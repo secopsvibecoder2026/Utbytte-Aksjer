@@ -483,6 +483,7 @@ function visModal(a) {
       ${modalKort('Siste utbytte', fmt(a.siste_utbytte) + ' ' + a.valuta)}
       ${modalKort('Payout Ratio', `<span class="${payoutKlasse(a.payout_ratio)}">${a.payout_ratio > 0 ? a.payout_ratio.toFixed(0)+'%' : '—'}</span>`)}
       ${modalKort('Utbyttevekst 5år', `<span class="${vekstKlasse(a.utbytte_vekst_5ar)}">${a.utbytte_vekst_5ar !== 0 ? (a.utbytte_vekst_5ar>0?'+':'')+a.utbytte_vekst_5ar.toFixed(1)+'%' : '—'}</span>`)}
+      ${modalKort('Snitt yield 5år', a.snitt_yield_5ar > 0 ? `<span class="${yieldKlasse(a.snitt_yield_5ar)}">${a.snitt_yield_5ar.toFixed(1)}%</span>` : '—')}
       ${modalKort('P/E', a.pe_ratio > 0 ? a.pe_ratio.toFixed(1) : '—')}
       ${modalKort('P/B', a.pb_ratio > 0 ? a.pb_ratio.toFixed(1) : '—')}
       ${modalKort('Markedsverdi', a.markedsverdi_mrd > 0 ? a.markedsverdi_mrd.toFixed(1) + ' mrd' : '—')}
@@ -515,10 +516,46 @@ function visModal(a) {
     <div class="mt-4">
       ${rangebar(a.pris, a['52u_lav'], a['52u_hoy'], true)}
     </div>
+
+    ${historiskChart(a)}
   `;
 
   overlay.classList.remove('hidden');
   overlay.classList.add('flex');
+}
+
+function historiskChart(a) {
+  const hist = a.historiske_utbytter;
+  if (!hist || hist.length === 0) return '';
+
+  const maxDiv = Math.max(...hist.map(h => h.utbytte));
+
+  const bars = hist.map(h => {
+    const heightPct = maxDiv > 0 ? (h.utbytte / maxDiv * 100).toFixed(1) : 0;
+    const barColor = h.yield >= 7 ? 'bg-green-500' : h.yield >= 4 ? 'bg-blue-500' : 'bg-gray-400';
+    return `
+      <div class="flex flex-col items-center gap-0.5 flex-1 min-w-0">
+        <span class="text-xs text-gray-500 dark:text-gray-400">${h.yield.toFixed(1)}%</span>
+        <div class="w-full flex items-end rounded-t overflow-hidden" style="height:52px">
+          <div class="w-full ${barColor} rounded-t transition-all" style="height:${heightPct}%"></div>
+        </div>
+        <span class="text-xs font-medium text-gray-700 dark:text-gray-300 tabular-nums">${h.utbytte.toFixed(2)}</span>
+        <span class="text-xs text-gray-400">${h.ar}</span>
+      </div>`;
+  }).join('');
+
+  const snittHtml = a.snitt_yield_5ar > 0
+    ? `<span class="text-xs text-gray-500 dark:text-gray-400">Snitt yield: <span class="font-semibold text-gray-700 dark:text-gray-300">${a.snitt_yield_5ar.toFixed(1)}%</span></span>`
+    : '';
+
+  return `
+    <div class="mt-4 pt-4 border-t border-gray-100 dark:border-gray-800">
+      <div class="flex justify-between items-center mb-3">
+        <span class="text-sm font-semibold text-gray-800 dark:text-gray-200">Historiske utbytter</span>
+        ${snittHtml}
+      </div>
+      <div class="flex items-end gap-1.5">${bars}</div>
+    </div>`;
 }
 
 function lukkModal() {

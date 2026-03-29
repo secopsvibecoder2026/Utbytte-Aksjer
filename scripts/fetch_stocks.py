@@ -142,6 +142,42 @@ def frekvens_label(dividends_per_year):
     return "Uregelmessig"
 
 
+def hent_historiske_utbytter(dividends, hist_prices, years=5):
+    """Hent totalt utbytte og yield per kalenderår for siste N år."""
+    if dividends.empty or hist_prices.empty:
+        return [], 0.0
+
+    current_year = datetime.datetime.today().year
+    cutoff_year = current_year - years
+
+    # Summer utbytter per kalenderår
+    div_per_year = dividends.groupby(dividends.index.year).sum()
+    div_per_year = div_per_year[
+        (div_per_year.index > cutoff_year) & (div_per_year.index <= current_year)
+    ]
+
+    historiske = []
+    yields = []
+
+    for year, total_div in div_per_year.items():
+        total_div = float(total_div)
+        if total_div <= 0:
+            continue
+        year_hist = hist_prices[hist_prices.index.year == year]
+        if year_hist.empty:
+            continue
+        year_end_price = float(year_hist["Close"].iloc[-1])
+        if year_end_price <= 0:
+            continue
+        year_yield = round((total_div / year_end_price) * 100, 2)
+        historiske.append({"ar": int(year), "utbytte": round(total_div, 2), "yield": year_yield})
+        yields.append(year_yield)
+
+    historiske.sort(key=lambda x: x["ar"])
+    snitt_yield = round(sum(yields) / len(yields), 2) if yields else 0.0
+    return historiske, snitt_yield
+
+
 def beregn_utbytte_vekst(dividends, years=5):
     """Beregn CAGR for utbytte over angitte år."""
     if dividends.empty:
@@ -176,6 +212,7 @@ def hent_aksje(meta):
         info = stk.info
         dividends = stk.dividends
         calendar = stk.calendar
+        hist_prices = stk.history(period="5y")
 
         pris = safe_float(info.get("currentPrice") or info.get("regularMarketPrice"))
         if pris == 0.0:
@@ -200,6 +237,9 @@ def hent_aksje(meta):
 
         # Utbyttevekst 5 år CAGR
         utbytte_vekst_5ar = beregn_utbytte_vekst(dividends, years=5)
+
+        # Historiske utbytter per år + snitt yield
+        historiske_utbytter, snitt_yield_5ar = hent_historiske_utbytter(dividends, hist_prices)
 
         # Antall år med utbytte
         if not dividends.empty:
@@ -251,6 +291,8 @@ def hent_aksje(meta):
             "frekvens": frekvens,
             "ar_med_utbytte": ar_med_utbytte,
             "siste_utbytte": siste_utbytte,
+            "historiske_utbytter": historiske_utbytter,
+            "snitt_yield_5ar": snitt_yield_5ar,
             "beskrivelse": BESKRIVELSER.get(ticker, ""),
             "valuta": valuta,
         }
