@@ -47,6 +47,12 @@ async function lastData() {
     console.error('Feil ved lasting av data:', e);
     document.getElementById('sist-oppdatert').textContent = '⚠️ Kunne ikke laste data – prøv igjen senere';
     document.getElementById('sist-oppdatert').classList.add('text-red-500');
+    // Clear skeleton placeholders so they don't linger on error
+    document.getElementById('tabell-body').innerHTML = '';
+    document.getElementById('kort-body').innerHTML = '';
+    ['stat-antall','stat-hoyest-yield','stat-snitt-yield','stat-neste-ex'].forEach(id => {
+      document.getElementById(id).textContent = '—';
+    });
   }
 }
 
