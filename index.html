@@ -104,9 +104,9 @@
     <!-- OVERSIKT-FANE -->
     <div id="tab-oversikt">
 
-      <!-- SORT-VELGER (kun mobil) -->
+      <!-- SORT-VELGER + VIEW-TOGGLE (mobil) -->
       <div id="mobil-sort-rad" class="flex gap-2 items-center mb-3">
-        <label class="text-xs text-gray-500 dark:text-gray-400 shrink-0">Sorter etter:</label>
+        <label class="text-xs text-gray-500 dark:text-gray-400 shrink-0">Sorter:</label>
         <select id="mobil-sort" class="filter-input flex-1 text-sm">
           <option value="utbytte_yield_desc">Høyest yield</option>
           <option value="utbytte_yield_asc">Lavest yield</option>
@@ -116,26 +116,36 @@
           <option value="ex_dato_asc">Neste ex-dato</option>
           <option value="navn_asc">Navn A–Å</option>
         </select>
+        <button id="view-toggle-mobil" class="view-toggle-btn shrink-0" title="Bytt visning">
+          <span id="view-label-mobil">Kompakt</span>
+        </button>
       </div>
 
       <!-- TABELL (desktop) -->
       <div id="tabell-wrapper" class="overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-800 shadow-sm">
-        <table class="w-full text-sm">
+        <!-- View-toggle knapp (desktop) -->
+        <div class="hidden md:flex items-center justify-end px-4 py-2 border-b border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-900/50 gap-2">
+          <span class="text-xs text-gray-400">Visning:</span>
+          <button id="view-toggle-desktop" class="view-toggle-btn">
+            <span id="view-label-desktop">Kompakt</span>
+          </button>
+        </div>
+        <table class="w-full text-sm" id="hoved-tabell">
           <thead>
             <tr class="bg-gray-100 dark:bg-gray-900 text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
               <th class="sortable px-4 py-3 text-left" data-col="ticker">Ticker</th>
               <th class="sortable px-4 py-3 text-left" data-col="navn">Selskap</th>
               <th class="sortable px-4 py-3 text-right" data-col="pris">Pris</th>
-              <th class="px-4 py-3 text-center">52u range</th>
+              <th class="col-detalj px-4 py-3 text-center">52u range</th>
               <th class="sortable px-4 py-3 text-right" data-col="utbytte_yield">Yield %</th>
-              <th class="sortable px-4 py-3 text-right" data-col="utbytte_per_aksje">Utb./aksje</th>
+              <th class="col-detalj sortable px-4 py-3 text-right" data-col="utbytte_per_aksje">Utb./aksje</th>
               <th class="sortable px-4 py-3 text-right" data-col="payout_ratio">Payout</th>
               <th class="sortable px-4 py-3 text-right" data-col="utbytte_vekst_5ar">Vekst 5å</th>
-              <th class="sortable px-4 py-3 text-right" data-col="ar_med_utbytte">År m/utb.</th>
-              <th class="sortable px-4 py-3 text-right" data-col="pe_ratio">P/E</th>
-              <th class="sortable px-4 py-3 text-right" data-col="pb_ratio">P/B</th>
+              <th class="col-detalj sortable px-4 py-3 text-right" data-col="ar_med_utbytte">År m/utb.</th>
+              <th class="col-detalj sortable px-4 py-3 text-right" data-col="pe_ratio">P/E</th>
+              <th class="col-detalj sortable px-4 py-3 text-right" data-col="pb_ratio">P/B</th>
               <th class="sortable px-4 py-3 text-center" data-col="ex_dato">Ex-dato</th>
-              <th class="sortable px-4 py-3 text-center" data-col="betaling_dato">Bet.-dato</th>
+              <th class="col-detalj sortable px-4 py-3 text-center" data-col="betaling_dato">Bet.-dato</th>
               <th class="sortable px-4 py-3 text-center" data-col="frekvens">Frekvens</th>
             </tr>
           </thead>
@@ -147,8 +157,8 @@
       </div>
 
       <!-- KORT-VISNING (mobil) -->
-      <div id="kort-wrapper" class="space-y-3">
-        <div id="kort-body"></div>
+      <div id="kort-wrapper">
+        <div id="kort-body" class="kort-body-normal space-y-3"></div>
         <div id="ingen-resultater-mobil" class="hidden text-center py-12 text-gray-400 dark:text-gray-600">
           <p>Ingen aksjer matcher filteret</p>
         </div>
