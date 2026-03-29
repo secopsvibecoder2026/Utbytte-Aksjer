@@ -1,0 +1,253 @@
+#!/usr/bin/env python3
+"""
+Henter utbyttedata for norske aksjer fra Yahoo Finance og lagrer til data/aksjer.json.
+Kjøres daglig via GitHub Actions.
+"""
+
+import json
+import os
+import datetime
+import yfinance as yf
+
+# Norske aksjer med Yahoo Finance ticker-symbol (.OL = Oslo Børs, .OAX = Euronext Expand)
+AKSJER = [
+    {"ticker_yf": "EQNR.OL",  "ticker": "EQNR",  "navn": "Equinor ASA",              "sektor": "Energi",             "bors": "Oslo Børs"},
+    {"ticker_yf": "DNB.OL",   "ticker": "DNB",   "navn": "DNB Bank ASA",              "sektor": "Finans",             "bors": "Oslo Børs"},
+    {"ticker_yf": "TEL.OL",   "ticker": "TEL",   "navn": "Telenor ASA",               "sektor": "Telekommunikasjon",  "bors": "Oslo Børs"},
+    {"ticker_yf": "ORK.OL",   "ticker": "ORK",   "navn": "Orkla ASA",                 "sektor": "Forbruksvarer",      "bors": "Oslo Børs"},
+    {"ticker_yf": "MOWI.OL",  "ticker": "MOWI",  "navn": "Mowi ASA",                  "sektor": "Havbruk",            "bors": "Oslo Børs"},
+    {"ticker_yf": "AKRBP.OL", "ticker": "AKRBP", "navn": "Aker BP ASA",               "sektor": "Energi",             "bors": "Oslo Børs"},
+    {"ticker_yf": "NHY.OL",   "ticker": "NHY",   "navn": "Norsk Hydro ASA",           "sektor": "Materialer",         "bors": "Oslo Børs"},
+    {"ticker_yf": "YAR.OL",   "ticker": "YAR",   "navn": "Yara International ASA",    "sektor": "Materialer",         "bors": "Oslo Børs"},
+    {"ticker_yf": "SALM.OL",  "ticker": "SALM",  "navn": "SalMar ASA",                "sektor": "Havbruk",            "bors": "Oslo Børs"},
+    {"ticker_yf": "SRBNK.OL", "ticker": "SRBNK", "navn": "SpareBank 1 SR-Bank",       "sektor": "Finans",             "bors": "Oslo Børs"},
+    {"ticker_yf": "GOGL.OL",  "ticker": "GOGL",  "navn": "Golden Ocean Group",        "sektor": "Shipping",           "bors": "Oslo Børs"},
+    {"ticker_yf": "MPCC.OL",  "ticker": "MPCC",  "navn": "MPC Container Ships",       "sektor": "Shipping",           "bors": "Oslo Børs"},
+    {"ticker_yf": "BWLPG.OL", "ticker": "BWLPG", "navn": "BW LPG Limited",            "sektor": "Shipping",           "bors": "Oslo Børs"},
+    {"ticker_yf": "KOG.OL",   "ticker": "KOG",   "navn": "Kongsberg Gruppen ASA",     "sektor": "Industri",           "bors": "Oslo Børs"},
+    {"ticker_yf": "FRO.OL",   "ticker": "FRO",   "navn": "Frontline PLC",             "sektor": "Shipping",           "bors": "Oslo Børs"},
+    {"ticker_yf": "NONG.OL",  "ticker": "NONG",  "navn": "SpareBank 1 Nord-Norge",    "sektor": "Finans",             "bors": "Oslo Børs"},
+    {"ticker_yf": "SUBC.OL",  "ticker": "SUBC",  "navn": "Subsea 7 SA",               "sektor": "Energitjenester",    "bors": "Oslo Børs"},
+    {"ticker_yf": "WWI.OL",   "ticker": "WWI",   "navn": "Wilh. Wilhelmsen Holding",  "sektor": "Shipping",           "bors": "Oslo Børs"},
+    {"ticker_yf": "PNORD.OL", "ticker": "PNORD", "navn": "Protector Forsikring ASA",  "sektor": "Finans",             "bors": "Oslo Børs"},
+    {"ticker_yf": "SCATC.OL", "ticker": "SCATC", "navn": "Scatec ASA",                "sektor": "Fornybar energi",    "bors": "Oslo Børs"},
+]
+
+# Statiske beskrivelser (ikke tilgjengelig fra Yahoo Finance)
+BESKRIVELSER = {
+    "EQNR":  "Norges største energiselskap. Kvartalsutbytte pluss ekstraordinære utbytter ved høye oljepriser.",
+    "DNB":   "Norges største bank. Kjent for høyt og stabilt utbytte, ofte over 7% yield.",
+    "TEL":   "Norges ledende telekomselskap med stabil kontantstrøm og høy utbyttegrad. Sterkt fotavtrykk i Asia.",
+    "ORK":   "Nordisk merkevareselskap med diversifisert portefølje. Konsistent og voksende utbytte i over 30 år.",
+    "MOWI":  "Verdens største lakseoppdrettsselskap. Kvartalsutbytte koblet til laksepris og inntjening.",
+    "AKRBP": "Norsk E&P-selskap med høy utbyttepolitikk. Betaler kvartalsvis utbytte basert på fri kontantstrøm.",
+    "NHY":   "Globalt aluminiumselskap og ledende innen fornybar energi. Syklisk utbytte påvirket av aluminiumspriser.",
+    "YAR":   "Verdens ledende gjødselprodusent. Utbytte varierer med gjødselpris og global matetterspørsel.",
+    "SALM":  "En av Norges mest effektive lakseoppdrettere. Høy margin og voksende utbytte over tid.",
+    "SRBNK": "Ledende regional sparebank på Sør-Vestlandet. Kjent for høyt og stabilt utbytte med god vekst.",
+    "GOGL":  "Verdens største tørrbulkrederi. Volatilt men potensielt svært høyt utbytte koblet til shippingratene.",
+    "MPCC":  "Containerrederi med svært høy utbyttegrad. Syklisk og volatilt – utbytte varierer sterkt med containerrater.",
+    "BWLPG": "Verdens største LPG-tankrederi. Høy kontantstrøm og liberal utbyttepolitikk. Volatilt med shippingmarkedet.",
+    "KOG":   "Teknologi- og forsvarskonsern. Lav yield men sterk utbyttevekst. Defensivt som følge av økt NATO-satsing.",
+    "FRO":   "Ledende råoljetankrederi. Svært høy utbyttegrad fra sterk kontantstrøm. Syklisk og rateeksponert.",
+    "NONG":  "Regional sparebank i Nord-Norge. Stabilt og voksende utbytte, godt kapitaldekkede.",
+    "SUBC":  "Ledende leverandør av undersøiske engineering-tjenester til olje og gass. Solid balanse.",
+    "WWI":   "Internasjonal shipping- og logistikkkonsern. Ro-ro transport og havnevirksomhet. Lav verdsettelse.",
+    "PNORD": "Raskt voksende skadeforsikringsselskap i Norden og UK. Sterk utbyttevekst over mange år.",
+    "SCATC": "Norsk leverandør av fornybar energi globalt. Solenergi- og vindkraftprosjekter i fremvoksende markeder.",
+}
+
+
+def safe_float(value, default=0.0):
+    try:
+        v = float(value)
+        return round(v, 2) if v == v else default  # NaN check
+    except (TypeError, ValueError):
+        return default
+
+
+def safe_int(value, default=0):
+    try:
+        v = int(value)
+        return v
+    except (TypeError, ValueError):
+        return default
+
+
+def format_dato(ts):
+    """Konverter Unix timestamp til YYYY-MM-DD streng."""
+    if not ts:
+        return None
+    try:
+        return datetime.datetime.fromtimestamp(int(ts)).strftime("%Y-%m-%d")
+    except Exception:
+        return None
+
+
+def frekvens_label(dividends_per_year):
+    """Estimer utbyttefrekvens basert på antall utbetalinger siste år."""
+    if dividends_per_year >= 10:
+        return "Månedlig"
+    elif dividends_per_year >= 3:
+        return "Kvartalsvis"
+    elif dividends_per_year >= 2:
+        return "Halvårlig"
+    elif dividends_per_year >= 1:
+        return "Årlig"
+    return "Uregelmessig"
+
+
+def beregn_utbytte_vekst(dividends, years=5):
+    """Beregn CAGR for utbytte over angitte år."""
+    if dividends.empty:
+        return 0.0
+    today = datetime.datetime.today()
+    cutoff = today - datetime.timedelta(days=years * 365)
+    recent = dividends[dividends.index >= cutoff.tz_localize(dividends.index.tz) if dividends.index.tz else cutoff]
+    if recent.empty or len(recent) < 2:
+        return 0.0
+    # Summer utbytter per år
+    annual = recent.resample("YE").sum()
+    if len(annual) < 2:
+        return 0.0
+    start_val = annual.iloc[0]
+    end_val = annual.iloc[-1]
+    if start_val <= 0:
+        return 0.0
+    n = len(annual) - 1
+    cagr = (end_val / start_val) ** (1 / n) - 1
+    return round(cagr * 100, 1)
+
+
+def hent_aksje(meta):
+    ticker_yf = meta["ticker_yf"]
+    ticker = meta["ticker"]
+    print(f"  Henter {ticker} ({ticker_yf})...")
+
+    try:
+        stk = yf.Ticker(ticker_yf)
+        info = stk.info
+        dividends = stk.dividends
+        calendar = stk.calendar
+
+        pris = safe_float(info.get("currentPrice") or info.get("regularMarketPrice"))
+        if pris == 0.0:
+            history = stk.history(period="1d")
+            if not history.empty:
+                pris = round(float(history["Close"].iloc[-1]), 2)
+
+        utbytte_per_aksje = safe_float(info.get("dividendRate") or info.get("trailingAnnualDividendRate"))
+        utbytte_yield = safe_float(info.get("dividendYield", 0)) * 100
+        utbytte_yield = round(utbytte_yield, 2)
+
+        # Siste faktiske utbytte
+        siste_utbytte = safe_float(dividends.iloc[-1]) if not dividends.empty else 0.0
+
+        # Antall utbytter siste 12 mnd
+        one_year_ago = datetime.datetime.today() - datetime.timedelta(days=365)
+        if dividends.index.tz:
+            one_year_ago = one_year_ago.astimezone(dividends.index.tz)
+        recent_divs = dividends[dividends.index >= one_year_ago]
+        div_count = len(recent_divs)
+        frekvens = frekvens_label(div_count)
+
+        # Utbyttevekst 5 år CAGR
+        utbytte_vekst_5ar = beregn_utbytte_vekst(dividends, years=5)
+
+        # Antall år med utbytte
+        if not dividends.empty:
+            first_year = dividends.index[0].year
+            ar_med_utbytte = datetime.datetime.today().year - first_year
+        else:
+            ar_med_utbytte = 0
+
+        # Ex-dato og betalingsdato
+        ex_dato = None
+        betaling_dato = None
+        if isinstance(calendar, dict):
+            ex_dato = format_dato(calendar.get("exDividendDate"))
+            betaling_dato = format_dato(calendar.get("dividendDate"))
+
+        # 52-ukers kurs
+        hoy_52u = safe_float(info.get("fiftyTwoWeekHigh"))
+        lav_52u = safe_float(info.get("fiftyTwoWeekLow"))
+
+        # Markedsverdi i milliarder NOK
+        mkt_cap = safe_float(info.get("marketCap"))
+        markedsverdi_mrd = round(mkt_cap / 1e9, 1)
+
+        # Nøkkeltall
+        pe_ratio = safe_float(info.get("trailingPE") or info.get("forwardPE"))
+        pb_ratio = safe_float(info.get("priceToBook"))
+        payout_ratio = safe_float(info.get("payoutRatio", 0)) * 100
+        payout_ratio = round(payout_ratio, 1)
+
+        valuta = info.get("currency", "NOK")
+
+        resultat = {
+            "ticker": ticker,
+            "navn": meta["navn"],
+            "sektor": meta["sektor"],
+            "bors": meta["bors"],
+            "pris": pris,
+            "52u_hoy": hoy_52u,
+            "52u_lav": lav_52u,
+            "markedsverdi_mrd": markedsverdi_mrd,
+            "utbytte_per_aksje": utbytte_per_aksje,
+            "utbytte_yield": utbytte_yield,
+            "utbytte_vekst_5ar": utbytte_vekst_5ar,
+            "payout_ratio": payout_ratio,
+            "pe_ratio": pe_ratio,
+            "pb_ratio": pb_ratio,
+            "ex_dato": ex_dato,
+            "betaling_dato": betaling_dato,
+            "frekvens": frekvens,
+            "ar_med_utbytte": ar_med_utbytte,
+            "siste_utbytte": siste_utbytte,
+            "beskrivelse": BESKRIVELSER.get(ticker, ""),
+            "valuta": valuta,
+        }
+        return resultat
+
+    except Exception as e:
+        print(f"    FEIL for {ticker}: {e}")
+        return None
+
+
+def main():
+    print("Starter henting av aksjedata fra Yahoo Finance...")
+    output_path = os.path.join(os.path.dirname(__file__), "..", "data", "aksjer.json")
+
+    # Last eksisterende data som fallback
+    fallback = {}
+    if os.path.exists(output_path):
+        with open(output_path, "r", encoding="utf-8") as f:
+            existing = json.load(f)
+            fallback = {a["ticker"]: a for a in existing}
+
+    resultater = []
+    for meta in AKSJER:
+        aksje = hent_aksje(meta)
+        if aksje:
+            resultater.append(aksje)
+        elif meta["ticker"] in fallback:
+            print(f"    Bruker fallback-data for {meta['ticker']}")
+            resultater.append(fallback[meta["ticker"]])
+
+    # Legg til metadata
+    output = {
+        "sist_oppdatert": datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "kilde": "Yahoo Finance (yfinance)",
+        "aksjer": resultater,
+    }
+
+    os.makedirs(os.path.dirname(output_path), exist_ok=True)
+    with open(output_path, "w", encoding="utf-8") as f:
+        json.dump(output, f, ensure_ascii=False, indent=2)
+
+    print(f"\nFerdig! {len(resultater)} aksjer lagret til {output_path}")
+    print(f"Sist oppdatert: {output['sist_oppdatert']}")
+
+
+if __name__ == "__main__":
+    main()

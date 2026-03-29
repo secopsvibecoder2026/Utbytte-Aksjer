@@ -1,0 +1,85 @@
+/* ── BASE ────────────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+/* ── STAT CARDS ─────────────────────────────────────────────────────────── */
+.stat-card {
+  @apply bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 px-4 py-4 shadow-sm;
+}
+.stat-label {
+  @apply text-xs text-gray-500 dark:text-gray-400 font-medium uppercase tracking-wide;
+}
+.stat-value {
+  @apply text-2xl font-bold mt-1 leading-none;
+}
+
+/* ── TABS ───────────────────────────────────────────────────────────────── */
+.tab-btn {
+  @apply px-4 py-2.5 text-sm font-medium text-gray-500 dark:text-gray-400 border-b-2 border-transparent
+         hover:text-gray-800 dark:hover:text-gray-200 hover:border-gray-300 dark:hover:border-gray-600
+         transition-colors -mb-px;
+}
+.tab-btn.active {
+  @apply text-brand-700 dark:text-brand-400 border-brand-600 dark:border-brand-500;
+}
+
+/* ── FILTER INPUTS ──────────────────────────────────────────────────────── */
+.filter-input {
+  @apply px-3 py-2 text-sm rounded-lg border border-gray-300 dark:border-gray-700
+         bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200
+         focus:outline-none focus:ring-2 focus:ring-brand-500/50 focus:border-brand-500
+         transition-colors;
+}
+
+/* ── TABLE ──────────────────────────────────────────────────────────────── */
+.table-row {
+  @apply bg-white dark:bg-gray-950 hover:bg-brand-50 dark:hover:bg-gray-900 cursor-pointer transition-colors;
+}
+.row-highlight {
+  @apply bg-orange-50/50 dark:bg-orange-950/20;
+}
+
+th.sortable {
+  @apply cursor-pointer select-none hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors;
+}
+th.sortable::after {
+  content: ' ⇅';
+  @apply text-gray-300 dark:text-gray-600;
+}
+th.sort-asc::after { content: ' ↑'; @apply text-brand-600 dark:text-brand-400; }
+th.sort-desc::after { content: ' ↓'; @apply text-brand-600 dark:text-brand-400; }
+
+/* ── YIELD BADGES ───────────────────────────────────────────────────────── */
+.yield-badge {
+  @apply inline-block px-2 py-0.5 rounded-full text-xs font-bold;
+}
+.yield-hoy   { @apply bg-green-100 dark:bg-green-900/40 text-green-800 dark:text-green-300; }
+.yield-god   { @apply bg-blue-100 dark:bg-blue-900/40 text-blue-800 dark:text-blue-300; }
+.yield-middels { @apply bg-yellow-100 dark:bg-yellow-900/40 text-yellow-800 dark:text-yellow-300; }
+.yield-lav   { @apply bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400; }
+
+/* ── FREKVENS BADGE ─────────────────────────────────────────────────────── */
+.frekvens-badge {
+  @apply inline-block px-2 py-0.5 rounded text-xs bg-gray-100 dark:bg-gray-800
+         text-gray-600 dark:text-gray-400 font-medium;
+}
+
+/* ── KALENDER ───────────────────────────────────────────────────────────── */
+.kal-rad {
+  @apply flex items-center justify-between gap-4 px-4 py-3
+         hover:bg-gray-50 dark:hover:bg-gray-900/50 transition-colors;
+}
+
+/* ── SCROLLBAR ──────────────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { @apply bg-gray-300 dark:bg-gray-700 rounded-full; }
+::-webkit-scrollbar-thumb:hover { @apply bg-gray-400 dark:bg-gray-600; }
+
+/* ── MODAL ANIMATION ─────────────────────────────────────────────────────── */
+#modal-content {
+  animation: modalIn 0.2s ease-out;
+}
+@keyframes modalIn {
+  from { opacity: 0; transform: scale(0.95) translateY(8px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}

@@ -1,0 +1,74 @@
+name: Oppdater aksjedata og deploy
+
+on:
+  schedule:
+    # Kjør hverdager kl 08:00 Oslo-tid (07:00 UTC) - etter Oslo Børs åpning
+    - cron: "0 7 * * 1-5"
+  workflow_dispatch:  # Tillat manuell kjøring
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  oppdater-data:
+    name: Hent og oppdater aksjedata
+    runs-on: ubuntu-latest
+    steps:
+      - name: Sjekk ut kode
+        uses: actions/checkout@v4
+
+      - name: Sett opp Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+          cache-dependency-path: scripts/requirements.txt
+
+      - name: Installer avhengigheter
+        run: pip install -r scripts/requirements.txt
+
+      - name: Hent aksjedata fra Yahoo Finance
+        run: python scripts/fetch_stocks.py
+
+      - name: Commit og push oppdatert data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/aksjer.json
+          if git diff --staged --quiet; then
+            echo "Ingen endringer i aksjedata."
+          else
+            git commit -m "auto: oppdater aksjedata $(date -u '+%Y-%m-%d %H:%M UTC')"
+            git push
+          fi
+
+  deploy-pages:
+    name: Deploy til GitHub Pages
+    needs: oppdater-data
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Sjekk ut kode
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}  # Henter siste commit inkl. oppdatert JSON
+
+      - name: Konfigurer GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Last opp artefakt
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: "."
+
+      - name: Deploy til GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
