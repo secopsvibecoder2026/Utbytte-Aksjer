@@ -31,6 +31,20 @@ AKSJER = [
     {"ticker_yf": "WWI.OL",   "ticker": "WWI",   "navn": "Wilh. Wilhelmsen Holding",  "sektor": "Shipping",           "bors": "Oslo Børs"},
     {"ticker_yf": "PNORD.OL", "ticker": "PNORD", "navn": "Protector Forsikring ASA",  "sektor": "Finans",             "bors": "Oslo Børs"},
     {"ticker_yf": "SCATC.OL", "ticker": "SCATC", "navn": "Scatec ASA",                "sektor": "Fornybar energi",    "bors": "Oslo Børs"},
+    {"ticker_yf": "AUSS.OL",  "ticker": "AUSS",  "navn": "Austevoll Seafood ASA",     "sektor": "Havbruk",            "bors": "Oslo Børs"},
+    {"ticker_yf": "LSG.OL",   "ticker": "LSG",   "navn": "Lerøy Seafood Group ASA",   "sektor": "Havbruk",            "bors": "Oslo Børs"},
+    {"ticker_yf": "BAKKA.OL", "ticker": "BAKKA", "navn": "Bakkafrost P/F",            "sektor": "Havbruk",            "bors": "Oslo Børs"},
+    {"ticker_yf": "HAFNI.OL", "ticker": "HAFNI", "navn": "Hafnia Limited",            "sektor": "Shipping",           "bors": "Oslo Børs"},
+    {"ticker_yf": "FLNG.OL",  "ticker": "FLNG",  "navn": "Flex LNG Ltd",              "sektor": "Shipping",           "bors": "Oslo Børs"},
+    {"ticker_yf": "MING.OL",  "ticker": "MING",  "navn": "SpareBank 1 SMN",           "sektor": "Finans",             "bors": "Oslo Børs"},
+    {"ticker_yf": "SPOL.OL",  "ticker": "SPOL",  "navn": "SpareBank 1 Østlandet",     "sektor": "Finans",             "bors": "Oslo Børs"},
+    {"ticker_yf": "AFG.OL",   "ticker": "AFG",   "navn": "Arendals Fossekompani ASA", "sektor": "Fornybar energi",    "bors": "Oslo Børs"},
+    {"ticker_yf": "ODL.OL",   "ticker": "ODL",   "navn": "Odfjell SE",                "sektor": "Shipping",           "bors": "Oslo Børs"},
+    {"ticker_yf": "PGS.OL",   "ticker": "PGS",   "navn": "PGS ASA",                   "sektor": "Energitjenester",    "bors": "Oslo Børs"},
+    {"ticker_yf": "VEI.OL",   "ticker": "VEI",   "navn": "Veidekke ASA",              "sektor": "Industri",           "bors": "Oslo Børs"},
+    {"ticker_yf": "AKER.OL",  "ticker": "AKER",  "navn": "Aker ASA",                  "sektor": "Industri",           "bors": "Oslo Børs"},
+    {"ticker_yf": "BWO.OL",   "ticker": "BWO",   "navn": "BW Offshore Limited",       "sektor": "Energitjenester",    "bors": "Oslo Børs"},
+    {"ticker_yf": "SBVG.OL",  "ticker": "SBVG",  "navn": "SpareBank 1 BV",            "sektor": "Finans",             "bors": "Oslo Børs"},
 ]
 
 # Statiske beskrivelser (ikke tilgjengelig fra Yahoo Finance)
@@ -55,6 +69,20 @@ BESKRIVELSER = {
     "WWI":   "Internasjonal shipping- og logistikkkonsern. Ro-ro transport og havnevirksomhet. Lav verdsettelse.",
     "PNORD": "Raskt voksende skadeforsikringsselskap i Norden og UK. Sterk utbyttevekst over mange år.",
     "SCATC": "Norsk leverandør av fornybar energi globalt. Solenergi- og vindkraftprosjekter i fremvoksende markeder.",
+    "AUSS":  "Holdingselskap med majoritetseierandel i Lerøy Seafood og Pelagia. Bred eksponering mot sjømat og fiskeri.",
+    "LSG":   "En av Norges største lakseoppdrettere med virksomhet innen oppdrett, villfangst og bearbeiding.",
+    "BAKKA": "Færøysk-skotsk lakseoppdrettsselskap notert på Oslo Børs. Integrert verdikjede fra rogn til ferdig produkt.",
+    "HAFNI": "Verdens største produkttankrederi. Frakter raffinerte petroleumsprodukter. Svært høy utbyttegrad fra sterk kontantstrøm.",
+    "FLNG":  "LNG-tankselskap med moderne flåte på langsiktige TC-kontrakter. Stabil og forutsigbar kontantstrøm.",
+    "MING":  "Ledende sparebank i Midt-Norge. Konsistent og voksende utbytte med solid kapitalisering.",
+    "SPOL":  "Stor sparebank på Østlandet og Innlandet. Stabil inntjening og høy utbyttegrad.",
+    "AFG":   "Industrielt investeringsselskap med fokus på grønn teknologi og fornybar energi. Lang utbyttehistorikk.",
+    "ODL":   "Ledende kjemikalietankrederi. Frakter spesialkjemikalier globalt. Nytter av høy etterspørsel etter spesialprodukter.",
+    "PGS":   "Ledende seismikkselskap som henter inn geofysiske data for olje- og gassindustrien. Gjenopptok utbytte etter restrukturering.",
+    "VEI":   "Ledende skandinavisk bygg- og anleggsselskap. Lang og stabil utbyttehistorikk med ansatteeierskap som særpreg.",
+    "AKER":  "Kjell Inge Røkkes industrielle investeringsselskap. Eierandeler i bl.a. Aker BP, Aker Solutions og Cognite.",
+    "BWO":   "FPSO-operatør (flytende produksjon og lagring av olje). Langvarige kontrakter gir stabil kontantstrøm.",
+    "SBVG":  "Sparebank i Telemark og Vestfold. Stabil lokal bank med god utbyttehistorikk og solid kapitaldekning.",
 }
 
 
