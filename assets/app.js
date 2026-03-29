@@ -581,14 +581,41 @@ function vekstKlasse(v) {
 function rangebar(pris, lav, hoy, stor = false) {
   if (!lav || !hoy || lav >= hoy) return '';
   const pct = Math.min(100, Math.max(0, ((pris - lav) / (hoy - lav)) * 100));
-  const h = stor ? 'h-3' : 'h-2';
+
+  // Color reflects position: red = near 52w low, blue = mid, green = near 52w high
+  const barColor = pct >= 70 ? 'bg-green-500' : pct >= 35 ? 'bg-blue-500' : 'bg-red-400';
+  const dotColor = pct >= 70
+    ? 'bg-green-700 dark:bg-green-400'
+    : pct >= 35
+    ? 'bg-blue-700 dark:bg-blue-400'
+    : 'bg-red-600 dark:bg-red-400';
+
+  if (stor) {
+    return `
+    <div class="py-1">
+      <div class="flex justify-between items-center mb-2">
+        <span class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">52-ukers kursrange</span>
+        <span class="text-xs text-gray-500 dark:text-gray-400">${pct.toFixed(0)}% fra lavpunkt</span>
+      </div>
+      <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3 relative">
+        <div class="${barColor} rounded-full h-3 transition-all" style="width:${pct}%"></div>
+        <div class="absolute top-1/2 -translate-y-1/2 w-3 h-3 rounded-full ${dotColor} border-2 border-white dark:border-gray-900 shadow" style="left:calc(${pct}% - 6px)"></div>
+      </div>
+      <div class="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-1.5">
+        <span>Lav <span class="font-medium text-gray-700 dark:text-gray-300">${fmt(lav)}</span></span>
+        <span>Nå <span class="font-semibold text-gray-900 dark:text-gray-100">${fmt(pris)}</span></span>
+        <span>Høy <span class="font-medium text-gray-700 dark:text-gray-300">${fmt(hoy)}</span></span>
+      </div>
+    </div>`;
+  }
+
+  // Small version for table
   return `
-  <div class="${stor ? 'px-0 py-2' : ''}">
-    ${stor ? `<div class="flex justify-between text-xs text-gray-400 mb-1"><span>${fmt(lav)}</span><span class="font-medium text-gray-700 dark:text-gray-300">${fmt(pris)}</span><span>${fmt(hoy)}</span></div>` : ''}
-    <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full ${h} relative">
-      <div class="bg-brand-500 rounded-full ${h}" style="width:${pct}%"></div>
-      <div class="absolute top-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full bg-brand-700 dark:bg-brand-400 border-2 border-white dark:border-gray-900 shadow" style="left:calc(${pct}% - 5px)"></div>
+  <div>
+    <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 relative">
+      <div class="${barColor} rounded-full h-2" style="width:${pct}%"></div>
+      <div class="absolute top-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full ${dotColor} border-2 border-white dark:border-gray-900 shadow" style="left:calc(${pct}% - 5px)"></div>
     </div>
-    ${stor ? '' : `<div class="flex justify-between text-xs text-gray-400 mt-0.5"><span>${fmt(lav)}</span><span>${fmt(hoy)}</span></div>`}
+    <div class="flex justify-between text-xs text-gray-400 mt-0.5"><span>${fmt(lav)}</span><span>${pct.toFixed(0)}%</span><span>${fmt(hoy)}</span></div>
   </div>`;
 }
