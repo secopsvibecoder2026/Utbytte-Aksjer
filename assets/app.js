@@ -88,7 +88,7 @@ function initFilter() {
     visOversikt();
   });
 
-  // Kolonnesortering
+  // Kolonnesortering (desktop)
   document.querySelectorAll('th.sortable').forEach(th => {
     th.addEventListener('click', () => {
       const kol = th.dataset.col;
@@ -96,6 +96,15 @@ function initFilter() {
       sortering.kol = kol;
       visOversikt();
     });
+  });
+
+  // Mobilsortering
+  document.getElementById('mobil-sort').addEventListener('change', e => {
+    const val = e.target.value;
+    const lastUs = val.lastIndexOf('_');
+    sortering.kol = val.slice(0, lastUs);
+    sortering.retning = val.slice(lastUs + 1);
+    visOversikt();
   });
 }
 
@@ -148,11 +157,13 @@ function oppdaterSammendrag() {
   }
 }
 
-// ── OVERSIKTSTABELL ────────────────────────────────────────────────────────
+// ── OVERSIKTSTABELL + KORT ─────────────────────────────────────────────────
 function visOversikt() {
   const data = sorterAksjer(filtrerteAksjer());
   const tbody = document.getElementById('tabell-body');
+  const kortBody = document.getElementById('kort-body');
   const ingenEl = document.getElementById('ingen-resultater');
+  const ingenMobilEl = document.getElementById('ingen-resultater-mobil');
   const antallEl = document.getElementById('antall-vist');
 
   // Oppdater sorteringsikoner
@@ -163,11 +174,14 @@ function visOversikt() {
 
   if (data.length === 0) {
     tbody.innerHTML = '';
+    kortBody.innerHTML = '';
     ingenEl.classList.remove('hidden');
+    ingenMobilEl.classList.remove('hidden');
     antallEl.textContent = '';
     return;
   }
   ingenEl.classList.add('hidden');
+  ingenMobilEl.classList.add('hidden');
   antallEl.textContent = `Viser ${data.length} av ${alleAksjer.length} aksjer`;
 
   const idag = new Date(); idag.setHours(0,0,0,0);
@@ -215,10 +229,89 @@ function visOversikt() {
     </tr>`;
   }).join('');
 
-  // Klikk for detaljer
+  // Klikk for detaljer (tabell)
   tbody.querySelectorAll('tr').forEach(tr => {
     tr.addEventListener('click', () => {
       const aksje = alleAksjer.find(a => a.ticker === tr.dataset.ticker);
+      if (aksje) visModal(aksje);
+    });
+  });
+
+  // ── MOBIL KORTVISNING ──────────────────────────────────────────────────
+  kortBody.innerHTML = data.map(a => {
+    const exDato = a.ex_dato ? new Date(a.ex_dato) : null;
+    const idag2 = new Date(); idag2.setHours(0,0,0,0);
+    const om30b = new Date(idag2); om30b.setDate(om30b.getDate() + 30);
+    const snartEx = exDato && exDato >= idag2 && exDato <= om30b;
+    const dagerTil = exDato ? Math.ceil((exDato - idag2) / (1000*60*60*24)) : null;
+
+    return `
+    <div class="aksje-kort ${snartEx ? 'snart-ex' : ''}" data-ticker="${a.ticker}">
+      <!-- Topprad: ticker + yield -->
+      <div class="flex items-start justify-between gap-2 mb-2">
+        <div>
+          <span class="font-mono font-bold text-brand-700 dark:text-brand-400 text-base">${a.ticker}</span>
+          <span class="frekvens-badge ml-2">${a.frekvens}</span>
+          <div class="text-sm text-gray-600 dark:text-gray-400 mt-0.5 leading-tight">${a.navn}</div>
+          <div class="text-xs text-gray-400 dark:text-gray-500">${a.sektor}</div>
+        </div>
+        <span class="yield-badge ${yieldKlasse(a.utbytte_yield)} text-sm shrink-0">${a.utbytte_yield.toFixed(2)}%</span>
+      </div>
+
+      <!-- Nøkkeltall: 3 kolonner -->
+      <div class="grid grid-cols-3 gap-2 text-center my-3">
+        <div class="bg-gray-50 dark:bg-gray-800 rounded-lg py-2 px-1">
+          <div class="text-xs text-gray-400 leading-tight">Pris</div>
+          <div class="font-semibold text-sm mt-0.5">${fmt(a.pris)}</div>
+          <div class="text-xs text-gray-400">${a.valuta}</div>
+        </div>
+        <div class="bg-gray-50 dark:bg-gray-800 rounded-lg py-2 px-1">
+          <div class="text-xs text-gray-400 leading-tight">Utb./aksje</div>
+          <div class="font-semibold text-sm mt-0.5">${fmt(a.utbytte_per_aksje)}</div>
+          <div class="text-xs text-gray-400">${a.valuta}</div>
+        </div>
+        <div class="bg-gray-50 dark:bg-gray-800 rounded-lg py-2 px-1">
+          <div class="text-xs text-gray-400 leading-tight">Payout</div>
+          <div class="font-semibold text-sm mt-0.5 ${payoutKlasse(a.payout_ratio)}">${a.payout_ratio > 0 ? a.payout_ratio.toFixed(0)+'%' : '—'}</div>
+        </div>
+      </div>
+
+      <!-- Rad 2: vekst, P/E, år -->
+      <div class="grid grid-cols-3 gap-2 text-center mb-3">
+        <div class="bg-gray-50 dark:bg-gray-800 rounded-lg py-2 px-1">
+          <div class="text-xs text-gray-400 leading-tight">Vekst 5år</div>
+          <div class="font-semibold text-sm mt-0.5 ${vekstKlasse(a.utbytte_vekst_5ar)}">${a.utbytte_vekst_5ar !== 0 ? (a.utbytte_vekst_5ar>0?'+':'')+a.utbytte_vekst_5ar.toFixed(1)+'%' : '—'}</div>
+        </div>
+        <div class="bg-gray-50 dark:bg-gray-800 rounded-lg py-2 px-1">
+          <div class="text-xs text-gray-400 leading-tight">P/E</div>
+          <div class="font-semibold text-sm mt-0.5">${a.pe_ratio > 0 ? a.pe_ratio.toFixed(1) : '—'}</div>
+        </div>
+        <div class="bg-gray-50 dark:bg-gray-800 rounded-lg py-2 px-1">
+          <div class="text-xs text-gray-400 leading-tight">År m/utb.</div>
+          <div class="font-semibold text-sm mt-0.5">${a.ar_med_utbytte > 0 ? a.ar_med_utbytte : '—'}</div>
+        </div>
+      </div>
+
+      <!-- 52-ukers range -->
+      ${rangebar(a.pris, a['52u_lav'], a['52u_hoy'])}
+
+      <!-- Ex-dato -->
+      <div class="flex items-center justify-between mt-3 pt-3 border-t border-gray-100 dark:border-gray-800 text-sm">
+        <div>
+          <span class="text-xs text-gray-400">Ex-dato: </span>
+          <span class="${snartEx ? 'text-orange-600 dark:text-orange-400 font-semibold' : 'text-gray-600 dark:text-gray-400'}">
+            ${a.ex_dato ? formaterDato(a.ex_dato) : '—'}
+          </span>
+          ${snartEx && dagerTil !== null ? `<span class="text-xs text-orange-500 ml-1">${dagerTil === 0 ? '(i dag!)' : dagerTil === 1 ? '(i morgen)' : `(om ${dagerTil} d)`}</span>` : ''}
+        </div>
+        <svg class="w-4 h-4 text-gray-300 dark:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+      </div>
+    </div>`;
+  }).join('');
+
+  kortBody.querySelectorAll('.aksje-kort').forEach(el => {
+    el.addEventListener('click', () => {
+      const aksje = alleAksjer.find(a => a.ticker === el.dataset.ticker);
       if (aksje) visModal(aksje);
     });
   });

@@ -1,81 +1,161 @@
-/* ── BASE ────────────────────────────────────────────────────────────────── */
+/* ── BASE ─────────────────────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; }
 
-/* ── STAT CARDS ─────────────────────────────────────────────────────────── */
+/* ── STAT CARDS ──────────────────────────────────────────────────────── */
 .stat-card {
-  @apply bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 px-4 py-4 shadow-sm;
+  background: #fff;
+  border-radius: 0.75rem;
+  border: 1px solid #e5e7eb;
+  padding: 1rem;
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+}
+.dark .stat-card {
+  background: #111827;
+  border-color: #1f2937;
 }
 .stat-label {
-  @apply text-xs text-gray-500 dark:text-gray-400 font-medium uppercase tracking-wide;
+  font-size: 0.75rem;
+  color: #6b7280;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
+.dark .stat-label { color: #9ca3af; }
 .stat-value {
-  @apply text-2xl font-bold mt-1 leading-none;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-top: 0.25rem;
+  line-height: 1;
 }
 
-/* ── TABS ───────────────────────────────────────────────────────────────── */
+/* ── TABS ─────────────────────────────────────────────────────────────── */
 .tab-btn {
-  @apply px-4 py-2.5 text-sm font-medium text-gray-500 dark:text-gray-400 border-b-2 border-transparent
-         hover:text-gray-800 dark:hover:text-gray-200 hover:border-gray-300 dark:hover:border-gray-600
-         transition-colors -mb-px;
+  padding: 0.625rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #6b7280;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: color 0.15s, border-color 0.15s;
+  background: none;
+  cursor: pointer;
 }
-.tab-btn.active {
-  @apply text-brand-700 dark:text-brand-400 border-brand-600 dark:border-brand-500;
-}
+.dark .tab-btn { color: #9ca3af; }
+.tab-btn:hover { color: #1f2937; border-color: #d1d5db; }
+.dark .tab-btn:hover { color: #e5e7eb; border-color: #4b5563; }
+.tab-btn.active { color: #15803d; border-color: #16a34a; }
+.dark .tab-btn.active { color: #4ade80; border-color: #22c55e; }
 
-/* ── FILTER INPUTS ──────────────────────────────────────────────────────── */
+/* ── FILTER INPUTS ────────────────────────────────────────────────────── */
 .filter-input {
-  @apply px-3 py-2 text-sm rounded-lg border border-gray-300 dark:border-gray-700
-         bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200
-         focus:outline-none focus:ring-2 focus:ring-brand-500/50 focus:border-brand-500
-         transition-colors;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  border-radius: 0.5rem;
+  border: 1px solid #d1d5db;
+  background: #fff;
+  color: #1f2937;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  outline: none;
+}
+.dark .filter-input {
+  border-color: #374151;
+  background: #111827;
+  color: #e5e7eb;
+}
+.filter-input:focus {
+  border-color: #22c55e;
+  box-shadow: 0 0 0 3px rgb(34 197 94 / 0.15);
 }
 
-/* ── TABLE ──────────────────────────────────────────────────────────────── */
+/* ── TABLE ────────────────────────────────────────────────────────────── */
 .table-row {
-  @apply bg-white dark:bg-gray-950 hover:bg-brand-50 dark:hover:bg-gray-900 cursor-pointer transition-colors;
+  background: #fff;
+  cursor: pointer;
+  transition: background 0.1s;
 }
-.row-highlight {
-  @apply bg-orange-50/50 dark:bg-orange-950/20;
-}
+.dark .table-row { background: #030712; }
+.table-row:hover { background: #f0fdf4; }
+.dark .table-row:hover { background: #111827; }
+.row-highlight { background: #fff7ed !important; }
+.dark .row-highlight { background: rgb(124 45 18 / 0.1) !important; }
 
 th.sortable {
-  @apply cursor-pointer select-none hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.1s;
 }
-th.sortable::after {
-  content: ' ⇅';
-  @apply text-gray-300 dark:text-gray-600;
-}
-th.sort-asc::after { content: ' ↑'; @apply text-brand-600 dark:text-brand-400; }
-th.sort-desc::after { content: ' ↓'; @apply text-brand-600 dark:text-brand-400; }
+th.sortable:hover { background: #e5e7eb; }
+.dark th.sortable:hover { background: #1f2937; }
+th.sortable::after { content: ' ⇅'; color: #d1d5db; }
+.dark th.sortable::after { color: #4b5563; }
+th.sort-asc::after  { content: ' ↑'; color: #16a34a; }
+th.sort-desc::after { content: ' ↓'; color: #16a34a; }
+.dark th.sort-asc::after, .dark th.sort-desc::after { color: #4ade80; }
 
-/* ── YIELD BADGES ───────────────────────────────────────────────────────── */
+/* ── YIELD BADGES ─────────────────────────────────────────────────────── */
 .yield-badge {
-  @apply inline-block px-2 py-0.5 rounded-full text-xs font-bold;
+  display: inline-block;
+  padding: 0.125rem 0.5rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 700;
 }
-.yield-hoy   { @apply bg-green-100 dark:bg-green-900/40 text-green-800 dark:text-green-300; }
-.yield-god   { @apply bg-blue-100 dark:bg-blue-900/40 text-blue-800 dark:text-blue-300; }
-.yield-middels { @apply bg-yellow-100 dark:bg-yellow-900/40 text-yellow-800 dark:text-yellow-300; }
-.yield-lav   { @apply bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400; }
+.yield-hoy    { background: #dcfce7; color: #166534; }
+.yield-god    { background: #dbeafe; color: #1e40af; }
+.yield-middels{ background: #fef9c3; color: #854d0e; }
+.yield-lav    { background: #f3f4f6; color: #4b5563; }
+.dark .yield-hoy    { background: rgb(20 83 45 / 0.4); color: #86efac; }
+.dark .yield-god    { background: rgb(30 58 138 / 0.4); color: #93c5fd; }
+.dark .yield-middels{ background: rgb(133 77 14 / 0.4); color: #fde047; }
+.dark .yield-lav    { background: #1f2937; color: #9ca3af; }
 
-/* ── FREKVENS BADGE ─────────────────────────────────────────────────────── */
+/* ── FREKVENS BADGE ───────────────────────────────────────────────────── */
 .frekvens-badge {
-  @apply inline-block px-2 py-0.5 rounded text-xs bg-gray-100 dark:bg-gray-800
-         text-gray-600 dark:text-gray-400 font-medium;
+  display: inline-block;
+  padding: 0.125rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  background: #f3f4f6;
+  color: #4b5563;
 }
+.dark .frekvens-badge { background: #1f2937; color: #9ca3af; }
 
-/* ── KALENDER ───────────────────────────────────────────────────────────── */
+/* ── MOBILE AKSJE-KORT ────────────────────────────────────────────────── */
+.aksje-kort {
+  background: #fff;
+  border-radius: 0.75rem;
+  border: 1px solid #e5e7eb;
+  padding: 1rem;
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  cursor: pointer;
+  transition: box-shadow 0.15s, border-color 0.15s;
+}
+.dark .aksje-kort { background: #111827; border-color: #1f2937; }
+.aksje-kort:active { box-shadow: 0 0 0 2px #22c55e; border-color: #22c55e; }
+.aksje-kort.snart-ex { border-left: 3px solid #f97316; }
+
+/* ── KALENDER ─────────────────────────────────────────────────────────── */
 .kal-rad {
-  @apply flex items-center justify-between gap-4 px-4 py-3
-         hover:bg-gray-50 dark:hover:bg-gray-900/50 transition-colors;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  transition: background 0.1s;
 }
+.kal-rad:hover { background: #f9fafb; }
+.dark .kal-rad:hover { background: rgb(17 24 39 / 0.5); }
 
-/* ── SCROLLBAR ──────────────────────────────────────────────────────────── */
+/* ── SCROLLBAR ────────────────────────────────────────────────────────── */
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { @apply bg-gray-300 dark:bg-gray-700 rounded-full; }
-::-webkit-scrollbar-thumb:hover { @apply bg-gray-400 dark:bg-gray-600; }
+::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 9999px; }
+::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
+.dark ::-webkit-scrollbar-thumb { background: #374151; }
+.dark ::-webkit-scrollbar-thumb:hover { background: #4b5563; }
 
-/* ── MODAL ANIMATION ─────────────────────────────────────────────────────── */
+/* ── MODAL ────────────────────────────────────────────────────────────── */
 #modal-content {
   animation: modalIn 0.2s ease-out;
 }
@@ -83,3 +163,30 @@ th.sort-desc::after { content: ' ↓'; @apply text-brand-600 dark:text-brand-400
   from { opacity: 0; transform: scale(0.95) translateY(8px); }
   to   { opacity: 1; transform: scale(1) translateY(0); }
 }
+
+/* Fullskjerm modal på mobil */
+@media (max-width: 640px) {
+  #modal-overlay { align-items: flex-end; padding: 0; }
+  #modal-content {
+    border-radius: 1rem 1rem 0 0;
+    max-height: 92vh;
+    animation: modalSlideUp 0.25s ease-out;
+  }
+  @keyframes modalSlideUp {
+    from { opacity: 0; transform: translateY(100%); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+}
+
+/* ── RESPONSIV TABELL / KORT ──────────────────────────────────────────── */
+#tabell-wrapper { display: none; }
+#kort-wrapper   { display: block; }
+
+@media (min-width: 768px) {
+  #tabell-wrapper { display: block; }
+  #kort-wrapper   { display: none; }
+}
+
+/* ── SORT-VELGER (mobil) ──────────────────────────────────────────────── */
+#mobil-sort-rad { display: flex; }
+@media (min-width: 768px) { #mobil-sort-rad { display: none; } }

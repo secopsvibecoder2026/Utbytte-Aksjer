@@ -23,31 +23,31 @@
 
   <!-- HEADER -->
   <header class="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 sticky top-0 z-40 shadow-sm">
-    <div class="max-w-screen-2xl mx-auto px-4 py-3 flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <div class="w-8 h-8 rounded-lg bg-brand-600 flex items-center justify-center text-white font-bold text-sm">UA</div>
-        <div>
-          <h1 class="font-bold text-lg leading-tight">Norske Utbytteaksjer</h1>
-          <p id="sist-oppdatert" class="text-xs text-gray-500 dark:text-gray-400"></p>
+    <div class="max-w-screen-2xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
+      <div class="flex items-center gap-2 min-w-0">
+        <div class="w-8 h-8 shrink-0 rounded-lg bg-brand-600 flex items-center justify-center text-white font-bold text-sm">UA</div>
+        <div class="min-w-0">
+          <h1 class="font-bold text-base sm:text-lg leading-tight truncate">Norske Utbytteaksjer</h1>
+          <p id="sist-oppdatert" class="text-xs text-gray-500 dark:text-gray-400 truncate"></p>
         </div>
       </div>
-      <button id="dark-toggle" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500 dark:text-gray-400 transition-colors" title="Bytt tema">
+      <button id="dark-toggle" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500 dark:text-gray-400 transition-colors shrink-0" title="Bytt tema">
         <svg id="icon-moon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
         <svg id="icon-sun" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
       </button>
     </div>
   </header>
 
-  <main class="max-w-screen-2xl mx-auto px-4 py-6 space-y-6">
+  <main class="max-w-screen-2xl mx-auto px-3 sm:px-4 py-4 sm:py-6 space-y-4 sm:space-y-6">
 
     <!-- SAMMENDRAGSKORT -->
-    <section id="summary-cards" class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+    <section class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
       <div class="stat-card">
         <p class="stat-label">Aksjer sporet</p>
         <p id="stat-antall" class="stat-value text-brand-600 dark:text-brand-500">—</p>
       </div>
       <div class="stat-card">
-        <p class="stat-label">Høyeste utbytteyield</p>
+        <p class="stat-label">Høyeste yield</p>
         <p id="stat-hoyest-yield" class="stat-value text-green-600 dark:text-green-400">—</p>
         <p id="stat-hoyest-navn" class="text-xs text-gray-500 dark:text-gray-400 mt-0.5"></p>
       </div>
@@ -57,7 +57,7 @@
       </div>
       <div class="stat-card">
         <p class="stat-label">Neste ex-dato</p>
-        <p id="stat-neste-ex" class="stat-value text-orange-600 dark:text-orange-400">—</p>
+        <p id="stat-neste-ex" class="stat-value text-orange-600 dark:text-orange-400 text-xl sm:text-2xl">—</p>
         <p id="stat-neste-ex-navn" class="text-xs text-gray-500 dark:text-gray-400 mt-0.5"></p>
       </div>
     </section>
@@ -66,47 +66,67 @@
     <div class="border-b border-gray-200 dark:border-gray-800">
       <nav class="flex gap-1" id="tab-nav">
         <button class="tab-btn active" data-tab="oversikt">Oversikt</button>
-        <button class="tab-btn" data-tab="kalender">Utbyttekalender</button>
+        <button class="tab-btn" data-tab="kalender">Kalender</button>
       </nav>
     </div>
 
     <!-- FILTER BAR -->
-    <section class="flex flex-wrap gap-3 items-center" id="filter-bar">
-      <div class="relative flex-1 min-w-48">
-        <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-        <input id="sok" type="text" placeholder="Søk ticker eller navn…" class="filter-input pl-9 w-full" />
+    <section id="filter-bar" class="space-y-2 sm:space-y-0 sm:flex sm:flex-wrap sm:gap-3 sm:items-center">
+      <!-- Søk (full bredde på mobil) -->
+      <div class="relative w-full sm:flex-1 sm:min-w-48">
+        <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        <input id="sok" type="search" placeholder="Søk ticker eller selskapsnavn…" class="filter-input pl-9 w-full" />
       </div>
-      <select id="filter-sektor" class="filter-input">
-        <option value="">Alle sektorer</option>
-      </select>
-      <select id="filter-frekvens" class="filter-input">
-        <option value="">Alle frekvenser</option>
-        <option>Kvartalsvis</option>
-        <option>Halvårlig</option>
-        <option>Årlig</option>
-      </select>
-      <select id="filter-yield" class="filter-input">
-        <option value="">Alle yielder</option>
-        <option value="3">Yield ≥ 3%</option>
-        <option value="5">Yield ≥ 5%</option>
-        <option value="8">Yield ≥ 8%</option>
-        <option value="10">Yield ≥ 10%</option>
-      </select>
-      <button id="reset-filter" class="px-3 py-2 text-sm rounded-lg border border-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-400 transition-colors">
-        Nullstill
-      </button>
+      <!-- Dropdowns (2-kolonner på mobil) -->
+      <div class="grid grid-cols-2 sm:flex gap-2 sm:gap-3">
+        <select id="filter-sektor" class="filter-input w-full sm:w-auto">
+          <option value="">Alle sektorer</option>
+        </select>
+        <select id="filter-frekvens" class="filter-input w-full sm:w-auto">
+          <option value="">Alle frekvenser</option>
+          <option>Kvartalsvis</option>
+          <option>Halvårlig</option>
+          <option>Årlig</option>
+        </select>
+        <select id="filter-yield" class="filter-input w-full sm:w-auto">
+          <option value="">Alle yielder</option>
+          <option value="3">Yield ≥ 3%</option>
+          <option value="5">Yield ≥ 5%</option>
+          <option value="8">Yield ≥ 8%</option>
+          <option value="10">Yield ≥ 10%</option>
+        </select>
+        <button id="reset-filter" class="filter-input text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors text-center">
+          Nullstill
+        </button>
+      </div>
     </section>
 
     <!-- OVERSIKT-FANE -->
     <div id="tab-oversikt">
-      <div class="overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-800 shadow-sm">
+
+      <!-- SORT-VELGER (kun mobil) -->
+      <div id="mobil-sort-rad" class="flex gap-2 items-center mb-3">
+        <label class="text-xs text-gray-500 dark:text-gray-400 shrink-0">Sorter etter:</label>
+        <select id="mobil-sort" class="filter-input flex-1 text-sm">
+          <option value="utbytte_yield_desc">Høyest yield</option>
+          <option value="utbytte_yield_asc">Lavest yield</option>
+          <option value="utbytte_vekst_5ar_desc">Best vekst 5år</option>
+          <option value="payout_ratio_asc">Lavest payout</option>
+          <option value="ar_med_utbytte_desc">Flest år m/utbytte</option>
+          <option value="ex_dato_asc">Neste ex-dato</option>
+          <option value="navn_asc">Navn A–Å</option>
+        </select>
+      </div>
+
+      <!-- TABELL (desktop) -->
+      <div id="tabell-wrapper" class="overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-800 shadow-sm">
         <table class="w-full text-sm">
           <thead>
             <tr class="bg-gray-100 dark:bg-gray-900 text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
               <th class="sortable px-4 py-3 text-left" data-col="ticker">Ticker</th>
               <th class="sortable px-4 py-3 text-left" data-col="navn">Selskap</th>
               <th class="sortable px-4 py-3 text-right" data-col="pris">Pris</th>
-              <th class="px-4 py-3 text-center">52-ukers range</th>
+              <th class="px-4 py-3 text-center">52u range</th>
               <th class="sortable px-4 py-3 text-right" data-col="utbytte_yield">Yield %</th>
               <th class="sortable px-4 py-3 text-right" data-col="utbytte_per_aksje">Utb./aksje</th>
               <th class="sortable px-4 py-3 text-right" data-col="payout_ratio">Payout</th>
@@ -125,25 +145,38 @@
           <p class="text-lg">Ingen aksjer matcher filteret</p>
         </div>
       </div>
+
+      <!-- KORT-VISNING (mobil) -->
+      <div id="kort-wrapper" class="space-y-3">
+        <div id="kort-body"></div>
+        <div id="ingen-resultater-mobil" class="hidden text-center py-12 text-gray-400 dark:text-gray-600">
+          <p>Ingen aksjer matcher filteret</p>
+        </div>
+      </div>
+
       <p class="text-xs text-gray-400 dark:text-gray-600 mt-2 text-right" id="antall-vist"></p>
     </div>
 
     <!-- KALENDER-FANE -->
-    <div id="tab-kalender" class="hidden space-y-6">
+    <div id="tab-kalender" class="hidden space-y-4">
       <div id="kalender-innhold"></div>
     </div>
 
   </main>
 
-  <!-- MODAL / POPUP FOR AKSJEDETALJER -->
-  <div id="modal-overlay" class="fixed inset-0 bg-black/60 z-50 hidden items-center justify-center p-4">
-    <div id="modal-content" class="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
-      <div class="p-6" id="modal-body"></div>
+  <!-- MODAL -->
+  <div id="modal-overlay" class="fixed inset-0 bg-black/60 z-50 hidden items-end sm:items-center justify-center sm:p-4">
+    <div id="modal-content" class="bg-white dark:bg-gray-900 rounded-t-2xl sm:rounded-2xl shadow-2xl w-full sm:max-w-lg max-h-[92vh] sm:max-h-[90vh] overflow-y-auto">
+      <!-- Drag handle (mobil) -->
+      <div class="flex justify-center pt-3 pb-1 sm:hidden">
+        <div class="w-10 h-1 rounded-full bg-gray-300 dark:bg-gray-700"></div>
+      </div>
+      <div class="p-4 sm:p-6" id="modal-body"></div>
     </div>
   </div>
 
   <!-- FOOTER -->
-  <footer class="mt-12 border-t border-gray-200 dark:border-gray-800 py-6 text-center text-xs text-gray-400 dark:text-gray-600 space-y-1">
+  <footer class="mt-8 sm:mt-12 border-t border-gray-200 dark:border-gray-800 py-6 text-center text-xs text-gray-400 dark:text-gray-600 space-y-1 px-4">
     <p>Data hentet automatisk fra Yahoo Finance. Oppdateres hverdager kl 08:00.</p>
     <p class="font-medium text-yellow-600 dark:text-yellow-500">Ikke finansiell rådgivning. Gjør alltid din egen analyse før investering.</p>
   </footer>
