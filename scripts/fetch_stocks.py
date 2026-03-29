@@ -45,6 +45,14 @@ AKSJER = [
     {"ticker_yf": "AKER.OL",  "ticker": "AKER",  "navn": "Aker ASA",                  "sektor": "Industri",           "bors": "Oslo Børs"},
     {"ticker_yf": "BWO.OL",   "ticker": "BWO",   "navn": "BW Offshore Limited",       "sektor": "Energitjenester",    "bors": "Oslo Børs"},
     {"ticker_yf": "SBVG.OL",  "ticker": "SBVG",  "navn": "SpareBank 1 BV",            "sektor": "Finans",             "bors": "Oslo Børs"},
+    {"ticker_yf": "GJF.OL",   "ticker": "GJF",   "navn": "Gjensidige Forsikring ASA", "sektor": "Finans",             "bors": "Oslo Børs"},
+    {"ticker_yf": "STB.OL",   "ticker": "STB",   "navn": "Storebrand ASA",             "sektor": "Finans",             "bors": "Oslo Børs"},
+    {"ticker_yf": "AKSO.OL",  "ticker": "AKSO",  "navn": "Aker Solutions ASA",         "sektor": "Energitjenester",    "bors": "Oslo Børs"},
+    {"ticker_yf": "COOL.OL",  "ticker": "COOL",  "navn": "Cool Company Ltd",           "sektor": "Shipping",           "bors": "Oslo Børs"},
+    {"ticker_yf": "OKEA.OL",  "ticker": "OKEA",  "navn": "OKEA ASA",                   "sektor": "Energi",             "bors": "Oslo Børs"},
+    {"ticker_yf": "BEWI.OL",  "ticker": "BEWI",  "navn": "BEWI ASA",                   "sektor": "Industri",           "bors": "Oslo Børs"},
+    {"ticker_yf": "WILS.OL",  "ticker": "WILS",  "navn": "Wilson ASA",                 "sektor": "Shipping",           "bors": "Oslo Børs"},
+    {"ticker_yf": "BONHR.OL", "ticker": "BONHR", "navn": "Bonheur ASA",                "sektor": "Fornybar energi",    "bors": "Oslo Børs"},
 ]
 
 # Statiske beskrivelser (ikke tilgjengelig fra Yahoo Finance)
@@ -83,6 +91,14 @@ BESKRIVELSER = {
     "AKER":  "Kjell Inge Røkkes industrielle investeringsselskap. Eierandeler i bl.a. Aker BP, Aker Solutions og Cognite.",
     "BWO":   "FPSO-operatør (flytende produksjon og lagring av olje). Langvarige kontrakter gir stabil kontantstrøm.",
     "SBVG":  "Sparebank i Telemark og Vestfold. Stabil lokal bank med god utbyttehistorikk og solid kapitaldekning.",
+    "GJF":   "Norges største skadeforsikringsselskap. Betaler ordinært utbytte pluss ekstraordinært. Svært høy og stabil utbyttegrad.",
+    "STB":   "Ledende nordisk livsforsikrings- og pensjonskonsern. Voksende utbytte drevet av sterk vekst i forvaltningskapital.",
+    "AKSO":  "Leverandør av engineering og teknologi til olje-, gass- og havvindprosjekter. Gjenopptok utbytte etter restrukturering i 2020.",
+    "COOL":  "LNG-tankselskap spinnet ut fra Golar LNG. Liberal utbyttepolitikk. Syklisk eksponering mot LNG-fraktrater.",
+    "OKEA":  "Norsk E&P-selskap med fokus på norsk sokkel. Høy utbytteyield drevet av sterk produksjon fra Draugen og Brage.",
+    "BEWI":  "Produsent av EPS-emballasje og isolasjonsmaterialer. Eksponert mot bygg, fisk og mat. Voksende i Europa.",
+    "WILS":  "Europas ledende kysttransportselskap. Frakter tørrbulk og prosjektlast langs europakysten. Stabil inntjening.",
+    "BONHR": "Fred. Olsen-kontrollert konglomerat med offshore vind (Fred. Olsen Renewables), cruiseskip og shippingvirksomhet.",
 }
 
 
