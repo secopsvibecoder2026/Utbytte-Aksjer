@@ -1,47 +1,6 @@
 /* ── BASE ─────────────────────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; }
 
-/* ── GOOGLE ADS ──────────────────────────────────────────────────────── */
-
-/* Leaderboard – under sammendragskort */
-.ad-slot-leaderboard {
-  min-height: 90px;
-  width: 100%;
-  text-align: center;
-  background: transparent;
-}
-
-/* Inline – midt i innhold / under kalender */
-.ad-slot-inline {
-  min-height: 100px;
-  width: 100%;
-  text-align: center;
-  background: transparent;
-}
-
-/* Sticky bunn-banner (mobil) */
-.ad-slot-sticky-bottom {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 30;
-  background: #fff;
-  border-top: 1px solid #e5e7eb;
-  text-align: center;
-  min-height: 60px;
-  padding: 4px 0;
-}
-.dark .ad-slot-sticky-bottom {
-  background: #111827;
-  border-color: #1f2937;
-}
-
-/* Skjul tomme ad-slots for å unngå blank plass før AdSense er godkjent */
-.adsbygoogle:not([data-ad-status]) {
-  display: none !important;
-}
-
 /* ── STAT CARDS ──────────────────────────────────────────────────────── */
 .stat-card {
   background: #fff;

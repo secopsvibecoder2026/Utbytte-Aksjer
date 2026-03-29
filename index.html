@@ -18,13 +18,7 @@
       }
     }
   </script>
-
-  <!-- ═══════════════════════════════════════════════════════════════════
-       GOOGLE ADSENSE
-       Publisher ID: ca-pub-3981936786393038
-       Opprett ad-enheter på: https://adsense.google.com → Annonser → Etter annonseenhet
-       Erstatt data-ad-slot="XXXXXXXXXX" med riktig Slot ID for hver enhet
-  ════════════════════════════════════════════════════════════════════════ -->
+  <!-- Google AdSense – Auto Ads -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3981936786393038" crossorigin="anonymous"></script>
 </head>
 <body class="bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 min-h-screen transition-colors duration-200">
@@ -69,22 +63,6 @@
         <p id="stat-neste-ex-navn" class="text-xs text-gray-500 dark:text-gray-400 mt-0.5"></p>
       </div>
     </section>
-
-    <!-- ═══════════════════════════════════════════════════════════════════
-         ANNONSE 1 – Leaderboard under sammendragskort
-         Format: Responsiv (tilpasser seg bredden automatisk)
-         Erstatt data-ad-client og data-ad-slot med dine egne verdier.
-         Finn ad-slot på: https://adsense.google.com → Annonser → Etter annonseenhet
-    ════════════════════════════════════════════════════════════════════════ -->
-    <div class="ad-slot ad-slot-leaderboard">
-      <ins class="adsbygoogle"
-           style="display:block"
-           data-ad-client="ca-pub-3981936786393038"
-           data-ad-slot="XXXXXXXXXX"
-           data-ad-format="auto"
-           data-full-width-responsive="true"></ins>
-      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-    </div>
 
     <!-- TABS -->
     <div class="border-b border-gray-200 dark:border-gray-800">
@@ -177,21 +155,6 @@
         </div>
       </div>
 
-      <!-- ═══════════════════════════════════════════════════════════════════
-           ANNONSE 2 – Midt i innholdet (under tabellen, over kalender)
-           Vises kun på mobil (under kortvisningen).
-           Passer til rectangle/square-format (300x250 eller responsiv).
-      ════════════════════════════════════════════════════════════════════════ -->
-      <div class="ad-slot ad-slot-inline mt-4 md:hidden">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-3981936786393038"
-             data-ad-slot="XXXXXXXXXX"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-      </div>
-
       <!-- KORT-VISNING (mobil) -->
       <div id="kort-wrapper">
         <div id="kort-body" class="space-y-3"></div>
@@ -206,37 +169,9 @@
     <!-- KALENDER-FANE -->
     <div id="tab-kalender" class="hidden space-y-4">
       <div id="kalender-innhold"></div>
-
-      <!-- ═══════════════════════════════════════════════════════════════════
-           ANNONSE 3 – Under kalenderinnhold
-      ════════════════════════════════════════════════════════════════════════ -->
-      <div class="ad-slot ad-slot-inline">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-3981936786393038"
-             data-ad-slot="XXXXXXXXXX"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-      </div>
     </div>
 
   </main>
-
-  <!-- ═══════════════════════════════════════════════════════════════════
-       ANNONSE 4 – Sticky bunn-banner (mobil)
-       Vises som en liten sticky-bar i bunnen på mobile enheter.
-       Bruk "ankerbanner"-format i AdSense for best resultat.
-  ════════════════════════════════════════════════════════════════════════ -->
-  <div class="ad-slot-sticky-bottom md:hidden">
-    <ins class="adsbygoogle"
-         style="display:block"
-         data-ad-client="ca-pub-3981936786393038"
-         data-ad-slot="XXXXXXXXXX"
-         data-ad-format="auto"
-         data-full-width-responsive="true"></ins>
-    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-  </div>
 
   <!-- MODAL -->
   <div id="modal-overlay" class="fixed inset-0 bg-black/60 z-50 hidden items-end sm:items-center justify-center sm:p-4">
@@ -249,7 +184,7 @@
   </div>
 
   <!-- FOOTER -->
-  <footer class="mt-8 sm:mt-12 border-t border-gray-200 dark:border-gray-800 py-6 text-center text-xs text-gray-400 dark:text-gray-600 space-y-1 px-4 mb-16 md:mb-0">
+  <footer class="mt-8 sm:mt-12 border-t border-gray-200 dark:border-gray-800 py-6 text-center text-xs text-gray-400 dark:text-gray-600 space-y-1 px-4">
     <p>Data hentet automatisk fra Yahoo Finance. Oppdateres hverdager kl 08:00.</p>
     <p class="font-medium text-yellow-600 dark:text-yellow-500">Ikke finansiell rådgivning. Gjør alltid din egen analyse før investering.</p>
   </footer>
