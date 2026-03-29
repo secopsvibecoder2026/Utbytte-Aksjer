@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Personvern – exday.no</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { darkMode: 'class' }
+    if (localStorage.getItem('darkMode') === 'true') {
+      document.documentElement.classList.add('dark');
+    }
+  </script>
+  <script src="../assets/consent.js"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+    .section-heading {
+      font-size: 1.1rem;
+      font-weight: 600;
+      padding-bottom: 0.5rem;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    .dark .section-heading { border-color: #374151; }
+  </style>
+</head>
+<body class="bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 min-h-screen">
+
+  <div class="max-w-2xl mx-auto px-6 pt-10 pb-20">
+
+    <!-- TILBAKE -->
+    <a href="../" class="inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors mb-10">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+      Tilbake til exday.no
+    </a>
+
+    <!-- TITTEL -->
+    <h1 class="text-3xl font-bold mb-2">Personvern</h1>
+    <p class="text-sm text-gray-500 dark:text-gray-500 mb-12">Sist oppdatert: mars 2026</p>
+
+    <!-- 1. OM SIDEN -->
+    <section class="mb-10">
+      <h2 class="section-heading">1. Om denne siden</h2>
+      <p class="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+        exday.no er en informasjonstjeneste som viser oversikt over norske utbytteaksjer notert på Oslo Børs. Siden samler ikke inn personopplysninger på egne servere, men benytter tredjepartstjenester fra Google som kan sette informasjonskapsler på din enhet – dersom du samtykker til det.
+      </p>
+      <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+        Denne siden er i samsvar med GDPR (General Data Protection Regulation) og norsk personvernlovgivning forvaltet av <a href="https://www.datatilsynet.no" target="_blank" rel="noopener noreferrer" class="text-violet-600 dark:text-violet-400 underline">Datatilsynet</a>.
+      </p>
+    </section>
+
+    <!-- 2. INFORMASJONSKAPSLER -->
+    <section class="mb-10">
+      <h2 class="section-heading">2. Informasjonskapsler</h2>
+      <p class="text-gray-700 dark:text-gray-300 leading-relaxed mb-6">
+        Vi bruker kun sporings-informasjonskapsler dersom du aktivt samtykker til det ved første besøk. Du kan trekke tilbake samtykket ditt når som helst i seksjon 5 nedenfor.
+      </p>
+
+      <div class="space-y-5">
+        <div>
+          <p class="font-medium mb-1">Nødvendige (alltid aktive)</p>
+          <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+            <code class="bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded text-xs">cookie_consent</code> — lagrer ditt samtykkevalg i nettleserens localStorage. Ingen data sendes til eksterne servere.
+          </p>
+        </div>
+        <div>
+          <p class="font-medium mb-1">Analyse (krever samtykke)</p>
+          <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+            <code class="bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded text-xs">_ga</code>, <code class="bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded text-xs">_gid</code> — Google Analytics 4. Brukes til anonymisert statistikk om sidetrafikk (sidevisninger, enhetstype, omtrentlig geografisk plassering). IP-adresser anonymiseres. Varighet: 2 år / 24 timer.
+          </p>
+        </div>
+        <div>
+          <p class="font-medium mb-1">Annonsering (krever samtykke)</p>
+          <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+            Google AdSense — leverer annonser via Googles annonsenettverk. Google kan bruke informasjonskapsler til å vise relevante annonser basert på dine interesser. Se <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener noreferrer" class="text-violet-600 dark:text-violet-400 underline">Googles annonsepolitikk</a> for detaljer.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. GOOGLE ANALYTICS -->
+    <section class="mb-10">
+      <h2 class="section-heading">3. Google Analytics</h2>
+      <p class="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+        Vi bruker Google Analytics 4 for å forstå hvordan besøkende bruker siden. Dataene er aggregerte og anonymiserte — vi ser ikke hvem du er, bare mønstre som hvilke sider som er populære og hvilke enheter som brukes.
+      </p>
+      <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+        Data behandles av Google LLC (USA) under EUs standard databehandlervilkår. Les mer i <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" class="text-violet-600 dark:text-violet-400 underline">Googles personvernerklæring</a>.
+      </p>
+    </section>
+
+    <!-- 4. DINE RETTIGHETER -->
+    <section class="mb-10">
+      <h2 class="section-heading">4. Dine rettigheter</h2>
+      <p class="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">Etter GDPR har du rett til å:</p>
+      <ul class="space-y-2 text-gray-700 dark:text-gray-300 text-sm leading-relaxed">
+        <li class="flex gap-2"><span class="text-gray-400 shrink-0">—</span> Få innsyn i hvilke opplysninger som behandles om deg</li>
+        <li class="flex gap-2"><span class="text-gray-400 shrink-0">—</span> Kreve retting eller sletting av opplysninger</li>
+        <li class="flex gap-2"><span class="text-gray-400 shrink-0">—</span> Protestere mot behandling og be om begrensning</li>
+        <li class="flex gap-2"><span class="text-gray-400 shrink-0">—</span> Trekke tilbake samtykke når som helst uten at det påvirker lovligheten av tidligere behandling</li>
+        <li class="flex gap-2"><span class="text-gray-400 shrink-0">—</span> Klage til <a href="https://www.datatilsynet.no" target="_blank" rel="noopener noreferrer" class="text-violet-600 dark:text-violet-400 underline">Datatilsynet</a> dersom du mener personvernet ditt er krenket</li>
+      </ul>
+      <p class="text-gray-700 dark:text-gray-300 leading-relaxed mt-4 text-sm">
+        Siden lagrer ingen personopplysninger på egne servere. For henvendelser om data hos Google, bruk <a href="https://myaccount.google.com/data-and-privacy" target="_blank" rel="noopener noreferrer" class="text-violet-600 dark:text-violet-400 underline">Googles personverndashboard</a>.
+      </p>
+    </section>
+
+    <!-- 5. ADMINISTRER SAMTYKKE -->
+    <section class="mb-10">
+      <h2 class="section-heading">5. Administrer samtykke</h2>
+      <p class="text-gray-700 dark:text-gray-300 leading-relaxed mb-5">
+        Du kan når som helst endre eller trekke tilbake samtykket ditt her. Endringen trer i kraft ved neste sideinnlasting.
+      </p>
+      <div id="consent-ui" class="space-y-4">
+        <p id="consent-status" class="text-sm text-gray-500 dark:text-gray-400"></p>
+        <div class="flex flex-wrap gap-3" id="consent-buttons"></div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <div class="pt-8 border-t border-gray-100 dark:border-gray-800 text-sm text-gray-400 dark:text-gray-600">
+      <a href="../" class="hover:text-gray-600 dark:hover:text-gray-400 transition-colors">← exday.no</a>
+    </div>
+
+  </div>
+
+  <script>
+    (function () {
+      var KEY = 'cookie_consent';
+
+      function render() {
+        var val = localStorage.getItem(KEY);
+        var statusEl = document.getElementById('consent-status');
+        var btnsEl = document.getElementById('consent-buttons');
+
+        var labels = {
+          'all': 'Du har godtatt alle informasjonskapsler.',
+          'necessary': 'Du har valgt kun nødvendige informasjonskapsler.',
+          '': 'Du har ikke gjort et valg ennå.'
+        };
+        statusEl.textContent = labels[val || ''];
+
+        btnsEl.innerHTML = '';
+
+        var decline = document.createElement('button');
+        decline.textContent = 'Kun nødvendige';
+        decline.className = 'px-5 py-2.5 text-sm rounded-lg border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors' + (val === 'necessary' ? ' font-semibold ring-2 ring-gray-300 dark:ring-gray-600' : '');
+        decline.onclick = function () {
+          localStorage.setItem(KEY, 'necessary');
+          render();
+        };
+
+        var accept = document.createElement('button');
+        accept.textContent = 'Godta alle';
+        accept.className = 'px-5 py-2.5 text-sm rounded-lg bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 hover:bg-gray-700 dark:hover:bg-gray-300 font-medium transition-colors' + (val === 'all' ? ' ring-2 ring-offset-2 ring-gray-900 dark:ring-gray-100' : '');
+        accept.onclick = function () {
+          localStorage.setItem(KEY, 'all');
+          if (window.cookieConsent) window.cookieConsent.accept();
+          render();
+        };
+
+        btnsEl.appendChild(decline);
+        btnsEl.appendChild(accept);
+      }
+
+      render();
+    })();
+  </script>
+
+</body>
+</html>
