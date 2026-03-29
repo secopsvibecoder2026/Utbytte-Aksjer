@@ -6,6 +6,7 @@ Kjøres daglig via GitHub Actions.
 
 import json
 import os
+import sys
 import datetime
 import yfinance as yf
 
@@ -145,9 +146,11 @@ def beregn_utbytte_vekst(dividends, years=5):
     """Beregn CAGR for utbytte over angitte år."""
     if dividends.empty:
         return 0.0
-    today = datetime.datetime.today()
-    cutoff = today - datetime.timedelta(days=years * 365)
-    recent = dividends[dividends.index >= cutoff.tz_localize(dividends.index.tz) if dividends.index.tz else cutoff]
+    cutoff = datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(days=years * 365)
+    # Håndter både timezone-aware og naive DatetimeIndex
+    if dividends.index.tz is None:
+        cutoff = cutoff.replace(tzinfo=None)
+    recent = dividends[dividends.index >= cutoff]
     if recent.empty or len(recent) < 2:
         return 0.0
     # Summer utbytter per år
@@ -267,9 +270,11 @@ def main():
     if os.path.exists(output_path):
         with open(output_path, "r", encoding="utf-8") as f:
             existing = json.load(f)
-            fallback = {a["ticker"]: a for a in existing}
+            existing_aksjer = existing if isinstance(existing, list) else existing.get("aksjer", [])
+            fallback = {a["ticker"]: a for a in existing_aksjer}
 
     resultater = []
+    feil = []
     for meta in AKSJER:
         aksje = hent_aksje(meta)
         if aksje:
@@ -277,6 +282,17 @@ def main():
         elif meta["ticker"] in fallback:
             print(f"    Bruker fallback-data for {meta['ticker']}")
             resultater.append(fallback[meta["ticker"]])
+            feil.append(meta["ticker"])
+        else:
+            print(f"    ADVARSEL: Ingen data for {meta['ticker']} og ingen fallback.")
+            feil.append(meta["ticker"])
+
+    if not resultater:
+        print("\nKRITISK FEIL: Ingen aksjedata hentet og ingen fallback tilgjengelig.")
+        sys.exit(1)
+
+    if len(feil) > len(AKSJER) // 2:
+        print(f"\nADVARSEL: {len(feil)}/{len(AKSJER)} aksjer feilet. Sjekk Yahoo Finance-tilkoblingen.")
 
     # Legg til metadata
     output = {
@@ -290,6 +306,8 @@ def main():
         json.dump(output, f, ensure_ascii=False, indent=2)
 
     print(f"\nFerdig! {len(resultater)} aksjer lagret til {output_path}")
+    if feil:
+        print(f"Feilet (brukte fallback): {', '.join(feil)}")
     print(f"Sist oppdatert: {output['sist_oppdatert']}")
 
 

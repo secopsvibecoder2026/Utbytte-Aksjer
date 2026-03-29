@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initTabs();
   initFilter();
   initViewToggle();
+  initModal();
   lastData();
 });
 
@@ -19,17 +20,23 @@ document.addEventListener('DOMContentLoaded', () => {
 async function lastData() {
   try {
     const resp = await fetch('data/aksjer.json');
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
     const json = await resp.json();
 
-    // Støtter både {aksjer:[...]} og flat array
     alleAksjer = Array.isArray(json) ? json : json.aksjer;
 
-    // Sist oppdatert
+    // Sist oppdatert + advarsel hvis data er gammel
     const ts = json.sist_oppdatert;
     if (ts) {
       const d = new Date(ts);
-      document.getElementById('sist-oppdatert').textContent =
-        'Oppdatert ' + d.toLocaleDateString('nb-NO', { day:'numeric', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' });
+      const timerSiden = (Date.now() - d.getTime()) / 3600000;
+      const tidstekst = 'Oppdatert ' + d.toLocaleDateString('nb-NO', { day:'numeric', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' });
+      const el = document.getElementById('sist-oppdatert');
+      el.textContent = tidstekst;
+      if (timerSiden > 24) {
+        el.textContent += ' ⚠️ Data kan være utdatert';
+        el.classList.add('text-yellow-500');
+      }
     }
 
     byggSektorFilter();
@@ -38,6 +45,8 @@ async function lastData() {
     visKalender();
   } catch (e) {
     console.error('Feil ved lasting av data:', e);
+    document.getElementById('sist-oppdatert').textContent = '⚠️ Kunne ikke laste data – prøv igjen senere';
+    document.getElementById('sist-oppdatert').classList.add('text-red-500');
   }
 }
 
@@ -254,13 +263,13 @@ function visOversikt() {
     </tr>`;
   }).join('');
 
-  // Klikk for detaljer (tabell)
-  tbody.querySelectorAll('tr').forEach(tr => {
-    tr.addEventListener('click', () => {
-      const aksje = alleAksjer.find(a => a.ticker === tr.dataset.ticker);
-      if (aksje) visModal(aksje);
-    });
-  });
+  // Klikk via event delegation (tabell) – ingen minnelekasje
+  tbody.onclick = e => {
+    const tr = e.target.closest('tr[data-ticker]');
+    if (!tr) return;
+    const aksje = alleAksjer.find(a => a.ticker === tr.dataset.ticker);
+    if (aksje) visModal(aksje);
+  };
 
   // ── MOBIL KORTVISNING ──────────────────────────────────────────────────
   // Bytt mellom space-y-3 (normal) og tett listestil (kompakt)
@@ -350,12 +359,13 @@ function visOversikt() {
     return kompaktModus ? kompaktKort : normalKort;
   }).join('');
 
-  kortBody.querySelectorAll('.aksje-kort, .aksje-kort-kompakt').forEach(el => {
-    el.addEventListener('click', () => {
-      const aksje = alleAksjer.find(a => a.ticker === el.dataset.ticker);
-      if (aksje) visModal(aksje);
-    });
-  });
+  // Klikk via event delegation (kort) – ingen minnelekasje
+  kortBody.onclick = e => {
+    const kort = e.target.closest('[data-ticker]');
+    if (!kort) return;
+    const aksje = alleAksjer.find(a => a.ticker === kort.dataset.ticker);
+    if (aksje) visModal(aksje);
+  };
 }
 
 function sorterAksjer(data) {
@@ -453,7 +463,7 @@ function visModal(a) {
         <p class="text-gray-600 dark:text-gray-400">${a.navn}</p>
         <p class="text-xs text-gray-400 mt-0.5">${a.sektor} · ${a.bors}</p>
       </div>
-      <button id="modal-close" class="text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 p-1">
+      <button id="modal-close" class="text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 p-1" aria-label="Lukk">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
       </button>
     </div>
@@ -503,15 +513,23 @@ function visModal(a) {
 
   overlay.classList.remove('hidden');
   overlay.classList.add('flex');
-  document.getElementById('modal-close').addEventListener('click', lukkModal);
-
-  overlay.addEventListener('click', e => { if (e.target === overlay) lukkModal(); }, { once: true });
 }
 
 function lukkModal() {
   const overlay = document.getElementById('modal-overlay');
   overlay.classList.add('hidden');
   overlay.classList.remove('flex');
+}
+
+// ── MODAL INIT (én gang) ───────────────────────────────────────────────────
+function initModal() {
+  const overlay = document.getElementById('modal-overlay');
+  // Klikk på overlay-bakgrunn lukker modal
+  overlay.addEventListener('click', e => { if (e.target === overlay) lukkModal(); });
+  // Klikk på lukk-knapp via event delegation
+  overlay.addEventListener('click', e => { if (e.target.closest('#modal-close')) lukkModal(); });
+  // ESC lukker modal
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') lukkModal(); });
 }
 
 function modalKort(label, value) {
