@@ -558,6 +558,7 @@ function visPortefolje() {
   document.getElementById('pf-tom').classList.toggle('hidden', harBeholdning);
   document.getElementById('pf-beholdning-wrapper').classList.toggle('hidden', !harBeholdning);
   document.getElementById('pf-tidslinje-wrapper').classList.toggle('hidden', !harBeholdning);
+  document.getElementById('pf-charts-wrapper').classList.toggle('hidden', !harBeholdning);
 
   if (!harBeholdning) {
     ['pf-stat-ar','pf-stat-mnd','pf-stat-antall','pf-stat-neste','pf-stat-yield','pf-stat-verdi']
@@ -702,6 +703,127 @@ function visPortefolje() {
         <span class="text-xs font-semibold w-24 text-right tabular-nums">${fmtKr(v)}</span>
       </div>`;
   }).join('');
+
+  visCharts(alleBeholdning, totalAr);
+}
+
+// ── PORTEFØLJE-DIAGRAMMER ──────────────────────────────────────────────────
+const SEKTOR_FARGE = {
+  'Energi':            '#f97316',
+  'Finans':            '#3b82f6',
+  'Shipping':          '#1e40af',
+  'Havbruk':           '#14b8a6',
+  'Industri':          '#8b5cf6',
+  'Materialer':        '#a16207',
+  'Fornybar energi':   '#22c55e',
+  'Telekommunikasjon': '#ec4899',
+  'Forbruksvarer':     '#eab308',
+  'Energitjenester':   '#ef4444',
+  'Konsulent':         '#64748b',
+};
+const FARGE_FALLBACK = '#9ca3af';
+
+function visCharts(beholdning, totalAr) {
+  const wrapper = document.getElementById('pf-charts-wrapper');
+  if (!beholdning.length) { wrapper.classList.add('hidden'); return; }
+  wrapper.classList.remove('hidden');
+
+  // ── 1. SEKTOR-DONUT ────────────────────────────────────────────────────
+  const sektorMap = {};
+  beholdning.forEach(a => {
+    sektorMap[a.sektor] = (sektorMap[a.sektor] || 0) + a.forv_ar;
+  });
+  const sektorData = Object.entries(sektorMap)
+    .map(([s, v]) => ({ label: s, value: v, color: SEKTOR_FARGE[s] || FARGE_FALLBACK }))
+    .sort((a, b) => b.value - a.value);
+
+  const size = 180, cx = size / 2, cy = size / 2, or = 76, ir = 48;
+  let angle = -Math.PI / 2, paths = '';
+  sektorData.forEach(({ value, color }) => {
+    const sweep = (value / totalAr) * 2 * Math.PI;
+    const end = angle + sweep;
+    const lg = sweep > Math.PI ? 1 : 0;
+    const x1 = cx + or * Math.cos(angle),  y1 = cy + or * Math.sin(angle);
+    const x2 = cx + or * Math.cos(end),    y2 = cy + or * Math.sin(end);
+    const x3 = cx + ir * Math.cos(end),    y3 = cy + ir * Math.sin(end);
+    const x4 = cx + ir * Math.cos(angle),  y4 = cy + ir * Math.sin(angle);
+    paths += `<path d="M${x1},${y1} A${or},${or} 0 ${lg} 1 ${x2},${y2} L${x3},${y3} A${ir},${ir} 0 ${lg} 0 ${x4},${y4}Z" fill="${color}" stroke="white" stroke-width="1.5" class="dark:stroke-gray-900"/>`;
+    angle = end;
+  });
+
+  const legend = sektorData.map(({ label, value, color }) => {
+    const pct = (value / totalAr * 100).toFixed(1);
+    return `<div class="flex items-center gap-2 text-xs">
+      <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background:${color}"></span>
+      <span class="text-gray-600 dark:text-gray-400 truncate flex-1">${label}</span>
+      <span class="font-semibold tabular-nums">${pct}%</span>
+    </div>`;
+  }).join('');
+
+  document.getElementById('pf-sektor-chart').innerHTML = `
+    <div class="flex flex-col sm:flex-row items-center gap-4">
+      <svg viewBox="0 0 ${size} ${size}" width="${size}" height="${size}" class="shrink-0">${paths}</svg>
+      <div class="space-y-1.5 flex-1 min-w-0">${legend}</div>
+    </div>`;
+
+  // ── 2. TOPP BIDRAGSYTERE ───────────────────────────────────────────────
+  const topp = [...beholdning].sort((a, b) => b.forv_ar - a.forv_ar).slice(0, 8);
+  const maks = topp[0]?.forv_ar || 1;
+  const fmtKr = v => v.toLocaleString('nb-NO', { maximumFractionDigits: 0 }) + ' kr';
+
+  document.getElementById('pf-topp-chart').innerHTML = topp.map(a => {
+    const pct = (a.forv_ar / maks * 100).toFixed(1);
+    const andel = (a.forv_ar / totalAr * 100).toFixed(1);
+    const farge = SEKTOR_FARGE[a.sektor] || FARGE_FALLBACK;
+    return `
+      <div>
+        <div class="flex items-center justify-between mb-1">
+          <div class="flex items-center gap-1.5">
+            <span class="font-mono text-xs font-bold text-brand-700 dark:text-brand-400">${a.ticker}</span>
+            <span class="text-xs text-gray-400">${andel}%</span>
+          </div>
+          <span class="text-xs font-semibold tabular-nums">${fmtKr(a.forv_ar)}</span>
+        </div>
+        <div class="h-3 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
+          <div class="h-full rounded-full" style="width:${pct}%;background:${farge}"></div>
+        </div>
+      </div>`;
+  }).join('');
+
+  // ── 3. FREKVENSFORDELING ───────────────────────────────────────────────
+  const frekvensMap = {};
+  beholdning.forEach(a => {
+    frekvensMap[a.frekvens] = (frekvensMap[a.frekvens] || 0) + a.forv_ar;
+  });
+  const frekvensOrder = ['Månedlig','Kvartalsvis','Halvårlig','Årlig','Uregelmessig'];
+  const frekvensFarge = {
+    'Månedlig':      '#22c55e',
+    'Kvartalsvis':   '#3b82f6',
+    'Halvårlig':     '#8b5cf6',
+    'Årlig':         '#f97316',
+    'Uregelmessig':  '#9ca3af',
+  };
+
+  document.getElementById('pf-frekvens-chart').innerHTML = frekvensOrder
+    .filter(f => frekvensMap[f])
+    .map(f => {
+      const v = frekvensMap[f];
+      const pct = (v / totalAr * 100).toFixed(1);
+      const antall = beholdning.filter(a => a.frekvens === f).length;
+      const farge = frekvensFarge[f];
+      return `
+        <div class="flex-1 min-w-36 rounded-xl p-3 border border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/50">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background:${farge}"></span>
+            <span class="text-xs font-semibold">${f}</span>
+          </div>
+          <div class="text-lg font-bold tabular-nums">${pct}%</div>
+          <div class="text-xs text-gray-400">${fmtKr(v)} / år · ${antall} aksje${antall !== 1 ? 'r' : ''}</div>
+          <div class="mt-2 h-1.5 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+            <div class="h-full rounded-full" style="width:${pct}%;background:${farge}"></div>
+          </div>
+        </div>`;
+    }).join('');
 }
 
 function eksporterCSV() {
