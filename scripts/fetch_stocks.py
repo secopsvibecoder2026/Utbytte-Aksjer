@@ -212,7 +212,12 @@ def hent_aksje(meta):
         info = stk.info
         dividends = stk.dividends
         calendar = stk.calendar
-        hist_prices = stk.history(period="5y")
+        try:
+            hist_prices = stk.history(period="5y")
+        except Exception as hist_err:
+            print(f"    Advarsel: kunne ikke hente historiske kurser for {ticker}: {hist_err}")
+            import pandas as pd
+            hist_prices = pd.DataFrame()
 
         pris = safe_float(info.get("currentPrice") or info.get("regularMarketPrice"))
         if pris == 0.0:
@@ -221,8 +226,16 @@ def hent_aksje(meta):
                 pris = round(float(history["Close"].iloc[-1]), 2)
 
         utbytte_per_aksje = safe_float(info.get("dividendRate") or info.get("trailingAnnualDividendRate"))
-        utbytte_yield = safe_float(info.get("dividendYield", 0)) * 100
-        utbytte_yield = round(utbytte_yield, 2)
+
+        # Beregn yield fra pris og utbytte per aksje – mer pålitelig enn
+        # dividendYield-feltet som yfinance noen ganger returnerer som desimal
+        # og andre ganger som prosent avhengig av versjon/aksje.
+        if pris > 0 and utbytte_per_aksje > 0:
+            utbytte_yield = round((utbytte_per_aksje / pris) * 100, 2)
+        else:
+            raw = safe_float(info.get("dividendYield", 0))
+            # Sanity check: hvis > 1 er det allerede prosent, ellers desimal
+            utbytte_yield = round(raw if raw > 1 else raw * 100, 2)
 
         # Siste faktiske utbytte
         siste_utbytte = safe_float(dividends.iloc[-1]) if not dividends.empty else 0.0
