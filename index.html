@@ -32,19 +32,43 @@
 
   <!-- JSON-LD strukturert data -->
   <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    "name": "exday.no",
-    "url": "https://exday.no/",
-    "description": "Oversikt over norske utbytteaksjer notert på Oslo Børs",
-    "inLanguage": "nb-NO",
-    "publisher": {
-      "@type": "Organization",
+  [
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
       "name": "exday.no",
-      "url": "https://exday.no/"
+      "url": "https://exday.no/",
+      "description": "Oversikt over norske utbytteaksjer notert på Oslo Børs",
+      "inLanguage": "nb-NO",
+      "publisher": {
+        "@type": "Organization",
+        "name": "exday.no",
+        "url": "https://exday.no/"
+      }
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Dataset",
+      "name": "Norske utbytteaksjer – Oslo Børs",
+      "description": "Daglig oppdatert oversikt over 45 norske utbytteaksjer notert på Oslo Børs. Inneholder utbytteyield, ex-dato, betalingsdato, utbyttehistorikk, P/E, P/B, payout ratio og markedsverdi.",
+      "url": "https://exday.no/",
+      "inLanguage": "nb-NO",
+      "isAccessibleForFree": true,
+      "creator": {
+        "@type": "Organization",
+        "name": "exday.no",
+        "url": "https://exday.no/"
+      },
+      "keywords": ["utbytteaksjer", "Oslo Børs", "utbytte yield", "ex-dato", "dividend", "norske aksjer", "EQNR", "DNB", "Equinor"],
+      "variableMeasured": ["utbytte yield", "ex-dato", "betalingsdato", "utbytte per aksje", "payout ratio", "P/E ratio", "P/B ratio", "markedsverdi", "52-ukers kursrange"],
+      "temporalCoverage": "2020/..",
+      "spatialCoverage": {
+        "@type": "Place",
+        "name": "Norge"
+      },
+      "license": "https://creativecommons.org/licenses/by/4.0/"
     }
-  }
+  ]
   </script>
 
   <script src="https://cdn.tailwindcss.com"></script>
@@ -86,6 +110,7 @@
   <main class="max-w-screen-2xl mx-auto px-3 sm:px-4 py-4 sm:py-6 space-y-4 sm:space-y-6">
 
     <!-- SAMMENDRAGSKORT -->
+    <h2 class="text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 -mb-1">Utbytteoversikt · Oslo Børs</h2>
     <section class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
       <div class="stat-card">
         <p class="stat-label">Aksjer sporet</p>
@@ -152,6 +177,7 @@
 
     <!-- OVERSIKT-FANE -->
     <div id="tab-oversikt">
+      <h3 class="sr-only">Alle norske utbytteaksjer – yield, ex-dato og nøkkeltall</h3>
 
       <!-- SORT-VELGER + VIEW-TOGGLE (mobil) -->
       <div id="mobil-sort-rad" class="flex gap-2 items-center mb-3">

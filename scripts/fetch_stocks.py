@@ -603,6 +603,28 @@ def main():
     print(f"\nFerdig! {len(resultater)} aksjer lagret til {output_path}")
     print(f"Sist oppdatert: {output['sist_oppdatert']}")
 
+    # Generer sitemap.xml med oppdatert lastmod
+    today = datetime.datetime.utcnow().strftime("%Y-%m-%d")
+    sitemap_path = os.path.join(os.path.dirname(__file__), "..", "sitemap.xml")
+    sitemap_content = f"""<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://exday.no/</loc>
+    <lastmod>{today}</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://exday.no/personvern/</loc>
+    <lastmod>{today}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+  </url>
+</urlset>"""
+    with open(sitemap_path, "w", encoding="utf-8") as f:
+        f.write(sitemap_content)
+    print(f"Sitemap oppdatert: {sitemap_path}")
+
 
 if __name__ == "__main__":
     main()
