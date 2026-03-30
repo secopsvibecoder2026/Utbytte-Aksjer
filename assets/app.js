@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initViewToggle();
   initModal();
   initPortefolje();
+  initKalenderSok();
   lastData();
 });
 
@@ -115,6 +116,7 @@ function initTabs() {
     document.getElementById('tab-portfolio').classList.toggle('hidden', aktivTab !== 'portfolio');
     document.getElementById('filter-bar').classList.toggle('hidden', aktivTab !== 'oversikt');
     if (aktivTab === 'portfolio') visPortefolje();
+    if (aktivTab === 'kalender') visKalender();
   });
 }
 
@@ -397,14 +399,23 @@ function sorterAksjer(data) {
 }
 
 // ── KALENDER ───────────────────────────────────────────────────────────────
+function initKalenderSok() {
+  const inp = document.getElementById('kal-sok');
+  if (inp) inp.addEventListener('input', visKalender);
+}
+
 function visKalender() {
   const container = document.getElementById('kalender-innhold');
   const idag = new Date(); idag.setHours(0,0,0,0);
+  const sok = (document.getElementById('kal-sok')?.value || '').toLowerCase().trim();
 
-  // Grupper etter måned
   const manedsMap = {};
   alleAksjer
-    .filter(a => a.ex_dato)
+    .filter(a => {
+      if (!a.ex_dato) return false;
+      if (sok && !a.ticker.toLowerCase().includes(sok) && !a.navn.toLowerCase().includes(sok)) return false;
+      return true;
+    })
     .sort((a, b) => new Date(a.ex_dato) - new Date(b.ex_dato))
     .forEach(a => {
       const d = new Date(a.ex_dato);
@@ -414,7 +425,7 @@ function visKalender() {
     });
 
   if (Object.keys(manedsMap).length === 0) {
-    container.innerHTML = '<p class="text-gray-400">Ingen kommende ex-datoer tilgjengelig.</p>';
+    container.innerHTML = '<p class="text-gray-400 py-8 text-center">Ingen ex-datoer matcher søket.</p>';
     return;
   }
 
@@ -429,8 +440,8 @@ function visKalender() {
       const dagerTil = Math.ceil((exDato - idag) / (1000*60*60*24));
 
       return `
-      <div class="kal-rad ${erPassert ? 'opacity-40' : ''}">
-        <div class="flex items-center gap-3 flex-1">
+      <div class="kal-rad cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors ${erPassert ? 'opacity-40' : ''}" data-ticker="${a.ticker}">
+        <div class="flex items-center gap-3 flex-1 pointer-events-none">
           <div class="text-center w-12">
             <div class="text-xs text-gray-400">${['jan','feb','mar','apr','mai','jun','jul','aug','sep','okt','nov','des'][exDato.getMonth()]}</div>
             <div class="text-xl font-bold leading-none ${erPassert ? '' : 'text-orange-600 dark:text-orange-400'}">${exDato.getDate()}</div>
@@ -447,7 +458,7 @@ function visKalender() {
             </div>
           </div>
         </div>
-        <div class="text-right min-w-20">
+        <div class="text-right min-w-20 pointer-events-none">
           <span class="yield-badge ${yieldKlasse(a.utbytte_yield)} text-sm">${a.utbytte_yield.toFixed(2)}%</span>
           ${!erPassert ? `<div class="text-xs text-gray-400 mt-1">${dagerTil === 0 ? 'I dag!' : dagerTil === 1 ? 'I morgen' : `om ${dagerTil} dager`}</div>` : '<div class="text-xs text-gray-400 mt-1">Passert</div>'}
         </div>
@@ -460,9 +471,17 @@ function visKalender() {
         <span>${manedNavn}</span>
         <span class="text-xs font-normal text-gray-400">${aksjer.length} ex-dato${aksjer.length !== 1 ? 'er' : ''}</span>
       </div>
-      <div class="divide-y divide-gray-100 dark:divide-gray-800">${rader}</div>
+      <div class="divide-y divide-gray-100 dark:divide-gray-800" data-kal-gruppe>${rader}</div>
     </div>`;
   }).join('');
+
+  // Klikk → modal
+  container.onclick = e => {
+    const rad = e.target.closest('[data-ticker]');
+    if (!rad) return;
+    const aksje = alleAksjer.find(a => a.ticker === rad.dataset.ticker);
+    if (aksje) visModal(aksje);
+  };
 }
 
 // ── PORTEFØLJEKALKULATOR ───────────────────────────────────────────────────
@@ -494,6 +513,8 @@ function initPortefolje() {
   });
 
   document.getElementById('pf-eksport-csv').addEventListener('click', eksporterCSV);
+
+  document.getElementById('pf-sok').addEventListener('input', visPortefolje);
 }
 
 function fyllPFDropdown() {
@@ -516,7 +537,10 @@ function fyllPFDropdown() {
 function visPortefolje() {
   fyllPFDropdown();
   const pf = hentPF();
-  const beholdning = Object.entries(pf)
+  const sok = (document.getElementById('pf-sok')?.value || '').toLowerCase().trim();
+  const idag = new Date(); idag.setHours(0,0,0,0);
+
+  const alleBeholdning = Object.entries(pf)
     .map(([ticker, antall]) => {
       const a = alleAksjer.find(x => x.ticker === ticker);
       if (!a || antall < 1) return null;
@@ -525,32 +549,50 @@ function visPortefolje() {
     .filter(Boolean)
     .sort((a, b) => b.forv_ar - a.forv_ar);
 
-  const harBeholdning = beholdning.length > 0;
+  const beholdning = sok
+    ? alleBeholdning.filter(a => a.ticker.toLowerCase().includes(sok) || a.navn.toLowerCase().includes(sok))
+    : alleBeholdning;
+
+  const harBeholdning = alleBeholdning.length > 0;
   document.getElementById('pf-tom').classList.toggle('hidden', harBeholdning);
   document.getElementById('pf-beholdning-wrapper').classList.toggle('hidden', !harBeholdning);
   document.getElementById('pf-tidslinje-wrapper').classList.toggle('hidden', !harBeholdning);
 
   if (!harBeholdning) {
-    ['pf-stat-ar','pf-stat-mnd','pf-stat-antall','pf-stat-neste'].forEach(id => { document.getElementById(id).textContent = '—'; });
+    ['pf-stat-ar','pf-stat-mnd','pf-stat-antall','pf-stat-neste','pf-stat-yield','pf-stat-verdi']
+      .forEach(id => { document.getElementById(id).textContent = '—'; });
     document.getElementById('pf-stat-neste-navn').textContent = '';
     return;
   }
 
   // ── SAMMENDRAG ────────────────────────────────────────────────────────────
-  const totalAr = beholdning.reduce((s, a) => s + a.forv_ar, 0);
+  const totalAr = alleBeholdning.reduce((s, a) => s + a.forv_ar, 0);
+  const totalVerdi = alleBeholdning.reduce((s, a) => s + a.antall * (a.pris || 0), 0);
   const fmtKr = v => v.toLocaleString('nb-NO', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) + ' kr';
 
   document.getElementById('pf-stat-ar').textContent = fmtKr(totalAr);
   document.getElementById('pf-stat-mnd').textContent = fmtKr(totalAr / 12);
-  document.getElementById('pf-stat-antall').textContent = beholdning.length;
+  document.getElementById('pf-stat-antall').textContent = alleBeholdning.length;
+  document.getElementById('pf-stat-verdi').textContent = fmtKr(totalVerdi);
 
-  const idag = new Date(); idag.setHours(0,0,0,0);
-  const nestePayout = beholdning
-    .filter(a => a.betaling_dato && new Date(a.betaling_dato) >= idag)
-    .sort((a, b) => new Date(a.betaling_dato) - new Date(b.betaling_dato))[0];
+  // Vektet yield = totalAr / totalVerdi × 100
+  const vektetYield = totalVerdi > 0 ? (totalAr / totalVerdi * 100) : 0;
+  document.getElementById('pf-stat-yield').textContent = vektetYield > 0 ? vektetYield.toFixed(2) + '%' : '—';
+
+  // Neste utbetaling: bruk betaling_dato, fallback til ex_dato
+  const nesteRef = a => {
+    if (a.betaling_dato && new Date(a.betaling_dato) >= idag) return new Date(a.betaling_dato);
+    if (a.ex_dato && new Date(a.ex_dato) >= idag) return new Date(a.ex_dato);
+    return null;
+  };
+  const nestePayout = [...alleBeholdning]
+    .map(a => ({ a, dato: nesteRef(a) }))
+    .filter(x => x.dato)
+    .sort((x, y) => x.dato - y.dato)[0];
   if (nestePayout) {
-    document.getElementById('pf-stat-neste').textContent = formaterDato(nestePayout.betaling_dato);
-    document.getElementById('pf-stat-neste-navn').textContent = nestePayout.ticker;
+    const erBetaling = nestePayout.a.betaling_dato && new Date(nestePayout.a.betaling_dato) >= idag;
+    document.getElementById('pf-stat-neste').textContent = formaterDato(erBetaling ? nestePayout.a.betaling_dato : nestePayout.a.ex_dato);
+    document.getElementById('pf-stat-neste-navn').textContent = nestePayout.a.ticker + (erBetaling ? '' : ' (ex)');
   } else {
     document.getElementById('pf-stat-neste').textContent = '—';
     document.getElementById('pf-stat-neste-navn').textContent = '';
@@ -559,10 +601,10 @@ function visPortefolje() {
   // ── BEHOLDNINGSTABELL ─────────────────────────────────────────────────────
   const tbody = document.getElementById('pf-tabell-body');
   tbody.innerHTML = beholdning.map(a => `
-    <tr class="table-row">
+    <tr class="table-row cursor-pointer" data-ticker="${a.ticker}">
       <td class="px-4 py-3 font-mono font-bold text-brand-700 dark:text-brand-400">${a.ticker}</td>
       <td class="px-4 py-3 hidden sm:table-cell text-gray-600 dark:text-gray-400 text-sm">${a.navn}</td>
-      <td class="px-4 py-3 text-right">
+      <td class="px-4 py-3 text-right" onclick="event.stopPropagation()">
         <input type="number" min="1" value="${a.antall}"
           class="w-20 text-right text-sm border border-gray-200 dark:border-gray-700 rounded px-2 py-1 bg-transparent focus:outline-none focus:ring-1 focus:ring-brand-500"
           data-ticker="${a.ticker}" />
@@ -571,7 +613,7 @@ function visPortefolje() {
       <td class="px-4 py-3 text-right font-semibold">${fmtKr(a.forv_ar)}</td>
       <td class="px-4 py-3 text-center hidden sm:table-cell text-gray-500 text-sm">${a.ex_dato ? formaterDato(a.ex_dato) : '—'}</td>
       <td class="px-4 py-3 text-center hidden sm:table-cell"><span class="frekvens-badge">${a.frekvens}</span></td>
-      <td class="px-4 py-3 text-center">
+      <td class="px-4 py-3 text-center" onclick="event.stopPropagation()">
         <button class="pf-slett text-gray-400 hover:text-red-500 transition-colors p-1" data-ticker="${a.ticker}" title="Fjern">
           <svg class="w-4 h-4 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
         </button>
@@ -581,21 +623,27 @@ function visPortefolje() {
   // Sum-rad i footer
   document.getElementById('pf-tabell-footer').innerHTML = `
     <tr>
-      <td colspan="2" class="px-4 py-3 text-sm text-gray-500">Totalt</td>
-      <td class="px-4 py-3 text-right text-sm text-gray-500">${beholdning.reduce((s,a)=>s+a.antall,0)} aksjer</td>
+      <td colspan="2" class="px-4 py-3 text-sm text-gray-500">Totalt (${alleBeholdning.length} selskaper)</td>
+      <td class="px-4 py-3 text-right text-sm text-gray-500">${alleBeholdning.reduce((s,a)=>s+a.antall,0)} aksjer</td>
       <td></td>
       <td class="px-4 py-3 text-right text-brand-700 dark:text-brand-400">${fmtKr(totalAr)}</td>
       <td colspan="3"></td>
     </tr>`;
 
-  // Event delegation for slett + endre antall
+  // Event delegation: klikk på rad → modal (ikke slett-knapp eller input)
   tbody.onclick = e => {
     const btn = e.target.closest('.pf-slett');
-    if (!btn) return;
-    const pf2 = hentPF();
-    delete pf2[btn.dataset.ticker];
-    lagrePF(pf2);
-    visPortefolje();
+    if (btn) {
+      const pf2 = hentPF();
+      delete pf2[btn.dataset.ticker];
+      lagrePF(pf2);
+      visPortefolje();
+      return;
+    }
+    const tr = e.target.closest('tr[data-ticker]');
+    if (!tr || e.target.closest('input, button')) return;
+    const aksje = alleAksjer.find(a => a.ticker === tr.dataset.ticker);
+    if (aksje) visModal(aksje);
   };
   tbody.addEventListener('change', e => {
     if (!e.target.matches('input[data-ticker]')) return;

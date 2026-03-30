@@ -79,6 +79,22 @@ Brukere taster inn antall aksjer de eier → siden beregner forventet årlig utb
 - [x] Beregn: forventet utbytte per år, per kvartal og totalt
 - [x] Vis: kvartalsvis distribusjon som strekdiagram
 - [x] Eksport til CSV (BOM for norsk Excel-kompatibilitet)
+- [x] Klikk på aksjer → modal med fullstendig detaljer
+- [x] Søk i beholdning
+- [x] Vektet yield og total porteføljeverdi i sammendrag
+
+---
+
+### 4b. CSV-import av portefølje 📥
+**Status: Planlagt (avvent)**
+
+Brukere kan laste opp en CSV-fil (f.eks. eksportert fra nettbanken) for å importere beholdningen sin automatisk.
+
+- [ ] Parser CSV-format: ticker + antall kolonner
+- [ ] Valider tickers mot kjente aksjer i systemet
+- [ ] Feilmelding ved ukjente tickers
+- [ ] Forhåndsvisning før import bekreftes
+- [ ] Støtte for eksisterende eksport-format (round-trip)
 
 ---
 
