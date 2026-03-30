@@ -267,14 +267,32 @@ def hent_aksje(meta):
         else:
             ar_med_utbytte = 0
 
-        # Ex-dato, betalingsdato og neste kvartalsrapport
+        # Ex-dato og betalingsdato
         ex_dato = None
         betaling_dato = None
-        rapport_dato = None
         if isinstance(calendar, dict):
             ex_dato = format_dato(calendar.get("exDividendDate"))
             betaling_dato = format_dato(calendar.get("dividendDate"))
-            # Earnings Date kan være en liste (neste + evt. estimat)
+
+        # Neste kvartalsrapport – hentes fra earnings_dates (DataFrame) og
+        # faller tilbake på calendar["Earnings Date"] hvis det feiler
+        rapport_dato = None
+        try:
+            idag = datetime.datetime.today().date()
+            ed = stk.earnings_dates
+            if ed is not None and not ed.empty:
+                # Indeksen er tz-aware – normaliser til dato
+                fremtidige = [
+                    d.date() for d in ed.index
+                    if hasattr(d, 'date') and d.date() > idag
+                ]
+                if fremtidige:
+                    rapport_dato = min(fremtidige).strftime("%Y-%m-%d")
+        except Exception:
+            pass
+
+        # Fallback: calendar["Earnings Date"] fra Yahoo Finance
+        if not rapport_dato and isinstance(calendar, dict):
             earnings = calendar.get("Earnings Date") or calendar.get("earningsDate")
             if isinstance(earnings, list) and earnings:
                 rapport_dato = format_dato(earnings[0])
