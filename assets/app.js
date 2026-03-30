@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initFilter();
   initViewToggle();
   initModal();
+  initPortefolje();
   lastData();
 });
 
@@ -111,7 +112,9 @@ function initTabs() {
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b === btn));
     document.getElementById('tab-oversikt').classList.toggle('hidden', aktivTab !== 'oversikt');
     document.getElementById('tab-kalender').classList.toggle('hidden', aktivTab !== 'kalender');
+    document.getElementById('tab-portfolio').classList.toggle('hidden', aktivTab !== 'portfolio');
     document.getElementById('filter-bar').classList.toggle('hidden', aktivTab !== 'oversikt');
+    if (aktivTab === 'portfolio') visPortefolje();
   });
 }
 
@@ -460,6 +463,218 @@ function visKalender() {
       <div class="divide-y divide-gray-100 dark:divide-gray-800">${rader}</div>
     </div>`;
   }).join('');
+}
+
+// ── PORTEFØLJEKALKULATOR ───────────────────────────────────────────────────
+function hentPF() {
+  try { return JSON.parse(localStorage.getItem('pf_beholdning') || '{}'); } catch { return {}; }
+}
+function lagrePF(pf) { localStorage.setItem('pf_beholdning', JSON.stringify(pf)); }
+
+function initPortefolje() {
+  document.getElementById('pf-legg-til').addEventListener('click', () => {
+    const sel = document.getElementById('pf-velg-aksje');
+    const antallEl = document.getElementById('pf-antall');
+    const feilEl = document.getElementById('pf-feil');
+    const ticker = sel.value;
+    const antall = parseInt(antallEl.value, 10);
+    feilEl.classList.add('hidden');
+    if (!ticker) { feilEl.textContent = 'Velg en aksje.'; feilEl.classList.remove('hidden'); return; }
+    if (!antall || antall < 1) { feilEl.textContent = 'Skriv inn gyldig antall aksjer.'; feilEl.classList.remove('hidden'); return; }
+    const pf = hentPF();
+    pf[ticker] = antall;
+    lagrePF(pf);
+    sel.value = '';
+    antallEl.value = '';
+    visPortefolje();
+  });
+
+  document.getElementById('pf-antall').addEventListener('keydown', e => {
+    if (e.key === 'Enter') document.getElementById('pf-legg-til').click();
+  });
+
+  document.getElementById('pf-eksport-csv').addEventListener('click', eksporterCSV);
+}
+
+function fyllPFDropdown() {
+  const sel = document.getElementById('pf-velg-aksje');
+  const pf = hentPF();
+  const valgt = sel.value;
+  sel.innerHTML = '<option value="">Velg aksje…</option>';
+  [...alleAksjer]
+    .sort((a, b) => a.ticker.localeCompare(b.ticker, 'nb'))
+    .forEach(a => {
+      const opt = document.createElement('option');
+      opt.value = a.ticker;
+      opt.textContent = `${a.ticker} – ${a.navn}`;
+      if (pf[a.ticker]) opt.textContent += ` (${pf[a.ticker]} aksjer)`;
+      sel.appendChild(opt);
+    });
+  if (valgt) sel.value = valgt;
+}
+
+function visPortefolje() {
+  fyllPFDropdown();
+  const pf = hentPF();
+  const beholdning = Object.entries(pf)
+    .map(([ticker, antall]) => {
+      const a = alleAksjer.find(x => x.ticker === ticker);
+      if (!a || antall < 1) return null;
+      return { ...a, antall, forv_ar: antall * (a.utbytte_per_aksje || 0) };
+    })
+    .filter(Boolean)
+    .sort((a, b) => b.forv_ar - a.forv_ar);
+
+  const harBeholdning = beholdning.length > 0;
+  document.getElementById('pf-tom').classList.toggle('hidden', harBeholdning);
+  document.getElementById('pf-beholdning-wrapper').classList.toggle('hidden', !harBeholdning);
+  document.getElementById('pf-tidslinje-wrapper').classList.toggle('hidden', !harBeholdning);
+
+  if (!harBeholdning) {
+    ['pf-stat-ar','pf-stat-mnd','pf-stat-antall','pf-stat-neste'].forEach(id => { document.getElementById(id).textContent = '—'; });
+    document.getElementById('pf-stat-neste-navn').textContent = '';
+    return;
+  }
+
+  // ── SAMMENDRAG ────────────────────────────────────────────────────────────
+  const totalAr = beholdning.reduce((s, a) => s + a.forv_ar, 0);
+  const fmtKr = v => v.toLocaleString('nb-NO', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) + ' kr';
+
+  document.getElementById('pf-stat-ar').textContent = fmtKr(totalAr);
+  document.getElementById('pf-stat-mnd').textContent = fmtKr(totalAr / 12);
+  document.getElementById('pf-stat-antall').textContent = beholdning.length;
+
+  const idag = new Date(); idag.setHours(0,0,0,0);
+  const nestePayout = beholdning
+    .filter(a => a.betaling_dato && new Date(a.betaling_dato) >= idag)
+    .sort((a, b) => new Date(a.betaling_dato) - new Date(b.betaling_dato))[0];
+  if (nestePayout) {
+    document.getElementById('pf-stat-neste').textContent = formaterDato(nestePayout.betaling_dato);
+    document.getElementById('pf-stat-neste-navn').textContent = nestePayout.ticker;
+  } else {
+    document.getElementById('pf-stat-neste').textContent = '—';
+    document.getElementById('pf-stat-neste-navn').textContent = '';
+  }
+
+  // ── BEHOLDNINGSTABELL ─────────────────────────────────────────────────────
+  const tbody = document.getElementById('pf-tabell-body');
+  tbody.innerHTML = beholdning.map(a => `
+    <tr class="table-row">
+      <td class="px-4 py-3 font-mono font-bold text-brand-700 dark:text-brand-400">${a.ticker}</td>
+      <td class="px-4 py-3 hidden sm:table-cell text-gray-600 dark:text-gray-400 text-sm">${a.navn}</td>
+      <td class="px-4 py-3 text-right">
+        <input type="number" min="1" value="${a.antall}"
+          class="w-20 text-right text-sm border border-gray-200 dark:border-gray-700 rounded px-2 py-1 bg-transparent focus:outline-none focus:ring-1 focus:ring-brand-500"
+          data-ticker="${a.ticker}" />
+      </td>
+      <td class="px-4 py-3 text-right"><span class="yield-badge ${yieldKlasse(a.utbytte_yield)}">${a.utbytte_yield.toFixed(2)}%</span></td>
+      <td class="px-4 py-3 text-right font-semibold">${fmtKr(a.forv_ar)}</td>
+      <td class="px-4 py-3 text-center hidden sm:table-cell text-gray-500 text-sm">${a.ex_dato ? formaterDato(a.ex_dato) : '—'}</td>
+      <td class="px-4 py-3 text-center hidden sm:table-cell"><span class="frekvens-badge">${a.frekvens}</span></td>
+      <td class="px-4 py-3 text-center">
+        <button class="pf-slett text-gray-400 hover:text-red-500 transition-colors p-1" data-ticker="${a.ticker}" title="Fjern">
+          <svg class="w-4 h-4 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </td>
+    </tr>`).join('');
+
+  // Sum-rad i footer
+  document.getElementById('pf-tabell-footer').innerHTML = `
+    <tr>
+      <td colspan="2" class="px-4 py-3 text-sm text-gray-500">Totalt</td>
+      <td class="px-4 py-3 text-right text-sm text-gray-500">${beholdning.reduce((s,a)=>s+a.antall,0)} aksjer</td>
+      <td></td>
+      <td class="px-4 py-3 text-right text-brand-700 dark:text-brand-400">${fmtKr(totalAr)}</td>
+      <td colspan="3"></td>
+    </tr>`;
+
+  // Event delegation for slett + endre antall
+  tbody.onclick = e => {
+    const btn = e.target.closest('.pf-slett');
+    if (!btn) return;
+    const pf2 = hentPF();
+    delete pf2[btn.dataset.ticker];
+    lagrePF(pf2);
+    visPortefolje();
+  };
+  tbody.addEventListener('change', e => {
+    if (!e.target.matches('input[data-ticker]')) return;
+    const v = parseInt(e.target.value, 10);
+    if (!v || v < 1) { e.target.value = hentPF()[e.target.dataset.ticker]; return; }
+    const pf2 = hentPF();
+    pf2[e.target.dataset.ticker] = v;
+    lagrePF(pf2);
+    visPortefolje();
+  });
+
+  // ── KVARTALSVIS TIDSLINJE ─────────────────────────────────────────────────
+  const frekvensPerAr = { 'Månedlig': 12, 'Kvartalsvis': 4, 'Halvårlig': 2, 'Årlig': 1, 'Uregelmessig': 1 };
+  const kvartaler = ['K1 (jan–mar)', 'K2 (apr–jun)', 'K3 (jul–sep)', 'K4 (okt–des)'];
+  const kvartalSummer = [0, 0, 0, 0];
+
+  beholdning.forEach(a => {
+    const perAr = frekvensPerAr[a.frekvens] || 1;
+    const perUtbetaling = a.forv_ar / perAr;
+    if (perAr >= 12) {
+      // Månedlig: fordel jevnt over alle 4 kvartaler
+      kvartalSummer.forEach((_, i) => { kvartalSummer[i] += perUtbetaling * 3; });
+    } else if (perAr === 4) {
+      // Kvartalsvis: ett utbytte per kvartal
+      kvartalSummer.forEach((_, i) => { kvartalSummer[i] += perUtbetaling; });
+    } else if (perAr === 2) {
+      // Halvårlig: to kvartaler (K1 og K3, eller bruk betaling_dato)
+      const betalMnd = a.betaling_dato ? new Date(a.betaling_dato).getMonth() : null;
+      if (betalMnd !== null) {
+        const k = Math.floor(betalMnd / 3);
+        kvartalSummer[k] += perUtbetaling;
+        kvartalSummer[(k + 2) % 4] += perUtbetaling;
+      } else {
+        kvartalSummer[0] += perUtbetaling;
+        kvartalSummer[2] += perUtbetaling;
+      }
+    } else {
+      // Årlig / uregelmessig: legg i betalingsmånedens kvartal
+      const betalMnd = a.betaling_dato ? new Date(a.betaling_dato).getMonth()
+        : a.ex_dato ? new Date(a.ex_dato).getMonth() : 0;
+      kvartalSummer[Math.floor(betalMnd / 3)] += perUtbetaling;
+    }
+  });
+
+  const maksKvartal = Math.max(...kvartalSummer);
+  document.getElementById('pf-tidslinje').innerHTML = kvartaler.map((label, i) => {
+    const v = kvartalSummer[i];
+    const pct = maksKvartal > 0 ? (v / maksKvartal * 100).toFixed(1) : 0;
+    return `
+      <div class="flex items-center gap-3">
+        <span class="text-xs text-gray-500 dark:text-gray-400 w-28 shrink-0">${label}</span>
+        <div class="flex-1 h-5 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
+          <div class="h-full bg-brand-500 rounded-full transition-all" style="width:${pct}%"></div>
+        </div>
+        <span class="text-xs font-semibold w-24 text-right tabular-nums">${fmtKr(v)}</span>
+      </div>`;
+  }).join('');
+}
+
+function eksporterCSV() {
+  const pf = hentPF();
+  const rader = [['Ticker','Selskap','Antall','Kurs','Utbytte/aksje','Forv. utbytte/år','Yield %','Ex-dato','Frekvens']];
+  Object.entries(pf).forEach(([ticker, antall]) => {
+    const a = alleAksjer.find(x => x.ticker === ticker);
+    if (!a) return;
+    rader.push([
+      a.ticker, `"${a.navn}"`, antall,
+      a.pris.toFixed(2), (a.utbytte_per_aksje||0).toFixed(2),
+      (antall * (a.utbytte_per_aksje||0)).toFixed(2),
+      a.utbytte_yield.toFixed(2),
+      a.ex_dato || '', a.frekvens
+    ]);
+  });
+  const csv = rader.map(r => r.join(',')).join('\n');
+  const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'portef\u00F8lje-exday.csv'; a.click();
+  URL.revokeObjectURL(url);
 }
 
 // ── MODAL ─────────────────────────────────────────────────────────────────

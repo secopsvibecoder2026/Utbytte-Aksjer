@@ -105,6 +105,7 @@
       <nav class="flex gap-1" id="tab-nav">
         <button class="tab-btn active" data-tab="oversikt">Oversikt</button>
         <button class="tab-btn" data-tab="kalender">Kalender</button>
+        <button class="tab-btn" data-tab="portfolio">Portefølje</button>
       </nav>
     </div>
 
@@ -249,6 +250,87 @@
     <!-- KALENDER-FANE -->
     <div id="tab-kalender" class="hidden space-y-4">
       <div id="kalender-innhold"></div>
+    </div>
+
+    <!-- PORTEFØLJE-FANE -->
+    <div id="tab-portfolio" class="hidden space-y-4">
+
+      <!-- Sammendragskort -->
+      <section class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div class="stat-card">
+          <p class="stat-label">Forventet/år</p>
+          <p class="stat-value" id="pf-stat-ar">—</p>
+        </div>
+        <div class="stat-card">
+          <p class="stat-label">Snitt/måned</p>
+          <p class="stat-value" id="pf-stat-mnd">—</p>
+        </div>
+        <div class="stat-card">
+          <p class="stat-label">Selskaper</p>
+          <p class="stat-value" id="pf-stat-antall">—</p>
+        </div>
+        <div class="stat-card">
+          <p class="stat-label">Neste utbetaling</p>
+          <p class="stat-value text-base" id="pf-stat-neste">—</p>
+          <p class="text-xs text-gray-400 mt-0.5" id="pf-stat-neste-navn"></p>
+        </div>
+      </section>
+
+      <!-- Legg til aksje -->
+      <div class="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4 shadow-sm">
+        <h3 class="font-semibold text-sm mb-3">Legg til aksje</h3>
+        <div class="flex flex-col sm:flex-row gap-2">
+          <select id="pf-velg-aksje" class="filter-input flex-1">
+            <option value="">Velg aksje…</option>
+          </select>
+          <input id="pf-antall" type="number" min="1" placeholder="Antall aksjer" class="filter-input w-full sm:w-40" />
+          <button id="pf-legg-til" class="bg-brand-600 hover:bg-brand-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors shrink-0">Legg til</button>
+        </div>
+        <p id="pf-feil" class="text-xs text-red-500 mt-2 hidden"></p>
+      </div>
+
+      <!-- Beholdningstabell -->
+      <div id="pf-beholdning-wrapper" class="hidden">
+        <div class="flex items-center justify-between mb-2 px-1">
+          <h3 class="font-semibold text-sm">Min beholdning</h3>
+          <button id="pf-eksport-csv" class="text-xs text-brand-600 dark:text-brand-400 hover:underline font-medium flex items-center gap-1">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+            Last ned CSV
+          </button>
+        </div>
+        <div class="overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-800 shadow-sm">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="bg-gray-100 dark:bg-gray-900 text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
+                <th class="px-4 py-3 text-left">Ticker</th>
+                <th class="px-4 py-3 text-left hidden sm:table-cell">Selskap</th>
+                <th class="px-4 py-3 text-right">Antall</th>
+                <th class="px-4 py-3 text-right">Yield</th>
+                <th class="px-4 py-3 text-right">Forv. utbytte/år</th>
+                <th class="px-4 py-3 text-center hidden sm:table-cell">Ex-dato</th>
+                <th class="px-4 py-3 text-center hidden sm:table-cell">Frekvens</th>
+                <th class="px-4 py-3 text-center">Slett</th>
+              </tr>
+            </thead>
+            <tbody id="pf-tabell-body" class="divide-y divide-gray-100 dark:divide-gray-800"></tbody>
+            <tfoot id="pf-tabell-footer" class="bg-gray-50 dark:bg-gray-900/50 font-semibold"></tfoot>
+          </table>
+        </div>
+      </div>
+
+      <!-- Månedlig distribusjon -->
+      <div id="pf-tidslinje-wrapper" class="hidden bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4 shadow-sm">
+        <h3 class="font-semibold text-sm mb-3">Forventet utbytteinntekt per kvartal</h3>
+        <div id="pf-tidslinje" class="space-y-2"></div>
+      </div>
+
+      <!-- Tom tilstand -->
+      <div id="pf-tom" class="text-center py-12 text-gray-400 dark:text-gray-600">
+        <svg class="w-12 h-12 mx-auto mb-3 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        <p class="text-sm font-medium">Ingen aksjer i porteføljen ennå</p>
+        <p class="text-xs mt-1">Legg til aksjer ovenfor for å beregne forventet utbytteinntekt</p>
+      </div>
+
     </div>
 
   </main>
