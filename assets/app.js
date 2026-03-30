@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initViewToggle();
   initModal();
   initPortefolje();
+  initVarsler();
   lastData();
 });
 
@@ -46,6 +47,7 @@ async function lastData() {
     oppdaterSammendrag();
     visOversikt();
     visKalender();
+    sjekkExDatoerDirekte();
   } catch (e) {
     console.error('Feil ved lasting av data:', e);
     document.getElementById('sist-oppdatert').textContent = '⚠️ Kunne ikke laste data – prøv igjen senere';
@@ -115,6 +117,9 @@ function initTabs() {
     document.getElementById('tab-oversikt').classList.toggle('hidden', aktivTab !== 'oversikt');
     document.getElementById('tab-kalender').classList.toggle('hidden', aktivTab !== 'kalender');
     document.getElementById('tab-portfolio').classList.toggle('hidden', aktivTab !== 'portfolio');
+    document.getElementById('tab-varsler').classList.toggle('hidden', aktivTab !== 'varsler');
+    // Skjul hele filter-bar på varsler-fanen (søk gir ingen mening der)
+    document.getElementById('filter-bar').classList.toggle('hidden', aktivTab === 'varsler');
     // Søkefeltet er alltid synlig; bare filtre/dropdowns skjules på andre faner
     document.getElementById('filter-ekstra').classList.toggle('hidden', aktivTab !== 'oversikt');
     // Tøm søk ved tabbytte så man ikke beholder gammelt søk
@@ -122,6 +127,7 @@ function initTabs() {
     if (aktivTab === 'portfolio') visPortefolje();
     if (aktivTab === 'kalender') visKalender();
     if (aktivTab === 'oversikt') visOversikt();
+    if (aktivTab === 'varsler') visVarslerTab();
   });
 }
 
@@ -1253,4 +1259,185 @@ function rangebar(pris, lav, hoy, stor = false) {
     </div>
     <div class="flex justify-between text-xs text-gray-400 mt-0.5"><span>${fmt(lav)}</span><span>${pct.toFixed(0)}%</span><span>${fmt(hoy)}</span></div>
   </div>`;
+}
+
+// ── PWA / VARSLER ─────────────────────────────────────────────────────────────
+
+function hentNotifPrefs() {
+  try { return new Set(JSON.parse(localStorage.getItem('notif_aksjer') || '[]')); } catch { return new Set(); }
+}
+
+function lagreNotifPrefs(prefs) {
+  localStorage.setItem('notif_aksjer', JSON.stringify([...prefs]));
+  if ('caches' in window) {
+    caches.open('notif-prefs-v1').then(cache =>
+      cache.put('/notif-prefs', new Response(JSON.stringify([...prefs]), {
+        headers: { 'Content-Type': 'application/json' },
+      }))
+    );
+  }
+}
+
+async function initVarsler() {
+  if (!('serviceWorker' in navigator)) return;
+  try {
+    await navigator.serviceWorker.register('/sw.js');
+  } catch (e) {
+    console.warn('Service Worker registrering feilet:', e);
+  }
+}
+
+async function registrerPeriodicSync() {
+  if (!('serviceWorker' in navigator)) return;
+  try {
+    const reg = await navigator.serviceWorker.ready;
+    if ('periodicSync' in reg) {
+      const status = await navigator.permissions.query({ name: 'periodic-background-sync' });
+      if (status.state === 'granted') {
+        await reg.periodicSync.register('sjekk-ex-datoer', { minInterval: 24 * 60 * 60 * 1000 });
+      }
+    }
+  } catch (e) {
+    console.warn('Periodic sync ikke tilgjengelig:', e);
+  }
+}
+
+// Fallback: sjekk direkte i nettleseren når appen åpnes (fungerer uten periodic sync)
+async function sjekkExDatoerDirekte() {
+  if (!('Notification' in window) || Notification.permission !== 'granted') return;
+  const prefs = hentNotifPrefs();
+  if (!prefs.size) return;
+
+  const idag = new Date(); idag.setHours(0, 0, 0, 0);
+  const PREFIKS = 'notif_vist_';
+
+  for (const a of alleAksjer) {
+    if (!prefs.has(a.ticker) || !a.ex_dato) continue;
+    const exDato = new Date(a.ex_dato); exDato.setHours(0, 0, 0, 0);
+    const dager = Math.round((exDato - idag) / (1000 * 60 * 60 * 24));
+    if (dager < 0 || dager > 7) continue;
+
+    const key = PREFIKS + a.ticker + '_' + a.ex_dato;
+    if (localStorage.getItem(key)) continue;
+
+    const tittel = dager === 0
+      ? `${a.ticker} ex-dato er i dag!`
+      : `${a.ticker} ex-dato om ${dager} dag${dager === 1 ? '' : 'er'}`;
+    const kropp = dager === 0
+      ? `${a.navn} – du må eie aksjen i dag for å motta utbytte`
+      : `${a.navn} – ex-dato ${new Date(a.ex_dato).toLocaleDateString('nb-NO', { day: 'numeric', month: 'long' })}`;
+
+    new Notification(tittel, { body: kropp, icon: '/assets/icon.svg', tag: key });
+    localStorage.setItem(key, '1');
+  }
+}
+
+function visVarslerTab() {
+  const container = document.getElementById('varsler-innhold');
+  const harNotif = 'Notification' in window && 'serviceWorker' in navigator;
+  const tillatelse = harNotif ? Notification.permission : 'unsupported';
+  const prefs = hentNotifPrefs();
+
+  // Status-kort
+  let statusHtml;
+  if (!harNotif) {
+    statusHtml = `
+      <div class="rounded-xl border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/50 p-4">
+        <p class="font-semibold text-sm mb-1">Varsler støttes ikke</p>
+        <p class="text-sm text-gray-500">Nettleseren din støtter ikke push-varsler. Prøv Chrome, Edge eller Safari på iOS 16.4+.</p>
+      </div>`;
+  } else if (tillatelse === 'denied') {
+    statusHtml = `
+      <div class="rounded-xl border border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-900/20 p-4">
+        <p class="font-semibold text-sm text-red-800 dark:text-red-300 mb-1">Varsler er blokkert</p>
+        <p class="text-sm text-red-700 dark:text-red-400">Gå til nettleserinnstillinger → Nettstedsinnstillinger → Varslinger, og tillat exday.no.</p>
+      </div>`;
+  } else if (tillatelse === 'granted') {
+    statusHtml = `
+      <div class="rounded-xl border border-green-200 dark:border-green-800 bg-green-50 dark:bg-green-900/20 p-4 flex items-start gap-3">
+        <svg class="w-5 h-5 text-green-600 dark:text-green-400 shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+        <div>
+          <p class="font-semibold text-sm text-green-800 dark:text-green-300">Varsler er aktivert</p>
+          <p class="text-sm text-green-700 dark:text-green-400 mt-0.5">Du får beskjed når valgte aksjer nærmer seg ex-dato (varsler opp til 7 dager i forveien).</p>
+        </div>
+      </div>`;
+  } else {
+    statusHtml = `
+      <div class="rounded-xl border border-brand-200 dark:border-brand-800 bg-brand-50 dark:bg-brand-900/20 p-4 flex items-center justify-between gap-4">
+        <div>
+          <p class="font-semibold text-sm text-brand-900 dark:text-brand-200">Aktiver ex-dato-varsler</p>
+          <p class="text-sm text-brand-700 dark:text-brand-400 mt-0.5">Få varsler når aksjer du følger nærmer seg ex-dato.</p>
+        </div>
+        <button id="aktiver-varsler-btn" class="shrink-0 px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white text-sm font-medium rounded-lg transition-colors">
+          Aktiver
+        </button>
+      </div>`;
+  }
+
+  // Installeringsinfo (kun om ikke allerede installert som PWA)
+  const erPWA = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+  const installHtml = erPWA ? '' : `
+    <div class="rounded-xl border border-gray-200 dark:border-gray-800 p-4 flex items-start gap-3">
+      <svg class="w-5 h-5 text-gray-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+      <div>
+        <p class="font-semibold text-sm">Installer som app</p>
+        <p class="text-sm text-gray-500 mt-0.5">I Chrome/Edge: trykk menyknappen og velg "Installer app". På iOS Safari: trykk Del-knappen og "Legg til på hjem-skjerm".</p>
+      </div>
+    </div>`;
+
+  // Aksjeliste
+  const listeHtml = alleAksjer.length === 0
+    ? `<div class="text-sm text-gray-400 py-4 text-center">Laster aksjedata…</div>`
+    : `<div class="flex items-center justify-between mb-3">
+        <h3 class="font-semibold text-sm">Aksjer å varsle for</h3>
+        <div class="flex gap-3">
+          <button id="varsler-velg-alle" class="text-xs text-brand-600 dark:text-brand-400 hover:underline">Velg alle</button>
+          <button id="varsler-fjern-alle" class="text-xs text-gray-400 hover:underline">Fjern alle</button>
+        </div>
+      </div>
+      <div class="rounded-xl border border-gray-200 dark:border-gray-800 overflow-hidden divide-y divide-gray-100 dark:divide-gray-800">
+        ${[...alleAksjer].sort((a, b) => a.ticker.localeCompare(b.ticker, 'nb')).map(a => {
+          const aktiv = prefs.has(a.ticker);
+          const exInfo = a.ex_dato ? formaterDato(a.ex_dato) : '—';
+          return `<label class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-800/50 cursor-pointer transition-colors">
+            <input type="checkbox" class="notif-toggle w-4 h-4 rounded cursor-pointer accent-brand-600"
+              data-ticker="${a.ticker}" ${aktiv ? 'checked' : ''} />
+            <div class="flex-1 min-w-0">
+              <span class="font-mono font-bold text-sm text-brand-700 dark:text-brand-400">${a.ticker}</span>
+              <span class="text-sm text-gray-600 dark:text-gray-400 ml-2 truncate">${a.navn}</span>
+            </div>
+            <span class="text-xs text-gray-400 shrink-0">Ex: ${exInfo}</span>
+          </label>`;
+        }).join('')}
+      </div>`;
+
+  container.innerHTML = statusHtml + installHtml + `<div>${listeHtml}</div>`;
+
+  // Bind events
+  document.getElementById('aktiver-varsler-btn')?.addEventListener('click', async () => {
+    const perm = await Notification.requestPermission();
+    if (perm === 'granted') {
+      await registrerPeriodicSync();
+      visVarslerTab();
+    }
+  });
+
+  container.addEventListener('change', e => {
+    const cb = e.target.closest('.notif-toggle');
+    if (!cb) return;
+    const p = hentNotifPrefs();
+    if (cb.checked) p.add(cb.dataset.ticker); else p.delete(cb.dataset.ticker);
+    lagreNotifPrefs(p);
+  });
+
+  document.getElementById('varsler-velg-alle')?.addEventListener('click', () => {
+    const p = new Set(alleAksjer.map(a => a.ticker));
+    lagreNotifPrefs(p);
+    container.querySelectorAll('.notif-toggle').forEach(cb => { cb.checked = true; });
+  });
+
+  document.getElementById('varsler-fjern-alle')?.addEventListener('click', () => {
+    lagreNotifPrefs(new Set());
+    container.querySelectorAll('.notif-toggle').forEach(cb => { cb.checked = false; });
+  });
 }

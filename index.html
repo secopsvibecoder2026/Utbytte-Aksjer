@@ -13,6 +13,14 @@
   <meta name="keywords" content="norske utbytteaksjer, Oslo Børs, utbytte, yield, ex-dato, dividend, EQNR, DNB, Equinor, norsk aksje" />
   <link rel="canonical" href="https://exday.no/" />
 
+  <!-- PWA -->
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#16a34a" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="exday.no" />
+  <link rel="apple-touch-icon" href="/assets/icon.svg" />
+
   <!-- Open Graph -->
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://exday.no/" />
@@ -138,6 +146,7 @@
         <button class="tab-btn active" data-tab="oversikt">Oversikt</button>
         <button class="tab-btn" data-tab="kalender">Kalender</button>
         <button class="tab-btn" data-tab="portfolio">Kalkulator</button>
+        <button class="tab-btn" data-tab="varsler">Varsler</button>
       </nav>
     </div>
 
@@ -395,6 +404,11 @@
         <p class="text-xs mt-1">Legg til aksjer ovenfor for å beregne forventet utbytteinntekt. Data lagres kun i din nettleser.</p>
       </div>
 
+    </div>
+
+    <!-- VARSLER-FANE -->
+    <div id="tab-varsler" class="hidden">
+      <div id="varsler-innhold" class="space-y-4 max-w-2xl mx-auto"></div>
     </div>
 
   </main>

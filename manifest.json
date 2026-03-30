@@ -1,0 +1,18 @@
+{
+  "name": "Norske Utbytteaksjer – exday.no",
+  "short_name": "exday.no",
+  "description": "Oversikt over norske utbytteaksjer på Oslo Børs med yield, ex-dato og utbyttehistorikk",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f9fafb",
+  "theme_color": "#16a34a",
+  "lang": "nb",
+  "icons": [
+    {
+      "src": "/assets/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
