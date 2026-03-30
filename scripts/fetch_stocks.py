@@ -334,16 +334,28 @@ def hent_aksje(meta):
             if not history.empty:
                 pris = round(float(history["Close"].iloc[-1]), 2)
 
-        utbytte_per_aksje = safe_float(info.get("dividendRate") or info.get("trailingAnnualDividendRate"))
+        raw_div_rate = safe_float(info.get("dividendRate") or info.get("trailingAnnualDividendRate"))
 
-        # Beregn yield fra pris og utbytte per aksje – mer pålitelig enn
-        # dividendYield-feltet som yfinance noen ganger returnerer som desimal
-        # og andre ganger som prosent avhengig av versjon/aksje.
+        # Yahoo Finance returnerer av og til dividendRate som yield-prosent
+        # (f.eks. 13.93) i stedet for absolutt beløp per aksje (f.eks. 7.10 NOK).
+        # Deteksjon: hvis raw_div_rate / pris * 100 > 100 er det sannsynligvis
+        # allerede en prosentsats → omregn til absolutt beløp.
+        if pris > 0 and raw_div_rate > 0:
+            tentativ_yield = (raw_div_rate / pris) * 100
+            if tentativ_yield > 100:
+                # dividendRate er sannsynligvis yield i prosent, ikke absolutt beløp
+                utbytte_per_aksje = round(raw_div_rate * pris / 100, 4)
+            else:
+                utbytte_per_aksje = raw_div_rate
+        else:
+            utbytte_per_aksje = raw_div_rate
+
+        # Beregn yield fra pris og utbytte per aksje
         if pris > 0 and utbytte_per_aksje > 0:
             utbytte_yield = round((utbytte_per_aksje / pris) * 100, 2)
         else:
             raw = safe_float(info.get("dividendYield", 0))
-            # Sanity check: hvis > 1 er det allerede prosent, ellers desimal
+            # dividendYield: desimal (0.069) → ×100, eller allerede prosent (6.9) → bruk direkte
             utbytte_yield = round(raw if raw > 1 else raw * 100, 2)
 
         # Siste faktiske utbytte
