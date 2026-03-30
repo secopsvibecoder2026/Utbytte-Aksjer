@@ -248,6 +248,7 @@ function visOversikt() {
       <td class="px-4 py-3 text-right">
         <span class="yield-badge ${yieldKlasse(a.utbytte_yield)}">${a.utbytte_yield.toFixed(2)}%</span>
       </td>
+      <td class="px-4 py-3 text-center">${scoreBadge(beregnScore(a))}</td>
       <td class="col-detalj px-4 py-3 text-right">
         ${a.snitt_yield_5ar > 0 ? `<span class="yield-badge ${yieldKlasse(a.snitt_yield_5ar)}">${a.snitt_yield_5ar.toFixed(1)}%</span>` : '<span class="text-gray-400">—</span>'}
       </td>
@@ -320,7 +321,10 @@ function visOversikt() {
           <div class="text-sm text-gray-600 dark:text-gray-400 mt-0.5 leading-tight">${a.navn}</div>
           <div class="text-xs text-gray-400 dark:text-gray-500">${a.sektor}</div>
         </div>
-        <span class="yield-badge ${yieldKlasse(a.utbytte_yield)} text-sm shrink-0">${a.utbytte_yield.toFixed(2)}%</span>
+        <div class="flex flex-col items-end gap-1 shrink-0">
+          <span class="yield-badge ${yieldKlasse(a.utbytte_yield)} text-sm">${a.utbytte_yield.toFixed(2)}%</span>
+          ${scoreBadge(beregnScore(a))}
+        </div>
       </div>
       <div class="grid grid-cols-3 gap-2 text-center my-3">
         <div class="bg-gray-50 dark:bg-gray-800 rounded-lg py-2 px-1">
@@ -379,8 +383,9 @@ function visOversikt() {
 
 function sorterAksjer(data) {
   const { kol, retning } = sortering;
+  const hentVerdi = (a) => kol === 'utbytte_score' ? beregnScore(a) : a[kol];
   return [...data].sort((a, b) => {
-    let va = a[kol], vb = b[kol];
+    let va = hentVerdi(a), vb = hentVerdi(b);
     if (va == null) va = retning === 'asc' ? Infinity : -Infinity;
     if (vb == null) vb = retning === 'asc' ? Infinity : -Infinity;
     if (typeof va === 'string') return retning === 'asc' ? va.localeCompare(vb, 'nb') : vb.localeCompare(va, 'nb');
@@ -521,6 +526,7 @@ function visModal(a) {
     </div>
 
     ${historiskChart(a)}
+    ${scoreForklaring(a)}
   `;
 
   overlay.classList.remove('hidden');
@@ -602,6 +608,95 @@ function yieldKlasse(y) {
   if (y >= 6)  return 'yield-god';
   if (y >= 3)  return 'yield-middels';
   return 'yield-lav';
+}
+
+// ── UTBYTTE-SCORE (1–10) ───────────────────────────────────────────────────
+// Poengsum for utbyttekvalitet basert på 5 kriterier (maks 10 poeng):
+//   1. Yield-nivå          0–3 p
+//   2. Payout-bærekraft    0–2 p
+//   3. Utbyttevekst 5 år   0–2 p
+//   4. År med utbytte      0–2 p
+//   5. Yield-stabilitet    0–1 p  (snitt yield 5å vs. dagens yield)
+
+function beregnScore(a) {
+  let p = 0;
+
+  // 1. Yield-nivå (0–3)
+  const y = a.utbytte_yield || 0;
+  if      (y >= 10) p += 3;
+  else if (y >= 6)  p += 2;
+  else if (y >= 3)  p += 1;
+
+  // 2. Payout-bærekraft (0–2): lavt payout = bærekraftig
+  const po = a.payout_ratio || 0;
+  if      (po > 0 && po <= 50)  p += 2;
+  else if (po > 0 && po <= 75)  p += 1;
+  // payout > 75% eller 0 (ukjent) = 0 poeng
+
+  // 3. Utbyttevekst 5 år CAGR (0–2)
+  const vekst = a.utbytte_vekst_5ar || 0;
+  if      (vekst > 10) p += 2;
+  else if (vekst > 0)  p += 1;
+
+  // 4. År med utbytte = konsistens (0–2)
+  const ar = a.ar_med_utbytte || 0;
+  if      (ar >= 10) p += 2;
+  else if (ar >= 5)  p += 1;
+
+  // 5. Yield-stabilitet: snitt yield 5å nær dagens yield (0–1)
+  const snitt = a.snitt_yield_5ar || 0;
+  if (snitt > 0 && y > 0) {
+    const avvik = Math.abs(y - snitt) / snitt;
+    if (avvik <= 0.3) p += 1;  // innenfor 30% = stabilt
+  }
+
+  return Math.min(10, Math.max(1, p));
+}
+
+function scoreBadge(score) {
+  let cls;
+  if      (score >= 8) cls = 'score-høy';
+  else if (score >= 5) cls = 'score-middels';
+  else                 cls = 'score-lav';
+  return `<span class="score-badge ${cls}">${score}<span class="score-av10">/10</span></span>`;
+}
+
+function scoreForklaring(a) {
+  const y = a.utbytte_yield || 0;
+  const po = a.payout_ratio || 0;
+  const vekst = a.utbytte_vekst_5ar || 0;
+  const ar = a.ar_med_utbytte || 0;
+  const snitt = a.snitt_yield_5ar || 0;
+
+  const p1 = y >= 10 ? 3 : y >= 6 ? 2 : y >= 3 ? 1 : 0;
+  const p2 = (po > 0 && po <= 50) ? 2 : (po > 0 && po <= 75) ? 1 : 0;
+  const p3 = vekst > 10 ? 2 : vekst > 0 ? 1 : 0;
+  const p4 = ar >= 10 ? 2 : ar >= 5 ? 1 : 0;
+  const p5 = (snitt > 0 && y > 0 && Math.abs(y - snitt) / snitt <= 0.3) ? 1 : 0;
+
+  const rad = (label, poeng, maks, tekst) =>
+    `<div class="flex justify-between items-center py-1 border-b border-gray-100 dark:border-gray-800 last:border-0">
+      <span class="text-xs text-gray-500 dark:text-gray-400">${label}</span>
+      <div class="flex items-center gap-2">
+        <span class="text-xs text-gray-400">${tekst}</span>
+        <span class="text-xs font-semibold ${poeng > 0 ? 'text-green-600 dark:text-green-400' : 'text-gray-400'}">${poeng}/${maks}</span>
+      </div>
+    </div>`;
+
+  return `
+    <div class="mt-4 pt-4 border-t border-gray-100 dark:border-gray-800">
+      <div class="flex justify-between items-center mb-2">
+        <span class="text-sm font-semibold">Utbytte-score</span>
+        ${scoreBadge(beregnScore(a))}
+      </div>
+      <div class="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-3 space-y-0">
+        ${rad('Yield-nivå', p1, 3, y > 0 ? y.toFixed(1)+'%' : '—')}
+        ${rad('Payout-bærekraft', p2, 2, po > 0 ? po.toFixed(0)+'%' : '—')}
+        ${rad('Vekst 5 år', p3, 2, vekst !== 0 ? (vekst>0?'+':'')+vekst.toFixed(1)+'%' : '—')}
+        ${rad('År med utbytte', p4, 2, ar > 0 ? ar+' år' : '—')}
+        ${rad('Yield-stabilitet', p5, 1, snitt > 0 ? 'snitt '+snitt.toFixed(1)+'%' : '—')}
+      </div>
+    </div>`;
 }
 
 function payoutKlasse(p) {

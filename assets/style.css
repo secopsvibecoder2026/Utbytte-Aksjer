@@ -238,6 +238,24 @@ th.sort-desc::after { content: ' ↓'; color: #16a34a; }
 #mobil-sort-rad { display: flex; }
 @media (min-width: 768px) { #mobil-sort-rad { display: none; } }
 
+/* ── UTBYTTE-SCORE BADGE ─────────────────────────────────────────────── */
+.score-badge {
+  display: inline-flex;
+  align-items: baseline;
+  padding: 0.15rem 0.5rem;
+  border-radius: 9999px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  line-height: 1.4;
+}
+.score-av10 { font-size: 0.65rem; font-weight: 500; margin-left: 1px; opacity: 0.75; }
+.score-høy     { background: #dcfce7; color: #15803d; }
+.score-middels { background: #dbeafe; color: #1e40af; }
+.score-lav     { background: #fee2e2; color: #b91c1c; }
+.dark .score-høy     { background: rgb(20 83 45 / 0.4); color: #86efac; }
+.dark .score-middels { background: rgb(30 58 138 / 0.4); color: #93c5fd; }
+.dark .score-lav     { background: rgb(127 29 29 / 0.4); color: #fca5a5; }
+
 /* ── SKELETON LOADER ─────────────────────────────────────────────────── */
 .skeleton {
   background: linear-gradient(90deg, #e5e7eb 25%, #f3f4f6 50%, #e5e7eb 75%);

@@ -19,24 +19,24 @@ Norsk utbytteaksje-tracker for Oslo Børs. Data hentes automatisk fra Yahoo Fina
 | Google Analytics + AdSense Auto Ads | ✅ Ferdig |
 | GDPR cookie-samtykke + personvernside | ✅ Ferdig |
 | Skeleton loader | ✅ Ferdig |
-| Custom domene (exday.no) | ✅ Ferdig |
+| Snitt yield 5 år + stolpediagram historikk | ✅ Ferdig |
+| Sortering på snitt yield 5 år | ✅ Ferdig |
+| Yahoo Finance robusthet (5-punkts validering) | ✅ Ferdig |
 
 ---
 
 ## Veikart
 
 ### 1. SEO — synlighet på Google 🔍
-**Status: Pågår**
+**Status: ✅ Ferdig**
 
-Siden mangler i dag meta-beskrivelse, Open Graph-tags og strukturert data. Noen som søker "norske utbytteaksjer" eller "DNB utbytte 2026" vil ikke finne siden organisk.
-
-- [ ] `<meta name="description">` på alle sider
-- [ ] Open Graph-tags (tittel, beskrivelse, URL, bilde)
-- [ ] Twitter Card-tags
-- [ ] Canonical URL
-- [ ] JSON-LD strukturert data (WebSite + tabell-data)
-- [ ] `sitemap.xml`
-- [ ] `robots.txt`
+- [x] `<meta name="description">` på alle sider
+- [x] Open Graph-tags (tittel, beskrivelse, URL)
+- [x] Twitter Card-tags
+- [x] Canonical URL
+- [x] JSON-LD strukturert data (WebSite-schema)
+- [x] `sitemap.xml`
+- [x] `robots.txt`
 
 ---
 
@@ -52,21 +52,21 @@ Brukere kan stjernemerke sine favorittaksjer og få disse øverst i listen. Lagr
 ---
 
 ### 3. Utbytte-score (1–10) ⭐
-**Status: Planlagt**
+**Status: Pågår**
 
 Sammensatt poengsum per aksje som rangerer utbyttekvalitet — ikke bare størrelse. Gjør det enkelt å skille "høy yield men ustabil" fra "moderat yield men svært pålitelig".
 
-Formel (forslag):
+Formel:
 - Yield-nivå: 0–3 poeng
 - Payout ratio (bærekraft): 0–2 poeng
 - Utbyttevekst 5 år: 0–2 poeng
 - År med sammenhengende utbytte: 0–2 poeng
 - Snitt yield 5 år vs. dagens yield: 0–1 poeng
 
-- [ ] Beregningslogikk i `app.js`
-- [ ] Score-badge per aksje i tabell og kort
-- [ ] Sorteringsalternativ: "Høyest score"
-- [ ] Forklaring av score i modal
+- [x] Beregningslogikk i `app.js`
+- [x] Score-badge per aksje i tabell og kort
+- [x] Sorteringsalternativ: "Høyest score"
+- [x] Forklaring av score i modal
 
 ---
 
@@ -96,7 +96,7 @@ Installer siden på hjemskjermen som en app. Brukere kan abonnere på varsler: *
 
 ## Teknisk gjeld
 
-- [ ] Yield-validering i Python: sanity-sjekk beregnet yield mot Yahoo-felt, varsle ved avvik > 20%
+- [x] Yield-validering i Python: 5-punkts sanity-sjekk med strukturert rapport
 - [ ] Unit-tester for `fetch_stocks.py`
 - [ ] Automatisk Lighthouse-rapport i CI
 
