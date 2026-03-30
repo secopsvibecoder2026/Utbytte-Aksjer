@@ -558,7 +558,7 @@ function visPortefolje() {
   document.getElementById('pf-tom').classList.toggle('hidden', harBeholdning);
   document.getElementById('pf-beholdning-wrapper').classList.toggle('hidden', !harBeholdning);
   document.getElementById('pf-tidslinje-wrapper').classList.toggle('hidden', !harBeholdning);
-  document.getElementById('pf-charts-wrapper').classList.toggle('hidden', !harBeholdning);
+  document.getElementById('pf-charts-wrapper').style.display = harBeholdning ? 'grid' : 'none';
 
   if (!harBeholdning) {
     ['pf-stat-ar','pf-stat-mnd','pf-stat-antall','pf-stat-neste','pf-stat-yield','pf-stat-verdi']
@@ -725,8 +725,8 @@ const FARGE_FALLBACK = '#9ca3af';
 
 function visCharts(beholdning, totalAr) {
   const wrapper = document.getElementById('pf-charts-wrapper');
-  if (!beholdning.length) { wrapper.classList.add('hidden'); return; }
-  wrapper.classList.remove('hidden');
+  if (!beholdning.length) { wrapper.style.display = 'none'; return; }
+  wrapper.style.display = 'grid';
 
   // ── 1. SEKTOR-DONUT ────────────────────────────────────────────────────
   const sektorMap = {};
