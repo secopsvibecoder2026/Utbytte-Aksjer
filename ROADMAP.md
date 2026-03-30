@@ -9,32 +9,11 @@ Norsk utbytteaksje-tracker for Oslo Børs. Data hentes automatisk fra Yahoo Fina
 ### 1. Favoritter / huskeliste 🔖
 **Status: Ferdig ✅**
 
-- [x] Stjerneikon per aksje (tabell, mobilt kort og modal)
-- [x] Filter: "Vis kun favoritter"
-- [x] Favoritter vises øverst ved default
-
----
-
 ### 2. CSV-import av portefølje 📥
-**Status: Planlagt (avvent)**
-
-Brukere kan laste opp en CSV-fil (f.eks. eksportert fra nettbanken) for å importere beholdningen sin automatisk.
-
-- [ ] Parser CSV-format: ticker + antall kolonner
-- [ ] Valider tickers mot kjente aksjer i systemet
-- [ ] Feilmelding ved ukjente tickers
-- [ ] Forhåndsvisning før import bekreftes
-- [ ] Støtte for eksisterende eksport-format (round-trip)
-
----
+**Status: Ferdig ✅**
 
 ### 3. PWA + push-varsler for ex-datoer 📲
 **Status: Ferdig ✅**
-
-- [x] `manifest.json` (navn, ikon, farger)
-- [x] Service Worker for offline-støtte
-- [x] Push-varsel-integrasjon (Web Push API)
-- [x] Innstillingsside: velg hvilke aksjer du vil ha varsler for
 
 ---
 
