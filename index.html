@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <!-- Favicon -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2316a34a'/%3E%3Ctext x='16' y='22' font-family='system-ui,sans-serif' font-size='13' font-weight='700' fill='white' text-anchor='middle'%3EUA%3C/text%3E%3C/svg%3E">
+  <link rel="icon" type="image/svg+xml" href="logo/exday_icon_primary.svg">
 
   <!-- SEO -->
   <title>Norske Utbytteaksjer – Oversikt og utbyttedatoer | exday.no</title>
@@ -19,7 +19,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="apple-mobile-web-app-title" content="exday.no" />
-  <link rel="apple-touch-icon" href="/assets/icon.svg" />
+  <link rel="apple-touch-icon" href="/logo/apple_touch_icon_180.png" />
 
   <!-- Open Graph -->
   <meta property="og:type" content="website" />
@@ -101,12 +101,11 @@
   <!-- HEADER -->
   <header class="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 sticky top-0 z-40 shadow-sm">
     <div class="max-w-screen-2xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
-      <div class="flex items-center gap-2 min-w-0">
-        <div class="w-8 h-8 shrink-0 rounded-lg bg-brand-600 flex items-center justify-center text-white font-bold text-sm">UA</div>
-        <div class="min-w-0">
-          <h1 class="font-bold text-base sm:text-lg leading-tight truncate">Norske Utbytteaksjer</h1>
-          <p id="sist-oppdatert" class="text-xs text-gray-500 dark:text-gray-400 truncate"><span class="skeleton inline-block h-3 rounded align-middle" style="width:8rem"></span></p>
-        </div>
+      <div class="flex items-center gap-3 min-w-0">
+        <h1 class="sr-only">Norske Utbytteaksjer – exday.no</h1>
+        <img src="logo/exday_logo_primary.svg" class="h-8 sm:h-9 dark:hidden shrink-0" alt="exday.no" />
+        <img src="logo/exday_logo_inverse.svg" class="h-8 sm:h-9 hidden dark:block shrink-0" alt="exday.no" />
+        <p id="sist-oppdatert" class="text-xs text-gray-500 dark:text-gray-400 truncate hidden sm:block"><span class="skeleton inline-block h-3 rounded align-middle" style="width:8rem"></span></p>
       </div>
       <button id="dark-toggle" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500 dark:text-gray-400 transition-colors shrink-0" title="Bytt tema">
         <svg id="icon-moon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
