@@ -316,6 +316,68 @@ def hent_aksje(meta):
         return None
 
 
+# ── VALIDERING ────────────────────────────────────────────────────────────────
+
+def valider_aksje(a):
+    """
+    Kjør 5 valideringskontroller på en ferdig hentet aksje.
+    Returnerer liste med advarselstrenger (tom = OK).
+
+    Punkt 1: Yield-kryssvalidering
+    Punkt 2: Pris-validering
+    Punkt 3: Feltplausibilitet
+    Punkt 4: Manglende kritiske felt
+    (Punkt 5 er den strukturerte rapporten i main())
+    """
+    advarsler = []
+    ticker = a.get("ticker", "?")
+
+    # ── 1. Yield-kryssvalidering ──────────────────────────────────────────────
+    if a["pris"] > 0 and a["utbytte_per_aksje"] > 0:
+        beregnet = (a["utbytte_per_aksje"] / a["pris"]) * 100
+        lagret   = a["utbytte_yield"]
+        if lagret > 0:
+            avvik_pct = abs(beregnet - lagret) / max(beregnet, 0.01) * 100
+            if avvik_pct > 25:
+                advarsler.append(
+                    f"[1] Yield-avvik {avvik_pct:.0f}%: "
+                    f"beregnet {beregnet:.2f}% vs lagret {lagret:.2f}%"
+                )
+
+    # ── 2. Pris-validering ────────────────────────────────────────────────────
+    if a["pris"] <= 0:
+        advarsler.append(f"[2] Ugyldig pris: {a['pris']}")
+    elif a["pris"] > 100_000:
+        advarsler.append(f"[2] Mistenkelig høy pris: {a['pris']}")
+
+    # ── 3. Feltplausibilitet ──────────────────────────────────────────────────
+    if a["payout_ratio"] > 300:
+        advarsler.append(f"[3] Payout ratio ekstremt høy: {a['payout_ratio']}%")
+    if 0 < a["pe_ratio"] > 500:
+        advarsler.append(f"[3] Mistenkelig høy P/E: {a['pe_ratio']}")
+    if a["utbytte_yield"] > 80:
+        advarsler.append(f"[3] Ekstremt høy yield: {a['utbytte_yield']}% — sjekk manuelt")
+    if a["utbytte_per_aksje"] > 0 and a["pris"] > 0 and a["utbytte_per_aksje"] > a["pris"]:
+        advarsler.append(
+            f"[3] Utbytte/aksje ({a['utbytte_per_aksje']}) > kurs ({a['pris']}) — umulig"
+        )
+    if a["52u_lav"] > 0 and a["52u_hoy"] > 0 and a["52u_lav"] > a["52u_hoy"]:
+        advarsler.append(
+            f"[3] 52u lav ({a['52u_lav']}) > 52u høy ({a['52u_hoy']}) — data-feil"
+        )
+
+    # ── 4. Manglende kritiske felt ────────────────────────────────────────────
+    mangler = []
+    if a["pris"] == 0:               mangler.append("pris")
+    if a["utbytte_yield"] == 0:      mangler.append("utbytte_yield")
+    if a["utbytte_per_aksje"] == 0:  mangler.append("utbytte_per_aksje")
+    if not a.get("ex_dato"):         mangler.append("ex_dato")
+    if mangler:
+        advarsler.append(f"[4] Manglende felt: {', '.join(mangler)}")
+
+    return advarsler
+
+
 def main():
     print("Starter henting av aksjedata fra Yahoo Finance...")
     output_path = os.path.join(os.path.dirname(__file__), "..", "data", "aksjer.json")
@@ -329,7 +391,9 @@ def main():
             fallback = {a["ticker"]: a for a in existing_aksjer}
 
     resultater = []
-    feil = []
+    feil = []          # Henting feilet, brukte fallback
+    ingen_data = []    # Henting feilet, ingen fallback
+
     for meta in AKSJER:
         aksje = hent_aksje(meta)
         if aksje:
@@ -339,17 +403,55 @@ def main():
             resultater.append(fallback[meta["ticker"]])
             feil.append(meta["ticker"])
         else:
-            print(f"    ADVARSEL: Ingen data for {meta['ticker']} og ingen fallback.")
-            feil.append(meta["ticker"])
+            print(f"    KRITISK: Ingen data for {meta['ticker']} og ingen fallback.")
+            ingen_data.append(meta["ticker"])
+
+    # ── 5. Strukturert datakvalitetsrapport ───────────────────────────────────
+    linje = "=" * 54
+    print(f"\n{linje}")
+    print("  DATAKVALITETSRAPPORT")
+    print(linje)
+
+    advarsel_map = {}   # ticker -> [advarsler]
+    for a in resultater:
+        advarsler = valider_aksje(a)
+        if advarsler:
+            advarsel_map[a["ticker"]] = advarsler
+
+    antall_ok       = len(resultater) - len(advarsel_map)
+    antall_advarsel = len(advarsel_map)
+    antall_fallback = len(feil)
+    antall_tapt     = len(ingen_data)
+
+    print(f"  ✅ {antall_ok} aksjer OK")
+
+    if advarsel_map:
+        print(f"  ⚠️  {antall_advarsel} aksjer med advarsler:")
+        for ticker, advarsler in advarsel_map.items():
+            for advarsel in advarsler:
+                print(f"     {ticker:6s} – {advarsel}")
+
+    if feil:
+        print(f"  🔄 {antall_fallback} aksjer brukte fallback-data:")
+        print(f"     {', '.join(feil)}")
+
+    if ingen_data:
+        print(f"  ❌ {antall_tapt} aksjer uten data og uten fallback:")
+        print(f"     {', '.join(ingen_data)}")
+
+    print(linje)
+    print(f"  Totalt: {len(AKSJER)} aksjer | {antall_ok} OK | "
+          f"{antall_advarsel} advarsler | {antall_fallback} fallback | {antall_tapt} tapt")
+    print(linje)
 
     if not resultater:
         print("\nKRITISK FEIL: Ingen aksjedata hentet og ingen fallback tilgjengelig.")
         sys.exit(1)
 
-    if len(feil) > len(AKSJER) // 2:
-        print(f"\nADVARSEL: {len(feil)}/{len(AKSJER)} aksjer feilet. Sjekk Yahoo Finance-tilkoblingen.")
+    if len(feil) + len(ingen_data) > len(AKSJER) // 2:
+        print("\nADVARSEL: Over halvparten av aksjene feilet. Sjekk Yahoo Finance-tilkoblingen.")
 
-    # Legg til metadata
+    # Lagre til JSON
     output = {
         "sist_oppdatert": datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"),
         "kilde": "Yahoo Finance (yfinance)",
@@ -361,8 +463,6 @@ def main():
         json.dump(output, f, ensure_ascii=False, indent=2)
 
     print(f"\nFerdig! {len(resultater)} aksjer lagret til {output_path}")
-    if feil:
-        print(f"Feilet (brukte fallback): {', '.join(feil)}")
     print(f"Sist oppdatert: {output['sist_oppdatert']}")
 
 
