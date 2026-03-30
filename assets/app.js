@@ -48,6 +48,7 @@ async function lastData() {
     visOversikt();
     visKalender();
     sjekkExDatoerDirekte();
+    if (aktivTab === 'varsler') visVarslerTab();
   } catch (e) {
     console.error('Feil ved lasting av data:', e);
     document.getElementById('sist-oppdatert').textContent = '⚠️ Kunne ikke laste data – prøv igjen senere';
@@ -1264,7 +1265,14 @@ function rangebar(pris, lav, hoy, stor = false) {
 // ── PWA / VARSLER ─────────────────────────────────────────────────────────────
 
 function hentNotifPrefs() {
-  try { return new Set(JSON.parse(localStorage.getItem('notif_aksjer') || '[]')); } catch { return new Set(); }
+  try {
+    // Første gang: arv favoritter som standard så listen ikke er tom
+    if (localStorage.getItem('notif_aksjer') === null) {
+      const fav = hentFav();
+      if (fav.size > 0) return fav;
+    }
+    return new Set(JSON.parse(localStorage.getItem('notif_aksjer') || '[]'));
+  } catch { return new Set(); }
 }
 
 function lagreNotifPrefs(prefs) {
