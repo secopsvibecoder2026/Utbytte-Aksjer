@@ -267,12 +267,19 @@ def hent_aksje(meta):
         else:
             ar_med_utbytte = 0
 
-        # Ex-dato og betalingsdato
+        # Ex-dato, betalingsdato og neste kvartalsrapport
         ex_dato = None
         betaling_dato = None
+        rapport_dato = None
         if isinstance(calendar, dict):
             ex_dato = format_dato(calendar.get("exDividendDate"))
             betaling_dato = format_dato(calendar.get("dividendDate"))
+            # Earnings Date kan være en liste (neste + evt. estimat)
+            earnings = calendar.get("Earnings Date") or calendar.get("earningsDate")
+            if isinstance(earnings, list) and earnings:
+                rapport_dato = format_dato(earnings[0])
+            elif earnings:
+                rapport_dato = format_dato(earnings)
 
         # 52-ukers kurs
         hoy_52u = safe_float(info.get("fiftyTwoWeekHigh"))
@@ -307,6 +314,7 @@ def hent_aksje(meta):
             "pb_ratio": pb_ratio,
             "ex_dato": ex_dato,
             "betaling_dato": betaling_dato,
+            "rapport_dato": rapport_dato,
             "frekvens": frekvens,
             "ar_med_utbytte": ar_med_utbytte,
             "siste_utbytte": siste_utbytte,

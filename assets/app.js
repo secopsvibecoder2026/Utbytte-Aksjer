@@ -407,72 +407,101 @@ function sorterAksjer(data) {
 }
 
 // ── KALENDER ───────────────────────────────────────────────────────────────
+// Kalender-badge konfigurasjoner
+const KAL_TYPER = {
+  ex:      { label: 'Ex-dag',    bg: 'bg-orange-100 dark:bg-orange-900/40', text: 'text-orange-700 dark:text-orange-300', dag: 'text-orange-600 dark:text-orange-400' },
+  utbytte: { label: 'Utbytte',   bg: 'bg-green-100 dark:bg-green-900/40',  text: 'text-green-700 dark:text-green-300',   dag: 'text-green-600 dark:text-green-400'   },
+  rapport: { label: 'Rapport',   bg: 'bg-blue-100 dark:bg-blue-900/40',    text: 'text-blue-700 dark:text-blue-300',     dag: 'text-blue-600 dark:text-blue-400'     },
+};
+
 function visKalender() {
   const container = document.getElementById('kalender-innhold');
   const idag = new Date(); idag.setHours(0,0,0,0);
   const sok = (document.getElementById('sok')?.value || '').toLowerCase().trim();
 
+  // Bygg flat liste av alle hendelser (ex, utbytte, rapport)
+  const hendelser = [];
+  alleAksjer.forEach(a => {
+    if (sok && !a.ticker.toLowerCase().includes(sok) && !a.navn.toLowerCase().includes(sok)) return;
+    if (a.ex_dato)      hendelser.push({ dato: a.ex_dato,      type: 'ex',      aksje: a });
+    if (a.betaling_dato) hendelser.push({ dato: a.betaling_dato, type: 'utbytte', aksje: a });
+    if (a.rapport_dato) hendelser.push({ dato: a.rapport_dato,  type: 'rapport', aksje: a });
+  });
+  hendelser.sort((x, y) => new Date(x.dato) - new Date(y.dato));
+
+  // Grupper per måned
   const manedsMap = {};
-  alleAksjer
-    .filter(a => {
-      if (!a.ex_dato) return false;
-      if (sok && !a.ticker.toLowerCase().includes(sok) && !a.navn.toLowerCase().includes(sok)) return false;
-      return true;
-    })
-    .sort((a, b) => new Date(a.ex_dato) - new Date(b.ex_dato))
-    .forEach(a => {
-      const d = new Date(a.ex_dato);
-      const key = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
-      if (!manedsMap[key]) manedsMap[key] = [];
-      manedsMap[key].push(a);
-    });
+  hendelser.forEach(h => {
+    const d = new Date(h.dato);
+    const key = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+    if (!manedsMap[key]) manedsMap[key] = [];
+    manedsMap[key].push(h);
+  });
 
   if (Object.keys(manedsMap).length === 0) {
-    container.innerHTML = '<p class="text-gray-400 py-8 text-center">Ingen ex-datoer matcher søket.</p>';
+    container.innerHTML = '<p class="text-gray-400 py-8 text-center">Ingen hendelser matcher søket.</p>';
     return;
   }
 
-  container.innerHTML = Object.entries(manedsMap).map(([key, aksjer]) => {
+  const MANED = ['jan','feb','mar','apr','mai','jun','jul','aug','sep','okt','nov','des'];
+
+  container.innerHTML = Object.entries(manedsMap).map(([key, hendelseListe]) => {
     const [year, month] = key.split('-');
     const manedNavn = new Date(parseInt(year), parseInt(month)-1, 1)
       .toLocaleDateString('nb-NO', { month: 'long', year: 'numeric' });
 
-    const rader = aksjer.map(a => {
-      const exDato = new Date(a.ex_dato);
-      const erPassert = exDato < idag;
-      const dagerTil = Math.ceil((exDato - idag) / (1000*60*60*24));
+    const rader = hendelseListe.map(({ dato, type, aksje: a }) => {
+      const d = new Date(dato);
+      const erPassert = d < idag;
+      const dagerTil = Math.ceil((d - idag) / (1000*60*60*24));
+      const cfg = KAL_TYPER[type];
+
+      let detalj = '';
+      if (type === 'ex') {
+        detalj = `Siste utbytte: <strong>${fmt(a.siste_utbytte)} ${a.valuta}</strong>`;
+      } else if (type === 'utbytte') {
+        detalj = `Utbetaling: <strong>${fmt(a.siste_utbytte)} ${a.valuta}</strong> per aksje`;
+      } else if (type === 'rapport') {
+        detalj = `Kvartalsrapport`;
+      }
 
       return `
       <div class="kal-rad cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors ${erPassert ? 'opacity-40' : ''}" data-ticker="${a.ticker}">
         <div class="flex items-center gap-3 flex-1 pointer-events-none">
-          <div class="text-center w-12">
-            <div class="text-xs text-gray-400">${['jan','feb','mar','apr','mai','jun','jul','aug','sep','okt','nov','des'][exDato.getMonth()]}</div>
-            <div class="text-xl font-bold leading-none ${erPassert ? '' : 'text-orange-600 dark:text-orange-400'}">${exDato.getDate()}</div>
+          <div class="text-center w-12 shrink-0">
+            <div class="text-xs text-gray-400">${MANED[d.getMonth()]}</div>
+            <div class="text-xl font-bold leading-none ${erPassert ? 'text-gray-400' : cfg.dag}">${d.getDate()}</div>
           </div>
-          <div class="flex-1">
+          <div class="flex-1 min-w-0">
             <div class="flex items-center gap-2 flex-wrap">
+              <span class="text-xs font-semibold px-1.5 py-0.5 rounded ${cfg.bg} ${cfg.text}">${cfg.label}</span>
               <span class="font-mono font-bold text-brand-700 dark:text-brand-400">${a.ticker}</span>
-              <span class="text-gray-600 dark:text-gray-400 text-sm">${a.navn}</span>
-              <span class="text-xs text-gray-400 dark:text-gray-600">${a.sektor}</span>
+              <span class="text-gray-600 dark:text-gray-400 text-sm truncate">${a.navn}</span>
             </div>
-            <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
-              Siste utbytte: <strong>${fmt(a.siste_utbytte)} ${a.valuta}</strong>
-              &nbsp;·&nbsp; Betaling: ${a.betaling_dato ? formaterDato(a.betaling_dato) : '—'}
-            </div>
+            <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">${detalj}</div>
           </div>
         </div>
-        <div class="text-right min-w-20 pointer-events-none">
-          <span class="yield-badge ${yieldKlasse(a.utbytte_yield)} text-sm">${a.utbytte_yield.toFixed(2)}%</span>
-          ${!erPassert ? `<div class="text-xs text-gray-400 mt-1">${dagerTil === 0 ? 'I dag!' : dagerTil === 1 ? 'I morgen' : `om ${dagerTil} dager`}</div>` : '<div class="text-xs text-gray-400 mt-1">Passert</div>'}
+        <div class="text-right min-w-16 shrink-0 pointer-events-none">
+          ${type !== 'rapport' ? `<span class="yield-badge ${yieldKlasse(a.utbytte_yield)} text-sm">${a.utbytte_yield.toFixed(2)}%</span>` : ''}
+          ${!erPassert ? `<div class="text-xs text-gray-400 mt-1">${dagerTil === 0 ? 'I dag!' : dagerTil === 1 ? 'I morgen' : `om ${dagerTil}d`}</div>` : '<div class="text-xs text-gray-400 mt-1">Passert</div>'}
         </div>
       </div>`;
     }).join('');
+
+    const antEx      = hendelseListe.filter(h => h.type === 'ex').length;
+    const antUtbytte = hendelseListe.filter(h => h.type === 'utbytte').length;
+    const antRapport = hendelseListe.filter(h => h.type === 'rapport').length;
+    const oppsummer = [
+      antEx      ? `${antEx} ex-dag`      : '',
+      antUtbytte ? `${antUtbytte} utbytte` : '',
+      antRapport ? `${antRapport} rapport` : '',
+    ].filter(Boolean).join(' · ');
 
     return `
     <div class="rounded-xl border border-gray-200 dark:border-gray-800 overflow-hidden shadow-sm">
       <div class="px-4 py-3 bg-gray-100 dark:bg-gray-900 font-semibold capitalize flex items-center justify-between">
         <span>${manedNavn}</span>
-        <span class="text-xs font-normal text-gray-400">${aksjer.length} ex-dato${aksjer.length !== 1 ? 'er' : ''}</span>
+        <span class="text-xs font-normal text-gray-400">${oppsummer}</span>
       </div>
       <div class="divide-y divide-gray-100 dark:divide-gray-800" data-kal-gruppe>${rader}</div>
     </div>`;
