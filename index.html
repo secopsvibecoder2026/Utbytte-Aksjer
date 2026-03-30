@@ -3,7 +3,82 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Norske Utbytteaksjer</title>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="logo/exday_icon_primary.svg">
+
+  <!-- SEO -->
+  <title>Norske Utbytteaksjer – Oversikt og utbyttedatoer | exday.no</title>
+  <meta name="description" content="Oversikt over 45 norske utbytteaksjer på Oslo Børs. Se yield, ex-dato, utbyttehistorikk og nøkkeltall. Oppdateres daglig fra Yahoo Finance." />
+  <meta name="keywords" content="norske utbytteaksjer, Oslo Børs, utbytte, yield, ex-dato, dividend, EQNR, DNB, Equinor, norsk aksje" />
+  <link rel="canonical" href="https://exday.no/" />
+
+  <!-- PWA -->
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#16a34a" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="exday.no" />
+  <link rel="apple-touch-icon" href="/logo/apple_touch_icon_180.png" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://exday.no/" />
+  <meta property="og:title" content="Norske Utbytteaksjer – exday.no" />
+  <meta property="og:description" content="Oversikt over 45 norske utbytteaksjer på Oslo Børs. Yield, ex-dato, historikk og nøkkeltall – oppdatert daglig." />
+  <meta property="og:image" content="https://exday.no/assets/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:locale" content="nb_NO" />
+  <meta property="og:site_name" content="exday.no" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Norske Utbytteaksjer – exday.no" />
+  <meta name="twitter:description" content="Oversikt over 45 norske utbytteaksjer på Oslo Børs. Yield, ex-dato, historikk og nøkkeltall – oppdatert daglig." />
+  <meta name="twitter:image" content="https://exday.no/assets/og-image.png" />
+
+  <!-- JSON-LD strukturert data -->
+  <script type="application/ld+json">
+  [
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "exday.no",
+      "url": "https://exday.no/",
+      "description": "Oversikt over norske utbytteaksjer notert på Oslo Børs",
+      "inLanguage": "nb-NO",
+      "publisher": {
+        "@type": "Organization",
+        "name": "exday.no",
+        "url": "https://exday.no/"
+      }
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Dataset",
+      "name": "Norske utbytteaksjer – Oslo Børs",
+      "description": "Daglig oppdatert oversikt over 45 norske utbytteaksjer notert på Oslo Børs. Inneholder utbytteyield, ex-dato, betalingsdato, utbyttehistorikk, P/E, P/B, payout ratio og markedsverdi.",
+      "url": "https://exday.no/",
+      "inLanguage": "nb-NO",
+      "isAccessibleForFree": true,
+      "creator": {
+        "@type": "Organization",
+        "name": "exday.no",
+        "url": "https://exday.no/"
+      },
+      "keywords": ["utbytteaksjer", "Oslo Børs", "utbytte yield", "ex-dato", "dividend", "norske aksjer", "EQNR", "DNB", "Equinor"],
+      "variableMeasured": ["utbytte yield", "ex-dato", "betalingsdato", "utbytte per aksje", "payout ratio", "P/E ratio", "P/B ratio", "markedsverdi", "52-ukers kursrange"],
+      "temporalCoverage": "2020/..",
+      "spatialCoverage": {
+        "@type": "Place",
+        "name": "Norge"
+      },
+      "license": "https://creativecommons.org/licenses/by/4.0/"
+    }
+  ]
+  </script>
+
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="assets/style.css" />
   <script>
@@ -26,12 +101,11 @@
   <!-- HEADER -->
   <header class="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 sticky top-0 z-40 shadow-sm">
     <div class="max-w-screen-2xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
-      <div class="flex items-center gap-2 min-w-0">
-        <div class="w-8 h-8 shrink-0 rounded-lg bg-brand-600 flex items-center justify-center text-white font-bold text-sm">UA</div>
-        <div class="min-w-0">
-          <h1 class="font-bold text-base sm:text-lg leading-tight truncate">Norske Utbytteaksjer</h1>
-          <p id="sist-oppdatert" class="text-xs text-gray-500 dark:text-gray-400 truncate"><span class="skeleton inline-block h-3 rounded align-middle" style="width:8rem"></span></p>
-        </div>
+      <div class="flex items-center gap-3 min-w-0">
+        <h1 class="sr-only">Norske Utbytteaksjer – exday.no</h1>
+        <img src="logo/exday_logo_primary.svg" class="h-8 sm:h-9 dark:hidden shrink-0" alt="exday.no" />
+        <img src="logo/exday_logo_inverse.svg" class="h-8 sm:h-9 hidden dark:block shrink-0" alt="exday.no" />
+        <p id="sist-oppdatert" class="text-xs text-gray-500 dark:text-gray-400 truncate hidden sm:block"><span class="skeleton inline-block h-3 rounded align-middle" style="width:8rem"></span></p>
       </div>
       <button id="dark-toggle" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500 dark:text-gray-400 transition-colors shrink-0" title="Bytt tema">
         <svg id="icon-moon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
@@ -43,6 +117,7 @@
   <main class="max-w-screen-2xl mx-auto px-3 sm:px-4 py-4 sm:py-6 space-y-4 sm:space-y-6">
 
     <!-- SAMMENDRAGSKORT -->
+    <h2 class="text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 -mb-1">Utbytteoversikt · Oslo Børs</h2>
     <section class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
       <div class="stat-card">
         <p class="stat-label">Aksjer sporet</p>
@@ -69,6 +144,8 @@
       <nav class="flex gap-1" id="tab-nav">
         <button class="tab-btn active" data-tab="oversikt">Oversikt</button>
         <button class="tab-btn" data-tab="kalender">Kalender</button>
+        <button class="tab-btn" data-tab="portfolio">Kalkulator</button>
+        <button class="tab-btn" data-tab="varsler">Varsler</button>
       </nav>
     </div>
 
@@ -78,7 +155,7 @@
         <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
         <input id="sok" type="search" placeholder="Søk ticker eller selskapsnavn…" class="filter-input pl-9 w-full" />
       </div>
-      <div class="grid grid-cols-2 sm:flex gap-2 sm:gap-3">
+      <div class="grid grid-cols-2 sm:flex gap-2 sm:gap-3" id="filter-ekstra">
         <select id="filter-sektor" class="filter-input w-full sm:w-auto">
           <option value="">Alle sektorer</option>
         </select>
@@ -97,6 +174,9 @@
           <option value="8">Yield ≥ 8%</option>
           <option value="10">Yield ≥ 10%</option>
         </select>
+        <button id="filter-fav" class="filter-input text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors text-center">
+          ☆ Favoritter
+        </button>
         <button id="reset-filter" class="filter-input text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors text-center">
           Nullstill
         </button>
@@ -105,13 +185,16 @@
 
     <!-- OVERSIKT-FANE -->
     <div id="tab-oversikt">
+      <h3 class="sr-only">Alle norske utbytteaksjer – yield, ex-dato og nøkkeltall</h3>
 
       <!-- SORT-VELGER + VIEW-TOGGLE (mobil) -->
       <div id="mobil-sort-rad" class="flex gap-2 items-center mb-3">
         <label class="text-xs text-gray-500 dark:text-gray-400 shrink-0">Sorter:</label>
         <select id="mobil-sort" class="filter-input flex-1 text-sm">
+          <option value="utbytte_score_desc">Høyest score</option>
           <option value="utbytte_yield_desc">Høyest yield</option>
           <option value="utbytte_yield_asc">Lavest yield</option>
+          <option value="snitt_yield_5ar_desc">Høyest snitt yield 5å</option>
           <option value="utbytte_vekst_5ar_desc">Best vekst 5år</option>
           <option value="payout_ratio_asc">Lavest payout</option>
           <option value="ar_med_utbytte_desc">Flest år m/utbytte</option>
@@ -134,11 +217,14 @@
         <table class="w-full text-sm" id="hoved-tabell">
           <thead>
             <tr class="bg-gray-100 dark:bg-gray-900 text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
+              <th class="px-2 py-3 w-8"></th>
               <th class="sortable px-4 py-3 text-left" data-col="ticker">Ticker</th>
               <th class="sortable px-4 py-3 text-left" data-col="navn">Selskap</th>
               <th class="sortable px-4 py-3 text-right" data-col="pris">Pris</th>
               <th class="col-detalj px-4 py-3 text-center">52u range</th>
               <th class="sortable px-4 py-3 text-right" data-col="utbytte_yield">Yield %</th>
+              <th class="sortable px-4 py-3 text-center" data-col="utbytte_score">Score</th>
+              <th class="col-detalj sortable px-4 py-3 text-right" data-col="snitt_yield_5ar">Snitt yield 5å</th>
               <th class="col-detalj sortable px-4 py-3 text-right" data-col="utbytte_per_aksje">Utb./aksje</th>
               <th class="sortable px-4 py-3 text-right" data-col="payout_ratio">Payout</th>
               <th class="sortable px-4 py-3 text-right" data-col="utbytte_vekst_5ar">Vekst 5å</th>
@@ -209,6 +295,141 @@
     <!-- KALENDER-FANE -->
     <div id="tab-kalender" class="hidden space-y-4">
       <div id="kalender-innhold"></div>
+    </div>
+
+    <!-- PORTEFØLJE-FANE -->
+    <div id="tab-portfolio" class="hidden space-y-4">
+
+      <!-- Sammendragskort -->
+      <section class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+        <div class="stat-card">
+          <p class="stat-label">Forventet/år</p>
+          <p class="stat-value" id="pf-stat-ar">—</p>
+        </div>
+        <div class="stat-card">
+          <p class="stat-label">Snitt/måned</p>
+          <p class="stat-value" id="pf-stat-mnd">—</p>
+        </div>
+        <div class="stat-card">
+          <p class="stat-label">Neste utbetaling</p>
+          <p class="stat-value text-base" id="pf-stat-neste">—</p>
+          <p class="text-xs text-gray-400 mt-0.5" id="pf-stat-neste-navn"></p>
+        </div>
+        <div class="stat-card">
+          <p class="stat-label">Selskaper</p>
+          <p class="stat-value" id="pf-stat-antall">—</p>
+        </div>
+        <div class="stat-card">
+          <p class="stat-label">Vektet yield</p>
+          <p class="stat-value" id="pf-stat-yield">—</p>
+        </div>
+        <div class="stat-card">
+          <p class="stat-label">Porteføljeverdi</p>
+          <p class="stat-value text-base" id="pf-stat-verdi">—</p>
+        </div>
+      </section>
+
+      <!-- Legg til aksje -->
+      <div class="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4 shadow-sm">
+        <h3 class="font-semibold text-sm mb-3">Legg til aksje i kalkulatoren</h3>
+        <div class="flex flex-col sm:flex-row gap-2">
+          <select id="pf-velg-aksje" class="filter-input flex-1">
+            <option value="">Velg aksje…</option>
+          </select>
+          <input id="pf-antall" type="number" min="1" placeholder="Antall aksjer" class="filter-input w-full sm:w-40" />
+          <button id="pf-legg-til" class="bg-brand-600 hover:bg-brand-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors shrink-0">Legg til</button>
+        </div>
+        <p id="pf-feil" class="text-xs text-red-500 mt-2 hidden"></p>
+      </div>
+
+      <!-- Beholdningstabell -->
+      <div id="pf-beholdning-wrapper" class="hidden">
+        <div class="flex items-center justify-between mb-2 px-1">
+          <h3 class="font-semibold text-sm">Min beholdning</h3>
+          <div class="flex items-center gap-3">
+            <button id="pf-importer-csv" class="text-xs text-gray-500 dark:text-gray-400 hover:text-brand-600 dark:hover:text-brand-400 hover:underline font-medium flex items-center gap-1">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+              Importer CSV
+            </button>
+            <button id="pf-eksport-csv" class="text-xs text-brand-600 dark:text-brand-400 hover:underline font-medium flex items-center gap-1">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+              Last ned CSV
+            </button>
+          </div>
+        </div>
+        <div class="overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-800 shadow-sm">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="bg-gray-100 dark:bg-gray-900 text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
+                <th class="px-4 py-3 text-left">Ticker</th>
+                <th class="px-4 py-3 text-left hidden sm:table-cell">Selskap</th>
+                <th class="px-4 py-3 text-right">Antall</th>
+                <th class="px-4 py-3 text-right">Yield</th>
+                <th class="px-4 py-3 text-right">Forv. utbytte/år</th>
+                <th class="px-4 py-3 text-center hidden sm:table-cell">Ex-dato</th>
+                <th class="px-4 py-3 text-center hidden sm:table-cell">Frekvens</th>
+                <th class="px-4 py-3 text-center">Slett</th>
+              </tr>
+            </thead>
+            <tbody id="pf-tabell-body" class="divide-y divide-gray-100 dark:divide-gray-800"></tbody>
+            <tfoot id="pf-tabell-footer" class="bg-gray-50 dark:bg-gray-900/50 font-semibold"></tfoot>
+          </table>
+        </div>
+      </div>
+
+      <!-- Månedlig distribusjon -->
+      <div id="pf-tidslinje-wrapper" class="hidden bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4 shadow-sm">
+        <h3 class="font-semibold text-sm mb-3">Forventet utbytteinntekt per kvartal</h3>
+        <div id="pf-tidslinje" class="space-y-2"></div>
+      </div>
+
+      <!-- Diagrammer -->
+      <div id="pf-charts-wrapper" style="display:none" class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <!-- Sektordiversifisering -->
+        <div class="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4 shadow-sm">
+          <h3 class="font-semibold text-sm mb-4">Sektordiversifisering</h3>
+          <div id="pf-sektor-chart"></div>
+        </div>
+        <!-- Topp bidragsytere -->
+        <div class="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4 shadow-sm">
+          <h3 class="font-semibold text-sm mb-4">Største bidragsytere</h3>
+          <div id="pf-topp-chart" class="space-y-2"></div>
+        </div>
+        <!-- Frekvensfordeling (full bredde) -->
+        <div class="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4 shadow-sm lg:col-span-2">
+          <h3 class="font-semibold text-sm mb-4">Utbetalingsfrekvens</h3>
+          <div id="pf-frekvens-chart" class="flex flex-wrap gap-3"></div>
+        </div>
+      </div>
+
+      <!-- Tom tilstand -->
+      <div id="pf-tom" class="text-center py-10 text-gray-400 dark:text-gray-600">
+        <svg class="w-12 h-12 mx-auto mb-3 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        <p class="text-sm font-medium">Ingen aksjer i porteføljen ennå</p>
+        <p class="text-xs mt-1 mb-4">Legg til aksjer ovenfor for å beregne forventet utbytteinntekt. Data lagres kun i din nettleser.</p>
+        <button id="pf-importer-csv-tom" class="inline-flex items-center gap-1.5 text-xs text-brand-600 dark:text-brand-400 border border-brand-300 dark:border-brand-700 hover:bg-brand-50 dark:hover:bg-brand-900/20 px-3 py-1.5 rounded-lg transition-colors font-medium">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+          Importer fra CSV
+        </button>
+      </div>
+
+      <!-- Skjult fil-input + preview-seksjon -->
+      <input type="file" id="pf-importer-fil" accept=".csv" class="hidden" />
+      <div id="pf-importer-preview" class="hidden rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-4 shadow-sm space-y-3">
+        <h3 class="font-semibold text-sm">Forhåndsvisning av import</h3>
+        <div id="pf-importer-innhold"></div>
+        <div class="flex flex-wrap gap-2 pt-1">
+          <button id="pf-importer-bekreft-legg-til" class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white text-sm font-medium rounded-lg transition-colors">Legg til i portefølje</button>
+          <button id="pf-importer-bekreft-erstatt" class="px-4 py-2 bg-gray-800 dark:bg-gray-200 hover:bg-gray-700 dark:hover:bg-gray-300 text-white dark:text-gray-900 text-sm font-medium rounded-lg transition-colors">Erstatt portefølje</button>
+          <button id="pf-importer-avbryt" class="px-4 py-2 text-sm text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition-colors">Avbryt</button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- VARSLER-FANE -->
+    <div id="tab-varsler" class="hidden">
+      <div id="varsler-innhold" class="space-y-4 max-w-2xl mx-auto"></div>
     </div>
 
   </main>

@@ -5,14 +5,18 @@ let alleAksjer = [];
 let sortering = { kol: 'utbytte_yield', retning: 'desc' };
 let aktivTab = 'oversikt';
 let kompaktModus = false;
+let visKunFavoritter = false;
 
 // ── INIT ───────────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
   initDarkMode();
   initTabs();
   initFilter();
+  oppdaterFavBtn();
   initViewToggle();
   initModal();
+  initPortefolje();
+  initVarsler();
   lastData();
 });
 
@@ -43,6 +47,8 @@ async function lastData() {
     oppdaterSammendrag();
     visOversikt();
     visKalender();
+    sjekkExDatoerDirekte();
+    if (aktivTab === 'varsler') visVarslerTab();
   } catch (e) {
     console.error('Feil ved lasting av data:', e);
     document.getElementById('sist-oppdatert').textContent = '⚠️ Kunne ikke laste data – prøv igjen senere';
@@ -111,13 +117,29 @@ function initTabs() {
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b === btn));
     document.getElementById('tab-oversikt').classList.toggle('hidden', aktivTab !== 'oversikt');
     document.getElementById('tab-kalender').classList.toggle('hidden', aktivTab !== 'kalender');
-    document.getElementById('filter-bar').classList.toggle('hidden', aktivTab !== 'oversikt');
+    document.getElementById('tab-portfolio').classList.toggle('hidden', aktivTab !== 'portfolio');
+    document.getElementById('tab-varsler').classList.toggle('hidden', aktivTab !== 'varsler');
+    // Skjul hele filter-bar på varsler-fanen (søk gir ingen mening der)
+    document.getElementById('filter-bar').classList.toggle('hidden', aktivTab === 'varsler');
+    // Søkefeltet er alltid synlig; bare filtre/dropdowns skjules på andre faner
+    document.getElementById('filter-ekstra').classList.toggle('hidden', aktivTab !== 'oversikt');
+    // Tøm søk ved tabbytte så man ikke beholder gammelt søk
+    document.getElementById('sok').value = '';
+    if (aktivTab === 'portfolio') visPortefolje();
+    if (aktivTab === 'kalender') visKalender();
+    if (aktivTab === 'oversikt') visOversikt();
+    if (aktivTab === 'varsler') visVarslerTab();
   });
 }
 
 // ── FILTER ─────────────────────────────────────────────────────────────────
 function initFilter() {
-  ['sok', 'filter-sektor', 'filter-frekvens', 'filter-yield'].forEach(id => {
+  document.getElementById('sok').addEventListener('input', () => {
+    if (aktivTab === 'kalender') visKalender();
+    else if (aktivTab === 'portfolio') visPortefolje();
+    else visOversikt();
+  });
+  ['filter-sektor', 'filter-frekvens', 'filter-yield'].forEach(id => {
     document.getElementById(id).addEventListener('input', visOversikt);
   });
   document.getElementById('reset-filter').addEventListener('click', () => {
@@ -125,6 +147,14 @@ function initFilter() {
     document.getElementById('filter-sektor').value = '';
     document.getElementById('filter-frekvens').value = '';
     document.getElementById('filter-yield').value = '';
+    visKunFavoritter = false;
+    oppdaterFavBtn();
+    visOversikt();
+  });
+
+  document.getElementById('filter-fav').addEventListener('click', () => {
+    visKunFavoritter = !visKunFavoritter;
+    oppdaterFavBtn();
     visOversikt();
   });
 
@@ -148,6 +178,19 @@ function initFilter() {
   });
 }
 
+function oppdaterFavBtn() {
+  const btn = document.getElementById('filter-fav');
+  if (!btn) return;
+  const antall = hentFav().size;
+  if (visKunFavoritter) {
+    btn.className = 'filter-input text-sm font-medium bg-yellow-100 dark:bg-yellow-900/40 text-yellow-700 dark:text-yellow-300 border-yellow-300 dark:border-yellow-700';
+    btn.textContent = `★ Favoritter (${antall})`;
+  } else {
+    btn.className = 'filter-input text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors';
+    btn.textContent = antall > 0 ? `☆ Favoritter (${antall})` : '☆ Favoritter';
+  }
+}
+
 function byggSektorFilter() {
   const sektorer = [...new Set(alleAksjer.map(a => a.sektor))].sort();
   const sel = document.getElementById('filter-sektor');
@@ -163,8 +206,10 @@ function filtrerteAksjer() {
   const sektor = document.getElementById('filter-sektor').value;
   const frekvens = document.getElementById('filter-frekvens').value;
   const minYield = parseFloat(document.getElementById('filter-yield').value) || 0;
+  const fav = hentFav();
 
   return alleAksjer.filter(a => {
+    if (visKunFavoritter && !fav.has(a.ticker)) return false;
     if (sok && !a.ticker.toLowerCase().includes(sok) && !a.navn.toLowerCase().includes(sok)) return false;
     if (sektor && a.sektor !== sektor) return false;
     if (frekvens && a.frekvens !== frekvens) return false;
@@ -234,6 +279,7 @@ function visOversikt() {
 
     return `
     <tr class="table-row ${rowClass}" data-ticker="${a.ticker}">
+      <td class="px-2 py-3 w-8">${stjerne(a.ticker)}</td>
       <td class="px-4 py-3 font-mono font-bold text-brand-700 dark:text-brand-400">${a.ticker}</td>
       <td class="px-4 py-3">
         <div class="font-medium leading-tight">${a.navn}</div>
@@ -247,6 +293,10 @@ function visOversikt() {
       </td>
       <td class="px-4 py-3 text-right">
         <span class="yield-badge ${yieldKlasse(a.utbytte_yield)}">${a.utbytte_yield.toFixed(2)}%</span>
+      </td>
+      <td class="px-4 py-3 text-center">${scoreBadge(beregnScore(a))}</td>
+      <td class="col-detalj px-4 py-3 text-right">
+        ${a.snitt_yield_5ar > 0 ? `<span class="yield-badge ${yieldKlasse(a.snitt_yield_5ar)}">${a.snitt_yield_5ar.toFixed(1)}%</span>` : '<span class="text-gray-400">—</span>'}
       </td>
       <td class="col-detalj px-4 py-3 text-right">${fmt(a.utbytte_per_aksje)}</td>
       <td class="px-4 py-3 text-right">
@@ -271,6 +321,14 @@ function visOversikt() {
 
   // Klikk via event delegation (tabell) – ingen minnelekasje
   tbody.onclick = e => {
+    const favBtn = e.target.closest('.fav-btn');
+    if (favBtn) {
+      e.stopPropagation();
+      toggleFav(favBtn.dataset.ticker);
+      oppdaterFavBtn();
+      visOversikt();
+      return;
+    }
     const tr = e.target.closest('tr[data-ticker]');
     if (!tr) return;
     const aksje = alleAksjer.find(a => a.ticker === tr.dataset.ticker);
@@ -295,6 +353,7 @@ function visOversikt() {
     <div class="aksje-kort-kompakt ${snartEx ? 'snart-ex' : ''}" data-ticker="${a.ticker}">
       <div class="flex-1 min-w-0">
         <div class="flex items-center gap-2">
+          ${stjerne(a.ticker, 'shrink-0')}
           <span class="font-mono font-bold text-brand-700 dark:text-brand-400 text-sm">${a.ticker}</span>
           <span class="frekvens-badge">${a.frekvens}</span>
           ${snartEx ? `<span class="text-xs text-orange-500 font-medium">Ex ${dagerTil === 0 ? 'i dag' : dagerTil === 1 ? 'i morgen' : `om ${dagerTil}d`}</span>` : ''}
@@ -311,13 +370,19 @@ function visOversikt() {
     const normalKort = `
     <div class="aksje-kort ${snartEx ? 'snart-ex' : ''}" data-ticker="${a.ticker}">
       <div class="flex items-start justify-between gap-2 mb-2">
-        <div>
-          <span class="font-mono font-bold text-brand-700 dark:text-brand-400 text-base">${a.ticker}</span>
-          <span class="frekvens-badge ml-2">${a.frekvens}</span>
-          <div class="text-sm text-gray-600 dark:text-gray-400 mt-0.5 leading-tight">${a.navn}</div>
-          <div class="text-xs text-gray-400 dark:text-gray-500">${a.sektor}</div>
+        <div class="flex items-start gap-2">
+          ${stjerne(a.ticker, 'mt-0.5 shrink-0')}
+          <div>
+            <span class="font-mono font-bold text-brand-700 dark:text-brand-400 text-base">${a.ticker}</span>
+            <span class="frekvens-badge ml-2">${a.frekvens}</span>
+            <div class="text-sm text-gray-600 dark:text-gray-400 mt-0.5 leading-tight">${a.navn}</div>
+            <div class="text-xs text-gray-400 dark:text-gray-500">${a.sektor}</div>
+          </div>
         </div>
-        <span class="yield-badge ${yieldKlasse(a.utbytte_yield)} text-sm shrink-0">${a.utbytte_yield.toFixed(2)}%</span>
+        <div class="flex flex-col items-end gap-1 shrink-0">
+          <span class="yield-badge ${yieldKlasse(a.utbytte_yield)} text-sm">${a.utbytte_yield.toFixed(2)}%</span>
+          ${scoreBadge(beregnScore(a))}
+        </div>
       </div>
       <div class="grid grid-cols-3 gap-2 text-center my-3">
         <div class="bg-gray-50 dark:bg-gray-800 rounded-lg py-2 px-1">
@@ -367,6 +432,14 @@ function visOversikt() {
 
   // Klikk via event delegation (kort) – ingen minnelekasje
   kortBody.onclick = e => {
+    const favBtn = e.target.closest('.fav-btn');
+    if (favBtn) {
+      e.stopPropagation();
+      toggleFav(favBtn.dataset.ticker);
+      oppdaterFavBtn();
+      visOversikt();
+      return;
+    }
     const kort = e.target.closest('[data-ticker]');
     if (!kort) return;
     const aksje = alleAksjer.find(a => a.ticker === kort.dataset.ticker);
@@ -376,8 +449,16 @@ function visOversikt() {
 
 function sorterAksjer(data) {
   const { kol, retning } = sortering;
+  const hentVerdi = (a) => kol === 'utbytte_score' ? beregnScore(a) : a[kol];
+  const fav = hentFav();
   return [...data].sort((a, b) => {
-    let va = a[kol], vb = b[kol];
+    // Favoritter alltid øverst (med mindre man filtrerer kun favoritter)
+    if (!visKunFavoritter) {
+      const fa = fav.has(a.ticker) ? 0 : 1;
+      const fb = fav.has(b.ticker) ? 0 : 1;
+      if (fa !== fb) return fa - fb;
+    }
+    let va = hentVerdi(a), vb = hentVerdi(b);
     if (va == null) va = retning === 'asc' ? Infinity : -Infinity;
     if (vb == null) vb = retning === 'asc' ? Infinity : -Infinity;
     if (typeof va === 'string') return retning === 'asc' ? va.localeCompare(vb, 'nb') : vb.localeCompare(va, 'nb');
@@ -386,72 +467,605 @@ function sorterAksjer(data) {
 }
 
 // ── KALENDER ───────────────────────────────────────────────────────────────
+// Kalender-badge konfigurasjoner
+const KAL_TYPER = {
+  ex:      { label: 'Ex-dag',    bg: 'bg-orange-100 dark:bg-orange-900/40', text: 'text-orange-700 dark:text-orange-300', dag: 'text-orange-600 dark:text-orange-400' },
+  utbytte: { label: 'Utbytte',   bg: 'bg-green-100 dark:bg-green-900/40',  text: 'text-green-700 dark:text-green-300',   dag: 'text-green-600 dark:text-green-400'   },
+  rapport: { label: 'Rapport',   bg: 'bg-blue-100 dark:bg-blue-900/40',    text: 'text-blue-700 dark:text-blue-300',     dag: 'text-blue-600 dark:text-blue-400'     },
+};
+
 function visKalender() {
   const container = document.getElementById('kalender-innhold');
   const idag = new Date(); idag.setHours(0,0,0,0);
+  const sok = (document.getElementById('sok')?.value || '').toLowerCase().trim();
 
-  // Grupper etter måned
+  // Bygg flat liste av alle hendelser (ex, utbytte, rapport)
+  const hendelser = [];
+  alleAksjer.forEach(a => {
+    if (sok && !a.ticker.toLowerCase().includes(sok) && !a.navn.toLowerCase().includes(sok)) return;
+    if (a.ex_dato)      hendelser.push({ dato: a.ex_dato,      type: 'ex',      aksje: a });
+    if (a.betaling_dato) hendelser.push({ dato: a.betaling_dato, type: 'utbytte', aksje: a });
+    if (a.rapport_dato) hendelser.push({ dato: a.rapport_dato,  type: 'rapport', aksje: a });
+  });
+  hendelser.sort((x, y) => new Date(x.dato) - new Date(y.dato));
+
+  // Grupper per måned
   const manedsMap = {};
-  alleAksjer
-    .filter(a => a.ex_dato)
-    .sort((a, b) => new Date(a.ex_dato) - new Date(b.ex_dato))
-    .forEach(a => {
-      const d = new Date(a.ex_dato);
-      const key = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
-      if (!manedsMap[key]) manedsMap[key] = [];
-      manedsMap[key].push(a);
-    });
+  hendelser.forEach(h => {
+    const d = new Date(h.dato);
+    const key = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+    if (!manedsMap[key]) manedsMap[key] = [];
+    manedsMap[key].push(h);
+  });
 
   if (Object.keys(manedsMap).length === 0) {
-    container.innerHTML = '<p class="text-gray-400">Ingen kommende ex-datoer tilgjengelig.</p>';
+    container.innerHTML = '<p class="text-gray-400 py-8 text-center">Ingen hendelser matcher søket.</p>';
     return;
   }
 
-  container.innerHTML = Object.entries(manedsMap).map(([key, aksjer]) => {
+  const MANED = ['jan','feb','mar','apr','mai','jun','jul','aug','sep','okt','nov','des'];
+
+  container.innerHTML = Object.entries(manedsMap).map(([key, hendelseListe]) => {
     const [year, month] = key.split('-');
     const manedNavn = new Date(parseInt(year), parseInt(month)-1, 1)
       .toLocaleDateString('nb-NO', { month: 'long', year: 'numeric' });
 
-    const rader = aksjer.map(a => {
-      const exDato = new Date(a.ex_dato);
-      const erPassert = exDato < idag;
-      const dagerTil = Math.ceil((exDato - idag) / (1000*60*60*24));
+    const rader = hendelseListe.map(({ dato, type, aksje: a }) => {
+      const d = new Date(dato);
+      const erPassert = d < idag;
+      const dagerTil = Math.ceil((d - idag) / (1000*60*60*24));
+      const cfg = KAL_TYPER[type];
+
+      let detalj = '';
+      if (type === 'ex') {
+        detalj = `Siste utbytte: <strong>${fmt(a.siste_utbytte)} ${a.valuta}</strong>`;
+      } else if (type === 'utbytte') {
+        detalj = `Utbetaling: <strong>${fmt(a.siste_utbytte)} ${a.valuta}</strong> per aksje`;
+      } else if (type === 'rapport') {
+        detalj = `Kvartalsrapport`;
+      }
 
       return `
-      <div class="kal-rad ${erPassert ? 'opacity-40' : ''}">
-        <div class="flex items-center gap-3 flex-1">
-          <div class="text-center w-12">
-            <div class="text-xs text-gray-400">${['jan','feb','mar','apr','mai','jun','jul','aug','sep','okt','nov','des'][exDato.getMonth()]}</div>
-            <div class="text-xl font-bold leading-none ${erPassert ? '' : 'text-orange-600 dark:text-orange-400'}">${exDato.getDate()}</div>
+      <div class="kal-rad cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors ${erPassert ? 'opacity-40' : ''}" data-ticker="${a.ticker}">
+        <div class="flex items-center gap-3 flex-1 pointer-events-none">
+          <div class="text-center w-12 shrink-0">
+            <div class="text-xs text-gray-400">${MANED[d.getMonth()]}</div>
+            <div class="text-xl font-bold leading-none ${erPassert ? 'text-gray-400' : cfg.dag}">${d.getDate()}</div>
           </div>
-          <div class="flex-1">
+          <div class="flex-1 min-w-0">
             <div class="flex items-center gap-2 flex-wrap">
+              <span class="text-xs font-semibold px-1.5 py-0.5 rounded ${cfg.bg} ${cfg.text}">${cfg.label}</span>
               <span class="font-mono font-bold text-brand-700 dark:text-brand-400">${a.ticker}</span>
-              <span class="text-gray-600 dark:text-gray-400 text-sm">${a.navn}</span>
-              <span class="text-xs text-gray-400 dark:text-gray-600">${a.sektor}</span>
+              <span class="text-gray-600 dark:text-gray-400 text-sm truncate">${a.navn}</span>
             </div>
-            <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
-              Siste utbytte: <strong>${fmt(a.siste_utbytte)} ${a.valuta}</strong>
-              &nbsp;·&nbsp; Betaling: ${a.betaling_dato ? formaterDato(a.betaling_dato) : '—'}
-            </div>
+            <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">${detalj}</div>
           </div>
         </div>
-        <div class="text-right min-w-20">
-          <span class="yield-badge ${yieldKlasse(a.utbytte_yield)} text-sm">${a.utbytte_yield.toFixed(2)}%</span>
-          ${!erPassert ? `<div class="text-xs text-gray-400 mt-1">${dagerTil === 0 ? 'I dag!' : dagerTil === 1 ? 'I morgen' : `om ${dagerTil} dager`}</div>` : '<div class="text-xs text-gray-400 mt-1">Passert</div>'}
+        <div class="text-right min-w-16 shrink-0 pointer-events-none">
+          ${type !== 'rapport' ? `<span class="yield-badge ${yieldKlasse(a.utbytte_yield)} text-sm">${a.utbytte_yield.toFixed(2)}%</span>` : ''}
+          ${!erPassert ? `<div class="text-xs text-gray-400 mt-1">${dagerTil === 0 ? 'I dag!' : dagerTil === 1 ? 'I morgen' : `om ${dagerTil}d`}</div>` : '<div class="text-xs text-gray-400 mt-1">Passert</div>'}
         </div>
       </div>`;
     }).join('');
+
+    const antEx      = hendelseListe.filter(h => h.type === 'ex').length;
+    const antUtbytte = hendelseListe.filter(h => h.type === 'utbytte').length;
+    const antRapport = hendelseListe.filter(h => h.type === 'rapport').length;
+    const oppsummer = [
+      antEx      ? `${antEx} ex-dag`      : '',
+      antUtbytte ? `${antUtbytte} utbytte` : '',
+      antRapport ? `${antRapport} rapport` : '',
+    ].filter(Boolean).join(' · ');
 
     return `
     <div class="rounded-xl border border-gray-200 dark:border-gray-800 overflow-hidden shadow-sm">
       <div class="px-4 py-3 bg-gray-100 dark:bg-gray-900 font-semibold capitalize flex items-center justify-between">
         <span>${manedNavn}</span>
-        <span class="text-xs font-normal text-gray-400">${aksjer.length} ex-dato${aksjer.length !== 1 ? 'er' : ''}</span>
+        <span class="text-xs font-normal text-gray-400">${oppsummer}</span>
       </div>
-      <div class="divide-y divide-gray-100 dark:divide-gray-800">${rader}</div>
+      <div class="divide-y divide-gray-100 dark:divide-gray-800" data-kal-gruppe>${rader}</div>
     </div>`;
   }).join('');
+
+  // Klikk → modal
+  container.onclick = e => {
+    const rad = e.target.closest('[data-ticker]');
+    if (!rad) return;
+    const aksje = alleAksjer.find(a => a.ticker === rad.dataset.ticker);
+    if (aksje) visModal(aksje);
+  };
+}
+
+// ── FAVORITTER ─────────────────────────────────────────────────────────────
+function hentFav() {
+  try { return new Set(JSON.parse(localStorage.getItem('fav_aksjer') || '[]')); } catch { return new Set(); }
+}
+function lagreFav(fav) { localStorage.setItem('fav_aksjer', JSON.stringify([...fav])); }
+function erFavoritt(ticker) { return hentFav().has(ticker); }
+function toggleFav(ticker) {
+  const fav = hentFav();
+  if (fav.has(ticker)) fav.delete(ticker); else fav.add(ticker);
+  lagreFav(fav);
+}
+
+function stjerne(ticker, ekstraKlasse = '') {
+  const er = erFavoritt(ticker);
+  return `<button class="fav-btn ${ekstraKlasse} transition-colors" data-ticker="${ticker}" title="${er ? 'Fjern favoritt' : 'Legg til favoritt'}" aria-label="Favoritt">
+    <svg class="w-4 h-4 pointer-events-none ${er ? 'text-yellow-400' : 'text-gray-300 dark:text-gray-600'}" fill="${er ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
+  </button>`;
+}
+
+// ── PORTEFØLJEKALKULATOR ───────────────────────────────────────────────────
+function hentPF() {
+  try { return JSON.parse(localStorage.getItem('pf_beholdning') || '{}'); } catch { return {}; }
+}
+function lagrePF(pf) { localStorage.setItem('pf_beholdning', JSON.stringify(pf)); }
+
+function initPortefolje() {
+  document.getElementById('pf-legg-til').addEventListener('click', () => {
+    const sel = document.getElementById('pf-velg-aksje');
+    const antallEl = document.getElementById('pf-antall');
+    const feilEl = document.getElementById('pf-feil');
+    const ticker = sel.value;
+    const antall = parseInt(antallEl.value, 10);
+    feilEl.classList.add('hidden');
+    if (!ticker) { feilEl.textContent = 'Velg en aksje.'; feilEl.classList.remove('hidden'); return; }
+    if (!antall || antall < 1) { feilEl.textContent = 'Skriv inn gyldig antall aksjer.'; feilEl.classList.remove('hidden'); return; }
+    const pf = hentPF();
+    pf[ticker] = antall;
+    lagrePF(pf);
+    sel.value = '';
+    antallEl.value = '';
+    visPortefolje();
+  });
+
+  document.getElementById('pf-antall').addEventListener('keydown', e => {
+    if (e.key === 'Enter') document.getElementById('pf-legg-til').click();
+  });
+
+  document.getElementById('pf-eksport-csv').addEventListener('click', eksporterCSV);
+
+  // ── CSV-IMPORT ─────────────────────────────────────────────────────────────
+  const filInput = document.getElementById('pf-importer-fil');
+
+  function triggerFilInput() { filInput.click(); }
+
+  document.getElementById('pf-importer-csv').addEventListener('click', triggerFilInput);
+
+  const tomKnapp = document.getElementById('pf-importer-csv-tom');
+  if (tomKnapp) tomKnapp.addEventListener('click', triggerFilInput);
+
+  filInput.addEventListener('change', () => {
+    const fil = filInput.files[0];
+    if (!fil) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+      const { gyldig, ukjent } = parseCSV(e.target.result);
+      visImportPreview(gyldig, ukjent);
+    };
+    reader.readAsText(fil, 'UTF-8');
+    filInput.value = '';
+  });
+
+  document.getElementById('pf-importer-bekreft-legg-til').addEventListener('click', () => {
+    bekreftImport(window._importData, false);
+  });
+  document.getElementById('pf-importer-bekreft-erstatt').addEventListener('click', () => {
+    bekreftImport(window._importData, true);
+  });
+  document.getElementById('pf-importer-avbryt').addEventListener('click', () => {
+    document.getElementById('pf-importer-preview').classList.add('hidden');
+    window._importData = null;
+  });
+}
+
+function fyllPFDropdown() {
+  const sel = document.getElementById('pf-velg-aksje');
+  const pf = hentPF();
+  const valgt = sel.value;
+  sel.innerHTML = '<option value="">Velg aksje…</option>';
+  [...alleAksjer]
+    .sort((a, b) => a.ticker.localeCompare(b.ticker, 'nb'))
+    .forEach(a => {
+      const opt = document.createElement('option');
+      opt.value = a.ticker;
+      opt.textContent = `${a.ticker} – ${a.navn}`;
+      if (pf[a.ticker]) opt.textContent += ` (${pf[a.ticker]} aksjer)`;
+      sel.appendChild(opt);
+    });
+  if (valgt) sel.value = valgt;
+}
+
+function visPortefolje() {
+  fyllPFDropdown();
+  const pf = hentPF();
+  const sok = (document.getElementById('sok')?.value || '').toLowerCase().trim();
+  const idag = new Date(); idag.setHours(0,0,0,0);
+
+  const alleBeholdning = Object.entries(pf)
+    .map(([ticker, antall]) => {
+      const a = alleAksjer.find(x => x.ticker === ticker);
+      if (!a || antall < 1) return null;
+      return { ...a, antall, forv_ar: antall * (a.utbytte_per_aksje || 0) };
+    })
+    .filter(Boolean)
+    .sort((a, b) => b.forv_ar - a.forv_ar);
+
+  const beholdning = sok
+    ? alleBeholdning.filter(a => a.ticker.toLowerCase().includes(sok) || a.navn.toLowerCase().includes(sok))
+    : alleBeholdning;
+
+  const harBeholdning = alleBeholdning.length > 0;
+  document.getElementById('pf-tom').classList.toggle('hidden', harBeholdning);
+  document.getElementById('pf-beholdning-wrapper').classList.toggle('hidden', !harBeholdning);
+  document.getElementById('pf-tidslinje-wrapper').classList.toggle('hidden', !harBeholdning);
+  document.getElementById('pf-charts-wrapper').style.display = harBeholdning ? 'grid' : 'none';
+
+  if (!harBeholdning) {
+    ['pf-stat-ar','pf-stat-mnd','pf-stat-antall','pf-stat-neste','pf-stat-yield','pf-stat-verdi']
+      .forEach(id => { document.getElementById(id).textContent = '—'; });
+    document.getElementById('pf-stat-neste-navn').textContent = '';
+    return;
+  }
+
+  // ── SAMMENDRAG ────────────────────────────────────────────────────────────
+  const totalAr = alleBeholdning.reduce((s, a) => s + a.forv_ar, 0);
+  const totalVerdi = alleBeholdning.reduce((s, a) => s + a.antall * (a.pris || 0), 0);
+  const fmtKr = v => v.toLocaleString('nb-NO', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) + ' kr';
+
+  document.getElementById('pf-stat-ar').textContent = fmtKr(totalAr);
+  document.getElementById('pf-stat-mnd').textContent = fmtKr(totalAr / 12);
+  document.getElementById('pf-stat-antall').textContent = alleBeholdning.length;
+  document.getElementById('pf-stat-verdi').textContent = fmtKr(totalVerdi);
+
+  // Vektet yield = totalAr / totalVerdi × 100
+  const vektetYield = totalVerdi > 0 ? (totalAr / totalVerdi * 100) : 0;
+  document.getElementById('pf-stat-yield').textContent = vektetYield > 0 ? vektetYield.toFixed(2) + '%' : '—';
+
+  // Neste utbetaling: bruk betaling_dato, fallback til ex_dato
+  const nesteRef = a => {
+    if (a.betaling_dato && new Date(a.betaling_dato) >= idag) return new Date(a.betaling_dato);
+    if (a.ex_dato && new Date(a.ex_dato) >= idag) return new Date(a.ex_dato);
+    return null;
+  };
+  const nestePayout = [...alleBeholdning]
+    .map(a => ({ a, dato: nesteRef(a) }))
+    .filter(x => x.dato)
+    .sort((x, y) => x.dato - y.dato)[0];
+  if (nestePayout) {
+    const erBetaling = nestePayout.a.betaling_dato && new Date(nestePayout.a.betaling_dato) >= idag;
+    document.getElementById('pf-stat-neste').textContent = formaterDato(erBetaling ? nestePayout.a.betaling_dato : nestePayout.a.ex_dato);
+    document.getElementById('pf-stat-neste-navn').textContent = nestePayout.a.ticker + (erBetaling ? '' : ' (ex)');
+  } else {
+    document.getElementById('pf-stat-neste').textContent = '—';
+    document.getElementById('pf-stat-neste-navn').textContent = '';
+  }
+
+  // ── BEHOLDNINGSTABELL ─────────────────────────────────────────────────────
+  const tbody = document.getElementById('pf-tabell-body');
+  tbody.innerHTML = beholdning.map(a => `
+    <tr class="table-row cursor-pointer" data-ticker="${a.ticker}">
+      <td class="px-4 py-3 font-mono font-bold text-brand-700 dark:text-brand-400">${a.ticker}</td>
+      <td class="px-4 py-3 hidden sm:table-cell text-gray-600 dark:text-gray-400 text-sm">${a.navn}</td>
+      <td class="px-4 py-3 text-right">
+        <input type="number" min="1" value="${a.antall}"
+          class="w-20 text-right text-sm border border-gray-200 dark:border-gray-700 rounded px-2 py-1 bg-transparent focus:outline-none focus:ring-1 focus:ring-brand-500"
+          data-ticker="${a.ticker}" />
+      </td>
+      <td class="px-4 py-3 text-right"><span class="yield-badge ${yieldKlasse(a.utbytte_yield)}">${a.utbytte_yield.toFixed(2)}%</span></td>
+      <td class="px-4 py-3 text-right font-semibold">${fmtKr(a.forv_ar)}</td>
+      <td class="px-4 py-3 text-center hidden sm:table-cell text-gray-500 text-sm">${a.ex_dato ? formaterDato(a.ex_dato) : '—'}</td>
+      <td class="px-4 py-3 text-center hidden sm:table-cell"><span class="frekvens-badge">${a.frekvens}</span></td>
+      <td class="px-4 py-3 text-center">
+        <button class="pf-slett text-gray-400 hover:text-red-500 transition-colors p-1" data-ticker="${a.ticker}" title="Fjern">
+          <svg class="w-4 h-4 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </td>
+    </tr>`).join('');
+
+  // Sum-rad i footer
+  document.getElementById('pf-tabell-footer').innerHTML = `
+    <tr>
+      <td colspan="2" class="px-4 py-3 text-sm text-gray-500">Totalt (${alleBeholdning.length} selskaper)</td>
+      <td class="px-4 py-3 text-right text-sm text-gray-500">${alleBeholdning.reduce((s,a)=>s+a.antall,0)} aksjer</td>
+      <td></td>
+      <td class="px-4 py-3 text-right text-brand-700 dark:text-brand-400">${fmtKr(totalAr)}</td>
+      <td colspan="3"></td>
+    </tr>`;
+
+  // Event delegation: klikk på rad → modal (ikke slett-knapp eller input)
+  tbody.onclick = e => {
+    const btn = e.target.closest('.pf-slett');
+    if (btn) {
+      const pf2 = hentPF();
+      delete pf2[btn.dataset.ticker];
+      lagrePF(pf2);
+      visPortefolje();
+      return;
+    }
+    const tr = e.target.closest('tr[data-ticker]');
+    if (!tr || e.target.closest('input, button')) return;
+    const aksje = alleAksjer.find(a => a.ticker === tr.dataset.ticker);
+    if (aksje) visModal(aksje);
+  };
+  tbody.addEventListener('change', e => {
+    if (!e.target.matches('input[data-ticker]')) return;
+    const v = parseInt(e.target.value, 10);
+    if (!v || v < 1) { e.target.value = hentPF()[e.target.dataset.ticker]; return; }
+    const pf2 = hentPF();
+    pf2[e.target.dataset.ticker] = v;
+    lagrePF(pf2);
+    visPortefolje();
+  });
+
+  // ── KVARTALSVIS TIDSLINJE ─────────────────────────────────────────────────
+  const frekvensPerAr = { 'Månedlig': 12, 'Kvartalsvis': 4, 'Halvårlig': 2, 'Årlig': 1, 'Uregelmessig': 1 };
+  const kvartaler = ['K1 (jan–mar)', 'K2 (apr–jun)', 'K3 (jul–sep)', 'K4 (okt–des)'];
+  const kvartalSummer = [0, 0, 0, 0];
+
+  beholdning.forEach(a => {
+    const perAr = frekvensPerAr[a.frekvens] || 1;
+    const perUtbetaling = a.forv_ar / perAr;
+    if (perAr >= 12) {
+      // Månedlig: fordel jevnt over alle 4 kvartaler
+      kvartalSummer.forEach((_, i) => { kvartalSummer[i] += perUtbetaling * 3; });
+    } else if (perAr === 4) {
+      // Kvartalsvis: ett utbytte per kvartal
+      kvartalSummer.forEach((_, i) => { kvartalSummer[i] += perUtbetaling; });
+    } else if (perAr === 2) {
+      // Halvårlig: to kvartaler (K1 og K3, eller bruk betaling_dato)
+      const betalMnd = a.betaling_dato ? new Date(a.betaling_dato).getMonth() : null;
+      if (betalMnd !== null) {
+        const k = Math.floor(betalMnd / 3);
+        kvartalSummer[k] += perUtbetaling;
+        kvartalSummer[(k + 2) % 4] += perUtbetaling;
+      } else {
+        kvartalSummer[0] += perUtbetaling;
+        kvartalSummer[2] += perUtbetaling;
+      }
+    } else {
+      // Årlig / uregelmessig: legg i betalingsmånedens kvartal
+      const betalMnd = a.betaling_dato ? new Date(a.betaling_dato).getMonth()
+        : a.ex_dato ? new Date(a.ex_dato).getMonth() : 0;
+      kvartalSummer[Math.floor(betalMnd / 3)] += perUtbetaling;
+    }
+  });
+
+  const maksKvartal = Math.max(...kvartalSummer);
+  document.getElementById('pf-tidslinje').innerHTML = kvartaler.map((label, i) => {
+    const v = kvartalSummer[i];
+    const pct = maksKvartal > 0 ? (v / maksKvartal * 100).toFixed(1) : 0;
+    return `
+      <div class="flex items-center gap-3">
+        <span class="text-xs text-gray-500 dark:text-gray-400 w-28 shrink-0">${label}</span>
+        <div class="flex-1 h-5 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
+          <div class="h-full bg-brand-500 rounded-full transition-all" style="width:${pct}%"></div>
+        </div>
+        <span class="text-xs font-semibold w-24 text-right tabular-nums">${fmtKr(v)}</span>
+      </div>`;
+  }).join('');
+
+  visCharts(alleBeholdning, totalAr);
+}
+
+// ── PORTEFØLJE-DIAGRAMMER ──────────────────────────────────────────────────
+const SEKTOR_FARGE = {
+  'Energi':            '#f97316',
+  'Finans':            '#3b82f6',
+  'Shipping':          '#1e40af',
+  'Havbruk':           '#14b8a6',
+  'Industri':          '#8b5cf6',
+  'Materialer':        '#a16207',
+  'Fornybar energi':   '#22c55e',
+  'Telekommunikasjon': '#ec4899',
+  'Forbruksvarer':     '#eab308',
+  'Energitjenester':   '#ef4444',
+  'Konsulent':         '#64748b',
+};
+const FARGE_FALLBACK = '#9ca3af';
+
+function visCharts(beholdning, totalAr) {
+  const wrapper = document.getElementById('pf-charts-wrapper');
+  if (!beholdning.length || !totalAr) { wrapper.style.display = 'none'; return; }
+  wrapper.style.display = 'grid';
+
+  // ── 1. SEKTOR-DONUT ────────────────────────────────────────────────────
+  const sektorMap = {};
+  beholdning.forEach(a => {
+    sektorMap[a.sektor] = (sektorMap[a.sektor] || 0) + a.forv_ar;
+  });
+  const sektorData = Object.entries(sektorMap)
+    .filter(([, v]) => v > 0)
+    .map(([s, v]) => ({ label: s, value: v, color: SEKTOR_FARGE[s] || FARGE_FALLBACK }))
+    .sort((a, b) => b.value - a.value);
+
+  const size = 180, cx = size / 2, cy = size / 2, or = 76, ir = 48;
+  let angle = -Math.PI / 2, paths = '';
+  sektorData.forEach(({ value, color }) => {
+    const sweep = (value / totalAr) * 2 * Math.PI;
+    const end = angle + sweep;
+    const lg = sweep > Math.PI ? 1 : 0;
+    const x1 = cx + or * Math.cos(angle),  y1 = cy + or * Math.sin(angle);
+    const x2 = cx + or * Math.cos(end),    y2 = cy + or * Math.sin(end);
+    const x3 = cx + ir * Math.cos(end),    y3 = cy + ir * Math.sin(end);
+    const x4 = cx + ir * Math.cos(angle),  y4 = cy + ir * Math.sin(angle);
+    paths += `<path d="M${x1},${y1} A${or},${or} 0 ${lg} 1 ${x2},${y2} L${x3},${y3} A${ir},${ir} 0 ${lg} 0 ${x4},${y4}Z" fill="${color}" stroke="white" stroke-width="1.5" class="dark:stroke-gray-900"/>`;
+    angle = end;
+  });
+
+  const legend = sektorData.map(({ label, value, color }) => {
+    const pct = (value / totalAr * 100).toFixed(1);
+    return `<div class="flex items-center gap-2 text-xs">
+      <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background:${color}"></span>
+      <span class="text-gray-600 dark:text-gray-400 truncate flex-1">${label}</span>
+      <span class="font-semibold tabular-nums">${pct}%</span>
+    </div>`;
+  }).join('');
+
+  document.getElementById('pf-sektor-chart').innerHTML = `
+    <div class="flex flex-col sm:flex-row items-center gap-4">
+      <svg viewBox="0 0 ${size} ${size}" width="${size}" height="${size}" class="shrink-0">${paths}</svg>
+      <div class="space-y-1.5 flex-1 min-w-0">${legend}</div>
+    </div>`;
+
+  // ── 2. TOPP BIDRAGSYTERE ───────────────────────────────────────────────
+  const topp = [...beholdning].sort((a, b) => b.forv_ar - a.forv_ar).slice(0, 8);
+  const maks = topp[0]?.forv_ar || 1;
+  const fmtKr = v => v.toLocaleString('nb-NO', { maximumFractionDigits: 0 }) + ' kr';
+
+  document.getElementById('pf-topp-chart').innerHTML = topp.map(a => {
+    const pct = (a.forv_ar / maks * 100).toFixed(1);
+    const andel = (a.forv_ar / totalAr * 100).toFixed(1);
+    const farge = SEKTOR_FARGE[a.sektor] || FARGE_FALLBACK;
+    return `
+      <div>
+        <div class="flex items-center justify-between mb-1">
+          <div class="flex items-center gap-1.5">
+            <span class="font-mono text-xs font-bold text-brand-700 dark:text-brand-400">${a.ticker}</span>
+            <span class="text-xs text-gray-400">${andel}%</span>
+          </div>
+          <span class="text-xs font-semibold tabular-nums">${fmtKr(a.forv_ar)}</span>
+        </div>
+        <div class="h-3 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
+          <div class="h-full rounded-full" style="width:${pct}%;background:${farge}"></div>
+        </div>
+      </div>`;
+  }).join('');
+
+  // ── 3. FREKVENSFORDELING ───────────────────────────────────────────────
+  const frekvensMap = {};
+  beholdning.forEach(a => {
+    frekvensMap[a.frekvens] = (frekvensMap[a.frekvens] || 0) + a.forv_ar;
+  });
+  const frekvensOrder = ['Månedlig','Kvartalsvis','Halvårlig','Årlig','Uregelmessig'];
+  const frekvensFarge = {
+    'Månedlig':      '#22c55e',
+    'Kvartalsvis':   '#3b82f6',
+    'Halvårlig':     '#8b5cf6',
+    'Årlig':         '#f97316',
+    'Uregelmessig':  '#9ca3af',
+  };
+
+  document.getElementById('pf-frekvens-chart').innerHTML = frekvensOrder
+    .filter(f => frekvensMap[f])
+    .map(f => {
+      const v = frekvensMap[f];
+      const pct = (v / totalAr * 100).toFixed(1);
+      const antall = beholdning.filter(a => a.frekvens === f).length;
+      const farge = frekvensFarge[f];
+      return `
+        <div class="flex-1 min-w-36 rounded-xl p-3 border border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/50">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background:${farge}"></span>
+            <span class="text-xs font-semibold">${f}</span>
+          </div>
+          <div class="text-lg font-bold tabular-nums">${pct}%</div>
+          <div class="text-xs text-gray-400">${fmtKr(v)} / år · ${antall} aksje${antall !== 1 ? 'r' : ''}</div>
+          <div class="mt-2 h-1.5 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+            <div class="h-full rounded-full" style="width:${pct}%;background:${farge}"></div>
+          </div>
+        </div>`;
+    }).join('');
+}
+
+function eksporterCSV() {
+  const pf = hentPF();
+  const rader = [['Ticker','Selskap','Antall','Kurs','Utbytte/aksje','Forv. utbytte/år','Yield %','Ex-dato','Frekvens']];
+  Object.entries(pf).forEach(([ticker, antall]) => {
+    const a = alleAksjer.find(x => x.ticker === ticker);
+    if (!a) return;
+    rader.push([
+      a.ticker, `"${a.navn}"`, antall,
+      a.pris.toFixed(2), (a.utbytte_per_aksje||0).toFixed(2),
+      (antall * (a.utbytte_per_aksje||0)).toFixed(2),
+      a.utbytte_yield.toFixed(2),
+      a.ex_dato || '', a.frekvens
+    ]);
+  });
+  const csv = rader.map(r => r.join(',')).join('\n');
+  const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'portef\u00F8lje-exday.csv'; a.click();
+  URL.revokeObjectURL(url);
+}
+
+function parseCSV(tekst) {
+  // Fjern BOM
+  if (tekst.charCodeAt(0) === 0xFEFF) tekst = tekst.slice(1);
+  const linjer = tekst.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+  if (!linjer.length) return { gyldig: [], ukjent: [] };
+
+  let tickerIdx = 0, antallIdx = 2;
+
+  // Header-deteksjon: finn kolonne-indekser dynamisk
+  const forste = linjer[0].toLowerCase();
+  if (forste.includes('ticker') || forste.includes('antall') || forste.includes('selskap')) {
+    const cols = linjer[0].split(',').map(c => c.trim().toLowerCase());
+    const ti = cols.findIndex(c => c === 'ticker');
+    const ai = cols.findIndex(c => c === 'antall');
+    if (ti !== -1) tickerIdx = ti;
+    if (ai !== -1) antallIdx = ai;
+    linjer.shift(); // fjern header
+  }
+
+  const kjenteTickers = new Set(alleAksjer.map(a => a.ticker));
+  const gyldig = [], ukjent = [];
+
+  for (const linje of linjer) {
+    const deler = linje.split(',');
+    const ticker = (deler[tickerIdx] || '').replace(/"/g, '').trim().toUpperCase();
+    const antall = parseInt((deler[antallIdx] || '').replace(/"/g, '').trim(), 10);
+    if (!ticker) continue;
+    if (kjenteTickers.has(ticker) && antall > 0) {
+      gyldig.push({ ticker, antall });
+    } else {
+      ukjent.push(ticker);
+    }
+  }
+
+  return { gyldig, ukjent };
+}
+
+function visImportPreview(gyldig, ukjent) {
+  window._importData = gyldig;
+  const previewEl = document.getElementById('pf-importer-preview');
+  const innholdEl = document.getElementById('pf-importer-innhold');
+
+  let html = '';
+
+  if (!gyldig.length && !ukjent.length) {
+    html = '<p class="text-sm text-red-500">Filen ser tom ut eller har uventet format.</p>';
+    document.getElementById('pf-importer-bekreft-legg-til').classList.add('hidden');
+    document.getElementById('pf-importer-bekreft-erstatt').classList.add('hidden');
+  } else if (!gyldig.length) {
+    html = `<p class="text-sm text-red-500">Ingen kjente tickers funnet. Ukjente: ${ukjent.join(', ')}</p>`;
+    document.getElementById('pf-importer-bekreft-legg-til').classList.add('hidden');
+    document.getElementById('pf-importer-bekreft-erstatt').classList.add('hidden');
+  } else {
+    const preview = gyldig.slice(0, 6).map(({ ticker, antall }) => `${ticker} (${antall})`).join(', ');
+    const mer = gyldig.length > 6 ? ` og ${gyldig.length - 6} til…` : '';
+    html += `<p class="text-sm text-green-600 dark:text-green-400">✅ ${gyldig.length} aksje${gyldig.length !== 1 ? 'r' : ''} funnet: ${preview}${mer}</p>`;
+    if (ukjent.length) {
+      html += `<p class="text-sm text-yellow-600 dark:text-yellow-400 mt-1">⚠️ ${ukjent.length} ukjente tickers ignoreres: ${ukjent.join(', ')}</p>`;
+    }
+    document.getElementById('pf-importer-bekreft-legg-til').classList.remove('hidden');
+    document.getElementById('pf-importer-bekreft-erstatt').classList.remove('hidden');
+  }
+
+  innholdEl.innerHTML = html;
+  previewEl.classList.remove('hidden');
+  previewEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function bekreftImport(data, erstatt) {
+  if (!data || !data.length) return;
+  const pf = erstatt ? {} : hentPF();
+  data.forEach(({ ticker, antall }) => { pf[ticker] = antall; });
+  lagrePF(pf);
+  document.getElementById('pf-importer-preview').classList.add('hidden');
+  window._importData = null;
+  visPortefolje();
 }
 
 // ── MODAL ─────────────────────────────────────────────────────────────────
@@ -469,9 +1083,12 @@ function visModal(a) {
         <p class="text-gray-600 dark:text-gray-400">${a.navn}</p>
         <p class="text-xs text-gray-400 mt-0.5">${a.sektor} · ${a.bors}</p>
       </div>
-      <button id="modal-close" class="text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 p-1" aria-label="Lukk">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-      </button>
+      <div class="flex items-center gap-1">
+        ${stjerne(a.ticker, 'p-1 hover:scale-110')}
+        <button id="modal-close" class="text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 p-1" aria-label="Lukk">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
     </div>
 
     ${a.beskrivelse ? `<p class="text-sm text-gray-600 dark:text-gray-400 mb-4 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">${a.beskrivelse}</p>` : ''}
@@ -518,6 +1135,7 @@ function visModal(a) {
     </div>
 
     ${historiskChart(a)}
+    ${scoreForklaring(a)}
   `;
 
   overlay.classList.remove('hidden');
@@ -571,6 +1189,15 @@ function initModal() {
   overlay.addEventListener('click', e => { if (e.target === overlay) lukkModal(); });
   // Klikk på lukk-knapp via event delegation
   overlay.addEventListener('click', e => { if (e.target.closest('#modal-close')) lukkModal(); });
+  // Favoritt-toggle i modal
+  overlay.addEventListener('click', e => {
+    const btn = e.target.closest('.fav-btn');
+    if (!btn) return;
+    toggleFav(btn.dataset.ticker);
+    oppdaterFavBtn();
+    // Re-render stjernen inne i modal uten å lukke
+    visModal(alleAksjer.find(x => x.ticker === btn.dataset.ticker));
+  });
   // ESC lukker modal
   document.addEventListener('keydown', e => { if (e.key === 'Escape') lukkModal(); });
 }
@@ -599,6 +1226,95 @@ function yieldKlasse(y) {
   if (y >= 6)  return 'yield-god';
   if (y >= 3)  return 'yield-middels';
   return 'yield-lav';
+}
+
+// ── UTBYTTE-SCORE (1–10) ───────────────────────────────────────────────────
+// Poengsum for utbyttekvalitet basert på 5 kriterier (maks 10 poeng):
+//   1. Yield-nivå          0–3 p
+//   2. Payout-bærekraft    0–2 p
+//   3. Utbyttevekst 5 år   0–2 p
+//   4. År med utbytte      0–2 p
+//   5. Yield-stabilitet    0–1 p  (snitt yield 5å vs. dagens yield)
+
+function beregnScore(a) {
+  let p = 0;
+
+  // 1. Yield-nivå (0–3)
+  const y = a.utbytte_yield || 0;
+  if      (y >= 10) p += 3;
+  else if (y >= 6)  p += 2;
+  else if (y >= 3)  p += 1;
+
+  // 2. Payout-bærekraft (0–2): lavt payout = bærekraftig
+  const po = a.payout_ratio || 0;
+  if      (po > 0 && po <= 50)  p += 2;
+  else if (po > 0 && po <= 75)  p += 1;
+  // payout > 75% eller 0 (ukjent) = 0 poeng
+
+  // 3. Utbyttevekst 5 år CAGR (0–2)
+  const vekst = a.utbytte_vekst_5ar || 0;
+  if      (vekst > 10) p += 2;
+  else if (vekst > 0)  p += 1;
+
+  // 4. År med utbytte = konsistens (0–2)
+  const ar = a.ar_med_utbytte || 0;
+  if      (ar >= 10) p += 2;
+  else if (ar >= 5)  p += 1;
+
+  // 5. Yield-stabilitet: snitt yield 5å nær dagens yield (0–1)
+  const snitt = a.snitt_yield_5ar || 0;
+  if (snitt > 0 && y > 0) {
+    const avvik = Math.abs(y - snitt) / snitt;
+    if (avvik <= 0.3) p += 1;  // innenfor 30% = stabilt
+  }
+
+  return Math.min(10, Math.max(1, p));
+}
+
+function scoreBadge(score) {
+  let cls;
+  if      (score >= 8) cls = 'score-høy';
+  else if (score >= 5) cls = 'score-middels';
+  else                 cls = 'score-lav';
+  return `<span class="score-badge ${cls}">${score}<span class="score-av10">/10</span></span>`;
+}
+
+function scoreForklaring(a) {
+  const y = a.utbytte_yield || 0;
+  const po = a.payout_ratio || 0;
+  const vekst = a.utbytte_vekst_5ar || 0;
+  const ar = a.ar_med_utbytte || 0;
+  const snitt = a.snitt_yield_5ar || 0;
+
+  const p1 = y >= 10 ? 3 : y >= 6 ? 2 : y >= 3 ? 1 : 0;
+  const p2 = (po > 0 && po <= 50) ? 2 : (po > 0 && po <= 75) ? 1 : 0;
+  const p3 = vekst > 10 ? 2 : vekst > 0 ? 1 : 0;
+  const p4 = ar >= 10 ? 2 : ar >= 5 ? 1 : 0;
+  const p5 = (snitt > 0 && y > 0 && Math.abs(y - snitt) / snitt <= 0.3) ? 1 : 0;
+
+  const rad = (label, poeng, maks, tekst) =>
+    `<div class="flex justify-between items-center py-1 border-b border-gray-100 dark:border-gray-800 last:border-0">
+      <span class="text-xs text-gray-500 dark:text-gray-400">${label}</span>
+      <div class="flex items-center gap-2">
+        <span class="text-xs text-gray-400">${tekst}</span>
+        <span class="text-xs font-semibold ${poeng > 0 ? 'text-green-600 dark:text-green-400' : 'text-gray-400'}">${poeng}/${maks}</span>
+      </div>
+    </div>`;
+
+  return `
+    <div class="mt-4 pt-4 border-t border-gray-100 dark:border-gray-800">
+      <div class="flex justify-between items-center mb-2">
+        <span class="text-sm font-semibold">Utbytte-score</span>
+        ${scoreBadge(beregnScore(a))}
+      </div>
+      <div class="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-3 space-y-0">
+        ${rad('Yield-nivå', p1, 3, y > 0 ? y.toFixed(1)+'%' : '—')}
+        ${rad('Payout-bærekraft', p2, 2, po > 0 ? po.toFixed(0)+'%' : '—')}
+        ${rad('Vekst 5 år', p3, 2, vekst !== 0 ? (vekst>0?'+':'')+vekst.toFixed(1)+'%' : '—')}
+        ${rad('År med utbytte', p4, 2, ar > 0 ? ar+' år' : '—')}
+        ${rad('Yield-stabilitet', p5, 1, snitt > 0 ? 'snitt '+snitt.toFixed(1)+'%' : '—')}
+      </div>
+    </div>`;
 }
 
 function payoutKlasse(p) {
@@ -655,4 +1371,192 @@ function rangebar(pris, lav, hoy, stor = false) {
     </div>
     <div class="flex justify-between text-xs text-gray-400 mt-0.5"><span>${fmt(lav)}</span><span>${pct.toFixed(0)}%</span><span>${fmt(hoy)}</span></div>
   </div>`;
+}
+
+// ── PWA / VARSLER ─────────────────────────────────────────────────────────────
+
+function hentNotifPrefs() {
+  try {
+    // Første gang: arv favoritter som standard så listen ikke er tom
+    if (localStorage.getItem('notif_aksjer') === null) {
+      const fav = hentFav();
+      if (fav.size > 0) return fav;
+    }
+    return new Set(JSON.parse(localStorage.getItem('notif_aksjer') || '[]'));
+  } catch { return new Set(); }
+}
+
+function lagreNotifPrefs(prefs) {
+  localStorage.setItem('notif_aksjer', JSON.stringify([...prefs]));
+  if ('caches' in window) {
+    caches.open('notif-prefs-v1').then(cache =>
+      cache.put('/notif-prefs', new Response(JSON.stringify([...prefs]), {
+        headers: { 'Content-Type': 'application/json' },
+      }))
+    );
+  }
+}
+
+async function initVarsler() {
+  if (!('serviceWorker' in navigator)) return;
+  try {
+    await navigator.serviceWorker.register('/sw.js');
+  } catch (e) {
+    console.warn('Service Worker registrering feilet:', e);
+  }
+}
+
+async function registrerPeriodicSync() {
+  if (!('serviceWorker' in navigator)) return;
+  try {
+    const reg = await navigator.serviceWorker.ready;
+    if ('periodicSync' in reg) {
+      const status = await navigator.permissions.query({ name: 'periodic-background-sync' });
+      if (status.state === 'granted') {
+        await reg.periodicSync.register('sjekk-ex-datoer', { minInterval: 24 * 60 * 60 * 1000 });
+      }
+    }
+  } catch (e) {
+    console.warn('Periodic sync ikke tilgjengelig:', e);
+  }
+}
+
+// Fallback: sjekk direkte i nettleseren når appen åpnes (fungerer uten periodic sync)
+async function sjekkExDatoerDirekte() {
+  if (!('Notification' in window) || Notification.permission !== 'granted') return;
+  const prefs = hentNotifPrefs();
+  if (!prefs.size) return;
+
+  const idag = new Date(); idag.setHours(0, 0, 0, 0);
+  const PREFIKS = 'notif_vist_';
+
+  for (const a of alleAksjer) {
+    if (!prefs.has(a.ticker) || !a.ex_dato) continue;
+    const exDato = new Date(a.ex_dato); exDato.setHours(0, 0, 0, 0);
+    const dager = Math.round((exDato - idag) / (1000 * 60 * 60 * 24));
+    if (dager < 0 || dager > 7) continue;
+
+    const key = PREFIKS + a.ticker + '_' + a.ex_dato;
+    if (localStorage.getItem(key)) continue;
+
+    const tittel = dager === 0
+      ? `${a.ticker} ex-dato er i dag!`
+      : `${a.ticker} ex-dato om ${dager} dag${dager === 1 ? '' : 'er'}`;
+    const kropp = dager === 0
+      ? `${a.navn} – du må eie aksjen i dag for å motta utbytte`
+      : `${a.navn} – ex-dato ${new Date(a.ex_dato).toLocaleDateString('nb-NO', { day: 'numeric', month: 'long' })}`;
+
+    new Notification(tittel, { body: kropp, icon: '/assets/icon.svg', tag: key });
+    localStorage.setItem(key, '1');
+  }
+}
+
+function visVarslerTab() {
+  const container = document.getElementById('varsler-innhold');
+  const harNotif = 'Notification' in window && 'serviceWorker' in navigator;
+  const tillatelse = harNotif ? Notification.permission : 'unsupported';
+  const prefs = hentNotifPrefs();
+
+  // Status-kort
+  let statusHtml;
+  if (!harNotif) {
+    statusHtml = `
+      <div class="rounded-xl border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/50 p-4">
+        <p class="font-semibold text-sm mb-1">Varsler støttes ikke</p>
+        <p class="text-sm text-gray-500">Nettleseren din støtter ikke push-varsler. Prøv Chrome, Edge eller Safari på iOS 16.4+.</p>
+      </div>`;
+  } else if (tillatelse === 'denied') {
+    statusHtml = `
+      <div class="rounded-xl border border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-900/20 p-4">
+        <p class="font-semibold text-sm text-red-800 dark:text-red-300 mb-1">Varsler er blokkert</p>
+        <p class="text-sm text-red-700 dark:text-red-400">Gå til nettleserinnstillinger → Nettstedsinnstillinger → Varslinger, og tillat exday.no.</p>
+      </div>`;
+  } else if (tillatelse === 'granted') {
+    statusHtml = `
+      <div class="rounded-xl border border-green-200 dark:border-green-800 bg-green-50 dark:bg-green-900/20 p-4 flex items-start gap-3">
+        <svg class="w-5 h-5 text-green-600 dark:text-green-400 shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+        <div>
+          <p class="font-semibold text-sm text-green-800 dark:text-green-300">Varsler er aktivert</p>
+          <p class="text-sm text-green-700 dark:text-green-400 mt-0.5">Du får beskjed når valgte aksjer nærmer seg ex-dato (varsler opp til 7 dager i forveien).</p>
+        </div>
+      </div>`;
+  } else {
+    statusHtml = `
+      <div class="rounded-xl border border-brand-200 dark:border-brand-800 bg-brand-50 dark:bg-brand-900/20 p-4 flex items-center justify-between gap-4">
+        <div>
+          <p class="font-semibold text-sm text-brand-900 dark:text-brand-200">Aktiver ex-dato-varsler</p>
+          <p class="text-sm text-brand-700 dark:text-brand-400 mt-0.5">Få varsler når aksjer du følger nærmer seg ex-dato.</p>
+        </div>
+        <button id="aktiver-varsler-btn" class="shrink-0 px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white text-sm font-medium rounded-lg transition-colors">
+          Aktiver
+        </button>
+      </div>`;
+  }
+
+  // Installeringsinfo (kun om ikke allerede installert som PWA)
+  const erPWA = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+  const installHtml = erPWA ? '' : `
+    <div class="rounded-xl border border-gray-200 dark:border-gray-800 p-4 flex items-start gap-3">
+      <svg class="w-5 h-5 text-gray-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+      <div>
+        <p class="font-semibold text-sm">Installer som app</p>
+        <p class="text-sm text-gray-500 mt-0.5">I Chrome/Edge: trykk menyknappen og velg "Installer app". På iOS Safari: trykk Del-knappen og "Legg til på hjem-skjerm".</p>
+      </div>
+    </div>`;
+
+  // Aksjeliste
+  const listeHtml = alleAksjer.length === 0
+    ? `<div class="text-sm text-gray-400 py-4 text-center">Laster aksjedata…</div>`
+    : `<div class="flex items-center justify-between mb-3">
+        <h3 class="font-semibold text-sm">Aksjer å varsle for</h3>
+        <div class="flex gap-3">
+          <button id="varsler-velg-alle" class="text-xs text-brand-600 dark:text-brand-400 hover:underline">Velg alle</button>
+          <button id="varsler-fjern-alle" class="text-xs text-gray-400 hover:underline">Fjern alle</button>
+        </div>
+      </div>
+      <div class="rounded-xl border border-gray-200 dark:border-gray-800 overflow-hidden divide-y divide-gray-100 dark:divide-gray-800">
+        ${[...alleAksjer].sort((a, b) => a.ticker.localeCompare(b.ticker, 'nb')).map(a => {
+          const aktiv = prefs.has(a.ticker);
+          const exInfo = a.ex_dato ? formaterDato(a.ex_dato) : '—';
+          return `<label class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-800/50 cursor-pointer transition-colors">
+            <input type="checkbox" class="notif-toggle w-4 h-4 rounded cursor-pointer accent-brand-600"
+              data-ticker="${a.ticker}" ${aktiv ? 'checked' : ''} />
+            <div class="flex-1 min-w-0">
+              <span class="font-mono font-bold text-sm text-brand-700 dark:text-brand-400">${a.ticker}</span>
+              <span class="text-sm text-gray-600 dark:text-gray-400 ml-2 truncate">${a.navn}</span>
+            </div>
+            <span class="text-xs text-gray-400 shrink-0">Ex: ${exInfo}</span>
+          </label>`;
+        }).join('')}
+      </div>`;
+
+  container.innerHTML = statusHtml + installHtml + `<div>${listeHtml}</div>`;
+
+  // Bind events
+  document.getElementById('aktiver-varsler-btn')?.addEventListener('click', async () => {
+    const perm = await Notification.requestPermission();
+    if (perm === 'granted') {
+      await registrerPeriodicSync();
+      visVarslerTab();
+    }
+  });
+
+  container.addEventListener('change', e => {
+    const cb = e.target.closest('.notif-toggle');
+    if (!cb) return;
+    const p = hentNotifPrefs();
+    if (cb.checked) p.add(cb.dataset.ticker); else p.delete(cb.dataset.ticker);
+    lagreNotifPrefs(p);
+  });
+
+  document.getElementById('varsler-velg-alle')?.addEventListener('click', () => {
+    const p = new Set(alleAksjer.map(a => a.ticker));
+    lagreNotifPrefs(p);
+    container.querySelectorAll('.notif-toggle').forEach(cb => { cb.checked = true; });
+  });
+
+  document.getElementById('varsler-fjern-alle')?.addEventListener('click', () => {
+    lagreNotifPrefs(new Set());
+    container.querySelectorAll('.notif-toggle').forEach(cb => { cb.checked = false; });
+  });
 }
