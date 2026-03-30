@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120" fill="none">
+  <g aria-label="exday icon">
+    <rect x="16" y="16" width="88" height="88" rx="22" fill="#FFFFFF"/>
+    <path d="M16 32H104" stroke="#14B8A6" stroke-width="16" stroke-linecap="round"/>
+    <line x1="38" y1="46" x2="82" y2="86" stroke="#0F172A" stroke-width="9" stroke-linecap="round"/>
+    <line x1="82" y1="46" x2="38" y2="86" stroke="#0F172A" stroke-width="9" stroke-linecap="round"/>
+    <circle cx="40" cy="24" r="4" fill="#FFFFFF"/>
+    <circle cx="80" cy="24" r="4" fill="#FFFFFF"/>
+  </g></svg>
