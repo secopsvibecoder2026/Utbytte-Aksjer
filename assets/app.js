@@ -606,7 +606,7 @@ function visPortefolje() {
     <tr class="table-row cursor-pointer" data-ticker="${a.ticker}">
       <td class="px-4 py-3 font-mono font-bold text-brand-700 dark:text-brand-400">${a.ticker}</td>
       <td class="px-4 py-3 hidden sm:table-cell text-gray-600 dark:text-gray-400 text-sm">${a.navn}</td>
-      <td class="px-4 py-3 text-right" onclick="event.stopPropagation()">
+      <td class="px-4 py-3 text-right">
         <input type="number" min="1" value="${a.antall}"
           class="w-20 text-right text-sm border border-gray-200 dark:border-gray-700 rounded px-2 py-1 bg-transparent focus:outline-none focus:ring-1 focus:ring-brand-500"
           data-ticker="${a.ticker}" />
@@ -615,7 +615,7 @@ function visPortefolje() {
       <td class="px-4 py-3 text-right font-semibold">${fmtKr(a.forv_ar)}</td>
       <td class="px-4 py-3 text-center hidden sm:table-cell text-gray-500 text-sm">${a.ex_dato ? formaterDato(a.ex_dato) : '—'}</td>
       <td class="px-4 py-3 text-center hidden sm:table-cell"><span class="frekvens-badge">${a.frekvens}</span></td>
-      <td class="px-4 py-3 text-center" onclick="event.stopPropagation()">
+      <td class="px-4 py-3 text-center">
         <button class="pf-slett text-gray-400 hover:text-red-500 transition-colors p-1" data-ticker="${a.ticker}" title="Fjern">
           <svg class="w-4 h-4 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
         </button>
@@ -725,7 +725,7 @@ const FARGE_FALLBACK = '#9ca3af';
 
 function visCharts(beholdning, totalAr) {
   const wrapper = document.getElementById('pf-charts-wrapper');
-  if (!beholdning.length) { wrapper.style.display = 'none'; return; }
+  if (!beholdning.length || !totalAr) { wrapper.style.display = 'none'; return; }
   wrapper.style.display = 'grid';
 
   // ── 1. SEKTOR-DONUT ────────────────────────────────────────────────────
@@ -734,6 +734,7 @@ function visCharts(beholdning, totalAr) {
     sektorMap[a.sektor] = (sektorMap[a.sektor] || 0) + a.forv_ar;
   });
   const sektorData = Object.entries(sektorMap)
+    .filter(([, v]) => v > 0)
     .map(([s, v]) => ({ label: s, value: v, color: SEKTOR_FARGE[s] || FARGE_FALLBACK }))
     .sort((a, b) => b.value - a.value);
 
