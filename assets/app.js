@@ -248,6 +248,9 @@ function visOversikt() {
       <td class="px-4 py-3 text-right">
         <span class="yield-badge ${yieldKlasse(a.utbytte_yield)}">${a.utbytte_yield.toFixed(2)}%</span>
       </td>
+      <td class="col-detalj px-4 py-3 text-right">
+        ${a.snitt_yield_5ar > 0 ? `<span class="yield-badge ${yieldKlasse(a.snitt_yield_5ar)}">${a.snitt_yield_5ar.toFixed(1)}%</span>` : '<span class="text-gray-400">—</span>'}
+      </td>
       <td class="col-detalj px-4 py-3 text-right">${fmt(a.utbytte_per_aksje)}</td>
       <td class="px-4 py-3 text-right">
         <span class="${payoutKlasse(a.payout_ratio)}">${a.payout_ratio > 0 ? a.payout_ratio.toFixed(0) + '%' : '—'}</span>
