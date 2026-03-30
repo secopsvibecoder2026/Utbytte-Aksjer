@@ -1,6 +1,10 @@
 name: Oppdater aksjedata og deploy
 
 on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - 'data/aksjer.json'  # unngå loop når auto-commit oppdaterer data
   schedule:
     # Kjør hverdager kl 08:00 Oslo-tid (07:00 UTC) - etter Oslo Børs åpning
     - cron: "0 7 * * 1-5"
@@ -19,6 +23,8 @@ jobs:
   oppdater-data:
     name: Hent og oppdater aksjedata
     runs-on: ubuntu-latest
+    # Kun kjøres på schedule og manuell trigger – ikke ved vanlig push
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
     steps:
       - name: Sjekk ut kode
         uses: actions/checkout@v4
@@ -50,8 +56,13 @@ jobs:
 
   deploy-pages:
     name: Deploy til GitHub Pages
-    needs: oppdater-data
-    if: github.ref == 'refs/heads/main'
+    # Ved push: kjør direkte. Ved schedule/dispatch: kjør etter data-oppdatering
+    needs: [oppdater-data]
+    if: |
+      always() &&
+      (needs.oppdater-data.result == 'success' ||
+       needs.oppdater-data.result == 'skipped') &&
+      github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     environment:
       name: github-pages
