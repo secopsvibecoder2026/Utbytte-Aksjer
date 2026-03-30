@@ -29,14 +29,37 @@ Brukere kan laste opp en CSV-fil (f.eks. eksportert fra nettbanken) for å impor
 ---
 
 ### 3. PWA + push-varsler for ex-datoer 📲
+**Status: Ferdig ✅**
+
+- [x] `manifest.json` (navn, ikon, farger)
+- [x] Service Worker for offline-støtte
+- [x] Push-varsel-integrasjon (Web Push API)
+- [x] Innstillingsside: velg hvilke aksjer du vil ha varsler for
+
+---
+
+### 4. Daglig engasjement — gjør appen til en vane 🔁
 **Status: Planlagt**
 
-Installer siden på hjemskjermen som en app. Brukere kan abonnere på varsler: *"SRBNK ex-dato er om 3 dager"*.
+Tre funksjoner som i kombinasjon gjør at brukere åpner appen daglig, ikke bare av og til.
 
-- [ ] `manifest.json` (navn, ikon, farger)
-- [ ] Service Worker for offline-støtte
-- [ ] Push-varsel-integrasjon (Web Push API)
-- [ ] Innstillingsside: velg hvilke aksjer du vil ha varsler for
+#### 4a. Inntektsteller — "Hva har jeg tjent i år?" ⭐ (høyest prioritet)
+Utbytteinvestorer tenker i inntekt, ikke kursgevinst. Å se penger akkumulere gir motivasjon til å komme tilbake.
+- [ ] "Hittil i år: X kr" — basert på betalingsdatoer som har passert for porteføljeaksjene
+- [ ] Valgfritt **årsmål** (brukeren setter f.eks. 50 000 kr) med progress-bar
+- [ ] "Du er X% av veien til målet"
+- Logikk: `pf_beholdning` × `utbytte_per_aksje` for aksjer der `betaling_dato` er passert i år
+
+#### 4b. Personlig "I dag"-dashboard
+Erstatt de 4 generiske kortene øverst med personlige kort når bruker har favoritter/portefølje:
+- [ ] **"Ex-dato denne uken"** — dine aksjer med ex-dato innen 7 dager (navn + dager igjen)
+- [ ] **"Neste utbetaling"** — dato + beløp fra portefølje
+- [ ] **"Siste sjanse"** — aksje med ex-dato ≤3 dager og høy yield
+- [ ] Fallback til generiske stats hvis ingen favoritter/portefølje er satt
+
+#### 4c. Opportunity feed — "Verdt å se på nå"
+- [ ] Seksjon i Oversikt-fanen med aksjer som har ex-dato innen 10 dager OG yield ≥ 5%
+- [ ] Sortert etter dager til ex-dato, med yield-badge
 
 ---
 
