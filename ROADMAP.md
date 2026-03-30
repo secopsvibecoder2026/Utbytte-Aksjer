@@ -8,20 +8,25 @@ Norsk utbytteaksje-tracker for Oslo Børs. Data hentes automatisk fra Yahoo Fina
 
 | Område | Status |
 |---|---|
-| 44 aksjer med live data | ✅ Ferdig |
+| 45 aksjer med live data | ✅ Ferdig |
 | Tabell + kortsvisning (desktop/mobil) | ✅ Ferdig |
 | Kompakt/detaljert visning | ✅ Ferdig |
 | Mørk/lys modus | ✅ Ferdig |
 | Historiske utbytter (5 år) + stolpediagram | ✅ Ferdig |
 | 52-ukers kursrange med fargekoding | ✅ Ferdig |
-| Utbyttekalender | ✅ Ferdig |
+| Utbyttekalender med søk og klikk-til-modal | ✅ Ferdig |
 | Filtrering og sortering | ✅ Ferdig |
+| Søk på tvers av alle faner | ✅ Ferdig |
 | Google Analytics + AdSense Auto Ads | ✅ Ferdig |
 | GDPR cookie-samtykke + personvernside | ✅ Ferdig |
 | Skeleton loader | ✅ Ferdig |
 | Snitt yield 5 år + stolpediagram historikk | ✅ Ferdig |
 | Sortering på snitt yield 5 år | ✅ Ferdig |
 | Yahoo Finance robusthet (5-punkts validering) | ✅ Ferdig |
+| Utbytte-score (1–10) i tabell, kort og modal | ✅ Ferdig |
+| Porteføljekalkulator med CSV-eksport | ✅ Ferdig |
+| Favicon + OG-bilde for sosiale medier | ✅ Ferdig |
+| SEO — meta, Open Graph, Twitter Card, JSON-LD | ✅ Ferdig |
 
 ---
 
@@ -31,12 +36,13 @@ Norsk utbytteaksje-tracker for Oslo Børs. Data hentes automatisk fra Yahoo Fina
 **Status: ✅ Ferdig**
 
 - [x] `<meta name="description">` på alle sider
-- [x] Open Graph-tags (tittel, beskrivelse, URL)
-- [x] Twitter Card-tags
+- [x] Open Graph-tags (tittel, beskrivelse, URL, bilde)
+- [x] Twitter Card `summary_large_image`
 - [x] Canonical URL
 - [x] JSON-LD strukturert data (WebSite-schema)
 - [x] `sitemap.xml`
 - [x] `robots.txt`
+- [x] OG-bilde (PNG 1200×630) med merkevaredesign
 
 ---
 
@@ -73,15 +79,16 @@ Formel:
 ### 4. Porteføljekalkulator 💰
 **Status: ✅ Ferdig**
 
-Brukere taster inn antall aksjer de eier → siden beregner forventet årlig utbytteinntekt, månedlig fordeling og neste utbytteutbetaling. Ingen norsk konkurrent tilbyr dette.
+Brukere taster inn antall aksjer de eier → siden beregner forventet årlig utbytteinntekt, kvartalsvis fordeling og neste utbytteutbetaling.
 
 - [x] Input: antall aksjer per selskap (lagres i localStorage)
 - [x] Beregn: forventet utbytte per år, per kvartal og totalt
-- [x] Vis: kvartalsvis distribusjon som strekdiagram
+- [x] 6 sammendragskort: årlig, månedlig, neste utbetaling, selskaper, vektet yield, porteføljeverdi
+- [x] Kvartalsvis distribusjon som strekdiagram
 - [x] Eksport til CSV (BOM for norsk Excel-kompatibilitet)
 - [x] Klikk på aksjer → modal med fullstendig detaljer
-- [x] Søk i beholdning
-- [x] Vektet yield og total porteføljeverdi i sammendrag
+- [x] Søk filtrerer beholdningslisten
+- [x] Neste utbetaling: bruker betaling_dato, faller tilbake på ex_dato
 
 ---
 
@@ -113,6 +120,8 @@ Installer siden på hjemskjermen som en app. Brukere kan abonnere på varsler: *
 ## Teknisk gjeld
 
 - [x] Yield-validering i Python: 5-punkts sanity-sjekk med strukturert rapport
+- [x] Søk fungerer på tvers av alle faner (oversikt, kalender, kalkulator)
+- [x] Klikk-til-modal i kalender og kalkulator
 - [ ] Unit-tester for `fetch_stocks.py`
 - [ ] Automatisk Lighthouse-rapport i CI
 
