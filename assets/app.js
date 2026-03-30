@@ -14,7 +14,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initViewToggle();
   initModal();
   initPortefolje();
-  initKalenderSok();
   lastData();
 });
 
@@ -114,15 +113,24 @@ function initTabs() {
     document.getElementById('tab-oversikt').classList.toggle('hidden', aktivTab !== 'oversikt');
     document.getElementById('tab-kalender').classList.toggle('hidden', aktivTab !== 'kalender');
     document.getElementById('tab-portfolio').classList.toggle('hidden', aktivTab !== 'portfolio');
-    document.getElementById('filter-bar').classList.toggle('hidden', aktivTab !== 'oversikt');
+    // Søkefeltet er alltid synlig; bare filtre/dropdowns skjules på andre faner
+    document.getElementById('filter-ekstra').classList.toggle('hidden', aktivTab !== 'oversikt');
+    // Tøm søk ved tabbytte så man ikke beholder gammelt søk
+    document.getElementById('sok').value = '';
     if (aktivTab === 'portfolio') visPortefolje();
     if (aktivTab === 'kalender') visKalender();
+    if (aktivTab === 'oversikt') visOversikt();
   });
 }
 
 // ── FILTER ─────────────────────────────────────────────────────────────────
 function initFilter() {
-  ['sok', 'filter-sektor', 'filter-frekvens', 'filter-yield'].forEach(id => {
+  document.getElementById('sok').addEventListener('input', () => {
+    if (aktivTab === 'kalender') visKalender();
+    else if (aktivTab === 'portfolio') visPortefolje();
+    else visOversikt();
+  });
+  ['filter-sektor', 'filter-frekvens', 'filter-yield'].forEach(id => {
     document.getElementById(id).addEventListener('input', visOversikt);
   });
   document.getElementById('reset-filter').addEventListener('click', () => {
@@ -399,15 +407,10 @@ function sorterAksjer(data) {
 }
 
 // ── KALENDER ───────────────────────────────────────────────────────────────
-function initKalenderSok() {
-  const inp = document.getElementById('kal-sok');
-  if (inp) inp.addEventListener('input', visKalender);
-}
-
 function visKalender() {
   const container = document.getElementById('kalender-innhold');
   const idag = new Date(); idag.setHours(0,0,0,0);
-  const sok = (document.getElementById('kal-sok')?.value || '').toLowerCase().trim();
+  const sok = (document.getElementById('sok')?.value || '').toLowerCase().trim();
 
   const manedsMap = {};
   alleAksjer
@@ -513,8 +516,6 @@ function initPortefolje() {
   });
 
   document.getElementById('pf-eksport-csv').addEventListener('click', eksporterCSV);
-
-  document.getElementById('pf-sok').addEventListener('input', visPortefolje);
 }
 
 function fyllPFDropdown() {
@@ -537,7 +538,7 @@ function fyllPFDropdown() {
 function visPortefolje() {
   fyllPFDropdown();
   const pf = hentPF();
-  const sok = (document.getElementById('pf-sok')?.value || '').toLowerCase().trim();
+  const sok = (document.getElementById('sok')?.value || '').toLowerCase().trim();
   const idag = new Date(); idag.setHours(0,0,0,0);
 
   const alleBeholdning = Object.entries(pf)
