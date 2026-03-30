@@ -6,9 +6,112 @@ Kjøres daglig via GitHub Actions.
 
 import json
 import os
+import re
 import sys
 import datetime
+import urllib.request
 import yfinance as yf
+
+# ── NEWSWEB (Oslo Børs) INTEGRASJON ───────────────────────────────────────────
+
+def _newsweb_api_base():
+    """Henter Newsweb API-baseurl dynamisk fra urls.json."""
+    try:
+        req = urllib.request.Request(
+            "https://newsweb.oslobors.no/urls.json",
+            headers={"Accept": "application/json"}
+        )
+        with urllib.request.urlopen(req, timeout=5) as r:
+            data = json.loads(r.read())
+            return data.get("api_large", "https://api3.oslo.oslobors.no")
+    except Exception:
+        return "https://api3.oslo.oslobors.no"
+
+
+def _newsweb_post(url, data=None, timeout=10):
+    """Hjelpefunksjon for POST til Newsweb API."""
+    body = json.dumps(data).encode() if data else b""
+    req = urllib.request.Request(
+        url,
+        data=body,
+        headers={"Content-Type": "application/json", "Accept": "application/json"},
+        method="POST"
+    )
+    with urllib.request.urlopen(req, timeout=timeout) as r:
+        return json.loads(r.read())
+
+
+def _newsweb_get(url, timeout=10):
+    """Hjelpefunksjon for GET til Newsweb API."""
+    req = urllib.request.Request(url, headers={"Accept": "application/json"})
+    with urllib.request.urlopen(req, timeout=timeout) as r:
+        return json.loads(r.read())
+
+
+def _parse_rapport_dato(body: str) -> str | None:
+    """
+    Parser kvartalsrapport-dato fra finansiell kalender body-tekst.
+    Foretrekker kvartal/halvår/årsrapporter fremfor andre hendelser.
+    """
+    today = datetime.date.today()
+    dato_pattern = re.compile(r"(\d{2})\.(\d{2})\.(\d{4})\s*[-–]\s*(.+)")
+    kommende = []
+    for m in dato_pattern.finditer(body):
+        dag, mnd, ar, event = m.group(1), m.group(2), m.group(3), m.group(4).strip()
+        try:
+            d = datetime.date(int(ar), int(mnd), int(dag))
+        except ValueError:
+            continue
+        if d > today:
+            kommende.append((d, event))
+
+    if not kommende:
+        return None
+    kommende.sort(key=lambda x: x[0])
+
+    # Prioriter rapport-hendelser over f.eks. kapitalmarkedsdag / generalforsamling
+    rapport_kw = ["quarterly", "kvartals", "annual report", "årsrapport",
+                  "half-yearly", "halvår", "q1", "q2", "q3", "q4"]
+    for d, event in kommende:
+        if any(kw in event.lower() for kw in rapport_kw):
+            return d.strftime("%Y-%m-%d")
+
+    return kommende[0][0].strftime("%Y-%m-%d")
+
+
+_NEWSWEB_API = None   # Lazy-init én gang per kjøring
+
+def hent_newsweb_rapport_dato(ticker: str) -> str | None:
+    """
+    Henter neste kvartalsrapport-dato for en aksje fra Newsweb Oslo Børs.
+    Søker etter 'Financial calendar' / 'Finansiell kalender' meldinger.
+    """
+    global _NEWSWEB_API
+    if _NEWSWEB_API is None:
+        _NEWSWEB_API = _newsweb_api_base()
+        print(f"  Newsweb API: {_NEWSWEB_API}")
+
+    try:
+        resp = _newsweb_post(
+            f"{_NEWSWEB_API}/v1/newsreader/list?issuer={ticker}&limit=500"
+        )
+        messages = resp.get("data", {}).get("messages", [])
+
+        for msg in messages:
+            title = msg.get("title", "").lower()
+            if "financial calendar" in title or "finansiell kalender" in title:
+                msg_id = msg.get("messageId")
+                full = _newsweb_get(
+                    f"{_NEWSWEB_API}/v1/newsreader/message?messageId={msg_id}"
+                )
+                body = full.get("data", {}).get("message", {}).get("body", "")
+                if body:
+                    dato = _parse_rapport_dato(body)
+                    if dato:
+                        return dato
+    except Exception as e:
+        print(f"    Advarsel Newsweb [{ticker}]: {e}")
+    return None
 
 # Norske aksjer med Yahoo Finance ticker-symbol (.OL = Oslo Børs, .OAX = Euronext Expand)
 AKSJER = [
@@ -274,24 +377,27 @@ def hent_aksje(meta):
             ex_dato = format_dato(calendar.get("exDividendDate"))
             betaling_dato = format_dato(calendar.get("dividendDate"))
 
-        # Neste kvartalsrapport – hentes fra earnings_dates (DataFrame) og
-        # faller tilbake på calendar["Earnings Date"] hvis det feiler
-        rapport_dato = None
-        try:
-            idag = datetime.datetime.today().date()
-            ed = stk.earnings_dates
-            if ed is not None and not ed.empty:
-                # Indeksen er tz-aware – normaliser til dato
-                fremtidige = [
-                    d.date() for d in ed.index
-                    if hasattr(d, 'date') and d.date() > idag
-                ]
-                if fremtidige:
-                    rapport_dato = min(fremtidige).strftime("%Y-%m-%d")
-        except Exception:
-            pass
+        # Neste kvartalsrapport ─ Kilde 1: Newsweb Oslo Børs (offisiell, primær)
+        rapport_dato = hent_newsweb_rapport_dato(ticker)
+        if rapport_dato:
+            print(f"    Newsweb rapport_dato: {rapport_dato}")
 
-        # Fallback: calendar["Earnings Date"] fra Yahoo Finance
+        # Kilde 2: yfinance earnings_dates (fallback)
+        if not rapport_dato:
+            try:
+                idag = datetime.datetime.today().date()
+                ed = stk.earnings_dates
+                if ed is not None and not ed.empty:
+                    fremtidige = [
+                        d.date() for d in ed.index
+                        if hasattr(d, 'date') and d.date() > idag
+                    ]
+                    if fremtidige:
+                        rapport_dato = min(fremtidige).strftime("%Y-%m-%d")
+            except Exception:
+                pass
+
+        # Kilde 3: calendar["Earnings Date"] fra Yahoo Finance (siste fallback)
         if not rapport_dato and isinstance(calendar, dict):
             earnings = calendar.get("Earnings Date") or calendar.get("earningsDate")
             if isinstance(earnings, list) and earnings:
