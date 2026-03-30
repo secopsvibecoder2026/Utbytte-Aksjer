@@ -1,6 +1,6 @@
 'use strict';
 
-const CACHE = 'exday-v1';
+const CACHE = 'exday-v2';
 const NOTIF_CACHE = 'notif-prefs-v1';
 
 const PRECACHE = [
