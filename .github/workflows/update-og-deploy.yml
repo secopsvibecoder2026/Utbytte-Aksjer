@@ -51,6 +51,7 @@ jobs:
   deploy-pages:
     name: Deploy til GitHub Pages
     needs: oppdater-data
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     environment:
       name: github-pages
@@ -59,7 +60,7 @@ jobs:
       - name: Sjekk ut kode
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.ref }}  # Henter siste commit inkl. oppdatert JSON
+          ref: main  # Alltid deploy fra main, inkl. eventuelle auto-commits
 
       - name: Konfigurer GitHub Pages
         uses: actions/configure-pages@v5
