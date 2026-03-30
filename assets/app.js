@@ -371,6 +371,7 @@ function visOversikt() {
             <div class="text-sm text-gray-600 dark:text-gray-400 mt-0.5 leading-tight">${a.navn}</div>
             <div class="text-xs text-gray-400 dark:text-gray-500">${a.sektor}</div>
           </div>
+        </div>
         <div class="flex flex-col items-end gap-1 shrink-0">
           <span class="yield-badge ${yieldKlasse(a.utbytte_yield)} text-sm">${a.utbytte_yield.toFixed(2)}%</span>
           ${scoreBadge(beregnScore(a))}
