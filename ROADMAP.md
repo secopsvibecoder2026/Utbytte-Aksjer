@@ -116,6 +116,17 @@ Installer siden på hjemskjermen som en app. Brukere kan abonnere på varsler: *
 - [ ] Unit-tester for `fetch_stocks.py`
 - [ ] Automatisk Lighthouse-rapport i CI
 
+### Manglende historiske utbytter for 8 aksjer
+
+**Årsak:** Yahoo Finance returnerer tom dividend-serie eller tom kursserie for disse aksjene. Uten begge kan vi ikke beregne yield per år.
+
+**Berørte aksjer (per mars 2026):** COOL, FLNG, GOGL, PGS, PNORD, SBVG, SRBNK, WILS
+
+**Mulige løsninger:**
+- [ ] Manuell backup-data for kjente utbytter (hardkodes i `fetch_stocks.py`)
+- [ ] Alternativ datakilde for Oslo Børs (alle kjente APIer krever betalt plan)
+- [ ] Vise tydelig "Historikk ikke tilgjengelig fra Yahoo Finance" i modalen i stedet for å vise ingenting
+
 ---
 
 ## Bidrag
