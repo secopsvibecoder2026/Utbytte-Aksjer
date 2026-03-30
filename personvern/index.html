@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2316a34a'/%3E%3Ctext x='16' y='22' font-family='system-ui,sans-serif' font-size='13' font-weight='700' fill='white' text-anchor='middle'%3EUA%3C/text%3E%3C/svg%3E">
+  <link rel="icon" type="image/svg+xml" href="../logo/exday_icon_primary.svg">
   <title>Personvern og informasjonskapsler – exday.no</title>
   <meta name="description" content="Informasjon om personvern, informasjonskapsler og dine rettigheter på exday.no." />
   <link rel="canonical" href="https://exday.no/personvern/" />
@@ -15,7 +15,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = { darkMode: 'class' }
-    if (localStorage.getItem('darkMode') === 'true') {
+    if (localStorage.getItem('tema') === 'dark') {
       document.documentElement.classList.add('dark');
     }
   </script>
@@ -44,7 +44,7 @@
 
     <!-- TITTEL -->
     <h1 class="text-3xl font-bold mb-2">Personvern</h1>
-    <p class="text-sm text-gray-500 dark:text-gray-500 mb-12">Sist oppdatert: mars 2026</p>
+    <p class="text-sm text-gray-500 dark:text-gray-500 mb-12">Sist oppdatert: mars 2026 · v2</p>
 
     <!-- 1. OM SIDEN -->
     <section class="mb-10">
@@ -68,7 +68,9 @@
         <div>
           <p class="font-medium mb-1">Nødvendige (alltid aktive)</p>
           <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-            <code class="bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded text-xs">cookie_consent</code> — lagrer ditt samtykkevalg i nettleserens localStorage. Ingen data sendes til eksterne servere.
+            <code class="bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded text-xs">cookie_consent</code> — lagrer ditt samtykkevalg.
+            <code class="bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded text-xs">tema</code> — mørkt eller lyst utseende.
+            Ingen av disse sendes til eksterne servere.
           </p>
         </div>
         <div>
@@ -97,9 +99,60 @@
       </p>
     </section>
 
-    <!-- 4. DINE RETTIGHETER -->
+    <!-- 4. LOKAL DATALAGRING -->
     <section class="mb-10">
-      <h2 class="section-heading">4. Dine rettigheter</h2>
+      <h2 class="section-heading">4. Lokal datalagring</h2>
+      <p class="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+        exday.no lagrer brukerpreferanser og appdata direkte i nettleseren din (localStorage og Cache API). Ingen av disse dataene sendes til exday.no sine servere eller deles med tredjeparter — de finnes kun på din enhet.
+      </p>
+      <div class="space-y-3 text-sm">
+        <div class="rounded-lg border border-gray-100 dark:border-gray-800 overflow-hidden">
+          <table class="w-full text-left">
+            <thead>
+              <tr class="bg-gray-50 dark:bg-gray-900 text-xs uppercase tracking-wide text-gray-400">
+                <th class="px-4 py-2.5 font-medium">Nøkkel</th>
+                <th class="px-4 py-2.5 font-medium">Innhold</th>
+                <th class="px-4 py-2.5 font-medium hidden sm:table-cell">Formål</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100 dark:divide-gray-800 text-gray-600 dark:text-gray-400">
+              <tr>
+                <td class="px-4 py-2.5"><code class="bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded text-xs">fav_aksjer</code></td>
+                <td class="px-4 py-2.5">Liste over tickers du har stjernemerket</td>
+                <td class="px-4 py-2.5 hidden sm:table-cell">Huskeliste / favoritter</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-2.5"><code class="bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded text-xs">pf_beholdning</code></td>
+                <td class="px-4 py-2.5">Tickers og antall aksjer i kalkulatoren</td>
+                <td class="px-4 py-2.5 hidden sm:table-cell">Porteføljeberegning</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-2.5"><code class="bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded text-xs">notif_aksjer</code></td>
+                <td class="px-4 py-2.5">Tickers du har aktivert ex-dato-varsler for</td>
+                <td class="px-4 py-2.5 hidden sm:table-cell">Varselinnstillinger</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-2.5"><code class="bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded text-xs">notif_vist_*</code></td>
+                <td class="px-4 py-2.5">Hvilke varsler som allerede er vist</td>
+                <td class="px-4 py-2.5 hidden sm:table-cell">Hindre duplikate varsler</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-2.5"><code class="bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded text-xs">Cache API</code></td>
+                <td class="px-4 py-2.5">Statiske filer og siste aksjedata</td>
+                <td class="px-4 py-2.5 hidden sm:table-cell">Offline-støtte (PWA)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="text-gray-500 dark:text-gray-500">
+          Du kan slette all lokal data via nettleserens innstillinger: Innstillinger → Personvern → Nettleserdata → Nettstedsdata → exday.no.
+        </p>
+      </div>
+    </section>
+
+    <!-- 5. DINE RETTIGHETER -->
+    <section class="mb-10">
+      <h2 class="section-heading">5. Dine rettigheter</h2>
       <p class="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">Etter GDPR har du rett til å:</p>
       <ul class="space-y-2 text-gray-700 dark:text-gray-300 text-sm leading-relaxed">
         <li class="flex gap-2"><span class="text-gray-400 shrink-0">—</span> Få innsyn i hvilke opplysninger som behandles om deg</li>
@@ -113,9 +166,9 @@
       </p>
     </section>
 
-    <!-- 5. ADMINISTRER SAMTYKKE -->
+    <!-- 6. ADMINISTRER SAMTYKKE -->
     <section class="mb-10">
-      <h2 class="section-heading">5. Administrer samtykke</h2>
+      <h2 class="section-heading">6. Administrer samtykke</h2>
       <p class="text-gray-700 dark:text-gray-300 leading-relaxed mb-5">
         Du kan når som helst endre eller trekke tilbake samtykket ditt her. Endringen trer i kraft ved neste sideinnlasting.
       </p>
