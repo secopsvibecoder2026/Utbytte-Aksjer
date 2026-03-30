@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <!-- Background -->
+  <rect width="1200" height="630" fill="#f0fdf4"/>
+  <!-- Top accent bar -->
+  <rect width="1200" height="6" fill="#16a34a"/>
+  <!-- Bottom accent bar -->
+  <rect y="624" width="1200" height="6" fill="#16a34a"/>
+
+  <!-- Logo square -->
+  <rect x="80" y="88" width="72" height="72" rx="14" fill="#16a34a"/>
+  <text x="116" y="139" font-family="system-ui,ui-sans-serif,sans-serif" font-size="30" font-weight="700" fill="white" text-anchor="middle">UA</text>
+
+  <!-- Site name -->
+  <text x="172" y="114" font-family="system-ui,ui-sans-serif,sans-serif" font-size="22" font-weight="600" fill="#16a34a">exday.no</text>
+  <text x="172" y="142" font-family="system-ui,ui-sans-serif,sans-serif" font-size="16" fill="#6b7280">Norsk utbytteaksje-tracker</text>
+
+  <!-- Main headline -->
+  <text x="80" y="258" font-family="system-ui,ui-sans-serif,sans-serif" font-size="58" font-weight="700" fill="#111827">Norske</text>
+  <text x="80" y="330" font-family="system-ui,ui-sans-serif,sans-serif" font-size="58" font-weight="700" fill="#111827">Utbytteaksjer</text>
+
+  <!-- Subtitle -->
+  <text x="80" y="392" font-family="system-ui,ui-sans-serif,sans-serif" font-size="26" fill="#4b5563">Oversikt, yield og ex-datoer for Oslo Børs.</text>
+  <text x="80" y="428" font-family="system-ui,ui-sans-serif,sans-serif" font-size="26" fill="#4b5563">Oppdateres daglig.</text>
+
+  <!-- Decorative stat pills -->
+  <rect x="80" y="492" width="180" height="52" rx="10" fill="#dcfce7"/>
+  <text x="170" y="513" font-family="system-ui,ui-sans-serif,sans-serif" font-size="12" fill="#15803d" text-anchor="middle" font-weight="600">YIELD</text>
+  <text x="170" y="534" font-family="system-ui,ui-sans-serif,sans-serif" font-size="20" fill="#15803d" text-anchor="middle" font-weight="700">Opptil 12%</text>
+
+  <rect x="276" y="492" width="180" height="52" rx="10" fill="#dbeafe"/>
+  <text x="366" y="513" font-family="system-ui,ui-sans-serif,sans-serif" font-size="12" fill="#1e40af" text-anchor="middle" font-weight="600">AKSJER</text>
+  <text x="366" y="534" font-family="system-ui,ui-sans-serif,sans-serif" font-size="20" fill="#1e40af" text-anchor="middle" font-weight="700">44 selskaper</text>
+
+  <rect x="472" y="492" width="200" height="52" rx="10" fill="#fef9c3"/>
+  <text x="572" y="513" font-family="system-ui,ui-sans-serif,sans-serif" font-size="12" fill="#854d0e" text-anchor="middle" font-weight="600">DATA</text>
+  <text x="572" y="534" font-family="system-ui,ui-sans-serif,sans-serif" font-size="20" fill="#854d0e" text-anchor="middle" font-weight="700">Daglig oppdatert</text>
+
+  <!-- Right side decorative chart bars -->
+  <g opacity="0.15">
+    <rect x="860" y="180" width="48" height="180" rx="8" fill="#16a34a"/>
+    <rect x="924" y="240" width="48" height="120" rx="8" fill="#16a34a"/>
+    <rect x="988" y="140" width="48" height="220" rx="8" fill="#16a34a"/>
+    <rect x="1052" y="200" width="48" height="160" rx="8" fill="#16a34a"/>
+    <rect x="1116" y="160" width="48" height="200" rx="8" fill="#16a34a"/>
+  </g>
+</svg>
