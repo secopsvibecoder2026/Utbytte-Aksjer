@@ -52,7 +52,7 @@ Brukere kan stjernemerke sine favorittaksjer og få disse øverst i listen. Lagr
 ---
 
 ### 3. Utbytte-score (1–10) ⭐
-**Status: Pågår**
+**Status: ✅ Ferdig**
 
 Sammensatt poengsum per aksje som rangerer utbyttekvalitet — ikke bare størrelse. Gjør det enkelt å skille "høy yield men ustabil" fra "moderat yield men svært pålitelig".
 
@@ -71,14 +71,14 @@ Formel:
 ---
 
 ### 4. Porteføljekalkulator 💰
-**Status: Planlagt**
+**Status: ✅ Ferdig**
 
 Brukere taster inn antall aksjer de eier → siden beregner forventet årlig utbytteinntekt, månedlig fordeling og neste utbytteutbetaling. Ingen norsk konkurrent tilbyr dette.
 
-- [ ] Input: antall aksjer per selskap (lagres i localStorage)
-- [ ] Beregn: forventet utbytte per år, per kvartal og totalt
-- [ ] Vis: tidslinje over når utbetalingene kommer
-- [ ] Eksport til CSV
+- [x] Input: antall aksjer per selskap (lagres i localStorage)
+- [x] Beregn: forventet utbytte per år, per kvartal og totalt
+- [x] Vis: kvartalsvis distribusjon som strekdiagram
+- [x] Eksport til CSV (BOM for norsk Excel-kompatibilitet)
 
 ---
 
