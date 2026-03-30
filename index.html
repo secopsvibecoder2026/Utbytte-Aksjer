@@ -141,6 +141,9 @@
           <option value="8">Yield ≥ 8%</option>
           <option value="10">Yield ≥ 10%</option>
         </select>
+        <button id="filter-fav" class="filter-input text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors text-center">
+          ☆ Favoritter
+        </button>
         <button id="reset-filter" class="filter-input text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors text-center">
           Nullstill
         </button>
@@ -180,6 +183,7 @@
         <table class="w-full text-sm" id="hoved-tabell">
           <thead>
             <tr class="bg-gray-100 dark:bg-gray-900 text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
+              <th class="px-2 py-3 w-8"></th>
               <th class="sortable px-4 py-3 text-left" data-col="ticker">Ticker</th>
               <th class="sortable px-4 py-3 text-left" data-col="navn">Selskap</th>
               <th class="sortable px-4 py-3 text-right" data-col="pris">Pris</th>

@@ -7,13 +7,11 @@ Norsk utbytteaksje-tracker for Oslo Børs. Data hentes automatisk fra Yahoo Fina
 ## Veikart
 
 ### 1. Favoritter / huskeliste 🔖
-**Status: Planlagt**
+**Status: Ferdig ✅**
 
-Brukere kan stjernemerke sine favorittaksjer og få disse øverst i listen. Lagres i `localStorage` — ingen pålogging nødvendig.
-
-- [ ] Stjerneikon per aksje (tabell og kort)
-- [ ] Filter: "Vis kun favoritter"
-- [ ] Favoritter vises øverst ved default
+- [x] Stjerneikon per aksje (tabell, mobilt kort og modal)
+- [x] Filter: "Vis kun favoritter"
+- [x] Favoritter vises øverst ved default
 
 ---
 

@@ -5,12 +5,14 @@ let alleAksjer = [];
 let sortering = { kol: 'utbytte_yield', retning: 'desc' };
 let aktivTab = 'oversikt';
 let kompaktModus = false;
+let visKunFavoritter = false;
 
 // ── INIT ───────────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
   initDarkMode();
   initTabs();
   initFilter();
+  oppdaterFavBtn();
   initViewToggle();
   initModal();
   initPortefolje();
@@ -138,6 +140,14 @@ function initFilter() {
     document.getElementById('filter-sektor').value = '';
     document.getElementById('filter-frekvens').value = '';
     document.getElementById('filter-yield').value = '';
+    visKunFavoritter = false;
+    oppdaterFavBtn();
+    visOversikt();
+  });
+
+  document.getElementById('filter-fav').addEventListener('click', () => {
+    visKunFavoritter = !visKunFavoritter;
+    oppdaterFavBtn();
     visOversikt();
   });
 
@@ -161,6 +171,19 @@ function initFilter() {
   });
 }
 
+function oppdaterFavBtn() {
+  const btn = document.getElementById('filter-fav');
+  if (!btn) return;
+  const antall = hentFav().size;
+  if (visKunFavoritter) {
+    btn.className = 'filter-input text-sm font-medium bg-yellow-100 dark:bg-yellow-900/40 text-yellow-700 dark:text-yellow-300 border-yellow-300 dark:border-yellow-700';
+    btn.textContent = `★ Favoritter (${antall})`;
+  } else {
+    btn.className = 'filter-input text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors';
+    btn.textContent = antall > 0 ? `☆ Favoritter (${antall})` : '☆ Favoritter';
+  }
+}
+
 function byggSektorFilter() {
   const sektorer = [...new Set(alleAksjer.map(a => a.sektor))].sort();
   const sel = document.getElementById('filter-sektor');
@@ -176,8 +199,10 @@ function filtrerteAksjer() {
   const sektor = document.getElementById('filter-sektor').value;
   const frekvens = document.getElementById('filter-frekvens').value;
   const minYield = parseFloat(document.getElementById('filter-yield').value) || 0;
+  const fav = hentFav();
 
   return alleAksjer.filter(a => {
+    if (visKunFavoritter && !fav.has(a.ticker)) return false;
     if (sok && !a.ticker.toLowerCase().includes(sok) && !a.navn.toLowerCase().includes(sok)) return false;
     if (sektor && a.sektor !== sektor) return false;
     if (frekvens && a.frekvens !== frekvens) return false;
@@ -247,6 +272,7 @@ function visOversikt() {
 
     return `
     <tr class="table-row ${rowClass}" data-ticker="${a.ticker}">
+      <td class="px-2 py-3 w-8">${stjerne(a.ticker)}</td>
       <td class="px-4 py-3 font-mono font-bold text-brand-700 dark:text-brand-400">${a.ticker}</td>
       <td class="px-4 py-3">
         <div class="font-medium leading-tight">${a.navn}</div>
@@ -288,6 +314,14 @@ function visOversikt() {
 
   // Klikk via event delegation (tabell) – ingen minnelekasje
   tbody.onclick = e => {
+    const favBtn = e.target.closest('.fav-btn');
+    if (favBtn) {
+      e.stopPropagation();
+      toggleFav(favBtn.dataset.ticker);
+      oppdaterFavBtn();
+      visOversikt();
+      return;
+    }
     const tr = e.target.closest('tr[data-ticker]');
     if (!tr) return;
     const aksje = alleAksjer.find(a => a.ticker === tr.dataset.ticker);
@@ -312,6 +346,7 @@ function visOversikt() {
     <div class="aksje-kort-kompakt ${snartEx ? 'snart-ex' : ''}" data-ticker="${a.ticker}">
       <div class="flex-1 min-w-0">
         <div class="flex items-center gap-2">
+          ${stjerne(a.ticker, 'shrink-0')}
           <span class="font-mono font-bold text-brand-700 dark:text-brand-400 text-sm">${a.ticker}</span>
           <span class="frekvens-badge">${a.frekvens}</span>
           ${snartEx ? `<span class="text-xs text-orange-500 font-medium">Ex ${dagerTil === 0 ? 'i dag' : dagerTil === 1 ? 'i morgen' : `om ${dagerTil}d`}</span>` : ''}
@@ -328,12 +363,14 @@ function visOversikt() {
     const normalKort = `
     <div class="aksje-kort ${snartEx ? 'snart-ex' : ''}" data-ticker="${a.ticker}">
       <div class="flex items-start justify-between gap-2 mb-2">
-        <div>
-          <span class="font-mono font-bold text-brand-700 dark:text-brand-400 text-base">${a.ticker}</span>
-          <span class="frekvens-badge ml-2">${a.frekvens}</span>
-          <div class="text-sm text-gray-600 dark:text-gray-400 mt-0.5 leading-tight">${a.navn}</div>
-          <div class="text-xs text-gray-400 dark:text-gray-500">${a.sektor}</div>
-        </div>
+        <div class="flex items-start gap-2">
+          ${stjerne(a.ticker, 'mt-0.5 shrink-0')}
+          <div>
+            <span class="font-mono font-bold text-brand-700 dark:text-brand-400 text-base">${a.ticker}</span>
+            <span class="frekvens-badge ml-2">${a.frekvens}</span>
+            <div class="text-sm text-gray-600 dark:text-gray-400 mt-0.5 leading-tight">${a.navn}</div>
+            <div class="text-xs text-gray-400 dark:text-gray-500">${a.sektor}</div>
+          </div>
         <div class="flex flex-col items-end gap-1 shrink-0">
           <span class="yield-badge ${yieldKlasse(a.utbytte_yield)} text-sm">${a.utbytte_yield.toFixed(2)}%</span>
           ${scoreBadge(beregnScore(a))}
@@ -387,6 +424,14 @@ function visOversikt() {
 
   // Klikk via event delegation (kort) – ingen minnelekasje
   kortBody.onclick = e => {
+    const favBtn = e.target.closest('.fav-btn');
+    if (favBtn) {
+      e.stopPropagation();
+      toggleFav(favBtn.dataset.ticker);
+      oppdaterFavBtn();
+      visOversikt();
+      return;
+    }
     const kort = e.target.closest('[data-ticker]');
     if (!kort) return;
     const aksje = alleAksjer.find(a => a.ticker === kort.dataset.ticker);
@@ -397,7 +442,14 @@ function visOversikt() {
 function sorterAksjer(data) {
   const { kol, retning } = sortering;
   const hentVerdi = (a) => kol === 'utbytte_score' ? beregnScore(a) : a[kol];
+  const fav = hentFav();
   return [...data].sort((a, b) => {
+    // Favoritter alltid øverst (med mindre man filtrerer kun favoritter)
+    if (!visKunFavoritter) {
+      const fa = fav.has(a.ticker) ? 0 : 1;
+      const fb = fav.has(b.ticker) ? 0 : 1;
+      if (fa !== fb) return fa - fb;
+    }
     let va = hentVerdi(a), vb = hentVerdi(b);
     if (va == null) va = retning === 'asc' ? Infinity : -Infinity;
     if (vb == null) vb = retning === 'asc' ? Infinity : -Infinity;
@@ -514,6 +566,25 @@ function visKalender() {
     const aksje = alleAksjer.find(a => a.ticker === rad.dataset.ticker);
     if (aksje) visModal(aksje);
   };
+}
+
+// ── FAVORITTER ─────────────────────────────────────────────────────────────
+function hentFav() {
+  try { return new Set(JSON.parse(localStorage.getItem('fav_aksjer') || '[]')); } catch { return new Set(); }
+}
+function lagreFav(fav) { localStorage.setItem('fav_aksjer', JSON.stringify([...fav])); }
+function erFavoritt(ticker) { return hentFav().has(ticker); }
+function toggleFav(ticker) {
+  const fav = hentFav();
+  if (fav.has(ticker)) fav.delete(ticker); else fav.add(ticker);
+  lagreFav(fav);
+}
+
+function stjerne(ticker, ekstraKlasse = '') {
+  const er = erFavoritt(ticker);
+  return `<button class="fav-btn ${ekstraKlasse} transition-colors" data-ticker="${ticker}" title="${er ? 'Fjern favoritt' : 'Legg til favoritt'}" aria-label="Favoritt">
+    <svg class="w-4 h-4 pointer-events-none ${er ? 'text-yellow-400' : 'text-gray-300 dark:text-gray-600'}" fill="${er ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
+  </button>`;
 }
 
 // ── PORTEFØLJEKALKULATOR ───────────────────────────────────────────────────
@@ -893,9 +964,12 @@ function visModal(a) {
         <p class="text-gray-600 dark:text-gray-400">${a.navn}</p>
         <p class="text-xs text-gray-400 mt-0.5">${a.sektor} · ${a.bors}</p>
       </div>
-      <button id="modal-close" class="text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 p-1" aria-label="Lukk">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-      </button>
+      <div class="flex items-center gap-1">
+        ${stjerne(a.ticker, 'p-1 hover:scale-110')}
+        <button id="modal-close" class="text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 p-1" aria-label="Lukk">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
     </div>
 
     ${a.beskrivelse ? `<p class="text-sm text-gray-600 dark:text-gray-400 mb-4 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">${a.beskrivelse}</p>` : ''}
@@ -996,6 +1070,15 @@ function initModal() {
   overlay.addEventListener('click', e => { if (e.target === overlay) lukkModal(); });
   // Klikk på lukk-knapp via event delegation
   overlay.addEventListener('click', e => { if (e.target.closest('#modal-close')) lukkModal(); });
+  // Favoritt-toggle i modal
+  overlay.addEventListener('click', e => {
+    const btn = e.target.closest('.fav-btn');
+    if (!btn) return;
+    toggleFav(btn.dataset.ticker);
+    oppdaterFavBtn();
+    // Re-render stjernen inne i modal uten å lukke
+    visModal(alleAksjer.find(x => x.ticker === btn.dataset.ticker));
+  });
   // ESC lukker modal
   document.addEventListener('keydown', e => { if (e.key === 'Escape') lukkModal(); });
 }
