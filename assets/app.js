@@ -624,6 +624,39 @@ function initPortefolje() {
   });
 
   document.getElementById('pf-eksport-csv').addEventListener('click', eksporterCSV);
+
+  // ── CSV-IMPORT ─────────────────────────────────────────────────────────────
+  const filInput = document.getElementById('pf-importer-fil');
+
+  function triggerFilInput() { filInput.click(); }
+
+  document.getElementById('pf-importer-csv').addEventListener('click', triggerFilInput);
+
+  const tomKnapp = document.getElementById('pf-importer-csv-tom');
+  if (tomKnapp) tomKnapp.addEventListener('click', triggerFilInput);
+
+  filInput.addEventListener('change', () => {
+    const fil = filInput.files[0];
+    if (!fil) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+      const { gyldig, ukjent } = parseCSV(e.target.result);
+      visImportPreview(gyldig, ukjent);
+    };
+    reader.readAsText(fil, 'UTF-8');
+    filInput.value = '';
+  });
+
+  document.getElementById('pf-importer-bekreft-legg-til').addEventListener('click', () => {
+    bekreftImport(window._importData, false);
+  });
+  document.getElementById('pf-importer-bekreft-erstatt').addEventListener('click', () => {
+    bekreftImport(window._importData, true);
+  });
+  document.getElementById('pf-importer-avbryt').addEventListener('click', () => {
+    document.getElementById('pf-importer-preview').classList.add('hidden');
+    window._importData = null;
+  });
 }
 
 function fyllPFDropdown() {
@@ -955,6 +988,84 @@ function eksporterCSV() {
   const a = document.createElement('a');
   a.href = url; a.download = 'portef\u00F8lje-exday.csv'; a.click();
   URL.revokeObjectURL(url);
+}
+
+function parseCSV(tekst) {
+  // Fjern BOM
+  if (tekst.charCodeAt(0) === 0xFEFF) tekst = tekst.slice(1);
+  const linjer = tekst.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+  if (!linjer.length) return { gyldig: [], ukjent: [] };
+
+  let tickerIdx = 0, antallIdx = 2;
+
+  // Header-deteksjon: finn kolonne-indekser dynamisk
+  const forste = linjer[0].toLowerCase();
+  if (forste.includes('ticker') || forste.includes('antall') || forste.includes('selskap')) {
+    const cols = linjer[0].split(',').map(c => c.trim().toLowerCase());
+    const ti = cols.findIndex(c => c === 'ticker');
+    const ai = cols.findIndex(c => c === 'antall');
+    if (ti !== -1) tickerIdx = ti;
+    if (ai !== -1) antallIdx = ai;
+    linjer.shift(); // fjern header
+  }
+
+  const kjenteTickers = new Set(alleAksjer.map(a => a.ticker));
+  const gyldig = [], ukjent = [];
+
+  for (const linje of linjer) {
+    const deler = linje.split(',');
+    const ticker = (deler[tickerIdx] || '').replace(/"/g, '').trim().toUpperCase();
+    const antall = parseInt((deler[antallIdx] || '').replace(/"/g, '').trim(), 10);
+    if (!ticker) continue;
+    if (kjenteTickers.has(ticker) && antall > 0) {
+      gyldig.push({ ticker, antall });
+    } else {
+      ukjent.push(ticker);
+    }
+  }
+
+  return { gyldig, ukjent };
+}
+
+function visImportPreview(gyldig, ukjent) {
+  window._importData = gyldig;
+  const previewEl = document.getElementById('pf-importer-preview');
+  const innholdEl = document.getElementById('pf-importer-innhold');
+
+  let html = '';
+
+  if (!gyldig.length && !ukjent.length) {
+    html = '<p class="text-sm text-red-500">Filen ser tom ut eller har uventet format.</p>';
+    document.getElementById('pf-importer-bekreft-legg-til').classList.add('hidden');
+    document.getElementById('pf-importer-bekreft-erstatt').classList.add('hidden');
+  } else if (!gyldig.length) {
+    html = `<p class="text-sm text-red-500">Ingen kjente tickers funnet. Ukjente: ${ukjent.join(', ')}</p>`;
+    document.getElementById('pf-importer-bekreft-legg-til').classList.add('hidden');
+    document.getElementById('pf-importer-bekreft-erstatt').classList.add('hidden');
+  } else {
+    const preview = gyldig.slice(0, 6).map(({ ticker, antall }) => `${ticker} (${antall})`).join(', ');
+    const mer = gyldig.length > 6 ? ` og ${gyldig.length - 6} til…` : '';
+    html += `<p class="text-sm text-green-600 dark:text-green-400">✅ ${gyldig.length} aksje${gyldig.length !== 1 ? 'r' : ''} funnet: ${preview}${mer}</p>`;
+    if (ukjent.length) {
+      html += `<p class="text-sm text-yellow-600 dark:text-yellow-400 mt-1">⚠️ ${ukjent.length} ukjente tickers ignoreres: ${ukjent.join(', ')}</p>`;
+    }
+    document.getElementById('pf-importer-bekreft-legg-til').classList.remove('hidden');
+    document.getElementById('pf-importer-bekreft-erstatt').classList.remove('hidden');
+  }
+
+  innholdEl.innerHTML = html;
+  previewEl.classList.remove('hidden');
+  previewEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function bekreftImport(data, erstatt) {
+  if (!data || !data.length) return;
+  const pf = erstatt ? {} : hentPF();
+  data.forEach(({ ticker, antall }) => { pf[ticker] = antall; });
+  lagrePF(pf);
+  document.getElementById('pf-importer-preview').classList.add('hidden');
+  window._importData = null;
+  visPortefolje();
 }
 
 // ── MODAL ─────────────────────────────────────────────────────────────────
