@@ -54,6 +54,9 @@ AKSJER = [
     {"ticker_yf": "BEWI.OL",  "ticker": "BEWI",  "navn": "BEWI ASA",                   "sektor": "Industri",           "bors": "Oslo Børs"},
     {"ticker_yf": "WILS.OL",  "ticker": "WILS",  "navn": "Wilson ASA",                 "sektor": "Shipping",           "bors": "Oslo Børs"},
     {"ticker_yf": "BONHR.OL", "ticker": "BONHR", "navn": "Bonheur ASA",                "sektor": "Fornybar energi",    "bors": "Oslo Børs"},
+    {"ticker_yf": "WAWI.OL",  "ticker": "WAWI",  "navn": "Wallenius Wilhelmsen ASA",  "sektor": "Shipping",           "bors": "Oslo Børs"},
+    {"ticker_yf": "NORCO.OL", "ticker": "NORCO", "navn": "Norconsult AS",              "sektor": "Industri",           "bors": "Oslo Børs"},
+    {"ticker_yf": "B2I.OL",   "ticker": "B2I",   "navn": "B2 Impact ASA",              "sektor": "Finans",             "bors": "Oslo Børs"},
 ]
 
 # Statiske beskrivelser (ikke tilgjengelig fra Yahoo Finance)
@@ -100,6 +103,9 @@ BESKRIVELSER = {
     "BEWI":  "Produsent av EPS-emballasje og isolasjonsmaterialer. Eksponert mot bygg, fisk og mat. Voksende i Europa.",
     "WILS":  "Europas ledende kysttransportselskap. Frakter tørrbulk og prosjektlast langs europakysten. Stabil inntjening.",
     "BONHR": "Fred. Olsen-kontrollert konglomerat med offshore vind (Fred. Olsen Renewables), cruiseskip og shippingvirksomhet.",
+    "WAWI":  "Verdensledende innen bil- og høy-og-tung transport til sjøs (ro-ro). Betjener globale bilprodusenter med en moderne flåte.",
+    "NORCO": "Nordens ledende ingeniør- og rådgivningsselskap. Ansatteeid med over 7 000 medarbeidere. Stabil kontantstrøm fra konsulentoppdrag.",
+    "B2I":   "Europeisk kreditthåndteringsselskap. Kjøper og inndriver misligholdte fordringer. Voksende utbytte drevet av ekspansjon i Norden og Baltikum.",
 }
 
 
