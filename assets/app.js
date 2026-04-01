@@ -20,6 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initVarsler();
   sjekkQRParam();
   visVelkomstModal();
+  initProfil();
   lastData();
 });
 
@@ -240,6 +241,68 @@ function filtrerteAksjer() {
     if (a.utbytte_yield < minYield) return false;
     return true;
   });
+}
+
+// ── PROFIL ─────────────────────────────────────────────────────────────────
+function hentProfil() {
+  return {
+    navn:   localStorage.getItem('profil_navn') || '',
+    malMnd: parseFloat(localStorage.getItem('profil_mal_mnd') || '0')
+  };
+}
+
+function lagreProfil(navn, malMnd) {
+  localStorage.setItem('profil_navn', navn);
+  localStorage.setItem('profil_mal_mnd', malMnd);
+}
+
+function visGreeting() {
+  const { navn } = hentProfil();
+  const el = document.getElementById('profil-hilsen');
+  if (!el) return;
+  if (!navn) { el.classList.add('hidden'); return; }
+  const t = new Date().getHours();
+  const hilsen = t < 10 ? 'God morgen' : t < 17 ? 'God dag' : 'God kveld';
+  el.textContent = `${hilsen}, ${navn}`;
+  el.classList.remove('hidden');
+}
+
+function initProfil() {
+  const btn    = document.getElementById('profil-btn');
+  const modal  = document.getElementById('profil-modal');
+  const lukk1  = document.getElementById('profil-modal-lukk');
+  const lukk2  = document.getElementById('profil-modal-avbryt');
+  const lagreBtn = document.getElementById('profil-lagre');
+  const navnIn = document.getElementById('profil-navn-input');
+  const malIn  = document.getElementById('profil-mal-input');
+
+  function apneModal() {
+    const p = hentProfil();
+    navnIn.value = p.navn;
+    malIn.value  = p.malMnd || '';
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    navnIn.focus();
+  }
+
+  function lukkProfilModal() {
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+  }
+
+  btn.addEventListener('click', apneModal);
+  lukk1.addEventListener('click', lukkProfilModal);
+  lukk2.addEventListener('click', lukkProfilModal);
+  modal.addEventListener('click', e => { if (e.target === modal) lukkProfilModal(); });
+
+  lagreBtn.addEventListener('click', () => {
+    lagreProfil(navnIn.value.trim(), parseFloat(malIn.value) || 0);
+    lukkProfilModal();
+    visGreeting();
+    if (aktivTab === 'portfolio') visPortefolje();
+  });
+
+  visGreeting();
 }
 
 // ── SAMMENDRAG ─────────────────────────────────────────────────────────────
@@ -836,6 +899,21 @@ function visPortefolje() {
   document.getElementById('pf-stat-mnd').textContent = fmtKr(totalAr / 12);
   document.getElementById('pf-stat-antall').textContent = alleBeholdning.length;
   document.getElementById('pf-stat-verdi').textContent = fmtKr(totalVerdi);
+
+  // Månedlig mål fra profil
+  const { malMnd } = hentProfil();
+  const mndMalEl = document.getElementById('pf-mnd-mål');
+  if (mndMalEl) {
+    if (malMnd > 0) {
+      const mndPct = Math.min(100, ((totalAr / 12) / malMnd) * 100);
+      document.getElementById('pf-mnd-mål-pct').textContent = mndPct.toFixed(0) + '%';
+      document.getElementById('pf-mnd-mål-tekst').textContent = 'av ' + malMnd.toLocaleString('nb-NO') + ' kr';
+      document.getElementById('pf-mnd-mål-bar').style.width = mndPct + '%';
+      mndMalEl.classList.remove('hidden');
+    } else {
+      mndMalEl.classList.add('hidden');
+    }
+  }
 
   // Vektet yield = totalAr / totalVerdi × 100
   const vektetYield = totalVerdi > 0 ? (totalAr / totalVerdi * 100) : 0;

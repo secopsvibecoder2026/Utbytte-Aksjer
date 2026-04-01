@@ -64,14 +64,14 @@ Pop-up som vises kun ved første besøk. Informerer om prosjektets natur (hobbyp
 ## Planlagt
 
 ### 16. Personlig profil og mål 🎯
-**Mål: gjøre appen til noe som tilhører brukeren**
+**Status: Ferdig ✅**
 
 Brukeren setter et personlig navn og månedlig utbyttemål. Vises øverst på dashbordet.
 
-- [ ] Profil-knapp øverst i hjørnet → enkel modal: navn + månedlig mål i NOK
-- [ ] "God morgen, Kristian" på dashbordet basert på klokkeslett
-- [ ] Fremgangsbar mot månedlig mål (estimert utbytte vs. mål)
-- [ ] Profil lagres i localStorage
+- [x] Profil-knapp øverst i hjørnet → enkel modal: navn + månedlig mål i NOK
+- [x] "God morgen, Kristian" på dashbordet basert på klokkeslett
+- [x] Fremgangsbar mot månedlig mål (estimert utbytte vs. mål)
+- [x] Profil lagres i localStorage
 
 ---
 
