@@ -1062,6 +1062,30 @@ def main():
     if len(feil) + len(ingen_data) > len(AKSJER) // 2:
         print("\nADVARSEL: Over halvparten av aksjene feilet. Sjekk Yahoo Finance-tilkoblingen.")
 
+    # ── T4b: Datakvalitets-terskel — stopp deploy hvis dataene er ubrukelige ──
+    antall_null_pris   = sum(1 for a in resultater if a.get("pris", 0) <= 0)
+    antall_hoy_yield   = sum(1 for a in resultater if a.get("utbytte_yield", 0) > 30)
+    antall_mangler_felt = sum(
+        1 for a in resultater
+        if not a.get("navn") or not a.get("ticker") or a.get("pris") is None
+    )
+
+    kritiske_feil = []
+    if antall_null_pris > len(resultater) // 2:
+        kritiske_feil.append(f"{antall_null_pris}/{len(resultater)} aksjer har pris = 0")
+    if antall_hoy_yield > len(resultater) // 2:
+        kritiske_feil.append(f"{antall_hoy_yield}/{len(resultater)} aksjer har yield > 30 %")
+    if antall_mangler_felt > len(resultater) // 2:
+        kritiske_feil.append(f"{antall_mangler_felt}/{len(resultater)} aksjer mangler kritiske felt")
+
+    if kritiske_feil:
+        print("\n" + "!" * 54)
+        print("  KRITISK DATAKVALITETSFEIL — deploy avbrutt")
+        for f_melding in kritiske_feil:
+            print(f"  ✗ {f_melding}")
+        print("!" * 54)
+        sys.exit(2)
+
     # Hent OSEBX-historikk
     print("\nHenter OSEBX-historikk...")
     osebx_data = hent_osebx_historikk()
