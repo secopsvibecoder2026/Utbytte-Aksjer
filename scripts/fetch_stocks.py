@@ -113,104 +113,17 @@ def hent_newsweb_rapport_dato(ticker: str) -> str | None:
         print(f"    Advarsel Newsweb [{ticker}]: {e}")
     return None
 
-# Norske aksjer med Yahoo Finance ticker-symbol (.OL = Oslo Børs, .OAX = Euronext Expand)
-AKSJER = [
-    {"ticker_yf": "EQNR.OL",  "ticker": "EQNR",  "navn": "Equinor ASA",              "sektor": "Energi",             "bors": "Oslo Børs"},
-    {"ticker_yf": "DNB.OL",   "ticker": "DNB",   "navn": "DNB Bank ASA",              "sektor": "Finans",             "bors": "Oslo Børs"},
-    {"ticker_yf": "TEL.OL",   "ticker": "TEL",   "navn": "Telenor ASA",               "sektor": "Telekommunikasjon",  "bors": "Oslo Børs"},
-    {"ticker_yf": "ORK.OL",   "ticker": "ORK",   "navn": "Orkla ASA",                 "sektor": "Forbruksvarer",      "bors": "Oslo Børs"},
-    {"ticker_yf": "MOWI.OL",  "ticker": "MOWI",  "navn": "Mowi ASA",                  "sektor": "Havbruk",            "bors": "Oslo Børs"},
-    {"ticker_yf": "AKRBP.OL", "ticker": "AKRBP", "navn": "Aker BP ASA",               "sektor": "Energi",             "bors": "Oslo Børs"},
-    {"ticker_yf": "NHY.OL",   "ticker": "NHY",   "navn": "Norsk Hydro ASA",           "sektor": "Materialer",         "bors": "Oslo Børs"},
-    {"ticker_yf": "YAR.OL",   "ticker": "YAR",   "navn": "Yara International ASA",    "sektor": "Materialer",         "bors": "Oslo Børs"},
-    {"ticker_yf": "SALM.OL",  "ticker": "SALM",  "navn": "SalMar ASA",                "sektor": "Havbruk",            "bors": "Oslo Børs"},
-    {"ticker_yf": "SRBNK.OL", "ticker": "SRBNK", "navn": "SpareBank 1 SR-Bank",       "sektor": "Finans",             "bors": "Oslo Børs"},
-    {"ticker_yf": "GOGL.OL",  "ticker": "GOGL",  "navn": "Golden Ocean Group",        "sektor": "Shipping",           "bors": "Oslo Børs"},
-    {"ticker_yf": "MPCC.OL",  "ticker": "MPCC",  "navn": "MPC Container Ships",       "sektor": "Shipping",           "bors": "Oslo Børs"},
-    {"ticker_yf": "BWLPG.OL", "ticker": "BWLPG", "navn": "BW LPG Limited",            "sektor": "Shipping",           "bors": "Oslo Børs"},
-    {"ticker_yf": "KOG.OL",   "ticker": "KOG",   "navn": "Kongsberg Gruppen ASA",     "sektor": "Industri",           "bors": "Oslo Børs"},
-    {"ticker_yf": "FRO.OL",   "ticker": "FRO",   "navn": "Frontline PLC",             "sektor": "Shipping",           "bors": "Oslo Børs"},
-    {"ticker_yf": "NONG.OL",  "ticker": "NONG",  "navn": "SpareBank 1 Nord-Norge",    "sektor": "Finans",             "bors": "Oslo Børs"},
-    {"ticker_yf": "SUBC.OL",  "ticker": "SUBC",  "navn": "Subsea 7 SA",               "sektor": "Energitjenester",    "bors": "Oslo Børs"},
-    {"ticker_yf": "WWI.OL",   "ticker": "WWI",   "navn": "Wilh. Wilhelmsen Holding",  "sektor": "Shipping",           "bors": "Oslo Børs"},
-    {"ticker_yf": "PNORD.OL", "ticker": "PNORD", "navn": "Protector Forsikring ASA",  "sektor": "Finans",             "bors": "Oslo Børs"},
-    {"ticker_yf": "SCATC.OL", "ticker": "SCATC", "navn": "Scatec ASA",                "sektor": "Fornybar energi",    "bors": "Oslo Børs"},
-    {"ticker_yf": "AUSS.OL",  "ticker": "AUSS",  "navn": "Austevoll Seafood ASA",     "sektor": "Havbruk",            "bors": "Oslo Børs"},
-    {"ticker_yf": "LSG.OL",   "ticker": "LSG",   "navn": "Lerøy Seafood Group ASA",   "sektor": "Havbruk",            "bors": "Oslo Børs"},
-    {"ticker_yf": "BAKKA.OL", "ticker": "BAKKA", "navn": "Bakkafrost P/F",            "sektor": "Havbruk",            "bors": "Oslo Børs"},
-    {"ticker_yf": "HAFNI.OL", "ticker": "HAFNI", "navn": "Hafnia Limited",            "sektor": "Shipping",           "bors": "Oslo Børs"},
-    {"ticker_yf": "FLNG.OL",  "ticker": "FLNG",  "navn": "Flex LNG Ltd",              "sektor": "Shipping",           "bors": "Oslo Børs"},
-    {"ticker_yf": "MING.OL",  "ticker": "MING",  "navn": "SpareBank 1 SMN",           "sektor": "Finans",             "bors": "Oslo Børs"},
-    {"ticker_yf": "SPOL.OL",  "ticker": "SPOL",  "navn": "SpareBank 1 Østlandet",     "sektor": "Finans",             "bors": "Oslo Børs"},
-    {"ticker_yf": "AFG.OL",   "ticker": "AFG",   "navn": "Arendals Fossekompani ASA", "sektor": "Fornybar energi",    "bors": "Oslo Børs"},
-    {"ticker_yf": "ODL.OL",   "ticker": "ODL",   "navn": "Odfjell SE",                "sektor": "Shipping",           "bors": "Oslo Børs"},
-    {"ticker_yf": "PGS.OL",   "ticker": "PGS",   "navn": "PGS ASA",                   "sektor": "Energitjenester",    "bors": "Oslo Børs"},
-    {"ticker_yf": "VEI.OL",   "ticker": "VEI",   "navn": "Veidekke ASA",              "sektor": "Industri",           "bors": "Oslo Børs"},
-    {"ticker_yf": "AKER.OL",  "ticker": "AKER",  "navn": "Aker ASA",                  "sektor": "Industri",           "bors": "Oslo Børs"},
-    {"ticker_yf": "BWO.OL",   "ticker": "BWO",   "navn": "BW Offshore Limited",       "sektor": "Energitjenester",    "bors": "Oslo Børs"},
-    {"ticker_yf": "SBVG.OL",  "ticker": "SBVG",  "navn": "SpareBank 1 BV",            "sektor": "Finans",             "bors": "Oslo Børs"},
-    {"ticker_yf": "GJF.OL",   "ticker": "GJF",   "navn": "Gjensidige Forsikring ASA", "sektor": "Finans",             "bors": "Oslo Børs"},
-    {"ticker_yf": "STB.OL",   "ticker": "STB",   "navn": "Storebrand ASA",             "sektor": "Finans",             "bors": "Oslo Børs"},
-    {"ticker_yf": "AKSO.OL",  "ticker": "AKSO",  "navn": "Aker Solutions ASA",         "sektor": "Energitjenester",    "bors": "Oslo Børs"},
-    {"ticker_yf": "COOL.OL",  "ticker": "COOL",  "navn": "Cool Company Ltd",           "sektor": "Shipping",           "bors": "Oslo Børs"},
-    {"ticker_yf": "OKEA.OL",  "ticker": "OKEA",  "navn": "OKEA ASA",                   "sektor": "Energi",             "bors": "Oslo Børs"},
-    {"ticker_yf": "BEWI.OL",  "ticker": "BEWI",  "navn": "BEWI ASA",                   "sektor": "Industri",           "bors": "Oslo Børs"},
-    {"ticker_yf": "WILS.OL",  "ticker": "WILS",  "navn": "Wilson ASA",                 "sektor": "Shipping",           "bors": "Oslo Børs"},
-    {"ticker_yf": "BONHR.OL", "ticker": "BONHR", "navn": "Bonheur ASA",                "sektor": "Fornybar energi",    "bors": "Oslo Børs"},
-    {"ticker_yf": "WAWI.OL",  "ticker": "WAWI",  "navn": "Wallenius Wilhelmsen ASA",  "sektor": "Shipping",           "bors": "Oslo Børs"},
-    {"ticker_yf": "NORCO.OL", "ticker": "NORCO", "navn": "Norconsult AS",              "sektor": "Industri",           "bors": "Oslo Børs"},
-    {"ticker_yf": "B2I.OL",   "ticker": "B2I",   "navn": "B2 Impact ASA",              "sektor": "Finans",             "bors": "Oslo Børs"},
-]
+# ── TICKER-KONFIGURASJON ─────────────────────────────────────────────────────
+# Aksjer og beskrivelser leses fra data/tickers.json — legg til nye aksjer der.
+_tickers_path = os.path.join(os.path.dirname(__file__), "..", "data", "tickers.json")
+with open(_tickers_path, "r", encoding="utf-8") as _f:
+    _ticker_data = json.load(_f)
 
-# Statiske beskrivelser (ikke tilgjengelig fra Yahoo Finance)
-BESKRIVELSER = {
-    "EQNR":  "Norges største energiselskap. Kvartalsutbytte pluss ekstraordinære utbytter ved høye oljepriser.",
-    "DNB":   "Norges største bank. Kjent for høyt og stabilt utbytte, ofte over 7% yield.",
-    "TEL":   "Norges ledende telekomselskap med stabil kontantstrøm og høy utbyttegrad. Sterkt fotavtrykk i Asia.",
-    "ORK":   "Nordisk merkevareselskap med diversifisert portefølje. Konsistent og voksende utbytte i over 30 år.",
-    "MOWI":  "Verdens største lakseoppdrettsselskap. Kvartalsutbytte koblet til laksepris og inntjening.",
-    "AKRBP": "Norsk E&P-selskap med høy utbyttepolitikk. Betaler kvartalsvis utbytte basert på fri kontantstrøm.",
-    "NHY":   "Globalt aluminiumselskap og ledende innen fornybar energi. Syklisk utbytte påvirket av aluminiumspriser.",
-    "YAR":   "Verdens ledende gjødselprodusent. Utbytte varierer med gjødselpris og global matetterspørsel.",
-    "SALM":  "En av Norges mest effektive lakseoppdrettere. Høy margin og voksende utbytte over tid.",
-    "SRBNK": "Ledende regional sparebank på Sør-Vestlandet. Kjent for høyt og stabilt utbytte med god vekst.",
-    "GOGL":  "Verdens største tørrbulkrederi. Volatilt men potensielt svært høyt utbytte koblet til shippingratene.",
-    "MPCC":  "Containerrederi med svært høy utbyttegrad. Syklisk og volatilt – utbytte varierer sterkt med containerrater.",
-    "BWLPG": "Verdens største LPG-tankrederi. Høy kontantstrøm og liberal utbyttepolitikk. Volatilt med shippingmarkedet.",
-    "KOG":   "Teknologi- og forsvarskonsern. Lav yield men sterk utbyttevekst. Defensivt som følge av økt NATO-satsing.",
-    "FRO":   "Ledende råoljetankrederi. Svært høy utbyttegrad fra sterk kontantstrøm. Syklisk og rateeksponert.",
-    "NONG":  "Regional sparebank i Nord-Norge. Stabilt og voksende utbytte, godt kapitaldekkede.",
-    "SUBC":  "Ledende leverandør av undersøiske engineering-tjenester til olje og gass. Solid balanse.",
-    "WWI":   "Internasjonal shipping- og logistikkkonsern. Ro-ro transport og havnevirksomhet. Lav verdsettelse.",
-    "PNORD": "Raskt voksende skadeforsikringsselskap i Norden og UK. Sterk utbyttevekst over mange år.",
-    "SCATC": "Norsk leverandør av fornybar energi globalt. Solenergi- og vindkraftprosjekter i fremvoksende markeder.",
-    "AUSS":  "Holdingselskap med majoritetseierandel i Lerøy Seafood og Pelagia. Bred eksponering mot sjømat og fiskeri.",
-    "LSG":   "En av Norges største lakseoppdrettere med virksomhet innen oppdrett, villfangst og bearbeiding.",
-    "BAKKA": "Færøysk-skotsk lakseoppdrettsselskap notert på Oslo Børs. Integrert verdikjede fra rogn til ferdig produkt.",
-    "HAFNI": "Verdens største produkttankrederi. Frakter raffinerte petroleumsprodukter. Svært høy utbyttegrad fra sterk kontantstrøm.",
-    "FLNG":  "LNG-tankselskap med moderne flåte på langsiktige TC-kontrakter. Stabil og forutsigbar kontantstrøm.",
-    "MING":  "Ledende sparebank i Midt-Norge. Konsistent og voksende utbytte med solid kapitalisering.",
-    "SPOL":  "Stor sparebank på Østlandet og Innlandet. Stabil inntjening og høy utbyttegrad.",
-    "AFG":   "Industrielt investeringsselskap med fokus på grønn teknologi og fornybar energi. Lang utbyttehistorikk.",
-    "ODL":   "Ledende kjemikalietankrederi. Frakter spesialkjemikalier globalt. Nytter av høy etterspørsel etter spesialprodukter.",
-    "PGS":   "Ledende seismikkselskap som henter inn geofysiske data for olje- og gassindustrien. Gjenopptok utbytte etter restrukturering.",
-    "VEI":   "Ledende skandinavisk bygg- og anleggsselskap. Lang og stabil utbyttehistorikk med ansatteeierskap som særpreg.",
-    "AKER":  "Kjell Inge Røkkes industrielle investeringsselskap. Eierandeler i bl.a. Aker BP, Aker Solutions og Cognite.",
-    "BWO":   "FPSO-operatør (flytende produksjon og lagring av olje). Langvarige kontrakter gir stabil kontantstrøm.",
-    "SBVG":  "Sparebank i Telemark og Vestfold. Stabil lokal bank med god utbyttehistorikk og solid kapitaldekning.",
-    "GJF":   "Norges største skadeforsikringsselskap. Betaler ordinært utbytte pluss ekstraordinært. Svært høy og stabil utbyttegrad.",
-    "STB":   "Ledende nordisk livsforsikrings- og pensjonskonsern. Voksende utbytte drevet av sterk vekst i forvaltningskapital.",
-    "AKSO":  "Leverandør av engineering og teknologi til olje-, gass- og havvindprosjekter. Gjenopptok utbytte etter restrukturering i 2020.",
-    "COOL":  "LNG-tankselskap spinnet ut fra Golar LNG. Liberal utbyttepolitikk. Syklisk eksponering mot LNG-fraktrater.",
-    "OKEA":  "Norsk E&P-selskap med fokus på norsk sokkel. Høy utbytteyield drevet av sterk produksjon fra Draugen og Brage.",
-    "BEWI":  "Produsent av EPS-emballasje og isolasjonsmaterialer. Eksponert mot bygg, fisk og mat. Voksende i Europa.",
-    "WILS":  "Europas ledende kysttransportselskap. Frakter tørrbulk og prosjektlast langs europakysten. Stabil inntjening.",
-    "BONHR": "Fred. Olsen-kontrollert konglomerat med offshore vind (Fred. Olsen Renewables), cruiseskip og shippingvirksomhet.",
-    "WAWI":  "Verdensledende innen bil- og høy-og-tung transport til sjøs (ro-ro). Betjener globale bilprodusenter med en moderne flåte.",
-    "NORCO": "Nordens ledende ingeniør- og rådgivningsselskap. Ansatteeid med over 7 000 medarbeidere. Stabil kontantstrøm fra konsulentoppdrag.",
-    "B2I":   "Europeisk kreditthåndteringsselskap. Kjøper og inndriver misligholdte fordringer. Voksende utbytte drevet av ekspansjon i Norden og Baltikum.",
-}
+AKSJER = [{"ticker_yf": t["ticker_yf"], "ticker": t["ticker"],
+            "navn": t["navn"], "sektor": t["sektor"], "bors": t["bors"]}
+          for t in _ticker_data]
 
+BESKRIVELSER = {t["ticker"]: t.get("beskrivelse", "") for t in _ticker_data}
 
 def safe_float(value, default=0.0):
     try:
