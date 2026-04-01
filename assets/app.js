@@ -1102,20 +1102,18 @@ function initPortefolje() {
     document.getElementById('qr-modal').classList.remove('flex');
   });
 
-  // ── INNTEKTSTELLER-MÅL ─────────────────────────────────────────────────────
-  const malInput = document.getElementById('pf-inntekt-mal');
-  // Pre-fyll fra profil (malMnd × 12) hvis ingen eksplisitt verdi er satt
-  const lagretMal = localStorage.getItem('pf_inntekt_mal');
-  if (lagretMal !== null) {
-    malInput.value = lagretMal;
-  } else {
-    const { malMnd } = hentProfil();
-    malInput.value = malMnd > 0 ? (malMnd * 12).toFixed(0) : '';
+  // ── INNTEKTSTELLER-MÅL — åpne innstillinger ved klikk ──────────────────────
+  const settBtn = document.getElementById('pf-inntekt-mal-sett');
+  if (settBtn) {
+    settBtn.addEventListener('click', () => {
+      const modal = document.getElementById('innstillinger-modal');
+      if (modal) {
+        modal.querySelector('[data-innst-tab="profil"]').click();
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+      }
+    });
   }
-  malInput.addEventListener('change', () => {
-    localStorage.setItem('pf_inntekt_mal', malInput.value);
-    visPortefolje();
-  });
 }
 
 function fyllPFDropdown() {
@@ -1203,15 +1201,22 @@ function visPortefolje() {
   // ── INNTEKTSTELLER ────────────────────────────────────────────────────────
   const ytdInntekt = beregnYtdInntekt(alleBeholdning);
   document.getElementById('pf-inntekt-ar').textContent = fmtKr(ytdInntekt);
-  const malRaw = parseFloat(localStorage.getItem('pf_inntekt_mal') || '0');
-  const progEl = document.getElementById('pf-inntekt-progresjon');
+  const { malMnd: profilMalMnd } = hentProfil();
+  const malRaw = profilMalMnd > 0 ? profilMalMnd * 12 : 0;
+  const malVisEl  = document.getElementById('pf-inntekt-mal-vis');
+  const settBtn2  = document.getElementById('pf-inntekt-mal-sett');
+  const progEl    = document.getElementById('pf-inntekt-progresjon');
   if (malRaw > 0) {
+    if (malVisEl) malVisEl.textContent = fmtKr(malRaw);
+    if (settBtn2) settBtn2.classList.add('hidden');
     const pct = Math.min(100, (ytdInntekt / malRaw) * 100);
     document.getElementById('pf-inntekt-pct-tekst').textContent = pct.toFixed(0) + '%';
     document.getElementById('pf-inntekt-mal-tekst').textContent = 'Mål: ' + fmtKr(malRaw);
     document.getElementById('pf-inntekt-bar').style.width = pct + '%';
     progEl.classList.remove('hidden');
   } else {
+    if (malVisEl) malVisEl.textContent = '—';
+    if (settBtn2) settBtn2.classList.remove('hidden');
     progEl.classList.add('hidden');
   }
 
