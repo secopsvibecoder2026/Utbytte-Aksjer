@@ -291,3 +291,24 @@ th.sort-desc::after { content: ' ↓'; color: #6b7280; }
   0%   { background-position: 200% 0; }
   100% { background-position: -200% 0; }
 }
+
+/* ── DAG-PILLS (Hva skjer i dag) ─────────────────────────────────────── */
+.dag-pill {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.75rem;
+  padding: 0.25rem 0.625rem;
+  border-radius: 9999px;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: opacity 0.15s;
+}
+.dag-pill:hover { opacity: 0.85; }
+.dag-pill-utbetaling { background: #dcfce7; color: #166534; }
+.dag-pill-ex         { background: #fed7aa; color: #9a3412; }
+.dag-pill-siste      { background: #fef3c7; color: #92400e; }
+.dag-pill-uke        { background: #e0e7ff; color: #3730a3; }
+.dark .dag-pill-utbetaling { background: rgb(20 83 45 / 0.35); color: #86efac; }
+.dark .dag-pill-ex         { background: rgb(154 52 18 / 0.35); color: #fdba74; }
+.dark .dag-pill-siste      { background: rgb(146 64 14 / 0.35); color: #fcd34d; }
+.dark .dag-pill-uke        { background: rgb(55 48 163 / 0.35); color: #a5b4fc; }

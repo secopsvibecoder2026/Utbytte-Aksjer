@@ -76,15 +76,13 @@ Brukeren setter et personlig navn og månedlig utbyttemål. Vises øverst på da
 ---
 
 ### 17. Daglig oppdatering — "Hva skjer i dag?" 📰
-**Mål: en grunn til å åpne appen hver dag**
+**Status: Ferdig ✅**
 
-En seksjon øverst (eller som start-panel) som viser hva som er relevant akkurat i dag basert på brukerens aksjer og favoritter.
-
-- [ ] Kursendring siden forrige dag for portefølje-aksjer (beregnet fra aksjer.json historikk)
-- [ ] "Ex-dato i dag / i morgen" — fremhevet for aksjer i portefølje/favoritter
-- [ ] "Utbetaling denne uken" — hvilke utbetalinger er nær
-- [ ] "Siste sjanse" — aksjer med ex-dato om 1–2 dager som brukeren ikke eier
-- [ ] Oppdateres automatisk ved innlasting uten ekstra kall
+- [x] "Ex-dato i dag / i morgen" — fremhevet for aksjer i portefølje/favoritter
+- [x] "Utbetaling denne uken" — hvilke utbetalinger er nær (med estimert beløp)
+- [x] "Siste sjanse" — høy-yield aksjer med ex-dato i dag/morgen som brukeren ikke eier
+- [x] Oppdateres automatisk ved innlasting uten ekstra kall
+- [ ] Kursendring siden forrige dag — krever historisk kurslager, utsatt
 
 ---
 
