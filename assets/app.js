@@ -32,14 +32,49 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function visVelkomstModal() {
   if (localStorage.getItem('velkommen_vist')) return;
-  const modal = document.getElementById('velkommen-modal');
+  const modal  = document.getElementById('velkommen-modal');
+  const steg1  = document.getElementById('velk-steg1');
+  const steg2  = document.getElementById('velk-steg2');
   modal.classList.remove('hidden');
   modal.classList.add('flex');
-  document.getElementById('velkommen-lukk').addEventListener('click', () => {
+
+  function lukkOgMerk() {
     modal.classList.add('hidden');
     modal.classList.remove('flex');
     localStorage.setItem('velkommen_vist', '1');
+  }
+
+  // Steg 1 → Steg 2
+  document.getElementById('velk-neste').addEventListener('click', () => {
+    steg1.classList.add('hidden');
+    steg2.classList.remove('hidden');
+    document.getElementById('velk-navn-input').focus();
   });
+
+  // Lagre profil og start
+  document.getElementById('velk-lagre').addEventListener('click', () => {
+    const navn      = (document.getElementById('velk-navn-input').value || '').trim();
+    const spareMaal = parseFloat(document.getElementById('velk-sparemaal-input').value) || 0;
+    const malMnd    = parseFloat(document.getElementById('velk-mal-input').value) || 0;
+    lagreProfil(navn, malMnd, spareMaal);
+    visGreeting();
+    lukkOgMerk();
+  });
+
+  // Importer CSV
+  document.getElementById('velk-importer').addEventListener('click', () => {
+    lukkOgMerk();
+    // Switch to portfolio tab and trigger file import
+    const pfTab = document.querySelector('[data-tab="portfolio"]');
+    if (pfTab) pfTab.click();
+    setTimeout(() => {
+      const fil = document.getElementById('pf-importer-fil');
+      if (fil) fil.click();
+    }, 150);
+  });
+
+  // Gjest — hopp over
+  document.getElementById('velk-gjest').addEventListener('click', lukkOgMerk);
 }
 
 // ── DATA ───────────────────────────────────────────────────────────────────
@@ -70,7 +105,6 @@ async function lastData() {
     visOversikt();
     visKalender();
     sjekkExDatoerDirekte();
-    if (aktivTab === 'varsler') visVarslerTab();
 
     // 20b: ?aksje=EQNR åpner modal direkte
     const urlAksje = new URLSearchParams(location.search).get('aksje');
@@ -159,14 +193,12 @@ function initTabs() {
     document.getElementById('tab-kalender').classList.toggle('hidden', aktivTab !== 'kalender');
     document.getElementById('tab-portfolio').classList.toggle('hidden', aktivTab !== 'portfolio');
     document.getElementById('tab-kalkulator').classList.toggle('hidden', aktivTab !== 'kalkulator');
-    document.getElementById('tab-varsler').classList.toggle('hidden', aktivTab !== 'varsler');
-    const skjulFilter = aktivTab === 'varsler' || aktivTab === 'kalkulator';
+    const skjulFilter = aktivTab === 'kalkulator';
     document.getElementById('filter-bar').classList.toggle('hidden', skjulFilter);
     document.getElementById('filter-ekstra').classList.toggle('hidden', aktivTab !== 'oversikt');
     if (aktivTab === 'portfolio') visPortefolje();
     if (aktivTab === 'kalender') visKalender();
     if (aktivTab === 'oversikt') visOversikt();
-    if (aktivTab === 'varsler') visVarslerTab();
   });
 }
 
@@ -310,14 +342,16 @@ function visMilepelToast(belop) {
 // ── PROFIL ─────────────────────────────────────────────────────────────────
 function hentProfil() {
   return {
-    navn:   localStorage.getItem('profil_navn') || '',
-    malMnd: parseFloat(localStorage.getItem('profil_mal_mnd') || '0')
+    navn:      localStorage.getItem('profil_navn') || '',
+    malMnd:    parseFloat(localStorage.getItem('profil_mal_mnd') || '0'),
+    spareMaal: parseFloat(localStorage.getItem('profil_sparemaal') || '0')
   };
 }
 
-function lagreProfil(navn, malMnd) {
+function lagreProfil(navn, malMnd, spareMaal) {
   localStorage.setItem('profil_navn', navn);
   localStorage.setItem('profil_mal_mnd', malMnd);
+  localStorage.setItem('profil_sparemaal', spareMaal);
 }
 
 function visGreeting() {
@@ -331,43 +365,74 @@ function visGreeting() {
   el.classList.remove('hidden');
 }
 
-function initProfil() {
-  const btn    = document.getElementById('profil-btn');
-  const modal  = document.getElementById('profil-modal');
-  const lukk1  = document.getElementById('profil-modal-lukk');
-  const lukk2  = document.getElementById('profil-modal-avbryt');
+function initInnstillinger() {
+  const btn   = document.getElementById('profil-btn');
+  const modal = document.getElementById('innstillinger-modal');
+  const lukkBtn  = document.getElementById('innstillinger-lukk');
+  const avbrytBtn = document.getElementById('innstillinger-avbryt');
   const lagreBtn = document.getElementById('profil-lagre');
-  const navnIn = document.getElementById('profil-navn-input');
-  const malIn  = document.getElementById('profil-mal-input');
+  const navnIn   = document.getElementById('profil-navn-input');
+  const spareMaalIn = document.getElementById('profil-sparemaal-input');
+  const malIn    = document.getElementById('profil-mal-input');
 
-  function apneModal() {
+  // Tab switching inside modal
+  modal.querySelectorAll('.innst-tab-btn').forEach(tabBtn => {
+    tabBtn.addEventListener('click', () => {
+      const tab = tabBtn.dataset.innstTab;
+      modal.querySelectorAll('.innst-tab-btn').forEach(b => {
+        const active = b === tabBtn;
+        b.classList.toggle('text-brand-600', active);
+        b.classList.toggle('dark:text-brand-400', active);
+        b.classList.toggle('border-brand-600', active);
+        b.classList.toggle('dark:border-brand-400', active);
+        b.classList.toggle('text-gray-500', !active);
+        b.classList.toggle('dark:text-gray-400', !active);
+        b.classList.toggle('border-transparent', !active);
+      });
+      document.getElementById('innst-profil').classList.toggle('hidden', tab !== 'profil');
+      document.getElementById('innst-varsler').classList.toggle('hidden', tab !== 'varsler');
+      if (tab === 'varsler') visVarslerTab();
+    });
+  });
+
+  function apneModal(startTab) {
     const p = hentProfil();
-    navnIn.value = p.navn;
-    malIn.value  = p.malMnd || '';
+    navnIn.value      = p.navn;
+    spareMaalIn.value = p.spareMaal || '';
+    malIn.value       = p.malMnd || '';
+    // Reset to profil tab unless varsler requested
+    if (startTab === 'varsler') {
+      modal.querySelector('[data-innst-tab="varsler"]').click();
+    } else {
+      modal.querySelector('[data-innst-tab="profil"]').click();
+    }
     modal.classList.remove('hidden');
     modal.classList.add('flex');
-    navnIn.focus();
+    if (startTab !== 'varsler') navnIn.focus();
   }
 
-  function lukkProfilModal() {
+  function lukkInnstillingerModal() {
     modal.classList.add('hidden');
     modal.classList.remove('flex');
   }
 
-  btn.addEventListener('click', apneModal);
-  lukk1.addEventListener('click', lukkProfilModal);
-  lukk2.addEventListener('click', lukkProfilModal);
-  modal.addEventListener('click', e => { if (e.target === modal) lukkProfilModal(); });
+  btn.addEventListener('click', () => apneModal('profil'));
+  lukkBtn.addEventListener('click', lukkInnstillingerModal);
+  avbrytBtn.addEventListener('click', lukkInnstillingerModal);
+  modal.addEventListener('click', e => { if (e.target === modal) lukkInnstillingerModal(); });
 
   lagreBtn.addEventListener('click', () => {
-    lagreProfil(navnIn.value.trim(), parseFloat(malIn.value) || 0);
-    lukkProfilModal();
+    lagreProfil(navnIn.value.trim(), parseFloat(malIn.value) || 0, parseFloat(spareMaalIn.value) || 0);
+    lukkInnstillingerModal();
     visGreeting();
     if (aktivTab === 'portfolio') visPortefolje();
   });
 
   visGreeting();
 }
+
+// Keep legacy alias so any existing call to initProfil() still works during transition
+function initProfil() { initInnstillinger(); }
 
 // ── SAMMENDRAG ─────────────────────────────────────────────────────────────
 function oppdaterSammendrag() {
@@ -981,7 +1046,8 @@ function initPortefolje() {
     if (!fil) return;
     const reader = new FileReader();
     reader.onload = e => {
-      const { gyldig, ukjent } = parseCSV(e.target.result);
+      const { gyldig, ukjent, profil } = parseCSV(e.target.result);
+      window._importProfil = profil;
       visImportPreview(gyldig, ukjent);
     };
     reader.readAsText(fil, 'UTF-8');
@@ -1361,6 +1427,8 @@ function visCharts(beholdning, totalAr) {
 
 function eksporterCSV() {
   const pf = hentPF();
+  const { navn, malMnd, spareMaal } = hentProfil();
+  const profilLinje = `#exday-profil,navn=${navn},sparemaal=${spareMaal},mal_mnd=${malMnd}`;
   const rader = [['Ticker','Selskap','Antall','Kurs','Utbytte/aksje','Forv. utbytte/år','Yield %','Ex-dato','Frekvens']];
   Object.entries(pf).forEach(([ticker, antall]) => {
     const a = alleAksjer.find(x => x.ticker === ticker);
@@ -1373,7 +1441,7 @@ function eksporterCSV() {
       a.ex_dato || '', a.frekvens
     ]);
   });
-  const csv = rader.map(r => r.join(',')).join('\n');
+  const csv = profilLinje + '\n' + rader.map(r => r.join(',')).join('\n');
   const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
@@ -1384,13 +1452,25 @@ function eksporterCSV() {
 function parseCSV(tekst) {
   // Fjern BOM
   if (tekst.charCodeAt(0) === 0xFEFF) tekst = tekst.slice(1);
-  const linjer = tekst.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
-  if (!linjer.length) return { gyldig: [], ukjent: [] };
+  let linjer = tekst.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+  if (!linjer.length) return { gyldig: [], ukjent: [], profil: null };
+
+  // Les profil-metadata fra første linje hvis den starter med #exday-profil
+  let profil = null;
+  if (linjer[0].startsWith('#exday-profil,')) {
+    const deler = linjer[0].slice('#exday-profil,'.length).split(',');
+    profil = {};
+    deler.forEach(del => {
+      const eq = del.indexOf('=');
+      if (eq > -1) profil[del.slice(0, eq)] = del.slice(eq + 1);
+    });
+    linjer = linjer.slice(1);
+  }
 
   let tickerIdx = 0, antallIdx = 2;
 
   // Header-deteksjon: finn kolonne-indekser dynamisk
-  const forste = linjer[0].toLowerCase();
+  const forste = linjer[0] ? linjer[0].toLowerCase() : '';
   if (forste.includes('ticker') || forste.includes('antall') || forste.includes('selskap')) {
     const cols = linjer[0].split(',').map(c => c.trim().toLowerCase());
     const ti = cols.findIndex(c => c === 'ticker');
@@ -1415,7 +1495,7 @@ function parseCSV(tekst) {
     }
   }
 
-  return { gyldig, ukjent };
+  return { gyldig, ukjent, profil };
 }
 
 function visImportPreview(gyldig, ukjent) {
@@ -1454,8 +1534,15 @@ function bekreftImport(data, erstatt) {
   const pf = erstatt ? {} : hentPF();
   data.forEach(({ ticker, antall }) => { pf[ticker] = antall; });
   lagrePF(pf);
+  // Restore profile data when doing a full replacement import
+  if (erstatt && window._importProfil) {
+    const p = window._importProfil;
+    lagreProfil(p.navn || '', parseFloat(p.mal_mnd) || 0, parseFloat(p.sparemaal) || 0);
+    visGreeting();
+  }
   document.getElementById('pf-importer-preview').classList.add('hidden');
-  window._importData = null;
+  window._importData  = null;
+  window._importProfil = null;
   visPortefolje();
 }
 

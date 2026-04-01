@@ -114,6 +114,21 @@ Brukeren setter et personlig navn og månedlig utbyttemål. Vises øverst på da
 
 ---
 
+### 22. Innstillinger-panel og onboarding 🛠️
+**Status: Ferdig ✅**
+
+Samlet profil og varsler under ett felles "Innstillinger"-panel, og la til onboarding-flyt for nye brukere.
+
+- [x] Velkomstmodalen får et steg 2 for nye brukere: Fyll inn profil / Importer CSV / Hopp over
+- [x] Utvidet profil: navn, sparemål (total porteføljebeløp) og månedlig utbyttemål
+- [x] "Min profil"-knapp i header → "Innstillinger" med tannhjulikone
+- [x] Innstillinger-modal med to faner: Profil og Varsler
+- [x] Varsler-fanen fjernes fra hoved-navigasjonen og flyttes til Innstillinger
+- [x] CSV-eksport inkluderer profil-metadata (navn, sparemål, utbyttemål)
+- [x] CSV-import leser tilbake profil-metadata ved fullstendig gjenoppretting
+
+---
+
 ### 21. Individuelle aksjesider for SEO 📄
 **Mål: organisk trafikk fra Google på ticker-spesifikke søk**
 
