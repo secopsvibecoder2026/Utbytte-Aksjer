@@ -10,10 +10,21 @@ Fullførte funksjoner er dokumentert i [ROADMAP_COMPLETED.md](ROADMAP_COMPLETED.
 
 ### Teknisk gjeld (prioritert fra code review)
 
+#### T3. Tilgjengelighet (accessibility) ♿
+**Prioritet: Medium**
+
+Estimert WCAG A — faller under AA på flere punkter.
+
+- [ ] `aria-label` på alle ikonknapper (tannhjul, sol/måne, stjerneikon osv.)
+- [ ] `role="dialog"` og `aria-modal="true"` på alle modaler
+- [ ] Escape-tast lukker alle modaler
+- [ ] `aria-sort` på sorterbare kolonneoverskrifter i tabeller
+- [ ] Ikke bare farge som indikator — legg til ikon ved yield-farge (grønn/rød)
+
 #### T4b. Validering av datapipeline 🧪
 **Prioritet: Medium**
 
-T1 og T4 er fullført (37 JS-tester, app.js splittet i 4 moduler). Gjenstår:
+T1, T2 og T4 er fullført. Gjenstår backend-validering:
 
 - [ ] Varsle i GitHub Actions hvis yield > 30%, pris = 0, eller manglende felt på mer enn halvparten av aksjene i `fetch_stocks.py` output
 
