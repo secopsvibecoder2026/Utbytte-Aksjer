@@ -21,6 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
   sjekkQRParam();
   visVelkomstModal();
   initProfil();
+  initStreak();
   lastData();
 });
 
@@ -241,6 +242,55 @@ function filtrerteAksjer() {
     if (a.utbytte_yield < minYield) return false;
     return true;
   });
+}
+
+// ── STREAK + MILEPÆLER ─────────────────────────────────────────────────────
+function initStreak() {
+  const idag      = new Date().toISOString().slice(0, 10);
+  const sistBesok = localStorage.getItem('streak_sist_besok') || '';
+  let streak      = parseInt(localStorage.getItem('streak_teller') || '1', 10);
+
+  if (sistBesok !== idag) {
+    const igaar = new Date();
+    igaar.setDate(igaar.getDate() - 1);
+    streak = sistBesok === igaar.toISOString().slice(0, 10) ? streak + 1 : 1;
+    localStorage.setItem('streak_sist_besok', idag);
+    localStorage.setItem('streak_teller', streak);
+  }
+
+  if (streak >= 2) {
+    const el = document.getElementById('streak-badge');
+    if (el) {
+      el.textContent = `🔥 ${streak}`;
+      el.title = `${streak} dager på rad!`;
+      el.classList.remove('hidden');
+    }
+  }
+}
+
+function sjekkMilepeler(totalAr) {
+  const GRENSER = [1000, 5000, 10000, 25000, 50000, 100000, 250000, 500000, 1000000];
+  let oppnaadde;
+  try { oppnaadde = JSON.parse(localStorage.getItem('milepeler_oppnaad') || '[]'); } catch { oppnaadde = []; }
+
+  for (const g of GRENSER) {
+    if (totalAr >= g && !oppnaadde.includes(g)) {
+      oppnaadde.push(g);
+      localStorage.setItem('milepeler_oppnaad', JSON.stringify(oppnaadde));
+      visMilepelToast(g);
+      break; // én melding om gangen
+    }
+  }
+}
+
+function visMilepelToast(belop) {
+  const toast = document.getElementById('milestone-toast');
+  const text  = document.getElementById('milestone-toast-text');
+  if (!toast || !text) return;
+  const fmt = v => v.toLocaleString('nb-NO') + ' kr';
+  text.textContent = `🏆 Ny milepæl: ${fmt(belop)} i estimert årlig utbytte!`;
+  toast.classList.remove('hidden');
+  setTimeout(() => toast.classList.add('hidden'), 6000);
 }
 
 // ── PROFIL ─────────────────────────────────────────────────────────────────
@@ -478,6 +528,17 @@ function visHvaSkjerIDag() {
     </span>`);
   }
 
+  // 6. Aksjer under målpris
+  const _adDag = hentAlleAksjeData();
+  alleAksjer.forEach(a => {
+    const d = _adDag[a.ticker];
+    if (!d || !d.malPris || d.malPris <= 0) return;
+    if (a.pris <= 0 || a.pris > d.malPris) return;
+    pills.push(`<span class="dag-pill dag-pill-malpris cursor-pointer" data-ticker="${a.ticker}">
+      🎯 Under målpris: <strong>${a.ticker}</strong> (${a.pris.toFixed(0)} / mål ${d.malPris.toFixed(0)})
+    </span>`);
+  });
+
   if (!pills.length) { el.classList.add('hidden'); return; }
 
   const datoTekst = idag.toLocaleDateString('nb-NO', { weekday: 'long', day: 'numeric', month: 'long' });
@@ -529,11 +590,15 @@ function visOversikt() {
 
   const idag = new Date(); idag.setHours(0,0,0,0);
   const om30 = new Date(idag); om30.setDate(om30.getDate() + 30);
+  const _ad = hentAlleAksjeData();
 
   tbody.innerHTML = data.map(a => {
     const exDato = a.ex_dato ? new Date(a.ex_dato) : null;
     const snartEx = exDato && exDato >= idag && exDato <= om30;
     const rowClass = snartEx ? 'row-highlight' : '';
+    const _d = _ad[a.ticker] || {};
+    const _harNotat  = !!_d.notat;
+    const _underMal  = _d.malPris > 0 && a.pris > 0 && a.pris <= _d.malPris;
 
     return `
     <tr class="table-row ${rowClass}" data-ticker="${a.ticker}">
@@ -541,7 +606,11 @@ function visOversikt() {
       <td class="px-4 py-3 font-mono font-bold text-brand-700 dark:text-brand-400">${a.ticker}</td>
       <td class="px-4 py-3">
         <div class="font-medium leading-tight">${a.navn}</div>
-        <div class="text-xs text-gray-400 dark:text-gray-500">${a.sektor}</div>
+        <div class="text-xs text-gray-400 dark:text-gray-500 flex items-center gap-1.5">
+          ${a.sektor}
+          ${_harNotat ? '<span title="Har notat" class="opacity-60">✏</span>' : ''}
+          ${_underMal ? '<span title="Under målpris" class="text-blue-500 dark:text-blue-400">🎯</span>' : ''}
+        </div>
       </td>
       <td class="px-4 py-3 text-right font-medium">
         ${fmt(a.pris)} <span class="text-xs text-gray-400">${a.valuta}</span>
@@ -990,6 +1059,7 @@ function visPortefolje() {
   const totalVerdi = alleBeholdning.reduce((s, a) => s + a.antall * (a.pris || 0), 0);
   const fmtKr = v => v.toLocaleString('nb-NO', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) + ' kr';
 
+  sjekkMilepeler(totalAr);
   document.getElementById('pf-stat-ar').textContent = fmtKr(totalAr);
   document.getElementById('pf-stat-mnd').textContent = fmtKr(totalAr / 12);
   document.getElementById('pf-stat-antall').textContent = alleBeholdning.length;
@@ -1375,6 +1445,19 @@ function bekreftImport(data, erstatt) {
   visPortefolje();
 }
 
+// ── AKSJE-BRUKERDATA (notat + målpris) ────────────────────────────────────
+function hentAlleAksjeData() {
+  try { return JSON.parse(localStorage.getItem('aksje_data') || '{}'); } catch { return {}; }
+}
+function hentAksjeData(ticker) {
+  return hentAlleAksjeData()[ticker] || { notat: '', malPris: 0 };
+}
+function lagreAksjeData(ticker, data) {
+  const all = hentAlleAksjeData();
+  all[ticker] = { ...all[ticker], ...data };
+  localStorage.setItem('aksje_data', JSON.stringify(all));
+}
+
 // ── MODAL ─────────────────────────────────────────────────────────────────
 function visModal(a) {
   const overlay = document.getElementById('modal-overlay');
@@ -1443,10 +1526,27 @@ function visModal(a) {
 
     ${historiskChart(a)}
     ${scoreForklaring(a)}
+    ${notatSeksjon(a)}
   `;
 
   overlay.classList.remove('hidden');
   overlay.classList.add('flex');
+
+  // Notat + målpris: live-lagring
+  const _malIn  = document.getElementById('modal-malpris');
+  const _notIn  = document.getElementById('modal-notat');
+  if (_malIn) {
+    _malIn.addEventListener('change', () => {
+      lagreAksjeData(a.ticker, { malPris: parseFloat(_malIn.value) || 0 });
+      visOversikt();
+      visHvaSkjerIDag();
+    });
+  }
+  if (_notIn) {
+    _notIn.addEventListener('input', () => {
+      lagreAksjeData(a.ticker, { notat: _notIn.value });
+    });
+  }
 }
 
 function historiskChart(a) {
@@ -1620,6 +1720,31 @@ function scoreForklaring(a) {
         ${rad('Vekst 5 år', p3, 2, vekst !== 0 ? (vekst>0?'+':'')+vekst.toFixed(1)+'%' : '—')}
         ${rad('År med utbytte', p4, 2, ar > 0 ? ar+' år' : '—')}
         ${rad('Yield-stabilitet', p5, 1, snitt > 0 ? 'snitt '+snitt.toFixed(1)+'%' : '—')}
+      </div>
+    </div>`;
+}
+
+function notatSeksjon(a) {
+  const d = hentAksjeData(a.ticker);
+  const underMal = d.malPris > 0 && a.pris > 0 && a.pris <= d.malPris;
+  return `
+    <div class="mt-4 pt-4 border-t border-gray-100 dark:border-gray-800">
+      <h3 class="text-sm font-semibold mb-3">Mine notater</h3>
+      <div class="space-y-3">
+        <div>
+          <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Målpris (${a.valuta})</label>
+          <div class="flex items-center gap-3">
+            <input id="modal-malpris" type="number" min="0" step="1" placeholder="—"
+              value="${d.malPris || ''}"
+              class="filter-input w-28 text-sm text-right" />
+            <span class="text-xs text-gray-400">Nå: ${a.pris ? a.pris.toFixed(0) : '—'} ${a.valuta}${underMal ? ' · <span class="text-blue-500 dark:text-blue-400 font-semibold">Under mål ✓</span>' : ''}</span>
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Notat</label>
+          <textarea id="modal-notat" rows="2" placeholder="Skriv en kort notis…"
+            class="filter-input w-full text-sm resize-none">${d.notat || ''}</textarea>
+        </div>
       </div>
     </div>`;
 }

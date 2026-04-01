@@ -87,21 +87,20 @@ Brukeren setter et personlig navn og månedlig utbyttemål. Vises øverst på da
 ---
 
 ### 18. Notat og prisvarsler per aksje 📝
-**Mål: gjøre appen til et personlig arbeidsverktøy**
+**Status: Ferdig ✅**
 
-- [ ] Notatfelt per aksje i detaljmodalen (lagret i localStorage)
-- [ ] "Målpris"-felt: sett ønsket kjøpspris — vises som badge i tabellen når pris er under mål
-- [ ] Prisvarsler vises som en samlet liste i et eget panel ("Aksjer nær din målpris")
+- [x] Notatfelt per aksje i detaljmodalen (lagret i localStorage)
+- [x] "Målpris"-felt: sett ønsket kjøpspris — vises som 🎯-badge i tabellen når pris er under mål
+- [x] Prisvarsler vises i "Hva skjer i dag?"-panelet når aksje er under målpris
 
 ---
 
 ### 19. Streaks og milepæler 🏆
-**Mål: belønne daglig bruk og bygge vane**
+**Status: Ferdig ✅**
 
-- [ ] Besøksstreak-teller ("5 dager på rad") — vist diskret i hjørnet
-- [ ] Utbyttemilestones: badge når portefølje passerer 1 000 / 10 000 / 100 000 kr estimert/år
-- [ ] "Hittil i år"-fremgang — visuell oppdatering når ny utbetaling er registrert i perioden
-- [ ] Animasjon / konfetti ved ny milepæl (kan slås av)
+- [x] Besøksstreak-teller (🔥 N) — vist diskret i header fra dag 2
+- [x] Utbyttemilestoner: toast-melding når portefølje passerer 1k / 5k / 10k / 25k / 50k / 100k / 250k / 500k / 1M kr estimert/år
+- [ ] Animasjon/konfetti ved milepæl — utsatt (lavt prioritet)
 
 ---
 

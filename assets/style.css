@@ -312,3 +312,5 @@ th.sort-desc::after { content: ' ↓'; color: #6b7280; }
 .dark .dag-pill-ex         { background: rgb(154 52 18 / 0.35); color: #fdba74; }
 .dark .dag-pill-siste      { background: rgb(146 64 14 / 0.35); color: #fcd34d; }
 .dark .dag-pill-uke        { background: rgb(55 48 163 / 0.35); color: #a5b4fc; }
+.dag-pill-malpris { background: #dbeafe; color: #1e40af; }
+.dark .dag-pill-malpris { background: rgb(30 64 175 / 0.35); color: #93c5fd; }
