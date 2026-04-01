@@ -2394,6 +2394,7 @@ function visWatchlister() {
             <th class="px-4 py-3 text-right">Kurs</th>
             <th class="px-4 py-3 text-right">Yield</th>
             <th class="px-4 py-3 text-center hidden sm:table-cell">Ex-dato</th>
+            <th class="px-4 py-3 text-center">+ Port.</th>
             <th class="px-4 py-3 text-center">Fjern</th>
           </tr>
         </thead>
@@ -2408,6 +2409,12 @@ function visWatchlister() {
               <td class="px-4 py-3 text-right"><span class="yield-badge ${yieldKlasse(a.utbytte_yield)}">${a.utbytte_yield.toFixed(2)}%</span></td>
               <td class="px-4 py-3 text-center hidden sm:table-cell text-gray-500 text-sm">${a.ex_dato ? formaterDato(a.ex_dato) : '—'}</td>
               <td class="px-4 py-3 text-center">
+                <button class="wl-legg-til-pf text-gray-400 hover:text-brand-600 dark:hover:text-brand-400 transition-colors p-1" title="Legg til i portefølje"
+                        data-ticker="${ticker}">
+                  <svg class="w-4 h-4 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                </button>
+              </td>
+              <td class="px-4 py-3 text-center">
                 <button class="wl-fjern-ticker text-gray-400 hover:text-red-500 transition-colors p-1"
                         data-liste-id="${aktivListe.id}" data-ticker="${ticker}">
                   <svg class="w-4 h-4 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
@@ -2419,7 +2426,7 @@ function visWatchlister() {
       </table>
     </div>`;
 
-  // Klikk på rad → modal
+  // Klikk på rad → modal / legg til portefølje / fjern
   innholdEl.querySelector('tbody').onclick = e => {
     const fjernBtn = e.target.closest('.wl-fjern-ticker');
     if (fjernBtn) {
@@ -2427,6 +2434,16 @@ function visWatchlister() {
       const listerNy = hentWatchlister();
       const liste    = listerNy.find(w => w.id === listeId);
       if (liste) { liste.tickers = liste.tickers.filter(t => t !== ticker); lagreWatchlister(listerNy); visWatchlister(); }
+      return;
+    }
+    const pfBtn = e.target.closest('.wl-legg-til-pf');
+    if (pfBtn) {
+      const { ticker } = pfBtn.dataset;
+      // Bytt til Transaksjoner-fanen og forhåndsvelg aksjen
+      document.querySelector('[data-pf-tab="transaksjoner"]').click();
+      const sel = document.getElementById('tx-velg-aksje');
+      if (sel) { sel.value = ticker; sel.dispatchEvent(new Event('change')); }
+      document.getElementById('tx-antall')?.focus();
       return;
     }
     const rad = e.target.closest('[data-ticker]');
