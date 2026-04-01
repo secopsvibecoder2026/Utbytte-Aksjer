@@ -66,14 +66,13 @@ function visVelkomstModal() {
   // Steg 3: Utforsk aksjer (bare lukk)
   document.getElementById('velk-start-sok').addEventListener('click', lukkOgMerk);
 
-  // Importer CSV
+  // Importer backup (JSON)
   document.getElementById('velk-importer').addEventListener('click', () => {
     lukkOgMerk();
-    // Switch to portfolio tab and trigger file import
     const pfTab = document.querySelector('[data-tab="portfolio"]');
     if (pfTab) pfTab.click();
     setTimeout(() => {
-      const fil = document.getElementById('pf-importer-fil');
+      const fil = document.getElementById('json-importer-fil');
       if (fil) fil.click();
     }, 150);
   });
