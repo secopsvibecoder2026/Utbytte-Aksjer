@@ -15,13 +15,6 @@ Fullførte funksjoner er dokumentert i [ROADMAP_COMPLETED.md](ROADMAP_COMPLETED.
 
 - [ ] Varsle i GitHub Actions hvis yield > 30%, pris = 0, eller manglende felt på mer enn halvparten av aksjene i `fetch_stocks.py` output
 
-#### T5. Minifisering og byggesteg ⚡
-**Prioritet: Lav**
-
-- [ ] Sett opp esbuild eller Vite for å minifisere JS/CSS
-- [ ] Potensielt 50–60% reduksjon i filstørrelse
-- [ ] Oppdater GitHub Actions workflow til å kjøre build før deploy
-
 ---
 
 ### SEO og vekst
@@ -76,8 +69,8 @@ Fullførte funksjoner er dokumentert i [ROADMAP_COMPLETED.md](ROADMAP_COMPLETED.
 **Prioritet: Medium**
 
 - [ ] Grundig test på mobil etter alle nylige endringer
-- [ ] Særlig: Statistikk-fanen, Innstillinger-modal, kalendervisning
-- [ ] Vurdere forenkling av Portefølje-fanen (4 sub-tabs + valg er mye på liten skjerm)
+- [ ] Særlig: Statistikk-fanen, Innstillinger-siden (/innstillinger/), kalendervisning
+- [ ] Vurdere forenkling av Portefølje-fanen på liten skjerm
 
 ---
 
