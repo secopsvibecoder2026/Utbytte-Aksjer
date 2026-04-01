@@ -1,5 +1,26 @@
 'use strict';
 
+// ── LOCALSTORAGE VERSJON ────────────────────────────────────────────────────
+const LS_VERSJON = 1;
+
+function sjekkLSVersjon() {
+  const lagret = parseInt(localStorage.getItem('ls_versjon') || '0', 10);
+  if (lagret === LS_VERSJON) return;
+
+  // v0 → v1: første gang versjonering innføres
+  if (lagret < 1) {
+    // Fjern gammel cookie-samtykkenøkkel fra egendefinert CMP (erstattet av Google CMP)
+    localStorage.removeItem('cookie_consent');
+  }
+
+  // Legg til fremtidige migrasjoner her:
+  // if (lagret < 2) { ... }
+
+  localStorage.setItem('ls_versjon', LS_VERSJON);
+}
+
+sjekkLSVersjon();
+
 // ── STATE ──────────────────────────────────────────────────────────────────
 let alleAksjer = [];
 let sortering = (() => {
