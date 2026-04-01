@@ -41,37 +41,14 @@ Fullførte funksjoner er dokumentert i [ROADMAP_COMPLETED.md](ROADMAP_COMPLETED.
 
 ### Portefølje og analyse
 
-#### 35. Transaksjonslogg og faktisk avkastning 💹
-**Prioritet: Høy — største gap mot konkurrenter**
-
-Lar brukeren registrere kjøp/salg med kurs og dato, og beregner faktisk avkastning i stedet for kun forventet yield.
-
-- [ ] Transaksjonslogg per aksje: dato, antall, kurs, type (kjøp/salg)
-- [ ] Beregn kostpris (VWAP) og urealisert gevinst/tap
-- [ ] Vis faktisk avkastning inkl. mottatt utbytte (TWR/IRR)
-- [ ] Lagres i localStorage under `pf_transaksjoner`
-
-#### 36. Flere porteføljer og watchlister 📋
-**Prioritet: Høy**
-
-- [ ] Støtte for flere navngitte porteføljer (f.eks. "Langsiktig", "Pensjon")
-- [ ] Watchliste-funksjon separat fra portefølje og favoritter
-- [ ] Bytte mellom porteføljer i Portefølje-fanen
-- [ ] Lagres som `pf_portefoljer` — objekt med navn og beholdning per portefølje
-
-#### 37. OSEBX-sammenligning 📊
+#### 35. TWR/IRR — faktisk avkastning 💹
 **Prioritet: Medium**
 
-- [ ] Hent OSEBX-historikk (eller bruk indeksverdi fra Yahoo Finance)
-- [ ] Vis porteføljens utvikling mot OSEBX på Historikk-kurven
-- [ ] "Slår du indeksen?"-indikator på Statistikk-fanen
+Transaksjonslogg er på plass (punkt 35). Neste steg er beregning av faktisk avkastning inkl. mottatt utbytte.
 
-#### 38. Skatteberegning — skjermingsfradrag 🧾
-**Prioritet: Lav**
-
-- [ ] Beregn skjermingsrente på kostpris per posisjon
-- [ ] Vis estimert skatt på utbytte (31,68% over skjermingsfradrag)
-- [ ] Netto utbytte etter skatt i Statistikk-fanen
+- [ ] Beregn TWR (Time-Weighted Return) eller IRR per portefølje
+- [ ] Inkluder mottatte utbytter i avkastningsberegningen
+- [ ] Vis mot OSEBX på Historikk-kurven
 
 ---
 

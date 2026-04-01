@@ -31,3 +31,10 @@ Alle punkter som er ferdig implementert.
 - **26. Historisk porteføljeutvikling** — daglig snapshot i localStorage, SVG-kurve på Statistikk-fanen (siste 30 dager)
 - **27. Full backup — JSON-eksport og -import** — eksporterer portefølje, favoritter, notater, profil og streak til JSON; import med forhåndsvisning og bekreftelse
 - **28. Utbyttekalender med ICS-eksport** — "Last ned kalender (.ics)"-knapp i Kalender-fanen; ex-datoer og betalingsdatoer for alle aksjer, portefølje- og favoritthendelser markert med ⭐
+- **25. Individuelle SEO-sider per aksje** — `/aksjer/TICKER/index.html` genereres automatisk av fetch_stocks.py; JSON-LD BreadcrumbList + FinancialProduct schema; sitemap.xml med 69 URL-er
+- **CMP. Google Consent Management Platform** — erstattet egendefinert samtykkebanner med Googles Privacy & Messaging CMP (IAB TCF v2.3); Consent Mode v2 med standard avviste signaler
+- **LocalStorage v3-migrering** — versjonssystem med migreringskjede (v0→v1→v2→v3); automatisk migrering fra gamle nøkler til ny multi-portefølje-struktur
+- **35. Transaksjonslogg og kostbasis (VWAP)** — registrer kjøp/salg med dato, antall og kurs; beregner vektet snittpris (VWAP), urealisert gevinst/tap og faktisk beholdning; lagres som `pf_portefoljer`
+- **36. Flere porteføljer og watchlister** — støtte for flere navngitte porteføljer med bytte i Portefølje-fanen; watchliste-funksjon separat fra portefølje og favoritter
+- **37. OSEBX-sammenligning** — henter ^OSEAX 30-dagers historikk via yfinance; normalisert OSEBX-linje (stiplet grå) overlay i historikk-kurven; «Slår du indeksen?»-indikator i Statistikk-fanen
+- **38. Skatteberegning — skjermingsfradrag** — beregner skjermingsfradrag basert på VWAP-kostpris × 3,1% per posisjon; netto utbytte etter skatt (37,84% aksjonærmodellen) i Statistikk-fanen
