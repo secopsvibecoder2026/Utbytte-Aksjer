@@ -458,6 +458,55 @@
           </div>
         </section>
 
+        <!-- Ekstra nøkkeltall -->
+        <section id="pf-extra-stats" class="hidden grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <div class="stat-card">
+            <p class="stat-label">Neste utbetaling</p>
+            <p class="stat-value text-base" id="pf-stat-neste-belop">—</p>
+            <p class="text-xs text-gray-400 mt-0.5" id="pf-stat-neste-belop-navn"></p>
+          </div>
+          <div class="stat-card">
+            <p class="stat-label">Vektet P/E</p>
+            <p class="stat-value" id="pf-stat-pe">—</p>
+            <p class="text-xs text-gray-400 mt-0.5">porteføljeveid snitt</p>
+          </div>
+          <div class="stat-card">
+            <p class="stat-label">Utbetalinger/år</p>
+            <p class="stat-value" id="pf-stat-utbetalinger">—</p>
+            <p class="text-xs text-gray-400 mt-0.5">hendelser totalt</p>
+          </div>
+          <div class="stat-card">
+            <p class="stat-label">Sparemål-fremgang</p>
+            <p class="stat-value" id="pf-stat-sparemaal-pct">—</p>
+            <p class="text-xs text-gray-400 mt-0.5" id="pf-stat-sparemaal-tekst">
+              <button id="pf-stat-sparemaal-sett" class="hidden text-brand-600 dark:text-brand-400 hover:underline">Sett sparemål →</button>
+            </p>
+          </div>
+        </section>
+
+        <!-- Porteføljeprofil -->
+        <div id="pf-profil-seksjon" class="hidden bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4 shadow-sm">
+          <h3 class="font-semibold text-sm mb-3">Porteføljeprofil</h3>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            <div>
+              <p class="text-xs font-semibold uppercase tracking-wide text-gray-400 mb-1">Beste yield</p>
+              <p class="font-semibold text-sm" id="pf-profil-best-yield">—</p>
+            </div>
+            <div>
+              <p class="text-xs font-semibold uppercase tracking-wide text-gray-400 mb-1">Laveste yield</p>
+              <p class="font-semibold text-sm" id="pf-profil-lav-yield">—</p>
+            </div>
+            <div>
+              <p class="text-xs font-semibold uppercase tracking-wide text-gray-400 mb-1">Største posisjon</p>
+              <p class="font-semibold text-sm" id="pf-profil-storst">—</p>
+            </div>
+            <div>
+              <p class="text-xs font-semibold uppercase tracking-wide text-gray-400 mb-1">Sektorer</p>
+              <p class="font-semibold text-sm" id="pf-profil-sektorer">—</p>
+            </div>
+          </div>
+        </div>
+
         <!-- Inntektsteller -->
         <div id="pf-inntekt-wrapper" class="hidden bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4 shadow-sm space-y-3">
           <div class="flex items-start justify-between gap-4">

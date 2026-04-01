@@ -1103,17 +1103,21 @@ function initPortefolje() {
   });
 
   // ── INNTEKTSTELLER-MÅL — åpne innstillinger ved klikk ──────────────────────
-  const settBtn = document.getElementById('pf-inntekt-mal-sett');
-  if (settBtn) {
-    settBtn.addEventListener('click', () => {
-      const modal = document.getElementById('innstillinger-modal');
-      if (modal) {
-        modal.querySelector('[data-innst-tab="profil"]').click();
-        modal.classList.remove('hidden');
-        modal.classList.add('flex');
-      }
-    });
+  function apneInnstillingerProfil() {
+    const modal = document.getElementById('innstillinger-modal');
+    if (modal) {
+      modal.querySelector('[data-innst-tab="profil"]').click();
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
   }
+
+  const settBtn = document.getElementById('pf-inntekt-mal-sett');
+  if (settBtn) settBtn.addEventListener('click', apneInnstillingerProfil);
+
+  // Sparemål-sett knapp (i ekstra stats)
+  const spareSettBtnInit = document.getElementById('pf-stat-sparemaal-sett');
+  if (spareSettBtnInit) spareSettBtnInit.addEventListener('click', apneInnstillingerProfil);
 }
 
 function fyllPFDropdown() {
@@ -1237,6 +1241,63 @@ function visPortefolje() {
   } else {
     document.getElementById('pf-stat-neste').textContent = '—';
     document.getElementById('pf-stat-neste-navn').textContent = '';
+  }
+
+  // ── EKSTRA NØKKELTALL ─────────────────────────────────────────────────────
+  const frekvMap = { 'Månedlig': 12, 'Kvartalsvis': 4, 'Halvårlig': 2, 'Årlig': 1, 'Uregelmessig': 1 };
+
+  document.getElementById('pf-extra-stats').classList.toggle('hidden', !harBeholdning);
+  document.getElementById('pf-profil-seksjon').classList.toggle('hidden', !harBeholdning);
+
+  if (harBeholdning) {
+    // Estimert beløp neste utbetaling
+    if (nestePayout) {
+      const perUtbetaling = nestePayout.a.forv_ar / (frekvMap[nestePayout.a.frekvens] || 1);
+      document.getElementById('pf-stat-neste-belop').textContent = fmtKr(perUtbetaling);
+      document.getElementById('pf-stat-neste-belop-navn').textContent = nestePayout.a.ticker;
+    }
+
+    // Vektet P/E (veid etter posisjonsstørrelse, kun aksjer med gyldig P/E)
+    const medPE = alleBeholdning.filter(a => a.pe_ratio && a.pe_ratio > 0 && a.pe_ratio < 200);
+    const totalVerdiPE = medPE.reduce((s, a) => s + a.antall * (a.pris || 0), 0);
+    const vektetPE = totalVerdiPE > 0
+      ? medPE.reduce((s, a) => s + (a.antall * (a.pris || 0) / totalVerdiPE) * a.pe_ratio, 0)
+      : 0;
+    document.getElementById('pf-stat-pe').textContent = vektetPE > 0 ? vektetPE.toFixed(1) : '—';
+
+    // Totale utbetalingshendelser per år
+    const totalUtbetalinger = alleBeholdning.reduce((s, a) => s + (frekvMap[a.frekvens] || 1), 0);
+    document.getElementById('pf-stat-utbetalinger').textContent = totalUtbetalinger;
+
+    // Sparemål-fremgang
+    const { spareMaal } = hentProfil();
+    const sparePctEl  = document.getElementById('pf-stat-sparemaal-pct');
+    const spareTekstEl = document.getElementById('pf-stat-sparemaal-tekst');
+    const spareSettBtn = document.getElementById('pf-stat-sparemaal-sett');
+    if (spareMaal > 0) {
+      const sparePct = (totalVerdi / spareMaal * 100);
+      sparePctEl.textContent   = sparePct.toFixed(1) + '%';
+      spareTekstEl.textContent = 'av ' + spareMaal.toLocaleString('nb-NO') + ' kr';
+      if (spareSettBtn) spareSettBtn.classList.add('hidden');
+    } else {
+      sparePctEl.textContent   = '—';
+      spareTekstEl.textContent = '';
+      if (spareSettBtn) spareSettBtn.classList.remove('hidden');
+    }
+
+    // Porteføljeprofil: beste/laveste yield, største posisjon, sektorer
+    const sortYield = [...alleBeholdning].sort((a, b) => b.utbytte_yield - a.utbytte_yield);
+    const best = sortYield[0];
+    const lav  = sortYield[sortYield.length - 1];
+    document.getElementById('pf-profil-best-yield').textContent  = `${best.ticker} — ${best.utbytte_yield.toFixed(2)}%`;
+    document.getElementById('pf-profil-lav-yield').textContent   = `${lav.ticker} — ${lav.utbytte_yield.toFixed(2)}%`;
+
+    const storst = [...alleBeholdning].sort((a, b) => (b.antall * (b.pris||0)) - (a.antall * (a.pris||0)))[0];
+    const storstPct = totalVerdi > 0 ? (storst.antall * (storst.pris||0) / totalVerdi * 100).toFixed(1) : '0';
+    document.getElementById('pf-profil-storst').textContent = `${storst.ticker} — ${storstPct}%`;
+
+    const antallSektorer = new Set(alleBeholdning.map(a => a.sektor).filter(Boolean)).size;
+    document.getElementById('pf-profil-sektorer').textContent = antallSektorer + ' sektorer';
   }
 
   // ── BEHOLDNINGSTABELL ─────────────────────────────────────────────────────
