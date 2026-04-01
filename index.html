@@ -336,6 +336,12 @@
 
     <!-- KALENDER-FANE -->
     <div id="tab-kalender" class="hidden space-y-4">
+      <div class="flex justify-end">
+        <button id="kal-eksport-ics" class="inline-flex items-center gap-1.5 text-xs text-brand-600 dark:text-brand-400 border border-brand-300 dark:border-brand-700 hover:bg-brand-50 dark:hover:bg-brand-900/20 px-3 py-1.5 rounded-lg transition-colors font-medium">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+          Last ned kalender (.ics)
+        </button>
+      </div>
       <div id="kalender-innhold"></div>
     </div>
 
@@ -381,6 +387,14 @@
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
                 Last ned CSV
               </button>
+              <button id="pf-importer-json" class="text-xs text-gray-500 dark:text-gray-400 hover:text-brand-600 dark:hover:text-brand-400 hover:underline font-medium flex items-center gap-1">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                Importer backup
+              </button>
+              <button id="pf-eksport-json" class="text-xs text-brand-600 dark:text-brand-400 hover:underline font-medium flex items-center gap-1">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"/></svg>
+                Last ned backup
+              </button>
             </div>
           </div>
           <div class="overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-800 shadow-sm">
@@ -416,6 +430,16 @@
 
         <!-- Skjult fil-input + preview-seksjon -->
         <input type="file" id="pf-importer-fil" accept=".csv" class="hidden" />
+        <input type="file" id="json-importer-fil" accept=".json" class="hidden" />
+        <div id="json-importer-preview" class="hidden rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-4 shadow-sm space-y-3">
+          <h3 class="font-semibold text-sm">Forhåndsvisning av backup-import</h3>
+          <div id="json-importer-innhold" class="text-sm text-gray-600 dark:text-gray-400 space-y-1"></div>
+          <p class="text-xs text-yellow-600 dark:text-yellow-400">⚠️ Dette vil erstatte all eksisterende data (portefølje, favoritter, notater og profil).</p>
+          <div class="flex flex-wrap gap-2 pt-1">
+            <button id="json-importer-bekreft" class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white text-sm font-medium rounded-lg transition-colors">Gjenopprett backup</button>
+            <button id="json-importer-avbryt" class="px-4 py-2 text-sm text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition-colors">Avbryt</button>
+          </div>
+        </div>
         <div id="pf-importer-preview" class="hidden rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-4 shadow-sm space-y-3">
           <h3 class="font-semibold text-sm">Forhåndsvisning av import</h3>
           <div id="pf-importer-innhold"></div>

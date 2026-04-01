@@ -30,6 +30,8 @@ Norsk utbytteaksje-tracker for Oslo Børs. Data hentes automatisk fra Yahoo Fina
 - **22. Portefølje sub-tabs** — Beholdning og Statistikk som egne faner; ekstra nøkkeltall (P/E, utbetalinger/år, sparemål-fremgang, porteføljeprofil)
 - **23. Sparemål-progresjon på dashbordet** — fremgangsbar under stat-kortene; vises kun når sparemål er satt
 - **24. Del-link for enkeltaksjer** — del-ikon i modal-header kopierer `?aksje=`-URL til clipboard med "Kopiert!"-bekreftelse
+- **26. Full backup — JSON-eksport og -import** — eksporterer portefølje, favoritter, notater, profil og streak til JSON; import med forhåndsvisning og bekreftelse
+- **27. Utbyttekalender med ICS-eksport** — "Last ned kalender (.ics)"-knapp i Kalender-fanen; ex-datoer og betalingsdatoer for alle aksjer, portefølje- og favoritthendelser markert med ⭐
 
 ---
 
@@ -56,20 +58,5 @@ Utvid `fetch_stocks.py` til å generere én HTML-side per aksje.
 
 ---
 
-### 27. Full backup — JSON-eksport og -import 💾
-**Prioritet: Medium**
-
-- [ ] JSON-eksport: portefølje, favoritter, notater, målpriser, profil
-- [ ] JSON-import med forhåndsvisning og bekreftelse
-
----
-
-### 28. Utbyttekalender med ICS-eksport 📅
-**Prioritet: Lav-medium**
-
-- [ ] `.ics`-fil med ex-datoer og betalingsdatoer for aksjer i porteføljen
-- [ ] Kompatibel med Google Kalender, Apple Kalender og Outlook
-
----
 
 Dette er et privat prosjekt. Kontakt via GitHub Issues for spørsmål eller feilrapporter.

@@ -22,6 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initModal();
   initPFSubTabs();
   initPortefolje();
+  initJSONBackup();
   initKalkulator();
   initVarsler();
   sjekkQRParam();
@@ -107,6 +108,7 @@ async function lastData() {
     visOversikt();
     visKalender();
     sjekkExDatoerDirekte();
+    document.getElementById('kal-eksport-ics').addEventListener('click', eksporterICS);
 
     // 20b: ?aksje=EQNR åpner modal direkte
     const urlAksje = new URLSearchParams(location.search).get('aksje');
@@ -1664,6 +1666,173 @@ function bekreftImport(data, erstatt) {
   window._importData  = null;
   window._importProfil = null;
   visPortefolje();
+}
+
+// ── JSON BACKUP ───────────────────────────────────────────────────────────
+function eksporterJSON() {
+  const backup = {
+    versjon: 1,
+    eksportert: new Date().toISOString(),
+    profil: {
+      navn:      localStorage.getItem('profil_navn') || '',
+      mal_mnd:   localStorage.getItem('profil_mal_mnd') || '0',
+      sparemaal: localStorage.getItem('profil_sparemaal') || '0'
+    },
+    portef\u00f8lje:  JSON.parse(localStorage.getItem('pf_beholdning') || '{}'),
+    favoritter: JSON.parse(localStorage.getItem('fav_aksjer') || '[]'),
+    aksje_data: JSON.parse(localStorage.getItem('aksje_data') || '{}'),
+    sortering:  localStorage.getItem('sortering') || '',
+    streak: {
+      teller:      localStorage.getItem('streak_teller') || '1',
+      sist_besok:  localStorage.getItem('streak_sist_besok') || ''
+    },
+    milepeler: JSON.parse(localStorage.getItem('milepeler_oppnaad') || '[]')
+  };
+  const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  const dato = new Date().toISOString().slice(0, 10);
+  a.href = url; a.download = `exday-backup-${dato}.json`; a.click();
+  URL.revokeObjectURL(url);
+}
+
+function parseJSONBackup(tekst) {
+  try {
+    const b = JSON.parse(tekst);
+    if (!b || b.versjon !== 1) return null;
+    return b;
+  } catch { return null; }
+}
+
+function visJSONPreview(backup) {
+  const el = document.getElementById('json-importer-innhold');
+  const pf = backup.portef\u00f8lje || {};
+  const fav = backup.favoritter || [];
+  const ad  = backup.aksje_data || {};
+  const p   = backup.profil || {};
+  const linjer = [
+    `Portefølje: ${Object.keys(pf).length} aksjer`,
+    `Favoritter: ${fav.length} aksjer`,
+    `Notater / målpriser: ${Object.keys(ad).length} aksjer`,
+    p.navn ? `Profil: ${p.navn}` : 'Profil: (ikke satt)',
+    `Eksportert: ${backup.eksportert ? new Date(backup.eksportert).toLocaleDateString('nb-NO') : 'ukjent'}`
+  ];
+  el.innerHTML = linjer.map(l => `<p>• ${l}</p>`).join('');
+  document.getElementById('json-importer-preview').classList.remove('hidden');
+}
+
+function bekreftJSONImport(backup) {
+  const pf = backup.portef\u00f8lje || {};
+  const fav = backup.favoritter || [];
+  const p   = backup.profil || {};
+
+  localStorage.setItem('pf_beholdning', JSON.stringify(pf));
+  localStorage.setItem('fav_aksjer',    JSON.stringify(fav));
+  if (backup.aksje_data)  localStorage.setItem('aksje_data',        JSON.stringify(backup.aksje_data));
+  if (backup.sortering)   localStorage.setItem('sortering',          backup.sortering);
+  if (backup.streak)      { localStorage.setItem('streak_teller', backup.streak.teller); localStorage.setItem('streak_sist_besok', backup.streak.sist_besok); }
+  if (backup.milepeler)   localStorage.setItem('milepeler_oppnaad', JSON.stringify(backup.milepeler));
+  lagreProfil(p.navn || '', parseFloat(p.mal_mnd) || 0, parseFloat(p.sparemaal) || 0);
+
+  document.getElementById('json-importer-preview').classList.add('hidden');
+  visGreeting();
+  oppdaterSpareMaalBar(pf);
+  oppdaterSammendrag();
+  if (aktivTab === 'portfolio') visPortefolje();
+}
+
+function initJSONBackup() {
+  document.getElementById('pf-eksport-json').addEventListener('click', eksporterJSON);
+
+  const filInput = document.getElementById('json-importer-fil');
+  document.getElementById('pf-importer-json').addEventListener('click', () => filInput.click());
+  filInput.addEventListener('change', () => {
+    const fil = filInput.files[0];
+    if (!fil) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+      const backup = parseJSONBackup(e.target.result);
+      if (!backup) {
+        alert('Ugyldig backup-fil. Kontroller at du har valgt riktig .json-fil fra exday.no.');
+        return;
+      }
+      window._pendingJSONBackup = backup;
+      visJSONPreview(backup);
+    };
+    reader.readAsText(fil, 'UTF-8');
+    filInput.value = '';
+  });
+
+  document.getElementById('json-importer-bekreft').addEventListener('click', () => {
+    if (window._pendingJSONBackup) bekreftJSONImport(window._pendingJSONBackup);
+    window._pendingJSONBackup = null;
+  });
+  document.getElementById('json-importer-avbryt').addEventListener('click', () => {
+    document.getElementById('json-importer-preview').classList.add('hidden');
+    window._pendingJSONBackup = null;
+  });
+}
+
+// ── ICS KALENDEREKSPORT ───────────────────────────────────────────────────
+function eksporterICS() {
+  const pf  = hentPF();
+  const fav = hentFav();
+  const relevante = new Set([...Object.keys(pf), ...fav]);
+
+  const datoStr = d => d.replace(/-/g, '');
+  const uid = (type, ticker, dato) => `exday-${type}-${ticker}-${dato}@exday.no`;
+
+  const events = [];
+  alleAksjer.forEach(a => {
+    const erRelevant = relevante.has(a.ticker);
+    if (a.ex_dato) {
+      const ds = datoStr(a.ex_dato);
+      const neste = new Date(a.ex_dato); neste.setDate(neste.getDate() + 1);
+      const dsNeste = neste.toISOString().slice(0,10).replace(/-/g,'');
+      events.push([
+        'BEGIN:VEVENT',
+        `DTSTART;VALUE=DATE:${ds}`,
+        `DTEND;VALUE=DATE:${dsNeste}`,
+        `SUMMARY:${a.ticker} Ex-dato${erRelevant ? ' ⭐' : ''}`,
+        `DESCRIPTION:Ex-dato for ${a.navn}. Yield: ${a.utbytte_yield.toFixed(2)}%. Siste utbytte: ${a.siste_utbytte || '—'} ${a.valuta}.`,
+        `UID:${uid('ex', a.ticker, a.ex_dato)}`,
+        'END:VEVENT'
+      ].join('\r\n'));
+    }
+    if (a.betaling_dato) {
+      const ds = datoStr(a.betaling_dato);
+      const neste = new Date(a.betaling_dato); neste.setDate(neste.getDate() + 1);
+      const dsNeste = neste.toISOString().slice(0,10).replace(/-/g,'');
+      const belop = pf[a.ticker] ? `Estimert utbetaling: ${(pf[a.ticker] * (a.utbytte_per_aksje || 0) / (({Månedlig:12,Kvartalsvis:4,Halvårlig:2,Årlig:1}[a.frekvens]||1))).toLocaleString('nb-NO',{maximumFractionDigits:0})} kr. ` : '';
+      events.push([
+        'BEGIN:VEVENT',
+        `DTSTART;VALUE=DATE:${ds}`,
+        `DTEND;VALUE=DATE:${dsNeste}`,
+        `SUMMARY:${a.ticker} Utbetaling${erRelevant ? ' ⭐' : ''}`,
+        `DESCRIPTION:${belop}Utbyttebetaling fra ${a.navn}.`,
+        `UID:${uid('utbytte', a.ticker, a.betaling_dato)}`,
+        'END:VEVENT'
+      ].join('\r\n'));
+    }
+  });
+
+  const ics = [
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'PRODID:-//exday.no//Utbyttekalender//NO',
+    'CALSCALE:GREGORIAN',
+    'METHOD:PUBLISH',
+    'X-WR-CALNAME:exday.no – Utbyttekalender',
+    'X-WR-TIMEZONE:Europe/Oslo',
+    ...events,
+    'END:VCALENDAR'
+  ].join('\r\n');
+
+  const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href = url; a.download = 'exday-utbyttekalender.ics'; a.click();
+  URL.revokeObjectURL(url);
 }
 
 // ── AKSJE-BRUKERDATA (notat + målpris) ────────────────────────────────────
