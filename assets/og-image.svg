@@ -23,17 +23,17 @@
   <text x="80" y="428" font-family="system-ui,ui-sans-serif,sans-serif" font-size="26" fill="#4b5563">Oppdateres daglig.</text>
 
   <!-- Decorative stat pills -->
-  <rect x="80" y="492" width="180" height="52" rx="10" fill="#dcfce7"/>
-  <text x="170" y="513" font-family="system-ui,ui-sans-serif,sans-serif" font-size="12" fill="#15803d" text-anchor="middle" font-weight="600">YIELD</text>
-  <text x="170" y="534" font-family="system-ui,ui-sans-serif,sans-serif" font-size="20" fill="#15803d" text-anchor="middle" font-weight="700">Opptil 12%</text>
+  <rect x="80" y="492" width="165" height="52" rx="10" fill="#dcfce7"/>
+  <text x="162" y="513" font-family="system-ui,ui-sans-serif,sans-serif" font-size="12" fill="#15803d" text-anchor="middle" font-weight="600">TILGANG</text>
+  <text x="162" y="534" font-family="system-ui,ui-sans-serif,sans-serif" font-size="20" fill="#15803d" text-anchor="middle" font-weight="700">100% gratis</text>
 
-  <rect x="276" y="492" width="180" height="52" rx="10" fill="#dbeafe"/>
-  <text x="366" y="513" font-family="system-ui,ui-sans-serif,sans-serif" font-size="12" fill="#1e40af" text-anchor="middle" font-weight="600">AKSJER</text>
-  <text x="366" y="534" font-family="system-ui,ui-sans-serif,sans-serif" font-size="20" fill="#1e40af" text-anchor="middle" font-weight="700">45 selskaper</text>
+  <rect x="261" y="492" width="165" height="52" rx="10" fill="#dbeafe"/>
+  <text x="343" y="513" font-family="system-ui,ui-sans-serif,sans-serif" font-size="12" fill="#1e40af" text-anchor="middle" font-weight="600">MARKED</text>
+  <text x="343" y="534" font-family="system-ui,ui-sans-serif,sans-serif" font-size="20" fill="#1e40af" text-anchor="middle" font-weight="700">Oslo Børs</text>
 
-  <rect x="472" y="492" width="200" height="52" rx="10" fill="#fef9c3"/>
-  <text x="572" y="513" font-family="system-ui,ui-sans-serif,sans-serif" font-size="12" fill="#854d0e" text-anchor="middle" font-weight="600">DATA</text>
-  <text x="572" y="534" font-family="system-ui,ui-sans-serif,sans-serif" font-size="20" fill="#854d0e" text-anchor="middle" font-weight="700">Daglig oppdatert</text>
+  <rect x="442" y="492" width="225" height="52" rx="10" fill="#fef9c3"/>
+  <text x="554" y="513" font-family="system-ui,ui-sans-serif,sans-serif" font-size="12" fill="#854d0e" text-anchor="middle" font-weight="600">DATA</text>
+  <text x="554" y="534" font-family="system-ui,ui-sans-serif,sans-serif" font-size="20" fill="#854d0e" text-anchor="middle" font-weight="700">Daglig oppdatert</text>
 
   <!-- Right side decorative chart bars -->
   <g opacity="0.15">
