@@ -1,6 +1,12 @@
 {
   "name": "exday-tests",
   "scripts": {
-    "test": "node --test tests/*.test.js"
+    "test": "node --test tests/*.test.js",
+    "build:css": "tailwindcss -i assets/tw-input.css -o assets/tailwind.css --minify",
+    "watch:css": "tailwindcss -i assets/tw-input.css -o assets/tailwind.css --watch"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.2.2",
+    "tailwindcss": "^4.2.2"
   }
 }
