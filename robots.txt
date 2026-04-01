@@ -2,4 +2,11 @@ User-agent: *
 Allow: /
 Disallow: /data/
 
+# Automatisert scraping og massenedlasting av innhold er ikke tillatt.
+# Innholdet på exday.no er ment for menneskelige besøkende.
+# For tilgang til dataene, se data/aksjer.json som er åpent tilgjengelig.
+# Kontakt: github.com/secopsvibecoder2026/utbytte-aksjer
+
+Crawl-delay: 10
+
 Sitemap: https://exday.no/sitemap.xml
