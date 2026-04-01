@@ -2357,6 +2357,17 @@ function visWatchlister() {
   document.getElementById('wl-velg-wrapper').classList.toggle('hidden', !harLister);
   document.getElementById('wl-legg-til-wrapper').classList.toggle('hidden', !harLister);
 
+  // Fyll aksje-dropdown (her er alleAksjer alltid lastet)
+  const wlAksjeSel = document.getElementById('wl-velg-aksje');
+  const valgtAksje = wlAksjeSel.value;
+  wlAksjeSel.innerHTML = '<option value="">Velg aksje…</option>';
+  [...alleAksjer].sort((a, b) => a.ticker.localeCompare(b.ticker, 'nb')).forEach(a => {
+    const o = document.createElement('option');
+    o.value = a.ticker; o.textContent = `${a.ticker} – ${a.navn}`;
+    wlAksjeSel.appendChild(o);
+  });
+  if (valgtAksje) wlAksjeSel.value = valgtAksje;
+
   const sel = document.getElementById('wl-velg');
   const valgt = sel.value || (lister[0]?.id);
   sel.innerHTML = lister.map(w =>
@@ -2424,14 +2435,6 @@ function visWatchlister() {
 }
 
 function initWatchlister() {
-  // Fyll aksjedropdown
-  const wlAksjeSel = document.getElementById('wl-velg-aksje');
-  [...alleAksjer].sort((a, b) => a.ticker.localeCompare(b.ticker, 'nb')).forEach(a => {
-    const o = document.createElement('option');
-    o.value = a.ticker; o.textContent = `${a.ticker} – ${a.navn}`;
-    wlAksjeSel.appendChild(o);
-  });
-
   document.getElementById('wl-opprett').addEventListener('click', () => {
     const navnEl = document.getElementById('wl-ny-navn');
     const navn   = navnEl.value.trim();
