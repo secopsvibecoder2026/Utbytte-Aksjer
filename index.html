@@ -4,9 +4,25 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- Google AdSense -->
+  <!-- Google AdSense (håndterer også CMP for EØS/UK) -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3981936786393038"
      crossorigin="anonymous"></script>
+
+  <!-- Google Analytics med Consent Mode v2 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-X6C9PERKMB"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', {
+      analytics_storage: 'denied',
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      wait_for_update: 500
+    });
+    gtag('js', new Date());
+    gtag('config', 'G-X6C9PERKMB');
+  </script>
 
   <!-- Favicon -->
   <link rel="icon" type="image/svg+xml" href="logo/exday_icon_primary.svg">
@@ -110,7 +126,6 @@
     }
   </script>
   <!-- Consent manager – loads GA + AdSense only after user accepts -->
-  <script src="assets/consent.js"></script>
 </head>
 <body class="bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 min-h-screen transition-colors duration-200">
 
@@ -811,24 +826,6 @@
   <div id="milestone-toast" class="fixed bottom-24 left-1/2 -translate-x-1/2 z-50 hidden pointer-events-none">
     <div class="bg-gray-900 dark:bg-white text-white dark:text-gray-900 text-sm font-semibold px-5 py-3 rounded-full shadow-xl flex items-center gap-2 whitespace-nowrap">
       <span id="milestone-toast-text"></span>
-    </div>
-  </div>
-
-  <!-- COOKIE BANNER -->
-  <div id="cookie-banner" style="display:none" class="fixed bottom-0 left-0 right-0 z-50 bg-gray-900 border-t border-gray-700 shadow-2xl">
-    <div class="max-w-screen-2xl mx-auto px-4 py-4 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6">
-      <p class="text-sm text-gray-300 flex-1">
-        Vi bruker informasjonskapsler fra Google Analytics og Google AdSense for å analysere trafikk og vise annonser.
-        <a href="personvern/" class="underline text-brand-400 hover:text-brand-300 ml-1">Les mer</a>
-      </p>
-      <div class="flex gap-2 shrink-0">
-        <button onclick="cookieConsent.decline()" class="px-4 py-2 text-sm rounded-lg border border-gray-600 text-gray-300 hover:bg-gray-800 transition-colors">
-          Kun nødvendige
-        </button>
-        <button onclick="cookieConsent.accept()" class="px-4 py-2 text-sm rounded-lg bg-brand-600 hover:bg-brand-700 text-white font-medium transition-colors">
-          Godta alle
-        </button>
-      </div>
     </div>
   </div>
 
