@@ -41,25 +41,14 @@ Fullførte funksjoner er dokumentert i [ROADMAP_COMPLETED.md](ROADMAP_COMPLETED.
 
 ### Portefølje og analyse
 
-#### 35. TWR/IRR — faktisk avkastning 💹
-**Prioritet: Medium**
-
-Transaksjonslogg er på plass (punkt 35). Neste steg er beregning av faktisk avkastning inkl. mottatt utbytte.
-
-- [ ] Beregn TWR (Time-Weighted Return) eller IRR per portefølje
-- [ ] Inkluder mottatte utbytter i avkastningsberegningen
-- [ ] Vis mot OSEBX på Historikk-kurven
-
----
-
-### Community og deling
-
-#### 39. Offentlige porteføljer / deling 🌐
+#### 35c. TWR/IRR — tidsavhengig avkastning 💹
 **Prioritet: Lav**
 
-- [ ] Generer en delbar lenke med porteføljesammendraget (read-only)
-- [ ] Viser yield, fordeling og nøkkeltall — ingen persondata
-- [ ] Alternativt: lenke til Facebook-gruppe for utbytteinvestorer
+Faktisk avkastning (punkt 35b) er på plass. Neste steg er tidskorrigert beregning.
+
+- [ ] Beregn TWR (Time-Weighted Return) ved å splitte perioden på transaksjonsdata
+- [ ] Alternativt IRR via Newton–Raphson basert på kontantstrøm
+- [ ] Sammenlign direkte mot OSEBX TWR i Historikk-kurven
 
 ---
 

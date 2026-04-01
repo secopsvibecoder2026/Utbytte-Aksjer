@@ -38,3 +38,5 @@ Alle punkter som er ferdig implementert.
 - **36. Flere porteføljer og watchlister** — støtte for flere navngitte porteføljer med bytte i Portefølje-fanen; watchliste-funksjon separat fra portefølje og favoritter
 - **37. OSEBX-sammenligning** — henter ^OSEAX 30-dagers historikk via yfinance; normalisert OSEBX-linje (stiplet grå) overlay i historikk-kurven; «Slår du indeksen?»-indikator i Statistikk-fanen
 - **38. Skatteberegning — skjermingsfradrag** — beregner skjermingsfradrag basert på VWAP-kostpris × 3,1% per posisjon; netto utbytte etter skatt (37,84% aksjonærmodellen) i Statistikk-fanen
+- **35b. Faktisk avkastning** — ny transaksjonstype «Utbytte mottatt»; stat-kort viser (markedsverdi + mottatt utbytte − kostpris) / kostpris; gul badge i logg; footer summerer total avkastning inkl. utbytte
+- **39. Del portefølje** — «Del portefølje»-knapp genererer `?del=`-URL med base64-kodet sammendrag (verdi, yield, topp 5 posisjoner); kopier til clipboard; mottaker får read-only modal automatisk ved sidelasting
