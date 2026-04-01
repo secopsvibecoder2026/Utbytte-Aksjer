@@ -54,6 +54,19 @@ Fjernet fire ulike farger på toppkortene. Dempede yield-badges, nøytral tabell
 
 ---
 
-## Bidrag
+## Planlagt
+
+### 15. Individuelle aksjesider for SEO 📄
+**Mål: organisk trafikk fra Google på ticker-spesifikke søk**
+
+Utvid `fetch_stocks.py` til å generere én HTML-side per aksje i tillegg til JSON og sitemap. Ingen ny teknologi — samme Python-script, samme GitHub Actions.
+
+- [ ] HTML-template i `fetch_stocks.py` som genererer `aksjer/TICKER/index.html`
+- [ ] Innhold per side: navn, ticker, sektor, pris, yield, ex-dato, beskrivelse, historisk tabell
+- [ ] SEO-metadata: `<title>`, `<meta description>`, canonical URL
+- [ ] JSON-LD schema per side (`WebPage` + nøkkeltall)
+- [ ] Oppdater `sitemap.xml` til å inkludere alle aksje-URL-er
+- [ ] Intern lenking: "Åpne full oversikt" → tilbake til hovedappen
+- [ ] `/aksjer/index.html` — oversiktsside med alle aksjer som inngangspunkt
 
 Dette er et privat prosjekt. Kontakt via GitHub Issues for spørsmål eller feilrapporter.
