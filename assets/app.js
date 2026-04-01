@@ -59,6 +59,7 @@ function visVelkomstModal() {
     const malMnd    = parseFloat(document.getElementById('velk-mal-input').value) || 0;
     lagreProfil(navn, malMnd, spareMaal);
     visGreeting();
+    oppdaterSpareMaalBar(hentPF());
     lukkOgMerk();
   });
 
@@ -425,13 +426,9 @@ function initInnstillinger() {
   lagreBtn.addEventListener('click', () => {
     const nyMalMnd = parseFloat(malIn.value) || 0;
     lagreProfil(navnIn.value.trim(), nyMalMnd, parseFloat(spareMaalIn.value) || 0);
-    // Synkroniser Årsmål i porteføljen hvis det ikke er manuelt overstyrt
-    if (!localStorage.getItem('pf_inntekt_mal') && nyMalMnd > 0) {
-      const malInputEl = document.getElementById('pf-inntekt-mal');
-      if (malInputEl) malInputEl.value = (nyMalMnd * 12).toFixed(0);
-    }
     lukkInnstillingerModal();
     visGreeting();
+    oppdaterSpareMaalBar(hentPF());
     if (aktivTab === 'portfolio') visPortefolje();
   });
 
@@ -451,6 +448,27 @@ function oppdaterSammendrag() {
   } else {
     oppdaterGeneriskSammendrag();
   }
+  oppdaterSpareMaalBar(pf);
+}
+
+function oppdaterSpareMaalBar(pf) {
+  const { spareMaal } = hentProfil();
+  const wrapper = document.getElementById('sparemaal-bar-wrapper');
+  if (!wrapper) return;
+  if (!spareMaal || spareMaal <= 0) { wrapper.classList.add('hidden'); return; }
+
+  const totalVerdi = Object.entries(pf).reduce((s, [ticker, antall]) => {
+    const a = alleAksjer.find(x => x.ticker === ticker);
+    return s + (a ? antall * (a.pris || 0) : 0);
+  }, 0);
+
+  const pct = Math.min(100, totalVerdi / spareMaal * 100);
+  document.getElementById('sparemaal-bar').style.width = pct.toFixed(1) + '%';
+  document.getElementById('sparemaal-bar-tekst').textContent =
+    totalVerdi.toLocaleString('nb-NO', { maximumFractionDigits: 0 }) + ' kr'
+    + ' av ' + spareMaal.toLocaleString('nb-NO', { maximumFractionDigits: 0 }) + ' kr'
+    + ' (' + pct.toFixed(1) + '%)';
+  wrapper.classList.remove('hidden');
 }
 
 function oppdaterGeneriskSammendrag() {
@@ -1678,6 +1696,9 @@ function visModal(a) {
       </div>
       <div class="flex items-center gap-1">
         ${stjerne(a.ticker, 'p-1 hover:scale-110')}
+        <button id="modal-del" class="text-gray-400 hover:text-brand-600 dark:hover:text-brand-400 p-1 transition-colors" aria-label="Del lenke" title="Kopier lenke">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg>
+        </button>
         <button id="modal-close" class="text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 p-1" aria-label="Lukk">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
         </button>
@@ -1808,8 +1829,18 @@ function initModal() {
   const overlay = document.getElementById('modal-overlay');
   // Klikk på overlay-bakgrunn lukker modal
   overlay.addEventListener('click', e => { if (e.target === overlay) lukkModal(); });
-  // Klikk på lukk-knapp via event delegation
   overlay.addEventListener('click', e => { if (e.target.closest('#modal-close')) lukkModal(); });
+  // Del-knapp: kopier ?aksje= URL til clipboard
+  overlay.addEventListener('click', e => {
+    if (!e.target.closest('#modal-del')) return;
+    const url = location.origin + location.pathname + location.search;
+    navigator.clipboard.writeText(url).then(() => {
+      const btn = e.target.closest('#modal-del');
+      const orig = btn.innerHTML;
+      btn.innerHTML = '<span class="text-xs font-semibold text-brand-600 dark:text-brand-400 px-1">Kopiert!</span>';
+      setTimeout(() => { btn.innerHTML = orig; }, 2000);
+    });
+  });
   // Favoritt-toggle i modal
   overlay.addEventListener('click', e => {
     const btn = e.target.closest('.fav-btn');

@@ -28,29 +28,12 @@ Norsk utbytteaksje-tracker for Oslo Børs. Data hentes automatisk fra Yahoo Fina
 - **20. Lavthengende forbedringer** — sortering huskes, `?aksje=`-param, score-forklaring, søk huskes
 - **21. Innstillinger-panel og onboarding** — tannhjul-meny med Profil + Varsler; utvidet profil med sparemål
 - **22. Portefølje sub-tabs** — Beholdning og Statistikk som egne faner; ekstra nøkkeltall (P/E, utbetalinger/år, sparemål-fremgang, porteføljeprofil)
+- **23. Sparemål-progresjon på dashbordet** — fremgangsbar under stat-kortene; vises kun når sparemål er satt
+- **24. Del-link for enkeltaksjer** — del-ikon i modal-header kopierer `?aksje=`-URL til clipboard med "Kopiert!"-bekreftelse
 
 ---
 
 ## Planlagt
-
-### 23. Sparemål-progresjon på dashbordet 🎯
-**Prioritet: Høy — lav innsats**
-
-- [ ] Fremgangsbar på dashboard: "15 232 kr av 500 000 kr (3%)"
-- [ ] Vises kun når sparemål er satt i profilen
-- [ ] Oppdateres automatisk når portefølje endres
-
----
-
-### 24. Del-link for enkeltaksjer 🔗
-**Prioritet: Høy — lav innsats**
-
-`?aksje=EQNR` fungerer allerede. Gjør det lett å dele.
-
-- [ ] "Del"-knapp i aksjemodal som kopierer URL til clipboard
-- [ ] Visuell bekreftelse (f.eks. "Kopiert!" i 2 sekunder)
-
----
 
 ### 25. Individuelle aksjesider for SEO 📄
 **Prioritet: Høy — SEO-gevinst**
