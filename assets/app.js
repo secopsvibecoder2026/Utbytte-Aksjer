@@ -36,6 +36,11 @@ sjekkLSVersjon();
 
 // ── STATE ──────────────────────────────────────────────────────────────────
 let alleAksjer = [];
+let osebxHistorikk = {};   // { "2026-03-01": 1423.5, ... } fra aksjer.json
+
+// Skjermingsrente for inneværende år (oppdateres årlig av Skatteetaten)
+const SKJERMINGSRENTE = 0.031; // 3,1 % (2024)
+const SKATTESATS      = 0.3784; // 37,84 % effektiv skatt på utbytte (aksjonærmodellen)
 let sortering = (() => {
   try {
     const s = JSON.parse(localStorage.getItem('sortering') || '{}');
@@ -124,7 +129,8 @@ async function lastData() {
     if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
     const json = await resp.json();
 
-    alleAksjer = Array.isArray(json) ? json : json.aksjer;
+    alleAksjer    = Array.isArray(json) ? json : json.aksjer;
+    osebxHistorikk = json.osebx_historikk || {};
 
     // Sist oppdatert + advarsel hvis data er gammel
     const ts = json.sist_oppdatert;
@@ -1452,52 +1458,72 @@ function visHistorikkKurve() {
   try { historikk = JSON.parse(localStorage.getItem('pf_historikk') || '{}'); } catch(e) {}
 
   const datoer = Object.keys(historikk).sort();
-  if (datoer.length < 2) {
-    wrapper.classList.add('hidden');
-    return;
-  }
-
+  if (datoer.length < 2) { wrapper.classList.add('hidden'); return; }
   wrapper.classList.remove('hidden');
 
+  // Normalisér begge til 100 ved første felles dato
   const verdier = datoer.map(d => historikk[d]);
-  const min = Math.min(...verdier);
-  const max = Math.max(...verdier);
+  const pf0 = verdier[0];
+  const pfNorm = verdier.map(v => v / pf0 * 100);
+
+  // OSEBX: finn felles datoer
+  const osebxDatoer = datoer.filter(d => osebxHistorikk[d] != null);
+  let osebxPts = null;
+  if (osebxDatoer.length >= 2) {
+    const osebx0 = osebxHistorikk[osebxDatoer[0]];
+    osebxPts = datoer.map((d, i) => {
+      if (!osebxHistorikk[d]) return null;
+      return [i, osebxHistorikk[d] / osebx0 * 100];
+    }).filter(Boolean);
+  }
+
+  // Samlet min/max over alle normaliserte verdier
+  const alleVerdier = [...pfNorm, ...(osebxPts ? osebxPts.map(p => p[1]) : [])];
+  const min = Math.min(...alleVerdier);
+  const max = Math.max(...alleVerdier);
   const range = max - min || 1;
 
   const W = 800, H = 100, pad = 4;
-  const n = verdier.length;
+  const n = datoer.length;
   const xStep = (W - pad * 2) / (n - 1);
 
-  const pts = verdier.map((v, i) => [
-    pad + i * xStep,
-    pad + (1 - (v - min) / range) * (H - pad * 2)
-  ]);
+  const toSvg = (idx, val) => [
+    pad + idx * xStep,
+    pad + (1 - (val - min) / range) * (H - pad * 2)
+  ];
 
-  const polyline = pts.map(p => p.join(',')).join(' ');
-  const areaD = `M${pts[0][0]},${H} ` +
-    pts.map(p => `L${p[0]},${p[1]}`).join(' ') +
-    ` L${pts[pts.length-1][0]},${H} Z`;
+  const pfPts  = pfNorm.map((v, i) => toSvg(i, v));
+  const polyline = pfPts.map(p => p.join(',')).join(' ');
+  const areaD = `M${pfPts[0][0]},${H} ` + pfPts.map(p => `L${p[0]},${p[1]}`).join(' ') + ` L${pfPts[pfPts.length-1][0]},${H} Z`;
 
-  const endring = verdier[verdier.length - 1] - verdier[0];
-  const endringPct = (endring / (verdier[0] || 1) * 100).toFixed(1);
+  const endring = pfNorm[pfNorm.length - 1] - 100;
+  const endringPct = endring.toFixed(1);
   const positiv = endring >= 0;
   const farge = positiv ? '#16a34a' : '#dc2626';
   const fargeLys = positiv ? '#dcfce7' : '#fee2e2';
 
+  // OSEBX SVG-linje
+  let osebxSvg = '';
+  if (osebxPts) {
+    const obxSvgPts = osebxPts.map(([idx, val]) => toSvg(idx, val));
+    osebxSvg = `<polyline points="${obxSvgPts.map(p => p.join(',')).join(' ')}"
+      fill="none" stroke="#9ca3af" stroke-width="1.5" stroke-dasharray="4 3"
+      stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"/>`;
+  }
+
   document.getElementById('pf-historikk-chart').innerHTML = `
-    <svg viewBox="0 0 ${W} ${H}" width="100%" height="100%" preserveAspectRatio="none"
-         xmlns="http://www.w3.org/2000/svg">
+    <svg viewBox="0 0 ${W} ${H}" width="100%" height="100%" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <linearGradient id="hgrad" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="${farge}" stop-opacity="0.25"/>
+          <stop offset="0%" stop-color="${farge}" stop-opacity="0.2"/>
           <stop offset="100%" stop-color="${farge}" stop-opacity="0.02"/>
         </linearGradient>
       </defs>
       <path d="${areaD}" fill="url(#hgrad)"/>
+      ${osebxSvg}
       <polyline points="${polyline}" fill="none" stroke="${farge}" stroke-width="2.5"
                 stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"/>
-      <circle cx="${pts[pts.length-1][0]}" cy="${pts[pts.length-1][1]}" r="4" fill="${farge}"
-              vector-effect="non-scaling-stroke"/>
+      <circle cx="${pfPts[pfPts.length-1][0]}" cy="${pfPts[pfPts.length-1][1]}" r="4" fill="${farge}" vector-effect="non-scaling-stroke"/>
     </svg>`;
 
   const endringEl = document.getElementById('pf-historikk-endring');
@@ -1505,6 +1531,14 @@ function visHistorikkKurve() {
     endringEl.textContent = (positiv ? '+' : '') + endringPct + '%';
     endringEl.style.backgroundColor = fargeLys;
     endringEl.style.color = farge;
+  }
+
+  // Legg til OSEBX-legend hvis tilgjengelig
+  const legendEl = document.getElementById('pf-historikk-legend');
+  if (legendEl) {
+    legendEl.innerHTML = osebxPts
+      ? `<span class="flex items-center gap-1"><span class="inline-block w-5 border-t-2 border-dashed border-gray-400"></span> OSEBX</span>`
+      : '';
   }
 
   const fmtDato = iso => { const [y,m,d] = iso.split('-'); return d+'.'+m+'.'+y; };
@@ -1677,6 +1711,45 @@ function visPortefolje() {
 
     const antallSektorer = new Set(alleBeholdning.map(a => a.sektor).filter(Boolean)).size;
     document.getElementById('pf-profil-sektorer').textContent = antallSektorer + ' sektorer';
+
+    // ── OSEBX-SAMMENLIGNING ───────────────────────────────────────────────────
+    const osebxEl     = document.getElementById('pf-stat-osebx');
+    const osebxTekst  = document.getElementById('pf-stat-osebx-tekst');
+    let historikk = {};
+    try { historikk = JSON.parse(localStorage.getItem('pf_historikk') || '{}'); } catch(e) {}
+    const pfDatoer = Object.keys(historikk).sort();
+    const fellesDatoer = pfDatoer.filter(d => osebxHistorikk[d] != null);
+    if (osebxEl && fellesDatoer.length >= 2) {
+      const d0 = fellesDatoer[0], dN = fellesDatoer[fellesDatoer.length - 1];
+      const pfEndring    = (historikk[dN] - historikk[d0]) / historikk[d0] * 100;
+      const osebxEndring = (osebxHistorikk[dN] - osebxHistorikk[d0]) / osebxHistorikk[d0] * 100;
+      const diff = pfEndring - osebxEndring;
+      const slaer = diff >= 0;
+      osebxEl.textContent = slaer ? '✓ Ja' : '✗ Nei';
+      osebxEl.className   = 'stat-value text-base ' + (slaer ? 'text-green-600 dark:text-green-400' : 'text-red-500');
+      osebxTekst.textContent = (diff >= 0 ? '+' : '') + diff.toFixed(1) + '% vs indeks';
+    } else if (osebxEl) {
+      osebxEl.textContent  = '—';
+      osebxEl.className    = 'stat-value text-base';
+      osebxTekst.textContent = 'trenger mer historikk';
+    }
+
+    // ── SKATTEBEREGNING (aksjonærmodellen) ────────────────────────────────────
+    const nettoEl    = document.getElementById('pf-stat-netto-skatt');
+    const skattTekst = document.getElementById('pf-stat-skatt-tekst');
+    if (nettoEl) {
+      // Skjermingsfradrag = VWAP-kostpris × skjermingsrente per posisjon
+      let totalSkjermingsfradrag = 0;
+      alleBeholdning.forEach(a => {
+        const kb = beregnKostbasis(a.ticker);
+        if (kb.totalKost > 0) totalSkjermingsfradrag += kb.totalKost * SKJERMINGSRENTE;
+      });
+      const skattbartUtbytte = Math.max(0, totalAr - totalSkjermingsfradrag);
+      const skatt            = skattbartUtbytte * SKATTESATS;
+      const netto            = totalAr - skatt;
+      nettoEl.textContent    = fmtKr(netto);
+      if (skattTekst) skattTekst.textContent = `skatt: ${fmtKr(skatt)}`;
+    }
   }
 
   // ── HISTORISK SNAPSHOT + KURVE ────────────────────────────────────────────

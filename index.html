@@ -536,6 +536,16 @@
             <p class="text-xs text-gray-400 mt-0.5">hendelser totalt</p>
           </div>
           <div class="stat-card">
+            <p class="stat-label">vs. OSEBX</p>
+            <p class="stat-value text-base" id="pf-stat-osebx">—</p>
+            <p class="text-xs text-gray-400 mt-0.5" id="pf-stat-osebx-tekst"></p>
+          </div>
+          <div class="stat-card">
+            <p class="stat-label">Netto etter skatt/år</p>
+            <p class="stat-value text-base" id="pf-stat-netto-skatt">—</p>
+            <p class="text-xs text-gray-400 mt-0.5" id="pf-stat-skatt-tekst"></p>
+          </div>
+          <div class="stat-card">
             <p class="stat-label">Sparemål-fremgang</p>
             <p class="stat-value" id="pf-stat-sparemaal-pct">—</p>
             <p class="text-xs text-gray-400 mt-0.5" id="pf-stat-sparemaal-tekst">
@@ -571,7 +581,10 @@
         <div id="pf-historikk-wrapper" class="hidden bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4 shadow-sm">
           <div class="flex items-center justify-between mb-3">
             <h3 class="font-semibold text-sm">Porteføljeverdi — siste 30 dager</h3>
-            <span id="pf-historikk-endring" class="text-xs font-semibold px-2 py-0.5 rounded-full"></span>
+            <div class="flex items-center gap-3">
+              <span id="pf-historikk-legend" class="text-xs text-gray-400 flex items-center gap-1"></span>
+              <span id="pf-historikk-endring" class="text-xs font-semibold px-2 py-0.5 rounded-full"></span>
+            </div>
           </div>
           <div id="pf-historikk-chart" class="w-full" style="height:120px"></div>
           <div class="flex justify-between text-xs text-gray-400 mt-1">

@@ -948,6 +948,25 @@ def generer_sitemap(aksjer, root_dir, today):
     print(f"Sitemap oppdatert med {len(aksjer) + 3} URL-er: {sitemap_path}")
 
 
+def hent_osebx_historikk():
+    """Henter OSEBX (^OSEAX) 30-dagers historikk fra Yahoo Finance."""
+    try:
+        ticker = yf.Ticker("^OSEAX")
+        hist = ticker.history(period="30d")
+        if hist.empty:
+            print("  OSEBX: Ingen data returnert")
+            return {}
+        result = {}
+        for d, v in hist["Close"].items():
+            dato = str(d.date()) if hasattr(d, "date") else str(d)[:10]
+            result[dato] = round(float(v), 2)
+        print(f"  OSEBX: {len(result)} datapunkter hentet")
+        return result
+    except Exception as e:
+        print(f"  Kunne ikke hente OSEBX: {e}")
+        return {}
+
+
 def main():
     print("Starter henting av aksjedata fra Yahoo Finance...")
     output_path = os.path.join(os.path.dirname(__file__), "..", "data", "aksjer.json")
@@ -1043,11 +1062,16 @@ def main():
     if len(feil) + len(ingen_data) > len(AKSJER) // 2:
         print("\nADVARSEL: Over halvparten av aksjene feilet. Sjekk Yahoo Finance-tilkoblingen.")
 
+    # Hent OSEBX-historikk
+    print("\nHenter OSEBX-historikk...")
+    osebx_data = hent_osebx_historikk()
+
     # Lagre til JSON
     output = {
         "sist_oppdatert": datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"),
         "kilde": "Yahoo Finance (yfinance)",
         "aksjer": resultater,
+        "osebx_historikk": osebx_data,
     }
 
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
