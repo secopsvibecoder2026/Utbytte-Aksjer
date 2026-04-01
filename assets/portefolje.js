@@ -239,10 +239,8 @@ function initPFSubTabs() {
     });
     document.getElementById('pf-sub-beholdning').classList.toggle('hidden', tab !== 'beholdning');
     document.getElementById('pf-sub-statistikk').classList.toggle('hidden', tab !== 'statistikk');
-    document.getElementById('pf-sub-transaksjoner').classList.toggle('hidden', tab !== 'transaksjoner');
     document.getElementById('pf-sub-watchlister').classList.toggle('hidden', tab !== 'watchlister');
     if (tab === 'statistikk') visPortefolje();
-    if (tab === 'transaksjoner') visTransaksjoner();
     if (tab === 'watchlister') visWatchlister();
   }
 
@@ -254,20 +252,58 @@ function initPFSubTabs() {
 
 
 function initPortefolje() {
+  // Toggle for kostbasis/transaksjons-seksjonen
+  const txToggle  = document.getElementById('pf-tx-toggle');
+  const txInnhold = document.getElementById('pf-tx-innhold');
+  const txChevron = document.getElementById('pf-tx-chevron');
+  if (txToggle) {
+    txToggle.addEventListener('click', () => {
+      const aapen = txInnhold.classList.contains('hidden');
+      txInnhold.classList.toggle('hidden', !aapen);
+      txChevron.style.transform = aapen ? 'rotate(180deg)' : '';
+      txToggle.setAttribute('aria-expanded', aapen ? 'true' : 'false');
+      if (aapen) visTransaksjoner();
+    });
+  }
+
   document.getElementById('pf-legg-til').addEventListener('click', () => {
-    const sel = document.getElementById('pf-velg-aksje');
-    const antallEl = document.getElementById('pf-antall');
-    const feilEl = document.getElementById('pf-feil');
-    const ticker = sel.value;
-    const antall = parseInt(antallEl.value, 10);
+    const sel       = document.getElementById('pf-velg-aksje');
+    const antallEl  = document.getElementById('pf-antall');
+    const datoEl    = document.getElementById('pf-kjoepsdato');
+    const kursEl    = document.getElementById('pf-kjoepskurs');
+    const feilEl    = document.getElementById('pf-feil');
+    const ticker    = sel.value;
+    const antall    = parseInt(antallEl.value, 10);
     feilEl.classList.add('hidden');
     if (!ticker) { feilEl.textContent = 'Velg en aksje.'; feilEl.classList.remove('hidden'); return; }
     if (!antall || antall < 1) { feilEl.textContent = 'Skriv inn gyldig antall aksjer.'; feilEl.classList.remove('hidden'); return; }
+
     const pf = hentPF();
     pf[ticker] = antall;
     lagrePF(pf);
+
+    // Valgfritt: lag kjøpstransaksjon hvis dato og kurs er fylt ut
+    const dato = datoEl?.value;
+    const kurs = parseFloat(kursEl?.value);
+    if (dato && kurs > 0) {
+      const txData = hentTransaksjoner();
+      if (!txData[ticker]) txData[ticker] = [];
+      txData[ticker].push({ id: Date.now().toString(), dato, antall, kurs, type: 'kjøp' });
+      txData[ticker].sort((a, b) => a.dato.localeCompare(b.dato));
+      lagreTransaksjoner(txData);
+      // Åpne seksjonen automatisk så brukeren ser resultatet
+      if (txInnhold?.classList.contains('hidden')) {
+        txInnhold.classList.remove('hidden');
+        if (txChevron) txChevron.style.transform = 'rotate(180deg)';
+        if (txToggle) txToggle.setAttribute('aria-expanded', 'true');
+      }
+      visTransaksjoner();
+    }
+
     sel.value = '';
     antallEl.value = '';
+    if (datoEl) datoEl.value = '';
+    if (kursEl) kursEl.value = '';
     visPortefolje();
   });
 
@@ -840,6 +876,12 @@ function visPortefolje() {
   lagrePortefoljeSnapshot(totalVerdi);
   visHistorikkKurve();
 
+  // ── KOSTBASIS + TRANSAKSJONSLOGG (oppdater hvis seksjonen er åpen) ─────────
+  const txInnholdEl = document.getElementById('pf-tx-innhold');
+  if (txInnholdEl && !txInnholdEl.classList.contains('hidden')) {
+    visTransaksjoner();
+  }
+
   // ── BEHOLDNINGSTABELL ─────────────────────────────────────────────────────
   const tbody = document.getElementById('pf-tabell-body');
   tbody.innerHTML = beholdning.map(a => {
@@ -1220,11 +1262,11 @@ function visWatchlister() {
     const pfBtn = e.target.closest('.wl-legg-til-pf');
     if (pfBtn) {
       const { ticker } = pfBtn.dataset;
-      // Bytt til Transaksjoner-fanen og forhåndsvelg aksjen
-      document.querySelector('[data-pf-tab="transaksjoner"]').click();
-      const sel = document.getElementById('tx-velg-aksje');
-      if (sel) { sel.value = ticker; sel.dispatchEvent(new Event('change')); }
-      document.getElementById('tx-antall')?.focus();
+      // Bytt til Beholdning-fanen, forhåndsvelg aksjen i legg-til-skjemaet
+      document.querySelector('[data-pf-tab="beholdning"]').click();
+      const sel = document.getElementById('pf-velg-aksje');
+      if (sel) sel.value = ticker;
+      document.getElementById('pf-antall')?.focus();
       return;
     }
     const rad = e.target.closest('[data-ticker]');
