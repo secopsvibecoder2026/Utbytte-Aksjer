@@ -20,6 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
   oppdaterFavBtn();
   initViewToggle();
   initModal();
+  initPFSubTabs();
   initPortefolje();
   initKalkulator();
   initVarsler();
@@ -1013,6 +1014,28 @@ function hentPF() {
 }
 function lagrePF(pf) { localStorage.setItem('pf_beholdning', JSON.stringify(pf)); }
 
+function initPFSubTabs() {
+  function byttSubTab(tab) {
+    document.querySelectorAll('.pf-sub-btn').forEach(b => {
+      const aktiv = b.dataset.pfTab === tab;
+      b.classList.toggle('bg-brand-600', aktiv);
+      b.classList.toggle('text-white', aktiv);
+      b.classList.toggle('text-gray-500', !aktiv);
+      b.classList.toggle('dark:text-gray-400', !aktiv);
+      b.classList.toggle('hover:bg-gray-100', !aktiv);
+      b.classList.toggle('dark:hover:bg-gray-800', !aktiv);
+    });
+    document.getElementById('pf-sub-beholdning').classList.toggle('hidden', tab !== 'beholdning');
+    document.getElementById('pf-sub-statistikk').classList.toggle('hidden', tab !== 'statistikk');
+    if (tab === 'statistikk') visPortefolje();
+  }
+
+  document.getElementById('tab-portfolio').addEventListener('click', e => {
+    const btn = e.target.closest('.pf-sub-btn');
+    if (btn) byttSubTab(btn.dataset.pfTab);
+  });
+}
+
 function initPortefolje() {
   document.getElementById('pf-legg-til').addEventListener('click', () => {
     const sel = document.getElementById('pf-velg-aksje');
@@ -1136,9 +1159,9 @@ function visPortefolje() {
   document.getElementById('pf-beholdning-wrapper').classList.toggle('hidden', !harBeholdning);
   document.getElementById('pf-tidslinje-wrapper').classList.toggle('hidden', !harBeholdning);
   document.getElementById('pf-charts-wrapper').style.display = harBeholdning ? 'grid' : 'none';
-
   document.getElementById('pf-inntekt-wrapper').classList.toggle('hidden', !harBeholdning);
-  oppdaterSammendrag(); // oppdater topkort når portefølje endres
+  document.getElementById('pf-statistikk-tom').classList.toggle('hidden', harBeholdning);
+  oppdaterSammendrag();
 
   if (!harBeholdning) {
     ['pf-stat-ar','pf-stat-mnd','pf-stat-antall','pf-stat-neste','pf-stat-yield','pf-stat-verdi']

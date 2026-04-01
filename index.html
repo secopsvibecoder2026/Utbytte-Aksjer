@@ -331,165 +331,184 @@
     <!-- PORTEFØLJE-FANE -->
     <div id="tab-portfolio" class="hidden space-y-4">
 
-      <!-- Sammendragskort -->
-      <section class="grid grid-cols-2 sm:grid-cols-3 gap-3">
-        <div class="stat-card">
-          <p class="stat-label">Forventet/år</p>
-          <p class="stat-value" id="pf-stat-ar">—</p>
-        </div>
-        <div class="stat-card">
-          <p class="stat-label">Snitt/måned</p>
-          <p class="stat-value" id="pf-stat-mnd">—</p>
-          <div id="pf-mnd-mål" class="hidden mt-1.5">
-            <div class="flex justify-between text-xs text-gray-400 mb-0.5">
-              <span id="pf-mnd-mål-pct"></span>
-              <span id="pf-mnd-mål-tekst"></span>
-            </div>
-            <div class="h-1 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
-              <div id="pf-mnd-mål-bar" class="h-full bg-brand-500 rounded-full transition-all duration-500" style="width:0%"></div>
-            </div>
-          </div>
-        </div>
-        <div class="stat-card">
-          <p class="stat-label">Neste utbetaling</p>
-          <p class="stat-value text-base" id="pf-stat-neste">—</p>
-          <p class="text-xs text-gray-400 mt-0.5" id="pf-stat-neste-navn"></p>
-        </div>
-        <div class="stat-card">
-          <p class="stat-label">Selskaper</p>
-          <p class="stat-value" id="pf-stat-antall">—</p>
-        </div>
-        <div class="stat-card">
-          <p class="stat-label">Vektet yield</p>
-          <p class="stat-value" id="pf-stat-yield">—</p>
-        </div>
-        <div class="stat-card">
-          <p class="stat-label">Porteføljeverdi</p>
-          <p class="stat-value text-base" id="pf-stat-verdi">—</p>
-        </div>
-      </section>
-
-      <!-- Inntektsteller -->
-      <div id="pf-inntekt-wrapper" class="hidden bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4 shadow-sm space-y-3">
-        <div class="flex items-start justify-between gap-4">
-          <div>
-            <p class="stat-label">Hittil i år <span class="text-gray-400 font-normal normal-case tracking-normal">(estimert)</span></p>
-            <p id="pf-inntekt-ar" class="text-2xl font-bold mt-1">—</p>
-          </div>
-          <div class="text-right shrink-0">
-            <label class="text-xs text-gray-500 dark:text-gray-400 block mb-1">Årsmål (kr)</label>
-            <input id="pf-inntekt-mal" type="number" min="0" step="1000" placeholder="F.eks. 50 000" class="filter-input w-36 text-right text-sm" />
-          </div>
-        </div>
-        <div id="pf-inntekt-progresjon" class="hidden space-y-1">
-          <div class="flex justify-between text-xs text-gray-500 dark:text-gray-400">
-            <span id="pf-inntekt-pct-tekst">0%</span>
-            <span id="pf-inntekt-mal-tekst">Mål: —</span>
-          </div>
-          <div class="w-full h-2 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
-            <div id="pf-inntekt-bar" class="h-full bg-brand-500 rounded-full transition-all duration-500" style="width:0%"></div>
-          </div>
-        </div>
+      <!-- Sub-tab nav -->
+      <div class="flex gap-1">
+        <button class="pf-sub-btn px-4 py-1.5 text-sm font-medium rounded-lg bg-brand-600 text-white transition-colors" data-pf-tab="beholdning">Beholdning</button>
+        <button class="pf-sub-btn px-4 py-1.5 text-sm font-medium rounded-lg text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" data-pf-tab="statistikk">Statistikk</button>
       </div>
 
-      <!-- Legg til aksje -->
-      <div class="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4 shadow-sm">
-        <h3 class="font-semibold text-sm mb-3">Legg til aksje i kalkulatoren</h3>
-        <div class="flex flex-col sm:flex-row gap-2">
-          <select id="pf-velg-aksje" class="filter-input flex-1">
-            <option value="">Velg aksje…</option>
-          </select>
-          <input id="pf-antall" type="number" min="1" placeholder="Antall aksjer" class="filter-input w-full sm:w-40" />
-          <button id="pf-legg-til" class="bg-brand-600 hover:bg-brand-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors shrink-0">Legg til</button>
-        </div>
-        <p id="pf-feil" class="text-xs text-red-500 mt-2 hidden"></p>
-      </div>
+      <!-- ── BEHOLDNING ─────────────────────────────────────────────────────── -->
+      <div id="pf-sub-beholdning" class="space-y-4">
 
-      <!-- Beholdningstabell -->
-      <div id="pf-beholdning-wrapper" class="hidden">
-        <div class="flex items-center justify-between mb-2 px-1">
-          <h3 class="font-semibold text-sm">Min beholdning</h3>
-          <div class="flex items-center gap-3">
-            <button id="pf-qr-btn" class="text-xs text-gray-500 dark:text-gray-400 hover:text-brand-600 dark:hover:text-brand-400 hover:underline font-medium flex items-center gap-1">
-              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/></svg>
-              Send til mobil
-            </button>
-            <button id="pf-importer-csv" class="text-xs text-gray-500 dark:text-gray-400 hover:text-brand-600 dark:hover:text-brand-400 hover:underline font-medium flex items-center gap-1">
-              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
-              Importer CSV
-            </button>
-            <button id="pf-eksport-csv" class="text-xs text-brand-600 dark:text-brand-400 hover:underline font-medium flex items-center gap-1">
-              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-              Last ned CSV
-            </button>
-          </div>
-        </div>
-        <div class="overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-800 shadow-sm">
-          <table class="w-full text-sm">
-            <thead>
-              <tr class="bg-gray-100 dark:bg-gray-900 text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
-                <th class="px-4 py-3 text-left">Ticker</th>
-                <th class="px-4 py-3 text-left hidden sm:table-cell">Selskap</th>
-                <th class="px-4 py-3 text-right">Antall</th>
-                <th class="px-4 py-3 text-right">Yield</th>
-                <th class="px-4 py-3 text-right">Forv. utbytte/år</th>
-                <th class="px-4 py-3 text-center hidden sm:table-cell">Ex-dato</th>
-                <th class="px-4 py-3 text-center hidden sm:table-cell">Frekvens</th>
-                <th class="px-4 py-3 text-center">Slett</th>
-              </tr>
-            </thead>
-            <tbody id="pf-tabell-body" class="divide-y divide-gray-100 dark:divide-gray-800"></tbody>
-            <tfoot id="pf-tabell-footer" class="bg-gray-50 dark:bg-gray-900/50 font-semibold"></tfoot>
-          </table>
-        </div>
-      </div>
-
-      <!-- Månedlig distribusjon -->
-      <div id="pf-tidslinje-wrapper" class="hidden bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4 shadow-sm">
-        <h3 class="font-semibold text-sm mb-3">Forventet utbytteinntekt per kvartal</h3>
-        <div id="pf-tidslinje" class="space-y-2"></div>
-      </div>
-
-      <!-- Diagrammer -->
-      <div id="pf-charts-wrapper" style="display:none" class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <!-- Sektordiversifisering -->
+        <!-- Legg til aksje -->
         <div class="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4 shadow-sm">
-          <h3 class="font-semibold text-sm mb-4">Sektordiversifisering</h3>
-          <div id="pf-sektor-chart"></div>
+          <h3 class="font-semibold text-sm mb-3">Legg til aksje i porteføljen</h3>
+          <div class="flex flex-col sm:flex-row gap-2">
+            <select id="pf-velg-aksje" class="filter-input flex-1">
+              <option value="">Velg aksje…</option>
+            </select>
+            <input id="pf-antall" type="number" min="1" placeholder="Antall aksjer" class="filter-input w-full sm:w-40" />
+            <button id="pf-legg-til" class="bg-brand-600 hover:bg-brand-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors shrink-0">Legg til</button>
+          </div>
+          <p id="pf-feil" class="text-xs text-red-500 mt-2 hidden"></p>
         </div>
-        <!-- Topp bidragsytere -->
-        <div class="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4 shadow-sm">
-          <h3 class="font-semibold text-sm mb-4">Største bidragsytere</h3>
-          <div id="pf-topp-chart" class="space-y-2"></div>
+
+        <!-- Beholdningstabell -->
+        <div id="pf-beholdning-wrapper" class="hidden">
+          <div class="flex items-center justify-between mb-2 px-1">
+            <h3 class="font-semibold text-sm">Min beholdning</h3>
+            <div class="flex items-center gap-3">
+              <button id="pf-qr-btn" class="text-xs text-gray-500 dark:text-gray-400 hover:text-brand-600 dark:hover:text-brand-400 hover:underline font-medium flex items-center gap-1">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/></svg>
+                Send til mobil
+              </button>
+              <button id="pf-importer-csv" class="text-xs text-gray-500 dark:text-gray-400 hover:text-brand-600 dark:hover:text-brand-400 hover:underline font-medium flex items-center gap-1">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                Importer CSV
+              </button>
+              <button id="pf-eksport-csv" class="text-xs text-brand-600 dark:text-brand-400 hover:underline font-medium flex items-center gap-1">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                Last ned CSV
+              </button>
+            </div>
+          </div>
+          <div class="overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-800 shadow-sm">
+            <table class="w-full text-sm">
+              <thead>
+                <tr class="bg-gray-100 dark:bg-gray-900 text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
+                  <th class="px-4 py-3 text-left">Ticker</th>
+                  <th class="px-4 py-3 text-left hidden sm:table-cell">Selskap</th>
+                  <th class="px-4 py-3 text-right">Antall</th>
+                  <th class="px-4 py-3 text-right">Yield</th>
+                  <th class="px-4 py-3 text-right">Forv. utbytte/år</th>
+                  <th class="px-4 py-3 text-center hidden sm:table-cell">Ex-dato</th>
+                  <th class="px-4 py-3 text-center hidden sm:table-cell">Frekvens</th>
+                  <th class="px-4 py-3 text-center">Slett</th>
+                </tr>
+              </thead>
+              <tbody id="pf-tabell-body" class="divide-y divide-gray-100 dark:divide-gray-800"></tbody>
+              <tfoot id="pf-tabell-footer" class="bg-gray-50 dark:bg-gray-900/50 font-semibold"></tfoot>
+            </table>
+          </div>
         </div>
-        <!-- Frekvensfordeling (full bredde) -->
-        <div class="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4 shadow-sm lg:col-span-2">
-          <h3 class="font-semibold text-sm mb-4">Utbetalingsfrekvens</h3>
-          <div id="pf-frekvens-chart" class="flex flex-wrap gap-3"></div>
+
+        <!-- Tom tilstand -->
+        <div id="pf-tom" class="text-center py-10 text-gray-400 dark:text-gray-600">
+          <svg class="w-12 h-12 mx-auto mb-3 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          <p class="text-sm font-medium">Ingen aksjer i porteføljen ennå</p>
+          <p class="text-xs mt-1 mb-4">Legg til aksjer ovenfor for å beregne forventet utbytteinntekt. Data lagres kun i din nettleser.</p>
+          <button id="pf-importer-csv-tom" class="inline-flex items-center gap-1.5 text-xs text-brand-600 dark:text-brand-400 border border-brand-300 dark:border-brand-700 hover:bg-brand-50 dark:hover:bg-brand-900/20 px-3 py-1.5 rounded-lg transition-colors font-medium">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+            Importer fra CSV
+          </button>
         </div>
+
+        <!-- Skjult fil-input + preview-seksjon -->
+        <input type="file" id="pf-importer-fil" accept=".csv" class="hidden" />
+        <div id="pf-importer-preview" class="hidden rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-4 shadow-sm space-y-3">
+          <h3 class="font-semibold text-sm">Forhåndsvisning av import</h3>
+          <div id="pf-importer-innhold"></div>
+          <div class="flex flex-wrap gap-2 pt-1">
+            <button id="pf-importer-bekreft-legg-til" class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white text-sm font-medium rounded-lg transition-colors">Legg til i portefølje</button>
+            <button id="pf-importer-bekreft-erstatt" class="px-4 py-2 bg-gray-800 dark:bg-gray-200 hover:bg-gray-700 dark:hover:bg-gray-300 text-white dark:text-gray-900 text-sm font-medium rounded-lg transition-colors">Erstatt portefølje</button>
+            <button id="pf-importer-avbryt" class="px-4 py-2 text-sm text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition-colors">Avbryt</button>
+          </div>
+        </div>
+
       </div>
 
-      <!-- Tom tilstand -->
-      <div id="pf-tom" class="text-center py-10 text-gray-400 dark:text-gray-600">
-        <svg class="w-12 h-12 mx-auto mb-3 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-        <p class="text-sm font-medium">Ingen aksjer i porteføljen ennå</p>
-        <p class="text-xs mt-1 mb-4">Legg til aksjer ovenfor for å beregne forventet utbytteinntekt. Data lagres kun i din nettleser.</p>
-        <button id="pf-importer-csv-tom" class="inline-flex items-center gap-1.5 text-xs text-brand-600 dark:text-brand-400 border border-brand-300 dark:border-brand-700 hover:bg-brand-50 dark:hover:bg-brand-900/20 px-3 py-1.5 rounded-lg transition-colors font-medium">
-          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
-          Importer fra CSV
-        </button>
-      </div>
+      <!-- ── STATISTIKK ──────────────────────────────────────────────────────── -->
+      <div id="pf-sub-statistikk" class="hidden space-y-4">
 
-      <!-- Skjult fil-input + preview-seksjon -->
-      <input type="file" id="pf-importer-fil" accept=".csv" class="hidden" />
-      <div id="pf-importer-preview" class="hidden rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-4 shadow-sm space-y-3">
-        <h3 class="font-semibold text-sm">Forhåndsvisning av import</h3>
-        <div id="pf-importer-innhold"></div>
-        <div class="flex flex-wrap gap-2 pt-1">
-          <button id="pf-importer-bekreft-legg-til" class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white text-sm font-medium rounded-lg transition-colors">Legg til i portefølje</button>
-          <button id="pf-importer-bekreft-erstatt" class="px-4 py-2 bg-gray-800 dark:bg-gray-200 hover:bg-gray-700 dark:hover:bg-gray-300 text-white dark:text-gray-900 text-sm font-medium rounded-lg transition-colors">Erstatt portefølje</button>
-          <button id="pf-importer-avbryt" class="px-4 py-2 text-sm text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition-colors">Avbryt</button>
+        <!-- Sammendragskort -->
+        <section class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+          <div class="stat-card">
+            <p class="stat-label">Forventet/år</p>
+            <p class="stat-value" id="pf-stat-ar">—</p>
+          </div>
+          <div class="stat-card">
+            <p class="stat-label">Snitt/måned</p>
+            <p class="stat-value" id="pf-stat-mnd">—</p>
+            <div id="pf-mnd-mål" class="hidden mt-1.5">
+              <div class="flex justify-between text-xs text-gray-400 mb-0.5">
+                <span id="pf-mnd-mål-pct"></span>
+                <span id="pf-mnd-mål-tekst"></span>
+              </div>
+              <div class="h-1 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
+                <div id="pf-mnd-mål-bar" class="h-full bg-brand-500 rounded-full transition-all duration-500" style="width:0%"></div>
+              </div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <p class="stat-label">Neste utbetaling</p>
+            <p class="stat-value text-base" id="pf-stat-neste">—</p>
+            <p class="text-xs text-gray-400 mt-0.5" id="pf-stat-neste-navn"></p>
+          </div>
+          <div class="stat-card">
+            <p class="stat-label">Selskaper</p>
+            <p class="stat-value" id="pf-stat-antall">—</p>
+          </div>
+          <div class="stat-card">
+            <p class="stat-label">Vektet yield</p>
+            <p class="stat-value" id="pf-stat-yield">—</p>
+          </div>
+          <div class="stat-card">
+            <p class="stat-label">Porteføljeverdi</p>
+            <p class="stat-value text-base" id="pf-stat-verdi">—</p>
+          </div>
+        </section>
+
+        <!-- Inntektsteller -->
+        <div id="pf-inntekt-wrapper" class="hidden bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4 shadow-sm space-y-3">
+          <div class="flex items-start justify-between gap-4">
+            <div>
+              <p class="stat-label">Hittil i år <span class="text-gray-400 font-normal normal-case tracking-normal">(estimert)</span></p>
+              <p id="pf-inntekt-ar" class="text-2xl font-bold mt-1">—</p>
+            </div>
+            <div class="text-right shrink-0">
+              <label class="text-xs text-gray-500 dark:text-gray-400 block mb-1">Årsmål (kr)</label>
+              <input id="pf-inntekt-mal" type="number" min="0" step="1000" placeholder="F.eks. 50 000" class="filter-input w-36 text-right text-sm" />
+            </div>
+          </div>
+          <div id="pf-inntekt-progresjon" class="hidden space-y-1">
+            <div class="flex justify-between text-xs text-gray-500 dark:text-gray-400">
+              <span id="pf-inntekt-pct-tekst">0%</span>
+              <span id="pf-inntekt-mal-tekst">Mål: —</span>
+            </div>
+            <div class="w-full h-2 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
+              <div id="pf-inntekt-bar" class="h-full bg-brand-500 rounded-full transition-all duration-500" style="width:0%"></div>
+            </div>
+          </div>
         </div>
+
+        <!-- Månedlig distribusjon -->
+        <div id="pf-tidslinje-wrapper" class="hidden bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4 shadow-sm">
+          <h3 class="font-semibold text-sm mb-3">Forventet utbytteinntekt per kvartal</h3>
+          <div id="pf-tidslinje" class="space-y-2"></div>
+        </div>
+
+        <!-- Diagrammer -->
+        <div id="pf-charts-wrapper" style="display:none" class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div class="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4 shadow-sm">
+            <h3 class="font-semibold text-sm mb-4">Sektordiversifisering</h3>
+            <div id="pf-sektor-chart"></div>
+          </div>
+          <div class="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4 shadow-sm">
+            <h3 class="font-semibold text-sm mb-4">Største bidragsytere</h3>
+            <div id="pf-topp-chart" class="space-y-2"></div>
+          </div>
+          <div class="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4 shadow-sm lg:col-span-2">
+            <h3 class="font-semibold text-sm mb-4">Utbetalingsfrekvens</h3>
+            <div id="pf-frekvens-chart" class="flex flex-wrap gap-3"></div>
+          </div>
+        </div>
+
+        <!-- Tom tilstand Statistikk -->
+        <div id="pf-statistikk-tom" class="hidden text-center py-10 text-gray-400 dark:text-gray-600">
+          <p class="text-sm">Legg til aksjer i Beholdning for å se statistikk.</p>
+          <button class="pf-sub-btn mt-3 text-xs text-brand-600 dark:text-brand-400 hover:underline font-medium" data-pf-tab="beholdning">Gå til Beholdning →</button>
+        </div>
+
       </div>
 
     </div>
