@@ -73,6 +73,11 @@ jobs:
         with:
           ref: main  # Alltid deploy fra main, inkl. eventuelle auto-commits
 
+      - name: Bump SW cache-versjon
+        run: |
+          SHA=$(git rev-parse --short HEAD)
+          sed -i "s/const CACHE = 'exday-v[^']*'/const CACHE = 'exday-v$SHA'/" sw.js
+
       - name: Konfigurer GitHub Pages
         uses: actions/configure-pages@v5
 

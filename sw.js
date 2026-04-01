@@ -1,11 +1,17 @@
 'use strict';
 
+// CACHE-VERSJON BYTTES AUTOMATISK AV GITHUB ACTIONS VED HVERT DEPLOY
 const CACHE = 'exday-v2';
 const NOTIF_CACHE = 'notif-prefs-v1';
 
 const PRECACHE = [
   '/',
+  '/innstillinger/',
+  '/assets/storage.js',
+  '/assets/ui.js',
+  '/assets/portefolje.js',
   '/assets/app.js',
+  '/assets/tailwind.css',
   '/assets/style.css',
   '/assets/consent.js',
   '/assets/icon.svg',
@@ -32,14 +38,15 @@ self.addEventListener('activate', event => {
   );
 });
 
-// ── FETCH (offline-støtte) ────────────────────────────────────────────────────
+// ── FETCH ─────────────────────────────────────────────────────────────────────
 self.addEventListener('fetch', event => {
   const { request } = event;
   if (request.method !== 'GET') return;
 
   const url = new URL(request.url);
+
+  // 1. aksjer.json: alltid nettverks-first
   if (url.pathname === '/data/aksjer.json') {
-    // Network-first: alltid prøv fersk data, fall tilbake til cache
     event.respondWith(
       fetch(request)
         .then(resp => {
@@ -48,12 +55,43 @@ self.addEventListener('fetch', event => {
         })
         .catch(() => caches.match(request))
     );
-  } else {
-    // Cache-first for statiske assets
-    event.respondWith(
-      caches.match(request).then(cached => cached || fetch(request))
-    );
+    return;
   }
+
+  // 2. HTML-navigasjon: nettverks-first — brukere ser alltid siste versjon
+  if (request.mode === 'navigate') {
+    event.respondWith(
+      fetch(request)
+        .then(resp => {
+          if (resp.ok) caches.open(CACHE).then(c => c.put(request, resp.clone()));
+          return resp;
+        })
+        .catch(() => caches.match(request))
+    );
+    return;
+  }
+
+  // 3. JS og CSS: stale-while-revalidate — server cache umiddelbart,
+  //    oppdater i bakgrunnen slik at neste lasting er fersk
+  if (/\.(js|css)(\?.*)?$/.test(url.pathname)) {
+    event.respondWith(
+      caches.open(CACHE).then(cache =>
+        cache.match(request).then(cached => {
+          const networkFetch = fetch(request).then(resp => {
+            if (resp.ok) cache.put(request, resp.clone());
+            return resp;
+          }).catch(() => cached);
+          return cached ? (networkFetch, cached) : networkFetch;
+        })
+      )
+    );
+    return;
+  }
+
+  // 4. Alt annet (bilder, ikoner): cache-first
+  event.respondWith(
+    caches.match(request).then(cached => cached || fetch(request))
+  );
 });
 
 // ── PERIODIC BACKGROUND SYNC (daglig sjekk av ex-datoer) ─────────────────────
