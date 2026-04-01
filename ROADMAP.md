@@ -42,6 +42,23 @@ Erstatt de 4 generiske kortene øverst med personlige kort når bruker har favor
 
 ---
 
+### 5. Porteføljesynkronisering mellom enheter 📱↔️💻
+**Status: Planlagt**
+
+Brukere som veksler mellom mobil og PC mister porteføljen siden alt ligger i localStorage (enhetsspesifikt). Ingen server = ingen tradisjonell sky-synk.
+
+#### 5a. QR-kode for overføring ⭐ (høyest prioritet)
+- [ ] "Send til mobil"-knapp i portefølje-fanen som genererer en QR-kode
+- [ ] Porteføljedata kodes inn i URL (`?pf=<base64>`) med tidsstempel
+- [ ] QR-koden er gyldig i 5 minutter — etter det vises feilmelding
+- [ ] Mottaker-siden (mobil) oppdager `?pf=`-parameteren, viser forhåndsvisning og importerer
+- [ ] Ingen server, ingen lagring — data finnes kun i QR-koden mens den vises
+
+#### 5b. CSV som manuell backup (allerede bygget ✅)
+Brukere kan eksportere på én enhet og importere på en annen via CSV-filen.
+
+---
+
 ## Teknisk gjeld
 
 - [ ] Manglende historikk for 8 aksjer (COOL, FLNG, GOGL, PGS, PNORD, SBVG, SRBNK, WILS) — Yahoo Finance har ikke data. Mulig løsning: manuell backup-data i `fetch_stocks.py`
