@@ -139,12 +139,12 @@
         <p id="sist-oppdatert" class="text-xs text-gray-500 dark:text-gray-400 truncate hidden sm:block"><span class="skeleton inline-block h-3 rounded align-middle" style="width:8rem"></span></p>
       </div>
       <span id="streak-badge" class="hidden text-xs font-semibold text-orange-500 dark:text-orange-400 bg-orange-50 dark:bg-orange-900/30 px-2 py-1 rounded-full shrink-0 cursor-default"></span>
-      <button id="profil-btn" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500 dark:text-gray-400 transition-colors shrink-0" title="Innstillinger">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><circle cx="12" cy="12" r="3" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
+      <button id="profil-btn" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500 dark:text-gray-400 transition-colors shrink-0" title="Innstillinger" aria-label="Innstillinger">
+        <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><circle cx="12" cy="12" r="3" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
       </button>
-      <button id="dark-toggle" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500 dark:text-gray-400 transition-colors shrink-0" title="Bytt tema">
-        <svg id="icon-moon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
-        <svg id="icon-sun" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+      <button id="dark-toggle" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500 dark:text-gray-400 transition-colors shrink-0" title="Bytt tema" aria-label="Bytt fargemodus">
+        <svg id="icon-moon" class="w-5 h-5" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+        <svg id="icon-sun" class="w-5 h-5 hidden" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
       </button>
     </div>
   </header>
@@ -167,8 +167,8 @@
     <div id="data-cache-banner" class="hidden rounded-xl border border-yellow-200 dark:border-yellow-800 bg-yellow-50 dark:bg-yellow-900/20 px-4 py-3 flex items-center gap-3">
       <svg class="w-5 h-5 text-yellow-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
       <p class="text-xs text-yellow-700 dark:text-yellow-400 flex-1" id="data-cache-tekst">Viser lagrede data fra sist vellykkede henting.</p>
-      <button id="data-cache-lukk" class="text-yellow-500 hover:text-yellow-700 dark:hover:text-yellow-300 p-1">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      <button id="data-cache-lukk" class="text-yellow-500 hover:text-yellow-700 dark:hover:text-yellow-300 p-1" aria-label="Lukk">
+        <svg class="w-4 h-4" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
       </button>
     </div>
 
@@ -278,7 +278,7 @@
           <option value="ex_dato_asc">Neste ex-dato</option>
           <option value="navn_asc">Navn A–Å</option>
         </select>
-        <button id="view-toggle-mobil" class="view-toggle-btn shrink-0" title="Bytt visning">
+        <button id="view-toggle-mobil" class="view-toggle-btn shrink-0" title="Bytt visning" aria-label="Kompakt visning">
           <span id="view-label-mobil">Kompakt</span>
         </button>
       </div>
@@ -287,7 +287,7 @@
       <div id="tabell-wrapper" class="overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-800 shadow-sm">
         <div class="hidden md:flex items-center justify-end px-4 py-2 border-b border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-900/50 gap-2">
           <span class="text-xs text-gray-400">Visning:</span>
-          <button id="view-toggle-desktop" class="view-toggle-btn">
+          <button id="view-toggle-desktop" class="view-toggle-btn" aria-label="Kompakt visning">
             <span id="view-label-desktop">Kompakt</span>
           </button>
         </div>
@@ -295,27 +295,27 @@
           <thead>
             <tr class="bg-gray-100 dark:bg-gray-900 text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
               <th class="px-2 py-3 w-8"></th>
-              <th class="sortable px-4 py-3 text-left" data-col="ticker">Ticker</th>
-              <th class="sortable px-4 py-3 text-left" data-col="navn">Selskap</th>
-              <th class="sortable px-4 py-3 text-right" data-col="pris">Pris</th>
+              <th class="sortable px-4 py-3 text-left" data-col="ticker" aria-sort="none">Ticker</th>
+              <th class="sortable px-4 py-3 text-left" data-col="navn" aria-sort="none">Selskap</th>
+              <th class="sortable px-4 py-3 text-right" data-col="pris" aria-sort="none">Pris</th>
               <th class="col-detalj px-4 py-3 text-center">52u range</th>
-              <th class="sortable px-4 py-3 text-right" data-col="utbytte_yield">Yield %</th>
-              <th class="sortable px-4 py-3 text-center" data-col="utbytte_score">
+              <th class="sortable px-4 py-3 text-right" data-col="utbytte_yield" aria-sort="descending">Yield %</th>
+              <th class="sortable px-4 py-3 text-center" data-col="utbytte_score" aria-sort="none">
                 Score
-                <button id="score-info-btn" class="ml-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 align-middle" title="Hva er Score?" onclick="event.stopPropagation(); visScoreInfoModal()">
-                  <svg class="w-3.5 h-3.5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2"/><path stroke-linecap="round" stroke-width="2" d="M12 16v-4m0-4h.01"/></svg>
+                <button id="score-info-btn" class="ml-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 align-middle" title="Hva er Score?" aria-label="Hva er utbytte-score?" onclick="event.stopPropagation(); visScoreInfoModal()">
+                  <svg class="w-3.5 h-3.5 inline" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2"/><path stroke-linecap="round" stroke-width="2" d="M12 16v-4m0-4h.01"/></svg>
                 </button>
               </th>
-              <th class="col-detalj sortable px-4 py-3 text-right" data-col="snitt_yield_5ar">Snitt yield 5å</th>
-              <th class="col-detalj sortable px-4 py-3 text-right" data-col="utbytte_per_aksje">Utb./aksje</th>
-              <th class="sortable px-4 py-3 text-right" data-col="payout_ratio">Payout</th>
-              <th class="sortable px-4 py-3 text-right" data-col="utbytte_vekst_5ar">Vekst 5å</th>
-              <th class="col-detalj sortable px-4 py-3 text-right" data-col="ar_med_utbytte">År m/utb.</th>
-              <th class="col-detalj sortable px-4 py-3 text-right" data-col="pe_ratio">P/E</th>
-              <th class="col-detalj sortable px-4 py-3 text-right" data-col="pb_ratio">P/B</th>
-              <th class="sortable px-4 py-3 text-center" data-col="ex_dato">Ex-dato</th>
-              <th class="col-detalj sortable px-4 py-3 text-center" data-col="betaling_dato">Bet.-dato</th>
-              <th class="sortable px-4 py-3 text-center" data-col="frekvens">Frekvens</th>
+              <th class="col-detalj sortable px-4 py-3 text-right" data-col="snitt_yield_5ar" aria-sort="none">Snitt yield 5å</th>
+              <th class="col-detalj sortable px-4 py-3 text-right" data-col="utbytte_per_aksje" aria-sort="none">Utb./aksje</th>
+              <th class="sortable px-4 py-3 text-right" data-col="payout_ratio" aria-sort="none">Payout</th>
+              <th class="sortable px-4 py-3 text-right" data-col="utbytte_vekst_5ar" aria-sort="none">Vekst 5å</th>
+              <th class="col-detalj sortable px-4 py-3 text-right" data-col="ar_med_utbytte" aria-sort="none">År m/utb.</th>
+              <th class="col-detalj sortable px-4 py-3 text-right" data-col="pe_ratio" aria-sort="none">P/E</th>
+              <th class="col-detalj sortable px-4 py-3 text-right" data-col="pb_ratio" aria-sort="none">P/B</th>
+              <th class="sortable px-4 py-3 text-center" data-col="ex_dato" aria-sort="none">Ex-dato</th>
+              <th class="col-detalj sortable px-4 py-3 text-center" data-col="betaling_dato" aria-sort="none">Bet.-dato</th>
+              <th class="sortable px-4 py-3 text-center" data-col="frekvens" aria-sort="none">Frekvens</th>
             </tr>
           </thead>
           <tbody id="tabell-body" class="divide-y divide-gray-100 dark:divide-gray-800">
@@ -880,14 +880,14 @@
   </main>
 
   <!-- VELKOMST-MODAL -->
-  <div id="velkommen-modal" class="fixed inset-0 bg-black/60 z-50 hidden items-center justify-center p-4">
+  <div id="velkommen-modal" class="fixed inset-0 bg-black/60 z-50 hidden items-center justify-center p-4" role="dialog" aria-modal="true" aria-labelledby="velk-tittel">
     <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto">
       <!-- STEG 1: Info -->
       <div id="velk-steg1" class="p-6 space-y-4">
         <div class="flex items-center gap-3">
           <img src="logo/exday_icon_primary.svg" class="h-8 dark:hidden shrink-0" alt="exday.no" />
           <img src="logo/exday_icon_primary.svg" class="h-8 hidden dark:block shrink-0" alt="exday.no" />
-          <h2 class="text-lg font-bold">Velkommen til exday.no</h2>
+          <h2 id="velk-tittel" class="text-lg font-bold">Velkommen til exday.no</h2>
         </div>
         <p class="text-sm text-gray-600 dark:text-gray-400">exday.no er et hobbyprosjekt med én målsetning: gi deg en rask og oversiktlig oversikt over utbytteaksjer notert på Oslo Børs — uten konto, uten abonnement og uten at noe lagres hos oss.</p>
         <div class="space-y-3">
@@ -967,7 +967,7 @@
   </div>
 
   <!-- MODAL -->
-  <div id="modal-overlay" class="fixed inset-0 bg-black/60 z-50 hidden items-end sm:items-center justify-center sm:p-4">
+  <div id="modal-overlay" class="fixed inset-0 bg-black/60 z-50 hidden items-end sm:items-center justify-center sm:p-4" role="dialog" aria-modal="true" aria-labelledby="modal-aksje-tittel">
     <div id="modal-content" class="bg-white dark:bg-gray-900 rounded-t-2xl sm:rounded-2xl shadow-2xl w-full sm:max-w-lg max-h-[92vh] sm:max-h-[90vh] overflow-y-auto">
       <div class="flex justify-center pt-3 pb-1 sm:hidden">
         <div class="w-10 h-1 rounded-full bg-gray-300 dark:bg-gray-700"></div>
@@ -977,9 +977,9 @@
   </div>
 
   <!-- QR-MODAL -->
-  <div id="qr-modal" class="fixed inset-0 bg-black/60 z-50 hidden items-center justify-center p-4">
+  <div id="qr-modal" class="fixed inset-0 bg-black/60 z-50 hidden items-center justify-center p-4" role="dialog" aria-modal="true" aria-labelledby="qr-modal-tittel">
     <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl p-6 max-w-xs w-full text-center space-y-4">
-      <h3 class="font-semibold text-base">Skann for å overføre portefølje</h3>
+      <h3 id="qr-modal-tittel" class="font-semibold text-base">Skann for å overføre portefølje</h3>
       <div id="qr-canvas-wrapper" class="flex justify-center"></div>
       <p class="text-xs text-gray-400">Gyldig i <span id="qr-countdown" class="font-mono font-semibold">5:00</span></p>
       <p class="text-xs text-red-500 hidden" id="qr-utlopt">QR-koden er utløpt. Lukk og generer en ny.</p>
@@ -988,13 +988,13 @@
   </div>
 
   <!-- INNSTILLINGER-MODAL -->
-  <div id="innstillinger-modal" class="fixed inset-0 bg-black/60 z-50 hidden items-center justify-center p-4">
+  <div id="innstillinger-modal" class="fixed inset-0 bg-black/60 z-50 hidden items-center justify-center p-4" role="dialog" aria-modal="true" aria-labelledby="innst-tittel">
     <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl w-full max-w-md max-h-[90vh] flex flex-col">
       <!-- Header -->
       <div class="flex items-center justify-between px-5 pt-5 pb-4 border-b border-gray-100 dark:border-gray-800 shrink-0">
-        <h3 class="font-semibold text-base">Innstillinger</h3>
-        <button id="innstillinger-lukk" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 p-1">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        <h3 id="innst-tittel" class="font-semibold text-base">Innstillinger</h3>
+        <button id="innstillinger-lukk" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 p-1" aria-label="Lukk">
+          <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
         </button>
       </div>
       <!-- Tabs -->
@@ -1097,7 +1097,7 @@
   </footer>
 
   <!-- DEL-MODAL -->
-  <div id="del-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+  <div id="del-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="del-modal-navn">
     <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
       <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-800 flex items-center justify-between">
         <div>
@@ -1105,8 +1105,8 @@
           <h2 class="font-bold text-lg" id="del-modal-navn">—</h2>
           <p class="text-xs text-gray-400 mt-0.5" id="del-modal-dato"></p>
         </div>
-        <button id="del-modal-lukk" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 p-1">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        <button id="del-modal-lukk" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 p-1" aria-label="Lukk">
+          <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
         </button>
       </div>
       <div class="p-6 space-y-4">

@@ -111,8 +111,8 @@ function visTransaksjoner() {
       <td class="px-4 py-3 text-right">${kursLabel}</td>
       <td class="px-4 py-3 text-right ${vergeFarge} font-semibold">${isKjøp ? '-' : '+'}${fmtKr(verdi)}</td>
       <td class="px-4 py-3 text-center">
-        <button class="tx-slett-rad text-gray-400 hover:text-red-500 transition-colors p-1" data-ticker="${t.ticker}" data-id="${t.id}">
-          <svg class="w-4 h-4 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        <button class="tx-slett-rad text-gray-400 hover:text-red-500 transition-colors p-1" data-ticker="${t.ticker}" data-id="${t.id}" aria-label="Slett transaksjon">
+          <svg class="w-4 h-4 pointer-events-none" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
         </button>
       </td>
     </tr>`;
@@ -732,8 +732,8 @@ function visPortefolje() {
       <td class="px-4 py-3 text-center hidden sm:table-cell text-gray-500 text-sm">${a.ex_dato ? formaterDato(a.ex_dato) : '—'}</td>
       <td class="px-4 py-3 text-center hidden sm:table-cell"><span class="frekvens-badge">${a.frekvens}</span></td>
       <td class="px-4 py-3 text-center">
-        <button class="pf-slett text-gray-400 hover:text-red-500 transition-colors p-1" data-ticker="${a.ticker}" title="Fjern">
-          <svg class="w-4 h-4 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        <button class="pf-slett text-gray-400 hover:text-red-500 transition-colors p-1" data-ticker="${a.ticker}" title="Fjern fra portefølje" aria-label="Slett transaksjon">
+          <svg class="w-4 h-4 pointer-events-none" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
         </button>
       </td>
     </tr>`;
@@ -1051,15 +1051,15 @@ function visWatchlister() {
               <td class="px-4 py-3 text-right"><span class="yield-badge ${yieldKlasse(a.utbytte_yield)}">${a.utbytte_yield.toFixed(2)}%</span></td>
               <td class="px-4 py-3 text-center hidden sm:table-cell text-gray-500 text-sm">${a.ex_dato ? formaterDato(a.ex_dato) : '—'}</td>
               <td class="px-4 py-3 text-center">
-                <button class="wl-legg-til-pf text-gray-400 hover:text-brand-600 dark:hover:text-brand-400 transition-colors p-1" title="Legg til i portefølje"
+                <button class="wl-legg-til-pf text-gray-400 hover:text-brand-600 dark:hover:text-brand-400 transition-colors p-1" title="Legg til i portefølje" aria-label="Legg til i portefølje"
                         data-ticker="${ticker}">
-                  <svg class="w-4 h-4 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                  <svg class="w-4 h-4 pointer-events-none" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
                 </button>
               </td>
               <td class="px-4 py-3 text-center">
                 <button class="wl-fjern-ticker text-gray-400 hover:text-red-500 transition-colors p-1"
-                        data-liste-id="${aktivListe.id}" data-ticker="${ticker}">
-                  <svg class="w-4 h-4 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                        data-liste-id="${aktivListe.id}" data-ticker="${ticker}" aria-label="Fjern fra watchliste">
+                  <svg class="w-4 h-4 pointer-events-none" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
                 </button>
               </td>
             </tr>`;

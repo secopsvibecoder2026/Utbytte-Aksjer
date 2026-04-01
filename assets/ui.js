@@ -616,10 +616,15 @@ function visOversikt() {
   const ingenMobilEl = document.getElementById('ingen-resultater-mobil');
   const antallEl = document.getElementById('antall-vist');
 
-  // Oppdater sorteringsikoner
+  // Oppdater sorteringsikoner og aria-sort
   document.querySelectorAll('th.sortable').forEach(th => {
     th.classList.remove('sort-asc', 'sort-desc');
-    if (th.dataset.col === sortering.kol) th.classList.add('sort-' + sortering.retning);
+    if (th.dataset.col === sortering.kol) {
+      th.classList.add('sort-' + sortering.retning);
+      th.setAttribute('aria-sort', sortering.retning === 'asc' ? 'ascending' : 'descending');
+    } else {
+      th.setAttribute('aria-sort', 'none');
+    }
   });
 
   if (data.length === 0) {
@@ -796,7 +801,7 @@ function visOversikt() {
           </span>
           ${snartEx && dagerTil !== null ? `<span class="text-xs text-orange-500 ml-1">${dagerTil === 0 ? '(i dag!)' : dagerTil === 1 ? '(i morgen)' : `(om ${dagerTil} d)`}</span>` : ''}
         </div>
-        <svg class="w-4 h-4 text-gray-300 dark:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        <svg class="w-4 h-4 text-gray-300 dark:text-gray-600" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
       </div>
     </div>`;
 
@@ -914,8 +919,8 @@ function visKalender() {
           </div>
           <button class="kal-ics-btn p-1.5 rounded-lg text-gray-400 hover:text-brand-600 hover:bg-brand-50 dark:hover:bg-brand-900/20 transition-colors"
                   data-ticker="${a.ticker}" data-type="${type}" data-dato="${dato}"
-                  title="Legg til i kalender (.ics)">
-            <svg class="w-4 h-4 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  title="Legg til i kalender (.ics)" aria-label="Legg til i kalender (.ics)">
+            <svg class="w-4 h-4 pointer-events-none" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
             </svg>
           </button>
@@ -961,8 +966,8 @@ function visKalender() {
 
 function stjerne(ticker, ekstraKlasse = '') {
   const er = erFavoritt(ticker);
-  return `<button class="fav-btn ${ekstraKlasse} transition-colors" data-ticker="${ticker}" title="${er ? 'Fjern favoritt' : 'Legg til favoritt'}" aria-label="Favoritt">
-    <svg class="w-4 h-4 pointer-events-none ${er ? 'text-yellow-400' : 'text-gray-300 dark:text-gray-600'}" fill="${er ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
+  return `<button class="fav-btn ${ekstraKlasse} transition-colors" data-ticker="${ticker}" title="${er ? 'Fjern favoritt' : 'Legg til favoritt'}" aria-label="${er ? 'Fjern fra favoritter' : 'Legg til i favoritter'}">
+    <svg class="w-4 h-4 pointer-events-none ${er ? 'text-yellow-400' : 'text-gray-300 dark:text-gray-600'}" aria-hidden="true" fill="${er ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
   </button>`;
 }
 
@@ -1337,17 +1342,17 @@ function visModal(a) {
   body.innerHTML = `
     <div class="flex items-start justify-between mb-4">
       <div>
-        <h2 class="text-2xl font-bold text-brand-700 dark:text-brand-400">${a.ticker}</h2>
+        <h2 id="modal-aksje-tittel" class="text-2xl font-bold text-brand-700 dark:text-brand-400">${a.ticker}</h2>
         <p class="text-gray-600 dark:text-gray-400">${a.navn}</p>
         <p class="text-xs text-gray-400 mt-0.5">${a.sektor} · ${a.bors}</p>
       </div>
       <div class="flex items-center gap-1">
         ${stjerne(a.ticker, 'p-1 hover:scale-110')}
         <button id="modal-del" class="text-gray-400 hover:text-brand-600 dark:hover:text-brand-400 p-1 transition-colors" aria-label="Del lenke" title="Kopier lenke">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg>
+          <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg>
         </button>
         <button id="modal-close" class="text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 p-1" aria-label="Lukk">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+          <svg class="w-6 h-6" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
         </button>
       </div>
     </div>
@@ -1497,8 +1502,25 @@ function initModal() {
     // Re-render stjernen inne i modal uten å lukke
     visModal(alleAksjer.find(x => x.ticker === btn.dataset.ticker));
   });
-  // ESC lukker modal
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') lukkModal(); });
+  // ESC lukker alle modaler
+  document.addEventListener('keydown', e => {
+    if (e.key !== 'Escape') return;
+    // Aksje-modal
+    const aksjeModal = document.getElementById('modal-overlay');
+    if (aksjeModal && !aksjeModal.classList.contains('hidden')) { lukkModal(); return; }
+    // Innstillinger-modal
+    const innstModal = document.getElementById('innstillinger-modal');
+    if (innstModal && innstModal.classList.contains('flex')) { innstModal.classList.remove('flex'); innstModal.classList.add('hidden'); return; }
+    // Del-modal
+    const delModal = document.getElementById('del-modal');
+    if (delModal && !delModal.classList.contains('hidden')) { delModal.classList.add('hidden'); delModal.classList.remove('flex'); return; }
+    // Velkommen-modal
+    const velkModal = document.getElementById('velkommen-modal');
+    if (velkModal && velkModal.classList.contains('flex')) { velkModal.classList.remove('flex'); velkModal.classList.add('hidden'); return; }
+    // QR-modal
+    const qrModal = document.getElementById('qr-modal');
+    if (qrModal && qrModal.classList.contains('flex')) { qrModal.classList.remove('flex'); qrModal.classList.add('hidden'); }
+  });
 }
 
 function modalKort(label, value) {
@@ -1622,8 +1644,8 @@ function visScoreInfoModal() {
   body.innerHTML = `
     <div class="flex items-start justify-between mb-4">
       <h2 class="text-lg font-bold">Utbytte-score — slik beregnes den</h2>
-      <button id="modal-close" class="text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 p-1">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      <button id="modal-close" class="text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 p-1" aria-label="Lukk">
+        <svg class="w-6 h-6" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
       </button>
     </div>
     <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">Scoren (1–10) måler utbyttekvalitet basert på fem kriterier. Høy score betyr ikke nødvendigvis lav risiko — gjør alltid egen analyse.</p>
