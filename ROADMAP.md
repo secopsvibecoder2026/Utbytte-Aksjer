@@ -63,23 +63,67 @@ Pop-up som vises kun ved første besøk. Informerer om prosjektets natur (hobbyp
 
 ## Planlagt
 
-### 16. Lavthengende forbedringer 🍒
+### 16. Personlig profil og mål 🎯
+**Mål: gjøre appen til noe som tilhører brukeren**
 
-#### 16a. Sortering huskes mellom besøk
+Brukeren setter et personlig navn og månedlig utbyttemål. Vises øverst på dashbordet.
+
+- [ ] Profil-knapp øverst i hjørnet → enkel modal: navn + månedlig mål i NOK
+- [ ] "God morgen, Kristian" på dashbordet basert på klokkeslett
+- [ ] Fremgangsbar mot månedlig mål (estimert utbytte vs. mål)
+- [ ] Profil lagres i localStorage
+
+---
+
+### 17. Daglig oppdatering — "Hva skjer i dag?" 📰
+**Mål: en grunn til å åpne appen hver dag**
+
+En seksjon øverst (eller som start-panel) som viser hva som er relevant akkurat i dag basert på brukerens aksjer og favoritter.
+
+- [ ] Kursendring siden forrige dag for portefølje-aksjer (beregnet fra aksjer.json historikk)
+- [ ] "Ex-dato i dag / i morgen" — fremhevet for aksjer i portefølje/favoritter
+- [ ] "Utbetaling denne uken" — hvilke utbetalinger er nær
+- [ ] "Siste sjanse" — aksjer med ex-dato om 1–2 dager som brukeren ikke eier
+- [ ] Oppdateres automatisk ved innlasting uten ekstra kall
+
+---
+
+### 18. Notat og prisvarsler per aksje 📝
+**Mål: gjøre appen til et personlig arbeidsverktøy**
+
+- [ ] Notatfelt per aksje i detaljmodalen (lagret i localStorage)
+- [ ] "Målpris"-felt: sett ønsket kjøpspris — vises som badge i tabellen når pris er under mål
+- [ ] Prisvarsler vises som en samlet liste i et eget panel ("Aksjer nær din målpris")
+
+---
+
+### 19. Streaks og milepæler 🏆
+**Mål: belønne daglig bruk og bygge vane**
+
+- [ ] Besøksstreak-teller ("5 dager på rad") — vist diskret i hjørnet
+- [ ] Utbyttemilestones: badge når portefølje passerer 1 000 / 10 000 / 100 000 kr estimert/år
+- [ ] "Hittil i år"-fremgang — visuell oppdatering når ny utbetaling er registrert i perioden
+- [ ] Animasjon / konfetti ved ny milepæl (kan slås av)
+
+---
+
+### 20. Lavthengende forbedringer 🍒
+
+#### 20a. Sortering huskes mellom besøk
 Lagre valgt sorteringskolonne og retning i localStorage.
 
-#### 16b. Dele enkeltaksje via URL
+#### 20b. Dele enkeltaksje via URL
 `?aksje=EQNR` åpner modalen direkte — gjør det mulig å sende lenker.
 
-#### 16c. Score-forklaring
+#### 20c. Score-forklaring
 Tooltip eller infoboks som forklarer hva Score (0–10) faktisk beregnes fra.
 
-#### 16d. Søk huskes ved tabbytte
+#### 20d. Søk huskes ved tabbytte
 Søkefeltet tømmes i dag ved tabbytte — vurder å beholde søket.
 
 ---
 
-### 17. Individuelle aksjesider for SEO 📄
+### 21. Individuelle aksjesider for SEO 📄
 **Mål: organisk trafikk fra Google på ticker-spesifikke søk**
 
 Utvid `fetch_stocks.py` til å generere én HTML-side per aksje i tillegg til JSON og sitemap. Ingen ny teknologi — samme Python-script, samme GitHub Actions.
