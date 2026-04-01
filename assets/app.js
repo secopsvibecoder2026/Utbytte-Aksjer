@@ -105,7 +105,7 @@ function visVelkomstModal() {
     document.getElementById('velk-navn-input').focus();
   });
 
-  // Lagre profil og start
+  // Lagre profil og vis steg 3 (kom i gang)
   document.getElementById('velk-lagre').addEventListener('click', () => {
     const navn      = (document.getElementById('velk-navn-input').value || '').trim();
     const spareMaal = parseFloat(document.getElementById('velk-sparemaal-input').value) || 0;
@@ -113,8 +113,18 @@ function visVelkomstModal() {
     lagreProfil(navn, malMnd, spareMaal);
     visGreeting();
     oppdaterSpareMaalBar(hentPF());
-    lukkOgMerk();
+    steg2.classList.add('hidden');
+    document.getElementById('velk-steg3').classList.remove('hidden');
   });
+
+  // Steg 3: Gå til portefølje
+  document.getElementById('velk-start-pf').addEventListener('click', () => {
+    lukkOgMerk();
+    document.querySelector('[data-tab="portfolio"]')?.click();
+  });
+
+  // Steg 3: Utforsk aksjer (bare lukk)
+  document.getElementById('velk-start-sok').addEventListener('click', lukkOgMerk);
 
   // Importer CSV
   document.getElementById('velk-importer').addEventListener('click', () => {
@@ -447,6 +457,7 @@ function initInnstillinger() {
       });
       document.getElementById('innst-profil').classList.toggle('hidden', tab !== 'profil');
       document.getElementById('innst-varsler').classList.toggle('hidden', tab !== 'varsler');
+      document.getElementById('innst-guide').classList.toggle('hidden', tab !== 'guide');
       if (tab === 'varsler') visVarslerTab();
     });
   });
@@ -476,6 +487,13 @@ function initInnstillinger() {
   lukkBtn.addEventListener('click', lukkInnstillingerModal);
   avbrytBtn.addEventListener('click', lukkInnstillingerModal);
   modal.addEventListener('click', e => { if (e.target === modal) lukkInnstillingerModal(); });
+
+  // «Vis veiviseren på nytt» i Guide-fanen
+  document.getElementById('guide-restart-onboarding').addEventListener('click', () => {
+    lukkInnstillingerModal();
+    localStorage.removeItem('velkommen_vist');
+    visVelkomstModal();
+  });
 
   lagreBtn.addEventListener('click', () => {
     const nyMalMnd = parseFloat(malIn.value) || 0;

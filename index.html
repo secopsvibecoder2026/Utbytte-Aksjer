@@ -881,6 +881,40 @@
         </div>
         <button id="velk-neste" class="w-full py-2.5 bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold rounded-lg transition-colors">Kom i gang →</button>
       </div>
+      <!-- STEG 3: Kom i gang -->
+      <div id="velk-steg3" class="hidden p-6 space-y-4">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">🚀</span>
+          <h2 class="text-lg font-bold">Klar til å starte!</h2>
+        </div>
+        <p class="text-sm text-gray-500 dark:text-gray-400">Du er satt opp. Slik bygger du porteføljen din:</p>
+        <div class="space-y-3">
+          <div class="flex gap-3 items-start p-3 rounded-xl bg-brand-50 dark:bg-brand-900/20 border border-brand-200 dark:border-brand-800">
+            <span class="flex-shrink-0 w-6 h-6 rounded-full bg-brand-600 text-white text-xs font-bold flex items-center justify-center mt-0.5">1</span>
+            <div>
+              <p class="font-semibold text-sm text-brand-700 dark:text-brand-300">Søk etter en aksje</p>
+              <p class="text-xs text-brand-600/70 dark:text-brand-400/70 mt-0.5">Skriv navn eller ticker i søkefeltet på forsiden, f.eks. «DNB» eller «EQNR».</p>
+            </div>
+          </div>
+          <div class="flex gap-3 items-start p-3 rounded-xl bg-gray-50 dark:bg-gray-800/50">
+            <span class="flex-shrink-0 w-6 h-6 rounded-full bg-gray-400 text-white text-xs font-bold flex items-center justify-center mt-0.5">2</span>
+            <div>
+              <p class="font-semibold text-sm">Legg til i portefølje</p>
+              <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Gå til Portefølje → Beholdning og skriv inn antall aksjer du eier.</p>
+            </div>
+          </div>
+          <div class="flex gap-3 items-start p-3 rounded-xl bg-gray-50 dark:bg-gray-800/50">
+            <span class="flex-shrink-0 w-6 h-6 rounded-full bg-gray-400 text-white text-xs font-bold flex items-center justify-center mt-0.5">3</span>
+            <div>
+              <p class="font-semibold text-sm">Se utbytte og statistikk</p>
+              <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Under Statistikk ser du forventet utbytte/år, yield og sammenligning mot OSEBX.</p>
+            </div>
+          </div>
+        </div>
+        <button id="velk-start-pf" class="w-full py-2.5 bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold rounded-lg transition-colors">Gå til porteføljen →</button>
+        <button id="velk-start-sok" class="w-full py-2 text-sm text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors">Utforsk aksjer først</button>
+      </div>
+
       <!-- STEG 2: Profil-oppsett -->
       <div id="velk-steg2" class="hidden p-6 space-y-4">
         <div class="flex items-center gap-2">
@@ -946,6 +980,7 @@
       <div class="flex border-b border-gray-100 dark:border-gray-800 shrink-0">
         <button class="innst-tab-btn flex-1 py-2.5 text-sm font-medium text-brand-600 dark:text-brand-400 border-b-2 border-brand-600 dark:border-brand-400 -mb-px transition-colors" data-innst-tab="profil">Profil</button>
         <button class="innst-tab-btn flex-1 py-2.5 text-sm font-medium text-gray-500 dark:text-gray-400 border-b-2 border-transparent hover:text-gray-700 dark:hover:text-gray-200 -mb-px transition-colors" data-innst-tab="varsler">Varsler</button>
+        <button class="innst-tab-btn flex-1 py-2.5 text-sm font-medium text-gray-500 dark:text-gray-400 border-b-2 border-transparent hover:text-gray-700 dark:hover:text-gray-200 -mb-px transition-colors" data-innst-tab="guide">Guide</button>
       </div>
       <!-- Profil-innhold -->
       <div id="innst-profil" class="overflow-y-auto p-5 space-y-4">
@@ -971,6 +1006,57 @@
       <!-- Varsler-innhold -->
       <div id="innst-varsler" class="overflow-y-auto p-5 hidden">
         <div id="varsler-innhold" class="space-y-4"></div>
+      </div>
+      <!-- Guide-innhold -->
+      <div id="innst-guide" class="overflow-y-auto p-5 hidden space-y-4">
+        <p class="text-xs text-gray-400">Slik bruker du exday.no — alt lagres lokalt i nettleseren, ingen innlogging.</p>
+        <div class="space-y-3">
+          <div class="flex gap-3">
+            <span class="flex-shrink-0 w-7 h-7 rounded-full bg-brand-600 text-white text-xs font-bold flex items-center justify-center">1</span>
+            <div>
+              <p class="font-semibold text-sm">Utforsk aksjer</p>
+              <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Bruk søk og filtre øverst på siden. Klikk på en aksje for detaljer, utbyttehistorikk og nøkkeltall.</p>
+            </div>
+          </div>
+          <div class="flex gap-3">
+            <span class="flex-shrink-0 w-7 h-7 rounded-full bg-brand-600 text-white text-xs font-bold flex items-center justify-center">2</span>
+            <div>
+              <p class="font-semibold text-sm">Bygg porteføljen din</p>
+              <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Gå til <strong>Portefølje → Beholdning</strong> og skriv inn antall aksjer per selskap. Appen beregner forventet utbytte, yield og markedsverdi automatisk.</p>
+            </div>
+          </div>
+          <div class="flex gap-3">
+            <span class="flex-shrink-0 w-7 h-7 rounded-full bg-brand-600 text-white text-xs font-bold flex items-center justify-center">3</span>
+            <div>
+              <p class="font-semibold text-sm">Registrer kjøp og salg</p>
+              <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Under <strong>Transaksjoner</strong> kan du logge kjøp, salg og mottatt utbytte. Appen beregner da din faktiske avkastning og kostpris (VWAP).</p>
+            </div>
+          </div>
+          <div class="flex gap-3">
+            <span class="flex-shrink-0 w-7 h-7 rounded-full bg-brand-600 text-white text-xs font-bold flex items-center justify-center">4</span>
+            <div>
+              <p class="font-semibold text-sm">Watchliste</p>
+              <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Legg aksjer du vurderer å kjøpe i en <strong>Watchliste</strong>. Klikk "+" på en rad for å gå direkte til kjøpsregistrering.</p>
+            </div>
+          </div>
+          <div class="flex gap-3">
+            <span class="flex-shrink-0 w-7 h-7 rounded-full bg-brand-600 text-white text-xs font-bold flex items-center justify-center">5</span>
+            <div>
+              <p class="font-semibold text-sm">Kalender og varsler</p>
+              <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Kalender-fanen viser alle kommende ex-datoer og betalingsdatoer. Last ned enkelhendelser som .ics-fil til din kalender-app.</p>
+            </div>
+          </div>
+          <div class="flex gap-3">
+            <span class="flex-shrink-0 w-7 h-7 rounded-full bg-brand-600 text-white text-xs font-bold flex items-center justify-center">6</span>
+            <div>
+              <p class="font-semibold text-sm">Del porteføljen din</p>
+              <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Under <strong>Portefølje</strong> finner du «Del portefølje»-knappen. Den genererer en lenke med et anonymt sammendrag — ingen persondata deles.</p>
+            </div>
+          </div>
+        </div>
+        <div class="pt-2 border-t border-gray-100 dark:border-gray-800">
+          <button id="guide-restart-onboarding" class="text-xs text-brand-600 dark:text-brand-400 hover:underline">Vis velkomst-veiviseren på nytt →</button>
+        </div>
       </div>
     </div>
   </div>
