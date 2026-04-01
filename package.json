@@ -1,0 +1,6 @@
+{
+  "name": "exday-tests",
+  "scripts": {
+    "test": "node --test tests/*.test.js"
+  }
+}
