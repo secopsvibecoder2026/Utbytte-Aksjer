@@ -10,6 +10,7 @@ import re
 import sys
 import datetime
 import urllib.request
+import html.parser
 import yfinance as yf
 
 # ── NEWSWEB (Oslo Børs) INTEGRASJON ───────────────────────────────────────────
@@ -124,6 +125,186 @@ AKSJER = [{"ticker_yf": t["ticker_yf"], "ticker": t["ticker"],
           for t in _ticker_data]
 
 BESKRIVELSER = {t["ticker"]: t.get("beskrivelse", "") for t in _ticker_data}
+DNB_NAVN = {t["ticker"]: t.get("navn_dnb", t["navn"]) for t in _ticker_data}
+
+# ── DNB MARKETS INTEGRASJON ─────────────────────────────────────────────────
+
+class _DNBParser(html.parser.HTMLParser):
+    """HTML-parser for DNB Markets utbytteside (server-rendered Gatsby)."""
+
+    def __init__(self):
+        super().__init__()
+        self._in_tbody = False
+        self._in_tr    = False
+        self._in_td    = False
+        self._cells    = []
+        self._current  = ""
+        self.rader     = []   # list of dicts med 6 felt
+        _H = ["selskap", "utbytte", "valuta", "frekvens", "eks_dato", "betaling"]
+        self._headers  = _H
+
+    def handle_starttag(self, tag, attrs):
+        if tag == "tbody":
+            self._in_tbody = True
+        elif tag == "tr" and self._in_tbody:
+            self._in_tr  = True
+            self._cells  = []
+        elif tag == "td" and self._in_tr:
+            self._in_td  = True
+            self._current = ""
+
+    def handle_endtag(self, tag):
+        if tag == "tbody":
+            self._in_tbody = False
+        elif tag == "tr" and self._in_tbody:
+            self._in_tr = False
+            if len(self._cells) >= 6:
+                self.rader.append(dict(zip(self._headers, self._cells[:6])))
+        elif tag == "td" and self._in_td:
+            self._in_td = False
+            self._cells.append(self._current.strip())
+
+    def handle_data(self, data):
+        if self._in_td:
+            self._current += data
+
+
+def _parse_dnb_full_dato(s: str) -> str | None:
+    """Parse '3-Feb-2026' → '2026-02-03'."""
+    s = s.strip()
+    if not s or s == "-":
+        return None
+    for fmt in ("%d-%b-%Y", "%d/%m/%Y", "%d.%m.%Y"):
+        try:
+            return datetime.datetime.strptime(s, fmt).strftime("%Y-%m-%d")
+        except ValueError:
+            continue
+    return None
+
+
+def _parse_dnb_betaling_dato(s: str, ex_dt: datetime.date) -> str | None:
+    """
+    Parse betalingsdato uten år ('12-Feb').
+    Infererer år: hvis betaling-måned >= ex-måned → samme år, ellers neste år.
+    """
+    s = s.strip()
+    if not s or s == "-":
+        return None
+    try:
+        d = datetime.datetime.strptime(f"{s}-{ex_dt.year}", "%d-%b-%Y")
+        if d.month < ex_dt.month:
+            d = d.replace(year=ex_dt.year + 1)
+        return d.strftime("%Y-%m-%d")
+    except ValueError:
+        return None
+
+
+def _finn_dnb_tabell(obj, depth: int = 0):
+    """Rekursivt søk etter utbyttetabell i Gatsby page-data.json."""
+    if depth > 12:
+        return None
+    if isinstance(obj, list) and len(obj) > 10 and isinstance(obj[0], dict):
+        keys = set(obj[0].keys())
+        har_dato  = any(k for k in keys if "dato" in k.lower() or "date" in k.lower() or "eks" in k.lower())
+        har_navn  = any(k for k in keys if "selskap" in k.lower() or "name" in k.lower() or "company" in k.lower())
+        if har_dato and har_navn:
+            return obj
+    if isinstance(obj, dict):
+        for v in obj.values():
+            r = _finn_dnb_tabell(v, depth + 1)
+            if r:
+                return r
+    if isinstance(obj, list):
+        for item in obj:
+            r = _finn_dnb_tabell(item, depth + 1)
+            if r:
+                return r
+    return None
+
+
+def _processer_dnb_rader(rader: list) -> dict:
+    """Konverter liste av DNB-rader til {navn: {ex_dato, betaling_dato}}-dict."""
+    today = datetime.date.today()
+    result: dict = {}
+
+    for rad in rader:
+        # Strip parenthetisk suffix, f.eks. 'Equinor ASA (Q3 25)' → 'Equinor ASA'
+        navn = re.sub(r'\s*\(.*?\)', '', rad.get("selskap", "")).strip()
+        if not navn:
+            continue
+        ex_dato = _parse_dnb_full_dato(rad.get("eks_dato", ""))
+        if not ex_dato:
+            continue
+        ex_dt = datetime.date.fromisoformat(ex_dato)
+        if ex_dt < today:
+            continue   # Kun fremtidige ex-datoer
+        betaling = _parse_dnb_betaling_dato(rad.get("betaling", ""), ex_dt)
+        # Behold tidligste fremtidige ex-dato per selskap
+        if navn not in result or ex_dato < result[navn]["ex_dato"]:
+            result[navn] = {"ex_dato": ex_dato, "betaling_dato": betaling}
+
+    return result
+
+
+def hent_dnb_datoer() -> dict:
+    """
+    Henter ex-dato og betalingsdato fra DNB Markets utbyttekalender.
+    Returnerer {selskapsnavn: {"ex_dato": "YYYY-MM-DD", "betaling_dato": "YYYY-MM-DD"}}.
+    Prøver Gatsby page-data.json først, faller tilbake på HTML-scraping.
+    """
+    import html as _html_module
+    import html.parser
+
+    PAGE_DATA = "https://www.dnb.no/web/page-data/markets/aksjer/utbytteaksjer/page-data.json"
+    HTML_URL  = "https://www.dnb.no/markets/aksjer/utbytteaksjer"
+    HEADERS   = {
+        "User-Agent": "Mozilla/5.0 (compatible; exday.no/1.0)",
+        "Accept": "*/*",
+    }
+
+    # ── Forsøk 1: page-data.json ─────────────────────────────────────────────
+    try:
+        req = urllib.request.Request(PAGE_DATA, headers=HEADERS)
+        with urllib.request.urlopen(req, timeout=15) as r:
+            data = json.loads(r.read())
+        tabell = _finn_dnb_tabell(data)
+        if tabell:
+            rader = []
+            for item in tabell:
+                # Prøv å normalisere feltnavnene
+                rad = {
+                    "selskap":  item.get("selskap") or item.get("company") or item.get("name", ""),
+                    "utbytte":  item.get("utbytte") or item.get("dividend", ""),
+                    "valuta":   item.get("valuta")  or item.get("currency", ""),
+                    "frekvens": item.get("frekvens") or item.get("frequency", ""),
+                    "eks_dato": item.get("eks_dato") or item.get("exDate") or item.get("ex_date", ""),
+                    "betaling": item.get("betaling") or item.get("payDate") or item.get("payment_date", ""),
+                }
+                rader.append(rad)
+            resultat = _processer_dnb_rader(rader)
+            if resultat:
+                print(f"  DNB: {len(resultat)} selskaper fra page-data.json")
+                return resultat
+    except Exception as e:
+        print(f"  DNB page-data.json: {e}")
+
+    # ── Forsøk 2: HTML-scraping ───────────────────────────────────────────────
+    try:
+        req = urllib.request.Request(HTML_URL, headers=HEADERS)
+        with urllib.request.urlopen(req, timeout=20) as r:
+            tekst = r.read().decode("utf-8", errors="replace")
+        parser = _DNBParser()
+        parser.feed(tekst)
+        if parser.rader:
+            resultat = _processer_dnb_rader(parser.rader)
+            print(f"  DNB: {len(resultat)} selskaper fra HTML ({len(parser.rader)} rader funnet)")
+            return resultat
+    except Exception as e:
+        print(f"  DNB HTML: {e}")
+
+    print("  DNB: Kunne ikke hente datodata – hopper over")
+    return {}
+
 
 def safe_float(value, default=0.0):
     try:
@@ -468,6 +649,28 @@ def main():
         else:
             print(f"    KRITISK: Ingen data for {meta['ticker']} og ingen fallback.")
             ingen_data.append(meta["ticker"])
+
+    # ── DNB-datoer: berik ex_dato og betaling_dato ───────────────────────────
+    print("\nHenter utbyttedatoer fra DNB Markets...")
+    dnb_datoer = hent_dnb_datoer()
+    if dnb_datoer:
+        dnb_treff = 0
+        for aksje in resultater:
+            t = aksje["ticker"]
+            navn_dnb = DNB_NAVN.get(t)
+            if not navn_dnb:
+                continue
+            # Strip parentheticals ved oppslag
+            oppslag = re.sub(r'\s*\(.*?\)', '', navn_dnb).strip()
+            if oppslag in dnb_datoer:
+                dnb = dnb_datoer[oppslag]
+                if dnb.get("ex_dato"):
+                    if not aksje.get("ex_dato") or dnb["ex_dato"] > (aksje.get("ex_dato") or ""):
+                        aksje["ex_dato"] = dnb["ex_dato"]
+                        dnb_treff += 1
+                if dnb.get("betaling_dato") and not aksje.get("betaling_dato"):
+                    aksje["betaling_dato"] = dnb["betaling_dato"]
+        print(f"  DNB oppdaterte ex_dato for {dnb_treff} aksjer")
 
     # ── 5. Strukturert datakvalitetsrapport ───────────────────────────────────
     linje = "=" * 54

@@ -2,226 +2,427 @@
   {
     "ticker": "EQNR", "ticker_yf": "EQNR.OL", "navn": "Equinor ASA",
     "sektor": "Energi", "bors": "Oslo Børs",
-    "beskrivelse": "Norges største energiselskap. Kvartalsutbytte pluss ekstraordinære utbytter ved høye oljepriser."
+    "beskrivelse": "Norges største energiselskap. Kvartalsutbytte pluss ekstraordinære utbytter ved høye oljepriser.",
+    "navn_dnb": "Equinor ASA"
   },
   {
     "ticker": "DNB", "ticker_yf": "DNB.OL", "navn": "DNB Bank ASA",
     "sektor": "Finans", "bors": "Oslo Børs",
-    "beskrivelse": "Norges største bank. Kjent for høyt og stabilt utbytte, ofte over 7% yield."
+    "beskrivelse": "Norges største bank. Kjent for høyt og stabilt utbytte, ofte over 7% yield.",
+    "navn_dnb": "DNB ASA"
   },
   {
     "ticker": "TEL", "ticker_yf": "TEL.OL", "navn": "Telenor ASA",
     "sektor": "Telekommunikasjon", "bors": "Oslo Børs",
-    "beskrivelse": "Norges ledende telekomselskap med stabil kontantstrøm og høy utbyttegrad. Sterkt fotavtrykk i Asia."
+    "beskrivelse": "Norges ledende telekomselskap med stabil kontantstrøm og høy utbyttegrad. Sterkt fotavtrykk i Asia.",
+    "navn_dnb": "Telenor ASA"
   },
   {
     "ticker": "ORK", "ticker_yf": "ORK.OL", "navn": "Orkla ASA",
     "sektor": "Forbruksvarer", "bors": "Oslo Børs",
-    "beskrivelse": "Nordisk merkevareselskap med diversifisert portefølje. Konsistent og voksende utbytte i over 30 år."
+    "beskrivelse": "Nordisk merkevareselskap med diversifisert portefølje. Konsistent og voksende utbytte i over 30 år.",
+    "navn_dnb": "Orkla ASA"
   },
   {
     "ticker": "MOWI", "ticker_yf": "MOWI.OL", "navn": "Mowi ASA",
     "sektor": "Havbruk", "bors": "Oslo Børs",
-    "beskrivelse": "Verdens største lakseoppdrettsselskap. Kvartalsutbytte koblet til laksepris og inntjening."
+    "beskrivelse": "Verdens største lakseoppdrettsselskap. Kvartalsutbytte koblet til laksepris og inntjening.",
+    "navn_dnb": "Mowi ASA"
   },
   {
     "ticker": "AKRBP", "ticker_yf": "AKRBP.OL", "navn": "Aker BP ASA",
     "sektor": "Energi", "bors": "Oslo Børs",
-    "beskrivelse": "Norsk E&P-selskap med høy utbyttepolitikk. Betaler kvartalsvis utbytte basert på fri kontantstrøm."
+    "beskrivelse": "Norsk E&P-selskap med høy utbyttepolitikk. Betaler kvartalsvis utbytte basert på fri kontantstrøm.",
+    "navn_dnb": "Aker BP ASA"
   },
   {
     "ticker": "NHY", "ticker_yf": "NHY.OL", "navn": "Norsk Hydro ASA",
     "sektor": "Materialer", "bors": "Oslo Børs",
-    "beskrivelse": "Globalt aluminiumselskap og ledende innen fornybar energi. Syklisk utbytte påvirket av aluminiumspriser."
+    "beskrivelse": "Globalt aluminiumselskap og ledende innen fornybar energi. Syklisk utbytte påvirket av aluminiumspriser.",
+    "navn_dnb": "Norsk Hydro ASA"
   },
   {
     "ticker": "YAR", "ticker_yf": "YAR.OL", "navn": "Yara International ASA",
     "sektor": "Materialer", "bors": "Oslo Børs",
-    "beskrivelse": "Verdens ledende gjødselprodusent. Utbytte varierer med gjødselpris og global matetterspørsel."
+    "beskrivelse": "Verdens ledende gjødselprodusent. Utbytte varierer med gjødselpris og global matetterspørsel.",
+    "navn_dnb": "Yara International ASA"
   },
   {
     "ticker": "SALM", "ticker_yf": "SALM.OL", "navn": "SalMar ASA",
     "sektor": "Havbruk", "bors": "Oslo Børs",
-    "beskrivelse": "En av Norges mest effektive lakseoppdrettere. Høy margin og voksende utbytte over tid."
+    "beskrivelse": "En av Norges mest effektive lakseoppdrettere. Høy margin og voksende utbytte over tid.",
+    "navn_dnb": "SalMar ASA"
   },
   {
     "ticker": "SRBNK", "ticker_yf": "SRBNK.OL", "navn": "SpareBank 1 SR-Bank",
     "sektor": "Finans", "bors": "Oslo Børs",
-    "beskrivelse": "Ledende regional sparebank på Sør-Vestlandet. Kjent for høyt og stabilt utbytte med god vekst."
+    "beskrivelse": "Ledende regional sparebank på Sør-Vestlandet. Kjent for høyt og stabilt utbytte med god vekst.",
+    "navn_dnb": "SpareBank 1 SR-Bank ASA"
   },
   {
     "ticker": "GOGL", "ticker_yf": "GOGL.OL", "navn": "Golden Ocean Group",
     "sektor": "Shipping", "bors": "Oslo Børs",
-    "beskrivelse": "Verdens største tørrbulkrederi. Volatilt men potensielt svært høyt utbytte koblet til shippingratene."
+    "beskrivelse": "Verdens største tørrbulkrederi. Volatilt men potensielt svært høyt utbytte koblet til shippingratene.",
+    "navn_dnb": "Golden Ocean Group"
   },
   {
     "ticker": "MPCC", "ticker_yf": "MPCC.OL", "navn": "MPC Container Ships",
     "sektor": "Shipping", "bors": "Oslo Børs",
-    "beskrivelse": "Containerrederi med svært høy utbyttegrad. Syklisk og volatilt – utbytte varierer sterkt med containerrater."
+    "beskrivelse": "Containerrederi med svært høy utbyttegrad. Syklisk og volatilt – utbytte varierer sterkt med containerrater.",
+    "navn_dnb": "MPC Container Ships ASA"
   },
   {
     "ticker": "BWLPG", "ticker_yf": "BWLPG.OL", "navn": "BW LPG Limited",
     "sektor": "Shipping", "bors": "Oslo Børs",
-    "beskrivelse": "Verdens største LPG-tankrederi. Høy kontantstrøm og liberal utbyttepolitikk. Volatilt med shippingmarkedet."
+    "beskrivelse": "Verdens største LPG-tankrederi. Høy kontantstrøm og liberal utbyttepolitikk. Volatilt med shippingmarkedet.",
+    "navn_dnb": "BW LPG Limited"
   },
   {
     "ticker": "KOG", "ticker_yf": "KOG.OL", "navn": "Kongsberg Gruppen ASA",
     "sektor": "Industri", "bors": "Oslo Børs",
-    "beskrivelse": "Teknologi- og forsvarskonsern. Lav yield men sterk utbyttevekst. Defensivt som følge av økt NATO-satsing."
+    "beskrivelse": "Teknologi- og forsvarskonsern. Lav yield men sterk utbyttevekst. Defensivt som følge av økt NATO-satsing.",
+    "navn_dnb": "Kongsberg Gruppen ASA"
   },
   {
     "ticker": "FRO", "ticker_yf": "FRO.OL", "navn": "Frontline PLC",
     "sektor": "Shipping", "bors": "Oslo Børs",
-    "beskrivelse": "Ledende råoljetankrederi. Svært høy utbyttegrad fra sterk kontantstrøm. Syklisk og rateeksponert."
+    "beskrivelse": "Ledende råoljetankrederi. Svært høy utbyttegrad fra sterk kontantstrøm. Syklisk og rateeksponert.",
+    "navn_dnb": "Frontline"
   },
   {
     "ticker": "NONG", "ticker_yf": "NONG.OL", "navn": "SpareBank 1 Nord-Norge",
     "sektor": "Finans", "bors": "Oslo Børs",
-    "beskrivelse": "Regional sparebank i Nord-Norge. Stabilt og voksende utbytte, godt kapitaldekkede."
+    "beskrivelse": "Regional sparebank i Nord-Norge. Stabilt og voksende utbytte, godt kapitaldekkede.",
+    "navn_dnb": "SpareBank 1 Nord-Norge"
   },
   {
     "ticker": "SUBC", "ticker_yf": "SUBC.OL", "navn": "Subsea 7 SA",
     "sektor": "Energitjenester", "bors": "Oslo Børs",
-    "beskrivelse": "Ledende leverandør av undersøiske engineering-tjenester til olje og gass. Solid balanse."
+    "beskrivelse": "Ledende leverandør av undersøiske engineering-tjenester til olje og gass. Solid balanse.",
+    "navn_dnb": "Subsea 7 S.A."
   },
   {
     "ticker": "WWI", "ticker_yf": "WWI.OL", "navn": "Wilh. Wilhelmsen Holding",
     "sektor": "Shipping", "bors": "Oslo Børs",
-    "beskrivelse": "Internasjonal shipping- og logistikkkonsern. Ro-ro transport og havnevirksomhet. Lav verdsettelse."
+    "beskrivelse": "Internasjonal shipping- og logistikkkonsern. Ro-ro transport og havnevirksomhet. Lav verdsettelse.",
+    "navn_dnb": "Wilh. Wilhelmsen Holding ASA"
   },
   {
     "ticker": "PNORD", "ticker_yf": "PNORD.OL", "navn": "Protector Forsikring ASA",
     "sektor": "Finans", "bors": "Oslo Børs",
-    "beskrivelse": "Raskt voksende skadeforsikringsselskap i Norden og UK. Sterk utbyttevekst over mange år."
+    "beskrivelse": "Raskt voksende skadeforsikringsselskap i Norden og UK. Sterk utbyttevekst over mange år.",
+    "navn_dnb": "Protector Forsikring ASA"
   },
   {
     "ticker": "SCATC", "ticker_yf": "SCATC.OL", "navn": "Scatec ASA",
     "sektor": "Fornybar energi", "bors": "Oslo Børs",
-    "beskrivelse": "Norsk leverandør av fornybar energi globalt. Solenergi- og vindkraftprosjekter i fremvoksende markeder."
+    "beskrivelse": "Norsk leverandør av fornybar energi globalt. Solenergi- og vindkraftprosjekter i fremvoksende markeder.",
+    "navn_dnb": "Scatec ASA"
   },
   {
     "ticker": "AUSS", "ticker_yf": "AUSS.OL", "navn": "Austevoll Seafood ASA",
     "sektor": "Havbruk", "bors": "Oslo Børs",
-    "beskrivelse": "Holdingselskap med majoritetseierandel i Lerøy Seafood og Pelagia. Bred eksponering mot sjømat og fiskeri."
+    "beskrivelse": "Holdingselskap med majoritetseierandel i Lerøy Seafood og Pelagia. Bred eksponering mot sjømat og fiskeri.",
+    "navn_dnb": "Austevoll Seafood ASA"
   },
   {
     "ticker": "LSG", "ticker_yf": "LSG.OL", "navn": "Lerøy Seafood Group ASA",
     "sektor": "Havbruk", "bors": "Oslo Børs",
-    "beskrivelse": "En av Norges største lakseoppdrettere med virksomhet innen oppdrett, villfangst og bearbeiding."
+    "beskrivelse": "En av Norges største lakseoppdrettere med virksomhet innen oppdrett, villfangst og bearbeiding.",
+    "navn_dnb": "Lerøy Seafood Group ASA"
   },
   {
     "ticker": "BAKKA", "ticker_yf": "BAKKA.OL", "navn": "Bakkafrost P/F",
     "sektor": "Havbruk", "bors": "Oslo Børs",
-    "beskrivelse": "Færøysk-skotsk lakseoppdrettsselskap notert på Oslo Børs. Integrert verdikjede fra rogn til ferdig produkt."
+    "beskrivelse": "Færøysk-skotsk lakseoppdrettsselskap notert på Oslo Børs. Integrert verdikjede fra rogn til ferdig produkt.",
+    "navn_dnb": "Bakkafrost"
   },
   {
     "ticker": "HAFNI", "ticker_yf": "HAFNI.OL", "navn": "Hafnia Limited",
     "sektor": "Shipping", "bors": "Oslo Børs",
-    "beskrivelse": "Verdens største produkttankrederi. Frakter raffinerte petroleumsprodukter. Svært høy utbyttegrad fra sterk kontantstrøm."
+    "beskrivelse": "Verdens største produkttankrederi. Frakter raffinerte petroleumsprodukter. Svært høy utbyttegrad fra sterk kontantstrøm.",
+    "navn_dnb": "Hafnia Limited"
   },
   {
     "ticker": "FLNG", "ticker_yf": "FLNG.OL", "navn": "Flex LNG Ltd",
     "sektor": "Shipping", "bors": "Oslo Børs",
-    "beskrivelse": "LNG-tankselskap med moderne flåte på langsiktige TC-kontrakter. Stabil og forutsigbar kontantstrøm."
+    "beskrivelse": "LNG-tankselskap med moderne flåte på langsiktige TC-kontrakter. Stabil og forutsigbar kontantstrøm.",
+    "navn_dnb": "Flex LNG Ltd"
   },
   {
     "ticker": "MING", "ticker_yf": "MING.OL", "navn": "SpareBank 1 SMN",
     "sektor": "Finans", "bors": "Oslo Børs",
-    "beskrivelse": "Ledende sparebank i Midt-Norge. Konsistent og voksende utbytte med solid kapitalisering."
+    "beskrivelse": "Ledende sparebank i Midt-Norge. Konsistent og voksende utbytte med solid kapitalisering.",
+    "navn_dnb": "SpareBank 1 SMN"
   },
   {
     "ticker": "SPOL", "ticker_yf": "SPOL.OL", "navn": "SpareBank 1 Østlandet",
     "sektor": "Finans", "bors": "Oslo Børs",
-    "beskrivelse": "Stor sparebank på Østlandet og Innlandet. Stabil inntjening og høy utbyttegrad."
+    "beskrivelse": "Stor sparebank på Østlandet og Innlandet. Stabil inntjening og høy utbyttegrad.",
+    "navn_dnb": "SpareBank 1 Østlandet"
   },
   {
     "ticker": "AFG", "ticker_yf": "AFG.OL", "navn": "Arendals Fossekompani ASA",
     "sektor": "Fornybar energi", "bors": "Oslo Børs",
-    "beskrivelse": "Industrielt investeringsselskap med fokus på grønn teknologi og fornybar energi. Lang utbyttehistorikk."
+    "beskrivelse": "Industrielt investeringsselskap med fokus på grønn teknologi og fornybar energi. Lang utbyttehistorikk.",
+    "navn_dnb": "Arendals Fossekompani ASA"
   },
   {
     "ticker": "ODL", "ticker_yf": "ODL.OL", "navn": "Odfjell SE",
     "sektor": "Shipping", "bors": "Oslo Børs",
-    "beskrivelse": "Ledende kjemikalietankrederi. Frakter spesialkjemikalier globalt. Nytter av høy etterspørsel etter spesialprodukter."
+    "beskrivelse": "Ledende kjemikalietankrederi. Frakter spesialkjemikalier globalt. Nytter av høy etterspørsel etter spesialprodukter.",
+    "navn_dnb": "Odfjell SE"
   },
   {
     "ticker": "PGS", "ticker_yf": "PGS.OL", "navn": "PGS ASA",
     "sektor": "Energitjenester", "bors": "Oslo Børs",
-    "beskrivelse": "Ledende seismikkselskap som henter inn geofysiske data for olje- og gassindustrien. Gjenopptok utbytte etter restrukturering."
+    "beskrivelse": "Ledende seismikkselskap som henter inn geofysiske data for olje- og gassindustrien. Gjenopptok utbytte etter restrukturering.",
+    "navn_dnb": "PGS ASA"
   },
   {
     "ticker": "VEI", "ticker_yf": "VEI.OL", "navn": "Veidekke ASA",
     "sektor": "Industri", "bors": "Oslo Børs",
-    "beskrivelse": "Ledende skandinavisk bygg- og anleggsselskap. Lang og stabil utbyttehistorikk med ansatteeierskap som særpreg."
+    "beskrivelse": "Ledende skandinavisk bygg- og anleggsselskap. Lang og stabil utbyttehistorikk med ansatteeierskap som særpreg.",
+    "navn_dnb": "Veidekke ASA"
   },
   {
     "ticker": "AKER", "ticker_yf": "AKER.OL", "navn": "Aker ASA",
     "sektor": "Industri", "bors": "Oslo Børs",
-    "beskrivelse": "Kjell Inge Røkkes industrielle investeringsselskap. Eierandeler i bl.a. Aker BP, Aker Solutions og Cognite."
+    "beskrivelse": "Kjell Inge Røkkes industrielle investeringsselskap. Eierandeler i bl.a. Aker BP, Aker Solutions og Cognite.",
+    "navn_dnb": "Aker ASA"
   },
   {
     "ticker": "BWO", "ticker_yf": "BWO.OL", "navn": "BW Offshore Limited",
     "sektor": "Energitjenester", "bors": "Oslo Børs",
-    "beskrivelse": "FPSO-operatør (flytende produksjon og lagring av olje). Langvarige kontrakter gir stabil kontantstrøm."
+    "beskrivelse": "FPSO-operatør (flytende produksjon og lagring av olje). Langvarige kontrakter gir stabil kontantstrøm.",
+    "navn_dnb": "BW Offshore Limited"
   },
   {
     "ticker": "SBVG", "ticker_yf": "SBVG.OL", "navn": "SpareBank 1 BV",
     "sektor": "Finans", "bors": "Oslo Børs",
-    "beskrivelse": "Sparebank i Telemark og Vestfold. Stabil lokal bank med god utbyttehistorikk og solid kapitaldekning."
+    "beskrivelse": "Sparebank i Telemark og Vestfold. Stabil lokal bank med god utbyttehistorikk og solid kapitaldekning.",
+    "navn_dnb": "SpareBank 1 BV"
   },
   {
     "ticker": "GJF", "ticker_yf": "GJF.OL", "navn": "Gjensidige Forsikring ASA",
     "sektor": "Finans", "bors": "Oslo Børs",
-    "beskrivelse": "Norges største skadeforsikringsselskap. Betaler ordinært utbytte pluss ekstraordinært. Svært høy og stabil utbyttegrad."
+    "beskrivelse": "Norges største skadeforsikringsselskap. Betaler ordinært utbytte pluss ekstraordinært. Svært høy og stabil utbyttegrad.",
+    "navn_dnb": "Gjensidige Forsikring ASA"
   },
   {
     "ticker": "STB", "ticker_yf": "STB.OL", "navn": "Storebrand ASA",
     "sektor": "Finans", "bors": "Oslo Børs",
-    "beskrivelse": "Ledende nordisk livsforsikrings- og pensjonskonsern. Voksende utbytte drevet av sterk vekst i forvaltningskapital."
+    "beskrivelse": "Ledende nordisk livsforsikrings- og pensjonskonsern. Voksende utbytte drevet av sterk vekst i forvaltningskapital.",
+    "navn_dnb": "Storebrand ASA"
   },
   {
     "ticker": "AKSO", "ticker_yf": "AKSO.OL", "navn": "Aker Solutions ASA",
     "sektor": "Energitjenester", "bors": "Oslo Børs",
-    "beskrivelse": "Leverandør av engineering og teknologi til olje-, gass- og havvindprosjekter. Gjenopptok utbytte etter restrukturering i 2020."
+    "beskrivelse": "Leverandør av engineering og teknologi til olje-, gass- og havvindprosjekter. Gjenopptok utbytte etter restrukturering i 2020.",
+    "navn_dnb": "Aker Solutions ASA"
   },
   {
     "ticker": "COOL", "ticker_yf": "COOL.OL", "navn": "Cool Company Ltd",
     "sektor": "Shipping", "bors": "Oslo Børs",
-    "beskrivelse": "LNG-tankselskap spinnet ut fra Golar LNG. Liberal utbyttepolitikk. Syklisk eksponering mot LNG-fraktrater."
+    "beskrivelse": "LNG-tankselskap spinnet ut fra Golar LNG. Liberal utbyttepolitikk. Syklisk eksponering mot LNG-fraktrater.",
+    "navn_dnb": "Cool Company Ltd"
   },
   {
     "ticker": "OKEA", "ticker_yf": "OKEA.OL", "navn": "OKEA ASA",
     "sektor": "Energi", "bors": "Oslo Børs",
-    "beskrivelse": "Norsk E&P-selskap med fokus på norsk sokkel. Høy utbytteyield drevet av sterk produksjon fra Draugen og Brage."
+    "beskrivelse": "Norsk E&P-selskap med fokus på norsk sokkel. Høy utbytteyield drevet av sterk produksjon fra Draugen og Brage.",
+    "navn_dnb": "OKEA ASA"
   },
   {
     "ticker": "BEWI", "ticker_yf": "BEWI.OL", "navn": "BEWI ASA",
     "sektor": "Industri", "bors": "Oslo Børs",
-    "beskrivelse": "Produsent av EPS-emballasje og isolasjonsmaterialer. Eksponert mot bygg, fisk og mat. Voksende i Europa."
+    "beskrivelse": "Produsent av EPS-emballasje og isolasjonsmaterialer. Eksponert mot bygg, fisk og mat. Voksende i Europa.",
+    "navn_dnb": "BEWI ASA"
   },
   {
     "ticker": "WILS", "ticker_yf": "WILS.OL", "navn": "Wilson ASA",
     "sektor": "Shipping", "bors": "Oslo Børs",
-    "beskrivelse": "Europas ledende kysttransportselskap. Frakter tørrbulk og prosjektlast langs europakysten. Stabil inntjening."
+    "beskrivelse": "Europas ledende kysttransportselskap. Frakter tørrbulk og prosjektlast langs europakysten. Stabil inntjening.",
+    "navn_dnb": "Wilson ASA"
   },
   {
     "ticker": "BONHR", "ticker_yf": "BONHR.OL", "navn": "Bonheur ASA",
     "sektor": "Fornybar energi", "bors": "Oslo Børs",
-    "beskrivelse": "Fred. Olsen-kontrollert konglomerat med offshore vind (Fred. Olsen Renewables), cruiseskip og shippingvirksomhet."
+    "beskrivelse": "Fred. Olsen-kontrollert konglomerat med offshore vind (Fred. Olsen Renewables), cruiseskip og shippingvirksomhet.",
+    "navn_dnb": "Bonheur ASA"
   },
   {
     "ticker": "WAWI", "ticker_yf": "WAWI.OL", "navn": "Wallenius Wilhelmsen ASA",
     "sektor": "Shipping", "bors": "Oslo Børs",
-    "beskrivelse": "Verdensledende innen bil- og høy-og-tung transport til sjøs (ro-ro). Betjener globale bilprodusenter med en moderne flåte."
+    "beskrivelse": "Verdensledende innen bil- og høy-og-tung transport til sjøs (ro-ro). Betjener globale bilprodusenter med en moderne flåte.",
+    "navn_dnb": "Wallenius Wilhelmsen ASA"
   },
   {
     "ticker": "NORCO", "ticker_yf": "NORCO.OL", "navn": "Norconsult AS",
     "sektor": "Industri", "bors": "Oslo Børs",
-    "beskrivelse": "Nordens ledende ingeniør- og rådgivningsselskap. Ansatteeid med over 7 000 medarbeidere. Stabil kontantstrøm fra konsulentoppdrag."
+    "beskrivelse": "Nordens ledende ingeniør- og rådgivningsselskap. Ansatteeid med over 7 000 medarbeidere. Stabil kontantstrøm fra konsulentoppdrag.",
+    "navn_dnb": "Norconsult ASA"
   },
   {
     "ticker": "B2I", "ticker_yf": "B2I.OL", "navn": "B2 Impact ASA",
     "sektor": "Finans", "bors": "Oslo Børs",
-    "beskrivelse": "Europeisk kreditthåndteringsselskap. Kjøper og inndriver misligholdte fordringer. Voksende utbytte drevet av ekspansjon i Norden og Baltikum."
+    "beskrivelse": "Europeisk kreditthåndteringsselskap. Kjøper og inndriver misligholdte fordringer. Voksende utbytte drevet av ekspansjon i Norden og Baltikum.",
+    "navn_dnb": "B2 Impact ASA"
+  },
+  {
+    "ticker": "VAR", "ticker_yf": "VAR.OL", "navn": "Vår Energi ASA",
+    "sektor": "Energi", "bors": "Oslo Børs",
+    "beskrivelse": "Norges nest største E&P-selskap etter Equinor, med produksjon på norsk sokkel. Høy utbyttegrad koblet til oljepris og fri kontantstrøm.",
+    "navn_dnb": "Vår Energi ASA"
+  },
+  {
+    "ticker": "DNO", "ticker_yf": "DNO.OL", "navn": "DNO ASA",
+    "sektor": "Energi", "bors": "Oslo Børs",
+    "beskrivelse": "Norsk olje- og gasselskap med produksjon i Kurdistan-regionen og Nordsjøen. Høy yield og liberal utbyttepolitikk.",
+    "navn_dnb": "DNO ASA"
+  },
+  {
+    "ticker": "HAUTO", "ticker_yf": "HAUTO.OL", "navn": "Höegh Autoliners ASA",
+    "sektor": "Shipping", "bors": "Oslo Børs",
+    "beskrivelse": "Norsk bilfrakter med en av verdens største PCTC-flåter. Sterk etterspørsel etter biltransport gir høy kontantstrøm.",
+    "navn_dnb": "Höegh Autoliners ASA"
+  },
+  {
+    "ticker": "BRG", "ticker_yf": "BRG.OL", "navn": "Borregaard ASA",
+    "sektor": "Materialer", "bors": "Oslo Børs",
+    "beskrivelse": "Globalt spesialkjemikalieselskap basert på trevirke. Stabil inntjening og konsistent voksende utbytte.",
+    "navn_dnb": "Borregaard ASA"
+  },
+  {
+    "ticker": "EPR", "ticker_yf": "EPR.OL", "navn": "Europris ASA",
+    "sektor": "Forbruksvarer", "bors": "Oslo Børs",
+    "beskrivelse": "Norges ledende lavpriskjede med over 290 butikker. Sterk kontantstrøm og attraktivt utbytte.",
+    "navn_dnb": "Europris ASA"
+  },
+  {
+    "ticker": "GSF", "ticker_yf": "GSF.OL", "navn": "Grieg Seafood ASA",
+    "sektor": "Havbruk", "bors": "Oslo Børs",
+    "beskrivelse": "Lakseoppdrettsselskap med virksomhet i Rogaland, Finnmark, Shetland og British Columbia.",
+    "navn_dnb": "Grieg Seafood ASA"
+  },
+  {
+    "ticker": "KCC", "ticker_yf": "KCC.OL", "navn": "Klaveness Combination Carriers ASA",
+    "sektor": "Shipping", "bors": "Oslo Børs",
+    "beskrivelse": "Kombinasjonstanker som frakter kjemikalier og tørrbulk. Unik dual-trade forretningsmodell gir høyere utnyttelse.",
+    "navn_dnb": "Klaveness Combination Carriers ASA"
+  },
+  {
+    "ticker": "OET", "ticker_yf": "OET.OL", "navn": "Okeanis Eco Tankers Corp",
+    "sektor": "Shipping", "bors": "Oslo Børs",
+    "beskrivelse": "Moderne råoljetanker med ekofokusert flåte av VLCC og Suezmax skip. Høy utbyttegrad fra sterk kontantstrøm.",
+    "navn_dnb": "Okeanis Eco Tankers"
+  },
+  {
+    "ticker": "SBMO", "ticker_yf": "SBMO.OL", "navn": "Sparebanken Møre",
+    "sektor": "Finans", "bors": "Oslo Børs",
+    "beskrivelse": "Regional sparebank i Møre og Romsdal. Stabil inntjening og god utbyttehistorikk.",
+    "navn_dnb": "Sparebanken Møre"
+  },
+  {
+    "ticker": "SATS", "ticker_yf": "SATS.OL", "navn": "SATS ASA",
+    "sektor": "Forbruksvarer", "bors": "Oslo Børs",
+    "beskrivelse": "Nordens ledende treningssenter-kjede med over 240 sentre i Norge, Sverige og Finland.",
+    "navn_dnb": "SATS ASA"
+  },
+  {
+    "ticker": "KIT", "ticker_yf": "KIT.OL", "navn": "Kitron ASA",
+    "sektor": "Industri", "bors": "Oslo Børs",
+    "beskrivelse": "Nordisk elektronikkprodusent og kontraktsprodusent for forsvar, medisin og industri.",
+    "navn_dnb": "Kitron ASA"
+  },
+  {
+    "ticker": "ABG", "ticker_yf": "ABG.OL", "navn": "ABG Sundal Collier Holding ASA",
+    "sektor": "Finans", "bors": "Oslo Børs",
+    "beskrivelse": "Nordisk investeringsbank og meglerhus. Sterk posisjon i nordiske aksje- og obligasjonsmarked.",
+    "navn_dnb": "ABG Sundal Collier Holding ASA"
+  },
+  {
+    "ticker": "SBO", "ticker_yf": "SBO.OL", "navn": "Selvaag Bolig ASA",
+    "sektor": "Eiendom", "bors": "Oslo Børs",
+    "beskrivelse": "Norsk boligutbygger med fokus på Oslo og storbyregionene. Liberal utbyttepolitikk med halvårlige utbetalinger.",
+    "navn_dnb": "Selvaag Bolig ASA"
+  },
+  {
+    "ticker": "ELMRA", "ticker_yf": "ELMRA.OL", "navn": "Elmera Group ASA",
+    "sektor": "Forsyning", "bors": "Oslo Børs",
+    "beskrivelse": "Norsk energiselskap innen strømsalg og -tjenester til forbrukere og bedrifter.",
+    "navn_dnb": "Elmera Group ASA"
+  },
+  {
+    "ticker": "PARB", "ticker_yf": "PARB.OL", "navn": "Pareto Bank ASA",
+    "sektor": "Finans", "bors": "Oslo Børs",
+    "beskrivelse": "Norsk næringslivsbank med fokus på eiendomsfinansiering og shipping. Høy og stabil utbyttegrad.",
+    "navn_dnb": "Pareto Bank ASA"
+  },
+  {
+    "ticker": "ENTR", "ticker_yf": "ENTR.OL", "navn": "Entra ASA",
+    "sektor": "Eiendom", "bors": "Oslo Børs",
+    "beskrivelse": "Norges største kontoreiendomsselskap. Stabil leieinntekt fra lange kontrakter med offentlige og private leietakere.",
+    "navn_dnb": "Entra ASA"
+  },
+  {
+    "ticker": "TOM", "ticker_yf": "TOM.OL", "navn": "TOMRA Systems ASA",
+    "sektor": "Industri", "bors": "Oslo Børs",
+    "beskrivelse": "Verdensledende innen panteautomater og ressursoptimalisering. Eksponert mot global pantebølge og resirkulering.",
+    "navn_dnb": "TOMRA Systems ASA"
+  },
+  {
+    "ticker": "MULTI", "ticker_yf": "MULTI.OL", "navn": "Multiconsult ASA",
+    "sektor": "Industri", "bors": "Oslo Børs",
+    "beskrivelse": "Norsk ingeniør- og rådgivningsselskap. Solid inntjening fra offentlige infrastrukturprosjekter.",
+    "navn_dnb": "Multiconsult ASA"
+  },
+  {
+    "ticker": "2020", "ticker_yf": "2020.OL", "navn": "2020 Bulkers Ltd",
+    "sektor": "Shipping", "bors": "Oslo Børs",
+    "beskrivelse": "Tørrbulkrederi med Newcastlemax-skip optimert for jernmalm og kull. Høy utbyttegrad fra sterk TCE.",
+    "navn_dnb": "2020 Bulkers Ltd"
+  },
+  {
+    "ticker": "ODLD", "ticker_yf": "ODLD.OL", "navn": "Odfjell Drilling Ltd",
+    "sektor": "Energitjenester", "bors": "Oslo Børs",
+    "beskrivelse": "Norsk boreentreprenør med halvt-nedsenkbare rigger og jack-up rigger på norsk sokkel.",
+    "navn_dnb": "Odfjell Drilling Ltd"
+  },
+  {
+    "ticker": "DOF", "ticker_yf": "DOF.OL", "navn": "DOF Group ASA",
+    "sektor": "Energitjenester", "bors": "Oslo Børs",
+    "beskrivelse": "Offshore supplyvesselselskap med AHTS, PSV og subsea-fartøyer. Høy etterspørsel fra olje og offshore vind.",
+    "navn_dnb": "DOF Group ASA"
+  },
+  {
+    "ticker": "SRHA", "ticker_yf": "SRHA.OL", "navn": "SpareBank 1 Ringerike Hadeland",
+    "sektor": "Finans", "bors": "Oslo Børs",
+    "beskrivelse": "Regional sparebank i Ringerike og Hadeland. Solid kapitaldekning og stabil utbyttebetaler.",
+    "navn_dnb": "SpareBank 1 Ringerike Hadeland"
+  },
+  {
+    "ticker": "HELG", "ticker_yf": "HELG.OL", "navn": "SpareBank 1 Helgeland",
+    "sektor": "Finans", "bors": "Oslo Børs",
+    "beskrivelse": "Regional sparebank på Helgeland i Nordland. Stabil inntjening og god kapitalbase.",
+    "navn_dnb": "SpareBank 1 Helgeland"
+  },
+  {
+    "ticker": "SPOG", "ticker_yf": "SPOG.OL", "navn": "Sparebanken Øst",
+    "sektor": "Finans", "bors": "Oslo Børs",
+    "beskrivelse": "Sparebank i Drammen og Østlandsregionen. Stabil bank med god utbyttehistorikk.",
+    "navn_dnb": "Sparebanken Øst"
+  },
+  {
+    "ticker": "PEN", "ticker_yf": "PEN.OL", "navn": "Panoro Energy ASA",
+    "sektor": "Energi", "bors": "Oslo Børs",
+    "beskrivelse": "Afrikarettet E&P-selskap med produksjon i Gabon, Tunisia og Ekvatorial-Guinea. Høy yield relativt til størrelse.",
+    "navn_dnb": "Panoro Energy ASA"
+  },
+  {
+    "ticker": "AKVA", "ticker_yf": "AKVA.OL", "navn": "AKVA Group ASA",
+    "sektor": "Havbruk", "bors": "Oslo Børs",
+    "beskrivelse": "Ledende leverandør av teknologi og tjenester til havbruksnæringen globalt. Sterk posisjon i vekstmarkedet for oppdrettsteknologi.",
+    "navn_dnb": "AKVA Group ASA"
   }
 ]
