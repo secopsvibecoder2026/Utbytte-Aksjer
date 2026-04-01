@@ -635,6 +635,7 @@ function visPortefolje() {
   const harBeholdning = alleBeholdning.length > 0;
   document.getElementById('pf-tom').classList.toggle('hidden', harBeholdning);
   document.getElementById('pf-beholdning-wrapper').classList.toggle('hidden', !harBeholdning);
+  document.getElementById('pf-tx-seksjon').classList.toggle('hidden', !harBeholdning);
   document.getElementById('pf-tidslinje-wrapper').classList.toggle('hidden', !harBeholdning);
   document.getElementById('pf-charts-wrapper').style.display = harBeholdning ? 'grid' : 'none';
   document.getElementById('pf-inntekt-wrapper').classList.toggle('hidden', !harBeholdning);
