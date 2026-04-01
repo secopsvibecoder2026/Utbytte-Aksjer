@@ -369,6 +369,103 @@ function lagrePortefoljeSnapshot(verdi) {
 }
 
 
+// ── TWR: beregn normalisert TWR-serie fra daglige snapshots + transaksjoner ──
+function beregnTWRSerie(historikk, datoer, txMap) {
+  const tx = txMap !== undefined ? txMap : hentTransaksjoner();
+  const cfPerDag = {};
+  Object.values(tx).forEach(liste => {
+    liste.forEach(t => {
+      if (t.dato < datoer[0]) return;
+      if (!cfPerDag[t.dato]) cfPerDag[t.dato] = 0;
+      const v = t.antall * t.kurs;
+      if (t.type === 'kjøp')       cfPerDag[t.dato] += v;  // nytt kapital inn
+      else if (t.type === 'salg')  cfPerDag[t.dato] -= v;  // kapital ut
+      // utbytte er intern avkastning — justeres ikke
+    });
+  });
+
+  const serie = [100];
+  for (let i = 1; i < datoer.length; i++) {
+    const V0   = historikk[datoer[i - 1]];
+    const V1   = historikk[datoer[i]];
+    const CF   = cfPerDag[datoer[i - 1]] || 0;
+    const denom = V0 + CF;
+    serie.push(denom > 0 ? serie[i - 1] * (V1 / denom) : serie[i - 1]);
+  }
+  return serie;
+}
+
+// ── IRR: Newton-Raphson fra transaksjonshistorikk + nåværende porteføljeverdi ──
+function beregnIRR(txMap) {
+  const tx = txMap !== undefined ? txMap : hentTransaksjoner();
+  const alle = Object.entries(tx).flatMap(([ticker, liste]) =>
+    liste.map(t => ({ ...t, ticker }))
+  ).sort((a, b) => a.dato.localeCompare(b.dato));
+
+  if (alle.length === 0) return { harNokData: false };
+
+  // Kontantstrømmer: negative = penger ut (kjøp), positive = penger inn (salg, utbytte)
+  const cashflows = [];
+  alle.forEach(t => {
+    const v = t.antall * t.kurs;
+    if      (t.type === 'kjøp')    cashflows.push({ dato: t.dato, cf: -v });
+    else if (t.type === 'salg')    cashflows.push({ dato: t.dato, cf: +v });
+    else if (t.type === 'utbytte') cashflows.push({ dato: t.dato, cf: +v });
+  });
+
+  // Terminalverdi: nåværende markedsverdi av beholdning
+  const pfMap = {};
+  alle.forEach(t => {
+    if (!pfMap[t.ticker]) pfMap[t.ticker] = 0;
+    if      (t.type === 'kjøp') pfMap[t.ticker] += t.antall;
+    else if (t.type === 'salg') pfMap[t.ticker] = Math.max(0, pfMap[t.ticker] - t.antall);
+  });
+  let terminalVerdi = 0;
+  Object.entries(pfMap).forEach(([ticker, antall]) => {
+    if (antall <= 0) return;
+    const aksje = alleAksjer.find(a => a.ticker === ticker);
+    if (aksje?.pris > 0) terminalVerdi += antall * aksje.pris;
+  });
+
+  if (terminalVerdi <= 0) return { harNokData: false };
+
+  const idag = new Date().toISOString().slice(0, 10);
+  cashflows.push({ dato: idag, cf: +terminalVerdi });
+
+  const dag0 = new Date(cashflows[0].dato);
+  const cfArr = cashflows.map(c => ({
+    t: Math.max(0, (new Date(c.dato) - dag0) / 86400000),
+    cf: c.cf
+  }));
+
+  const totalDager = cfArr[cfArr.length - 1].t;
+  if (totalDager < 1) return { harNokData: false };
+
+  const npv  = r => cfArr.reduce((s, {t, cf}) => s + cf / Math.pow(1 + r, t), 0);
+  const dnpv = r => cfArr.reduce((s, {t, cf}) => s - t * cf / Math.pow(1 + r, t + 1), 0);
+
+  let r = 0.0003;
+  let konvergen = false;
+  for (let i = 0; i < 200; i++) {
+    const f = npv(r), df = dnpv(r);
+    if (Math.abs(df) < 1e-12) break;
+    const rNy = r - f / df;
+    if (rNy <= -1) break;
+    if (Math.abs(rNy - r) < 1e-10) { r = rNy; konvergen = true; break; }
+    r = rNy;
+  }
+
+  if (!konvergen) return { harNokData: false };
+
+  return {
+    harNokData: true,
+    irr_ar:     (Math.pow(1 + r, 365) - 1) * 100,
+    periodeAr:  totalDager / 365,
+    forsteDato: cashflows[0].dato
+  };
+}
+
+
 function visHistorikkKurve() {
   const wrapper = document.getElementById('pf-historikk-wrapper');
   if (!wrapper) return;
@@ -380,10 +477,14 @@ function visHistorikkKurve() {
   if (datoer.length < 2) { wrapper.classList.add('hidden'); return; }
   wrapper.classList.remove('hidden');
 
-  // Normalisér begge til 100 ved første felles dato
+  // Normalisér porteføljelinjen til 100 ved første dato
   const verdier = datoer.map(d => historikk[d]);
   const pf0 = verdier[0];
   const pfNorm = verdier.map(v => v / pf0 * 100);
+
+  // TWR-serie: eliminerer effekten av nye innskudd/uttak
+  const twrSerie = beregnTWRSerie(historikk, datoer);
+  const twrAvviker = twrSerie.some((v, i) => Math.abs(v - pfNorm[i]) > 0.5);
 
   // OSEBX: finn felles datoer
   const osebxDatoer = datoer.filter(d => osebxHistorikk[d] != null);
@@ -396,8 +497,12 @@ function visHistorikkKurve() {
     }).filter(Boolean);
   }
 
-  // Samlet min/max over alle normaliserte verdier
-  const alleVerdier = [...pfNorm, ...(osebxPts ? osebxPts.map(p => p[1]) : [])];
+  // Samlet min/max for skalering
+  const alleVerdier = [
+    ...pfNorm,
+    ...(twrAvviker ? twrSerie : []),
+    ...(osebxPts ? osebxPts.map(p => p[1]) : [])
+  ];
   const min = Math.min(...alleVerdier);
   const max = Math.max(...alleVerdier);
   const range = max - min || 1;
@@ -411,17 +516,26 @@ function visHistorikkKurve() {
     pad + (1 - (val - min) / range) * (H - pad * 2)
   ];
 
-  const pfPts  = pfNorm.map((v, i) => toSvg(i, v));
+  const pfPts    = pfNorm.map((v, i) => toSvg(i, v));
   const polyline = pfPts.map(p => p.join(',')).join(' ');
-  const areaD = `M${pfPts[0][0]},${H} ` + pfPts.map(p => `L${p[0]},${p[1]}`).join(' ') + ` L${pfPts[pfPts.length-1][0]},${H} Z`;
+  const areaD    = `M${pfPts[0][0]},${H} ` + pfPts.map(p => `L${p[0]},${p[1]}`).join(' ') + ` L${pfPts[pfPts.length-1][0]},${H} Z`;
 
-  const endring = pfNorm[pfNorm.length - 1] - 100;
+  const endring    = pfNorm[pfNorm.length - 1] - 100;
   const endringPct = endring.toFixed(1);
-  const positiv = endring >= 0;
-  const farge = positiv ? '#16a34a' : '#dc2626';
-  const fargeLys = positiv ? '#dcfce7' : '#fee2e2';
+  const positiv    = endring >= 0;
+  const farge      = positiv ? '#16a34a' : '#dc2626';
+  const fargeLys   = positiv ? '#dcfce7' : '#fee2e2';
 
-  // OSEBX SVG-linje
+  // TWR SVG-linje (blå) — vises kun hvis den avviker fra porteføljelinjen
+  let twrSvg = '';
+  if (twrAvviker) {
+    const twrPts = twrSerie.map((v, i) => toSvg(i, v));
+    twrSvg = `<polyline points="${twrPts.map(p => p.join(',')).join(' ')}"
+      fill="none" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="3 2"
+      stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"/>`;
+  }
+
+  // OSEBX SVG-linje (grå stiplet)
   let osebxSvg = '';
   if (osebxPts) {
     const obxSvgPts = osebxPts.map(([idx, val]) => toSvg(idx, val));
@@ -440,6 +554,7 @@ function visHistorikkKurve() {
       </defs>
       <path d="${areaD}" fill="url(#hgrad)"/>
       ${osebxSvg}
+      ${twrSvg}
       <polyline points="${polyline}" fill="none" stroke="${farge}" stroke-width="2.5"
                 stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"/>
       <circle cx="${pfPts[pfPts.length-1][0]}" cy="${pfPts[pfPts.length-1][1]}" r="4" fill="${farge}" vector-effect="non-scaling-stroke"/>
@@ -452,12 +567,16 @@ function visHistorikkKurve() {
     endringEl.style.color = farge;
   }
 
-  // Legg til OSEBX-legend hvis tilgjengelig
+  // Legend
   const legendEl = document.getElementById('pf-historikk-legend');
   if (legendEl) {
-    legendEl.innerHTML = osebxPts
+    const osebxLegend = osebxPts
       ? `<span class="flex items-center gap-1"><span class="inline-block w-5 border-t-2 border-dashed border-gray-400"></span> OSEBX</span>`
       : '';
+    const twrLegend = twrAvviker
+      ? `<span class="flex items-center gap-1"><span class="inline-block w-5 border-t-2 border-dashed border-blue-400"></span> TWR</span>`
+      : '';
+    legendEl.innerHTML = [twrLegend, osebxLegend].filter(Boolean).join('');
   }
 
   const fmtDato = iso => { const [y,m,d] = iso.split('-'); return d+'.'+m+'.'+y; };
@@ -676,6 +795,26 @@ function visPortefolje() {
         faktiskEl.textContent = '—';
         faktiskEl.className   = 'stat-value text-base';
         if (faktiskTekst) faktiskTekst.textContent = 'trenger transaksjoner';
+      }
+    }
+
+    // ── IRR (annualisert intern avkastningsrate) ──────────────────────────────
+    const irrEl    = document.getElementById('pf-stat-irr');
+    const irrTekst = document.getElementById('pf-stat-irr-tekst');
+    if (irrEl) {
+      const irr = beregnIRR();
+      if (irr.harNokData) {
+        const pct = irr.irr_ar;
+        irrEl.textContent  = (pct >= 0 ? '+' : '') + pct.toFixed(1) + '%';
+        irrEl.className    = 'stat-value text-base ' + (pct >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-500');
+        const aar = irr.periodeAr < 1
+          ? Math.round(irr.periodeAr * 12) + ' mnd'
+          : irr.periodeAr.toFixed(1) + ' år';
+        if (irrTekst) irrTekst.textContent = 'over ' + aar;
+      } else {
+        irrEl.textContent  = '—';
+        irrEl.className    = 'stat-value text-base';
+        if (irrTekst) irrTekst.textContent = 'trenger transaksjoner';
       }
     }
 
@@ -1133,4 +1272,4 @@ function initWatchlister() {
 
 
 // Node.js test export
-if (typeof module !== 'undefined') module.exports = { beregnKostbasis };
+if (typeof module !== 'undefined') module.exports = { beregnKostbasis, beregnIRR, beregnTWRSerie };
