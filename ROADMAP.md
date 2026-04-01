@@ -57,15 +57,6 @@ Fullførte funksjoner er dokumentert i [ROADMAP_COMPLETED.md](ROADMAP_COMPLETED.
 
 ### Portefølje og analyse
 
-#### 35c. TWR/IRR — tidsavhengig avkastning 💹
-**Prioritet: Lav**
-
-Faktisk avkastning (punkt 35b) er på plass. Neste steg er tidskorrigert beregning.
-
-- [ ] Beregn TWR (Time-Weighted Return) ved å splitte perioden på transaksjonsdata
-- [ ] Alternativt IRR via Newton–Raphson basert på kontantstrøm
-- [ ] Sammenlign direkte mot OSEBX TWR i Historikk-kurven
-
 ---
 
 ### Monetisering
