@@ -4,66 +4,72 @@ Norsk utbytteaksje-tracker for Oslo Børs. Data hentes automatisk fra Yahoo Fina
 
 ---
 
-## Veikart
+## Ferdig ✅
 
 ### 1. Favoritter / huskeliste 🔖
-**Status: Ferdig ✅**
+Stjerneikon per aksje, filter for kun favoritter, favoritter vises øverst.
 
-### 2. CSV-import av portefølje 📥
-**Status: Ferdig ✅**
+### 2. Porteføljakalkulator 📊
+Legg til aksjer med antall, se forventet utbytte per år/måned, vektet yield, porteføljeverdi, neste utbetaling og tidslinje.
 
-### 3. PWA + push-varsler for ex-datoer 📲
-**Status: Ferdig ✅**
+### 3. CSV eksport og import 📥
+Eksporter portefølje til CSV og importer tilbake. Støtte for round-trip og forhåndsvisning før import bekreftes.
 
----
+### 4. Kalender 📅
+Oversikt over kommende ex-datoer og utbetalingsdatoer. Filtrerbar per måned.
 
-### 4. Daglig engasjement — gjør appen til en vane 🔁
-**Status: Planlagt**
+### 5. Historiske data og 5-årssnitt 📈
+Historisk utbyttegraf per aksje, snitt yield siste 5 år som sorterbar kolonne.
 
-Tre funksjoner som i kombinasjon gjør at brukere åpner appen daglig, ikke bare av og til.
+### 6. Utbyttescore 🏅
+Automatisk score (0–10) per aksje basert på yield, payout ratio, vekst og antall år med utbytte.
 
-#### 4a. Inntektsteller — "Hva har jeg tjent i år?" ⭐ (høyest prioritet)
-Utbytteinvestorer tenker i inntekt, ikke kursgevinst. Å se penger akkumulere gir motivasjon til å komme tilbake.
-- [ ] "Hittil i år: X kr" — basert på betalingsdatoer som har passert for porteføljeaksjene
-- [ ] Valgfritt **årsmål** (brukeren setter f.eks. 50 000 kr) med progress-bar
-- [ ] "Du er X% av veien til målet"
-- Logikk: `pf_beholdning` × `utbytte_per_aksje` for aksjer der `betaling_dato` er passert i år
+### 7. SEO og synlighet 🔍
+Sitemap med `<lastmod>`, JSON-LD Dataset-schema, semantiske `<h2>`/`<h3>`-overskrifter.
 
-#### 4b. Personlig "I dag"-dashboard
-Erstatt de 4 generiske kortene øverst med personlige kort når bruker har favoritter/portefølje:
-- [ ] **"Ex-dato denne uken"** — dine aksjer med ex-dato innen 7 dager (navn + dager igjen)
-- [ ] **"Neste utbetaling"** — dato + beløp fra portefølje
-- [ ] **"Siste sjanse"** — aksje med ex-dato ≤3 dager og høy yield
-- [ ] Fallback til generiske stats hvis ingen favoritter/portefølje er satt
+### 8. PWA + push-varsler for ex-datoer 📲
+Installerbar app, offline-støtte via Service Worker, push-varsler for valgte aksjer.
 
-#### 4c. Opportunity feed — "Verdt å se på nå"
-- [ ] Seksjon i Oversikt-fanen med aksjer som har ex-dato innen 10 dager OG yield ≥ 5%
-- [ ] Sortert etter dager til ex-dato, med yield-badge
+### 9. Branding — exday.no 🎨
+Ny logo (lys/mørk variant), favicon, PWA-ikon, app-ikon. Byttet ut placeholder-design.
 
----
+### 10. GDPR / personvernside 🔒
+Dokumentasjon av all lokal datalagring (localStorage + Cache API). Mørkemodusfix og oppdatert favicon.
 
-### 5. Porteføljesynkronisering mellom enheter 📱↔️💻
-**Status: Planlagt**
+### 11. Utbyttekalkulator over tid 🧮
+Beregn yield over tid med startbeløp, yield %, kursvekst, månedlig sparing og DRIP-reinvestering. År-for-år-tabell.
 
-Brukere som veksler mellom mobil og PC mister porteføljen siden alt ligger i localStorage (enhetsspesifikt). Ingen server = ingen tradisjonell sky-synk.
-
-#### 5a. QR-kode for overføring ⭐ (høyest prioritet)
-- [ ] "Send til mobil"-knapp i portefølje-fanen som genererer en QR-kode
-- [ ] Porteføljedata kodes inn i URL (`?pf=<base64>`) med tidsstempel
-- [ ] QR-koden er gyldig i 5 minutter — etter det vises feilmelding
-- [ ] Mottaker-siden (mobil) oppdager `?pf=`-parameteren, viser forhåndsvisning og importerer
-- [ ] Ingen server, ingen lagring — data finnes kun i QR-koden mens den vises
-
-#### 5b. CSV som manuell backup (allerede bygget ✅)
-Brukere kan eksportere på én enhet og importere på en annen via CSV-filen.
+### 12. Fargedesign — tonet ned 🖌️
+Fjernet fire ulike farger på toppkortene. Dempede yield-badges, nøytral tabellhover, sorteringspiler og vekstfarger.
 
 ---
 
-## Teknisk gjeld
+## Planlagt
 
-- [ ] Manglende historikk for 8 aksjer (COOL, FLNG, GOGL, PGS, PNORD, SBVG, SRBNK, WILS) — Yahoo Finance har ikke data. Mulig løsning: manuell backup-data i `fetch_stocks.py`
-- [ ] Unit-tester for `fetch_stocks.py`
-- [ ] Automatisk Lighthouse-rapport i CI
+### 13. Daglig engasjement — gjør appen til en vane 🔁
+
+#### 13a. Inntektsteller — "Hva har jeg tjent i år?" ⭐
+- [ ] "Hittil i år: X kr" basert på betalingsdatoer som har passert for porteføljeaksjene
+- [ ] Valgfritt årsmål med progress-bar
+
+#### 13b. Personlig "I dag"-dashboard
+- [ ] Erstatt generiske toppkort med personlige når bruker har portefølje/favoritter
+- [ ] "Ex-dato denne uken", "Neste utbetaling", "Siste sjanse"
+- [ ] Fallback til generiske stats hvis ingen data
+
+#### 13c. Opportunity feed
+- [ ] Aksjer med ex-dato innen 10 dager OG yield ≥ 5%, sortert etter dager til ex-dato
+
+---
+
+### 14. Porteføljesynkronisering mellom enheter 📱↔️💻
+
+#### 14a. QR-kode for overføring ⭐
+- [ ] "Send til mobil"-knapp som genererer QR-kode med porteføljedata
+- [ ] QR-koden er gyldig i 5 minutter, ingen server involvert
+- [ ] Mottaker-siden oppdager `?pf=`-parameteren og viser forhåndsvisning
+
+#### 14b. CSV som manuell backup (allerede bygget ✅)
 
 ---
 
