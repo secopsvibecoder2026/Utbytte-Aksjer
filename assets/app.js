@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initPortefolje();
   initKalkulator();
   initVarsler();
+  sjekkQRParam();
   lastData();
 });
 
@@ -50,6 +51,16 @@ async function lastData() {
     visKalender();
     sjekkExDatoerDirekte();
     if (aktivTab === 'varsler') visVarslerTab();
+    if (window._pendingQRImport) {
+      const gyldig = Object.entries(window._pendingQRImport)
+        .filter(([t]) => alleAksjer.find(a => a.ticker === t))
+        .map(([ticker, antall]) => ({ ticker, antall: Number(antall) }));
+      window._pendingQRImport = null;
+      if (gyldig.length) {
+        document.querySelector('[data-tab="portfolio"]').click();
+        visImportPreview(gyldig, []);
+      }
+    }
   } catch (e) {
     console.error('Feil ved lasting av data:', e);
     document.getElementById('sist-oppdatert').textContent = '⚠️ Kunne ikke laste data – prøv igjen senere';
@@ -220,7 +231,24 @@ function filtrerteAksjer() {
 
 // ── SAMMENDRAG ─────────────────────────────────────────────────────────────
 function oppdaterSammendrag() {
+  const pf = hentPF();
+  const fav = hentFav();
+  const harPersonligData = Object.keys(pf).length > 0 || fav.size > 0;
+  if (harPersonligData) {
+    oppdaterPersonligSammendrag(pf, fav);
+  } else {
+    oppdaterGeneriskSammendrag();
+  }
+}
+
+function oppdaterGeneriskSammendrag() {
+  document.getElementById('stat-card1-label').textContent = 'Aksjer sporet';
+  document.getElementById('stat-card2-label').textContent = 'Høyeste yield';
+  document.getElementById('stat-card3-label').textContent = 'Gj.snitt yield';
+  document.getElementById('stat-card4-label').textContent = 'Neste ex-dato';
+
   document.getElementById('stat-antall').textContent = alleAksjer.length;
+  document.getElementById('stat-snitt-sub').textContent = '';
 
   const medYield = alleAksjer.filter(a => a.utbytte_yield > 0);
   if (medYield.length) {
@@ -242,8 +270,67 @@ function oppdaterSammendrag() {
   }
 }
 
+function oppdaterPersonligSammendrag(pf, fav) {
+  const idag = new Date(); idag.setHours(0,0,0,0);
+  const om7 = new Date(idag); om7.setDate(om7.getDate() + 7);
+  const om3 = new Date(idag); om3.setDate(om3.getDate() + 3);
+  const alleTickere = new Set([...Object.keys(pf), ...fav]);
+
+  // Kort 1: Ex-dato denne uken (fra portefølje + favoritter)
+  const exDenneUken = alleAksjer.filter(a =>
+    alleTickere.has(a.ticker) && a.ex_dato &&
+    new Date(a.ex_dato) >= idag && new Date(a.ex_dato) <= om7
+  ).sort((a, b) => new Date(a.ex_dato) - new Date(b.ex_dato));
+  document.getElementById('stat-card1-label').textContent = 'Ex-dato denne uken';
+  document.getElementById('stat-antall').textContent = exDenneUken.length || '—';
+  document.getElementById('stat-hoyest-navn').textContent = exDenneUken.length
+    ? exDenneUken.slice(0,3).map(a => a.ticker).join(', ') + (exDenneUken.length > 3 ? '…' : '')
+    : 'Ingen denne uken';
+
+  // Kort 2: Neste utbetaling fra portefølje
+  const nesteBetaling = alleAksjer
+    .filter(a => pf[a.ticker] && a.betaling_dato && new Date(a.betaling_dato) >= idag)
+    .sort((a, b) => new Date(a.betaling_dato) - new Date(b.betaling_dato))[0];
+  document.getElementById('stat-card2-label').textContent = 'Neste utbetaling';
+  if (nesteBetaling) {
+    const belop = pf[nesteBetaling.ticker] * (nesteBetaling.siste_utbytte || nesteBetaling.utbytte_per_aksje || 0);
+    document.getElementById('stat-hoyest-yield').textContent =
+      belop > 0 ? belop.toLocaleString('nb-NO', { maximumFractionDigits: 0 }) + ' kr' : formaterDato(nesteBetaling.betaling_dato);
+    document.getElementById('stat-hoyest-navn').textContent = nesteBetaling.ticker + ' · ' + formaterDato(nesteBetaling.betaling_dato);
+  } else {
+    document.getElementById('stat-hoyest-yield').textContent = '—';
+    document.getElementById('stat-hoyest-navn').textContent = 'Ingen planlagt';
+  }
+
+  // Kort 3: Siste sjanse (ex ≤ 3 dager, yield ≥ 5%)
+  const sistesjanse = alleAksjer.filter(a =>
+    a.ex_dato && a.utbytte_yield >= 5 &&
+    new Date(a.ex_dato) >= idag && new Date(a.ex_dato) <= om3
+  ).sort((a, b) => b.utbytte_yield - a.utbytte_yield)[0];
+  document.getElementById('stat-card3-label').textContent = 'Siste sjanse';
+  if (sistesjanse) {
+    const dager = Math.ceil((new Date(sistesjanse.ex_dato) - idag) / 86400000);
+    document.getElementById('stat-snitt-yield').textContent = sistesjanse.utbytte_yield.toFixed(1) + '%';
+    document.getElementById('stat-snitt-sub').textContent = sistesjanse.ticker + ' · ex ' + (dager === 0 ? 'i dag' : `om ${dager}d`);
+  } else {
+    document.getElementById('stat-snitt-yield').textContent = '—';
+    document.getElementById('stat-snitt-sub').textContent = 'Ingen innen 3 dager';
+  }
+
+  // Kort 4: Neste ex-dato (generisk, uendret)
+  document.getElementById('stat-card4-label').textContent = 'Neste ex-dato';
+  const fremtidige = alleAksjer
+    .filter(a => a.ex_dato && new Date(a.ex_dato) >= idag)
+    .sort((a, b) => new Date(a.ex_dato) - new Date(b.ex_dato));
+  if (fremtidige.length) {
+    document.getElementById('stat-neste-ex').textContent = formaterDato(fremtidige[0].ex_dato);
+    document.getElementById('stat-neste-ex-navn').textContent = fremtidige[0].ticker;
+  }
+}
+
 // ── OVERSIKTSTABELL + KORT ─────────────────────────────────────────────────
 function visOversikt() {
+  visOpportunityFeed();
   const data = sorterAksjer(filtrerteAksjer());
   const tbody = document.getElementById('tabell-body');
   const kortBody = document.getElementById('kort-body');
@@ -657,6 +744,22 @@ function initPortefolje() {
     document.getElementById('pf-importer-preview').classList.add('hidden');
     window._importData = null;
   });
+
+  // ── QR-KODE ────────────────────────────────────────────────────────────────
+  document.getElementById('pf-qr-btn').addEventListener('click', visQRModal);
+  document.getElementById('qr-lukk').addEventListener('click', () => {
+    clearInterval(document.getElementById('qr-modal')._timer);
+    document.getElementById('qr-modal').classList.add('hidden');
+    document.getElementById('qr-modal').classList.remove('flex');
+  });
+
+  // ── INNTEKTSTELLER-MÅL ─────────────────────────────────────────────────────
+  const malInput = document.getElementById('pf-inntekt-mal');
+  malInput.value = localStorage.getItem('pf_inntekt_mal') || '';
+  malInput.addEventListener('change', () => {
+    localStorage.setItem('pf_inntekt_mal', malInput.value);
+    visPortefolje();
+  });
 }
 
 function fyllPFDropdown() {
@@ -701,6 +804,9 @@ function visPortefolje() {
   document.getElementById('pf-tidslinje-wrapper').classList.toggle('hidden', !harBeholdning);
   document.getElementById('pf-charts-wrapper').style.display = harBeholdning ? 'grid' : 'none';
 
+  document.getElementById('pf-inntekt-wrapper').classList.toggle('hidden', !harBeholdning);
+  oppdaterSammendrag(); // oppdater topkort når portefølje endres
+
   if (!harBeholdning) {
     ['pf-stat-ar','pf-stat-mnd','pf-stat-antall','pf-stat-neste','pf-stat-yield','pf-stat-verdi']
       .forEach(id => { document.getElementById(id).textContent = '—'; });
@@ -721,6 +827,21 @@ function visPortefolje() {
   // Vektet yield = totalAr / totalVerdi × 100
   const vektetYield = totalVerdi > 0 ? (totalAr / totalVerdi * 100) : 0;
   document.getElementById('pf-stat-yield').textContent = vektetYield > 0 ? vektetYield.toFixed(2) + '%' : '—';
+
+  // ── INNTEKTSTELLER ────────────────────────────────────────────────────────
+  const ytdInntekt = beregnYtdInntekt(alleBeholdning);
+  document.getElementById('pf-inntekt-ar').textContent = fmtKr(ytdInntekt);
+  const malRaw = parseFloat(localStorage.getItem('pf_inntekt_mal') || '0');
+  const progEl = document.getElementById('pf-inntekt-progresjon');
+  if (malRaw > 0) {
+    const pct = Math.min(100, (ytdInntekt / malRaw) * 100);
+    document.getElementById('pf-inntekt-pct-tekst').textContent = pct.toFixed(0) + '%';
+    document.getElementById('pf-inntekt-mal-tekst').textContent = 'Mål: ' + fmtKr(malRaw);
+    document.getElementById('pf-inntekt-bar').style.width = pct + '%';
+    progEl.classList.remove('hidden');
+  } else {
+    progEl.classList.add('hidden');
+  }
 
   // Neste utbetaling: bruk betaling_dato, fallback til ex_dato
   const nesteRef = a => {
@@ -1463,6 +1584,135 @@ function beregnKalkulator() {
     </tr>`).join('');
 
   document.getElementById('kal-resultat').classList.remove('hidden');
+}
+
+// ── INNTEKTSTELLER ────────────────────────────────────────────────────────
+function beregnYtdInntekt(alleBeholdning) {
+  const idag = new Date();
+  const currentYear = idag.getFullYear();
+  const currentMonth = idag.getMonth(); // 0=jan
+  const frekvensPerAr = { 'Månedlig': 12, 'Kvartalsvis': 4, 'Halvårlig': 2, 'Årlig': 1, 'Uregelmessig': 1 };
+  let total = 0;
+
+  alleBeholdning.forEach(a => {
+    // 1. betaling_dato som allerede har passert i år
+    if (a.betaling_dato) {
+      const bd = new Date(a.betaling_dato);
+      if (bd.getFullYear() === currentYear && bd < idag) {
+        total += a.antall * (a.siste_utbytte || 0);
+        return;
+      }
+    }
+    // 2. historiske_utbytter for inneværende år
+    const histIAr = (a.historiske_utbytter || []).find(h => h.ar === currentYear);
+    if (histIAr) {
+      total += a.antall * histIAr.utbytte;
+      return;
+    }
+    // 3. Frekvensbasert estimat — andel av året som er gått
+    const perAr = frekvensPerAr[a.frekvens] || 1;
+    const estimertBetalinger = Math.floor((currentMonth / 12) * perAr);
+    if (estimertBetalinger > 0) {
+      total += a.antall * (a.utbytte_per_aksje || 0) * (estimertBetalinger / perAr);
+    }
+  });
+  return total;
+}
+
+// ── OPPORTUNITY FEED ──────────────────────────────────────────────────────
+function visOpportunityFeed() {
+  const el = document.getElementById('opportunity-feed');
+  if (!el || !alleAksjer.length) return;
+  const idag = new Date(); idag.setHours(0,0,0,0);
+  const om10 = new Date(idag); om10.setDate(om10.getDate() + 10);
+
+  const muligheter = alleAksjer
+    .filter(a => a.ex_dato && a.utbytte_yield >= 5)
+    .filter(a => { const d = new Date(a.ex_dato); return d >= idag && d <= om10; })
+    .sort((a, b) => new Date(a.ex_dato) - new Date(b.ex_dato));
+
+  if (!muligheter.length) { el.classList.add('hidden'); return; }
+
+  el.classList.remove('hidden');
+  el.innerHTML = `
+    <div class="rounded-xl border border-amber-200 dark:border-amber-800/60 bg-amber-50 dark:bg-amber-950/20 p-4">
+      <p class="text-xs font-semibold uppercase tracking-widest text-amber-700 dark:text-amber-400 mb-3">Verdt å se på nå</p>
+      <div class="flex flex-wrap gap-2">
+        ${muligheter.map(a => {
+          const dager = Math.ceil((new Date(a.ex_dato) - idag) / 86400000);
+          return `<div class="opportunity-kort" data-ticker="${a.ticker}">
+            <span class="font-mono font-bold text-sm">${a.ticker}</span>
+            <span class="yield-badge ${yieldKlasse(a.utbytte_yield)}">${a.utbytte_yield.toFixed(1)}%</span>
+            <span class="text-xs text-gray-400">ex ${dager === 0 ? 'i dag' : `om ${dager}d`}</span>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>`;
+
+  el.onclick = e => {
+    const kort = e.target.closest('[data-ticker]');
+    if (kort) visModal(alleAksjer.find(a => a.ticker === kort.dataset.ticker));
+  };
+}
+
+// ── QR-KODE SYNKRONISERING ────────────────────────────────────────────────
+function sjekkQRParam() {
+  const params = new URLSearchParams(location.search);
+  const raw = params.get('pf');
+  if (!raw) return;
+  history.replaceState(null, '', location.pathname);
+  try {
+    const payload = JSON.parse(decodeURIComponent(escape(atob(raw))));
+    if (!payload.ts || !payload.pf) return;
+    if (Date.now() - payload.ts > 5 * 60 * 1000) {
+      alert('QR-koden er utløpt (eldre enn 5 minutter). Generer en ny fra avsender-enheten.');
+      return;
+    }
+    window._pendingQRImport = payload.pf;
+  } catch { /* ugyldig data, ignorer */ }
+}
+
+function visQRModal() {
+  const pf = hentPF();
+  if (!Object.keys(pf).length) return;
+
+  if (typeof QRCode === 'undefined') {
+    alert('QR-biblioteket er ikke tilgjengelig. Sjekk internettforbindelsen og prøv igjen.');
+    return;
+  }
+
+  const payload = { ts: Date.now(), pf };
+  const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
+  const url = `${location.origin}${location.pathname}?pf=${encoded}`;
+
+  const wrapper = document.getElementById('qr-canvas-wrapper');
+  wrapper.innerHTML = '';
+  new QRCode(wrapper, {
+    text: url, width: 200, height: 200,
+    colorDark: document.documentElement.classList.contains('dark') ? '#f3f4f6' : '#111827',
+    colorLight: document.documentElement.classList.contains('dark') ? '#111827' : '#ffffff',
+    correctLevel: QRCode.CorrectLevel.M
+  });
+
+  const modal = document.getElementById('qr-modal');
+  modal.classList.remove('hidden');
+  modal.classList.add('flex');
+  document.getElementById('qr-utlopt').classList.add('hidden');
+
+  const expiresAt = payload.ts + 5 * 60 * 1000;
+  clearInterval(modal._timer);
+  modal._timer = setInterval(() => {
+    const remaining = expiresAt - Date.now();
+    if (remaining <= 0) {
+      clearInterval(modal._timer);
+      document.getElementById('qr-countdown').textContent = '0:00';
+      document.getElementById('qr-utlopt').classList.remove('hidden');
+      return;
+    }
+    const m = Math.floor(remaining / 60000);
+    const s = Math.floor((remaining % 60000) / 1000);
+    document.getElementById('qr-countdown').textContent = `${m}:${s.toString().padStart(2, '0')}`;
+  }, 1000);
 }
 
 async function initVarsler() {

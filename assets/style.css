@@ -123,6 +123,23 @@ th.sort-desc::after { content: ' ↓'; color: #6b7280; }
 }
 .dark .frekvens-badge { background: #1f2937; color: #9ca3af; }
 
+/* ── OPPORTUNITY KORT ─────────────────────────────────────────────────── */
+.opportunity-kort {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.375rem 0.625rem;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-size: 0.8125rem;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.opportunity-kort:hover { border-color: #9ca3af; box-shadow: 0 1px 3px rgb(0 0 0 / 0.08); }
+.dark .opportunity-kort { background: #111827; border-color: #374151; }
+.dark .opportunity-kort:hover { border-color: #6b7280; }
+
 /* ── VIEW TOGGLE KNAPP ────────────────────────────────────────────────── */
 .view-toggle-btn {
   display: inline-flex;
