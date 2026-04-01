@@ -142,4 +142,60 @@ Utvid `fetch_stocks.py` til å generere én HTML-side per aksje i tillegg til JS
 - [ ] Intern lenking: "Åpne full oversikt" → tilbake til hovedappen
 - [ ] `/aksjer/index.html` — oversiktsside med alle aksjer som inngangspunkt
 
+---
+
+## Planlagt
+
+### 23. Sparemål-progresjon på dashbordet 🎯
+**Prioritet: Høy — lav innsats**
+
+Profilen har `sparemaal` (total porteføljebeløp), men det vises ingensteds. Gi umiddelbar motivasjon ved å vise fremgang mot målet der brukeren ser det først.
+
+- [ ] Fremgangsbar på dashboard: "15 232 kr av 500 000 kr (3%)"
+- [ ] Vises kun når sparemål er satt i profilen
+- [ ] Oppdateres automatisk når portefølje endres
+
+---
+
+### 24. Del-link for enkeltaksjer 🔗
+**Prioritet: Høy — lav innsats**
+
+`?aksje=EQNR` fungerer allerede. Gjør det lett å dele.
+
+- [ ] "Del"-knapp i aksjemodal som kopierer URL til clipboard
+- [ ] Visuell bekreftelse (f.eks. "Kopiert!" i 2 sekunder)
+
+---
+
+### 25. Historisk porteføljeutvikling 📈
+**Prioritet: Medium**
+
+Ingen API nødvendig — kun localStorage.
+
+- [ ] Lagre daglig snapshot av porteføljeverdien og estimert utbytte/år i localStorage
+- [ ] Enkel kurve på Portefølje-fanen: "Din porteføljeverdi siste 30 dager"
+- [ ] Viser også utbytteutvikling over tid
+
+---
+
+### 26. Full backup — JSON-eksport og -import 💾
+**Prioritet: Medium**
+
+CSV dekker kun portefølje. JSON kan ta med alt.
+
+- [ ] JSON-eksport: portefølje, favoritter, notater, målpriser, profil
+- [ ] JSON-import med forhåndsvisning og bekreftelse
+- [ ] Fungerer som komplett backup ved nettleserskifte eller nullstilling
+
+---
+
+### 27. Utbyttekalender med ICS-eksport 📅
+**Prioritet: Lav-medium**
+
+- [ ] "Last ned til kalender"-knapp på Kalender-fanen
+- [ ] Genererer `.ics`-fil med ex-datoer og betalingsdatoer for aksjer i porteføljen
+- [ ] Kompatibel med Google Kalender, Apple Kalender og Outlook
+
+---
+
 Dette er et privat prosjekt. Kontakt via GitHub Issues for spørsmål eller feilrapporter.
