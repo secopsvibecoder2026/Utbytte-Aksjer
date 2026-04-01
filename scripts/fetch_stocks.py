@@ -622,6 +622,332 @@ def valider_aksje(a):
     return advarsler
 
 
+def _fmt_dato(iso):
+    """Formaterer ISO-dato til lesbar norsk form, f.eks. 14. mars 2026."""
+    if not iso:
+        return "—"
+    try:
+        d = datetime.date.fromisoformat(iso)
+        mnd = ["jan","feb","mar","apr","mai","jun","jul","aug","sep","okt","nov","des"]
+        return f"{d.day}. {mnd[d.month-1]} {d.year}"
+    except Exception:
+        return iso
+
+
+def _aksje_side_html(a, today):
+    ticker  = a["ticker"]
+    navn    = a["navn"]
+    sektor  = a.get("sektor") or "—"
+    pris    = a.get("pris") or 0
+    yield_  = a.get("utbytte_yield") or 0
+    ex      = a.get("ex_dato") or ""
+    bet     = a.get("betaling_dato") or ""
+    frekvens = a.get("frekvens") or "—"
+    upa     = a.get("utbytte_per_aksje") or 0
+    pe      = a.get("pe_ratio") or 0
+    ar_med  = a.get("ar_med_utbytte") or 0
+    besk    = a.get("beskrivelse") or ""
+    hist    = a.get("historiske_utbytter") or []
+    snitt5  = a.get("snitt_yield_5ar") or 0
+    valuta  = a.get("valuta") or "NOK"
+
+    meta_desc = (
+        f"{navn} ({ticker}) betaler {yield_:.2f}% utbytte. "
+        f"Ex-dato: {_fmt_dato(ex)}. "
+        f"Siste utbytte: {upa} {valuta} per aksje. "
+        f"Oppdatert daglig på exday.no."
+    )
+
+    hist_rader = ""
+    for h in sorted(hist, key=lambda x: x["ar"], reverse=True):
+        hist_rader += f"""
+        <tr>
+          <td>{h["ar"]}</td>
+          <td>{h["utbytte"]} {valuta}</td>
+          <td>{h["yield"]:.2f}%</td>
+        </tr>"""
+
+    pe_rad = f"<tr><td>P/E</td><td>{pe:.1f}</td></tr>" if pe and pe > 0 else ""
+
+    pe_card = (
+        f'<div class="card"><div class="label">P/E</div>'
+        f'<div class="val">{pe:.1f}</div></div>'
+    ) if pe and pe > 0 else ""
+
+    besk_seksjon = f'<div class="desc"><p>{besk}</p></div>' if besk else ""
+
+    nokkeltal_seksjon = (
+        "<h2>Nøkkeltall</h2>"
+        "<table>"
+        "<thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead>"
+        "<tbody>"
+        f"<tr><td>Sektor</td><td>{sektor}</td></tr>"
+        f"<tr><td>Frekvens</td><td>{frekvens}</td></tr>"
+        f"<tr><td>Utbytte per aksje</td><td>{upa} {valuta}</td></tr>"
+        f"<tr><td>Direkteavkastning</td><td>{yield_:.2f}%</td></tr>"
+        f"<tr><td>5-årssnitt yield</td><td>{snitt5:.2f}%</td></tr>"
+        f"<tr><td>År med utbytte</td><td>{ar_med}</td></tr>"
+        f"{pe_rad}"
+        "</tbody></table>"
+    )
+
+    hist_seksjon = (
+        "<h2>Historiske utbytter</h2>"
+        "<table>"
+        "<thead><tr><th>År</th><th>Utbytte</th><th>Yield</th></tr></thead>"
+        f"<tbody>{hist_rader}</tbody>"
+        "</table>"
+    ) if hist_rader else ""
+
+    json_ld = json.dumps({
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {"@type": "ListItem", "position": 1, "name": "Hjem",   "item": "https://exday.no/"},
+                    {"@type": "ListItem", "position": 2, "name": "Aksjer", "item": "https://exday.no/aksjer/"},
+                    {"@type": "ListItem", "position": 3, "name": ticker,   "item": f"https://exday.no/aksjer/{ticker}/"},
+                ]
+            },
+            {
+                "@type": "FinancialProduct",
+                "name": f"{navn} ({ticker})",
+                "description": besk or meta_desc,
+                "url": f"https://exday.no/aksjer/{ticker}/",
+                "provider": {"@type": "Organization", "name": "exday.no", "url": "https://exday.no/"},
+            }
+        ]
+    }, ensure_ascii=False, indent=2)
+
+    return f"""<!DOCTYPE html>
+<html lang="nb">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>{ticker} – {navn} | Utbytte og ex-dato | exday.no</title>
+  <meta name="description" content="{meta_desc}"/>
+  <link rel="canonical" href="https://exday.no/aksjer/{ticker}/"/>
+  <meta property="og:title" content="{ticker} – {navn} | exday.no"/>
+  <meta property="og:description" content="{meta_desc}"/>
+  <meta property="og:url" content="https://exday.no/aksjer/{ticker}/"/>
+  <meta property="og:type" content="website"/>
+  <script type="application/ld+json">{json_ld}</script>
+  <style>
+    *, *::before, *::after {{ box-sizing: border-box; margin: 0; padding: 0; }}
+    body {{ font-family: system-ui, -apple-system, sans-serif; background: #f9fafb; color: #111827; line-height: 1.6; }}
+    a {{ color: #16a34a; text-decoration: none; }}
+    a:hover {{ text-decoration: underline; }}
+    .wrap {{ max-width: 760px; margin: 0 auto; padding: 1.5rem 1rem; }}
+    nav {{ font-size: 0.85rem; color: #6b7280; margin-bottom: 1.5rem; }}
+    nav a {{ color: #6b7280; }}
+    nav span {{ margin: 0 0.35rem; }}
+    h1 {{ font-size: 1.75rem; font-weight: 700; margin-bottom: 0.25rem; }}
+    .sub {{ color: #6b7280; font-size: 0.95rem; margin-bottom: 1.5rem; }}
+    .badge {{ display: inline-block; font-size: 0.75rem; font-weight: 600; padding: 0.2rem 0.6rem;
+              border-radius: 9999px; background: #dcfce7; color: #15803d; margin-bottom: 1.25rem; }}
+    .grid {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }}
+    .card {{ background: #fff; border: 1px solid #e5e7eb; border-radius: 0.75rem; padding: 1rem; }}
+    .card .label {{ font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #9ca3af; margin-bottom: 0.2rem; }}
+    .card .val {{ font-size: 1.25rem; font-weight: 700; color: #111827; }}
+    .card .val.green {{ color: #16a34a; }}
+    .desc {{ background: #fff; border: 1px solid #e5e7eb; border-radius: 0.75rem; padding: 1rem 1.25rem; margin-bottom: 1.5rem; color: #374151; }}
+    h2 {{ font-size: 1rem; font-weight: 700; margin-bottom: 0.75rem; color: #374151; }}
+    table {{ width: 100%; border-collapse: collapse; background: #fff; border: 1px solid #e5e7eb; border-radius: 0.75rem; overflow: hidden; margin-bottom: 1.5rem; font-size: 0.9rem; }}
+    th {{ background: #f3f4f6; padding: 0.6rem 1rem; text-align: left; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: #6b7280; }}
+    td {{ padding: 0.6rem 1rem; border-top: 1px solid #f3f4f6; }}
+    tr:hover td {{ background: #f9fafb; }}
+    .cta {{ text-align: center; margin-top: 2rem; padding: 1.5rem; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 0.75rem; }}
+    .cta a {{ display: inline-block; background: #16a34a; color: #fff; font-weight: 600; padding: 0.65rem 1.5rem; border-radius: 0.5rem; }}
+    .cta a:hover {{ background: #15803d; text-decoration: none; }}
+    .updated {{ font-size: 0.78rem; color: #9ca3af; text-align: right; margin-top: 1rem; }}
+    @media (max-width: 480px) {{ h1 {{ font-size: 1.4rem; }} }}
+  </style>
+</head>
+<body>
+<div class="wrap">
+
+  <nav>
+    <a href="https://exday.no/">exday.no</a>
+    <span>›</span>
+    <a href="https://exday.no/aksjer/">Aksjer</a>
+    <span>›</span>
+    {ticker}
+  </nav>
+
+  <h1>{ticker} – {navn}</h1>
+  <p class="sub">{sektor} · {frekvens} utbytte · Oslo Børs</p>
+  <span class="badge">{yield_:.2f}% direkteavkastning</span>
+
+  <div class="grid">
+    <div class="card">
+      <div class="label">Kurs</div>
+      <div class="val">{pris:,.0f} {valuta}</div>
+    </div>
+    <div class="card">
+      <div class="label">Yield</div>
+      <div class="val green">{yield_:.2f}%</div>
+    </div>
+    <div class="card">
+      <div class="label">Utbytte/aksje</div>
+      <div class="val">{upa} {valuta}</div>
+    </div>
+    <div class="card">
+      <div class="label">Ex-dato</div>
+      <div class="val" style="font-size:1rem">{_fmt_dato(ex)}</div>
+    </div>
+    <div class="card">
+      <div class="label">Utbetalingsdato</div>
+      <div class="val" style="font-size:1rem">{_fmt_dato(bet)}</div>
+    </div>
+    <div class="card">
+      <div class="label">5-årssnitt yield</div>
+      <div class="val green">{snitt5:.2f}%</div>
+    </div>
+    <div class="card">
+      <div class="label">År med utbytte</div>
+      <div class="val">{ar_med}</div>
+    </div>
+    {pe_card}
+  </div>
+
+  {besk_seksjon}
+
+  {nokkeltal_seksjon}
+
+  {hist_seksjon}
+
+  <div class="cta">
+    <p style="margin-bottom:0.75rem;color:#374151;">Se alle norske utbytteaksjer, bygg portefølje og spor ex-datoer</p>
+    <a href="https://exday.no/?aksje={ticker}">Åpne {ticker} i exday.no →</a>
+  </div>
+
+  <p class="updated">Sist oppdatert: {today}</p>
+
+</div>
+</body>
+</html>"""
+
+
+def generer_aksjesider(aksjer, root_dir):
+    """Genererer én HTML-side per aksje under aksjer/TICKER/index.html."""
+    today = datetime.datetime.utcnow().strftime("%Y-%m-%d")
+    aksjer_dir = os.path.join(root_dir, "aksjer")
+    os.makedirs(aksjer_dir, exist_ok=True)
+
+    for a in aksjer:
+        ticker = a["ticker"]
+        ticker_dir = os.path.join(aksjer_dir, ticker)
+        os.makedirs(ticker_dir, exist_ok=True)
+        html = _aksje_side_html(a, today)
+        with open(os.path.join(ticker_dir, "index.html"), "w", encoding="utf-8") as f:
+            f.write(html)
+
+    # Oversiktsside
+    rader = ""
+    for a in sorted(aksjer, key=lambda x: x.get("utbytte_yield", 0), reverse=True):
+        t   = a["ticker"]
+        ex  = _fmt_dato(a.get("ex_dato"))
+        rader += f"""
+        <tr>
+          <td><a href="/aksjer/{t}/">{t}</a></td>
+          <td>{a["navn"]}</td>
+          <td>{a.get("sektor") or "—"}</td>
+          <td>{a.get("pris") or "—"} {a.get("valuta","NOK")}</td>
+          <td>{a.get("utbytte_yield", 0):.2f}%</td>
+          <td>{ex}</td>
+        </tr>"""
+
+    oversikt_html = f"""<!DOCTYPE html>
+<html lang="nb">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Norske utbytteaksjer – oversikt | exday.no</title>
+  <meta name="description" content="Oversikt over {len(aksjer)} norske utbytteaksjer på Oslo Børs med yield, ex-dato og utbyttehistorikk. Oppdateres daglig."/>
+  <link rel="canonical" href="https://exday.no/aksjer/"/>
+  <script type="application/ld+json">{json.dumps({"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Hjem","item":"https://exday.no/"},{"@type":"ListItem","position":2,"name":"Aksjer","item":"https://exday.no/aksjer/"}]}, ensure_ascii=False)}</script>
+  <style>
+    *, *::before, *::after {{ box-sizing: border-box; margin: 0; padding: 0; }}
+    body {{ font-family: system-ui, -apple-system, sans-serif; background: #f9fafb; color: #111827; line-height: 1.6; }}
+    a {{ color: #16a34a; text-decoration: none; }}
+    a:hover {{ text-decoration: underline; }}
+    .wrap {{ max-width: 900px; margin: 0 auto; padding: 1.5rem 1rem; }}
+    nav {{ font-size: 0.85rem; color: #6b7280; margin-bottom: 1.5rem; }}
+    h1 {{ font-size: 1.75rem; font-weight: 700; margin-bottom: 0.5rem; }}
+    .sub {{ color: #6b7280; margin-bottom: 1.5rem; }}
+    table {{ width: 100%; border-collapse: collapse; background: #fff; border: 1px solid #e5e7eb; border-radius: 0.75rem; overflow: hidden; font-size: 0.9rem; }}
+    th {{ background: #f3f4f6; padding: 0.6rem 1rem; text-align: left; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: #6b7280; }}
+    td {{ padding: 0.65rem 1rem; border-top: 1px solid #f3f4f6; }}
+    tr:hover td {{ background: #f9fafb; }}
+    .yield {{ color: #16a34a; font-weight: 600; }}
+    .cta {{ margin-top: 1.5rem; text-align: center; }}
+    .cta a {{ display: inline-block; background: #16a34a; color: #fff; font-weight: 600; padding: 0.65rem 1.5rem; border-radius: 0.5rem; }}
+    .updated {{ font-size: 0.78rem; color: #9ca3af; text-align: right; margin-top: 1rem; }}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <nav><a href="https://exday.no/">exday.no</a> › Aksjer</nav>
+  <h1>Norske utbytteaksjer</h1>
+  <p class="sub">Oversikt over {len(aksjer)} utbytteaksjer på Oslo Børs, sortert etter direkteavkastning. Oppdateres daglig.</p>
+  <table>
+    <thead><tr><th>Ticker</th><th>Navn</th><th>Sektor</th><th>Kurs</th><th>Yield</th><th>Ex-dato</th></tr></thead>
+    <tbody>{rader}</tbody>
+  </table>
+  <div class="cta"><a href="https://exday.no/">Åpne full app med porteføljekalkulator →</a></div>
+  <p class="updated">Sist oppdatert: {today}</p>
+</div>
+</body>
+</html>"""
+
+    with open(os.path.join(aksjer_dir, "index.html"), "w", encoding="utf-8") as f:
+        f.write(oversikt_html)
+
+    print(f"Genererte {len(aksjer)} aksjesider + oversiktsside under aksjer/")
+
+
+def generer_sitemap(aksjer, root_dir, today):
+    """Genererer sitemap.xml med alle sider inkludert individuelle aksjesider."""
+    urls = [
+        f"""  <url>
+    <loc>https://exday.no/</loc>
+    <lastmod>{today}</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>""",
+        f"""  <url>
+    <loc>https://exday.no/aksjer/</loc>
+    <lastmod>{today}</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>""",
+        f"""  <url>
+    <loc>https://exday.no/personvern/</loc>
+    <lastmod>{today}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+  </url>""",
+    ]
+    for a in aksjer:
+        urls.append(f"""  <url>
+    <loc>https://exday.no/aksjer/{a["ticker"]}/</loc>
+    <lastmod>{today}</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>""")
+
+    sitemap_content = '<?xml version="1.0" encoding="UTF-8"?>\n'
+    sitemap_content += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+    sitemap_content += "\n".join(urls)
+    sitemap_content += "\n</urlset>"
+
+    sitemap_path = os.path.join(root_dir, "sitemap.xml")
+    with open(sitemap_path, "w", encoding="utf-8") as f:
+        f.write(sitemap_content)
+    print(f"Sitemap oppdatert med {len(aksjer) + 3} URL-er: {sitemap_path}")
+
+
 def main():
     print("Starter henting av aksjedata fra Yahoo Finance...")
     output_path = os.path.join(os.path.dirname(__file__), "..", "data", "aksjer.json")
@@ -731,27 +1057,11 @@ def main():
     print(f"\nFerdig! {len(resultater)} aksjer lagret til {output_path}")
     print(f"Sist oppdatert: {output['sist_oppdatert']}")
 
-    # Generer sitemap.xml med oppdatert lastmod
+    # Generer individuelle aksjesider og sitemap
+    root_dir = os.path.join(os.path.dirname(__file__), "..")
+    generer_aksjesider(resultater, root_dir)
     today = datetime.datetime.utcnow().strftime("%Y-%m-%d")
-    sitemap_path = os.path.join(os.path.dirname(__file__), "..", "sitemap.xml")
-    sitemap_content = f"""<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://exday.no/</loc>
-    <lastmod>{today}</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>1.0</priority>
-  </url>
-  <url>
-    <loc>https://exday.no/personvern/</loc>
-    <lastmod>{today}</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.3</priority>
-  </url>
-</urlset>"""
-    with open(sitemap_path, "w", encoding="utf-8") as f:
-        f.write(sitemap_content)
-    print(f"Sitemap oppdatert: {sitemap_path}")
+    generer_sitemap(resultater, root_dir, today)
 
 
 if __name__ == "__main__":
