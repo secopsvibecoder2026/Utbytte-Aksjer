@@ -47,29 +47,10 @@ Fjernet fire ulike farger på toppkortene. Dempede yield-badges, nøytral tabell
 ## Planlagt
 
 ### 13. Daglig engasjement — gjør appen til en vane 🔁
-
-#### 13a. Inntektsteller — "Hva har jeg tjent i år?" ⭐
-- [ ] "Hittil i år: X kr" basert på betalingsdatoer som har passert for porteføljeaksjene
-- [ ] Valgfritt årsmål med progress-bar
-
-#### 13b. Personlig "I dag"-dashboard
-- [ ] Erstatt generiske toppkort med personlige når bruker har portefølje/favoritter
-- [ ] "Ex-dato denne uken", "Neste utbetaling", "Siste sjanse"
-- [ ] Fallback til generiske stats hvis ingen data
-
-#### 13c. Opportunity feed
-- [ ] Aksjer med ex-dato innen 10 dager OG yield ≥ 5%, sortert etter dager til ex-dato
-
----
+**Status: Ferdig ✅**
 
 ### 14. Porteføljesynkronisering mellom enheter 📱↔️💻
-
-#### 14a. QR-kode for overføring ⭐
-- [ ] "Send til mobil"-knapp som genererer QR-kode med porteføljedata
-- [ ] QR-koden er gyldig i 5 minutter, ingen server involvert
-- [ ] Mottaker-siden oppdager `?pf=`-parameteren og viser forhåndsvisning
-
-#### 14b. CSV som manuell backup (allerede bygget ✅)
+**Status: Ferdig ✅**
 
 ---
 
