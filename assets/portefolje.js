@@ -355,22 +355,12 @@ function initPortefolje() {
     document.getElementById('qr-modal').classList.remove('flex');
   });
 
-  // ── INNTEKTSTELLER-MÅL — åpne innstillinger ved klikk ──────────────────────
-  function apneInnstillingerProfil() {
-    const modal = document.getElementById('innstillinger-modal');
-    if (modal) {
-      modal.querySelector('[data-innst-tab="profil"]').click();
-      modal.classList.remove('hidden');
-      modal.classList.add('flex');
-    }
-  }
-
+  // ── INNTEKTSTELLER-MÅL / SPAREMÅL — naviger til innstillinger ────────────────
+  const navTilInnst = () => { window.location.href = '/innstillinger/'; };
   const settBtn = document.getElementById('pf-inntekt-mal-sett');
-  if (settBtn) settBtn.addEventListener('click', apneInnstillingerProfil);
-
-  // Sparemål-sett knapp (i ekstra stats)
+  if (settBtn) settBtn.addEventListener('click', navTilInnst);
   const spareSettBtnInit = document.getElementById('pf-stat-sparemaal-sett');
-  if (spareSettBtnInit) spareSettBtnInit.addEventListener('click', apneInnstillingerProfil);
+  if (spareSettBtnInit) spareSettBtnInit.addEventListener('click', navTilInnst);
 }
 
 
@@ -1129,43 +1119,6 @@ function initPortefoljeVelger() {
 
   document.getElementById('pf-portefolje-velg').addEventListener('change', e => {
     settAktivPFId(e.target.value);
-    visPortefolje();
-    oppdaterSammendrag();
-  });
-
-  document.getElementById('pf-portefolje-ny').addEventListener('click', () => {
-    const navn = prompt('Navn på ny portefølje:');
-    if (!navn || !navn.trim()) return;
-    const id  = 'pf_' + Date.now();
-    const pfl = hentPortefoljer();
-    pfl[id]   = { id, navn: navn.trim(), beholdning: {}, transaksjoner: {} };
-    lagrePortefoljer(pfl);
-    settAktivPFId(id);
-    oppdaterPortefoljeVelger();
-    visPortefolje();
-    oppdaterSammendrag();
-  });
-
-  document.getElementById('pf-portefolje-gi-navn').addEventListener('click', () => {
-    const pfl = hentPortefoljer();
-    const id  = hentAktivPFId();
-    const navn = prompt('Nytt navn:', pfl[id]?.navn || '');
-    if (!navn || !navn.trim()) return;
-    pfl[id].navn = navn.trim();
-    lagrePortefoljer(pfl);
-    oppdaterPortefoljeVelger();
-  });
-
-  document.getElementById('pf-portefolje-slett').addEventListener('click', () => {
-    const pfl = hentPortefoljer();
-    if (Object.keys(pfl).length <= 1) return;
-    const id  = hentAktivPFId();
-    const navn = pfl[id]?.navn || id;
-    if (!confirm(`Slett porteføljen "${navn}"? Dette kan ikke angres.`)) return;
-    delete pfl[id];
-    lagrePortefoljer(pfl);
-    settAktivPFId(Object.keys(pfl)[0]);
-    oppdaterPortefoljeVelger();
     visPortefolje();
     oppdaterSammendrag();
   });

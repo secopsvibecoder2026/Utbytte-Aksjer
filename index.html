@@ -139,9 +139,9 @@
         <p id="sist-oppdatert" class="text-xs text-gray-500 dark:text-gray-400 truncate hidden sm:block"><span class="skeleton inline-block h-3 rounded align-middle" style="width:8rem"></span></p>
       </div>
       <span id="streak-badge" class="hidden text-xs font-semibold text-orange-500 dark:text-orange-400 bg-orange-50 dark:bg-orange-900/30 px-2 py-1 rounded-full shrink-0 cursor-default"></span>
-      <button id="profil-btn" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500 dark:text-gray-400 transition-colors shrink-0" title="Innstillinger" aria-label="Innstillinger">
+      <a href="/innstillinger/" id="profil-btn" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500 dark:text-gray-400 transition-colors shrink-0" title="Innstillinger" aria-label="Innstillinger">
         <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><circle cx="12" cy="12" r="3" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
-      </button>
+      </a>
       <button id="dark-toggle" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500 dark:text-gray-400 transition-colors shrink-0" title="Bytt tema" aria-label="Bytt fargemodus">
         <svg id="icon-moon" class="w-5 h-5" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
         <svg id="icon-sun" class="w-5 h-5 hidden" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
@@ -383,11 +383,9 @@
     <div id="tab-portfolio" class="hidden space-y-4">
 
       <!-- Porteføljevalg -->
-      <div class="flex items-center gap-2 flex-wrap">
+      <div class="flex items-center gap-2">
         <select id="pf-portefolje-velg" class="filter-input flex-1 min-w-0 max-w-xs text-sm"></select>
-        <button id="pf-portefolje-ny" class="text-xs text-brand-600 dark:text-brand-400 border border-brand-300 dark:border-brand-700 hover:bg-brand-50 dark:hover:bg-brand-900/20 px-3 py-1.5 rounded-lg transition-colors font-medium whitespace-nowrap">+ Ny portefølje</button>
-        <button id="pf-portefolje-gi-navn" class="text-xs text-gray-500 dark:text-gray-400 hover:text-brand-600 dark:hover:text-brand-400 hover:underline font-medium whitespace-nowrap">Gi nytt navn</button>
-        <button id="pf-portefolje-slett" class="text-xs text-gray-400 hover:text-red-500 hover:underline font-medium whitespace-nowrap">Slett</button>
+        <a href="/innstillinger/" class="text-xs text-gray-400 dark:text-gray-500 hover:text-brand-600 dark:hover:text-brand-400 hover:underline font-medium whitespace-nowrap transition-colors">Administrer →</a>
       </div>
 
       <!-- Sub-tab nav -->
@@ -1000,101 +998,6 @@
       <p class="text-xs text-gray-400">Gyldig i <span id="qr-countdown" class="font-mono font-semibold">5:00</span></p>
       <p class="text-xs text-red-500 hidden" id="qr-utlopt">QR-koden er utløpt. Lukk og generer en ny.</p>
       <button id="qr-lukk" class="text-sm text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition-colors">Lukk</button>
-    </div>
-  </div>
-
-  <!-- INNSTILLINGER-MODAL -->
-  <div id="innstillinger-modal" class="fixed inset-0 bg-black/60 z-50 hidden items-center justify-center p-4" role="dialog" aria-modal="true" aria-labelledby="innst-tittel">
-    <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl w-full max-w-md max-h-[90vh] flex flex-col">
-      <!-- Header -->
-      <div class="flex items-center justify-between px-5 pt-5 pb-4 border-b border-gray-100 dark:border-gray-800 shrink-0">
-        <h3 id="innst-tittel" class="font-semibold text-base">Innstillinger</h3>
-        <button id="innstillinger-lukk" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 p-1" aria-label="Lukk">
-          <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-        </button>
-      </div>
-      <!-- Tabs -->
-      <div class="flex border-b border-gray-100 dark:border-gray-800 shrink-0">
-        <button class="innst-tab-btn flex-1 py-2.5 text-sm font-medium text-brand-600 dark:text-brand-400 border-b-2 border-brand-600 dark:border-brand-400 -mb-px transition-colors" data-innst-tab="profil">Profil</button>
-        <button class="innst-tab-btn flex-1 py-2.5 text-sm font-medium text-gray-500 dark:text-gray-400 border-b-2 border-transparent hover:text-gray-700 dark:hover:text-gray-200 -mb-px transition-colors" data-innst-tab="varsler">Varsler</button>
-        <button class="innst-tab-btn flex-1 py-2.5 text-sm font-medium text-gray-500 dark:text-gray-400 border-b-2 border-transparent hover:text-gray-700 dark:hover:text-gray-200 -mb-px transition-colors" data-innst-tab="guide">Guide</button>
-      </div>
-      <!-- Profil-innhold -->
-      <div id="innst-profil" class="overflow-y-auto p-5 space-y-4">
-        <div>
-          <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Navn / kallenavn</label>
-          <input id="profil-navn-input" type="text" maxlength="30" placeholder="F.eks. Kristian" class="filter-input w-full" />
-        </div>
-        <div>
-          <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Sparemål — total porteføljebeløp (kr)</label>
-          <input id="profil-sparemaal-input" type="number" min="0" step="10000" placeholder="F.eks. 500 000" class="filter-input w-full" />
-          <p class="text-xs text-gray-400 mt-1">Totalbeløpet du ønsker å investere i utbytteaksjer</p>
-        </div>
-        <div>
-          <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Månedlig utbyttemål (kr)</label>
-          <input id="profil-mal-input" type="number" min="0" step="500" placeholder="F.eks. 5 000" class="filter-input w-full" />
-          <p class="text-xs text-gray-400 mt-1">Vises som fremgangsbar under «Snitt/måned» i porteføljen</p>
-        </div>
-        <div class="flex gap-2 pt-1">
-          <button id="profil-lagre" class="flex-1 py-2.5 bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold rounded-lg transition-colors">Lagre</button>
-          <button id="innstillinger-avbryt" class="px-4 py-2 text-sm text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition-colors">Avbryt</button>
-        </div>
-      </div>
-      <!-- Varsler-innhold -->
-      <div id="innst-varsler" class="overflow-y-auto p-5 hidden">
-        <div id="varsler-innhold" class="space-y-4"></div>
-      </div>
-      <!-- Guide-innhold -->
-      <div id="innst-guide" class="overflow-y-auto p-5 hidden space-y-4">
-        <p class="text-xs text-gray-400">Slik bruker du exday.no — alt lagres lokalt i nettleseren, ingen innlogging.</p>
-        <div class="space-y-3">
-          <div class="flex gap-3">
-            <span class="flex-shrink-0 w-7 h-7 rounded-full bg-brand-600 text-white text-xs font-bold flex items-center justify-center">1</span>
-            <div>
-              <p class="font-semibold text-sm">Utforsk aksjer</p>
-              <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Bruk søk og filtre øverst på siden. Klikk på en aksje for detaljer, utbyttehistorikk og nøkkeltall.</p>
-            </div>
-          </div>
-          <div class="flex gap-3">
-            <span class="flex-shrink-0 w-7 h-7 rounded-full bg-brand-600 text-white text-xs font-bold flex items-center justify-center">2</span>
-            <div>
-              <p class="font-semibold text-sm">Bygg porteføljen din</p>
-              <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Gå til <strong>Portefølje → Beholdning</strong> og skriv inn antall aksjer per selskap. Appen beregner forventet utbytte, yield og markedsverdi automatisk.</p>
-            </div>
-          </div>
-          <div class="flex gap-3">
-            <span class="flex-shrink-0 w-7 h-7 rounded-full bg-brand-600 text-white text-xs font-bold flex items-center justify-center">3</span>
-            <div>
-              <p class="font-semibold text-sm">Registrer kjøp og salg</p>
-              <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Fyll ut <strong>Kjøpsdato</strong> og <strong>Kjøpskurs</strong> når du legger til en aksje — eller bruk «Kostbasis og transaksjoner» i Beholdning for å logge kjøp, salg og mottatt utbytte. Appen beregner da din faktiske avkastning og kostpris (VWAP).</p>
-            </div>
-          </div>
-          <div class="flex gap-3">
-            <span class="flex-shrink-0 w-7 h-7 rounded-full bg-brand-600 text-white text-xs font-bold flex items-center justify-center">4</span>
-            <div>
-              <p class="font-semibold text-sm">Watchliste</p>
-              <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Legg aksjer du vurderer å kjøpe i en <strong>Watchliste</strong>. Klikk "+" på en rad for å gå direkte til kjøpsregistrering.</p>
-            </div>
-          </div>
-          <div class="flex gap-3">
-            <span class="flex-shrink-0 w-7 h-7 rounded-full bg-brand-600 text-white text-xs font-bold flex items-center justify-center">5</span>
-            <div>
-              <p class="font-semibold text-sm">Kalender og varsler</p>
-              <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Kalender-fanen viser alle kommende ex-datoer og betalingsdatoer. Last ned enkelhendelser som .ics-fil til din kalender-app.</p>
-            </div>
-          </div>
-          <div class="flex gap-3">
-            <span class="flex-shrink-0 w-7 h-7 rounded-full bg-brand-600 text-white text-xs font-bold flex items-center justify-center">6</span>
-            <div>
-              <p class="font-semibold text-sm">Del porteføljen din</p>
-              <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Under <strong>Portefølje</strong> finner du «Del portefølje»-knappen. Den genererer en lenke med et anonymt sammendrag — ingen persondata deles.</p>
-            </div>
-          </div>
-        </div>
-        <div class="pt-2 border-t border-gray-100 dark:border-gray-800">
-          <button id="guide-restart-onboarding" class="text-xs text-brand-600 dark:text-brand-400 hover:underline">Vis velkomst-veiviseren på nytt →</button>
-        </div>
-      </div>
     </div>
   </div>
 

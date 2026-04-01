@@ -302,82 +302,9 @@ function visGreeting() {
 }
 
 function initInnstillinger() {
-  const btn   = document.getElementById('profil-btn');
-  const modal = document.getElementById('innstillinger-modal');
-  const lukkBtn  = document.getElementById('innstillinger-lukk');
-  const avbrytBtn = document.getElementById('innstillinger-avbryt');
-  const lagreBtn = document.getElementById('profil-lagre');
-  const navnIn   = document.getElementById('profil-navn-input');
-  const spareMaalIn = document.getElementById('profil-sparemaal-input');
-  const malIn    = document.getElementById('profil-mal-input');
-
-  // Tab switching inside modal
-  modal.querySelectorAll('.innst-tab-btn').forEach(tabBtn => {
-    tabBtn.addEventListener('click', () => {
-      const tab = tabBtn.dataset.innstTab;
-      modal.querySelectorAll('.innst-tab-btn').forEach(b => {
-        const active = b === tabBtn;
-        b.classList.toggle('text-brand-600', active);
-        b.classList.toggle('dark:text-brand-400', active);
-        b.classList.toggle('border-brand-600', active);
-        b.classList.toggle('dark:border-brand-400', active);
-        b.classList.toggle('text-gray-500', !active);
-        b.classList.toggle('dark:text-gray-400', !active);
-        b.classList.toggle('border-transparent', !active);
-      });
-      document.getElementById('innst-profil').classList.toggle('hidden', tab !== 'profil');
-      document.getElementById('innst-varsler').classList.toggle('hidden', tab !== 'varsler');
-      document.getElementById('innst-guide').classList.toggle('hidden', tab !== 'guide');
-      if (tab === 'varsler') visVarslerTab();
-    });
-  });
-
-  function apneModal(startTab) {
-    const p = hentProfil();
-    navnIn.value      = p.navn;
-    spareMaalIn.value = p.spareMaal || '';
-    malIn.value       = p.malMnd || '';
-    // Reset to profil tab unless varsler requested
-    if (startTab === 'varsler') {
-      modal.querySelector('[data-innst-tab="varsler"]').click();
-    } else {
-      modal.querySelector('[data-innst-tab="profil"]').click();
-    }
-    modal.classList.remove('hidden');
-    modal.classList.add('flex');
-    if (startTab !== 'varsler') navnIn.focus();
-  }
-
-  function lukkInnstillingerModal() {
-    modal.classList.add('hidden');
-    modal.classList.remove('flex');
-  }
-
-  btn.addEventListener('click', () => apneModal('profil'));
-  lukkBtn.addEventListener('click', lukkInnstillingerModal);
-  avbrytBtn.addEventListener('click', lukkInnstillingerModal);
-  modal.addEventListener('click', e => { if (e.target === modal) lukkInnstillingerModal(); });
-
-  // «Vis veiviseren på nytt» i Guide-fanen
-  document.getElementById('guide-restart-onboarding').addEventListener('click', () => {
-    lukkInnstillingerModal();
-    localStorage.removeItem('velkommen_vist');
-    visVelkomstModal();
-  });
-
-  lagreBtn.addEventListener('click', () => {
-    const nyMalMnd = parseFloat(malIn.value) || 0;
-    lagreProfil(navnIn.value.trim(), nyMalMnd, parseFloat(spareMaalIn.value) || 0);
-    lukkInnstillingerModal();
-    visGreeting();
-    oppdaterSpareMaalBar(hentPF());
-    if (aktivTab === 'portfolio') visPortefolje();
-  });
-
   visGreeting();
 }
 
-// Keep legacy alias so any existing call to initProfil() still works during transition
 function initProfil() { initInnstillinger(); }
 
 
@@ -1508,9 +1435,6 @@ function initModal() {
     // Aksje-modal
     const aksjeModal = document.getElementById('modal-overlay');
     if (aksjeModal && !aksjeModal.classList.contains('hidden')) { lukkModal(); return; }
-    // Innstillinger-modal
-    const innstModal = document.getElementById('innstillinger-modal');
-    if (innstModal && innstModal.classList.contains('flex')) { innstModal.classList.remove('flex'); innstModal.classList.add('hidden'); return; }
     // Del-modal
     const delModal = document.getElementById('del-modal');
     if (delModal && !delModal.classList.contains('hidden')) { delModal.classList.add('hidden'); delModal.classList.remove('flex'); return; }
@@ -2004,6 +1928,7 @@ async function sjekkExDatoerDirekte() {
 
 function visVarslerTab() {
   const container = document.getElementById('varsler-innhold');
+  if (!container) return;
   const harNotif = 'Notification' in window && 'serviceWorker' in navigator;
   const tillatelse = harNotif ? Notification.permission : 'unsupported';
   const prefs = hentNotifPrefs();

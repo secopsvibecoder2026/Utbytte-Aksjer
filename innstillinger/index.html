@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Innstillinger – exday.no</title>
+  <meta name="robots" content="noindex" />
+  <link rel="icon" type="image/svg+xml" href="/logo/exday_icon_primary.svg">
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#16a34a" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/assets/style.css" />
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: { extend: { colors: { brand: { 50:'#f0fdf4', 100:'#dcfce7', 500:'#22c55e', 600:'#16a34a', 700:'#15803d', 900:'#14532d' } } } }
+    }
+  </script>
+</head>
+<body class="bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 min-h-screen transition-colors duration-200">
+
+  <!-- HEADER -->
+  <header class="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 sticky top-0 z-40 shadow-sm">
+    <div class="max-w-2xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <a href="/" class="flex items-center gap-1.5 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors" aria-label="Tilbake til forsiden">
+          <svg class="w-4 h-4" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+          <span class="text-sm font-medium">exday.no</span>
+        </a>
+        <span class="text-gray-300 dark:text-gray-600">/</span>
+        <h1 class="text-sm font-semibold">Innstillinger</h1>
+      </div>
+      <button id="dark-toggle" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500 dark:text-gray-400 transition-colors" aria-label="Bytt fargemodus">
+        <svg class="w-5 h-5 dark:hidden" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+        <svg class="w-5 h-5 hidden dark:block" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main class="max-w-2xl mx-auto px-4 py-6 space-y-6">
+
+    <!-- PROFIL -->
+    <section class="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
+      <div class="px-5 py-4 border-b border-gray-100 dark:border-gray-800">
+        <h2 class="font-semibold text-base">Profil</h2>
+      </div>
+      <div class="p-5 space-y-4">
+        <div>
+          <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1" for="profil-navn-input">Navn / kallenavn</label>
+          <input id="profil-navn-input" type="text" maxlength="30" placeholder="F.eks. Kristian" class="filter-input w-full" />
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1" for="profil-sparemaal-input">Sparemål — total porteføljebeløp (kr)</label>
+          <input id="profil-sparemaal-input" type="number" min="0" step="10000" placeholder="F.eks. 500 000" class="filter-input w-full" />
+          <p class="text-xs text-gray-400 mt-1">Vises som fremgangsbar i oversikten</p>
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1" for="profil-mal-input">Månedlig utbyttemål (kr)</label>
+          <input id="profil-mal-input" type="number" min="0" step="500" placeholder="F.eks. 5 000" class="filter-input w-full" />
+          <p class="text-xs text-gray-400 mt-1">Vises som fremgangsbar under Snitt/måned i porteføljen</p>
+        </div>
+        <div class="flex gap-2 pt-1">
+          <button id="profil-lagre" class="flex-1 py-2.5 bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold rounded-lg transition-colors">Lagre profil</button>
+        </div>
+        <p id="profil-lagret" class="hidden text-xs text-green-600 dark:text-green-400 font-medium">✓ Lagret</p>
+      </div>
+    </section>
+
+    <!-- PORTEFØLJER -->
+    <section class="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
+      <div class="px-5 py-4 border-b border-gray-100 dark:border-gray-800">
+        <h2 class="font-semibold text-base">Porteføljer</h2>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Bytt aktiv portefølje fra Portefølje-fanen på forsiden.</p>
+      </div>
+      <div id="pf-liste" class="divide-y divide-gray-100 dark:divide-gray-800"></div>
+      <!-- Ny portefølje -->
+      <div class="p-5 border-t border-gray-100 dark:border-gray-800 flex gap-2">
+        <input id="pf-ny-navn" type="text" maxlength="40" placeholder="Navn på ny portefølje…" class="filter-input flex-1" />
+        <button id="pf-ny-opprett" class="bg-brand-600 hover:bg-brand-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors shrink-0">+ Opprett</button>
+      </div>
+    </section>
+
+    <!-- VARSLER -->
+    <section class="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
+      <div class="px-5 py-4 border-b border-gray-100 dark:border-gray-800">
+        <h2 class="font-semibold text-base">Varsler</h2>
+      </div>
+      <div id="varsler-status" class="p-5"></div>
+    </section>
+
+    <!-- GUIDE -->
+    <section class="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
+      <div class="px-5 py-4 border-b border-gray-100 dark:border-gray-800">
+        <h2 class="font-semibold text-base">Guide</h2>
+      </div>
+      <div class="p-5 space-y-4">
+        <p class="text-xs text-gray-500 dark:text-gray-400">Slik bruker du exday.no — alt lagres lokalt i nettleseren, ingen innlogging.</p>
+        <ol class="space-y-3">
+          <li class="flex gap-3">
+            <span class="flex-shrink-0 w-7 h-7 rounded-full bg-brand-600 text-white text-xs font-bold flex items-center justify-center">1</span>
+            <div>
+              <p class="font-semibold text-sm">Utforsk aksjer</p>
+              <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Bruk søk og filtre på forsiden. Klikk på en aksje for detaljer, utbyttehistorikk og nøkkeltall.</p>
+            </div>
+          </li>
+          <li class="flex gap-3">
+            <span class="flex-shrink-0 w-7 h-7 rounded-full bg-brand-600 text-white text-xs font-bold flex items-center justify-center">2</span>
+            <div>
+              <p class="font-semibold text-sm">Bygg porteføljen din</p>
+              <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Gå til <strong>Portefølje → Beholdning</strong> og legg til aksjer med antall. Appen beregner forventet utbytte, yield og markedsverdi automatisk.</p>
+            </div>
+          </li>
+          <li class="flex gap-3">
+            <span class="flex-shrink-0 w-7 h-7 rounded-full bg-brand-600 text-white text-xs font-bold flex items-center justify-center">3</span>
+            <div>
+              <p class="font-semibold text-sm">Registrer kjøp og salg</p>
+              <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Fyll ut <strong>Kjøpsdato</strong> og <strong>Kjøpskurs</strong> når du legger til en aksje — eller bruk «Kostbasis og transaksjoner» i Beholdning for å logge kjøp, salg og utbytte. Appen beregner kostpris (VWAP) og faktisk avkastning.</p>
+            </div>
+          </li>
+          <li class="flex gap-3">
+            <span class="flex-shrink-0 w-7 h-7 rounded-full bg-brand-600 text-white text-xs font-bold flex items-center justify-center">4</span>
+            <div>
+              <p class="font-semibold text-sm">Watchliste</p>
+              <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Legg aksjer du vurderer i en Watchliste under Portefølje-fanen.</p>
+            </div>
+          </li>
+          <li class="flex gap-3">
+            <span class="flex-shrink-0 w-7 h-7 rounded-full bg-brand-600 text-white text-xs font-bold flex items-center justify-center">5</span>
+            <div>
+              <p class="font-semibold text-sm">Kalender og varsler</p>
+              <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Kalender-fanen viser alle kommende ex-datoer og betalingsdatoer. Last ned som .ics-fil.</p>
+            </div>
+          </li>
+        </ol>
+        <div class="pt-2 border-t border-gray-100 dark:border-gray-800">
+          <button id="guide-restart-onboarding" class="text-xs text-brand-600 dark:text-brand-400 hover:underline">Vis velkomst-veiviseren på nytt →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- DATA -->
+    <section class="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
+      <div class="px-5 py-4 border-b border-gray-100 dark:border-gray-800">
+        <h2 class="font-semibold text-base">Data og personvern</h2>
+      </div>
+      <div class="p-5 space-y-3">
+        <p class="text-xs text-gray-500 dark:text-gray-400">All data — portefølje, favoritter og innstillinger — lagres utelukkende lokalt i nettleseren din (localStorage). Ingenting sendes til våre servere.</p>
+        <div class="flex flex-wrap gap-2 pt-1">
+          <button id="eksport-json-btn" class="inline-flex items-center gap-1.5 text-xs text-brand-600 dark:text-brand-400 border border-brand-300 dark:border-brand-700 hover:bg-brand-50 dark:hover:bg-brand-900/20 px-3 py-1.5 rounded-lg transition-colors font-medium">
+            <svg class="w-3.5 h-3.5" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"/></svg>
+            Last ned backup (JSON)
+          </button>
+          <a href="/personvern/" class="inline-flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 px-3 py-1.5 rounded-lg transition-colors font-medium">
+            Personvernerklæring →
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="/assets/storage.js"></script>
+  <script>
+  'use strict';
+
+  // ── DARK MODE ────────────────────────────────────────────────────────────────
+  (function() {
+    const pref = localStorage.getItem('darkMode');
+    if (pref === 'dark' || (!pref && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark');
+    }
+  })();
+
+  document.getElementById('dark-toggle').addEventListener('click', () => {
+    const isDark = document.documentElement.classList.toggle('dark');
+    localStorage.setItem('darkMode', isDark ? 'dark' : 'light');
+  });
+
+  // ── PROFIL ───────────────────────────────────────────────────────────────────
+  const p = hentProfil();
+  document.getElementById('profil-navn-input').value      = p.navn || '';
+  document.getElementById('profil-sparemaal-input').value = p.spareMaal || '';
+  document.getElementById('profil-mal-input').value       = p.malMnd || '';
+
+  document.getElementById('profil-lagre').addEventListener('click', () => {
+    const navn     = document.getElementById('profil-navn-input').value.trim();
+    const malMnd   = parseFloat(document.getElementById('profil-mal-input').value) || 0;
+    const spareMaal = parseFloat(document.getElementById('profil-sparemaal-input').value) || 0;
+    lagreProfil(navn, malMnd, spareMaal);
+    const melding = document.getElementById('profil-lagret');
+    melding.classList.remove('hidden');
+    setTimeout(() => melding.classList.add('hidden'), 2500);
+  });
+
+  // ── PORTEFØLJER ──────────────────────────────────────────────────────────────
+  function visPFListe() {
+    const pfl     = hentPortefoljer();
+    const aktivId = hentAktivPFId();
+    const liste   = document.getElementById('pf-liste');
+    const ids     = Object.keys(pfl);
+
+    liste.innerHTML = ids.map(id => {
+      const pf = pfl[id];
+      const erAktiv = id === aktivId;
+      const antall  = Object.keys(pf.beholdning || {}).length;
+      return `
+        <div class="px-5 py-4 flex items-center gap-3" data-pf-id="${id}">
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="pf-navn-tekst font-medium text-sm truncate">${escHtml(pf.navn)}</span>
+              ${erAktiv ? `<span class="text-xs bg-brand-100 dark:bg-brand-900/40 text-brand-700 dark:text-brand-300 px-2 py-0.5 rounded-full font-medium">Aktiv</span>` : ''}
+            </div>
+            <p class="text-xs text-gray-400 mt-0.5">${antall} aksje${antall !== 1 ? 'r' : ''}</p>
+          </div>
+          <div class="flex items-center gap-2 shrink-0">
+            <button class="pf-gi-navn-btn text-xs text-gray-500 hover:text-brand-600 dark:hover:text-brand-400 hover:underline font-medium" data-id="${id}">Gi nytt navn</button>
+            <button class="pf-sett-aktiv-btn text-xs text-gray-500 hover:text-brand-600 dark:hover:text-brand-400 hover:underline font-medium ${erAktiv ? 'hidden' : ''}" data-id="${id}">Sett aktiv</button>
+            <button class="pf-slett-btn text-xs text-gray-400 hover:text-red-500 hover:underline font-medium ${ids.length <= 1 ? 'opacity-30 cursor-not-allowed' : ''}" data-id="${id}" ${ids.length <= 1 ? 'disabled' : ''}>Slett</button>
+          </div>
+        </div>
+        <div class="pf-gi-navn-form hidden px-5 pb-4 flex gap-2" data-form-id="${id}">
+          <input type="text" class="filter-input flex-1 pf-gi-navn-input" value="${escHtml(pf.navn)}" maxlength="40" />
+          <button class="pf-gi-navn-lagre bg-brand-600 hover:bg-brand-700 text-white text-sm font-medium px-3 py-1.5 rounded-lg transition-colors" data-id="${id}">Lagre</button>
+          <button class="pf-gi-navn-avbryt text-sm text-gray-400 hover:text-gray-600 px-2" data-id="${id}">Avbryt</button>
+        </div>`;
+    }).join('');
+  }
+
+  function escHtml(s) {
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  document.getElementById('pf-liste').addEventListener('click', e => {
+    // Gi nytt navn — toggle form
+    const gNavnBtn = e.target.closest('.pf-gi-navn-btn');
+    if (gNavnBtn) {
+      const id   = gNavnBtn.dataset.id;
+      const form = document.querySelector(`.pf-gi-navn-form[data-form-id="${id}"]`);
+      form.classList.toggle('hidden');
+      if (!form.classList.contains('hidden')) form.querySelector('.pf-gi-navn-input').focus();
+      return;
+    }
+    // Lagre nytt navn
+    const lagreBtn = e.target.closest('.pf-gi-navn-lagre');
+    if (lagreBtn) {
+      const id    = lagreBtn.dataset.id;
+      const form  = document.querySelector(`.pf-gi-navn-form[data-form-id="${id}"]`);
+      const navn  = form.querySelector('.pf-gi-navn-input').value.trim();
+      if (!navn) return;
+      const pfl   = hentPortefoljer();
+      if (pfl[id]) { pfl[id].navn = navn; lagrePortefoljer(pfl); }
+      visPFListe();
+      return;
+    }
+    // Avbryt
+    const avbrytBtn = e.target.closest('.pf-gi-navn-avbryt');
+    if (avbrytBtn) {
+      const id  = avbrytBtn.dataset.id;
+      document.querySelector(`.pf-gi-navn-form[data-form-id="${id}"]`).classList.add('hidden');
+      return;
+    }
+    // Sett aktiv
+    const settBtn = e.target.closest('.pf-sett-aktiv-btn');
+    if (settBtn) {
+      settAktivPFId(settBtn.dataset.id);
+      visPFListe();
+      return;
+    }
+    // Slett
+    const slettBtn = e.target.closest('.pf-slett-btn:not([disabled])');
+    if (slettBtn) {
+      const pfl = hentPortefoljer();
+      if (Object.keys(pfl).length <= 1) return;
+      const id   = slettBtn.dataset.id;
+      const navn = pfl[id]?.navn || id;
+      if (!confirm(`Slett porteføljen «${navn}»?\nDette fjerner all beholdning og alle transaksjoner i denne porteføljen. Kan ikke angres.`)) return;
+      delete pfl[id];
+      lagrePortefoljer(pfl);
+      if (hentAktivPFId() === id) settAktivPFId(Object.keys(pfl)[0]);
+      visPFListe();
+    }
+  });
+
+  document.getElementById('pf-ny-opprett').addEventListener('click', () => {
+    const input = document.getElementById('pf-ny-navn');
+    const navn  = input.value.trim();
+    if (!navn) { input.focus(); return; }
+    const id  = 'pf_' + Date.now();
+    const pfl = hentPortefoljer();
+    pfl[id]   = { id, navn, beholdning: {}, transaksjoner: {} };
+    lagrePortefoljer(pfl);
+    settAktivPFId(id);
+    input.value = '';
+    visPFListe();
+  });
+
+  document.getElementById('pf-ny-navn').addEventListener('keydown', e => {
+    if (e.key === 'Enter') document.getElementById('pf-ny-opprett').click();
+  });
+
+  visPFListe();
+
+  // ── VARSLER ──────────────────────────────────────────────────────────────────
+  (function visVarsler() {
+    const container = document.getElementById('varsler-status');
+    const harNotif  = 'Notification' in window && 'serviceWorker' in navigator;
+    if (!harNotif) {
+      container.innerHTML = `<p class="text-sm text-gray-500">Nettleseren din støtter ikke push-varsler. Prøv Chrome, Edge eller Safari på iOS 16.4+.</p>`;
+      return;
+    }
+    const tillatelse = Notification.permission;
+    if (tillatelse === 'denied') {
+      container.innerHTML = `
+        <div class="rounded-xl border border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-900/20 p-4">
+          <p class="font-semibold text-sm text-red-800 dark:text-red-300 mb-1">Varsler er blokkert</p>
+          <p class="text-sm text-red-700 dark:text-red-400">Gå til nettleserinnstillinger → Nettstedsinnstillinger → Varslinger, og tillat exday.no.</p>
+        </div>`;
+    } else if (tillatelse === 'granted') {
+      container.innerHTML = `
+        <div class="rounded-xl border border-green-200 dark:border-green-800 bg-green-50 dark:bg-green-900/20 p-4 flex items-start gap-3">
+          <svg class="w-5 h-5 text-green-600 dark:text-green-400 shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+          <div>
+            <p class="font-semibold text-sm text-green-800 dark:text-green-300">Varsler er aktivert</p>
+            <p class="text-sm text-green-700 dark:text-green-400 mt-0.5">Du får varsler når aksjer du følger nærmer seg ex-dato. Velg hvilke aksjer under <a href="/" class="underline">forsiden</a>.</p>
+          </div>
+        </div>`;
+    } else {
+      container.innerHTML = `
+        <div class="rounded-xl border border-brand-200 dark:border-brand-800 bg-brand-50 dark:bg-brand-900/20 p-4 flex items-center justify-between gap-4">
+          <div>
+            <p class="font-semibold text-sm">Aktiver ex-dato-varsler</p>
+            <p class="text-sm text-gray-600 dark:text-gray-400 mt-0.5">Få varsler når aksjer du følger nærmer seg ex-dato.</p>
+          </div>
+          <button id="aktiver-varsler-btn" class="shrink-0 px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white text-sm font-medium rounded-lg transition-colors">Aktiver</button>
+        </div>`;
+      document.getElementById('aktiver-varsler-btn')?.addEventListener('click', async () => {
+        const tillatelse = await Notification.requestPermission();
+        visVarsler();
+      });
+    }
+  })();
+
+  // ── GUIDE — restart onboarding ───────────────────────────────────────────────
+  document.getElementById('guide-restart-onboarding').addEventListener('click', () => {
+    localStorage.removeItem('velkommen_vist');
+    window.location.href = '/';
+  });
+
+  // ── EKSPORT JSON ─────────────────────────────────────────────────────────────
+  document.getElementById('eksport-json-btn').addEventListener('click', () => {
+    const data = {
+      versjon: 3,
+      eksportert: new Date().toISOString(),
+      portefoljer: hentPortefoljer(),
+      favoritter: [...(hentFav ? hentFav() : new Set())],
+      profil: hentProfil(),
+      aksjedata: (() => { try { return JSON.parse(localStorage.getItem('aksje_data') || '{}'); } catch { return {}; } })()
+    };
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'exday-backup-' + new Date().toISOString().slice(0, 10) + '.json';
+    a.click();
+    URL.revokeObjectURL(a.href);
+  });
+  </script>
+</body>
+</html>
