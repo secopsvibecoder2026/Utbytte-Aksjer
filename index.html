@@ -144,7 +144,8 @@
       <nav class="flex gap-1" id="tab-nav">
         <button class="tab-btn active" data-tab="oversikt">Oversikt</button>
         <button class="tab-btn" data-tab="kalender">Kalender</button>
-        <button class="tab-btn" data-tab="portfolio">Kalkulator</button>
+        <button class="tab-btn" data-tab="portfolio">Portefølje</button>
+        <button class="tab-btn" data-tab="kalkulator">Kalkulator</button>
         <button class="tab-btn" data-tab="varsler">Varsler</button>
       </nav>
     </div>
@@ -425,6 +426,82 @@
         </div>
       </div>
 
+    </div>
+
+    <!-- KALKULATOR-FANE -->
+    <div id="tab-kalkulator" class="hidden space-y-6 max-w-2xl mx-auto">
+      <div class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-5 shadow-sm space-y-4">
+        <h2 class="font-semibold text-base">Utbyttekalkulator — yield over tid</h2>
+        <p class="text-xs text-gray-500 dark:text-gray-400">Se hvordan utbytte og reinvestering vokser over år.</p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Startbeløp (kr)</label>
+            <input id="kal-startbelop" type="number" min="1000" step="1000" value="100000" class="filter-input w-full" />
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Årlig yield (%)</label>
+            <input id="kal-yield" type="number" min="0.1" max="50" step="0.1" value="6" class="filter-input w-full" />
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Antall år</label>
+            <input id="kal-ar" type="number" min="1" max="40" step="1" value="10" class="filter-input w-full" />
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Årlig kursvekst (%)</label>
+            <input id="kal-vekst" type="number" min="0" max="30" step="0.5" value="3" class="filter-input w-full" />
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Månedlig sparing (kr)</label>
+            <input id="kal-sparing" type="number" min="0" step="500" value="0" class="filter-input w-full" />
+          </div>
+          <div class="flex items-end pb-1">
+            <label class="flex items-center gap-2 cursor-pointer select-none text-sm">
+              <input id="kal-reinvester" type="checkbox" checked class="w-4 h-4 rounded accent-brand-600" />
+              Reinvester utbytte (DRIP)
+            </label>
+          </div>
+        </div>
+
+        <button id="kal-beregn" class="px-5 py-2 bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold rounded-lg transition-colors">Beregn</button>
+      </div>
+
+      <!-- Resultat-kort -->
+      <div id="kal-resultat" class="hidden space-y-4">
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <div class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-3 text-center shadow-sm">
+            <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Verdi etter <span id="kal-res-ar">—</span> år</p>
+            <p id="kal-res-verdi" class="text-lg font-bold text-brand-600 dark:text-brand-400">—</p>
+          </div>
+          <div class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-3 text-center shadow-sm">
+            <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Totalt utbytte</p>
+            <p id="kal-res-utbytte" class="text-lg font-bold text-green-600 dark:text-green-400">—</p>
+          </div>
+          <div class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-3 text-center shadow-sm">
+            <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Totalt innbetalt</p>
+            <p id="kal-res-innbetalt" class="text-lg font-bold text-gray-700 dark:text-gray-300">—</p>
+          </div>
+          <div class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-3 text-center shadow-sm">
+            <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Månedlig utbytte (år <span id="kal-res-ar2">—</span>)</p>
+            <p id="kal-res-mnd" class="text-lg font-bold text-orange-500">—</p>
+          </div>
+        </div>
+
+        <!-- Tabell år-for-år -->
+        <div class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-sm overflow-hidden">
+          <table class="w-full text-sm">
+            <thead class="bg-gray-50 dark:bg-gray-800 text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide">
+              <tr>
+                <th class="px-4 py-2 text-left">År</th>
+                <th class="px-4 py-2 text-right">Porteføljeverdi</th>
+                <th class="px-4 py-2 text-right">Utbytte dette året</th>
+                <th class="px-4 py-2 text-right">Totalt utbytte</th>
+              </tr>
+            </thead>
+            <tbody id="kal-tabell" class="divide-y divide-gray-100 dark:divide-gray-800"></tbody>
+          </table>
+        </div>
+      </div>
     </div>
 
     <!-- VARSLER-FANE -->

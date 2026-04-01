@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initViewToggle();
   initModal();
   initPortefolje();
+  initKalkulator();
   initVarsler();
   lastData();
 });
@@ -118,12 +119,11 @@ function initTabs() {
     document.getElementById('tab-oversikt').classList.toggle('hidden', aktivTab !== 'oversikt');
     document.getElementById('tab-kalender').classList.toggle('hidden', aktivTab !== 'kalender');
     document.getElementById('tab-portfolio').classList.toggle('hidden', aktivTab !== 'portfolio');
+    document.getElementById('tab-kalkulator').classList.toggle('hidden', aktivTab !== 'kalkulator');
     document.getElementById('tab-varsler').classList.toggle('hidden', aktivTab !== 'varsler');
-    // Skjul hele filter-bar på varsler-fanen (søk gir ingen mening der)
-    document.getElementById('filter-bar').classList.toggle('hidden', aktivTab === 'varsler');
-    // Søkefeltet er alltid synlig; bare filtre/dropdowns skjules på andre faner
+    const skjulFilter = aktivTab === 'varsler' || aktivTab === 'kalkulator';
+    document.getElementById('filter-bar').classList.toggle('hidden', skjulFilter);
     document.getElementById('filter-ekstra').classList.toggle('hidden', aktivTab !== 'oversikt');
-    // Tøm søk ved tabbytte så man ikke beholder gammelt søk
     document.getElementById('sok').value = '';
     if (aktivTab === 'portfolio') visPortefolje();
     if (aktivTab === 'kalender') visKalender();
@@ -1395,6 +1395,74 @@ function lagreNotifPrefs(prefs) {
       }))
     );
   }
+}
+
+// ── UTBYTTEKALKULATOR ─────────────────────────────────────────────────────
+function initKalkulator() {
+  document.getElementById('kal-beregn').addEventListener('click', beregnKalkulator);
+  // Beregn automatisk ved endring
+  ['kal-startbelop','kal-yield','kal-ar','kal-vekst','kal-sparing','kal-reinvester']
+    .forEach(id => document.getElementById(id).addEventListener('input', beregnKalkulator));
+  beregnKalkulator();
+}
+
+function beregnKalkulator() {
+  const startbelop  = Math.max(0, parseFloat(document.getElementById('kal-startbelop').value) || 0);
+  const yieldPct    = Math.max(0, Math.min(50, parseFloat(document.getElementById('kal-yield').value) || 0));
+  const antallAr    = Math.max(1, Math.min(40, parseInt(document.getElementById('kal-ar').value) || 1));
+  const vekstPct    = Math.max(0, Math.min(30, parseFloat(document.getElementById('kal-vekst').value) || 0));
+  const sparingMnd  = Math.max(0, parseFloat(document.getElementById('kal-sparing').value) || 0);
+  const reinvester  = document.getElementById('kal-reinvester').checked;
+
+  if (startbelop <= 0 && sparingMnd <= 0) return;
+
+  const fmtKr = v => v.toLocaleString('nb-NO', { maximumFractionDigits: 0 }) + ' kr';
+  const yieldFaktor = yieldPct / 100;
+  const vekstFaktor = vekstPct / 100;
+  const sparingAr   = sparingMnd * 12;
+
+  let verdi = startbelop;
+  let totUtbytte = 0;
+  let totInnbetalt = startbelop;
+  const rader = [];
+
+  for (let ar = 1; ar <= antallAr; ar++) {
+    // Månedlig sparing legges til gjennom året (enkel approx: halvparten av årssparingen er investert i snitt)
+    const nySparing = sparingAr;
+    const baseForUtbytte = verdi + nySparing * 0.5;
+    const utbytteIAr = baseForUtbytte * yieldFaktor;
+
+    verdi += nySparing;
+    if (reinvester) {
+      verdi += utbytteIAr;
+    }
+    // Kursvekst på hele porteføljen
+    verdi = verdi * (1 + vekstFaktor);
+
+    totUtbytte += utbytteIAr;
+    totInnbetalt += nySparing;
+
+    rader.push({ ar, verdi, utbytteIAr, totUtbytte });
+  }
+
+  // Oppdater sammendragskort
+  document.getElementById('kal-res-ar').textContent  = antallAr;
+  document.getElementById('kal-res-ar2').textContent = antallAr;
+  document.getElementById('kal-res-verdi').textContent    = fmtKr(verdi);
+  document.getElementById('kal-res-utbytte').textContent  = fmtKr(totUtbytte);
+  document.getElementById('kal-res-innbetalt').textContent = fmtKr(totInnbetalt);
+  document.getElementById('kal-res-mnd').textContent = fmtKr(rader[rader.length - 1].utbytteIAr / 12);
+
+  // Tabell
+  document.getElementById('kal-tabell').innerHTML = rader.map(r => `
+    <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50">
+      <td class="px-4 py-2 text-gray-500 dark:text-gray-400">${r.ar}</td>
+      <td class="px-4 py-2 text-right font-medium">${fmtKr(r.verdi)}</td>
+      <td class="px-4 py-2 text-right text-green-600 dark:text-green-400">${fmtKr(r.utbytteIAr)}</td>
+      <td class="px-4 py-2 text-right text-gray-500 dark:text-gray-400">${fmtKr(r.totUtbytte)}</td>
+    </tr>`).join('');
+
+  document.getElementById('kal-resultat').classList.remove('hidden');
 }
 
 async function initVarsler() {
