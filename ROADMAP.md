@@ -6,141 +6,28 @@ Norsk utbytteaksje-tracker for Oslo Børs. Data hentes automatisk fra Yahoo Fina
 
 ## Ferdig ✅
 
-### 1. Favoritter / huskeliste 🔖
-Stjerneikon per aksje, filter for kun favoritter, favoritter vises øverst.
-
-### 2. Porteføljakalkulator 📊
-Legg til aksjer med antall, se forventet utbytte per år/måned, vektet yield, porteføljeverdi, neste utbetaling og tidslinje.
-
-### 3. CSV eksport og import 📥
-Eksporter portefølje til CSV og importer tilbake. Støtte for round-trip og forhåndsvisning før import bekreftes.
-
-### 4. Kalender 📅
-Oversikt over kommende ex-datoer og utbetalingsdatoer. Filtrerbar per måned.
-
-### 5. Historiske data og 5-årssnitt 📈
-Historisk utbyttegraf per aksje, snitt yield siste 5 år som sorterbar kolonne.
-
-### 6. Utbyttescore 🏅
-Automatisk score (0–10) per aksje basert på yield, payout ratio, vekst og antall år med utbytte.
-
-### 7. SEO og synlighet 🔍
-Sitemap med `<lastmod>`, JSON-LD Dataset-schema, semantiske `<h2>`/`<h3>`-overskrifter.
-
-### 8. PWA + push-varsler for ex-datoer 📲
-Installerbar app, offline-støtte via Service Worker, push-varsler for valgte aksjer.
-
-### 9. Branding — exday.no 🎨
-Ny logo (lys/mørk variant), favicon, PWA-ikon, app-ikon. Byttet ut placeholder-design.
-
-### 10. GDPR / personvernside 🔒
-Dokumentasjon av all lokal datalagring (localStorage + Cache API). Mørkemodusfix og oppdatert favicon.
-
-### 11. Utbyttekalkulator over tid 🧮
-Beregn yield over tid med startbeløp, yield %, kursvekst, månedlig sparing og DRIP-reinvestering. År-for-år-tabell.
-
-### 12. Fargedesign — tonet ned 🖌️
-Fjernet fire ulike farger på toppkortene. Dempede yield-badges, nøytral tabellhover, sorteringspiler og vekstfarger.
-
----
-
-## Planlagt
-
-### 13. Daglig engasjement — gjør appen til en vane 🔁
-**Status: Ferdig ✅**
-
-### 14. Porteføljesynkronisering mellom enheter 📱↔️💻
-**Status: Ferdig ✅**
-
----
-
-### 15. Velkomstmelding for nye brukere 👋
-**Status: Ferdig ✅**
-
-Pop-up som vises kun ved første besøk. Informerer om prosjektets natur (hobbyprosjekt, hyppige endringer), personvernmodellen (alt lagres lokalt) og datakvalitet (Yahoo Finance, kan inneholde feil). Lagres i localStorage så den ikke vises igjen.
-
----
-
-## Planlagt
-
-### 16. Personlig profil og mål 🎯
-**Status: Ferdig ✅**
-
-Brukeren setter et personlig navn og månedlig utbyttemål. Vises øverst på dashbordet.
-
-- [x] Profil-knapp øverst i hjørnet → enkel modal: navn + månedlig mål i NOK
-- [x] "God morgen, Kristian" på dashbordet basert på klokkeslett
-- [x] Fremgangsbar mot månedlig mål (estimert utbytte vs. mål)
-- [x] Profil lagres i localStorage
-
----
-
-### 17. Daglig oppdatering — "Hva skjer i dag?" 📰
-**Status: Ferdig ✅**
-
-- [x] "Ex-dato i dag / i morgen" — fremhevet for aksjer i portefølje/favoritter
-- [x] "Utbetaling denne uken" — hvilke utbetalinger er nær (med estimert beløp)
-- [x] "Siste sjanse" — høy-yield aksjer med ex-dato i dag/morgen som brukeren ikke eier
-- [x] Oppdateres automatisk ved innlasting uten ekstra kall
-- [ ] Kursendring siden forrige dag — krever historisk kurslager, utsatt
-
----
-
-### 18. Notat og prisvarsler per aksje 📝
-**Status: Ferdig ✅**
-
-- [x] Notatfelt per aksje i detaljmodalen (lagret i localStorage)
-- [x] "Målpris"-felt: sett ønsket kjøpspris — vises som 🎯-badge i tabellen når pris er under mål
-- [x] Prisvarsler vises i "Hva skjer i dag?"-panelet når aksje er under målpris
-
----
-
-### 19. Streaks og milepæler 🏆
-**Status: Ferdig ✅**
-
-- [x] Besøksstreak-teller (🔥 N) — vist diskret i header fra dag 2
-- [x] Utbyttemilestoner: toast-melding når portefølje passerer 1k / 5k / 10k / 25k / 50k / 100k / 250k / 500k / 1M kr estimert/år
-- [ ] Animasjon/konfetti ved milepæl — utsatt (lavt prioritet)
-
----
-
-### 20. Lavthengende forbedringer 🍒
-**Status: Ferdig ✅**
-
-- [x] **20a** Sortering huskes mellom besøk (localStorage)
-- [x] **20b** `?aksje=EQNR` åpner modal direkte — URL oppdateres ved åpning og fjernes ved lukking
-- [x] **20c** Score-forklaring via ⓘ-knapp i tabelloverskriften — åpner modal med detaljert poengberegning
-- [x] **20d** Søk huskes ved tabbytte — feltet tømmes ikke lenger automatisk
-
----
-
-### 22. Innstillinger-panel og onboarding 🛠️
-**Status: Ferdig ✅**
-
-Samlet profil og varsler under ett felles "Innstillinger"-panel, og la til onboarding-flyt for nye brukere.
-
-- [x] Velkomstmodalen får et steg 2 for nye brukere: Fyll inn profil / Importer CSV / Hopp over
-- [x] Utvidet profil: navn, sparemål (total porteføljebeløp) og månedlig utbyttemål
-- [x] "Min profil"-knapp i header → "Innstillinger" med tannhjulikone
-- [x] Innstillinger-modal med to faner: Profil og Varsler
-- [x] Varsler-fanen fjernes fra hoved-navigasjonen og flyttes til Innstillinger
-- [x] CSV-eksport inkluderer profil-metadata (navn, sparemål, utbyttemål)
-- [x] CSV-import leser tilbake profil-metadata ved fullstendig gjenoppretting
-
----
-
-### 21. Individuelle aksjesider for SEO 📄
-**Mål: organisk trafikk fra Google på ticker-spesifikke søk**
-
-Utvid `fetch_stocks.py` til å generere én HTML-side per aksje i tillegg til JSON og sitemap. Ingen ny teknologi — samme Python-script, samme GitHub Actions.
-
-- [ ] HTML-template i `fetch_stocks.py` som genererer `aksjer/TICKER/index.html`
-- [ ] Innhold per side: navn, ticker, sektor, pris, yield, ex-dato, beskrivelse, historisk tabell
-- [ ] SEO-metadata: `<title>`, `<meta description>`, canonical URL
-- [ ] JSON-LD schema per side (`WebPage` + nøkkeltall)
-- [ ] Oppdater `sitemap.xml` til å inkludere alle aksje-URL-er
-- [ ] Intern lenking: "Åpne full oversikt" → tilbake til hovedappen
-- [ ] `/aksjer/index.html` — oversiktsside med alle aksjer som inngangspunkt
+- **1. Favoritter** — stjerneikon, filter og prioritert visning
+- **2. Porteføljakalkulator** — forventet utbytte/år, vektet yield, tidslinje
+- **3. CSV eksport og import** — round-trip med forhåndsvisning; profil-metadata inkludert
+- **4. Kalender** — kommende ex-datoer og betalingsdatoer, filtrerbar per måned
+- **5. Historiske data og 5-årssnitt** — utbyttegraf per aksje, snitt yield sorterbar kolonne
+- **6. Utbyttescore** — automatisk score 0–10 basert på yield, payout, vekst og historikk
+- **7. SEO og synlighet** — sitemap, JSON-LD Dataset-schema, semantisk markup
+- **8. PWA + push-varsler** — installerbar app, Service Worker, push-varsler for ex-datoer
+- **9. Branding** — logo lys/mørk, favicon, PWA-ikon
+- **10. GDPR / personvernside** — dokumentasjon av lokal datalagring
+- **11. Utbyttekalkulator over tid** — DRIP-reinvestering, år-for-år-tabell
+- **12. Fargedesign** — dempede farger, nøytral tabellhover
+- **13. Daglig engasjement** — besøksstreak, milepæl-toasts, "Hva skjer i dag?"
+- **14. Porteføljesynkronisering** — QR-kode for overføring mellom enheter
+- **15. Velkomstmelding** — onboarding-modal for nye brukere med profil-oppsett
+- **16. Personlig profil og mål** — navn, månedlig utbyttemål, hilsen på dashboard
+- **17. "Hva skjer i dag?"** — ex-dato i dag/morgen, utbetaling denne uken, siste sjanse
+- **18. Notat og prisvarsler** — notatfelt og målpris per aksje i modal
+- **19. Streaks og milepæler** — 🔥-streak i header, toast ved porteføljemilepæler
+- **20. Lavthengende forbedringer** — sortering huskes, `?aksje=`-param, score-forklaring, søk huskes
+- **21. Innstillinger-panel og onboarding** — tannhjul-meny med Profil + Varsler; utvidet profil med sparemål
+- **22. Portefølje sub-tabs** — Beholdning og Statistikk som egne faner; ekstra nøkkeltall (P/E, utbetalinger/år, sparemål-fremgang, porteføljeprofil)
 
 ---
 
@@ -148,8 +35,6 @@ Utvid `fetch_stocks.py` til å generere én HTML-side per aksje i tillegg til JS
 
 ### 23. Sparemål-progresjon på dashbordet 🎯
 **Prioritet: Høy — lav innsats**
-
-Profilen har `sparemaal` (total porteføljebeløp), men det vises ingensteds. Gi umiddelbar motivasjon ved å vise fremgang mot målet der brukeren ser det først.
 
 - [ ] Fremgangsbar på dashboard: "15 232 kr av 500 000 kr (3%)"
 - [ ] Vises kun når sparemål er satt i profilen
@@ -167,33 +52,39 @@ Profilen har `sparemaal` (total porteføljebeløp), men det vises ingensteds. Gi
 
 ---
 
-### 25. Historisk porteføljeutvikling 📈
-**Prioritet: Medium**
+### 25. Individuelle aksjesider for SEO 📄
+**Prioritet: Høy — SEO-gevinst**
 
-Ingen API nødvendig — kun localStorage.
+Utvid `fetch_stocks.py` til å generere én HTML-side per aksje.
 
-- [ ] Lagre daglig snapshot av porteføljeverdien og estimert utbytte/år i localStorage
-- [ ] Enkel kurve på Portefølje-fanen: "Din porteføljeverdi siste 30 dager"
-- [ ] Viser også utbytteutvikling over tid
+- [ ] `aksjer/TICKER/index.html` genereres av fetch_stocks.py
+- [ ] Innhold: navn, ticker, sektor, pris, yield, ex-dato, beskrivelse, historisk tabell
+- [ ] SEO-metadata: `<title>`, `<meta description>`, canonical URL, JSON-LD
+- [ ] Oppdater `sitemap.xml` med alle aksje-URL-er
+- [ ] `/aksjer/index.html` — oversiktsside som inngangspunkt
 
 ---
 
-### 26. Full backup — JSON-eksport og -import 💾
+### 26. Historisk porteføljeutvikling 📈
 **Prioritet: Medium**
 
-CSV dekker kun portefølje. JSON kan ta med alt.
+- [ ] Daglig snapshot av porteføljeverdien i localStorage
+- [ ] Kurve på Statistikk-fanen: porteføljeverdi siste 30 dager
+
+---
+
+### 27. Full backup — JSON-eksport og -import 💾
+**Prioritet: Medium**
 
 - [ ] JSON-eksport: portefølje, favoritter, notater, målpriser, profil
 - [ ] JSON-import med forhåndsvisning og bekreftelse
-- [ ] Fungerer som komplett backup ved nettleserskifte eller nullstilling
 
 ---
 
-### 27. Utbyttekalender med ICS-eksport 📅
+### 28. Utbyttekalender med ICS-eksport 📅
 **Prioritet: Lav-medium**
 
-- [ ] "Last ned til kalender"-knapp på Kalender-fanen
-- [ ] Genererer `.ics`-fil med ex-datoer og betalingsdatoer for aksjer i porteføljen
+- [ ] `.ics`-fil med ex-datoer og betalingsdatoer for aksjer i porteføljen
 - [ ] Kompatibel med Google Kalender, Apple Kalender og Outlook
 
 ---
