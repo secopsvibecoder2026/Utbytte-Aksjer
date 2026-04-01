@@ -54,9 +54,32 @@ Fjernet fire ulike farger på toppkortene. Dempede yield-badges, nøytral tabell
 
 ---
 
+### 15. Velkomstmelding for nye brukere 👋
+**Status: Ferdig ✅**
+
+Pop-up som vises kun ved første besøk. Informerer om prosjektets natur (hobbyprosjekt, hyppige endringer), personvernmodellen (alt lagres lokalt) og datakvalitet (Yahoo Finance, kan inneholde feil). Lagres i localStorage så den ikke vises igjen.
+
+---
+
 ## Planlagt
 
-### 15. Individuelle aksjesider for SEO 📄
+### 16. Lavthengende forbedringer 🍒
+
+#### 16a. Sortering huskes mellom besøk
+Lagre valgt sorteringskolonne og retning i localStorage.
+
+#### 16b. Dele enkeltaksje via URL
+`?aksje=EQNR` åpner modalen direkte — gjør det mulig å sende lenker.
+
+#### 16c. Score-forklaring
+Tooltip eller infoboks som forklarer hva Score (0–10) faktisk beregnes fra.
+
+#### 16d. Søk huskes ved tabbytte
+Søkefeltet tømmes i dag ved tabbytte — vurder å beholde søket.
+
+---
+
+### 17. Individuelle aksjesider for SEO 📄
 **Mål: organisk trafikk fra Google på ticker-spesifikke søk**
 
 Utvid `fetch_stocks.py` til å generere én HTML-side per aksje i tillegg til JSON og sitemap. Ingen ny teknologi — samme Python-script, samme GitHub Actions.

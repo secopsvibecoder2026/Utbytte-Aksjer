@@ -19,8 +19,21 @@ document.addEventListener('DOMContentLoaded', () => {
   initKalkulator();
   initVarsler();
   sjekkQRParam();
+  visVelkomstModal();
   lastData();
 });
+
+function visVelkomstModal() {
+  if (localStorage.getItem('velkommen_vist')) return;
+  const modal = document.getElementById('velkommen-modal');
+  modal.classList.remove('hidden');
+  modal.classList.add('flex');
+  document.getElementById('velkommen-lukk').addEventListener('click', () => {
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+    localStorage.setItem('velkommen_vist', '1');
+  });
+}
 
 // ── DATA ───────────────────────────────────────────────────────────────────
 async function lastData() {
