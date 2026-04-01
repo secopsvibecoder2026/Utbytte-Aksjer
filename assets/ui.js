@@ -1068,7 +1068,7 @@ function bekreftImport(data, erstatt) {
 // ── JSON BACKUP ───────────────────────────────────────────────────────────
 function eksporterJSON() {
   const backup = {
-    versjon: 3,
+    versjon: 4,
     eksportert: new Date().toISOString(),
     profil: {
       navn:      localStorage.getItem('profil_navn') || '',
@@ -1080,6 +1080,9 @@ function eksporterJSON() {
     watchlister:   hentWatchlister(),
     favoritter:    JSON.parse(localStorage.getItem('fav_aksjer') || '[]'),
     aksje_data:    JSON.parse(localStorage.getItem('aksje_data') || '{}'),
+    notif_aksjer:  JSON.parse(localStorage.getItem('notif_aksjer') || '[]'),
+    historikk:     JSON.parse(localStorage.getItem('pf_historikk') || '{}'),
+    tema:          localStorage.getItem('tema') || '',
     sortering:     localStorage.getItem('sortering') || '',
     streak: {
       teller:      localStorage.getItem('streak_teller') || '1',
@@ -1098,22 +1101,25 @@ function eksporterJSON() {
 function parseJSONBackup(tekst) {
   try {
     const b = JSON.parse(tekst);
-    if (!b || b.versjon !== 1) return null;
+    if (!b || typeof b.versjon !== 'number') return null;
     return b;
   } catch { return null; }
 }
 
 function visJSONPreview(backup) {
-  const el = document.getElementById('json-importer-innhold');
-  const pf = backup.portef\u00f8lje || {};
-  const fav = backup.favoritter || [];
-  const ad  = backup.aksje_data || {};
+  const el  = document.getElementById('json-importer-innhold');
   const p   = backup.profil || {};
+  const pfl = backup.portefoljer || (backup['portefølje'] ? { default: { beholdning: backup['portefølje'] } } : {});
+  const antallPF  = Object.keys(pfl).length;
+  const antallPos = Object.values(pfl).reduce((s, pf) => s + Object.keys(pf.beholdning || {}).length, 0);
+  const antallTx  = Object.values(pfl).reduce((s, pf) => s + Object.values(pf.transaksjoner || {}).reduce((t, l) => t + l.length, 0), 0);
+  const wl  = backup.watchlister || [];
+  const fav = backup.favoritter  || [];
+  const na  = backup.notif_aksjer || [];
   const linjer = [
-    `Portefølje: ${Object.keys(pf).length} aksjer`,
-    `Favoritter: ${fav.length} aksjer`,
-    `Notater / målpriser: ${Object.keys(ad).length} aksjer`,
     p.navn ? `Profil: ${p.navn}` : 'Profil: (ikke satt)',
+    `${antallPF} portefølje${antallPF !== 1 ? 'r' : ''} · ${antallPos} posisjoner · ${antallTx} transaksjoner`,
+    `Favoritter: ${fav.length} · Watchlister: ${wl.length} · Varsler: ${na.length} aksjer`,
     `Eksportert: ${backup.eksportert ? new Date(backup.eksportert).toLocaleDateString('nb-NO') : 'ukjent'}`
   ];
   el.innerHTML = linjer.map(l => `<p>• ${l}</p>`).join('');
@@ -1135,12 +1141,15 @@ function bekreftJSONImport(backup) {
     lagrePortefoljer({ default: { id: 'default', navn: 'Min portefølje', beholdning: gammelPF, transaksjoner: gammelTx } });
     settAktivPFId('default');
   }
-  if (backup.watchlister) lagreWatchlister(backup.watchlister);
+  if (backup.watchlister)  lagreWatchlister(backup.watchlister);
   localStorage.setItem('fav_aksjer', JSON.stringify(fav));
-  if (backup.aksje_data)  localStorage.setItem('aksje_data',        JSON.stringify(backup.aksje_data));
-  if (backup.sortering)   localStorage.setItem('sortering',          backup.sortering);
-  if (backup.streak)      { localStorage.setItem('streak_teller', backup.streak.teller); localStorage.setItem('streak_sist_besok', backup.streak.sist_besok); }
-  if (backup.milepeler)   localStorage.setItem('milepeler_oppnaad', JSON.stringify(backup.milepeler));
+  if (backup.aksje_data)   localStorage.setItem('aksje_data',          JSON.stringify(backup.aksje_data));
+  if (backup.notif_aksjer) localStorage.setItem('notif_aksjer',        JSON.stringify(backup.notif_aksjer));
+  if (backup.historikk)    localStorage.setItem('pf_historikk',        JSON.stringify(backup.historikk));
+  if (backup.tema)         localStorage.setItem('tema',                 backup.tema);
+  if (backup.sortering)    localStorage.setItem('sortering',            backup.sortering);
+  if (backup.streak)       { localStorage.setItem('streak_teller', backup.streak.teller); localStorage.setItem('streak_sist_besok', backup.streak.sist_besok); }
+  if (backup.milepeler)    localStorage.setItem('milepeler_oppnaad',   JSON.stringify(backup.milepeler));
   lagreProfil(p.navn || '', parseFloat(p.mal_mnd) || 0, parseFloat(p.sparemaal) || 0);
   oppdaterPortefoljeVelger();
 
