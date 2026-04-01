@@ -8,16 +8,55 @@ Fullførte funksjoner er dokumentert i [ROADMAP_COMPLETED.md](ROADMAP_COMPLETED.
 
 ## Planlagt
 
-### 25. Individuelle aksjesider for SEO 📄
-**Prioritet: Høy — SEO-gevinst**
+### SEO og vekst
 
-Utvid `fetch_stocks.py` til å generere én HTML-side per aksje.
+#### 29. Google Search Console — sitemap-innsending 🔍
+**Prioritet: Høy — raskest SEO-gevinst**
 
-- [ ] `aksjer/TICKER/index.html` genereres av fetch_stocks.py
-- [ ] Innhold: navn, ticker, sektor, pris, yield, ex-dato, beskrivelse, historisk tabell
-- [ ] SEO-metadata: `<title>`, `<meta description>`, canonical URL, JSON-LD
-- [ ] Oppdater `sitemap.xml` med alle aksje-URL-er
-- [ ] `/aksjer/index.html` — oversiktsside som inngangspunkt
+- [ ] Verifiser exday.no i Google Search Console
+- [ ] Send inn sitemap.xml (69 URL-er inkl. alle aksjesider)
+- [ ] Sjekk indekseringsstatus for aksjer/TICKER/-sidene
+
+#### 30. Sektorsider 📂
+**Prioritet: Medium — flere SEO-landingssider**
+
+- [ ] Generer `aksjer/sektor/energi/`, `aksjer/sektor/finans/` osv. i fetch_stocks.py
+- [ ] Oversiktsside per sektor med alle aksjer i sektoren
+- [ ] Legg til i sitemap.xml
+- [ ] Interne lenker fra enkeltaksjesider til sektorsiden
+
+#### 31. Interne lenker mellom app og aksjesider 🔗
+**Prioritet: Medium**
+
+- [ ] Legg til lenke fra aksjemodal i hovedappen til `exday.no/aksjer/TICKER/`
+- [ ] Legg til lenke fra aksjesider tilbake til full app med `?aksje=TICKER`
+
+#### 32. Flere aksjer 📈
+**Prioritet: Medium**
+
+- [ ] Gjennomgå Oslo Børs for aksjer som mangler
+- [ ] Legg til i AKSJER-listen i fetch_stocks.py
+
+---
+
+### Monetisering
+
+#### 33. AdSense-godkjenning og annonseenheter 💰
+**Prioritet: Høy — avventer Googles gjennomgang**
+
+- [ ] Vente på AdSense-godkjenning
+- [ ] Vurdere manuelle annonseenheter i tillegg til auto-ads
+- [ ] Teste annonsevisning og samtykkeflyt
+
+---
+
+### Brukeropplevelse
+
+#### 34. Mobilgjennomgang 📱
+**Prioritet: Medium**
+
+- [ ] Grundig test på mobil etter alle nylige endringer
+- [ ] Særlig: Statistikk-fanen, Innstillinger-modal, kalendervisning
 
 ---
 
