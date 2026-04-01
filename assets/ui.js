@@ -26,11 +26,10 @@ const FARGE_FALLBACK = '#9ca3af';
 
 function visVelkomstModal() {
   if (localStorage.getItem('velkommen_vist')) return;
-  const modal  = document.getElementById('velkommen-modal');
-  const steg1  = document.getElementById('velk-steg1');
-  const steg2  = document.getElementById('velk-steg2');
+  const modal = document.getElementById('velkommen-modal');
   modal.classList.remove('hidden');
   modal.classList.add('flex');
+  document.getElementById('velk-navn-input').focus();
 
   function lukkOgMerk() {
     modal.classList.add('hidden');
@@ -38,47 +37,23 @@ function visVelkomstModal() {
     localStorage.setItem('velkommen_vist', '1');
   }
 
-  // Steg 1 → Steg 2
-  document.getElementById('velk-neste').addEventListener('click', () => {
-    steg1.classList.add('hidden');
-    steg2.classList.remove('hidden');
-    document.getElementById('velk-navn-input').focus();
-  });
-
-  // Lagre profil og vis steg 3 (kom i gang)
-  document.getElementById('velk-lagre').addEventListener('click', () => {
-    const navn      = (document.getElementById('velk-navn-input').value || '').trim();
-    const spareMaal = parseFloat(document.getElementById('velk-sparemaal-input').value) || 0;
-    const malMnd    = parseFloat(document.getElementById('velk-mal-input').value) || 0;
-    lagreProfil(navn, malMnd, spareMaal);
+  function lagreOgLukk() {
+    const navn = (document.getElementById('velk-navn-input').value || '').trim();
+    if (navn) lagreProfil(navn, 0, 0);
     visGreeting();
-    oppdaterSpareMaalBar(hentPF());
-    steg2.classList.add('hidden');
-    document.getElementById('velk-steg3').classList.remove('hidden');
-  });
-
-  // Steg 3: Gå til portefølje
-  document.getElementById('velk-start-pf').addEventListener('click', () => {
     lukkOgMerk();
-    document.querySelector('[data-tab="portfolio"]')?.click();
+  }
+
+  document.getElementById('velk-start').addEventListener('click', lagreOgLukk);
+  document.getElementById('velk-navn-input').addEventListener('keydown', e => {
+    if (e.key === 'Enter') lagreOgLukk();
   });
 
-  // Steg 3: Utforsk aksjer (bare lukk)
-  document.getElementById('velk-start-sok').addEventListener('click', lukkOgMerk);
-
-  // Importer backup (JSON)
   document.getElementById('velk-importer').addEventListener('click', () => {
     lukkOgMerk();
-    const pfTab = document.querySelector('[data-tab="portfolio"]');
-    if (pfTab) pfTab.click();
-    setTimeout(() => {
-      const fil = document.getElementById('json-importer-fil');
-      if (fil) fil.click();
-    }, 150);
+    document.querySelector('[data-tab="portfolio"]')?.click();
+    setTimeout(() => document.getElementById('json-importer-fil')?.click(), 150);
   });
-
-  // Gjest — hopp over
-  document.getElementById('velk-gjest').addEventListener('click', lukkOgMerk);
 }
 
 

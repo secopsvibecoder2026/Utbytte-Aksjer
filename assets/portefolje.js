@@ -321,7 +321,7 @@ function initPortefolje() {
   document.getElementById('pf-importer-csv').addEventListener('click', triggerFilInput);
 
   const tomKnapp = document.getElementById('pf-importer-csv-tom');
-  if (tomKnapp) tomKnapp.addEventListener('click', triggerFilInput);
+  if (tomKnapp) tomKnapp.addEventListener('click', () => document.getElementById('json-importer-fil')?.click());
 
   filInput.addEventListener('change', () => {
     const fil = filInput.files[0];
