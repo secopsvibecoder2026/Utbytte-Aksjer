@@ -1157,6 +1157,92 @@ function fyllPFDropdown() {
   if (valgt) sel.value = valgt;
 }
 
+// ── HISTORISK PORTEFØLJEUTVIKLING ──────────────────────────────────────────
+
+function lagrePortefoljeSnapshot(verdi) {
+  const idag = new Date().toISOString().slice(0, 10);
+  let historikk = {};
+  try { historikk = JSON.parse(localStorage.getItem('pf_historikk') || '{}'); } catch(e) {}
+  historikk[idag] = Math.round(verdi);
+  const datoer = Object.keys(historikk).sort();
+  if (datoer.length > 30) {
+    datoer.slice(0, datoer.length - 30).forEach(d => delete historikk[d]);
+  }
+  localStorage.setItem('pf_historikk', JSON.stringify(historikk));
+}
+
+function visHistorikkKurve() {
+  const wrapper = document.getElementById('pf-historikk-wrapper');
+  if (!wrapper) return;
+
+  let historikk = {};
+  try { historikk = JSON.parse(localStorage.getItem('pf_historikk') || '{}'); } catch(e) {}
+
+  const datoer = Object.keys(historikk).sort();
+  if (datoer.length < 2) {
+    wrapper.classList.add('hidden');
+    return;
+  }
+
+  wrapper.classList.remove('hidden');
+
+  const verdier = datoer.map(d => historikk[d]);
+  const min = Math.min(...verdier);
+  const max = Math.max(...verdier);
+  const range = max - min || 1;
+
+  const W = 800, H = 100, pad = 4;
+  const n = verdier.length;
+  const xStep = (W - pad * 2) / (n - 1);
+
+  const pts = verdier.map((v, i) => [
+    pad + i * xStep,
+    pad + (1 - (v - min) / range) * (H - pad * 2)
+  ]);
+
+  const polyline = pts.map(p => p.join(',')).join(' ');
+  const areaD = `M${pts[0][0]},${H} ` +
+    pts.map(p => `L${p[0]},${p[1]}`).join(' ') +
+    ` L${pts[pts.length-1][0]},${H} Z`;
+
+  const endring = verdier[verdier.length - 1] - verdier[0];
+  const endringPct = (endring / (verdier[0] || 1) * 100).toFixed(1);
+  const positiv = endring >= 0;
+  const farge = positiv ? '#16a34a' : '#dc2626';
+  const fargeLys = positiv ? '#dcfce7' : '#fee2e2';
+
+  document.getElementById('pf-historikk-chart').innerHTML = `
+    <svg viewBox="0 0 ${W} ${H}" width="100%" height="100%" preserveAspectRatio="none"
+         xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="hgrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="${farge}" stop-opacity="0.25"/>
+          <stop offset="100%" stop-color="${farge}" stop-opacity="0.02"/>
+        </linearGradient>
+      </defs>
+      <path d="${areaD}" fill="url(#hgrad)"/>
+      <polyline points="${polyline}" fill="none" stroke="${farge}" stroke-width="2.5"
+                stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"/>
+      <circle cx="${pts[pts.length-1][0]}" cy="${pts[pts.length-1][1]}" r="4" fill="${farge}"
+              vector-effect="non-scaling-stroke"/>
+    </svg>`;
+
+  const endringEl = document.getElementById('pf-historikk-endring');
+  if (endringEl) {
+    endringEl.textContent = (positiv ? '+' : '') + endringPct + '%';
+    endringEl.style.backgroundColor = fargeLys;
+    endringEl.style.color = farge;
+  }
+
+  const fmtDato = iso => { const [y,m,d] = iso.split('-'); return d+'.'+m+'.'+y; };
+  const fraEl = document.getElementById('pf-historikk-dato-fra');
+  const tilEl = document.getElementById('pf-historikk-dato-til');
+  if (fraEl) fraEl.textContent = fmtDato(datoer[0]);
+  if (tilEl) tilEl.textContent = fmtDato(datoer[datoer.length - 1]);
+}
+
+// ── PORTEFØLJE ──────────────────────────────────────────────────────────────
+
 function visPortefolje() {
   fyllPFDropdown();
   const pf = hentPF();
@@ -1319,6 +1405,10 @@ function visPortefolje() {
     const antallSektorer = new Set(alleBeholdning.map(a => a.sektor).filter(Boolean)).size;
     document.getElementById('pf-profil-sektorer').textContent = antallSektorer + ' sektorer';
   }
+
+  // ── HISTORISK SNAPSHOT + KURVE ────────────────────────────────────────────
+  lagrePortefoljeSnapshot(totalVerdi);
+  visHistorikkKurve();
 
   // ── BEHOLDNINGSTABELL ─────────────────────────────────────────────────────
   const tbody = document.getElementById('pf-tabell-body');
