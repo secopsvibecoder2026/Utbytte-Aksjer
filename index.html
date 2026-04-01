@@ -361,11 +361,20 @@
     <!-- PORTEFØLJE-FANE -->
     <div id="tab-portfolio" class="hidden space-y-4">
 
+      <!-- Porteføljevalg -->
+      <div class="flex items-center gap-2 flex-wrap">
+        <select id="pf-portefolje-velg" class="filter-input flex-1 min-w-0 max-w-xs text-sm"></select>
+        <button id="pf-portefolje-ny" class="text-xs text-brand-600 dark:text-brand-400 border border-brand-300 dark:border-brand-700 hover:bg-brand-50 dark:hover:bg-brand-900/20 px-3 py-1.5 rounded-lg transition-colors font-medium whitespace-nowrap">+ Ny portefølje</button>
+        <button id="pf-portefolje-gi-navn" class="text-xs text-gray-500 dark:text-gray-400 hover:text-brand-600 dark:hover:text-brand-400 hover:underline font-medium whitespace-nowrap">Gi nytt navn</button>
+        <button id="pf-portefolje-slett" class="text-xs text-gray-400 hover:text-red-500 hover:underline font-medium whitespace-nowrap">Slett</button>
+      </div>
+
       <!-- Sub-tab nav -->
-      <div class="flex gap-1">
+      <div class="flex gap-1 flex-wrap">
         <button class="pf-sub-btn px-4 py-1.5 text-sm font-medium rounded-lg bg-brand-600 text-white transition-colors" data-pf-tab="beholdning">Beholdning</button>
         <button class="pf-sub-btn px-4 py-1.5 text-sm font-medium rounded-lg text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" data-pf-tab="statistikk">Statistikk</button>
         <button class="pf-sub-btn px-4 py-1.5 text-sm font-medium rounded-lg text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" data-pf-tab="transaksjoner">Transaksjoner</button>
+        <button class="pf-sub-btn px-4 py-1.5 text-sm font-medium rounded-lg text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" data-pf-tab="watchlister">Watchlister</button>
       </div>
 
       <!-- ── BEHOLDNING ─────────────────────────────────────────────────────── -->
@@ -702,6 +711,45 @@
           <svg class="w-12 h-12 mx-auto mb-3 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
           <p class="text-sm font-medium">Ingen transaksjoner registrert ennå</p>
           <p class="text-xs mt-1">Registrer kjøp og salg for å beregne kostpris og avkastning.</p>
+        </div>
+
+      </div>
+
+      <!-- ── WATCHLISTER ────────────────────────────────────────────────────── -->
+      <div id="pf-sub-watchlister" class="hidden space-y-4">
+
+        <!-- Opprett / velg watchliste -->
+        <div class="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4 shadow-sm space-y-3">
+          <h3 class="font-semibold text-sm">Watchlister</h3>
+          <div class="flex gap-2">
+            <input id="wl-ny-navn" type="text" placeholder="Navn på ny watchliste…" class="filter-input flex-1" />
+            <button id="wl-opprett" class="bg-brand-600 hover:bg-brand-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors shrink-0">Opprett</button>
+          </div>
+          <div id="wl-velg-wrapper" class="hidden flex items-center gap-2 flex-wrap">
+            <select id="wl-velg" class="filter-input flex-1 max-w-xs text-sm"></select>
+            <button id="wl-slett-liste" class="text-xs text-red-400 hover:text-red-600 hover:underline font-medium">Slett liste</button>
+          </div>
+        </div>
+
+        <!-- Legg til aksje i valgt watchliste -->
+        <div id="wl-legg-til-wrapper" class="hidden bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4 shadow-sm">
+          <h3 class="font-semibold text-sm mb-3">Legg til aksje</h3>
+          <div class="flex gap-2">
+            <select id="wl-velg-aksje" class="filter-input flex-1">
+              <option value="">Velg aksje…</option>
+            </select>
+            <button id="wl-legg-til" class="bg-brand-600 hover:bg-brand-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors shrink-0">Legg til</button>
+          </div>
+        </div>
+
+        <!-- Innhold i valgt watchliste -->
+        <div id="wl-innhold"></div>
+
+        <!-- Tom tilstand -->
+        <div id="wl-tom" class="text-center py-10 text-gray-400 dark:text-gray-600">
+          <svg class="w-12 h-12 mx-auto mb-3 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+          <p class="text-sm font-medium">Ingen watchlister ennå</p>
+          <p class="text-xs mt-1">Opprett en watchliste for å følge med på aksjer du vurderer å kjøpe.</p>
         </div>
 
       </div>

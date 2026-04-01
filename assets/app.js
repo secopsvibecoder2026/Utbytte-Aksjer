@@ -1,20 +1,33 @@
 'use strict';
 
 // ── LOCALSTORAGE VERSJON ────────────────────────────────────────────────────
-const LS_VERSJON = 2;
+const LS_VERSJON = 3;
 
 function sjekkLSVersjon() {
   const lagret = parseInt(localStorage.getItem('ls_versjon') || '0', 10);
   if (lagret === LS_VERSJON) return;
 
-  // v0 → v1: første gang versjonering innføres
+  // v0 → v1: fjern gammel cookie-samtykkenøkkel
   if (lagret < 1) {
-    // Fjern gammel cookie-samtykkenøkkel fra egendefinert CMP (erstattet av Google CMP)
     localStorage.removeItem('cookie_consent');
   }
 
-  // v1 → v2: transaksjonslogg innført (ingen datamigrasjon nødvendig)
-  // if (lagret < 2) { }
+  // v1 → v2: transaksjonslogg innført (ingen datamigrasjon)
+
+  // v2 → v3: migrér pf_beholdning + pf_transaksjoner til pf_portefoljer
+  if (lagret < 3) {
+    const gammelBeholdning = JSON.parse(localStorage.getItem('pf_beholdning') || '{}');
+    const gammelTx         = JSON.parse(localStorage.getItem('pf_transaksjoner') || '{}');
+    const eksisterende     = JSON.parse(localStorage.getItem('pf_portefoljer') || '{}');
+    if (Object.keys(eksisterende).length === 0) {
+      localStorage.setItem('pf_portefoljer', JSON.stringify({
+        default: { id: 'default', navn: 'Min portefølje', beholdning: gammelBeholdning, transaksjoner: gammelTx }
+      }));
+      localStorage.setItem('pf_aktiv', 'default');
+    }
+    localStorage.removeItem('pf_beholdning');
+    localStorage.removeItem('pf_transaksjoner');
+  }
 
   localStorage.setItem('ls_versjon', LS_VERSJON);
 }
@@ -42,8 +55,10 @@ document.addEventListener('DOMContentLoaded', () => {
   initViewToggle();
   initModal();
   initPFSubTabs();
+  initPortefoljeVelger();
   initPortefolje();
   initTransaksjoner();
+  initWatchlister();
   initJSONBackup();
   initKalkulator();
   initVarsler();
@@ -1066,16 +1081,44 @@ function stjerne(ticker, ekstraKlasse = '') {
 }
 
 // ── PORTEFØLJEKALKULATOR ───────────────────────────────────────────────────
-function hentPF() {
-  try { return JSON.parse(localStorage.getItem('pf_beholdning') || '{}'); } catch { return {}; }
+// ── PORTEFØLJER (multi) ────────────────────────────────────────────────────
+function hentPortefoljer() {
+  try { return JSON.parse(localStorage.getItem('pf_portefoljer') || '{}'); } catch { return {}; }
 }
-function lagrePF(pf) { localStorage.setItem('pf_beholdning', JSON.stringify(pf)); }
+function lagrePortefoljer(pfl) { localStorage.setItem('pf_portefoljer', JSON.stringify(pfl)); }
+function hentAktivPFId() { return localStorage.getItem('pf_aktiv') || 'default'; }
+function settAktivPFId(id) { localStorage.setItem('pf_aktiv', id); }
+
+function hentAktivPF() {
+  const pfl = hentPortefoljer();
+  const id  = hentAktivPFId();
+  if (!pfl[id]) {
+    pfl[id] = { id, navn: 'Min portefølje', beholdning: {}, transaksjoner: {} };
+    lagrePortefoljer(pfl);
+  }
+  return pfl[id];
+}
+
+function hentPF() { return hentAktivPF().beholdning || {}; }
+
+function lagrePF(pf) {
+  const pfl = hentPortefoljer();
+  const id  = hentAktivPFId();
+  if (!pfl[id]) pfl[id] = { id, navn: 'Min portefølje', beholdning: {}, transaksjoner: {} };
+  pfl[id].beholdning = pf;
+  lagrePortefoljer(pfl);
+}
 
 // ── TRANSAKSJONER ──────────────────────────────────────────────────────────
-function hentTransaksjoner() {
-  try { return JSON.parse(localStorage.getItem('pf_transaksjoner') || '{}'); } catch { return {}; }
+function hentTransaksjoner() { return hentAktivPF().transaksjoner || {}; }
+
+function lagreTransaksjoner(tx) {
+  const pfl = hentPortefoljer();
+  const id  = hentAktivPFId();
+  if (!pfl[id]) pfl[id] = { id, navn: 'Min portefølje', beholdning: {}, transaksjoner: {} };
+  pfl[id].transaksjoner = tx;
+  lagrePortefoljer(pfl);
 }
-function lagreTransaksjoner(tx) { localStorage.setItem('pf_transaksjoner', JSON.stringify(tx)); }
 
 function beregnKostbasis(ticker) {
   const tx = hentTransaksjoner()[ticker] || [];
@@ -1274,8 +1317,10 @@ function initPFSubTabs() {
     document.getElementById('pf-sub-beholdning').classList.toggle('hidden', tab !== 'beholdning');
     document.getElementById('pf-sub-statistikk').classList.toggle('hidden', tab !== 'statistikk');
     document.getElementById('pf-sub-transaksjoner').classList.toggle('hidden', tab !== 'transaksjoner');
+    document.getElementById('pf-sub-watchlister').classList.toggle('hidden', tab !== 'watchlister');
     if (tab === 'statistikk') visPortefolje();
     if (tab === 'transaksjoner') visTransaksjoner();
+    if (tab === 'watchlister') visWatchlister();
   }
 
   document.getElementById('tab-portfolio').addEventListener('click', e => {
@@ -2005,18 +2050,19 @@ function bekreftImport(data, erstatt) {
 // ── JSON BACKUP ───────────────────────────────────────────────────────────
 function eksporterJSON() {
   const backup = {
-    versjon: 2,
+    versjon: 3,
     eksportert: new Date().toISOString(),
     profil: {
       navn:      localStorage.getItem('profil_navn') || '',
       mal_mnd:   localStorage.getItem('profil_mal_mnd') || '0',
       sparemaal: localStorage.getItem('profil_sparemaal') || '0'
     },
-    portef\u00f8lje:    JSON.parse(localStorage.getItem('pf_beholdning') || '{}'),
-    transaksjoner: JSON.parse(localStorage.getItem('pf_transaksjoner') || '{}'),
-    favoritter: JSON.parse(localStorage.getItem('fav_aksjer') || '[]'),
-    aksje_data: JSON.parse(localStorage.getItem('aksje_data') || '{}'),
-    sortering:  localStorage.getItem('sortering') || '',
+    portefoljer:   hentPortefoljer(),
+    aktiv_pf:      hentAktivPFId(),
+    watchlister:   hentWatchlister(),
+    favoritter:    JSON.parse(localStorage.getItem('fav_aksjer') || '[]'),
+    aksje_data:    JSON.parse(localStorage.getItem('aksje_data') || '{}'),
+    sortering:     localStorage.getItem('sortering') || '',
     streak: {
       teller:      localStorage.getItem('streak_teller') || '1',
       sist_besok:  localStorage.getItem('streak_sist_besok') || ''
@@ -2057,24 +2103,221 @@ function visJSONPreview(backup) {
 }
 
 function bekreftJSONImport(backup) {
-  const pf = backup.portef\u00f8lje || {};
   const fav = backup.favoritter || [];
   const p   = backup.profil || {};
 
-  localStorage.setItem('pf_beholdning', JSON.stringify(pf));
-  localStorage.setItem('fav_aksjer',    JSON.stringify(fav));
-  if (backup.transaksjoner) localStorage.setItem('pf_transaksjoner', JSON.stringify(backup.transaksjoner));
-  if (backup.aksje_data)   localStorage.setItem('aksje_data',        JSON.stringify(backup.aksje_data));
-  if (backup.sortering)    localStorage.setItem('sortering',          backup.sortering);
-  if (backup.streak)       { localStorage.setItem('streak_teller', backup.streak.teller); localStorage.setItem('streak_sist_besok', backup.streak.sist_besok); }
-  if (backup.milepeler)    localStorage.setItem('milepeler_oppnaad', JSON.stringify(backup.milepeler));
+  // v3+: portefoljer-struktur
+  if (backup.portefoljer) {
+    lagrePortefoljer(backup.portefoljer);
+    if (backup.aktiv_pf) settAktivPFId(backup.aktiv_pf);
+  } else {
+    // Eldre backup-format — migrer til portefoljer-struktur
+    const gammelPF = backup['portefølje'] || backup.portefolje || {};
+    const gammelTx = backup.transaksjoner || {};
+    lagrePortefoljer({ default: { id: 'default', navn: 'Min portefølje', beholdning: gammelPF, transaksjoner: gammelTx } });
+    settAktivPFId('default');
+  }
+  if (backup.watchlister) lagreWatchlister(backup.watchlister);
+  localStorage.setItem('fav_aksjer', JSON.stringify(fav));
+  if (backup.aksje_data)  localStorage.setItem('aksje_data',        JSON.stringify(backup.aksje_data));
+  if (backup.sortering)   localStorage.setItem('sortering',          backup.sortering);
+  if (backup.streak)      { localStorage.setItem('streak_teller', backup.streak.teller); localStorage.setItem('streak_sist_besok', backup.streak.sist_besok); }
+  if (backup.milepeler)   localStorage.setItem('milepeler_oppnaad', JSON.stringify(backup.milepeler));
   lagreProfil(p.navn || '', parseFloat(p.mal_mnd) || 0, parseFloat(p.sparemaal) || 0);
+  oppdaterPortefoljeVelger();
 
   document.getElementById('json-importer-preview').classList.add('hidden');
   visGreeting();
   oppdaterSpareMaalBar(pf);
   oppdaterSammendrag();
   if (aktivTab === 'portfolio') visPortefolje();
+}
+
+// ── PORTEFØLJEVALG ─────────────────────────────────────────────────────────
+function oppdaterPortefoljeVelger() {
+  const pfl = hentPortefoljer();
+  const aktivId = hentAktivPFId();
+  const sel = document.getElementById('pf-portefolje-velg');
+  if (!sel) return;
+  sel.innerHTML = Object.values(pfl).map(p =>
+    `<option value="${p.id}" ${p.id === aktivId ? 'selected' : ''}>${p.navn}</option>`
+  ).join('');
+  // Deaktiver slett-knapp hvis bare én portefølje
+  const slettBtn = document.getElementById('pf-portefolje-slett');
+  if (slettBtn) slettBtn.disabled = Object.keys(pfl).length <= 1;
+}
+
+function initPortefoljeVelger() {
+  oppdaterPortefoljeVelger();
+
+  document.getElementById('pf-portefolje-velg').addEventListener('change', e => {
+    settAktivPFId(e.target.value);
+    visPortefolje();
+    oppdaterSammendrag();
+  });
+
+  document.getElementById('pf-portefolje-ny').addEventListener('click', () => {
+    const navn = prompt('Navn på ny portefølje:');
+    if (!navn || !navn.trim()) return;
+    const id  = 'pf_' + Date.now();
+    const pfl = hentPortefoljer();
+    pfl[id]   = { id, navn: navn.trim(), beholdning: {}, transaksjoner: {} };
+    lagrePortefoljer(pfl);
+    settAktivPFId(id);
+    oppdaterPortefoljeVelger();
+    visPortefolje();
+    oppdaterSammendrag();
+  });
+
+  document.getElementById('pf-portefolje-gi-navn').addEventListener('click', () => {
+    const pfl = hentPortefoljer();
+    const id  = hentAktivPFId();
+    const navn = prompt('Nytt navn:', pfl[id]?.navn || '');
+    if (!navn || !navn.trim()) return;
+    pfl[id].navn = navn.trim();
+    lagrePortefoljer(pfl);
+    oppdaterPortefoljeVelger();
+  });
+
+  document.getElementById('pf-portefolje-slett').addEventListener('click', () => {
+    const pfl = hentPortefoljer();
+    if (Object.keys(pfl).length <= 1) return;
+    const id  = hentAktivPFId();
+    const navn = pfl[id]?.navn || id;
+    if (!confirm(`Slett porteføljen "${navn}"? Dette kan ikke angres.`)) return;
+    delete pfl[id];
+    lagrePortefoljer(pfl);
+    settAktivPFId(Object.keys(pfl)[0]);
+    oppdaterPortefoljeVelger();
+    visPortefolje();
+    oppdaterSammendrag();
+  });
+}
+
+// ── WATCHLISTER ────────────────────────────────────────────────────────────
+function hentWatchlister() {
+  try { return JSON.parse(localStorage.getItem('pf_watchlister') || '[]'); } catch { return []; }
+}
+function lagreWatchlister(wl) { localStorage.setItem('pf_watchlister', JSON.stringify(wl)); }
+
+function visWatchlister() {
+  const lister   = hentWatchlister();
+  const harLister = lister.length > 0;
+
+  document.getElementById('wl-tom').classList.toggle('hidden', harLister);
+  document.getElementById('wl-velg-wrapper').classList.toggle('hidden', !harLister);
+  document.getElementById('wl-legg-til-wrapper').classList.toggle('hidden', !harLister);
+
+  const sel = document.getElementById('wl-velg');
+  const valgt = sel.value || (lister[0]?.id);
+  sel.innerHTML = lister.map(w =>
+    `<option value="${w.id}" ${w.id === valgt ? 'selected' : ''}>${w.navn} (${w.tickers.length})</option>`
+  ).join('');
+
+  const aktivListe = lister.find(w => w.id === valgt) || lister[0];
+  const innholdEl  = document.getElementById('wl-innhold');
+
+  if (!aktivListe || aktivListe.tickers.length === 0) {
+    innholdEl.innerHTML = '<p class="text-xs text-gray-400 text-center py-4">Ingen aksjer i denne watchlisten ennå.</p>';
+    return;
+  }
+
+  const fmtKr = v => v.toLocaleString('nb-NO', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) + ' kr';
+
+  innholdEl.innerHTML = `
+    <div class="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="bg-gray-100 dark:bg-gray-900 text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
+            <th class="px-4 py-3 text-left">Ticker</th>
+            <th class="px-4 py-3 text-left hidden sm:table-cell">Selskap</th>
+            <th class="px-4 py-3 text-right">Kurs</th>
+            <th class="px-4 py-3 text-right">Yield</th>
+            <th class="px-4 py-3 text-center hidden sm:table-cell">Ex-dato</th>
+            <th class="px-4 py-3 text-center">Fjern</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+          ${aktivListe.tickers.map(ticker => {
+            const a = alleAksjer.find(x => x.ticker === ticker);
+            if (!a) return '';
+            return `<tr class="table-row cursor-pointer" data-ticker="${ticker}">
+              <td class="px-4 py-3 font-mono font-bold text-brand-700 dark:text-brand-400">${ticker}</td>
+              <td class="px-4 py-3 hidden sm:table-cell text-gray-600 dark:text-gray-400 text-sm">${a.navn}</td>
+              <td class="px-4 py-3 text-right">${a.pris ? fmtKr(a.pris) : '—'}</td>
+              <td class="px-4 py-3 text-right"><span class="yield-badge ${yieldKlasse(a.utbytte_yield)}">${a.utbytte_yield.toFixed(2)}%</span></td>
+              <td class="px-4 py-3 text-center hidden sm:table-cell text-gray-500 text-sm">${a.ex_dato ? formaterDato(a.ex_dato) : '—'}</td>
+              <td class="px-4 py-3 text-center">
+                <button class="wl-fjern-ticker text-gray-400 hover:text-red-500 transition-colors p-1"
+                        data-liste-id="${aktivListe.id}" data-ticker="${ticker}">
+                  <svg class="w-4 h-4 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+              </td>
+            </tr>`;
+          }).join('')}
+        </tbody>
+      </table>
+    </div>`;
+
+  // Klikk på rad → modal
+  innholdEl.querySelector('tbody').onclick = e => {
+    const fjernBtn = e.target.closest('.wl-fjern-ticker');
+    if (fjernBtn) {
+      const { listeId, ticker } = fjernBtn.dataset;
+      const listerNy = hentWatchlister();
+      const liste    = listerNy.find(w => w.id === listeId);
+      if (liste) { liste.tickers = liste.tickers.filter(t => t !== ticker); lagreWatchlister(listerNy); visWatchlister(); }
+      return;
+    }
+    const rad = e.target.closest('[data-ticker]');
+    if (rad) { const a = alleAksjer.find(x => x.ticker === rad.dataset.ticker); if (a) visModal(a); }
+  };
+}
+
+function initWatchlister() {
+  // Fyll aksjedropdown
+  const wlAksjeSel = document.getElementById('wl-velg-aksje');
+  [...alleAksjer].sort((a, b) => a.ticker.localeCompare(b.ticker, 'nb')).forEach(a => {
+    const o = document.createElement('option');
+    o.value = a.ticker; o.textContent = `${a.ticker} – ${a.navn}`;
+    wlAksjeSel.appendChild(o);
+  });
+
+  document.getElementById('wl-opprett').addEventListener('click', () => {
+    const navnEl = document.getElementById('wl-ny-navn');
+    const navn   = navnEl.value.trim();
+    if (!navn) return;
+    const lister = hentWatchlister();
+    lister.push({ id: 'wl_' + Date.now(), navn, tickers: [] });
+    lagreWatchlister(lister);
+    navnEl.value = '';
+    visWatchlister();
+  });
+
+  document.getElementById('wl-velg').addEventListener('change', visWatchlister);
+
+  document.getElementById('wl-legg-til').addEventListener('click', () => {
+    const ticker  = document.getElementById('wl-velg-aksje').value;
+    const listeId = document.getElementById('wl-velg').value;
+    if (!ticker || !listeId) return;
+    const lister = hentWatchlister();
+    const liste  = lister.find(w => w.id === listeId);
+    if (liste && !liste.tickers.includes(ticker)) {
+      liste.tickers.push(ticker);
+      lagreWatchlister(lister);
+      visWatchlister();
+    }
+  });
+
+  document.getElementById('wl-slett-liste').addEventListener('click', () => {
+    const listeId = document.getElementById('wl-velg').value;
+    if (!listeId) return;
+    const lister  = hentWatchlister();
+    const navn    = lister.find(w => w.id === listeId)?.navn || '';
+    if (!confirm(`Slett watchlisten "${navn}"?`)) return;
+    lagreWatchlister(lister.filter(w => w.id !== listeId));
+    visWatchlister();
+  });
 }
 
 function initJSONBackup() {
