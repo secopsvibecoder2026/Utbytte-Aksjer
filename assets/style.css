@@ -26,7 +26,9 @@
   font-weight: 700;
   margin-top: 0.25rem;
   line-height: 1;
+  color: #111827;
 }
+.dark .stat-value { color: #f3f4f6; }
 
 /* ── TABS ─────────────────────────────────────────────────────────────── */
 .tab-btn {
@@ -74,10 +76,10 @@
   transition: background 0.1s;
 }
 .dark .table-row { background: #030712; }
-.table-row:hover { background: #f0fdf4; }
+.table-row:hover { background: #f9fafb; }
 .dark .table-row:hover { background: #111827; }
-.row-highlight { background: #fff7ed !important; }
-.dark .row-highlight { background: rgb(124 45 18 / 0.1) !important; }
+.row-highlight { background: #f3f4f6 !important; }
+.dark .row-highlight { background: rgb(255 255 255 / 0.04) !important; }
 
 th.sortable {
   cursor: pointer;
@@ -88,9 +90,9 @@ th.sortable:hover { background: #e5e7eb; }
 .dark th.sortable:hover { background: #1f2937; }
 th.sortable::after { content: ' ⇅'; color: #d1d5db; }
 .dark th.sortable::after { color: #4b5563; }
-th.sort-asc::after  { content: ' ↑'; color: #16a34a; }
-th.sort-desc::after { content: ' ↓'; color: #16a34a; }
-.dark th.sort-asc::after, .dark th.sort-desc::after { color: #4ade80; }
+th.sort-asc::after  { content: ' ↑'; color: #6b7280; }
+th.sort-desc::after { content: ' ↓'; color: #6b7280; }
+.dark th.sort-asc::after, .dark th.sort-desc::after { color: #9ca3af; }
 
 /* ── YIELD BADGES ─────────────────────────────────────────────────────── */
 .yield-badge {
@@ -100,14 +102,14 @@ th.sort-desc::after { content: ' ↓'; color: #16a34a; }
   font-size: 0.75rem;
   font-weight: 700;
 }
-.yield-hoy    { background: #dcfce7; color: #166534; }
-.yield-god    { background: #dbeafe; color: #1e40af; }
-.yield-middels{ background: #fef9c3; color: #854d0e; }
-.yield-lav    { background: #f3f4f6; color: #4b5563; }
-.dark .yield-hoy    { background: rgb(20 83 45 / 0.4); color: #86efac; }
-.dark .yield-god    { background: rgb(30 58 138 / 0.4); color: #93c5fd; }
-.dark .yield-middels{ background: rgb(133 77 14 / 0.4); color: #fde047; }
-.dark .yield-lav    { background: #1f2937; color: #9ca3af; }
+.yield-hoy    { background: #f0fdf4; color: #166534; }
+.yield-god    { background: #f0f9ff; color: #075985; }
+.yield-middels{ background: #fafafa; color: #57534e; }
+.yield-lav    { background: #f3f4f6; color: #6b7280; }
+.dark .yield-hoy    { background: rgb(20 83 45 / 0.2); color: #86efac; }
+.dark .yield-god    { background: rgb(12 74 110 / 0.25); color: #7dd3fc; }
+.dark .yield-middels{ background: rgb(255 255 255 / 0.05); color: #a8a29e; }
+.dark .yield-lav    { background: #1f2937; color: #6b7280; }
 
 /* ── FREKVENS BADGE ───────────────────────────────────────────────────── */
 .frekvens-badge {

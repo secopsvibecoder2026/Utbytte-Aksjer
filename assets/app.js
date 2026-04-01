@@ -308,7 +308,7 @@ function visOversikt() {
       <td class="col-detalj px-4 py-3 text-right text-gray-600 dark:text-gray-400">${a.ar_med_utbytte > 0 ? a.ar_med_utbytte : '—'}</td>
       <td class="col-detalj px-4 py-3 text-right text-gray-600 dark:text-gray-400">${a.pe_ratio > 0 ? a.pe_ratio.toFixed(1) : '—'}</td>
       <td class="col-detalj px-4 py-3 text-right text-gray-600 dark:text-gray-400">${a.pb_ratio > 0 ? a.pb_ratio.toFixed(1) : '—'}</td>
-      <td class="px-4 py-3 text-center ${snartEx ? 'font-semibold text-orange-600 dark:text-orange-400' : 'text-gray-600 dark:text-gray-400'}">
+      <td class="px-4 py-3 text-center ${snartEx ? 'font-semibold text-amber-700 dark:text-amber-400 font-semibold' : 'text-gray-600 dark:text-gray-400'}">
         ${a.ex_dato ? formaterDato(a.ex_dato) : '—'}
         ${snartEx ? '<span class="block text-xs text-orange-500">Snart!</span>' : ''}
       </td>
@@ -356,7 +356,7 @@ function visOversikt() {
           ${stjerne(a.ticker, 'shrink-0')}
           <span class="font-mono font-bold text-brand-700 dark:text-brand-400 text-sm">${a.ticker}</span>
           <span class="frekvens-badge">${a.frekvens}</span>
-          ${snartEx ? `<span class="text-xs text-orange-500 font-medium">Ex ${dagerTil === 0 ? 'i dag' : dagerTil === 1 ? 'i morgen' : `om ${dagerTil}d`}</span>` : ''}
+          ${snartEx ? `<span class="text-xs text-amber-600 dark:text-amber-400 font-medium">Ex ${dagerTil === 0 ? 'i dag' : dagerTil === 1 ? 'i morgen' : `om ${dagerTil}d`}</span>` : ''}
         </div>
         <div class="text-xs text-gray-500 dark:text-gray-400 truncate">${a.navn}</div>
       </div>
@@ -1319,14 +1319,14 @@ function scoreForklaring(a) {
 
 function payoutKlasse(p) {
   if (p <= 0)   return 'text-gray-400';
-  if (p <= 50)  return 'text-green-600 dark:text-green-400 font-medium';
-  if (p <= 75)  return 'text-yellow-600 dark:text-yellow-400 font-medium';
+  if (p <= 50)  return 'text-gray-700 dark:text-gray-300 font-medium';
+  if (p <= 75)  return 'text-amber-700 dark:text-amber-400 font-medium';
   return 'text-red-600 dark:text-red-400 font-medium';
 }
 
 function vekstKlasse(v) {
-  if (v > 10) return 'text-green-600 dark:text-green-400 font-medium';
-  if (v > 0)  return 'text-blue-600 dark:text-blue-400';
+  if (v > 10) return 'text-emerald-700 dark:text-emerald-400 font-medium';
+  if (v > 0)  return 'text-gray-600 dark:text-gray-400';
   if (v < 0)  return 'text-red-500 dark:text-red-400';
   return 'text-gray-400';
 }
