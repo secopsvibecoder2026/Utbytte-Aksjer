@@ -1,7 +1,7 @@
 'use strict';
 
 // ── LOCALSTORAGE VERSJON ────────────────────────────────────────────────────
-const LS_VERSJON = 1;
+const LS_VERSJON = 2;
 
 function sjekkLSVersjon() {
   const lagret = parseInt(localStorage.getItem('ls_versjon') || '0', 10);
@@ -13,8 +13,8 @@ function sjekkLSVersjon() {
     localStorage.removeItem('cookie_consent');
   }
 
-  // Legg til fremtidige migrasjoner her:
-  // if (lagret < 2) { ... }
+  // v1 → v2: transaksjonslogg innført (ingen datamigrasjon nødvendig)
+  // if (lagret < 2) { }
 
   localStorage.setItem('ls_versjon', LS_VERSJON);
 }
@@ -43,6 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initModal();
   initPFSubTabs();
   initPortefolje();
+  initTransaksjoner();
   initJSONBackup();
   initKalkulator();
   initVarsler();
@@ -1070,6 +1071,195 @@ function hentPF() {
 }
 function lagrePF(pf) { localStorage.setItem('pf_beholdning', JSON.stringify(pf)); }
 
+// ── TRANSAKSJONER ──────────────────────────────────────────────────────────
+function hentTransaksjoner() {
+  try { return JSON.parse(localStorage.getItem('pf_transaksjoner') || '{}'); } catch { return {}; }
+}
+function lagreTransaksjoner(tx) { localStorage.setItem('pf_transaksjoner', JSON.stringify(tx)); }
+
+function beregnKostbasis(ticker) {
+  const tx = hentTransaksjoner()[ticker] || [];
+  let antall = 0, totalKost = 0;
+  tx.forEach(t => {
+    if (t.type === 'kjøp') {
+      totalKost += t.antall * t.kurs;
+      antall    += t.antall;
+    } else {
+      // FIFO-forenkling: reduser kostpris proporsjonalt
+      if (antall > 0) {
+        const andel = Math.min(t.antall, antall) / antall;
+        totalKost  -= totalKost * andel;
+        antall     -= Math.min(t.antall, antall);
+      }
+    }
+  });
+  const vwap = antall > 0 ? totalKost / antall : 0;
+  return { antall, totalKost, vwap };
+}
+
+function visTransaksjoner() {
+  const tx    = hentTransaksjoner();
+  const alle  = Object.entries(tx).flatMap(([ticker, liste]) =>
+    liste.map(t => ({ ...t, ticker }))
+  ).sort((a, b) => b.dato.localeCompare(a.dato));
+
+  const harData = alle.length > 0;
+  document.getElementById('tx-tom').classList.toggle('hidden', harData);
+  document.getElementById('tx-logg-wrapper').classList.toggle('hidden', !harData);
+  document.getElementById('tx-kostbasis-wrapper').classList.toggle('hidden', !harData);
+
+  if (!harData) return;
+
+  const fmtKr = v => v.toLocaleString('nb-NO', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) + ' kr';
+  const fmtKurs = v => v.toLocaleString('nb-NO', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' kr';
+
+  // Kostbasis-tabell
+  const tickers = [...new Set(alle.map(t => t.ticker))];
+  let totalKost = 0, totalMarked = 0;
+
+  document.getElementById('tx-kostbasis-body').innerHTML = tickers.map(ticker => {
+    const aksje = alleAksjer.find(a => a.ticker === ticker);
+    const kb    = beregnKostbasis(ticker);
+    if (kb.antall <= 0) return '';
+    const marked   = kb.antall * (aksje?.pris || 0);
+    const gevinst  = marked - kb.totalKost;
+    const gevPct   = kb.totalKost > 0 ? (gevinst / kb.totalKost * 100) : 0;
+    const farge    = gevinst >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-500';
+    totalKost   += kb.totalKost;
+    totalMarked += marked;
+    return `<tr class="table-row cursor-pointer" data-ticker="${ticker}">
+      <td class="px-4 py-3 font-mono font-bold text-brand-700 dark:text-brand-400">${ticker}</td>
+      <td class="px-4 py-3 text-right">${kb.antall}</td>
+      <td class="px-4 py-3 text-right">${fmtKurs(kb.vwap)}</td>
+      <td class="px-4 py-3 text-right">${fmtKr(kb.totalKost)}</td>
+      <td class="px-4 py-3 text-right">${aksje ? fmtKr(marked) : '—'}</td>
+      <td class="px-4 py-3 text-right ${farge} font-semibold">${aksje ? (gevinst >= 0 ? '+' : '') + fmtKr(gevinst) : '—'}</td>
+      <td class="px-4 py-3 text-right ${farge}">${aksje ? (gevPct >= 0 ? '+' : '') + gevPct.toFixed(1) + '%' : '—'}</td>
+    </tr>`;
+  }).join('');
+
+  const totalGevinst = totalMarked - totalKost;
+  const totalPct     = totalKost > 0 ? (totalGevinst / totalKost * 100) : 0;
+  const totalFarge   = totalGevinst >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-500';
+  document.getElementById('tx-kostbasis-footer').innerHTML = `<tr>
+    <td colspan="3" class="px-4 py-3 text-sm text-gray-500">Totalt</td>
+    <td class="px-4 py-3 text-right">${fmtKr(totalKost)}</td>
+    <td class="px-4 py-3 text-right">${fmtKr(totalMarked)}</td>
+    <td class="px-4 py-3 text-right ${totalFarge} font-semibold">${(totalGevinst >= 0 ? '+' : '') + fmtKr(totalGevinst)}</td>
+    <td class="px-4 py-3 text-right ${totalFarge}">${(totalPct >= 0 ? '+' : '') + totalPct.toFixed(1)}%</td>
+  </tr>`;
+
+  // Transaksjonslogg
+  document.getElementById('tx-logg-body').innerHTML = alle.map(t => {
+    const verdi = t.antall * t.kurs;
+    const farge = t.type === 'kjøp' ? 'text-green-600 dark:text-green-400' : 'text-red-500';
+    const [y, m, d] = t.dato.split('-');
+    return `<tr>
+      <td class="px-4 py-3 text-gray-500">${d}.${m}.${y}</td>
+      <td class="px-4 py-3 font-mono font-bold text-brand-700 dark:text-brand-400">${t.ticker}</td>
+      <td class="px-4 py-3 text-center"><span class="text-xs font-semibold px-2 py-0.5 rounded-full ${t.type === 'kjøp' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'}">${t.type}</span></td>
+      <td class="px-4 py-3 text-right">${t.antall}</td>
+      <td class="px-4 py-3 text-right">${fmtKurs(t.kurs)}</td>
+      <td class="px-4 py-3 text-right ${farge} font-semibold">${fmtKr(verdi)}</td>
+      <td class="px-4 py-3 text-center">
+        <button class="tx-slett-rad text-gray-400 hover:text-red-500 transition-colors p-1" data-ticker="${t.ticker}" data-id="${t.id}">
+          <svg class="w-4 h-4 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </td>
+    </tr>`;
+  }).join('');
+
+  // Klikk på kostbasis-rad → åpne modal
+  document.getElementById('tx-kostbasis-body').onclick = e => {
+    const rad = e.target.closest('[data-ticker]');
+    if (rad) { const a = alleAksjer.find(x => x.ticker === rad.dataset.ticker); if (a) visModal(a); }
+  };
+
+  // Slett enkelt transaksjon
+  document.getElementById('tx-logg-body').onclick = e => {
+    const btn = e.target.closest('.tx-slett-rad');
+    if (!btn) return;
+    const { ticker, id } = btn.dataset;
+    const txData = hentTransaksjoner();
+    if (txData[ticker]) {
+      txData[ticker] = txData[ticker].filter(t => t.id !== id);
+      if (txData[ticker].length === 0) delete txData[ticker];
+    }
+    lagreTransaksjoner(txData);
+    visTransaksjoner();
+    visPortefolje();
+  };
+}
+
+function initTransaksjoner() {
+  // Fyll dropdown med aksjer fra portefølje (og alle)
+  const sel = document.getElementById('tx-velg-aksje');
+  const fyllTxDropdown = () => {
+    const pf = hentPF();
+    const valgt = sel.value;
+    sel.innerHTML = '<option value="">Velg aksje…</option>';
+    const prio = alleAksjer.filter(a => pf[a.ticker]).sort((a, b) => a.ticker.localeCompare(b.ticker));
+    const rest = alleAksjer.filter(a => !pf[a.ticker]).sort((a, b) => a.ticker.localeCompare(b.ticker));
+    if (prio.length) {
+      const grp = document.createElement('optgroup'); grp.label = 'I portefølje';
+      prio.forEach(a => { const o = document.createElement('option'); o.value = a.ticker; o.textContent = `${a.ticker} – ${a.navn}`; grp.appendChild(o); });
+      sel.appendChild(grp);
+    }
+    const grp2 = document.createElement('optgroup'); grp2.label = 'Alle aksjer';
+    rest.forEach(a => { const o = document.createElement('option'); o.value = a.ticker; o.textContent = `${a.ticker} – ${a.navn}`; grp2.appendChild(o); });
+    sel.appendChild(grp2);
+    if (valgt) sel.value = valgt;
+  };
+  fyllTxDropdown();
+
+  // Sett dagens dato som default
+  document.getElementById('tx-dato').value = new Date().toISOString().slice(0, 10);
+
+  document.getElementById('tx-legg-til').addEventListener('click', () => {
+    const ticker = document.getElementById('tx-velg-aksje').value;
+    const type   = document.getElementById('tx-type').value;
+    const dato   = document.getElementById('tx-dato').value;
+    const antall = parseInt(document.getElementById('tx-antall').value, 10);
+    const kurs   = parseFloat(document.getElementById('tx-kurs').value);
+    const feilEl = document.getElementById('tx-feil');
+
+    feilEl.classList.add('hidden');
+    if (!ticker) { feilEl.textContent = 'Velg en aksje.'; feilEl.classList.remove('hidden'); return; }
+    if (!dato)   { feilEl.textContent = 'Velg en dato.'; feilEl.classList.remove('hidden'); return; }
+    if (!antall || antall < 1) { feilEl.textContent = 'Skriv inn gyldig antall.'; feilEl.classList.remove('hidden'); return; }
+    if (!kurs   || kurs <= 0)  { feilEl.textContent = 'Skriv inn gyldig kurs.'; feilEl.classList.remove('hidden'); return; }
+
+    const txData = hentTransaksjoner();
+    if (!txData[ticker]) txData[ticker] = [];
+    txData[ticker].push({ id: Date.now().toString(), dato, antall, kurs, type });
+    txData[ticker].sort((a, b) => a.dato.localeCompare(b.dato));
+    lagreTransaksjoner(txData);
+
+    // Oppdater beholdning automatisk ved kjøp hvis ticker ikke er der fra før
+    const pf = hentPF();
+    if (type === 'kjøp') {
+      pf[ticker] = (pf[ticker] || 0) + antall;
+    } else if (type === 'salg' && pf[ticker]) {
+      pf[ticker] = Math.max(0, (pf[ticker] || 0) - antall);
+      if (pf[ticker] === 0) delete pf[ticker];
+    }
+    lagrePF(pf);
+
+    document.getElementById('tx-antall').value = '';
+    document.getElementById('tx-kurs').value   = '';
+    fyllTxDropdown();
+    visTransaksjoner();
+    visPortefolje();
+  });
+
+  document.getElementById('tx-slett-alle').addEventListener('click', () => {
+    if (!confirm('Slett alle transaksjoner?')) return;
+    lagreTransaksjoner({});
+    visTransaksjoner();
+    visPortefolje();
+  });
+}
+
 function initPFSubTabs() {
   function byttSubTab(tab) {
     document.querySelectorAll('.pf-sub-btn').forEach(b => {
@@ -1083,7 +1273,9 @@ function initPFSubTabs() {
     });
     document.getElementById('pf-sub-beholdning').classList.toggle('hidden', tab !== 'beholdning');
     document.getElementById('pf-sub-statistikk').classList.toggle('hidden', tab !== 'statistikk');
+    document.getElementById('pf-sub-transaksjoner').classList.toggle('hidden', tab !== 'transaksjoner');
     if (tab === 'statistikk') visPortefolje();
+    if (tab === 'transaksjoner') visTransaksjoner();
   }
 
   document.getElementById('tab-portfolio').addEventListener('click', e => {
@@ -1448,7 +1640,20 @@ function visPortefolje() {
 
   // ── BEHOLDNINGSTABELL ─────────────────────────────────────────────────────
   const tbody = document.getElementById('pf-tabell-body');
-  tbody.innerHTML = beholdning.map(a => `
+  tbody.innerHTML = beholdning.map(a => {
+    const kb = beregnKostbasis(a.ticker);
+    const harKb = kb.antall > 0 && kb.totalKost > 0;
+    const marked  = a.antall * (a.pris || 0);
+    const gevinst = harKb ? marked - kb.totalKost : null;
+    const gevPct  = harKb && kb.totalKost > 0 ? (gevinst / kb.totalKost * 100) : null;
+    const gevFarge = gevinst !== null ? (gevinst >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-500') : 'text-gray-400';
+    const kostTd = harKb
+      ? `<span class="text-xs">${fmtKr(kb.totalKost)}</span><br><span class="text-xs text-gray-400">${kb.vwap.toLocaleString('nb-NO',{maximumFractionDigits:1})} kr/stk</span>`
+      : '—';
+    const gevTd = gevinst !== null
+      ? `<span class="font-semibold ${gevFarge}">${gevinst >= 0 ? '+' : ''}${fmtKr(gevinst)}</span><br><span class="text-xs ${gevFarge}">${gevPct >= 0 ? '+' : ''}${gevPct.toFixed(1)}%</span>`
+      : '—';
+    return `
     <tr class="table-row cursor-pointer" data-ticker="${a.ticker}">
       <td class="px-4 py-3 font-mono font-bold text-brand-700 dark:text-brand-400">${a.ticker}</td>
       <td class="px-4 py-3 hidden sm:table-cell text-gray-600 dark:text-gray-400 text-sm">${a.navn}</td>
@@ -1459,6 +1664,8 @@ function visPortefolje() {
       </td>
       <td class="px-4 py-3 text-right"><span class="yield-badge ${yieldKlasse(a.utbytte_yield)}">${a.utbytte_yield.toFixed(2)}%</span></td>
       <td class="px-4 py-3 text-right font-semibold">${fmtKr(a.forv_ar)}</td>
+      <td class="px-4 py-3 text-right hidden lg:table-cell text-sm">${kostTd}</td>
+      <td class="px-4 py-3 text-right hidden lg:table-cell text-sm">${gevTd}</td>
       <td class="px-4 py-3 text-center hidden sm:table-cell text-gray-500 text-sm">${a.ex_dato ? formaterDato(a.ex_dato) : '—'}</td>
       <td class="px-4 py-3 text-center hidden sm:table-cell"><span class="frekvens-badge">${a.frekvens}</span></td>
       <td class="px-4 py-3 text-center">
@@ -1466,7 +1673,8 @@ function visPortefolje() {
           <svg class="w-4 h-4 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
         </button>
       </td>
-    </tr>`).join('');
+    </tr>`;
+  }).join('');
 
   // Sum-rad i footer
   document.getElementById('pf-tabell-footer').innerHTML = `
@@ -1797,14 +2005,15 @@ function bekreftImport(data, erstatt) {
 // ── JSON BACKUP ───────────────────────────────────────────────────────────
 function eksporterJSON() {
   const backup = {
-    versjon: 1,
+    versjon: 2,
     eksportert: new Date().toISOString(),
     profil: {
       navn:      localStorage.getItem('profil_navn') || '',
       mal_mnd:   localStorage.getItem('profil_mal_mnd') || '0',
       sparemaal: localStorage.getItem('profil_sparemaal') || '0'
     },
-    portef\u00f8lje:  JSON.parse(localStorage.getItem('pf_beholdning') || '{}'),
+    portef\u00f8lje:    JSON.parse(localStorage.getItem('pf_beholdning') || '{}'),
+    transaksjoner: JSON.parse(localStorage.getItem('pf_transaksjoner') || '{}'),
     favoritter: JSON.parse(localStorage.getItem('fav_aksjer') || '[]'),
     aksje_data: JSON.parse(localStorage.getItem('aksje_data') || '{}'),
     sortering:  localStorage.getItem('sortering') || '',
@@ -1854,10 +2063,11 @@ function bekreftJSONImport(backup) {
 
   localStorage.setItem('pf_beholdning', JSON.stringify(pf));
   localStorage.setItem('fav_aksjer',    JSON.stringify(fav));
-  if (backup.aksje_data)  localStorage.setItem('aksje_data',        JSON.stringify(backup.aksje_data));
-  if (backup.sortering)   localStorage.setItem('sortering',          backup.sortering);
-  if (backup.streak)      { localStorage.setItem('streak_teller', backup.streak.teller); localStorage.setItem('streak_sist_besok', backup.streak.sist_besok); }
-  if (backup.milepeler)   localStorage.setItem('milepeler_oppnaad', JSON.stringify(backup.milepeler));
+  if (backup.transaksjoner) localStorage.setItem('pf_transaksjoner', JSON.stringify(backup.transaksjoner));
+  if (backup.aksje_data)   localStorage.setItem('aksje_data',        JSON.stringify(backup.aksje_data));
+  if (backup.sortering)    localStorage.setItem('sortering',          backup.sortering);
+  if (backup.streak)       { localStorage.setItem('streak_teller', backup.streak.teller); localStorage.setItem('streak_sist_besok', backup.streak.sist_besok); }
+  if (backup.milepeler)    localStorage.setItem('milepeler_oppnaad', JSON.stringify(backup.milepeler));
   lagreProfil(p.navn || '', parseFloat(p.mal_mnd) || 0, parseFloat(p.sparemaal) || 0);
 
   document.getElementById('json-importer-preview').classList.add('hidden');

@@ -365,6 +365,7 @@
       <div class="flex gap-1">
         <button class="pf-sub-btn px-4 py-1.5 text-sm font-medium rounded-lg bg-brand-600 text-white transition-colors" data-pf-tab="beholdning">Beholdning</button>
         <button class="pf-sub-btn px-4 py-1.5 text-sm font-medium rounded-lg text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" data-pf-tab="statistikk">Statistikk</button>
+        <button class="pf-sub-btn px-4 py-1.5 text-sm font-medium rounded-lg text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" data-pf-tab="transaksjoner">Transaksjoner</button>
       </div>
 
       <!-- ── BEHOLDNING ─────────────────────────────────────────────────────── -->
@@ -419,6 +420,8 @@
                   <th class="px-4 py-3 text-right">Antall</th>
                   <th class="px-4 py-3 text-right">Yield</th>
                   <th class="px-4 py-3 text-right">Forv. utbytte/år</th>
+                  <th class="px-4 py-3 text-right hidden lg:table-cell">Kostpris</th>
+                  <th class="px-4 py-3 text-right hidden lg:table-cell">Gev./tap</th>
                   <th class="px-4 py-3 text-center hidden sm:table-cell">Ex-dato</th>
                   <th class="px-4 py-3 text-center hidden sm:table-cell">Frekvens</th>
                   <th class="px-4 py-3 text-center">Slett</th>
@@ -618,6 +621,87 @@
         <div id="pf-statistikk-tom" class="hidden text-center py-10 text-gray-400 dark:text-gray-600">
           <p class="text-sm">Legg til aksjer i Beholdning for å se statistikk.</p>
           <button class="pf-sub-btn mt-3 text-xs text-brand-600 dark:text-brand-400 hover:underline font-medium" data-pf-tab="beholdning">Gå til Beholdning →</button>
+        </div>
+
+      </div>
+
+      <!-- ── TRANSAKSJONER ──────────────────────────────────────────────────── -->
+      <div id="pf-sub-transaksjoner" class="hidden space-y-4">
+
+        <!-- Registrer transaksjon -->
+        <div class="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4 shadow-sm">
+          <h3 class="font-semibold text-sm mb-3">Registrer transaksjon</h3>
+          <div class="grid grid-cols-2 sm:grid-cols-6 gap-2">
+            <select id="tx-velg-aksje" class="filter-input col-span-2 sm:col-span-2">
+              <option value="">Velg aksje…</option>
+            </select>
+            <select id="tx-type" class="filter-input">
+              <option value="kjøp">Kjøp</option>
+              <option value="salg">Salg</option>
+            </select>
+            <input id="tx-dato" type="date" class="filter-input" />
+            <input id="tx-antall" type="number" min="1" placeholder="Antall" class="filter-input" />
+            <input id="tx-kurs" type="number" min="0" step="0.01" placeholder="Kurs (kr)" class="filter-input" />
+          </div>
+          <div class="flex items-center gap-3 mt-2">
+            <button id="tx-legg-til" class="bg-brand-600 hover:bg-brand-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors">Legg til</button>
+            <p id="tx-feil" class="hidden text-xs text-red-500"></p>
+          </div>
+        </div>
+
+        <!-- Kostbaseoversikt per posisjon -->
+        <div id="tx-kostbasis-wrapper" class="hidden bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
+          <div class="px-4 py-3 bg-gray-50 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800">
+            <h3 class="font-semibold text-sm">Kostbasis og avkastning</h3>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead>
+                <tr class="bg-gray-100 dark:bg-gray-900 text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
+                  <th class="px-4 py-3 text-left">Ticker</th>
+                  <th class="px-4 py-3 text-right">Antall</th>
+                  <th class="px-4 py-3 text-right">Sn.kurs (VWAP)</th>
+                  <th class="px-4 py-3 text-right">Kostpris</th>
+                  <th class="px-4 py-3 text-right">Markedsverdi</th>
+                  <th class="px-4 py-3 text-right">Gev./tap</th>
+                  <th class="px-4 py-3 text-right">%</th>
+                </tr>
+              </thead>
+              <tbody id="tx-kostbasis-body" class="divide-y divide-gray-100 dark:divide-gray-800"></tbody>
+              <tfoot id="tx-kostbasis-footer" class="bg-gray-50 dark:bg-gray-900/50 font-semibold"></tfoot>
+            </table>
+          </div>
+        </div>
+
+        <!-- Transaksjonslogg -->
+        <div id="tx-logg-wrapper" class="hidden bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
+          <div class="px-4 py-3 bg-gray-50 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 flex items-center justify-between">
+            <h3 class="font-semibold text-sm">Transaksjonslogg</h3>
+            <button id="tx-slett-alle" class="text-xs text-red-400 hover:text-red-600 hover:underline">Slett alle</button>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead>
+                <tr class="bg-gray-100 dark:bg-gray-900 text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
+                  <th class="px-4 py-3 text-left">Dato</th>
+                  <th class="px-4 py-3 text-left">Ticker</th>
+                  <th class="px-4 py-3 text-center">Type</th>
+                  <th class="px-4 py-3 text-right">Antall</th>
+                  <th class="px-4 py-3 text-right">Kurs</th>
+                  <th class="px-4 py-3 text-right">Verdi</th>
+                  <th class="px-4 py-3 text-center">Slett</th>
+                </tr>
+              </thead>
+              <tbody id="tx-logg-body" class="divide-y divide-gray-100 dark:divide-gray-800"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Tom tilstand -->
+        <div id="tx-tom" class="text-center py-10 text-gray-400 dark:text-gray-600">
+          <svg class="w-12 h-12 mx-auto mb-3 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+          <p class="text-sm font-medium">Ingen transaksjoner registrert ennå</p>
+          <p class="text-xs mt-1">Registrer kjøp og salg for å beregne kostpris og avkastning.</p>
         </div>
 
       </div>
