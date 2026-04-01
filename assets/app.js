@@ -108,7 +108,6 @@ async function lastData() {
     visOversikt();
     visKalender();
     sjekkExDatoerDirekte();
-    document.getElementById('kal-eksport-ics').addEventListener('click', eksporterICS);
 
     // 20b: ?aksje=EQNR åpner modal direkte
     const urlAksje = new URLSearchParams(location.search).get('aksje');
@@ -974,9 +973,18 @@ function visKalender() {
             <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">${detalj}</div>
           </div>
         </div>
-        <div class="text-right min-w-16 shrink-0 pointer-events-none">
-          ${type !== 'rapport' ? `<span class="yield-badge ${yieldKlasse(a.utbytte_yield)} text-sm">${a.utbytte_yield.toFixed(2)}%</span>` : ''}
-          ${!erPassert ? `<div class="text-xs text-gray-400 mt-1">${dagerTil === 0 ? 'I dag!' : dagerTil === 1 ? 'I morgen' : `om ${dagerTil}d`}</div>` : '<div class="text-xs text-gray-400 mt-1">Passert</div>'}
+        <div class="flex items-center gap-2 shrink-0">
+          <div class="text-right min-w-16 pointer-events-none">
+            ${type !== 'rapport' ? `<span class="yield-badge ${yieldKlasse(a.utbytte_yield)} text-sm">${a.utbytte_yield.toFixed(2)}%</span>` : ''}
+            ${!erPassert ? `<div class="text-xs text-gray-400 mt-1">${dagerTil === 0 ? 'I dag!' : dagerTil === 1 ? 'I morgen' : `om ${dagerTil}d`}</div>` : '<div class="text-xs text-gray-400 mt-1">Passert</div>'}
+          </div>
+          <button class="kal-ics-btn p-1.5 rounded-lg text-gray-400 hover:text-brand-600 hover:bg-brand-50 dark:hover:bg-brand-900/20 transition-colors"
+                  data-ticker="${a.ticker}" data-type="${type}" data-dato="${dato}"
+                  title="Legg til i kalender (.ics)">
+            <svg class="w-4 h-4 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+            </svg>
+          </button>
         </div>
       </div>`;
     }).join('');
@@ -1000,8 +1008,15 @@ function visKalender() {
     </div>`;
   }).join('');
 
-  // Klikk → modal
+  // Klikk → ICS-knapp eller modal
   container.onclick = e => {
+    const icsBtn = e.target.closest('.kal-ics-btn');
+    if (icsBtn) {
+      e.stopPropagation();
+      const aksje = alleAksjer.find(a => a.ticker === icsBtn.dataset.ticker);
+      if (aksje) eksporterEnkeltICS(aksje, icsBtn.dataset.type, icsBtn.dataset.dato);
+      return;
+    }
     const rad = e.target.closest('[data-ticker]');
     if (!rad) return;
     const aksje = alleAksjer.find(a => a.ticker === rad.dataset.ticker);
@@ -1863,48 +1878,28 @@ function initJSONBackup() {
   });
 }
 
-// ── ICS KALENDEREKSPORT ───────────────────────────────────────────────────
-function eksporterICS() {
-  const pf  = hentPF();
-  const fav = hentFav();
-  const relevante = new Set([...Object.keys(pf), ...fav]);
-
+// ── ICS KALENDEREKSPORT (per hendelse) ────────────────────────────────────
+function eksporterEnkeltICS(a, type, dato) {
+  const pf = hentPF();
   const datoStr = d => d.replace(/-/g, '');
-  const uid = (type, ticker, dato) => `exday-${type}-${ticker}-${dato}@exday.no`;
+  const ds = datoStr(dato);
+  const neste = new Date(dato); neste.setDate(neste.getDate() + 1);
+  const dsNeste = neste.toISOString().slice(0,10).replace(/-/g,'');
 
-  const events = [];
-  alleAksjer.forEach(a => {
-    const erRelevant = relevante.has(a.ticker);
-    if (a.ex_dato) {
-      const ds = datoStr(a.ex_dato);
-      const neste = new Date(a.ex_dato); neste.setDate(neste.getDate() + 1);
-      const dsNeste = neste.toISOString().slice(0,10).replace(/-/g,'');
-      events.push([
-        'BEGIN:VEVENT',
-        `DTSTART;VALUE=DATE:${ds}`,
-        `DTEND;VALUE=DATE:${dsNeste}`,
-        `SUMMARY:${a.ticker} Ex-dato${erRelevant ? ' ⭐' : ''}`,
-        `DESCRIPTION:Ex-dato for ${a.navn}. Yield: ${a.utbytte_yield.toFixed(2)}%. Siste utbytte: ${a.siste_utbytte || '—'} ${a.valuta}.`,
-        `UID:${uid('ex', a.ticker, a.ex_dato)}`,
-        'END:VEVENT'
-      ].join('\r\n'));
-    }
-    if (a.betaling_dato) {
-      const ds = datoStr(a.betaling_dato);
-      const neste = new Date(a.betaling_dato); neste.setDate(neste.getDate() + 1);
-      const dsNeste = neste.toISOString().slice(0,10).replace(/-/g,'');
-      const belop = pf[a.ticker] ? `Estimert utbetaling: ${(pf[a.ticker] * (a.utbytte_per_aksje || 0) / (({Månedlig:12,Kvartalsvis:4,Halvårlig:2,Årlig:1}[a.frekvens]||1))).toLocaleString('nb-NO',{maximumFractionDigits:0})} kr. ` : '';
-      events.push([
-        'BEGIN:VEVENT',
-        `DTSTART;VALUE=DATE:${ds}`,
-        `DTEND;VALUE=DATE:${dsNeste}`,
-        `SUMMARY:${a.ticker} Utbetaling${erRelevant ? ' ⭐' : ''}`,
-        `DESCRIPTION:${belop}Utbyttebetaling fra ${a.navn}.`,
-        `UID:${uid('utbytte', a.ticker, a.betaling_dato)}`,
-        'END:VEVENT'
-      ].join('\r\n'));
-    }
-  });
+  let summary, description;
+  if (type === 'ex') {
+    summary     = `${a.ticker} Ex-dato`;
+    description = `Ex-dato for ${a.navn}. Yield: ${a.utbytte_yield.toFixed(2)}%. Siste utbytte: ${a.siste_utbytte || '—'} ${a.valuta}.`;
+  } else if (type === 'utbytte') {
+    const belop = pf[a.ticker]
+      ? `Estimert utbetaling: ${(pf[a.ticker] * (a.utbytte_per_aksje || 0) / (({Månedlig:12,Kvartalsvis:4,Halvårlig:2,Årlig:1}[a.frekvens]||1))).toLocaleString('nb-NO',{maximumFractionDigits:0})} kr. `
+      : '';
+    summary     = `${a.ticker} Utbetaling`;
+    description = `${belop}Utbyttebetaling fra ${a.navn}.`;
+  } else {
+    summary     = `${a.ticker} Kvartalsrapport`;
+    description = `Kvartalsrapport for ${a.navn}.`;
+  }
 
   const ics = [
     'BEGIN:VCALENDAR',
@@ -1912,16 +1907,22 @@ function eksporterICS() {
     'PRODID:-//exday.no//Utbyttekalender//NO',
     'CALSCALE:GREGORIAN',
     'METHOD:PUBLISH',
-    'X-WR-CALNAME:exday.no – Utbyttekalender',
-    'X-WR-TIMEZONE:Europe/Oslo',
-    ...events,
+    'BEGIN:VEVENT',
+    `DTSTART;VALUE=DATE:${ds}`,
+    `DTEND;VALUE=DATE:${dsNeste}`,
+    `SUMMARY:${summary}`,
+    `DESCRIPTION:${description}`,
+    `UID:exday-${type}-${a.ticker}-${dato}@exday.no`,
+    'END:VEVENT',
     'END:VCALENDAR'
   ].join('\r\n');
 
   const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
   const url  = URL.createObjectURL(blob);
-  const a    = document.createElement('a');
-  a.href = url; a.download = 'exday-utbyttekalender.ics'; a.click();
+  const el   = document.createElement('a');
+  el.href = url;
+  el.download = `${a.ticker}-${type}-${dato}.ics`;
+  el.click();
   URL.revokeObjectURL(url);
 }
 
