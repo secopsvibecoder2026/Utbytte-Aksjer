@@ -238,7 +238,12 @@
               <th class="sortable px-4 py-3 text-right" data-col="pris">Pris</th>
               <th class="col-detalj px-4 py-3 text-center">52u range</th>
               <th class="sortable px-4 py-3 text-right" data-col="utbytte_yield">Yield %</th>
-              <th class="sortable px-4 py-3 text-center" data-col="utbytte_score">Score</th>
+              <th class="sortable px-4 py-3 text-center" data-col="utbytte_score">
+                Score
+                <button id="score-info-btn" class="ml-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 align-middle" title="Hva er Score?" onclick="event.stopPropagation(); visScoreInfoModal()">
+                  <svg class="w-3.5 h-3.5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2"/><path stroke-linecap="round" stroke-width="2" d="M12 16v-4m0-4h.01"/></svg>
+                </button>
+              </th>
               <th class="col-detalj sortable px-4 py-3 text-right" data-col="snitt_yield_5ar">Snitt yield 5å</th>
               <th class="col-detalj sortable px-4 py-3 text-right" data-col="utbytte_per_aksje">Utb./aksje</th>
               <th class="sortable px-4 py-3 text-right" data-col="payout_ratio">Payout</th>

@@ -2,7 +2,12 @@
 
 // ── STATE ──────────────────────────────────────────────────────────────────
 let alleAksjer = [];
-let sortering = { kol: 'utbytte_yield', retning: 'desc' };
+let sortering = (() => {
+  try {
+    const s = JSON.parse(localStorage.getItem('sortering') || '{}');
+    return (s.kol && s.retning) ? s : { kol: 'utbytte_yield', retning: 'desc' };
+  } catch { return { kol: 'utbytte_yield', retning: 'desc' }; }
+})();
 let aktivTab = 'oversikt';
 let kompaktModus = false;
 let visKunFavoritter = false;
@@ -66,6 +71,14 @@ async function lastData() {
     visKalender();
     sjekkExDatoerDirekte();
     if (aktivTab === 'varsler') visVarslerTab();
+
+    // 20b: ?aksje=EQNR åpner modal direkte
+    const urlAksje = new URLSearchParams(location.search).get('aksje');
+    if (urlAksje) {
+      const treff = alleAksjer.find(a => a.ticker.toUpperCase() === urlAksje.toUpperCase());
+      if (treff) visModal(treff);
+    }
+
     if (window._pendingQRImport) {
       const gyldig = Object.entries(window._pendingQRImport)
         .filter(([t]) => alleAksjer.find(a => a.ticker === t))
@@ -150,7 +163,6 @@ function initTabs() {
     const skjulFilter = aktivTab === 'varsler' || aktivTab === 'kalkulator';
     document.getElementById('filter-bar').classList.toggle('hidden', skjulFilter);
     document.getElementById('filter-ekstra').classList.toggle('hidden', aktivTab !== 'oversikt');
-    document.getElementById('sok').value = '';
     if (aktivTab === 'portfolio') visPortefolje();
     if (aktivTab === 'kalender') visKalender();
     if (aktivTab === 'oversikt') visOversikt();
@@ -190,6 +202,7 @@ function initFilter() {
       const kol = th.dataset.col;
       sortering.retning = sortering.kol === kol && sortering.retning === 'desc' ? 'asc' : 'desc';
       sortering.kol = kol;
+      localStorage.setItem('sortering', JSON.stringify(sortering));
       visOversikt();
     });
   });
@@ -200,6 +213,7 @@ function initFilter() {
     const lastUs = val.lastIndexOf('_');
     sortering.kol = val.slice(0, lastUs);
     sortering.retning = val.slice(lastUs + 1);
+    localStorage.setItem('sortering', JSON.stringify(sortering));
     visOversikt();
   });
 }
@@ -1532,6 +1546,11 @@ function visModal(a) {
   overlay.classList.remove('hidden');
   overlay.classList.add('flex');
 
+  // Sett ?aksje= i URL slik at siden kan deles
+  const _url = new URL(location.href);
+  _url.searchParams.set('aksje', a.ticker);
+  history.replaceState(null, '', _url.toString());
+
   // Notat + målpris: live-lagring
   const _malIn  = document.getElementById('modal-malpris');
   const _notIn  = document.getElementById('modal-notat');
@@ -1587,6 +1606,12 @@ function lukkModal() {
   const overlay = document.getElementById('modal-overlay');
   overlay.classList.add('hidden');
   overlay.classList.remove('flex');
+  // Fjern ?aksje= fra URL uten å laste siden på nytt
+  const url = new URL(location.href);
+  if (url.searchParams.has('aksje')) {
+    url.searchParams.delete('aksje');
+    history.replaceState(null, '', url.pathname + (url.search !== '?' ? url.search : ''));
+  }
 }
 
 // ── MODAL INIT (én gang) ───────────────────────────────────────────────────
@@ -1722,6 +1747,37 @@ function scoreForklaring(a) {
         ${rad('Yield-stabilitet', p5, 1, snitt > 0 ? 'snitt '+snitt.toFixed(1)+'%' : '—')}
       </div>
     </div>`;
+}
+
+function visScoreInfoModal() {
+  const overlay = document.getElementById('modal-overlay');
+  const body    = document.getElementById('modal-body');
+  body.innerHTML = `
+    <div class="flex items-start justify-between mb-4">
+      <h2 class="text-lg font-bold">Utbytte-score — slik beregnes den</h2>
+      <button id="modal-close" class="text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 p-1">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">Scoren (1–10) måler utbyttekvalitet basert på fem kriterier. Høy score betyr ikke nødvendigvis lav risiko — gjør alltid egen analyse.</p>
+    <div class="space-y-3">
+      ${[
+        ['Yield-nivå',       '0–3 p', '≥10%→3p · ≥6%→2p · ≥3%→1p'],
+        ['Payout-bærekraft', '0–2 p', '≤50%→2p · ≤75%→1p · >75%→0p'],
+        ['Utbyttevekst 5år', '0–2 p', 'CAGR >10%→2p · >0%→1p'],
+        ['År med utbytte',   '0–2 p', '≥10 år→2p · ≥5 år→1p'],
+        ['Yield-stabilitet', '0–1 p', 'Snitt yield 5å avviker ≤30% fra dagens yield'],
+      ].map(([k, p, t]) => `
+        <div class="rounded-lg bg-gray-50 dark:bg-gray-800 p-3 flex items-start justify-between gap-4">
+          <div>
+            <p class="text-sm font-semibold">${k}</p>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">${t}</p>
+          </div>
+          <span class="text-xs font-bold text-brand-600 dark:text-brand-400 shrink-0">${p}</span>
+        </div>`).join('')}
+    </div>`;
+  overlay.classList.remove('hidden');
+  overlay.classList.add('flex');
 }
 
 function notatSeksjon(a) {

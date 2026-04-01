@@ -105,18 +105,12 @@ Brukeren setter et personlig navn og månedlig utbyttemål. Vises øverst på da
 ---
 
 ### 20. Lavthengende forbedringer 🍒
+**Status: Ferdig ✅**
 
-#### 20a. Sortering huskes mellom besøk
-Lagre valgt sorteringskolonne og retning i localStorage.
-
-#### 20b. Dele enkeltaksje via URL
-`?aksje=EQNR` åpner modalen direkte — gjør det mulig å sende lenker.
-
-#### 20c. Score-forklaring
-Tooltip eller infoboks som forklarer hva Score (0–10) faktisk beregnes fra.
-
-#### 20d. Søk huskes ved tabbytte
-Søkefeltet tømmes i dag ved tabbytte — vurder å beholde søket.
+- [x] **20a** Sortering huskes mellom besøk (localStorage)
+- [x] **20b** `?aksje=EQNR` åpner modal direkte — URL oppdateres ved åpning og fjernes ved lukking
+- [x] **20c** Score-forklaring via ⓘ-knapp i tabelloverskriften — åpner modal med detaljert poengberegning
+- [x] **20d** Søk huskes ved tabbytte — feltet tømmes ikke lenger automatisk
 
 ---
 
