@@ -10,17 +10,6 @@ Fullførte funksjoner er dokumentert i [ROADMAP_COMPLETED.md](ROADMAP_COMPLETED.
 
 ### Teknisk gjeld
 
-#### T3. Tilgjengelighet (accessibility) ♿
-**Prioritet: Medium**
-
-Estimert WCAG A — faller under AA på flere punkter.
-
-- [ ] `aria-label` på alle ikonknapper (tannhjul, sol/måne, stjerneikon osv.)
-- [ ] `role="dialog"` og `aria-modal="true"` på alle modaler
-- [ ] Escape-tast lukker alle modaler
-- [ ] `aria-sort` på sorterbare kolonneoverskrifter i tabeller
-- [ ] Ikke bare farge som indikator — legg til ikon ved yield-farge (grønn/rød)
-
 #### T4b. Validering av datapipeline 🧪
 **Prioritet: Medium**
 
