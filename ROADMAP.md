@@ -10,44 +10,12 @@ Fullførte funksjoner er dokumentert i [ROADMAP_COMPLETED.md](ROADMAP_COMPLETED.
 
 ### Teknisk gjeld (prioritert fra code review)
 
-#### T1. Del opp app.js 🏗️
-**Prioritet: Høy — viktigst for fremtidig vedlikehold**
-
-`app.js` er 162 KB / 3 500 linjer og håndterer absolutt alt. Vanskeligere å finne feil og legge til nye features jo lenger det venter.
-
-- [ ] Trekk ut `storage.js` — all localStorage-logikk (hentPF, lagrePF, hentTransaksjoner osv.)
-- [ ] Trekk ut `portefolje.js` — visPortefolje, visTransaksjoner, visWatchlister, beregnKostbasis
-- [ ] Trekk ut `modaler.js` — visModal, initInnstillinger, visVelkomstModal, del-modal
-- [ ] `app.js` beholder kun bootstrap og tab-routing
-
-#### T2. Feilhåndtering overfor brukeren 🚨
-**Prioritet: Høy**
-
-Hvis data ikke laster ser brukeren bare `—` overalt uten forklaring.
-
-- [ ] Tydelig feilmelding med forklarende tekst hvis `lastData()` feiler
-- [ ] Retry-knapp i feilmeldingen
-- [ ] Vis sist kjente data med advarsel hvis fetch feiler (fallback til cache)
-
-#### T3. Tilgjengelighet (accessibility) ♿
+#### T4b. Validering av datapipeline 🧪
 **Prioritet: Medium**
 
-Estimert WCAG A — faller under AA på flere punkter.
+T1 og T4 er fullført (37 JS-tester, app.js splittet i 4 moduler). Gjenstår:
 
-- [ ] `aria-label` på alle ikonknapper (tannhjul, sol/måne, stjerneikon osv.)
-- [ ] `role="dialog"` og `aria-modal="true"` på alle modaler
-- [ ] Escape-tast lukker alle modaler
-- [ ] `aria-sort` på sorterbare kolonneoverskrifter i tabeller
-- [ ] Ikke bare farge som indikator — legg til ikon ved yield-farge (grønn/rød)
-
-#### T4. Automatiske tester for kritisk logikk 🧪
-**Prioritet: Medium**
-
-Ingen tester betyr at en stille bug i VWAP eller skatteberegning kan gå uoppdaget.
-
-- [ ] Enhetstester for `beregnKostbasis()` (VWAP, mottattUtbytte)
-- [ ] Enhetstester for skatteberegning (skjermingsfradrag, netto)
-- [ ] Validering av `fetch_stocks.py` output — varsle hvis yield > 30% eller pris = 0
+- [ ] Varsle i GitHub Actions hvis yield > 30%, pris = 0, eller manglende felt på mer enn halvparten av aksjene i `fetch_stocks.py` output
 
 #### T5. Minifisering og byggesteg ⚡
 **Prioritet: Lav**
