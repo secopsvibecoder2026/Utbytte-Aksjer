@@ -422,7 +422,13 @@ function initInnstillinger() {
   modal.addEventListener('click', e => { if (e.target === modal) lukkInnstillingerModal(); });
 
   lagreBtn.addEventListener('click', () => {
-    lagreProfil(navnIn.value.trim(), parseFloat(malIn.value) || 0, parseFloat(spareMaalIn.value) || 0);
+    const nyMalMnd = parseFloat(malIn.value) || 0;
+    lagreProfil(navnIn.value.trim(), nyMalMnd, parseFloat(spareMaalIn.value) || 0);
+    // Synkroniser Årsmål i porteføljen hvis det ikke er manuelt overstyrt
+    if (!localStorage.getItem('pf_inntekt_mal') && nyMalMnd > 0) {
+      const malInputEl = document.getElementById('pf-inntekt-mal');
+      if (malInputEl) malInputEl.value = (nyMalMnd * 12).toFixed(0);
+    }
     lukkInnstillingerModal();
     visGreeting();
     if (aktivTab === 'portfolio') visPortefolje();
@@ -1075,7 +1081,14 @@ function initPortefolje() {
 
   // ── INNTEKTSTELLER-MÅL ─────────────────────────────────────────────────────
   const malInput = document.getElementById('pf-inntekt-mal');
-  malInput.value = localStorage.getItem('pf_inntekt_mal') || '';
+  // Pre-fyll fra profil (malMnd × 12) hvis ingen eksplisitt verdi er satt
+  const lagretMal = localStorage.getItem('pf_inntekt_mal');
+  if (lagretMal !== null) {
+    malInput.value = lagretMal;
+  } else {
+    const { malMnd } = hentProfil();
+    malInput.value = malMnd > 0 ? (malMnd * 12).toFixed(0) : '';
+  }
   malInput.addEventListener('change', () => {
     localStorage.setItem('pf_inntekt_mal', malInput.value);
     visPortefolje();
