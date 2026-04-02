@@ -231,7 +231,7 @@ def _normaliser_dnb_navn(s: str) -> str:
 
 
 def _processer_dnb_rader(rader: list) -> dict:
-    """Konverter liste av DNB-rader til {navn: {ex_dato, betaling_dato}}-dict."""
+    """Konverter liste av DNB-rader til {navn: {ex_dato, betaling_dato, utbytte, valuta}}-dict."""
     today = datetime.date.today()
     result: dict = {}
 
@@ -247,9 +247,16 @@ def _processer_dnb_rader(rader: list) -> dict:
         if ex_dt < today:
             continue   # Kun fremtidige ex-datoer
         betaling = _parse_dnb_betaling_dato(rad.get("betaling", ""), ex_dt)
+        raw_utbytte = str(rad.get("utbytte", "")).replace(",", ".").replace("\xa0", "").strip()
+        utbytte_belop = safe_float(raw_utbytte) if raw_utbytte else 0.0
         # Behold tidligste fremtidige ex-dato per selskap
         if navn not in result or ex_dato < result[navn]["ex_dato"]:
-            result[navn] = {"ex_dato": ex_dato, "betaling_dato": betaling}
+            result[navn] = {
+                "ex_dato": ex_dato,
+                "betaling_dato": betaling,
+                "utbytte": utbytte_belop,
+                "valuta": str(rad.get("valuta", "")).strip(),
+            }
 
     return result
 
@@ -1023,6 +1030,25 @@ def main():
                         dnb_treff += 1
                 if dnb.get("betaling_dato") and not aksje.get("betaling_dato"):
                     aksje["betaling_dato"] = dnb["betaling_dato"]
+                # Bruk DNBs annonserte utbyttebeløp som primærkilde
+                dnb_belop = dnb.get("utbytte", 0)
+                if dnb_belop and dnb_belop > 0:
+                    aksje["siste_utbytte"] = dnb_belop
+                    dnb_valuta = dnb.get("valuta", "")
+                    aksje_valuta = aksje.get("valuta", "NOK")
+                    if dnb_valuta == aksje_valuta or dnb_valuta == "":
+                        frekvens_map = {
+                            "Månedlig": 12, "Kvartalsvis": 4,
+                            "Halvårlig": 2, "Årlig": 1, "Uregelmessig": 1,
+                        }
+                        per_ar = frekvens_map.get(aksje.get("frekvens", ""), 1)
+                        dnb_annual = round(dnb_belop * per_ar, 4)
+                        if dnb_annual > 0:
+                            aksje["utbytte_per_aksje"] = dnb_annual
+                            if aksje.get("pris", 0) > 0:
+                                aksje["utbytte_yield"] = round(
+                                    (dnb_annual / aksje["pris"]) * 100, 2
+                                )
         print(f"  DNB oppdaterte ex_dato for {dnb_treff} aksjer")
 
     # ── 5. Strukturert datakvalitetsrapport ───────────────────────────────────
