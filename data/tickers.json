@@ -718,5 +718,185 @@
     "bors": "Oslo Børs",
     "beskrivelse": "Norsk krill-selskap som høster, foredler og selger krillolje og krilmel til menneskelig ernæring og akvakultur.",
     "navn_dnb": "Aker BioMarine ASA"
+  },
+  {
+    "ticker": "AGAS",
+    "ticker_yf": "AGAS.OL",
+    "navn": "Avance Gas Holding Ltd",
+    "sektor": "Shipping",
+    "bors": "Oslo Børs",
+    "beskrivelse": "Ledende VLGC-tankrederi for flytende petroleum (LPG). Høy og variabel utbyttegrad koblet til LPG-shippingratene.",
+    "navn_dnb": "Avance Gas Holding"
+  },
+  {
+    "ticker": "GCC",
+    "ticker_yf": "GCC.OL",
+    "navn": "Gram Car Carriers ASA",
+    "sektor": "Shipping",
+    "bors": "Oslo Børs",
+    "beskrivelse": "Spesialisert bilfrakter (PCTC/LCTC) med fokus på korte og mellomlange ruter. Svært høy utbyttegrad fra sterk kontantstrøm.",
+    "navn_dnb": "Gram Car Carriers ASA"
+  },
+  {
+    "ticker": "TGS",
+    "ticker_yf": "TGS.OL",
+    "navn": "TGS ASA",
+    "sektor": "Energitjenester",
+    "bors": "Oslo Børs",
+    "beskrivelse": "Verdensledende innen seismikk- og geospatiale data til olje- og gassindustrien. Kvartalsvis utbytte pluss ekstraordinære utbetalinger.",
+    "navn_dnb": "TGS ASA"
+  },
+  {
+    "ticker": "NSKOG",
+    "ticker_yf": "NSKOG.OL",
+    "navn": "Norske Skog ASA",
+    "sektor": "Materialer",
+    "bors": "Oslo Børs",
+    "beskrivelse": "En av Europas største avispapirprodusenter. Gjenopptok utbytte etter restrukturering og betaler jevnt siden.",
+    "navn_dnb": "Norske Skog ASA"
+  },
+  {
+    "ticker": "SOFF",
+    "ticker_yf": "SOFF.OL",
+    "navn": "Solstad Offshore ASA",
+    "sektor": "Energitjenester",
+    "bors": "Oslo Børs",
+    "beskrivelse": "Norsk offshore supplyreder med AHTS, PSV og CSV-fartøyer. Relisting etter restrukturering; sterk markedsetterspørsel.",
+    "navn_dnb": "Solstad Offshore ASA"
+  },
+  {
+    "ticker": "AMSC",
+    "ticker_yf": "AMSC.OL",
+    "navn": "American Shipping Company ASA",
+    "sektor": "Shipping",
+    "bors": "Oslo Børs",
+    "beskrivelse": "Eier og leier ut produkttankfartøyer på langsiktige bareboat-kontrakter. Stabil og forutsigbar kontantstrøm med høy utbytteyield.",
+    "navn_dnb": "American Shipping Company ASA"
+  },
+  {
+    "ticker": "OLT",
+    "ticker_yf": "OLT.OL",
+    "navn": "Olav Thon Eiendomsselskap ASA",
+    "sektor": "Eiendom",
+    "bors": "Oslo Børs",
+    "beskrivelse": "Norges største private eiendomsaktør med kjøpesentre og næringseiendom. Stabil leieinntekt og lang utbyttehistorikk.",
+    "navn_dnb": "Olav Thon Eiendomsselskap ASA"
+  },
+  {
+    "ticker": "SCHA",
+    "ticker_yf": "SCHA.OL",
+    "navn": "Schibsted ASA",
+    "sektor": "Kommunikasjonstjenester",
+    "bors": "Oslo Børs",
+    "beskrivelse": "Norsk mediekonsern og ledende nordisk nettmarkedsplass-aktør (Finn.no, Blocket m.fl.). Betaler halvårlig utbytte.",
+    "navn_dnb": "Schibsted ASA"
+  },
+  {
+    "ticker": "ITERA",
+    "ticker_yf": "ITERA.OL",
+    "navn": "Itera ASA",
+    "sektor": "Informasjonsteknologi",
+    "bors": "Oslo Børs",
+    "beskrivelse": "Norsk IT-konsulentselskap med spisskompetanse innen digital transformasjon. Konsistent utbyttebetaler med lav kapitalintensitet.",
+    "navn_dnb": "Itera ASA"
+  },
+  {
+    "ticker": "SPSUR",
+    "ticker_yf": "SPSUR.OL",
+    "navn": "Sparebanken Sør",
+    "sektor": "Finans",
+    "bors": "Oslo Børs",
+    "beskrivelse": "Ledende sparebank på Sørlandet med sterk posisjon i Aust- og Vest-Agder. Stabil inntjening og god utbyttehistorikk.",
+    "navn_dnb": "Sparebanken Sør"
+  },
+  {
+    "ticker": "HUNT",
+    "ticker_yf": "HUNT.OL",
+    "navn": "Hunter Group ASA",
+    "sektor": "Shipping",
+    "bors": "Oslo Børs",
+    "beskrivelse": "VLCC-tankrederi med fokus på råoljetransport. Variabelt utbytte koblet til tankratene og inntjening per skip.",
+    "navn_dnb": "Hunter Group ASA"
+  },
+  {
+    "ticker": "CLOUD",
+    "ticker_yf": "CLOUD.OL",
+    "navn": "Cloudberry Clean Energy AS",
+    "sektor": "Fornybar energi",
+    "bors": "Oslo Børs",
+    "beskrivelse": "Norsk fornybar energiselskap med vind- og solkraft i Norden. Halvårlig utbytte fra stabil strømproduksjon på langsiktige kontrakter.",
+    "navn_dnb": "Cloudberry Clean Energy AS"
+  },
+  {
+    "ticker": "ALNG",
+    "ticker_yf": "ALNG.OL",
+    "navn": "Awilco LNG ASA",
+    "sektor": "Shipping",
+    "bors": "Oslo Børs",
+    "beskrivelse": "LNG-tankselskap med skip på langsiktige TC-kontrakter. Stabil og forutsigbar kvartalsvis utbytte fra høy flåteutnyttelse.",
+    "navn_dnb": "Awilco LNG ASA"
+  },
+  {
+    "ticker": "VISTIN",
+    "ticker_yf": "VISTIN.OL",
+    "navn": "Vistin Pharma ASA",
+    "sektor": "Helsevern",
+    "bors": "Oslo Børs",
+    "beskrivelse": "Norsk produsent av aktive legemiddelsubstanser (API). Høy utbyttegrad relativt til størrelse og stabil etterspørsel fra legemiddelindustrien.",
+    "navn_dnb": "Vistin Pharma ASA"
+  },
+  {
+    "ticker": "NTS",
+    "ticker_yf": "NTS.OL",
+    "navn": "NTS ASA",
+    "sektor": "Havbruk",
+    "bors": "Oslo Børs",
+    "beskrivelse": "Norsk havbruksselskap med lakseoppdrett i Midt-Norge og på Helgeland. Regelmessig utbytte koblet til laksepris og inntjening.",
+    "navn_dnb": "NTS ASA"
+  },
+  {
+    "ticker": "VOLUE",
+    "ticker_yf": "VOLUE.OL",
+    "navn": "Volue ASA",
+    "sektor": "Informasjonsteknologi",
+    "bors": "Oslo Børs",
+    "beskrivelse": "Norsk programvareselskap for energi-, kraft- og vanninfrastrukturbransjen. Voksende SaaS-modell og utbyttevekst.",
+    "navn_dnb": "Volue ASA"
+  },
+  {
+    "ticker": "STRONG",
+    "ticker_yf": "STRONG.OL",
+    "navn": "Strongpoint ASA",
+    "sektor": "Informasjonsteknologi",
+    "bors": "Oslo Børs",
+    "beskrivelse": "Norsk leverandør av teknologi for dagligvarehandel og lagerlogistikk. Automatisering av butikker og e-handelsfulfillment. Betaler utbytte.",
+    "navn_dnb": "Strongpoint ASA"
+  },
+  {
+    "ticker": "SDRL",
+    "ticker_yf": "SDRL.OL",
+    "navn": "Seadrill Limited",
+    "sektor": "Energitjenester",
+    "bors": "Oslo Børs",
+    "beskrivelse": "Global offshore boreentreprenør med dypvannssemisubmersibles og boreskip. Gjenopptok utbytte etter restrukturering i 2022.",
+    "navn_dnb": "Seadrill"
+  },
+  {
+    "ticker": "EMGS",
+    "ticker_yf": "EMGS.OL",
+    "navn": "Electromagnetic Geoservices ASA",
+    "sektor": "Energitjenester",
+    "bors": "Oslo Børs",
+    "beskrivelse": "Norsk geofysikk-selskap som leverer elektromagnetiske undersøkelsestjenester til olje- og gassindustrien. Betaler utbytte ved overskuddskapital.",
+    "navn_dnb": "Electromagnetic Geoservices ASA"
+  },
+  {
+    "ticker": "NRC",
+    "ticker_yf": "NRC.OL",
+    "navn": "NRC Group ASA",
+    "sektor": "Industri",
+    "bors": "Oslo Børs",
+    "beskrivelse": "Nordisk jernbaneinfrastrukturentreprenør med virksomhet i Norge, Sverige og Finland. Stabil ordrebok fra offentlige infrastrukturinvesteringer.",
+    "navn_dnb": "NRC Group ASA"
   }
 ]
