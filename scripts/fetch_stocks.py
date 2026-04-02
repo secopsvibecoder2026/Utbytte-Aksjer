@@ -222,14 +222,22 @@ def _finn_dnb_tabell(obj, depth: int = 0):
     return None
 
 
+def _normaliser_dnb_navn(s: str) -> str:
+    """Normaliser selskapsnavn: strip parentes, erstatt non-breaking spaces, kollaps whitespace."""
+    s = re.sub(r'\s*\(.*?\)', '', s)   # fjern parentetisk suffix
+    s = s.replace('\xa0', ' ')          # non-breaking space → vanlig mellomrom
+    s = re.sub(r'\s+', ' ', s)          # kollaps flere mellomrom
+    return s.strip()
+
+
 def _processer_dnb_rader(rader: list) -> dict:
     """Konverter liste av DNB-rader til {navn: {ex_dato, betaling_dato}}-dict."""
     today = datetime.date.today()
     result: dict = {}
 
     for rad in rader:
-        # Strip parenthetisk suffix, f.eks. 'Equinor ASA (Q3 25)' → 'Equinor ASA'
-        navn = re.sub(r'\s*\(.*?\)', '', rad.get("selskap", "")).strip()
+        # Normaliser navn: strip parentes, \xa0, doble mellomrom
+        navn = _normaliser_dnb_navn(rad.get("selskap", ""))
         if not navn:
             continue
         ex_dato = _parse_dnb_full_dato(rad.get("eks_dato", ""))
@@ -1005,8 +1013,8 @@ def main():
             navn_dnb = DNB_NAVN.get(t)
             if not navn_dnb:
                 continue
-            # Strip parentheticals ved oppslag
-            oppslag = re.sub(r'\s*\(.*?\)', '', navn_dnb).strip()
+            # Normaliser navn for oppslag (samme logikk som _processer_dnb_rader)
+            oppslag = _normaliser_dnb_navn(navn_dnb)
             if oppslag in dnb_datoer:
                 dnb = dnb_datoer[oppslag]
                 if dnb.get("ex_dato"):
