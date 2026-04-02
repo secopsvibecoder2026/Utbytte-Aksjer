@@ -544,14 +544,31 @@ function visOversikt() {
   const om30 = new Date(idag); om30.setDate(om30.getDate() + 30);
   const _ad = hentAlleAksjeData();
 
-  tbody.innerHTML = data.map(a => {
+  const bekreftet = data.filter(a => a.ex_dato).sort((a,b) => a.ex_dato.localeCompare(b.ex_dato));
+  const estimert  = data.filter(a => !a.ex_dato);
+  const visSeksjon = bekreftet.length > 0 && estimert.length > 0;
+
+  const tabellSeksjonHeader = (label, sublabel) => `
+    <tr class="bg-gray-100 dark:bg-gray-800/70">
+      <td colspan="17" class="px-4 py-2">
+        <span class="text-xs font-semibold text-gray-700 dark:text-gray-200 uppercase tracking-wide">${label}</span>
+        <span class="text-xs text-gray-400 dark:text-gray-500 ml-2">${sublabel}</span>
+      </td>
+    </tr>`;
+
+  const kortSeksjonHeader = (label, sublabel) => `
+    <div class="px-3 py-2 bg-gray-100 dark:bg-gray-800/70 rounded-lg mt-3 mb-1">
+      <span class="text-xs font-semibold text-gray-700 dark:text-gray-200 uppercase tracking-wide">${label}</span>
+      <span class="text-xs text-gray-400 dark:text-gray-500 ml-2">${sublabel}</span>
+    </div>`;
+
+  const byggTabellRad = a => {
     const exDato = a.ex_dato ? new Date(a.ex_dato) : null;
     const snartEx = exDato && exDato >= idag && exDato <= om30;
     const rowClass = snartEx ? 'row-highlight' : '';
     const _d = _ad[a.ticker] || {};
     const _harNotat  = !!_d.notat;
     const _underMal  = _d.malPris > 0 && a.pris > 0 && a.pris <= _d.malPris;
-
     return `
     <tr class="table-row ${rowClass}" data-ticker="${a.ticker}">
       <td class="px-2 py-3 w-8">${stjerne(a.ticker)}</td>
@@ -596,7 +613,14 @@ function visOversikt() {
         <span class="frekvens-badge">${a.frekvens}</span>
       </td>
     </tr>`;
-  }).join('');
+  };
+
+  let tabellHtml = '';
+  if (visSeksjon) tabellHtml += tabellSeksjonHeader('Annonsert / vedtatt', `ex-dato kjent — ${bekreftet.length} aksjer`);
+  tabellHtml += bekreftet.map(byggTabellRad).join('');
+  if (visSeksjon) tabellHtml += tabellSeksjonHeader('Forventet / estimert', `basert på siste 12 mnd — ${estimert.length} aksjer`);
+  tabellHtml += estimert.map(byggTabellRad).join('');
+  tbody.innerHTML = tabellHtml;
 
   // Klikk via event delegation (tabell) – ingen minnelekasje
   tbody.onclick = e => {
@@ -620,7 +644,7 @@ function visOversikt() {
     ? 'rounded-xl border border-gray-200 dark:border-gray-800 overflow-hidden shadow-sm divide-y divide-gray-100 dark:divide-gray-800'
     : 'space-y-3';
 
-  kortBody.innerHTML = data.map(a => {
+  const byggKort = a => {
     const exDato = a.ex_dato ? new Date(a.ex_dato) : null;
     const idag2 = new Date(); idag2.setHours(0,0,0,0);
     const om30b = new Date(idag2); om30b.setDate(om30b.getDate() + 30);
@@ -707,7 +731,14 @@ function visOversikt() {
     </div>`;
 
     return kompaktModus ? kompaktKort : normalKort;
-  }).join('');
+  };
+
+  let kortHtml = '';
+  if (visSeksjon) kortHtml += kortSeksjonHeader('Annonsert / vedtatt', `ex-dato kjent — ${bekreftet.length} aksjer`);
+  kortHtml += bekreftet.map(byggKort).join('');
+  if (visSeksjon) kortHtml += kortSeksjonHeader('Forventet / estimert', `basert på siste 12 mnd — ${estimert.length} aksjer`);
+  kortHtml += estimert.map(byggKort).join('');
+  kortBody.innerHTML = kortHtml;
 
   // Klikk via event delegation (kort) – ingen minnelekasje
   kortBody.onclick = e => {
