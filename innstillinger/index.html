@@ -94,21 +94,27 @@
             <span class="flex-shrink-0 w-7 h-7 rounded-full bg-brand-600 text-white text-xs font-bold flex items-center justify-center">1</span>
             <div>
               <p class="font-semibold text-sm">Utforsk aksjer</p>
-              <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Bruk søk og filtre på forsiden. Klikk på en aksje for detaljer, utbyttehistorikk og nøkkeltall.</p>
+              <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Bruk søk og filtre på forsiden. Tabellen er delt i <strong>Annonsert / vedtatt</strong> (bekreftet ex-dato) og <strong>Forventet / estimert</strong> (basert på siste 12 mnd). Klikk på en aksje for detaljer og utbyttehistorikk.</p>
             </div>
           </li>
           <li class="flex gap-3">
             <span class="flex-shrink-0 w-7 h-7 rounded-full bg-brand-600 text-white text-xs font-bold flex items-center justify-center">2</span>
             <div>
               <p class="font-semibold text-sm">Bygg porteføljen din</p>
-              <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Gå til <strong>Portefølje → Beholdning</strong> og legg til aksjer med antall. Appen beregner forventet utbytte, yield og markedsverdi automatisk.</p>
+              <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Gå til <strong>Portefølje → Beholdning</strong> og legg til aksjer med antall. Appen beregner forventet utbytte, yield og markedsverdi automatisk. Statistikk-fanen viser hva som er vedtatt vs. estimert.</p>
             </div>
           </li>
           <li class="flex gap-3">
             <span class="flex-shrink-0 w-7 h-7 rounded-full bg-brand-600 text-white text-xs font-bold flex items-center justify-center">3</span>
             <div>
-              <p class="font-semibold text-sm">Registrer kjøp og salg</p>
-              <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Fyll ut <strong>Kjøpsdato</strong> og <strong>Kjøpskurs</strong> når du legger til en aksje — eller bruk «Kostbasis og transaksjoner» i Beholdning for å logge kjøp, salg og utbytte. Appen beregner kostpris (VWAP) og faktisk avkastning.</p>
+              <p class="font-semibold text-sm">Registrer kjøp — lås opp IRR og avkastning</p>
+              <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Trykk på <strong>▼-pilen</strong> på en aksje i Beholdning for å åpne transaksjonsloggen. Fyll inn <strong>dato</strong>, <strong>antall</strong> og <strong>GAV/kurs</strong>, og trykk <strong>+ Legg til</strong>. Etter minst én kjøpstransaksjon beregnes:</p>
+              <ul class="mt-1.5 space-y-0.5 text-xs text-gray-500 dark:text-gray-400 list-disc list-inside">
+                <li>Kostpris (VWAP) og urealisert gevinst/tap</li>
+                <li>IRR — annualisert intern avkastningsrate</li>
+                <li>TWR — tidskorrigert avkastning i grafen</li>
+                <li>Faktisk avkastning inkl. mottatt utbytte</li>
+              </ul>
             </div>
           </li>
           <li class="flex gap-3">
@@ -122,7 +128,20 @@
             <span class="flex-shrink-0 w-7 h-7 rounded-full bg-brand-600 text-white text-xs font-bold flex items-center justify-center">5</span>
             <div>
               <p class="font-semibold text-sm">Kalender og varsler</p>
-              <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Kalender-fanen viser alle kommende ex-datoer og betalingsdatoer. Last ned som .ics-fil.</p>
+              <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Kalender-fanen viser alle kommende ex-datoer og betalingsdatoer. Last ned som .ics-fil for kalenderabonnement.</p>
+            </div>
+          </li>
+          <li class="flex gap-3">
+            <span class="flex-shrink-0 w-7 h-7 rounded-full bg-brand-600 text-white text-xs font-bold flex items-center justify-center">6</span>
+            <div>
+              <p class="font-semibold text-sm">Installer som app</p>
+              <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">exday.no kan installeres som en app på mobil og PC — ingen App Store nødvendig:</p>
+              <ul class="mt-1.5 space-y-1 text-xs text-gray-500 dark:text-gray-400">
+                <li><strong class="text-gray-700 dark:text-gray-300">iPhone/iPad (Safari):</strong> trykk på Del-ikonet nederst → «Legg til på hjemskjermen»</li>
+                <li><strong class="text-gray-700 dark:text-gray-300">Android (Chrome):</strong> trykk på menyknappen (⋮) → «Legg til på startskjermen»</li>
+                <li><strong class="text-gray-700 dark:text-gray-300">Mac/Windows (Chrome/Edge):</strong> klikk på installikonet (⊕) i adressefeltet</li>
+              </ul>
+              <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Appen åpner da uten nettleser-UI og lagrer data lokalt som vanlig.</p>
             </div>
           </li>
         </ol>
