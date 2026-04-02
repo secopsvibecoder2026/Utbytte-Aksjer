@@ -111,9 +111,13 @@ function byttStatsSubTab(tab) {
     const el = document.getElementById('stats-sub-' + t);
     if (el) el.classList.toggle('hidden', t !== tab);
   });
-  // Tegn charts på nytt når relevant tab aktiveres
-  if ((tab === 'beholdning' || tab === 'sektorer') && window._pfSisteData) {
-    visCharts(window._pfSisteData.beholdning, window._pfSisteData.totalAr);
+  // Tegn charts på nytt når tab aktiveres
+  if (window._pfSisteData) {
+    const { beholdning, totalAr } = window._pfSisteData;
+    if (tab === 'oversikt')    visYieldChart(beholdning);
+    if (tab === 'inntekt')     visMaanedChart(beholdning);
+    if (tab === 'beholdning')  { visVerdiChart(beholdning); visCharts(beholdning, totalAr); }
+    if (tab === 'sektorer')    { visSektorYieldChart(beholdning); visCharts(beholdning, totalAr); }
   }
 }
 
@@ -938,16 +942,171 @@ function visPortefolje() {
 
   // Lagre for lazy chart-tegning ved tab-bytte
   window._pfSisteData = { beholdning: alleBeholdning, totalAr };
-  // Tegn charts kun om aktiv tab er beholdning eller sektorer
-  if (aktivStatsTab === 'beholdning' || aktivStatsTab === 'sektorer') {
-    visCharts(alleBeholdning, totalAr);
-  } else {
-    // Skjul charts-wrapper hvis feil tab er aktiv
+  // Tegn chart for aktiv stats-tab
+  if (aktivStatsTab === 'oversikt')   visYieldChart(alleBeholdning);
+  if (aktivStatsTab === 'inntekt')    visMaanedChart(alleBeholdning);
+  if (aktivStatsTab === 'beholdning') { visVerdiChart(alleBeholdning); visCharts(alleBeholdning, totalAr); }
+  if (aktivStatsTab === 'sektorer')   { visSektorYieldChart(alleBeholdning); visCharts(alleBeholdning, totalAr); }
+  if (!['beholdning','sektorer'].includes(aktivStatsTab)) {
     const cw = document.getElementById('pf-charts-wrapper');
     if (cw) cw.style.display = 'none';
   }
 }
 
+
+// ── HJELPERE FOR MÅNEDLIG DISTRIBUSJON ────────────────────────────────────
+function _frekvensAntall(f) {
+  return { 'Månedlig': 12, 'Kvartalsvis': 4, 'Halvårlig': 2, 'Årlig': 1 }[f] || 1;
+}
+
+function _betalingsMaaneder(a) {
+  const ant = _frekvensAntall(a.frekvens);
+  if (a.betaling_dato) {
+    const base = new Date(a.betaling_dato).getMonth();
+    const intervall = 12 / ant;
+    return Array.from({ length: ant }, (_, i) => Math.round((base + i * intervall) % 12));
+  }
+  return ({
+    'Månedlig':    [0,1,2,3,4,5,6,7,8,9,10,11],
+    'Kvartalsvis': [2,5,8,11],
+    'Halvårlig':   [5,11],
+    'Årlig':       [11],
+  })[a.frekvens] || [11];
+}
+
+// ── YIELD-FORDELING (Oversikt) ────────────────────────────────────────────
+function visYieldChart(beholdning) {
+  const el = document.getElementById('pf-yield-chart');
+  if (!el || !beholdning.length) return;
+  const fmtKr = v => v.toLocaleString('nb-NO', { maximumFractionDigits: 0 }) + ' kr';
+  const buckets = [
+    { label: '< 3%',  min: 0, max: 3,   color: '#94a3b8', items: [] },
+    { label: '3–6%',  min: 3, max: 6,   color: '#3b82f6', items: [] },
+    { label: '6–9%',  min: 6, max: 9,   color: '#14b8a6', items: [] },
+    { label: '≥ 9%',  min: 9, max: 999, color: '#22c55e', items: [] },
+  ];
+  beholdning.forEach(a => {
+    const y = a.utbytte_yield || 0;
+    const b = buckets.find(b => y >= b.min && y < b.max);
+    if (b) b.items.push(a);
+  });
+  const maks = Math.max(...buckets.map(b => b.items.length), 1);
+  el.innerHTML = buckets.map(b => {
+    const pct = (b.items.length / maks * 100).toFixed(1);
+    const forv = b.items.reduce((s, a) => s + a.forv_ar, 0);
+    return `
+      <div>
+        <div class="flex items-center justify-between mb-1">
+          <span class="text-xs font-semibold" style="color:${b.color}">${b.label}</span>
+          <span class="text-xs text-gray-500 dark:text-gray-400">${b.items.length} aksjer${forv > 0 ? ' · ' + fmtKr(forv) + '/år' : ''}</span>
+        </div>
+        <div class="h-4 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
+          <div class="h-full rounded-full transition-all duration-500" style="width:${pct}%;background:${b.color}"></div>
+        </div>
+        <p class="text-xs text-gray-400 mt-0.5 truncate">${b.items.map(a => a.ticker).join(', ') || '—'}</p>
+      </div>`;
+  }).join('');
+}
+
+// ── MÅNEDLIG INNTEKT (Inntekt) ────────────────────────────────────────────
+function visMaanedChart(beholdning) {
+  const el = document.getElementById('pf-maaned-chart');
+  if (!el || !beholdning.length) return;
+  const mnd = Array(12).fill(0);
+  beholdning.forEach(a => {
+    const perBetaling = a.forv_ar / _frekvensAntall(a.frekvens);
+    _betalingsMaaneder(a).forEach(m => { mnd[m] += perBetaling; });
+  });
+  const maks = Math.max(...mnd, 1);
+  const fmtKr = v => v.toLocaleString('nb-NO', { maximumFractionDigits: 0 }) + ' kr';
+  const navn = ['Jan','Feb','Mar','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Des'];
+  const iMnd = new Date().getMonth();
+  el.innerHTML = `
+    <div class="flex items-end gap-0.5 h-28">
+      ${mnd.map((v, i) => {
+        const h = maks > 0 ? (v / maks * 100).toFixed(1) : 0;
+        const er = i === iMnd;
+        const bg = er ? '#14b8a6' : '#3b82f6';
+        const op = v > 0 ? '1' : '0.15';
+        return `<div class="flex-1 flex flex-col items-center justify-end gap-0.5 group relative" title="${navn[i]}: ${fmtKr(v)}">
+          <div class="w-full rounded-t-sm transition-all duration-500" style="height:${h}%;background:${bg};opacity:${op};min-height:${v>0?'4px':'0'}"></div>
+          <span class="text-[9px] text-gray-400${er ? ' font-bold text-brand-500' : ''}">${navn[i][0]}</span>
+        </div>`;
+      }).join('')}
+    </div>
+    <div class="flex justify-between text-xs text-gray-400 mt-2">
+      <span>Lavest: <strong>${fmtKr(Math.min(...mnd.filter(v=>v>0)))}</strong></span>
+      <span>Høyest: <strong>${fmtKr(Math.max(...mnd))}</strong></span>
+    </div>`;
+}
+
+// ── VERDIKONSENTRASJON (Beholdning) ───────────────────────────────────────
+function visVerdiChart(beholdning) {
+  const el = document.getElementById('pf-verdi-chart');
+  if (!el || !beholdning.length) return;
+  const fmtKr = v => v.toLocaleString('nb-NO', { maximumFractionDigits: 0 }) + ' kr';
+  const totalVerdi = beholdning.reduce((s, a) => s + a.antall * (a.pris || 0), 0);
+  if (!totalVerdi) { el.innerHTML = '<p class="text-xs text-gray-400">Mangler kursinformasjon.</p>'; return; }
+  let data = [...beholdning]
+    .map(a => ({ label: a.ticker, value: a.antall * (a.pris || 0), color: SEKTOR_FARGE[a.sektor] || FARGE_FALLBACK }))
+    .filter(d => d.value > 0)
+    .sort((a, b) => b.value - a.value);
+  const andreVerdi = data.slice(7).reduce((s, d) => s + d.value, 0);
+  data = data.slice(0, 7);
+  if (andreVerdi > 0) data.push({ label: 'Andre', value: andreVerdi, color: '#9ca3af' });
+  const size = 180, cx = 90, cy = 90, or = 76, ir = 48;
+  let angle = -Math.PI / 2, paths = '';
+  data.forEach(({ value, color }) => {
+    const sweep = (value / totalVerdi) * 2 * Math.PI;
+    const end = angle + sweep;
+    const lg = sweep > Math.PI ? 1 : 0;
+    const [x1,y1] = [cx+or*Math.cos(angle), cy+or*Math.sin(angle)];
+    const [x2,y2] = [cx+or*Math.cos(end),   cy+or*Math.sin(end)];
+    const [x3,y3] = [cx+ir*Math.cos(end),   cy+ir*Math.sin(end)];
+    const [x4,y4] = [cx+ir*Math.cos(angle), cy+ir*Math.sin(angle)];
+    paths += `<path d="M${x1},${y1} A${or},${or} 0 ${lg} 1 ${x2},${y2} L${x3},${y3} A${ir},${ir} 0 ${lg} 0 ${x4},${y4}Z" fill="${color}" stroke="white" stroke-width="1.5" class="dark:stroke-gray-900"/>`;
+    angle = end;
+  });
+  const legend = data.map(({ label, value, color }) => `
+    <div class="flex items-center gap-2 text-xs">
+      <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background:${color}"></span>
+      <span class="font-mono font-bold text-brand-700 dark:text-brand-400 shrink-0 w-14">${label}</span>
+      <span class="text-gray-400">${(value/totalVerdi*100).toFixed(1)}%</span>
+      <span class="ml-auto font-semibold tabular-nums">${fmtKr(value)}</span>
+    </div>`).join('');
+  el.innerHTML = `
+    <div class="flex flex-col sm:flex-row items-center gap-4">
+      <svg viewBox="0 0 ${size} ${size}" width="${size}" height="${size}" class="shrink-0">${paths}</svg>
+      <div class="space-y-1.5 flex-1 min-w-0">${legend}</div>
+    </div>`;
+}
+
+// ── YIELD PER SEKTOR (Sektorer) ───────────────────────────────────────────
+function visSektorYieldChart(beholdning) {
+  const el = document.getElementById('pf-sektor-yield-chart');
+  if (!el || !beholdning.length) return;
+  const smap = {};
+  beholdning.forEach(a => {
+    if (!smap[a.sektor]) smap[a.sektor] = { sum: 0, n: 0 };
+    smap[a.sektor].sum += a.utbytte_yield || 0;
+    smap[a.sektor].n++;
+  });
+  const sektorer = Object.entries(smap)
+    .map(([s, d]) => ({ sektor: s, avg: d.sum / d.n, color: SEKTOR_FARGE[s] || FARGE_FALLBACK }))
+    .filter(s => s.avg > 0)
+    .sort((a, b) => b.avg - a.avg);
+  const maks = sektorer[0]?.avg || 1;
+  el.innerHTML = sektorer.map(({ sektor, avg, color }) => `
+    <div>
+      <div class="flex items-center justify-between mb-1">
+        <span class="text-xs font-medium text-gray-700 dark:text-gray-300">${sektor}</span>
+        <span class="text-xs font-semibold tabular-nums" style="color:${color}">${avg.toFixed(1)}%</span>
+      </div>
+      <div class="h-3 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
+        <div class="h-full rounded-full transition-all duration-500" style="width:${(avg/maks*100).toFixed(1)}%;background:${color}"></div>
+      </div>
+    </div>`).join('');
+}
 
 function visCharts(beholdning, totalAr) {
   const wrapper = document.getElementById('pf-charts-wrapper');

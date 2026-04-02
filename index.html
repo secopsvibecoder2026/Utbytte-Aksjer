@@ -719,6 +719,12 @@
           </div>
         </div>
 
+          <!-- Yield-fordeling -->
+          <div class="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4 shadow-sm">
+            <h3 class="font-semibold text-sm mb-3">Yield-fordeling</h3>
+            <div id="pf-yield-chart" class="space-y-3"></div>
+          </div>
+
         </div><!-- /stats-sub-oversikt -->
 
         <!-- ── INNTEKT ── -->
@@ -770,10 +776,21 @@
           <div id="pf-tidslinje" class="space-y-2"></div>
         </div>
 
+          <!-- Månedlig utbytteinntekt -->
+          <div class="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4 shadow-sm">
+            <h3 class="font-semibold text-sm mb-3">Forventet inntekt per måned</h3>
+            <div id="pf-maaned-chart"></div>
+          </div>
+
         </div><!-- /stats-sub-inntekt -->
 
         <!-- ── BEHOLDNING ── -->
         <div id="stats-sub-beholdning" class="hidden space-y-4">
+          <!-- Verdikonsentrasjon -->
+          <div class="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4 shadow-sm">
+            <h3 class="font-semibold text-sm mb-3">Verdikonsentrasjon</h3>
+            <div id="pf-verdi-chart"></div>
+          </div>
           <div id="pf-charts-wrapper" style="display:none" class="grid grid-cols-1 gap-4">
             <div class="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4 shadow-sm">
               <h3 class="font-semibold text-sm mb-4">Største bidragsytere</h3>
@@ -792,6 +809,12 @@
             <h3 class="font-semibold text-sm mb-4">Sektordiversifisering</h3>
             <div id="pf-sektor-chart"></div>
           </div>
+          <!-- Gjennomsnittlig yield per sektor -->
+          <div class="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4 shadow-sm">
+            <h3 class="font-semibold text-sm mb-3">Gjennomsnittlig yield per sektor</h3>
+            <div id="pf-sektor-yield-chart" class="space-y-3"></div>
+          </div>
+
         </div><!-- /stats-sub-sektorer -->
 
       </div>
