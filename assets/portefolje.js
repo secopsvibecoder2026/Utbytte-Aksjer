@@ -502,6 +502,17 @@ function visPortefolje() {
   sjekkMilepeler(totalAr);
   document.getElementById('pf-stat-ar').textContent = fmtKr(totalAr);
   document.getElementById('pf-stat-mnd').textContent = fmtKr(totalAr / 12);
+
+  const totalArVedtatt  = alleBeholdning.filter(a => a.ex_dato).reduce((s, a) => s + a.forv_ar, 0);
+  const totalArEstimert = alleBeholdning.filter(a => !a.ex_dato).reduce((s, a) => s + a.forv_ar, 0);
+  const breakdownEl = document.getElementById('pf-stat-ar-breakdown');
+  if (breakdownEl && totalArVedtatt > 0 && totalArEstimert > 0) {
+    document.getElementById('pf-stat-ar-vedtatt').textContent = fmtKr(totalArVedtatt);
+    document.getElementById('pf-stat-ar-estimert').textContent = fmtKr(totalArEstimert);
+    breakdownEl.classList.remove('hidden');
+  } else if (breakdownEl) {
+    breakdownEl.classList.add('hidden');
+  }
   document.getElementById('pf-stat-antall').textContent = alleBeholdning.length;
   document.getElementById('pf-stat-verdi').textContent = fmtKr(totalVerdi);
 
