@@ -137,16 +137,34 @@
       <div class="px-5 py-4 border-b border-gray-100 dark:border-gray-800">
         <h2 class="font-semibold text-base">Data og personvern</h2>
       </div>
-      <div class="p-5 space-y-3">
+      <div class="p-5 space-y-4">
         <p class="text-xs text-gray-500 dark:text-gray-400">All data — portefølje, favoritter og innstillinger — lagres utelukkende lokalt i nettleseren din (localStorage). Ingenting sendes til våre servere.</p>
-        <div class="flex flex-wrap gap-2 pt-1">
-          <button id="eksport-json-btn" class="inline-flex items-center gap-1.5 text-xs text-brand-600 dark:text-brand-400 border border-brand-300 dark:border-brand-700 hover:bg-brand-50 dark:hover:bg-brand-900/20 px-3 py-1.5 rounded-lg transition-colors font-medium">
-            <svg class="w-3.5 h-3.5" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"/></svg>
-            Last ned backup (JSON)
-          </button>
-          <a href="/personvern/" class="inline-flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 px-3 py-1.5 rounded-lg transition-colors font-medium">
-            Personvernerklæring →
-          </a>
+
+        <div class="space-y-2">
+          <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Backup</p>
+          <div class="flex flex-wrap gap-2">
+            <button id="eksport-json-btn" class="inline-flex items-center gap-1.5 text-xs text-brand-600 dark:text-brand-400 border border-brand-300 dark:border-brand-700 hover:bg-brand-50 dark:hover:bg-brand-900/20 px-3 py-1.5 rounded-lg transition-colors font-medium">
+              <svg class="w-3.5 h-3.5" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"/></svg>
+              Last ned backup
+            </button>
+            <button id="importer-json-btn" class="inline-flex items-center gap-1.5 text-xs text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 px-3 py-1.5 rounded-lg transition-colors font-medium">
+              <svg class="w-3.5 h-3.5" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+              Gjenopprett backup
+            </button>
+            <input type="file" id="importer-json-fil" accept=".json" class="hidden" />
+          </div>
+          <div id="importer-json-preview" class="hidden rounded-xl border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900/50 p-4 space-y-3 text-sm">
+            <div id="importer-json-innhold" class="text-gray-600 dark:text-gray-400 space-y-1"></div>
+            <p class="text-xs text-yellow-600 dark:text-yellow-400">⚠️ Dette erstatter all eksisterende data.</p>
+            <div class="flex gap-2">
+              <button id="importer-json-bekreft" class="px-4 py-1.5 bg-brand-600 hover:bg-brand-700 text-white text-xs font-medium rounded-lg transition-colors">Gjenopprett</button>
+              <button id="importer-json-avbryt" class="px-4 py-1.5 text-xs text-gray-500 hover:text-gray-700 dark:hover:text-gray-300">Avbryt</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="pt-1 border-t border-gray-100 dark:border-gray-800">
+          <a href="/personvern/" class="text-xs text-gray-400 dark:text-gray-500 hover:underline">Personvernerklæring →</a>
         </div>
       </div>
     </section>
@@ -342,13 +360,22 @@
 
   // ── EKSPORT JSON ─────────────────────────────────────────────────────────────
   document.getElementById('eksport-json-btn').addEventListener('click', () => {
+    const p = hentProfil();
     const data = {
-      versjon: 3,
+      versjon: 4,
       eksportert: new Date().toISOString(),
-      portefoljer: hentPortefoljer(),
-      favoritter: [...(hentFav ? hentFav() : new Set())],
-      profil: hentProfil(),
-      aksjedata: (() => { try { return JSON.parse(localStorage.getItem('aksje_data') || '{}'); } catch { return {}; } })()
+      profil: { navn: p.navn || '', mal_mnd: String(p.malMnd || 0), sparemaal: String(p.spareMaal || 0) },
+      portefoljer:  hentPortefoljer(),
+      aktiv_pf:     hentAktivPFId(),
+      watchlister:  hentWatchlister(),
+      favoritter:   [...hentFav()],
+      aksje_data:   (() => { try { return JSON.parse(localStorage.getItem('aksje_data') || '{}'); } catch { return {}; } })(),
+      notif_aksjer: (() => { try { return JSON.parse(localStorage.getItem('notif_aksjer') || '[]'); } catch { return []; } })(),
+      historikk:    (() => { try { return JSON.parse(localStorage.getItem('pf_historikk') || '{}'); } catch { return {}; } })(),
+      tema:         localStorage.getItem('tema') || '',
+      sortering:    localStorage.getItem('sortering') || '',
+      streak:       { teller: localStorage.getItem('streak_teller') || '1', sist_besok: localStorage.getItem('streak_sist_besok') || '' },
+      milepeler:    (() => { try { return JSON.parse(localStorage.getItem('milepeler_oppnaad') || '[]'); } catch { return []; } })()
     };
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
     const a = document.createElement('a');
@@ -356,6 +383,64 @@
     a.download = 'exday-backup-' + new Date().toISOString().slice(0, 10) + '.json';
     a.click();
     URL.revokeObjectURL(a.href);
+  });
+
+  // ── IMPORT JSON ──────────────────────────────────────────────────────────────
+  let _pendingBackup = null;
+  const importFil = document.getElementById('importer-json-fil');
+
+  document.getElementById('importer-json-btn').addEventListener('click', () => importFil.click());
+
+  importFil.addEventListener('change', () => {
+    const fil = importFil.files[0];
+    if (!fil) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+      try {
+        const b = JSON.parse(e.target.result);
+        if (!b || typeof b.versjon !== 'number') { alert('Ugyldig backup-fil.'); return; }
+        _pendingBackup = b;
+        const pfl = b.portefoljer || {};
+        const antallPos = Object.values(pfl).reduce((s, pf) => s + Object.keys(pf.beholdning || {}).length, 0);
+        const p = b.profil || {};
+        const linjer = [
+          p.navn ? `Profil: ${p.navn}` : 'Profil: (ikke satt)',
+          `${Object.keys(pfl).length} portefølje(r) · ${antallPos} posisjoner`,
+          `Eksportert: ${b.eksportert ? new Date(b.eksportert).toLocaleDateString('nb-NO') : 'ukjent'}`
+        ];
+        document.getElementById('importer-json-innhold').innerHTML = linjer.map(l => `<p>• ${l}</p>`).join('');
+        document.getElementById('importer-json-preview').classList.remove('hidden');
+      } catch { alert('Kunne ikke lese filen.'); }
+    };
+    reader.readAsText(fil, 'UTF-8');
+    importFil.value = '';
+  });
+
+  document.getElementById('importer-json-bekreft').addEventListener('click', () => {
+    if (!_pendingBackup) return;
+    const b = _pendingBackup;
+    const p = b.profil || {};
+    if (b.portefoljer) {
+      lagrePortefoljer(b.portefoljer);
+      if (b.aktiv_pf) settAktivPFId(b.aktiv_pf);
+    }
+    if (b.watchlister)  lagreWatchlister(b.watchlister);
+    if (b.favoritter)   localStorage.setItem('fav_aksjer',          JSON.stringify(b.favoritter));
+    if (b.aksje_data)   localStorage.setItem('aksje_data',          JSON.stringify(b.aksje_data));
+    if (b.notif_aksjer) localStorage.setItem('notif_aksjer',        JSON.stringify(b.notif_aksjer));
+    if (b.historikk)    localStorage.setItem('pf_historikk',        JSON.stringify(b.historikk));
+    if (b.tema)         localStorage.setItem('tema',                 b.tema);
+    if (b.sortering)    localStorage.setItem('sortering',            b.sortering);
+    if (b.streak)       { localStorage.setItem('streak_teller', b.streak.teller); localStorage.setItem('streak_sist_besok', b.streak.sist_besok); }
+    if (b.milepeler)    localStorage.setItem('milepeler_oppnaad',   JSON.stringify(b.milepeler));
+    lagreProfil(p.navn || '', parseFloat(p.mal_mnd) || 0, parseFloat(p.sparemaal) || 0);
+    _pendingBackup = null;
+    window.location.href = '/';
+  });
+
+  document.getElementById('importer-json-avbryt').addEventListener('click', () => {
+    _pendingBackup = null;
+    document.getElementById('importer-json-preview').classList.add('hidden');
   });
   </script>
 </body>

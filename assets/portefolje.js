@@ -311,14 +311,12 @@ function initPortefolje() {
     if (e.key === 'Enter') document.getElementById('pf-legg-til').click();
   });
 
-  document.getElementById('pf-eksport-csv').addEventListener('click', eksporterCSV);
+  document.getElementById('pf-eksport-csv')?.addEventListener('click', eksporterCSV);
 
   // ── CSV-IMPORT ─────────────────────────────────────────────────────────────
   const filInput = document.getElementById('pf-importer-fil');
 
-  function triggerFilInput() { filInput.click(); }
-
-  document.getElementById('pf-importer-csv').addEventListener('click', triggerFilInput);
+  document.getElementById('pf-importer-csv')?.addEventListener('click', () => filInput.click());
 
   const tomKnapp = document.getElementById('pf-importer-csv-tom');
   if (tomKnapp) tomKnapp.addEventListener('click', () => document.getElementById('json-importer-fil')?.click());
@@ -348,7 +346,7 @@ function initPortefolje() {
   });
 
   // ── QR-KODE ────────────────────────────────────────────────────────────────
-  document.getElementById('pf-qr-btn').addEventListener('click', visQRModal);
+  document.getElementById('pf-qr-btn')?.addEventListener('click', visQRModal);
   document.getElementById('qr-lukk').addEventListener('click', () => {
     clearInterval(document.getElementById('qr-modal')._timer);
     document.getElementById('qr-modal').classList.add('hidden');

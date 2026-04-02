@@ -1162,10 +1162,10 @@ function bekreftJSONImport(backup) {
 
 
 function initJSONBackup() {
-  document.getElementById('pf-eksport-json').addEventListener('click', eksporterJSON);
+  document.getElementById('pf-eksport-json')?.addEventListener('click', eksporterJSON);
 
   const filInput = document.getElementById('json-importer-fil');
-  document.getElementById('pf-importer-json').addEventListener('click', () => filInput.click());
+  document.getElementById('pf-importer-json')?.addEventListener('click', () => filInput?.click());
   filInput.addEventListener('change', () => {
     const fil = filInput.files[0];
     if (!fil) return;
