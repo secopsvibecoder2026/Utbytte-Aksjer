@@ -557,8 +557,8 @@ function visOversikt() {
     </tr>`;
 
   const kortSeksjonHeader = (label, sublabel) => `
-    <div class="px-3 py-2 bg-gray-100 dark:bg-gray-800/70 rounded-lg mt-3 mb-1">
-      <span class="text-xs font-semibold text-gray-700 dark:text-gray-200 uppercase tracking-wide">${label}</span>
+    <div class="px-1 pt-4 pb-1 border-b border-gray-200 dark:border-gray-700 mb-2">
+      <span class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">${label}</span>
       <span class="text-xs text-gray-400 dark:text-gray-500 ml-2">${sublabel}</span>
     </div>`;
 
