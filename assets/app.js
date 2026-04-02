@@ -26,7 +26,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initPFSubTabs();
   initPortefoljeVelger();
   initPortefolje();
-  initTransaksjoner();
   initWatchlister();
   initJSONBackup();
   initKalkulator();

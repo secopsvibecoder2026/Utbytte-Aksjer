@@ -1,5 +1,8 @@
 'use strict';
 
+// Holder styr på hvilke detail-rader som er åpne på tvers av re-renders
+const _aapneDetailRader = new Set();
+
 function beregnKostbasis(ticker, txMap) {
   const tx = (txMap !== undefined ? txMap : hentTransaksjoner())[ticker] || [];
   let antall = 0, totalKost = 0, mottattUtbytte = 0;
@@ -25,204 +28,66 @@ function beregnKostbasis(ticker, txMap) {
 
 
 
-function visTransaksjoner() {
-  const tx    = hentTransaksjoner();
-  const alle  = Object.entries(tx).flatMap(([ticker, liste]) =>
-    liste.map(t => ({ ...t, ticker }))
-  ).sort((a, b) => b.dato.localeCompare(a.dato));
+// Bygger HTML-innholdet for en rad sin detail-panel (kostbasis + tx-form + logg)
+function byggDetailHtml(ticker, kb, marked) {
+  const fmtKr   = v => v.toLocaleString('nb-NO', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) + '\u00a0kr';
+  const fmtKurs = v => v.toLocaleString('nb-NO', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const txListe = (hentTransaksjoner()[ticker] || []).slice().sort((a, b) => b.dato.localeCompare(a.dato));
 
-  const harData = alle.length > 0;
-  document.getElementById('tx-tom').classList.toggle('hidden', harData);
-  document.getElementById('tx-logg-wrapper').classList.toggle('hidden', !harData);
-  document.getElementById('tx-kostbasis-wrapper').classList.toggle('hidden', !harData);
+  const harKb  = kb && kb.antall > 0 && kb.totalKost > 0;
+  const gevinst = harKb ? marked - kb.totalKost : null;
+  const gevPct  = harKb && kb.totalKost > 0 ? (gevinst / kb.totalKost * 100) : null;
+  const gevFarge = gevinst !== null
+    ? (gevinst >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-500') : '';
 
-  if (!harData) return;
+  const kostbasisHtml = harKb ? `
+    <div class="flex flex-wrap gap-x-4 gap-y-1 text-xs py-2 border-b border-gray-100 dark:border-gray-800">
+      <span class="text-gray-500">Sn.kurs: <span class="font-medium text-gray-700 dark:text-gray-300">${kb.vwap.toLocaleString('nb-NO', { maximumFractionDigits: 2 })} kr</span></span>
+      <span class="text-gray-500">Kostpris: <span class="font-medium text-gray-700 dark:text-gray-300">${fmtKr(kb.totalKost)}</span></span>
+      <span class="text-gray-500">Gev./tap: <span class="font-semibold ${gevFarge}">${gevinst >= 0 ? '+' : ''}${fmtKr(gevinst)} (${gevPct >= 0 ? '+' : ''}${gevPct.toFixed(1)}%)</span></span>
+      ${kb.mottattUtbytte > 0 ? `<span class="text-gray-500">Utbytte mottatt: <span class="font-medium text-yellow-600 dark:text-yellow-400">${fmtKr(kb.mottattUtbytte)}</span></span>` : ''}
+    </div>` : '';
 
-  const fmtKr = v => v.toLocaleString('nb-NO', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) + ' kr';
-  const fmtKurs = v => v.toLocaleString('nb-NO', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' kr';
+  const idag = new Date().toISOString().slice(0, 10);
 
-  // Kostbasis-tabell
-  const tickers = [...new Set(alle.map(t => t.ticker))];
-  let totalKost = 0, totalMarked = 0;
+  const txLoggHtml = txListe.length > 0
+    ? txListe.map(t => {
+        const isKjøp    = t.type === 'kjøp';
+        const isUtbytte = t.type === 'utbytte';
+        const badge = isKjøp
+          ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
+          : isUtbytte
+            ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400'
+            : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400';
+        const label = isKjøp ? 'Kjøp' : isUtbytte ? 'Utbytte' : 'Salg';
+        const [y, m, d] = t.dato.split('-');
+        return `<div class="flex items-center gap-2 py-1.5 text-xs border-b border-gray-100 dark:border-gray-800 last:border-0">
+          <span class="text-gray-400 min-w-[4.5rem]">${d}.${m}.${y}</span>
+          <span class="px-1.5 py-0.5 rounded text-[10px] font-medium ${badge}">${label}</span>
+          <span class="flex-1 text-gray-600 dark:text-gray-400">${t.antall} × ${fmtKurs(t.kurs)} kr</span>
+          <span class="font-medium">${fmtKr(t.antall * t.kurs)}</span>
+          <button class="pf-tx-slett p-0.5 text-gray-300 hover:text-red-500 transition-colors" data-ticker="${ticker}" data-id="${t.id}" aria-label="Slett transaksjon">
+            <svg class="w-3.5 h-3.5 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+          </button>
+        </div>`;
+      }).join('')
+    : '<p class="text-xs text-gray-400 py-2">Ingen transaksjoner ennå.</p>';
 
-  document.getElementById('tx-kostbasis-body').innerHTML = tickers.map(ticker => {
-    const aksje = alleAksjer.find(a => a.ticker === ticker);
-    const kb    = beregnKostbasis(ticker);
-    if (kb.antall <= 0) return '';
-    const marked   = kb.antall * (aksje?.pris || 0);
-    const gevinst  = marked - kb.totalKost;
-    const gevPct   = kb.totalKost > 0 ? (gevinst / kb.totalKost * 100) : 0;
-    const farge    = gevinst >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-500';
-    totalKost   += kb.totalKost;
-    totalMarked += marked;
-    return `<tr class="table-row cursor-pointer" data-ticker="${ticker}">
-      <td class="px-4 py-3 font-mono font-bold text-brand-700 dark:text-brand-400">${ticker}</td>
-      <td class="px-4 py-3 text-right">${kb.antall}</td>
-      <td class="px-4 py-3 text-right">${fmtKurs(kb.vwap)}</td>
-      <td class="px-4 py-3 text-right">${fmtKr(kb.totalKost)}</td>
-      <td class="px-4 py-3 text-right">${aksje ? fmtKr(marked) : '—'}</td>
-      <td class="px-4 py-3 text-right ${farge} font-semibold">${aksje ? (gevinst >= 0 ? '+' : '') + fmtKr(gevinst) : '—'}</td>
-      <td class="px-4 py-3 text-right ${farge}">${aksje ? (gevPct >= 0 ? '+' : '') + gevPct.toFixed(1) + '%' : '—'}</td>
-    </tr>`;
-  }).join('');
-
-  // Summer mottatt utbytte per ticker
-  let totalMottattUtbytte = 0;
-  tickers.forEach(ticker => {
-    const kb = beregnKostbasis(ticker);
-    totalMottattUtbytte += kb.mottattUtbytte;
-  });
-
-  const totalGevinst      = totalMarked - totalKost;
-  const totalAvkastning   = totalGevinst + totalMottattUtbytte;
-  const totalPct          = totalKost > 0 ? (totalAvkastning / totalKost * 100) : 0;
-  const totalFarge        = totalGevinst >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-500';
-  const avkFarge          = totalAvkastning >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-500';
-  const utbytteTd         = totalMottattUtbytte > 0
-    ? `<span class="text-yellow-600 dark:text-yellow-400">+${fmtKr(totalMottattUtbytte)} utbytte</span>`
-    : '';
-  document.getElementById('tx-kostbasis-footer').innerHTML = `<tr>
-    <td colspan="3" class="px-4 py-3 text-sm text-gray-500">Totalt</td>
-    <td class="px-4 py-3 text-right">${fmtKr(totalKost)}</td>
-    <td class="px-4 py-3 text-right">${fmtKr(totalMarked)}${utbytteTd ? `<br><span class="text-xs font-normal">${utbytteTd}</span>` : ''}</td>
-    <td class="px-4 py-3 text-right ${totalFarge} font-semibold">${(totalGevinst >= 0 ? '+' : '') + fmtKr(totalGevinst)}</td>
-    <td class="px-4 py-3 text-right ${avkFarge} font-semibold">${(totalPct >= 0 ? '+' : '') + totalPct.toFixed(1)}%${totalMottattUtbytte > 0 ? '<br><span class="text-xs font-normal">inkl. utbytte</span>' : ''}</td>
-  </tr>`;
-
-  // Transaksjonslogg
-  document.getElementById('tx-logg-body').innerHTML = alle.map(t => {
-    const verdi = t.antall * t.kurs;
-    const isKjøp    = t.type === 'kjøp';
-    const isUtbytte = t.type === 'utbytte';
-    const vergeFarge = isKjøp ? 'text-green-600 dark:text-green-400'
-                     : isUtbytte ? 'text-yellow-600 dark:text-yellow-400'
-                     : 'text-red-500';
-    const badgeKlasse = isKjøp    ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
-                      : isUtbytte ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400'
-                      : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400';
-    const typeLabel = isKjøp ? 'Kjøp' : isUtbytte ? 'Utbytte' : 'Salg';
-    const kursLabel = isUtbytte ? `${fmtKurs(t.kurs)}/aksje` : fmtKurs(t.kurs);
-    const [y, m, d] = t.dato.split('-');
-    return `<tr>
-      <td class="px-4 py-3 text-gray-500">${d}.${m}.${y}</td>
-      <td class="px-4 py-3 font-mono font-bold text-brand-700 dark:text-brand-400">${t.ticker}</td>
-      <td class="px-4 py-3 text-center"><span class="text-xs font-semibold px-2 py-0.5 rounded-full ${badgeKlasse}">${typeLabel}</span></td>
-      <td class="px-4 py-3 text-right">${t.antall}</td>
-      <td class="px-4 py-3 text-right">${kursLabel}</td>
-      <td class="px-4 py-3 text-right ${vergeFarge} font-semibold">${isKjøp ? '-' : '+'}${fmtKr(verdi)}</td>
-      <td class="px-4 py-3 text-center">
-        <button class="tx-slett-rad text-gray-400 hover:text-red-500 transition-colors p-1" data-ticker="${t.ticker}" data-id="${t.id}" aria-label="Slett transaksjon">
-          <svg class="w-4 h-4 pointer-events-none" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-        </button>
-      </td>
-    </tr>`;
-  }).join('');
-
-  // Klikk på kostbasis-rad → åpne modal
-  document.getElementById('tx-kostbasis-body').onclick = e => {
-    const rad = e.target.closest('[data-ticker]');
-    if (rad) { const a = alleAksjer.find(x => x.ticker === rad.dataset.ticker); if (a) visModal(a); }
-  };
-
-  // Slett enkelt transaksjon
-  document.getElementById('tx-logg-body').onclick = e => {
-    const btn = e.target.closest('.tx-slett-rad');
-    if (!btn) return;
-    const { ticker, id } = btn.dataset;
-    const txData = hentTransaksjoner();
-    if (txData[ticker]) {
-      txData[ticker] = txData[ticker].filter(t => t.id !== id);
-      if (txData[ticker].length === 0) delete txData[ticker];
-    }
-    lagreTransaksjoner(txData);
-    visTransaksjoner();
-    visPortefolje();
-  };
-}
-
-
-function initTransaksjoner() {
-  // Fyll dropdown med aksjer fra portefølje (og alle)
-  const sel = document.getElementById('tx-velg-aksje');
-  const fyllTxDropdown = () => {
-    const pf = hentPF();
-    const valgt = sel.value;
-    sel.innerHTML = '<option value="">Velg aksje…</option>';
-    const prio = alleAksjer.filter(a => pf[a.ticker]).sort((a, b) => a.ticker.localeCompare(b.ticker));
-    const rest = alleAksjer.filter(a => !pf[a.ticker]).sort((a, b) => a.ticker.localeCompare(b.ticker));
-    if (prio.length) {
-      const grp = document.createElement('optgroup'); grp.label = 'I portefølje';
-      prio.forEach(a => { const o = document.createElement('option'); o.value = a.ticker; o.textContent = `${a.ticker} – ${a.navn}`; grp.appendChild(o); });
-      sel.appendChild(grp);
-    }
-    const grp2 = document.createElement('optgroup'); grp2.label = 'Alle aksjer';
-    rest.forEach(a => { const o = document.createElement('option'); o.value = a.ticker; o.textContent = `${a.ticker} – ${a.navn}`; grp2.appendChild(o); });
-    sel.appendChild(grp2);
-    if (valgt) sel.value = valgt;
-  };
-  fyllTxDropdown();
-
-  // Sett dagens dato som default
-  document.getElementById('tx-dato').value = new Date().toISOString().slice(0, 10);
-
-  // Oppdater kurs-hint basert på type
-  const typeEl = document.getElementById('tx-type');
-  const kursInput = document.getElementById('tx-kurs');
-  const kursHint  = document.getElementById('tx-kurs-hint');
-  function oppdaterKursHint() {
-    if (typeEl.value === 'utbytte') {
-      kursInput.placeholder = 'Kr/aksje';
-      if (kursHint) kursHint.textContent = 'utbytte per aksje';
-    } else {
-      kursInput.placeholder = 'Kurs (kr)';
-      if (kursHint) kursHint.textContent = 'kurs per aksje';
-    }
-  }
-  typeEl.addEventListener('change', oppdaterKursHint);
-
-  document.getElementById('tx-legg-til').addEventListener('click', () => {
-    const ticker = document.getElementById('tx-velg-aksje').value;
-    const type   = document.getElementById('tx-type').value;
-    const dato   = document.getElementById('tx-dato').value;
-    const antall = parseInt(document.getElementById('tx-antall').value, 10);
-    const kurs   = parseFloat(document.getElementById('tx-kurs').value);
-    const feilEl = document.getElementById('tx-feil');
-
-    feilEl.classList.add('hidden');
-    if (!ticker) { feilEl.textContent = 'Velg en aksje.'; feilEl.classList.remove('hidden'); return; }
-    if (!dato)   { feilEl.textContent = 'Velg en dato.'; feilEl.classList.remove('hidden'); return; }
-    if (!antall || antall < 1) { feilEl.textContent = 'Skriv inn gyldig antall.'; feilEl.classList.remove('hidden'); return; }
-    if (!kurs   || kurs <= 0)  { feilEl.textContent = 'Skriv inn gyldig kurs.'; feilEl.classList.remove('hidden'); return; }
-
-    const txData = hentTransaksjoner();
-    if (!txData[ticker]) txData[ticker] = [];
-    txData[ticker].push({ id: Date.now().toString(), dato, antall, kurs, type });
-    txData[ticker].sort((a, b) => a.dato.localeCompare(b.dato));
-    lagreTransaksjoner(txData);
-
-    // Oppdater beholdning automatisk ved kjøp hvis ticker ikke er der fra før
-    const pf = hentPF();
-    if (type === 'kjøp') {
-      pf[ticker] = (pf[ticker] || 0) + antall;
-    } else if (type === 'salg' && pf[ticker]) {
-      pf[ticker] = Math.max(0, (pf[ticker] || 0) - antall);
-      if (pf[ticker] === 0) delete pf[ticker];
-    }
-    lagrePF(pf);
-
-    document.getElementById('tx-antall').value = '';
-    document.getElementById('tx-kurs').value   = '';
-    fyllTxDropdown();
-    visTransaksjoner();
-    visPortefolje();
-  });
-
-  document.getElementById('tx-slett-alle').addEventListener('click', () => {
-    if (!confirm('Slett alle transaksjoner?')) return;
-    lagreTransaksjoner({});
-    visTransaksjoner();
-    visPortefolje();
-  });
+  return `<div class="pt-2 space-y-2">
+    ${kostbasisHtml}
+    <div class="grid grid-cols-2 sm:grid-cols-5 gap-1.5">
+      <select class="pf-detail-type filter-input text-xs py-1.5">
+        <option value="kjøp">Kjøp</option>
+        <option value="salg">Salg</option>
+        <option value="utbytte">Utbytte</option>
+      </select>
+      <input type="date" class="pf-detail-dato filter-input text-xs py-1.5" value="${idag}" />
+      <input type="number" min="1" class="pf-detail-antall filter-input text-xs py-1.5" placeholder="Antall" />
+      <input type="number" min="0" step="0.01" class="pf-detail-kurs filter-input text-xs py-1.5" placeholder="Kurs (kr)" />
+      <button class="pf-detail-legg-til bg-brand-600 hover:bg-brand-700 text-white text-xs font-medium px-3 py-1.5 rounded-lg transition-colors" data-ticker="${ticker}">+ Legg til</button>
+    </div>
+    <div class="divide-y divide-gray-100 dark:divide-gray-800">${txLoggHtml}</div>
+  </div>`;
 }
 
 
@@ -252,20 +117,6 @@ function initPFSubTabs() {
 
 
 function initPortefolje() {
-  // Toggle for kostbasis/transaksjons-seksjonen
-  const txToggle  = document.getElementById('pf-tx-toggle');
-  const txInnhold = document.getElementById('pf-tx-innhold');
-  const txChevron = document.getElementById('pf-tx-chevron');
-  if (txToggle) {
-    txToggle.addEventListener('click', () => {
-      const aapen = txInnhold.classList.contains('hidden');
-      txInnhold.classList.toggle('hidden', !aapen);
-      txChevron.style.transform = aapen ? 'rotate(180deg)' : '';
-      txToggle.setAttribute('aria-expanded', aapen ? 'true' : 'false');
-      if (aapen) visTransaksjoner();
-    });
-  }
-
   document.getElementById('pf-legg-til').addEventListener('click', () => {
     const sel       = document.getElementById('pf-velg-aksje');
     const antallEl  = document.getElementById('pf-antall');
@@ -291,13 +142,8 @@ function initPortefolje() {
       txData[ticker].push({ id: Date.now().toString(), dato, antall, kurs, type: 'kjøp' });
       txData[ticker].sort((a, b) => a.dato.localeCompare(b.dato));
       lagreTransaksjoner(txData);
-      // Åpne seksjonen automatisk så brukeren ser resultatet
-      if (txInnhold?.classList.contains('hidden')) {
-        txInnhold.classList.remove('hidden');
-        if (txChevron) txChevron.style.transform = 'rotate(180deg)';
-        if (txToggle) txToggle.setAttribute('aria-expanded', 'true');
-      }
-      visTransaksjoner();
+      // Auto-åpne detail-raden for denne tickeren
+      _aapneDetailRader.add(ticker);
     }
 
     sel.value = '';
@@ -633,7 +479,6 @@ function visPortefolje() {
   const harBeholdning = alleBeholdning.length > 0;
   document.getElementById('pf-tom').classList.toggle('hidden', harBeholdning);
   document.getElementById('pf-beholdning-wrapper').classList.toggle('hidden', !harBeholdning);
-  document.getElementById('pf-tx-seksjon').classList.toggle('hidden', !harBeholdning);
   document.getElementById('pf-tidslinje-wrapper').classList.toggle('hidden', !harBeholdning);
   document.getElementById('pf-charts-wrapper').style.display = harBeholdning ? 'grid' : 'none';
   document.getElementById('pf-inntekt-wrapper').classList.toggle('hidden', !harBeholdning);
@@ -865,17 +710,12 @@ function visPortefolje() {
   lagrePortefoljeSnapshot(totalVerdi);
   visHistorikkKurve();
 
-  // ── KOSTBASIS + TRANSAKSJONSLOGG (oppdater hvis seksjonen er åpen) ─────────
-  const txInnholdEl = document.getElementById('pf-tx-innhold');
-  if (txInnholdEl && !txInnholdEl.classList.contains('hidden')) {
-    visTransaksjoner();
-  }
 
-  // ── BEHOLDNINGSTABELL ─────────────────────────────────────────────────────
+  // ── BEHOLDNINGSTABELL MED INLINE DETAIL-RADER ────────────────────────────
   const tbody = document.getElementById('pf-tabell-body');
   tbody.innerHTML = beholdning.map(a => {
-    const kb = beregnKostbasis(a.ticker);
-    const harKb = kb.antall > 0 && kb.totalKost > 0;
+    const kb      = beregnKostbasis(a.ticker);
+    const harKb   = kb.antall > 0 && kb.totalKost > 0;
     const marked  = a.antall * (a.pris || 0);
     const gevinst = harKb ? marked - kb.totalKost : null;
     const gevPct  = harKb && kb.totalKost > 0 ? (gevinst / kb.totalKost * 100) : null;
@@ -886,8 +726,9 @@ function visPortefolje() {
     const gevTd = gevinst !== null
       ? `<span class="font-semibold ${gevFarge}">${gevinst >= 0 ? '+' : ''}${fmtKr(gevinst)}</span><br><span class="text-xs ${gevFarge}">${gevPct >= 0 ? '+' : ''}${gevPct.toFixed(1)}%</span>`
       : '—';
+    const isOpen = _aapneDetailRader.has(a.ticker);
     return `
-    <tr class="table-row cursor-pointer" data-ticker="${a.ticker}">
+    <tr class="table-row" data-ticker="${a.ticker}">
       <td class="px-4 py-3 font-mono font-bold text-brand-700 dark:text-brand-400">${a.ticker}</td>
       <td class="px-4 py-3 hidden sm:table-cell text-gray-600 dark:text-gray-400 text-sm">${a.navn}</td>
       <td class="px-4 py-3 text-right">
@@ -902,9 +743,19 @@ function visPortefolje() {
       <td class="px-4 py-3 text-center hidden sm:table-cell text-gray-500 text-sm">${a.ex_dato ? formaterDato(a.ex_dato) : '—'}</td>
       <td class="px-4 py-3 text-center hidden sm:table-cell"><span class="frekvens-badge">${a.frekvens}</span></td>
       <td class="px-4 py-3 text-center">
-        <button class="pf-slett text-gray-400 hover:text-red-500 transition-colors p-1" data-ticker="${a.ticker}" title="Fjern fra portefølje" aria-label="Slett transaksjon">
-          <svg class="w-4 h-4 pointer-events-none" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-        </button>
+        <div class="flex items-center justify-center gap-1">
+          <button class="pf-detail-toggle p-1 text-gray-400 hover:text-brand-500 transition-colors" data-ticker="${a.ticker}" aria-label="Vis transaksjoner" aria-expanded="${isOpen}">
+            <svg class="w-4 h-4 pointer-events-none transition-transform${isOpen ? ' rotate-180' : ''}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <button class="pf-slett p-1 text-gray-400 hover:text-red-500 transition-colors" data-ticker="${a.ticker}" aria-label="Fjern">
+            <svg class="w-4 h-4 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+          </button>
+        </div>
+      </td>
+    </tr>
+    <tr class="pf-detail-rad${isOpen ? '' : ' hidden'}" data-for="${a.ticker}">
+      <td colspan="10" class="px-4 pb-4 bg-gray-50 dark:bg-gray-900/30 border-b border-gray-100 dark:border-gray-800">
+        ${byggDetailHtml(a.ticker, kb, marked)}
       </td>
     </tr>`;
   }).join('');
@@ -916,24 +767,83 @@ function visPortefolje() {
       <td class="px-4 py-3 text-right text-sm text-gray-500">${alleBeholdning.reduce((s,a)=>s+a.antall,0)} aksjer</td>
       <td></td>
       <td class="px-4 py-3 text-right text-brand-700 dark:text-brand-400">${fmtKr(totalAr)}</td>
-      <td colspan="3"></td>
+      <td colspan="5"></td>
     </tr>`;
 
-  // Event delegation: klikk på rad → modal (ikke slett-knapp eller input)
+  // Event delegation for hele tbody
   tbody.onclick = e => {
-    const btn = e.target.closest('.pf-slett');
-    if (btn) {
+    // Expand/kollaps detail-rad
+    const toggleBtn = e.target.closest('.pf-detail-toggle');
+    if (toggleBtn) {
+      const ticker = toggleBtn.dataset.ticker;
+      const isOpen = _aapneDetailRader.has(ticker);
+      if (isOpen) _aapneDetailRader.delete(ticker); else _aapneDetailRader.add(ticker);
+      const rad     = tbody.querySelector(`.pf-detail-rad[data-for="${ticker}"]`);
+      const chevron = toggleBtn.querySelector('svg');
+      if (rad)     rad.classList.toggle('hidden', isOpen);
+      if (chevron) chevron.style.transform = isOpen ? '' : 'rotate(180deg)';
+      toggleBtn.setAttribute('aria-expanded', !isOpen);
+      return;
+    }
+    // Legg til transaksjon fra detail-rad
+    const leggTilBtn = e.target.closest('.pf-detail-legg-til');
+    if (leggTilBtn) {
+      const ticker  = leggTilBtn.dataset.ticker;
+      const rad     = leggTilBtn.closest('.pf-detail-rad');
+      const type    = rad.querySelector('.pf-detail-type').value;
+      const dato    = rad.querySelector('.pf-detail-dato').value;
+      const antall  = parseInt(rad.querySelector('.pf-detail-antall').value, 10);
+      const kurs    = parseFloat(rad.querySelector('.pf-detail-kurs').value);
+      if (!dato || !antall || antall < 1 || !kurs || kurs <= 0) return;
+      const txData = hentTransaksjoner();
+      if (!txData[ticker]) txData[ticker] = [];
+      txData[ticker].push({ id: Date.now().toString(), dato, antall, kurs, type });
+      txData[ticker].sort((a, b) => a.dato.localeCompare(b.dato));
+      lagreTransaksjoner(txData);
+      // Oppdater beholdning automatisk for kjøp/salg
       const pf2 = hentPF();
-      delete pf2[btn.dataset.ticker];
+      if (type === 'kjøp') {
+        pf2[ticker] = (pf2[ticker] || 0) + antall;
+      } else if (type === 'salg' && pf2[ticker]) {
+        pf2[ticker] = Math.max(0, (pf2[ticker] || 0) - antall);
+        if (pf2[ticker] === 0) delete pf2[ticker];
+      }
+      lagrePF(pf2);
+      _aapneDetailRader.add(ticker);
+      visPortefolje();
+      return;
+    }
+    // Slett transaksjon fra detail-rad
+    const txSlett = e.target.closest('.pf-tx-slett');
+    if (txSlett) {
+      const { ticker, id } = txSlett.dataset;
+      const txData = hentTransaksjoner();
+      if (txData[ticker]) {
+        txData[ticker] = txData[ticker].filter(t => String(t.id) !== String(id));
+        if (!txData[ticker].length) delete txData[ticker];
+      }
+      lagreTransaksjoner(txData);
+      _aapneDetailRader.add(ticker);
+      visPortefolje();
+      return;
+    }
+    // Fjern aksje fra portefølje
+    const slett = e.target.closest('.pf-slett');
+    if (slett) {
+      const pf2 = hentPF();
+      delete pf2[slett.dataset.ticker];
       lagrePF(pf2);
       visPortefolje();
       return;
     }
-    const tr = e.target.closest('tr[data-ticker]');
-    if (!tr || e.target.closest('input, button')) return;
-    const aksje = alleAksjer.find(a => a.ticker === tr.dataset.ticker);
-    if (aksje) visModal(aksje);
+    // Rad-klikk → vis modal (ikke på input/knapp)
+    const tr = e.target.closest('tr[data-ticker].table-row');
+    if (tr && !e.target.closest('input, button')) {
+      const aksje = alleAksjer.find(a => a.ticker === tr.dataset.ticker);
+      if (aksje) visModal(aksje);
+    }
   };
+
   tbody.addEventListener('change', e => {
     if (!e.target.matches('input[data-ticker]')) return;
     const v = parseInt(e.target.value, 10);
