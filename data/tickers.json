@@ -637,5 +637,86 @@
     "bors": "Oslo Børs",
     "beskrivelse": "Ledende leverandør av teknologi og tjenester til havbruksnæringen globalt. Sterk posisjon i vekstmarkedet for oppdrettsteknologi.",
     "navn_dnb": "AKVA Group ASA"
+  },
+  {
+    "ticker": "SVEG",
+    "ticker_yf": "SVEG.OL",
+    "navn": "Sparebanken Vest",
+    "sektor": "Finans",
+    "bors": "Oslo Børs",
+    "beskrivelse": "Vestlandets ledende sparebank med sterk posisjon i Bergen og Hordaland. Stabil inntjening og god utbyttehistorikk.",
+    "navn_dnb": "Sparebanken Vest"
+  },
+  {
+    "ticker": "SNI",
+    "ticker_yf": "SNI.OL",
+    "navn": "Stolt-Nielsen Limited",
+    "sektor": "Shipping",
+    "bors": "Oslo Børs",
+    "beskrivelse": "Internasjonalt konsern innen kjemikalietankere, tankterminalvirksomhet og akvakultur. Diversifisert og solid utbyttebetaler over mange år.",
+    "navn_dnb": "Stolt-Nielsen"
+  },
+  {
+    "ticker": "BELS",
+    "ticker_yf": "BELS.OL",
+    "navn": "Belships ASA",
+    "sektor": "Shipping",
+    "bors": "Oslo Børs",
+    "beskrivelse": "Moderne tørrbulkrederi med Supramax/Ultramax-skip. Sterk kontantstrøm og liberal utbyttepolitikk koblet til shippingratene.",
+    "navn_dnb": "Belships ASA"
+  },
+  {
+    "ticker": "NPRO",
+    "ticker_yf": "NPRO.OL",
+    "navn": "Norwegian Property ASA",
+    "sektor": "Eiendom",
+    "bors": "Oslo Børs",
+    "beskrivelse": "Kommersielt eiendomsselskap med kontorbygg i Oslo-regionen. Stabil leieinntekt fra lange kontrakter og halvårlige utbetalinger.",
+    "navn_dnb": "Norwegian Property ASA"
+  },
+  {
+    "ticker": "MEDI",
+    "ticker_yf": "MEDI.OL",
+    "navn": "Medistim ASA",
+    "sektor": "Helsevern",
+    "bors": "Oslo Børs",
+    "beskrivelse": "Norsk medisinsk teknologiselskap med ultralyd- og flowmålingsprodukter for hjertekirurgi. Lang og konsistent utbyttehistorikk.",
+    "navn_dnb": "Medistim ASA"
+  },
+  {
+    "ticker": "ATEA",
+    "ticker_yf": "ATEA.OL",
+    "navn": "Atea ASA",
+    "sektor": "Informasjonsteknologi",
+    "bors": "Oslo Børs",
+    "beskrivelse": "Nordens ledende IT-infrastrukturleverandør. Distribuerer hardware, software og tjenester til offentlig og privat sektor. Stabilt og voksende utbytte.",
+    "navn_dnb": "Atea ASA"
+  },
+  {
+    "ticker": "BOUV",
+    "ticker_yf": "BOUV.OL",
+    "navn": "Bouvet ASA",
+    "sektor": "Informasjonsteknologi",
+    "bors": "Oslo Børs",
+    "beskrivelse": "Norsk IT- og digitalrådgivningsselskap. Høy utbyttegrad og konsistent vekst. Lavt kapitalintensivt og ansattedrevet.",
+    "navn_dnb": "Bouvet ASA"
+  },
+  {
+    "ticker": "TRE",
+    "ticker_yf": "TRE.OL",
+    "navn": "Treasure ASA",
+    "sektor": "Finans",
+    "bors": "Oslo Børs",
+    "beskrivelse": "Investeringsselskap med majoritetseierandel i Golden Ocean Group. Utbytte speiler i stor grad Golden Oceans utbetalinger.",
+    "navn_dnb": "Treasure ASA"
+  },
+  {
+    "ticker": "AKBM",
+    "ticker_yf": "AKBM.OL",
+    "navn": "Aker BioMarine ASA",
+    "sektor": "Havbruk",
+    "bors": "Oslo Børs",
+    "beskrivelse": "Norsk krill-selskap som høster, foredler og selger krillolje og krilmel til menneskelig ernæring og akvakultur.",
+    "navn_dnb": "Aker BioMarine ASA"
   }
 ]
