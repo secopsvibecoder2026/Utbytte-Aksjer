@@ -349,16 +349,19 @@ function oppdaterPersonligSammendrag(pf, fav) {
   const om3 = new Date(idag); om3.setDate(om3.getDate() + 3);
   const alleTickere = new Set([...Object.keys(pf), ...fav]);
 
-  // Kort 1: Ex-dato denne uken (fra portefølje + favoritter)
-  const exDenneUken = alleAksjer.filter(a =>
-    alleTickere.has(a.ticker) && a.ex_dato &&
-    new Date(a.ex_dato) >= idag && new Date(a.ex_dato) <= om7
-  ).sort((a, b) => new Date(a.ex_dato) - new Date(b.ex_dato));
-  document.getElementById('stat-card1-label').textContent = 'Ex-dato denne uken';
-  document.getElementById('stat-antall').textContent = exDenneUken.length || '—';
-  document.getElementById('stat-hoyest-navn').textContent = exDenneUken.length
-    ? exDenneUken.slice(0,3).map(a => a.ticker).join(', ') + (exDenneUken.length > 3 ? '…' : '')
-    : 'Ingen denne uken';
+  // Kort 1: Ex-datoer denne måneden (fra portefølje + favoritter)
+  const nå = new Date();
+  const denneMåneden = alleAksjer.filter(a => {
+    if (!alleTickere.has(a.ticker) || !a.ex_dato) return false;
+    const d = new Date(a.ex_dato);
+    return d >= idag && d.getMonth() === nå.getMonth() && d.getFullYear() === nå.getFullYear();
+  }).sort((a, b) => new Date(a.ex_dato) - new Date(b.ex_dato));
+  const månedNavn = nå.toLocaleString('nb-NO', { month: 'long' });
+  document.getElementById('stat-card1-label').textContent = 'Ex-datoer i ' + månedNavn;
+  document.getElementById('stat-antall').textContent = denneMåneden.length || '—';
+  document.getElementById('stat-hoyest-navn').textContent = denneMåneden.length
+    ? denneMåneden.slice(0,3).map(a => a.ticker).join(', ') + (denneMåneden.length > 3 ? ` +${denneMåneden.length - 3}` : '')
+    : 'Ingen denne måneden';
 
   // Kort 2: Neste utbetaling fra portefølje
   const nesteBetaling = alleAksjer
@@ -375,19 +378,17 @@ function oppdaterPersonligSammendrag(pf, fav) {
     document.getElementById('stat-hoyest-navn').textContent = 'Ingen planlagt';
   }
 
-  // Kort 3: Siste sjanse (ex ≤ 3 dager, yield ≥ 5%)
-  const sistesjanse = alleAksjer.filter(a =>
-    a.ex_dato && a.utbytte_yield >= 5 &&
-    new Date(a.ex_dato) >= idag && new Date(a.ex_dato) <= om3
-  ).sort((a, b) => b.utbytte_yield - a.utbytte_yield)[0];
-  document.getElementById('stat-card3-label').textContent = 'Siste sjanse';
-  if (sistesjanse) {
-    const dager = Math.ceil((new Date(sistesjanse.ex_dato) - idag) / 86400000);
-    document.getElementById('stat-snitt-yield').textContent = sistesjanse.utbytte_yield.toFixed(1) + '%';
-    document.getElementById('stat-snitt-sub').textContent = sistesjanse.ticker + ' · ex ' + (dager === 0 ? 'i dag' : `om ${dager}d`);
+  // Kort 3: Høyeste yield i portefølje
+  const pfMedYield = alleAksjer
+    .filter(a => pf[a.ticker] && a.utbytte_yield > 0)
+    .sort((a, b) => b.utbytte_yield - a.utbytte_yield);
+  document.getElementById('stat-card3-label').textContent = 'Høyeste yield';
+  if (pfMedYield.length) {
+    document.getElementById('stat-snitt-yield').textContent = pfMedYield[0].utbytte_yield.toFixed(2) + '%';
+    document.getElementById('stat-snitt-sub').textContent = pfMedYield[0].ticker + ' · ' + pfMedYield[0].navn.split(' ')[0];
   } else {
     document.getElementById('stat-snitt-yield').textContent = '—';
-    document.getElementById('stat-snitt-sub').textContent = 'Ingen innen 3 dager';
+    document.getElementById('stat-snitt-sub').textContent = 'Legg til aksjer';
   }
 
   // Kort 4: Neste ex-dato (generisk, uendret)
