@@ -20,10 +20,18 @@ const PRECACHE = [
 
 // ── INSTALL ───────────────────────────────────────────────────────────────────
 self.addEventListener('install', event => {
+  // Bruker individuelle put() i stedet for addAll() slik at én feilende fil
+  // ikke aborter hele installasjonen og setter gammel SW i lås.
   event.waitUntil(
-    caches.open(CACHE)
-      .then(cache => cache.addAll(PRECACHE))
-      .then(() => self.skipWaiting())
+    caches.open(CACHE).then(cache =>
+      Promise.allSettled(
+        PRECACHE.map(url =>
+          fetch(new Request(url, { cache: 'reload' }))
+            .then(resp => { if (resp.ok) cache.put(url, resp); })
+            .catch(() => {})
+        )
+      )
+    ).then(() => self.skipWaiting())
   );
 });
 
@@ -58,10 +66,11 @@ self.addEventListener('fetch', event => {
     return;
   }
 
-  // 2. HTML-navigasjon: nettverks-first — brukere ser alltid siste versjon
+  // 2. HTML-navigasjon: nettverks-first med cache-bypass — brukere ser alltid
+  //    siste versjon, og omgår nettleserens egen HTTP-cache (max-age frå GitHub Pages)
   if (request.mode === 'navigate') {
     event.respondWith(
-      fetch(request)
+      fetch(new Request(request, { cache: 'no-cache' }))
         .then(resp => {
           if (resp.ok) caches.open(CACHE).then(c => c.put(request, resp.clone()));
           return resp;
