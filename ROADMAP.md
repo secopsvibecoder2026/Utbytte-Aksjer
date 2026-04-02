@@ -10,6 +10,15 @@ Fullførte funksjoner er dokumentert i [ROADMAP_COMPLETED.md](ROADMAP_COMPLETED.
 
 ### Teknisk gjeld
 
+#### T6. Testmiljø (staging-site) 🧪
+**Prioritet: Medium**
+
+- [ ] Opprett `dev`-branch for løpende utvikling
+- [ ] Koble repo til Netlify (gratis) — deploy fra `dev`-branch
+- [ ] Staging-URL: f.eks. `exday-staging.netlify.app`
+- [ ] Produksjon (`main`) forblir på GitHub Pages / exday.no
+- [ ] Vurdere automatisk preview-URL per pull request via Netlify
+
 #### T4b. Validering av datapipeline 🧪
 **Prioritet: Medium**
 
