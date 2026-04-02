@@ -50,6 +50,7 @@ function byggDetailHtml(ticker, kb, marked) {
 
   const idag = new Date().toISOString().slice(0, 10);
   const beholdningAntall = hentPF()[ticker] || '';
+  const prefillKurs = kb && kb.vwap > 0 ? kb.vwap.toFixed(2) : '';
 
   const txLoggHtml = txListe.length > 0
     ? txListe.map(t => {
@@ -84,7 +85,7 @@ function byggDetailHtml(ticker, kb, marked) {
       </select>
       <input type="date" class="pf-detail-dato filter-input text-xs py-1.5" value="${idag}" />
       <input type="number" min="1" class="pf-detail-antall filter-input text-xs py-1.5" placeholder="Antall" value="${beholdningAntall}" />
-      <input type="number" min="0" step="0.01" class="pf-detail-kurs filter-input text-xs py-1.5" placeholder="Kurs / GAV (kr)" />
+      <input type="number" min="0" step="0.01" class="pf-detail-kurs filter-input text-xs py-1.5" placeholder="Kurs / GAV (kr)" value="${prefillKurs}" />
       <button class="pf-detail-legg-til bg-brand-600 hover:bg-brand-700 text-white text-xs font-medium px-3 py-1.5 rounded-lg transition-colors" data-ticker="${ticker}">+ Legg til</button>
     </div>
     <div class="divide-y divide-gray-100 dark:divide-gray-800">${txLoggHtml}</div>
@@ -792,24 +793,16 @@ function visPortefolje() {
       const ticker  = leggTilBtn.dataset.ticker;
       const rad     = leggTilBtn.closest('.pf-detail-rad');
       const type    = rad.querySelector('.pf-detail-type').value;
-      const dato    = rad.querySelector('.pf-detail-dato').value;
+      const datoRaw = rad.querySelector('.pf-detail-dato').value;
+      const dato    = datoRaw || new Date().toISOString().slice(0, 10);
       const antall  = parseInt(rad.querySelector('.pf-detail-antall').value, 10);
       const kurs    = parseFloat(rad.querySelector('.pf-detail-kurs').value);
-      if (!dato || !antall || antall < 1 || !kurs || kurs <= 0) return;
+      if (!antall || antall < 1 || !kurs || kurs <= 0) return;
       const txData = hentTransaksjoner();
       if (!txData[ticker]) txData[ticker] = [];
       txData[ticker].push({ id: Date.now().toString(), dato, antall, kurs, type });
       txData[ticker].sort((a, b) => a.dato.localeCompare(b.dato));
       lagreTransaksjoner(txData);
-      // Oppdater beholdning automatisk for kjøp/salg
-      const pf2 = hentPF();
-      if (type === 'kjøp') {
-        pf2[ticker] = (pf2[ticker] || 0) + antall;
-      } else if (type === 'salg' && pf2[ticker]) {
-        pf2[ticker] = Math.max(0, (pf2[ticker] || 0) - antall);
-        if (pf2[ticker] === 0) delete pf2[ticker];
-      }
-      lagrePF(pf2);
       _aapneDetailRader.add(ticker);
       visPortefolje();
       return;
