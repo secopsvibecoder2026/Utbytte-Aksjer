@@ -49,6 +49,7 @@ function byggDetailHtml(ticker, kb, marked) {
     </div>` : '';
 
   const idag = new Date().toISOString().slice(0, 10);
+  const beholdningAntall = hentPF()[ticker] || '';
 
   const txLoggHtml = txListe.length > 0
     ? txListe.map(t => {
@@ -82,8 +83,8 @@ function byggDetailHtml(ticker, kb, marked) {
         <option value="utbytte">Utbytte</option>
       </select>
       <input type="date" class="pf-detail-dato filter-input text-xs py-1.5" value="${idag}" />
-      <input type="number" min="1" class="pf-detail-antall filter-input text-xs py-1.5" placeholder="Antall" />
-      <input type="number" min="0" step="0.01" class="pf-detail-kurs filter-input text-xs py-1.5" placeholder="Kurs (kr)" />
+      <input type="number" min="1" class="pf-detail-antall filter-input text-xs py-1.5" placeholder="Antall" value="${beholdningAntall}" />
+      <input type="number" min="0" step="0.01" class="pf-detail-kurs filter-input text-xs py-1.5" placeholder="Kurs / GAV (kr)" />
       <button class="pf-detail-legg-til bg-brand-600 hover:bg-brand-700 text-white text-xs font-medium px-3 py-1.5 rounded-lg transition-colors" data-ticker="${ticker}">+ Legg til</button>
     </div>
     <div class="divide-y divide-gray-100 dark:divide-gray-800">${txLoggHtml}</div>
