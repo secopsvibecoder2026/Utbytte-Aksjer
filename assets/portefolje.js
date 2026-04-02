@@ -93,6 +93,30 @@ function byggDetailHtml(ticker, kb, marked) {
 }
 
 
+const STATS_TABS = ['oversikt', 'inntekt', 'beholdning', 'sektorer'];
+let aktivStatsTab = 'oversikt';
+
+function byttStatsSubTab(tab) {
+  aktivStatsTab = tab;
+  document.querySelectorAll('.stats-sub-btn').forEach(b => {
+    const aktiv = b.dataset.statsTab === tab;
+    b.classList.toggle('bg-brand-600', aktiv);
+    b.classList.toggle('text-white', aktiv);
+    b.classList.toggle('text-gray-500', !aktiv);
+    b.classList.toggle('dark:text-gray-400', !aktiv);
+    b.classList.toggle('hover:bg-gray-100', !aktiv);
+    b.classList.toggle('dark:hover:bg-gray-800', !aktiv);
+  });
+  STATS_TABS.forEach(t => {
+    const el = document.getElementById('stats-sub-' + t);
+    if (el) el.classList.toggle('hidden', t !== tab);
+  });
+  // Tegn charts på nytt når relevant tab aktiveres
+  if ((tab === 'beholdning' || tab === 'sektorer') && window._pfSisteData) {
+    visCharts(window._pfSisteData.beholdning, window._pfSisteData.totalAr);
+  }
+}
+
 function initPFSubTabs() {
   function byttSubTab(tab) {
     document.querySelectorAll('.pf-sub-btn').forEach(b => {
@@ -114,6 +138,8 @@ function initPFSubTabs() {
   document.getElementById('tab-portfolio').addEventListener('click', e => {
     const btn = e.target.closest('.pf-sub-btn');
     if (btn) byttSubTab(btn.dataset.pfTab);
+    const sBtn = e.target.closest('.stats-sub-btn');
+    if (sBtn) byttStatsSubTab(sBtn.dataset.statsTab);
   });
 }
 
@@ -482,9 +508,13 @@ function visPortefolje() {
   document.getElementById('pf-tom').classList.toggle('hidden', harBeholdning);
   document.getElementById('pf-beholdning-wrapper').classList.toggle('hidden', !harBeholdning);
   document.getElementById('pf-tidslinje-wrapper').classList.toggle('hidden', !harBeholdning);
-  document.getElementById('pf-charts-wrapper').style.display = harBeholdning ? 'grid' : 'none';
   document.getElementById('pf-inntekt-wrapper').classList.toggle('hidden', !harBeholdning);
   document.getElementById('pf-statistikk-tom').classList.toggle('hidden', harBeholdning);
+  // Vis/skjul stats-sub-tabs og sett standard til oversikt ved første lasting
+  STATS_TABS.forEach(t => {
+    const el = document.getElementById('stats-sub-' + t);
+    if (el) el.classList.toggle('hidden', t !== aktivStatsTab);
+  });
   oppdaterSammendrag();
 
   if (!harBeholdning) {
@@ -906,16 +936,28 @@ function visPortefolje() {
       </div>`;
   }).join('');
 
-  visCharts(alleBeholdning, totalAr);
+  // Lagre for lazy chart-tegning ved tab-bytte
+  window._pfSisteData = { beholdning: alleBeholdning, totalAr };
+  // Tegn charts kun om aktiv tab er beholdning eller sektorer
+  if (aktivStatsTab === 'beholdning' || aktivStatsTab === 'sektorer') {
+    visCharts(alleBeholdning, totalAr);
+  } else {
+    // Skjul charts-wrapper hvis feil tab er aktiv
+    const cw = document.getElementById('pf-charts-wrapper');
+    if (cw) cw.style.display = 'none';
+  }
 }
 
 
 function visCharts(beholdning, totalAr) {
   const wrapper = document.getElementById('pf-charts-wrapper');
-  if (!beholdning.length || !totalAr) { wrapper.style.display = 'none'; return; }
-  wrapper.style.display = 'grid';
+  if (!beholdning.length || !totalAr) { if (wrapper) wrapper.style.display = 'none'; return; }
+  if (wrapper) wrapper.style.display = 'grid';
+  const visBeholdning = aktivStatsTab === 'beholdning';
+  const visSektorer   = aktivStatsTab === 'sektorer';
 
-  // ── 1. SEKTOR-DONUT ────────────────────────────────────────────────────
+  // ── 1. SEKTOR-DONUT (kun på Sektorer-tab) ─────────────────────────────
+  if (!visSektorer && !visBeholdning) return;
   const sektorMap = {};
   beholdning.forEach(a => {
     sektorMap[a.sektor] = (sektorMap[a.sektor] || 0) + a.forv_ar;
@@ -948,11 +990,14 @@ function visCharts(beholdning, totalAr) {
     </div>`;
   }).join('');
 
-  document.getElementById('pf-sektor-chart').innerHTML = `
-    <div class="flex flex-col sm:flex-row items-center gap-4">
-      <svg viewBox="0 0 ${size} ${size}" width="${size}" height="${size}" class="shrink-0">${paths}</svg>
-      <div class="space-y-1.5 flex-1 min-w-0">${legend}</div>
-    </div>`;
+  if (visSektorer) {
+    document.getElementById('pf-sektor-chart').innerHTML = `
+      <div class="flex flex-col sm:flex-row items-center gap-4">
+        <svg viewBox="0 0 ${size} ${size}" width="${size}" height="${size}" class="shrink-0">${paths}</svg>
+        <div class="space-y-1.5 flex-1 min-w-0">${legend}</div>
+      </div>`;
+  }
+  if (!visBeholdning) return;
 
   // ── 2. TOPP BIDRAGSYTERE ───────────────────────────────────────────────
   const topp = [...beholdning].sort((a, b) => b.forv_ar - a.forv_ar).slice(0, 8);

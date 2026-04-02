@@ -585,6 +585,23 @@
       <!-- ── STATISTIKK ──────────────────────────────────────────────────────── -->
       <div id="pf-sub-statistikk" class="hidden space-y-4">
 
+        <!-- Stats under-tab nav -->
+        <div class="flex gap-1 overflow-x-auto pb-0.5 scrollbar-hide">
+          <button class="stats-sub-btn px-3 py-1.5 text-sm font-medium rounded-lg bg-brand-600 text-white transition-colors whitespace-nowrap" data-stats-tab="oversikt">Oversikt</button>
+          <button class="stats-sub-btn px-3 py-1.5 text-sm font-medium rounded-lg text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors whitespace-nowrap" data-stats-tab="inntekt">Inntekt</button>
+          <button class="stats-sub-btn px-3 py-1.5 text-sm font-medium rounded-lg text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors whitespace-nowrap" data-stats-tab="beholdning">Beholdning</button>
+          <button class="stats-sub-btn px-3 py-1.5 text-sm font-medium rounded-lg text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors whitespace-nowrap" data-stats-tab="sektorer">Sektorer</button>
+        </div>
+
+        <!-- Tom tilstand Statistikk -->
+        <div id="pf-statistikk-tom" class="hidden text-center py-10 text-gray-400 dark:text-gray-600">
+          <p class="text-sm">Legg til aksjer i Beholdning for å se statistikk.</p>
+          <button class="pf-sub-btn mt-3 text-xs text-brand-600 dark:text-brand-400 hover:underline font-medium" data-pf-tab="beholdning">Gå til Beholdning →</button>
+        </div>
+
+        <!-- ── OVERSIKT ── -->
+        <div id="stats-sub-oversikt" class="space-y-4">
+
         <!-- Sammendragskort -->
         <section class="grid grid-cols-2 sm:grid-cols-3 gap-3">
           <div class="stat-card">
@@ -702,6 +719,11 @@
           </div>
         </div>
 
+        </div><!-- /stats-sub-oversikt -->
+
+        <!-- ── INNTEKT ── -->
+        <div id="stats-sub-inntekt" class="hidden space-y-4">
+
         <!-- Historisk porteføljeutvikling -->
         <div id="pf-historikk-wrapper" class="hidden bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4 shadow-sm">
           <div class="flex items-center justify-between mb-3">
@@ -748,27 +770,29 @@
           <div id="pf-tidslinje" class="space-y-2"></div>
         </div>
 
-        <!-- Diagrammer -->
-        <div id="pf-charts-wrapper" style="display:none" class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        </div><!-- /stats-sub-inntekt -->
+
+        <!-- ── BEHOLDNING ── -->
+        <div id="stats-sub-beholdning" class="hidden space-y-4">
+          <div id="pf-charts-wrapper" style="display:none" class="grid grid-cols-1 gap-4">
+            <div class="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4 shadow-sm">
+              <h3 class="font-semibold text-sm mb-4">Største bidragsytere</h3>
+              <div id="pf-topp-chart" class="space-y-2"></div>
+            </div>
+            <div class="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4 shadow-sm">
+              <h3 class="font-semibold text-sm mb-4">Utbetalingsfrekvens</h3>
+              <div id="pf-frekvens-chart" class="flex flex-wrap gap-3"></div>
+            </div>
+          </div>
+        </div><!-- /stats-sub-beholdning -->
+
+        <!-- ── SEKTORER ── -->
+        <div id="stats-sub-sektorer" class="hidden space-y-4">
           <div class="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4 shadow-sm">
             <h3 class="font-semibold text-sm mb-4">Sektordiversifisering</h3>
             <div id="pf-sektor-chart"></div>
           </div>
-          <div class="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4 shadow-sm">
-            <h3 class="font-semibold text-sm mb-4">Største bidragsytere</h3>
-            <div id="pf-topp-chart" class="space-y-2"></div>
-          </div>
-          <div class="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4 shadow-sm lg:col-span-2">
-            <h3 class="font-semibold text-sm mb-4">Utbetalingsfrekvens</h3>
-            <div id="pf-frekvens-chart" class="flex flex-wrap gap-3"></div>
-          </div>
-        </div>
-
-        <!-- Tom tilstand Statistikk -->
-        <div id="pf-statistikk-tom" class="hidden text-center py-10 text-gray-400 dark:text-gray-600">
-          <p class="text-sm">Legg til aksjer i Beholdning for å se statistikk.</p>
-          <button class="pf-sub-btn mt-3 text-xs text-brand-600 dark:text-brand-400 hover:underline font-medium" data-pf-tab="beholdning">Gå til Beholdning →</button>
-        </div>
+        </div><!-- /stats-sub-sektorer -->
 
       </div>
 
