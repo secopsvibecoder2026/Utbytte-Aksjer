@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 851 315" width="851" height="315">
+  <!-- Background -->
+  <rect width="851" height="315" fill="#0F172A"/>
+
+  <!-- Subtle grid pattern -->
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1E293B" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <rect width="851" height="315" fill="url(#grid)" opacity="0.6"/>
+
+  <!-- Teal accent bar top -->
+  <rect width="851" height="4" fill="#14B8A6"/>
+
+  <!-- Decorative chart bars right side -->
+  <g opacity="0.08">
+    <rect x="590" y="80" width="36" height="155" rx="6" fill="#14B8A6"/>
+    <rect x="638" y="115" width="36" height="120" rx="6" fill="#14B8A6"/>
+    <rect x="686" y="60" width="36" height="175" rx="6" fill="#14B8A6"/>
+    <rect x="734" y="95" width="36" height="140" rx="6" fill="#14B8A6"/>
+    <rect x="782" y="50" width="36" height="185" rx="6" fill="#14B8A6"/>
+  </g>
+
+  <!-- Glow blob behind icon -->
+  <ellipse cx="157" cy="157" rx="90" ry="90" fill="#14B8A6" opacity="0.06"/>
+
+  <!-- exday icon (scaled up, centered left) -->
+  <g transform="translate(97, 97) scale(1.33)">
+    <rect x="0" y="0" width="90" height="90" rx="18" fill="#14B8A6" opacity="0.15"/>
+    <rect x="0" y="0" width="90" height="90" rx="18" fill="none" stroke="#14B8A6" stroke-width="2"/>
+    <!-- Teal top bar -->
+    <line x1="12" y1="18" x2="78" y2="18" stroke="#14B8A6" stroke-width="12" stroke-linecap="round"/>
+    <!-- X shape -->
+    <line x1="24" y1="34" x2="66" y2="74" stroke="#FFFFFF" stroke-width="8" stroke-linecap="round"/>
+    <line x1="66" y1="34" x2="24" y2="74" stroke="#FFFFFF" stroke-width="8" stroke-linecap="round"/>
+    <!-- Dots on bar -->
+    <circle cx="24" cy="18" r="4" fill="#0F172A"/>
+    <circle cx="66" cy="18" r="4" fill="#0F172A"/>
+  </g>
+
+  <!-- exday wordmark -->
+  <text x="282" y="135" font-family="ui-sans-serif,system-ui,sans-serif" font-size="68" font-weight="800" fill="#FFFFFF" letter-spacing="-2">ex<tspan fill="#14B8A6">day</tspan></text>
+
+  <!-- Tagline -->
+  <text x="284" y="174" font-family="ui-sans-serif,system-ui,sans-serif" font-size="22" fill="#94A3B8" letter-spacing="0.5">Norske utbytteaksjer — ex-datoer, yield og historikk</text>
+
+  <!-- Divider -->
+  <line x1="284" y1="200" x2="560" y2="200" stroke="#1E293B" stroke-width="1"/>
+
+  <!-- Stat pills -->
+  <rect x="284" y="218" width="130" height="42" rx="8" fill="#1E293B"/>
+  <text x="349" y="235" font-family="ui-sans-serif,system-ui,sans-serif" font-size="10" fill="#14B8A6" text-anchor="middle" font-weight="700" letter-spacing="1">AKSJER</text>
+  <text x="349" y="252" font-family="ui-sans-serif,system-ui,sans-serif" font-size="18" fill="#FFFFFF" text-anchor="middle" font-weight="700">100+</text>
+
+  <rect x="426" y="218" width="130" height="42" rx="8" fill="#1E293B"/>
+  <text x="491" y="235" font-family="ui-sans-serif,system-ui,sans-serif" font-size="10" fill="#14B8A6" text-anchor="middle" font-weight="700" letter-spacing="1">OPPDATERT</text>
+  <text x="491" y="252" font-family="ui-sans-serif,system-ui,sans-serif" font-size="18" fill="#FFFFFF" text-anchor="middle" font-weight="700">Daglig</text>
+
+  <rect x="568" y="218" width="130" height="42" rx="8" fill="#1E293B"/>
+  <text x="633" y="235" font-family="ui-sans-serif,system-ui,sans-serif" font-size="10" fill="#14B8A6" text-anchor="middle" font-weight="700" letter-spacing="1">TILGANG</text>
+  <text x="633" y="252" font-family="ui-sans-serif,system-ui,sans-serif" font-size="18" fill="#FFFFFF" text-anchor="middle" font-weight="700">Gratis</text>
+
+  <!-- URL bottom right -->
+  <text x="831" y="298" font-family="ui-sans-serif,system-ui,sans-serif" font-size="14" fill="#475569" text-anchor="end">exday.no</text>
+</svg>
