@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ukens ex-datoer – exday.no</title>
+  <meta name="description" content="Hvilke norske utbytteaksjer har ex-dato denne uken? Oppdatert oversikt på exday.no." />
+  <link rel="icon" type="image/svg+xml" href="/logo/exday_icon_primary.svg">
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#2563eb" />
+
+  <!-- Open Graph (Facebook) -->
+  <meta property="og:title" content="Ukens ex-datoer på Oslo Børs – exday.no" />
+  <meta property="og:description" content="Se hvilke norske utbytteaksjer som har ex-dato denne uken. Gratis oversikt på exday.no." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://exday.no/uke/" />
+  <meta property="og:image" content="https://exday.no/logo/og_image.png" />
+  <meta property="og:locale" content="nb_NO" />
+
+  <link rel="stylesheet" href="/assets/tailwind.css" />
+  <link rel="stylesheet" href="/assets/style.css" />
+</head>
+<body class="bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 min-h-screen transition-colors duration-200">
+
+  <!-- HEADER -->
+  <header class="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 sticky top-0 z-40 shadow-sm">
+    <div class="max-w-2xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <a href="/" class="flex items-center gap-1.5 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors" aria-label="Tilbake til forsiden">
+          <svg class="w-4 h-4" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+          <span class="text-sm font-medium">exday.no</span>
+        </a>
+        <span class="text-gray-300 dark:text-gray-600">/</span>
+        <h1 class="text-sm font-semibold">Ukens ex-datoer</h1>
+      </div>
+      <button id="dark-toggle" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500 dark:text-gray-400 transition-colors" aria-label="Bytt fargemodus">
+        <svg class="w-5 h-5 dark:hidden" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+        <svg class="w-5 h-5 hidden dark:block" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main class="max-w-2xl mx-auto px-4 py-6 space-y-6">
+
+    <!-- INTRO -->
+    <div>
+      <h2 id="uke-tittel" class="text-2xl font-bold tracking-tight">Ukens ex-datoer</h2>
+      <p id="uke-undertittel" class="text-sm text-gray-500 dark:text-gray-400 mt-1">Laster data…</p>
+    </div>
+
+    <!-- DENNE UKEN -->
+    <section id="seksjon-denne" class="hidden">
+      <div class="flex items-center gap-2 mb-3">
+        <span class="w-2 h-2 rounded-full bg-blue-500 shrink-0"></span>
+        <h3 id="label-denne" class="text-xs font-semibold uppercase tracking-widest text-gray-500 dark:text-gray-400"></h3>
+      </div>
+      <div id="liste-denne" class="space-y-2"></div>
+    </section>
+
+    <!-- NESTE UKE -->
+    <section id="seksjon-neste" class="hidden">
+      <div class="flex items-center gap-2 mb-3">
+        <span class="w-2 h-2 rounded-full bg-gray-400 shrink-0"></span>
+        <h3 id="label-neste" class="text-xs font-semibold uppercase tracking-widest text-gray-500 dark:text-gray-400"></h3>
+      </div>
+      <div id="liste-neste" class="space-y-2"></div>
+    </section>
+
+    <!-- TOM TILSTAND -->
+    <div id="ingen" class="hidden text-center py-16 text-gray-400 dark:text-gray-600">
+      <svg class="w-10 h-10 mx-auto mb-3 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+      <p class="text-sm">Ingen ex-datoer de neste to ukene</p>
+    </div>
+
+    <!-- CTA -->
+    <div class="rounded-xl border border-blue-100 dark:border-blue-900/40 bg-blue-50 dark:bg-blue-950/30 p-5 text-center space-y-3">
+      <p class="text-sm font-medium text-blue-900 dark:text-blue-200">Vil du se yield, historikk og nøkkeltall?</p>
+      <a href="/" class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors">
+        Åpne exday.no
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+      </a>
+      <p class="text-xs text-blue-600 dark:text-blue-400">Gratis · Ingen innlogging · Oppdateres daglig</p>
+    </div>
+
+  </main>
+
+  <script>
+    // ── Mørkt/lyst tema ──────────────────────────────────────────────────────
+    const root = document.documentElement;
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      root.classList.add('dark');
+    }
+    document.getElementById('dark-toggle').addEventListener('click', () => {
+      const isDark = root.classList.toggle('dark');
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    });
+
+    // ── Hjelpe-funksjoner ────────────────────────────────────────────────────
+    function startOfWeek(d) {
+      const r = new Date(d);
+      const day = r.getDay(); // 0=søndag
+      const diff = day === 0 ? -6 : 1 - day; // mandag
+      r.setDate(r.getDate() + diff);
+      r.setHours(0, 0, 0, 0);
+      return r;
+    }
+
+    function endOfWeek(start) {
+      const r = new Date(start);
+      r.setDate(r.getDate() + 6);
+      r.setHours(23, 59, 59, 999);
+      return r;
+    }
+
+    function ukenummer(d) {
+      const thursday = new Date(d);
+      thursday.setDate(d.getDate() + (4 - (d.getDay() || 7)));
+      const yearStart = new Date(thursday.getFullYear(), 0, 1);
+      return Math.ceil(((thursday - yearStart) / 86400000 + 1) / 7);
+    }
+
+    function formaterDato(str) {
+      const d = new Date(str);
+      return d.toLocaleDateString('nb-NO', { weekday: 'short', day: 'numeric', month: 'short' });
+    }
+
+    function yieldFarge(y) {
+      if (y >= 8) return 'bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300';
+      if (y >= 5) return 'bg-teal-100 dark:bg-teal-900/40 text-teal-700 dark:text-teal-300';
+      if (y >= 3) return 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300';
+      return 'bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400';
+    }
+
+    function byggKort(a) {
+      const yf = yieldFarge(a.utbytte_yield);
+      const betalingTekst = a.betaling_dato
+        ? `<span class="text-xs text-gray-400 dark:text-gray-500">Utbetaling: ${formaterDato(a.betaling_dato)}</span>`
+        : '';
+      return `
+        <a href="/aksjer/${a.ticker}/" class="block bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl px-4 py-3.5 hover:border-blue-300 dark:hover:border-blue-700 transition-colors">
+          <div class="flex items-center justify-between gap-3">
+            <div class="flex items-center gap-3 min-w-0">
+              <span class="font-mono font-bold text-brand-700 dark:text-brand-400 shrink-0">${a.ticker}</span>
+              <span class="text-sm text-gray-600 dark:text-gray-400 truncate">${a.navn}</span>
+            </div>
+            <span class="text-xs font-semibold px-2 py-0.5 rounded-full shrink-0 ${yf}">${a.utbytte_yield.toFixed(1)}%</span>
+          </div>
+          <div class="flex items-center gap-4 mt-1.5">
+            <span class="text-xs font-medium text-gray-700 dark:text-gray-300">Ex: <strong>${formaterDato(a.ex_dato)}</strong></span>
+            ${betalingTekst}
+          </div>
+        </a>`;
+    }
+
+    // ── Hent data og bygg side ───────────────────────────────────────────────
+    async function init() {
+      const resp = await fetch('/data/aksjer.json');
+      const data = await resp.json();
+      const aksjer = data.aksjer || data;
+
+      const idag = new Date(); idag.setHours(0, 0, 0, 0);
+      const denneMandagen  = startOfWeek(idag);
+      const denneSøndagen  = endOfWeek(denneMandagen);
+      const nesteMandagen  = new Date(denneMandagen); nesteMandagen.setDate(nesteMandagen.getDate() + 7);
+      const nesteSøndagen  = endOfWeek(nesteMandagen);
+
+      const denneUken = aksjer
+        .filter(a => a.ex_dato && new Date(a.ex_dato) >= denneMandagen && new Date(a.ex_dato) <= denneSøndagen)
+        .sort((a, b) => a.ex_dato.localeCompare(b.ex_dato));
+
+      const nesteUken = aksjer
+        .filter(a => a.ex_dato && new Date(a.ex_dato) >= nesteMandagen && new Date(a.ex_dato) <= nesteSøndagen)
+        .sort((a, b) => a.ex_dato.localeCompare(b.ex_dato));
+
+      const ukeNr = ukenummer(denneMandagen);
+      const nesteUkeNr = ukenummer(nesteMandagen);
+
+      // Tittel
+      document.getElementById('uke-tittel').textContent = `Ukens ex-datoer — uke ${ukeNr}`;
+      document.getElementById('uke-undertittel').textContent =
+        `Norske utbytteaksjer med ex-dato denne og neste uke · Oppdatert daglig`;
+
+      if (denneUken.length === 0 && nesteUken.length === 0) {
+        document.getElementById('ingen').classList.remove('hidden');
+        return;
+      }
+
+      if (denneUken.length > 0) {
+        document.getElementById('seksjon-denne').classList.remove('hidden');
+        document.getElementById('label-denne').textContent = `Uke ${ukeNr} — ${denneUken.length} aksje${denneUken.length > 1 ? 'r' : ''}`;
+        document.getElementById('liste-denne').innerHTML = denneUken.map(byggKort).join('');
+      }
+
+      if (nesteUken.length > 0) {
+        document.getElementById('seksjon-neste').classList.remove('hidden');
+        document.getElementById('label-neste').textContent = `Neste uke (uke ${nesteUkeNr}) — ${nesteUken.length} aksje${nesteUken.length > 1 ? 'r' : ''}`;
+        document.getElementById('liste-neste').innerHTML = nesteUken.map(byggKort).join('');
+      }
+    }
+
+    init().catch(() => {
+      document.getElementById('uke-undertittel').textContent = 'Kunne ikke laste data. Prøv igjen senere.';
+    });
+  </script>
+</body>
+</html>
