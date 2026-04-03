@@ -688,6 +688,7 @@ function visOversikt() {
         <div class="flex flex-col items-end gap-1 shrink-0">
           <span class="yield-badge ${yieldKlasse(a.utbytte_yield)} text-sm">${a.utbytte_yield.toFixed(2)}%</span>
           ${scoreBadge(beregnScore(a))}
+          ${(() => { const b = beregnBaerekraft(a); return b ? `<span class="text-xs font-medium px-1.5 py-0.5 rounded ${b.bg} ${b.farge}">${b.grad}</span>` : ''; })()}
         </div>
       </div>
       <div class="grid grid-cols-3 gap-2 text-center my-3">
@@ -1535,6 +1536,75 @@ function beregnScore(a) {
   return Math.min(10, Math.max(1, p));
 }
 
+function beregnBaerekraft(a) {
+  let poeng = 0, maks = 0;
+
+  // Payout ratio (0-4p): hjertet av bærekraft
+  if (a.payout_ratio > 0) {
+    maks += 4;
+    if      (a.payout_ratio <= 40) poeng += 4;
+    else if (a.payout_ratio <= 60) poeng += 3;
+    else if (a.payout_ratio <= 75) poeng += 2;
+    else if (a.payout_ratio <= 90) poeng += 1;
+  }
+
+  // Utbyttevekst 5 år (0-3p)
+  if (a.utbytte_vekst_5ar != null) {
+    maks += 3;
+    const v = a.utbytte_vekst_5ar;
+    if      (v > 8)  poeng += 3;
+    else if (v > 0)  poeng += 2;
+    else if (v > -5) poeng += 1;
+  }
+
+  // År med utbytte (0-2p)
+  maks += 2;
+  const ar = a.ar_med_utbytte || 0;
+  if      (ar >= 10) poeng += 2;
+  else if (ar >= 5)  poeng += 1;
+
+  // Yield-konsistens vs 5-år snitt (0-1p)
+  if (a.snitt_yield_5ar > 0 && a.utbytte_yield > 0) {
+    maks += 1;
+    if (Math.abs(a.utbytte_yield - a.snitt_yield_5ar) / a.snitt_yield_5ar <= 0.35) poeng += 1;
+  }
+
+  if (maks === 0) return null;
+  const pct = poeng / maks;
+  if (pct >= 0.70) return { grad: 'Trygg',    farge: 'text-teal-600 dark:text-teal-400',   bg: 'bg-teal-50 dark:bg-teal-900/30',   poeng, maks };
+  if (pct >= 0.45) return { grad: 'Moderat',  farge: 'text-blue-600 dark:text-blue-400',   bg: 'bg-blue-50 dark:bg-blue-900/30',   poeng, maks };
+  return             { grad: 'Svak',     farge: 'text-red-500 dark:text-red-400',     bg: 'bg-red-50 dark:bg-red-900/30',     poeng, maks };
+}
+
+function baerekraftVisning(a) {
+  const b = beregnBaerekraft(a);
+  if (!b) return '';
+  const po = a.payout_ratio;
+  const v  = a.utbytte_vekst_5ar;
+  const ar = a.ar_med_utbytte || 0;
+  const snitt = a.snitt_yield_5ar || 0;
+
+  const linje = (label, verdi, ok) =>
+    `<div class="flex justify-between items-center py-1 border-b border-gray-100 dark:border-gray-800 last:border-0">
+       <span class="text-xs text-gray-500 dark:text-gray-400">${label}</span>
+       <span class="text-xs font-medium ${ok ? 'text-teal-600 dark:text-teal-400' : 'text-red-500 dark:text-red-400'}">${verdi}</span>
+     </div>`;
+
+  return `
+    <div class="mt-4 pt-4 border-t border-gray-100 dark:border-gray-800">
+      <div class="flex justify-between items-center mb-2">
+        <span class="text-sm font-semibold">Bærekraft-analyse</span>
+        <span class="text-xs font-semibold px-2 py-0.5 rounded-full ${b.bg} ${b.farge}">${b.grad}</span>
+      </div>
+      <div class="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-3 space-y-0">
+        ${linje('Payout ratio',      po > 0 ? po.toFixed(0)+'%' : '—',   po > 0 && po <= 75)}
+        ${linje('Utbyttevekst 5 år', v != null ? (v>=0?'+':'')+v.toFixed(1)+'%' : '—', v != null && v > 0)}
+        ${linje('År med utbytte',    ar > 0 ? ar+' år' : '—',            ar >= 5)}
+        ${linje('Yield-konsistens',  snitt > 0 ? 'snitt '+snitt.toFixed(1)+'%' : '—', snitt > 0 && Math.abs((a.utbytte_yield||0) - snitt) / snitt <= 0.35)}
+      </div>
+    </div>`;
+}
+
 function scoreBadge(score) {
   let cls;
   if      (score >= 8) cls = 'score-høy';
@@ -1578,7 +1648,8 @@ function scoreForklaring(a) {
         ${rad('År med utbytte', p4, 2, ar > 0 ? ar+' år' : '—')}
         ${rad('Yield-stabilitet', p5, 1, snitt > 0 ? 'snitt '+snitt.toFixed(1)+'%' : '—')}
       </div>
-    </div>`;
+    </div>
+    ${baerekraftVisning(a)}`;
 }
 
 function visScoreInfoModal() {
@@ -2106,4 +2177,4 @@ function visVarslerTab() {
 
 
 // Node.js test export
-if (typeof module !== 'undefined') module.exports = { fmt, formaterDato, yieldKlasse, payoutKlasse, vekstKlasse, beregnScore, beregnYtdInntekt };
+if (typeof module !== 'undefined') module.exports = { fmt, formaterDato, yieldKlasse, payoutKlasse, vekstKlasse, beregnScore, beregnBaerekraft, beregnYtdInntekt };

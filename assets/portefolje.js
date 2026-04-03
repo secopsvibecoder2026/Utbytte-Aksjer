@@ -368,6 +368,76 @@ function beregnIRR(txMap) {
 }
 
 
+function visOsebxSammenligning(alleBeholdning, historikk, fellesDatoer) {
+  const wrapper = document.getElementById('pf-osebx-sammenligning');
+  const innhold = document.getElementById('pf-osebx-innhold');
+  if (!wrapper || !innhold) return;
+
+  if (fellesDatoer.length < 2) {
+    // Show what it will look like when data is available
+    wrapper.classList.remove('hidden');
+    innhold.innerHTML = `
+      <p class="text-sm text-gray-400 dark:text-gray-500">
+        Sammenligningen aktiveres automatisk når appen har lagret nok prishistorikk (opptil 30 dager).
+        Kommer tilbake hit om noen dager for å se hvordan porteføljen din måler seg mot Oslo Børs-indeksen.
+      </p>`;
+    return;
+  }
+
+  const d0 = fellesDatoer[0], dN = fellesDatoer[fellesDatoer.length - 1];
+  const pfStart    = historikk[d0];
+  const pfSlutt    = historikk[dN];
+  const osebxStart = osebxHistorikk[d0];
+  const osebxSlutt = osebxHistorikk[dN];
+  const pfPct      = (pfSlutt - pfStart) / pfStart * 100;
+  const osebxPct   = (osebxSlutt - osebxStart) / osebxStart * 100;
+  const diff       = pfPct - osebxPct;
+  const slaer      = diff >= 0;
+  const dager      = fellesDatoer.length;
+
+  const fmtPct = v => (v >= 0 ? '+' : '') + v.toFixed(2) + '%';
+  const fmtKr  = v => v.toLocaleString('nb-NO', { maximumFractionDigits: 0 }) + ' kr';
+
+  // Hypothetical: same NOK amount in OSEBX
+  const totalVerdiNaa = pfSlutt;
+  const hypoOsebx     = pfStart * (1 + osebxPct / 100);
+  const diffKr        = totalVerdiNaa - hypoOsebx;
+
+  // Bar widths
+  const maks = Math.max(Math.abs(pfPct), Math.abs(osebxPct), 0.01);
+  const pfW  = Math.min(100, Math.abs(pfPct)    / maks * 100);
+  const oxW  = Math.min(100, Math.abs(osebxPct) / maks * 100);
+
+  wrapper.classList.remove('hidden');
+  innhold.innerHTML = `
+    <div class="space-y-3">
+      <div>
+        <div class="flex justify-between text-xs mb-1">
+          <span class="text-gray-500 dark:text-gray-400">Din portefølje</span>
+          <span class="font-semibold ${pfPct >= 0 ? 'text-teal-600 dark:text-teal-400' : 'text-red-500'}">${fmtPct(pfPct)}</span>
+        </div>
+        <div class="h-2 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
+          <div class="h-full rounded-full ${pfPct >= 0 ? 'bg-teal-500' : 'bg-red-400'}" style="width:${pfW}%"></div>
+        </div>
+      </div>
+      <div>
+        <div class="flex justify-between text-xs mb-1">
+          <span class="text-gray-500 dark:text-gray-400">OSEBX (Oslo Børs)</span>
+          <span class="font-semibold ${osebxPct >= 0 ? 'text-blue-600 dark:text-blue-400' : 'text-red-500'}">${fmtPct(osebxPct)}</span>
+        </div>
+        <div class="h-2 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
+          <div class="h-full rounded-full ${osebxPct >= 0 ? 'bg-blue-400' : 'bg-red-400'}" style="width:${oxW}%"></div>
+        </div>
+      </div>
+      <div class="pt-2 border-t border-gray-100 dark:border-gray-800 flex justify-between items-center">
+        <span class="text-xs text-gray-400">Differanse (siste ${dager} dager)</span>
+        <span class="text-sm font-bold ${slaer ? 'text-teal-600 dark:text-teal-400' : 'text-red-500'}">
+          ${fmtPct(diff)} (${diffKr >= 0 ? '+' : ''}${fmtKr(diffKr)})
+        </span>
+      </div>
+    </div>`;
+}
+
 function visHistorikkKurve() {
   const wrapper = document.getElementById('pf-historikk-wrapper');
   if (!wrapper) return;
@@ -687,6 +757,7 @@ function visPortefolje() {
       osebxEl.className    = 'stat-value text-base';
       osebxTekst.textContent = 'trenger mer historikk';
     }
+    visOsebxSammenligning(alleBeholdning, historikk, fellesDatoer);
 
     // ── FAKTISK AVKASTNING ────────────────────────────────────────────────────
     const faktiskEl   = document.getElementById('pf-stat-faktisk');
