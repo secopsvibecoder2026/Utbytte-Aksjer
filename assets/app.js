@@ -103,6 +103,7 @@ function lastInnData(json) {
   oppdaterSammendrag();
   visOversikt();
   visKalender();
+  mergPriser();
   sjekkExDatoerDirekte();
 
   const urlAksje = new URLSearchParams(location.search).get('aksje');
@@ -121,6 +122,22 @@ function lastInnData(json) {
       visImportPreview(gyldig, []);
     }
   }
+}
+
+async function mergPriser() {
+  const data = await hentPriser();
+  if (!data || !data.aksjer) return;
+
+  let changed = false;
+  alleAksjer.forEach(a => {
+    const p = data.aksjer[a.ticker];
+    if (!p) return;
+    if (p.pris > 0) { a.pris = p.pris; changed = true; }
+    a.endring_pct = p.endring_pct ?? 0;
+    a.endring_krs = p.endring_krs ?? 0;
+  });
+
+  if (changed) visOversikt();
 }
 
 async function lastData() {

@@ -584,7 +584,10 @@ function visOversikt() {
         </div>
       </td>
       <td class="px-4 py-3 text-right font-medium">
-        ${fmt(a.pris)} <span class="text-xs text-gray-400">${a.valuta}</span>
+        ${fmt(a.pris)}
+        ${a.endring_pct !== undefined && a.endring_pct !== 0
+          ? `<span class="block text-xs font-normal ${a.endring_pct > 0 ? 'text-green-500 dark:text-green-400' : 'text-red-500 dark:text-red-400'}">${a.endring_pct > 0 ? '+' : ''}${a.endring_pct.toFixed(2)}%</span>`
+          : `<span class="text-xs text-gray-400">${a.valuta}</span>`}
       </td>
       <td class="col-detalj px-4 py-3 w-36">
         ${rangebar(a.pris, a['52u_lav'], a['52u_hoy'])}
@@ -693,7 +696,9 @@ function visOversikt() {
         <div class="bg-gray-50 dark:bg-gray-800 rounded-lg py-2 px-1">
           <div class="text-xs text-gray-400 leading-tight">Pris</div>
           <div class="font-semibold text-sm mt-0.5">${fmt(a.pris)}</div>
-          <div class="text-xs text-gray-400">${a.valuta}</div>
+          ${a.endring_pct !== undefined && a.endring_pct !== 0
+            ? `<div class="text-xs font-medium ${a.endring_pct > 0 ? 'text-green-500 dark:text-green-400' : 'text-red-500 dark:text-red-400'}">${a.endring_pct > 0 ? '+' : ''}${a.endring_pct.toFixed(2)}%</div>`
+            : `<div class="text-xs text-gray-400">${a.valuta}</div>`}
         </div>
         <div class="bg-gray-50 dark:bg-gray-800 rounded-lg py-2 px-1">
           <div class="text-xs text-gray-400 leading-tight">Utb./aksje</div>
