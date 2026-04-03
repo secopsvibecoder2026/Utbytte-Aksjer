@@ -14,6 +14,8 @@ let sortering = (() => {
 let aktivTab = 'oversikt';
 let kompaktModus = false;
 let visKunFavoritter = false;
+let visKunPortefolje = false;
+let visKunWatchliste = false;
 
 // ── INIT ───────────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
@@ -21,6 +23,8 @@ document.addEventListener('DOMContentLoaded', () => {
   initTabs();
   initFilter();
   oppdaterFavBtn();
+  oppdaterPFFilterBtn();
+  oppdaterWLFilterBtn();
   initViewToggle();
   initModal();
   initPFSubTabs();

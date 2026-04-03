@@ -152,13 +152,29 @@ function initFilter() {
     document.getElementById('filter-frekvens').value = '';
     document.getElementById('filter-yield').value = '';
     visKunFavoritter = false;
+    visKunPortefolje = false;
+    visKunWatchliste = false;
     oppdaterFavBtn();
+    oppdaterPFFilterBtn();
+    oppdaterWLFilterBtn();
     visOversikt();
   });
 
   document.getElementById('filter-fav').addEventListener('click', () => {
     visKunFavoritter = !visKunFavoritter;
     oppdaterFavBtn();
+    visOversikt();
+  });
+
+  document.getElementById('filter-pf').addEventListener('click', () => {
+    visKunPortefolje = !visKunPortefolje;
+    oppdaterPFFilterBtn();
+    visOversikt();
+  });
+
+  document.getElementById('filter-wl').addEventListener('click', () => {
+    visKunWatchliste = !visKunWatchliste;
+    oppdaterWLFilterBtn();
     visOversikt();
   });
 
@@ -199,6 +215,33 @@ function oppdaterFavBtn() {
 }
 
 
+function oppdaterPFFilterBtn() {
+  const btn = document.getElementById('filter-pf');
+  if (!btn) return;
+  const antall = Object.keys(hentPF()).length;
+  if (visKunPortefolje) {
+    btn.className = 'filter-input text-sm font-medium bg-teal-100 dark:bg-teal-900/40 text-teal-700 dark:text-teal-300 border-teal-300 dark:border-teal-700';
+    btn.textContent = `⊕ Portefølje (${antall})`;
+  } else {
+    btn.className = 'filter-input text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors';
+    btn.textContent = antall > 0 ? `⊕ Portefølje (${antall})` : '⊕ Portefølje';
+  }
+}
+
+function oppdaterWLFilterBtn() {
+  const btn = document.getElementById('filter-wl');
+  if (!btn) return;
+  const tickers = new Set(hentWatchlister().flatMap(w => w.tickers || []));
+  const antall = tickers.size;
+  if (visKunWatchliste) {
+    btn.className = 'filter-input text-sm font-medium bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300 border-indigo-300 dark:border-indigo-700';
+    btn.textContent = `≋ Watchliste (${antall})`;
+  } else {
+    btn.className = 'filter-input text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors';
+    btn.textContent = antall > 0 ? `≋ Watchliste (${antall})` : '≋ Watchliste';
+  }
+}
+
 function byggSektorFilter() {
   const sektorer = [...new Set(alleAksjer.map(a => a.sektor))].sort();
   const sel = document.getElementById('filter-sektor');
@@ -216,9 +259,13 @@ function filtrerteAksjer() {
   const frekvens = document.getElementById('filter-frekvens').value;
   const minYield = parseFloat(document.getElementById('filter-yield').value) || 0;
   const fav = hentFav();
+  const pf = visKunPortefolje ? new Set(Object.keys(hentPF())) : null;
+  const wl = visKunWatchliste ? new Set(hentWatchlister().flatMap(w => w.tickers || [])) : null;
 
   return alleAksjer.filter(a => {
     if (visKunFavoritter && !fav.has(a.ticker)) return false;
+    if (pf && !pf.has(a.ticker)) return false;
+    if (wl && !wl.has(a.ticker)) return false;
     if (sok && !a.ticker.toLowerCase().includes(sok) && !a.navn.toLowerCase().includes(sok)) return false;
     if (sektor && a.sektor !== sektor) return false;
     if (frekvens && a.frekvens !== frekvens) return false;
