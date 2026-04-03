@@ -722,7 +722,7 @@ function visPortefolje() {
       const irr = beregnIRR();
       if (irr.harNokData) {
         const pct = irr.irr_ar;
-        irrEl.textContent  = (pct >= 0 ? '+' : '') + pct.toFixed(1) + '%';
+        irrEl.textContent  = (pct >= 0 ? '+' : '') + pct.toFixed(2) + '%';
         irrEl.className    = 'stat-value text-base ' + (pct >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-500');
         const aar = irr.periodeAr < 1
           ? Math.round(irr.periodeAr * 12) + ' mnd'
