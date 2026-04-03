@@ -80,19 +80,16 @@ self.addEventListener('fetch', event => {
     return;
   }
 
-  // 3. JS og CSS: stale-while-revalidate — server cache umiddelbart,
-  //    oppdater i bakgrunnen slik at neste lasting er fersk
+  // 3. JS og CSS: nettverks-first — brukere får alltid siste versjon,
+  //    faller tilbake på cache ved nettverksfeil
   if (/\.(js|css)(\?.*)?$/.test(url.pathname)) {
     event.respondWith(
-      caches.open(CACHE).then(cache =>
-        cache.match(request).then(cached => {
-          const networkFetch = fetch(request).then(resp => {
-            if (resp.ok) cache.put(request, resp.clone());
-            return resp;
-          }).catch(() => cached);
-          return cached ? (networkFetch, cached) : networkFetch;
+      fetch(request)
+        .then(resp => {
+          if (resp.ok) caches.open(CACHE).then(c => c.put(request, resp.clone()));
+          return resp;
         })
-      )
+        .catch(() => caches.match(request))
     );
     return;
   }

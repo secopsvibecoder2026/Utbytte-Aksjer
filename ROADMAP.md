@@ -41,7 +41,7 @@ Fullførte funksjoner er dokumentert i [ROADMAP_COMPLETED.md](ROADMAP_COMPLETED.
 - [x] Generer `aksjer/sektor/energi/`, `aksjer/sektor/finans/` osv. i fetch_stocks.py
 - [x] Oversiktsside per sektor med alle aksjer i sektoren
 - [x] Legg til i sitemap.xml (99 URL-er totalt)
-- [ ] Interne lenker fra enkeltaksjesider til sektorsiden (neste steg)
+- [x] Interne lenker fra enkeltaksjesider til sektorsiden
 
 #### 31. Interne lenker mellom app og aksjesider 🔗 ✅
 **Prioritet: Medium**
@@ -49,11 +49,11 @@ Fullførte funksjoner er dokumentert i [ROADMAP_COMPLETED.md](ROADMAP_COMPLETED.
 - [x] Legg til lenke fra aksjemodal i hovedappen til `exday.no/aksjer/TICKER/`
 - [x] Lenken åpner SEO-siden med full info og historikk
 
-#### 32. Flere aksjer 📈
+#### 32. Flere aksjer 📈 ✅
 **Prioritet: Medium**
 
-- [ ] Gjennomgå Oslo Børs for aksjer som mangler
-- [ ] Legg til i AKSJER-listen i fetch_stocks.py
+- [x] Utvidet fra 66 til 80 aksjer (20 tickers utilgjengelig på Yahoo Finance)
+- [x] Legg til i AKSJER-listen i fetch_stocks.py
 
 ---
 
@@ -74,12 +74,12 @@ Fullførte funksjoner er dokumentert i [ROADMAP_COMPLETED.md](ROADMAP_COMPLETED.
 - [ ] Vis score i aksjekortet og aksjemodalen
 - [ ] Enkel fargekoding: grønn / gul / rød
 
-#### 37. Porteføljesammenligning mot OSEBX 📊
+#### 37. Porteføljesammenligning mot OSEBX 📊 ✅
 **Prioritet: Medium**
 
-- [ ] Hent OSEBX total return-data (inkl. utbytte)
-- [ ] Sammenlign brukerens portefølje mot samme investering i indeksfond
-- [ ] Vis som graf i Portefølje → Oversikt-fanen
+- [x] Hent OSEBX total return-data (inkl. utbytte)
+- [x] Sammenlign brukerens portefølje mot samme investering i indeksfond
+- [x] Vis som graf i Portefølje → Oversikt-fanen
 
 #### 38. Månedlig utbytteplanlegger 🎯
 **Prioritet: Medium**
