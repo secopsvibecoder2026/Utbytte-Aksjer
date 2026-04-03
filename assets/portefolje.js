@@ -375,45 +375,36 @@ function beregnIRR(txMap) {
 }
 
 
-function visOsebxSammenligning(alleBeholdning, historikk, fellesDatoer) {
+function visOsebxSammenligning(alleBeholdning, pfPct, osebxPct, invKost, totalReturnKr, forsteTxDato, osebxStartDato) {
   const wrapper = document.getElementById('pf-osebx-sammenligning');
   const innhold = document.getElementById('pf-osebx-innhold');
   if (!wrapper || !innhold) return;
 
-  if (fellesDatoer.length < 2) {
-    // Show what it will look like when data is available
+  if (pfPct === null || osebxPct === null) {
     wrapper.classList.remove('hidden');
     innhold.innerHTML = `
       <p class="text-sm text-gray-400 dark:text-gray-500">
-        Sammenligningen aktiveres automatisk når appen har lagret nok prishistorikk (opptil 30 dager).
-        Kommer tilbake hit om noen dager for å se hvordan porteføljen din måler seg mot Oslo Børs-indeksen.
+        Legg til transaksjoner i porteføljen for å se hvordan du måler deg mot Oslo Børs-indeksen.
       </p>`;
     return;
   }
 
-  const d0 = fellesDatoer[0], dN = fellesDatoer[fellesDatoer.length - 1];
-  const pfStart    = historikk[d0];
-  const pfSlutt    = historikk[dN];
-  const osebxStart = osebxHistorikk[d0];
-  const osebxSlutt = osebxHistorikk[dN];
-  const pfPct      = (pfSlutt - pfStart) / pfStart * 100;
-  const osebxPct   = (osebxSlutt - osebxStart) / osebxStart * 100;
-  const diff       = pfPct - osebxPct;
-  const slaer      = diff >= 0;
-  const dager      = fellesDatoer.length;
+  const diff   = pfPct - osebxPct;
+  const slaer  = diff >= 0;
+  const hypoOsebx = invKost * (1 + osebxPct / 100);
+  const totalVerdi = invKost + totalReturnKr;
+  const diffKr = totalVerdi - hypoOsebx;
 
   const fmtPct = v => (v >= 0 ? '+' : '') + v.toFixed(2) + '%';
   const fmtKr  = v => v.toLocaleString('nb-NO', { maximumFractionDigits: 0 }) + ' kr';
 
-  // Hypothetical: same NOK amount in OSEBX
-  const totalVerdiNaa = pfSlutt;
-  const hypoOsebx     = pfStart * (1 + osebxPct / 100);
-  const diffKr        = totalVerdiNaa - hypoOsebx;
-
-  // Bar widths
   const maks = Math.max(Math.abs(pfPct), Math.abs(osebxPct), 0.01);
   const pfW  = Math.min(100, Math.abs(pfPct)    / maks * 100);
   const oxW  = Math.min(100, Math.abs(osebxPct) / maks * 100);
+
+  const fraDato = forsteTxDato
+    ? new Date(forsteTxDato).toLocaleDateString('nb-NO', { day: 'numeric', month: 'short', year: 'numeric' })
+    : osebxStartDato || '—';
 
   wrapper.classList.remove('hidden');
   innhold.innerHTML = `
@@ -437,7 +428,7 @@ function visOsebxSammenligning(alleBeholdning, historikk, fellesDatoer) {
         </div>
       </div>
       <div class="pt-2 border-t border-gray-100 dark:border-gray-800 flex justify-between items-center">
-        <span class="text-xs text-gray-400">Differanse (siste ${dager} dager)</span>
+        <span class="text-xs text-gray-400">Fra ${fraDato}</span>
         <span class="text-sm font-bold ${slaer ? 'text-teal-600 dark:text-teal-400' : 'text-red-500'}">
           ${fmtPct(diff)} (${diffKr >= 0 ? '+' : ''}${fmtKr(diffKr)})
         </span>
@@ -743,18 +734,58 @@ function visPortefolje() {
     const antallSektorer = new Set(alleBeholdning.map(a => a.sektor).filter(Boolean)).size;
     document.getElementById('pf-profil-sektorer').textContent = antallSektorer + ' sektorer';
 
-    // ── OSEBX-SAMMENLIGNING ───────────────────────────────────────────────────
+    // ── FAKTISK AVKASTNING + OSEBX-SAMMENLIGNING ─────────────────────────────
+    // Beregnes samlet for å dele data mellom stat-kortene
+    const faktiskEl   = document.getElementById('pf-stat-faktisk');
+    const faktiskTekst = document.getElementById('pf-stat-faktisk-tekst');
     const osebxEl     = document.getElementById('pf-stat-osebx');
     const osebxTekst  = document.getElementById('pf-stat-osebx-tekst');
-    let historikk = {};
-    try { historikk = JSON.parse(localStorage.getItem('pf_historikk') || '{}'); } catch(e) {}
-    const pfDatoer = Object.keys(historikk).sort();
-    const fellesDatoer = pfDatoer.filter(d => osebxHistorikk[d] != null);
-    if (osebxEl && fellesDatoer.length >= 2) {
-      const d0 = fellesDatoer[0], dN = fellesDatoer[fellesDatoer.length - 1];
-      const pfEndring    = (historikk[dN] - historikk[d0]) / historikk[d0] * 100;
-      const osebxEndring = (osebxHistorikk[dN] - osebxHistorikk[d0]) / osebxHistorikk[d0] * 100;
-      const diff = pfEndring - osebxEndring;
+
+    const txMap = hentTransaksjoner();
+    let invKost = 0, invMottatt = 0, invMarkert = 0, harTx = false;
+    alleBeholdning.forEach(a => {
+      const kb = beregnKostbasis(a.ticker, txMap);
+      if (kb.totalKost > 0 || kb.mottattUtbytte > 0) {
+        invKost    += kb.totalKost;
+        invMottatt += kb.mottattUtbytte;
+        invMarkert += kb.antall * (a.pris || 0);
+        harTx = true;
+      }
+    });
+
+    let pfPctTotal = null, totalReturnKr = null;
+    if (harTx && invKost > 0) {
+      totalReturnKr = invMarkert + invMottatt - invKost;
+      pfPctTotal    = totalReturnKr / invKost * 100;
+      if (faktiskEl) {
+        faktiskEl.textContent = (pfPctTotal >= 0 ? '+' : '') + pfPctTotal.toFixed(1) + '%';
+        faktiskEl.className   = 'stat-value text-base ' + (pfPctTotal >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-500');
+        if (faktiskTekst) faktiskTekst.textContent = (totalReturnKr >= 0 ? '+' : '') + fmtKr(totalReturnKr);
+      }
+    } else if (faktiskEl) {
+      faktiskEl.textContent = '—';
+      faktiskEl.className   = 'stat-value text-base';
+      if (faktiskTekst) faktiskTekst.textContent = 'trenger transaksjoner';
+    }
+
+    // OSEBX: bruk transaksjonsdata – tidligste kjøpsdato som startpunkt
+    const alleTxDatoer = Object.values(txMap)
+      .flatMap(liste => liste.filter(t => t.type === 'kjøp').map(t => t.dato))
+      .sort();
+    const forsteTxDato  = alleTxDatoer[0] || null;
+    const osebxDatoer   = Object.keys(osebxHistorikk).sort();
+    const osebxStartDato = forsteTxDato
+      ? (osebxDatoer.find(d => d >= forsteTxDato) || osebxDatoer[0])
+      : osebxDatoer[0];
+    const osebxSluttDato = osebxDatoer[osebxDatoer.length - 1];
+
+    let osebxPctTotal = null;
+    if (osebxStartDato && osebxSluttDato && osebxStartDato !== osebxSluttDato) {
+      osebxPctTotal = (osebxHistorikk[osebxSluttDato] - osebxHistorikk[osebxStartDato]) / osebxHistorikk[osebxStartDato] * 100;
+    }
+
+    if (osebxEl && pfPctTotal !== null && osebxPctTotal !== null) {
+      const diff  = pfPctTotal - osebxPctTotal;
       const slaer = diff >= 0;
       osebxEl.textContent = slaer ? '✓ Ja' : '✗ Nei';
       osebxEl.className   = 'stat-value text-base ' + (slaer ? 'text-green-600 dark:text-green-400' : 'text-red-500');
@@ -762,36 +793,9 @@ function visPortefolje() {
     } else if (osebxEl) {
       osebxEl.textContent  = '—';
       osebxEl.className    = 'stat-value text-base';
-      osebxTekst.textContent = 'trenger mer historikk';
+      osebxTekst.textContent = harTx ? 'ingen OSEBX-data' : 'trenger transaksjoner';
     }
-    visOsebxSammenligning(alleBeholdning, historikk, fellesDatoer);
-
-    // ── FAKTISK AVKASTNING ────────────────────────────────────────────────────
-    const faktiskEl   = document.getElementById('pf-stat-faktisk');
-    const faktiskTekst = document.getElementById('pf-stat-faktisk-tekst');
-    if (faktiskEl) {
-      let invKost = 0, invMottatt = 0, invMarkert = 0, harTx = false;
-      alleBeholdning.forEach(a => {
-        const kb = beregnKostbasis(a.ticker);
-        if (kb.totalKost > 0 || kb.mottattUtbytte > 0) {
-          invKost    += kb.totalKost;
-          invMottatt += kb.mottattUtbytte;
-          invMarkert += kb.antall * (a.pris || 0);
-          harTx = true;
-        }
-      });
-      if (harTx && invKost > 0) {
-        const totalReturn = invMarkert + invMottatt - invKost;
-        const pct = totalReturn / invKost * 100;
-        faktiskEl.textContent = (pct >= 0 ? '+' : '') + pct.toFixed(1) + '%';
-        faktiskEl.className   = 'stat-value text-base ' + (pct >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-500');
-        if (faktiskTekst) faktiskTekst.textContent = (totalReturn >= 0 ? '+' : '') + fmtKr(totalReturn);
-      } else {
-        faktiskEl.textContent = '—';
-        faktiskEl.className   = 'stat-value text-base';
-        if (faktiskTekst) faktiskTekst.textContent = 'trenger transaksjoner';
-      }
-    }
+    visOsebxSammenligning(alleBeholdning, pfPctTotal, osebxPctTotal, invKost, totalReturnKr, forsteTxDato, osebxStartDato);
 
     // ── IRR (annualisert intern avkastningsrate) ──────────────────────────────
     const irrEl    = document.getElementById('pf-stat-irr');
