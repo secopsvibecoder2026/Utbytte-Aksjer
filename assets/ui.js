@@ -688,7 +688,6 @@ function visOversikt() {
         <div class="flex flex-col items-end gap-1 shrink-0">
           <span class="yield-badge ${yieldKlasse(a.utbytte_yield)} text-sm">${a.utbytte_yield.toFixed(2)}%</span>
           ${scoreBadge(beregnScore(a))}
-          ${(() => { const b = beregnBaerekraft(a); return b ? `<span class="text-xs font-medium px-1.5 py-0.5 rounded ${b.bg} ${b.farge}">${b.grad}</span>` : ''; })()}
         </div>
       </div>
       <div class="grid grid-cols-3 gap-2 text-center my-3">
