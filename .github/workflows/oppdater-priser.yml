@@ -1,0 +1,49 @@
+name: Oppdater kurspriser
+
+on:
+  schedule:
+    # Hvert 15. minutt man-fre mellom 08:00–16:45 UTC (= 09:00–17:45 Oslo-tid)
+    - cron: "0,15,30,45 8-16 * * 1-5"
+    # Ekstra kjøring kl 17:00 UTC for sluttkurs
+    - cron: "0 17 * * 1-5"
+  workflow_dispatch:  # Tillat manuell kjøring
+
+permissions:
+  contents: write
+
+concurrency:
+  group: "oppdater-priser"
+  cancel-in-progress: true   # Dropp ventende jobb hvis ny starter
+
+jobs:
+  hent-priser:
+    name: Hent og lagre kurspriser
+    runs-on: ubuntu-latest
+    steps:
+      - name: Sjekk ut kode
+        uses: actions/checkout@v4
+
+      - name: Sett opp Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+          cache-dependency-path: scripts/requirements.txt
+
+      - name: Installer avhengigheter
+        run: pip install -r scripts/requirements.txt
+
+      - name: Hent kurspriser
+        run: python scripts/fetch_priser.py
+
+      - name: Commit og push priser
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/priser.json
+          if git diff --staged --quiet; then
+            echo "Ingen prisendringer."
+          else
+            git commit -m "auto: oppdater kurspriser $(date -u '+%Y-%m-%d %H:%M UTC')"
+            git push
+          fi
