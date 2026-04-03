@@ -59,6 +59,36 @@ Fullførte funksjoner er dokumentert i [ROADMAP_COMPLETED.md](ROADMAP_COMPLETED.
 
 ### Portefølje og analyse
 
+#### 35. Reinvesteringskalkulator (DRIP) 📈
+**Prioritet: Høy**
+
+- [ ] Inndata: startbeløp, månedlig sparing, yield, vekst i utbytte, antall år
+- [ ] Beregn porteføljeverdi med og uten reinvestering av utbytte
+- [ ] Visuelt graf som viser renters rente-effekten over tid
+- [ ] Legg til i Kalkulator-fanen som egen seksjon
+
+#### 36. Utbyttebærekraft-analyse 🛡️
+**Prioritet: Medium**
+
+- [ ] Kombiner payout ratio, gjeldsnivå og inntjeningsvekst til én "trygghetsscore" per aksje
+- [ ] Vis score i aksjekortet og aksjemodalen
+- [ ] Enkel fargekoding: grønn / gul / rød
+
+#### 37. Porteføljesammenligning mot OSEBX 📊
+**Prioritet: Medium**
+
+- [ ] Hent OSEBX total return-data (inkl. utbytte)
+- [ ] Sammenlign brukerens portefølje mot samme investering i indeksfond
+- [ ] Vis som graf i Portefølje → Oversikt-fanen
+
+#### 38. Månedlig utbytteplanlegger 🎯
+**Prioritet: Medium**
+
+- [ ] Omvendt kalkulator: bruker setter inn ønsket månedsinntekt fra utbytte
+- [ ] Appen beregner nødvendig investert beløp per aksje / totalt
+- [ ] Valgfritt: fordel automatisk på aksjer basert på yield og sektor
+- [ ] Legg til i Kalkulator-fanen
+
 ---
 
 ### Monetisering
