@@ -35,13 +35,13 @@ Fullførte funksjoner er dokumentert i [ROADMAP_COMPLETED.md](ROADMAP_COMPLETED.
 - [x] Send inn sitemap.xml (83 URL-er inkl. alle aksjesider)
 - [x] Sjekk indekseringsstatus for aksjer/TICKER/-sidene
 
-#### 30. Sektorsider 📂
+#### 30. Sektorsider 📂 ✅
 **Prioritet: Medium — flere SEO-landingssider**
 
-- [ ] Generer `aksjer/sektor/energi/`, `aksjer/sektor/finans/` osv. i fetch_stocks.py
-- [ ] Oversiktsside per sektor med alle aksjer i sektoren
-- [ ] Legg til i sitemap.xml
-- [ ] Interne lenker fra enkeltaksjesider til sektorsiden
+- [x] Generer `aksjer/sektor/energi/`, `aksjer/sektor/finans/` osv. i fetch_stocks.py
+- [x] Oversiktsside per sektor med alle aksjer i sektoren
+- [x] Legg til i sitemap.xml (99 URL-er totalt)
+- [ ] Interne lenker fra enkeltaksjesider til sektorsiden (neste steg)
 
 #### 31. Interne lenker mellom app og aksjesider 🔗 ✅
 **Prioritet: Medium**

@@ -922,8 +922,177 @@ def generer_aksjesider(aksjer, root_dir):
     print(f"Genererte {len(aksjer)} aksjesider + oversiktsside under aksjer/")
 
 
+def _sektor_slug(sektor):
+    return (sektor.lower()
+            .replace('æ', 'ae').replace('ø', 'o').replace('å', 'a')
+            .replace(' ', '-'))
+
+
+def generer_sektorsider(aksjer, root_dir):
+    """Genererer én HTML-oversiktsside per sektor under aksjer/sektor/{slug}/index.html."""
+    today = datetime.datetime.utcnow().strftime("%Y-%m-%d")
+    sektor_dir = os.path.join(root_dir, "aksjer", "sektor")
+    os.makedirs(sektor_dir, exist_ok=True)
+
+    from collections import defaultdict
+    sektorer = defaultdict(list)
+    for a in aksjer:
+        if a.get("sektor"):
+            sektorer[a["sektor"]].append(a)
+
+    generert = []
+    for sektor, aksjer_i_sektor in sorted(sektorer.items()):
+        slug = _sektor_slug(sektor)
+        aksjer_sortert = sorted(aksjer_i_sektor, key=lambda x: x.get("utbytte_yield", 0), reverse=True)
+        snitt_yield = sum(a.get("utbytte_yield", 0) for a in aksjer_sortert) / len(aksjer_sortert)
+
+        rader = ""
+        for a in aksjer_sortert:
+            t  = a["ticker"]
+            ex = _fmt_dato(a.get("ex_dato"))
+            rader += f"""
+        <tr>
+          <td><a href="/aksjer/{t}/">{t}</a></td>
+          <td>{a["navn"]}</td>
+          <td>{a.get("pris") or "—"} {a.get("valuta","NOK")}</td>
+          <td class="yield">{a.get("utbytte_yield", 0):.2f}%</td>
+          <td>{ex}</td>
+        </tr>"""
+
+        meta_desc = (f"{len(aksjer_sortert)} norske {sektor.lower()}-aksjer på Oslo Børs med "
+                     f"gjennomsnittlig utbytteyield på {snitt_yield:.1f}%. "
+                     f"Se yield, ex-dato og historikk på exday.no.")
+
+        json_ld = json.dumps({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {"@type": "ListItem", "position": 1, "name": "Hjem",   "item": "https://exday.no/"},
+                {"@type": "ListItem", "position": 2, "name": "Aksjer", "item": "https://exday.no/aksjer/"},
+                {"@type": "ListItem", "position": 3, "name": sektor,   "item": f"https://exday.no/aksjer/sektor/{slug}/"},
+            ]
+        }, ensure_ascii=False)
+
+        html = f"""<!DOCTYPE html>
+<html lang="nb">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>{sektor}-aksjer med utbytte | Oslo Børs | exday.no</title>
+  <meta name="description" content="{meta_desc}"/>
+  <link rel="canonical" href="https://exday.no/aksjer/sektor/{slug}/"/>
+  <meta property="og:title" content="{sektor}-aksjer med utbytte – exday.no"/>
+  <meta property="og:description" content="{meta_desc}"/>
+  <meta property="og:url" content="https://exday.no/aksjer/sektor/{slug}/"/>
+  <script type="application/ld+json">{json_ld}</script>
+  <style>
+    *, *::before, *::after {{ box-sizing: border-box; margin: 0; padding: 0; }}
+    body {{ font-family: system-ui, -apple-system, sans-serif; background: #f9fafb; color: #111827; line-height: 1.6; }}
+    a {{ color: #2563eb; text-decoration: none; }}
+    a:hover {{ text-decoration: underline; }}
+    .wrap {{ max-width: 900px; margin: 0 auto; padding: 1.5rem 1rem; }}
+    nav {{ font-size: 0.85rem; color: #6b7280; margin-bottom: 1.5rem; }}
+    h1 {{ font-size: 1.75rem; font-weight: 700; margin-bottom: 0.5rem; }}
+    .sub {{ color: #6b7280; margin-bottom: 1.5rem; font-size: 0.95rem; }}
+    .stats {{ display: flex; gap: 1.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }}
+    .stat {{ background: #fff; border: 1px solid #e5e7eb; border-radius: 0.5rem; padding: 0.75rem 1.25rem; }}
+    .stat-val {{ font-size: 1.4rem; font-weight: 700; color: #2563eb; }}
+    .stat-lbl {{ font-size: 0.75rem; color: #6b7280; text-transform: uppercase; letter-spacing: 0.04em; }}
+    table {{ width: 100%; border-collapse: collapse; background: #fff; border: 1px solid #e5e7eb; border-radius: 0.75rem; overflow: hidden; font-size: 0.9rem; }}
+    th {{ background: #f3f4f6; padding: 0.6rem 1rem; text-align: left; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: #6b7280; }}
+    td {{ padding: 0.65rem 1rem; border-top: 1px solid #f3f4f6; }}
+    tr:hover td {{ background: #f9fafb; }}
+    .yield {{ color: #0891b2; font-weight: 600; }}
+    .cta {{ margin-top: 1.5rem; text-align: center; }}
+    .cta a {{ display: inline-block; background: #2563eb; color: #fff; font-weight: 600; padding: 0.65rem 1.5rem; border-radius: 0.5rem; }}
+    .updated {{ font-size: 0.78rem; color: #9ca3af; text-align: right; margin-top: 1rem; }}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <nav><a href="https://exday.no/">exday.no</a> › <a href="/aksjer/">Aksjer</a> › {sektor}</nav>
+  <h1>{sektor}-aksjer med utbytte</h1>
+  <p class="sub">{len(aksjer_sortert)} norske {sektor.lower()}-aksjer på Oslo Børs. Sortert etter direkteavkastning.</p>
+  <div class="stats">
+    <div class="stat"><div class="stat-val">{len(aksjer_sortert)}</div><div class="stat-lbl">Aksjer</div></div>
+    <div class="stat"><div class="stat-val">{snitt_yield:.1f}%</div><div class="stat-lbl">Snitt yield</div></div>
+    <div class="stat"><div class="stat-val">{max(a.get("utbytte_yield",0) for a in aksjer_sortert):.1f}%</div><div class="stat-lbl">Høyeste yield</div></div>
+  </div>
+  <table>
+    <thead><tr><th>Ticker</th><th>Navn</th><th>Kurs</th><th>Yield</th><th>Ex-dato</th></tr></thead>
+    <tbody>{rader}</tbody>
+  </table>
+  <div class="cta"><a href="https://exday.no/">Åpne full app med filtrering og porteføljekalkulator →</a></div>
+  <p class="updated">Sist oppdatert: {today}</p>
+</div>
+</body>
+</html>"""
+
+        slug_dir = os.path.join(sektor_dir, slug)
+        os.makedirs(slug_dir, exist_ok=True)
+        with open(os.path.join(slug_dir, "index.html"), "w", encoding="utf-8") as f:
+            f.write(html)
+        generert.append((slug, sektor, len(aksjer_sortert)))
+
+    # Oversiktsside for alle sektorer
+    sektorkort = ""
+    for slug, sektor, antall in generert:
+        aksjer_i = sektorer[sektor]
+        snitt = sum(a.get("utbytte_yield", 0) for a in aksjer_i) / len(aksjer_i)
+        sektorkort += f"""
+    <a href="/aksjer/sektor/{slug}/" class="sektor-kort">
+      <div class="sk-navn">{sektor}</div>
+      <div class="sk-antall">{antall} aksjer · snitt {snitt:.1f}%</div>
+    </a>"""
+
+    sektor_oversikt = f"""<!DOCTYPE html>
+<html lang="nb">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Norske utbytteaksjer etter sektor | exday.no</title>
+  <meta name="description" content="Finn norske utbytteaksjer på Oslo Børs sortert etter sektor — energi, finans, shipping, havbruk og mer."/>
+  <link rel="canonical" href="https://exday.no/aksjer/sektor/"/>
+  <style>
+    *, *::before, *::after {{ box-sizing: border-box; margin: 0; padding: 0; }}
+    body {{ font-family: system-ui, -apple-system, sans-serif; background: #f9fafb; color: #111827; line-height: 1.6; }}
+    a {{ color: #2563eb; text-decoration: none; }}
+    .wrap {{ max-width: 900px; margin: 0 auto; padding: 1.5rem 1rem; }}
+    nav {{ font-size: 0.85rem; color: #6b7280; margin-bottom: 1.5rem; }}
+    h1 {{ font-size: 1.75rem; font-weight: 700; margin-bottom: 0.5rem; }}
+    .sub {{ color: #6b7280; margin-bottom: 1.5rem; }}
+    .grid {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; }}
+    .sektor-kort {{ display: block; background: #fff; border: 1px solid #e5e7eb; border-radius: 0.75rem; padding: 1rem 1.25rem; transition: border-color 0.15s; }}
+    .sektor-kort:hover {{ border-color: #2563eb; }}
+    .sk-navn {{ font-weight: 600; font-size: 1rem; color: #111827; }}
+    .sk-antall {{ font-size: 0.8rem; color: #6b7280; margin-top: 0.25rem; }}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <nav><a href="https://exday.no/">exday.no</a> › <a href="/aksjer/">Aksjer</a> › Sektorer</nav>
+  <h1>Utbytteaksjer etter sektor</h1>
+  <p class="sub">Velg en sektor for å se alle aksjer med utbytte innen den kategorien.</p>
+  <div class="grid">{sektorkort}
+  </div>
+</div>
+</body>
+</html>"""
+
+    with open(os.path.join(sektor_dir, "index.html"), "w", encoding="utf-8") as f:
+        f.write(sektor_oversikt)
+
+    print(f"Genererte {len(generert)} sektorsider under aksjer/sektor/")
+
+
 def generer_sitemap(aksjer, root_dir, today):
-    """Genererer sitemap.xml med alle sider inkludert individuelle aksjesider."""
+    """Genererer sitemap.xml med alle sider inkludert individuelle aksjesider og sektorsider."""
+    from collections import defaultdict
+    sektorer = defaultdict(list)
+    for a in aksjer:
+        if a.get("sektor"):
+            sektorer[a["sektor"]].append(a)
+
     urls = [
         f"""  <url>
     <loc>https://exday.no/</loc>
@@ -932,9 +1101,21 @@ def generer_sitemap(aksjer, root_dir, today):
     <priority>1.0</priority>
   </url>""",
         f"""  <url>
+    <loc>https://exday.no/uke/</loc>
+    <lastmod>{today}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>""",
+        f"""  <url>
     <loc>https://exday.no/aksjer/</loc>
     <lastmod>{today}</lastmod>
     <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>""",
+        f"""  <url>
+    <loc>https://exday.no/aksjer/sektor/</loc>
+    <lastmod>{today}</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>""",
         f"""  <url>
@@ -944,6 +1125,14 @@ def generer_sitemap(aksjer, root_dir, today):
     <priority>0.3</priority>
   </url>""",
     ]
+    for sektor in sorted(sektorer.keys()):
+        slug = _sektor_slug(sektor)
+        urls.append(f"""  <url>
+    <loc>https://exday.no/aksjer/sektor/{slug}/</loc>
+    <lastmod>{today}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>""")
     for a in aksjer:
         urls.append(f"""  <url>
     <loc>https://exday.no/aksjer/{a["ticker"]}/</loc>
@@ -960,7 +1149,8 @@ def generer_sitemap(aksjer, root_dir, today):
     sitemap_path = os.path.join(root_dir, "sitemap.xml")
     with open(sitemap_path, "w", encoding="utf-8") as f:
         f.write(sitemap_content)
-    print(f"Sitemap oppdatert med {len(aksjer) + 3} URL-er: {sitemap_path}")
+    total = len(urls)
+    print(f"Sitemap oppdatert med {total} URL-er: {sitemap_path}")
 
 
 def hent_osebx_historikk():
@@ -1139,9 +1329,10 @@ def main():
     print(f"\nFerdig! {len(resultater)} aksjer lagret til {output_path}")
     print(f"Sist oppdatert: {output['sist_oppdatert']}")
 
-    # Generer individuelle aksjesider og sitemap
+    # Generer individuelle aksjesider, sektorsider og sitemap
     root_dir = os.path.join(os.path.dirname(__file__), "..")
     generer_aksjesider(resultater, root_dir)
+    generer_sektorsider(resultater, root_dir)
     today = datetime.datetime.utcnow().strftime("%Y-%m-%d")
     generer_sitemap(resultater, root_dir, today)
 
