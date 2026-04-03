@@ -50,54 +50,96 @@
   ]
 }</script>
   <style>
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    body{font-family:system-ui,-apple-system,sans-serif;background:#f9fafb;color:#111827;line-height:1.6}
-    a{color:#16a34a;text-decoration:none}a:hover{text-decoration:underline}
-    .wrap{max-width:760px;margin:0 auto;padding:1.5rem 1rem}
-    nav{font-size:.85rem;color:#6b7280;margin-bottom:1.5rem}nav a{color:#6b7280}
-    h1{font-size:1.75rem;font-weight:700;margin-bottom:.25rem}
-    .sub{color:#6b7280;font-size:.95rem;margin-bottom:1.5rem}
-    .badge{display:inline-block;font-size:.75rem;font-weight:600;padding:.2rem .6rem;border-radius:9999px;background:#dcfce7;color:#15803d;margin-bottom:1.25rem}
-    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:1rem;margin-bottom:1.5rem}
-    .card{background:#fff;border:1px solid #e5e7eb;border-radius:.75rem;padding:1rem}
-    .card .label{font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:#9ca3af;margin-bottom:.2rem}
-    .card .val{font-size:1.25rem;font-weight:700;color:#111827}.card .val.green{color:#16a34a}
-    .desc{background:#fff;border:1px solid #e5e7eb;border-radius:.75rem;padding:1rem 1.25rem;margin-bottom:1.5rem;color:#374151}
-    h2{font-size:1rem;font-weight:700;margin-bottom:.75rem;color:#374151;margin-top:1.5rem}
-    table{width:100%;border-collapse:collapse;background:#fff;border:1px solid #e5e7eb;border-radius:.75rem;overflow:hidden;margin-bottom:1.5rem;font-size:.9rem}
-    th{background:#f3f4f6;padding:.6rem 1rem;text-align:left;font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:#6b7280}
-    td{padding:.6rem 1rem;border-top:1px solid #f3f4f6}tr:hover td{background:#f9fafb}
-    .cta{text-align:center;margin-top:2rem;padding:1.5rem;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:.75rem}
-    .cta a{display:inline-block;background:#16a34a;color:#fff;font-weight:600;padding:.65rem 1.5rem;border-radius:.5rem}
-    .cta a:hover{background:#15803d;text-decoration:none}
-    .updated{font-size:.78rem;color:#9ca3af;text-align:right;margin-top:1rem}
-    @media(max-width:480px){h1{font-size:1.4rem}}
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: system-ui, -apple-system, sans-serif; background: #f9fafb; color: #111827; line-height: 1.6; }
+    a { color: #16a34a; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .wrap { max-width: 760px; margin: 0 auto; padding: 1.5rem 1rem; }
+    nav { font-size: 0.85rem; color: #6b7280; margin-bottom: 1.5rem; }
+    nav a { color: #6b7280; }
+    nav span { margin: 0 0.35rem; }
+    h1 { font-size: 1.75rem; font-weight: 700; margin-bottom: 0.25rem; }
+    .sub { color: #6b7280; font-size: 0.95rem; margin-bottom: 1.5rem; }
+    .badge { display: inline-block; font-size: 0.75rem; font-weight: 600; padding: 0.2rem 0.6rem;
+              border-radius: 9999px; background: #dcfce7; color: #15803d; margin-bottom: 1.25rem; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+    .card { background: #fff; border: 1px solid #e5e7eb; border-radius: 0.75rem; padding: 1rem; }
+    .card .label { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #9ca3af; margin-bottom: 0.2rem; }
+    .card .val { font-size: 1.25rem; font-weight: 700; color: #111827; }
+    .card .val.green { color: #16a34a; }
+    .desc { background: #fff; border: 1px solid #e5e7eb; border-radius: 0.75rem; padding: 1rem 1.25rem; margin-bottom: 1.5rem; color: #374151; }
+    h2 { font-size: 1rem; font-weight: 700; margin-bottom: 0.75rem; color: #374151; }
+    table { width: 100%; border-collapse: collapse; background: #fff; border: 1px solid #e5e7eb; border-radius: 0.75rem; overflow: hidden; margin-bottom: 1.5rem; font-size: 0.9rem; }
+    th { background: #f3f4f6; padding: 0.6rem 1rem; text-align: left; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: #6b7280; }
+    td { padding: 0.6rem 1rem; border-top: 1px solid #f3f4f6; }
+    tr:hover td { background: #f9fafb; }
+    .cta { text-align: center; margin-top: 2rem; padding: 1.5rem; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 0.75rem; }
+    .cta a { display: inline-block; background: #16a34a; color: #fff; font-weight: 600; padding: 0.65rem 1.5rem; border-radius: 0.5rem; }
+    .cta a:hover { background: #15803d; text-decoration: none; }
+    .updated { font-size: 0.78rem; color: #9ca3af; text-align: right; margin-top: 1rem; }
+    @media (max-width: 480px) { h1 { font-size: 1.4rem; } }
   </style>
 </head>
 <body>
 <div class="wrap">
-  <nav><a href="https://exday.no/">exday.no</a> › <a href="https://exday.no/aksjer/">Aksjer</a> › GOGL</nav>
+
+  <nav>
+    <a href="https://exday.no/">exday.no</a>
+    <span>›</span>
+    <a href="https://exday.no/aksjer/">Aksjer</a>
+    <span>›</span>
+    GOGL
+  </nav>
+
   <h1>GOGL – Golden Ocean Group</h1>
   <p class="sub">Shipping · Kvartalsvis utbytte · Oslo Børs</p>
   <span class="badge">10.98% direkteavkastning</span>
+
   <div class="grid">
-    <div class="card"><div class="label">Kurs</div><div class="val">98 USD</div></div>
-    <div class="card"><div class="label">Yield</div><div class="val green">10.98%</div></div>
-    <div class="card"><div class="label">Utbytte/aksje</div><div class="val">10.8 USD</div></div>
-    <div class="card"><div class="label">Ex-dato</div><div class="val" style="font-size:1rem">22. mai 2026</div></div>
-    <div class="card"><div class="label">Utbetalingsdato</div><div class="val" style="font-size:1rem">6. jun 2026</div></div>
-    <div class="card"><div class="label">5-årssnitt yield</div><div class="val green">0.00%</div></div>
-    <div class="card"><div class="label">År med utbytte</div><div class="val">8</div></div>
+    <div class="card">
+      <div class="label">Kurs</div>
+      <div class="val">98 USD</div>
+    </div>
+    <div class="card">
+      <div class="label">Yield</div>
+      <div class="val green">10.98%</div>
+    </div>
+    <div class="card">
+      <div class="label">Utbytte/aksje</div>
+      <div class="val">10.8 USD</div>
+    </div>
+    <div class="card">
+      <div class="label">Ex-dato</div>
+      <div class="val" style="font-size:1rem">22. mai 2026</div>
+    </div>
+    <div class="card">
+      <div class="label">Utbetalingsdato</div>
+      <div class="val" style="font-size:1rem">6. jun 2026</div>
+    </div>
+    <div class="card">
+      <div class="label">5-årssnitt yield</div>
+      <div class="val green">0.00%</div>
+    </div>
+    <div class="card">
+      <div class="label">År med utbytte</div>
+      <div class="val">8</div>
+    </div>
     <div class="card"><div class="label">P/E</div><div class="val">6.2</div></div>
   </div>
+
   <div class="desc"><p>Verdens største tørrbulkrederi. Volatilt men potensielt svært høyt utbytte koblet til shippingratene.</p></div>
+
   <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Shipping</td></tr><tr><td>Frekvens</td><td>Kvartalsvis</td></tr><tr><td>Utbytte per aksje</td><td>10.8 USD</td></tr><tr><td>Direkteavkastning</td><td>10.98%</td></tr><tr><td>5-årssnitt yield</td><td>0.00%</td></tr><tr><td>År med utbytte</td><td>8</td></tr><tr><td>P/E</td><td>6.2</td></tr></tbody></table>
+
   
+
   <div class="cta">
-    <p style="margin-bottom:.75rem;color:#374151">Se alle norske utbytteaksjer, bygg portefølje og spor ex-datoer</p>
+    <p style="margin-bottom:0.75rem;color:#374151;">Se alle norske utbytteaksjer, bygg portefølje og spor ex-datoer</p>
     <a href="https://exday.no/?aksje=GOGL">Åpne GOGL i exday.no →</a>
   </div>
-  <p class="updated">Sist oppdatert: 2026-04-01</p>
+
+  <p class="updated">Sist oppdatert: 2026-04-03</p>
+
 </div>
 </body>
 </html>

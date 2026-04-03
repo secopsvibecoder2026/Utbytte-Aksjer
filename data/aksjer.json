@@ -1,5 +1,5 @@
 {
-  "sist_oppdatert": "2026-04-01T11:21:09Z",
+  "sist_oppdatert": "2026-04-03T14:12:58Z",
   "kilde": "Yahoo Finance (yfinance)",
   "aksjer": [
     {
@@ -7,32 +7,32 @@
       "navn": "Equinor ASA",
       "sektor": "Energi",
       "bors": "Oslo Børs",
-      "pris": 397.7,
+      "pris": 399.1,
       "52u_hoy": 422.3,
       "52u_lav": 226.4,
-      "markedsverdi_mrd": 991.5,
+      "markedsverdi_mrd": 995.0,
       "utbytte_per_aksje": 14.81,
-      "utbytte_yield": 3.72,
-      "utbytte_vekst_5ar": -2.8,
+      "utbytte_yield": 3.71,
+      "utbytte_vekst_5ar": -2.9,
       "payout_ratio": 76.0,
-      "pe_ratio": 21.02,
-      "pb_ratio": 2.52,
+      "pe_ratio": 21.09,
+      "pb_ratio": 2.55,
       "ex_dato": "2026-05-13",
       "betaling_dato": "2026-05-27",
       "rapport_dato": "2026-05-06",
       "frekvens": "Kvartalsvis",
       "ar_med_utbytte": 24,
-      "siste_utbytte": 3.52,
+      "siste_utbytte": 0.39,
       "historiske_utbytter": [
         {
           "ar": 2022,
-          "utbytte": 16.57,
-          "yield": 6.0
+          "utbytte": 16.59,
+          "yield": 6.01
         },
         {
           "ar": 2023,
-          "utbytte": 35.97,
-          "yield": 13.71
+          "utbytte": 36.25,
+          "yield": 13.82
         },
         {
           "ar": 2024,
@@ -47,10 +47,10 @@
         {
           "ar": 2026,
           "utbytte": 3.52,
-          "yield": 0.89
+          "yield": 0.88
         }
       ],
-      "snitt_yield_5ar": 8.41,
+      "snitt_yield_5ar": 8.43,
       "beskrivelse": "Norges største energiselskap. Kvartalsutbytte pluss ekstraordinære utbytter ved høye oljepriser.",
       "valuta": "NOK"
     },
@@ -59,22 +59,22 @@
       "navn": "DNB Bank ASA",
       "sektor": "Finans",
       "bors": "Oslo Børs",
-      "pris": 303.4,
+      "pris": 304.3,
       "52u_hoy": 307.3,
       "52u_lav": 230.3,
-      "markedsverdi_mrd": 440.9,
+      "markedsverdi_mrd": 442.2,
       "utbytte_per_aksje": 18.0,
-      "utbytte_yield": 5.93,
+      "utbytte_yield": 5.92,
       "utbytte_vekst_5ar": 16.8,
       "payout_ratio": 59.0,
-      "pe_ratio": 10.68,
-      "pb_ratio": 1.63,
+      "pe_ratio": 10.72,
+      "pb_ratio": 1.64,
       "ex_dato": "2026-04-22",
       "betaling_dato": "2026-04-30",
       "rapport_dato": "2026-04-23",
       "frekvens": "Årlig",
       "ar_med_utbytte": 22,
-      "siste_utbytte": 16.75,
+      "siste_utbytte": 18.0,
       "historiske_utbytter": [
         {
           "ar": 2022,
@@ -106,22 +106,22 @@
       "navn": "Telenor ASA",
       "sektor": "Telekommunikasjon",
       "bors": "Oslo Børs",
-      "pris": 171.5,
+      "pris": 170.3,
       "52u_hoy": 178.7,
       "52u_lav": 134.7,
-      "markedsverdi_mrd": 234.7,
-      "utbytte_per_aksje": 9.7,
-      "utbytte_yield": 5.66,
+      "markedsverdi_mrd": 233.0,
+      "utbytte_per_aksje": 10.0,
+      "utbytte_yield": 5.87,
       "utbytte_vekst_5ar": 1.6,
       "payout_ratio": 120.0,
-      "pe_ratio": 21.44,
-      "pb_ratio": 3.33,
+      "pe_ratio": 21.29,
+      "pb_ratio": 3.31,
       "ex_dato": "2026-05-20",
       "betaling_dato": "2026-06-02",
       "rapport_dato": "2026-04-28",
       "frekvens": "Halvårlig",
       "ar_med_utbytte": 25,
-      "siste_utbytte": 4.6,
+      "siste_utbytte": 5.0,
       "historiske_utbytter": [
         {
           "ar": 2022,
@@ -157,8 +157,8 @@
       "52u_hoy": 131.2,
       "52u_lav": 100.6,
       "markedsverdi_mrd": 120.5,
-      "utbytte_per_aksje": 4.0,
-      "utbytte_yield": 3.26,
+      "utbytte_per_aksje": 6.0,
+      "utbytte_yield": 4.89,
       "utbytte_vekst_5ar": 38.1,
       "payout_ratio": 63.0,
       "pe_ratio": 19.23,
@@ -168,7 +168,7 @@
       "rapport_dato": "2026-05-20",
       "frekvens": "Årlig",
       "ar_med_utbytte": 26,
-      "siste_utbytte": 10.0,
+      "siste_utbytte": 6.0,
       "historiske_utbytter": [
         {
           "ar": 2022,
@@ -200,16 +200,16 @@
       "navn": "Mowi ASA",
       "sektor": "Havbruk",
       "bors": "Oslo Børs",
-      "pris": 224.8,
+      "pris": 223.8,
       "52u_hoy": 245.8,
       "52u_lav": 170.3,
-      "markedsverdi_mrd": 118.5,
+      "markedsverdi_mrd": 118.0,
       "utbytte_per_aksje": 6.15,
-      "utbytte_yield": 2.74,
+      "utbytte_yield": 2.75,
       "utbytte_vekst_5ar": -18.3,
       "payout_ratio": 41.0,
-      "pe_ratio": 14.54,
-      "pb_ratio": 2.43,
+      "pe_ratio": 14.53,
+      "pb_ratio": 2.41,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-05-13",
@@ -252,15 +252,15 @@
       "navn": "Aker BP ASA",
       "sektor": "Energi",
       "bors": "Oslo Børs",
-      "pris": 342.1,
+      "pris": 340.2,
       "52u_hoy": 367.8,
       "52u_lav": 200.5,
-      "markedsverdi_mrd": 216.1,
+      "markedsverdi_mrd": 214.9,
       "utbytte_per_aksje": 25.18,
-      "utbytte_yield": 7.36,
+      "utbytte_yield": 7.4,
       "utbytte_vekst_5ar": -6.5,
       "payout_ratio": 1197.0,
-      "pe_ratio": 166.07,
+      "pe_ratio": 166.76,
       "pb_ratio": 1.98,
       "ex_dato": null,
       "betaling_dato": null,
@@ -292,7 +292,7 @@
         {
           "ar": 2026,
           "utbytte": 6.29,
-          "yield": 1.84
+          "yield": 1.85
         }
       ],
       "snitt_yield_5ar": 8.86,
@@ -304,22 +304,22 @@
       "navn": "Norsk Hydro ASA",
       "sektor": "Materialer",
       "bors": "Oslo Børs",
-      "pris": 102.85,
+      "pris": 102.6,
       "52u_hoy": 103.7,
       "52u_lav": 50.6,
-      "markedsverdi_mrd": 202.1,
+      "markedsverdi_mrd": 201.6,
       "utbytte_per_aksje": 3.0,
       "utbytte_yield": 2.92,
       "utbytte_vekst_5ar": 15.8,
       "payout_ratio": 66.0,
-      "pe_ratio": 30.16,
+      "pe_ratio": 30.09,
       "pb_ratio": 2.02,
       "ex_dato": "2026-05-08",
       "betaling_dato": "2026-05-19",
       "rapport_dato": "2026-04-29",
       "frekvens": "Årlig",
       "ar_med_utbytte": 26,
-      "siste_utbytte": 2.25,
+      "siste_utbytte": 3.0,
       "historiske_utbytter": [
         {
           "ar": 2022,
@@ -351,22 +351,22 @@
       "navn": "Yara International ASA",
       "sektor": "Materialer",
       "bors": "Oslo Børs",
-      "pris": 561.8,
+      "pris": 561.0,
       "52u_hoy": 577.6,
       "52u_lav": 282.2,
-      "markedsverdi_mrd": 143.1,
+      "markedsverdi_mrd": 142.9,
       "utbytte_per_aksje": 22.0,
       "utbytte_yield": 3.92,
       "utbytte_vekst_5ar": -40.5,
       "payout_ratio": 9.0,
       "pe_ratio": 10.72,
-      "pb_ratio": 1.68,
+      "pb_ratio": 1.69,
       "ex_dato": "2026-05-13",
       "betaling_dato": "2026-05-28",
       "rapport_dato": "2026-04-24",
       "frekvens": "Årlig",
       "ar_med_utbytte": 21,
-      "siste_utbytte": 5.0,
+      "siste_utbytte": 22.0,
       "historiske_utbytter": [
         {
           "ar": 2022,
@@ -398,22 +398,22 @@
       "navn": "SalMar ASA",
       "sektor": "Havbruk",
       "bors": "Oslo Børs",
-      "pris": 580.5,
+      "pris": 578.0,
       "52u_hoy": 627.0,
       "52u_lav": 407.2,
-      "markedsverdi_mrd": 78.7,
+      "markedsverdi_mrd": 78.3,
       "utbytte_per_aksje": 10.0,
-      "utbytte_yield": 1.72,
+      "utbytte_yield": 1.73,
       "utbytte_vekst_5ar": 2.4,
       "payout_ratio": 267.0,
-      "pe_ratio": 70.36,
-      "pb_ratio": 4.43,
-      "ex_dato": null,
-      "betaling_dato": null,
+      "pe_ratio": 69.89,
+      "pb_ratio": 4.41,
+      "ex_dato": "2026-06-24",
+      "betaling_dato": "2026-07-07",
       "rapport_dato": "2026-05-20",
       "frekvens": "Årlig",
       "ar_med_utbytte": 18,
-      "siste_utbytte": 22.0,
+      "siste_utbytte": 10.0,
       "historiske_utbytter": [
         {
           "ar": 2022,
@@ -491,15 +491,15 @@
       "navn": "MPC Container Ships",
       "sektor": "Shipping",
       "bors": "Oslo Børs",
-      "pris": 23.08,
+      "pris": 22.91,
       "52u_hoy": 24.0,
       "52u_lav": 12.2,
       "markedsverdi_mrd": 10.2,
       "utbytte_per_aksje": 1.92,
-      "utbytte_yield": 8.32,
+      "utbytte_yield": 8.38,
       "utbytte_vekst_5ar": -52.3,
       "payout_ratio": 51.0,
-      "pe_ratio": 4.46,
+      "pe_ratio": 4.44,
       "pb_ratio": 1.13,
       "ex_dato": null,
       "betaling_dato": null,
@@ -510,8 +510,8 @@
       "historiske_utbytter": [
         {
           "ar": 2022,
-          "utbytte": 9.25,
-          "yield": 143.99
+          "utbytte": 9.27,
+          "yield": 144.31
         },
         {
           "ar": 2023,
@@ -531,10 +531,10 @@
         {
           "ar": 2026,
           "utbytte": 0.48,
-          "yield": 2.07
+          "yield": 2.09
         }
       ],
-      "snitt_yield_5ar": 55.01,
+      "snitt_yield_5ar": 55.08,
       "beskrivelse": "Containerrederi med svært høy utbyttegrad. Syklisk og volatilt – utbytte varierer sterkt med containerrater.",
       "valuta": "NOK"
     },
@@ -543,50 +543,50 @@
       "navn": "BW LPG Limited",
       "sektor": "Shipping",
       "bors": "Oslo Børs",
-      "pris": 169.2,
+      "pris": 168.9,
       "52u_hoy": 185.0,
       "52u_lav": 82.55,
-      "markedsverdi_mrd": 25.7,
+      "markedsverdi_mrd": 25.6,
       "utbytte_per_aksje": 14.5,
-      "utbytte_yield": 8.57,
+      "utbytte_yield": 8.58,
       "utbytte_vekst_5ar": 8.4,
       "payout_ratio": 82.0,
-      "pe_ratio": 10.85,
+      "pe_ratio": 10.83,
       "pb_ratio": 1.44,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-06-02",
       "frekvens": "Kvartalsvis",
       "ar_med_utbytte": 12,
-      "siste_utbytte": 5.51,
+      "siste_utbytte": 5.57,
       "historiske_utbytter": [
         {
           "ar": 2022,
-          "utbytte": 9.09,
-          "yield": 12.77
+          "utbytte": 9.19,
+          "yield": 12.91
         },
         {
           "ar": 2023,
-          "utbytte": 29.79,
-          "yield": 20.38
+          "utbytte": 30.12,
+          "yield": 20.61
         },
         {
           "ar": 2024,
-          "utbytte": 28.05,
-          "yield": 22.71
+          "utbytte": 28.36,
+          "yield": 22.97
         },
         {
           "ar": 2025,
-          "utbytte": 12.77,
-          "yield": 9.71
+          "utbytte": 12.91,
+          "yield": 9.82
         },
         {
           "ar": 2026,
-          "utbytte": 5.51,
-          "yield": 3.26
+          "utbytte": 5.57,
+          "yield": 3.3
         }
       ],
-      "snitt_yield_5ar": 13.77,
+      "snitt_yield_5ar": 13.92,
       "beskrivelse": "Verdens største LPG-tankrederi. Høy kontantstrøm og liberal utbyttepolitikk. Volatilt med shippingmarkedet.",
       "valuta": "NOK"
     },
@@ -595,22 +595,22 @@
       "navn": "Kongsberg Gruppen ASA",
       "sektor": "Industri",
       "bors": "Oslo Børs",
-      "pris": 421.4,
+      "pris": 418.85,
       "52u_hoy": 425.9,
       "52u_lav": 228.5,
-      "markedsverdi_mrd": 370.6,
-      "utbytte_per_aksje": 2.2,
-      "utbytte_yield": 0.52,
+      "markedsverdi_mrd": 368.4,
+      "utbytte_per_aksje": 11.4,
+      "utbytte_yield": 2.72,
       "utbytte_vekst_5ar": 28.8,
       "payout_ratio": 42.0,
-      "pe_ratio": 88.72,
-      "pb_ratio": 16.42,
+      "pe_ratio": 88.55,
+      "pb_ratio": 16.32,
       "ex_dato": "2026-04-14",
       "betaling_dato": "2026-04-22",
       "rapport_dato": "2026-05-06",
       "frekvens": "Halvårlig",
       "ar_med_utbytte": 26,
-      "siste_utbytte": 2.4,
+      "siste_utbytte": 5.7,
       "historiske_utbytter": [
         {
           "ar": 2022,
@@ -642,50 +642,50 @@
       "navn": "Frontline PLC",
       "sektor": "Shipping",
       "bors": "Oslo Børs",
-      "pris": 340.1,
+      "pris": 339.3,
       "52u_hoy": 388.6,
       "52u_lav": 126.0,
-      "markedsverdi_mrd": 75.7,
+      "markedsverdi_mrd": 75.5,
       "utbytte_per_aksje": 17.2,
-      "utbytte_yield": 5.06,
+      "utbytte_yield": 5.07,
       "utbytte_vekst_5ar": 61.9,
       "payout_ratio": 55.0,
-      "pe_ratio": 20.5,
-      "pb_ratio": 3.09,
+      "pe_ratio": 20.49,
+      "pb_ratio": 3.1,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-04-30",
       "frekvens": "Kvartalsvis",
       "ar_med_utbytte": 25,
-      "siste_utbytte": 9.96,
+      "siste_utbytte": 10.07,
       "historiske_utbytter": [
         {
           "ar": 2022,
-          "utbytte": 1.45,
-          "yield": 1.27
+          "utbytte": 1.47,
+          "yield": 1.29
         },
         {
           "ar": 2023,
-          "utbytte": 27.75,
-          "yield": 13.9
+          "utbytte": 28.07,
+          "yield": 14.06
         },
         {
           "ar": 2024,
-          "utbytte": 18.86,
-          "yield": 12.14
+          "utbytte": 19.07,
+          "yield": 12.27
         },
         {
           "ar": 2025,
-          "utbytte": 8.99,
-          "yield": 4.06
+          "utbytte": 9.09,
+          "yield": 4.1
         },
         {
           "ar": 2026,
-          "utbytte": 9.96,
-          "yield": 2.93
+          "utbytte": 10.07,
+          "yield": 2.97
         }
       ],
-      "snitt_yield_5ar": 6.86,
+      "snitt_yield_5ar": 6.94,
       "beskrivelse": "Ledende råoljetankrederi. Svært høy utbyttegrad fra sterk kontantstrøm. Syklisk og rateeksponert.",
       "valuta": "NOK"
     },
@@ -694,7 +694,7 @@
       "navn": "SpareBank 1 Nord-Norge",
       "sektor": "Finans",
       "bors": "Oslo Børs",
-      "pris": 156.6,
+      "pris": 156.62,
       "52u_hoy": 161.52,
       "52u_lav": 119.5,
       "markedsverdi_mrd": 15.7,
@@ -746,22 +746,22 @@
       "navn": "Subsea 7 SA",
       "sektor": "Energitjenester",
       "bors": "Oslo Børs",
-      "pris": 294.4,
+      "pris": 293.2,
       "52u_hoy": 304.4,
       "52u_lav": 130.9,
-      "markedsverdi_mrd": 87.2,
-      "utbytte_per_aksje": 19.5,
-      "utbytte_yield": 6.62,
+      "markedsverdi_mrd": 86.8,
+      "utbytte_per_aksje": 26.0,
+      "utbytte_yield": 8.87,
       "utbytte_vekst_5ar": 59.7,
       "payout_ratio": 93.0,
-      "pe_ratio": 21.87,
+      "pe_ratio": 21.78,
       "pb_ratio": 2.03,
-      "ex_dato": null,
-      "betaling_dato": null,
+      "ex_dato": "2026-05-20",
+      "betaling_dato": "2026-05-28",
       "rapport_dato": "2026-04-30",
       "frekvens": "Halvårlig",
       "ar_med_utbytte": 19,
-      "siste_utbytte": 6.5,
+      "siste_utbytte": 13.0,
       "historiske_utbytter": [
         {
           "ar": 2022,
@@ -793,22 +793,22 @@
       "navn": "Wilh. Wilhelmsen Holding",
       "sektor": "Shipping",
       "bors": "Oslo Børs",
-      "pris": 740.0,
+      "pris": 733.0,
       "52u_hoy": 783.0,
       "52u_lav": 304.0,
-      "markedsverdi_mrd": 31.0,
-      "utbytte_per_aksje": 28.0,
-      "utbytte_yield": 3.78,
+      "markedsverdi_mrd": 30.8,
+      "utbytte_per_aksje": 20.0,
+      "utbytte_yield": 2.73,
       "utbytte_vekst_5ar": 41.4,
       "payout_ratio": 13.0,
-      "pe_ratio": 4.89,
-      "pb_ratio": 0.98,
-      "ex_dato": null,
-      "betaling_dato": null,
+      "pe_ratio": 4.85,
+      "pb_ratio": 0.97,
+      "ex_dato": "2026-05-04",
+      "betaling_dato": "2026-05-20",
       "rapport_dato": "2026-05-06",
       "frekvens": "Årlig",
       "ar_med_utbytte": 26,
-      "siste_utbytte": 12.0,
+      "siste_utbytte": 20.0,
       "historiske_utbytter": [
         {
           "ar": 2022,
@@ -863,15 +863,15 @@
       "navn": "Scatec ASA",
       "sektor": "Fornybar energi",
       "bors": "Oslo Børs",
-      "pris": 133.6,
+      "pris": 133.2,
       "52u_hoy": 134.0,
       "52u_lav": 68.0,
-      "markedsverdi_mrd": 21.4,
+      "markedsverdi_mrd": 21.3,
       "utbytte_per_aksje": 0.0,
       "utbytte_yield": 0.0,
       "utbytte_vekst_5ar": 33.4,
       "payout_ratio": 0.0,
-      "pe_ratio": 21.79,
+      "pe_ratio": 21.8,
       "pb_ratio": 2.1,
       "ex_dato": null,
       "betaling_dato": null,
@@ -900,16 +900,16 @@
       "navn": "Austevoll Seafood ASA",
       "sektor": "Havbruk",
       "bors": "Oslo Børs",
-      "pris": 104.8,
+      "pris": 104.2,
       "52u_hoy": 105.4,
       "52u_lav": 84.3,
-      "markedsverdi_mrd": 21.2,
+      "markedsverdi_mrd": 21.0,
       "utbytte_per_aksje": 6.5,
-      "utbytte_yield": 6.2,
+      "utbytte_yield": 6.24,
       "utbytte_vekst_5ar": 16.7,
       "payout_ratio": 295.0,
-      "pe_ratio": 47.64,
-      "pb_ratio": 1.32,
+      "pe_ratio": 47.36,
+      "pb_ratio": 1.31,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-04-30",
@@ -947,16 +947,16 @@
       "navn": "Lerøy Seafood Group ASA",
       "sektor": "Havbruk",
       "bors": "Oslo Børs",
-      "pris": 49.74,
+      "pris": 49.5,
       "52u_hoy": 52.4,
       "52u_lav": 41.64,
-      "markedsverdi_mrd": 29.6,
+      "markedsverdi_mrd": 29.5,
       "utbytte_per_aksje": 2.5,
-      "utbytte_yield": 5.03,
+      "utbytte_yield": 5.05,
       "utbytte_vekst_5ar": 5.7,
       "payout_ratio": 410.0,
-      "pe_ratio": 81.54,
-      "pb_ratio": 1.58,
+      "pe_ratio": 81.15,
+      "pb_ratio": 1.57,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-04-30",
@@ -994,7 +994,7 @@
       "navn": "Bakkafrost P/F",
       "sektor": "Havbruk",
       "bors": "Oslo Børs",
-      "pris": 459.2,
+      "pris": 458.0,
       "52u_hoy": 528.0,
       "52u_lav": 388.0,
       "markedsverdi_mrd": 27.2,
@@ -1002,14 +1002,14 @@
       "utbytte_yield": 1.15,
       "utbytte_vekst_5ar": 28.1,
       "payout_ratio": 94.0,
-      "pe_ratio": 34.27,
-      "pb_ratio": 1.65,
-      "ex_dato": null,
-      "betaling_dato": null,
+      "pe_ratio": 34.26,
+      "pb_ratio": 1.63,
+      "ex_dato": "2026-05-04",
+      "betaling_dato": "2026-05-21",
       "rapport_dato": "2026-05-19",
       "frekvens": "Årlig",
       "ar_med_utbytte": 15,
-      "siste_utbytte": 13.37,
+      "siste_utbytte": 3.45,
       "historiske_utbytter": [
         {
           "ar": 2022,
@@ -1041,50 +1041,50 @@
       "navn": "Hafnia Limited",
       "sektor": "Shipping",
       "bors": "Oslo Børs",
-      "pris": 75.86,
+      "pris": 75.68,
       "52u_hoy": 77.44,
       "52u_lav": 36.02,
-      "markedsverdi_mrd": 37.9,
+      "markedsverdi_mrd": 37.8,
       "utbytte_per_aksje": 6.76,
-      "utbytte_yield": 8.91,
+      "utbytte_yield": 8.93,
       "utbytte_vekst_5ar": -22.5,
       "payout_ratio": 60.0,
-      "pe_ratio": 11.62,
-      "pb_ratio": 1.66,
+      "pe_ratio": 11.59,
+      "pb_ratio": 1.67,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-04-17",
       "frekvens": "Kvartalsvis",
       "ar_med_utbytte": 6,
-      "siste_utbytte": 1.7,
+      "siste_utbytte": 1.72,
       "historiske_utbytter": [
         {
           "ar": 2022,
-          "utbytte": 4.71,
-          "yield": 9.78
+          "utbytte": 4.77,
+          "yield": 9.89
         },
         {
           "ar": 2023,
-          "utbytte": 10.4,
-          "yield": 15.23
+          "utbytte": 10.52,
+          "yield": 15.4
         },
         {
           "ar": 2024,
-          "utbytte": 13.26,
-          "yield": 22.03
+          "utbytte": 13.41,
+          "yield": 22.28
         },
         {
           "ar": 2025,
-          "utbytte": 3.86,
-          "yield": 7.11
+          "utbytte": 3.9,
+          "yield": 7.19
         },
         {
           "ar": 2026,
-          "utbytte": 1.7,
-          "yield": 2.25
+          "utbytte": 1.72,
+          "yield": 2.28
         }
       ],
-      "snitt_yield_5ar": 11.28,
+      "snitt_yield_5ar": 11.41,
       "beskrivelse": "Verdens største produkttankrederi. Frakter raffinerte petroleumsprodukter. Svært høy utbyttegrad fra sterk kontantstrøm.",
       "valuta": "NOK"
     },
@@ -1168,15 +1168,15 @@
       "navn": "SpareBank 1 Østlandet",
       "sektor": "Finans",
       "bors": "Oslo Børs",
-      "pris": 199.76,
+      "pris": 200.05,
       "52u_hoy": 215.7,
       "52u_lav": 147.7,
-      "markedsverdi_mrd": 27.1,
+      "markedsverdi_mrd": 27.2,
       "utbytte_per_aksje": 12.7,
-      "utbytte_yield": 6.36,
+      "utbytte_yield": 6.35,
       "utbytte_vekst_5ar": 33.1,
       "payout_ratio": 57.0,
-      "pe_ratio": 10.99,
+      "pe_ratio": 11.0,
       "pb_ratio": 1.06,
       "ex_dato": null,
       "betaling_dato": null,
@@ -1208,7 +1208,7 @@
         {
           "ar": 2026,
           "utbytte": 12.7,
-          "yield": 6.36
+          "yield": 6.35
         }
       ],
       "snitt_yield_5ar": 5.98,
@@ -1220,16 +1220,16 @@
       "navn": "Arendals Fossekompani ASA",
       "sektor": "Fornybar energi",
       "bors": "Oslo Børs",
-      "pris": 172.8,
+      "pris": 173.4,
       "52u_hoy": 192.4,
       "52u_lav": 123.0,
-      "markedsverdi_mrd": 19.6,
+      "markedsverdi_mrd": 19.7,
       "utbytte_per_aksje": 6.5,
-      "utbytte_yield": 3.76,
+      "utbytte_yield": 3.75,
       "utbytte_vekst_5ar": -3.8,
       "payout_ratio": 50.0,
-      "pe_ratio": 17.4,
-      "pb_ratio": 6.56,
+      "pe_ratio": 17.44,
+      "pb_ratio": 6.58,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-04-10",
@@ -1273,10 +1273,10 @@
       "markedsverdi_mrd": 24.3,
       "utbytte_per_aksje": 8.92,
       "utbytte_yield": 8.8,
-      "utbytte_vekst_5ar": 24.3,
+      "utbytte_vekst_5ar": 23.8,
       "payout_ratio": 92.0,
       "pe_ratio": 14.44,
-      "pb_ratio": 1.75,
+      "pb_ratio": 1.76,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-04-20",
@@ -1286,8 +1286,8 @@
       "historiske_utbytter": [
         {
           "ar": 2023,
-          "utbytte": 1.16,
-          "yield": 3.48
+          "utbytte": 1.17,
+          "yield": 3.52
         },
         {
           "ar": 2024,
@@ -1305,7 +1305,7 @@
           "yield": 2.2
         }
       ],
-      "snitt_yield_5ar": 4.82,
+      "snitt_yield_5ar": 4.83,
       "beskrivelse": "Ledende kjemikalietankrederi. Frakter spesialkjemikalier globalt. Nytter av høy etterspørsel etter spesialprodukter.",
       "valuta": "NOK"
     },
@@ -1329,7 +1329,7 @@
       "rapport_dato": null,
       "frekvens": "Uregelmessig",
       "ar_med_utbytte": 19,
-      "siste_utbytte": 6.71,
+      "siste_utbytte": 6.79,
       "historiske_utbytter": [],
       "snitt_yield_5ar": 0.0,
       "beskrivelse": "Ledende seismikkselskap som henter inn geofysiske data for olje- og gassindustrien. Gjenopptok utbytte etter restrukturering.",
@@ -1340,22 +1340,22 @@
       "navn": "Veidekke ASA",
       "sektor": "Industri",
       "bors": "Oslo Børs",
-      "pris": 189.8,
+      "pris": 189.2,
       "52u_hoy": 197.6,
       "52u_lav": 131.8,
-      "markedsverdi_mrd": 25.6,
+      "markedsverdi_mrd": 25.5,
       "utbytte_per_aksje": 11.25,
-      "utbytte_yield": 5.93,
+      "utbytte_yield": 5.95,
       "utbytte_vekst_5ar": 11.9,
       "payout_ratio": 78.0,
-      "pe_ratio": 16.52,
-      "pb_ratio": 6.95,
+      "pe_ratio": 16.45,
+      "pb_ratio": 6.93,
       "ex_dato": "2026-05-07",
       "betaling_dato": "2026-05-20",
       "rapport_dato": "2026-05-07",
       "frekvens": "Årlig",
       "ar_med_utbytte": 26,
-      "siste_utbytte": 9.0,
+      "siste_utbytte": 11.25,
       "historiske_utbytter": [
         {
           "ar": 2022,
@@ -1387,22 +1387,22 @@
       "navn": "Aker ASA",
       "sektor": "Industri",
       "bors": "Oslo Børs",
-      "pris": 1068.0,
+      "pris": 1066.0,
       "52u_hoy": 1142.0,
       "52u_lav": 520.0,
-      "markedsverdi_mrd": 79.3,
-      "utbytte_per_aksje": 82.0,
-      "utbytte_yield": 7.68,
+      "markedsverdi_mrd": 79.2,
+      "utbytte_per_aksje": 58.0,
+      "utbytte_yield": 5.44,
       "utbytte_vekst_5ar": 22.5,
       "payout_ratio": 97.0,
-      "pe_ratio": 19.61,
-      "pb_ratio": 1.7,
+      "pe_ratio": 19.57,
+      "pb_ratio": 1.69,
       "ex_dato": "2026-04-23",
       "betaling_dato": "2026-05-05",
       "rapport_dato": "2026-05-08",
       "frekvens": "Halvårlig",
       "ar_med_utbytte": 21,
-      "siste_utbytte": 26.5,
+      "siste_utbytte": 29.0,
       "historiske_utbytter": [
         {
           "ar": 2022,
@@ -1442,42 +1442,42 @@
       "utbytte_yield": 13.79,
       "utbytte_vekst_5ar": 11.8,
       "payout_ratio": 44.0,
-      "pe_ratio": 7.13,
+      "pe_ratio": 7.14,
       "pb_ratio": 0.84,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-05-18",
       "frekvens": "Kvartalsvis",
       "ar_med_utbytte": 15,
-      "siste_utbytte": 1.77,
+      "siste_utbytte": 1.79,
       "historiske_utbytter": [
         {
           "ar": 2022,
-          "utbytte": 1.35,
-          "yield": 5.86
+          "utbytte": 1.37,
+          "yield": 5.93
         },
         {
           "ar": 2023,
-          "utbytte": 1.35,
-          "yield": 6.18
+          "utbytte": 1.37,
+          "yield": 6.25
         },
         {
           "ar": 2024,
-          "utbytte": 2.66,
-          "yield": 9.02
+          "utbytte": 2.69,
+          "yield": 9.12
         },
         {
           "ar": 2025,
-          "utbytte": 3.17,
-          "yield": 7.03
+          "utbytte": 3.2,
+          "yield": 7.11
         },
         {
           "ar": 2026,
-          "utbytte": 1.77,
-          "yield": 3.44
+          "utbytte": 1.79,
+          "yield": 3.47
         }
       ],
-      "snitt_yield_5ar": 6.31,
+      "snitt_yield_5ar": 6.38,
       "beskrivelse": "FPSO-operatør (flytende produksjon og lagring av olje). Langvarige kontrakter gir stabil kontantstrøm.",
       "valuta": "NOK"
     },
@@ -1517,7 +1517,7 @@
       "utbytte_yield": 3.93,
       "utbytte_vekst_5ar": 29.4,
       "payout_ratio": 72.0,
-      "pe_ratio": 20.27,
+      "pe_ratio": 20.29,
       "pb_ratio": 4.97,
       "ex_dato": null,
       "betaling_dato": null,
@@ -1561,22 +1561,22 @@
       "navn": "Storebrand ASA",
       "sektor": "Finans",
       "bors": "Oslo Børs",
-      "pris": 176.2,
+      "pris": 175.4,
       "52u_hoy": 183.3,
       "52u_lav": 113.5,
-      "markedsverdi_mrd": 74.3,
+      "markedsverdi_mrd": 74.0,
       "utbytte_per_aksje": 5.4,
-      "utbytte_yield": 3.06,
+      "utbytte_yield": 3.08,
       "utbytte_vekst_5ar": 9.7,
       "payout_ratio": 40.0,
-      "pe_ratio": 15.06,
-      "pb_ratio": 2.27,
+      "pe_ratio": 15.02,
+      "pb_ratio": 2.26,
       "ex_dato": "2026-04-10",
       "betaling_dato": "2026-04-21",
       "rapport_dato": "2026-04-29",
       "frekvens": "Årlig",
       "ar_med_utbytte": 26,
-      "siste_utbytte": 4.7,
+      "siste_utbytte": 5.4,
       "historiske_utbytter": [
         {
           "ar": 2022,
@@ -1612,18 +1612,18 @@
       "52u_hoy": 46.52,
       "52u_lav": 25.92,
       "markedsverdi_mrd": 22.0,
-      "utbytte_per_aksje": 3.6,
-      "utbytte_yield": 7.94,
+      "utbytte_per_aksje": 8.6,
+      "utbytte_yield": 18.98,
       "utbytte_vekst_5ar": 154.6,
       "payout_ratio": 62.0,
       "pe_ratio": 8.58,
-      "pb_ratio": 1.92,
+      "pb_ratio": 1.93,
       "ex_dato": "2026-04-17",
       "betaling_dato": "2026-04-27",
       "rapport_dato": "2026-04-30",
       "frekvens": "Årlig",
       "ar_med_utbytte": 11,
-      "siste_utbytte": 3.3,
+      "siste_utbytte": 8.6,
       "historiske_utbytter": [
         {
           "ar": 2022,
@@ -1687,7 +1687,7 @@
       "utbytte_vekst_5ar": 37.9,
       "payout_ratio": 0.0,
       "pe_ratio": 5.97,
-      "pb_ratio": 7.42,
+      "pb_ratio": 7.46,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-04-29",
@@ -1778,14 +1778,14 @@
       "utbytte_yield": 3.0,
       "utbytte_vekst_5ar": 14.0,
       "payout_ratio": 20.0,
-      "pe_ratio": 7.27,
+      "pe_ratio": 7.28,
       "pb_ratio": 1.12,
       "ex_dato": "2026-05-28",
       "betaling_dato": "2026-06-05",
       "rapport_dato": "2026-04-30",
       "frekvens": "Årlig",
       "ar_med_utbytte": 26,
-      "siste_utbytte": 6.75,
+      "siste_utbytte": 7.3,
       "historiske_utbytter": [
         {
           "ar": 2022,
@@ -1817,22 +1817,22 @@
       "navn": "Wallenius Wilhelmsen ASA",
       "sektor": "Shipping",
       "bors": "Oslo Børs",
-      "pris": 126.1,
+      "pris": 125.6,
       "52u_hoy": 137.1,
       "52u_lav": 55.25,
-      "markedsverdi_mrd": 53.3,
+      "markedsverdi_mrd": 53.1,
       "utbytte_per_aksje": 13.11,
-      "utbytte_yield": 10.4,
-      "utbytte_vekst_5ar": 61.4,
+      "utbytte_yield": 10.44,
+      "utbytte_vekst_5ar": 61.8,
       "payout_ratio": 59.0,
-      "pe_ratio": 5.36,
+      "pe_ratio": 5.35,
       "pb_ratio": 1.66,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-05-06",
       "frekvens": "Halvårlig",
       "ar_med_utbytte": 15,
-      "siste_utbytte": 9.77,
+      "siste_utbytte": 9.88,
       "historiske_utbytter": [
         {
           "ar": 2022,
@@ -1841,8 +1841,8 @@
         },
         {
           "ar": 2023,
-          "utbytte": 8.73,
-          "yield": 14.99
+          "utbytte": 8.78,
+          "yield": 15.09
         },
         {
           "ar": 2024,
@@ -1856,11 +1856,11 @@
         },
         {
           "ar": 2026,
-          "utbytte": 9.77,
-          "yield": 7.75
+          "utbytte": 9.88,
+          "yield": 7.86
         }
       ],
-      "snitt_yield_5ar": 15.09,
+      "snitt_yield_5ar": 15.13,
       "beskrivelse": "Verdensledende innen bil- og høy-og-tung transport til sjøs (ro-ro). Betjener globale bilprodusenter med en moderne flåte.",
       "valuta": "NOK"
     },
@@ -1916,12 +1916,12 @@
       "payout_ratio": 89.0,
       "pe_ratio": 14.14,
       "pb_ratio": 1.54,
-      "ex_dato": null,
-      "betaling_dato": null,
+      "ex_dato": "2026-05-26",
+      "betaling_dato": "2026-06-03",
       "rapport_dato": "2026-04-30",
       "frekvens": "Årlig",
       "ar_med_utbytte": 9,
-      "siste_utbytte": 1.5,
+      "siste_utbytte": 1.9,
       "historiske_utbytter": [
         {
           "ar": 2022,
@@ -1962,7 +1962,7 @@
       "utbytte_vekst_5ar": -20.8,
       "payout_ratio": 151.0,
       "pe_ratio": 15.94,
-      "pb_ratio": -51.47,
+      "pb_ratio": -51.75,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-04-22",
@@ -2014,7 +2014,7 @@
       "utbytte_vekst_5ar": 13.4,
       "payout_ratio": 122.0,
       "pe_ratio": 5.35,
-      "pb_ratio": 1.56,
+      "pb_ratio": 1.57,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-05-07",
@@ -2066,7 +2066,7 @@
       "utbytte_vekst_5ar": 28.1,
       "payout_ratio": 81.0,
       "pe_ratio": 5.36,
-      "pb_ratio": 2.16,
+      "pb_ratio": 2.17,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-04-16",
@@ -2124,7 +2124,7 @@
       "rapport_dato": "2026-04-29",
       "frekvens": "Årlig",
       "ar_med_utbytte": 13,
-      "siste_utbytte": 4.25,
+      "siste_utbytte": 4.75,
       "historiske_utbytter": [
         {
           "ar": 2022,
@@ -2171,7 +2171,7 @@
       "rapport_dato": "2026-04-23",
       "frekvens": "Årlig",
       "ar_med_utbytte": 10,
-      "siste_utbytte": 3.5,
+      "siste_utbytte": 3.75,
       "historiske_utbytter": [
         {
           "ar": 2022,
@@ -2218,7 +2218,7 @@
       "rapport_dato": "2026-08-27",
       "frekvens": "Uregelmessig",
       "ar_med_utbytte": 16,
-      "siste_utbytte": 1.75,
+      "siste_utbytte": 35.64,
       "historiske_utbytter": [
         {
           "ar": 2022,
@@ -2251,16 +2251,16 @@
       "markedsverdi_mrd": 5.6,
       "utbytte_per_aksje": 3.58,
       "utbytte_yield": 3.77,
-      "utbytte_vekst_5ar": -5.4,
+      "utbytte_vekst_5ar": -5.2,
       "payout_ratio": 67.0,
       "pe_ratio": 17.38,
-      "pb_ratio": 1.58,
+      "pb_ratio": 1.59,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-04-28",
       "frekvens": "Kvartalsvis",
       "ar_med_utbytte": 7,
-      "siste_utbytte": 0.77,
+      "siste_utbytte": 0.78,
       "historiske_utbytter": [
         {
           "ar": 2022,
@@ -2274,21 +2274,21 @@
         },
         {
           "ar": 2024,
-          "utbytte": 13.56,
-          "yield": 18.91
+          "utbytte": 13.59,
+          "yield": 18.95
         },
         {
           "ar": 2025,
-          "utbytte": 3.87,
-          "yield": 4.89
+          "utbytte": 3.89,
+          "yield": 4.91
         },
         {
           "ar": 2026,
-          "utbytte": 0.77,
+          "utbytte": 0.78,
           "yield": 0.82
         }
       ],
-      "snitt_yield_5ar": 11.74,
+      "snitt_yield_5ar": 11.75,
       "beskrivelse": "Kombinasjonstanker som frakter kjemikalier og tørrbulk. Unik dual-trade forretningsmodell gir høyere utnyttelse.",
       "valuta": "NOK"
     },
@@ -2303,16 +2303,16 @@
       "markedsverdi_mrd": 19.3,
       "utbytte_per_aksje": 59.53,
       "utbytte_yield": 12.03,
-      "utbytte_vekst_5ar": 10.5,
+      "utbytte_vekst_5ar": 10.8,
       "payout_ratio": 56.0,
-      "pe_ratio": 13.46,
-      "pb_ratio": 3.14,
+      "pe_ratio": 13.48,
+      "pb_ratio": 3.16,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-05-13",
       "frekvens": "Kvartalsvis",
       "ar_med_utbytte": 6,
-      "siste_utbytte": 14.99,
+      "siste_utbytte": 15.16,
       "historiske_utbytter": [
         {
           "ar": 2022,
@@ -2326,21 +2326,21 @@
         },
         {
           "ar": 2024,
-          "utbytte": 32.9,
-          "yield": 14.39
+          "utbytte": 33.19,
+          "yield": 14.52
         },
         {
           "ar": 2025,
-          "utbytte": 20.5,
-          "yield": 6.08
+          "utbytte": 20.73,
+          "yield": 6.14
         },
         {
           "ar": 2026,
-          "utbytte": 14.99,
-          "yield": 3.03
+          "utbytte": 15.16,
+          "yield": 3.06
         }
       ],
-      "snitt_yield_5ar": 9.77,
+      "snitt_yield_5ar": 9.81,
       "beskrivelse": "Moderne råoljetanker med ekofokusert flåte av VLCC og Suezmax skip. Høy utbyttegrad fra sterk kontantstrøm.",
       "valuta": "NOK"
     },
@@ -2394,14 +2394,14 @@
       "utbytte_yield": 0.71,
       "utbytte_vekst_5ar": -15.9,
       "payout_ratio": 13.0,
-      "pe_ratio": 39.66,
-      "pb_ratio": 6.05,
+      "pe_ratio": 39.82,
+      "pb_ratio": 6.02,
       "ex_dato": "2026-04-27",
       "betaling_dato": "2026-05-15",
       "rapport_dato": "2026-04-24",
       "frekvens": "Årlig",
       "ar_med_utbytte": 26,
-      "siste_utbytte": 0.35,
+      "siste_utbytte": 0.7,
       "historiske_utbytter": [
         {
           "ar": 2022,
@@ -2448,7 +2448,7 @@
       "rapport_dato": "2026-04-15",
       "frekvens": "Årlig",
       "ar_med_utbytte": 24,
-      "siste_utbytte": 0.5,
+      "siste_utbytte": 0.55,
       "historiske_utbytter": [
         {
           "ar": 2022,
@@ -2495,7 +2495,7 @@
       "rapport_dato": "2026-04-09",
       "frekvens": "Årlig",
       "ar_med_utbytte": 12,
-      "siste_utbytte": 1.25,
+      "siste_utbytte": 1.0,
       "historiske_utbytter": [
         {
           "ar": 2022,
@@ -2537,12 +2537,12 @@
       "payout_ratio": 205.0,
       "pe_ratio": 24.01,
       "pb_ratio": 2.82,
-      "ex_dato": null,
-      "betaling_dato": null,
+      "ex_dato": "2026-05-04",
+      "betaling_dato": "2027-04-12",
       "rapport_dato": "2026-04-09",
       "frekvens": "Årlig",
       "ar_med_utbytte": 7,
-      "siste_utbytte": 3.0,
+      "siste_utbytte": 2.0,
       "historiske_utbytter": [
         {
           "ar": 2022,
@@ -2589,7 +2589,7 @@
       "rapport_dato": "2026-04-30",
       "frekvens": "Årlig",
       "ar_med_utbytte": 9,
-      "siste_utbytte": 4.15,
+      "siste_utbytte": 8.0,
       "historiske_utbytter": [
         {
           "ar": 2022,
@@ -2629,8 +2629,8 @@
       "utbytte_yield": 1.85,
       "utbytte_vekst_5ar": 9.4,
       "payout_ratio": 59.0,
-      "pe_ratio": 33.45,
-      "pb_ratio": 5.28,
+      "pe_ratio": 33.64,
+      "pb_ratio": 5.25,
       "ex_dato": "2026-04-24",
       "betaling_dato": "2026-05-19",
       "rapport_dato": "2026-04-24",
@@ -2676,14 +2676,14 @@
       "utbytte_yield": 3.14,
       "utbytte_vekst_5ar": 5.7,
       "payout_ratio": 108.0,
-      "pe_ratio": 17.23,
+      "pe_ratio": 17.25,
       "pb_ratio": 3.69,
       "ex_dato": "2026-04-17",
       "betaling_dato": "2026-04-27",
       "rapport_dato": "2026-05-12",
       "frekvens": "Årlig",
       "ar_med_utbytte": 10,
-      "siste_utbytte": 10.0,
+      "siste_utbytte": 5.0,
       "historiske_utbytter": [
         {
           "ar": 2022,
@@ -2723,42 +2723,42 @@
       "utbytte_yield": 8.3,
       "utbytte_vekst_5ar": -29.0,
       "payout_ratio": 113.0,
-      "pe_ratio": 11.16,
-      "pb_ratio": 2.22,
+      "pe_ratio": 11.17,
+      "pb_ratio": 2.23,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": null,
       "frekvens": "Månedlig",
       "ar_med_utbytte": 7,
-      "siste_utbytte": 0.97,
+      "siste_utbytte": 0.98,
       "historiske_utbytter": [
         {
           "ar": 2022,
-          "utbytte": 15.67,
-          "yield": 17.72
+          "utbytte": 15.84,
+          "yield": 17.92
         },
         {
           "ar": 2023,
-          "utbytte": 7.93,
-          "yield": 6.78
+          "utbytte": 8.02,
+          "yield": 6.86
         },
         {
           "ar": 2024,
-          "utbytte": 34.62,
-          "yield": 28.32
+          "utbytte": 35.01,
+          "yield": 28.64
         },
         {
           "ar": 2025,
-          "utbytte": 14.12,
-          "yield": 9.78
+          "utbytte": 14.28,
+          "yield": 9.89
         },
         {
           "ar": 2026,
-          "utbytte": 4.64,
-          "yield": 3.31
+          "utbytte": 4.69,
+          "yield": 3.34
         }
       ],
-      "snitt_yield_5ar": 13.18,
+      "snitt_yield_5ar": 13.33,
       "beskrivelse": "Tørrbulkrederi med Newcastlemax-skip optimert for jernmalm og kull. Høy utbyttegrad fra sterk TCE.",
       "valuta": "NOK"
     },
@@ -2874,8 +2874,8 @@
       "utbytte_yield": 7.55,
       "utbytte_vekst_5ar": -28.7,
       "payout_ratio": 88.0,
-      "pe_ratio": 4.84,
-      "pb_ratio": 1.86,
+      "pe_ratio": 4.85,
+      "pb_ratio": 1.87,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-04-22",
@@ -2944,6 +2944,583 @@
       "snitt_yield_5ar": 2.02,
       "beskrivelse": "Ledende leverandør av teknologi og tjenester til havbruksnæringen globalt. Sterk posisjon i vekstmarkedet for oppdrettsteknologi.",
       "valuta": "NOK"
+    },
+    {
+      "ticker": "SNI",
+      "navn": "Stolt-Nielsen Limited",
+      "sektor": "Shipping",
+      "bors": "Oslo Børs",
+      "pris": 332.5,
+      "52u_hoy": 358.5,
+      "52u_lav": 189.8,
+      "markedsverdi_mrd": 22.1,
+      "utbytte_per_aksje": 19.11,
+      "utbytte_yield": 5.75,
+      "utbytte_vekst_5ar": 31.6,
+      "payout_ratio": 34.0,
+      "pe_ratio": 5.19,
+      "pb_ratio": 0.76,
+      "ex_dato": null,
+      "betaling_dato": null,
+      "rapport_dato": "2026-04-09",
+      "frekvens": "Halvårlig",
+      "ar_med_utbytte": 21,
+      "siste_utbytte": 9.78,
+      "historiske_utbytter": [
+        {
+          "ar": 2022,
+          "utbytte": 14.67,
+          "yield": 5.57
+        },
+        {
+          "ar": 2023,
+          "utbytte": 22.0,
+          "yield": 7.18
+        },
+        {
+          "ar": 2024,
+          "utbytte": 26.89,
+          "yield": 9.38
+        },
+        {
+          "ar": 2025,
+          "utbytte": 22.0,
+          "yield": 6.75
+        }
+      ],
+      "snitt_yield_5ar": 7.22,
+      "beskrivelse": "Internasjonalt konsern innen kjemikalietankere, tankterminalvirksomhet og akvakultur. Diversifisert og solid utbyttebetaler over mange år.",
+      "valuta": "NOK"
+    },
+    {
+      "ticker": "MEDI",
+      "navn": "Medistim ASA",
+      "sektor": "Helsevern",
+      "bors": "Oslo Børs",
+      "pris": 214.0,
+      "52u_hoy": 292.0,
+      "52u_lav": 153.0,
+      "markedsverdi_mrd": 3.9,
+      "utbytte_per_aksje": 6.0,
+      "utbytte_yield": 2.8,
+      "utbytte_vekst_5ar": 18.9,
+      "payout_ratio": 69.0,
+      "pe_ratio": 24.57,
+      "pb_ratio": 8.35,
+      "ex_dato": null,
+      "betaling_dato": null,
+      "rapport_dato": "2026-04-14",
+      "frekvens": "Årlig",
+      "ar_med_utbytte": 21,
+      "siste_utbytte": 6.0,
+      "historiske_utbytter": [
+        {
+          "ar": 2022,
+          "utbytte": 3.75,
+          "yield": 1.75
+        },
+        {
+          "ar": 2023,
+          "utbytte": 4.5,
+          "yield": 2.24
+        },
+        {
+          "ar": 2024,
+          "utbytte": 4.5,
+          "yield": 3.12
+        },
+        {
+          "ar": 2025,
+          "utbytte": 6.0,
+          "yield": 2.32
+        }
+      ],
+      "snitt_yield_5ar": 2.36,
+      "beskrivelse": "Norsk medisinsk teknologiselskap med ultralyd- og flowmålingsprodukter for hjertekirurgi. Lang og konsistent utbyttehistorikk.",
+      "valuta": "NOK"
+    },
+    {
+      "ticker": "ATEA",
+      "navn": "Atea ASA",
+      "sektor": "Informasjonsteknologi",
+      "bors": "Oslo Børs",
+      "pris": 139.2,
+      "52u_hoy": 163.8,
+      "52u_lav": 120.2,
+      "markedsverdi_mrd": 15.5,
+      "utbytte_per_aksje": 7.5,
+      "utbytte_yield": 5.39,
+      "utbytte_vekst_5ar": 8.8,
+      "payout_ratio": 91.0,
+      "pe_ratio": 18.01,
+      "pb_ratio": 3.42,
+      "ex_dato": "2026-05-20",
+      "betaling_dato": "2026-05-26",
+      "rapport_dato": "2026-04-28",
+      "frekvens": "Halvårlig",
+      "ar_med_utbytte": 17,
+      "siste_utbytte": 3.75,
+      "historiske_utbytter": [
+        {
+          "ar": 2022,
+          "utbytte": 5.5,
+          "yield": 5.58
+        },
+        {
+          "ar": 2023,
+          "utbytte": 6.25,
+          "yield": 5.34
+        },
+        {
+          "ar": 2024,
+          "utbytte": 7.0,
+          "yield": 5.19
+        },
+        {
+          "ar": 2025,
+          "utbytte": 7.0,
+          "yield": 4.44
+        }
+      ],
+      "snitt_yield_5ar": 5.14,
+      "beskrivelse": "Nordens ledende IT-infrastrukturleverandør. Distribuerer hardware, software og tjenester til offentlig og privat sektor. Stabilt og voksende utbytte.",
+      "valuta": "NOK"
+    },
+    {
+      "ticker": "BOUV",
+      "navn": "Bouvet ASA",
+      "sektor": "Informasjonsteknologi",
+      "bors": "Oslo Børs",
+      "pris": 50.0,
+      "52u_hoy": 83.5,
+      "52u_lav": 48.1,
+      "markedsverdi_mrd": 5.1,
+      "utbytte_per_aksje": 6.0,
+      "utbytte_yield": 12.0,
+      "utbytte_vekst_5ar": 8.2,
+      "payout_ratio": 87.0,
+      "pe_ratio": 14.45,
+      "pb_ratio": 13.21,
+      "ex_dato": "2026-05-15",
+      "betaling_dato": "2026-05-27",
+      "rapport_dato": "2026-04-15",
+      "frekvens": "Halvårlig",
+      "ar_med_utbytte": 18,
+      "siste_utbytte": 3.0,
+      "historiske_utbytter": [
+        {
+          "ar": 2022,
+          "utbytte": 2.31,
+          "yield": 4.49
+        },
+        {
+          "ar": 2023,
+          "utbytte": 3.05,
+          "yield": 5.56
+        },
+        {
+          "ar": 2024,
+          "utbytte": 3.6,
+          "yield": 4.94
+        },
+        {
+          "ar": 2025,
+          "utbytte": 3.7,
+          "yield": 6.01
+        }
+      ],
+      "snitt_yield_5ar": 5.25,
+      "beskrivelse": "Norsk IT- og digitalrådgivningsselskap. Høy utbyttegrad og konsistent vekst. Lavt kapitalintensivt og ansattedrevet.",
+      "valuta": "NOK"
+    },
+    {
+      "ticker": "AKBM",
+      "navn": "Aker BioMarine ASA",
+      "sektor": "Havbruk",
+      "bors": "Oslo Børs",
+      "pris": 107.0,
+      "52u_hoy": 118.0,
+      "52u_lav": 43.65,
+      "markedsverdi_mrd": 9.4,
+      "utbytte_per_aksje": 0.0,
+      "utbytte_yield": 0.0,
+      "utbytte_vekst_5ar": 0.0,
+      "payout_ratio": 0.0,
+      "pe_ratio": 24.56,
+      "pb_ratio": 6.73,
+      "ex_dato": null,
+      "betaling_dato": null,
+      "rapport_dato": "2026-04-30",
+      "frekvens": "Uregelmessig",
+      "ar_med_utbytte": 2,
+      "siste_utbytte": 45.0,
+      "historiske_utbytter": [
+        {
+          "ar": 2024,
+          "utbytte": 45.0,
+          "yield": 67.06
+        }
+      ],
+      "snitt_yield_5ar": 67.06,
+      "beskrivelse": "Norsk krill-selskap som høster, foredler og selger krillolje og krilmel til menneskelig ernæring og akvakultur.",
+      "valuta": "NOK"
+    },
+    {
+      "ticker": "TGS",
+      "navn": "TGS ASA",
+      "sektor": "Energitjenester",
+      "bors": "Oslo Børs",
+      "pris": 127.0,
+      "52u_hoy": 133.0,
+      "52u_lav": 70.05,
+      "markedsverdi_mrd": 25.0,
+      "utbytte_per_aksje": 6.2,
+      "utbytte_yield": 4.88,
+      "utbytte_vekst_5ar": -16.3,
+      "payout_ratio": 687.0,
+      "pe_ratio": 144.32,
+      "pb_ratio": 1.3,
+      "ex_dato": null,
+      "betaling_dato": null,
+      "rapport_dato": "2026-04-30",
+      "frekvens": "Kvartalsvis",
+      "ar_med_utbytte": 16,
+      "siste_utbytte": 1.47,
+      "historiske_utbytter": [
+        {
+          "ar": 2022,
+          "utbytte": 5.47,
+          "yield": 4.96
+        },
+        {
+          "ar": 2023,
+          "utbytte": 5.91,
+          "yield": 5.15
+        },
+        {
+          "ar": 2024,
+          "utbytte": 6.03,
+          "yield": 5.8
+        },
+        {
+          "ar": 2025,
+          "utbytte": 6.46,
+          "yield": 7.14
+        },
+        {
+          "ar": 2026,
+          "utbytte": 1.47,
+          "yield": 1.16
+        }
+      ],
+      "snitt_yield_5ar": 4.84,
+      "beskrivelse": "Verdensledende innen seismikk- og geospatiale data til olje- og gassindustrien. Kvartalsvis utbytte pluss ekstraordinære utbetalinger.",
+      "valuta": "NOK"
+    },
+    {
+      "ticker": "NSKOG",
+      "navn": "Norske Skog ASA",
+      "sektor": "Materialer",
+      "bors": "Oslo Børs",
+      "pris": 39.75,
+      "52u_hoy": 39.75,
+      "52u_lav": 14.12,
+      "markedsverdi_mrd": 3.4,
+      "utbytte_per_aksje": 0.0,
+      "utbytte_yield": 0.0,
+      "utbytte_vekst_5ar": 0.0,
+      "payout_ratio": 0.0,
+      "pe_ratio": 7.63,
+      "pb_ratio": 0.58,
+      "ex_dato": null,
+      "betaling_dato": null,
+      "rapport_dato": "2026-04-24",
+      "frekvens": "Uregelmessig",
+      "ar_med_utbytte": 6,
+      "siste_utbytte": 0.67,
+      "historiske_utbytter": [
+        {
+          "ar": 2023,
+          "utbytte": 0.67,
+          "yield": 1.62
+        }
+      ],
+      "snitt_yield_5ar": 1.62,
+      "beskrivelse": "En av Europas største avispapirprodusenter. Gjenopptok utbytte etter restrukturering og betaler jevnt siden.",
+      "valuta": "NOK"
+    },
+    {
+      "ticker": "SOFF",
+      "navn": "Solstad Offshore ASA",
+      "sektor": "Energitjenester",
+      "bors": "Oslo Børs",
+      "pris": 68.1,
+      "52u_hoy": 70.8,
+      "52u_lav": 30.0,
+      "markedsverdi_mrd": 7.4,
+      "utbytte_per_aksje": 0.51,
+      "utbytte_yield": 0.75,
+      "utbytte_vekst_5ar": 0.0,
+      "payout_ratio": 3.0,
+      "pe_ratio": 4.13,
+      "pb_ratio": 1.39,
+      "ex_dato": null,
+      "betaling_dato": null,
+      "rapport_dato": "2026-05-07",
+      "frekvens": "Årlig",
+      "ar_med_utbytte": 26,
+      "siste_utbytte": 0.51,
+      "historiske_utbytter": [
+        {
+          "ar": 2025,
+          "utbytte": 0.51,
+          "yield": 1.18
+        }
+      ],
+      "snitt_yield_5ar": 1.18,
+      "beskrivelse": "Norsk offshore supplyreder med AHTS, PSV og CSV-fartøyer. Relisting etter restrukturering; sterk markedsetterspørsel.",
+      "valuta": "NOK"
+    },
+    {
+      "ticker": "ITERA",
+      "navn": "Itera ASA",
+      "sektor": "Informasjonsteknologi",
+      "bors": "Oslo Børs",
+      "pris": 7.2,
+      "52u_hoy": 10.45,
+      "52u_lav": 6.7,
+      "markedsverdi_mrd": 0.6,
+      "utbytte_per_aksje": 0.3,
+      "utbytte_yield": 4.17,
+      "utbytte_vekst_5ar": -3.8,
+      "payout_ratio": 107.0,
+      "pe_ratio": 25.71,
+      "pb_ratio": 12.88,
+      "ex_dato": null,
+      "betaling_dato": null,
+      "rapport_dato": "2026-04-28",
+      "frekvens": "Halvårlig",
+      "ar_med_utbytte": 21,
+      "siste_utbytte": 0.1,
+      "historiske_utbytter": [
+        {
+          "ar": 2022,
+          "utbytte": 0.5,
+          "yield": 4.29
+        },
+        {
+          "ar": 2023,
+          "utbytte": 0.7,
+          "yield": 6.22
+        },
+        {
+          "ar": 2024,
+          "utbytte": 0.4,
+          "yield": 4.63
+        },
+        {
+          "ar": 2025,
+          "utbytte": 0.3,
+          "yield": 3.5
+        }
+      ],
+      "snitt_yield_5ar": 4.66,
+      "beskrivelse": "Norsk IT-konsulentselskap med spisskompetanse innen digital transformasjon. Konsistent utbyttebetaler med lav kapitalintensitet.",
+      "valuta": "NOK"
+    },
+    {
+      "ticker": "HUNT",
+      "navn": "Hunter Group ASA",
+      "sektor": "Shipping",
+      "bors": "Oslo Børs",
+      "pris": 5.69,
+      "52u_hoy": 6.48,
+      "52u_lav": 0.7,
+      "markedsverdi_mrd": 0.8,
+      "utbytte_per_aksje": 1.28,
+      "utbytte_yield": 22.5,
+      "utbytte_vekst_5ar": -35.6,
+      "payout_ratio": 30.0,
+      "pe_ratio": 5.87,
+      "pb_ratio": 3.81,
+      "ex_dato": null,
+      "betaling_dato": null,
+      "rapport_dato": "2026-05-28",
+      "frekvens": "Kvartalsvis",
+      "ar_med_utbytte": 5,
+      "siste_utbytte": 0.58,
+      "historiske_utbytter": [
+        {
+          "ar": 2022,
+          "utbytte": 26.52,
+          "yield": 666.75
+        },
+        {
+          "ar": 2023,
+          "utbytte": 40.85,
+          "yield": 2604.02
+        },
+        {
+          "ar": 2025,
+          "utbytte": 0.3,
+          "yield": 20.13
+        },
+        {
+          "ar": 2026,
+          "utbytte": 0.98,
+          "yield": 17.22
+        }
+      ],
+      "snitt_yield_5ar": 827.03,
+      "beskrivelse": "VLCC-tankrederi med fokus på råoljetransport. Variabelt utbytte koblet til tankratene og inntjening per skip.",
+      "valuta": "NOK"
+    },
+    {
+      "ticker": "CLOUD",
+      "navn": "Cloudberry Clean Energy AS",
+      "sektor": "Fornybar energi",
+      "bors": "Oslo Børs",
+      "pris": 13.18,
+      "52u_hoy": 13.94,
+      "52u_lav": 10.4,
+      "markedsverdi_mrd": 4.4,
+      "utbytte_per_aksje": 0.0,
+      "utbytte_yield": 0.0,
+      "utbytte_vekst_5ar": 0.0,
+      "payout_ratio": 0.0,
+      "pe_ratio": 62.76,
+      "pb_ratio": 0.83,
+      "ex_dato": null,
+      "betaling_dato": null,
+      "rapport_dato": "2026-05-12",
+      "frekvens": "Uregelmessig",
+      "ar_med_utbytte": 0,
+      "siste_utbytte": 0.0,
+      "historiske_utbytter": [],
+      "snitt_yield_5ar": 0.0,
+      "beskrivelse": "Norsk fornybar energiselskap med vind- og solkraft i Norden. Halvårlig utbytte fra stabil strømproduksjon på langsiktige kontrakter.",
+      "valuta": "NOK"
+    },
+    {
+      "ticker": "ALNG",
+      "navn": "Awilco LNG ASA",
+      "sektor": "Shipping",
+      "bors": "Oslo Børs",
+      "pris": 3.4,
+      "52u_hoy": 5.75,
+      "52u_lav": 2.19,
+      "markedsverdi_mrd": 0.5,
+      "utbytte_per_aksje": 0.0,
+      "utbytte_yield": 0.0,
+      "utbytte_vekst_5ar": 25.0,
+      "payout_ratio": 0.0,
+      "pe_ratio": -16.75,
+      "pb_ratio": 0.37,
+      "ex_dato": null,
+      "betaling_dato": null,
+      "rapport_dato": "2026-04-15",
+      "frekvens": "Uregelmessig",
+      "ar_med_utbytte": 3,
+      "siste_utbytte": 0.25,
+      "historiske_utbytter": [
+        {
+          "ar": 2023,
+          "utbytte": 1.6,
+          "yield": 25.22
+        },
+        {
+          "ar": 2024,
+          "utbytte": 2.0,
+          "yield": 48.08
+        }
+      ],
+      "snitt_yield_5ar": 36.65,
+      "beskrivelse": "LNG-tankselskap med skip på langsiktige TC-kontrakter. Stabil og forutsigbar kvartalsvis utbytte fra høy flåteutnyttelse.",
+      "valuta": "NOK"
+    },
+    {
+      "ticker": "EMGS",
+      "navn": "Electromagnetic Geoservices ASA",
+      "sektor": "Energitjenester",
+      "bors": "Oslo Børs",
+      "pris": 0.3,
+      "52u_hoy": 2.2,
+      "52u_lav": 0.12,
+      "markedsverdi_mrd": 0.0,
+      "utbytte_per_aksje": 0.0,
+      "utbytte_yield": 0.0,
+      "utbytte_vekst_5ar": 0.0,
+      "payout_ratio": 0.0,
+      "pe_ratio": -3.71,
+      "pb_ratio": -0.37,
+      "ex_dato": null,
+      "betaling_dato": null,
+      "rapport_dato": "2026-04-23",
+      "frekvens": "Uregelmessig",
+      "ar_med_utbytte": 0,
+      "siste_utbytte": 0.0,
+      "historiske_utbytter": [],
+      "snitt_yield_5ar": 0.0,
+      "beskrivelse": "Norsk geofysikk-selskap som leverer elektromagnetiske undersøkelsestjenester til olje- og gassindustrien. Betaler utbytte ved overskuddskapital.",
+      "valuta": "NOK"
+    },
+    {
+      "ticker": "NRC",
+      "navn": "NRC Group ASA",
+      "sektor": "Industri",
+      "bors": "Oslo Børs",
+      "pris": 7.65,
+      "52u_hoy": 10.1,
+      "52u_lav": 3.99,
+      "markedsverdi_mrd": 1.3,
+      "utbytte_per_aksje": 0.0,
+      "utbytte_yield": 0.0,
+      "utbytte_vekst_5ar": 0.0,
+      "payout_ratio": 0.0,
+      "pe_ratio": 54.64,
+      "pb_ratio": 0.86,
+      "ex_dato": null,
+      "betaling_dato": null,
+      "rapport_dato": "2026-05-13",
+      "frekvens": "Uregelmessig",
+      "ar_med_utbytte": 26,
+      "siste_utbytte": 1.53,
+      "historiske_utbytter": [],
+      "snitt_yield_5ar": 0.0,
+      "beskrivelse": "Nordisk jernbaneinfrastrukturentreprenør med virksomhet i Norge, Sverige og Finland. Stabil ordrebok fra offentlige infrastrukturinvesteringer.",
+      "valuta": "NOK"
     }
-  ]
+  ],
+  "osebx_historikk": {
+    "2026-02-19": 2167.32,
+    "2026-02-20": 2177.91,
+    "2026-02-23": 2171.45,
+    "2026-02-24": 2175.44,
+    "2026-02-25": 2181.22,
+    "2026-02-26": 2172.26,
+    "2026-02-27": 2193.27,
+    "2026-03-02": 2230.47,
+    "2026-03-03": 2206.72,
+    "2026-03-04": 2222.33,
+    "2026-03-05": 2223.14,
+    "2026-03-06": 2226.08,
+    "2026-03-09": 2238.83,
+    "2026-03-10": 2229.62,
+    "2026-03-11": 2241.93,
+    "2026-03-12": 2271.57,
+    "2026-03-13": 2282.21,
+    "2026-03-16": 2310.04,
+    "2026-03-17": 2320.5,
+    "2026-03-18": 2337.58,
+    "2026-03-19": 2374.83,
+    "2026-03-20": 2337.49,
+    "2026-03-23": 2304.45,
+    "2026-03-24": 2318.56,
+    "2026-03-25": 2346.58,
+    "2026-03-26": 2357.66,
+    "2026-03-27": 2353.47,
+    "2026-03-30": 2420.54,
+    "2026-03-31": 2451.18,
+    "2026-04-01": 2424.13
+  }
 }
