@@ -1,0 +1,196 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1080" width="1080" height="1080">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0F172A"/>
+      <stop offset="100%" stop-color="#1E293B"/>
+    </linearGradient>
+    <linearGradient id="cardGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1E293B"/>
+      <stop offset="100%" stop-color="#162032"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="0" dy="8" stdDeviation="20" flood-color="#000" flood-opacity="0.4"/>
+    </filter>
+    <filter id="glowTeal">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <clipPath id="phoneClip">
+      <rect x="290" y="60" width="500" height="880" rx="40"/>
+    </clipPath>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1080" height="1080" fill="url(#bg)"/>
+
+  <!-- Subtle grid -->
+  <g opacity="0.04" stroke="#94a3b8" stroke-width="1">
+    <line x1="0" y1="216" x2="1080" y2="216"/>
+    <line x1="0" y1="432" x2="1080" y2="432"/>
+    <line x1="0" y1="648" x2="1080" y2="648"/>
+    <line x1="0" y1="864" x2="1080" y2="864"/>
+    <line x1="216" y1="0" x2="216" y2="1080"/>
+    <line x1="432" y1="0" x2="432" y2="1080"/>
+    <line x1="648" y1="0" x2="648" y2="1080"/>
+    <line x1="864" y1="0" x2="864" y2="1080"/>
+  </g>
+
+  <!-- Teal accent blobs -->
+  <circle cx="160" cy="200" r="120" fill="#14b8a6" opacity="0.07"/>
+  <circle cx="920" cy="880" r="150" fill="#2563eb" opacity="0.07"/>
+  <circle cx="950" cy="180" r="80" fill="#14b8a6" opacity="0.05"/>
+
+  <!-- Phone frame -->
+  <rect x="288" y="58" width="504" height="884" rx="42" fill="#0F172A" filter="url(#shadow)"/>
+  <rect x="290" y="60" width="500" height="880" rx="40" fill="#111827"/>
+
+  <!-- Phone screen content (clipped) -->
+  <g clip-path="url(#phoneClip)">
+
+    <!-- Status bar -->
+    <rect x="290" y="60" width="500" height="44" fill="#0F172A"/>
+    <text x="320" y="88" font-family="system-ui,sans-serif" font-size="13" fill="#9ca3af">09:15</text>
+    <text x="740" y="88" font-family="system-ui,sans-serif" font-size="13" fill="#9ca3af" text-anchor="end">5G ▌▌▌</text>
+
+    <!-- App header -->
+    <rect x="290" y="104" width="500" height="60" fill="#0F172A"/>
+    <!-- exday icon -->
+    <rect x="316" y="116" width="32" height="32" rx="7" fill="none" stroke="#14b8a6" stroke-width="2"/>
+    <rect x="316" y="116" width="32" height="7" rx="3" fill="#14b8a6"/>
+    <line x1="326" y1="123" x2="338" y2="143" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="338" y1="123" x2="326" y2="143" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+    <!-- wordmark -->
+    <text x="358" y="138" font-family="system-ui,sans-serif" font-size="22" font-weight="800" fill="white">ex</text>
+    <text x="383" y="138" font-family="system-ui,sans-serif" font-size="22" font-weight="800" fill="#14b8a6">day</text>
+
+    <!-- Tab bar -->
+    <rect x="290" y="164" width="500" height="40" fill="#0F172A"/>
+    <text x="320" y="189" font-family="system-ui,sans-serif" font-size="13" font-weight="600" fill="#14b8a6">Oversikt</text>
+    <line x1="316" y1="202" x2="380" y2="202" stroke="#14b8a6" stroke-width="2"/>
+    <text x="405" y="189" font-family="system-ui,sans-serif" font-size="13" fill="#4b5563">Kalender</text>
+    <text x="498" y="189" font-family="system-ui,sans-serif" font-size="13" fill="#4b5563">Portefølje</text>
+    <text x="618" y="189" font-family="system-ui,sans-serif" font-size="13" fill="#4b5563">Kalkulator</text>
+
+    <!-- Dagens bevegelser card -->
+    <rect x="302" y="210" width="476" height="210" rx="14" fill="#1E293B"/>
+    <text x="322" y="234" font-family="system-ui,sans-serif" font-size="11" font-weight="600" fill="#64748b" letter-spacing="1">DAGENS BEVEGELSER</text>
+    <text x="730" y="234" font-family="system-ui,sans-serif" font-size="11" fill="#475569" text-anchor="end">Oppdatert 09:15</text>
+    <!-- divider -->
+    <line x1="302" y1="244" x2="778" y2="244" stroke="#334155" stroke-width="1"/>
+
+    <!-- Vinnere label -->
+    <text x="322" y="264" font-family="system-ui,sans-serif" font-size="11" font-weight="600" fill="#14b8a6">Vinnere</text>
+    <!-- row 1 -->
+    <text x="322" y="284" font-family="monospace,sans-serif" font-size="13" font-weight="700" fill="#d1fae5">KIT</text>
+    <text x="360" y="284" font-family="system-ui,sans-serif" font-size="12" fill="#6b7280">Kitron ASA</text>
+    <text x="770" y="284" font-family="system-ui,sans-serif" font-size="12" font-weight="600" fill="#14b8a6" text-anchor="end">▲ +4.76%</text>
+    <!-- row 2 -->
+    <text x="322" y="304" font-family="monospace,sans-serif" font-size="13" font-weight="700" fill="#d1fae5">SBO</text>
+    <text x="360" y="304" font-family="system-ui,sans-serif" font-size="12" fill="#6b7280">Selvaag Bolig ASA</text>
+    <text x="770" y="304" font-family="system-ui,sans-serif" font-size="12" font-weight="600" fill="#14b8a6" text-anchor="end">▲ +3.79%</text>
+    <!-- row 3 -->
+    <text x="322" y="324" font-family="monospace,sans-serif" font-size="13" font-weight="700" fill="#d1fae5">WAWI</text>
+    <text x="368" y="324" font-family="system-ui,sans-serif" font-size="12" fill="#6b7280">Wallenius Wilhelmsen</text>
+    <text x="770" y="324" font-family="system-ui,sans-serif" font-size="12" font-weight="600" fill="#14b8a6" text-anchor="end">▲ +3.12%</text>
+
+    <!-- Tapere label -->
+    <text x="322" y="348" font-family="system-ui,sans-serif" font-size="11" font-weight="600" fill="#ef4444">Tapere</text>
+    <!-- row 4 -->
+    <text x="322" y="368" font-family="monospace,sans-serif" font-size="13" font-weight="700" fill="#fecaca">EQNR</text>
+    <text x="374" y="368" font-family="system-ui,sans-serif" font-size="12" fill="#6b7280">Equinor ASA</text>
+    <text x="770" y="368" font-family="system-ui,sans-serif" font-size="12" font-weight="600" fill="#ef4444" text-anchor="end">▼ −5.07%</text>
+    <!-- row 5 -->
+    <text x="322" y="388" font-family="monospace,sans-serif" font-size="13" font-weight="700" fill="#fecaca">AKRBP</text>
+    <text x="384" y="388" font-family="system-ui,sans-serif" font-size="12" fill="#6b7280">Aker BP ASA</text>
+    <text x="770" y="388" font-family="system-ui,sans-serif" font-size="12" font-weight="600" fill="#ef4444" text-anchor="end">▼ −5.79%</text>
+
+    <!-- Aksje-cards -->
+    <!-- Card 1: DNB -->
+    <rect x="302" y="432" width="476" height="96" rx="14" fill="#1E293B"/>
+    <text x="322" y="460" font-family="monospace,sans-serif" font-size="15" font-weight="800" fill="#14b8a6">DNB</text>
+    <text x="368" y="460" font-family="system-ui,sans-serif" font-size="13" fill="#9ca3af">DNB Bank ASA</text>
+    <text x="322" y="480" font-family="system-ui,sans-serif" font-size="11" fill="#64748b">Finans · Kvartalsvis</text>
+    <!-- yield badge -->
+    <rect x="660" y="448" width="96" height="24" rx="12" fill="#14b8a6" opacity="0.15"/>
+    <text x="708" y="464" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="#14b8a6" text-anchor="middle">7.0%</text>
+    <!-- score -->
+    <text x="322" y="514" font-family="system-ui,sans-serif" font-size="11" fill="#64748b">Ex-dato</text>
+    <text x="380" y="514" font-family="system-ui,sans-serif" font-size="11" font-weight="600" fill="#f59e0b">24. apr</text>
+    <text x="490" y="514" font-family="system-ui,sans-serif" font-size="11" fill="#64748b">Kurs</text>
+    <text x="530" y="514" font-family="system-ui,sans-serif" font-size="11" font-weight="600" fill="#e2e8f0">218,5 kr</text>
+    <text x="650" y="514" font-family="system-ui,sans-serif" font-size="11" fill="#64748b">Score</text>
+    <rect x="698" y="503" width="40" height="16" rx="8" fill="#2563eb" opacity="0.25"/>
+    <text x="718" y="515" font-family="system-ui,sans-serif" font-size="11" font-weight="700" fill="#60a5fa" text-anchor="middle">8/10</text>
+
+    <!-- Card 2: EQNR -->
+    <rect x="302" y="540" width="476" height="96" rx="14" fill="#1E293B"/>
+    <text x="322" y="568" font-family="monospace,sans-serif" font-size="15" font-weight="800" fill="#14b8a6">EQNR</text>
+    <text x="378" y="568" font-family="system-ui,sans-serif" font-size="13" fill="#9ca3af">Equinor ASA</text>
+    <text x="322" y="588" font-family="system-ui,sans-serif" font-size="11" fill="#64748b">Energi · Kvartalsvis</text>
+    <rect x="660" y="556" width="96" height="24" rx="12" fill="#14b8a6" opacity="0.15"/>
+    <text x="708" y="572" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="#14b8a6" text-anchor="middle">4.2%</text>
+    <text x="322" y="622" font-family="system-ui,sans-serif" font-size="11" fill="#64748b">Ex-dato</text>
+    <text x="380" y="622" font-family="system-ui,sans-serif" font-size="11" font-weight="600" fill="#f59e0b">7. mai</text>
+    <text x="490" y="622" font-family="system-ui,sans-serif" font-size="11" fill="#64748b">Kurs</text>
+    <text x="530" y="622" font-family="system-ui,sans-serif" font-size="11" font-weight="600" fill="#e2e8f0">399,1 kr</text>
+    <text x="650" y="622" font-family="system-ui,sans-serif" font-size="11" fill="#64748b">Score</text>
+    <rect x="698" y="611" width="40" height="16" rx="8" fill="#2563eb" opacity="0.25"/>
+    <text x="718" y="623" font-family="system-ui,sans-serif" font-size="11" font-weight="700" fill="#60a5fa" text-anchor="middle">7/10</text>
+
+    <!-- Card 3: PARB -->
+    <rect x="302" y="648" width="476" height="96" rx="14" fill="#1E293B"/>
+    <text x="322" y="676" font-family="monospace,sans-serif" font-size="15" font-weight="800" fill="#14b8a6">PARB</text>
+    <text x="378" y="676" font-family="system-ui,sans-serif" font-size="13" fill="#9ca3af">Pareto Bank ASA</text>
+    <text x="322" y="696" font-family="system-ui,sans-serif" font-size="11" fill="#64748b">Finans · Halvårlig</text>
+    <rect x="660" y="664" width="96" height="24" rx="12" fill="#14b8a6" opacity="0.25"/>
+    <text x="708" y="680" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="#14b8a6" text-anchor="middle">9.4%</text>
+    <text x="322" y="730" font-family="system-ui,sans-serif" font-size="11" fill="#64748b">Ex-dato</text>
+    <text x="380" y="730" font-family="system-ui,sans-serif" font-size="11" font-weight="600" fill="#f59e0b">11. apr</text>
+    <text x="490" y="730" font-family="system-ui,sans-serif" font-size="11" fill="#64748b">Kurs</text>
+    <text x="530" y="730" font-family="system-ui,sans-serif" font-size="11" font-weight="600" fill="#e2e8f0">83,5 kr</text>
+    <text x="650" y="730" font-family="system-ui,sans-serif" font-size="11" fill="#64748b">Score</text>
+    <rect x="698" y="719" width="40" height="16" rx="8" fill="#14b8a6" opacity="0.25"/>
+    <text x="718" y="731" font-family="system-ui,sans-serif" font-size="11" font-weight="700" fill="#2dd4bf" text-anchor="middle">9/10</text>
+
+    <!-- Bottom nav blur -->
+    <rect x="290" y="870" width="500" height="70" fill="#0F172A"/>
+    <text x="540" y="910" font-family="system-ui,sans-serif" font-size="13" fill="#475569" text-anchor="middle">exday.no</text>
+
+  </g>
+
+  <!-- Phone notch -->
+  <rect x="460" y="58" width="160" height="28" rx="14" fill="#0F172A"/>
+  <circle cx="510" cy="72" r="5" fill="#1a2535"/>
+  <rect x="523" y="67" width="94" height="10" rx="5" fill="#1a2535"/>
+
+  <!-- Left side: headline text -->
+  <text x="72" y="180" font-family="system-ui,sans-serif" font-size="15" font-weight="600" fill="#14b8a6" letter-spacing="2">NORSKE UTBYTTEAKSJER</text>
+  <text x="72" y="240" font-family="system-ui,sans-serif" font-size="42" font-weight="800" fill="white">Følg med på</text>
+  <text x="72" y="292" font-family="system-ui,sans-serif" font-size="42" font-weight="800" fill="white">ex-datoer og</text>
+  <text x="72" y="344" font-family="system-ui,sans-serif" font-size="42" font-weight="800" fill="#14b8a6">yield — gratis.</text>
+
+  <!-- Feature bullets -->
+  <circle cx="84" cy="404" r="4" fill="#14b8a6"/>
+  <text x="100" y="410" font-family="system-ui,sans-serif" font-size="16" fill="#94a3b8">100+ aksjer på Oslo Børs</text>
+  <circle cx="84" cy="444" r="4" fill="#14b8a6"/>
+  <text x="100" y="450" font-family="system-ui,sans-serif" font-size="16" fill="#94a3b8">Kurs oppdatert hvert 15. min</text>
+  <circle cx="84" cy="484" r="4" fill="#14b8a6"/>
+  <text x="100" y="490" font-family="system-ui,sans-serif" font-size="16" fill="#94a3b8">Porteføljetracking og yield-kalkulator</text>
+  <circle cx="84" cy="524" r="4" fill="#14b8a6"/>
+  <text x="100" y="530" font-family="system-ui,sans-serif" font-size="16" fill="#94a3b8">Varsler ved ex-dato</text>
+
+  <!-- URL pill bottom left -->
+  <rect x="72" y="900" width="170" height="42" rx="21" fill="#1E293B" stroke="#334155" stroke-width="1.5"/>
+  <!-- icon small -->
+  <rect x="90" y="913" width="18" height="18" rx="4" fill="none" stroke="#14b8a6" stroke-width="1.5"/>
+  <rect x="90" y="913" width="18" height="5" rx="2" fill="#14b8a6"/>
+  <line x1="95" y1="918" x2="101" y2="928" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="101" y1="918" x2="95" y2="928" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+  <text x="117" y="926" font-family="system-ui,sans-serif" font-size="14" font-weight="700" fill="white">ex</text>
+  <text x="133" y="926" font-family="system-ui,sans-serif" font-size="14" font-weight="700" fill="#14b8a6">day</text>
+  <text x="155" y="926" font-family="system-ui,sans-serif" font-size="11" fill="#64748b">.no</text>
+
+  <!-- Right side stats (bottom right) -->
+  <text x="1008" y="880" font-family="system-ui,sans-serif" font-size="13" fill="#475569" text-anchor="end">© 2026 exday.no</text>
+
+</svg>
