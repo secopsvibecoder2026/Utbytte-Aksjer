@@ -850,14 +850,7 @@ function visOversikt() {
 function sorterAksjer(data) {
   const { kol, retning } = sortering;
   const hentVerdi = (a) => kol === 'utbytte_score' ? beregnScore(a) : a[kol];
-  const fav = hentFav();
   return [...data].sort((a, b) => {
-    // Favoritter alltid øverst (med mindre man filtrerer kun favoritter)
-    if (!visKunFavoritter) {
-      const fa = fav.has(a.ticker) ? 0 : 1;
-      const fb = fav.has(b.ticker) ? 0 : 1;
-      if (fa !== fb) return fa - fb;
-    }
     let va = hentVerdi(a), vb = hentVerdi(b);
     if (va == null) va = retning === 'asc' ? Infinity : -Infinity;
     if (vb == null) vb = retning === 'asc' ? Infinity : -Infinity;
