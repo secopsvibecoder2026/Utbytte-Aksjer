@@ -62,13 +62,14 @@ Brukere med portefølje vil vite nøyaktig hvilken måned de mottar utbytte fra 
 - [ ] Grupper etter måned med forventet betalingsdato og beløp
 - [ ] Sum per måned (forventet innbetaling)
 
-### N4. Reinvesteringskalkulator (DRIP) ← fra ROADMAP.md #35
+### N4. Reinvesteringskalkulator (DRIP) ← fra ROADMAP.md #35 ✅
 **Prioritet: Høy**
 
-- [ ] Inndata: startbeløp, månedlig sparing, yield, utbyttevekst, antall år
-- [ ] Beregn porteføljeverdi med og uten reinvestering
-- [ ] Graf: renters rente-effekten over tid
-- [ ] Legg til i Kalkulator-fanen
+- [x] Inndata: startbeløp, månedlig sparing, yield, kursvekst, antall år
+- [x] Beregn porteføljeverdi med og uten reinvestering (begge beregnes alltid)
+- [x] SVG-graf: blå linje (med DRIP) vs. stiplet grå (uten DRIP) — renters rente-effekten over tid
+- [x] DRIP-gevinst stat-kort viser differansen mellom de to scenariene
+- [x] Checkbox styrer hvilken kolonne tabellen viser
 
 ---
 

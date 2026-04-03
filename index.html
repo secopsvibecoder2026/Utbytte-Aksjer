@@ -910,7 +910,7 @@
 
       <!-- Resultat-kort -->
       <div id="kal-resultat" class="hidden space-y-4">
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
           <div class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-3 text-center shadow-sm">
             <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Verdi etter <span id="kal-res-ar">—</span> år</p>
             <p id="kal-res-verdi" class="text-lg font-bold text-brand-600 dark:text-brand-400">—</p>
@@ -927,6 +927,16 @@
             <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Månedlig utbytte (år <span id="kal-res-ar2">—</span>)</p>
             <p id="kal-res-mnd" class="text-lg font-bold text-orange-500">—</p>
           </div>
+          <div class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-3 text-center shadow-sm col-span-2 sm:col-span-1">
+            <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">DRIP-gevinst vs. uten reinvestering</p>
+            <p id="kal-res-drip" class="text-lg font-bold text-teal-600 dark:text-teal-400">—</p>
+          </div>
+        </div>
+
+        <!-- Graf -->
+        <div class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-4 shadow-sm">
+          <h3 class="text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500 mb-3">Renters rente-effekten over tid</h3>
+          <div id="kal-graf"></div>
         </div>
 
         <!-- Tabell år-for-år -->

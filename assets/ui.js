@@ -1811,55 +1811,95 @@ function initKalkulator() {
   beregnKalkulator();
 }
 
-function beregnKalkulator() {
-  const startbelop  = Math.max(0, parseFloat(document.getElementById('kal-startbelop').value) || 0);
-  const yieldPct    = Math.max(0, Math.min(50, parseFloat(document.getElementById('kal-yield').value) || 0));
-  const antallAr    = Math.max(1, Math.min(40, parseInt(document.getElementById('kal-ar').value) || 1));
-  const vekstPct    = Math.max(0, Math.min(30, parseFloat(document.getElementById('kal-vekst').value) || 0));
-  const sparingMnd  = Math.max(0, parseFloat(document.getElementById('kal-sparing').value) || 0);
-  const reinvester  = document.getElementById('kal-reinvester').checked;
-
-  if (startbelop <= 0 && sparingMnd <= 0) return;
-
-  const fmtKr = v => v.toLocaleString('nb-NO', { maximumFractionDigits: 0 }) + ' kr';
-  const yieldFaktor = yieldPct / 100;
-  const vekstFaktor = vekstPct / 100;
-  const sparingAr   = sparingMnd * 12;
-
+function _simulerKalkulator(startbelop, yieldFaktor, vekstFaktor, sparingAr, antallAr, medDRIP) {
   let verdi = startbelop;
   let totUtbytte = 0;
   let totInnbetalt = startbelop;
   const rader = [];
-
   for (let ar = 1; ar <= antallAr; ar++) {
-    // Månedlig sparing legges til gjennom året (enkel approx: halvparten av årssparingen er investert i snitt)
-    const nySparing = sparingAr;
-    const baseForUtbytte = verdi + nySparing * 0.5;
+    const baseForUtbytte = verdi + sparingAr * 0.5;
     const utbytteIAr = baseForUtbytte * yieldFaktor;
-
-    verdi += nySparing;
-    if (reinvester) {
-      verdi += utbytteIAr;
-    }
-    // Kursvekst på hele porteføljen
+    verdi += sparingAr;
+    if (medDRIP) verdi += utbytteIAr;
     verdi = verdi * (1 + vekstFaktor);
-
     totUtbytte += utbytteIAr;
-    totInnbetalt += nySparing;
-
+    totInnbetalt += sparingAr;
     rader.push({ ar, verdi, utbytteIAr, totUtbytte });
   }
+  return { rader, totUtbytte, totInnbetalt, verdi };
+}
 
-  // Oppdater sammendragskort
-  document.getElementById('kal-res-ar').textContent  = antallAr;
-  document.getElementById('kal-res-ar2').textContent = antallAr;
-  document.getElementById('kal-res-verdi').textContent    = fmtKr(verdi);
-  document.getElementById('kal-res-utbytte').textContent  = fmtKr(totUtbytte);
-  document.getElementById('kal-res-innbetalt').textContent = fmtKr(totInnbetalt);
-  document.getElementById('kal-res-mnd').textContent = fmtKr(rader[rader.length - 1].utbytteIAr / 12);
+function tegneKalkulatorGraf(raderMed, raderUten) {
+  const el = document.getElementById('kal-graf');
+  if (!el) return;
+  const W = 560, H = 180;
+  const PAD = { top: 12, right: 16, bottom: 28, left: 58 };
+  const iW = W - PAD.left - PAD.right;
+  const iH = H - PAD.top - PAD.bottom;
+  const n  = raderMed.length;
+  const maxVal = Math.max(...raderMed.map(r => r.verdi));
 
-  // Tabell
-  document.getElementById('kal-tabell').innerHTML = rader.map(r => `
+  const xS = i  => PAD.left + (n > 1 ? (i / (n - 1)) : 0.5) * iW;
+  const yS = v  => PAD.top + iH - (v / maxVal) * iH;
+  const pts = r => r.map((p, i) => `${xS(i).toFixed(1)},${yS(p.verdi).toFixed(1)}`).join(' ');
+
+  const fmtY = v => v >= 1e6 ? (v/1e6).toFixed(1)+'M' : v >= 1e3 ? Math.round(v/1e3)+'k' : v.toFixed(0);
+
+  const gridLines = [0, 0.25, 0.5, 0.75, 1].map(f => {
+    const v = maxVal * f, y = yS(v).toFixed(1);
+    return `<line x1="${PAD.left}" y1="${y}" x2="${W - PAD.right}" y2="${y}" stroke="currentColor" stroke-opacity="0.08" stroke-width="1"/>
+            <text x="${PAD.left - 5}" y="${y}" text-anchor="end" dominant-baseline="middle" font-size="9" fill="currentColor" opacity="0.45">${fmtY(v)}</text>`;
+  }).join('');
+
+  const step = Math.max(1, Math.floor(n / 5));
+  const xLabels = raderMed
+    .filter((_, i) => i === 0 || (i + 1) % step === 0 || i === n - 1)
+    .map(r => `<text x="${xS(r.ar - 1).toFixed(1)}" y="${H - PAD.bottom + 13}" text-anchor="middle" font-size="9" fill="currentColor" opacity="0.45">År ${r.ar}</text>`)
+    .join('');
+
+  el.innerHTML = `
+    <svg viewBox="0 0 ${W} ${H}" class="w-full" style="max-height:190px">
+      ${gridLines}
+      <polyline points="${pts(raderUten)}" fill="none" stroke="#94a3b8" stroke-width="2" stroke-dasharray="6,3"/>
+      <polyline points="${pts(raderMed)}"  fill="none" stroke="#2563eb" stroke-width="2.5"/>
+      ${xLabels}
+      <line x1="${PAD.left}" y1="${H-6}" x2="${PAD.left+18}" y2="${H-6}" stroke="#2563eb" stroke-width="2.5"/>
+      <text x="${PAD.left+22}" y="${H-3}" font-size="9" fill="currentColor" opacity="0.65">Med DRIP</text>
+      <line x1="${PAD.left+80}" y1="${H-6}" x2="${PAD.left+98}" y2="${H-6}" stroke="#94a3b8" stroke-width="2" stroke-dasharray="6,3"/>
+      <text x="${PAD.left+102}" y="${H-3}" font-size="9" fill="currentColor" opacity="0.65">Uten DRIP</text>
+    </svg>`;
+}
+
+function beregnKalkulator() {
+  const startbelop = Math.max(0, parseFloat(document.getElementById('kal-startbelop').value) || 0);
+  const yieldPct   = Math.max(0, Math.min(50, parseFloat(document.getElementById('kal-yield').value) || 0));
+  const antallAr   = Math.max(1, Math.min(40, parseInt(document.getElementById('kal-ar').value) || 1));
+  const vekstPct   = Math.max(0, Math.min(30, parseFloat(document.getElementById('kal-vekst').value) || 0));
+  const sparingMnd = Math.max(0, parseFloat(document.getElementById('kal-sparing').value) || 0);
+  const reinvester = document.getElementById('kal-reinvester').checked;
+
+  if (startbelop <= 0 && sparingMnd <= 0) return;
+
+  const fmtKr      = v => v.toLocaleString('nb-NO', { maximumFractionDigits: 0 }) + ' kr';
+  const yieldFaktor = yieldPct / 100;
+  const vekstFaktor = vekstPct / 100;
+  const sparingAr   = sparingMnd * 12;
+
+  const med   = _simulerKalkulator(startbelop, yieldFaktor, vekstFaktor, sparingAr, antallAr, true);
+  const uten  = _simulerKalkulator(startbelop, yieldFaktor, vekstFaktor, sparingAr, antallAr, false);
+  const aktiv = reinvester ? med : uten;
+
+  document.getElementById('kal-res-ar').textContent       = antallAr;
+  document.getElementById('kal-res-ar2').textContent      = antallAr;
+  document.getElementById('kal-res-verdi').textContent    = fmtKr(aktiv.verdi);
+  document.getElementById('kal-res-utbytte').textContent  = fmtKr(aktiv.totUtbytte);
+  document.getElementById('kal-res-innbetalt').textContent = fmtKr(aktiv.totInnbetalt);
+  document.getElementById('kal-res-mnd').textContent      = fmtKr(aktiv.rader[aktiv.rader.length - 1].utbytteIAr / 12);
+  document.getElementById('kal-res-drip').textContent     = fmtKr(med.verdi - uten.verdi);
+
+  tegneKalkulatorGraf(med.rader, uten.rader);
+
+  document.getElementById('kal-tabell').innerHTML = aktiv.rader.map(r => `
     <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50">
       <td class="px-4 py-2 text-gray-500 dark:text-gray-400">${r.ar}</td>
       <td class="px-4 py-2 text-right font-medium">${fmtKr(r.verdi)}</td>
