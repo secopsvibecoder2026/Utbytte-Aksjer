@@ -1331,7 +1331,7 @@ function visModal(a) {
           <span class="text-gray-500">Ex-dato</span>
           <span class="font-medium ${dagerTilEx !== null && dagerTilEx >= 0 ? 'text-orange-600 dark:text-orange-400' : ''}">
             ${a.ex_dato ? formaterDato(a.ex_dato) : '—'}
-            ${dagerTilEx !== null && dagerTilEx >= 0 ? ` <span class="text-xs">(om ${dagerTilEx} dager)</span>` : ''}
+            ${dagerTilEx !== null && dagerTilEx >= 0 ? ` <span class="text-xs">(${dagerTilEx === 0 ? 'i dag!' : dagerTilEx === 1 ? 'i morgen' : 'om ' + dagerTilEx + ' dager'})</span>` : ''}
           </span>
         </div>
         <div class="flex justify-between">
