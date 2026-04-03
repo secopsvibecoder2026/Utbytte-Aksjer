@@ -380,12 +380,32 @@ function visOsebxSammenligning(alleBeholdning, pfPct, osebxPct, invKost, totalRe
   const innhold = document.getElementById('pf-osebx-innhold');
   if (!wrapper || !innhold) return;
 
-  if (pfPct === null || osebxPct === null) {
+  if (osebxPct === null) {
+    wrapper.classList.remove('hidden');
+    innhold.innerHTML = `<p class="text-sm text-gray-400 dark:text-gray-500">Ingen OSEBX-data tilgjengelig.</p>`;
+    return;
+  }
+
+  // Kun OSEBX – ingen porteføljedata ennå
+  if (pfPct === null) {
+    const fmtPct = v => (v >= 0 ? '+' : '') + v.toFixed(2) + '%';
+    const fraDato = forsteTxDato
+      ? new Date(forsteTxDato).toLocaleDateString('nb-NO', { day: 'numeric', month: 'short', year: 'numeric' })
+      : osebxStartDato || '—';
     wrapper.classList.remove('hidden');
     innhold.innerHTML = `
-      <p class="text-sm text-gray-400 dark:text-gray-500">
-        Legg til transaksjoner i porteføljen for å se hvordan du måler deg mot Oslo Børs-indeksen.
-      </p>`;
+      <div class="space-y-3">
+        <div>
+          <div class="flex justify-between text-xs mb-1">
+            <span class="text-gray-500 dark:text-gray-400">OSEBX (Oslo Børs)</span>
+            <span class="font-semibold ${osebxPct >= 0 ? 'text-blue-600 dark:text-blue-400' : 'text-red-500'}">${fmtPct(osebxPct)}</span>
+          </div>
+          <div class="h-2 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
+            <div class="h-full rounded-full ${osebxPct >= 0 ? 'bg-blue-400' : 'bg-red-400'}" style="width:100%"></div>
+          </div>
+        </div>
+        <p class="text-xs text-gray-400 dark:text-gray-500">Fra ${fraDato} · Legg til transaksjoner for å sammenligne mot din portefølje.</p>
+      </div>`;
     return;
   }
 
@@ -768,16 +788,24 @@ function visPortefolje() {
       if (faktiskTekst) faktiskTekst.textContent = 'trenger transaksjoner';
     }
 
-    // OSEBX: bruk transaksjonsdata – tidligste kjøpsdato som startpunkt
+    // OSEBX: bruk tidligste kjøpsdato som startpunkt, eller siste 12 mnd hvis ingen transaksjoner
     const alleTxDatoer = Object.values(txMap)
       .flatMap(liste => liste.filter(t => t.type === 'kjøp').map(t => t.dato))
       .sort();
     const forsteTxDato  = alleTxDatoer[0] || null;
     const osebxDatoer   = Object.keys(osebxHistorikk).sort();
-    const osebxStartDato = forsteTxDato
-      ? (osebxDatoer.find(d => d >= forsteTxDato) || osebxDatoer[0])
-      : osebxDatoer[0];
     const osebxSluttDato = osebxDatoer[osebxDatoer.length - 1];
+
+    // Startdato: fra første kjøp, eller for 12 mnd siden (fallback uten transaksjoner)
+    let osebxStartDato;
+    if (forsteTxDato) {
+      osebxStartDato = osebxDatoer.find(d => d >= forsteTxDato) || osebxDatoer[0];
+    } else {
+      const for12mnd = new Date(osebxSluttDato || new Date());
+      for12mnd.setFullYear(for12mnd.getFullYear() - 1);
+      const for12mndStr = for12mnd.toISOString().slice(0, 10);
+      osebxStartDato = osebxDatoer.find(d => d >= for12mndStr) || osebxDatoer[0];
+    }
 
     let osebxPctTotal = null;
     if (osebxStartDato && osebxSluttDato && osebxStartDato !== osebxSluttDato) {
@@ -790,10 +818,15 @@ function visPortefolje() {
       osebxEl.textContent = slaer ? '✓ Ja' : '✗ Nei';
       osebxEl.className   = 'stat-value text-base ' + (slaer ? 'text-green-600 dark:text-green-400' : 'text-red-500');
       osebxTekst.textContent = (diff >= 0 ? '+' : '') + diff.toFixed(1) + '% vs indeks';
+    } else if (osebxEl && osebxPctTotal !== null) {
+      // Ingen porteføljedata – vis OSEBX-avkastning alene
+      osebxEl.textContent = (osebxPctTotal >= 0 ? '+' : '') + osebxPctTotal.toFixed(1) + '%';
+      osebxEl.className   = 'stat-value text-base ' + (osebxPctTotal >= 0 ? 'text-blue-600 dark:text-blue-400' : 'text-red-500');
+      osebxTekst.textContent = forsteTxDato ? 'OSEBX siden kjøp' : 'OSEBX siste 12 mnd';
     } else if (osebxEl) {
       osebxEl.textContent  = '—';
       osebxEl.className    = 'stat-value text-base';
-      osebxTekst.textContent = harTx ? 'ingen OSEBX-data' : 'trenger transaksjoner';
+      osebxTekst.textContent = 'ingen OSEBX-data';
     }
     visOsebxSammenligning(alleBeholdning, pfPctTotal, osebxPctTotal, invKost, totalReturnKr, forsteTxDato, osebxStartDato);
 
