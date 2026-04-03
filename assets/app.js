@@ -33,7 +33,6 @@ document.addEventListener('DOMContentLoaded', () => {
   sjekkQRParam();
   visVelkomstModal();
   initProfil();
-  initStreak();
   lastData();
 
   // Del-portefølje-knapp

@@ -228,28 +228,6 @@ function filtrerteAksjer() {
 }
 
 
-function initStreak() {
-  const idag      = new Date().toISOString().slice(0, 10);
-  const sistBesok = localStorage.getItem('streak_sist_besok') || '';
-  let streak      = parseInt(localStorage.getItem('streak_teller') || '1', 10);
-
-  if (sistBesok !== idag) {
-    const igaar = new Date();
-    igaar.setDate(igaar.getDate() - 1);
-    streak = sistBesok === igaar.toISOString().slice(0, 10) ? streak + 1 : 1;
-    localStorage.setItem('streak_sist_besok', idag);
-    localStorage.setItem('streak_teller', streak);
-  }
-
-  if (streak >= 2) {
-    const el = document.getElementById('streak-badge');
-    if (el) {
-      el.textContent = `🔥 ${streak}`;
-      el.title = `${streak} dager på rad!`;
-      el.classList.remove('hidden');
-    }
-  }
-}
 
 
 function sjekkMilepeler(totalAr) {
@@ -523,7 +501,6 @@ function visHvaSkjerIDag() {
 
 
 function visOversikt() {
-  visOpportunityFeed();
   visHvaSkjerIDag();
   visDagensBevegelser();
   const data = sorterAksjer(filtrerteAksjer());
@@ -1900,41 +1877,6 @@ async function visDagensBevegelser() {
   });
 }
 
-
-function visOpportunityFeed() {
-  const el = document.getElementById('opportunity-feed');
-  if (!el || !alleAksjer.length) return;
-  const idag = new Date(); idag.setHours(0,0,0,0);
-  const om10 = new Date(idag); om10.setDate(om10.getDate() + 10);
-
-  const muligheter = alleAksjer
-    .filter(a => a.ex_dato && a.utbytte_yield >= 5)
-    .filter(a => { const d = new Date(a.ex_dato); return d >= idag && d <= om10; })
-    .sort((a, b) => new Date(a.ex_dato) - new Date(b.ex_dato));
-
-  if (!muligheter.length) { el.classList.add('hidden'); return; }
-
-  el.classList.remove('hidden');
-  el.innerHTML = `
-    <div class="rounded-xl border border-amber-200 dark:border-amber-800/60 bg-amber-50 dark:bg-amber-950/20 p-4">
-      <p class="text-xs font-semibold uppercase tracking-widest text-amber-700 dark:text-amber-400 mb-3">Verdt å se på nå</p>
-      <div class="flex flex-wrap gap-2">
-        ${muligheter.map(a => {
-          const dager = Math.ceil((new Date(a.ex_dato) - idag) / 86400000);
-          return `<div class="opportunity-kort" data-ticker="${a.ticker}">
-            <span class="font-mono font-bold text-sm">${a.ticker}</span>
-            <span class="yield-badge ${yieldKlasse(a.utbytte_yield)}">${a.utbytte_yield.toFixed(1)}%</span>
-            <span class="text-xs text-gray-400">ex ${dager === 0 ? 'i dag' : `om ${dager}d`}</span>
-          </div>`;
-        }).join('')}
-      </div>
-    </div>`;
-
-  el.onclick = e => {
-    const kort = e.target.closest('[data-ticker]');
-    if (kort) visModal(alleAksjer.find(a => a.ticker === kort.dataset.ticker));
-  };
-}
 
 
 function sjekkQRParam() {
