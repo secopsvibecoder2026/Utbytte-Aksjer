@@ -14,8 +14,7 @@ let sortering = (() => {
 let aktivTab = 'oversikt';
 let kompaktModus = false;
 let visKunFavoritter = false;
-let visKunPortefolje = false;
-let visKunWatchliste = false;
+let aktivListeFilter = ''; // '' = alle, 'pf' = portefølje, 'wl:{id}' = watchliste
 
 // ── INIT ───────────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
@@ -23,8 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initTabs();
   initFilter();
   oppdaterFavBtn();
-  oppdaterPFFilterBtn();
-  oppdaterWLFilterBtn();
+  byggListeFilter();
   initViewToggle();
   initModal();
   initPFSubTabs();
@@ -103,6 +101,7 @@ function lastInnData(json) {
   }
 
   byggSektorFilter();
+  byggListeFilter();
   oppdaterSammendrag();
   visOversikt();
   visKalender();
