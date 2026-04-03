@@ -10,21 +10,32 @@ const KAL_TYPER = {
 
 const SEKTOR_FARGE = {
   'Energi':                  '#64748b',
-  'Finans':                  '#3b82f6',
-  'Shipping':                '#6366f1',
+  'Finans':                  '#2563eb',
+  'Shipping':                '#3b82f6',
   'Havbruk':                 '#14b8a6',
-  'Industri':                '#8b5cf6',
-  'Materialer':              '#059669',
-  'Fornybar energi':         '#0891b2',
-  'Telekommunikasjon':       '#7c3aed',
-  'Forbruksvarer':           '#f59e0b',
-  'Energitjenester':         '#94a3b8',
-  'Konsulent':               '#475569',
-  'Informasjonsteknologi':   '#2563eb',
-  'Helsevern':               '#0d9488',
-  'Kommunikasjonstjenester': '#a78bfa',
+  'Industri':                '#6366f1',
+  'Materialer':              '#0891b2',
+  'Fornybar energi':         '#0d9488',
+  'Telekommunikasjon':       '#818cf8',
+  'Forbruksvarer':           '#94a3b8',
+  'Energitjenester':         '#475569',
+  'Konsulent':               '#334155',
+  'Informasjonsteknologi':   '#1d4ed8',
+  'Helsevern':               '#2dd4bf',
+  'Kommunikasjonstjenester': '#4f46e5',
 };
 const FARGE_FALLBACK = '#94a3b8';
+// Sekvensiell palett for individuelle aksjer i donut/bar-charts
+const CHART_FARGER = [
+  '#2563eb',
+  '#14b8a6',
+  '#6366f1',
+  '#0891b2',
+  '#3b82f6',
+  '#0d9488',
+  '#4f46e5',
+  '#60a5fa',
+];
 
 
 function visVelkomstModal() {

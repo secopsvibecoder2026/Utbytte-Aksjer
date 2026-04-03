@@ -1048,12 +1048,13 @@ function visVerdiChart(beholdning) {
   const totalVerdi = beholdning.reduce((s, a) => s + a.antall * (a.pris || 0), 0);
   if (!totalVerdi) { el.innerHTML = '<p class="text-xs text-gray-400">Mangler kursinformasjon.</p>'; return; }
   let data = [...beholdning]
-    .map(a => ({ label: a.ticker, value: a.antall * (a.pris || 0), color: SEKTOR_FARGE[a.sektor] || FARGE_FALLBACK }))
+    .map(a => ({ label: a.ticker, value: a.antall * (a.pris || 0) }))
     .filter(d => d.value > 0)
-    .sort((a, b) => b.value - a.value);
+    .sort((a, b) => b.value - a.value)
+    .map((d, i) => ({ ...d, color: CHART_FARGER[i % CHART_FARGER.length] }));
   const andreVerdi = data.slice(7).reduce((s, d) => s + d.value, 0);
-  data = data.slice(0, 7);
-  if (andreVerdi > 0) data.push({ label: 'Andre', value: andreVerdi, color: '#9ca3af' });
+  data = data.slice(0, 7).map((d, i) => ({ ...d, color: CHART_FARGER[i % CHART_FARGER.length] }));
+  if (andreVerdi > 0) data.push({ label: 'Andre', value: andreVerdi, color: '#475569' });
   const size = 180, cx = 90, cy = 90, or = 76, ir = 48;
   let angle = -Math.PI / 2, paths = '';
   data.forEach(({ value, color }) => {
@@ -1070,7 +1071,7 @@ function visVerdiChart(beholdning) {
   const legend = data.map(({ label, value, color }) => `
     <div class="flex items-center gap-2 text-xs">
       <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background:${color}"></span>
-      <span class="font-mono font-bold text-brand-700 dark:text-brand-400 shrink-0 w-14">${label}</span>
+      <span class="font-mono font-bold text-gray-700 dark:text-gray-200 shrink-0 w-14">${label}</span>
       <span class="text-gray-400">${(value/totalVerdi*100).toFixed(1)}%</span>
       <span class="ml-auto font-semibold tabular-nums">${fmtKr(value)}</span>
     </div>`).join('');
@@ -1163,15 +1164,15 @@ function visCharts(beholdning, totalAr) {
   const maks = topp[0]?.forv_ar || 1;
   const fmtKr = v => v.toLocaleString('nb-NO', { maximumFractionDigits: 0 }) + ' kr';
 
-  document.getElementById('pf-topp-chart').innerHTML = topp.map(a => {
+  document.getElementById('pf-topp-chart').innerHTML = topp.map((a, i) => {
     const pct = (a.forv_ar / maks * 100).toFixed(1);
     const andel = (a.forv_ar / totalAr * 100).toFixed(1);
-    const farge = SEKTOR_FARGE[a.sektor] || FARGE_FALLBACK;
+    const farge = CHART_FARGER[i % CHART_FARGER.length];
     return `
       <div>
         <div class="flex items-center justify-between mb-1">
           <div class="flex items-center gap-1.5">
-            <span class="font-mono text-xs font-bold text-brand-700 dark:text-brand-400">${a.ticker}</span>
+            <span class="font-mono text-xs font-bold text-gray-700 dark:text-gray-200">${a.ticker}</span>
             <span class="text-xs text-gray-400">${andel}%</span>
           </div>
           <span class="text-xs font-semibold tabular-nums">${fmtKr(a.forv_ar)}</span>
