@@ -1833,24 +1833,16 @@ async function visDagensBevegelser() {
 
   if (!gainers.length && !losers.length) { el.classList.add('hidden'); return; }
 
-  const kortHtml = (b, type) => {
-    const pos = type === 'gainer';
+  const radHtml = (b, pos) => {
     const pctTxt = (pos ? '+' : '') + b.endring_pct.toFixed(2) + '%';
-    const krsTxt = (pos ? '+' : '') + b.endring_krs.toFixed(2) + ' kr';
-    const ramme  = pos
-      ? 'border-green-200 dark:border-green-800/60 bg-green-50 dark:bg-green-950/20'
-      : 'border-red-200 dark:border-red-800/60 bg-red-50 dark:bg-red-950/20';
     const pctCls = pos ? 'text-green-600 dark:text-green-400' : 'text-red-500 dark:text-red-400';
-    const ikon   = pos ? '▲' : '▼';
-    return `<div class="bevegelse-kort rounded-lg border p-2.5 cursor-pointer hover:shadow-sm transition-shadow ${ramme}" data-ticker="${b.ticker}">
-      <div class="flex items-center justify-between gap-1 mb-0.5">
-        <span class="font-mono font-bold text-sm">${b.ticker}</span>
-        <span class="text-xs font-semibold ${pctCls}">${ikon} ${pctTxt}</span>
-      </div>
-      <div class="flex items-center justify-between gap-1">
-        <span class="text-xs text-gray-500 dark:text-gray-400 truncate">${b.aksje.navn}</span>
-        <span class="text-xs text-gray-400 shrink-0">${b.pris.toLocaleString('nb-NO', { maximumFractionDigits: 2 })} kr</span>
-      </div>
+    const tickerCls = pos ? 'text-green-700 dark:text-green-300' : 'text-red-600 dark:text-red-400';
+    const ikon = pos ? '▲' : '▼';
+    return `<div class="bevegelse-rad flex items-center gap-2 py-1.5 px-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer transition-colors" data-ticker="${b.ticker}">
+      <span class="font-mono font-bold text-sm w-14 shrink-0 ${tickerCls}">${b.ticker}</span>
+      <span class="text-xs text-gray-500 dark:text-gray-400 flex-1 truncate">${b.aksje.navn}</span>
+      <span class="text-xs text-gray-400 dark:text-gray-500 shrink-0">${b.pris.toLocaleString('nb-NO', { maximumFractionDigits: 2 })}</span>
+      <span class="text-xs font-semibold w-16 text-right shrink-0 ${pctCls}">${ikon} ${pctTxt}</span>
     </div>`;
   };
 
@@ -1860,20 +1852,20 @@ async function visDagensBevegelser() {
 
   el.innerHTML = `
     <div class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-3 shadow-sm">
-      <div class="flex items-center justify-between mb-2.5">
+      <div class="flex items-center justify-between mb-2">
         <p class="text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500">Dagens bevegelser</p>
         ${ts ? `<span class="text-xs text-gray-400 dark:text-gray-600">Oppdatert ${ts}</span>` : ''}
       </div>
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-4">
         ${gainers.length ? `
           <div>
-            <p class="text-xs font-medium text-green-600 dark:text-green-400 mb-1.5">Dagens vinnere</p>
-            <div class="space-y-1.5">${gainers.map(b => kortHtml(b, 'gainer')).join('')}</div>
+            <p class="text-xs font-medium text-green-600 dark:text-green-400 mb-0.5 px-2">Vinnere</p>
+            ${gainers.map(b => radHtml(b, true)).join('')}
           </div>` : ''}
         ${losers.length ? `
-          <div>
-            <p class="text-xs font-medium text-red-500 dark:text-red-400 mb-1.5">Dagens tapere</p>
-            <div class="space-y-1.5">${losers.map(b => kortHtml(b, 'loser')).join('')}</div>
+          <div class="${gainers.length ? 'mt-2 sm:mt-0' : ''}">
+            <p class="text-xs font-medium text-red-500 dark:text-red-400 mb-0.5 px-2">Tapere</p>
+            ${losers.map(b => radHtml(b, false)).join('')}
           </div>` : ''}
       </div>
     </div>`;
