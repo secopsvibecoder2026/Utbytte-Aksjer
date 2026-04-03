@@ -980,10 +980,10 @@ function visYieldChart(beholdning) {
   if (!el || !beholdning.length) return;
   const fmtKr = v => v.toLocaleString('nb-NO', { maximumFractionDigits: 0 }) + ' kr';
   const buckets = [
-    { label: '< 3%',  min: 0, max: 3,   color: '#94a3b8', items: [] },
-    { label: '3–6%',  min: 3, max: 6,   color: '#3b82f6', items: [] },
-    { label: '6–9%',  min: 6, max: 9,   color: '#14b8a6', items: [] },
-    { label: '≥ 9%',  min: 9, max: 999, color: '#22c55e', items: [] },
+    { label: '< 3%',  min: 0, max: 3,   color: '#cbd5e1', items: [] },
+    { label: '3–6%',  min: 3, max: 6,   color: '#94a3b8', items: [] },
+    { label: '6–9%',  min: 6, max: 9,   color: '#0d9488', items: [] },
+    { label: '≥ 9%',  min: 9, max: 999, color: '#14b8a6', items: [] },
   ];
   beholdning.forEach(a => {
     const y = a.utbytte_yield || 0;
@@ -1189,11 +1189,11 @@ function visCharts(beholdning, totalAr) {
   });
   const frekvensOrder = ['Månedlig','Kvartalsvis','Halvårlig','Årlig','Uregelmessig'];
   const frekvensFarge = {
-    'Månedlig':      '#22c55e',
-    'Kvartalsvis':   '#3b82f6',
-    'Halvårlig':     '#8b5cf6',
-    'Årlig':         '#f97316',
-    'Uregelmessig':  '#9ca3af',
+    'Månedlig':      '#14b8a6',
+    'Kvartalsvis':   '#0d9488',
+    'Halvårlig':     '#6366f1',
+    'Årlig':         '#64748b',
+    'Uregelmessig':  '#94a3b8',
   };
 
   document.getElementById('pf-frekvens-chart').innerHTML = frekvensOrder

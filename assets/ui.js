@@ -9,19 +9,22 @@ const KAL_TYPER = {
 
 
 const SEKTOR_FARGE = {
-  'Energi':            '#f97316',
-  'Finans':            '#3b82f6',
-  'Shipping':          '#1e40af',
-  'Havbruk':           '#14b8a6',
-  'Industri':          '#8b5cf6',
-  'Materialer':        '#a16207',
-  'Fornybar energi':   '#22c55e',
-  'Telekommunikasjon': '#ec4899',
-  'Forbruksvarer':     '#eab308',
-  'Energitjenester':   '#ef4444',
-  'Konsulent':         '#64748b',
+  'Energi':                  '#64748b',
+  'Finans':                  '#3b82f6',
+  'Shipping':                '#6366f1',
+  'Havbruk':                 '#14b8a6',
+  'Industri':                '#8b5cf6',
+  'Materialer':              '#059669',
+  'Fornybar energi':         '#0891b2',
+  'Telekommunikasjon':       '#7c3aed',
+  'Forbruksvarer':           '#f59e0b',
+  'Energitjenester':         '#94a3b8',
+  'Konsulent':               '#475569',
+  'Informasjonsteknologi':   '#2563eb',
+  'Helsevern':               '#0d9488',
+  'Kommunikasjonstjenester': '#a78bfa',
 };
-const FARGE_FALLBACK = '#9ca3af';
+const FARGE_FALLBACK = '#94a3b8';
 
 
 function visVelkomstModal() {

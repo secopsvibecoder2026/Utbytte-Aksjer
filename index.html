@@ -605,6 +605,29 @@
         <!-- ── OVERSIKT ── -->
         <div id="stats-sub-oversikt" class="space-y-4">
 
+        <!-- Porteføljeprofil -->
+        <div id="pf-profil-seksjon" class="hidden bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4 shadow-sm">
+          <h3 class="font-semibold text-sm mb-3">Porteføljeprofil</h3>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            <div>
+              <p class="text-xs font-semibold uppercase tracking-wide text-gray-400 mb-1">Beste yield</p>
+              <p class="font-semibold text-sm" id="pf-profil-best-yield">—</p>
+            </div>
+            <div>
+              <p class="text-xs font-semibold uppercase tracking-wide text-gray-400 mb-1">Laveste yield</p>
+              <p class="font-semibold text-sm" id="pf-profil-lav-yield">—</p>
+            </div>
+            <div>
+              <p class="text-xs font-semibold uppercase tracking-wide text-gray-400 mb-1">Største posisjon</p>
+              <p class="font-semibold text-sm" id="pf-profil-storst">—</p>
+            </div>
+            <div>
+              <p class="text-xs font-semibold uppercase tracking-wide text-gray-400 mb-1">Sektorer</p>
+              <p class="font-semibold text-sm" id="pf-profil-sektorer">—</p>
+            </div>
+          </div>
+        </div>
+
         <!-- Sammendragskort -->
         <section class="grid grid-cols-2 sm:grid-cols-3 gap-3">
           <div class="stat-card">
@@ -698,29 +721,6 @@
             </p>
           </div>
         </section>
-
-        <!-- Porteføljeprofil -->
-        <div id="pf-profil-seksjon" class="hidden bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4 shadow-sm">
-          <h3 class="font-semibold text-sm mb-3">Porteføljeprofil</h3>
-          <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            <div>
-              <p class="text-xs font-semibold uppercase tracking-wide text-gray-400 mb-1">Beste yield</p>
-              <p class="font-semibold text-sm" id="pf-profil-best-yield">—</p>
-            </div>
-            <div>
-              <p class="text-xs font-semibold uppercase tracking-wide text-gray-400 mb-1">Laveste yield</p>
-              <p class="font-semibold text-sm" id="pf-profil-lav-yield">—</p>
-            </div>
-            <div>
-              <p class="text-xs font-semibold uppercase tracking-wide text-gray-400 mb-1">Største posisjon</p>
-              <p class="font-semibold text-sm" id="pf-profil-storst">—</p>
-            </div>
-            <div>
-              <p class="text-xs font-semibold uppercase tracking-wide text-gray-400 mb-1">Sektorer</p>
-              <p class="font-semibold text-sm" id="pf-profil-sektorer">—</p>
-            </div>
-          </div>
-        </div>
 
           <!-- Yield-fordeling -->
           <div class="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4 shadow-sm">
@@ -1001,7 +1001,7 @@
   <!-- FOOTER -->
   <footer class="mt-8 sm:mt-12 border-t border-gray-200 dark:border-gray-800 py-6 text-center text-xs text-gray-400 dark:text-gray-600 space-y-1 px-4">
     <p>Data hentet automatisk fra Yahoo Finance. Oppdateres hverdager kl 08:00.</p>
-    <p class="font-medium text-yellow-600 dark:text-yellow-500">Ikke finansiell rådgivning. Gjør alltid din egen analyse før investering.</p>
+    <p>Ikke finansiell rådgivning. Gjør alltid din egen analyse før investering.</p>
     <p class="mt-2"><a href="personvern/" class="underline hover:text-gray-400 dark:hover:text-gray-400 transition-colors">Personvern og informasjonskapsler</a></p>
   </footer>
 
