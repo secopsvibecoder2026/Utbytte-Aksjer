@@ -1,7 +1,7 @@
 'use strict';
 
 // CACHE-VERSJON BYTTES AUTOMATISK AV GITHUB ACTIONS VED HVERT DEPLOY
-const CACHE = 'exday-v2';
+const CACHE = 'exday-v3';
 const NOTIF_CACHE = 'notif-prefs-v1';
 
 const PRECACHE = [
