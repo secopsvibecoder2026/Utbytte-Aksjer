@@ -117,6 +117,43 @@ function initDarkMode() {
 }
 
 
+// ── TILBAKE TIL TOPPEN ────────────────────────────────────────────────────────
+function initTilbakeTopp() {
+  const btn = document.getElementById('tilbake-topp');
+  if (!btn) return;
+  window.addEventListener('scroll', () => {
+    btn.classList.toggle('hidden', window.scrollY < 300);
+  }, { passive: true });
+  btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+}
+
+// ── SWIPE-NAVIGASJON ─────────────────────────────────────────────────────────
+function initSwipe() {
+  const FANER = ['oversikt', 'kalender', 'portfolio', 'kalkulator'];
+  let startX = 0, startY = 0;
+
+  function byttTab(retning) {
+    const idx = FANER.indexOf(aktivTab);
+    const nyIdx = idx + retning;
+    if (nyIdx < 0 || nyIdx >= FANER.length) return;
+    document.querySelector(`.tab-btn[data-tab="${FANER[nyIdx]}"]`)?.click();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  document.addEventListener('touchstart', e => {
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+  }, { passive: true });
+
+  document.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - startX;
+    const dy = e.changedTouches[0].clientY - startY;
+    // Kun horisontal swipe: dx > 50px og klart mer horisontal enn vertikal
+    if (Math.abs(dx) < 50 || Math.abs(dx) < Math.abs(dy) * 1.5) return;
+    byttTab(dx < 0 ? 1 : -1);
+  }, { passive: true });
+}
+
 function initTabs() {
   document.getElementById('tab-nav').addEventListener('click', e => {
     const btn = e.target.closest('.tab-btn');

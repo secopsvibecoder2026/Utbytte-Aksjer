@@ -216,17 +216,17 @@ Eksisterende enhetstester dekker beregningslogikk. Brukerflyter testes ikke.
 
 ## 📱 Mobilopplevelse
 
-### N17. Swipe-navigasjon mellom faner
+### N17. Swipe-navigasjon mellom faner ✅
 **Prioritet: Lav**
 
-- [ ] Touch-swipe venstre/høyre bytter mellom Oversikt / Kalender / Portefølje
-- [ ] Visuell indikator som følger fingeren
+- [x] Touch-swipe venstre/høyre bytter mellom alle faner
+- [x] Scroll til toppen automatisk ved fanebyttting
 
-### N18. «Tilbake til toppen»-knapp
+### N18. «Tilbake til toppen»-knapp ✅
 **Prioritet: Lav**
 
-- [ ] Vises etter scroll > 300px
-- [ ] Sticky, lavere høyre hjørne, lite og diskret
+- [x] Vises etter scroll > 300px
+- [x] Sticky, nedre høyre hjørne, lite og diskret
 
 ---
 

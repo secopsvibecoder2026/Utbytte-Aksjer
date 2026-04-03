@@ -20,6 +20,8 @@ let aktivListeFilter = ''; // '' = alle, 'pf' = portefølje, 'wl:{id}' = watchli
 document.addEventListener('DOMContentLoaded', () => {
   initDarkMode();
   initTabs();
+  initSwipe();
+  initTilbakeTopp();
   initFilter();
   oppdaterFavBtn();
   byggListeFilter();
