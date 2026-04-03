@@ -75,12 +75,12 @@ Brukere med portefølje vil vite nøyaktig hvilken måned de mottar utbytte fra 
 
 ## 📈 Medium prioritet
 
-### N5. Sammenlign aksjer side ved side
+### N5. Sammenlign aksjer side ved side ✅
 **Prioritet: Medium**
 
-- [ ] Velg 2–3 aksjer og vis dem i en sammenligningstabell
-- [ ] Sammenlign: yield, payout, vekst, P/E, P/B, score, historikk
-- [ ] Del-lenke: `?sammenlign=EQNR,DNB,ORK`
+- [x] Velg 2–3 aksjer og vis dem i en sammenligningstabell
+- [x] Sammenlign: yield, payout, vekst, P/E, P/B, score, historikk
+- [x] Del-lenke: `?sammenlign=EQNR,DNB,ORK`
 
 ### N6. Skattesammendrag — årsoppsummering
 **Prioritet: Medium**
@@ -94,11 +94,11 @@ Skjermingsfradrag er allerede beregnet. Mangler en samlet årsvisning for skatte
 - [ ] Estimert skatt å betale (37,84 %)
 - [ ] Eksporter som PDF eller kopier til utklippstavle
 
-### N7. Portefølje-rebalansering
+### N7. Portefølje-rebalansering ✅
 **Prioritet: Medium**
 
-- [ ] Bruker setter inn ønsket vekting per sektor (f.eks. 30 % Energi, 20 % Finans)
-- [ ] App viser avvik fra mål og hvilke aksjer å kjøpe/selge
+- [x] Bruker setter inn ønsket vekting per sektor (f.eks. 30 % Energi, 20 % Finans)
+- [x] App viser avvik fra mål og hvilke aksjer å kjøpe/selge
 
 ### N8. Månedlig utbytteplanlegger ← fra ROADMAP.md #38
 **Prioritet: Medium**
@@ -107,13 +107,13 @@ Skjermingsfradrag er allerede beregnet. Mangler en samlet årsvisning for skatte
 - [ ] Beregn nødvendig investert kapital basert på porteføljens vektede yield
 - [ ] Vis fremgang: «Du er X % av veien til målet ditt»
 
-### N9. Dynamisk meta-beskrivelse i fetch_stocks.py
+### N9. Dynamisk meta-beskrivelse i fetch_stocks.py ✅
 **Prioritet: Medium — vedlikeholdsforbedring**
 
 I dag er antallet hardkodet i HTML. Bør genereres automatisk.
 
-- [ ] `fetch_stocks.py` oppdaterer `<meta name="description">` og JSON-LD i `index.html` med riktig antall aksjer
-- [ ] Tilsvarende for `og:description` og `twitter:description`
+- [x] `fetch_stocks.py` oppdaterer `<meta name="description">` og JSON-LD i `index.html` med riktig antall aksjer
+- [x] Tilsvarende for `og:description` og `twitter:description`
 
 ### N10. Ytterligere aksjer og datakvalitet
 **Prioritet: Medium**

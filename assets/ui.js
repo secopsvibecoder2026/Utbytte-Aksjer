@@ -688,6 +688,9 @@ function visOversikt() {
       <td class="px-4 py-3 text-center">
         <span class="frekvens-badge">${a.frekvens}</span>
       </td>
+      <td class="px-2 py-3 text-center">
+        <button class="sammenlign-btn text-xs px-1.5 py-0.5 rounded border border-gray-200 dark:border-gray-700 text-gray-400 dark:text-gray-500 hover:border-brand-400 hover:text-brand-600 dark:hover:text-brand-400 transition-colors" data-ticker="${a.ticker}" title="Sammenlign">⊕</button>
+      </td>
     </tr>`;
   };
 
@@ -706,6 +709,12 @@ function visOversikt() {
       toggleFav(favBtn.dataset.ticker);
       oppdaterFavBtn();
       visOversikt();
+      return;
+    }
+    const samBtn = e.target.closest('.sammenlign-btn');
+    if (samBtn) {
+      e.stopPropagation();
+      toggleSammenlign(samBtn.dataset.ticker);
       return;
     }
     const tr = e.target.closest('tr[data-ticker]');
@@ -804,7 +813,10 @@ function visOversikt() {
           </span>
           ${snartEx && dagerTil !== null ? `<span class="text-xs text-orange-500 ml-1">${dagerTil === 0 ? '(i dag!)' : dagerTil === 1 ? '(i morgen)' : `(om ${dagerTil} d)`}</span>` : ''}
         </div>
-        <svg class="w-4 h-4 text-gray-300 dark:text-gray-600" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        <div class="flex items-center gap-2">
+          <button class="sammenlign-btn text-xs px-2 py-0.5 rounded border border-gray-200 dark:border-gray-700 text-gray-400 dark:text-gray-500 hover:border-brand-400 hover:text-brand-600 dark:hover:text-brand-400 transition-colors" data-ticker="${a.ticker}" onclick="event.stopPropagation();toggleSammenlign('${a.ticker}')" title="Sammenlign">⊕</button>
+          <svg class="w-4 h-4 text-gray-300 dark:text-gray-600" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        </div>
       </div>
     </div>`;
 
@@ -2290,6 +2302,117 @@ function visVarslerTab() {
   });
 }
 
+
+// ── SAMMENLIGNINGSVERKTØY ─────────────────────────────────────────────────────
+let sammenlignBasket = [];
+
+function toggleSammenlign(ticker) {
+  const idx = sammenlignBasket.indexOf(ticker);
+  if (idx >= 0) {
+    sammenlignBasket.splice(idx, 1);
+  } else {
+    if (sammenlignBasket.length >= 3) sammenlignBasket.shift();
+    sammenlignBasket.push(ticker);
+  }
+  oppdaterSammenlignSkuff();
+  document.querySelectorAll(`.sammenlign-btn[data-ticker="${ticker}"]`).forEach(btn => {
+    const aktiv = sammenlignBasket.includes(ticker);
+    btn.classList.toggle('text-brand-600', aktiv);
+    btn.classList.toggle('dark:text-brand-400', aktiv);
+    btn.title = aktiv ? 'Fjern fra sammenligning' : 'Legg til sammenligning';
+  });
+}
+
+function oppdaterSammenlignSkuff() {
+  const skuff = document.getElementById('sammenlign-skuff');
+  if (!skuff) return;
+  if (sammenlignBasket.length === 0) { skuff.classList.add('hidden'); return; }
+  skuff.classList.remove('hidden');
+  document.getElementById('sammenlign-valgte').innerHTML = sammenlignBasket.map(t => `
+    <span class="flex items-center gap-1 bg-gray-100 dark:bg-gray-800 pl-2.5 pr-1.5 py-1 rounded-full text-sm font-mono font-semibold text-brand-700 dark:text-brand-400">
+      ${t}
+      <button onclick="toggleSammenlign('${t}')" class="text-gray-400 hover:text-red-500 leading-none text-base ml-0.5" aria-label="Fjern ${t}">×</button>
+    </span>`).join('');
+  document.getElementById('sammenlign-vis').disabled = sammenlignBasket.length < 2;
+}
+
+function visKomparasjonsModal() {
+  const aksjer = sammenlignBasket.map(t => alleAksjer.find(a => a.ticker === t)).filter(Boolean);
+  if (aksjer.length < 2) return;
+
+  const RADER = [
+    { label: 'Kurs',            fn: a => fmt(a.pris) + ' ' + a.valuta },
+    { label: 'Yield',           fn: a => `<span class="${yieldKlasse(a.utbytte_yield)}">${a.utbytte_yield.toFixed(2)}%</span>` },
+    { label: 'Utbytte/aksje',   fn: a => fmt(a.utbytte_per_aksje) + ' ' + a.valuta },
+    { label: 'Payout ratio',    fn: a => a.payout_ratio > 0 ? `<span class="${payoutKlasse(a.payout_ratio)}">${a.payout_ratio.toFixed(0)}%</span>` : '—' },
+    { label: 'Vekst 5år',       fn: a => a.utbytte_vekst_5ar !== 0 ? `<span class="${vekstKlasse(a.utbytte_vekst_5ar)}">${a.utbytte_vekst_5ar > 0 ? '+' : ''}${a.utbytte_vekst_5ar.toFixed(1)}%</span>` : '—' },
+    { label: 'Snitt yield 5år', fn: a => a.snitt_yield_5ar > 0 ? `<span class="${yieldKlasse(a.snitt_yield_5ar)}">${a.snitt_yield_5ar.toFixed(1)}%</span>` : '—' },
+    { label: 'P/E',             fn: a => a.pe_ratio > 0 ? a.pe_ratio.toFixed(1) : '—' },
+    { label: 'P/B',             fn: a => a.pb_ratio > 0 ? a.pb_ratio.toFixed(1) : '—' },
+    { label: 'Score',           fn: a => scoreBadge(beregnScore(a)) },
+    { label: 'År m/utbytte',    fn: a => a.ar_med_utbytte > 0 ? a.ar_med_utbytte + ' år' : '—' },
+    { label: 'Markedsverdi',    fn: a => a.markedsverdi_mrd > 0 ? a.markedsverdi_mrd.toFixed(1) + ' mrd kr' : '—' },
+    { label: 'Sektor',          fn: a => a.sektor },
+    { label: 'Frekvens',        fn: a => `<span class="frekvens-badge">${a.frekvens}</span>` },
+    { label: 'Ex-dato',         fn: a => a.ex_dato ? formaterDato(a.ex_dato) : '—' },
+    { label: 'Betalingsdato',   fn: a => a.betaling_dato ? formaterDato(a.betaling_dato) : '—' },
+  ];
+
+  document.getElementById('sammenlign-modal-body').innerHTML = `
+    <table class="w-full text-sm min-w-[360px]">
+      <thead>
+        <tr class="border-b border-gray-100 dark:border-gray-800">
+          <th class="text-left py-2 pr-4 text-xs font-semibold uppercase tracking-wide text-gray-400 w-28 sm:w-36"></th>
+          ${aksjer.map(a => `
+            <th class="py-2 px-2 text-center">
+              <div class="font-mono font-bold text-brand-700 dark:text-brand-400">${a.ticker}</div>
+              <div class="text-xs text-gray-400 font-normal mt-0.5 hidden sm:block truncate max-w-[110px] mx-auto">${a.navn}</div>
+            </th>`).join('')}
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-50 dark:divide-gray-800/50">
+        ${RADER.map(r => `
+          <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/30">
+            <td class="py-2 pr-4 text-xs text-gray-500 dark:text-gray-400 font-medium">${r.label}</td>
+            ${aksjer.map(a => `<td class="py-2 px-2 text-center">${r.fn(a)}</td>`).join('')}
+          </tr>`).join('')}
+      </tbody>
+    </table>
+    <p class="text-xs text-gray-400 mt-4 text-center">Del: <a href="?sammenlign=${sammenlignBasket.join(',')}" class="text-brand-600 hover:underline">${location.origin}?sammenlign=${sammenlignBasket.join(',')}</a></p>`;
+
+  const modal = document.getElementById('sammenlign-modal');
+  modal.classList.remove('hidden');
+  modal.classList.add('flex');
+  document.body.style.overflow = 'hidden';
+}
+
+function initSammenligning() {
+  document.getElementById('sammenlign-vis')?.addEventListener('click', visKomparasjonsModal);
+  document.getElementById('sammenlign-tom')?.addEventListener('click', () => {
+    sammenlignBasket = [];
+    oppdaterSammenlignSkuff();
+    visOversikt();
+  });
+  const lukkModal = () => {
+    document.getElementById('sammenlign-modal').classList.add('hidden');
+    document.getElementById('sammenlign-modal').classList.remove('flex');
+    document.body.style.overflow = '';
+  };
+  document.getElementById('sammenlign-modal-lukk')?.addEventListener('click', lukkModal);
+  document.getElementById('sammenlign-modal')?.addEventListener('click', e => {
+    if (e.target === e.currentTarget) lukkModal();
+  });
+
+  // URL-param: ?sammenlign=EQNR,DNB,ORK
+  const param = new URLSearchParams(location.search).get('sammenlign');
+  if (param) {
+    param.split(',').slice(0, 3).forEach(t => {
+      const upper = t.trim().toUpperCase();
+      if (upper && !sammenlignBasket.includes(upper)) sammenlignBasket.push(upper);
+    });
+    if (sammenlignBasket.length >= 2) window._pendingKomparasjon = true;
+  }
+}
 
 // Node.js test export
 if (typeof module !== 'undefined') module.exports = { fmt, formaterDato, yieldKlasse, payoutKlasse, vekstKlasse, beregnScore, beregnBaerekraft, beregnYtdInntekt };

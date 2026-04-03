@@ -93,7 +93,7 @@ function byggDetailHtml(ticker, kb, marked) {
 }
 
 
-const STATS_TABS = ['oversikt', 'inntekt', 'beholdning', 'sektorer'];
+const STATS_TABS = ['oversikt', 'inntekt', 'beholdning', 'sektorer', 'rebalansering'];
 let aktivStatsTab = 'oversikt';
 
 function byttStatsSubTab(tab) {
@@ -114,11 +114,18 @@ function byttStatsSubTab(tab) {
   // Tegn charts på nytt når tab aktiveres
   if (window._pfSisteData) {
     const { beholdning, totalAr } = window._pfSisteData;
-    if (tab === 'oversikt')    visYieldChart(beholdning);
-    if (tab === 'inntekt')     visMaanedChart(beholdning);
-    if (tab === 'beholdning')  { visVerdiChart(beholdning); visCharts(beholdning, totalAr); }
-    if (tab === 'sektorer')    { visSektorYieldChart(beholdning); visCharts(beholdning, totalAr); }
+    if (tab === 'oversikt')      visYieldChart(beholdning);
+    if (tab === 'inntekt')       visMaanedChart(beholdning);
+    if (tab === 'beholdning')    { visVerdiChart(beholdning); visCharts(beholdning, totalAr); }
+    if (tab === 'sektorer')      { visSektorYieldChart(beholdning); visCharts(beholdning, totalAr); }
+    if (tab === 'rebalansering') visRebalansering(beholdning);
   }
+
+  // Nullstill rebalanserings-mål
+  document.getElementById('rebal-nullstill')?.addEventListener('click', () => {
+    lagreRebalanseringsmaal({});
+    if (window._pfSisteData) visRebalansering(window._pfSisteData.beholdning);
+  });
 }
 
 function initPFSubTabs() {
@@ -1014,10 +1021,11 @@ function visPortefolje() {
   // Lagre for lazy chart-tegning ved tab-bytte
   window._pfSisteData = { beholdning: alleBeholdning, totalAr };
   // Tegn chart for aktiv stats-tab
-  if (aktivStatsTab === 'oversikt')   visYieldChart(alleBeholdning);
-  if (aktivStatsTab === 'inntekt')    visMaanedChart(alleBeholdning);
-  if (aktivStatsTab === 'beholdning') { visVerdiChart(alleBeholdning); visCharts(alleBeholdning, totalAr); }
-  if (aktivStatsTab === 'sektorer')   { visSektorYieldChart(alleBeholdning); visCharts(alleBeholdning, totalAr); }
+  if (aktivStatsTab === 'oversikt')      visYieldChart(alleBeholdning);
+  if (aktivStatsTab === 'inntekt')       visMaanedChart(alleBeholdning);
+  if (aktivStatsTab === 'beholdning')    { visVerdiChart(alleBeholdning); visCharts(alleBeholdning, totalAr); }
+  if (aktivStatsTab === 'sektorer')      { visSektorYieldChart(alleBeholdning); visCharts(alleBeholdning, totalAr); }
+  if (aktivStatsTab === 'rebalansering') visRebalansering(alleBeholdning);
   if (!['beholdning','sektorer'].includes(aktivStatsTab)) {
     const cw = document.getElementById('pf-charts-wrapper');
     if (cw) cw.style.display = 'none';
@@ -1455,6 +1463,73 @@ function initWatchlister() {
   });
 }
 
+
+// ── REBALANSERING ─────────────────────────────────────────────────────────────
+function hentRebalanseringsmaal() {
+  try { return JSON.parse(localStorage.getItem('pf_rebalansering') || '{}'); } catch { return {}; }
+}
+function lagreRebalanseringsmaal(maal) { localStorage.setItem('pf_rebalansering', JSON.stringify(maal)); }
+
+function visRebalansering(alleBeholdning) {
+  const el = document.getElementById('rebal-rader');
+  if (!el) return;
+
+  const totalVerdi = alleBeholdning.reduce((s, a) => s + a.antall * (a.pris || 0), 0);
+  if (totalVerdi <= 0) { el.innerHTML = '<p class="text-xs text-gray-400 text-center py-4">Legg til aksjer med kurs for å se rebalansering.</p>'; return; }
+
+  // Grupper etter sektor
+  const sektorMap = {};
+  alleBeholdning.forEach(a => {
+    const v = a.antall * (a.pris || 0);
+    sektorMap[a.sektor] = (sektorMap[a.sektor] || 0) + v;
+  });
+  const sektorer = Object.entries(sektorMap).sort((a, b) => b[1] - a[1]);
+  const maal = hentRebalanseringsmaal();
+
+  el.innerHTML = sektorer.map(([sektor, verdi]) => {
+    const naaværendePct = verdi / totalVerdi * 100;
+    const maalPct = maal[sektor] !== undefined ? maal[sektor] : Math.round(naaværendePct);
+    const diff = naaværendePct - maalPct;
+    let statusKlasse, statusTekst;
+    if (Math.abs(diff) <= 5) {
+      statusKlasse = 'text-green-600 dark:text-green-400'; statusTekst = 'OK';
+    } else if (diff < -5) {
+      statusKlasse = 'text-orange-500'; statusTekst = `Kjøp +${Math.abs(diff).toFixed(0)}%`;
+    } else {
+      statusKlasse = 'text-red-500'; statusTekst = `Reduser −${diff.toFixed(0)}%`;
+    }
+    const barBredde = Math.min(100, naaværendePct).toFixed(1);
+    const maalBredde = Math.min(100, maalPct).toFixed(1);
+    return `
+      <div class="space-y-1" data-sektor="${sektor}">
+        <div class="flex items-center gap-3">
+          <span class="text-sm font-medium w-36 shrink-0 truncate">${sektor}</span>
+          <span class="text-xs text-gray-500 dark:text-gray-400 w-12 text-right shrink-0">${naaværendePct.toFixed(1)}%</span>
+          <div class="flex items-center gap-1 flex-1">
+            <span class="text-xs text-gray-400 shrink-0">Mål:</span>
+            <input type="number" min="0" max="100" step="1" value="${maalPct}"
+              class="w-14 text-xs text-center border border-gray-200 dark:border-gray-700 rounded px-1 py-0.5 bg-white dark:bg-gray-800 focus:outline-none focus:border-brand-400"
+              data-rebal-sektor="${sektor}" />
+            <span class="text-xs font-medium w-20 shrink-0 ${statusKlasse}">${statusTekst}</span>
+          </div>
+        </div>
+        <div class="relative h-2 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
+          <div class="absolute top-0 left-0 h-full bg-brand-500/30 rounded-full" style="width:${maalBredde}%"></div>
+          <div class="absolute top-0 left-0 h-full bg-brand-500 rounded-full" style="width:${barBredde}%"></div>
+        </div>
+      </div>`;
+  }).join('');
+
+  // Lagre ved input
+  el.querySelectorAll('input[data-rebal-sektor]').forEach(inp => {
+    inp.addEventListener('change', () => {
+      const m = hentRebalanseringsmaal();
+      m[inp.dataset.rebalSektor] = Math.max(0, Math.min(100, parseInt(inp.value) || 0));
+      lagreRebalanseringsmaal(m);
+      visRebalansering(alleBeholdning);
+    });
+  });
+}
 
 // Node.js test export
 if (typeof module !== 'undefined') module.exports = { beregnKostbasis, beregnIRR, beregnTWRSerie };

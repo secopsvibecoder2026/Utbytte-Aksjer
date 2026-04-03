@@ -34,6 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initJSONBackup();
   initKalkulator();
   initVarsler();
+  initSammenligning();
   sjekkQRParam();
   visVelkomstModal();
   initProfil();
@@ -114,6 +115,12 @@ function lastInnData(json) {
   if (urlAksje) {
     const treff = alleAksjer.find(a => a.ticker.toUpperCase() === urlAksje.toUpperCase());
     if (treff) visModal(treff);
+  }
+
+  if (window._pendingKomparasjon) {
+    window._pendingKomparasjon = false;
+    oppdaterSammenlignSkuff();
+    visKomparasjonsModal();
   }
 
   if (window._pendingQRImport) {

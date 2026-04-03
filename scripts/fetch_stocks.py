@@ -1341,6 +1341,28 @@ def main():
     generer_sektorsider(resultater, root_dir)
     today = datetime.datetime.utcnow().strftime("%Y-%m-%d")
     generer_sitemap(resultater, root_dir, today)
+    oppdater_index_html_meta(len(resultater), root_dir)
+
+
+def oppdater_index_html_meta(antall_aksjer: int, root_dir: str):
+    """Oppdaterer hardkodet antall aksjer i meta-tagger og JSON-LD i index.html."""
+    path = os.path.join(root_dir, "index.html")
+    if not os.path.exists(path):
+        print("  Advarsel: index.html ikke funnet, hopper over meta-oppdatering")
+        return
+    with open(path, "r", encoding="utf-8") as f:
+        html = f.read()
+    oppdatert = re.sub(
+        r'((?:Oversikt|Daglig oppdatert oversikt) over )\d+( norske utbytteaksjer)',
+        rf'\g<1>{antall_aksjer}\g<2>',
+        html
+    )
+    if oppdatert == html:
+        print(f"  index.html: ingen endring (allerede {antall_aksjer} aksjer)")
+        return
+    with open(path, "w", encoding="utf-8") as f:
+        f.write(oppdatert)
+    print(f"  index.html meta-beskrivelse oppdatert → {antall_aksjer} aksjer")
 
 
 if __name__ == "__main__":
