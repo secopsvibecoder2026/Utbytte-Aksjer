@@ -43,11 +43,11 @@ Fullførte funksjoner er dokumentert i [ROADMAP_COMPLETED.md](ROADMAP_COMPLETED.
 - [ ] Legg til i sitemap.xml
 - [ ] Interne lenker fra enkeltaksjesider til sektorsiden
 
-#### 31. Interne lenker mellom app og aksjesider 🔗
+#### 31. Interne lenker mellom app og aksjesider 🔗 ✅
 **Prioritet: Medium**
 
-- [ ] Legg til lenke fra aksjemodal i hovedappen til `exday.no/aksjer/TICKER/`
-- [ ] Lenken åpner SEO-siden med full info og historikk
+- [x] Legg til lenke fra aksjemodal i hovedappen til `exday.no/aksjer/TICKER/`
+- [x] Lenken åpner SEO-siden med full info og historikk
 
 #### 32. Flere aksjer 📈
 **Prioritet: Medium**
