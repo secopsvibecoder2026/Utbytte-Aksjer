@@ -28,12 +28,12 @@ Fullførte funksjoner er dokumentert i [ROADMAP_COMPLETED.md](ROADMAP_COMPLETED.
 
 ### SEO og vekst
 
-#### 29. Google Search Console — sitemap-innsending 🔍
+#### 29. Google Search Console — sitemap-innsending 🔍 ✅
 **Prioritet: Høy — raskest SEO-gevinst**
 
-- [ ] Verifiser exday.no i Google Search Console
-- [ ] Send inn sitemap.xml (69 URL-er inkl. alle aksjesider)
-- [ ] Sjekk indekseringsstatus for aksjer/TICKER/-sidene
+- [x] Verifiser exday.no i Google Search Console
+- [x] Send inn sitemap.xml (83 URL-er inkl. alle aksjesider)
+- [x] Sjekk indekseringsstatus for aksjer/TICKER/-sidene
 
 #### 30. Sektorsider 📂
 **Prioritet: Medium — flere SEO-landingssider**
