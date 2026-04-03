@@ -787,6 +787,8 @@ def _aksje_side_html(a, today):
     <span>›</span>
     <a href="https://exday.no/aksjer/">Aksjer</a>
     <span>›</span>
+    <a href="https://exday.no/aksjer/sektor/{_sektor_slug(sektor)}/">{sektor}</a>
+    <span>›</span>
     {ticker}
   </nav>
 
@@ -831,6 +833,10 @@ def _aksje_side_html(a, today):
   {nokkeltal_seksjon}
 
   {hist_seksjon}
+
+  <div style="margin-top:1.5rem;">
+    <a href="/aksjer/sektor/{_sektor_slug(sektor)}/" style="font-size:0.9rem;color:#2563eb;">← Se alle {sektor}-aksjer med utbytte</a>
+  </div>
 
   <div class="cta">
     <p style="margin-bottom:0.75rem;color:#374151;">Se alle norske utbytteaksjer, bygg portefølje og spor ex-datoer</p>
