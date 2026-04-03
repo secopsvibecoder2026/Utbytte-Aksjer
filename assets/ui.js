@@ -567,7 +567,7 @@ function visOversikt() {
   const om30 = new Date(idag); om30.setDate(om30.getDate() + 30);
   const _ad = hentAlleAksjeData();
 
-  const bekreftet = data.filter(a => a.ex_dato).sort((a,b) => a.ex_dato.localeCompare(b.ex_dato));
+  const bekreftet = data.filter(a => a.ex_dato);
   const estimert  = data.filter(a => !a.ex_dato);
   const visSeksjon = bekreftet.length > 0 && estimert.length > 0;
 
