@@ -132,12 +132,20 @@ async function mergPriser() {
   alleAksjer.forEach(a => {
     const p = data.aksjer[a.ticker];
     if (!p) return;
-    if (p.pris > 0) { a.pris = p.pris; changed = true; }
+    if (p.pris > 0) {
+      a.pris = p.pris;
+      // Recalkuler yield basert på ny kurs
+      if (a.utbytte_per_aksje > 0) {
+        a.utbytte_yield = Math.round((a.utbytte_per_aksje / p.pris) * 10000) / 100;
+      }
+      changed = true;
+    }
     a.endring_pct = p.endring_pct ?? 0;
     a.endring_krs = p.endring_krs ?? 0;
   });
 
-  if (changed) visOversikt();
+  // Re-render kun om brukeren faktisk ser oversikten
+  if (changed && aktivTab === 'oversikt') visOversikt();
 }
 
 async function lastData() {

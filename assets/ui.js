@@ -544,6 +544,13 @@ function visOversikt() {
     }
   });
 
+  // Sync mobilsort-dropdown med faktisk sorteringstilstand
+  const mobilSortEl = document.getElementById('mobil-sort');
+  if (mobilSortEl) {
+    const val = sortering.kol + '_' + sortering.retning;
+    if (mobilSortEl.value !== val) mobilSortEl.value = val;
+  }
+
   if (data.length === 0) {
     tbody.innerHTML = '';
     kortBody.innerHTML = '';
