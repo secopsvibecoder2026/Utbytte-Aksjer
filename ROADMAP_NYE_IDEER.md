@@ -7,27 +7,27 @@ Eksisterende veikart: [ROADMAP.md](ROADMAP.md) · Fullførte funksjoner: [ROADMA
 
 ## 🐛 Kjente bugs og rask-fikser
 
-### B1. Utdatert antall i meta-tagger
+### B1. Utdatert antall i meta-tagger ✅
 **Prioritet: Høy — påvirker SEO og troverdighet**
 
 `index.html` har hardkodet "45 norske utbytteaksjer" i `<meta name="description">`, `og:description`, Twitter Card og JSON-LD Dataset. Vi sporer nå 80.
 
-- [ ] Oppdater alle meta-tagger til "80 norske utbytteaksjer"
-- [ ] Endre `fetch_stocks.py` til å skrive antall dynamisk inn i `index.html` ved hvert deploy
+- [x] Oppdater alle meta-tagger til "80 norske utbytteaksjer"
+- [x] Endre `fetch_stocks.py` til å skrive antall dynamisk inn i `index.html` ved hvert deploy
 
-### B2. Modal-tekst ved ex-dato i dag
+### B2. Modal-tekst ved ex-dato i dag ✅
 **Prioritet: Lav**
 
 Modal viser "om 0 dager" når ex-dato er i dag. Aksjekortet håndterer dette korrekt med "(i dag!)".
 
-- [ ] Bytt `om ${dagerTilEx} dager` til betinget tekst: `i dag` / `i morgen` / `om X dager`
+- [x] Bytt `om ${dagerTilEx} dager` til betinget tekst: `i dag` / `i morgen` / `om X dager`
 
-### B3. Canonical-tag mangler på /uke/
+### B3. Canonical-tag mangler på /uke/ ✅
 **Prioritet: Medium — SEO**
 
 `/uke/index.html` mangler `<link rel="canonical">`, noe som kan gi duplikat-innhold-problemer.
 
-- [ ] Legg til `<link rel="canonical" href="https://exday.no/uke/" />`
+- [x] Legg til `<link rel="canonical" href="https://exday.no/uke/" />`
 
 ---
 
