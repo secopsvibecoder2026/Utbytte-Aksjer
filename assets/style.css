@@ -185,7 +185,7 @@ th.sort-desc::after { content: ' ↓'; color: #6b7280; }
 .dark .aksje-kort-kompakt { background: #111827; border-color: #1f2937; }
 .aksje-kort-kompakt:active { background: #f0fdf4; }
 .dark .aksje-kort-kompakt:active { background: #14532d20; }
-.aksje-kort-kompakt.snart-ex { border-left: 3px solid #f97316; }
+.aksje-kort-kompakt.snart-ex { }
 
 /* ── MOBILE AKSJE-KORT ────────────────────────────────────────────────── */
 .aksje-kort {
@@ -199,7 +199,7 @@ th.sort-desc::after { content: ' ↓'; color: #6b7280; }
 }
 .dark .aksje-kort { background: #111827; border-color: #1f2937; }
 .aksje-kort:active { box-shadow: 0 0 0 2px #22c55e; border-color: #22c55e; }
-.aksje-kort.snart-ex { border-left: 3px solid #f97316; }
+.aksje-kort.snart-ex { }
 
 /* ── KALENDER ─────────────────────────────────────────────────────────── */
 .kal-rad {
