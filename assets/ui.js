@@ -511,6 +511,7 @@ function visHvaSkjerIDag() {
 function visOversikt() {
   visOpportunityFeed();
   visHvaSkjerIDag();
+  visDagensBevegelser();
   const data = sorterAksjer(filtrerteAksjer());
   const tbody = document.getElementById('tabell-body');
   const kortBody = document.getElementById('kort-body');
@@ -1788,6 +1789,97 @@ function beregnYtdInntekt(alleBeholdning) {
     }
   });
   return total;
+}
+
+
+let _priserCache = null;
+let _priserCacheTs = 0;
+
+async function hentPriser() {
+  const now = Date.now();
+  if (_priserCache && now - _priserCacheTs < 5 * 60 * 1000) return _priserCache;
+  try {
+    const r = await fetch('data/priser.json');
+    if (!r.ok) return null;
+    _priserCache = await r.json();
+    _priserCacheTs = now;
+    return _priserCache;
+  } catch { return null; }
+}
+
+async function visDagensBevegelser() {
+  const el = document.getElementById('dagens-bevegelser');
+  if (!el || !alleAksjer.length) return;
+
+  const data = await hentPriser();
+  if (!data || !data.aksjer) { el.classList.add('hidden'); return; }
+
+  const aksjerMap = Object.fromEntries(alleAksjer.map(a => [a.ticker, a]));
+
+  const bevegelser = Object.entries(data.aksjer)
+    .map(([ticker, p]) => ({ ticker, ...p, aksje: aksjerMap[ticker] }))
+    .filter(b => b.aksje && (b.endring_pct !== 0 || b.endring_krs !== 0));
+
+  if (!bevegelser.length) { el.classList.add('hidden'); return; }
+
+  const sorted = [...bevegelser].sort((a, b) => b.endring_pct - a.endring_pct);
+  const gainers = sorted.slice(0, 5).filter(b => b.endring_pct > 0);
+  const losers = sorted.slice(-5).reverse().filter(b => b.endring_pct < 0);
+
+  if (!gainers.length && !losers.length) { el.classList.add('hidden'); return; }
+
+  const kortHtml = (b, type) => {
+    const pos = type === 'gainer';
+    const pctTxt = (pos ? '+' : '') + b.endring_pct.toFixed(2) + '%';
+    const krsTxt = (pos ? '+' : '') + b.endring_krs.toFixed(2) + ' kr';
+    const ramme  = pos
+      ? 'border-green-200 dark:border-green-800/60 bg-green-50 dark:bg-green-950/20'
+      : 'border-red-200 dark:border-red-800/60 bg-red-50 dark:bg-red-950/20';
+    const pctCls = pos ? 'text-green-600 dark:text-green-400' : 'text-red-500 dark:text-red-400';
+    const ikon   = pos ? '▲' : '▼';
+    return `<div class="bevegelse-kort rounded-lg border p-2.5 cursor-pointer hover:shadow-sm transition-shadow ${ramme}" data-ticker="${b.ticker}">
+      <div class="flex items-center justify-between gap-1 mb-0.5">
+        <span class="font-mono font-bold text-sm">${b.ticker}</span>
+        <span class="text-xs font-semibold ${pctCls}">${ikon} ${pctTxt}</span>
+      </div>
+      <div class="flex items-center justify-between gap-1">
+        <span class="text-xs text-gray-500 dark:text-gray-400 truncate">${b.aksje.navn}</span>
+        <span class="text-xs text-gray-400 shrink-0">${b.pris.toLocaleString('nb-NO', { maximumFractionDigits: 2 })} kr</span>
+      </div>
+    </div>`;
+  };
+
+  const ts = data.oppdatert
+    ? new Date(data.oppdatert).toLocaleTimeString('nb-NO', { hour: '2-digit', minute: '2-digit' })
+    : '';
+
+  el.innerHTML = `
+    <div class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-3 shadow-sm">
+      <div class="flex items-center justify-between mb-2.5">
+        <p class="text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500">Dagens bevegelser</p>
+        ${ts ? `<span class="text-xs text-gray-400 dark:text-gray-600">Oppdatert ${ts}</span>` : ''}
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        ${gainers.length ? `
+          <div>
+            <p class="text-xs font-medium text-green-600 dark:text-green-400 mb-1.5">Dagens vinnere</p>
+            <div class="space-y-1.5">${gainers.map(b => kortHtml(b, 'gainer')).join('')}</div>
+          </div>` : ''}
+        ${losers.length ? `
+          <div>
+            <p class="text-xs font-medium text-red-500 dark:text-red-400 mb-1.5">Dagens tapere</p>
+            <div class="space-y-1.5">${losers.map(b => kortHtml(b, 'loser')).join('')}</div>
+          </div>` : ''}
+      </div>
+    </div>`;
+  el.classList.remove('hidden');
+
+  el.querySelectorAll('[data-ticker]').forEach(kort => {
+    kort.addEventListener('click', () => {
+      const aksje = alleAksjer.find(a => a.ticker === kort.dataset.ticker);
+      if (aksje) visModal(aksje);
+    });
+  });
 }
 
 
