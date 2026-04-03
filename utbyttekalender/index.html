@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Utbyttekalender 2026 – Norske aksjer på Oslo Børs | exday.no</title>
+  <meta name="description" content="Komplett utbyttekalender for norske utbytteaksjer på Oslo Børs 2026. Se ex-dato og utbetalingsdato måned for måned – oppdatert daglig." />
+  <link rel="canonical" href="https://exday.no/utbyttekalender/" />
+  <link rel="icon" type="image/svg+xml" href="/logo/exday_icon_primary.svg">
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#2563eb" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Utbyttekalender 2026 – Norske aksjer på Oslo Børs" />
+  <meta property="og:description" content="Komplett utbyttekalender for norske utbytteaksjer på Oslo Børs. Se ex-datoer og utbetalingsdatoer måned for måned." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://exday.no/utbyttekalender/" />
+  <meta property="og:image" content="https://exday.no/assets/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:locale" content="nb_NO" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Utbyttekalender 2026 – Norske aksjer på Oslo Børs" />
+  <meta name="twitter:description" content="Komplett utbyttekalender for norske utbytteaksjer på Oslo Børs. Ex-datoer og utbetalingsdatoer måned for måned." />
+  <meta name="twitter:image" content="https://exday.no/assets/og-image.png" />
+
+  <!-- JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Utbyttekalender 2026 – Norske aksjer på Oslo Børs",
+    "description": "Komplett utbyttekalender for norske utbytteaksjer på Oslo Børs 2026. Ex-datoer og utbetalingsdatoer måned for måned.",
+    "url": "https://exday.no/utbyttekalender/",
+    "publisher": {
+      "@type": "Organization",
+      "name": "exday.no",
+      "url": "https://exday.no"
+    }
+  }
+  </script>
+
+  <link rel="stylesheet" href="/assets/tailwind.css" />
+  <link rel="stylesheet" href="/assets/style.css" />
+</head>
+<body class="bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 min-h-screen transition-colors duration-200">
+
+  <!-- HEADER -->
+  <header class="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 sticky top-0 z-40 shadow-sm">
+    <div class="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <a href="/" class="flex items-center gap-1.5 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors" aria-label="Tilbake til forsiden">
+          <svg class="w-4 h-4" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+          <span class="text-sm font-medium">exday.no</span>
+        </a>
+        <span class="text-gray-300 dark:text-gray-600">/</span>
+        <h1 class="text-sm font-semibold">Utbyttekalender</h1>
+      </div>
+      <button id="dark-toggle" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500 dark:text-gray-400 transition-colors" aria-label="Bytt fargemodus">
+        <svg class="w-5 h-5 dark:hidden" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+        <svg class="w-5 h-5 hidden dark:block" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main class="max-w-3xl mx-auto px-4 py-6 space-y-8">
+
+    <!-- INTRO -->
+    <div>
+      <h2 class="text-2xl font-bold tracking-tight">Utbyttekalender <span id="aar">2026</span></h2>
+      <p class="text-sm text-gray-500 dark:text-gray-400 mt-1" id="undertittel">Laster kalender…</p>
+    </div>
+
+    <!-- HURTIGHOPP (månedsliste) -->
+    <nav id="maaned-nav" aria-label="Hopp til måned" class="hidden flex-wrap gap-2 flex"></nav>
+
+    <!-- MÅNEDER -->
+    <div id="kalender-body" class="space-y-10"></div>
+
+    <!-- TOM TILSTAND -->
+    <div id="ingen" class="hidden text-center py-16 text-gray-400 dark:text-gray-600">
+      <svg class="w-10 h-10 mx-auto mb-3 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+      <p class="text-sm">Ingen utbyttedatoer tilgjengelig</p>
+    </div>
+
+    <!-- FORKLARING -->
+    <section class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-5 space-y-3 text-sm text-gray-600 dark:text-gray-400">
+      <h3 class="font-semibold text-gray-800 dark:text-gray-200 text-base">Hva er ex-dato?</h3>
+      <p>
+        <strong class="text-gray-800 dark:text-gray-200">Ex-dato</strong> (ex-dividend date) er den første handelsdagen der aksjen handles <em>uten</em> rett på kommende utbytte. Kjøper du aksjen på eller etter ex-dato, mottar du ikke utbyttet.
+      </p>
+      <p>
+        <strong class="text-gray-800 dark:text-gray-200">Utbetalingsdato</strong> er den dagen utbyttet faktisk settes inn på kontoen din — typisk noen dager til uker etter ex-dato.
+      </p>
+      <p class="text-xs text-gray-400 dark:text-gray-600">Data hentes fra Oslo Børs og selskapenes egne rapporter. Estimerte datoer er basert på historisk utbyttemønster og kan avvike.</p>
+    </section>
+
+    <!-- CTA -->
+    <div class="rounded-xl border border-blue-100 dark:border-blue-900/40 bg-blue-50 dark:bg-blue-950/30 p-5 text-center space-y-3">
+      <p class="text-sm font-medium text-blue-900 dark:text-blue-200">Vil du se yield, score og nøkkeltall for hver aksje?</p>
+      <a href="/" class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors">
+        Åpne exday.no
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+      </a>
+      <p class="text-xs text-blue-600 dark:text-blue-400">Gratis · Ingen innlogging · Oppdateres daglig</p>
+    </div>
+
+  </main>
+
+  <script>
+    // ── Tema ─────────────────────────────────────────────────────────────────
+    const root = document.documentElement;
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      root.classList.add('dark');
+    }
+    document.getElementById('dark-toggle').addEventListener('click', () => {
+      const isDark = root.classList.toggle('dark');
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    });
+
+    // ── Hjelpefunksjoner ─────────────────────────────────────────────────────
+    const MAANEDER = ['Januar','Februar','Mars','April','Mai','Juni','Juli','August','September','Oktober','November','Desember'];
+
+    function formaterDatoLang(str) {
+      const d = new Date(str);
+      return d.toLocaleDateString('nb-NO', { weekday: 'short', day: 'numeric', month: 'short' });
+    }
+
+    function yieldKlasse(y) {
+      if (y >= 8) return 'bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300';
+      if (y >= 5) return 'bg-teal-100 dark:bg-teal-900/40 text-teal-700 dark:text-teal-300';
+      if (y >= 3) return 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300';
+      return 'bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400';
+    }
+
+    function erPassert(datoStr) {
+      const d = new Date(datoStr);
+      const idag = new Date(); idag.setHours(0,0,0,0);
+      return d < idag;
+    }
+
+    function byggRad(a, erEstimert) {
+      const passert = erPassert(a.ex_dato);
+      return `
+        <tr class="${passert ? 'opacity-40' : ''}">
+          <td class="pl-4 pr-3 py-2.5">
+            <a href="/aksjer/${a.ticker}/" class="font-mono font-bold text-brand-700 dark:text-brand-400 hover:underline text-sm">${a.ticker}</a>
+          </td>
+          <td class="px-3 py-2.5 text-sm text-gray-600 dark:text-gray-400 max-w-[200px] truncate">${a.navn}</td>
+          <td class="px-3 py-2.5 text-sm ${passert ? '' : 'font-medium'}">
+            ${formaterDatoLang(a.ex_dato)}
+            ${erEstimert ? '<span class="ml-1 text-xs text-gray-400 dark:text-gray-600" title="Estimert basert på historikk">~</span>' : ''}
+          </td>
+          <td class="px-3 py-2.5 text-sm text-gray-500 dark:text-gray-400 hidden md:table-cell">${a.betaling_dato ? formaterDatoLang(a.betaling_dato) : '—'}</td>
+          <td class="pl-3 pr-4 py-2.5 text-right">
+            <span class="text-xs font-semibold px-2 py-0.5 rounded-full ${yieldKlasse(a.utbytte_yield)}">${a.utbytte_yield.toFixed(1)}%</span>
+          </td>
+        </tr>`;
+    }
+
+    function byggMaanedSeksjon(maanedNr, aar, aksjer, bekreftetSet) {
+      const maanedNavn = MAANEDER[maanedNr];
+      const id = `maaned-${aar}-${maanedNr}`;
+      const sortert = [...aksjer].sort((a, b) => a.ex_dato.localeCompare(b.ex_dato));
+      const rader = sortert.map(a => byggRad(a, !bekreftetSet.has(a.ticker + a.ex_dato))).join('');
+
+      return `
+        <section id="${id}">
+          <div class="flex items-center gap-3 mb-4">
+            <h3 class="text-lg font-bold">${maanedNavn} ${aar}</h3>
+            <span class="text-xs text-gray-400 dark:text-gray-600 font-medium">${aksjer.length} aksje${aksjer.length !== 1 ? 'r' : ''}</span>
+          </div>
+          <div class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 overflow-hidden">
+            <!-- Desktop tabell -->
+            <div class="hidden sm:block overflow-x-auto">
+              <table class="w-full text-left">
+                <thead>
+                  <tr class="border-b border-gray-100 dark:border-gray-800 text-xs text-gray-400 dark:text-gray-600 uppercase tracking-wider">
+                    <th class="px-4 py-2.5 font-medium">Ticker</th>
+                    <th class="px-4 py-2.5 font-medium">Selskap</th>
+                    <th class="px-4 py-2.5 font-medium">Ex-dato</th>
+                    <th class="px-4 py-2.5 font-medium hidden md:table-cell">Utbetaling</th>
+                    <th class="px-4 py-2.5 font-medium text-right">Yield</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+                  ${rader}
+                </tbody>
+              </table>
+            </div>
+            <!-- Mobilvisning -->
+            <div class="sm:hidden divide-y divide-gray-100 dark:divide-gray-800">
+              ${sortert.map(a => {
+                const passert = erPassert(a.ex_dato);
+                const erEstimert = !bekreftetSet.has(a.ticker + a.ex_dato);
+                return `<div class="${passert ? 'opacity-40' : ''} px-4 py-3 flex items-center justify-between">
+                  <div>
+                    <a href="/aksjer/${a.ticker}/" class="font-mono font-bold text-brand-700 dark:text-brand-400 text-sm">${a.ticker}</a>
+                    <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">${formaterDatoLang(a.ex_dato)}${erEstimert ? ' <span title="Estimert">~</span>' : ''}</div>
+                  </div>
+                  <span class="text-xs font-semibold px-2 py-0.5 rounded-full ${yieldKlasse(a.utbytte_yield)}">${a.utbytte_yield.toFixed(1)}%</span>
+                </div>`;
+              }).join('')}
+            </div>
+          </div>
+        </section>`;
+    }
+
+    // ── Hent data og bygg kalender ───────────────────────────────────────────
+    async function init() {
+      const resp = await fetch('/data/aksjer.json');
+      const data = await resp.json();
+      const aksjer = (data.aksjer || data).filter(a => a.ex_dato && a.utbytte_yield > 0);
+
+      // Finn "bekreftet"-aksjer (ex_dato er faktisk kunngjort — ikke-estimert)
+      // Vi bruker det faktum at bekreftet = ex_dato finnes og er innenfor ~90 dager
+      const idag = new Date(); idag.setHours(0,0,0,0);
+      const bekreftetSet = new Set();
+      aksjer.forEach(a => {
+        const d = new Date(a.ex_dato);
+        const diffDager = (d - idag) / 86400000;
+        if (diffDager <= 90) bekreftetSet.add(a.ticker + a.ex_dato);
+      });
+
+      // Grupper per år + måned
+      const grupper = {};
+      aksjer.forEach(a => {
+        const d = new Date(a.ex_dato);
+        const aar = d.getFullYear();
+        const mnd = d.getMonth();
+        const key = `${aar}-${mnd}`;
+        if (!grupper[key]) grupper[key] = { aar, mnd, aksjer: [] };
+        grupper[key].aksjer.push(a);
+      });
+
+      const sorterte = Object.values(grupper).sort((a, b) =>
+        a.aar !== b.aar ? a.aar - b.aar : a.mnd - b.mnd
+      );
+
+      if (sorterte.length === 0) {
+        document.getElementById('ingen').classList.remove('hidden');
+        document.getElementById('undertittel').textContent = 'Ingen data tilgjengelig.';
+        return;
+      }
+
+      const aarSet = [...new Set(sorterte.map(g => g.aar))];
+      const aarTekst = aarSet.join('/');
+      document.getElementById('aar').textContent = aarTekst;
+      document.getElementById('undertittel').textContent =
+        `${aksjer.length} norske utbytteaksjer på Oslo Børs · Oppdatert daglig`;
+
+      // Måneds-hurtighopp
+      const nav = document.getElementById('maaned-nav');
+      nav.classList.remove('hidden');
+      sorterte.forEach(g => {
+        const a = document.createElement('a');
+        a.href = `#maaned-${g.aar}-${g.mnd}`;
+        a.className = 'text-xs px-3 py-1 rounded-full border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:border-brand-400 hover:text-brand-700 dark:hover:text-brand-400 transition-colors';
+        const erAktivMnd = g.aar === idag.getFullYear() && g.mnd === idag.getMonth();
+        if (erAktivMnd) a.className += ' border-brand-400 text-brand-700 dark:text-brand-400 font-semibold';
+        a.textContent = `${MAANEDER[g.mnd].slice(0,3)} ${g.aar}`;
+        nav.appendChild(a);
+      });
+
+      // Bygg seksjoner
+      document.getElementById('kalender-body').innerHTML = sorterte
+        .map(g => byggMaanedSeksjon(g.mnd, g.aar, g.aksjer, bekreftetSet))
+        .join('');
+    }
+
+    init().catch(() => {
+      document.getElementById('undertittel').textContent = 'Kunne ikke laste data. Prøv igjen senere.';
+    });
+  </script>
+</body>
+</html>
