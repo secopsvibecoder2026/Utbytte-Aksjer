@@ -332,43 +332,52 @@ def hent_euronext_priser() -> dict:
     """
     Henter live-priser for alle Oslo Børs-aksjer fra Euronext.
     Returnerer {ticker: pris} for bruk som prisfallback.
+    Kolonnestruktur: [0]=navn(HTML), [1]=ISIN, [2]=ticker, [3]=exchange, [4]=pris(HTML), ...
     """
-    url = "https://live.euronext.com/nb/pd/data/stocks?mics=XOSL&display_datapoints=pd_ticker,pd_last_price&display_filters=&draw=1&start=0&length=300"
+    import urllib.parse
+    # Noen tickers bruker annet symbol på Euronext enn på Oslo Børs
+    _EURONEXT_MAP = {
+        "ENTRA": "ENTR", "DOFG": "DOF", "OTL": "OLT", "VISTN": "VISTIN",
+        "NORBT": "NORBIT", "PNOR": "PNORD", "JAREN": "JAEDR",
+    }
     headers = {
         "User-Agent": "Mozilla/5.0 (compatible; exday.no/1.0)",
         "Accept": "application/json",
+        "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
         "X-Requested-With": "XMLHttpRequest",
     }
-    try:
-        req = urllib.request.Request(url, headers=headers)
-        with urllib.request.urlopen(req, timeout=15) as r:
-            data = json.loads(r.read())
-        priser = {}
-        for row in data.get("aaData", []):
-            # row is a list of HTML strings or values
-            # Parse ticker from first cell (contains <a> tag or plain text)
-            if not row:
-                continue
-            # Extract ticker - usually in format: <a href="...">TICKER</a> or plain TICKER
-            raw = str(row[0]) if row else ""
-            import re as _re
-            m = _re.search(r'>([A-Z0-9]+)<', raw)
-            ticker = m.group(1) if m else raw.strip()
-            # Price is usually last numeric field
-            for cell in reversed(row):
-                s = str(cell).replace('\xa0', '').replace(' ', '').replace(',', '.')
-                try:
-                    p = float(s)
-                    if p > 0:
-                        priser[ticker] = p
-                        break
-                except (ValueError, TypeError):
+    priser = {}
+    for mic in ("XOSL", "XOAS"):   # Oslo Børs + Oslo Axess
+        try:
+            url = f"https://live.euronext.com/nb/pd/data/stocks?mics={mic}"
+            body = urllib.parse.urlencode({
+                "draw": "1", "start": "0", "length": "300",
+                "iDisplayStart": "0", "iDisplayLength": "300",
+            }).encode()
+            req = urllib.request.Request(url, data=body, headers=headers, method="POST")
+            with urllib.request.urlopen(req, timeout=20) as r:
+                data = json.loads(r.read())
+            for row in data.get("aaData", []):
+                if not row or len(row) < 5:
                     continue
-        print(f"  Euronext: {len(priser)} priser hentet")
-        return priser
-    except Exception as e:
-        print(f"  Euronext priser: {e}")
-        return {}
+                raw_ticker = str(row[2]).strip()
+                ticker = _EURONEXT_MAP.get(raw_ticker, raw_ticker)
+                if not ticker:
+                    continue
+                pris_html = str(row[4])
+                m = re.search(r"pd_last_price[^>]*>([0-9\s\xa0,.]+)<", pris_html)
+                if m:
+                    pris_str = m.group(1).replace('\xa0', '').replace(' ', '').replace(',', '.')
+                    try:
+                        p = float(pris_str)
+                        if p > 0 and ticker not in priser:
+                            priser[ticker] = p
+                    except (ValueError, TypeError):
+                        pass
+        except Exception as e:
+            print(f"  Euronext {mic}: {e}")
+    print(f"  Euronext: {len(priser)} priser hentet (XOSL + XOAS)")
+    return priser
 
 
 def safe_float(value, default=0.0):
@@ -591,6 +600,13 @@ def hent_aksje(meta):
         payout_ratio = round(payout_ratio, 1)
 
         valuta = info.get("currency", "NOK")
+
+        # Sanity-sjekk: hvis yield er mer enn 3× historisk snitt-yield, bruk snitt i stedet
+        # (beskytter mot Yahoo Finance-feil med trailingAnnualDividendRate)
+        if snitt_yield_5ar > 0 and utbytte_yield > snitt_yield_5ar * 3:
+            print(f"    Advarsel [{ticker}]: yield {utbytte_yield:.1f}% >> snitt {snitt_yield_5ar:.1f}% — bruker snitt")
+            utbytte_yield = snitt_yield_5ar
+            utbytte_per_aksje = round(pris * snitt_yield_5ar / 100, 4) if pris > 0 else 0
 
         resultat = {
             "ticker": ticker,
@@ -1263,10 +1279,11 @@ def main():
                 aksje["data_kilde"] = "euronext"
             resultater.append(aksje)
         elif meta["ticker"] in fallback:
-            fb = fallback[meta["ticker"]]
-            # Berik fallback med Euronext-pris
+            fb = dict(fallback[meta["ticker"]])
+            # Sett data_kilde — behold "yahoo" hvis kjent, sett "euronext" hvis vi oppdaterer pris
+            if not fb.get("data_kilde"):
+                fb["data_kilde"] = "yahoo"
             if fb.get("pris", 0) == 0 and meta["ticker"] in euronext_priser:
-                fb = dict(fb)
                 fb["pris"] = euronext_priser[meta["ticker"]]
                 fb["data_kilde"] = "euronext"
             print(f"    Bruker fallback-data for {meta['ticker']}")
