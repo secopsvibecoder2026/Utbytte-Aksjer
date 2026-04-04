@@ -65,6 +65,45 @@
 .sub-tab-btn.active { color: #15803d; border-color: #16a34a; }
 .dark .sub-tab-btn.active { color: #4ade80; border-color: #22c55e; }
 
+/* ── TOPPLISTOR ───────────────────────────────────────────────────────────── */
+.toppliste-pill {
+  padding: 0.3rem 0.85rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  border-radius: 9999px;
+  border: 1px solid #d1d5db;
+  background: #fff;
+  color: #6b7280;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+  white-space: nowrap;
+}
+.dark .toppliste-pill { background: #111827; border-color: #374151; color: #9ca3af; }
+.toppliste-pill:hover { border-color: #22c55e; color: #15803d; }
+.dark .toppliste-pill:hover { border-color: #22c55e; color: #4ade80; }
+.toppliste-pill.active { background: #f0fdf4; border-color: #16a34a; color: #15803d; font-weight: 600; }
+.dark .toppliste-pill.active { background: rgb(20 83 45 / 0.2); border-color: #22c55e; color: #4ade80; }
+
+.toppliste-rad {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.625rem 0.75rem;
+  border-radius: 0.75rem;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+.toppliste-rad:hover { background: #f9fafb; }
+.dark .toppliste-rad:hover { background: #111827; }
+.toppliste-rang { font-size: 0.75rem; font-weight: 700; color: #9ca3af; width: 1.25rem; text-align: right; flex-shrink: 0; }
+.toppliste-info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 0.1rem; }
+.toppliste-navn { font-size: 0.8125rem; color: #374151; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.dark .toppliste-navn { color: #d1d5db; }
+.toppliste-sektor { font-size: 0.7rem; color: #9ca3af; }
+.toppliste-høyre { display: flex; flex-direction: column; align-items: flex-end; gap: 0.2rem; flex-shrink: 0; }
+.toppliste-metric { font-size: 0.8rem; font-weight: 600; color: #374151; }
+.dark .toppliste-metric { color: #e5e7eb; }
+
 /* ── FILTER INPUTS ────────────────────────────────────────────────────── */
 .filter-input {
   padding: 0.5rem 0.75rem;

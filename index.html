@@ -212,6 +212,7 @@
       <button class="sub-tab-btn active" data-subtab="aksjer">Aksjer</button>
       <button class="sub-tab-btn" data-subtab="bevegelser">Bevegelser</button>
       <button class="sub-tab-btn" data-subtab="sektor">Sektorer</button>
+      <button class="sub-tab-btn" data-subtab="topplistor">Topplistor</button>
     </nav>
 
     <!-- FILTER BAR -->
@@ -390,6 +391,17 @@
         <div class="mt-4 text-right">
           <a href="/aksjer/sektor/" class="text-xs text-brand-600 dark:text-brand-400 hover:underline">Åpne full side →</a>
         </div>
+      </div>
+
+      <!-- SUB-FANE: TOPPLISTOR -->
+      <div id="subtab-topplistor" class="hidden">
+        <div id="toppliste-pill-bar" class="flex flex-wrap gap-2 mb-4">
+          <button class="toppliste-pill active" data-liste="yield">🏆 Høyest yield</button>
+          <button class="toppliste-pill" data-liste="vekst">📈 Best vekst 5år</button>
+          <button class="toppliste-pill" data-liste="konsistent">🛡️ Mest konsistente</button>
+          <button class="toppliste-pill" data-liste="payout">💰 Lavest payout</button>
+        </div>
+        <div id="toppliste-innhold"></div>
       </div>
 
     </div><!-- /tab-oversikt -->

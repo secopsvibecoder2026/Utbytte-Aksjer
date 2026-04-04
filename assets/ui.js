@@ -178,6 +178,7 @@ function initTabs() {
 function initOversiktSubTabs() {
   const nav = document.getElementById('oversikt-sub-nav');
   if (!nav) return;
+  initTopplistor();
   nav.addEventListener('click', e => {
     const btn = e.target.closest('.sub-tab-btn');
     if (!btn) return;
@@ -186,11 +187,13 @@ function initOversiktSubTabs() {
     document.getElementById('subtab-aksjer').classList.toggle('hidden', aktivOversiktSubTab !== 'aksjer');
     document.getElementById('subtab-bevegelser').classList.toggle('hidden', aktivOversiktSubTab !== 'bevegelser');
     document.getElementById('subtab-sektor').classList.toggle('hidden', aktivOversiktSubTab !== 'sektor');
+    document.getElementById('subtab-topplistor').classList.toggle('hidden', aktivOversiktSubTab !== 'topplistor');
     const erAksjer = aktivOversiktSubTab === 'aksjer';
     document.getElementById('filter-bar').classList.toggle('hidden', !erAksjer);
     document.getElementById('filter-ekstra').classList.toggle('hidden', !erAksjer);
     if (aktivOversiktSubTab === 'sektor') visSektorer();
     if (aktivOversiktSubTab === 'bevegelser') visDagensBevegelser();
+    if (aktivOversiktSubTab === 'topplistor') visTopplistor();
   });
 }
 
@@ -883,6 +886,72 @@ function sorterAksjer(data) {
   });
 }
 
+
+function initTopplistor() {
+  const pillBar = document.getElementById('toppliste-pill-bar');
+  const container = document.getElementById('toppliste-innhold');
+  if (!pillBar || pillBar.dataset.init) return;
+  pillBar.dataset.init = '1';
+  pillBar.addEventListener('click', e => {
+    const pill = e.target.closest('.toppliste-pill');
+    if (!pill) return;
+    pillBar.querySelectorAll('.toppliste-pill').forEach(b => b.classList.toggle('active', b === pill));
+    visTopplistor(pill.dataset.liste);
+  });
+  container.addEventListener('click', e => {
+    const rad = e.target.closest('.toppliste-rad');
+    if (!rad) return;
+    const aksje = alleAksjer.find(x => x.ticker === rad.dataset.ticker);
+    if (aksje) visModal(aksje);
+  });
+}
+
+function visTopplistor(liste = 'yield') {
+  const container = document.getElementById('toppliste-innhold');
+  if (!container || !alleAksjer.length) return;
+
+  const LISTER = {
+    yield:      { felt: 'utbytte_yield',    retning: 'desc',
+                  filter: a => a.utbytte_yield > 0,
+                  label:  a => a.utbytte_yield.toFixed(2) + '% yield' },
+    vekst:      { felt: 'utbytte_vekst_5ar', retning: 'desc',
+                  filter: a => a.utbytte_vekst_5ar > 0,
+                  label:  a => '+' + a.utbytte_vekst_5ar.toFixed(1) + '% vekst/år' },
+    konsistent: { felt: 'ar_med_utbytte',   retning: 'desc',
+                  filter: a => a.ar_med_utbytte > 0,
+                  label:  a => a.ar_med_utbytte + ' år m/utbytte' },
+    payout:     { felt: 'payout_ratio',     retning: 'asc',
+                  filter: a => a.payout_ratio > 0 && a.payout_ratio < 100,
+                  label:  a => a.payout_ratio.toFixed(0) + '% payout' },
+  };
+
+  const cfg = LISTER[liste];
+  if (!cfg) return;
+
+  const topp = alleAksjer
+    .filter(cfg.filter)
+    .sort((a, b) => cfg.retning === 'desc' ? b[cfg.felt] - a[cfg.felt] : a[cfg.felt] - b[cfg.felt])
+    .slice(0, 10);
+
+  if (!topp.length) {
+    container.innerHTML = '<p class="text-gray-400 dark:text-gray-600 py-8 text-center text-sm">Ingen data tilgjengelig.</p>';
+    return;
+  }
+
+  container.innerHTML = topp.map((a, i) => `
+    <div class="toppliste-rad" data-ticker="${a.ticker}">
+      <span class="toppliste-rang">${i + 1}</span>
+      <div class="toppliste-info">
+        <span class="font-mono font-bold text-sm text-brand-700 dark:text-brand-400">${a.ticker}</span>
+        <span class="toppliste-navn">${a.navn}</span>
+        <span class="toppliste-sektor">${a.sektor || ''}</span>
+      </div>
+      <div class="toppliste-høyre">
+        <span class="toppliste-metric">${cfg.label(a)}</span>
+        <span class="yield-badge ${yieldKlasse(a.utbytte_yield)}">${a.utbytte_yield.toFixed(2)}%</span>
+      </div>
+    </div>`).join('');
+}
 
 function visSektorer() {
   const grid = document.getElementById('sektor-grid');
