@@ -647,7 +647,7 @@ function visOversikt() {
       <td class="px-2 py-3 w-8">${stjerne(a.ticker)}</td>
       <td class="px-4 py-3 font-mono font-bold text-brand-700 dark:text-brand-400">${a.ticker}</td>
       <td class="px-4 py-3">
-        <div class="font-medium leading-tight">${a.navn}</div>
+        <div class="font-medium leading-tight">${a.navn} ${a.data_kilde && a.data_kilde !== 'yahoo' ? '<span class="text-xs text-amber-500 dark:text-amber-400" title="Data kan være utdatert">⚠ begrenset data</span>' : ''}</div>
         <div class="text-xs text-gray-400 dark:text-gray-500 flex items-center gap-1.5">
           ${a.sektor}
           ${_harNotat ? '<span title="Har notat" class="opacity-60">✏</span>' : ''}
@@ -755,6 +755,9 @@ function visOversikt() {
     </div>`;
 
     // ── NORMALT MOBILKORT (full detalj) ────────────────────────────────
+    const kildeStr = a.data_kilde && a.data_kilde !== 'yahoo'
+      ? `<span class="text-xs text-amber-500 dark:text-amber-400" title="Data kan være utdatert">⚠ begrenset data</span>`
+      : '';
     const normalKort = `
     <div class="aksje-kort ${snartEx ? 'snart-ex' : ''}" data-ticker="${a.ticker}">
       <div class="flex items-start justify-between gap-2 mb-2">
@@ -764,6 +767,7 @@ function visOversikt() {
             <span class="font-mono font-bold text-brand-700 dark:text-brand-400 text-base">${a.ticker}</span>
             <span class="frekvens-badge ml-2">${a.frekvens}</span>
             <div class="text-sm text-gray-600 dark:text-gray-400 mt-0.5 leading-tight">${a.navn}</div>
+            ${kildeStr}
             <div class="text-xs text-gray-400 dark:text-gray-500">${a.sektor}</div>
           </div>
         </div>

@@ -127,6 +127,13 @@ AKSJER = [{"ticker_yf": t["ticker_yf"], "ticker": t["ticker"],
 BESKRIVELSER = {t["ticker"]: t.get("beskrivelse", "") for t in _ticker_data}
 DNB_NAVN = {t["ticker"]: t.get("navn_dnb", t["navn"]) for t in _ticker_data}
 
+_fallback_path = os.path.join(os.path.dirname(__file__), "..", "data", "fallback_data.json")
+FALLBACK_DATA = {}
+if os.path.exists(_fallback_path):
+    with open(_fallback_path, "r", encoding="utf-8") as _ff:
+        _fb_list = json.load(_ff)
+        FALLBACK_DATA = {a["ticker"]: a for a in _fb_list}
+
 # ── DNB MARKETS INTEGRASJON ─────────────────────────────────────────────────
 
 class _DNBParser(html.parser.HTMLParser):
@@ -319,6 +326,49 @@ def hent_dnb_datoer() -> dict:
 
     print("  DNB: Kunne ikke hente datodata – hopper over")
     return {}
+
+
+def hent_euronext_priser() -> dict:
+    """
+    Henter live-priser for alle Oslo Børs-aksjer fra Euronext.
+    Returnerer {ticker: pris} for bruk som prisfallback.
+    """
+    url = "https://live.euronext.com/nb/pd/data/stocks?mics=XOSL&display_datapoints=pd_ticker,pd_last_price&display_filters=&draw=1&start=0&length=300"
+    headers = {
+        "User-Agent": "Mozilla/5.0 (compatible; exday.no/1.0)",
+        "Accept": "application/json",
+        "X-Requested-With": "XMLHttpRequest",
+    }
+    try:
+        req = urllib.request.Request(url, headers=headers)
+        with urllib.request.urlopen(req, timeout=15) as r:
+            data = json.loads(r.read())
+        priser = {}
+        for row in data.get("aaData", []):
+            # row is a list of HTML strings or values
+            # Parse ticker from first cell (contains <a> tag or plain text)
+            if not row:
+                continue
+            # Extract ticker - usually in format: <a href="...">TICKER</a> or plain TICKER
+            raw = str(row[0]) if row else ""
+            import re as _re
+            m = _re.search(r'>([A-Z0-9]+)<', raw)
+            ticker = m.group(1) if m else raw.strip()
+            # Price is usually last numeric field
+            for cell in reversed(row):
+                s = str(cell).replace('\xa0', '').replace(' ', '').replace(',', '.')
+                try:
+                    p = float(s)
+                    if p > 0:
+                        priser[ticker] = p
+                        break
+                except (ValueError, TypeError):
+                    continue
+        print(f"  Euronext: {len(priser)} priser hentet")
+        return priser
+    except Exception as e:
+        print(f"  Euronext priser: {e}")
+        return {}
 
 
 def safe_float(value, default=0.0):
@@ -567,6 +617,7 @@ def hent_aksje(meta):
             "snitt_yield_5ar": snitt_yield_5ar,
             "beskrivelse": BESKRIVELSER.get(ticker, ""),
             "valuta": valuta,
+            "data_kilde": "yahoo",
         }
         return resultat
 
@@ -1194,14 +1245,36 @@ def main():
     feil = []          # Henting feilet, brukte fallback
     ingen_data = []    # Henting feilet, ingen fallback
 
+    print("\nForhenter Euronext-priser...")
+    euronext_priser = hent_euronext_priser()
+
     for meta in AKSJER:
         aksje = hent_aksje(meta)
         if aksje:
+            # Berik med Euronext-pris hvis Yahoo-pris mangler
+            if aksje.get("pris", 0) == 0 and meta["ticker"] in euronext_priser:
+                aksje["pris"] = euronext_priser[meta["ticker"]]
+                aksje["data_kilde"] = "euronext"
             resultater.append(aksje)
         elif meta["ticker"] in fallback:
+            fb = fallback[meta["ticker"]]
+            # Berik fallback med Euronext-pris
+            if fb.get("pris", 0) == 0 and meta["ticker"] in euronext_priser:
+                fb = dict(fb)
+                fb["pris"] = euronext_priser[meta["ticker"]]
+                fb["data_kilde"] = "euronext"
             print(f"    Bruker fallback-data for {meta['ticker']}")
-            resultater.append(fallback[meta["ticker"]])
+            resultater.append(fb)
             feil.append(meta["ticker"])
+        elif meta["ticker"] in FALLBACK_DATA:
+            fb = dict(FALLBACK_DATA[meta["ticker"]])
+            # Berik statisk data med Euronext-pris
+            if meta["ticker"] in euronext_priser:
+                fb["pris"] = euronext_priser[meta["ticker"]]
+                fb["data_kilde"] = "euronext"
+            print(f"    Bruker statisk fallback for {meta['ticker']}")
+            resultater.append(fb)
+            ingen_data.append(meta["ticker"])
         else:
             print(f"    KRITISK: Ingen data for {meta['ticker']} og ingen fallback.")
             ingen_data.append(meta["ticker"])

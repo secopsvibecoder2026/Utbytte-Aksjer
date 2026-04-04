@@ -898,5 +898,95 @@
     "bors": "Oslo Børs",
     "beskrivelse": "Nordisk jernbaneinfrastrukturentreprenør med virksomhet i Norge, Sverige og Finland. Stabil ordrebok fra offentlige infrastrukturinvesteringer.",
     "navn_dnb": "NRC Group ASA"
+  },
+  {
+    "ticker": "JAEDR",
+    "ticker_yf": "JAEDR.OL",
+    "navn": "Jæren Sparebank",
+    "sektor": "Finans",
+    "bors": "Oslo Børs",
+    "beskrivelse": "Regional sparebank på Jæren med stabil utbytteutbetaling.",
+    "navn_dnb": "Jæren Sparebank"
+  },
+  {
+    "ticker": "HDLG",
+    "ticker_yf": "HDLG.OL",
+    "navn": "Hoegh LNG Holdings Ltd",
+    "sektor": "Energi",
+    "bors": "Oslo Børs",
+    "beskrivelse": "LNG infrastrukturselskap med stabil kontantstrøm og utbytte.",
+    "navn_dnb": "Hoegh LNG Holdings"
+  },
+  {
+    "ticker": "NAPA",
+    "ticker_yf": "NAPA.OL",
+    "navn": "Napatech AS",
+    "sektor": "Informasjonsteknologi",
+    "bors": "Oslo Børs",
+    "beskrivelse": "Norsk teknologiselskap innen nettverksakselerasjon.",
+    "navn_dnb": "Napatech"
+  },
+  {
+    "ticker": "NOFI",
+    "ticker_yf": "NOFI.OL",
+    "navn": "Norway Royal Salmon ASA",
+    "sektor": "Havbruk",
+    "bors": "Oslo Børs",
+    "beskrivelse": "Norsk lakseoppdrettsselskap med utbytteutbetalinger.",
+    "navn_dnb": "Norway Royal Salmon"
+  },
+  {
+    "ticker": "STRO",
+    "ticker_yf": "STRO.OL",
+    "navn": "Stolt-Nielsen Ltd",
+    "sektor": "Shipping",
+    "bors": "Oslo Børs",
+    "beskrivelse": "Globalt kjemikalietankrederi med lang utbyttehistorie.",
+    "navn_dnb": "Stolt-Nielsen"
+  },
+  {
+    "ticker": "FKRAFT",
+    "ticker_yf": "FKRAFT.OL",
+    "navn": "Fjordkraft Holding ASA",
+    "sektor": "Forsyning",
+    "bors": "Oslo Børs",
+    "beskrivelse": "Norsk strømleverandør med stabil utbyttepolitikk.",
+    "navn_dnb": "Fjordkraft Holding"
+  },
+  {
+    "ticker": "TOTG",
+    "ticker_yf": "TOTG.OL",
+    "navn": "Tidewater Inc.",
+    "sektor": "Energitjenester",
+    "bors": "Oslo Børs",
+    "beskrivelse": "Offshorefartøyselskap som betjener olje- og gassindustrien.",
+    "navn_dnb": "Tidewater"
+  },
+  {
+    "ticker": "IDEX",
+    "ticker_yf": "IDEX.OL",
+    "navn": "IDEX Biometrics ASA",
+    "sektor": "Informasjonsteknologi",
+    "bors": "Oslo Børs",
+    "beskrivelse": "Norsk biometriselskap. Betaler ikke utbytte per nå.",
+    "navn_dnb": "IDEX Biometrics"
+  },
+  {
+    "ticker": "WALWIL",
+    "ticker_yf": "WALWIL.OL",
+    "navn": "Wallenius Wilhelmsen ASA",
+    "sektor": "Shipping",
+    "bors": "Oslo Børs",
+    "beskrivelse": "Globalt bilfrakt- og logistikkselskap med kvartalsvis utbytte.",
+    "navn_dnb": "Wallenius Wilhelmsen"
+  },
+  {
+    "ticker": "NORBIT",
+    "ticker_yf": "NORBIT.OL",
+    "navn": "NORBIT ASA",
+    "sektor": "Informasjonsteknologi",
+    "bors": "Oslo Børs",
+    "beskrivelse": "Norsk teknologiselskap innen IoT og sensorteknologi med utbytte.",
+    "navn_dnb": "NORBIT"
   }
 ]
