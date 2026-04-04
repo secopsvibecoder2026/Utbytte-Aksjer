@@ -195,59 +195,66 @@
       const idag     = new Date(); idag.setHours(0,0,0,0);
       const manDenne = mandagI(idag);
       const sønDenne = søndagI(manDenne);
-      const ukeNr    = ukenr(manDenne);
+      const manNeste = new Date(manDenne); manNeste.setDate(manDenne.getDate() + 7);
+      const sønNeste = søndagI(manNeste);
+
+      // Bruk denne uke; fall tilbake til neste uke hvis tom
+      let fra = manDenne, til = sønDenne, ukeNr = ukenr(manDenne);
+      const denneTom = !aksjer.some(a =>
+        inRange(a.ex_dato, manDenne, sønDenne) ||
+        inRange(a.betaling_dato, manDenne, sønDenne) ||
+        inRange(a.rapport_dato, manDenne, sønDenne)
+      );
+      if (denneTom) { fra = manNeste; til = sønNeste; ukeNr = ukenr(manNeste); }
+      const erNesteUke = denneTom;
 
       // Ex-datoer
-      const exDenne = aksjer.filter(a => inRange(a.ex_dato, manDenne, sønDenne))
+      const exListe = aksjer.filter(a => inRange(a.ex_dato, fra, til))
         .sort((a,b) => a.ex_dato.localeCompare(b.ex_dato)).map(a => [a, a.ex_dato]);
 
       // Utbetalinger
-      const betDenne = aksjer.filter(a => inRange(a.betaling_dato, manDenne, sønDenne))
+      const betListe = aksjer.filter(a => inRange(a.betaling_dato, fra, til))
         .sort((a,b) => a.betaling_dato.localeCompare(b.betaling_dato)).map(a => [a, a.betaling_dato]);
 
       // Rapporter
-      const rapDenne = aksjer.filter(a => inRange(a.rapport_dato, manDenne, sønDenne))
+      const rapListe = aksjer.filter(a => inRange(a.rapport_dato, fra, til))
         .sort((a,b) => a.rapport_dato.localeCompare(b.rapport_dato)).map(a => [a, a.rapport_dato]);
 
-      const totalt = exDenne.length + betDenne.length + rapDenne.length;
+      const totalt = exListe.length + betListe.length + rapListe.length;
 
       if (totalt === 0) {
         document.getElementById('ingen').classList.remove('hidden');
-        document.getElementById('uke-undertittel').textContent = 'Ingen registrerte hendelser denne uken.';
+        document.getElementById('uke-undertittel').textContent = 'Ingen registrerte hendelser de neste to ukene.';
         return;
       }
 
       // Tittel og intro-tekst
-      document.getElementById('uke-tittel').textContent = `Ukens utbytteoversikt — uke ${ukeNr}`;
+      const ukeLabel = erNesteUke ? `Neste uke — uke ${ukeNr}` : `Uke ${ukeNr}`;
+      document.getElementById('uke-tittel').textContent = `Utbytteoversikt Oslo Børs — ${ukeLabel}`;
       document.getElementById('uke-undertittel').textContent =
-        `Oslo Børs · Ex-datoer, utbetalinger og rapporter · Oppdatert daglig`;
+        `Ex-datoer, utbetalinger og rapporter · Oppdatert daglig`;
 
       // Facebook-vennlig intro
       const deler = [];
-      if (exDenne.length) deler.push(`${exDenne.length} ex-dato${exDenne.length > 1 ? 'er' : ''}`);
-      if (betDenne.length) deler.push(`${betDenne.length} utbetaling${betDenne.length > 1 ? 'er' : ''}`);
-      if (rapDenne.length) deler.push(`${rapDenne.length} rapport${rapDenne.length > 1 ? 'er' : ''}`);
-      const introTekst = document.getElementById('intro-tekst');
+      if (exListe.length) deler.push(`${exListe.length} ex-dato${exListe.length > 1 ? 'er' : ''}`);
+      if (betListe.length) deler.push(`${betListe.length} utbetaling${betListe.length > 1 ? 'er' : ''}`);
+      if (rapListe.length) deler.push(`${rapListe.length} rapport${rapListe.length > 1 ? 'er' : ''}`);
       const linje1 = document.getElementById('intro-linje1');
       const linje2 = document.getElementById('intro-linje2');
-      if (deler.length) {
-        linje1.textContent = deler.length
-          ? `📌 Denne uken (uke ${ukeNr}): ${deler.join(', ')} på Oslo Børs.`
-          : `📌 Uke ${ukeNr} på Oslo Børs.`;
-        linje2.textContent = `Følg med på exday.no for daglig oppdatert oversikt over norske utbytteaksjer.`;
-        introTekst.classList.remove('hidden');
-      }
+      linje1.textContent = `📌 ${ukeLabel} (Oslo Børs): ${deler.join(', ')}.`;
+      linje2.textContent = `Følg med på exday.no for daglig oppdatert oversikt over norske utbytteaksjer.`;
+      document.getElementById('intro-tekst').classList.remove('hidden');
 
       // Ex-datoer
-      if (byggSeksjon(document.getElementById('liste-ex'), exDenne))
+      if (byggSeksjon(document.getElementById('liste-ex'), exListe))
         document.getElementById('seksjon-ex').classList.remove('hidden');
 
       // Utbetalinger
-      if (byggSeksjon(document.getElementById('liste-bet'), betDenne))
+      if (byggSeksjon(document.getElementById('liste-bet'), betListe))
         document.getElementById('seksjon-bet').classList.remove('hidden');
 
       // Rapporter
-      if (byggSeksjon(document.getElementById('liste-rap'), rapDenne))
+      if (byggSeksjon(document.getElementById('liste-rap'), rapListe))
         document.getElementById('seksjon-rap').classList.remove('hidden');
     }
 
