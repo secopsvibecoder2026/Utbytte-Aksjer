@@ -643,9 +643,11 @@ def valider_aksje(a):
     ticker = a.get("ticker", "?")
 
     # ── 1. Yield-kryssvalidering ──────────────────────────────────────────────
-    if a["pris"] > 0 and a["utbytte_per_aksje"] > 0:
-        beregnet = (a["utbytte_per_aksje"] / a["pris"]) * 100
-        lagret   = a["utbytte_yield"]
+    pris = a.get("pris", 0)
+    upa  = a.get("utbytte_per_aksje", 0)
+    if pris > 0 and upa > 0:
+        beregnet = (upa / pris) * 100
+        lagret   = a.get("utbytte_yield", 0)
         if lagret > 0:
             avvik_pct = abs(beregnet - lagret) / max(beregnet, 0.01) * 100
             if avvik_pct > 25:
@@ -655,32 +657,36 @@ def valider_aksje(a):
                 )
 
     # ── 2. Pris-validering ────────────────────────────────────────────────────
-    if a["pris"] <= 0:
-        advarsler.append(f"[2] Ugyldig pris: {a['pris']}")
-    elif a["pris"] > 100_000:
-        advarsler.append(f"[2] Mistenkelig høy pris: {a['pris']}")
+    if pris <= 0:
+        advarsler.append(f"[2] Ugyldig pris: {pris}")
+    elif pris > 100_000:
+        advarsler.append(f"[2] Mistenkelig høy pris: {pris}")
 
     # ── 3. Feltplausibilitet ──────────────────────────────────────────────────
-    if a["payout_ratio"] > 300:
-        advarsler.append(f"[3] Payout ratio ekstremt høy: {a['payout_ratio']}%")
-    if 0 < a["pe_ratio"] > 500:
-        advarsler.append(f"[3] Mistenkelig høy P/E: {a['pe_ratio']}")
-    if a["utbytte_yield"] > 80:
-        advarsler.append(f"[3] Ekstremt høy yield: {a['utbytte_yield']}% — sjekk manuelt")
-    if a["utbytte_per_aksje"] > 0 and a["pris"] > 0 and a["utbytte_per_aksje"] > a["pris"]:
+    payout = a.get("payout_ratio", 0)
+    pe     = a.get("pe_ratio", 0)
+    lav52  = a.get("52u_lav", 0)
+    hoy52  = a.get("52u_hoy", 0)
+    if payout > 300:
+        advarsler.append(f"[3] Payout ratio ekstremt høy: {payout}%")
+    if 0 < pe > 500:
+        advarsler.append(f"[3] Mistenkelig høy P/E: {pe}")
+    if a.get("utbytte_yield", 0) > 80:
+        advarsler.append(f"[3] Ekstremt høy yield: {a.get('utbytte_yield')}% — sjekk manuelt")
+    if a.get("utbytte_per_aksje", 0) > 0 and a.get("pris", 0) > 0 and a["utbytte_per_aksje"] > a["pris"]:
         advarsler.append(
             f"[3] Utbytte/aksje ({a['utbytte_per_aksje']}) > kurs ({a['pris']}) — umulig"
         )
-    if a["52u_lav"] > 0 and a["52u_hoy"] > 0 and a["52u_lav"] > a["52u_hoy"]:
+    if lav52 > 0 and hoy52 > 0 and lav52 > hoy52:
         advarsler.append(
-            f"[3] 52u lav ({a['52u_lav']}) > 52u høy ({a['52u_hoy']}) — data-feil"
+            f"[3] 52u lav ({lav52}) > 52u høy ({hoy52}) — data-feil"
         )
 
     # ── 4. Manglende kritiske felt ────────────────────────────────────────────
     mangler = []
-    if a["pris"] == 0:               mangler.append("pris")
-    if a["utbytte_yield"] == 0:      mangler.append("utbytte_yield")
-    if a["utbytte_per_aksje"] == 0:  mangler.append("utbytte_per_aksje")
+    if a.get("pris", 0) == 0:               mangler.append("pris")
+    if a.get("utbytte_yield", 0) == 0:      mangler.append("utbytte_yield")
+    if a.get("utbytte_per_aksje", 0) == 0:  mangler.append("utbytte_per_aksje")
     if not a.get("ex_dato"):         mangler.append("ex_dato")
     if mangler:
         advarsler.append(f"[4] Manglende felt: {', '.join(mangler)}")
