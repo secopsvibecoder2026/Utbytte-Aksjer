@@ -677,7 +677,7 @@ function visOversikt() {
         <span class="${payoutKlasse(a.payout_ratio)}">${a.payout_ratio > 0 ? a.payout_ratio.toFixed(0) + '%' : '—'}</span>
       </td>
       <td class="px-4 py-3 text-right ${vekstKlasse(a.utbytte_vekst_5ar)}">
-        ${a.utbytte_vekst_5ar !== 0 ? (a.utbytte_vekst_5ar > 0 ? '+' : '') + a.utbytte_vekst_5ar.toFixed(1) + '%' : '—'}
+        ${a.utbytte_vekst_5ar ? (a.utbytte_vekst_5ar > 0 ? '+' : '') + a.utbytte_vekst_5ar.toFixed(1) + '%' : '—'}
       </td>
       <td class="col-detalj px-4 py-3 text-right text-gray-600 dark:text-gray-400">${a.ar_med_utbytte > 0 ? a.ar_med_utbytte : '—'}</td>
       <td class="col-detalj px-4 py-3 text-right text-gray-600 dark:text-gray-400">${a.pe_ratio > 0 ? a.pe_ratio.toFixed(1) : '—'}</td>
@@ -799,7 +799,7 @@ function visOversikt() {
       <div class="grid grid-cols-3 gap-2 text-center mb-3">
         <div class="bg-gray-50 dark:bg-gray-800 rounded-lg py-2 px-1">
           <div class="text-xs text-gray-400 leading-tight">Vekst 5år</div>
-          <div class="font-semibold text-sm mt-0.5 ${vekstKlasse(a.utbytte_vekst_5ar)}">${a.utbytte_vekst_5ar !== 0 ? (a.utbytte_vekst_5ar>0?'+':'')+a.utbytte_vekst_5ar.toFixed(1)+'%' : '—'}</div>
+          <div class="font-semibold text-sm mt-0.5 ${vekstKlasse(a.utbytte_vekst_5ar)}">${a.utbytte_vekst_5ar ? (a.utbytte_vekst_5ar>0?'+':'')+a.utbytte_vekst_5ar.toFixed(1)+'%' : '—'}</div>
         </div>
         <div class="bg-gray-50 dark:bg-gray-800 rounded-lg py-2 px-1">
           <div class="text-xs text-gray-400 leading-tight">P/E</div>
