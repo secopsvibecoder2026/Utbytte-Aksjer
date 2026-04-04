@@ -543,10 +543,9 @@ def hent_aksje(meta):
         # Historiske utbytter per år + snitt yield
         historiske_utbytter, snitt_yield_5ar = hent_historiske_utbytter(dividends, hist_prices)
 
-        # Antall år med utbytte
+        # Antall år med utbytte (unike kalenderår med faktisk utbyttebetaling)
         if not dividends.empty:
-            first_year = dividends.index[0].year
-            ar_med_utbytte = datetime.datetime.today().year - first_year
+            ar_med_utbytte = int(dividends.index.year.nunique())
         else:
             ar_med_utbytte = 0
 
