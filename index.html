@@ -203,7 +203,6 @@
         <button class="tab-btn active" data-tab="oversikt">Oversikt</button>
         <button class="tab-btn" data-tab="portfolio">Portefølje</button>
         <button class="tab-btn" data-tab="kalender">Kalender</button>
-        <button class="tab-btn" data-tab="sektor">Sektorer</button>
         <button class="tab-btn" data-tab="kalkulator">Kalkulator</button>
       </nav>
     </div>
@@ -249,13 +248,18 @@
     <div id="tab-oversikt">
       <h3 class="sr-only">Alle norske utbytteaksjer – yield, ex-dato og nøkkeltall</h3>
 
+      <!-- OVERSIKT SUB-FANE NAVIGASJON -->
+      <nav id="oversikt-sub-nav" class="flex gap-1 border-b border-gray-200 dark:border-gray-800 mb-4">
+        <button class="sub-tab-btn active" data-subtab="aksjer">Aksjer</button>
+        <button class="sub-tab-btn" data-subtab="bevegelser">Bevegelser</button>
+        <button class="sub-tab-btn" data-subtab="sektor">Sektorer</button>
+      </nav>
+
+      <!-- SUB-FANE: AKSJER -->
+      <div id="subtab-aksjer">
+
       <!-- HVA SKJER I DAG -->
       <div id="hva-skjer-idag" class="hidden mb-4"></div>
-
-      <!-- OPPORTUNITY FEED -->
-
-      <!-- DAGENS BEVEGELSER -->
-      <div id="dagens-bevegelser" class="hidden mb-4"></div>
 
       <!-- SORT-VELGER + VIEW-TOGGLE (mobil) -->
       <div id="mobil-sort-rad" class="flex gap-2 items-center mb-3">
@@ -366,7 +370,23 @@
       </div>
 
       <p class="text-xs text-gray-400 dark:text-gray-600 mt-2 text-right" id="antall-vist"></p>
-    </div>
+
+      </div><!-- /subtab-aksjer -->
+
+      <!-- SUB-FANE: BEVEGELSER -->
+      <div id="subtab-bevegelser" class="hidden">
+        <div id="dagens-bevegelser"></div>
+        <div id="bevegelser-tom" class="hidden text-center py-16 text-gray-400 dark:text-gray-600">
+          <p class="text-sm">Ingen kursdata tilgjengelig ennå.<br>Prøv igjen etter børsåpning.</p>
+        </div>
+      </div>
+
+      <!-- SUB-FANE: SEKTORER -->
+      <div id="subtab-sektor" class="hidden">
+        <div id="sektor-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+      </div>
+
+    </div><!-- /tab-oversikt -->
 
     <!-- KALENDER-FANE -->
     <div id="tab-kalender" class="hidden space-y-4">
@@ -885,11 +905,6 @@
 
       </div>
 
-    </div>
-
-    <!-- SEKTOR-FANE -->
-    <div id="tab-sektor" class="hidden space-y-6">
-      <div id="sektor-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
     </div>
 
     <!-- KALKULATOR-FANE -->

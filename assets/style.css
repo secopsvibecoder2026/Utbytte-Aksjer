@@ -48,6 +48,23 @@
 .tab-btn.active { color: #15803d; border-color: #16a34a; }
 .dark .tab-btn.active { color: #4ade80; border-color: #22c55e; }
 
+/* ── OVERSIKT SUB-TABS ────────────────────────────────────────────────── */
+.sub-tab-btn {
+  padding: 0.375rem 0.75rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #6b7280;
+  border-bottom: 2px solid transparent;
+  background: none;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+.dark .sub-tab-btn { color: #9ca3af; }
+.sub-tab-btn:hover { color: #1f2937; border-color: #d1d5db; }
+.dark .sub-tab-btn:hover { color: #e5e7eb; border-color: #4b5563; }
+.sub-tab-btn.active { color: #15803d; border-color: #16a34a; }
+.dark .sub-tab-btn.active { color: #4ade80; border-color: #22c55e; }
+
 /* ── FILTER INPUTS ────────────────────────────────────────────────────── */
 .filter-input {
   padding: 0.5rem 0.75rem;

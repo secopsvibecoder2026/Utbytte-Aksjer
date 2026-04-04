@@ -129,7 +129,7 @@ function initTilbakeTopp() {
 
 // ── SWIPE-NAVIGASJON ─────────────────────────────────────────────────────────
 function initSwipe() {
-  const FANER = ['oversikt', 'kalender', 'portfolio', 'sektor', 'kalkulator'];
+  const FANER = ['oversikt', 'kalender', 'portfolio', 'kalkulator'];
   let startX = 0, startY = 0;
 
   function byttTab(retning) {
@@ -163,18 +163,35 @@ function initTabs() {
     document.getElementById('tab-oversikt').classList.toggle('hidden', aktivTab !== 'oversikt');
     document.getElementById('tab-kalender').classList.toggle('hidden', aktivTab !== 'kalender');
     document.getElementById('tab-portfolio').classList.toggle('hidden', aktivTab !== 'portfolio');
-    document.getElementById('tab-sektor').classList.toggle('hidden', aktivTab !== 'sektor');
     document.getElementById('tab-kalkulator').classList.toggle('hidden', aktivTab !== 'kalkulator');
-    const skjulFilter = aktivTab === 'kalkulator' || aktivTab === 'sektor';
-    document.getElementById('filter-bar').classList.toggle('hidden', skjulFilter);
-    document.getElementById('filter-ekstra').classList.toggle('hidden', aktivTab !== 'oversikt');
+    const erAksjerSubtab = aktivTab === 'oversikt' && aktivOversiktSubTab === 'aksjer';
+    document.getElementById('filter-bar').classList.toggle('hidden', aktivTab === 'kalkulator' || !erAksjerSubtab);
+    document.getElementById('filter-ekstra').classList.toggle('hidden', !erAksjerSubtab);
     if (aktivTab === 'portfolio') visPortefolje();
     if (aktivTab === 'kalender') visKalender();
     if (aktivTab === 'oversikt') visOversikt();
-    if (aktivTab === 'sektor') visSektorer();
   });
 }
 
+
+function initOversiktSubTabs() {
+  const nav = document.getElementById('oversikt-sub-nav');
+  if (!nav) return;
+  nav.addEventListener('click', e => {
+    const btn = e.target.closest('.sub-tab-btn');
+    if (!btn) return;
+    aktivOversiktSubTab = btn.dataset.subtab;
+    nav.querySelectorAll('.sub-tab-btn').forEach(b => b.classList.toggle('active', b === btn));
+    document.getElementById('subtab-aksjer').classList.toggle('hidden', aktivOversiktSubTab !== 'aksjer');
+    document.getElementById('subtab-bevegelser').classList.toggle('hidden', aktivOversiktSubTab !== 'bevegelser');
+    document.getElementById('subtab-sektor').classList.toggle('hidden', aktivOversiktSubTab !== 'sektor');
+    const erAksjer = aktivOversiktSubTab === 'aksjer';
+    document.getElementById('filter-bar').classList.toggle('hidden', !erAksjer);
+    document.getElementById('filter-ekstra').classList.toggle('hidden', !erAksjer);
+    if (aktivOversiktSubTab === 'sektor') visSektorer();
+    if (aktivOversiktSubTab === 'bevegelser') visDagensBevegelser();
+  });
+}
 
 function initFilter() {
   document.getElementById('sok').addEventListener('input', () => {
@@ -2163,10 +2180,16 @@ async function hentPriser() {
 
 async function visDagensBevegelser() {
   const el = document.getElementById('dagens-bevegelser');
+  const tomEl = document.getElementById('bevegelser-tom');
   if (!el || !alleAksjer.length) return;
 
   const data = await hentPriser();
-  if (!data || !data.aksjer) { el.classList.add('hidden'); return; }
+  if (!data || !data.aksjer) {
+    el.innerHTML = '';
+    if (tomEl) tomEl.classList.remove('hidden');
+    return;
+  }
+  if (tomEl) tomEl.classList.add('hidden');
 
   const aksjerMap = Object.fromEntries(alleAksjer.map(a => [a.ticker, a]));
 
@@ -2180,7 +2203,11 @@ async function visDagensBevegelser() {
   const gainers = sorted.slice(0, 5).filter(b => b.endring_pct > 0);
   const losers = sorted.slice(-5).reverse().filter(b => b.endring_pct < 0);
 
-  if (!gainers.length && !losers.length) { el.classList.add('hidden'); return; }
+  if (!gainers.length && !losers.length) {
+    el.innerHTML = '';
+    if (tomEl) tomEl.classList.remove('hidden');
+    return;
+  }
 
   const radHtml = (b, pos) => {
     const pctTxt = (pos ? '+' : '') + b.endring_pct.toFixed(2) + '%';
@@ -2218,7 +2245,6 @@ async function visDagensBevegelser() {
           </div>` : ''}
       </div>
     </div>`;
-  el.classList.remove('hidden');
 
   el.querySelectorAll('[data-ticker]').forEach(kort => {
     kort.addEventListener('click', () => {

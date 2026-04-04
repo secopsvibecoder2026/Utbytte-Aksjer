@@ -12,6 +12,7 @@ let sortering = (() => {
   } catch { return { kol: 'utbytte_yield', retning: 'desc' }; }
 })();
 let aktivTab = 'oversikt';
+let aktivOversiktSubTab = 'aksjer';
 let kompaktModus = false;
 let visKunFavoritter = false;
 let aktivListeFilter = ''; // '' = alle, 'pf' = portefølje, 'wl:{id}' = watchliste
@@ -20,6 +21,7 @@ let aktivListeFilter = ''; // '' = alle, 'pf' = portefølje, 'wl:{id}' = watchli
 document.addEventListener('DOMContentLoaded', () => {
   initDarkMode();
   initTabs();
+  initOversiktSubTabs();
   initSwipe();
   initTilbakeTopp();
   initFilter();
