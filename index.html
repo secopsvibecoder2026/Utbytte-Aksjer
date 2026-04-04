@@ -207,6 +207,13 @@
       </nav>
     </div>
 
+    <!-- OVERSIKT SUB-FANE NAVIGASJON (vises kun når Oversikt-fanen er aktiv) -->
+    <nav id="oversikt-sub-nav" class="flex gap-1 border-b border-gray-200 dark:border-gray-800">
+      <button class="sub-tab-btn active" data-subtab="aksjer">Aksjer</button>
+      <button class="sub-tab-btn" data-subtab="bevegelser">Bevegelser</button>
+      <button class="sub-tab-btn" data-subtab="sektor">Sektorer</button>
+    </nav>
+
     <!-- FILTER BAR -->
     <section id="filter-bar" class="space-y-2 sm:space-y-0 sm:flex sm:flex-wrap sm:gap-3 sm:items-center">
       <div class="relative w-full sm:flex-1 sm:min-w-48">
@@ -247,13 +254,6 @@
     <!-- OVERSIKT-FANE -->
     <div id="tab-oversikt">
       <h3 class="sr-only">Alle norske utbytteaksjer – yield, ex-dato og nøkkeltall</h3>
-
-      <!-- OVERSIKT SUB-FANE NAVIGASJON -->
-      <nav id="oversikt-sub-nav" class="flex gap-1 border-b border-gray-200 dark:border-gray-800 mb-4">
-        <button class="sub-tab-btn active" data-subtab="aksjer">Aksjer</button>
-        <button class="sub-tab-btn" data-subtab="bevegelser">Bevegelser</button>
-        <button class="sub-tab-btn" data-subtab="sektor">Sektorer</button>
-      </nav>
 
       <!-- SUB-FANE: AKSJER -->
       <div id="subtab-aksjer">

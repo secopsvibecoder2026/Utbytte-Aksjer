@@ -164,6 +164,7 @@ function initTabs() {
     document.getElementById('tab-kalender').classList.toggle('hidden', aktivTab !== 'kalender');
     document.getElementById('tab-portfolio').classList.toggle('hidden', aktivTab !== 'portfolio');
     document.getElementById('tab-kalkulator').classList.toggle('hidden', aktivTab !== 'kalkulator');
+    document.getElementById('oversikt-sub-nav').classList.toggle('hidden', aktivTab !== 'oversikt');
     const erAksjerSubtab = aktivTab === 'oversikt' && aktivOversiktSubTab === 'aksjer';
     document.getElementById('filter-bar').classList.toggle('hidden', aktivTab === 'kalkulator' || !erAksjerSubtab);
     document.getElementById('filter-ekstra').classList.toggle('hidden', !erAksjerSubtab);
