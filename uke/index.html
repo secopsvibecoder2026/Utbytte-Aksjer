@@ -180,18 +180,9 @@
       </a>`;
     }
 
-    function byggSeksjon(containerEl, denneUke, nesteUke, ukeNr, nesteUkeNr) {
-      if (!denneUke.length && !nesteUke.length) return false;
-      let html = '';
-      if (denneUke.length) {
-        html += `<div class="uke-uke-label">Uke ${ukeNr}</div>`;
-        html += denneUke.map(([a, dato]) => byggRad(a, dato)).join('');
-      }
-      if (nesteUke.length) {
-        html += `<div class="uke-uke-label">Neste uke — uke ${nesteUkeNr}</div>`;
-        html += nesteUke.map(([a, dato]) => byggRad(a, dato)).join('');
-      }
-      containerEl.innerHTML = html;
+    function byggSeksjon(containerEl, denneUke) {
+      if (!denneUke.length) return false;
+      containerEl.innerHTML = denneUke.map(([a, dato]) => byggRad(a, dato)).join('');
       return true;
     }
 
@@ -201,37 +192,28 @@
       const data = await resp.json();
       const aksjer = Array.isArray(data) ? data : (data.aksjer || []);
 
-      const idag       = new Date(); idag.setHours(0,0,0,0);
-      const manDenne   = mandagI(idag);
-      const sønDenne   = søndagI(manDenne);
-      const manNeste   = new Date(manDenne); manNeste.setDate(manDenne.getDate() + 7);
-      const sønNeste   = søndagI(manNeste);
-      const ukeNr      = ukenr(manDenne);
-      const nesteUkeNr = ukenr(manNeste);
+      const idag     = new Date(); idag.setHours(0,0,0,0);
+      const manDenne = mandagI(idag);
+      const sønDenne = søndagI(manDenne);
+      const ukeNr    = ukenr(manDenne);
 
       // Ex-datoer
       const exDenne = aksjer.filter(a => inRange(a.ex_dato, manDenne, sønDenne))
-        .sort((a,b) => a.ex_dato.localeCompare(b.ex_dato)).map(a => [a, a.ex_dato]);
-      const exNeste = aksjer.filter(a => inRange(a.ex_dato, manNeste, sønNeste))
         .sort((a,b) => a.ex_dato.localeCompare(b.ex_dato)).map(a => [a, a.ex_dato]);
 
       // Utbetalinger
       const betDenne = aksjer.filter(a => inRange(a.betaling_dato, manDenne, sønDenne))
         .sort((a,b) => a.betaling_dato.localeCompare(b.betaling_dato)).map(a => [a, a.betaling_dato]);
-      const betNeste = aksjer.filter(a => inRange(a.betaling_dato, manNeste, sønNeste))
-        .sort((a,b) => a.betaling_dato.localeCompare(b.betaling_dato)).map(a => [a, a.betaling_dato]);
 
       // Rapporter
       const rapDenne = aksjer.filter(a => inRange(a.rapport_dato, manDenne, sønDenne))
         .sort((a,b) => a.rapport_dato.localeCompare(b.rapport_dato)).map(a => [a, a.rapport_dato]);
-      const rapNeste = aksjer.filter(a => inRange(a.rapport_dato, manNeste, sønNeste))
-        .sort((a,b) => a.rapport_dato.localeCompare(b.rapport_dato)).map(a => [a, a.rapport_dato]);
 
-      const totalt = exDenne.length + exNeste.length + betDenne.length + betNeste.length + rapDenne.length + rapNeste.length;
+      const totalt = exDenne.length + betDenne.length + rapDenne.length;
 
       if (totalt === 0) {
         document.getElementById('ingen').classList.remove('hidden');
-        document.getElementById('uke-undertittel').textContent = 'Ingen registrerte hendelser de neste to ukene.';
+        document.getElementById('uke-undertittel').textContent = 'Ingen registrerte hendelser denne uken.';
         return;
       }
 
@@ -257,22 +239,16 @@
       }
 
       // Ex-datoer
-      const exVist = byggSeksjon(
-        document.getElementById('liste-ex'), exDenne, exNeste, ukeNr, nesteUkeNr
-      );
-      if (exVist) document.getElementById('seksjon-ex').classList.remove('hidden');
+      if (byggSeksjon(document.getElementById('liste-ex'), exDenne))
+        document.getElementById('seksjon-ex').classList.remove('hidden');
 
       // Utbetalinger
-      const betVist = byggSeksjon(
-        document.getElementById('liste-bet'), betDenne, betNeste, ukeNr, nesteUkeNr
-      );
-      if (betVist) document.getElementById('seksjon-bet').classList.remove('hidden');
+      if (byggSeksjon(document.getElementById('liste-bet'), betDenne))
+        document.getElementById('seksjon-bet').classList.remove('hidden');
 
       // Rapporter
-      const rapVist = byggSeksjon(
-        document.getElementById('liste-rap'), rapDenne, rapNeste, ukeNr, nesteUkeNr
-      );
-      if (rapVist) document.getElementById('seksjon-rap').classList.remove('hidden');
+      if (byggSeksjon(document.getElementById('liste-rap'), rapDenne))
+        document.getElementById('seksjon-rap').classList.remove('hidden');
     }
 
     init().catch(() => {
