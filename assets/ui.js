@@ -129,7 +129,7 @@ function initTilbakeTopp() {
 
 // ── SWIPE-NAVIGASJON ─────────────────────────────────────────────────────────
 function initSwipe() {
-  const FANER = ['oversikt', 'kalender', 'portfolio', 'kalkulator'];
+  const FANER = ['oversikt', 'kalender', 'portfolio', 'sektor', 'kalkulator'];
   let startX = 0, startY = 0;
 
   function byttTab(retning) {
@@ -163,13 +163,15 @@ function initTabs() {
     document.getElementById('tab-oversikt').classList.toggle('hidden', aktivTab !== 'oversikt');
     document.getElementById('tab-kalender').classList.toggle('hidden', aktivTab !== 'kalender');
     document.getElementById('tab-portfolio').classList.toggle('hidden', aktivTab !== 'portfolio');
+    document.getElementById('tab-sektor').classList.toggle('hidden', aktivTab !== 'sektor');
     document.getElementById('tab-kalkulator').classList.toggle('hidden', aktivTab !== 'kalkulator');
-    const skjulFilter = aktivTab === 'kalkulator';
+    const skjulFilter = aktivTab === 'kalkulator' || aktivTab === 'sektor';
     document.getElementById('filter-bar').classList.toggle('hidden', skjulFilter);
     document.getElementById('filter-ekstra').classList.toggle('hidden', aktivTab !== 'oversikt');
     if (aktivTab === 'portfolio') visPortefolje();
     if (aktivTab === 'kalender') visKalender();
     if (aktivTab === 'oversikt') visOversikt();
+    if (aktivTab === 'sektor') visSektorer();
   });
 }
 
@@ -863,6 +865,61 @@ function sorterAksjer(data) {
   });
 }
 
+
+function visSektorer() {
+  const grid = document.getElementById('sektor-grid');
+  if (!grid) return;
+
+  // Group stocks by sector
+  const sektorMap = {};
+  alleAksjer.forEach(a => {
+    const s = a.sektor || 'Ukjent';
+    if (!sektorMap[s]) sektorMap[s] = [];
+    sektorMap[s].push(a);
+  });
+
+  // Sector icon mapping
+  const ikoner = {
+    'Energi': '⚡', 'Finans': '🏦', 'Eiendom': '🏢', 'Industri': '⚙️',
+    'Forbruksvarer': '🛒', 'Sjømat': '🐟', 'Shipping': '🚢', 'Teknologi': '💻',
+    'Telekommunikasjon': '📡', 'Helse': '🏥', 'Materialer': '🔩', 'Forsyning': '💡',
+    'Konsumvarer': '🧴',
+  };
+
+  const kort = Object.entries(sektorMap)
+    .sort((a, b) => a[0].localeCompare(b[0], 'no'))
+    .map(([navn, aksjer]) => {
+      const yields = aksjer.map(a => a.utbytte_yield).filter(y => y > 0);
+      const snittYield = yields.length ? (yields.reduce((s, y) => s + y, 0) / yields.length) : 0;
+      const bestYield = yields.length ? Math.max(...yields) : 0;
+      const bestAksje = aksjer.find(a => a.utbytte_yield === bestYield);
+      const ikon = ikoner[navn] || '📈';
+      const slug = navn.toLowerCase().replace(/\s+/g, '-').replace(/[æ]/g, 'ae').replace(/[ø]/g, 'o').replace(/[å]/g, 'a');
+
+      return `<a href="/aksjer/sektor/${slug}/" class="block rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-5 shadow-sm hover:shadow-md hover:border-brand-300 dark:hover:border-brand-700 transition-all group">
+        <div class="flex items-start justify-between gap-2 mb-3">
+          <div class="flex items-center gap-2">
+            <span class="text-2xl">${ikon}</span>
+            <h3 class="font-semibold text-gray-900 dark:text-gray-100 group-hover:text-brand-700 dark:group-hover:text-brand-400 transition-colors">${navn}</h3>
+          </div>
+          <span class="text-xs bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 px-2 py-0.5 rounded-full whitespace-nowrap">${aksjer.length} aksjer</span>
+        </div>
+        <div class="grid grid-cols-2 gap-3 text-sm">
+          <div>
+            <div class="text-xs text-gray-400 dark:text-gray-500 mb-0.5">Snitt yield</div>
+            <div class="font-semibold text-brand-600 dark:text-brand-400">${snittYield > 0 ? snittYield.toFixed(1) + ' %' : '—'}</div>
+          </div>
+          <div>
+            <div class="text-xs text-gray-400 dark:text-gray-500 mb-0.5">Høyeste yield</div>
+            <div class="font-semibold text-green-600 dark:text-green-400">${bestYield > 0 ? bestYield.toFixed(1) + ' %' : '—'}</div>
+          </div>
+        </div>
+        ${bestAksje ? `<div class="mt-3 pt-3 border-t border-gray-100 dark:border-gray-800 text-xs text-gray-400 dark:text-gray-500">Beste: <span class="font-medium text-gray-700 dark:text-gray-300">${bestAksje.ticker}</span> — ${bestAksje.navn}</div>` : ''}
+      </a>`;
+    });
+
+  grid.innerHTML = kort.join('');
+}
 
 function visKalender() {
   const container = document.getElementById('kalender-innhold');
