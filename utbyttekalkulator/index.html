@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Utbyttekalkulator – Beregn utbytteinntekt og DRIP | exday.no</title>
+  <meta name="description" content="Beregn fremtidig utbytteinntekt fra norske aksjer. Inkluderer DRIP-reinvestering, skatteberegning og inflasjonsjustering. Gratis kalkulator på exday.no." />
+  <link rel="canonical" href="https://exday.no/utbyttekalkulator/" />
+  <link rel="icon" type="image/svg+xml" href="/logo/exday_icon_primary.svg">
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#16a34a" />
+
+  <meta property="og:title" content="Utbyttekalkulator – Beregn utbytteinntekt og DRIP | exday.no" />
+  <meta property="og:description" content="Gratis kalkulator for utbytteinntekt fra norske aksjer med DRIP, skatt og inflasjonsjustering." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://exday.no/utbyttekalkulator/" />
+  <meta property="og:image" content="https://exday.no/assets/og-image.png" />
+  <meta property="og:locale" content="nb_NO" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Utbyttekalkulator",
+    "url": "https://exday.no/utbyttekalkulator/",
+    "description": "Kalkulator for utbytteinntekt fra norske aksjer med DRIP-reinvestering, skatt og inflasjonsjustering.",
+    "applicationCategory": "FinanceApplication",
+    "operatingSystem": "Web",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "NOK" },
+    "publisher": { "@type": "Organization", "name": "exday.no", "url": "https://exday.no" }
+  }
+  </script>
+
+  <link rel="stylesheet" href="/assets/tailwind.css" />
+  <link rel="stylesheet" href="/assets/style.css" />
+</head>
+<body class="bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 min-h-screen transition-colors duration-200">
+
+  <header class="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 sticky top-0 z-40 shadow-sm">
+    <div class="max-w-2xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <a href="/" class="flex items-center gap-1.5 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors" aria-label="Tilbake til forsiden">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+          <span class="text-sm font-medium">exday.no</span>
+        </a>
+        <span class="text-gray-300 dark:text-gray-600">/</span>
+        <h1 class="text-sm font-semibold">Utbyttekalkulator</h1>
+      </div>
+      <button id="dark-toggle" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500 dark:text-gray-400 transition-colors" aria-label="Bytt fargemodus">
+        <svg class="w-5 h-5 dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+        <svg class="w-5 h-5 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main class="max-w-2xl mx-auto px-4 py-6 space-y-6">
+
+    <div>
+      <h2 class="text-2xl font-bold tracking-tight">Utbyttekalkulator</h2>
+      <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Beregn fremtidig utbytteinntekt med DRIP-reinvestering, skatt og inflasjonsjustering.</p>
+    </div>
+
+    <!-- INNDATA -->
+    <div class="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-5 space-y-4">
+      <h3 class="text-sm font-semibold uppercase tracking-widest text-gray-500 dark:text-gray-400">Inndata</h3>
+
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1" for="k-start">Startbeløp (kr)</label>
+          <input id="k-start" type="number" value="100000" min="0" class="filter-input w-full" />
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1" for="k-yield">Utbytteyield (%)</label>
+          <input id="k-yield" type="number" value="6" min="0" max="100" step="0.1" class="filter-input w-full" />
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1" for="k-ar">Antall år</label>
+          <input id="k-ar" type="number" value="10" min="1" max="50" class="filter-input w-full" />
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1" for="k-vekst">Kursvekst/år (%)</label>
+          <input id="k-vekst" type="number" value="3" min="-20" max="50" step="0.1" class="filter-input w-full" />
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1" for="k-sparing">Månedlig sparing (kr)</label>
+          <input id="k-sparing" type="number" value="0" min="0" class="filter-input w-full" />
+        </div>
+        <div class="flex items-end pb-1">
+          <label class="flex items-center gap-2 cursor-pointer select-none">
+            <input id="k-drip" type="checkbox" checked class="w-4 h-4 accent-green-600 rounded" />
+            <span class="text-sm font-medium">DRIP (reinvester utbytte)</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Avanserte innstillinger -->
+      <div>
+        <button id="avansert-toggle" class="flex items-center gap-1.5 text-xs font-medium text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors mt-1">
+          <svg id="avansert-chevron" class="w-3.5 h-3.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+          Avanserte innstillinger
+        </button>
+        <div id="avansert-panel" class="hidden mt-3 space-y-3 pl-1 border-l-2 border-gray-100 dark:border-gray-800">
+          <div class="flex items-center gap-3">
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input id="k-skatt-aktiv" type="checkbox" class="w-4 h-4 accent-amber-500 rounded" />
+              <span class="text-sm font-medium">Skatteberegning</span>
+            </label>
+            <div class="flex items-center gap-1">
+              <input id="k-skatt" type="number" value="37.84" min="0" max="100" step="0.01" class="filter-input w-24 text-sm" />
+              <span class="text-xs text-gray-500">%</span>
+            </div>
+          </div>
+          <p class="text-xs text-gray-400 dark:text-gray-500">Effektiv utbytteskatt i Norge er 37,84 % (aksjonærmodellen inkl. oppjusteringsfaktor).</p>
+          <div class="flex items-center gap-3">
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input id="k-infl-aktiv" type="checkbox" class="w-4 h-4 accent-blue-500 rounded" />
+              <span class="text-sm font-medium">Inflasjonsjustering</span>
+            </label>
+            <div class="flex items-center gap-1">
+              <input id="k-infl" type="number" value="2.5" min="0" max="20" step="0.1" class="filter-input w-24 text-sm" />
+              <span class="text-xs text-gray-500">%/år</span>
+            </div>
+          </div>
+          <p class="text-xs text-gray-400 dark:text-gray-500">Viser verdier i dagens kjøpekraft. Norges Bank sitt inflasjonsmål er 2,0 %.</p>
+        </div>
+      </div>
+
+      <button id="k-beregn" class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2.5 rounded-lg transition-colors text-sm">
+        Beregn
+      </button>
+    </div>
+
+    <!-- RESULTATER -->
+    <div id="k-resultat" class="hidden space-y-4">
+
+      <!-- Stat-kort -->
+      <div class="grid grid-cols-2 gap-3" id="k-stats-grid">
+        <div class="stat-card">
+          <div class="stat-label">Porteføljeverdi</div>
+          <div class="stat-value text-green-600 dark:text-green-400" id="k-verdi">–</div>
+          <div class="text-xs text-gray-400 mt-0.5" id="k-verdi-real"></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Årlig utbytte</div>
+          <div class="stat-value text-blue-600 dark:text-blue-400" id="k-utbytte">–</div>
+          <div class="text-xs text-gray-400 mt-0.5" id="k-utbytte-netto"></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Totalt innbetalt</div>
+          <div class="stat-value" id="k-innbetalt">–</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">DRIP-gevinst</div>
+          <div class="stat-value text-purple-600 dark:text-purple-400" id="k-drip-gevinst">–</div>
+        </div>
+      </div>
+
+      <!-- Skattekort -->
+      <div id="k-skatt-kort" class="hidden bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/50 rounded-xl p-4">
+        <div class="flex items-start gap-3">
+          <svg class="w-5 h-5 text-amber-500 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2z"/></svg>
+          <div>
+            <p class="text-sm font-semibold text-amber-800 dark:text-amber-300">Estimert skatt på utbytte</p>
+            <p class="text-xl font-bold text-amber-700 dark:text-amber-400 mt-0.5" id="k-skatt-total">–</p>
+            <p class="text-xs text-amber-600 dark:text-amber-500 mt-1">Totalt over perioden. Beregnet uten hensyn til skjermingsfradrag.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SVG Graf -->
+      <div class="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-sm font-semibold">Porteføljeutvikling</h3>
+          <div class="flex items-center gap-3 text-xs text-gray-500">
+            <span class="flex items-center gap-1"><span class="inline-block w-5 h-0.5 bg-blue-500"></span>Med DRIP</span>
+            <span class="flex items-center gap-1"><span class="inline-block w-5 h-0.5 bg-gray-400 border-dashed" style="border-top:2px dashed #9ca3af;height:0"></span>Uten DRIP</span>
+          </div>
+        </div>
+        <svg id="k-chart" viewBox="0 0 560 180" style="width:100%;height:auto;display:block;" preserveAspectRatio="none"></svg>
+      </div>
+
+      <!-- Tabell -->
+      <div class="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 overflow-hidden">
+        <table class="w-full text-sm">
+          <thead class="bg-gray-50 dark:bg-gray-800 text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
+            <tr>
+              <th class="text-left px-4 py-2.5">År</th>
+              <th class="text-right px-4 py-2.5">Porteføljeverdi</th>
+              <th class="text-right px-4 py-2.5 k-kol-etter-skatt hidden">Etter skatt</th>
+              <th class="text-right px-4 py-2.5">Årsutbytte</th>
+              <th class="text-right px-4 py-2.5 k-kol-netto hidden">Netto utbytte</th>
+            </tr>
+          </thead>
+          <tbody id="k-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- INFO -->
+    <div class="space-y-3">
+      <div class="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4 space-y-2">
+        <h3 class="text-sm font-semibold">Hva er DRIP?</h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400">DRIP (Dividend Reinvestment Plan) betyr at du reinvesterer utbyttet i samme aksje i stedet for å ta det ut som kontanter. Over tid gir dette kraftig rentesrente-effekt — spesielt ved høy yield og lang horisont.</p>
+      </div>
+      <div class="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4 space-y-2">
+        <h3 class="text-sm font-semibold">Skatt på utbytte i Norge</h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400">Utbytte fra aksjer beskattes med 37,84 % effektiv sats for privatpersoner (aksjonærmodellen: 22 % skatt × 1,72 oppjusteringsfaktor). Skjermingsfradrag kan redusere dette noe. Kalkulatoren bruker bruttosatsen som et konservativt estimat.</p>
+      </div>
+      <div class="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4 space-y-2">
+        <h3 class="text-sm font-semibold">Inflasjonsjustering</h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400">Med inflasjonsjustering vises fremtidige verdier i dagens kjøpekraft. En portefølje verdt 1 million om 10 år er ikke det samme som 1 million i dag — med 2,5 % inflasjon er reell verdi ca. 781 000 kr.</p>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="rounded-xl border border-green-100 dark:border-green-900/40 bg-green-50 dark:bg-green-950/30 p-5 text-center space-y-3">
+      <p class="text-sm font-semibold text-green-900 dark:text-green-100">Vil du se faktiske utbytteaksjer på Oslo Børs?</p>
+      <a href="/" class="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors" style="color:#ffffff">
+        Åpne exday.no
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+      </a>
+      <p class="text-xs text-green-700 dark:text-green-400">Gratis · Ingen innlogging · Oppdateres daglig</p>
+      <a href="https://www.facebook.com/share/17rMp8o9yF/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs text-green-700 dark:text-green-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+        <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/></svg>
+        Følg oss på Facebook
+      </a>
+    </div>
+
+  </main>
+
+  <script>
+    // ── Tema ──────────────────────────────────────────────────────────────────
+    const root = document.documentElement;
+    const saved = localStorage.getItem('theme');
+    if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) root.classList.add('dark');
+    document.getElementById('dark-toggle').addEventListener('click', () => {
+      const d = root.classList.toggle('dark');
+      localStorage.setItem('theme', d ? 'dark' : 'light');
+    });
+
+    // ── Avansert toggle ───────────────────────────────────────────────────────
+    document.getElementById('avansert-toggle').addEventListener('click', () => {
+      const p = document.getElementById('avansert-panel');
+      const c = document.getElementById('avansert-chevron');
+      p.classList.toggle('hidden');
+      c.style.transform = p.classList.contains('hidden') ? '' : 'rotate(90deg)';
+    });
+
+    // ── Format ────────────────────────────────────────────────────────────────
+    function fmt(v, dec=0) {
+      return new Intl.NumberFormat('nb-NO', {minimumFractionDigits:dec,maximumFractionDigits:dec}).format(v) + ' kr';
+    }
+
+    // ── Simulering ────────────────────────────────────────────────────────────
+    function sim(start, yF, vF, sAr, n, drip, skF, inF) {
+      let v = start, totU = 0, totN = 0, totS = 0, totI = start;
+      const rows = [];
+      for (let a = 1; a <= n; a++) {
+        const u = (v + sAr * 0.5) * yF;
+        const s = u * skF;
+        const net = u - s;
+        v += sAr;
+        if (drip) v += net; else v += u;
+        v *= (1 + vF);
+        totU += u; totN += net; totS += s; totI += sAr;
+        rows.push({ a, v, vR: v / Math.pow(1 + inF, a), u, net, totU });
+      }
+      return { rows, totU, totN, totS, totI, v };
+    }
+
+    // ── Beregn ────────────────────────────────────────────────────────────────
+    function beregn() {
+      const start = parseFloat(document.getElementById('k-start').value) || 0;
+      const yF    = (parseFloat(document.getElementById('k-yield').value) || 0) / 100;
+      const n     = Math.min(Math.max(parseInt(document.getElementById('k-ar').value) || 10, 1), 50);
+      const vF    = (parseFloat(document.getElementById('k-vekst').value) || 0) / 100;
+      const sAr   = (parseFloat(document.getElementById('k-sparing').value) || 0) * 12;
+      const drip  = document.getElementById('k-drip').checked;
+      const skattAktiv = document.getElementById('k-skatt-aktiv').checked;
+      const skF   = skattAktiv ? (parseFloat(document.getElementById('k-skatt').value) || 0) / 100 : 0;
+      const inflAktiv = document.getElementById('k-infl-aktiv').checked;
+      const inF   = inflAktiv ? (parseFloat(document.getElementById('k-infl').value) || 0) / 100 : 0;
+
+      const r    = sim(start, yF, vF, sAr, n, drip, skF, inF);
+      const rRef = sim(start, yF, vF, sAr, n, false, 0, 0); // uten DRIP, ingen skatt (for graf)
+
+      // Stat-kort
+      document.getElementById('k-verdi').textContent   = fmt(r.v);
+      document.getElementById('k-utbytte').textContent = fmt(r.rows[r.rows.length-1].u);
+
+      if (inflAktiv) {
+        const vR = r.rows[r.rows.length-1].vR;
+        document.getElementById('k-verdi-real').textContent = 'Reell verdi: ' + fmt(vR);
+      } else {
+        document.getElementById('k-verdi-real').textContent = '';
+      }
+
+      if (skattAktiv) {
+        const netLast = r.rows[r.rows.length-1].net;
+        document.getElementById('k-utbytte-netto').textContent = 'Netto: ' + fmt(netLast);
+      } else {
+        document.getElementById('k-utbytte-netto').textContent = '';
+      }
+
+      document.getElementById('k-innbetalt').textContent = fmt(r.totI);
+
+      const dripGevinst = r.v - rRef.v;
+      document.getElementById('k-drip-gevinst').textContent = drip ? fmt(dripGevinst) : '–';
+
+      // Skattekort
+      const skKort = document.getElementById('k-skatt-kort');
+      if (skattAktiv) {
+        skKort.classList.remove('hidden');
+        document.getElementById('k-skatt-total').textContent = fmt(r.totS);
+      } else {
+        skKort.classList.add('hidden');
+      }
+
+      // Kolonner i tabell
+      document.querySelectorAll('.k-kol-etter-skatt').forEach(el => {
+        el.classList.toggle('hidden', !skattAktiv);
+      });
+      document.querySelectorAll('.k-kol-netto').forEach(el => {
+        el.classList.toggle('hidden', !skattAktiv);
+      });
+
+      // Tabell
+      const tbody = document.getElementById('k-tbody');
+      tbody.innerHTML = '';
+      r.rows.forEach((row, i) => {
+        const highlight = i % 2 === 1 ? 'bg-gray-50 dark:bg-gray-800/50' : '';
+        const tr = document.createElement('tr');
+        tr.className = highlight;
+        const vReal = inflAktiv ? '<br><span class="text-xs text-gray-400">' + fmt(row.vR) + '</span>' : '';
+        const nReal = skattAktiv ? fmt(row.v) : '';
+        const netto = skattAktiv ? fmt(row.net) : '';
+        tr.innerHTML = `
+          <td class="px-4 py-2 font-medium">${row.a}</td>
+          <td class="px-4 py-2 text-right text-green-700 dark:text-green-400">${fmt(row.v)}${vReal}</td>
+          <td class="px-4 py-2 text-right k-kol-etter-skatt ${skattAktiv?'':'hidden'}">${nReal}</td>
+          <td class="px-4 py-2 text-right text-blue-700 dark:text-blue-400">${fmt(row.u)}</td>
+          <td class="px-4 py-2 text-right k-kol-netto ${skattAktiv?'':'hidden'}">${netto}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      // Graf
+      const allV = r.rows.map(x => x.v).concat(rRef.rows.map(x => x.v));
+      const maxV = Math.max(...allV, start);
+      const minV = 0;
+      const W = 560, H = 180, pad = 10;
+      const xS = (a) => pad + (a / n) * (W - 2*pad);
+      const yS = (v) => H - pad - ((v - minV) / (maxV - minV)) * (H - 2*pad);
+
+      const pathDRIP  = r.rows.map((row, i) => (i===0?'M':'L') + xS(row.a).toFixed(1)+','+yS(row.v).toFixed(1)).join(' ');
+      const pathNoDRIP= rRef.rows.map((row, i) => (i===0?'M':'L') + xS(row.a).toFixed(1)+','+yS(row.v).toFixed(1)).join(' ');
+
+      const isDark = root.classList.contains('dark');
+      const blueLine = isDark ? '#60a5fa' : '#3b82f6';
+      const grayLine = isDark ? '#6b7280' : '#9ca3af';
+
+      document.getElementById('k-chart').innerHTML = `
+        <path d="${pathNoDRIP}" fill="none" stroke="${grayLine}" stroke-width="2" stroke-dasharray="6,4"/>
+        <path d="${pathDRIP}"   fill="none" stroke="${blueLine}"  stroke-width="2.5"/>
+      `;
+
+      document.getElementById('k-resultat').classList.remove('hidden');
+    }
+
+    document.getElementById('k-beregn').addEventListener('click', beregn);
+
+    // Auto-beregn ved innlasting
+    beregn();
+  </script>
+</body>
+</html>
