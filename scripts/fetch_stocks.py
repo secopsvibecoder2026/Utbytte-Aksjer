@@ -1210,6 +1210,12 @@ def generer_sitemap(aksjer, root_dir, today):
     <priority>0.9</priority>
   </url>""",
         f"""  <url>
+    <loc>https://exday.no/bevegelser/</loc>
+    <lastmod>{today}</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>""",
+        f"""  <url>
     <loc>https://exday.no/personvern/</loc>
     <lastmod>{today}</lastmod>
     <changefreq>monthly</changefreq>
