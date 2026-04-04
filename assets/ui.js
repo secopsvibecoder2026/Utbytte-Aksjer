@@ -1847,28 +1847,84 @@ function rangebar(pris, lav, hoy, stor = false) {
 
 function initKalkulator() {
   document.getElementById('kal-beregn').addEventListener('click', beregnKalkulator);
+
+  // Avansert-toggle
+  document.getElementById('kal-avansert-toggle').addEventListener('click', () => {
+    const panel = document.getElementById('kal-avansert');
+    const ikon  = document.getElementById('kal-avansert-ikon');
+    const aapen = panel.classList.toggle('hidden');
+    ikon.style.transform = aapen ? '' : 'rotate(90deg)';
+  });
+
+  // Portefølje-knapp
+  document.getElementById('kal-bruk-pf').addEventListener('click', brukPortefoljeData);
+
   // Beregn automatisk ved endring
-  ['kal-startbelop','kal-yield','kal-ar','kal-vekst','kal-sparing','kal-reinvester']
+  ['kal-startbelop','kal-yield','kal-ar','kal-vekst','kal-sparing','kal-reinvester',
+   'kal-skatt-aktiv','kal-skattesats','kal-inflasjon-aktiv','kal-inflasjon']
     .forEach(id => document.getElementById(id).addEventListener('input', beregnKalkulator));
   beregnKalkulator();
 }
 
-function _simulerKalkulator(startbelop, yieldFaktor, vekstFaktor, sparingAr, antallAr, medDRIP) {
+function brukPortefoljeData() {
+  const pf = hentPF();
+  const tickers = Object.keys(pf);
+  if (!tickers.length || !alleAksjer.length) {
+    document.getElementById('kal-pf-info').textContent = 'Ingen porteføljedata — legg til aksjer i Portefølje-fanen først.';
+    document.getElementById('kal-pf-info').classList.remove('hidden');
+    return;
+  }
+
+  let totalVerdi = 0, totalAr = 0, antallAksjer = 0;
+  tickers.forEach(ticker => {
+    const a = alleAksjer.find(x => x.ticker === ticker);
+    const antall = pf[ticker];
+    if (!a || antall < 1) return;
+    const verdi = antall * (a.pris || 0);
+    totalVerdi += verdi;
+    totalAr    += antall * (a.utbytte_per_aksje || 0);
+    antallAksjer++;
+  });
+
+  if (totalVerdi <= 0) {
+    document.getElementById('kal-pf-info').textContent = 'Mangler kursinformasjon for porteføljen. Prøv igjen om litt.';
+    document.getElementById('kal-pf-info').classList.remove('hidden');
+    return;
+  }
+
+  const vektetYield = (totalAr / totalVerdi * 100);
+
+  document.getElementById('kal-startbelop').value = Math.round(totalVerdi);
+  document.getElementById('kal-yield').value = vektetYield.toFixed(2);
+
+  const info = document.getElementById('kal-pf-info');
+  info.textContent = `Hentet fra portefølje: ${antallAksjer} selskaper · markedsverdi ${Math.round(totalVerdi).toLocaleString('nb-NO')} kr · vektet yield ${vektetYield.toFixed(2)}%`;
+  info.classList.remove('hidden');
+
+  beregnKalkulator();
+}
+
+function _simulerKalkulator(startbelop, yieldFaktor, vekstFaktor, sparingAr, antallAr, medDRIP, skattFaktor, inflasjonFaktor) {
   let verdi = startbelop;
-  let totUtbytte = 0;
-  let totInnbetalt = startbelop;
+  let totUtbytte = 0, totUtbytteNetto = 0, totSkatt = 0, totInnbetalt = startbelop;
   const rader = [];
   for (let ar = 1; ar <= antallAr; ar++) {
     const baseForUtbytte = verdi + sparingAr * 0.5;
-    const utbytteIAr = baseForUtbytte * yieldFaktor;
+    const utbytteIAr     = baseForUtbytte * yieldFaktor;
+    const skattIAr       = utbytteIAr * skattFaktor;
+    const utbytteNetto   = utbytteIAr - skattIAr;
     verdi += sparingAr;
-    if (medDRIP) verdi += utbytteIAr;
+    if (medDRIP) verdi += utbytteNetto;   // reinvester kun etter skatt
     verdi = verdi * (1 + vekstFaktor);
-    totUtbytte += utbytteIAr;
-    totInnbetalt += sparingAr;
-    rader.push({ ar, verdi, utbytteIAr, totUtbytte });
+    totUtbytte      += utbytteIAr;
+    totUtbytteNetto += utbytteNetto;
+    totSkatt        += skattIAr;
+    totInnbetalt    += sparingAr;
+    // Realverdi: deflatér med kumulert inflasjon
+    const realFaktor = Math.pow(1 + inflasjonFaktor, ar);
+    rader.push({ ar, verdi, verdiReal: verdi / realFaktor, utbytteIAr, utbytteNetto, totUtbytte });
   }
-  return { rader, totUtbytte, totInnbetalt, verdi };
+  return { rader, totUtbytte, totUtbytteNetto, totSkatt, totInnbetalt, verdi };
 }
 
 function tegneKalkulatorGraf(raderMed, raderUten) {
@@ -1913,39 +1969,82 @@ function tegneKalkulatorGraf(raderMed, raderUten) {
 }
 
 function beregnKalkulator() {
-  const startbelop = Math.max(0, parseFloat(document.getElementById('kal-startbelop').value) || 0);
-  const yieldPct   = Math.max(0, Math.min(50, parseFloat(document.getElementById('kal-yield').value) || 0));
-  const antallAr   = Math.max(1, Math.min(40, parseInt(document.getElementById('kal-ar').value) || 1));
-  const vekstPct   = Math.max(0, Math.min(30, parseFloat(document.getElementById('kal-vekst').value) || 0));
-  const sparingMnd = Math.max(0, parseFloat(document.getElementById('kal-sparing').value) || 0);
-  const reinvester = document.getElementById('kal-reinvester').checked;
+  const startbelop   = Math.max(0, parseFloat(document.getElementById('kal-startbelop').value) || 0);
+  const yieldPct     = Math.max(0, Math.min(50, parseFloat(document.getElementById('kal-yield').value) || 0));
+  const antallAr     = Math.max(1, Math.min(40, parseInt(document.getElementById('kal-ar').value) || 1));
+  const vekstPct     = Math.max(0, Math.min(30, parseFloat(document.getElementById('kal-vekst').value) || 0));
+  const sparingMnd   = Math.max(0, parseFloat(document.getElementById('kal-sparing').value) || 0);
+  const reinvester   = document.getElementById('kal-reinvester').checked;
+  const skattAktiv   = document.getElementById('kal-skatt-aktiv').checked;
+  const skattPct     = Math.max(0, Math.min(60, parseFloat(document.getElementById('kal-skattesats').value) || 37.84));
+  const inflAktiv    = document.getElementById('kal-inflasjon-aktiv').checked;
+  const inflPct      = Math.max(0, Math.min(20, parseFloat(document.getElementById('kal-inflasjon').value) || 2.5));
 
   if (startbelop <= 0 && sparingMnd <= 0) return;
 
-  const fmtKr      = v => v.toLocaleString('nb-NO', { maximumFractionDigits: 0 }) + ' kr';
-  const yieldFaktor = yieldPct / 100;
-  const vekstFaktor = vekstPct / 100;
-  const sparingAr   = sparingMnd * 12;
+  const fmtKr        = v => v.toLocaleString('nb-NO', { maximumFractionDigits: 0 }) + ' kr';
+  const yieldFaktor  = yieldPct / 100;
+  const vekstFaktor  = vekstPct / 100;
+  const sparingAr    = sparingMnd * 12;
+  const skattFaktor  = skattAktiv ? skattPct / 100 : 0;
+  const inflFaktor   = inflAktiv  ? inflPct  / 100 : 0;
 
-  const med   = _simulerKalkulator(startbelop, yieldFaktor, vekstFaktor, sparingAr, antallAr, true);
-  const uten  = _simulerKalkulator(startbelop, yieldFaktor, vekstFaktor, sparingAr, antallAr, false);
+  const med   = _simulerKalkulator(startbelop, yieldFaktor, vekstFaktor, sparingAr, antallAr, true,  skattFaktor, inflFaktor);
+  const uten  = _simulerKalkulator(startbelop, yieldFaktor, vekstFaktor, sparingAr, antallAr, false, skattFaktor, inflFaktor);
   const aktiv = reinvester ? med : uten;
+  const sisteRad = aktiv.rader[aktiv.rader.length - 1];
 
-  document.getElementById('kal-res-ar').textContent       = antallAr;
-  document.getElementById('kal-res-ar2').textContent      = antallAr;
-  document.getElementById('kal-res-verdi').textContent    = fmtKr(aktiv.verdi);
-  document.getElementById('kal-res-utbytte').textContent  = fmtKr(aktiv.totUtbytte);
+  document.getElementById('kal-res-ar').textContent        = antallAr;
+  document.getElementById('kal-res-ar2').textContent       = antallAr;
+  document.getElementById('kal-res-verdi').textContent     = fmtKr(aktiv.verdi);
+  document.getElementById('kal-res-utbytte').textContent   = fmtKr(aktiv.totUtbytte);
   document.getElementById('kal-res-innbetalt').textContent = fmtKr(aktiv.totInnbetalt);
-  document.getElementById('kal-res-mnd').textContent      = fmtKr(aktiv.rader[aktiv.rader.length - 1].utbytteIAr / 12);
-  document.getElementById('kal-res-drip').textContent     = fmtKr(med.verdi - uten.verdi);
+  document.getElementById('kal-res-mnd').textContent       = fmtKr(sisteRad.utbytteIAr / 12);
+  document.getElementById('kal-res-drip').textContent      = fmtKr(med.verdi - uten.verdi);
+
+  // Inflasjonsjustert verdi
+  const verdiRealEl = document.getElementById('kal-res-verdi-real');
+  if (inflAktiv && inflFaktor > 0) {
+    verdiRealEl.textContent = `≈ ${fmtKr(sisteRad.verdiReal)} i dagens kroneverdi`;
+    verdiRealEl.classList.remove('hidden');
+  } else {
+    verdiRealEl.classList.add('hidden');
+  }
+
+  // Etter-skatt utbytte
+  const utbytteNettoEl = document.getElementById('kal-res-utbytte-netto');
+  const mndNettoEl     = document.getElementById('kal-res-mnd-netto');
+  if (skattAktiv) {
+    utbytteNettoEl.textContent = `${fmtKr(aktiv.totUtbytteNetto)} etter skatt`;
+    utbytteNettoEl.classList.remove('hidden');
+    mndNettoEl.textContent = `${fmtKr(sisteRad.utbytteNetto / 12)} etter skatt`;
+    mndNettoEl.classList.remove('hidden');
+  } else {
+    utbytteNettoEl.classList.add('hidden');
+    mndNettoEl.classList.add('hidden');
+  }
+
+  // Skatt-kort
+  const skattKort = document.getElementById('kal-res-skatt-kort');
+  if (skattAktiv) {
+    document.getElementById('kal-res-skatt').textContent = fmtKr(aktiv.totSkatt);
+    skattKort.classList.remove('hidden');
+  } else {
+    skattKort.classList.add('hidden');
+  }
+
+  // Etter-skatt kolonne i tabell
+  const thNetto = document.getElementById('kal-th-netto');
+  if (skattAktiv) thNetto.classList.remove('hidden'); else thNetto.classList.add('hidden');
 
   tegneKalkulatorGraf(med.rader, uten.rader);
 
   document.getElementById('kal-tabell').innerHTML = aktiv.rader.map(r => `
     <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50">
       <td class="px-4 py-2 text-gray-500 dark:text-gray-400">${r.ar}</td>
-      <td class="px-4 py-2 text-right font-medium">${fmtKr(r.verdi)}</td>
+      <td class="px-4 py-2 text-right font-medium">${fmtKr(r.verdi)}${inflAktiv ? `<span class="block text-xs text-gray-400">${fmtKr(r.verdiReal)}</span>` : ''}</td>
       <td class="px-4 py-2 text-right text-green-600 dark:text-green-400">${fmtKr(r.utbytteIAr)}</td>
+      ${skattAktiv ? `<td class="px-4 py-2 text-right text-amber-600 dark:text-amber-400">${fmtKr(r.utbytteNetto)}</td>` : ''}
       <td class="px-4 py-2 text-right text-gray-500 dark:text-gray-400">${fmtKr(r.totUtbytte)}</td>
     </tr>`).join('');
 

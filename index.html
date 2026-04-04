@@ -889,8 +889,18 @@
     <!-- KALKULATOR-FANE -->
     <div id="tab-kalkulator" class="hidden space-y-6 max-w-2xl mx-auto">
       <div class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-5 shadow-sm space-y-4">
-        <h2 class="font-semibold text-base">Utbyttekalkulator — yield over tid</h2>
-        <p class="text-xs text-gray-500 dark:text-gray-400">Se hvordan utbytte og reinvestering vokser over år.</p>
+        <div class="flex items-start justify-between gap-3">
+          <div>
+            <h2 class="font-semibold text-base">Utbyttekalkulator — yield over tid</h2>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Se hvordan utbytte og reinvestering vokser over år.</p>
+          </div>
+          <button id="kal-bruk-pf" class="shrink-0 text-xs px-3 py-1.5 rounded-lg border border-brand-300 dark:border-brand-700 text-brand-700 dark:text-brand-400 hover:bg-brand-50 dark:hover:bg-brand-900/30 transition-colors font-medium" title="Fyll inn verdier fra din portefølje">
+            ⊕ Bruk min portefølje
+          </button>
+        </div>
+
+        <!-- Portefølje-kilde-info (skjult inntil brukt) -->
+        <div id="kal-pf-info" class="hidden rounded-lg bg-brand-50 dark:bg-brand-900/20 border border-brand-200 dark:border-brand-800 px-3 py-2 text-xs text-brand-700 dark:text-brand-300"></div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
@@ -921,6 +931,34 @@
           </div>
         </div>
 
+        <!-- Avanserte innstillinger (skatt + inflasjon) -->
+        <button id="kal-avansert-toggle" class="text-xs text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 flex items-center gap-1 transition-colors">
+          <svg id="kal-avansert-ikon" class="w-3 h-3 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+          Avanserte innstillinger (skatt &amp; inflasjon)
+        </button>
+        <div id="kal-avansert" class="hidden grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
+          <div>
+            <label class="flex items-center gap-2 cursor-pointer select-none text-sm mb-2">
+              <input id="kal-skatt-aktiv" type="checkbox" class="w-4 h-4 rounded accent-brand-600" />
+              Inkluder utbytteskatt
+            </label>
+            <div class="flex items-center gap-2">
+              <input id="kal-skattesats" type="number" min="0" max="60" step="0.1" value="37.84" class="filter-input w-24" />
+              <span class="text-xs text-gray-400">% (norsk aksjonærmodell: 37,84%)</span>
+            </div>
+          </div>
+          <div>
+            <label class="flex items-center gap-2 cursor-pointer select-none text-sm mb-2">
+              <input id="kal-inflasjon-aktiv" type="checkbox" class="w-4 h-4 rounded accent-brand-600" />
+              Inflasjonsjustering
+            </label>
+            <div class="flex items-center gap-2">
+              <input id="kal-inflasjon" type="number" min="0" max="20" step="0.1" value="2.5" class="filter-input w-24" />
+              <span class="text-xs text-gray-400">% per år</span>
+            </div>
+          </div>
+        </div>
+
         <button id="kal-beregn" class="px-5 py-2 bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold rounded-lg transition-colors">Beregn</button>
       </div>
 
@@ -930,10 +968,12 @@
           <div class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-3 text-center shadow-sm">
             <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Verdi etter <span id="kal-res-ar">—</span> år</p>
             <p id="kal-res-verdi" class="text-lg font-bold text-brand-600 dark:text-brand-400">—</p>
+            <p id="kal-res-verdi-real" class="text-xs text-gray-400 dark:text-gray-500 mt-0.5 hidden"></p>
           </div>
           <div class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-3 text-center shadow-sm">
             <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Totalt utbytte</p>
             <p id="kal-res-utbytte" class="text-lg font-bold text-green-600 dark:text-green-400">—</p>
+            <p id="kal-res-utbytte-netto" class="text-xs text-gray-400 dark:text-gray-500 mt-0.5 hidden"></p>
           </div>
           <div class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-3 text-center shadow-sm">
             <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Totalt innbetalt</p>
@@ -942,10 +982,15 @@
           <div class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-3 text-center shadow-sm">
             <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Månedlig utbytte (år <span id="kal-res-ar2">—</span>)</p>
             <p id="kal-res-mnd" class="text-lg font-bold text-orange-500">—</p>
+            <p id="kal-res-mnd-netto" class="text-xs text-gray-400 dark:text-gray-500 mt-0.5 hidden"></p>
           </div>
-          <div class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-3 text-center shadow-sm col-span-2 sm:col-span-1">
+          <div class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-3 text-center shadow-sm">
             <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">DRIP-gevinst vs. uten reinvestering</p>
             <p id="kal-res-drip" class="text-lg font-bold text-teal-600 dark:text-teal-400">—</p>
+          </div>
+          <div id="kal-res-skatt-kort" class="hidden rounded-xl border border-amber-200 dark:border-amber-900/40 bg-amber-50 dark:bg-amber-950/20 p-3 text-center shadow-sm">
+            <p class="text-xs text-amber-600 dark:text-amber-400 mb-1">Estimert skatt totalt</p>
+            <p id="kal-res-skatt" class="text-lg font-bold text-amber-600 dark:text-amber-400">—</p>
           </div>
         </div>
 
@@ -963,6 +1008,7 @@
                 <th class="px-4 py-2 text-left">År</th>
                 <th class="px-4 py-2 text-right">Porteføljeverdi</th>
                 <th class="px-4 py-2 text-right">Utbytte dette året</th>
+                <th id="kal-th-netto" class="px-4 py-2 text-right hidden">Etter skatt</th>
                 <th class="px-4 py-2 text-right">Totalt utbytte</th>
               </tr>
             </thead>
