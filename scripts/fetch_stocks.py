@@ -1163,6 +1163,214 @@ def generer_sektorsider(aksjer, root_dir):
     print(f"Genererte {len(generert)} sektorsider under aksjer/sektor/")
 
 
+def generer_topplistesider(aksjer, root_dir):
+    """Genererer 4 statiske SEO-sider for kuraterte topplistor."""
+    today = datetime.datetime.utcnow().strftime("%Y-%m-%d")
+
+    LISTER = [
+        {
+            "slug":     "hoyest-utbytte",
+            "tittel":   "Aksjer med høyest utbytte på Oslo Børs",
+            "h1":       "Aksjer med høyest utbytte",
+            "desc_tpl": "De {n} norske aksjene med høyest utbytteyield på Oslo Børs akkurat nå. Oppdatert daglig.",
+            "sub":      "Sortert etter direkteavkastning (utbytteyield) — høyest først.",
+            "filter":   lambda a: a.get("utbytte_yield", 0) > 0,
+            "sort_key": lambda a: a.get("utbytte_yield", 0),
+            "reverse":  True,
+            "kolonner": [
+                ("Yield",        lambda a: f'<td class="metric">{a["utbytte_yield"]:.2f}%</td>'),
+                ("Pris",         lambda a: f'<td>{a.get("pris") or "—"} {a.get("valuta","NOK")}</td>'),
+                ("Payout",       lambda a: f'<td>{a["payout_ratio"]:.0f}% </td>' if a.get("payout_ratio") else '<td>—</td>'),
+                ("Ex-dato",      lambda a: f'<td>{_fmt_dato(a.get("ex_dato"))}</td>'),
+            ],
+            "stat_lbl": "Snitt yield",
+            "stat_fn":  lambda topp: f'{sum(a["utbytte_yield"] for a in topp)/len(topp):.1f}%',
+            "stat2_lbl":"Høyeste yield",
+            "stat2_fn": lambda topp: f'{topp[0]["utbytte_yield"]:.2f}%',
+        },
+        {
+            "slug":     "utbyttevekst",
+            "tittel":   "Norske aksjer med best utbyttevekst siste 5 år",
+            "h1":       "Aksjer med best utbyttevekst",
+            "desc_tpl": "De {n} norske aksjene med sterkest utbyttevekst siste 5 år på Oslo Børs. CAGR beregnet fra historiske utbyttedata.",
+            "sub":      "Sortert etter gjennomsnittlig årlig utbyttevekst siste 5 år (CAGR).",
+            "filter":   lambda a: a.get("utbytte_vekst_5ar", 0) > 0,
+            "sort_key": lambda a: a.get("utbytte_vekst_5ar", 0),
+            "reverse":  True,
+            "kolonner": [
+                ("Vekst 5år",    lambda a: f'<td class="metric">+{a["utbytte_vekst_5ar"]:.1f}%/år</td>'),
+                ("Yield nå",     lambda a: f'<td>{a.get("utbytte_yield",0):.2f}%</td>'),
+                ("Pris",         lambda a: f'<td>{a.get("pris") or "—"} {a.get("valuta","NOK")}</td>'),
+                ("Ex-dato",      lambda a: f'<td>{_fmt_dato(a.get("ex_dato"))}</td>'),
+            ],
+            "stat_lbl": "Snitt vekst",
+            "stat_fn":  lambda topp: f'+{sum(a["utbytte_vekst_5ar"] for a in topp)/len(topp):.1f}%/år',
+            "stat2_lbl":"Høyeste vekst",
+            "stat2_fn": lambda topp: f'+{topp[0]["utbytte_vekst_5ar"]:.1f}%/år',
+        },
+        {
+            "slug":     "konsistente-utbytteaksjer",
+            "tittel":   "Mest konsistente utbytteaksjer på Oslo Børs",
+            "h1":       "Mest konsistente utbytteaksjer",
+            "desc_tpl": "De {n} norske aksjene som har betalt utbytte flest år på rad. Konsistens er et sentralt kriterium for utbytteinvestorer.",
+            "sub":      "Sortert etter antall kalenderår med utbyttebetaling — flest år først.",
+            "filter":   lambda a: a.get("ar_med_utbytte", 0) > 0,
+            "sort_key": lambda a: a.get("ar_med_utbytte", 0),
+            "reverse":  True,
+            "kolonner": [
+                ("År m/utbytte", lambda a: f'<td class="metric">{a["ar_med_utbytte"]} år</td>'),
+                ("Yield",        lambda a: f'<td>{a.get("utbytte_yield",0):.2f}%</td>'),
+                ("Pris",         lambda a: f'<td>{a.get("pris") or "—"} {a.get("valuta","NOK")}</td>'),
+                ("Ex-dato",      lambda a: f'<td>{_fmt_dato(a.get("ex_dato"))}</td>'),
+            ],
+            "stat_lbl": "Snitt år",
+            "stat_fn":  lambda topp: f'{sum(a["ar_med_utbytte"] for a in topp)/len(topp):.0f} år',
+            "stat2_lbl":"Flest år",
+            "stat2_fn": lambda topp: f'{topp[0]["ar_med_utbytte"]} år',
+        },
+        {
+            "slug":     "lavest-payout",
+            "tittel":   "Aksjer med lavest payout ratio – bærekraftig utbytte",
+            "h1":       "Aksjer med lavest payout ratio",
+            "desc_tpl": "De {n} norske aksjene med lavest payout ratio på Oslo Børs. Lav payout betyr at selskapet beholder mer av overskuddet og utbyttet er mer bærekraftig.",
+            "sub":      "Sortert etter payout ratio (andel av overskudd utbetalt som utbytte) — lavest først.",
+            "filter":   lambda a: 0 < a.get("payout_ratio", 0) < 100,
+            "sort_key": lambda a: a.get("payout_ratio", 0),
+            "reverse":  False,
+            "kolonner": [
+                ("Payout ratio", lambda a: f'<td class="metric">{a["payout_ratio"]:.0f}%</td>'),
+                ("Yield",        lambda a: f'<td>{a.get("utbytte_yield",0):.2f}%</td>'),
+                ("Pris",         lambda a: f'<td>{a.get("pris") or "—"} {a.get("valuta","NOK")}</td>'),
+                ("Ex-dato",      lambda a: f'<td>{_fmt_dato(a.get("ex_dato"))}</td>'),
+            ],
+            "stat_lbl": "Snitt payout",
+            "stat_fn":  lambda topp: f'{sum(a["payout_ratio"] for a in topp)/len(topp):.0f}%',
+            "stat2_lbl":"Laveste payout",
+            "stat2_fn": lambda topp: f'{topp[0]["payout_ratio"]:.0f}%',
+        },
+    ]
+
+    CSS = """
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: system-ui, -apple-system, sans-serif; background: #f9fafb; color: #111827; line-height: 1.6; }
+    a { color: #2563eb; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .wrap { max-width: 900px; margin: 0 auto; padding: 1.5rem 1rem; }
+    nav { font-size: 0.85rem; color: #6b7280; margin-bottom: 1.5rem; }
+    h1 { font-size: 1.75rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .sub { color: #6b7280; margin-bottom: 1.5rem; font-size: 0.95rem; }
+    .stats { display: flex; gap: 1.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+    .stat { background: #fff; border: 1px solid #e5e7eb; border-radius: 0.5rem; padding: 0.75rem 1.25rem; }
+    .stat-val { font-size: 1.4rem; font-weight: 700; color: #16a34a; }
+    .stat-lbl { font-size: 0.75rem; color: #6b7280; text-transform: uppercase; letter-spacing: 0.04em; }
+    table { width: 100%; border-collapse: collapse; background: #fff; border: 1px solid #e5e7eb; border-radius: 0.75rem; overflow: hidden; font-size: 0.9rem; }
+    th { background: #f3f4f6; padding: 0.6rem 1rem; text-align: left; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: #6b7280; }
+    td { padding: 0.65rem 1rem; border-top: 1px solid #f3f4f6; }
+    tr:hover td { background: #f9fafb; }
+    .rang { color: #9ca3af; font-size: 0.8rem; font-weight: 700; width: 2rem; }
+    .ticker a { color: #16a34a; font-family: monospace; font-weight: 700; font-size: 0.95rem; }
+    .metric { color: #0891b2; font-weight: 700; }
+    .cta { margin-top: 2rem; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 0.75rem; padding: 1.25rem; text-align: center; }
+    .cta a { display: inline-block; background: #16a34a; color: #fff; font-weight: 600; padding: 0.65rem 1.5rem; border-radius: 0.5rem; margin-top: 0.5rem; }
+    .relatert { margin-top: 2rem; }
+    .relatert h2 { font-size: 1rem; font-weight: 600; margin-bottom: 0.75rem; color: #374151; }
+    .relatert ul { list-style: none; display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .relatert li a { display: block; background: #fff; border: 1px solid #e5e7eb; border-radius: 0.5rem; padding: 0.4rem 0.85rem; font-size: 0.85rem; color: #374151; }
+    .relatert li a:hover { border-color: #16a34a; color: #15803d; text-decoration: none; }
+    .updated { font-size: 0.78rem; color: #9ca3af; text-align: right; margin-top: 1rem; }
+"""
+
+    alle_slugs = [(l["slug"], l["h1"]) for l in LISTER]
+
+    for cfg in LISTER:
+        topp = sorted(
+            [a for a in aksjer if cfg["filter"](a)],
+            key=cfg["sort_key"],
+            reverse=cfg["reverse"]
+        )[:20]
+
+        if not topp:
+            continue
+
+        n = len(topp)
+        desc = cfg["desc_tpl"].format(n=n)
+        col_headers = "".join(f"<th>{lbl}</th>" for lbl, _ in cfg["kolonner"])
+        rader = ""
+        for i, a in enumerate(topp, 1):
+            kols = "".join(fn(a) for _, fn in cfg["kolonner"])
+            rader += f"""
+        <tr>
+          <td class="rang">{i}</td>
+          <td class="ticker"><a href="/aksjer/{a['ticker']}/">{a['ticker']}</a></td>
+          <td>{a['navn']}</td>
+          {kols}
+        </tr>"""
+
+        relatert_lenker = "".join(
+            f'<li><a href="/aksjer/{s}/">{h}</a></li>'
+            for s, h in alle_slugs if s != cfg["slug"]
+        )
+
+        json_ld = json.dumps({
+            "@context": "https://schema.org",
+            "@type": "ItemList",
+            "name": cfg["tittel"],
+            "description": desc,
+            "url": f"https://exday.no/aksjer/{cfg['slug']}/",
+            "numberOfItems": n,
+        }, ensure_ascii=False)
+
+        html = f"""<!DOCTYPE html>
+<html lang="nb">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>{cfg['tittel']} | exday.no</title>
+  <meta name="description" content="{desc}"/>
+  <link rel="canonical" href="https://exday.no/aksjer/{cfg['slug']}/"/>
+  <meta property="og:title" content="{cfg['tittel']} | exday.no"/>
+  <meta property="og:description" content="{desc}"/>
+  <meta property="og:url" content="https://exday.no/aksjer/{cfg['slug']}/"/>
+  <meta property="og:type" content="website"/>
+  <script type="application/ld+json">{json_ld}</script>
+  <style>{CSS}</style>
+</head>
+<body>
+<div class="wrap">
+  <nav><a href="https://exday.no/">exday.no</a> › <a href="/aksjer/">Aksjer</a> › {cfg['h1']}</nav>
+  <h1>{cfg['h1']}</h1>
+  <p class="sub">{cfg['sub']}</p>
+  <div class="stats">
+    <div class="stat"><div class="stat-val">{n}</div><div class="stat-lbl">Aksjer</div></div>
+    <div class="stat"><div class="stat-val">{cfg['stat_fn'](topp)}</div><div class="stat-lbl">{cfg['stat_lbl']}</div></div>
+    <div class="stat"><div class="stat-val">{cfg['stat2_fn'](topp)}</div><div class="stat-lbl">{cfg['stat2_lbl']}</div></div>
+  </div>
+  <table>
+    <thead><tr><th>#</th><th>Ticker</th><th>Selskap</th>{col_headers}</tr></thead>
+    <tbody>{rader}
+    </tbody>
+  </table>
+  <div class="cta">
+    <p>Se yield, ex-dato, score og porteføljekalkulator for alle aksjer</p>
+    <a href="https://exday.no/">Åpne exday.no →</a>
+  </div>
+  <div class="relatert">
+    <h2>Andre topplistor</h2>
+    <ul>{relatert_lenker}</ul>
+  </div>
+  <p class="updated">Sist oppdatert: {today}</p>
+</div>
+</body>
+</html>"""
+
+        slug_dir = os.path.join(root_dir, "aksjer", cfg["slug"])
+        os.makedirs(slug_dir, exist_ok=True)
+        with open(os.path.join(slug_dir, "index.html"), "w", encoding="utf-8") as f:
+            f.write(html)
+
+    print(f"Genererte {len(LISTER)} topplistesider under aksjer/{{slug}}/")
+
+
 def generer_sitemap(aksjer, root_dir, today):
     """Genererer sitemap.xml med alle sider inkludert individuelle aksjesider og sektorsider."""
     from collections import defaultdict
@@ -1213,6 +1421,30 @@ def generer_sitemap(aksjer, root_dir, today):
     <lastmod>{today}</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
+  </url>""",
+        f"""  <url>
+    <loc>https://exday.no/aksjer/hoyest-utbytte/</loc>
+    <lastmod>{today}</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>""",
+        f"""  <url>
+    <loc>https://exday.no/aksjer/utbyttevekst/</loc>
+    <lastmod>{today}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>""",
+        f"""  <url>
+    <loc>https://exday.no/aksjer/konsistente-utbytteaksjer/</loc>
+    <lastmod>{today}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>""",
+        f"""  <url>
+    <loc>https://exday.no/aksjer/lavest-payout/</loc>
+    <lastmod>{today}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
   </url>""",
         f"""  <url>
     <loc>https://exday.no/personvern/</loc>
@@ -1452,6 +1684,7 @@ def main():
     root_dir = os.path.join(os.path.dirname(__file__), "..")
     generer_aksjesider(resultater, root_dir)
     generer_sektorsider(resultater, root_dir)
+    generer_topplistesider(resultater, root_dir)
     today = datetime.datetime.utcnow().strftime("%Y-%m-%d")
     generer_sitemap(resultater, root_dir, today)
     oppdater_index_html_meta(len(resultater), root_dir)
