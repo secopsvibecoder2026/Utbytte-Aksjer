@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=1200"/>
+<title>exday.no – Facebook promo</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 1200px; height: 628px;
+    background: linear-gradient(135deg, #052e16 0%, #14532d 50%, #166534 100%);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 60px;
+    position: relative;
+  }
+
+  /* Bakgrunnsdekor */
+  .circle1 {
+    position: absolute; border-radius: 50%;
+    width: 500px; height: 500px;
+    background: rgba(34,197,94,0.08);
+    top: -150px; right: 280px;
+    pointer-events: none;
+  }
+  .circle2 {
+    position: absolute; border-radius: 50%;
+    width: 300px; height: 300px;
+    background: rgba(34,197,94,0.06);
+    bottom: -80px; left: 40px;
+    pointer-events: none;
+  }
+
+  /* VENSTRE: tekst */
+  .left {
+    flex: 1;
+    padding-right: 40px;
+    z-index: 1;
+  }
+  .logo {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 28px;
+  }
+  .logo-icon {
+    width: 48px; height: 48px;
+    background: #16a34a;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px; font-weight: 900; color: white;
+    letter-spacing: -1px;
+  }
+  .logo-text {
+    font-size: 28px; font-weight: 800; color: #fff; letter-spacing: -0.5px;
+  }
+  .logo-domain {
+    font-size: 14px; color: #4ade80; font-weight: 500; margin-top: 2px;
+  }
+
+  .tagline {
+    font-size: 42px; font-weight: 800; color: #fff;
+    line-height: 1.15; margin-bottom: 16px; letter-spacing: -1px;
+  }
+  .tagline span { color: #4ade80; }
+
+  .sub {
+    font-size: 17px; color: #86efac; line-height: 1.6; margin-bottom: 32px;
+    max-width: 420px;
+  }
+
+  .features {
+    display: flex; flex-direction: column; gap: 10px; margin-bottom: 32px;
+  }
+  .feature {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 15px; color: #dcfce7;
+  }
+  .feature .dot {
+    width: 22px; height: 22px; border-radius: 50%;
+    background: #16a34a; display: flex; align-items: center; justify-content: center;
+    font-size: 11px; flex-shrink: 0;
+  }
+
+  .cta {
+    display: inline-block;
+    background: #16a34a; color: #fff;
+    font-size: 17px; font-weight: 700;
+    padding: 14px 32px; border-radius: 12px;
+    letter-spacing: 0.2px;
+  }
+  .cta span { opacity: 0.8; font-weight: 400; margin-left: 8px; font-size: 14px; }
+
+  /* HØYRE: telefon-mockup */
+  .phone-wrap {
+    flex-shrink: 0;
+    z-index: 1;
+    position: relative;
+  }
+  .phone {
+    width: 260px; height: 520px;
+    background: #0f172a;
+    border-radius: 40px;
+    border: 3px solid #1e3a2f;
+    box-shadow: 0 40px 80px rgba(0,0,0,0.6), inset 0 0 0 1px rgba(255,255,255,0.05);
+    overflow: hidden;
+    position: relative;
+  }
+  /* Notch */
+  .phone::before {
+    content: '';
+    position: absolute; top: 10px; left: 50%; transform: translateX(-50%);
+    width: 80px; height: 20px;
+    background: #0f172a; border-radius: 12px; z-index: 10;
+  }
+  .phone-screen {
+    width: 100%; height: 100%;
+    background: #111827;
+    padding-top: 40px;
+    overflow: hidden;
+  }
+
+  /* App-header */
+  .app-header {
+    background: #111827;
+    padding: 6px 14px 8px;
+    border-bottom: 1px solid #1f2937;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .app-logo { font-size: 15px; font-weight: 800; color: #fff; }
+  .app-logo span { color: #4ade80; }
+  .app-icons { display: flex; gap: 8px; }
+  .app-icon { width: 22px; height: 22px; background: #1f2937; border-radius: 6px; }
+
+  /* Stats-bar */
+  .stats-bar {
+    display: flex; gap: 0;
+    background: #1f2937;
+    margin: 8px 10px; border-radius: 10px; overflow: hidden;
+  }
+  .stat-item {
+    flex: 1; padding: 6px 4px; text-align: center;
+    border-right: 1px solid #374151;
+  }
+  .stat-item:last-child { border-right: none; }
+  .stat-val { font-size: 12px; font-weight: 700; color: #4ade80; }
+  .stat-lbl { font-size: 8px; color: #6b7280; margin-top: 1px; }
+
+  /* Aksjeliste */
+  .aksje-list { padding: 4px 10px; }
+  .aksje-row {
+    background: #1f2937; border-radius: 10px; margin-bottom: 6px;
+    padding: 8px 10px; display: flex; align-items: center; justify-content: space-between;
+  }
+  .aksje-left { display: flex; flex-direction: column; gap: 2px; }
+  .aksje-ticker { font-size: 12px; font-weight: 800; color: #4ade80; }
+  .aksje-name { font-size: 9px; color: #9ca3af; }
+  .aksje-right { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
+  .aksje-yield { font-size: 14px; font-weight: 800; color: #fff; }
+  .aksje-ex { font-size: 8px; color: #fbbf24; }
+
+  .aksje-row.highlight { background: linear-gradient(90deg, #14532d, #1f2937); }
+
+  /* score-badge */
+  .score {
+    width: 22px; height: 22px; border-radius: 50%;
+    background: #052e16; font-size: 8px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 2px;
+  }
+  .score.green { color: #4ade80; border: 1px solid #16a34a; }
+  .score.red { color: #f87171; border: 1px solid #dc2626; }
+
+  /* Tab-bar */
+  .tab-bar {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    background: #0f172a; border-top: 1px solid #1f2937;
+    display: flex; padding: 6px 0;
+  }
+  .tab { flex: 1; text-align: center; font-size: 7px; color: #6b7280; }
+  .tab.active { color: #4ade80; }
+  .tab-icon { font-size: 14px; display: block; margin-bottom: 1px; }
+</style>
+</head>
+<body>
+  <div class="circle1"></div>
+  <div class="circle2"></div>
+
+  <!-- VENSTRE: Tekst -->
+  <div class="left">
+    <div class="logo">
+      <div class="logo-icon">ex</div>
+      <div>
+        <div class="logo-text">exday.no</div>
+        <div class="logo-domain">Norges utbytteoversikt</div>
+      </div>
+    </div>
+
+    <div class="tagline">
+      Finn de beste<br><span>utbytteaksjene</span><br>på Oslo Børs
+    </div>
+
+    <p class="sub">
+      Yield, ex-dato, score og kalkulator for alle norske utbytteaksjer — gratis og uten innlogging.
+    </p>
+
+    <div class="features">
+      <div class="feature"><div class="dot">✓</div> Direkteavkastning og ex-datoer oppdatert daglig</div>
+      <div class="feature"><div class="dot">✓</div> Utbyttekalkulator med DRIP-reinvestering</div>
+      <div class="feature"><div class="dot">✓</div> Porteføljeoppfølging og watchlister</div>
+      <div class="feature"><div class="dot">✓</div> Score 0–10 basert på historikk og stabilitet</div>
+      <div class="feature"><div class="dot">✓</div> Kalender med alle kommende ex-datoer</div>
+    </div>
+
+    <div class="cta">Prøv gratis på exday.no <span>→</span></div>
+  </div>
+
+  <!-- HØYRE: Telefon-mockup -->
+  <div class="phone-wrap">
+    <div class="phone">
+      <div class="phone-screen">
+        <div class="app-header">
+          <div class="app-logo">ex<span>day</span></div>
+          <div class="app-icons">
+            <div class="app-icon"></div>
+            <div class="app-icon"></div>
+          </div>
+        </div>
+
+        <div class="stats-bar">
+          <div class="stat-item">
+            <div class="stat-val">124</div>
+            <div class="stat-lbl">Aksjer</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-val">8.2%</div>
+            <div class="stat-lbl">Høyeste</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-val">4.1%</div>
+            <div class="stat-lbl">Snitt yield</div>
+          </div>
+        </div>
+
+        <div class="aksje-list">
+          <div class="aksje-row highlight">
+            <div class="aksje-left">
+              <div class="aksje-ticker">EQNR</div>
+              <div class="aksje-name">Equinor ASA</div>
+              <div class="aksje-ex">Ex: 14. mai</div>
+            </div>
+            <div class="aksje-right">
+              <div class="aksje-yield">6.8%</div>
+              <div class="score green">8</div>
+            </div>
+          </div>
+
+          <div class="aksje-row">
+            <div class="aksje-left">
+              <div class="aksje-ticker">DNB</div>
+              <div class="aksje-name">DNB Bank ASA</div>
+              <div class="aksje-ex">Ex: 22. apr</div>
+            </div>
+            <div class="aksje-right">
+              <div class="aksje-yield">5.9%</div>
+              <div class="score green">7</div>
+            </div>
+          </div>
+
+          <div class="aksje-row">
+            <div class="aksje-left">
+              <div class="aksje-ticker">TEL</div>
+              <div class="aksje-name">Telenor ASA</div>
+              <div class="aksje-ex">Ex: 7. mai</div>
+            </div>
+            <div class="aksje-right">
+              <div class="aksje-yield">5.7%</div>
+              <div class="score green">6</div>
+            </div>
+          </div>
+
+          <div class="aksje-row">
+            <div class="aksje-left">
+              <div class="aksje-ticker">MOWI</div>
+              <div class="aksje-name">Mowi ASA</div>
+              <div class="aksje-ex">Ex: 30. apr</div>
+            </div>
+            <div class="aksje-right">
+              <div class="aksje-yield">4.4%</div>
+              <div class="score red">4</div>
+            </div>
+          </div>
+
+          <div class="aksje-row">
+            <div class="aksje-left">
+              <div class="aksje-ticker">AKER</div>
+              <div class="aksje-name">Aker ASA</div>
+              <div class="aksje-ex">Ex: 12. mai</div>
+            </div>
+            <div class="aksje-right">
+              <div class="aksje-yield">4.1%</div>
+              <div class="score green">5</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tab-bar">
+          <div class="tab active"><span class="tab-icon">📊</span>Oversikt</div>
+          <div class="tab"><span class="tab-icon">📅</span>Kalender</div>
+          <div class="tab"><span class="tab-icon">💼</span>Portefølje</div>
+          <div class="tab"><span class="tab-icon">🧮</span>Kalkulator</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
