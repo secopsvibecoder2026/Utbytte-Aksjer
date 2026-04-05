@@ -709,6 +709,80 @@ def valider_aksje(a):
     return advarsler
 
 
+def _generer_hist_chart(hist, valuta="NOK"):
+    """Lager et inline SVG søylediagram med Y-akse og hover-tooltip for historiske utbytter."""
+    if not hist or len(hist) < 2:
+        return ""
+
+    sortert = sorted(hist, key=lambda x: x["ar"])
+    maks = max(h["utbytte"] for h in sortert) or 1
+
+    W, H = 420, 180
+    pad_l, pad_r, pad_t, pad_b = 52, 12, 16, 32
+    chart_w = W - pad_l - pad_r
+    chart_h = H - pad_t - pad_b
+    n = len(sortert)
+    bar_w = max(8, min(36, int(chart_w / n) - 4))
+    spacing = chart_w / n
+
+    # Y-akse ticks (4 nivåer)
+    ticks = [round(maks * i / 3, 2) for i in range(4)]
+
+    bars = []
+    labels = []
+    tooltips = []
+    for i, h in enumerate(sortert):
+        x = pad_l + spacing * i + spacing / 2
+        bh = (h["utbytte"] / maks) * chart_h
+        by = pad_t + chart_h - bh
+        bars.append(
+            f'<rect class="hbar" x="{x - bar_w/2:.1f}" y="{by:.1f}" '
+            f'width="{bar_w}" height="{bh:.1f}" rx="3" fill="#16a34a" opacity="0.85"/>'
+        )
+        labels.append(
+            f'<text x="{x:.1f}" y="{H - 6}" text-anchor="middle" '
+            f'font-size="10" fill="#9ca3af">{h["ar"]}</text>'
+        )
+        tip = f'{h["utbytte"]} {valuta} · {h["yield"]:.1f}% yield'
+        tooltips.append(
+            f'<rect class="htip-bg" x="{min(x - 52, W - pad_r - 106):.1f}" y="{max(by - 28, 2):.1f}" '
+            f'width="106" height="20" rx="4" fill="#111827" opacity="0" pointer-events="none"/>'
+            f'<text class="htip-txt" x="{min(x, W - pad_r - 4):.1f}" y="{max(by - 13, 14):.1f}" '
+            f'text-anchor="middle" font-size="10" fill="#f3f4f6" opacity="0" pointer-events="none">{tip}</text>'
+            f'<rect class="htrig" x="{x - spacing/2:.1f}" y="{pad_t}" '
+            f'width="{spacing:.1f}" height="{chart_h}" fill="transparent" '
+            f'onmouseenter="showTip(this)" onmouseleave="hideTip(this)" data-i="{i}"/>'
+        )
+
+    y_ticks = []
+    for t in ticks:
+        y = pad_t + chart_h - (t / maks) * chart_h
+        y_ticks.append(
+            f'<line x1="{pad_l}" y1="{y:.1f}" x2="{W - pad_r}" y2="{y:.1f}" '
+            f'stroke="#e5e7eb" stroke-width="1" class="ytick"/>'
+            f'<text x="{pad_l - 4}" y="{y + 4:.1f}" text-anchor="end" '
+            f'font-size="10" fill="#9ca3af">{t}</text>'
+        )
+
+    svg = (
+        f'<svg viewBox="0 0 {W} {H}" style="width:100%;max-width:{W}px;height:auto;display:block;margin-bottom:0.5rem;" '
+        f'aria-label="Historiske utbytter per aksje i {valuta}">'
+        + "".join(y_ticks)
+        + "".join(bars)
+        + "".join(labels)
+        + "".join(tooltips)
+        + f'<text x="{pad_l - 36}" y="{pad_t + chart_h/2:.1f}" text-anchor="middle" '
+        f'font-size="10" fill="#9ca3af" transform="rotate(-90,{pad_l - 36},{pad_t + chart_h/2:.1f})">'
+        f'{valuta} per aksje</text>'
+        + "</svg>"
+        + """<script>
+function showTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAll('.htip-bg')[i],tx=s.querySelectorAll('.htip-txt')[i];bg.setAttribute('opacity','0.92');tx.setAttribute('opacity','1');}
+function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAll('.htip-bg')[i],tx=s.querySelectorAll('.htip-txt')[i];bg.setAttribute('opacity','0');tx.setAttribute('opacity','0');}
+</script>"""
+    )
+    return svg
+
+
 def _fmt_dato(iso):
     """Formaterer ISO-dato til lesbar norsk form, f.eks. 14. mars 2026."""
     if not iso:
@@ -778,9 +852,11 @@ def _aksje_side_html(a, today):
         "</tbody></table>"
     )
 
+    hist_chart = _generer_hist_chart(hist, valuta)
     hist_seksjon = (
         "<h2>Historiske utbytter</h2>"
-        "<table>"
+        + hist_chart
+        + "<table>"
         "<thead><tr><th>År</th><th>Utbytte</th><th>Yield</th></tr></thead>"
         f"<tbody>{hist_rader}</tbody>"
         "</table>"
@@ -902,34 +978,29 @@ def _aksje_side_html(a, today):
     .dark a {{ color: #4ade80; }}
     .dark .cta a {{ background: #16a34a; color: #fff !important; }}
     .dark .kcard .val.green {{ color: #4ade80; }}
+    .dark .ytick {{ stroke: #1f2937; }}
+    .dark .hbar {{ fill: #22c55e; }}
   </style>
 </head>
 <body>
 
   <!-- HEADER -->
-  <header style="position:sticky;top:0;z-index:40;border-bottom:1px solid #e5e7eb;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.06);" class="ak-header">
-    <div style="max-width:760px;margin:0 auto;padding:0.6rem 1rem;display:flex;align-items:center;justify-content:space-between;gap:0.75rem;">
-      <div style="display:flex;align-items:center;gap:0.6rem;font-size:0.875rem;">
-        <a href="/" style="display:inline-flex;align-items:center;gap:0.35rem;color:#6b7280;text-decoration:none;" class="ak-back">
+  <header class="ak-header">
+    <div class="ak-inner" style="max-width:760px;">
+      <div class="ak-left">
+        <a href="/" class="ak-back">
           <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
-          <span style="font-weight:500;">exday.no</span>
+          exday.no
         </a>
-        <span style="color:#d1d5db;">/</span>
-        <a href="/aksjer/" style="color:#6b7280;text-decoration:none;" class="ak-back">{navn[:18]}{'…' if len(navn) > 18 else ''}</a>
+        <span class="ak-sep">/</span>
+        <a href="/aksjer/" class="ak-back">{navn[:18]}{'…' if len(navn) > 18 else ''}</a>
       </div>
-      <button id="dark-toggle" style="padding:0.4rem;border-radius:0.5rem;border:none;cursor:pointer;background:transparent;color:#6b7280;" aria-label="Bytt fargemodus" class="ak-toggle">
+      <button id="dark-toggle" class="ak-toggle" aria-label="Bytt fargemodus">
         <svg class="sun-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
         <svg class="moon-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display:none;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
       </button>
     </div>
   </header>
-  <style>
-    .dark .ak-header {{ background: #111827 !important; border-color: #1f2937 !important; }}
-    .dark .ak-back {{ color: #9ca3af !important; }}
-    .dark .ak-toggle {{ color: #9ca3af !important; }}
-    .dark .ak-toggle:hover {{ background: #1f2937 !important; }}
-    .ak-toggle:hover {{ background: #f3f4f6; }}
-  </style>
 
 <div class="wrap">
 
@@ -938,13 +1009,13 @@ def _aksje_side_html(a, today):
     <span>›</span>
     <a href="https://exday.no/aksjer/">Aksjer</a>
     <span>›</span>
-    <a href="https://exday.no/aksjer/sektor/{_sektor_slug(sektor)}/">{sektor}</a>
+    <a href="https://exday.no/aksjer/sektor/{_sektor_slug(sektor)}/">{_sektor_ikon(sektor)} {sektor}</a>
     <span>›</span>
     {ticker}
   </div>
 
   <h1>{ticker} – {navn}</h1>
-  <p class="sub">{sektor} · {frekvens} utbytte · Oslo Børs</p>
+  <p class="sub">{_sektor_ikon(sektor)} {sektor} · {frekvens} utbytte · Oslo Børs</p>
   <span class="badge">{yield_:.2f}% direkteavkastning</span>
 
   <div class="kgrid">
@@ -1117,6 +1188,32 @@ def generer_aksjesider(aksjer, root_dir):
     print(f"Genererte {len(aksjer)} aksjesider + oversiktsside under aksjer/")
 
 
+SEKTOR_IKONER = {
+    "Energi":          "⚡",
+    "Finans":          "🏦",
+    "Shipping":        "🚢",
+    "Sjømat":          "🐟",
+    "Havbruk":         "🐟",
+    "Teknologi":       "💻",
+    "Industri":        "🏗️",
+    "Eiendom":         "🏢",
+    "Forbruksvarer":   "🛒",
+    "Helsevern":       "🏥",
+    "Kommunikasjon":   "📡",
+    "Materialer":      "⛏️",
+    "Offshore":        "🛢️",
+    "Kraftproduksjon": "💧",
+    "Forsikring":      "🛡️",
+}
+
+
+def _sektor_ikon(sektor):
+    for k, v in SEKTOR_IKONER.items():
+        if k.lower() in sektor.lower():
+            return v
+    return "📊"
+
+
 def _sektor_slug(sektor):
     return (sektor.lower()
             .replace('æ', 'ae').replace('ø', 'o').replace('å', 'a')
@@ -1260,14 +1357,6 @@ def generer_sektorsider(aksjer, root_dir):
       </button>
     </div>
   </header>
-  <style>
-    .dark .ak-header {{ background: #111827 !important; border-color: #1f2937 !important; }}
-    .dark .ak-back {{ color: #9ca3af !important; }}
-    .dark .ak-title {{ color: #f3f4f6 !important; }}
-    .dark .ak-toggle {{ color: #9ca3af !important; }}
-    .ak-toggle:hover {{ background: #f3f4f6; }}
-    .dark .ak-toggle:hover {{ background: #1f2937 !important; }}
-  </style>
 <div class="wrap">
   <div class="breadcrumb">
     <a href="https://exday.no/">exday.no</a>
@@ -1276,7 +1365,7 @@ def generer_sektorsider(aksjer, root_dir):
     <span>›</span>
     {sektor}
   </div>
-  <h1>{sektor}-aksjer med utbytte</h1>
+  <h1>{_sektor_ikon(sektor)} {sektor}-aksjer med utbytte</h1>
   <p class="sub">{len(aksjer_sortert)} norske {sektor.lower()}-aksjer på Oslo Børs. Sortert etter direkteavkastning.</p>
   <div class="stats">
     <div class="stat"><div class="stat-val">{len(aksjer_sortert)}</div><div class="stat-lbl">Aksjer</div></div>
@@ -1591,21 +1680,7 @@ def generer_topplistesider(aksjer, root_dir):
       }}
     }})();
   </script>
-  <style>{CSS}
-    .ak-header {{ position: sticky; top: 0; z-index: 40; border-bottom: 1px solid #e5e7eb; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.06); }}
-    .ak-inner {{ max-width: 900px; margin: 0 auto; padding: 0.6rem 1rem; display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; }}
-    .ak-left {{ display: flex; align-items: center; gap: 0.6rem; font-size: 0.875rem; }}
-    .ak-back {{ display: inline-flex; align-items: center; gap: 0.35rem; color: #6b7280; text-decoration: none; font-weight: 500; }}
-    .ak-sep {{ color: #d1d5db; }}
-    .ak-cur {{ font-weight: 600; font-size: 0.875rem; }}
-    .ak-toggle {{ padding: 0.4rem; border-radius: 0.5rem; border: none; cursor: pointer; background: transparent; color: #6b7280; }}
-    .ak-toggle:hover {{ background: #f3f4f6; }}
-    .dark .ak-header {{ background: #111827 !important; border-color: #1f2937 !important; }}
-    .dark .ak-back {{ color: #9ca3af !important; }}
-    .dark .ak-cur {{ color: #f3f4f6 !important; }}
-    .dark .ak-toggle {{ color: #9ca3af !important; }}
-    .dark .ak-toggle:hover {{ background: #1f2937 !important; }}
-  </style>
+  <style>{CSS}</style>
 </head>
 <body>
   <header class="ak-header">

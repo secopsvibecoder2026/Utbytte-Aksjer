@@ -370,3 +370,37 @@ th.sort-desc::after { content: ' ↓'; color: #6b7280; }
 .dark .dag-pill-uke        { background: rgb(55 48 163 / 0.35); color: #a5b4fc; }
 .dag-pill-malpris { background: #dbeafe; color: #1e40af; }
 .dark .dag-pill-malpris { background: rgb(30 64 175 / 0.35); color: #93c5fd; }
+
+/* ── GENERERTE AKSJESIDER – delt header/toggle ────────────────────────── */
+.ak-header {
+  position: sticky; top: 0; z-index: 40;
+  border-bottom: 1px solid #e5e7eb;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0,0,0,.06);
+}
+.dark .ak-header { background: #111827; border-color: #1f2937; }
+
+.ak-inner {
+  max-width: 900px; margin: 0 auto;
+  padding: 0.6rem 1rem;
+  display: flex; align-items: center; justify-content: space-between; gap: 0.75rem;
+}
+.ak-left  { display: flex; align-items: center; gap: 0.6rem; font-size: 0.875rem; }
+.ak-back  {
+  display: inline-flex; align-items: center; gap: 0.35rem;
+  color: #6b7280; text-decoration: none; font-weight: 500;
+}
+.dark .ak-back  { color: #9ca3af; }
+.ak-sep   { color: #d1d5db; }
+.dark .ak-sep   { color: #374151; }
+.ak-cur, .ak-title {
+  font-weight: 600; font-size: 0.875rem; color: #111827;
+}
+.dark .ak-cur, .dark .ak-title { color: #f3f4f6; }
+.ak-toggle {
+  padding: 0.4rem; border-radius: 0.5rem;
+  border: none; cursor: pointer; background: transparent; color: #6b7280;
+}
+.ak-toggle:hover  { background: #f3f4f6; }
+.dark .ak-toggle  { color: #9ca3af; }
+.dark .ak-toggle:hover { background: #1f2937; }

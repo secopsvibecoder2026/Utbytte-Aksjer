@@ -6,6 +6,8 @@
   <title>ELMRA – Elmera Group ASA | Utbytte og ex-dato | exday.no</title>
   <meta name="description" content="Elmera Group ASA (ELMRA) betaler 5.71% utbytte. Ex-dato: 4. mai 2026. Siste utbytte: 2.0 NOK per aksje. Oppdatert daglig på exday.no."/>
   <link rel="canonical" href="https://exday.no/aksjer/ELMRA/"/>
+  <meta name="theme-color" content="#16a34a"/>
+  <link rel="icon" type="image/svg+xml" href="/logo/exday_icon_primary.svg"/>
   <meta property="og:title" content="ELMRA – Elmera Group ASA | exday.no"/>
   <meta property="og:description" content="Elmera Group ASA (ELMRA) betaler 5.71% utbytte. Ex-dato: 4. mai 2026. Siste utbytte: 2.0 NOK per aksje. Oppdatert daglig på exday.no."/>
   <meta property="og:url" content="https://exday.no/aksjer/ELMRA/"/>
@@ -49,80 +51,152 @@
     }
   ]
 }</script>
+  <link rel="stylesheet" href="/assets/tailwind.css"/>
+  <link rel="stylesheet" href="/assets/style.css"/>
+  <script>
+    (function(){
+      var t = localStorage.getItem('theme');
+      if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
+      }
+    })();
+  </script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: system-ui, -apple-system, sans-serif; background: #f9fafb; color: #111827; line-height: 1.6; }
+    body { font-family: system-ui, -apple-system, sans-serif; line-height: 1.6; }
     a { color: #16a34a; text-decoration: none; }
     a:hover { text-decoration: underline; }
-    .wrap { max-width: 760px; margin: 0 auto; padding: 1.5rem 1rem; }
-    nav { font-size: 0.85rem; color: #6b7280; margin-bottom: 1.5rem; }
-    nav a { color: #6b7280; }
-    nav span { margin: 0 0.35rem; }
+    .wrap { max-width: 760px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+    .breadcrumb { font-size: 0.85rem; color: #6b7280; margin-bottom: 1.5rem; }
+    .breadcrumb a { color: #6b7280; }
+    .breadcrumb span { margin: 0 0.35rem; }
     h1 { font-size: 1.75rem; font-weight: 700; margin-bottom: 0.25rem; }
-    .sub { color: #6b7280; font-size: 0.95rem; margin-bottom: 1.5rem; }
+    .sub { font-size: 0.95rem; margin-bottom: 1.5rem; }
     .badge { display: inline-block; font-size: 0.75rem; font-weight: 600; padding: 0.2rem 0.6rem;
-              border-radius: 9999px; background: #dcfce7; color: #15803d; margin-bottom: 1.25rem; }
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
-    .card { background: #fff; border: 1px solid #e5e7eb; border-radius: 0.75rem; padding: 1rem; }
-    .card .label { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #9ca3af; margin-bottom: 0.2rem; }
-    .card .val { font-size: 1.25rem; font-weight: 700; color: #111827; }
-    .card .val.green { color: #16a34a; }
-    .desc { background: #fff; border: 1px solid #e5e7eb; border-radius: 0.75rem; padding: 1rem 1.25rem; margin-bottom: 1.5rem; color: #374151; }
-    h2 { font-size: 1rem; font-weight: 700; margin-bottom: 0.75rem; color: #374151; }
-    table { width: 100%; border-collapse: collapse; background: #fff; border: 1px solid #e5e7eb; border-radius: 0.75rem; overflow: hidden; margin-bottom: 1.5rem; font-size: 0.9rem; }
-    th { background: #f3f4f6; padding: 0.6rem 1rem; text-align: left; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: #6b7280; }
-    td { padding: 0.6rem 1rem; border-top: 1px solid #f3f4f6; }
-    tr:hover td { background: #f9fafb; }
-    .cta { text-align: center; margin-top: 2rem; padding: 1.5rem; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 0.75rem; }
-    .cta a { display: inline-block; background: #16a34a; color: #fff; font-weight: 600; padding: 0.65rem 1.5rem; border-radius: 0.5rem; }
-    .cta a:hover { background: #15803d; text-decoration: none; }
-    .updated { font-size: 0.78rem; color: #9ca3af; text-align: right; margin-top: 1rem; }
+              border-radius: 9999px; margin-bottom: 1.25rem; }
+    .kgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+    .kcard { border-radius: 0.75rem; padding: 1rem; border: 1px solid; }
+    .kcard .label { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.2rem; }
+    .kcard .val { font-size: 1.25rem; font-weight: 700; }
+    .kcard .val.green { color: #16a34a; }
+    .desc { border-radius: 0.75rem; padding: 1rem 1.25rem; margin-bottom: 1.5rem; border: 1px solid; }
+    h2 { font-size: 1rem; font-weight: 700; margin-bottom: 0.75rem; }
+    table { width: 100%; border-collapse: collapse; border-radius: 0.75rem; overflow: hidden; margin-bottom: 1.5rem; font-size: 0.9rem; border: 1px solid; }
+    th { padding: 0.6rem 1rem; text-align: left; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; }
+    td { padding: 0.6rem 1rem; border-top: 1px solid; }
+    .cta { text-align: center; margin-top: 2rem; padding: 1.5rem; border-radius: 0.75rem; border: 1px solid; }
+    .cta a { display: inline-block; background: #16a34a; color: #fff !important; font-weight: 600; padding: 0.65rem 1.5rem; border-radius: 0.5rem; text-decoration: none; }
+    .cta a:hover { background: #15803d; }
+    .updated { font-size: 0.78rem; text-align: right; margin-top: 1rem; }
+    .mini-nav { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.5rem; font-size: 0.85rem; }
+    .mini-nav a { color: #16a34a; }
     @media (max-width: 480px) { h1 { font-size: 1.4rem; } }
+
+    /* Light mode */
+    body { background: #f9fafb; color: #111827; }
+    .kcard { background: #fff; border-color: #e5e7eb; }
+    .kcard .label { color: #9ca3af; }
+    .kcard .val { color: #111827; }
+    .desc { background: #fff; border-color: #e5e7eb; color: #374151; }
+    h2 { color: #374151; }
+    table { background: #fff; border-color: #e5e7eb; }
+    th { background: #f3f4f6; color: #6b7280; }
+    td { border-color: #f3f4f6; }
+    tr:hover td { background: #f9fafb; }
+    .cta { background: #f0fdf4; border-color: #bbf7d0; }
+    .cta p { color: #374151; }
+    .updated { color: #9ca3af; }
+    .breadcrumb { color: #6b7280; }
+    .sub { color: #6b7280; }
+    .badge { background: #dcfce7; color: #15803d; }
+
+    /* Dark mode */
+    .dark body { background: #030712; color: #f3f4f6; }
+    .dark .kcard { background: #111827; border-color: #1f2937; }
+    .dark .kcard .label { color: #6b7280; }
+    .dark .kcard .val { color: #f3f4f6; }
+    .dark .desc { background: #111827; border-color: #1f2937; color: #d1d5db; }
+    .dark h2 { color: #d1d5db; }
+    .dark table { background: #111827; border-color: #1f2937; }
+    .dark th { background: #1f2937; color: #9ca3af; }
+    .dark td { border-color: #1f2937; }
+    .dark tr:hover td { background: #1f2937; }
+    .dark .cta { background: #052e16; border-color: #166534; }
+    .dark .cta p { color: #d1d5db; }
+    .dark .updated { color: #6b7280; }
+    .dark .breadcrumb { color: #9ca3af; }
+    .dark .breadcrumb a { color: #9ca3af; }
+    .dark .sub { color: #9ca3af; }
+    .dark .badge { background: #14532d; color: #86efac; }
+    .dark a { color: #4ade80; }
+    .dark .cta a { background: #16a34a; color: #fff !important; }
+    .dark .kcard .val.green { color: #4ade80; }
+    .dark .ytick { stroke: #1f2937; }
+    .dark .hbar { fill: #22c55e; }
   </style>
 </head>
 <body>
+
+  <!-- HEADER -->
+  <header class="ak-header">
+    <div class="ak-inner" style="max-width:760px;">
+      <div class="ak-left">
+        <a href="/" class="ak-back">
+          <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+          exday.no
+        </a>
+        <span class="ak-sep">/</span>
+        <a href="/aksjer/" class="ak-back">Elmera Group ASA</a>
+      </div>
+      <button id="dark-toggle" class="ak-toggle" aria-label="Bytt fargemodus">
+        <svg class="sun-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+        <svg class="moon-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display:none;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+      </button>
+    </div>
+  </header>
+
 <div class="wrap">
 
-  <nav>
+  <div class="breadcrumb">
     <a href="https://exday.no/">exday.no</a>
     <span>›</span>
     <a href="https://exday.no/aksjer/">Aksjer</a>
     <span>›</span>
-    <a href="https://exday.no/aksjer/sektor/forsyning/">Forsyning</a>
+    <a href="https://exday.no/aksjer/sektor/forsyning/">📊 Forsyning</a>
     <span>›</span>
     ELMRA
-  </nav>
+  </div>
 
   <h1>ELMRA – Elmera Group ASA</h1>
-  <p class="sub">Forsyning · Årlig utbytte · Oslo Børs</p>
+  <p class="sub">📊 Forsyning · Årlig utbytte · Oslo Børs</p>
   <span class="badge">5.71% direkteavkastning</span>
 
-  <div class="grid">
-    <div class="card">
+  <div class="kgrid">
+    <div class="kcard">
       <div class="label">Kurs</div>
       <div class="val">35 NOK</div>
     </div>
-    <div class="card">
+    <div class="kcard">
       <div class="label">Yield</div>
       <div class="val green">5.71%</div>
     </div>
-    <div class="card">
+    <div class="kcard">
       <div class="label">Utbytte/aksje</div>
       <div class="val">2.0 NOK</div>
     </div>
-    <div class="card">
+    <div class="kcard">
       <div class="label">Ex-dato</div>
       <div class="val" style="font-size:1rem">4. mai 2026</div>
     </div>
-    <div class="card">
+    <div class="kcard">
       <div class="label">Utbetalingsdato</div>
       <div class="val" style="font-size:1rem">12. apr 2027</div>
     </div>
-    <div class="card">
+    <div class="kcard">
       <div class="label">5-årssnitt yield</div>
       <div class="val green">12.09%</div>
     </div>
-    <div class="card">
+    <div class="kcard">
       <div class="label">År med utbytte</div>
       <div class="val">7</div>
     </div>
@@ -133,7 +207,10 @@
 
   <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Forsyning</td></tr><tr><td>Frekvens</td><td>Årlig</td></tr><tr><td>Utbytte per aksje</td><td>2.0 NOK</td></tr><tr><td>Direkteavkastning</td><td>5.71%</td></tr><tr><td>5-årssnitt yield</td><td>12.09%</td></tr><tr><td>År med utbytte</td><td>7</td></tr><tr><td>P/E</td><td>24.0</td></tr></tbody></table>
 
-  <h2>Historiske utbytter</h2><table><thead><tr><th>År</th><th>Utbytte</th><th>Yield</th></tr></thead><tbody>
+  <h2>Historiske utbytter</h2><svg viewBox="0 0 420 180" style="width:100%;max-width:420px;height:auto;display:block;margin-bottom:0.5rem;" aria-label="Historiske utbytter per aksje i NOK"><line x1="52" y1="148.0" x2="408" y2="148.0" stroke="#e5e7eb" stroke-width="1" class="ytick"/><text x="48" y="152.0" text-anchor="end" font-size="10" fill="#9ca3af">0.0</text><line x1="52" y1="103.9" x2="408" y2="103.9" stroke="#e5e7eb" stroke-width="1" class="ytick"/><text x="48" y="107.9" text-anchor="end" font-size="10" fill="#9ca3af">1.17</text><line x1="52" y1="60.1" x2="408" y2="60.1" stroke="#e5e7eb" stroke-width="1" class="ytick"/><text x="48" y="64.1" text-anchor="end" font-size="10" fill="#9ca3af">2.33</text><line x1="52" y1="16.0" x2="408" y2="16.0" stroke="#e5e7eb" stroke-width="1" class="ytick"/><text x="48" y="20.0" text-anchor="end" font-size="10" fill="#9ca3af">3.5</text><rect class="hbar" x="78.5" y="16.0" width="36" height="132.0" rx="3" fill="#16a34a" opacity="0.85"/><rect class="hbar" x="167.5" y="91.4" width="36" height="56.6" rx="3" fill="#16a34a" opacity="0.85"/><rect class="hbar" x="256.5" y="61.3" width="36" height="86.7" rx="3" fill="#16a34a" opacity="0.85"/><rect class="hbar" x="345.5" y="34.9" width="36" height="113.1" rx="3" fill="#16a34a" opacity="0.85"/><text x="96.5" y="174" text-anchor="middle" font-size="10" fill="#9ca3af">2022</text><text x="185.5" y="174" text-anchor="middle" font-size="10" fill="#9ca3af">2023</text><text x="274.5" y="174" text-anchor="middle" font-size="10" fill="#9ca3af">2024</text><text x="363.5" y="174" text-anchor="middle" font-size="10" fill="#9ca3af">2025</text><rect class="htip-bg" x="44.5" y="2.0" width="106" height="20" rx="4" fill="#111827" opacity="0" pointer-events="none"/><text class="htip-txt" x="96.5" y="14.0" text-anchor="middle" font-size="10" fill="#f3f4f6" opacity="0" pointer-events="none">3.5 NOK · 28.2% yield</text><rect class="htrig" x="52.0" y="16" width="89.0" height="132" fill="transparent" onmouseenter="showTip(this)" onmouseleave="hideTip(this)" data-i="0"/><rect class="htip-bg" x="133.5" y="63.4" width="106" height="20" rx="4" fill="#111827" opacity="0" pointer-events="none"/><text class="htip-txt" x="185.5" y="78.4" text-anchor="middle" font-size="10" fill="#f3f4f6" opacity="0" pointer-events="none">1.5 NOK · 5.8% yield</text><rect class="htrig" x="141.0" y="16" width="89.0" height="132" fill="transparent" onmouseenter="showTip(this)" onmouseleave="hideTip(this)" data-i="1"/><rect class="htip-bg" x="222.5" y="33.3" width="106" height="20" rx="4" fill="#111827" opacity="0" pointer-events="none"/><text class="htip-txt" x="274.5" y="48.3" text-anchor="middle" font-size="10" fill="#f3f4f6" opacity="0" pointer-events="none">2.3 NOK · 6.5% yield</text><rect class="htrig" x="230.0" y="16" width="89.0" height="132" fill="transparent" onmouseenter="showTip(this)" onmouseleave="hideTip(this)" data-i="2"/><rect class="htip-bg" x="302.0" y="6.9" width="106" height="20" rx="4" fill="#111827" opacity="0" pointer-events="none"/><text class="htip-txt" x="363.5" y="21.9" text-anchor="middle" font-size="10" fill="#f3f4f6" opacity="0" pointer-events="none">3.0 NOK · 7.8% yield</text><rect class="htrig" x="319.0" y="16" width="89.0" height="132" fill="transparent" onmouseenter="showTip(this)" onmouseleave="hideTip(this)" data-i="3"/><text x="16" y="82.0" text-anchor="middle" font-size="10" fill="#9ca3af" transform="rotate(-90,16,82.0)">NOK per aksje</text></svg><script>
+function showTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAll('.htip-bg')[i],tx=s.querySelectorAll('.htip-txt')[i];bg.setAttribute('opacity','0.92');tx.setAttribute('opacity','1');}
+function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAll('.htip-bg')[i],tx=s.querySelectorAll('.htip-txt')[i];bg.setAttribute('opacity','0');tx.setAttribute('opacity','0');}
+</script><table><thead><tr><th>År</th><th>Utbytte</th><th>Yield</th></tr></thead><tbody>
         <tr>
           <td>2025</td>
           <td>3.0 NOK</td>
@@ -155,17 +232,55 @@
           <td>28.19%</td>
         </tr></tbody></table>
 
-  <div style="margin-top:1.5rem;">
-    <a href="/aksjer/sektor/forsyning/" style="font-size:0.9rem;color:#2563eb;">← Se alle Forsyning-aksjer med utbytte</a>
+  <div class="mini-nav">
+    <a href="/aksjer/sektor/forsyning/">← Alle Forsyning-aksjer</a>
+    <span style="color:#9ca3af;">·</span>
+    <a href="/utbyttekalender/">Utbyttekalender</a>
+    <span style="color:#9ca3af;">·</span>
+    <a href="/utbyttekalkulator/">Kalkulator</a>
+    <span style="color:#9ca3af;">·</span>
+    <a href="/aksjer/hoyest-utbytte/">Høyest yield</a>
   </div>
 
   <div class="cta">
-    <p style="margin-bottom:0.75rem;color:#374151;">Se alle norske utbytteaksjer, bygg portefølje og spor ex-datoer</p>
+    <p style="margin-bottom:0.75rem;">Se alle norske utbytteaksjer, bygg portefølje og spor ex-datoer</p>
     <a href="https://exday.no/?aksje=ELMRA">Åpne ELMRA i exday.no →</a>
   </div>
 
-  <p class="updated">Sist oppdatert: 2026-04-04</p>
+  <p class="updated">Sist oppdatert: 2026-04-05</p>
+
+  <footer style="margin-top:2.5rem;padding-top:1.5rem;border-top:1px solid;font-size:0.78rem;text-align:center;" class="ak-footer">
+    <p style="margin-bottom:0.5rem;">exday.no er ikke et verdipapirforetak og tilbyr ikke finansiell rådgivning. Historisk utbytte er ingen garanti for fremtidig utbytte.</p>
+    <p><a href="/personvern/">Personvern</a> · <a href="/faq/">FAQ</a> · <a href="/">exday.no</a></p>
+  </footer>
+  <style>
+    .ak-footer { color: #9ca3af; border-color: #e5e7eb; }
+    .ak-footer a { color: #9ca3af; }
+    .dark .ak-footer { color: #6b7280 !important; border-color: #1f2937 !important; }
+    .dark .ak-footer a { color: #6b7280 !important; }
+  </style>
 
 </div>
+
+<script>
+  (function() {
+    var btn = document.getElementById('dark-toggle');
+    var root = document.documentElement;
+    var sun = btn.querySelector('.sun-icon');
+    var moon = btn.querySelector('.moon-icon');
+    function syncIcons() {
+      var dark = root.classList.contains('dark');
+      sun.style.display = dark ? 'none' : '';
+      moon.style.display = dark ? '' : 'none';
+    }
+    syncIcons();
+    btn.addEventListener('click', function() {
+      var isDark = root.classList.toggle('dark');
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      syncIcons();
+    });
+  })();
+</script>
+
 </body>
 </html>

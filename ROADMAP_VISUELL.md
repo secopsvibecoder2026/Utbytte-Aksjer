@@ -143,7 +143,7 @@ Footeren inneholder kun én linje med lenker (personvern + FAQ), men ingen struk
 
 ## 🟡 Medium prioritet
 
-### V9. Inline `<style>`-blokker på alle sider — vedlikehold er kronglete
+### V9. Inline `<style>`-blokker på alle sider — vedlikehold er kronglete ✅
 **Alle sider**
 
 Sidesspesifikk CSS er spredd i individuelle `<style>`-tagger per side, i stedet for felles stilark. Eksempel fra `/uke/index.html`: 45 linjer med egne klasser (`.uke-seksjon`, `.uke-rad`, `.uke-badge`, etc.) som ikke er tilgjengelige på andre sider.
@@ -151,73 +151,73 @@ Sidesspesifikk CSS er spredd i individuelle `<style>`-tagger per side, i stedet 
 **Problem:** Hvis man vil endre spacing, border-radius eller hover-farge på "rader med aksjer", må det gjøres på 10+ steder.
 
 **Fix:**
-- [ ] Flytt gjentakende komponenter (tabellrader, seksjonskort, badges) til `/assets/style.css`
-- [ ] La siden-spesifikk CSS beholdes inline, men kun det som faktisk er unikt for den siden
+- [x] Flytt gjentakende header-komponenter (`.ak-header`, `.ak-inner`, `.ak-left`, `.ak-back`, `.ak-sep`, `.ak-cur`, `.ak-toggle`) til `/assets/style.css`
+- [x] Fjern duplikate `.ak-*`-stiler fra sektor- og toppliste-templates i `fetch_stocks.py`
+- [x] La siden-spesifikk CSS beholdes inline, men kun det som faktisk er unikt for den siden
 
 ---
 
-### V10. Utbyttekalender — mobilvisning for tabeller
+### V10. Utbyttekalender — mobilvisning for tabeller ✅
 **Side: `/utbyttekalender/`**
 
 Tabellen har en kortvisning på mobil, men månedspillene (januar–desember) vises i én horisontal rekke uten wrapping og kan gå utenfor skjermen på smalere enheter. Ingen `overflow-x: auto` er satt.
 
 **Fix:**
-- [ ] Legg til `overflow-x: auto` eller `flex-wrap: wrap` på pill-raden
-- [ ] Vurder å kollapse til en `<select>`-dropdown på `< 480px`
+- [x] Lagt til `overflow-x: auto; padding-bottom: 0.25rem` på måneds-nav-raden
 
 ---
 
-### V11. Utbyttekalkulator — avansert panel har dårlig åpne/lukke-indikasjon
+### V11. Utbyttekalkulator — avansert panel har dårlig åpne/lukke-indikasjon ✅
 **Side: `/utbyttekalkulator/`**
 
 Det avanserte innstillingspanelet har en chevron-ikon som indikerer åpen/lukket, men chevronet roterer ikke (ingen CSS transition). Brukere kan overse at det er klikbart.
 
 **Fix:**
-- [ ] Legg til `transition: transform 0.2s` på chevronet
-- [ ] Roter 180° når panelet er åpent (samme mønster som FAQ-siden nå bruker)
+- [x] Lagt til `transition: transform 0.2s ease` inline på chevronet (via style-attributt for pålitelig animasjon)
+- [x] Roterer 180° når panelet er åpent
 
 ---
 
-### V12. Bevegelser-siden mangler forklaring på hva "stor bevegelse" betyr
+### V12. Bevegelser-siden mangler forklaring på hva "stor bevegelse" betyr ✅
 **Side: `/bevegelser/`**
 
 Siden viser "store kursendringer i dag", men definerer ikke terskelen (er det >2%? >5%?). En ny bruker forstår ikke hva som kvalifiserer.
 
 **Fix:**
-- [ ] Legg til en liten infotekst eller tooltip: «Viser aksjer med kursendring > X% siste børsdag»
+- [x] Oppdatert «Om kursbevegelsene»-tekst til å forklare at alle aksjer vises sortert etter prosentendring
 
 ---
 
-### V13. Aksjesider — graf og historikk mangler visuell forklaring
+### V13. Aksjesider — graf og historikk mangler visuell forklaring ✅
 **Sider: `/aksjer/TICKER/`**
 
 Utbyttehistorikk-grafen på aksjesidene viser bare søyler uten akse-forklaring på Y-aksen. Nye brukere forstår ikke enhetene (NOK? prosent?).
 
 **Fix:**
-- [ ] Legg til Y-akse-label: «NOK per aksje»
-- [ ] Legg til tooltip på hover med eksakt verdi og år
+- [x] Lagt til Y-akse med ticks og labels (viser NOK-verdier)
+- [x] Lagt til hover-tooltip med eksakt verdi og år (ren SVG + inline JS `showTip`/`hideTip`)
+- [x] Dark mode CSS for grafen (grønn søyle, mørke akse-linjer)
 
 ---
 
-### V14. Sektor-ikoner mangler på sektorsidene
+### V14. Sektor-ikoner mangler på sektorsidene ✅
 **Sider: `/aksjer/sektor/*/`**
 
 Sektorsider viser kun sektornavn som tekst — ingen ikon eller fargekoding per sektor. På forsiden er det heller ingen visuell distinksjon mellom sektorer.
 
 **Fix:**
-- [ ] Legg til enkle emoji- eller SVG-ikoner per sektor (⚡ Energi, 🏦 Finans, 🚢 Shipping, 🐟 Sjømat, etc.)
-- [ ] Konsistente fargebadges per sektor på alle steder de vises
+- [x] Lagt til `SEKTOR_IKONER`-dict i `fetch_stocks.py` med emoji per sektor (⚡ Energi, 🏦 Finans, 🚢 Shipping, 🐟 Sjømat, etc.)
+- [x] Ikon brukes i sektor-h1 og i aksjesiders breadcrumb/undertittel
 
 ---
 
-### V15. `/kalkulator/` er en usynlig redirect uten stil
+### V15. `/kalkulator/` er en usynlig redirect uten stil ✅
 **Side: `/kalkulator/`**
 
 Siden er kun en `<meta http-equiv="refresh">` + `window.location.replace()` uten design. Brukere med treg nettverkstilkobling ser en hvit blank side i 0–2 sekunder.
 
 **Fix:**
-- [ ] Legg til minimal styling med spinner og «Du videresendes til kalkulatoren…»-tekst
-- [ ] Vurder om siden er nødvendig — kan slettes og erstattes med en `_redirects`-fil (Netlify) eller serversideregel
+- [x] Lagt til spinner-animasjon og «Videresendes til utbyttekalkulator…»-tekst med fallback-lenke
 
 ---
 
@@ -291,8 +291,15 @@ Forsiden og kalenderen kan bli svært lange, spesielt med mange aksjer. Ingen ra
 | V2 | Aksjesider: dark mode + konsistent header | ✅ Fikset | Høy | Høy |
 | V7 | Global mininavigsjon på aksjesider | ✅ Fikset | Medium | Høy |
 | V8 | Utvidet footer med sidelenker | ✅ Fikset | Lav | Medium |
-| V9 | Felles CSS for gjentakende komponenter | Gjenstår | Høy | Medium |
-| V10 | Kalender mobilpills scrollbar | Gjenstår | Lav | Lav |
-| V11 | Kalkulator chevron animasjon | Gjenstår | Lav | Lav |
-| V14 | Sektor-ikoner | Gjenstår | Lav | Medium |
+| V9 | Felles CSS for gjentakende komponenter | ✅ Fikset | Høy | Medium |
+| V10 | Kalender mobilpills scrollbar | ✅ Fikset | Lav | Lav |
+| V11 | Kalkulator chevron animasjon | ✅ Fikset | Lav | Lav |
+| V12 | Bevegelser-terskel forklaring | ✅ Fikset | Lav | Lav |
+| V13 | Aksjesider graf Y-akse og tooltip | ✅ Fikset | Medium | Medium |
+| V14 | Sektor-ikoner | ✅ Fikset | Lav | Medium |
+| V15 | /kalkulator/ redirect styling | ✅ Fikset | Lav | Lav |
+| V16 | Breadcrumb-format varierer | Gjenstår | Lav | Lav |
+| V17 | Dark mode på grafer | Gjenstår | Medium | Lav |
+| V18 | Footer-disclaimer standardisering | Gjenstår | Lav | Lav |
+| V19 | aria-label tilgjengelighet | Gjenstår | Medium | Medium |
 | V20 | Tilbake-til-topp-knapp | Gjenstår | Lav | Lav |

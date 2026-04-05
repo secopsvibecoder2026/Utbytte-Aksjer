@@ -6,37 +6,99 @@
   <title>Eiendom-aksjer med utbytte | Oslo Børs | exday.no</title>
   <meta name="description" content="4 norske eiendom-aksjer på Oslo Børs med gjennomsnittlig utbytteyield på 1.8%. Se yield, ex-dato og historikk på exday.no."/>
   <link rel="canonical" href="https://exday.no/aksjer/sektor/eiendom/"/>
+  <meta name="theme-color" content="#16a34a"/>
+  <link rel="icon" type="image/svg+xml" href="/logo/exday_icon_primary.svg"/>
   <meta property="og:title" content="Eiendom-aksjer med utbytte – exday.no"/>
   <meta property="og:description" content="4 norske eiendom-aksjer på Oslo Børs med gjennomsnittlig utbytteyield på 1.8%. Se yield, ex-dato og historikk på exday.no."/>
   <meta property="og:url" content="https://exday.no/aksjer/sektor/eiendom/"/>
   <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Hjem", "item": "https://exday.no/"}, {"@type": "ListItem", "position": 2, "name": "Aksjer", "item": "https://exday.no/aksjer/"}, {"@type": "ListItem", "position": 3, "name": "Eiendom", "item": "https://exday.no/aksjer/sektor/eiendom/"}]}</script>
+  <link rel="stylesheet" href="/assets/tailwind.css"/>
+  <link rel="stylesheet" href="/assets/style.css"/>
+  <script>
+    (function(){
+      var t = localStorage.getItem('theme');
+      if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
+      }
+    })();
+  </script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: system-ui, -apple-system, sans-serif; background: #f9fafb; color: #111827; line-height: 1.6; }
-    a { color: #2563eb; text-decoration: none; }
+    body { font-family: system-ui, -apple-system, sans-serif; line-height: 1.6; }
+    a { color: #16a34a; text-decoration: none; }
     a:hover { text-decoration: underline; }
-    .wrap { max-width: 900px; margin: 0 auto; padding: 1.5rem 1rem; }
-    nav { font-size: 0.85rem; color: #6b7280; margin-bottom: 1.5rem; }
+    .wrap { max-width: 900px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+    .breadcrumb { font-size: 0.85rem; color: #6b7280; margin-bottom: 1.5rem; }
+    .breadcrumb a { color: #6b7280; }
+    .breadcrumb span { margin: 0 0.35rem; }
     h1 { font-size: 1.75rem; font-weight: 700; margin-bottom: 0.5rem; }
-    .sub { color: #6b7280; margin-bottom: 1.5rem; font-size: 0.95rem; }
+    .sub { margin-bottom: 1.5rem; font-size: 0.95rem; }
     .stats { display: flex; gap: 1.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
-    .stat { background: #fff; border: 1px solid #e5e7eb; border-radius: 0.5rem; padding: 0.75rem 1.25rem; }
-    .stat-val { font-size: 1.4rem; font-weight: 700; color: #2563eb; }
-    .stat-lbl { font-size: 0.75rem; color: #6b7280; text-transform: uppercase; letter-spacing: 0.04em; }
-    table { width: 100%; border-collapse: collapse; background: #fff; border: 1px solid #e5e7eb; border-radius: 0.75rem; overflow: hidden; font-size: 0.9rem; }
-    th { background: #f3f4f6; padding: 0.6rem 1rem; text-align: left; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: #6b7280; }
-    td { padding: 0.65rem 1rem; border-top: 1px solid #f3f4f6; }
-    tr:hover td { background: #f9fafb; }
-    .yield { color: #0891b2; font-weight: 600; }
+    .stat { border-radius: 0.5rem; padding: 0.75rem 1.25rem; border: 1px solid; }
+    .stat-val { font-size: 1.4rem; font-weight: 700; color: #16a34a; }
+    .stat-lbl { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    table { width: 100%; border-collapse: collapse; border-radius: 0.75rem; overflow: hidden; font-size: 0.9rem; border: 1px solid; }
+    th { padding: 0.6rem 1rem; text-align: left; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; }
+    td { padding: 0.65rem 1rem; border-top: 1px solid; }
+    .yield { font-weight: 600; color: #16a34a; }
     .cta { margin-top: 1.5rem; text-align: center; }
-    .cta a { display: inline-block; background: #2563eb; color: #fff; font-weight: 600; padding: 0.65rem 1.5rem; border-radius: 0.5rem; }
-    .updated { font-size: 0.78rem; color: #9ca3af; text-align: right; margin-top: 1rem; }
+    .cta a { display: inline-block; background: #16a34a; color: #fff !important; font-weight: 600; padding: 0.65rem 1.5rem; border-radius: 0.5rem; text-decoration: none; }
+    .cta a:hover { background: #15803d; }
+    .updated { font-size: 0.78rem; text-align: right; margin-top: 1rem; }
+
+    body { background: #f9fafb; color: #111827; }
+    .stat { background: #fff; border-color: #e5e7eb; }
+    .stat-lbl { color: #6b7280; }
+    table { background: #fff; border-color: #e5e7eb; }
+    th { background: #f3f4f6; color: #6b7280; }
+    td { border-color: #f3f4f6; }
+    tr:hover td { background: #f9fafb; }
+    .sub { color: #6b7280; }
+    .updated { color: #9ca3af; }
+
+    .dark body { background: #030712; color: #f3f4f6; }
+    .dark .stat { background: #111827; border-color: #1f2937; }
+    .dark .stat-lbl { color: #9ca3af; }
+    .dark table { background: #111827; border-color: #1f2937; }
+    .dark th { background: #1f2937; color: #9ca3af; }
+    .dark td { border-color: #1f2937; }
+    .dark tr:hover td { background: #1f2937; }
+    .dark .sub { color: #9ca3af; }
+    .dark .updated { color: #6b7280; }
+    .dark a { color: #4ade80; }
+    .dark .breadcrumb { color: #9ca3af; }
+    .dark .breadcrumb a { color: #9ca3af; }
+    .dark .stat-val { color: #4ade80; }
+    .dark .yield { color: #4ade80; }
+    .dark .cta a { background: #16a34a; color: #fff !important; }
   </style>
 </head>
 <body>
+  <header style="position:sticky;top:0;z-index:40;border-bottom:1px solid #e5e7eb;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.06);" class="ak-header">
+    <div style="max-width:900px;margin:0 auto;padding:0.6rem 1rem;display:flex;align-items:center;justify-content:space-between;gap:0.75rem;">
+      <div style="display:flex;align-items:center;gap:0.6rem;font-size:0.875rem;">
+        <a href="/" style="display:inline-flex;align-items:center;gap:0.35rem;color:#6b7280;text-decoration:none;" class="ak-back">
+          <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+          <span style="font-weight:500;">exday.no</span>
+        </a>
+        <span style="color:#d1d5db;">/</span>
+        <span style="font-weight:600;font-size:0.875rem;" class="ak-title">Eiendom</span>
+      </div>
+      <button id="dark-toggle" style="padding:0.4rem;border-radius:0.5rem;border:none;cursor:pointer;background:transparent;color:#6b7280;" aria-label="Bytt fargemodus" class="ak-toggle">
+        <svg class="sun-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+        <svg class="moon-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display:none;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+      </button>
+    </div>
+  </header>
 <div class="wrap">
-  <nav><a href="https://exday.no/">exday.no</a> › <a href="/aksjer/">Aksjer</a> › Eiendom</nav>
-  <h1>Eiendom-aksjer med utbytte</h1>
+  <div class="breadcrumb">
+    <a href="https://exday.no/">exday.no</a>
+    <span>›</span>
+    <a href="/aksjer/">Aksjer</a>
+    <span>›</span>
+    Eiendom
+  </div>
+  <h1>🏢 Eiendom-aksjer med utbytte</h1>
   <p class="sub">4 norske eiendom-aksjer på Oslo Børs. Sortert etter direkteavkastning.</p>
   <div class="stats">
     <div class="stat"><div class="stat-val">4</div><div class="stat-lbl">Aksjer</div></div>
@@ -76,7 +138,26 @@
         </tr></tbody>
   </table>
   <div class="cta"><a href="https://exday.no/">Åpne full app med filtrering og porteføljekalkulator →</a></div>
-  <p class="updated">Sist oppdatert: 2026-04-04</p>
+  <p class="updated">Sist oppdatert: 2026-04-05</p>
 </div>
+<script>
+  (function() {
+    var btn = document.getElementById('dark-toggle');
+    var root = document.documentElement;
+    var sun = btn.querySelector('.sun-icon');
+    var moon = btn.querySelector('.moon-icon');
+    function syncIcons() {
+      var dark = root.classList.contains('dark');
+      sun.style.display = dark ? 'none' : '';
+      moon.style.display = dark ? '' : 'none';
+    }
+    syncIcons();
+    btn.addEventListener('click', function() {
+      var isDark = root.classList.toggle('dark');
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      syncIcons();
+    });
+  })();
+</script>
 </body>
 </html>

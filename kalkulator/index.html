@@ -2,12 +2,30 @@
 <html lang="no">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta http-equiv="refresh" content="0; url=https://exday.no/utbyttekalkulator/" />
   <link rel="canonical" href="https://exday.no/utbyttekalkulator/" />
+  <link rel="icon" type="image/svg+xml" href="/logo/exday_icon_primary.svg" />
   <title>Utbyttekalkulator – exday.no</title>
+  <style>
+    body { margin: 0; font-family: system-ui, -apple-system, sans-serif;
+           background: #f9fafb; display: flex; align-items: center; justify-content: center;
+           min-height: 100vh; text-align: center; color: #374151; }
+    .box { padding: 2rem 1.5rem; }
+    .spinner { width: 36px; height: 36px; border: 3px solid #dcfce7;
+               border-top-color: #16a34a; border-radius: 50%;
+               animation: spin 0.7s linear infinite; margin: 0 auto 1.25rem; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    p { font-size: 0.95rem; margin: 0 0 0.5rem; }
+    a { color: #16a34a; font-size: 0.875rem; }
+  </style>
 </head>
 <body>
-  <script>window.location.replace('https://exday.no/utbyttekalkulator/');</script>
-  <a href="https://exday.no/utbyttekalkulator/">Gå til utbyttekalkulator</a>
+  <div class="box">
+    <div class="spinner"></div>
+    <p>Videresendes til utbyttekalkulator…</p>
+    <a href="/utbyttekalkulator/">Klikk her hvis siden ikke lastes automatisk</a>
+  </div>
+  <script>window.location.replace('/utbyttekalkulator/');</script>
 </body>
 </html>
