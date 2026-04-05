@@ -45,6 +45,31 @@ Alle punkter som er ferdig implementert.
 - **T2. Feilhåndtering overfor brukeren** — rød feilbanner med «Prøv igjen»-knapp ved lastfeil; cacher JSON til localStorage ved suksess; ved feil lastes cache med gul advarsel og dato; tom tilstand med forklarende tekst når ingen cache finnes
 - **35c. TWR/IRR — tidskorrigert avkastning** — `beregnIRR()` via Newton-Raphson fra full transaksjonshistorikk + nåværende verdi; annualisert IRR-kort i Statistikk-fanen; `beregnTWRSerie()` eliminerer innskuddseffekt fra historikk-kurven; blå TWR-linje i grafen vises når den avviker fra råverdi
 - **T3. Tilgjengelighet (accessibility)** — `aria-label` på alle ikonknapper (tannhjul, sol/måne, stjerne); `role="dialog"` + `aria-modal="true"` + `aria-labelledby` på alle modaler; Escape-tast lukker alle modaler; `aria-sort` på sorterbare kolonner; `aria-hidden="true"` på dekorative SVG-er
+
+---
+
+## Visuell og UX-gjennomgang (april 2026)
+
+- **V1. Blå theme-color og CTA på utbyttekalender** — `theme-color` endret fra `#2563eb` til `#16a34a`; CTA-knapp fra `bg-blue-600` til `bg-brand-600`
+- **V2. Aksjesider visuelt brudd** — alle genererte aksjesider (`/aksjer/TICKER/`, sektor, toppliste) fikk dark mode, sticky header med dark-toggle, `theme-color` og konsistent header-struktur via `fetch_stocks.py`-templates
+- **V3. localStorage-nøkkel-kaos** — standardisert dark mode-nøkkel til `'theme'` på tvers av alle sider; `innstillinger`, `personvern` og `faq` brukte tidligere `'darkMode'` og `'tema'`
+- **V4. Inkonsistent theme-color** — alle `<meta name="theme-color">` standardisert til `#16a34a`
+- **V5. CDN-Tailwind på personvern og faq** — erstattet `cdn.tailwindcss.com` med lokal `tailwind.css` + `style.css`; dark-toggle og system-preference fallback lagt til
+- **V6. Inkonsistente knappfarger** — standardisert alle primærknapper til `bg-brand-600 hover:bg-brand-700`
+- **V7. Manglende navigasjon** — mini-nav lagt til på alle genererte aksjesider; FAQ-lenke i footer på alle undersider
+- **V8. Rotete footer** — footer med nav-lenker (Kalender · Kalkulator · Høyest yield · FAQ · Personvern) lagt til på alle undersider
+- **V9. Duplisert inline CSS** — felles `.ak-header`, `.ak-inner`, `.ak-back`, `.ak-toggle` m.fl. flyttet til `/assets/style.css`; duplikater fjernet fra sektor- og toppliste-templates
+- **V10. Kalender mobilscroll** — `overflow-x: auto` lagt til på måneds-nav-raden
+- **V11. Kalkulator chevron-animasjon** — `transition: transform 0.2s ease` lagt til inline; roterer 180° ved åpning
+- **V12. Bevegelser-forklaring** — «Om kursbevegelsene»-tekst oppdatert til å forklare at alle aksjer vises sortert etter prosentendring
+- **V13. Aksjesider graf Y-akse og tooltip** — inline SVG-bar-chart fikk Y-akse med ticks og labels (NOK-verdier) og hover-tooltip via `showTip`/`hideTip`; dark mode CSS
+- **V14. Sektor-ikoner** — `SEKTOR_IKONER`-dict med emoji per sektor (⚡🏦🚢🐟💻🏗️🏢 m.fl.) lagt til i `fetch_stocks.py`; brukes i h1 og breadcrumb
+- **V15. /kalkulator/ redirect** — lagt til CSS-spinner og «Videresendes til utbyttekalkulator…»-tekst med fallback-lenke
+- **V16. Breadcrumb-separatorer** — alle `.breadcrumb`-separatorer standardisert fra `›` til `/` i alle genererte sider
+- **V17. Dark mode på grafer** — verifisert: kalkulator-grafen sjekker `isDark` ved rendering; SVG-grafer har `.dark .hbar` og `.dark .ytick` CSS
+- **V18. Footer-disclaimer** — footer lagt til på `/utbyttekalender/` (manglet helt); alle undersider har nå identisk kortversjon
+- **V19. aria-label tilgjengelighet** — verifisert at alle icon-only knapper har `aria-label` på tvers av alle sider
+- **V20. Tilbake-til-topp** — knapp + scroll-handler lagt til på `/uke/`, `/bevegelser/`, `/utbyttekalender/`, `/utbyttekalkulator/`
 - **Transaksjoner slått sammen med Beholdning** — egne kjøpsdato/kjøpskurs-felt direkte i «Legg til aksje»-skjemaet; transaksjonslogg og kostbasis-tabell i kollapserbar seksjon under beholdningslisten; Transaksjoner-fanen fjernet
 - **Innstillinger som egen URL (/innstillinger/)** — innstillinger-modal fjernet; tannhjul-knapp er nå en `<a href="/innstillinger/">`; standalone side med profil, porteføljeadministrasjon (opprett/gi nytt navn/slett), varsler, guide og data-seksjon; ingen full-sideominnlasting ved navigasjon
 - **Forenklet onboarding** — ett-stegs modal med bare brukernavn + «Gjenopprett backup»-knapp; tom portefølje viser inline 3-stegs guide som forsvinner automatisk når første aksje legges til
