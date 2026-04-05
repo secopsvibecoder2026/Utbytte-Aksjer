@@ -93,7 +93,7 @@ function byggDetailHtml(ticker, kb, marked) {
 }
 
 
-const STATS_TABS = ['oversikt', 'inntekt', 'beholdning', 'sektorer', 'rebalansering'];
+const STATS_TABS = ['oversikt', 'inntekt', 'beholdning', 'sektorer'];
 let aktivStatsTab = 'oversikt';
 
 function byttStatsSubTab(tab) {
@@ -118,14 +118,7 @@ function byttStatsSubTab(tab) {
     if (tab === 'inntekt')       visMaanedChart(beholdning);
     if (tab === 'beholdning')    { visVerdiChart(beholdning); visCharts(beholdning, totalAr); }
     if (tab === 'sektorer')      { visSektorYieldChart(beholdning); visCharts(beholdning, totalAr); }
-    if (tab === 'rebalansering') visRebalansering(beholdning);
   }
-
-  // Nullstill rebalanserings-mål
-  document.getElementById('rebal-nullstill')?.addEventListener('click', () => {
-    lagreRebalanseringsmaal({});
-    if (window._pfSisteData) visRebalansering(window._pfSisteData.beholdning);
-  });
 }
 
 function initPFSubTabs() {
@@ -1062,7 +1055,6 @@ function visPortefolje() {
   if (aktivStatsTab === 'inntekt')       visMaanedChart(alleBeholdning);
   if (aktivStatsTab === 'beholdning')    { visVerdiChart(alleBeholdning); visCharts(alleBeholdning, totalAr); }
   if (aktivStatsTab === 'sektorer')      { visSektorYieldChart(alleBeholdning); visCharts(alleBeholdning, totalAr); }
-  if (aktivStatsTab === 'rebalansering') visRebalansering(alleBeholdning);
   if (!['beholdning','sektorer'].includes(aktivStatsTab)) {
     const cw = document.getElementById('pf-charts-wrapper');
     if (cw) cw.style.display = 'none';

@@ -215,12 +215,24 @@ function initOversiktSubTabs() {
 function initVerktoySubTabs() {
   const nav = document.getElementById('verktoy-sub-nav');
   if (!nav) return;
+
+  // Nullstill rebalanserings-mål
+  document.getElementById('rebal-nullstill')?.addEventListener('click', () => {
+    if (typeof lagreRebalanseringsmaal === 'function') lagreRebalanseringsmaal({});
+    const beholdning = window._pfSisteData?.beholdning || [];
+    if (typeof visRebalansering === 'function') visRebalansering(beholdning);
+  });
+
   nav.addEventListener('click', e => {
     const btn = e.target.closest('[data-verktoy-subtab]');
     if (!btn) return;
     nav.querySelectorAll('[data-verktoy-subtab]').forEach(b => b.classList.toggle('active', b === btn));
     const subtab = btn.dataset.verktoySubtab;
     document.getElementById('verktoy-subtab-kalkulator').classList.toggle('hidden', subtab !== 'kalkulator');
+    document.getElementById('verktoy-subtab-rebalansering').classList.toggle('hidden', subtab !== 'rebalansering');
+    if (subtab === 'rebalansering' && typeof visRebalansering === 'function') {
+      visRebalansering(window._pfSisteData?.beholdning || []);
+    }
   });
 }
 

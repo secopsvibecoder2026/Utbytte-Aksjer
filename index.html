@@ -219,6 +219,7 @@
     <!-- VERKTØY SUB-FANE NAVIGASJON (vises kun når Verktøy-fanen er aktiv) -->
     <nav id="verktoy-sub-nav" class="hidden flex gap-1 border-b border-gray-200 dark:border-gray-800">
       <button class="sub-tab-btn active" data-verktoy-subtab="kalkulator">Kalkulator</button>
+      <button class="sub-tab-btn" data-verktoy-subtab="rebalansering">Rebalansering</button>
     </nav>
 
     <!-- FILTER BAR -->
@@ -641,7 +642,6 @@
           <button class="stats-sub-btn px-3 py-1.5 text-sm font-medium rounded-lg text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors whitespace-nowrap" data-stats-tab="inntekt">Inntekt</button>
           <button class="stats-sub-btn px-3 py-1.5 text-sm font-medium rounded-lg text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors whitespace-nowrap" data-stats-tab="beholdning">Beholdning</button>
           <button class="stats-sub-btn px-3 py-1.5 text-sm font-medium rounded-lg text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors whitespace-nowrap" data-stats-tab="sektorer">Sektorer</button>
-          <button class="stats-sub-btn px-3 py-1.5 text-sm font-medium rounded-lg text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors whitespace-nowrap" data-stats-tab="rebalansering">Rebalansering</button>
         </div>
 
         <!-- Tom tilstand Statistikk -->
@@ -874,19 +874,6 @@
 
         </div><!-- /stats-sub-sektorer -->
 
-        <!-- ── REBALANSERING ── -->
-        <div id="stats-sub-rebalansering" class="hidden space-y-4">
-          <div class="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4 shadow-sm">
-            <div class="flex items-center justify-between mb-4">
-              <div>
-                <h3 class="font-semibold text-sm">Sektormål</h3>
-                <p class="text-xs text-gray-400 dark:text-gray-500 mt-0.5">Sett ønsket vekting per sektor. Grønn = OK (±5%), oransje = kjøp mer, rød = reduser.</p>
-              </div>
-              <button id="rebal-nullstill" class="text-xs text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors">Nullstill mål</button>
-            </div>
-            <div id="rebal-rader" class="space-y-3"></div>
-          </div>
-        </div><!-- /stats-sub-rebalansering -->
 
       </div>
 
@@ -1061,6 +1048,18 @@
             <tbody id="kal-tabell" class="divide-y divide-gray-100 dark:divide-gray-800"></tbody>
           </table>
         </div>
+      </div>
+    </div>
+    <div id="verktoy-subtab-rebalansering" class="hidden space-y-6 max-w-2xl mx-auto">
+      <div class="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4 shadow-sm">
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <h2 class="font-semibold text-base">Rebalansering</h2>
+            <p class="text-xs text-gray-400 dark:text-gray-500 mt-0.5">Sett ønsket vekting per sektor. Grønn = OK (±5%), oransje = kjøp mer, rød = reduser.</p>
+          </div>
+          <button id="rebal-nullstill" class="text-xs text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors">Nullstill mål</button>
+        </div>
+        <div id="rebal-rader" class="space-y-3"></div>
       </div>
     </div>
     </div><!-- /tab-verktoy -->
