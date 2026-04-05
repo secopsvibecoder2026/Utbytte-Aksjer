@@ -121,9 +121,16 @@ function initDarkMode() {
 function initTilbakeTopp() {
   const btn = document.getElementById('tilbake-topp');
   if (!btn) return;
-  window.addEventListener('scroll', () => {
-    btn.classList.toggle('hidden', window.scrollY < 300);
-  }, { passive: true });
+  const TERSKEL = 200;
+  function sjekkScroll() {
+    const scrolled = window.scrollY || document.documentElement.scrollTop || 0;
+    if (scrolled >= TERSKEL) {
+      btn.classList.remove('hidden');
+    } else {
+      btn.classList.add('hidden');
+    }
+  }
+  window.addEventListener('scroll', sjekkScroll, { passive: true });
   btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 }
 
