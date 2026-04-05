@@ -82,12 +82,26 @@
       banner.remove();
     });
 
-    // Mørk modus
-    if (document.documentElement.classList.contains('dark')) {
-      banner.style.background = '#1f2937';
-      banner.style.borderTopColor = '#374151';
-      banner.style.color = '#d1d5db';
+    // Mørk modus – sett ved oppstart og lytt på tema-endringer
+    function oppdaterTema() {
+      var mork = document.documentElement.classList.contains('dark');
+      banner.style.background     = mork ? '#1f2937' : '#fff';
+      banner.style.borderTopColor = mork ? '#374151' : '#d1fae5';
+      banner.style.color          = mork ? '#d1d5db' : '#374151';
+      var avslaaBtn = document.getElementById('cookie-decline');
+      if (avslaaBtn) {
+        avslaaBtn.style.background = mork ? '#374151' : '#fff';
+        avslaaBtn.style.color      = mork ? '#d1d5db' : '#374151';
+        avslaaBtn.style.borderColor = mork ? '#4b5563' : '#d1d5db';
+      }
     }
+    oppdaterTema();
+
+    // Observer som fanger opp mørk/lys-bytte
+    new MutationObserver(oppdaterTema).observe(
+      document.documentElement,
+      { attributes: true, attributeFilter: ['class'] }
+    );
   }
 
   if (document.readyState === 'loading') {

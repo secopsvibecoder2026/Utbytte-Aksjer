@@ -212,9 +212,98 @@ function initOversiktSubTabs() {
   });
 }
 
+// ── FIRE-KALKULATOR ──────────────────────────────────────────────────────────
+function beregnFire() {
+  const maaned   = parseFloat(document.getElementById('fire-maaned')?.value) || 0;
+  const yieldPct = parseFloat(document.getElementById('fire-yield')?.value)  || 5;
+  const pf       = parseFloat(document.getElementById('fire-portefolje')?.value) || 0;
+  const sparing  = parseFloat(document.getElementById('fire-sparing')?.value) || 0;
+  const konto    = document.querySelector('input[name="fire-konto"]:checked')?.value || 'ask';
+
+  const SKATT = konto === 'ask' ? 0.3784 : konto === 'vanlig' ? 0.22 : 0;
+  const yieldR = yieldPct / 100;
+
+  // Brutto utbytte nødvendig per år = netto / (1 - skatt)
+  const bruttoAar = (maaned * 12) / (1 - SKATT);
+  const kapital   = SKATT === 0 ? (maaned * 12) / yieldR : bruttoAar / yieldR;
+
+  // Antall år til FIRE med compound growth (yield reinvestert + sparing)
+  // FV = PV*(1+r)^n + PMT*((1+r)^n - 1)/r >= kapital
+  const PMT = sparing * 12;
+  let ar = null;
+  if (pf >= kapital) {
+    ar = 0;
+  } else if (PMT === 0 && pf === 0) {
+    ar = null;
+  } else {
+    for (let n = 1; n <= 100; n++) {
+      const fv = pf * Math.pow(1 + yieldR, n) + (PMT > 0 ? PMT * (Math.pow(1 + yieldR, n) - 1) / yieldR : 0);
+      if (fv >= kapital) { ar = n; break; }
+    }
+  }
+
+  const prosent = kapital > 0 ? Math.min(100, (pf / kapital) * 100) : 0;
+  const fireAar = ar !== null ? new Date().getFullYear() + ar : null;
+
+  // Oppdater DOM
+  const fmt = v => v >= 1e6
+    ? (v / 1e6).toLocaleString('nb', { maximumFractionDigits: 2 }) + ' mill. kr'
+    : Math.round(v).toLocaleString('nb') + ' kr';
+
+  document.getElementById('fire-ut-kapital').textContent = fmt(kapital);
+  document.getElementById('fire-ut-brutto').textContent  = fmt(bruttoAar);
+  document.getElementById('fire-ut-ar').textContent      = ar === null ? '> 100 år' : ar === 0 ? 'Allerede FIRE! 🎉' : ar + ' år';
+  document.getElementById('fire-ut-prosent').textContent = prosent.toFixed(1) + '%';
+  document.getElementById('fire-ut-bar').style.width     = prosent + '%';
+
+  const tl = document.getElementById('fire-ut-tidslinje');
+  if (ar !== null && ar > 0) {
+    const halvveis = pf > 0 || PMT > 0
+      ? (() => {
+          for (let n = 1; n <= 100; n++) {
+            const fv = pf * Math.pow(1 + yieldR, n) + (PMT > 0 ? PMT * (Math.pow(1 + yieldR, n) - 1) / yieldR : 0);
+            if (fv >= kapital / 2) return n;
+          }
+          return null;
+        })()
+      : null;
+    tl.innerHTML =
+      (halvveis ? `<p>📍 Halvveis om ${halvveis} år (${new Date().getFullYear() + halvveis})</p>` : '') +
+      `<p>🏁 FIRE-dato: ${fireAar}</p>` +
+      `<p>💡 Netto månedlig utbytte ved FIRE: ${Math.round(maaned).toLocaleString('nb')} kr</p>`;
+  } else if (ar === 0) {
+    tl.innerHTML = '<p>🎉 Porteføljen din dekker allerede målet ditt!</p>';
+  } else {
+    tl.innerHTML = '<p>Fyll inn månedlig sparing eller nåværende portefølje for å beregne tid til FIRE.</p>';
+  }
+}
+
+function initFire() {
+  ['fire-maaned','fire-yield','fire-portefolje','fire-sparing'].forEach(id => {
+    document.getElementById(id)?.addEventListener('input', beregnFire);
+  });
+  document.querySelectorAll('input[name="fire-konto"]').forEach(r => {
+    r.addEventListener('change', beregnFire);
+  });
+  // Fyll inn porteføljeverdien fra eksisterende data hvis tilgjengelig
+  const pfBtn = document.getElementById('fire-fra-portefolje');
+  if (pfBtn) {
+    pfBtn.addEventListener('click', () => {
+      const totalVerdi = window._pfSisteData?.beholdning?.reduce((s, a) => s + a.antall * (a.pris || 0), 0) || 0;
+      if (totalVerdi > 0) {
+        document.getElementById('fire-portefolje').value = Math.round(totalVerdi);
+        beregnFire();
+      }
+    });
+  }
+  beregnFire();
+}
+
 function initVerktoySubTabs() {
   const nav = document.getElementById('verktoy-sub-nav');
   if (!nav) return;
+
+  initFire();
 
   // Nullstill rebalanserings-mål
   document.getElementById('rebal-nullstill')?.addEventListener('click', () => {
@@ -229,10 +318,12 @@ function initVerktoySubTabs() {
     nav.querySelectorAll('[data-verktoy-subtab]').forEach(b => b.classList.toggle('active', b === btn));
     const subtab = btn.dataset.verktoySubtab;
     document.getElementById('verktoy-subtab-kalkulator').classList.toggle('hidden', subtab !== 'kalkulator');
+    document.getElementById('verktoy-subtab-fire').classList.toggle('hidden', subtab !== 'fire');
     document.getElementById('verktoy-subtab-rebalansering').classList.toggle('hidden', subtab !== 'rebalansering');
     if (subtab === 'rebalansering' && typeof visRebalansering === 'function') {
       visRebalansering(window._pfSisteData?.beholdning || []);
     }
+    if (subtab === 'fire') beregnFire();
   });
 }
 

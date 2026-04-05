@@ -219,6 +219,7 @@
     <!-- VERKTØY SUB-FANE NAVIGASJON (vises kun når Verktøy-fanen er aktiv) -->
     <nav id="verktoy-sub-nav" class="hidden flex gap-1 border-b border-gray-200 dark:border-gray-800">
       <button class="sub-tab-btn active" data-verktoy-subtab="kalkulator">Kalkulator</button>
+      <button class="sub-tab-btn" data-verktoy-subtab="fire">FIRE</button>
       <button class="sub-tab-btn" data-verktoy-subtab="rebalansering">Rebalansering</button>
     </nav>
 
@@ -1050,6 +1051,82 @@
         </div>
       </div>
     </div>
+    <!-- FIRE-KALKULATOR -->
+    <div id="verktoy-subtab-fire" class="hidden space-y-5 max-w-2xl mx-auto">
+
+      <!-- Inndata -->
+      <div class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-5 shadow-sm space-y-4">
+        <div>
+          <h2 class="font-semibold text-base">FIRE-kalkulator</h2>
+          <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Beregn nødvendig kapital og antall år til du kan leve av utbytte.</p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Ønsket netto månedsinntekt (kr)</label>
+            <input id="fire-maaned" type="number" min="0" step="1000" value="30000" class="filter-input w-full" />
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Forventet yield (%)</label>
+            <input id="fire-yield" type="number" min="0.1" max="30" step="0.1" value="5" class="filter-input w-full" />
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Nåværende porteføljeverdi (kr)</label>
+            <input id="fire-portefolje" type="number" min="0" step="10000" value="0" class="filter-input w-full" />
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Månedlig sparing (kr)</label>
+            <input id="fire-sparing" type="number" min="0" step="500" value="5000" class="filter-input w-full" />
+          </div>
+        </div>
+
+        <div class="flex items-center gap-4 flex-wrap">
+          <span class="text-xs font-medium text-gray-600 dark:text-gray-400">Kontotype:</span>
+          <label class="flex items-center gap-1.5 text-xs cursor-pointer">
+            <input type="radio" name="fire-konto" value="ask" checked class="accent-brand-600" /> ASK (37,84% skatt)
+          </label>
+          <label class="flex items-center gap-1.5 text-xs cursor-pointer">
+            <input type="radio" name="fire-konto" value="vanlig" class="accent-brand-600" /> Vanlig konto (22% skatt)
+          </label>
+          <label class="flex items-center gap-1.5 text-xs cursor-pointer">
+            <input type="radio" name="fire-konto" value="ingen" class="accent-brand-600" /> Ingen skatt
+          </label>
+        </div>
+      </div>
+
+      <!-- Resultat -->
+      <div id="fire-resultat" class="rounded-xl border border-brand-200 dark:border-brand-800 bg-brand-50 dark:bg-brand-900/20 p-5 shadow-sm space-y-4">
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+          <div class="text-center">
+            <p class="text-xs text-gray-500 dark:text-gray-400 mb-0.5">Nødvendig kapital</p>
+            <p id="fire-ut-kapital" class="text-xl font-bold text-brand-700 dark:text-brand-400">—</p>
+          </div>
+          <div class="text-center">
+            <p class="text-xs text-gray-500 dark:text-gray-400 mb-0.5">Brutto per år</p>
+            <p id="fire-ut-brutto" class="text-xl font-bold text-gray-800 dark:text-gray-200">—</p>
+          </div>
+          <div class="text-center col-span-2 sm:col-span-1">
+            <p class="text-xs text-gray-500 dark:text-gray-400 mb-0.5">År til FIRE</p>
+            <p id="fire-ut-ar" class="text-xl font-bold text-gray-800 dark:text-gray-200">—</p>
+          </div>
+        </div>
+
+        <!-- Fremgang -->
+        <div>
+          <div class="flex justify-between text-xs text-gray-500 dark:text-gray-400 mb-1">
+            <span>Fremgang mot målet</span>
+            <span id="fire-ut-prosent">0%</span>
+          </div>
+          <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
+            <div id="fire-ut-bar" class="bg-brand-600 h-2.5 rounded-full transition-all duration-500" style="width:0%"></div>
+          </div>
+        </div>
+
+        <!-- Tidslinje -->
+        <div id="fire-ut-tidslinje" class="text-xs text-gray-500 dark:text-gray-400 space-y-0.5"></div>
+      </div>
+    </div>
+
     <div id="verktoy-subtab-rebalansering" class="hidden space-y-6 max-w-2xl mx-auto">
       <div class="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4 shadow-sm">
         <div class="flex items-center justify-between mb-4">
