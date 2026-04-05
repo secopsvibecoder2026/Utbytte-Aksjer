@@ -290,5 +290,34 @@
       document.getElementById('undertittel').textContent = 'Kunne ikke laste data. Prøv igjen senere.';
     });
   </script>
+
+  <footer class="mt-10 border-t border-gray-200 dark:border-gray-800 py-5 text-center text-xs text-gray-400 dark:text-gray-600 space-y-1 px-4">
+    <p>exday.no er ikke et verdipapirforetak og tilbyr ikke finansiell rådgivning. Historisk utbytte er ingen garanti for fremtidig utbytte.</p>
+    <p class="mt-1">
+      <a href="/uke/" class="hover:underline">Ukens oversikt</a> ·
+      <a href="/utbyttekalkulator/" class="hover:underline">Kalkulator</a> ·
+      <a href="/aksjer/hoyest-utbytte/" class="hover:underline">Høyest yield</a> ·
+      <a href="/faq/" class="hover:underline">FAQ</a> ·
+      <a href="/personvern/" class="hover:underline">Personvern</a>
+    </p>
+  </footer>
+
+  <!-- TILBAKE TIL TOPPEN -->
+  <button id="tilbake-topp" aria-label="Tilbake til toppen"
+    class="fixed bottom-5 right-4 z-50 hidden p-2.5 rounded-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-md text-gray-500 dark:text-gray-400 hover:text-brand-600 dark:hover:text-brand-400 hover:border-brand-300 dark:hover:border-brand-700 transition-all duration-200">
+    <svg class="w-4 h-4" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 15l7-7 7 7"/></svg>
+  </button>
+  <script>
+    (function() {
+      var btn = document.getElementById('tilbake-topp');
+      window.addEventListener('scroll', function() {
+        btn.classList.toggle('hidden', window.scrollY < 400);
+      }, { passive: true });
+      btn.addEventListener('click', function() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    })();
+  </script>
+
 </body>
 </html>

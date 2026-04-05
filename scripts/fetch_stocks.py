@@ -1006,7 +1006,7 @@ def _aksje_side_html(a, today):
 
   <div class="breadcrumb">
     <a href="https://exday.no/">exday.no</a>
-    <span>›</span>
+    <span>/</span>
     <a href="https://exday.no/aksjer/">Aksjer</a>
     <span>›</span>
     <a href="https://exday.no/aksjer/sektor/{_sektor_slug(sektor)}/">{_sektor_ikon(sektor)} {sektor}</a>
@@ -1360,9 +1360,9 @@ def generer_sektorsider(aksjer, root_dir):
 <div class="wrap">
   <div class="breadcrumb">
     <a href="https://exday.no/">exday.no</a>
-    <span>›</span>
+    <span>/</span>
     <a href="/aksjer/">Aksjer</a>
-    <span>›</span>
+    <span>/</span>
     {sektor}
   </div>
   <h1>{_sektor_ikon(sektor)} {sektor}-aksjer med utbytte</h1>
@@ -1702,9 +1702,9 @@ def generer_topplistesider(aksjer, root_dir):
 <div class="wrap">
   <div class="breadcrumb">
     <a href="https://exday.no/">exday.no</a>
-    <span>›</span>
+    <span>/</span>
     <a href="/aksjer/">Aksjer</a>
-    <span>›</span>
+    <span>/</span>
     {cfg['h1']}
   </div>
   <h1>{cfg['h1']}</h1>

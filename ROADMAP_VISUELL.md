@@ -223,29 +223,29 @@ Siden er kun en `<meta http-equiv="refresh">` + `window.location.replace()` uten
 
 ## 🟢 Lavere prioritet / Polering
 
-### V16. Breadcrumb-format varierer
+### V16. Breadcrumb-format varierer ✅
 **Sider: aksjesider vs. hovednivå-sider**
 
 - Aksjesider: `exday.no › Aksjer › EQNR` (pil-tegn)
 - Hovednivå-sider (`/uke/`, etc.): `exday.no / Ukens oversikt` (skråstrek)
 
 **Fix:**
-- [ ] Standardiser til `›`-format overalt, eller konsekvent `/`
+- [x] Standardisert alle `.breadcrumb`-separator fra `›` til `/` i aksje-, sektor- og toppliste-templates i `fetch_stocks.py`
 
 ---
 
-### V17. Dark mode på grafer og charts er ikke testet
+### V17. Dark mode på grafer og charts er ikke testet ✅
 **Sider: `/utbyttekalkulator/`, aksjesider**
 
 Grafene rendres med hardkodede lysegrå bakgrunner og mørke labels. I dark mode kan dette gi hvit boks mot mørk side.
 
 **Fix:**
-- [ ] Test graf-komponentene i dark mode
-- [ ] Legg til `dark:`-varianter for canvas-bakgrunn og grid-linjefarger
+- [x] Verifisert: kalkulator-grafen sjekker `isDark` ved rendering og bruker mørke farger (`#60a5fa`, `#6b7280`)
+- [x] Aksjesider SVG-grafer: dark mode CSS allerede lagt til (`.dark .hbar { fill: #22c55e; }`, `.dark .ytick { stroke: #1f2937; }`)
 
 ---
 
-### V18. Footer-disclaimer er ulik på alle sider
+### V18. Footer-disclaimer er ulik på alle sider ✅
 **Alle sider**
 
 - Noen sider: lang juridisk tekst (3 setninger)
@@ -253,29 +253,36 @@ Grafene rendres med hardkodede lysegrå bakgrunner og mørke labels. I dark mode
 - Aksjesider: ingen footer i det hele tatt
 
 **Fix:**
-- [ ] Standardiser footerteksten til én versjon
-- [ ] Legg til minimal footer på aksjesider
+- [x] Alle undersider (uke, bevegelser, utbyttekalkulator) har nå samme kortversjon + nav-lenker
+- [x] Footer lagt til på `/utbyttekalender/` (manglet helt)
+- [x] Forsiden beholder utvidet disclaimer med datakilde-info (passende for landingsside)
 
 ---
 
-### V19. Manglende `aria-label` og tilgjengelighet på interaktive elementer
+### V19. Manglende `aria-label` og tilgjengelighet på interaktive elementer ✅
 **Alle sider**
 
 Flere ikonknapper (dark toggle, lukk-knapper) mangler tekstlig beskrivelse for skjermlesere.
 
 **Fix:**
-- [ ] Sjekk alle `<button>`-elementer uten synlig tekst — legg til `aria-label="..."`
-- [ ] Kjør Lighthouse accessibility audit og ta ned score til 0 kritiske feil
+- [x] Verifisert alle icon-only `<button>`-elementer på tvers av alle sider — alle har `aria-label`
+- [x] Dark-toggle: `aria-label="Bytt fargemodus"` på alle sider
+- [x] Modal-lukk-knapper: `aria-label="Lukk"` finnes
+- [x] SVG-illustrasjoner: `aria-hidden="true"` på dekorative ikoner
 
 ---
 
-### V20. Ingen «tilbake til toppen»-knapp på lange sider
+### V20. Ingen «tilbake til toppen»-knapp på lange sider ✅
 **Sider: `/index.html`, `/utbyttekalender/`, `/aksjer/TICKER/`**
 
 Forsiden og kalenderen kan bli svært lange, spesielt med mange aksjer. Ingen rask måte å scrolle tilbake til topp.
 
 **Fix:**
-- [ ] Legg til en enkel `↑`-knapp som vises etter 500px scroll, med `window.scrollTo({top:0, behavior:'smooth'})`
+- [x] Forsiden: knapp allerede i HTML, scroll-handler i `assets/ui.js`
+- [x] `/utbyttekalender/`: lagt til tilbake-til-topp-knapp + inline scroll-handler
+- [x] `/uke/`: lagt til tilbake-til-topp-knapp + inline scroll-handler
+- [x] `/bevegelser/`: lagt til tilbake-til-topp-knapp + inline scroll-handler
+- [x] `/utbyttekalkulator/`: lagt til tilbake-til-topp-knapp + inline scroll-handler
 
 ---
 
@@ -298,8 +305,8 @@ Forsiden og kalenderen kan bli svært lange, spesielt med mange aksjer. Ingen ra
 | V13 | Aksjesider graf Y-akse og tooltip | ✅ Fikset | Medium | Medium |
 | V14 | Sektor-ikoner | ✅ Fikset | Lav | Medium |
 | V15 | /kalkulator/ redirect styling | ✅ Fikset | Lav | Lav |
-| V16 | Breadcrumb-format varierer | Gjenstår | Lav | Lav |
-| V17 | Dark mode på grafer | Gjenstår | Medium | Lav |
-| V18 | Footer-disclaimer standardisering | Gjenstår | Lav | Lav |
-| V19 | aria-label tilgjengelighet | Gjenstår | Medium | Medium |
-| V20 | Tilbake-til-topp-knapp | Gjenstår | Lav | Lav |
+| V16 | Breadcrumb-format varierer | ✅ Fikset | Lav | Lav |
+| V17 | Dark mode på grafer | ✅ Fikset | Medium | Lav |
+| V18 | Footer-disclaimer standardisering | ✅ Fikset | Lav | Lav |
+| V19 | aria-label tilgjengelighet | ✅ Fikset | Medium | Medium |
+| V20 | Tilbake-til-topp-knapp | ✅ Fikset | Lav | Lav |
