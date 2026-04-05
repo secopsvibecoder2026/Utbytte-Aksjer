@@ -888,6 +888,21 @@ def _aksje_side_html(a, today):
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <!-- Google Analytics med Consent Mode v2 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-X6C9PERKMB"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){{dataLayer.push(arguments);}}
+    gtag('consent', 'default', {{
+      analytics_storage: 'denied',
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      wait_for_update: 500
+    }});
+    gtag('js', new Date());
+    gtag('config', 'G-X6C9PERKMB');
+  </script>
   <title>{ticker} – {navn} | Utbytte og ex-dato | exday.no</title>
   <meta name="description" content="{meta_desc}"/>
   <link rel="canonical" href="https://exday.no/aksjer/{ticker}/"/>
@@ -1133,6 +1148,21 @@ def generer_aksjesider(aksjer, root_dir):
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <!-- Google Analytics med Consent Mode v2 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-X6C9PERKMB"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){{dataLayer.push(arguments);}}
+    gtag('consent', 'default', {{
+      analytics_storage: 'denied',
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      wait_for_update: 500
+    }});
+    gtag('js', new Date());
+    gtag('config', 'G-X6C9PERKMB');
+  </script>
   <title>Norske utbytteaksjer – oversikt | exday.no</title>
   <meta name="description" content="Oversikt over {len(aksjer)} norske utbytteaksjer på Oslo Børs med yield, ex-dato og utbyttehistorikk. Oppdateres daglig."/>
   <link rel="canonical" href="https://exday.no/aksjer/"/>
@@ -1282,6 +1312,21 @@ def generer_sektorsider(aksjer, root_dir):
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <!-- Google Analytics med Consent Mode v2 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-X6C9PERKMB"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){{dataLayer.push(arguments);}}
+    gtag('consent', 'default', {{
+      analytics_storage: 'denied',
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      wait_for_update: 500
+    }});
+    gtag('js', new Date());
+    gtag('config', 'G-X6C9PERKMB');
+  </script>
   <title>{sektor}-aksjer med utbytte | Oslo Børs | exday.no</title>
   <meta name="description" content="{meta_desc}"/>
   <link rel="canonical" href="https://exday.no/aksjer/sektor/{slug}/"/>
@@ -1436,6 +1481,21 @@ def generer_sektorsider(aksjer, root_dir):
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <!-- Google Analytics med Consent Mode v2 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-X6C9PERKMB"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){{dataLayer.push(arguments);}}
+    gtag('consent', 'default', {{
+      analytics_storage: 'denied',
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      wait_for_update: 500
+    }});
+    gtag('js', new Date());
+    gtag('config', 'G-X6C9PERKMB');
+  </script>
   <title>Norske utbytteaksjer etter sektor | exday.no</title>
   <meta name="description" content="Finn norske utbytteaksjer på Oslo Børs sortert etter sektor — energi, finans, shipping, havbruk og mer."/>
   <link rel="canonical" href="https://exday.no/aksjer/sektor/"/>
@@ -1673,6 +1733,21 @@ def generer_topplistesider(aksjer, root_dir):
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <!-- Google Analytics med Consent Mode v2 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-X6C9PERKMB"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){{dataLayer.push(arguments);}}
+    gtag('consent', 'default', {{
+      analytics_storage: 'denied',
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      wait_for_update: 500
+    }});
+    gtag('js', new Date());
+    gtag('config', 'G-X6C9PERKMB');
+  </script>
   <title>{cfg['tittel']} | exday.no</title>
   <meta name="description" content="{desc}"/>
   <link rel="canonical" href="https://exday.no/aksjer/{cfg['slug']}/"/>
