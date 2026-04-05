@@ -903,6 +903,7 @@ def _aksje_side_html(a, today):
     gtag('js', new Date());
     gtag('config', 'G-X6C9PERKMB');
   </script>
+  <script src="/assets/consent.js" defer></script>
   <title>{ticker} – {navn} | Utbytte og ex-dato | exday.no</title>
   <meta name="description" content="{meta_desc}"/>
   <link rel="canonical" href="https://exday.no/aksjer/{ticker}/"/>
@@ -1163,6 +1164,7 @@ def generer_aksjesider(aksjer, root_dir):
     gtag('js', new Date());
     gtag('config', 'G-X6C9PERKMB');
   </script>
+  <script src="/assets/consent.js" defer></script>
   <title>Norske utbytteaksjer – oversikt | exday.no</title>
   <meta name="description" content="Oversikt over {len(aksjer)} norske utbytteaksjer på Oslo Børs med yield, ex-dato og utbyttehistorikk. Oppdateres daglig."/>
   <link rel="canonical" href="https://exday.no/aksjer/"/>
@@ -1327,6 +1329,7 @@ def generer_sektorsider(aksjer, root_dir):
     gtag('js', new Date());
     gtag('config', 'G-X6C9PERKMB');
   </script>
+  <script src="/assets/consent.js" defer></script>
   <title>{sektor}-aksjer med utbytte | Oslo Børs | exday.no</title>
   <meta name="description" content="{meta_desc}"/>
   <link rel="canonical" href="https://exday.no/aksjer/sektor/{slug}/"/>
@@ -1496,6 +1499,7 @@ def generer_sektorsider(aksjer, root_dir):
     gtag('js', new Date());
     gtag('config', 'G-X6C9PERKMB');
   </script>
+  <script src="/assets/consent.js" defer></script>
   <title>Norske utbytteaksjer etter sektor | exday.no</title>
   <meta name="description" content="Finn norske utbytteaksjer på Oslo Børs sortert etter sektor — energi, finans, shipping, havbruk og mer."/>
   <link rel="canonical" href="https://exday.no/aksjer/sektor/"/>
@@ -1748,6 +1752,7 @@ def generer_topplistesider(aksjer, root_dir):
     gtag('js', new Date());
     gtag('config', 'G-X6C9PERKMB');
   </script>
+  <script src="/assets/consent.js" defer></script>
   <title>{cfg['tittel']} | exday.no</title>
   <meta name="description" content="{desc}"/>
   <link rel="canonical" href="https://exday.no/aksjer/{cfg['slug']}/"/>
