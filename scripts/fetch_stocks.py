@@ -815,46 +815,125 @@ def _aksje_side_html(a, today):
   <title>{ticker} – {navn} | Utbytte og ex-dato | exday.no</title>
   <meta name="description" content="{meta_desc}"/>
   <link rel="canonical" href="https://exday.no/aksjer/{ticker}/"/>
+  <meta name="theme-color" content="#16a34a"/>
+  <link rel="icon" type="image/svg+xml" href="/logo/exday_icon_primary.svg"/>
   <meta property="og:title" content="{ticker} – {navn} | exday.no"/>
   <meta property="og:description" content="{meta_desc}"/>
   <meta property="og:url" content="https://exday.no/aksjer/{ticker}/"/>
   <meta property="og:type" content="website"/>
   <script type="application/ld+json">{json_ld}</script>
+  <link rel="stylesheet" href="/assets/tailwind.css"/>
+  <link rel="stylesheet" href="/assets/style.css"/>
+  <script>
+    (function(){{
+      var t = localStorage.getItem('theme');
+      if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) {{
+        document.documentElement.classList.add('dark');
+      }}
+    }})();
+  </script>
   <style>
     *, *::before, *::after {{ box-sizing: border-box; margin: 0; padding: 0; }}
-    body {{ font-family: system-ui, -apple-system, sans-serif; background: #f9fafb; color: #111827; line-height: 1.6; }}
+    body {{ font-family: system-ui, -apple-system, sans-serif; line-height: 1.6; }}
     a {{ color: #16a34a; text-decoration: none; }}
     a:hover {{ text-decoration: underline; }}
-    .wrap {{ max-width: 760px; margin: 0 auto; padding: 1.5rem 1rem; }}
-    nav {{ font-size: 0.85rem; color: #6b7280; margin-bottom: 1.5rem; }}
-    nav a {{ color: #6b7280; }}
-    nav span {{ margin: 0 0.35rem; }}
+    .wrap {{ max-width: 760px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }}
+    .breadcrumb {{ font-size: 0.85rem; color: #6b7280; margin-bottom: 1.5rem; }}
+    .breadcrumb a {{ color: #6b7280; }}
+    .breadcrumb span {{ margin: 0 0.35rem; }}
     h1 {{ font-size: 1.75rem; font-weight: 700; margin-bottom: 0.25rem; }}
-    .sub {{ color: #6b7280; font-size: 0.95rem; margin-bottom: 1.5rem; }}
+    .sub {{ font-size: 0.95rem; margin-bottom: 1.5rem; }}
     .badge {{ display: inline-block; font-size: 0.75rem; font-weight: 600; padding: 0.2rem 0.6rem;
-              border-radius: 9999px; background: #dcfce7; color: #15803d; margin-bottom: 1.25rem; }}
-    .grid {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }}
-    .card {{ background: #fff; border: 1px solid #e5e7eb; border-radius: 0.75rem; padding: 1rem; }}
-    .card .label {{ font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #9ca3af; margin-bottom: 0.2rem; }}
-    .card .val {{ font-size: 1.25rem; font-weight: 700; color: #111827; }}
-    .card .val.green {{ color: #16a34a; }}
-    .desc {{ background: #fff; border: 1px solid #e5e7eb; border-radius: 0.75rem; padding: 1rem 1.25rem; margin-bottom: 1.5rem; color: #374151; }}
-    h2 {{ font-size: 1rem; font-weight: 700; margin-bottom: 0.75rem; color: #374151; }}
-    table {{ width: 100%; border-collapse: collapse; background: #fff; border: 1px solid #e5e7eb; border-radius: 0.75rem; overflow: hidden; margin-bottom: 1.5rem; font-size: 0.9rem; }}
-    th {{ background: #f3f4f6; padding: 0.6rem 1rem; text-align: left; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: #6b7280; }}
-    td {{ padding: 0.6rem 1rem; border-top: 1px solid #f3f4f6; }}
-    tr:hover td {{ background: #f9fafb; }}
-    .cta {{ text-align: center; margin-top: 2rem; padding: 1.5rem; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 0.75rem; }}
-    .cta a {{ display: inline-block; background: #16a34a; color: #fff; font-weight: 600; padding: 0.65rem 1.5rem; border-radius: 0.5rem; }}
-    .cta a:hover {{ background: #15803d; text-decoration: none; }}
-    .updated {{ font-size: 0.78rem; color: #9ca3af; text-align: right; margin-top: 1rem; }}
+              border-radius: 9999px; margin-bottom: 1.25rem; }}
+    .kgrid {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }}
+    .kcard {{ border-radius: 0.75rem; padding: 1rem; border: 1px solid; }}
+    .kcard .label {{ font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.2rem; }}
+    .kcard .val {{ font-size: 1.25rem; font-weight: 700; }}
+    .kcard .val.green {{ color: #16a34a; }}
+    .desc {{ border-radius: 0.75rem; padding: 1rem 1.25rem; margin-bottom: 1.5rem; border: 1px solid; }}
+    h2 {{ font-size: 1rem; font-weight: 700; margin-bottom: 0.75rem; }}
+    table {{ width: 100%; border-collapse: collapse; border-radius: 0.75rem; overflow: hidden; margin-bottom: 1.5rem; font-size: 0.9rem; border: 1px solid; }}
+    th {{ padding: 0.6rem 1rem; text-align: left; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; }}
+    td {{ padding: 0.6rem 1rem; border-top: 1px solid; }}
+    .cta {{ text-align: center; margin-top: 2rem; padding: 1.5rem; border-radius: 0.75rem; border: 1px solid; }}
+    .cta a {{ display: inline-block; background: #16a34a; color: #fff !important; font-weight: 600; padding: 0.65rem 1.5rem; border-radius: 0.5rem; text-decoration: none; }}
+    .cta a:hover {{ background: #15803d; }}
+    .updated {{ font-size: 0.78rem; text-align: right; margin-top: 1rem; }}
+    .mini-nav {{ display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.5rem; font-size: 0.85rem; }}
+    .mini-nav a {{ color: #16a34a; }}
     @media (max-width: 480px) {{ h1 {{ font-size: 1.4rem; }} }}
+
+    /* Light mode */
+    body {{ background: #f9fafb; color: #111827; }}
+    .kcard {{ background: #fff; border-color: #e5e7eb; }}
+    .kcard .label {{ color: #9ca3af; }}
+    .kcard .val {{ color: #111827; }}
+    .desc {{ background: #fff; border-color: #e5e7eb; color: #374151; }}
+    h2 {{ color: #374151; }}
+    table {{ background: #fff; border-color: #e5e7eb; }}
+    th {{ background: #f3f4f6; color: #6b7280; }}
+    td {{ border-color: #f3f4f6; }}
+    tr:hover td {{ background: #f9fafb; }}
+    .cta {{ background: #f0fdf4; border-color: #bbf7d0; }}
+    .cta p {{ color: #374151; }}
+    .updated {{ color: #9ca3af; }}
+    .breadcrumb {{ color: #6b7280; }}
+    .sub {{ color: #6b7280; }}
+    .badge {{ background: #dcfce7; color: #15803d; }}
+
+    /* Dark mode */
+    .dark body {{ background: #030712; color: #f3f4f6; }}
+    .dark .kcard {{ background: #111827; border-color: #1f2937; }}
+    .dark .kcard .label {{ color: #6b7280; }}
+    .dark .kcard .val {{ color: #f3f4f6; }}
+    .dark .desc {{ background: #111827; border-color: #1f2937; color: #d1d5db; }}
+    .dark h2 {{ color: #d1d5db; }}
+    .dark table {{ background: #111827; border-color: #1f2937; }}
+    .dark th {{ background: #1f2937; color: #9ca3af; }}
+    .dark td {{ border-color: #1f2937; }}
+    .dark tr:hover td {{ background: #1f2937; }}
+    .dark .cta {{ background: #052e16; border-color: #166534; }}
+    .dark .cta p {{ color: #d1d5db; }}
+    .dark .updated {{ color: #6b7280; }}
+    .dark .breadcrumb {{ color: #9ca3af; }}
+    .dark .breadcrumb a {{ color: #9ca3af; }}
+    .dark .sub {{ color: #9ca3af; }}
+    .dark .badge {{ background: #14532d; color: #86efac; }}
+    .dark a {{ color: #4ade80; }}
+    .dark .cta a {{ background: #16a34a; color: #fff !important; }}
+    .dark .kcard .val.green {{ color: #4ade80; }}
   </style>
 </head>
 <body>
+
+  <!-- HEADER -->
+  <header style="position:sticky;top:0;z-index:40;border-bottom:1px solid #e5e7eb;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.06);" class="ak-header">
+    <div style="max-width:760px;margin:0 auto;padding:0.6rem 1rem;display:flex;align-items:center;justify-content:space-between;gap:0.75rem;">
+      <div style="display:flex;align-items:center;gap:0.6rem;font-size:0.875rem;">
+        <a href="/" style="display:inline-flex;align-items:center;gap:0.35rem;color:#6b7280;text-decoration:none;" class="ak-back">
+          <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+          <span style="font-weight:500;">exday.no</span>
+        </a>
+        <span style="color:#d1d5db;">/</span>
+        <a href="/aksjer/" style="color:#6b7280;text-decoration:none;" class="ak-back">{navn[:18]}{'…' if len(navn) > 18 else ''}</a>
+      </div>
+      <button id="dark-toggle" style="padding:0.4rem;border-radius:0.5rem;border:none;cursor:pointer;background:transparent;color:#6b7280;" aria-label="Bytt fargemodus" class="ak-toggle">
+        <svg class="sun-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+        <svg class="moon-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display:none;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+      </button>
+    </div>
+  </header>
+  <style>
+    .dark .ak-header {{ background: #111827 !important; border-color: #1f2937 !important; }}
+    .dark .ak-back {{ color: #9ca3af !important; }}
+    .dark .ak-toggle {{ color: #9ca3af !important; }}
+    .dark .ak-toggle:hover {{ background: #1f2937 !important; }}
+    .ak-toggle:hover {{ background: #f3f4f6; }}
+  </style>
+
 <div class="wrap">
 
-  <nav>
+  <div class="breadcrumb">
     <a href="https://exday.no/">exday.no</a>
     <span>›</span>
     <a href="https://exday.no/aksjer/">Aksjer</a>
@@ -862,38 +941,38 @@ def _aksje_side_html(a, today):
     <a href="https://exday.no/aksjer/sektor/{_sektor_slug(sektor)}/">{sektor}</a>
     <span>›</span>
     {ticker}
-  </nav>
+  </div>
 
   <h1>{ticker} – {navn}</h1>
   <p class="sub">{sektor} · {frekvens} utbytte · Oslo Børs</p>
   <span class="badge">{yield_:.2f}% direkteavkastning</span>
 
-  <div class="grid">
-    <div class="card">
+  <div class="kgrid">
+    <div class="kcard">
       <div class="label">Kurs</div>
       <div class="val">{pris:,.0f} {valuta}</div>
     </div>
-    <div class="card">
+    <div class="kcard">
       <div class="label">Yield</div>
       <div class="val green">{yield_:.2f}%</div>
     </div>
-    <div class="card">
+    <div class="kcard">
       <div class="label">Utbytte/aksje</div>
       <div class="val">{upa} {valuta}</div>
     </div>
-    <div class="card">
+    <div class="kcard">
       <div class="label">Ex-dato</div>
       <div class="val" style="font-size:1rem">{_fmt_dato(ex)}</div>
     </div>
-    <div class="card">
+    <div class="kcard">
       <div class="label">Utbetalingsdato</div>
       <div class="val" style="font-size:1rem">{_fmt_dato(bet)}</div>
     </div>
-    <div class="card">
+    <div class="kcard">
       <div class="label">5-årssnitt yield</div>
       <div class="val green">{snitt5:.2f}%</div>
     </div>
-    <div class="card">
+    <div class="kcard">
       <div class="label">År med utbytte</div>
       <div class="val">{ar_med}</div>
     </div>
@@ -906,18 +985,56 @@ def _aksje_side_html(a, today):
 
   {hist_seksjon}
 
-  <div style="margin-top:1.5rem;">
-    <a href="/aksjer/sektor/{_sektor_slug(sektor)}/" style="font-size:0.9rem;color:#2563eb;">← Se alle {sektor}-aksjer med utbytte</a>
+  <div class="mini-nav">
+    <a href="/aksjer/sektor/{_sektor_slug(sektor)}/">← Alle {sektor}-aksjer</a>
+    <span style="color:#9ca3af;">·</span>
+    <a href="/utbyttekalender/">Utbyttekalender</a>
+    <span style="color:#9ca3af;">·</span>
+    <a href="/utbyttekalkulator/">Kalkulator</a>
+    <span style="color:#9ca3af;">·</span>
+    <a href="/aksjer/hoyest-utbytte/">Høyest yield</a>
   </div>
 
   <div class="cta">
-    <p style="margin-bottom:0.75rem;color:#374151;">Se alle norske utbytteaksjer, bygg portefølje og spor ex-datoer</p>
+    <p style="margin-bottom:0.75rem;">Se alle norske utbytteaksjer, bygg portefølje og spor ex-datoer</p>
     <a href="https://exday.no/?aksje={ticker}">Åpne {ticker} i exday.no →</a>
   </div>
 
   <p class="updated">Sist oppdatert: {today}</p>
 
+  <footer style="margin-top:2.5rem;padding-top:1.5rem;border-top:1px solid;font-size:0.78rem;text-align:center;" class="ak-footer">
+    <p style="margin-bottom:0.5rem;">exday.no er ikke et verdipapirforetak og tilbyr ikke finansiell rådgivning. Historisk utbytte er ingen garanti for fremtidig utbytte.</p>
+    <p><a href="/personvern/">Personvern</a> · <a href="/faq/">FAQ</a> · <a href="/">exday.no</a></p>
+  </footer>
+  <style>
+    .ak-footer {{ color: #9ca3af; border-color: #e5e7eb; }}
+    .ak-footer a {{ color: #9ca3af; }}
+    .dark .ak-footer {{ color: #6b7280 !important; border-color: #1f2937 !important; }}
+    .dark .ak-footer a {{ color: #6b7280 !important; }}
+  </style>
+
 </div>
+
+<script>
+  (function() {{
+    var btn = document.getElementById('dark-toggle');
+    var root = document.documentElement;
+    var sun = btn.querySelector('.sun-icon');
+    var moon = btn.querySelector('.moon-icon');
+    function syncIcons() {{
+      var dark = root.classList.contains('dark');
+      sun.style.display = dark ? 'none' : '';
+      moon.style.display = dark ? '' : 'none';
+    }}
+    syncIcons();
+    btn.addEventListener('click', function() {{
+      var isDark = root.classList.toggle('dark');
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      syncIcons();
+    }});
+  }})();
+</script>
+
 </body>
 </html>"""
 
@@ -1059,36 +1176,106 @@ def generer_sektorsider(aksjer, root_dir):
   <title>{sektor}-aksjer med utbytte | Oslo Børs | exday.no</title>
   <meta name="description" content="{meta_desc}"/>
   <link rel="canonical" href="https://exday.no/aksjer/sektor/{slug}/"/>
+  <meta name="theme-color" content="#16a34a"/>
+  <link rel="icon" type="image/svg+xml" href="/logo/exday_icon_primary.svg"/>
   <meta property="og:title" content="{sektor}-aksjer med utbytte – exday.no"/>
   <meta property="og:description" content="{meta_desc}"/>
   <meta property="og:url" content="https://exday.no/aksjer/sektor/{slug}/"/>
   <script type="application/ld+json">{json_ld}</script>
+  <link rel="stylesheet" href="/assets/tailwind.css"/>
+  <link rel="stylesheet" href="/assets/style.css"/>
+  <script>
+    (function(){{
+      var t = localStorage.getItem('theme');
+      if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) {{
+        document.documentElement.classList.add('dark');
+      }}
+    }})();
+  </script>
   <style>
     *, *::before, *::after {{ box-sizing: border-box; margin: 0; padding: 0; }}
-    body {{ font-family: system-ui, -apple-system, sans-serif; background: #f9fafb; color: #111827; line-height: 1.6; }}
-    a {{ color: #2563eb; text-decoration: none; }}
+    body {{ font-family: system-ui, -apple-system, sans-serif; line-height: 1.6; }}
+    a {{ color: #16a34a; text-decoration: none; }}
     a:hover {{ text-decoration: underline; }}
-    .wrap {{ max-width: 900px; margin: 0 auto; padding: 1.5rem 1rem; }}
-    nav {{ font-size: 0.85rem; color: #6b7280; margin-bottom: 1.5rem; }}
+    .wrap {{ max-width: 900px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }}
+    .breadcrumb {{ font-size: 0.85rem; color: #6b7280; margin-bottom: 1.5rem; }}
+    .breadcrumb a {{ color: #6b7280; }}
+    .breadcrumb span {{ margin: 0 0.35rem; }}
     h1 {{ font-size: 1.75rem; font-weight: 700; margin-bottom: 0.5rem; }}
-    .sub {{ color: #6b7280; margin-bottom: 1.5rem; font-size: 0.95rem; }}
+    .sub {{ margin-bottom: 1.5rem; font-size: 0.95rem; }}
     .stats {{ display: flex; gap: 1.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }}
-    .stat {{ background: #fff; border: 1px solid #e5e7eb; border-radius: 0.5rem; padding: 0.75rem 1.25rem; }}
-    .stat-val {{ font-size: 1.4rem; font-weight: 700; color: #2563eb; }}
-    .stat-lbl {{ font-size: 0.75rem; color: #6b7280; text-transform: uppercase; letter-spacing: 0.04em; }}
-    table {{ width: 100%; border-collapse: collapse; background: #fff; border: 1px solid #e5e7eb; border-radius: 0.75rem; overflow: hidden; font-size: 0.9rem; }}
-    th {{ background: #f3f4f6; padding: 0.6rem 1rem; text-align: left; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: #6b7280; }}
-    td {{ padding: 0.65rem 1rem; border-top: 1px solid #f3f4f6; }}
-    tr:hover td {{ background: #f9fafb; }}
-    .yield {{ color: #0891b2; font-weight: 600; }}
+    .stat {{ border-radius: 0.5rem; padding: 0.75rem 1.25rem; border: 1px solid; }}
+    .stat-val {{ font-size: 1.4rem; font-weight: 700; color: #16a34a; }}
+    .stat-lbl {{ font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em; }}
+    table {{ width: 100%; border-collapse: collapse; border-radius: 0.75rem; overflow: hidden; font-size: 0.9rem; border: 1px solid; }}
+    th {{ padding: 0.6rem 1rem; text-align: left; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; }}
+    td {{ padding: 0.65rem 1rem; border-top: 1px solid; }}
+    .yield {{ font-weight: 600; color: #16a34a; }}
     .cta {{ margin-top: 1.5rem; text-align: center; }}
-    .cta a {{ display: inline-block; background: #2563eb; color: #fff; font-weight: 600; padding: 0.65rem 1.5rem; border-radius: 0.5rem; }}
-    .updated {{ font-size: 0.78rem; color: #9ca3af; text-align: right; margin-top: 1rem; }}
+    .cta a {{ display: inline-block; background: #16a34a; color: #fff !important; font-weight: 600; padding: 0.65rem 1.5rem; border-radius: 0.5rem; text-decoration: none; }}
+    .cta a:hover {{ background: #15803d; }}
+    .updated {{ font-size: 0.78rem; text-align: right; margin-top: 1rem; }}
+
+    body {{ background: #f9fafb; color: #111827; }}
+    .stat {{ background: #fff; border-color: #e5e7eb; }}
+    .stat-lbl {{ color: #6b7280; }}
+    table {{ background: #fff; border-color: #e5e7eb; }}
+    th {{ background: #f3f4f6; color: #6b7280; }}
+    td {{ border-color: #f3f4f6; }}
+    tr:hover td {{ background: #f9fafb; }}
+    .sub {{ color: #6b7280; }}
+    .updated {{ color: #9ca3af; }}
+
+    .dark body {{ background: #030712; color: #f3f4f6; }}
+    .dark .stat {{ background: #111827; border-color: #1f2937; }}
+    .dark .stat-lbl {{ color: #9ca3af; }}
+    .dark table {{ background: #111827; border-color: #1f2937; }}
+    .dark th {{ background: #1f2937; color: #9ca3af; }}
+    .dark td {{ border-color: #1f2937; }}
+    .dark tr:hover td {{ background: #1f2937; }}
+    .dark .sub {{ color: #9ca3af; }}
+    .dark .updated {{ color: #6b7280; }}
+    .dark a {{ color: #4ade80; }}
+    .dark .breadcrumb {{ color: #9ca3af; }}
+    .dark .breadcrumb a {{ color: #9ca3af; }}
+    .dark .stat-val {{ color: #4ade80; }}
+    .dark .yield {{ color: #4ade80; }}
+    .dark .cta a {{ background: #16a34a; color: #fff !important; }}
   </style>
 </head>
 <body>
+  <header style="position:sticky;top:0;z-index:40;border-bottom:1px solid #e5e7eb;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.06);" class="ak-header">
+    <div style="max-width:900px;margin:0 auto;padding:0.6rem 1rem;display:flex;align-items:center;justify-content:space-between;gap:0.75rem;">
+      <div style="display:flex;align-items:center;gap:0.6rem;font-size:0.875rem;">
+        <a href="/" style="display:inline-flex;align-items:center;gap:0.35rem;color:#6b7280;text-decoration:none;" class="ak-back">
+          <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+          <span style="font-weight:500;">exday.no</span>
+        </a>
+        <span style="color:#d1d5db;">/</span>
+        <span style="font-weight:600;font-size:0.875rem;" class="ak-title">{sektor}</span>
+      </div>
+      <button id="dark-toggle" style="padding:0.4rem;border-radius:0.5rem;border:none;cursor:pointer;background:transparent;color:#6b7280;" aria-label="Bytt fargemodus" class="ak-toggle">
+        <svg class="sun-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+        <svg class="moon-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display:none;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+      </button>
+    </div>
+  </header>
+  <style>
+    .dark .ak-header {{ background: #111827 !important; border-color: #1f2937 !important; }}
+    .dark .ak-back {{ color: #9ca3af !important; }}
+    .dark .ak-title {{ color: #f3f4f6 !important; }}
+    .dark .ak-toggle {{ color: #9ca3af !important; }}
+    .ak-toggle:hover {{ background: #f3f4f6; }}
+    .dark .ak-toggle:hover {{ background: #1f2937 !important; }}
+  </style>
 <div class="wrap">
-  <nav><a href="https://exday.no/">exday.no</a> › <a href="/aksjer/">Aksjer</a> › {sektor}</nav>
+  <div class="breadcrumb">
+    <a href="https://exday.no/">exday.no</a>
+    <span>›</span>
+    <a href="/aksjer/">Aksjer</a>
+    <span>›</span>
+    {sektor}
+  </div>
   <h1>{sektor}-aksjer med utbytte</h1>
   <p class="sub">{len(aksjer_sortert)} norske {sektor.lower()}-aksjer på Oslo Børs. Sortert etter direkteavkastning.</p>
   <div class="stats">
@@ -1103,6 +1290,25 @@ def generer_sektorsider(aksjer, root_dir):
   <div class="cta"><a href="https://exday.no/">Åpne full app med filtrering og porteføljekalkulator →</a></div>
   <p class="updated">Sist oppdatert: {today}</p>
 </div>
+<script>
+  (function() {{
+    var btn = document.getElementById('dark-toggle');
+    var root = document.documentElement;
+    var sun = btn.querySelector('.sun-icon');
+    var moon = btn.querySelector('.moon-icon');
+    function syncIcons() {{
+      var dark = root.classList.contains('dark');
+      sun.style.display = dark ? 'none' : '';
+      moon.style.display = dark ? '' : 'none';
+    }}
+    syncIcons();
+    btn.addEventListener('click', function() {{
+      var isDark = root.classList.toggle('dark');
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      syncIcons();
+    }});
+  }})();
+</script>
 </body>
 </html>"""
 
@@ -1252,32 +1458,72 @@ def generer_topplistesider(aksjer, root_dir):
 
     CSS = """
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: system-ui, -apple-system, sans-serif; background: #f9fafb; color: #111827; line-height: 1.6; }
-    a { color: #2563eb; text-decoration: none; }
+    body { font-family: system-ui, -apple-system, sans-serif; line-height: 1.6; }
+    a { color: #16a34a; text-decoration: none; }
     a:hover { text-decoration: underline; }
-    .wrap { max-width: 900px; margin: 0 auto; padding: 1.5rem 1rem; }
-    nav { font-size: 0.85rem; color: #6b7280; margin-bottom: 1.5rem; }
+    .wrap { max-width: 900px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+    .breadcrumb { font-size: 0.85rem; margin-bottom: 1.5rem; }
+    .breadcrumb a { text-decoration: none; }
+    .breadcrumb span { margin: 0 0.35rem; }
     h1 { font-size: 1.75rem; font-weight: 700; margin-bottom: 0.5rem; }
-    .sub { color: #6b7280; margin-bottom: 1.5rem; font-size: 0.95rem; }
+    .sub { margin-bottom: 1.5rem; font-size: 0.95rem; }
     .stats { display: flex; gap: 1.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
-    .stat { background: #fff; border: 1px solid #e5e7eb; border-radius: 0.5rem; padding: 0.75rem 1.25rem; }
+    .stat { border-radius: 0.5rem; padding: 0.75rem 1.25rem; border: 1px solid; }
     .stat-val { font-size: 1.4rem; font-weight: 700; color: #16a34a; }
-    .stat-lbl { font-size: 0.75rem; color: #6b7280; text-transform: uppercase; letter-spacing: 0.04em; }
-    table { width: 100%; border-collapse: collapse; background: #fff; border: 1px solid #e5e7eb; border-radius: 0.75rem; overflow: hidden; font-size: 0.9rem; }
-    th { background: #f3f4f6; padding: 0.6rem 1rem; text-align: left; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: #6b7280; }
-    td { padding: 0.65rem 1rem; border-top: 1px solid #f3f4f6; }
-    tr:hover td { background: #f9fafb; }
-    .rang { color: #9ca3af; font-size: 0.8rem; font-weight: 700; width: 2rem; }
+    .stat-lbl { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    table { width: 100%; border-collapse: collapse; border-radius: 0.75rem; overflow: hidden; font-size: 0.9rem; border: 1px solid; }
+    th { padding: 0.6rem 1rem; text-align: left; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; }
+    td { padding: 0.65rem 1rem; border-top: 1px solid; }
+    .rang { font-size: 0.8rem; font-weight: 700; width: 2rem; }
     .ticker a { color: #16a34a; font-family: monospace; font-weight: 700; font-size: 0.95rem; }
-    .metric { color: #0891b2; font-weight: 700; }
-    .cta { margin-top: 2rem; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 0.75rem; padding: 1.25rem; text-align: center; }
-    .cta a { display: inline-block; background: #16a34a; color: #fff; font-weight: 600; padding: 0.65rem 1.5rem; border-radius: 0.5rem; margin-top: 0.5rem; }
+    .metric { color: #16a34a; font-weight: 700; }
+    .cta { margin-top: 2rem; border-radius: 0.75rem; padding: 1.25rem; text-align: center; border: 1px solid; }
+    .cta a { display: inline-block; background: #16a34a; color: #fff !important; font-weight: 600; padding: 0.65rem 1.5rem; border-radius: 0.5rem; margin-top: 0.5rem; text-decoration: none; }
+    .cta a:hover { background: #15803d; }
     .relatert { margin-top: 2rem; }
-    .relatert h2 { font-size: 1rem; font-weight: 600; margin-bottom: 0.75rem; color: #374151; }
+    .relatert h2 { font-size: 1rem; font-weight: 600; margin-bottom: 0.75rem; }
     .relatert ul { list-style: none; display: flex; flex-wrap: wrap; gap: 0.5rem; }
-    .relatert li a { display: block; background: #fff; border: 1px solid #e5e7eb; border-radius: 0.5rem; padding: 0.4rem 0.85rem; font-size: 0.85rem; color: #374151; }
-    .relatert li a:hover { border-color: #16a34a; color: #15803d; text-decoration: none; }
-    .updated { font-size: 0.78rem; color: #9ca3af; text-align: right; margin-top: 1rem; }
+    .relatert li a { display: block; border-radius: 0.5rem; padding: 0.4rem 0.85rem; font-size: 0.85rem; border: 1px solid; text-decoration: none; }
+    .updated { font-size: 0.78rem; text-align: right; margin-top: 1rem; }
+
+    body { background: #f9fafb; color: #111827; }
+    .stat { background: #fff; border-color: #e5e7eb; }
+    .stat-lbl { color: #6b7280; }
+    .sub { color: #6b7280; }
+    .breadcrumb { color: #6b7280; }
+    .breadcrumb a { color: #6b7280; }
+    .rang { color: #9ca3af; }
+    table { background: #fff; border-color: #e5e7eb; }
+    th { background: #f3f4f6; color: #6b7280; }
+    td { border-color: #f3f4f6; }
+    tr:hover td { background: #f9fafb; }
+    .cta { background: #f0fdf4; border-color: #bbf7d0; }
+    .relatert h2 { color: #374151; }
+    .relatert li a { background: #fff; border-color: #e5e7eb; color: #374151; }
+    .relatert li a:hover { border-color: #16a34a; color: #15803d; }
+    .updated { color: #9ca3af; }
+
+    .dark body { background: #030712; color: #f3f4f6; }
+    .dark .stat { background: #111827; border-color: #1f2937; }
+    .dark .stat-lbl { color: #9ca3af; }
+    .dark .stat-val { color: #4ade80; }
+    .dark .sub { color: #9ca3af; }
+    .dark .breadcrumb { color: #9ca3af; }
+    .dark .breadcrumb a { color: #9ca3af; }
+    .dark .rang { color: #6b7280; }
+    .dark a { color: #4ade80; }
+    .dark .ticker a { color: #4ade80; }
+    .dark .metric { color: #4ade80; }
+    .dark table { background: #111827; border-color: #1f2937; }
+    .dark th { background: #1f2937; color: #9ca3af; }
+    .dark td { border-color: #1f2937; }
+    .dark tr:hover td { background: #1f2937; }
+    .dark .cta { background: #052e16; border-color: #166534; }
+    .dark .cta a { background: #16a34a; }
+    .dark .relatert h2 { color: #d1d5db; }
+    .dark .relatert li a { background: #111827; border-color: #1f2937; color: #d1d5db; }
+    .dark .relatert li a:hover { border-color: #4ade80; color: #4ade80; }
+    .dark .updated { color: #6b7280; }
 """
 
     alle_slugs = [(l["slug"], l["h1"]) for l in LISTER]
@@ -1328,16 +1574,64 @@ def generer_topplistesider(aksjer, root_dir):
   <title>{cfg['tittel']} | exday.no</title>
   <meta name="description" content="{desc}"/>
   <link rel="canonical" href="https://exday.no/aksjer/{cfg['slug']}/"/>
+  <meta name="theme-color" content="#16a34a"/>
+  <link rel="icon" type="image/svg+xml" href="/logo/exday_icon_primary.svg"/>
   <meta property="og:title" content="{cfg['tittel']} | exday.no"/>
   <meta property="og:description" content="{desc}"/>
   <meta property="og:url" content="https://exday.no/aksjer/{cfg['slug']}/"/>
   <meta property="og:type" content="website"/>
   <script type="application/ld+json">{json_ld}</script>
-  <style>{CSS}</style>
+  <link rel="stylesheet" href="/assets/tailwind.css"/>
+  <link rel="stylesheet" href="/assets/style.css"/>
+  <script>
+    (function(){{
+      var t = localStorage.getItem('theme');
+      if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) {{
+        document.documentElement.classList.add('dark');
+      }}
+    }})();
+  </script>
+  <style>{CSS}
+    .ak-header {{ position: sticky; top: 0; z-index: 40; border-bottom: 1px solid #e5e7eb; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.06); }}
+    .ak-inner {{ max-width: 900px; margin: 0 auto; padding: 0.6rem 1rem; display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; }}
+    .ak-left {{ display: flex; align-items: center; gap: 0.6rem; font-size: 0.875rem; }}
+    .ak-back {{ display: inline-flex; align-items: center; gap: 0.35rem; color: #6b7280; text-decoration: none; font-weight: 500; }}
+    .ak-sep {{ color: #d1d5db; }}
+    .ak-cur {{ font-weight: 600; font-size: 0.875rem; }}
+    .ak-toggle {{ padding: 0.4rem; border-radius: 0.5rem; border: none; cursor: pointer; background: transparent; color: #6b7280; }}
+    .ak-toggle:hover {{ background: #f3f4f6; }}
+    .dark .ak-header {{ background: #111827 !important; border-color: #1f2937 !important; }}
+    .dark .ak-back {{ color: #9ca3af !important; }}
+    .dark .ak-cur {{ color: #f3f4f6 !important; }}
+    .dark .ak-toggle {{ color: #9ca3af !important; }}
+    .dark .ak-toggle:hover {{ background: #1f2937 !important; }}
+  </style>
 </head>
 <body>
+  <header class="ak-header">
+    <div class="ak-inner">
+      <div class="ak-left">
+        <a href="/" class="ak-back">
+          <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+          exday.no
+        </a>
+        <span class="ak-sep">/</span>
+        <span class="ak-cur">{cfg['h1'][:30]}{'…' if len(cfg['h1']) > 30 else ''}</span>
+      </div>
+      <button id="dark-toggle" class="ak-toggle" aria-label="Bytt fargemodus">
+        <svg class="sun-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+        <svg class="moon-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display:none;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+      </button>
+    </div>
+  </header>
 <div class="wrap">
-  <nav><a href="https://exday.no/">exday.no</a> › <a href="/aksjer/">Aksjer</a> › {cfg['h1']}</nav>
+  <div class="breadcrumb">
+    <a href="https://exday.no/">exday.no</a>
+    <span>›</span>
+    <a href="/aksjer/">Aksjer</a>
+    <span>›</span>
+    {cfg['h1']}
+  </div>
   <h1>{cfg['h1']}</h1>
   <p class="sub">{cfg['sub']}</p>
   <div class="stats">
@@ -1360,6 +1654,25 @@ def generer_topplistesider(aksjer, root_dir):
   </div>
   <p class="updated">Sist oppdatert: {today}</p>
 </div>
+<script>
+  (function() {{
+    var btn = document.getElementById('dark-toggle');
+    var root = document.documentElement;
+    var sun = btn.querySelector('.sun-icon');
+    var moon = btn.querySelector('.moon-icon');
+    function syncIcons() {{
+      var dark = root.classList.contains('dark');
+      sun.style.display = dark ? 'none' : '';
+      moon.style.display = dark ? '' : 'none';
+    }}
+    syncIcons();
+    btn.addEventListener('click', function() {{
+      var isDark = root.classList.toggle('dark');
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      syncIcons();
+    }});
+  }})();
+</script>
 </body>
 </html>"""
 

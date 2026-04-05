@@ -33,12 +33,15 @@
   <meta property="og:title" content="Vanlige spørsmål om utbytteaksjer | exday.no" />
   <meta property="og:description" content="Svar på de vanligste spørsmålene om utbytte, ex-dato, yield, skatt og aksjesparekonto for norske investorer." />
 
-  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="../assets/tailwind.css" />
+  <link rel="stylesheet" href="../assets/style.css" />
   <script>
-    tailwind.config = { darkMode: 'class' }
-    if (localStorage.getItem('tema') === 'dark') {
-      document.documentElement.classList.add('dark');
-    }
+    (function() {
+      var t = localStorage.getItem('theme');
+      if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
+      }
+    })();
   </script>
 
   <style>
@@ -186,11 +189,17 @@
 
   <div class="max-w-2xl mx-auto px-6 pt-10 pb-20">
 
-    <!-- TILBAKE -->
-    <a href="../" class="inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors mb-10">
-      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
-      Tilbake til exday.no
-    </a>
+    <!-- TILBAKE + DARK TOGGLE -->
+    <div class="flex items-center justify-between mb-10">
+      <a href="../" class="inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+        Tilbake til exday.no
+      </a>
+      <button id="dark-toggle" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500 dark:text-gray-400 transition-colors" aria-label="Bytt fargemodus">
+        <svg class="w-5 h-5 dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+        <svg class="w-5 h-5 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+      </button>
+    </div>
 
     <!-- TITTEL -->
     <h1 class="text-3xl font-bold mb-2">Vanlige spørsmål</h1>
@@ -349,28 +358,28 @@
       <h2 class="section-heading">Relaterte sider</h2>
       <ul class="space-y-3">
         <li>
-          <a href="../utbyttekalender/" class="inline-flex items-center gap-2 text-sm text-[#16a34a] hover:underline font-medium">
+          <a href="../utbyttekalender/" class="inline-flex items-center gap-2 text-sm text-brand-600 hover:underline font-medium">
             <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
             Utbyttekalender
           </a>
           <span class="text-sm text-gray-500 dark:text-gray-500"> — Oversikt over kommende ex-datoer og utbetalinger</span>
         </li>
         <li>
-          <a href="../utbyttekalkulator/" class="inline-flex items-center gap-2 text-sm text-[#16a34a] hover:underline font-medium">
+          <a href="../utbyttekalkulator/" class="inline-flex items-center gap-2 text-sm text-brand-600 hover:underline font-medium">
             <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
             Utbyttekalkulator
           </a>
           <span class="text-sm text-gray-500 dark:text-gray-500"> — Estimer forventet utbytte fra din portefølje</span>
         </li>
         <li>
-          <a href="../aksjer/hoyest-utbytte/" class="inline-flex items-center gap-2 text-sm text-[#16a34a] hover:underline font-medium">
+          <a href="../aksjer/hoyest-utbytte/" class="inline-flex items-center gap-2 text-sm text-brand-600 hover:underline font-medium">
             <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
             Høyest utbytte
           </a>
           <span class="text-sm text-gray-500 dark:text-gray-500"> — Aksjer med høyest direkteavkastning på Oslo Børs</span>
         </li>
         <li>
-          <a href="../aksjer/konsistente-utbytteaksjer/" class="inline-flex items-center gap-2 text-sm text-[#16a34a] hover:underline font-medium">
+          <a href="../aksjer/konsistente-utbytteaksjer/" class="inline-flex items-center gap-2 text-sm text-brand-600 hover:underline font-medium">
             <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg>
             Konsistente utbytteaksjer
           </a>
@@ -389,6 +398,13 @@
     </div>
 
   </div>
+
+  <script>
+    document.getElementById('dark-toggle').addEventListener('click', function() {
+      var isDark = document.documentElement.classList.toggle('dark');
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    });
+  </script>
 
 </body>
 </html>

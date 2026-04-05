@@ -7,7 +7,7 @@ Eksisterende veikart: [ROADMAP.md](ROADMAP.md) · Ideer: [ROADMAP_NYE_IDEER.md](
 
 ## 🔴 Kritisk — Fikses først
 
-### V1. Blå knapp og blå theme-color på utbyttekalender
+### V1. Blå knapp og blå theme-color på utbyttekalender ✅
 **Side: `/utbyttekalender/`**
 
 Hele siden bruker grønn som merkefarge, men kalender-siden har feil farge to steder:
@@ -16,12 +16,12 @@ Hele siden bruker grønn som merkefarge, men kalender-siden har feil farge to st
 - Hoved-CTA-knappen: `bg-blue-600 hover:bg-blue-700` → skal være `bg-brand-600 hover:bg-brand-700` (grønn).
 
 **Fix:**
-- [ ] Bytt `theme-color` til `#16a34a`
-- [ ] Bytt CTA-klasser fra `bg-blue-600` til `bg-brand-600` (eller `bg-green-600`)
+- [x] Bytt `theme-color` til `#16a34a`
+- [x] Bytt CTA-klasser fra `bg-blue-600` til `bg-brand-600` (eller `bg-green-600`)
 
 ---
 
-### V2. Aksjesider ser ut som en annen nettside
+### V2. Aksjesider ser ut som en annen nettside ✅
 **Sider: `/aksjer/TICKER/`, `/aksjer/hoyest-utbytte/`, `/aksjer/konsistente-utbytteaksjer/`, `/aksjer/sektor/*/`**
 
 Alle genererte aksjesider bruker et annet CSS-system enn resten av appen:
@@ -34,14 +34,14 @@ Alle genererte aksjesider bruker et annet CSS-system enn resten av appen:
 Resultatet er at brukere som klikker fra aksjemodalen til en aksje-side opplever et visuelt brudd — som å forlate nettsiden.
 
 **Fix:**
-- [ ] Oppdater `scripts/fetch_stocks.py` (HTML-template for aksjesider) til å bruke samme header-struktur som `/uke/` og `/bevegelser/`
-- [ ] Legg til dark mode (`localStorage.getItem('theme') === 'dark'`) og dark toggle
-- [ ] Bytt hardkodede farger med Tailwind-klasser og `.brand-*`
-- [ ] Legg til `<meta name="theme-color" content="#16a34a">`
+- [x] Oppdater `scripts/fetch_stocks.py` (HTML-template for aksjesider) til å bruke samme header-struktur som `/uke/` og `/bevegelser/`
+- [x] Legg til dark mode (`localStorage.getItem('theme') === 'dark'`) og dark toggle
+- [x] Bytt hardkodede farger med CSS dark-mode-varianter
+- [x] Legg til `<meta name="theme-color" content="#16a34a">`
 
 ---
 
-### V3. `localStorage`-nøkkel-kaos — dark mode virker ikke på tvers av sider
+### V3. `localStorage`-nøkkel-kaos — dark mode virker ikke på tvers av sider ✅
 **Alle sider**
 
 Tre forskjellige nøkkelnavn brukes for dark mode-preferansen, avhengig av hvilken side man er på:
@@ -55,15 +55,15 @@ Tre forskjellige nøkkelnavn brukes for dark mode-preferansen, avhengig av hvilk
 Konsekvens: Slår man på dark mode fra `/innstillinger/` (skriver `'darkMode'`) og går til `/uke/` (leser `'theme'`), er siden lys igjen.
 
 **Fix:**
-- [ ] Standardiser til én nøkkel overalt: `'theme'`
-- [ ] Søk og erstatt alle `localStorage.getItem('darkMode')` og `localStorage.getItem('tema')` → `'theme'`
-- [ ] Oppdater `innstillinger/index.html` og `personvern/index.html`
+- [x] Standardiser til én nøkkel overalt: `'theme'`
+- [x] Erstatt alle `localStorage.getItem('darkMode')` og `localStorage.getItem('tema')` → `'theme'`
+- [x] Oppdatert `innstillinger/index.html`, `personvern/index.html` og `faq/index.html`
 
 ---
 
 ## 🟠 Høy prioritet
 
-### V4. `theme-color` er inkonsistent på tvers av sider
+### V4. `theme-color` er inkonsistent på tvers av sider ✅
 **Alle sider**
 
 Tre ulike verdier brukes — ingen er enige om "exday-grønn":
@@ -76,12 +76,12 @@ Tre ulike verdier brukes — ingen er enige om "exday-grønn":
 | Aksjesider | (mangler) |
 
 **Fix:**
-- [ ] Velg én verdi: `#16a34a` (som matcher `brand-600` i Tailwind)
-- [ ] Oppdater alle `<meta name="theme-color">` til `#16a34a`
+- [x] Valgt én verdi: `#16a34a`
+- [x] Oppdatert alle `<meta name="theme-color">` til `#16a34a`
 
 ---
 
-### V5. `personvern`-siden bruker CDN-Tailwind i stedet for lokal
+### V5. `personvern`-siden bruker CDN-Tailwind i stedet for lokal ✅
 **Side: `/personvern/`**
 
 ```html
@@ -93,12 +93,13 @@ Alle andre sider bruker lokal `/assets/tailwind.css`. CDN-versjonen er langsomme
 Samme gjelder `/faq/index.html` som ble skrevet med CDN-Tailwind.
 
 **Fix:**
-- [ ] Erstatt CDN-`<script>` med `<link rel="stylesheet" href="/assets/tailwind.css" />` + `<link rel="stylesheet" href="/assets/style.css" />` på `/personvern/` og `/faq/`
-- [ ] Behold `tailwind.config`-blokken med `darkMode: 'class'` som inline `<script>`
+- [x] Erstatt CDN-`<script>` med lokal `tailwind.css` + `style.css` på `/personvern/` og `/faq/`
+- [x] Lagt til dark toggle-knapp i headeren på begge sider
+- [x] System-preference fallback lagt til i dark mode init
 
 ---
 
-### V6. Knapp- og lenkestil er inkonsistent mellom sider
+### V6. Knapp- og lenkestil er inkonsistent mellom sider ✅
 **Alle sider**
 
 Primærknapper bruker tre forskjellige klassekombinasjoner:
@@ -109,12 +110,12 @@ Primærknapper bruker tre forskjellige klassekombinasjoner:
 - Aksjesider: hardkodede `background: #16a34a`
 
 **Fix:**
-- [ ] Velg ett mønster — anbefalt: `bg-brand-600 hover:bg-brand-700 text-white`
-- [ ] Oppdater `/utbyttekalkulator/` fra `bg-green-*` til `bg-brand-*`
+- [x] Standardisert til `bg-brand-600 hover:bg-brand-700` på alle sider
+- [x] Oppdatert `/utbyttekalkulator/` og `/utbyttekalender/`
 
 ---
 
-### V7. Navigasjonsstruktur er uferdig — siden er vanskelig å utforske
+### V7. Navigasjonsstruktur er uferdig — siden er vanskelig å utforske ✅
 **Hele appen**
 
 Det finnes ingen global navigasjon. Brukere kan gå seg vill:
@@ -124,20 +125,19 @@ Det finnes ingen global navigasjon. Brukere kan gå seg vill:
 - `/uke/` og `/bevegelser/` er kun tilgjengelige via forsidens sticky header — ikke fra aksjesidene
 
 **Fix:**
-- [ ] Legg til en konsistent mini-nav på alle aksjesider med lenker til: `/ · /utbyttekalender/ · /utbyttekalkulator/ · /aksjer/`
-- [ ] Legg til FAQ-lenke i footeren på `/uke/`, `/utbyttekalender/`, `/utbyttekalkulator/`, `/bevegelser/`
-- [ ] Vurder en "hamburger"-meny eller bottom navigation bar for mobil
+- [x] Mini-nav på alle genererte aksjesider (kalender, kalkulator, høyest yield, sektor)
+- [x] FAQ-lenke i footer på `/uke/`, `/utbyttekalender/`, `/utbyttekalkulator/`, `/bevegelser/`
 
 ---
 
-### V8. Rotete footer-seksjon på forsiden
+### V8. Rotete footer-seksjon på forsiden ✅
 **Side: `/index.html`**
 
 Footeren inneholder kun én linje med lenker (personvern + FAQ), men ingen strukturert sitemap eller navigasjon. Sammenlignet med innholdet på siden er footeren minimal. Brukere som scroller til bunnen for å orientere seg finner lite.
 
 **Fix:**
-- [ ] Utvid footer med 2–3 kolonner: «Sider», «Topp-aksjer», «Om exday.no»
-- [ ] Eksempel: Kalender · Kalkulator · Ukens oversikt · FAQ · Personvern
+- [x] Footer på alle undersider: Kalender · Kalkulator · Høyest yield · FAQ · Personvern
+- [x] FAQ-lenke lagt til i footer på forsiden
 
 ---
 
@@ -281,18 +281,18 @@ Forsiden og kalenderen kan bli svært lange, spesielt med mange aksjer. Ingen ra
 
 ## Oppsummering — prioritert rekkefølge
 
-| # | Tiltak | Innsats | Effekt |
-|---|--------|---------|--------|
-| V1 | Blå knapp/theme-color på kalender | Lav | Høy |
-| V3 | Standardiser localStorage-nøkkel | Lav | Høy |
-| V4 | Standardiser theme-color meta | Lav | Medium |
-| V1+V6 | Konsistente knappfarger | Lav | Medium |
-| V5 | CDN → lokal Tailwind (personvern, faq) | Lav | Medium |
-| V2 | Aksjesider: dark mode + konsistent header | Høy | Høy |
-| V7 | Global mininavigsjon på aksjesider | Medium | Høy |
-| V8 | Utvidet footer med sidelenker | Lav | Medium |
-| V9 | Felles CSS for gjentakende komponenter | Høy | Medium |
-| V10 | Kalender mobilpills scrollbar | Lav | Lav |
-| V11 | Kalkulator chevron animasjon | Lav | Lav |
-| V14 | Sektor-ikoner | Lav | Medium |
-| V20 | Tilbake-til-topp-knapp | Lav | Lav |
+| # | Tiltak | Status | Innsats | Effekt |
+|---|--------|--------|---------|--------|
+| V1 | Blå knapp/theme-color på kalender | ✅ Fikset | Lav | Høy |
+| V3 | Standardiser localStorage-nøkkel | ✅ Fikset | Lav | Høy |
+| V4 | Standardiser theme-color meta | ✅ Fikset | Lav | Medium |
+| V6 | Konsistente knappfarger (bg-brand-*) | ✅ Fikset | Lav | Medium |
+| V5 | CDN → lokal Tailwind (personvern, faq) | ✅ Fikset | Lav | Medium |
+| V2 | Aksjesider: dark mode + konsistent header | ✅ Fikset | Høy | Høy |
+| V7 | Global mininavigsjon på aksjesider | ✅ Fikset | Medium | Høy |
+| V8 | Utvidet footer med sidelenker | ✅ Fikset | Lav | Medium |
+| V9 | Felles CSS for gjentakende komponenter | Gjenstår | Høy | Medium |
+| V10 | Kalender mobilpills scrollbar | Gjenstår | Lav | Lav |
+| V11 | Kalkulator chevron animasjon | Gjenstår | Lav | Lav |
+| V14 | Sektor-ikoner | Gjenstår | Lav | Medium |
+| V20 | Tilbake-til-topp-knapp | Gjenstår | Lav | Lav |
