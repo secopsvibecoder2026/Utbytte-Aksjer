@@ -186,6 +186,7 @@ function initTabs() {
     if (aktivTab === 'portfolio') visPortefolje();
     if (aktivTab === 'kalender') visKalender();
     if (aktivTab === 'oversikt') visOversikt();
+    if (aktivTab === 'verktoy' && !window._pfSisteData) visPortefolje();
   });
 }
 
