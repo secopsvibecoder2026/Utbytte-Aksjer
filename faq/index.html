@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Google AdSense (håndterer også CMP for EØS/UK) -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3981936786393038"
+     crossorigin="anonymous"></script>
+
+  <!-- Google Analytics med Consent Mode v2 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-X6C9PERKMB"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', {
+      analytics_storage: 'denied',
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      wait_for_update: 500
+    });
+    gtag('js', new Date());
+    gtag('config', 'G-X6C9PERKMB');
+  </script>
+
+  <link rel="icon" type="image/svg+xml" href="../logo/exday_icon_primary.svg">
+  <title>Vanlige spørsmål om utbytteaksjer på Oslo Børs | exday.no</title>
+  <meta name="description" content="Svar på de vanligste spørsmålene om utbytte, ex-dato, yield, skatt og aksjesparekonto for norske investorer." />
+  <link rel="canonical" href="https://exday.no/faq/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://exday.no/faq/" />
+  <meta property="og:title" content="Vanlige spørsmål om utbytteaksjer | exday.no" />
+  <meta property="og:description" content="Svar på de vanligste spørsmålene om utbytte, ex-dato, yield, skatt og aksjesparekonto for norske investorer." />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { darkMode: 'class' }
+    if (localStorage.getItem('tema') === 'dark') {
+      document.documentElement.classList.add('dark');
+    }
+  </script>
+
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+    .section-heading {
+      font-size: 1.1rem;
+      font-weight: 600;
+      padding-bottom: 0.5rem;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    .dark .section-heading { border-color: #374151; }
+
+    details summary {
+      cursor: pointer;
+      list-style: none;
+    }
+    details summary::-webkit-details-marker { display: none; }
+    details summary::marker { display: none; }
+
+    details summary .chevron {
+      transition: transform 0.2s ease;
+      flex-shrink: 0;
+    }
+    details[open] summary .chevron {
+      transform: rotate(180deg);
+    }
+  </style>
+
+  <!-- FAQPage JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Hva er ex-dato (ex-dividend date)?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Ex-dato er den første handelsdagen der en aksje handles uten rett til det kommende utbyttet. For å motta utbyttet må du eie aksjen dagen FØR ex-dato. Kjøper du aksjen på eller etter ex-dato, mottar du ikke utbyttet. På Oslo Børs går aksjeprisen normalt ned med omtrent utbyttebeløpet på ex-dato."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Må jeg eie aksjen på ex-dato for å få utbytte?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Nei — du må eie aksjen DAGEN FØR ex-dato. Hvis ex-dato er 15. mai, må du ha kjøpt og fått aksjen registrert på deg senest 14. mai. På Oslo Børs gjelder T+2 oppgjør, noe som betyr at du normalt må kjøpe aksjen senest 2 børsdager før ex-dato for å være sikker på at kjøpet er registrert i tide."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Hva er direkteavkastning (yield)?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Direkteavkastning (yield) er årets forventede eller utbetalte utbytte delt på aksjekursen, oppgitt i prosent. Formel: Yield = (Utbytte per aksje ÷ Aksjekurs) × 100. Eksempel: Betaler et selskap 15 NOK i utbytte og aksjen koster 300 NOK, er yielden 5%. Høy yield kan være attraktivt, men bør ses i sammenheng med selskapets finansielle helse."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Hva er utbyttefrekvens — og hvilke norske aksjer betaler kvartalsvis?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Utbyttefrekvens angir hvor ofte et selskap betaler utbytte i løpet av et år. De fleste norske selskaper betaler utbytte én gang i året (årlig), gjerne i april–juni etter generalforsamlingen. Noen shippingselskaper og finansforetak betaler kvartalsvis (fire ganger i året), noe som gir jevnere kontantstrøm for investorer. Halvårlig utbetaling forekommer også."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Hva er payout ratio, og hva er et sunt nivå?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Payout ratio er andelen av selskapets overskudd (EPS) som utbetales som utbytte. Formel: Payout ratio = (Utbytte per aksje ÷ Resultat per aksje) × 100. En ratio under 60–70% anses gjerne som bærekraftig for de fleste selskaper, da det gir rom for reinvesteringer og buffer ved svakere perioder. Svært høy payout ratio (over 90%) kan indikere at utbyttet er vanskelig å opprettholde over tid."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Hva er 5-årssnitt yield, og hvorfor er det nyttig?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "5-årssnitt yield er gjennomsnittet av et selskaps direkteavkastning over de siste fem år. Det er et nyttig mål fordi det jevner ut år med ekstraordinære utbytter eller kurssvingninger og gir et bedre bilde av selskapets historiske utbytteevne. Et stabilt 5-årssnitt kan indikere et pålitelig utbytteselskap."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Beskattes utbytte fra norske aksjer?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Ja. Utbytte fra norske aksjer beskattes som kapitalinntekt. Den effektive skattesatsen er om lag 37,84% (22% selskapsskatt + 17,22% aksjonærskatt på gjenværende utbytte). Utbytte mottatt på en aksjesparekonto (ASK) beskattes ikke løpende — skatten utsettes til du tar ut gevinst eller utbytte fra kontoen. Konsulter en skatteekspert for din konkrete situasjon."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Hva er aksjesparekonto (ASK), og hvorfor er den gunstig for utbytteinvestorer?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "En aksjesparekonto (ASK) er en særskilt sparekonto der du kan kjøpe og selge aksjer og aksjefond uten å betale skatt løpende på gevinster eller mottatt utbytte. Skatten utsettes til du tar ut mer enn det du har skutt inn. For utbytteinvestorer er dette gunstig fordi du kan reinvestere hele utbyttet (uten å trekke fra skatt) og dermed dra nytte av rentes-rente-effekten over tid."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Hva er DRIP — Dividend Reinvestment Plan?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "DRIP (Dividend Reinvestment Plan) er en strategi der du automatisk reinvesterer mottatt utbytte i nye aksjer i samme selskap, i stedet for å ta ut kontanter. Over tid gir dette en kraftig rentes-rente-effekt: du eier stadig flere aksjer som igjen gir utbytte. Mange norske meglerhus tilbyr ikke automatisk DRIP, men du kan gjøre dette manuelt ved å bruke utbyttet til å kjøpe flere aksjer etter utbetaling."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Hva betyr det at et selskap kutter utbyttet?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Når et selskap kutter eller reduserer utbyttet, er det vanligvis et negativt signal til markedet. Det kan skyldes svakere inntjening, høy gjeld, behov for kapital til investeringer, eller strategisk omstilling. Aksjeprisen faller typisk som følge av et uventet kutt. Det er viktig å skille mellom en midlertidig reduksjon (selskapet vil gjenoppta utbytte) og et permanent kutt."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Hvilke sektorer på Oslo Børs gir høyest utbytte historisk?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Shipping, energi (olje og gass) og finans (sparebanker og forsikring) har historisk gitt de høyeste utbyttene på Oslo Børs. Shippingaksjer er kjent for høye, men volatile utbytter som svinger med fraktrater. Sparebanker gir gjerne stabile og forutsigbare utbytter. Energisektoren varierer med olje- og gassprisene. Sjømat (laks) er en annen sektor med solide utbyttetradisjoner i gode år."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Hva er forskjellen mellom ex-dato og utbetalingsdato?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Ex-dato er den datoen du senest må eie aksjen for å ha rett til utbyttet. Utbetalingsdato (payment date) er den datoen utbyttet faktisk overføres til aksjonærenes kontoer — typisk 2 til 4 uker etter ex-dato. Mellom disse to datoene registreres hvem som har rett til utbyttet (record date) og generalforsamlingen godkjenner normalt utdelingen."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Hvordan bruker jeg exday.no?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "exday.no gir en samlet oversikt over norske utbytteaksjer notert på Oslo Børs. På forsiden finner du alle aksjer med direkteavkastning, ex-dato og nøkkeltall — oppdatert daglig. Utbyttekalenderen viser kommende ex-datoer og utbetalinger. Utbyttekalkulatoren lar deg estimere forventet avkastning basert på beløp og valgte aksjer. Klikk på en enkelt aksje for å se detaljert historikk, grafer og nøkkeltall."
+        }
+      }
+    ]
+  }
+  </script>
+</head>
+<body class="bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 min-h-screen">
+
+  <div class="max-w-2xl mx-auto px-6 pt-10 pb-20">
+
+    <!-- TILBAKE -->
+    <a href="../" class="inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors mb-10">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+      Tilbake til exday.no
+    </a>
+
+    <!-- TITTEL -->
+    <h1 class="text-3xl font-bold mb-2">Vanlige spørsmål</h1>
+    <p class="text-sm text-gray-500 dark:text-gray-500 mb-12">Svar på de viktigste spørsmålene om utbytte, ex-dato, yield, skatt og mer — for norske investorer.</p>
+
+    <!-- FAQ ACCORDION -->
+    <div class="space-y-3">
+
+      <!-- Q1 -->
+      <details class="group rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
+        <summary class="flex items-center justify-between gap-4 px-5 py-4 font-medium text-gray-900 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-800/60 rounded-xl transition-colors">
+          <span>Hva er ex-dato (ex-dividend date)?</span>
+          <svg class="chevron w-5 h-5 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </summary>
+        <div class="px-5 pb-5 pt-1 text-gray-700 dark:text-gray-300 leading-relaxed text-sm">
+          Ex-dato er den første handelsdagen der en aksje handles uten rett til det kommende utbyttet. For å motta utbyttet må du eie aksjen dagen <strong>FØR</strong> ex-dato. Kjøper du aksjen på eller etter ex-dato, mottar du ikke utbyttet. På Oslo Børs går aksjeprisen normalt ned med omtrent utbyttebeløpet på ex-dato.
+        </div>
+      </details>
+
+      <!-- Q2 -->
+      <details class="group rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
+        <summary class="flex items-center justify-between gap-4 px-5 py-4 font-medium text-gray-900 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-800/60 rounded-xl transition-colors">
+          <span>Må jeg eie aksjen på ex-dato for å få utbytte?</span>
+          <svg class="chevron w-5 h-5 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </summary>
+        <div class="px-5 pb-5 pt-1 text-gray-700 dark:text-gray-300 leading-relaxed text-sm">
+          Nei — du må eie aksjen <strong>DAGEN FØR</strong> ex-dato. Hvis ex-dato er 15. mai, må du ha kjøpt og fått aksjen registrert på deg senest 14. mai. På Oslo Børs gjelder T+2 oppgjør, noe som betyr at du normalt må kjøpe aksjen senest 2 børsdager før ex-dato for å være sikker på at kjøpet er registrert i tide.
+        </div>
+      </details>
+
+      <!-- Q3 -->
+      <details class="group rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
+        <summary class="flex items-center justify-between gap-4 px-5 py-4 font-medium text-gray-900 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-800/60 rounded-xl transition-colors">
+          <span>Hva er direkteavkastning (yield)?</span>
+          <svg class="chevron w-5 h-5 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </summary>
+        <div class="px-5 pb-5 pt-1 text-gray-700 dark:text-gray-300 leading-relaxed text-sm">
+          Direkteavkastning (yield) er årets forventede eller utbetalte utbytte delt på aksjekursen, oppgitt i prosent. Formel: <code class="bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded text-xs">Yield = (Utbytte per aksje ÷ Aksjekurs) × 100</code>. Eksempel: Betaler et selskap 15 NOK i utbytte og aksjen koster 300 NOK, er yielden 5 %. Høy yield kan være attraktivt, men bør ses i sammenheng med selskapets finansielle helse.
+        </div>
+      </details>
+
+      <!-- Q4 -->
+      <details class="group rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
+        <summary class="flex items-center justify-between gap-4 px-5 py-4 font-medium text-gray-900 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-800/60 rounded-xl transition-colors">
+          <span>Hva er utbyttefrekvens — og hvilke norske aksjer betaler kvartalsvis?</span>
+          <svg class="chevron w-5 h-5 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </summary>
+        <div class="px-5 pb-5 pt-1 text-gray-700 dark:text-gray-300 leading-relaxed text-sm">
+          Utbyttefrekvens angir hvor ofte et selskap betaler utbytte i løpet av et år. De fleste norske selskaper betaler utbytte én gang i året (årlig), gjerne i april–juni etter generalforsamlingen. Noen shippingselskaper og finansforetak betaler kvartalsvis (fire ganger i året), noe som gir jevnere kontantstrøm for investorer. Halvårlig utbetaling forekommer også.
+        </div>
+      </details>
+
+      <!-- Q5 -->
+      <details class="group rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
+        <summary class="flex items-center justify-between gap-4 px-5 py-4 font-medium text-gray-900 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-800/60 rounded-xl transition-colors">
+          <span>Hva er payout ratio, og hva er et sunt nivå?</span>
+          <svg class="chevron w-5 h-5 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </summary>
+        <div class="px-5 pb-5 pt-1 text-gray-700 dark:text-gray-300 leading-relaxed text-sm">
+          Payout ratio er andelen av selskapets overskudd (EPS) som utbetales som utbytte. Formel: <code class="bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded text-xs">Payout ratio = (Utbytte per aksje ÷ Resultat per aksje) × 100</code>. En ratio under 60–70 % anses gjerne som bærekraftig for de fleste selskaper, da det gir rom for reinvesteringer og buffer ved svakere perioder. Svært høy payout ratio (over 90 %) kan indikere at utbyttet er vanskelig å opprettholde over tid.
+        </div>
+      </details>
+
+      <!-- Q6 -->
+      <details class="group rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
+        <summary class="flex items-center justify-between gap-4 px-5 py-4 font-medium text-gray-900 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-800/60 rounded-xl transition-colors">
+          <span>Hva er 5-årssnitt yield, og hvorfor er det nyttig?</span>
+          <svg class="chevron w-5 h-5 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </summary>
+        <div class="px-5 pb-5 pt-1 text-gray-700 dark:text-gray-300 leading-relaxed text-sm">
+          5-årssnitt yield er gjennomsnittet av et selskaps direkteavkastning over de siste fem år. Det er et nyttig mål fordi det jevner ut år med ekstraordinære utbytter eller kurssvingninger og gir et bedre bilde av selskapets historiske utbytteevne. Et stabilt 5-årssnitt kan indikere et pålitelig utbytteselskap.
+        </div>
+      </details>
+
+      <!-- Q7 -->
+      <details class="group rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
+        <summary class="flex items-center justify-between gap-4 px-5 py-4 font-medium text-gray-900 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-800/60 rounded-xl transition-colors">
+          <span>Beskattes utbytte fra norske aksjer?</span>
+          <svg class="chevron w-5 h-5 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </summary>
+        <div class="px-5 pb-5 pt-1 text-gray-700 dark:text-gray-300 leading-relaxed text-sm">
+          Ja. Utbytte fra norske aksjer beskattes som kapitalinntekt. Den effektive skattesatsen er om lag 37,84 % (22 % selskapsskatt + 17,22 % aksjonærskatt på gjenværende utbytte). Utbytte mottatt på en aksjesparekonto (ASK) beskattes ikke løpende — skatten utsettes til du tar ut gevinst eller utbytte fra kontoen. Konsulter en skatteekspert for din konkrete situasjon.
+        </div>
+      </details>
+
+      <!-- Q8 -->
+      <details class="group rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
+        <summary class="flex items-center justify-between gap-4 px-5 py-4 font-medium text-gray-900 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-800/60 rounded-xl transition-colors">
+          <span>Hva er aksjesparekonto (ASK), og hvorfor er den gunstig for utbytteinvestorer?</span>
+          <svg class="chevron w-5 h-5 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </summary>
+        <div class="px-5 pb-5 pt-1 text-gray-700 dark:text-gray-300 leading-relaxed text-sm">
+          En aksjesparekonto (ASK) er en særskilt sparekonto der du kan kjøpe og selge aksjer og aksjefond uten å betale skatt løpende på gevinster eller mottatt utbytte. Skatten utsettes til du tar ut mer enn det du har skutt inn. For utbytteinvestorer er dette gunstig fordi du kan reinvestere hele utbyttet (uten å trekke fra skatt) og dermed dra nytte av rentes-rente-effekten over tid.
+        </div>
+      </details>
+
+      <!-- Q9 -->
+      <details class="group rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
+        <summary class="flex items-center justify-between gap-4 px-5 py-4 font-medium text-gray-900 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-800/60 rounded-xl transition-colors">
+          <span>Hva er DRIP — Dividend Reinvestment Plan?</span>
+          <svg class="chevron w-5 h-5 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </summary>
+        <div class="px-5 pb-5 pt-1 text-gray-700 dark:text-gray-300 leading-relaxed text-sm">
+          DRIP (Dividend Reinvestment Plan) er en strategi der du automatisk reinvesterer mottatt utbytte i nye aksjer i samme selskap, i stedet for å ta ut kontanter. Over tid gir dette en kraftig rentes-rente-effekt: du eier stadig flere aksjer som igjen gir utbytte. Mange norske meglerhus tilbyr ikke automatisk DRIP, men du kan gjøre dette manuelt ved å bruke utbyttet til å kjøpe flere aksjer etter utbetaling.
+        </div>
+      </details>
+
+      <!-- Q10 -->
+      <details class="group rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
+        <summary class="flex items-center justify-between gap-4 px-5 py-4 font-medium text-gray-900 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-800/60 rounded-xl transition-colors">
+          <span>Hva betyr det at et selskap kutter utbyttet?</span>
+          <svg class="chevron w-5 h-5 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </summary>
+        <div class="px-5 pb-5 pt-1 text-gray-700 dark:text-gray-300 leading-relaxed text-sm">
+          Når et selskap kutter eller reduserer utbyttet, er det vanligvis et negativt signal til markedet. Det kan skyldes svakere inntjening, høy gjeld, behov for kapital til investeringer, eller strategisk omstilling. Aksjeprisen faller typisk som følge av et uventet kutt. Det er viktig å skille mellom en midlertidig reduksjon (selskapet vil gjenoppta utbytte) og et permanent kutt.
+        </div>
+      </details>
+
+      <!-- Q11 -->
+      <details class="group rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
+        <summary class="flex items-center justify-between gap-4 px-5 py-4 font-medium text-gray-900 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-800/60 rounded-xl transition-colors">
+          <span>Hvilke sektorer på Oslo Børs gir høyest utbytte historisk?</span>
+          <svg class="chevron w-5 h-5 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </summary>
+        <div class="px-5 pb-5 pt-1 text-gray-700 dark:text-gray-300 leading-relaxed text-sm">
+          Shipping, energi (olje og gass) og finans (sparebanker og forsikring) har historisk gitt de høyeste utbyttene på Oslo Børs. Shippingaksjer er kjent for høye, men volatile utbytter som svinger med fraktrater. Sparebanker gir gjerne stabile og forutsigbare utbytter. Energisektoren varierer med olje- og gassprisene. Sjømat (laks) er en annen sektor med solide utbyttetradisjoner i gode år.
+        </div>
+      </details>
+
+      <!-- Q12 -->
+      <details class="group rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
+        <summary class="flex items-center justify-between gap-4 px-5 py-4 font-medium text-gray-900 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-800/60 rounded-xl transition-colors">
+          <span>Hva er forskjellen mellom ex-dato og utbetalingsdato?</span>
+          <svg class="chevron w-5 h-5 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </summary>
+        <div class="px-5 pb-5 pt-1 text-gray-700 dark:text-gray-300 leading-relaxed text-sm">
+          Ex-dato er den datoen du senest må eie aksjen for å ha rett til utbyttet (se spørsmål 1). Utbetalingsdato (payment date) er den datoen utbyttet faktisk overføres til aksjonærenes kontoer — typisk 2 til 4 uker etter ex-dato. Mellom disse to datoene registreres hvem som har rett til utbyttet (record date) og generalforsamlingen godkjenner normalt utdelingen.
+        </div>
+      </details>
+
+      <!-- Q13 -->
+      <details class="group rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
+        <summary class="flex items-center justify-between gap-4 px-5 py-4 font-medium text-gray-900 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-800/60 rounded-xl transition-colors">
+          <span>Hvordan bruker jeg exday.no?</span>
+          <svg class="chevron w-5 h-5 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </summary>
+        <div class="px-5 pb-5 pt-1 text-gray-700 dark:text-gray-300 leading-relaxed text-sm">
+          exday.no gir en samlet oversikt over norske utbytteaksjer notert på Oslo Børs. På forsiden finner du alle aksjer med direkteavkastning, ex-dato og nøkkeltall — oppdatert daglig. Utbyttekalenderen viser kommende ex-datoer og utbetalinger. Utbyttekalkulatoren lar deg estimere forventet avkastning basert på beløp og valgte aksjer. Klikk på en enkelt aksje for å se detaljert historikk, grafer og nøkkeltall.
+        </div>
+      </details>
+
+    </div><!-- end accordion -->
+
+    <!-- RELATERTE SIDER -->
+    <section class="mt-16">
+      <h2 class="section-heading">Relaterte sider</h2>
+      <ul class="space-y-3">
+        <li>
+          <a href="../utbyttekalender/" class="inline-flex items-center gap-2 text-sm text-[#16a34a] hover:underline font-medium">
+            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+            Utbyttekalender
+          </a>
+          <span class="text-sm text-gray-500 dark:text-gray-500"> — Oversikt over kommende ex-datoer og utbetalinger</span>
+        </li>
+        <li>
+          <a href="../utbyttekalkulator/" class="inline-flex items-center gap-2 text-sm text-[#16a34a] hover:underline font-medium">
+            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+            Utbyttekalkulator
+          </a>
+          <span class="text-sm text-gray-500 dark:text-gray-500"> — Estimer forventet utbytte fra din portefølje</span>
+        </li>
+        <li>
+          <a href="../aksjer/hoyest-utbytte/" class="inline-flex items-center gap-2 text-sm text-[#16a34a] hover:underline font-medium">
+            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+            Høyest utbytte
+          </a>
+          <span class="text-sm text-gray-500 dark:text-gray-500"> — Aksjer med høyest direkteavkastning på Oslo Børs</span>
+        </li>
+        <li>
+          <a href="../aksjer/konsistente-utbytteaksjer/" class="inline-flex items-center gap-2 text-sm text-[#16a34a] hover:underline font-medium">
+            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg>
+            Konsistente utbytteaksjer
+          </a>
+          <span class="text-sm text-gray-500 dark:text-gray-500"> — Selskaper med lang og stabil utbyttehistorikk</span>
+        </li>
+      </ul>
+    </section>
+
+    <!-- FOOTER -->
+    <div class="pt-10 mt-10 border-t border-gray-100 dark:border-gray-800 text-sm text-gray-400 dark:text-gray-600 space-y-2">
+      <p>Informasjonen på denne siden er kun ment som generell veiledning og er ikke finansiell rådgivning. Invester alltid på eget ansvar.</p>
+      <div class="flex gap-4 pt-1">
+        <a href="../" class="hover:text-gray-600 dark:hover:text-gray-400 transition-colors">← exday.no</a>
+        <a href="../personvern/" class="hover:text-gray-600 dark:hover:text-gray-400 transition-colors">Personvern</a>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>
