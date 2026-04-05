@@ -213,6 +213,43 @@ function initOversiktSubTabs() {
 }
 
 // ── FIRE-KALKULATOR ──────────────────────────────────────────────────────────
+function brukPortefoljeDataFire() {
+  const pf = hentPF();
+  const tickers = Object.keys(pf);
+  const info = document.getElementById('fire-pf-info');
+
+  if (!tickers.length || !alleAksjer.length) {
+    info.textContent = 'Ingen porteføljedata — legg til aksjer i Portefølje-fanen først.';
+    info.classList.remove('hidden');
+    return;
+  }
+
+  let totalVerdi = 0, totalAr = 0, antallAksjer = 0;
+  tickers.forEach(ticker => {
+    const a = alleAksjer.find(x => x.ticker === ticker);
+    const antall = pf[ticker];
+    if (!a || antall < 1) return;
+    const verdi = antall * (a.pris || 0);
+    totalVerdi += verdi;
+    totalAr    += antall * (a.utbytte_per_aksje || 0);
+    antallAksjer++;
+  });
+
+  if (totalVerdi <= 0) {
+    info.textContent = 'Mangler kursinformasjon for porteføljen. Prøv igjen om litt.';
+    info.classList.remove('hidden');
+    return;
+  }
+
+  const vektetYield = (totalAr / totalVerdi * 100);
+  document.getElementById('fire-portefolje').value = Math.round(totalVerdi);
+  document.getElementById('fire-yield').value = vektetYield.toFixed(2);
+
+  info.textContent = `Hentet fra portefølje: ${antallAksjer} selskaper · ${Math.round(totalVerdi).toLocaleString('nb-NO')} kr · vektet yield ${vektetYield.toFixed(2)}%`;
+  info.classList.remove('hidden');
+  beregnFire();
+}
+
 function beregnFire() {
   const maaned   = parseFloat(document.getElementById('fire-maaned')?.value) || 0;
   const yieldPct = parseFloat(document.getElementById('fire-yield')?.value)  || 5;
@@ -285,17 +322,7 @@ function initFire() {
   document.querySelectorAll('input[name="fire-konto"]').forEach(r => {
     r.addEventListener('change', beregnFire);
   });
-  // Fyll inn porteføljeverdien fra eksisterende data hvis tilgjengelig
-  const pfBtn = document.getElementById('fire-fra-portefolje');
-  if (pfBtn) {
-    pfBtn.addEventListener('click', () => {
-      const totalVerdi = window._pfSisteData?.beholdning?.reduce((s, a) => s + a.antall * (a.pris || 0), 0) || 0;
-      if (totalVerdi > 0) {
-        document.getElementById('fire-portefolje').value = Math.round(totalVerdi);
-        beregnFire();
-      }
-    });
-  }
+  document.getElementById('fire-bruk-pf')?.addEventListener('click', brukPortefoljeDataFire);
   beregnFire();
 }
 

@@ -1056,10 +1056,18 @@
 
       <!-- Inndata -->
       <div class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-5 shadow-sm space-y-4">
-        <div>
-          <h2 class="font-semibold text-base">FIRE-kalkulator</h2>
-          <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Beregn nødvendig kapital og antall år til du kan leve av utbytte.</p>
+        <div class="flex items-start justify-between gap-3">
+          <div>
+            <h2 class="font-semibold text-base">FIRE-kalkulator</h2>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Beregn nødvendig kapital og antall år til du kan leve av utbytte.</p>
+          </div>
+          <button id="fire-bruk-pf" class="shrink-0 text-xs px-3 py-1.5 rounded-lg border border-brand-300 dark:border-brand-700 text-brand-700 dark:text-brand-400 hover:bg-brand-50 dark:hover:bg-brand-900/30 transition-colors font-medium" title="Fyll inn verdier fra din portefølje">
+            ⊕ Bruk min portefølje
+          </button>
         </div>
+
+        <!-- Portefølje-kilde-info -->
+        <div id="fire-pf-info" class="hidden rounded-lg bg-brand-50 dark:bg-brand-900/20 border border-brand-200 dark:border-brand-800 px-3 py-2 text-xs text-brand-700 dark:text-brand-300"></div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
