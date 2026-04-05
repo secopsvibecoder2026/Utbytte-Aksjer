@@ -22,6 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initDarkMode();
   initTabs();
   initOversiktSubTabs();
+  initVerktoySubTabs();
   initSwipe();
   initTilbakeTopp();
   initFilter();

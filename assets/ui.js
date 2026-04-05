@@ -143,7 +143,7 @@ function initTilbakeTopp() {
 
 // ── SWIPE-NAVIGASJON ─────────────────────────────────────────────────────────
 function initSwipe() {
-  const FANER = ['oversikt', 'kalender', 'portfolio', 'kalkulator'];
+  const FANER = ['oversikt', 'kalender', 'portfolio', 'verktoy'];
   let startX = 0, startY = 0;
 
   function byttTab(retning) {
@@ -177,10 +177,11 @@ function initTabs() {
     document.getElementById('tab-oversikt').classList.toggle('hidden', aktivTab !== 'oversikt');
     document.getElementById('tab-kalender').classList.toggle('hidden', aktivTab !== 'kalender');
     document.getElementById('tab-portfolio').classList.toggle('hidden', aktivTab !== 'portfolio');
-    document.getElementById('tab-kalkulator').classList.toggle('hidden', aktivTab !== 'kalkulator');
+    document.getElementById('tab-verktoy').classList.toggle('hidden', aktivTab !== 'verktoy');
     document.getElementById('oversikt-sub-nav').classList.toggle('hidden', aktivTab !== 'oversikt');
+    document.getElementById('verktoy-sub-nav').classList.toggle('hidden', aktivTab !== 'verktoy');
     const erAksjerSubtab = aktivTab === 'oversikt' && aktivOversiktSubTab === 'aksjer';
-    document.getElementById('filter-bar').classList.toggle('hidden', aktivTab === 'kalkulator' || !erAksjerSubtab);
+    document.getElementById('filter-bar').classList.toggle('hidden', aktivTab === 'verktoy' || !erAksjerSubtab);
     document.getElementById('filter-ekstra').classList.toggle('hidden', !erAksjerSubtab);
     if (aktivTab === 'portfolio') visPortefolje();
     if (aktivTab === 'kalender') visKalender();
@@ -208,6 +209,18 @@ function initOversiktSubTabs() {
     if (aktivOversiktSubTab === 'sektor') visSektorer();
     if (aktivOversiktSubTab === 'bevegelser') visDagensBevegelser();
     if (aktivOversiktSubTab === 'topplistor') visTopplistor();
+  });
+}
+
+function initVerktoySubTabs() {
+  const nav = document.getElementById('verktoy-sub-nav');
+  if (!nav) return;
+  nav.addEventListener('click', e => {
+    const btn = e.target.closest('[data-verktoy-subtab]');
+    if (!btn) return;
+    nav.querySelectorAll('[data-verktoy-subtab]').forEach(b => b.classList.toggle('active', b === btn));
+    const subtab = btn.dataset.verktoySubtab;
+    document.getElementById('verktoy-subtab-kalkulator').classList.toggle('hidden', subtab !== 'kalkulator');
   });
 }
 

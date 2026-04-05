@@ -204,7 +204,7 @@
         <button class="tab-btn active" data-tab="oversikt">Oversikt</button>
         <button class="tab-btn" data-tab="portfolio">Portefølje</button>
         <button class="tab-btn" data-tab="kalender">Kalender</button>
-        <button class="tab-btn" data-tab="kalkulator">Kalkulator</button>
+        <button class="tab-btn" data-tab="verktoy">Verktøy</button>
       </nav>
     </div>
 
@@ -214,6 +214,11 @@
       <button class="sub-tab-btn" data-subtab="bevegelser">Bevegelser</button>
       <button class="sub-tab-btn" data-subtab="sektor">Sektorer</button>
       <button class="sub-tab-btn" data-subtab="topplistor">Topplister</button>
+    </nav>
+
+    <!-- VERKTØY SUB-FANE NAVIGASJON (vises kun når Verktøy-fanen er aktiv) -->
+    <nav id="verktoy-sub-nav" class="hidden flex gap-1 border-b border-gray-200 dark:border-gray-800">
+      <button class="sub-tab-btn active" data-verktoy-subtab="kalkulator">Kalkulator</button>
     </nav>
 
     <!-- FILTER BAR -->
@@ -926,8 +931,9 @@
 
     </div>
 
-    <!-- KALKULATOR-FANE -->
-    <div id="tab-kalkulator" class="hidden space-y-6 max-w-2xl mx-auto">
+    <!-- VERKTØY-FANE -->
+    <div id="tab-verktoy" class="hidden">
+    <div id="verktoy-subtab-kalkulator" class="space-y-6 max-w-2xl mx-auto">
       <div class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-5 shadow-sm space-y-4">
         <div class="flex items-start justify-between gap-3">
           <div>
@@ -1057,6 +1063,7 @@
         </div>
       </div>
     </div>
+    </div><!-- /tab-verktoy -->
 
     <!-- VARSLER-FANE -->
     <div id="tab-varsler" class="hidden"></div>
