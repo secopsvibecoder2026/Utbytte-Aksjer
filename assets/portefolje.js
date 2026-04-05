@@ -117,7 +117,7 @@ function byttStatsSubTab(tab) {
     if (tab === 'oversikt')      visYieldChart(beholdning);
     if (tab === 'inntekt')       visMaanedChart(beholdning);
     if (tab === 'beholdning')    { visVerdiChart(beholdning); visCharts(beholdning, totalAr); }
-    if (tab === 'sektorer')      { visSektorYieldChart(beholdning); visCharts(beholdning, totalAr); }
+    if (tab === 'sektorer')      { visHHI(beholdning); visSektorYieldChart(beholdning); visCharts(beholdning, totalAr); }
   }
 }
 
@@ -1054,7 +1054,7 @@ function visPortefolje() {
   if (aktivStatsTab === 'oversikt')      visYieldChart(alleBeholdning);
   if (aktivStatsTab === 'inntekt')       visMaanedChart(alleBeholdning);
   if (aktivStatsTab === 'beholdning')    { visVerdiChart(alleBeholdning); visCharts(alleBeholdning, totalAr); }
-  if (aktivStatsTab === 'sektorer')      { visSektorYieldChart(alleBeholdning); visCharts(alleBeholdning, totalAr); }
+  if (aktivStatsTab === 'sektorer')      { visHHI(alleBeholdning); visSektorYieldChart(alleBeholdning); visCharts(alleBeholdning, totalAr); }
   if (!['beholdning','sektorer'].includes(aktivStatsTab)) {
     const cw = document.getElementById('pf-charts-wrapper');
     if (cw) cw.style.display = 'none';
@@ -1188,6 +1188,61 @@ function visVerdiChart(beholdning) {
       <svg viewBox="0 0 ${size} ${size}" width="${size}" height="${size}" class="shrink-0">${paths}</svg>
       <div class="space-y-1.5 flex-1 min-w-0">${legend}</div>
     </div>`;
+}
+
+// ── HHI-KONSENTRASJONSINDEKS ──────────────────────────────────────────────
+function visHHI(beholdning) {
+  if (!document.getElementById('hhi-aksje-score')) return;
+
+  const totalVerdi = beholdning.reduce((s, a) => s + a.antall * (a.pris || 0), 0);
+  if (totalVerdi <= 0) return;
+
+  // HHI per aksje (basert på markedsverdi)
+  const hhiAksje = beholdning.reduce((s, a) => {
+    const andel = (a.antall * (a.pris || 0)) / totalVerdi * 100;
+    return s + andel * andel;
+  }, 0);
+
+  // HHI per sektor
+  const sektorMap = {};
+  beholdning.forEach(a => {
+    sektorMap[a.sektor || 'Ukjent'] = (sektorMap[a.sektor || 'Ukjent'] || 0) + a.antall * (a.pris || 0);
+  });
+  const hhiSektor = Object.values(sektorMap).reduce((s, v) => {
+    const andel = v / totalVerdi * 100;
+    return s + andel * andel;
+  }, 0);
+
+  function hhiInfo(hhi) {
+    if (hhi < 1000)  return { farge: '#16a34a', tekst: 'Godt diversifisert' };
+    if (hhi < 2500)  return { farge: '#d97706', tekst: 'Moderat konsentrasjon' };
+    return               { farge: '#dc2626', tekst: 'Høy konsentrasjon' };
+  }
+
+  const ia = hhiInfo(hhiAksje), is_ = hhiInfo(hhiSektor);
+
+  document.getElementById('hhi-aksje-score').textContent = Math.round(hhiAksje).toLocaleString('nb');
+  document.getElementById('hhi-aksje-score').style.color = ia.farge;
+  document.getElementById('hhi-aksje-label').textContent = ia.tekst;
+  document.getElementById('hhi-aksje-label').style.color = ia.farge;
+
+  document.getElementById('hhi-sektor-score').textContent = Math.round(hhiSektor).toLocaleString('nb');
+  document.getElementById('hhi-sektor-score').style.color = is_.farge;
+  document.getElementById('hhi-sektor-label').textContent = is_.tekst;
+  document.getElementById('hhi-sektor-label').style.color = is_.farge;
+
+  // Finn dominerende aksje og sektor
+  const toppAksje = [...beholdning].sort((a, b) =>
+    (b.antall * (b.pris || 0)) - (a.antall * (a.pris || 0)))[0];
+  const toppSektor = Object.entries(sektorMap).sort((a, b) => b[1] - a[1])[0];
+
+  const toppAksjeAndel = toppAksje ? (toppAksje.antall * (toppAksje.pris || 0) / totalVerdi * 100).toFixed(1) : 0;
+  const toppSektorAndel = toppSektor ? (toppSektor[1] / totalVerdi * 100).toFixed(1) : 0;
+
+  document.getElementById('hhi-detaljer').innerHTML =
+    `<p>📌 Største aksjeposisjon: <strong>${toppAksje?.ticker || '—'}</strong> (${toppAksjeAndel}% av porteføljen)</p>` +
+    `<p>📌 Største sektor: <strong>${toppSektor?.[0] || '—'}</strong> (${toppSektorAndel}% av porteføljen)</p>` +
+    `<p class="mt-1 text-gray-400">HHI &lt; 1 000 = diversifisert · 1 000–2 500 = moderat · &gt; 2 500 = konsentrert</p>`;
 }
 
 // ── YIELD PER SEKTOR (Sektorer) ───────────────────────────────────────────
