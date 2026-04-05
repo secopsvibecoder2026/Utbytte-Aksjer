@@ -123,7 +123,11 @@ function initTilbakeTopp() {
   if (!btn) return;
   const TERSKEL = 200;
   function sjekkScroll() {
-    const scrolled = window.scrollY || document.documentElement.scrollTop || 0;
+    const scrolled = window.pageYOffset
+      || window.scrollY
+      || document.documentElement.scrollTop
+      || document.body.scrollTop
+      || 0;
     if (scrolled >= TERSKEL) {
       btn.classList.remove('hidden');
     } else {
@@ -131,6 +135,9 @@ function initTilbakeTopp() {
     }
   }
   window.addEventListener('scroll', sjekkScroll, { passive: true });
+  document.addEventListener('scroll', sjekkScroll, { passive: true });
+  // Fallback: poll kvert sekund i tilfelle scroll-events ikke fyrer
+  setInterval(sjekkScroll, 1000);
   btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 }
 
