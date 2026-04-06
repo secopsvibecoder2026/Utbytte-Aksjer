@@ -1,5 +1,5 @@
 {
-  "sist_oppdatert": "2026-04-05T13:57:28Z",
+  "sist_oppdatert": "2026-04-06T08:37:11Z",
   "kilde": "Yahoo Finance (yfinance)",
   "aksjer": [
     {
@@ -13,7 +13,7 @@
       "markedsverdi_mrd": 995.0,
       "utbytte_per_aksje": 14.81,
       "utbytte_yield": 3.71,
-      "utbytte_vekst_5ar": -2.9,
+      "utbytte_vekst_5ar": -2.8,
       "payout_ratio": 76.0,
       "pe_ratio": 21.09,
       "pb_ratio": 2.55,
@@ -26,13 +26,13 @@
       "historiske_utbytter": [
         {
           "ar": 2022,
-          "utbytte": 16.59,
-          "yield": 6.01
+          "utbytte": 16.58,
+          "yield": 6.0
         },
         {
           "ar": 2023,
-          "utbytte": 36.2,
-          "yield": 13.8
+          "utbytte": 36.11,
+          "yield": 13.77
         },
         {
           "ar": 2024,
@@ -50,8 +50,8 @@
           "yield": 0.88
         }
       ],
-      "snitt_yield_5ar": 8.43,
-      "beskrivelse": "Norges største energiselskap. Kvartalsutbytte pluss ekstraordinære utbytter ved høye oljepriser.",
+      "snitt_yield_5ar": 8.42,
+      "beskrivelse": "Norges største energiselskap. Kvartalsutbytte pluss ekstraordinære utbytter ved høye oljepriser. Equinor ASA er notert på Oslo Børs med en markedsverdi på rundt 995 milliarder NOK, noe som gjør selskapet til ett av de større børsnoterte selskapene i Norge. Aksjen har betalt utbytte 25 år på rad, noe som reflekterer langvarig stabil inntjening og kapitalavkastning til aksjonærene. Utbyttet utbetales kvartalsvis — fire ganger i året. 5-årssnittlig direkteavkastning er 8.4%, noe som plasserer EQNR blant de høyest-yielding aksjene i energisektoren. Utbetalingsgraden (payout ratio) er 76%, noe som anses som bærekraftig for de fleste markedsforhold.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -99,7 +99,7 @@
         }
       ],
       "snitt_yield_5ar": 6.61,
-      "beskrivelse": "Norges største bank. Kjent for høyt og stabilt utbytte, ofte over 7% yield.",
+      "beskrivelse": "Norges største bank. Kjent for høyt og stabilt utbytte, ofte over 7% yield. DNB Bank ASA er notert på Oslo Børs med en markedsverdi på rundt 442 milliarder NOK, noe som gjør selskapet til ett av de større børsnoterte selskapene i Norge. Aksjen har betalt utbytte 20 år på rad, noe som reflekterer langvarig stabil inntjening og kapitalavkastning til aksjonærene. Utbyttet utbetales én gang i året. 5-årssnittlig direkteavkastning er 6.6%, noe som plasserer DNB blant de solid-yielding aksjene i finanssektoren. Utbetalingsgraden (payout ratio) er 59%, noe som anses som bærekraftig for de fleste markedsforhold.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -147,7 +147,7 @@
         }
       ],
       "snitt_yield_5ar": 9.07,
-      "beskrivelse": "Norges ledende telekomselskap med stabil kontantstrøm og høy utbyttegrad. Sterkt fotavtrykk i Asia.",
+      "beskrivelse": "Norges ledende telekomselskap med stabil kontantstrøm og høy utbyttegrad. Sterkt fotavtrykk i Asia. Telenor ASA er notert på Oslo Børs med en markedsverdi på rundt 233 milliarder NOK, noe som gjør selskapet til ett av de større børsnoterte selskapene i Norge. Aksjen har betalt utbytte 24 år på rad, noe som reflekterer langvarig stabil inntjening og kapitalavkastning til aksjonærene. Utbyttet utbetales halvårlig — to ganger i året. 5-årssnittlig direkteavkastning er 9.1%, noe som plasserer TEL blant de høyest-yielding aksjene i telekommunikasjonssektoren. Utbetalingsgraden (payout ratio) er 120%, noe som kan gjøre utbyttet sårbart ved svakere inntjening.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -195,7 +195,7 @@
         }
       ],
       "snitt_yield_5ar": 6.33,
-      "beskrivelse": "Nordisk merkevareselskap med diversifisert portefølje. Konsistent og voksende utbytte i over 30 år.",
+      "beskrivelse": "Nordisk merkevareselskap med diversifisert portefølje. Konsistent og voksende utbytte i over 30 år. Orkla ASA er notert på Oslo Børs med en markedsverdi på rundt 120 milliarder NOK, noe som gjør selskapet til ett av de større børsnoterte selskapene i Norge. Aksjen har betalt utbytte 26 år på rad, noe som reflekterer langvarig stabil inntjening og kapitalavkastning til aksjonærene. Utbyttet utbetales én gang i året. 5-årssnittlig direkteavkastning er 6.3%, noe som plasserer ORK blant de solid-yielding aksjene i forbruksvarer-sektoren. Utbetalingsgraden (payout ratio) er 63%, noe som anses som bærekraftig for de fleste markedsforhold.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -248,7 +248,7 @@
         }
       ],
       "snitt_yield_5ar": 3.22,
-      "beskrivelse": "Verdens største lakseoppdrettsselskap. Kvartalsutbytte koblet til laksepris og inntjening.",
+      "beskrivelse": "Verdens største lakseoppdrettsselskap. Kvartalsutbytte koblet til laksepris og inntjening. Mowi ASA er notert på Oslo Børs med en markedsverdi på rundt 118 milliarder NOK, noe som gjør selskapet til ett av de større børsnoterte selskapene i Norge. Selskapet har hatt sammenhengende utbyttebetalinger i 13 år. Utbyttet utbetales kvartalsvis — fire ganger i året. 5-årssnittlig direkteavkastning er 3.2%, noe som plasserer MOWI blant de mer moderate aksjene i havbrukssektoren. Utbetalingsgraden (payout ratio) er 41%, noe som gir selskapet godt rom for å øke utbyttet fremover.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -301,7 +301,7 @@
         }
       ],
       "snitt_yield_5ar": 8.86,
-      "beskrivelse": "Norsk E&P-selskap med høy utbyttepolitikk. Betaler kvartalsvis utbytte basert på fri kontantstrøm.",
+      "beskrivelse": "Norsk E&P-selskap med høy utbyttepolitikk. Betaler kvartalsvis utbytte basert på fri kontantstrøm. Aker BP ASA er notert på Oslo Børs med en markedsverdi på rundt 215 milliarder NOK, noe som gjør selskapet til ett av de større børsnoterte selskapene i Norge. Selskapet har hatt sammenhengende utbyttebetalinger i 11 år. Utbyttet utbetales kvartalsvis — fire ganger i året. 5-årssnittlig direkteavkastning er 8.9%, noe som plasserer AKRBP blant de høyest-yielding aksjene i energisektoren. Utbetalingsgraden (payout ratio) er 1197%, noe som kan gjøre utbyttet sårbart ved svakere inntjening.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -349,7 +349,7 @@
         }
       ],
       "snitt_yield_5ar": 6.74,
-      "beskrivelse": "Globalt aluminiumselskap og ledende innen fornybar energi. Syklisk utbytte påvirket av aluminiumspriser.",
+      "beskrivelse": "Globalt aluminiumselskap og ledende innen fornybar energi. Syklisk utbytte påvirket av aluminiumspriser. Norsk Hydro ASA er notert på Oslo Børs med en markedsverdi på rundt 202 milliarder NOK, noe som gjør selskapet til ett av de større børsnoterte selskapene i Norge. Aksjen har betalt utbytte 25 år på rad, noe som reflekterer langvarig stabil inntjening og kapitalavkastning til aksjonærene. Utbyttet utbetales én gang i året. 5-årssnittlig direkteavkastning er 6.7%, noe som plasserer NHY blant de solid-yielding aksjene i materialersektoren. Utbetalingsgraden (payout ratio) er 66%, noe som anses som bærekraftig for de fleste markedsforhold.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -397,7 +397,7 @@
         }
       ],
       "snitt_yield_5ar": 7.44,
-      "beskrivelse": "Verdens ledende gjødselprodusent. Utbytte varierer med gjødselpris og global matetterspørsel.",
+      "beskrivelse": "Verdens ledende gjødselprodusent. Utbytte varierer med gjødselpris og global matetterspørsel. Yara International ASA er notert på Oslo Børs med en markedsverdi på rundt 143 milliarder NOK, noe som gjør selskapet til ett av de større børsnoterte selskapene i Norge. Aksjen har betalt utbytte 21 år på rad, noe som reflekterer langvarig stabil inntjening og kapitalavkastning til aksjonærene. Utbyttet utbetales én gang i året. 5-årssnittlig direkteavkastning er 7.4%, noe som plasserer YAR blant de høyest-yielding aksjene i materialersektoren. Utbetalingsgraden (payout ratio) er 9%, noe som gir selskapet godt rom for å øke utbyttet fremover.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -445,7 +445,7 @@
         }
       ],
       "snitt_yield_5ar": 5.09,
-      "beskrivelse": "En av Norges mest effektive lakseoppdrettere. Høy margin og voksende utbytte over tid.",
+      "beskrivelse": "En av Norges mest effektive lakseoppdrettere. Høy margin og voksende utbytte over tid. SalMar ASA er notert på Oslo Børs med en markedsverdi på rundt 78 milliarder NOK. Aksjen har betalt utbytte 16 år på rad, noe som reflekterer langvarig stabil inntjening og kapitalavkastning til aksjonærene. Utbyttet utbetales én gang i året. 5-årssnittlig direkteavkastning er 5.1%, noe som plasserer SALM blant de solid-yielding aksjene i havbrukssektoren. Utbetalingsgraden (payout ratio) er 267%, noe som kan gjøre utbyttet sårbart ved svakere inntjening.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -469,7 +469,7 @@
       "frekvens": "Halvårlig",
       "ar_med_utbytte": 20,
       "siste_utbytte": 6.0,
-      "beskrivelse": "Ledende regional sparebank på Sør-Vestlandet. Kjent for høyt og stabilt utbytte med god vekst.",
+      "beskrivelse": "Ledende regional sparebank på Sør-Vestlandet. Kjent for høyt og stabilt utbytte med god vekst. SpareBank 1 SR-Bank er notert på Oslo Børs med en markedsverdi på rundt 31 milliarder NOK. Aksjen har betalt utbytte 20 år på rad, noe som reflekterer langvarig stabil inntjening og kapitalavkastning til aksjonærene. Utbyttet utbetales halvårlig — to ganger i året. Utbetalingsgraden (payout ratio) er 60%, noe som anses som bærekraftig for de fleste markedsforhold.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -493,7 +493,7 @@
       "frekvens": "Kvartalsvis",
       "ar_med_utbytte": 8,
       "siste_utbytte": 2.7,
-      "beskrivelse": "Verdens største tørrbulkrederi. Volatilt men potensielt svært høyt utbytte koblet til shippingratene.",
+      "beskrivelse": "Verdens største tørrbulkrederi. Volatilt men potensielt svært høyt utbytte koblet til shippingratene. Golden Ocean Group er notert på Oslo Børs med en markedsverdi på rundt 21 milliarder NOK. Selskapet har hatt sammenhengende utbyttebetalinger i 8 år. Utbyttet utbetales kvartalsvis — fire ganger i året. Utbetalingsgraden (payout ratio) er 85%, noe som kan gjøre utbyttet sårbart ved svakere inntjening.",
       "valuta": "USD",
       "data_kilde": "yahoo"
     },
@@ -521,8 +521,8 @@
       "historiske_utbytter": [
         {
           "ar": 2022,
-          "utbytte": 9.27,
-          "yield": 144.25
+          "utbytte": 9.26,
+          "yield": 144.15
         },
         {
           "ar": 2023,
@@ -545,8 +545,8 @@
           "yield": 2.09
         }
       ],
-      "snitt_yield_5ar": 55.06,
-      "beskrivelse": "Containerrederi med svært høy utbyttegrad. Syklisk og volatilt – utbytte varierer sterkt med containerrater.",
+      "snitt_yield_5ar": 55.04,
+      "beskrivelse": "Containerrederi med svært høy utbyttegrad. Syklisk og volatilt – utbytte varierer sterkt med containerrater. MPC Container Ships er notert på Oslo Børs med en markedsverdi på rundt 10 milliarder NOK. Selskapet har hatt sammenhengende utbyttebetalinger i 5 år. Utbyttet utbetales kvartalsvis — fire ganger i året. 5-årssnittlig direkteavkastning er 55.0%, noe som plasserer MPCC blant de høyest-yielding aksjene i shippingsektoren. Utbetalingsgraden (payout ratio) er 51%, noe som anses som bærekraftig for de fleste markedsforhold.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -570,36 +570,36 @@
       "rapport_dato": "2026-06-02",
       "frekvens": "Kvartalsvis",
       "ar_med_utbytte": 11,
-      "siste_utbytte": 5.56,
+      "siste_utbytte": 5.54,
       "historiske_utbytter": [
         {
           "ar": 2022,
-          "utbytte": 9.17,
-          "yield": 12.88
+          "utbytte": 9.14,
+          "yield": 12.84
         },
         {
           "ar": 2023,
-          "utbytte": 30.06,
-          "yield": 20.57
+          "utbytte": 29.96,
+          "yield": 20.5
         },
         {
           "ar": 2024,
-          "utbytte": 28.3,
-          "yield": 22.92
+          "utbytte": 28.21,
+          "yield": 22.85
         },
         {
           "ar": 2025,
-          "utbytte": 12.88,
-          "yield": 9.8
+          "utbytte": 12.84,
+          "yield": 9.77
         },
         {
           "ar": 2026,
-          "utbytte": 5.56,
-          "yield": 3.29
+          "utbytte": 5.54,
+          "yield": 3.28
         }
       ],
-      "snitt_yield_5ar": 13.89,
-      "beskrivelse": "Verdens største LPG-tankrederi. Høy kontantstrøm og liberal utbyttepolitikk. Volatilt med shippingmarkedet.",
+      "snitt_yield_5ar": 13.85,
+      "beskrivelse": "Verdens største LPG-tankrederi. Høy kontantstrøm og liberal utbyttepolitikk. Volatilt med shippingmarkedet. BW LPG Limited er notert på Oslo Børs med en markedsverdi på rundt 26 milliarder NOK. Selskapet har hatt sammenhengende utbyttebetalinger i 11 år. Utbyttet utbetales kvartalsvis — fire ganger i året. 5-årssnittlig direkteavkastning er 13.8%, noe som plasserer BWLPG blant de høyest-yielding aksjene i shippingsektoren. Utbetalingsgraden (payout ratio) er 82%, noe som kan gjøre utbyttet sårbart ved svakere inntjening.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -647,7 +647,7 @@
         }
       ],
       "snitt_yield_5ar": 2.34,
-      "beskrivelse": "Teknologi- og forsvarskonsern. Lav yield men sterk utbyttevekst. Defensivt som følge av økt NATO-satsing.",
+      "beskrivelse": "Teknologi- og forsvarskonsern. Lav yield men sterk utbyttevekst. Defensivt som følge av økt NATO-satsing. Kongsberg Gruppen ASA er notert på Oslo Børs med en markedsverdi på rundt 368 milliarder NOK, noe som gjør selskapet til ett av de større børsnoterte selskapene i Norge. Aksjen har betalt utbytte 24 år på rad, noe som reflekterer langvarig stabil inntjening og kapitalavkastning til aksjonærene. Utbyttet utbetales halvårlig — to ganger i året. 5-årssnittlig direkteavkastning er 2.3%, noe som plasserer KOG blant de mer moderate aksjene i industrisektoren. Utbetalingsgraden (payout ratio) er 42%, noe som gir selskapet godt rom for å øke utbyttet fremover.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -671,36 +671,36 @@
       "rapport_dato": "2026-04-30",
       "frekvens": "Kvartalsvis",
       "ar_med_utbytte": 21,
-      "siste_utbytte": 10.05,
+      "siste_utbytte": 10.02,
       "historiske_utbytter": [
         {
           "ar": 2022,
           "utbytte": 1.46,
-          "yield": 1.29
+          "yield": 1.28
         },
         {
           "ar": 2023,
-          "utbytte": 28.01,
-          "yield": 14.03
+          "utbytte": 27.92,
+          "yield": 13.98
         },
         {
           "ar": 2024,
-          "utbytte": 19.03,
-          "yield": 12.25
+          "utbytte": 18.97,
+          "yield": 12.21
         },
         {
           "ar": 2025,
-          "utbytte": 9.08,
-          "yield": 4.09
+          "utbytte": 9.05,
+          "yield": 4.08
         },
         {
           "ar": 2026,
-          "utbytte": 10.05,
-          "yield": 2.96
+          "utbytte": 10.02,
+          "yield": 2.95
         }
       ],
-      "snitt_yield_5ar": 6.92,
-      "beskrivelse": "Ledende råoljetankrederi. Svært høy utbyttegrad fra sterk kontantstrøm. Syklisk og rateeksponert.",
+      "snitt_yield_5ar": 6.9,
+      "beskrivelse": "Ledende råoljetankrederi. Svært høy utbyttegrad fra sterk kontantstrøm. Syklisk og rateeksponert. Frontline PLC er notert på Oslo Børs med en markedsverdi på rundt 76 milliarder NOK. Aksjen har betalt utbytte 21 år på rad, noe som reflekterer langvarig stabil inntjening og kapitalavkastning til aksjonærene. Utbyttet utbetales kvartalsvis — fire ganger i året. 5-årssnittlig direkteavkastning er 6.9%, noe som plasserer FRO blant de solid-yielding aksjene i shippingsektoren. Utbetalingsgraden (payout ratio) er 55%, noe som anses som bærekraftig for de fleste markedsforhold.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -753,7 +753,7 @@
         }
       ],
       "snitt_yield_5ar": 8.44,
-      "beskrivelse": "Regional sparebank i Nord-Norge. Stabilt og voksende utbytte, godt kapitaldekkede.",
+      "beskrivelse": "Regional sparebank i Nord-Norge. Stabilt og voksende utbytte, godt kapitaldekkede. SpareBank 1 Nord-Norge er notert på Oslo Børs med en markedsverdi på rundt 16 milliarder NOK. Aksjen har betalt utbytte 24 år på rad, noe som reflekterer langvarig stabil inntjening og kapitalavkastning til aksjonærene. Utbyttet utbetales halvårlig — to ganger i året. 5-årssnittlig direkteavkastning er 8.4%, noe som plasserer NONG blant de høyest-yielding aksjene i finanssektoren. Utbetalingsgraden (payout ratio) er 57%, noe som anses som bærekraftig for de fleste markedsforhold.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -801,7 +801,7 @@
         }
       ],
       "snitt_yield_5ar": 3.5,
-      "beskrivelse": "Ledende leverandør av undersøiske engineering-tjenester til olje og gass. Solid balanse.",
+      "beskrivelse": "Ledende leverandør av undersøiske engineering-tjenester til olje og gass. Solid balanse. Subsea 7 SA er notert på Oslo Børs med en markedsverdi på rundt 87 milliarder NOK. Aksjen har betalt utbytte 15 år på rad, noe som reflekterer langvarig stabil inntjening og kapitalavkastning til aksjonærene. Utbyttet utbetales halvårlig — to ganger i året. 5-årssnittlig direkteavkastning er 3.5%, noe som plasserer SUBC blant de mer moderate aksjene i energitjenester-sektoren. Utbetalingsgraden (payout ratio) er 93%, noe som kan gjøre utbyttet sårbart ved svakere inntjening.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -849,7 +849,7 @@
         }
       ],
       "snitt_yield_5ar": 2.49,
-      "beskrivelse": "Internasjonal shipping- og logistikkkonsern. Ro-ro transport og havnevirksomhet. Lav verdsettelse.",
+      "beskrivelse": "Internasjonal shipping- og logistikkkonsern. Ro-ro transport og havnevirksomhet. Lav verdsettelse. Wilh. Wilhelmsen Holding er notert på Oslo Børs med en markedsverdi på rundt 31 milliarder NOK. Aksjen har betalt utbytte 26 år på rad, noe som reflekterer langvarig stabil inntjening og kapitalavkastning til aksjonærene. Utbyttet utbetales én gang i året. 5-årssnittlig direkteavkastning er 2.5%, noe som plasserer WWI blant de mer moderate aksjene i shippingsektoren. Utbetalingsgraden (payout ratio) er 13%, noe som gir selskapet godt rom for å øke utbyttet fremover.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -873,7 +873,7 @@
       "frekvens": "Halvårlig",
       "ar_med_utbytte": 16,
       "siste_utbytte": 7.0,
-      "beskrivelse": "Raskt voksende skadeforsikringsselskap i Norden og UK. Sterk utbyttevekst over mange år.",
+      "beskrivelse": "Raskt voksende skadeforsikringsselskap i Norden og UK. Sterk utbyttevekst over mange år. Protector Forsikring ASA er notert på Oslo Børs med en markedsverdi på rundt 12 milliarder NOK. Aksjen har betalt utbytte 16 år på rad, noe som reflekterer langvarig stabil inntjening og kapitalavkastning til aksjonærene. Utbyttet utbetales halvårlig — to ganger i året. Utbetalingsgraden (payout ratio) er 52%, noe som anses som bærekraftig for de fleste markedsforhold.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -911,7 +911,7 @@
         }
       ],
       "snitt_yield_5ar": 2.84,
-      "beskrivelse": "Norsk leverandør av fornybar energi globalt. Solenergi- og vindkraftprosjekter i fremvoksende markeder.",
+      "beskrivelse": "Norsk leverandør av fornybar energi globalt. Solenergi- og vindkraftprosjekter i fremvoksende markeder. Scatec ASA er notert på Oslo Børs med en markedsverdi på rundt 21 milliarder NOK. Selskapet har hatt sammenhengende utbyttebetalinger i 9 år. 5-årssnittlig direkteavkastning er 2.8%, noe som plasserer SCATC blant de mer moderate aksjene i fornybar energi-sektoren.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -959,7 +959,7 @@
         }
       ],
       "snitt_yield_5ar": 6.53,
-      "beskrivelse": "Holdingselskap med majoritetseierandel i Lerøy Seafood og Pelagia. Bred eksponering mot sjømat og fiskeri.",
+      "beskrivelse": "Holdingselskap med majoritetseierandel i Lerøy Seafood og Pelagia. Bred eksponering mot sjømat og fiskeri. Austevoll Seafood ASA er notert på Oslo Børs med en markedsverdi på rundt 21 milliarder NOK. Aksjen har betalt utbytte 17 år på rad, noe som reflekterer langvarig stabil inntjening og kapitalavkastning til aksjonærene. Utbyttet utbetales én gang i året. 5-årssnittlig direkteavkastning er 6.5%, noe som plasserer AUSS blant de solid-yielding aksjene i havbrukssektoren. Utbetalingsgraden (payout ratio) er 295%, noe som kan gjøre utbyttet sårbart ved svakere inntjening.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -1007,7 +1007,7 @@
         }
       ],
       "snitt_yield_5ar": 5.57,
-      "beskrivelse": "En av Norges største lakseoppdrettere med virksomhet innen oppdrett, villfangst og bearbeiding.",
+      "beskrivelse": "En av Norges største lakseoppdrettere med virksomhet innen oppdrett, villfangst og bearbeiding. Lerøy Seafood Group ASA er notert på Oslo Børs med en markedsverdi på rundt 30 milliarder NOK. Aksjen har betalt utbytte 23 år på rad, noe som reflekterer langvarig stabil inntjening og kapitalavkastning til aksjonærene. Utbyttet utbetales én gang i året. 5-årssnittlig direkteavkastning er 5.6%, noe som plasserer LSG blant de solid-yielding aksjene i havbrukssektoren. Utbetalingsgraden (payout ratio) er 410%, noe som kan gjøre utbyttet sårbart ved svakere inntjening.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -1055,7 +1055,7 @@
         }
       ],
       "snitt_yield_5ar": 2.26,
-      "beskrivelse": "Færøysk-skotsk lakseoppdrettsselskap notert på Oslo Børs. Integrert verdikjede fra rogn til ferdig produkt.",
+      "beskrivelse": "Færøysk-skotsk lakseoppdrettsselskap notert på Oslo Børs. Integrert verdikjede fra rogn til ferdig produkt. Bakkafrost P/F er notert på Oslo Børs med en markedsverdi på rundt 27 milliarder NOK. Selskapet har hatt sammenhengende utbyttebetalinger i 14 år. Utbyttet utbetales én gang i året. 5-årssnittlig direkteavkastning er 2.3%, noe som plasserer BAKKA blant de mer moderate aksjene i havbrukssektoren. Utbetalingsgraden (payout ratio) er 94%, noe som kan gjøre utbyttet sårbart ved svakere inntjening.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -1079,36 +1079,36 @@
       "rapport_dato": "2026-04-17",
       "frekvens": "Kvartalsvis",
       "ar_med_utbytte": 6,
-      "siste_utbytte": 1.72,
+      "siste_utbytte": 1.71,
       "historiske_utbytter": [
         {
           "ar": 2022,
-          "utbytte": 4.76,
-          "yield": 9.87
+          "utbytte": 4.74,
+          "yield": 9.84
         },
         {
           "ar": 2023,
-          "utbytte": 10.5,
-          "yield": 15.37
+          "utbytte": 10.47,
+          "yield": 15.32
         },
         {
           "ar": 2024,
-          "utbytte": 13.38,
-          "yield": 22.23
+          "utbytte": 13.34,
+          "yield": 22.16
         },
         {
           "ar": 2025,
-          "utbytte": 3.89,
-          "yield": 7.17
+          "utbytte": 3.88,
+          "yield": 7.15
         },
         {
           "ar": 2026,
-          "utbytte": 1.72,
-          "yield": 2.27
+          "utbytte": 1.71,
+          "yield": 2.26
         }
       ],
-      "snitt_yield_5ar": 11.38,
-      "beskrivelse": "Verdens største produkttankrederi. Frakter raffinerte petroleumsprodukter. Svært høy utbyttegrad fra sterk kontantstrøm.",
+      "snitt_yield_5ar": 11.35,
+      "beskrivelse": "Verdens største produkttankrederi. Frakter raffinerte petroleumsprodukter. Svært høy utbyttegrad fra sterk kontantstrøm. Hafnia Limited er notert på Oslo Børs med en markedsverdi på rundt 38 milliarder NOK. Selskapet har hatt sammenhengende utbyttebetalinger i 6 år. Utbyttet utbetales kvartalsvis — fire ganger i året. 5-årssnittlig direkteavkastning er 11.3%, noe som plasserer HAFNI blant de høyest-yielding aksjene i shippingsektoren. Utbetalingsgraden (payout ratio) er 60%, noe som anses som bærekraftig for de fleste markedsforhold.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -1132,7 +1132,7 @@
       "frekvens": "Kvartalsvis",
       "ar_med_utbytte": 7,
       "siste_utbytte": 3.6,
-      "beskrivelse": "LNG-tankselskap med moderne flåte på langsiktige TC-kontrakter. Stabil og forutsigbar kontantstrøm.",
+      "beskrivelse": "LNG-tankselskap med moderne flåte på langsiktige TC-kontrakter. Stabil og forutsigbar kontantstrøm. Flex LNG Ltd er notert på Oslo Børs med en markedsverdi på rundt 11 milliarder NOK. Selskapet har hatt sammenhengende utbyttebetalinger i 7 år. Utbyttet utbetales kvartalsvis — fire ganger i året. Utbetalingsgraden (payout ratio) er 78%, noe som anses som bærekraftig for de fleste markedsforhold.",
       "valuta": "USD",
       "data_kilde": "yahoo"
     },
@@ -1185,7 +1185,7 @@
         }
       ],
       "snitt_yield_5ar": 6.94,
-      "beskrivelse": "Ledende sparebank i Midt-Norge. Konsistent og voksende utbytte med solid kapitalisering.",
+      "beskrivelse": "Ledende sparebank i Midt-Norge. Konsistent og voksende utbytte med solid kapitalisering. SpareBank 1 SMN er notert på Oslo Børs med en markedsverdi på rundt 30 milliarder NOK. Aksjen har betalt utbytte 27 år på rad, noe som reflekterer langvarig stabil inntjening og kapitalavkastning til aksjonærene. Utbyttet utbetales én gang i året. 5-årssnittlig direkteavkastning er 6.9%, noe som plasserer MING blant de solid-yielding aksjene i finanssektoren. Utbetalingsgraden (payout ratio) er 65%, noe som anses som bærekraftig for de fleste markedsforhold.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -1238,7 +1238,7 @@
         }
       ],
       "snitt_yield_5ar": 5.98,
-      "beskrivelse": "Stor sparebank på Østlandet og Innlandet. Stabil inntjening og høy utbyttegrad.",
+      "beskrivelse": "Stor sparebank på Østlandet og Innlandet. Stabil inntjening og høy utbyttegrad. SpareBank 1 Østlandet er notert på Oslo Børs med en markedsverdi på rundt 27 milliarder NOK. Selskapet har hatt sammenhengende utbyttebetalinger i 9 år. Utbyttet utbetales én gang i året. 5-årssnittlig direkteavkastning er 6.0%, noe som plasserer SPOL blant de solid-yielding aksjene i finanssektoren. Utbetalingsgraden (payout ratio) er 57%, noe som anses som bærekraftig for de fleste markedsforhold.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -1286,7 +1286,7 @@
         }
       ],
       "snitt_yield_5ar": 5.3,
-      "beskrivelse": "Industrielt investeringsselskap med fokus på grønn teknologi og fornybar energi. Lang utbyttehistorikk.",
+      "beskrivelse": "Industrielt investeringsselskap med fokus på grønn teknologi og fornybar energi. Lang utbyttehistorikk. Arendals Fossekompani ASA er notert på Oslo Børs med en markedsverdi på rundt 20 milliarder NOK. Aksjen har betalt utbytte 26 år på rad, noe som reflekterer langvarig stabil inntjening og kapitalavkastning til aksjonærene. Utbyttet utbetales halvårlig — to ganger i året. 5-årssnittlig direkteavkastning er 5.3%, noe som plasserer AFG blant de solid-yielding aksjene i fornybar energi-sektoren. Utbetalingsgraden (payout ratio) er 50%, noe som anses som bærekraftig for de fleste markedsforhold.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -1301,7 +1301,7 @@
       "markedsverdi_mrd": 24.3,
       "utbytte_per_aksje": 8.92,
       "utbytte_yield": 8.8,
-      "utbytte_vekst_5ar": 23.9,
+      "utbytte_vekst_5ar": 24.1,
       "payout_ratio": 92.0,
       "pe_ratio": 14.44,
       "pb_ratio": 1.76,
@@ -1315,7 +1315,7 @@
         {
           "ar": 2023,
           "utbytte": 1.17,
-          "yield": 3.51
+          "yield": 3.5
         },
         {
           "ar": 2024,
@@ -1333,8 +1333,8 @@
           "yield": 2.2
         }
       ],
-      "snitt_yield_5ar": 4.83,
-      "beskrivelse": "Ledende kjemikalietankrederi. Frakter spesialkjemikalier globalt. Nytter av høy etterspørsel etter spesialprodukter.",
+      "snitt_yield_5ar": 4.82,
+      "beskrivelse": "Ledende kjemikalietankrederi. Frakter spesialkjemikalier globalt. Nytter av høy etterspørsel etter spesialprodukter. Odfjell SE er notert på Oslo Børs med en markedsverdi på rundt 24 milliarder NOK. Selskapet har hatt sammenhengende utbyttebetalinger i 5 år. Utbyttet utbetales kvartalsvis — fire ganger i året. 5-årssnittlig direkteavkastning er 4.8%, noe som plasserer ODL blant de solid-yielding aksjene i shippingsektoren. Utbetalingsgraden (payout ratio) er 92%, noe som kan gjøre utbyttet sårbart ved svakere inntjening.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -1358,10 +1358,10 @@
       "rapport_dato": null,
       "frekvens": "Uregelmessig",
       "ar_med_utbytte": 5,
-      "siste_utbytte": 6.77,
+      "siste_utbytte": 6.75,
       "historiske_utbytter": [],
       "snitt_yield_5ar": 0.0,
-      "beskrivelse": "Ledende seismikkselskap som henter inn geofysiske data for olje- og gassindustrien. Gjenopptok utbytte etter restrukturering.",
+      "beskrivelse": "Ledende seismikkselskap som henter inn geofysiske data for olje- og gassindustrien. Gjenopptok utbytte etter restrukturering. PGS ASA er notert på Oslo Børs. Selskapet har hatt sammenhengende utbyttebetalinger i 5 år.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -1409,7 +1409,7 @@
         }
       ],
       "snitt_yield_5ar": 7.11,
-      "beskrivelse": "Ledende skandinavisk bygg- og anleggsselskap. Lang og stabil utbyttehistorikk med ansatteeierskap som særpreg.",
+      "beskrivelse": "Ledende skandinavisk bygg- og anleggsselskap. Lang og stabil utbyttehistorikk med ansatteeierskap som særpreg. Veidekke ASA er notert på Oslo Børs med en markedsverdi på rundt 26 milliarder NOK. Aksjen har betalt utbytte 26 år på rad, noe som reflekterer langvarig stabil inntjening og kapitalavkastning til aksjonærene. Utbyttet utbetales én gang i året. 5-årssnittlig direkteavkastning er 7.1%, noe som plasserer VEI blant de høyest-yielding aksjene i industrisektoren. Utbetalingsgraden (payout ratio) er 78%, noe som anses som bærekraftig for de fleste markedsforhold.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -1457,7 +1457,7 @@
         }
       ],
       "snitt_yield_5ar": 4.91,
-      "beskrivelse": "Kjell Inge Røkkes industrielle investeringsselskap. Eierandeler i bl.a. Aker BP, Aker Solutions og Cognite.",
+      "beskrivelse": "Kjell Inge Røkkes industrielle investeringsselskap. Eierandeler i bl.a. Aker BP, Aker Solutions og Cognite. Aker ASA er notert på Oslo Børs med en markedsverdi på rundt 79 milliarder NOK. Aksjen har betalt utbytte 21 år på rad, noe som reflekterer langvarig stabil inntjening og kapitalavkastning til aksjonærene. Utbyttet utbetales halvårlig — to ganger i året. 5-årssnittlig direkteavkastning er 4.9%, noe som plasserer AKER blant de solid-yielding aksjene i industrisektoren. Utbetalingsgraden (payout ratio) er 97%, noe som kan gjøre utbyttet sårbart ved svakere inntjening.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -1481,36 +1481,36 @@
       "rapport_dato": "2026-05-18",
       "frekvens": "Kvartalsvis",
       "ar_med_utbytte": 12,
-      "siste_utbytte": 1.79,
+      "siste_utbytte": 1.78,
       "historiske_utbytter": [
         {
           "ar": 2022,
-          "utbytte": 1.37,
-          "yield": 5.91
+          "utbytte": 1.36,
+          "yield": 5.9
         },
         {
           "ar": 2023,
-          "utbytte": 1.37,
-          "yield": 6.24
+          "utbytte": 1.36,
+          "yield": 6.22
         },
         {
           "ar": 2024,
-          "utbytte": 2.69,
-          "yield": 9.1
+          "utbytte": 2.68,
+          "yield": 9.07
         },
         {
           "ar": 2025,
-          "utbytte": 3.2,
-          "yield": 7.1
+          "utbytte": 3.19,
+          "yield": 7.07
         },
         {
           "ar": 2026,
-          "utbytte": 1.79,
-          "yield": 3.47
+          "utbytte": 1.78,
+          "yield": 3.46
         }
       ],
-      "snitt_yield_5ar": 6.36,
-      "beskrivelse": "FPSO-operatør (flytende produksjon og lagring av olje). Langvarige kontrakter gir stabil kontantstrøm.",
+      "snitt_yield_5ar": 6.34,
+      "beskrivelse": "FPSO-operatør (flytende produksjon og lagring av olje). Langvarige kontrakter gir stabil kontantstrøm. BW Offshore Limited er notert på Oslo Børs. Selskapet har hatt sammenhengende utbyttebetalinger i 12 år. Utbyttet utbetales kvartalsvis — fire ganger i året. 5-årssnittlig direkteavkastning er 6.3%, noe som plasserer BWO blant de solid-yielding aksjene i energitjenester-sektoren. Utbetalingsgraden (payout ratio) er 44%, noe som gir selskapet godt rom for å øke utbyttet fremover.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -1534,7 +1534,7 @@
       "frekvens": "Halvårlig",
       "ar_med_utbytte": 17,
       "siste_utbytte": 3.9,
-      "beskrivelse": "Sparebank i Telemark og Vestfold. Stabil lokal bank med god utbyttehistorikk og solid kapitaldekning.",
+      "beskrivelse": "Sparebank i Telemark og Vestfold. Stabil lokal bank med god utbyttehistorikk og solid kapitaldekning. SpareBank 1 BV er notert på Oslo Børs. Aksjen har betalt utbytte 17 år på rad, noe som reflekterer langvarig stabil inntjening og kapitalavkastning til aksjonærene. Utbyttet utbetales halvårlig — to ganger i året. Utbetalingsgraden (payout ratio) er 61%, noe som anses som bærekraftig for de fleste markedsforhold.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -1587,7 +1587,7 @@
         }
       ],
       "snitt_yield_5ar": 4.82,
-      "beskrivelse": "Norges største skadeforsikringsselskap. Betaler ordinært utbytte pluss ekstraordinært. Svært høy og stabil utbyttegrad.",
+      "beskrivelse": "Norges største skadeforsikringsselskap. Betaler ordinært utbytte pluss ekstraordinært. Svært høy og stabil utbyttegrad. Gjensidige Forsikring ASA er notert på Oslo Børs med en markedsverdi på rundt 127 milliarder NOK, noe som gjør selskapet til ett av de større børsnoterte selskapene i Norge. Aksjen har betalt utbytte 16 år på rad, noe som reflekterer langvarig stabil inntjening og kapitalavkastning til aksjonærene. Utbyttet utbetales én gang i året. 5-årssnittlig direkteavkastning er 4.8%, noe som plasserer GJF blant de solid-yielding aksjene i finanssektoren. Utbetalingsgraden (payout ratio) er 72%, noe som anses som bærekraftig for de fleste markedsforhold.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -1635,7 +1635,7 @@
         }
       ],
       "snitt_yield_5ar": 3.85,
-      "beskrivelse": "Ledende nordisk livsforsikrings- og pensjonskonsern. Voksende utbytte drevet av sterk vekst i forvaltningskapital.",
+      "beskrivelse": "Ledende nordisk livsforsikrings- og pensjonskonsern. Voksende utbytte drevet av sterk vekst i forvaltningskapital. Storebrand ASA er notert på Oslo Børs med en markedsverdi på rundt 74 milliarder NOK. Aksjen har betalt utbytte 16 år på rad, noe som reflekterer langvarig stabil inntjening og kapitalavkastning til aksjonærene. Utbyttet utbetales én gang i året. 5-årssnittlig direkteavkastning er 3.9%, noe som plasserer STB blant de mer moderate aksjene i finanssektoren. Utbetalingsgraden (payout ratio) er 40%, noe som gir selskapet godt rom for å øke utbyttet fremover.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -1683,7 +1683,7 @@
         }
       ],
       "snitt_yield_5ar": 5.33,
-      "beskrivelse": "Leverandør av engineering og teknologi til olje-, gass- og havvindprosjekter. Gjenopptok utbytte etter restrukturering i 2020.",
+      "beskrivelse": "Leverandør av engineering og teknologi til olje-, gass- og havvindprosjekter. Gjenopptok utbytte etter restrukturering i 2020. Aker Solutions ASA er notert på Oslo Børs med en markedsverdi på rundt 22 milliarder NOK. Selskapet har hatt sammenhengende utbyttebetalinger i 5 år. Utbyttet utbetales én gang i året. 5-årssnittlig direkteavkastning er 5.3%, noe som plasserer AKSO blant de solid-yielding aksjene i energitjenester-sektoren. Utbetalingsgraden (payout ratio) er 62%, noe som anses som bærekraftig for de fleste markedsforhold.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -1707,7 +1707,7 @@
       "frekvens": "Kvartalsvis",
       "ar_med_utbytte": 3,
       "siste_utbytte": 2.0,
-      "beskrivelse": "LNG-tankselskap spinnet ut fra Golar LNG. Liberal utbyttepolitikk. Syklisk eksponering mot LNG-fraktrater.",
+      "beskrivelse": "LNG-tankselskap spinnet ut fra Golar LNG. Liberal utbyttepolitikk. Syklisk eksponering mot LNG-fraktrater. Cool Company Ltd er notert på Oslo Børs. Selskapet har betalt utbytte de siste 3 årene. Utbyttet utbetales kvartalsvis — fire ganger i året. Utbetalingsgraden (payout ratio) er 82%, noe som kan gjøre utbyttet sårbart ved svakere inntjening.",
       "valuta": "USD",
       "data_kilde": "yahoo"
     },
@@ -1745,7 +1745,7 @@
         }
       ],
       "snitt_yield_5ar": 12.3,
-      "beskrivelse": "Norsk E&P-selskap med fokus på norsk sokkel. Høy utbytteyield drevet av sterk produksjon fra Draugen og Brage.",
+      "beskrivelse": "Norsk E&P-selskap med fokus på norsk sokkel. Høy utbytteyield drevet av sterk produksjon fra Draugen og Brage. OKEA ASA er notert på Oslo Børs. Selskapet har betalt utbytte de siste 2 årene. 5-årssnittlig direkteavkastning er 12.3%, noe som plasserer OKEA blant de høyest-yielding aksjene i energisektoren.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -1778,7 +1778,7 @@
         }
       ],
       "snitt_yield_5ar": 2.4,
-      "beskrivelse": "Produsent av EPS-emballasje og isolasjonsmaterialer. Eksponert mot bygg, fisk og mat. Voksende i Europa.",
+      "beskrivelse": "Produsent av EPS-emballasje og isolasjonsmaterialer. Eksponert mot bygg, fisk og mat. Voksende i Europa. BEWI ASA er notert på Oslo Børs. Selskapet har betalt utbytte de siste 2 årene. 5-årssnittlig direkteavkastning er 2.4%, noe som plasserer BEWI blant de mer moderate aksjene i industrisektoren.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -1802,7 +1802,7 @@
       "frekvens": "Halvårlig",
       "ar_med_utbytte": 10,
       "siste_utbytte": 0.8,
-      "beskrivelse": "Europas ledende kysttransportselskap. Frakter tørrbulk og prosjektlast langs europakysten. Stabil inntjening.",
+      "beskrivelse": "Europas ledende kysttransportselskap. Frakter tørrbulk og prosjektlast langs europakysten. Stabil inntjening. Wilson ASA er notert på Oslo Børs. Selskapet har hatt sammenhengende utbyttebetalinger i 10 år. Utbyttet utbetales halvårlig — to ganger i året. Utbetalingsgraden (payout ratio) er 65%, noe som anses som bærekraftig for de fleste markedsforhold.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -1850,7 +1850,7 @@
         }
       ],
       "snitt_yield_5ar": 2.21,
-      "beskrivelse": "Fred. Olsen-kontrollert konglomerat med offshore vind (Fred. Olsen Renewables), cruiseskip og shippingvirksomhet.",
+      "beskrivelse": "Fred. Olsen-kontrollert konglomerat med offshore vind (Fred. Olsen Renewables), cruiseskip og shippingvirksomhet. Bonheur ASA er notert på Oslo Børs med en markedsverdi på rundt 10 milliarder NOK. Aksjen har betalt utbytte 26 år på rad, noe som reflekterer langvarig stabil inntjening og kapitalavkastning til aksjonærene. Utbyttet utbetales én gang i året. 5-årssnittlig direkteavkastning er 2.2%, noe som plasserer BONHR blant de mer moderate aksjene i fornybar energi-sektoren. Utbetalingsgraden (payout ratio) er 20%, noe som gir selskapet godt rom for å øke utbyttet fremover.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -1865,7 +1865,7 @@
       "markedsverdi_mrd": 53.1,
       "utbytte_per_aksje": 13.11,
       "utbytte_yield": 10.44,
-      "utbytte_vekst_5ar": 61.7,
+      "utbytte_vekst_5ar": 61.6,
       "payout_ratio": 59.0,
       "pe_ratio": 5.35,
       "pb_ratio": 1.66,
@@ -1874,7 +1874,7 @@
       "rapport_dato": "2026-05-06",
       "frekvens": "Halvårlig",
       "ar_med_utbytte": 11,
-      "siste_utbytte": 9.86,
+      "siste_utbytte": 9.82,
       "historiske_utbytter": [
         {
           "ar": 2022,
@@ -1883,8 +1883,8 @@
         },
         {
           "ar": 2023,
-          "utbytte": 8.77,
-          "yield": 15.07
+          "utbytte": 8.76,
+          "yield": 15.04
         },
         {
           "ar": 2024,
@@ -1898,12 +1898,12 @@
         },
         {
           "ar": 2026,
-          "utbytte": 9.86,
-          "yield": 7.85
+          "utbytte": 9.82,
+          "yield": 7.82
         }
       ],
-      "snitt_yield_5ar": 15.13,
-      "beskrivelse": "Verdensledende innen bil- og høy-og-tung transport til sjøs (ro-ro). Betjener globale bilprodusenter med en moderne flåte.",
+      "snitt_yield_5ar": 15.11,
+      "beskrivelse": "Verdensledende innen bil- og høy-og-tung transport til sjøs (ro-ro). Betjener globale bilprodusenter med en moderne flåte. Wallenius Wilhelmsen ASA er notert på Oslo Børs med en markedsverdi på rundt 53 milliarder NOK. Selskapet har hatt sammenhengende utbyttebetalinger i 11 år. Utbyttet utbetales halvårlig — to ganger i året. 5-årssnittlig direkteavkastning er 15.1%, noe som plasserer WAWI blant de høyest-yielding aksjene i shippingsektoren. Utbetalingsgraden (payout ratio) er 59%, noe som anses som bærekraftig for de fleste markedsforhold.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -1941,7 +1941,7 @@
         }
       ],
       "snitt_yield_5ar": 3.25,
-      "beskrivelse": "Nordens ledende ingeniør- og rådgivningsselskap. Ansatteeid med over 7 000 medarbeidere. Stabil kontantstrøm fra konsulentoppdrag.",
+      "beskrivelse": "Nordens ledende ingeniør- og rådgivningsselskap. Ansatteeid med over 7 000 medarbeidere. Stabil kontantstrøm fra konsulentoppdrag. Norconsult AS er notert på Oslo Børs med en markedsverdi på rundt 13 milliarder NOK. Selskapet har betalt utbytte de siste 2 årene. Utbyttet utbetales én gang i året. 5-årssnittlig direkteavkastning er 3.2%, noe som plasserer NORCO blant de mer moderate aksjene i industrisektoren. Utbetalingsgraden (payout ratio) er 80%, noe som kan gjøre utbyttet sårbart ved svakere inntjening.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -1989,7 +1989,7 @@
         }
       ],
       "snitt_yield_5ar": 8.37,
-      "beskrivelse": "Europeisk kreditthåndteringsselskap. Kjøper og inndriver misligholdte fordringer. Voksende utbytte drevet av ekspansjon i Norden og Baltikum.",
+      "beskrivelse": "Europeisk kreditthåndteringsselskap. Kjøper og inndriver misligholdte fordringer. Voksende utbytte drevet av ekspansjon i Norden og Baltikum. B2 Impact ASA er notert på Oslo Børs. Selskapet har hatt sammenhengende utbyttebetalinger i 8 år. Utbyttet utbetales én gang i året. 5-årssnittlig direkteavkastning er 8.4%, noe som plasserer B2I blant de høyest-yielding aksjene i finanssektoren. Utbetalingsgraden (payout ratio) er 89%, noe som kan gjøre utbyttet sårbart ved svakere inntjening.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -2042,7 +2042,7 @@
         }
       ],
       "snitt_yield_5ar": 13.74,
-      "beskrivelse": "Norges nest største E&P-selskap etter Equinor, med produksjon på norsk sokkel. Høy utbyttegrad koblet til oljepris og fri kontantstrøm.",
+      "beskrivelse": "Norges nest største E&P-selskap etter Equinor, med produksjon på norsk sokkel. Høy utbyttegrad koblet til oljepris og fri kontantstrøm. Vår Energi ASA er notert på Oslo Børs med en markedsverdi på rundt 120 milliarder NOK, noe som gjør selskapet til ett av de større børsnoterte selskapene i Norge. Selskapet har hatt sammenhengende utbyttebetalinger i 5 år. Utbyttet utbetales kvartalsvis — fire ganger i året. 5-årssnittlig direkteavkastning er 13.7%, noe som plasserer VAR blant de høyest-yielding aksjene i energisektoren. Utbetalingsgraden (payout ratio) er 151%, noe som kan gjøre utbyttet sårbart ved svakere inntjening.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -2095,7 +2095,7 @@
         }
       ],
       "snitt_yield_5ar": 8.73,
-      "beskrivelse": "Norsk olje- og gasselskap med produksjon i Kurdistan-regionen og Nordsjøen. Høy yield og liberal utbyttepolitikk.",
+      "beskrivelse": "Norsk olje- og gasselskap med produksjon i Kurdistan-regionen og Nordsjøen. Høy yield og liberal utbyttepolitikk. DNO ASA er notert på Oslo Børs med en markedsverdi på rundt 20 milliarder NOK. Selskapet har hatt sammenhengende utbyttebetalinger i 11 år. Utbyttet utbetales kvartalsvis — fire ganger i året. 5-årssnittlig direkteavkastning er 8.7%, noe som plasserer DNO blant de høyest-yielding aksjene i energisektoren. Utbetalingsgraden (payout ratio) er 122%, noe som kan gjøre utbyttet sårbart ved svakere inntjening.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -2148,7 +2148,7 @@
         }
       ],
       "snitt_yield_5ar": 24.34,
-      "beskrivelse": "Norsk bilfrakter med en av verdens største PCTC-flåter. Sterk etterspørsel etter biltransport gir høy kontantstrøm.",
+      "beskrivelse": "Norsk bilfrakter med en av verdens største PCTC-flåter. Sterk etterspørsel etter biltransport gir høy kontantstrøm. Höegh Autoliners ASA er notert på Oslo Børs med en markedsverdi på rundt 27 milliarder NOK. Selskapet har hatt sammenhengende utbyttebetalinger i 5 år. Utbyttet utbetales kvartalsvis — fire ganger i året. 5-årssnittlig direkteavkastning er 24.3%, noe som plasserer HAUTO blant de høyest-yielding aksjene i shippingsektoren. Utbetalingsgraden (payout ratio) er 81%, noe som kan gjøre utbyttet sårbart ved svakere inntjening.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -2196,7 +2196,7 @@
         }
       ],
       "snitt_yield_5ar": 2.43,
-      "beskrivelse": "Globalt spesialkjemikalieselskap basert på trevirke. Stabil inntjening og konsistent voksende utbytte.",
+      "beskrivelse": "Globalt spesialkjemikalieselskap basert på trevirke. Stabil inntjening og konsistent voksende utbytte. Borregaard ASA er notert på Oslo Børs med en markedsverdi på rundt 18 milliarder NOK. Selskapet har hatt sammenhengende utbyttebetalinger i 13 år. Utbyttet utbetales én gang i året. 5-årssnittlig direkteavkastning er 2.4%, noe som plasserer BRG blant de mer moderate aksjene i materialersektoren. Utbetalingsgraden (payout ratio) er 68%, noe som anses som bærekraftig for de fleste markedsforhold.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -2244,7 +2244,7 @@
         }
       ],
       "snitt_yield_5ar": 5.12,
-      "beskrivelse": "Norges ledende lavpriskjede med over 290 butikker. Sterk kontantstrøm og attraktivt utbytte.",
+      "beskrivelse": "Norges ledende lavpriskjede med over 290 butikker. Sterk kontantstrøm og attraktivt utbytte. Europris ASA er notert på Oslo Børs med en markedsverdi på rundt 15 milliarder NOK. Selskapet har hatt sammenhengende utbyttebetalinger i 10 år. Utbyttet utbetales én gang i året. 5-årssnittlig direkteavkastning er 5.1%, noe som plasserer EPR blant de solid-yielding aksjene i forbruksvarer-sektoren. Utbetalingsgraden (payout ratio) er 71%, noe som anses som bærekraftig for de fleste markedsforhold.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -2287,7 +2287,7 @@
         }
       ],
       "snitt_yield_5ar": 4.59,
-      "beskrivelse": "Lakseoppdrettsselskap med virksomhet i Rogaland, Finnmark, Shetland og British Columbia.",
+      "beskrivelse": "Lakseoppdrettsselskap med virksomhet i Rogaland, Finnmark, Shetland og British Columbia. Grieg Seafood ASA er notert på Oslo Børs. Selskapet har hatt sammenhengende utbyttebetalinger i 10 år. 5-årssnittlig direkteavkastning er 4.6%, noe som plasserer GSF blant de solid-yielding aksjene i havbrukssektoren.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -2302,7 +2302,7 @@
       "markedsverdi_mrd": 5.6,
       "utbytte_per_aksje": 3.58,
       "utbytte_yield": 3.77,
-      "utbytte_vekst_5ar": -5.2,
+      "utbytte_vekst_5ar": -5.3,
       "payout_ratio": 67.0,
       "pe_ratio": 17.38,
       "pb_ratio": 1.59,
@@ -2325,13 +2325,13 @@
         },
         {
           "ar": 2024,
-          "utbytte": 13.59,
-          "yield": 18.94
+          "utbytte": 13.58,
+          "yield": 18.93
         },
         {
           "ar": 2025,
           "utbytte": 3.88,
-          "yield": 4.91
+          "yield": 4.9
         },
         {
           "ar": 2026,
@@ -2340,7 +2340,7 @@
         }
       ],
       "snitt_yield_5ar": 11.75,
-      "beskrivelse": "Kombinasjonstanker som frakter kjemikalier og tørrbulk. Unik dual-trade forretningsmodell gir høyere utnyttelse.",
+      "beskrivelse": "Kombinasjonstanker som frakter kjemikalier og tørrbulk. Unik dual-trade forretningsmodell gir høyere utnyttelse. Klaveness Combination Carriers ASA er notert på Oslo Børs. Selskapet har hatt sammenhengende utbyttebetalinger i 8 år. Utbyttet utbetales kvartalsvis — fire ganger i året. 5-årssnittlig direkteavkastning er 11.8%, noe som plasserer KCC blant de høyest-yielding aksjene i shippingsektoren. Utbetalingsgraden (payout ratio) er 67%, noe som anses som bærekraftig for de fleste markedsforhold.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -2364,7 +2364,7 @@
       "rapport_dato": "2026-05-13",
       "frekvens": "Kvartalsvis",
       "ar_med_utbytte": 7,
-      "siste_utbytte": 15.13,
+      "siste_utbytte": 15.07,
       "historiske_utbytter": [
         {
           "ar": 2022,
@@ -2378,22 +2378,22 @@
         },
         {
           "ar": 2024,
-          "utbytte": 33.13,
-          "yield": 14.49
+          "utbytte": 33.04,
+          "yield": 14.45
         },
         {
           "ar": 2025,
-          "utbytte": 20.69,
-          "yield": 6.13
+          "utbytte": 20.62,
+          "yield": 6.11
         },
         {
           "ar": 2026,
-          "utbytte": 15.13,
-          "yield": 3.06
+          "utbytte": 15.07,
+          "yield": 3.05
         }
       ],
-      "snitt_yield_5ar": 9.8,
-      "beskrivelse": "Moderne råoljetanker med ekofokusert flåte av VLCC og Suezmax skip. Høy utbyttegrad fra sterk kontantstrøm.",
+      "snitt_yield_5ar": 9.79,
+      "beskrivelse": "Moderne råoljetanker med ekofokusert flåte av VLCC og Suezmax skip. Høy utbyttegrad fra sterk kontantstrøm. Okeanis Eco Tankers Corp er notert på Oslo Børs med en markedsverdi på rundt 19 milliarder NOK. Selskapet har hatt sammenhengende utbyttebetalinger i 7 år. Utbyttet utbetales kvartalsvis — fire ganger i året. 5-årssnittlig direkteavkastning er 9.8%, noe som plasserer OET blant de høyest-yielding aksjene i shippingsektoren. Utbetalingsgraden (payout ratio) er 56%, noe som anses som bærekraftig for de fleste markedsforhold.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -2409,7 +2409,7 @@
       "ar_med_utbytte": 0,
       "historiske_utbytter": [],
       "snitt_yield_5ar": 0,
-      "beskrivelse": "Regional sparebank i Møre og Romsdal med hovedkontor i Ålesund. Betaler jevnlig utbytte til egenkapitalbeviseierne og er godt kapitalisert.",
+      "beskrivelse": "Regional sparebank i Møre og Romsdal. Stabil inntjening og god utbyttehistorikk. Utbyttet utbetales halvårlig — to ganger i året.",
       "valuta": "NOK",
       "data_kilde": "manuell",
       "ex_dato": "2026-04-09",
@@ -2450,7 +2450,7 @@
         }
       ],
       "snitt_yield_5ar": 1.56,
-      "beskrivelse": "Nordens ledende treningssenter-kjede med over 240 sentre i Norge, Sverige og Finland.",
+      "beskrivelse": "Nordens ledende treningssenter-kjede med over 240 sentre i Norge, Sverige og Finland. SATS ASA er notert på Oslo Børs. Selskapet har betalt utbytte de siste 2 årene. Utbyttet utbetales halvårlig — to ganger i året. 5-årssnittlig direkteavkastning er 1.6%, noe som plasserer SATS blant de mer moderate aksjene i forbruksvarer-sektoren. Utbetalingsgraden (payout ratio) er 27%, noe som gir selskapet godt rom for å øke utbyttet fremover.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -2498,7 +2498,7 @@
         }
       ],
       "snitt_yield_5ar": 1.29,
-      "beskrivelse": "Nordisk elektronikkprodusent og kontraktsprodusent for forsvar, medisin og industri.",
+      "beskrivelse": "Nordisk elektronikkprodusent og kontraktsprodusent for forsvar, medisin og industri. Kitron ASA er notert på Oslo Børs med en markedsverdi på rundt 21 milliarder NOK. Aksjen har betalt utbytte 15 år på rad, noe som reflekterer langvarig stabil inntjening og kapitalavkastning til aksjonærene. Utbyttet utbetales én gang i året. 5-årssnittlig direkteavkastning er 1.3%, noe som plasserer KIT blant de mer moderate aksjene i industrisektoren. Utbetalingsgraden (payout ratio) er 13%, noe som gir selskapet godt rom for å øke utbyttet fremover.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -2546,7 +2546,7 @@
         }
       ],
       "snitt_yield_5ar": 11.36,
-      "beskrivelse": "Nordisk investeringsbank og meglerhus. Sterk posisjon i nordiske aksje- og obligasjonsmarked.",
+      "beskrivelse": "Nordisk investeringsbank og meglerhus. Sterk posisjon i nordiske aksje- og obligasjonsmarked. ABG Sundal Collier Holding ASA er notert på Oslo Børs. Aksjen har betalt utbytte 24 år på rad, noe som reflekterer langvarig stabil inntjening og kapitalavkastning til aksjonærene. Utbyttet utbetales én gang i året. 5-årssnittlig direkteavkastning er 11.4%, noe som plasserer ABG blant de høyest-yielding aksjene i finanssektoren. Utbetalingsgraden (payout ratio) er 76%, noe som anses som bærekraftig for de fleste markedsforhold.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -2594,7 +2594,7 @@
         }
       ],
       "snitt_yield_5ar": 8.54,
-      "beskrivelse": "Norsk boligutbygger med fokus på Oslo og storbyregionene. Liberal utbyttepolitikk med halvårlige utbetalinger.",
+      "beskrivelse": "Norsk boligutbygger med fokus på Oslo og storbyregionene. Liberal utbyttepolitikk med halvårlige utbetalinger. Selvaag Bolig ASA er notert på Oslo Børs. Selskapet har hatt sammenhengende utbyttebetalinger i 12 år. Utbyttet utbetales én gang i året. 5-årssnittlig direkteavkastning er 8.5%, noe som plasserer SBO blant de høyest-yielding aksjene i eiendomssektoren. Utbetalingsgraden (payout ratio) er 88%, noe som kan gjøre utbyttet sårbart ved svakere inntjening.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -2642,7 +2642,7 @@
         }
       ],
       "snitt_yield_5ar": 12.09,
-      "beskrivelse": "Norsk energiselskap innen strømsalg og -tjenester til forbrukere og bedrifter.",
+      "beskrivelse": "Norsk energiselskap innen strømsalg og -tjenester til forbrukere og bedrifter. Elmera Group ASA er notert på Oslo Børs. Selskapet har hatt sammenhengende utbyttebetalinger i 7 år. Utbyttet utbetales én gang i året. 5-årssnittlig direkteavkastning er 12.1%, noe som plasserer ELMRA blant de høyest-yielding aksjene i forsyning-sektoren. Utbetalingsgraden (payout ratio) er 205%, noe som kan gjøre utbyttet sårbart ved svakere inntjening.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -2690,7 +2690,7 @@
         }
       ],
       "snitt_yield_5ar": 6.92,
-      "beskrivelse": "Norsk næringslivsbank med fokus på eiendomsfinansiering og shipping. Høy og stabil utbyttegrad.",
+      "beskrivelse": "Norsk næringslivsbank med fokus på eiendomsfinansiering og shipping. Høy og stabil utbyttegrad. Pareto Bank ASA er notert på Oslo Børs. Selskapet har hatt sammenhengende utbyttebetalinger i 9 år. 5-årssnittlig direkteavkastning er 6.9%, noe som plasserer PARB blant de solid-yielding aksjene i finanssektoren. Utbetalingsgraden (payout ratio) er 51%, noe som anses som bærekraftig for de fleste markedsforhold.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -2706,7 +2706,7 @@
       "ar_med_utbytte": 0,
       "historiske_utbytter": [],
       "snitt_yield_5ar": 0,
-      "beskrivelse": "Norges største kontoreiendomsselskap med portefølje av sentrale kontorbygg i Oslo, Bergen og Trondheim. Betaler kvartalsvis utbytte med typisk yield på 4–6%.",
+      "beskrivelse": "Norges største kontoreiendomsselskap. Stabil leieinntekt fra lange kontrakter med offentlige og private leietakere. Utbyttet utbetales kvartalsvis — fire ganger i året.",
       "valuta": "NOK",
       "data_kilde": "euronext",
       "ex_dato": "2026-04-22",
@@ -2757,7 +2757,7 @@
         }
       ],
       "snitt_yield_5ar": 1.58,
-      "beskrivelse": "Verdensledende innen panteautomater og ressursoptimalisering. Eksponert mot global pantebølge og resirkulering.",
+      "beskrivelse": "Verdensledende innen panteautomater og ressursoptimalisering. Eksponert mot global pantebølge og resirkulering. TOMRA Systems ASA er notert på Oslo Børs med en markedsverdi på rundt 34 milliarder NOK. Aksjen har betalt utbytte 26 år på rad, noe som reflekterer langvarig stabil inntjening og kapitalavkastning til aksjonærene. Utbyttet utbetales én gang i året. 5-årssnittlig direkteavkastning er 1.6%, noe som plasserer TOM blant de mer moderate aksjene i industrisektoren. Utbetalingsgraden (payout ratio) er 59%, noe som anses som bærekraftig for de fleste markedsforhold.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -2805,7 +2805,7 @@
         }
       ],
       "snitt_yield_5ar": 5.81,
-      "beskrivelse": "Norsk ingeniør- og rådgivningsselskap. Solid inntjening fra offentlige infrastrukturprosjekter.",
+      "beskrivelse": "Norsk ingeniør- og rådgivningsselskap. Solid inntjening fra offentlige infrastrukturprosjekter. Multiconsult ASA er notert på Oslo Børs. Selskapet har hatt sammenhengende utbyttebetalinger i 10 år. Utbyttet utbetales én gang i året. 5-årssnittlig direkteavkastning er 5.8%, noe som plasserer MULTI blant de solid-yielding aksjene i industrisektoren. Utbetalingsgraden (payout ratio) er 108%, noe som kan gjøre utbyttet sårbart ved svakere inntjening.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -2829,36 +2829,36 @@
       "rapport_dato": null,
       "frekvens": "Månedlig",
       "ar_med_utbytte": 8,
-      "siste_utbytte": 0.98,
+      "siste_utbytte": 0.97,
       "historiske_utbytter": [
         {
           "ar": 2022,
-          "utbytte": 15.81,
-          "yield": 17.88
+          "utbytte": 15.75,
+          "yield": 17.81
         },
         {
           "ar": 2023,
-          "utbytte": 8.0,
-          "yield": 6.84
+          "utbytte": 7.97,
+          "yield": 6.82
         },
         {
           "ar": 2024,
-          "utbytte": 34.94,
-          "yield": 28.58
+          "utbytte": 34.81,
+          "yield": 28.48
         },
         {
           "ar": 2025,
-          "utbytte": 14.25,
-          "yield": 9.87
+          "utbytte": 14.2,
+          "yield": 9.83
         },
         {
           "ar": 2026,
-          "utbytte": 4.68,
-          "yield": 3.34
+          "utbytte": 4.67,
+          "yield": 3.32
         }
       ],
-      "snitt_yield_5ar": 13.3,
-      "beskrivelse": "Tørrbulkrederi med Newcastlemax-skip optimert for jernmalm og kull. Høy utbyttegrad fra sterk TCE.",
+      "snitt_yield_5ar": 13.25,
+      "beskrivelse": "Tørrbulkrederi med Newcastlemax-skip optimert for jernmalm og kull. Høy utbyttegrad fra sterk TCE. 2020 Bulkers Ltd er notert på Oslo Børs. Selskapet har hatt sammenhengende utbyttebetalinger i 8 år. Utbyttet utbetales månedlig. 5-årssnittlig direkteavkastning er 13.2%, noe som plasserer 2020 blant de høyest-yielding aksjene i shippingsektoren. Utbetalingsgraden (payout ratio) er 113%, noe som kan gjøre utbyttet sårbart ved svakere inntjening.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -2874,7 +2874,7 @@
       "ar_med_utbytte": 0,
       "historiske_utbytter": [],
       "snitt_yield_5ar": 0,
-      "beskrivelse": "Norsk offshoreboreselskap med flåte av halvt nedsenkbare rigger og jack-up rigger primært på norsk sokkel. Betaler utbytte avhengig av kontraktsdekning og markedsforhold.",
+      "beskrivelse": "Norsk boreentreprenør med halvt-nedsenkbare rigger og jack-up rigger på norsk sokkel. Utbyttet utbetales halvårlig — to ganger i året.",
       "valuta": "USD",
       "data_kilde": "manuell"
     },
@@ -2890,7 +2890,7 @@
       "ar_med_utbytte": 0,
       "historiske_utbytter": [],
       "snitt_yield_5ar": 0,
-      "beskrivelse": "Norsk leverandør av offshore-fartøy og ingeniørtjenester til olje-, gass- og havvindindustrien. Gjennotert etter restrukturering med sterk etterspørsel etter offshorefartøyer.",
+      "beskrivelse": "Offshore supplyvesselselskap med AHTS, PSV og subsea-fartøyer. Høy etterspørsel fra olje og offshore vind. Utbyttet utbetales halvårlig — to ganger i året.",
       "valuta": "NOK",
       "data_kilde": "euronext"
     },
@@ -2906,7 +2906,7 @@
       "ar_med_utbytte": 0,
       "historiske_utbytter": [],
       "snitt_yield_5ar": 0,
-      "beskrivelse": "Regional sparebank i Ringerike og Hadeland, del av SpareBank 1-alliansen. Solid kapitaldekning og stabil utbyttebetaler til egenkapitalbeviseierne.",
+      "beskrivelse": "Regional sparebank i Ringerike og Hadeland. Solid kapitaldekning og stabil utbyttebetaler. Utbyttet utbetales halvårlig — to ganger i året.",
       "valuta": "NOK",
       "data_kilde": "manuell"
     },
@@ -2959,7 +2959,7 @@
         }
       ],
       "snitt_yield_5ar": 6.14,
-      "beskrivelse": "Regional sparebank på Helgeland i Nordland. Stabil inntjening og god kapitalbase.",
+      "beskrivelse": "Regional sparebank på Helgeland i Nordland. Stabil inntjening og god kapitalbase. SpareBank 1 Helgeland er notert på Oslo Børs. Aksjen har betalt utbytte 18 år på rad, noe som reflekterer langvarig stabil inntjening og kapitalavkastning til aksjonærene. Utbyttet utbetales én gang i året. 5-årssnittlig direkteavkastning er 6.1%, noe som plasserer HELG blant de solid-yielding aksjene i finanssektoren. Utbetalingsgraden (payout ratio) er 60%, noe som anses som bærekraftig for de fleste markedsforhold.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -3007,7 +3007,7 @@
         }
       ],
       "snitt_yield_5ar": 9.23,
-      "beskrivelse": "Sparebank i Drammen og Østlandsregionen. Stabil bank med god utbyttehistorikk.",
+      "beskrivelse": "Sparebank i Drammen og Østlandsregionen. Stabil bank med god utbyttehistorikk. Sparebanken Øst er notert på Oslo Børs. Aksjen har betalt utbytte 25 år på rad, noe som reflekterer langvarig stabil inntjening og kapitalavkastning til aksjonærene. Utbyttet utbetales én gang i året. 5-årssnittlig direkteavkastning er 9.2%, noe som plasserer SPOG blant de høyest-yielding aksjene i finanssektoren. Utbetalingsgraden (payout ratio) er 78%, noe som anses som bærekraftig for de fleste markedsforhold.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -3055,7 +3055,7 @@
         }
       ],
       "snitt_yield_5ar": 6.96,
-      "beskrivelse": "Afrikarettet E&P-selskap med produksjon i Gabon, Tunisia og Ekvatorial-Guinea. Høy yield relativt til størrelse.",
+      "beskrivelse": "Afrikarettet E&P-selskap med produksjon i Gabon, Tunisia og Ekvatorial-Guinea. Høy yield relativt til størrelse. Panoro Energy ASA er notert på Oslo Børs. Selskapet har betalt utbytte de siste 4 årene. Utbyttet utbetales kvartalsvis — fire ganger i året. 5-årssnittlig direkteavkastning er 7.0%, noe som plasserer PEN blant de solid-yielding aksjene i energisektoren. Utbetalingsgraden (payout ratio) er 88%, noe som kan gjøre utbyttet sårbart ved svakere inntjening.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -3070,7 +3070,7 @@
       "markedsverdi_mrd": 3.9,
       "utbytte_per_aksje": 2.0,
       "utbytte_yield": 1.87,
-      "utbytte_vekst_5ar": 18.9,
+      "utbytte_vekst_5ar": 26.0,
       "payout_ratio": 40.0,
       "pe_ratio": 21.57,
       "pb_ratio": 2.84,
@@ -3093,7 +3093,7 @@
         }
       ],
       "snitt_yield_5ar": 2.02,
-      "beskrivelse": "Ledende leverandør av teknologi og tjenester til havbruksnæringen globalt. Sterk posisjon i vekstmarkedet for oppdrettsteknologi.",
+      "beskrivelse": "Ledende leverandør av teknologi og tjenester til havbruksnæringen globalt. Sterk posisjon i vekstmarkedet for oppdrettsteknologi. AKVA Group ASA er notert på Oslo Børs. Selskapet har hatt sammenhengende utbyttebetalinger i 11 år. Utbyttet utbetales halvårlig — to ganger i året. 5-årssnittlig direkteavkastning er 2.0%, noe som plasserer AKVA blant de mer moderate aksjene i havbrukssektoren. Utbetalingsgraden (payout ratio) er 40%, noe som gir selskapet godt rom for å øke utbyttet fremover.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -3109,7 +3109,7 @@
       "ar_med_utbytte": 0,
       "historiske_utbytter": [],
       "snitt_yield_5ar": 0,
-      "beskrivelse": "Vestlandets ledende sparebank med sterk posisjon i Bergen og Hordaland. Betaler halvårlig utbytte til egenkapitalbeviseierne med god og stabil avkastning.",
+      "beskrivelse": "Vestlandets ledende sparebank med sterk posisjon i Bergen og Hordaland. Stabil inntjening og god utbyttehistorikk. Utbyttet utbetales halvårlig — to ganger i året.",
       "valuta": "NOK",
       "data_kilde": "manuell"
     },
@@ -3133,31 +3133,31 @@
       "rapport_dato": "2026-04-09",
       "frekvens": "Halvårlig",
       "ar_med_utbytte": 21,
-      "siste_utbytte": 9.76,
+      "siste_utbytte": 9.72,
       "historiske_utbytter": [
         {
           "ar": 2022,
-          "utbytte": 14.64,
-          "yield": 5.56
+          "utbytte": 14.59,
+          "yield": 5.54
         },
         {
           "ar": 2023,
-          "utbytte": 21.96,
-          "yield": 7.16
+          "utbytte": 21.88,
+          "yield": 7.13
         },
         {
           "ar": 2024,
-          "utbytte": 26.84,
-          "yield": 9.36
+          "utbytte": 26.74,
+          "yield": 9.33
         },
         {
           "ar": 2025,
-          "utbytte": 21.96,
-          "yield": 6.74
+          "utbytte": 21.88,
+          "yield": 6.71
         }
       ],
-      "snitt_yield_5ar": 7.21,
-      "beskrivelse": "Internasjonalt konsern innen kjemikalietankere, tankterminalvirksomhet og akvakultur. Diversifisert og solid utbyttebetaler over mange år.",
+      "snitt_yield_5ar": 7.18,
+      "beskrivelse": "Internasjonalt konsern innen kjemikalietankere, tankterminalvirksomhet og akvakultur. Diversifisert og solid utbyttebetaler over mange år. Stolt-Nielsen Limited er notert på Oslo Børs med en markedsverdi på rundt 22 milliarder NOK. Aksjen har betalt utbytte 21 år på rad, noe som reflekterer langvarig stabil inntjening og kapitalavkastning til aksjonærene. Utbyttet utbetales halvårlig — to ganger i året. 5-årssnittlig direkteavkastning er 7.2%, noe som plasserer SNI blant de høyest-yielding aksjene i shippingsektoren. Utbetalingsgraden (payout ratio) er 34%, noe som gir selskapet godt rom for å øke utbyttet fremover.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -3173,7 +3173,7 @@
       "ar_med_utbytte": 0,
       "historiske_utbytter": [],
       "snitt_yield_5ar": 0,
-      "beskrivelse": "Moderne norsk tørrbulkrederi med Supramax- og Ultramax-skip. Betaler kvartalsvis utbytte koblet til fraktinntjening og shippingmarkedets utvikling.",
+      "beskrivelse": "Moderne tørrbulkrederi med Supramax/Ultramax-skip. Sterk kontantstrøm og liberal utbyttepolitikk koblet til shippingratene. Utbyttet utbetales kvartalsvis — fire ganger i året.",
       "valuta": "USD",
       "data_kilde": "manuell"
     },
@@ -3189,7 +3189,7 @@
       "ar_med_utbytte": 0,
       "historiske_utbytter": [],
       "snitt_yield_5ar": 0,
-      "beskrivelse": "Kommersielt eiendomsselskap med kontorbygg i sentrale deler av Oslo-regionen. Stabil leieinntekt fra lange kontrakter og halvårlige utbetalinger til aksjonærene.",
+      "beskrivelse": "Kommersielt eiendomsselskap med kontorbygg i Oslo-regionen. Stabil leieinntekt fra lange kontrakter og halvårlige utbetalinger. Utbyttet utbetales halvårlig — to ganger i året.",
       "valuta": "NOK",
       "data_kilde": "manuell"
     },
@@ -3237,7 +3237,7 @@
         }
       ],
       "snitt_yield_5ar": 2.36,
-      "beskrivelse": "Norsk medisinsk teknologiselskap med ultralyd- og flowmålingsprodukter for hjertekirurgi. Lang og konsistent utbyttehistorikk.",
+      "beskrivelse": "Norsk medisinsk teknologiselskap med ultralyd- og flowmålingsprodukter for hjertekirurgi. Lang og konsistent utbyttehistorikk. Medistim ASA er notert på Oslo Børs. Aksjen har betalt utbytte 21 år på rad, noe som reflekterer langvarig stabil inntjening og kapitalavkastning til aksjonærene. Utbyttet utbetales én gang i året. 5-årssnittlig direkteavkastning er 2.4%, noe som plasserer MEDI blant de mer moderate aksjene i helsevern-sektoren. Utbetalingsgraden (payout ratio) er 69%, noe som anses som bærekraftig for de fleste markedsforhold.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -3285,7 +3285,7 @@
         }
       ],
       "snitt_yield_5ar": 5.14,
-      "beskrivelse": "Nordens ledende IT-infrastrukturleverandør. Distribuerer hardware, software og tjenester til offentlig og privat sektor. Stabilt og voksende utbytte.",
+      "beskrivelse": "Nordens ledende IT-infrastrukturleverandør. Distribuerer hardware, software og tjenester til offentlig og privat sektor. Stabilt og voksende utbytte. Atea ASA er notert på Oslo Børs med en markedsverdi på rundt 16 milliarder NOK. Aksjen har betalt utbytte 17 år på rad, noe som reflekterer langvarig stabil inntjening og kapitalavkastning til aksjonærene. Utbyttet utbetales halvårlig — to ganger i året. 5-årssnittlig direkteavkastning er 5.1%, noe som plasserer ATEA blant de solid-yielding aksjene i informasjonsteknologi-sektoren. Utbetalingsgraden (payout ratio) er 91%, noe som kan gjøre utbyttet sårbart ved svakere inntjening.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -3333,7 +3333,7 @@
         }
       ],
       "snitt_yield_5ar": 5.25,
-      "beskrivelse": "Norsk IT- og digitalrådgivningsselskap. Høy utbyttegrad og konsistent vekst. Lavt kapitalintensivt og ansattedrevet.",
+      "beskrivelse": "Norsk IT- og digitalrådgivningsselskap. Høy utbyttegrad og konsistent vekst. Lavt kapitalintensivt og ansattedrevet. Bouvet ASA er notert på Oslo Børs. Aksjen har betalt utbytte 18 år på rad, noe som reflekterer langvarig stabil inntjening og kapitalavkastning til aksjonærene. Utbyttet utbetales halvårlig — to ganger i året. 5-årssnittlig direkteavkastning er 5.2%, noe som plasserer BOUV blant de solid-yielding aksjene i informasjonsteknologi-sektoren. Utbetalingsgraden (payout ratio) er 87%, noe som kan gjøre utbyttet sårbart ved svakere inntjening.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -3349,7 +3349,7 @@
       "ar_med_utbytte": 0,
       "historiske_utbytter": [],
       "snitt_yield_5ar": 0,
-      "beskrivelse": "Investeringsselskap med majoritetseierandel i Golden Ocean Group. Utbyttet speiler i stor grad Golden Oceans egne kvartalsvise utbetalinger.",
+      "beskrivelse": "Investeringsselskap med majoritetseierandel i Golden Ocean Group. Utbytte speiler i stor grad Golden Oceans utbetalinger. Utbyttet utbetales kvartalsvis — fire ganger i året.",
       "valuta": "NOK",
       "data_kilde": "manuell"
     },
@@ -3382,7 +3382,7 @@
         }
       ],
       "snitt_yield_5ar": 67.06,
-      "beskrivelse": "Norsk krill-selskap som høster, foredler og selger krillolje og krilmel til menneskelig ernæring og akvakultur.",
+      "beskrivelse": "Norsk krill-selskap som høster, foredler og selger krillolje og krilmel til menneskelig ernæring og akvakultur. Aker BioMarine ASA er notert på Oslo Børs. Selskapet har betalt utbytte de siste 1 årene. 5-årssnittlig direkteavkastning er 67.1%, noe som plasserer AKBM blant de høyest-yielding aksjene i havbrukssektoren.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -3398,7 +3398,7 @@
       "ar_med_utbytte": 0,
       "historiske_utbytter": [],
       "snitt_yield_5ar": 0,
-      "beskrivelse": "Internasjonalt LPG-rederi med flåte av Very Large Gas Carriers (VLGC). Betaler kvartalsvis utbytte med høy variasjon avhengig av LPG-spotmarkedet.",
+      "beskrivelse": "Ledende VLGC-tankrederi for flytende petroleum (LPG). Høy og variabel utbyttegrad koblet til LPG-shippingratene. Utbyttet utbetales kvartalsvis — fire ganger i året.",
       "valuta": "USD",
       "data_kilde": "manuell"
     },
@@ -3414,7 +3414,7 @@
       "ar_med_utbytte": 0,
       "historiske_utbytter": [],
       "snitt_yield_5ar": 0,
-      "beskrivelse": "Norsk bilfrakt-rederi som transporterer kjøretøy til sjøs globalt med PCTC- og LCTC-fartøyer. Betaler kvartalsvis utbytte med høy direkteavkastning.",
+      "beskrivelse": "Spesialisert bilfrakter (PCTC/LCTC) med fokus på korte og mellomlange ruter. Svært høy utbyttegrad fra sterk kontantstrøm. Utbyttet utbetales kvartalsvis — fire ganger i året.",
       "valuta": "USD",
       "data_kilde": "manuell"
     },
@@ -3467,7 +3467,7 @@
         }
       ],
       "snitt_yield_5ar": 4.84,
-      "beskrivelse": "Verdensledende innen seismikk- og geospatiale data til olje- og gassindustrien. Kvartalsvis utbytte pluss ekstraordinære utbetalinger.",
+      "beskrivelse": "Verdensledende innen seismikk- og geospatiale data til olje- og gassindustrien. Kvartalsvis utbytte pluss ekstraordinære utbetalinger. TGS ASA er notert på Oslo Børs med en markedsverdi på rundt 25 milliarder NOK. Aksjen har betalt utbytte 17 år på rad, noe som reflekterer langvarig stabil inntjening og kapitalavkastning til aksjonærene. Utbyttet utbetales kvartalsvis — fire ganger i året. 5-årssnittlig direkteavkastning er 4.8%, noe som plasserer TGS blant de solid-yielding aksjene i energitjenester-sektoren. Utbetalingsgraden (payout ratio) er 687%, noe som kan gjøre utbyttet sårbart ved svakere inntjening.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -3500,7 +3500,7 @@
         }
       ],
       "snitt_yield_5ar": 1.62,
-      "beskrivelse": "En av Europas største avispapirprodusenter. Gjenopptok utbytte etter restrukturering og betaler jevnt siden.",
+      "beskrivelse": "En av Europas største avispapirprodusenter. Gjenopptok utbytte etter restrukturering og betaler jevnt siden. Norske Skog ASA er notert på Oslo Børs. Selskapet har betalt utbytte de siste 2 årene. 5-årssnittlig direkteavkastning er 1.6%, noe som plasserer NSKOG blant de mer moderate aksjene i materialersektoren.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -3533,7 +3533,7 @@
         }
       ],
       "snitt_yield_5ar": 1.18,
-      "beskrivelse": "Norsk offshore supplyreder med AHTS, PSV og CSV-fartøyer. Relisting etter restrukturering; sterk markedsetterspørsel.",
+      "beskrivelse": "Norsk offshore supplyreder med AHTS, PSV og CSV-fartøyer. Relisting etter restrukturering; sterk markedsetterspørsel. Solstad Offshore ASA er notert på Oslo Børs. Aksjen har betalt utbytte 16 år på rad, noe som reflekterer langvarig stabil inntjening og kapitalavkastning til aksjonærene. Utbyttet utbetales én gang i året. 5-årssnittlig direkteavkastning er 1.2%, noe som plasserer SOFF blant de mer moderate aksjene i energitjenester-sektoren. Utbetalingsgraden (payout ratio) er 3%, noe som gir selskapet godt rom for å øke utbyttet fremover.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -3549,7 +3549,7 @@
       "ar_med_utbytte": 0,
       "historiske_utbytter": [],
       "snitt_yield_5ar": 0,
-      "beskrivelse": "Norsk shippingselskap som eier og leier ut produkttankskip til det amerikanske innenriksmarkedet under Jones Act. Stabil kontantstrøm og kvartalsvis utbytte.",
+      "beskrivelse": "Eier og leier ut produkttankfartøyer på langsiktige bareboat-kontrakter. Stabil og forutsigbar kontantstrøm med høy utbytteyield. Utbyttet utbetales kvartalsvis — fire ganger i året.",
       "valuta": "USD",
       "data_kilde": "manuell"
     },
@@ -3565,7 +3565,7 @@
       "ar_med_utbytte": 0,
       "historiske_utbytter": [],
       "snitt_yield_5ar": 0,
-      "beskrivelse": "Norges største private kjøpesenteroperatør, kontrollert av Olav Thon-stiftelsen. Lang og stabil utbyttehistorikk med halvårlige utbetalinger til aksjonærene.",
+      "beskrivelse": "Norges største private eiendomsaktør med kjøpesentre og næringseiendom. Stabil leieinntekt og lang utbyttehistorikk. Utbyttet utbetales halvårlig — to ganger i året.",
       "valuta": "NOK",
       "data_kilde": "euronext"
     },
@@ -3581,7 +3581,7 @@
       "ar_med_utbytte": 0,
       "historiske_utbytter": [],
       "snitt_yield_5ar": 0,
-      "beskrivelse": "Norsk mediekonsern og ledende nordisk nettmarkedsplass-aktør gjennom Finn.no og Blocket. Betaler halvårlig utbytte og satser sterkt på digitale markedsplasser.",
+      "beskrivelse": "Norsk mediekonsern og ledende nordisk nettmarkedsplass-aktør (Finn.no, Blocket m.fl.). Betaler halvårlig utbytte. Utbyttet utbetales halvårlig — to ganger i året.",
       "valuta": "NOK",
       "data_kilde": "manuell"
     },
@@ -3629,7 +3629,7 @@
         }
       ],
       "snitt_yield_5ar": 4.66,
-      "beskrivelse": "Norsk IT-konsulentselskap med spisskompetanse innen digital transformasjon. Konsistent utbyttebetaler med lav kapitalintensitet.",
+      "beskrivelse": "Norsk IT-konsulentselskap med spisskompetanse innen digital transformasjon. Konsistent utbyttebetaler med lav kapitalintensitet. Itera ASA er notert på Oslo Børs. Aksjen har betalt utbytte 20 år på rad, noe som reflekterer langvarig stabil inntjening og kapitalavkastning til aksjonærene. Utbyttet utbetales halvårlig — to ganger i året. 5-årssnittlig direkteavkastning er 4.7%, noe som plasserer ITERA blant de solid-yielding aksjene i informasjonsteknologi-sektoren. Utbetalingsgraden (payout ratio) er 107%, noe som kan gjøre utbyttet sårbart ved svakere inntjening.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -3645,7 +3645,7 @@
       "ar_med_utbytte": 0,
       "historiske_utbytter": [],
       "snitt_yield_5ar": 0,
-      "beskrivelse": "Ledende sparebank på Agder med sterk lokal forankring i Aust- og Vest-Agder. Betaler halvårlig utbytte til egenkapitalbeviseierne med stabil inntjening.",
+      "beskrivelse": "Ledende sparebank på Sørlandet med sterk posisjon i Aust- og Vest-Agder. Stabil inntjening og god utbyttehistorikk. Utbyttet utbetales halvårlig — to ganger i året.",
       "valuta": "NOK",
       "data_kilde": "manuell"
     },
@@ -3693,7 +3693,7 @@
         }
       ],
       "snitt_yield_5ar": 827.03,
-      "beskrivelse": "VLCC-tankrederi med fokus på råoljetransport. Variabelt utbytte koblet til tankratene og inntjening per skip.",
+      "beskrivelse": "VLCC-tankrederi med fokus på råoljetransport. Variabelt utbytte koblet til tankratene og inntjening per skip. Hunter Group ASA er notert på Oslo Børs. Selskapet har hatt sammenhengende utbyttebetalinger i 5 år. Utbyttet utbetales kvartalsvis — fire ganger i året. 5-årssnittlig direkteavkastning er 827.0%, noe som plasserer HUNT blant de høyest-yielding aksjene i shippingsektoren. Utbetalingsgraden (payout ratio) er 30%, noe som gir selskapet godt rom for å øke utbyttet fremover.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -3720,7 +3720,7 @@
       "siste_utbytte": 0.0,
       "historiske_utbytter": [],
       "snitt_yield_5ar": 0.0,
-      "beskrivelse": "Norsk fornybar energiselskap med vind- og solkraft i Norden. Halvårlig utbytte fra stabil strømproduksjon på langsiktige kontrakter.",
+      "beskrivelse": "Norsk fornybar energiselskap med vind- og solkraft i Norden. Halvårlig utbytte fra stabil strømproduksjon på langsiktige kontrakter. Cloudberry Clean Energy AS er notert på Oslo Børs.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -3758,7 +3758,7 @@
         }
       ],
       "snitt_yield_5ar": 36.65,
-      "beskrivelse": "LNG-tankselskap med skip på langsiktige TC-kontrakter. Stabil og forutsigbar kvartalsvis utbytte fra høy flåteutnyttelse.",
+      "beskrivelse": "LNG-tankselskap med skip på langsiktige TC-kontrakter. Stabil og forutsigbar kvartalsvis utbytte fra høy flåteutnyttelse. Awilco LNG ASA er notert på Oslo Børs. Selskapet har betalt utbytte de siste 2 årene. 5-årssnittlig direkteavkastning er 36.6%, noe som plasserer ALNG blant de høyest-yielding aksjene i shippingsektoren.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -3774,7 +3774,7 @@
       "ar_med_utbytte": 0,
       "historiske_utbytter": [],
       "snitt_yield_5ar": 0,
-      "beskrivelse": "Norsk produsent av aktive legemiddelsubstanser (API) ved fabrikken i Kragerø, herunder metformin for diabetesbehandling. Høy utbyttegrad og stabil etterspørsel fra legemiddelindustrien.",
+      "beskrivelse": "Norsk produsent av aktive legemiddelsubstanser (API). Høy utbyttegrad relativt til størrelse og stabil etterspørsel fra legemiddelindustrien. Utbyttet utbetales halvårlig — to ganger i året.",
       "valuta": "NOK",
       "data_kilde": "euronext",
       "ex_dato": "2026-05-22",
@@ -3793,7 +3793,7 @@
       "ar_med_utbytte": 0,
       "historiske_utbytter": [],
       "snitt_yield_5ar": 0,
-      "beskrivelse": "Norsk konsern med aktiviteter innen lakseoppdrett, fôrproduksjon og sjøtransport i Midt-Norge og på Helgeland. Betaler halvårlig utbytte basert på underliggende resultater.",
+      "beskrivelse": "Norsk havbruksselskap med lakseoppdrett i Midt-Norge og på Helgeland. Regelmessig utbytte koblet til laksepris og inntjening. Utbyttet utbetales halvårlig — to ganger i året.",
       "valuta": "NOK",
       "data_kilde": "manuell"
     },
@@ -3809,7 +3809,7 @@
       "ar_med_utbytte": 0,
       "historiske_utbytter": [],
       "snitt_yield_5ar": 0,
-      "beskrivelse": "Norsk teknologiselskap som leverer programvare og løsninger for kraftmarkedet, smart infrastruktur og byggebransjen. Voksende SaaS-modell med halvårlig utbyttebetalng.",
+      "beskrivelse": "Norsk programvareselskap for energi-, kraft- og vanninfrastrukturbransjen. Voksende SaaS-modell og utbyttevekst. Utbyttet utbetales halvårlig — to ganger i året.",
       "valuta": "NOK",
       "data_kilde": "manuell"
     },
@@ -3825,7 +3825,7 @@
       "ar_med_utbytte": 0,
       "historiske_utbytter": [],
       "snitt_yield_5ar": 0,
-      "beskrivelse": "Norsk teknologiselskap som leverer kassaløsninger, selvbetjeningskasser og lagerautomatisering til dagligvarehandelen. Betaler halvårlig utbytte med stabil vekst.",
+      "beskrivelse": "Norsk leverandør av teknologi for dagligvarehandel og lagerlogistikk. Automatisering av butikker og e-handelsfulfillment. Betaler utbytte. Utbyttet utbetales halvårlig — to ganger i året.",
       "valuta": "NOK",
       "data_kilde": "manuell"
     },
@@ -3841,7 +3841,7 @@
       "ar_med_utbytte": 0,
       "historiske_utbytter": [],
       "snitt_yield_5ar": 0,
-      "beskrivelse": "Global offshore boreentreprenør med dypvannssemisubmersibles og boreskip for olje- og gassindustrien. Gjenopptok utbytte etter restrukturering i 2022.",
+      "beskrivelse": "Global offshore boreentreprenør med dypvannssemisubmersibles og boreskip. Gjenopptok utbytte etter restrukturering i 2022. Utbyttet utbetales kvartalsvis — fire ganger i året.",
       "valuta": "USD",
       "data_kilde": "manuell"
     },
@@ -3895,7 +3895,7 @@
       "siste_utbytte": 1.53,
       "historiske_utbytter": [],
       "snitt_yield_5ar": 0.0,
-      "beskrivelse": "Nordisk jernbaneinfrastrukturentreprenør med virksomhet i Norge, Sverige og Finland. Stabil ordrebok fra offentlige infrastrukturinvesteringer.",
+      "beskrivelse": "Nordisk jernbaneinfrastrukturentreprenør med virksomhet i Norge, Sverige og Finland. Stabil ordrebok fra offentlige infrastrukturinvesteringer. NRC Group ASA er notert på Oslo Børs. Selskapet har betalt utbytte de siste 4 årene.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -3922,7 +3922,7 @@
       "siste_utbytte": 0.0,
       "historiske_utbytter": [],
       "snitt_yield_5ar": 0.0,
-      "beskrivelse": "Norsk teknologiselskap innen nettverksakselerasjon.",
+      "beskrivelse": "Norsk teknologiselskap innen nettverksakselerasjon. Napatech AS er notert på Oslo Børs.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -3960,7 +3960,7 @@
         }
       ],
       "snitt_yield_5ar": 5.26,
-      "beskrivelse": "Globalt kjemikalietankrederi med lang utbyttehistorie.",
+      "beskrivelse": "Globalt kjemikalietankrederi med lang utbyttehistorie. Stolt-Nielsen Ltd er notert på Oslo Børs. Selskapet har hatt sammenhengende utbyttebetalinger i 12 år. 5-årssnittlig direkteavkastning er 5.3%, noe som plasserer STRO blant de solid-yielding aksjene i shippingsektoren.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -3987,7 +3987,7 @@
       "siste_utbytte": 0.0,
       "historiske_utbytter": [],
       "snitt_yield_5ar": 0.0,
-      "beskrivelse": "Norsk biometriselskap. Betaler ikke utbytte per nå.",
+      "beskrivelse": "Norsk biometriselskap. Betaler ikke utbytte per nå. IDEX Biometrics ASA er notert på Oslo Børs.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -4035,7 +4035,7 @@
         }
       ],
       "snitt_yield_5ar": 6.64,
-      "beskrivelse": "Norges ledende kjede innen interiør og tekstiler for hjemmet med over 200 butikker i Norden. Betaler regelmessig utbytte og har en sterk kontantgenererende forretningsmodell.",
+      "beskrivelse": "Norges ledende kjede innen interiør og tekstiler for hjemmet med over 200 butikker i Norden. Betaler regelmessig utbytte og har en sterk kontantgenererende forretningsmodell. Kid ASA er notert på Oslo Børs. Selskapet har hatt sammenhengende utbyttebetalinger i 10 år. Utbyttet utbetales halvårlig — to ganger i året. 5-årssnittlig direkteavkastning er 6.6%, noe som plasserer KID blant de solid-yielding aksjene i forbruksvarer-sektoren. Utbetalingsgraden (payout ratio) er 133%, noe som kan gjøre utbyttet sårbart ved svakere inntjening.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -4088,7 +4088,7 @@
         }
       ],
       "snitt_yield_5ar": 10.46,
-      "beskrivelse": "Ledende internasjonalt kjemikalietankrederi med flåte av spesialiserte kjemikalie- og produkttankere. A-aksjen betaler utbytte med jevne mellomrom basert på selskapets inntjening.",
+      "beskrivelse": "Ledende internasjonalt kjemikalietankrederi med flåte av spesialiserte kjemikalie- og produkttankere. A-aksjen betaler utbytte med jevne mellomrom basert på selskapets inntjening. Odfjell SE (A-aksje) er notert på Oslo Børs. Aksjen har betalt utbytte 18 år på rad, noe som reflekterer langvarig stabil inntjening og kapitalavkastning til aksjonærene. Utbyttet utbetales halvårlig — to ganger i året. 5-årssnittlig direkteavkastning er 10.5%, noe som plasserer ODF blant de høyest-yielding aksjene i shippingsektoren. Utbetalingsgraden (payout ratio) er 65%, noe som anses som bærekraftig for de fleste markedsforhold.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -4136,7 +4136,7 @@
         }
       ],
       "snitt_yield_5ar": 7.44,
-      "beskrivelse": "Lokal sparebank på Ringerike med lang og stabil utbyttehistorikk. Godt kapitalisert bank med solid lokal posisjon og jevnlige utbetalinger til egenkapitalbeviseierne.",
+      "beskrivelse": "Lokal sparebank på Ringerike med lang og stabil utbyttehistorikk. Godt kapitalisert bank med solid lokal posisjon og jevnlige utbetalinger til egenkapitalbeviseierne. Skue Sparebank er notert på Oslo Børs. Aksjen har betalt utbytte 24 år på rad, noe som reflekterer langvarig stabil inntjening og kapitalavkastning til aksjonærene. Utbyttet utbetales én gang i året. 5-årssnittlig direkteavkastning er 7.4%, noe som plasserer SKUE blant de høyest-yielding aksjene i finanssektoren. Utbetalingsgraden (payout ratio) er 146%, noe som kan gjøre utbyttet sårbart ved svakere inntjening.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -4169,7 +4169,7 @@
         }
       ],
       "snitt_yield_5ar": 7.81,
-      "beskrivelse": "Regional sparebank i Haugesund-området med stabil inntjening og attraktiv utbyttegrad. Godt forankret i Haugaland-regionen med solid kapitaldekning.",
+      "beskrivelse": "Regional sparebank i Haugesund-området med stabil inntjening og attraktiv utbyttegrad. Godt forankret i Haugaland-regionen med solid kapitaldekning. Haugesund Sparebank er notert på Oslo Børs. Selskapet har betalt utbytte de siste 1 årene. 5-årssnittlig direkteavkastning er 7.8%, noe som plasserer HGSB blant de høyest-yielding aksjene i finanssektoren. Utbetalingsgraden (payout ratio) er 135%, noe som kan gjøre utbyttet sårbart ved svakere inntjening.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -4207,7 +4207,7 @@
         }
       ],
       "snitt_yield_5ar": 2.94,
-      "beskrivelse": "Norsk videokonferanseselskap som leverer skybaserte møteløsninger til store organisasjoner og myndigheter globalt. Har innledet utbytteutbetalinger etter overgang til lønnsom drift.",
+      "beskrivelse": "Norsk videokonferanseselskap som leverer skybaserte møteløsninger til store organisasjoner og myndigheter globalt. Har innledet utbytteutbetalinger etter overgang til lønnsom drift. Pexip Holding ASA er notert på Oslo Børs. Selskapet har betalt utbytte de siste 2 årene. Utbyttet utbetales én gang i året. 5-årssnittlig direkteavkastning er 2.9%, noe som plasserer PEXIP blant de mer moderate aksjene i informasjonsteknologi-sektoren. Utbetalingsgraden (payout ratio) er 128%, noe som kan gjøre utbyttet sårbart ved svakere inntjening.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -4245,7 +4245,7 @@
         }
       ],
       "snitt_yield_5ar": 2.14,
-      "beskrivelse": "Norsk offshore supplyselskap med PSV- og AHTS-fartøyer som betjener olje-, gass- og havvindindustrien. Betaler utbytte drevet av sterk etterspørsel etter offshorefartøyer.",
+      "beskrivelse": "Norsk offshore supplyselskap med PSV- og AHTS-fartøyer som betjener olje-, gass- og havvindindustrien. Betaler utbytte drevet av sterk etterspørsel etter offshorefartøyer. Eidesvik Offshore ASA er notert på Oslo Børs. Selskapet har hatt sammenhengende utbyttebetalinger i 11 år. Utbyttet utbetales én gang i året. 5-årssnittlig direkteavkastning er 2.1%, noe som plasserer EIOF blant de mer moderate aksjene i energitjenester-sektoren. Utbetalingsgraden (payout ratio) er 32%, noe som gir selskapet godt rom for å øke utbyttet fremover.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -4288,7 +4288,7 @@
         }
       ],
       "snitt_yield_5ar": 4.62,
-      "beskrivelse": "Gammel og solid lokalbank på Voss med lang tradisjon for å betale utbytte til egenkapitalbeviseierne. Stabil regional bank med høy kapitaldekning.",
+      "beskrivelse": "Gammel og solid lokalbank på Voss med lang tradisjon for å betale utbytte til egenkapitalbeviseierne. Stabil regional bank med høy kapitaldekning. Voss Veksel- og Landmandsbank ASA er notert på Oslo Børs. Aksjen har betalt utbytte 25 år på rad, noe som reflekterer langvarig stabil inntjening og kapitalavkastning til aksjonærene. Utbyttet utbetales én gang i året. 5-årssnittlig direkteavkastning er 4.6%, noe som plasserer VVL blant de solid-yielding aksjene i finanssektoren. Utbetalingsgraden (payout ratio) er 43%, noe som gir selskapet godt rom for å øke utbyttet fremover.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -4336,7 +4336,7 @@
         }
       ],
       "snitt_yield_5ar": 13.65,
-      "beskrivelse": "Norsk jernmalmgruveselskap med gruvedrift i Mo i Rana. Produserer jernmalmkonsentrater til stålproduksjon og betaler høyt utbytte med sterk kobling til jernmalmprisene.",
+      "beskrivelse": "Norsk jernmalmgruveselskap med gruvedrift i Mo i Rana. Produserer jernmalmkonsentrater til stålproduksjon og betaler høyt utbytte med sterk kobling til jernmalmprisene. Rana Gruber ASA er notert på Oslo Børs. Selskapet har hatt sammenhengende utbyttebetalinger i 5 år. Utbyttet utbetales kvartalsvis — fire ganger i året. 5-årssnittlig direkteavkastning er 13.7%, noe som plasserer RANA blant de høyest-yielding aksjene i materialersektoren. Utbetalingsgraden (payout ratio) er 66%, noe som anses som bærekraftig for de fleste markedsforhold.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -4374,7 +4374,7 @@
         }
       ],
       "snitt_yield_5ar": 3.71,
-      "beskrivelse": "Lokal sparebank i Oslo-området med god utbyttehistorikk. Stabil bank som betaler regelmessig utbytte til sine egenkapitalbeviseiere basert på solid lønnsomhet.",
+      "beskrivelse": "Lokal sparebank i Oslo-området med god utbyttehistorikk. Stabil bank som betaler regelmessig utbytte til sine egenkapitalbeviseiere basert på solid lønnsomhet. Bien Sparebank ASA er notert på Oslo Børs. Selskapet har betalt utbytte de siste 2 årene. 5-årssnittlig direkteavkastning er 3.7%, noe som plasserer BIEN blant de mer moderate aksjene i finanssektoren. Utbetalingsgraden (payout ratio) er 49%, noe som gir selskapet godt rom for å øke utbyttet fremover.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -4412,7 +4412,7 @@
         }
       ],
       "snitt_yield_5ar": 10.44,
-      "beskrivelse": "Norsk olje- og gasselskap med produksjon i Norskehavet og Nordsjøen. Betaler utbytte til aksjonærene basert på fri kontantstrøm fra produksjonsaktiva.",
+      "beskrivelse": "Norsk olje- og gasselskap med produksjon i Norskehavet og Nordsjøen. Betaler utbytte til aksjonærene basert på fri kontantstrøm fra produksjonsaktiva. BlueNord ASA er notert på Oslo Børs med en markedsverdi på rundt 14 milliarder NOK. Selskapet har betalt utbytte de siste 2 årene. Utbyttet utbetales kvartalsvis — fire ganger i året. 5-årssnittlig direkteavkastning er 10.4%, noe som plasserer BNOR blant de høyest-yielding aksjene i energisektoren. Utbetalingsgraden (payout ratio) er 61%, noe som anses som bærekraftig for de fleste markedsforhold.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -4465,7 +4465,7 @@
         }
       ],
       "snitt_yield_5ar": 6.1,
-      "beskrivelse": "Lokal sparebank i Aurskog-Høland med stabil inntjening og attraktiv utbyttegrad til egenkapitalbeviseierne. Solid kapitaldekning og god lokal forankring.",
+      "beskrivelse": "Lokal sparebank i Aurskog-Høland med stabil inntjening og attraktiv utbyttegrad til egenkapitalbeviseierne. Solid kapitaldekning og god lokal forankring. Aurskog Sparebank er notert på Oslo Børs. Aksjen har betalt utbytte 19 år på rad, noe som reflekterer langvarig stabil inntjening og kapitalavkastning til aksjonærene. Utbyttet utbetales én gang i året. 5-årssnittlig direkteavkastning er 6.1%, noe som plasserer AURG blant de solid-yielding aksjene i finanssektoren. Utbetalingsgraden (payout ratio) er 27%, noe som gir selskapet godt rom for å øke utbyttet fremover.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -4498,7 +4498,7 @@
         }
       ],
       "snitt_yield_5ar": 5.95,
-      "beskrivelse": "Sparebank med bred virksomhet i Sør-Norge. Stabil inntjening og konsistent utbyttebetaler med god kapitaldekning og solid regional posisjon.",
+      "beskrivelse": "Sparebank med bred virksomhet i Sør-Norge. Stabil inntjening og konsistent utbyttebetaler med god kapitaldekning og solid regional posisjon. Sparebanken Norge er notert på Oslo Børs med en markedsverdi på rundt 35 milliarder NOK. Selskapet har betalt utbytte de siste 1 årene. Utbyttet utbetales én gang i året. 5-årssnittlig direkteavkastning er 6.0%, noe som plasserer SBNOR blant de solid-yielding aksjene i finanssektoren. Utbetalingsgraden (payout ratio) er 51%, noe som anses som bærekraftig for de fleste markedsforhold.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -4546,7 +4546,7 @@
         }
       ],
       "snitt_yield_5ar": 5.43,
-      "beskrivelse": "Regional sparebank i Sør-Norge med sterk posisjon på Sørlandet. Stabil og voksende utbyttebetaler med høy kapitaldekning og bred produktportefølje.",
+      "beskrivelse": "Regional sparebank i Sør-Norge med sterk posisjon på Sørlandet. Stabil og voksende utbyttebetaler med høy kapitaldekning og bred produktportefølje. SpareBank 1 Sør-Norge ASA er notert på Oslo Børs med en markedsverdi på rundt 79 milliarder NOK. Selskapet har hatt sammenhengende utbyttebetalinger i 14 år. Utbyttet utbetales én gang i året. 5-årssnittlig direkteavkastning er 5.4%, noe som plasserer SB1NO blant de solid-yielding aksjene i finanssektoren. Utbetalingsgraden (payout ratio) er 50%, noe som anses som bærekraftig for de fleste markedsforhold.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -4589,7 +4589,7 @@
         }
       ],
       "snitt_yield_5ar": 4.82,
-      "beskrivelse": "Regional sparebank på Nordmøre med stabil inntjening og god utbyttehistorikk. Solid lokal bank som betaler jevnlig utbytte til egenkapitalbeviseierne.",
+      "beskrivelse": "Regional sparebank på Nordmøre med stabil inntjening og god utbyttehistorikk. Solid lokal bank som betaler jevnlig utbytte til egenkapitalbeviseierne. SpareBank 1 Nordmøre er notert på Oslo Børs. Selskapet har hatt sammenhengende utbyttebetalinger i 6 år. Utbyttet utbetales én gang i året. 5-årssnittlig direkteavkastning er 4.8%, noe som plasserer SNOR blant de solid-yielding aksjene i finanssektoren. Utbetalingsgraden (payout ratio) er 45%, noe som gir selskapet godt rom for å øke utbyttet fremover.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -4613,26 +4613,26 @@
       "rapport_dato": "2026-05-21",
       "frekvens": "Månedlig",
       "ar_med_utbytte": 3,
-      "siste_utbytte": 0.59,
+      "siste_utbytte": 0.58,
       "historiske_utbytter": [
         {
           "ar": 2024,
-          "utbytte": 4.68,
-          "yield": 8.62
+          "utbytte": 4.67,
+          "yield": 8.58
         },
         {
           "ar": 2025,
-          "utbytte": 5.56,
-          "yield": 6.07
+          "utbytte": 5.54,
+          "yield": 6.04
         },
         {
           "ar": 2026,
-          "utbytte": 2.44,
-          "yield": 1.9
+          "utbytte": 2.43,
+          "yield": 1.89
         }
       ],
-      "snitt_yield_5ar": 5.53,
-      "beskrivelse": "Moderne tørrbulkrederi med Newcastlemax-skip som frakter jernmalm og kull. Liberal utbyttepolitikk med kvartalsvis utbetaling basert på inntjening og kontantstrøm.",
+      "snitt_yield_5ar": 5.5,
+      "beskrivelse": "Moderne tørrbulkrederi med Newcastlemax-skip som frakter jernmalm og kull. Liberal utbyttepolitikk med kvartalsvis utbetaling basert på inntjening og kontantstrøm. Himalaya Shipping Ltd. er notert på Oslo Børs. Selskapet har betalt utbytte de siste 3 årene. Utbyttet utbetales månedlig. 5-årssnittlig direkteavkastning er 5.5%, noe som plasserer HSHP blant de solid-yielding aksjene i shippingsektoren. Utbetalingsgraden (payout ratio) er 150%, noe som kan gjøre utbyttet sårbart ved svakere inntjening.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -4659,7 +4659,7 @@
       "siste_utbytte": 0.5,
       "historiske_utbytter": [],
       "snitt_yield_5ar": 0.0,
-      "beskrivelse": "Norsk ingeniør- og teknologiselskap som leverer automatiserings- og prosessløsninger til industri og energisektoren. Betaler utbytte med basis i stabil kontantstrøm fra langvarige kontrakter.",
+      "beskrivelse": "Norsk ingeniør- og teknologiselskap som leverer automatiserings- og prosessløsninger til industri og energisektoren. Betaler utbytte med basis i stabil kontantstrøm fra langvarige kontrakter. Goodtech ASA er notert på Oslo Børs. Selskapet har betalt utbytte de siste 4 årene.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -4697,7 +4697,7 @@
         }
       ],
       "snitt_yield_5ar": 1.11,
-      "beskrivelse": "Nordisk leverandør av HR- og lønnstjenester med skybaserte løsninger for store og mellomstore bedrifter. Betaler utbytte basert på stabil inntjening fra langvarige kundeforhold.",
+      "beskrivelse": "Nordisk leverandør av HR- og lønnstjenester med skybaserte løsninger for store og mellomstore bedrifter. Betaler utbytte basert på stabil inntjening fra langvarige kundeforhold. Zalaris ASA er notert på Oslo Børs. Selskapet har hatt sammenhengende utbyttebetalinger i 7 år. Utbyttet utbetales én gang i året. 5-årssnittlig direkteavkastning er 1.1%, noe som plasserer ZAL blant de mer moderate aksjene i informasjonsteknologi-sektoren. Utbetalingsgraden (payout ratio) er 35%, noe som gir selskapet godt rom for å øke utbyttet fremover.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -4735,7 +4735,7 @@
         }
       ],
       "snitt_yield_5ar": 4.79,
-      "beskrivelse": "Industrielt investeringsselskap kontrollert av Aker med portefølje av olje- og gassservicevirksomheter. Betaler utbytte fra porteføljeinntekter og realiserte verdier.",
+      "beskrivelse": "Industrielt investeringsselskap kontrollert av Aker med portefølje av olje- og gassservicevirksomheter. Betaler utbytte fra porteføljeinntekter og realiserte verdier. Akastor ASA er notert på Oslo Børs. Selskapet har hatt sammenhengende utbyttebetalinger i 11 år. Utbyttet utbetales kvartalsvis — fire ganger i året. 5-årssnittlig direkteavkastning er 4.8%, noe som plasserer AKAST blant de solid-yielding aksjene i energitjenester-sektoren.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -4768,7 +4768,7 @@
         }
       ],
       "snitt_yield_5ar": 0.71,
-      "beskrivelse": "Norsk medisinsk diagnostikkselskap som utvikler og produserer proteinbaserte reagenser for kliniske analyseinstrumenter. Betaler utbytte basert på sterk vekst i globale analyselaboratorier.",
+      "beskrivelse": "Norsk medisinsk diagnostikkselskap som utvikler og produserer proteinbaserte reagenser for kliniske analyseinstrumenter. Betaler utbytte basert på sterk vekst i globale analyselaboratorier. Gentian Diagnostics ASA er notert på Oslo Børs. Selskapet har betalt utbytte de siste 1 årene. Utbyttet utbetales én gang i året. 5-årssnittlig direkteavkastning er 0.7%, noe som plasserer GENT blant de mer moderate aksjene i helsevern-sektoren. Utbetalingsgraden (payout ratio) er 47%, noe som gir selskapet godt rom for å øke utbyttet fremover.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -4816,7 +4816,7 @@
         }
       ],
       "snitt_yield_5ar": 2.1,
-      "beskrivelse": "Industrielt investeringsselskap med fokus på grønn teknologi og fornybar energi. B-aksjen gir eksponering mot samme portefølje som A-aksjen (AFG) og betaler ordinært utbytte.",
+      "beskrivelse": "Industrielt investeringsselskap med fokus på grønn teknologi og fornybar energi. B-aksjen gir eksponering mot samme portefølje som A-aksjen (AFG) og betaler ordinært utbytte. Arendals Fossekompani ASA (B-aksje) er notert på Oslo Børs. Aksjen har betalt utbytte 24 år på rad, noe som reflekterer langvarig stabil inntjening og kapitalavkastning til aksjonærene. Utbyttet utbetales én gang i året. 5-årssnittlig direkteavkastning er 2.1%, noe som plasserer AFK blant de mer moderate aksjene i fornybar energi-sektoren. Utbetalingsgraden (payout ratio) er 22%, noe som gir selskapet godt rom for å øke utbyttet fremover.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     },
@@ -4854,7 +4854,7 @@
         }
       ],
       "snitt_yield_5ar": 4.92,
-      "beskrivelse": "SED Energy Holdings er et internasjonalt olje- og gasselskap notert på Oslo Børs. Selskapet er kjent for høy direkteavkastning og regelmessige utbyttebetalinger.",
+      "beskrivelse": "SED Energy Holdings er et internasjonalt olje- og gasselskap notert på Oslo Børs. Selskapet er kjent for høy direkteavkastning og regelmessige utbyttebetalinger. SED Energy Holdings PLC er notert på Oslo Børs. Selskapet har betalt utbytte de siste 2 årene. Utbyttet utbetales halvårlig — to ganger i året. 5-årssnittlig direkteavkastning er 4.9%, noe som plasserer ENH blant de solid-yielding aksjene i energisektoren. Utbetalingsgraden (payout ratio) er 226%, noe som kan gjøre utbyttet sårbart ved svakere inntjening.",
       "valuta": "NOK",
       "data_kilde": "yahoo"
     }

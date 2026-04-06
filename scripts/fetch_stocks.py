@@ -795,6 +795,61 @@ def _fmt_dato(iso):
         return iso
 
 
+def _lag_analyse_tekst(a):
+    """Bygger et analytisk avsnitt om yield, payout og veksttrender."""
+    deler = []
+    yield_ = a.get("utbytte_yield") or 0
+    snitt5 = a.get("snitt_yield_5ar") or 0
+    payout = a.get("payout_ratio") or 0
+    vekst  = a.get("utbytte_vekst_5ar")
+
+    if yield_ > 0 and snitt5 > 0:
+        diff = yield_ - snitt5
+        if diff > 1.5:
+            deler.append(
+                f"Nåværende direkteavkastning på {yield_:.1f}% er betydelig høyere enn "
+                f"5-årssnittet på {snitt5:.1f}%, noe som kan indikere et midlertidig "
+                "kursfall eller ekstraordinært utbytte."
+            )
+        elif diff < -1.5:
+            deler.append(
+                f"Nåværende direkteavkastning på {yield_:.1f}% er lavere enn "
+                f"5-årssnittet på {snitt5:.1f}%, noe som tyder på sterk kursvekst de siste årene."
+            )
+        else:
+            deler.append(
+                f"Direkteavkastningen på {yield_:.1f}% ligger nær 5-årssnittet på {snitt5:.1f}%, "
+                "som indikerer stabil kurs- og utbytteutvikling."
+            )
+
+    if payout > 0:
+        if payout < 50:
+            deler.append(
+                f"Utbetalingsgraden på {payout:.0f}% gir godt rom for fremtidige utbytteøkninger."
+            )
+        elif payout < 80:
+            deler.append(
+                f"Utbetalingsgraden på {payout:.0f}% er bærekraftig."
+            )
+        else:
+            deler.append(
+                f"Utbetalingsgraden på {payout:.0f}% er høy — utbyttet kan være "
+                "sårbart ved svakere inntjening."
+            )
+
+    if vekst is not None and abs(vekst) > 0.5:
+        if vekst > 0:
+            deler.append(
+                f"Utbyttet har vokst med {vekst:.1f}% per år de siste 5 årene."
+            )
+        else:
+            deler.append(
+                f"Utbyttet har falt med {abs(vekst):.1f}% per år de siste 5 årene."
+            )
+
+    return " ".join(deler)
+
+
 def _aksje_side_html(a, today):
     ticker  = a["ticker"]
     navn    = a["navn"]
@@ -811,10 +866,16 @@ def _aksje_side_html(a, today):
     hist    = a.get("historiske_utbytter") or []
     snitt5  = a.get("snitt_yield_5ar") or 0
     valuta  = a.get("valuta") or "NOK"
+    payout  = a.get("payout_ratio") or 0
+    vekst   = a.get("utbytte_vekst_5ar")
+    mrd     = a.get("markedsverdi_mrd") or 0
+    hoy52   = a.get("52u_hoy") or 0
+    lav52   = a.get("52u_lav") or 0
 
     meta_desc = (
-        f"{navn} ({ticker}) betaler {yield_:.2f}% utbytte. "
+        f"{navn} ({ticker}) betaler {yield_:.2f}% utbytte ({sektor}). "
         f"Ex-dato: {_fmt_dato(ex)}. "
+        f"5-årssnitt yield: {snitt5:.2f}%. "
         f"Siste utbytte: {upa} {valuta} per aksje. "
         f"Oppdatert daglig på exday.no."
     )
@@ -835,7 +896,24 @@ def _aksje_side_html(a, today):
         f'<div class="val">{pe:.1f}</div></div>'
     ) if pe and pe > 0 else ""
 
-    besk_seksjon = f'<div class="desc"><p>{besk}</p></div>' if besk else ""
+    payout_rad = f"<tr><td>Payout ratio</td><td>{payout:.0f}%</td></tr>" if payout > 0 else ""
+    vekst_rad  = (
+        f"<tr><td>Utbyttevekst 5 år</td><td>{'+' if vekst >= 0 else ''}{vekst:.1f}% p.a.</td></tr>"
+        if vekst is not None else ""
+    )
+    mrd_rad    = f"<tr><td>Markedsverdi</td><td>{mrd:.1f} mrd NOK</td></tr>" if mrd > 0 else ""
+    kurs52_rad = (
+        f"<tr><td>52-ukers kurs</td><td>{lav52} – {hoy52} {valuta}</td></tr>"
+        if hoy52 > 0 and lav52 > 0 else ""
+    )
+
+    om_seksjon = f'<div class="desc"><p>{besk}</p></div>' if besk else ""
+
+    analyse_tekst   = _lag_analyse_tekst(a)
+    analyse_seksjon = (
+        f'<div class="analyse"><h2>Utbytteanalyse</h2><p>{analyse_tekst}</p></div>'
+        if analyse_tekst else ""
+    )
 
     nokkeltal_seksjon = (
         "<h2>Nøkkeltall</h2>"
@@ -849,6 +927,10 @@ def _aksje_side_html(a, today):
         f"<tr><td>5-årssnitt yield</td><td>{snitt5:.2f}%</td></tr>"
         f"<tr><td>År med utbytte</td><td>{ar_med}</td></tr>"
         f"{pe_rad}"
+        f"{payout_rad}"
+        f"{vekst_rad}"
+        f"{mrd_rad}"
+        f"{kurs52_rad}"
         "</tbody></table>"
     )
 
@@ -876,7 +958,7 @@ def _aksje_side_html(a, today):
             {
                 "@type": "FinancialProduct",
                 "name": f"{navn} ({ticker})",
-                "description": besk or meta_desc,
+                "description": (besk or meta_desc)[:500],
                 "url": f"https://exday.no/aksjer/{ticker}/",
                 "provider": {"@type": "Organization", "name": "exday.no", "url": "https://exday.no/"},
             }
@@ -943,6 +1025,8 @@ def _aksje_side_html(a, today):
     .kcard .val {{ font-size: 1.25rem; font-weight: 700; }}
     .kcard .val.green {{ color: #16a34a; }}
     .desc {{ border-radius: 0.75rem; padding: 1rem 1.25rem; margin-bottom: 1.5rem; border: 1px solid; }}
+    .analyse {{ border-radius: 0.75rem; padding: 1rem 1.25rem; margin: 1rem 0 1.5rem; border: 1px solid; line-height: 1.75; }}
+    .analyse h2 {{ margin-bottom: 0.4rem; }}
     h2 {{ font-size: 1rem; font-weight: 700; margin-bottom: 0.75rem; }}
     table {{ width: 100%; border-collapse: collapse; border-radius: 0.75rem; overflow: hidden; margin-bottom: 1.5rem; font-size: 0.9rem; border: 1px solid; }}
     th {{ padding: 0.6rem 1rem; text-align: left; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; }}
@@ -961,6 +1045,8 @@ def _aksje_side_html(a, today):
     .kcard .label {{ color: #9ca3af; }}
     .kcard .val {{ color: #111827; }}
     .desc {{ background: #fff; border-color: #e5e7eb; color: #374151; }}
+    .analyse {{ background: #f0fdf4; border-color: #bbf7d0; color: #374151; }}
+    .analyse h2 {{ color: #15803d; }}
     h2 {{ color: #374151; }}
     table {{ background: #fff; border-color: #e5e7eb; }}
     th {{ background: #f3f4f6; color: #6b7280; }}
@@ -979,6 +1065,8 @@ def _aksje_side_html(a, today):
     .dark .kcard .label {{ color: #6b7280; }}
     .dark .kcard .val {{ color: #f3f4f6; }}
     .dark .desc {{ background: #111827; border-color: #1f2937; color: #d1d5db; }}
+    .dark .analyse {{ background: #052e16; border-color: #166534; color: #d1d5db; }}
+    .dark .analyse h2 {{ color: #4ade80; }}
     .dark h2 {{ color: #d1d5db; }}
     .dark table {{ background: #111827; border-color: #1f2937; }}
     .dark th {{ background: #1f2937; color: #9ca3af; }}
@@ -1066,7 +1154,9 @@ def _aksje_side_html(a, today):
     {pe_card}
   </div>
 
-  {besk_seksjon}
+  {om_seksjon}
+
+  {analyse_seksjon}
 
   {nokkeltal_seksjon}
 
