@@ -11,7 +11,7 @@
 | Alvorlighetsgrad | Antall | Status |
 |---|---|---|
 | Kritisk | 2 | ✅ Fikset 2026-04-06 |
-| Høy | 1 | Åpen |
+| Høy | 1 | ✅ Fikset 2026-04-06 |
 | Medium | 4 | Åpen |
 | Lav | 8 | Åpen |
 | Info | 3 | OK |
@@ -43,45 +43,30 @@ ${a.beskrivelse ? `<p ...>${escHtml(a.beskrivelse)}</p>` : ''}
 
 ---
 
-## Fase 2 — Høy (innen 2 uker)
+## Fase 2 — Høy ✅ Fikset 2026-04-06
 
 ### URL-injeksjon i Python-skript
 **Fil:** `scripts/fetch_stocks.py`  
-**Problem:** Ticker-strenger brukes direkte i URL-bygging uten encoding:
-```python
-f"{_NEWSWEB_API}/v1/newsreader/list?issuer={ticker}&limit=500"
-```
-Spesialtegn i en ticker (`?`, `&`, `#`) kan gi query-parameter-injeksjon.
+**Status:** ✅ **Fikset**
 
-**Fix:**
-```python
-from urllib.parse import quote
-f"{_NEWSWEB_API}/v1/newsreader/list?issuer={quote(ticker, safe='')}&limit=500"
-```
-
-Legg også til format-validering av tickers ved innlesing:
-```python
-import re
-TICKER_RE = re.compile(r'^[A-Z0-9]{1,10}$')
-if not TICKER_RE.match(ticker):
-    raise ValueError(f"Ugyldig ticker-format: {ticker}")
-```
+- `urllib.parse` importert og `quote(ticker, safe='')` brukes i alle Newsweb-URL-er
+- `_valider_ticker()` validerer ticker-format (`^[A-Z0-9]{1,10}$`) ved oppstart — kaster `ValueError` ved ugyldig verdi
+- Alle 191 tickers validert OK ved oppstart
 
 ---
 
 ### Utdaterte `escape`/`unescape`-funksjoner
 **Fil:** `assets/ui.js` (QR-kode-deling)  
-**Problem:** `escape()` og `unescape()` er deprecated og ikke del av ES-standarden:
-```js
-const payload = JSON.parse(decodeURIComponent(escape(atob(raw))));
-const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
-```
+**Status:** ✅ **Fikset**
 
-**Fix:**
+Erstattet med moderne `TextEncoder`/`TextDecoder` API (støttet i alle moderne nettlesere):
 ```js
-const payload = JSON.parse(decodeURIComponent(atob(raw)));
-const encoded = btoa(encodeURIComponent(JSON.stringify(payload)));
+// Encode
+btoa(String.fromCharCode(...new TextEncoder().encode(JSON.stringify(payload))))
+// Decode
+JSON.parse(new TextDecoder().decode(Uint8Array.from(atob(raw), c => c.charCodeAt(0))))
 ```
+Ingen deprecated funksjoner, korrekt UTF-8-håndtering for alle tegn.
 
 ---
 
@@ -192,9 +177,9 @@ Ingen bruk av `subprocess`, `os.system()`, `eval()` eller `shell=True` funnet.
 
 - [x] Fase 1: Bytt inline onclick → data-attributter i `ui.js`
 - [x] Fase 1: Sanitér `beskrivelse`-felt i `innerHTML`
-- [ ] Fase 2: Legg til `urllib.parse.quote()` i `fetch_stocks.py`
-- [ ] Fase 2: Legg til ticker-format-validering i Python
-- [ ] Fase 2: Erstatt `escape`/`unescape` med standard encoding
+- [x] Fase 2: Legg til `urllib.parse.quote()` i `fetch_stocks.py`
+- [x] Fase 2: Legg til ticker-format-validering i Python
+- [x] Fase 2: Erstatt `escape`/`unescape` med standard encoding
 - [ ] Fase 3: Legg til CSP-header i `index.html`
 - [ ] Fase 3: Legg til SRI-hash på QRCode CDN-script (eller vendor det)
 - [ ] Fase 3: Dokumenter sikkerhetsheadere til eventuell plattformmigrering

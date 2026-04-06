@@ -10,8 +10,17 @@ import re
 import sys
 import datetime
 import urllib.request
+import urllib.parse
 import html.parser
 import yfinance as yf
+
+_TICKER_RE = re.compile(r'^[A-Z0-9]{1,10}$')
+
+def _valider_ticker(ticker: str) -> str:
+    """Kaster ValueError hvis ticker ikke matcher forventet format."""
+    if not _TICKER_RE.match(ticker):
+        raise ValueError(f"Ugyldig ticker-format: {ticker!r}")
+    return ticker
 
 # ── NEWSWEB (Oslo Børs) INTEGRASJON ───────────────────────────────────────────
 
@@ -94,7 +103,7 @@ def hent_newsweb_rapport_dato(ticker: str) -> str | None:
 
     try:
         resp = _newsweb_post(
-            f"{_NEWSWEB_API}/v1/newsreader/list?issuer={ticker}&limit=500"
+            f"{_NEWSWEB_API}/v1/newsreader/list?issuer={urllib.parse.quote(ticker, safe='')}&limit=500"
         )
         messages = resp.get("data", {}).get("messages", [])
 
@@ -103,7 +112,7 @@ def hent_newsweb_rapport_dato(ticker: str) -> str | None:
             if "financial calendar" in title or "finansiell kalender" in title:
                 msg_id = msg.get("messageId")
                 full = _newsweb_get(
-                    f"{_NEWSWEB_API}/v1/newsreader/message?messageId={msg_id}"
+                    f"{_NEWSWEB_API}/v1/newsreader/message?messageId={urllib.parse.quote(str(msg_id), safe='')}"
                 )
                 body = full.get("data", {}).get("message", {}).get("body", "")
                 if body:
@@ -120,7 +129,7 @@ _tickers_path = os.path.join(os.path.dirname(__file__), "..", "data", "tickers.j
 with open(_tickers_path, "r", encoding="utf-8") as _f:
     _ticker_data = json.load(_f)
 
-AKSJER = [{"ticker_yf": t["ticker_yf"], "ticker": t["ticker"],
+AKSJER = [{"ticker_yf": t["ticker_yf"], "ticker": _valider_ticker(t["ticker"]),
             "navn": t["navn"], "sektor": t["sektor"], "bors": t["bors"]}
           for t in _ticker_data]
 

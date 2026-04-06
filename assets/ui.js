@@ -2569,7 +2569,7 @@ function sjekkQRParam() {
   if (!raw) return;
   history.replaceState(null, '', location.pathname);
   try {
-    const payload = JSON.parse(decodeURIComponent(escape(atob(raw))));
+    const payload = JSON.parse(new TextDecoder().decode(Uint8Array.from(atob(raw), c => c.charCodeAt(0))));
     if (!payload.ts || !payload.pf) return;
     if (Date.now() - payload.ts > 5 * 60 * 1000) {
       alert('QR-koden er utløpt (eldre enn 5 minutter). Generer en ny fra avsender-enheten.');
@@ -2589,7 +2589,7 @@ function visQRModal() {
   }
 
   const payload = { ts: Date.now(), pf };
-  const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
+  const encoded = btoa(String.fromCharCode(...new TextEncoder().encode(JSON.stringify(payload))));
   const url = `${location.origin}${location.pathname}?pf=${encoded}`;
 
   const wrapper = document.getElementById('qr-canvas-wrapper');
