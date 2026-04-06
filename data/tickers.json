@@ -1177,5 +1177,245 @@
     "bors": "Oslo Børs",
     "beskrivelse": "SED Energy Holdings er et internasjonalt olje- og gasselskap notert på Oslo Børs. Selskapet er kjent for høy direkteavkastning og regelmessige utbyttebetalinger. SED Energy Holdings PLC er notert på Oslo Børs. Selskapet har betalt utbytte de siste 2 årene. Utbyttet utbetales halvårlig — to ganger i året. 5-årssnittlig direkteavkastning er 4.9%, noe som plasserer ENH blant de solid-yielding aksjene i energisektoren. Utbetalingsgraden (payout ratio) er 226%, noe som kan gjøre utbyttet sårbart ved svakere inntjening.",
     "navn_dnb": "SED Energy Holdings"
+  },
+  {
+    "ticker": "PROT",
+    "ticker_yf": "PROT.OL",
+    "navn": "Protector Forsikring ASA",
+    "sektor": "Finans",
+    "bors": "Oslo Børs",
+    "beskrivelse": "Norsk skadeforsikringsselskap med virksomhet i Skandinavia og Storbritannia. Voksende premieinntekter og sterk combined ratio. Betaler halvårlig utbytte basert på solid underliggende inntjening."
+  },
+  {
+    "ticker": "ELK",
+    "ticker_yf": "ELK.OL",
+    "navn": "Elkem ASA",
+    "sektor": "Materialer",
+    "bors": "Oslo Børs",
+    "beskrivelse": "Norsk produsent av silisium, silikoner og karbonprodukter til industri og elektronikk globalt. Et av verdens ledende integrerte selskaper innen avanserte materialer. Betaler utbytte basert på syklisk inntjening."
+  },
+  {
+    "ticker": "ELO",
+    "ticker_yf": "ELO.OL",
+    "navn": "Elopak ASA",
+    "sektor": "Industri",
+    "bors": "Oslo Børs",
+    "beskrivelse": "Norsk produsent av kartongemballasje for drikkevarer, med Pure-Pak-kartongene som flaggskip. Virksomhet i Europa, Amerika og Midtøsten. Betaler halvårlig utbytte med stabil utbyttegrad og voksende volumer."
+  },
+  {
+    "ticker": "ENDUR",
+    "ticker_yf": "ENDUR.OL",
+    "navn": "Endúr ASA",
+    "sektor": "Industri",
+    "bors": "Oslo Børs",
+    "beskrivelse": "Norsk industrikonsern med tjenester innen vedlikehold, modifikasjon og konstruksjon for offshore, marin og landbasert industri. Sterk ordrereserve og utbyttepolitikk med halvårlige utbetalinger."
+  },
+  {
+    "ticker": "MORLD",
+    "ticker_yf": "MORLD.OL",
+    "navn": "Moreld ASA",
+    "sektor": "Industri",
+    "bors": "Oslo Børs",
+    "beskrivelse": "Norsk industriselskap med virksomhet innen ingeniørtjenester, teknologi og avansert produksjon for olje- og gassindustrien. Betaler utbytte til aksjonærene basert på lønnsom drift og kontantstrøm."
+  },
+  {
+    "ticker": "NKR",
+    "ticker_yf": "NKR.OL",
+    "navn": "Nekkar ASA",
+    "sektor": "Industri",
+    "bors": "Oslo Børs",
+    "beskrivelse": "Norsk maritim teknologigruppe med produkter og tjenester til offshore og havvind, inkludert heisesystemer og ankerhåndteringsutstyr. Betaler utbytte basert på underliggende resultater."
+  },
+  {
+    "ticker": "TIETO",
+    "ticker_yf": "TIETO.OL",
+    "navn": "TietoEVRY Corporation",
+    "sektor": "Informasjonsteknologi",
+    "bors": "Oslo Børs",
+    "beskrivelse": "Nordisk IT-tjenesteleverandør skapt av fusjonen mellom finske Tieto og norske EVRY. Leverer digitalisering, skyløsninger og forretningsprogramvare. Notert på Oslo Børs og Helsinki. Betaler halvårlig utbytte."
+  },
+  {
+    "ticker": "WSTEP",
+    "ticker_yf": "WSTEP.OL",
+    "navn": "Webstep ASA",
+    "sektor": "Informasjonsteknologi",
+    "bors": "Oslo Børs",
+    "beskrivelse": "Norsk IT-konsulentselskap med spesialkompetanse innen systemutvikling, sky og data. Opererer i Oslo, Bergen og Trondheim. Betaler halvårlig utbytte og har høy utbyttebetaling relativt til overskudd."
+  },
+  {
+    "ticker": "BWE",
+    "ticker_yf": "BWE.OL",
+    "navn": "BW Energy Limited",
+    "sektor": "Energi",
+    "bors": "Oslo Børs",
+    "beskrivelse": "BW Energy er et internasjonalt olje- og gasselskap fokusert på lav-risiko produksjonseiendeler i Vest-Afrika, primært Gabon og Brasil. Sterk kontantstrøm fra produksjon danner grunnlag for utbytte."
+  },
+  {
+    "ticker": "MGN",
+    "ticker_yf": "MGN.OL",
+    "navn": "Magnora ASA",
+    "sektor": "Energi",
+    "bors": "Oslo Børs",
+    "beskrivelse": "Norsk investeringsselskap innen fornybar energi med prosjektutvikling innen sol og vind i Skandinavia og Europa. Betaler utbytte til aksjonærene etter realiserte prosjektgevinster og løpende inntekter."
+  },
+  {
+    "ticker": "ARCH",
+    "ticker_yf": "ARCH.OL",
+    "navn": "Archer Limited",
+    "sektor": "Energitjenester",
+    "bors": "Oslo Børs",
+    "beskrivelse": "Internasjonalt oilfield services-selskap med spesialisering på boretjenester, completions og rettetjenester. Opererer globalt for olje- og gassindustrien. Betaler utbytte avhengig av aktivitetsnivå."
+  },
+  {
+    "ticker": "ABL",
+    "ticker_yf": "ABL.OL",
+    "navn": "ABL Group ASA",
+    "sektor": "Energitjenester",
+    "bors": "Oslo Børs",
+    "beskrivelse": "Norsk ingeniør- og rådgivningskonsern med spesialisering på marin og offshore-teknologi, inkludert havvind. Virksomhet i over 30 land. Betaler utbytte halvårlig basert på kontantstrøm fra rådgivningstjenester."
+  },
+  {
+    "ticker": "CADLR",
+    "ticker_yf": "CADLR.OL",
+    "navn": "Cadeler A/S",
+    "sektor": "Energitjenester",
+    "bors": "Oslo Børs",
+    "beskrivelse": "Dansk-norsk offshoreselskap som installerer havvindturbiner med spesialiserte fartøyer. Sterkt voksende ordrebok drevet av europeisk havvindsatsing. Betaler utbytte etter hvert som kontantstrøm tillater."
+  },
+  {
+    "ticker": "KMCP",
+    "ticker_yf": "KMCP.OL",
+    "navn": "KMC Properties ASA",
+    "sektor": "Eiendom",
+    "bors": "Oslo Børs",
+    "beskrivelse": "Norsk eiendomsselskap med industrielle næringseiendommer i Norden. Langsiktige leieavtaler med solide industrileietakere gir stabil kontantstrøm. Betaler kvartalsvis utbytte og har høy direkteavkastning."
+  },
+  {
+    "ticker": "PUBLI",
+    "ticker_yf": "PUBLI.OL",
+    "navn": "Public Property Invest ASA",
+    "sektor": "Eiendom",
+    "bors": "Oslo Børs",
+    "beskrivelse": "Norsk eiendomsselskap spesialisert på offentlige leietakere som kommuner, sykehus og statlige etater. Svært stabile leieforhold og lang gjenværende leietid. Betaler halvårlig utbytte med høy direkteavkastning."
+  },
+  {
+    "ticker": "WWIB",
+    "ticker_yf": "WWIB.OL",
+    "navn": "Wilh. Wilhelmsen Holding B",
+    "sektor": "Industri",
+    "bors": "Oslo Børs",
+    "beskrivelse": "Norsk maritim industrikonsern med virksomhet innen bilfrakt (EUKOR, Wallenius Wilhelmsen) og maritime tjenester globalt. B-aksjen gir samme utbytte som A-aksjen. Betaler halvårlig utbytte med sterk historikk."
+  },
+  {
+    "ticker": "POL",
+    "ticker_yf": "POL.OL",
+    "navn": "Polaris Media ASA",
+    "sektor": "Kommunikasjonstjenester",
+    "bors": "Oslo Børs",
+    "beskrivelse": "Norsk mediekonsern med aviser, digitale nyhetsplattformer og trykkerivirksomhet primært i Midt-Norge og Nord-Norge. Betaler halvårlig utbytte til aksjonærene basert på annonseinntekter og abonnementsvekst."
+  },
+  {
+    "ticker": "GYL",
+    "ticker_yf": "GYL.OL",
+    "navn": "Gyldendal ASA",
+    "sektor": "Kommunikasjonstjenester",
+    "bors": "Oslo Børs",
+    "beskrivelse": "Norges største forlag med sterk posisjon innen skjønnlitteratur, fagbøker og læremidler. Lang utbyttehistorikk med jevnlige utbetalinger. Thinly traded aksje med stabile leieinntekter fra forlagsvirksomheten."
+  },
+  {
+    "ticker": "SOAG",
+    "ticker_yf": "SOAG.OL",
+    "navn": "SpareBank 1 Østfold Akershus",
+    "sektor": "Finans",
+    "bors": "Oslo Børs",
+    "beskrivelse": "Regional sparebank i Østfold og Akershus, del av SpareBank 1-alliansen. Solid kapitalisering og stabil utbyttebetaling til egenkapitalbeviseierne halvårlig. God markedsposisjon i vekstkommuner nær Oslo."
+  },
+  {
+    "ticker": "ROGS",
+    "ticker_yf": "ROGS.OL",
+    "navn": "Rogaland Sparebank",
+    "sektor": "Finans",
+    "bors": "Oslo Børs",
+    "beskrivelse": "Regional sparebank i Stavanger-regionen med sterk lokal forankring i oljehovedstaden. Betaler halvårlig utbytte til egenkapitalbeviseierne og er godt kapitalisert med solid inntjening fra næringslivet."
+  },
+  {
+    "ticker": "MELG",
+    "ticker_yf": "MELG.OL",
+    "navn": "Melhus Sparebank",
+    "sektor": "Finans",
+    "bors": "Oslo Børs",
+    "beskrivelse": "Regional sparebank i Melhus kommune i Trøndelag. Solid lokal sparebank med stabil inntjening og jevn utbyttebetaling til egenkapitalbeviseierne. Godt kapitalisert og veldrevet."
+  },
+  {
+    "ticker": "TRSB",
+    "ticker_yf": "TRSB.OL",
+    "navn": "Trøndelag Sparebank",
+    "sektor": "Finans",
+    "bors": "Oslo Børs",
+    "beskrivelse": "Regional sparebank i Trøndelag med sterk lokal forankring og jevnt voksende kundemasse. Betaler halvårlig utbytte til egenkapitalbeviseierne med stabil og god kapitalisering."
+  },
+  {
+    "ticker": "HSPG",
+    "ticker_yf": "HSPG.OL",
+    "navn": "Høland og Setskog Sparebank",
+    "sektor": "Finans",
+    "bors": "Oslo Børs",
+    "beskrivelse": "Lokal sparebank i Aurskog-Høland og Aurskog nord for Oslo. Betaler halvårlig utbytte til egenkapitalbeviseierne og har solid lokalt kundegrunnlag i voksende pendlerkommuner."
+  },
+  {
+    "ticker": "SOGN",
+    "ticker_yf": "SOGN.OL",
+    "navn": "Sogn Sparebank",
+    "sektor": "Finans",
+    "bors": "Oslo Børs",
+    "beskrivelse": "Regional sparebank i Sogn og Fjordane med røtter tilbake til 1846. Godt kapitalisert og betaler halvårlig utbytte til egenkapitalbeviseierne. Stabil forretningsmodell basert på lokal privatkundemarked."
+  },
+  {
+    "ticker": "GRONG",
+    "ticker_yf": "GRONG.OL",
+    "navn": "Grong Sparebank",
+    "sektor": "Finans",
+    "bors": "Euronext Growth Oslo",
+    "beskrivelse": "Lokal sparebank i Grong i Trøndelag med lokal forankring i Namdalen. Betaler halvårlig utbytte til egenkapitalbeviseierne og har stabil inntjening fra privatkundesegmentet i regionen."
+  },
+  {
+    "ticker": "TINDE",
+    "ticker_yf": "TINDE.OL",
+    "navn": "Tinde Sparebank",
+    "sektor": "Finans",
+    "bors": "Euronext Growth Oslo",
+    "beskrivelse": "Regional sparebank på Sunnmøre i Møre og Romsdal. Betaler halvårlig utbytte til egenkapitalbeviseierne. Solid lokal bank med veldrevet virksomhet i et område med sterk industri og næringsvirksomhet."
+  },
+  {
+    "ticker": "ROMER",
+    "ticker_yf": "ROMER.OL",
+    "navn": "Romerike Sparebank",
+    "sektor": "Finans",
+    "bors": "Euronext Growth Oslo",
+    "beskrivelse": "Regional sparebank på Romerike nord for Oslo. Betaler halvårlig utbytte til egenkapitalbeviseierne og har godt kundegrunnlag i vekstkommunene rundt Gardermoen og Lillestrøm."
+  },
+  {
+    "ticker": "SB68",
+    "ticker_yf": "SB68.OL",
+    "navn": "SpareBank 68° Nord",
+    "sektor": "Finans",
+    "bors": "Euronext Growth Oslo",
+    "beskrivelse": "Regional sparebank i Nordland med røtter i Bodø-regionen. Betaler halvårlig utbytte til egenkapitalbeviseierne og har sterk lokal posisjon i en region preget av fisk, industri og forsvar."
+  },
+  {
+    "ticker": "NISB",
+    "ticker_yf": "NISB.OL",
+    "navn": "Nidaros Sparebank",
+    "sektor": "Finans",
+    "bors": "Euronext Growth Oslo",
+    "beskrivelse": "Lokal sparebank i Trondheim-regionen. Betaler halvårlig utbytte til egenkapitalbeviseierne. Stabil forretningsmodell med fokus på privatkunder og lokalt næringsliv i Norges tredje største by."
+  },
+  {
+    "ticker": "AASB",
+    "ticker_yf": "AASB.OL",
+    "navn": "Aasen Sparebank",
+    "sektor": "Finans",
+    "bors": "Euronext Growth Oslo",
+    "beskrivelse": "Lokal sparebank i Åsnes og Trysil i Innlandet. Betaler halvårlig utbytte til egenkapitalbeviseierne og har solid lokal forankring med stabil inntjening fra en vel kapitalisert bankvirksomhet."
   }
 ]
