@@ -1816,6 +1816,7 @@ function visModal(a) {
 
     ${historiskChart(a)}
     ${scoreForklaring(a)}
+    ${modalKalkulator(a)}
     ${notatSeksjon(a)}
   `;
 
@@ -1842,6 +1843,73 @@ function visModal(a) {
       lagreAksjeData(a.ticker, { notat: _notIn.value });
     });
   }
+
+  // Utbytte-kalkulator: live-oppdatering
+  const _kalIn = document.getElementById('modal-kal-belop');
+  if (_kalIn) {
+    _kalIn.addEventListener('input', () => _oppdaterModalKalkulator(a));
+    _oppdaterModalKalkulator(a);
+  }
+}
+
+function modalKalkulator(a) {
+  const harData = (a.pris > 0) && (a.utbytte_per_aksje > 0 || a.utbytte_yield > 0);
+  if (!harData) return '';
+  const fmtKr = v => new Intl.NumberFormat('nb-NO', { style: 'currency', currency: 'NOK', maximumFractionDigits: 0 }).format(v);
+  const startBelop = 10000;
+  const kurs = a.pris;
+  const upa  = a.utbytte_per_aksje || 0;
+  const antall = kurs > 0 ? Math.floor(startBelop / kurs) : 0;
+  const utbAar = upa > 0 ? antall * upa : (a.utbytte_yield / 100) * (antall * kurs);
+  return `
+    <div class="mt-4 pt-4 border-t border-gray-100 dark:border-gray-800">
+      <h3 class="text-sm font-semibold text-gray-800 dark:text-gray-200 mb-3">Beregn utbytte</h3>
+      <div class="rounded-lg bg-gray-50 dark:bg-gray-800/60 border border-gray-200 dark:border-gray-700 p-4 space-y-3">
+        <div class="flex items-center gap-3">
+          <label class="text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap">Invester (kr)</label>
+          <input id="modal-kal-belop" type="number" min="1" step="1000" value="${startBelop}"
+            class="filter-input flex-1 text-right font-semibold" />
+        </div>
+        <div class="grid grid-cols-3 gap-2 text-center text-xs">
+          <div class="rounded-lg bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 p-2.5">
+            <p class="text-gray-400 mb-0.5">Antall aksjer</p>
+            <p id="modal-kal-antall" class="font-bold text-brand-600 dark:text-brand-400 text-base">${antall}</p>
+            <p id="modal-kal-kurs" class="text-gray-400 mt-0.5">@ ${fmt(kurs)} ${a.valuta}</p>
+          </div>
+          <div class="rounded-lg bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 p-2.5">
+            <p class="text-gray-400 mb-0.5">Utbytte / år</p>
+            <p id="modal-kal-aar" class="font-bold text-green-600 dark:text-green-400 text-base">${fmtKr(utbAar)}</p>
+            <p id="modal-kal-mnd" class="text-gray-400 mt-0.5">${fmtKr(utbAar / 12)} / mnd</p>
+          </div>
+          <div class="rounded-lg bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 p-2.5">
+            <p class="text-gray-400 mb-0.5">Etter skatt</p>
+            <p id="modal-kal-netto" class="font-bold text-gray-700 dark:text-gray-300 text-base">${fmtKr(utbAar * 0.6216)}</p>
+            <p class="text-gray-400 mt-0.5">37,84% skatt</p>
+          </div>
+        </div>
+      </div>
+    </div>`;
+}
+
+function _oppdaterModalKalkulator(a) {
+  const input   = document.getElementById('modal-kal-belop');
+  const antallEl = document.getElementById('modal-kal-antall');
+  const aarEl   = document.getElementById('modal-kal-aar');
+  const mndEl   = document.getElementById('modal-kal-mnd');
+  const nettoEl = document.getElementById('modal-kal-netto');
+  if (!input || !antallEl) return;
+
+  const fmtKr = v => new Intl.NumberFormat('nb-NO', { style: 'currency', currency: 'NOK', maximumFractionDigits: 0 }).format(v);
+  const belop  = parseFloat(input.value) || 0;
+  const kurs   = a.pris || 0;
+  const upa    = a.utbytte_per_aksje || 0;
+  const antall = kurs > 0 ? Math.floor(belop / kurs) : 0;
+  const utbAar = upa > 0 ? antall * upa : (a.utbytte_yield / 100) * (antall * kurs);
+
+  antallEl.textContent = new Intl.NumberFormat('nb-NO').format(antall);
+  aarEl.textContent    = fmtKr(utbAar);
+  mndEl.textContent    = fmtKr(utbAar / 12) + ' / mnd';
+  nettoEl.textContent  = fmtKr(utbAar * 0.6216);
 }
 
 function historiskChart(a) {
