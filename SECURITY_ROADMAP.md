@@ -182,4 +182,5 @@ Ingen bruk av `subprocess`, `os.system()`, `eval()` eller `shell=True` funnet.
 - [x] Fase 2: Erstatt `escape`/`unescape` med standard encoding
 - [ ] Fase 3: Legg til CSP-header i `index.html`
 - [x] Fase 3: Vendor QRCode-biblioteket inn i assets/ (eliminerer CDN-avhengighet)
+- [x] Fase 4: Oppdater personvernsiden med alle localStorage-nøkler og QR-delingsinfo
 - [ ] Fase 3: Dokumenter sikkerhetsheadere til eventuell plattformmigrering

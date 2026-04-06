@@ -68,7 +68,7 @@
 
     <!-- TITTEL -->
     <h1 class="text-3xl font-bold mb-2">Personvern</h1>
-    <p class="text-sm text-gray-500 dark:text-gray-500 mb-12">Sist oppdatert: mars 2026 · v2</p>
+    <p class="text-sm text-gray-500 dark:text-gray-500 mb-12">Sist oppdatert: april 2026 · v3</p>
 
     <!-- 1. OM SIDEN -->
     <section class="mb-10">
@@ -127,7 +127,7 @@
     <section class="mb-10">
       <h2 class="section-heading">4. Lokal datalagring</h2>
       <p class="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
-        exday.no lagrer brukerpreferanser og appdata direkte i nettleseren din (localStorage og Cache API). Ingen av disse dataene sendes til exday.no sine servere eller deles med tredjeparter — de finnes kun på din enhet.
+        exday.no lagrer brukerpreferanser og appdata direkte i nettleseren din via <code class="bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded text-xs">localStorage</code> og Cache API. Ingen av disse dataene sendes til exday.no sine servere eller deles med tredjeparter — de finnes kun på din enhet.
       </p>
       <div class="space-y-3 text-sm">
         <div class="rounded-lg border border-gray-100 dark:border-gray-800 overflow-hidden">
@@ -142,23 +142,53 @@
             <tbody class="divide-y divide-gray-100 dark:divide-gray-800 text-gray-600 dark:text-gray-400">
               <tr>
                 <td class="px-4 py-2.5"><code class="bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded text-xs">fav_aksjer</code></td>
-                <td class="px-4 py-2.5">Liste over tickers du har stjernemerket</td>
-                <td class="px-4 py-2.5 hidden sm:table-cell">Huskeliste / favoritter</td>
+                <td class="px-4 py-2.5">Tickers du har stjernemerket</td>
+                <td class="px-4 py-2.5 hidden sm:table-cell">Favoritter</td>
               </tr>
               <tr>
-                <td class="px-4 py-2.5"><code class="bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded text-xs">pf_beholdning</code></td>
-                <td class="px-4 py-2.5">Tickers og antall aksjer i kalkulatoren</td>
+                <td class="px-4 py-2.5"><code class="bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded text-xs">pf_portefoljer</code></td>
+                <td class="px-4 py-2.5">Porteføljenavn og beholdning (tickers + antall)</td>
                 <td class="px-4 py-2.5 hidden sm:table-cell">Porteføljeberegning</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-2.5"><code class="bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded text-xs">pf_transaksjoner</code></td>
+                <td class="px-4 py-2.5">Kjøps- og salgshistorikk du har lagt inn</td>
+                <td class="px-4 py-2.5 hidden sm:table-cell">Kostbasis og gevinst/tap</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-2.5"><code class="bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded text-xs">pf_historikk</code></td>
+                <td class="px-4 py-2.5">Daglige porteføljeverdier (tidsseriedata)</td>
+                <td class="px-4 py-2.5 hidden sm:table-cell">Avkastningsgraf</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-2.5"><code class="bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded text-xs">pf_watchlister</code></td>
+                <td class="px-4 py-2.5">Egendefinerte aksjelister</td>
+                <td class="px-4 py-2.5 hidden sm:table-cell">Overvåkingslister</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-2.5"><code class="bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded text-xs">pf_rebalansering</code></td>
+                <td class="px-4 py-2.5">Ønskede sektorvektinger (prosentmål)</td>
+                <td class="px-4 py-2.5 hidden sm:table-cell">Sektorbalansering</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-2.5"><code class="bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded text-xs">profil_navn · profil_sparemaal · profil_mal_mnd</code></td>
+                <td class="px-4 py-2.5">Navn, sparemål (kr) og månedlig inntektsmål</td>
+                <td class="px-4 py-2.5 hidden sm:table-cell">Personlig dashboard og FIRE-kalkulator</td>
               </tr>
               <tr>
                 <td class="px-4 py-2.5"><code class="bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded text-xs">notif_aksjer</code></td>
                 <td class="px-4 py-2.5">Tickers du har aktivert ex-dato-varsler for</td>
-                <td class="px-4 py-2.5 hidden sm:table-cell">Varselinnstillinger</td>
+                <td class="px-4 py-2.5 hidden sm:table-cell">Push-varsler</td>
               </tr>
               <tr>
                 <td class="px-4 py-2.5"><code class="bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded text-xs">notif_vist_*</code></td>
                 <td class="px-4 py-2.5">Hvilke varsler som allerede er vist</td>
                 <td class="px-4 py-2.5 hidden sm:table-cell">Hindre duplikate varsler</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-2.5"><code class="bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded text-xs">sortering · paginering-per-side · tema</code></td>
+                <td class="px-4 py-2.5">Sorteringsvalg, antall per side, mørkt/lyst tema</td>
+                <td class="px-4 py-2.5 hidden sm:table-cell">UI-innstillinger</td>
               </tr>
               <tr>
                 <td class="px-4 py-2.5"><code class="bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded text-xs">Cache API</code></td>
@@ -172,6 +202,17 @@
           Du kan slette all lokal data via nettleserens innstillinger: Innstillinger → Personvern → Nettleserdata → Nettstedsdata → exday.no.
         </p>
       </div>
+    </section>
+
+    <!-- 4b. PORTEFØLJE-DELING -->
+    <section class="mb-10">
+      <h2 class="section-heading">4b. Portefølje-deling via QR-kode</h2>
+      <p class="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+        Appen har en valgfri funksjon for å dele porteføljen som QR-kode. Delingslenken inneholder en Base64-kodet versjon av beholdningen din (tickers og antall) og utløper automatisk etter 5 minutter. Ingen data sendes til exday.no sine servere — delingen skjer utelukkende mellom enhetene dine.
+      </p>
+      <p class="text-gray-700 dark:text-gray-300 leading-relaxed text-sm">
+        Lenken er ikke kryptert og kan leses av alle som mottar den. Del den kun med enheter du eier selv.
+      </p>
     </section>
 
     <!-- 5. DINE RETTIGHETER -->
