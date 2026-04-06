@@ -339,6 +339,11 @@ def hent_euronext_priser() -> dict:
     _EURONEXT_MAP = {
         "ENTRA": "ENTR", "DOFG": "DOF", "OTL": "OLT", "VISTN": "VISTIN",
         "NORBT": "NORBIT", "PNOR": "PNORD", "JAREN": "JAEDR",
+        # Sparebanker og andre med avvikende Euronext-ticker
+        "MORG": "SBMO",    # Sparebanken Møre
+        "RING": "SRHA",    # SpareBank 1 Ringerike Hadeland
+        "STRO": "STRONG",  # Strongpoint (Euronext STRO → vår STRONG; YF bruker STRO.OL)
+        "SNI":  "STRO",    # Stolt-Nielsen (Euronext SNI → vår STRO; YF bruker SNI.OL)
     }
     headers = {
         "User-Agent": "Mozilla/5.0 (compatible; exday.no/1.0)",
