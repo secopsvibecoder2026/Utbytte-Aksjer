@@ -12,7 +12,7 @@
 |---|---|---|
 | Kritisk | 2 | ✅ Fikset 2026-04-06 |
 | Høy | 1 | ✅ Fikset 2026-04-06 |
-| Medium | 4 | Åpen |
+| Medium | 4 | 1/4 fikset |
 | Lav | 8 | Åpen |
 | Info | 3 | OK |
 
@@ -181,5 +181,5 @@ Ingen bruk av `subprocess`, `os.system()`, `eval()` eller `shell=True` funnet.
 - [x] Fase 2: Legg til ticker-format-validering i Python
 - [x] Fase 2: Erstatt `escape`/`unescape` med standard encoding
 - [ ] Fase 3: Legg til CSP-header i `index.html`
-- [ ] Fase 3: Legg til SRI-hash på QRCode CDN-script (eller vendor det)
+- [x] Fase 3: Vendor QRCode-biblioteket inn i assets/ (eliminerer CDN-avhengighet)
 - [ ] Fase 3: Dokumenter sikkerhetsheadere til eventuell plattformmigrering
