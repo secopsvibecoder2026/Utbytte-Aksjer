@@ -330,11 +330,13 @@ def hent_dnb_datoer() -> dict:
 
 def hent_euronext_priser() -> dict:
     """
-    Henter live-priser for alle Oslo Børs-aksjer fra Euronext.
+    Henter live-priser for alle Oslo Børs-aksjer fra Euronext CSV-nedlasting.
     Returnerer {ticker: pris} for bruk som prisfallback.
-    Kolonnestruktur: [0]=navn(HTML), [1]=ISIN, [2]=ticker, [3]=exchange, [4]=pris(HTML), ...
+    CSV-format (semikolonseparert, 4 headerlinjer):
+      Name;ISIN;Symbol;Market;Currency;"Open Price";"High Price";"low Price";"last Price";...
+    Kolonneindekser: Symbol=[2], Last price=[8]
     """
-    import urllib.parse
+    import csv, io
     # Noen tickers bruker annet symbol på Euronext enn på Oslo Børs
     _EURONEXT_MAP = {
         "ENTRA": "ENTR", "DOFG": "DOF", "OTL": "OLT", "VISTN": "VISTIN",
@@ -347,41 +349,44 @@ def hent_euronext_priser() -> dict:
     }
     headers = {
         "User-Agent": "Mozilla/5.0 (compatible; exday.no/1.0)",
-        "Accept": "application/json",
-        "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
-        "X-Requested-With": "XMLHttpRequest",
+        "Accept": "text/csv,text/plain,*/*",
     }
     priser = {}
-    for mic in ("XOSL", "XOAS"):   # Oslo Børs + Oslo Axess
-        try:
-            url = f"https://live.euronext.com/nb/pd/data/stocks?mics={mic}"
-            body = urllib.parse.urlencode({
-                "draw": "1", "start": "0", "length": "300",
-                "iDisplayStart": "0", "iDisplayLength": "300",
-            }).encode()
-            req = urllib.request.Request(url, data=body, headers=headers, method="POST")
-            with urllib.request.urlopen(req, timeout=20) as r:
-                data = json.loads(r.read())
-            for row in data.get("aaData", []):
-                if not row or len(row) < 5:
-                    continue
-                raw_ticker = str(row[2]).strip()
-                ticker = _EURONEXT_MAP.get(raw_ticker, raw_ticker)
-                if not ticker:
-                    continue
-                pris_html = str(row[4])
-                m = re.search(r"pd_last_price[^>]*>([0-9\s\xa0,.]+)<", pris_html)
-                if m:
-                    pris_str = m.group(1).replace('\xa0', '').replace(' ', '').replace(',', '.')
-                    try:
-                        p = float(pris_str)
-                        if p > 0 and ticker not in priser:
-                            priser[ticker] = p
-                    except (ValueError, TypeError):
-                        pass
-        except Exception as e:
-            print(f"  Euronext {mic}: {e}")
-    print(f"  Euronext: {len(priser)} priser hentet (XOSL + XOAS)")
+    try:
+        url = "https://live.euronext.com/pd_es/data/stocks/download?mics=XOSL%2CMERK%2CXOAS"
+        req = urllib.request.Request(url, headers=headers)
+        with urllib.request.urlopen(req, timeout=30) as r:
+            raw = r.read().decode("utf-8", errors="replace")
+
+        # Hopp over 4 headerlinjer
+        lines = raw.splitlines()
+        skip = 0
+        for i, line in enumerate(lines):
+            if line.startswith("Name") or line.startswith('"Name'):
+                skip = i + 1
+                break
+        data_lines = lines[skip:]
+
+        reader = csv.reader(io.StringIO("\n".join(data_lines)), delimiter=";")
+        for row in reader:
+            if len(row) < 9:
+                continue
+            raw_ticker = row[2].strip().strip('"')
+            if not raw_ticker:
+                continue
+            ticker = _EURONEXT_MAP.get(raw_ticker, raw_ticker)
+            pris_str = row[8].strip().strip('"').replace('\xa0', '').replace(' ', '').replace(',', '.')
+            if not pris_str or pris_str in ('-', ''):
+                continue
+            try:
+                p = float(pris_str)
+                if p > 0 and ticker not in priser:
+                    priser[ticker] = p
+            except (ValueError, TypeError):
+                pass
+    except Exception as e:
+        print(f"  Euronext CSV: {e}")
+    print(f"  Euronext: {len(priser)} priser hentet (CSV-nedlasting)")
     return priser
 
 
