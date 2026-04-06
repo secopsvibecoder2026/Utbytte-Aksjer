@@ -46,8 +46,6 @@ def hent_uke_data():
     today  = datetime.date.today()
     monday = today - datetime.timedelta(days=today.weekday())
     friday = monday + datetime.timedelta(days=4)
-    neste_mandag = monday + datetime.timedelta(days=7)
-    neste_fredag = friday + datetime.timedelta(days=7)
     uke_nr = monday.isocalendar()[1]
 
     def i_uke(dato_str, fra, til):
@@ -57,8 +55,6 @@ def hent_uke_data():
 
     ex_denne  = sorted([a for a in aksjer if i_uke(a.get("ex_dato"), monday, friday)],
                        key=lambda a: a["ex_dato"])
-    ex_neste  = sorted([a for a in aksjer if i_uke(a.get("ex_dato"), neste_mandag, neste_fredag)],
-                       key=lambda a: a["ex_dato"])
     bet_denne = sorted([a for a in aksjer if i_uke(a.get("betaling_dato"), monday, friday)],
                        key=lambda a: a["betaling_dato"])
     rap_denne = sorted([a for a in aksjer if i_uke(a.get("rapport_dato"), monday, friday)],
@@ -66,8 +62,7 @@ def hent_uke_data():
 
     return {
         "monday": monday, "friday": friday, "uke_nr": uke_nr,
-        "ex_denne": ex_denne, "ex_neste": ex_neste,
-        "bet_denne": bet_denne, "rap_denne": rap_denne,
+        "ex_denne": ex_denne, "bet_denne": bet_denne, "rap_denne": rap_denne,
     }
 
 def fmt_dato_no(dato_str):
@@ -112,14 +107,14 @@ def lag_posttekst(d):
             linjer.append(f"  {fmt_dato_no(a['rapport_dato'])} — {a['ticker']} ({a['navn'].split()[0]})")
         linjer.append("")
 
-    # Forhåndsvisning neste uke
-    if d["ex_neste"]:
-        tickere = ", ".join(a["ticker"] for a in d["ex_neste"][:6])
-        rest = f" +{len(d['ex_neste'])-6} til" if len(d["ex_neste"]) > 6 else ""
-        linjer.append(f"🔜 Neste uke ex-dato: {tickere}{rest}")
-        linjer.append("")
-
-    linjer.append("👉 Full oversikt på exday.no")
+    # Lenker
+    linjer.append("🔗 Se mer:")
+    linjer.append("  📅 Utbyttekalender: exday.no/utbyttekalender/")
+    if d["ex_denne"]:
+        for a in d["ex_denne"]:
+            linjer.append(f"  📈 {a['ticker']}: exday.no/aksjer/{a['ticker']}/")
+    linjer.append("")
+    linjer.append("👉 Full oversikt: exday.no")
     linjer.append("")
     linjer.append("#utbytte #OsloBørs #aksjer #exday #utbytteaksjer #investering #passivInntekt")
 
@@ -185,9 +180,12 @@ def lag_png(d):
     rap_rader = [f"{fmt_dato_no(a['rapport_dato'])}  {a['ticker']}" for a in d["rap_denne"]]
     kolonne(1, "Rapporter", "📊", rap_rader, ORANGE)
 
-    # Kol 3: Neste uke ex
-    neste_rader = [f"{fmt_dato_no(a['ex_dato'])}  {a['ticker']}" for a in d["ex_neste"]]
-    kolonne(2, "Neste uke ex", "🔜", neste_rader, BLUE)
+    # Kol 3: Utbetalinger (eller lenker hvis ingen)
+    if d["bet_denne"]:
+        bet_rader = [f"{fmt_dato_no(a['betaling_dato'])}  {a['ticker']}  {a['utbytte_per_aksje']:.2f} {a.get('valuta','NOK')}" if a.get('utbytte_per_aksje') else f"{fmt_dato_no(a['betaling_dato'])}  {a['ticker']}" for a in d["bet_denne"]]
+        kolonne(2, "Utbetalinger", "💰", bet_rader, BLUE)
+    else:
+        kolonne(2, "Utbetalinger", "💰", ["Ingen denne uken"], BLUE)
 
     # Bunntekst
     draw.text((56, H - 52), "exday.no  ·  Norges utbytteoversikt  ·  Oppdateres daglig", font=fnt(14), fill=GRAY)
