@@ -1032,7 +1032,7 @@ function visOversikt(bevarSide = false) {
           ${snartEx && dagerTil !== null ? `<span class="text-xs text-orange-500 ml-1">${dagerTil === 0 ? '(i dag!)' : dagerTil === 1 ? '(i morgen)' : `(om ${dagerTil} d)`}</span>` : ''}
         </div>
         <div class="flex items-center gap-2">
-          <button class="sammenlign-btn text-xs px-2 py-0.5 rounded border border-gray-200 dark:border-gray-700 text-gray-400 dark:text-gray-500 hover:border-brand-400 hover:text-brand-600 dark:hover:text-brand-400 transition-colors" data-ticker="${a.ticker}" onclick="event.stopPropagation();toggleSammenlign('${a.ticker}')" title="Sammenlign">⊕</button>
+          <button class="sammenlign-btn text-xs px-2 py-0.5 rounded border border-gray-200 dark:border-gray-700 text-gray-400 dark:text-gray-500 hover:border-brand-400 hover:text-brand-600 dark:hover:text-brand-400 transition-colors" data-ticker="${escHtml(a.ticker)}" title="Sammenlign">⊕</button>
           <svg class="w-4 h-4 text-gray-300 dark:text-gray-600" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
         </div>
       </div>
@@ -1050,6 +1050,12 @@ function visOversikt(bevarSide = false) {
 
   // Klikk via event delegation (kort) – ingen minnelekasje
   kortBody.onclick = e => {
+    const sammenlignBtn = e.target.closest('.sammenlign-btn');
+    if (sammenlignBtn) {
+      e.stopPropagation();
+      toggleSammenlign(sammenlignBtn.dataset.ticker);
+      return;
+    }
     const favBtn = e.target.closest('.fav-btn');
     if (favBtn) {
       e.stopPropagation();
@@ -1763,7 +1769,7 @@ function visModal(a) {
       </div>
     </div>
 
-    ${a.beskrivelse ? `<p class="text-sm text-gray-600 dark:text-gray-400 mb-4 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">${a.beskrivelse}</p>` : ''}
+    ${a.beskrivelse ? `<p class="text-sm text-gray-600 dark:text-gray-400 mb-4 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">${escHtml(a.beskrivelse)}</p>` : ''}
 
     <div class="grid grid-cols-2 gap-3 mb-4">
       ${modalKort('Kurs', fmt(a.pris) + ' ' + a.valuta)}
@@ -2808,11 +2814,16 @@ function oppdaterSammenlignSkuff() {
   if (!skuff) return;
   if (sammenlignBasket.length === 0) { skuff.classList.add('hidden'); return; }
   skuff.classList.remove('hidden');
-  document.getElementById('sammenlign-valgte').innerHTML = sammenlignBasket.map(t => `
+  const valgteEl = document.getElementById('sammenlign-valgte');
+  valgteEl.innerHTML = sammenlignBasket.map(t => `
     <span class="flex items-center gap-1 bg-gray-100 dark:bg-gray-800 pl-2.5 pr-1.5 py-1 rounded-full text-sm font-mono font-semibold text-brand-700 dark:text-brand-400">
-      ${t}
-      <button onclick="toggleSammenlign('${t}')" class="text-gray-400 hover:text-red-500 leading-none text-base ml-0.5" aria-label="Fjern ${t}">×</button>
+      ${escHtml(t)}
+      <button class="sammenlign-fjern-btn text-gray-400 hover:text-red-500 leading-none text-base ml-0.5" data-ticker="${escHtml(t)}" aria-label="Fjern ${escHtml(t)}">×</button>
     </span>`).join('');
+  valgteEl.onclick = e => {
+    const btn = e.target.closest('.sammenlign-fjern-btn');
+    if (btn) { e.stopPropagation(); toggleSammenlign(btn.dataset.ticker); }
+  };
   document.getElementById('sammenlign-vis').disabled = sammenlignBasket.length < 2;
 }
 

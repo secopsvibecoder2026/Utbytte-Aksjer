@@ -1,5 +1,10 @@
 'use strict';
 
+// ── HELPERS ────────────────────────────────────────────────────────────────
+function escHtml(s) {
+  return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#x27;');
+}
+
 // ── STATE ──────────────────────────────────────────────────────────────────
 let alleAksjer = [];
 let osebxHistorikk = {};   // { "2026-03-01": 1423.5, ... } fra aksjer.json

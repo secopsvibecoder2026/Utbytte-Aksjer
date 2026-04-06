@@ -10,7 +10,7 @@
 
 | Alvorlighetsgrad | Antall | Status |
 |---|---|---|
-| Kritisk | 2 | Åpen |
+| Kritisk | 2 | ✅ Fikset 2026-04-06 |
 | Høy | 1 | Åpen |
 | Medium | 4 | Åpen |
 | Lav | 8 | Åpen |
@@ -18,44 +18,28 @@
 
 ---
 
-## Fase 1 — Kritisk (gjør snarest)
+## Fase 1 — Kritisk ✅ Fikset 2026-04-06
 
 ### XSS via inline onclick-handlere
-**Fil:** `assets/ui.js` (flere steder)  
-**Problem:** Ticker-data interpoleres direkte i inline `onclick`-attributter:
-```js
-onclick="event.stopPropagation();toggleSammenlign('${a.ticker}')"
-```
-Hvis `tickers.json` blir kompromittert og en ticker inneholder `'); alert('xss'); //` kjøres vilkårlig JavaScript.
+**Fil:** `assets/ui.js` (linje 1035, 2814)  
+**Status:** ✅ **Fikset** — commit `dab3d38+`
 
-**Fix:** Bytt til `data-*`-attributter og event delegation:
-```js
-// Istedenfor onclick="..." i template-string:
-data-ticker="${a.ticker}"
-
-// Og én delegert lytter:
-el.addEventListener('click', e => {
-  const btn = e.target.closest('[data-ticker]');
-  if (btn) toggleSammenlign(btn.dataset.ticker);
-});
-```
+Inline `onclick="...${a.ticker}"` er fjernet. Erstattet med:
+- `data-ticker="${escHtml(a.ticker)}"` på knappene
+- Delegerte event-lyttere i `kortBody.onclick` og `valgteEl.onclick`
+- `escHtml()` helper lagt til i `app.js` (globalt tilgjengelig)
 
 ---
 
 ### XSS via `innerHTML` med selskapsbeskrivelser
-**Fil:** `assets/ui.js` (modal/kortvisning)  
-**Problem:** `a.beskrivelse`-felt fra `aksjer.json` settes inn via `innerHTML` uten sanitering:
-```js
-${a.beskrivelse ? `<p class="text-sm...">${a.beskrivelse}</p>` : ''}
-```
-Kompromittert data kan inneholde `<script>` eller `<img onerror=...>`.
+**Fil:** `assets/ui.js` (linje 1766)  
+**Status:** ✅ **Fikset** — commit `dab3d38+`
 
-**Fix:** Bruk `textContent` der det er mulig, eller sanitér med DOMPurify:
+`a.beskrivelse` saniteres nå med `escHtml()` før innsetning i `innerHTML`:
 ```js
-const p = document.createElement('p');
-p.textContent = a.beskrivelse;
-el.appendChild(p);
+${a.beskrivelse ? `<p ...>${escHtml(a.beskrivelse)}</p>` : ''}
 ```
+`escHtml()` escaperer `&`, `<`, `>`, `"`, `'` til HTML-entiteter.
 
 ---
 
@@ -206,8 +190,8 @@ Ingen bruk av `subprocess`, `os.system()`, `eval()` eller `shell=True` funnet.
 
 ## Neste steg
 
-- [ ] Fase 1: Bytt inline onclick → data-attributter i `ui.js`
-- [ ] Fase 1: Sanitér `beskrivelse`-felt i `innerHTML`
+- [x] Fase 1: Bytt inline onclick → data-attributter i `ui.js`
+- [x] Fase 1: Sanitér `beskrivelse`-felt i `innerHTML`
 - [ ] Fase 2: Legg til `urllib.parse.quote()` i `fetch_stocks.py`
 - [ ] Fase 2: Legg til ticker-format-validering i Python
 - [ ] Fase 2: Erstatt `escape`/`unescape` med standard encoding
