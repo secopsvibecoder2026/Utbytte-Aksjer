@@ -2998,7 +2998,7 @@ function _annOppdaterResultat() {
   if (!a) { resultatEl.classList.add('hidden'); ingenEl.classList.add('hidden'); return; }
 
   const belop  = parseFloat(document.getElementById('ann-belop').value) || 0;
-  const kurs   = a.kurs || a.siste_kurs || 0;
+  const kurs   = a.pris || a.kurs || 0;
   const upa    = a.utbytte_per_aksje || 0;
   const yield_ = a.utbytte_yield || 0;
   const snitt5 = a.snitt_yield_5ar || 0;
