@@ -2256,8 +2256,18 @@ def main():
     }
 
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
+    # Erstatt Infinity/NaN med null — ugyldig JSON som brekker nettlesere
+    import math
+    def _sanitize(obj):
+        if isinstance(obj, float) and (math.isnan(obj) or math.isinf(obj)):
+            return None
+        if isinstance(obj, dict):
+            return {k: _sanitize(v) for k, v in obj.items()}
+        if isinstance(obj, list):
+            return [_sanitize(v) for v in obj]
+        return obj
     with open(output_path, "w", encoding="utf-8") as f:
-        json.dump(output, f, ensure_ascii=False, indent=2)
+        json.dump(_sanitize(output), f, ensure_ascii=False, indent=2)
 
     print(f"\nFerdig! {len(resultater)} aksjer lagret til {output_path}")
     print(f"Sist oppdatert: {output['sist_oppdatert']}")
