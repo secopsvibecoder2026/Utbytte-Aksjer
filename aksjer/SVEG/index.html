@@ -57,13 +57,26 @@
     {
       "@type": "FinancialProduct",
       "name": "Sparebanken Vest (SVEG)",
-      "description": "Vestlandets ledende sparebank med sterk posisjon i Bergen og Hordaland. Stabil inntjening og god utbyttehistorikk. Utbyttet utbetales halvårlig — to ganger i året. Utbyttet utbetales halvårlig — to ganger i året.",
+      "description": "Vestlandets ledende sparebank med sterk posisjon i Bergen og Hordaland. Stabil inntjening og god utbyttehistorikk. Utbyttet utbetales halvårlig — to ganger i året.",
       "url": "https://exday.no/aksjer/SVEG/",
       "provider": {
         "@type": "Organization",
         "name": "exday.no",
         "url": "https://exday.no/"
       }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Hvor ofte betaler Sparebanken Vest utbytte?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Sparebanken Vest betaler utbytte to ganger i året."
+          }
+        }
+      ]
     }
   ]
 }</script>
@@ -108,6 +121,19 @@
     .updated { font-size: 0.78rem; text-align: right; margin-top: 1rem; }
     .mini-nav { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.5rem; font-size: 0.85rem; }
     .mini-nav a { color: #16a34a; }
+    .faq-seksjon { margin: 1.5rem 0; }
+    .faq-seksjon h2 { margin-bottom: 1rem; }
+    .faq-item { border-radius: 0.75rem; padding: 1rem 1.25rem; margin-bottom: 0.75rem; border: 1px solid; }
+    .faq-q { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.4rem; }
+    .faq-a { font-size: 0.9rem; line-height: 1.6; }
+    .relaterte { margin: 1.5rem 0; }
+    .relaterte h2 { margin-bottom: 0.75rem; }
+    .rel-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 0.75rem; }
+    .rel-kort { border-radius: 0.75rem; padding: 0.75rem 1rem; border: 1px solid; display: flex; flex-direction: column; gap: 0.2rem; text-decoration: none; transition: border-color 0.15s; }
+    .rel-kort:hover { border-color: #16a34a; text-decoration: none; }
+    .rel-ticker { font-weight: 700; font-size: 1rem; color: #16a34a; }
+    .rel-navn { font-size: 0.75rem; }
+    .rel-yield { font-size: 0.8rem; font-weight: 600; color: #16a34a; }
     @media (max-width: 480px) { h1 { font-size: 1.4rem; } }
 
     /* Light mode */
@@ -128,6 +154,11 @@
     .updated { color: #9ca3af; }
     .breadcrumb { color: #6b7280; }
     .sub { color: #6b7280; }
+    .faq-item { background: #fff; border-color: #e5e7eb; }
+    .faq-q { color: #111827; }
+    .faq-a { color: #374151; }
+    .rel-kort { background: #fff; border-color: #e5e7eb; }
+    .rel-navn { color: #6b7280; }
     .badge { background: #dcfce7; color: #15803d; }
 
     /* Dark mode */
@@ -155,6 +186,10 @@
     .dark .kcard .val.green { color: #4ade80; }
     .dark .ytick { stroke: #1f2937; }
     .dark .hbar { fill: #22c55e; }
+    .dark .faq-item { background: #111827; border-color: #1f2937; color: #d1d5db; }
+    .dark .faq-q { color: #f3f4f6; }
+    .dark .rel-kort { background: #111827; border-color: #1f2937; }
+    .dark .rel-navn { color: #9ca3af; }
   </style>
 </head>
 <body>
@@ -225,13 +260,20 @@
     
   </div>
 
-  <div class="desc"><p>Vestlandets ledende sparebank med sterk posisjon i Bergen og Hordaland. Stabil inntjening og god utbyttehistorikk. Utbyttet utbetales halvårlig — to ganger i året. Utbyttet utbetales halvårlig — to ganger i året.</p></div>
+  <div class="desc"><p>Vestlandets ledende sparebank med sterk posisjon i Bergen og Hordaland. Stabil inntjening og god utbyttehistorikk. Utbyttet utbetales halvårlig — to ganger i året.</p></div>
 
   
 
   <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Finans</td></tr><tr><td>Frekvens</td><td>Halvårlig</td></tr><tr><td>Utbytte per aksje</td><td>0 NOK</td></tr><tr><td>Direkteavkastning</td><td>—</td></tr><tr><td>5-årssnitt yield</td><td>0.00%</td></tr><tr><td>År med utbytte</td><td>0</td></tr></tbody></table>
 
   
+
+  <div class="faq-seksjon"><h2>Vanlige spørsmål om Sparebanken Vest</h2><div class="faq-item"><h3 class="faq-q">Hvor ofte betaler Sparebanken Vest utbytte?</h3><p class="faq-a">Sparebanken Vest betaler utbytte to ganger i året.</p></div></div>
+
+  <div class="relaterte"><h2>Andre finans-aksjer med utbytte</h2><div class="rel-grid"><a href="/aksjer/PARB/" class="rel-kort"><span class="rel-ticker">PARB</span><span class="rel-navn">Pareto Bank ASA</span><span class="rel-yield">9.4%</span></a>
+<a href="/aksjer/SPOG/" class="rel-kort"><span class="rel-ticker">SPOG</span><span class="rel-navn">Sparebanken Øst</span><span class="rel-yield">8.7%</span></a>
+<a href="/aksjer/SRBNK/" class="rel-kort"><span class="rel-ticker">SRBNK</span><span class="rel-navn">SpareBank 1 SR-Bank</span><span class="rel-yield">8.1%</span></a>
+<a href="/aksjer/B2I/" class="rel-kort"><span class="rel-ticker">B2I</span><span class="rel-navn">B2 Impact ASA</span><span class="rel-yield">8.0%</span></a></div></div>
 
   <div class="mini-nav">
     <a href="/aksjer/sektor/finans/">← Alle Finans-aksjer</a>

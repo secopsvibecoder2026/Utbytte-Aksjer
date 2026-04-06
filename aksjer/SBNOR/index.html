@@ -64,6 +64,35 @@
         "name": "exday.no",
         "url": "https://exday.no/"
       }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Hva er direkteavkastningen til Sparebanken Norge?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Sparebanken Norge (SBNOR) har en direkteavkastning på 5.95% basert på siste kurs. 5-årssnittlig yield er 6.0%."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Hvor mye utbytte gir 100 000 kr investert i SBNOR?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Med 100 000 kr kan du kjøpe omtrent 495 aksjer i Sparebanken Norge til kurs 202 NOK. Det gir ca. 5,940 NOK i utbytte per år (495 NOK per måned) basert på 12.0 NOK per aksje. Etter 37,84% utbytteskatt sitter du igjen med ca. 3,692 NOK netto."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Hvor ofte betaler Sparebanken Norge utbytte?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Sparebanken Norge betaler utbytte én gang i året."
+          }
+        }
+      ]
     }
   ]
 }</script>
@@ -108,6 +137,19 @@
     .updated { font-size: 0.78rem; text-align: right; margin-top: 1rem; }
     .mini-nav { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.5rem; font-size: 0.85rem; }
     .mini-nav a { color: #16a34a; }
+    .faq-seksjon { margin: 1.5rem 0; }
+    .faq-seksjon h2 { margin-bottom: 1rem; }
+    .faq-item { border-radius: 0.75rem; padding: 1rem 1.25rem; margin-bottom: 0.75rem; border: 1px solid; }
+    .faq-q { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.4rem; }
+    .faq-a { font-size: 0.9rem; line-height: 1.6; }
+    .relaterte { margin: 1.5rem 0; }
+    .relaterte h2 { margin-bottom: 0.75rem; }
+    .rel-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 0.75rem; }
+    .rel-kort { border-radius: 0.75rem; padding: 0.75rem 1rem; border: 1px solid; display: flex; flex-direction: column; gap: 0.2rem; text-decoration: none; transition: border-color 0.15s; }
+    .rel-kort:hover { border-color: #16a34a; text-decoration: none; }
+    .rel-ticker { font-weight: 700; font-size: 1rem; color: #16a34a; }
+    .rel-navn { font-size: 0.75rem; }
+    .rel-yield { font-size: 0.8rem; font-weight: 600; color: #16a34a; }
     @media (max-width: 480px) { h1 { font-size: 1.4rem; } }
 
     /* Light mode */
@@ -128,6 +170,11 @@
     .updated { color: #9ca3af; }
     .breadcrumb { color: #6b7280; }
     .sub { color: #6b7280; }
+    .faq-item { background: #fff; border-color: #e5e7eb; }
+    .faq-q { color: #111827; }
+    .faq-a { color: #374151; }
+    .rel-kort { background: #fff; border-color: #e5e7eb; }
+    .rel-navn { color: #6b7280; }
     .badge { background: #dcfce7; color: #15803d; }
 
     /* Dark mode */
@@ -155,6 +202,10 @@
     .dark .kcard .val.green { color: #4ade80; }
     .dark .ytick { stroke: #1f2937; }
     .dark .hbar { fill: #22c55e; }
+    .dark .faq-item { background: #111827; border-color: #1f2937; color: #d1d5db; }
+    .dark .faq-q { color: #f3f4f6; }
+    .dark .rel-kort { background: #111827; border-color: #1f2937; }
+    .dark .rel-navn { color: #9ca3af; }
   </style>
 </head>
 <body>
@@ -225,7 +276,7 @@
     <div class="card"><div class="label">P/E</div><div class="val">12.0</div></div>
   </div>
 
-  <div class="desc"><p>Sparebank med bred virksomhet i Sør-Norge. Stabil inntjening og konsistent utbyttebetaler med god kapitaldekning og solid regional posisjon. Sparebanken Norge er notert på Oslo Børs med en markedsverdi på rundt 35 milliarder NOK. Selskapet har betalt utbytte de siste 1 årene. Utbyttet utbetales én gang i året. 5-årssnittlig direkteavkastning er 6.0%, noe som plasserer SBNOR blant de solid-yielding aksjene i finanssektoren. Utbetalingsgraden (payout ratio) er 51%, noe som anses som bærekraftig for de fleste markedsforhold. Sparebanken Norge er notert på Oslo Børs med en markedsverdi på rundt 35 milliarder NOK. Selskapet har betalt utbytte de siste 1 årene. Utbyttet utbetales én gang i året. 5-årssnittlig direkteavkastning er 6.0%, noe som plasserer SBNOR blant de solid-yielding aksjene i finanssektoren. Utbetalingsgraden (payout ratio) er 51%, noe som anses som bærekraftig for de fleste markedsforhold.</p></div>
+  <div class="desc"><p>Sparebank med bred virksomhet i Sør-Norge. Stabil inntjening og konsistent utbyttebetaler med god kapitaldekning og solid regional posisjon. Sparebanken Norge er notert på Oslo Børs med en markedsverdi på rundt 35 milliarder NOK. Selskapet har betalt utbytte de siste 1 årene. Utbyttet utbetales én gang i året. 5-årssnittlig direkteavkastning er 6.0%, noe som plasserer SBNOR blant de solid-yielding aksjene i finanssektoren. Utbetalingsgraden (payout ratio) er 51%, noe som anses som bærekraftig for de fleste markedsforhold.</p></div>
 
   <div class="analyse"><h2>Utbytteanalyse</h2><p>Direkteavkastningen på 6.0% ligger nær 5-årssnittet på 6.0%, som indikerer stabil kurs- og utbytteutvikling. Utbetalingsgraden på 51% er bærekraftig.</p></div>
 
@@ -237,6 +288,15 @@
           <td>12.0 NOK</td>
           <td>5.95%</td>
         </tr></tbody></table>
+
+  <div class="faq-seksjon"><h2>Vanlige spørsmål om Sparebanken Norge</h2><div class="faq-item"><h3 class="faq-q">Hva er direkteavkastningen til Sparebanken Norge?</h3><p class="faq-a">Sparebanken Norge (SBNOR) har en direkteavkastning på 5.95% basert på siste kurs. 5-årssnittlig yield er 6.0%.</p></div>
+<div class="faq-item"><h3 class="faq-q">Hvor mye utbytte gir 100 000 kr investert i SBNOR?</h3><p class="faq-a">Med 100 000 kr kan du kjøpe omtrent 495 aksjer i Sparebanken Norge til kurs 202 NOK. Det gir ca. 5,940 NOK i utbytte per år (495 NOK per måned) basert på 12.0 NOK per aksje. Etter 37,84% utbytteskatt sitter du igjen med ca. 3,692 NOK netto.</p></div>
+<div class="faq-item"><h3 class="faq-q">Hvor ofte betaler Sparebanken Norge utbytte?</h3><p class="faq-a">Sparebanken Norge betaler utbytte én gang i året.</p></div></div>
+
+  <div class="relaterte"><h2>Andre finans-aksjer med utbytte</h2><div class="rel-grid"><a href="/aksjer/PARB/" class="rel-kort"><span class="rel-ticker">PARB</span><span class="rel-navn">Pareto Bank ASA</span><span class="rel-yield">9.4%</span></a>
+<a href="/aksjer/SPOG/" class="rel-kort"><span class="rel-ticker">SPOG</span><span class="rel-navn">Sparebanken Øst</span><span class="rel-yield">8.7%</span></a>
+<a href="/aksjer/SRBNK/" class="rel-kort"><span class="rel-ticker">SRBNK</span><span class="rel-navn">SpareBank 1 SR-Bank</span><span class="rel-yield">8.1%</span></a>
+<a href="/aksjer/B2I/" class="rel-kort"><span class="rel-ticker">B2I</span><span class="rel-navn">B2 Impact ASA</span><span class="rel-yield">8.0%</span></a></div></div>
 
   <div class="mini-nav">
     <a href="/aksjer/sektor/finans/">← Alle Finans-aksjer</a>

@@ -57,13 +57,50 @@
     {
       "@type": "FinancialProduct",
       "name": "Cool Company Ltd (COOL)",
-      "description": "LNG-tankselskap spinnet ut fra Golar LNG. Liberal utbyttepolitikk. Syklisk eksponering mot LNG-fraktrater. Cool Company Ltd er notert på Oslo Børs. Selskapet har betalt utbytte de siste 3 årene. Utbyttet utbetales kvartalsvis — fire ganger i året. Utbetalingsgraden (payout ratio) er 82%, noe som kan gjøre utbyttet sårbart ved svakere inntjening. Cool Company Ltd er notert på Oslo Børs. Selskapet har betalt utbytte de siste 3 årene. Utbyttet utbetales kvartalsvis — fire ganger i året. Utbetalings",
+      "description": "LNG-tankselskap spinnet ut fra Golar LNG. Liberal utbyttepolitikk. Syklisk eksponering mot LNG-fraktrater. Cool Company Ltd er notert på Oslo Børs. Selskapet har betalt utbytte de siste 3 årene. Utbyttet utbetales kvartalsvis — fire ganger i året. Utbetalingsgraden (payout ratio) er 82%, noe som kan gjøre utbyttet sårbart ved svakere inntjening.",
       "url": "https://exday.no/aksjer/COOL/",
       "provider": {
         "@type": "Organization",
         "name": "exday.no",
         "url": "https://exday.no/"
       }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Hva er direkteavkastningen til Cool Company Ltd?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Cool Company Ltd (COOL) har en direkteavkastning på 13.75% basert på siste kurs."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Når er neste ex-dato og utbetalingsdato for COOL?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Neste ex-dato for COOL er 25. mai 2026. Du må eie aksjen før denne datoen for å motta utbytte. Utbetalingsdatoen er 9. jun 2026."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Hvor mye utbytte gir 100 000 kr investert i COOL?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Med 100 000 kr kan du kjøpe omtrent 1718 aksjer i Cool Company Ltd til kurs 58 USD. Det gir ca. 13,744 USD i utbytte per år (1,145 USD per måned) basert på 8.0 USD per aksje. Etter 37,84% utbytteskatt sitter du igjen med ca. 8,543 USD netto."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Hvor ofte betaler Cool Company Ltd utbytte?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Cool Company Ltd betaler utbytte fire ganger i året (mars, juni, september, desember)."
+          }
+        }
+      ]
     }
   ]
 }</script>
@@ -108,6 +145,19 @@
     .updated { font-size: 0.78rem; text-align: right; margin-top: 1rem; }
     .mini-nav { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.5rem; font-size: 0.85rem; }
     .mini-nav a { color: #16a34a; }
+    .faq-seksjon { margin: 1.5rem 0; }
+    .faq-seksjon h2 { margin-bottom: 1rem; }
+    .faq-item { border-radius: 0.75rem; padding: 1rem 1.25rem; margin-bottom: 0.75rem; border: 1px solid; }
+    .faq-q { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.4rem; }
+    .faq-a { font-size: 0.9rem; line-height: 1.6; }
+    .relaterte { margin: 1.5rem 0; }
+    .relaterte h2 { margin-bottom: 0.75rem; }
+    .rel-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 0.75rem; }
+    .rel-kort { border-radius: 0.75rem; padding: 0.75rem 1rem; border: 1px solid; display: flex; flex-direction: column; gap: 0.2rem; text-decoration: none; transition: border-color 0.15s; }
+    .rel-kort:hover { border-color: #16a34a; text-decoration: none; }
+    .rel-ticker { font-weight: 700; font-size: 1rem; color: #16a34a; }
+    .rel-navn { font-size: 0.75rem; }
+    .rel-yield { font-size: 0.8rem; font-weight: 600; color: #16a34a; }
     @media (max-width: 480px) { h1 { font-size: 1.4rem; } }
 
     /* Light mode */
@@ -128,6 +178,11 @@
     .updated { color: #9ca3af; }
     .breadcrumb { color: #6b7280; }
     .sub { color: #6b7280; }
+    .faq-item { background: #fff; border-color: #e5e7eb; }
+    .faq-q { color: #111827; }
+    .faq-a { color: #374151; }
+    .rel-kort { background: #fff; border-color: #e5e7eb; }
+    .rel-navn { color: #6b7280; }
     .badge { background: #dcfce7; color: #15803d; }
 
     /* Dark mode */
@@ -155,6 +210,10 @@
     .dark .kcard .val.green { color: #4ade80; }
     .dark .ytick { stroke: #1f2937; }
     .dark .hbar { fill: #22c55e; }
+    .dark .faq-item { background: #111827; border-color: #1f2937; color: #d1d5db; }
+    .dark .faq-q { color: #f3f4f6; }
+    .dark .rel-kort { background: #111827; border-color: #1f2937; }
+    .dark .rel-navn { color: #9ca3af; }
   </style>
 </head>
 <body>
@@ -225,13 +284,23 @@
     <div class="card"><div class="label">P/E</div><div class="val">6.0</div></div>
   </div>
 
-  <div class="desc"><p>LNG-tankselskap spinnet ut fra Golar LNG. Liberal utbyttepolitikk. Syklisk eksponering mot LNG-fraktrater. Cool Company Ltd er notert på Oslo Børs. Selskapet har betalt utbytte de siste 3 årene. Utbyttet utbetales kvartalsvis — fire ganger i året. Utbetalingsgraden (payout ratio) er 82%, noe som kan gjøre utbyttet sårbart ved svakere inntjening. Cool Company Ltd er notert på Oslo Børs. Selskapet har betalt utbytte de siste 3 årene. Utbyttet utbetales kvartalsvis — fire ganger i året. Utbetalingsgraden (payout ratio) er 82%, noe som kan gjøre utbyttet sårbart ved svakere inntjening.</p></div>
+  <div class="desc"><p>LNG-tankselskap spinnet ut fra Golar LNG. Liberal utbyttepolitikk. Syklisk eksponering mot LNG-fraktrater. Cool Company Ltd er notert på Oslo Børs. Selskapet har betalt utbytte de siste 3 årene. Utbyttet utbetales kvartalsvis — fire ganger i året. Utbetalingsgraden (payout ratio) er 82%, noe som kan gjøre utbyttet sårbart ved svakere inntjening.</p></div>
 
   <div class="analyse"><h2>Utbytteanalyse</h2><p>Utbetalingsgraden på 82% er høy — utbyttet kan være sårbart ved svakere inntjening.</p></div>
 
   <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Shipping</td></tr><tr><td>Frekvens</td><td>Kvartalsvis</td></tr><tr><td>Utbytte per aksje</td><td>8.0 USD</td></tr><tr><td>Direkteavkastning</td><td>13.75%</td></tr><tr><td>5-årssnitt yield</td><td>0.00%</td></tr><tr><td>År med utbytte</td><td>3</td></tr><tr><td>P/E</td><td>6.0</td></tr><tr><td>Payout ratio</td><td>82%</td></tr><tr><td>Utbyttevekst 5 år</td><td>+0.0% p.a.</td></tr><tr><td>Markedsverdi</td><td>4.8 mrd NOK</td></tr><tr><td>52-ukers kurs</td><td>44.8 – 84.6 USD</td></tr></tbody></table>
 
   
+
+  <div class="faq-seksjon"><h2>Vanlige spørsmål om Cool Company Ltd</h2><div class="faq-item"><h3 class="faq-q">Hva er direkteavkastningen til Cool Company Ltd?</h3><p class="faq-a">Cool Company Ltd (COOL) har en direkteavkastning på 13.75% basert på siste kurs.</p></div>
+<div class="faq-item"><h3 class="faq-q">Når er neste ex-dato og utbetalingsdato for COOL?</h3><p class="faq-a">Neste ex-dato for COOL er 25. mai 2026. Du må eie aksjen før denne datoen for å motta utbytte. Utbetalingsdatoen er 9. jun 2026.</p></div>
+<div class="faq-item"><h3 class="faq-q">Hvor mye utbytte gir 100 000 kr investert i COOL?</h3><p class="faq-a">Med 100 000 kr kan du kjøpe omtrent 1718 aksjer i Cool Company Ltd til kurs 58 USD. Det gir ca. 13,744 USD i utbytte per år (1,145 USD per måned) basert på 8.0 USD per aksje. Etter 37,84% utbytteskatt sitter du igjen med ca. 8,543 USD netto.</p></div>
+<div class="faq-item"><h3 class="faq-q">Hvor ofte betaler Cool Company Ltd utbytte?</h3><p class="faq-a">Cool Company Ltd betaler utbytte fire ganger i året (mars, juni, september, desember).</p></div></div>
+
+  <div class="relaterte"><h2>Andre shipping-aksjer med utbytte</h2><div class="rel-grid"><a href="/aksjer/HUNT/" class="rel-kort"><span class="rel-ticker">HUNT</span><span class="rel-navn">Hunter Group ASA</span><span class="rel-yield">22.5%</span></a>
+<a href="/aksjer/HAUTO/" class="rel-kort"><span class="rel-ticker">HAUTO</span><span class="rel-navn">Höegh Autoliners ASA</span><span class="rel-yield">16.0%</span></a>
+<a href="/aksjer/OET/" class="rel-kort"><span class="rel-ticker">OET</span><span class="rel-navn">Okeanis Eco Tankers Corp</span><span class="rel-yield">12.0%</span></a>
+<a href="/aksjer/GOGL/" class="rel-kort"><span class="rel-ticker">GOGL</span><span class="rel-navn">Golden Ocean Group</span><span class="rel-yield">11.0%</span></a></div></div>
 
   <div class="mini-nav">
     <a href="/aksjer/sektor/shipping/">← Alle Shipping-aksjer</a>

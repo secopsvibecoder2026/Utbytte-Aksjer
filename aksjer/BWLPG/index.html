@@ -64,6 +64,43 @@
         "name": "exday.no",
         "url": "https://exday.no/"
       }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Hva er direkteavkastningen til BW LPG Limited?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "BW LPG Limited (BWLPG) har en direkteavkastning på 8.58% basert på siste kurs. 5-årssnittlig yield er 13.9%. Selskapet har betalt utbytte i 11 år på rad."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Hvor mye utbytte gir 100 000 kr investert i BWLPG?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Med 100 000 kr kan du kjøpe omtrent 592 aksjer i BW LPG Limited til kurs 169 NOK. Det gir ca. 8,584 NOK i utbytte per år (715 NOK per måned) basert på 14.5 NOK per aksje. Etter 37,84% utbytteskatt sitter du igjen med ca. 5,336 NOK netto."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Hvor ofte betaler BW LPG Limited utbytte?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "BW LPG Limited betaler utbytte fire ganger i året (mars, juni, september, desember). Selskapet har hatt sammenhengende utbyttebetalinger i 11 år."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Har BW LPG Limited økt utbyttet over tid?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Ja, BW LPG Limited har økt utbyttet med gjennomsnittlig 8.4% per år de siste 5 årene. Dette er et tegn på stabil og voksende inntjening."
+          }
+        }
+      ]
     }
   ]
 }</script>
@@ -108,6 +145,19 @@
     .updated { font-size: 0.78rem; text-align: right; margin-top: 1rem; }
     .mini-nav { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.5rem; font-size: 0.85rem; }
     .mini-nav a { color: #16a34a; }
+    .faq-seksjon { margin: 1.5rem 0; }
+    .faq-seksjon h2 { margin-bottom: 1rem; }
+    .faq-item { border-radius: 0.75rem; padding: 1rem 1.25rem; margin-bottom: 0.75rem; border: 1px solid; }
+    .faq-q { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.4rem; }
+    .faq-a { font-size: 0.9rem; line-height: 1.6; }
+    .relaterte { margin: 1.5rem 0; }
+    .relaterte h2 { margin-bottom: 0.75rem; }
+    .rel-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 0.75rem; }
+    .rel-kort { border-radius: 0.75rem; padding: 0.75rem 1rem; border: 1px solid; display: flex; flex-direction: column; gap: 0.2rem; text-decoration: none; transition: border-color 0.15s; }
+    .rel-kort:hover { border-color: #16a34a; text-decoration: none; }
+    .rel-ticker { font-weight: 700; font-size: 1rem; color: #16a34a; }
+    .rel-navn { font-size: 0.75rem; }
+    .rel-yield { font-size: 0.8rem; font-weight: 600; color: #16a34a; }
     @media (max-width: 480px) { h1 { font-size: 1.4rem; } }
 
     /* Light mode */
@@ -128,6 +178,11 @@
     .updated { color: #9ca3af; }
     .breadcrumb { color: #6b7280; }
     .sub { color: #6b7280; }
+    .faq-item { background: #fff; border-color: #e5e7eb; }
+    .faq-q { color: #111827; }
+    .faq-a { color: #374151; }
+    .rel-kort { background: #fff; border-color: #e5e7eb; }
+    .rel-navn { color: #6b7280; }
     .badge { background: #dcfce7; color: #15803d; }
 
     /* Dark mode */
@@ -155,6 +210,10 @@
     .dark .kcard .val.green { color: #4ade80; }
     .dark .ytick { stroke: #1f2937; }
     .dark .hbar { fill: #22c55e; }
+    .dark .faq-item { background: #111827; border-color: #1f2937; color: #d1d5db; }
+    .dark .faq-q { color: #f3f4f6; }
+    .dark .rel-kort { background: #111827; border-color: #1f2937; }
+    .dark .rel-navn { color: #9ca3af; }
   </style>
 </head>
 <body>
@@ -225,7 +284,7 @@
     <div class="card"><div class="label">P/E</div><div class="val">10.8</div></div>
   </div>
 
-  <div class="desc"><p>Verdens største LPG-tankrederi. Høy kontantstrøm og liberal utbyttepolitikk. Volatilt med shippingmarkedet. BW LPG Limited er notert på Oslo Børs med en markedsverdi på rundt 26 milliarder NOK. Selskapet har hatt sammenhengende utbyttebetalinger i 11 år. Utbyttet utbetales kvartalsvis — fire ganger i året. 5-årssnittlig direkteavkastning er 13.8%, noe som plasserer BWLPG blant de høyest-yielding aksjene i shippingsektoren. Utbetalingsgraden (payout ratio) er 82%, noe som kan gjøre utbyttet sårbart ved svakere inntjening. BW LPG Limited er notert på Oslo Børs med en markedsverdi på rundt 26 milliarder NOK. Selskapet har hatt sammenhengende utbyttebetalinger i 11 år. Utbyttet utbetales kvartalsvis — fire ganger i året. 5-årssnittlig direkteavkastning er 13.9%, noe som plasserer BWLPG blant de høyest-yielding aksjene i shippingsektoren. Utbetalingsgraden (payout ratio) er 82%, noe som kan gjøre utbyttet sårbart ved svakere inntjening.</p></div>
+  <div class="desc"><p>Verdens største LPG-tankrederi. Høy kontantstrøm og liberal utbyttepolitikk. Volatilt med shippingmarkedet. BW LPG Limited er notert på Oslo Børs med en markedsverdi på rundt 26 milliarder NOK. Selskapet har hatt sammenhengende utbyttebetalinger i 11 år. Utbyttet utbetales kvartalsvis — fire ganger i året. 5-årssnittlig direkteavkastning er 13.8%, noe som plasserer BWLPG blant de høyest-yielding aksjene i shippingsektoren. Utbetalingsgraden (payout ratio) er 82%, noe som kan gjøre utbyttet sårbart ved svakere inntjening. 5-årssnittlig direkteavkastning er 13.9%, noe som plasserer BWLPG blant de høyest-yielding aksjene i shippingsektoren.</p></div>
 
   <div class="analyse"><h2>Utbytteanalyse</h2><p>Nåværende direkteavkastning på 8.6% er lavere enn 5-årssnittet på 13.9%, noe som tyder på sterk kursvekst de siste årene. Utbetalingsgraden på 82% er høy — utbyttet kan være sårbart ved svakere inntjening. Utbyttet har vokst med 8.4% per år de siste 5 årene.</p></div>
 
@@ -260,6 +319,16 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
           <td>9.15 NOK</td>
           <td>12.85%</td>
         </tr></tbody></table>
+
+  <div class="faq-seksjon"><h2>Vanlige spørsmål om BW LPG Limited</h2><div class="faq-item"><h3 class="faq-q">Hva er direkteavkastningen til BW LPG Limited?</h3><p class="faq-a">BW LPG Limited (BWLPG) har en direkteavkastning på 8.58% basert på siste kurs. 5-årssnittlig yield er 13.9%. Selskapet har betalt utbytte i 11 år på rad.</p></div>
+<div class="faq-item"><h3 class="faq-q">Hvor mye utbytte gir 100 000 kr investert i BWLPG?</h3><p class="faq-a">Med 100 000 kr kan du kjøpe omtrent 592 aksjer i BW LPG Limited til kurs 169 NOK. Det gir ca. 8,584 NOK i utbytte per år (715 NOK per måned) basert på 14.5 NOK per aksje. Etter 37,84% utbytteskatt sitter du igjen med ca. 5,336 NOK netto.</p></div>
+<div class="faq-item"><h3 class="faq-q">Hvor ofte betaler BW LPG Limited utbytte?</h3><p class="faq-a">BW LPG Limited betaler utbytte fire ganger i året (mars, juni, september, desember). Selskapet har hatt sammenhengende utbyttebetalinger i 11 år.</p></div>
+<div class="faq-item"><h3 class="faq-q">Har BW LPG Limited økt utbyttet over tid?</h3><p class="faq-a">Ja, BW LPG Limited har økt utbyttet med gjennomsnittlig 8.4% per år de siste 5 årene. Dette er et tegn på stabil og voksende inntjening.</p></div></div>
+
+  <div class="relaterte"><h2>Andre shipping-aksjer med utbytte</h2><div class="rel-grid"><a href="/aksjer/HUNT/" class="rel-kort"><span class="rel-ticker">HUNT</span><span class="rel-navn">Hunter Group ASA</span><span class="rel-yield">22.5%</span></a>
+<a href="/aksjer/HAUTO/" class="rel-kort"><span class="rel-ticker">HAUTO</span><span class="rel-navn">Höegh Autoliners ASA</span><span class="rel-yield">16.0%</span></a>
+<a href="/aksjer/COOL/" class="rel-kort"><span class="rel-ticker">COOL</span><span class="rel-navn">Cool Company Ltd</span><span class="rel-yield">13.8%</span></a>
+<a href="/aksjer/OET/" class="rel-kort"><span class="rel-ticker">OET</span><span class="rel-navn">Okeanis Eco Tankers Corp</span><span class="rel-yield">12.0%</span></a></div></div>
 
   <div class="mini-nav">
     <a href="/aksjer/sektor/shipping/">← Alle Shipping-aksjer</a>

@@ -64,6 +64,43 @@
         "name": "exday.no",
         "url": "https://exday.no/"
       }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Hva er direkteavkastningen til Itera ASA?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Itera ASA (ITERA) har en direkteavkastning på 4.17% basert på siste kurs. 5-årssnittlig yield er 4.7%. Selskapet har betalt utbytte i 20 år på rad."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Hvor mye utbytte gir 100 000 kr investert i ITERA?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Med 100 000 kr kan du kjøpe omtrent 13888 aksjer i Itera ASA til kurs 7 NOK. Det gir ca. 4,166 NOK i utbytte per år (347 NOK per måned) basert på 0.3 NOK per aksje. Etter 37,84% utbytteskatt sitter du igjen med ca. 2,590 NOK netto."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Hvor ofte betaler Itera ASA utbytte?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Itera ASA betaler utbytte to ganger i året. Selskapet har hatt sammenhengende utbyttebetalinger i 20 år."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Har Itera ASA redusert utbyttet over tid?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Itera ASA har redusert utbyttet med 3.8% per år i snitt over de siste 5 årene. Investorer bør se på selskapets inntjeningsutvikling og fremtidsutsikter."
+          }
+        }
+      ]
     }
   ]
 }</script>
@@ -108,6 +145,19 @@
     .updated { font-size: 0.78rem; text-align: right; margin-top: 1rem; }
     .mini-nav { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.5rem; font-size: 0.85rem; }
     .mini-nav a { color: #16a34a; }
+    .faq-seksjon { margin: 1.5rem 0; }
+    .faq-seksjon h2 { margin-bottom: 1rem; }
+    .faq-item { border-radius: 0.75rem; padding: 1rem 1.25rem; margin-bottom: 0.75rem; border: 1px solid; }
+    .faq-q { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.4rem; }
+    .faq-a { font-size: 0.9rem; line-height: 1.6; }
+    .relaterte { margin: 1.5rem 0; }
+    .relaterte h2 { margin-bottom: 0.75rem; }
+    .rel-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 0.75rem; }
+    .rel-kort { border-radius: 0.75rem; padding: 0.75rem 1rem; border: 1px solid; display: flex; flex-direction: column; gap: 0.2rem; text-decoration: none; transition: border-color 0.15s; }
+    .rel-kort:hover { border-color: #16a34a; text-decoration: none; }
+    .rel-ticker { font-weight: 700; font-size: 1rem; color: #16a34a; }
+    .rel-navn { font-size: 0.75rem; }
+    .rel-yield { font-size: 0.8rem; font-weight: 600; color: #16a34a; }
     @media (max-width: 480px) { h1 { font-size: 1.4rem; } }
 
     /* Light mode */
@@ -128,6 +178,11 @@
     .updated { color: #9ca3af; }
     .breadcrumb { color: #6b7280; }
     .sub { color: #6b7280; }
+    .faq-item { background: #fff; border-color: #e5e7eb; }
+    .faq-q { color: #111827; }
+    .faq-a { color: #374151; }
+    .rel-kort { background: #fff; border-color: #e5e7eb; }
+    .rel-navn { color: #6b7280; }
     .badge { background: #dcfce7; color: #15803d; }
 
     /* Dark mode */
@@ -155,6 +210,10 @@
     .dark .kcard .val.green { color: #4ade80; }
     .dark .ytick { stroke: #1f2937; }
     .dark .hbar { fill: #22c55e; }
+    .dark .faq-item { background: #111827; border-color: #1f2937; color: #d1d5db; }
+    .dark .faq-q { color: #f3f4f6; }
+    .dark .rel-kort { background: #111827; border-color: #1f2937; }
+    .dark .rel-navn { color: #9ca3af; }
   </style>
 </head>
 <body>
@@ -225,7 +284,7 @@
     <div class="card"><div class="label">P/E</div><div class="val">25.7</div></div>
   </div>
 
-  <div class="desc"><p>Norsk IT-konsulentselskap med spisskompetanse innen digital transformasjon. Konsistent utbyttebetaler med lav kapitalintensitet. Itera ASA er notert på Oslo Børs. Aksjen har betalt utbytte 20 år på rad, noe som reflekterer langvarig stabil inntjening og kapitalavkastning til aksjonærene. Utbyttet utbetales halvårlig — to ganger i året. 5-årssnittlig direkteavkastning er 4.7%, noe som plasserer ITERA blant de solid-yielding aksjene i informasjonsteknologi-sektoren. Utbetalingsgraden (payout ratio) er 107%, noe som kan gjøre utbyttet sårbart ved svakere inntjening. Itera ASA er notert på Oslo Børs. Aksjen har betalt utbytte 20 år på rad, noe som reflekterer langvarig stabil inntjening og kapitalavkastning til aksjonærene. Utbyttet utbetales halvårlig — to ganger i året. 5-årssnittlig direkteavkastning er 4.7%, noe som plasserer ITERA blant de solid-yielding aksjene i informasjonsteknologi-sektoren. Utbetalingsgraden (payout ratio) er 107%, noe som kan gjøre utbyttet sårbart ved svakere inntjening.</p></div>
+  <div class="desc"><p>Norsk IT-konsulentselskap med spisskompetanse innen digital transformasjon. Konsistent utbyttebetaler med lav kapitalintensitet. Itera ASA er notert på Oslo Børs. Aksjen har betalt utbytte 20 år på rad, noe som reflekterer langvarig stabil inntjening og kapitalavkastning til aksjonærene. Utbyttet utbetales halvårlig — to ganger i året. 5-årssnittlig direkteavkastning er 4.7%, noe som plasserer ITERA blant de solid-yielding aksjene i informasjonsteknologi-sektoren. Utbetalingsgraden (payout ratio) er 107%, noe som kan gjøre utbyttet sårbart ved svakere inntjening.</p></div>
 
   <div class="analyse"><h2>Utbytteanalyse</h2><p>Direkteavkastningen på 4.2% ligger nær 5-årssnittet på 4.7%, som indikerer stabil kurs- og utbytteutvikling. Utbetalingsgraden på 107% er høy — utbyttet kan være sårbart ved svakere inntjening. Utbyttet har falt med 3.8% per år de siste 5 årene.</p></div>
 
@@ -255,6 +314,16 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
           <td>0.5 NOK</td>
           <td>4.29%</td>
         </tr></tbody></table>
+
+  <div class="faq-seksjon"><h2>Vanlige spørsmål om Itera ASA</h2><div class="faq-item"><h3 class="faq-q">Hva er direkteavkastningen til Itera ASA?</h3><p class="faq-a">Itera ASA (ITERA) har en direkteavkastning på 4.17% basert på siste kurs. 5-årssnittlig yield er 4.7%. Selskapet har betalt utbytte i 20 år på rad.</p></div>
+<div class="faq-item"><h3 class="faq-q">Hvor mye utbytte gir 100 000 kr investert i ITERA?</h3><p class="faq-a">Med 100 000 kr kan du kjøpe omtrent 13888 aksjer i Itera ASA til kurs 7 NOK. Det gir ca. 4,166 NOK i utbytte per år (347 NOK per måned) basert på 0.3 NOK per aksje. Etter 37,84% utbytteskatt sitter du igjen med ca. 2,590 NOK netto.</p></div>
+<div class="faq-item"><h3 class="faq-q">Hvor ofte betaler Itera ASA utbytte?</h3><p class="faq-a">Itera ASA betaler utbytte to ganger i året. Selskapet har hatt sammenhengende utbyttebetalinger i 20 år.</p></div>
+<div class="faq-item"><h3 class="faq-q">Har Itera ASA redusert utbyttet over tid?</h3><p class="faq-a">Itera ASA har redusert utbyttet med 3.8% per år i snitt over de siste 5 årene. Investorer bør se på selskapets inntjeningsutvikling og fremtidsutsikter.</p></div></div>
+
+  <div class="relaterte"><h2>Andre informasjonsteknologi-aksjer med utbytte</h2><div class="rel-grid"><a href="/aksjer/SNTIA/" class="rel-kort"><span class="rel-ticker">SNTIA</span><span class="rel-navn">Sentia AS</span><span class="rel-yield">14.9%</span></a>
+<a href="/aksjer/WSTEP/" class="rel-kort"><span class="rel-ticker">WSTEP</span><span class="rel-navn">Webstep ASA</span><span class="rel-yield">13.0%</span></a>
+<a href="/aksjer/BOUV/" class="rel-kort"><span class="rel-ticker">BOUV</span><span class="rel-navn">Bouvet ASA</span><span class="rel-yield">12.0%</span></a>
+<a href="/aksjer/PEXIP/" class="rel-kort"><span class="rel-ticker">PEXIP</span><span class="rel-navn">Pexip Holding ASA</span><span class="rel-yield">6.5%</span></a></div></div>
 
   <div class="mini-nav">
     <a href="/aksjer/sektor/informasjonsteknologi/">← Alle Informasjonsteknologi-aksjer</a>

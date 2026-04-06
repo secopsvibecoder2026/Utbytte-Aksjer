@@ -64,6 +64,43 @@
         "name": "exday.no",
         "url": "https://exday.no/"
       }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Hva er direkteavkastningen til Pexip Holding ASA?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Pexip Holding ASA (PEXIP) har en direkteavkastning på 6.51% basert på siste kurs. 5-årssnittlig yield er 2.9%."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Hvor mye utbytte gir 100 000 kr investert i PEXIP?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Med 100 000 kr kan du kjøpe omtrent 1628 aksjer i Pexip Holding ASA til kurs 61 NOK. Det gir ca. 6,512 NOK i utbytte per år (543 NOK per måned) basert på 4.0 NOK per aksje. Etter 37,84% utbytteskatt sitter du igjen med ca. 4,048 NOK netto."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Hvor ofte betaler Pexip Holding ASA utbytte?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Pexip Holding ASA betaler utbytte én gang i året."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Har Pexip Holding ASA økt utbyttet over tid?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Ja, Pexip Holding ASA har økt utbyttet med gjennomsnittlig 127.3% per år de siste 5 årene. Dette er et tegn på stabil og voksende inntjening."
+          }
+        }
+      ]
     }
   ]
 }</script>
@@ -108,6 +145,19 @@
     .updated { font-size: 0.78rem; text-align: right; margin-top: 1rem; }
     .mini-nav { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.5rem; font-size: 0.85rem; }
     .mini-nav a { color: #16a34a; }
+    .faq-seksjon { margin: 1.5rem 0; }
+    .faq-seksjon h2 { margin-bottom: 1rem; }
+    .faq-item { border-radius: 0.75rem; padding: 1rem 1.25rem; margin-bottom: 0.75rem; border: 1px solid; }
+    .faq-q { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.4rem; }
+    .faq-a { font-size: 0.9rem; line-height: 1.6; }
+    .relaterte { margin: 1.5rem 0; }
+    .relaterte h2 { margin-bottom: 0.75rem; }
+    .rel-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 0.75rem; }
+    .rel-kort { border-radius: 0.75rem; padding: 0.75rem 1rem; border: 1px solid; display: flex; flex-direction: column; gap: 0.2rem; text-decoration: none; transition: border-color 0.15s; }
+    .rel-kort:hover { border-color: #16a34a; text-decoration: none; }
+    .rel-ticker { font-weight: 700; font-size: 1rem; color: #16a34a; }
+    .rel-navn { font-size: 0.75rem; }
+    .rel-yield { font-size: 0.8rem; font-weight: 600; color: #16a34a; }
     @media (max-width: 480px) { h1 { font-size: 1.4rem; } }
 
     /* Light mode */
@@ -128,6 +178,11 @@
     .updated { color: #9ca3af; }
     .breadcrumb { color: #6b7280; }
     .sub { color: #6b7280; }
+    .faq-item { background: #fff; border-color: #e5e7eb; }
+    .faq-q { color: #111827; }
+    .faq-a { color: #374151; }
+    .rel-kort { background: #fff; border-color: #e5e7eb; }
+    .rel-navn { color: #6b7280; }
     .badge { background: #dcfce7; color: #15803d; }
 
     /* Dark mode */
@@ -155,6 +210,10 @@
     .dark .kcard .val.green { color: #4ade80; }
     .dark .ytick { stroke: #1f2937; }
     .dark .hbar { fill: #22c55e; }
+    .dark .faq-item { background: #111827; border-color: #1f2937; color: #d1d5db; }
+    .dark .faq-q { color: #f3f4f6; }
+    .dark .rel-kort { background: #111827; border-color: #1f2937; }
+    .dark .rel-navn { color: #9ca3af; }
   </style>
 </head>
 <body>
@@ -225,7 +284,7 @@
     <div class="card"><div class="label">P/E</div><div class="val">31.3</div></div>
   </div>
 
-  <div class="desc"><p>Norsk videokonferanseselskap som leverer skybaserte møteløsninger til store organisasjoner og myndigheter globalt. Har innledet utbytteutbetalinger etter overgang til lønnsom drift. Pexip Holding ASA er notert på Oslo Børs. Selskapet har betalt utbytte de siste 2 årene. Utbyttet utbetales én gang i året. 5-årssnittlig direkteavkastning er 2.9%, noe som plasserer PEXIP blant de mer moderate aksjene i informasjonsteknologi-sektoren. Utbetalingsgraden (payout ratio) er 128%, noe som kan gjøre utbyttet sårbart ved svakere inntjening. Pexip Holding ASA er notert på Oslo Børs. Selskapet har betalt utbytte de siste 2 årene. Utbyttet utbetales én gang i året. 5-årssnittlig direkteavkastning er 2.9%, noe som plasserer PEXIP blant de mer moderate aksjene i informasjonsteknologi-sektoren. Utbetalingsgraden (payout ratio) er 128%, noe som kan gjøre utbyttet sårbart ved svakere inntjening.</p></div>
+  <div class="desc"><p>Norsk videokonferanseselskap som leverer skybaserte møteløsninger til store organisasjoner og myndigheter globalt. Har innledet utbytteutbetalinger etter overgang til lønnsom drift. Pexip Holding ASA er notert på Oslo Børs. Selskapet har betalt utbytte de siste 2 årene. Utbyttet utbetales én gang i året. 5-årssnittlig direkteavkastning er 2.9%, noe som plasserer PEXIP blant de mer moderate aksjene i informasjonsteknologi-sektoren. Utbetalingsgraden (payout ratio) er 128%, noe som kan gjøre utbyttet sårbart ved svakere inntjening.</p></div>
 
   <div class="analyse"><h2>Utbytteanalyse</h2><p>Nåværende direkteavkastning på 6.5% er betydelig høyere enn 5-årssnittet på 2.9%, noe som kan indikere et midlertidig kursfall eller ekstraordinært utbytte. Utbetalingsgraden på 128% er høy — utbyttet kan være sårbart ved svakere inntjening. Utbyttet har vokst med 127.3% per år de siste 5 årene.</p></div>
 
@@ -245,6 +304,16 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
           <td>1.1 NOK</td>
           <td>2.67%</td>
         </tr></tbody></table>
+
+  <div class="faq-seksjon"><h2>Vanlige spørsmål om Pexip Holding ASA</h2><div class="faq-item"><h3 class="faq-q">Hva er direkteavkastningen til Pexip Holding ASA?</h3><p class="faq-a">Pexip Holding ASA (PEXIP) har en direkteavkastning på 6.51% basert på siste kurs. 5-årssnittlig yield er 2.9%.</p></div>
+<div class="faq-item"><h3 class="faq-q">Hvor mye utbytte gir 100 000 kr investert i PEXIP?</h3><p class="faq-a">Med 100 000 kr kan du kjøpe omtrent 1628 aksjer i Pexip Holding ASA til kurs 61 NOK. Det gir ca. 6,512 NOK i utbytte per år (543 NOK per måned) basert på 4.0 NOK per aksje. Etter 37,84% utbytteskatt sitter du igjen med ca. 4,048 NOK netto.</p></div>
+<div class="faq-item"><h3 class="faq-q">Hvor ofte betaler Pexip Holding ASA utbytte?</h3><p class="faq-a">Pexip Holding ASA betaler utbytte én gang i året.</p></div>
+<div class="faq-item"><h3 class="faq-q">Har Pexip Holding ASA økt utbyttet over tid?</h3><p class="faq-a">Ja, Pexip Holding ASA har økt utbyttet med gjennomsnittlig 127.3% per år de siste 5 årene. Dette er et tegn på stabil og voksende inntjening.</p></div></div>
+
+  <div class="relaterte"><h2>Andre informasjonsteknologi-aksjer med utbytte</h2><div class="rel-grid"><a href="/aksjer/SNTIA/" class="rel-kort"><span class="rel-ticker">SNTIA</span><span class="rel-navn">Sentia AS</span><span class="rel-yield">14.9%</span></a>
+<a href="/aksjer/WSTEP/" class="rel-kort"><span class="rel-ticker">WSTEP</span><span class="rel-navn">Webstep ASA</span><span class="rel-yield">13.0%</span></a>
+<a href="/aksjer/BOUV/" class="rel-kort"><span class="rel-ticker">BOUV</span><span class="rel-navn">Bouvet ASA</span><span class="rel-yield">12.0%</span></a>
+<a href="/aksjer/ATEA/" class="rel-kort"><span class="rel-ticker">ATEA</span><span class="rel-navn">Atea ASA</span><span class="rel-yield">5.4%</span></a></div></div>
 
   <div class="mini-nav">
     <a href="/aksjer/sektor/informasjonsteknologi/">← Alle Informasjonsteknologi-aksjer</a>

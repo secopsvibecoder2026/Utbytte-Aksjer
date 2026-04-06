@@ -64,6 +64,51 @@
         "name": "exday.no",
         "url": "https://exday.no/"
       }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Hva er direkteavkastningen til Yara International ASA?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yara International ASA (YAR) har en direkteavkastning på 3.92% basert på siste kurs. 5-årssnittlig yield er 7.4%. Selskapet har betalt utbytte i 21 år på rad."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Når er neste ex-dato og utbetalingsdato for YAR?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Neste ex-dato for YAR er 13. mai 2026. Du må eie aksjen før denne datoen for å motta utbytte. Utbetalingsdatoen er 28. mai 2026."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Hvor mye utbytte gir 100 000 kr investert i YAR?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Med 100 000 kr kan du kjøpe omtrent 178 aksjer i Yara International ASA til kurs 561 NOK. Det gir ca. 3,916 NOK i utbytte per år (326 NOK per måned) basert på 22.0 NOK per aksje. Etter 37,84% utbytteskatt sitter du igjen med ca. 2,434 NOK netto."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Hvor ofte betaler Yara International ASA utbytte?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yara International ASA betaler utbytte én gang i året. Selskapet har hatt sammenhengende utbyttebetalinger i 21 år."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Har Yara International ASA redusert utbyttet over tid?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yara International ASA har redusert utbyttet med 40.5% per år i snitt over de siste 5 årene. Investorer bør se på selskapets inntjeningsutvikling og fremtidsutsikter."
+          }
+        }
+      ]
     }
   ]
 }</script>
@@ -108,6 +153,19 @@
     .updated { font-size: 0.78rem; text-align: right; margin-top: 1rem; }
     .mini-nav { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.5rem; font-size: 0.85rem; }
     .mini-nav a { color: #16a34a; }
+    .faq-seksjon { margin: 1.5rem 0; }
+    .faq-seksjon h2 { margin-bottom: 1rem; }
+    .faq-item { border-radius: 0.75rem; padding: 1rem 1.25rem; margin-bottom: 0.75rem; border: 1px solid; }
+    .faq-q { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.4rem; }
+    .faq-a { font-size: 0.9rem; line-height: 1.6; }
+    .relaterte { margin: 1.5rem 0; }
+    .relaterte h2 { margin-bottom: 0.75rem; }
+    .rel-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 0.75rem; }
+    .rel-kort { border-radius: 0.75rem; padding: 0.75rem 1rem; border: 1px solid; display: flex; flex-direction: column; gap: 0.2rem; text-decoration: none; transition: border-color 0.15s; }
+    .rel-kort:hover { border-color: #16a34a; text-decoration: none; }
+    .rel-ticker { font-weight: 700; font-size: 1rem; color: #16a34a; }
+    .rel-navn { font-size: 0.75rem; }
+    .rel-yield { font-size: 0.8rem; font-weight: 600; color: #16a34a; }
     @media (max-width: 480px) { h1 { font-size: 1.4rem; } }
 
     /* Light mode */
@@ -128,6 +186,11 @@
     .updated { color: #9ca3af; }
     .breadcrumb { color: #6b7280; }
     .sub { color: #6b7280; }
+    .faq-item { background: #fff; border-color: #e5e7eb; }
+    .faq-q { color: #111827; }
+    .faq-a { color: #374151; }
+    .rel-kort { background: #fff; border-color: #e5e7eb; }
+    .rel-navn { color: #6b7280; }
     .badge { background: #dcfce7; color: #15803d; }
 
     /* Dark mode */
@@ -155,6 +218,10 @@
     .dark .kcard .val.green { color: #4ade80; }
     .dark .ytick { stroke: #1f2937; }
     .dark .hbar { fill: #22c55e; }
+    .dark .faq-item { background: #111827; border-color: #1f2937; color: #d1d5db; }
+    .dark .faq-q { color: #f3f4f6; }
+    .dark .rel-kort { background: #111827; border-color: #1f2937; }
+    .dark .rel-navn { color: #9ca3af; }
   </style>
 </head>
 <body>
@@ -255,6 +322,17 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
           <td>40.0 NOK</td>
           <td>11.19%</td>
         </tr></tbody></table>
+
+  <div class="faq-seksjon"><h2>Vanlige spørsmål om Yara International ASA</h2><div class="faq-item"><h3 class="faq-q">Hva er direkteavkastningen til Yara International ASA?</h3><p class="faq-a">Yara International ASA (YAR) har en direkteavkastning på 3.92% basert på siste kurs. 5-årssnittlig yield er 7.4%. Selskapet har betalt utbytte i 21 år på rad.</p></div>
+<div class="faq-item"><h3 class="faq-q">Når er neste ex-dato og utbetalingsdato for YAR?</h3><p class="faq-a">Neste ex-dato for YAR er 13. mai 2026. Du må eie aksjen før denne datoen for å motta utbytte. Utbetalingsdatoen er 28. mai 2026.</p></div>
+<div class="faq-item"><h3 class="faq-q">Hvor mye utbytte gir 100 000 kr investert i YAR?</h3><p class="faq-a">Med 100 000 kr kan du kjøpe omtrent 178 aksjer i Yara International ASA til kurs 561 NOK. Det gir ca. 3,916 NOK i utbytte per år (326 NOK per måned) basert på 22.0 NOK per aksje. Etter 37,84% utbytteskatt sitter du igjen med ca. 2,434 NOK netto.</p></div>
+<div class="faq-item"><h3 class="faq-q">Hvor ofte betaler Yara International ASA utbytte?</h3><p class="faq-a">Yara International ASA betaler utbytte én gang i året. Selskapet har hatt sammenhengende utbyttebetalinger i 21 år.</p></div>
+<div class="faq-item"><h3 class="faq-q">Har Yara International ASA redusert utbyttet over tid?</h3><p class="faq-a">Yara International ASA har redusert utbyttet med 40.5% per år i snitt over de siste 5 årene. Investorer bør se på selskapets inntjeningsutvikling og fremtidsutsikter.</p></div></div>
+
+  <div class="relaterte"><h2>Andre materialer-aksjer med utbytte</h2><div class="rel-grid"><a href="/aksjer/RANA/" class="rel-kort"><span class="rel-ticker">RANA</span><span class="rel-navn">Rana Gruber ASA</span><span class="rel-yield">6.8%</span></a>
+<a href="/aksjer/BOR/" class="rel-kort"><span class="rel-ticker">BOR</span><span class="rel-navn">Borgestad ASA</span><span class="rel-yield">6.0%</span></a>
+<a href="/aksjer/NHY/" class="rel-kort"><span class="rel-ticker">NHY</span><span class="rel-navn">Norsk Hydro ASA</span><span class="rel-yield">2.9%</span></a>
+<a href="/aksjer/BRG/" class="rel-kort"><span class="rel-ticker">BRG</span><span class="rel-navn">Borregaard ASA</span><span class="rel-yield">2.7%</span></a></div></div>
 
   <div class="mini-nav">
     <a href="/aksjer/sektor/materialer/">← Alle Materialer-aksjer</a>

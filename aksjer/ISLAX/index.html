@@ -64,6 +64,19 @@
         "name": "exday.no",
         "url": "https://exday.no/"
       }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Hvor ofte betaler Icelandic Salmon AS utbytte?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Icelandic Salmon AS betaler utbytte uregelmessig."
+          }
+        }
+      ]
     }
   ]
 }</script>
@@ -108,6 +121,19 @@
     .updated { font-size: 0.78rem; text-align: right; margin-top: 1rem; }
     .mini-nav { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.5rem; font-size: 0.85rem; }
     .mini-nav a { color: #16a34a; }
+    .faq-seksjon { margin: 1.5rem 0; }
+    .faq-seksjon h2 { margin-bottom: 1rem; }
+    .faq-item { border-radius: 0.75rem; padding: 1rem 1.25rem; margin-bottom: 0.75rem; border: 1px solid; }
+    .faq-q { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.4rem; }
+    .faq-a { font-size: 0.9rem; line-height: 1.6; }
+    .relaterte { margin: 1.5rem 0; }
+    .relaterte h2 { margin-bottom: 0.75rem; }
+    .rel-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 0.75rem; }
+    .rel-kort { border-radius: 0.75rem; padding: 0.75rem 1rem; border: 1px solid; display: flex; flex-direction: column; gap: 0.2rem; text-decoration: none; transition: border-color 0.15s; }
+    .rel-kort:hover { border-color: #16a34a; text-decoration: none; }
+    .rel-ticker { font-weight: 700; font-size: 1rem; color: #16a34a; }
+    .rel-navn { font-size: 0.75rem; }
+    .rel-yield { font-size: 0.8rem; font-weight: 600; color: #16a34a; }
     @media (max-width: 480px) { h1 { font-size: 1.4rem; } }
 
     /* Light mode */
@@ -128,6 +154,11 @@
     .updated { color: #9ca3af; }
     .breadcrumb { color: #6b7280; }
     .sub { color: #6b7280; }
+    .faq-item { background: #fff; border-color: #e5e7eb; }
+    .faq-q { color: #111827; }
+    .faq-a { color: #374151; }
+    .rel-kort { background: #fff; border-color: #e5e7eb; }
+    .rel-navn { color: #6b7280; }
     .badge { background: #dcfce7; color: #15803d; }
 
     /* Dark mode */
@@ -155,6 +186,10 @@
     .dark .kcard .val.green { color: #4ade80; }
     .dark .ytick { stroke: #1f2937; }
     .dark .hbar { fill: #22c55e; }
+    .dark .faq-item { background: #111827; border-color: #1f2937; color: #d1d5db; }
+    .dark .faq-q { color: #f3f4f6; }
+    .dark .rel-kort { background: #111827; border-color: #1f2937; }
+    .dark .rel-navn { color: #9ca3af; }
   </style>
 </head>
 <body>
@@ -232,6 +267,13 @@
   <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Havbruk</td></tr><tr><td>Frekvens</td><td>Uregelmessig</td></tr><tr><td>Utbytte per aksje</td><td>0 NOK</td></tr><tr><td>Direkteavkastning</td><td>—</td></tr><tr><td>5-årssnitt yield</td><td>0.00%</td></tr><tr><td>År med utbytte</td><td>0</td></tr><tr><td>P/E</td><td>14.3</td></tr><tr><td>Utbyttevekst 5 år</td><td>+0.0% p.a.</td></tr><tr><td>Markedsverdi</td><td>2.3 mrd NOK</td></tr><tr><td>52-ukers kurs</td><td>62.0 – 111.0 NOK</td></tr></tbody></table>
 
   
+
+  <div class="faq-seksjon"><h2>Vanlige spørsmål om Icelandic Salmon AS</h2><div class="faq-item"><h3 class="faq-q">Hvor ofte betaler Icelandic Salmon AS utbytte?</h3><p class="faq-a">Icelandic Salmon AS betaler utbytte uregelmessig.</p></div></div>
+
+  <div class="relaterte"><h2>Andre havbruk-aksjer med utbytte</h2><div class="rel-grid"><a href="/aksjer/GSF/" class="rel-kort"><span class="rel-ticker">GSF</span><span class="rel-navn">Grieg Seafood ASA</span><span class="rel-yield">47.0%</span></a>
+<a href="/aksjer/AUSS/" class="rel-kort"><span class="rel-ticker">AUSS</span><span class="rel-navn">Austevoll Seafood ASA</span><span class="rel-yield">6.2%</span></a>
+<a href="/aksjer/LSG/" class="rel-kort"><span class="rel-ticker">LSG</span><span class="rel-navn">Lerøy Seafood Group ASA</span><span class="rel-yield">5.0%</span></a>
+<a href="/aksjer/MOWI/" class="rel-kort"><span class="rel-ticker">MOWI</span><span class="rel-navn">Mowi ASA</span><span class="rel-yield">2.8%</span></a></div></div>
 
   <div class="mini-nav">
     <a href="/aksjer/sektor/havbruk/">← Alle Havbruk-aksjer</a>

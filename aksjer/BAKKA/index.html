@@ -64,6 +64,51 @@
         "name": "exday.no",
         "url": "https://exday.no/"
       }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Hva er direkteavkastningen til Bakkafrost P/F?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Bakkafrost P/F (BAKKA) har en direkteavkastning på 1.15% basert på siste kurs. 5-årssnittlig yield er 2.3%. Selskapet har betalt utbytte i 14 år på rad."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Når er neste ex-dato og utbetalingsdato for BAKKA?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Neste ex-dato for BAKKA er 4. mai 2026. Du må eie aksjen før denne datoen for å motta utbytte. Utbetalingsdatoen er 21. mai 2026."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Hvor mye utbytte gir 100 000 kr investert i BAKKA?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Med 100 000 kr kan du kjøpe omtrent 218 aksjer i Bakkafrost P/F til kurs 458 NOK. Det gir ca. 1,149 NOK i utbytte per år (96 NOK per måned) basert på 5.27 NOK per aksje. Etter 37,84% utbytteskatt sitter du igjen med ca. 714 NOK netto."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Hvor ofte betaler Bakkafrost P/F utbytte?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Bakkafrost P/F betaler utbytte én gang i året. Selskapet har hatt sammenhengende utbyttebetalinger i 14 år."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Har Bakkafrost P/F økt utbyttet over tid?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Ja, Bakkafrost P/F har økt utbyttet med gjennomsnittlig 28.1% per år de siste 5 årene. Dette er et tegn på stabil og voksende inntjening."
+          }
+        }
+      ]
     }
   ]
 }</script>
@@ -108,6 +153,19 @@
     .updated { font-size: 0.78rem; text-align: right; margin-top: 1rem; }
     .mini-nav { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.5rem; font-size: 0.85rem; }
     .mini-nav a { color: #16a34a; }
+    .faq-seksjon { margin: 1.5rem 0; }
+    .faq-seksjon h2 { margin-bottom: 1rem; }
+    .faq-item { border-radius: 0.75rem; padding: 1rem 1.25rem; margin-bottom: 0.75rem; border: 1px solid; }
+    .faq-q { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.4rem; }
+    .faq-a { font-size: 0.9rem; line-height: 1.6; }
+    .relaterte { margin: 1.5rem 0; }
+    .relaterte h2 { margin-bottom: 0.75rem; }
+    .rel-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 0.75rem; }
+    .rel-kort { border-radius: 0.75rem; padding: 0.75rem 1rem; border: 1px solid; display: flex; flex-direction: column; gap: 0.2rem; text-decoration: none; transition: border-color 0.15s; }
+    .rel-kort:hover { border-color: #16a34a; text-decoration: none; }
+    .rel-ticker { font-weight: 700; font-size: 1rem; color: #16a34a; }
+    .rel-navn { font-size: 0.75rem; }
+    .rel-yield { font-size: 0.8rem; font-weight: 600; color: #16a34a; }
     @media (max-width: 480px) { h1 { font-size: 1.4rem; } }
 
     /* Light mode */
@@ -128,6 +186,11 @@
     .updated { color: #9ca3af; }
     .breadcrumb { color: #6b7280; }
     .sub { color: #6b7280; }
+    .faq-item { background: #fff; border-color: #e5e7eb; }
+    .faq-q { color: #111827; }
+    .faq-a { color: #374151; }
+    .rel-kort { background: #fff; border-color: #e5e7eb; }
+    .rel-navn { color: #6b7280; }
     .badge { background: #dcfce7; color: #15803d; }
 
     /* Dark mode */
@@ -155,6 +218,10 @@
     .dark .kcard .val.green { color: #4ade80; }
     .dark .ytick { stroke: #1f2937; }
     .dark .hbar { fill: #22c55e; }
+    .dark .faq-item { background: #111827; border-color: #1f2937; color: #d1d5db; }
+    .dark .faq-q { color: #f3f4f6; }
+    .dark .rel-kort { background: #111827; border-color: #1f2937; }
+    .dark .rel-navn { color: #9ca3af; }
   </style>
 </head>
 <body>
@@ -225,7 +292,7 @@
     <div class="card"><div class="label">P/E</div><div class="val">34.3</div></div>
   </div>
 
-  <div class="desc"><p>Færøysk-skotsk lakseoppdrettsselskap notert på Oslo Børs. Integrert verdikjede fra rogn til ferdig produkt. Bakkafrost P/F er notert på Oslo Børs med en markedsverdi på rundt 27 milliarder NOK. Selskapet har hatt sammenhengende utbyttebetalinger i 14 år. Utbyttet utbetales én gang i året. 5-årssnittlig direkteavkastning er 2.3%, noe som plasserer BAKKA blant de mer moderate aksjene i havbrukssektoren. Utbetalingsgraden (payout ratio) er 94%, noe som kan gjøre utbyttet sårbart ved svakere inntjening. Bakkafrost P/F er notert på Oslo Børs med en markedsverdi på rundt 27 milliarder NOK. Selskapet har hatt sammenhengende utbyttebetalinger i 14 år. Utbyttet utbetales én gang i året. 5-årssnittlig direkteavkastning er 2.3%, noe som plasserer BAKKA blant de mer moderate aksjene i havbrukssektoren. Utbetalingsgraden (payout ratio) er 94%, noe som kan gjøre utbyttet sårbart ved svakere inntjening.</p></div>
+  <div class="desc"><p>Færøysk-skotsk lakseoppdrettsselskap notert på Oslo Børs. Integrert verdikjede fra rogn til ferdig produkt. Bakkafrost P/F er notert på Oslo Børs med en markedsverdi på rundt 27 milliarder NOK. Selskapet har hatt sammenhengende utbyttebetalinger i 14 år. Utbyttet utbetales én gang i året. 5-årssnittlig direkteavkastning er 2.3%, noe som plasserer BAKKA blant de mer moderate aksjene i havbrukssektoren. Utbetalingsgraden (payout ratio) er 94%, noe som kan gjøre utbyttet sårbart ved svakere inntjening.</p></div>
 
   <div class="analyse"><h2>Utbytteanalyse</h2><p>Direkteavkastningen på 1.1% ligger nær 5-årssnittet på 2.3%, som indikerer stabil kurs- og utbytteutvikling. Utbetalingsgraden på 94% er høy — utbyttet kan være sårbart ved svakere inntjening. Utbyttet har vokst med 28.1% per år de siste 5 årene.</p></div>
 
@@ -255,6 +322,17 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
           <td>6.7 NOK</td>
           <td>1.16%</td>
         </tr></tbody></table>
+
+  <div class="faq-seksjon"><h2>Vanlige spørsmål om Bakkafrost P/F</h2><div class="faq-item"><h3 class="faq-q">Hva er direkteavkastningen til Bakkafrost P/F?</h3><p class="faq-a">Bakkafrost P/F (BAKKA) har en direkteavkastning på 1.15% basert på siste kurs. 5-årssnittlig yield er 2.3%. Selskapet har betalt utbytte i 14 år på rad.</p></div>
+<div class="faq-item"><h3 class="faq-q">Når er neste ex-dato og utbetalingsdato for BAKKA?</h3><p class="faq-a">Neste ex-dato for BAKKA er 4. mai 2026. Du må eie aksjen før denne datoen for å motta utbytte. Utbetalingsdatoen er 21. mai 2026.</p></div>
+<div class="faq-item"><h3 class="faq-q">Hvor mye utbytte gir 100 000 kr investert i BAKKA?</h3><p class="faq-a">Med 100 000 kr kan du kjøpe omtrent 218 aksjer i Bakkafrost P/F til kurs 458 NOK. Det gir ca. 1,149 NOK i utbytte per år (96 NOK per måned) basert på 5.27 NOK per aksje. Etter 37,84% utbytteskatt sitter du igjen med ca. 714 NOK netto.</p></div>
+<div class="faq-item"><h3 class="faq-q">Hvor ofte betaler Bakkafrost P/F utbytte?</h3><p class="faq-a">Bakkafrost P/F betaler utbytte én gang i året. Selskapet har hatt sammenhengende utbyttebetalinger i 14 år.</p></div>
+<div class="faq-item"><h3 class="faq-q">Har Bakkafrost P/F økt utbyttet over tid?</h3><p class="faq-a">Ja, Bakkafrost P/F har økt utbyttet med gjennomsnittlig 28.1% per år de siste 5 årene. Dette er et tegn på stabil og voksende inntjening.</p></div></div>
+
+  <div class="relaterte"><h2>Andre havbruk-aksjer med utbytte</h2><div class="rel-grid"><a href="/aksjer/GSF/" class="rel-kort"><span class="rel-ticker">GSF</span><span class="rel-navn">Grieg Seafood ASA</span><span class="rel-yield">47.0%</span></a>
+<a href="/aksjer/AUSS/" class="rel-kort"><span class="rel-ticker">AUSS</span><span class="rel-navn">Austevoll Seafood ASA</span><span class="rel-yield">6.2%</span></a>
+<a href="/aksjer/LSG/" class="rel-kort"><span class="rel-ticker">LSG</span><span class="rel-navn">Lerøy Seafood Group ASA</span><span class="rel-yield">5.0%</span></a>
+<a href="/aksjer/MOWI/" class="rel-kort"><span class="rel-ticker">MOWI</span><span class="rel-navn">Mowi ASA</span><span class="rel-yield">2.8%</span></a></div></div>
 
   <div class="mini-nav">
     <a href="/aksjer/sektor/havbruk/">← Alle Havbruk-aksjer</a>

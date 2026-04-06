@@ -869,7 +869,104 @@ def _lag_analyse_tekst(a):
     return " ".join(deler)
 
 
-def _aksje_side_html(a, today):
+def _lag_faq(a):
+    """Bygger FAQ-spørsmål og -svar spesifikke for en aksje."""
+    ticker = a["ticker"]
+    navn   = a["navn"]
+    yield_ = a.get("utbytte_yield") or 0
+    upa    = a.get("utbytte_per_aksje") or 0
+    ex     = a.get("ex_dato") or ""
+    bet    = a.get("betaling_dato") or ""
+    snitt5 = a.get("snitt_yield_5ar") or 0
+    frekvens = a.get("frekvens") or ""
+    valuta = a.get("valuta") or "NOK"
+    pris   = a.get("pris") or 0
+    ar_med = a.get("ar_med_utbytte") or 0
+    vekst  = a.get("utbytte_vekst_5ar")
+
+    faq = []
+
+    # 1. Yield
+    if yield_ > 0:
+        faq.append({
+            "q": f"Hva er direkteavkastningen til {navn}?",
+            "a": (
+                f"{navn} ({ticker}) har en direkteavkastning på {yield_:.2f}% basert på siste kurs. "
+                + (f"5-årssnittlig yield er {snitt5:.1f}%. " if snitt5 > 0 else "")
+                + (f"Selskapet har betalt utbytte i {ar_med} år på rad." if ar_med > 5 else "")
+            ).strip()
+        })
+
+    # 2. Ex-dato og utbetaling
+    if ex or bet:
+        ex_str  = _fmt_dato(ex) if ex else "ikke kunngjort"
+        bet_str = _fmt_dato(bet) if bet else "ikke kunngjort"
+        faq.append({
+            "q": f"Når er neste ex-dato og utbetalingsdato for {ticker}?",
+            "a": (
+                f"Neste ex-dato for {ticker} er {ex_str}. "
+                f"Du må eie aksjen før denne datoen for å motta utbytte. "
+                f"Utbetalingsdatoen er {bet_str}."
+            )
+        })
+
+    # 3. Kalkulator-eksempel
+    if pris > 0 and (upa > 0 or yield_ > 0):
+        eks_belop = 100_000
+        antall    = int(eks_belop // pris)
+        utb_aar   = antall * upa if upa > 0 else (yield_ / 100) * (antall * pris)
+        faq.append({
+            "q": f"Hvor mye utbytte gir 100 000 kr investert i {ticker}?",
+            "a": (
+                f"Med 100 000 kr kan du kjøpe omtrent {antall} aksjer i {navn} "
+                f"til kurs {pris:,.0f} {valuta}. "
+                + (f"Det gir ca. {utb_aar:,.0f} {valuta} i utbytte per år "
+                   f"({utb_aar/12:,.0f} {valuta} per måned) basert på {upa} {valuta} per aksje. "
+                   if upa > 0 else
+                   f"Det gir ca. {utb_aar:,.0f} {valuta} i utbytte per år basert på {yield_:.2f}% yield. ")
+                + f"Etter 37,84% utbytteskatt sitter du igjen med ca. {utb_aar * 0.6216:,.0f} {valuta} netto."
+            )
+        })
+
+    # 4. Frekvens
+    if frekvens:
+        freq_forklaring = {
+            "Kvartalsvis": "fire ganger i året (mars, juni, september, desember)",
+            "Halvårlig":   "to ganger i året",
+            "Årlig":       "én gang i året",
+            "Månedlig":    "hver måned",
+        }.get(frekvens, frekvens.lower())
+        faq.append({
+            "q": f"Hvor ofte betaler {navn} utbytte?",
+            "a": (
+                f"{navn} betaler utbytte {freq_forklaring}. "
+                + (f"Selskapet har hatt sammenhengende utbyttebetalinger i {ar_med} år." if ar_med > 3 else "")
+            ).strip()
+        })
+
+    # 5. Utbyttevekst
+    if vekst is not None and abs(vekst) > 0.5:
+        if vekst > 0:
+            faq.append({
+                "q": f"Har {navn} økt utbyttet over tid?",
+                "a": (
+                    f"Ja, {navn} har økt utbyttet med gjennomsnittlig {vekst:.1f}% per år de siste 5 årene. "
+                    "Dette er et tegn på stabil og voksende inntjening."
+                )
+            })
+        else:
+            faq.append({
+                "q": f"Har {navn} redusert utbyttet over tid?",
+                "a": (
+                    f"{navn} har redusert utbyttet med {abs(vekst):.1f}% per år i snitt over de siste 5 årene. "
+                    "Investorer bør se på selskapets inntjeningsutvikling og fremtidsutsikter."
+                )
+            })
+
+    return faq
+
+
+def _aksje_side_html(a, today, relaterte=None):
     ticker  = a["ticker"]
     navn    = a["navn"]
     sektor  = a.get("sektor") or "—"
@@ -963,26 +1060,65 @@ def _aksje_side_html(a, today):
         "</table>"
     ) if hist_rader else ""
 
-    json_ld = json.dumps({
-        "@context": "https://schema.org",
-        "@graph": [
-            {
-                "@type": "BreadcrumbList",
-                "itemListElement": [
-                    {"@type": "ListItem", "position": 1, "name": "Hjem",   "item": "https://exday.no/"},
-                    {"@type": "ListItem", "position": 2, "name": "Aksjer", "item": "https://exday.no/aksjer/"},
-                    {"@type": "ListItem", "position": 3, "name": ticker,   "item": f"https://exday.no/aksjer/{ticker}/"},
-                ]
-            },
-            {
-                "@type": "FinancialProduct",
-                "name": f"{navn} ({ticker})",
-                "description": (besk or meta_desc)[:500],
-                "url": f"https://exday.no/aksjer/{ticker}/",
-                "provider": {"@type": "Organization", "name": "exday.no", "url": "https://exday.no/"},
-            }
-        ]
-    }, ensure_ascii=False, indent=2)
+    # FAQ
+    faq_liste = _lag_faq(a)
+    faq_html = ""
+    if faq_liste:
+        faq_items = "\n".join(
+            f'<div class="faq-item">'
+            f'<h3 class="faq-q">{item["q"]}</h3>'
+            f'<p class="faq-a">{item["a"]}</p>'
+            f'</div>'
+            for item in faq_liste
+        )
+        faq_html = f'<div class="faq-seksjon"><h2>Vanlige spørsmål om {navn}</h2>{faq_items}</div>'
+
+    # Relaterte aksjer
+    relaterte_html = ""
+    if relaterte:
+        kort = "\n".join(
+            f'<a href="/aksjer/{r["ticker"]}/" class="rel-kort">'
+            f'<span class="rel-ticker">{r["ticker"]}</span>'
+            f'<span class="rel-navn">{r["navn"]}</span>'
+            f'<span class="rel-yield">{r.get("utbytte_yield", 0):.1f}%</span>'
+            f'</a>'
+            for r in relaterte
+        )
+        relaterte_html = (
+            f'<div class="relaterte"><h2>Andre {sektor.lower()}-aksjer med utbytte</h2>'
+            f'<div class="rel-grid">{kort}</div></div>'
+        )
+
+    ld_graph = [
+        {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {"@type": "ListItem", "position": 1, "name": "Hjem",   "item": "https://exday.no/"},
+                {"@type": "ListItem", "position": 2, "name": "Aksjer", "item": "https://exday.no/aksjer/"},
+                {"@type": "ListItem", "position": 3, "name": ticker,   "item": f"https://exday.no/aksjer/{ticker}/"},
+            ]
+        },
+        {
+            "@type": "FinancialProduct",
+            "name": f"{navn} ({ticker})",
+            "description": (besk or meta_desc)[:500],
+            "url": f"https://exday.no/aksjer/{ticker}/",
+            "provider": {"@type": "Organization", "name": "exday.no", "url": "https://exday.no/"},
+        },
+    ]
+    if faq_liste:
+        ld_graph.append({
+            "@type": "FAQPage",
+            "mainEntity": [
+                {
+                    "@type": "Question",
+                    "name": item["q"],
+                    "acceptedAnswer": {"@type": "Answer", "text": item["a"]}
+                }
+                for item in faq_liste
+            ]
+        })
+    json_ld = json.dumps({"@context": "https://schema.org", "@graph": ld_graph}, ensure_ascii=False, indent=2)
 
     return f"""<!DOCTYPE html>
 <html lang="nb">
@@ -1056,6 +1192,19 @@ def _aksje_side_html(a, today):
     .updated {{ font-size: 0.78rem; text-align: right; margin-top: 1rem; }}
     .mini-nav {{ display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.5rem; font-size: 0.85rem; }}
     .mini-nav a {{ color: #16a34a; }}
+    .faq-seksjon {{ margin: 1.5rem 0; }}
+    .faq-seksjon h2 {{ margin-bottom: 1rem; }}
+    .faq-item {{ border-radius: 0.75rem; padding: 1rem 1.25rem; margin-bottom: 0.75rem; border: 1px solid; }}
+    .faq-q {{ font-size: 0.95rem; font-weight: 600; margin-bottom: 0.4rem; }}
+    .faq-a {{ font-size: 0.9rem; line-height: 1.6; }}
+    .relaterte {{ margin: 1.5rem 0; }}
+    .relaterte h2 {{ margin-bottom: 0.75rem; }}
+    .rel-grid {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 0.75rem; }}
+    .rel-kort {{ border-radius: 0.75rem; padding: 0.75rem 1rem; border: 1px solid; display: flex; flex-direction: column; gap: 0.2rem; text-decoration: none; transition: border-color 0.15s; }}
+    .rel-kort:hover {{ border-color: #16a34a; text-decoration: none; }}
+    .rel-ticker {{ font-weight: 700; font-size: 1rem; color: #16a34a; }}
+    .rel-navn {{ font-size: 0.75rem; }}
+    .rel-yield {{ font-size: 0.8rem; font-weight: 600; color: #16a34a; }}
     @media (max-width: 480px) {{ h1 {{ font-size: 1.4rem; }} }}
 
     /* Light mode */
@@ -1076,6 +1225,11 @@ def _aksje_side_html(a, today):
     .updated {{ color: #9ca3af; }}
     .breadcrumb {{ color: #6b7280; }}
     .sub {{ color: #6b7280; }}
+    .faq-item {{ background: #fff; border-color: #e5e7eb; }}
+    .faq-q {{ color: #111827; }}
+    .faq-a {{ color: #374151; }}
+    .rel-kort {{ background: #fff; border-color: #e5e7eb; }}
+    .rel-navn {{ color: #6b7280; }}
     .badge {{ background: #dcfce7; color: #15803d; }}
 
     /* Dark mode */
@@ -1103,6 +1257,10 @@ def _aksje_side_html(a, today):
     .dark .kcard .val.green {{ color: #4ade80; }}
     .dark .ytick {{ stroke: #1f2937; }}
     .dark .hbar {{ fill: #22c55e; }}
+    .dark .faq-item {{ background: #111827; border-color: #1f2937; color: #d1d5db; }}
+    .dark .faq-q {{ color: #f3f4f6; }}
+    .dark .rel-kort {{ background: #111827; border-color: #1f2937; }}
+    .dark .rel-navn {{ color: #9ca3af; }}
   </style>
 </head>
 <body>
@@ -1181,6 +1339,10 @@ def _aksje_side_html(a, today):
 
   {hist_seksjon}
 
+  {faq_html}
+
+  {relaterte_html}
+
   <div class="mini-nav">
     <a href="/aksjer/sektor/{_sektor_slug(sektor)}/">← Alle {sektor}-aksjer</a>
     <span style="color:#9ca3af;">·</span>
@@ -1230,11 +1392,24 @@ def generer_aksjesider(aksjer, root_dir):
     aksjer_dir = os.path.join(root_dir, "aksjer")
     os.makedirs(aksjer_dir, exist_ok=True)
 
+    # Bygg sektor-indeks for relaterte aksjer
+    sektor_map = {}
+    for a in aksjer:
+        s = a.get("sektor") or "Annet"
+        sektor_map.setdefault(s, []).append(a)
+
     for a in aksjer:
         ticker = a["ticker"]
         ticker_dir = os.path.join(aksjer_dir, ticker)
         os.makedirs(ticker_dir, exist_ok=True)
-        html = _aksje_side_html(a, today)
+        # Finn inntil 4 relaterte aksjer fra samme sektor (ekskl. seg selv), sortert på yield
+        sektor = a.get("sektor") or "Annet"
+        relaterte = [
+            r for r in sorted(sektor_map.get(sektor, []),
+                               key=lambda x: x.get("utbytte_yield", 0), reverse=True)
+            if r["ticker"] != ticker and (r.get("utbytte_yield") or 0) > 0
+        ][:4]
+        html = _aksje_side_html(a, today, relaterte=relaterte)
         with open(os.path.join(ticker_dir, "index.html"), "w", encoding="utf-8") as f:
             f.write(html)
 

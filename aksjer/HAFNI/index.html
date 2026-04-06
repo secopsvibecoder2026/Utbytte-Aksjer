@@ -64,6 +64,43 @@
         "name": "exday.no",
         "url": "https://exday.no/"
       }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Hva er direkteavkastningen til Hafnia Limited?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Hafnia Limited (HAFNI) har en direkteavkastning på 8.93% basert på siste kurs. 5-årssnittlig yield er 11.4%. Selskapet har betalt utbytte i 6 år på rad."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Hvor mye utbytte gir 100 000 kr investert i HAFNI?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Med 100 000 kr kan du kjøpe omtrent 1321 aksjer i Hafnia Limited til kurs 76 NOK. Det gir ca. 8,930 NOK i utbytte per år (744 NOK per måned) basert på 6.76 NOK per aksje. Etter 37,84% utbytteskatt sitter du igjen med ca. 5,551 NOK netto."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Hvor ofte betaler Hafnia Limited utbytte?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Hafnia Limited betaler utbytte fire ganger i året (mars, juni, september, desember). Selskapet har hatt sammenhengende utbyttebetalinger i 6 år."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Har Hafnia Limited redusert utbyttet over tid?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Hafnia Limited har redusert utbyttet med 22.5% per år i snitt over de siste 5 årene. Investorer bør se på selskapets inntjeningsutvikling og fremtidsutsikter."
+          }
+        }
+      ]
     }
   ]
 }</script>
@@ -108,6 +145,19 @@
     .updated { font-size: 0.78rem; text-align: right; margin-top: 1rem; }
     .mini-nav { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.5rem; font-size: 0.85rem; }
     .mini-nav a { color: #16a34a; }
+    .faq-seksjon { margin: 1.5rem 0; }
+    .faq-seksjon h2 { margin-bottom: 1rem; }
+    .faq-item { border-radius: 0.75rem; padding: 1rem 1.25rem; margin-bottom: 0.75rem; border: 1px solid; }
+    .faq-q { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.4rem; }
+    .faq-a { font-size: 0.9rem; line-height: 1.6; }
+    .relaterte { margin: 1.5rem 0; }
+    .relaterte h2 { margin-bottom: 0.75rem; }
+    .rel-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 0.75rem; }
+    .rel-kort { border-radius: 0.75rem; padding: 0.75rem 1rem; border: 1px solid; display: flex; flex-direction: column; gap: 0.2rem; text-decoration: none; transition: border-color 0.15s; }
+    .rel-kort:hover { border-color: #16a34a; text-decoration: none; }
+    .rel-ticker { font-weight: 700; font-size: 1rem; color: #16a34a; }
+    .rel-navn { font-size: 0.75rem; }
+    .rel-yield { font-size: 0.8rem; font-weight: 600; color: #16a34a; }
     @media (max-width: 480px) { h1 { font-size: 1.4rem; } }
 
     /* Light mode */
@@ -128,6 +178,11 @@
     .updated { color: #9ca3af; }
     .breadcrumb { color: #6b7280; }
     .sub { color: #6b7280; }
+    .faq-item { background: #fff; border-color: #e5e7eb; }
+    .faq-q { color: #111827; }
+    .faq-a { color: #374151; }
+    .rel-kort { background: #fff; border-color: #e5e7eb; }
+    .rel-navn { color: #6b7280; }
     .badge { background: #dcfce7; color: #15803d; }
 
     /* Dark mode */
@@ -155,6 +210,10 @@
     .dark .kcard .val.green { color: #4ade80; }
     .dark .ytick { stroke: #1f2937; }
     .dark .hbar { fill: #22c55e; }
+    .dark .faq-item { background: #111827; border-color: #1f2937; color: #d1d5db; }
+    .dark .faq-q { color: #f3f4f6; }
+    .dark .rel-kort { background: #111827; border-color: #1f2937; }
+    .dark .rel-navn { color: #9ca3af; }
   </style>
 </head>
 <body>
@@ -225,7 +284,7 @@
     <div class="card"><div class="label">P/E</div><div class="val">11.6</div></div>
   </div>
 
-  <div class="desc"><p>Verdens største produkttankrederi. Frakter raffinerte petroleumsprodukter. Svært høy utbyttegrad fra sterk kontantstrøm. Hafnia Limited er notert på Oslo Børs med en markedsverdi på rundt 38 milliarder NOK. Selskapet har hatt sammenhengende utbyttebetalinger i 6 år. Utbyttet utbetales kvartalsvis — fire ganger i året. 5-årssnittlig direkteavkastning er 11.3%, noe som plasserer HAFNI blant de høyest-yielding aksjene i shippingsektoren. Utbetalingsgraden (payout ratio) er 60%, noe som anses som bærekraftig for de fleste markedsforhold. Hafnia Limited er notert på Oslo Børs med en markedsverdi på rundt 38 milliarder NOK. Selskapet har hatt sammenhengende utbyttebetalinger i 6 år. Utbyttet utbetales kvartalsvis — fire ganger i året. 5-årssnittlig direkteavkastning er 11.4%, noe som plasserer HAFNI blant de høyest-yielding aksjene i shippingsektoren. Utbetalingsgraden (payout ratio) er 60%, noe som anses som bærekraftig for de fleste markedsforhold.</p></div>
+  <div class="desc"><p>Verdens største produkttankrederi. Frakter raffinerte petroleumsprodukter. Svært høy utbyttegrad fra sterk kontantstrøm. Hafnia Limited er notert på Oslo Børs med en markedsverdi på rundt 38 milliarder NOK. Selskapet har hatt sammenhengende utbyttebetalinger i 6 år. Utbyttet utbetales kvartalsvis — fire ganger i året. 5-årssnittlig direkteavkastning er 11.3%, noe som plasserer HAFNI blant de høyest-yielding aksjene i shippingsektoren. Utbetalingsgraden (payout ratio) er 60%, noe som anses som bærekraftig for de fleste markedsforhold. 5-årssnittlig direkteavkastning er 11.4%, noe som plasserer HAFNI blant de høyest-yielding aksjene i shippingsektoren.</p></div>
 
   <div class="analyse"><h2>Utbytteanalyse</h2><p>Nåværende direkteavkastning på 8.9% er lavere enn 5-årssnittet på 11.4%, noe som tyder på sterk kursvekst de siste årene. Utbetalingsgraden på 60% er bærekraftig. Utbyttet har falt med 22.5% per år de siste 5 årene.</p></div>
 
@@ -260,6 +319,16 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
           <td>4.74 NOK</td>
           <td>9.85%</td>
         </tr></tbody></table>
+
+  <div class="faq-seksjon"><h2>Vanlige spørsmål om Hafnia Limited</h2><div class="faq-item"><h3 class="faq-q">Hva er direkteavkastningen til Hafnia Limited?</h3><p class="faq-a">Hafnia Limited (HAFNI) har en direkteavkastning på 8.93% basert på siste kurs. 5-årssnittlig yield er 11.4%. Selskapet har betalt utbytte i 6 år på rad.</p></div>
+<div class="faq-item"><h3 class="faq-q">Hvor mye utbytte gir 100 000 kr investert i HAFNI?</h3><p class="faq-a">Med 100 000 kr kan du kjøpe omtrent 1321 aksjer i Hafnia Limited til kurs 76 NOK. Det gir ca. 8,930 NOK i utbytte per år (744 NOK per måned) basert på 6.76 NOK per aksje. Etter 37,84% utbytteskatt sitter du igjen med ca. 5,551 NOK netto.</p></div>
+<div class="faq-item"><h3 class="faq-q">Hvor ofte betaler Hafnia Limited utbytte?</h3><p class="faq-a">Hafnia Limited betaler utbytte fire ganger i året (mars, juni, september, desember). Selskapet har hatt sammenhengende utbyttebetalinger i 6 år.</p></div>
+<div class="faq-item"><h3 class="faq-q">Har Hafnia Limited redusert utbyttet over tid?</h3><p class="faq-a">Hafnia Limited har redusert utbyttet med 22.5% per år i snitt over de siste 5 årene. Investorer bør se på selskapets inntjeningsutvikling og fremtidsutsikter.</p></div></div>
+
+  <div class="relaterte"><h2>Andre shipping-aksjer med utbytte</h2><div class="rel-grid"><a href="/aksjer/HUNT/" class="rel-kort"><span class="rel-ticker">HUNT</span><span class="rel-navn">Hunter Group ASA</span><span class="rel-yield">22.5%</span></a>
+<a href="/aksjer/HAUTO/" class="rel-kort"><span class="rel-ticker">HAUTO</span><span class="rel-navn">Höegh Autoliners ASA</span><span class="rel-yield">16.0%</span></a>
+<a href="/aksjer/COOL/" class="rel-kort"><span class="rel-ticker">COOL</span><span class="rel-navn">Cool Company Ltd</span><span class="rel-yield">13.8%</span></a>
+<a href="/aksjer/OET/" class="rel-kort"><span class="rel-ticker">OET</span><span class="rel-navn">Okeanis Eco Tankers Corp</span><span class="rel-yield">12.0%</span></a></div></div>
 
   <div class="mini-nav">
     <a href="/aksjer/sektor/shipping/">← Alle Shipping-aksjer</a>

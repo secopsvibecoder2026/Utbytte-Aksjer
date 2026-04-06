@@ -57,13 +57,34 @@
     {
       "@type": "FinancialProduct",
       "name": "Scatec ASA (SCATC)",
-      "description": "Norsk leverandør av fornybar energi globalt. Solenergi- og vindkraftprosjekter i fremvoksende markeder. Scatec ASA er notert på Oslo Børs med en markedsverdi på rundt 21 milliarder NOK. Selskapet har hatt sammenhengende utbyttebetalinger i 9 år. 5-årssnittlig direkteavkastning er 2.8%, noe som plasserer SCATC blant de mer moderate aksjene i fornybar energi-sektoren. Scatec ASA er notert på Oslo Børs med en markedsverdi på rundt 21 milliarder NOK. Selskapet har hatt sammenhengende utbyttebetaling",
+      "description": "Norsk leverandør av fornybar energi globalt. Solenergi- og vindkraftprosjekter i fremvoksende markeder. Scatec ASA er notert på Oslo Børs med en markedsverdi på rundt 21 milliarder NOK. Selskapet har hatt sammenhengende utbyttebetalinger i 9 år. 5-årssnittlig direkteavkastning er 2.8%, noe som plasserer SCATC blant de mer moderate aksjene i fornybar energi-sektoren.",
       "url": "https://exday.no/aksjer/SCATC/",
       "provider": {
         "@type": "Organization",
         "name": "exday.no",
         "url": "https://exday.no/"
       }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Hvor ofte betaler Scatec ASA utbytte?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Scatec ASA betaler utbytte uregelmessig. Selskapet har hatt sammenhengende utbyttebetalinger i 9 år."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Har Scatec ASA økt utbyttet over tid?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Ja, Scatec ASA har økt utbyttet med gjennomsnittlig 33.4% per år de siste 5 årene. Dette er et tegn på stabil og voksende inntjening."
+          }
+        }
+      ]
     }
   ]
 }</script>
@@ -108,6 +129,19 @@
     .updated { font-size: 0.78rem; text-align: right; margin-top: 1rem; }
     .mini-nav { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.5rem; font-size: 0.85rem; }
     .mini-nav a { color: #16a34a; }
+    .faq-seksjon { margin: 1.5rem 0; }
+    .faq-seksjon h2 { margin-bottom: 1rem; }
+    .faq-item { border-radius: 0.75rem; padding: 1rem 1.25rem; margin-bottom: 0.75rem; border: 1px solid; }
+    .faq-q { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.4rem; }
+    .faq-a { font-size: 0.9rem; line-height: 1.6; }
+    .relaterte { margin: 1.5rem 0; }
+    .relaterte h2 { margin-bottom: 0.75rem; }
+    .rel-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 0.75rem; }
+    .rel-kort { border-radius: 0.75rem; padding: 0.75rem 1rem; border: 1px solid; display: flex; flex-direction: column; gap: 0.2rem; text-decoration: none; transition: border-color 0.15s; }
+    .rel-kort:hover { border-color: #16a34a; text-decoration: none; }
+    .rel-ticker { font-weight: 700; font-size: 1rem; color: #16a34a; }
+    .rel-navn { font-size: 0.75rem; }
+    .rel-yield { font-size: 0.8rem; font-weight: 600; color: #16a34a; }
     @media (max-width: 480px) { h1 { font-size: 1.4rem; } }
 
     /* Light mode */
@@ -128,6 +162,11 @@
     .updated { color: #9ca3af; }
     .breadcrumb { color: #6b7280; }
     .sub { color: #6b7280; }
+    .faq-item { background: #fff; border-color: #e5e7eb; }
+    .faq-q { color: #111827; }
+    .faq-a { color: #374151; }
+    .rel-kort { background: #fff; border-color: #e5e7eb; }
+    .rel-navn { color: #6b7280; }
     .badge { background: #dcfce7; color: #15803d; }
 
     /* Dark mode */
@@ -155,6 +194,10 @@
     .dark .kcard .val.green { color: #4ade80; }
     .dark .ytick { stroke: #1f2937; }
     .dark .hbar { fill: #22c55e; }
+    .dark .faq-item { background: #111827; border-color: #1f2937; color: #d1d5db; }
+    .dark .faq-q { color: #f3f4f6; }
+    .dark .rel-kort { background: #111827; border-color: #1f2937; }
+    .dark .rel-navn { color: #9ca3af; }
   </style>
 </head>
 <body>
@@ -225,7 +268,7 @@
     <div class="card"><div class="label">P/E</div><div class="val">21.8</div></div>
   </div>
 
-  <div class="desc"><p>Norsk leverandør av fornybar energi globalt. Solenergi- og vindkraftprosjekter i fremvoksende markeder. Scatec ASA er notert på Oslo Børs med en markedsverdi på rundt 21 milliarder NOK. Selskapet har hatt sammenhengende utbyttebetalinger i 9 år. 5-årssnittlig direkteavkastning er 2.8%, noe som plasserer SCATC blant de mer moderate aksjene i fornybar energi-sektoren. Scatec ASA er notert på Oslo Børs med en markedsverdi på rundt 21 milliarder NOK. Selskapet har hatt sammenhengende utbyttebetalinger i 9 år. 5-årssnittlig direkteavkastning er 2.8%, noe som plasserer SCATC blant de mer moderate aksjene i fornybar energi-sektoren.</p></div>
+  <div class="desc"><p>Norsk leverandør av fornybar energi globalt. Solenergi- og vindkraftprosjekter i fremvoksende markeder. Scatec ASA er notert på Oslo Børs med en markedsverdi på rundt 21 milliarder NOK. Selskapet har hatt sammenhengende utbyttebetalinger i 9 år. 5-årssnittlig direkteavkastning er 2.8%, noe som plasserer SCATC blant de mer moderate aksjene i fornybar energi-sektoren.</p></div>
 
   <div class="analyse"><h2>Utbytteanalyse</h2><p>Utbyttet har vokst med 33.4% per år de siste 5 årene.</p></div>
 
@@ -245,6 +288,13 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
           <td>2.54 NOK</td>
           <td>3.32%</td>
         </tr></tbody></table>
+
+  <div class="faq-seksjon"><h2>Vanlige spørsmål om Scatec ASA</h2><div class="faq-item"><h3 class="faq-q">Hvor ofte betaler Scatec ASA utbytte?</h3><p class="faq-a">Scatec ASA betaler utbytte uregelmessig. Selskapet har hatt sammenhengende utbyttebetalinger i 9 år.</p></div>
+<div class="faq-item"><h3 class="faq-q">Har Scatec ASA økt utbyttet over tid?</h3><p class="faq-a">Ja, Scatec ASA har økt utbyttet med gjennomsnittlig 33.4% per år de siste 5 årene. Dette er et tegn på stabil og voksende inntjening.</p></div></div>
+
+  <div class="relaterte"><h2>Andre fornybar energi-aksjer med utbytte</h2><div class="rel-grid"><a href="/aksjer/AFG/" class="rel-kort"><span class="rel-ticker">AFG</span><span class="rel-navn">Arendals Fossekompani ASA</span><span class="rel-yield">3.8%</span></a>
+<a href="/aksjer/BONHR/" class="rel-kort"><span class="rel-ticker">BONHR</span><span class="rel-navn">Bonheur ASA</span><span class="rel-yield">3.0%</span></a>
+<a href="/aksjer/AFK/" class="rel-kort"><span class="rel-ticker">AFK</span><span class="rel-navn">Arendals Fossekompani ASA (B-aksje)</span><span class="rel-yield">2.5%</span></a></div></div>
 
   <div class="mini-nav">
     <a href="/aksjer/sektor/fornybar-energi/">← Alle Fornybar energi-aksjer</a>
