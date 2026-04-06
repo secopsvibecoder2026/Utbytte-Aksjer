@@ -407,6 +407,24 @@ function initFilter() {
     localStorage.setItem('sortering', JSON.stringify(sortering));
     visOversikt();
   });
+
+  // Paginering
+  document.getElementById('paginering-kontroller')?.addEventListener('click', e => {
+    const perBtn = e.target.closest('[data-per-side]');
+    if (perBtn) {
+      paginering.perSide = parseInt(perBtn.dataset.perSide, 10);
+      paginering.side = 1;
+      localStorage.setItem('paginering-per-side', paginering.perSide);
+      visOversikt(true);
+      return;
+    }
+    const sideBtn = e.target.closest('[data-side]');
+    if (sideBtn && !sideBtn.disabled) {
+      paginering.side = parseInt(sideBtn.dataset.side, 10);
+      visOversikt(true);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  });
 }
 
 
@@ -754,15 +772,26 @@ function visHvaSkjerIDag() {
 }
 
 
-function visOversikt() {
+function visOversikt(bevarSide = false) {
+  if (!bevarSide) paginering.side = 1;
   visHvaSkjerIDag();
   visDagensBevegelser();
-  const data = sorterAksjer(filtrerteAksjer());
+  const alleData = sorterAksjer(filtrerteAksjer());
   const tbody = document.getElementById('tabell-body');
   const kortBody = document.getElementById('kort-body');
   const ingenEl = document.getElementById('ingen-resultater');
   const ingenMobilEl = document.getElementById('ingen-resultater-mobil');
   const antallEl = document.getElementById('antall-vist');
+
+  // ── PAGINERING ────────────────────────────────────────────────────────────
+  const totalAntall = alleData.length;
+  const perSide = paginering.perSide;
+  const sidetall = perSide === 0 ? 1 : Math.max(1, Math.ceil(totalAntall / perSide));
+  if (paginering.side > sidetall) paginering.side = sidetall;
+  if (paginering.side < 1) paginering.side = 1;
+  const sideFra = perSide === 0 ? 0 : (paginering.side - 1) * perSide;
+  const sideTil = perSide === 0 ? totalAntall : Math.min(sideFra + perSide, totalAntall);
+  const data = alleData.slice(sideFra, sideTil);
 
   // Oppdater sorteringsikoner og aria-sort
   document.querySelectorAll('th.sortable').forEach(th => {
@@ -792,7 +821,11 @@ function visOversikt() {
   }
   ingenEl.classList.add('hidden');
   ingenMobilEl.classList.add('hidden');
-  antallEl.textContent = `Viser ${data.length} av ${alleAksjer.length} aksjer`;
+  if (perSide === 0 || totalAntall <= perSide) {
+    antallEl.textContent = `Viser ${totalAntall} av ${alleAksjer.length} aksjer`;
+  } else {
+    antallEl.textContent = `Viser ${sideFra + 1}–${sideTil} av ${totalAntall} aksjer`;
+  }
 
   const idag = new Date(); idag.setHours(0,0,0,0);
   const om30 = new Date(idag); om30.setDate(om30.getDate() + 30);
@@ -1022,7 +1055,7 @@ function visOversikt() {
       e.stopPropagation();
       toggleFav(favBtn.dataset.ticker);
       oppdaterFavBtn();
-      visOversikt();
+      visOversikt(true);
       return;
     }
     const kort = e.target.closest('[data-ticker]');
@@ -1030,6 +1063,46 @@ function visOversikt() {
     const aksje = alleAksjer.find(a => a.ticker === kort.dataset.ticker);
     if (aksje) visModal(aksje);
   };
+
+  renderPaginering(totalAntall, sidetall);
+}
+
+function renderPaginering(totalAntall, sidetall) {
+  const el = document.getElementById('paginering-kontroller');
+  if (!el) return;
+  const { side, perSide } = paginering;
+
+  const perSideAlternativer = [
+    { val: 25, label: '25' },
+    { val: 50, label: '50' },
+    { val: 75, label: '75' },
+    { val: 100, label: '100' },
+    { val: 0, label: 'Alle' },
+  ];
+
+  const perSideHtml = perSideAlternativer.map(({ val, label }) => {
+    const aktiv = val === perSide;
+    return `<button data-per-side="${val}" class="px-2.5 py-1 rounded text-xs font-medium transition-colors ${
+      aktiv
+        ? 'bg-brand-600 text-white dark:bg-brand-500'
+        : 'text-gray-500 dark:text-gray-400 hover:text-brand-600 dark:hover:text-brand-400 hover:bg-gray-100 dark:hover:bg-gray-800'
+    }">${label}</button>`;
+  }).join('');
+
+  const visNav = perSide !== 0 && sidetall > 1;
+  const navHtml = visNav ? `
+    <div class="flex items-center gap-1">
+      <button data-side="${side - 1}" ${side <= 1 ? 'disabled' : ''} class="px-2.5 py-1 rounded text-xs font-medium text-gray-500 dark:text-gray-400 hover:text-brand-600 dark:hover:text-brand-400 hover:bg-gray-100 dark:hover:bg-gray-800 disabled:opacity-30 disabled:cursor-default transition-colors">‹ Forrige</button>
+      <span class="text-xs text-gray-400 dark:text-gray-500 px-1">Side ${side} av ${sidetall}</span>
+      <button data-side="${side + 1}" ${side >= sidetall ? 'disabled' : ''} class="px-2.5 py-1 rounded text-xs font-medium text-gray-500 dark:text-gray-400 hover:text-brand-600 dark:hover:text-brand-400 hover:bg-gray-100 dark:hover:bg-gray-800 disabled:opacity-30 disabled:cursor-default transition-colors">Neste ›</button>
+    </div>` : '';
+
+  el.innerHTML = `
+    <div class="flex items-center gap-1">
+      <span class="text-xs text-gray-400 dark:text-gray-500 mr-1">Vis:</span>
+      ${perSideHtml}
+    </div>
+    ${navHtml}`;
 }
 
 function sorterAksjer(data) {

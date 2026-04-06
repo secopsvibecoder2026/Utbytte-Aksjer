@@ -15,6 +15,11 @@ let aktivTab = 'oversikt';
 let aktivOversiktSubTab = 'aksjer';
 let kompaktModus = false;
 let visKunFavoritter = false;
+let paginering = (() => {
+  const lagret = parseInt(localStorage.getItem('paginering-per-side') || '25', 10);
+  const perSide = [25, 50, 75, 100, 0].includes(lagret) ? lagret : 25;
+  return { side: 1, perSide };
+})();
 let aktivListeFilter = ''; // '' = alle, 'pf' = portefølje, 'wl:{id}' = watchliste
 
 // ── INIT ───────────────────────────────────────────────────────────────────
