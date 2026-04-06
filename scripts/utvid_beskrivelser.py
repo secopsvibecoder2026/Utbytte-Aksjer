@@ -114,7 +114,14 @@ def lag_beskrivelse(t: dict, a: dict) -> str:
             vurd = "noe som kan gjøre utbyttet sårbart ved svakere inntjening"
         deler.append(f"Utbetalingsgraden (payout ratio) er {payout:.0f}%, {vurd}.")
 
-    return " ".join(deler)
+    # Fjern dupliserte setninger før sammenslåing
+    sett = set()
+    unike = []
+    for d in deler:
+        if d not in sett:
+            sett.add(d)
+            unike.append(d)
+    return " ".join(unike)
 
 
 def main():
