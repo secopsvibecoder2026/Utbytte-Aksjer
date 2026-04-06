@@ -78,45 +78,53 @@ def lag_posttekst(d):
     fre    = fmt_dato_no(d["friday"].isoformat())
     linjer = []
 
-    linjer.append(f"📅 Uke {uke} på Oslo Børs ({man}–{fre})")
+    linjer.append(f"🗓️ God mandag! Her er utbytteuken du bør følge med på — uke {uke} ({man}–{fre})")
     linjer.append("")
 
     # Ex-datoer denne uken
     if d["ex_denne"]:
-        linjer.append("📌 Ex-datoer denne uken (siste dag å kjøpe for utbytte):")
+        antall_ex = len(d["ex_denne"])
+        ex_tekst = "Én aksje har" if antall_ex == 1 else f"{antall_ex} aksjer har"
+        linjer.append(f"📌 {ex_tekst} ex-dato denne uken.")
+        linjer.append("Kjøper du innen dagen FØR ex-dato, er du med på utbyttet 💰")
+        linjer.append("")
         for a in d["ex_denne"]:
-            yield_str = f" · {a['utbytte_yield']:.1f}% yield" if a.get("utbytte_yield") else ""
-            utb_str   = f" · {a['utbytte_per_aksje']:.2f} {a.get('valuta','NOK')}" if a.get("utbytte_per_aksje") else ""
-            linjer.append(f"  {fmt_dato_no(a['ex_dato'])} — {a['ticker']} ({a['navn'].split()[0]}){yield_str}{utb_str}")
+            yield_str = f"  →  {a['utbytte_yield']:.1f}% yield" if a.get("utbytte_yield") else ""
+            utb_str   = f"  ·  {a['utbytte_per_aksje']:.2f} {a.get('valuta','NOK')} per aksje" if a.get("utbytte_per_aksje") else ""
+            linjer.append(f"  📍 {fmt_dato_no(a['ex_dato'])} — {a['navn']} ({a['ticker']}){yield_str}{utb_str}")
     else:
-        linjer.append("📌 Ingen ex-datoer denne uken.")
+        linjer.append("📌 Ingen ex-datoer denne uken — rolig uke på utbyttesiden.")
     linjer.append("")
 
     # Utbetalinger denne uken
     if d["bet_denne"]:
-        linjer.append("💰 Utbyttebetalinger denne uken:")
+        antall_bet = len(d["bet_denne"])
+        bet_fl = "utbetalinger" if antall_bet > 1 else "utbetaling"
+        linjer.append(f"💸 {antall_bet} {bet_fl} lander på kontoen denne uken:")
         for a in d["bet_denne"]:
-            utb_str = f" · {a['utbytte_per_aksje']:.2f} {a.get('valuta','NOK')}" if a.get("utbytte_per_aksje") else ""
-            linjer.append(f"  {fmt_dato_no(a['betaling_dato'])} — {a['ticker']} ({a['navn'].split()[0]}){utb_str}")
+            utb_str = f"  ·  {a['utbytte_per_aksje']:.2f} {a.get('valuta','NOK')} per aksje" if a.get("utbytte_per_aksje") else ""
+            linjer.append(f"  💰 {fmt_dato_no(a['betaling_dato'])} — {a['navn']} ({a['ticker']}){utb_str}")
         linjer.append("")
 
     # Rapporter denne uken
     if d["rap_denne"]:
-        linjer.append("📊 Kvartalsrapporter denne uken:")
+        antall_rap = len(d["rap_denne"])
+        rap_fl = "kvartalsrapporter" if antall_rap > 1 else "kvartalsrapport"
+        linjer.append(f"📊 {antall_rap} {rap_fl} denne uken — følg med på tallene:")
         for a in d["rap_denne"]:
-            linjer.append(f"  {fmt_dato_no(a['rapport_dato'])} — {a['ticker']} ({a['navn'].split()[0]})")
+            linjer.append(f"  📋 {fmt_dato_no(a['rapport_dato'])} — {a['navn']} ({a['ticker']})")
         linjer.append("")
 
     # Lenker
-    linjer.append("🔗 Se mer:")
-    linjer.append("  📅 Utbyttekalender: exday.no/utbyttekalender/")
+    linjer.append("🔗 Les mer om ukens aksjer:")
+    linjer.append(f"  📅 Utbyttekalender: exday.no/utbyttekalender/")
     if d["ex_denne"]:
         for a in d["ex_denne"]:
-            linjer.append(f"  📈 {a['ticker']}: exday.no/aksjer/{a['ticker']}/")
+            linjer.append(f"  📈 {a['navn']}: exday.no/aksjer/{a['ticker']}/")
     linjer.append("")
-    linjer.append("👉 Full oversikt: exday.no")
+    linjer.append("👉 Full oversikt over alle norske utbytteaksjer: exday.no")
     linjer.append("")
-    linjer.append("#utbytte #OsloBørs #aksjer #exday #utbytteaksjer #investering #passivInntekt")
+    linjer.append("#utbytte #OsloBørs #aksjer #exday #utbytteaksjer #investering #passivInntekt #uke" + str(uke))
 
     return "\n".join(linjer)
 
@@ -145,7 +153,7 @@ def lag_png(d):
     uke   = d["uke_nr"]
     man   = fmt_dato_no(d["monday"].isoformat())
     fre   = fmt_dato_no(d["friday"].isoformat())
-    draw.text((56, 40 + 42), f"Uke {uke}  ·  {man} – {fre}", font=fnt(16), fill=GREEN_L)
+    draw.text((56, 40 + 42), f"Uke {uke}  ·  {man} – {fre}  ·  Oslo Børs", font=fnt(16), fill=GREEN_L)
     draw.text((56, 96), "Hva skjer på\nOslo Børs denne uken?", font=fnt(38, bold=True), fill=WHITE)
 
     # Tre kolonner
@@ -154,10 +162,16 @@ def lag_png(d):
     col_h  = 300
     top_y  = 210
     cols   = [
-        (56,             top_y, 56 + col_w,             top_y + col_h),
-        (56+col_w+col_gap, top_y, 56+col_w*2+col_gap,     top_y + col_h),
-        (56+col_w*2+col_gap*2, top_y, 56+col_w*3+col_gap*2, top_y + col_h),
+        (56,                    top_y, 56 + col_w,                top_y + col_h),
+        (56+col_w+col_gap,      top_y, 56+col_w*2+col_gap,        top_y + col_h),
+        (56+col_w*2+col_gap*2,  top_y, 56+col_w*3+col_gap*2,      top_y + col_h),
     ]
+
+    def kortnavn(navn):
+        # Fjern ASA, Ltd, AS o.l. for kompakthet i PNG
+        for suf in (" ASA", " AS", " Ltd", " Limited", " Holding", " Group", " Bank"):
+            navn = navn.replace(suf, "")
+        return navn.strip()
 
     def kolonne(idx, tittel, ikon, items, farge_tittel):
         x1, y1, x2, y2 = cols[idx]
@@ -172,17 +186,27 @@ def lag_png(d):
             draw.text((x1+16, y), row, font=fnt(13), fill=WHITE)
             y += 22
 
-    # Kol 1: Ex-datoer
-    ex_rader = [f"{fmt_dato_no(a['ex_dato'])}  {a['ticker']}  {a['utbytte_yield']:.1f}%" if a.get('utbytte_yield') else f"{fmt_dato_no(a['ex_dato'])}  {a['ticker']}" for a in d["ex_denne"]]
+    # Kol 1: Ex-datoer — fullt navn
+    ex_rader = [
+        f"{fmt_dato_no(a['ex_dato'])}  {kortnavn(a['navn'])}  {a['utbytte_yield']:.1f}%"
+        if a.get('utbytte_yield') else
+        f"{fmt_dato_no(a['ex_dato'])}  {kortnavn(a['navn'])}"
+        for a in d["ex_denne"]
+    ]
     kolonne(0, "Ex-datoer", "📌", ex_rader, GREEN_L)
 
-    # Kol 2: Rapporter
-    rap_rader = [f"{fmt_dato_no(a['rapport_dato'])}  {a['ticker']}" for a in d["rap_denne"]]
+    # Kol 2: Rapporter — fullt navn
+    rap_rader = [f"{fmt_dato_no(a['rapport_dato'])}  {kortnavn(a['navn'])}" for a in d["rap_denne"]]
     kolonne(1, "Rapporter", "📊", rap_rader, ORANGE)
 
-    # Kol 3: Utbetalinger (eller lenker hvis ingen)
+    # Kol 3: Utbetalinger — fullt navn
     if d["bet_denne"]:
-        bet_rader = [f"{fmt_dato_no(a['betaling_dato'])}  {a['ticker']}  {a['utbytte_per_aksje']:.2f} {a.get('valuta','NOK')}" if a.get('utbytte_per_aksje') else f"{fmt_dato_no(a['betaling_dato'])}  {a['ticker']}" for a in d["bet_denne"]]
+        bet_rader = [
+            f"{fmt_dato_no(a['betaling_dato'])}  {kortnavn(a['navn'])}  {a['utbytte_per_aksje']:.2f} {a.get('valuta','NOK')}"
+            if a.get('utbytte_per_aksje') else
+            f"{fmt_dato_no(a['betaling_dato'])}  {kortnavn(a['navn'])}"
+            for a in d["bet_denne"]
+        ]
         kolonne(2, "Utbetalinger", "💰", bet_rader, BLUE)
     else:
         kolonne(2, "Utbetalinger", "💰", ["Ingen denne uken"], BLUE)
