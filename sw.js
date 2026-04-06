@@ -1,7 +1,7 @@
 'use strict';
 
 // CACHE-VERSJON BYTTES AUTOMATISK AV GITHUB ACTIONS VED HVERT DEPLOY
-const CACHE = 'exday-v8';
+const CACHE = 'exday-v9';
 const NOTIF_CACHE = 'notif-prefs-v1';
 
 const PRECACHE = [
@@ -80,11 +80,11 @@ self.addEventListener('fetch', event => {
     return;
   }
 
-  // 3. JS og CSS: nettverks-first — brukere får alltid siste versjon,
-  //    faller tilbake på cache ved nettverksfeil
+  // 3. JS og CSS: nettverks-first med cache-bypass — samme som HTML-navigasjon
+  //    for å omgå nettleserens HTTP-cache (GitHub Pages kan sette max-age)
   if (/\.(js|css)(\?.*)?$/.test(url.pathname)) {
     event.respondWith(
-      fetch(request)
+      fetch(new Request(request, { cache: 'no-cache' }))
         .then(resp => {
           if (resp.ok) caches.open(CACHE).then(c => c.put(request, resp.clone()));
           return resp;
