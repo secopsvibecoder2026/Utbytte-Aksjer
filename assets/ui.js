@@ -1864,7 +1864,7 @@ function modalKalkulator(a) {
   return `
     <div class="mt-4 pt-4 border-t border-gray-100 dark:border-gray-800">
       <h3 class="text-sm font-semibold text-gray-800 dark:text-gray-200 mb-3">Beregn utbytte</h3>
-      <div class="rounded-lg bg-gray-50 dark:bg-gray-800/60 border border-gray-200 dark:border-gray-700 p-4 space-y-3">
+      <div class="rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-4 space-y-3">
         <div class="flex items-center gap-3">
           <label class="text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap">Invester (kr)</label>
           <input id="modal-kal-belop" type="number" min="1" step="1000" value="${startBelop}"
