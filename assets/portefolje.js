@@ -1583,7 +1583,9 @@ function visRebalansering(alleBeholdning) {
     const maalPct = maal[sektor] !== undefined ? maal[sektor] : Math.round(naaværendePct);
     const diff = naaværendePct - maalPct;
     let statusKlasse, statusTekst;
-    if (Math.abs(diff) <= 5) {
+    if (maalPct > 0 && naaværendePct === 0) {
+      statusKlasse = 'text-orange-500'; statusTekst = `Kjøp +${maalPct.toFixed(0)}%`;
+    } else if (Math.abs(diff) <= 5) {
       statusKlasse = 'text-green-600 dark:text-green-400'; statusTekst = 'OK';
     } else if (diff < -5) {
       statusKlasse = 'text-orange-500'; statusTekst = `Kjøp +${Math.abs(diff).toFixed(0)}%`;
@@ -1592,10 +1594,11 @@ function visRebalansering(alleBeholdning) {
     }
     const barBredde = Math.min(100, naaværendePct).toFixed(1);
     const maalBredde = Math.min(100, maalPct).toFixed(1);
+    const sektorSlug = sektor.toLowerCase().replace(/\s+/g, '-').replace(/[æå]/g, m => m === 'æ' ? 'ae' : 'a').replace(/ø/g, 'o');
     return `
       <div class="space-y-1" data-sektor="${sektor}">
         <div class="flex items-center gap-3">
-          <span class="text-sm font-medium w-36 shrink-0 truncate">${sektor}</span>
+          <a href="/aksjer/sektor/${sektorSlug}/" class="text-sm font-medium w-36 shrink-0 truncate text-gray-900 dark:text-gray-100 hover:text-brand-600 dark:hover:text-brand-400 hover:underline">${sektor}</a>
           <span class="text-xs text-gray-500 dark:text-gray-400 w-12 text-right shrink-0">${naaværendePct.toFixed(1)}%</span>
           <div class="flex items-center gap-1 flex-1">
             <span class="text-xs text-gray-400 shrink-0">Mål:</span>
