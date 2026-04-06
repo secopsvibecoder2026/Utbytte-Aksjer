@@ -1672,7 +1672,7 @@ function visRebalansering(alleBeholdning) {
             <div class="flex items-center gap-1.5 flex-wrap">
               <a href="/aksjer/sektor/${slug}/"
                  class="text-sm font-semibold text-gray-900 dark:text-gray-100 hover:text-brand-600 dark:hover:text-brand-400 hover:underline">${sektor}</a>
-              ${chipTekst ? `<span class="text-[10px] ${eid > 0 ? 'bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400' : 'bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400'} rounded-full px-1.5 py-0.5 shrink-0 font-medium">${chipTekst}</span>` : ''}
+              ${chipTekst ? `<span class="text-xs ${eid > 0 ? 'text-brand-500 dark:text-brand-400' : 'text-gray-400 dark:text-gray-500'} shrink-0">${chipTekst}</span>` : ''}
             </div>
             <div class="flex items-center gap-2 mt-0.5 flex-wrap">
               <p class="text-xs ${statusKlasse}">${statusTekst}</p>
