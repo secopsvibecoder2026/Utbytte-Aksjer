@@ -94,6 +94,7 @@ function visCacheBanner(ts) {
 
 function lastInnData(json) {
   alleAksjer     = Array.isArray(json) ? json : (json.aksjer || []);
+  window.alleAksjer = alleAksjer;
   osebxHistorikk = json.osebx_historikk || {};
 
   const ts = json.sist_oppdatert;
