@@ -680,33 +680,6 @@
         <!-- Sammendragskort -->
         <section class="grid grid-cols-2 sm:grid-cols-3 gap-3">
           <div class="stat-card">
-            <p class="stat-label">Forventet/år</p>
-            <p class="stat-value" id="pf-stat-ar">—</p>
-            <div id="pf-stat-ar-breakdown" class="hidden mt-1.5 space-y-0.5">
-              <div class="flex justify-between text-xs">
-                <span class="text-green-600 dark:text-green-400">✓ Vedtatt</span>
-                <span class="font-medium text-green-600 dark:text-green-400" id="pf-stat-ar-vedtatt"></span>
-              </div>
-              <div class="flex justify-between text-xs">
-                <span class="text-gray-400">~ Estimert</span>
-                <span class="font-medium text-gray-400" id="pf-stat-ar-estimert"></span>
-              </div>
-            </div>
-          </div>
-          <div class="stat-card">
-            <p class="stat-label">Snitt/måned</p>
-            <p class="stat-value" id="pf-stat-mnd">—</p>
-            <div id="pf-mnd-mål" class="hidden mt-1.5">
-              <div class="flex justify-between text-xs text-gray-400 mb-0.5">
-                <span id="pf-mnd-mål-pct"></span>
-                <span id="pf-mnd-mål-tekst"></span>
-              </div>
-              <div class="h-1 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
-                <div id="pf-mnd-mål-bar" class="h-full bg-brand-500 rounded-full transition-all duration-500" style="width:0%"></div>
-              </div>
-            </div>
-          </div>
-          <div class="stat-card">
             <p class="stat-label">Neste utbetaling</p>
             <p class="stat-value text-base" id="pf-stat-neste">—</p>
             <p class="text-xs text-gray-400 mt-0.5" id="pf-stat-neste-navn"></p>
@@ -787,6 +760,37 @@
 
         <!-- ── INNTEKT ── -->
         <div id="stats-sub-inntekt" class="hidden space-y-4">
+
+        <!-- Inntektsoversikt øverst -->
+        <section class="grid grid-cols-2 gap-3">
+          <div class="stat-card">
+            <p class="stat-label">Forventet/år</p>
+            <p class="stat-value" id="pf-stat-ar">—</p>
+            <div id="pf-stat-ar-breakdown" class="hidden mt-1.5 space-y-0.5">
+              <div class="flex justify-between text-xs">
+                <span class="text-green-600 dark:text-green-400">✓ Vedtatt</span>
+                <span class="font-medium text-green-600 dark:text-green-400" id="pf-stat-ar-vedtatt"></span>
+              </div>
+              <div class="flex justify-between text-xs">
+                <span class="text-gray-400">~ Estimert</span>
+                <span class="font-medium text-gray-400" id="pf-stat-ar-estimert"></span>
+              </div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <p class="stat-label">Snitt/måned</p>
+            <p class="stat-value" id="pf-stat-mnd">—</p>
+            <div id="pf-mnd-mål" class="hidden mt-1.5">
+              <div class="flex justify-between text-xs text-gray-400 mb-0.5">
+                <span id="pf-mnd-mål-pct"></span>
+                <span id="pf-mnd-mål-tekst"></span>
+              </div>
+              <div class="h-1 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
+                <div id="pf-mnd-mål-bar" class="h-full bg-brand-500 rounded-full transition-all duration-500" style="width:0%"></div>
+              </div>
+            </div>
+          </div>
+        </section>
 
         <!-- Historisk porteføljeutvikling -->
         <div id="pf-historikk-wrapper" class="hidden bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4 shadow-sm">
