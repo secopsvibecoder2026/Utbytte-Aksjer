@@ -1,12 +1,11 @@
 User-agent: *
 Allow: /
 Disallow: /data/
+Disallow: /*?aksje=
 
+# /data/ inneholder rå JSON-datafiler som ikke skal indekseres.
+# ?aksje= er SPA-parametre – de individuelle aksjesidene finnes under /aksjer/<ticker>/
 # Automatisert scraping og massenedlasting av innhold er ikke tillatt.
-# Innholdet på exday.no er ment for menneskelige besøkende.
-# For tilgang til dataene, se data/aksjer.json som er åpent tilgjengelig.
 # Kontakt: github.com/secopsvibecoder2026/utbytte-aksjer
-
-Crawl-delay: 10
 
 Sitemap: https://exday.no/sitemap.xml
