@@ -1554,63 +1554,127 @@ function hentRebalanseringsmaal() {
 }
 function lagreRebalanseringsmaal(maal) { localStorage.setItem('pf_rebalansering', JSON.stringify(maal)); }
 
+function _rebalSlug(sektor) {
+  return sektor.toLowerCase()
+    .replace(/æ/g, 'ae').replace(/ø/g, 'o').replace(/å/g, 'a')
+    .replace(/\s+/g, '-');
+}
+
 function visRebalansering(alleBeholdning) {
-  const el = document.getElementById('rebal-rader');
+  const el     = document.getElementById('rebal-rader');
+  const hdrEl  = document.getElementById('rebal-header-info');
   if (!el) return;
 
+  const fmtKr = v => v.toLocaleString('nb-NO', { maximumFractionDigits: 0 }) + ' kr';
+
   const totalVerdi = alleBeholdning.reduce((s, a) => s + a.antall * (a.pris || 0), 0);
-  if (totalVerdi <= 0) { el.innerHTML = '<p class="text-xs text-gray-400 text-center py-4">Legg til aksjer med kurs for å se rebalansering.</p>'; return; }
+  if (totalVerdi <= 0) {
+    el.innerHTML = '<p class="text-xs text-gray-400 dark:text-gray-500 text-center py-6">Legg til aksjer med kurs for å se rebalansering.</p>';
+    if (hdrEl) hdrEl.innerHTML = '';
+    return;
+  }
 
   // Grupper etter sektor (portefølje)
   const sektorMap = {};
   alleBeholdning.forEach(a => {
     const v = a.antall * (a.pris || 0);
-    sektorMap[a.sektor] = (sektorMap[a.sektor] || 0) + v;
+    if (a.sektor) sektorMap[a.sektor] = (sektorMap[a.sektor] || 0) + v;
   });
 
-  // Legg til alle sektorer fra aksjelisten med 0 hvis ikke i portefølje
+  // Tell aksjer og legg til sektorer uten holdings
+  const sektorAntall = {};
   (window.alleAksjer || []).forEach(a => {
-    if (a.sektor && !(a.sektor in sektorMap)) {
-      sektorMap[a.sektor] = 0;
-    }
+    if (!a.sektor) return;
+    sektorAntall[a.sektor] = (sektorAntall[a.sektor] || 0) + 1;
+    if (!(a.sektor in sektorMap)) sektorMap[a.sektor] = 0;
   });
 
   const sektorer = Object.entries(sektorMap).sort((a, b) => b[1] - a[1]);
   const maal = hentRebalanseringsmaal();
 
+  // Beregn mål-sum
+  const totalMaal = sektorer.reduce((s, [sek]) => {
+    return s + (maal[sek] !== undefined ? maal[sek] : Math.round(sektorMap[sek] / totalVerdi * 100));
+  }, 0);
+  const maalOk = Math.abs(totalMaal - 100) <= 1;
+
+  // Vis bare sektorer med aktivitet (skjul-toggle)
+  const skjulTomme = localStorage.getItem('rebal-skjul-tomme') !== 'false';
+
+  // Header-info
+  if (hdrEl) {
+    const maalFarge = maalOk ? 'text-green-600 dark:text-green-400' : 'text-orange-500';
+    hdrEl.innerHTML = `
+      <div class="flex items-center gap-1.5">
+        <span class="text-xs text-gray-500 dark:text-gray-400">Total mål:</span>
+        <span class="text-xs font-semibold ${maalFarge}">${totalMaal}%</span>
+        ${maalOk
+          ? '<span class="text-[10px] bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-400 rounded-full px-1.5 py-0.5">✓ OK</span>'
+          : '<span class="text-[10px] bg-orange-100 dark:bg-orange-900/40 text-orange-600 dark:text-orange-400 rounded-full px-1.5 py-0.5">bør være 100%</span>'
+        }
+      </div>
+      <label class="flex items-center gap-1.5 cursor-pointer select-none">
+        <input type="checkbox" id="rebal-skjul-cb" ${skjulTomme ? 'checked' : ''} class="w-3.5 h-3.5 accent-brand-600">
+        <span class="text-xs text-gray-400 dark:text-gray-500">Skjul tomme</span>
+      </label>`;
+    hdrEl.querySelector('#rebal-skjul-cb')?.addEventListener('change', e => {
+      localStorage.setItem('rebal-skjul-tomme', e.target.checked ? 'true' : 'false');
+      visRebalansering(alleBeholdning);
+    });
+  }
+
+  // Render rader
   el.innerHTML = sektorer.map(([sektor, verdi]) => {
     const naaværendePct = verdi / totalVerdi * 100;
     const maalPct = maal[sektor] !== undefined ? maal[sektor] : Math.round(naaværendePct);
+
+    // Skjul tomme sektorer hvis toggle er på
+    if (skjulTomme && naaværendePct === 0 && maalPct === 0) return '';
+
     const diff = naaværendePct - maalPct;
-    let statusKlasse, statusTekst;
-    if (maalPct > 0 && naaværendePct === 0) {
-      statusKlasse = 'text-orange-500'; statusTekst = `Kjøp +${maalPct.toFixed(0)}%`;
+    const antall = sektorAntall[sektor] || 0;
+
+    let statusKlasse, statusTekst, barFarge;
+    if (maalPct === 0 && naaværendePct === 0) {
+      statusKlasse = 'text-gray-400'; statusTekst = '—'; barFarge = 'bg-gray-300 dark:bg-gray-700';
+    } else if (maalPct > 0 && naaværendePct === 0) {
+      const kr = maalPct / 100 * totalVerdi;
+      statusKlasse = 'text-orange-500'; statusTekst = `Kjøp +${maalPct}% · ${fmtKr(kr)}`; barFarge = 'bg-orange-400';
     } else if (Math.abs(diff) <= 5) {
-      statusKlasse = 'text-green-600 dark:text-green-400'; statusTekst = 'OK';
+      statusKlasse = 'text-green-600 dark:text-green-400'; statusTekst = 'OK'; barFarge = 'bg-green-500';
     } else if (diff < -5) {
-      statusKlasse = 'text-orange-500'; statusTekst = `Kjøp +${Math.abs(diff).toFixed(0)}%`;
+      const kr = Math.abs(diff) / 100 * totalVerdi;
+      statusKlasse = 'text-orange-500'; statusTekst = `Kjøp +${Math.abs(diff).toFixed(0)}% · ${fmtKr(kr)}`; barFarge = 'bg-orange-400';
     } else {
-      statusKlasse = 'text-red-500'; statusTekst = `Reduser −${diff.toFixed(0)}%`;
+      const kr = Math.abs(diff) / 100 * totalVerdi;
+      statusKlasse = 'text-red-500'; statusTekst = `Reduser −${diff.toFixed(0)}% · ${fmtKr(kr)}`; barFarge = 'bg-red-400';
     }
-    const barBredde = Math.min(100, naaværendePct).toFixed(1);
+
+    const barBredde  = Math.min(100, naaværendePct).toFixed(1);
     const maalBredde = Math.min(100, maalPct).toFixed(1);
-    const sektorSlug = sektor.toLowerCase().replace(/\s+/g, '-').replace(/[æå]/g, m => m === 'æ' ? 'ae' : 'a').replace(/ø/g, 'o');
+
     return `
-      <div class="space-y-1" data-sektor="${sektor}">
-        <div class="flex items-center gap-3">
-          <a href="/aksjer/sektor/${sektorSlug}/" class="text-sm font-medium w-36 shrink-0 truncate text-gray-900 dark:text-gray-100 hover:text-brand-600 dark:hover:text-brand-400 hover:underline">${sektor}</a>
-          <span class="text-xs text-gray-500 dark:text-gray-400 w-12 text-right shrink-0">${naaværendePct.toFixed(1)}%</span>
-          <div class="flex items-center gap-1 flex-1">
-            <span class="text-xs text-gray-400 shrink-0">Mål:</span>
+      <div class="py-3" data-sektor="${sektor}">
+        <div class="flex items-center justify-between gap-2 mb-1">
+          <div class="min-w-0">
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <a href="/aksjer/sektor/${_rebalSlug(sektor)}/"
+                 class="text-sm font-semibold text-gray-900 dark:text-gray-100 hover:text-brand-600 dark:hover:text-brand-400 hover:underline">${sektor}</a>
+              ${antall > 0 ? `<span class="text-[10px] bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 rounded-full px-1.5 py-0.5 shrink-0">${antall} aksjer</span>` : ''}
+            </div>
+            <p class="text-xs mt-0.5 ${statusKlasse}">${statusTekst}</p>
+          </div>
+          <div class="flex items-center gap-1 shrink-0">
+            <span class="text-xs text-gray-400 dark:text-gray-600">${naaværendePct.toFixed(1)}% →</span>
             <input type="number" min="0" max="100" step="1" value="${maalPct}"
-              class="w-14 text-xs text-center border border-gray-200 dark:border-gray-700 rounded px-1 py-0.5 bg-white dark:bg-gray-800 focus:outline-none focus:border-brand-400"
+              class="w-12 text-xs text-center border border-gray-200 dark:border-gray-700 rounded-md px-1 py-1 bg-white dark:bg-gray-800 focus:outline-none focus:border-brand-400 focus:ring-1 focus:ring-brand-400/30"
               data-rebal-sektor="${sektor}" />
-            <span class="text-xs font-medium w-20 shrink-0 ${statusKlasse}">${statusTekst}</span>
+            <span class="text-xs text-gray-400 dark:text-gray-600">%</span>
           </div>
         </div>
-        <div class="relative h-2 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
-          <div class="absolute top-0 left-0 h-full bg-brand-500/30 rounded-full" style="width:${maalBredde}%"></div>
-          <div class="absolute top-0 left-0 h-full bg-brand-500 rounded-full" style="width:${barBredde}%"></div>
+        <div class="relative h-1.5 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden mt-1.5">
+          <div class="absolute inset-y-0 left-0 bg-gray-300 dark:bg-gray-700 rounded-full" style="width:${maalBredde}%"></div>
+          <div class="absolute inset-y-0 left-0 ${barFarge} rounded-full transition-all duration-300" style="width:${barBredde}%"></div>
         </div>
       </div>`;
   }).join('');

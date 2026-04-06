@@ -1159,16 +1159,20 @@
       </div>
     </div>
 
-    <div id="verktoy-subtab-rebalansering" class="hidden space-y-6 max-w-2xl mx-auto">
+    <div id="verktoy-subtab-rebalansering" class="hidden space-y-4 max-w-2xl mx-auto">
       <div class="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4 shadow-sm">
-        <div class="flex items-center justify-between mb-4">
+        <!-- Header -->
+        <div class="flex items-start justify-between mb-3">
           <div>
-            <h2 class="font-semibold text-base">Rebalansering</h2>
-            <p class="text-xs text-gray-400 dark:text-gray-500 mt-0.5">Sett ønsket vekting per sektor. Grønn = OK (±5%), oransje = kjøp mer, rød = reduser.</p>
+            <h2 class="font-semibold text-base">Sektorbalansering</h2>
+            <p class="text-xs text-gray-400 dark:text-gray-500 mt-0.5">Sett ønsket vekting per sektor og få kjøpsanbefalinger.</p>
           </div>
-          <button id="rebal-nullstill" class="text-xs text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors">Nullstill mål</button>
+          <button id="rebal-nullstill" class="text-xs text-gray-400 hover:text-red-500 dark:hover:text-red-400 transition-colors shrink-0 mt-0.5">Nullstill</button>
         </div>
-        <div id="rebal-rader" class="space-y-3"></div>
+        <!-- Mål-sum + toggle -->
+        <div id="rebal-header-info" class="flex items-center justify-between mb-3 pb-3 border-b border-gray-100 dark:border-gray-800"></div>
+        <!-- Rader -->
+        <div id="rebal-rader" class="divide-y divide-gray-100 dark:divide-gray-800"></div>
       </div>
     </div>
     </div><!-- /tab-verktoy -->
