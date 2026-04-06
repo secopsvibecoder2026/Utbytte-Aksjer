@@ -1583,10 +1583,14 @@ function visRebalansering(alleBeholdning) {
 
   // Tell aksjer og legg til sektorer uten holdings
   const sektorAntall = {};
+  const sektorIPortefolje = {};
   (window.alleAksjer || []).forEach(a => {
     if (!a.sektor) return;
     sektorAntall[a.sektor] = (sektorAntall[a.sektor] || 0) + 1;
     if (!(a.sektor in sektorMap)) sektorMap[a.sektor] = 0;
+  });
+  alleBeholdning.forEach(a => {
+    if (a.sektor) sektorIPortefolje[a.sektor] = (sektorIPortefolje[a.sektor] || 0) + 1;
   });
 
   const sektorer = Object.entries(sektorMap).sort((a, b) => b[1] - a[1]);
@@ -1632,23 +1636,31 @@ function visRebalansering(alleBeholdning) {
     if (skjulTomme && naaværendePct === 0 && maalPct === 0) return '';
 
     const diff = naaværendePct - maalPct;
-    const antall = sektorAntall[sektor] || 0;
+    const totalt = sektorAntall[sektor] || 0;
+    const eid    = sektorIPortefolje[sektor] || 0;
+    const slug   = _rebalSlug(sektor);
 
-    let statusKlasse, statusTekst, barFarge;
+    let statusKlasse, statusTekst, barFarge, kjopLenke = '';
     if (maalPct === 0 && naaværendePct === 0) {
       statusKlasse = 'text-gray-400'; statusTekst = '—'; barFarge = 'bg-gray-300 dark:bg-gray-700';
     } else if (maalPct > 0 && naaværendePct === 0) {
       const kr = maalPct / 100 * totalVerdi;
       statusKlasse = 'text-orange-500'; statusTekst = `Kjøp +${maalPct}% · ${fmtKr(kr)}`; barFarge = 'bg-orange-400';
+      kjopLenke = `<a href="/aksjer/sektor/${slug}/" class="text-[11px] text-brand-600 dark:text-brand-400 font-medium hover:underline shrink-0">Utforsk aksjer →</a>`;
     } else if (Math.abs(diff) <= 5) {
       statusKlasse = 'text-green-600 dark:text-green-400'; statusTekst = 'OK'; barFarge = 'bg-green-500';
     } else if (diff < -5) {
       const kr = Math.abs(diff) / 100 * totalVerdi;
       statusKlasse = 'text-orange-500'; statusTekst = `Kjøp +${Math.abs(diff).toFixed(0)}% · ${fmtKr(kr)}`; barFarge = 'bg-orange-400';
+      kjopLenke = `<a href="/aksjer/sektor/${slug}/" class="text-[11px] text-brand-600 dark:text-brand-400 font-medium hover:underline shrink-0">Finn aksjer →</a>`;
     } else {
       const kr = Math.abs(diff) / 100 * totalVerdi;
       statusKlasse = 'text-red-500'; statusTekst = `Reduser −${diff.toFixed(0)}% · ${fmtKr(kr)}`; barFarge = 'bg-red-400';
     }
+
+    const chipTekst = totalt > 0
+      ? (eid > 0 ? `${eid} av ${totalt} aksjer` : `${totalt} tilgjengelig`)
+      : '';
 
     const barBredde  = Math.min(100, naaværendePct).toFixed(1);
     const maalBredde = Math.min(100, maalPct).toFixed(1);
@@ -1658,11 +1670,14 @@ function visRebalansering(alleBeholdning) {
         <div class="flex items-center justify-between gap-2 mb-1">
           <div class="min-w-0">
             <div class="flex items-center gap-1.5 flex-wrap">
-              <a href="/aksjer/sektor/${_rebalSlug(sektor)}/"
+              <a href="/aksjer/sektor/${slug}/"
                  class="text-sm font-semibold text-gray-900 dark:text-gray-100 hover:text-brand-600 dark:hover:text-brand-400 hover:underline">${sektor}</a>
-              ${antall > 0 ? `<span class="text-[10px] bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 rounded-full px-1.5 py-0.5 shrink-0">${antall} aksjer</span>` : ''}
+              ${chipTekst ? `<span class="text-[10px] ${eid > 0 ? 'bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400' : 'bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400'} rounded-full px-1.5 py-0.5 shrink-0 font-medium">${chipTekst}</span>` : ''}
             </div>
-            <p class="text-xs mt-0.5 ${statusKlasse}">${statusTekst}</p>
+            <div class="flex items-center gap-2 mt-0.5 flex-wrap">
+              <p class="text-xs ${statusKlasse}">${statusTekst}</p>
+              ${kjopLenke}
+            </div>
           </div>
           <div class="flex items-center gap-1 shrink-0">
             <span class="text-xs text-gray-400 dark:text-gray-600">${naaværendePct.toFixed(1)}% →</span>
