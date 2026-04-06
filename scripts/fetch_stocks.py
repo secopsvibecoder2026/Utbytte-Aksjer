@@ -923,7 +923,7 @@ def _aksje_side_html(a, today):
         f"<tr><td>Sektor</td><td>{sektor}</td></tr>"
         f"<tr><td>Frekvens</td><td>{frekvens}</td></tr>"
         f"<tr><td>Utbytte per aksje</td><td>{upa} {valuta}</td></tr>"
-        f"<tr><td>Direkteavkastning</td><td>{yield_:.2f}%</td></tr>"
+        f"<tr><td>Direkteavkastning</td><td>{f'{yield_:.2f}%' if yield_ else '—'}</td></tr>"
         f"<tr><td>5-årssnitt yield</td><td>{snitt5:.2f}%</td></tr>"
         f"<tr><td>År med utbytte</td><td>{ar_med}</td></tr>"
         f"{pe_rad}"
@@ -1120,16 +1120,16 @@ def _aksje_side_html(a, today):
 
   <h1>{ticker} – {navn}</h1>
   <p class="sub">{_sektor_ikon(sektor)} {sektor} · {frekvens} utbytte · Oslo Børs</p>
-  <span class="badge">{yield_:.2f}% direkteavkastning</span>
+  <span class="badge">{f'{yield_:.2f}% direkteavkastning' if yield_ else 'Kurs ikke tilgjengelig'}</span>
 
   <div class="kgrid">
     <div class="kcard">
       <div class="label">Kurs</div>
-      <div class="val">{pris:,.0f} {valuta}</div>
+      <div class="val">{f'{pris:,.0f} {valuta}' if pris else '—'}</div>
     </div>
     <div class="kcard">
       <div class="label">Yield</div>
-      <div class="val green">{yield_:.2f}%</div>
+      <div class="val green">{f'{yield_:.2f}%' if yield_ else '—'}</div>
     </div>
     <div class="kcard">
       <div class="label">Utbytte/aksje</div>
