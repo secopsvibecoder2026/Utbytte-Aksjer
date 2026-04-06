@@ -219,6 +219,7 @@
     <!-- VERKTØY SUB-FANE NAVIGASJON (vises kun når Verktøy-fanen er aktiv) -->
     <nav id="verktoy-sub-nav" class="hidden flex gap-1 border-b border-gray-200 dark:border-gray-800">
       <button class="sub-tab-btn active" data-verktoy-subtab="kalkulator">Kalkulator</button>
+      <button class="sub-tab-btn" data-verktoy-subtab="annonsert">Annonsert utbytte</button>
       <button class="sub-tab-btn" data-verktoy-subtab="fire">FIRE</button>
       <button class="sub-tab-btn" data-verktoy-subtab="rebalansering">Rebalansering</button>
     </nav>
@@ -1156,6 +1157,83 @@
 
         <!-- Tidslinje -->
         <div id="fire-ut-tidslinje" class="text-xs text-gray-500 dark:text-gray-400 space-y-0.5"></div>
+      </div>
+    </div>
+
+    <!-- ANNONSERT UTBYTTE-KALKULATOR -->
+    <div id="verktoy-subtab-annonsert" class="hidden space-y-6 max-w-2xl mx-auto">
+      <div class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-5 shadow-sm space-y-4">
+        <div>
+          <h2 class="font-semibold text-base">Annonsert utbytte-kalkulator</h2>
+          <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Beregn hvor mye utbytte et beløp gir basert på annonserte utbytter.</p>
+        </div>
+
+        <div class="space-y-3">
+          <div>
+            <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Beløp å investere (kr)</label>
+            <input id="ann-belop" type="number" min="1" step="1000" value="100000" placeholder="F.eks. 100000" class="filter-input w-full" />
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Aksje</label>
+            <div class="relative">
+              <input id="ann-sok" type="text" placeholder="Søk etter ticker eller selskap…" autocomplete="off" class="filter-input w-full pr-8" />
+              <button id="ann-nullstill" class="hidden absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300" title="Fjern valg">✕</button>
+            </div>
+            <ul id="ann-forslag" class="hidden mt-1 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 shadow-lg max-h-52 overflow-y-auto z-20 relative text-sm"></ul>
+          </div>
+        </div>
+
+        <!-- Resultat -->
+        <div id="ann-resultat" class="hidden space-y-4 pt-1">
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+            <div class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-3 text-center shadow-sm">
+              <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Antall aksjer</p>
+              <p id="ann-res-antall" class="text-lg font-bold text-brand-600 dark:text-brand-400">—</p>
+              <p id="ann-res-kurs" class="text-xs text-gray-400 dark:text-gray-500 mt-0.5">—</p>
+            </div>
+            <div class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-3 text-center shadow-sm">
+              <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Utbytte per år</p>
+              <p id="ann-res-utbytte" class="text-lg font-bold text-green-600 dark:text-green-400">—</p>
+              <p id="ann-res-upa" class="text-xs text-gray-400 dark:text-gray-500 mt-0.5">— per aksje</p>
+            </div>
+            <div class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-3 text-center shadow-sm">
+              <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Yield</p>
+              <p id="ann-res-yield" class="text-lg font-bold text-orange-500">—</p>
+              <p id="ann-res-snitt5" class="text-xs text-gray-400 dark:text-gray-500 mt-0.5 hidden">5-årssnitt: —</p>
+            </div>
+            <div class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-3 text-center shadow-sm">
+              <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Utbytte per måned</p>
+              <p id="ann-res-mnd" class="text-lg font-bold text-teal-600 dark:text-teal-400">—</p>
+            </div>
+            <div class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-3 text-center shadow-sm">
+              <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Etter skatt (37,84%)</p>
+              <p id="ann-res-netto" class="text-lg font-bold text-gray-700 dark:text-gray-300">—</p>
+              <p class="text-xs text-gray-400 dark:text-gray-500 mt-0.5">per år</p>
+            </div>
+            <div id="ann-res-ex-kort" class="hidden rounded-xl border border-amber-200 dark:border-amber-900/40 bg-amber-50 dark:bg-amber-950/20 p-3 text-center shadow-sm">
+              <p class="text-xs text-amber-600 dark:text-amber-400 mb-1">Neste ex-dato</p>
+              <p id="ann-res-ex" class="text-lg font-bold text-amber-600 dark:text-amber-400">—</p>
+            </div>
+          </div>
+
+          <!-- Info om aksjen -->
+          <div id="ann-aksje-info" class="rounded-lg bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 px-4 py-3 text-xs text-gray-600 dark:text-gray-400 space-y-1">
+          </div>
+        </div>
+
+        <!-- Tom tilstand / ingen annonsert utbytte -->
+        <div id="ann-ingen" class="hidden rounded-lg bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900/40 px-4 py-3 text-sm text-amber-700 dark:text-amber-400">
+          Denne aksjen har ikke annonsert noe utbytte for øyeblikket. Yield-beregningen er basert på siste kjente utbyttesats.
+        </div>
+      </div>
+
+      <!-- Topp 10 høyest yield med annonsert utbytte -->
+      <div class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-4 shadow-sm">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500">Høyest annonsert yield</h3>
+          <span class="text-xs text-gray-400 dark:text-gray-500">Klikk for å velge aksje</span>
+        </div>
+        <div id="ann-topp-liste" class="space-y-1.5 text-sm"></div>
       </div>
     </div>
 

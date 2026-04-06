@@ -346,12 +346,14 @@ function initVerktoySubTabs() {
     nav.querySelectorAll('[data-verktoy-subtab]').forEach(b => b.classList.toggle('active', b === btn));
     const subtab = btn.dataset.verktoySubtab;
     document.getElementById('verktoy-subtab-kalkulator').classList.toggle('hidden', subtab !== 'kalkulator');
+    document.getElementById('verktoy-subtab-annonsert').classList.toggle('hidden', subtab !== 'annonsert');
     document.getElementById('verktoy-subtab-fire').classList.toggle('hidden', subtab !== 'fire');
     document.getElementById('verktoy-subtab-rebalansering').classList.toggle('hidden', subtab !== 'rebalansering');
     if (subtab === 'rebalansering' && typeof visRebalansering === 'function') {
       visRebalansering(window._pfSisteData?.beholdning || []);
     }
     if (subtab === 'fire') beregnFire();
+    if (subtab === 'annonsert') initAnnonsertKalkulator();
   });
 }
 
@@ -2903,6 +2905,198 @@ function initSammenligning() {
     });
     if (sammenlignBasket.length >= 2) window._pendingKomparasjon = true;
   }
+}
+
+// --- ANNONSERT UTBYTTE-KALKULATOR ---
+
+let _annValgtAksje = null;
+let _annInitiert = false;
+
+function initAnnonsertKalkulator() {
+  if (_annInitiert) { _annOppdaterResultat(); return; }
+  _annInitiert = true;
+
+  const sokEl     = document.getElementById('ann-sok');
+  const forslagEl = document.getElementById('ann-forslag');
+  const nullstillEl = document.getElementById('ann-nullstill');
+  const belopEl   = document.getElementById('ann-belop');
+
+  function lukkForslag() { forslagEl.classList.add('hidden'); }
+
+  function visForslag(tekst) {
+    const t = tekst.trim().toLowerCase();
+    const alle = window.alleAksjer || [];
+    const treff = alle
+      .filter(a => a.ticker.toLowerCase().includes(t) || (a.navn || '').toLowerCase().includes(t))
+      .slice(0, 12);
+
+    if (!treff.length) { lukkForslag(); return; }
+
+    forslagEl.innerHTML = treff.map(a => {
+      const yield_ = a.utbytte_yield || 0;
+      const yieldStr = yield_ > 0 ? `<span class="text-green-600 dark:text-green-400 font-medium">${yield_.toFixed(1)}%</span>` : '<span class="text-gray-400">—</span>';
+      return `<li class="flex items-center justify-between px-3 py-2 hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer"
+                  data-ticker="${escHtml(a.ticker)}">
+        <span><span class="font-semibold">${escHtml(a.ticker)}</span> <span class="text-gray-500 dark:text-gray-400 text-xs">${escHtml(a.navn || '')}</span></span>
+        ${yieldStr}
+      </li>`;
+    }).join('');
+    forslagEl.classList.remove('hidden');
+  }
+
+  function velgAksje(ticker) {
+    const alle = window.alleAksjer || [];
+    _annValgtAksje = alle.find(a => a.ticker === ticker) || null;
+    if (_annValgtAksje) {
+      sokEl.value = `${_annValgtAksje.ticker} — ${_annValgtAksje.navn || ''}`;
+      nullstillEl.classList.remove('hidden');
+    }
+    lukkForslag();
+    _annOppdaterResultat();
+    _annBygTopp();
+  }
+
+  sokEl.addEventListener('input', () => {
+    _annValgtAksje = null;
+    nullstillEl.classList.add('hidden');
+    document.getElementById('ann-resultat').classList.add('hidden');
+    document.getElementById('ann-ingen').classList.add('hidden');
+    visForslag(sokEl.value);
+  });
+
+  sokEl.addEventListener('keydown', e => {
+    if (e.key === 'Escape') lukkForslag();
+  });
+
+  forslagEl.addEventListener('click', e => {
+    const li = e.target.closest('li[data-ticker]');
+    if (li) velgAksje(li.dataset.ticker);
+  });
+
+  nullstillEl.addEventListener('click', () => {
+    _annValgtAksje = null;
+    sokEl.value = '';
+    nullstillEl.classList.add('hidden');
+    document.getElementById('ann-resultat').classList.add('hidden');
+    document.getElementById('ann-ingen').classList.add('hidden');
+    sokEl.focus();
+  });
+
+  belopEl.addEventListener('input', _annOppdaterResultat);
+
+  document.addEventListener('click', e => {
+    if (!sokEl.contains(e.target) && !forslagEl.contains(e.target)) lukkForslag();
+  });
+
+  _annBygTopp();
+}
+
+function _annOppdaterResultat() {
+  const a = _annValgtAksje;
+  const resultatEl = document.getElementById('ann-resultat');
+  const ingenEl    = document.getElementById('ann-ingen');
+  if (!a) { resultatEl.classList.add('hidden'); ingenEl.classList.add('hidden'); return; }
+
+  const belop  = parseFloat(document.getElementById('ann-belop').value) || 0;
+  const kurs   = a.kurs || a.siste_kurs || 0;
+  const upa    = a.utbytte_per_aksje || 0;
+  const yield_ = a.utbytte_yield || 0;
+  const snitt5 = a.snitt_yield_5ar || 0;
+  const ex     = a.ex_dato || a.neste_ex_dato || '';
+  const valuta = a.valuta || 'NOK';
+
+  if (kurs <= 0 && upa <= 0) {
+    resultatEl.classList.add('hidden');
+    ingenEl.classList.remove('hidden');
+    return;
+  }
+
+  const antall       = kurs > 0 ? Math.floor(belop / kurs) : 0;
+  const faktiskBelop = antall * kurs;
+  const utbytteAar   = upa > 0 ? antall * upa : (yield_ / 100) * faktiskBelop;
+  const utbytteMnd   = utbytteAar / 12;
+  const netto        = utbytteAar * (1 - 0.3784);
+  const effYield     = faktiskBelop > 0 ? (utbytteAar / faktiskBelop) * 100 : yield_;
+
+  const fmtKr = v => new Intl.NumberFormat('nb-NO', { style: 'currency', currency: 'NOK', maximumFractionDigits: 0 }).format(v);
+  const fmtTall = v => new Intl.NumberFormat('nb-NO', { maximumFractionDigits: 2 }).format(v);
+
+  document.getElementById('ann-res-antall').textContent = fmtTall(antall);
+  document.getElementById('ann-res-kurs').textContent   = kurs > 0 ? `@ ${fmtTall(kurs)} ${valuta}` : '—';
+  document.getElementById('ann-res-utbytte').textContent = fmtKr(utbytteAar);
+  document.getElementById('ann-res-upa').textContent    = upa > 0 ? `${fmtTall(upa)} ${valuta} per aksje` : 'Basert på yield';
+  document.getElementById('ann-res-yield').textContent  = effYield > 0 ? `${effYield.toFixed(2)}%` : '—';
+  document.getElementById('ann-res-mnd').textContent    = fmtKr(utbytteMnd);
+  document.getElementById('ann-res-netto').textContent  = fmtKr(netto);
+
+  const snitt5El = document.getElementById('ann-res-snitt5');
+  if (snitt5 > 0) {
+    snitt5El.textContent = `5-årssnitt: ${snitt5.toFixed(1)}%`;
+    snitt5El.classList.remove('hidden');
+  } else {
+    snitt5El.classList.add('hidden');
+  }
+
+  const exKort = document.getElementById('ann-res-ex-kort');
+  if (ex) {
+    document.getElementById('ann-res-ex').textContent = formaterDato(ex);
+    exKort.classList.remove('hidden');
+  } else {
+    exKort.classList.add('hidden');
+  }
+
+  const infoEl = document.getElementById('ann-aksje-info');
+  const infoDeler = [];
+  if (a.navn)    infoDeler.push(`<span class="font-medium">${escHtml(a.navn)}</span>`);
+  if (a.sektor)  infoDeler.push(`Sektor: ${escHtml(a.sektor)}`);
+  if (a.frekvens) infoDeler.push(`Utbyttefrekvens: ${escHtml(a.frekvens)}`);
+  if (belop > 0 && faktiskBelop < belop) {
+    const rest = belop - faktiskBelop;
+    infoDeler.push(`Ubrukt beløp: ${fmtKr(rest)} (${antall} hele aksjer)`);
+  }
+  infoEl.innerHTML = infoDeler.map(d => `<div>${d}</div>`).join('');
+
+  ingenEl.classList.add('hidden');
+  resultatEl.classList.remove('hidden');
+}
+
+function _annBygTopp() {
+  const liste = document.getElementById('ann-topp-liste');
+  if (!liste) return;
+  const alle = window.alleAksjer || [];
+  const topp = alle
+    .filter(a => (a.utbytte_yield || 0) > 0)
+    .sort((a, b) => (b.utbytte_yield || 0) - (a.utbytte_yield || 0))
+    .slice(0, 10);
+
+  if (!topp.length) { liste.innerHTML = '<p class="text-xs text-gray-400">Ingen data tilgjengelig.</p>'; return; }
+
+  liste.innerHTML = topp.map((a, i) => {
+    const yield_ = (a.utbytte_yield || 0).toFixed(1);
+    return `<button class="ann-topp-btn w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-left"
+                data-ticker="${escHtml(a.ticker)}">
+      <span class="flex items-center gap-2">
+        <span class="text-xs font-mono text-gray-400 w-4">${i + 1}.</span>
+        <span class="font-semibold">${escHtml(a.ticker)}</span>
+        <span class="text-gray-500 dark:text-gray-400 text-xs hidden sm:inline">${escHtml(a.navn || '')}</span>
+      </span>
+      <span class="font-semibold text-green-600 dark:text-green-400">${yield_}%</span>
+    </button>`;
+  }).join('');
+
+  liste.addEventListener('click', e => {
+    const btn = e.target.closest('.ann-topp-btn[data-ticker]');
+    if (!btn) return;
+    const ticker = btn.dataset.ticker;
+    const alle2  = window.alleAksjer || [];
+    _annValgtAksje = alle2.find(a => a.ticker === ticker) || null;
+    if (_annValgtAksje) {
+      const sokEl = document.getElementById('ann-sok');
+      sokEl.value = `${_annValgtAksje.ticker} — ${_annValgtAksje.navn || ''}`;
+      document.getElementById('ann-nullstill').classList.remove('hidden');
+      _annOppdaterResultat();
+    }
+  });
 }
 
 // Node.js test export
