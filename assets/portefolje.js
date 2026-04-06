@@ -1561,12 +1561,20 @@ function visRebalansering(alleBeholdning) {
   const totalVerdi = alleBeholdning.reduce((s, a) => s + a.antall * (a.pris || 0), 0);
   if (totalVerdi <= 0) { el.innerHTML = '<p class="text-xs text-gray-400 text-center py-4">Legg til aksjer med kurs for å se rebalansering.</p>'; return; }
 
-  // Grupper etter sektor
+  // Grupper etter sektor (portefølje)
   const sektorMap = {};
   alleBeholdning.forEach(a => {
     const v = a.antall * (a.pris || 0);
     sektorMap[a.sektor] = (sektorMap[a.sektor] || 0) + v;
   });
+
+  // Legg til alle sektorer fra aksjelisten med 0 hvis ikke i portefølje
+  (window.alleAksjer || []).forEach(a => {
+    if (a.sektor && !(a.sektor in sektorMap)) {
+      sektorMap[a.sektor] = 0;
+    }
+  });
+
   const sektorer = Object.entries(sektorMap).sort((a, b) => b[1] - a[1]);
   const maal = hentRebalanseringsmaal();
 
