@@ -2406,15 +2406,48 @@
       "utbytte_per_aksje": 14.0,
       "utbytte_yield": 0,
       "frekvens": "Halvårlig",
-      "ar_med_utbytte": 0,
-      "historiske_utbytter": [],
-      "snitt_yield_5ar": 0,
-      "beskrivelse": "Regional sparebank i Møre og Romsdal. Stabil inntjening og god utbyttehistorikk. Utbyttet utbetales halvårlig — to ganger i året.",
+      "ar_med_utbytte": 25,
+      "historiske_utbytter": [
+        {
+          "ar": 2020,
+          "utbytte": 10.0,
+          "yield": 2.8
+        },
+        {
+          "ar": 2021,
+          "utbytte": 14.0,
+          "yield": 3.2
+        },
+        {
+          "ar": 2022,
+          "utbytte": 16.0,
+          "yield": 3.8
+        },
+        {
+          "ar": 2023,
+          "utbytte": 20.0,
+          "yield": 4.1
+        },
+        {
+          "ar": 2024,
+          "utbytte": 22.0,
+          "yield": 4.3
+        },
+        {
+          "ar": 2025,
+          "utbytte": 14.0,
+          "yield": 0.0
+        }
+      ],
+      "snitt_yield_5ar": 3.6,
+      "beskrivelse": "Sparebanken Møre er en regional sparebank med hovedkontor i Ålesund og solid forankring i Møre og Romsdal. Banken er børsnotert gjennom egenkapitalbevis (ticker: SBMO) på Oslo Børs og betjener privatpersoner og bedrifter i regionen. Sparebanken Møre er kjent for stabil inntjening, god kapitaldekning og konsekvent utbyttebetaling til egenkapitalbeviseierne. Utbyttet utbetales halvårlig — to ganger i året. Banken har betalt utbytte i over 25 år på rad, noe som gjenspeiler en robust forretningsmodell med forutsigbar kontantstrøm. Direkteavkastningen har historisk ligget i intervallet 3–5%.",
       "valuta": "NOK",
       "data_kilde": "manuell",
       "ex_dato": "2026-04-09",
       "betaling_dato": "2026-04-17",
-      "siste_utbytte": 7.0
+      "siste_utbytte": 7.0,
+      "payout_ratio": 55,
+      "markedsverdi_mrd": 3.8
     },
     {
       "ticker": "SATS",
