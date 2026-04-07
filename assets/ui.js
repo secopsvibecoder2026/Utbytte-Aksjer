@@ -905,7 +905,9 @@ function visOversikt(bevarSide = false) {
         <span class="frekvens-badge">${a.frekvens}</span>
       </td>
       <td class="px-2 py-3 text-center">
-        <button class="sammenlign-btn text-xs px-1.5 py-0.5 rounded border border-gray-200 dark:border-gray-700 text-gray-400 dark:text-gray-500 hover:border-brand-400 hover:text-brand-600 dark:hover:text-brand-400 transition-colors" data-ticker="${a.ticker}" title="Sammenlign">⊕</button>
+        <button class="sammenlign-btn p-1.5 rounded-lg border border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:border-brand-500 hover:text-brand-600 dark:hover:text-brand-400 hover:bg-brand-50 dark:hover:bg-brand-900/20 transition-colors" data-ticker="${a.ticker}" aria-label="Legg til i sammenligning" title="Sammenlign">
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18M5 8l-2 8M21 8l-2 8M3 16h4M17 16h4M5 8h4m6 0h4"/><circle cx="12" cy="3" r="1"/></svg>
+        </button>
       </td>
     </tr>`;
   };
@@ -964,6 +966,9 @@ function visOversikt(bevarSide = false) {
         </div>
         <div class="text-xs text-gray-500 dark:text-gray-400 truncate">${a.navn}</div>
       </div>
+      <button class="sammenlign-btn shrink-0 p-1.5 rounded-lg border border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:border-brand-500 hover:text-brand-600 dark:hover:text-brand-400 hover:bg-brand-50 dark:hover:bg-brand-900/20 transition-colors" data-ticker="${escHtml(a.ticker)}" aria-label="Legg til i sammenligning" title="Sammenlign">
+        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18M5 8l-2 8M21 8l-2 8M3 16h4M17 16h4M5 8h4m6 0h4"/><circle cx="12" cy="3" r="1"/></svg>
+      </button>
       <div class="text-right shrink-0 space-y-0.5">
         <span class="yield-badge ${yieldKlasse(a.utbytte_yield)}">${a.utbytte_yield.toFixed(2)}%</span>
         <div class="text-xs ${payoutKlasse(a.payout_ratio)}">Payout ${a.payout_ratio > 0 ? a.payout_ratio.toFixed(0)+'%' : '—'}</div>
@@ -1034,7 +1039,10 @@ function visOversikt(bevarSide = false) {
           ${snartEx && dagerTil !== null ? `<span class="text-xs text-orange-500 ml-1">${dagerTil === 0 ? '(i dag!)' : dagerTil === 1 ? '(i morgen)' : `(om ${dagerTil} d)`}</span>` : ''}
         </div>
         <div class="flex items-center gap-2">
-          <button class="sammenlign-btn text-xs px-2 py-0.5 rounded border border-gray-200 dark:border-gray-700 text-gray-400 dark:text-gray-500 hover:border-brand-400 hover:text-brand-600 dark:hover:text-brand-400 transition-colors" data-ticker="${escHtml(a.ticker)}" title="Sammenlign">⊕</button>
+          <button class="sammenlign-btn flex items-center gap-1 text-xs px-2 py-1 rounded-lg border border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:border-brand-500 hover:text-brand-600 dark:hover:text-brand-400 hover:bg-brand-50 dark:hover:bg-brand-900/20 transition-colors" data-ticker="${escHtml(a.ticker)}" aria-label="Legg til i sammenligning">
+            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18M5 8l-2 8M21 8l-2 8M3 16h4M17 16h4M5 8h4m6 0h4"/><circle cx="12" cy="3" r="1"/></svg>
+            <span>Sammenlign</span>
+          </button>
           <svg class="w-4 h-4 text-gray-300 dark:text-gray-600" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
         </div>
       </div>
@@ -2885,9 +2893,13 @@ function toggleSammenlign(ticker) {
   oppdaterSammenlignSkuff();
   document.querySelectorAll(`.sammenlign-btn[data-ticker="${ticker}"]`).forEach(btn => {
     const aktiv = sammenlignBasket.includes(ticker);
-    btn.classList.toggle('text-brand-600', aktiv);
-    btn.classList.toggle('dark:text-brand-400', aktiv);
-    btn.title = aktiv ? 'Fjern fra sammenligning' : 'Legg til sammenligning';
+    btn.classList.toggle('text-brand-600',       aktiv);
+    btn.classList.toggle('dark:text-brand-400',  aktiv);
+    btn.classList.toggle('border-brand-500',     aktiv);
+    btn.classList.toggle('bg-brand-50',          aktiv);
+    btn.classList.toggle('dark:bg-brand-900/20', aktiv);
+    btn.title     = aktiv ? 'Fjern fra sammenligning' : 'Sammenlign';
+    btn.setAttribute('aria-label', aktiv ? 'Fjern fra sammenligning' : 'Legg til i sammenligning');
   });
 }
 
@@ -2960,6 +2972,33 @@ function visKomparasjonsModal() {
 }
 
 function initSammenligning() {
+  // Hint-knapp i mobil-sort-rad: åpner skuffen og viser en toast om funksjonen
+  document.getElementById('mobil-sammenlign-hint')?.addEventListener('click', () => {
+    const skuff = document.getElementById('sammenlign-skuff');
+    if (sammenlignBasket.length >= 2) {
+      visKomparasjonsModal();
+    } else {
+      // Finn første tilgjengelige sammenlign-knapp og animér den
+      const forsteBtn = document.querySelector('.sammenlign-btn[data-ticker]');
+      if (forsteBtn) {
+        forsteBtn.classList.add('ring-2', 'ring-brand-500', 'ring-offset-1');
+        forsteBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        setTimeout(() => forsteBtn.classList.remove('ring-2', 'ring-brand-500', 'ring-offset-1'), 1800);
+      }
+      // Vis kort melding
+      let toast = document.getElementById('sammenlign-toast');
+      if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'sammenlign-toast';
+        toast.className = 'fixed bottom-20 left-1/2 -translate-x-1/2 z-50 bg-gray-900 dark:bg-gray-700 text-white text-sm px-4 py-2 rounded-full shadow-lg pointer-events-none transition-opacity';
+        document.body.appendChild(toast);
+      }
+      toast.textContent = 'Trykk ⚖ på en aksje for å sammenligne';
+      toast.style.opacity = '1';
+      setTimeout(() => { toast.style.opacity = '0'; }, 2500);
+    }
+  });
+
   document.getElementById('sammenlign-vis')?.addEventListener('click', visKomparasjonsModal);
   document.getElementById('sammenlign-tom')?.addEventListener('click', () => {
     sammenlignBasket = [];
