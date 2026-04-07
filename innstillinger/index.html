@@ -167,6 +167,17 @@
       </div>
     </section>
 
+    <!-- AUTOMATISK BACKUP -->
+    <section class="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
+      <div class="px-5 py-4 border-b border-gray-100 dark:border-gray-800">
+        <h2 class="font-semibold text-base">Automatisk backup</h2>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Backup av portefølje, favoritter og innstillinger til en fil på datamaskinen din.</p>
+      </div>
+      <div id="autobackup-seksjon" class="p-5 space-y-4">
+        <div id="autobackup-status" class="text-sm text-gray-400">Laster…</div>
+      </div>
+    </section>
+
     <!-- DATA -->
     <section class="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
       <div class="px-5 py-4 border-b border-gray-100 dark:border-gray-800">
@@ -477,6 +488,213 @@
     _pendingBackup = null;
     document.getElementById('importer-json-preview').classList.add('hidden');
   });
+
+  // ── AUTOMATISK BACKUP ────────────────────────────────────────────────────
+  const _AB_DB    = 'exday-autobackup';
+  const _AB_STORE = 'filehandle';
+  const _AB_KEY   = 'handle';
+  const _AB_SIST  = 'autobackup_sist';
+  const _AB_AV    = 'autobackup_av';
+
+  function _abErChrome() {
+    return typeof window.showSaveFilePicker === 'function' &&
+           /Chrome|Edg/.test(navigator.userAgent) &&
+           !/Firefox/.test(navigator.userAgent);
+  }
+
+  function _abAapneDB() {
+    return new Promise((res, rej) => {
+      const r = indexedDB.open(_AB_DB, 1);
+      r.onupgradeneeded = e => e.target.result.createObjectStore(_AB_STORE);
+      r.onsuccess = e => res(e.target.result);
+      r.onerror   = e => rej(e.target.error);
+    });
+  }
+
+  async function _abHentHandle() {
+    try {
+      const db = await _abAapneDB();
+      return new Promise((res, rej) => {
+        const tx = db.transaction(_AB_STORE, 'readonly');
+        const r  = tx.objectStore(_AB_STORE).get(_AB_KEY);
+        r.onsuccess = e => res(e.target.result || null);
+        r.onerror   = e => rej(e.target.error);
+      });
+    } catch { return null; }
+  }
+
+  async function _abSlettHandle() {
+    try {
+      const db = await _abAapneDB();
+      return new Promise((res, rej) => {
+        const tx = db.transaction(_AB_STORE, 'readwrite');
+        const r  = tx.objectStore(_AB_STORE).delete(_AB_KEY);
+        r.onsuccess = () => res();
+        r.onerror   = e => rej(e.target.error);
+      });
+    } catch { /* stille */ }
+  }
+
+  async function _abLagreHandle(handle) {
+    try {
+      const db = await _abAapneDB();
+      return new Promise((res, rej) => {
+        const tx = db.transaction(_AB_STORE, 'readwrite');
+        const r  = tx.objectStore(_AB_STORE).put(handle, _AB_KEY);
+        r.onsuccess = () => res();
+        r.onerror   = e => rej(e.target.error);
+      });
+    } catch { /* stille */ }
+  }
+
+  function _abLagBlob() {
+    const pf = hentPortefoljer();
+    const backup = {
+      versjon: 5, eksportert: new Date().toISOString(),
+      profil: { navn: localStorage.getItem('profil_navn') || '', mal_mnd: localStorage.getItem('profil_mal_mnd') || '0', sparemaal: localStorage.getItem('profil_sparemaal') || '0' },
+      portefoljer: pf, aktiv_pf: hentAktivPFId(),
+      watchlister: hentWatchlister(),
+      favoritter:  JSON.parse(localStorage.getItem('fav_aksjer') || '[]'),
+      aksje_data:  JSON.parse(localStorage.getItem('aksje_data') || '{}'),
+      notif_aksjer: JSON.parse(localStorage.getItem('notif_aksjer') || '[]'),
+      historikk:   JSON.parse(localStorage.getItem('pf_historikk') || '{}'),
+      rebalansering: JSON.parse(localStorage.getItem('pf_rebalansering') || '{}'),
+      tema: localStorage.getItem('tema') || '', sortering: localStorage.getItem('sortering') || '',
+      paginering: localStorage.getItem('paginering-per-side') || '25',
+      rebal_skjul_tomme: localStorage.getItem('rebal-skjul-tomme') || 'true',
+      streak: { teller: localStorage.getItem('streak_teller') || '1', sist_besok: localStorage.getItem('streak_sist_besok') || '' },
+      milepeler: JSON.parse(localStorage.getItem('milepeler_oppnaad') || '[]')
+    };
+    return new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
+  }
+
+  async function _abSkrivTilFil(handle, blob) {
+    try {
+      let perm = await handle.queryPermission({ mode: 'readwrite' });
+      if (perm !== 'granted') perm = await handle.requestPermission({ mode: 'readwrite' });
+      if (perm !== 'granted') return false;
+      const w = await handle.createWritable();
+      await w.write(blob); await w.close();
+      return true;
+    } catch { return false; }
+  }
+
+  async function visAutoBackupStatus() {
+    const el = document.getElementById('autobackup-status');
+    if (!el) return;
+
+    if (_abErChrome()) {
+      // ── Chrome / Edge ────────────────────────────────────────────────────
+      const handle = await _abHentHandle();
+      const av     = localStorage.getItem(_AB_AV) !== 'nei';
+      const sist   = localStorage.getItem(_AB_SIST);
+      const sistTekst = sist ? new Date(sist).toLocaleString('nb-NO', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'Aldri';
+
+      el.innerHTML = `
+        <div class="flex items-center gap-2 mb-3">
+          <span class="w-2 h-2 rounded-full ${handle && av ? 'bg-green-500' : 'bg-gray-300 dark:bg-gray-600'}"></span>
+          <span class="text-sm font-medium ${handle && av ? 'text-green-700 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'}">
+            ${handle && av ? 'Aktiv' : 'Ikke konfigurert'}
+          </span>
+          <span class="text-xs text-gray-400 ml-1">Chrome / Edge</span>
+        </div>
+        ${handle ? `
+          <div class="bg-gray-50 dark:bg-gray-800 rounded-lg px-3 py-2 mb-3 text-xs">
+            <p class="text-gray-500 dark:text-gray-400">Backup-fil: <span class="font-mono text-gray-700 dark:text-gray-200">${handle.name}</span></p>
+            <p class="text-gray-400 mt-0.5">Sist skrevet: ${sistTekst}</p>
+          </div>` : ''}
+        <div class="flex flex-wrap gap-2">
+          <button id="ab-velg-fil" class="inline-flex items-center gap-1.5 text-xs bg-brand-600 hover:bg-brand-700 text-white px-3 py-1.5 rounded-lg transition-colors font-medium">
+            ${handle ? 'Endre backup-fil' : '💾 Velg backup-fil'}
+          </button>
+          ${handle ? `<button id="ab-skriv-naa" class="inline-flex items-center gap-1.5 text-xs border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 px-3 py-1.5 rounded-lg transition-colors font-medium">Skriv backup nå</button>` : ''}
+          ${handle ? `<button id="ab-fjern" class="inline-flex items-center gap-1.5 text-xs text-red-500 hover:text-red-700 dark:hover:text-red-400 px-2 py-1.5 transition-colors">Fjern kobling</button>` : ''}
+        </div>
+        <p class="text-xs text-gray-400 dark:text-gray-500 mt-3">Appen oppdaterer filen automatisk hver gang du åpner exday.</p>`;
+
+      document.getElementById('ab-velg-fil')?.addEventListener('click', async () => {
+        try {
+          const dato   = new Date().toISOString().slice(0, 10);
+          const h = await window.showSaveFilePicker({
+            suggestedName: `exday-backup-${dato}.json`,
+            types: [{ description: 'JSON backup', accept: { 'application/json': ['.json'] } }]
+          });
+          await _abLagreHandle(h);
+          const blob = _abLagBlob();
+          await _abSkrivTilFil(h, blob);
+          localStorage.setItem(_AB_SIST, new Date().toISOString());
+          localStorage.setItem(_AB_AV, 'ja');
+          await visAutoBackupStatus();
+        } catch { /* bruker avbrøt */ }
+      });
+
+      document.getElementById('ab-skriv-naa')?.addEventListener('click', async () => {
+        const h = await _abHentHandle();
+        if (!h) return;
+        const ok = await _abSkrivTilFil(h, _abLagBlob());
+        if (ok) {
+          localStorage.setItem(_AB_SIST, new Date().toISOString());
+          await visAutoBackupStatus();
+        } else {
+          alert('Kunne ikke skrive til filen. Prøv å velge filen på nytt.');
+        }
+      });
+
+      document.getElementById('ab-fjern')?.addEventListener('click', async () => {
+        if (!confirm('Fjern kobling til backup-fil? Appen vil slutte å skrive automatisk backup.')) return;
+        await _abSlettHandle();
+        localStorage.removeItem(_AB_SIST);
+        localStorage.setItem(_AB_AV, 'nei');
+        await visAutoBackupStatus();
+      });
+
+    } else {
+      // ── Firefox / Safari / andre ─────────────────────────────────────────
+      const av   = localStorage.getItem(_AB_AV) !== 'nei';
+      const sist = localStorage.getItem(_AB_SIST);
+      const dagSiden = sist ? Math.floor((Date.now() - new Date(sist).getTime()) / 86_400_000) : null;
+      const sistTekst = sist ? new Date(sist).toLocaleString('nb-NO', { day: 'numeric', month: 'short', year: 'numeric' }) : 'Aldri';
+
+      el.innerHTML = `
+        <div class="flex items-center justify-between mb-3">
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full ${av ? 'bg-green-500' : 'bg-gray-300 dark:bg-gray-600'}"></span>
+            <span class="text-sm font-medium ${av ? 'text-green-700 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'}">
+              Ukentlig påminnelse ${av ? 'aktiv' : 'av'}
+            </span>
+            <span class="text-xs text-gray-400">Firefox / Safari</span>
+          </div>
+          <button id="ab-toggle" class="text-xs px-3 py-1.5 rounded-lg border ${av ? 'border-red-200 dark:border-red-800 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20' : 'border-brand-300 dark:border-brand-700 text-brand-600 dark:text-brand-400 hover:bg-brand-50 dark:hover:bg-brand-900/20'} transition-colors">
+            ${av ? 'Slå av' : 'Slå på'}
+          </button>
+        </div>
+        <div class="bg-gray-50 dark:bg-gray-800 rounded-lg px-3 py-2 mb-3 text-xs">
+          <p class="text-gray-400">Sist backup: <span class="text-gray-600 dark:text-gray-300">${sistTekst}</span>${dagSiden !== null ? ` (${dagSiden} dager siden)` : ''}</p>
+        </div>
+        <button id="ab-last-ned-naa" class="inline-flex items-center gap-1.5 text-xs bg-brand-600 hover:bg-brand-700 text-white px-3 py-1.5 rounded-lg transition-colors font-medium">
+          💾 Last ned backup nå
+        </button>
+        <p class="text-xs text-gray-400 dark:text-gray-500 mt-3">Du får en påminnelse på forsiden hver 7. dag. Safari og Firefox tillater ikke automatisk skriving til disk.</p>`;
+
+      document.getElementById('ab-toggle')?.addEventListener('click', () => {
+        localStorage.setItem(_AB_AV, av ? 'nei' : 'ja');
+        visAutoBackupStatus();
+      });
+
+      document.getElementById('ab-last-ned-naa')?.addEventListener('click', () => {
+        const blob = _abLagBlob();
+        const dato = new Date().toISOString().slice(0, 10);
+        const url  = URL.createObjectURL(blob);
+        const a    = document.createElement('a');
+        a.href = url; a.download = `exday-backup-${dato}.json`; a.click();
+        URL.revokeObjectURL(url);
+        localStorage.setItem(_AB_SIST, new Date().toISOString());
+        visAutoBackupStatus();
+      });
+    }
+  }
+
+  visAutoBackupStatus();
   </script>
 
   <footer class="mt-8 sm:mt-12 border-t border-gray-200 dark:border-gray-800 py-6 text-center text-xs text-gray-400 dark:text-gray-600 space-y-1 px-4">
