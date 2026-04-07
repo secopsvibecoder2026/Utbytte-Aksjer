@@ -838,7 +838,7 @@ function visOversikt(bevarSide = false) {
   const visSeksjon = bekreftet.length > 0 && estimert.length > 0;
 
   const tabellSeksjonHeader = (label, sublabel) => `
-    <tr class="bg-gray-100 dark:bg-gray-800/70">
+    <tr class="bg-gray-100 dark:bg-gray-800">
       <td colspan="17" class="px-4 py-2">
         <span class="text-xs font-semibold text-gray-700 dark:text-gray-200 uppercase tracking-wide">${label}</span>
         <span class="text-xs text-gray-400 dark:text-gray-500 ml-2">${sublabel}</span>
