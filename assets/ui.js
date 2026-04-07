@@ -1723,6 +1723,8 @@ const _BACKUP_DB       = 'exday-autobackup';
 const _BACKUP_STORE    = 'filehandle';
 const _BACKUP_KEY      = 'handle';
 const _SIST_BACKUP_KEY = 'autobackup_sist';
+const _BACKUP_SNOOZE   = 'autobackup_snooze';
+const _BACKUP_AV_KEY   = 'autobackup_av';
 const _DAGER_MELLOM    = 7;
 
 function _erChromiumMedFilAPI() {
@@ -1832,11 +1834,16 @@ function _autoNedlasting(blob) {
 }
 
 function _harData() {
-  const pf  = hentPortefoljer();
   const fav = JSON.parse(localStorage.getItem('fav_aksjer') || '[]');
-  const wl  = hentWatchlister();
+  if (fav.length > 0) return true;
+  const pf  = hentPortefoljer();
   const harPF = Object.values(pf).some(p => Object.keys(p.beholdning || {}).length > 0);
-  return harPF || fav.length > 0 || wl.length > 0;
+  if (harPF) return true;
+  const wl = hentWatchlister();
+  if (wl.length > 0) return true;
+  if (localStorage.getItem('profil_navn')) return true;
+  const trx = JSON.parse(localStorage.getItem('pf_transaksjoner') || '{}');
+  return Object.values(trx).some(t => Array.isArray(t) && t.length > 0);
 }
 
 function _lagBackupToast(tittel, tekst, knappTekst, onKlikk) {
@@ -1854,52 +1861,68 @@ function _lagBackupToast(tittel, tekst, knappTekst, onKlikk) {
       <button class="bt-ok flex-1 px-3 py-1.5 bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold rounded-lg transition-colors">${knappTekst}</button>
       <button class="bt-senere text-xs text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 px-2 transition-colors">Senere</button>
     </div>`;
-  const lukk = () => el.remove();
-  el.querySelector('.bt-lukk').addEventListener('click', lukk);
-  el.querySelector('.bt-senere').addEventListener('click', lukk);
-  el.querySelector('.bt-ok').addEventListener('click', async () => { await onKlikk(); lukk(); });
-  setTimeout(lukk, 20_000);
+  const lukk = (snooze = false) => {
+    if (snooze) localStorage.setItem(_BACKUP_SNOOZE, Date.now().toString());
+    el.remove();
+  };
+  el.querySelector('.bt-lukk').addEventListener('click', () => lukk(true));
+  el.querySelector('.bt-senere').addEventListener('click', () => lukk(true));
+  el.querySelector('.bt-ok').addEventListener('click', async () => { await onKlikk(); lukk(false); });
+  setTimeout(() => lukk(false), 30_000);
   return el;
 }
 
 async function initAutoBackup() {
-  if (!_harData()) return;
-  const blob = _lagBackupBlob();
+  try {
+    if (!_harData()) return;
 
-  if (_erChromiumMedFilAPI()) {
-    // ── Chrome/Edge ────────────────────────────────────────────────────────
-    const handle = await _hentFilhandle();
-    if (handle) {
-      const ok = await _skrivTilFil(handle, blob);
-      if (ok) { localStorage.setItem(_SIST_BACKUP_KEY, new Date().toISOString()); return; }
-      // Tillatelse tapt — fall gjennom til nytt filvalg
-    }
-    const toast = _lagBackupToast(
-      '💾 Automatisk backup',
-      'Velg en fil på datamaskinen — appen oppdaterer den automatisk neste gang du åpner exday.',
-      'Velg fil',
-      async () => {
-        const ok = await _velgOgLagreFil(blob);
-        if (ok) localStorage.setItem(_SIST_BACKUP_KEY, new Date().toISOString());
+    // Sjekk om backup er slått av av bruker (satt til 'nei' fra innstillinger)
+    if (localStorage.getItem(_BACKUP_AV_KEY) === 'nei') return;
+
+    // Sjekk snooze (snoozet = toast ble lukket uten handling)
+    const snooze = parseInt(localStorage.getItem(_BACKUP_SNOOZE) || '0', 10);
+    const dagSidenSnooze = snooze ? Math.floor((Date.now() - snooze) / 86_400_000) : 99;
+    if (dagSidenSnooze < _DAGER_MELLOM) return;
+
+    const blob = _lagBackupBlob();
+
+    if (_erChromiumMedFilAPI()) {
+      // ── Chrome/Edge ──────────────────────────────────────────────────────
+      const handle = await _hentFilhandle();
+      if (handle) {
+        const ok = await _skrivTilFil(handle, blob);
+        if (ok) { localStorage.setItem(_SIST_BACKUP_KEY, new Date().toISOString()); return; }
+        // Tillatelse tapt — fall gjennom til nytt filvalg
       }
-    );
-    document.body.appendChild(toast);
+      const toast = _lagBackupToast(
+        '💾 Automatisk backup',
+        'Velg en fil på datamaskinen — appen oppdaterer den automatisk neste gang du åpner exday.',
+        'Velg fil',
+        async () => {
+          const ok = await _velgOgLagreFil(blob);
+          if (ok) localStorage.setItem(_SIST_BACKUP_KEY, new Date().toISOString());
+        }
+      );
+      document.body.appendChild(toast);
 
-  } else {
-    // ── Firefox / Safari / andre ───────────────────────────────────────────
-    const sist     = localStorage.getItem(_SIST_BACKUP_KEY);
-    const dagSiden = sist
-      ? Math.floor((Date.now() - new Date(sist).getTime()) / 86_400_000)
-      : _DAGER_MELLOM + 1;
-    if (dagSiden < _DAGER_MELLOM) return;
+    } else {
+      // ── Firefox / Safari / andre ─────────────────────────────────────────
+      const sist     = localStorage.getItem(_SIST_BACKUP_KEY);
+      const dagSiden = sist
+        ? Math.floor((Date.now() - new Date(sist).getTime()) / 86_400_000)
+        : _DAGER_MELLOM + 1;
+      if (dagSiden < _DAGER_MELLOM) return;
 
-    const toast = _lagBackupToast(
-      '💾 Ukentlig backup',
-      `Det er ${dagSiden} dager siden sist backup av portefølje og favoritter.`,
-      'Last ned nå',
-      () => { _autoNedlasting(blob); localStorage.setItem(_SIST_BACKUP_KEY, new Date().toISOString()); }
-    );
-    document.body.appendChild(toast);
+      const toast = _lagBackupToast(
+        '💾 Ukentlig backup',
+        `Det er ${dagSiden} dager siden sist backup av portefølje og favoritter.`,
+        'Last ned nå',
+        () => { _autoNedlasting(blob); localStorage.setItem(_SIST_BACKUP_KEY, new Date().toISOString()); }
+      );
+      document.body.appendChild(toast);
+    }
+  } catch (e) {
+    console.warn('initAutoBackup feil:', e);
   }
 }
 
