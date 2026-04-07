@@ -1242,7 +1242,11 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
   <meta name="description" content="{meta_desc}"/>
   <link rel="canonical" href="https://exday.no/aksjer/{ticker}/"/>
   <meta name="theme-color" content="#16a34a"/>
+  <link rel="icon" type="image/png" sizes="512x512" href="/favicon.png"/>
+  <link rel="icon" type="image/png" sizes="180x180" href="/logo/apple_touch_icon_180.png"/>
   <link rel="icon" type="image/svg+xml" href="/logo/exday_icon_primary.svg"/>
+  <link rel="shortcut icon" href="/favicon.png"/>
+  <link rel="apple-touch-icon" href="/logo/apple_touch_icon_180.png"/>
   <meta property="og:title" content="{ticker} – {navn} | exday.no"/>
   <meta property="og:description" content="{meta_desc}"/>
   <meta property="og:url" content="https://exday.no/aksjer/{ticker}/"/>
@@ -1739,7 +1743,11 @@ def generer_sektorsider(aksjer, root_dir):
   <meta name="description" content="{meta_desc}"/>
   <link rel="canonical" href="https://exday.no/aksjer/sektor/{slug}/"/>
   <meta name="theme-color" content="#16a34a"/>
+  <link rel="icon" type="image/png" sizes="512x512" href="/favicon.png"/>
+  <link rel="icon" type="image/png" sizes="180x180" href="/logo/apple_touch_icon_180.png"/>
   <link rel="icon" type="image/svg+xml" href="/logo/exday_icon_primary.svg"/>
+  <link rel="shortcut icon" href="/favicon.png"/>
+  <link rel="apple-touch-icon" href="/logo/apple_touch_icon_180.png"/>
   <meta property="og:title" content="{sektor}-aksjer med utbytte – exday.no"/>
   <meta property="og:description" content="{meta_desc}"/>
   <meta property="og:url" content="https://exday.no/aksjer/sektor/{slug}/"/>
@@ -2162,7 +2170,11 @@ def generer_topplistesider(aksjer, root_dir):
   <meta name="description" content="{desc}"/>
   <link rel="canonical" href="https://exday.no/aksjer/{cfg['slug']}/"/>
   <meta name="theme-color" content="#16a34a"/>
+  <link rel="icon" type="image/png" sizes="512x512" href="/favicon.png"/>
+  <link rel="icon" type="image/png" sizes="180x180" href="/logo/apple_touch_icon_180.png"/>
   <link rel="icon" type="image/svg+xml" href="/logo/exday_icon_primary.svg"/>
+  <link rel="shortcut icon" href="/favicon.png"/>
+  <link rel="apple-touch-icon" href="/logo/apple_touch_icon_180.png"/>
   <meta property="og:title" content="{cfg['tittel']} | exday.no"/>
   <meta property="og:description" content="{desc}"/>
   <meta property="og:url" content="https://exday.no/aksjer/{cfg['slug']}/"/>
