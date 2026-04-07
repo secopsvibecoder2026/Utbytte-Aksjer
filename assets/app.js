@@ -45,6 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initPortefolje();
   initWatchlister();
   initJSONBackup();
+  initAutoBackup();
   initKalkulator();
   initVarsler();
   initSammenligning();

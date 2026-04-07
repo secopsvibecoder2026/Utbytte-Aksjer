@@ -1715,6 +1715,195 @@ function initJSONBackup() {
 }
 
 
+// ── AUTO-BACKUP ────────────────────────────────────────────────────────────
+// Chrome/Edge: File System Access API → skriver stille til en fast fil på disk
+// Firefox/Safari/andre: automatisk nedlasting én gang per uke
+
+const _BACKUP_DB       = 'exday-autobackup';
+const _BACKUP_STORE    = 'filehandle';
+const _BACKUP_KEY      = 'handle';
+const _SIST_BACKUP_KEY = 'autobackup_sist';
+const _DAGER_MELLOM    = 7;
+
+function _erChromiumMedFilAPI() {
+  return (
+    typeof window.showSaveFilePicker === 'function' &&
+    /Chrome|Edg/.test(navigator.userAgent) &&
+    !/Firefox/.test(navigator.userAgent)
+  );
+}
+
+function _aapneBackupDB() {
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open(_BACKUP_DB, 1);
+    req.onupgradeneeded = e => e.target.result.createObjectStore(_BACKUP_STORE);
+    req.onsuccess  = e => resolve(e.target.result);
+    req.onerror    = e => reject(e.target.error);
+  });
+}
+
+async function _hentFilhandle() {
+  try {
+    const db = await _aapneBackupDB();
+    return new Promise((resolve, reject) => {
+      const tx  = db.transaction(_BACKUP_STORE, 'readonly');
+      const req = tx.objectStore(_BACKUP_STORE).get(_BACKUP_KEY);
+      req.onsuccess = e => resolve(e.target.result || null);
+      req.onerror   = e => reject(e.target.error);
+    });
+  } catch { return null; }
+}
+
+async function _lagreFilhandle(handle) {
+  try {
+    const db = await _aapneBackupDB();
+    return new Promise((resolve, reject) => {
+      const tx  = db.transaction(_BACKUP_STORE, 'readwrite');
+      const req = tx.objectStore(_BACKUP_STORE).put(handle, _BACKUP_KEY);
+      req.onsuccess = () => resolve();
+      req.onerror   = e => reject(e.target.error);
+    });
+  } catch { /* stille feil */ }
+}
+
+function _lagBackupBlob() {
+  const backup = {
+    versjon: 5,
+    eksportert: new Date().toISOString(),
+    profil: {
+      navn:      localStorage.getItem('profil_navn') || '',
+      mal_mnd:   localStorage.getItem('profil_mal_mnd') || '0',
+      sparemaal: localStorage.getItem('profil_sparemaal') || '0'
+    },
+    portefoljer:       hentPortefoljer(),
+    aktiv_pf:          hentAktivPFId(),
+    watchlister:       hentWatchlister(),
+    favoritter:        JSON.parse(localStorage.getItem('fav_aksjer') || '[]'),
+    aksje_data:        JSON.parse(localStorage.getItem('aksje_data') || '{}'),
+    notif_aksjer:      JSON.parse(localStorage.getItem('notif_aksjer') || '[]'),
+    historikk:         JSON.parse(localStorage.getItem('pf_historikk') || '{}'),
+    rebalansering:     JSON.parse(localStorage.getItem('pf_rebalansering') || '{}'),
+    tema:              localStorage.getItem('tema') || '',
+    sortering:         localStorage.getItem('sortering') || '',
+    paginering:        localStorage.getItem('paginering-per-side') || '25',
+    rebal_skjul_tomme: localStorage.getItem('rebal-skjul-tomme') || 'true',
+    streak: {
+      teller:     localStorage.getItem('streak_teller') || '1',
+      sist_besok: localStorage.getItem('streak_sist_besok') || ''
+    },
+    milepeler: JSON.parse(localStorage.getItem('milepeler_oppnaad') || '[]')
+  };
+  return new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
+}
+
+async function _skrivTilFil(handle, blob) {
+  try {
+    const perm = await handle.queryPermission({ mode: 'readwrite' });
+    if (perm !== 'granted') {
+      const req = await handle.requestPermission({ mode: 'readwrite' });
+      if (req !== 'granted') return false;
+    }
+    const writable = await handle.createWritable();
+    await writable.write(blob);
+    await writable.close();
+    return true;
+  } catch { return false; }
+}
+
+async function _velgOgLagreFil(blob) {
+  try {
+    const dato   = new Date().toISOString().slice(0, 10);
+    const handle = await window.showSaveFilePicker({
+      suggestedName: `exday-backup-${dato}.json`,
+      types: [{ description: 'JSON backup', accept: { 'application/json': ['.json'] } }]
+    });
+    await _lagreFilhandle(handle);
+    await _skrivTilFil(handle, blob);
+    return true;
+  } catch { return false; }
+}
+
+function _autoNedlasting(blob) {
+  const dato = new Date().toISOString().slice(0, 10);
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href = url; a.download = `exday-backup-${dato}.json`; a.click();
+  URL.revokeObjectURL(url);
+}
+
+function _harData() {
+  const pf  = hentPortefoljer();
+  const fav = JSON.parse(localStorage.getItem('fav_aksjer') || '[]');
+  const wl  = hentWatchlister();
+  const harPF = Object.values(pf).some(p => Object.keys(p.beholdning || {}).length > 0);
+  return harPF || fav.length > 0 || wl.length > 0;
+}
+
+function _lagBackupToast(tittel, tekst, knappTekst, onKlikk) {
+  const el = document.createElement('div');
+  el.className = 'fixed bottom-4 right-4 z-50 max-w-sm w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-xl p-4 flex flex-col gap-2';
+  el.innerHTML =
+    `<div class="flex items-start justify-between gap-2">
+      <div>
+        <p class="text-sm font-semibold text-gray-800 dark:text-gray-100">${tittel}</p>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">${tekst}</p>
+      </div>
+      <button class="bt-lukk text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-xl leading-none shrink-0">×</button>
+    </div>
+    <div class="flex gap-2">
+      <button class="bt-ok flex-1 px-3 py-1.5 bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold rounded-lg transition-colors">${knappTekst}</button>
+      <button class="bt-senere text-xs text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 px-2 transition-colors">Senere</button>
+    </div>`;
+  const lukk = () => el.remove();
+  el.querySelector('.bt-lukk').addEventListener('click', lukk);
+  el.querySelector('.bt-senere').addEventListener('click', lukk);
+  el.querySelector('.bt-ok').addEventListener('click', async () => { await onKlikk(); lukk(); });
+  setTimeout(lukk, 20_000);
+  return el;
+}
+
+async function initAutoBackup() {
+  if (!_harData()) return;
+  const blob = _lagBackupBlob();
+
+  if (_erChromiumMedFilAPI()) {
+    // ── Chrome/Edge ────────────────────────────────────────────────────────
+    const handle = await _hentFilhandle();
+    if (handle) {
+      const ok = await _skrivTilFil(handle, blob);
+      if (ok) { localStorage.setItem(_SIST_BACKUP_KEY, new Date().toISOString()); return; }
+      // Tillatelse tapt — fall gjennom til nytt filvalg
+    }
+    const toast = _lagBackupToast(
+      '💾 Automatisk backup',
+      'Velg en fil på datamaskinen — appen oppdaterer den automatisk neste gang du åpner exday.',
+      'Velg fil',
+      async () => {
+        const ok = await _velgOgLagreFil(blob);
+        if (ok) localStorage.setItem(_SIST_BACKUP_KEY, new Date().toISOString());
+      }
+    );
+    document.body.appendChild(toast);
+
+  } else {
+    // ── Firefox / Safari / andre ───────────────────────────────────────────
+    const sist     = localStorage.getItem(_SIST_BACKUP_KEY);
+    const dagSiden = sist
+      ? Math.floor((Date.now() - new Date(sist).getTime()) / 86_400_000)
+      : _DAGER_MELLOM + 1;
+    if (dagSiden < _DAGER_MELLOM) return;
+
+    const toast = _lagBackupToast(
+      '💾 Ukentlig backup',
+      `Det er ${dagSiden} dager siden sist backup av portefølje og favoritter.`,
+      'Last ned nå',
+      () => { _autoNedlasting(blob); localStorage.setItem(_SIST_BACKUP_KEY, new Date().toISOString()); }
+    );
+    document.body.appendChild(toast);
+  }
+}
+
+
 function eksporterEnkeltICS(a, type, dato) {
   const pf = hentPF();
   const datoStr = d => d.replace(/-/g, '');
