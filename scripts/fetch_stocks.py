@@ -576,7 +576,7 @@ def hent_aksje(meta):
             betaling_dato = format_dato(calendar.get("dividendDate"))
         # Yahoo Finance er konsekvent 1 dag for tidlig for .OL-aksjer (T+2-oppgjør).
         # Korrigerer med +1 dag så ex-dato matcher Oslo Børs / Nordnet.
-        if ex_dato and ticker.endswith(".OL"):
+        if ex_dato and ticker_yf.endswith(".OL"):
             try:
                 ex_dato = (datetime.date.fromisoformat(ex_dato) + datetime.timedelta(days=1)).isoformat()
             except ValueError:
