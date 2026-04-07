@@ -869,104 +869,221 @@ def _lag_analyse_tekst(a):
     return " ".join(deler)
 
 
-def _lag_faq(a):
-    """Bygger FAQ-spørsmål og -svar spesifikke for en aksje."""
+def _lag_utbytte_profil(a, sektor_snitt):
+    """Investor-profil med badges og sektorsammenligning."""
     ticker = a["ticker"]
     navn   = a["navn"]
+    sektor = a.get("sektor") or "Annet"
     yield_ = a.get("utbytte_yield") or 0
-    upa    = a.get("utbytte_per_aksje") or 0
-    ex     = a.get("ex_dato") or ""
-    bet    = a.get("betaling_dato") or ""
     snitt5 = a.get("snitt_yield_5ar") or 0
-    frekvens = a.get("frekvens") or ""
-    valuta = a.get("valuta") or "NOK"
-    pris   = a.get("pris") or 0
     ar_med = a.get("ar_med_utbytte") or 0
     vekst  = a.get("utbytte_vekst_5ar")
+    payout = a.get("payout_ratio") or 0
 
-    faq = []
+    SYKLISKE  = {"Shipping", "Energi", "Havbruk", "Materialer", "Energitjenester"}
+    DEFENSIVE = {"Finans", "Eiendom", "Telekommunikasjon", "Forsyning", "Helsevern"}
 
-    # 1. Yield
-    if yield_ > 0:
-        faq.append({
-            "q": f"Hva er direkteavkastningen til {navn}?",
-            "a": (
-                f"{navn} ({ticker}) har en direkteavkastning på {yield_:.2f}% basert på siste kurs. "
-                + (f"5-årssnittlig yield er {snitt5:.1f}%. " if snitt5 > 0 else "")
-                + (f"Selskapet har betalt utbytte i {ar_med} år på rad." if ar_med > 5 else "")
-            ).strip()
-        })
+    badges = []
+    if yield_ >= 5:
+        badges.append(("Høy yield",      "badge-green"))
+    if ar_med >= 10:
+        badges.append(("Stabil betaler",  "badge-blue"))
+    if vekst is not None and vekst > 1:
+        badges.append(("Utbyttevekst",    "badge-teal"))
+    if sektor in SYKLISKE:
+        badges.append(("Syklisk",         "badge-orange"))
+    elif sektor in DEFENSIVE:
+        badges.append(("Defensiv",        "badge-gray"))
 
-    # 2. Ex-dato og utbetaling
-    if ex or bet:
-        ex_str  = _fmt_dato(ex) if ex else "ikke kunngjort"
-        bet_str = _fmt_dato(bet) if bet else "ikke kunngjort"
-        faq.append({
-            "q": f"Når er neste ex-dato og utbetalingsdato for {ticker}?",
-            "a": (
-                f"Neste ex-dato for {ticker} er {ex_str}. "
-                f"Du må eie aksjen før denne datoen for å motta utbytte. "
-                f"Utbetalingsdatoen er {bet_str}."
+    badge_html = "".join(
+        f'<span class="profil-badge {cls}">{label}</span>'
+        for label, cls in badges
+    )
+
+    # Sektorsammenligning-tekst
+    sn = sektor_snitt.get(sektor, 0)
+    tekst_deler = []
+    if yield_ > 0 and sn > 0:
+        if yield_ >= sn * 1.1:
+            tekst_deler.append(
+                f"{ticker} gir {yield_:.1f}% direkteavkastning, "
+                f"over sektorsnittet for {sektor.lower()} på {sn:.1f}%."
             )
-        })
-
-    # 3. Kalkulator-eksempel
-    if pris > 0 and (upa > 0 or yield_ > 0):
-        eks_belop = 100_000
-        antall    = int(eks_belop // pris)
-        utb_aar   = antall * upa if upa > 0 else (yield_ / 100) * (antall * pris)
-        faq.append({
-            "q": f"Hvor mye utbytte gir 100 000 kr investert i {ticker}?",
-            "a": (
-                f"Med 100 000 kr kan du kjøpe omtrent {antall} aksjer i {navn} "
-                f"til kurs {pris:,.0f} {valuta}. "
-                + (f"Det gir ca. {utb_aar:,.0f} {valuta} i utbytte per år "
-                   f"({utb_aar/12:,.0f} {valuta} per måned) basert på {upa} {valuta} per aksje. "
-                   if upa > 0 else
-                   f"Det gir ca. {utb_aar:,.0f} {valuta} i utbytte per år basert på {yield_:.2f}% yield. ")
-                + f"Etter 37,84% utbytteskatt sitter du igjen med ca. {utb_aar * 0.6216:,.0f} {valuta} netto."
+        elif yield_ <= sn * 0.9:
+            tekst_deler.append(
+                f"{ticker} gir {yield_:.1f}% direkteavkastning, "
+                f"noe under sektorsnittet for {sektor.lower()} på {sn:.1f}%."
             )
-        })
-
-    # 4. Frekvens
-    if frekvens:
-        freq_forklaring = {
-            "Kvartalsvis": "fire ganger i året (mars, juni, september, desember)",
-            "Halvårlig":   "to ganger i året",
-            "Årlig":       "én gang i året",
-            "Månedlig":    "hver måned",
-        }.get(frekvens, frekvens.lower())
-        faq.append({
-            "q": f"Hvor ofte betaler {navn} utbytte?",
-            "a": (
-                f"{navn} betaler utbytte {freq_forklaring}. "
-                + (f"Selskapet har hatt sammenhengende utbyttebetalinger i {ar_med} år." if ar_med > 3 else "")
-            ).strip()
-        })
-
-    # 5. Utbyttevekst
-    if vekst is not None and abs(vekst) > 0.5:
-        if vekst > 0:
-            faq.append({
-                "q": f"Har {navn} økt utbyttet over tid?",
-                "a": (
-                    f"Ja, {navn} har økt utbyttet med gjennomsnittlig {vekst:.1f}% per år de siste 5 årene. "
-                    "Dette er et tegn på stabil og voksende inntjening."
-                )
-            })
         else:
-            faq.append({
-                "q": f"Har {navn} redusert utbyttet over tid?",
-                "a": (
-                    f"{navn} har redusert utbyttet med {abs(vekst):.1f}% per år i snitt over de siste 5 årene. "
-                    "Investorer bør se på selskapets inntjeningsutvikling og fremtidsutsikter."
-                )
-            })
+            tekst_deler.append(
+                f"{ticker} gir {yield_:.1f}% direkteavkastning, "
+                f"nær sektorsnittet for {sektor.lower()} på {sn:.1f}%."
+            )
+    if ar_med >= 15:
+        tekst_deler.append(
+            f"Med {ar_med} år på rad med utbytte er {navn} "
+            f"blant de mest stabile utbyttebetalerne på Oslo Børs."
+        )
+    elif ar_med >= 5:
+        tekst_deler.append(
+            f"Selskapet har betalt utbytte {ar_med} år på rad."
+        )
+    if payout > 0 and payout < 50:
+        tekst_deler.append("Lav utbetalingsgrad gir rom for fremtidige utbytteøkninger.")
+    elif payout >= 100:
+        tekst_deler.append("Utbetalingsgraden er over 100% — utbyttet finansieres delvis av kapital.")
 
-    return faq
+    tekst_html = f'<p class="profil-tekst">{" ".join(tekst_deler)}</p>' if tekst_deler else ""
+
+    return (
+        f'<div class="profil-seksjon">'
+        f'<h2>Utbytteprofil</h2>'
+        f'<div class="profil-badges">{badge_html}</div>'
+        f'{tekst_html}'
+        f'</div>'
+    ) if (badge_html or tekst_html) else ""
 
 
-def _aksje_side_html(a, today, relaterte=None):
+def _lag_historikk_prosa(a):
+    """Narrativ tekst basert på historiske utbyttedata."""
+    navn  = a["navn"]
+    hist  = a.get("historiske_utbytter") or []
+    valuta = a.get("valuta") or "NOK"
+    yield_ = a.get("utbytte_yield") or 0
+    upa    = a.get("utbytte_per_aksje") or 0
+
+    if len(hist) < 2:
+        return ""
+
+    sortert  = sorted(hist, key=lambda x: x["ar"])
+    antall_ar = len(sortert)
+    min_h    = min(sortert, key=lambda x: x["utbytte"])
+    max_h    = max(sortert, key=lambda x: x["utbytte"])
+    siste    = sortert[-1]
+
+    deler = []
+    deler.append(
+        f"{navn} har de siste {antall_ar} årene betalt mellom "
+        f"{min_h['utbytte']:.2f} og {max_h['utbytte']:.2f} {valuta} per aksje i utbytte."
+    )
+    if max_h["ar"] != siste["ar"]:
+        deler.append(
+            f"Det høyeste utbyttet ble registrert i {max_h['ar']} "
+            f"med {max_h['utbytte']:.2f} {valuta} per aksje "
+            f"({max_h.get('yield', 0):.1f}% yield)."
+        )
+    if upa > 0 and yield_ > 0:
+        deler.append(
+            f"I {siste['ar']} er utbyttet {siste['utbytte']:.2f} {valuta} per aksje, "
+            f"tilsvarende {yield_:.1f}% direkteavkastning."
+        )
+
+    return (
+        f'<div class="historikk-prosa">'
+        f'<h2>Utbyttehistorikk</h2>'
+        f'<p>{" ".join(deler)}</p>'
+        f'</div>'
+    )
+
+
+SEKTOR_RISIKOER = {
+    "Energi": [
+        "Olje- og gasspris påvirker inntjeningen direkte og kan svinge kraftig",
+        "Energiomstilling og ESG-krav kan presse markedsverdi over tid",
+        "Statlig eierstyring kan påvirke utbyttepolitikk",
+    ],
+    "Energitjenester": [
+        "Aktivitetsnivå i olje- og gassektoren styrer etterspørselen",
+        "Prispress fra internasjonale konkurrenter",
+        "Syklisk inntjening gjør utbyttet konjunkturavhengig",
+    ],
+    "Shipping": [
+        "Fraktrater er svært volatile og kan halves på kort tid",
+        "Bunkerspriser (drivstoff) påvirker driftsmarginene direkte",
+        "Overkapasitet i markedet kan presse ratene ned i lengre perioder",
+    ],
+    "Havbruk": [
+        "Laksepris varierer med globalt tilbud og etterspørsel",
+        "Biologisk risiko (lakselus, sykdom) kan redusere produksjonsvolum",
+        "Eksportrestriksjoner og politisk risiko i nøkkelmarkeder",
+    ],
+    "Finans": [
+        "Rentenivå påvirker netto renteinntekter og utlånsmargin",
+        "Økte kredittap i nedgangstider kan presse resultater",
+        "Regulatoriske kapitalkrav begrenser utbyttekapasitet",
+    ],
+    "Eiendom": [
+        "Renteøkninger øker finansieringskostnader og presser verdivurderinger",
+        "Ledighetsgrad og leiepriser varierer med konjunktur",
+        "Refinansiering av gjeld kan være utfordrende i et stramt marked",
+    ],
+    "Fornybar energi": [
+        "Strømpris er volatil og avgjørende for inntjening",
+        "Regulatorisk risiko knyttet til støtteordninger og konsesjoner",
+        "Høye investeringsbehov kan begrense utbyttekapasitet",
+    ],
+    "Materialer": [
+        "Råvareprisene er sykliske og konjunkturfølsomme",
+        "Valutaeksponering ved internasjonal omsetning kan påvirke marginer",
+        "Miljøregulering kan øke driftskostnader",
+    ],
+    "Industri": [
+        "Konjunkturfølsomhet påvirker ordrevolum og marginer",
+        "Råvare- og energikostnader kan variere betydelig",
+        "Valuta- og eksportrisiko for internasjonale selskaper",
+    ],
+    "Telekommunikasjon": [
+        "Prispress fra konkurranse kan redusere marginer",
+        "Høye investeringer i infrastruktur binder kapital",
+        "Regulatorisk usikkerhet rundt frekvenstillatelser",
+    ],
+    "Forbruksvarer": [
+        "Konjunkturnedgang reduserer forbrukernes kjøpekraft",
+        "Priskonkurranse fra netthandel og lavprisaktører",
+        "Råvarekostnader (emballasje, ingredienser) varierer",
+    ],
+    "Helsevern": [
+        "Regulatorisk godkjenning og patent-utløp kan endre inntjeningsbildet",
+        "Prispress fra offentlige innkjøpere",
+        "Høye FoU-kostnader kan begrense utbyttekapasitet",
+    ],
+    "Forsyning": [
+        "Regulerte tariffer begrenser vekstpotensialet",
+        "Høye kapitalinvesteringer i nett og infrastruktur",
+        "Politisk risiko knyttet til prissetting og konsesjoner",
+    ],
+    "Informasjonsteknologi": [
+        "Rask teknologiutvikling kan gjøre produkter utdaterte",
+        "Høy konkurranse fra internasjonale aktører presser marginer",
+        "Høye investeringsbehov i utvikling og salg",
+    ],
+    "Kommunikasjonstjenester": [
+        "Prispress og høy konkurranse i digitale medier",
+        "Regulatoriske krav knyttet til personvern og innhold",
+        "Annonseinntekter er konjunkturfølsomme",
+    ],
+}
+STANDARD_RISIKOER = [
+    "Makroøkonomisk nedgang kan påvirke inntjening og utbyttekapasitet",
+    "Valuta- og renteeksponering kan påvirke resultater",
+    "Regulatoriske endringer kan påvirke driftsbetingelser",
+]
+
+
+def _lag_risikofaktorer(a):
+    """Sektor-spesifikke risikofaktorer for utbyttet."""
+    sektor = a.get("sektor") or ""
+    risikoer = SEKTOR_RISIKOER.get(sektor, STANDARD_RISIKOER)
+    punkter = "\n".join(f"<li>{r}</li>" for r in risikoer)
+    return (
+        f'<div class="risiko-seksjon">'
+        f'<h2>Risiko for utbyttet</h2>'
+        f'<ul class="risiko-liste">{punkter}</ul>'
+        f'</div>'
+    )
+
+
+def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     ticker  = a["ticker"]
     navn    = a["navn"]
     sektor  = a.get("sektor") or "—"
@@ -1060,18 +1177,10 @@ def _aksje_side_html(a, today, relaterte=None):
         "</table>"
     ) if hist_rader else ""
 
-    # FAQ
-    faq_liste = _lag_faq(a)
-    faq_html = ""
-    if faq_liste:
-        faq_items = "\n".join(
-            f'<div class="faq-item">'
-            f'<h3 class="faq-q">{item["q"]}</h3>'
-            f'<p class="faq-a">{item["a"]}</p>'
-            f'</div>'
-            for item in faq_liste
-        )
-        faq_html = f'<div class="faq-seksjon"><h2>Vanlige spørsmål om {navn}</h2>{faq_items}</div>'
+    # Nye innholdsseksjoner
+    profil_html    = _lag_utbytte_profil(a, sektor_snitt or {})
+    hist_prosa_html = _lag_historikk_prosa(a)
+    risiko_html    = _lag_risikofaktorer(a)
 
     # Relaterte aksjer
     relaterte_html = ""
@@ -1106,18 +1215,6 @@ def _aksje_side_html(a, today, relaterte=None):
             "provider": {"@type": "Organization", "name": "exday.no", "url": "https://exday.no/"},
         },
     ]
-    if faq_liste:
-        ld_graph.append({
-            "@type": "FAQPage",
-            "mainEntity": [
-                {
-                    "@type": "Question",
-                    "name": item["q"],
-                    "acceptedAnswer": {"@type": "Answer", "text": item["a"]}
-                }
-                for item in faq_liste
-            ]
-        })
     json_ld = json.dumps({"@context": "https://schema.org", "@graph": ld_graph}, ensure_ascii=False, indent=2)
 
     return f"""<!DOCTYPE html>
@@ -1192,11 +1289,20 @@ def _aksje_side_html(a, today, relaterte=None):
     .updated {{ font-size: 0.78rem; text-align: right; margin-top: 1rem; }}
     .mini-nav {{ display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.5rem; font-size: 0.85rem; }}
     .mini-nav a {{ color: #16a34a; }}
-    .faq-seksjon {{ margin: 1.5rem 0; }}
-    .faq-seksjon h2 {{ margin-bottom: 1rem; }}
-    .faq-item {{ border-radius: 0.75rem; padding: 1rem 1.25rem; margin-bottom: 0.75rem; border: 1px solid; }}
-    .faq-q {{ font-size: 0.95rem; font-weight: 600; margin-bottom: 0.4rem; }}
-    .faq-a {{ font-size: 0.9rem; line-height: 1.6; }}
+    .profil-seksjon {{ margin: 1.5rem 0; }}
+    .profil-badges {{ display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem; }}
+    .profil-badge {{ font-size: 0.75rem; font-weight: 600; padding: 0.25rem 0.75rem; border-radius: 9999px; }}
+    .badge-green {{ background: #dcfce7; color: #15803d; }}
+    .badge-blue {{ background: #dbeafe; color: #1d4ed8; }}
+    .badge-teal {{ background: #ccfbf1; color: #0f766e; }}
+    .badge-orange {{ background: #ffedd5; color: #c2410c; }}
+    .badge-gray {{ background: #f3f4f6; color: #374151; }}
+    .profil-tekst {{ font-size: 0.9rem; line-height: 1.65; }}
+    .historikk-prosa {{ margin: 1.5rem 0; }}
+    .historikk-prosa p {{ font-size: 0.9rem; line-height: 1.7; }}
+    .risiko-seksjon {{ margin: 1.5rem 0; }}
+    .risiko-liste {{ list-style: none; padding: 0; margin: 0; }}
+    .risiko-liste li {{ font-size: 0.875rem; padding: 0.5rem 0.75rem; border-left: 3px solid #fca5a5; margin-bottom: 0.5rem; line-height: 1.5; }}
     .relaterte {{ margin: 1.5rem 0; }}
     .relaterte h2 {{ margin-bottom: 0.75rem; }}
     .rel-grid {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 0.75rem; }}
@@ -1257,9 +1363,14 @@ def _aksje_side_html(a, today, relaterte=None):
     .dark .kcard .val.green {{ color: #4ade80; }}
     .dark .ytick {{ stroke: #1f2937; }}
     .dark .hbar {{ fill: #22c55e; }}
-    .dark .faq-item {{ background: #111827; border-color: #1f2937; }}
-    .dark .faq-q {{ color: #f3f4f6; }}
-    .dark .faq-a {{ color: #9ca3af; }}
+    .dark .badge-green {{ background: #14532d; color: #86efac; }}
+    .dark .badge-blue {{ background: #1e3a5f; color: #93c5fd; }}
+    .dark .badge-teal {{ background: #134e4a; color: #5eead4; }}
+    .dark .badge-orange {{ background: #431407; color: #fdba74; }}
+    .dark .badge-gray {{ background: #1f2937; color: #d1d5db; }}
+    .dark .profil-tekst {{ color: #9ca3af; }}
+    .dark .historikk-prosa p {{ color: #9ca3af; }}
+    .dark .risiko-liste li {{ border-left-color: #7f1d1d; color: #9ca3af; }}
     .dark .rel-kort {{ background: #111827; border-color: #1f2937; }}
     .dark .rel-navn {{ color: #9ca3af; }}
   </style>
@@ -1340,7 +1451,11 @@ def _aksje_side_html(a, today, relaterte=None):
 
   {hist_seksjon}
 
-  {faq_html}
+  {profil_html}
+
+  {hist_prosa_html}
+
+  {risiko_html}
 
   {relaterte_html}
 
@@ -1393,11 +1508,16 @@ def generer_aksjesider(aksjer, root_dir):
     aksjer_dir = os.path.join(root_dir, "aksjer")
     os.makedirs(aksjer_dir, exist_ok=True)
 
-    # Bygg sektor-indeks for relaterte aksjer
-    sektor_map = {}
+    # Bygg sektor-indeks for relaterte aksjer og sektorsnitt
+    sektor_map  = {}
+    sektor_data = {}
     for a in aksjer:
         s = a.get("sektor") or "Annet"
         sektor_map.setdefault(s, []).append(a)
+        y = a.get("utbytte_yield") or 0
+        if y > 0:
+            sektor_data.setdefault(s, []).append(y)
+    sektor_snitt = {s: sum(v) / len(v) for s, v in sektor_data.items() if v}
 
     for a in aksjer:
         ticker = a["ticker"]
@@ -1410,7 +1530,7 @@ def generer_aksjesider(aksjer, root_dir):
                                key=lambda x: x.get("utbytte_yield", 0), reverse=True)
             if r["ticker"] != ticker and (r.get("utbytte_yield") or 0) > 0
         ][:4]
-        html = _aksje_side_html(a, today, relaterte=relaterte)
+        html = _aksje_side_html(a, today, relaterte=relaterte, sektor_snitt=sektor_snitt)
         with open(os.path.join(ticker_dir, "index.html"), "w", encoding="utf-8") as f:
             f.write(html)
 

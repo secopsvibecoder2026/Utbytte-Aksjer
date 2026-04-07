@@ -64,19 +64,6 @@
         "name": "exday.no",
         "url": "https://exday.no/"
       }
-    },
-    {
-      "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "Hvor ofte betaler Norcod AS utbytte?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Norcod AS betaler utbytte uregelmessig."
-          }
-        }
-      ]
     }
   ]
 }</script>
@@ -121,11 +108,20 @@
     .updated { font-size: 0.78rem; text-align: right; margin-top: 1rem; }
     .mini-nav { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.5rem; font-size: 0.85rem; }
     .mini-nav a { color: #16a34a; }
-    .faq-seksjon { margin: 1.5rem 0; }
-    .faq-seksjon h2 { margin-bottom: 1rem; }
-    .faq-item { border-radius: 0.75rem; padding: 1rem 1.25rem; margin-bottom: 0.75rem; border: 1px solid; }
-    .faq-q { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.4rem; }
-    .faq-a { font-size: 0.9rem; line-height: 1.6; }
+    .profil-seksjon { margin: 1.5rem 0; }
+    .profil-badges { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem; }
+    .profil-badge { font-size: 0.75rem; font-weight: 600; padding: 0.25rem 0.75rem; border-radius: 9999px; }
+    .badge-green { background: #dcfce7; color: #15803d; }
+    .badge-blue { background: #dbeafe; color: #1d4ed8; }
+    .badge-teal { background: #ccfbf1; color: #0f766e; }
+    .badge-orange { background: #ffedd5; color: #c2410c; }
+    .badge-gray { background: #f3f4f6; color: #374151; }
+    .profil-tekst { font-size: 0.9rem; line-height: 1.65; }
+    .historikk-prosa { margin: 1.5rem 0; }
+    .historikk-prosa p { font-size: 0.9rem; line-height: 1.7; }
+    .risiko-seksjon { margin: 1.5rem 0; }
+    .risiko-liste { list-style: none; padding: 0; margin: 0; }
+    .risiko-liste li { font-size: 0.875rem; padding: 0.5rem 0.75rem; border-left: 3px solid #fca5a5; margin-bottom: 0.5rem; line-height: 1.5; }
     .relaterte { margin: 1.5rem 0; }
     .relaterte h2 { margin-bottom: 0.75rem; }
     .rel-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 0.75rem; }
@@ -186,9 +182,14 @@
     .dark .kcard .val.green { color: #4ade80; }
     .dark .ytick { stroke: #1f2937; }
     .dark .hbar { fill: #22c55e; }
-    .dark .faq-item { background: #111827; border-color: #1f2937; }
-    .dark .faq-q { color: #f3f4f6; }
-    .dark .faq-a { color: #9ca3af; }
+    .dark .badge-green { background: #14532d; color: #86efac; }
+    .dark .badge-blue { background: #1e3a5f; color: #93c5fd; }
+    .dark .badge-teal { background: #134e4a; color: #5eead4; }
+    .dark .badge-orange { background: #431407; color: #fdba74; }
+    .dark .badge-gray { background: #1f2937; color: #d1d5db; }
+    .dark .profil-tekst { color: #9ca3af; }
+    .dark .historikk-prosa p { color: #9ca3af; }
+    .dark .risiko-liste li { border-left-color: #7f1d1d; color: #9ca3af; }
     .dark .rel-kort { background: #111827; border-color: #1f2937; }
     .dark .rel-navn { color: #9ca3af; }
   </style>
@@ -269,7 +270,13 @@
 
   
 
-  <div class="faq-seksjon"><h2>Vanlige spørsmål om Norcod AS</h2><div class="faq-item"><h3 class="faq-q">Hvor ofte betaler Norcod AS utbytte?</h3><p class="faq-a">Norcod AS betaler utbytte uregelmessig.</p></div></div>
+  <div class="profil-seksjon"><h2>Utbytteprofil</h2><div class="profil-badges"><span class="profil-badge badge-orange">Syklisk</span></div></div>
+
+  
+
+  <div class="risiko-seksjon"><h2>Risiko for utbyttet</h2><ul class="risiko-liste"><li>Laksepris varierer med globalt tilbud og etterspørsel</li>
+<li>Biologisk risiko (lakselus, sykdom) kan redusere produksjonsvolum</li>
+<li>Eksportrestriksjoner og politisk risiko i nøkkelmarkeder</li></ul></div>
 
   <div class="relaterte"><h2>Andre havbruk-aksjer med utbytte</h2><div class="rel-grid"><a href="/aksjer/GSF/" class="rel-kort"><span class="rel-ticker">GSF</span><span class="rel-navn">Grieg Seafood ASA</span><span class="rel-yield">47.0%</span></a>
 <a href="/aksjer/AUSS/" class="rel-kort"><span class="rel-ticker">AUSS</span><span class="rel-navn">Austevoll Seafood ASA</span><span class="rel-yield">6.2%</span></a>

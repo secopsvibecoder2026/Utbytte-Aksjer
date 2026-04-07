@@ -64,43 +64,6 @@
         "name": "exday.no",
         "url": "https://exday.no/"
       }
-    },
-    {
-      "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "Hva er direkteavkastningen til Arendals Fossekompani ASA?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Arendals Fossekompani ASA (AFG) har en direkteavkastning på 3.75% basert på siste kurs. 5-årssnittlig yield er 5.3%. Selskapet har betalt utbytte i 26 år på rad."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Hvor mye utbytte gir 100 000 kr investert i AFG?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Med 100 000 kr kan du kjøpe omtrent 576 aksjer i Arendals Fossekompani ASA til kurs 173 NOK. Det gir ca. 3,744 NOK i utbytte per år (312 NOK per måned) basert på 6.5 NOK per aksje. Etter 37,84% utbytteskatt sitter du igjen med ca. 2,327 NOK netto."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Hvor ofte betaler Arendals Fossekompani ASA utbytte?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Arendals Fossekompani ASA betaler utbytte to ganger i året. Selskapet har hatt sammenhengende utbyttebetalinger i 26 år."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Har Arendals Fossekompani ASA redusert utbyttet over tid?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Arendals Fossekompani ASA har redusert utbyttet med 3.8% per år i snitt over de siste 5 årene. Investorer bør se på selskapets inntjeningsutvikling og fremtidsutsikter."
-          }
-        }
-      ]
     }
   ]
 }</script>
@@ -145,11 +108,20 @@
     .updated { font-size: 0.78rem; text-align: right; margin-top: 1rem; }
     .mini-nav { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.5rem; font-size: 0.85rem; }
     .mini-nav a { color: #16a34a; }
-    .faq-seksjon { margin: 1.5rem 0; }
-    .faq-seksjon h2 { margin-bottom: 1rem; }
-    .faq-item { border-radius: 0.75rem; padding: 1rem 1.25rem; margin-bottom: 0.75rem; border: 1px solid; }
-    .faq-q { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.4rem; }
-    .faq-a { font-size: 0.9rem; line-height: 1.6; }
+    .profil-seksjon { margin: 1.5rem 0; }
+    .profil-badges { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem; }
+    .profil-badge { font-size: 0.75rem; font-weight: 600; padding: 0.25rem 0.75rem; border-radius: 9999px; }
+    .badge-green { background: #dcfce7; color: #15803d; }
+    .badge-blue { background: #dbeafe; color: #1d4ed8; }
+    .badge-teal { background: #ccfbf1; color: #0f766e; }
+    .badge-orange { background: #ffedd5; color: #c2410c; }
+    .badge-gray { background: #f3f4f6; color: #374151; }
+    .profil-tekst { font-size: 0.9rem; line-height: 1.65; }
+    .historikk-prosa { margin: 1.5rem 0; }
+    .historikk-prosa p { font-size: 0.9rem; line-height: 1.7; }
+    .risiko-seksjon { margin: 1.5rem 0; }
+    .risiko-liste { list-style: none; padding: 0; margin: 0; }
+    .risiko-liste li { font-size: 0.875rem; padding: 0.5rem 0.75rem; border-left: 3px solid #fca5a5; margin-bottom: 0.5rem; line-height: 1.5; }
     .relaterte { margin: 1.5rem 0; }
     .relaterte h2 { margin-bottom: 0.75rem; }
     .rel-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 0.75rem; }
@@ -210,9 +182,14 @@
     .dark .kcard .val.green { color: #4ade80; }
     .dark .ytick { stroke: #1f2937; }
     .dark .hbar { fill: #22c55e; }
-    .dark .faq-item { background: #111827; border-color: #1f2937; }
-    .dark .faq-q { color: #f3f4f6; }
-    .dark .faq-a { color: #9ca3af; }
+    .dark .badge-green { background: #14532d; color: #86efac; }
+    .dark .badge-blue { background: #1e3a5f; color: #93c5fd; }
+    .dark .badge-teal { background: #134e4a; color: #5eead4; }
+    .dark .badge-orange { background: #431407; color: #fdba74; }
+    .dark .badge-gray { background: #1f2937; color: #d1d5db; }
+    .dark .profil-tekst { color: #9ca3af; }
+    .dark .historikk-prosa p { color: #9ca3af; }
+    .dark .risiko-liste li { border-left-color: #7f1d1d; color: #9ca3af; }
     .dark .rel-kort { background: #111827; border-color: #1f2937; }
     .dark .rel-navn { color: #9ca3af; }
   </style>
@@ -316,10 +293,13 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
           <td>8.26%</td>
         </tr></tbody></table>
 
-  <div class="faq-seksjon"><h2>Vanlige spørsmål om Arendals Fossekompani ASA</h2><div class="faq-item"><h3 class="faq-q">Hva er direkteavkastningen til Arendals Fossekompani ASA?</h3><p class="faq-a">Arendals Fossekompani ASA (AFG) har en direkteavkastning på 3.75% basert på siste kurs. 5-årssnittlig yield er 5.3%. Selskapet har betalt utbytte i 26 år på rad.</p></div>
-<div class="faq-item"><h3 class="faq-q">Hvor mye utbytte gir 100 000 kr investert i AFG?</h3><p class="faq-a">Med 100 000 kr kan du kjøpe omtrent 576 aksjer i Arendals Fossekompani ASA til kurs 173 NOK. Det gir ca. 3,744 NOK i utbytte per år (312 NOK per måned) basert på 6.5 NOK per aksje. Etter 37,84% utbytteskatt sitter du igjen med ca. 2,327 NOK netto.</p></div>
-<div class="faq-item"><h3 class="faq-q">Hvor ofte betaler Arendals Fossekompani ASA utbytte?</h3><p class="faq-a">Arendals Fossekompani ASA betaler utbytte to ganger i året. Selskapet har hatt sammenhengende utbyttebetalinger i 26 år.</p></div>
-<div class="faq-item"><h3 class="faq-q">Har Arendals Fossekompani ASA redusert utbyttet over tid?</h3><p class="faq-a">Arendals Fossekompani ASA har redusert utbyttet med 3.8% per år i snitt over de siste 5 årene. Investorer bør se på selskapets inntjeningsutvikling og fremtidsutsikter.</p></div></div>
+  <div class="profil-seksjon"><h2>Utbytteprofil</h2><div class="profil-badges"><span class="profil-badge badge-blue">Stabil betaler</span></div><p class="profil-tekst">AFG gir 3.8% direkteavkastning, over sektorsnittet for fornybar energi på 3.1%. Med 26 år på rad med utbytte er Arendals Fossekompani ASA blant de mest stabile utbyttebetalerne på Oslo Børs.</p></div>
+
+  <div class="historikk-prosa"><h2>Utbyttehistorikk</h2><p>Arendals Fossekompani ASA har de siste 4 årene betalt mellom 3.50 og 10.50 NOK per aksje i utbytte. Det høyeste utbyttet ble registrert i 2022 med 10.50 NOK per aksje (8.3% yield). I 2025 er utbyttet 9.00 NOK per aksje, tilsvarende 3.8% direkteavkastning.</p></div>
+
+  <div class="risiko-seksjon"><h2>Risiko for utbyttet</h2><ul class="risiko-liste"><li>Strømpris er volatil og avgjørende for inntjening</li>
+<li>Regulatorisk risiko knyttet til støtteordninger og konsesjoner</li>
+<li>Høye investeringsbehov kan begrense utbyttekapasitet</li></ul></div>
 
   <div class="relaterte"><h2>Andre fornybar energi-aksjer med utbytte</h2><div class="rel-grid"><a href="/aksjer/BONHR/" class="rel-kort"><span class="rel-ticker">BONHR</span><span class="rel-navn">Bonheur ASA</span><span class="rel-yield">3.0%</span></a>
 <a href="/aksjer/AFK/" class="rel-kort"><span class="rel-ticker">AFK</span><span class="rel-navn">Arendals Fossekompani ASA (B-aksje)</span><span class="rel-yield">2.5%</span></a></div></div>

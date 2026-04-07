@@ -64,43 +64,6 @@
         "name": "exday.no",
         "url": "https://exday.no/"
       }
-    },
-    {
-      "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "Hva er direkteavkastningen til Haugesund Sparebank?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Haugesund Sparebank (HGSB) har en direkteavkastning på 5.94% basert på siste kurs. 5-årssnittlig yield er 7.8%."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Når er neste ex-dato og utbetalingsdato for HGSB?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Neste ex-dato for HGSB er 23. apr 2026. Du må eie aksjen før denne datoen for å motta utbytte. Utbetalingsdatoen er 7. mai 2026."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Hvor mye utbytte gir 100 000 kr investert i HGSB?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Med 100 000 kr kan du kjøpe omtrent 588 aksjer i Haugesund Sparebank til kurs 170 NOK. Det gir ca. 5,939 NOK i utbytte per år (495 NOK per måned) basert på 10.1 NOK per aksje. Etter 37,84% utbytteskatt sitter du igjen med ca. 3,692 NOK netto."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Hvor ofte betaler Haugesund Sparebank utbytte?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Haugesund Sparebank betaler utbytte uregelmessig."
-          }
-        }
-      ]
     }
   ]
 }</script>
@@ -145,11 +108,20 @@
     .updated { font-size: 0.78rem; text-align: right; margin-top: 1rem; }
     .mini-nav { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.5rem; font-size: 0.85rem; }
     .mini-nav a { color: #16a34a; }
-    .faq-seksjon { margin: 1.5rem 0; }
-    .faq-seksjon h2 { margin-bottom: 1rem; }
-    .faq-item { border-radius: 0.75rem; padding: 1rem 1.25rem; margin-bottom: 0.75rem; border: 1px solid; }
-    .faq-q { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.4rem; }
-    .faq-a { font-size: 0.9rem; line-height: 1.6; }
+    .profil-seksjon { margin: 1.5rem 0; }
+    .profil-badges { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem; }
+    .profil-badge { font-size: 0.75rem; font-weight: 600; padding: 0.25rem 0.75rem; border-radius: 9999px; }
+    .badge-green { background: #dcfce7; color: #15803d; }
+    .badge-blue { background: #dbeafe; color: #1d4ed8; }
+    .badge-teal { background: #ccfbf1; color: #0f766e; }
+    .badge-orange { background: #ffedd5; color: #c2410c; }
+    .badge-gray { background: #f3f4f6; color: #374151; }
+    .profil-tekst { font-size: 0.9rem; line-height: 1.65; }
+    .historikk-prosa { margin: 1.5rem 0; }
+    .historikk-prosa p { font-size: 0.9rem; line-height: 1.7; }
+    .risiko-seksjon { margin: 1.5rem 0; }
+    .risiko-liste { list-style: none; padding: 0; margin: 0; }
+    .risiko-liste li { font-size: 0.875rem; padding: 0.5rem 0.75rem; border-left: 3px solid #fca5a5; margin-bottom: 0.5rem; line-height: 1.5; }
     .relaterte { margin: 1.5rem 0; }
     .relaterte h2 { margin-bottom: 0.75rem; }
     .rel-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 0.75rem; }
@@ -210,9 +182,14 @@
     .dark .kcard .val.green { color: #4ade80; }
     .dark .ytick { stroke: #1f2937; }
     .dark .hbar { fill: #22c55e; }
-    .dark .faq-item { background: #111827; border-color: #1f2937; }
-    .dark .faq-q { color: #f3f4f6; }
-    .dark .faq-a { color: #9ca3af; }
+    .dark .badge-green { background: #14532d; color: #86efac; }
+    .dark .badge-blue { background: #1e3a5f; color: #93c5fd; }
+    .dark .badge-teal { background: #134e4a; color: #5eead4; }
+    .dark .badge-orange { background: #431407; color: #fdba74; }
+    .dark .badge-gray { background: #1f2937; color: #d1d5db; }
+    .dark .profil-tekst { color: #9ca3af; }
+    .dark .historikk-prosa p { color: #9ca3af; }
+    .dark .risiko-liste li { border-left-color: #7f1d1d; color: #9ca3af; }
     .dark .rel-kort { background: #111827; border-color: #1f2937; }
     .dark .rel-navn { color: #9ca3af; }
   </style>
@@ -298,10 +275,13 @@
           <td>7.81%</td>
         </tr></tbody></table>
 
-  <div class="faq-seksjon"><h2>Vanlige spørsmål om Haugesund Sparebank</h2><div class="faq-item"><h3 class="faq-q">Hva er direkteavkastningen til Haugesund Sparebank?</h3><p class="faq-a">Haugesund Sparebank (HGSB) har en direkteavkastning på 5.94% basert på siste kurs. 5-årssnittlig yield er 7.8%.</p></div>
-<div class="faq-item"><h3 class="faq-q">Når er neste ex-dato og utbetalingsdato for HGSB?</h3><p class="faq-a">Neste ex-dato for HGSB er 23. apr 2026. Du må eie aksjen før denne datoen for å motta utbytte. Utbetalingsdatoen er 7. mai 2026.</p></div>
-<div class="faq-item"><h3 class="faq-q">Hvor mye utbytte gir 100 000 kr investert i HGSB?</h3><p class="faq-a">Med 100 000 kr kan du kjøpe omtrent 588 aksjer i Haugesund Sparebank til kurs 170 NOK. Det gir ca. 5,939 NOK i utbytte per år (495 NOK per måned) basert på 10.1 NOK per aksje. Etter 37,84% utbytteskatt sitter du igjen med ca. 3,692 NOK netto.</p></div>
-<div class="faq-item"><h3 class="faq-q">Hvor ofte betaler Haugesund Sparebank utbytte?</h3><p class="faq-a">Haugesund Sparebank betaler utbytte uregelmessig.</p></div></div>
+  <div class="profil-seksjon"><h2>Utbytteprofil</h2><div class="profil-badges"><span class="profil-badge badge-green">Høy yield</span><span class="profil-badge badge-gray">Defensiv</span></div><p class="profil-tekst">HGSB gir 5.9% direkteavkastning, nær sektorsnittet for finans på 5.9%. Utbetalingsgraden er over 100% — utbyttet finansieres delvis av kapital.</p></div>
+
+  
+
+  <div class="risiko-seksjon"><h2>Risiko for utbyttet</h2><ul class="risiko-liste"><li>Rentenivå påvirker netto renteinntekter og utlånsmargin</li>
+<li>Økte kredittap i nedgangstider kan presse resultater</li>
+<li>Regulatoriske kapitalkrav begrenser utbyttekapasitet</li></ul></div>
 
   <div class="relaterte"><h2>Andre finans-aksjer med utbytte</h2><div class="rel-grid"><a href="/aksjer/PARB/" class="rel-kort"><span class="rel-ticker">PARB</span><span class="rel-navn">Pareto Bank ASA</span><span class="rel-yield">9.4%</span></a>
 <a href="/aksjer/SPOG/" class="rel-kort"><span class="rel-ticker">SPOG</span><span class="rel-navn">Sparebanken Øst</span><span class="rel-yield">8.7%</span></a>

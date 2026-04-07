@@ -64,35 +64,6 @@
         "name": "exday.no",
         "url": "https://exday.no/"
       }
-    },
-    {
-      "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "Hva er direkteavkastningen til Gentian Diagnostics ASA?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Gentian Diagnostics ASA (GENT) har en direkteavkastning på 1.54% basert på siste kurs. 5-årssnittlig yield er 0.7%."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Hvor mye utbytte gir 100 000 kr investert i GENT?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Med 100 000 kr kan du kjøpe omtrent 2564 aksjer i Gentian Diagnostics ASA til kurs 39 NOK. Det gir ca. 1,538 NOK i utbytte per år (128 NOK per måned) basert på 0.6 NOK per aksje. Etter 37,84% utbytteskatt sitter du igjen med ca. 956 NOK netto."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Hvor ofte betaler Gentian Diagnostics ASA utbytte?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Gentian Diagnostics ASA betaler utbytte én gang i året."
-          }
-        }
-      ]
     }
   ]
 }</script>
@@ -137,11 +108,20 @@
     .updated { font-size: 0.78rem; text-align: right; margin-top: 1rem; }
     .mini-nav { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.5rem; font-size: 0.85rem; }
     .mini-nav a { color: #16a34a; }
-    .faq-seksjon { margin: 1.5rem 0; }
-    .faq-seksjon h2 { margin-bottom: 1rem; }
-    .faq-item { border-radius: 0.75rem; padding: 1rem 1.25rem; margin-bottom: 0.75rem; border: 1px solid; }
-    .faq-q { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.4rem; }
-    .faq-a { font-size: 0.9rem; line-height: 1.6; }
+    .profil-seksjon { margin: 1.5rem 0; }
+    .profil-badges { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem; }
+    .profil-badge { font-size: 0.75rem; font-weight: 600; padding: 0.25rem 0.75rem; border-radius: 9999px; }
+    .badge-green { background: #dcfce7; color: #15803d; }
+    .badge-blue { background: #dbeafe; color: #1d4ed8; }
+    .badge-teal { background: #ccfbf1; color: #0f766e; }
+    .badge-orange { background: #ffedd5; color: #c2410c; }
+    .badge-gray { background: #f3f4f6; color: #374151; }
+    .profil-tekst { font-size: 0.9rem; line-height: 1.65; }
+    .historikk-prosa { margin: 1.5rem 0; }
+    .historikk-prosa p { font-size: 0.9rem; line-height: 1.7; }
+    .risiko-seksjon { margin: 1.5rem 0; }
+    .risiko-liste { list-style: none; padding: 0; margin: 0; }
+    .risiko-liste li { font-size: 0.875rem; padding: 0.5rem 0.75rem; border-left: 3px solid #fca5a5; margin-bottom: 0.5rem; line-height: 1.5; }
     .relaterte { margin: 1.5rem 0; }
     .relaterte h2 { margin-bottom: 0.75rem; }
     .rel-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 0.75rem; }
@@ -202,9 +182,14 @@
     .dark .kcard .val.green { color: #4ade80; }
     .dark .ytick { stroke: #1f2937; }
     .dark .hbar { fill: #22c55e; }
-    .dark .faq-item { background: #111827; border-color: #1f2937; }
-    .dark .faq-q { color: #f3f4f6; }
-    .dark .faq-a { color: #9ca3af; }
+    .dark .badge-green { background: #14532d; color: #86efac; }
+    .dark .badge-blue { background: #1e3a5f; color: #93c5fd; }
+    .dark .badge-teal { background: #134e4a; color: #5eead4; }
+    .dark .badge-orange { background: #431407; color: #fdba74; }
+    .dark .badge-gray { background: #1f2937; color: #d1d5db; }
+    .dark .profil-tekst { color: #9ca3af; }
+    .dark .historikk-prosa p { color: #9ca3af; }
+    .dark .risiko-liste li { border-left-color: #7f1d1d; color: #9ca3af; }
     .dark .rel-kort { background: #111827; border-color: #1f2937; }
     .dark .rel-navn { color: #9ca3af; }
   </style>
@@ -290,9 +275,13 @@
           <td>0.71%</td>
         </tr></tbody></table>
 
-  <div class="faq-seksjon"><h2>Vanlige spørsmål om Gentian Diagnostics ASA</h2><div class="faq-item"><h3 class="faq-q">Hva er direkteavkastningen til Gentian Diagnostics ASA?</h3><p class="faq-a">Gentian Diagnostics ASA (GENT) har en direkteavkastning på 1.54% basert på siste kurs. 5-årssnittlig yield er 0.7%.</p></div>
-<div class="faq-item"><h3 class="faq-q">Hvor mye utbytte gir 100 000 kr investert i GENT?</h3><p class="faq-a">Med 100 000 kr kan du kjøpe omtrent 2564 aksjer i Gentian Diagnostics ASA til kurs 39 NOK. Det gir ca. 1,538 NOK i utbytte per år (128 NOK per måned) basert på 0.6 NOK per aksje. Etter 37,84% utbytteskatt sitter du igjen med ca. 956 NOK netto.</p></div>
-<div class="faq-item"><h3 class="faq-q">Hvor ofte betaler Gentian Diagnostics ASA utbytte?</h3><p class="faq-a">Gentian Diagnostics ASA betaler utbytte én gang i året.</p></div></div>
+  <div class="profil-seksjon"><h2>Utbytteprofil</h2><div class="profil-badges"><span class="profil-badge badge-gray">Defensiv</span></div><p class="profil-tekst">GENT gir 1.5% direkteavkastning, noe under sektorsnittet for helsevern på 4.5%. Lav utbetalingsgrad gir rom for fremtidige utbytteøkninger.</p></div>
+
+  
+
+  <div class="risiko-seksjon"><h2>Risiko for utbyttet</h2><ul class="risiko-liste"><li>Regulatorisk godkjenning og patent-utløp kan endre inntjeningsbildet</li>
+<li>Prispress fra offentlige innkjøpere</li>
+<li>Høye FoU-kostnader kan begrense utbyttekapasitet</li></ul></div>
 
   <div class="relaterte"><h2>Andre helsevern-aksjer med utbytte</h2><div class="rel-grid"><a href="/aksjer/VISTIN/" class="rel-kort"><span class="rel-ticker">VISTIN</span><span class="rel-navn">Vistin Pharma ASA</span><span class="rel-yield">9.1%</span></a>
 <a href="/aksjer/MEDI/" class="rel-kort"><span class="rel-ticker">MEDI</span><span class="rel-navn">Medistim ASA</span><span class="rel-yield">2.8%</span></a></div></div>

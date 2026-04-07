@@ -64,51 +64,6 @@
         "name": "exday.no",
         "url": "https://exday.no/"
       }
-    },
-    {
-      "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "Hva er direkteavkastningen til Polaris Media ASA?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Polaris Media ASA (POL) har en direkteavkastning på 5.45% basert på siste kurs. 5-årssnittlig yield er 13.1%. Selskapet har betalt utbytte i 15 år på rad."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Når er neste ex-dato og utbetalingsdato for POL?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Neste ex-dato for POL er 12. mai 2026. Du må eie aksjen før denne datoen for å motta utbytte. Utbetalingsdatoen er 20. mai 2026."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Hvor mye utbytte gir 100 000 kr investert i POL?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Med 100 000 kr kan du kjøpe omtrent 1652 aksjer i Polaris Media ASA til kurs 60 NOK. Det gir ca. 5,452 NOK i utbytte per år (454 NOK per måned) basert på 3.3 NOK per aksje. Etter 37,84% utbytteskatt sitter du igjen med ca. 3,389 NOK netto."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Hvor ofte betaler Polaris Media ASA utbytte?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Polaris Media ASA betaler utbytte én gang i året. Selskapet har hatt sammenhengende utbyttebetalinger i 15 år."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Har Polaris Media ASA økt utbyttet over tid?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Ja, Polaris Media ASA har økt utbyttet med gjennomsnittlig 95.5% per år de siste 5 årene. Dette er et tegn på stabil og voksende inntjening."
-          }
-        }
-      ]
     }
   ]
 }</script>
@@ -153,11 +108,20 @@
     .updated { font-size: 0.78rem; text-align: right; margin-top: 1rem; }
     .mini-nav { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.5rem; font-size: 0.85rem; }
     .mini-nav a { color: #16a34a; }
-    .faq-seksjon { margin: 1.5rem 0; }
-    .faq-seksjon h2 { margin-bottom: 1rem; }
-    .faq-item { border-radius: 0.75rem; padding: 1rem 1.25rem; margin-bottom: 0.75rem; border: 1px solid; }
-    .faq-q { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.4rem; }
-    .faq-a { font-size: 0.9rem; line-height: 1.6; }
+    .profil-seksjon { margin: 1.5rem 0; }
+    .profil-badges { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem; }
+    .profil-badge { font-size: 0.75rem; font-weight: 600; padding: 0.25rem 0.75rem; border-radius: 9999px; }
+    .badge-green { background: #dcfce7; color: #15803d; }
+    .badge-blue { background: #dbeafe; color: #1d4ed8; }
+    .badge-teal { background: #ccfbf1; color: #0f766e; }
+    .badge-orange { background: #ffedd5; color: #c2410c; }
+    .badge-gray { background: #f3f4f6; color: #374151; }
+    .profil-tekst { font-size: 0.9rem; line-height: 1.65; }
+    .historikk-prosa { margin: 1.5rem 0; }
+    .historikk-prosa p { font-size: 0.9rem; line-height: 1.7; }
+    .risiko-seksjon { margin: 1.5rem 0; }
+    .risiko-liste { list-style: none; padding: 0; margin: 0; }
+    .risiko-liste li { font-size: 0.875rem; padding: 0.5rem 0.75rem; border-left: 3px solid #fca5a5; margin-bottom: 0.5rem; line-height: 1.5; }
     .relaterte { margin: 1.5rem 0; }
     .relaterte h2 { margin-bottom: 0.75rem; }
     .rel-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 0.75rem; }
@@ -218,9 +182,14 @@
     .dark .kcard .val.green { color: #4ade80; }
     .dark .ytick { stroke: #1f2937; }
     .dark .hbar { fill: #22c55e; }
-    .dark .faq-item { background: #111827; border-color: #1f2937; }
-    .dark .faq-q { color: #f3f4f6; }
-    .dark .faq-a { color: #9ca3af; }
+    .dark .badge-green { background: #14532d; color: #86efac; }
+    .dark .badge-blue { background: #1e3a5f; color: #93c5fd; }
+    .dark .badge-teal { background: #134e4a; color: #5eead4; }
+    .dark .badge-orange { background: #431407; color: #fdba74; }
+    .dark .badge-gray { background: #1f2937; color: #d1d5db; }
+    .dark .profil-tekst { color: #9ca3af; }
+    .dark .historikk-prosa p { color: #9ca3af; }
+    .dark .risiko-liste li { border-left-color: #7f1d1d; color: #9ca3af; }
     .dark .rel-kort { background: #111827; border-color: #1f2937; }
     .dark .rel-navn { color: #9ca3af; }
   </style>
@@ -324,11 +293,13 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
           <td>6.95%</td>
         </tr></tbody></table>
 
-  <div class="faq-seksjon"><h2>Vanlige spørsmål om Polaris Media ASA</h2><div class="faq-item"><h3 class="faq-q">Hva er direkteavkastningen til Polaris Media ASA?</h3><p class="faq-a">Polaris Media ASA (POL) har en direkteavkastning på 5.45% basert på siste kurs. 5-årssnittlig yield er 13.1%. Selskapet har betalt utbytte i 15 år på rad.</p></div>
-<div class="faq-item"><h3 class="faq-q">Når er neste ex-dato og utbetalingsdato for POL?</h3><p class="faq-a">Neste ex-dato for POL er 12. mai 2026. Du må eie aksjen før denne datoen for å motta utbytte. Utbetalingsdatoen er 20. mai 2026.</p></div>
-<div class="faq-item"><h3 class="faq-q">Hvor mye utbytte gir 100 000 kr investert i POL?</h3><p class="faq-a">Med 100 000 kr kan du kjøpe omtrent 1652 aksjer i Polaris Media ASA til kurs 60 NOK. Det gir ca. 5,452 NOK i utbytte per år (454 NOK per måned) basert på 3.3 NOK per aksje. Etter 37,84% utbytteskatt sitter du igjen med ca. 3,389 NOK netto.</p></div>
-<div class="faq-item"><h3 class="faq-q">Hvor ofte betaler Polaris Media ASA utbytte?</h3><p class="faq-a">Polaris Media ASA betaler utbytte én gang i året. Selskapet har hatt sammenhengende utbyttebetalinger i 15 år.</p></div>
-<div class="faq-item"><h3 class="faq-q">Har Polaris Media ASA økt utbyttet over tid?</h3><p class="faq-a">Ja, Polaris Media ASA har økt utbyttet med gjennomsnittlig 95.5% per år de siste 5 årene. Dette er et tegn på stabil og voksende inntjening.</p></div></div>
+  <div class="profil-seksjon"><h2>Utbytteprofil</h2><div class="profil-badges"><span class="profil-badge badge-green">Høy yield</span><span class="profil-badge badge-blue">Stabil betaler</span><span class="profil-badge badge-teal">Utbyttevekst</span></div><p class="profil-tekst">POL gir 5.5% direkteavkastning, over sektorsnittet for kommunikasjonstjenester på 2.8%. Med 15 år på rad med utbytte er Polaris Media ASA blant de mest stabile utbyttebetalerne på Oslo Børs. Utbetalingsgraden er over 100% — utbyttet finansieres delvis av kapital.</p></div>
+
+  <div class="historikk-prosa"><h2>Utbyttehistorikk</h2><p>Polaris Media ASA har de siste 4 årene betalt mellom 1.00 og 22.40 NOK per aksje i utbytte. I 2025 er utbyttet 22.40 NOK per aksje, tilsvarende 5.5% direkteavkastning.</p></div>
+
+  <div class="risiko-seksjon"><h2>Risiko for utbyttet</h2><ul class="risiko-liste"><li>Prispress og høy konkurranse i digitale medier</li>
+<li>Regulatoriske krav knyttet til personvern og innhold</li>
+<li>Annonseinntekter er konjunkturfølsomme</li></ul></div>
 
   <div class="relaterte"><h2>Andre kommunikasjonstjenester-aksjer med utbytte</h2><div class="rel-grid"><a href="/aksjer/VEND/" class="rel-kort"><span class="rel-ticker">VEND</span><span class="rel-navn">Vend Marketplaces ASA</span><span class="rel-yield">2.1%</span></a>
 <a href="/aksjer/GYL/" class="rel-kort"><span class="rel-ticker">GYL</span><span class="rel-navn">Gyldendal ASA</span><span class="rel-yield">0.8%</span></a></div></div>

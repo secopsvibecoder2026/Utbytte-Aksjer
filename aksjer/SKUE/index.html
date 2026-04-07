@@ -64,43 +64,6 @@
         "name": "exday.no",
         "url": "https://exday.no/"
       }
-    },
-    {
-      "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "Hva er direkteavkastningen til Skue Sparebank?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Skue Sparebank (SKUE) har en direkteavkastning på 6.59% basert på siste kurs. 5-årssnittlig yield er 7.4%. Selskapet har betalt utbytte i 24 år på rad."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Hvor mye utbytte gir 100 000 kr investert i SKUE?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Med 100 000 kr kan du kjøpe omtrent 295 aksjer i Skue Sparebank til kurs 338 NOK. Det gir ca. 6,570 NOK i utbytte per år (547 NOK per måned) basert på 22.27 NOK per aksje. Etter 37,84% utbytteskatt sitter du igjen med ca. 4,084 NOK netto."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Hvor ofte betaler Skue Sparebank utbytte?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Skue Sparebank betaler utbytte én gang i året. Selskapet har hatt sammenhengende utbyttebetalinger i 24 år."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Har Skue Sparebank økt utbyttet over tid?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Ja, Skue Sparebank har økt utbyttet med gjennomsnittlig 19.3% per år de siste 5 årene. Dette er et tegn på stabil og voksende inntjening."
-          }
-        }
-      ]
     }
   ]
 }</script>
@@ -145,11 +108,20 @@
     .updated { font-size: 0.78rem; text-align: right; margin-top: 1rem; }
     .mini-nav { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.5rem; font-size: 0.85rem; }
     .mini-nav a { color: #16a34a; }
-    .faq-seksjon { margin: 1.5rem 0; }
-    .faq-seksjon h2 { margin-bottom: 1rem; }
-    .faq-item { border-radius: 0.75rem; padding: 1rem 1.25rem; margin-bottom: 0.75rem; border: 1px solid; }
-    .faq-q { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.4rem; }
-    .faq-a { font-size: 0.9rem; line-height: 1.6; }
+    .profil-seksjon { margin: 1.5rem 0; }
+    .profil-badges { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem; }
+    .profil-badge { font-size: 0.75rem; font-weight: 600; padding: 0.25rem 0.75rem; border-radius: 9999px; }
+    .badge-green { background: #dcfce7; color: #15803d; }
+    .badge-blue { background: #dbeafe; color: #1d4ed8; }
+    .badge-teal { background: #ccfbf1; color: #0f766e; }
+    .badge-orange { background: #ffedd5; color: #c2410c; }
+    .badge-gray { background: #f3f4f6; color: #374151; }
+    .profil-tekst { font-size: 0.9rem; line-height: 1.65; }
+    .historikk-prosa { margin: 1.5rem 0; }
+    .historikk-prosa p { font-size: 0.9rem; line-height: 1.7; }
+    .risiko-seksjon { margin: 1.5rem 0; }
+    .risiko-liste { list-style: none; padding: 0; margin: 0; }
+    .risiko-liste li { font-size: 0.875rem; padding: 0.5rem 0.75rem; border-left: 3px solid #fca5a5; margin-bottom: 0.5rem; line-height: 1.5; }
     .relaterte { margin: 1.5rem 0; }
     .relaterte h2 { margin-bottom: 0.75rem; }
     .rel-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 0.75rem; }
@@ -210,9 +182,14 @@
     .dark .kcard .val.green { color: #4ade80; }
     .dark .ytick { stroke: #1f2937; }
     .dark .hbar { fill: #22c55e; }
-    .dark .faq-item { background: #111827; border-color: #1f2937; }
-    .dark .faq-q { color: #f3f4f6; }
-    .dark .faq-a { color: #9ca3af; }
+    .dark .badge-green { background: #14532d; color: #86efac; }
+    .dark .badge-blue { background: #1e3a5f; color: #93c5fd; }
+    .dark .badge-teal { background: #134e4a; color: #5eead4; }
+    .dark .badge-orange { background: #431407; color: #fdba74; }
+    .dark .badge-gray { background: #1f2937; color: #d1d5db; }
+    .dark .profil-tekst { color: #9ca3af; }
+    .dark .historikk-prosa p { color: #9ca3af; }
+    .dark .risiko-liste li { border-left-color: #7f1d1d; color: #9ca3af; }
     .dark .rel-kort { background: #111827; border-color: #1f2937; }
     .dark .rel-navn { color: #9ca3af; }
   </style>
@@ -316,10 +293,13 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
           <td>6.10%</td>
         </tr></tbody></table>
 
-  <div class="faq-seksjon"><h2>Vanlige spørsmål om Skue Sparebank</h2><div class="faq-item"><h3 class="faq-q">Hva er direkteavkastningen til Skue Sparebank?</h3><p class="faq-a">Skue Sparebank (SKUE) har en direkteavkastning på 6.59% basert på siste kurs. 5-årssnittlig yield er 7.4%. Selskapet har betalt utbytte i 24 år på rad.</p></div>
-<div class="faq-item"><h3 class="faq-q">Hvor mye utbytte gir 100 000 kr investert i SKUE?</h3><p class="faq-a">Med 100 000 kr kan du kjøpe omtrent 295 aksjer i Skue Sparebank til kurs 338 NOK. Det gir ca. 6,570 NOK i utbytte per år (547 NOK per måned) basert på 22.27 NOK per aksje. Etter 37,84% utbytteskatt sitter du igjen med ca. 4,084 NOK netto.</p></div>
-<div class="faq-item"><h3 class="faq-q">Hvor ofte betaler Skue Sparebank utbytte?</h3><p class="faq-a">Skue Sparebank betaler utbytte én gang i året. Selskapet har hatt sammenhengende utbyttebetalinger i 24 år.</p></div>
-<div class="faq-item"><h3 class="faq-q">Har Skue Sparebank økt utbyttet over tid?</h3><p class="faq-a">Ja, Skue Sparebank har økt utbyttet med gjennomsnittlig 19.3% per år de siste 5 årene. Dette er et tegn på stabil og voksende inntjening.</p></div></div>
+  <div class="profil-seksjon"><h2>Utbytteprofil</h2><div class="profil-badges"><span class="profil-badge badge-green">Høy yield</span><span class="profil-badge badge-blue">Stabil betaler</span><span class="profil-badge badge-teal">Utbyttevekst</span><span class="profil-badge badge-gray">Defensiv</span></div><p class="profil-tekst">SKUE gir 6.6% direkteavkastning, over sektorsnittet for finans på 5.9%. Med 24 år på rad med utbytte er Skue Sparebank blant de mest stabile utbyttebetalerne på Oslo Børs. Utbetalingsgraden er over 100% — utbyttet finansieres delvis av kapital.</p></div>
+
+  <div class="historikk-prosa"><h2>Utbyttehistorikk</h2><p>Skue Sparebank har de siste 4 årene betalt mellom 11.00 og 32.52 NOK per aksje i utbytte. Det høyeste utbyttet ble registrert i 2025 med 32.52 NOK per aksje (9.9% yield). I 2026 er utbyttet 22.27 NOK per aksje, tilsvarende 6.6% direkteavkastning.</p></div>
+
+  <div class="risiko-seksjon"><h2>Risiko for utbyttet</h2><ul class="risiko-liste"><li>Rentenivå påvirker netto renteinntekter og utlånsmargin</li>
+<li>Økte kredittap i nedgangstider kan presse resultater</li>
+<li>Regulatoriske kapitalkrav begrenser utbyttekapasitet</li></ul></div>
 
   <div class="relaterte"><h2>Andre finans-aksjer med utbytte</h2><div class="rel-grid"><a href="/aksjer/PARB/" class="rel-kort"><span class="rel-ticker">PARB</span><span class="rel-navn">Pareto Bank ASA</span><span class="rel-yield">9.4%</span></a>
 <a href="/aksjer/SPOG/" class="rel-kort"><span class="rel-ticker">SPOG</span><span class="rel-navn">Sparebanken Øst</span><span class="rel-yield">8.7%</span></a>
