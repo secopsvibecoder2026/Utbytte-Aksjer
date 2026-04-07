@@ -45,7 +45,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initPortefolje();
   initWatchlister();
   initJSONBackup();
-  initAutoBackup();
   initKalkulator();
   initVarsler();
   initSammenligning();
@@ -137,6 +136,9 @@ function lastInnData(json) {
     oppdaterSammenlignSkuff();
     visKomparasjonsModal();
   }
+
+  // Auto-backup etter at appen er ferdig lastet (3 sek forsinkelse for å ikke forstyrre)
+  setTimeout(() => initAutoBackup(), 3000);
 
   if (window._pendingQRImport) {
     const gyldig = Object.entries(window._pendingQRImport)
