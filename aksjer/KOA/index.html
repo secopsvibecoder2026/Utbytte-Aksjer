@@ -75,7 +75,7 @@
   <link rel="stylesheet" href="/assets/style.css"/>
   <script>
     (function(){
-      var t = localStorage.getItem('theme');
+      var t = localStorage.getItem('tema');
       if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
         document.documentElement.classList.add('dark');
       }
@@ -263,14 +263,14 @@
       <div class="label">År med utbytte</div>
       <div class="val">2</div>
     </div>
-    <div class="card"><div class="label">P/E</div><div class="val">inf</div></div>
+    
   </div>
 
   <div class="desc"><p>Norsk global leverandør av automotive-komponenter som girspaker, interiørprodukter og drivlinjeteknologi til bil-OEM-er. Opererer i over 20 land. Betaler utbytte avhengig av inntjening fra bilindustrien. Kongsberg Automotive Holding ASA er notert på Oslo Børs. Selskapet har betalt utbytte de siste 2 årene.</p></div>
 
   
 
-  <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Industri</td></tr><tr><td>Frekvens</td><td>Uregelmessig</td></tr><tr><td>Utbytte per aksje</td><td>0 NOK</td></tr><tr><td>Direkteavkastning</td><td>—</td></tr><tr><td>5-årssnitt yield</td><td>0.00%</td></tr><tr><td>År med utbytte</td><td>2</td></tr><tr><td>P/E</td><td>inf</td></tr><tr><td>Utbyttevekst 5 år</td><td>+0.0% p.a.</td></tr><tr><td>Markedsverdi</td><td>1.8 mrd NOK</td></tr><tr><td>52-ukers kurs</td><td>1.27 – 2.4 NOK</td></tr></tbody></table>
+  <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Industri</td></tr><tr><td>Frekvens</td><td>Uregelmessig</td></tr><tr><td>Utbytte per aksje</td><td>0 NOK</td></tr><tr><td>Direkteavkastning</td><td>—</td></tr><tr><td>5-årssnitt yield</td><td>0.00%</td></tr><tr><td>År med utbytte</td><td>2</td></tr><tr><td>Utbyttevekst 5 år</td><td>+0.0% p.a.</td></tr><tr><td>Markedsverdi</td><td>1.8 mrd NOK</td></tr><tr><td>52-ukers kurs</td><td>1.27 – 2.4 NOK</td></tr></tbody></table>
 
   
 
@@ -340,7 +340,7 @@
     syncIcons();
     btn.addEventListener('click', function() {
       var isDark = root.classList.toggle('dark');
-      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      localStorage.setItem('tema', isDark ? 'dark' : 'light');
       syncIcons();
     });
   })();

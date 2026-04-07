@@ -263,9 +263,26 @@ portefolje.js: FIFO, IRR, TWR, tax, sector rebalancing
 
 ## SEO Pages
 
-`/aksjer/{TICKER}/index.html` and `/aksjer/sektor/{slug}/index.html` are **auto-generated**. Do not edit manually — changes are overwritten on the next daily run.
+`/aksjer/{TICKER}/index.html`, `/aksjer/sektor/{slug}/index.html`, and `/aksjer/index.html` are **auto-generated**. Do not edit manually — changes are overwritten on the next daily run.
 
 To modify the template, edit `scripts/fetch_stocks.py` or run `python scripts/regenerer_sider.py` after updating `tickers.json`.
+
+### SEO Page Templates (in `scripts/fetch_stocks.py`)
+
+There are **3 HTML templates** in `fetch_stocks.py`:
+
+| Template | Function | Output | Dark mode |
+|----------|----------|--------|-----------|
+| Stock page | `_aksje_side_html()` | `/aksjer/{TICKER}/index.html` (184 pages) | ✓ Tailwind `dark:` classes |
+| Sector page | `generer_sektorsider()` | `/aksjer/sektor/{slug}/index.html` (16 pages) | ✓ Tailwind `dark:` classes |
+| Overview page | inline in `generer_aksjesider()` | `/aksjer/index.html` | ✓ Inline CSS `.dark` selectors |
+
+**Key conventions for all 3 templates:**
+- Dark mode init script reads `localStorage.getItem('tema')` (Norwegian key — matches main app)
+- Dark mode toggle saves `localStorage.setItem('tema', 'dark'|'light')`
+- Favicon block: `/favicon.png` (512), `/logo/apple_touch_icon_180.png`, SVG icon
+- Footer: `STANDARD_FOOTER` constant (defined after `generer_aksjesider()`) — uses inline styles with `.dark .std-footer` override
+- After changing any template: run `python scripts/regenerer_sider.py` to rebuild all pages
 
 ---
 

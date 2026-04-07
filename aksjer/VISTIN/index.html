@@ -75,7 +75,7 @@
   <link rel="stylesheet" href="/assets/style.css"/>
   <script>
     (function(){
-      var t = localStorage.getItem('theme');
+      var t = localStorage.getItem('tema');
       if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
         document.documentElement.classList.add('dark');
       }
@@ -338,7 +338,7 @@
     syncIcons();
     btn.addEventListener('click', function() {
       var isDark = root.classList.toggle('dark');
-      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      localStorage.setItem('tema', isDark ? 'dark' : 'light');
       syncIcons();
     });
   })();
