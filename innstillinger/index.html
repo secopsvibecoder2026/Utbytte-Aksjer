@@ -167,48 +167,41 @@
       </div>
     </section>
 
-    <!-- AUTOMATISK BACKUP -->
+    <!-- BACKUP OG DATA -->
     <section class="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
       <div class="px-5 py-4 border-b border-gray-100 dark:border-gray-800">
-        <h2 class="font-semibold text-base">Automatisk backup</h2>
-        <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Backup av portefølje, favoritter og innstillinger til en fil på datamaskinen din.</p>
+        <h2 class="font-semibold text-base">Backup og data</h2>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">All data lagres utelukkende lokalt i nettleseren din. Ingenting sendes til våre servere.</p>
       </div>
-      <div id="autobackup-seksjon" class="p-5 space-y-4">
+
+      <!-- Automatisk backup -->
+      <div class="px-5 py-4 border-b border-gray-100 dark:border-gray-800">
+        <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-3">Automatisk backup</p>
         <div id="autobackup-status" class="text-sm text-gray-400">Laster…</div>
       </div>
-    </section>
 
-    <!-- DATA -->
-    <section class="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
-      <div class="px-5 py-4 border-b border-gray-100 dark:border-gray-800">
-        <h2 class="font-semibold text-base">Data og personvern</h2>
-      </div>
-      <div class="p-5 space-y-4">
-        <p class="text-xs text-gray-500 dark:text-gray-400">All data — portefølje, favoritter og innstillinger — lagres utelukkende lokalt i nettleseren din (localStorage). Ingenting sendes til våre servere.</p>
-
-        <div class="space-y-2">
-          <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Backup</p>
-          <div class="flex flex-wrap gap-2">
-            <button id="eksport-json-btn" class="inline-flex items-center gap-1.5 text-xs text-brand-600 dark:text-brand-400 border border-brand-300 dark:border-brand-700 hover:bg-brand-50 dark:hover:bg-brand-900/20 px-3 py-1.5 rounded-lg transition-colors font-medium">
-              <svg class="w-3.5 h-3.5" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"/></svg>
-              Last ned backup
-            </button>
-            <button id="importer-json-btn" class="inline-flex items-center gap-1.5 text-xs text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 px-3 py-1.5 rounded-lg transition-colors font-medium">
-              <svg class="w-3.5 h-3.5" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
-              Gjenopprett backup
-            </button>
-            <input type="file" id="importer-json-fil" accept=".json" class="hidden" />
-          </div>
-          <div id="importer-json-preview" class="hidden rounded-xl border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900/50 p-4 space-y-3 text-sm">
-            <div id="importer-json-innhold" class="text-gray-600 dark:text-gray-400 space-y-1"></div>
-            <p class="text-xs text-yellow-600 dark:text-yellow-400">⚠️ Dette erstatter all eksisterende data.</p>
-            <div class="flex gap-2">
-              <button id="importer-json-bekreft" class="px-4 py-1.5 bg-brand-600 hover:bg-brand-700 text-white text-xs font-medium rounded-lg transition-colors">Gjenopprett</button>
-              <button id="importer-json-avbryt" class="px-4 py-1.5 text-xs text-gray-500 hover:text-gray-700 dark:hover:text-gray-300">Avbryt</button>
-            </div>
+      <!-- Manuell backup -->
+      <div class="px-5 py-4 space-y-3">
+        <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Manuell backup</p>
+        <div class="flex flex-wrap gap-2">
+          <button id="eksport-json-btn" class="inline-flex items-center gap-1.5 text-xs text-brand-600 dark:text-brand-400 border border-brand-300 dark:border-brand-700 hover:bg-brand-50 dark:hover:bg-brand-900/20 px-3 py-1.5 rounded-lg transition-colors font-medium">
+            <svg class="w-3.5 h-3.5" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"/></svg>
+            Last ned backup
+          </button>
+          <button id="importer-json-btn" class="inline-flex items-center gap-1.5 text-xs text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 px-3 py-1.5 rounded-lg transition-colors font-medium">
+            <svg class="w-3.5 h-3.5" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+            Gjenopprett backup
+          </button>
+          <input type="file" id="importer-json-fil" accept=".json" class="hidden" />
+        </div>
+        <div id="importer-json-preview" class="hidden rounded-xl border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900/50 p-4 space-y-3 text-sm">
+          <div id="importer-json-innhold" class="text-gray-600 dark:text-gray-400 space-y-1"></div>
+          <p class="text-xs text-yellow-600 dark:text-yellow-400">⚠️ Dette erstatter all eksisterende data.</p>
+          <div class="flex gap-2">
+            <button id="importer-json-bekreft" class="px-4 py-1.5 bg-brand-600 hover:bg-brand-700 text-white text-xs font-medium rounded-lg transition-colors">Gjenopprett</button>
+            <button id="importer-json-avbryt" class="px-4 py-1.5 text-xs text-gray-500 hover:text-gray-700 dark:hover:text-gray-300">Avbryt</button>
           </div>
         </div>
-
         <div class="pt-1 border-t border-gray-100 dark:border-gray-800">
           <a href="/personvern/" class="text-xs text-gray-400 dark:text-gray-500 hover:underline">Personvernerklæring →</a>
         </div>
