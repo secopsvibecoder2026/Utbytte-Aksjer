@@ -1257,8 +1257,9 @@ def _aksje_side_html(a, today, relaterte=None):
     .dark .kcard .val.green {{ color: #4ade80; }}
     .dark .ytick {{ stroke: #1f2937; }}
     .dark .hbar {{ fill: #22c55e; }}
-    .dark .faq-item {{ background: #111827; border-color: #1f2937; color: #d1d5db; }}
+    .dark .faq-item {{ background: #111827; border-color: #1f2937; }}
     .dark .faq-q {{ color: #f3f4f6; }}
+    .dark .faq-a {{ color: #9ca3af; }}
     .dark .rel-kort {{ background: #111827; border-color: #1f2937; }}
     .dark .rel-navn {{ color: #9ca3af; }}
   </style>
