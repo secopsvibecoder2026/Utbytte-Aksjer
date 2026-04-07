@@ -137,7 +137,9 @@ function lastInnData(json) {
     visKomparasjonsModal();
   }
 
-  // Auto-backup etter at appen er ferdig lastet (3 sek forsinkelse for å ikke forstyrre)
+  // Stille auto-lagring til IndexedDB på hvert sidelast (alle nettlesere inkl. iOS)
+  autoLagreIDB();
+  // Auto-backup toast (Chrome/Edge: filvalg; Firefox/Safari/iOS: ukentlig nedlastingspåminnelse)
   setTimeout(() => initAutoBackup(), 3000);
 
   if (window._pendingQRImport) {

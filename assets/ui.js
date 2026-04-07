@@ -1737,11 +1737,43 @@ function _erChromiumMedFilAPI() {
 
 function _aapneBackupDB() {
   return new Promise((resolve, reject) => {
-    const req = indexedDB.open(_BACKUP_DB, 1);
-    req.onupgradeneeded = e => e.target.result.createObjectStore(_BACKUP_STORE);
+    const req = indexedDB.open(_BACKUP_DB, 2);
+    req.onupgradeneeded = e => {
+      const db = e.target.result;
+      if (!db.objectStoreNames.contains(_BACKUP_STORE)) db.createObjectStore(_BACKUP_STORE);
+      if (!db.objectStoreNames.contains('autokopi')) db.createObjectStore('autokopi');
+    };
     req.onsuccess  = e => resolve(e.target.result);
     req.onerror    = e => reject(e.target.error);
   });
+}
+
+// Lagrer backup stille til IndexedDB ved hvert sidelast (fungerer på alle nettlesere inkl. iOS)
+async function autoLagreIDB() {
+  try {
+    if (!_harData()) return;
+    const blob = _lagBackupBlob();
+    const tekst = await blob.text();
+    const db = await _aapneBackupDB();
+    await new Promise((resolve, reject) => {
+      const tx  = db.transaction('autokopi', 'readwrite');
+      tx.objectStore('autokopi').put({ dato: new Date().toISOString(), json: tekst }, 'siste');
+      tx.oncomplete = resolve;
+      tx.onerror    = e => reject(e.target.error);
+    });
+  } catch (e) { console.warn('autoLagreIDB feil:', e); }
+}
+
+async function hentAutoKopiIDB() {
+  try {
+    const db = await _aapneBackupDB();
+    return await new Promise((resolve, reject) => {
+      const tx  = db.transaction('autokopi', 'readonly');
+      const req = tx.objectStore('autokopi').get('siste');
+      req.onsuccess = e => resolve(e.target.result || null);
+      req.onerror   = e => reject(e.target.error);
+    });
+  } catch { return null; }
 }
 
 async function _hentFilhandle() {
@@ -1825,11 +1857,21 @@ async function _velgOgLagreFil(blob) {
   } catch { return false; }
 }
 
-function _autoNedlasting(blob) {
+async function _autoNedlasting(blob) {
   const dato = new Date().toISOString().slice(0, 10);
-  const url  = URL.createObjectURL(blob);
-  const a    = document.createElement('a');
-  a.href = url; a.download = `exday-backup-${dato}.json`; a.click();
+  const filnavn = `exday-backup-${dato}.json`;
+  // Web Share API med filer: iOS 15+ åpner del-ark → "Lagre i Filer" / AirDrop / etc.
+  try {
+    const fil = new File([blob], filnavn, { type: 'application/json' });
+    if (navigator.canShare && navigator.canShare({ files: [fil] })) {
+      await navigator.share({ files: [fil], title: 'exday backup' });
+      return;
+    }
+  } catch (e) { if (e.name !== 'AbortError') console.warn('share feil:', e); }
+  // Fallback: vanlig nedlasting
+  const url = URL.createObjectURL(blob);
+  const a   = document.createElement('a');
+  a.href = url; a.download = filnavn; a.click();
   URL.revokeObjectURL(url);
 }
 
