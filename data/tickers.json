@@ -541,7 +541,7 @@
   },
   {
     "ticker": "ENTR",
-    "ticker_yf": "ENTR.OL",
+    "ticker_yf": "ENTRA.OL",
     "navn": "Entra ASA",
     "sektor": "Eiendom",
     "bors": "Oslo Børs",
@@ -639,15 +639,6 @@
     "navn_dnb": "AKVA Group ASA"
   },
   {
-    "ticker": "SVEG",
-    "ticker_yf": "SVEG.OL",
-    "navn": "Sparebanken Vest",
-    "sektor": "Finans",
-    "bors": "Oslo Børs",
-    "beskrivelse": "Vestlandets ledende sparebank med sterk posisjon i Bergen og Hordaland. Stabil inntjening og god utbyttehistorikk. Utbyttet utbetales halvårlig — to ganger i året.",
-    "navn_dnb": "Sparebanken Vest"
-  },
-  {
     "ticker": "SNI",
     "ticker_yf": "SNI.OL",
     "navn": "Stolt-Nielsen Limited",
@@ -658,21 +649,12 @@
   },
   {
     "ticker": "BELS",
-    "ticker_yf": "BELS.OL",
+    "ticker_yf": "BELCO.OL",
     "navn": "Belships ASA",
     "sektor": "Shipping",
     "bors": "Oslo Børs",
     "beskrivelse": "Moderne tørrbulkrederi med Supramax/Ultramax-skip. Sterk kontantstrøm og liberal utbyttepolitikk koblet til shippingratene. Utbyttet utbetales kvartalsvis — fire ganger i året.",
     "navn_dnb": "Belships ASA"
-  },
-  {
-    "ticker": "NPRO",
-    "ticker_yf": "NPRO.OL",
-    "navn": "Norwegian Property ASA",
-    "sektor": "Eiendom",
-    "bors": "Oslo Børs",
-    "beskrivelse": "Kommersielt eiendomsselskap med kontorbygg i Oslo-regionen. Stabil leieinntekt fra lange kontrakter og halvårlige utbetalinger. Utbyttet utbetales halvårlig — to ganger i året.",
-    "navn_dnb": "Norwegian Property ASA"
   },
   {
     "ticker": "MEDI",
@@ -774,15 +756,6 @@
     "navn_dnb": "American Shipping Company ASA"
   },
   {
-    "ticker": "OLT",
-    "ticker_yf": "OLT.OL",
-    "navn": "Olav Thon Eiendomsselskap ASA",
-    "sektor": "Eiendom",
-    "bors": "Oslo Børs",
-    "beskrivelse": "Norges største private eiendomsaktør med kjøpesentre og næringseiendom. Stabil leieinntekt og lang utbyttehistorikk. Utbyttet utbetales halvårlig — to ganger i året.",
-    "navn_dnb": "Olav Thon Eiendomsselskap ASA"
-  },
-  {
     "ticker": "SCHA",
     "ticker_yf": "SCHA.OL",
     "navn": "Schibsted ASA",
@@ -801,15 +774,6 @@
     "navn_dnb": "Itera ASA"
   },
   {
-    "ticker": "SPSUR",
-    "ticker_yf": "SPSUR.OL",
-    "navn": "Sparebanken Sør",
-    "sektor": "Finans",
-    "bors": "Oslo Børs",
-    "beskrivelse": "Ledende sparebank på Sørlandet med sterk posisjon i Aust- og Vest-Agder. Stabil inntjening og god utbyttehistorikk. Utbyttet utbetales halvårlig — to ganger i året.",
-    "navn_dnb": "Sparebanken Sør"
-  },
-  {
     "ticker": "HUNT",
     "ticker_yf": "HUNT.OL",
     "navn": "Hunter Group ASA",
@@ -817,15 +781,6 @@
     "bors": "Oslo Børs",
     "beskrivelse": "VLCC-tankrederi med fokus på råoljetransport. Variabelt utbytte koblet til tankratene og inntjening per skip. Hunter Group ASA er notert på Oslo Børs. Selskapet har hatt sammenhengende utbyttebetalinger i 5 år. Utbyttet utbetales kvartalsvis — fire ganger i året. 5-årssnittlig direkteavkastning er 827.0%, noe som plasserer HUNT blant de høyest-yielding aksjene i shippingsektoren. Utbetalingsgraden (payout ratio) er 30%, noe som gir selskapet godt rom for å øke utbyttet fremover.",
     "navn_dnb": "Hunter Group ASA"
-  },
-  {
-    "ticker": "CLOUD",
-    "ticker_yf": "CLOUD.OL",
-    "navn": "Cloudberry Clean Energy AS",
-    "sektor": "Fornybar energi",
-    "bors": "Oslo Børs",
-    "beskrivelse": "Norsk fornybar energiselskap med vind- og solkraft i Norden. Halvårlig utbytte fra stabil strømproduksjon på langsiktige kontrakter. Cloudberry Clean Energy AS er notert på Oslo Børs.",
-    "navn_dnb": "Cloudberry Clean Energy AS"
   },
   {
     "ticker": "ALNG",
@@ -838,7 +793,7 @@
   },
   {
     "ticker": "VISTIN",
-    "ticker_yf": "VISTIN.OL",
+    "ticker_yf": "VISTN.OL",
     "navn": "Vistin Pharma ASA",
     "sektor": "Helsevern",
     "bors": "Oslo Børs",
@@ -855,15 +810,6 @@
     "navn_dnb": "NTS ASA"
   },
   {
-    "ticker": "VOLUE",
-    "ticker_yf": "VOLUE.OL",
-    "navn": "Volue ASA",
-    "sektor": "Informasjonsteknologi",
-    "bors": "Oslo Børs",
-    "beskrivelse": "Norsk programvareselskap for energi-, kraft- og vanninfrastrukturbransjen. Voksende SaaS-modell og utbyttevekst. Utbyttet utbetales halvårlig — to ganger i året.",
-    "navn_dnb": "Volue ASA"
-  },
-  {
     "ticker": "STRONG",
     "ticker_yf": "STRO.OL",
     "navn": "Strongpoint ASA",
@@ -871,24 +817,6 @@
     "bors": "Oslo Børs",
     "beskrivelse": "Norsk leverandør av teknologi for dagligvarehandel og lagerlogistikk. Automatisering av butikker og e-handelsfulfillment. Betaler utbytte. Utbyttet utbetales halvårlig — to ganger i året. Strongpoint ASA er notert på Oslo Børs. Selskapet har hatt sammenhengende utbyttebetalinger i 12 år. 5-årssnittlig direkteavkastning er 5.3%, noe som plasserer STRONG blant de solid-yielding aksjene i informasjonsteknologi-sektoren.",
     "navn_dnb": "Strongpoint ASA"
-  },
-  {
-    "ticker": "SDRL",
-    "ticker_yf": "SDRL.OL",
-    "navn": "Seadrill Limited",
-    "sektor": "Energitjenester",
-    "bors": "Oslo Børs",
-    "beskrivelse": "Global offshore boreentreprenør med dypvannssemisubmersibles og boreskip. Gjenopptok utbytte etter restrukturering i 2022. Utbyttet utbetales kvartalsvis — fire ganger i året.",
-    "navn_dnb": "Seadrill"
-  },
-  {
-    "ticker": "EMGS",
-    "ticker_yf": "EMGS.OL",
-    "navn": "Electromagnetic Geoservices ASA",
-    "sektor": "Energitjenester",
-    "bors": "Oslo Børs",
-    "beskrivelse": "Norsk geofysikk-selskap som leverer elektromagnetiske undersøkelsestjenester til olje- og gassindustrien. Betaler utbytte ved overskuddskapital.",
-    "navn_dnb": "Electromagnetic Geoservices ASA"
   },
   {
     "ticker": "NRC",
@@ -916,15 +844,6 @@
     "bors": "Oslo Børs",
     "beskrivelse": "LNG infrastrukturselskap med stabil kontantstrøm og utbytte.",
     "navn_dnb": "Hoegh LNG Holdings"
-  },
-  {
-    "ticker": "NAPA",
-    "ticker_yf": "NAPA.OL",
-    "navn": "Napatech AS",
-    "sektor": "Informasjonsteknologi",
-    "bors": "Oslo Børs",
-    "beskrivelse": "Norsk teknologiselskap innen nettverksakselerasjon. Napatech AS er notert på Oslo Børs.",
-    "navn_dnb": "Napatech"
   },
   {
     "ticker": "NOFI",
@@ -961,15 +880,6 @@
     "bors": "Oslo Børs",
     "beskrivelse": "Offshorefartøyselskap som betjener olje- og gassindustrien.",
     "navn_dnb": "Tidewater"
-  },
-  {
-    "ticker": "IDEX",
-    "ticker_yf": "IDEX.OL",
-    "navn": "IDEX Biometrics ASA",
-    "sektor": "Informasjonsteknologi",
-    "bors": "Oslo Børs",
-    "beskrivelse": "Norsk biometriselskap. Betaler ikke utbytte per nå. IDEX Biometrics ASA er notert på Oslo Børs.",
-    "navn_dnb": "IDEX Biometrics"
   },
   {
     "ticker": "WALWIL",
@@ -1491,22 +1401,6 @@
     "beskrivelse": "Islandsk lakseoppdrettsselskap som utnytter Islands rene og kalde havmiljø for lakseproduksjon. Betaler utbytte til aksjonærene etter hvert som produksjonsvolum og inntjening tillater. Arctic Fish Holding AS er notert på Euronext Growth Oslo."
   },
   {
-    "ticker": "NCOD",
-    "ticker_yf": "NCOD.OL",
-    "navn": "Norcod AS",
-    "sektor": "Havbruk",
-    "bors": "Euronext Growth Oslo",
-    "beskrivelse": "Norsk torskeoppdrettsselskap med konsesjoner langs norskekysten. Pionér i kommersiell torskeopprett. Betaler utbytte etter hvert som produksjonsvolum og lønnsomhet styrkes i det voksende torskemarkedet. Norcod AS er notert på Euronext Growth Oslo."
-  },
-  {
-    "ticker": "NOHAL",
-    "ticker_yf": "NOHAL.OL",
-    "navn": "Nordic Halibut AS",
-    "sektor": "Havbruk",
-    "bors": "Euronext Growth Oslo",
-    "beskrivelse": "Norsk kveiteoppdretter som produserer atlantisk kveite i Ryfylkefjordene. Kveite er ett av havbruksnæringens premiumsegmenter med høye priser. Betaler utbytte etter hvert som skalering og lønnsomhet tillater. Nordic Halibut AS er notert på Euronext Growth Oslo."
-  },
-  {
     "ticker": "SMOP",
     "ticker_yf": "SMOP.OL",
     "navn": "Smartoptics Group AS",
@@ -1523,16 +1417,8 @@
     "beskrivelse": "Norsk leverandør av IT-driftstjenester og cybersikkerhet for bedriftsmarkedet i Norden. Stabile abonnementsinntekter fra offentlige og private kunder. Betaler halvårlig utbytte basert på sterk kontantstrøm. Sentia AS er notert på Oslo Børs."
   },
   {
-    "ticker": "TECH",
-    "ticker_yf": "TECH.OL",
-    "navn": "Techstep ASA",
-    "sektor": "Informasjonsteknologi",
-    "bors": "Oslo Børs",
-    "beskrivelse": "Norsk leverandør av administrerte mobile enheter og bedriftsløsninger. Selger og drifter smarttelefoner, nettbrett og tilhørende programvare til bedrifter. Betaler utbytte etter hvert som abonnementsinntekter vokser. Techstep ASA er notert på Oslo Børs."
-  },
-  {
     "ticker": "SWON",
-    "ticker_yf": "SWON.OL",
+    "ticker_yf": "SWON.SW",
     "navn": "SoftwareOne Holding AG",
     "sektor": "Informasjonsteknologi",
     "bors": "Oslo Børs",
@@ -1553,14 +1439,6 @@
     "sektor": "Industri",
     "bors": "Euronext Growth Oslo",
     "beskrivelse": "Norsk byggevarekonsern som produserer og selger himlingsplater, isolasjon og vinduer under merkevarer som Hunton og Uldal. Lang utbyttehistorikk og stabil inntjening fra bygg- og anleggsmarkedet. Byggma ASA er notert på Euronext Growth Oslo. Aksjen har betalt utbytte 23 år på rad, noe som reflekterer langvarig stabil inntjening og kapitalavkastning til aksjonærene. 5-årssnittlig direkteavkastning er 3.6%, noe som plasserer BMA blant de mer moderate aksjene i industrisektoren."
-  },
-  {
-    "ticker": "ENVIP",
-    "ticker_yf": "ENVIP.OL",
-    "navn": "Envipco Holding N.V.",
-    "sektor": "Industri",
-    "bors": "Oslo Børs",
-    "beskrivelse": "Nederlandsk-norsk produsent av returautomater for tomflasker og hermetikk. Leverer pantemaskinløsninger til dagligvarehandelen i Europa og Nord-Amerika. Betaler utbytte basert på vekst i returmarkedet. Envipco Holding N.V. er notert på Oslo Børs."
   },
   {
     "ticker": "EQVA",
