@@ -354,8 +354,9 @@
       }
 
       const antAksjer = new Set(alleHendelser.filter(h => h.type === 'ex').map(h => h.aksje.ticker)).size;
+      const antRapporter = new Set(alleHendelser.filter(h => h.type === 'rapport').map(h => h.aksje.ticker)).size;
       document.getElementById('undertittel').textContent =
-        `${antAksjer} norske utbytteaksjer på Oslo Børs · Oppdatert daglig`;
+        `${antAksjer} utbytteaksjer og ${antRapporter} rapporter – oppdatert daglig`;
 
       visKalender();
     }
