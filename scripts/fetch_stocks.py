@@ -2537,10 +2537,10 @@ def generer_sitemap(aksjer, root_dir, today):
 
 
 def hent_osebx_historikk():
-    """Henter OSEBX (^OSEAX) 30-dagers historikk fra Yahoo Finance."""
+    """Henter OSEBX (^OSEAX) 2-års historikk fra Yahoo Finance."""
     try:
         ticker = yf.Ticker("^OSEAX")
-        hist = ticker.history(period="30d")
+        hist = ticker.history(period="2y")
         if hist.empty:
             print("  OSEBX: Ingen data returnert")
             return {}

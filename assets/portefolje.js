@@ -3,6 +3,9 @@
 // Holder styr på hvilke detail-rader som er åpne på tvers av re-renders
 const _aapneDetailRader = new Set();
 
+// Lagrer OSEBX-tilstand for periodebytte uten full re-render av portefølje
+let _pfOsebxState = null;
+
 function beregnKostbasis(ticker, txMap) {
   const tx = (txMap !== undefined ? txMap : hentTransaksjoner())[ticker] || [];
   let antall = 0, totalKost = 0, mottattUtbytte = 0;
@@ -144,6 +147,8 @@ function initPFSubTabs() {
     if (btn) byttSubTab(btn.dataset.pfTab);
     const sBtn = e.target.closest('.stats-sub-btn');
     if (sBtn) byttStatsSubTab(sBtn.dataset.statsTab);
+    const periodeBtn = e.target.closest('[data-osebx-periode]');
+    if (periodeBtn) _oppdaterOsebxPeriode(periodeBtn.dataset.osebxPeriode);
   });
 }
 
@@ -368,10 +373,79 @@ function beregnIRR(txMap) {
 }
 
 
-function visOsebxSammenligning(alleBeholdning, pfPct, osebxPct, invKost, totalReturnKr, forsteTxDato, osebxStartDato) {
+function _osebxStartForPeriode(periode, osebxDatoer, osebxSluttDato, forsteTxDato) {
+  let startDato;
+  if (periode === 'ytd') {
+    const ar = new Date(osebxSluttDato).getFullYear();
+    startDato = osebxDatoer.find(d => d >= ar + '-01-01') || osebxDatoer[0];
+  } else if (periode === '1ar') {
+    const for1ar = new Date(osebxSluttDato);
+    for1ar.setFullYear(for1ar.getFullYear() - 1);
+    startDato = osebxDatoer.find(d => d >= for1ar.toISOString().slice(0, 10)) || osebxDatoer[0];
+  } else { // 'kjop'
+    if (forsteTxDato) {
+      startDato = osebxDatoer.find(d => d >= forsteTxDato) || osebxDatoer[0];
+      if (startDato === osebxSluttDato && osebxDatoer.length > 1) {
+        startDato = osebxDatoer[osebxDatoer.length - 2];
+      }
+    } else {
+      const for12mnd = new Date(osebxSluttDato);
+      for12mnd.setFullYear(for12mnd.getFullYear() - 1);
+      startDato = osebxDatoer.find(d => d >= for12mnd.toISOString().slice(0, 10)) || osebxDatoer[0];
+    }
+  }
+  return startDato;
+}
+
+
+function _oppdaterOsebxPeriode(periode) {
+  if (!_pfOsebxState) return;
+  const { alleBeholdning, pfPct, invKost, totalReturnKr, forsteTxDato } = _pfOsebxState;
+  const osebxDatoer    = Object.keys(osebxHistorikk).sort();
+  const osebxSluttDato = osebxDatoer[osebxDatoer.length - 1];
+  const startDato      = _osebxStartForPeriode(periode, osebxDatoer, osebxSluttDato, forsteTxDato);
+  let osebxPct = null;
+  if (startDato && osebxSluttDato && startDato !== osebxSluttDato) {
+    osebxPct = (osebxHistorikk[osebxSluttDato] - osebxHistorikk[startDato]) / osebxHistorikk[startDato] * 100;
+  }
+  _pfOsebxState.aktivPeriode = periode;
+  visOsebxSammenligning(alleBeholdning, pfPct, osebxPct, invKost, totalReturnKr, forsteTxDato, startDato, osebxSluttDato, periode);
+
+  // Oppdater stat-kortet
+  const osebxEl    = document.getElementById('pf-stat-osebx');
+  const osebxTekst = document.getElementById('pf-stat-osebx-tekst');
+  if (!osebxEl) return;
+  if (osebxPct !== null) {
+    if (pfPct !== null) {
+      const diff  = pfPct - osebxPct;
+      const slaer = diff >= 0;
+      osebxEl.textContent = slaer ? '✓ Ja' : '✗ Nei';
+      osebxEl.className   = 'stat-value text-base ' + (slaer ? 'text-green-600 dark:text-green-400' : 'text-red-500');
+      if (osebxTekst) osebxTekst.textContent = (diff >= 0 ? '+' : '') + diff.toFixed(1) + '% vs indeks';
+    } else {
+      osebxEl.textContent = (osebxPct >= 0 ? '+' : '') + osebxPct.toFixed(1) + '%';
+      osebxEl.className   = 'stat-value text-base ' + (osebxPct >= 0 ? 'text-blue-600 dark:text-blue-400' : 'text-red-500');
+      const label = { ytd: 'OSEBX YTD', '1ar': 'OSEBX 1 år', kjop: 'OSEBX siden kjøp' }[periode] || 'OSEBX';
+      if (osebxTekst) osebxTekst.textContent = label;
+    }
+  }
+}
+
+
+function visOsebxSammenligning(alleBeholdning, pfPct, osebxPct, invKost, totalReturnKr, forsteTxDato, osebxStartDato, osebxSluttDato, aktivPeriode) {
   const wrapper = document.getElementById('pf-osebx-sammenligning');
   const innhold = document.getElementById('pf-osebx-innhold');
   if (!wrapper || !innhold) return;
+
+  const periode = aktivPeriode || 'kjop';
+  const fmtDato = d => new Date(d + 'T00:00:00').toLocaleDateString('nb-NO', { day: 'numeric', month: 'short' });
+
+  const periodeKnapper = `
+    <div class="flex gap-1 mb-3" role="group" aria-label="Velg tidsperiode">
+      ${forsteTxDato ? `<button class="text-xs px-2 py-1 rounded ${periode === 'kjop' ? 'bg-teal-600 text-white' : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'}" data-osebx-periode="kjop">Siden kjøp</button>` : ''}
+      <button class="text-xs px-2 py-1 rounded ${periode === 'ytd' ? 'bg-teal-600 text-white' : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'}" data-osebx-periode="ytd">YTD</button>
+      <button class="text-xs px-2 py-1 rounded ${periode === '1ar' ? 'bg-teal-600 text-white' : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'}" data-osebx-periode="1ar">1 år</button>
+    </div>`;
 
   if (osebxPct === null) {
     wrapper.classList.remove('hidden');
@@ -379,15 +453,17 @@ function visOsebxSammenligning(alleBeholdning, pfPct, osebxPct, invKost, totalRe
     return;
   }
 
+  const datoLabel = (osebxStartDato && osebxSluttDato)
+    ? `${fmtDato(osebxStartDato)} – ${fmtDato(osebxSluttDato)}`
+    : '—';
+
   // Kun OSEBX – ingen porteføljedata ennå
   if (pfPct === null) {
     const fmtPct = v => (v >= 0 ? '+' : '') + v.toFixed(2) + '%';
-    const fraDato = forsteTxDato
-      ? new Date(forsteTxDato).toLocaleDateString('nb-NO', { day: 'numeric', month: 'short', year: 'numeric' })
-      : osebxStartDato || '—';
     wrapper.classList.remove('hidden');
     innhold.innerHTML = `
       <div class="space-y-3">
+        ${periodeKnapper}
         <div>
           <div class="flex justify-between text-xs mb-1">
             <span class="text-gray-500 dark:text-gray-400">OSEBX (Oslo Børs)</span>
@@ -397,7 +473,7 @@ function visOsebxSammenligning(alleBeholdning, pfPct, osebxPct, invKost, totalRe
             <div class="h-full rounded-full ${osebxPct >= 0 ? 'bg-blue-400' : 'bg-red-400'}" style="width:100%"></div>
           </div>
         </div>
-        <p class="text-xs text-gray-400 dark:text-gray-500">Fra ${fraDato} · Legg til transaksjoner for å sammenligne mot din portefølje.</p>
+        <p class="text-xs text-gray-400 dark:text-gray-500">${datoLabel} · Legg til transaksjoner for å sammenligne mot din portefølje.</p>
       </div>`;
     return;
   }
@@ -415,13 +491,10 @@ function visOsebxSammenligning(alleBeholdning, pfPct, osebxPct, invKost, totalRe
   const pfW  = Math.min(100, Math.abs(pfPct)    / maks * 100);
   const oxW  = Math.min(100, Math.abs(osebxPct) / maks * 100);
 
-  const fraDato = forsteTxDato
-    ? new Date(forsteTxDato).toLocaleDateString('nb-NO', { day: 'numeric', month: 'short', year: 'numeric' })
-    : osebxStartDato || '—';
-
   wrapper.classList.remove('hidden');
   innhold.innerHTML = `
     <div class="space-y-3">
+      ${periodeKnapper}
       <div>
         <div class="flex justify-between text-xs mb-1">
           <span class="text-gray-500 dark:text-gray-400">Din portefølje</span>
@@ -441,7 +514,7 @@ function visOsebxSammenligning(alleBeholdning, pfPct, osebxPct, invKost, totalRe
         </div>
       </div>
       <div class="pt-2 border-t border-gray-100 dark:border-gray-800 flex justify-between items-center">
-        <span class="text-xs text-gray-400">Fra ${fraDato}</span>
+        <span class="text-xs text-gray-400">${datoLabel}</span>
         <span class="text-sm font-bold ${slaer ? 'text-teal-600 dark:text-teal-400' : 'text-red-500'}">
           ${fmtPct(diff)} (${diffKr >= 0 ? '+' : ''}${fmtKr(diffKr)})
         </span>
@@ -781,52 +854,43 @@ function visPortefolje() {
       if (faktiskTekst) faktiskTekst.textContent = 'trenger transaksjoner';
     }
 
-    // OSEBX: bruk tidligste kjøpsdato som startpunkt, eller siste 12 mnd hvis ingen transaksjoner
+    // OSEBX: bruk tidligste kjøpsdato som startpunkt (eller 12 mnd), med støtte for periodebytte
     const alleTxDatoer = Object.values(txMap)
       .flatMap(liste => liste.filter(t => t.type === 'kjøp').map(t => t.dato))
       .sort();
-    const forsteTxDato  = alleTxDatoer[0] || null;
-    const osebxDatoer   = Object.keys(osebxHistorikk).sort();
+    const forsteTxDato   = alleTxDatoer[0] || null;
+    const osebxDatoer    = Object.keys(osebxHistorikk).sort();
     const osebxSluttDato = osebxDatoer[osebxDatoer.length - 1];
 
-    // Startdato: fra første kjøp, eller for 12 mnd siden (fallback uten transaksjoner)
-    let osebxStartDato;
-    if (forsteTxDato) {
-      // Finn nærmeste OSEBX-dato på eller etter første kjøp
-      osebxStartDato = osebxDatoer.find(d => d >= forsteTxDato) || osebxDatoer[0];
-      // Hvis startdato = sluttdato (kjøpt på/etter siste datapunkt), bruk nest siste
-      if (osebxStartDato === osebxSluttDato && osebxDatoer.length > 1) {
-        osebxStartDato = osebxDatoer[osebxDatoer.length - 2];
-      }
-    } else {
-      const for12mnd = new Date(osebxSluttDato || new Date());
-      for12mnd.setFullYear(for12mnd.getFullYear() - 1);
-      const for12mndStr = for12mnd.toISOString().slice(0, 10);
-      osebxStartDato = osebxDatoer.find(d => d >= for12mndStr) || osebxDatoer[0];
-    }
+    // Behold aktiv periode ved re-render, ellers velg 'kjop' (eller 'ytd' om ingen kjøp)
+    const aktivPeriode   = (_pfOsebxState && _pfOsebxState.aktivPeriode) || (forsteTxDato ? 'kjop' : 'ytd');
+    const osebxStartDato = _osebxStartForPeriode(aktivPeriode, osebxDatoer, osebxSluttDato, forsteTxDato);
 
     let osebxPctTotal = null;
     if (osebxStartDato && osebxSluttDato && osebxStartDato !== osebxSluttDato) {
       osebxPctTotal = (osebxHistorikk[osebxSluttDato] - osebxHistorikk[osebxStartDato]) / osebxHistorikk[osebxStartDato] * 100;
     }
 
+    // Lagre tilstand for periodebytte uten full re-render
+    _pfOsebxState = { alleBeholdning, pfPct: pfPctTotal, invKost, totalReturnKr, forsteTxDato, aktivPeriode };
+
     if (osebxEl && pfPctTotal !== null && osebxPctTotal !== null) {
       const diff  = pfPctTotal - osebxPctTotal;
       const slaer = diff >= 0;
       osebxEl.textContent = slaer ? '✓ Ja' : '✗ Nei';
       osebxEl.className   = 'stat-value text-base ' + (slaer ? 'text-green-600 dark:text-green-400' : 'text-red-500');
-      osebxTekst.textContent = (diff >= 0 ? '+' : '') + diff.toFixed(1) + '% vs indeks';
+      if (osebxTekst) osebxTekst.textContent = (diff >= 0 ? '+' : '') + diff.toFixed(1) + '% vs indeks';
     } else if (osebxEl && osebxPctTotal !== null) {
-      // Ingen porteføljedata – vis OSEBX-avkastning alene
       osebxEl.textContent = (osebxPctTotal >= 0 ? '+' : '') + osebxPctTotal.toFixed(1) + '%';
       osebxEl.className   = 'stat-value text-base ' + (osebxPctTotal >= 0 ? 'text-blue-600 dark:text-blue-400' : 'text-red-500');
-      osebxTekst.textContent = forsteTxDato ? 'OSEBX siden kjøp' : 'OSEBX siste 12 mnd';
+      const label = { ytd: 'OSEBX YTD', '1ar': 'OSEBX 1 år', kjop: 'OSEBX siden kjøp' }[aktivPeriode] || 'OSEBX';
+      if (osebxTekst) osebxTekst.textContent = label;
     } else if (osebxEl) {
       osebxEl.textContent  = '—';
       osebxEl.className    = 'stat-value text-base';
-      osebxTekst.textContent = 'oppdateres daglig';
+      if (osebxTekst) osebxTekst.textContent = 'oppdateres daglig';
     }
-    visOsebxSammenligning(alleBeholdning, pfPctTotal, osebxPctTotal, invKost, totalReturnKr, forsteTxDato, osebxStartDato);
+    visOsebxSammenligning(alleBeholdning, pfPctTotal, osebxPctTotal, invKost, totalReturnKr, forsteTxDato, osebxStartDato, osebxSluttDato, aktivPeriode);
 
     // ── IRR (annualisert intern avkastningsrate) ──────────────────────────────
     const irrEl    = document.getElementById('pf-stat-irr');
