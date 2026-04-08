@@ -576,13 +576,8 @@ def hent_aksje(meta):
         if isinstance(calendar, dict):
             ex_dato = format_dato(calendar.get("exDividendDate"))
             betaling_dato = format_dato(calendar.get("dividendDate"))
-        # Yahoo Finance er konsekvent 1 dag for tidlig for .OL-aksjer (T+2-oppgjør).
-        # Korrigerer med +1 dag så ex-dato matcher Oslo Børs / Nordnet.
-        if ex_dato and ticker_yf.endswith(".OL"):
-            try:
-                ex_dato = (datetime.date.fromisoformat(ex_dato) + datetime.timedelta(days=1)).isoformat()
-            except ValueError:
-                pass
+        # Oslo Børs bruker T+1-oppgjør (siden okt 2024). Yahoo Finance rapporterer
+        # ex-datoer korrekt for norske aksjer — ingen +1-korreksjon nødvendig.
 
         # Neste kvartalsrapport ─ Kilde 1: Newsweb Oslo Børs (offisiell, primær)
         rapport_dato = hent_newsweb_rapport_dato(ticker)
@@ -1137,7 +1132,7 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     pe_rad = f"<tr><td>P/E</td><td>{pe:.1f}</td></tr>" if pe and pe > 0 else ""
 
     pe_card = (
-        f'<div class="card"><div class="label">P/E</div>'
+        f'<div class="kcard"><div class="label">P/E</div>'
         f'<div class="val">{pe:.1f}</div></div>'
     ) if pe and pe > 0 else ""
 
@@ -2548,19 +2543,13 @@ def main():
                 dnb = dnb_datoer[oppslag]
                 if dnb.get("ex_dato"):
                     dnb_ex = dnb["ex_dato"]
-                    # DNB Markets bruker T+1-konvensjon for Oslo Børs-aksjer (samme som Yahoo).
-                    # Korriger +1 dag når DNB er eneste kilde (Yahoo hadde ingen ex_dato).
+                    # DNB Markets publiserer offisielle ex-datoer fra Oslo Børs — ingen +1-korreksjon.
                     if not aksje.get("ex_dato"):
-                        ticker_yf_val = TICKER_YF.get(t, t + ".OL")
-                        if ticker_yf_val and ticker_yf_val.endswith(".OL"):
-                            try:
-                                dnb_ex = (datetime.date.fromisoformat(dnb_ex) + datetime.timedelta(days=1)).isoformat()
-                            except ValueError:
-                                pass
+                        # Yahoo manglet ex_dato — bruk DNB-dato direkte
                         aksje["ex_dato"] = dnb_ex
                         dnb_treff += 1
                     elif dnb_ex > aksje.get("ex_dato", ""):
-                        # DNB har en nyere dato enn Yahoo — bruk DNB (ingen ekstra +1, Yahoo er allerede korrigert)
+                        # DNB har en nyere dato enn Yahoo — bruk DNB
                         aksje["ex_dato"] = dnb_ex
                         dnb_treff += 1
                 if dnb.get("betaling_dato") and not aksje.get("betaling_dato"):
