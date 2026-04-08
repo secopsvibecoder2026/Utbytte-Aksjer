@@ -353,10 +353,7 @@
         return;
       }
 
-      const antAksjer = new Set(alleHendelser.filter(h => h.type === 'ex').map(h => h.aksje.ticker)).size;
-      const antRapporter = new Set(alleHendelser.filter(h => h.type === 'rapport').map(h => h.aksje.ticker)).size;
-      document.getElementById('undertittel').textContent =
-        `${antAksjer} utbytteaksjer og ${antRapporter} rapporter – oppdatert daglig`;
+      document.getElementById('undertittel').textContent = '';
 
       visKalender();
     }
