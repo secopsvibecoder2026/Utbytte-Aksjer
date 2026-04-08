@@ -2045,9 +2045,9 @@ function visModal(a) {
       </div>
     </div>
 
-    ${a.beskrivelse_fakta ? `<div class="mb-4 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700"><p class="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">Om selskapet</p><p class="text-sm text-gray-700 dark:text-gray-300">${escHtml(a.beskrivelse_fakta)}</p></div>` : a.beskrivelse ? `<p class="text-sm text-gray-600 dark:text-gray-400 mb-4 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">${escHtml(a.beskrivelse)}</p>` : ''}
+    ${a.beskrivelse_fakta ? `<div class="om-selskap-boks"><p class="om-selskap-label">Om selskapet</p><p class="om-selskap-tekst">${escHtml(a.beskrivelse_fakta)}</p></div>` : a.beskrivelse ? `<div class="om-selskap-boks"><p class="om-selskap-label">Om selskapet</p><p class="om-selskap-tekst">${escHtml(a.beskrivelse)}</p></div>` : ''}
 
-    ${a.ai_oppsummering ? `<div class="mb-4 p-3 bg-blue-50 dark:bg-blue-950/30 rounded-lg border border-blue-200 dark:border-blue-800"><p class="text-xs font-semibold text-blue-700 dark:text-blue-300 mb-1">AI-oppsummering${a.ai_oppsummering_dato ? ` <span class="font-normal opacity-70">${escHtml(a.ai_oppsummering_dato)}</span>` : ''}</p><p class="text-sm text-blue-900 dark:text-blue-200">${escHtml(a.ai_oppsummering)}</p></div>` : ''}
+    ${a.ai_oppsummering ? `<div class="ai-opp-boks"><p class="ai-opp-label">AI-oppsummering${a.ai_oppsummering_dato ? ` <span class="ai-opp-dato">${escHtml(a.ai_oppsummering_dato)}</span>` : ''}</p><p class="ai-opp-tekst">${escHtml(a.ai_oppsummering)}</p></div>` : ''}
 
     <div class="grid grid-cols-2 gap-3 mb-4">
       ${modalKort('Kurs', fmt(a.pris) + ' ' + a.valuta)}
