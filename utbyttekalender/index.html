@@ -89,6 +89,20 @@
       <p class="text-sm text-gray-500 dark:text-gray-400 mt-1" id="undertittel">Laster kalender…</p>
     </div>
 
+    <!-- FILTRE -->
+    <div class="flex flex-wrap gap-2" id="filter-bar" role="group" aria-label="Filtrer hendelsestype">
+      <button class="filter-btn aktiv-filter" data-filter="alle">Alle</button>
+      <button class="filter-btn" data-filter="ex">
+        <span aria-hidden="true">📌</span> Ex-dato
+      </button>
+      <button class="filter-btn" data-filter="utbytte">
+        <span aria-hidden="true">💸</span> Utbetaling
+      </button>
+      <button class="filter-btn" data-filter="rapport">
+        <span aria-hidden="true">📋</span> Rapport
+      </button>
+    </div>
+
     <!-- HURTIGHOPP (månedsliste) -->
     <nav id="maaned-nav" aria-label="Hopp til måned" class="hidden flex-wrap gap-2 flex overflow-x-auto pb-1"></nav>
 
@@ -129,22 +143,50 @@
 
   </main>
 
+  <style>
+    .filter-btn {
+      display: inline-flex; align-items: center; gap: 0.35rem;
+      font-size: 0.8125rem; font-weight: 600;
+      padding: 0.35rem 0.9rem; border-radius: 9999px;
+      border: 1.5px solid #e5e7eb;
+      color: #6b7280; background: #fff;
+      cursor: pointer; transition: all 0.15s;
+      white-space: nowrap;
+    }
+    .dark .filter-btn { background: #111827; border-color: #374151; color: #9ca3af; }
+    .filter-btn:hover { border-color: #16a34a; color: #16a34a; }
+    .dark .filter-btn:hover { border-color: #4ade80; color: #4ade80; }
+    .filter-btn.aktiv-filter { border-color: #16a34a; color: #16a34a; background: #f0fdf4; }
+    .dark .filter-btn.aktiv-filter { border-color: #4ade80; color: #4ade80; background: #052e16; }
+  </style>
   <script>
+    'use strict';
     // ── Tema ─────────────────────────────────────────────────────────────────
     const root = document.documentElement;
-    const savedTheme = localStorage.getItem('theme');
+    const savedTheme = localStorage.getItem('tema') || localStorage.getItem('theme');
     if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
       root.classList.add('dark');
     }
     document.getElementById('dark-toggle').addEventListener('click', () => {
       const isDark = root.classList.toggle('dark');
-      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      localStorage.setItem('tema', isDark ? 'dark' : 'light');
     });
 
-    // ── Hjelpefunksjoner ─────────────────────────────────────────────────────
+    // ── Konfig ───────────────────────────────────────────────────────────────
     const MAANEDER = ['Januar','Februar','Mars','April','Mai','Juni','Juli','August','September','Oktober','November','Desember'];
 
-    function formaterDatoLang(str) {
+    const HENDELSE_TYPER = {
+      ex:      { label: 'Ex-dato',    bg: 'bg-green-100 dark:bg-green-900/40',   tekst: 'text-green-700 dark:text-green-300' },
+      utbytte: { label: 'Utbetaling', bg: 'bg-blue-100 dark:bg-blue-900/40',     tekst: 'text-blue-700 dark:text-blue-300' },
+      rapport: { label: 'Rapport',    bg: 'bg-orange-100 dark:bg-orange-900/40', tekst: 'text-orange-700 dark:text-orange-300' },
+    };
+
+    // ── State ────────────────────────────────────────────────────────────────
+    let alleHendelser = [];
+    let aktivFilter = 'alle';
+
+    // ── Hjelpefunksjoner ─────────────────────────────────────────────────────
+    function formaterDatoKort(str) {
       const d = new Date(str);
       return d.toLocaleDateString('nb-NO', { weekday: 'short', day: 'numeric', month: 'short' });
     }
@@ -162,98 +204,72 @@
       return d < idag;
     }
 
-    function byggRad(a, erEstimert) {
-      const passert = erPassert(a.ex_dato);
-      return `
-        <tr class="${passert ? 'opacity-40' : ''}">
-          <td class="pl-4 pr-3 py-2.5">
-            <a href="/aksjer/${a.ticker}/" class="font-mono font-bold text-brand-700 dark:text-brand-400 hover:underline text-sm">${a.ticker}</a>
-          </td>
-          <td class="px-3 py-2.5 text-sm text-gray-600 dark:text-gray-400 max-w-[200px] truncate">${a.navn}</td>
-          <td class="px-3 py-2.5 text-sm ${passert ? '' : 'font-medium'}">
-            ${formaterDatoLang(a.ex_dato)}
-            ${erEstimert ? '<span class="ml-1 text-xs text-gray-400 dark:text-gray-600" title="Estimert basert på historikk">~</span>' : ''}
-          </td>
-          <td class="px-3 py-2.5 text-sm text-gray-500 dark:text-gray-400 hidden md:table-cell">${a.betaling_dato ? formaterDatoLang(a.betaling_dato) : '—'}</td>
-          <td class="pl-3 pr-4 py-2.5 text-right">
-            <span class="text-xs font-semibold px-2 py-0.5 rounded-full ${yieldKlasse(a.utbytte_yield)}">${a.utbytte_yield.toFixed(1)}%</span>
-          </td>
-        </tr>`;
-    }
-
-    function byggMaanedSeksjon(maanedNr, aar, aksjer, bekreftetSet) {
-      const maanedNavn = MAANEDER[maanedNr];
-      const id = `maaned-${aar}-${maanedNr}`;
-      const sortert = [...aksjer].sort((a, b) => a.ex_dato.localeCompare(b.ex_dato));
-      const rader = sortert.map(a => byggRad(a, !bekreftetSet.has(a.ticker + a.ex_dato))).join('');
-
-      return `
-        <section id="${id}">
-          <div class="flex items-center gap-3 mb-4">
-            <h3 class="text-lg font-bold">${maanedNavn} ${aar}</h3>
-            <span class="text-xs text-gray-400 dark:text-gray-600 font-medium">${aksjer.length} aksje${aksjer.length !== 1 ? 'r' : ''}</span>
-          </div>
-          <div class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 overflow-hidden">
-            <!-- Desktop tabell -->
-            <div class="hidden sm:block overflow-x-auto">
-              <table class="w-full text-left">
-                <thead>
-                  <tr class="border-b border-gray-100 dark:border-gray-800 text-xs text-gray-400 dark:text-gray-600 uppercase tracking-wider">
-                    <th class="px-4 py-2.5 font-medium">Ticker</th>
-                    <th class="px-4 py-2.5 font-medium">Selskap</th>
-                    <th class="px-4 py-2.5 font-medium">Ex-dato</th>
-                    <th class="px-4 py-2.5 font-medium hidden md:table-cell">Utbetaling</th>
-                    <th class="px-4 py-2.5 font-medium text-right">Yield</th>
-                  </tr>
-                </thead>
-                <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
-                  ${rader}
-                </tbody>
-              </table>
-            </div>
-            <!-- Mobilvisning -->
-            <div class="sm:hidden divide-y divide-gray-100 dark:divide-gray-800">
-              ${sortert.map(a => {
-                const passert = erPassert(a.ex_dato);
-                const erEstimert = !bekreftetSet.has(a.ticker + a.ex_dato);
-                return `<div class="${passert ? 'opacity-40' : ''} px-4 py-3 flex items-center justify-between">
-                  <div>
-                    <a href="/aksjer/${a.ticker}/" class="font-mono font-bold text-brand-700 dark:text-brand-400 text-sm">${a.ticker}</a>
-                    <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">${formaterDatoLang(a.ex_dato)}${erEstimert ? ' <span title="Estimert">~</span>' : ''}</div>
-                  </div>
-                  <span class="text-xs font-semibold px-2 py-0.5 rounded-full ${yieldKlasse(a.utbytte_yield)}">${a.utbytte_yield.toFixed(1)}%</span>
-                </div>`;
-              }).join('')}
-            </div>
-          </div>
-        </section>`;
-    }
-
-    // ── Hent data og bygg kalender ───────────────────────────────────────────
-    async function init() {
-      const resp = await fetch('/data/aksjer.json');
-      const data = await resp.json();
-      const aksjer = (data.aksjer || data).filter(a => a.ex_dato && a.utbytte_yield > 0);
-
-      // Finn "bekreftet"-aksjer (ex_dato er faktisk kunngjort — ikke-estimert)
-      // Vi bruker det faktum at bekreftet = ex_dato finnes og er innenfor ~90 dager
+    function dagerTilTekst(datoStr) {
+      const d = new Date(datoStr);
       const idag = new Date(); idag.setHours(0,0,0,0);
-      const bekreftetSet = new Set();
-      aksjer.forEach(a => {
-        const d = new Date(a.ex_dato);
-        const diffDager = (d - idag) / 86400000;
-        if (diffDager <= 90) bekreftetSet.add(a.ticker + a.ex_dato);
-      });
+      const dager = Math.ceil((d - idag) / 86400000);
+      if (dager < 0) return 'Passert';
+      if (dager === 0) return 'I dag!';
+      if (dager === 1) return 'I morgen';
+      return `om ${dager}d`;
+    }
+
+    function byggHendelseRad(h) {
+      const { dato, type, aksje: a, estimert } = h;
+      const passert = erPassert(dato);
+      const cfg = HENDELSE_TYPER[type];
+      const d = new Date(dato);
+      const dagNr = d.getDate();
+      const mndKort = MAANEDER[d.getMonth()].slice(0, 3).toLowerCase();
+
+      let detalj = '';
+      if (type === 'ex') {
+        detalj = a.siste_utbytte ? `${a.siste_utbytte} ${a.valuta || 'NOK'} per aksje` : '';
+      } else if (type === 'utbytte') {
+        detalj = a.siste_utbytte ? `${a.siste_utbytte} ${a.valuta || 'NOK'} per aksje` : '';
+      } else if (type === 'rapport') {
+        detalj = 'Kvartalsrapport';
+      }
+
+      return `
+        <div class="flex items-center gap-3 px-4 py-3 ${passert ? 'opacity-40' : ''} hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+          <div class="text-center w-10 shrink-0">
+            <div class="text-xs text-gray-400 leading-none">${mndKort}</div>
+            <div class="text-xl font-bold leading-tight ${passert ? 'text-gray-400' : 'text-gray-800 dark:text-gray-100'}">${dagNr}</div>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="text-xs font-semibold px-1.5 py-0.5 rounded ${cfg.bg} ${cfg.tekst}">${cfg.label}</span>
+              <a href="/aksjer/${a.ticker}/" class="font-mono font-bold text-brand-700 dark:text-brand-400 hover:underline text-sm">${a.ticker}</a>
+              <span class="text-gray-600 dark:text-gray-400 text-sm truncate">${a.navn}</span>
+              ${estimert ? '<span class="text-xs text-gray-400 dark:text-gray-600" title="Estimert basert på historikk">~est.</span>' : ''}
+            </div>
+            ${detalj ? `<div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">${detalj}</div>` : ''}
+          </div>
+          <div class="shrink-0 text-right min-w-[4rem]">
+            ${type !== 'rapport' && a.utbytte_yield > 0
+              ? `<span class="text-xs font-semibold px-2 py-0.5 rounded-full ${yieldKlasse(a.utbytte_yield)}">${a.utbytte_yield.toFixed(1)}%</span>`
+              : ''}
+            <div class="text-xs text-gray-400 mt-1">${passert ? 'Passert' : dagerTilTekst(dato)}</div>
+          </div>
+        </div>`;
+    }
+
+    // ── Bygg og vis kalender ─────────────────────────────────────────────────
+    function visKalender() {
+      const filtrerte = aktivFilter === 'alle'
+        ? alleHendelser
+        : alleHendelser.filter(h => h.type === aktivFilter);
+
+      const idag = new Date(); idag.setHours(0,0,0,0);
 
       // Grupper per år + måned
       const grupper = {};
-      aksjer.forEach(a => {
-        const d = new Date(a.ex_dato);
-        const aar = d.getFullYear();
-        const mnd = d.getMonth();
-        const key = `${aar}-${mnd}`;
-        if (!grupper[key]) grupper[key] = { aar, mnd, aksjer: [] };
-        grupper[key].aksjer.push(a);
+      filtrerte.forEach(h => {
+        const d = new Date(h.dato);
+        const key = `${d.getFullYear()}-${d.getMonth()}`;
+        if (!grupper[key]) grupper[key] = { aar: d.getFullYear(), mnd: d.getMonth(), hendelser: [] };
+        grupper[key].hendelser.push(h);
       });
 
       const sorterte = Object.values(grupper).sort((a, b) =>
@@ -261,34 +277,93 @@
       );
 
       if (sorterte.length === 0) {
+        document.getElementById('kalender-body').innerHTML =
+          '<p class="text-center text-gray-400 dark:text-gray-600 py-12">Ingen hendelser matcher valgt filter.</p>';
+        document.getElementById('maaned-nav').innerHTML = '';
+        document.getElementById('maaned-nav').classList.add('hidden');
+        return;
+      }
+
+      // Måneds-hurtighopp
+      const nav = document.getElementById('maaned-nav');
+      nav.classList.remove('hidden');
+      nav.innerHTML = sorterte.map(g => {
+        const erAktivMnd = g.aar === idag.getFullYear() && g.mnd === idag.getMonth();
+        return `<a href="#maaned-${g.aar}-${g.mnd}"
+          class="text-xs px-3 py-1 rounded-full border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:border-brand-400 hover:text-brand-700 dark:hover:text-brand-400 transition-colors${erAktivMnd ? ' border-brand-400 text-brand-700 dark:text-brand-400 font-semibold' : ''}"
+          >${MAANEDER[g.mnd].slice(0,3)} ${g.aar}</a>`;
+      }).join('');
+
+      // Bygg månedsseksjoner
+      document.getElementById('kalender-body').innerHTML = sorterte.map(g => {
+        const rader = g.hendelser.map(byggHendelseRad).join('');
+        const antEx      = g.hendelser.filter(h => h.type === 'ex').length;
+        const antUtbytte = g.hendelser.filter(h => h.type === 'utbytte').length;
+        const antRapport = g.hendelser.filter(h => h.type === 'rapport').length;
+        const oppsummer = [
+          antEx      ? `${antEx} ex-dag`      : '',
+          antUtbytte ? `${antUtbytte} utbetaling${antUtbytte !== 1 ? 'er' : ''}` : '',
+          antRapport ? `${antRapport} rapport${antRapport !== 1 ? 'er' : ''}` : '',
+        ].filter(Boolean).join(' · ');
+
+        return `
+          <section id="maaned-${g.aar}-${g.mnd}">
+            <div class="flex items-center gap-3 mb-3">
+              <h3 class="text-lg font-bold">${MAANEDER[g.mnd]} ${g.aar}</h3>
+              <span class="text-xs text-gray-400 dark:text-gray-600 font-medium">${oppsummer}</span>
+            </div>
+            <div class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 overflow-hidden divide-y divide-gray-100 dark:divide-gray-800">
+              ${rader}
+            </div>
+          </section>`;
+      }).join('');
+    }
+
+    // ── Filterklikk ──────────────────────────────────────────────────────────
+    document.getElementById('filter-bar').addEventListener('click', e => {
+      const btn = e.target.closest('.filter-btn');
+      if (!btn) return;
+      aktivFilter = btn.dataset.filter;
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.toggle('aktiv-filter', b === btn));
+      visKalender();
+    });
+
+    // ── Hent data ────────────────────────────────────────────────────────────
+    async function init() {
+      const resp = await fetch('/data/aksjer.json');
+      const data = await resp.json();
+      const aksjer = data.aksjer || data;
+
+      const idag = new Date(); idag.setHours(0,0,0,0);
+
+      // Bygg flat liste av alle hendelser
+      aksjer.forEach(a => {
+        if (a.ex_dato && a.utbytte_yield > 0) {
+          const d = new Date(a.ex_dato);
+          const diffDager = (d - idag) / 86400000;
+          alleHendelser.push({ dato: a.ex_dato, type: 'ex', aksje: a, estimert: diffDager > 90 });
+        }
+        if (a.betaling_dato && a.utbytte_yield > 0) {
+          alleHendelser.push({ dato: a.betaling_dato, type: 'utbytte', aksje: a, estimert: false });
+        }
+        if (a.rapport_dato) {
+          alleHendelser.push({ dato: a.rapport_dato, type: 'rapport', aksje: a, estimert: false });
+        }
+      });
+
+      alleHendelser.sort((x, y) => x.dato.localeCompare(y.dato));
+
+      if (alleHendelser.length === 0) {
         document.getElementById('ingen').classList.remove('hidden');
         document.getElementById('undertittel').textContent = 'Ingen data tilgjengelig.';
         return;
       }
 
-      const aarSet = [...new Set(sorterte.map(g => g.aar))];
-      const aarTekst = aarSet.join('/');
-      document.getElementById('aar').textContent = aarTekst;
+      const antAksjer = new Set(alleHendelser.filter(h => h.type === 'ex').map(h => h.aksje.ticker)).size;
       document.getElementById('undertittel').textContent =
-        `${aksjer.length} norske utbytteaksjer på Oslo Børs · Oppdatert daglig`;
+        `${antAksjer} norske utbytteaksjer på Oslo Børs · Oppdatert daglig`;
 
-      // Måneds-hurtighopp
-      const nav = document.getElementById('maaned-nav');
-      nav.classList.remove('hidden');
-      sorterte.forEach(g => {
-        const a = document.createElement('a');
-        a.href = `#maaned-${g.aar}-${g.mnd}`;
-        a.className = 'text-xs px-3 py-1 rounded-full border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:border-brand-400 hover:text-brand-700 dark:hover:text-brand-400 transition-colors';
-        const erAktivMnd = g.aar === idag.getFullYear() && g.mnd === idag.getMonth();
-        if (erAktivMnd) a.className += ' border-brand-400 text-brand-700 dark:text-brand-400 font-semibold';
-        a.textContent = `${MAANEDER[g.mnd].slice(0,3)} ${g.aar}`;
-        nav.appendChild(a);
-      });
-
-      // Bygg seksjoner
-      document.getElementById('kalender-body').innerHTML = sorterte
-        .map(g => byggMaanedSeksjon(g.mnd, g.aar, g.aksjer, bekreftetSet))
-        .join('');
+      visKalender();
     }
 
     init().catch(() => {
