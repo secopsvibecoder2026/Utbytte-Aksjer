@@ -17,7 +17,9 @@ from fetch_stocks import generer_aksjesider, generer_sektorsider, generer_toppli
 
 def main():
     with open(TICKERS_F, encoding="utf-8") as f:
-        beskrivelser = {t["ticker"]: t.get("beskrivelse", "") for t in json.load(f)}
+        ticker_data = json.load(f)
+        beskrivelser      = {t["ticker"]: t.get("beskrivelse", "") for t in ticker_data}
+        beskrivelse_fakta = {t["ticker"]: t.get("beskrivelse_fakta", "") for t in ticker_data}
 
     with open(AKSJER_F, encoding="utf-8") as f:
         data = json.load(f)
@@ -27,6 +29,10 @@ def main():
         ny_besk = beskrivelser.get(a["ticker"], "")
         if ny_besk and ny_besk != a.get("beskrivelse", ""):
             a["beskrivelse"] = ny_besk
+            oppdatert += 1
+        ny_fakta = beskrivelse_fakta.get(a["ticker"], "")
+        if ny_fakta and ny_fakta != a.get("beskrivelse_fakta", ""):
+            a["beskrivelse_fakta"] = ny_fakta
             oppdatert += 1
 
     with open(AKSJER_F, "w", encoding="utf-8") as f:

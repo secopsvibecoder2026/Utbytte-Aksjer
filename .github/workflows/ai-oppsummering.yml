@@ -1,0 +1,55 @@
+name: AI-oppsummering (ukentlig)
+
+on:
+  schedule:
+    # Hver mandag kl. 06:00 UTC (07:00 CET)
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+    inputs:
+      force:
+        description: "Overskriv eksisterende oppsummeringer"
+        type: boolean
+        default: false
+      tickers:
+        description: "Spesifikke tickers (kommaseparert, tomt = alle)"
+        type: string
+        default: ""
+
+jobs:
+  generer-oppsummeringer:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Sjekk ut kode
+        uses: actions/checkout@v4
+
+      - name: Sett opp Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Installer avhengigheter
+        run: pip install anthropic
+
+      - name: Generer AI-oppsummeringer
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          ARGS=""
+          if [ "${{ inputs.force }}" = "true" ]; then ARGS="$ARGS --force"; fi
+          if [ -n "${{ inputs.tickers }}" ]; then ARGS="$ARGS --tickers ${{ inputs.tickers }}"; fi
+          python3 scripts/ai_oppsummering.py $ARGS
+
+      - name: Commit og push hvis endringer
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          if git diff --quiet data/aksjer.json; then
+            echo "Ingen endringer."
+          else
+            git add data/aksjer.json
+            git commit -m "auto: oppdater AI-oppsummeringer $(date -u '+%Y-%m-%d')"
+            git push
+          fi

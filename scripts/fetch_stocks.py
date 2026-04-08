@@ -133,9 +133,10 @@ AKSJER = [{"ticker_yf": t["ticker_yf"], "ticker": _valider_ticker(t["ticker"]),
             "navn": t["navn"], "sektor": t["sektor"], "bors": t["bors"]}
           for t in _ticker_data]
 
-BESKRIVELSER = {t["ticker"]: t.get("beskrivelse", "") for t in _ticker_data}
-DNB_NAVN     = {t["ticker"]: t.get("navn_dnb", t["navn"]) for t in _ticker_data}
-TICKER_YF    = {t["ticker"]: t.get("ticker_yf", t["ticker"] + ".OL") for t in _ticker_data}
+BESKRIVELSER         = {t["ticker"]: t.get("beskrivelse", "") for t in _ticker_data}
+BESKRIVELSE_FAKTA    = {t["ticker"]: t.get("beskrivelse_fakta", "") for t in _ticker_data}
+DNB_NAVN             = {t["ticker"]: t.get("navn_dnb", t["navn"]) for t in _ticker_data}
+TICKER_YF            = {t["ticker"]: t.get("ticker_yf", t["ticker"] + ".OL") for t in _ticker_data}
 
 _fallback_path = os.path.join(os.path.dirname(__file__), "..", "data", "fallback_data.json")
 FALLBACK_DATA = {}
@@ -658,6 +659,7 @@ def hent_aksje(meta):
             "historiske_utbytter": historiske_utbytter,
             "snitt_yield_5ar": snitt_yield_5ar,
             "beskrivelse": BESKRIVELSER.get(ticker, ""),
+            "beskrivelse_fakta": BESKRIVELSE_FAKTA.get(ticker, ""),
             "valuta": valuta,
             "data_kilde": "yahoo",
         }
@@ -1103,8 +1105,10 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     upa     = a.get("utbytte_per_aksje") or 0
     pe      = a.get("pe_ratio") or 0
     ar_med  = a.get("ar_med_utbytte") or 0
-    besk    = a.get("beskrivelse") or ""
-    hist    = a.get("historiske_utbytter") or []
+    besk         = a.get("beskrivelse_fakta") or a.get("beskrivelse") or ""
+    ai_opp       = a.get("ai_oppsummering") or ""
+    ai_opp_dato  = a.get("ai_oppsummering_dato") or ""
+    hist         = a.get("historiske_utbytter") or []
     snitt5  = a.get("snitt_yield_5ar") or 0
     valuta  = a.get("valuta") or "NOK"
     payout  = a.get("payout_ratio") or 0
@@ -1148,7 +1152,15 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
         if hoy52 > 0 and lav52 > 0 else ""
     )
 
-    om_seksjon = f'<div class="desc"><p>{besk}</p></div>' if besk else ""
+    om_seksjon = f'<div class="desc"><h2>Om selskapet</h2><p>{besk}</p></div>' if besk else ""
+
+    ai_dato_tekst = f' <span class="ai-dato">Oppdatert {ai_opp_dato}</span>' if ai_opp_dato else ""
+    ai_oppsummering_seksjon = (
+        f'<div class="ai-oppsummering">'
+        f'<h2>AI-oppsummering{ai_dato_tekst}</h2>'
+        f'<p>{ai_opp}</p>'
+        f'</div>'
+    ) if ai_opp else ""
 
     analyse_tekst   = _lag_analyse_tekst(a)
     analyse_seksjon = (
@@ -1289,8 +1301,12 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     .kcard .val {{ font-size: 1.25rem; font-weight: 700; }}
     .kcard .val.green {{ color: #16a34a; }}
     .desc {{ border-radius: 0.75rem; padding: 1rem 1.25rem; margin-bottom: 1.5rem; border: 1px solid; }}
+    .desc h2 {{ margin-bottom: 0.5rem; }}
     .analyse {{ border-radius: 0.75rem; padding: 1rem 1.25rem; margin: 1rem 0 1.5rem; border: 1px solid; line-height: 1.75; }}
     .analyse h2 {{ margin-bottom: 0.4rem; }}
+    .ai-oppsummering {{ border-radius: 0.75rem; padding: 1rem 1.25rem; margin: 1rem 0 1.5rem; border: 1px solid; line-height: 1.75; }}
+    .ai-oppsummering h2 {{ margin-bottom: 0.4rem; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }}
+    .ai-dato {{ font-size: 0.7rem; font-weight: 400; padding: 0.15rem 0.5rem; border-radius: 9999px; }}
     h2 {{ font-size: 1rem; font-weight: 700; margin-bottom: 0.75rem; }}
     table {{ width: 100%; border-collapse: collapse; border-radius: 0.75rem; overflow: hidden; margin-bottom: 1.5rem; font-size: 0.9rem; border: 1px solid; }}
     th {{ padding: 0.6rem 1rem; text-align: left; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; }}
@@ -1333,6 +1349,9 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     .desc {{ background: #fff; border-color: #e5e7eb; color: #374151; }}
     .analyse {{ background: #f0fdf4; border-color: #bbf7d0; color: #374151; }}
     .analyse h2 {{ color: #15803d; }}
+    .ai-oppsummering {{ background: #eff6ff; border-color: #bfdbfe; color: #374151; }}
+    .ai-oppsummering h2 {{ color: #1d4ed8; }}
+    .ai-dato {{ background: #dbeafe; color: #1e40af; }}
     h2 {{ color: #374151; }}
     table {{ background: #fff; border-color: #e5e7eb; }}
     th {{ background: #f3f4f6; color: #6b7280; }}
@@ -1358,6 +1377,9 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     .dark .desc {{ background: #111827; border-color: #1f2937; color: #d1d5db; }}
     .dark .analyse {{ background: #052e16; border-color: #166534; color: #d1d5db; }}
     .dark .analyse h2 {{ color: #4ade80; }}
+    .dark .ai-oppsummering {{ background: #0f1729; border-color: #1e3a5f; color: #d1d5db; }}
+    .dark .ai-oppsummering h2 {{ color: #93c5fd; }}
+    .dark .ai-dato {{ background: #1e3a5f; color: #93c5fd; }}
     .dark h2 {{ color: #d1d5db; }}
     .dark table {{ background: #111827; border-color: #1f2937; }}
     .dark th {{ background: #1f2937; color: #9ca3af; }}
@@ -1456,6 +1478,8 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
   </div>
 
   {om_seksjon}
+
+  {ai_oppsummering_seksjon}
 
   {analyse_seksjon}
 
@@ -2476,6 +2500,13 @@ def main():
             if aksje.get("pris", 0) == 0 and meta["ticker"] in euronext_priser:
                 aksje["pris"] = euronext_priser[meta["ticker"]]
                 aksje["data_kilde"] = "euronext"
+            # Bevar ai_oppsummering fra forrige kjøring
+            if meta["ticker"] in fallback:
+                prev = fallback[meta["ticker"]]
+                if prev.get("ai_oppsummering"):
+                    aksje["ai_oppsummering"] = prev["ai_oppsummering"]
+                if prev.get("ai_oppsummering_dato"):
+                    aksje["ai_oppsummering_dato"] = prev["ai_oppsummering_dato"]
             resultater.append(aksje)
         elif meta["ticker"] in fallback:
             fb = dict(fallback[meta["ticker"]])
