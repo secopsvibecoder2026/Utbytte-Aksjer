@@ -134,7 +134,8 @@ AKSJER = [{"ticker_yf": t["ticker_yf"], "ticker": _valider_ticker(t["ticker"]),
           for t in _ticker_data]
 
 BESKRIVELSER = {t["ticker"]: t.get("beskrivelse", "") for t in _ticker_data}
-DNB_NAVN = {t["ticker"]: t.get("navn_dnb", t["navn"]) for t in _ticker_data}
+DNB_NAVN     = {t["ticker"]: t.get("navn_dnb", t["navn"]) for t in _ticker_data}
+TICKER_YF    = {t["ticker"]: t.get("ticker_yf", t["ticker"] + ".OL") for t in _ticker_data}
 
 _fallback_path = os.path.join(os.path.dirname(__file__), "..", "data", "fallback_data.json")
 FALLBACK_DATA = {}
@@ -2515,8 +2516,21 @@ def main():
             if oppslag in dnb_datoer:
                 dnb = dnb_datoer[oppslag]
                 if dnb.get("ex_dato"):
-                    if not aksje.get("ex_dato") or dnb["ex_dato"] > (aksje.get("ex_dato") or ""):
-                        aksje["ex_dato"] = dnb["ex_dato"]
+                    dnb_ex = dnb["ex_dato"]
+                    # DNB Markets bruker T+1-konvensjon for Oslo Børs-aksjer (samme som Yahoo).
+                    # Korriger +1 dag når DNB er eneste kilde (Yahoo hadde ingen ex_dato).
+                    if not aksje.get("ex_dato"):
+                        ticker_yf_val = TICKER_YF.get(t, t + ".OL")
+                        if ticker_yf_val and ticker_yf_val.endswith(".OL"):
+                            try:
+                                dnb_ex = (datetime.date.fromisoformat(dnb_ex) + datetime.timedelta(days=1)).isoformat()
+                            except ValueError:
+                                pass
+                        aksje["ex_dato"] = dnb_ex
+                        dnb_treff += 1
+                    elif dnb_ex > aksje.get("ex_dato", ""):
+                        # DNB har en nyere dato enn Yahoo — bruk DNB (ingen ekstra +1, Yahoo er allerede korrigert)
+                        aksje["ex_dato"] = dnb_ex
                         dnb_treff += 1
                 if dnb.get("betaling_dato") and not aksje.get("betaling_dato"):
                     aksje["betaling_dato"] = dnb["betaling_dato"]
