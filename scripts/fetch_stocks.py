@@ -1431,13 +1431,13 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     <span>/</span>
     <a href="https://exday.no/aksjer/">Aksjer</a>
     <span>›</span>
-    <a href="https://exday.no/aksjer/sektor/{_sektor_slug(sektor)}/">{_sektor_ikon(sektor)} {sektor}</a>
+    <a href="https://exday.no/aksjer/sektor/{_sektor_slug(sektor)}/">{sektor}</a>
     <span>›</span>
     {ticker}
   </div>
 
   <h1>{ticker} – {navn}</h1>
-  <p class="sub">{_sektor_ikon(sektor)} {sektor} · {frekvens} utbytte · Oslo Børs</p>
+  <p class="sub">{sektor} · {frekvens} utbytte · Oslo Børs</p>
   <span class="badge">{f'{yield_:.2f}% direkteavkastning' if yield_ else 'Kurs ikke tilgjengelig'}</span>
 
   <div class="kgrid">
@@ -1908,7 +1908,7 @@ def generer_sektorsider(aksjer, root_dir):
     <span>/</span>
     {sektor}
   </div>
-  <h1>{_sektor_ikon(sektor)} {sektor}-aksjer med utbytte</h1>
+  <h1>{sektor}-aksjer med utbytte</h1>
   <p class="sub">{len(aksjer_sortert)} norske {sektor.lower()}-aksjer på Oslo Børs. Sortert etter direkteavkastning.</p>
   <div class="stats">
     <div class="stat"><div class="stat-val">{len(aksjer_sortert)}</div><div class="stat-lbl">Aksjer</div></div>

@@ -1212,14 +1212,6 @@ function visSektorer() {
     sektorMap[s].push(a);
   });
 
-  // Sector icon mapping
-  const ikoner = {
-    'Energi': '⚡', 'Finans': '🏦', 'Eiendom': '🏢', 'Industri': '⚙️',
-    'Forbruksvarer': '🛒', 'Sjømat': '🐟', 'Shipping': '🚢', 'Teknologi': '💻',
-    'Telekommunikasjon': '📡', 'Helse': '🏥', 'Materialer': '🔩', 'Forsyning': '💡',
-    'Konsumvarer': '🧴',
-  };
-
   const kort = Object.entries(sektorMap)
     .sort((a, b) => a[0].localeCompare(b[0], 'no'))
     .map(([navn, aksjer]) => {
@@ -1227,13 +1219,11 @@ function visSektorer() {
       const snittYield = yields.length ? (yields.reduce((s, y) => s + y, 0) / yields.length) : 0;
       const bestYield = yields.length ? Math.max(...yields) : 0;
       const bestAksje = aksjer.find(a => a.utbytte_yield === bestYield);
-      const ikon = ikoner[navn] || '📈';
       const slug = navn.toLowerCase().replace(/\s+/g, '-').replace(/[æ]/g, 'ae').replace(/[ø]/g, 'o').replace(/[å]/g, 'a');
 
       return `<a href="/aksjer/sektor/${slug}/" class="block rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-5 shadow-sm hover:shadow-md hover:border-brand-300 dark:hover:border-brand-700 transition-all group">
         <div class="flex items-start justify-between gap-2 mb-3">
-          <div class="flex items-center gap-2">
-            <span class="text-2xl">${ikon}</span>
+          <div>
             <h3 class="font-semibold text-gray-900 dark:text-gray-100 group-hover:text-brand-700 dark:group-hover:text-brand-400 transition-colors">${navn}</h3>
           </div>
           <span class="text-xs bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 px-2 py-0.5 rounded-full whitespace-nowrap">${aksjer.length} aksjer</span>
