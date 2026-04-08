@@ -341,7 +341,7 @@ function beregnIRR(txMap) {
   }));
 
   const totalDager = cfArr[cfArr.length - 1].t;
-  if (totalDager < 1) return { harNokData: false };
+  if (totalDager < 30) return { harNokData: false, forKort: true };  // IRR er ikke meningsfull under 30 dager
 
   const npv  = r => cfArr.reduce((s, {t, cf}) => s + cf / Math.pow(1 + r, t), 0);
   const dnpv = r => cfArr.reduce((s, {t, cf}) => s - t * cf / Math.pow(1 + r, t + 1), 0);
@@ -792,7 +792,12 @@ function visPortefolje() {
     // Startdato: fra første kjøp, eller for 12 mnd siden (fallback uten transaksjoner)
     let osebxStartDato;
     if (forsteTxDato) {
+      // Finn nærmeste OSEBX-dato på eller etter første kjøp
       osebxStartDato = osebxDatoer.find(d => d >= forsteTxDato) || osebxDatoer[0];
+      // Hvis startdato = sluttdato (kjøpt på/etter siste datapunkt), bruk nest siste
+      if (osebxStartDato === osebxSluttDato && osebxDatoer.length > 1) {
+        osebxStartDato = osebxDatoer[osebxDatoer.length - 2];
+      }
     } else {
       const for12mnd = new Date(osebxSluttDato || new Date());
       for12mnd.setFullYear(for12mnd.getFullYear() - 1);
@@ -819,7 +824,7 @@ function visPortefolje() {
     } else if (osebxEl) {
       osebxEl.textContent  = '—';
       osebxEl.className    = 'stat-value text-base';
-      osebxTekst.textContent = 'ingen OSEBX-data';
+      osebxTekst.textContent = 'oppdateres daglig';
     }
     visOsebxSammenligning(alleBeholdning, pfPctTotal, osebxPctTotal, invKost, totalReturnKr, forsteTxDato, osebxStartDato);
 
@@ -830,16 +835,17 @@ function visPortefolje() {
       const irr = beregnIRR();
       if (irr.harNokData) {
         const pct = irr.irr_ar;
-        irrEl.textContent  = (pct >= 0 ? '+' : '') + pct.toFixed(2) + '%';
+        irrEl.textContent  = (pct >= 0 ? '+' : '') + pct.toFixed(1) + '%';
         irrEl.className    = 'stat-value text-base ' + (pct >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-500');
+        const mnd = Math.round(irr.periodeAr * 12);
         const aar = irr.periodeAr < 1
-          ? Math.round(irr.periodeAr * 12) + ' mnd'
+          ? (mnd < 1 ? '< 1 mnd' : mnd + ' mnd')
           : irr.periodeAr.toFixed(1) + ' år';
         if (irrTekst) irrTekst.textContent = 'over ' + aar;
       } else {
         irrEl.textContent  = '—';
         irrEl.className    = 'stat-value text-base';
-        if (irrTekst) irrTekst.textContent = 'trenger transaksjoner';
+        if (irrTekst) irrTekst.textContent = irr.forKort ? 'trenger 30 dager' : 'trenger transaksjoner';
       }
     }
 
