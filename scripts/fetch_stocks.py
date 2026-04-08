@@ -1986,29 +1986,115 @@ def generer_sektorsider(aksjer, root_dir):
   <title>Norske utbytteaksjer etter sektor | exday.no</title>
   <meta name="description" content="Finn norske utbytteaksjer på Oslo Børs sortert etter sektor — energi, finans, shipping, havbruk og mer."/>
   <link rel="canonical" href="https://exday.no/aksjer/sektor/"/>
+  <meta name="theme-color" content="#16a34a"/>
+  <link rel="icon" type="image/png" sizes="512x512" href="/favicon.png"/>
+  <link rel="icon" type="image/png" sizes="180x180" href="/logo/apple_touch_icon_180.png"/>
+  <link rel="icon" type="image/svg+xml" href="/logo/exday_icon_primary.svg"/>
+  <link rel="shortcut icon" href="/favicon.png"/>
+  <link rel="apple-touch-icon" href="/logo/apple_touch_icon_180.png"/>
+  <link rel="stylesheet" href="/assets/tailwind.css"/>
+  <link rel="stylesheet" href="/assets/style.css"/>
+  <script>
+    (function(){{
+      var t = localStorage.getItem('tema');
+      if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) {{
+        document.documentElement.classList.add('dark');
+      }}
+    }})();
+  </script>
   <style>
     *, *::before, *::after {{ box-sizing: border-box; margin: 0; padding: 0; }}
-    body {{ font-family: system-ui, -apple-system, sans-serif; background: #f9fafb; color: #111827; line-height: 1.6; }}
-    a {{ color: #2563eb; text-decoration: none; }}
-    .wrap {{ max-width: 900px; margin: 0 auto; padding: 1.5rem 1rem; }}
-    nav {{ font-size: 0.85rem; color: #6b7280; margin-bottom: 1.5rem; }}
-    h1 {{ font-size: 1.75rem; font-weight: 700; margin-bottom: 0.5rem; }}
-    .sub {{ color: #6b7280; margin-bottom: 1.5rem; }}
+    body {{ font-family: system-ui, -apple-system, sans-serif; line-height: 1.6; }}
+    a {{ color: #16a34a; text-decoration: none; }}
+    a:hover {{ text-decoration: underline; }}
+    .wrap {{ max-width: 900px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }}
+    .breadcrumb {{ font-size: 0.85rem; color: #6b7280; margin-bottom: 1.5rem; }}
+    .breadcrumb a {{ color: #6b7280; }}
+    .breadcrumb span {{ margin: 0 0.35rem; }}
+    h1 {{ font-size: 1.75rem; font-weight: 700; margin-bottom: 0.25rem; }}
+    .sub {{ font-size: 0.95rem; margin-bottom: 1.5rem; }}
     .grid {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; }}
-    .sektor-kort {{ display: block; background: #fff; border: 1px solid #e5e7eb; border-radius: 0.75rem; padding: 1rem 1.25rem; transition: border-color 0.15s; }}
-    .sektor-kort:hover {{ border-color: #2563eb; }}
-    .sk-navn {{ font-weight: 600; font-size: 1rem; color: #111827; }}
-    .sk-antall {{ font-size: 0.8rem; color: #6b7280; margin-top: 0.25rem; }}
+    .sektor-kort {{ display: block; border-radius: 0.75rem; padding: 1rem 1.25rem; border: 1px solid; transition: border-color 0.15s; text-decoration: none; }}
+    .sektor-kort:hover {{ border-color: #16a34a; text-decoration: none; }}
+    .sk-navn {{ font-weight: 600; font-size: 1rem; }}
+    .sk-antall {{ font-size: 0.8rem; margin-top: 0.25rem; }}
+
+    /* Light mode */
+    body {{ background: #f9fafb; color: #111827; }}
+    .breadcrumb {{ color: #6b7280; }}
+    .sub {{ color: #6b7280; }}
+    .sektor-kort {{ background: #fff; border-color: #e5e7eb; }}
+    .sk-navn {{ color: #111827; }}
+    .sk-antall {{ color: #6b7280; }}
+
+    /* Dark mode */
+    .dark body {{ background: #030712; color: #f3f4f6; }}
+    .dark .breadcrumb {{ color: #9ca3af; }}
+    .dark .breadcrumb a {{ color: #9ca3af; }}
+    .dark .sub {{ color: #9ca3af; }}
+    .dark .sektor-kort {{ background: #111827; border-color: #1f2937; }}
+    .dark .sektor-kort:hover {{ border-color: #16a34a; }}
+    .dark .sk-navn {{ color: #f3f4f6; }}
+    .dark .sk-antall {{ color: #6b7280; }}
+    .dark a {{ color: #4ade80; }}
   </style>
 </head>
 <body>
+
+  <!-- HEADER -->
+  <header class="ak-header">
+    <div class="ak-inner" style="max-width:900px;">
+      <div class="ak-left">
+        <a href="/" class="ak-back">
+          <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+          exday.no
+        </a>
+        <span class="ak-sep">/</span>
+        <a href="/aksjer/" class="ak-back">Aksjer</a>
+        <span class="ak-sep">/</span>
+        <span style="font-size:0.85rem;color:#6b7280;">Sektorer</span>
+      </div>
+      <button id="dark-toggle" class="ak-toggle" aria-label="Bytt fargemodus">
+        <svg class="sun-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+        <svg class="moon-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display:none;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+      </button>
+    </div>
+  </header>
+
 <div class="wrap">
-  <nav><a href="https://exday.no/">exday.no</a> › <a href="/aksjer/">Aksjer</a> › Sektorer</nav>
+  <div class="breadcrumb">
+    <a href="https://exday.no/">exday.no</a>
+    <span>›</span>
+    <a href="/aksjer/">Aksjer</a>
+    <span>›</span>
+    Sektorer
+  </div>
   <h1>Utbytteaksjer etter sektor</h1>
   <p class="sub">Velg en sektor for å se alle aksjer med utbytte innen den kategorien.</p>
   <div class="grid">{sektorkort}
   </div>
+{STANDARD_FOOTER}
 </div>
+
+<script>
+  (function() {{
+    var btn = document.getElementById('dark-toggle');
+    var root = document.documentElement;
+    var sun = btn.querySelector('.sun-icon');
+    var moon = btn.querySelector('.moon-icon');
+    function syncIcons() {{
+      var dark = root.classList.contains('dark');
+      sun.style.display = dark ? 'none' : '';
+      moon.style.display = dark ? '' : 'none';
+    }}
+    syncIcons();
+    btn.addEventListener('click', function() {{
+      var isDark = root.classList.toggle('dark');
+      localStorage.setItem('tema', isDark ? 'dark' : 'light');
+      syncIcons();
+    }});
+  }})();
+</script>
 </body>
 </html>"""
 

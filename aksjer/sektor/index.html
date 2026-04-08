@@ -22,92 +22,198 @@
   <title>Norske utbytteaksjer etter sektor | exday.no</title>
   <meta name="description" content="Finn norske utbytteaksjer på Oslo Børs sortert etter sektor — energi, finans, shipping, havbruk og mer."/>
   <link rel="canonical" href="https://exday.no/aksjer/sektor/"/>
+  <meta name="theme-color" content="#16a34a"/>
+  <link rel="icon" type="image/png" sizes="512x512" href="/favicon.png"/>
+  <link rel="icon" type="image/png" sizes="180x180" href="/logo/apple_touch_icon_180.png"/>
+  <link rel="icon" type="image/svg+xml" href="/logo/exday_icon_primary.svg"/>
+  <link rel="shortcut icon" href="/favicon.png"/>
+  <link rel="apple-touch-icon" href="/logo/apple_touch_icon_180.png"/>
+  <link rel="stylesheet" href="/assets/tailwind.css"/>
+  <link rel="stylesheet" href="/assets/style.css"/>
+  <script>
+    (function(){
+      var t = localStorage.getItem('tema');
+      if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
+      }
+    })();
+  </script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: system-ui, -apple-system, sans-serif; background: #f9fafb; color: #111827; line-height: 1.6; }
-    a { color: #2563eb; text-decoration: none; }
-    .wrap { max-width: 900px; margin: 0 auto; padding: 1.5rem 1rem; }
-    nav { font-size: 0.85rem; color: #6b7280; margin-bottom: 1.5rem; }
-    h1 { font-size: 1.75rem; font-weight: 700; margin-bottom: 0.5rem; }
-    .sub { color: #6b7280; margin-bottom: 1.5rem; }
+    body { font-family: system-ui, -apple-system, sans-serif; line-height: 1.6; }
+    a { color: #16a34a; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .wrap { max-width: 900px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+    .breadcrumb { font-size: 0.85rem; color: #6b7280; margin-bottom: 1.5rem; }
+    .breadcrumb a { color: #6b7280; }
+    .breadcrumb span { margin: 0 0.35rem; }
+    h1 { font-size: 1.75rem; font-weight: 700; margin-bottom: 0.25rem; }
+    .sub { font-size: 0.95rem; margin-bottom: 1.5rem; }
     .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; }
-    .sektor-kort { display: block; background: #fff; border: 1px solid #e5e7eb; border-radius: 0.75rem; padding: 1rem 1.25rem; transition: border-color 0.15s; }
-    .sektor-kort:hover { border-color: #2563eb; }
-    .sk-navn { font-weight: 600; font-size: 1rem; color: #111827; }
-    .sk-antall { font-size: 0.8rem; color: #6b7280; margin-top: 0.25rem; }
+    .sektor-kort { display: block; border-radius: 0.75rem; padding: 1rem 1.25rem; border: 1px solid; transition: border-color 0.15s; text-decoration: none; }
+    .sektor-kort:hover { border-color: #16a34a; text-decoration: none; }
+    .sk-navn { font-weight: 600; font-size: 1rem; }
+    .sk-antall { font-size: 0.8rem; margin-top: 0.25rem; }
+
+    /* Light mode */
+    body { background: #f9fafb; color: #111827; }
+    .breadcrumb { color: #6b7280; }
+    .sub { color: #6b7280; }
+    .sektor-kort { background: #fff; border-color: #e5e7eb; }
+    .sk-navn { color: #111827; }
+    .sk-antall { color: #6b7280; }
+
+    /* Dark mode */
+    .dark body { background: #030712; color: #f3f4f6; }
+    .dark .breadcrumb { color: #9ca3af; }
+    .dark .breadcrumb a { color: #9ca3af; }
+    .dark .sub { color: #9ca3af; }
+    .dark .sektor-kort { background: #111827; border-color: #1f2937; }
+    .dark .sektor-kort:hover { border-color: #16a34a; }
+    .dark .sk-navn { color: #f3f4f6; }
+    .dark .sk-antall { color: #6b7280; }
+    .dark a { color: #4ade80; }
   </style>
 </head>
 <body>
+
+  <!-- HEADER -->
+  <header class="ak-header">
+    <div class="ak-inner" style="max-width:900px;">
+      <div class="ak-left">
+        <a href="/" class="ak-back">
+          <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+          exday.no
+        </a>
+        <span class="ak-sep">/</span>
+        <a href="/aksjer/" class="ak-back">Aksjer</a>
+        <span class="ak-sep">/</span>
+        <span style="font-size:0.85rem;color:#6b7280;">Sektorer</span>
+      </div>
+      <button id="dark-toggle" class="ak-toggle" aria-label="Bytt fargemodus">
+        <svg class="sun-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+        <svg class="moon-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display:none;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+      </button>
+    </div>
+  </header>
+
 <div class="wrap">
-  <nav><a href="https://exday.no/">exday.no</a> › <a href="/aksjer/">Aksjer</a> › Sektorer</nav>
+  <div class="breadcrumb">
+    <a href="https://exday.no/">exday.no</a>
+    <span>›</span>
+    <a href="/aksjer/">Aksjer</a>
+    <span>›</span>
+    Sektorer
+  </div>
   <h1>Utbytteaksjer etter sektor</h1>
   <p class="sub">Velg en sektor for å se alle aksjer med utbytte innen den kategorien.</p>
   <div class="grid">
     <a href="/aksjer/sektor/eiendom/" class="sektor-kort">
-      <div class="sk-navn">Eiendom</div>
+      <div class="sk-navn">🏢 Eiendom</div>
       <div class="sk-antall">4 aksjer · snitt 1.3%</div>
     </a>
     <a href="/aksjer/sektor/energi/" class="sektor-kort">
-      <div class="sk-navn">Energi</div>
+      <div class="sk-navn">⚡ Energi</div>
       <div class="sk-antall">10 aksjer · snitt 5.5%</div>
     </a>
     <a href="/aksjer/sektor/energitjenester/" class="sektor-kort">
-      <div class="sk-navn">Energitjenester</div>
+      <div class="sk-navn">📊 Energitjenester</div>
       <div class="sk-antall">16 aksjer · snitt 6.5%</div>
     </a>
     <a href="/aksjer/sektor/finans/" class="sektor-kort">
-      <div class="sk-navn">Finans</div>
+      <div class="sk-navn">🏦 Finans</div>
       <div class="sk-antall">40 aksjer · snitt 5.6%</div>
     </a>
     <a href="/aksjer/sektor/forbruksvarer/" class="sektor-kort">
-      <div class="sk-navn">Forbruksvarer</div>
+      <div class="sk-navn">📊 Forbruksvarer</div>
       <div class="sk-antall">4 aksjer · snitt 3.9%</div>
     </a>
     <a href="/aksjer/sektor/fornybar-energi/" class="sektor-kort">
-      <div class="sk-navn">Fornybar energi</div>
+      <div class="sk-navn">📊 Fornybar energi</div>
       <div class="sk-antall">4 aksjer · snitt 2.3%</div>
     </a>
     <a href="/aksjer/sektor/forsyning/" class="sektor-kort">
-      <div class="sk-navn">Forsyning</div>
+      <div class="sk-navn">💡 Forsyning</div>
       <div class="sk-antall">1 aksjer · snitt 5.7%</div>
     </a>
     <a href="/aksjer/sektor/havbruk/" class="sektor-kort">
-      <div class="sk-navn">Havbruk</div>
+      <div class="sk-navn">🐟 Havbruk</div>
       <div class="sk-antall">11 aksjer · snitt 5.8%</div>
     </a>
     <a href="/aksjer/sektor/helsevern/" class="sektor-kort">
-      <div class="sk-navn">Helsevern</div>
+      <div class="sk-navn">📊 Helsevern</div>
       <div class="sk-antall">3 aksjer · snitt 3.0%</div>
     </a>
     <a href="/aksjer/sektor/industri/" class="sektor-kort">
-      <div class="sk-navn">Industri</div>
+      <div class="sk-navn">🏗️ Industri</div>
       <div class="sk-antall">19 aksjer · snitt 2.7%</div>
     </a>
     <a href="/aksjer/sektor/informasjonsteknologi/" class="sektor-kort">
-      <div class="sk-navn">Informasjonsteknologi</div>
+      <div class="sk-navn">📊 Informasjonsteknologi</div>
       <div class="sk-antall">12 aksjer · snitt 5.4%</div>
     </a>
     <a href="/aksjer/sektor/kommunikasjonstjenester/" class="sektor-kort">
-      <div class="sk-navn">Kommunikasjonstjenester</div>
+      <div class="sk-navn">📊 Kommunikasjonstjenester</div>
       <div class="sk-antall">5 aksjer · snitt 1.7%</div>
     </a>
     <a href="/aksjer/sektor/materialer/" class="sektor-kort">
-      <div class="sk-navn">Materialer</div>
+      <div class="sk-navn">🪨 Materialer</div>
       <div class="sk-antall">7 aksjer · snitt 3.4%</div>
     </a>
     <a href="/aksjer/sektor/shipping/" class="sektor-kort">
-      <div class="sk-navn">Shipping</div>
+      <div class="sk-navn">🚢 Shipping</div>
       <div class="sk-antall">22 aksjer · snitt 8.2%</div>
     </a>
     <a href="/aksjer/sektor/skipsfart/" class="sektor-kort">
-      <div class="sk-navn">Skipsfart</div>
+      <div class="sk-navn">📊 Skipsfart</div>
       <div class="sk-antall">6 aksjer · snitt 5.4%</div>
     </a>
     <a href="/aksjer/sektor/telekommunikasjon/" class="sektor-kort">
-      <div class="sk-navn">Telekommunikasjon</div>
+      <div class="sk-navn">📡 Telekommunikasjon</div>
       <div class="sk-antall">1 aksjer · snitt 5.9%</div>
     </a>
   </div>
+  <footer style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid #e5e7eb;font-size:0.78rem;text-align:center;color:#9ca3af;line-height:1.6;" class="std-footer">
+    <p>Kurs og utbyttedata hentes fra Yahoo Finance og Euronext. Oppdateres daglig på børsdager.</p>
+    <p style="max-width:36rem;margin:0.4rem auto;">
+      exday.no er ikke et verdipapirforetak og tilbyr ikke finansiell rådgivning.
+      Data kan inneholde feil eller forsinkelser &#8212; verifiser alltid mot Oslo B&#248;rs eller selskapets egne rapporter.
+      Historisk utbytte er ingen garanti for fremtidig utbytte.
+      Gj&#248;r alltid din egen analyse f&#248;r du tar investeringsbeslutninger.
+    </p>
+    <p style="margin-top:0.5rem;">
+      <a href="/personvern/" style="color:#9ca3af;text-decoration:underline;">Personvern og informasjonskapsler</a>
+      <span style="margin:0 0.4rem;">&#183;</span>
+      <a href="/faq/" style="color:#9ca3af;text-decoration:underline;">Vanlige sp&#248;rsm&#229;l (FAQ)</a>
+    </p>
+    <p style="margin-top:0.75rem;">
+      <a href="https://www.facebook.com/share/17rMp8o9yF/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:0.375rem;color:#9ca3af;">
+        <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/></svg>
+        F&#248;lg exday.no p&#229; Facebook
+      </a>
+    </p>
+  </footer>
+  <style>.dark .std-footer { color:#6b7280 !important; border-color:#1f2937 !important; } .dark .std-footer a { color:#6b7280 !important; }</style>
 </div>
+
+<script>
+  (function() {
+    var btn = document.getElementById('dark-toggle');
+    var root = document.documentElement;
+    var sun = btn.querySelector('.sun-icon');
+    var moon = btn.querySelector('.moon-icon');
+    function syncIcons() {
+      var dark = root.classList.contains('dark');
+      sun.style.display = dark ? 'none' : '';
+      moon.style.display = dark ? '' : 'none';
+    }
+    syncIcons();
+    btn.addEventListener('click', function() {
+      var isDark = root.classList.toggle('dark');
+      localStorage.setItem('tema', isDark ? 'dark' : 'light');
+      syncIcons();
+    });
+  })();
+</script>
 </body>
 </html>
