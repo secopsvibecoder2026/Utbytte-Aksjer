@@ -648,15 +648,6 @@
     "navn_dnb": "Stolt-Nielsen"
   },
   {
-    "ticker": "BELS",
-    "ticker_yf": "BELCO.OL",
-    "navn": "Belships ASA",
-    "sektor": "Shipping",
-    "bors": "Oslo Børs",
-    "beskrivelse": "Moderne tørrbulkrederi med Supramax/Ultramax-skip. Sterk kontantstrøm og liberal utbyttepolitikk koblet til shippingratene. Utbyttet utbetales kvartalsvis — fire ganger i året.",
-    "navn_dnb": "Belships ASA"
-  },
-  {
     "ticker": "MEDI",
     "ticker_yf": "MEDI.OL",
     "navn": "Medistim ASA",
@@ -684,15 +675,6 @@
     "navn_dnb": "Bouvet ASA"
   },
   {
-    "ticker": "TRE",
-    "ticker_yf": "TRE.OL",
-    "navn": "Treasure ASA",
-    "sektor": "Finans",
-    "bors": "Oslo Børs",
-    "beskrivelse": "Investeringsselskap med majoritetseierandel i Golden Ocean Group. Utbytte speiler i stor grad Golden Oceans utbetalinger. Utbyttet utbetales kvartalsvis — fire ganger i året.",
-    "navn_dnb": "Treasure ASA"
-  },
-  {
     "ticker": "AKBM",
     "ticker_yf": "AKBM.OL",
     "navn": "Aker BioMarine ASA",
@@ -700,15 +682,6 @@
     "bors": "Oslo Børs",
     "beskrivelse": "Norsk krill-selskap som høster, foredler og selger krillolje og krilmel til menneskelig ernæring og akvakultur. Aker BioMarine ASA er notert på Oslo Børs. Selskapet har betalt utbytte de siste 1 årene. 5-årssnittlig direkteavkastning er 67.1%, noe som plasserer AKBM blant de høyest-yielding aksjene i havbrukssektoren.",
     "navn_dnb": "Aker BioMarine ASA"
-  },
-  {
-    "ticker": "AGAS",
-    "ticker_yf": "AGAS.OL",
-    "navn": "Avance Gas Holding Ltd",
-    "sektor": "Shipping",
-    "bors": "Oslo Børs",
-    "beskrivelse": "Ledende VLGC-tankrederi for flytende petroleum (LPG). Høy og variabel utbyttegrad koblet til LPG-shippingratene. Utbyttet utbetales kvartalsvis — fire ganger i året.",
-    "navn_dnb": "Avance Gas Holding"
   },
   {
     "ticker": "GCC",
@@ -747,22 +720,13 @@
     "navn_dnb": "Solstad Offshore ASA"
   },
   {
-    "ticker": "AMSC",
-    "ticker_yf": "AMSC.OL",
-    "navn": "American Shipping Company ASA",
-    "sektor": "Shipping",
-    "bors": "Oslo Børs",
-    "beskrivelse": "Eier og leier ut produkttankfartøyer på langsiktige bareboat-kontrakter. Stabil og forutsigbar kontantstrøm med høy utbytteyield. Utbyttet utbetales kvartalsvis — fire ganger i året.",
-    "navn_dnb": "American Shipping Company ASA"
-  },
-  {
-    "ticker": "SCHA",
-    "ticker_yf": "SCHA.OL",
-    "navn": "Schibsted ASA",
+    "ticker": "VENDA",
+    "ticker_yf": "VENDA.OL",
+    "navn": "Vend Marketplaces ASA",
     "sektor": "Kommunikasjonstjenester",
     "bors": "Oslo Børs",
-    "beskrivelse": "Norsk mediekonsern og ledende nordisk nettmarkedsplass-aktør (Finn.no, Blocket m.fl.). Betaler halvårlig utbytte. Utbyttet utbetales halvårlig — to ganger i året.",
-    "navn_dnb": "Schibsted ASA"
+    "beskrivelse": "Norsk teknologi- og mediakonsern som driver ledende nordiske nettmarkedsplasser (Finn.no, Blocket, DBA m.fl.). Selskapet ble omdøpt fra Schibsted ASA til Vend Marketplaces ASA i 2025. Betaler halvårlig utbytte.",
+    "navn_dnb": "Vend Marketplaces ASA"
   },
   {
     "ticker": "ITERA",
@@ -799,15 +763,6 @@
     "bors": "Oslo Børs",
     "beskrivelse": "Norsk produsent av aktive legemiddelsubstanser (API). Høy utbyttegrad relativt til størrelse og stabil etterspørsel fra legemiddelindustrien. Utbyttet utbetales halvårlig — to ganger i året.",
     "navn_dnb": "Vistin Pharma ASA"
-  },
-  {
-    "ticker": "NTS",
-    "ticker_yf": "NTS.OL",
-    "navn": "NTS ASA",
-    "sektor": "Havbruk",
-    "bors": "Oslo Børs",
-    "beskrivelse": "Norsk havbruksselskap med lakseoppdrett i Midt-Norge og på Helgeland. Regelmessig utbytte koblet til laksepris og inntjening. Utbyttet utbetales halvårlig — to ganger i året.",
-    "navn_dnb": "NTS ASA"
   },
   {
     "ticker": "STRONG",
