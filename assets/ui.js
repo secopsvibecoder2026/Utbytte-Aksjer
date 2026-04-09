@@ -2974,6 +2974,15 @@ async function initVarsler() {
   if (!('serviceWorker' in navigator)) return;
   try {
     await navigator.serviceWorker.register('/sw.js');
+
+    // Auto-reload når ny Service Worker tar over – unngår at brukere
+    // sitter med gamle JS/CSS-filer i minnet etter et deploy
+    let _swOppdaterer = false;
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      if (_swOppdaterer) return;
+      _swOppdaterer = true;
+      window.location.reload();
+    });
   } catch (e) {
     console.warn('Service Worker registrering feilet:', e);
   }
