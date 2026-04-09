@@ -178,17 +178,10 @@
     .badge { background: #dcfce7; color: #15803d; }
     .kurs-lenker { margin: 1.5rem 0; }
     .kurs-lenker h2 { margin-bottom: 0.75rem; }
-    .kurs-knapper { display: flex; gap: 0.5rem; flex-wrap: wrap; }
-    .kurs-btn { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.5rem 0.9rem; border-radius: 8px; font-size: 0.8rem; font-weight: 500; background: #f3f4f6; color: #374151; text-decoration: none; transition: background 0.15s; }
-    .kurs-btn:hover { background: #e5e7eb; }
-    .dark .kurs-btn { background: #1f2937; color: #d1d5db; }
-    .dark .kurs-btn:hover { background: #374151; }
-    .kurs-chart-wrap { background: var(--chart-bg,#fff); border-radius: 10px; padding: 0.75rem 0.5rem 0; border: 1px solid #e5e7eb; }
-    .kurs-chart-header { display: flex; justify-content: space-between; align-items: baseline; padding: 0 0.5rem 0.5rem; }
-    .kurs-chart-naa { font-size: 1.1rem; font-weight: 700; color: #111827; }
-    .kurs-chart-endring { font-size: 0.8rem; font-weight: 500; }
-    .dark .kurs-chart-wrap { --chart-bg: #111827; --chart-label: #6b7280; --chart-grid: #1f2937; border-color: #1f2937; }
-    .dark .kurs-chart-naa { color: #f3f4f6; }
+    .kp-btn { font-size: 0.72rem; font-weight: 500; padding: 0.2rem 0.55rem; border-radius: 6px; border: none; cursor: pointer; background: transparent; color: #6b7280; transition: background 0.12s, color 0.12s; }
+    .kp-btn:hover, .kp-aktiv { background: #f3f4f6; color: #111827; font-weight: 600; }
+    .dark .kp-btn { color: #9ca3af; }
+    .dark .kp-btn:hover, .dark .kp-aktiv { background: #1f2937; color: #f3f4f6; }
 
     /* Dark mode */
     .dark body { background: #030712; color: #f3f4f6; }
@@ -298,6 +291,76 @@
     <div class="kcard"><div class="label">P/E</div><div class="val">5.0</div></div>
   </div>
 
+  
+<div class="kurs-lenker">
+  <h2>Kursgraf</h2>
+  <div style="display:flex;gap:4px;margin-bottom:8px;">
+    <button class="kp-btn kp-aktiv" data-p="1ar">1 år</button>
+    <button class="kp-btn" data-p="ytd">YTD</button>
+    <button class="kp-btn" data-p="2ar">2 år</button>
+    <button class="kp-btn" data-p="3ar">3 år</button>
+    <button class="kp-btn" data-p="5ar">5 år</button>
+  </div>
+  <div id="kurs-header-STRO" style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px;"></div>
+  <canvas id="kurs-canvas-STRO" style="display:block;border-radius:10px;width:100%;"></canvas>
+  <script>
+  (function() {
+    var ALLE = [{"d": "2021-04-25", "k": 124.54}, {"d": "2021-05-02", "k": 121.06}, {"d": "2021-05-09", "k": 123.57}, {"d": "2021-05-16", "k": 122.8}, {"d": "2021-05-23", "k": 124.74}, {"d": "2021-05-30", "k": 128.8}, {"d": "2021-06-06", "k": 131.12}, {"d": "2021-06-13", "k": 127.25}, {"d": "2021-06-20", "k": 127.44}, {"d": "2021-06-27", "k": 125.9}, {"d": "2021-07-04", "k": 124.74}, {"d": "2021-07-11", "k": 122.61}, {"d": "2021-07-18", "k": 119.9}, {"d": "2021-07-25", "k": 117.97}, {"d": "2021-08-01", "k": 116.61}, {"d": "2021-08-08", "k": 116.61}, {"d": "2021-08-15", "k": 116.81}, {"d": "2021-08-22", "k": 111.58}, {"d": "2021-08-29", "k": 107.72}, {"d": "2021-09-05", "k": 104.43}, {"d": "2021-09-12", "k": 107.14}, {"d": "2021-09-19", "k": 107.52}, {"d": "2021-09-26", "k": 113.13}, {"d": "2021-10-03", "k": 117.97}, {"d": "2021-10-10", "k": 132.47}, {"d": "2021-10-17", "k": 125.12}, {"d": "2021-10-24", "k": 130.15}, {"d": "2021-10-31", "k": 125.7}, {"d": "2021-11-07", "k": 129.96}, {"d": "2021-11-14", "k": 132.97}, {"d": "2021-11-21", "k": 124.04}, {"d": "2021-11-28", "k": 121.13}, {"d": "2021-12-05", "k": 125.79}, {"d": "2021-12-12", "k": 128.9}, {"d": "2021-12-19", "k": 126.18}, {"d": "2021-12-26", "k": 125.4}, {"d": "2022-01-02", "k": 132.2}, {"d": "2022-01-09", "k": 134.91}, {"d": "2022-01-16", "k": 135.88}, {"d": "2022-01-23", "k": 140.35}, {"d": "2022-01-30", "k": 146.56}, {"d": "2022-02-06", "k": 148.89}, {"d": "2022-02-13", "k": 156.27}, {"d": "2022-02-20", "k": 160.15}, {"d": "2022-02-27", "k": 156.66}, {"d": "2022-03-06", "k": 147.92}, {"d": "2022-03-13", "k": 151.8}, {"d": "2022-03-20", "k": 149.67}, {"d": "2022-03-27", "k": 151.03}, {"d": "2022-04-03", "k": 166.94}, {"d": "2022-04-10", "k": 170.83}, {"d": "2022-04-17", "k": 169.47}, {"d": "2022-04-24", "k": 170.83}, {"d": "2022-05-01", "k": 165.7}, {"d": "2022-05-08", "k": 164.53}, {"d": "2022-05-15", "k": 160.05}, {"d": "2022-05-22", "k": 163.75}, {"d": "2022-05-29", "k": 173.88}, {"d": "2022-06-05", "k": 172.32}, {"d": "2022-06-12", "k": 169.4}, {"d": "2022-06-19", "k": 181.86}, {"d": "2022-06-26", "k": 187.31}, {"d": "2022-07-03", "k": 190.43}, {"d": "2022-07-10", "k": 189.45}, {"d": "2022-07-17", "k": 196.66}, {"d": "2022-07-24", "k": 198.12}, {"d": "2022-07-31", "k": 200.55}, {"d": "2022-08-07", "k": 198.6}, {"d": "2022-08-14", "k": 211.26}, {"d": "2022-08-21", "k": 213.21}, {"d": "2022-08-28", "k": 216.61}, {"d": "2022-09-04", "k": 215.15}, {"d": "2022-09-11", "k": 213.69}, {"d": "2022-09-18", "k": 207.85}, {"d": "2022-09-25", "k": 198.12}, {"d": "2022-10-02", "k": 211.75}, {"d": "2022-10-09", "k": 236.09}, {"d": "2022-10-16", "k": 234.62}, {"d": "2022-10-23", "k": 247.28}, {"d": "2022-10-30", "k": 246.79}, {"d": "2022-11-06", "k": 248.25}, {"d": "2022-11-13", "k": 244.36}, {"d": "2022-11-20", "k": 242.9}, {"d": "2022-11-27", "k": 240.48}, {"d": "2022-12-04", "k": 248.3}, {"d": "2022-12-11", "k": 249.27}, {"d": "2022-12-18", "k": 257.09}, {"d": "2022-12-25", "k": 274.69}, {"d": "2023-01-01", "k": 263.45}, {"d": "2023-01-08", "k": 247.32}, {"d": "2023-01-15", "k": 250.74}, {"d": "2023-01-22", "k": 266.38}, {"d": "2023-01-29", "k": 251.23}, {"d": "2023-02-05", "k": 270.78}, {"d": "2023-02-12", "k": 284.95}, {"d": "2023-02-19", "k": 305.97}, {"d": "2023-02-26", "k": 306.95}, {"d": "2023-03-05", "k": 315.75}, {"d": "2023-03-12", "k": 315.75}, {"d": "2023-03-19", "k": 297.17}, {"d": "2023-03-26", "k": 306.46}, {"d": "2023-04-02", "k": 325.52}, {"d": "2023-04-09", "k": 302.06}, {"d": "2023-04-16", "k": 324.06}, {"d": "2023-04-23", "k": 327.48}, {"d": "2023-04-30", "k": 301.76}, {"d": "2023-05-07", "k": 277.72}, {"d": "2023-05-14", "k": 277.23}, {"d": "2023-05-21", "k": 283.12}, {"d": "2023-05-28", "k": 278.21}, {"d": "2023-06-04", "k": 272.32}, {"d": "2023-06-11", "k": 265.95}, {"d": "2023-06-18", "k": 263.49}, {"d": "2023-06-25", "k": 255.15}, {"d": "2023-07-02", "k": 267.91}, {"d": "2023-07-09", "k": 248.77}, {"d": "2023-07-16", "k": 251.23}, {"d": "2023-07-23", "k": 236.01}, {"d": "2023-07-30", "k": 238.47}, {"d": "2023-08-06", "k": 258.09}, {"d": "2023-08-13", "k": 246.81}, {"d": "2023-08-20", "k": 248.28}, {"d": "2023-08-27", "k": 247.3}, {"d": "2023-09-03", "k": 270.85}, {"d": "2023-09-10", "k": 270.85}, {"d": "2023-09-17", "k": 278.21}, {"d": "2023-09-24", "k": 297.84}, {"d": "2023-10-01", "k": 304.22}, {"d": "2023-10-08", "k": 324.34}, {"d": "2023-10-15", "k": 349.36}, {"d": "2023-10-22", "k": 345.43}, {"d": "2023-10-29", "k": 355.25}, {"d": "2023-11-05", "k": 339.06}, {"d": "2023-11-12", "k": 335.13}, {"d": "2023-11-19", "k": 328.26}, {"d": "2023-11-26", "k": 319.44}, {"d": "2023-12-03", "k": 310.58}, {"d": "2023-12-10", "k": 294.34}, {"d": "2023-12-17", "k": 293.35}, {"d": "2023-12-24", "k": 314.02}, {"d": "2023-12-31", "k": 306.64}, {"d": "2024-01-07", "k": 333.71}, {"d": "2024-01-14", "k": 340.6}, {"d": "2024-01-21", "k": 375.55}, {"d": "2024-01-28", "k": 371.61}, {"d": "2024-02-04", "k": 402.62}, {"d": "2024-02-11", "k": 400.65}, {"d": "2024-02-18", "k": 382.93}, {"d": "2024-02-25", "k": 380.47}, {"d": "2024-03-03", "k": 386.87}, {"d": "2024-03-10", "k": 376.53}, {"d": "2024-03-17", "k": 384.41}, {"d": "2024-03-24", "k": 377.03}, {"d": "2024-03-31", "k": 393.76}, {"d": "2024-04-07", "k": 426.74}, {"d": "2024-04-14", "k": 452.82}, {"d": "2024-04-21", "k": 470.54}, {"d": "2024-04-28", "k": 465.65}, {"d": "2024-05-05", "k": 466.14}, {"d": "2024-05-12", "k": 500.7}, {"d": "2024-05-19", "k": 495.77}, {"d": "2024-05-26", "k": 497.74}, {"d": "2024-06-02", "k": 478.48}, {"d": "2024-06-09", "k": 462.68}, {"d": "2024-06-16", "k": 470.09}, {"d": "2024-06-23", "k": 468.61}, {"d": "2024-06-30", "k": 498.73}, {"d": "2024-07-07", "k": 470.09}, {"d": "2024-07-14", "k": 425.65}, {"d": "2024-07-21", "k": 427.13}, {"d": "2024-07-28", "k": 418.74}, {"d": "2024-08-04", "k": 402.44}, {"d": "2024-08-11", "k": 409.85}, {"d": "2024-08-18", "k": 414.29}, {"d": "2024-08-25", "k": 407.87}, {"d": "2024-09-01", "k": 417.25}, {"d": "2024-09-08", "k": 386.15}, {"d": "2024-09-15", "k": 389.11}, {"d": "2024-09-22", "k": 388.61}, {"d": "2024-09-29", "k": 386.15}, {"d": "2024-10-06", "k": 367.87}, {"d": "2024-10-13", "k": 353.55}, {"d": "2024-10-20", "k": 336.27}, {"d": "2024-10-27", "k": 328.37}, {"d": "2024-11-03", "k": 310.59}, {"d": "2024-11-10", "k": 297.76}, {"d": "2024-11-17", "k": 306.64}, {"d": "2024-11-24", "k": 292.02}, {"d": "2024-12-01", "k": 277.64}, {"d": "2024-12-08", "k": 289.04}, {"d": "2024-12-15", "k": 285.57}, {"d": "2024-12-22", "k": 276.65}, {"d": "2024-12-29", "k": 287.56}, {"d": "2025-01-05", "k": 293.51}, {"d": "2025-01-12", "k": 309.37}, {"d": "2025-01-19", "k": 284.09}, {"d": "2025-01-26", "k": 275.66}, {"d": "2025-02-02", "k": 290.53}, {"d": "2025-02-09", "k": 278.63}, {"d": "2025-02-16", "k": 268.22}, {"d": "2025-02-23", "k": 265.74}, {"d": "2025-03-02", "k": 262.27}, {"d": "2025-03-09", "k": 246.41}, {"d": "2025-03-16", "k": 248.89}, {"d": "2025-03-23", "k": 263.76}, {"d": "2025-03-30", "k": 248.89}, {"d": "2025-04-06", "k": 201.29}, {"d": "2025-04-13", "k": 217.65}, {"d": "2025-04-20", "k": 221.12}, {"d": "2025-04-27", "k": 230.32}, {"d": "2025-05-04", "k": 243.28}, {"d": "2025-05-11", "k": 233.81}, {"d": "2025-05-18", "k": 258.73}, {"d": "2025-05-25", "k": 246.27}, {"d": "2025-06-01", "k": 254.74}, {"d": "2025-06-08", "k": 264.71}, {"d": "2025-06-15", "k": 264.71}, {"d": "2025-06-22", "k": 263.72}, {"d": "2025-06-29", "k": 259.23}, {"d": "2025-07-06", "k": 275.18}, {"d": "2025-07-13", "k": 295.62}, {"d": "2025-07-20", "k": 294.63}, {"d": "2025-07-27", "k": 300.11}, {"d": "2025-08-03", "k": 297.12}, {"d": "2025-08-10", "k": 311.08}, {"d": "2025-08-17", "k": 305.59}, {"d": "2025-08-24", "k": 326.53}, {"d": "2025-08-31", "k": 325.53}, {"d": "2025-09-07", "k": 328.53}, {"d": "2025-09-14", "k": 337.5}, {"d": "2025-09-21", "k": 347.97}, {"d": "2025-09-28", "k": 341.99}, {"d": "2025-10-05", "k": 335.01}, {"d": "2025-10-12", "k": 322.54}, {"d": "2025-10-19", "k": 320.05}, {"d": "2025-10-26", "k": 325.04}, {"d": "2025-11-02", "k": 338.99}, {"d": "2025-11-09", "k": 340.49}, {"d": "2025-11-16", "k": 336.5}, {"d": "2025-11-23", "k": 336.5}, {"d": "2025-11-30", "k": 340.0}, {"d": "2025-12-07", "k": 335.0}, {"d": "2025-12-14", "k": 333.0}, {"d": "2025-12-21", "k": 328.0}, {"d": "2025-12-28", "k": 316.5}, {"d": "2026-01-04", "k": 318.0}, {"d": "2026-01-11", "k": 337.0}, {"d": "2026-01-18", "k": 355.0}, {"d": "2026-01-25", "k": 346.0}, {"d": "2026-02-01", "k": 302.5}, {"d": "2026-02-08", "k": 298.0}, {"d": "2026-02-15", "k": 306.0}, {"d": "2026-02-22", "k": 319.5}, {"d": "2026-03-01", "k": 337.0}, {"d": "2026-03-08", "k": 326.0}, {"d": "2026-03-15", "k": 313.5}, {"d": "2026-03-22", "k": 320.5}, {"d": "2026-03-29", "k": 318.5}, {"d": "2026-04-05", "k": 332.5}, {"d": "2026-04-12", "k": 322.0}];
+    var VAL = 'NOK';
+    function filtrer(p) {
+      var now = new Date(), ar = now.getFullYear();
+      if (p === 'ytd') return ALLE.filter(function(x) { return x.d >= ar + '-01-01'; });
+      var years = (p==='2ar'?2:p==='3ar'?3:p==='5ar'?5:1);
+      var d = new Date(now); d.setFullYear(d.getFullYear()-years);
+      var s = d.toISOString().slice(0,10);
+      return ALLE.filter(function(x) { return x.d >= s; });
+    }
+    function tegn(periode) {
+      var data = filtrer(periode); if (data.length<4) data=ALLE; if (data.length<4) return;
+      var pr = data.map(function(x){return x.k;}), da = data.map(function(x){return x.d;}), n=pr.length;
+      var mn=Math.min.apply(null,pr), mx=Math.max.apply(null,pr), rng=mx-mn||1;
+      var opp=pr[n-1]>=pr[0], fg=opp?'#22c55e':'#ef4444';
+      var end=((pr[n-1]-pr[0])/pr[0]*100).toFixed(1);
+      var hdr=document.getElementById('kurs-header-STRO');
+      if(hdr) hdr.innerHTML='<span style="font-size:1.05rem;font-weight:700">'+pr[n-1].toLocaleString('nb-NO',{minimumFractionDigits:2})+' '+VAL+'</span><span style="font-size:0.78rem;font-weight:500;color:'+fg+'">'+(opp?'▲ +':'▼ ')+end+'%</span>';
+      var cv=document.getElementById('kurs-canvas-STRO'); if(!cv) return;
+      var dk=document.documentElement.classList.contains('dark');
+      var DPR=Math.min(window.devicePixelRatio||1,2), CW=cv.parentElement.offsetWidth||680, CH=200;
+      var pL=54,pR=12,pT=14,pB=30;
+      cv.width=CW*DPR; cv.height=CH*DPR; cv.style.height=CH+'px';
+      var ctx=cv.getContext('2d'); ctx.scale(DPR,DPR);
+      var sx=function(i){return pL+i/(n-1)*(CW-pL-pR);};
+      var sy=function(p){return pT+(1-(p-mn)/rng)*(CH-pT-pB);};
+      ctx.fillStyle=dk?'#111827':'#f9fafb'; ctx.fillRect(0,0,CW,CH);
+      ctx.strokeStyle=dk?'#1f2937':'#e5e7eb'; ctx.lineWidth=1; ctx.setLineDash([4,4]);
+      [mn,(mn+mx)/2,mx].forEach(function(v){ctx.beginPath();ctx.moveTo(pL,sy(v));ctx.lineTo(CW-pR,sy(v));ctx.stroke();});
+      ctx.setLineDash([]);
+      ctx.fillStyle=dk?'#6b7280':'#9ca3af'; ctx.font='11px sans-serif'; ctx.textAlign='right';
+      [[mn,sy(mn)],[(mn+mx)/2,sy((mn+mx)/2)],[mx,sy(mx)]].forEach(function(pair){ctx.fillText(pair[0].toLocaleString('nb-NO',{maximumFractionDigits:0}),pL-4,pair[1]+4);});
+      var grad=ctx.createLinearGradient(0,pT,0,CH-pB);
+      grad.addColorStop(0,opp?'rgba(34,197,94,0.25)':'rgba(239,68,68,0.2)'); grad.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.beginPath(); ctx.moveTo(sx(0),CH-pB);
+      pr.forEach(function(p,i){ctx.lineTo(sx(i),sy(p));});
+      ctx.lineTo(sx(n-1),CH-pB); ctx.closePath(); ctx.fillStyle=grad; ctx.fill();
+      ctx.beginPath(); ctx.lineWidth=2.5; ctx.strokeStyle=fg; ctx.lineJoin='round';
+      pr.forEach(function(p,i){if(i===0)ctx.moveTo(sx(i),sy(p));else ctx.lineTo(sx(i),sy(p));});
+      ctx.stroke();
+      ctx.beginPath(); ctx.arc(sx(n-1),sy(pr[n-1]),4,0,Math.PI*2); ctx.fillStyle=fg; ctx.fill();
+      ctx.strokeStyle=dk?'#111827':'#fff'; ctx.lineWidth=2; ctx.stroke();
+      ctx.fillStyle=dk?'#6b7280':'#9ca3af'; ctx.textAlign='center';
+      [0,Math.floor(n/3),Math.floor(2*n/3),n-1].forEach(function(i){var d=da[i].slice(5);ctx.fillText(d.slice(3,5)+'.'+d.slice(0,2),sx(i),CH-8);});
+    }
+    document.querySelectorAll('.kp-btn').forEach(function(btn){
+      btn.addEventListener('click',function(){
+        document.querySelectorAll('.kp-btn').forEach(function(b){b.classList.remove('kp-aktiv');});
+        btn.classList.add('kp-aktiv'); tegn(btn.dataset.p);
+      });
+    });
+    if(ALLE.length>0) tegn('1ar');
+  })();
+  </script>
+</div>
+
   <div class="desc"><h2>Om selskapet</h2><p>Stolt-Nielsen Limited, together with its subsidiaries, provides transportation, storage, and distribution solutions for bulk liquid chemicals, edible oils, acids, and other specialty liquids worldwide. It operates through five segments: Tankers, Terminals, Tank Containers, Stolt Sea Farm, and Stolt-Nielsen Gas. The company also produces, processes, and markets seafood, including turbot and sole; and stores and handles chemicals, clean petroleum products, liquefied petroleum gases, vegetable oils, and biofuels, as well as alternative fuels and feedstocks.</p></div>
 
   <div class="ai-oppsummering"><h2>AI-oppsummering <span class="ai-dato">Oppdatert 2026-04-08T12:34:53</span></h2><p>Direkteavkastningen på 5.6% er solid og godt over normalt rentenivå, noe som gjør aksjen interessant for utbyttejegere. P/E på 5.3 er lavt for shipping-sektoren og tyder på attraktiv inngangsverdi — forutsatt at inntjeningen er normalisert. Utbetalingsgraden på 34% er konservativt lav og gir god buffer for utbytteøkninger — selskapet beholder mesteparten av overskuddet til reinvestering. Utbytteveksten på 31.6% per år siste fem år er bemerkelsesverdig sterk og gir imponerende realavkastning for langsiktige aksjonærer. Selskapet har betalt utbytte i 21 år på rad — solid historikk som underbygger ledelsens langsiktige fokus på aksjonæravkastning. Samlet sett fremstår STRO som et solid utbyttealternativ med høy kvalitet — attraktiv yield, bærekraftig utbetalingsgrad og lang historikk gir god inntektssikkerhet.</p></div>
@@ -306,72 +369,34 @@
 
   <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Shipping</td></tr><tr><td>Frekvens</td><td>Halvårlig</td></tr><tr><td>Utbytte per aksje</td><td>19.11 NOK</td></tr><tr><td>Direkteavkastning</td><td>5.93%</td></tr><tr><td>5-årssnitt yield</td><td>7.00%</td></tr><tr><td>År med utbytte</td><td>21</td></tr><tr><td>P/E</td><td>5.0</td></tr><tr><td>Payout ratio</td><td>34%</td></tr><tr><td>Utbyttevekst 5 år</td><td>+31.6% p.a.</td></tr><tr><td>Markedsverdi</td><td>21.4 mrd NOK</td></tr><tr><td>52-ukers kurs</td><td>202.0 – 358.5 NOK</td></tr></tbody></table>
 
-  
-<div class="kurs-lenker">
-  <h2>Kursgraf</h2>
-  <div class="kurs-chart-wrap">
-  <div class="kurs-chart-header">
-    <span class="kurs-chart-naa">322.00 NOK</span>
-    <span class="kurs-chart-endring" style="color:#22c55e">▲ 45.6% siste 52 uker</span>
-  </div>
-  <svg viewBox="0 0 600 180" style="width:100%;height:180px;display:block;" role="img"
-       aria-label="Kursgraf siste 52 uker">
-    <defs>
-      <linearGradient id="kg-grad" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="#22c55e" stop-opacity="0.25"/>
-        <stop offset="100%" stop-color="#22c55e" stop-opacity="0"/>
-      </linearGradient>
-    </defs>
-    <text x="55" y="154.0" text-anchor="end" font-size="10" fill="var(--chart-label,#9ca3af)">221</text><line x1="60" y1="150.0" x2="588" y2="150.0" stroke="var(--chart-grid,#1f2937)" stroke-width="1" stroke-dasharray="3,4"/><text x="55" y="85.0" text-anchor="end" font-size="10" fill="var(--chart-label,#9ca3af)">288</text><line x1="60" y1="81.0" x2="588" y2="81.0" stroke="var(--chart-grid,#1f2937)" stroke-width="1" stroke-dasharray="3,4"/><text x="55" y="16.0" text-anchor="end" font-size="10" fill="var(--chart-label,#9ca3af)">355</text><line x1="60" y1="12.0" x2="588" y2="12.0" stroke="var(--chart-grid,#1f2937)" stroke-width="1" stroke-dasharray="3,4"/>
-    <polygon points="60.0,150 60.0,150.0 70.4,140.5 80.7,127.2 91.1,136.9 101.4,111.2 111.8,124.1 122.1,115.3 132.5,105.1 142.8,105.1 153.2,106.1 163.5,110.7 173.9,94.3 184.2,73.2 194.6,74.2 204.9,68.6 215.3,71.7 225.6,57.3 236.0,62.9 246.4,41.3 256.7,42.4 267.1,39.3 277.4,30.0 287.8,19.2 298.1,25.4 308.5,32.6 318.8,45.5 329.2,48.0 339.5,42.9 349.9,28.5 360.2,27.0 370.6,31.1 380.9,31.1 391.3,27.5 401.6,32.6 412.0,34.7 422.4,39.8 432.7,51.7 443.1,50.1 453.4,30.6 463.8,12.0 474.1,21.3 484.5,66.1 494.8,70.8 505.2,62.5 515.5,48.6 525.9,30.6 536.2,41.9 546.6,54.8 556.9,47.6 567.3,49.6 577.6,35.2 588.0,46.0 588.0,150" fill="url(#kg-grad)"/>
-    <polyline points="60.0,150.0 70.4,140.5 80.7,127.2 91.1,136.9 101.4,111.2 111.8,124.1 122.1,115.3 132.5,105.1 142.8,105.1 153.2,106.1 163.5,110.7 173.9,94.3 184.2,73.2 194.6,74.2 204.9,68.6 215.3,71.7 225.6,57.3 236.0,62.9 246.4,41.3 256.7,42.4 267.1,39.3 277.4,30.0 287.8,19.2 298.1,25.4 308.5,32.6 318.8,45.5 329.2,48.0 339.5,42.9 349.9,28.5 360.2,27.0 370.6,31.1 380.9,31.1 391.3,27.5 401.6,32.6 412.0,34.7 422.4,39.8 432.7,51.7 443.1,50.1 453.4,30.6 463.8,12.0 474.1,21.3 484.5,66.1 494.8,70.8 505.2,62.5 515.5,48.6 525.9,30.6 536.2,41.9 546.6,54.8 556.9,47.6 567.3,49.6 577.6,35.2 588.0,46.0" fill="none" stroke="#22c55e" stroke-width="2"
-              stroke-linejoin="round" stroke-linecap="round"/>
-    <!-- Siste punkt markert -->
-    <circle cx="588.0" cy="46.0" r="4"
-            fill="#22c55e" stroke="var(--chart-bg,#111827)" stroke-width="2"/>
-    <text x="60.0" y="176" text-anchor="middle" font-size="10" fill="var(--chart-label,#9ca3af)">20.04</text><text x="163.5" y="176" text-anchor="middle" font-size="10" fill="var(--chart-label,#9ca3af)">29.06</text><text x="267.1" y="176" text-anchor="middle" font-size="10" fill="var(--chart-label,#9ca3af)">07.09</text><text x="370.6" y="176" text-anchor="middle" font-size="10" fill="var(--chart-label,#9ca3af)">16.11</text><text x="474.1" y="176" text-anchor="middle" font-size="10" fill="var(--chart-label,#9ca3af)">25.01</text><text x="588.0" y="176" text-anchor="middle" font-size="10" fill="var(--chart-label,#9ca3af)">12.04</text>
-  </svg>
-</div>
-  <div class="kurs-knapper" style="margin-top:0.75rem;">
-    <a href="https://finance.yahoo.com/chart/STRO.OL" target="_blank" rel="noopener noreferrer" class="kurs-btn">
-      <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"/></svg>
-      Yahoo Finance
-    </a>
-    <a href="https://www.tradingview.com/symbols/OSLO-STRO/" target="_blank" rel="noopener noreferrer" class="kurs-btn">
-      <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
-      TradingView
-    </a>
-  </div>
-</div>
-
-  <h2>Historiske utbytter</h2><svg viewBox="0 0 420 180" style="width:100%;max-width:420px;height:auto;display:block;margin-bottom:0.5rem;" aria-label="Historiske utbytter per aksje i NOK"><line x1="52" y1="148.0" x2="408" y2="148.0" stroke="#e5e7eb" stroke-width="1" class="ytick"/><text x="48" y="152.0" text-anchor="end" font-size="10" fill="#9ca3af">0.0</text><line x1="52" y1="104.0" x2="408" y2="104.0" stroke="#e5e7eb" stroke-width="1" class="ytick"/><text x="48" y="108.0" text-anchor="end" font-size="10" fill="#9ca3af">8.69</text><line x1="52" y1="60.0" x2="408" y2="60.0" stroke="#e5e7eb" stroke-width="1" class="ytick"/><text x="48" y="64.0" text-anchor="end" font-size="10" fill="#9ca3af">17.39</text><line x1="52" y1="16.0" x2="408" y2="16.0" stroke="#e5e7eb" stroke-width="1" class="ytick"/><text x="48" y="20.0" text-anchor="end" font-size="10" fill="#9ca3af">26.08</text><rect class="hbar" x="78.5" y="76.0" width="36" height="72.0" rx="3" fill="#16a34a" opacity="0.85"/><rect class="hbar" x="167.5" y="40.0" width="36" height="108.0" rx="3" fill="#16a34a" opacity="0.85"/><rect class="hbar" x="256.5" y="16.0" width="36" height="132.0" rx="3" fill="#16a34a" opacity="0.85"/><rect class="hbar" x="345.5" y="40.0" width="36" height="108.0" rx="3" fill="#16a34a" opacity="0.85"/><text x="96.5" y="174" text-anchor="middle" font-size="10" fill="#9ca3af">2022</text><text x="185.5" y="174" text-anchor="middle" font-size="10" fill="#9ca3af">2023</text><text x="274.5" y="174" text-anchor="middle" font-size="10" fill="#9ca3af">2024</text><text x="363.5" y="174" text-anchor="middle" font-size="10" fill="#9ca3af">2025</text><rect class="htip-bg" x="44.5" y="48.0" width="106" height="20" rx="4" fill="#111827" opacity="0" pointer-events="none"/><text class="htip-txt" x="96.5" y="63.0" text-anchor="middle" font-size="10" fill="#f3f4f6" opacity="0" pointer-events="none">14.23 NOK · 5.4% yield</text><rect class="htrig" x="52.0" y="16" width="89.0" height="132" fill="transparent" onmouseenter="showTip(this)" onmouseleave="hideTip(this)" data-i="0"/><rect class="htip-bg" x="133.5" y="12.0" width="106" height="20" rx="4" fill="#111827" opacity="0" pointer-events="none"/><text class="htip-txt" x="185.5" y="27.0" text-anchor="middle" font-size="10" fill="#f3f4f6" opacity="0" pointer-events="none">21.34 NOK · 7.0% yield</text><rect class="htrig" x="141.0" y="16" width="89.0" height="132" fill="transparent" onmouseenter="showTip(this)" onmouseleave="hideTip(this)" data-i="1"/><rect class="htip-bg" x="222.5" y="2.0" width="106" height="20" rx="4" fill="#111827" opacity="0" pointer-events="none"/><text class="htip-txt" x="274.5" y="14.0" text-anchor="middle" font-size="10" fill="#f3f4f6" opacity="0" pointer-events="none">26.08 NOK · 9.1% yield</text><rect class="htrig" x="230.0" y="16" width="89.0" height="132" fill="transparent" onmouseenter="showTip(this)" onmouseleave="hideTip(this)" data-i="2"/><rect class="htip-bg" x="302.0" y="12.0" width="106" height="20" rx="4" fill="#111827" opacity="0" pointer-events="none"/><text class="htip-txt" x="363.5" y="27.0" text-anchor="middle" font-size="10" fill="#f3f4f6" opacity="0" pointer-events="none">21.34 NOK · 6.5% yield</text><rect class="htrig" x="319.0" y="16" width="89.0" height="132" fill="transparent" onmouseenter="showTip(this)" onmouseleave="hideTip(this)" data-i="3"/><text x="16" y="82.0" text-anchor="middle" font-size="10" fill="#9ca3af" transform="rotate(-90,16,82.0)">NOK per aksje</text></svg><script>
+  <h2>Historiske utbytter</h2><svg viewBox="0 0 420 180" style="width:100%;max-width:420px;height:auto;display:block;margin-bottom:0.5rem;" aria-label="Historiske utbytter per aksje i NOK"><line x1="52" y1="148.0" x2="408" y2="148.0" stroke="#e5e7eb" stroke-width="1" class="ytick"/><text x="48" y="152.0" text-anchor="end" font-size="10" fill="#9ca3af">0.0</text><line x1="52" y1="104.0" x2="408" y2="104.0" stroke="#e5e7eb" stroke-width="1" class="ytick"/><text x="48" y="108.0" text-anchor="end" font-size="10" fill="#9ca3af">8.7</text><line x1="52" y1="60.0" x2="408" y2="60.0" stroke="#e5e7eb" stroke-width="1" class="ytick"/><text x="48" y="64.0" text-anchor="end" font-size="10" fill="#9ca3af">17.4</text><line x1="52" y1="16.0" x2="408" y2="16.0" stroke="#e5e7eb" stroke-width="1" class="ytick"/><text x="48" y="20.0" text-anchor="end" font-size="10" fill="#9ca3af">26.1</text><rect class="hbar" x="78.5" y="76.0" width="36" height="72.0" rx="3" fill="#16a34a" opacity="0.85"/><rect class="hbar" x="167.5" y="40.0" width="36" height="108.0" rx="3" fill="#16a34a" opacity="0.85"/><rect class="hbar" x="256.5" y="16.0" width="36" height="132.0" rx="3" fill="#16a34a" opacity="0.85"/><rect class="hbar" x="345.5" y="40.0" width="36" height="108.0" rx="3" fill="#16a34a" opacity="0.85"/><text x="96.5" y="174" text-anchor="middle" font-size="10" fill="#9ca3af">2022</text><text x="185.5" y="174" text-anchor="middle" font-size="10" fill="#9ca3af">2023</text><text x="274.5" y="174" text-anchor="middle" font-size="10" fill="#9ca3af">2024</text><text x="363.5" y="174" text-anchor="middle" font-size="10" fill="#9ca3af">2025</text><rect class="htip-bg" x="44.5" y="48.0" width="106" height="20" rx="4" fill="#111827" opacity="0" pointer-events="none"/><text class="htip-txt" x="96.5" y="63.0" text-anchor="middle" font-size="10" fill="#f3f4f6" opacity="0" pointer-events="none">14.24 NOK · 5.4% yield</text><rect class="htrig" x="52.0" y="16" width="89.0" height="132" fill="transparent" onmouseenter="showTip(this)" onmouseleave="hideTip(this)" data-i="0"/><rect class="htip-bg" x="133.5" y="12.0" width="106" height="20" rx="4" fill="#111827" opacity="0" pointer-events="none"/><text class="htip-txt" x="185.5" y="27.0" text-anchor="middle" font-size="10" fill="#f3f4f6" opacity="0" pointer-events="none">21.35 NOK · 7.0% yield</text><rect class="htrig" x="141.0" y="16" width="89.0" height="132" fill="transparent" onmouseenter="showTip(this)" onmouseleave="hideTip(this)" data-i="1"/><rect class="htip-bg" x="222.5" y="2.0" width="106" height="20" rx="4" fill="#111827" opacity="0" pointer-events="none"/><text class="htip-txt" x="274.5" y="14.0" text-anchor="middle" font-size="10" fill="#f3f4f6" opacity="0" pointer-events="none">26.1 NOK · 9.1% yield</text><rect class="htrig" x="230.0" y="16" width="89.0" height="132" fill="transparent" onmouseenter="showTip(this)" onmouseleave="hideTip(this)" data-i="2"/><rect class="htip-bg" x="302.0" y="12.0" width="106" height="20" rx="4" fill="#111827" opacity="0" pointer-events="none"/><text class="htip-txt" x="363.5" y="27.0" text-anchor="middle" font-size="10" fill="#f3f4f6" opacity="0" pointer-events="none">21.35 NOK · 6.5% yield</text><rect class="htrig" x="319.0" y="16" width="89.0" height="132" fill="transparent" onmouseenter="showTip(this)" onmouseleave="hideTip(this)" data-i="3"/><text x="16" y="82.0" text-anchor="middle" font-size="10" fill="#9ca3af" transform="rotate(-90,16,82.0)">NOK per aksje</text></svg><script>
 function showTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAll('.htip-bg')[i],tx=s.querySelectorAll('.htip-txt')[i];bg.setAttribute('opacity','0.92');tx.setAttribute('opacity','1');}
 function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAll('.htip-bg')[i],tx=s.querySelectorAll('.htip-txt')[i];bg.setAttribute('opacity','0');tx.setAttribute('opacity','0');}
 </script><table><thead><tr><th>År</th><th>Utbytte</th><th>Yield</th></tr></thead><tbody>
         <tr>
           <td>2025</td>
-          <td>21.34 NOK</td>
+          <td>21.35 NOK</td>
           <td>6.55%</td>
         </tr>
         <tr>
           <td>2024</td>
-          <td>26.08 NOK</td>
-          <td>9.10%</td>
+          <td>26.1 NOK</td>
+          <td>9.11%</td>
         </tr>
         <tr>
           <td>2023</td>
-          <td>21.34 NOK</td>
+          <td>21.35 NOK</td>
           <td>6.96%</td>
         </tr>
         <tr>
           <td>2022</td>
-          <td>14.23 NOK</td>
+          <td>14.24 NOK</td>
           <td>5.40%</td>
         </tr></tbody></table>
 
   <div class="profil-seksjon"><h2>Utbytteprofil</h2><div class="profil-badges"><span class="profil-badge badge-green">Høy yield</span><span class="profil-badge badge-blue">Stabil betaler</span><span class="profil-badge badge-teal">Utbyttevekst</span><span class="profil-badge badge-orange">Syklisk</span></div><p class="profil-tekst">STRO gir 5.9% direkteavkastning, noe under sektorsnittet for shipping på 8.8%. Med 21 år på rad med utbytte er Stolt-Nielsen Ltd blant de mest stabile utbyttebetalerne på Oslo Børs. Lav utbetalingsgrad gir rom for fremtidige utbytteøkninger.</p></div>
 
-  <div class="historikk-prosa"><h2>Utbyttehistorikk</h2><p>Stolt-Nielsen Ltd har de siste 4 årene betalt mellom 14.23 og 26.08 NOK per aksje i utbytte. Det høyeste utbyttet ble registrert i 2024 med 26.08 NOK per aksje (9.1% yield). I 2025 er utbyttet 21.34 NOK per aksje, tilsvarende 5.9% direkteavkastning.</p></div>
+  <div class="historikk-prosa"><h2>Utbyttehistorikk</h2><p>Stolt-Nielsen Ltd har de siste 4 årene betalt mellom 14.24 og 26.10 NOK per aksje i utbytte. Det høyeste utbyttet ble registrert i 2024 med 26.10 NOK per aksje (9.1% yield). I 2025 er utbyttet 21.35 NOK per aksje, tilsvarende 5.9% direkteavkastning.</p></div>
 
   <div class="risiko-seksjon"><h2>Risiko for utbyttet</h2><ul class="risiko-liste"><li>Fraktrater er svært volatile og kan halves på kort tid</li>
 <li>Bunkerspriser (drivstoff) påvirker driftsmarginene direkte</li>

@@ -178,17 +178,10 @@
     .badge { background: #dcfce7; color: #15803d; }
     .kurs-lenker { margin: 1.5rem 0; }
     .kurs-lenker h2 { margin-bottom: 0.75rem; }
-    .kurs-knapper { display: flex; gap: 0.5rem; flex-wrap: wrap; }
-    .kurs-btn { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.5rem 0.9rem; border-radius: 8px; font-size: 0.8rem; font-weight: 500; background: #f3f4f6; color: #374151; text-decoration: none; transition: background 0.15s; }
-    .kurs-btn:hover { background: #e5e7eb; }
-    .dark .kurs-btn { background: #1f2937; color: #d1d5db; }
-    .dark .kurs-btn:hover { background: #374151; }
-    .kurs-chart-wrap { background: var(--chart-bg,#fff); border-radius: 10px; padding: 0.75rem 0.5rem 0; border: 1px solid #e5e7eb; }
-    .kurs-chart-header { display: flex; justify-content: space-between; align-items: baseline; padding: 0 0.5rem 0.5rem; }
-    .kurs-chart-naa { font-size: 1.1rem; font-weight: 700; color: #111827; }
-    .kurs-chart-endring { font-size: 0.8rem; font-weight: 500; }
-    .dark .kurs-chart-wrap { --chart-bg: #111827; --chart-label: #6b7280; --chart-grid: #1f2937; border-color: #1f2937; }
-    .dark .kurs-chart-naa { color: #f3f4f6; }
+    .kp-btn { font-size: 0.72rem; font-weight: 500; padding: 0.2rem 0.55rem; border-radius: 6px; border: none; cursor: pointer; background: transparent; color: #6b7280; transition: background 0.12s, color 0.12s; }
+    .kp-btn:hover, .kp-aktiv { background: #f3f4f6; color: #111827; font-weight: 600; }
+    .dark .kp-btn { color: #9ca3af; }
+    .dark .kp-btn:hover, .dark .kp-aktiv { background: #1f2937; color: #f3f4f6; }
 
     /* Dark mode */
     .dark body { background: #030712; color: #f3f4f6; }
@@ -298,6 +291,76 @@
     <div class="kcard"><div class="label">P/E</div><div class="val">15.6</div></div>
   </div>
 
+  
+<div class="kurs-lenker">
+  <h2>Kursgraf</h2>
+  <div style="display:flex;gap:4px;margin-bottom:8px;">
+    <button class="kp-btn kp-aktiv" data-p="1ar">1 år</button>
+    <button class="kp-btn" data-p="ytd">YTD</button>
+    <button class="kp-btn" data-p="2ar">2 år</button>
+    <button class="kp-btn" data-p="3ar">3 år</button>
+    <button class="kp-btn" data-p="5ar">5 år</button>
+  </div>
+  <div id="kurs-header-PROT" style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px;"></div>
+  <canvas id="kurs-canvas-PROT" style="display:block;border-radius:10px;width:100%;"></canvas>
+  <script>
+  (function() {
+    var ALLE = [{"d": "2021-04-25", "k": 67.9}, {"d": "2021-05-02", "k": 69.74}, {"d": "2021-05-09", "k": 65.1}, {"d": "2021-05-16", "k": 63.75}, {"d": "2021-05-23", "k": 65.77}, {"d": "2021-05-30", "k": 67.27}, {"d": "2021-06-06", "k": 67.27}, {"d": "2021-06-13", "k": 64.65}, {"d": "2021-06-20", "k": 65.02}, {"d": "2021-06-27", "k": 64.28}, {"d": "2021-07-04", "k": 63.38}, {"d": "2021-07-11", "k": 71.75}, {"d": "2021-07-18", "k": 71.2}, {"d": "2021-07-25", "k": 69.22}, {"d": "2021-08-01", "k": 69.15}, {"d": "2021-08-08", "k": 69.0}, {"d": "2021-08-15", "k": 69.6}, {"d": "2021-08-22", "k": 69.91}, {"d": "2021-08-29", "k": 72.27}, {"d": "2021-09-05", "k": 71.73}, {"d": "2021-09-12", "k": 71.13}, {"d": "2021-09-19", "k": 69.38}, {"d": "2021-09-26", "k": 66.94}, {"d": "2021-10-03", "k": 67.47}, {"d": "2021-10-10", "k": 66.26}, {"d": "2021-10-17", "k": 68.08}, {"d": "2021-10-24", "k": 70.52}, {"d": "2021-10-31", "k": 74.47}, {"d": "2021-11-07", "k": 74.33}, {"d": "2021-11-14", "k": 75.64}, {"d": "2021-11-21", "k": 78.2}, {"d": "2021-11-28", "k": 78.66}, {"d": "2021-12-05", "k": 78.35}, {"d": "2021-12-12", "k": 79.13}, {"d": "2021-12-19", "k": 76.65}, {"d": "2021-12-26", "k": 80.99}, {"d": "2022-01-02", "k": 83.93}, {"d": "2022-01-09", "k": 86.71}, {"d": "2022-01-16", "k": 92.91}, {"d": "2022-01-23", "k": 91.52}, {"d": "2022-01-30", "k": 92.13}, {"d": "2022-02-06", "k": 93.84}, {"d": "2022-02-13", "k": 92.49}, {"d": "2022-02-20", "k": 88.36}, {"d": "2022-02-27", "k": 89.79}, {"d": "2022-03-06", "k": 83.43}, {"d": "2022-03-13", "k": 90.26}, {"d": "2022-03-20", "k": 92.65}, {"d": "2022-03-27", "k": 97.89}, {"d": "2022-04-03", "k": 96.62}, {"d": "2022-04-10", "k": 96.73}, {"d": "2022-04-17", "k": 96.39}, {"d": "2022-04-24", "k": 96.39}, {"d": "2022-05-01", "k": 90.47}, {"d": "2022-05-08", "k": 89.88}, {"d": "2022-05-15", "k": 89.37}, {"d": "2022-05-22", "k": 88.16}, {"d": "2022-05-29", "k": 90.74}, {"d": "2022-06-05", "k": 91.09}, {"d": "2022-06-12", "k": 90.23}, {"d": "2022-06-19", "k": 88.68}, {"d": "2022-06-26", "k": 86.96}, {"d": "2022-07-03", "k": 87.48}, {"d": "2022-07-10", "k": 100.71}, {"d": "2022-07-17", "k": 96.93}, {"d": "2022-07-24", "k": 97.27}, {"d": "2022-07-31", "k": 97.96}, {"d": "2022-08-07", "k": 101.91}, {"d": "2022-08-14", "k": 102.09}, {"d": "2022-08-21", "k": 103.29}, {"d": "2022-08-28", "k": 103.63}, {"d": "2022-09-04", "k": 105.87}, {"d": "2022-09-11", "k": 104.84}, {"d": "2022-09-18", "k": 104.84}, {"d": "2022-09-25", "k": 99.85}, {"d": "2022-10-02", "k": 96.59}, {"d": "2022-10-09", "k": 97.45}, {"d": "2022-10-16", "k": 97.45}, {"d": "2022-10-23", "k": 100.19}, {"d": "2022-10-30", "k": 107.41}, {"d": "2022-11-06", "k": 106.73}, {"d": "2022-11-13", "k": 105.18}, {"d": "2022-11-20", "k": 104.84}, {"d": "2022-11-27", "k": 105.52}, {"d": "2022-12-04", "k": 105.52}, {"d": "2022-12-11", "k": 107.07}, {"d": "2022-12-18", "k": 101.91}, {"d": "2022-12-25", "k": 105.52}, {"d": "2023-01-01", "k": 108.1}, {"d": "2023-01-08", "k": 106.73}, {"d": "2023-01-15", "k": 112.91}, {"d": "2023-01-22", "k": 121.33}, {"d": "2023-01-29", "k": 124.6}, {"d": "2023-02-05", "k": 126.15}, {"d": "2023-02-12", "k": 126.16}, {"d": "2023-02-19", "k": 127.06}, {"d": "2023-02-26", "k": 125.81}, {"d": "2023-03-05", "k": 129.22}, {"d": "2023-03-12", "k": 133.52}, {"d": "2023-03-19", "k": 123.65}, {"d": "2023-03-26", "k": 121.68}, {"d": "2023-04-02", "k": 124.73}, {"d": "2023-04-09", "k": 131.37}, {"d": "2023-04-16", "k": 127.6}, {"d": "2023-04-23", "k": 127.78}, {"d": "2023-04-30", "k": 139.09}, {"d": "2023-05-07", "k": 142.17}, {"d": "2023-05-14", "k": 142.72}, {"d": "2023-05-21", "k": 147.08}, {"d": "2023-05-28", "k": 155.99}, {"d": "2023-06-04", "k": 153.63}, {"d": "2023-06-11", "k": 153.08}, {"d": "2023-06-18", "k": 146.9}, {"d": "2023-06-25", "k": 143.45}, {"d": "2023-07-02", "k": 150.17}, {"d": "2023-07-09", "k": 147.45}, {"d": "2023-07-16", "k": 140.83}, {"d": "2023-07-23", "k": 145.06}, {"d": "2023-07-30", "k": 153.35}, {"d": "2023-08-06", "k": 154.64}, {"d": "2023-08-13", "k": 151.87}, {"d": "2023-08-20", "k": 158.32}, {"d": "2023-08-27", "k": 163.47}, {"d": "2023-09-03", "k": 159.24}, {"d": "2023-09-10", "k": 156.29}, {"d": "2023-09-17", "k": 148.01}, {"d": "2023-09-24", "k": 161.63}, {"d": "2023-10-01", "k": 160.16}, {"d": "2023-10-08", "k": 160.34}, {"d": "2023-10-15", "k": 162.74}, {"d": "2023-10-22", "k": 154.64}, {"d": "2023-10-29", "k": 159.42}, {"d": "2023-11-05", "k": 162.18}, {"d": "2023-11-12", "k": 170.28}, {"d": "2023-11-19", "k": 171.02}, {"d": "2023-11-26", "k": 177.46}, {"d": "2023-12-03", "k": 178.2}, {"d": "2023-12-10", "k": 171.94}, {"d": "2023-12-17", "k": 165.13}, {"d": "2023-12-24", "k": 161.63}, {"d": "2023-12-31", "k": 165.68}, {"d": "2024-01-07", "k": 164.94}, {"d": "2024-01-14", "k": 168.81}, {"d": "2024-01-21", "k": 163.47}, {"d": "2024-01-28", "k": 173.41}, {"d": "2024-02-04", "k": 204.8}, {"d": "2024-02-11", "k": 208.1}, {"d": "2024-02-18", "k": 206.21}, {"d": "2024-02-25", "k": 201.03}, {"d": "2024-03-03", "k": 201.97}, {"d": "2024-03-10", "k": 198.68}, {"d": "2024-03-17", "k": 203.86}, {"d": "2024-03-24", "k": 205.27}, {"d": "2024-03-31", "k": 213.74}, {"d": "2024-04-07", "k": 211.86}, {"d": "2024-04-14", "k": 219.39}, {"d": "2024-04-21", "k": 204.8}, {"d": "2024-04-28", "k": 210.92}, {"d": "2024-05-05", "k": 209.95}, {"d": "2024-05-12", "k": 229.43}, {"d": "2024-05-19", "k": 222.3}, {"d": "2024-05-26", "k": 233.23}, {"d": "2024-06-02", "k": 230.38}, {"d": "2024-06-09", "k": 235.13}, {"d": "2024-06-16", "k": 235.13}, {"d": "2024-06-23", "k": 242.25}, {"d": "2024-06-30", "k": 243.68}, {"d": "2024-07-07", "k": 244.15}, {"d": "2024-07-14", "k": 218.5}, {"d": "2024-07-21", "k": 214.7}, {"d": "2024-07-28", "k": 212.78}, {"d": "2024-08-04", "k": 205.11}, {"d": "2024-08-11", "k": 200.32}, {"d": "2024-08-18", "k": 212.3}, {"d": "2024-08-25", "k": 211.82}, {"d": "2024-09-01", "k": 217.1}, {"d": "2024-09-08", "k": 212.3}, {"d": "2024-09-15", "k": 213.26}, {"d": "2024-09-22", "k": 223.33}, {"d": "2024-09-29", "k": 228.6}, {"d": "2024-10-06", "k": 230.51}, {"d": "2024-10-13", "k": 241.54}, {"d": "2024-10-20", "k": 245.85}, {"d": "2024-10-27", "k": 277.96}, {"d": "2024-11-03", "k": 277.0}, {"d": "2024-11-10", "k": 275.08}, {"d": "2024-11-17", "k": 271.73}, {"d": "2024-11-24", "k": 270.29}, {"d": "2024-12-01", "k": 277.0}, {"d": "2024-12-08", "k": 278.92}, {"d": "2024-12-15", "k": 270.29}, {"d": "2024-12-22", "k": 269.33}, {"d": "2024-12-29", "k": 274.6}, {"d": "2025-01-05", "k": 280.35}, {"d": "2025-01-12", "k": 281.79}, {"d": "2025-01-19", "k": 283.23}, {"d": "2025-01-26", "k": 311.03}, {"d": "2025-02-02", "k": 317.26}, {"d": "2025-02-09", "k": 308.63}, {"d": "2025-02-16", "k": 304.75}, {"d": "2025-02-23", "k": 299.89}, {"d": "2025-03-02", "k": 308.14}, {"d": "2025-03-09", "k": 302.81}, {"d": "2025-03-16", "k": 315.42}, {"d": "2025-03-23", "k": 322.7}, {"d": "2025-03-30", "k": 334.35}, {"d": "2025-04-06", "k": 307.66}, {"d": "2025-04-13", "k": 315.42}, {"d": "2025-04-20", "k": 318.82}, {"d": "2025-04-27", "k": 353.76}, {"d": "2025-05-04", "k": 366.99}, {"d": "2025-05-11", "k": 379.71}, {"d": "2025-05-18", "k": 397.33}, {"d": "2025-05-25", "k": 396.35}, {"d": "2025-06-01", "k": 395.86}, {"d": "2025-06-08", "k": 399.29}, {"d": "2025-06-15", "k": 395.86}, {"d": "2025-06-22", "k": 406.63}, {"d": "2025-06-29", "k": 418.86}, {"d": "2025-07-06", "k": 441.86}, {"d": "2025-07-13", "k": 494.22}, {"d": "2025-07-20", "k": 509.89}, {"d": "2025-07-27", "k": 507.93}, {"d": "2025-08-03", "k": 494.17}, {"d": "2025-08-10", "k": 483.37}, {"d": "2025-08-17", "k": 487.3}, {"d": "2025-08-24", "k": 493.19}, {"d": "2025-08-31", "k": 476.98}, {"d": "2025-09-07", "k": 452.91}, {"d": "2025-09-14", "k": 462.24}, {"d": "2025-09-21", "k": 489.75}, {"d": "2025-09-28", "k": 472.56}, {"d": "2025-10-05", "k": 477.96}, {"d": "2025-10-12", "k": 480.42}, {"d": "2025-10-19", "k": 468.63}, {"d": "2025-10-26", "k": 453.89}, {"d": "2025-11-02", "k": 451.36}, {"d": "2025-11-09", "k": 436.04}, {"d": "2025-11-16", "k": 449.38}, {"d": "2025-11-23", "k": 465.7}, {"d": "2025-11-30", "k": 476.08}, {"d": "2025-12-07", "k": 477.56}, {"d": "2025-12-14", "k": 494.37}, {"d": "2025-12-21", "k": 514.15}, {"d": "2025-12-28", "k": 519.09}, {"d": "2026-01-04", "k": 515.14}, {"d": "2026-01-11", "k": 513.16}, {"d": "2026-01-18", "k": 531.94}, {"d": "2026-01-25", "k": 540.84}, {"d": "2026-02-01", "k": 517.11}, {"d": "2026-02-08", "k": 523.0}, {"d": "2026-02-15", "k": 491.5}, {"d": "2026-02-22", "k": 505.0}, {"d": "2026-03-01", "k": 518.0}, {"d": "2026-03-08", "k": 506.0}, {"d": "2026-03-15", "k": 525.0}, {"d": "2026-03-22", "k": 524.0}, {"d": "2026-03-29", "k": 459.0}, {"d": "2026-04-05", "k": 466.0}, {"d": "2026-04-12", "k": 495.0}];
+    var VAL = 'NOK';
+    function filtrer(p) {
+      var now = new Date(), ar = now.getFullYear();
+      if (p === 'ytd') return ALLE.filter(function(x) { return x.d >= ar + '-01-01'; });
+      var years = (p==='2ar'?2:p==='3ar'?3:p==='5ar'?5:1);
+      var d = new Date(now); d.setFullYear(d.getFullYear()-years);
+      var s = d.toISOString().slice(0,10);
+      return ALLE.filter(function(x) { return x.d >= s; });
+    }
+    function tegn(periode) {
+      var data = filtrer(periode); if (data.length<4) data=ALLE; if (data.length<4) return;
+      var pr = data.map(function(x){return x.k;}), da = data.map(function(x){return x.d;}), n=pr.length;
+      var mn=Math.min.apply(null,pr), mx=Math.max.apply(null,pr), rng=mx-mn||1;
+      var opp=pr[n-1]>=pr[0], fg=opp?'#22c55e':'#ef4444';
+      var end=((pr[n-1]-pr[0])/pr[0]*100).toFixed(1);
+      var hdr=document.getElementById('kurs-header-PROT');
+      if(hdr) hdr.innerHTML='<span style="font-size:1.05rem;font-weight:700">'+pr[n-1].toLocaleString('nb-NO',{minimumFractionDigits:2})+' '+VAL+'</span><span style="font-size:0.78rem;font-weight:500;color:'+fg+'">'+(opp?'▲ +':'▼ ')+end+'%</span>';
+      var cv=document.getElementById('kurs-canvas-PROT'); if(!cv) return;
+      var dk=document.documentElement.classList.contains('dark');
+      var DPR=Math.min(window.devicePixelRatio||1,2), CW=cv.parentElement.offsetWidth||680, CH=200;
+      var pL=54,pR=12,pT=14,pB=30;
+      cv.width=CW*DPR; cv.height=CH*DPR; cv.style.height=CH+'px';
+      var ctx=cv.getContext('2d'); ctx.scale(DPR,DPR);
+      var sx=function(i){return pL+i/(n-1)*(CW-pL-pR);};
+      var sy=function(p){return pT+(1-(p-mn)/rng)*(CH-pT-pB);};
+      ctx.fillStyle=dk?'#111827':'#f9fafb'; ctx.fillRect(0,0,CW,CH);
+      ctx.strokeStyle=dk?'#1f2937':'#e5e7eb'; ctx.lineWidth=1; ctx.setLineDash([4,4]);
+      [mn,(mn+mx)/2,mx].forEach(function(v){ctx.beginPath();ctx.moveTo(pL,sy(v));ctx.lineTo(CW-pR,sy(v));ctx.stroke();});
+      ctx.setLineDash([]);
+      ctx.fillStyle=dk?'#6b7280':'#9ca3af'; ctx.font='11px sans-serif'; ctx.textAlign='right';
+      [[mn,sy(mn)],[(mn+mx)/2,sy((mn+mx)/2)],[mx,sy(mx)]].forEach(function(pair){ctx.fillText(pair[0].toLocaleString('nb-NO',{maximumFractionDigits:0}),pL-4,pair[1]+4);});
+      var grad=ctx.createLinearGradient(0,pT,0,CH-pB);
+      grad.addColorStop(0,opp?'rgba(34,197,94,0.25)':'rgba(239,68,68,0.2)'); grad.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.beginPath(); ctx.moveTo(sx(0),CH-pB);
+      pr.forEach(function(p,i){ctx.lineTo(sx(i),sy(p));});
+      ctx.lineTo(sx(n-1),CH-pB); ctx.closePath(); ctx.fillStyle=grad; ctx.fill();
+      ctx.beginPath(); ctx.lineWidth=2.5; ctx.strokeStyle=fg; ctx.lineJoin='round';
+      pr.forEach(function(p,i){if(i===0)ctx.moveTo(sx(i),sy(p));else ctx.lineTo(sx(i),sy(p));});
+      ctx.stroke();
+      ctx.beginPath(); ctx.arc(sx(n-1),sy(pr[n-1]),4,0,Math.PI*2); ctx.fillStyle=fg; ctx.fill();
+      ctx.strokeStyle=dk?'#111827':'#fff'; ctx.lineWidth=2; ctx.stroke();
+      ctx.fillStyle=dk?'#6b7280':'#9ca3af'; ctx.textAlign='center';
+      [0,Math.floor(n/3),Math.floor(2*n/3),n-1].forEach(function(i){var d=da[i].slice(5);ctx.fillText(d.slice(3,5)+'.'+d.slice(0,2),sx(i),CH-8);});
+    }
+    document.querySelectorAll('.kp-btn').forEach(function(btn){
+      btn.addEventListener('click',function(){
+        document.querySelectorAll('.kp-btn').forEach(function(b){b.classList.remove('kp-aktiv');});
+        btn.classList.add('kp-aktiv'); tegn(btn.dataset.p);
+      });
+    });
+    if(ALLE.length>0) tegn('1ar');
+  })();
+  </script>
+</div>
+
   <div class="desc"><h2>Om selskapet</h2><p>Protector Forsikring ASA, operates as a non-life insurance company, provides general insurance and reinsurance services in Norway, Sweden, Finland, Denmark, the United Kingdom and France. The company provides personal, motor, property, liability, and change of ownership insurances. It offers services to commercial lines of business, public sector, and affinity schemes through insurance brokers and agents. Protector Forsikring ASA was incorporated in 2003 and is headquartered in Oslo, Norway.</p></div>
 
   <div class="ai-oppsummering"><h2>AI-oppsummering <span class="ai-dato">Oppdatert 2026-04-08T12:34:53</span></h2><p>Direkteavkastningen på 3.8% er moderat, men tilstrekkelig for langsiktige utbytteinvestorer. P/E på 15.2 er noe over sektorsnittet for finans — aksjen er ikke billig, men premien kan forsvares av sterk merkevare og stabile kontantstrømmer. Utbetalingsgraden på 38% er solid og forsvarlig, med god sikkerhetsmargin for utbyttet selv ved svakere kvartal. Utbytteveksten på 3.7% per år er moderat positiv og holder tritt med inflasjon. Selskapet har betalt utbytte i 14 år på rad, noe som gir god forutsigbarhet for utbytteinvestorer. Historisk yield-trend har vært fallende de siste tre år, primært drevet av kursvekst. Kvartalsvis utbetaling gir god likviditetsflyt og reduserer reinvesteringsrisiko. Samlet sett et moderat alternativ for utbytteinvestorer i finans-sektoren — noen sterke sider, men også faktorer som trekker ned.</p></div>
@@ -305,44 +368,6 @@
   <div class="analyse"><h2>Utbytteanalyse</h2><p>Direkteavkastningen på 3.6% ligger nær 5-årssnittet på 4.7%, som indikerer stabil kurs- og utbytteutvikling. Utbetalingsgraden på 38% gir godt rom for fremtidige utbytteøkninger. Utbyttet har vokst med 3.7% per år de siste 5 årene.</p></div>
 
   <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Finans</td></tr><tr><td>Frekvens</td><td>Kvartalsvis</td></tr><tr><td>Utbytte per aksje</td><td>18.0 NOK</td></tr><tr><td>Direkteavkastning</td><td>3.64%</td></tr><tr><td>5-årssnitt yield</td><td>4.70%</td></tr><tr><td>År med utbytte</td><td>14</td></tr><tr><td>P/E</td><td>15.6</td></tr><tr><td>Payout ratio</td><td>38%</td></tr><tr><td>Utbyttevekst 5 år</td><td>+3.7% p.a.</td></tr><tr><td>Markedsverdi</td><td>40.8 mrd NOK</td></tr><tr><td>52-ukers kurs</td><td>303.0 – 559.0 NOK</td></tr></tbody></table>
-
-  
-<div class="kurs-lenker">
-  <h2>Kursgraf</h2>
-  <div class="kurs-chart-wrap">
-  <div class="kurs-chart-header">
-    <span class="kurs-chart-naa">495.00 NOK</span>
-    <span class="kurs-chart-endring" style="color:#22c55e">▲ 55.3% siste 52 uker</span>
-  </div>
-  <svg viewBox="0 0 600 180" style="width:100%;height:180px;display:block;" role="img"
-       aria-label="Kursgraf siste 52 uker">
-    <defs>
-      <linearGradient id="kg-grad" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="#22c55e" stop-opacity="0.25"/>
-        <stop offset="100%" stop-color="#22c55e" stop-opacity="0"/>
-      </linearGradient>
-    </defs>
-    <text x="55" y="154.0" text-anchor="end" font-size="10" fill="var(--chart-label,#9ca3af)">319</text><line x1="60" y1="150.0" x2="588" y2="150.0" stroke="var(--chart-grid,#1f2937)" stroke-width="1" stroke-dasharray="3,4"/><text x="55" y="85.0" text-anchor="end" font-size="10" fill="var(--chart-label,#9ca3af)">430</text><line x1="60" y1="81.0" x2="588" y2="81.0" stroke="var(--chart-grid,#1f2937)" stroke-width="1" stroke-dasharray="3,4"/><text x="55" y="16.0" text-anchor="end" font-size="10" fill="var(--chart-label,#9ca3af)">541</text><line x1="60" y1="12.0" x2="588" y2="12.0" stroke="var(--chart-grid,#1f2937)" stroke-width="1" stroke-dasharray="3,4"/>
-    <polygon points="60.0,150 60.0,150.0 70.4,128.3 80.7,120.1 91.1,112.2 101.4,101.2 111.8,101.8 122.1,102.1 132.5,100.0 142.8,102.1 153.2,95.4 163.5,87.8 173.9,73.5 184.2,41.0 194.6,31.2 204.9,32.5 215.3,41.0 225.6,47.7 236.0,45.3 246.4,41.6 256.7,51.7 267.1,66.7 277.4,60.9 287.8,43.8 298.1,54.4 308.5,51.1 318.8,49.6 329.2,56.9 339.5,66.0 349.9,67.6 360.2,77.1 370.6,68.8 380.9,58.7 391.3,52.3 401.6,51.3 412.0,40.9 422.4,28.6 432.7,25.5 443.1,28.0 453.4,29.2 463.8,17.5 474.1,12.0 484.5,26.7 494.8,23.1 505.2,42.7 515.5,34.3 525.9,26.2 536.2,33.7 546.6,21.8 556.9,22.5 567.3,62.9 577.6,58.5 588.0,40.5 588.0,150" fill="url(#kg-grad)"/>
-    <polyline points="60.0,150.0 70.4,128.3 80.7,120.1 91.1,112.2 101.4,101.2 111.8,101.8 122.1,102.1 132.5,100.0 142.8,102.1 153.2,95.4 163.5,87.8 173.9,73.5 184.2,41.0 194.6,31.2 204.9,32.5 215.3,41.0 225.6,47.7 236.0,45.3 246.4,41.6 256.7,51.7 267.1,66.7 277.4,60.9 287.8,43.8 298.1,54.4 308.5,51.1 318.8,49.6 329.2,56.9 339.5,66.0 349.9,67.6 360.2,77.1 370.6,68.8 380.9,58.7 391.3,52.3 401.6,51.3 412.0,40.9 422.4,28.6 432.7,25.5 443.1,28.0 453.4,29.2 463.8,17.5 474.1,12.0 484.5,26.7 494.8,23.1 505.2,42.7 515.5,34.3 525.9,26.2 536.2,33.7 546.6,21.8 556.9,22.5 567.3,62.9 577.6,58.5 588.0,40.5" fill="none" stroke="#22c55e" stroke-width="2"
-              stroke-linejoin="round" stroke-linecap="round"/>
-    <!-- Siste punkt markert -->
-    <circle cx="588.0" cy="40.5" r="4"
-            fill="#22c55e" stroke="var(--chart-bg,#111827)" stroke-width="2"/>
-    <text x="60.0" y="176" text-anchor="middle" font-size="10" fill="var(--chart-label,#9ca3af)">20.04</text><text x="163.5" y="176" text-anchor="middle" font-size="10" fill="var(--chart-label,#9ca3af)">29.06</text><text x="267.1" y="176" text-anchor="middle" font-size="10" fill="var(--chart-label,#9ca3af)">07.09</text><text x="370.6" y="176" text-anchor="middle" font-size="10" fill="var(--chart-label,#9ca3af)">16.11</text><text x="474.1" y="176" text-anchor="middle" font-size="10" fill="var(--chart-label,#9ca3af)">25.01</text><text x="588.0" y="176" text-anchor="middle" font-size="10" fill="var(--chart-label,#9ca3af)">12.04</text>
-  </svg>
-</div>
-  <div class="kurs-knapper" style="margin-top:0.75rem;">
-    <a href="https://finance.yahoo.com/chart/PROT.OL" target="_blank" rel="noopener noreferrer" class="kurs-btn">
-      <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"/></svg>
-      Yahoo Finance
-    </a>
-    <a href="https://www.tradingview.com/symbols/OSLO-PROT/" target="_blank" rel="noopener noreferrer" class="kurs-btn">
-      <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
-      TradingView
-    </a>
-  </div>
-</div>
 
   <h2>Historiske utbytter</h2><svg viewBox="0 0 420 180" style="width:100%;max-width:420px;height:auto;display:block;margin-bottom:0.5rem;" aria-label="Historiske utbytter per aksje i NOK"><line x1="52" y1="148.0" x2="408" y2="148.0" stroke="#e5e7eb" stroke-width="1" class="ytick"/><text x="48" y="152.0" text-anchor="end" font-size="10" fill="#9ca3af">0.0</text><line x1="52" y1="104.0" x2="408" y2="104.0" stroke="#e5e7eb" stroke-width="1" class="ytick"/><text x="48" y="108.0" text-anchor="end" font-size="10" fill="#9ca3af">4.0</text><line x1="52" y1="60.0" x2="408" y2="60.0" stroke="#e5e7eb" stroke-width="1" class="ytick"/><text x="48" y="64.0" text-anchor="end" font-size="10" fill="#9ca3af">8.0</text><line x1="52" y1="16.0" x2="408" y2="16.0" stroke="#e5e7eb" stroke-width="1" class="ytick"/><text x="48" y="20.0" text-anchor="end" font-size="10" fill="#9ca3af">12.0</text><rect class="hbar" x="69.6" y="21.5" width="36" height="126.5" rx="3" fill="#16a34a" opacity="0.85"/><rect class="hbar" x="140.8" y="38.0" width="36" height="110.0" rx="3" fill="#16a34a" opacity="0.85"/><rect class="hbar" x="212.0" y="49.0" width="36" height="99.0" rx="3" fill="#16a34a" opacity="0.85"/><rect class="hbar" x="283.2" y="16.0" width="36" height="132.0" rx="3" fill="#16a34a" opacity="0.85"/><rect class="hbar" x="354.4" y="82.0" width="36" height="66.0" rx="3" fill="#16a34a" opacity="0.85"/><text x="87.6" y="174" text-anchor="middle" font-size="10" fill="#9ca3af">2022</text><text x="158.8" y="174" text-anchor="middle" font-size="10" fill="#9ca3af">2023</text><text x="230.0" y="174" text-anchor="middle" font-size="10" fill="#9ca3af">2024</text><text x="301.2" y="174" text-anchor="middle" font-size="10" fill="#9ca3af">2025</text><text x="372.4" y="174" text-anchor="middle" font-size="10" fill="#9ca3af">2026</text><rect class="htip-bg" x="35.6" y="2.0" width="106" height="20" rx="4" fill="#111827" opacity="0" pointer-events="none"/><text class="htip-txt" x="87.6" y="14.0" text-anchor="middle" font-size="10" fill="#f3f4f6" opacity="0" pointer-events="none">11.5 NOK · 10.6% yield</text><rect class="htrig" x="52.0" y="16" width="71.2" height="132" fill="transparent" onmouseenter="showTip(this)" onmouseleave="hideTip(this)" data-i="0"/><rect class="htip-bg" x="106.8" y="10.0" width="106" height="20" rx="4" fill="#111827" opacity="0" pointer-events="none"/><text class="htip-txt" x="158.8" y="25.0" text-anchor="middle" font-size="10" fill="#f3f4f6" opacity="0" pointer-events="none">10.0 NOK · 6.0% yield</text><rect class="htrig" x="123.2" y="16" width="71.2" height="132" fill="transparent" onmouseenter="showTip(this)" onmouseleave="hideTip(this)" data-i="1"/><rect class="htip-bg" x="178.0" y="21.0" width="106" height="20" rx="4" fill="#111827" opacity="0" pointer-events="none"/><text class="htip-txt" x="230.0" y="36.0" text-anchor="middle" font-size="10" fill="#f3f4f6" opacity="0" pointer-events="none">9.0 NOK · 3.3% yield</text><rect class="htrig" x="194.4" y="16" width="71.2" height="132" fill="transparent" onmouseenter="showTip(this)" onmouseleave="hideTip(this)" data-i="2"/><rect class="htip-bg" x="249.2" y="2.0" width="106" height="20" rx="4" fill="#111827" opacity="0" pointer-events="none"/><text class="htip-txt" x="301.2" y="14.0" text-anchor="middle" font-size="10" fill="#f3f4f6" opacity="0" pointer-events="none">12.0 NOK · 2.3% yield</text><rect class="htrig" x="265.6" y="16" width="71.2" height="132" fill="transparent" onmouseenter="showTip(this)" onmouseleave="hideTip(this)" data-i="3"/><rect class="htip-bg" x="302.0" y="54.0" width="106" height="20" rx="4" fill="#111827" opacity="0" pointer-events="none"/><text class="htip-txt" x="372.4" y="69.0" text-anchor="middle" font-size="10" fill="#f3f4f6" opacity="0" pointer-events="none">6.0 NOK · 1.2% yield</text><rect class="htrig" x="336.8" y="16" width="71.2" height="132" fill="transparent" onmouseenter="showTip(this)" onmouseleave="hideTip(this)" data-i="4"/><text x="16" y="82.0" text-anchor="middle" font-size="10" fill="#9ca3af" transform="rotate(-90,16,82.0)">NOK per aksje</text></svg><script>
 function showTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAll('.htip-bg')[i],tx=s.querySelectorAll('.htip-txt')[i];bg.setAttribute('opacity','0.92');tx.setAttribute('opacity','1');}

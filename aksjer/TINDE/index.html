@@ -178,17 +178,10 @@
     .badge { background: #dcfce7; color: #15803d; }
     .kurs-lenker { margin: 1.5rem 0; }
     .kurs-lenker h2 { margin-bottom: 0.75rem; }
-    .kurs-knapper { display: flex; gap: 0.5rem; flex-wrap: wrap; }
-    .kurs-btn { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.5rem 0.9rem; border-radius: 8px; font-size: 0.8rem; font-weight: 500; background: #f3f4f6; color: #374151; text-decoration: none; transition: background 0.15s; }
-    .kurs-btn:hover { background: #e5e7eb; }
-    .dark .kurs-btn { background: #1f2937; color: #d1d5db; }
-    .dark .kurs-btn:hover { background: #374151; }
-    .kurs-chart-wrap { background: var(--chart-bg,#fff); border-radius: 10px; padding: 0.75rem 0.5rem 0; border: 1px solid #e5e7eb; }
-    .kurs-chart-header { display: flex; justify-content: space-between; align-items: baseline; padding: 0 0.5rem 0.5rem; }
-    .kurs-chart-naa { font-size: 1.1rem; font-weight: 700; color: #111827; }
-    .kurs-chart-endring { font-size: 0.8rem; font-weight: 500; }
-    .dark .kurs-chart-wrap { --chart-bg: #111827; --chart-label: #6b7280; --chart-grid: #1f2937; border-color: #1f2937; }
-    .dark .kurs-chart-naa { color: #f3f4f6; }
+    .kp-btn { font-size: 0.72rem; font-weight: 500; padding: 0.2rem 0.55rem; border-radius: 6px; border: none; cursor: pointer; background: transparent; color: #6b7280; transition: background 0.12s, color 0.12s; }
+    .kp-btn:hover, .kp-aktiv { background: #f3f4f6; color: #111827; font-weight: 600; }
+    .dark .kp-btn { color: #9ca3af; }
+    .dark .kp-btn:hover, .dark .kp-aktiv { background: #1f2937; color: #f3f4f6; }
 
     /* Dark mode */
     .dark body { background: #030712; color: #f3f4f6; }
@@ -298,6 +291,76 @@
     <div class="kcard"><div class="label">P/E</div><div class="val">23.9</div></div>
   </div>
 
+  
+<div class="kurs-lenker">
+  <h2>Kursgraf</h2>
+  <div style="display:flex;gap:4px;margin-bottom:8px;">
+    <button class="kp-btn kp-aktiv" data-p="1ar">1 år</button>
+    <button class="kp-btn" data-p="ytd">YTD</button>
+    <button class="kp-btn" data-p="2ar">2 år</button>
+    <button class="kp-btn" data-p="3ar">3 år</button>
+    <button class="kp-btn" data-p="5ar">5 år</button>
+  </div>
+  <div id="kurs-header-TINDE" style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px;"></div>
+  <canvas id="kurs-canvas-TINDE" style="display:block;border-radius:10px;width:100%;"></canvas>
+  <script>
+  (function() {
+    var ALLE = [{"d": "2025-06-08", "k": 122.72}, {"d": "2025-06-15", "k": 122.26}, {"d": "2025-06-22", "k": 122.71}, {"d": "2025-06-29", "k": 121.19}, {"d": "2025-07-06", "k": 116.99}, {"d": "2025-07-13", "k": 119.85}, {"d": "2025-07-20", "k": 119.85}, {"d": "2025-07-27", "k": 122.25}, {"d": "2025-08-03", "k": 123.68}, {"d": "2025-08-10", "k": 120.14}, {"d": "2025-08-17", "k": 123.66}, {"d": "2025-08-24", "k": 120.52}, {"d": "2025-08-31", "k": 117.91}, {"d": "2025-09-07", "k": 119.18}, {"d": "2025-09-14", "k": 119.85}, {"d": "2025-09-21", "k": 116.95}, {"d": "2025-09-28", "k": 116.99}, {"d": "2025-10-05", "k": 115.53}, {"d": "2025-10-12", "k": 116.01}, {"d": "2025-10-19", "k": 114.1}, {"d": "2025-10-26", "k": 114.15}, {"d": "2025-11-02", "k": 117.36}, {"d": "2025-11-09", "k": 115.07}, {"d": "2025-11-16", "k": 115.02}, {"d": "2025-11-23", "k": 113.14}, {"d": "2025-11-30", "k": 111.32}, {"d": "2025-12-07", "k": 112.75}, {"d": "2025-12-14", "k": 113.12}, {"d": "2025-12-21", "k": 114.08}, {"d": "2025-12-28", "k": 114.96}, {"d": "2026-01-04", "k": 114.48}, {"d": "2026-01-11", "k": 112.66}, {"d": "2026-01-18", "k": 113.62}, {"d": "2026-01-25", "k": 113.16}, {"d": "2026-02-01", "k": 115.05}, {"d": "2026-02-08", "k": 116.97}, {"d": "2026-02-15", "k": 110.64}, {"d": "2026-02-22", "k": 109.99}, {"d": "2026-03-01", "k": 110.45}, {"d": "2026-03-08", "k": 111.2}, {"d": "2026-03-15", "k": 114.1}, {"d": "2026-03-22", "k": 112.18}, {"d": "2026-03-29", "k": 114.92}, {"d": "2026-04-05", "k": 115.96}, {"d": "2026-04-12", "k": 117.0}];
+    var VAL = 'NOK';
+    function filtrer(p) {
+      var now = new Date(), ar = now.getFullYear();
+      if (p === 'ytd') return ALLE.filter(function(x) { return x.d >= ar + '-01-01'; });
+      var years = (p==='2ar'?2:p==='3ar'?3:p==='5ar'?5:1);
+      var d = new Date(now); d.setFullYear(d.getFullYear()-years);
+      var s = d.toISOString().slice(0,10);
+      return ALLE.filter(function(x) { return x.d >= s; });
+    }
+    function tegn(periode) {
+      var data = filtrer(periode); if (data.length<4) data=ALLE; if (data.length<4) return;
+      var pr = data.map(function(x){return x.k;}), da = data.map(function(x){return x.d;}), n=pr.length;
+      var mn=Math.min.apply(null,pr), mx=Math.max.apply(null,pr), rng=mx-mn||1;
+      var opp=pr[n-1]>=pr[0], fg=opp?'#22c55e':'#ef4444';
+      var end=((pr[n-1]-pr[0])/pr[0]*100).toFixed(1);
+      var hdr=document.getElementById('kurs-header-TINDE');
+      if(hdr) hdr.innerHTML='<span style="font-size:1.05rem;font-weight:700">'+pr[n-1].toLocaleString('nb-NO',{minimumFractionDigits:2})+' '+VAL+'</span><span style="font-size:0.78rem;font-weight:500;color:'+fg+'">'+(opp?'▲ +':'▼ ')+end+'%</span>';
+      var cv=document.getElementById('kurs-canvas-TINDE'); if(!cv) return;
+      var dk=document.documentElement.classList.contains('dark');
+      var DPR=Math.min(window.devicePixelRatio||1,2), CW=cv.parentElement.offsetWidth||680, CH=200;
+      var pL=54,pR=12,pT=14,pB=30;
+      cv.width=CW*DPR; cv.height=CH*DPR; cv.style.height=CH+'px';
+      var ctx=cv.getContext('2d'); ctx.scale(DPR,DPR);
+      var sx=function(i){return pL+i/(n-1)*(CW-pL-pR);};
+      var sy=function(p){return pT+(1-(p-mn)/rng)*(CH-pT-pB);};
+      ctx.fillStyle=dk?'#111827':'#f9fafb'; ctx.fillRect(0,0,CW,CH);
+      ctx.strokeStyle=dk?'#1f2937':'#e5e7eb'; ctx.lineWidth=1; ctx.setLineDash([4,4]);
+      [mn,(mn+mx)/2,mx].forEach(function(v){ctx.beginPath();ctx.moveTo(pL,sy(v));ctx.lineTo(CW-pR,sy(v));ctx.stroke();});
+      ctx.setLineDash([]);
+      ctx.fillStyle=dk?'#6b7280':'#9ca3af'; ctx.font='11px sans-serif'; ctx.textAlign='right';
+      [[mn,sy(mn)],[(mn+mx)/2,sy((mn+mx)/2)],[mx,sy(mx)]].forEach(function(pair){ctx.fillText(pair[0].toLocaleString('nb-NO',{maximumFractionDigits:0}),pL-4,pair[1]+4);});
+      var grad=ctx.createLinearGradient(0,pT,0,CH-pB);
+      grad.addColorStop(0,opp?'rgba(34,197,94,0.25)':'rgba(239,68,68,0.2)'); grad.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.beginPath(); ctx.moveTo(sx(0),CH-pB);
+      pr.forEach(function(p,i){ctx.lineTo(sx(i),sy(p));});
+      ctx.lineTo(sx(n-1),CH-pB); ctx.closePath(); ctx.fillStyle=grad; ctx.fill();
+      ctx.beginPath(); ctx.lineWidth=2.5; ctx.strokeStyle=fg; ctx.lineJoin='round';
+      pr.forEach(function(p,i){if(i===0)ctx.moveTo(sx(i),sy(p));else ctx.lineTo(sx(i),sy(p));});
+      ctx.stroke();
+      ctx.beginPath(); ctx.arc(sx(n-1),sy(pr[n-1]),4,0,Math.PI*2); ctx.fillStyle=fg; ctx.fill();
+      ctx.strokeStyle=dk?'#111827':'#fff'; ctx.lineWidth=2; ctx.stroke();
+      ctx.fillStyle=dk?'#6b7280':'#9ca3af'; ctx.textAlign='center';
+      [0,Math.floor(n/3),Math.floor(2*n/3),n-1].forEach(function(i){var d=da[i].slice(5);ctx.fillText(d.slice(3,5)+'.'+d.slice(0,2),sx(i),CH-8);});
+    }
+    document.querySelectorAll('.kp-btn').forEach(function(btn){
+      btn.addEventListener('click',function(){
+        document.querySelectorAll('.kp-btn').forEach(function(b){b.classList.remove('kp-aktiv');});
+        btn.classList.add('kp-aktiv'); tegn(btn.dataset.p);
+      });
+    });
+    if(ALLE.length>0) tegn('1ar');
+  })();
+  </script>
+</div>
+
   <div class="desc"><h2>Om selskapet</h2><p>Tinde Sparebank operates as a savings bank that provides various financial products and services to retail and corporate customers in Norway. It offers savings and pension accounts, credit cards, and mobile and online banking services. The company also provides insurance products for cars, children, contents, household items, home, travel, dog, and damage; and loan products for car, mortgage, consumer, motorcycles, motorhomes, and ATVs, as well as refinances consumer debt. The company was formerly known as Romsdal Sparebank and changed its name to Tinde Sparebank in June 2025.</p></div>
 
   <div class="ai-oppsummering"><h2>AI-oppsummering <span class="ai-dato">Oppdatert 2026-04-08T12:34:53</span></h2><p>Direkteavkastningen på 4.2% er moderat, men tilstrekkelig for langsiktige utbytteinvestorer. P/E på 23.9 er klart over sektorsnittet og krever solid inntjeningsvekst for å rettferdiggjøre dagens kurs. Utbetalingsgraden på 184% er ekstremt høy og reflekterer at selskapet benytter en kontantstrøm-basert utbyttepolitikk fremfor regnskapsmessig overskudd — vanlig i E&P-selskaper, men innebærer økt risiko ved lavere oljepriser. Begrenset utbyttehistorikk på 1 år gir lite grunnlag for å vurdere langsiktig konsistens. P/B under 1 (0.32) er uvanlig for finansaksjer og kan bety at markedet priser inn økt taprisiko eller at aksjen er underpriset. Lav markedsverdi på 0.6 mrd NOK innebærer lavere likviditet og høyere kurssvingninger enn for større selskaper. TINDE anbefales med forsiktighet for rene utbytteinvestorer — inntjeningssituasjonen gir liten trygghet for fremtidige utbetalinger.</p></div>
@@ -305,44 +368,6 @@
   <div class="analyse"><h2>Utbytteanalyse</h2><p>Direkteavkastningen på 4.2% ligger nær 5-årssnittet på 4.2%, som indikerer stabil kurs- og utbytteutvikling. Utbetalingsgraden på 184% er høy — utbyttet kan være sårbart ved svakere inntjening.</p></div>
 
   <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Finans</td></tr><tr><td>Frekvens</td><td>Årlig</td></tr><tr><td>Utbytte per aksje</td><td>4.9 NOK</td></tr><tr><td>Direkteavkastning</td><td>4.19%</td></tr><tr><td>5-årssnitt yield</td><td>4.19%</td></tr><tr><td>År med utbytte</td><td>1</td></tr><tr><td>P/E</td><td>23.9</td></tr><tr><td>Payout ratio</td><td>184%</td></tr><tr><td>Utbyttevekst 5 år</td><td>+0.0% p.a.</td></tr><tr><td>Markedsverdi</td><td>0.6 mrd NOK</td></tr><tr><td>52-ukers kurs</td><td>101.12 – 130.0 NOK</td></tr></tbody></table>
-
-  
-<div class="kurs-lenker">
-  <h2>Kursgraf</h2>
-  <div class="kurs-chart-wrap">
-  <div class="kurs-chart-header">
-    <span class="kurs-chart-naa">117.00 NOK</span>
-    <span class="kurs-chart-endring" style="color:#ef4444">▼ 4.7% siste 52 uker</span>
-  </div>
-  <svg viewBox="0 0 600 180" style="width:100%;height:180px;display:block;" role="img"
-       aria-label="Kursgraf siste 52 uker">
-    <defs>
-      <linearGradient id="kg-grad" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="#ef4444" stop-opacity="0.25"/>
-        <stop offset="100%" stop-color="#ef4444" stop-opacity="0"/>
-      </linearGradient>
-    </defs>
-    <text x="55" y="154.0" text-anchor="end" font-size="10" fill="var(--chart-label,#9ca3af)">110</text><line x1="60" y1="150.0" x2="588" y2="150.0" stroke="var(--chart-grid,#1f2937)" stroke-width="1" stroke-dasharray="3,4"/><text x="55" y="85.0" text-anchor="end" font-size="10" fill="var(--chart-label,#9ca3af)">117</text><line x1="60" y1="81.0" x2="588" y2="81.0" stroke="var(--chart-grid,#1f2937)" stroke-width="1" stroke-dasharray="3,4"/><text x="55" y="16.0" text-anchor="end" font-size="10" fill="var(--chart-label,#9ca3af)">124</text><line x1="60" y1="12.0" x2="588" y2="12.0" stroke="var(--chart-grid,#1f2937)" stroke-width="1" stroke-dasharray="3,4"/>
-    <polygon points="60.0,150 60.0,21.7 72.0,26.3 84.0,21.8 96.0,37.1 108.0,79.4 120.0,50.6 132.0,50.6 144.0,26.4 156.0,12.0 168.0,47.7 180.0,12.2 192.0,43.9 204.0,70.2 216.0,57.4 228.0,50.6 240.0,79.8 252.0,79.4 264.0,94.2 276.0,89.3 288.0,108.6 300.0,108.1 312.0,75.7 324.0,98.8 336.0,99.3 348.0,118.2 360.0,136.6 372.0,122.2 384.0,118.4 396.0,108.8 408.0,99.9 420.0,104.7 432.0,123.1 444.0,113.4 456.0,118.0 468.0,99.0 480.0,79.6 492.0,143.4 504.0,150.0 516.0,145.4 528.0,137.8 540.0,108.6 552.0,127.9 564.0,100.3 576.0,89.8 588.0,79.3 588.0,150" fill="url(#kg-grad)"/>
-    <polyline points="60.0,21.7 72.0,26.3 84.0,21.8 96.0,37.1 108.0,79.4 120.0,50.6 132.0,50.6 144.0,26.4 156.0,12.0 168.0,47.7 180.0,12.2 192.0,43.9 204.0,70.2 216.0,57.4 228.0,50.6 240.0,79.8 252.0,79.4 264.0,94.2 276.0,89.3 288.0,108.6 300.0,108.1 312.0,75.7 324.0,98.8 336.0,99.3 348.0,118.2 360.0,136.6 372.0,122.2 384.0,118.4 396.0,108.8 408.0,99.9 420.0,104.7 432.0,123.1 444.0,113.4 456.0,118.0 468.0,99.0 480.0,79.6 492.0,143.4 504.0,150.0 516.0,145.4 528.0,137.8 540.0,108.6 552.0,127.9 564.0,100.3 576.0,89.8 588.0,79.3" fill="none" stroke="#ef4444" stroke-width="2"
-              stroke-linejoin="round" stroke-linecap="round"/>
-    <!-- Siste punkt markert -->
-    <circle cx="588.0" cy="79.3" r="4"
-            fill="#ef4444" stroke="var(--chart-bg,#111827)" stroke-width="2"/>
-    <text x="60.0" y="176" text-anchor="middle" font-size="10" fill="var(--chart-label,#9ca3af)">08.06</text><text x="156.0" y="176" text-anchor="middle" font-size="10" fill="var(--chart-label,#9ca3af)">03.08</text><text x="264.0" y="176" text-anchor="middle" font-size="10" fill="var(--chart-label,#9ca3af)">05.10</text><text x="372.0" y="176" text-anchor="middle" font-size="10" fill="var(--chart-label,#9ca3af)">07.12</text><text x="480.0" y="176" text-anchor="middle" font-size="10" fill="var(--chart-label,#9ca3af)">08.02</text><text x="588.0" y="176" text-anchor="middle" font-size="10" fill="var(--chart-label,#9ca3af)">12.04</text>
-  </svg>
-</div>
-  <div class="kurs-knapper" style="margin-top:0.75rem;">
-    <a href="https://finance.yahoo.com/chart/TINDE.OL" target="_blank" rel="noopener noreferrer" class="kurs-btn">
-      <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"/></svg>
-      Yahoo Finance
-    </a>
-    <a href="https://www.tradingview.com/symbols/OSLO-TINDE/" target="_blank" rel="noopener noreferrer" class="kurs-btn">
-      <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
-      TradingView
-    </a>
-  </div>
-</div>
 
   <h2>Historiske utbytter</h2><table><thead><tr><th>År</th><th>Utbytte</th><th>Yield</th></tr></thead><tbody>
         <tr>

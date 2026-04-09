@@ -178,17 +178,10 @@
     .badge { background: #dcfce7; color: #15803d; }
     .kurs-lenker { margin: 1.5rem 0; }
     .kurs-lenker h2 { margin-bottom: 0.75rem; }
-    .kurs-knapper { display: flex; gap: 0.5rem; flex-wrap: wrap; }
-    .kurs-btn { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.5rem 0.9rem; border-radius: 8px; font-size: 0.8rem; font-weight: 500; background: #f3f4f6; color: #374151; text-decoration: none; transition: background 0.15s; }
-    .kurs-btn:hover { background: #e5e7eb; }
-    .dark .kurs-btn { background: #1f2937; color: #d1d5db; }
-    .dark .kurs-btn:hover { background: #374151; }
-    .kurs-chart-wrap { background: var(--chart-bg,#fff); border-radius: 10px; padding: 0.75rem 0.5rem 0; border: 1px solid #e5e7eb; }
-    .kurs-chart-header { display: flex; justify-content: space-between; align-items: baseline; padding: 0 0.5rem 0.5rem; }
-    .kurs-chart-naa { font-size: 1.1rem; font-weight: 700; color: #111827; }
-    .kurs-chart-endring { font-size: 0.8rem; font-weight: 500; }
-    .dark .kurs-chart-wrap { --chart-bg: #111827; --chart-label: #6b7280; --chart-grid: #1f2937; border-color: #1f2937; }
-    .dark .kurs-chart-naa { color: #f3f4f6; }
+    .kp-btn { font-size: 0.72rem; font-weight: 500; padding: 0.2rem 0.55rem; border-radius: 6px; border: none; cursor: pointer; background: transparent; color: #6b7280; transition: background 0.12s, color 0.12s; }
+    .kp-btn:hover, .kp-aktiv { background: #f3f4f6; color: #111827; font-weight: 600; }
+    .dark .kp-btn { color: #9ca3af; }
+    .dark .kp-btn:hover, .dark .kp-aktiv { background: #1f2937; color: #f3f4f6; }
 
     /* Dark mode */
     .dark body { background: #030712; color: #f3f4f6; }
@@ -298,6 +291,76 @@
     <div class="kcard"><div class="label">P/E</div><div class="val">10.6</div></div>
   </div>
 
+  
+<div class="kurs-lenker">
+  <h2>Kursgraf</h2>
+  <div style="display:flex;gap:4px;margin-bottom:8px;">
+    <button class="kp-btn kp-aktiv" data-p="1ar">1 år</button>
+    <button class="kp-btn" data-p="ytd">YTD</button>
+    <button class="kp-btn" data-p="2ar">2 år</button>
+    <button class="kp-btn" data-p="3ar">3 år</button>
+    <button class="kp-btn" data-p="5ar">5 år</button>
+  </div>
+  <div id="kurs-header-WSTEP" style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px;"></div>
+  <canvas id="kurs-canvas-WSTEP" style="display:block;border-radius:10px;width:100%;"></canvas>
+  <script>
+  (function() {
+    var ALLE = [{"d": "2021-04-25", "k": 23.21}, {"d": "2021-05-02", "k": 25.14}, {"d": "2021-05-09", "k": 26.46}, {"d": "2021-05-16", "k": 24.36}, {"d": "2021-05-23", "k": 24.44}, {"d": "2021-05-30", "k": 22.88}, {"d": "2021-06-06", "k": 22.26}, {"d": "2021-06-13", "k": 22.1}, {"d": "2021-06-20", "k": 21.95}, {"d": "2021-06-27", "k": 21.87}, {"d": "2021-07-04", "k": 21.79}, {"d": "2021-07-11", "k": 22.02}, {"d": "2021-07-18", "k": 22.1}, {"d": "2021-07-25", "k": 21.64}, {"d": "2021-08-01", "k": 22.1}, {"d": "2021-08-08", "k": 21.4}, {"d": "2021-08-15", "k": 21.48}, {"d": "2021-08-22", "k": 22.18}, {"d": "2021-08-29", "k": 23.35}, {"d": "2021-09-05", "k": 25.06}, {"d": "2021-09-12", "k": 24.9}, {"d": "2021-09-19", "k": 25.29}, {"d": "2021-09-26", "k": 24.13}, {"d": "2021-10-03", "k": 24.51}, {"d": "2021-10-10", "k": 24.67}, {"d": "2021-10-17", "k": 24.75}, {"d": "2021-10-24", "k": 26.62}, {"d": "2021-10-31", "k": 26.93}, {"d": "2021-11-07", "k": 26.38}, {"d": "2021-11-14", "k": 28.41}, {"d": "2021-11-21", "k": 28.09}, {"d": "2021-11-28", "k": 27.86}, {"d": "2021-12-05", "k": 27.94}, {"d": "2021-12-12", "k": 27.47}, {"d": "2021-12-19", "k": 26.38}, {"d": "2021-12-26", "k": 26.07}, {"d": "2022-01-02", "k": 26.15}, {"d": "2022-01-09", "k": 26.3}, {"d": "2022-01-16", "k": 26.07}, {"d": "2022-01-23", "k": 26.23}, {"d": "2022-01-30", "k": 25.29}, {"d": "2022-02-06", "k": 25.53}, {"d": "2022-02-13", "k": 25.29}, {"d": "2022-02-20", "k": 25.68}, {"d": "2022-02-27", "k": 24.67}, {"d": "2022-03-06", "k": 24.67}, {"d": "2022-03-13", "k": 24.05}, {"d": "2022-03-20", "k": 23.43}, {"d": "2022-03-27", "k": 24.75}, {"d": "2022-04-03", "k": 24.51}, {"d": "2022-04-10", "k": 24.9}, {"d": "2022-04-17", "k": 25.14}, {"d": "2022-04-24", "k": 24.44}, {"d": "2022-05-01", "k": 24.85}, {"d": "2022-05-08", "k": 24.11}, {"d": "2022-05-15", "k": 24.69}, {"d": "2022-05-22", "k": 26.01}, {"d": "2022-05-29", "k": 24.93}, {"d": "2022-06-05", "k": 26.01}, {"d": "2022-06-12", "k": 26.26}, {"d": "2022-06-19", "k": 25.35}, {"d": "2022-06-26", "k": 26.34}, {"d": "2022-07-03", "k": 25.35}, {"d": "2022-07-10", "k": 26.34}, {"d": "2022-07-17", "k": 26.42}, {"d": "2022-07-24", "k": 26.75}, {"d": "2022-07-31", "k": 26.17}, {"d": "2022-08-07", "k": 26.67}, {"d": "2022-08-14", "k": 28.57}, {"d": "2022-08-21", "k": 27.82}, {"d": "2022-08-28", "k": 25.27}, {"d": "2022-09-04", "k": 23.94}, {"d": "2022-09-11", "k": 22.79}, {"d": "2022-09-18", "k": 21.88}, {"d": "2022-09-25", "k": 20.81}, {"d": "2022-10-02", "k": 21.22}, {"d": "2022-10-09", "k": 22.21}, {"d": "2022-10-16", "k": 22.95}, {"d": "2022-10-23", "k": 21.88}, {"d": "2022-10-30", "k": 22.29}, {"d": "2022-11-06", "k": 22.29}, {"d": "2022-11-13", "k": 21.63}, {"d": "2022-11-20", "k": 21.47}, {"d": "2022-11-27", "k": 21.05}, {"d": "2022-12-04", "k": 20.89}, {"d": "2022-12-11", "k": 18.91}, {"d": "2022-12-18", "k": 19.4}, {"d": "2022-12-25", "k": 19.32}, {"d": "2023-01-01", "k": 20.48}, {"d": "2023-01-08", "k": 20.64}, {"d": "2023-01-15", "k": 20.56}, {"d": "2023-01-22", "k": 21.3}, {"d": "2023-01-29", "k": 21.3}, {"d": "2023-02-05", "k": 21.8}, {"d": "2023-02-12", "k": 21.71}, {"d": "2023-02-19", "k": 22.87}, {"d": "2023-02-26", "k": 22.54}, {"d": "2023-03-05", "k": 22.46}, {"d": "2023-03-12", "k": 22.54}, {"d": "2023-03-19", "k": 22.38}, {"d": "2023-03-26", "k": 22.05}, {"d": "2023-04-02", "k": 25.27}, {"d": "2023-04-09", "k": 25.76}, {"d": "2023-04-16", "k": 26.26}, {"d": "2023-04-23", "k": 25.84}, {"d": "2023-04-30", "k": 25.6}, {"d": "2023-05-07", "k": 25.41}, {"d": "2023-05-14", "k": 25.93}, {"d": "2023-05-21", "k": 26.99}, {"d": "2023-05-28", "k": 26.2}, {"d": "2023-06-04", "k": 26.72}, {"d": "2023-06-11", "k": 26.99}, {"d": "2023-06-18", "k": 26.46}, {"d": "2023-06-25", "k": 26.2}, {"d": "2023-07-02", "k": 26.11}, {"d": "2023-07-09", "k": 24.36}, {"d": "2023-07-16", "k": 23.66}, {"d": "2023-07-23", "k": 22.87}, {"d": "2023-07-30", "k": 23.13}, {"d": "2023-08-06", "k": 23.74}, {"d": "2023-08-13", "k": 23.48}, {"d": "2023-08-20", "k": 23.31}, {"d": "2023-08-27", "k": 22.96}, {"d": "2023-09-03", "k": 21.9}, {"d": "2023-09-10", "k": 22.08}, {"d": "2023-09-17", "k": 22.08}, {"d": "2023-09-24", "k": 21.82}, {"d": "2023-10-01", "k": 21.64}, {"d": "2023-10-08", "k": 21.2}, {"d": "2023-10-15", "k": 20.94}, {"d": "2023-10-22", "k": 20.15}, {"d": "2023-10-29", "k": 20.15}, {"d": "2023-11-05", "k": 20.5}, {"d": "2023-11-12", "k": 18.31}, {"d": "2023-11-19", "k": 17.87}, {"d": "2023-11-26", "k": 17.44}, {"d": "2023-12-03", "k": 16.65}, {"d": "2023-12-10", "k": 16.73}, {"d": "2023-12-17", "k": 18.92}, {"d": "2023-12-24", "k": 19.28}, {"d": "2023-12-31", "k": 18.84}, {"d": "2024-01-07", "k": 20.15}, {"d": "2024-01-14", "k": 19.71}, {"d": "2024-01-21", "k": 19.36}, {"d": "2024-01-28", "k": 19.89}, {"d": "2024-02-04", "k": 19.8}, {"d": "2024-02-11", "k": 18.84}, {"d": "2024-02-18", "k": 18.92}, {"d": "2024-02-25", "k": 18.84}, {"d": "2024-03-03", "k": 18.31}, {"d": "2024-03-10", "k": 17.96}, {"d": "2024-03-17", "k": 18.92}, {"d": "2024-03-24", "k": 18.4}, {"d": "2024-03-31", "k": 18.84}, {"d": "2024-04-07", "k": 18.84}, {"d": "2024-04-14", "k": 18.22}, {"d": "2024-04-21", "k": 18.4}, {"d": "2024-04-28", "k": 18.22}, {"d": "2024-05-05", "k": 19.1}, {"d": "2024-05-12", "k": 19.8}, {"d": "2024-05-19", "k": 20.41}, {"d": "2024-05-26", "k": 22.34}, {"d": "2024-06-02", "k": 21.97}, {"d": "2024-06-09", "k": 21.06}, {"d": "2024-06-16", "k": 21.7}, {"d": "2024-06-23", "k": 21.51}, {"d": "2024-06-30", "k": 21.42}, {"d": "2024-07-07", "k": 20.69}, {"d": "2024-07-14", "k": 20.78}, {"d": "2024-07-21", "k": 20.96}, {"d": "2024-07-28", "k": 20.6}, {"d": "2024-08-04", "k": 20.41}, {"d": "2024-08-11", "k": 19.59}, {"d": "2024-08-18", "k": 20.14}, {"d": "2024-08-25", "k": 20.96}, {"d": "2024-09-01", "k": 20.78}, {"d": "2024-09-08", "k": 21.24}, {"d": "2024-09-15", "k": 21.24}, {"d": "2024-09-22", "k": 21.24}, {"d": "2024-09-29", "k": 21.97}, {"d": "2024-10-06", "k": 20.14}, {"d": "2024-10-13", "k": 21.88}, {"d": "2024-10-20", "k": 21.97}, {"d": "2024-10-27", "k": 21.15}, {"d": "2024-11-03", "k": 21.51}, {"d": "2024-11-10", "k": 21.06}, {"d": "2024-11-17", "k": 22.34}, {"d": "2024-11-24", "k": 21.06}, {"d": "2024-12-01", "k": 21.33}, {"d": "2024-12-08", "k": 21.06}, {"d": "2024-12-15", "k": 21.24}, {"d": "2024-12-22", "k": 20.23}, {"d": "2024-12-29", "k": 20.6}, {"d": "2025-01-05", "k": 20.14}, {"d": "2025-01-12", "k": 20.32}, {"d": "2025-01-19", "k": 20.32}, {"d": "2025-01-26", "k": 20.41}, {"d": "2025-02-02", "k": 21.06}, {"d": "2025-02-09", "k": 20.96}, {"d": "2025-02-16", "k": 21.24}, {"d": "2025-02-23", "k": 21.24}, {"d": "2025-03-02", "k": 21.88}, {"d": "2025-03-09", "k": 21.88}, {"d": "2025-03-16", "k": 22.61}, {"d": "2025-03-23", "k": 22.89}, {"d": "2025-03-30", "k": 22.89}, {"d": "2025-04-06", "k": 21.6}, {"d": "2025-04-13", "k": 22.34}, {"d": "2025-04-20", "k": 22.89}, {"d": "2025-04-27", "k": 22.15}, {"d": "2025-05-04", "k": 23.62}, {"d": "2025-05-11", "k": 23.8}, {"d": "2025-05-18", "k": 24.9}, {"d": "2025-05-25", "k": 25.0}, {"d": "2025-06-01", "k": 24.4}, {"d": "2025-06-08", "k": 24.4}, {"d": "2025-06-15", "k": 24.2}, {"d": "2025-06-22", "k": 24.2}, {"d": "2025-06-29", "k": 25.0}, {"d": "2025-07-06", "k": 25.0}, {"d": "2025-07-13", "k": 25.0}, {"d": "2025-07-20", "k": 24.6}, {"d": "2025-07-27", "k": 24.0}, {"d": "2025-08-03", "k": 24.0}, {"d": "2025-08-10", "k": 24.2}, {"d": "2025-08-17", "k": 23.8}, {"d": "2025-08-24", "k": 23.0}, {"d": "2025-08-31", "k": 23.4}, {"d": "2025-09-07", "k": 22.6}, {"d": "2025-09-14", "k": 22.6}, {"d": "2025-09-21", "k": 22.2}, {"d": "2025-09-28", "k": 22.2}, {"d": "2025-10-05", "k": 21.2}, {"d": "2025-10-12", "k": 21.0}, {"d": "2025-10-19", "k": 20.4}, {"d": "2025-10-26", "k": 19.8}, {"d": "2025-11-02", "k": 19.8}, {"d": "2025-11-09", "k": 19.4}, {"d": "2025-11-16", "k": 17.1}, {"d": "2025-11-23", "k": 17.8}, {"d": "2025-11-30", "k": 18.0}, {"d": "2025-12-07", "k": 17.7}, {"d": "2025-12-14", "k": 17.7}, {"d": "2025-12-21", "k": 18.4}, {"d": "2025-12-28", "k": 18.9}, {"d": "2026-01-04", "k": 18.7}, {"d": "2026-01-11", "k": 18.9}, {"d": "2026-01-18", "k": 18.5}, {"d": "2026-01-25", "k": 18.5}, {"d": "2026-02-01", "k": 18.8}, {"d": "2026-02-08", "k": 18.5}, {"d": "2026-02-15", "k": 18.6}, {"d": "2026-02-22", "k": 18.2}, {"d": "2026-03-01", "k": 18.2}, {"d": "2026-03-08", "k": 17.8}, {"d": "2026-03-15", "k": 17.4}, {"d": "2026-03-22", "k": 17.7}, {"d": "2026-03-29", "k": 17.3}, {"d": "2026-04-05", "k": 17.7}, {"d": "2026-04-12", "k": 17.0}];
+    var VAL = 'NOK';
+    function filtrer(p) {
+      var now = new Date(), ar = now.getFullYear();
+      if (p === 'ytd') return ALLE.filter(function(x) { return x.d >= ar + '-01-01'; });
+      var years = (p==='2ar'?2:p==='3ar'?3:p==='5ar'?5:1);
+      var d = new Date(now); d.setFullYear(d.getFullYear()-years);
+      var s = d.toISOString().slice(0,10);
+      return ALLE.filter(function(x) { return x.d >= s; });
+    }
+    function tegn(periode) {
+      var data = filtrer(periode); if (data.length<4) data=ALLE; if (data.length<4) return;
+      var pr = data.map(function(x){return x.k;}), da = data.map(function(x){return x.d;}), n=pr.length;
+      var mn=Math.min.apply(null,pr), mx=Math.max.apply(null,pr), rng=mx-mn||1;
+      var opp=pr[n-1]>=pr[0], fg=opp?'#22c55e':'#ef4444';
+      var end=((pr[n-1]-pr[0])/pr[0]*100).toFixed(1);
+      var hdr=document.getElementById('kurs-header-WSTEP');
+      if(hdr) hdr.innerHTML='<span style="font-size:1.05rem;font-weight:700">'+pr[n-1].toLocaleString('nb-NO',{minimumFractionDigits:2})+' '+VAL+'</span><span style="font-size:0.78rem;font-weight:500;color:'+fg+'">'+(opp?'▲ +':'▼ ')+end+'%</span>';
+      var cv=document.getElementById('kurs-canvas-WSTEP'); if(!cv) return;
+      var dk=document.documentElement.classList.contains('dark');
+      var DPR=Math.min(window.devicePixelRatio||1,2), CW=cv.parentElement.offsetWidth||680, CH=200;
+      var pL=54,pR=12,pT=14,pB=30;
+      cv.width=CW*DPR; cv.height=CH*DPR; cv.style.height=CH+'px';
+      var ctx=cv.getContext('2d'); ctx.scale(DPR,DPR);
+      var sx=function(i){return pL+i/(n-1)*(CW-pL-pR);};
+      var sy=function(p){return pT+(1-(p-mn)/rng)*(CH-pT-pB);};
+      ctx.fillStyle=dk?'#111827':'#f9fafb'; ctx.fillRect(0,0,CW,CH);
+      ctx.strokeStyle=dk?'#1f2937':'#e5e7eb'; ctx.lineWidth=1; ctx.setLineDash([4,4]);
+      [mn,(mn+mx)/2,mx].forEach(function(v){ctx.beginPath();ctx.moveTo(pL,sy(v));ctx.lineTo(CW-pR,sy(v));ctx.stroke();});
+      ctx.setLineDash([]);
+      ctx.fillStyle=dk?'#6b7280':'#9ca3af'; ctx.font='11px sans-serif'; ctx.textAlign='right';
+      [[mn,sy(mn)],[(mn+mx)/2,sy((mn+mx)/2)],[mx,sy(mx)]].forEach(function(pair){ctx.fillText(pair[0].toLocaleString('nb-NO',{maximumFractionDigits:0}),pL-4,pair[1]+4);});
+      var grad=ctx.createLinearGradient(0,pT,0,CH-pB);
+      grad.addColorStop(0,opp?'rgba(34,197,94,0.25)':'rgba(239,68,68,0.2)'); grad.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.beginPath(); ctx.moveTo(sx(0),CH-pB);
+      pr.forEach(function(p,i){ctx.lineTo(sx(i),sy(p));});
+      ctx.lineTo(sx(n-1),CH-pB); ctx.closePath(); ctx.fillStyle=grad; ctx.fill();
+      ctx.beginPath(); ctx.lineWidth=2.5; ctx.strokeStyle=fg; ctx.lineJoin='round';
+      pr.forEach(function(p,i){if(i===0)ctx.moveTo(sx(i),sy(p));else ctx.lineTo(sx(i),sy(p));});
+      ctx.stroke();
+      ctx.beginPath(); ctx.arc(sx(n-1),sy(pr[n-1]),4,0,Math.PI*2); ctx.fillStyle=fg; ctx.fill();
+      ctx.strokeStyle=dk?'#111827':'#fff'; ctx.lineWidth=2; ctx.stroke();
+      ctx.fillStyle=dk?'#6b7280':'#9ca3af'; ctx.textAlign='center';
+      [0,Math.floor(n/3),Math.floor(2*n/3),n-1].forEach(function(i){var d=da[i].slice(5);ctx.fillText(d.slice(3,5)+'.'+d.slice(0,2),sx(i),CH-8);});
+    }
+    document.querySelectorAll('.kp-btn').forEach(function(btn){
+      btn.addEventListener('click',function(){
+        document.querySelectorAll('.kp-btn').forEach(function(b){b.classList.remove('kp-aktiv');});
+        btn.classList.add('kp-aktiv'); tegn(btn.dataset.p);
+      });
+    });
+    if(ALLE.length>0) tegn('1ar');
+  })();
+  </script>
+</div>
+
   <div class="desc"><h2>Om selskapet</h2><p>Webstep ASA provides information technology (IT) consultancy services to public and private businesses in Norway and Sweden. The company offers consulting, digitalization, .Net, Java, open source, full stack, front and back end, user experience, integration, Artificial Intelligence, mobility, cloud apps, machine learning, business intelligence, big data, data warehousing, Internet of Things, virtual robotics, devops, application service management, data science, and project and test management services.</p></div>
 
   <div class="ai-oppsummering"><h2>AI-oppsummering <span class="ai-dato">Oppdatert 2026-04-08T12:34:53</span></h2><p>Direkteavkastningen på 13.1% er svært høy — attraktivt for inntektssøkende, men krever kritisk vurdering av bærekraft. P/E på 10.9 er svært lavt for informasjonsteknologi-sektoren, og kombinert med 13.1% yield fremstår verdsettelsen som meget attraktiv. Utbetalingsgraden på 143% overstiger årsresultatet, noe som er et advarselstegn — utbyttet er sannsynlig finansiert av sterk fri kontantstrøm, men er ikke bærekraftig over tid. Utbytteveksten på 9.5% per år er moderat positiv og holder tritt med inflasjon. Selskapet har betalt utbytte i 8 år på rad, noe som gir god forutsigbarhet for utbytteinvestorer. Historisk yield-trend er stigende de siste tre år, noe som reflekterer voksende utbyttebetalinger. Kursen er nær 52-ukers bunn — potensielt attraktivt inngangspunkt for tålmodige, langsiktige investorer. Lav utbyttekvalitet totalt sett — investorer bør vurdere om risikoen er tilstrekkelig kompensert gjennom direkteavkastningen.</p></div>
@@ -305,44 +368,6 @@
   <div class="analyse"><h2>Utbytteanalyse</h2><p>Nåværende direkteavkastning på 13.5% er betydelig høyere enn 5-årssnittet på 8.7%, noe som kan indikere et midlertidig kursfall eller ekstraordinært utbytte. Utbetalingsgraden på 143% er høy — utbyttet kan være sårbart ved svakere inntjening. Utbyttet har vokst med 9.5% per år de siste 5 årene.</p></div>
 
   <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Informasjonsteknologi</td></tr><tr><td>Frekvens</td><td>Årlig</td></tr><tr><td>Utbytte per aksje</td><td>2.3 NOK</td></tr><tr><td>Direkteavkastning</td><td>13.53%</td></tr><tr><td>5-årssnitt yield</td><td>8.68%</td></tr><tr><td>År med utbytte</td><td>8</td></tr><tr><td>P/E</td><td>10.6</td></tr><tr><td>Payout ratio</td><td>143%</td></tr><tr><td>Utbyttevekst 5 år</td><td>+9.5% p.a.</td></tr><tr><td>Markedsverdi</td><td>0.5 mrd NOK</td></tr><tr><td>52-ukers kurs</td><td>16.9 – 27.2 NOK</td></tr></tbody></table>
-
-  
-<div class="kurs-lenker">
-  <h2>Kursgraf</h2>
-  <div class="kurs-chart-wrap">
-  <div class="kurs-chart-header">
-    <span class="kurs-chart-naa">17.00 NOK</span>
-    <span class="kurs-chart-endring" style="color:#ef4444">▼ 25.7% siste 52 uker</span>
-  </div>
-  <svg viewBox="0 0 600 180" style="width:100%;height:180px;display:block;" role="img"
-       aria-label="Kursgraf siste 52 uker">
-    <defs>
-      <linearGradient id="kg-grad" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="#ef4444" stop-opacity="0.25"/>
-        <stop offset="100%" stop-color="#ef4444" stop-opacity="0"/>
-      </linearGradient>
-    </defs>
-    <text x="55" y="154.0" text-anchor="end" font-size="10" fill="var(--chart-label,#9ca3af)">17</text><line x1="60" y1="150.0" x2="588" y2="150.0" stroke="var(--chart-grid,#1f2937)" stroke-width="1" stroke-dasharray="3,4"/><text x="55" y="85.0" text-anchor="end" font-size="10" fill="var(--chart-label,#9ca3af)">21</text><line x1="60" y1="81.0" x2="588" y2="81.0" stroke="var(--chart-grid,#1f2937)" stroke-width="1" stroke-dasharray="3,4"/><text x="55" y="16.0" text-anchor="end" font-size="10" fill="var(--chart-label,#9ca3af)">25</text><line x1="60" y1="12.0" x2="588" y2="12.0" stroke="var(--chart-grid,#1f2937)" stroke-width="1" stroke-dasharray="3,4"/>
-    <polygon points="60.0,150 60.0,48.4 70.4,61.2 80.7,35.8 91.1,32.7 101.4,13.7 111.8,12.0 122.1,22.4 132.5,22.4 142.8,25.8 153.2,25.8 163.5,12.0 173.9,12.0 184.2,12.0 194.6,18.9 204.9,29.2 215.3,29.2 225.6,25.8 236.0,32.7 246.4,46.5 256.7,39.6 267.1,53.4 277.4,53.4 287.8,60.3 298.1,60.3 308.5,77.6 318.8,81.0 329.2,91.4 339.5,101.7 349.9,101.7 360.2,108.6 370.6,148.3 380.9,136.2 391.3,132.8 401.6,137.9 412.0,137.9 422.4,125.9 432.7,117.2 443.1,120.7 453.4,117.2 463.8,124.1 474.1,124.1 484.5,118.9 494.8,124.1 505.2,122.4 515.5,129.3 525.9,129.3 536.2,136.2 546.6,143.1 556.9,137.9 567.3,144.8 577.6,137.9 588.0,150.0 588.0,150" fill="url(#kg-grad)"/>
-    <polyline points="60.0,48.4 70.4,61.2 80.7,35.8 91.1,32.7 101.4,13.7 111.8,12.0 122.1,22.4 132.5,22.4 142.8,25.8 153.2,25.8 163.5,12.0 173.9,12.0 184.2,12.0 194.6,18.9 204.9,29.2 215.3,29.2 225.6,25.8 236.0,32.7 246.4,46.5 256.7,39.6 267.1,53.4 277.4,53.4 287.8,60.3 298.1,60.3 308.5,77.6 318.8,81.0 329.2,91.4 339.5,101.7 349.9,101.7 360.2,108.6 370.6,148.3 380.9,136.2 391.3,132.8 401.6,137.9 412.0,137.9 422.4,125.9 432.7,117.2 443.1,120.7 453.4,117.2 463.8,124.1 474.1,124.1 484.5,118.9 494.8,124.1 505.2,122.4 515.5,129.3 525.9,129.3 536.2,136.2 546.6,143.1 556.9,137.9 567.3,144.8 577.6,137.9 588.0,150.0" fill="none" stroke="#ef4444" stroke-width="2"
-              stroke-linejoin="round" stroke-linecap="round"/>
-    <!-- Siste punkt markert -->
-    <circle cx="588.0" cy="150.0" r="4"
-            fill="#ef4444" stroke="var(--chart-bg,#111827)" stroke-width="2"/>
-    <text x="60.0" y="176" text-anchor="middle" font-size="10" fill="var(--chart-label,#9ca3af)">20.04</text><text x="163.5" y="176" text-anchor="middle" font-size="10" fill="var(--chart-label,#9ca3af)">29.06</text><text x="267.1" y="176" text-anchor="middle" font-size="10" fill="var(--chart-label,#9ca3af)">07.09</text><text x="370.6" y="176" text-anchor="middle" font-size="10" fill="var(--chart-label,#9ca3af)">16.11</text><text x="474.1" y="176" text-anchor="middle" font-size="10" fill="var(--chart-label,#9ca3af)">25.01</text><text x="588.0" y="176" text-anchor="middle" font-size="10" fill="var(--chart-label,#9ca3af)">12.04</text>
-  </svg>
-</div>
-  <div class="kurs-knapper" style="margin-top:0.75rem;">
-    <a href="https://finance.yahoo.com/chart/WSTEP.OL" target="_blank" rel="noopener noreferrer" class="kurs-btn">
-      <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"/></svg>
-      Yahoo Finance
-    </a>
-    <a href="https://www.tradingview.com/symbols/OSLO-WSTEP/" target="_blank" rel="noopener noreferrer" class="kurs-btn">
-      <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
-      TradingView
-    </a>
-  </div>
-</div>
 
   <h2>Historiske utbytter</h2><svg viewBox="0 0 420 180" style="width:100%;max-width:420px;height:auto;display:block;margin-bottom:0.5rem;" aria-label="Historiske utbytter per aksje i NOK"><line x1="52" y1="148.0" x2="408" y2="148.0" stroke="#e5e7eb" stroke-width="1" class="ytick"/><text x="48" y="152.0" text-anchor="end" font-size="10" fill="#9ca3af">0.0</text><line x1="52" y1="103.8" x2="408" y2="103.8" stroke="#e5e7eb" stroke-width="1" class="ytick"/><text x="48" y="107.8" text-anchor="end" font-size="10" fill="#9ca3af">0.77</text><line x1="52" y1="60.2" x2="408" y2="60.2" stroke="#e5e7eb" stroke-width="1" class="ytick"/><text x="48" y="64.2" text-anchor="end" font-size="10" fill="#9ca3af">1.53</text><line x1="52" y1="16.0" x2="408" y2="16.0" stroke="#e5e7eb" stroke-width="1" class="ytick"/><text x="48" y="20.0" text-anchor="end" font-size="10" fill="#9ca3af">2.3</text><rect class="hbar" x="78.5" y="50.4" width="36" height="97.6" rx="3" fill="#16a34a" opacity="0.85"/><rect class="hbar" x="167.5" y="50.4" width="36" height="97.6" rx="3" fill="#16a34a" opacity="0.85"/><rect class="hbar" x="256.5" y="90.6" width="36" height="57.4" rx="3" fill="#16a34a" opacity="0.85"/><rect class="hbar" x="345.5" y="16.0" width="36" height="132.0" rx="3" fill="#16a34a" opacity="0.85"/><text x="96.5" y="174" text-anchor="middle" font-size="10" fill="#9ca3af">2022</text><text x="185.5" y="174" text-anchor="middle" font-size="10" fill="#9ca3af">2023</text><text x="274.5" y="174" text-anchor="middle" font-size="10" fill="#9ca3af">2024</text><text x="363.5" y="174" text-anchor="middle" font-size="10" fill="#9ca3af">2025</text><rect class="htip-bg" x="44.5" y="22.4" width="106" height="20" rx="4" fill="#111827" opacity="0" pointer-events="none"/><text class="htip-txt" x="96.5" y="37.4" text-anchor="middle" font-size="10" fill="#f3f4f6" opacity="0" pointer-events="none">1.7 NOK · 8.3% yield</text><rect class="htrig" x="52.0" y="16" width="89.0" height="132" fill="transparent" onmouseenter="showTip(this)" onmouseleave="hideTip(this)" data-i="0"/><rect class="htip-bg" x="133.5" y="22.4" width="106" height="20" rx="4" fill="#111827" opacity="0" pointer-events="none"/><text class="htip-txt" x="185.5" y="37.4" text-anchor="middle" font-size="10" fill="#f3f4f6" opacity="0" pointer-events="none">1.7 NOK · 9.0% yield</text><rect class="htrig" x="141.0" y="16" width="89.0" height="132" fill="transparent" onmouseenter="showTip(this)" onmouseleave="hideTip(this)" data-i="1"/><rect class="htip-bg" x="222.5" y="62.6" width="106" height="20" rx="4" fill="#111827" opacity="0" pointer-events="none"/><text class="htip-txt" x="274.5" y="77.6" text-anchor="middle" font-size="10" fill="#f3f4f6" opacity="0" pointer-events="none">1.0 NOK · 5.0% yield</text><rect class="htrig" x="230.0" y="16" width="89.0" height="132" fill="transparent" onmouseenter="showTip(this)" onmouseleave="hideTip(this)" data-i="2"/><rect class="htip-bg" x="302.0" y="2.0" width="106" height="20" rx="4" fill="#111827" opacity="0" pointer-events="none"/><text class="htip-txt" x="363.5" y="14.0" text-anchor="middle" font-size="10" fill="#f3f4f6" opacity="0" pointer-events="none">2.3 NOK · 12.4% yield</text><rect class="htrig" x="319.0" y="16" width="89.0" height="132" fill="transparent" onmouseenter="showTip(this)" onmouseleave="hideTip(this)" data-i="3"/><text x="16" y="82.0" text-anchor="middle" font-size="10" fill="#9ca3af" transform="rotate(-90,16,82.0)">NOK per aksje</text></svg><script>
 function showTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAll('.htip-bg')[i],tx=s.querySelectorAll('.htip-txt')[i];bg.setAttribute('opacity','0.92');tx.setAttribute('opacity','1');}

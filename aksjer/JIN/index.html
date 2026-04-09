@@ -20,7 +20,7 @@
   </script>
   <script src="/assets/consent.js" defer></script>
   <title>JIN – Jinhui Shipping and Transportation Limited | Utbytte og ex-dato | exday.no</title>
-  <meta name="description" content="Jinhui Shipping and Transportation Limited (JIN) betaler 2.89% utbytte (Skipsfart). Ex-dato: —. 5-årssnitt yield: 7.98%. Siste utbytte: 0.17 NOK per aksje. Oppdatert daglig på exday.no."/>
+  <meta name="description" content="Jinhui Shipping and Transportation Limited (JIN) betaler 2.89% utbytte (Skipsfart). Ex-dato: —. 5-årssnitt yield: 7.99%. Siste utbytte: 0.17 NOK per aksje. Oppdatert daglig på exday.no."/>
   <link rel="canonical" href="https://exday.no/aksjer/JIN/"/>
   <meta name="theme-color" content="#16a34a"/>
   <link rel="icon" type="image/png" sizes="512x512" href="/favicon.png"/>
@@ -29,7 +29,7 @@
   <link rel="shortcut icon" href="/favicon.png"/>
   <link rel="apple-touch-icon" href="/logo/apple_touch_icon_180.png"/>
   <meta property="og:title" content="JIN – Jinhui Shipping and Transportation Limited | exday.no"/>
-  <meta property="og:description" content="Jinhui Shipping and Transportation Limited (JIN) betaler 2.89% utbytte (Skipsfart). Ex-dato: —. 5-årssnitt yield: 7.98%. Siste utbytte: 0.17 NOK per aksje. Oppdatert daglig på exday.no."/>
+  <meta property="og:description" content="Jinhui Shipping and Transportation Limited (JIN) betaler 2.89% utbytte (Skipsfart). Ex-dato: —. 5-årssnitt yield: 7.99%. Siste utbytte: 0.17 NOK per aksje. Oppdatert daglig på exday.no."/>
   <meta property="og:url" content="https://exday.no/aksjer/JIN/"/>
   <meta property="og:type" content="website"/>
   <meta property="og:image" content="https://exday.no/assets/og-image.png"/>
@@ -39,7 +39,7 @@
   <meta property="og:site_name" content="exday.no"/>
   <meta name="twitter:card" content="summary_large_image"/>
   <meta name="twitter:title" content="JIN – Jinhui Shipping and Transportation Limited | exday.no"/>
-  <meta name="twitter:description" content="Jinhui Shipping and Transportation Limited (JIN) betaler 2.89% utbytte (Skipsfart). Ex-dato: —. 5-årssnitt yield: 7.98%. Siste utbytte: 0.17 NOK per aksje. Oppdatert daglig på exday.no."/>
+  <meta name="twitter:description" content="Jinhui Shipping and Transportation Limited (JIN) betaler 2.89% utbytte (Skipsfart). Ex-dato: —. 5-årssnitt yield: 7.99%. Siste utbytte: 0.17 NOK per aksje. Oppdatert daglig på exday.no."/>
   <meta name="twitter:image" content="https://exday.no/assets/og-image.png"/>
   <script type="application/ld+json">{
   "@context": "https://schema.org",
@@ -178,17 +178,10 @@
     .badge { background: #dcfce7; color: #15803d; }
     .kurs-lenker { margin: 1.5rem 0; }
     .kurs-lenker h2 { margin-bottom: 0.75rem; }
-    .kurs-knapper { display: flex; gap: 0.5rem; flex-wrap: wrap; }
-    .kurs-btn { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.5rem 0.9rem; border-radius: 8px; font-size: 0.8rem; font-weight: 500; background: #f3f4f6; color: #374151; text-decoration: none; transition: background 0.15s; }
-    .kurs-btn:hover { background: #e5e7eb; }
-    .dark .kurs-btn { background: #1f2937; color: #d1d5db; }
-    .dark .kurs-btn:hover { background: #374151; }
-    .kurs-chart-wrap { background: var(--chart-bg,#fff); border-radius: 10px; padding: 0.75rem 0.5rem 0; border: 1px solid #e5e7eb; }
-    .kurs-chart-header { display: flex; justify-content: space-between; align-items: baseline; padding: 0 0.5rem 0.5rem; }
-    .kurs-chart-naa { font-size: 1.1rem; font-weight: 700; color: #111827; }
-    .kurs-chart-endring { font-size: 0.8rem; font-weight: 500; }
-    .dark .kurs-chart-wrap { --chart-bg: #111827; --chart-label: #6b7280; --chart-grid: #1f2937; border-color: #1f2937; }
-    .dark .kurs-chart-naa { color: #f3f4f6; }
+    .kp-btn { font-size: 0.72rem; font-weight: 500; padding: 0.2rem 0.55rem; border-radius: 6px; border: none; cursor: pointer; background: transparent; color: #6b7280; transition: background 0.12s, color 0.12s; }
+    .kp-btn:hover, .kp-aktiv { background: #f3f4f6; color: #111827; font-weight: 600; }
+    .dark .kp-btn { color: #9ca3af; }
+    .dark .kp-btn:hover, .dark .kp-aktiv { background: #1f2937; color: #f3f4f6; }
 
     /* Dark mode */
     .dark body { background: #030712; color: #f3f4f6; }
@@ -289,7 +282,7 @@
     </div>
     <div class="kcard">
       <div class="label">5-årssnitt yield</div>
-      <div class="val green">7.98%</div>
+      <div class="val green">7.99%</div>
     </div>
     <div class="kcard">
       <div class="label">År med utbytte</div>
@@ -298,53 +291,85 @@
     <div class="kcard"><div class="label">P/E</div><div class="val">5.2</div></div>
   </div>
 
+  
+<div class="kurs-lenker">
+  <h2>Kursgraf</h2>
+  <div style="display:flex;gap:4px;margin-bottom:8px;">
+    <button class="kp-btn kp-aktiv" data-p="1ar">1 år</button>
+    <button class="kp-btn" data-p="ytd">YTD</button>
+    <button class="kp-btn" data-p="2ar">2 år</button>
+    <button class="kp-btn" data-p="3ar">3 år</button>
+    <button class="kp-btn" data-p="5ar">5 år</button>
+  </div>
+  <div id="kurs-header-JIN" style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px;"></div>
+  <canvas id="kurs-canvas-JIN" style="display:block;border-radius:10px;width:100%;"></canvas>
+  <script>
+  (function() {
+    var ALLE = [{"d": "2021-04-25", "k": 8.1}, {"d": "2021-05-02", "k": 8.51}, {"d": "2021-05-09", "k": 8.61}, {"d": "2021-05-16", "k": 8.45}, {"d": "2021-05-23", "k": 8.47}, {"d": "2021-05-30", "k": 8.12}, {"d": "2021-06-06", "k": 8.17}, {"d": "2021-06-13", "k": 8.7}, {"d": "2021-06-20", "k": 8.59}, {"d": "2021-06-27", "k": 8.92}, {"d": "2021-07-04", "k": 10.1}, {"d": "2021-07-11", "k": 9.57}, {"d": "2021-07-18", "k": 8.92}, {"d": "2021-07-25", "k": 8.92}, {"d": "2021-08-01", "k": 8.74}, {"d": "2021-08-08", "k": 9.8}, {"d": "2021-08-15", "k": 12.5}, {"d": "2021-08-22", "k": 12.3}, {"d": "2021-08-29", "k": 13.77}, {"d": "2021-09-05", "k": 14.68}, {"d": "2021-09-12", "k": 14.0}, {"d": "2021-09-19", "k": 17.78}, {"d": "2021-09-26", "k": 15.96}, {"d": "2021-10-03", "k": 14.83}, {"d": "2021-10-10", "k": 14.68}, {"d": "2021-10-17", "k": 14.14}, {"d": "2021-10-24", "k": 13.02}, {"d": "2021-10-31", "k": 12.03}, {"d": "2021-11-07", "k": 14.59}, {"d": "2021-11-14", "k": 15.18}, {"d": "2021-11-21", "k": 11.89}, {"d": "2021-11-28", "k": 11.05}, {"d": "2021-12-05", "k": 12.23}, {"d": "2021-12-12", "k": 11.64}, {"d": "2021-12-19", "k": 11.0}, {"d": "2021-12-26", "k": 11.05}, {"d": "2022-01-02", "k": 10.85}, {"d": "2022-01-09", "k": 11.89}, {"d": "2022-01-16", "k": 10.9}, {"d": "2022-01-23", "k": 10.02}, {"d": "2022-01-30", "k": 10.61}, {"d": "2022-02-06", "k": 11.05}, {"d": "2022-02-13", "k": 12.97}, {"d": "2022-02-20", "k": 13.41}, {"d": "2022-02-27", "k": 13.36}, {"d": "2022-03-06", "k": 12.67}, {"d": "2022-03-13", "k": 14.1}, {"d": "2022-03-20", "k": 14.24}, {"d": "2022-03-27", "k": 14.34}, {"d": "2022-04-03", "k": 14.56}, {"d": "2022-04-10", "k": 14.14}, {"d": "2022-04-17", "k": 13.48}, {"d": "2022-04-24", "k": 15.07}, {"d": "2022-05-01", "k": 14.54}, {"d": "2022-05-08", "k": 15.64}, {"d": "2022-05-15", "k": 16.07}, {"d": "2022-05-22", "k": 18.17}, {"d": "2022-05-29", "k": 16.53}, {"d": "2022-06-05", "k": 14.89}, {"d": "2022-06-12", "k": 13.92}, {"d": "2022-06-19", "k": 12.86}, {"d": "2022-06-26", "k": 11.26}, {"d": "2022-07-03", "k": 10.69}, {"d": "2022-07-10", "k": 10.31}, {"d": "2022-07-17", "k": 10.53}, {"d": "2022-07-24", "k": 10.73}, {"d": "2022-07-31", "k": 11.02}, {"d": "2022-08-07", "k": 10.89}, {"d": "2022-08-14", "k": 10.69}, {"d": "2022-08-21", "k": 10.45}, {"d": "2022-08-28", "k": 8.91}, {"d": "2022-09-04", "k": 8.49}, {"d": "2022-09-11", "k": 8.19}, {"d": "2022-09-18", "k": 8.98}, {"d": "2022-09-25", "k": 8.44}, {"d": "2022-10-02", "k": 8.44}, {"d": "2022-10-09", "k": 9.1}, {"d": "2022-10-16", "k": 9.44}, {"d": "2022-10-23", "k": 9.28}, {"d": "2022-10-30", "k": 8.93}, {"d": "2022-11-06", "k": 9.18}, {"d": "2022-11-13", "k": 8.88}, {"d": "2022-11-20", "k": 8.13}, {"d": "2022-11-27", "k": 8.7}, {"d": "2022-12-04", "k": 7.97}, {"d": "2022-12-11", "k": 8.01}, {"d": "2022-12-18", "k": 7.9}, {"d": "2022-12-25", "k": 7.7}, {"d": "2023-01-01", "k": 7.62}, {"d": "2023-01-08", "k": 7.42}, {"d": "2023-01-15", "k": 7.82}, {"d": "2023-01-22", "k": 8.11}, {"d": "2023-01-29", "k": 8.11}, {"d": "2023-02-05", "k": 9.42}, {"d": "2023-02-12", "k": 9.15}, {"d": "2023-02-19", "k": 9.0}, {"d": "2023-02-26", "k": 7.32}, {"d": "2023-03-05", "k": 8.57}, {"d": "2023-03-12", "k": 7.88}, {"d": "2023-03-19", "k": 7.62}, {"d": "2023-03-26", "k": 7.29}, {"d": "2023-04-02", "k": 7.87}, {"d": "2023-04-09", "k": 7.68}, {"d": "2023-04-16", "k": 7.62}, {"d": "2023-04-23", "k": 7.61}, {"d": "2023-04-30", "k": 7.76}, {"d": "2023-05-07", "k": 7.82}, {"d": "2023-05-14", "k": 7.35}, {"d": "2023-05-21", "k": 7.66}, {"d": "2023-05-28", "k": 7.37}, {"d": "2023-06-04", "k": 7.26}, {"d": "2023-06-11", "k": 7.46}, {"d": "2023-06-18", "k": 7.11}, {"d": "2023-06-25", "k": 7.06}, {"d": "2023-07-02", "k": 7.06}, {"d": "2023-07-09", "k": 6.76}, {"d": "2023-07-16", "k": 6.58}, {"d": "2023-07-23", "k": 6.68}, {"d": "2023-07-30", "k": 7.01}, {"d": "2023-08-06", "k": 6.63}, {"d": "2023-08-13", "k": 6.51}, {"d": "2023-08-20", "k": 6.46}, {"d": "2023-08-27", "k": 6.35}, {"d": "2023-09-03", "k": 5.93}, {"d": "2023-09-10", "k": 5.76}, {"d": "2023-09-17", "k": 5.94}, {"d": "2023-09-24", "k": 5.9}, {"d": "2023-10-01", "k": 5.87}, {"d": "2023-10-08", "k": 5.74}, {"d": "2023-10-15", "k": 5.96}, {"d": "2023-10-22", "k": 5.84}, {"d": "2023-10-29", "k": 5.68}, {"d": "2023-11-05", "k": 6.15}, {"d": "2023-11-12", "k": 6.02}, {"d": "2023-11-19", "k": 6.09}, {"d": "2023-11-26", "k": 6.25}, {"d": "2023-12-03", "k": 6.26}, {"d": "2023-12-10", "k": 5.96}, {"d": "2023-12-17", "k": 5.74}, {"d": "2023-12-24", "k": 5.82}, {"d": "2023-12-31", "k": 5.71}, {"d": "2024-01-07", "k": 7.68}, {"d": "2024-01-14", "k": 7.36}, {"d": "2024-01-21", "k": 7.18}, {"d": "2024-01-28", "k": 7.16}, {"d": "2024-02-04", "k": 6.69}, {"d": "2024-02-11", "k": 6.96}, {"d": "2024-02-18", "k": 6.88}, {"d": "2024-02-25", "k": 6.9}, {"d": "2024-03-03", "k": 6.37}, {"d": "2024-03-10", "k": 6.31}, {"d": "2024-03-17", "k": 5.72}, {"d": "2024-03-24", "k": 5.82}, {"d": "2024-03-31", "k": 5.91}, {"d": "2024-04-07", "k": 6.07}, {"d": "2024-04-14", "k": 6.09}, {"d": "2024-04-21", "k": 5.81}, {"d": "2024-04-28", "k": 5.75}, {"d": "2024-05-05", "k": 6.11}, {"d": "2024-05-12", "k": 6.47}, {"d": "2024-05-19", "k": 6.47}, {"d": "2024-05-26", "k": 6.47}, {"d": "2024-06-02", "k": 7.36}, {"d": "2024-06-09", "k": 6.96}, {"d": "2024-06-16", "k": 6.63}, {"d": "2024-06-23", "k": 6.67}, {"d": "2024-06-30", "k": 6.73}, {"d": "2024-07-07", "k": 6.47}, {"d": "2024-07-14", "k": 6.49}, {"d": "2024-07-21", "k": 6.37}, {"d": "2024-07-28", "k": 6.73}, {"d": "2024-08-04", "k": 6.41}, {"d": "2024-08-11", "k": 6.23}, {"d": "2024-08-18", "k": 6.27}, {"d": "2024-08-25", "k": 6.17}, {"d": "2024-09-01", "k": 6.41}, {"d": "2024-09-08", "k": 6.43}, {"d": "2024-09-15", "k": 6.37}, {"d": "2024-09-22", "k": 6.23}, {"d": "2024-09-29", "k": 6.47}, {"d": "2024-10-06", "k": 6.25}, {"d": "2024-10-13", "k": 6.21}, {"d": "2024-10-20", "k": 6.47}, {"d": "2024-10-27", "k": 6.09}, {"d": "2024-11-03", "k": 6.19}, {"d": "2024-11-10", "k": 5.79}, {"d": "2024-11-17", "k": 6.75}, {"d": "2024-11-24", "k": 6.51}, {"d": "2024-12-01", "k": 6.65}, {"d": "2024-12-08", "k": 6.37}, {"d": "2024-12-15", "k": 6.01}, {"d": "2024-12-22", "k": 5.97}, {"d": "2024-12-29", "k": 5.87}, {"d": "2025-01-05", "k": 6.17}, {"d": "2025-01-12", "k": 6.27}, {"d": "2025-01-19", "k": 6.15}, {"d": "2025-01-26", "k": 5.91}, {"d": "2025-02-02", "k": 6.01}, {"d": "2025-02-09", "k": 5.77}, {"d": "2025-02-16", "k": 5.63}, {"d": "2025-02-23", "k": 5.57}, {"d": "2025-03-02", "k": 5.83}, {"d": "2025-03-09", "k": 5.73}, {"d": "2025-03-16", "k": 5.65}, {"d": "2025-03-23", "k": 5.83}, {"d": "2025-03-30", "k": 5.63}, {"d": "2025-04-06", "k": 5.37}, {"d": "2025-04-13", "k": 5.51}, {"d": "2025-04-20", "k": 5.33}, {"d": "2025-04-27", "k": 5.59}, {"d": "2025-05-04", "k": 5.57}, {"d": "2025-05-11", "k": 5.17}, {"d": "2025-05-18", "k": 5.67}, {"d": "2025-05-25", "k": 5.61}, {"d": "2025-06-01", "k": 6.0}, {"d": "2025-06-08", "k": 5.52}, {"d": "2025-06-15", "k": 5.7}, {"d": "2025-06-22", "k": 5.5}, {"d": "2025-06-29", "k": 5.48}, {"d": "2025-07-06", "k": 5.5}, {"d": "2025-07-13", "k": 5.72}, {"d": "2025-07-20", "k": 6.28}, {"d": "2025-07-27", "k": 6.34}, {"d": "2025-08-03", "k": 5.98}, {"d": "2025-08-10", "k": 6.36}, {"d": "2025-08-17", "k": 6.24}, {"d": "2025-08-24", "k": 6.58}, {"d": "2025-08-31", "k": 6.26}, {"d": "2025-09-07", "k": 6.3}, {"d": "2025-09-14", "k": 6.28}, {"d": "2025-09-21", "k": 6.2}, {"d": "2025-09-28", "k": 6.2}, {"d": "2025-10-05", "k": 6.08}, {"d": "2025-10-12", "k": 6.04}, {"d": "2025-10-19", "k": 5.94}, {"d": "2025-10-26", "k": 5.68}, {"d": "2025-11-02", "k": 6.06}, {"d": "2025-11-09", "k": 5.96}, {"d": "2025-11-16", "k": 5.9}, {"d": "2025-11-23", "k": 5.8}, {"d": "2025-11-30", "k": 5.94}, {"d": "2025-12-07", "k": 5.9}, {"d": "2025-12-14", "k": 5.9}, {"d": "2025-12-21", "k": 5.88}, {"d": "2025-12-28", "k": 5.72}, {"d": "2026-01-04", "k": 5.86}, {"d": "2026-01-11", "k": 5.8}, {"d": "2026-01-18", "k": 5.76}, {"d": "2026-01-25", "k": 5.62}, {"d": "2026-02-01", "k": 5.72}, {"d": "2026-02-08", "k": 5.68}, {"d": "2026-02-15", "k": 5.7}, {"d": "2026-02-22", "k": 5.72}, {"d": "2026-03-01", "k": 5.68}, {"d": "2026-03-08", "k": 5.64}, {"d": "2026-03-15", "k": 5.56}, {"d": "2026-03-22", "k": 5.54}, {"d": "2026-03-29", "k": 5.78}, {"d": "2026-04-05", "k": 5.9}, {"d": "2026-04-12", "k": 5.88}];
+    var VAL = 'NOK';
+    function filtrer(p) {
+      var now = new Date(), ar = now.getFullYear();
+      if (p === 'ytd') return ALLE.filter(function(x) { return x.d >= ar + '-01-01'; });
+      var years = (p==='2ar'?2:p==='3ar'?3:p==='5ar'?5:1);
+      var d = new Date(now); d.setFullYear(d.getFullYear()-years);
+      var s = d.toISOString().slice(0,10);
+      return ALLE.filter(function(x) { return x.d >= s; });
+    }
+    function tegn(periode) {
+      var data = filtrer(periode); if (data.length<4) data=ALLE; if (data.length<4) return;
+      var pr = data.map(function(x){return x.k;}), da = data.map(function(x){return x.d;}), n=pr.length;
+      var mn=Math.min.apply(null,pr), mx=Math.max.apply(null,pr), rng=mx-mn||1;
+      var opp=pr[n-1]>=pr[0], fg=opp?'#22c55e':'#ef4444';
+      var end=((pr[n-1]-pr[0])/pr[0]*100).toFixed(1);
+      var hdr=document.getElementById('kurs-header-JIN');
+      if(hdr) hdr.innerHTML='<span style="font-size:1.05rem;font-weight:700">'+pr[n-1].toLocaleString('nb-NO',{minimumFractionDigits:2})+' '+VAL+'</span><span style="font-size:0.78rem;font-weight:500;color:'+fg+'">'+(opp?'▲ +':'▼ ')+end+'%</span>';
+      var cv=document.getElementById('kurs-canvas-JIN'); if(!cv) return;
+      var dk=document.documentElement.classList.contains('dark');
+      var DPR=Math.min(window.devicePixelRatio||1,2), CW=cv.parentElement.offsetWidth||680, CH=200;
+      var pL=54,pR=12,pT=14,pB=30;
+      cv.width=CW*DPR; cv.height=CH*DPR; cv.style.height=CH+'px';
+      var ctx=cv.getContext('2d'); ctx.scale(DPR,DPR);
+      var sx=function(i){return pL+i/(n-1)*(CW-pL-pR);};
+      var sy=function(p){return pT+(1-(p-mn)/rng)*(CH-pT-pB);};
+      ctx.fillStyle=dk?'#111827':'#f9fafb'; ctx.fillRect(0,0,CW,CH);
+      ctx.strokeStyle=dk?'#1f2937':'#e5e7eb'; ctx.lineWidth=1; ctx.setLineDash([4,4]);
+      [mn,(mn+mx)/2,mx].forEach(function(v){ctx.beginPath();ctx.moveTo(pL,sy(v));ctx.lineTo(CW-pR,sy(v));ctx.stroke();});
+      ctx.setLineDash([]);
+      ctx.fillStyle=dk?'#6b7280':'#9ca3af'; ctx.font='11px sans-serif'; ctx.textAlign='right';
+      [[mn,sy(mn)],[(mn+mx)/2,sy((mn+mx)/2)],[mx,sy(mx)]].forEach(function(pair){ctx.fillText(pair[0].toLocaleString('nb-NO',{maximumFractionDigits:0}),pL-4,pair[1]+4);});
+      var grad=ctx.createLinearGradient(0,pT,0,CH-pB);
+      grad.addColorStop(0,opp?'rgba(34,197,94,0.25)':'rgba(239,68,68,0.2)'); grad.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.beginPath(); ctx.moveTo(sx(0),CH-pB);
+      pr.forEach(function(p,i){ctx.lineTo(sx(i),sy(p));});
+      ctx.lineTo(sx(n-1),CH-pB); ctx.closePath(); ctx.fillStyle=grad; ctx.fill();
+      ctx.beginPath(); ctx.lineWidth=2.5; ctx.strokeStyle=fg; ctx.lineJoin='round';
+      pr.forEach(function(p,i){if(i===0)ctx.moveTo(sx(i),sy(p));else ctx.lineTo(sx(i),sy(p));});
+      ctx.stroke();
+      ctx.beginPath(); ctx.arc(sx(n-1),sy(pr[n-1]),4,0,Math.PI*2); ctx.fillStyle=fg; ctx.fill();
+      ctx.strokeStyle=dk?'#111827':'#fff'; ctx.lineWidth=2; ctx.stroke();
+      ctx.fillStyle=dk?'#6b7280':'#9ca3af'; ctx.textAlign='center';
+      [0,Math.floor(n/3),Math.floor(2*n/3),n-1].forEach(function(i){var d=da[i].slice(5);ctx.fillText(d.slice(3,5)+'.'+d.slice(0,2),sx(i),CH-8);});
+    }
+    document.querySelectorAll('.kp-btn').forEach(function(btn){
+      btn.addEventListener('click',function(){
+        document.querySelectorAll('.kp-btn').forEach(function(b){b.classList.remove('kp-aktiv');});
+        btn.classList.add('kp-aktiv'); tegn(btn.dataset.p);
+      });
+    });
+    if(ALLE.length>0) tegn('1ar');
+  })();
+  </script>
+</div>
+
   <div class="desc"><h2>Om selskapet</h2><p>Jinhui Shipping and Transportation Limited, an investment holding company, engages in ship chartering and owning activities in China, Singapore, Japan, Norway, the United Arab Emirates, South Korea, Switzerland, and internationally. The company engages in money lending; property investment activities; and provision of ship management and shipping agent services. It operates a fleet of 25 owned vessels and 8 chartered-in vessels. The company was founded in 1987 and is based in Hong Kong, Hong Kong.</p></div>
 
   <div class="ai-oppsummering"><h2>AI-oppsummering <span class="ai-dato">Oppdatert 2026-04-08T12:34:53</span></h2><p>Direkteavkastningen på 2.9% er lav — aksjen egner seg primært for investorer som verdsetter stabilitet og potensielt utbyttevekst fremfor umiddelbar inntekt. P/E på 5.3 er svært lavt og indikerer at markedet priser aksjen med betydelig rabatt sammenlignet med sektornormen. Utbetalingsgraden på 26% er konservativt lav og gir god buffer for utbytteøkninger — selskapet beholder mesteparten av overskuddet til reinvestering. Selskapet har betalt utbytte i 9 år på rad, noe som gir god forutsigbarhet for utbytteinvestorer. Historisk yield-trend har vært fallende de siste tre år, primært drevet av kursvekst. Lav markedsverdi på 0.6 mrd NOK innebærer lavere likviditet og høyere kurssvingninger enn for større selskaper. Moderat utbyttekvalitet — stabiliteten er til stede, men yield er for lav til å stå alene som inntektskilde.</p></div>
 
   <div class="analyse"><h2>Utbytteanalyse</h2><p>Nåværende direkteavkastning på 2.9% er lavere enn 5-årssnittet på 8.0%, noe som tyder på sterk kursvekst de siste årene. Utbetalingsgraden på 26% gir godt rom for fremtidige utbytteøkninger.</p></div>
 
-  <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Skipsfart</td></tr><tr><td>Frekvens</td><td>Årlig</td></tr><tr><td>Utbytte per aksje</td><td>0.17 NOK</td></tr><tr><td>Direkteavkastning</td><td>2.89%</td></tr><tr><td>5-årssnitt yield</td><td>7.98%</td></tr><tr><td>År med utbytte</td><td>9</td></tr><tr><td>P/E</td><td>5.2</td></tr><tr><td>Payout ratio</td><td>26%</td></tr><tr><td>Utbyttevekst 5 år</td><td>+0.0% p.a.</td></tr><tr><td>Markedsverdi</td><td>0.6 mrd NOK</td></tr><tr><td>52-ukers kurs</td><td>5.02 – 6.8 NOK</td></tr></tbody></table>
+  <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Skipsfart</td></tr><tr><td>Frekvens</td><td>Årlig</td></tr><tr><td>Utbytte per aksje</td><td>0.17 NOK</td></tr><tr><td>Direkteavkastning</td><td>2.89%</td></tr><tr><td>5-årssnitt yield</td><td>7.99%</td></tr><tr><td>År med utbytte</td><td>9</td></tr><tr><td>P/E</td><td>5.2</td></tr><tr><td>Payout ratio</td><td>26%</td></tr><tr><td>Utbyttevekst 5 år</td><td>+0.0% p.a.</td></tr><tr><td>Markedsverdi</td><td>0.6 mrd NOK</td></tr><tr><td>52-ukers kurs</td><td>5.02 – 6.8 NOK</td></tr></tbody></table>
 
-  
-<div class="kurs-lenker">
-  <h2>Kursgraf</h2>
-  <div class="kurs-chart-wrap">
-  <div class="kurs-chart-header">
-    <span class="kurs-chart-naa">5.88 NOK</span>
-    <span class="kurs-chart-endring" style="color:#22c55e">▲ 10.3% siste 52 uker</span>
-  </div>
-  <svg viewBox="0 0 600 180" style="width:100%;height:180px;display:block;" role="img"
-       aria-label="Kursgraf siste 52 uker">
-    <defs>
-      <linearGradient id="kg-grad" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="#22c55e" stop-opacity="0.25"/>
-        <stop offset="100%" stop-color="#22c55e" stop-opacity="0"/>
-      </linearGradient>
-    </defs>
-    <text x="55" y="154.0" text-anchor="end" font-size="10" fill="var(--chart-label,#9ca3af)">5</text><line x1="60" y1="150.0" x2="588" y2="150.0" stroke="var(--chart-grid,#1f2937)" stroke-width="1" stroke-dasharray="3,4"/><text x="55" y="85.0" text-anchor="end" font-size="10" fill="var(--chart-label,#9ca3af)">6</text><line x1="60" y1="81.0" x2="588" y2="81.0" stroke="var(--chart-grid,#1f2937)" stroke-width="1" stroke-dasharray="3,4"/><text x="55" y="16.0" text-anchor="end" font-size="10" fill="var(--chart-label,#9ca3af)">7</text><line x1="60" y1="12.0" x2="588" y2="12.0" stroke="var(--chart-grid,#1f2937)" stroke-width="1" stroke-dasharray="3,4"/>
-    <polygon points="60.0,150 60.0,134.3 70.4,108.9 80.7,110.9 91.1,150.0 101.4,101.1 111.8,106.9 122.1,68.8 132.5,115.7 142.8,98.1 153.2,117.7 163.5,119.7 173.9,117.7 184.2,96.2 194.6,41.4 204.9,35.5 215.3,70.7 225.6,33.5 236.0,45.3 246.4,12.0 256.7,43.3 267.1,39.4 277.4,41.4 287.8,49.2 298.1,49.2 308.5,60.9 318.8,64.9 329.2,74.6 339.5,100.1 349.9,62.9 360.2,72.7 370.6,78.6 380.9,88.3 391.3,74.6 401.6,78.6 412.0,78.6 422.4,80.5 432.7,96.2 443.1,82.5 453.4,88.3 463.8,92.3 474.1,106.0 484.5,96.2 494.8,100.1 505.2,98.1 515.5,96.2 525.9,100.1 536.2,104.0 546.6,111.8 556.9,113.8 567.3,90.3 577.6,78.6 588.0,80.5 588.0,150" fill="url(#kg-grad)"/>
-    <polyline points="60.0,134.3 70.4,108.9 80.7,110.9 91.1,150.0 101.4,101.1 111.8,106.9 122.1,68.8 132.5,115.7 142.8,98.1 153.2,117.7 163.5,119.7 173.9,117.7 184.2,96.2 194.6,41.4 204.9,35.5 215.3,70.7 225.6,33.5 236.0,45.3 246.4,12.0 256.7,43.3 267.1,39.4 277.4,41.4 287.8,49.2 298.1,49.2 308.5,60.9 318.8,64.9 329.2,74.6 339.5,100.1 349.9,62.9 360.2,72.7 370.6,78.6 380.9,88.3 391.3,74.6 401.6,78.6 412.0,78.6 422.4,80.5 432.7,96.2 443.1,82.5 453.4,88.3 463.8,92.3 474.1,106.0 484.5,96.2 494.8,100.1 505.2,98.1 515.5,96.2 525.9,100.1 536.2,104.0 546.6,111.8 556.9,113.8 567.3,90.3 577.6,78.6 588.0,80.5" fill="none" stroke="#22c55e" stroke-width="2"
-              stroke-linejoin="round" stroke-linecap="round"/>
-    <!-- Siste punkt markert -->
-    <circle cx="588.0" cy="80.5" r="4"
-            fill="#22c55e" stroke="var(--chart-bg,#111827)" stroke-width="2"/>
-    <text x="60.0" y="176" text-anchor="middle" font-size="10" fill="var(--chart-label,#9ca3af)">20.04</text><text x="163.5" y="176" text-anchor="middle" font-size="10" fill="var(--chart-label,#9ca3af)">29.06</text><text x="267.1" y="176" text-anchor="middle" font-size="10" fill="var(--chart-label,#9ca3af)">07.09</text><text x="370.6" y="176" text-anchor="middle" font-size="10" fill="var(--chart-label,#9ca3af)">16.11</text><text x="474.1" y="176" text-anchor="middle" font-size="10" fill="var(--chart-label,#9ca3af)">25.01</text><text x="588.0" y="176" text-anchor="middle" font-size="10" fill="var(--chart-label,#9ca3af)">12.04</text>
-  </svg>
-</div>
-  <div class="kurs-knapper" style="margin-top:0.75rem;">
-    <a href="https://finance.yahoo.com/chart/JIN.OL" target="_blank" rel="noopener noreferrer" class="kurs-btn">
-      <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"/></svg>
-      Yahoo Finance
-    </a>
-    <a href="https://www.tradingview.com/symbols/OSLO-JIN/" target="_blank" rel="noopener noreferrer" class="kurs-btn">
-      <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
-      TradingView
-    </a>
-  </div>
-</div>
-
-  <h2>Historiske utbytter</h2><svg viewBox="0 0 420 180" style="width:100%;max-width:420px;height:auto;display:block;margin-bottom:0.5rem;" aria-label="Historiske utbytter per aksje i NOK"><line x1="52" y1="148.0" x2="408" y2="148.0" stroke="#e5e7eb" stroke-width="1" class="ytick"/><text x="48" y="152.0" text-anchor="end" font-size="10" fill="#9ca3af">0.0</text><line x1="52" y1="103.5" x2="408" y2="103.5" stroke="#e5e7eb" stroke-width="1" class="ytick"/><text x="48" y="107.5" text-anchor="end" font-size="10" fill="#9ca3af">0.32</text><line x1="52" y1="60.5" x2="408" y2="60.5" stroke="#e5e7eb" stroke-width="1" class="ytick"/><text x="48" y="64.5" text-anchor="end" font-size="10" fill="#9ca3af">0.63</text><line x1="52" y1="16.0" x2="408" y2="16.0" stroke="#e5e7eb" stroke-width="1" class="ytick"/><text x="48" y="20.0" text-anchor="end" font-size="10" fill="#9ca3af">0.95</text><rect class="hbar" x="93.3" y="16.0" width="36" height="132.0" rx="3" fill="#16a34a" opacity="0.85"/><rect class="hbar" x="212.0" y="95.2" width="36" height="52.8" rx="3" fill="#16a34a" opacity="0.85"/><rect class="hbar" x="330.7" y="109.1" width="36" height="38.9" rx="3" fill="#16a34a" opacity="0.85"/><text x="111.3" y="174" text-anchor="middle" font-size="10" fill="#9ca3af">2022</text><text x="230.0" y="174" text-anchor="middle" font-size="10" fill="#9ca3af">2023</text><text x="348.7" y="174" text-anchor="middle" font-size="10" fill="#9ca3af">2025</text><rect class="htip-bg" x="59.3" y="2.0" width="106" height="20" rx="4" fill="#111827" opacity="0" pointer-events="none"/><text class="htip-txt" x="111.3" y="14.0" text-anchor="middle" font-size="10" fill="#f3f4f6" opacity="0" pointer-events="none">0.95 NOK · 12.4% yield</text><rect class="htrig" x="52.0" y="16" width="118.7" height="132" fill="transparent" onmouseenter="showTip(this)" onmouseleave="hideTip(this)" data-i="0"/><rect class="htip-bg" x="178.0" y="67.2" width="106" height="20" rx="4" fill="#111827" opacity="0" pointer-events="none"/><text class="htip-txt" x="230.0" y="82.2" text-anchor="middle" font-size="10" fill="#f3f4f6" opacity="0" pointer-events="none">0.38 NOK · 6.6% yield</text><rect class="htrig" x="170.7" y="16" width="118.7" height="132" fill="transparent" onmouseenter="showTip(this)" onmouseleave="hideTip(this)" data-i="1"/><rect class="htip-bg" x="296.7" y="81.1" width="106" height="20" rx="4" fill="#111827" opacity="0" pointer-events="none"/><text class="htip-txt" x="348.7" y="96.1" text-anchor="middle" font-size="10" fill="#f3f4f6" opacity="0" pointer-events="none">0.28 NOK · 4.9% yield</text><rect class="htrig" x="289.3" y="16" width="118.7" height="132" fill="transparent" onmouseenter="showTip(this)" onmouseleave="hideTip(this)" data-i="2"/><text x="16" y="82.0" text-anchor="middle" font-size="10" fill="#9ca3af" transform="rotate(-90,16,82.0)">NOK per aksje</text></svg><script>
+  <h2>Historiske utbytter</h2><svg viewBox="0 0 420 180" style="width:100%;max-width:420px;height:auto;display:block;margin-bottom:0.5rem;" aria-label="Historiske utbytter per aksje i NOK"><line x1="52" y1="148.0" x2="408" y2="148.0" stroke="#e5e7eb" stroke-width="1" class="ytick"/><text x="48" y="152.0" text-anchor="end" font-size="10" fill="#9ca3af">0.0</text><line x1="52" y1="103.5" x2="408" y2="103.5" stroke="#e5e7eb" stroke-width="1" class="ytick"/><text x="48" y="107.5" text-anchor="end" font-size="10" fill="#9ca3af">0.32</text><line x1="52" y1="60.5" x2="408" y2="60.5" stroke="#e5e7eb" stroke-width="1" class="ytick"/><text x="48" y="64.5" text-anchor="end" font-size="10" fill="#9ca3af">0.63</text><line x1="52" y1="16.0" x2="408" y2="16.0" stroke="#e5e7eb" stroke-width="1" class="ytick"/><text x="48" y="20.0" text-anchor="end" font-size="10" fill="#9ca3af">0.95</text><rect class="hbar" x="93.3" y="16.0" width="36" height="132.0" rx="3" fill="#16a34a" opacity="0.85"/><rect class="hbar" x="212.0" y="95.2" width="36" height="52.8" rx="3" fill="#16a34a" opacity="0.85"/><rect class="hbar" x="330.7" y="109.1" width="36" height="38.9" rx="3" fill="#16a34a" opacity="0.85"/><text x="111.3" y="174" text-anchor="middle" font-size="10" fill="#9ca3af">2022</text><text x="230.0" y="174" text-anchor="middle" font-size="10" fill="#9ca3af">2023</text><text x="348.7" y="174" text-anchor="middle" font-size="10" fill="#9ca3af">2025</text><rect class="htip-bg" x="59.3" y="2.0" width="106" height="20" rx="4" fill="#111827" opacity="0" pointer-events="none"/><text class="htip-txt" x="111.3" y="14.0" text-anchor="middle" font-size="10" fill="#f3f4f6" opacity="0" pointer-events="none">0.95 NOK · 12.5% yield</text><rect class="htrig" x="52.0" y="16" width="118.7" height="132" fill="transparent" onmouseenter="showTip(this)" onmouseleave="hideTip(this)" data-i="0"/><rect class="htip-bg" x="178.0" y="67.2" width="106" height="20" rx="4" fill="#111827" opacity="0" pointer-events="none"/><text class="htip-txt" x="230.0" y="82.2" text-anchor="middle" font-size="10" fill="#f3f4f6" opacity="0" pointer-events="none">0.38 NOK · 6.7% yield</text><rect class="htrig" x="170.7" y="16" width="118.7" height="132" fill="transparent" onmouseenter="showTip(this)" onmouseleave="hideTip(this)" data-i="1"/><rect class="htip-bg" x="296.7" y="81.1" width="106" height="20" rx="4" fill="#111827" opacity="0" pointer-events="none"/><text class="htip-txt" x="348.7" y="96.1" text-anchor="middle" font-size="10" fill="#f3f4f6" opacity="0" pointer-events="none">0.28 NOK · 4.9% yield</text><rect class="htrig" x="289.3" y="16" width="118.7" height="132" fill="transparent" onmouseenter="showTip(this)" onmouseleave="hideTip(this)" data-i="2"/><text x="16" y="82.0" text-anchor="middle" font-size="10" fill="#9ca3af" transform="rotate(-90,16,82.0)">NOK per aksje</text></svg><script>
 function showTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAll('.htip-bg')[i],tx=s.querySelectorAll('.htip-txt')[i];bg.setAttribute('opacity','0.92');tx.setAttribute('opacity','1');}
 function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAll('.htip-bg')[i],tx=s.querySelectorAll('.htip-txt')[i];bg.setAttribute('opacity','0');tx.setAttribute('opacity','0');}
 </script><table><thead><tr><th>År</th><th>Utbytte</th><th>Yield</th></tr></thead><tbody>
@@ -356,17 +381,17 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
         <tr>
           <td>2023</td>
           <td>0.38 NOK</td>
-          <td>6.64%</td>
+          <td>6.65%</td>
         </tr>
         <tr>
           <td>2022</td>
           <td>0.95 NOK</td>
-          <td>12.45%</td>
+          <td>12.46%</td>
         </tr></tbody></table>
 
   <div class="profil-seksjon"><h2>Utbytteprofil</h2><div class="profil-badges"></div><p class="profil-tekst">JIN gir 2.9% direkteavkastning, noe under sektorsnittet for skipsfart på 7.0%. Selskapet har betalt utbytte 9 år på rad. Lav utbetalingsgrad gir rom for fremtidige utbytteøkninger.</p></div>
 
-  <div class="historikk-prosa"><h2>Utbyttehistorikk</h2><p>Jinhui Shipping and Transportation Limited har de siste 3 årene betalt mellom 0.28 og 0.95 NOK per aksje i utbytte. Det høyeste utbyttet ble registrert i 2022 med 0.95 NOK per aksje (12.4% yield). I 2025 er utbyttet 0.28 NOK per aksje, tilsvarende 2.9% direkteavkastning.</p></div>
+  <div class="historikk-prosa"><h2>Utbyttehistorikk</h2><p>Jinhui Shipping and Transportation Limited har de siste 3 årene betalt mellom 0.28 og 0.95 NOK per aksje i utbytte. Det høyeste utbyttet ble registrert i 2022 med 0.95 NOK per aksje (12.5% yield). I 2025 er utbyttet 0.28 NOK per aksje, tilsvarende 2.9% direkteavkastning.</p></div>
 
   <div class="risiko-seksjon"><h2>Risiko for utbyttet</h2><ul class="risiko-liste"><li>Makroøkonomisk nedgang kan påvirke inntjening og utbyttekapasitet</li>
 <li>Valuta- og renteeksponering kan påvirke resultater</li>

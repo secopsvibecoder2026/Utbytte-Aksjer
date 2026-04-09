@@ -178,17 +178,10 @@
     .badge { background: #dcfce7; color: #15803d; }
     .kurs-lenker { margin: 1.5rem 0; }
     .kurs-lenker h2 { margin-bottom: 0.75rem; }
-    .kurs-knapper { display: flex; gap: 0.5rem; flex-wrap: wrap; }
-    .kurs-btn { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.5rem 0.9rem; border-radius: 8px; font-size: 0.8rem; font-weight: 500; background: #f3f4f6; color: #374151; text-decoration: none; transition: background 0.15s; }
-    .kurs-btn:hover { background: #e5e7eb; }
-    .dark .kurs-btn { background: #1f2937; color: #d1d5db; }
-    .dark .kurs-btn:hover { background: #374151; }
-    .kurs-chart-wrap { background: var(--chart-bg,#fff); border-radius: 10px; padding: 0.75rem 0.5rem 0; border: 1px solid #e5e7eb; }
-    .kurs-chart-header { display: flex; justify-content: space-between; align-items: baseline; padding: 0 0.5rem 0.5rem; }
-    .kurs-chart-naa { font-size: 1.1rem; font-weight: 700; color: #111827; }
-    .kurs-chart-endring { font-size: 0.8rem; font-weight: 500; }
-    .dark .kurs-chart-wrap { --chart-bg: #111827; --chart-label: #6b7280; --chart-grid: #1f2937; border-color: #1f2937; }
-    .dark .kurs-chart-naa { color: #f3f4f6; }
+    .kp-btn { font-size: 0.72rem; font-weight: 500; padding: 0.2rem 0.55rem; border-radius: 6px; border: none; cursor: pointer; background: transparent; color: #6b7280; transition: background 0.12s, color 0.12s; }
+    .kp-btn:hover, .kp-aktiv { background: #f3f4f6; color: #111827; font-weight: 600; }
+    .dark .kp-btn { color: #9ca3af; }
+    .dark .kp-btn:hover, .dark .kp-aktiv { background: #1f2937; color: #f3f4f6; }
 
     /* Dark mode */
     .dark body { background: #030712; color: #f3f4f6; }
@@ -298,6 +291,76 @@
     <div class="kcard"><div class="label">P/E</div><div class="val">12.2</div></div>
   </div>
 
+  
+<div class="kurs-lenker">
+  <h2>Kursgraf</h2>
+  <div style="display:flex;gap:4px;margin-bottom:8px;">
+    <button class="kp-btn kp-aktiv" data-p="1ar">1 år</button>
+    <button class="kp-btn" data-p="ytd">YTD</button>
+    <button class="kp-btn" data-p="2ar">2 år</button>
+    <button class="kp-btn" data-p="3ar">3 år</button>
+    <button class="kp-btn" data-p="5ar">5 år</button>
+  </div>
+  <div id="kurs-header-SBNOR" style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px;"></div>
+  <canvas id="kurs-canvas-SBNOR" style="display:block;border-radius:10px;width:100%;"></canvas>
+  <script>
+  (function() {
+    var ALLE = [{"d": "2025-04-27", "k": 128.65}, {"d": "2025-05-04", "k": 134.4}, {"d": "2025-05-11", "k": 131.21}, {"d": "2025-05-18", "k": 142.96}, {"d": "2025-05-25", "k": 144.05}, {"d": "2025-06-01", "k": 146.25}, {"d": "2025-06-08", "k": 148.63}, {"d": "2025-06-15", "k": 148.28}, {"d": "2025-06-22", "k": 144.72}, {"d": "2025-06-29", "k": 149.55}, {"d": "2025-07-06", "k": 151.64}, {"d": "2025-07-13", "k": 151.08}, {"d": "2025-07-20", "k": 150.36}, {"d": "2025-07-27", "k": 152.79}, {"d": "2025-08-03", "k": 151.41}, {"d": "2025-08-10", "k": 149.06}, {"d": "2025-08-17", "k": 157.24}, {"d": "2025-08-24", "k": 159.55}, {"d": "2025-08-31", "k": 159.55}, {"d": "2025-09-07", "k": 154.99}, {"d": "2025-09-14", "k": 159.95}, {"d": "2025-09-21", "k": 164.38}, {"d": "2025-09-28", "k": 165.29}, {"d": "2025-10-05", "k": 163.26}, {"d": "2025-10-12", "k": 169.07}, {"d": "2025-10-19", "k": 166.66}, {"d": "2025-10-26", "k": 165.4}, {"d": "2025-11-02", "k": 165.89}, {"d": "2025-11-09", "k": 162.43}, {"d": "2025-11-16", "k": 162.09}, {"d": "2025-11-23", "k": 161.43}, {"d": "2025-11-30", "k": 168.56}, {"d": "2025-12-07", "k": 172.0}, {"d": "2025-12-14", "k": 172.86}, {"d": "2025-12-21", "k": 181.96}, {"d": "2025-12-28", "k": 182.34}, {"d": "2026-01-04", "k": 184.03}, {"d": "2026-01-11", "k": 176.02}, {"d": "2026-01-18", "k": 181.49}, {"d": "2026-01-25", "k": 176.15}, {"d": "2026-02-01", "k": 180.46}, {"d": "2026-02-08", "k": 186.32}, {"d": "2026-02-15", "k": 184.16}, {"d": "2026-02-22", "k": 192.96}, {"d": "2026-03-01", "k": 193.29}, {"d": "2026-03-08", "k": 186.53}, {"d": "2026-03-15", "k": 188.3}, {"d": "2026-03-22", "k": 185.27}, {"d": "2026-03-29", "k": 189.46}, {"d": "2026-04-05", "k": 201.75}, {"d": "2026-04-12", "k": 205.5}];
+    var VAL = 'NOK';
+    function filtrer(p) {
+      var now = new Date(), ar = now.getFullYear();
+      if (p === 'ytd') return ALLE.filter(function(x) { return x.d >= ar + '-01-01'; });
+      var years = (p==='2ar'?2:p==='3ar'?3:p==='5ar'?5:1);
+      var d = new Date(now); d.setFullYear(d.getFullYear()-years);
+      var s = d.toISOString().slice(0,10);
+      return ALLE.filter(function(x) { return x.d >= s; });
+    }
+    function tegn(periode) {
+      var data = filtrer(periode); if (data.length<4) data=ALLE; if (data.length<4) return;
+      var pr = data.map(function(x){return x.k;}), da = data.map(function(x){return x.d;}), n=pr.length;
+      var mn=Math.min.apply(null,pr), mx=Math.max.apply(null,pr), rng=mx-mn||1;
+      var opp=pr[n-1]>=pr[0], fg=opp?'#22c55e':'#ef4444';
+      var end=((pr[n-1]-pr[0])/pr[0]*100).toFixed(1);
+      var hdr=document.getElementById('kurs-header-SBNOR');
+      if(hdr) hdr.innerHTML='<span style="font-size:1.05rem;font-weight:700">'+pr[n-1].toLocaleString('nb-NO',{minimumFractionDigits:2})+' '+VAL+'</span><span style="font-size:0.78rem;font-weight:500;color:'+fg+'">'+(opp?'▲ +':'▼ ')+end+'%</span>';
+      var cv=document.getElementById('kurs-canvas-SBNOR'); if(!cv) return;
+      var dk=document.documentElement.classList.contains('dark');
+      var DPR=Math.min(window.devicePixelRatio||1,2), CW=cv.parentElement.offsetWidth||680, CH=200;
+      var pL=54,pR=12,pT=14,pB=30;
+      cv.width=CW*DPR; cv.height=CH*DPR; cv.style.height=CH+'px';
+      var ctx=cv.getContext('2d'); ctx.scale(DPR,DPR);
+      var sx=function(i){return pL+i/(n-1)*(CW-pL-pR);};
+      var sy=function(p){return pT+(1-(p-mn)/rng)*(CH-pT-pB);};
+      ctx.fillStyle=dk?'#111827':'#f9fafb'; ctx.fillRect(0,0,CW,CH);
+      ctx.strokeStyle=dk?'#1f2937':'#e5e7eb'; ctx.lineWidth=1; ctx.setLineDash([4,4]);
+      [mn,(mn+mx)/2,mx].forEach(function(v){ctx.beginPath();ctx.moveTo(pL,sy(v));ctx.lineTo(CW-pR,sy(v));ctx.stroke();});
+      ctx.setLineDash([]);
+      ctx.fillStyle=dk?'#6b7280':'#9ca3af'; ctx.font='11px sans-serif'; ctx.textAlign='right';
+      [[mn,sy(mn)],[(mn+mx)/2,sy((mn+mx)/2)],[mx,sy(mx)]].forEach(function(pair){ctx.fillText(pair[0].toLocaleString('nb-NO',{maximumFractionDigits:0}),pL-4,pair[1]+4);});
+      var grad=ctx.createLinearGradient(0,pT,0,CH-pB);
+      grad.addColorStop(0,opp?'rgba(34,197,94,0.25)':'rgba(239,68,68,0.2)'); grad.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.beginPath(); ctx.moveTo(sx(0),CH-pB);
+      pr.forEach(function(p,i){ctx.lineTo(sx(i),sy(p));});
+      ctx.lineTo(sx(n-1),CH-pB); ctx.closePath(); ctx.fillStyle=grad; ctx.fill();
+      ctx.beginPath(); ctx.lineWidth=2.5; ctx.strokeStyle=fg; ctx.lineJoin='round';
+      pr.forEach(function(p,i){if(i===0)ctx.moveTo(sx(i),sy(p));else ctx.lineTo(sx(i),sy(p));});
+      ctx.stroke();
+      ctx.beginPath(); ctx.arc(sx(n-1),sy(pr[n-1]),4,0,Math.PI*2); ctx.fillStyle=fg; ctx.fill();
+      ctx.strokeStyle=dk?'#111827':'#fff'; ctx.lineWidth=2; ctx.stroke();
+      ctx.fillStyle=dk?'#6b7280':'#9ca3af'; ctx.textAlign='center';
+      [0,Math.floor(n/3),Math.floor(2*n/3),n-1].forEach(function(i){var d=da[i].slice(5);ctx.fillText(d.slice(3,5)+'.'+d.slice(0,2),sx(i),CH-8);});
+    }
+    document.querySelectorAll('.kp-btn').forEach(function(btn){
+      btn.addEventListener('click',function(){
+        document.querySelectorAll('.kp-btn').forEach(function(b){b.classList.remove('kp-aktiv');});
+        btn.classList.add('kp-aktiv'); tegn(btn.dataset.p);
+      });
+    });
+    if(ALLE.length>0) tegn('1ar');
+  })();
+  </script>
+</div>
+
   <div class="desc"><h2>Om selskapet</h2><p>Sparebanken Norge, a financial services company, provides banking and financing services. It is also involved in investment banking, trading in securities for professional investors, leasing and sales mortgage loans, and real estate agency business. It serves retail and commercial markets, as well as the public sector in Southern, Western, and Eastern Norway. The company was founded in 1823 and is headquartered in Bergen, Norway.</p></div>
 
   <div class="ai-oppsummering"><h2>AI-oppsummering <span class="ai-dato">Oppdatert 2026-04-08T12:34:53</span></h2><p>Direkteavkastningen på 5.9% er solid og godt over normalt rentenivå, noe som gjør aksjen interessant for utbyttejegere. P/E på 12.1 er i tråd med normalt nivå for finans-sektoren og gir et balansert bilde av verdsettelsen. Utbetalingsgraden på 51% er solid og forsvarlig, med god sikkerhetsmargin for utbyttet selv ved svakere kvartal. Begrenset utbyttehistorikk på 1 år gir lite grunnlag for å vurdere langsiktig konsistens. Aksjen handles nær 52-ukers topp og gir begrenset margin of safety for nye investorer. P/B under 1 (0.72) er uvanlig for finansaksjer og kan bety at markedet priser inn økt taprisiko eller at aksjen er underpriset. Samlet sett et moderat alternativ for utbytteinvestorer i finans-sektoren — noen sterke sider, men også faktorer som trekker ned.</p></div>
@@ -305,44 +368,6 @@
   <div class="analyse"><h2>Utbytteanalyse</h2><p>Direkteavkastningen på 5.8% ligger nær 5-årssnittet på 5.8%, som indikerer stabil kurs- og utbytteutvikling. Utbetalingsgraden på 51% er bærekraftig.</p></div>
 
   <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Finans</td></tr><tr><td>Frekvens</td><td>Årlig</td></tr><tr><td>Utbytte per aksje</td><td>12.0 NOK</td></tr><tr><td>Direkteavkastning</td><td>5.84%</td></tr><tr><td>5-årssnitt yield</td><td>5.84%</td></tr><tr><td>År med utbytte</td><td>1</td></tr><tr><td>P/E</td><td>12.2</td></tr><tr><td>Payout ratio</td><td>51%</td></tr><tr><td>Utbyttevekst 5 år</td><td>+0.0% p.a.</td></tr><tr><td>Markedsverdi</td><td>35.6 mrd NOK</td></tr><tr><td>52-ukers kurs</td><td>134.62 – 208.1 NOK</td></tr></tbody></table>
-
-  
-<div class="kurs-lenker">
-  <h2>Kursgraf</h2>
-  <div class="kurs-chart-wrap">
-  <div class="kurs-chart-header">
-    <span class="kurs-chart-naa">205.50 NOK</span>
-    <span class="kurs-chart-endring" style="color:#22c55e">▲ 59.7% siste 52 uker</span>
-  </div>
-  <svg viewBox="0 0 600 180" style="width:100%;height:180px;display:block;" role="img"
-       aria-label="Kursgraf siste 52 uker">
-    <defs>
-      <linearGradient id="kg-grad" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="#22c55e" stop-opacity="0.25"/>
-        <stop offset="100%" stop-color="#22c55e" stop-opacity="0"/>
-      </linearGradient>
-    </defs>
-    <text x="55" y="154.0" text-anchor="end" font-size="10" fill="var(--chart-label,#9ca3af)">129</text><line x1="60" y1="150.0" x2="588" y2="150.0" stroke="var(--chart-grid,#1f2937)" stroke-width="1" stroke-dasharray="3,4"/><text x="55" y="85.0" text-anchor="end" font-size="10" fill="var(--chart-label,#9ca3af)">167</text><line x1="60" y1="81.0" x2="588" y2="81.0" stroke="var(--chart-grid,#1f2937)" stroke-width="1" stroke-dasharray="3,4"/><text x="55" y="16.0" text-anchor="end" font-size="10" fill="var(--chart-label,#9ca3af)">206</text><line x1="60" y1="12.0" x2="588" y2="12.0" stroke="var(--chart-grid,#1f2937)" stroke-width="1" stroke-dasharray="3,4"/>
-    <polygon points="60.0,150 60.0,150.0 70.6,139.7 81.1,145.4 91.7,124.3 102.2,122.3 112.8,118.4 123.4,114.1 133.9,114.8 144.5,121.1 155.0,112.5 165.6,108.7 176.2,109.7 186.7,111.0 197.3,106.7 207.8,109.1 218.4,113.3 229.0,98.7 239.5,94.5 250.1,94.5 260.6,102.7 271.2,93.8 281.8,85.8 292.3,84.2 302.9,87.9 313.4,77.4 324.0,81.7 334.6,84.0 345.1,83.1 355.7,89.3 366.2,90.0 376.8,91.1 387.4,78.3 397.9,72.2 408.5,70.6 419.0,54.3 429.6,53.6 440.2,50.6 450.7,64.9 461.3,55.1 471.8,64.7 482.4,57.0 493.0,46.4 503.5,50.3 514.1,34.5 524.6,33.9 535.2,46.1 545.8,42.9 556.3,48.3 566.9,40.8 577.4,18.7 588.0,12.0 588.0,150" fill="url(#kg-grad)"/>
-    <polyline points="60.0,150.0 70.6,139.7 81.1,145.4 91.7,124.3 102.2,122.3 112.8,118.4 123.4,114.1 133.9,114.8 144.5,121.1 155.0,112.5 165.6,108.7 176.2,109.7 186.7,111.0 197.3,106.7 207.8,109.1 218.4,113.3 229.0,98.7 239.5,94.5 250.1,94.5 260.6,102.7 271.2,93.8 281.8,85.8 292.3,84.2 302.9,87.9 313.4,77.4 324.0,81.7 334.6,84.0 345.1,83.1 355.7,89.3 366.2,90.0 376.8,91.1 387.4,78.3 397.9,72.2 408.5,70.6 419.0,54.3 429.6,53.6 440.2,50.6 450.7,64.9 461.3,55.1 471.8,64.7 482.4,57.0 493.0,46.4 503.5,50.3 514.1,34.5 524.6,33.9 535.2,46.1 545.8,42.9 556.3,48.3 566.9,40.8 577.4,18.7 588.0,12.0" fill="none" stroke="#22c55e" stroke-width="2"
-              stroke-linejoin="round" stroke-linecap="round"/>
-    <!-- Siste punkt markert -->
-    <circle cx="588.0" cy="12.0" r="4"
-            fill="#22c55e" stroke="var(--chart-bg,#111827)" stroke-width="2"/>
-    <text x="60.0" y="176" text-anchor="middle" font-size="10" fill="var(--chart-label,#9ca3af)">27.04</text><text x="165.6" y="176" text-anchor="middle" font-size="10" fill="var(--chart-label,#9ca3af)">06.07</text><text x="271.2" y="176" text-anchor="middle" font-size="10" fill="var(--chart-label,#9ca3af)">14.09</text><text x="376.8" y="176" text-anchor="middle" font-size="10" fill="var(--chart-label,#9ca3af)">23.11</text><text x="482.4" y="176" text-anchor="middle" font-size="10" fill="var(--chart-label,#9ca3af)">01.02</text><text x="588.0" y="176" text-anchor="middle" font-size="10" fill="var(--chart-label,#9ca3af)">12.04</text>
-  </svg>
-</div>
-  <div class="kurs-knapper" style="margin-top:0.75rem;">
-    <a href="https://finance.yahoo.com/chart/SBNOR.OL" target="_blank" rel="noopener noreferrer" class="kurs-btn">
-      <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"/></svg>
-      Yahoo Finance
-    </a>
-    <a href="https://www.tradingview.com/symbols/OSLO-SBNOR/" target="_blank" rel="noopener noreferrer" class="kurs-btn">
-      <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
-      TradingView
-    </a>
-  </div>
-</div>
 
   <h2>Historiske utbytter</h2><table><thead><tr><th>År</th><th>Utbytte</th><th>Yield</th></tr></thead><tbody>
         <tr>

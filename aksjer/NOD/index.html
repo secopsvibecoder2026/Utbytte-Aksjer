@@ -178,17 +178,10 @@
     .badge { background: #dcfce7; color: #15803d; }
     .kurs-lenker { margin: 1.5rem 0; }
     .kurs-lenker h2 { margin-bottom: 0.75rem; }
-    .kurs-knapper { display: flex; gap: 0.5rem; flex-wrap: wrap; }
-    .kurs-btn { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.5rem 0.9rem; border-radius: 8px; font-size: 0.8rem; font-weight: 500; background: #f3f4f6; color: #374151; text-decoration: none; transition: background 0.15s; }
-    .kurs-btn:hover { background: #e5e7eb; }
-    .dark .kurs-btn { background: #1f2937; color: #d1d5db; }
-    .dark .kurs-btn:hover { background: #374151; }
-    .kurs-chart-wrap { background: var(--chart-bg,#fff); border-radius: 10px; padding: 0.75rem 0.5rem 0; border: 1px solid #e5e7eb; }
-    .kurs-chart-header { display: flex; justify-content: space-between; align-items: baseline; padding: 0 0.5rem 0.5rem; }
-    .kurs-chart-naa { font-size: 1.1rem; font-weight: 700; color: #111827; }
-    .kurs-chart-endring { font-size: 0.8rem; font-weight: 500; }
-    .dark .kurs-chart-wrap { --chart-bg: #111827; --chart-label: #6b7280; --chart-grid: #1f2937; border-color: #1f2937; }
-    .dark .kurs-chart-naa { color: #f3f4f6; }
+    .kp-btn { font-size: 0.72rem; font-weight: 500; padding: 0.2rem 0.55rem; border-radius: 6px; border: none; cursor: pointer; background: transparent; color: #6b7280; transition: background 0.12s, color 0.12s; }
+    .kp-btn:hover, .kp-aktiv { background: #f3f4f6; color: #111827; font-weight: 600; }
+    .dark .kp-btn { color: #9ca3af; }
+    .dark .kp-btn:hover, .dark .kp-aktiv { background: #1f2937; color: #f3f4f6; }
 
     /* Dark mode */
     .dark body { background: #030712; color: #f3f4f6; }
@@ -298,6 +291,76 @@
     <div class="kcard"><div class="label">P/E</div><div class="val">207.0</div></div>
   </div>
 
+  
+<div class="kurs-lenker">
+  <h2>Kursgraf</h2>
+  <div style="display:flex;gap:4px;margin-bottom:8px;">
+    <button class="kp-btn kp-aktiv" data-p="1ar">1 år</button>
+    <button class="kp-btn" data-p="ytd">YTD</button>
+    <button class="kp-btn" data-p="2ar">2 år</button>
+    <button class="kp-btn" data-p="3ar">3 år</button>
+    <button class="kp-btn" data-p="5ar">5 år</button>
+  </div>
+  <div id="kurs-header-NOD" style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px;"></div>
+  <canvas id="kurs-canvas-NOD" style="display:block;border-radius:10px;width:100%;"></canvas>
+  <script>
+  (function() {
+    var ALLE = [{"d": "2021-04-25", "k": 191.5}, {"d": "2021-05-02", "k": 206.0}, {"d": "2021-05-09", "k": 214.4}, {"d": "2021-05-16", "k": 194.8}, {"d": "2021-05-23", "k": 218.4}, {"d": "2021-05-30", "k": 232.8}, {"d": "2021-06-06", "k": 238.0}, {"d": "2021-06-13", "k": 235.2}, {"d": "2021-06-20", "k": 228.0}, {"d": "2021-06-27", "k": 214.0}, {"d": "2021-07-04", "k": 227.4}, {"d": "2021-07-11", "k": 230.2}, {"d": "2021-07-18", "k": 262.0}, {"d": "2021-07-25", "k": 282.4}, {"d": "2021-08-01", "k": 289.6}, {"d": "2021-08-08", "k": 288.4}, {"d": "2021-08-15", "k": 281.0}, {"d": "2021-08-22", "k": 275.6}, {"d": "2021-08-29", "k": 288.4}, {"d": "2021-09-05", "k": 305.0}, {"d": "2021-09-12", "k": 313.8}, {"d": "2021-09-19", "k": 293.8}, {"d": "2021-09-26", "k": 282.2}, {"d": "2021-10-03", "k": 257.0}, {"d": "2021-10-10", "k": 256.4}, {"d": "2021-10-17", "k": 278.2}, {"d": "2021-10-24", "k": 265.2}, {"d": "2021-10-31", "k": 250.0}, {"d": "2021-11-07", "k": 276.6}, {"d": "2021-11-14", "k": 292.2}, {"d": "2021-11-21", "k": 306.0}, {"d": "2021-11-28", "k": 278.6}, {"d": "2021-12-05", "k": 288.0}, {"d": "2021-12-12", "k": 297.4}, {"d": "2021-12-19", "k": 273.2}, {"d": "2021-12-26", "k": 286.4}, {"d": "2022-01-02", "k": 297.6}, {"d": "2022-01-09", "k": 276.2}, {"d": "2022-01-16", "k": 269.0}, {"d": "2022-01-23", "k": 260.2}, {"d": "2022-01-30", "k": 243.4}, {"d": "2022-02-06", "k": 246.0}, {"d": "2022-02-13", "k": 232.0}, {"d": "2022-02-20", "k": 221.2}, {"d": "2022-02-27", "k": 230.6}, {"d": "2022-03-06", "k": 219.0}, {"d": "2022-03-13", "k": 218.6}, {"d": "2022-03-20", "k": 241.6}, {"d": "2022-03-27", "k": 235.8}, {"d": "2022-04-03", "k": 218.6}, {"d": "2022-04-10", "k": 177.85}, {"d": "2022-04-17", "k": 172.35}, {"d": "2022-04-24", "k": 174.8}, {"d": "2022-05-01", "k": 191.45}, {"d": "2022-05-08", "k": 177.35}, {"d": "2022-05-15", "k": 175.65}, {"d": "2022-05-22", "k": 173.75}, {"d": "2022-05-29", "k": 178.0}, {"d": "2022-06-05", "k": 185.7}, {"d": "2022-06-12", "k": 166.8}, {"d": "2022-06-19", "k": 147.05}, {"d": "2022-06-26", "k": 162.0}, {"d": "2022-07-03", "k": 150.4}, {"d": "2022-07-10", "k": 156.9}, {"d": "2022-07-17", "k": 148.0}, {"d": "2022-07-24", "k": 169.2}, {"d": "2022-07-31", "k": 168.0}, {"d": "2022-08-07", "k": 174.3}, {"d": "2022-08-14", "k": 170.0}, {"d": "2022-08-21", "k": 158.95}, {"d": "2022-08-28", "k": 152.4}, {"d": "2022-09-04", "k": 143.05}, {"d": "2022-09-11", "k": 151.8}, {"d": "2022-09-18", "k": 136.9}, {"d": "2022-09-25", "k": 133.85}, {"d": "2022-10-02", "k": 145.5}, {"d": "2022-10-09", "k": 141.75}, {"d": "2022-10-16", "k": 137.6}, {"d": "2022-10-23", "k": 147.5}, {"d": "2022-10-30", "k": 147.4}, {"d": "2022-11-06", "k": 146.6}, {"d": "2022-11-13", "k": 177.9}, {"d": "2022-11-20", "k": 176.65}, {"d": "2022-11-27", "k": 178.0}, {"d": "2022-12-04", "k": 181.1}, {"d": "2022-12-11", "k": 176.8}, {"d": "2022-12-18", "k": 173.45}, {"d": "2022-12-25", "k": 166.15}, {"d": "2023-01-01", "k": 163.9}, {"d": "2023-01-08", "k": 174.25}, {"d": "2023-01-15", "k": 168.65}, {"d": "2023-01-22", "k": 154.2}, {"d": "2023-01-29", "k": 168.05}, {"d": "2023-02-05", "k": 174.4}, {"d": "2023-02-12", "k": 141.05}, {"d": "2023-02-19", "k": 149.7}, {"d": "2023-02-26", "k": 149.45}, {"d": "2023-03-05", "k": 161.55}, {"d": "2023-03-12", "k": 163.25}, {"d": "2023-03-19", "k": 161.45}, {"d": "2023-03-26", "k": 156.6}, {"d": "2023-04-02", "k": 159.5}, {"d": "2023-04-09", "k": 151.35}, {"d": "2023-04-16", "k": 152.55}, {"d": "2023-04-23", "k": 115.5}, {"d": "2023-04-30", "k": 115.15}, {"d": "2023-05-07", "k": 114.15}, {"d": "2023-05-14", "k": 109.25}, {"d": "2023-05-21", "k": 114.5}, {"d": "2023-05-28", "k": 116.7}, {"d": "2023-06-04", "k": 122.45}, {"d": "2023-06-11", "k": 133.0}, {"d": "2023-06-18", "k": 135.5}, {"d": "2023-06-25", "k": 125.2}, {"d": "2023-07-02", "k": 130.45}, {"d": "2023-07-09", "k": 122.7}, {"d": "2023-07-16", "k": 144.05}, {"d": "2023-07-23", "k": 142.35}, {"d": "2023-07-30", "k": 149.2}, {"d": "2023-08-06", "k": 145.65}, {"d": "2023-08-13", "k": 140.95}, {"d": "2023-08-20", "k": 131.0}, {"d": "2023-08-27", "k": 128.65}, {"d": "2023-09-03", "k": 129.25}, {"d": "2023-09-10", "k": 120.5}, {"d": "2023-09-17", "k": 122.65}, {"d": "2023-09-24", "k": 111.9}, {"d": "2023-10-01", "k": 111.05}, {"d": "2023-10-08", "k": 108.4}, {"d": "2023-10-15", "k": 116.2}, {"d": "2023-10-22", "k": 89.56}, {"d": "2023-10-29", "k": 88.64}, {"d": "2023-11-05", "k": 91.86}, {"d": "2023-11-12", "k": 93.98}, {"d": "2023-11-19", "k": 104.65}, {"d": "2023-11-26", "k": 98.22}, {"d": "2023-12-03", "k": 98.76}, {"d": "2023-12-10", "k": 110.9}, {"d": "2023-12-17", "k": 126.95}, {"d": "2023-12-24", "k": 124.25}, {"d": "2023-12-31", "k": 126.0}, {"d": "2024-01-07", "k": 112.15}, {"d": "2024-01-14", "k": 112.3}, {"d": "2024-01-21", "k": 111.9}, {"d": "2024-01-28", "k": 110.3}, {"d": "2024-02-04", "k": 104.55}, {"d": "2024-02-11", "k": 97.3}, {"d": "2024-02-18", "k": 97.48}, {"d": "2024-02-25", "k": 91.8}, {"d": "2024-03-03", "k": 92.8}, {"d": "2024-03-10", "k": 86.14}, {"d": "2024-03-17", "k": 84.88}, {"d": "2024-03-24", "k": 85.58}, {"d": "2024-03-31", "k": 85.8}, {"d": "2024-04-07", "k": 77.44}, {"d": "2024-04-14", "k": 94.24}, {"d": "2024-04-21", "k": 88.9}, {"d": "2024-04-28", "k": 116.4}, {"d": "2024-05-05", "k": 128.65}, {"d": "2024-05-12", "k": 134.35}, {"d": "2024-05-19", "k": 132.95}, {"d": "2024-05-26", "k": 135.0}, {"d": "2024-06-02", "k": 134.5}, {"d": "2024-06-09", "k": 142.95}, {"d": "2024-06-16", "k": 144.35}, {"d": "2024-06-23", "k": 137.95}, {"d": "2024-06-30", "k": 142.6}, {"d": "2024-07-07", "k": 150.0}, {"d": "2024-07-14", "k": 156.35}, {"d": "2024-07-21", "k": 146.05}, {"d": "2024-07-28", "k": 130.85}, {"d": "2024-08-04", "k": 128.05}, {"d": "2024-08-11", "k": 137.4}, {"d": "2024-08-18", "k": 140.4}, {"d": "2024-08-25", "k": 140.6}, {"d": "2024-09-01", "k": 143.4}, {"d": "2024-09-08", "k": 125.5}, {"d": "2024-09-15", "k": 131.1}, {"d": "2024-09-22", "k": 141.85}, {"d": "2024-09-29", "k": 105.9}, {"d": "2024-10-06", "k": 98.92}, {"d": "2024-10-13", "k": 96.62}, {"d": "2024-10-20", "k": 98.54}, {"d": "2024-10-27", "k": 105.35}, {"d": "2024-11-03", "k": 108.25}, {"d": "2024-11-10", "k": 100.5}, {"d": "2024-11-17", "k": 98.94}, {"d": "2024-11-24", "k": 96.0}, {"d": "2024-12-01", "k": 98.94}, {"d": "2024-12-08", "k": 101.5}, {"d": "2024-12-15", "k": 99.7}, {"d": "2024-12-22", "k": 97.56}, {"d": "2024-12-29", "k": 101.85}, {"d": "2025-01-05", "k": 103.7}, {"d": "2025-01-12", "k": 109.0}, {"d": "2025-01-19", "k": 116.15}, {"d": "2025-01-26", "k": 118.0}, {"d": "2025-02-02", "k": 114.0}, {"d": "2025-02-09", "k": 144.3}, {"d": "2025-02-16", "k": 143.25}, {"d": "2025-02-23", "k": 153.5}, {"d": "2025-03-02", "k": 137.45}, {"d": "2025-03-09", "k": 132.25}, {"d": "2025-03-16", "k": 133.15}, {"d": "2025-03-23", "k": 134.05}, {"d": "2025-03-30", "k": 128.0}, {"d": "2025-04-06", "k": 110.6}, {"d": "2025-04-13", "k": 104.1}, {"d": "2025-04-20", "k": 108.0}, {"d": "2025-04-27", "k": 121.9}, {"d": "2025-05-04", "k": 112.0}, {"d": "2025-05-11", "k": 116.4}, {"d": "2025-05-18", "k": 123.8}, {"d": "2025-05-25", "k": 121.8}, {"d": "2025-06-01", "k": 125.1}, {"d": "2025-06-08", "k": 135.0}, {"d": "2025-06-15", "k": 137.1}, {"d": "2025-06-22", "k": 135.9}, {"d": "2025-06-29", "k": 133.9}, {"d": "2025-07-06", "k": 139.2}, {"d": "2025-07-13", "k": 137.6}, {"d": "2025-07-20", "k": 145.0}, {"d": "2025-07-27", "k": 136.6}, {"d": "2025-08-03", "k": 141.0}, {"d": "2025-08-10", "k": 137.7}, {"d": "2025-08-17", "k": 168.3}, {"d": "2025-08-24", "k": 165.2}, {"d": "2025-08-31", "k": 165.9}, {"d": "2025-09-07", "k": 155.0}, {"d": "2025-09-14", "k": 151.8}, {"d": "2025-09-21", "k": 161.8}, {"d": "2025-09-28", "k": 153.7}, {"d": "2025-10-05", "k": 161.3}, {"d": "2025-10-12", "k": 164.5}, {"d": "2025-10-19", "k": 164.1}, {"d": "2025-10-26", "k": 163.6}, {"d": "2025-11-02", "k": 147.0}, {"d": "2025-11-09", "k": 132.3}, {"d": "2025-11-16", "k": 137.0}, {"d": "2025-11-23", "k": 130.4}, {"d": "2025-11-30", "k": 134.2}, {"d": "2025-12-07", "k": 136.9}, {"d": "2025-12-14", "k": 131.5}, {"d": "2025-12-21", "k": 128.3}, {"d": "2025-12-28", "k": 129.9}, {"d": "2026-01-04", "k": 137.3}, {"d": "2026-01-11", "k": 138.1}, {"d": "2026-01-18", "k": 137.3}, {"d": "2026-01-25", "k": 134.1}, {"d": "2026-02-01", "k": 129.6}, {"d": "2026-02-08", "k": 155.2}, {"d": "2026-02-15", "k": 142.2}, {"d": "2026-02-22", "k": 144.5}, {"d": "2026-03-01", "k": 143.3}, {"d": "2026-03-08", "k": 141.4}, {"d": "2026-03-15", "k": 148.9}, {"d": "2026-03-22", "k": 146.0}, {"d": "2026-03-29", "k": 146.3}, {"d": "2026-04-05", "k": 152.7}, {"d": "2026-04-12", "k": 159.4}];
+    var VAL = 'NOK';
+    function filtrer(p) {
+      var now = new Date(), ar = now.getFullYear();
+      if (p === 'ytd') return ALLE.filter(function(x) { return x.d >= ar + '-01-01'; });
+      var years = (p==='2ar'?2:p==='3ar'?3:p==='5ar'?5:1);
+      var d = new Date(now); d.setFullYear(d.getFullYear()-years);
+      var s = d.toISOString().slice(0,10);
+      return ALLE.filter(function(x) { return x.d >= s; });
+    }
+    function tegn(periode) {
+      var data = filtrer(periode); if (data.length<4) data=ALLE; if (data.length<4) return;
+      var pr = data.map(function(x){return x.k;}), da = data.map(function(x){return x.d;}), n=pr.length;
+      var mn=Math.min.apply(null,pr), mx=Math.max.apply(null,pr), rng=mx-mn||1;
+      var opp=pr[n-1]>=pr[0], fg=opp?'#22c55e':'#ef4444';
+      var end=((pr[n-1]-pr[0])/pr[0]*100).toFixed(1);
+      var hdr=document.getElementById('kurs-header-NOD');
+      if(hdr) hdr.innerHTML='<span style="font-size:1.05rem;font-weight:700">'+pr[n-1].toLocaleString('nb-NO',{minimumFractionDigits:2})+' '+VAL+'</span><span style="font-size:0.78rem;font-weight:500;color:'+fg+'">'+(opp?'▲ +':'▼ ')+end+'%</span>';
+      var cv=document.getElementById('kurs-canvas-NOD'); if(!cv) return;
+      var dk=document.documentElement.classList.contains('dark');
+      var DPR=Math.min(window.devicePixelRatio||1,2), CW=cv.parentElement.offsetWidth||680, CH=200;
+      var pL=54,pR=12,pT=14,pB=30;
+      cv.width=CW*DPR; cv.height=CH*DPR; cv.style.height=CH+'px';
+      var ctx=cv.getContext('2d'); ctx.scale(DPR,DPR);
+      var sx=function(i){return pL+i/(n-1)*(CW-pL-pR);};
+      var sy=function(p){return pT+(1-(p-mn)/rng)*(CH-pT-pB);};
+      ctx.fillStyle=dk?'#111827':'#f9fafb'; ctx.fillRect(0,0,CW,CH);
+      ctx.strokeStyle=dk?'#1f2937':'#e5e7eb'; ctx.lineWidth=1; ctx.setLineDash([4,4]);
+      [mn,(mn+mx)/2,mx].forEach(function(v){ctx.beginPath();ctx.moveTo(pL,sy(v));ctx.lineTo(CW-pR,sy(v));ctx.stroke();});
+      ctx.setLineDash([]);
+      ctx.fillStyle=dk?'#6b7280':'#9ca3af'; ctx.font='11px sans-serif'; ctx.textAlign='right';
+      [[mn,sy(mn)],[(mn+mx)/2,sy((mn+mx)/2)],[mx,sy(mx)]].forEach(function(pair){ctx.fillText(pair[0].toLocaleString('nb-NO',{maximumFractionDigits:0}),pL-4,pair[1]+4);});
+      var grad=ctx.createLinearGradient(0,pT,0,CH-pB);
+      grad.addColorStop(0,opp?'rgba(34,197,94,0.25)':'rgba(239,68,68,0.2)'); grad.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.beginPath(); ctx.moveTo(sx(0),CH-pB);
+      pr.forEach(function(p,i){ctx.lineTo(sx(i),sy(p));});
+      ctx.lineTo(sx(n-1),CH-pB); ctx.closePath(); ctx.fillStyle=grad; ctx.fill();
+      ctx.beginPath(); ctx.lineWidth=2.5; ctx.strokeStyle=fg; ctx.lineJoin='round';
+      pr.forEach(function(p,i){if(i===0)ctx.moveTo(sx(i),sy(p));else ctx.lineTo(sx(i),sy(p));});
+      ctx.stroke();
+      ctx.beginPath(); ctx.arc(sx(n-1),sy(pr[n-1]),4,0,Math.PI*2); ctx.fillStyle=fg; ctx.fill();
+      ctx.strokeStyle=dk?'#111827':'#fff'; ctx.lineWidth=2; ctx.stroke();
+      ctx.fillStyle=dk?'#6b7280':'#9ca3af'; ctx.textAlign='center';
+      [0,Math.floor(n/3),Math.floor(2*n/3),n-1].forEach(function(i){var d=da[i].slice(5);ctx.fillText(d.slice(3,5)+'.'+d.slice(0,2),sx(i),CH-8);});
+    }
+    document.querySelectorAll('.kp-btn').forEach(function(btn){
+      btn.addEventListener('click',function(){
+        document.querySelectorAll('.kp-btn').forEach(function(b){b.classList.remove('kp-aktiv');});
+        btn.classList.add('kp-aktiv'); tegn(btn.dataset.p);
+      });
+    });
+    if(ALLE.length>0) tegn('1ar');
+  })();
+  </script>
+</div>
+
   <div class="desc"><h2>Om selskapet</h2><p>Nordic Semiconductor ASA, a fabless semiconductor company, develops and sells integrated circuits for use in short- and long- range wireless applications in Europe, the Americas, and the Asia Pacific.</p></div>
 
   <div class="ai-oppsummering"><h2>AI-oppsummering <span class="ai-dato">Oppdatert 2026-04-08T12:34:53</span></h2><p>NOD betaler for øyeblikket ikke utbytte, men har historisk hatt utbetalinger — siste kjente utbytte var 0.40 NOK per aksje. P/E på 200.8 er ekstremt høyt og gjenspeiler enten midlertidige svake resultater eller at markedet priser inn et kraftig inntjeningshopp fremover. Med 3 år utbyttehistorikk er grunnlaget for langsiktig pålitelighet i ferd med å etableres — men historikken er ennå begrenset. NOD anbefales med forsiktighet for rene utbytteinvestorer — inntjeningssituasjonen gir liten trygghet for fremtidige utbetalinger. Investorer bør følge inntjeningsutviklingen nøye for NOD og vurdere aksjen i lys av egne mål for inntekt versus kursavkastning.</p></div>
@@ -305,44 +368,6 @@
   
 
   <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Informasjonsteknologi</td></tr><tr><td>Frekvens</td><td>Uregelmessig</td></tr><tr><td>Utbytte per aksje</td><td>0 NOK</td></tr><tr><td>Direkteavkastning</td><td>—</td></tr><tr><td>5-årssnitt yield</td><td>0.00%</td></tr><tr><td>År med utbytte</td><td>3</td></tr><tr><td>P/E</td><td>207.0</td></tr><tr><td>Utbyttevekst 5 år</td><td>+0.0% p.a.</td></tr><tr><td>Markedsverdi</td><td>31.5 mrd NOK</td></tr><tr><td>52-ukers kurs</td><td>101.8 – 170.0 NOK</td></tr></tbody></table>
-
-  
-<div class="kurs-lenker">
-  <h2>Kursgraf</h2>
-  <div class="kurs-chart-wrap">
-  <div class="kurs-chart-header">
-    <span class="kurs-chart-naa">159.40 NOK</span>
-    <span class="kurs-chart-endring" style="color:#22c55e">▲ 47.6% siste 52 uker</span>
-  </div>
-  <svg viewBox="0 0 600 180" style="width:100%;height:180px;display:block;" role="img"
-       aria-label="Kursgraf siste 52 uker">
-    <defs>
-      <linearGradient id="kg-grad" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="#22c55e" stop-opacity="0.25"/>
-        <stop offset="100%" stop-color="#22c55e" stop-opacity="0"/>
-      </linearGradient>
-    </defs>
-    <text x="55" y="154.0" text-anchor="end" font-size="10" fill="var(--chart-label,#9ca3af)">108</text><line x1="60" y1="150.0" x2="588" y2="150.0" stroke="var(--chart-grid,#1f2937)" stroke-width="1" stroke-dasharray="3,4"/><text x="55" y="85.0" text-anchor="end" font-size="10" fill="var(--chart-label,#9ca3af)">138</text><line x1="60" y1="81.0" x2="588" y2="81.0" stroke="var(--chart-grid,#1f2937)" stroke-width="1" stroke-dasharray="3,4"/><text x="55" y="16.0" text-anchor="end" font-size="10" fill="var(--chart-label,#9ca3af)">168</text><line x1="60" y1="12.0" x2="588" y2="12.0" stroke="var(--chart-grid,#1f2937)" stroke-width="1" stroke-dasharray="3,4"/>
-    <polygon points="60.0,150 60.0,150.0 70.4,118.2 80.7,140.8 91.1,130.8 101.4,113.8 111.8,118.4 122.1,110.9 132.5,88.2 142.8,83.4 153.2,86.1 163.5,90.7 173.9,78.6 184.2,82.3 194.6,65.3 204.9,84.5 215.3,74.5 225.6,82.0 236.0,12.0 246.4,19.1 256.7,17.5 267.1,42.4 277.4,49.8 287.8,26.9 298.1,45.4 308.5,28.0 318.8,20.7 329.2,21.6 339.5,22.8 349.9,60.7 360.2,94.4 370.6,83.6 380.9,98.7 391.3,90.0 401.6,83.9 412.0,96.2 422.4,103.5 432.7,99.9 443.1,82.9 453.4,81.1 463.8,82.9 474.1,90.3 484.5,100.6 494.8,42.0 505.2,71.7 515.5,66.5 525.9,69.2 536.2,73.6 546.6,56.4 556.9,63.0 567.3,62.3 577.6,47.7 588.0,32.4 588.0,150" fill="url(#kg-grad)"/>
-    <polyline points="60.0,150.0 70.4,118.2 80.7,140.8 91.1,130.8 101.4,113.8 111.8,118.4 122.1,110.9 132.5,88.2 142.8,83.4 153.2,86.1 163.5,90.7 173.9,78.6 184.2,82.3 194.6,65.3 204.9,84.5 215.3,74.5 225.6,82.0 236.0,12.0 246.4,19.1 256.7,17.5 267.1,42.4 277.4,49.8 287.8,26.9 298.1,45.4 308.5,28.0 318.8,20.7 329.2,21.6 339.5,22.8 349.9,60.7 360.2,94.4 370.6,83.6 380.9,98.7 391.3,90.0 401.6,83.9 412.0,96.2 422.4,103.5 432.7,99.9 443.1,82.9 453.4,81.1 463.8,82.9 474.1,90.3 484.5,100.6 494.8,42.0 505.2,71.7 515.5,66.5 525.9,69.2 536.2,73.6 546.6,56.4 556.9,63.0 567.3,62.3 577.6,47.7 588.0,32.4" fill="none" stroke="#22c55e" stroke-width="2"
-              stroke-linejoin="round" stroke-linecap="round"/>
-    <!-- Siste punkt markert -->
-    <circle cx="588.0" cy="32.4" r="4"
-            fill="#22c55e" stroke="var(--chart-bg,#111827)" stroke-width="2"/>
-    <text x="60.0" y="176" text-anchor="middle" font-size="10" fill="var(--chart-label,#9ca3af)">20.04</text><text x="163.5" y="176" text-anchor="middle" font-size="10" fill="var(--chart-label,#9ca3af)">29.06</text><text x="267.1" y="176" text-anchor="middle" font-size="10" fill="var(--chart-label,#9ca3af)">07.09</text><text x="370.6" y="176" text-anchor="middle" font-size="10" fill="var(--chart-label,#9ca3af)">16.11</text><text x="474.1" y="176" text-anchor="middle" font-size="10" fill="var(--chart-label,#9ca3af)">25.01</text><text x="588.0" y="176" text-anchor="middle" font-size="10" fill="var(--chart-label,#9ca3af)">12.04</text>
-  </svg>
-</div>
-  <div class="kurs-knapper" style="margin-top:0.75rem;">
-    <a href="https://finance.yahoo.com/chart/NOD.OL" target="_blank" rel="noopener noreferrer" class="kurs-btn">
-      <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"/></svg>
-      Yahoo Finance
-    </a>
-    <a href="https://www.tradingview.com/symbols/OSLO-NOD/" target="_blank" rel="noopener noreferrer" class="kurs-btn">
-      <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
-      TradingView
-    </a>
-  </div>
-</div>
 
   
 
