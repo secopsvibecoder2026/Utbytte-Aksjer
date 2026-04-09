@@ -679,8 +679,10 @@ function visHvaSkjerIDag() {
   const imorgen = new Date(idag); imorgen.setDate(idag.getDate() + 1);
   const om7     = new Date(idag); om7.setDate(idag.getDate() + 7);
 
-  const dagStr     = idag.toISOString().slice(0,10);
-  const imorgenStr = imorgen.toISOString().slice(0,10);
+  // Bruk lokal dato (ikke UTC) for å unngå at norsk midnatt gir gårsdagens ISO-dato
+  const _pZ = n => String(n).padStart(2, '0');
+  const dagStr     = `${idag.getFullYear()}-${_pZ(idag.getMonth()+1)}-${_pZ(idag.getDate())}`;
+  const imorgenStr = `${imorgen.getFullYear()}-${_pZ(imorgen.getMonth()+1)}-${_pZ(imorgen.getDate())}`;
   const fmtKr = v => v.toLocaleString('nb-NO', { maximumFractionDigits: 0 }) + ' kr';
 
   const pills = [];
@@ -692,7 +694,7 @@ function visHvaSkjerIDag() {
     const belop = pf[a.ticker] * (a.siste_utbytte || a.utbytte_per_aksje || 0);
     const belopTekst = belop > 0 ? ` (~${fmtKr(belop)})` : '';
     pills.push(`<span class="dag-pill dag-pill-utbetaling cursor-pointer" data-ticker="${a.ticker}">
-      💰 Utbetaling i dag: <strong>${a.ticker}</strong>${belopTekst}
+      Utbetaling i dag — ${escHtml(a.ticker)}${belopTekst}
     </span>`);
   });
 
@@ -702,7 +704,7 @@ function visHvaSkjerIDag() {
     const erMin = pf[a.ticker] || fav.has(a.ticker);
     if (!erMin) return;
     pills.push(`<span class="dag-pill dag-pill-ex cursor-pointer" data-ticker="${a.ticker}">
-      📅 Ex-dato i dag: <strong>${a.ticker}</strong> (${a.utbytte_yield.toFixed(1)}%)
+      Ex-dato i dag — ${escHtml(a.ticker)} ${a.utbytte_yield.toFixed(1)}%
     </span>`);
   });
 
@@ -712,7 +714,7 @@ function visHvaSkjerIDag() {
     if (pf[a.ticker] || fav.has(a.ticker)) return;
     if (a.utbytte_yield < 4) return;
     pills.push(`<span class="dag-pill dag-pill-siste cursor-pointer" data-ticker="${a.ticker}">
-      ⚡ Siste sjanse i dag: <strong>${a.ticker}</strong> ${a.utbytte_yield.toFixed(1)}%
+      Ex-dato i dag — ${escHtml(a.ticker)} ${a.utbytte_yield.toFixed(1)}%
     </span>`);
   });
 
@@ -722,7 +724,7 @@ function visHvaSkjerIDag() {
     if (pf[a.ticker]) return;
     if (a.utbytte_yield < 4) return;
     pills.push(`<span class="dag-pill dag-pill-siste cursor-pointer" data-ticker="${a.ticker}">
-      ⚡ Siste sjanse i morgen: <strong>${a.ticker}</strong> ${a.utbytte_yield.toFixed(1)}%
+      Ex-dato i morgen — ${escHtml(a.ticker)} ${a.utbytte_yield.toFixed(1)}%
     </span>`);
   });
 
