@@ -852,7 +852,7 @@ function visOversikt(bevarSide = false) {
     </div>`;
 
   const byggTabellRad = a => {
-    const exDato = a.ex_dato ? new Date(a.ex_dato) : null;
+    const exDato = a.ex_dato ? new Date(a.ex_dato + 'T00:00:00') : null; // lokal midnatt
     const snartEx = exDato && exDato >= idag && exDato <= om30;
     const rowClass = snartEx ? 'row-highlight' : '';
     const _d = _ad[a.ticker] || {};
@@ -948,7 +948,7 @@ function visOversikt(bevarSide = false) {
     : 'space-y-3';
 
   const byggKort = a => {
-    const exDato = a.ex_dato ? new Date(a.ex_dato) : null;
+    const exDato = a.ex_dato ? new Date(a.ex_dato + 'T00:00:00') : null; // lokal midnatt
     const idag2 = new Date(); idag2.setHours(0,0,0,0);
     const om30b = new Date(idag2); om30b.setDate(om30b.getDate() + 30);
     const snartEx = exDato && exDato >= idag2 && exDato <= om30b;
@@ -1292,7 +1292,7 @@ function visKalender() {
       .toLocaleDateString('nb-NO', { month: 'long', year: 'numeric' });
 
     const rader = hendelseListe.map(({ dato, type, aksje: a }) => {
-      const d = new Date(dato);
+      const d = new Date(dato + 'T00:00:00'); // lokal midnatt, ikke UTC
       const erPassert = d < idag;
       const dagerTil = Math.ceil((d - idag) / (1000*60*60*24));
       const cfg = KAL_TYPER[type];
@@ -2021,7 +2021,7 @@ function visModal(a) {
   const overlay = document.getElementById('modal-overlay');
   const body = document.getElementById('modal-body');
   const idag = new Date(); idag.setHours(0,0,0,0);
-  const exDato = a.ex_dato ? new Date(a.ex_dato) : null;
+  const exDato = a.ex_dato ? new Date(a.ex_dato + 'T00:00:00') : null; // lokal midnatt
   const dagerTilEx = exDato ? Math.ceil((exDato - idag) / (1000*60*60*24)) : null;
 
   body.innerHTML = `
