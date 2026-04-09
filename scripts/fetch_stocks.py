@@ -564,6 +564,18 @@ def hent_aksje(meta):
         # Historiske utbytter per år + snitt yield
         historiske_utbytter, snitt_yield_5ar = hent_historiske_utbytter(dividends, hist_prices)
 
+        # Ukentlig kurshistorikk siste 52 uker (for kursgraf)
+        kurs_historikk = []
+        if hist_prices is not None and not hist_prices.empty and "Close" in hist_prices.columns:
+            try:
+                weekly = hist_prices["Close"].resample("W").last().dropna()
+                kurs_historikk = [
+                    {"d": str(idx.date()), "k": round(float(val), 2)}
+                    for idx, val in weekly.tail(52).items()
+                ]
+            except Exception:
+                pass
+
         # Antall år med utbytte (unike kalenderår med faktisk utbyttebetaling)
         if not dividends.empty:
             ar_med_utbytte = int(dividends.index.year.nunique())
@@ -656,6 +668,7 @@ def hent_aksje(meta):
             "beskrivelse": BESKRIVELSER.get(ticker, ""),
             "beskrivelse_fakta": BESKRIVELSE_FAKTA.get(ticker, ""),
             "valuta": valuta,
+            "kurs_historikk": kurs_historikk,
             "data_kilde": "yahoo",
         }
         return resultat
@@ -731,6 +744,94 @@ def valider_aksje(a):
         advarsler.append(f"[4] Manglende felt: {', '.join(mangler)}")
 
     return advarsler
+
+
+def _generer_kurs_chart_svg(kurs_historikk, valuta="NOK"):
+    """Lager et inline SVG linjediagram for kurshistorikk (Nordnet-stil)."""
+    if not kurs_historikk or len(kurs_historikk) < 4:
+        return ""
+
+    priser = [p["k"] for p in kurs_historikk]
+    datoer = [p["d"] for p in kurs_historikk]
+    n = len(priser)
+    min_p = min(priser)
+    max_p = max(priser)
+    rekkevidde = max_p - min_p or 1
+
+    W, H = 600, 180
+    pad_l, pad_r, pad_t, pad_b = 60, 12, 12, 30
+
+    def sx(i):
+        return pad_l + i / (n - 1) * (W - pad_l - pad_r)
+
+    def sy(p):
+        return pad_t + (1 - (p - min_p) / rekkevidde) * (H - pad_t - pad_b)
+
+    # Bygg linjepunkter
+    punkter = " ".join(f"{sx(i):.1f},{sy(p):.1f}" for i, p in enumerate(priser))
+
+    # Fyll under linja
+    fyll_punkter = (
+        f"{sx(0):.1f},{H - pad_b} "
+        + punkter
+        + f" {sx(n-1):.1f},{H - pad_b}"
+    )
+
+    er_opp = priser[-1] >= priser[0]
+    farge = "#22c55e" if er_opp else "#ef4444"
+    farge_lys = "rgba(34,197,94,0.15)" if er_opp else "rgba(239,68,68,0.12)"
+
+    # Y-akse etiketter
+    y_labels = ""
+    for val in [min_p, (min_p + max_p) / 2, max_p]:
+        y = sy(val)
+        y_labels += (
+            f'<text x="{pad_l - 5}" y="{y + 4:.1f}" '
+            f'text-anchor="end" font-size="10" fill="var(--chart-label,#9ca3af)">'
+            f'{val:,.0f}</text>'
+            f'<line x1="{pad_l}" y1="{y:.1f}" x2="{W - pad_r}" y2="{y:.1f}" '
+            f'stroke="var(--chart-grid,#1f2937)" stroke-width="1" stroke-dasharray="3,4"/>'
+        )
+
+    # X-akse etiketter (6 jevnt fordelte datoer)
+    x_labels = ""
+    indices = [int(i * (n - 1) / 5) for i in range(6)]
+    for i in indices:
+        d = datoer[i][5:]  # MM-DD
+        d_norsk = d[3:5] + "." + d[:2]  # DD.MM
+        x_labels += (
+            f'<text x="{sx(i):.1f}" y="{H - 4}" '
+            f'text-anchor="middle" font-size="10" fill="var(--chart-label,#9ca3af)">'
+            f'{d_norsk}</text>'
+        )
+
+    endring = ((priser[-1] - priser[0]) / priser[0] * 100) if priser[0] else 0
+    endring_tekst = f"{'▲' if er_opp else '▼'} {abs(endring):.1f}% siste 52 uker"
+    endring_farge = farge
+
+    return f"""<div class="kurs-chart-wrap">
+  <div class="kurs-chart-header">
+    <span class="kurs-chart-naa">{priser[-1]:,.2f} {valuta}</span>
+    <span class="kurs-chart-endring" style="color:{endring_farge}">{endring_tekst}</span>
+  </div>
+  <svg viewBox="0 0 {W} {H}" style="width:100%;height:{H}px;display:block;" role="img"
+       aria-label="Kursgraf siste 52 uker">
+    <defs>
+      <linearGradient id="kg-grad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="{farge}" stop-opacity="0.25"/>
+        <stop offset="100%" stop-color="{farge}" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+    {y_labels}
+    <polygon points="{fyll_punkter}" fill="url(#kg-grad)"/>
+    <polyline points="{punkter}" fill="none" stroke="{farge}" stroke-width="2"
+              stroke-linejoin="round" stroke-linecap="round"/>
+    <!-- Siste punkt markert -->
+    <circle cx="{sx(n-1):.1f}" cy="{sy(priser[-1]):.1f}" r="4"
+            fill="{farge}" stroke="var(--chart-bg,#111827)" stroke-width="2"/>
+    {x_labels}
+  </svg>
+</div>"""
 
 
 def _generer_hist_chart(hist, valuta="NOK"):
@@ -1192,12 +1293,15 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
         "</table>"
     ) if hist_rader else ""
 
-    # Kursgraf-lenker (eksterne leverandører)
+    # Kursgraf-seksjon (SVG hvis data finnes, ellers lenker)
+    kurs_hist = a.get("kurs_historikk") or []
     ticker_yf = a.get("ticker_yf") or f"{ticker}.OL"
+    kurs_svg = _generer_kurs_chart_svg(kurs_hist, valuta)
     tv_chart_seksjon = f"""
 <div class="kurs-lenker">
   <h2>Kursgraf</h2>
-  <div class="kurs-knapper">
+  {kurs_svg if kurs_svg else ""}
+  <div class="kurs-knapper" style="margin-top:0.75rem;">
     <a href="https://finance.yahoo.com/chart/{ticker_yf}" target="_blank" rel="noopener noreferrer" class="kurs-btn">
       <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"/></svg>
       Yahoo Finance
@@ -1396,6 +1500,12 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     .kurs-btn:hover {{ background: #e5e7eb; }}
     .dark .kurs-btn {{ background: #1f2937; color: #d1d5db; }}
     .dark .kurs-btn:hover {{ background: #374151; }}
+    .kurs-chart-wrap {{ background: var(--chart-bg,#fff); border-radius: 10px; padding: 0.75rem 0.5rem 0; border: 1px solid #e5e7eb; }}
+    .kurs-chart-header {{ display: flex; justify-content: space-between; align-items: baseline; padding: 0 0.5rem 0.5rem; }}
+    .kurs-chart-naa {{ font-size: 1.1rem; font-weight: 700; color: #111827; }}
+    .kurs-chart-endring {{ font-size: 0.8rem; font-weight: 500; }}
+    .dark .kurs-chart-wrap {{ --chart-bg: #111827; --chart-label: #6b7280; --chart-grid: #1f2937; border-color: #1f2937; }}
+    .dark .kurs-chart-naa {{ color: #f3f4f6; }}
 
     /* Dark mode */
     .dark body {{ background: #030712; color: #f3f4f6; }}
