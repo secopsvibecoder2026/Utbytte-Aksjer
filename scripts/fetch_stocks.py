@@ -1802,11 +1802,26 @@ def generer_sektorsider(aksjer, root_dir):
 
         json_ld = json.dumps({
             "@context": "https://schema.org",
-            "@type": "BreadcrumbList",
-            "itemListElement": [
-                {"@type": "ListItem", "position": 1, "name": "Hjem",   "item": "https://exday.no/"},
-                {"@type": "ListItem", "position": 2, "name": "Aksjer", "item": "https://exday.no/aksjer/"},
-                {"@type": "ListItem", "position": 3, "name": sektor,   "item": f"https://exday.no/aksjer/sektor/{slug}/"},
+            "@graph": [
+                {
+                    "@type": "BreadcrumbList",
+                    "itemListElement": [
+                        {"@type": "ListItem", "position": 1, "name": "Hjem",   "item": "https://exday.no/"},
+                        {"@type": "ListItem", "position": 2, "name": "Aksjer", "item": "https://exday.no/aksjer/"},
+                        {"@type": "ListItem", "position": 3, "name": sektor,   "item": f"https://exday.no/aksjer/sektor/{slug}/"},
+                    ]
+                },
+                {
+                    "@type": "ItemList",
+                    "name": f"{sektor}-aksjer med utbytte på Oslo Børs",
+                    "description": meta_desc,
+                    "url": f"https://exday.no/aksjer/sektor/{slug}/",
+                    "numberOfItems": len(aksjer_sortert),
+                    "itemListElement": [
+                        {"@type": "ListItem", "position": i + 1, "url": f"https://exday.no/aksjer/{a['ticker']}/"}
+                        for i, a in enumerate(aksjer_sortert)
+                    ]
+                }
             ]
         }, ensure_ascii=False)
 
