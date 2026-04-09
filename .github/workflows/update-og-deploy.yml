@@ -55,6 +55,7 @@ jobs:
             echo "Ingen endringer."
           else
             git commit -m "auto: oppdater aksjedata og aksjesider $(date -u '+%Y-%m-%d %H:%M UTC')"
+            git pull --rebase origin main
             git push
           fi
 
