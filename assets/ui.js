@@ -1975,43 +1975,24 @@ function visModal(a) {
       ${rangebar(a.pris, a['52u_lav'], a['52u_hoy'], true)}
     </div>
 
-    <div id="tv-modal-chart" class="mt-4 rounded-xl overflow-hidden" style="height:220px;"></div>
+    <div class="mt-4 flex gap-2 flex-wrap">
+      <a href="https://finance.yahoo.com/chart/${escHtml(a.ticker_yf || a.ticker + '.OL')}" target="_blank" rel="noopener noreferrer"
+         class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"/></svg>
+        Kursgraf (Yahoo Finance)
+      </a>
+      <a href="https://www.tradingview.com/symbols/OSLO-${escHtml(a.ticker)}/" target="_blank" rel="noopener noreferrer"
+         class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+        TradingView
+      </a>
+    </div>
 
     ${historiskChart(a)}
     ${scoreForklaring(a)}
     ${modalKalkulator(a)}
     ${notatSeksjon(a)}
   `;
-
-  // TradingView kursgraf (dynamisk, siden scripts ikke kjøres via innerHTML)
-  const tvEl = body.querySelector('#tv-modal-chart');
-  if (tvEl) {
-    const isDark = document.documentElement.classList.contains('dark');
-    const inner = document.createElement('div');
-    inner.className = 'tradingview-widget-container';
-    inner.style.height = '100%';
-    const widget = document.createElement('div');
-    widget.className = 'tradingview-widget-container__widget';
-    widget.style.height = '100%';
-    inner.appendChild(widget);
-    const s = document.createElement('script');
-    s.type = 'text/javascript';
-    s.src = 'https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js';
-    s.async = true;
-    s.textContent = JSON.stringify({
-      symbol: `OSL:${a.ticker}`,
-      width: '100%',
-      height: 220,
-      locale: 'no',
-      dateRange: '12M',
-      colorTheme: isDark ? 'dark' : 'light',
-      isTransparent: false,
-      autosize: true,
-      largeChartUrl: `https://www.tradingview.com/chart/?symbol=OSL:${a.ticker}`
-    });
-    inner.appendChild(s);
-    tvEl.appendChild(inner);
-  }
 
   overlay.classList.remove('hidden');
   overlay.classList.add('flex');

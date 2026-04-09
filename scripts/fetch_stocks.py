@@ -1192,45 +1192,21 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
         "</table>"
     ) if hist_rader else ""
 
-    # TradingView kursgraf-seksjon
+    # Kursgraf-lenker (eksterne leverandører)
+    ticker_yf = a.get("ticker_yf") or f"{ticker}.OL"
     tv_chart_seksjon = f"""
-<div class="tv-wrap">
+<div class="kurs-lenker">
   <h2>Kursgraf</h2>
-  <div id="tv-chart-{ticker}" style="height:420px;border-radius:10px;overflow:hidden;"></div>
-  <script>
-  (function() {{
-    var isDark = document.documentElement.classList.contains('dark');
-    var container = document.getElementById('tv-chart-{ticker}');
-    if (!container) return;
-    var inner = document.createElement('div');
-    inner.className = 'tradingview-widget-container';
-    inner.style.height = '100%';
-    var widget = document.createElement('div');
-    widget.className = 'tradingview-widget-container__widget';
-    widget.style.height = '100%';
-    inner.appendChild(widget);
-    var s = document.createElement('script');
-    s.type = 'text/javascript';
-    s.src = 'https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js';
-    s.async = true;
-    s.textContent = JSON.stringify({{
-      autosize: true,
-      symbol: 'OSL:{ticker}',
-      interval: 'W',
-      timezone: 'Europe/Oslo',
-      theme: isDark ? 'dark' : 'light',
-      style: '1',
-      locale: 'no',
-      hide_top_toolbar: false,
-      hide_legend: false,
-      save_image: false,
-      hide_volume: false,
-      support_host: 'https://www.tradingview.com'
-    }});
-    inner.appendChild(s);
-    container.appendChild(inner);
-  }})();
-  </script>
+  <div class="kurs-knapper">
+    <a href="https://finance.yahoo.com/chart/{ticker_yf}" target="_blank" rel="noopener noreferrer" class="kurs-btn">
+      <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"/></svg>
+      Yahoo Finance
+    </a>
+    <a href="https://www.tradingview.com/symbols/OSLO-{ticker}/" target="_blank" rel="noopener noreferrer" class="kurs-btn">
+      <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+      TradingView
+    </a>
+  </div>
 </div>"""
 
     # Nye innholdsseksjoner
@@ -1413,8 +1389,13 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     .rel-kort {{ background: #fff; border-color: #e5e7eb; }}
     .rel-navn {{ color: #6b7280; }}
     .badge {{ background: #dcfce7; color: #15803d; }}
-    .tv-wrap {{ margin: 1.5rem 0; }}
-    .tv-wrap h2 {{ margin-bottom: 0.75rem; }}
+    .kurs-lenker {{ margin: 1.5rem 0; }}
+    .kurs-lenker h2 {{ margin-bottom: 0.75rem; }}
+    .kurs-knapper {{ display: flex; gap: 0.5rem; flex-wrap: wrap; }}
+    .kurs-btn {{ display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.5rem 0.9rem; border-radius: 8px; font-size: 0.8rem; font-weight: 500; background: #f3f4f6; color: #374151; text-decoration: none; transition: background 0.15s; }}
+    .kurs-btn:hover {{ background: #e5e7eb; }}
+    .dark .kurs-btn {{ background: #1f2937; color: #d1d5db; }}
+    .dark .kurs-btn:hover {{ background: #374151; }}
 
     /* Dark mode */
     .dark body {{ background: #030712; color: #f3f4f6; }}

@@ -176,8 +176,13 @@
     .rel-kort { background: #fff; border-color: #e5e7eb; }
     .rel-navn { color: #6b7280; }
     .badge { background: #dcfce7; color: #15803d; }
-    .tv-wrap { margin: 1.5rem 0; }
-    .tv-wrap h2 { margin-bottom: 0.75rem; }
+    .kurs-lenker { margin: 1.5rem 0; }
+    .kurs-lenker h2 { margin-bottom: 0.75rem; }
+    .kurs-knapper { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .kurs-btn { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.5rem 0.9rem; border-radius: 8px; font-size: 0.8rem; font-weight: 500; background: #f3f4f6; color: #374151; text-decoration: none; transition: background 0.15s; }
+    .kurs-btn:hover { background: #e5e7eb; }
+    .dark .kurs-btn { background: #1f2937; color: #d1d5db; }
+    .dark .kurs-btn:hover { background: #374151; }
 
     /* Dark mode */
     .dark body { background: #030712; color: #f3f4f6; }
@@ -296,43 +301,18 @@
   <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Industri</td></tr><tr><td>Frekvens</td><td>Kvartalsvis</td></tr><tr><td>Utbytte per aksje</td><td>1.68 NOK</td></tr><tr><td>Direkteavkastning</td><td>9.46%</td></tr><tr><td>5-årssnitt yield</td><td>4.62%</td></tr><tr><td>År med utbytte</td><td>2</td></tr><tr><td>P/E</td><td>11.2</td></tr><tr><td>Payout ratio</td><td>79%</td></tr><tr><td>Utbyttevekst 5 år</td><td>-66.7% p.a.</td></tr><tr><td>Markedsverdi</td><td>3.1 mrd NOK</td></tr><tr><td>52-ukers kurs</td><td>11.32 – 21.1 NOK</td></tr></tbody></table>
 
   
-<div class="tv-wrap">
+<div class="kurs-lenker">
   <h2>Kursgraf</h2>
-  <div id="tv-chart-MORLD" style="height:420px;border-radius:10px;overflow:hidden;"></div>
-  <script>
-  (function() {
-    var isDark = document.documentElement.classList.contains('dark');
-    var container = document.getElementById('tv-chart-MORLD');
-    if (!container) return;
-    var inner = document.createElement('div');
-    inner.className = 'tradingview-widget-container';
-    inner.style.height = '100%';
-    var widget = document.createElement('div');
-    widget.className = 'tradingview-widget-container__widget';
-    widget.style.height = '100%';
-    inner.appendChild(widget);
-    var s = document.createElement('script');
-    s.type = 'text/javascript';
-    s.src = 'https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js';
-    s.async = true;
-    s.textContent = JSON.stringify({
-      autosize: true,
-      symbol: 'OSL:MORLD',
-      interval: 'W',
-      timezone: 'Europe/Oslo',
-      theme: isDark ? 'dark' : 'light',
-      style: '1',
-      locale: 'no',
-      hide_top_toolbar: false,
-      hide_legend: false,
-      save_image: false,
-      hide_volume: false,
-      support_host: 'https://www.tradingview.com'
-    });
-    inner.appendChild(s);
-    container.appendChild(inner);
-  })();
-  </script>
+  <div class="kurs-knapper">
+    <a href="https://finance.yahoo.com/chart/MORLD.OL" target="_blank" rel="noopener noreferrer" class="kurs-btn">
+      <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"/></svg>
+      Yahoo Finance
+    </a>
+    <a href="https://www.tradingview.com/symbols/OSLO-MORLD/" target="_blank" rel="noopener noreferrer" class="kurs-btn">
+      <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+      TradingView
+    </a>
+  </div>
 </div>
 
   <h2>Historiske utbytter</h2><svg viewBox="0 0 420 180" style="width:100%;max-width:420px;height:auto;display:block;margin-bottom:0.5rem;" aria-label="Historiske utbytter per aksje i NOK"><line x1="52" y1="148.0" x2="408" y2="148.0" stroke="#e5e7eb" stroke-width="1" class="ytick"/><text x="48" y="152.0" text-anchor="end" font-size="10" fill="#9ca3af">0.0</text><line x1="52" y1="104.0" x2="408" y2="104.0" stroke="#e5e7eb" stroke-width="1" class="ytick"/><text x="48" y="108.0" text-anchor="end" font-size="10" fill="#9ca3af">0.42</text><line x1="52" y1="60.0" x2="408" y2="60.0" stroke="#e5e7eb" stroke-width="1" class="ytick"/><text x="48" y="64.0" text-anchor="end" font-size="10" fill="#9ca3af">0.84</text><line x1="52" y1="16.0" x2="408" y2="16.0" stroke="#e5e7eb" stroke-width="1" class="ytick"/><text x="48" y="20.0" text-anchor="end" font-size="10" fill="#9ca3af">1.26</text><rect class="hbar" x="123.0" y="16.0" width="36" height="132.0" rx="3" fill="#16a34a" opacity="0.85"/><rect class="hbar" x="301.0" y="104.0" width="36" height="44.0" rx="3" fill="#16a34a" opacity="0.85"/><text x="141.0" y="174" text-anchor="middle" font-size="10" fill="#9ca3af">2025</text><text x="319.0" y="174" text-anchor="middle" font-size="10" fill="#9ca3af">2026</text><rect class="htip-bg" x="89.0" y="2.0" width="106" height="20" rx="4" fill="#111827" opacity="0" pointer-events="none"/><text class="htip-txt" x="141.0" y="14.0" text-anchor="middle" font-size="10" fill="#f3f4f6" opacity="0" pointer-events="none">1.26 NOK · 6.9% yield</text><rect class="htrig" x="52.0" y="16" width="178.0" height="132" fill="transparent" onmouseenter="showTip(this)" onmouseleave="hideTip(this)" data-i="0"/><rect class="htip-bg" x="267.0" y="76.0" width="106" height="20" rx="4" fill="#111827" opacity="0" pointer-events="none"/><text class="htip-txt" x="319.0" y="91.0" text-anchor="middle" font-size="10" fill="#f3f4f6" opacity="0" pointer-events="none">0.42 NOK · 2.4% yield</text><rect class="htrig" x="230.0" y="16" width="178.0" height="132" fill="transparent" onmouseenter="showTip(this)" onmouseleave="hideTip(this)" data-i="1"/><text x="16" y="82.0" text-anchor="middle" font-size="10" fill="#9ca3af" transform="rotate(-90,16,82.0)">NOK per aksje</text></svg><script>
