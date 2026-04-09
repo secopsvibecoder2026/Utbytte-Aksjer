@@ -2069,17 +2069,7 @@ function visModal(a) {
       ${rangebar(a.pris, a['52u_lav'], a['52u_hoy'], true)}
     </div>
 
-    ${a.kurs_historikk && a.kurs_historikk.length >= 4 ? `
-    <div id="kurs-graf-modal" class="mt-4">
-      <div class="flex gap-1 mb-2">
-        ${['YTD','1å','2å','3å','5å'].map((l,i) => {
-          const p = ['ytd','1ar','2ar','3ar','5ar'][i];
-          return `<button data-kgp="${p}" class="kurs-periode-knapp${p==='1ar' ? ' aktiv' : ''}">${l}</button>`;
-        }).join('')}
-      </div>
-      <div id="kurs-modal-header" class="flex justify-between items-baseline mb-1 text-sm"></div>
-      <canvas id="kurs-modal-canvas" style="display:block;border-radius:10px;width:100%;"></canvas>
-    </div>` : ''}
+    <div id="kurs-graf-modal" class="mt-4"></div>
 
     ${historiskChart(a)}
     ${scoreForklaring(a)}
@@ -2091,11 +2081,20 @@ function visModal(a) {
   overlay.classList.add('flex');
 
   // Kursgraf (Canvas) – tegnes ETTER modal vises så offsetWidth er korrekt
-  if (a.kurs_historikk && a.kurs_historikk.length >= 4) {
+  const grafEl = body.querySelector('#kurs-graf-modal');
+  if (grafEl && a.kurs_historikk && a.kurs_historikk.length >= 4) {
+    const perioder = [['YTD','ytd'],['1å','1ar'],['2å','2ar'],['3å','3ar'],['5å','5ar']];
+    grafEl.innerHTML =
+      '<div class="flex gap-1 mb-2">' +
+      perioder.map(([l,p]) => '<button data-kgp="' + p + '" class="kurs-periode-knapp' + (p==='1ar' ? ' aktiv' : '') + '">' + l + '</button>').join('') +
+      '</div>' +
+      '<div id="kurs-modal-header" class="flex justify-between items-baseline mb-1 text-sm"></div>' +
+      '<canvas id="kurs-modal-canvas" style="display:block;border-radius:10px;width:100%;"></canvas>';
+
     requestAnimationFrame(() => _tegnModalKursGraf(body, a, '1ar'));
-    body.querySelectorAll('.kurs-periode-knapp').forEach(btn => {
+    grafEl.querySelectorAll('.kurs-periode-knapp').forEach(btn => {
       btn.addEventListener('click', () => {
-        body.querySelectorAll('.kurs-periode-knapp').forEach(b => b.classList.remove('aktiv'));
+        grafEl.querySelectorAll('.kurs-periode-knapp').forEach(b => b.classList.remove('aktiv'));
         btn.classList.add('aktiv');
         _tegnModalKursGraf(body, a, btn.dataset.kgp);
       });
