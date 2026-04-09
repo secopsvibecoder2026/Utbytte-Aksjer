@@ -669,116 +669,9 @@ function oppdaterPersonligSammendrag(pf, fav) {
 }
 
 
-function visHvaSkjerIDag() {
-  const el = document.getElementById('hva-skjer-idag');
-  if (!el || !alleAksjer.length) return;
-
-  const pf  = hentPF();
-  const fav = hentFav();
-  const idag    = new Date(); idag.setHours(0,0,0,0);
-  const imorgen = new Date(idag); imorgen.setDate(idag.getDate() + 1);
-  const om7     = new Date(idag); om7.setDate(idag.getDate() + 7);
-
-  // Bruk lokal dato (ikke UTC) for å unngå at norsk midnatt gir gårsdagens ISO-dato
-  const _pZ = n => String(n).padStart(2, '0');
-  const dagStr     = `${idag.getFullYear()}-${_pZ(idag.getMonth()+1)}-${_pZ(idag.getDate())}`;
-  const imorgenStr = `${imorgen.getFullYear()}-${_pZ(imorgen.getMonth()+1)}-${_pZ(imorgen.getDate())}`;
-  const fmtKr = v => v.toLocaleString('nb-NO', { maximumFractionDigits: 0 }) + ' kr';
-
-  const pills = [];
-
-  // 1. Utbetaling i dag (portefølje)
-  alleAksjer.forEach(a => {
-    if (!pf[a.ticker] || !a.betaling_dato) return;
-    if (a.betaling_dato.slice(0,10) !== dagStr) return;
-    const belop = pf[a.ticker] * (a.siste_utbytte || a.utbytte_per_aksje || 0);
-    const belopTekst = belop > 0 ? ` (~${fmtKr(belop)})` : '';
-    pills.push(`<span class="dag-pill dag-pill-utbetaling cursor-pointer" data-ticker="${a.ticker}">
-      Utbetaling i dag — ${escHtml(a.ticker)}${belopTekst}
-    </span>`);
-  });
-
-  // 2. Ex-dato i dag – portefølje/favoritter (du eier allerede → ingen advarsel)
-  alleAksjer.forEach(a => {
-    if (!a.ex_dato || a.ex_dato.slice(0,10) !== dagStr) return;
-    const erMin = pf[a.ticker] || fav.has(a.ticker);
-    if (!erMin) return;
-    pills.push(`<span class="dag-pill dag-pill-ex cursor-pointer" data-ticker="${a.ticker}">
-      Ex-dato i dag — ${escHtml(a.ticker)} ${a.utbytte_yield.toFixed(1)}%
-    </span>`);
-  });
-
-  // 3. Ex-dato i dag – høy-yield aksjer du IKKE eier (siste sjanse i dag)
-  alleAksjer.forEach(a => {
-    if (!a.ex_dato || a.ex_dato.slice(0,10) !== dagStr) return;
-    if (pf[a.ticker] || fav.has(a.ticker)) return;
-    if (a.utbytte_yield < 4) return;
-    pills.push(`<span class="dag-pill dag-pill-siste cursor-pointer" data-ticker="${a.ticker}">
-      Ex-dato i dag — ${escHtml(a.ticker)} ${a.utbytte_yield.toFixed(1)}%
-    </span>`);
-  });
-
-  // 4. Ex-dato i morgen – siste sjanse (høy yield, ikke i portefølje)
-  alleAksjer.forEach(a => {
-    if (!a.ex_dato || a.ex_dato.slice(0,10) !== imorgenStr) return;
-    if (pf[a.ticker]) return;
-    if (a.utbytte_yield < 4) return;
-    pills.push(`<span class="dag-pill dag-pill-siste cursor-pointer" data-ticker="${a.ticker}">
-      Ex-dato i morgen — ${escHtml(a.ticker)} ${a.utbytte_yield.toFixed(1)}%
-    </span>`);
-  });
-
-  // 5. Utbetalinger denne uken (portefølje, fra i morgen)
-  const ukeBetalinger = alleAksjer.filter(a =>
-    pf[a.ticker] && a.betaling_dato &&
-    new Date(a.betaling_dato) > idag && new Date(a.betaling_dato) <= om7
-  ).sort((a, b) => new Date(a.betaling_dato) - new Date(b.betaling_dato));
-
-  if (ukeBetalinger.length) {
-    const totalUke = ukeBetalinger.reduce((s, a) =>
-      s + pf[a.ticker] * (a.siste_utbytte || a.utbytte_per_aksje || 0), 0);
-    const tickerListe = ukeBetalinger.slice(0,3).map(a => a.ticker).join(', ')
-      + (ukeBetalinger.length > 3 ? ` +${ukeBetalinger.length - 3}` : '');
-    pills.push(`<span class="dag-pill dag-pill-uke">
-      📬 Utbetalinger denne uken: ${tickerListe}${totalUke > 0 ? ` (~${fmtKr(totalUke)})` : ''}
-    </span>`);
-  }
-
-  // 6. Aksjer under målpris
-  const _adDag = hentAlleAksjeData();
-  alleAksjer.forEach(a => {
-    const d = _adDag[a.ticker];
-    if (!d || !d.malPris || d.malPris <= 0) return;
-    if (a.pris <= 0 || a.pris > d.malPris) return;
-    pills.push(`<span class="dag-pill dag-pill-malpris cursor-pointer" data-ticker="${a.ticker}">
-      🎯 Under målpris: <strong>${a.ticker}</strong> (${a.pris.toFixed(0)} / mål ${d.malPris.toFixed(0)})
-    </span>`);
-  });
-
-  if (!pills.length) { el.classList.add('hidden'); return; }
-
-  const datoTekst = idag.toLocaleDateString('nb-NO', { weekday: 'long', day: 'numeric', month: 'long' });
-  el.innerHTML = `
-    <div class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-3 shadow-sm">
-      <p class="text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500 mb-2.5">
-        I dag · ${datoTekst.charAt(0).toUpperCase() + datoTekst.slice(1)}
-      </p>
-      <div class="flex flex-wrap gap-2">${pills.join('')}</div>
-    </div>`;
-  el.classList.remove('hidden');
-
-  el.querySelectorAll('[data-ticker]').forEach(pill => {
-    pill.addEventListener('click', () => {
-      const aksje = alleAksjer.find(a => a.ticker === pill.dataset.ticker);
-      if (aksje) visModal(aksje);
-    });
-  });
-}
-
 
 function visOversikt(bevarSide = false) {
   if (!bevarSide) paginering.side = 1;
-  visHvaSkjerIDag();
   visDagensBevegelser();
   const alleData = sorterAksjer(filtrerteAksjer());
   const tbody = document.getElementById('tabell-body');
@@ -2103,7 +1996,6 @@ function visModal(a) {
     _malIn.addEventListener('change', () => {
       lagreAksjeData(a.ticker, { malPris: parseFloat(_malIn.value) || 0 });
       visOversikt();
-      visHvaSkjerIDag();
     });
   }
   if (_notIn) {
