@@ -183,6 +183,12 @@
     .kurs-btn:hover { background: #e5e7eb; }
     .dark .kurs-btn { background: #1f2937; color: #d1d5db; }
     .dark .kurs-btn:hover { background: #374151; }
+    .kurs-chart-wrap { background: var(--chart-bg,#fff); border-radius: 10px; padding: 0.75rem 0.5rem 0; border: 1px solid #e5e7eb; }
+    .kurs-chart-header { display: flex; justify-content: space-between; align-items: baseline; padding: 0 0.5rem 0.5rem; }
+    .kurs-chart-naa { font-size: 1.1rem; font-weight: 700; color: #111827; }
+    .kurs-chart-endring { font-size: 0.8rem; font-weight: 500; }
+    .dark .kurs-chart-wrap { --chart-bg: #111827; --chart-label: #6b7280; --chart-grid: #1f2937; border-color: #1f2937; }
+    .dark .kurs-chart-naa { color: #f3f4f6; }
 
     /* Dark mode */
     .dark body { background: #030712; color: #f3f4f6; }
@@ -303,7 +309,30 @@
   
 <div class="kurs-lenker">
   <h2>Kursgraf</h2>
-  <div class="kurs-knapper">
+  <div class="kurs-chart-wrap">
+  <div class="kurs-chart-header">
+    <span class="kurs-chart-naa">246.00 NOK</span>
+    <span class="kurs-chart-endring" style="color:#22c55e">▲ 10.8% siste 52 uker</span>
+  </div>
+  <svg viewBox="0 0 600 180" style="width:100%;height:180px;display:block;" role="img"
+       aria-label="Kursgraf siste 52 uker">
+    <defs>
+      <linearGradient id="kg-grad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#22c55e" stop-opacity="0.25"/>
+        <stop offset="100%" stop-color="#22c55e" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+    <text x="55" y="154.0" text-anchor="end" font-size="10" fill="var(--chart-label,#9ca3af)">210</text><line x1="60" y1="150.0" x2="588" y2="150.0" stroke="var(--chart-grid,#1f2937)" stroke-width="1" stroke-dasharray="3,4"/><text x="55" y="85.0" text-anchor="end" font-size="10" fill="var(--chart-label,#9ca3af)">243</text><line x1="60" y1="81.0" x2="588" y2="81.0" stroke="var(--chart-grid,#1f2937)" stroke-width="1" stroke-dasharray="3,4"/><text x="55" y="16.0" text-anchor="end" font-size="10" fill="var(--chart-label,#9ca3af)">276</text><line x1="60" y1="12.0" x2="588" y2="12.0" stroke="var(--chart-grid,#1f2937)" stroke-width="1" stroke-dasharray="3,4"/>
+    <polygon points="60.0,150 60.0,125.0 70.4,118.9 80.7,91.7 91.1,92.7 101.4,93.7 111.8,106.4 122.1,99.2 132.5,118.9 142.8,129.2 153.2,124.1 163.5,104.3 173.9,109.5 184.2,86.7 194.6,92.9 204.9,91.9 215.3,102.3 225.6,87.7 236.0,92.9 246.4,96.0 256.7,109.5 267.1,127.2 277.4,125.1 287.8,113.7 298.1,122.0 308.5,122.0 318.8,126.1 329.2,146.9 339.5,119.9 349.9,128.2 360.2,150.0 370.6,143.8 380.9,130.3 391.3,120.9 401.6,120.9 412.0,113.7 422.4,97.1 432.7,66.0 443.1,58.7 453.4,66.0 463.8,52.5 474.1,53.5 484.5,60.8 494.8,42.1 505.2,37.9 515.5,12.0 525.9,61.8 536.2,86.7 546.6,99.2 556.9,113.7 567.3,110.6 577.6,81.5 588.0,75.3 588.0,150" fill="url(#kg-grad)"/>
+    <polyline points="60.0,125.0 70.4,118.9 80.7,91.7 91.1,92.7 101.4,93.7 111.8,106.4 122.1,99.2 132.5,118.9 142.8,129.2 153.2,124.1 163.5,104.3 173.9,109.5 184.2,86.7 194.6,92.9 204.9,91.9 215.3,102.3 225.6,87.7 236.0,92.9 246.4,96.0 256.7,109.5 267.1,127.2 277.4,125.1 287.8,113.7 298.1,122.0 308.5,122.0 318.8,126.1 329.2,146.9 339.5,119.9 349.9,128.2 360.2,150.0 370.6,143.8 380.9,130.3 391.3,120.9 401.6,120.9 412.0,113.7 422.4,97.1 432.7,66.0 443.1,58.7 453.4,66.0 463.8,52.5 474.1,53.5 484.5,60.8 494.8,42.1 505.2,37.9 515.5,12.0 525.9,61.8 536.2,86.7 546.6,99.2 556.9,113.7 567.3,110.6 577.6,81.5 588.0,75.3" fill="none" stroke="#22c55e" stroke-width="2"
+              stroke-linejoin="round" stroke-linecap="round"/>
+    <!-- Siste punkt markert -->
+    <circle cx="588.0" cy="75.3" r="4"
+            fill="#22c55e" stroke="var(--chart-bg,#111827)" stroke-width="2"/>
+    <text x="60.0" y="176" text-anchor="middle" font-size="10" fill="var(--chart-label,#9ca3af)">20.04</text><text x="163.5" y="176" text-anchor="middle" font-size="10" fill="var(--chart-label,#9ca3af)">29.06</text><text x="267.1" y="176" text-anchor="middle" font-size="10" fill="var(--chart-label,#9ca3af)">07.09</text><text x="370.6" y="176" text-anchor="middle" font-size="10" fill="var(--chart-label,#9ca3af)">16.11</text><text x="474.1" y="176" text-anchor="middle" font-size="10" fill="var(--chart-label,#9ca3af)">25.01</text><text x="588.0" y="176" text-anchor="middle" font-size="10" fill="var(--chart-label,#9ca3af)">12.04</text>
+  </svg>
+</div>
+  <div class="kurs-knapper" style="margin-top:0.75rem;">
     <a href="https://finance.yahoo.com/chart/BONHR.OL" target="_blank" rel="noopener noreferrer" class="kurs-btn">
       <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"/></svg>
       Yahoo Finance

@@ -183,6 +183,12 @@
     .kurs-btn:hover { background: #e5e7eb; }
     .dark .kurs-btn { background: #1f2937; color: #d1d5db; }
     .dark .kurs-btn:hover { background: #374151; }
+    .kurs-chart-wrap { background: var(--chart-bg,#fff); border-radius: 10px; padding: 0.75rem 0.5rem 0; border: 1px solid #e5e7eb; }
+    .kurs-chart-header { display: flex; justify-content: space-between; align-items: baseline; padding: 0 0.5rem 0.5rem; }
+    .kurs-chart-naa { font-size: 1.1rem; font-weight: 700; color: #111827; }
+    .kurs-chart-endring { font-size: 0.8rem; font-weight: 500; }
+    .dark .kurs-chart-wrap { --chart-bg: #111827; --chart-label: #6b7280; --chart-grid: #1f2937; border-color: #1f2937; }
+    .dark .kurs-chart-naa { color: #f3f4f6; }
 
     /* Dark mode */
     .dark body { background: #030712; color: #f3f4f6; }
@@ -303,7 +309,8 @@
   
 <div class="kurs-lenker">
   <h2>Kursgraf</h2>
-  <div class="kurs-knapper">
+  
+  <div class="kurs-knapper" style="margin-top:0.75rem;">
     <a href="https://finance.yahoo.com/chart/GOGL.OL" target="_blank" rel="noopener noreferrer" class="kurs-btn">
       <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"/></svg>
       Yahoo Finance

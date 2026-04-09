@@ -183,6 +183,12 @@
     .kurs-btn:hover { background: #e5e7eb; }
     .dark .kurs-btn { background: #1f2937; color: #d1d5db; }
     .dark .kurs-btn:hover { background: #374151; }
+    .kurs-chart-wrap { background: var(--chart-bg,#fff); border-radius: 10px; padding: 0.75rem 0.5rem 0; border: 1px solid #e5e7eb; }
+    .kurs-chart-header { display: flex; justify-content: space-between; align-items: baseline; padding: 0 0.5rem 0.5rem; }
+    .kurs-chart-naa { font-size: 1.1rem; font-weight: 700; color: #111827; }
+    .kurs-chart-endring { font-size: 0.8rem; font-weight: 500; }
+    .dark .kurs-chart-wrap { --chart-bg: #111827; --chart-label: #6b7280; --chart-grid: #1f2937; border-color: #1f2937; }
+    .dark .kurs-chart-naa { color: #f3f4f6; }
 
     /* Dark mode */
     .dark body { background: #030712; color: #f3f4f6; }
@@ -298,12 +304,35 @@
 
   <div class="analyse"><h2>Utbytteanalyse</h2><p>Nåværende direkteavkastning på 8.6% er lavere enn 5-årssnittet på 12.9%, noe som tyder på sterk kursvekst de siste årene. Utbetalingsgraden på 113% er høy — utbyttet kan være sårbart ved svakere inntjening. Utbyttet har falt med 29.0% per år de siste 5 årene.</p></div>
 
-  <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Shipping</td></tr><tr><td>Frekvens</td><td>Månedlig</td></tr><tr><td>Utbytte per aksje</td><td>11.65 NOK</td></tr><tr><td>Direkteavkastning</td><td>8.62%</td></tr><tr><td>5-årssnitt yield</td><td>12.95%</td></tr><tr><td>År med utbytte</td><td>8</td></tr><tr><td>P/E</td><td>10.8</td></tr><tr><td>Payout ratio</td><td>113%</td></tr><tr><td>Utbyttevekst 5 år</td><td>-29.0% p.a.</td></tr><tr><td>Markedsverdi</td><td>3.1 mrd NOK</td></tr><tr><td>52-ukers kurs</td><td>100.0 – 152.0 NOK</td></tr></tbody></table>
+  <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Shipping</td></tr><tr><td>Frekvens</td><td>Månedlig</td></tr><tr><td>Utbytte per aksje</td><td>11.65 NOK</td></tr><tr><td>Direkteavkastning</td><td>8.62%</td></tr><tr><td>5-årssnitt yield</td><td>12.95%</td></tr><tr><td>År med utbytte</td><td>8</td></tr><tr><td>P/E</td><td>10.8</td></tr><tr><td>Payout ratio</td><td>113%</td></tr><tr><td>Utbyttevekst 5 år</td><td>-29.0% p.a.</td></tr><tr><td>Markedsverdi</td><td>3.1 mrd NOK</td></tr><tr><td>52-ukers kurs</td><td>97.25 – 152.0 NOK</td></tr></tbody></table>
 
   
 <div class="kurs-lenker">
   <h2>Kursgraf</h2>
-  <div class="kurs-knapper">
+  <div class="kurs-chart-wrap">
+  <div class="kurs-chart-header">
+    <span class="kurs-chart-naa">135.10 NOK</span>
+    <span class="kurs-chart-endring" style="color:#22c55e">▲ 31.0% siste 52 uker</span>
+  </div>
+  <svg viewBox="0 0 600 180" style="width:100%;height:180px;display:block;" role="img"
+       aria-label="Kursgraf siste 52 uker">
+    <defs>
+      <linearGradient id="kg-grad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#22c55e" stop-opacity="0.25"/>
+        <stop offset="100%" stop-color="#22c55e" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+    <text x="55" y="154.0" text-anchor="end" font-size="10" fill="var(--chart-label,#9ca3af)">103</text><line x1="60" y1="150.0" x2="588" y2="150.0" stroke="var(--chart-grid,#1f2937)" stroke-width="1" stroke-dasharray="3,4"/><text x="55" y="85.0" text-anchor="end" font-size="10" fill="var(--chart-label,#9ca3af)">125</text><line x1="60" y1="81.0" x2="588" y2="81.0" stroke="var(--chart-grid,#1f2937)" stroke-width="1" stroke-dasharray="3,4"/><text x="55" y="16.0" text-anchor="end" font-size="10" fill="var(--chart-label,#9ca3af)">146</text><line x1="60" y1="12.0" x2="588" y2="12.0" stroke="var(--chart-grid,#1f2937)" stroke-width="1" stroke-dasharray="3,4"/>
+    <polygon points="60.0,150 60.0,150.0 70.4,126.7 80.7,118.8 91.1,114.0 101.4,91.7 111.8,106.0 122.1,97.4 132.5,83.1 142.8,72.2 153.2,93.6 163.5,117.2 173.9,112.1 184.2,84.0 194.6,80.6 204.9,74.5 215.3,80.0 225.6,66.9 236.0,57.9 246.4,43.7 256.7,50.7 267.1,44.6 277.4,13.9 287.8,12.0 298.1,22.6 308.5,49.5 318.8,44.1 329.2,52.4 339.5,43.1 349.9,40.2 360.2,41.8 370.6,43.4 380.9,25.5 391.3,21.7 401.6,20.7 412.0,31.0 422.4,31.0 432.7,31.9 443.1,32.5 453.4,17.1 463.8,20.6 474.1,23.5 484.5,21.8 494.8,25.1 505.2,53.7 515.5,55.8 525.9,48.1 536.2,50.4 546.6,66.5 556.9,62.0 567.3,52.9 577.6,29.7 588.0,46.8 588.0,150" fill="url(#kg-grad)"/>
+    <polyline points="60.0,150.0 70.4,126.7 80.7,118.8 91.1,114.0 101.4,91.7 111.8,106.0 122.1,97.4 132.5,83.1 142.8,72.2 153.2,93.6 163.5,117.2 173.9,112.1 184.2,84.0 194.6,80.6 204.9,74.5 215.3,80.0 225.6,66.9 236.0,57.9 246.4,43.7 256.7,50.7 267.1,44.6 277.4,13.9 287.8,12.0 298.1,22.6 308.5,49.5 318.8,44.1 329.2,52.4 339.5,43.1 349.9,40.2 360.2,41.8 370.6,43.4 380.9,25.5 391.3,21.7 401.6,20.7 412.0,31.0 422.4,31.0 432.7,31.9 443.1,32.5 453.4,17.1 463.8,20.6 474.1,23.5 484.5,21.8 494.8,25.1 505.2,53.7 515.5,55.8 525.9,48.1 536.2,50.4 546.6,66.5 556.9,62.0 567.3,52.9 577.6,29.7 588.0,46.8" fill="none" stroke="#22c55e" stroke-width="2"
+              stroke-linejoin="round" stroke-linecap="round"/>
+    <!-- Siste punkt markert -->
+    <circle cx="588.0" cy="46.8" r="4"
+            fill="#22c55e" stroke="var(--chart-bg,#111827)" stroke-width="2"/>
+    <text x="60.0" y="176" text-anchor="middle" font-size="10" fill="var(--chart-label,#9ca3af)">20.04</text><text x="163.5" y="176" text-anchor="middle" font-size="10" fill="var(--chart-label,#9ca3af)">29.06</text><text x="267.1" y="176" text-anchor="middle" font-size="10" fill="var(--chart-label,#9ca3af)">07.09</text><text x="370.6" y="176" text-anchor="middle" font-size="10" fill="var(--chart-label,#9ca3af)">16.11</text><text x="474.1" y="176" text-anchor="middle" font-size="10" fill="var(--chart-label,#9ca3af)">25.01</text><text x="588.0" y="176" text-anchor="middle" font-size="10" fill="var(--chart-label,#9ca3af)">12.04</text>
+  </svg>
+</div>
+  <div class="kurs-knapper" style="margin-top:0.75rem;">
     <a href="https://finance.yahoo.com/chart/2020.OL" target="_blank" rel="noopener noreferrer" class="kurs-btn">
       <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"/></svg>
       Yahoo Finance
@@ -315,7 +344,7 @@
   </div>
 </div>
 
-  <h2>Historiske utbytter</h2><svg viewBox="0 0 420 180" style="width:100%;max-width:420px;height:auto;display:block;margin-bottom:0.5rem;" aria-label="Historiske utbytter per aksje i NOK"><line x1="52" y1="148.0" x2="408" y2="148.0" stroke="#e5e7eb" stroke-width="1" class="ytick"/><text x="48" y="152.0" text-anchor="end" font-size="10" fill="#9ca3af">0.0</text><line x1="52" y1="104.0" x2="408" y2="104.0" stroke="#e5e7eb" stroke-width="1" class="ytick"/><text x="48" y="108.0" text-anchor="end" font-size="10" fill="#9ca3af">11.32</text><line x1="52" y1="60.0" x2="408" y2="60.0" stroke="#e5e7eb" stroke-width="1" class="ytick"/><text x="48" y="64.0" text-anchor="end" font-size="10" fill="#9ca3af">22.64</text><line x1="52" y1="16.0" x2="408" y2="16.0" stroke="#e5e7eb" stroke-width="1" class="ytick"/><text x="48" y="20.0" text-anchor="end" font-size="10" fill="#9ca3af">33.96</text><rect class="hbar" x="69.6" y="88.3" width="36" height="59.7" rx="3" fill="#16a34a" opacity="0.85"/><rect class="hbar" x="140.8" y="117.8" width="36" height="30.2" rx="3" fill="#16a34a" opacity="0.85"/><rect class="hbar" x="212.0" y="16.0" width="36" height="132.0" rx="3" fill="#16a34a" opacity="0.85"/><rect class="hbar" x="283.2" y="94.2" width="36" height="53.8" rx="3" fill="#16a34a" opacity="0.85"/><rect class="hbar" x="354.4" y="130.3" width="36" height="17.7" rx="3" fill="#16a34a" opacity="0.85"/><text x="87.6" y="174" text-anchor="middle" font-size="10" fill="#9ca3af">2022</text><text x="158.8" y="174" text-anchor="middle" font-size="10" fill="#9ca3af">2023</text><text x="230.0" y="174" text-anchor="middle" font-size="10" fill="#9ca3af">2024</text><text x="301.2" y="174" text-anchor="middle" font-size="10" fill="#9ca3af">2025</text><text x="372.4" y="174" text-anchor="middle" font-size="10" fill="#9ca3af">2026</text><rect class="htip-bg" x="35.6" y="60.3" width="106" height="20" rx="4" fill="#111827" opacity="0" pointer-events="none"/><text class="htip-txt" x="87.6" y="75.3" text-anchor="middle" font-size="10" fill="#f3f4f6" opacity="0" pointer-events="none">15.37 NOK · 17.4% yield</text><rect class="htrig" x="52.0" y="16" width="71.2" height="132" fill="transparent" onmouseenter="showTip(this)" onmouseleave="hideTip(this)" data-i="0"/><rect class="htip-bg" x="106.8" y="89.8" width="106" height="20" rx="4" fill="#111827" opacity="0" pointer-events="none"/><text class="htip-txt" x="158.8" y="104.8" text-anchor="middle" font-size="10" fill="#f3f4f6" opacity="0" pointer-events="none">7.78 NOK · 6.7% yield</text><rect class="htrig" x="123.2" y="16" width="71.2" height="132" fill="transparent" onmouseenter="showTip(this)" onmouseleave="hideTip(this)" data-i="1"/><rect class="htip-bg" x="178.0" y="2.0" width="106" height="20" rx="4" fill="#111827" opacity="0" pointer-events="none"/><text class="htip-txt" x="230.0" y="14.0" text-anchor="middle" font-size="10" fill="#f3f4f6" opacity="0" pointer-events="none">33.96 NOK · 27.8% yield</text><rect class="htrig" x="194.4" y="16" width="71.2" height="132" fill="transparent" onmouseenter="showTip(this)" onmouseleave="hideTip(this)" data-i="2"/><rect class="htip-bg" x="249.2" y="66.2" width="106" height="20" rx="4" fill="#111827" opacity="0" pointer-events="none"/><text class="htip-txt" x="301.2" y="81.2" text-anchor="middle" font-size="10" fill="#f3f4f6" opacity="0" pointer-events="none">13.85 NOK · 9.6% yield</text><rect class="htrig" x="265.6" y="16" width="71.2" height="132" fill="transparent" onmouseenter="showTip(this)" onmouseleave="hideTip(this)" data-i="3"/><rect class="htip-bg" x="302.0" y="102.3" width="106" height="20" rx="4" fill="#111827" opacity="0" pointer-events="none"/><text class="htip-txt" x="372.4" y="117.3" text-anchor="middle" font-size="10" fill="#f3f4f6" opacity="0" pointer-events="none">4.55 NOK · 3.4% yield</text><rect class="htrig" x="336.8" y="16" width="71.2" height="132" fill="transparent" onmouseenter="showTip(this)" onmouseleave="hideTip(this)" data-i="4"/><text x="16" y="82.0" text-anchor="middle" font-size="10" fill="#9ca3af" transform="rotate(-90,16,82.0)">NOK per aksje</text></svg><script>
+  <h2>Historiske utbytter</h2><svg viewBox="0 0 420 180" style="width:100%;max-width:420px;height:auto;display:block;margin-bottom:0.5rem;" aria-label="Historiske utbytter per aksje i NOK"><line x1="52" y1="148.0" x2="408" y2="148.0" stroke="#e5e7eb" stroke-width="1" class="ytick"/><text x="48" y="152.0" text-anchor="end" font-size="10" fill="#9ca3af">0.0</text><line x1="52" y1="104.0" x2="408" y2="104.0" stroke="#e5e7eb" stroke-width="1" class="ytick"/><text x="48" y="108.0" text-anchor="end" font-size="10" fill="#9ca3af">11.32</text><line x1="52" y1="60.0" x2="408" y2="60.0" stroke="#e5e7eb" stroke-width="1" class="ytick"/><text x="48" y="64.0" text-anchor="end" font-size="10" fill="#9ca3af">22.63</text><line x1="52" y1="16.0" x2="408" y2="16.0" stroke="#e5e7eb" stroke-width="1" class="ytick"/><text x="48" y="20.0" text-anchor="end" font-size="10" fill="#9ca3af">33.95</text><rect class="hbar" x="69.6" y="88.3" width="36" height="59.7" rx="3" fill="#16a34a" opacity="0.85"/><rect class="hbar" x="140.8" y="117.8" width="36" height="30.2" rx="3" fill="#16a34a" opacity="0.85"/><rect class="hbar" x="212.0" y="16.0" width="36" height="132.0" rx="3" fill="#16a34a" opacity="0.85"/><rect class="hbar" x="283.2" y="94.2" width="36" height="53.8" rx="3" fill="#16a34a" opacity="0.85"/><rect class="hbar" x="354.4" y="130.3" width="36" height="17.7" rx="3" fill="#16a34a" opacity="0.85"/><text x="87.6" y="174" text-anchor="middle" font-size="10" fill="#9ca3af">2022</text><text x="158.8" y="174" text-anchor="middle" font-size="10" fill="#9ca3af">2023</text><text x="230.0" y="174" text-anchor="middle" font-size="10" fill="#9ca3af">2024</text><text x="301.2" y="174" text-anchor="middle" font-size="10" fill="#9ca3af">2025</text><text x="372.4" y="174" text-anchor="middle" font-size="10" fill="#9ca3af">2026</text><rect class="htip-bg" x="35.6" y="60.3" width="106" height="20" rx="4" fill="#111827" opacity="0" pointer-events="none"/><text class="htip-txt" x="87.6" y="75.3" text-anchor="middle" font-size="10" fill="#f3f4f6" opacity="0" pointer-events="none">15.36 NOK · 17.4% yield</text><rect class="htrig" x="52.0" y="16" width="71.2" height="132" fill="transparent" onmouseenter="showTip(this)" onmouseleave="hideTip(this)" data-i="0"/><rect class="htip-bg" x="106.8" y="89.8" width="106" height="20" rx="4" fill="#111827" opacity="0" pointer-events="none"/><text class="htip-txt" x="158.8" y="104.8" text-anchor="middle" font-size="10" fill="#f3f4f6" opacity="0" pointer-events="none">7.78 NOK · 6.7% yield</text><rect class="htrig" x="123.2" y="16" width="71.2" height="132" fill="transparent" onmouseenter="showTip(this)" onmouseleave="hideTip(this)" data-i="1"/><rect class="htip-bg" x="178.0" y="2.0" width="106" height="20" rx="4" fill="#111827" opacity="0" pointer-events="none"/><text class="htip-txt" x="230.0" y="14.0" text-anchor="middle" font-size="10" fill="#f3f4f6" opacity="0" pointer-events="none">33.95 NOK · 27.8% yield</text><rect class="htrig" x="194.4" y="16" width="71.2" height="132" fill="transparent" onmouseenter="showTip(this)" onmouseleave="hideTip(this)" data-i="2"/><rect class="htip-bg" x="249.2" y="66.2" width="106" height="20" rx="4" fill="#111827" opacity="0" pointer-events="none"/><text class="htip-txt" x="301.2" y="81.2" text-anchor="middle" font-size="10" fill="#f3f4f6" opacity="0" pointer-events="none">13.85 NOK · 9.6% yield</text><rect class="htrig" x="265.6" y="16" width="71.2" height="132" fill="transparent" onmouseenter="showTip(this)" onmouseleave="hideTip(this)" data-i="3"/><rect class="htip-bg" x="302.0" y="102.3" width="106" height="20" rx="4" fill="#111827" opacity="0" pointer-events="none"/><text class="htip-txt" x="372.4" y="117.3" text-anchor="middle" font-size="10" fill="#f3f4f6" opacity="0" pointer-events="none">4.55 NOK · 3.4% yield</text><rect class="htrig" x="336.8" y="16" width="71.2" height="132" fill="transparent" onmouseenter="showTip(this)" onmouseleave="hideTip(this)" data-i="4"/><text x="16" y="82.0" text-anchor="middle" font-size="10" fill="#9ca3af" transform="rotate(-90,16,82.0)">NOK per aksje</text></svg><script>
 function showTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAll('.htip-bg')[i],tx=s.querySelectorAll('.htip-txt')[i];bg.setAttribute('opacity','0.92');tx.setAttribute('opacity','1');}
 function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAll('.htip-bg')[i],tx=s.querySelectorAll('.htip-txt')[i];bg.setAttribute('opacity','0');tx.setAttribute('opacity','0');}
 </script><table><thead><tr><th>År</th><th>Utbytte</th><th>Yield</th></tr></thead><tbody>
@@ -331,7 +360,7 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
         </tr>
         <tr>
           <td>2024</td>
-          <td>33.96 NOK</td>
+          <td>33.95 NOK</td>
           <td>27.78%</td>
         </tr>
         <tr>
@@ -341,13 +370,13 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
         </tr>
         <tr>
           <td>2022</td>
-          <td>15.37 NOK</td>
-          <td>17.38%</td>
+          <td>15.36 NOK</td>
+          <td>17.37%</td>
         </tr></tbody></table>
 
   <div class="profil-seksjon"><h2>Utbytteprofil</h2><div class="profil-badges"><span class="profil-badge badge-green">Høy yield</span><span class="profil-badge badge-orange">Syklisk</span></div><p class="profil-tekst">2020 gir 8.6% direkteavkastning, nær sektorsnittet for shipping på 8.8%. Selskapet har betalt utbytte 8 år på rad. Utbetalingsgraden er over 100% — utbyttet finansieres delvis av kapital.</p></div>
 
-  <div class="historikk-prosa"><h2>Utbyttehistorikk</h2><p>2020 Bulkers Ltd har de siste 5 årene betalt mellom 4.55 og 33.96 NOK per aksje i utbytte. Det høyeste utbyttet ble registrert i 2024 med 33.96 NOK per aksje (27.8% yield). I 2026 er utbyttet 4.55 NOK per aksje, tilsvarende 8.6% direkteavkastning.</p></div>
+  <div class="historikk-prosa"><h2>Utbyttehistorikk</h2><p>2020 Bulkers Ltd har de siste 5 årene betalt mellom 4.55 og 33.95 NOK per aksje i utbytte. Det høyeste utbyttet ble registrert i 2024 med 33.95 NOK per aksje (27.8% yield). I 2026 er utbyttet 4.55 NOK per aksje, tilsvarende 8.6% direkteavkastning.</p></div>
 
   <div class="risiko-seksjon"><h2>Risiko for utbyttet</h2><ul class="risiko-liste"><li>Fraktrater er svært volatile og kan halves på kort tid</li>
 <li>Bunkerspriser (drivstoff) påvirker driftsmarginene direkte</li>

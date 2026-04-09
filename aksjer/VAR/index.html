@@ -183,6 +183,12 @@
     .kurs-btn:hover { background: #e5e7eb; }
     .dark .kurs-btn { background: #1f2937; color: #d1d5db; }
     .dark .kurs-btn:hover { background: #374151; }
+    .kurs-chart-wrap { background: var(--chart-bg,#fff); border-radius: 10px; padding: 0.75rem 0.5rem 0; border: 1px solid #e5e7eb; }
+    .kurs-chart-header { display: flex; justify-content: space-between; align-items: baseline; padding: 0 0.5rem 0.5rem; }
+    .kurs-chart-naa { font-size: 1.1rem; font-weight: 700; color: #111827; }
+    .kurs-chart-endring { font-size: 0.8rem; font-weight: 500; }
+    .dark .kurs-chart-wrap { --chart-bg: #111827; --chart-label: #6b7280; --chart-grid: #1f2937; border-color: #1f2937; }
+    .dark .kurs-chart-naa { color: #f3f4f6; }
 
     /* Dark mode */
     .dark body { background: #030712; color: #f3f4f6; }
@@ -298,12 +304,35 @@
 
   <div class="analyse"><h2>Utbytteanalyse</h2><p>Nåværende direkteavkastning på 10.5% er lavere enn 5-årssnittet på 13.8%, noe som tyder på sterk kursvekst de siste årene. Utbetalingsgraden på 151% er høy — utbyttet kan være sårbart ved svakere inntjening. Utbyttet har falt med 20.8% per år de siste 5 årene.</p></div>
 
-  <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Energi</td></tr><tr><td>Frekvens</td><td>Kvartalsvis</td></tr><tr><td>Utbytte per aksje</td><td>4.84 NOK</td></tr><tr><td>Direkteavkastning</td><td>10.51%</td></tr><tr><td>5-årssnitt yield</td><td>13.76%</td></tr><tr><td>År med utbytte</td><td>5</td></tr><tr><td>P/E</td><td>15.3</td></tr><tr><td>Payout ratio</td><td>151%</td></tr><tr><td>Utbyttevekst 5 år</td><td>-20.8% p.a.</td></tr><tr><td>Markedsverdi</td><td>115.0 mrd NOK</td></tr><tr><td>52-ukers kurs</td><td>27.04 – 50.7 NOK</td></tr></tbody></table>
+  <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Energi</td></tr><tr><td>Frekvens</td><td>Kvartalsvis</td></tr><tr><td>Utbytte per aksje</td><td>4.84 NOK</td></tr><tr><td>Direkteavkastning</td><td>10.51%</td></tr><tr><td>5-årssnitt yield</td><td>13.76%</td></tr><tr><td>År med utbytte</td><td>5</td></tr><tr><td>P/E</td><td>15.3</td></tr><tr><td>Payout ratio</td><td>151%</td></tr><tr><td>Utbyttevekst 5 år</td><td>-20.8% p.a.</td></tr><tr><td>Markedsverdi</td><td>115.0 mrd NOK</td></tr><tr><td>52-ukers kurs</td><td>26.81 – 50.7 NOK</td></tr></tbody></table>
 
   
 <div class="kurs-lenker">
   <h2>Kursgraf</h2>
-  <div class="kurs-knapper">
+  <div class="kurs-chart-wrap">
+  <div class="kurs-chart-header">
+    <span class="kurs-chart-naa">46.06 NOK</span>
+    <span class="kurs-chart-endring" style="color:#22c55e">▲ 83.7% siste 52 uker</span>
+  </div>
+  <svg viewBox="0 0 600 180" style="width:100%;height:180px;display:block;" role="img"
+       aria-label="Kursgraf siste 52 uker">
+    <defs>
+      <linearGradient id="kg-grad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#22c55e" stop-opacity="0.25"/>
+        <stop offset="100%" stop-color="#22c55e" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+    <text x="55" y="154.0" text-anchor="end" font-size="10" fill="var(--chart-label,#9ca3af)">25</text><line x1="60" y1="150.0" x2="588" y2="150.0" stroke="var(--chart-grid,#1f2937)" stroke-width="1" stroke-dasharray="3,4"/><text x="55" y="85.0" text-anchor="end" font-size="10" fill="var(--chart-label,#9ca3af)">37</text><line x1="60" y1="81.0" x2="588" y2="81.0" stroke="var(--chart-grid,#1f2937)" stroke-width="1" stroke-dasharray="3,4"/><text x="55" y="16.0" text-anchor="end" font-size="10" fill="var(--chart-label,#9ca3af)">49</text><line x1="60" y1="12.0" x2="588" y2="12.0" stroke="var(--chart-grid,#1f2937)" stroke-width="1" stroke-dasharray="3,4"/>
+    <polygon points="60.0,150 60.0,150.0 70.4,145.6 80.7,148.1 91.1,145.9 101.4,139.4 111.8,144.5 122.1,141.1 132.5,136.2 142.8,119.6 153.2,111.1 163.5,126.3 173.9,122.2 184.2,118.3 194.6,117.2 204.9,114.9 215.3,111.6 225.6,115.8 236.0,117.0 246.4,112.5 256.7,109.7 267.1,117.2 277.4,115.2 287.8,118.4 298.1,103.7 308.5,110.9 318.8,115.8 329.2,123.2 339.5,114.0 349.9,111.3 360.2,110.3 370.6,107.0 380.9,115.8 391.3,118.3 401.6,115.4 412.0,115.5 422.4,118.7 432.7,118.5 443.1,108.4 453.4,112.4 463.8,99.5 474.1,101.1 484.5,100.2 494.8,97.7 505.2,99.6 515.5,96.1 525.9,89.5 536.2,71.0 546.6,56.2 556.9,16.9 567.3,12.0 577.6,16.0 588.0,28.1 588.0,150" fill="url(#kg-grad)"/>
+    <polyline points="60.0,150.0 70.4,145.6 80.7,148.1 91.1,145.9 101.4,139.4 111.8,144.5 122.1,141.1 132.5,136.2 142.8,119.6 153.2,111.1 163.5,126.3 173.9,122.2 184.2,118.3 194.6,117.2 204.9,114.9 215.3,111.6 225.6,115.8 236.0,117.0 246.4,112.5 256.7,109.7 267.1,117.2 277.4,115.2 287.8,118.4 298.1,103.7 308.5,110.9 318.8,115.8 329.2,123.2 339.5,114.0 349.9,111.3 360.2,110.3 370.6,107.0 380.9,115.8 391.3,118.3 401.6,115.4 412.0,115.5 422.4,118.7 432.7,118.5 443.1,108.4 453.4,112.4 463.8,99.5 474.1,101.1 484.5,100.2 494.8,97.7 505.2,99.6 515.5,96.1 525.9,89.5 536.2,71.0 546.6,56.2 556.9,16.9 567.3,12.0 577.6,16.0 588.0,28.1" fill="none" stroke="#22c55e" stroke-width="2"
+              stroke-linejoin="round" stroke-linecap="round"/>
+    <!-- Siste punkt markert -->
+    <circle cx="588.0" cy="28.1" r="4"
+            fill="#22c55e" stroke="var(--chart-bg,#111827)" stroke-width="2"/>
+    <text x="60.0" y="176" text-anchor="middle" font-size="10" fill="var(--chart-label,#9ca3af)">20.04</text><text x="163.5" y="176" text-anchor="middle" font-size="10" fill="var(--chart-label,#9ca3af)">29.06</text><text x="267.1" y="176" text-anchor="middle" font-size="10" fill="var(--chart-label,#9ca3af)">07.09</text><text x="370.6" y="176" text-anchor="middle" font-size="10" fill="var(--chart-label,#9ca3af)">16.11</text><text x="474.1" y="176" text-anchor="middle" font-size="10" fill="var(--chart-label,#9ca3af)">25.01</text><text x="588.0" y="176" text-anchor="middle" font-size="10" fill="var(--chart-label,#9ca3af)">12.04</text>
+  </svg>
+</div>
+  <div class="kurs-knapper" style="margin-top:0.75rem;">
     <a href="https://finance.yahoo.com/chart/VAR.OL" target="_blank" rel="noopener noreferrer" class="kurs-btn">
       <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"/></svg>
       Yahoo Finance

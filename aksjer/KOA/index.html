@@ -183,6 +183,12 @@
     .kurs-btn:hover { background: #e5e7eb; }
     .dark .kurs-btn { background: #1f2937; color: #d1d5db; }
     .dark .kurs-btn:hover { background: #374151; }
+    .kurs-chart-wrap { background: var(--chart-bg,#fff); border-radius: 10px; padding: 0.75rem 0.5rem 0; border: 1px solid #e5e7eb; }
+    .kurs-chart-header { display: flex; justify-content: space-between; align-items: baseline; padding: 0 0.5rem 0.5rem; }
+    .kurs-chart-naa { font-size: 1.1rem; font-weight: 700; color: #111827; }
+    .kurs-chart-endring { font-size: 0.8rem; font-weight: 500; }
+    .dark .kurs-chart-wrap { --chart-bg: #111827; --chart-label: #6b7280; --chart-grid: #1f2937; border-color: #1f2937; }
+    .dark .kurs-chart-naa { color: #f3f4f6; }
 
     /* Dark mode */
     .dark body { background: #030712; color: #f3f4f6; }
@@ -289,7 +295,7 @@
       <div class="label">År med utbytte</div>
       <div class="val">2</div>
     </div>
-    
+    <div class="kcard"><div class="label">P/E</div><div class="val">inf</div></div>
   </div>
 
   <div class="desc"><h2>Om selskapet</h2><p>Kongsberg Automotive ASA develops, manufactures, and sells products to the automotive industry worldwide. The company operates through Drive Control Systems (DCS) and Flow Control Systems (FCS) segments. The Drive Control Systems (DCS) segment engages in the designing and manufacturing of products for the automotive and the off-highway industry, including pneumatic and electric actuation systems for gear control and clutch actuation; steering column modules; and pedals and throttles for off-highway applications.</p></div>
@@ -298,12 +304,35 @@
 
   
 
-  <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Industri</td></tr><tr><td>Frekvens</td><td>Uregelmessig</td></tr><tr><td>Utbytte per aksje</td><td>0 NOK</td></tr><tr><td>Direkteavkastning</td><td>—</td></tr><tr><td>5-årssnitt yield</td><td>0.00%</td></tr><tr><td>År med utbytte</td><td>2</td></tr><tr><td>Utbyttevekst 5 år</td><td>+0.0% p.a.</td></tr><tr><td>Markedsverdi</td><td>1.9 mrd NOK</td></tr><tr><td>52-ukers kurs</td><td>1.3 – 2.4 NOK</td></tr></tbody></table>
+  <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Industri</td></tr><tr><td>Frekvens</td><td>Uregelmessig</td></tr><tr><td>Utbytte per aksje</td><td>0 NOK</td></tr><tr><td>Direkteavkastning</td><td>—</td></tr><tr><td>5-årssnitt yield</td><td>0.00%</td></tr><tr><td>År med utbytte</td><td>2</td></tr><tr><td>P/E</td><td>inf</td></tr><tr><td>Utbyttevekst 5 år</td><td>+0.0% p.a.</td></tr><tr><td>Markedsverdi</td><td>1.9 mrd NOK</td></tr><tr><td>52-ukers kurs</td><td>1.27 – 2.4 NOK</td></tr></tbody></table>
 
   
 <div class="kurs-lenker">
   <h2>Kursgraf</h2>
-  <div class="kurs-knapper">
+  <div class="kurs-chart-wrap">
+  <div class="kurs-chart-header">
+    <span class="kurs-chart-naa">1.99 NOK</span>
+    <span class="kurs-chart-endring" style="color:#22c55e">▲ 47.4% siste 52 uker</span>
+  </div>
+  <svg viewBox="0 0 600 180" style="width:100%;height:180px;display:block;" role="img"
+       aria-label="Kursgraf siste 52 uker">
+    <defs>
+      <linearGradient id="kg-grad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#22c55e" stop-opacity="0.25"/>
+        <stop offset="100%" stop-color="#22c55e" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+    <text x="55" y="154.0" text-anchor="end" font-size="10" fill="var(--chart-label,#9ca3af)">1</text><line x1="60" y1="150.0" x2="588" y2="150.0" stroke="var(--chart-grid,#1f2937)" stroke-width="1" stroke-dasharray="3,4"/><text x="55" y="85.0" text-anchor="end" font-size="10" fill="var(--chart-label,#9ca3af)">2</text><line x1="60" y1="81.0" x2="588" y2="81.0" stroke="var(--chart-grid,#1f2937)" stroke-width="1" stroke-dasharray="3,4"/><text x="55" y="16.0" text-anchor="end" font-size="10" fill="var(--chart-label,#9ca3af)">2</text><line x1="60" y1="12.0" x2="588" y2="12.0" stroke="var(--chart-grid,#1f2937)" stroke-width="1" stroke-dasharray="3,4"/>
+    <polygon points="60.0,150 60.0,150.0 70.4,150.0 80.7,142.0 91.1,135.3 101.4,115.2 111.8,121.9 122.1,113.8 132.5,117.8 142.8,111.1 153.2,113.8 163.5,108.5 173.9,119.2 184.2,116.5 194.6,117.8 204.9,109.8 215.3,131.2 225.6,121.9 236.0,89.7 246.4,88.4 256.7,92.4 267.1,101.8 277.4,99.1 287.8,97.7 298.1,111.1 308.5,113.8 318.8,117.8 329.2,112.5 339.5,97.7 349.9,99.1 360.2,104.4 370.6,93.7 380.9,96.4 391.3,84.3 401.6,52.2 412.0,12.0 422.4,45.5 432.7,61.6 443.1,57.6 453.4,32.1 463.8,25.4 474.1,30.8 484.5,41.5 494.8,45.5 505.2,34.8 515.5,36.1 525.9,45.5 536.2,58.9 546.6,72.3 556.9,72.3 567.3,66.9 577.6,68.3 588.0,64.3 588.0,150" fill="url(#kg-grad)"/>
+    <polyline points="60.0,150.0 70.4,150.0 80.7,142.0 91.1,135.3 101.4,115.2 111.8,121.9 122.1,113.8 132.5,117.8 142.8,111.1 153.2,113.8 163.5,108.5 173.9,119.2 184.2,116.5 194.6,117.8 204.9,109.8 215.3,131.2 225.6,121.9 236.0,89.7 246.4,88.4 256.7,92.4 267.1,101.8 277.4,99.1 287.8,97.7 298.1,111.1 308.5,113.8 318.8,117.8 329.2,112.5 339.5,97.7 349.9,99.1 360.2,104.4 370.6,93.7 380.9,96.4 391.3,84.3 401.6,52.2 412.0,12.0 422.4,45.5 432.7,61.6 443.1,57.6 453.4,32.1 463.8,25.4 474.1,30.8 484.5,41.5 494.8,45.5 505.2,34.8 515.5,36.1 525.9,45.5 536.2,58.9 546.6,72.3 556.9,72.3 567.3,66.9 577.6,68.3 588.0,64.3" fill="none" stroke="#22c55e" stroke-width="2"
+              stroke-linejoin="round" stroke-linecap="round"/>
+    <!-- Siste punkt markert -->
+    <circle cx="588.0" cy="64.3" r="4"
+            fill="#22c55e" stroke="var(--chart-bg,#111827)" stroke-width="2"/>
+    <text x="60.0" y="176" text-anchor="middle" font-size="10" fill="var(--chart-label,#9ca3af)">20.04</text><text x="163.5" y="176" text-anchor="middle" font-size="10" fill="var(--chart-label,#9ca3af)">29.06</text><text x="267.1" y="176" text-anchor="middle" font-size="10" fill="var(--chart-label,#9ca3af)">07.09</text><text x="370.6" y="176" text-anchor="middle" font-size="10" fill="var(--chart-label,#9ca3af)">16.11</text><text x="474.1" y="176" text-anchor="middle" font-size="10" fill="var(--chart-label,#9ca3af)">25.01</text><text x="588.0" y="176" text-anchor="middle" font-size="10" fill="var(--chart-label,#9ca3af)">12.04</text>
+  </svg>
+</div>
+  <div class="kurs-knapper" style="margin-top:0.75rem;">
     <a href="https://finance.yahoo.com/chart/KOA.OL" target="_blank" rel="noopener noreferrer" class="kurs-btn">
       <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"/></svg>
       Yahoo Finance

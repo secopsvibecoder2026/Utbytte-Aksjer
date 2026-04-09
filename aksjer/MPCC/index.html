@@ -183,6 +183,12 @@
     .kurs-btn:hover { background: #e5e7eb; }
     .dark .kurs-btn { background: #1f2937; color: #d1d5db; }
     .dark .kurs-btn:hover { background: #374151; }
+    .kurs-chart-wrap { background: var(--chart-bg,#fff); border-radius: 10px; padding: 0.75rem 0.5rem 0; border: 1px solid #e5e7eb; }
+    .kurs-chart-header { display: flex; justify-content: space-between; align-items: baseline; padding: 0 0.5rem 0.5rem; }
+    .kurs-chart-naa { font-size: 1.1rem; font-weight: 700; color: #111827; }
+    .kurs-chart-endring { font-size: 0.8rem; font-weight: 500; }
+    .dark .kurs-chart-wrap { --chart-bg: #111827; --chart-label: #6b7280; --chart-grid: #1f2937; border-color: #1f2937; }
+    .dark .kurs-chart-naa { color: #f3f4f6; }
 
     /* Dark mode */
     .dark body { background: #030712; color: #f3f4f6; }
@@ -298,12 +304,35 @@
 
   <div class="analyse"><h2>Utbytteanalyse</h2><p>Nåværende direkteavkastning på 8.0% er lavere enn 5-årssnittet på 54.9%, noe som tyder på sterk kursvekst de siste årene. Utbetalingsgraden på 51% er bærekraftig. Utbyttet har falt med 52.3% per år de siste 5 årene.</p></div>
 
-  <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Shipping</td></tr><tr><td>Frekvens</td><td>Kvartalsvis</td></tr><tr><td>Utbytte per aksje</td><td>1.92 NOK</td></tr><tr><td>Direkteavkastning</td><td>8.03%</td></tr><tr><td>5-årssnitt yield</td><td>54.88%</td></tr><tr><td>År med utbytte</td><td>5</td></tr><tr><td>P/E</td><td>4.6</td></tr><tr><td>Payout ratio</td><td>51%</td></tr><tr><td>Utbyttevekst 5 år</td><td>-52.3% p.a.</td></tr><tr><td>Markedsverdi</td><td>10.6 mrd NOK</td></tr><tr><td>52-ukers kurs</td><td>13.87 – 24.09 NOK</td></tr></tbody></table>
+  <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Shipping</td></tr><tr><td>Frekvens</td><td>Kvartalsvis</td></tr><tr><td>Utbytte per aksje</td><td>1.92 NOK</td></tr><tr><td>Direkteavkastning</td><td>8.03%</td></tr><tr><td>5-årssnitt yield</td><td>54.88%</td></tr><tr><td>År med utbytte</td><td>5</td></tr><tr><td>P/E</td><td>4.6</td></tr><tr><td>Payout ratio</td><td>51%</td></tr><tr><td>Utbyttevekst 5 år</td><td>-52.3% p.a.</td></tr><tr><td>Markedsverdi</td><td>10.6 mrd NOK</td></tr><tr><td>52-ukers kurs</td><td>13.69 – 24.09 NOK</td></tr></tbody></table>
 
   
 <div class="kurs-lenker">
   <h2>Kursgraf</h2>
-  <div class="kurs-knapper">
+  <div class="kurs-chart-wrap">
+  <div class="kurs-chart-header">
+    <span class="kurs-chart-naa">23.91 NOK</span>
+    <span class="kurs-chart-endring" style="color:#22c55e">▲ 86.2% siste 52 uker</span>
+  </div>
+  <svg viewBox="0 0 600 180" style="width:100%;height:180px;display:block;" role="img"
+       aria-label="Kursgraf siste 52 uker">
+    <defs>
+      <linearGradient id="kg-grad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#22c55e" stop-opacity="0.25"/>
+        <stop offset="100%" stop-color="#22c55e" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+    <text x="55" y="154.0" text-anchor="end" font-size="10" fill="var(--chart-label,#9ca3af)">13</text><line x1="60" y1="150.0" x2="588" y2="150.0" stroke="var(--chart-grid,#1f2937)" stroke-width="1" stroke-dasharray="3,4"/><text x="55" y="85.0" text-anchor="end" font-size="10" fill="var(--chart-label,#9ca3af)">18</text><line x1="60" y1="81.0" x2="588" y2="81.0" stroke="var(--chart-grid,#1f2937)" stroke-width="1" stroke-dasharray="3,4"/><text x="55" y="16.0" text-anchor="end" font-size="10" fill="var(--chart-label,#9ca3af)">24</text><line x1="60" y1="12.0" x2="588" y2="12.0" stroke="var(--chart-grid,#1f2937)" stroke-width="1" stroke-dasharray="3,4"/>
+    <polygon points="60.0,150 60.0,150.0 70.4,140.7 80.7,138.7 91.1,144.9 101.4,119.2 111.8,137.5 122.1,133.5 132.5,128.8 142.8,122.7 153.2,125.3 163.5,123.8 173.9,124.6 184.2,109.5 194.6,90.8 204.9,88.4 215.3,91.9 225.6,79.7 236.0,87.4 246.4,83.7 256.7,103.0 267.1,98.1 277.4,101.4 287.8,104.0 298.1,107.4 308.5,115.3 318.8,123.7 329.2,116.7 339.5,112.4 349.9,99.9 360.2,99.1 370.6,102.5 380.9,107.2 391.3,97.3 401.6,93.8 412.0,98.6 422.4,101.1 432.7,101.6 443.1,99.1 453.4,87.9 463.8,87.2 474.1,93.4 484.5,82.3 494.8,85.9 505.2,80.3 515.5,60.6 525.9,38.4 536.2,35.1 546.6,43.0 556.9,35.2 567.3,34.2 577.6,24.5 588.0,12.0 588.0,150" fill="url(#kg-grad)"/>
+    <polyline points="60.0,150.0 70.4,140.7 80.7,138.7 91.1,144.9 101.4,119.2 111.8,137.5 122.1,133.5 132.5,128.8 142.8,122.7 153.2,125.3 163.5,123.8 173.9,124.6 184.2,109.5 194.6,90.8 204.9,88.4 215.3,91.9 225.6,79.7 236.0,87.4 246.4,83.7 256.7,103.0 267.1,98.1 277.4,101.4 287.8,104.0 298.1,107.4 308.5,115.3 318.8,123.7 329.2,116.7 339.5,112.4 349.9,99.9 360.2,99.1 370.6,102.5 380.9,107.2 391.3,97.3 401.6,93.8 412.0,98.6 422.4,101.1 432.7,101.6 443.1,99.1 453.4,87.9 463.8,87.2 474.1,93.4 484.5,82.3 494.8,85.9 505.2,80.3 515.5,60.6 525.9,38.4 536.2,35.1 546.6,43.0 556.9,35.2 567.3,34.2 577.6,24.5 588.0,12.0" fill="none" stroke="#22c55e" stroke-width="2"
+              stroke-linejoin="round" stroke-linecap="round"/>
+    <!-- Siste punkt markert -->
+    <circle cx="588.0" cy="12.0" r="4"
+            fill="#22c55e" stroke="var(--chart-bg,#111827)" stroke-width="2"/>
+    <text x="60.0" y="176" text-anchor="middle" font-size="10" fill="var(--chart-label,#9ca3af)">20.04</text><text x="163.5" y="176" text-anchor="middle" font-size="10" fill="var(--chart-label,#9ca3af)">29.06</text><text x="267.1" y="176" text-anchor="middle" font-size="10" fill="var(--chart-label,#9ca3af)">07.09</text><text x="370.6" y="176" text-anchor="middle" font-size="10" fill="var(--chart-label,#9ca3af)">16.11</text><text x="474.1" y="176" text-anchor="middle" font-size="10" fill="var(--chart-label,#9ca3af)">25.01</text><text x="588.0" y="176" text-anchor="middle" font-size="10" fill="var(--chart-label,#9ca3af)">12.04</text>
+  </svg>
+</div>
+  <div class="kurs-knapper" style="margin-top:0.75rem;">
     <a href="https://finance.yahoo.com/chart/MPCC.OL" target="_blank" rel="noopener noreferrer" class="kurs-btn">
       <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"/></svg>
       Yahoo Finance
@@ -342,7 +371,7 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
         <tr>
           <td>2022</td>
           <td>9.22 NOK</td>
-          <td>143.44%</td>
+          <td>143.43%</td>
         </tr></tbody></table>
 
   <div class="profil-seksjon"><h2>Utbytteprofil</h2><div class="profil-badges"><span class="profil-badge badge-green">Høy yield</span><span class="profil-badge badge-orange">Syklisk</span></div><p class="profil-tekst">MPCC gir 8.0% direkteavkastning, nær sektorsnittet for shipping på 8.8%. Selskapet har betalt utbytte 5 år på rad.</p></div>
