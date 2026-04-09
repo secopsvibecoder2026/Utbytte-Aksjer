@@ -176,6 +176,8 @@
     .rel-kort { background: #fff; border-color: #e5e7eb; }
     .rel-navn { color: #6b7280; }
     .badge { background: #dcfce7; color: #15803d; }
+    .tv-wrap { margin: 1.5rem 0; }
+    .tv-wrap h2 { margin-bottom: 0.75rem; }
 
     /* Dark mode */
     .dark body { background: #030712; color: #f3f4f6; }
@@ -282,7 +284,7 @@
       <div class="label">År med utbytte</div>
       <div class="val">2</div>
     </div>
-    <div class="kcard"><div class="label">P/E</div><div class="val">inf</div></div>
+    
   </div>
 
   <div class="desc"><h2>Om selskapet</h2><p>Kongsberg Automotive ASA develops, manufactures, and sells products to the automotive industry worldwide. The company operates through Drive Control Systems (DCS) and Flow Control Systems (FCS) segments. The Drive Control Systems (DCS) segment engages in the designing and manufacturing of products for the automotive and the off-highway industry, including pneumatic and electric actuation systems for gear control and clutch actuation; steering column modules; and pedals and throttles for off-highway applications.</p></div>
@@ -291,7 +293,47 @@
 
   
 
-  <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Industri</td></tr><tr><td>Frekvens</td><td>Uregelmessig</td></tr><tr><td>Utbytte per aksje</td><td>0 NOK</td></tr><tr><td>Direkteavkastning</td><td>—</td></tr><tr><td>5-årssnitt yield</td><td>0.00%</td></tr><tr><td>År med utbytte</td><td>2</td></tr><tr><td>P/E</td><td>inf</td></tr><tr><td>Utbyttevekst 5 år</td><td>+0.0% p.a.</td></tr><tr><td>Markedsverdi</td><td>1.9 mrd NOK</td></tr><tr><td>52-ukers kurs</td><td>1.3 – 2.4 NOK</td></tr></tbody></table>
+  <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Industri</td></tr><tr><td>Frekvens</td><td>Uregelmessig</td></tr><tr><td>Utbytte per aksje</td><td>0 NOK</td></tr><tr><td>Direkteavkastning</td><td>—</td></tr><tr><td>5-årssnitt yield</td><td>0.00%</td></tr><tr><td>År med utbytte</td><td>2</td></tr><tr><td>Utbyttevekst 5 år</td><td>+0.0% p.a.</td></tr><tr><td>Markedsverdi</td><td>1.9 mrd NOK</td></tr><tr><td>52-ukers kurs</td><td>1.3 – 2.4 NOK</td></tr></tbody></table>
+
+  
+<div class="tv-wrap">
+  <h2>Kursgraf</h2>
+  <div id="tv-chart-KOA" style="height:420px;border-radius:10px;overflow:hidden;"></div>
+  <script>
+  (function() {
+    var isDark = document.documentElement.classList.contains('dark');
+    var container = document.getElementById('tv-chart-KOA');
+    if (!container) return;
+    var inner = document.createElement('div');
+    inner.className = 'tradingview-widget-container';
+    inner.style.height = '100%';
+    var widget = document.createElement('div');
+    widget.className = 'tradingview-widget-container__widget';
+    widget.style.height = '100%';
+    inner.appendChild(widget);
+    var s = document.createElement('script');
+    s.type = 'text/javascript';
+    s.src = 'https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js';
+    s.async = true;
+    s.textContent = JSON.stringify({
+      autosize: true,
+      symbol: 'OSL:KOA',
+      interval: 'W',
+      timezone: 'Europe/Oslo',
+      theme: isDark ? 'dark' : 'light',
+      style: '1',
+      locale: 'no',
+      hide_top_toolbar: false,
+      hide_legend: false,
+      save_image: false,
+      hide_volume: false,
+      support_host: 'https://www.tradingview.com'
+    });
+    inner.appendChild(s);
+    container.appendChild(inner);
+  })();
+  </script>
+</div>
 
   
 

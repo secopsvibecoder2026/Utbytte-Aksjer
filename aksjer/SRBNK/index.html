@@ -176,6 +176,8 @@
     .rel-kort { background: #fff; border-color: #e5e7eb; }
     .rel-navn { color: #6b7280; }
     .badge { background: #dcfce7; color: #15803d; }
+    .tv-wrap { margin: 1.5rem 0; }
+    .tv-wrap h2 { margin-bottom: 0.75rem; }
 
     /* Dark mode */
     .dark body { background: #030712; color: #f3f4f6; }
@@ -292,6 +294,46 @@
   <div class="analyse"><h2>Utbytteanalyse</h2><p>Utbetalingsgraden på 60% er bærekraftig. Utbyttet har vokst med 14.5% per år de siste 5 årene.</p></div>
 
   <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Finans</td></tr><tr><td>Frekvens</td><td>Halvårlig</td></tr><tr><td>Utbytte per aksje</td><td>12.0 NOK</td></tr><tr><td>Direkteavkastning</td><td>8.07%</td></tr><tr><td>5-årssnitt yield</td><td>0.00%</td></tr><tr><td>År med utbytte</td><td>20</td></tr><tr><td>P/E</td><td>7.8</td></tr><tr><td>Payout ratio</td><td>60%</td></tr><tr><td>Utbyttevekst 5 år</td><td>+14.5% p.a.</td></tr><tr><td>Markedsverdi</td><td>30.8 mrd NOK</td></tr><tr><td>52-ukers kurs</td><td>128.2 – 162.4 NOK</td></tr></tbody></table>
+
+  
+<div class="tv-wrap">
+  <h2>Kursgraf</h2>
+  <div id="tv-chart-SRBNK" style="height:420px;border-radius:10px;overflow:hidden;"></div>
+  <script>
+  (function() {
+    var isDark = document.documentElement.classList.contains('dark');
+    var container = document.getElementById('tv-chart-SRBNK');
+    if (!container) return;
+    var inner = document.createElement('div');
+    inner.className = 'tradingview-widget-container';
+    inner.style.height = '100%';
+    var widget = document.createElement('div');
+    widget.className = 'tradingview-widget-container__widget';
+    widget.style.height = '100%';
+    inner.appendChild(widget);
+    var s = document.createElement('script');
+    s.type = 'text/javascript';
+    s.src = 'https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js';
+    s.async = true;
+    s.textContent = JSON.stringify({
+      autosize: true,
+      symbol: 'OSL:SRBNK',
+      interval: 'W',
+      timezone: 'Europe/Oslo',
+      theme: isDark ? 'dark' : 'light',
+      style: '1',
+      locale: 'no',
+      hide_top_toolbar: false,
+      hide_legend: false,
+      save_image: false,
+      hide_volume: false,
+      support_host: 'https://www.tradingview.com'
+    });
+    inner.appendChild(s);
+    container.appendChild(inner);
+  })();
+  </script>
+</div>
 
   
 

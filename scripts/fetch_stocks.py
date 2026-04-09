@@ -1192,6 +1192,47 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
         "</table>"
     ) if hist_rader else ""
 
+    # TradingView kursgraf-seksjon
+    tv_chart_seksjon = f"""
+<div class="tv-wrap">
+  <h2>Kursgraf</h2>
+  <div id="tv-chart-{ticker}" style="height:420px;border-radius:10px;overflow:hidden;"></div>
+  <script>
+  (function() {{
+    var isDark = document.documentElement.classList.contains('dark');
+    var container = document.getElementById('tv-chart-{ticker}');
+    if (!container) return;
+    var inner = document.createElement('div');
+    inner.className = 'tradingview-widget-container';
+    inner.style.height = '100%';
+    var widget = document.createElement('div');
+    widget.className = 'tradingview-widget-container__widget';
+    widget.style.height = '100%';
+    inner.appendChild(widget);
+    var s = document.createElement('script');
+    s.type = 'text/javascript';
+    s.src = 'https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js';
+    s.async = true;
+    s.textContent = JSON.stringify({{
+      autosize: true,
+      symbol: 'OSL:{ticker}',
+      interval: 'W',
+      timezone: 'Europe/Oslo',
+      theme: isDark ? 'dark' : 'light',
+      style: '1',
+      locale: 'no',
+      hide_top_toolbar: false,
+      hide_legend: false,
+      save_image: false,
+      hide_volume: false,
+      support_host: 'https://www.tradingview.com'
+    }});
+    inner.appendChild(s);
+    container.appendChild(inner);
+  }})();
+  </script>
+</div>"""
+
     # Nye innholdsseksjoner
     profil_html    = _lag_utbytte_profil(a, sektor_snitt or {})
     hist_prosa_html = _lag_historikk_prosa(a)
@@ -1372,6 +1413,8 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     .rel-kort {{ background: #fff; border-color: #e5e7eb; }}
     .rel-navn {{ color: #6b7280; }}
     .badge {{ background: #dcfce7; color: #15803d; }}
+    .tv-wrap {{ margin: 1.5rem 0; }}
+    .tv-wrap h2 {{ margin-bottom: 0.75rem; }}
 
     /* Dark mode */
     .dark body {{ background: #030712; color: #f3f4f6; }}
@@ -1488,6 +1531,8 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
   {analyse_seksjon}
 
   {nokkeltal_seksjon}
+
+  {tv_chart_seksjon}
 
   {hist_seksjon}
 

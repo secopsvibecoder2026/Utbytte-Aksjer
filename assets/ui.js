@@ -1975,11 +1975,43 @@ function visModal(a) {
       ${rangebar(a.pris, a['52u_lav'], a['52u_hoy'], true)}
     </div>
 
+    <div id="tv-modal-chart" class="mt-4 rounded-xl overflow-hidden" style="height:220px;"></div>
+
     ${historiskChart(a)}
     ${scoreForklaring(a)}
     ${modalKalkulator(a)}
     ${notatSeksjon(a)}
   `;
+
+  // TradingView kursgraf (dynamisk, siden scripts ikke kjøres via innerHTML)
+  const tvEl = body.querySelector('#tv-modal-chart');
+  if (tvEl) {
+    const isDark = document.documentElement.classList.contains('dark');
+    const inner = document.createElement('div');
+    inner.className = 'tradingview-widget-container';
+    inner.style.height = '100%';
+    const widget = document.createElement('div');
+    widget.className = 'tradingview-widget-container__widget';
+    widget.style.height = '100%';
+    inner.appendChild(widget);
+    const s = document.createElement('script');
+    s.type = 'text/javascript';
+    s.src = 'https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js';
+    s.async = true;
+    s.textContent = JSON.stringify({
+      symbol: `OSL:${a.ticker}`,
+      width: '100%',
+      height: 220,
+      locale: 'no',
+      dateRange: '12M',
+      colorTheme: isDark ? 'dark' : 'light',
+      isTransparent: false,
+      autosize: true,
+      largeChartUrl: `https://www.tradingview.com/chart/?symbol=OSL:${a.ticker}`
+    });
+    inner.appendChild(s);
+    tvEl.appendChild(inner);
+  }
 
   overlay.classList.remove('hidden');
   overlay.classList.add('flex');
