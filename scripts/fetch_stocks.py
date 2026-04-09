@@ -571,7 +571,7 @@ def hent_aksje(meta):
                 weekly = hist_prices["Close"].resample("W").last().dropna()
                 kurs_historikk = [
                     {"d": str(idx.date()), "k": round(float(val), 2)}
-                    for idx, val in weekly.tail(52).items()
+                    for idx, val in weekly.tail(260).items()  # 5 år
                 ]
             except Exception:
                 pass
@@ -1293,25 +1293,81 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
         "</table>"
     ) if hist_rader else ""
 
-    # Kursgraf-seksjon (SVG hvis data finnes, ellers lenker)
+    # Kursgraf-seksjon med Canvas og periodeknapper
     kurs_hist = a.get("kurs_historikk") or []
-    ticker_yf = a.get("ticker_yf") or f"{ticker}.OL"
-    kurs_svg = _generer_kurs_chart_svg(kurs_hist, valuta)
-    tv_chart_seksjon = f"""
+    kurs_json_str = json.dumps(kurs_hist, ensure_ascii=False)
+    if kurs_hist:
+        tv_chart_seksjon = f"""
 <div class="kurs-lenker">
   <h2>Kursgraf</h2>
-  {kurs_svg if kurs_svg else ""}
-  <div class="kurs-knapper" style="margin-top:0.75rem;">
-    <a href="https://finance.yahoo.com/chart/{ticker_yf}" target="_blank" rel="noopener noreferrer" class="kurs-btn">
-      <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"/></svg>
-      Yahoo Finance
-    </a>
-    <a href="https://www.tradingview.com/symbols/OSLO-{ticker}/" target="_blank" rel="noopener noreferrer" class="kurs-btn">
-      <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
-      TradingView
-    </a>
+  <div style="display:flex;gap:4px;margin-bottom:8px;">
+    <button class="kp-btn kp-aktiv" data-p="1ar">1 år</button>
+    <button class="kp-btn" data-p="ytd">YTD</button>
+    <button class="kp-btn" data-p="2ar">2 år</button>
+    <button class="kp-btn" data-p="3ar">3 år</button>
+    <button class="kp-btn" data-p="5ar">5 år</button>
   </div>
+  <div id="kurs-header-{ticker}" style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px;"></div>
+  <canvas id="kurs-canvas-{ticker}" style="display:block;border-radius:10px;width:100%;"></canvas>
+  <script>
+  (function() {{
+    var ALLE = {kurs_json_str};
+    var VAL = '{valuta}';
+    function filtrer(p) {{
+      var now = new Date(), ar = now.getFullYear();
+      if (p === 'ytd') return ALLE.filter(function(x) {{ return x.d >= ar + '-01-01'; }});
+      var years = (p==='2ar'?2:p==='3ar'?3:p==='5ar'?5:1);
+      var d = new Date(now); d.setFullYear(d.getFullYear()-years);
+      var s = d.toISOString().slice(0,10);
+      return ALLE.filter(function(x) {{ return x.d >= s; }});
+    }}
+    function tegn(periode) {{
+      var data = filtrer(periode); if (data.length<4) data=ALLE; if (data.length<4) return;
+      var pr = data.map(function(x){{return x.k;}}), da = data.map(function(x){{return x.d;}}), n=pr.length;
+      var mn=Math.min.apply(null,pr), mx=Math.max.apply(null,pr), rng=mx-mn||1;
+      var opp=pr[n-1]>=pr[0], fg=opp?'#22c55e':'#ef4444';
+      var end=((pr[n-1]-pr[0])/pr[0]*100).toFixed(1);
+      var hdr=document.getElementById('kurs-header-{ticker}');
+      if(hdr) hdr.innerHTML='<span style="font-size:1.05rem;font-weight:700">'+pr[n-1].toLocaleString('nb-NO',{{minimumFractionDigits:2}})+' '+VAL+'</span><span style="font-size:0.78rem;font-weight:500;color:'+fg+'">'+(opp?'▲ +':'▼ ')+end+'%</span>';
+      var cv=document.getElementById('kurs-canvas-{ticker}'); if(!cv) return;
+      var dk=document.documentElement.classList.contains('dark');
+      var DPR=Math.min(window.devicePixelRatio||1,2), CW=cv.parentElement.offsetWidth||680, CH=200;
+      var pL=54,pR=12,pT=14,pB=30;
+      cv.width=CW*DPR; cv.height=CH*DPR; cv.style.height=CH+'px';
+      var ctx=cv.getContext('2d'); ctx.scale(DPR,DPR);
+      var sx=function(i){{return pL+i/(n-1)*(CW-pL-pR);}};
+      var sy=function(p){{return pT+(1-(p-mn)/rng)*(CH-pT-pB);}};
+      ctx.fillStyle=dk?'#111827':'#f9fafb'; ctx.fillRect(0,0,CW,CH);
+      ctx.strokeStyle=dk?'#1f2937':'#e5e7eb'; ctx.lineWidth=1; ctx.setLineDash([4,4]);
+      [mn,(mn+mx)/2,mx].forEach(function(v){{ctx.beginPath();ctx.moveTo(pL,sy(v));ctx.lineTo(CW-pR,sy(v));ctx.stroke();}});
+      ctx.setLineDash([]);
+      ctx.fillStyle=dk?'#6b7280':'#9ca3af'; ctx.font='11px sans-serif'; ctx.textAlign='right';
+      [[mn,sy(mn)],[(mn+mx)/2,sy((mn+mx)/2)],[mx,sy(mx)]].forEach(function(pair){{ctx.fillText(pair[0].toLocaleString('nb-NO',{{maximumFractionDigits:0}}),pL-4,pair[1]+4);}});
+      var grad=ctx.createLinearGradient(0,pT,0,CH-pB);
+      grad.addColorStop(0,opp?'rgba(34,197,94,0.25)':'rgba(239,68,68,0.2)'); grad.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.beginPath(); ctx.moveTo(sx(0),CH-pB);
+      pr.forEach(function(p,i){{ctx.lineTo(sx(i),sy(p));}});
+      ctx.lineTo(sx(n-1),CH-pB); ctx.closePath(); ctx.fillStyle=grad; ctx.fill();
+      ctx.beginPath(); ctx.lineWidth=2.5; ctx.strokeStyle=fg; ctx.lineJoin='round';
+      pr.forEach(function(p,i){{if(i===0)ctx.moveTo(sx(i),sy(p));else ctx.lineTo(sx(i),sy(p));}});
+      ctx.stroke();
+      ctx.beginPath(); ctx.arc(sx(n-1),sy(pr[n-1]),4,0,Math.PI*2); ctx.fillStyle=fg; ctx.fill();
+      ctx.strokeStyle=dk?'#111827':'#fff'; ctx.lineWidth=2; ctx.stroke();
+      ctx.fillStyle=dk?'#6b7280':'#9ca3af'; ctx.textAlign='center';
+      [0,Math.floor(n/3),Math.floor(2*n/3),n-1].forEach(function(i){{var d=da[i].slice(5);ctx.fillText(d.slice(3,5)+'.'+d.slice(0,2),sx(i),CH-8);}});
+    }}
+    document.querySelectorAll('.kp-btn').forEach(function(btn){{
+      btn.addEventListener('click',function(){{
+        document.querySelectorAll('.kp-btn').forEach(function(b){{b.classList.remove('kp-aktiv');}});
+        btn.classList.add('kp-aktiv'); tegn(btn.dataset.p);
+      }});
+    }});
+    if(ALLE.length>0) tegn('1ar');
+  }})();
+  </script>
 </div>"""
+    else:
+        tv_chart_seksjon = ""
 
     # Nye innholdsseksjoner
     profil_html    = _lag_utbytte_profil(a, sektor_snitt or {})
@@ -1495,17 +1551,10 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     .badge {{ background: #dcfce7; color: #15803d; }}
     .kurs-lenker {{ margin: 1.5rem 0; }}
     .kurs-lenker h2 {{ margin-bottom: 0.75rem; }}
-    .kurs-knapper {{ display: flex; gap: 0.5rem; flex-wrap: wrap; }}
-    .kurs-btn {{ display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.5rem 0.9rem; border-radius: 8px; font-size: 0.8rem; font-weight: 500; background: #f3f4f6; color: #374151; text-decoration: none; transition: background 0.15s; }}
-    .kurs-btn:hover {{ background: #e5e7eb; }}
-    .dark .kurs-btn {{ background: #1f2937; color: #d1d5db; }}
-    .dark .kurs-btn:hover {{ background: #374151; }}
-    .kurs-chart-wrap {{ background: var(--chart-bg,#fff); border-radius: 10px; padding: 0.75rem 0.5rem 0; border: 1px solid #e5e7eb; }}
-    .kurs-chart-header {{ display: flex; justify-content: space-between; align-items: baseline; padding: 0 0.5rem 0.5rem; }}
-    .kurs-chart-naa {{ font-size: 1.1rem; font-weight: 700; color: #111827; }}
-    .kurs-chart-endring {{ font-size: 0.8rem; font-weight: 500; }}
-    .dark .kurs-chart-wrap {{ --chart-bg: #111827; --chart-label: #6b7280; --chart-grid: #1f2937; border-color: #1f2937; }}
-    .dark .kurs-chart-naa {{ color: #f3f4f6; }}
+    .kp-btn {{ font-size: 0.72rem; font-weight: 500; padding: 0.2rem 0.55rem; border-radius: 6px; border: none; cursor: pointer; background: transparent; color: #6b7280; transition: background 0.12s, color 0.12s; }}
+    .kp-btn:hover, .kp-aktiv {{ background: #f3f4f6; color: #111827; font-weight: 600; }}
+    .dark .kp-btn {{ color: #9ca3af; }}
+    .dark .kp-btn:hover, .dark .kp-aktiv {{ background: #1f2937; color: #f3f4f6; }}
 
     /* Dark mode */
     .dark body {{ background: #030712; color: #f3f4f6; }}
@@ -1615,6 +1664,8 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     {pe_card}
   </div>
 
+  {tv_chart_seksjon}
+
   {om_seksjon}
 
   {ai_oppsummering_seksjon}
@@ -1622,8 +1673,6 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
   {analyse_seksjon}
 
   {nokkeltal_seksjon}
-
-  {tv_chart_seksjon}
 
   {hist_seksjon}
 

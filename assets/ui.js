@@ -1,5 +1,99 @@
 'use strict';
 
+// ── KURSGRAF CANVAS ───────────────────────────────────────────────────────────
+function _filtrerKursData(alleData, periode) {
+  const nå = new Date();
+  let cutoff;
+  if (periode === 'ytd') {
+    cutoff = `${nå.getFullYear()}-01-01`;
+  } else {
+    const år = { '1ar': 1, '2ar': 2, '3ar': 3, '5ar': 5 }[periode] || 1;
+    const d = new Date(nå); d.setFullYear(d.getFullYear() - år);
+    cutoff = d.toISOString().slice(0, 10);
+  }
+  const filtrert = alleData.filter(p => p.d >= cutoff);
+  return filtrert.length >= 4 ? filtrert : alleData;
+}
+
+function _tegnModalKursGraf(body, a, periode) {
+  const canvas = body.querySelector('#kurs-modal-canvas');
+  const header = body.querySelector('#kurs-modal-header');
+  if (!canvas || !header) return;
+
+  const data = _filtrerKursData(a.kurs_historikk, periode);
+  const priser = data.map(p => p.k);
+  const datoer = data.map(p => p.d);
+  const n = priser.length;
+  if (n < 4) return;
+
+  const minP = Math.min(...priser), maxP = Math.max(...priser);
+  const range = maxP - minP || 1;
+  const erOpp = priser[n - 1] >= priser[0];
+  const farge = erOpp ? '#22c55e' : '#ef4444';
+  const endring = ((priser[n - 1] - priser[0]) / priser[0] * 100).toFixed(1);
+
+  header.innerHTML = `<span class="font-bold text-gray-900 dark:text-gray-100">${priser[n-1].toLocaleString('nb-NO', {minimumFractionDigits:2, maximumFractionDigits:2})} ${escHtml(a.valuta || 'NOK')}</span><span style="color:${farge};font-size:0.75rem;font-weight:500">${erOpp ? '▲ +' : '▼ '}${endring}%</span>`;
+
+  const DPR = Math.min(window.devicePixelRatio || 1, 2);
+  const CW = canvas.parentElement.offsetWidth || 340;
+  const CH = 170;
+  const padL = 52, padR = 12, padT = 14, padB = 28;
+
+  canvas.width = CW * DPR; canvas.height = CH * DPR;
+  canvas.style.height = CH + 'px';
+  const ctx = canvas.getContext('2d');
+  ctx.scale(DPR, DPR);
+
+  const isDark = document.documentElement.classList.contains('dark');
+  ctx.fillStyle = isDark ? '#111827' : '#f9fafb';
+  ctx.fillRect(0, 0, CW, CH);
+
+  const sx = i => padL + (i / (n - 1)) * (CW - padL - padR);
+  const sy = p => padT + (1 - (p - minP) / range) * (CH - padT - padB);
+
+  // Rutenett
+  ctx.strokeStyle = isDark ? '#1f2937' : '#e5e7eb';
+  ctx.lineWidth = 1; ctx.setLineDash([4, 4]);
+  [minP, (minP + maxP) / 2, maxP].forEach(v => {
+    ctx.beginPath(); ctx.moveTo(padL, sy(v)); ctx.lineTo(CW - padR, sy(v)); ctx.stroke();
+  });
+  ctx.setLineDash([]);
+
+  // Y-etiketter
+  ctx.fillStyle = isDark ? '#6b7280' : '#9ca3af';
+  ctx.font = '10px sans-serif'; ctx.textAlign = 'right';
+  [[minP, sy(minP)], [(minP + maxP) / 2, sy((minP + maxP) / 2)], [maxP, sy(maxP)]].forEach(([v, y]) => {
+    ctx.fillText(v.toLocaleString('nb-NO', {maximumFractionDigits: 0}), padL - 4, y + 4);
+  });
+
+  // Gradient fyll
+  const grad = ctx.createLinearGradient(0, padT, 0, CH - padB);
+  grad.addColorStop(0, erOpp ? 'rgba(34,197,94,0.25)' : 'rgba(239,68,68,0.2)');
+  grad.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.beginPath();
+  ctx.moveTo(sx(0), CH - padB);
+  priser.forEach((p, i) => ctx.lineTo(sx(i), sy(p)));
+  ctx.lineTo(sx(n - 1), CH - padB);
+  ctx.closePath(); ctx.fillStyle = grad; ctx.fill();
+
+  // Linje
+  ctx.beginPath(); ctx.lineWidth = 2.5; ctx.strokeStyle = farge; ctx.lineJoin = 'round';
+  priser.forEach((p, i) => i === 0 ? ctx.moveTo(sx(i), sy(p)) : ctx.lineTo(sx(i), sy(p)));
+  ctx.stroke();
+
+  // Siste punkt
+  ctx.beginPath(); ctx.arc(sx(n - 1), sy(priser[n - 1]), 4, 0, Math.PI * 2);
+  ctx.fillStyle = farge; ctx.fill();
+  ctx.strokeStyle = isDark ? '#111827' : '#fff'; ctx.lineWidth = 2; ctx.stroke();
+
+  // X-etiketter
+  ctx.fillStyle = isDark ? '#6b7280' : '#9ca3af'; ctx.textAlign = 'center';
+  [0, Math.floor(n / 3), Math.floor(2 * n / 3), n - 1].forEach(i => {
+    const d = datoer[i].slice(5);
+    ctx.fillText(d.slice(3, 5) + '.' + d.slice(0, 2), sx(i), CH - 6);
+  });
+}
+
 // ── KALENDER-BADGE KONFIGURASJONER ─────────────────────────────────────────
 const KAL_TYPER = {
   ex:      { label: 'Ex-dag',    bg: 'bg-orange-100 dark:bg-orange-900/40', text: 'text-orange-700 dark:text-orange-300', dag: 'text-orange-600 dark:text-orange-400' },
@@ -1975,20 +2069,17 @@ function visModal(a) {
       ${rangebar(a.pris, a['52u_lav'], a['52u_hoy'], true)}
     </div>
 
-    <div id="kurs-graf-modal" class="mt-4"></div>
-
-    <div class="mt-2 flex gap-2 flex-wrap">
-      <a href="https://finance.yahoo.com/chart/${escHtml(a.ticker_yf || a.ticker + '.OL')}" target="_blank" rel="noopener noreferrer"
-         class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
-        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
-        Yahoo Finance
-      </a>
-      <a href="https://www.tradingview.com/symbols/OSLO-${escHtml(a.ticker)}/" target="_blank" rel="noopener noreferrer"
-         class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
-        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
-        TradingView
-      </a>
-    </div>
+    ${a.kurs_historikk && a.kurs_historikk.length >= 4 ? `
+    <div id="kurs-graf-modal" class="mt-4">
+      <div class="flex gap-1 mb-2">
+        ${['YTD','1å','2å','3å','5å'].map((l,i) => {
+          const p = ['ytd','1ar','2ar','3ar','5ar'][i];
+          return `<button data-kgp="${p}" class="kurs-periode-knapp${p==='1ar' ? ' aktiv' : ''}">${l}</button>`;
+        }).join('')}
+      </div>
+      <div id="kurs-modal-header" class="flex justify-between items-baseline mb-1 text-sm"></div>
+      <canvas id="kurs-modal-canvas" style="display:block;border-radius:10px;width:100%;"></canvas>
+    </div>` : ''}
 
     ${historiskChart(a)}
     ${scoreForklaring(a)}
@@ -1996,106 +2087,20 @@ function visModal(a) {
     ${notatSeksjon(a)}
   `;
 
-  // Kursgraf (Canvas) – tegnes etter innerHTML er satt
-  const grafEl = body.querySelector('#kurs-graf-modal');
-  if (grafEl && a.kurs_historikk && a.kurs_historikk.length >= 4) {
-    const isDark = document.documentElement.classList.contains('dark');
-    const priser = a.kurs_historikk.map(p => p.k);
-    const datoer = a.kurs_historikk.map(p => p.d);
-    const n = priser.length;
-    const minP = Math.min(...priser);
-    const maxP = Math.max(...priser);
-    const range = maxP - minP || 1;
-    const erOpp = priser[n - 1] >= priser[0];
-    const farge = erOpp ? '#22c55e' : '#ef4444';
-    const endring = ((priser[n - 1] - priser[0]) / priser[0] * 100).toFixed(1);
-    const endringTekst = (erOpp ? '▲ +' : '▼ ') + endring + '% siste 52u';
-
-    const DPR = Math.min(window.devicePixelRatio || 1, 2);
-    const CW = grafEl.offsetWidth || 340, CH = 160;
-    const padL = 52, padR = 12, padT = 14, padB = 28;
-
-    const canvas = document.createElement('canvas');
-    canvas.width = CW * DPR; canvas.height = CH * DPR;
-    canvas.style.cssText = `width:${CW}px;height:${CH}px;display:block;border-radius:10px;`;
-    const ctx = canvas.getContext('2d');
-    ctx.scale(DPR, DPR);
-
-    // Bakgrunn
-    ctx.fillStyle = isDark ? '#111827' : '#f9fafb';
-    ctx.beginPath();
-    ctx.roundRect(0, 0, CW, CH, 10);
-    ctx.fill();
-
-    const sx = i => padL + (i / (n - 1)) * (CW - padL - padR);
-    const sy = p => padT + (1 - (p - minP) / range) * (CH - padT - padB);
-
-    // Rutenett
-    ctx.strokeStyle = isDark ? '#1f2937' : '#e5e7eb';
-    ctx.lineWidth = 1;
-    ctx.setLineDash([4, 4]);
-    [minP, (minP + maxP) / 2, maxP].forEach(v => {
-      ctx.beginPath();
-      ctx.moveTo(padL, sy(v)); ctx.lineTo(CW - padR, sy(v));
-      ctx.stroke();
-    });
-    ctx.setLineDash([]);
-
-    // Y-etiketter
-    ctx.fillStyle = isDark ? '#6b7280' : '#9ca3af';
-    ctx.font = '10px sans-serif';
-    ctx.textAlign = 'right';
-    [[minP, sy(minP)], [(minP + maxP) / 2, sy((minP + maxP) / 2)], [maxP, sy(maxP)]].forEach(([v, y]) => {
-      ctx.fillText(v.toLocaleString('nb-NO', { maximumFractionDigits: 0 }), padL - 4, y + 4);
-    });
-
-    // Gradient fyll
-    const grad = ctx.createLinearGradient(0, padT, 0, CH - padB);
-    grad.addColorStop(0, erOpp ? 'rgba(34,197,94,0.25)' : 'rgba(239,68,68,0.2)');
-    grad.addColorStop(1, 'rgba(0,0,0,0)');
-    ctx.beginPath();
-    ctx.moveTo(sx(0), CH - padB);
-    priser.forEach((p, i) => ctx.lineTo(sx(i), sy(p)));
-    ctx.lineTo(sx(n - 1), CH - padB);
-    ctx.closePath();
-    ctx.fillStyle = grad;
-    ctx.fill();
-
-    // Linje
-    ctx.beginPath();
-    ctx.lineWidth = 2;
-    ctx.strokeStyle = farge;
-    ctx.lineJoin = 'round';
-    priser.forEach((p, i) => i === 0 ? ctx.moveTo(sx(i), sy(p)) : ctx.lineTo(sx(i), sy(p)));
-    ctx.stroke();
-
-    // Siste punkt (markert sirkel)
-    ctx.beginPath();
-    ctx.arc(sx(n - 1), sy(priser[n - 1]), 4, 0, Math.PI * 2);
-    ctx.fillStyle = farge;
-    ctx.fill();
-    ctx.strokeStyle = isDark ? '#111827' : '#fff';
-    ctx.lineWidth = 2;
-    ctx.stroke();
-
-    // X-etiketter (4 datoer)
-    ctx.fillStyle = isDark ? '#6b7280' : '#9ca3af';
-    ctx.textAlign = 'center';
-    [0, Math.floor(n / 3), Math.floor(2 * n / 3), n - 1].forEach(i => {
-      const d = datoer[i].slice(5);
-      ctx.fillText(d.slice(3, 5) + '.' + d.slice(0, 2), sx(i), CH - 6);
-    });
-
-    // Header (kurs + endring)
-    const header = document.createElement('div');
-    header.className = 'flex justify-between items-baseline mb-1.5 text-sm';
-    header.innerHTML = `<span class="font-bold text-gray-900 dark:text-gray-100">${priser[n-1].toLocaleString('nb-NO', {minimumFractionDigits:2, maximumFractionDigits:2})} ${escHtml(a.valuta||'NOK')}</span><span style="color:${farge};font-size:0.75rem;font-weight:500">${endringTekst}</span>`;
-    grafEl.appendChild(header);
-    grafEl.appendChild(canvas);
-  }
-
   overlay.classList.remove('hidden');
   overlay.classList.add('flex');
+
+  // Kursgraf (Canvas) – tegnes ETTER modal vises så offsetWidth er korrekt
+  if (a.kurs_historikk && a.kurs_historikk.length >= 4) {
+    requestAnimationFrame(() => _tegnModalKursGraf(body, a, '1ar'));
+    body.querySelectorAll('.kurs-periode-knapp').forEach(btn => {
+      btn.addEventListener('click', () => {
+        body.querySelectorAll('.kurs-periode-knapp').forEach(b => b.classList.remove('aktiv'));
+        btn.classList.add('aktiv');
+        _tegnModalKursGraf(body, a, btn.dataset.kgp);
+      });
+    });
+  }
 
   // Sett ?aksje= i URL slik at siden kan deles
   const _url = new URL(location.href);

@@ -348,6 +348,24 @@ th.sort-desc::after { content: ' ↓'; color: #6b7280; }
   100% { background-position: -200% 0; }
 }
 
+/* ── KURSGRAF PERIODEKNAPPER ─────────────────────────────────────────── */
+.kurs-periode-knapp {
+  font-size: 0.72rem;
+  font-weight: 500;
+  padding: 0.2rem 0.55rem;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  background: transparent;
+  color: #6b7280;
+  transition: background 0.12s, color 0.12s;
+}
+.kurs-periode-knapp:hover { background: #f3f4f6; color: #111827; }
+.kurs-periode-knapp.aktiv { background: #f3f4f6; color: #111827; font-weight: 600; }
+.dark .kurs-periode-knapp { color: #9ca3af; }
+.dark .kurs-periode-knapp:hover { background: #1f2937; color: #f3f4f6; }
+.dark .kurs-periode-knapp.aktiv { background: #1f2937; color: #f3f4f6; font-weight: 600; }
+
 /* ── DAG-PILLS (Hva skjer i dag) ─────────────────────────────────────── */
 .dag-pill {
   display: inline-flex;
