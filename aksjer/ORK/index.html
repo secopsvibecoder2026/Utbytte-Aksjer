@@ -129,6 +129,9 @@
     .dark .utbytte-sep { color: #6b7280; }
     .dark .utbytte-sep::before, .dark .utbytte-sep::after { background: #1f2937; }
     .mini-nav a { color: #16a34a; }
+    .til-toppen { position: fixed; bottom: 1.5rem; right: 1.25rem; z-index: 40; background: #16a34a; color: #fff; border: none; border-radius: 9999px; width: 2.5rem; height: 2.5rem; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.18); opacity: 0; pointer-events: none; transition: opacity 0.2s; }
+    .til-toppen.synlig { opacity: 1; pointer-events: auto; }
+    .til-toppen:hover { background: #15803d; }
     .profil-seksjon { margin: 1.5rem 0; }
     .profil-badges { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem; }
     .profil-badge { font-size: 0.75rem; font-weight: 600; padding: 0.25rem 0.75rem; border-radius: 9999px; }
@@ -471,6 +474,10 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
   <style>.dark .std-footer {{ color:#6b7280 !important; border-color:#1f2937 !important; }} .dark .std-footer a {{ color:#6b7280 !important; }}</style>
 </div>
 
+<button class="til-toppen" id="til-toppen" aria-label="Til toppen">
+  <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 15l7-7 7 7"/></svg>
+</button>
+
 <script>
   (function() {
     // Mørk/lys modus
@@ -524,6 +531,15 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
     }
     window.addEventListener('scroll', oppdaterTab, {passive: true});
     oppdaterTab();
+
+    // Til toppen-knapp
+    var tilToppenBtn = document.getElementById('til-toppen');
+    window.addEventListener('scroll', function() {
+      tilToppenBtn.classList.toggle('synlig', window.scrollY > 300);
+    }, {passive: true});
+    tilToppenBtn.addEventListener('click', function() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
   })();
 </script>
 

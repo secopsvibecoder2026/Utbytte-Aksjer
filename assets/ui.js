@@ -2033,11 +2033,22 @@ function visModal(a) {
     <div class="modal-tabs">
       <button class="modal-tab aktiv" data-panel="oversikt">Oversikt</button>
       <button class="modal-tab" data-panel="utbytte">Utbytte</button>
+      <button class="modal-tab" data-panel="nokkeltall">Nøkkeltall</button>
       <button class="modal-tab" data-panel="kalkulator">Kalkulator</button>
     </div>
 
     <!-- ── OVERSIKT ── -->
     <div class="modal-panel" id="mp-oversikt">
+      <div id="kurs-graf-modal" class="mb-3"></div>
+      <div class="mb-3">
+        ${rangebar(a.pris, a['52u_lav'], a['52u_hoy'], true)}
+      </div>
+      <div class="grid grid-cols-2 gap-3 mb-4">
+        ${modalKort('Kurs', fmt(a.pris) + ' ' + a.valuta)}
+        ${modalKort('P/E', a.pe_ratio > 0 ? a.pe_ratio.toFixed(1) : '—')}
+        ${modalKort('P/B', a.pb_ratio > 0 ? a.pb_ratio.toFixed(1) : '—')}
+        ${modalKort('Markedsverdi', a.markedsverdi_mrd > 0 ? a.markedsverdi_mrd.toFixed(1) + ' mrd' : '—')}
+      </div>
       ${a.beskrivelse_fakta
         ? '<div class="om-selskap-boks"><p class="om-selskap-label">Om selskapet</p><p class="om-selskap-tekst">' + escHtml(a.beskrivelse_fakta) + '</p></div>'
         : a.beskrivelse
@@ -2046,16 +2057,6 @@ function visModal(a) {
       ${a.ai_oppsummering
         ? '<div class="ai-opp-boks"><p class="ai-opp-label">AI-oppsummering' + (a.ai_oppsummering_dato ? ' <span class="ai-opp-dato">' + escHtml(a.ai_oppsummering_dato) + '</span>' : '') + '</p><p class="ai-opp-tekst">' + escHtml(a.ai_oppsummering) + '</p></div>'
         : ''}
-      <div id="kurs-graf-modal" class="mt-3"></div>
-      <div class="mt-3">
-        ${rangebar(a.pris, a['52u_lav'], a['52u_hoy'], true)}
-      </div>
-      <div class="grid grid-cols-2 gap-3 mt-4">
-        ${modalKort('Kurs', fmt(a.pris) + ' ' + a.valuta)}
-        ${modalKort('P/E', a.pe_ratio > 0 ? a.pe_ratio.toFixed(1) : '—')}
-        ${modalKort('P/B', a.pb_ratio > 0 ? a.pb_ratio.toFixed(1) : '—')}
-        ${modalKort('Markedsverdi', a.markedsverdi_mrd > 0 ? a.markedsverdi_mrd.toFixed(1) + ' mrd' : '—')}
-      </div>
     </div>
 
     <!-- ── UTBYTTE ── -->
@@ -2093,6 +2094,35 @@ function visModal(a) {
       </div>
       ${historiskChart(a)}
       ${scoreForklaring(a)}
+    </div>
+
+    <!-- ── NØKKELTALL ── -->
+    <div class="modal-panel skjult" id="mp-nokkeltall">
+      <div class="rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden text-sm">
+        ${[
+          ['Kurs',             fmt(a.pris) + ' ' + a.valuta],
+          ['Markedsverdi',     a.markedsverdi_mrd > 0 ? a.markedsverdi_mrd.toFixed(1) + ' mrd NOK' : '—'],
+          ['P/E',              a.pe_ratio > 0 ? a.pe_ratio.toFixed(1) : '—'],
+          ['P/B',              a.pb_ratio > 0 ? a.pb_ratio.toFixed(1) : '—'],
+          ['52u høy',          a['52u_hoy'] > 0 ? fmt(a['52u_hoy']) + ' ' + a.valuta : '—'],
+          ['52u lav',          a['52u_lav'] > 0 ? fmt(a['52u_lav']) + ' ' + a.valuta : '—'],
+          ['Direkteavkastning',a.utbytte_yield > 0 ? a.utbytte_yield.toFixed(2) + '%' : '—'],
+          ['5-årssnitt yield', a.snitt_yield_5ar > 0 ? a.snitt_yield_5ar.toFixed(2) + '%' : '—'],
+          ['Utbytte/aksje',    fmt(a.utbytte_per_aksje) + ' ' + a.valuta],
+          ['Siste utbytte',    fmt(a.siste_utbytte) + ' ' + a.valuta],
+          ['Payout Ratio',     a.payout_ratio > 0 ? a.payout_ratio.toFixed(0) + '%' : '—'],
+          ['Utbyttevekst 5år', a.utbytte_vekst_5ar !== 0 ? (a.utbytte_vekst_5ar > 0 ? '+' : '') + a.utbytte_vekst_5ar.toFixed(1) + '% p.a.' : '—'],
+          ['År m/utbytte',     a.ar_med_utbytte > 0 ? a.ar_med_utbytte + ' år' : '—'],
+          ['Frekvens',         a.frekvens],
+          ['Sektor',           a.sektor],
+          ['Børs',             a.bors],
+        ].map(([k,v], i) =>
+          '<div class="flex justify-between items-center px-4 py-2.5' + (i % 2 === 0 ? ' bg-gray-50 dark:bg-gray-800/50' : '') + '">' +
+          '<span class="text-gray-500 dark:text-gray-400">' + escHtml(k) + '</span>' +
+          '<span class="font-medium text-gray-900 dark:text-gray-100">' + escHtml(String(v)) + '</span>' +
+          '</div>'
+        ).join('')}
+      </div>
     </div>
 
     <!-- ── KALKULATOR ── -->
