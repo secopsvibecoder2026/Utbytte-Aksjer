@@ -262,6 +262,15 @@
   <h1>CAPT – Capital Tankers AS</h1>
   <p class="sub">Skipsfart · Uregelmessig utbytte · Oslo Børs</p>
 
+  <nav class="ak-tabnav" id="ak-tabnav" aria-label="Sideseksjoner">
+    <a href="#oversikt" class="ak-tab aktiv">Oversikt</a>
+    <a href="#utbytte" class="ak-tab">Utbytte</a>
+    <a href="#nokkeltall" class="ak-tab">Nøkkeltall</a>
+  </nav>
+
+  <!-- ── OVERSIKT ── -->
+  <section id="oversikt">
+
   <div class="desc"><h2>Om selskapet</h2><p>Capital Tankers Corp. operates crude and product tankers. The company owns a fleet of 30 vessels comprising 12 crude carriers, 10 Suezmax tankers, and 8 Aframax/LR2 tankers. It serves customers in the global crude oil transportation sector. Capital Tankers Corp. was incorporated in 2026 and is headquartered in Piraeus, Greece. Capital Tankers Corp. operates as a subsidiary of Capital Maritime & Trading Corp.</p></div>
 
   <div class="ai-oppsummering"><h2>AI-oppsummering <span class="ai-dato">Oppdatert 2026-04-08T12:34:53</span></h2><p>CAPT er for øyeblikket ikke en utbytteaksje, og all verdiskapning forventes kanalisert gjennom kursvekst. Selskapet mangler registrert sammenhengende utbyttehistorikk, noe som gjør det vanskelig å bedømme påliteligheten på lang sikt. CAPT har lav utbyttekvalitet etter en helhetsvurdering — yield alene rettferdiggjør ikke posisjonen uten at fundamentale tall forbedres. Investorer bør følge inntjeningsutviklingen nøye for CAPT og vurdere aksjen i lys av egne mål for inntekt versus kursavkastning. En grundig gjennomgang av selskapets balanse og kontantstrømsutvikling anbefales før man tar en investeringsbeslutning i CAPT. Uansett utbytteprofil bør CAPT vurderes opp mot den øvrige porteføljens eksponering mot skipsfart for å sikre god risikospredning.</p></div>
@@ -370,11 +379,12 @@
   </script>
 </div>
 
-  <div class="utbytte-sep">Utbytteinformasjon</div>
+  </section>
+
+  <!-- ── UTBYTTE ── -->
+  <section id="utbytte">
 
   
-
-  <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Skipsfart</td></tr><tr><td>Frekvens</td><td>Uregelmessig</td></tr><tr><td>Utbytte per aksje</td><td>0 NOK</td></tr><tr><td>Direkteavkastning</td><td>—</td></tr><tr><td>5-årssnitt yield</td><td>0.00%</td></tr><tr><td>År med utbytte</td><td>0</td></tr><tr><td>Utbyttevekst 5 år</td><td>+0.0% p.a.</td></tr><tr><td>52-ukers kurs</td><td>118.4 – 132.0 NOK</td></tr></tbody></table>
 
   
 
@@ -385,6 +395,15 @@
   <div class="risiko-seksjon"><h2>Risiko for utbyttet</h2><ul class="risiko-liste"><li>Makroøkonomisk nedgang kan påvirke inntjening og utbyttekapasitet</li>
 <li>Valuta- og renteeksponering kan påvirke resultater</li>
 <li>Regulatoriske endringer kan påvirke driftsbetingelser</li></ul></div>
+
+  </section>
+
+  <!-- ── NØKKELTALL ── -->
+  <section id="nokkeltall">
+
+  <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Skipsfart</td></tr><tr><td>Frekvens</td><td>Uregelmessig</td></tr><tr><td>Utbytte per aksje</td><td>0 NOK</td></tr><tr><td>Direkteavkastning</td><td>—</td></tr><tr><td>5-årssnitt yield</td><td>0.00%</td></tr><tr><td>År med utbytte</td><td>0</td></tr><tr><td>Utbyttevekst 5 år</td><td>+0.0% p.a.</td></tr><tr><td>52-ukers kurs</td><td>118.4 – 132.0 NOK</td></tr></tbody></table>
+
+  </section>
 
   <div class="relaterte"><h2>Andre skipsfart-aksjer med utbytte</h2><div class="rel-grid"><a href="/aksjer/STST/" class="rel-kort"><span class="rel-ticker">STST</span><span class="rel-navn">Stainless Tankers AS</span><span class="rel-yield">21.3%</span></a>
 <a href="/aksjer/WEST/" class="rel-kort"><span class="rel-ticker">WEST</span><span class="rel-navn">Western Bulk Chartering AS</span><span class="rel-yield">6.0%</span></a>
@@ -432,6 +451,7 @@
 
 <script>
   (function() {
+    // Mørk/lys modus
     var btn = document.getElementById('dark-toggle');
     var root = document.documentElement;
     var sun = btn.querySelector('.sun-icon');
@@ -447,6 +467,26 @@
       localStorage.setItem('tema', isDark ? 'dark' : 'light');
       syncIcons();
     });
+
+    // Scroll-spy: marker aktiv fane basert på synlig seksjon
+    var seksjoner = ['oversikt','utbytte','nokkeltall']
+      .map(function(id) { return document.getElementById(id); })
+      .filter(Boolean);
+    var tabLinker = document.querySelectorAll('.ak-tab');
+    var headerH = 96;
+    function oppdaterTab() {
+      var aktiv = seksjoner[0] ? seksjoner[0].id : 'oversikt';
+      for (var i = 0; i < seksjoner.length; i++) {
+        if (seksjoner[i].getBoundingClientRect().top < headerH + 40) {
+          aktiv = seksjoner[i].id;
+        }
+      }
+      tabLinker.forEach(function(a) {
+        a.classList.toggle('aktiv', a.getAttribute('href') === '#' + aktiv);
+      });
+    }
+    window.addEventListener('scroll', oppdaterTab, {passive: true});
+    oppdaterTab();
   })();
 </script>
 

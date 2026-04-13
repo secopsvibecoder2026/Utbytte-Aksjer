@@ -262,6 +262,15 @@
   <h1>BWE – BW Energy Limited</h1>
   <p class="sub">Energi · Uregelmessig utbytte · Oslo Børs</p>
 
+  <nav class="ak-tabnav" id="ak-tabnav" aria-label="Sideseksjoner">
+    <a href="#oversikt" class="ak-tab aktiv">Oversikt</a>
+    <a href="#utbytte" class="ak-tab">Utbytte</a>
+    <a href="#nokkeltall" class="ak-tab">Nøkkeltall</a>
+  </nav>
+
+  <!-- ── OVERSIKT ── -->
+  <section id="oversikt">
+
   <div class="desc"><h2>Om selskapet</h2><p>BW Energy Limited, together with its subsidiaries, engages in the exploration and production of oil and gas properties. It holds interests in various shallow- and deep-water assets located in Gabon, Brazil, and Namibia. The company was founded in 2016 and is based in Hamilton, Bermuda. BW Energy Limited is a subsidiary of Bw Group Limited.</p></div>
 
   <div class="ai-oppsummering"><h2>AI-oppsummering <span class="ai-dato">Oppdatert 2026-04-08T12:34:53</span></h2><p>BWE er for øyeblikket ikke en utbytteaksje, og all verdiskapning forventes kanalisert gjennom kursvekst. P/E på 11.4 er i tråd med normalt nivå for energi-sektoren og gir et balansert bilde av verdsettelsen. Selskapet mangler registrert sammenhengende utbyttehistorikk, noe som gjør det vanskelig å bedømme påliteligheten på lang sikt. BWE har lav utbyttekvalitet etter en helhetsvurdering — yield alene rettferdiggjør ikke posisjonen uten at fundamentale tall forbedres. Aktive utbytteinvestorer bør følge kvartalsvise resultater og eventuelle policyendringer for BWE tett, ettersom disse vil påvirke fremtidig inntektsevne. For en fullstendig vurdering bør BWE ses i kontekst av bredere sektordynamikk, rentenivå og makroøkonomiske utsikter.</p></div>
@@ -370,11 +379,12 @@
   </script>
 </div>
 
-  <div class="utbytte-sep">Utbytteinformasjon</div>
+  </section>
+
+  <!-- ── UTBYTTE ── -->
+  <section id="utbytte">
 
   
-
-  <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Energi</td></tr><tr><td>Frekvens</td><td>Uregelmessig</td></tr><tr><td>Utbytte per aksje</td><td>0 NOK</td></tr><tr><td>Direkteavkastning</td><td>—</td></tr><tr><td>5-årssnitt yield</td><td>0.00%</td></tr><tr><td>År med utbytte</td><td>0</td></tr><tr><td>P/E</td><td>12.1</td></tr><tr><td>Utbyttevekst 5 år</td><td>+0.0% p.a.</td></tr><tr><td>Markedsverdi</td><td>15.2 mrd NOK</td></tr><tr><td>52-ukers kurs</td><td>26.0 – 62.0 NOK</td></tr></tbody></table>
 
   
 
@@ -385,6 +395,15 @@
   <div class="risiko-seksjon"><h2>Risiko for utbyttet</h2><ul class="risiko-liste"><li>Olje- og gasspris påvirker inntjeningen direkte og kan svinge kraftig</li>
 <li>Energiomstilling og ESG-krav kan presse markedsverdi over tid</li>
 <li>Statlig eierstyring kan påvirke utbyttepolitikk</li></ul></div>
+
+  </section>
+
+  <!-- ── NØKKELTALL ── -->
+  <section id="nokkeltall">
+
+  <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Energi</td></tr><tr><td>Frekvens</td><td>Uregelmessig</td></tr><tr><td>Utbytte per aksje</td><td>0 NOK</td></tr><tr><td>Direkteavkastning</td><td>—</td></tr><tr><td>5-årssnitt yield</td><td>0.00%</td></tr><tr><td>År med utbytte</td><td>0</td></tr><tr><td>P/E</td><td>12.1</td></tr><tr><td>Utbyttevekst 5 år</td><td>+0.0% p.a.</td></tr><tr><td>Markedsverdi</td><td>15.2 mrd NOK</td></tr><tr><td>52-ukers kurs</td><td>26.0 – 62.0 NOK</td></tr></tbody></table>
+
+  </section>
 
   <div class="relaterte"><h2>Andre energi-aksjer med utbytte</h2><div class="rel-grid"><a href="/aksjer/VAR/" class="rel-kort"><span class="rel-ticker">VAR</span><span class="rel-navn">Vår Energi ASA</span><span class="rel-yield">10.4%</span></a>
 <a href="/aksjer/ENH/" class="rel-kort"><span class="rel-ticker">ENH</span><span class="rel-navn">SED Energy Holdings PLC</span><span class="rel-yield">9.3%</span></a>
@@ -432,6 +451,7 @@
 
 <script>
   (function() {
+    // Mørk/lys modus
     var btn = document.getElementById('dark-toggle');
     var root = document.documentElement;
     var sun = btn.querySelector('.sun-icon');
@@ -447,6 +467,26 @@
       localStorage.setItem('tema', isDark ? 'dark' : 'light');
       syncIcons();
     });
+
+    // Scroll-spy: marker aktiv fane basert på synlig seksjon
+    var seksjoner = ['oversikt','utbytte','nokkeltall']
+      .map(function(id) { return document.getElementById(id); })
+      .filter(Boolean);
+    var tabLinker = document.querySelectorAll('.ak-tab');
+    var headerH = 96;
+    function oppdaterTab() {
+      var aktiv = seksjoner[0] ? seksjoner[0].id : 'oversikt';
+      for (var i = 0; i < seksjoner.length; i++) {
+        if (seksjoner[i].getBoundingClientRect().top < headerH + 40) {
+          aktiv = seksjoner[i].id;
+        }
+      }
+      tabLinker.forEach(function(a) {
+        a.classList.toggle('aktiv', a.getAttribute('href') === '#' + aktiv);
+      });
+    }
+    window.addEventListener('scroll', oppdaterTab, {passive: true});
+    oppdaterTab();
   })();
 </script>
 

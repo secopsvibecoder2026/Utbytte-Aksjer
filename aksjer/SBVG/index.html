@@ -262,6 +262,15 @@
   <h1>SBVG – SpareBank 1 BV</h1>
   <p class="sub">Finans · Halvårlig utbytte · Oslo Børs</p>
 
+  <nav class="ak-tabnav" id="ak-tabnav" aria-label="Sideseksjoner">
+    <a href="#oversikt" class="ak-tab aktiv">Oversikt</a>
+    <a href="#utbytte" class="ak-tab">Utbytte</a>
+    <a href="#nokkeltall" class="ak-tab">Nøkkeltall</a>
+  </nav>
+
+  <!-- ── OVERSIKT ── -->
+  <section id="oversikt">
+
   <div class="desc"><h2>Om selskapet</h2><p>Sparebank i Telemark og Vestfold. Stabil lokal bank med god utbyttehistorikk og solid kapitaldekning. SpareBank 1 BV er notert på Oslo Børs. Aksjen har betalt utbytte 17 år på rad, noe som reflekterer langvarig stabil inntjening og kapitalavkastning til aksjonærene. Utbyttet utbetales halvårlig — to ganger i året. Utbetalingsgraden (payout ratio) er 61%, noe som anses som bærekraftig for de fleste markedsforhold.</p></div>
 
   <div class="ai-oppsummering"><h2>AI-oppsummering <span class="ai-dato">Oppdatert 2026-04-08T12:34:53</span></h2><p>Direkteavkastningen på 7.9% er klart over snittet for Oslo Børs og meget attraktiv for inntektsinvestorer. P/E på 7.7 er lavt for finans-sektoren og tyder på attraktiv inngangsverdi — forutsatt at inntjeningen er normalisert. Utbetalingsgraden på 61% er moderat høy, men bærekraftig dersom inntjeningen holder seg stabil. Utbytteveksten på 9.8% per år er moderat positiv og holder tritt med inflasjon. Selskapet har betalt utbytte i 17 år på rad — solid historikk som underbygger ledelsens langsiktige fokus på aksjonæravkastning. P/B på 1.00 er moderat og fornuftig for finanssektoren. Høy utbyttekvalitet totalt sett — SBVG er et naturlig kjernevalg i en norsk utbytteportefølje.</p></div>
@@ -302,11 +311,12 @@
 
   
 
-  <div class="utbytte-sep">Utbytteinformasjon</div>
+  </section>
+
+  <!-- ── UTBYTTE ── -->
+  <section id="utbytte">
 
   <div class="analyse"><h2>Utbyttedatoer</h2><p>Neste ex-dato er 16. apr 2026 — kjøp innen 15. apr for å motta utbytte. Utbetalingsdato er satt til 1. mai 2026. Yielden på 7.9% er 2.2 prosentpoeng over snittet for Finans-sektoren (5.8%).</p></div>
-
-  <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Finans</td></tr><tr><td>Frekvens</td><td>Halvårlig</td></tr><tr><td>Utbytte per aksje</td><td>7.8 NOK</td></tr><tr><td>Direkteavkastning</td><td>7.93%</td></tr><tr><td>5-årssnitt yield</td><td>0.00%</td></tr><tr><td>År med utbytte</td><td>17</td></tr><tr><td>P/E</td><td>7.7</td></tr><tr><td>Payout ratio</td><td>61%</td></tr><tr><td>Utbyttevekst 5 år</td><td>+9.8% p.a.</td></tr><tr><td>Markedsverdi</td><td>5.2 mrd NOK</td></tr><tr><td>52-ukers kurs</td><td>82.2 – 108.6 NOK</td></tr></tbody></table>
 
   
 
@@ -317,6 +327,15 @@
   <div class="risiko-seksjon"><h2>Risiko for utbyttet</h2><ul class="risiko-liste"><li>Rentenivå påvirker netto renteinntekter og utlånsmargin</li>
 <li>Økte kredittap i nedgangstider kan presse resultater</li>
 <li>Regulatoriske kapitalkrav begrenser utbyttekapasitet</li></ul></div>
+
+  </section>
+
+  <!-- ── NØKKELTALL ── -->
+  <section id="nokkeltall">
+
+  <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Finans</td></tr><tr><td>Frekvens</td><td>Halvårlig</td></tr><tr><td>Utbytte per aksje</td><td>7.8 NOK</td></tr><tr><td>Direkteavkastning</td><td>7.93%</td></tr><tr><td>5-årssnitt yield</td><td>0.00%</td></tr><tr><td>År med utbytte</td><td>17</td></tr><tr><td>P/E</td><td>7.7</td></tr><tr><td>Payout ratio</td><td>61%</td></tr><tr><td>Utbyttevekst 5 år</td><td>+9.8% p.a.</td></tr><tr><td>Markedsverdi</td><td>5.2 mrd NOK</td></tr><tr><td>52-ukers kurs</td><td>82.2 – 108.6 NOK</td></tr></tbody></table>
+
+  </section>
 
   <div class="relaterte"><h2>Andre finans-aksjer med utbytte</h2><div class="rel-grid"><a href="/aksjer/PARB/" class="rel-kort"><span class="rel-ticker">PARB</span><span class="rel-navn">Pareto Bank ASA</span><span class="rel-yield">10.1%</span></a>
 <a href="/aksjer/SPOG/" class="rel-kort"><span class="rel-ticker">SPOG</span><span class="rel-navn">Sparebanken Øst</span><span class="rel-yield">8.5%</span></a>
@@ -364,6 +383,7 @@
 
 <script>
   (function() {
+    // Mørk/lys modus
     var btn = document.getElementById('dark-toggle');
     var root = document.documentElement;
     var sun = btn.querySelector('.sun-icon');
@@ -379,6 +399,26 @@
       localStorage.setItem('tema', isDark ? 'dark' : 'light');
       syncIcons();
     });
+
+    // Scroll-spy: marker aktiv fane basert på synlig seksjon
+    var seksjoner = ['oversikt','utbytte','nokkeltall']
+      .map(function(id) { return document.getElementById(id); })
+      .filter(Boolean);
+    var tabLinker = document.querySelectorAll('.ak-tab');
+    var headerH = 96;
+    function oppdaterTab() {
+      var aktiv = seksjoner[0] ? seksjoner[0].id : 'oversikt';
+      for (var i = 0; i < seksjoner.length; i++) {
+        if (seksjoner[i].getBoundingClientRect().top < headerH + 40) {
+          aktiv = seksjoner[i].id;
+        }
+      }
+      tabLinker.forEach(function(a) {
+        a.classList.toggle('aktiv', a.getAttribute('href') === '#' + aktiv);
+      });
+    }
+    window.addEventListener('scroll', oppdaterTab, {passive: true});
+    oppdaterTab();
   })();
 </script>
 

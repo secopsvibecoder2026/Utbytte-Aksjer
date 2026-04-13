@@ -262,6 +262,15 @@
   <h1>DOF – DOF Group ASA</h1>
   <p class="sub">Energitjenester · Halvårlig utbytte · Oslo Børs</p>
 
+  <nav class="ak-tabnav" id="ak-tabnav" aria-label="Sideseksjoner">
+    <a href="#oversikt" class="ak-tab aktiv">Oversikt</a>
+    <a href="#utbytte" class="ak-tab">Utbytte</a>
+    <a href="#nokkeltall" class="ak-tab">Nøkkeltall</a>
+  </nav>
+
+  <!-- ── OVERSIKT ── -->
+  <section id="oversikt">
+
   <div class="desc"><h2>Om selskapet</h2><p>Offshore supplyvesselselskap med AHTS, PSV og subsea-fartøyer. Høy etterspørsel fra olje og offshore vind. Utbyttet utbetales halvårlig — to ganger i året.</p></div>
 
   <div class="ai-oppsummering"><h2>AI-oppsummering <span class="ai-dato">Oppdatert 2026-04-08T12:34:53</span></h2><p>DOF er for øyeblikket ikke en utbytteaksje, og all verdiskapning forventes kanalisert gjennom kursvekst. Selskapet mangler registrert sammenhengende utbyttehistorikk, noe som gjør det vanskelig å bedømme påliteligheten på lang sikt. DOF anbefales med forsiktighet for rene utbytteinvestorer — inntjeningssituasjonen gir liten trygghet for fremtidige utbetalinger. For en fullstendig vurdering bør DOF ses i kontekst av bredere sektordynamikk, rentenivå og makroøkonomiske utsikter. Aktive utbytteinvestorer bør følge kvartalsvise resultater og eventuelle policyendringer for DOF tett, ettersom disse vil påvirke fremtidig inntektsevne. Investorer bør følge inntjeningsutviklingen nøye for DOF og vurdere aksjen i lys av egne mål for inntekt versus kursavkastning.</p></div>
@@ -302,11 +311,12 @@
 
   
 
-  <div class="utbytte-sep">Utbytteinformasjon</div>
+  </section>
+
+  <!-- ── UTBYTTE ── -->
+  <section id="utbytte">
 
   
-
-  <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Energitjenester</td></tr><tr><td>Frekvens</td><td>Halvårlig</td></tr><tr><td>Utbytte per aksje</td><td>0 NOK</td></tr><tr><td>Direkteavkastning</td><td>—</td></tr><tr><td>5-årssnitt yield</td><td>0.00%</td></tr><tr><td>År med utbytte</td><td>0</td></tr></tbody></table>
 
   
 
@@ -317,6 +327,15 @@
   <div class="risiko-seksjon"><h2>Risiko for utbyttet</h2><ul class="risiko-liste"><li>Aktivitetsnivå i olje- og gassektoren styrer etterspørselen</li>
 <li>Prispress fra internasjonale konkurrenter</li>
 <li>Syklisk inntjening gjør utbyttet konjunkturavhengig</li></ul></div>
+
+  </section>
+
+  <!-- ── NØKKELTALL ── -->
+  <section id="nokkeltall">
+
+  <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Energitjenester</td></tr><tr><td>Frekvens</td><td>Halvårlig</td></tr><tr><td>Utbytte per aksje</td><td>0 NOK</td></tr><tr><td>Direkteavkastning</td><td>—</td></tr><tr><td>5-årssnitt yield</td><td>0.00%</td></tr><tr><td>År med utbytte</td><td>0</td></tr></tbody></table>
+
+  </section>
 
   <div class="relaterte"><h2>Andre energitjenester-aksjer med utbytte</h2><div class="rel-grid"><a href="/aksjer/AKSO/" class="rel-kort"><span class="rel-ticker">AKSO</span><span class="rel-navn">Aker Solutions ASA</span><span class="rel-yield">18.0%</span></a>
 <a href="/aksjer/PLSV/" class="rel-kort"><span class="rel-ticker">PLSV</span><span class="rel-navn">Paratus Energy Services AS</span><span class="rel-yield">17.9%</span></a>
@@ -364,6 +383,7 @@
 
 <script>
   (function() {
+    // Mørk/lys modus
     var btn = document.getElementById('dark-toggle');
     var root = document.documentElement;
     var sun = btn.querySelector('.sun-icon');
@@ -379,6 +399,26 @@
       localStorage.setItem('tema', isDark ? 'dark' : 'light');
       syncIcons();
     });
+
+    // Scroll-spy: marker aktiv fane basert på synlig seksjon
+    var seksjoner = ['oversikt','utbytte','nokkeltall']
+      .map(function(id) { return document.getElementById(id); })
+      .filter(Boolean);
+    var tabLinker = document.querySelectorAll('.ak-tab');
+    var headerH = 96;
+    function oppdaterTab() {
+      var aktiv = seksjoner[0] ? seksjoner[0].id : 'oversikt';
+      for (var i = 0; i < seksjoner.length; i++) {
+        if (seksjoner[i].getBoundingClientRect().top < headerH + 40) {
+          aktiv = seksjoner[i].id;
+        }
+      }
+      tabLinker.forEach(function(a) {
+        a.classList.toggle('aktiv', a.getAttribute('href') === '#' + aktiv);
+      });
+    }
+    window.addEventListener('scroll', oppdaterTab, {passive: true});
+    oppdaterTab();
   })();
 </script>
 

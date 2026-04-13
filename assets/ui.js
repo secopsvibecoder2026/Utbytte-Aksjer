@@ -2003,16 +2003,22 @@ function visModal(a) {
   const exDato = a.ex_dato ? new Date(a.ex_dato + 'T00:00:00') : null; // lokal midnatt
   const dagerTilEx = exDato ? Math.ceil((exDato - idag) / (1000*60*60*24)) : null;
 
+  const _exDatoTekst = dagerTilEx !== null && dagerTilEx >= 0
+    ? (dagerTilEx === 0 ? 'i dag!' : dagerTilEx === 1 ? 'i morgen' : 'om ' + dagerTilEx + ' dager')
+    : null;
+  const _exKlasse = dagerTilEx !== null && dagerTilEx >= 0
+    ? 'text-orange-600 dark:text-orange-400' : '';
+
   body.innerHTML = `
-    <div class="flex items-start justify-between mb-4">
+    <div class="flex items-start justify-between mb-3">
       <div>
-        <h2 id="modal-aksje-tittel" class="text-2xl font-bold text-brand-700 dark:text-brand-400">${a.ticker}</h2>
-        <p class="text-gray-600 dark:text-gray-400">${a.navn}</p>
-        <p class="text-xs text-gray-400 mt-0.5">${a.sektor} · ${a.bors}</p>
+        <h2 id="modal-aksje-tittel" class="text-2xl font-bold text-brand-700 dark:text-brand-400">${escHtml(a.ticker)}</h2>
+        <p class="text-gray-600 dark:text-gray-400">${escHtml(a.navn)}</p>
+        <p class="text-xs text-gray-400 mt-0.5">${escHtml(a.sektor)} · ${escHtml(a.bors)}</p>
       </div>
       <div class="flex items-center gap-1">
         ${stjerne(a.ticker, 'p-1 hover:scale-110')}
-        <a href="/aksjer/${a.ticker}/" target="_blank" rel="noopener" class="text-gray-400 hover:text-brand-600 dark:hover:text-brand-400 p-1 transition-colors" aria-label="Åpne full aksjesiden" title="Se full aksjesiden">
+        <a href="/aksjer/${escHtml(a.ticker)}/" target="_blank" rel="noopener" class="text-gray-400 hover:text-brand-600 dark:hover:text-brand-400 p-1 transition-colors" aria-label="Åpne full aksjesiden" title="Se full aksjesiden">
           <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
         </a>
         <button id="modal-del" class="text-gray-400 hover:text-brand-600 dark:hover:text-brand-400 p-1 transition-colors" aria-label="Del lenke" title="Kopier lenke">
@@ -2024,66 +2030,96 @@ function visModal(a) {
       </div>
     </div>
 
-    ${a.beskrivelse_fakta ? `<div class="om-selskap-boks"><p class="om-selskap-label">Om selskapet</p><p class="om-selskap-tekst">${escHtml(a.beskrivelse_fakta)}</p></div>` : a.beskrivelse ? `<div class="om-selskap-boks"><p class="om-selskap-label">Om selskapet</p><p class="om-selskap-tekst">${escHtml(a.beskrivelse)}</p></div>` : ''}
-
-    ${a.ai_oppsummering ? `<div class="ai-opp-boks"><p class="ai-opp-label">AI-oppsummering${a.ai_oppsummering_dato ? ` <span class="ai-opp-dato">${escHtml(a.ai_oppsummering_dato)}</span>` : ''}</p><p class="ai-opp-tekst">${escHtml(a.ai_oppsummering)}</p></div>` : ''}
-
-    <div id="kurs-graf-modal" class="mt-4"></div>
-
-    <div class="mt-3">
-      ${rangebar(a.pris, a['52u_lav'], a['52u_hoy'], true)}
+    <div class="modal-tabs">
+      <button class="modal-tab aktiv" data-panel="oversikt">Oversikt</button>
+      <button class="modal-tab" data-panel="utbytte">Utbytte</button>
+      <button class="modal-tab" data-panel="kalkulator">Kalkulator</button>
     </div>
 
-    <div class="grid grid-cols-2 gap-3 mt-4 mb-1">
-      ${modalKort('Kurs', fmt(a.pris) + ' ' + a.valuta)}
-      ${modalKort('P/E', a.pe_ratio > 0 ? a.pe_ratio.toFixed(1) : '—')}
-      ${modalKort('P/B', a.pb_ratio > 0 ? a.pb_ratio.toFixed(1) : '—')}
-      ${modalKort('Markedsverdi', a.markedsverdi_mrd > 0 ? a.markedsverdi_mrd.toFixed(1) + ' mrd' : '—')}
-    </div>
-
-    <p class="modal-seksjon-label">Utbytteinformasjon</p>
-
-    <div class="grid grid-cols-2 gap-3 mb-4">
-      ${modalKort('Utbytteyield', `<span class="${yieldKlasse(a.utbytte_yield)}">${a.utbytte_yield.toFixed(2)}%</span>`)}
-      ${modalKort('Snitt yield 5år', a.snitt_yield_5ar > 0 ? `<span class="${yieldKlasse(a.snitt_yield_5ar)}">${a.snitt_yield_5ar.toFixed(1)}%</span>` : '—')}
-      ${modalKort('Utbytte/aksje (år)', fmt(a.utbytte_per_aksje) + ' ' + a.valuta)}
-      ${modalKort('Siste utbytte', fmt(a.siste_utbytte) + ' ' + a.valuta)}
-      ${modalKort('Payout Ratio', `<span class="${payoutKlasse(a.payout_ratio)}">${a.payout_ratio > 0 ? a.payout_ratio.toFixed(0)+'%' : '—'}</span>`)}
-      ${modalKort('Utbyttevekst 5år', `<span class="${vekstKlasse(a.utbytte_vekst_5ar)}">${a.utbytte_vekst_5ar !== 0 ? (a.utbytte_vekst_5ar>0?'+':'')+a.utbytte_vekst_5ar.toFixed(1)+'%' : '—'}</span>`)}
-      ${modalKort('År m/utbytte', a.ar_med_utbytte > 0 ? a.ar_med_utbytte + ' år' : '—')}
-    </div>
-
-    <div class="rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
-      <div class="bg-orange-50 dark:bg-orange-950/30 px-4 py-3">
-        <h3 class="font-semibold text-sm text-orange-800 dark:text-orange-300">Utbyttedatoer</h3>
+    <!-- ── OVERSIKT ── -->
+    <div class="modal-panel" id="mp-oversikt">
+      ${a.beskrivelse_fakta
+        ? '<div class="om-selskap-boks"><p class="om-selskap-label">Om selskapet</p><p class="om-selskap-tekst">' + escHtml(a.beskrivelse_fakta) + '</p></div>'
+        : a.beskrivelse
+          ? '<div class="om-selskap-boks"><p class="om-selskap-label">Om selskapet</p><p class="om-selskap-tekst">' + escHtml(a.beskrivelse) + '</p></div>'
+          : ''}
+      ${a.ai_oppsummering
+        ? '<div class="ai-opp-boks"><p class="ai-opp-label">AI-oppsummering' + (a.ai_oppsummering_dato ? ' <span class="ai-opp-dato">' + escHtml(a.ai_oppsummering_dato) + '</span>' : '') + '</p><p class="ai-opp-tekst">' + escHtml(a.ai_oppsummering) + '</p></div>'
+        : ''}
+      <div id="kurs-graf-modal" class="mt-3"></div>
+      <div class="mt-3">
+        ${rangebar(a.pris, a['52u_lav'], a['52u_hoy'], true)}
       </div>
-      <div class="p-4 space-y-2 text-sm">
-        <div class="flex justify-between">
-          <span class="text-gray-500">Ex-dato</span>
-          <span class="font-medium ${dagerTilEx !== null && dagerTilEx >= 0 ? 'text-orange-600 dark:text-orange-400' : ''}">
-            ${a.ex_dato ? formaterDato(a.ex_dato) : '—'}
-            ${dagerTilEx !== null && dagerTilEx >= 0 ? ` <span class="text-xs">(${dagerTilEx === 0 ? 'i dag!' : dagerTilEx === 1 ? 'i morgen' : 'om ' + dagerTilEx + ' dager'})</span>` : ''}
-          </span>
-        </div>
-        <div class="flex justify-between">
-          <span class="text-gray-500">Betalingsdato</span>
-          <span class="font-medium">${a.betaling_dato ? formaterDato(a.betaling_dato) : '—'}</span>
-        </div>
-        <div class="flex justify-between">
-          <span class="text-gray-500">Frekvens</span>
-          <span class="frekvens-badge">${a.frekvens}</span>
-        </div>
+      <div class="grid grid-cols-2 gap-3 mt-4">
+        ${modalKort('Kurs', fmt(a.pris) + ' ' + a.valuta)}
+        ${modalKort('P/E', a.pe_ratio > 0 ? a.pe_ratio.toFixed(1) : '—')}
+        ${modalKort('P/B', a.pb_ratio > 0 ? a.pb_ratio.toFixed(1) : '—')}
+        ${modalKort('Markedsverdi', a.markedsverdi_mrd > 0 ? a.markedsverdi_mrd.toFixed(1) + ' mrd' : '—')}
       </div>
     </div>
 
-    ${historiskChart(a)}
-    ${scoreForklaring(a)}
-    ${modalKalkulator(a)}
-    ${notatSeksjon(a)}
+    <!-- ── UTBYTTE ── -->
+    <div class="modal-panel skjult" id="mp-utbytte">
+      <div class="grid grid-cols-2 gap-3 mb-4">
+        ${modalKort('Utbytteyield', '<span class="' + yieldKlasse(a.utbytte_yield) + '">' + a.utbytte_yield.toFixed(2) + '%</span>')}
+        ${modalKort('Snitt yield 5år', a.snitt_yield_5ar > 0 ? '<span class="' + yieldKlasse(a.snitt_yield_5ar) + '">' + a.snitt_yield_5ar.toFixed(1) + '%</span>' : '—')}
+        ${modalKort('Utbytte/aksje', fmt(a.utbytte_per_aksje) + ' ' + a.valuta)}
+        ${modalKort('Siste utbytte', fmt(a.siste_utbytte) + ' ' + a.valuta)}
+        ${modalKort('Payout Ratio', '<span class="' + payoutKlasse(a.payout_ratio) + '">' + (a.payout_ratio > 0 ? a.payout_ratio.toFixed(0) + '%' : '—') + '</span>')}
+        ${modalKort('Utbyttevekst 5år', '<span class="' + vekstKlasse(a.utbytte_vekst_5ar) + '">' + (a.utbytte_vekst_5ar !== 0 ? (a.utbytte_vekst_5ar > 0 ? '+' : '') + a.utbytte_vekst_5ar.toFixed(1) + '%' : '—') + '</span>')}
+        ${modalKort('År m/utbytte', a.ar_med_utbytte > 0 ? a.ar_med_utbytte + ' år' : '—')}
+      </div>
+      <div class="rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden mb-4">
+        <div class="bg-orange-50 dark:bg-orange-950/30 px-4 py-3">
+          <h3 class="font-semibold text-sm text-orange-800 dark:text-orange-300">Utbyttedatoer</h3>
+        </div>
+        <div class="p-4 space-y-2 text-sm">
+          <div class="flex justify-between">
+            <span class="text-gray-500">Ex-dato</span>
+            <span class="font-medium ${_exKlasse}">
+              ${a.ex_dato ? formaterDato(a.ex_dato) : '—'}
+              ${_exDatoTekst ? '<span class="text-xs">(' + _exDatoTekst + ')</span>' : ''}
+            </span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-500">Betalingsdato</span>
+            <span class="font-medium">${a.betaling_dato ? formaterDato(a.betaling_dato) : '—'}</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-500">Frekvens</span>
+            <span class="frekvens-badge">${escHtml(a.frekvens)}</span>
+          </div>
+        </div>
+      </div>
+      ${historiskChart(a)}
+      ${scoreForklaring(a)}
+    </div>
+
+    <!-- ── KALKULATOR ── -->
+    <div class="modal-panel skjult" id="mp-kalkulator">
+      ${modalKalkulator(a)}
+      ${notatSeksjon(a)}
+    </div>
   `;
 
   overlay.classList.remove('hidden');
   overlay.classList.add('flex');
+
+  // Tab-system
+  let _gjeldendePeriode = '1ar';
+  body.querySelectorAll('.modal-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      body.querySelectorAll('.modal-tab').forEach(t => t.classList.remove('aktiv'));
+      body.querySelectorAll('.modal-panel').forEach(p => p.classList.add('skjult'));
+      tab.classList.add('aktiv');
+      const panel = body.querySelector('#mp-' + tab.dataset.panel);
+      if (panel) panel.classList.remove('skjult');
+      // Re-tegn kursgraf når oversikt-fanen aktiveres igjen
+      if (tab.dataset.panel === 'oversikt') {
+        requestAnimationFrame(() => _tegnModalKursGraf(body, a, _gjeldendePeriode));
+      }
+    });
+  });
 
   // Kursgraf (Canvas) – tegnes ETTER modal vises så offsetWidth er korrekt
   const grafEl = body.querySelector('#kurs-graf-modal');
@@ -2101,7 +2137,8 @@ function visModal(a) {
       btn.addEventListener('click', () => {
         grafEl.querySelectorAll('.kurs-periode-knapp').forEach(b => b.classList.remove('aktiv'));
         btn.classList.add('aktiv');
-        _tegnModalKursGraf(body, a, btn.dataset.kgp);
+        _gjeldendePeriode = btn.dataset.kgp;
+        _tegnModalKursGraf(body, a, _gjeldendePeriode);
       });
     });
   }

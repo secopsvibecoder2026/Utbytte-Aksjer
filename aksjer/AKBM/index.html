@@ -262,6 +262,15 @@
   <h1>AKBM – Aker BioMarine ASA</h1>
   <p class="sub">Havbruk · Uregelmessig utbytte · Oslo Børs</p>
 
+  <nav class="ak-tabnav" id="ak-tabnav" aria-label="Sideseksjoner">
+    <a href="#oversikt" class="ak-tab aktiv">Oversikt</a>
+    <a href="#utbytte" class="ak-tab">Utbytte</a>
+    <a href="#nokkeltall" class="ak-tab">Nøkkeltall</a>
+  </nav>
+
+  <!-- ── OVERSIKT ── -->
+  <section id="oversikt">
+
   <div class="desc"><h2>Om selskapet</h2><p>Aker BioMarine ASA, a biotech innovator, develops and supplies krill-derived products for consumer health and wellness worldwide. It operates through three segments: Human Health Ingredients (HHI), Consumer Health Products, and Emerging Business. The Human Health Ingredients segment sells B2B krill oil supplements for humans under the Superba Krill brand; supplements for brain health under the LYSOVETA brand; and marine-origin DHA omega-3 from microalgae under the Revervia brand name, as well as advanced phospholipid technology under PL+ name.</p></div>
 
   <div class="ai-oppsummering"><h2>AI-oppsummering <span class="ai-dato">Oppdatert 2026-04-08T12:34:53</span></h2><p>AKBM betaler for øyeblikket ikke utbytte, men har historisk hatt utbetalinger — siste kjente utbytte var 45.00 NOK per aksje. Historisk har selskapet levert 67.1% snittlig yield, så utbyttepolitikken kan gjenopptas. P/E på 24.2 er noe over sektorsnittet for havbruk — aksjen er ikke billig, men premien kan forsvares av sterk merkevare og stabile kontantstrømmer. Begrenset utbyttehistorikk på 1 år gir lite grunnlag for å vurdere langsiktig konsistens. Høy P/B på 6.68 reflekterer markedets forventning om sterk fremtidig avkastning på egenkapitalen. AKBM anbefales med forsiktighet for rene utbytteinvestorer — inntjeningssituasjonen gir liten trygghet for fremtidige utbetalinger.</p></div>
@@ -370,11 +379,12 @@
   </script>
 </div>
 
-  <div class="utbytte-sep">Utbytteinformasjon</div>
+  </section>
+
+  <!-- ── UTBYTTE ── -->
+  <section id="utbytte">
 
   
-
-  <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Havbruk</td></tr><tr><td>Frekvens</td><td>Uregelmessig</td></tr><tr><td>Utbytte per aksje</td><td>0 NOK</td></tr><tr><td>Direkteavkastning</td><td>—</td></tr><tr><td>5-årssnitt yield</td><td>67.06%</td></tr><tr><td>År med utbytte</td><td>1</td></tr><tr><td>P/E</td><td>24.7</td></tr><tr><td>Utbyttevekst 5 år</td><td>+0.0% p.a.</td></tr><tr><td>Markedsverdi</td><td>9.3 mrd NOK</td></tr><tr><td>52-ukers kurs</td><td>49.3 – 118.0 NOK</td></tr></tbody></table>
 
   <h2>Historiske utbytter</h2><table><thead><tr><th>År</th><th>Utbytte</th><th>Yield</th></tr></thead><tbody>
         <tr>
@@ -390,6 +400,15 @@
   <div class="risiko-seksjon"><h2>Risiko for utbyttet</h2><ul class="risiko-liste"><li>Laksepris varierer med globalt tilbud og etterspørsel</li>
 <li>Biologisk risiko (lakselus, sykdom) kan redusere produksjonsvolum</li>
 <li>Eksportrestriksjoner og politisk risiko i nøkkelmarkeder</li></ul></div>
+
+  </section>
+
+  <!-- ── NØKKELTALL ── -->
+  <section id="nokkeltall">
+
+  <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Havbruk</td></tr><tr><td>Frekvens</td><td>Uregelmessig</td></tr><tr><td>Utbytte per aksje</td><td>0 NOK</td></tr><tr><td>Direkteavkastning</td><td>—</td></tr><tr><td>5-årssnitt yield</td><td>67.06%</td></tr><tr><td>År med utbytte</td><td>1</td></tr><tr><td>P/E</td><td>24.7</td></tr><tr><td>Utbyttevekst 5 år</td><td>+0.0% p.a.</td></tr><tr><td>Markedsverdi</td><td>9.3 mrd NOK</td></tr><tr><td>52-ukers kurs</td><td>49.3 – 118.0 NOK</td></tr></tbody></table>
+
+  </section>
 
   <div class="relaterte"><h2>Andre havbruk-aksjer med utbytte</h2><div class="rel-grid"><a href="/aksjer/GSF/" class="rel-kort"><span class="rel-ticker">GSF</span><span class="rel-navn">Grieg Seafood ASA</span><span class="rel-yield">49.3%</span></a>
 <a href="/aksjer/AUSS/" class="rel-kort"><span class="rel-ticker">AUSS</span><span class="rel-navn">Austevoll Seafood ASA</span><span class="rel-yield">6.4%</span></a>
@@ -437,6 +456,7 @@
 
 <script>
   (function() {
+    // Mørk/lys modus
     var btn = document.getElementById('dark-toggle');
     var root = document.documentElement;
     var sun = btn.querySelector('.sun-icon');
@@ -452,6 +472,26 @@
       localStorage.setItem('tema', isDark ? 'dark' : 'light');
       syncIcons();
     });
+
+    // Scroll-spy: marker aktiv fane basert på synlig seksjon
+    var seksjoner = ['oversikt','utbytte','nokkeltall']
+      .map(function(id) { return document.getElementById(id); })
+      .filter(Boolean);
+    var tabLinker = document.querySelectorAll('.ak-tab');
+    var headerH = 96;
+    function oppdaterTab() {
+      var aktiv = seksjoner[0] ? seksjoner[0].id : 'oversikt';
+      for (var i = 0; i < seksjoner.length; i++) {
+        if (seksjoner[i].getBoundingClientRect().top < headerH + 40) {
+          aktiv = seksjoner[i].id;
+        }
+      }
+      tabLinker.forEach(function(a) {
+        a.classList.toggle('aktiv', a.getAttribute('href') === '#' + aktiv);
+      });
+    }
+    window.addEventListener('scroll', oppdaterTab, {passive: true});
+    oppdaterTab();
   })();
 </script>
 

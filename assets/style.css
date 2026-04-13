@@ -489,25 +489,70 @@ th.sort-desc::after { content: ' ↓'; color: #6b7280; }
 }
 .dark .om-selskap-tekst { color: #d1d5db; }
 
-/* Seksjons-etikett mellom generell info og utbytteinformasjon */
-.modal-seksjon-label {
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.07em;
-  text-transform: uppercase;
-  color: #9ca3af;
-  margin: 1.25rem 0 0.5rem;
+/* ── MODAL TABS ───────────────────────────────────────────────────────────── */
+.modal-tabs {
   display: flex;
-  align-items: center;
-  gap: 0.5rem;
+  border-bottom: 1px solid #e5e7eb;
+  margin: 0 -1rem 1rem;   /* full-bleed under header */
+  padding: 0 1rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+  flex-shrink: 0;
 }
-.modal-seksjon-label::before,
-.modal-seksjon-label::after {
-  content: '';
-  flex: 1;
-  height: 1px;
-  background: #e5e7eb;
+.modal-tabs::-webkit-scrollbar { display: none; }
+.modal-tab {
+  padding: 0.55rem 1.1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border: none;
+  background: transparent;
+  color: #6b7280;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  white-space: nowrap;
+  margin-bottom: -1px;
+  transition: color 0.15s, border-color 0.15s;
 }
-.dark .modal-seksjon-label { color: #6b7280; }
-.dark .modal-seksjon-label::before,
-.dark .modal-seksjon-label::after { background: #1f2937; }
+.modal-tab:hover { color: #111827; }
+.modal-tab.aktiv { color: #16a34a; border-bottom-color: #16a34a; font-weight: 600; }
+.dark .modal-tabs { border-bottom-color: #1f2937; }
+.dark .modal-tab { color: #9ca3af; }
+.dark .modal-tab:hover { color: #f3f4f6; }
+.dark .modal-tab.aktiv { color: #4ade80; border-bottom-color: #4ade80; }
+
+.modal-panel.skjult { display: none; }
+
+/* ── SEO-SIDE TABS ────────────────────────────────────────────────────────── */
+.ak-tabnav {
+  position: sticky;
+  top: 48px;              /* under ak-header */
+  z-index: 20;
+  display: flex;
+  gap: 0;
+  border-bottom: 2px solid #e5e7eb;
+  background: #f9fafb;
+  margin: 1rem -1rem 1.5rem;
+  padding: 0 1rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.ak-tabnav::-webkit-scrollbar { display: none; }
+.ak-tabnav a {
+  display: block;
+  padding: 0.6rem 1.1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #6b7280;
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  white-space: nowrap;
+  transition: color 0.15s, border-color 0.15s;
+}
+.ak-tabnav a:hover { color: #111827; }
+.ak-tabnav a.aktiv { color: #16a34a; border-bottom-color: #16a34a; font-weight: 600; }
+.dark .ak-tabnav { background: #030712; border-bottom-color: #1f2937; }
+.dark .ak-tabnav a { color: #9ca3af; }
+.dark .ak-tabnav a:hover { color: #f3f4f6; }
+.dark .ak-tabnav a.aktiv { color: #4ade80; border-bottom-color: #4ade80; }
+

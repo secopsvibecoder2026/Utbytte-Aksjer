@@ -262,6 +262,15 @@
   <h1>PGS – PGS ASA</h1>
   <p class="sub">Energitjenester · Uregelmessig utbytte · Oslo Børs</p>
 
+  <nav class="ak-tabnav" id="ak-tabnav" aria-label="Sideseksjoner">
+    <a href="#oversikt" class="ak-tab aktiv">Oversikt</a>
+    <a href="#utbytte" class="ak-tab">Utbytte</a>
+    <a href="#nokkeltall" class="ak-tab">Nøkkeltall</a>
+  </nav>
+
+  <!-- ── OVERSIKT ── -->
+  <section id="oversikt">
+
   <div class="desc"><h2>Om selskapet</h2><p>Ledende seismikkselskap som henter inn geofysiske data for olje- og gassindustrien. Gjenopptok utbytte etter restrukturering. PGS ASA er notert på Oslo Børs. Selskapet har hatt sammenhengende utbyttebetalinger i 5 år.</p></div>
 
   <div class="ai-oppsummering"><h2>AI-oppsummering <span class="ai-dato">Oppdatert 2026-04-08T12:34:53</span></h2><p>PGS betaler for øyeblikket ikke utbytte, men har historisk hatt utbetalinger — siste kjente utbytte var 6.64 NOK per aksje. P/E på 22.6 er noe over sektorsnittet for energitjenester — aksjen er ikke billig, men premien kan forsvares av sterk merkevare og stabile kontantstrømmer. Med 5 år utbyttehistorikk er grunnlaget for langsiktig pålitelighet i ferd med å etableres — men historikken er ennå begrenset. Høy P/B på 16.40 reflekterer markedets forventning om sterk fremtidig avkastning på egenkapitalen. PGS anbefales med forsiktighet for rene utbytteinvestorer — inntjeningssituasjonen gir liten trygghet for fremtidige utbetalinger.</p></div>
@@ -370,11 +379,12 @@
   </script>
 </div>
 
-  <div class="utbytte-sep">Utbytteinformasjon</div>
+  </section>
+
+  <!-- ── UTBYTTE ── -->
+  <section id="utbytte">
 
   
-
-  <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Energitjenester</td></tr><tr><td>Frekvens</td><td>Uregelmessig</td></tr><tr><td>Utbytte per aksje</td><td>0 NOK</td></tr><tr><td>Direkteavkastning</td><td>—</td></tr><tr><td>5-årssnitt yield</td><td>0.00%</td></tr><tr><td>År med utbytte</td><td>5</td></tr><tr><td>P/E</td><td>22.6</td></tr><tr><td>Utbyttevekst 5 år</td><td>+0.0% p.a.</td></tr><tr><td>Markedsverdi</td><td>8.6 mrd NOK</td></tr><tr><td>52-ukers kurs</td><td>6.06 – 10.45 NOK</td></tr></tbody></table>
 
   
 
@@ -385,6 +395,15 @@
   <div class="risiko-seksjon"><h2>Risiko for utbyttet</h2><ul class="risiko-liste"><li>Aktivitetsnivå i olje- og gassektoren styrer etterspørselen</li>
 <li>Prispress fra internasjonale konkurrenter</li>
 <li>Syklisk inntjening gjør utbyttet konjunkturavhengig</li></ul></div>
+
+  </section>
+
+  <!-- ── NØKKELTALL ── -->
+  <section id="nokkeltall">
+
+  <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Energitjenester</td></tr><tr><td>Frekvens</td><td>Uregelmessig</td></tr><tr><td>Utbytte per aksje</td><td>0 NOK</td></tr><tr><td>Direkteavkastning</td><td>—</td></tr><tr><td>5-årssnitt yield</td><td>0.00%</td></tr><tr><td>År med utbytte</td><td>5</td></tr><tr><td>P/E</td><td>22.6</td></tr><tr><td>Utbyttevekst 5 år</td><td>+0.0% p.a.</td></tr><tr><td>Markedsverdi</td><td>8.6 mrd NOK</td></tr><tr><td>52-ukers kurs</td><td>6.06 – 10.45 NOK</td></tr></tbody></table>
+
+  </section>
 
   <div class="relaterte"><h2>Andre energitjenester-aksjer med utbytte</h2><div class="rel-grid"><a href="/aksjer/AKSO/" class="rel-kort"><span class="rel-ticker">AKSO</span><span class="rel-navn">Aker Solutions ASA</span><span class="rel-yield">18.0%</span></a>
 <a href="/aksjer/PLSV/" class="rel-kort"><span class="rel-ticker">PLSV</span><span class="rel-navn">Paratus Energy Services AS</span><span class="rel-yield">17.9%</span></a>
@@ -432,6 +451,7 @@
 
 <script>
   (function() {
+    // Mørk/lys modus
     var btn = document.getElementById('dark-toggle');
     var root = document.documentElement;
     var sun = btn.querySelector('.sun-icon');
@@ -447,6 +467,26 @@
       localStorage.setItem('tema', isDark ? 'dark' : 'light');
       syncIcons();
     });
+
+    // Scroll-spy: marker aktiv fane basert på synlig seksjon
+    var seksjoner = ['oversikt','utbytte','nokkeltall']
+      .map(function(id) { return document.getElementById(id); })
+      .filter(Boolean);
+    var tabLinker = document.querySelectorAll('.ak-tab');
+    var headerH = 96;
+    function oppdaterTab() {
+      var aktiv = seksjoner[0] ? seksjoner[0].id : 'oversikt';
+      for (var i = 0; i < seksjoner.length; i++) {
+        if (seksjoner[i].getBoundingClientRect().top < headerH + 40) {
+          aktiv = seksjoner[i].id;
+        }
+      }
+      tabLinker.forEach(function(a) {
+        a.classList.toggle('aktiv', a.getAttribute('href') === '#' + aktiv);
+      });
+    }
+    window.addEventListener('scroll', oppdaterTab, {passive: true});
+    oppdaterTab();
   })();
 </script>
 

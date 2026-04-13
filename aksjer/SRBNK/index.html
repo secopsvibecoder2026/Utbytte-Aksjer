@@ -262,6 +262,15 @@
   <h1>SRBNK – SpareBank 1 SR-Bank</h1>
   <p class="sub">Finans · Halvårlig utbytte · Oslo Børs</p>
 
+  <nav class="ak-tabnav" id="ak-tabnav" aria-label="Sideseksjoner">
+    <a href="#oversikt" class="ak-tab aktiv">Oversikt</a>
+    <a href="#utbytte" class="ak-tab">Utbytte</a>
+    <a href="#nokkeltall" class="ak-tab">Nøkkeltall</a>
+  </nav>
+
+  <!-- ── OVERSIKT ── -->
+  <section id="oversikt">
+
   <div class="desc"><h2>Om selskapet</h2><p>Ledende regional sparebank på Sør-Vestlandet. Kjent for høyt og stabilt utbytte med god vekst. SpareBank 1 SR-Bank er notert på Oslo Børs med en markedsverdi på rundt 31 milliarder NOK. Aksjen har betalt utbytte 20 år på rad, noe som reflekterer langvarig stabil inntjening og kapitalavkastning til aksjonærene. Utbyttet utbetales halvårlig — to ganger i året. Utbetalingsgraden (payout ratio) er 60%, noe som anses som bærekraftig for de fleste markedsforhold.</p></div>
 
   <div class="ai-oppsummering"><h2>AI-oppsummering <span class="ai-dato">Oppdatert 2026-04-08T12:34:53</span></h2><p>Direkteavkastningen på 8.1% er klart over snittet for Oslo Børs og meget attraktiv for inntektsinvestorer. P/E på 7.8 er lavt for finans-sektoren og tyder på attraktiv inngangsverdi — forutsatt at inntjeningen er normalisert. Utbetalingsgraden på 60% er moderat høy, men bærekraftig dersom inntjeningen holder seg stabil. Med 14.5% gjennomsnittlig utbyttevekst per år siste fem år leverer selskapet godt over inflasjonen og styrker kjøpekraften for utbytteinvestorer. Selskapet har betalt utbytte i 20 år på rad — solid historikk som underbygger ledelsens langsiktige fokus på aksjonæravkastning. P/B på 1.20 er moderat og fornuftig for finanssektoren. SRBNK scorer sterkt på de viktigste utbyttemålene og passer godt for langsiktige utbytteinvestorer med lav til moderat risikotoleranse.</p></div>
@@ -302,11 +311,12 @@
 
   
 
-  <div class="utbytte-sep">Utbytteinformasjon</div>
+  </section>
+
+  <!-- ── UTBYTTE ── -->
+  <section id="utbytte">
 
   <div class="analyse"><h2>Utbyttedatoer</h2><p>Neste ex-dato er 15. apr 2026 — kjøp innen 14. apr for å motta utbytte. Utbetalingsdato er satt til 30. apr 2026. Yielden på 8.1% er 2.3 prosentpoeng over snittet for Finans-sektoren (5.8%).</p></div>
-
-  <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Finans</td></tr><tr><td>Frekvens</td><td>Halvårlig</td></tr><tr><td>Utbytte per aksje</td><td>12.0 NOK</td></tr><tr><td>Direkteavkastning</td><td>8.07%</td></tr><tr><td>5-årssnitt yield</td><td>0.00%</td></tr><tr><td>År med utbytte</td><td>20</td></tr><tr><td>P/E</td><td>7.8</td></tr><tr><td>Payout ratio</td><td>60%</td></tr><tr><td>Utbyttevekst 5 år</td><td>+14.5% p.a.</td></tr><tr><td>Markedsverdi</td><td>30.8 mrd NOK</td></tr><tr><td>52-ukers kurs</td><td>128.2 – 162.4 NOK</td></tr></tbody></table>
 
   
 
@@ -317,6 +327,15 @@
   <div class="risiko-seksjon"><h2>Risiko for utbyttet</h2><ul class="risiko-liste"><li>Rentenivå påvirker netto renteinntekter og utlånsmargin</li>
 <li>Økte kredittap i nedgangstider kan presse resultater</li>
 <li>Regulatoriske kapitalkrav begrenser utbyttekapasitet</li></ul></div>
+
+  </section>
+
+  <!-- ── NØKKELTALL ── -->
+  <section id="nokkeltall">
+
+  <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Finans</td></tr><tr><td>Frekvens</td><td>Halvårlig</td></tr><tr><td>Utbytte per aksje</td><td>12.0 NOK</td></tr><tr><td>Direkteavkastning</td><td>8.07%</td></tr><tr><td>5-årssnitt yield</td><td>0.00%</td></tr><tr><td>År med utbytte</td><td>20</td></tr><tr><td>P/E</td><td>7.8</td></tr><tr><td>Payout ratio</td><td>60%</td></tr><tr><td>Utbyttevekst 5 år</td><td>+14.5% p.a.</td></tr><tr><td>Markedsverdi</td><td>30.8 mrd NOK</td></tr><tr><td>52-ukers kurs</td><td>128.2 – 162.4 NOK</td></tr></tbody></table>
+
+  </section>
 
   <div class="relaterte"><h2>Andre finans-aksjer med utbytte</h2><div class="rel-grid"><a href="/aksjer/PARB/" class="rel-kort"><span class="rel-ticker">PARB</span><span class="rel-navn">Pareto Bank ASA</span><span class="rel-yield">10.1%</span></a>
 <a href="/aksjer/SPOG/" class="rel-kort"><span class="rel-ticker">SPOG</span><span class="rel-navn">Sparebanken Øst</span><span class="rel-yield">8.5%</span></a>
@@ -364,6 +383,7 @@
 
 <script>
   (function() {
+    // Mørk/lys modus
     var btn = document.getElementById('dark-toggle');
     var root = document.documentElement;
     var sun = btn.querySelector('.sun-icon');
@@ -379,6 +399,26 @@
       localStorage.setItem('tema', isDark ? 'dark' : 'light');
       syncIcons();
     });
+
+    // Scroll-spy: marker aktiv fane basert på synlig seksjon
+    var seksjoner = ['oversikt','utbytte','nokkeltall']
+      .map(function(id) { return document.getElementById(id); })
+      .filter(Boolean);
+    var tabLinker = document.querySelectorAll('.ak-tab');
+    var headerH = 96;
+    function oppdaterTab() {
+      var aktiv = seksjoner[0] ? seksjoner[0].id : 'oversikt';
+      for (var i = 0; i < seksjoner.length; i++) {
+        if (seksjoner[i].getBoundingClientRect().top < headerH + 40) {
+          aktiv = seksjoner[i].id;
+        }
+      }
+      tabLinker.forEach(function(a) {
+        a.classList.toggle('aktiv', a.getAttribute('href') === '#' + aktiv);
+      });
+    }
+    window.addEventListener('scroll', oppdaterTab, {passive: true});
+    oppdaterTab();
   })();
 </script>
 

@@ -262,6 +262,15 @@
   <h1>OTEC – Otello Corporation ASA</h1>
   <p class="sub">Kommunikasjonstjenester · Uregelmessig utbytte · Oslo Børs</p>
 
+  <nav class="ak-tabnav" id="ak-tabnav" aria-label="Sideseksjoner">
+    <a href="#oversikt" class="ak-tab aktiv">Oversikt</a>
+    <a href="#utbytte" class="ak-tab">Utbytte</a>
+    <a href="#nokkeltall" class="ak-tab">Nøkkeltall</a>
+  </nav>
+
+  <!-- ── OVERSIKT ── -->
+  <section id="oversikt">
+
   <div class="desc"><h2>Om selskapet</h2><p>Otello Corporation ASA, through its subsidiary, provides mobile solutions and platforms for digital payments, customer engagement, microfinance, and digital services in Norway. It provides Apps Club subscription service to mobile carriers and smartphone OEMs. The company was formerly known as Opera Software ASA and changed its name to Otello Corporation ASA in January 2018. Otello Corporation ASA was founded in 1995 and is based in Oslo, Norway.</p></div>
 
   <div class="ai-oppsummering"><h2>AI-oppsummering <span class="ai-dato">Oppdatert 2026-04-08T12:34:53</span></h2><p>OTEC betaler for øyeblikket ikke utbytte, men har historisk hatt utbetalinger — siste kjente utbytte var 21.00 NOK per aksje. Historisk har selskapet levert 264.1% snittlig yield, så utbyttepolitikken kan gjenopptas. P/E på 3.1 er svært lavt og indikerer at markedet priser aksjen med betydelig rabatt sammenlignet med sektornormen. Selskapet har betalt utbytte i 9 år på rad, noe som gir god forutsigbarhet for utbytteinvestorer. Aksjen handles nær 52-ukers topp og gir begrenset margin of safety for nye investorer. Lav markedsverdi på 1.4 mrd NOK innebærer lavere likviditet og høyere kurssvingninger enn for større selskaper. OTEC har lav utbyttekvalitet etter en helhetsvurdering — yield alene rettferdiggjør ikke posisjonen uten at fundamentale tall forbedres.</p></div>
@@ -370,11 +379,12 @@
   </script>
 </div>
 
-  <div class="utbytte-sep">Utbytteinformasjon</div>
+  </section>
+
+  <!-- ── UTBYTTE ── -->
+  <section id="utbytte">
 
   
-
-  <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Kommunikasjonstjenester</td></tr><tr><td>Frekvens</td><td>Uregelmessig</td></tr><tr><td>Utbytte per aksje</td><td>0 NOK</td></tr><tr><td>Direkteavkastning</td><td>—</td></tr><tr><td>5-årssnitt yield</td><td>264.15%</td></tr><tr><td>År med utbytte</td><td>9</td></tr><tr><td>P/E</td><td>3.2</td></tr><tr><td>Utbyttevekst 5 år</td><td>+0.0% p.a.</td></tr><tr><td>Markedsverdi</td><td>1.4 mrd NOK</td></tr><tr><td>52-ukers kurs</td><td>8.68 – 20.25 NOK</td></tr></tbody></table>
 
   <h2>Historiske utbytter</h2><table><thead><tr><th>År</th><th>Utbytte</th><th>Yield</th></tr></thead><tbody>
         <tr>
@@ -390,6 +400,15 @@
   <div class="risiko-seksjon"><h2>Risiko for utbyttet</h2><ul class="risiko-liste"><li>Prispress og høy konkurranse i digitale medier</li>
 <li>Regulatoriske krav knyttet til personvern og innhold</li>
 <li>Annonseinntekter er konjunkturfølsomme</li></ul></div>
+
+  </section>
+
+  <!-- ── NØKKELTALL ── -->
+  <section id="nokkeltall">
+
+  <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Kommunikasjonstjenester</td></tr><tr><td>Frekvens</td><td>Uregelmessig</td></tr><tr><td>Utbytte per aksje</td><td>0 NOK</td></tr><tr><td>Direkteavkastning</td><td>—</td></tr><tr><td>5-årssnitt yield</td><td>264.15%</td></tr><tr><td>År med utbytte</td><td>9</td></tr><tr><td>P/E</td><td>3.2</td></tr><tr><td>Utbyttevekst 5 år</td><td>+0.0% p.a.</td></tr><tr><td>Markedsverdi</td><td>1.4 mrd NOK</td></tr><tr><td>52-ukers kurs</td><td>8.68 – 20.25 NOK</td></tr></tbody></table>
+
+  </section>
 
   <div class="relaterte"><h2>Andre kommunikasjonstjenester-aksjer med utbytte</h2><div class="rel-grid"><a href="/aksjer/POL/" class="rel-kort"><span class="rel-ticker">POL</span><span class="rel-navn">Polaris Media ASA</span><span class="rel-yield">5.5%</span></a>
 <a href="/aksjer/VEND/" class="rel-kort"><span class="rel-ticker">VEND</span><span class="rel-navn">Vend Marketplaces ASA</span><span class="rel-yield">2.0%</span></a>
@@ -436,6 +455,7 @@
 
 <script>
   (function() {
+    // Mørk/lys modus
     var btn = document.getElementById('dark-toggle');
     var root = document.documentElement;
     var sun = btn.querySelector('.sun-icon');
@@ -451,6 +471,26 @@
       localStorage.setItem('tema', isDark ? 'dark' : 'light');
       syncIcons();
     });
+
+    // Scroll-spy: marker aktiv fane basert på synlig seksjon
+    var seksjoner = ['oversikt','utbytte','nokkeltall']
+      .map(function(id) { return document.getElementById(id); })
+      .filter(Boolean);
+    var tabLinker = document.querySelectorAll('.ak-tab');
+    var headerH = 96;
+    function oppdaterTab() {
+      var aktiv = seksjoner[0] ? seksjoner[0].id : 'oversikt';
+      for (var i = 0; i < seksjoner.length; i++) {
+        if (seksjoner[i].getBoundingClientRect().top < headerH + 40) {
+          aktiv = seksjoner[i].id;
+        }
+      }
+      tabLinker.forEach(function(a) {
+        a.classList.toggle('aktiv', a.getAttribute('href') === '#' + aktiv);
+      });
+    }
+    window.addEventListener('scroll', oppdaterTab, {passive: true});
+    oppdaterTab();
   })();
 </script>
 

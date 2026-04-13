@@ -262,6 +262,15 @@
   <h1>NSKOG – Norske Skog ASA</h1>
   <p class="sub">Materialer · Uregelmessig utbytte · Oslo Børs</p>
 
+  <nav class="ak-tabnav" id="ak-tabnav" aria-label="Sideseksjoner">
+    <a href="#oversikt" class="ak-tab aktiv">Oversikt</a>
+    <a href="#utbytte" class="ak-tab">Utbytte</a>
+    <a href="#nokkeltall" class="ak-tab">Nøkkeltall</a>
+  </nav>
+
+  <!-- ── OVERSIKT ── -->
+  <section id="oversikt">
+
   <div class="desc"><h2>Om selskapet</h2><p>Norske Skog ASA engages in the production and sale of publication and packaging paper products in Norway, rest of Europe, North America, Asia, and Africa. It operates in Publication Paper Europe and Packaging paper segments. The company offers newsprint paper products comprising standard newsprint and other papers; magazine papers, including super calendared SC and lightweight coated LWC papers; and recycled containerboards. Its products are primarily used in magazines, periodicals, catalogues, and brochures. The company was founded in 1962 and is headquartered in Oslo, Norway.</p></div>
 
   <div class="ai-oppsummering"><h2>AI-oppsummering <span class="ai-dato">Oppdatert 2026-04-08T12:34:53</span></h2><p>NSKOG betaler for øyeblikket ikke utbytte, men har historisk hatt utbetalinger — siste kjente utbytte var 0.67 NOK per aksje. P/E på 7.3 er svært lavt og indikerer at markedet priser aksjen med betydelig rabatt sammenlignet med sektornormen. Begrenset utbyttehistorikk på 2 år gir lite grunnlag for å vurdere langsiktig konsistens. Aksjen handles nær 52-ukers topp og gir begrenset margin of safety for nye investorer. Lav markedsverdi på 3.2 mrd NOK innebærer lavere likviditet og høyere kurssvingninger enn for større selskaper. NSKOG anbefales med forsiktighet for rene utbytteinvestorer — inntjeningssituasjonen gir liten trygghet for fremtidige utbetalinger.</p></div>
@@ -370,11 +379,12 @@
   </script>
 </div>
 
-  <div class="utbytte-sep">Utbytteinformasjon</div>
+  </section>
+
+  <!-- ── UTBYTTE ── -->
+  <section id="utbytte">
 
   
-
-  <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Materialer</td></tr><tr><td>Frekvens</td><td>Uregelmessig</td></tr><tr><td>Utbytte per aksje</td><td>0 NOK</td></tr><tr><td>Direkteavkastning</td><td>—</td></tr><tr><td>5-årssnitt yield</td><td>1.62%</td></tr><tr><td>År med utbytte</td><td>2</td></tr><tr><td>P/E</td><td>7.6</td></tr><tr><td>Utbyttevekst 5 år</td><td>+0.0% p.a.</td></tr><tr><td>Markedsverdi</td><td>3.4 mrd NOK</td></tr><tr><td>52-ukers kurs</td><td>14.12 – 39.95 NOK</td></tr></tbody></table>
 
   <h2>Historiske utbytter</h2><table><thead><tr><th>År</th><th>Utbytte</th><th>Yield</th></tr></thead><tbody>
         <tr>
@@ -390,6 +400,15 @@
   <div class="risiko-seksjon"><h2>Risiko for utbyttet</h2><ul class="risiko-liste"><li>Råvareprisene er sykliske og konjunkturfølsomme</li>
 <li>Valutaeksponering ved internasjonal omsetning kan påvirke marginer</li>
 <li>Miljøregulering kan øke driftskostnader</li></ul></div>
+
+  </section>
+
+  <!-- ── NØKKELTALL ── -->
+  <section id="nokkeltall">
+
+  <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Materialer</td></tr><tr><td>Frekvens</td><td>Uregelmessig</td></tr><tr><td>Utbytte per aksje</td><td>0 NOK</td></tr><tr><td>Direkteavkastning</td><td>—</td></tr><tr><td>5-årssnitt yield</td><td>1.62%</td></tr><tr><td>År med utbytte</td><td>2</td></tr><tr><td>P/E</td><td>7.6</td></tr><tr><td>Utbyttevekst 5 år</td><td>+0.0% p.a.</td></tr><tr><td>Markedsverdi</td><td>3.4 mrd NOK</td></tr><tr><td>52-ukers kurs</td><td>14.12 – 39.95 NOK</td></tr></tbody></table>
+
+  </section>
 
   <div class="relaterte"><h2>Andre materialer-aksjer med utbytte</h2><div class="rel-grid"><a href="/aksjer/RANA/" class="rel-kort"><span class="rel-ticker">RANA</span><span class="rel-navn">Rana Gruber ASA</span><span class="rel-yield">6.8%</span></a>
 <a href="/aksjer/BOR/" class="rel-kort"><span class="rel-ticker">BOR</span><span class="rel-navn">Borgestad ASA</span><span class="rel-yield">5.9%</span></a>
@@ -437,6 +456,7 @@
 
 <script>
   (function() {
+    // Mørk/lys modus
     var btn = document.getElementById('dark-toggle');
     var root = document.documentElement;
     var sun = btn.querySelector('.sun-icon');
@@ -452,6 +472,26 @@
       localStorage.setItem('tema', isDark ? 'dark' : 'light');
       syncIcons();
     });
+
+    // Scroll-spy: marker aktiv fane basert på synlig seksjon
+    var seksjoner = ['oversikt','utbytte','nokkeltall']
+      .map(function(id) { return document.getElementById(id); })
+      .filter(Boolean);
+    var tabLinker = document.querySelectorAll('.ak-tab');
+    var headerH = 96;
+    function oppdaterTab() {
+      var aktiv = seksjoner[0] ? seksjoner[0].id : 'oversikt';
+      for (var i = 0; i < seksjoner.length; i++) {
+        if (seksjoner[i].getBoundingClientRect().top < headerH + 40) {
+          aktiv = seksjoner[i].id;
+        }
+      }
+      tabLinker.forEach(function(a) {
+        a.classList.toggle('aktiv', a.getAttribute('href') === '#' + aktiv);
+      });
+    }
+    window.addEventListener('scroll', oppdaterTab, {passive: true});
+    oppdaterTab();
   })();
 </script>
 

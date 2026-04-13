@@ -262,6 +262,15 @@
   <h1>KMCP – KMC Properties ASA</h1>
   <p class="sub">Eiendom · Uregelmessig utbytte · Oslo Børs</p>
 
+  <nav class="ak-tabnav" id="ak-tabnav" aria-label="Sideseksjoner">
+    <a href="#oversikt" class="ak-tab aktiv">Oversikt</a>
+    <a href="#utbytte" class="ak-tab">Utbytte</a>
+    <a href="#nokkeltall" class="ak-tab">Nøkkeltall</a>
+  </nav>
+
+  <!-- ── OVERSIKT ── -->
+  <section id="oversikt">
+
   <div class="desc"><h2>Om selskapet</h2><p>KMC Properties ASA does not have significant operations. Previously, it operated as a real estate company. KMC Properties ASA was founded in 2020 and is headquartered in Trondheim, Norway. KMC Properties AS operates as a subsidiary of Bekken Invest AS.</p></div>
 
   <div class="ai-oppsummering"><h2>AI-oppsummering <span class="ai-dato">Oppdatert 2026-04-08T12:34:53</span></h2><p>KMCP betaler for øyeblikket ikke utbytte, men har historisk hatt utbetalinger — siste kjente utbytte var 6958.03 NOK per aksje. P/E på 0.0 er svært lavt og indikerer at markedet priser aksjen med betydelig rabatt sammenlignet med sektornormen. Med 5 år utbyttehistorikk er grunnlaget for langsiktig pålitelighet i ferd med å etableres — men historikken er ennå begrenset. Kursen er nær 52-ukers bunn — potensielt attraktivt inngangspunkt for tålmodige, langsiktige investorer. KMCP anbefales med forsiktighet for rene utbytteinvestorer — inntjeningssituasjonen gir liten trygghet for fremtidige utbetalinger. Den lave P/E på 0.0 bør ses i lys av sykliske svingninger — gjennomsnittlig inntjening over en hel syklus er et bedre sammenligningsgrunnlag.</p></div>
@@ -370,11 +379,12 @@
   </script>
 </div>
 
-  <div class="utbytte-sep">Utbytteinformasjon</div>
+  </section>
+
+  <!-- ── UTBYTTE ── -->
+  <section id="utbytte">
 
   
-
-  <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Eiendom</td></tr><tr><td>Frekvens</td><td>Uregelmessig</td></tr><tr><td>Utbytte per aksje</td><td>0 NOK</td></tr><tr><td>Direkteavkastning</td><td>—</td></tr><tr><td>5-årssnitt yield</td><td>0.00%</td></tr><tr><td>År med utbytte</td><td>5</td></tr><tr><td>P/E</td><td>0.0</td></tr><tr><td>Utbyttevekst 5 år</td><td>+0.0% p.a.</td></tr><tr><td>52-ukers kurs</td><td>22.02 – 312.0 NOK</td></tr></tbody></table>
 
   
 
@@ -385,6 +395,15 @@
   <div class="risiko-seksjon"><h2>Risiko for utbyttet</h2><ul class="risiko-liste"><li>Renteøkninger øker finansieringskostnader og presser verdivurderinger</li>
 <li>Ledighetsgrad og leiepriser varierer med konjunktur</li>
 <li>Refinansiering av gjeld kan være utfordrende i et stramt marked</li></ul></div>
+
+  </section>
+
+  <!-- ── NØKKELTALL ── -->
+  <section id="nokkeltall">
+
+  <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Eiendom</td></tr><tr><td>Frekvens</td><td>Uregelmessig</td></tr><tr><td>Utbytte per aksje</td><td>0 NOK</td></tr><tr><td>Direkteavkastning</td><td>—</td></tr><tr><td>5-årssnitt yield</td><td>0.00%</td></tr><tr><td>År med utbytte</td><td>5</td></tr><tr><td>P/E</td><td>0.0</td></tr><tr><td>Utbyttevekst 5 år</td><td>+0.0% p.a.</td></tr><tr><td>52-ukers kurs</td><td>22.02 – 312.0 NOK</td></tr></tbody></table>
+
+  </section>
 
   <div class="relaterte"><h2>Andre eiendom-aksjer med utbytte</h2><div class="rel-grid"><a href="/aksjer/SBO/" class="rel-kort"><span class="rel-ticker">SBO</span><span class="rel-navn">Selvaag Bolig ASA</span><span class="rel-yield">2.9%</span></a>
 <a href="/aksjer/PUBLI/" class="rel-kort"><span class="rel-ticker">PUBLI</span><span class="rel-navn">Public Property Invest ASA</span><span class="rel-yield">1.1%</span></a>
@@ -431,6 +450,7 @@
 
 <script>
   (function() {
+    // Mørk/lys modus
     var btn = document.getElementById('dark-toggle');
     var root = document.documentElement;
     var sun = btn.querySelector('.sun-icon');
@@ -446,6 +466,26 @@
       localStorage.setItem('tema', isDark ? 'dark' : 'light');
       syncIcons();
     });
+
+    // Scroll-spy: marker aktiv fane basert på synlig seksjon
+    var seksjoner = ['oversikt','utbytte','nokkeltall']
+      .map(function(id) { return document.getElementById(id); })
+      .filter(Boolean);
+    var tabLinker = document.querySelectorAll('.ak-tab');
+    var headerH = 96;
+    function oppdaterTab() {
+      var aktiv = seksjoner[0] ? seksjoner[0].id : 'oversikt';
+      for (var i = 0; i < seksjoner.length; i++) {
+        if (seksjoner[i].getBoundingClientRect().top < headerH + 40) {
+          aktiv = seksjoner[i].id;
+        }
+      }
+      tabLinker.forEach(function(a) {
+        a.classList.toggle('aktiv', a.getAttribute('href') === '#' + aktiv);
+      });
+    }
+    window.addEventListener('scroll', oppdaterTab, {passive: true});
+    oppdaterTab();
   })();
 </script>
 

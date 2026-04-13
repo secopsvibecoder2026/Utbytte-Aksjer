@@ -262,6 +262,15 @@
   <h1>KOA – Kongsberg Automotive Holding ASA</h1>
   <p class="sub">Industri · Uregelmessig utbytte · Oslo Børs</p>
 
+  <nav class="ak-tabnav" id="ak-tabnav" aria-label="Sideseksjoner">
+    <a href="#oversikt" class="ak-tab aktiv">Oversikt</a>
+    <a href="#utbytte" class="ak-tab">Utbytte</a>
+    <a href="#nokkeltall" class="ak-tab">Nøkkeltall</a>
+  </nav>
+
+  <!-- ── OVERSIKT ── -->
+  <section id="oversikt">
+
   <div class="desc"><h2>Om selskapet</h2><p>Kongsberg Automotive ASA develops, manufactures, and sells products to the automotive industry worldwide. The company operates through Drive Control Systems (DCS) and Flow Control Systems (FCS) segments. The Drive Control Systems (DCS) segment engages in the designing and manufacturing of products for the automotive and the off-highway industry, including pneumatic and electric actuation systems for gear control and clutch actuation; steering column modules; and pedals and throttles for off-highway applications.</p></div>
 
   <div class="ai-oppsummering"><h2>AI-oppsummering <span class="ai-dato">Oppdatert 2026-04-08T12:34:53</span></h2><p>KOA betaler for øyeblikket ikke utbytte, men har historisk hatt utbetalinger — siste kjente utbytte var 1.49 NOK per aksje. Begrenset utbyttehistorikk på 2 år gir lite grunnlag for å vurdere langsiktig konsistens. Lav markedsverdi på 1.8 mrd NOK innebærer lavere likviditet og høyere kurssvingninger enn for større selskaper. Lav utbyttekvalitet totalt sett — investorer bør vurdere om risikoen er tilstrekkelig kompensert gjennom direkteavkastningen. For en fullstendig vurdering bør KOA ses i kontekst av bredere sektordynamikk, rentenivå og makroøkonomiske utsikter. En grundig gjennomgang av selskapets balanse og kontantstrømsutvikling anbefales før man tar en investeringsbeslutning i KOA.</p></div>
@@ -370,11 +379,12 @@
   </script>
 </div>
 
-  <div class="utbytte-sep">Utbytteinformasjon</div>
+  </section>
+
+  <!-- ── UTBYTTE ── -->
+  <section id="utbytte">
 
   
-
-  <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Industri</td></tr><tr><td>Frekvens</td><td>Uregelmessig</td></tr><tr><td>Utbytte per aksje</td><td>0 NOK</td></tr><tr><td>Direkteavkastning</td><td>—</td></tr><tr><td>5-årssnitt yield</td><td>0.00%</td></tr><tr><td>År med utbytte</td><td>2</td></tr><tr><td>Utbyttevekst 5 år</td><td>+0.0% p.a.</td></tr><tr><td>Markedsverdi</td><td>1.9 mrd NOK</td></tr><tr><td>52-ukers kurs</td><td>1.3 – 2.4 NOK</td></tr></tbody></table>
 
   
 
@@ -385,6 +395,15 @@
   <div class="risiko-seksjon"><h2>Risiko for utbyttet</h2><ul class="risiko-liste"><li>Konjunkturfølsomhet påvirker ordrevolum og marginer</li>
 <li>Råvare- og energikostnader kan variere betydelig</li>
 <li>Valuta- og eksportrisiko for internasjonale selskaper</li></ul></div>
+
+  </section>
+
+  <!-- ── NØKKELTALL ── -->
+  <section id="nokkeltall">
+
+  <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Industri</td></tr><tr><td>Frekvens</td><td>Uregelmessig</td></tr><tr><td>Utbytte per aksje</td><td>0 NOK</td></tr><tr><td>Direkteavkastning</td><td>—</td></tr><tr><td>5-årssnitt yield</td><td>0.00%</td></tr><tr><td>År med utbytte</td><td>2</td></tr><tr><td>Utbyttevekst 5 år</td><td>+0.0% p.a.</td></tr><tr><td>Markedsverdi</td><td>1.9 mrd NOK</td></tr><tr><td>52-ukers kurs</td><td>1.3 – 2.4 NOK</td></tr></tbody></table>
+
+  </section>
 
   <div class="relaterte"><h2>Andre industri-aksjer med utbytte</h2><div class="rel-grid"><a href="/aksjer/MORLD/" class="rel-kort"><span class="rel-ticker">MORLD</span><span class="rel-navn">Moreld ASA</span><span class="rel-yield">9.3%</span></a>
 <a href="/aksjer/NORCO/" class="rel-kort"><span class="rel-ticker">NORCO</span><span class="rel-navn">Norconsult AS</span><span class="rel-yield">8.3%</span></a>
@@ -432,6 +451,7 @@
 
 <script>
   (function() {
+    // Mørk/lys modus
     var btn = document.getElementById('dark-toggle');
     var root = document.documentElement;
     var sun = btn.querySelector('.sun-icon');
@@ -447,6 +467,26 @@
       localStorage.setItem('tema', isDark ? 'dark' : 'light');
       syncIcons();
     });
+
+    // Scroll-spy: marker aktiv fane basert på synlig seksjon
+    var seksjoner = ['oversikt','utbytte','nokkeltall']
+      .map(function(id) { return document.getElementById(id); })
+      .filter(Boolean);
+    var tabLinker = document.querySelectorAll('.ak-tab');
+    var headerH = 96;
+    function oppdaterTab() {
+      var aktiv = seksjoner[0] ? seksjoner[0].id : 'oversikt';
+      for (var i = 0; i < seksjoner.length; i++) {
+        if (seksjoner[i].getBoundingClientRect().top < headerH + 40) {
+          aktiv = seksjoner[i].id;
+        }
+      }
+      tabLinker.forEach(function(a) {
+        a.classList.toggle('aktiv', a.getAttribute('href') === '#' + aktiv);
+      });
+    }
+    window.addEventListener('scroll', oppdaterTab, {passive: true});
+    oppdaterTab();
   })();
 </script>
 

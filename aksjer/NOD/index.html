@@ -262,6 +262,15 @@
   <h1>NOD – Nordic Semiconductor ASA</h1>
   <p class="sub">Informasjonsteknologi · Uregelmessig utbytte · Oslo Børs</p>
 
+  <nav class="ak-tabnav" id="ak-tabnav" aria-label="Sideseksjoner">
+    <a href="#oversikt" class="ak-tab aktiv">Oversikt</a>
+    <a href="#utbytte" class="ak-tab">Utbytte</a>
+    <a href="#nokkeltall" class="ak-tab">Nøkkeltall</a>
+  </nav>
+
+  <!-- ── OVERSIKT ── -->
+  <section id="oversikt">
+
   <div class="desc"><h2>Om selskapet</h2><p>Nordic Semiconductor ASA, a fabless semiconductor company, develops and sells integrated circuits for use in short- and long- range wireless applications in Europe, the Americas, and the Asia Pacific.</p></div>
 
   <div class="ai-oppsummering"><h2>AI-oppsummering <span class="ai-dato">Oppdatert 2026-04-08T12:34:53</span></h2><p>NOD betaler for øyeblikket ikke utbytte, men har historisk hatt utbetalinger — siste kjente utbytte var 0.40 NOK per aksje. P/E på 200.8 er ekstremt høyt og gjenspeiler enten midlertidige svake resultater eller at markedet priser inn et kraftig inntjeningshopp fremover. Med 3 år utbyttehistorikk er grunnlaget for langsiktig pålitelighet i ferd med å etableres — men historikken er ennå begrenset. NOD anbefales med forsiktighet for rene utbytteinvestorer — inntjeningssituasjonen gir liten trygghet for fremtidige utbetalinger. Investorer bør følge inntjeningsutviklingen nøye for NOD og vurdere aksjen i lys av egne mål for inntekt versus kursavkastning.</p></div>
@@ -370,11 +379,12 @@
   </script>
 </div>
 
-  <div class="utbytte-sep">Utbytteinformasjon</div>
+  </section>
+
+  <!-- ── UTBYTTE ── -->
+  <section id="utbytte">
 
   
-
-  <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Informasjonsteknologi</td></tr><tr><td>Frekvens</td><td>Uregelmessig</td></tr><tr><td>Utbytte per aksje</td><td>0 NOK</td></tr><tr><td>Direkteavkastning</td><td>—</td></tr><tr><td>5-årssnitt yield</td><td>0.00%</td></tr><tr><td>År med utbytte</td><td>3</td></tr><tr><td>P/E</td><td>216.3</td></tr><tr><td>Utbyttevekst 5 år</td><td>+0.0% p.a.</td></tr><tr><td>Markedsverdi</td><td>32.5 mrd NOK</td></tr><tr><td>52-ukers kurs</td><td>102.0 – 170.0 NOK</td></tr></tbody></table>
 
   
 
@@ -385,6 +395,15 @@
   <div class="risiko-seksjon"><h2>Risiko for utbyttet</h2><ul class="risiko-liste"><li>Rask teknologiutvikling kan gjøre produkter utdaterte</li>
 <li>Høy konkurranse fra internasjonale aktører presser marginer</li>
 <li>Høye investeringsbehov i utvikling og salg</li></ul></div>
+
+  </section>
+
+  <!-- ── NØKKELTALL ── -->
+  <section id="nokkeltall">
+
+  <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Informasjonsteknologi</td></tr><tr><td>Frekvens</td><td>Uregelmessig</td></tr><tr><td>Utbytte per aksje</td><td>0 NOK</td></tr><tr><td>Direkteavkastning</td><td>—</td></tr><tr><td>5-årssnitt yield</td><td>0.00%</td></tr><tr><td>År med utbytte</td><td>3</td></tr><tr><td>P/E</td><td>216.3</td></tr><tr><td>Utbyttevekst 5 år</td><td>+0.0% p.a.</td></tr><tr><td>Markedsverdi</td><td>32.5 mrd NOK</td></tr><tr><td>52-ukers kurs</td><td>102.0 – 170.0 NOK</td></tr></tbody></table>
+
+  </section>
 
   <div class="relaterte"><h2>Andre informasjonsteknologi-aksjer med utbytte</h2><div class="rel-grid"><a href="/aksjer/SNTIA/" class="rel-kort"><span class="rel-ticker">SNTIA</span><span class="rel-navn">Sentia AS</span><span class="rel-yield">13.9%</span></a>
 <a href="/aksjer/WSTEP/" class="rel-kort"><span class="rel-ticker">WSTEP</span><span class="rel-navn">Webstep ASA</span><span class="rel-yield">13.0%</span></a>
@@ -432,6 +451,7 @@
 
 <script>
   (function() {
+    // Mørk/lys modus
     var btn = document.getElementById('dark-toggle');
     var root = document.documentElement;
     var sun = btn.querySelector('.sun-icon');
@@ -447,6 +467,26 @@
       localStorage.setItem('tema', isDark ? 'dark' : 'light');
       syncIcons();
     });
+
+    // Scroll-spy: marker aktiv fane basert på synlig seksjon
+    var seksjoner = ['oversikt','utbytte','nokkeltall']
+      .map(function(id) { return document.getElementById(id); })
+      .filter(Boolean);
+    var tabLinker = document.querySelectorAll('.ak-tab');
+    var headerH = 96;
+    function oppdaterTab() {
+      var aktiv = seksjoner[0] ? seksjoner[0].id : 'oversikt';
+      for (var i = 0; i < seksjoner.length; i++) {
+        if (seksjoner[i].getBoundingClientRect().top < headerH + 40) {
+          aktiv = seksjoner[i].id;
+        }
+      }
+      tabLinker.forEach(function(a) {
+        a.classList.toggle('aktiv', a.getAttribute('href') === '#' + aktiv);
+      });
+    }
+    window.addEventListener('scroll', oppdaterTab, {passive: true});
+    oppdaterTab();
   })();
 </script>
 

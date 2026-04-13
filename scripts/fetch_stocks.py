@@ -1641,6 +1641,15 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
   <h1>{ticker} – {navn}</h1>
   <p class="sub">{sektor} · {frekvens} utbytte · Oslo Børs</p>
 
+  <nav class="ak-tabnav" id="ak-tabnav" aria-label="Sideseksjoner">
+    <a href="#oversikt" class="ak-tab aktiv">Oversikt</a>
+    <a href="#utbytte" class="ak-tab">Utbytte</a>
+    <a href="#nokkeltall" class="ak-tab">Nøkkeltall</a>
+  </nav>
+
+  <!-- ── OVERSIKT ── -->
+  <section id="oversikt">
+
   {om_seksjon}
 
   {ai_oppsummering_seksjon}
@@ -1681,11 +1690,12 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
 
   {tv_chart_seksjon}
 
-  <div class="utbytte-sep">Utbytteinformasjon</div>
+  </section>
+
+  <!-- ── UTBYTTE ── -->
+  <section id="utbytte">
 
   {analyse_seksjon}
-
-  {nokkeltal_seksjon}
 
   {hist_seksjon}
 
@@ -1694,6 +1704,15 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
   {hist_prosa_html}
 
   {risiko_html}
+
+  </section>
+
+  <!-- ── NØKKELTALL ── -->
+  <section id="nokkeltall">
+
+  {nokkeltal_seksjon}
+
+  </section>
 
   {relaterte_html}
 
@@ -1718,6 +1737,7 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
 
 <script>
   (function() {{
+    // Mørk/lys modus
     var btn = document.getElementById('dark-toggle');
     var root = document.documentElement;
     var sun = btn.querySelector('.sun-icon');
@@ -1733,6 +1753,26 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
       localStorage.setItem('tema', isDark ? 'dark' : 'light');
       syncIcons();
     }});
+
+    // Scroll-spy: marker aktiv fane basert på synlig seksjon
+    var seksjoner = ['oversikt','utbytte','nokkeltall']
+      .map(function(id) {{ return document.getElementById(id); }})
+      .filter(Boolean);
+    var tabLinker = document.querySelectorAll('.ak-tab');
+    var headerH = 96;
+    function oppdaterTab() {{
+      var aktiv = seksjoner[0] ? seksjoner[0].id : 'oversikt';
+      for (var i = 0; i < seksjoner.length; i++) {{
+        if (seksjoner[i].getBoundingClientRect().top < headerH + 40) {{
+          aktiv = seksjoner[i].id;
+        }}
+      }}
+      tabLinker.forEach(function(a) {{
+        a.classList.toggle('aktiv', a.getAttribute('href') === '#' + aktiv);
+      }});
+    }}
+    window.addEventListener('scroll', oppdaterTab, {{passive: true}});
+    oppdaterTab();
   }})();
 </script>
 

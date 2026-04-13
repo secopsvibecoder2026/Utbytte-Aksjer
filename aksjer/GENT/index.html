@@ -262,6 +262,15 @@
   <h1>GENT – Gentian Diagnostics ASA</h1>
   <p class="sub">Helsevern · Årlig utbytte · Oslo Børs</p>
 
+  <nav class="ak-tabnav" id="ak-tabnav" aria-label="Sideseksjoner">
+    <a href="#oversikt" class="ak-tab aktiv">Oversikt</a>
+    <a href="#utbytte" class="ak-tab">Utbytte</a>
+    <a href="#nokkeltall" class="ak-tab">Nøkkeltall</a>
+  </nav>
+
+  <!-- ── OVERSIKT ── -->
+  <section id="oversikt">
+
   <div class="desc"><h2>Om selskapet</h2><p>Gentian Diagnostics ASA develops, manufactures, and sells biochemical reagents for use in medical diagnostics and research in the United States, Asia, and Europe.</p></div>
 
   <div class="ai-oppsummering"><h2>AI-oppsummering <span class="ai-dato">Oppdatert 2026-04-08T12:34:53</span></h2><p>Direkteavkastningen på 1.5% er lav — aksjen egner seg primært for investorer som verdsetter stabilitet og potensielt utbyttevekst fremfor umiddelbar inntekt. P/E på 45.5 er klart over sektorsnittet og krever solid inntjeningsvekst for å rettferdiggjøre dagens kurs. Utbetalingsgraden på 47% er solid og forsvarlig, med god sikkerhetsmargin for utbyttet selv ved svakere kvartal. Begrenset utbyttehistorikk på 1 år gir lite grunnlag for å vurdere langsiktig konsistens. Kursen er nær 52-ukers bunn — potensielt attraktivt inngangspunkt for tålmodige, langsiktige investorer. Lav markedsverdi på 0.6 mrd NOK innebærer lavere likviditet og høyere kurssvingninger enn for større selskaper. Lav utbyttekvalitet totalt sett — investorer bør vurdere om risikoen er tilstrekkelig kompensert gjennom direkteavkastningen.</p></div>
@@ -370,11 +379,12 @@
   </script>
 </div>
 
-  <div class="utbytte-sep">Utbytteinformasjon</div>
+  </section>
+
+  <!-- ── UTBYTTE ── -->
+  <section id="utbytte">
 
   <div class="analyse"><h2>Utbyttedatoer</h2><p>Yielden på 1.4% er 1.4 prosentpoeng under snittet for Helsevern-sektoren (2.8%).</p></div>
-
-  <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Helsevern</td></tr><tr><td>Frekvens</td><td>Årlig</td></tr><tr><td>Utbytte per aksje</td><td>0.6 NOK</td></tr><tr><td>Direkteavkastning</td><td>1.42%</td></tr><tr><td>5-årssnitt yield</td><td>0.71%</td></tr><tr><td>År med utbytte</td><td>1</td></tr><tr><td>P/E</td><td>49.2</td></tr><tr><td>Payout ratio</td><td>47%</td></tr><tr><td>Utbyttevekst 5 år</td><td>+0.0% p.a.</td></tr><tr><td>Markedsverdi</td><td>0.7 mrd NOK</td></tr><tr><td>52-ukers kurs</td><td>36.1 – 65.8 NOK</td></tr></tbody></table>
 
   <h2>Historiske utbytter</h2><table><thead><tr><th>År</th><th>Utbytte</th><th>Yield</th></tr></thead><tbody>
         <tr>
@@ -390,6 +400,15 @@
   <div class="risiko-seksjon"><h2>Risiko for utbyttet</h2><ul class="risiko-liste"><li>Regulatorisk godkjenning og patent-utløp kan endre inntjeningsbildet</li>
 <li>Prispress fra offentlige innkjøpere</li>
 <li>Høye FoU-kostnader kan begrense utbyttekapasitet</li></ul></div>
+
+  </section>
+
+  <!-- ── NØKKELTALL ── -->
+  <section id="nokkeltall">
+
+  <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Helsevern</td></tr><tr><td>Frekvens</td><td>Årlig</td></tr><tr><td>Utbytte per aksje</td><td>0.6 NOK</td></tr><tr><td>Direkteavkastning</td><td>1.42%</td></tr><tr><td>5-årssnitt yield</td><td>0.71%</td></tr><tr><td>År med utbytte</td><td>1</td></tr><tr><td>P/E</td><td>49.2</td></tr><tr><td>Payout ratio</td><td>47%</td></tr><tr><td>Utbyttevekst 5 år</td><td>+0.0% p.a.</td></tr><tr><td>Markedsverdi</td><td>0.7 mrd NOK</td></tr><tr><td>52-ukers kurs</td><td>36.1 – 65.8 NOK</td></tr></tbody></table>
+
+  </section>
 
   <div class="relaterte"><h2>Andre helsevern-aksjer med utbytte</h2><div class="rel-grid"><a href="/aksjer/VISTIN/" class="rel-kort"><span class="rel-ticker">VISTIN</span><span class="rel-navn">Vistin Pharma ASA</span><span class="rel-yield">4.5%</span></a>
 <a href="/aksjer/MEDI/" class="rel-kort"><span class="rel-ticker">MEDI</span><span class="rel-navn">Medistim ASA</span><span class="rel-yield">2.6%</span></a></div></div>
@@ -435,6 +454,7 @@
 
 <script>
   (function() {
+    // Mørk/lys modus
     var btn = document.getElementById('dark-toggle');
     var root = document.documentElement;
     var sun = btn.querySelector('.sun-icon');
@@ -450,6 +470,26 @@
       localStorage.setItem('tema', isDark ? 'dark' : 'light');
       syncIcons();
     });
+
+    // Scroll-spy: marker aktiv fane basert på synlig seksjon
+    var seksjoner = ['oversikt','utbytte','nokkeltall']
+      .map(function(id) { return document.getElementById(id); })
+      .filter(Boolean);
+    var tabLinker = document.querySelectorAll('.ak-tab');
+    var headerH = 96;
+    function oppdaterTab() {
+      var aktiv = seksjoner[0] ? seksjoner[0].id : 'oversikt';
+      for (var i = 0; i < seksjoner.length; i++) {
+        if (seksjoner[i].getBoundingClientRect().top < headerH + 40) {
+          aktiv = seksjoner[i].id;
+        }
+      }
+      tabLinker.forEach(function(a) {
+        a.classList.toggle('aktiv', a.getAttribute('href') === '#' + aktiv);
+      });
+    }
+    window.addEventListener('scroll', oppdaterTab, {passive: true});
+    oppdaterTab();
   })();
 </script>
 

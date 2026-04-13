@@ -262,6 +262,15 @@
   <h1>PNORD – Protector Forsikring ASA</h1>
   <p class="sub">Finans · Halvårlig utbytte · Oslo Børs</p>
 
+  <nav class="ak-tabnav" id="ak-tabnav" aria-label="Sideseksjoner">
+    <a href="#oversikt" class="ak-tab aktiv">Oversikt</a>
+    <a href="#utbytte" class="ak-tab">Utbytte</a>
+    <a href="#nokkeltall" class="ak-tab">Nøkkeltall</a>
+  </nav>
+
+  <!-- ── OVERSIKT ── -->
+  <section id="oversikt">
+
   <div class="desc"><h2>Om selskapet</h2><p>Raskt voksende skadeforsikringsselskap i Norden og UK. Sterk utbyttevekst over mange år. Protector Forsikring ASA er notert på Oslo Børs med en markedsverdi på rundt 12 milliarder NOK. Aksjen har betalt utbytte 16 år på rad, noe som reflekterer langvarig stabil inntjening og kapitalavkastning til aksjonærene. Utbyttet utbetales halvårlig — to ganger i året. Utbetalingsgraden (payout ratio) er 52%, noe som anses som bærekraftig for de fleste markedsforhold.</p></div>
 
   <div class="ai-oppsummering"><h2>AI-oppsummering <span class="ai-dato">Oppdatert 2026-04-08T12:34:53</span></h2><p>Direkteavkastningen på 6.2% er solid og godt over normalt rentenivå, noe som gjør aksjen interessant for utbyttejegere. P/E på 8.4 er i tråd med normalt nivå for finans-sektoren og gir et balansert bilde av verdsettelsen. Utbetalingsgraden på 52% er solid og forsvarlig, med god sikkerhetsmargin for utbyttet selv ved svakere kvartal. Utbytteveksten på 20.8% per år siste fem år er bemerkelsesverdig sterk og gir imponerende realavkastning for langsiktige aksjonærer. Selskapet har betalt utbytte i 16 år på rad — solid historikk som underbygger ledelsens langsiktige fokus på aksjonæravkastning. Høy utbyttekvalitet totalt sett — PNORD er et naturlig kjernevalg i en norsk utbytteportefølje.</p></div>
@@ -302,11 +311,12 @@
 
   
 
-  <div class="utbytte-sep">Utbytteinformasjon</div>
+  </section>
+
+  <!-- ── UTBYTTE ── -->
+  <section id="utbytte">
 
   <div class="analyse"><h2>Utbyttedatoer</h2><p>Neste ex-dato er 17. apr 2026 — kjøp innen 16. apr for å motta utbytte. Utbetalingsdato er satt til 2. mai 2026. Yielden på 6.2% er på linje med snittet for Finans-sektoren (5.8%).</p></div>
-
-  <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Finans</td></tr><tr><td>Frekvens</td><td>Halvårlig</td></tr><tr><td>Utbytte per aksje</td><td>14.0 NOK</td></tr><tr><td>Direkteavkastning</td><td>6.23%</td></tr><tr><td>5-årssnitt yield</td><td>0.00%</td></tr><tr><td>År med utbytte</td><td>16</td></tr><tr><td>P/E</td><td>8.4</td></tr><tr><td>Payout ratio</td><td>52%</td></tr><tr><td>Utbyttevekst 5 år</td><td>+20.8% p.a.</td></tr><tr><td>Markedsverdi</td><td>12.4 mrd NOK</td></tr><tr><td>52-ukers kurs</td><td>188.2 – 256.8 NOK</td></tr></tbody></table>
 
   
 
@@ -317,6 +327,15 @@
   <div class="risiko-seksjon"><h2>Risiko for utbyttet</h2><ul class="risiko-liste"><li>Rentenivå påvirker netto renteinntekter og utlånsmargin</li>
 <li>Økte kredittap i nedgangstider kan presse resultater</li>
 <li>Regulatoriske kapitalkrav begrenser utbyttekapasitet</li></ul></div>
+
+  </section>
+
+  <!-- ── NØKKELTALL ── -->
+  <section id="nokkeltall">
+
+  <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Finans</td></tr><tr><td>Frekvens</td><td>Halvårlig</td></tr><tr><td>Utbytte per aksje</td><td>14.0 NOK</td></tr><tr><td>Direkteavkastning</td><td>6.23%</td></tr><tr><td>5-årssnitt yield</td><td>0.00%</td></tr><tr><td>År med utbytte</td><td>16</td></tr><tr><td>P/E</td><td>8.4</td></tr><tr><td>Payout ratio</td><td>52%</td></tr><tr><td>Utbyttevekst 5 år</td><td>+20.8% p.a.</td></tr><tr><td>Markedsverdi</td><td>12.4 mrd NOK</td></tr><tr><td>52-ukers kurs</td><td>188.2 – 256.8 NOK</td></tr></tbody></table>
+
+  </section>
 
   <div class="relaterte"><h2>Andre finans-aksjer med utbytte</h2><div class="rel-grid"><a href="/aksjer/PARB/" class="rel-kort"><span class="rel-ticker">PARB</span><span class="rel-navn">Pareto Bank ASA</span><span class="rel-yield">10.1%</span></a>
 <a href="/aksjer/SPOG/" class="rel-kort"><span class="rel-ticker">SPOG</span><span class="rel-navn">Sparebanken Øst</span><span class="rel-yield">8.5%</span></a>
@@ -364,6 +383,7 @@
 
 <script>
   (function() {
+    // Mørk/lys modus
     var btn = document.getElementById('dark-toggle');
     var root = document.documentElement;
     var sun = btn.querySelector('.sun-icon');
@@ -379,6 +399,26 @@
       localStorage.setItem('tema', isDark ? 'dark' : 'light');
       syncIcons();
     });
+
+    // Scroll-spy: marker aktiv fane basert på synlig seksjon
+    var seksjoner = ['oversikt','utbytte','nokkeltall']
+      .map(function(id) { return document.getElementById(id); })
+      .filter(Boolean);
+    var tabLinker = document.querySelectorAll('.ak-tab');
+    var headerH = 96;
+    function oppdaterTab() {
+      var aktiv = seksjoner[0] ? seksjoner[0].id : 'oversikt';
+      for (var i = 0; i < seksjoner.length; i++) {
+        if (seksjoner[i].getBoundingClientRect().top < headerH + 40) {
+          aktiv = seksjoner[i].id;
+        }
+      }
+      tabLinker.forEach(function(a) {
+        a.classList.toggle('aktiv', a.getAttribute('href') === '#' + aktiv);
+      });
+    }
+    window.addEventListener('scroll', oppdaterTab, {passive: true});
+    oppdaterTab();
   })();
 </script>
 

@@ -262,6 +262,15 @@
   <h1>WILS – Wilson ASA</h1>
   <p class="sub">Shipping · Halvårlig utbytte · Oslo Børs</p>
 
+  <nav class="ak-tabnav" id="ak-tabnav" aria-label="Sideseksjoner">
+    <a href="#oversikt" class="ak-tab aktiv">Oversikt</a>
+    <a href="#utbytte" class="ak-tab">Utbytte</a>
+    <a href="#nokkeltall" class="ak-tab">Nøkkeltall</a>
+  </nav>
+
+  <!-- ── OVERSIKT ── -->
+  <section id="oversikt">
+
   <div class="desc"><h2>Om selskapet</h2><p>Europas ledende kysttransportselskap. Frakter tørrbulk og prosjektlast langs europakysten. Stabil inntjening. Wilson ASA er notert på Oslo Børs. Selskapet har hatt sammenhengende utbyttebetalinger i 10 år. Utbyttet utbetales halvårlig — to ganger i året. Utbetalingsgraden (payout ratio) er 65%, noe som anses som bærekraftig for de fleste markedsforhold.</p></div>
 
   <div class="ai-oppsummering"><h2>AI-oppsummering <span class="ai-dato">Oppdatert 2026-04-08T12:34:53</span></h2><p>Direkteavkastningen på 8.6% er klart over snittet for Oslo Børs og meget attraktiv for inntektsinvestorer. P/E på 7.6 er i tråd med normalt nivå for shipping-sektoren og gir et balansert bilde av verdsettelsen. Utbetalingsgraden på 65% er moderat høy, men bærekraftig dersom inntjeningen holder seg stabil. Utbytteveksten på 5.2% per år er moderat positiv og holder tritt med inflasjon. Selskapet har betalt utbytte i 10 år på rad, noe som gir god forutsigbarhet for utbytteinvestorer. Lav markedsverdi på 2.1 mrd NOK innebærer lavere likviditet og høyere kurssvingninger enn for større selskaper. Samlet sett fremstår WILS som et solid utbyttealternativ med høy kvalitet — attraktiv yield, bærekraftig utbetalingsgrad og lang historikk gir god inntektssikkerhet.</p></div>
@@ -302,11 +311,12 @@
 
   
 
-  <div class="utbytte-sep">Utbytteinformasjon</div>
+  </section>
 
-  <div class="analyse"><h2>Utbyttedatoer</h2><p>Neste ex-dato er 1. jun 2026 — kjøp innen 31. mai for å motta utbytte. Utbetalingsdato er satt til 16. jun 2026. Yielden på 8.6% er på linje med snittet for Shipping-sektoren (9.0%).</p></div>
+  <!-- ── UTBYTTE ── -->
+  <section id="utbytte">
 
-  <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Shipping</td></tr><tr><td>Frekvens</td><td>Halvårlig</td></tr><tr><td>Utbytte per aksje</td><td>1.6 NOK</td></tr><tr><td>Direkteavkastning</td><td>8.60%</td></tr><tr><td>5-årssnitt yield</td><td>0.00%</td></tr><tr><td>År med utbytte</td><td>10</td></tr><tr><td>P/E</td><td>7.6</td></tr><tr><td>Payout ratio</td><td>65%</td></tr><tr><td>Utbyttevekst 5 år</td><td>+5.2% p.a.</td></tr><tr><td>Markedsverdi</td><td>2.1 mrd NOK</td></tr><tr><td>52-ukers kurs</td><td>14.4 – 24.8 NOK</td></tr></tbody></table>
+  <div class="analyse"><h2>Utbyttedatoer</h2><p>Neste ex-dato er 1. jun 2026 — kjøp innen 31. mai for å motta utbytte. Utbetalingsdato er satt til 16. jun 2026. Yielden på 8.6% er på linje med snittet for Shipping-sektoren (8.9%).</p></div>
 
   
 
@@ -317,6 +327,15 @@
   <div class="risiko-seksjon"><h2>Risiko for utbyttet</h2><ul class="risiko-liste"><li>Fraktrater er svært volatile og kan halves på kort tid</li>
 <li>Bunkerspriser (drivstoff) påvirker driftsmarginene direkte</li>
 <li>Overkapasitet i markedet kan presse ratene ned i lengre perioder</li></ul></div>
+
+  </section>
+
+  <!-- ── NØKKELTALL ── -->
+  <section id="nokkeltall">
+
+  <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Shipping</td></tr><tr><td>Frekvens</td><td>Halvårlig</td></tr><tr><td>Utbytte per aksje</td><td>1.6 NOK</td></tr><tr><td>Direkteavkastning</td><td>8.60%</td></tr><tr><td>5-årssnitt yield</td><td>0.00%</td></tr><tr><td>År med utbytte</td><td>10</td></tr><tr><td>P/E</td><td>7.6</td></tr><tr><td>Payout ratio</td><td>65%</td></tr><tr><td>Utbyttevekst 5 år</td><td>+5.2% p.a.</td></tr><tr><td>Markedsverdi</td><td>2.1 mrd NOK</td></tr><tr><td>52-ukers kurs</td><td>14.4 – 24.8 NOK</td></tr></tbody></table>
+
+  </section>
 
   <div class="relaterte"><h2>Andre shipping-aksjer med utbytte</h2><div class="rel-grid"><a href="/aksjer/HUNT/" class="rel-kort"><span class="rel-ticker">HUNT</span><span class="rel-navn">Hunter Group ASA</span><span class="rel-yield">17.9%</span></a>
 <a href="/aksjer/HAUTO/" class="rel-kort"><span class="rel-ticker">HAUTO</span><span class="rel-navn">Höegh Autoliners ASA</span><span class="rel-yield">16.4%</span></a>
@@ -364,6 +383,7 @@
 
 <script>
   (function() {
+    // Mørk/lys modus
     var btn = document.getElementById('dark-toggle');
     var root = document.documentElement;
     var sun = btn.querySelector('.sun-icon');
@@ -379,6 +399,26 @@
       localStorage.setItem('tema', isDark ? 'dark' : 'light');
       syncIcons();
     });
+
+    // Scroll-spy: marker aktiv fane basert på synlig seksjon
+    var seksjoner = ['oversikt','utbytte','nokkeltall']
+      .map(function(id) { return document.getElementById(id); })
+      .filter(Boolean);
+    var tabLinker = document.querySelectorAll('.ak-tab');
+    var headerH = 96;
+    function oppdaterTab() {
+      var aktiv = seksjoner[0] ? seksjoner[0].id : 'oversikt';
+      for (var i = 0; i < seksjoner.length; i++) {
+        if (seksjoner[i].getBoundingClientRect().top < headerH + 40) {
+          aktiv = seksjoner[i].id;
+        }
+      }
+      tabLinker.forEach(function(a) {
+        a.classList.toggle('aktiv', a.getAttribute('href') === '#' + aktiv);
+      });
+    }
+    window.addEventListener('scroll', oppdaterTab, {passive: true});
+    oppdaterTab();
   })();
 </script>
 
