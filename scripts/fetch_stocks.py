@@ -16,7 +16,7 @@ import html.parser
 # yfinance er kun nødvendig ved full datahenting, ikke ved side-regenerering
 try:
     import yfinance as yf
-except ImportError:
+except (ImportError, Exception):
     yf = None
 
 _TICKER_RE = re.compile(r'^[A-Z0-9]{1,10}$')
@@ -2881,6 +2881,11 @@ def hent_osebx_historikk():
 
 
 def main():
+    if yf is None:
+        print("FEIL: yfinance er ikke installert eller kunne ikke importeres.")
+        print("Kjør: pip install 'yfinance>=0.2.36,<1.0.0'")
+        raise SystemExit(1)
+
     print("Starter henting av aksjedata fra Yahoo Finance...")
     output_path = os.path.join(os.path.dirname(__file__), "..", "data", "aksjer.json")
 
