@@ -291,8 +291,9 @@ th.sort-desc::after { content: ' ↓'; color: #6b7280; }
   #modal-overlay { align-items: flex-end; padding: 0; }
   #modal-content {
     border-radius: 1rem 1rem 0 0;
-    min-height: 78vh;
+    height: 85vh;
     max-height: 92vh;
+    overflow: hidden;
     animation: modalSlideUp 0.25s ease-out;
   }
   @keyframes modalSlideUp {
@@ -303,7 +304,11 @@ th.sort-desc::after { content: ' ↓'; color: #6b7280; }
 
 /* Desktop: konsistent høyde selv med korte faner */
 @media (min-width: 641px) {
-  #modal-content { min-height: 500px; }
+  #modal-content {
+    height: 620px;
+    max-height: 88vh;
+    overflow: hidden;
+  }
 }
 
 /* ── RESPONSIV TABELL / KORT ──────────────────────────────────────────── */
