@@ -488,3 +488,26 @@ th.sort-desc::after { content: ' ↓'; color: #6b7280; }
   color: #374151;
 }
 .dark .om-selskap-tekst { color: #d1d5db; }
+
+/* Seksjons-etikett mellom generell info og utbytteinformasjon */
+.modal-seksjon-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: #9ca3af;
+  margin: 1.25rem 0 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.modal-seksjon-label::before,
+.modal-seksjon-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: #e5e7eb;
+}
+.dark .modal-seksjon-label { color: #6b7280; }
+.dark .modal-seksjon-label::before,
+.dark .modal-seksjon-label::after { background: #1f2937; }

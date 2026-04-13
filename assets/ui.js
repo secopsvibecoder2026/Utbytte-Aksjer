@@ -2028,17 +2028,28 @@ function visModal(a) {
 
     ${a.ai_oppsummering ? `<div class="ai-opp-boks"><p class="ai-opp-label">AI-oppsummering${a.ai_oppsummering_dato ? ` <span class="ai-opp-dato">${escHtml(a.ai_oppsummering_dato)}</span>` : ''}</p><p class="ai-opp-tekst">${escHtml(a.ai_oppsummering)}</p></div>` : ''}
 
-    <div class="grid grid-cols-2 gap-3 mb-4">
+    <div id="kurs-graf-modal" class="mt-4"></div>
+
+    <div class="mt-3">
+      ${rangebar(a.pris, a['52u_lav'], a['52u_hoy'], true)}
+    </div>
+
+    <div class="grid grid-cols-2 gap-3 mt-4 mb-1">
       ${modalKort('Kurs', fmt(a.pris) + ' ' + a.valuta)}
+      ${modalKort('P/E', a.pe_ratio > 0 ? a.pe_ratio.toFixed(1) : '—')}
+      ${modalKort('P/B', a.pb_ratio > 0 ? a.pb_ratio.toFixed(1) : '—')}
+      ${modalKort('Markedsverdi', a.markedsverdi_mrd > 0 ? a.markedsverdi_mrd.toFixed(1) + ' mrd' : '—')}
+    </div>
+
+    <p class="modal-seksjon-label">Utbytteinformasjon</p>
+
+    <div class="grid grid-cols-2 gap-3 mb-4">
       ${modalKort('Utbytteyield', `<span class="${yieldKlasse(a.utbytte_yield)}">${a.utbytte_yield.toFixed(2)}%</span>`)}
+      ${modalKort('Snitt yield 5år', a.snitt_yield_5ar > 0 ? `<span class="${yieldKlasse(a.snitt_yield_5ar)}">${a.snitt_yield_5ar.toFixed(1)}%</span>` : '—')}
       ${modalKort('Utbytte/aksje (år)', fmt(a.utbytte_per_aksje) + ' ' + a.valuta)}
       ${modalKort('Siste utbytte', fmt(a.siste_utbytte) + ' ' + a.valuta)}
       ${modalKort('Payout Ratio', `<span class="${payoutKlasse(a.payout_ratio)}">${a.payout_ratio > 0 ? a.payout_ratio.toFixed(0)+'%' : '—'}</span>`)}
       ${modalKort('Utbyttevekst 5år', `<span class="${vekstKlasse(a.utbytte_vekst_5ar)}">${a.utbytte_vekst_5ar !== 0 ? (a.utbytte_vekst_5ar>0?'+':'')+a.utbytte_vekst_5ar.toFixed(1)+'%' : '—'}</span>`)}
-      ${modalKort('Snitt yield 5år', a.snitt_yield_5ar > 0 ? `<span class="${yieldKlasse(a.snitt_yield_5ar)}">${a.snitt_yield_5ar.toFixed(1)}%</span>` : '—')}
-      ${modalKort('P/E', a.pe_ratio > 0 ? a.pe_ratio.toFixed(1) : '—')}
-      ${modalKort('P/B', a.pb_ratio > 0 ? a.pb_ratio.toFixed(1) : '—')}
-      ${modalKort('Markedsverdi', a.markedsverdi_mrd > 0 ? a.markedsverdi_mrd.toFixed(1) + ' mrd' : '—')}
       ${modalKort('År m/utbytte', a.ar_med_utbytte > 0 ? a.ar_med_utbytte + ' år' : '—')}
     </div>
 
@@ -2064,12 +2075,6 @@ function visModal(a) {
         </div>
       </div>
     </div>
-
-    <div class="mt-4">
-      ${rangebar(a.pris, a['52u_lav'], a['52u_hoy'], true)}
-    </div>
-
-    <div id="kurs-graf-modal" class="mt-4"></div>
 
     ${historiskChart(a)}
     ${scoreForklaring(a)}

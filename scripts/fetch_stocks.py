@@ -12,7 +12,12 @@ import datetime
 import urllib.request
 import urllib.parse
 import html.parser
-import yfinance as yf
+
+# yfinance er kun nødvendig ved full datahenting, ikke ved side-regenerering
+try:
+    import yfinance as yf
+except ImportError:
+    yf = None
 
 _TICKER_RE = re.compile(r'^[A-Z0-9]{1,10}$')
 
@@ -920,56 +925,57 @@ def _fmt_dato(iso):
         return iso
 
 
-def _lag_analyse_tekst(a):
-    """Bygger et analytisk avsnitt om yield, payout og veksttrender."""
+def _lag_analyse_tekst(a, sektor_snitt=None):
+    """Faktabasert utbyttekontekst: datoer og sektorsammenligning.
+    Unngår overlapp med AI-oppsummering som dekker yield/payout/vekst narrativt."""
     deler = []
+    ex     = a.get("ex_dato")
+    bet    = a.get("betaling_dato")
+    sektor = a.get("sektor") or "Annet"
     yield_ = a.get("utbytte_yield") or 0
-    snitt5 = a.get("snitt_yield_5ar") or 0
-    payout = a.get("payout_ratio") or 0
-    vekst  = a.get("utbytte_vekst_5ar")
+    snitt_s = (sektor_snitt or {}).get(sektor, 0)
 
-    if yield_ > 0 and snitt5 > 0:
-        diff = yield_ - snitt5
-        if diff > 1.5:
+    # Datokontext
+    if ex:
+        try:
+            ex_d  = datetime.date.fromisoformat(ex)
+            today = datetime.date.today()
+            dager = (ex_d - today).days
+            kjop_d = ex_d - datetime.timedelta(days=1)
+            mnd = ["jan","feb","mar","apr","mai","jun","jul","aug","sep","okt","nov","des"]
+            kjop_str = f"{kjop_d.day}. {mnd[kjop_d.month-1]}"
+            if dager > 0:
+                deler.append(
+                    f"Neste ex-dato er {_fmt_dato(ex)} — kjøp innen {kjop_str} for å motta utbytte."
+                )
+            elif dager == 0:
+                deler.append(
+                    f"Ex-dato er i dag ({_fmt_dato(ex)}) — du må eie aksjen ved børsslutt for å motta utbytte."
+                )
+            else:
+                deler.append(f"Siste registrerte ex-dato var {_fmt_dato(ex)}.")
+        except Exception:
+            pass
+
+    if bet:
+        deler.append(f"Utbetalingsdato er satt til {_fmt_dato(bet)}.")
+
+    # Sektorsammenligning
+    if yield_ > 0 and snitt_s > 0:
+        diff = yield_ - snitt_s
+        if diff > 1.0:
             deler.append(
-                f"Nåværende direkteavkastning på {yield_:.1f}% er betydelig høyere enn "
-                f"5-årssnittet på {snitt5:.1f}%, noe som kan indikere et midlertidig "
-                "kursfall eller ekstraordinært utbytte."
+                f"Yielden på {yield_:.1f}% er {diff:.1f} prosentpoeng over snittet "
+                f"for {sektor}-sektoren ({snitt_s:.1f}%)."
             )
-        elif diff < -1.5:
+        elif diff < -1.0:
             deler.append(
-                f"Nåværende direkteavkastning på {yield_:.1f}% er lavere enn "
-                f"5-årssnittet på {snitt5:.1f}%, noe som tyder på sterk kursvekst de siste årene."
+                f"Yielden på {yield_:.1f}% er {abs(diff):.1f} prosentpoeng under snittet "
+                f"for {sektor}-sektoren ({snitt_s:.1f}%)."
             )
         else:
             deler.append(
-                f"Direkteavkastningen på {yield_:.1f}% ligger nær 5-årssnittet på {snitt5:.1f}%, "
-                "som indikerer stabil kurs- og utbytteutvikling."
-            )
-
-    if payout > 0:
-        if payout < 50:
-            deler.append(
-                f"Utbetalingsgraden på {payout:.0f}% gir godt rom for fremtidige utbytteøkninger."
-            )
-        elif payout < 80:
-            deler.append(
-                f"Utbetalingsgraden på {payout:.0f}% er bærekraftig."
-            )
-        else:
-            deler.append(
-                f"Utbetalingsgraden på {payout:.0f}% er høy — utbyttet kan være "
-                "sårbart ved svakere inntjening."
-            )
-
-    if vekst is not None and abs(vekst) > 0.5:
-        if vekst > 0:
-            deler.append(
-                f"Utbyttet har vokst med {vekst:.1f}% per år de siste 5 årene."
-            )
-        else:
-            deler.append(
-                f"Utbyttet har falt med {abs(vekst):.1f}% per år de siste 5 årene."
+                f"Yielden på {yield_:.1f}% er på linje med snittet for {sektor}-sektoren ({snitt_s:.1f}%)."
             )
 
     return " ".join(deler)
@@ -1258,9 +1264,9 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
         f'</div>'
     ) if ai_opp else ""
 
-    analyse_tekst   = _lag_analyse_tekst(a)
+    analyse_tekst   = _lag_analyse_tekst(a, sektor_snitt)
     analyse_seksjon = (
-        f'<div class="analyse"><h2>Utbytteanalyse</h2><p>{analyse_tekst}</p></div>'
+        f'<div class="analyse"><h2>Utbyttedatoer</h2><p>{analyse_tekst}</p></div>'
         if analyse_tekst else ""
     )
 
@@ -1497,6 +1503,10 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     .cta a:hover {{ background: #15803d; }}
     .updated {{ font-size: 0.78rem; text-align: right; margin-top: 1rem; }}
     .mini-nav {{ display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.5rem; font-size: 0.85rem; }}
+    .utbytte-sep {{ display: flex; align-items: center; gap: 0.75rem; margin: 1.75rem 0 1.25rem; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #9ca3af; }}
+    .utbytte-sep::before, .utbytte-sep::after {{ content: ''; flex: 1; height: 1px; background: #e5e7eb; }}
+    .dark .utbytte-sep {{ color: #6b7280; }}
+    .dark .utbytte-sep::before, .dark .utbytte-sep::after {{ background: #1f2937; }}
     .mini-nav a {{ color: #16a34a; }}
     .profil-seksjon {{ margin: 1.5rem 0; }}
     .profil-badges {{ display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem; }}
@@ -1630,6 +1640,11 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
 
   <h1>{ticker} – {navn}</h1>
   <p class="sub">{sektor} · {frekvens} utbytte · Oslo Børs</p>
+
+  {om_seksjon}
+
+  {ai_oppsummering_seksjon}
+
   <span class="badge">{f'{yield_:.2f}% direkteavkastning' if yield_ else 'Kurs ikke tilgjengelig'}</span>
 
   <div class="kgrid">
@@ -1666,9 +1681,7 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
 
   {tv_chart_seksjon}
 
-  {om_seksjon}
-
-  {ai_oppsummering_seksjon}
+  <div class="utbytte-sep">Utbytteinformasjon</div>
 
   {analyse_seksjon}
 
