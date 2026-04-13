@@ -153769,6 +153769,59 @@
       "data_kilde": "yahoo",
       "ai_oppsummering": "Advarsel: Direkteavkastningen på 21.8% er ekstraordinært høy og skyldes trolig et engangs- eller spesialutbytte — dette nivået er ikke representativt for normalt inntjeningsbasert utbytte. Historisk snittavkastning på 19.8% viser at ekstraordinære utbytter er et gjentakende mønster i dette selskapet. P/E på 7.8 er svært lavt for skipsfart-sektoren, og kombinert med 21.8% yield fremstår verdsettelsen som meget attraktiv. Utbetalingsgraden på 286% er ekstremt høy og reflekterer at selskapet benytter en kontantstrøm-basert utbyttepolitikk fremfor regnskapsmessig overskudd — vanlig i E&P-selskaper, men innebærer økt risiko ved lavere oljepriser. Utbyttet har falt med 24.4% per år siste fem år — et tydelig faresignal som indikerer strukturell svekkelse i inntjeningen. STST anbefales med forsiktighet for rene utbytteinvestorer — inntjeningssituasjonen gir liten trygghet for fremtidige utbetalinger.",
       "ai_oppsummering_dato": "2026-04-08T12:34:53"
+    },
+    {
+      "ticker": "NORBT",
+      "ticker_yf": "NORBT.OL",
+      "navn": "Norbit ASA",
+      "sektor": "Informasjonsteknologi",
+      "bors": "Oslo Børs",
+      "pris": 216.8,
+      "52u_hoy": 228.0,
+      "52u_lav": 118.8,
+      "valuta": "NOK",
+      "markedsverdi_mrd": 0,
+      "pe_ratio": 0,
+      "pb_ratio": 0,
+      "utbytte_per_aksje": 6.0,
+      "siste_utbytte": 3.0,
+      "utbytte_yield": 2.7675,
+      "snitt_yield_5ar": 1.43,
+      "utbytte_vekst_5ar": 111.5,
+      "payout_ratio": 0,
+      "frekvens": "Halvårlig",
+      "ar_med_utbytte": 5,
+      "historiske_utbytter": [
+        {
+          "ar": 2021,
+          "utbytte": 0.3,
+          "yield": 0.14
+        },
+        {
+          "ar": 2022,
+          "utbytte": 0.3,
+          "yield": 0.14
+        },
+        {
+          "ar": 2023,
+          "utbytte": 0.7,
+          "yield": 0.32
+        },
+        {
+          "ar": 2024,
+          "utbytte": 2.55,
+          "yield": 1.18
+        },
+        {
+          "ar": 2025,
+          "utbytte": 6.0,
+          "yield": 2.77
+        }
+      ],
+      "ex_dato": null,
+      "betaling_dato": null,
+      "beskrivelse": "Norsk teknologiselskap innen IoT og sensorteknologi med utbytte.",
+      "data_kilde": "yahoo"
     }
   ],
   "osebx_historikk": {
