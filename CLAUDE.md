@@ -39,6 +39,7 @@ Utbytte-Aksjer/
 │   ├── fetch_priser.py        # Lightweight price updater → priser.json
 │   ├── regenerer_sider.py     # Regenerates /aksjer/{TICKER}/index.html without full fetch
 │   ├── utvid_beskrivelser.py  # Enriches stock descriptions in tickers.json
+│   ├── valider_data.py        # Data quality validation script
 │   └── requirements.txt       # Python deps: yfinance>=0.2.36
 ├── tests/                     # Node.js unit tests
 │   ├── portefolje.test.js     # Tests: FIFO, IRR, TWR
@@ -113,6 +114,7 @@ python scripts/fetch_stocks.py        # Full fetch: aksjer.json + all SEO pages 
 python scripts/regenerer_sider.py     # Regenerate HTML pages only (fast, no Yahoo Finance)
 python scripts/utvid_beskrivelser.py  # Expand descriptions in tickers.json
 python scripts/fetch_priser.py        # Update priser.json
+python scripts/valider_data.py        # Run data quality checks on aksjer.json
 ```
 
 ### Local Development
