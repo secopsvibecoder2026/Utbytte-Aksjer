@@ -521,6 +521,8 @@ th.sort-desc::after { content: ' ↓'; color: #6b7280; }
 .dark .modal-tab.aktiv { color: #4ade80; border-bottom-color: #4ade80; }
 
 .modal-panel.skjult { display: none; }
+.modal-panel { min-height: 55vh; }
+@media (min-width: 641px) { .modal-panel { min-height: 420px; } }
 
 /* ── SEO-SIDE TABS ────────────────────────────────────────────────────────── */
 .ak-tabnav {
