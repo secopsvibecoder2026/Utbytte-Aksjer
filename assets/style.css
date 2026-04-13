@@ -555,4 +555,5 @@ th.sort-desc::after { content: ' ↓'; color: #6b7280; }
 .dark .ak-tabnav a { color: #9ca3af; }
 .dark .ak-tabnav a:hover { color: #f3f4f6; }
 .dark .ak-tabnav a.aktiv { color: #4ade80; border-bottom-color: #4ade80; }
+section[id] { scroll-margin-top: 100px; }
 

@@ -1754,12 +1754,27 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
       syncIcons();
     }});
 
-    // Scroll-spy: marker aktiv fane basert på synlig seksjon
+    // Tab-navigasjon: smooth scroll med offset for sticky header
     var seksjoner = ['oversikt','utbytte','nokkeltall']
       .map(function(id) {{ return document.getElementById(id); }})
       .filter(Boolean);
     var tabLinker = document.querySelectorAll('.ak-tab');
-    var headerH = 96;
+    var OFFSET = 100; // ak-header + ak-tabnav høyde
+
+    tabLinker.forEach(function(a) {{
+      a.addEventListener('click', function(e) {{
+        e.preventDefault();
+        var maal = document.querySelector(a.getAttribute('href'));
+        if (!maal) return;
+        var topp = maal.getBoundingClientRect().top + window.scrollY - OFFSET;
+        window.scrollTo({{ top: topp, behavior: 'smooth' }});
+        // Oppdater URL uten hopp
+        history.replaceState(null, '', a.getAttribute('href'));
+      }});
+    }});
+
+    // Scroll-spy: marker aktiv fane basert på synlig seksjon
+    var headerH = OFFSET;
     function oppdaterTab() {{
       var aktiv = seksjoner[0] ? seksjoner[0].id : 'oversikt';
       for (var i = 0; i < seksjoner.length; i++) {{
