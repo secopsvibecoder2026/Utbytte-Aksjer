@@ -530,6 +530,22 @@ def hent_aksje(meta):
 
         raw_div_rate = safe_float(info.get("dividendRate") or info.get("trailingAnnualDividendRate"))
 
+        # Cross-valider mot faktiske utbetalinger siste 12 mnd
+        one_year_ago_div = datetime.datetime.today() - datetime.timedelta(days=365)
+        if not dividends.empty and dividends.index.tz:
+            one_year_ago_div = one_year_ago_div.astimezone(dividends.index.tz)
+        trailing_12m = dividends[dividends.index >= one_year_ago_div] if not dividends.empty else dividends
+        trailing_annual = float(trailing_12m.sum()) if not trailing_12m.empty else 0.0
+
+        if trailing_annual > 0 and raw_div_rate > 0:
+            # Hvis Yahoo avviker >50% fra faktiske utbetalinger, bruk faktiske
+            avvik = abs(trailing_annual - raw_div_rate) / raw_div_rate
+            if avvik > 0.5:
+                print(f"    Advarsel: Yahoo dividendRate={raw_div_rate:.2f} avviker {avvik*100:.0f}% fra trailing={trailing_annual:.2f}. Bruker trailing.")
+                raw_div_rate = trailing_annual
+        elif trailing_annual > 0 and raw_div_rate == 0:
+            raw_div_rate = trailing_annual
+
         # Yahoo Finance returnerer av og til dividendRate som yield-prosent
         # (f.eks. 13.93) i stedet for absolutt beløp per aksje (f.eks. 7.10 NOK).
         # Deteksjon: hvis raw_div_rate / pris * 100 > 100 er det sannsynligvis

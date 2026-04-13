@@ -46,6 +46,9 @@ jobs:
       - name: Hent aksjedata fra Yahoo Finance
         run: python scripts/fetch_stocks.py
 
+      - name: Valider datakvalitet
+        run: python scripts/valider_data.py
+
       - name: Commit og push oppdatert data
         run: |
           git config user.name "github-actions[bot]"

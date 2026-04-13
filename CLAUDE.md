@@ -286,6 +286,32 @@ There are **3 HTML templates** in `fetch_stocks.py`:
 
 ---
 
+## Data Quality Checks
+
+`scripts/valider_data.py` is a reusable validation script that reads `data/aksjer.json` and verifies data integrity after each data fetch.
+
+### What it checks
+
+- **Yield consistency:** `utbytte_yield` must equal `utbytte_per_aksje / pris * 100` within 0.5% tolerance (flags); avvik > 2% is a **critical error** (exits with code 1)
+- **Implausibly high yields:** `utbytte_yield` > 60% is flagged as suspicious
+- **5-year average yield:** `snitt_yield_5ar` > 200% is flagged as suspicious
+- **Historical yields:** any entry in `historiske_utbytter` with yield > 200% is flagged
+- **Forward vs. trailing mismatch:** `utbytte_per_aksje` > 5x the most recent year in `historiske_utbytter` is flagged (may indicate Yahoo is returning a forward estimate)
+
+### Running manually
+
+```bash
+python scripts/valider_data.py
+```
+
+Exit code 0 = OK, exit code 1 = critical errors found.
+
+### Automatic execution
+
+The script runs automatically in the daily GitHub Actions workflow (`update-og-deploy.yml`) after `fetch_stocks.py` completes, before committing updated data. See the `Valider datakvalitet` step in the workflow.
+
+---
+
 ## Adding a New Stock
 
 1. Add entry to `data/tickers.json`
