@@ -302,11 +302,18 @@ th.sort-desc::after { content: ' ↓'; color: #6b7280; }
   }
 }
 
-/* Desktop: konsistent høyde selv med korte faner */
+/* Tablet / landscape-mobil */
 @media (min-width: 641px) {
   #modal-content {
-    height: 620px;
-    max-height: 88vh;
+    height: min(82vh, 640px);
+    overflow: hidden;
+  }
+}
+
+/* Desktop */
+@media (min-width: 1024px) {
+  #modal-content {
+    height: min(85vh, 800px);
     overflow: hidden;
   }
 }
