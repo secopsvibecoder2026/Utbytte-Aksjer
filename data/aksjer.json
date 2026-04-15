@@ -46044,8 +46044,8 @@
       "52u_hoy": 81.35,
       "52u_lav": 54.5,
       "markedsverdi_mrd": 8.1,
-      "utbytte_per_aksje": 1.75,
-      "utbytte_yield": 2.42,
+      "utbytte_per_aksje": 35.64,
+      "utbytte_yield": 49.36,
       "utbytte_vekst_5ar": -23.6,
       "payout_ratio": 0.0,
       "pe_ratio": 18.78,
@@ -46071,9 +46071,19 @@
           "ar": 2024,
           "utbytte": 1.75,
           "yield": 2.42
+        },
+        {
+          "ar": 2025,
+          "utbytte": 0.0,
+          "yield": 0.0
+        },
+        {
+          "ar": 2026,
+          "utbytte": 35.64,
+          "yield": 49.36
         }
       ],
-      "snitt_yield_5ar": 4.28,
+      "snitt_yield_5ar": 12.44,
       "beskrivelse": "Lakseoppdrettsselskap med virksomhet i Rogaland, Finnmark, Shetland og British Columbia. Grieg Seafood ASA er notert på Oslo Børs. Selskapet har hatt sammenhengende utbyttebetalinger i 10 år. 5-årssnittlig direkteavkastning er 4.6%, noe som plasserer GSF blant de solid-yielding aksjene i havbrukssektoren.",
       "beskrivelse_fakta": "Grieg Seafood ASA, through its subsidiaries, operates as a fish farming company in Norway, the United Kingdom, rest of Europe, the United States, Canada, Asia, and internationally. It engages in the farming, production, and sale of Atlantic salmon. The company was incorporated in 1988 and is based in Bergen, Norway. Grieg Seafood ASA operates as a subsidiary of Grieg Aqua AS.",
       "valuta": "NOK",
@@ -47119,9 +47129,7 @@
           "k": 72.2
         }
       ],
-      "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 2.4% er lav — aksjen egner seg primært for investorer som verdsetter stabilitet og potensielt utbyttevekst fremfor umiddelbar inntekt. P/E på 18.8 er i tråd med normalt nivå for havbruk-sektoren og gir et balansert bilde av verdsettelsen. Utbyttet har falt med 23.6% per år siste fem år — et tydelig faresignal som indikerer strukturell svekkelse i inntjeningen. Selskapet har betalt utbytte i 10 år på rad, noe som gir god forutsigbarhet for utbytteinvestorer. GSF anbefales med forsiktighet for rene utbytteinvestorer — inntjeningssituasjonen gir liten trygghet for fremtidige utbetalinger.",
-      "ai_oppsummering_dato": "2026-04-14T05:58:04"
+      "data_kilde": "yahoo"
     },
     {
       "ticker": "KCC",
