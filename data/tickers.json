@@ -745,7 +745,7 @@
   },
   {
     "ticker": "ODLD",
-    "ticker_yf": "ODL.OL",
+    "ticker_yf": "ODLD.OL",
     "navn": "Odfjell Drilling Ltd",
     "sektor": "Energitjenester",
     "bors": "Oslo Børs",
@@ -921,15 +921,6 @@
     "beskrivelse_fakta_sprak": "en"
   },
   {
-    "ticker": "VENDA",
-    "ticker_yf": "VEND.OL",
-    "navn": "Vend Marketplaces ASA",
-    "sektor": "Kommunikasjonstjenester",
-    "bors": "Oslo Børs",
-    "beskrivelse": "Norsk teknologi- og mediakonsern som driver ledende nordiske nettmarkedsplasser (Finn.no, Blocket, DBA m.fl.). Selskapet ble omdøpt fra Schibsted ASA til Vend Marketplaces ASA i 2025. Betaler halvårlig utbytte.",
-    "navn_dnb": "Vend Marketplaces ASA"
-  },
-  {
     "ticker": "ITERA",
     "ticker_yf": "ITERA.OL",
     "navn": "Itera ASA",
@@ -1027,18 +1018,6 @@
     "bors": "Oslo Børs",
     "beskrivelse": "Norsk lakseoppdrettsselskap med utbytteutbetalinger.",
     "navn_dnb": "Norway Royal Salmon"
-  },
-  {
-    "ticker": "STRO",
-    "ticker_yf": "SNI.OL",
-    "navn": "Stolt-Nielsen Ltd",
-    "sektor": "Shipping",
-    "bors": "Oslo Børs",
-    "beskrivelse": "Globalt kjemikalietankrederi med lang utbyttehistorie. Stolt-Nielsen Ltd er notert på Oslo Børs. Selskapet har hatt sammenhengende utbyttebetalinger i 12 år. 5-årssnittlig direkteavkastning er 5.3%, noe som plasserer STRO blant de solid-yielding aksjene i shippingsektoren. Stolt-Nielsen Ltd er notert på Oslo Børs med en markedsverdi på rundt 22 milliarder NOK. Aksjen har betalt utbytte 21 år på rad, noe som reflekterer langvarig stabil inntjening og kapitalavkastning til aksjonærene. Utbyttet utbetales halvårlig — to ganger i året. 5-årssnittlig direkteavkastning er 7.2%, noe som plasserer STRO blant de høyest-yielding aksjene i shippingsektoren. Utbetalingsgraden (payout ratio) er 34%, noe som gir selskapet godt rom for å øke utbyttet fremover.",
-    "navn_dnb": "Stolt-Nielsen",
-    "beskrivelse_fakta": "Stolt-Nielsen Limited, together with its subsidiaries, provides transportation, storage, and distribution solutions for bulk liquid chemicals, edible oils, acids, and other specialty liquids worldwide. It operates through five segments: Tankers, Terminals, Tank Containers, Stolt Sea Farm, and Stolt-Nielsen Gas. The company also produces, processes, and markets seafood, including turbot and sole; and stores and handles chemicals, clean petroleum products, liquefied petroleum gases, vegetable oils, and biofuels, as well as alternative fuels and feedstocks.",
-    "beskrivelse_fakta_kilde": "yahoo_finance",
-    "beskrivelse_fakta_sprak": "en"
   },
   {
     "ticker": "FKRAFT",

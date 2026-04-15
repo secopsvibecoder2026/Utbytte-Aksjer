@@ -314,6 +314,82 @@ The script runs automatically in the daily GitHub Actions workflow (`update-og-d
 
 ---
 
+## Known Yahoo Finance Data Quality Issues
+
+This section documents recurring patterns where Yahoo Finance returns incorrect or misleading dividend data. These root causes are important to understand when investigating yield discrepancies (e.g. "our app shows 16% but Nordnet shows 10%").
+
+### 1. Mixed-period payment stacking (WAWI-type)
+
+**Symptom:** `utbytte_per_aksje` is inflated — roughly equal to the sum of the most recent two payment events from different periods.
+
+**Root cause:** Yahoo's `dividendRate` sums recent payment events across calendar year boundaries. For stocks that pay semi-annually (one NOK payment in autumn + one USD payment in spring), Yahoo sums e.g. H2-2025 (NOK) + Q1-2026 (USD→NOK) and presents this as the "annual rate". Since `trailing_annual` (our cross-validation reference) computes the same sum, the 50%-deviation check doesn't catch it.
+
+**How to detect:** `utbytte_per_aksje` ≈ `siste_utbytte` + previous period's `historiske_utbytter` entry. Nordnet shows a significantly lower current yield.
+
+**Script mitigation:** Cross-validation now uses the last complete calendar year total as primary reference (not trailing 12 months). Also: `utbytte_per_aksje` is rounded to 2 decimal places on storage.
+
+**Affected stocks:** WAWI (canonical example), potentially other mixed NOK/USD payers.
+
+### 2. Stale USD/NOK exchange rate in dividend history
+
+**Symptom:** Historical dividends stored in NOK show inflated/deflated amounts compared to what investors actually received in real-time.
+
+**Root cause:** Yahoo Finance stores dividends for Oslo Børs stocks (`.OL` tickers) in NOK, converting USD-denominated dividends at the exchange rate at the time of payment. When the exchange rate changes significantly (e.g. USD weakens from 10.5 to 12.5 NOK/USD), the stored NOK values become stale. A dividend of 1.01 USD paid when USDNOK=9.45 is stored as 9.54 NOK, but at current USDNOK=12.5 it should be 12.63 NOK.
+
+**How to detect:** `valuta` field may show "USD" even for `.OL` tickers (Yahoo uses corporate reporting currency). The discrepancy is visible by comparing displayed yield vs. Nordnet.
+
+**Affected stocks:** WAWI, GOGL (USD), FLNG (USD), COOL (USD) — all companies that declare dividends in USD but trade on Oslo Børs in NOK.
+
+**Note:** `valuta=USD` in our data for `.OL` stocks means the company reports in USD, not that prices or dividends are displayed in USD. Prices are always in NOK for `.OL` tickers.
+
+### 3. Annualization inflation of single payment
+
+**Symptom:** `utbytte_per_aksje` = `siste_utbytte` × payment_frequency_multiplier (2 for halvårlig, 4 for kvartalsvis), and this annualized value is much higher than the previous full year's total.
+
+**Root cause:** Yahoo annualizes the most recent individual payment by multiplying by the assumed payment frequency. If a company recently raised its dividend significantly (e.g. KOG from ~1.1 NOK/quarter to 5.7 NOK/quarter), the annualized Yahoo figure (22.8) will be much higher than the previous year's total (4.4). This can be correct (genuine raise) or inflated (one-time special payment).
+
+**How to detect:** `frekvens == "Kvartalsvis"` or `"Halvårlig"` and `utbytte_per_aksje` ≈ `siste_utbytte × freq_multiplier`. Compare against `historiske_utbytter` last full year.
+
+**Affected stocks:** OET (quarterly tanker dividends), KOG (quarterly defense growth), SUBC (semi-annual offshore), others.
+
+**Script mitigation:** Cross-validation now compares against last complete calendar year (not just trailing 12m), which will flag cases where the annualized rate is >50% higher than the prior full year.
+
+### 4. Missing historical data (snitt_yield_5ar = None)
+
+**Symptom:** `snitt_yield_5ar = None` or 0, and `historiske_utbytter = []`.
+
+**Root cause:** `hent_historiske_utbytter()` requires both `dividends` and `hist_prices` to be non-empty. If `hist_prices` fails to fetch (network error, API limit), the function returns `[], 0.0`. Without `snitt_yield_5ar`, the sanity check (yield > 3× snitt) is bypassed, allowing inflated yields to pass through.
+
+**Script mitigation:** The sanity check now falls back to `trailing_annual / pris × 100` as effective snitt when `snitt_yield_5ar = 0`.
+
+**Affected stocks:** GOGL, FLNG, COOL (USD-reporting companies with potential hist_prices fetch issues).
+
+### 5. payout_ratio artifacts
+
+**Symptom:** `payout_ratio` shows values like 1197%, 1333%, 687%.
+
+**Root cause:** When EPS is near zero or negative, Yahoo's payout_ratio = dividend/EPS produces huge values. These are mathematically correct but meaningless for users.
+
+**Fix:** Values > 500% are zeroed out in the data pipeline.
+
+### Historical yields design decision
+
+**`historiske_utbytter.yield` is computed at the CURRENT stock price**, not the historical year-end price. This is a deliberate design choice for display consistency: a user comparing "2023 yield" to "current yield" is comparing at the same price base. This means:
+- Historical yields will look different from what a 2023 investor actually earned
+- For stocks with large price changes (HUNT: collapsed, KOG: tripled), historical yields may appear extreme
+- `snitt_yield_5ar` is the average of these current-price-adjusted historical yields
+
+### Duplicate tickers in tickers.json
+
+**Each `ticker_yf` must be unique** — if two entries share the same `ticker_yf`, both will receive identical data from Yahoo Finance. Known incidents:
+- **STRO** (removed 2026-04-15): duplicate of SNI (Stolt-Nielsen)
+- **VENDA** (removed 2026-04-15): duplicate of VEND (Vend Marketplaces)
+- **ODLD**: currently uses `ODLD.OL` — different company from ODL (Odfjell Drilling vs Odfjell SE), but may be delisted; needs verification on next data fetch
+
+When adding new tickers, always verify `ticker_yf` is unique in `tickers.json`.
+
+---
+
 ## Adding a New Stock
 
 1. Add entry to `data/tickers.json`

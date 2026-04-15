@@ -445,9 +445,16 @@ def frekvens_label(dividends_per_year):
     return "Uregelmessig"
 
 
-def hent_historiske_utbytter(dividends, hist_prices, years=5):
-    """Hent totalt utbytte og yield per kalenderår for siste N år."""
-    if dividends.empty or hist_prices.empty:
+def hent_historiske_utbytter(dividends, hist_prices, years=5, current_price=0.0):
+    """Hent totalt utbytte og yield per kalenderår for siste N år.
+
+    Yields beregnes mot current_price (dagens kurs) for konsistens med
+    den viste current yield. Historiske yields vil da reflektere hva
+    en investor som kjøper NÅ ville fått i yield de historiske årene,
+    ikke hva en investor da faktisk fikk (som var basert på daværende kurs).
+    Dette er et bevisst designvalg for konsistent visning.
+    """
+    if dividends.empty:
         return [], 0.0
 
     current_year = datetime.datetime.today().year
@@ -461,18 +468,27 @@ def hent_historiske_utbytter(dividends, hist_prices, years=5):
 
     historiske = []
     yields = []
+    ref_price = current_price  # Bruk dagens kurs for alle historiske yields
 
     for year, total_div in div_per_year.items():
         total_div = float(total_div)
         if total_div <= 0:
             continue
-        year_hist = hist_prices[hist_prices.index.year == year]
-        if year_hist.empty:
+
+        # Fallback til årsluttpris hvis ingen current_price (f.eks. ved første fetch)
+        if ref_price <= 0 and not hist_prices.empty:
+            year_hist = hist_prices[hist_prices.index.year == year]
+            if not year_hist.empty:
+                ref_price_year = float(year_hist["Close"].iloc[-1])
+            else:
+                continue
+        else:
+            ref_price_year = ref_price if ref_price > 0 else 0.0
+
+        if ref_price_year <= 0:
             continue
-        year_end_price = float(year_hist["Close"].iloc[-1])
-        if year_end_price <= 0:
-            continue
-        year_yield = round((total_div / year_end_price) * 100, 2)
+
+        year_yield = round((total_div / ref_price_year) * 100, 2)
         historiske.append({"ar": int(year), "utbytte": round(total_div, 2), "yield": year_yield})
         yields.append(year_yield)
 
@@ -530,21 +546,39 @@ def hent_aksje(meta):
 
         raw_div_rate = safe_float(info.get("dividendRate") or info.get("trailingAnnualDividendRate"))
 
-        # Cross-valider mot faktiske utbetalinger siste 12 mnd
-        one_year_ago_div = datetime.datetime.today() - datetime.timedelta(days=365)
-        if not dividends.empty and dividends.index.tz:
-            one_year_ago_div = one_year_ago_div.astimezone(dividends.index.tz)
-        trailing_12m = dividends[dividends.index >= one_year_ago_div] if not dividends.empty else dividends
-        trailing_annual = float(trailing_12m.sum()) if not trailing_12m.empty else 0.0
+        # Cross-valider mot faktiske utbetalinger
+        # Bruker SISTE HELE KALENDERÅR som referanse (ikke trailing 12 mnd).
+        # Trailing 12 mnd har kjent feil: for aksjer med betalinger i to valutaer
+        # eller ved periodeveksling (f.eks. H2 forrige år + Q1 inneværende år)
+        # summerer trailing 12 mnd betalinger fra ulike perioder og gir for høy verdi.
+        today = datetime.datetime.today()
+        last_complete_year = today.year - 1
+        if not dividends.empty:
+            tz = dividends.index.tz
+            y_start = datetime.datetime(last_complete_year, 1, 1, tzinfo=tz) if tz else datetime.datetime(last_complete_year, 1, 1)
+            y_end   = datetime.datetime(last_complete_year, 12, 31, tzinfo=tz) if tz else datetime.datetime(last_complete_year, 12, 31)
+            last_year_divs = dividends[(dividends.index >= y_start) & (dividends.index <= y_end)]
+            last_year_total = float(last_year_divs.sum()) if not last_year_divs.empty else 0.0
 
-        if trailing_annual > 0 and raw_div_rate > 0:
-            # Hvis Yahoo avviker >50% fra faktiske utbetalinger, bruk faktiske
-            avvik = abs(trailing_annual - raw_div_rate) / raw_div_rate
+            # Trailing 12 mnd som sekundær referanse
+            one_year_ago = today - datetime.timedelta(days=365)
+            if tz:
+                one_year_ago = one_year_ago.astimezone(tz)
+            trailing_12m = dividends[dividends.index >= one_year_ago]
+            trailing_annual = float(trailing_12m.sum()) if not trailing_12m.empty else 0.0
+        else:
+            last_year_total = 0.0
+            trailing_annual = 0.0
+
+        # Primær: sammenlign mot siste hele år (fanger opp WAWI-type periodestabling)
+        ref = last_year_total if last_year_total > 0 else trailing_annual
+        if ref > 0 and raw_div_rate > 0:
+            avvik = abs(ref - raw_div_rate) / ref
             if avvik > 0.5:
-                print(f"    Advarsel: Yahoo dividendRate={raw_div_rate:.2f} avviker {avvik*100:.0f}% fra trailing={trailing_annual:.2f}. Bruker trailing.")
-                raw_div_rate = trailing_annual
-        elif trailing_annual > 0 and raw_div_rate == 0:
-            raw_div_rate = trailing_annual
+                print(f"    Advarsel: Yahoo dividendRate={raw_div_rate:.2f} avviker {avvik*100:.0f}% fra ref={ref:.2f} ({last_complete_year}-total). Bruker ref.")
+                raw_div_rate = ref
+        elif ref > 0 and raw_div_rate == 0:
+            raw_div_rate = ref
 
         # Yahoo Finance returnerer av og til dividendRate som yield-prosent
         # (f.eks. 13.93) i stedet for absolutt beløp per aksje (f.eks. 7.10 NOK).
@@ -554,11 +588,11 @@ def hent_aksje(meta):
             tentativ_yield = (raw_div_rate / pris) * 100
             if tentativ_yield > 100:
                 # dividendRate er sannsynligvis yield i prosent, ikke absolutt beløp
-                utbytte_per_aksje = round(raw_div_rate * pris / 100, 4)
+                utbytte_per_aksje = round(raw_div_rate * pris / 100, 2)
             else:
-                utbytte_per_aksje = raw_div_rate
+                utbytte_per_aksje = round(raw_div_rate, 2)  # Avrund alltid til 2 desimaler
         else:
-            utbytte_per_aksje = raw_div_rate
+            utbytte_per_aksje = round(raw_div_rate, 2)
 
         # Beregn yield fra pris og utbytte per aksje
         if pris > 0 and utbytte_per_aksje > 0:
@@ -582,8 +616,8 @@ def hent_aksje(meta):
         # Utbyttevekst 5 år CAGR
         utbytte_vekst_5ar = beregn_utbytte_vekst(dividends, years=5)
 
-        # Historiske utbytter per år + snitt yield
-        historiske_utbytter, snitt_yield_5ar = hent_historiske_utbytter(dividends, hist_prices)
+        # Historiske utbytter per år + snitt yield (beregnet mot dagens kurs)
+        historiske_utbytter, snitt_yield_5ar = hent_historiske_utbytter(dividends, hist_prices, current_price=pris)
 
         # Ukentlig kurshistorikk siste 52 uker (for kursgraf)
         kurs_historikk = []
@@ -658,10 +692,14 @@ def hent_aksje(meta):
 
         # Sanity-sjekk: hvis yield er mer enn 3× historisk snitt-yield, bruk snitt i stedet
         # (beskytter mot Yahoo Finance-feil med trailingAnnualDividendRate)
-        if snitt_yield_5ar > 0 and utbytte_yield > snitt_yield_5ar * 3:
-            print(f"    Advarsel [{ticker}]: yield {utbytte_yield:.1f}% >> snitt {snitt_yield_5ar:.1f}% — bruker snitt")
-            utbytte_yield = snitt_yield_5ar
-            utbytte_per_aksje = round(pris * snitt_yield_5ar / 100, 4) if pris > 0 else 0
+        # Fallback: hvis snitt_yield_5ar=0 (tom hist_prices), bruk trailing 12 mnd yield
+        effective_snitt = snitt_yield_5ar
+        if effective_snitt == 0 and pris > 0 and trailing_annual > 0:
+            effective_snitt = round(trailing_annual / pris * 100, 2)
+        if effective_snitt > 0 and utbytte_yield > effective_snitt * 3:
+            print(f"    Advarsel [{ticker}]: yield {utbytte_yield:.1f}% >> effektivt snitt {effective_snitt:.1f}% — bruker snitt")
+            utbytte_yield = effective_snitt
+            utbytte_per_aksje = round(pris * effective_snitt / 100, 2) if pris > 0 else 0
 
         resultat = {
             "ticker": ticker,
