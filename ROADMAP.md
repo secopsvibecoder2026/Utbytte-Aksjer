@@ -16,14 +16,6 @@ HUNT (298%), OTEC (105%), WEST (56%) har ekstreme snitt pga. historiske spesialu
 - [ ] Ekskluder år med `yield > 100%` i snitt-beregningen i `hent_historiske_utbytter()`
 - [ ] Vis advarsel på sider der `snitt5ar > 50%`
 
-### SEO — OG/Twitter meta-tagger mangler på alle genererte sider
-Deling på Facebook/Twitter/LinkedIn viser ingen forhåndsvisning. Bildet finnes (`/assets/og-image.png`).
-- [ ] Legg til i `_aksje_side_html()`: `og:image`, `og:locale`, `og:site_name`, Twitter Card
-- [ ] Legg til i `generer_sektorsider()`: samme + `og:type=website`
-- [ ] Legg til i `generer_aksjesider()` (inline `/aksjer/`-template): full OG-blokk
-- [ ] Legg til i `generer_topplistesider()`: `og:image`, `og:locale`, `og:site_name`, Twitter Card
-- [ ] Kjør `python scripts/regenerer_sider.py` og push
-
 ### Prisvarsel via push-notifikasjon
 `malPris`-feltet og push-infrastruktur finnes allerede i Service Worker.
 - [ ] Legg til `malPris`-sjekk i `sjekkExDatoer()` i `sw.js`
@@ -48,11 +40,6 @@ Ny bruker bruker lang tid på manuell innlegging. Nordnet eksporterer CSV med Da
 ### Betalingskalender — «Når får jeg utbytte?»
 Kalender-fanen viser ex-datoer, men ikke forventet betalingsdato per aksje i portefølje.
 - [ ] Ny visning i Kalender: «Mine utbetalinger» — gruppert per måned med beløp og sum
-
-### Månedlig utbytteplanlegger
-- [ ] Input: ønsket månedsinntekt (f.eks. 10 000 kr/mnd)
-- [ ] Beregn nødvendig kapital basert på porteføljens vektede yield
-- [ ] Vis fremgang: «Du er X % av veien til målet ditt»
 
 ### Skattesammendrag — årsoppsummering
 Skjermingsfradrag er allerede beregnet. Mangler samlet årsvisning.
@@ -86,9 +73,6 @@ Bærekraft-analyse vises i modal, men ikke i kortvisning.
 ## Lav prioritet
 
 ### Teknisk gjeld
-
-**Internlenking mellom aksjesider**
-- [ ] «Relaterte aksjer» (samme sektor) på bunnen av hver aksje-side
 
 **Virtuell scrolling**
 - [ ] Render bare synlige kort + buffer — viktig på mobil med 160+ aksjer
