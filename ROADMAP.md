@@ -82,7 +82,7 @@ Bærekraft-analyse vises i modal, men ikke i kortvisning.
 - [ ] `kalender.js` for `visKalender()`
 
 **E2E-tester**
-- [ ] Playwright: søk aksje → åpne modal → legg i portefølje
+- [x] Playwright: søk aksje → åpne modal → legg i portefølje (`tests/app.e2e.js`, 8 tester)
 - [ ] Kjør i GitHub Actions på PR
 
 **Staging-miljø**

@@ -2,10 +2,12 @@
   "name": "exday-tests",
   "scripts": {
     "test": "node --test tests/*.test.js",
+    "test:e2e": "playwright test",
     "build:css": "tailwindcss -i assets/tw-input.css -o assets/tailwind.css --minify",
     "watch:css": "tailwindcss -i assets/tw-input.css -o assets/tailwind.css --watch"
   },
   "devDependencies": {
+    "@playwright/test": "^1.59.1",
     "@tailwindcss/cli": "^4.2.2",
     "tailwindcss": "^4.2.2"
   }
