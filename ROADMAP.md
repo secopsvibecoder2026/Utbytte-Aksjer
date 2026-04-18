@@ -37,9 +37,13 @@ Ny bruker bruker lang tid på manuell innlegging. Nordnet eksporterer CSV med Da
 
 ## Medium prioritet
 
-### Betalingskalender — «Når får jeg utbytte?»
-Kalender-fanen viser ex-datoer, men ikke forventet betalingsdato per aksje i portefølje.
-- [ ] Ny visning i Kalender: «Mine utbetalinger» — gruppert per måned med beløp og sum
+### Porteføljesiden — visuell og funksjonell forbedring
+Portefølje-fanen er funksjonell, men har forbedringspotensial på layout, oversikt og brukervennlighet.
+- [ ] Bedre visuell oversikt over total porteføljeverdi og avkastning på toppen
+- [ ] Tydeligere skille mellom beholdning og transaksjonslogg per rad
+- [ ] Mobiloptimalisering av beholdningstabellen (horisontalt scroll / kompaktvisning)
+- [ ] Raskere tilgang til «Legg til»-skjemaet — reduser klikk
+- [ ] Grafisk fremstilling av porteføljesammensetning (sektor- eller aksjefordeling)
 
 ### Skattesammendrag — årsoppsummering
 Skjermingsfradrag er allerede beregnet. Mangler samlet årsvisning.

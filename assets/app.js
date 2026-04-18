@@ -41,6 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initViewToggle();
   initModal();
   initPFSubTabs();
+  initKalSubTabs();
   initPortefoljeVelger();
   initPortefolje();
   initWatchlister();

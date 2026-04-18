@@ -1235,6 +1235,7 @@ function visSektorer() {
 }
 
 function visKalender() {
+  if (_kalAktivTab === 'mine') { visMineUtbetalinger(); return; }
   const container = document.getElementById('kalender-innhold');
   const idag = new Date(); idag.setHours(0,0,0,0);
   const sok = (document.getElementById('sok')?.value || '').toLowerCase().trim();
@@ -1352,6 +1353,123 @@ function visKalender() {
   };
 }
 
+
+let _kalAktivTab = 'alle';
+
+function initKalSubTabs() {
+  function byttKalTab(tab) {
+    _kalAktivTab = tab;
+    document.querySelectorAll('.kal-sub-btn').forEach(b => {
+      const aktiv = b.dataset.kalTab === tab;
+      b.classList.toggle('bg-brand-600', aktiv);
+      b.classList.toggle('text-white', aktiv);
+      b.classList.toggle('text-gray-500', !aktiv);
+      b.classList.toggle('dark:text-gray-400', !aktiv);
+      b.classList.toggle('hover:bg-gray-100', !aktiv);
+      b.classList.toggle('dark:hover:bg-gray-800', !aktiv);
+    });
+    visKalender();
+  }
+
+  document.getElementById('tab-kalender').addEventListener('click', e => {
+    const btn = e.target.closest('.kal-sub-btn');
+    if (btn) byttKalTab(btn.dataset.kalTab);
+  });
+}
+
+function visMineUtbetalinger() {
+  const container = document.getElementById('kalender-innhold');
+  const pf = hentPF();
+  const idag = new Date(); idag.setHours(0, 0, 0, 0);
+  const MANED = ['jan','feb','mar','apr','mai','jun','jul','aug','sep','okt','nov','des'];
+
+  if (Object.keys(pf).length === 0) {
+    container.innerHTML = '<p class="text-gray-400 py-8 text-center">Ingen aksjer i portefølje. Legg til aksjer i Portefølje-fanen for å se betalingsoversikten.</p>';
+    return;
+  }
+
+  const innslag = Object.entries(pf)
+    .map(([ticker, antall]) => {
+      if (!antall || antall < 1) return null;
+      const a = alleAksjer.find(x => x.ticker === ticker);
+      if (!a) return null;
+      const dato = a.betaling_dato || a.ex_dato;
+      if (!dato) return null;
+      const type = a.betaling_dato ? 'utbytte' : 'ex';
+      const belopPerAksje = a.siste_utbytte || a.utbytte_per_aksje || 0;
+      return { a, antall, dato, type, belopPerAksje, totalBelop: antall * belopPerAksje };
+    })
+    .filter(Boolean)
+    .sort((x, y) => new Date(x.dato) - new Date(y.dato));
+
+  if (innslag.length === 0) {
+    container.innerHTML = '<p class="text-gray-400 py-8 text-center">Ingen kjente utbetalingsdatoer for aksjer i portefølje.</p>';
+    return;
+  }
+
+  const manedsMap = {};
+  innslag.forEach(i => {
+    const d = new Date(i.dato);
+    const key = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+    if (!manedsMap[key]) manedsMap[key] = [];
+    manedsMap[key].push(i);
+  });
+
+  container.innerHTML = Object.entries(manedsMap).map(([key, items]) => {
+    const [year, month] = key.split('-');
+    const manedNavn = new Date(parseInt(year), parseInt(month)-1, 1)
+      .toLocaleDateString('nb-NO', { month: 'long', year: 'numeric' });
+    const totalManed = items.reduce((s, i) => s + i.totalBelop, 0);
+
+    const rader = items.map(({ a, antall, dato, type, belopPerAksje, totalBelop }) => {
+      const d = new Date(dato + 'T00:00:00');
+      const erPassert = d < idag;
+      const dagerTil = Math.ceil((d - idag) / (1000*60*60*24));
+      const cfg = KAL_TYPER[type];
+      return `
+      <div class="kal-rad cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors ${erPassert ? 'opacity-40' : ''}" data-ticker="${a.ticker}">
+        <div class="flex items-center gap-3 flex-1 pointer-events-none">
+          <div class="text-center w-12 shrink-0">
+            <div class="text-xs text-gray-400">${MANED[d.getMonth()]}</div>
+            <div class="text-xl font-bold leading-none ${erPassert ? 'text-gray-400' : cfg.dag}">${d.getDate()}</div>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="text-xs font-semibold px-1.5 py-0.5 rounded ${cfg.bg} ${cfg.text}">${cfg.label}</span>
+              <span class="font-mono font-bold text-brand-700 dark:text-brand-400">${a.ticker}</span>
+              <span class="text-gray-600 dark:text-gray-400 text-sm truncate">${escHtml(a.navn)}</span>
+            </div>
+            <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+              ${antall} aksjer × ${fmt(belopPerAksje)} ${escHtml(a.valuta)}
+            </div>
+          </div>
+        </div>
+        <div class="flex items-center gap-3 shrink-0 pointer-events-none">
+          <div class="text-right">
+            <div class="font-semibold text-brand-700 dark:text-brand-400">${fmt(totalBelop)} ${escHtml(a.valuta)}</div>
+            <div class="text-xs text-gray-400">${erPassert ? 'Passert' : dagerTil === 0 ? 'I dag!' : dagerTil === 1 ? 'I morgen' : `om ${dagerTil}d`}</div>
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+
+    return `
+    <div class="rounded-xl border border-gray-200 dark:border-gray-800 overflow-hidden shadow-sm">
+      <div class="px-4 py-3 bg-gray-100 dark:bg-gray-900 font-semibold capitalize flex items-center justify-between">
+        <span>${manedNavn}</span>
+        <span class="text-sm font-semibold text-brand-700 dark:text-brand-400">≈ ${fmt(totalManed)} NOK</span>
+      </div>
+      <div class="divide-y divide-gray-100 dark:divide-gray-800">${rader}</div>
+    </div>`;
+  }).join('');
+
+  container.onclick = e => {
+    const rad = e.target.closest('[data-ticker]');
+    if (!rad) return;
+    const aksje = alleAksjer.find(a => a.ticker === rad.dataset.ticker);
+    if (aksje) visModal(aksje);
+  };
+}
 
 function stjerne(ticker, ekstraKlasse = '') {
   const er = erFavoritt(ticker);
