@@ -1,116 +1,112 @@
-# exday.no — Prosjektoversikt og veikart
+# exday.no — Veikart
 
-Norsk utbytteaksje-tracker for Oslo Børs. Data hentes automatisk fra Yahoo Finance hverdager kl 08:00 og siden hostes på GitHub Pages.
-
-Fullførte funksjoner er dokumentert i [ROADMAP_COMPLETED.md](ROADMAP_COMPLETED.md).
+Norsk utbytteaksje-tracker for Oslo Børs. Fullførte funksjoner: [ROADMAP_COMPLETED.md](ROADMAP_COMPLETED.md)
 
 ---
 
-## Planlagt
+## Høy prioritet
+
+### Datakvalitet — fjern aksjer uten utbyttedata
+16 aksjer har `upa=0`, `yield=0`, `hist=0` og hører ikke hjemme på en utbytteside:
+PGS, DOF, NRC, ENDUR, NKR, BWE, CADLR, KMCP, BORR, CAPT, ISLAX, AFISH, HEX, ACR, NOD, KOA
+- [ ] Fjern fra `tickers.json` og regenerer alle sider
+
+### Datakvalitet — fiks misvisende snitt_yield_5ar i fetch_stocks.py
+HUNT (298%), OTEC (105%), WEST (56%) har ekstreme snitt pga. historiske spesialutbytter ved nåværende lav kurs.
+- [ ] Ekskluder år med `yield > 100%` i snitt-beregningen i `hent_historiske_utbytter()`
+- [ ] Vis advarsel på sider der `snitt5ar > 50%`
+
+### SEO — OG/Twitter meta-tagger mangler på alle genererte sider
+Deling på Facebook/Twitter/LinkedIn viser ingen forhåndsvisning. Bildet finnes (`/assets/og-image.png`).
+- [ ] Legg til i `_aksje_side_html()`: `og:image`, `og:locale`, `og:site_name`, Twitter Card
+- [ ] Legg til i `generer_sektorsider()`: samme + `og:type=website`
+- [ ] Legg til i `generer_aksjesider()` (inline `/aksjer/`-template): full OG-blokk
+- [ ] Legg til i `generer_topplistesider()`: `og:image`, `og:locale`, `og:site_name`, Twitter Card
+- [ ] Kjør `python scripts/regenerer_sider.py` og push
+
+### Prisvarsel via push-notifikasjon
+`malPris`-feltet og push-infrastruktur finnes allerede i Service Worker.
+- [ ] Legg til `malPris`-sjekk i `sjekkExDatoer()` i `sw.js`
+- [ ] Send varsel: «{TICKER} har truffet målprisen din på {pris} kr»
+- [ ] Lagre «varslet»-flagg per målpris for å unngå gjentatte varsler
+
+### Import fra Nordnet/DNB CSV
+Ny bruker bruker lang tid på manuell innlegging. Nordnet eksporterer CSV med Dato, Ticker, Antall, Kurs.
+- [ ] Parser for Nordnet-transaksjonseksport
+- [ ] Parser for DNB Aksjehandel-eksport
+- [ ] Preview-modal med deduplisering
+
+### AdSense-optimalisering
+- [ ] Manuell annonseenhet mellom sammendragskort og aksjelist
+- [ ] Manuell annonseenhet i bunnen av aksjemodal
+- [ ] Rapporter klikk-rate og RPM i GA4
+
+---
+
+## Medium prioritet
+
+### Betalingskalender — «Når får jeg utbytte?»
+Kalender-fanen viser ex-datoer, men ikke forventet betalingsdato per aksje i portefølje.
+- [ ] Ny visning i Kalender: «Mine utbetalinger» — gruppert per måned med beløp og sum
+
+### Månedlig utbytteplanlegger
+- [ ] Input: ønsket månedsinntekt (f.eks. 10 000 kr/mnd)
+- [ ] Beregn nødvendig kapital basert på porteføljens vektede yield
+- [ ] Vis fremgang: «Du er X % av veien til målet ditt»
+
+### Skattesammendrag — årsoppsummering
+Skjermingsfradrag er allerede beregnet. Mangler samlet årsvisning.
+- [ ] Ny seksjon i Statistikk-fanen: «Skatteåret {år}»
+- [ ] Totalt mottatt utbytte, skjermingsfradrag, skattepliktig beløp og estimert skatt (37,84%)
+- [ ] Eksporter til PDF eller klippebord
+
+### Utbyttebærekraft på aksjekortet
+Bærekraft-analyse vises i modal, men ikke i kortvisning.
+- [ ] Vurder subtilt ikon (skjold) i stedet for tekst-badge
+
+### Datapipeline-validering
+- [ ] Varsel i GitHub Actions ved yield > 30%, pris = 0 eller manglende felt på >50% av aksjene
+
+### Bloggseksjon / artikler
+- [ ] `/artikler/hva-er-ex-dato/`
+- [ ] `/artikler/beste-utbytteaksjer-2026/`
+- [ ] `/artikler/utbytte-skatt-norge/`
+
+### Strukturerte data for aksjesider
+- [ ] `Corporation`-schema med `tickerSymbol` i JSON-LD
+- [ ] `FAQPage`-schema: «Hva er ex-dato for {TICKER}?»
+
+### Ytterligere aksjer
+- [ ] Merk aksjer uten live-kurs tydelig («Kurs ikke tilgjengelig»)
+- [ ] Undersøk Euronext API for manglende tickers
+- [ ] Vurder Oslo Børs Small Cap-aksjer med stabil utbyttehistorikk
+
+---
+
+## Lav prioritet
 
 ### Teknisk gjeld
 
-#### T6. Testmiljø (staging-site) 🧪
-**Prioritet: Medium**
+**Internlenking mellom aksjesider**
+- [ ] «Relaterte aksjer» (samme sektor) på bunnen av hver aksje-side
 
-- [ ] Opprett `dev`-branch for løpende utvikling
-- [ ] Koble repo til Netlify (gratis) — deploy fra `dev`-branch
-- [ ] Staging-URL: f.eks. `exday-staging.netlify.app`
-- [ ] Produksjon (`main`) forblir på GitHub Pages / exday.no
-- [ ] Vurdere automatisk preview-URL per pull request via Netlify
+**Virtuell scrolling**
+- [ ] Render bare synlige kort + buffer — viktig på mobil med 160+ aksjer
 
-#### T4b. Validering av datapipeline 🧪
-**Prioritet: Medium**
+**Splitt ui.js (1 600+ linjer)**
+- [ ] `modal.js` for `visModal()` og `scoreForklaring()`
+- [ ] `kalender.js` for `visKalender()`
 
-- [ ] Varsle i GitHub Actions hvis yield > 30%, pris = 0, eller manglende felt på mer enn halvparten av aksjene i `fetch_stocks.py` output
+**E2E-tester**
+- [ ] Playwright: søk aksje → åpne modal → legg i portefølje
+- [ ] Kjør i GitHub Actions på PR
 
----
-
-### SEO og vekst
-
-#### 29. Google Search Console — sitemap-innsending 🔍 ✅
-**Prioritet: Høy — raskest SEO-gevinst**
-
-- [x] Verifiser exday.no i Google Search Console
-- [x] Send inn sitemap.xml (83 URL-er inkl. alle aksjesider)
-- [x] Sjekk indekseringsstatus for aksjer/TICKER/-sidene
-
-#### 30. Sektorsider 📂 ✅
-**Prioritet: Medium — flere SEO-landingssider**
-
-- [x] Generer `aksjer/sektor/energi/`, `aksjer/sektor/finans/` osv. i fetch_stocks.py
-- [x] Oversiktsside per sektor med alle aksjer i sektoren
-- [x] Legg til i sitemap.xml (99 URL-er totalt)
-- [x] Interne lenker fra enkeltaksjesider til sektorsiden
-
-#### 31. Interne lenker mellom app og aksjesider 🔗 ✅
-**Prioritet: Medium**
-
-- [x] Legg til lenke fra aksjemodal i hovedappen til `exday.no/aksjer/TICKER/`
-- [x] Lenken åpner SEO-siden med full info og historikk
-
-#### 32. Flere aksjer 📈 ✅
-**Prioritet: Medium**
-
-- [x] Utvidet fra 66 til 80 aksjer (20 tickers utilgjengelig på Yahoo Finance)
-- [x] Legg til i AKSJER-listen i fetch_stocks.py
-
----
-
-### Portefølje og analyse
-
-#### 35. Reinvesteringskalkulator (DRIP) 📈
-**Prioritet: Høy**
-
-- [ ] Inndata: startbeløp, månedlig sparing, yield, vekst i utbytte, antall år
-- [ ] Beregn porteføljeverdi med og uten reinvestering av utbytte
-- [ ] Visuelt graf som viser renters rente-effekten over tid
-- [ ] Legg til i Kalkulator-fanen som egen seksjon
-
-#### 36. Utbyttebærekraft-analyse 🛡️
-**Prioritet: Medium**
-
-- [ ] Kombiner payout ratio, gjeldsnivå og inntjeningsvekst til én "trygghetsscore" per aksje
-- [ ] Vis score i aksjekortet og aksjemodalen
-- [ ] Enkel fargekoding: grønn / gul / rød
-
-#### 37. Porteføljesammenligning mot OSEBX 📊 ✅
-**Prioritet: Medium**
-
-- [x] Hent OSEBX total return-data (inkl. utbytte)
-- [x] Sammenlign brukerens portefølje mot samme investering i indeksfond
-- [x] Vis som graf i Portefølje → Oversikt-fanen
-
-#### 38. Månedlig utbytteplanlegger 🎯
-**Prioritet: Medium**
-
-- [ ] Omvendt kalkulator: bruker setter inn ønsket månedsinntekt fra utbytte
-- [ ] Appen beregner nødvendig investert beløp per aksje / totalt
-- [ ] Valgfritt: fordel automatisk på aksjer basert på yield og sektor
-- [ ] Legg til i Kalkulator-fanen
-
----
+**Staging-miljø**
+- [ ] Netlify-deploy fra `dev`-branch med preview-URL per PR
 
 ### Monetisering
-
-#### 33. AdSense-godkjenning og annonseenheter 💰
-**Prioritet: Høy — avventer Googles gjennomgang**
-
-- [ ] Vente på AdSense-godkjenning
-- [ ] Vurdere manuelle annonseenheter i tillegg til auto-ads
-- [ ] Teste annonsevisning og samtykkeflyt
+- [ ] «Støtt prosjektet»-knapp (Ko-fi / Vipps) — vises etter 5 besøk
 
 ---
 
-### Brukeropplevelse
-
-#### 34. Mobilgjennomgang 📱
-**Prioritet: Medium**
-
-- [ ] Grundig test på mobil etter alle nylige endringer
-- [ ] Særlig: Statistikk-fanen, Innstillinger-siden (/innstillinger/), kalendervisning
-- [ ] Vurdere forenkling av Portefølje-fanen på liten skjerm
-
----
-
-Dette er et privat prosjekt. Kontakt via GitHub Issues for spørsmål eller feilrapporter.
+*Sist oppdatert: april 2026*
