@@ -174,6 +174,7 @@
       --ib-gray:   #e2e8f0; --ib-gray-c:   #4b5563;
       --ib-violet: #ddd6fe; --ib-violet-c: #7c3aed;
       --ib-green:  #bbf7d0; --ib-green-c:  #15803d;
+      --card-green-bg: #f0fdf4; --card-green-border: #bbf7d0;
     }
     html.dark {
       --ib-orange: rgba(154,52,18,0.5);  --ib-orange-c: #fb923c;
@@ -184,6 +185,7 @@
       --ib-gray:   #374151;              --ib-gray-c:   #9ca3af;
       --ib-violet: rgba(76,29,149,0.5);  --ib-violet-c: #a78bfa;
       --ib-green:  rgba(20,83,45,0.5);   --ib-green-c:  #4ade80;
+      --card-green-bg: rgba(5,46,22,0.4); --card-green-border: #166534;
     }
   </style>
 </head>
@@ -376,7 +378,7 @@
       </a>
 
       <!-- Se alle sektorer -->
-      <a href="/utforsk/" class="sektor-kort bg-green-50 dark:bg-green-950/40 rounded-xl p-4 border border-green-200 dark:border-green-800 flex flex-col gap-2 no-underline">
+      <a href="/utforsk/" class="sektor-kort rounded-xl p-4 flex flex-col gap-2 no-underline" style="background:var(--card-green-bg);border:1px solid var(--card-green-border);">
         <div style="background:var(--ib-green);color:var(--ib-green-c);align-self:flex-start;flex-shrink:0;width:2.25rem;height:2.25rem;min-width:2.25rem;border-radius:0.5rem;display:flex;align-items:center;justify-content:center;">
           <svg class="w-5 h-5 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
         </div>
