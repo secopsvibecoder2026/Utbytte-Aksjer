@@ -175,6 +175,10 @@
       --ib-violet: #ddd6fe; --ib-violet-c: #7c3aed;
       --ib-green:  #bbf7d0; --ib-green-c:  #15803d;
       --card-green-bg: #f0fdf4; --card-green-border: #bbf7d0;
+      --vk-green: #f0fdf4; --vk-green-c: #16a34a;
+      --vk-blue:  #eff6ff; --vk-blue-c:  #2563eb;
+      --vk-purp:  #faf5ff; --vk-purp-c:  #9333ea;
+      --vk-orng:  #fff7ed; --vk-orng-c:  #ea580c;
     }
     html.dark {
       --ib-orange: rgba(154,52,18,0.5);  --ib-orange-c: #fb923c;
@@ -186,6 +190,10 @@
       --ib-violet: rgba(76,29,149,0.5);  --ib-violet-c: #a78bfa;
       --ib-green:  rgba(20,83,45,0.5);   --ib-green-c:  #4ade80;
       --card-green-bg: rgba(5,46,22,0.4); --card-green-border: #166534;
+      --vk-green: rgba(20,83,45,0.35);  --vk-green-c: #4ade80;
+      --vk-blue:  rgba(30,58,138,0.35); --vk-blue-c:  #60a5fa;
+      --vk-purp:  rgba(88,28,135,0.35); --vk-purp-c:  #c084fc;
+      --vk-orng:  rgba(154,52,18,0.35); --vk-orng-c:  #fb923c;
     }
   </style>
 </head>
@@ -398,8 +406,8 @@
       <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
 
         <a href="/utbyttekalender/" class="group flex flex-col gap-3 p-4 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-green-400 dark:hover:border-green-600 transition-colors no-underline">
-          <div style="align-self:flex-start;flex-shrink:0" class="w-10 h-10 rounded-xl bg-green-50 dark:bg-green-900/30 flex items-center justify-center group-hover:bg-green-100 dark:group-hover:bg-green-900/60 transition-colors">
-            <svg class="w-5 h-5 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          <div style="align-self:flex-start;flex-shrink:0;width:2.5rem;height:2.5rem;border-radius:0.75rem;display:flex;align-items:center;justify-content:center;background:var(--vk-green);color:var(--vk-green-c);">
+            <svg style="width:1.25rem;height:1.25rem;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true" class="text-green-600 dark:text-green-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
           </div>
           <div>
             <div class="font-semibold text-sm text-gray-900 dark:text-gray-100">Utbyttekalender</div>
@@ -408,8 +416,8 @@
         </a>
 
         <a href="/utbyttekalkulator/" class="group flex flex-col gap-3 p-4 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-green-400 dark:hover:border-green-600 transition-colors no-underline">
-          <div style="align-self:flex-start;flex-shrink:0" class="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center group-hover:bg-blue-100 dark:group-hover:bg-blue-900/60 transition-colors">
-            <svg class="w-5 h-5 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="12" y2="14"/></svg>
+          <div style="align-self:flex-start;flex-shrink:0;width:2.5rem;height:2.5rem;border-radius:0.75rem;display:flex;align-items:center;justify-content:center;background:var(--vk-blue);color:var(--vk-blue-c);">
+            <svg style="width:1.25rem;height:1.25rem;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true" class="text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="12" y2="14"/></svg>
           </div>
           <div>
             <div class="font-semibold text-sm text-gray-900 dark:text-gray-100">Kalkulator</div>
@@ -418,8 +426,8 @@
         </a>
 
         <a href="/faq/" class="group flex flex-col gap-3 p-4 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-green-400 dark:hover:border-green-600 transition-colors no-underline">
-          <div style="align-self:flex-start;flex-shrink:0" class="w-10 h-10 rounded-xl bg-purple-50 dark:bg-purple-900/30 flex items-center justify-center group-hover:bg-purple-100 dark:group-hover:bg-purple-900/60 transition-colors">
-            <svg class="w-5 h-5 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <div style="align-self:flex-start;flex-shrink:0;width:2.5rem;height:2.5rem;border-radius:0.75rem;display:flex;align-items:center;justify-content:center;background:var(--vk-purp);color:var(--vk-purp-c);">
+            <svg style="width:1.25rem;height:1.25rem;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true" class="text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
           </div>
           <div>
             <div class="font-semibold text-sm text-gray-900 dark:text-gray-100">FAQ</div>
@@ -428,8 +436,8 @@
         </a>
 
         <a href="/aksjer/" class="group flex flex-col gap-3 p-4 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-green-400 dark:hover:border-green-600 transition-colors no-underline">
-          <div style="align-self:flex-start;flex-shrink:0" class="w-10 h-10 rounded-xl bg-orange-50 dark:bg-orange-900/30 flex items-center justify-center group-hover:bg-orange-100 dark:group-hover:bg-orange-900/60 transition-colors">
-            <svg class="w-5 h-5 text-orange-600 dark:text-orange-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+          <div style="align-self:flex-start;flex-shrink:0;width:2.5rem;height:2.5rem;border-radius:0.75rem;display:flex;align-items:center;justify-content:center;background:var(--vk-orng);color:var(--vk-orng-c);">
+            <svg style="width:1.25rem;height:1.25rem;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true" class="text-orange-600 dark:text-orange-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
           </div>
           <div>
             <div class="font-semibold text-sm text-gray-900 dark:text-gray-100">Alle aksjer</div>
@@ -556,7 +564,7 @@
   </section>
 
   <!-- ── APP CTA ─────────────────────────────────────────────────────── -->
-  <section class="bg-gradient-to-r from-green-600 to-green-700 dark:from-green-800 dark:to-green-900">
+  <section style="background:#166534;">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 py-10 sm:py-12 text-center">
       <h2 class="text-xl sm:text-2xl font-bold text-white mb-3">Klar til å bygge din utbytteportefølje?</h2>
       <p class="text-green-100 mb-6 max-w-xl mx-auto text-sm sm:text-base leading-relaxed">
