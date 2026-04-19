@@ -6,6 +6,7 @@ const NOTIF_CACHE = 'notif-prefs-v1';
 
 const PRECACHE = [
   '/',
+  '/app.html',
   '/innstillinger/',
   '/assets/storage.js',
   '/assets/ui.js',
