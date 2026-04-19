@@ -1669,12 +1669,12 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
   <header class="ak-header">
     <div class="ak-inner" style="max-width:760px;">
       <div class="ak-left">
-        <a href="/" class="ak-back">
+        <a href="/utforsk/" class="ak-back">
           <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
-          exday.no
+          Utforsk
         </a>
         <span class="ak-sep">/</span>
-        <a href="/aksjer/" class="ak-back">{navn[:18]}{'…' if len(navn) > 18 else ''}</a>
+        <a href="/aksjer/sektor/{_sektor_slug(sektor)}/" class="ak-back">{sektor}</a>
       </div>
       <button id="dark-toggle" class="ak-toggle" aria-label="Bytt fargemodus">
         <svg class="sun-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
@@ -2257,9 +2257,9 @@ def generer_sektorsider(aksjer, root_dir):
   <header class="ak-header">
     <div class="ak-inner">
       <div class="ak-left">
-        <a href="/" class="ak-back">
+        <a href="/utforsk/" class="ak-back">
           <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
-          exday.no
+          Utforsk
         </a>
         <span class="ak-sep">/</span>
         <span class="ak-title">{sektor}</span>
