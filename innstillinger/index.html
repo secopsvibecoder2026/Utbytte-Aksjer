@@ -98,6 +98,25 @@
       <div id="varsler-status" class="p-5"></div>
     </section>
 
+    <!-- STARTSIDE -->
+    <section class="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
+      <div class="px-5 py-4 border-b border-gray-100 dark:border-gray-800">
+        <h2 class="font-semibold text-base">Startside</h2>
+      </div>
+      <div class="px-5 py-4">
+        <label class="flex items-center justify-between gap-4 cursor-pointer">
+          <div>
+            <p class="text-sm font-medium text-gray-900 dark:text-gray-100">Åpne appen direkte</p>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Hopp over landingssiden og gå rett til appen når du besøker exday.no</p>
+          </div>
+          <button id="startside-toggle" role="switch" aria-checked="false"
+            class="relative shrink-0 w-11 h-6 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 bg-gray-200 dark:bg-gray-700">
+            <span class="block w-4 h-4 rounded-full bg-white shadow transition-transform translate-x-1"></span>
+          </button>
+        </label>
+      </div>
+    </section>
+
     <!-- GUIDE -->
     <section class="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
       <div class="px-5 py-4 border-b border-gray-100 dark:border-gray-800">
@@ -389,6 +408,27 @@
         visVarsler();
       });
     }
+  })();
+
+  // ── STARTSIDE-TOGGLE ────────────────────────────────────────────────────────
+  (function() {
+    const btn = document.getElementById('startside-toggle');
+    const span = btn.querySelector('span');
+    function oppdaterToggle(aktiv) {
+      btn.setAttribute('aria-checked', String(aktiv));
+      btn.classList.toggle('bg-brand-600', aktiv);
+      btn.classList.toggle('dark:bg-brand-500', aktiv);
+      btn.classList.toggle('bg-gray-200', !aktiv);
+      btn.classList.toggle('dark:bg-gray-700', !aktiv);
+      span.classList.toggle('translate-x-6', aktiv);
+      span.classList.toggle('translate-x-1', !aktiv);
+    }
+    oppdaterToggle(localStorage.getItem('start_side') === 'app');
+    btn.addEventListener('click', () => {
+      const aktiv = localStorage.getItem('start_side') !== 'app';
+      localStorage.setItem('start_side', aktiv ? 'app' : 'landing');
+      oppdaterToggle(aktiv);
+    });
   })();
 
   // ── GUIDE — restart onboarding ───────────────────────────────────────────────

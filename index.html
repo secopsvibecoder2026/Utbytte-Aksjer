@@ -137,11 +137,14 @@
   }
   </script>
 
-  <!-- Mørkt tema -->
+  <!-- Mørkt tema + startside-redirect -->
   <script>
     (function() {
       if (localStorage.getItem('tema') !== 'light') {
         document.documentElement.classList.add('dark');
+      }
+      if (localStorage.getItem('start_side') === 'app') {
+        window.location.replace('/app/');
       }
     })();
   </script>
