@@ -52,9 +52,20 @@ Bærekraft-analyse vises i modal, men ikke i kortvisning.
 - [ ] Varsel i GitHub Actions ved yield > 30%, pris = 0 eller manglende felt på >50% av aksjene
 
 ### Bloggseksjon / artikler
-- [ ] `/artikler/hva-er-ex-dato/`
-- [ ] `/artikler/beste-utbytteaksjer-2026/`
-- [ ] `/artikler/utbytte-skatt-norge/`
+10 artikler planlagt (1 500–3 000 ord, norsk, SEO-optimalisert med JSON-LD, dark mode, samme design som FAQ):
+
+- [x] `/artikler/hva-er-ex-dato/` — Alt om ex-dato: T+2, kursfall, skatt, strategi
+- [ ] `/artikler/beste-utbytteaksjer-2026/` — Redaksjonell gjennomgang av ledende norske utbytteaksjer
+- [ ] `/artikler/utbytte-skatt-norge/` — Skatteregler: ASK vs. VPS, skjermingsfradrag, 37,84%
+- [ ] `/artikler/aksjesparekonto-ask/` — Komplett guide til ASK for utbytteinvestorer
+- [ ] `/artikler/bygge-utbytteportefolje/` — Steg-for-steg: diversifisering, sektorvekting, rebalansering
+- [ ] `/artikler/reinvestering-utbytte/` — DRIP og rentes-rente-effekten over 20 år (med eksempler)
+- [ ] `/artikler/shipping-aksjer-utbytte/` — Norske shippingaksjer: høy yield, syklisitet, risiko
+- [ ] `/artikler/sparebanker-utbytte/` — Hvorfor sparebanker gir stabile utbytter år etter år
+- [ ] `/artikler/payout-ratio/` — Hva payout ratio forteller deg om utbyttets bærekraft
+- [ ] `/artikler/lese-utbyttekalender/` — Slik bruker du utbyttekalenderen til å planlegge kontantstrøm
+
+Også opprett `/artikler/index.html` som oversiktsside for alle artikler.
 
 ### Strukturerte data for aksjesider
 - [ ] `Corporation`-schema med `tickerSymbol` i JSON-LD

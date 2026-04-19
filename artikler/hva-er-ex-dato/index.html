@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3981936786393038"
+     crossorigin="anonymous"></script>
+
+  <!-- Google Analytics med Consent Mode v2 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-X6C9PERKMB"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', {
+      analytics_storage: 'denied',
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      wait_for_update: 500
+    });
+    gtag('js', new Date());
+    gtag('config', 'G-X6C9PERKMB');
+  </script>
+  <script src="/assets/consent.js" defer></script>
+
+  <link rel="icon" type="image/png" href="/favicon.png" sizes="512x512" />
+  <link rel="apple-touch-icon" href="/logo/apple_touch_icon_180.png" />
+  <link rel="icon" type="image/svg+xml" href="/logo/exday_icon_primary.svg" />
+
+  <title>Hva er ex-dato? Komplett guide for norske investorer | exday.no</title>
+  <meta name="description" content="Ex-dato forklart fra bunnen av: hva det betyr, T+2 oppgjør på Oslo Børs, kursfallet på ex-dag, skatt og strategi. Alt du trenger å vite for å ikke gå glipp av utbytte." />
+  <link rel="canonical" href="https://exday.no/artikler/hva-er-ex-dato/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://exday.no/artikler/hva-er-ex-dato/" />
+  <meta property="og:title" content="Hva er ex-dato? Komplett guide for norske investorer" />
+  <meta property="og:description" content="Ex-dato forklart fra bunnen av: hva det betyr, T+2 oppgjør, kursfallet på ex-dag, skatt og strategi." />
+  <meta property="og:site_name" content="exday.no" />
+
+  <link rel="stylesheet" href="/assets/tailwind.css" />
+  <link rel="stylesheet" href="/assets/style.css" />
+
+  <script>
+    (function() {
+      var t = localStorage.getItem('tema');
+      if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
+      }
+    })();
+  </script>
+
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+    .prose h2 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      margin-top: 2.5rem;
+      margin-bottom: 0.75rem;
+      color: inherit;
+    }
+    .prose h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-top: 1.75rem;
+      margin-bottom: 0.5rem;
+      color: inherit;
+    }
+    .prose p { margin-bottom: 1rem; line-height: 1.75; }
+    .prose ul { margin: 0.75rem 0 1rem 1.5rem; list-style: disc; }
+    .prose ol { margin: 0.75rem 0 1rem 1.5rem; list-style: decimal; }
+    .prose li { margin-bottom: 0.4rem; line-height: 1.7; }
+    .prose table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.9rem; }
+    .prose th { text-align: left; padding: 0.6rem 0.9rem; background: #f3f4f6; font-weight: 600; border: 1px solid #e5e7eb; }
+    .dark .prose th { background: #1f2937; border-color: #374151; }
+    .prose td { padding: 0.6rem 0.9rem; border: 1px solid #e5e7eb; vertical-align: top; }
+    .dark .prose td { border-color: #374151; }
+    .prose tr:nth-child(even) td { background: #f9fafb; }
+    .dark .prose tr:nth-child(even) td { background: #111827; }
+    .callout {
+      border-left: 4px solid #2563eb;
+      background: #eff6ff;
+      padding: 1rem 1.25rem;
+      border-radius: 0 0.5rem 0.5rem 0;
+      margin: 1.5rem 0;
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+    .dark .callout { background: #1e3a5f; border-color: #3b82f6; }
+    .callout-warn {
+      border-color: #d97706;
+      background: #fffbeb;
+    }
+    .dark .callout-warn { background: #2d1f00; border-color: #f59e0b; }
+    details summary { cursor: pointer; list-style: none; }
+    details summary::-webkit-details-marker { display: none; }
+    details summary .chevron { transition: transform 0.2s ease; flex-shrink: 0; }
+    details[open] summary .chevron { transform: rotate(180deg); }
+    .toc a { color: #2563eb; text-decoration: none; }
+    .toc a:hover { text-decoration: underline; }
+    .dark .toc a { color: #60a5fa; }
+  </style>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Hva er ex-dato? Komplett guide for norske investorer",
+    "description": "Ex-dato forklart fra bunnen av: hva det betyr, T+2 oppgjør på Oslo Børs, kursfallet på ex-dag, skatt og strategi.",
+    "url": "https://exday.no/artikler/hva-er-ex-dato/",
+    "datePublished": "2026-04-19",
+    "dateModified": "2026-04-19",
+    "author": { "@type": "Organization", "name": "exday.no" },
+    "publisher": {
+      "@type": "Organization",
+      "name": "exday.no",
+      "url": "https://exday.no"
+    },
+    "mainEntityOfPage": { "@type": "WebPage", "@id": "https://exday.no/artikler/hva-er-ex-dato/" }
+  }
+  </script>
+</head>
+<body class="bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 min-h-screen">
+<div class="max-w-2xl mx-auto px-6 pt-10 pb-20">
+
+  <!-- NAV -->
+  <div class="flex items-center justify-between mb-10">
+    <a href="/" class="inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+      exday.no
+    </a>
+    <button id="dark-toggle" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500 dark:text-gray-400 transition-colors" aria-label="Bytt fargemodus">
+      <svg class="w-5 h-5 dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+      <svg class="w-5 h-5 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+    </button>
+  </div>
+
+  <!-- BREADCRUMB -->
+  <nav class="text-xs text-gray-400 dark:text-gray-600 mb-6" aria-label="Brødsmulesti">
+    <a href="/" class="hover:text-gray-600 dark:hover:text-gray-400">exday.no</a>
+    <span class="mx-1.5">›</span>
+    <a href="/artikler/" class="hover:text-gray-600 dark:hover:text-gray-400">Artikler</a>
+    <span class="mx-1.5">›</span>
+    <span>Hva er ex-dato?</span>
+  </nav>
+
+  <!-- HEADER -->
+  <header class="mb-8">
+    <p class="text-xs font-semibold uppercase tracking-widest text-blue-600 dark:text-blue-400 mb-3">Guide · Grunnleggende</p>
+    <h1 class="text-3xl font-bold leading-tight mb-4">Hva er ex-dato? Komplett guide for norske investorer</h1>
+    <p class="text-lg text-gray-600 dark:text-gray-400 leading-relaxed">
+      Ex-dato er en av de viktigste datoene du må forstå som utbytteinvestor. Kjøper du aksjen én dag for sent, mister du hele utbyttet for den perioden. Her forklarer vi alt: hva ex-dato betyr, hvordan T+2-oppgjøret på Oslo Børs fungerer, hva som skjer med kursen — og hvordan du planlegger investeringene dine rundt ex-datoen.
+    </p>
+    <div class="flex items-center gap-4 mt-5 text-xs text-gray-400 dark:text-gray-600">
+      <span>Publisert 19. april 2026</span>
+      <span>·</span>
+      <span>8 min lesing</span>
+    </div>
+  </header>
+
+  <!-- INNHOLDSFORTEGNELSE -->
+  <nav class="toc bg-gray-50 dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-5 mb-10" aria-label="Innholdsfortegnelse">
+    <p class="text-xs font-semibold uppercase tracking-widest text-gray-500 dark:text-gray-500 mb-3">Innhold</p>
+    <ol class="space-y-1.5 text-sm">
+      <li><a href="#hva-er-ex-dato">1. Hva er ex-dato?</a></li>
+      <li><a href="#tre-datoer">2. De tre datoene: ex-dato, record date og utbetalingsdato</a></li>
+      <li><a href="#t-pluss-to">3. T+2 oppgjør på Oslo Børs</a></li>
+      <li><a href="#kursfallet">4. Hva skjer med kursen på ex-dato?</a></li>
+      <li><a href="#skatt">5. Skatt og ex-dato</a></li>
+      <li><a href="#strategi">6. Strategi rundt ex-dato</a></li>
+      <li><a href="#vanlige-feil">7. Vanlige feil</a></li>
+      <li><a href="#faq">8. Spørsmål og svar</a></li>
+    </ol>
+  </nav>
+
+  <article class="prose text-gray-800 dark:text-gray-200">
+
+    <!-- SEKSJON 1 -->
+    <h2 id="hva-er-ex-dato">1. Hva er ex-dato?</h2>
+    <p>
+      Ex-dato — eller ex-dividend date på engelsk — er den første handelsdagen der en aksje handles <em>uten</em> rett til det kommende utbyttet. Selve ordet «ex» er latin og betyr «uten». Kjøper du aksjen på ex-dato eller senere, er du for sent ute: utbyttet tilfaller den som solgte deg aksjen, ikke deg.
+    </p>
+    <p>
+      For å motta utbyttet må du være registrert som aksjonær dagen <strong>før</strong> ex-dato. Dette kalles «record date», og det er per denne datoen selskapet setter opp listen over hvem som skal motta utbyttet.
+    </p>
+    <div class="callout">
+      <strong>Huskeregel:</strong> Vil du ha utbyttet, må du kjøpe aksjen <em>senest dagen før ex-dato</em>. Selger du aksjen på ex-dato eller etter, beholder du retten til utbyttet — fordi du var registrert som eier på record date.
+    </div>
+    <p>
+      Ex-dato er den datoen som vises på exday.no. Det er denne datoen du bør merke deg i utbyttekalenderen — ikke utbetalingsdatoen, som gjerne er 2–4 uker senere.
+    </p>
+
+
+    <!-- SEKSJON 2 -->
+    <h2 id="tre-datoer">2. De tre datoene: ex-dato, record date og utbetalingsdato</h2>
+    <p>
+      Rundt hvert utbytte opererer selskapene med tre nøkkeldatoer. Mange investorer blander disse, særlig ex-dato og utbetalingsdato. Her er forskjellene:
+    </p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Dato</th>
+          <th>Norsk navn</th>
+          <th>Hva skjer?</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Ex-dividend date</strong></td>
+          <td>Ex-dato</td>
+          <td>Første dag aksjen handles uten rett til utbytte. Du må eie aksjen dagen <em>før</em> denne datoen.</td>
+        </tr>
+        <tr>
+          <td><strong>Record date</strong></td>
+          <td>Registreringsdato</td>
+          <td>Datoen selskapet registrerer hvem som er aksjonærer med rett til utbytte. Normalt én børsdag etter ex-dato.</td>
+        </tr>
+        <tr>
+          <td><strong>Payment date</strong></td>
+          <td>Utbetalingsdato</td>
+          <td>Datoen utbyttet faktisk overføres til din konto — gjerne 2–4 uker etter ex-dato.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>
+      Det er altså ex-dato som styrer om du får utbyttet — ikke utbetalingsdatoen. Utbetalingsdatoen er kun relevant for å vite <em>når</em> pengene dukker opp på kontoen din.
+    </p>
+    <p>
+      For de aller fleste norske aksjer er record date dagen etter ex-dato. Generalforsamlingen fastsetter normalt utbyttet og utbetalingsdatoen noen uker i forveien, og meldingen publiseres på Oslo Børs' nettsider og i selskapets børsmeldinger.
+    </p>
+
+    <h3>Eksempel: DNB-utbytte våren 2025</h3>
+    <p>
+      Anta at DNB kunngjør et utbytte på 11,50 kr per aksje med følgende datoer:
+    </p>
+    <ul>
+      <li><strong>Ex-dato:</strong> 29. april 2025</li>
+      <li><strong>Record date:</strong> 30. april 2025</li>
+      <li><strong>Utbetalingsdato:</strong> 14. mai 2025</li>
+    </ul>
+    <p>
+      Kjøper du DNB-aksjer 28. april eller tidligere, er du registrert som eier per 30. april og mottar 11,50 kr per aksje rundt 14. mai. Kjøper du 29. april (ex-dato) eller senere, får du ikke dette utbyttet — uansett hvor lenge du deretter holder aksjen.
+    </p>
+
+    <!-- SEKSJON 3 -->
+    <h2 id="t-pluss-to">3. T+2 oppgjør på Oslo Børs</h2>
+    <p>
+      Oslo Børs bruker T+2 oppgjør. Det betyr at en handel som gjøres i dag (T) ikke er juridisk og finansielt oppgjort før to børsdager senere (T+2). Det er først på oppgjørsdagen at du er formelt registrert som aksjonær i Verdipapirsentralen (VPS).
+    </p>
+    <p>
+      Dette har en viktig praktisk konsekvens: <strong>du bør kjøpe aksjen senest to børsdager før record date</strong> for å være sikker på at kjøpet er registrert i tide. Siden record date er én dag etter ex-dato, betyr det i praksis at du skal kjøpe senest dagen <em>før</em> ex-dato.
+    </p>
+
+    <div class="callout">
+      <strong>T+2 i praksis:</strong> Kjøper du en aksje på mandag, er handel oppgjort onsdag. Kjøper du torsdag, er oppgjøret mandag (helgen teller ikke). Husk at norske helligdager heller ikke er børsdager, og heller ikke 17. mai.
+    </div>
+
+    <h3>Hva hvis ex-dato er mandag?</h3>
+    <p>
+      Hvis ex-dato er mandag, må du ha kjøpt aksjen <strong>senest fredag uken før</strong>. Da er oppgjøret mandag (T+2), men du kjøpte fredag, så record date (tirsdag) er du allerede registrert som eier. Kjøper du aksjen på mandag (selve ex-dato), er oppgjøret onsdag — for sent for å stå som eier på record date tirsdag.
+    </p>
+    <p>
+      Vær ekstra oppmerksom rundt lange helger med helligdager. Hvis påskefredag er en fridag, forskyves oppgjørsfristen tilsvarende.
+    </p>
+
+    <h3>Hvorfor T+2 og ikke T+1?</h3>
+    <p>
+      Mange europeiske børser diskuterer å gå over til T+1 (oppgjør neste dag) for å redusere motpartsrisiko og frigjøre kapital. USA og Canada innførte T+1 i mai 2024. Oslo Børs vurderer dette i takt med resten av Europa — Euronext planlegger en gradvis overgang. Dersom Oslo Børs går over til T+1, vil kjøpsfristen for å nå record date forskyves, og ex-dato kan falle én dag nærmere utbetalingsdatoen.
+    </p>
+
+
+    <!-- SEKSJON 4 -->
+    <h2 id="kursfallet">4. Hva skjer med kursen på ex-dato?</h2>
+    <p>
+      På ex-dato faller aksjeprisen normalt med omtrent det samme beløpet som utbyttet. Dette er ikke en tilfeldighet — det er en logisk konsekvens av at aksjen nå er «tømt» for det kommende utbyttet. En aksje som koster 200 kr og betaler 10 kr i utbytte, vil på ex-dato typisk åpne rundt 190 kr.
+    </p>
+    <p>
+      Dette betyr at du ikke «tjener» penger bare ved å eie aksjen rett før ex-dato. Verdien overføres fra aksjen til kontantutbyttet — total formue er den samme. En investor som kjøper dagen før ex-dato og selger dagen etter har ikke tjent netto, men har byttet ut verdi i aksjen mot kontanter i utbytte.
+    </p>
+
+    <h3>Kursfallet i praksis</h3>
+    <p>
+      Kursfallet på ex-dato er sjelden nøyaktig lik utbyttet. En rekke faktorer påvirker åpningskursen:
+    </p>
+    <ul>
+      <li><strong>Generell markedsbevegelse:</strong> Hvis hele markedet stiger 1 % på ex-dagen, kan aksjen faktisk stige netto selv etter utbyttefradraget.</li>
+      <li><strong>Skattehensyn:</strong> I land med høy utbyttebeskatning selger noen investorer aksjen før ex-dato og kjøper tilbake etter — dette kan presse kursen ned mer enn utbyttebeløpet.</li>
+      <li><strong>Likviditet og markedssentiment:</strong> For aksjer med lav omsetning kan kursbevegelsene være mer uforutsigbare rundt ex-dato.</li>
+    </ul>
+
+    <div class="callout callout-warn">
+      <strong>Vanlig misforståelse:</strong> Mange tror at kursfallet på ex-dato er et «tap». Det er det ikke — utbyttet du mottar kompenserer nøyaktig for kursfallet. Det er verdinøytralt før skatt. Etter skatt er det faktisk negativt å utløse utbytte unødvendig (se skatteseksjonen nedenfor).
+    </div>
+
+    <h3>Historisk kursfall vs. utbyttebeløp</h3>
+    <p>
+      Studier fra Oslo Børs og internasjonale markeder viser at gjennomsnittlig kursfall på ex-dato er <em>litt lavere</em> enn utbyttebeløpet — typisk 85–95 % av utbyttet. Årsaken er at investorer i lavere skattegrupper verdsetter utbytte høyere enn skattepliktige gevinster, og derfor er villige til å betale en liten premie for aksjen rett før ex-dato.
+    </p>
+
+    <!-- SEKSJON 5 -->
+    <h2 id="skatt">5. Skatt og ex-dato</h2>
+    <p>
+      Norske privatpersoner betaler skatt på utbytte. Den effektive skattesatsen er om lag <strong>37,84 %</strong> — sammensatt av 22 % selskapsskatt og 17,22 % aksjonærskatt på det gjenværende beløpet. Men det finnes viktige unntak og strategier.
+    </p>
+
+    <h3>Aksjesparekonto (ASK) — utsett skatten</h3>
+    <p>
+      Eier du aksjen gjennom en aksjesparekonto (ASK), betaler du ikke skatt på utbytte løpende. Utbyttet kan reinvesteres i sin helhet, og skatten utsettes til du faktisk tar pengene ut av ASK-en som overstiger det du har skutt inn. Dette er en stor fordel over tid: hele utbyttet jobber for deg frem til du realiserer gevinsten.
+    </p>
+    <p>
+      For en langsiktig utbytteinvestor som reinvesterer utbyttene over 20 år, kan forskjellen mellom ASK og vanlig VPS-konto utgjøre hundretusener av kroner i ekstra avkastning — takket være rentes-rente-effekten på det utsatte skattebeløpet.
+    </p>
+
+    <h3>Skjermingsfradrag</h3>
+    <p>
+      Også på en vanlig VPS-konto finnes det et skjermingsfradrag. Skjermingsfradraget beregnes som kostpris × skjermingsrenten (fastsatt av Skatteetaten hvert år, typisk 2–4 %). Utbytte innenfor skjermingsfradraget er skattefritt. Ubenyttet skjermingsfradrag rulles over til neste år.
+    </p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Kontoform</th>
+          <th>Skatt på utbytte</th>
+          <th>Skjermingsfradrag</th>
+          <th>Anbefalt for</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Aksjesparekonto (ASK)</td>
+          <td>Utsatt til uttak</td>
+          <td>Nei</td>
+          <td>Langsiktig reinvestering</td>
+        </tr>
+        <tr>
+          <td>Vanlig VPS-konto</td>
+          <td>37,84 % samme år</td>
+          <td>Ja</td>
+          <td>Løpende kontantbehov</td>
+        </tr>
+        <tr>
+          <td>Aksjesparekonto via fond</td>
+          <td>Utsatt til uttak</td>
+          <td>Nei</td>
+          <td>Diversifisert sparing</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- SEKSJON 6 -->
+    <h2 id="strategi">6. Strategi rundt ex-dato</h2>
+
+    <h3>«Dividend capture» — fungerer det?</h3>
+    <p>
+      Dividend capture er strategien der du kjøper aksjen rett før ex-dato for å «snappe opp» utbyttet, og deretter selger aksjen etter ex-dato. I teorien høres dette attraktivt ut. I praksis fungerer det sjelden:
+    </p>
+    <ul>
+      <li>Kursen faller med ca. utbyttebeløpet på ex-dato, så du er omtrent i null.</li>
+      <li>Du betaler kurtasje to ganger (kjøp + salg).</li>
+      <li>Utbyttet er skattepliktig (37,84 % utenfor ASK).</li>
+      <li>Kursrisiko i perioden du holder aksjen er reell.</li>
+    </ul>
+    <p>
+      For privatinvestorer uten særlige skattefordeler er dividend capture sjelden lønnsomt. Profesjonelle aktører med lavere transaksjonskostnader og spesielle skatteposisjoner kan i noen tilfeller tjene på det — men da snakker vi om marginer på promillenivå.
+    </p>
+
+    <h3>Langsiktig kjøp rundt ex-dato</h3>
+    <p>
+      For en langsiktig investor er ex-dato langt mindre dramatisk. Vil du kjøpe en aksje du tror på, spiller det liten rolle om du kjøper rett før eller rett etter ex-dato. Kjøper du rett etter, betaler du en litt lavere kurs — men du mottar ikke utbyttet. Kjøper du rett før, betaler du en litt høyere kurs — men mottar utbyttet. Netto er det omtrent det samme.
+    </p>
+    <p>
+      Unntaket er skatteaspektet: på en vanlig VPS-konto er det faktisk litt bedre å kjøpe <em>etter</em> ex-dato, siden du unngår å utløse skattepliktig utbytte. Pengene «sitter igjen» som latent gevinst i aksjen i stedet for å bli beskattet umiddelbart.
+    </p>
+
+
+    <!-- SEKSJON 7 -->
+    <h2 id="vanlige-feil">7. Vanlige feil investorer gjør rundt ex-dato</h2>
+
+    <h3>Feil 1: Kjøpe aksjen på ex-dato og forvente utbytte</h3>
+    <p>
+      Dette er den aller vanligste feilen — særlig blant nye investorer. De ser at «ex-dato er i dag», kjøper aksjen, og venter deretter på utbytteutbetalingen. Den kommer aldri. Husk: ex-dato betyr <em>uten utbytte fra og med denne datoen</em>. Du måtte ha kjøpt dagen før.
+    </p>
+
+    <h3>Feil 2: Glemme T+2 og kjøpe for sent</h3>
+    <p>
+      Selv investorer som vet at de må kjøpe dagen før ex-dato, kan trå feil hvis ex-dato er en mandag eller rett etter en helligdag. Husk at oppgjøret tar to børsdager, og helger og helligdager teller ikke. Sjekk alltid børskalenderen dersom ex-dato faller etter en fridag.
+    </p>
+
+    <h3>Feil 3: Forveksle ex-dato med utbetalingsdato</h3>
+    <p>
+      Noen selger aksjen etter ex-dato fordi de tror pengene kommer «om noen dager». Men utbetalingsdatoen kan være 2–4 uker frem i tid. Du kan trygt selge aksjen etter ex-dato og fortsatt motta utbyttet — du er allerede registrert som berettiget aksjonær.
+    </p>
+
+    <h3>Feil 4: Ikke ta hensyn til skatt utenfor ASK</h3>
+    <p>
+      På en vanlig VPS-konto vil mottatt utbytte bli skattepliktig inntekt i mottaksåret. Investorer som ikke planlegger for dette kan bli overrasket av skatteoppgjøret. Hvis du ikke trenger kontantstrømmen løpende, er ASK normalt det klokeste valget for langsiktig sparing.
+    </p>
+
+    <!-- SEKSJON 8 — FAQ -->
+    <h2 id="faq">8. Spørsmål og svar om ex-dato</h2>
+
+  </article>
+
+  <div class="space-y-3 mt-2 mb-12">
+
+    <details class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
+      <summary class="flex items-center justify-between gap-4 px-5 py-4 font-medium text-gray-900 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-800/60 rounded-xl transition-colors">
+        <span>Kan jeg selge aksjen etter ex-dato og fortsatt få utbyttet?</span>
+        <svg class="chevron w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+      </summary>
+      <div class="px-5 pb-5 pt-1 text-gray-700 dark:text-gray-300 leading-relaxed text-sm">
+        Ja. Retten til utbyttet er allerede «låst» på ex-dato. Selger du aksjen på ex-dato eller etter, har du fortsatt rett til utbyttet som utbetales på payment date. Den nye eieren (kjøperen) får ikke dette utbyttet.
+      </div>
+    </details>
+
+    <details class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
+      <summary class="flex items-center justify-between gap-4 px-5 py-4 font-medium text-gray-900 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-800/60 rounded-xl transition-colors">
+        <span>Hva skjer med utbyttet hvis jeg har aksjen i et fond?</span>
+        <svg class="chevron w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+      </summary>
+      <div class="px-5 pb-5 pt-1 text-gray-700 dark:text-gray-300 leading-relaxed text-sm">
+        Aksjefond mottar utbytte på vegne av andelseierne. I de fleste norske aksjefond reinvesteres utbyttet automatisk i fondet (akkumulerende fond), slik at andelsverdien øker i stedet for at utbytte utbetales direkte. Noen fond er «utdelende» og overfører utbyttet til andelseierne. Sjekk fondets faktaark for å se hvilken type du har.
+      </div>
+    </details>
+
+    <details class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
+      <summary class="flex items-center justify-between gap-4 px-5 py-4 font-medium text-gray-900 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-800/60 rounded-xl transition-colors">
+        <span>Kan ex-dato endres etter at den er annonsert?</span>
+        <svg class="chevron w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+      </summary>
+      <div class="px-5 pb-5 pt-1 text-gray-700 dark:text-gray-300 leading-relaxed text-sm">
+        Ja, men det er sjelden. Dersom generalforsamlingen utsettes eller selskapet trekker tilbake utbytteforslaget, kan ex-dato endres eller frafalle. Slike endringer meldes via børsmeldingssystemet på Oslo Børs. exday.no oppdateres daglig med offisielle data, men det er alltid lurt å sjekke børsmeldinger for aksjer der store beslutninger er ventende.
+      </div>
+    </details>
+
+    <details class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
+      <summary class="flex items-center justify-between gap-4 px-5 py-4 font-medium text-gray-900 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-800/60 rounded-xl transition-colors">
+        <span>Gjelder ex-dato for utenlandske aksjer notert på Oslo Børs?</span>
+        <svg class="chevron w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+      </summary>
+      <div class="px-5 pb-5 pt-1 text-gray-700 dark:text-gray-300 leading-relaxed text-sm">
+        Ja. Alle aksjer notert på Oslo Børs følger samme oppgjørsregler (T+2) uavhengig av om selskapet er norsk eller utenlandsk. For dobbeltnoterte aksjer (f.eks. selskaper notert både på Oslo Børs og NYSE) gjelder det samme prinsippet, men ex-dato kan avvike noen dager mellom børsene på grunn av ulike oppgjørsregler.
+      </div>
+    </details>
+
+    <details class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
+      <summary class="flex items-center justify-between gap-4 px-5 py-4 font-medium text-gray-900 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-800/60 rounded-xl transition-colors">
+        <span>Hvor finner jeg ex-datoer for norske aksjer?</span>
+        <svg class="chevron w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+      </summary>
+      <div class="px-5 pb-5 pt-1 text-gray-700 dark:text-gray-300 leading-relaxed text-sm">
+        exday.no viser ex-datoer for alle norske utbytteaksjer på Oslo Børs, oppdatert daglig. Du kan bruke <a href="/utbyttekalender/" class="text-blue-600 dark:text-blue-400 hover:underline">utbyttekalenderen</a> for en kronologisk oversikt over kommende ex-datoer og utbetalinger. Offisiell kilde er Oslo Børs' nettsider og selskapenes børsmeldinger.
+      </div>
+    </details>
+
+  </div>
+
+  <!-- RELATERTE SIDER -->
+  <section class="mt-4 mb-12">
+    <h2 class="text-base font-semibold mb-4 pb-2 border-b border-gray-200 dark:border-gray-800">Les også</h2>
+    <ul class="space-y-3">
+      <li>
+        <a href="/utbyttekalender/" class="inline-flex items-center gap-2 text-sm text-blue-600 dark:text-blue-400 hover:underline font-medium">
+          <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+          Utbyttekalender
+        </a>
+        <span class="text-sm text-gray-500 dark:text-gray-500"> — Kommende ex-datoer og utbetalinger på Oslo Børs</span>
+      </li>
+      <li>
+        <a href="/utbyttekalkulator/" class="inline-flex items-center gap-2 text-sm text-blue-600 dark:text-blue-400 hover:underline font-medium">
+          <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+          Utbyttekalkulator
+        </a>
+        <span class="text-sm text-gray-500 dark:text-gray-500"> — Estimer forventet utbytte fra din portefølje</span>
+      </li>
+      <li>
+        <a href="/faq/" class="inline-flex items-center gap-2 text-sm text-blue-600 dark:text-blue-400 hover:underline font-medium">
+          <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          Vanlige spørsmål (FAQ)
+        </a>
+        <span class="text-sm text-gray-500 dark:text-gray-500"> — Alle grunnleggende begreper om utbytteinvestering</span>
+      </li>
+      <li>
+        <a href="/artikler/" class="inline-flex items-center gap-2 text-sm text-blue-600 dark:text-blue-400 hover:underline font-medium">
+          <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/></svg>
+          Alle artikler
+        </a>
+        <span class="text-sm text-gray-500 dark:text-gray-500"> — Guider og analyser for norske utbytteinvestorer</span>
+      </li>
+    </ul>
+  </section>
+
+  <!-- FOOTER -->
+  <div class="pt-8 border-t border-gray-100 dark:border-gray-800 text-sm text-gray-400 dark:text-gray-600 space-y-2">
+    <p>Informasjonen på denne siden er kun ment som generell veiledning og er ikke finansiell rådgivning. Invester alltid på eget ansvar.</p>
+    <div class="flex gap-4 pt-1">
+      <a href="/" class="hover:text-gray-600 dark:hover:text-gray-400 transition-colors">← exday.no</a>
+      <a href="/personvern/" class="hover:text-gray-600 dark:hover:text-gray-400 transition-colors">Personvern</a>
+      <a href="/faq/" class="hover:text-gray-600 dark:hover:text-gray-400 transition-colors">FAQ</a>
+    </div>
+  </div>
+
+</div><!-- end max-w-2xl -->
+
+<footer class="mt-8 border-t border-gray-200 dark:border-gray-800 py-6 text-center text-xs text-gray-400 dark:text-gray-600 space-y-1 px-4">
+  <p>Kurs og utbyttedata hentes fra Yahoo Finance og Euronext. Oppdateres daglig på børsdager.</p>
+  <p class="max-w-xl mx-auto leading-relaxed">
+    exday.no er ikke et verdipapirforetak og tilbyr ikke finansiell rådgivning.
+    Data kan inneholde feil eller forsinkelser — verifiser alltid mot Oslo Børs eller selskapets egne rapporter.
+    Historisk utbytte er ingen garanti for fremtidig utbytte.
+  </p>
+  <p class="mt-2">
+    <a href="/personvern/" class="underline hover:text-gray-400 transition-colors">Personvern</a>
+    <span class="mx-2">·</span>
+    <a href="/faq/" class="underline hover:text-gray-400 transition-colors">FAQ</a>
+    <span class="mx-2">·</span>
+    <a href="/artikler/" class="underline hover:text-gray-400 transition-colors">Artikler</a>
+  </p>
+</footer>
+
+<script>
+  document.getElementById('dark-toggle').addEventListener('click', function() {
+    var isDark = document.documentElement.classList.toggle('dark');
+    localStorage.setItem('tema', isDark ? 'dark' : 'light');
+  });
+</script>
+</body>
+</html>
