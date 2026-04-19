@@ -87,6 +87,56 @@
   }
   </script>
 
+  <!-- JSON-LD: FAQPage -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Hva er ex-dato?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Ex-dato er den første handelsdagen der en aksje handles uten rett til kommende utbytte. Du må eie aksjen dagen før ex-dato for å motta utbyttet. På Oslo Børs gjelder T+2-oppgjør, så du må kjøpe senest to børsdager før ex-dato."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Hva er utbytteyield?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Utbytteyield er årsutbyttet per aksje delt på aksjekursen, oppgitt i prosent. En yield på 5 % betyr at du mottar 5 kroner i utbytte per 100 kroner investert. Yield endres daglig i takt med kursutviklingen."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Er exday.no gratis?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Ja, exday.no er helt gratis og krever ingen registrering. Alle data vises åpent, og porteføljeverktøyet lagrer informasjon lokalt i nettleseren din uten å sende noe til en server."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Hva er T+2-regelen?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "T+2 betyr at aksjehandel på Oslo Børs avregnes to børsdager etter handelsdato. For å stå registrert som aksjonær på registreringsdatoen — og dermed motta utbytte — må du kjøpe aksjen senest to børsdager før ex-dato."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Hvordan beskattes utbytte i Norge?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Utbytte beskattes med 37,84 % over skjermingsfradraget. Eier du aksjen via aksjesparekonto (ASK) utsettes skatten til du tar ut gevinst. Via VPS eller fond uten ASK beskattes utbytte samme år det utbetales."
+        }
+      }
+    ]
+  }
+  </script>
+
   <!-- Mørkt tema -->
   <script>
     (function() {
@@ -185,6 +235,37 @@
       </div>
     </div>
   </header>
+
+  <!-- ── INTRO ─────────────────────────────────────────────────────── -->
+  <section class="max-w-3xl mx-auto px-4 sm:px-6 py-10 sm:py-14">
+    <h2 class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100 mb-5">Norske utbytteaksjer — hva, hvorfor og hvordan</h2>
+    <div class="prose prose-gray dark:prose-invert max-w-none space-y-4 text-gray-700 dark:text-gray-300 leading-relaxed text-sm sm:text-base">
+      <p>
+        Oslo Børs er hjemsted for mange av Nordens mest utbyttebetalende selskaper. Equinor, DNB, Aker BP,
+        Gjensidige og en rekke sparebanker deler hvert år ut milliarder i utbytte til sine aksjonærer.
+        For en langsiktig investor kan utbytteaksjer gi en stabil kontantstrøm som reinvesteres og skaper
+        rentes-rente-effekt over tid.
+      </p>
+      <p>
+        <strong class="text-gray-900 dark:text-gray-100">Utbytteyield</strong> er det nøkkeltallet som viser
+        hvor mye en aksje betaler i utbytte i prosent av aksjekursen. En yield på 5&nbsp;% betyr at du
+        mottar 5 kroner i utbytte for hver 100 kroner investert. exday.no viser oppdatert yield, historisk
+        utbyttehistorikk og en utbyttescore som veier frekvens, stabilitet og bærekraft.
+      </p>
+      <p>
+        <strong class="text-gray-900 dark:text-gray-100">Ex-dato</strong> er den viktigste datoen for
+        utbytteinvestorer. Du må eie aksjen <em>før</em> ex-dato for å ha rett på utbyttet — kjøper du
+        på selve ex-datoen, går utbyttet til forrige eier. På Oslo Børs gjelder T+2-regelen: handel
+        avregnes to børsdager etter avtaledato, så du må kjøpe <em>senest to børsdager før</em> ex-dato.
+        exday.no samler alle kommende ex-datoer i én oversiktlig <a href="/utbyttekalender/" class="text-green-600 dark:text-green-400 hover:underline">utbyttekalender</a>.
+      </p>
+      <p>
+        Tjenesten er gratis og krever ingen registrering. Data hentes daglig fra Yahoo Finance og Euronext
+        og dekker 191 aksjer fordelt på 16 sektorer — fra energi og finans til sjømat og shipping.
+        Porteføljeverktøyet lagrer alt lokalt i nettleseren din, uten at noe sendes til en server.
+      </p>
+    </div>
+  </section>
 
   <!-- ── SEKTORKORT ──────────────────────────────────────────────────── -->
   <section class="max-w-5xl mx-auto px-4 sm:px-6 py-10 sm:py-14">
@@ -369,6 +450,83 @@
       <a href="/artikler/" class="inline-flex items-center gap-2 text-sm font-medium text-green-600 dark:text-green-400 hover:underline">
         Se alle artikler og guider →
       </a>
+    </div>
+  </section>
+
+  <!-- ── FAQ ───────────────────────────────────────────────────────── -->
+  <section class="bg-white dark:bg-gray-900 border-t border-b border-gray-200 dark:border-gray-800">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 py-10 sm:py-14">
+      <h2 class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">Vanlige spørsmål</h2>
+      <div class="space-y-2">
+
+        <details class="group border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
+          <summary class="flex items-center justify-between gap-3 px-5 py-4 cursor-pointer font-medium text-gray-900 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors list-none">
+            Hva er ex-dato?
+            <svg class="w-4 h-4 text-gray-400 flex-shrink-0 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          </summary>
+          <div class="px-5 pb-5 pt-1 text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+            Ex-dato er den første handelsdagen der en aksje handles <em>uten</em> rett til kommende utbytte.
+            Du må eie aksjen dagen <strong>før</strong> ex-dato for å motta utbyttet.
+            På Oslo Børs gjelder T+2-oppgjør — kjøper du aksjen to børsdager eller mindre før ex-dato, er det for sent.
+            <a href="/artikler/hva-er-ex-dato/" class="text-green-600 dark:text-green-400 hover:underline ml-1">Les mer om ex-dato →</a>
+          </div>
+        </details>
+
+        <details class="group border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
+          <summary class="flex items-center justify-between gap-3 px-5 py-4 cursor-pointer font-medium text-gray-900 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors list-none">
+            Hva er utbytteyield?
+            <svg class="w-4 h-4 text-gray-400 flex-shrink-0 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          </summary>
+          <div class="px-5 pb-5 pt-1 text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+            Utbytteyield er årsutbyttet per aksje delt på aksjekursen, oppgitt i prosent.
+            En yield på 5&nbsp;% betyr at du mottar 5 kroner i utbytte per 100 kroner investert.
+            Yield endres daglig i takt med kursutviklingen — stiger kursen, faller yielden, og omvendt.
+            exday.no viser yield for 191 norske aksjer, oppdatert hver kvartert på børsdager.
+          </div>
+        </details>
+
+        <details class="group border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
+          <summary class="flex items-center justify-between gap-3 px-5 py-4 cursor-pointer font-medium text-gray-900 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors list-none">
+            Er exday.no gratis?
+            <svg class="w-4 h-4 text-gray-400 flex-shrink-0 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          </summary>
+          <div class="px-5 pb-5 pt-1 text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+            Ja, tjenesten er helt gratis og krever ingen registrering eller konto.
+            Porteføljeverktøyet lagrer all informasjon lokalt i nettleseren din — ingenting sendes til en server.
+            Du kan installere exday.no som en app (PWA) på mobil eller PC direkte fra nettleseren.
+          </div>
+        </details>
+
+        <details class="group border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
+          <summary class="flex items-center justify-between gap-3 px-5 py-4 cursor-pointer font-medium text-gray-900 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors list-none">
+            Hva er T+2-regelen på Oslo Børs?
+            <svg class="w-4 h-4 text-gray-400 flex-shrink-0 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          </summary>
+          <div class="px-5 pb-5 pt-1 text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+            T+2 betyr at aksjehandel avregnes to <em>børsdager</em> etter at handelen er gjennomført.
+            Det betyr at du ikke er registrert som aksjonær umiddelbart — det tar to dager.
+            For å ha rett på utbytte må du derfor kjøpe aksjen <strong>senest to børsdager før ex-dato</strong>.
+            Helger og helligdager teller ikke som børsdager.
+          </div>
+        </details>
+
+        <details class="group border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
+          <summary class="flex items-center justify-between gap-3 px-5 py-4 cursor-pointer font-medium text-gray-900 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors list-none">
+            Hvordan beskattes utbytte i Norge?
+            <svg class="w-4 h-4 text-gray-400 flex-shrink-0 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          </summary>
+          <div class="px-5 pb-5 pt-1 text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+            Utbytte over skjermingsfradraget beskattes med <strong>37,84&nbsp;%</strong> for personlige aksjonærer.
+            Eier du aksjen via <strong>aksjesparekonto (ASK)</strong>, utsettes skatten til du faktisk tar ut gevinst — utbyttet reinvesteres skattefritt innen kontoen.
+            Via ordinær VPS-konto beskattes utbyttet samme år det utbetales.
+            exday.no beregner estimert skatt i porteføljeverktøyet basert på skjermingsrenten.
+          </div>
+        </details>
+
+      </div>
+      <p class="mt-6 text-sm text-gray-500 dark:text-gray-400">
+        Flere spørsmål? Se vår <a href="/faq/" class="text-green-600 dark:text-green-400 hover:underline">fullstendige FAQ</a>.
+      </p>
     </div>
   </section>
 
