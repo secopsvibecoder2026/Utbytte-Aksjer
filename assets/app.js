@@ -183,7 +183,7 @@ async function mergPriser() {
 async function lastData() {
   skjulFeilBanner();
   try {
-    const resp = await fetch('data/aksjer.json');
+    const resp = await fetch('/data/aksjer.json');
     if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
     const json = await resp.json();
 

@@ -3040,7 +3040,7 @@ async function hentPriser() {
   const now = Date.now();
   if (_priserCache && now - _priserCacheTs < 5 * 60 * 1000) return _priserCache;
   try {
-    const r = await fetch('data/priser.json');
+    const r = await fetch('/data/priser.json');
     if (!r.ok) return null;
     _priserCache = await r.json();
     _priserCacheTs = now;
