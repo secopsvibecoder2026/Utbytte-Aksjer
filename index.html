@@ -155,20 +155,24 @@
       backdrop-filter: blur(8px);
       border: 1px solid rgba(255,255,255,0.15);
     }
+    .sektor-kort {
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 0.5rem;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
     .sektor-kort:hover {
       transform: translateY(-2px);
       box-shadow: 0 8px 24px rgba(0,0,0,0.12);
     }
-    .sektor-kort {
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
-    }
     .ikon-boks {
-      align-self: flex-start;
-      flex-shrink: 0;
-      width: 2.25rem;
-      height: 2.25rem;
+      align-self: flex-start !important;
+      flex-shrink: 0 !important;
+      width: 2.25rem !important;
+      height: 2.25rem !important;
+      min-width: 2.25rem !important;
       border-radius: 0.5rem;
-      display: flex;
+      display: flex !important;
       align-items: center;
       justify-content: center;
     }
