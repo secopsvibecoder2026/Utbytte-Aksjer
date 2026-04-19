@@ -52,6 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
   sjekkQRParam();
   visVelkomstModal();
   initProfil();
+  sjekkStartsideForslag();
   lastData();
 
   // Del-portefølje-knapp
@@ -222,3 +223,36 @@ async function lastData() {
 document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('data-feil-retry')?.addEventListener('click', lastData);
 });
+
+// ── STARTSIDE-FORSLAG ──────────────────────────────────────────────────────
+function sjekkStartsideForslag() {
+  if (localStorage.getItem('start_side') === 'app') return;
+  if (localStorage.getItem('startside_forslag_avvist')) return;
+  if (!localStorage.getItem('velkommen_vist')) return; // ikke vis før onboarding er ferdig
+
+  const teller = parseInt(localStorage.getItem('app_besok_teller') || '0', 10) + 1;
+  localStorage.setItem('app_besok_teller', String(teller));
+  if (teller < 2) return;
+
+  setTimeout(() => {
+    const toast = document.createElement('div');
+    toast.id = 'startside-forslag-toast';
+    toast.style.cssText = 'position:fixed;bottom:5rem;left:50%;transform:translateX(-50%);z-index:9999;background:#1f2937;color:#f3f4f6;border-radius:0.75rem;box-shadow:0 8px 24px rgba(0,0,0,0.4);padding:1rem 1.25rem;max-width:22rem;width:calc(100% - 2rem);display:flex;flex-direction:column;gap:0.75rem;';
+    toast.innerHTML = '<div style="font-size:0.875rem;font-weight:600;">Vil du åpne appen direkte?</div>'
+      + '<div style="font-size:0.8rem;color:#9ca3af;line-height:1.4;">Hopp over landingssiden og gå rett hit når du besøker exday.no</div>'
+      + '<div style="display:flex;gap:0.5rem;">'
+      + '<button id="startside-forslag-ja" style="flex:1;background:#16a34a;color:#fff;border:none;border-radius:0.5rem;padding:0.5rem;font-size:0.8rem;font-weight:600;cursor:pointer;">Ja, aktiver</button>'
+      + '<button id="startside-forslag-nei" style="flex:1;background:#374151;color:#d1d5db;border:none;border-radius:0.5rem;padding:0.5rem;font-size:0.8rem;cursor:pointer;">Nei takk</button>'
+      + '</div>';
+    document.body.appendChild(toast);
+
+    document.getElementById('startside-forslag-ja').addEventListener('click', () => {
+      localStorage.setItem('start_side', 'app');
+      toast.remove();
+    });
+    document.getElementById('startside-forslag-nei').addEventListener('click', () => {
+      localStorage.setItem('startside_forslag_avvist', '1');
+      toast.remove();
+    });
+  }, 3000);
+}
