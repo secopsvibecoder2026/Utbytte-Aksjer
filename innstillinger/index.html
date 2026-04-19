@@ -110,8 +110,8 @@
             <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Hopp over landingssiden og gå rett til appen når du besøker exday.no</p>
           </div>
           <button id="startside-toggle" role="switch" aria-checked="false"
-            class="relative shrink-0 w-11 h-6 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 bg-gray-200 dark:bg-gray-700">
-            <span class="block w-4 h-4 rounded-full bg-white shadow transition-transform translate-x-1"></span>
+            style="position:relative;flex-shrink:0;width:2.75rem;height:1.5rem;border-radius:9999px;background:#d1d5db;border:none;cursor:pointer;padding:0;transition:background 0.2s;">
+            <span style="display:block;position:absolute;top:0.25rem;left:0.25rem;width:1rem;height:1rem;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,0.3);transition:transform 0.2s;"></span>
           </button>
         </label>
       </div>
@@ -416,12 +416,8 @@
     const span = btn.querySelector('span');
     function oppdaterToggle(aktiv) {
       btn.setAttribute('aria-checked', String(aktiv));
-      btn.classList.toggle('bg-brand-600', aktiv);
-      btn.classList.toggle('dark:bg-brand-500', aktiv);
-      btn.classList.toggle('bg-gray-200', !aktiv);
-      btn.classList.toggle('dark:bg-gray-700', !aktiv);
-      span.classList.toggle('translate-x-6', aktiv);
-      span.classList.toggle('translate-x-1', !aktiv);
+      btn.style.background = aktiv ? '#16a34a' : '#d1d5db';
+      span.style.transform = aktiv ? 'translateX(1.25rem)' : 'translateX(0)';
     }
     oppdaterToggle(localStorage.getItem('start_side') === 'app');
     btn.addEventListener('click', () => {
