@@ -1454,9 +1454,9 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
         {
             "@type": "BreadcrumbList",
             "itemListElement": [
-                {"@type": "ListItem", "position": 1, "name": "Hjem",   "item": "https://exday.no/"},
-                {"@type": "ListItem", "position": 2, "name": "Aksjer", "item": "https://exday.no/aksjer/"},
-                {"@type": "ListItem", "position": 3, "name": ticker,   "item": f"https://exday.no/aksjer/{ticker}/"},
+                {"@type": "ListItem", "position": 1, "name": "Hjem",    "item": "https://exday.no/"},
+                {"@type": "ListItem", "position": 2, "name": "Utforsk", "item": "https://exday.no/utforsk/"},
+                {"@type": "ListItem", "position": 3, "name": ticker,    "item": f"https://exday.no/aksjer/{ticker}/"},
             ]
         },
         {
@@ -1687,8 +1687,8 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
 
   <div class="breadcrumb">
     <a href="https://exday.no/">exday.no</a>
-    <span>/</span>
-    <a href="https://exday.no/aksjer/">Aksjer</a>
+    <span>›</span>
+    <a href="https://exday.no/utforsk/">Utforsk</a>
     <span>›</span>
     <a href="https://exday.no/aksjer/sektor/{_sektor_slug(sektor)}/">{sektor}</a>
     <span>›</span>
@@ -2129,9 +2129,9 @@ def generer_sektorsider(aksjer, root_dir):
                 {
                     "@type": "BreadcrumbList",
                     "itemListElement": [
-                        {"@type": "ListItem", "position": 1, "name": "Hjem",   "item": "https://exday.no/"},
-                        {"@type": "ListItem", "position": 2, "name": "Aksjer", "item": "https://exday.no/aksjer/"},
-                        {"@type": "ListItem", "position": 3, "name": sektor,   "item": f"https://exday.no/aksjer/sektor/{slug}/"},
+                        {"@type": "ListItem", "position": 1, "name": "Hjem",    "item": "https://exday.no/"},
+                        {"@type": "ListItem", "position": 2, "name": "Utforsk", "item": "https://exday.no/utforsk/"},
+                        {"@type": "ListItem", "position": 3, "name": sektor,    "item": f"https://exday.no/aksjer/sektor/{slug}/"},
                     ]
                 },
                 {
@@ -2273,9 +2273,9 @@ def generer_sektorsider(aksjer, root_dir):
 <div class="wrap">
   <div class="breadcrumb">
     <a href="https://exday.no/">exday.no</a>
-    <span>/</span>
-    <a href="/aksjer/">Aksjer</a>
-    <span>/</span>
+    <span>›</span>
+    <a href="/utforsk/">Utforsk</a>
+    <span>›</span>
     {sektor}
   </div>
   <h1>{sektor}-aksjer med utbytte</h1>
