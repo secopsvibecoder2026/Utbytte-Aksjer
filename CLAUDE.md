@@ -213,6 +213,60 @@ portefolje.js: FIFO, IRR, TWR, tax, sector rebalancing
 
 ---
 
+## Artikler (`/artikler/`)
+
+Artikler ligger i `artikler/{slug}/index.html`. Indekssiden er `artikler/index.html`.
+
+### Mal og krav
+
+- **1 500–3 000 ord** med ekte, nyttig innhold — ingen fluffy fyll
+- **Norsk** — all tekst, overskrifter og kodekommentarer
+- **Dark mode** via `localStorage.getItem('tema')` (ikke `theme`) — samme nøkkel som hoved-appen
+- **Tailwind CSS** via `/assets/tailwind.css` + `/assets/style.css`
+- **Google AdSense og Analytics** — kopier head-blokken fra `faq/index.html` nøyaktig
+- **JSON-LD** — bruk `@type: "Article"` med `datePublished`, `dateModified`, `author`, `publisher`
+- **Breadcrumb** — `exday.no › Artikler › Artikkeltittel`
+- **Innholdsfortegnelse** — lenker til `id`-ankere for artikler over 5 seksjoner
+
+### Standard bunntekst — bruk alltid denne eksakt
+
+```html
+<footer class="mt-8 sm:mt-12 border-t border-gray-200 dark:border-gray-800 py-6 text-center text-xs text-gray-400 dark:text-gray-600 space-y-1 px-4">
+  <p>Kurs og utbyttedata hentes fra Yahoo Finance og Euronext. Oppdateres daglig på børsdager.</p>
+  <p class="max-w-xl mx-auto leading-relaxed">
+    exday.no er ikke et verdipapirforetak og tilbyr ikke finansiell rådgivning.
+    Data kan inneholde feil eller forsinkelser — verifiser alltid mot Oslo Børs eller selskapets egne rapporter.
+    Historisk utbytte er ingen garanti for fremtidig utbytte.
+    Gjør alltid din egen analyse før du tar investeringsbeslutninger.
+  </p>
+  <p class="mt-2">
+    <a href="/personvern/" class="underline hover:text-gray-400 dark:hover:text-gray-400 transition-colors">Personvern og informasjonskapsler</a>
+    <span class="mx-2">·</span>
+    <a href="/faq/" class="underline hover:text-gray-400 dark:hover:text-gray-400 transition-colors">Vanlige spørsmål (FAQ)</a>
+  </p>
+  <p class="mt-3">
+    <a href="https://www.facebook.com/share/17rMp8o9yF/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-gray-400 hover:text-blue-500 dark:hover:text-blue-400 transition-colors">
+      <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/></svg>
+      Følg exday.no på Facebook
+    </a>
+  </p>
+</footer>
+```
+
+### Tabeller på mobil
+
+Tabeller må alltid ha `display: block; overflow-x: auto; -webkit-overflow-scrolling: touch;` for å scrolle horisontalt på mobil.
+
+### "Les også"-lenker
+
+Bruk `flex items-center gap-2` med ikon + tekst på én linje. Ikke legg beskrivelsestekst inline etter lenken — det bryter dårlig på mobil.
+
+### Oppdater indekssiden
+
+Etter at en ny artikkel er ferdig: legg til et klikkbart kort under «Publisert» i `artikler/index.html` med tittel, ingress og dato. Flytt det tilhørende «Kommer snart»-kortet ut.
+
+---
+
 ## Portfolio Math (portefolje.js)
 
 - **Cost basis:** FIFO — `beregnKostbasis()`
