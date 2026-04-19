@@ -54,7 +54,7 @@ Bærekraft-analyse vises i modal, men ikke i kortvisning.
 ### Bloggseksjon / artikler
 10 artikler planlagt (1 500–3 000 ord, norsk, SEO-optimalisert med JSON-LD, dark mode, samme design som FAQ):
 
-- [ ] `/artikler/hva-er-ex-dato/` — Alt om ex-dato: T+2, kursfall, skatt, strategi
+- [x] `/artikler/hva-er-ex-dato/` — Alt om ex-dato: T+2, kursfall, skatt, strategi
 - [ ] `/artikler/beste-utbytteaksjer-2026/` — Redaksjonell gjennomgang av ledende norske utbytteaksjer
 - [ ] `/artikler/utbytte-skatt-norge/` — Skatteregler: ASK vs. VPS, skjermingsfradrag, 37,84%
 - [ ] `/artikler/aksjesparekonto-ask/` — Komplett guide til ASK for utbytteinvestorer
