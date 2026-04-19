@@ -78,20 +78,26 @@ function byggDetailHtml(ticker, kb, marked) {
       }).join('')
     : '<p class="text-xs text-gray-400 py-2">Ingen transaksjoner ennå.</p>';
 
-  return `<div class="pt-2 space-y-2">
+  return `<div class="pt-2 space-y-3">
     ${kostbasisHtml}
-    <div class="grid grid-cols-2 sm:grid-cols-5 gap-1.5">
-      <select class="pf-detail-type filter-input text-xs py-1.5">
-        <option value="kjøp">Kjøp</option>
-        <option value="salg">Salg</option>
-        <option value="utbytte">Utbytte</option>
-      </select>
-      <input type="date" class="pf-detail-dato filter-input text-xs py-1.5" value="${idag}" />
-      <input type="number" min="1" class="pf-detail-antall filter-input text-xs py-1.5" placeholder="Antall" value="${beholdningAntall}" />
-      <input type="number" min="0" step="0.01" class="pf-detail-kurs filter-input text-xs py-1.5" placeholder="Kurs / GAV (kr)" value="${prefillKurs}" />
-      <button class="pf-detail-legg-til bg-brand-600 hover:bg-brand-700 text-white text-xs font-medium px-3 py-1.5 rounded-lg transition-colors" data-ticker="${ticker}">+ Legg til</button>
+    <div>
+      <p class="text-xs font-medium text-gray-400 dark:text-gray-500 uppercase tracking-wide mb-1.5">Ny transaksjon</p>
+      <div class="grid grid-cols-2 sm:grid-cols-5 gap-1.5">
+        <select class="pf-detail-type filter-input text-xs py-1.5">
+          <option value="kjøp">Kjøp</option>
+          <option value="salg">Salg</option>
+          <option value="utbytte">Utbytte</option>
+        </select>
+        <input type="date" class="pf-detail-dato filter-input text-xs py-1.5" value="${idag}" />
+        <input type="number" min="1" class="pf-detail-antall filter-input text-xs py-1.5" placeholder="Antall" value="${beholdningAntall}" />
+        <input type="number" min="0" step="0.01" class="pf-detail-kurs filter-input text-xs py-1.5" placeholder="Kurs / GAV (kr)" value="${prefillKurs}" />
+        <button class="pf-detail-legg-til bg-brand-600 hover:bg-brand-700 text-white text-xs font-medium px-3 py-1.5 rounded-lg transition-colors" data-ticker="${ticker}">+ Legg til</button>
+      </div>
     </div>
-    <div class="divide-y divide-gray-100 dark:divide-gray-800">${txLoggHtml}</div>
+    <div>
+      <p class="text-xs font-medium text-gray-400 dark:text-gray-500 uppercase tracking-wide mb-1">Historikk</p>
+      <div class="divide-y divide-gray-100 dark:divide-gray-800">${txLoggHtml}</div>
+    </div>
   </div>`;
 }
 
@@ -192,6 +198,17 @@ function initPortefolje() {
 
   document.getElementById('pf-antall').addEventListener('keydown', e => {
     if (e.key === 'Enter') document.getElementById('pf-legg-til').click();
+  });
+
+  // Skjul/vis valgfri kostbasis-seksjon
+  document.getElementById('pf-kjop-toggle')?.addEventListener('click', () => {
+    const valgfritt = document.getElementById('pf-kjop-valgfritt');
+    const chevron   = document.getElementById('pf-kjop-chevron');
+    const toggle    = document.getElementById('pf-kjop-toggle');
+    const aapen = !valgfritt.classList.contains('hidden');
+    valgfritt.classList.toggle('hidden', aapen);
+    if (chevron) chevron.style.transform = aapen ? '' : 'rotate(180deg)';
+    toggle.setAttribute('aria-expanded', !aapen);
   });
 
   document.getElementById('pf-eksport-csv')?.addEventListener('click', eksporterCSV);
@@ -643,6 +660,36 @@ function visHistorikkKurve() {
 }
 
 
+function visMiniSektorChart(beholdning) {
+  const container = document.getElementById('pf-mini-sektor-chart');
+  if (!container || !beholdning || !beholdning.length) return;
+
+  const sektorMap = {};
+  let totVerdi = 0;
+  beholdning.forEach(a => {
+    const s = a.sektor || 'Annet';
+    const v = a.antall * (a.pris || 0);
+    sektorMap[s] = (sektorMap[s] || 0) + v;
+    totVerdi += v;
+  });
+  if (totVerdi === 0) return;
+
+  const sortert = Object.entries(sektorMap).sort((a, b) => b[1] - a[1]);
+  const farger = ['#2563eb', '#14b8a6', '#6366f1', '#0891b2', '#3b82f6', '#0d9488', '#4f46e5', '#60a5fa', '#10b981', '#f59e0b', '#f97316', '#ec4899'];
+
+  container.innerHTML = sortert.map(([sektor, verdi], i) => {
+    const pct = (verdi / totVerdi * 100);
+    const farge = farger[i % farger.length];
+    return `<div class="flex items-center gap-2 text-xs">
+      <span class="w-28 shrink-0 text-gray-600 dark:text-gray-400 truncate">${escHtml(sektor)}</span>
+      <div class="flex-1 bg-gray-100 dark:bg-gray-800 rounded-full h-2 overflow-hidden">
+        <div class="h-2 rounded-full" style="width:${pct.toFixed(1)}%;background:${farge}"></div>
+      </div>
+      <span class="w-9 text-right text-gray-500">${pct.toFixed(0)}%</span>
+    </div>`;
+  }).join('');
+}
+
 function visPortefolje() {
   fyllPFDropdown();
   const pf = hentPF();
@@ -668,6 +715,8 @@ function visPortefolje() {
   document.getElementById('pf-tidslinje-wrapper').classList.toggle('hidden', !harBeholdning);
   document.getElementById('pf-inntekt-wrapper').classList.toggle('hidden', !harBeholdning);
   document.getElementById('pf-statistikk-tom').classList.toggle('hidden', harBeholdning);
+  document.getElementById('pf-top-strip')?.classList.toggle('hidden', !harBeholdning);
+  document.getElementById('pf-mini-sektor-wrapper')?.classList.toggle('hidden', !harBeholdning);
   // Vis/skjul stats-sub-tabs og sett standard til oversikt ved første lasting
   STATS_TABS.forEach(t => {
     const el = document.getElementById('stats-sub-' + t);
@@ -722,6 +771,16 @@ function visPortefolje() {
   // Vektet yield = totalAr / totalVerdi × 100
   const vektetYield = totalVerdi > 0 ? (totalAr / totalVerdi * 100) : 0;
   document.getElementById('pf-stat-yield').textContent = vektetYield > 0 ? vektetYield.toFixed(2) + '%' : '—';
+
+  // Fyll sammendrag-strip øverst i Beholdning-fanen
+  const topVerdiEl = document.getElementById('pf-top-verdi');
+  if (topVerdiEl) topVerdiEl.textContent = fmtKr(totalVerdi);
+  const topArEl = document.getElementById('pf-top-ar');
+  if (topArEl) topArEl.textContent = fmtKr(totalAr);
+  const topYieldEl = document.getElementById('pf-top-yield');
+  if (topYieldEl) topYieldEl.textContent = vektetYield > 0 ? vektetYield.toFixed(2) + '%' : '—';
+  const topAntallEl = document.getElementById('pf-top-antall');
+  if (topAntallEl) topAntallEl.textContent = alleBeholdning.length;
 
   // ── INNTEKTSTELLER ────────────────────────────────────────────────────────
   const ytdInntekt = beregnYtdInntekt(alleBeholdning);
@@ -979,7 +1038,7 @@ function visPortefolje() {
       </td>
     </tr>
     <tr class="pf-detail-rad${isOpen ? '' : ' hidden'}" data-for="${a.ticker}">
-      <td colspan="10" class="px-4 pb-4 bg-gray-50 dark:bg-gray-900/30 border-b border-gray-100 dark:border-gray-800">
+      <td colspan="10" class="px-4 pb-4 bg-gray-50 dark:bg-gray-900/30 border-b border-gray-100 dark:border-gray-800" style="border-left:3px solid #4f7bcc">
         ${byggDetailHtml(a.ticker, kb, marked)}
       </td>
     </tr>`;
@@ -994,6 +1053,33 @@ function visPortefolje() {
       <td class="px-4 py-3 text-right text-brand-700 dark:text-brand-400">${fmtKr(totalAr)}</td>
       <td colspan="5"></td>
     </tr>`;
+
+  // Mobilkort
+  const kortBody = document.getElementById('pf-kort-body');
+  if (kortBody) {
+    kortBody.innerHTML = beholdning.map(a => {
+      const kb = beregnKostbasis(a.ticker);
+      const harKb = kb.antall > 0 && kb.totalKost > 0;
+      const marked = a.antall * (a.pris || 0);
+      const gevinst = harKb ? marked - kb.totalKost : null;
+      const gevFarge = gevinst !== null ? (gevinst >= 0 ? 'color:#16a34a' : 'color:#ef4444') : '';
+      return `<div class="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-3 shadow-sm">
+        <div class="flex items-center justify-between mb-1">
+          <span class="font-mono font-bold text-brand-700 dark:text-brand-400">${escHtml(a.ticker)}</span>
+          <span class="yield-badge ${yieldKlasse(a.utbytte_yield)}">${a.utbytte_yield.toFixed(2)}%</span>
+        </div>
+        <div class="text-xs text-gray-500 dark:text-gray-400 mb-2 truncate">${escHtml(a.navn)}</div>
+        <div class="flex items-center justify-between text-xs">
+          <span class="text-gray-500">${a.antall} aksjer${a.pris ? ' · ' + a.pris.toLocaleString('nb-NO', {maximumFractionDigits: 2}) + ' kr' : ''}</span>
+          <span class="font-semibold text-brand-700 dark:text-brand-400">${fmtKr(a.forv_ar)}/år</span>
+        </div>
+        ${gevinst !== null ? `<div class="mt-1.5 text-xs font-medium" style="${gevFarge}">${gevinst >= 0 ? '+' : ''}${fmtKr(gevinst)} (${(gevinst / kb.totalKost * 100).toFixed(1)}%)</div>` : ''}
+      </div>`;
+    }).join('');
+  }
+
+  // Sektorfordeling
+  visMiniSektorChart(alleBeholdning);
 
   // Event delegation for hele tbody
   tbody.onclick = e => {
