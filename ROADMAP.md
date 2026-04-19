@@ -33,6 +33,36 @@ Ny bruker bruker lang tid på manuell innlegging. Nordnet eksporterer CSV med Da
 - [ ] Manuell annonseenhet i bunnen av aksjemodal
 - [ ] Rapporter klikk-rate og RPM i GA4
 
+### Statisk forside — SEO-vennlig frontdoor for exday.no
+
+**Bakgrunn:** Google ser i dag en JavaScript-tung SPA på `exday.no/` og flagget siden for tynt innhold. Løsningen er ikke å flytte appen (stor migrasjonsrisiko, ingen server-side routing på GitHub Pages), men å erstatte `index.html` med en statisk landing page som laster appen ved klikk. Google indekserer statisk HTML — brukere som vil ha appen klikker én knapp.
+
+**Arkitektur etter endringen:**
+```
+exday.no/              → statisk landing page (ny index.html)
+exday.no/#app          → SPA lastes når bruker klikker «Åpne appen»
+exday.no/utforsk/      → navigasjonshub (eksisterer)
+exday.no/aksjer/       → SEO-sider (eksisterer)
+exday.no/artikler/     → innhold (eksisterer)
+```
+
+**Hva landing page-en skal inneholde (alt statisk HTML):**
+- [ ] Hero: tittel, ingress og «Åpne appen»-knapp (laster SPA inline eller navigerer til `/#app`)
+- [ ] 3–4 fremhevede nøkkeltall: antall aksjer, snittavkastning Oslo Børs, neste ex-dato
+- [ ] Sektorkort (samme som `/utforsk/`) — gir Google intern lenkestruktur fra roten
+- [ ] Siste 3 artikler fra `/artikler/`
+- [ ] Lenker til kalender, kalkulator og FAQ
+- [ ] Full standard footer med Facebook-lenke
+
+**Tekniske hensyn:**
+- [ ] Eksisterende `index.html` (SPA) flyttes til `app.html` eller lastes dynamisk
+- [ ] Service Worker må oppdateres: cache `app.html` i stedet for `index.html` for SPA-skallet
+- [ ] `sw.js`-deploy-scriptet i `update-og-deploy.yml` må oppdateres tilsvarende
+- [ ] Alle interne lenker til `/?tab=kalender` etc. må sjekkes — de fleste går direkte til undersider og er upåvirket
+- [ ] `manifest.json` `start_url` bør peke på `app.html` eller `/` med hash
+
+**Risiko:** Middels. SPA-logikken røres ikke — kun shell-filen flyttes. Største risiko er Service Worker-cache og PWA-installasjon for eksisterende brukere.
+
 ---
 
 ## Medium prioritet
