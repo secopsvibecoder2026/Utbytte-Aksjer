@@ -1054,28 +1054,86 @@ function visPortefolje() {
       <td colspan="5"></td>
     </tr>`;
 
-  // Mobilkort
+  // Mobilkort med utvidbare detalj-paneler
   const kortBody = document.getElementById('pf-kort-body');
   if (kortBody) {
     kortBody.innerHTML = beholdning.map(a => {
-      const kb = beregnKostbasis(a.ticker);
-      const harKb = kb.antall > 0 && kb.totalKost > 0;
+      const kb     = beregnKostbasis(a.ticker);
+      const harKb  = kb.antall > 0 && kb.totalKost > 0;
       const marked = a.antall * (a.pris || 0);
       const gevinst = harKb ? marked - kb.totalKost : null;
       const gevFarge = gevinst !== null ? (gevinst >= 0 ? 'color:#16a34a' : 'color:#ef4444') : '';
-      return `<div class="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-3 shadow-sm">
-        <div class="flex items-center justify-between mb-1">
-          <span class="font-mono font-bold text-brand-700 dark:text-brand-400">${escHtml(a.ticker)}</span>
-          <span class="yield-badge ${yieldKlasse(a.utbytte_yield)}">${a.utbytte_yield.toFixed(2)}%</span>
+      const isOpen   = _aapneDetailRader.has(a.ticker);
+      return `<div class="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
+        <div class="p-3 flex items-start justify-between gap-2 cursor-pointer select-none pf-kort-header" data-ticker="${escHtml(a.ticker)}">
+          <div class="min-w-0 flex-1">
+            <div class="flex items-center gap-2 mb-0.5">
+              <span class="font-mono font-bold text-brand-700 dark:text-brand-400">${escHtml(a.ticker)}</span>
+              <span class="yield-badge ${yieldKlasse(a.utbytte_yield)}">${a.utbytte_yield.toFixed(2)}%</span>
+            </div>
+            <div class="text-xs text-gray-500 dark:text-gray-400 truncate">${escHtml(a.navn)}</div>
+            <div class="flex items-center gap-3 mt-1.5 text-xs">
+              <span class="text-gray-500">${a.antall} aksjer${a.pris ? ' · ' + a.pris.toLocaleString('nb-NO', {maximumFractionDigits: 2}) + ' kr' : ''}</span>
+              <span class="font-semibold text-brand-700 dark:text-brand-400 ml-auto">${fmtKr(a.forv_ar)}/år</span>
+            </div>
+            ${gevinst !== null ? `<div class="mt-1 text-xs font-medium" style="${gevFarge}">${gevinst >= 0 ? '+' : ''}${fmtKr(gevinst)} (${(gevinst / kb.totalKost * 100).toFixed(1)}%)</div>` : ''}
+          </div>
+          <svg class="w-4 h-4 text-gray-400 shrink-0 mt-0.5 transition-transform${isOpen ? ' rotate-180' : ''}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
         </div>
-        <div class="text-xs text-gray-500 dark:text-gray-400 mb-2 truncate">${escHtml(a.navn)}</div>
-        <div class="flex items-center justify-between text-xs">
-          <span class="text-gray-500">${a.antall} aksjer${a.pris ? ' · ' + a.pris.toLocaleString('nb-NO', {maximumFractionDigits: 2}) + ' kr' : ''}</span>
-          <span class="font-semibold text-brand-700 dark:text-brand-400">${fmtKr(a.forv_ar)}/år</span>
+        <div class="pf-kort-detalj pf-detail-rad${isOpen ? '' : ' hidden'} border-t border-gray-100 dark:border-gray-800 px-3 pb-3" style="border-left:3px solid #4f7bcc" data-for="${escHtml(a.ticker)}">
+          ${byggDetailHtml(a.ticker, kb, marked)}
         </div>
-        ${gevinst !== null ? `<div class="mt-1.5 text-xs font-medium" style="${gevFarge}">${gevinst >= 0 ? '+' : ''}${fmtKr(gevinst)} (${(gevinst / kb.totalKost * 100).toFixed(1)}%)</div>` : ''}
       </div>`;
     }).join('');
+
+    kortBody.onclick = e => {
+      // Klikk inne i detalj-panel — håndter knapper
+      if (e.target.closest('.pf-kort-detalj')) {
+        const leggTilBtn = e.target.closest('.pf-detail-legg-til');
+        if (leggTilBtn) {
+          const ticker  = leggTilBtn.dataset.ticker;
+          const rad     = leggTilBtn.closest('.pf-detail-rad');
+          const type    = rad.querySelector('.pf-detail-type').value;
+          const datoRaw = rad.querySelector('.pf-detail-dato').value;
+          const dato    = datoRaw || new Date().toISOString().slice(0, 10);
+          const antall  = parseInt(rad.querySelector('.pf-detail-antall').value, 10);
+          const kurs    = parseFloat(rad.querySelector('.pf-detail-kurs').value);
+          if (!antall || antall < 1 || !kurs || kurs <= 0) return;
+          const txData = hentTransaksjoner();
+          if (!txData[ticker]) txData[ticker] = [];
+          txData[ticker].push({ id: Date.now().toString(), dato, antall, kurs, type });
+          txData[ticker].sort((a, b) => a.dato.localeCompare(b.dato));
+          lagreTransaksjoner(txData);
+          _aapneDetailRader.add(ticker);
+          visPortefolje();
+          return;
+        }
+        const txSlett = e.target.closest('.pf-tx-slett');
+        if (txSlett) {
+          const { ticker, id } = txSlett.dataset;
+          const txData = hentTransaksjoner();
+          if (txData[ticker]) {
+            txData[ticker] = txData[ticker].filter(t => String(t.id) !== String(id));
+            if (!txData[ticker].length) delete txData[ticker];
+          }
+          lagreTransaksjoner(txData);
+          _aapneDetailRader.add(ticker);
+          visPortefolje();
+          return;
+        }
+        return;
+      }
+      // Klikk på korthodet → toggle detalj
+      const header = e.target.closest('.pf-kort-header');
+      if (!header) return;
+      const ticker = header.dataset.ticker;
+      const isOpen = _aapneDetailRader.has(ticker);
+      if (isOpen) _aapneDetailRader.delete(ticker); else _aapneDetailRader.add(ticker);
+      const panel  = kortBody.querySelector(`.pf-kort-detalj[data-for="${ticker}"]`);
+      const chevron = header.querySelector('svg');
+      if (panel)  panel.classList.toggle('hidden', isOpen);
+      if (chevron) chevron.style.transform = isOpen ? '' : 'rotate(180deg)';
+    };
   }
 
   // Sektorfordeling
