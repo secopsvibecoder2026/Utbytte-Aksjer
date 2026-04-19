@@ -199,6 +199,33 @@
     /* ── Mørk modus — dark:-varianter mangler i kompilert tailwind.css ── */
     body { background: #f9fafb; }
     .dark body { background: #030712; color: #f3f4f6; }
+    /* max-w-5xl og sm:-varianter mangler fra tailwind.css */
+    .max-w-5xl { max-width: 64rem; }
+    @media (min-width: 640px) {
+      .sm\:inline { display: inline; }
+      .sm\:block  { display: block; }
+      .sm\:flex   { display: flex; }
+      .sm\:hidden { display: none; }
+      .sm\:flex-row { flex-direction: row; }
+      .sm\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+      .sm\:grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+      .sm\:items-center   { align-items: center; }
+      .sm\:justify-center { justify-content: center; }
+      .sm\:px-6  { padding-left: 1.5rem; padding-right: 1.5rem; }
+      .sm\:py-12 { padding-top: 3rem;   padding-bottom: 3rem; }
+      .sm\:py-14 { padding-top: 3.5rem; padding-bottom: 3.5rem; }
+      .sm\:pt-16 { padding-top: 4rem; }
+      .sm\:pb-14 { padding-bottom: 3.5rem; }
+      .sm\:mt-12 { margin-top: 3rem; }
+      .sm\:w-14  { width: 3.5rem; }
+      .sm\:h-14  { height: 3.5rem; }
+      .sm\:text-sm   { font-size: 0.875rem;  line-height: 1.25rem; }
+      .sm\:text-base { font-size: 1rem;      line-height: 1.5rem; }
+      .sm\:text-xl   { font-size: 1.25rem;   line-height: 1.75rem; }
+      .sm\:text-2xl  { font-size: 1.5rem;    line-height: 2rem; }
+      .sm\:text-3xl  { font-size: 1.875rem;  line-height: 2.25rem; }
+      .sm\:text-5xl  { font-size: 3rem;      line-height: 1; }
+    }
 
     /* Sektor-kort og verktøy-kort */
     .dark .sektor-kort { background: #111827; border-color: #1f2937; }
