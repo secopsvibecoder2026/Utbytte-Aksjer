@@ -195,6 +195,34 @@
       --vk-purp:  rgba(88,28,135,0.35); --vk-purp-c:  #c084fc;
       --vk-orng:  rgba(154,52,18,0.35); --vk-orng-c:  #fb923c;
     }
+
+    /* ── Mørk modus — dark:-varianter mangler i kompilert tailwind.css ── */
+    body { background: #f9fafb; }
+    .dark body { background: #030712; color: #f3f4f6; }
+
+    /* Sektor-kort og verktøy-kort */
+    .dark .sektor-kort { background: #111827; border-color: #1f2937; }
+    .dark .vkt-seksjon { background: #111827; border-top-color: #1f2937; border-bottom-color: #1f2937; }
+    .dark .faq-seksjon { background: #111827; border-top-color: #1f2937; border-bottom-color: #1f2937; }
+    .dark .faq-item { border-color: #374151; }
+    .dark .faq-item summary:hover { background: #1f2937; }
+    .dark .faq-svar { color: #9ca3af; }
+    .dark .artikel-kort { background: #111827; border-color: #1f2937; }
+    .dark .artikel-ikon { background: rgba(20,83,45,0.3) !important; }
+
+    /* Tekst — (0,2,0) slår Tailwinds (0,1,0) */
+    .dark .text-gray-900 { color: #f3f4f6; }
+    .dark .text-gray-700 { color: #d1d5db; }
+    .dark .text-gray-600 { color: #9ca3af; }
+    .dark .text-gray-500 { color: #6b7280; }
+    .dark .text-gray-400 { color: #9ca3af; }
+    .dark .text-green-600 { color: #4ade80; }
+    .dark .text-green-700 { color: #86efac; }
+    .dark .border-gray-200 { border-color: #1f2937; }
+    .dark .border-gray-700 { border-color: #374151; }
+    .dark .border-gray-800 { border-color: #1f2937; }
+    .dark .bg-green-100 { background: rgba(20,83,45,0.4); }
+    .dark footer { border-top-color: #1f2937; color: #4b5563; }
   </style>
 </head>
 <body class="bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 min-h-screen">
@@ -400,7 +428,7 @@
   </section>
 
   <!-- ── VERKTØY ─────────────────────────────────────────────────────── -->
-  <section class="bg-white dark:bg-gray-900 border-t border-b border-gray-200 dark:border-gray-800">
+  <section class="vkt-seksjon bg-white border-t border-b border-gray-200">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 py-10 sm:py-12">
       <h2 class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">Verktøy</h2>
       <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -457,9 +485,9 @@
     </div>
     <div class="grid sm:grid-cols-1 gap-4">
 
-      <a href="/artikler/hva-er-ex-dato/" class="group flex flex-col sm:flex-row gap-4 p-5 bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 hover:border-green-400 dark:hover:border-green-600 transition-colors no-underline">
+      <a href="/artikler/hva-er-ex-dato/" class="artikel-kort group flex flex-col sm:flex-row gap-4 p-5 bg-white rounded-xl border border-gray-200 hover:border-green-400 transition-colors no-underline">
         <div class="flex-shrink-0 w-full sm:w-14 h-2 sm:h-14 sm:flex sm:items-center sm:justify-center">
-          <div class="hidden sm:flex w-14 h-14 rounded-xl bg-green-50 dark:bg-green-900/30 items-center justify-center">
+          <div class="artikel-ikon hidden sm:flex w-14 h-14 rounded-xl bg-green-50 items-center justify-center">
             <svg class="w-7 h-7 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
           </div>
         </div>
@@ -487,17 +515,17 @@
   </section>
 
   <!-- ── FAQ ───────────────────────────────────────────────────────── -->
-  <section class="bg-white dark:bg-gray-900 border-t border-b border-gray-200 dark:border-gray-800">
+  <section class="faq-seksjon bg-white border-t border-b border-gray-200">
     <div class="max-w-3xl mx-auto px-4 sm:px-6 py-10 sm:py-14">
       <h2 class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">Vanlige spørsmål</h2>
       <div class="space-y-2">
 
-        <details class="group border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
+        <details class="faq-item group border border-gray-200 rounded-xl overflow-hidden">
           <summary class="flex items-center justify-between gap-3 px-5 py-4 cursor-pointer font-medium text-gray-900 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors list-none">
             Hva er ex-dato?
             <svg class="w-4 h-4 text-gray-400 flex-shrink-0 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
           </summary>
-          <div class="px-5 pb-5 pt-1 text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+          <div class="faq-svar px-5 pb-5 pt-1 text-sm text-gray-600 leading-relaxed">
             Ex-dato er den første handelsdagen der en aksje handles <em>uten</em> rett til kommende utbytte.
             Du må eie aksjen dagen <strong>før</strong> ex-dato for å motta utbyttet.
             På Oslo Børs gjelder T+2-oppgjør — kjøper du aksjen to børsdager eller mindre før ex-dato, er det for sent.
@@ -505,12 +533,12 @@
           </div>
         </details>
 
-        <details class="group border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
+        <details class="faq-item group border border-gray-200 rounded-xl overflow-hidden">
           <summary class="flex items-center justify-between gap-3 px-5 py-4 cursor-pointer font-medium text-gray-900 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors list-none">
             Hva er utbytteyield?
             <svg class="w-4 h-4 text-gray-400 flex-shrink-0 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
           </summary>
-          <div class="px-5 pb-5 pt-1 text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+          <div class="faq-svar px-5 pb-5 pt-1 text-sm text-gray-600 leading-relaxed">
             Utbytteyield er årsutbyttet per aksje delt på aksjekursen, oppgitt i prosent.
             En yield på 5&nbsp;% betyr at du mottar 5 kroner i utbytte per 100 kroner investert.
             Yield endres daglig i takt med kursutviklingen — stiger kursen, faller yielden, og omvendt.
@@ -518,24 +546,24 @@
           </div>
         </details>
 
-        <details class="group border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
+        <details class="faq-item group border border-gray-200 rounded-xl overflow-hidden">
           <summary class="flex items-center justify-between gap-3 px-5 py-4 cursor-pointer font-medium text-gray-900 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors list-none">
             Er exday.no gratis?
             <svg class="w-4 h-4 text-gray-400 flex-shrink-0 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
           </summary>
-          <div class="px-5 pb-5 pt-1 text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+          <div class="faq-svar px-5 pb-5 pt-1 text-sm text-gray-600 leading-relaxed">
             Ja, tjenesten er helt gratis og krever ingen registrering eller konto.
             Porteføljeverktøyet lagrer all informasjon lokalt i nettleseren din — ingenting sendes til en server.
             Du kan installere exday.no som en app (PWA) på mobil eller PC direkte fra nettleseren.
           </div>
         </details>
 
-        <details class="group border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
+        <details class="faq-item group border border-gray-200 rounded-xl overflow-hidden">
           <summary class="flex items-center justify-between gap-3 px-5 py-4 cursor-pointer font-medium text-gray-900 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors list-none">
             Hva er T+2-regelen på Oslo Børs?
             <svg class="w-4 h-4 text-gray-400 flex-shrink-0 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
           </summary>
-          <div class="px-5 pb-5 pt-1 text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+          <div class="faq-svar px-5 pb-5 pt-1 text-sm text-gray-600 leading-relaxed">
             T+2 betyr at aksjehandel avregnes to <em>børsdager</em> etter at handelen er gjennomført.
             Det betyr at du ikke er registrert som aksjonær umiddelbart — det tar to dager.
             For å ha rett på utbytte må du derfor kjøpe aksjen <strong>senest to børsdager før ex-dato</strong>.
@@ -543,12 +571,12 @@
           </div>
         </details>
 
-        <details class="group border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
+        <details class="faq-item group border border-gray-200 rounded-xl overflow-hidden">
           <summary class="flex items-center justify-between gap-3 px-5 py-4 cursor-pointer font-medium text-gray-900 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors list-none">
             Hvordan beskattes utbytte i Norge?
             <svg class="w-4 h-4 text-gray-400 flex-shrink-0 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
           </summary>
-          <div class="px-5 pb-5 pt-1 text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+          <div class="faq-svar px-5 pb-5 pt-1 text-sm text-gray-600 leading-relaxed">
             Utbytte over skjermingsfradraget beskattes med <strong>37,84&nbsp;%</strong> for personlige aksjonærer.
             Eier du aksjen via <strong>aksjesparekonto (ASK)</strong>, utsettes skatten til du faktisk tar ut gevinst — utbyttet reinvesteres skattefritt innen kontoen.
             Via ordinær VPS-konto beskattes utbyttet samme år det utbetales.
@@ -571,7 +599,7 @@
         Legg til aksjer, beregn avkastning og spor ex-datoer i en gratis PWA — ingen registrering, alt lagret lokalt.
       </p>
       <a href="/app/"
-         class="inline-flex items-center gap-2 bg-white text-green-700 font-semibold px-6 py-3 rounded-xl text-base hover:bg-green-50 transition-colors shadow-lg">
+         class="inline-flex items-center gap-2 bg-white font-semibold px-6 py-3 rounded-xl text-base hover:bg-green-50 transition-colors shadow-lg" style="color:#15803d;">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
           <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/>
         </svg>
