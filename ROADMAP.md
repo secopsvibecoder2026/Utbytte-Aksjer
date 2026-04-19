@@ -37,13 +37,6 @@ Ny bruker bruker lang tid på manuell innlegging. Nordnet eksporterer CSV med Da
 
 ## Medium prioritet
 
-### Porteføljesiden — visuell og funksjonell forbedring
-Portefølje-fanen er funksjonell, men har forbedringspotensial på layout, oversikt og brukervennlighet.
-- [ ] Bedre visuell oversikt over total porteføljeverdi og avkastning på toppen
-- [ ] Tydeligere skille mellom beholdning og transaksjonslogg per rad
-- [ ] Mobiloptimalisering av beholdningstabellen (horisontalt scroll / kompaktvisning)
-- [ ] Raskere tilgang til «Legg til»-skjemaet — reduser klikk
-- [ ] Grafisk fremstilling av porteføljesammensetning (sektor- eller aksjefordeling)
 
 ### Skattesammendrag — årsoppsummering
 Skjermingsfradrag er allerede beregnet. Mangler samlet årsvisning.
@@ -88,6 +81,7 @@ Bærekraft-analyse vises i modal, men ikke i kortvisning.
 **E2E-tester**
 - [x] Playwright: søk aksje → åpne modal → legg i portefølje (`tests/app.e2e.js`, 8 tester)
 - [ ] Kjør i GitHub Actions på PR
+
 
 **Staging-miljø**
 - [ ] Netlify-deploy fra `dev`-branch med preview-URL per PR

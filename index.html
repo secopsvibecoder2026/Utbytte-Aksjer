@@ -445,9 +445,35 @@
       <!-- ── BEHOLDNING ─────────────────────────────────────────────────────── -->
       <div id="pf-sub-beholdning" class="space-y-4">
 
+        <!-- Sammendrag-strip (vises når det finnes beholdning) -->
+        <div id="pf-top-strip" class="hidden grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <div class="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-3 text-center shadow-sm">
+            <div class="text-xs text-gray-500 dark:text-gray-400 mb-1">Porteføljeverdi</div>
+            <div id="pf-top-verdi" class="text-base font-bold text-gray-900 dark:text-gray-100 truncate">—</div>
+          </div>
+          <div class="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-3 text-center shadow-sm">
+            <div class="text-xs text-gray-500 dark:text-gray-400 mb-1">Forv. utbytte/år</div>
+            <div id="pf-top-ar" class="text-base font-bold text-brand-700 dark:text-brand-400 truncate">—</div>
+          </div>
+          <div class="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-3 text-center shadow-sm">
+            <div class="text-xs text-gray-500 dark:text-gray-400 mb-1">Yield</div>
+            <div id="pf-top-yield" class="text-base font-bold text-gray-900 dark:text-gray-100">—</div>
+          </div>
+          <div class="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-3 text-center shadow-sm">
+            <div class="text-xs text-gray-500 dark:text-gray-400 mb-1">Selskaper</div>
+            <div id="pf-top-antall" class="text-base font-bold text-gray-900 dark:text-gray-100">—</div>
+          </div>
+        </div>
+
         <!-- Legg til aksje -->
         <div class="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4 shadow-sm">
-          <h3 class="font-semibold text-sm mb-3">Legg til aksje</h3>
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="font-semibold text-sm">Legg til aksje</h3>
+            <button id="pf-kjop-toggle" class="flex items-center gap-1 text-xs text-gray-400 hover:text-brand-600 dark:hover:text-brand-400 transition-colors" aria-expanded="false" aria-controls="pf-kjop-valgfritt">
+              <span>+ Kostbasis</span>
+              <svg id="pf-kjop-chevron" class="w-3.5 h-3.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+          </div>
           <div class="flex flex-col sm:flex-row gap-2">
             <select id="pf-velg-aksje" class="filter-input flex-1">
               <option value="">Velg aksje…</option>
@@ -455,9 +481,8 @@
             <input id="pf-antall" type="number" min="1" placeholder="Antall aksjer" class="filter-input w-full sm:w-40" />
             <button id="pf-legg-til" class="bg-brand-600 hover:bg-brand-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors shrink-0">Legg til</button>
           </div>
-          <!-- Valgfri kjøpsinformasjon -->
-          <div class="mt-3 flex flex-wrap items-center gap-2">
-            <span class="text-xs text-gray-400 shrink-0">Valgfritt:</span>
+          <!-- Valgfri kjøpsinformasjon (skjult som standard) -->
+          <div id="pf-kjop-valgfritt" class="hidden mt-3 flex flex-wrap items-center gap-2">
             <input id="pf-kjoepsdato" type="date" class="filter-input w-full sm:w-auto sm:flex-1" title="Kjøpsdato" />
             <input id="pf-kjoepskurs" type="number" min="0" step="0.01" placeholder="GAV (kr/aksje)" class="filter-input w-full sm:w-auto sm:flex-1" />
             <span class="text-xs text-gray-400 hidden sm:inline">→ lagres som kjøpstransaksjon</span>
@@ -474,7 +499,10 @@
               Send til mobil
             </button>
           </div>
-          <div class="overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-800 shadow-sm">
+          <!-- Mobilvisning (kortliste) -->
+          <div id="pf-kort-body" class="sm:hidden space-y-2 mb-3"></div>
+          <!-- Desktopvisning (tabell) -->
+          <div class="hidden sm:block overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-800 shadow-sm">
             <table class="w-full text-sm">
               <thead>
                 <tr class="bg-gray-100 dark:bg-gray-900 text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
@@ -494,6 +522,12 @@
               <tfoot id="pf-tabell-footer" class="bg-gray-50 dark:bg-gray-900/50 font-semibold"></tfoot>
             </table>
           </div>
+        </div>
+
+        <!-- Sektorfordeling -->
+        <div id="pf-mini-sektor-wrapper" class="hidden bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4 shadow-sm">
+          <h3 class="font-semibold text-sm mb-3">Sektorfordeling</h3>
+          <div id="pf-mini-sektor-chart" class="space-y-2"></div>
         </div>
 
         <!-- pf-tx-seksjon fjernet — transaksjoner er nå integrert per rad i tabellen -->
