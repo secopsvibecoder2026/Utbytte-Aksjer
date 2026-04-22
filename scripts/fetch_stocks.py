@@ -1249,6 +1249,162 @@ def _lag_risikofaktorer(a):
     )
 
 
+def _lag_faq_seksjon(a, today):
+    """FAQ-seksjon med 5-6 aksje-spesifikke spørsmål og JSON-LD FAQPage-schema."""
+    ticker   = a["ticker"]
+    navn     = a["navn"]
+    sektor   = a.get("sektor") or "Annet"
+    yield_   = a.get("utbytte_yield") or 0
+    snitt5   = a.get("snitt_yield_5ar") or 0
+    upa      = a.get("utbytte_per_aksje") or 0
+    ex       = a.get("ex_dato") or ""
+    bet      = a.get("betaling_dato") or ""
+    frekvens = a.get("frekvens") or ""
+    ar_med   = a.get("ar_med_utbytte") or 0
+    payout   = a.get("payout_ratio") or 0
+    valuta   = a.get("valuta") or "NOK"
+    hist     = a.get("historiske_utbytter") or []
+    mnd_lang = ["januar","februar","mars","april","mai","juni",
+                "juli","august","september","oktober","november","desember"]
+
+    qas = []
+
+    # 1. Ex-dato og kjøpsfrist
+    if ex:
+        try:
+            ex_d    = datetime.date.fromisoformat(ex)
+            today_d = datetime.date.fromisoformat(today)
+            dager   = (ex_d - today_d).days
+            kjop_d  = ex_d - datetime.timedelta(days=1)
+            kjop_str = f"{kjop_d.day}. {mnd_lang[kjop_d.month-1]}"
+            ex_str   = f"{ex_d.day}. {mnd_lang[ex_d.month-1]} {ex_d.year}"
+            if dager > 0:
+                svar = (
+                    f"Neste ex-dato for {navn} er {ex_str}. "
+                    f"For å ha rett på utbyttet må du eie aksjen senest {kjop_str}. "
+                    f"Oslo Børs bruker T+2-oppgjør — handelen avregnes to børsdager etter kjøpsdato, "
+                    f"så du må kjøpe senest én børsdag før ex-dato."
+                )
+            else:
+                svar = (
+                    f"Siste registrerte ex-dato for {navn} var {ex_str}. "
+                    f"Neste ex-dato er ennå ikke bekreftet. exday.no oppdateres daglig med nye "
+                    f"utbyttedatoer fra Oslo Børs og DNB Markets så snart de er tilgjengelige."
+                )
+            qas.append((f"Hva er ex-datoen for {navn} ({ticker})?", svar))
+        except Exception:
+            pass
+
+    # 2. Utbyttefrekvens og kontinuitet
+    freq_map = {
+        "Kvartalsvis": "fire ganger i året (kvartalsvis)",
+        "Halvårlig":   "to ganger i året (halvårlig)",
+        "Månedlig":    "månedlig — tolv ganger per år",
+        "Årlig":       "én gang i året",
+    }
+    freq_tekst = freq_map.get(frekvens, frekvens.lower() if frekvens else "")
+    if freq_tekst and ar_med > 0:
+        if ar_med >= 15:
+            kontinuitet = f"Med {ar_med} år sammenhengende er {ticker} blant de mest stabile utbyttebetalerne på Oslo Børs."
+        elif ar_med >= 7:
+            kontinuitet = f"Selskapet har utbetalt utbytte i {ar_med} år på rad, noe som viser en konsistent kapitalavkastningspolitikk."
+        else:
+            kontinuitet = f"Selskapet har betalt utbytte de siste {ar_med} årene."
+        svar = f"{navn} betaler utbytte {freq_tekst}. {kontinuitet}"
+        qas.append((f"Betaler {navn} utbytte hvert år, og hvor ofte?", svar))
+
+    # 3. Direkteavkastning i kontekst
+    if yield_ > 0:
+        if snitt5 > 0:
+            diff = yield_ - snitt5
+            if diff > 1.5:
+                snitt_k = f"Det er {diff:.1f} prosentpoeng over det historiske 5-årsnittet på {snitt5:.1f}%, noe som kan indikere en attraktiv inngangskurs — men sjekk alltid om det skyldes kursfall."
+            elif diff < -1.5:
+                snitt_k = f"Det er {abs(diff):.1f} prosentpoeng under det historiske 5-årsnittet på {snitt5:.1f}%."
+            else:
+                snitt_k = f"Det er på linje med det historiske 5-årsnittet på {snitt5:.1f}%."
+        else:
+            snitt_k = ""
+        svar = (
+            f"Direkteavkastningen (yield) for {ticker} er {yield_:.2f}%, beregnet som "
+            f"{upa} {valuta} i annualisert utbytte per aksje delt på aksjekursen. "
+            f"{snitt_k} "
+            f"Yield endres daglig fordi den er koblet til kursen: stiger kursen, faller yielden."
+        ).strip()
+        qas.append((f"Hva er direkteavkastningen (yield) til {ticker}?", svar))
+
+    # 4. Skatt og ASK
+    if yield_ > 0:
+        netto = yield_ * (1 - 0.3784)
+        svar = (
+            f"Utbytte fra {navn} beskattes med 37,84 % for personlige aksjonærer "
+            f"som eier aksjen direkte (via VPS-konto). "
+            f"Med en yield på {yield_:.2f} % gir det en nettoyield etter skatt på ca. {netto:.2f} %. "
+            f"Eier du aksjen via aksjesparekonto (ASK), utsettes skatten til du tar ut midler — "
+            f"utbyttet reinvesteres skattefritt innen kontoen og gir renters-rente-effekt over tid."
+        )
+        qas.append((f"Hva er skatten på utbytte fra {ticker}?", svar))
+
+    # 5. Utbyttebærekraft
+    if payout > 0:
+        if payout < 50:
+            vurd = (f"En payout ratio under 50 % betyr at mer enn halvparten av overskuddet beholdes i selskapet. "
+                    f"Det gir {navn} god buffer til å opprettholde — eller øke — utbyttet selv om inntjeningen svinger.")
+        elif payout < 80:
+            vurd = (f"En payout ratio mellom 50 og 80 % er vanlig for etablerte utbytteaksjer og anses bærekraftig "
+                    f"så lenge inntjeningen er stabil. Sjekk at EPS-trenden er positiv.")
+        else:
+            vurd = (f"En payout ratio over {payout:.0f} % innebærer at {navn} deler ut en svært stor andel av inntjeningen. "
+                    f"Det kan holdes oppe med sterk kontantstrøm, men er mer sårbart ved svakere kvartaler.")
+        svar = f"Payout ratio for {navn} er {payout:.0f} % — det vil si andelen av inntjeningen per aksje som utbetales som utbytte. {vurd}"
+        qas.append((f"Er utbyttet fra {navn} bærekraftig?", svar))
+
+    # 6. Historikk-oppsummering
+    if len(hist) >= 3:
+        sortert  = sorted(hist, key=lambda x: x["ar"])
+        f_ar     = sortert[0]["ar"]
+        s_ar     = sortert[-1]["ar"]
+        total    = sum(h["utbytte"] for h in sortert)
+        max_h    = max(sortert, key=lambda x: x["utbytte"])
+        min_h    = min(sortert, key=lambda x: x["utbytte"])
+        svar = (
+            f"exday.no har utbyttedata for {navn} fra {f_ar} til {s_ar}. "
+            f"I denne perioden er det totalt utbetalt {total:.2f} {valuta} per aksje. "
+            f"Høyest enkeltutbytte var {max_h['utbytte']:.2f} {valuta} i {max_h['ar']}, "
+            f"lavest {min_h['utbytte']:.2f} {valuta} i {min_h['ar']}. "
+            f"Historikken gir et godt bilde av stabilitet og syklikalitet i selskapets utbetalinger."
+        )
+        qas.append((f"Hva er utbyttehistorikken til {ticker} de siste årene?", svar))
+
+    if not qas:
+        return "", ""
+
+    # HTML med <details>/<summary>
+    items_html = ""
+    for sp, sv in qas:
+        items_html += (
+            f'<div class="faq-item">'
+            f'<details><summary class="faq-q">{sp}</summary>'
+            f'<div class="faq-svar">{sv}</div>'
+            f'</details></div>\n'
+        )
+    faq_html = f'<div class="faq"><h2>Vanlige spørsmål om {ticker}</h2>{items_html}</div>'
+
+    # JSON-LD FAQPage
+    entities = [
+        {"@type": "Question", "name": sp,
+         "acceptedAnswer": {"@type": "Answer", "text": sv}}
+        for sp, sv in qas
+    ]
+    faq_jsonld = (
+        '<script type="application/ld+json">'
+        + json.dumps({"@context": "https://schema.org", "@type": "FAQPage",
+                      "mainEntity": entities}, ensure_ascii=False)
+        + '</script>'
+    )
+    return faq_html, faq_jsonld
+
+
 def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     ticker  = a["ticker"]
     navn    = a["navn"]
@@ -1430,9 +1586,10 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
         tv_chart_seksjon = ""
 
     # Nye innholdsseksjoner
-    profil_html    = _lag_utbytte_profil(a, sektor_snitt or {})
+    profil_html     = _lag_utbytte_profil(a, sektor_snitt or {})
     hist_prosa_html = _lag_historikk_prosa(a)
-    risiko_html    = _lag_risikofaktorer(a)
+    risiko_html     = _lag_risikofaktorer(a)
+    faq_html, faq_jsonld = _lag_faq_seksjon(a, today)
 
     # Relaterte aksjer
     relaterte_html = ""
@@ -1513,6 +1670,7 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
   <meta name="twitter:description" content="{meta_desc}"/>
   <meta name="twitter:image" content="https://exday.no/assets/og-image.png"/>
   <script type="application/ld+json">{json_ld}</script>
+  {faq_jsonld}
   <link rel="stylesheet" href="/assets/tailwind.css"/>
   <link rel="stylesheet" href="/assets/style.css"/>
   <script>
@@ -1610,9 +1768,16 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     .updated {{ color: #9ca3af; }}
     .breadcrumb {{ color: #6b7280; }}
     .sub {{ color: #6b7280; }}
-    .faq-item {{ background: #fff; border-color: #e5e7eb; }}
-    .faq-q {{ color: #111827; }}
-    .faq-a {{ color: #374151; }}
+    .faq {{ margin: 2rem 0; }}
+    .faq h2 {{ font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem; color: #374151; }}
+    .faq-item {{ border: 1px solid #e5e7eb; border-radius: 0.75rem; overflow: hidden; margin-bottom: 0.5rem; }}
+    .faq-item details summary {{ padding: 0.9rem 1.25rem; cursor: pointer; font-weight: 500; font-size: 0.875rem; color: #111827; list-style: none; display: flex; align-items: center; justify-content: space-between; }}
+    .faq-item details summary::-webkit-details-marker {{ display: none; }}
+    .faq-item details summary::after {{ content: '+'; font-size: 1.1rem; flex-shrink: 0; margin-left: 0.5rem; color: #9ca3af; }}
+    .faq-item details[open] summary::after {{ content: '−'; }}
+    .faq-item details summary:hover {{ background: #f9fafb; }}
+    .faq-item details[open] summary {{ background: #f0fdf4; color: #15803d; }}
+    .faq-svar {{ padding: 0.75rem 1.25rem 1rem; font-size: 0.85rem; color: #4b5563; line-height: 1.65; border-top: 1px solid #f3f4f6; }}
     .rel-kort {{ background: #fff; border-color: #e5e7eb; }}
     .rel-navn {{ color: #6b7280; }}
     .badge {{ background: #dcfce7; color: #15803d; }}
@@ -1661,6 +1826,12 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     .dark .risiko-liste li {{ border-left-color: #7f1d1d; color: #9ca3af; }}
     .dark .rel-kort {{ background: #111827; border-color: #1f2937; }}
     .dark .rel-navn {{ color: #9ca3af; }}
+    .dark .faq h2 {{ color: #d1d5db; }}
+    .dark .faq-item {{ border-color: #374151; }}
+    .dark .faq-item details summary {{ color: #e5e7eb; }}
+    .dark .faq-item details summary:hover {{ background: #1f2937; }}
+    .dark .faq-item details[open] summary {{ background: #052e16; color: #4ade80; }}
+    .dark .faq-svar {{ color: #9ca3af; border-top-color: #1f2937; }}
   </style>
 </head>
 <body>
@@ -1761,6 +1932,8 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
   {hist_prosa_html}
 
   {risiko_html}
+
+  {faq_html}
 
   </section>
 
