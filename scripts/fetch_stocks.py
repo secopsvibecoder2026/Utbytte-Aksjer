@@ -1284,11 +1284,20 @@ def _lag_kontoer_seksjon(a):
         '</div>'
     )
 
+    zero_badge = (
+        '<div class="konto-rad">'
+        '<span class="konto-ok">✓</span>'
+        '<div><strong>Zero-konto</strong>'
+        '<p>Kan handles — Zero er ikke begrenset til EØS-aksjer.</p></div>'
+        '</div>'
+    )
+
     return (
         '<div class="kontoer-seksjon">'
         '<h2>Hvilke kontoer kan du handle denne aksjen på?</h2>'
         + af_badge
-        + ask_badge +
+        + ask_badge
+        + zero_badge +
         '</div>'
     )
 

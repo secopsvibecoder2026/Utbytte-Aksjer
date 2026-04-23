@@ -2149,6 +2149,11 @@ function modalKontoer(a) {
     <div><strong>Aksje- og fondskonto</strong><p>Kan handles hos alle norske meglere.</p></div>
   </div>`;
 
+  const zeroRad = `<div class="modal-konto-rad">
+    <span class="modal-konto-ikon">✓</span>
+    <div><strong>Zero-konto</strong><p>Kan handles — Zero er ikke begrenset til EØS-aksjer.</p></div>
+  </div>`;
+
   const askRad = askEgnet
     ? `<div class="modal-konto-rad">
         <span class="modal-konto-ikon">✓</span>
@@ -2156,12 +2161,12 @@ function modalKontoer(a) {
       </div>`
     : `<div class="modal-konto-rad ikke">
         <span class="modal-konto-ikon">✗</span>
-        <div><strong>Aksjesparekonto (ASK)</strong><p>Selskapet er registrert i ${land} (utenfor EØS) og kan ikke holdes i ASK. Bruk aksje- og fondskonto.</p></div>
+        <div><strong>Aksjesparekonto (ASK)</strong><p>Selskapet er registrert i ${land} (utenfor EØS) — kan ikke holdes i ASK.</p></div>
       </div>`;
 
   return `<div>
     <p class="modal-kontoer-header">Kan handles på</p>
-    ${afRad}${askRad}
+    ${afRad}${askRad}${zeroRad}
   </div>`;
 }
 
