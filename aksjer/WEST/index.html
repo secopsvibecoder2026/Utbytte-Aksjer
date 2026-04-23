@@ -80,6 +80,7 @@
     }
   ]
 }</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Betaler Western Bulk Chartering AS utbytte hvert år, og hvor ofte?", "acceptedAnswer": {"@type": "Answer", "text": "Western Bulk Chartering AS betaler utbytte én gang i året. Selskapet har betalt utbytte de siste 3 årene."}}, {"@type": "Question", "name": "Hva er direkteavkastningen (yield) til WEST?", "acceptedAnswer": {"@type": "Answer", "text": "Direkteavkastningen (yield) for WEST er 5.93%, beregnet som 1.21 NOK i annualisert utbytte per aksje delt på aksjekursen. Det er 47.2 prosentpoeng under det historiske 5-årsnittet på 53.1%. Yield endres daglig fordi den er koblet til kursen: stiger kursen, faller yielden."}}, {"@type": "Question", "name": "Hva er skatten på utbytte fra WEST?", "acceptedAnswer": {"@type": "Answer", "text": "Utbytte fra Western Bulk Chartering AS beskattes med 37,84 % for personlige aksjonærer som eier aksjen direkte (via VPS-konto). Med en yield på 5.93 % gir det en nettoyield etter skatt på ca. 3.69 %. Eier du aksjen via aksjesparekonto (ASK), utsettes skatten til du tar ut midler — utbyttet reinvesteres skattefritt innen kontoen og gir renters-rente-effekt over tid."}}, {"@type": "Question", "name": "Hva er utbyttehistorikken til WEST de siste årene?", "acceptedAnswer": {"@type": "Answer", "text": "exday.no har utbyttedata for Western Bulk Chartering AS fra 2022 til 2026. I denne perioden er det totalt utbetalt 32.53 NOK per aksje. Høyest enkeltutbytte var 28.32 NOK i 2022, lavest 1.21 NOK i 2026. Historikken gir et godt bilde av stabilitet og syklikalitet i selskapets utbetalinger."}}]}</script>
   <link rel="stylesheet" href="/assets/tailwind.css"/>
   <link rel="stylesheet" href="/assets/style.css"/>
   <script>
@@ -177,9 +178,16 @@
     .updated { color: #9ca3af; }
     .breadcrumb { color: #6b7280; }
     .sub { color: #6b7280; }
-    .faq-item { background: #fff; border-color: #e5e7eb; }
-    .faq-q { color: #111827; }
-    .faq-a { color: #374151; }
+    .faq { margin: 2rem 0; }
+    .faq h2 { font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem; color: #374151; }
+    .faq-item { border: 1px solid #e5e7eb; border-radius: 0.75rem; overflow: hidden; margin-bottom: 0.5rem; }
+    .faq-item details summary { padding: 0.9rem 1.25rem; cursor: pointer; font-weight: 500; font-size: 0.875rem; color: #111827; list-style: none; display: flex; align-items: center; justify-content: space-between; }
+    .faq-item details summary::-webkit-details-marker { display: none; }
+    .faq-item details summary::after { content: '+'; font-size: 1.1rem; flex-shrink: 0; margin-left: 0.5rem; color: #9ca3af; }
+    .faq-item details[open] summary::after { content: '−'; }
+    .faq-item details summary:hover { background: #f9fafb; }
+    .faq-item details[open] summary { background: #f0fdf4; color: #15803d; }
+    .faq-svar { padding: 0.75rem 1.25rem 1rem; font-size: 0.85rem; color: #4b5563; line-height: 1.65; border-top: 1px solid #f3f4f6; }
     .rel-kort { background: #fff; border-color: #e5e7eb; }
     .rel-navn { color: #6b7280; }
     .badge { background: #dcfce7; color: #15803d; }
@@ -228,6 +236,12 @@
     .dark .risiko-liste li { border-left-color: #7f1d1d; color: #9ca3af; }
     .dark .rel-kort { background: #111827; border-color: #1f2937; }
     .dark .rel-navn { color: #9ca3af; }
+    .dark .faq h2 { color: #d1d5db; }
+    .dark .faq-item { border-color: #374151; }
+    .dark .faq-item details summary { color: #e5e7eb; }
+    .dark .faq-item details summary:hover { background: #1f2937; }
+    .dark .faq-item details[open] summary { background: #052e16; color: #4ade80; }
+    .dark .faq-svar { color: #9ca3af; border-top-color: #1f2937; }
   </style>
 </head>
 <body>
@@ -309,7 +323,7 @@
       <div class="label">År med utbytte</div>
       <div class="val">3</div>
     </div>
-    <div class="kcard"><div class="label">P/E</div><div class="val">13.6</div></div>
+    <div class="kcard"><div class="label">P/E</div><div class="val">13.7</div></div>
   </div>
 
   
@@ -387,7 +401,7 @@
   <!-- ── UTBYTTE ── -->
   <section id="utbytte">
 
-  <div class="analyse"><h2>Utbyttedatoer</h2><p>Yielden på 5.9% er 1.3 prosentpoeng under snittet for Skipsfart-sektoren (7.2%).</p></div>
+  <div class="analyse"><h2>Utbyttedatoer</h2><p>Yielden på 5.9% er på linje med snittet for Skipsfart-sektoren (6.0%).</p></div>
 
   <h2>Historiske utbytter</h2><svg viewBox="0 0 420 180" style="width:100%;max-width:420px;height:auto;display:block;margin-bottom:0.5rem;" aria-label="Historiske utbytter per aksje i NOK"><line x1="52" y1="148.0" x2="408" y2="148.0" stroke="#e5e7eb" stroke-width="1" class="ytick"/><text x="48" y="152.0" text-anchor="end" font-size="10" fill="#9ca3af">0.0</text><line x1="52" y1="104.0" x2="408" y2="104.0" stroke="#e5e7eb" stroke-width="1" class="ytick"/><text x="48" y="108.0" text-anchor="end" font-size="10" fill="#9ca3af">9.44</text><line x1="52" y1="60.0" x2="408" y2="60.0" stroke="#e5e7eb" stroke-width="1" class="ytick"/><text x="48" y="64.0" text-anchor="end" font-size="10" fill="#9ca3af">18.88</text><line x1="52" y1="16.0" x2="408" y2="16.0" stroke="#e5e7eb" stroke-width="1" class="ytick"/><text x="48" y="20.0" text-anchor="end" font-size="10" fill="#9ca3af">28.32</text><rect class="hbar" x="93.3" y="16.0" width="36" height="132.0" rx="3" fill="#16a34a" opacity="0.85"/><rect class="hbar" x="212.0" y="134.0" width="36" height="14.0" rx="3" fill="#16a34a" opacity="0.85"/><rect class="hbar" x="330.7" y="142.4" width="36" height="5.6" rx="3" fill="#16a34a" opacity="0.85"/><text x="111.3" y="174" text-anchor="middle" font-size="10" fill="#9ca3af">2022</text><text x="230.0" y="174" text-anchor="middle" font-size="10" fill="#9ca3af">2023</text><text x="348.7" y="174" text-anchor="middle" font-size="10" fill="#9ca3af">2026</text><rect class="htip-bg" x="59.3" y="2.0" width="106" height="20" rx="4" fill="#111827" opacity="0" pointer-events="none"/><text class="htip-txt" x="111.3" y="14.0" text-anchor="middle" font-size="10" fill="#f3f4f6" opacity="0" pointer-events="none">28.32 NOK · 138.8% yield</text><rect class="htrig" x="52.0" y="16" width="118.7" height="132" fill="transparent" onmouseenter="showTip(this)" onmouseleave="hideTip(this)" data-i="0"/><rect class="htip-bg" x="178.0" y="106.0" width="106" height="20" rx="4" fill="#111827" opacity="0" pointer-events="none"/><text class="htip-txt" x="230.0" y="121.0" text-anchor="middle" font-size="10" fill="#f3f4f6" opacity="0" pointer-events="none">3.0 NOK · 14.7% yield</text><rect class="htrig" x="170.7" y="16" width="118.7" height="132" fill="transparent" onmouseenter="showTip(this)" onmouseleave="hideTip(this)" data-i="1"/><rect class="htip-bg" x="296.7" y="114.4" width="106" height="20" rx="4" fill="#111827" opacity="0" pointer-events="none"/><text class="htip-txt" x="348.7" y="129.4" text-anchor="middle" font-size="10" fill="#f3f4f6" opacity="0" pointer-events="none">1.21 NOK · 5.9% yield</text><rect class="htrig" x="289.3" y="16" width="118.7" height="132" fill="transparent" onmouseenter="showTip(this)" onmouseleave="hideTip(this)" data-i="2"/><text x="16" y="82.0" text-anchor="middle" font-size="10" fill="#9ca3af" transform="rotate(-90,16,82.0)">NOK per aksje</text></svg><script>
 function showTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAll('.htip-bg')[i],tx=s.querySelectorAll('.htip-txt')[i];bg.setAttribute('opacity','0.92');tx.setAttribute('opacity','1');}
@@ -409,7 +423,7 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
           <td>138.82%</td>
         </tr></tbody></table>
 
-  <div class="profil-seksjon"><h2>Utbytteprofil</h2><div class="profil-badges"><span class="profil-badge badge-green">Høy yield</span></div><p class="profil-tekst">WEST gir 5.9% direkteavkastning, noe under sektorsnittet for skipsfart på 7.2%.</p></div>
+  <div class="profil-seksjon"><h2>Utbytteprofil</h2><div class="profil-badges"><span class="profil-badge badge-green">Høy yield</span></div><p class="profil-tekst">WEST gir 5.9% direkteavkastning, nær sektorsnittet for skipsfart på 6.0%.</p></div>
 
   <div class="historikk-prosa"><h2>Utbyttehistorikk</h2><p>Western Bulk Chartering AS har de siste 3 årene betalt mellom 1.21 og 28.32 NOK per aksje i utbytte. Det høyeste utbyttet ble registrert i 2022 med 28.32 NOK per aksje (138.8% yield). I 2026 er utbyttet 1.21 NOK per aksje, tilsvarende 5.9% direkteavkastning.</p></div>
 
@@ -417,18 +431,24 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
 <li>Valuta- og renteeksponering kan påvirke resultater</li>
 <li>Regulatoriske endringer kan påvirke driftsbetingelser</li></ul></div>
 
+  <div class="faq"><h2>Vanlige spørsmål om WEST</h2><div class="faq-item"><details><summary class="faq-q">Betaler Western Bulk Chartering AS utbytte hvert år, og hvor ofte?</summary><div class="faq-svar">Western Bulk Chartering AS betaler utbytte én gang i året. Selskapet har betalt utbytte de siste 3 årene.</div></details></div>
+<div class="faq-item"><details><summary class="faq-q">Hva er direkteavkastningen (yield) til WEST?</summary><div class="faq-svar">Direkteavkastningen (yield) for WEST er 5.93%, beregnet som 1.21 NOK i annualisert utbytte per aksje delt på aksjekursen. Det er 47.2 prosentpoeng under det historiske 5-årsnittet på 53.1%. Yield endres daglig fordi den er koblet til kursen: stiger kursen, faller yielden.</div></details></div>
+<div class="faq-item"><details><summary class="faq-q">Hva er skatten på utbytte fra WEST?</summary><div class="faq-svar">Utbytte fra Western Bulk Chartering AS beskattes med 37,84 % for personlige aksjonærer som eier aksjen direkte (via VPS-konto). Med en yield på 5.93 % gir det en nettoyield etter skatt på ca. 3.69 %. Eier du aksjen via aksjesparekonto (ASK), utsettes skatten til du tar ut midler — utbyttet reinvesteres skattefritt innen kontoen og gir renters-rente-effekt over tid.</div></details></div>
+<div class="faq-item"><details><summary class="faq-q">Hva er utbyttehistorikken til WEST de siste årene?</summary><div class="faq-svar">exday.no har utbyttedata for Western Bulk Chartering AS fra 2022 til 2026. I denne perioden er det totalt utbetalt 32.53 NOK per aksje. Høyest enkeltutbytte var 28.32 NOK i 2022, lavest 1.21 NOK i 2026. Historikken gir et godt bilde av stabilitet og syklikalitet i selskapets utbetalinger.</div></details></div>
+</div>
+
   </section>
 
   <!-- ── NØKKELTALL ── -->
   <section id="nokkeltall">
 
-  <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Skipsfart</td></tr><tr><td>Frekvens</td><td>Årlig</td></tr><tr><td>Utbytte per aksje</td><td>1.21 NOK</td></tr><tr><td>Direkteavkastning</td><td>5.93%</td></tr><tr><td>5-årssnitt yield</td><td>53.15%</td></tr><tr><td>År med utbytte</td><td>3</td></tr><tr><td>P/E</td><td>13.6</td></tr><tr><td>Utbyttevekst 5 år</td><td>-54.5% p.a.</td></tr><tr><td>Markedsverdi</td><td>0.7 mrd NOK</td></tr><tr><td>52-ukers kurs</td><td>11.95 – 23.0 NOK</td></tr></tbody></table>
+  <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Skipsfart</td></tr><tr><td>Frekvens</td><td>Årlig</td></tr><tr><td>Utbytte per aksje</td><td>1.21 NOK</td></tr><tr><td>Direkteavkastning</td><td>5.93%</td></tr><tr><td>5-årssnitt yield</td><td>53.15%</td></tr><tr><td>År med utbytte</td><td>3</td></tr><tr><td>P/E</td><td>13.7</td></tr><tr><td>Utbyttevekst 5 år</td><td>-54.5% p.a.</td></tr><tr><td>Markedsverdi</td><td>0.7 mrd NOK</td></tr><tr><td>52-ukers kurs</td><td>11.95 – 23.0 NOK</td></tr></tbody></table>
 
   </section>
 
-  <div class="relaterte"><h2>Andre skipsfart-aksjer med utbytte</h2><div class="rel-grid"><a href="/aksjer/STST/" class="rel-kort"><span class="rel-ticker">STST</span><span class="rel-navn">Stainless Tankers AS</span><span class="rel-yield">24.5%</span></a>
-<a href="/aksjer/JIN/" class="rel-kort"><span class="rel-ticker">JIN</span><span class="rel-navn">Jinhui Shipping and Transportation Limited</span><span class="rel-yield">4.6%</span></a>
-<a href="/aksjer/SOMA/" class="rel-kort"><span class="rel-ticker">SOMA</span><span class="rel-navn">Solstad Maritime ASA</span><span class="rel-yield">0.7%</span></a>
+  <div class="relaterte"><h2>Andre skipsfart-aksjer med utbytte</h2><div class="rel-grid"><a href="/aksjer/STST/" class="rel-kort"><span class="rel-ticker">STST</span><span class="rel-navn">Stainless Tankers AS</span><span class="rel-yield">19.8%</span></a>
+<a href="/aksjer/JIN/" class="rel-kort"><span class="rel-ticker">JIN</span><span class="rel-navn">Jinhui Shipping and Transportation Limited</span><span class="rel-yield">2.8%</span></a>
+<a href="/aksjer/SOMA/" class="rel-kort"><span class="rel-ticker">SOMA</span><span class="rel-navn">Solstad Maritime ASA</span><span class="rel-yield">1.1%</span></a>
 <a href="/aksjer/CMBTO/" class="rel-kort"><span class="rel-ticker">CMBTO</span><span class="rel-navn">CMB.TECH NV</span><span class="rel-yield">0.4%</span></a></div></div>
 
   <div class="mini-nav">
@@ -446,7 +466,7 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
     <a href="https://exday.no/?aksje=WEST">Åpne WEST i exday.no →</a>
   </div>
 
-  <p class="updated">Sist oppdatert: 2026-04-22</p>
+  <p class="updated">Sist oppdatert: 2026-04-23</p>
   <footer style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid #e5e7eb;font-size:0.78rem;text-align:center;color:#9ca3af;line-height:1.6;" class="std-footer">
     <p>Kurs og utbyttedata hentes fra Yahoo Finance og Euronext. Oppdateres daglig på børsdager.</p>
     <p style="max-width:36rem;margin:0.4rem auto;">

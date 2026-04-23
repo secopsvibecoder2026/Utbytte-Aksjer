@@ -80,6 +80,7 @@
     }
   ]
 }</script>
+  
   <link rel="stylesheet" href="/assets/tailwind.css"/>
   <link rel="stylesheet" href="/assets/style.css"/>
   <script>
@@ -177,9 +178,16 @@
     .updated { color: #9ca3af; }
     .breadcrumb { color: #6b7280; }
     .sub { color: #6b7280; }
-    .faq-item { background: #fff; border-color: #e5e7eb; }
-    .faq-q { color: #111827; }
-    .faq-a { color: #374151; }
+    .faq { margin: 2rem 0; }
+    .faq h2 { font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem; color: #374151; }
+    .faq-item { border: 1px solid #e5e7eb; border-radius: 0.75rem; overflow: hidden; margin-bottom: 0.5rem; }
+    .faq-item details summary { padding: 0.9rem 1.25rem; cursor: pointer; font-weight: 500; font-size: 0.875rem; color: #111827; list-style: none; display: flex; align-items: center; justify-content: space-between; }
+    .faq-item details summary::-webkit-details-marker { display: none; }
+    .faq-item details summary::after { content: '+'; font-size: 1.1rem; flex-shrink: 0; margin-left: 0.5rem; color: #9ca3af; }
+    .faq-item details[open] summary::after { content: '−'; }
+    .faq-item details summary:hover { background: #f9fafb; }
+    .faq-item details[open] summary { background: #f0fdf4; color: #15803d; }
+    .faq-svar { padding: 0.75rem 1.25rem 1rem; font-size: 0.85rem; color: #4b5563; line-height: 1.65; border-top: 1px solid #f3f4f6; }
     .rel-kort { background: #fff; border-color: #e5e7eb; }
     .rel-navn { color: #6b7280; }
     .badge { background: #dcfce7; color: #15803d; }
@@ -228,6 +236,12 @@
     .dark .risiko-liste li { border-left-color: #7f1d1d; color: #9ca3af; }
     .dark .rel-kort { background: #111827; border-color: #1f2937; }
     .dark .rel-navn { color: #9ca3af; }
+    .dark .faq h2 { color: #d1d5db; }
+    .dark .faq-item { border-color: #374151; }
+    .dark .faq-item details summary { color: #e5e7eb; }
+    .dark .faq-item details summary:hover { background: #1f2937; }
+    .dark .faq-item details[open] summary { background: #052e16; color: #4ade80; }
+    .dark .faq-svar { color: #9ca3af; border-top-color: #1f2937; }
   </style>
 </head>
 <body>
@@ -309,7 +323,7 @@
       <div class="label">År med utbytte</div>
       <div class="val">0</div>
     </div>
-    <div class="kcard"><div class="label">P/E</div><div class="val">11.6</div></div>
+    <div class="kcard"><div class="label">P/E</div><div class="val">11.7</div></div>
   </div>
 
   
@@ -399,16 +413,18 @@
 <li>Energiomstilling og ESG-krav kan presse markedsverdi over tid</li>
 <li>Statlig eierstyring kan påvirke utbyttepolitikk</li></ul></div>
 
+  
+
   </section>
 
   <!-- ── NØKKELTALL ── -->
   <section id="nokkeltall">
 
-  <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Energi</td></tr><tr><td>Frekvens</td><td>Uregelmessig</td></tr><tr><td>Utbytte per aksje</td><td>0 NOK</td></tr><tr><td>Direkteavkastning</td><td>—</td></tr><tr><td>5-årssnitt yield</td><td>0.00%</td></tr><tr><td>År med utbytte</td><td>0</td></tr><tr><td>P/E</td><td>11.6</td></tr><tr><td>Utbyttevekst 5 år</td><td>+0.0% p.a.</td></tr><tr><td>Markedsverdi</td><td>14.4 mrd NOK</td></tr><tr><td>52-ukers kurs</td><td>26.15 – 62.0 NOK</td></tr></tbody></table>
+  <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Energi</td></tr><tr><td>Frekvens</td><td>Uregelmessig</td></tr><tr><td>Utbytte per aksje</td><td>0 NOK</td></tr><tr><td>Direkteavkastning</td><td>—</td></tr><tr><td>5-årssnitt yield</td><td>0.00%</td></tr><tr><td>År med utbytte</td><td>0</td></tr><tr><td>P/E</td><td>11.7</td></tr><tr><td>Utbyttevekst 5 år</td><td>+0.0% p.a.</td></tr><tr><td>Markedsverdi</td><td>14.4 mrd NOK</td></tr><tr><td>52-ukers kurs</td><td>26.15 – 62.0 NOK</td></tr></tbody></table>
 
   </section>
 
-  <div class="relaterte"><h2>Andre energi-aksjer med utbytte</h2><div class="rel-grid"><a href="/aksjer/VAR/" class="rel-kort"><span class="rel-ticker">VAR</span><span class="rel-navn">Vår Energi ASA</span><span class="rel-yield">10.9%</span></a>
+  <div class="relaterte"><h2>Andre energi-aksjer med utbytte</h2><div class="rel-grid"><a href="/aksjer/VAR/" class="rel-kort"><span class="rel-ticker">VAR</span><span class="rel-navn">Vår Energi ASA</span><span class="rel-yield">10.8%</span></a>
 <a href="/aksjer/BNOR/" class="rel-kort"><span class="rel-ticker">BNOR</span><span class="rel-navn">BlueNord ASA</span><span class="rel-yield">10.1%</span></a>
 <a href="/aksjer/ENH/" class="rel-kort"><span class="rel-ticker">ENH</span><span class="rel-navn">SED Energy Holdings PLC</span><span class="rel-yield">9.6%</span></a>
 <a href="/aksjer/DNO/" class="rel-kort"><span class="rel-ticker">DNO</span><span class="rel-navn">DNO ASA</span><span class="rel-yield">8.1%</span></a></div></div>
@@ -428,7 +444,7 @@
     <a href="https://exday.no/?aksje=BWE">Åpne BWE i exday.no →</a>
   </div>
 
-  <p class="updated">Sist oppdatert: 2026-04-22</p>
+  <p class="updated">Sist oppdatert: 2026-04-23</p>
   <footer style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid #e5e7eb;font-size:0.78rem;text-align:center;color:#9ca3af;line-height:1.6;" class="std-footer">
     <p>Kurs og utbyttedata hentes fra Yahoo Finance og Euronext. Oppdateres daglig på børsdager.</p>
     <p style="max-width:36rem;margin:0.4rem auto;">

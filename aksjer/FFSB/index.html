@@ -80,6 +80,7 @@
     }
   ]
 }</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Betaler Flekkefjord Sparebank utbytte hvert år, og hvor ofte?", "acceptedAnswer": {"@type": "Answer", "text": "Flekkefjord Sparebank betaler utbytte én gang i året. Selskapet har betalt utbytte de siste 2 årene."}}, {"@type": "Question", "name": "Hva er direkteavkastningen (yield) til FFSB?", "acceptedAnswer": {"@type": "Answer", "text": "Direkteavkastningen (yield) for FFSB er 5.40%, beregnet som 6.4 NOK i annualisert utbytte per aksje delt på aksjekursen. Det er på linje med det historiske 5-årsnittet på 4.6%. Yield endres daglig fordi den er koblet til kursen: stiger kursen, faller yielden."}}, {"@type": "Question", "name": "Hva er skatten på utbytte fra FFSB?", "acceptedAnswer": {"@type": "Answer", "text": "Utbytte fra Flekkefjord Sparebank beskattes med 37,84 % for personlige aksjonærer som eier aksjen direkte (via VPS-konto). Med en yield på 5.40 % gir det en nettoyield etter skatt på ca. 3.36 %. Eier du aksjen via aksjesparekonto (ASK), utsettes skatten til du tar ut midler — utbyttet reinvesteres skattefritt innen kontoen og gir renters-rente-effekt over tid."}}, {"@type": "Question", "name": "Er utbyttet fra Flekkefjord Sparebank bærekraftig?", "acceptedAnswer": {"@type": "Answer", "text": "Payout ratio for Flekkefjord Sparebank er 5 % — det vil si andelen av inntjeningen per aksje som utbetales som utbytte. En payout ratio under 50 % betyr at mer enn halvparten av overskuddet beholdes i selskapet. Det gir Flekkefjord Sparebank god buffer til å opprettholde — eller øke — utbyttet selv om inntjeningen svinger."}}]}</script>
   <link rel="stylesheet" href="/assets/tailwind.css"/>
   <link rel="stylesheet" href="/assets/style.css"/>
   <script>
@@ -177,9 +178,16 @@
     .updated { color: #9ca3af; }
     .breadcrumb { color: #6b7280; }
     .sub { color: #6b7280; }
-    .faq-item { background: #fff; border-color: #e5e7eb; }
-    .faq-q { color: #111827; }
-    .faq-a { color: #374151; }
+    .faq { margin: 2rem 0; }
+    .faq h2 { font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem; color: #374151; }
+    .faq-item { border: 1px solid #e5e7eb; border-radius: 0.75rem; overflow: hidden; margin-bottom: 0.5rem; }
+    .faq-item details summary { padding: 0.9rem 1.25rem; cursor: pointer; font-weight: 500; font-size: 0.875rem; color: #111827; list-style: none; display: flex; align-items: center; justify-content: space-between; }
+    .faq-item details summary::-webkit-details-marker { display: none; }
+    .faq-item details summary::after { content: '+'; font-size: 1.1rem; flex-shrink: 0; margin-left: 0.5rem; color: #9ca3af; }
+    .faq-item details[open] summary::after { content: '−'; }
+    .faq-item details summary:hover { background: #f9fafb; }
+    .faq-item details[open] summary { background: #f0fdf4; color: #15803d; }
+    .faq-svar { padding: 0.75rem 1.25rem 1rem; font-size: 0.85rem; color: #4b5563; line-height: 1.65; border-top: 1px solid #f3f4f6; }
     .rel-kort { background: #fff; border-color: #e5e7eb; }
     .rel-navn { color: #6b7280; }
     .badge { background: #dcfce7; color: #15803d; }
@@ -228,6 +236,12 @@
     .dark .risiko-liste li { border-left-color: #7f1d1d; color: #9ca3af; }
     .dark .rel-kort { background: #111827; border-color: #1f2937; }
     .dark .rel-navn { color: #9ca3af; }
+    .dark .faq h2 { color: #d1d5db; }
+    .dark .faq-item { border-color: #374151; }
+    .dark .faq-item details summary { color: #e5e7eb; }
+    .dark .faq-item details summary:hover { background: #1f2937; }
+    .dark .faq-item details[open] summary { background: #052e16; color: #4ade80; }
+    .dark .faq-svar { color: #9ca3af; border-top-color: #1f2937; }
   </style>
 </head>
 <body>
@@ -387,7 +401,7 @@
   <!-- ── UTBYTTE ── -->
   <section id="utbytte">
 
-  <div class="analyse"><h2>Utbyttedatoer</h2><p>Yielden på 5.4% er på linje med snittet for Finans-sektoren (5.6%).</p></div>
+  <div class="analyse"><h2>Utbyttedatoer</h2><p>Yielden på 5.4% er på linje med snittet for Finans-sektoren (5.7%).</p></div>
 
   <h2>Historiske utbytter</h2><svg viewBox="0 0 420 180" style="width:100%;max-width:420px;height:auto;display:block;margin-bottom:0.5rem;" aria-label="Historiske utbytter per aksje i NOK"><line x1="52" y1="148.0" x2="408" y2="148.0" stroke="#e5e7eb" stroke-width="1" class="ytick"/><text x="48" y="152.0" text-anchor="end" font-size="10" fill="#9ca3af">0.0</text><line x1="52" y1="104.1" x2="408" y2="104.1" stroke="#e5e7eb" stroke-width="1" class="ytick"/><text x="48" y="108.1" text-anchor="end" font-size="10" fill="#9ca3af">2.13</text><line x1="52" y1="59.9" x2="408" y2="59.9" stroke="#e5e7eb" stroke-width="1" class="ytick"/><text x="48" y="63.9" text-anchor="end" font-size="10" fill="#9ca3af">4.27</text><line x1="52" y1="16.0" x2="408" y2="16.0" stroke="#e5e7eb" stroke-width="1" class="ytick"/><text x="48" y="20.0" text-anchor="end" font-size="10" fill="#9ca3af">6.4</text><rect class="hbar" x="123.0" y="53.1" width="36" height="94.9" rx="3" fill="#16a34a" opacity="0.85"/><rect class="hbar" x="301.0" y="16.0" width="36" height="132.0" rx="3" fill="#16a34a" opacity="0.85"/><text x="141.0" y="174" text-anchor="middle" font-size="10" fill="#9ca3af">2025</text><text x="319.0" y="174" text-anchor="middle" font-size="10" fill="#9ca3af">2026</text><rect class="htip-bg" x="89.0" y="25.1" width="106" height="20" rx="4" fill="#111827" opacity="0" pointer-events="none"/><text class="htip-txt" x="141.0" y="40.1" text-anchor="middle" font-size="10" fill="#f3f4f6" opacity="0" pointer-events="none">4.6 NOK · 3.9% yield</text><rect class="htrig" x="52.0" y="16" width="178.0" height="132" fill="transparent" onmouseenter="showTip(this)" onmouseleave="hideTip(this)" data-i="0"/><rect class="htip-bg" x="267.0" y="2.0" width="106" height="20" rx="4" fill="#111827" opacity="0" pointer-events="none"/><text class="htip-txt" x="319.0" y="14.0" text-anchor="middle" font-size="10" fill="#f3f4f6" opacity="0" pointer-events="none">6.4 NOK · 5.4% yield</text><rect class="htrig" x="230.0" y="16" width="178.0" height="132" fill="transparent" onmouseenter="showTip(this)" onmouseleave="hideTip(this)" data-i="1"/><text x="16" y="82.0" text-anchor="middle" font-size="10" fill="#9ca3af" transform="rotate(-90,16,82.0)">NOK per aksje</text></svg><script>
 function showTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAll('.htip-bg')[i],tx=s.querySelectorAll('.htip-txt')[i];bg.setAttribute('opacity','0.92');tx.setAttribute('opacity','1');}
@@ -404,7 +418,7 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
           <td>3.88%</td>
         </tr></tbody></table>
 
-  <div class="profil-seksjon"><h2>Utbytteprofil</h2><div class="profil-badges"><span class="profil-badge badge-green">Høy yield</span><span class="profil-badge badge-teal">Utbyttevekst</span><span class="profil-badge badge-gray">Defensiv</span></div><p class="profil-tekst">FFSB gir 5.4% direkteavkastning, nær sektorsnittet for finans på 5.6%.</p></div>
+  <div class="profil-seksjon"><h2>Utbytteprofil</h2><div class="profil-badges"><span class="profil-badge badge-green">Høy yield</span><span class="profil-badge badge-teal">Utbyttevekst</span><span class="profil-badge badge-gray">Defensiv</span></div><p class="profil-tekst">FFSB gir 5.4% direkteavkastning, nær sektorsnittet for finans på 5.7%. Lav utbetalingsgrad gir rom for fremtidige utbytteøkninger.</p></div>
 
   <div class="historikk-prosa"><h2>Utbyttehistorikk</h2><p>Flekkefjord Sparebank har de siste 2 årene betalt mellom 4.60 og 6.40 NOK per aksje i utbytte. I 2026 er utbyttet 6.40 NOK per aksje, tilsvarende 5.4% direkteavkastning.</p></div>
 
@@ -412,12 +426,18 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
 <li>Økte kredittap i nedgangstider kan presse resultater</li>
 <li>Regulatoriske kapitalkrav begrenser utbyttekapasitet</li></ul></div>
 
+  <div class="faq"><h2>Vanlige spørsmål om FFSB</h2><div class="faq-item"><details><summary class="faq-q">Betaler Flekkefjord Sparebank utbytte hvert år, og hvor ofte?</summary><div class="faq-svar">Flekkefjord Sparebank betaler utbytte én gang i året. Selskapet har betalt utbytte de siste 2 årene.</div></details></div>
+<div class="faq-item"><details><summary class="faq-q">Hva er direkteavkastningen (yield) til FFSB?</summary><div class="faq-svar">Direkteavkastningen (yield) for FFSB er 5.40%, beregnet som 6.4 NOK i annualisert utbytte per aksje delt på aksjekursen. Det er på linje med det historiske 5-årsnittet på 4.6%. Yield endres daglig fordi den er koblet til kursen: stiger kursen, faller yielden.</div></details></div>
+<div class="faq-item"><details><summary class="faq-q">Hva er skatten på utbytte fra FFSB?</summary><div class="faq-svar">Utbytte fra Flekkefjord Sparebank beskattes med 37,84 % for personlige aksjonærer som eier aksjen direkte (via VPS-konto). Med en yield på 5.40 % gir det en nettoyield etter skatt på ca. 3.36 %. Eier du aksjen via aksjesparekonto (ASK), utsettes skatten til du tar ut midler — utbyttet reinvesteres skattefritt innen kontoen og gir renters-rente-effekt over tid.</div></details></div>
+<div class="faq-item"><details><summary class="faq-q">Er utbyttet fra Flekkefjord Sparebank bærekraftig?</summary><div class="faq-svar">Payout ratio for Flekkefjord Sparebank er 5 % — det vil si andelen av inntjeningen per aksje som utbetales som utbytte. En payout ratio under 50 % betyr at mer enn halvparten av overskuddet beholdes i selskapet. Det gir Flekkefjord Sparebank god buffer til å opprettholde — eller øke — utbyttet selv om inntjeningen svinger.</div></details></div>
+</div>
+
   </section>
 
   <!-- ── NØKKELTALL ── -->
   <section id="nokkeltall">
 
-  <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Finans</td></tr><tr><td>Frekvens</td><td>Årlig</td></tr><tr><td>Utbytte per aksje</td><td>6.4 NOK</td></tr><tr><td>Direkteavkastning</td><td>5.40%</td></tr><tr><td>5-årssnitt yield</td><td>4.64%</td></tr><tr><td>År med utbytte</td><td>2</td></tr><tr><td>P/E</td><td>1.4</td></tr><tr><td>Utbyttevekst 5 år</td><td>+39.1% p.a.</td></tr><tr><td>Markedsverdi</td><td>0.2 mrd NOK</td></tr><tr><td>52-ukers kurs</td><td>115.52 – 138.0 NOK</td></tr></tbody></table>
+  <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Finans</td></tr><tr><td>Frekvens</td><td>Årlig</td></tr><tr><td>Utbytte per aksje</td><td>6.4 NOK</td></tr><tr><td>Direkteavkastning</td><td>5.40%</td></tr><tr><td>5-årssnitt yield</td><td>4.64%</td></tr><tr><td>År med utbytte</td><td>2</td></tr><tr><td>P/E</td><td>1.4</td></tr><tr><td>Payout ratio</td><td>5%</td></tr><tr><td>Utbyttevekst 5 år</td><td>+39.1% p.a.</td></tr><tr><td>Markedsverdi</td><td>0.2 mrd NOK</td></tr><tr><td>52-ukers kurs</td><td>115.52 – 138.0 NOK</td></tr></tbody></table>
 
   </section>
 
@@ -441,7 +461,7 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
     <a href="https://exday.no/?aksje=FFSB">Åpne FFSB i exday.no →</a>
   </div>
 
-  <p class="updated">Sist oppdatert: 2026-04-22</p>
+  <p class="updated">Sist oppdatert: 2026-04-23</p>
   <footer style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid #e5e7eb;font-size:0.78rem;text-align:center;color:#9ca3af;line-height:1.6;" class="std-footer">
     <p>Kurs og utbyttedata hentes fra Yahoo Finance og Euronext. Oppdateres daglig på børsdager.</p>
     <p style="max-width:36rem;margin:0.4rem auto;">

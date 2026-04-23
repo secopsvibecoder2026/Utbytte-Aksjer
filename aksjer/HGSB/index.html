@@ -80,6 +80,7 @@
     }
   ]
 }</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Betaler Haugesund Sparebank utbytte hvert år, og hvor ofte?", "acceptedAnswer": {"@type": "Answer", "text": "Haugesund Sparebank betaler utbytte uregelmessig. Selskapet har betalt utbytte de siste 1 årene."}}, {"@type": "Question", "name": "Hva er direkteavkastningen (yield) til HGSB?", "acceptedAnswer": {"@type": "Answer", "text": "Direkteavkastningen (yield) for HGSB er 5.52%, beregnet som 10.1 NOK i annualisert utbytte per aksje delt på aksjekursen. Det er på linje med det historiske 5-årsnittet på 6.8%. Yield endres daglig fordi den er koblet til kursen: stiger kursen, faller yielden."}}, {"@type": "Question", "name": "Hva er skatten på utbytte fra HGSB?", "acceptedAnswer": {"@type": "Answer", "text": "Utbytte fra Haugesund Sparebank beskattes med 37,84 % for personlige aksjonærer som eier aksjen direkte (via VPS-konto). Med en yield på 5.52 % gir det en nettoyield etter skatt på ca. 3.43 %. Eier du aksjen via aksjesparekonto (ASK), utsettes skatten til du tar ut midler — utbyttet reinvesteres skattefritt innen kontoen og gir renters-rente-effekt over tid."}}, {"@type": "Question", "name": "Er utbyttet fra Haugesund Sparebank bærekraftig?", "acceptedAnswer": {"@type": "Answer", "text": "Payout ratio for Haugesund Sparebank er 135 % — det vil si andelen av inntjeningen per aksje som utbetales som utbytte. En payout ratio over 135 % innebærer at Haugesund Sparebank deler ut en svært stor andel av inntjeningen. Det kan holdes oppe med sterk kontantstrøm, men er mer sårbart ved svakere kvartaler."}}]}</script>
   <link rel="stylesheet" href="/assets/tailwind.css"/>
   <link rel="stylesheet" href="/assets/style.css"/>
   <script>
@@ -177,9 +178,16 @@
     .updated { color: #9ca3af; }
     .breadcrumb { color: #6b7280; }
     .sub { color: #6b7280; }
-    .faq-item { background: #fff; border-color: #e5e7eb; }
-    .faq-q { color: #111827; }
-    .faq-a { color: #374151; }
+    .faq { margin: 2rem 0; }
+    .faq h2 { font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem; color: #374151; }
+    .faq-item { border: 1px solid #e5e7eb; border-radius: 0.75rem; overflow: hidden; margin-bottom: 0.5rem; }
+    .faq-item details summary { padding: 0.9rem 1.25rem; cursor: pointer; font-weight: 500; font-size: 0.875rem; color: #111827; list-style: none; display: flex; align-items: center; justify-content: space-between; }
+    .faq-item details summary::-webkit-details-marker { display: none; }
+    .faq-item details summary::after { content: '+'; font-size: 1.1rem; flex-shrink: 0; margin-left: 0.5rem; color: #9ca3af; }
+    .faq-item details[open] summary::after { content: '−'; }
+    .faq-item details summary:hover { background: #f9fafb; }
+    .faq-item details[open] summary { background: #f0fdf4; color: #15803d; }
+    .faq-svar { padding: 0.75rem 1.25rem 1rem; font-size: 0.85rem; color: #4b5563; line-height: 1.65; border-top: 1px solid #f3f4f6; }
     .rel-kort { background: #fff; border-color: #e5e7eb; }
     .rel-navn { color: #6b7280; }
     .badge { background: #dcfce7; color: #15803d; }
@@ -228,6 +236,12 @@
     .dark .risiko-liste li { border-left-color: #7f1d1d; color: #9ca3af; }
     .dark .rel-kort { background: #111827; border-color: #1f2937; }
     .dark .rel-navn { color: #9ca3af; }
+    .dark .faq h2 { color: #d1d5db; }
+    .dark .faq-item { border-color: #374151; }
+    .dark .faq-item details summary { color: #e5e7eb; }
+    .dark .faq-item details summary:hover { background: #1f2937; }
+    .dark .faq-item details[open] summary { background: #052e16; color: #4ade80; }
+    .dark .faq-svar { color: #9ca3af; border-top-color: #1f2937; }
   </style>
 </head>
 <body>
@@ -326,7 +340,7 @@
   <canvas id="kurs-canvas-HGSB" style="display:block;border-radius:10px;width:100%;"></canvas>
   <script>
   (function() {
-    var ALLE = [{"d": "2024-07-07", "k": 141.89}, {"d": "2024-07-14", "k": 137.19}, {"d": "2024-07-21", "k": 133.94}, {"d": "2024-07-28", "k": 131.61}, {"d": "2024-08-04", "k": 128.81}, {"d": "2024-08-11", "k": 127.87}, {"d": "2024-08-18", "k": 122.29}, {"d": "2024-08-25", "k": 129.57}, {"d": "2024-09-01", "k": 130.69}, {"d": "2024-09-08", "k": 133.03}, {"d": "2024-09-15", "k": 140.03}, {"d": "2024-09-22", "k": 139.56}, {"d": "2024-09-29", "k": 139.6}, {"d": "2024-10-06", "k": 131.62}, {"d": "2024-10-13", "k": 135.36}, {"d": "2024-10-20", "k": 129.01}, {"d": "2024-10-27", "k": 135.34}, {"d": "2024-11-03", "k": 138.44}, {"d": "2024-11-10", "k": 142.73}, {"d": "2024-11-17", "k": 141.87}, {"d": "2024-11-24", "k": 140.96}, {"d": "2024-12-01", "k": 137.23}, {"d": "2024-12-08", "k": 140.03}, {"d": "2024-12-15", "k": 140.94}, {"d": "2024-12-22", "k": 136.39}, {"d": "2024-12-29", "k": 140.05}, {"d": "2025-01-05", "k": 143.28}, {"d": "2025-01-12", "k": 144.69}, {"d": "2025-01-19", "k": 143.76}, {"d": "2025-01-26", "k": 144.69}, {"d": "2025-02-02", "k": 144.68}, {"d": "2025-02-09", "k": 151.23}, {"d": "2025-02-16", "k": 151.23}, {"d": "2025-02-23", "k": 165.23}, {"d": "2025-03-02", "k": 163.36}, {"d": "2025-03-09", "k": 153.08}, {"d": "2025-03-16", "k": 162.43}, {"d": "2025-03-23", "k": 177.98}, {"d": "2025-03-30", "k": 176.0}, {"d": "2025-04-06", "k": 165.02}, {"d": "2025-04-13", "k": 165.0}, {"d": "2025-04-20", "k": 157.5}, {"d": "2025-04-27", "k": 162.48}, {"d": "2025-05-04", "k": 160.0}, {"d": "2025-05-11", "k": 167.0}, {"d": "2025-05-18", "k": 167.0}, {"d": "2025-05-25", "k": 170.0}, {"d": "2025-06-01", "k": 168.0}, {"d": "2025-06-08", "k": 169.98}, {"d": "2025-06-15", "k": 178.0}, {"d": "2025-06-22", "k": 175.02}, {"d": "2025-06-29", "k": 183.5}, {"d": "2025-07-06", "k": 179.98}, {"d": "2025-07-13", "k": 179.98}, {"d": "2025-07-20", "k": 174.0}, {"d": "2025-07-27", "k": 179.0}, {"d": "2025-08-03", "k": 175.0}, {"d": "2025-08-10", "k": 175.0}, {"d": "2025-08-17", "k": 170.04}, {"d": "2025-08-24", "k": 157.2}, {"d": "2025-08-31", "k": 164.0}, {"d": "2025-09-07", "k": 161.98}, {"d": "2025-09-14", "k": 155.0}, {"d": "2025-09-21", "k": 156.94}, {"d": "2025-09-28", "k": 160.0}, {"d": "2025-10-05", "k": 158.0}, {"d": "2025-10-12", "k": 157.0}, {"d": "2025-10-19", "k": 160.98}, {"d": "2025-10-26", "k": 159.98}, {"d": "2025-11-02", "k": 162.0}, {"d": "2025-11-09", "k": 160.88}, {"d": "2025-11-16", "k": 162.0}, {"d": "2025-11-23", "k": 161.0}, {"d": "2025-11-30", "k": 161.66}, {"d": "2025-12-07", "k": 160.5}, {"d": "2025-12-14", "k": 161.6}, {"d": "2025-12-21", "k": 156.02}, {"d": "2025-12-28", "k": 159.98}, {"d": "2026-01-04", "k": 160.5}, {"d": "2026-01-11", "k": 161.94}, {"d": "2026-01-18", "k": 161.88}, {"d": "2026-01-25", "k": 163.5}, {"d": "2026-02-01", "k": 160.0}, {"d": "2026-02-08", "k": 161.98}, {"d": "2026-02-15", "k": 162.5}, {"d": "2026-02-22", "k": 164.68}, {"d": "2026-03-01", "k": 163.0}, {"d": "2026-03-08", "k": 161.3}, {"d": "2026-03-15", "k": 168.0}, {"d": "2026-03-22", "k": 167.88}, {"d": "2026-03-29", "k": 167.0}, {"d": "2026-04-05", "k": 170.0}, {"d": "2026-04-12", "k": 179.2}, {"d": "2026-04-19", "k": 182.98}, {"d": "2026-04-26", "k": 182.96}];
+    var ALLE = [{"d": "2024-07-07", "k": 134.06}, {"d": "2024-07-14", "k": 129.62}, {"d": "2024-07-21", "k": 126.55}, {"d": "2024-07-28", "k": 124.34}, {"d": "2024-08-04", "k": 121.7}, {"d": "2024-08-11", "k": 120.81}, {"d": "2024-08-18", "k": 115.54}, {"d": "2024-08-25", "k": 122.42}, {"d": "2024-09-01", "k": 123.48}, {"d": "2024-09-08", "k": 125.68}, {"d": "2024-09-15", "k": 132.3}, {"d": "2024-09-22", "k": 131.86}, {"d": "2024-09-29", "k": 131.89}, {"d": "2024-10-06", "k": 124.36}, {"d": "2024-10-13", "k": 127.89}, {"d": "2024-10-20", "k": 121.89}, {"d": "2024-10-27", "k": 127.87}, {"d": "2024-11-03", "k": 130.8}, {"d": "2024-11-10", "k": 134.85}, {"d": "2024-11-17", "k": 134.04}, {"d": "2024-11-24", "k": 133.18}, {"d": "2024-12-01", "k": 129.65}, {"d": "2024-12-08", "k": 132.3}, {"d": "2024-12-15", "k": 133.16}, {"d": "2024-12-22", "k": 128.86}, {"d": "2024-12-29", "k": 132.31}, {"d": "2025-01-05", "k": 135.37}, {"d": "2025-01-12", "k": 136.71}, {"d": "2025-01-19", "k": 135.82}, {"d": "2025-01-26", "k": 136.71}, {"d": "2025-02-02", "k": 136.69}, {"d": "2025-02-09", "k": 142.88}, {"d": "2025-02-16", "k": 142.88}, {"d": "2025-02-23", "k": 156.11}, {"d": "2025-03-02", "k": 154.35}, {"d": "2025-03-09", "k": 144.63}, {"d": "2025-03-16", "k": 153.46}, {"d": "2025-03-23", "k": 168.15}, {"d": "2025-03-30", "k": 166.28}, {"d": "2025-04-06", "k": 155.91}, {"d": "2025-04-13", "k": 155.89}, {"d": "2025-04-20", "k": 148.81}, {"d": "2025-04-27", "k": 153.51}, {"d": "2025-05-04", "k": 151.17}, {"d": "2025-05-11", "k": 157.78}, {"d": "2025-05-18", "k": 157.78}, {"d": "2025-05-25", "k": 160.62}, {"d": "2025-06-01", "k": 158.73}, {"d": "2025-06-08", "k": 160.6}, {"d": "2025-06-15", "k": 168.17}, {"d": "2025-06-22", "k": 165.36}, {"d": "2025-06-29", "k": 173.37}, {"d": "2025-07-06", "k": 170.04}, {"d": "2025-07-13", "k": 170.04}, {"d": "2025-07-20", "k": 164.39}, {"d": "2025-07-27", "k": 169.12}, {"d": "2025-08-03", "k": 165.34}, {"d": "2025-08-10", "k": 165.34}, {"d": "2025-08-17", "k": 160.65}, {"d": "2025-08-24", "k": 148.52}, {"d": "2025-08-31", "k": 154.95}, {"d": "2025-09-07", "k": 153.04}, {"d": "2025-09-14", "k": 146.44}, {"d": "2025-09-21", "k": 148.28}, {"d": "2025-09-28", "k": 151.17}, {"d": "2025-10-05", "k": 149.28}, {"d": "2025-10-12", "k": 148.33}, {"d": "2025-10-19", "k": 152.09}, {"d": "2025-10-26", "k": 151.15}, {"d": "2025-11-02", "k": 153.06}, {"d": "2025-11-09", "k": 152.0}, {"d": "2025-11-16", "k": 153.06}, {"d": "2025-11-23", "k": 152.11}, {"d": "2025-11-30", "k": 152.74}, {"d": "2025-12-07", "k": 151.64}, {"d": "2025-12-14", "k": 152.68}, {"d": "2025-12-21", "k": 147.41}, {"d": "2025-12-28", "k": 151.15}, {"d": "2026-01-04", "k": 151.64}, {"d": "2026-01-11", "k": 153.0}, {"d": "2026-01-18", "k": 152.94}, {"d": "2026-01-25", "k": 154.47}, {"d": "2026-02-01", "k": 151.17}, {"d": "2026-02-08", "k": 153.04}, {"d": "2026-02-15", "k": 153.53}, {"d": "2026-02-22", "k": 155.59}, {"d": "2026-03-01", "k": 154.0}, {"d": "2026-03-08", "k": 152.4}, {"d": "2026-03-15", "k": 158.73}, {"d": "2026-03-22", "k": 158.61}, {"d": "2026-03-29", "k": 157.78}, {"d": "2026-04-05", "k": 160.62}, {"d": "2026-04-12", "k": 169.31}, {"d": "2026-04-19", "k": 172.88}, {"d": "2026-04-26", "k": 172.86}];
     var VAL = 'NOK';
     function filtrer(p) {
       var now = new Date(), ar = now.getFullYear();
@@ -387,7 +401,7 @@
   <!-- ── UTBYTTE ── -->
   <section id="utbytte">
 
-  <div class="analyse"><h2>Utbyttedatoer</h2><p>Yielden på 5.5% er på linje med snittet for Finans-sektoren (5.6%).</p></div>
+  <div class="analyse"><h2>Utbyttedatoer</h2><p>Yielden på 5.5% er på linje med snittet for Finans-sektoren (5.7%).</p></div>
 
   <h2>Historiske utbytter</h2><table><thead><tr><th>År</th><th>Utbytte</th><th>Yield</th></tr></thead><tbody>
         <tr>
@@ -396,7 +410,7 @@
           <td>6.83%</td>
         </tr></tbody></table>
 
-  <div class="profil-seksjon"><h2>Utbytteprofil</h2><div class="profil-badges"><span class="profil-badge badge-green">Høy yield</span><span class="profil-badge badge-gray">Defensiv</span></div><p class="profil-tekst">HGSB gir 5.5% direkteavkastning, nær sektorsnittet for finans på 5.6%.</p></div>
+  <div class="profil-seksjon"><h2>Utbytteprofil</h2><div class="profil-badges"><span class="profil-badge badge-green">Høy yield</span><span class="profil-badge badge-gray">Defensiv</span></div><p class="profil-tekst">HGSB gir 5.5% direkteavkastning, nær sektorsnittet for finans på 5.7%. Utbetalingsgraden er over 100% — utbyttet finansieres delvis av kapital.</p></div>
 
   
 
@@ -404,12 +418,18 @@
 <li>Økte kredittap i nedgangstider kan presse resultater</li>
 <li>Regulatoriske kapitalkrav begrenser utbyttekapasitet</li></ul></div>
 
+  <div class="faq"><h2>Vanlige spørsmål om HGSB</h2><div class="faq-item"><details><summary class="faq-q">Betaler Haugesund Sparebank utbytte hvert år, og hvor ofte?</summary><div class="faq-svar">Haugesund Sparebank betaler utbytte uregelmessig. Selskapet har betalt utbytte de siste 1 årene.</div></details></div>
+<div class="faq-item"><details><summary class="faq-q">Hva er direkteavkastningen (yield) til HGSB?</summary><div class="faq-svar">Direkteavkastningen (yield) for HGSB er 5.52%, beregnet som 10.1 NOK i annualisert utbytte per aksje delt på aksjekursen. Det er på linje med det historiske 5-årsnittet på 6.8%. Yield endres daglig fordi den er koblet til kursen: stiger kursen, faller yielden.</div></details></div>
+<div class="faq-item"><details><summary class="faq-q">Hva er skatten på utbytte fra HGSB?</summary><div class="faq-svar">Utbytte fra Haugesund Sparebank beskattes med 37,84 % for personlige aksjonærer som eier aksjen direkte (via VPS-konto). Med en yield på 5.52 % gir det en nettoyield etter skatt på ca. 3.43 %. Eier du aksjen via aksjesparekonto (ASK), utsettes skatten til du tar ut midler — utbyttet reinvesteres skattefritt innen kontoen og gir renters-rente-effekt over tid.</div></details></div>
+<div class="faq-item"><details><summary class="faq-q">Er utbyttet fra Haugesund Sparebank bærekraftig?</summary><div class="faq-svar">Payout ratio for Haugesund Sparebank er 135 % — det vil si andelen av inntjeningen per aksje som utbetales som utbytte. En payout ratio over 135 % innebærer at Haugesund Sparebank deler ut en svært stor andel av inntjeningen. Det kan holdes oppe med sterk kontantstrøm, men er mer sårbart ved svakere kvartaler.</div></details></div>
+</div>
+
   </section>
 
   <!-- ── NØKKELTALL ── -->
   <section id="nokkeltall">
 
-  <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Finans</td></tr><tr><td>Frekvens</td><td>Uregelmessig</td></tr><tr><td>Utbytte per aksje</td><td>10.1 NOK</td></tr><tr><td>Direkteavkastning</td><td>5.52%</td></tr><tr><td>5-årssnitt yield</td><td>6.83%</td></tr><tr><td>År med utbytte</td><td>1</td></tr><tr><td>P/E</td><td>19.7</td></tr><tr><td>Utbyttevekst 5 år</td><td>+0.0% p.a.</td></tr><tr><td>Markedsverdi</td><td>1.0 mrd NOK</td></tr><tr><td>52-ukers kurs</td><td>152.0 – 194.0 NOK</td></tr></tbody></table>
+  <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Finans</td></tr><tr><td>Frekvens</td><td>Uregelmessig</td></tr><tr><td>Utbytte per aksje</td><td>10.1 NOK</td></tr><tr><td>Direkteavkastning</td><td>5.52%</td></tr><tr><td>5-årssnitt yield</td><td>6.83%</td></tr><tr><td>År med utbytte</td><td>1</td></tr><tr><td>P/E</td><td>19.7</td></tr><tr><td>Payout ratio</td><td>135%</td></tr><tr><td>Utbyttevekst 5 år</td><td>+0.0% p.a.</td></tr><tr><td>Markedsverdi</td><td>1.0 mrd NOK</td></tr><tr><td>52-ukers kurs</td><td>152.0 – 194.0 NOK</td></tr></tbody></table>
 
   </section>
 
@@ -433,7 +453,7 @@
     <a href="https://exday.no/?aksje=HGSB">Åpne HGSB i exday.no →</a>
   </div>
 
-  <p class="updated">Sist oppdatert: 2026-04-22</p>
+  <p class="updated">Sist oppdatert: 2026-04-23</p>
   <footer style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid #e5e7eb;font-size:0.78rem;text-align:center;color:#9ca3af;line-height:1.6;" class="std-footer">
     <p>Kurs og utbyttedata hentes fra Yahoo Finance og Euronext. Oppdateres daglig på børsdager.</p>
     <p style="max-width:36rem;margin:0.4rem auto;">

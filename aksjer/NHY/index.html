@@ -80,6 +80,7 @@
     }
   ]
 }</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Betaler Norsk Hydro ASA utbytte hvert år, og hvor ofte?", "acceptedAnswer": {"@type": "Answer", "text": "Norsk Hydro ASA betaler utbytte én gang i året. Med 25 år sammenhengende er NHY blant de mest stabile utbyttebetalerne på Oslo Børs."}}, {"@type": "Question", "name": "Hva er direkteavkastningen (yield) til NHY?", "acceptedAnswer": {"@type": "Answer", "text": "Direkteavkastningen (yield) for NHY er 2.80%, beregnet som 3.0 NOK i annualisert utbytte per aksje delt på aksjekursen. Det er på linje med det historiske 5-årsnittet på 4.0%. Yield endres daglig fordi den er koblet til kursen: stiger kursen, faller yielden."}}, {"@type": "Question", "name": "Hva er skatten på utbytte fra NHY?", "acceptedAnswer": {"@type": "Answer", "text": "Utbytte fra Norsk Hydro ASA beskattes med 37,84 % for personlige aksjonærer som eier aksjen direkte (via VPS-konto). Med en yield på 2.80 % gir det en nettoyield etter skatt på ca. 1.74 %. Eier du aksjen via aksjesparekonto (ASK), utsettes skatten til du tar ut midler — utbyttet reinvesteres skattefritt innen kontoen og gir renters-rente-effekt over tid."}}, {"@type": "Question", "name": "Er utbyttet fra Norsk Hydro ASA bærekraftig?", "acceptedAnswer": {"@type": "Answer", "text": "Payout ratio for Norsk Hydro ASA er 66 % — det vil si andelen av inntjeningen per aksje som utbetales som utbytte. En payout ratio mellom 50 og 80 % er vanlig for etablerte utbytteaksjer og anses bærekraftig så lenge inntjeningen er stabil. Sjekk at EPS-trenden er positiv."}}, {"@type": "Question", "name": "Hva er utbyttehistorikken til NHY de siste årene?", "acceptedAnswer": {"@type": "Answer", "text": "exday.no har utbyttedata for Norsk Hydro ASA fra 2022 til 2025. I denne perioden er det totalt utbetalt 17.25 NOK per aksje. Høyest enkeltutbytte var 6.85 NOK i 2022, lavest 2.25 NOK i 2025. Historikken gir et godt bilde av stabilitet og syklikalitet i selskapets utbetalinger."}}]}</script>
   <link rel="stylesheet" href="/assets/tailwind.css"/>
   <link rel="stylesheet" href="/assets/style.css"/>
   <script>
@@ -177,9 +178,16 @@
     .updated { color: #9ca3af; }
     .breadcrumb { color: #6b7280; }
     .sub { color: #6b7280; }
-    .faq-item { background: #fff; border-color: #e5e7eb; }
-    .faq-q { color: #111827; }
-    .faq-a { color: #374151; }
+    .faq { margin: 2rem 0; }
+    .faq h2 { font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem; color: #374151; }
+    .faq-item { border: 1px solid #e5e7eb; border-radius: 0.75rem; overflow: hidden; margin-bottom: 0.5rem; }
+    .faq-item details summary { padding: 0.9rem 1.25rem; cursor: pointer; font-weight: 500; font-size: 0.875rem; color: #111827; list-style: none; display: flex; align-items: center; justify-content: space-between; }
+    .faq-item details summary::-webkit-details-marker { display: none; }
+    .faq-item details summary::after { content: '+'; font-size: 1.1rem; flex-shrink: 0; margin-left: 0.5rem; color: #9ca3af; }
+    .faq-item details[open] summary::after { content: '−'; }
+    .faq-item details summary:hover { background: #f9fafb; }
+    .faq-item details[open] summary { background: #f0fdf4; color: #15803d; }
+    .faq-svar { padding: 0.75rem 1.25rem 1rem; font-size: 0.85rem; color: #4b5563; line-height: 1.65; border-top: 1px solid #f3f4f6; }
     .rel-kort { background: #fff; border-color: #e5e7eb; }
     .rel-navn { color: #6b7280; }
     .badge { background: #dcfce7; color: #15803d; }
@@ -228,6 +236,12 @@
     .dark .risiko-liste li { border-left-color: #7f1d1d; color: #9ca3af; }
     .dark .rel-kort { background: #111827; border-color: #1f2937; }
     .dark .rel-navn { color: #9ca3af; }
+    .dark .faq h2 { color: #d1d5db; }
+    .dark .faq-item { border-color: #374151; }
+    .dark .faq-item details summary { color: #e5e7eb; }
+    .dark .faq-item details summary:hover { background: #1f2937; }
+    .dark .faq-item details[open] summary { background: #052e16; color: #4ade80; }
+    .dark .faq-svar { color: #9ca3af; border-top-color: #1f2937; }
   </style>
 </head>
 <body>
@@ -387,7 +401,7 @@
   <!-- ── UTBYTTE ── -->
   <section id="utbytte">
 
-  <div class="analyse"><h2>Utbyttedatoer</h2><p>Yielden på 2.8% er på linje med snittet for Materialer-sektoren (3.0%).</p></div>
+  <div class="analyse"><h2>Utbyttedatoer</h2><p>Yielden på 2.8% er på linje med snittet for Materialer-sektoren (3.4%).</p></div>
 
   <h2>Historiske utbytter</h2><svg viewBox="0 0 420 180" style="width:100%;max-width:420px;height:auto;display:block;margin-bottom:0.5rem;" aria-label="Historiske utbytter per aksje i NOK"><line x1="52" y1="148.0" x2="408" y2="148.0" stroke="#e5e7eb" stroke-width="1" class="ytick"/><text x="48" y="152.0" text-anchor="end" font-size="10" fill="#9ca3af">0.0</text><line x1="52" y1="104.1" x2="408" y2="104.1" stroke="#e5e7eb" stroke-width="1" class="ytick"/><text x="48" y="108.1" text-anchor="end" font-size="10" fill="#9ca3af">2.28</text><line x1="52" y1="59.9" x2="408" y2="59.9" stroke="#e5e7eb" stroke-width="1" class="ytick"/><text x="48" y="63.9" text-anchor="end" font-size="10" fill="#9ca3af">4.57</text><line x1="52" y1="16.0" x2="408" y2="16.0" stroke="#e5e7eb" stroke-width="1" class="ytick"/><text x="48" y="20.0" text-anchor="end" font-size="10" fill="#9ca3af">6.85</text><rect class="hbar" x="78.5" y="16.0" width="36" height="132.0" rx="3" fill="#16a34a" opacity="0.85"/><rect class="hbar" x="167.5" y="39.1" width="36" height="108.9" rx="3" fill="#16a34a" opacity="0.85"/><rect class="hbar" x="256.5" y="99.8" width="36" height="48.2" rx="3" fill="#16a34a" opacity="0.85"/><rect class="hbar" x="345.5" y="104.6" width="36" height="43.4" rx="3" fill="#16a34a" opacity="0.85"/><text x="96.5" y="174" text-anchor="middle" font-size="10" fill="#9ca3af">2022</text><text x="185.5" y="174" text-anchor="middle" font-size="10" fill="#9ca3af">2023</text><text x="274.5" y="174" text-anchor="middle" font-size="10" fill="#9ca3af">2024</text><text x="363.5" y="174" text-anchor="middle" font-size="10" fill="#9ca3af">2025</text><rect class="htip-bg" x="44.5" y="2.0" width="106" height="20" rx="4" fill="#111827" opacity="0" pointer-events="none"/><text class="htip-txt" x="96.5" y="14.0" text-anchor="middle" font-size="10" fill="#f3f4f6" opacity="0" pointer-events="none">6.85 NOK · 6.4% yield</text><rect class="htrig" x="52.0" y="16" width="89.0" height="132" fill="transparent" onmouseenter="showTip(this)" onmouseleave="hideTip(this)" data-i="0"/><rect class="htip-bg" x="133.5" y="11.1" width="106" height="20" rx="4" fill="#111827" opacity="0" pointer-events="none"/><text class="htip-txt" x="185.5" y="26.1" text-anchor="middle" font-size="10" fill="#f3f4f6" opacity="0" pointer-events="none">5.65 NOK · 5.3% yield</text><rect class="htrig" x="141.0" y="16" width="89.0" height="132" fill="transparent" onmouseenter="showTip(this)" onmouseleave="hideTip(this)" data-i="1"/><rect class="htip-bg" x="222.5" y="71.8" width="106" height="20" rx="4" fill="#111827" opacity="0" pointer-events="none"/><text class="htip-txt" x="274.5" y="86.8" text-anchor="middle" font-size="10" fill="#f3f4f6" opacity="0" pointer-events="none">2.5 NOK · 2.3% yield</text><rect class="htrig" x="230.0" y="16" width="89.0" height="132" fill="transparent" onmouseenter="showTip(this)" onmouseleave="hideTip(this)" data-i="2"/><rect class="htip-bg" x="302.0" y="76.6" width="106" height="20" rx="4" fill="#111827" opacity="0" pointer-events="none"/><text class="htip-txt" x="363.5" y="91.6" text-anchor="middle" font-size="10" fill="#f3f4f6" opacity="0" pointer-events="none">2.25 NOK · 2.1% yield</text><rect class="htrig" x="319.0" y="16" width="89.0" height="132" fill="transparent" onmouseenter="showTip(this)" onmouseleave="hideTip(this)" data-i="3"/><text x="16" y="82.0" text-anchor="middle" font-size="10" fill="#9ca3af" transform="rotate(-90,16,82.0)">NOK per aksje</text></svg><script>
 function showTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAll('.htip-bg')[i],tx=s.querySelectorAll('.htip-txt')[i];bg.setAttribute('opacity','0.92');tx.setAttribute('opacity','1');}
@@ -414,7 +428,7 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
           <td>6.38%</td>
         </tr></tbody></table>
 
-  <div class="profil-seksjon"><h2>Utbytteprofil</h2><div class="profil-badges"><span class="profil-badge badge-blue">Stabil betaler</span><span class="profil-badge badge-teal">Utbyttevekst</span><span class="profil-badge badge-orange">Syklisk</span></div><p class="profil-tekst">NHY gir 2.8% direkteavkastning, nær sektorsnittet for materialer på 3.0%. Med 25 år på rad med utbytte er Norsk Hydro ASA blant de mest stabile utbyttebetalerne på Oslo Børs.</p></div>
+  <div class="profil-seksjon"><h2>Utbytteprofil</h2><div class="profil-badges"><span class="profil-badge badge-blue">Stabil betaler</span><span class="profil-badge badge-teal">Utbyttevekst</span><span class="profil-badge badge-orange">Syklisk</span></div><p class="profil-tekst">NHY gir 2.8% direkteavkastning, noe under sektorsnittet for materialer på 3.4%. Med 25 år på rad med utbytte er Norsk Hydro ASA blant de mest stabile utbyttebetalerne på Oslo Børs.</p></div>
 
   <div class="historikk-prosa"><h2>Utbyttehistorikk</h2><p>Norsk Hydro ASA har de siste 4 årene betalt mellom 2.25 og 6.85 NOK per aksje i utbytte. Det høyeste utbyttet ble registrert i 2022 med 6.85 NOK per aksje (6.4% yield). I 2025 er utbyttet 2.25 NOK per aksje, tilsvarende 2.8% direkteavkastning.</p></div>
 
@@ -422,17 +436,24 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
 <li>Valutaeksponering ved internasjonal omsetning kan påvirke marginer</li>
 <li>Miljøregulering kan øke driftskostnader</li></ul></div>
 
+  <div class="faq"><h2>Vanlige spørsmål om NHY</h2><div class="faq-item"><details><summary class="faq-q">Betaler Norsk Hydro ASA utbytte hvert år, og hvor ofte?</summary><div class="faq-svar">Norsk Hydro ASA betaler utbytte én gang i året. Med 25 år sammenhengende er NHY blant de mest stabile utbyttebetalerne på Oslo Børs.</div></details></div>
+<div class="faq-item"><details><summary class="faq-q">Hva er direkteavkastningen (yield) til NHY?</summary><div class="faq-svar">Direkteavkastningen (yield) for NHY er 2.80%, beregnet som 3.0 NOK i annualisert utbytte per aksje delt på aksjekursen. Det er på linje med det historiske 5-årsnittet på 4.0%. Yield endres daglig fordi den er koblet til kursen: stiger kursen, faller yielden.</div></details></div>
+<div class="faq-item"><details><summary class="faq-q">Hva er skatten på utbytte fra NHY?</summary><div class="faq-svar">Utbytte fra Norsk Hydro ASA beskattes med 37,84 % for personlige aksjonærer som eier aksjen direkte (via VPS-konto). Med en yield på 2.80 % gir det en nettoyield etter skatt på ca. 1.74 %. Eier du aksjen via aksjesparekonto (ASK), utsettes skatten til du tar ut midler — utbyttet reinvesteres skattefritt innen kontoen og gir renters-rente-effekt over tid.</div></details></div>
+<div class="faq-item"><details><summary class="faq-q">Er utbyttet fra Norsk Hydro ASA bærekraftig?</summary><div class="faq-svar">Payout ratio for Norsk Hydro ASA er 66 % — det vil si andelen av inntjeningen per aksje som utbetales som utbytte. En payout ratio mellom 50 og 80 % er vanlig for etablerte utbytteaksjer og anses bærekraftig så lenge inntjeningen er stabil. Sjekk at EPS-trenden er positiv.</div></details></div>
+<div class="faq-item"><details><summary class="faq-q">Hva er utbyttehistorikken til NHY de siste årene?</summary><div class="faq-svar">exday.no har utbyttedata for Norsk Hydro ASA fra 2022 til 2025. I denne perioden er det totalt utbetalt 17.25 NOK per aksje. Høyest enkeltutbytte var 6.85 NOK i 2022, lavest 2.25 NOK i 2025. Historikken gir et godt bilde av stabilitet og syklikalitet i selskapets utbetalinger.</div></details></div>
+</div>
+
   </section>
 
   <!-- ── NØKKELTALL ── -->
   <section id="nokkeltall">
 
-  <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Materialer</td></tr><tr><td>Frekvens</td><td>Årlig</td></tr><tr><td>Utbytte per aksje</td><td>3.0 NOK</td></tr><tr><td>Direkteavkastning</td><td>2.80%</td></tr><tr><td>5-årssnitt yield</td><td>4.02%</td></tr><tr><td>År med utbytte</td><td>25</td></tr><tr><td>P/E</td><td>31.5</td></tr><tr><td>Utbyttevekst 5 år</td><td>+15.8% p.a.</td></tr><tr><td>Markedsverdi</td><td>210.9 mrd NOK</td></tr><tr><td>52-ukers kurs</td><td>53.24 – 110.5 NOK</td></tr></tbody></table>
+  <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Materialer</td></tr><tr><td>Frekvens</td><td>Årlig</td></tr><tr><td>Utbytte per aksje</td><td>3.0 NOK</td></tr><tr><td>Direkteavkastning</td><td>2.80%</td></tr><tr><td>5-årssnitt yield</td><td>4.02%</td></tr><tr><td>År med utbytte</td><td>25</td></tr><tr><td>P/E</td><td>31.5</td></tr><tr><td>Payout ratio</td><td>66%</td></tr><tr><td>Utbyttevekst 5 år</td><td>+15.8% p.a.</td></tr><tr><td>Markedsverdi</td><td>210.9 mrd NOK</td></tr><tr><td>52-ukers kurs</td><td>53.24 – 110.5 NOK</td></tr></tbody></table>
 
   </section>
 
-  <div class="relaterte"><h2>Andre materialer-aksjer med utbytte</h2><div class="rel-grid"><a href="/aksjer/BOR/" class="rel-kort"><span class="rel-ticker">BOR</span><span class="rel-navn">Borgestad ASA</span><span class="rel-yield">6.0%</span></a>
-<a href="/aksjer/RANA/" class="rel-kort"><span class="rel-ticker">RANA</span><span class="rel-navn">Rana Gruber ASA</span><span class="rel-yield">4.5%</span></a>
+  <div class="relaterte"><h2>Andre materialer-aksjer med utbytte</h2><div class="rel-grid"><a href="/aksjer/RANA/" class="rel-kort"><span class="rel-ticker">RANA</span><span class="rel-navn">Rana Gruber ASA</span><span class="rel-yield">6.8%</span></a>
+<a href="/aksjer/BOR/" class="rel-kort"><span class="rel-ticker">BOR</span><span class="rel-navn">Borgestad ASA</span><span class="rel-yield">6.0%</span></a>
 <a href="/aksjer/BRG/" class="rel-kort"><span class="rel-ticker">BRG</span><span class="rel-navn">Borregaard ASA</span><span class="rel-yield">2.8%</span></a>
 <a href="/aksjer/ELK/" class="rel-kort"><span class="rel-ticker">ELK</span><span class="rel-navn">Elkem ASA</span><span class="rel-yield">1.0%</span></a></div></div>
 
@@ -451,7 +472,7 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
     <a href="https://exday.no/?aksje=NHY">Åpne NHY i exday.no →</a>
   </div>
 
-  <p class="updated">Sist oppdatert: 2026-04-22</p>
+  <p class="updated">Sist oppdatert: 2026-04-23</p>
   <footer style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid #e5e7eb;font-size:0.78rem;text-align:center;color:#9ca3af;line-height:1.6;" class="std-footer">
     <p>Kurs og utbyttedata hentes fra Yahoo Finance og Euronext. Oppdateres daglig på børsdager.</p>
     <p style="max-width:36rem;margin:0.4rem auto;">

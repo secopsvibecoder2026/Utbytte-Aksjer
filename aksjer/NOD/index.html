@@ -80,6 +80,7 @@
     }
   ]
 }</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Betaler Nordic Semiconductor ASA utbytte hvert år, og hvor ofte?", "acceptedAnswer": {"@type": "Answer", "text": "Nordic Semiconductor ASA betaler utbytte uregelmessig. Selskapet har betalt utbytte de siste 3 årene."}}]}</script>
   <link rel="stylesheet" href="/assets/tailwind.css"/>
   <link rel="stylesheet" href="/assets/style.css"/>
   <script>
@@ -177,9 +178,16 @@
     .updated { color: #9ca3af; }
     .breadcrumb { color: #6b7280; }
     .sub { color: #6b7280; }
-    .faq-item { background: #fff; border-color: #e5e7eb; }
-    .faq-q { color: #111827; }
-    .faq-a { color: #374151; }
+    .faq { margin: 2rem 0; }
+    .faq h2 { font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem; color: #374151; }
+    .faq-item { border: 1px solid #e5e7eb; border-radius: 0.75rem; overflow: hidden; margin-bottom: 0.5rem; }
+    .faq-item details summary { padding: 0.9rem 1.25rem; cursor: pointer; font-weight: 500; font-size: 0.875rem; color: #111827; list-style: none; display: flex; align-items: center; justify-content: space-between; }
+    .faq-item details summary::-webkit-details-marker { display: none; }
+    .faq-item details summary::after { content: '+'; font-size: 1.1rem; flex-shrink: 0; margin-left: 0.5rem; color: #9ca3af; }
+    .faq-item details[open] summary::after { content: '−'; }
+    .faq-item details summary:hover { background: #f9fafb; }
+    .faq-item details[open] summary { background: #f0fdf4; color: #15803d; }
+    .faq-svar { padding: 0.75rem 1.25rem 1rem; font-size: 0.85rem; color: #4b5563; line-height: 1.65; border-top: 1px solid #f3f4f6; }
     .rel-kort { background: #fff; border-color: #e5e7eb; }
     .rel-navn { color: #6b7280; }
     .badge { background: #dcfce7; color: #15803d; }
@@ -228,6 +236,12 @@
     .dark .risiko-liste li { border-left-color: #7f1d1d; color: #9ca3af; }
     .dark .rel-kort { background: #111827; border-color: #1f2937; }
     .dark .rel-navn { color: #9ca3af; }
+    .dark .faq h2 { color: #d1d5db; }
+    .dark .faq-item { border-color: #374151; }
+    .dark .faq-item details summary { color: #e5e7eb; }
+    .dark .faq-item details summary:hover { background: #1f2937; }
+    .dark .faq-item details[open] summary { background: #052e16; color: #4ade80; }
+    .dark .faq-svar { color: #9ca3af; border-top-color: #1f2937; }
   </style>
 </head>
 <body>
@@ -399,6 +413,9 @@
 <li>Høy konkurranse fra internasjonale aktører presser marginer</li>
 <li>Høye investeringsbehov i utvikling og salg</li></ul></div>
 
+  <div class="faq"><h2>Vanlige spørsmål om NOD</h2><div class="faq-item"><details><summary class="faq-q">Betaler Nordic Semiconductor ASA utbytte hvert år, og hvor ofte?</summary><div class="faq-svar">Nordic Semiconductor ASA betaler utbytte uregelmessig. Selskapet har betalt utbytte de siste 3 årene.</div></details></div>
+</div>
+
   </section>
 
   <!-- ── NØKKELTALL ── -->
@@ -410,8 +427,8 @@
 
   <div class="relaterte"><h2>Andre informasjonsteknologi-aksjer med utbytte</h2><div class="rel-grid"><a href="/aksjer/SNTIA/" class="rel-kort"><span class="rel-ticker">SNTIA</span><span class="rel-navn">Sentia AS</span><span class="rel-yield">13.8%</span></a>
 <a href="/aksjer/WSTEP/" class="rel-kort"><span class="rel-ticker">WSTEP</span><span class="rel-navn">Webstep ASA</span><span class="rel-yield">13.1%</span></a>
-<a href="/aksjer/TIETO/" class="rel-kort"><span class="rel-ticker">TIETO</span><span class="rel-navn">TietoEVRY Corporation</span><span class="rel-yield">8.0%</span></a>
-<a href="/aksjer/BOUV/" class="rel-kort"><span class="rel-ticker">BOUV</span><span class="rel-navn">Bouvet ASA</span><span class="rel-yield">5.7%</span></a></div></div>
+<a href="/aksjer/BOUV/" class="rel-kort"><span class="rel-ticker">BOUV</span><span class="rel-navn">Bouvet ASA</span><span class="rel-yield">5.7%</span></a>
+<a href="/aksjer/ATEA/" class="rel-kort"><span class="rel-ticker">ATEA</span><span class="rel-navn">Atea ASA</span><span class="rel-yield">5.1%</span></a></div></div>
 
   <div class="mini-nav">
     <a href="/aksjer/sektor/informasjonsteknologi/">← Alle Informasjonsteknologi-aksjer</a>
@@ -428,7 +445,7 @@
     <a href="https://exday.no/?aksje=NOD">Åpne NOD i exday.no →</a>
   </div>
 
-  <p class="updated">Sist oppdatert: 2026-04-22</p>
+  <p class="updated">Sist oppdatert: 2026-04-23</p>
   <footer style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid #e5e7eb;font-size:0.78rem;text-align:center;color:#9ca3af;line-height:1.6;" class="std-footer">
     <p>Kurs og utbyttedata hentes fra Yahoo Finance og Euronext. Oppdateres daglig på børsdager.</p>
     <p style="max-width:36rem;margin:0.4rem auto;">

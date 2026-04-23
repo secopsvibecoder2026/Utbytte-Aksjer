@@ -80,6 +80,7 @@
     }
   ]
 }</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Betaler DNB Bank ASA utbytte hvert år, og hvor ofte?", "acceptedAnswer": {"@type": "Answer", "text": "DNB Bank ASA betaler utbytte to ganger i året (halvårlig). Med 21 år sammenhengende er DNB blant de mest stabile utbyttebetalerne på Oslo Børs."}}, {"@type": "Question", "name": "Hva er direkteavkastningen (yield) til DNB?", "acceptedAnswer": {"@type": "Answer", "text": "Direkteavkastningen (yield) for DNB er 6.22%, beregnet som 18.0 NOK i annualisert utbytte per aksje delt på aksjekursen. Det er på linje med det historiske 5-årsnittet på 5.0%. Yield endres daglig fordi den er koblet til kursen: stiger kursen, faller yielden."}}, {"@type": "Question", "name": "Hva er skatten på utbytte fra DNB?", "acceptedAnswer": {"@type": "Answer", "text": "Utbytte fra DNB Bank ASA beskattes med 37,84 % for personlige aksjonærer som eier aksjen direkte (via VPS-konto). Med en yield på 6.22 % gir det en nettoyield etter skatt på ca. 3.87 %. Eier du aksjen via aksjesparekonto (ASK), utsettes skatten til du tar ut midler — utbyttet reinvesteres skattefritt innen kontoen og gir renters-rente-effekt over tid."}}, {"@type": "Question", "name": "Er utbyttet fra DNB Bank ASA bærekraftig?", "acceptedAnswer": {"@type": "Answer", "text": "Payout ratio for DNB Bank ASA er 59 % — det vil si andelen av inntjeningen per aksje som utbetales som utbytte. En payout ratio mellom 50 og 80 % er vanlig for etablerte utbytteaksjer og anses bærekraftig så lenge inntjeningen er stabil. Sjekk at EPS-trenden er positiv."}}, {"@type": "Question", "name": "Hva er utbyttehistorikken til DNB de siste årene?", "acceptedAnswer": {"@type": "Answer", "text": "exday.no har utbyttedata for DNB Bank ASA fra 2022 til 2026. I denne perioden er det totalt utbetalt 73.00 NOK per aksje. Høyest enkeltutbytte var 18.00 NOK i 2026, lavest 9.75 NOK i 2022. Historikken gir et godt bilde av stabilitet og syklikalitet i selskapets utbetalinger."}}]}</script>
   <link rel="stylesheet" href="/assets/tailwind.css"/>
   <link rel="stylesheet" href="/assets/style.css"/>
   <script>
@@ -177,9 +178,16 @@
     .updated { color: #9ca3af; }
     .breadcrumb { color: #6b7280; }
     .sub { color: #6b7280; }
-    .faq-item { background: #fff; border-color: #e5e7eb; }
-    .faq-q { color: #111827; }
-    .faq-a { color: #374151; }
+    .faq { margin: 2rem 0; }
+    .faq h2 { font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem; color: #374151; }
+    .faq-item { border: 1px solid #e5e7eb; border-radius: 0.75rem; overflow: hidden; margin-bottom: 0.5rem; }
+    .faq-item details summary { padding: 0.9rem 1.25rem; cursor: pointer; font-weight: 500; font-size: 0.875rem; color: #111827; list-style: none; display: flex; align-items: center; justify-content: space-between; }
+    .faq-item details summary::-webkit-details-marker { display: none; }
+    .faq-item details summary::after { content: '+'; font-size: 1.1rem; flex-shrink: 0; margin-left: 0.5rem; color: #9ca3af; }
+    .faq-item details[open] summary::after { content: '−'; }
+    .faq-item details summary:hover { background: #f9fafb; }
+    .faq-item details[open] summary { background: #f0fdf4; color: #15803d; }
+    .faq-svar { padding: 0.75rem 1.25rem 1rem; font-size: 0.85rem; color: #4b5563; line-height: 1.65; border-top: 1px solid #f3f4f6; }
     .rel-kort { background: #fff; border-color: #e5e7eb; }
     .rel-navn { color: #6b7280; }
     .badge { background: #dcfce7; color: #15803d; }
@@ -228,6 +236,12 @@
     .dark .risiko-liste li { border-left-color: #7f1d1d; color: #9ca3af; }
     .dark .rel-kort { background: #111827; border-color: #1f2937; }
     .dark .rel-navn { color: #9ca3af; }
+    .dark .faq h2 { color: #d1d5db; }
+    .dark .faq-item { border-color: #374151; }
+    .dark .faq-item details summary { color: #e5e7eb; }
+    .dark .faq-item details summary:hover { background: #1f2937; }
+    .dark .faq-item details[open] summary { background: #052e16; color: #4ade80; }
+    .dark .faq-svar { color: #9ca3af; border-top-color: #1f2937; }
   </style>
 </head>
 <body>
@@ -387,7 +401,7 @@
   <!-- ── UTBYTTE ── -->
   <section id="utbytte">
 
-  <div class="analyse"><h2>Utbyttedatoer</h2><p>Yielden på 6.2% er på linje med snittet for Finans-sektoren (5.6%).</p></div>
+  <div class="analyse"><h2>Utbyttedatoer</h2><p>Yielden på 6.2% er på linje med snittet for Finans-sektoren (5.7%).</p></div>
 
   <h2>Historiske utbytter</h2><svg viewBox="0 0 420 180" style="width:100%;max-width:420px;height:auto;display:block;margin-bottom:0.5rem;" aria-label="Historiske utbytter per aksje i NOK"><line x1="52" y1="148.0" x2="408" y2="148.0" stroke="#e5e7eb" stroke-width="1" class="ytick"/><text x="48" y="152.0" text-anchor="end" font-size="10" fill="#9ca3af">0.0</text><line x1="52" y1="104.0" x2="408" y2="104.0" stroke="#e5e7eb" stroke-width="1" class="ytick"/><text x="48" y="108.0" text-anchor="end" font-size="10" fill="#9ca3af">6.0</text><line x1="52" y1="60.0" x2="408" y2="60.0" stroke="#e5e7eb" stroke-width="1" class="ytick"/><text x="48" y="64.0" text-anchor="end" font-size="10" fill="#9ca3af">12.0</text><line x1="52" y1="16.0" x2="408" y2="16.0" stroke="#e5e7eb" stroke-width="1" class="ytick"/><text x="48" y="20.0" text-anchor="end" font-size="10" fill="#9ca3af">18.0</text><rect class="hbar" x="69.6" y="76.5" width="36" height="71.5" rx="3" fill="#16a34a" opacity="0.85"/><rect class="hbar" x="140.8" y="56.3" width="36" height="91.7" rx="3" fill="#16a34a" opacity="0.85"/><rect class="hbar" x="212.0" y="30.7" width="36" height="117.3" rx="3" fill="#16a34a" opacity="0.85"/><rect class="hbar" x="283.2" y="25.2" width="36" height="122.8" rx="3" fill="#16a34a" opacity="0.85"/><rect class="hbar" x="354.4" y="16.0" width="36" height="132.0" rx="3" fill="#16a34a" opacity="0.85"/><text x="87.6" y="174" text-anchor="middle" font-size="10" fill="#9ca3af">2022</text><text x="158.8" y="174" text-anchor="middle" font-size="10" fill="#9ca3af">2023</text><text x="230.0" y="174" text-anchor="middle" font-size="10" fill="#9ca3af">2024</text><text x="301.2" y="174" text-anchor="middle" font-size="10" fill="#9ca3af">2025</text><text x="372.4" y="174" text-anchor="middle" font-size="10" fill="#9ca3af">2026</text><rect class="htip-bg" x="35.6" y="48.5" width="106" height="20" rx="4" fill="#111827" opacity="0" pointer-events="none"/><text class="htip-txt" x="87.6" y="63.5" text-anchor="middle" font-size="10" fill="#f3f4f6" opacity="0" pointer-events="none">9.75 NOK · 3.4% yield</text><rect class="htrig" x="52.0" y="16" width="71.2" height="132" fill="transparent" onmouseenter="showTip(this)" onmouseleave="hideTip(this)" data-i="0"/><rect class="htip-bg" x="106.8" y="28.3" width="106" height="20" rx="4" fill="#111827" opacity="0" pointer-events="none"/><text class="htip-txt" x="158.8" y="43.3" text-anchor="middle" font-size="10" fill="#f3f4f6" opacity="0" pointer-events="none">12.5 NOK · 4.3% yield</text><rect class="htrig" x="123.2" y="16" width="71.2" height="132" fill="transparent" onmouseenter="showTip(this)" onmouseleave="hideTip(this)" data-i="1"/><rect class="htip-bg" x="178.0" y="2.7" width="106" height="20" rx="4" fill="#111827" opacity="0" pointer-events="none"/><text class="htip-txt" x="230.0" y="17.7" text-anchor="middle" font-size="10" fill="#f3f4f6" opacity="0" pointer-events="none">16.0 NOK · 5.5% yield</text><rect class="htrig" x="194.4" y="16" width="71.2" height="132" fill="transparent" onmouseenter="showTip(this)" onmouseleave="hideTip(this)" data-i="2"/><rect class="htip-bg" x="249.2" y="2.0" width="106" height="20" rx="4" fill="#111827" opacity="0" pointer-events="none"/><text class="htip-txt" x="301.2" y="14.0" text-anchor="middle" font-size="10" fill="#f3f4f6" opacity="0" pointer-events="none">16.75 NOK · 5.8% yield</text><rect class="htrig" x="265.6" y="16" width="71.2" height="132" fill="transparent" onmouseenter="showTip(this)" onmouseleave="hideTip(this)" data-i="3"/><rect class="htip-bg" x="302.0" y="2.0" width="106" height="20" rx="4" fill="#111827" opacity="0" pointer-events="none"/><text class="htip-txt" x="372.4" y="14.0" text-anchor="middle" font-size="10" fill="#f3f4f6" opacity="0" pointer-events="none">18.0 NOK · 6.2% yield</text><rect class="htrig" x="336.8" y="16" width="71.2" height="132" fill="transparent" onmouseenter="showTip(this)" onmouseleave="hideTip(this)" data-i="4"/><text x="16" y="82.0" text-anchor="middle" font-size="10" fill="#9ca3af" transform="rotate(-90,16,82.0)">NOK per aksje</text></svg><script>
 function showTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAll('.htip-bg')[i],tx=s.querySelectorAll('.htip-txt')[i];bg.setAttribute('opacity','0.92');tx.setAttribute('opacity','1');}
@@ -419,13 +433,20 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
           <td>3.37%</td>
         </tr></tbody></table>
 
-  <div class="profil-seksjon"><h2>Utbytteprofil</h2><div class="profil-badges"><span class="profil-badge badge-green">Høy yield</span><span class="profil-badge badge-blue">Stabil betaler</span><span class="profil-badge badge-teal">Utbyttevekst</span><span class="profil-badge badge-gray">Defensiv</span></div><p class="profil-tekst">DNB gir 6.2% direkteavkastning, over sektorsnittet for finans på 5.6%. Med 21 år på rad med utbytte er DNB Bank ASA blant de mest stabile utbyttebetalerne på Oslo Børs.</p></div>
+  <div class="profil-seksjon"><h2>Utbytteprofil</h2><div class="profil-badges"><span class="profil-badge badge-green">Høy yield</span><span class="profil-badge badge-blue">Stabil betaler</span><span class="profil-badge badge-teal">Utbyttevekst</span><span class="profil-badge badge-gray">Defensiv</span></div><p class="profil-tekst">DNB gir 6.2% direkteavkastning, nær sektorsnittet for finans på 5.7%. Med 21 år på rad med utbytte er DNB Bank ASA blant de mest stabile utbyttebetalerne på Oslo Børs.</p></div>
 
   <div class="historikk-prosa"><h2>Utbyttehistorikk</h2><p>DNB Bank ASA har de siste 5 årene betalt mellom 9.75 og 18.00 NOK per aksje i utbytte. I 2026 er utbyttet 18.00 NOK per aksje, tilsvarende 6.2% direkteavkastning.</p></div>
 
   <div class="risiko-seksjon"><h2>Risiko for utbyttet</h2><ul class="risiko-liste"><li>Rentenivå påvirker netto renteinntekter og utlånsmargin</li>
 <li>Økte kredittap i nedgangstider kan presse resultater</li>
 <li>Regulatoriske kapitalkrav begrenser utbyttekapasitet</li></ul></div>
+
+  <div class="faq"><h2>Vanlige spørsmål om DNB</h2><div class="faq-item"><details><summary class="faq-q">Betaler DNB Bank ASA utbytte hvert år, og hvor ofte?</summary><div class="faq-svar">DNB Bank ASA betaler utbytte to ganger i året (halvårlig). Med 21 år sammenhengende er DNB blant de mest stabile utbyttebetalerne på Oslo Børs.</div></details></div>
+<div class="faq-item"><details><summary class="faq-q">Hva er direkteavkastningen (yield) til DNB?</summary><div class="faq-svar">Direkteavkastningen (yield) for DNB er 6.22%, beregnet som 18.0 NOK i annualisert utbytte per aksje delt på aksjekursen. Det er på linje med det historiske 5-årsnittet på 5.0%. Yield endres daglig fordi den er koblet til kursen: stiger kursen, faller yielden.</div></details></div>
+<div class="faq-item"><details><summary class="faq-q">Hva er skatten på utbytte fra DNB?</summary><div class="faq-svar">Utbytte fra DNB Bank ASA beskattes med 37,84 % for personlige aksjonærer som eier aksjen direkte (via VPS-konto). Med en yield på 6.22 % gir det en nettoyield etter skatt på ca. 3.87 %. Eier du aksjen via aksjesparekonto (ASK), utsettes skatten til du tar ut midler — utbyttet reinvesteres skattefritt innen kontoen og gir renters-rente-effekt over tid.</div></details></div>
+<div class="faq-item"><details><summary class="faq-q">Er utbyttet fra DNB Bank ASA bærekraftig?</summary><div class="faq-svar">Payout ratio for DNB Bank ASA er 59 % — det vil si andelen av inntjeningen per aksje som utbetales som utbytte. En payout ratio mellom 50 og 80 % er vanlig for etablerte utbytteaksjer og anses bærekraftig så lenge inntjeningen er stabil. Sjekk at EPS-trenden er positiv.</div></details></div>
+<div class="faq-item"><details><summary class="faq-q">Hva er utbyttehistorikken til DNB de siste årene?</summary><div class="faq-svar">exday.no har utbyttedata for DNB Bank ASA fra 2022 til 2026. I denne perioden er det totalt utbetalt 73.00 NOK per aksje. Høyest enkeltutbytte var 18.00 NOK i 2026, lavest 9.75 NOK i 2022. Historikken gir et godt bilde av stabilitet og syklikalitet i selskapets utbetalinger.</div></details></div>
+</div>
 
   </section>
 
@@ -456,7 +477,7 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
     <a href="https://exday.no/?aksje=DNB">Åpne DNB i exday.no →</a>
   </div>
 
-  <p class="updated">Sist oppdatert: 2026-04-22</p>
+  <p class="updated">Sist oppdatert: 2026-04-23</p>
   <footer style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid #e5e7eb;font-size:0.78rem;text-align:center;color:#9ca3af;line-height:1.6;" class="std-footer">
     <p>Kurs og utbyttedata hentes fra Yahoo Finance og Euronext. Oppdateres daglig på børsdager.</p>
     <p style="max-width:36rem;margin:0.4rem auto;">
