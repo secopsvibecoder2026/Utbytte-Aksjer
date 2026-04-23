@@ -147,6 +147,17 @@
     .risiko-seksjon { margin: 1.5rem 0; }
     .risiko-liste { list-style: none; padding: 0; margin: 0; }
     .risiko-liste li { font-size: 0.875rem; padding: 0.5rem 0.75rem; border-left: 3px solid #fca5a5; margin-bottom: 0.5rem; line-height: 1.5; }
+    .kontoer-seksjon { margin: 1.5rem 0; }
+    .kontoer-seksjon h2 { font-size: 1rem; font-weight: 700; margin-bottom: 0.75rem; }
+    .konto-rad { display: flex; gap: 0.85rem; align-items: flex-start; padding: 0.85rem 1rem; border: 1px solid #d1fae5; border-radius: 0.65rem; margin-bottom: 0.5rem; background: #f0fdf4; }
+    .konto-rad.konto-ikke { border-color: #fca5a5; background: #fff1f2; }
+    .konto-rad strong { font-size: 0.875rem; }
+    .konto-rad p { font-size: 0.8rem; color: #4b5563; margin: 0.2rem 0 0; line-height: 1.5; }
+    .konto-ok { font-size: 1rem; color: #16a34a; flex-shrink: 0; margin-top: 0.1rem; }
+    .konto-nei { font-size: 1rem; color: #dc2626; flex-shrink: 0; margin-top: 0.1rem; }
+    .dark .konto-rad { background: #052e16; border-color: #166534; }
+    .dark .konto-rad p { color: #9ca3af; }
+    .dark .konto-rad.konto-ikke { background: #2d0a0a; border-color: #7f1d1d; }
     .relaterte { margin: 1.5rem 0; }
     .relaterte h2 { margin-bottom: 0.75rem; }
     .rel-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 0.75rem; }
@@ -436,6 +447,8 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
   <div class="risiko-seksjon"><h2>Risiko for utbyttet</h2><ul class="risiko-liste"><li>Laksepris varierer med globalt tilbud og etterspørsel</li>
 <li>Biologisk risiko (lakselus, sykdom) kan redusere produksjonsvolum</li>
 <li>Eksportrestriksjoner og politisk risiko i nøkkelmarkeder</li></ul></div>
+
+  <div class="kontoer-seksjon"><h2>Hvilke kontoer kan du handle denne aksjen på?</h2><div class="konto-rad"><span class="konto-ok">✓</span><div><strong>Aksje- og fondskonto</strong><p>Kan handles fritt på alle norske og internasjonale meglere.</p></div></div><div class="konto-rad"><span class="konto-ok">✓</span><div><strong>Aksjesparekonto (ASK)</strong><p>Kan holdes i ASK og Zero-konto hos alle norske meglere.</p></div></div></div>
 
   </section>
 

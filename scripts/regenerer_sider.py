@@ -20,6 +20,8 @@ def main():
         ticker_data = json.load(f)
         beskrivelser      = {t["ticker"]: t.get("beskrivelse", "") for t in ticker_data}
         beskrivelse_fakta = {t["ticker"]: t.get("beskrivelse_fakta", "") for t in ticker_data}
+        ask_egnet_map     = {t["ticker"]: t.get("ask_egnet", True) for t in ticker_data}
+        inkorp_map        = {t["ticker"]: t.get("inkorporeringsland", "Norge") for t in ticker_data}
 
     with open(AKSJER_F, encoding="utf-8") as f:
         data = json.load(f)
@@ -34,6 +36,8 @@ def main():
         if ny_fakta and ny_fakta != a.get("beskrivelse_fakta", ""):
             a["beskrivelse_fakta"] = ny_fakta
             oppdatert += 1
+        a["ask_egnet"] = ask_egnet_map.get(a["ticker"], True)
+        a["inkorporeringsland"] = inkorp_map.get(a["ticker"], "Norge")
 
     with open(AKSJER_F, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)

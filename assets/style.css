@@ -575,3 +575,50 @@ th.sort-desc::after { content: ' ↓'; color: #6b7280; }
 .dark .ak-tabnav a.aktiv { color: #4ade80; border-bottom-color: #4ade80; }
 section[id] { scroll-margin-top: 100px; }
 
+/* ── KONTOER (Kan handles på) ─────────────────────────────────────────── */
+.modal-kontoer-header {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #6b7280;
+  margin: 1rem 0 0.5rem;
+}
+.modal-konto-rad {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  padding: 0.65rem 0.9rem;
+  border-radius: 0.5rem;
+  margin-bottom: 0.4rem;
+  border: 1px solid #d1fae5;
+  background: #f0fdf4;
+}
+.modal-konto-rad.ikke {
+  border-color: #fca5a5;
+  background: #fff1f2;
+}
+.dark .modal-konto-rad {
+  border-color: #166534;
+  background: #052e16;
+}
+.dark .modal-konto-rad.ikke {
+  border-color: #7f1d1d;
+  background: #2d0a0a;
+}
+.modal-konto-ikon {
+  font-size: 0.95rem;
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+  color: #16a34a;
+}
+.modal-konto-rad.ikke .modal-konto-ikon { color: #dc2626; }
+.modal-konto-rad strong { font-size: 0.82rem; }
+.modal-konto-rad p {
+  font-size: 0.78rem;
+  color: #4b5563;
+  margin: 0.15rem 0 0;
+  line-height: 1.45;
+}
+.dark .modal-konto-rad p { color: #9ca3af; }
+
