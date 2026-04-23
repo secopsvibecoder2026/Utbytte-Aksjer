@@ -2001,6 +2001,11 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
 
   </section>
 
+  <!-- ── FAQ ── -->
+  <section id="faq">
+  {faq_html}
+  </section>
+
   {relaterte_html}
 
   <div class="mini-nav">
@@ -2012,11 +2017,6 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     <span style="color:#9ca3af;">·</span>
     <a href="/aksjer/hoyest-utbytte/">Høyest yield</a>
   </div>
-
-  <!-- ── FAQ ── -->
-  <section id="faq">
-  {faq_html}
-  </section>
 
   <div class="cta">
     <p style="margin-bottom:0.75rem;">Se alle norske utbytteaksjer, bygg portefølje og spor ex-datoer</p>
