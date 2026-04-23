@@ -283,6 +283,7 @@
     <a href="#oversikt" class="ak-tab aktiv">Oversikt</a>
     <a href="#utbytte" class="ak-tab">Utbytte</a>
     <a href="#nokkeltall" class="ak-tab">Nøkkeltall</a>
+    <a href="#faq" class="ak-tab">FAQ</a>
   </nav>
 
   <!-- ── OVERSIKT ── -->
@@ -426,12 +427,6 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
 <li>Ledighetsgrad og leiepriser varierer med konjunktur</li>
 <li>Refinansiering av gjeld kan være utfordrende i et stramt marked</li></ul></div>
 
-  <div class="faq"><h2>Vanlige spørsmål om PUBLI</h2><div class="faq-item"><details><summary class="faq-q">Betaler Public Property Invest ASA utbytte hvert år, og hvor ofte?</summary><div class="faq-svar">Public Property Invest ASA betaler utbytte fire ganger i året (kvartalsvis). Selskapet har betalt utbytte de siste 2 årene.</div></details></div>
-<div class="faq-item"><details><summary class="faq-q">Hva er direkteavkastningen (yield) til PUBLI?</summary><div class="faq-svar">Direkteavkastningen (yield) for PUBLI er 0.98%, beregnet som 0.2 NOK i annualisert utbytte per aksje delt på aksjekursen. Det er på linje med det historiske 5-årsnittet på 1.2%. Yield endres daglig fordi den er koblet til kursen: stiger kursen, faller yielden.</div></details></div>
-<div class="faq-item"><details><summary class="faq-q">Hva er skatten på utbytte fra PUBLI?</summary><div class="faq-svar">Utbytte fra Public Property Invest ASA beskattes med 37,84 % for personlige aksjonærer som eier aksjen direkte (via VPS-konto). Med en yield på 0.98 % gir det en nettoyield etter skatt på ca. 0.61 %. Eier du aksjen via aksjesparekonto (ASK), utsettes skatten til du tar ut midler — utbyttet reinvesteres skattefritt innen kontoen og gir renters-rente-effekt over tid.</div></details></div>
-<div class="faq-item"><details><summary class="faq-q">Er utbyttet fra Public Property Invest ASA bærekraftig?</summary><div class="faq-svar">Payout ratio for Public Property Invest ASA er 22 % — det vil si andelen av inntjeningen per aksje som utbetales som utbytte. En payout ratio under 50 % betyr at mer enn halvparten av overskuddet beholdes i selskapet. Det gir Public Property Invest ASA god buffer til å opprettholde — eller øke — utbyttet selv om inntjeningen svinger.</div></details></div>
-</div>
-
   </section>
 
   <!-- ── NØKKELTALL ── -->
@@ -453,6 +448,15 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
     <span style="color:#9ca3af;">·</span>
     <a href="/aksjer/hoyest-utbytte/">Høyest yield</a>
   </div>
+
+  <!-- ── FAQ ── -->
+  <section id="faq">
+  <div class="faq"><h2>Vanlige spørsmål om PUBLI</h2><div class="faq-item"><details><summary class="faq-q">Betaler Public Property Invest ASA utbytte hvert år, og hvor ofte?</summary><div class="faq-svar">Public Property Invest ASA betaler utbytte fire ganger i året (kvartalsvis). Selskapet har betalt utbytte de siste 2 årene.</div></details></div>
+<div class="faq-item"><details><summary class="faq-q">Hva er direkteavkastningen (yield) til PUBLI?</summary><div class="faq-svar">Direkteavkastningen (yield) for PUBLI er 0.98%, beregnet som 0.2 NOK i annualisert utbytte per aksje delt på aksjekursen. Det er på linje med det historiske 5-årsnittet på 1.2%. Yield endres daglig fordi den er koblet til kursen: stiger kursen, faller yielden.</div></details></div>
+<div class="faq-item"><details><summary class="faq-q">Hva er skatten på utbytte fra PUBLI?</summary><div class="faq-svar">Utbytte fra Public Property Invest ASA beskattes med 37,84 % for personlige aksjonærer som eier aksjen direkte (via VPS-konto). Med en yield på 0.98 % gir det en nettoyield etter skatt på ca. 0.61 %. Eier du aksjen via aksjesparekonto (ASK), utsettes skatten til du tar ut midler — utbyttet reinvesteres skattefritt innen kontoen og gir renters-rente-effekt over tid.</div></details></div>
+<div class="faq-item"><details><summary class="faq-q">Er utbyttet fra Public Property Invest ASA bærekraftig?</summary><div class="faq-svar">Payout ratio for Public Property Invest ASA er 22 % — det vil si andelen av inntjeningen per aksje som utbetales som utbytte. En payout ratio under 50 % betyr at mer enn halvparten av overskuddet beholdes i selskapet. Det gir Public Property Invest ASA god buffer til å opprettholde — eller øke — utbyttet selv om inntjeningen svinger.</div></details></div>
+</div>
+  </section>
 
   <div class="cta">
     <p style="margin-bottom:0.75rem;">Se alle norske utbytteaksjer, bygg portefølje og spor ex-datoer</p>
@@ -507,7 +511,7 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
     });
 
     // Tab-navigasjon: smooth scroll med offset for sticky header
-    var seksjoner = ['oversikt','utbytte','nokkeltall']
+    var seksjoner = ['oversikt','utbytte','nokkeltall','faq']
       .map(function(id) { return document.getElementById(id); })
       .filter(Boolean);
     var tabLinker = document.querySelectorAll('.ak-tab');

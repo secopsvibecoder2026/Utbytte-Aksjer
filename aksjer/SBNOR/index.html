@@ -283,6 +283,7 @@
     <a href="#oversikt" class="ak-tab aktiv">Oversikt</a>
     <a href="#utbytte" class="ak-tab">Utbytte</a>
     <a href="#nokkeltall" class="ak-tab">Nøkkeltall</a>
+    <a href="#faq" class="ak-tab">FAQ</a>
   </nav>
 
   <!-- ── OVERSIKT ── -->
@@ -418,12 +419,6 @@
 <li>Økte kredittap i nedgangstider kan presse resultater</li>
 <li>Regulatoriske kapitalkrav begrenser utbyttekapasitet</li></ul></div>
 
-  <div class="faq"><h2>Vanlige spørsmål om SBNOR</h2><div class="faq-item"><details><summary class="faq-q">Betaler Sparebanken Norge utbytte hvert år, og hvor ofte?</summary><div class="faq-svar">Sparebanken Norge betaler utbytte én gang i året. Selskapet har betalt utbytte de siste 1 årene.</div></details></div>
-<div class="faq-item"><details><summary class="faq-q">Hva er direkteavkastningen (yield) til SBNOR?</summary><div class="faq-svar">Direkteavkastningen (yield) for SBNOR er 5.75%, beregnet som 12.0 NOK i annualisert utbytte per aksje delt på aksjekursen. Det er på linje med det historiske 5-årsnittet på 5.8%. Yield endres daglig fordi den er koblet til kursen: stiger kursen, faller yielden.</div></details></div>
-<div class="faq-item"><details><summary class="faq-q">Hva er skatten på utbytte fra SBNOR?</summary><div class="faq-svar">Utbytte fra Sparebanken Norge beskattes med 37,84 % for personlige aksjonærer som eier aksjen direkte (via VPS-konto). Med en yield på 5.75 % gir det en nettoyield etter skatt på ca. 3.57 %. Eier du aksjen via aksjesparekonto (ASK), utsettes skatten til du tar ut midler — utbyttet reinvesteres skattefritt innen kontoen og gir renters-rente-effekt over tid.</div></details></div>
-<div class="faq-item"><details><summary class="faq-q">Er utbyttet fra Sparebanken Norge bærekraftig?</summary><div class="faq-svar">Payout ratio for Sparebanken Norge er 51 % — det vil si andelen av inntjeningen per aksje som utbetales som utbytte. En payout ratio mellom 50 og 80 % er vanlig for etablerte utbytteaksjer og anses bærekraftig så lenge inntjeningen er stabil. Sjekk at EPS-trenden er positiv.</div></details></div>
-</div>
-
   </section>
 
   <!-- ── NØKKELTALL ── -->
@@ -447,6 +442,15 @@
     <span style="color:#9ca3af;">·</span>
     <a href="/aksjer/hoyest-utbytte/">Høyest yield</a>
   </div>
+
+  <!-- ── FAQ ── -->
+  <section id="faq">
+  <div class="faq"><h2>Vanlige spørsmål om SBNOR</h2><div class="faq-item"><details><summary class="faq-q">Betaler Sparebanken Norge utbytte hvert år, og hvor ofte?</summary><div class="faq-svar">Sparebanken Norge betaler utbytte én gang i året. Selskapet har betalt utbytte de siste 1 årene.</div></details></div>
+<div class="faq-item"><details><summary class="faq-q">Hva er direkteavkastningen (yield) til SBNOR?</summary><div class="faq-svar">Direkteavkastningen (yield) for SBNOR er 5.75%, beregnet som 12.0 NOK i annualisert utbytte per aksje delt på aksjekursen. Det er på linje med det historiske 5-årsnittet på 5.8%. Yield endres daglig fordi den er koblet til kursen: stiger kursen, faller yielden.</div></details></div>
+<div class="faq-item"><details><summary class="faq-q">Hva er skatten på utbytte fra SBNOR?</summary><div class="faq-svar">Utbytte fra Sparebanken Norge beskattes med 37,84 % for personlige aksjonærer som eier aksjen direkte (via VPS-konto). Med en yield på 5.75 % gir det en nettoyield etter skatt på ca. 3.57 %. Eier du aksjen via aksjesparekonto (ASK), utsettes skatten til du tar ut midler — utbyttet reinvesteres skattefritt innen kontoen og gir renters-rente-effekt over tid.</div></details></div>
+<div class="faq-item"><details><summary class="faq-q">Er utbyttet fra Sparebanken Norge bærekraftig?</summary><div class="faq-svar">Payout ratio for Sparebanken Norge er 51 % — det vil si andelen av inntjeningen per aksje som utbetales som utbytte. En payout ratio mellom 50 og 80 % er vanlig for etablerte utbytteaksjer og anses bærekraftig så lenge inntjeningen er stabil. Sjekk at EPS-trenden er positiv.</div></details></div>
+</div>
+  </section>
 
   <div class="cta">
     <p style="margin-bottom:0.75rem;">Se alle norske utbytteaksjer, bygg portefølje og spor ex-datoer</p>
@@ -501,7 +505,7 @@
     });
 
     // Tab-navigasjon: smooth scroll med offset for sticky header
-    var seksjoner = ['oversikt','utbytte','nokkeltall']
+    var seksjoner = ['oversikt','utbytte','nokkeltall','faq']
       .map(function(id) { return document.getElementById(id); })
       .filter(Boolean);
     var tabLinker = document.querySelectorAll('.ak-tab');

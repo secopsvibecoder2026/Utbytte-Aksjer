@@ -283,6 +283,7 @@
     <a href="#oversikt" class="ak-tab aktiv">Oversikt</a>
     <a href="#utbytte" class="ak-tab">Utbytte</a>
     <a href="#nokkeltall" class="ak-tab">Nøkkeltall</a>
+    <a href="#faq" class="ak-tab">FAQ</a>
   </nav>
 
   <!-- ── OVERSIKT ── -->
@@ -413,11 +414,6 @@
 <li>Råvare- og energikostnader kan variere betydelig</li>
 <li>Valuta- og eksportrisiko for internasjonale selskaper</li></ul></div>
 
-  <div class="faq"><h2>Vanlige spørsmål om GOD</h2><div class="faq-item"><details><summary class="faq-q">Betaler Goodtech ASA utbytte hvert år, og hvor ofte?</summary><div class="faq-svar">Goodtech ASA betaler utbytte uregelmessig. Selskapet har betalt utbytte de siste 4 årene.</div></details></div>
-<div class="faq-item"><details><summary class="faq-q">Hva er direkteavkastningen (yield) til GOD?</summary><div class="faq-svar">Direkteavkastningen (yield) for GOD er 4.48%, beregnet som 0.5 NOK i annualisert utbytte per aksje delt på aksjekursen.  Yield endres daglig fordi den er koblet til kursen: stiger kursen, faller yielden.</div></details></div>
-<div class="faq-item"><details><summary class="faq-q">Hva er skatten på utbytte fra GOD?</summary><div class="faq-svar">Utbytte fra Goodtech ASA beskattes med 37,84 % for personlige aksjonærer som eier aksjen direkte (via VPS-konto). Med en yield på 4.48 % gir det en nettoyield etter skatt på ca. 2.78 %. Eier du aksjen via aksjesparekonto (ASK), utsettes skatten til du tar ut midler — utbyttet reinvesteres skattefritt innen kontoen og gir renters-rente-effekt over tid.</div></details></div>
-</div>
-
   </section>
 
   <!-- ── NØKKELTALL ── -->
@@ -441,6 +437,14 @@
     <span style="color:#9ca3af;">·</span>
     <a href="/aksjer/hoyest-utbytte/">Høyest yield</a>
   </div>
+
+  <!-- ── FAQ ── -->
+  <section id="faq">
+  <div class="faq"><h2>Vanlige spørsmål om GOD</h2><div class="faq-item"><details><summary class="faq-q">Betaler Goodtech ASA utbytte hvert år, og hvor ofte?</summary><div class="faq-svar">Goodtech ASA betaler utbytte uregelmessig. Selskapet har betalt utbytte de siste 4 årene.</div></details></div>
+<div class="faq-item"><details><summary class="faq-q">Hva er direkteavkastningen (yield) til GOD?</summary><div class="faq-svar">Direkteavkastningen (yield) for GOD er 4.48%, beregnet som 0.5 NOK i annualisert utbytte per aksje delt på aksjekursen.  Yield endres daglig fordi den er koblet til kursen: stiger kursen, faller yielden.</div></details></div>
+<div class="faq-item"><details><summary class="faq-q">Hva er skatten på utbytte fra GOD?</summary><div class="faq-svar">Utbytte fra Goodtech ASA beskattes med 37,84 % for personlige aksjonærer som eier aksjen direkte (via VPS-konto). Med en yield på 4.48 % gir det en nettoyield etter skatt på ca. 2.78 %. Eier du aksjen via aksjesparekonto (ASK), utsettes skatten til du tar ut midler — utbyttet reinvesteres skattefritt innen kontoen og gir renters-rente-effekt over tid.</div></details></div>
+</div>
+  </section>
 
   <div class="cta">
     <p style="margin-bottom:0.75rem;">Se alle norske utbytteaksjer, bygg portefølje og spor ex-datoer</p>
@@ -495,7 +499,7 @@
     });
 
     // Tab-navigasjon: smooth scroll med offset for sticky header
-    var seksjoner = ['oversikt','utbytte','nokkeltall']
+    var seksjoner = ['oversikt','utbytte','nokkeltall','faq']
       .map(function(id) { return document.getElementById(id); })
       .filter(Boolean);
     var tabLinker = document.querySelectorAll('.ak-tab');

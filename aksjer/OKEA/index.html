@@ -283,6 +283,7 @@
     <a href="#oversikt" class="ak-tab aktiv">Oversikt</a>
     <a href="#utbytte" class="ak-tab">Utbytte</a>
     <a href="#nokkeltall" class="ak-tab">Nøkkeltall</a>
+    <a href="#faq" class="ak-tab">FAQ</a>
   </nav>
 
   <!-- ── OVERSIKT ── -->
@@ -426,9 +427,6 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
 <li>Energiomstilling og ESG-krav kan presse markedsverdi over tid</li>
 <li>Statlig eierstyring kan påvirke utbyttepolitikk</li></ul></div>
 
-  <div class="faq"><h2>Vanlige spørsmål om OKEA</h2><div class="faq-item"><details><summary class="faq-q">Betaler OKEA ASA utbytte hvert år, og hvor ofte?</summary><div class="faq-svar">OKEA ASA betaler utbytte uregelmessig. Selskapet har betalt utbytte de siste 2 årene.</div></details></div>
-</div>
-
   </section>
 
   <!-- ── NØKKELTALL ── -->
@@ -452,6 +450,12 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
     <span style="color:#9ca3af;">·</span>
     <a href="/aksjer/hoyest-utbytte/">Høyest yield</a>
   </div>
+
+  <!-- ── FAQ ── -->
+  <section id="faq">
+  <div class="faq"><h2>Vanlige spørsmål om OKEA</h2><div class="faq-item"><details><summary class="faq-q">Betaler OKEA ASA utbytte hvert år, og hvor ofte?</summary><div class="faq-svar">OKEA ASA betaler utbytte uregelmessig. Selskapet har betalt utbytte de siste 2 årene.</div></details></div>
+</div>
+  </section>
 
   <div class="cta">
     <p style="margin-bottom:0.75rem;">Se alle norske utbytteaksjer, bygg portefølje og spor ex-datoer</p>
@@ -506,7 +510,7 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
     });
 
     // Tab-navigasjon: smooth scroll med offset for sticky header
-    var seksjoner = ['oversikt','utbytte','nokkeltall']
+    var seksjoner = ['oversikt','utbytte','nokkeltall','faq']
       .map(function(id) { return document.getElementById(id); })
       .filter(Boolean);
     var tabLinker = document.querySelectorAll('.ak-tab');

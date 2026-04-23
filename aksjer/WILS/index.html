@@ -283,6 +283,7 @@
     <a href="#oversikt" class="ak-tab aktiv">Oversikt</a>
     <a href="#utbytte" class="ak-tab">Utbytte</a>
     <a href="#nokkeltall" class="ak-tab">Nøkkeltall</a>
+    <a href="#faq" class="ak-tab">FAQ</a>
   </nav>
 
   <!-- ── OVERSIKT ── -->
@@ -345,13 +346,6 @@
 <li>Bunkerspriser (drivstoff) påvirker driftsmarginene direkte</li>
 <li>Overkapasitet i markedet kan presse ratene ned i lengre perioder</li></ul></div>
 
-  <div class="faq"><h2>Vanlige spørsmål om WILS</h2><div class="faq-item"><details><summary class="faq-q">Hva er ex-datoen for Wilson ASA (WILS)?</summary><div class="faq-svar">Neste ex-dato for Wilson ASA er 1. juni 2026. For å ha rett på utbyttet må du eie aksjen senest 31. mai. Oslo Børs bruker T+2-oppgjør — handelen avregnes to børsdager etter kjøpsdato, så du må kjøpe senest én børsdag før ex-dato.</div></details></div>
-<div class="faq-item"><details><summary class="faq-q">Betaler Wilson ASA utbytte hvert år, og hvor ofte?</summary><div class="faq-svar">Wilson ASA betaler utbytte to ganger i året (halvårlig). Selskapet har utbetalt utbytte i 10 år på rad, noe som viser en konsistent kapitalavkastningspolitikk.</div></details></div>
-<div class="faq-item"><details><summary class="faq-q">Hva er direkteavkastningen (yield) til WILS?</summary><div class="faq-svar">Direkteavkastningen (yield) for WILS er 8.60%, beregnet som 1.6 NOK i annualisert utbytte per aksje delt på aksjekursen.  Yield endres daglig fordi den er koblet til kursen: stiger kursen, faller yielden.</div></details></div>
-<div class="faq-item"><details><summary class="faq-q">Hva er skatten på utbytte fra WILS?</summary><div class="faq-svar">Utbytte fra Wilson ASA beskattes med 37,84 % for personlige aksjonærer som eier aksjen direkte (via VPS-konto). Med en yield på 8.60 % gir det en nettoyield etter skatt på ca. 5.35 %. Eier du aksjen via aksjesparekonto (ASK), utsettes skatten til du tar ut midler — utbyttet reinvesteres skattefritt innen kontoen og gir renters-rente-effekt over tid.</div></details></div>
-<div class="faq-item"><details><summary class="faq-q">Er utbyttet fra Wilson ASA bærekraftig?</summary><div class="faq-svar">Payout ratio for Wilson ASA er 65 % — det vil si andelen av inntjeningen per aksje som utbetales som utbytte. En payout ratio mellom 50 og 80 % er vanlig for etablerte utbytteaksjer og anses bærekraftig så lenge inntjeningen er stabil. Sjekk at EPS-trenden er positiv.</div></details></div>
-</div>
-
   </section>
 
   <!-- ── NØKKELTALL ── -->
@@ -375,6 +369,16 @@
     <span style="color:#9ca3af;">·</span>
     <a href="/aksjer/hoyest-utbytte/">Høyest yield</a>
   </div>
+
+  <!-- ── FAQ ── -->
+  <section id="faq">
+  <div class="faq"><h2>Vanlige spørsmål om WILS</h2><div class="faq-item"><details><summary class="faq-q">Hva er ex-datoen for Wilson ASA (WILS)?</summary><div class="faq-svar">Neste ex-dato for Wilson ASA er 1. juni 2026. For å ha rett på utbyttet må du eie aksjen senest 31. mai. Oslo Børs bruker T+2-oppgjør — handelen avregnes to børsdager etter kjøpsdato, så du må kjøpe senest én børsdag før ex-dato.</div></details></div>
+<div class="faq-item"><details><summary class="faq-q">Betaler Wilson ASA utbytte hvert år, og hvor ofte?</summary><div class="faq-svar">Wilson ASA betaler utbytte to ganger i året (halvårlig). Selskapet har utbetalt utbytte i 10 år på rad, noe som viser en konsistent kapitalavkastningspolitikk.</div></details></div>
+<div class="faq-item"><details><summary class="faq-q">Hva er direkteavkastningen (yield) til WILS?</summary><div class="faq-svar">Direkteavkastningen (yield) for WILS er 8.60%, beregnet som 1.6 NOK i annualisert utbytte per aksje delt på aksjekursen.  Yield endres daglig fordi den er koblet til kursen: stiger kursen, faller yielden.</div></details></div>
+<div class="faq-item"><details><summary class="faq-q">Hva er skatten på utbytte fra WILS?</summary><div class="faq-svar">Utbytte fra Wilson ASA beskattes med 37,84 % for personlige aksjonærer som eier aksjen direkte (via VPS-konto). Med en yield på 8.60 % gir det en nettoyield etter skatt på ca. 5.35 %. Eier du aksjen via aksjesparekonto (ASK), utsettes skatten til du tar ut midler — utbyttet reinvesteres skattefritt innen kontoen og gir renters-rente-effekt over tid.</div></details></div>
+<div class="faq-item"><details><summary class="faq-q">Er utbyttet fra Wilson ASA bærekraftig?</summary><div class="faq-svar">Payout ratio for Wilson ASA er 65 % — det vil si andelen av inntjeningen per aksje som utbetales som utbytte. En payout ratio mellom 50 og 80 % er vanlig for etablerte utbytteaksjer og anses bærekraftig så lenge inntjeningen er stabil. Sjekk at EPS-trenden er positiv.</div></details></div>
+</div>
+  </section>
 
   <div class="cta">
     <p style="margin-bottom:0.75rem;">Se alle norske utbytteaksjer, bygg portefølje og spor ex-datoer</p>
@@ -429,7 +433,7 @@
     });
 
     // Tab-navigasjon: smooth scroll med offset for sticky header
-    var seksjoner = ['oversikt','utbytte','nokkeltall']
+    var seksjoner = ['oversikt','utbytte','nokkeltall','faq']
       .map(function(id) { return document.getElementById(id); })
       .filter(Boolean);
     var tabLinker = document.querySelectorAll('.ak-tab');
