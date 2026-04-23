@@ -2152,11 +2152,11 @@ function modalKontoer(a) {
   const askRad = askEgnet
     ? `<div class="modal-konto-rad">
         <span class="modal-konto-ikon">✓</span>
-        <div><strong>ASK og Zero-konto</strong><p>EØS-registrert selskap — kan holdes i aksjesparekonto.</p></div>
+        <div><strong>Aksjesparekonto (ASK)</strong><p>EØS-registrert selskap — kan holdes i ASK.</p></div>
       </div>`
     : `<div class="modal-konto-rad ikke">
         <span class="modal-konto-ikon">✗</span>
-        <div><strong>ASK og Zero-konto</strong><p>Ikke tilgjengelig i ASK eller Zero-konto — selskapet er registrert i ${land} (ikke EØS).</p></div>
+        <div><strong>Aksjesparekonto (ASK)</strong><p>Selskapet er registrert i ${land} (utenfor EØS) og kan ikke holdes i ASK. Bruk aksje- og fondskonto.</p></div>
       </div>`;
 
   return `<div>

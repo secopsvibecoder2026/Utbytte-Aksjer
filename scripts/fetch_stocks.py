@@ -1263,7 +1263,7 @@ def _lag_kontoer_seksjon(a):
             '<div class="konto-rad">'
             '<span class="konto-ok">✓</span>'
             '<div><strong>Aksjesparekonto (ASK)</strong>'
-            '<p>Kan holdes i ASK og Zero-konto hos alle norske meglere.</p></div>'
+            '<p>EØS-registrert selskap — kan holdes i ASK.</p></div>'
             '</div>'
         )
     else:
@@ -1271,8 +1271,8 @@ def _lag_kontoer_seksjon(a):
             '<div class="konto-rad konto-ikke">'
             '<span class="konto-nei">✗</span>'
             '<div><strong>Aksjesparekonto (ASK)</strong>'
-            f'<p>Ikke tilgjengelig i ASK eller Zero-konto. Selskapet er registrert i {land}, '
-            f'som ikke er et EØS-land. Kan kun handles på aksje- og fondskonto.</p></div>'
+            f'<p>Selskapet er registrert i {land} (utenfor EØS) og kan ikke holdes i ASK. '
+            f'Bruk aksje- og fondskonto.</p></div>'
             '</div>'
         )
 
