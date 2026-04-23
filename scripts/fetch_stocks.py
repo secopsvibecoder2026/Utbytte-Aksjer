@@ -1873,6 +1873,7 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     <a href="#oversikt" class="ak-tab aktiv">Oversikt</a>
     <a href="#utbytte" class="ak-tab">Utbytte</a>
     <a href="#nokkeltall" class="ak-tab">Nøkkeltall</a>
+    <a href="#faq" class="ak-tab">FAQ</a>
   </nav>
 
   <!-- ── OVERSIKT ── -->
@@ -1933,8 +1934,6 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
 
   {risiko_html}
 
-  {faq_html}
-
   </section>
 
   <!-- ── NØKKELTALL ── -->
@@ -1955,6 +1954,11 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     <span style="color:#9ca3af;">·</span>
     <a href="/aksjer/hoyest-utbytte/">Høyest yield</a>
   </div>
+
+  <!-- ── FAQ ── -->
+  <section id="faq">
+  {faq_html}
+  </section>
 
   <div class="cta">
     <p style="margin-bottom:0.75rem;">Se alle norske utbytteaksjer, bygg portefølje og spor ex-datoer</p>
@@ -1989,7 +1993,7 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     }});
 
     // Tab-navigasjon: smooth scroll med offset for sticky header
-    var seksjoner = ['oversikt','utbytte','nokkeltall']
+    var seksjoner = ['oversikt','utbytte','nokkeltall','faq']
       .map(function(id) {{ return document.getElementById(id); }})
       .filter(Boolean);
     var tabLinker = document.querySelectorAll('.ak-tab');
