@@ -2140,6 +2140,32 @@ function eksporterEnkeltICS(a, type, dato) {
 }
 
 
+function modalKontoer(a) {
+  const askEgnet = a.ask_egnet !== false;
+  const land = escHtml(a.inkorporeringsland || 'Norge');
+
+  const afRad = `<div style="display:flex;gap:0.75rem;align-items:flex-start;padding:0.65rem 0.9rem;border:1px solid #d1fae5;border-radius:0.5rem;margin-bottom:0.4rem;background:#f0fdf4;">
+    <span style="color:#16a34a;font-size:0.95rem;flex-shrink:0;margin-top:0.1rem;">✓</span>
+    <div><strong style="font-size:0.82rem;">Aksje- og fondskonto</strong><p style="font-size:0.78rem;color:#4b5563;margin:0.15rem 0 0;line-height:1.45;">Kan handles hos alle norske meglere.</p></div>
+  </div>`;
+
+  const askRad = askEgnet
+    ? `<div style="display:flex;gap:0.75rem;align-items:flex-start;padding:0.65rem 0.9rem;border:1px solid #d1fae5;border-radius:0.5rem;background:#f0fdf4;">
+        <span style="color:#16a34a;font-size:0.95rem;flex-shrink:0;margin-top:0.1rem;">✓</span>
+        <div><strong style="font-size:0.82rem;">ASK og Zero-konto</strong><p style="font-size:0.78rem;color:#4b5563;margin:0.15rem 0 0;line-height:1.45;">EØS-registrert selskap — kan holdes i aksjesparekonto.</p></div>
+      </div>`
+    : `<div style="display:flex;gap:0.75rem;align-items:flex-start;padding:0.65rem 0.9rem;border:1px solid #fca5a5;border-radius:0.5rem;background:#fff1f2;">
+        <span style="color:#dc2626;font-size:0.95rem;flex-shrink:0;margin-top:0.1rem;">✗</span>
+        <div><strong style="font-size:0.82rem;">ASK og Zero-konto</strong><p style="font-size:0.78rem;color:#4b5563;margin:0.15rem 0 0;line-height:1.45;">Ikke tilgjengelig i ASK eller Zero-konto — selskapet er registrert i ${land} (ikke EØS).</p></div>
+      </div>`;
+
+  return `<div style="margin-top:1rem;">
+    <p style="font-size:0.72rem;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:#6b7280;margin-bottom:0.5rem;">Kan handles på</p>
+    ${afRad}${askRad}
+  </div>`;
+}
+
+
 function visModal(a) {
   const overlay = document.getElementById('modal-overlay');
   const body = document.getElementById('modal-body');
@@ -2201,6 +2227,7 @@ function visModal(a) {
       ${a.ai_oppsummering
         ? '<div class="ai-opp-boks"><p class="ai-opp-label">AI-oppsummering' + (a.ai_oppsummering_dato ? ' <span class="ai-opp-dato">' + escHtml(a.ai_oppsummering_dato) + '</span>' : '') + '</p><p class="ai-opp-tekst">' + escHtml(a.ai_oppsummering) + '</p></div>'
         : ''}
+      ${modalKontoer(a)}
     </div>
 
     <!-- ── UTBYTTE ── -->

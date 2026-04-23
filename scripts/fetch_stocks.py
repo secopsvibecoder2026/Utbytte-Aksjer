@@ -142,6 +142,8 @@ BESKRIVELSER         = {t["ticker"]: t.get("beskrivelse", "") for t in _ticker_d
 BESKRIVELSE_FAKTA    = {t["ticker"]: t.get("beskrivelse_fakta", "") for t in _ticker_data}
 DNB_NAVN             = {t["ticker"]: t.get("navn_dnb", t["navn"]) for t in _ticker_data}
 TICKER_YF            = {t["ticker"]: t.get("ticker_yf", t["ticker"] + ".OL") for t in _ticker_data}
+ASK_EGNET            = {t["ticker"]: t.get("ask_egnet", True) for t in _ticker_data}
+INKORPORERINGSLAND   = {t["ticker"]: t.get("inkorporeringsland", "Norge") for t in _ticker_data}
 
 _fallback_path = os.path.join(os.path.dirname(__file__), "..", "data", "fallback_data.json")
 FALLBACK_DATA = {}
@@ -728,6 +730,8 @@ def hent_aksje(meta):
             "beskrivelse_fakta": BESKRIVELSE_FAKTA.get(ticker, ""),
             "valuta": valuta,
             "kurs_historikk": kurs_historikk,
+            "ask_egnet": ASK_EGNET.get(ticker, True),
+            "inkorporeringsland": INKORPORERINGSLAND.get(ticker, "Norge"),
             "data_kilde": "yahoo",
         }
         return resultat
@@ -1249,6 +1253,46 @@ def _lag_risikofaktorer(a):
     )
 
 
+def _lag_kontoer_seksjon(a):
+    """Viser hvilke kontotyper aksjen kan handles på (ASK-eligibilitet)."""
+    ask      = a.get("ask_egnet", True)
+    land     = a.get("inkorporeringsland", "Norge")
+
+    if ask:
+        ask_badge = (
+            '<div class="konto-rad">'
+            '<span class="konto-ok">✓</span>'
+            '<div><strong>Aksjesparekonto (ASK)</strong>'
+            '<p>Kan holdes i ASK og Zero-konto hos alle norske meglere.</p></div>'
+            '</div>'
+        )
+    else:
+        ask_badge = (
+            '<div class="konto-rad konto-ikke">'
+            '<span class="konto-nei">✗</span>'
+            '<div><strong>Aksjesparekonto (ASK)</strong>'
+            f'<p>Ikke tilgjengelig i ASK eller Zero-konto. Selskapet er registrert i {land}, '
+            f'som ikke er et EØS-land. Kan kun handles på aksje- og fondskonto.</p></div>'
+            '</div>'
+        )
+
+    af_badge = (
+        '<div class="konto-rad">'
+        '<span class="konto-ok">✓</span>'
+        '<div><strong>Aksje- og fondskonto</strong>'
+        '<p>Kan handles fritt på alle norske og internasjonale meglere.</p></div>'
+        '</div>'
+    )
+
+    return (
+        '<div class="kontoer-seksjon">'
+        '<h2>Hvilke kontoer kan du handle denne aksjen på?</h2>'
+        + af_badge
+        + ask_badge +
+        '</div>'
+    )
+
+
 def _lag_faq_seksjon(a, today):
     """FAQ-seksjon med 5-6 aksje-spesifikke spørsmål og JSON-LD FAQPage-schema."""
     ticker   = a["ticker"]
@@ -1589,6 +1633,7 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     profil_html     = _lag_utbytte_profil(a, sektor_snitt or {})
     hist_prosa_html = _lag_historikk_prosa(a)
     risiko_html     = _lag_risikofaktorer(a)
+    kontoer_html    = _lag_kontoer_seksjon(a)
     faq_html, faq_jsonld = _lag_faq_seksjon(a, today)
 
     # Relaterte aksjer
@@ -1737,6 +1782,17 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     .risiko-seksjon {{ margin: 1.5rem 0; }}
     .risiko-liste {{ list-style: none; padding: 0; margin: 0; }}
     .risiko-liste li {{ font-size: 0.875rem; padding: 0.5rem 0.75rem; border-left: 3px solid #fca5a5; margin-bottom: 0.5rem; line-height: 1.5; }}
+    .kontoer-seksjon {{ margin: 1.5rem 0; }}
+    .kontoer-seksjon h2 {{ font-size: 1rem; font-weight: 700; margin-bottom: 0.75rem; }}
+    .konto-rad {{ display: flex; gap: 0.85rem; align-items: flex-start; padding: 0.85rem 1rem; border: 1px solid #d1fae5; border-radius: 0.65rem; margin-bottom: 0.5rem; background: #f0fdf4; }}
+    .konto-rad.konto-ikke {{ border-color: #fca5a5; background: #fff1f2; }}
+    .konto-rad strong {{ font-size: 0.875rem; }}
+    .konto-rad p {{ font-size: 0.8rem; color: #4b5563; margin: 0.2rem 0 0; line-height: 1.5; }}
+    .konto-ok {{ font-size: 1rem; color: #16a34a; flex-shrink: 0; margin-top: 0.1rem; }}
+    .konto-nei {{ font-size: 1rem; color: #dc2626; flex-shrink: 0; margin-top: 0.1rem; }}
+    .dark .konto-rad {{ background: #052e16; border-color: #166534; }}
+    .dark .konto-rad p {{ color: #9ca3af; }}
+    .dark .konto-rad.konto-ikke {{ background: #2d0a0a; border-color: #7f1d1d; }}
     .relaterte {{ margin: 1.5rem 0; }}
     .relaterte h2 {{ margin-bottom: 0.75rem; }}
     .rel-grid {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 0.75rem; }}
@@ -1933,6 +1989,8 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
   {hist_prosa_html}
 
   {risiko_html}
+
+  {kontoer_html}
 
   </section>
 
