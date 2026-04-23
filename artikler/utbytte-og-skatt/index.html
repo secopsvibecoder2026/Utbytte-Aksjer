@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3981936786393038"
+     crossorigin="anonymous"></script>
+
+  <!-- Google Analytics med Consent Mode v2 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-X6C9PERKMB"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', {
+      analytics_storage: 'denied',
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      wait_for_update: 500
+    });
+    gtag('js', new Date());
+    gtag('config', 'G-X6C9PERKMB');
+  </script>
+  <script src="/assets/consent.js" defer></script>
+
+  <link rel="icon" type="image/png" href="/favicon.png" sizes="512x512" />
+  <link rel="apple-touch-icon" href="/logo/apple_touch_icon_180.png" />
+  <link rel="icon" type="image/svg+xml" href="/logo/exday_icon_primary.svg" />
+
+  <title>Utbytte og skatt i Norge — 37,84 %, skjermingsfradrag og ASK | exday.no</title>
+  <meta name="description" content="Komplett guide til skatt på utbytte i Norge: effektiv sats på 37,84 %, skjermingsfradrag, aksjesparekonto (ASK) og hvilken konto som lønner seg for utbytteinvestorer." />
+  <link rel="canonical" href="https://exday.no/artikler/utbytte-og-skatt/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://exday.no/artikler/utbytte-og-skatt/" />
+  <meta property="og:title" content="Utbytte og skatt i Norge — 37,84 %, skjermingsfradrag og ASK" />
+  <meta property="og:description" content="Komplett guide til skatt på utbytte i Norge: effektiv sats på 37,84 %, skjermingsfradrag og aksjesparekonto (ASK)." />
+  <meta property="og:site_name" content="exday.no" />
+
+  <link rel="stylesheet" href="/assets/tailwind.css" />
+  <link rel="stylesheet" href="/assets/style.css" />
+
+  <script>
+    (function() {
+      var t = localStorage.getItem('tema');
+      if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
+      }
+    })();
+  </script>
+
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+    .prose h2 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      margin-top: 2.5rem;
+      margin-bottom: 0.75rem;
+      color: inherit;
+    }
+    .prose h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-top: 1.75rem;
+      margin-bottom: 0.5rem;
+      color: inherit;
+    }
+    .prose p { margin-bottom: 1rem; line-height: 1.75; }
+    .prose ul { margin: 0.75rem 0 1rem 1.5rem; list-style: disc; }
+    .prose ol { margin: 0.75rem 0 1rem 1.5rem; list-style: decimal; }
+    .prose li { margin-bottom: 0.4rem; line-height: 1.7; }
+    .prose table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.9rem; display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .prose th { text-align: left; padding: 0.6rem 0.9rem; background: #f3f4f6; font-weight: 600; border: 1px solid #e5e7eb; }
+    .dark .prose th { background: #1f2937; border-color: #374151; }
+    .prose td { padding: 0.6rem 0.9rem; border: 1px solid #e5e7eb; vertical-align: top; }
+    .dark .prose td { border-color: #374151; }
+    .prose tr:nth-child(even) td { background: #f9fafb; }
+    .dark .prose tr:nth-child(even) td { background: #111827; }
+    .callout {
+      border-left: 4px solid #2563eb;
+      background: #eff6ff;
+      padding: 1rem 1.25rem;
+      border-radius: 0 0.5rem 0.5rem 0;
+      margin: 1.5rem 0;
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+    .dark .callout { background: #1e3a5f; border-color: #3b82f6; }
+    .callout-green {
+      border-color: #16a34a;
+      background: #f0fdf4;
+    }
+    .dark .callout-green { background: #052e16; border-color: #4ade80; }
+    .callout-warn {
+      border-color: #d97706;
+      background: #fffbeb;
+    }
+    .dark .callout-warn { background: #2d1f00; border-color: #f59e0b; }
+    details summary { cursor: pointer; list-style: none; }
+    details summary::-webkit-details-marker { display: none; }
+    details summary .chevron { transition: transform 0.2s ease; flex-shrink: 0; }
+    details[open] summary .chevron { transform: rotate(180deg); }
+    .toc a { color: #2563eb; text-decoration: none; }
+    .toc a:hover { text-decoration: underline; }
+    .dark .toc a { color: #60a5fa; }
+    .formula-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 0.5rem;
+      padding: 1rem 1.25rem;
+      margin: 1.25rem 0;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9rem;
+      line-height: 1.8;
+    }
+    .dark .formula-box { background: #0f172a; border-color: #334155; }
+  </style>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Utbytte og skatt i Norge — 37,84 %, skjermingsfradrag og ASK",
+    "description": "Komplett guide til skatt på utbytte i Norge: effektiv sats på 37,84 %, skjermingsfradrag, aksjesparekonto (ASK) og hvilken konto som lønner seg for utbytteinvestorer.",
+    "url": "https://exday.no/artikler/utbytte-og-skatt/",
+    "datePublished": "2026-04-23",
+    "dateModified": "2026-04-23",
+    "author": { "@type": "Organization", "name": "exday.no" },
+    "publisher": {
+      "@type": "Organization",
+      "name": "exday.no",
+      "url": "https://exday.no"
+    },
+    "mainEntityOfPage": { "@type": "WebPage", "@id": "https://exday.no/artikler/utbytte-og-skatt/" }
+  }
+  </script>
+</head>
+<body class="bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 min-h-screen">
+<div class="max-w-2xl mx-auto px-6 pt-10 pb-20">
+
+  <!-- NAV -->
+  <div class="flex items-center justify-between mb-10">
+    <a href="/artikler/" class="inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+      Artikler
+    </a>
+    <button id="dark-toggle" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500 dark:text-gray-400 transition-colors" aria-label="Bytt fargemodus">
+      <svg class="w-5 h-5 dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+      <svg class="w-5 h-5 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+    </button>
+  </div>
+
+  <!-- BREADCRUMB -->
+  <nav class="text-xs text-gray-400 dark:text-gray-600 mb-6" aria-label="Brødsmulesti">
+    <a href="/" class="hover:text-gray-600 dark:hover:text-gray-400">exday.no</a>
+    <span class="mx-1.5">›</span>
+    <a href="/artikler/" class="hover:text-gray-600 dark:hover:text-gray-400">Artikler</a>
+    <span class="mx-1.5">›</span>
+    <span class="text-gray-600 dark:text-gray-400">Utbytte og skatt</span>
+  </nav>
+
+  <!-- HEADER -->
+  <header class="mb-8">
+    <div class="flex flex-wrap gap-2 mb-4">
+      <span style="display:inline-block;font-size:0.7rem;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;padding:0.2rem 0.6rem;border-radius:9999px;background:#dcfce7;color:#15803d;">Skatt</span>
+      <span style="display:inline-block;font-size:0.7rem;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;padding:0.2rem 0.6rem;border-radius:9999px;background:#dbeafe;color:#1d4ed8;">Guide</span>
+    </div>
+    <h1 class="text-3xl font-bold leading-tight mb-4">Utbytte og skatt i Norge — 37,84&nbsp;%, skjermingsfradrag og ASK</h1>
+    <p class="text-gray-600 dark:text-gray-400 leading-relaxed text-lg">
+      Utbytter er attraktive, men skattereglene er kompliserte. Denne guiden forklarer alt: hva du faktisk betaler, hvordan skjermingsfradraget reduserer skatten, og om du bør eie utbytteaksjer i en aksjesparekonto eller på vanlig VPS-konto.
+    </p>
+    <p class="text-xs text-gray-400 dark:text-gray-600 mt-4">23. april 2026 · 10 min lesing</p>
+  </header>
+
+  <!-- INNHOLDSFORTEGNELSE -->
+  <nav class="toc bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-5 mb-10" aria-label="Innholdsfortegnelse">
+    <p class="text-xs font-semibold uppercase tracking-widest text-gray-500 dark:text-gray-500 mb-3">Innhold</p>
+    <ol style="margin:0;padding-left:1.25rem;list-style:decimal;">
+      <li style="margin-bottom:0.4rem;"><a href="#skattesats">Skattesatsen på 37,84 % — hva betyr det egentlig?</a></li>
+      <li style="margin-bottom:0.4rem;"><a href="#skjermingsfradrag">Skjermingsfradraget — slik reduserer du skatten lovlig</a></li>
+      <li style="margin-bottom:0.4rem;"><a href="#ask">Aksjesparekonto (ASK) for utbytteinvestorer</a></li>
+      <li style="margin-bottom:0.4rem;"><a href="#ask-vs-vps">ASK vs. VPS-konto — hva lønner seg?</a></li>
+      <li style="margin-bottom:0.4rem;"><a href="#eksempler">Konkrete eksempler med tall</a></li>
+      <li style="margin-bottom:0.4rem;"><a href="#utenlandske">Utenlandskregistrerte aksjer og kildeskatt</a></li>
+      <li style="margin-bottom:0.4rem;"><a href="#vanlige-feil">Vanlige misforståelser om utbytte og skatt</a></li>
+      <li><a href="#sammendrag">Sammendrag</a></li>
+    </ol>
+  </nav>
+
+  <article class="prose">
