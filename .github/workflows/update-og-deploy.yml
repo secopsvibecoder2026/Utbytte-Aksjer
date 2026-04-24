@@ -49,11 +49,14 @@ jobs:
       - name: Valider datakvalitet
         run: python scripts/valider_data.py
 
+      - name: Oppdater hendelseskalender
+        run: python scripts/oppdater_hendelser.py
+
       - name: Commit og push oppdatert data
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/aksjer.json aksjer/ sitemap.xml index.html app/
+          git add data/aksjer.json data/hendelser.json aksjer/ sitemap.xml index.html app/
           if git diff --staged --quiet; then
             echo "Ingen endringer."
           else

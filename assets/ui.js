@@ -1319,12 +1319,29 @@ function visKalender() {
 
   // Bygg flat liste av alle hendelser (ex, utbytte, rapport)
   const hendelser = [];
+  const sett = new Set(); // unngå duplikater mellom aksjer.rapport_dato og hendelser.json
+
   alleAksjer.forEach(a => {
     if (sok && !a.ticker.toLowerCase().includes(sok) && !a.navn.toLowerCase().includes(sok)) return;
-    if (a.ex_dato)      hendelser.push({ dato: a.ex_dato,      type: 'ex',      aksje: a });
+    if (a.ex_dato)       hendelser.push({ dato: a.ex_dato,       type: 'ex',      aksje: a });
     if (a.betaling_dato) hendelser.push({ dato: a.betaling_dato, type: 'utbytte', aksje: a });
-    if (a.rapport_dato) hendelser.push({ dato: a.rapport_dato,  type: 'rapport', aksje: a });
+    if (a.rapport_dato) {
+      sett.add(`${a.ticker}|${a.rapport_dato}`);
+      hendelser.push({ dato: a.rapport_dato, type: 'rapport', aksje: a });
+    }
   });
+
+  // Legg til akkumulerte rapport-hendelser fra hendelser.json (inkl. passerte datoer)
+  (alleHendelser || []).forEach(h => {
+    const nøkkel = `${h.ticker}|${h.dato}`;
+    if (sett.has(nøkkel)) return; // allerede med
+    const a = alleAksjer.find(x => x.ticker === h.ticker);
+    if (!a) return;
+    if (sok && !a.ticker.toLowerCase().includes(sok) && !a.navn.toLowerCase().includes(sok)) return;
+    sett.add(nøkkel);
+    hendelser.push({ dato: h.dato, type: h.type || 'rapport', aksje: a });
+  });
+
   hendelser.sort((x, y) => new Date(x.dato) - new Date(y.dato));
 
   // Grupper per måned

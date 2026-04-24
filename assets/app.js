@@ -28,6 +28,7 @@ let paginering = (() => {
 let aktivListeFilter = ''; // '' = alle, 'pf' = portefølje, 'wl:{id}' = watchliste
 let aktivMalFilter = '';    // '' = alle, 'stabil', 'vekst', 'hoy_yield', 'kvartalsvis'
 let aktivRisikoFilter = ''; // '' = alle, 'lav', 'moderat', 'hoy'
+let alleHendelser = [];     // Akkumulerte rapport-hendelser fra hendelser.json
 
 // ── INIT ───────────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
@@ -185,9 +186,19 @@ async function mergPriser() {
 async function lastData() {
   skjulFeilBanner();
   try {
-    const resp = await fetch('/data/aksjer.json');
-    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-    const json = await resp.json();
+    const [aksjerResp, hendelserResp] = await Promise.all([
+      fetch('/data/aksjer.json'),
+      fetch('/data/hendelser.json').catch(() => null),
+    ]);
+    if (!aksjerResp.ok) throw new Error(`HTTP ${aksjerResp.status}`);
+    const json = await aksjerResp.json();
+
+    if (hendelserResp && hendelserResp.ok) {
+      try {
+        const hData = await hendelserResp.json();
+        alleHendelser = hData.hendelser || [];
+      } catch { alleHendelser = []; }
+    }
 
     // Lagre i cache for fallback
     try { localStorage.setItem(CACHE_NØKKEL, JSON.stringify(json)); } catch { /* quota */ }
