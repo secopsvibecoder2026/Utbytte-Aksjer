@@ -3,7 +3,8 @@
     {
       "ticker": "ODLD",
       "dato": "2026-04-23",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/671461"
     },
     {
       "ticker": "YAR",
@@ -136,6 +137,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "ENTR",
+      "dato": "2026-04-30",
+      "type": "rapport"
+    },
+    {
       "ticker": "EQVA",
       "dato": "2026-04-30",
       "type": "rapport"
@@ -201,7 +207,22 @@
       "type": "rapport"
     },
     {
+      "ticker": "SBMO",
+      "dato": "2026-04-30",
+      "type": "rapport"
+    },
+    {
       "ticker": "SBNOR",
+      "dato": "2026-04-30",
+      "type": "rapport"
+    },
+    {
+      "ticker": "SRHA",
+      "dato": "2026-04-30",
+      "type": "rapport"
+    },
+    {
+      "ticker": "STRONG",
       "dato": "2026-04-30",
       "type": "rapport"
     },
@@ -217,6 +238,16 @@
     },
     {
       "ticker": "VEND",
+      "dato": "2026-04-30",
+      "type": "rapport"
+    },
+    {
+      "ticker": "VISTIN",
+      "dato": "2026-04-30",
+      "type": "rapport"
+    },
+    {
+      "ticker": "WWIB",
       "dato": "2026-04-30",
       "type": "rapport"
     },
