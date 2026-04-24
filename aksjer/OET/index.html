@@ -172,6 +172,16 @@
     .dark .konto-rad { background: #052e16; border-color: #166534; }
     .dark .konto-rad p { color: #9ca3af; }
     .dark .konto-rad.konto-ikke { background: #2d0a0a; border-color: #7f1d1d; }
+    .investor-badges-rad { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0.85rem 0 0.5rem; }
+    .investor-badge { display: inline-flex; align-items: center; padding: 0.2rem 0.7rem; border-radius: 9999px; font-size: 0.73rem; font-weight: 600; border: 1px solid; }
+    .investor-risiko-lav { background: #dcfce7; color: #15803d; border-color: #86efac; }
+    .investor-risiko-moderat { background: #fef3c7; color: #92400e; border-color: #fcd34d; }
+    .investor-risiko-hoy { background: #fee2e2; color: #991b1b; border-color: #fca5a5; }
+    .investor-mal { background: #eff6ff; color: #1e40af; border-color: #bfdbfe; }
+    .dark .investor-risiko-lav { background: #052e16; color: #86efac; border-color: #166534; }
+    .dark .investor-risiko-moderat { background: #451a03; color: #fcd34d; border-color: #92400e; }
+    .dark .investor-risiko-hoy { background: #2d0a0a; color: #fca5a5; border-color: #7f1d1d; }
+    .dark .investor-mal { background: #1e3a5f; color: #93c5fd; border-color: #1d4ed8; }
     .relaterte { margin: 1.5rem 0; }
     .relaterte h2 { margin-bottom: 0.75rem; }
     .rel-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 0.75rem; }
@@ -351,6 +361,8 @@
     </div>
     <div class="kcard"><div class="label">P/E</div><div class="val">13.4</div></div>
   </div>
+
+  <div class="investor-badges-rad"><span class="investor-badge investor-risiko-moderat">Moderat risiko</span><span class="investor-badge investor-mal">Utbyttevekst</span><span class="investor-badge investor-mal">Kvartalsvis</span></div>
 
   
 <div class="kurs-lenker">

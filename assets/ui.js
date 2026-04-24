@@ -451,6 +451,17 @@ function initVerktoySubTabs() {
   });
 }
 
+function oppdaterInvestorChips() {
+  document.querySelectorAll('[data-mal-filter]').forEach(btn => {
+    const aktiv = btn.dataset.malFilter === aktivMalFilter;
+    btn.classList.toggle('chip-aktiv', aktiv);
+  });
+  document.querySelectorAll('[data-risiko-filter]').forEach(btn => {
+    const aktiv = btn.dataset.risikoFilter === aktivRisikoFilter;
+    btn.classList.toggle('chip-aktiv', aktiv);
+  });
+}
+
 function initFilter() {
   document.getElementById('sok').addEventListener('input', () => {
     if (aktivTab === 'kalender') visKalender();
@@ -468,7 +479,10 @@ function initFilter() {
     document.getElementById('filter-liste').value = '';
     visKunFavoritter = false;
     aktivListeFilter = '';
+    aktivMalFilter = '';
+    aktivRisikoFilter = '';
     oppdaterFavBtn();
+    oppdaterInvestorChips();
     visOversikt();
   });
 
@@ -481,6 +495,24 @@ function initFilter() {
   document.getElementById('filter-liste').addEventListener('change', e => {
     aktivListeFilter = e.target.value;
     visOversikt();
+  });
+
+  document.getElementById('filter-bar')?.addEventListener('click', e => {
+    const malBtn = e.target.closest('[data-mal-filter]');
+    if (malBtn) {
+      const val = malBtn.dataset.malFilter;
+      aktivMalFilter = aktivMalFilter === val ? '' : val;
+      oppdaterInvestorChips();
+      visOversikt();
+      return;
+    }
+    const risikoBtn = e.target.closest('[data-risiko-filter]');
+    if (risikoBtn) {
+      const val = risikoBtn.dataset.risikoFilter;
+      aktivRisikoFilter = aktivRisikoFilter === val ? '' : val;
+      oppdaterInvestorChips();
+      visOversikt();
+    }
   });
 
   // Kolonnesortering (desktop)
@@ -557,6 +589,41 @@ function byggListeFilter() {
   sel.value = aktivListeFilter;
 }
 
+const _DEFENSIVE_SEKTORER = new Set(['Finans', 'Eiendom', 'Helse', 'Forsyning', 'Telekommunikasjon', 'Dagligvarer']);
+const _SYKLISKE_SEKTORER  = new Set(['Energi', 'Shipping', 'Sjømat', 'Materialer', 'Industri']);
+
+function beregnRisiko(a) {
+  let poeng = 0;
+  if (_SYKLISKE_SEKTORER.has(a.sektor)) poeng += 2;
+  else if (!_DEFENSIVE_SEKTORER.has(a.sektor)) poeng += 1;
+  const ar = a.ar_med_utbytte || 0;
+  if (ar < 3) poeng += 2;
+  else if (ar < 7) poeng += 1;
+  const payout = a.payout_ratio || 0;
+  if (payout > 90) poeng += 2;
+  else if (payout > 75) poeng += 1;
+  else if (payout > 0 && payout < 50) poeng -= 1;
+  if (a.ask_egnet === false) poeng += 1;
+  const mv = a.markedsverdi || 0;
+  if (mv > 0 && mv < 1e9) poeng += 1;
+  else if (mv > 10e9) poeng -= 1;
+  if ((a.utbytte_yield || 0) > 12) poeng += 1;
+  if (poeng <= 1) return 'lav';
+  if (poeng <= 3) return 'moderat';
+  return 'hoy';
+}
+
+function beregnMal(a) {
+  const mål = [];
+  if (_DEFENSIVE_SEKTORER.has(a.sektor) && (a.ar_med_utbytte || 0) >= 7 && (a.payout_ratio || 0) < 80 && (a.payout_ratio || 0) > 0) {
+    mål.push('stabil');
+  }
+  if ((a.utbytte_vekst_5ar || 0) > 3) mål.push('vekst');
+  if ((a.utbytte_yield || 0) >= 6) mål.push('hoy_yield');
+  if (a.frekvens === 'Kvartalsvis' || a.frekvens === 'Månedlig') mål.push('kvartalsvis');
+  return mål;
+}
+
 function byggSektorFilter() {
   const sektorer = [...new Set(alleAksjer.map(a => a.sektor))].sort();
   const sel = document.getElementById('filter-sektor');
@@ -591,6 +658,8 @@ function filtrerteAksjer() {
     if (sektor && a.sektor !== sektor) return false;
     if (frekvens && a.frekvens !== frekvens) return false;
     if (a.utbytte_yield < minYield) return false;
+    if (aktivRisikoFilter && beregnRisiko(a) !== aktivRisikoFilter) return false;
+    if (aktivMalFilter && !beregnMal(a).includes(aktivMalFilter)) return false;
     return true;
   });
 }

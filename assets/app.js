@@ -26,6 +26,8 @@ let paginering = (() => {
   return { side: 1, perSide };
 })();
 let aktivListeFilter = ''; // '' = alle, 'pf' = portefølje, 'wl:{id}' = watchliste
+let aktivMalFilter = '';    // '' = alle, 'stabil', 'vekst', 'hoy_yield', 'kvartalsvis'
+let aktivRisikoFilter = ''; // '' = alle, 'lav', 'moderat', 'hoy'
 
 // ── INIT ───────────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {

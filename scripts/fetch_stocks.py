@@ -1519,6 +1519,92 @@ def _lag_investor_vurdering(a, sektor_snitt):
     return vurdering_html + driver_html + passer_html
 
 
+_DEFENSIVE_SEKTORER_PY = {'Finans', 'Eiendom', 'Helse', 'Forsyning', 'Telekommunikasjon', 'Dagligvarer'}
+_SYKLISKE_SEKTORER_PY  = {'Energi', 'Shipping', 'Sjømat', 'Materialer', 'Industri'}
+
+
+def _beregn_risiko_py(a):
+    poeng = 0
+    sektor = a.get('sektor', '')
+    if sektor in _SYKLISKE_SEKTORER_PY:
+        poeng += 2
+    elif sektor not in _DEFENSIVE_SEKTORER_PY:
+        poeng += 1
+    ar = a.get('ar_med_utbytte') or 0
+    if ar < 3:
+        poeng += 2
+    elif ar < 7:
+        poeng += 1
+    payout = a.get('payout_ratio') or 0
+    if payout > 90:
+        poeng += 2
+    elif payout > 75:
+        poeng += 1
+    elif 0 < payout < 50:
+        poeng -= 1
+    if not a.get('ask_egnet', True):
+        poeng += 1
+    mv = a.get('markedsverdi') or 0
+    if 0 < mv < 1e9:
+        poeng += 1
+    elif mv > 10e9:
+        poeng -= 1
+    if (a.get('utbytte_yield') or 0) > 12:
+        poeng += 1
+    if poeng <= 1:
+        return 'lav'
+    if poeng <= 3:
+        return 'moderat'
+    return 'hoy'
+
+
+def _beregn_mal_py(a):
+    mal = []
+    sektor = a.get('sektor', '')
+    if (sektor in _DEFENSIVE_SEKTORER_PY
+            and (a.get('ar_med_utbytte') or 0) >= 7
+            and 0 < (a.get('payout_ratio') or 0) < 80):
+        mal.append('stabil')
+    if (a.get('utbytte_vekst_5ar') or 0) > 3:
+        mal.append('vekst')
+    if (a.get('utbytte_yield') or 0) >= 6:
+        mal.append('hoy_yield')
+    if a.get('frekvens') in ('Kvartalsvis', 'Månedlig'):
+        mal.append('kvartalsvis')
+    return mal
+
+
+def _lag_investor_badges(a):
+    """Badges som viser risikoprofil og investormål — vises øverst på aksjesiden."""
+    risiko = _beregn_risiko_py(a)
+    mal    = _beregn_mal_py(a)
+
+    risiko_tekst = {'lav': 'Lav risiko', 'moderat': 'Moderat risiko', 'hoy': 'Høy risiko'}
+    risiko_klasse = {'lav': 'investor-risiko-lav', 'moderat': 'investor-risiko-moderat', 'hoy': 'investor-risiko-hoy'}
+
+    mal_tekst = {
+        'stabil':     'Stabil inntekt',
+        'vekst':      'Utbyttevekst',
+        'hoy_yield':  'Høy yield',
+        'kvartalsvis': 'Kvartalsvis',
+    }
+
+    risiko_badge = (
+        f'<span class="investor-badge {risiko_klasse.get(risiko, "")}">'
+        f'{risiko_tekst.get(risiko, risiko)}</span>'
+    )
+    mal_badges = ''.join(
+        f'<span class="investor-badge investor-mal">{mal_tekst.get(m, m)}</span>'
+        for m in mal
+    )
+
+    return (
+        '<div class="investor-badges-rad">'
+        + risiko_badge + mal_badges +
+        '</div>'
+    )
+
+
 def _lag_kontoer_seksjon(a):
     """Viser hvilke kontotyper aksjen kan handles på (ASK-eligibilitet)."""
     ask      = a.get("ask_egnet", True)
@@ -1905,11 +1991,12 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
         tv_chart_seksjon = ""
 
     # Nye innholdsseksjoner
-    profil_html      = _lag_utbytte_profil(a, sektor_snitt or {})
-    hist_prosa_html  = _lag_historikk_prosa(a)
-    vurdering_html   = _lag_investor_vurdering(a, sektor_snitt or {})
-    risiko_html      = _lag_risikofaktorer(a)
-    kontoer_html     = _lag_kontoer_seksjon(a)
+    profil_html          = _lag_utbytte_profil(a, sektor_snitt or {})
+    hist_prosa_html      = _lag_historikk_prosa(a)
+    vurdering_html       = _lag_investor_vurdering(a, sektor_snitt or {})
+    risiko_html          = _lag_risikofaktorer(a)
+    kontoer_html         = _lag_kontoer_seksjon(a)
+    investor_badges_html = _lag_investor_badges(a)
     faq_html, faq_jsonld = _lag_faq_seksjon(a, today)
 
     # Relaterte aksjer
@@ -2083,6 +2170,16 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     .dark .konto-rad {{ background: #052e16; border-color: #166534; }}
     .dark .konto-rad p {{ color: #9ca3af; }}
     .dark .konto-rad.konto-ikke {{ background: #2d0a0a; border-color: #7f1d1d; }}
+    .investor-badges-rad {{ display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0.85rem 0 0.5rem; }}
+    .investor-badge {{ display: inline-flex; align-items: center; padding: 0.2rem 0.7rem; border-radius: 9999px; font-size: 0.73rem; font-weight: 600; border: 1px solid; }}
+    .investor-risiko-lav {{ background: #dcfce7; color: #15803d; border-color: #86efac; }}
+    .investor-risiko-moderat {{ background: #fef3c7; color: #92400e; border-color: #fcd34d; }}
+    .investor-risiko-hoy {{ background: #fee2e2; color: #991b1b; border-color: #fca5a5; }}
+    .investor-mal {{ background: #eff6ff; color: #1e40af; border-color: #bfdbfe; }}
+    .dark .investor-risiko-lav {{ background: #052e16; color: #86efac; border-color: #166534; }}
+    .dark .investor-risiko-moderat {{ background: #451a03; color: #fcd34d; border-color: #92400e; }}
+    .dark .investor-risiko-hoy {{ background: #2d0a0a; color: #fca5a5; border-color: #7f1d1d; }}
+    .dark .investor-mal {{ background: #1e3a5f; color: #93c5fd; border-color: #1d4ed8; }}
     .relaterte {{ margin: 1.5rem 0; }}
     .relaterte h2 {{ margin-bottom: 0.75rem; }}
     .rel-grid {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 0.75rem; }}
@@ -2262,6 +2359,8 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     </div>
     {pe_card}
   </div>
+
+  {investor_badges_html}
 
   {tv_chart_seksjon}
 

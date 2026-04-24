@@ -622,3 +622,41 @@ section[id] { scroll-margin-top: 100px; }
 }
 .dark .modal-konto-rad p { color: #9ca3af; }
 
+
+/* ── INVESTOR-CHIPS ─────────────────────────────────────────────────────── */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.65rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border: 1px solid #d1d5db;
+  background: transparent;
+  color: #4b5563;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+  white-space: nowrap;
+}
+.chip:hover {
+  background: #f3f4f6;
+  border-color: #9ca3af;
+}
+.chip.chip-aktiv {
+  background: #132A50;
+  border-color: #132A50;
+  color: #fff;
+}
+.dark .chip {
+  border-color: #374151;
+  color: #9ca3af;
+}
+.dark .chip:hover {
+  background: #1f2937;
+  border-color: #6b7280;
+}
+.dark .chip.chip-aktiv {
+  background: #2E7B7B;
+  border-color: #2E7B7B;
+  color: #fff;
+}

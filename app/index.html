@@ -228,39 +228,55 @@
     </nav>
 
     <!-- FILTER BAR -->
-    <section id="filter-bar" class="space-y-2 sm:space-y-0 sm:flex sm:flex-wrap sm:gap-3 sm:items-center">
-      <div class="relative w-full sm:flex-1 sm:min-w-48">
-        <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-        <input id="sok" type="search" placeholder="Søk ticker eller selskapsnavn…" class="filter-input pl-10 w-full" />
+    <section id="filter-bar" class="space-y-2">
+      <!-- Rad 1: søk + vanlige filtre -->
+      <div class="sm:flex sm:flex-wrap sm:gap-3 sm:items-center space-y-2 sm:space-y-0">
+        <div class="relative w-full sm:flex-1 sm:min-w-48">
+          <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          <input id="sok" type="search" placeholder="Søk ticker eller selskapsnavn…" class="filter-input pl-10 w-full" />
+        </div>
+        <div class="grid grid-cols-2 sm:flex gap-2 sm:gap-3" id="filter-ekstra">
+          <select id="filter-sektor" class="filter-input w-full sm:w-auto">
+            <option value="">Alle sektorer</option>
+          </select>
+          <select id="filter-frekvens" class="filter-input w-full sm:w-auto">
+            <option value="">Alle frekvenser</option>
+            <option>Månedlig</option>
+            <option>Kvartalsvis</option>
+            <option>Halvårlig</option>
+            <option>Årlig</option>
+            <option>Uregelmessig</option>
+          </select>
+          <select id="filter-yield" class="filter-input w-full sm:w-auto">
+            <option value="">Alle yielder</option>
+            <option value="3">Yield ≥ 3%</option>
+            <option value="5">Yield ≥ 5%</option>
+            <option value="8">Yield ≥ 8%</option>
+            <option value="10">Yield ≥ 10%</option>
+          </select>
+          <button id="filter-fav" class="filter-input text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors text-center">
+            ☆ Favoritter
+          </button>
+          <select id="filter-liste" class="filter-input w-full sm:w-auto">
+            <option value="">Alle lister</option>
+          </select>
+          <button id="reset-filter" class="filter-input text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors text-center">
+            Nullstill
+          </button>
+        </div>
       </div>
-      <div class="grid grid-cols-2 sm:flex gap-2 sm:gap-3" id="filter-ekstra">
-        <select id="filter-sektor" class="filter-input w-full sm:w-auto">
-          <option value="">Alle sektorer</option>
-        </select>
-        <select id="filter-frekvens" class="filter-input w-full sm:w-auto">
-          <option value="">Alle frekvenser</option>
-          <option>Månedlig</option>
-          <option>Kvartalsvis</option>
-          <option>Halvårlig</option>
-          <option>Årlig</option>
-          <option>Uregelmessig</option>
-        </select>
-        <select id="filter-yield" class="filter-input w-full sm:w-auto">
-          <option value="">Alle yielder</option>
-          <option value="3">Yield ≥ 3%</option>
-          <option value="5">Yield ≥ 5%</option>
-          <option value="8">Yield ≥ 8%</option>
-          <option value="10">Yield ≥ 10%</option>
-        </select>
-        <button id="filter-fav" class="filter-input text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors text-center">
-          ☆ Favoritter
-        </button>
-        <select id="filter-liste" class="filter-input w-full sm:w-auto">
-          <option value="">Alle lister</option>
-        </select>
-        <button id="reset-filter" class="filter-input text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors text-center">
-          Nullstill
-        </button>
+      <!-- Rad 2: investorprofil-chips -->
+      <div class="flex flex-wrap gap-2 items-center">
+        <span class="text-xs text-gray-500 dark:text-gray-400 font-medium shrink-0">Mål:</span>
+        <button data-mal-filter="stabil"     class="chip">Stabil inntekt</button>
+        <button data-mal-filter="vekst"      class="chip">Utbyttevekst</button>
+        <button data-mal-filter="hoy_yield"  class="chip">Høy yield</button>
+        <button data-mal-filter="kvartalsvis" class="chip">Kvartalsvis</button>
+        <span class="text-xs text-gray-400 dark:text-gray-600 mx-1">|</span>
+        <span class="text-xs text-gray-500 dark:text-gray-400 font-medium shrink-0">Risiko:</span>
+        <button data-risiko-filter="lav"     class="chip">Lav</button>
+        <button data-risiko-filter="moderat" class="chip">Moderat</button>
+        <button data-risiko-filter="hoy"     class="chip">Høy</button>
       </div>
     </section>
 
