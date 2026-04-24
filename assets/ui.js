@@ -1344,9 +1344,13 @@ function visKalender() {
 
   hendelser.sort((x, y) => new Date(x.dato) - new Date(y.dato));
 
-  // Grupper per måned
+  // Vis kun hendelser fra og med i dag
+  const idagStr = idag.toISOString().slice(0, 10);
+  const synligeHendelser = hendelser.filter(h => h.dato >= idagStr);
+
+  // Grupper per måned (kun synlige hendelser fra i dag)
   const manedsMap = {};
-  hendelser.forEach(h => {
+  synligeHendelser.forEach(h => {
     const d = new Date(h.dato);
     const key = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
     if (!manedsMap[key]) manedsMap[key] = [];
