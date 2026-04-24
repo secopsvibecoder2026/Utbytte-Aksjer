@@ -912,6 +912,8 @@ function visOversikt(bevarSide = false) {
   const byggTabellRad = a => {
     const exDato = a.ex_dato ? new Date(a.ex_dato + 'T00:00:00') : null; // lokal midnatt
     const snartEx = exDato && exDato >= idag && exDato <= om30;
+    const rapportDato = a.rapport_dato ? new Date(a.rapport_dato + 'T00:00:00') : null;
+    const snartRapport = rapportDato && rapportDato >= idag && rapportDato <= om30;
     const rowClass = snartEx ? 'row-highlight' : '';
     const _d = _ad[a.ticker] || {};
     const _harNotat  = !!_d.notat;
@@ -954,9 +956,10 @@ function visOversikt(bevarSide = false) {
       <td class="col-detalj px-4 py-3 text-right text-gray-600 dark:text-gray-400">${a.ar_med_utbytte > 0 ? a.ar_med_utbytte : '—'}</td>
       <td class="col-detalj px-4 py-3 text-right text-gray-600 dark:text-gray-400">${a.pe_ratio > 0 ? a.pe_ratio.toFixed(1) : '—'}</td>
       <td class="col-detalj px-4 py-3 text-right text-gray-600 dark:text-gray-400">${a.pb_ratio > 0 ? a.pb_ratio.toFixed(1) : '—'}</td>
-      <td class="px-4 py-3 text-center ${snartEx ? 'font-semibold text-amber-700 dark:text-amber-400 font-semibold' : 'text-gray-600 dark:text-gray-400'}">
+      <td class="px-4 py-3 text-center ${snartEx ? 'font-semibold text-amber-700 dark:text-amber-400' : 'text-gray-600 dark:text-gray-400'}">
         ${a.ex_dato ? formaterDato(a.ex_dato) : '—'}
         ${snartEx ? '<span class="block text-xs text-orange-500">Snart!</span>' : ''}
+        ${a.rapport_dato ? `<span class="block text-xs ${snartRapport ? 'text-blue-500 font-semibold' : 'text-gray-400 dark:text-gray-500'}">Rapp: ${formaterDato(a.rapport_dato)}</span>` : ''}
       </td>
       <td class="col-detalj px-4 py-3 text-center text-gray-500 dark:text-gray-500">${a.betaling_dato ? formaterDato(a.betaling_dato) : '—'}</td>
       <td class="px-4 py-3 text-center">
@@ -1011,6 +1014,8 @@ function visOversikt(bevarSide = false) {
     const om30b = new Date(idag2); om30b.setDate(om30b.getDate() + 30);
     const snartEx = exDato && exDato >= idag2 && exDato <= om30b;
     const dagerTil = exDato ? Math.ceil((exDato - idag2) / (1000*60*60*24)) : null;
+    const rapportDatoKort = a.rapport_dato ? new Date(a.rapport_dato + 'T00:00:00') : null;
+    const snartRapportKort = rapportDatoKort && rapportDatoKort >= idag2 && rapportDatoKort <= om30b;
 
     // ── KOMPAKT MOBILKORT (liste-rad) ──────────────────────────────────
     const kompaktKort = `
@@ -1089,12 +1094,15 @@ function visOversikt(bevarSide = false) {
       </div>
       ${rangebar(a.pris, a['52u_lav'], a['52u_hoy'])}
       <div class="flex items-center justify-between mt-3 pt-3 border-t border-gray-100 dark:border-gray-800 text-sm">
-        <div>
-          <span class="text-xs text-gray-400">Ex-dato: </span>
-          <span class="${snartEx ? 'text-orange-600 dark:text-orange-400 font-semibold' : 'text-gray-600 dark:text-gray-400'}">
-            ${a.ex_dato ? formaterDato(a.ex_dato) : '—'}
-          </span>
-          ${snartEx && dagerTil !== null ? `<span class="text-xs text-orange-500 ml-1">${dagerTil === 0 ? '(i dag!)' : dagerTil === 1 ? '(i morgen)' : `(om ${dagerTil} d)`}</span>` : ''}
+        <div class="flex flex-col gap-0.5">
+          <div>
+            <span class="text-xs text-gray-400">Ex-dato: </span>
+            <span class="${snartEx ? 'text-orange-600 dark:text-orange-400 font-semibold' : 'text-gray-600 dark:text-gray-400'}">
+              ${a.ex_dato ? formaterDato(a.ex_dato) : '—'}
+            </span>
+            ${snartEx && dagerTil !== null ? `<span class="text-xs text-orange-500 ml-1">${dagerTil === 0 ? '(i dag!)' : dagerTil === 1 ? '(i morgen)' : `(om ${dagerTil} d)`}</span>` : ''}
+          </div>
+          ${a.rapport_dato ? `<div><span class="text-xs text-gray-400">Rapport: </span><span class="text-xs ${snartRapportKort ? 'text-blue-600 dark:text-blue-400 font-semibold' : 'text-gray-500 dark:text-gray-400'}">${formaterDato(a.rapport_dato)}</span></div>` : ''}
         </div>
         <div class="flex items-center gap-2">
           <button class="sammenlign-btn flex items-center gap-1 text-xs px-2 py-1 rounded-lg border border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:border-brand-500 hover:text-brand-600 dark:hover:text-brand-400 hover:bg-brand-50 dark:hover:bg-brand-900/20 transition-colors" data-ticker="${escHtml(a.ticker)}" aria-label="Legg til i sammenligning">
@@ -2317,7 +2325,7 @@ function visModal(a) {
       </div>
       <div class="rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden mb-4">
         <div class="bg-orange-50 dark:bg-orange-950/30 px-4 py-3">
-          <h3 class="font-semibold text-sm text-orange-800 dark:text-orange-300">Utbyttedatoer</h3>
+          <h3 class="font-semibold text-sm text-orange-800 dark:text-orange-300">Viktige datoer</h3>
         </div>
         <div class="p-4 space-y-2 text-sm">
           <div class="flex justify-between">
@@ -2331,6 +2339,11 @@ function visModal(a) {
             <span class="text-gray-500">Betalingsdato</span>
             <span class="font-medium">${a.betaling_dato ? formaterDato(a.betaling_dato) : '—'}</span>
           </div>
+          ${a.rapport_dato ? `
+          <div class="flex justify-between pt-1 border-t border-gray-100 dark:border-gray-800">
+            <span class="text-gray-500">Neste kvartalsrapport</span>
+            <span class="font-medium text-blue-600 dark:text-blue-400">${formaterDato(a.rapport_dato)}</span>
+          </div>` : ''}
           <div class="flex justify-between">
             <span class="text-gray-500">Frekvens</span>
             <span class="frekvens-badge">${escHtml(a.frekvens)}</span>
@@ -2358,9 +2371,10 @@ function visModal(a) {
           ['Payout Ratio',     a.payout_ratio > 0 ? a.payout_ratio.toFixed(0) + '%' : '—'],
           ['Utbyttevekst 5år', a.utbytte_vekst_5ar !== 0 ? (a.utbytte_vekst_5ar > 0 ? '+' : '') + a.utbytte_vekst_5ar.toFixed(1) + '% p.a.' : '—'],
           ['År m/utbytte',     a.ar_med_utbytte > 0 ? a.ar_med_utbytte + ' år' : '—'],
-          ['Frekvens',         a.frekvens],
-          ['Sektor',           a.sektor],
-          ['Børs',             a.bors],
+          ['Frekvens',             a.frekvens],
+          ['Neste kvartalsrapport', a.rapport_dato ? formaterDato(a.rapport_dato) : '—'],
+          ['Sektor',               a.sektor],
+          ['Børs',                 a.bors],
         ].map(([k,v], i) =>
           '<div class="flex justify-between items-center px-4 py-2.5' + (i % 2 === 0 ? ' bg-gray-50 dark:bg-gray-800/50' : '') + '">' +
           '<span class="text-gray-500 dark:text-gray-400">' + escHtml(k) + '</span>' +

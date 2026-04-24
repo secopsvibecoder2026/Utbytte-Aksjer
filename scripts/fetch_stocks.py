@@ -1817,11 +1817,12 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     pris    = a.get("pris") or 0
     yield_  = a.get("utbytte_yield") or 0
     ex      = a.get("ex_dato") or ""
-    bet     = a.get("betaling_dato") or ""
-    frekvens = a.get("frekvens") or "—"
-    upa     = a.get("utbytte_per_aksje") or 0
-    pe      = a.get("pe_ratio") or 0
-    ar_med  = a.get("ar_med_utbytte") or 0
+    bet          = a.get("betaling_dato") or ""
+    rapport_dato = a.get("rapport_dato") or ""
+    frekvens     = a.get("frekvens") or "—"
+    upa          = a.get("utbytte_per_aksje") or 0
+    pe           = a.get("pe_ratio") or 0
+    ar_med       = a.get("ar_med_utbytte") or 0
     besk         = a.get("beskrivelse_fakta") or a.get("beskrivelse") or ""
     ai_opp       = a.get("ai_oppsummering") or ""
     ai_opp_dato  = a.get("ai_oppsummering_dato") or ""
@@ -2180,6 +2181,8 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     .dark .investor-risiko-moderat {{ background: #451a03; color: #fcd34d; border-color: #92400e; }}
     .dark .investor-risiko-hoy {{ background: #2d0a0a; color: #fca5a5; border-color: #7f1d1d; }}
     .dark .investor-mal {{ background: #1e3a5f; color: #93c5fd; border-color: #1d4ed8; }}
+    .kcard-rapport {{ color: #2563eb; }}
+    .dark .kcard-rapport {{ color: #93c5fd; }}
     .relaterte {{ margin: 1.5rem 0; }}
     .relaterte h2 {{ margin-bottom: 0.75rem; }}
     .rel-grid {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 0.75rem; }}
@@ -2348,6 +2351,10 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     <div class="kcard">
       <div class="label">Utbetalingsdato</div>
       <div class="val" style="font-size:1rem">{_fmt_dato(bet)}</div>
+    </div>
+    <div class="kcard">
+      <div class="label">Kvartalsrapport</div>
+      <div class="val kcard-rapport" style="font-size:1rem">{_fmt_dato(rapport_dato) if rapport_dato else '—'}</div>
     </div>
     <div class="kcard">
       <div class="label">5-årssnitt yield</div>
