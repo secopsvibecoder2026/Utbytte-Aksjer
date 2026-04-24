@@ -144,6 +144,20 @@
     .profil-tekst { font-size: 0.9rem; line-height: 1.65; }
     .historikk-prosa { margin: 1.5rem 0; }
     .historikk-prosa p { font-size: 0.9rem; line-height: 1.7; }
+    .vurdering-seksjon { margin: 1.5rem 0; padding: 1.1rem 1.25rem; background: #f8fafc; border-radius: 0.75rem; border: 1px solid #e2e8f0; }
+    .vurdering-seksjon h2 { font-size: 1rem; font-weight: 700; margin-bottom: 0.6rem; }
+    .vurdering-tekst { font-size: 0.9rem; line-height: 1.75; color: #374151; margin: 0; }
+    .dark .vurdering-seksjon { background: #0f172a; border-color: #1e293b; }
+    .dark .vurdering-tekst { color: #cbd5e1; }
+    .driver-seksjon { margin: 1.5rem 0; }
+    .driver-seksjon h2 { font-size: 1rem; font-weight: 700; margin-bottom: 0.6rem; }
+    .driver-tekst { font-size: 0.875rem; line-height: 1.75; color: #4b5563; margin: 0; }
+    .dark .driver-tekst { color: #9ca3af; }
+    .passer-seksjon { margin: 1.5rem 0; }
+    .passer-seksjon h2 { font-size: 1rem; font-weight: 700; margin-bottom: 0.6rem; }
+    .passer-liste { list-style: none; padding: 0; margin: 0; }
+    .passer-liste li { font-size: 0.875rem; padding: 0.45rem 0.75rem; border-left: 3px solid #86efac; margin-bottom: 0.4rem; line-height: 1.5; color: #374151; }
+    .dark .passer-liste li { color: #d1d5db; border-left-color: #166534; }
     .risiko-seksjon { margin: 1.5rem 0; }
     .risiko-liste { list-style: none; padding: 0; margin: 0; }
     .risiko-liste li { font-size: 0.875rem; padding: 0.5rem 0.75rem; border-left: 3px solid #fca5a5; margin-bottom: 0.5rem; line-height: 1.5; }
@@ -444,6 +458,10 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
 
   <div class="historikk-prosa"><h2>Utbyttehistorikk</h2><p>Norsk Hydro ASA har de siste 4 årene betalt mellom 2.25 og 6.85 NOK per aksje i utbytte. Det høyeste utbyttet ble registrert i 2022 med 6.85 NOK per aksje (6.4% yield). I 2025 er utbyttet 2.25 NOK per aksje, tilsvarende 2.8% direkteavkastning.</p></div>
 
+  <div class="vurdering-seksjon"><h2>Vurdering som utbytteaksje</h2><p class="vurdering-tekst">Norsk Hydro ASA er en av de mest rutinerte utbyttebetalerne på Oslo Børs med 25 sammenhengende år med utbytte. Yielden på 2.8% er nær sektorsnittet for materialer (3.4%). Utbyttet har vokst med 15.8% per år de siste fem årene, noe som gjør det attraktivt for langsiktige reinvesteringsstrategier.</p></div><div class="driver-seksjon"><h2>Hva driver utbyttet i NHY?</h2><p class="driver-tekst">Råvarepriser (aluminium, gjødsel, trevirke m.m.) og valutakurser driver marginen. Sektoren er sensitiv for globale makrotrend og Kinas etterspørsel. Kapasitetsutnyttelse og energikostnader er operasjonelle nøkkeltall.</p></div><div class="passer-seksjon"><h2>Passer NHY for deg?</h2><ul class="passer-liste"><li>Investorer med lang horisont som vil kombinere vekst og løpende inntekt</li>
+<li>De som reinvesterer utbyttet og drar nytte av rentes-rente-effekten</li>
+<li>Porteføljer som ønsker eksponering mot kvalitetsselskaper med voksende utbytte</li></ul></div>
+
   <div class="risiko-seksjon"><h2>Risiko for utbyttet</h2><ul class="risiko-liste"><li>Råvareprisene er sykliske og konjunkturfølsomme</li>
 <li>Valutaeksponering ved internasjonal omsetning kan påvirke marginer</li>
 <li>Miljøregulering kan øke driftskostnader</li></ul></div>
@@ -489,7 +507,7 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
     <a href="https://exday.no/?aksje=NHY">Åpne NHY i exday.no →</a>
   </div>
 
-  <p class="updated">Sist oppdatert: 2026-04-23</p>
+  <p class="updated">Sist oppdatert: 2026-04-24</p>
   <footer style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid #e5e7eb;font-size:0.78rem;text-align:center;color:#9ca3af;line-height:1.6;" class="std-footer">
     <p>Kurs og utbyttedata hentes fra Yahoo Finance og Euronext. Oppdateres daglig på børsdager.</p>
     <p style="max-width:36rem;margin:0.4rem auto;">

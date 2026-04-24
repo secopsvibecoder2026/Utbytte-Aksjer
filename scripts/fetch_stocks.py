@@ -1253,6 +1253,272 @@ def _lag_risikofaktorer(a):
     )
 
 
+_SEKTOR_DRIVER_UTDYPET = {
+    "Energi": (
+        "Utbyttet drives primært av olje- og gasspriser. Høye råvarepriser gir "
+        "rom for ekstraordinære utbetalinger, mens lave priser raskt kan presse "
+        "kontantstrømmen. Produksjonsvolum, feltutvikling og investeringsprogram "
+        "er viktige sekundærfaktorer. Følg med på selskapets guiding for fri "
+        "kontantstrøm — det er det som finansierer utbyttet."
+    ),
+    "Finans": (
+        "Netto renteinntekter — differansen mellom utlåns- og innskuddsrenter — "
+        "er den viktigste inntektskilden. Norges Banks styringsrente påvirker "
+        "marginene direkte. Kredittap og myndighetenes kapitalkrav (CET1-ratio) "
+        "setter øvre grense for hva som kan deles ut. Følg kvartalsmeldingene "
+        "for utlånsvekst og mislighold."
+    ),
+    "Havbruk": (
+        "Laksepris er den suverent viktigste faktoren. En sterk laksekvart kan "
+        "mer enn doble utbyttekapasiteten fra et svakt år. Biologisk risiko — "
+        "lakselus, sykdom, smolt-overlevelse — er umulig å planlegge fullt ut "
+        "og kan gi overraskende svake kvartal. Følg spotprisene på laks og "
+        "selskapets biologiske driftsrapporter."
+    ),
+    "Shipping": (
+        "Fraktrater bestemmer inntjeningen nesten alene. Ratene svinger kraftig "
+        "med balansen mellom tilbud av tonnasje og etterspørsel fra global handel. "
+        "Ny tonnasje fra ordreboken, skraping av eldre skip og geopolitikk "
+        "(Rødehavet, Suezkanalen) er viktige drivere. Mange shippingselskaper "
+        "betaler ut det meste av overskuddet kvartalsvis — høy yield kan forsvinne "
+        "like fort som den kom."
+    ),
+    "Eiendom": (
+        "Leieinntekter fra kontrakter gir forutsigbar kontantstrøm, men "
+        "refinansieringsrisiko og eiendomsverdi påvirkes sterkt av rentenivået. "
+        "Ledighet og kontraktsfornyelse i porteføljen er nøkkeltall å følge. "
+        "I perioder med høye renter stiger finansieringskostnadene og kan "
+        "presse utbyttet selv om leieinntektene er stabile."
+    ),
+    "Telekommunikasjon": (
+        "Stabil abonnementsbase gir høy forutsigbarhet. Konkurranse om "
+        "abonnenter, investeringer i 5G-infrastruktur og regulatoriske "
+        "beslutninger om frekvenstildelinger påvirker langsiktig kapasitet "
+        "til utbyttevekst. Sektoren er defensiv, men vekstpotensialet er "
+        "begrenset av markedsmetning."
+    ),
+    "Industri": (
+        "Ordreinngangen gir 6–18 måneders forutsikt på inntjening. "
+        "Backlog-størrelse og book-to-bill-ratio er de viktigste "
+        "ledende indikatorene. Konjunktursensitivitet varierer — selskaper "
+        "med langsiktige forsvars- eller infrastrukturkontrakter er mer "
+        "defensive enn de som lever av korte industrioppdrag."
+    ),
+    "Fornybar energi": (
+        "Strømprisene i Nordic-markedet og tilgang på konsesjon er "
+        "avgjørende. Høye strømpriser gir ekstraordinær inntjening og "
+        "rom for sjenerøse utbytter, mens lave priser — særlig i fuktige "
+        "år med mye vannkraft — kan halvere utbyttekapasiteten. Følg med "
+        "på terminkurver for kraft og selskapets produksjonsveiledning."
+    ),
+    "Sjømat": (
+        "Eksportpriser, biologisk driftsresultat og markedsadgang "
+        "er de tre nøkkelvariablene. EU-tollsatser og handelsavtaler "
+        "kan påvirke marginen betydelig. Biologisk risiko gir store "
+        "kvartalsvise svingninger — gode biologiår gir rom for "
+        "ekstraordinære utbytter."
+    ),
+    "Materialer": (
+        "Råvarepriser (aluminium, gjødsel, trevirke m.m.) og "
+        "valutakurser driver marginen. Sektoren er sensitiv for "
+        "globale makrotrend og Kinas etterspørsel. Kapasitetsutnyttelse "
+        "og energikostnader er operasjonelle nøkkeltall."
+    ),
+    "Helsevern": (
+        "Produktgodkjenninger, patentstatus og refusjonsbeslutninger "
+        "fra helsemyndigheter er de viktigste hendelsene. Marginen er "
+        "relativt stabil, men ett negativt regulatorisk vedtak kan "
+        "endre bildet raskt. Utbyttet er typisk lavere og mer stabilt "
+        "enn i sykliske sektorer."
+    ),
+    "Forbruksvarer": (
+        "Kjøpekraft og forbrukertillit driver volum. Konkurranse fra "
+        "netthandel og private labels presser marginene i detaljhandel. "
+        "Merkevarestyrke og distribusjonsnett er varige konkurransefortrinn "
+        "som gir stabil kontantstrøm over tid."
+    ),
+    "Forsyning": (
+        "Regulerte tariffer fra myndighetene gir svært forutsigbar "
+        "inntjening — det gjør sektoren defensiv og rentesensitiv. "
+        "Renteoppgang øker finansieringskostnadene og gjør aksjen "
+        "relativt mindre attraktiv enn obligasjoner. Utbytteveksten "
+        "er typisk lav og stabil."
+    ),
+    "Energitjenester": (
+        "Aktivitetsnivået på norsk sokkel og internasjonalt offshore "
+        "er den primære driveren. Oljepris påvirker kundenes vilje til "
+        "å sette i gang nye prosjekter. Kontraktsdekning og dag-rater "
+        "for rigger og fartøy gir direkte innsikt i inntjeningsutsiktene."
+    ),
+    "Informasjonsteknologi": (
+        "Omsetningsvekst og marginer drives av kontrakter, "
+        "konsulentkapasitet og produktlisenser. IT-sektoren er "
+        "generelt mindre syklisk enn energi og shipping, men "
+        "utbyttet er sjelden høyt — selskaper foretrekker å "
+        "reinvestere i vekst."
+    ),
+}
+
+_PASSER_FOR = {
+    "kjerne": [
+        "Investorer som vil ha forutsigbar kontantstrøm år etter år",
+        "Langsiktig sparing med reinvestering av utbytte (DRIP)",
+        "Porteføljer som trenger defensiv stabilitet mot sykliske aksjer",
+        "Pensjonssparing med horisont over 10 år",
+    ],
+    "syklisk_hoy": [
+        "Investorer som tåler store svingninger i utbyttet",
+        "De som prioriterer høyest mulig yield fremfor forutsigbarhet",
+        "Taktiske posisjoner når sektoren er i medvind",
+        "Porteføljer som allerede har stabil kjerneeksponering",
+    ],
+    "vekst": [
+        "Investorer med lang horisont som vil kombinere vekst og løpende inntekt",
+        "De som reinvesterer utbyttet og drar nytte av rentes-rente-effekten",
+        "Porteføljer som ønsker eksponering mot kvalitetsselskaper med voksende utbytte",
+    ],
+    "hoy_payout": [
+        "Investorer som trenger løpende kontantstrøm nå",
+        "De som forstår at høy payout-ratio begrenser bufferkapasitet",
+        "Egnet som supplement, ikke kjerneposisjon i en utbytteportefølje",
+    ],
+    "lav_yield": [
+        "Investorer som kombinerer utbytte med veksteksponering",
+        "De som er villige til å vente på høyere yield over tid",
+        "Porteføljer med primær fokus på kapitalvekst",
+    ],
+}
+
+def _lag_investor_vurdering(a, sektor_snitt):
+    """Tre seksjoner: vurdering som utbytteaksje, hva driver utbyttet, passer for deg."""
+    ticker  = a["ticker"]
+    navn    = a["navn"]
+    sektor  = a.get("sektor") or "Annet"
+    yield_  = a.get("utbytte_yield") or 0
+    snitt5  = a.get("snitt_yield_5ar") or 0
+    ar_med  = a.get("ar_med_utbytte") or 0
+    payout  = a.get("payout_ratio") or 0
+    vekst   = a.get("utbytte_vekst_5ar")
+    sn      = (sektor_snitt or {}).get(sektor, 0)
+
+    SYKLISKE  = {"Shipping", "Energi", "Havbruk", "Materialer", "Energitjenester", "Sjømat"}
+    DEFENSIVE = {"Finans", "Eiendom", "Telekommunikasjon", "Forsyning", "Helsevern", "Forbruksvarer"}
+
+    if not yield_:
+        return ""
+
+    # ── Vurdering ──────────────────────────────────────────────────────────
+    vurdering_deler = []
+
+    # Stabilitetsvurdering
+    if ar_med >= 15:
+        vurdering_deler.append(
+            f"{navn} er en av de mest rutinerte utbyttebetalerne på Oslo Børs "
+            f"med {ar_med} sammenhengende år med utbytte."
+        )
+    elif ar_med >= 7:
+        vurdering_deler.append(
+            f"{navn} har vist konsistent utbytteevne over {ar_med} år "
+            f"og er et etablert navn blant utbytteinvestorer."
+        )
+    elif ar_med >= 3:
+        vurdering_deler.append(
+            f"{navn} har betalt utbytte de siste {ar_med} årene, "
+            f"men historikken er begrenset."
+        )
+
+    # Yield-karakter relativt til sektor
+    if sn > 0:
+        if yield_ >= sn * 1.2:
+            vurdering_deler.append(
+                f"Yielden på {yield_:.1f}% er klart over sektorsnittet for "
+                f"{sektor.lower()} ({sn:.1f}%), noe som reflekterer enten "
+                f"høy utbyttekapasitet eller at markedet priser inn høyere risiko."
+            )
+        elif yield_ <= sn * 0.8:
+            vurdering_deler.append(
+                f"Yielden på {yield_:.1f}% er under sektorsnittet ({sn:.1f}%), "
+                f"men {ticker} kompenserer typisk med høyere stabilitet "
+                f"eller sterkere langsiktig vekstutsikter."
+            )
+        else:
+            vurdering_deler.append(
+                f"Yielden på {yield_:.1f}% er nær sektorsnittet for "
+                f"{sektor.lower()} ({sn:.1f}%)."
+            )
+    elif yield_ >= 7:
+        vurdering_deler.append(
+            f"Med en direkteavkastning på {yield_:.1f}% er {ticker} "
+            f"blant de høyest-yielding aksjene på Oslo Børs."
+        )
+
+    # Payout-vurdering
+    if payout > 0:
+        if payout < 45:
+            vurdering_deler.append(
+                f"Utbetalingsgraden på {payout:.0f}% er lav, "
+                f"noe som gir solid buffer og rom for utbytteøkninger fremover."
+            )
+        elif payout > 90:
+            vurdering_deler.append(
+                f"Utbetalingsgraden på {payout:.0f}% er høy — "
+                f"de fleste av overskuddskronene deles ut, "
+                f"og utbyttet er dermed sensitivt for inntjeningsfall."
+            )
+
+    # Veksttendensen
+    if vekst is not None and vekst > 3:
+        vurdering_deler.append(
+            f"Utbyttet har vokst med {vekst:.1f}% per år de siste fem årene, "
+            f"noe som gjør det attraktivt for langsiktige reinvesteringsstrategier."
+        )
+    elif vekst is not None and vekst < -5:
+        vurdering_deler.append(
+            f"Utbyttet har falt med {abs(vekst):.1f}% per år de siste fem årene, "
+            f"noe som krever at investoren setter seg inn i hva som har drevet nedgangen."
+        )
+
+    vurdering_html = (
+        f'<div class="vurdering-seksjon">'
+        f'<h2>Vurdering som utbytteaksje</h2>'
+        f'<p class="vurdering-tekst">{" ".join(vurdering_deler)}</p>'
+        f'</div>'
+    ) if vurdering_deler else ""
+
+    # ── Hva driver utbyttet ─────────────────────────────────────────────────
+    driver_tekst = _SEKTOR_DRIVER_UTDYPET.get(sektor, "")
+    driver_html = (
+        f'<div class="driver-seksjon">'
+        f'<h2>Hva driver utbyttet i {ticker}?</h2>'
+        f'<p class="driver-tekst">{driver_tekst}</p>'
+        f'</div>'
+    ) if driver_tekst else ""
+
+    # ── Passer for deg? ─────────────────────────────────────────────────────
+    if sektor in SYKLISKE and yield_ >= 6:
+        profil_key = "syklisk_hoy"
+    elif payout > 85:
+        profil_key = "hoy_payout"
+    elif vekst is not None and vekst > 3 and yield_ < 4:
+        profil_key = "vekst"
+    elif yield_ < 3:
+        profil_key = "lav_yield"
+    else:
+        profil_key = "kjerne"
+
+    punkter = _PASSER_FOR.get(profil_key, _PASSER_FOR["kjerne"])
+    li_html = "\n".join(f"<li>{p}</li>" for p in punkter)
+
+    passer_html = (
+        f'<div class="passer-seksjon">'
+        f'<h2>Passer {ticker} for deg?</h2>'
+        f'<ul class="passer-liste">{li_html}</ul>'
+        f'</div>'
+    )
+
+    return vurdering_html + driver_html + passer_html
+
+
 def _lag_kontoer_seksjon(a):
     """Viser hvilke kontotyper aksjen kan handles på (ASK-eligibilitet)."""
     ask      = a.get("ask_egnet", True)
@@ -1639,10 +1905,11 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
         tv_chart_seksjon = ""
 
     # Nye innholdsseksjoner
-    profil_html     = _lag_utbytte_profil(a, sektor_snitt or {})
-    hist_prosa_html = _lag_historikk_prosa(a)
-    risiko_html     = _lag_risikofaktorer(a)
-    kontoer_html    = _lag_kontoer_seksjon(a)
+    profil_html      = _lag_utbytte_profil(a, sektor_snitt or {})
+    hist_prosa_html  = _lag_historikk_prosa(a)
+    vurdering_html   = _lag_investor_vurdering(a, sektor_snitt or {})
+    risiko_html      = _lag_risikofaktorer(a)
+    kontoer_html     = _lag_kontoer_seksjon(a)
     faq_html, faq_jsonld = _lag_faq_seksjon(a, today)
 
     # Relaterte aksjer
@@ -1788,6 +2055,20 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     .profil-tekst {{ font-size: 0.9rem; line-height: 1.65; }}
     .historikk-prosa {{ margin: 1.5rem 0; }}
     .historikk-prosa p {{ font-size: 0.9rem; line-height: 1.7; }}
+    .vurdering-seksjon {{ margin: 1.5rem 0; padding: 1.1rem 1.25rem; background: #f8fafc; border-radius: 0.75rem; border: 1px solid #e2e8f0; }}
+    .vurdering-seksjon h2 {{ font-size: 1rem; font-weight: 700; margin-bottom: 0.6rem; }}
+    .vurdering-tekst {{ font-size: 0.9rem; line-height: 1.75; color: #374151; margin: 0; }}
+    .dark .vurdering-seksjon {{ background: #0f172a; border-color: #1e293b; }}
+    .dark .vurdering-tekst {{ color: #cbd5e1; }}
+    .driver-seksjon {{ margin: 1.5rem 0; }}
+    .driver-seksjon h2 {{ font-size: 1rem; font-weight: 700; margin-bottom: 0.6rem; }}
+    .driver-tekst {{ font-size: 0.875rem; line-height: 1.75; color: #4b5563; margin: 0; }}
+    .dark .driver-tekst {{ color: #9ca3af; }}
+    .passer-seksjon {{ margin: 1.5rem 0; }}
+    .passer-seksjon h2 {{ font-size: 1rem; font-weight: 700; margin-bottom: 0.6rem; }}
+    .passer-liste {{ list-style: none; padding: 0; margin: 0; }}
+    .passer-liste li {{ font-size: 0.875rem; padding: 0.45rem 0.75rem; border-left: 3px solid #86efac; margin-bottom: 0.4rem; line-height: 1.5; color: #374151; }}
+    .dark .passer-liste li {{ color: #d1d5db; border-left-color: #166534; }}
     .risiko-seksjon {{ margin: 1.5rem 0; }}
     .risiko-liste {{ list-style: none; padding: 0; margin: 0; }}
     .risiko-liste li {{ font-size: 0.875rem; padding: 0.5rem 0.75rem; border-left: 3px solid #fca5a5; margin-bottom: 0.5rem; line-height: 1.5; }}
@@ -1996,6 +2277,8 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
   {profil_html}
 
   {hist_prosa_html}
+
+  {vurdering_html}
 
   {risiko_html}
 

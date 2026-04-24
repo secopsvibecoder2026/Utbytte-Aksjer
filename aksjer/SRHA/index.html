@@ -144,6 +144,20 @@
     .profil-tekst { font-size: 0.9rem; line-height: 1.65; }
     .historikk-prosa { margin: 1.5rem 0; }
     .historikk-prosa p { font-size: 0.9rem; line-height: 1.7; }
+    .vurdering-seksjon { margin: 1.5rem 0; padding: 1.1rem 1.25rem; background: #f8fafc; border-radius: 0.75rem; border: 1px solid #e2e8f0; }
+    .vurdering-seksjon h2 { font-size: 1rem; font-weight: 700; margin-bottom: 0.6rem; }
+    .vurdering-tekst { font-size: 0.9rem; line-height: 1.75; color: #374151; margin: 0; }
+    .dark .vurdering-seksjon { background: #0f172a; border-color: #1e293b; }
+    .dark .vurdering-tekst { color: #cbd5e1; }
+    .driver-seksjon { margin: 1.5rem 0; }
+    .driver-seksjon h2 { font-size: 1rem; font-weight: 700; margin-bottom: 0.6rem; }
+    .driver-tekst { font-size: 0.875rem; line-height: 1.75; color: #4b5563; margin: 0; }
+    .dark .driver-tekst { color: #9ca3af; }
+    .passer-seksjon { margin: 1.5rem 0; }
+    .passer-seksjon h2 { font-size: 1rem; font-weight: 700; margin-bottom: 0.6rem; }
+    .passer-liste { list-style: none; padding: 0; margin: 0; }
+    .passer-liste li { font-size: 0.875rem; padding: 0.45rem 0.75rem; border-left: 3px solid #86efac; margin-bottom: 0.4rem; line-height: 1.5; color: #374151; }
+    .dark .passer-liste li { color: #d1d5db; border-left-color: #166534; }
     .risiko-seksjon { margin: 1.5rem 0; }
     .risiko-liste { list-style: none; padding: 0; margin: 0; }
     .risiko-liste li { font-size: 0.875rem; padding: 0.5rem 0.75rem; border-left: 3px solid #fca5a5; margin-bottom: 0.5rem; line-height: 1.5; }
@@ -449,6 +463,11 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
 
   <div class="historikk-prosa"><h2>Utbyttehistorikk</h2><p>SpareBank 1 Ringerike Hadeland har de siste 5 årene betalt mellom 13.10 og 44.00 NOK per aksje i utbytte. I 2026 er utbyttet 44.00 NOK per aksje, tilsvarende 6.0% direkteavkastning.</p></div>
 
+  <div class="vurdering-seksjon"><h2>Vurdering som utbytteaksje</h2><p class="vurdering-tekst">SpareBank 1 Ringerike Hadeland er en av de mest rutinerte utbyttebetalerne på Oslo Børs med 19 sammenhengende år med utbytte. Yielden på 6.0% er nær sektorsnittet for finans (5.7%). Utbyttet har vokst med 36.8% per år de siste fem årene, noe som gjør det attraktivt for langsiktige reinvesteringsstrategier.</p></div><div class="driver-seksjon"><h2>Hva driver utbyttet i SRHA?</h2><p class="driver-tekst">Netto renteinntekter — differansen mellom utlåns- og innskuddsrenter — er den viktigste inntektskilden. Norges Banks styringsrente påvirker marginene direkte. Kredittap og myndighetenes kapitalkrav (CET1-ratio) setter øvre grense for hva som kan deles ut. Følg kvartalsmeldingene for utlånsvekst og mislighold.</p></div><div class="passer-seksjon"><h2>Passer SRHA for deg?</h2><ul class="passer-liste"><li>Investorer som vil ha forutsigbar kontantstrøm år etter år</li>
+<li>Langsiktig sparing med reinvestering av utbytte (DRIP)</li>
+<li>Porteføljer som trenger defensiv stabilitet mot sykliske aksjer</li>
+<li>Pensjonssparing med horisont over 10 år</li></ul></div>
+
   <div class="risiko-seksjon"><h2>Risiko for utbyttet</h2><ul class="risiko-liste"><li>Rentenivå påvirker netto renteinntekter og utlånsmargin</li>
 <li>Økte kredittap i nedgangstider kan presse resultater</li>
 <li>Regulatoriske kapitalkrav begrenser utbyttekapasitet</li></ul></div>
@@ -494,7 +513,7 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
     <a href="https://exday.no/?aksje=SRHA">Åpne SRHA i exday.no →</a>
   </div>
 
-  <p class="updated">Sist oppdatert: 2026-04-23</p>
+  <p class="updated">Sist oppdatert: 2026-04-24</p>
   <footer style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid #e5e7eb;font-size:0.78rem;text-align:center;color:#9ca3af;line-height:1.6;" class="std-footer">
     <p>Kurs og utbyttedata hentes fra Yahoo Finance og Euronext. Oppdateres daglig på børsdager.</p>
     <p style="max-width:36rem;margin:0.4rem auto;">
