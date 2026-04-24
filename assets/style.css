@@ -660,3 +660,17 @@ section[id] { scroll-margin-top: 100px; }
   border-color: #2E7B7B;
   color: #fff;
 }
+
+/* Risiko-boks i modal — light */
+.risiko-boks-lav     { color: #15803d; background: #f0fdf4; border-color: #bbf7d0; }
+.risiko-boks-moderat { color: #b45309; background: #fffbeb; border-color: #fde68a; }
+.risiko-boks-hoy     { color: #b91c1c; background: #fef2f2; border-color: #fecaca; }
+/* Risiko-boks i modal — dark */
+.dark .risiko-boks-lav     { color: #4ade80; background: rgba(20,83,45,0.35); border-color: #166534; }
+.dark .risiko-boks-moderat { color: #fbbf24; background: rgba(92,45,5,0.35);  border-color: #92400e; }
+.dark .risiko-boks-hoy     { color: #f87171; background: rgba(127,29,29,0.35); border-color: #991b1b; }
+
+/* «Passer for»-badge i modal */
+.mal-badge { font-size: 0.7rem; font-weight: 600; padding: 0.125rem 0.5rem; border-radius: 9999px;
+             background: #dbeafe; color: #1d4ed8; }
+.dark .mal-badge { background: rgba(30,58,138,0.4); color: #93c5fd; }

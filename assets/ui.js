@@ -679,12 +679,9 @@ function forklarMal(a) {
 function modalInvestorProfil(a) {
   const risiko  = beregnRisiko(a);
   const risikoTekst  = { lav: 'Lav risiko', moderat: 'Moderat risiko', hoy: 'Høy risiko' };
-  const risikoFarge  = { lav: 'text-green-700 dark:text-green-400 bg-green-50 dark:bg-green-950/40 border-green-200 dark:border-green-800',
-                         moderat: 'text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/40 border-amber-200 dark:border-amber-800',
-                         hoy: 'text-red-700 dark:text-red-400 bg-red-50 dark:bg-red-950/40 border-red-200 dark:border-red-800' };
 
   const risikoHtml = `
-    <div class="rounded-lg border px-4 py-3 mb-2 ${risikoFarge[risiko]}">
+    <div class="rounded-lg border px-4 py-3 mb-2 risiko-boks-${risiko}">
       <div class="font-semibold text-sm mb-2">${risikoTekst[risiko]}</div>
       <ul class="space-y-1">
         ${forklarRisiko(a).map(p => `<li class="text-xs opacity-80 flex gap-1.5"><span class="shrink-0 mt-0.5">·</span><span>${p}</span></li>`).join('')}
@@ -696,7 +693,7 @@ function modalInvestorProfil(a) {
 
   const malHtml = malForklaringer.map(({ mal, tekst }) => `
     <div class="flex items-start gap-2 py-1.5 border-b border-gray-100 dark:border-gray-800 last:border-0">
-      <span class="shrink-0 text-xs font-semibold px-2 py-0.5 rounded-full bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300">${mal}</span>
+      <span class="mal-badge shrink-0">${mal}</span>
       <span class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">${tekst}</span>
     </div>`).join('');
 
