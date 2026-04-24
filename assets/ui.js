@@ -1321,25 +1321,30 @@ function visKalender() {
   const hendelser = [];
   const sett = new Set(); // unngå duplikater mellom aksjer.rapport_dato og hendelser.json
 
+  // Bygg URL-oppslag fra hendelser.json for rask tilgang
+  const hendelseUrl = {};
+  (alleHendelser || []).forEach(h => { if (h.url) hendelseUrl[`${h.ticker}|${h.dato}`] = h.url; });
+
   alleAksjer.forEach(a => {
     if (sok && !a.ticker.toLowerCase().includes(sok) && !a.navn.toLowerCase().includes(sok)) return;
     if (a.ex_dato)       hendelser.push({ dato: a.ex_dato,       type: 'ex',      aksje: a });
     if (a.betaling_dato) hendelser.push({ dato: a.betaling_dato, type: 'utbytte', aksje: a });
     if (a.rapport_dato) {
-      sett.add(`${a.ticker}|${a.rapport_dato}`);
-      hendelser.push({ dato: a.rapport_dato, type: 'rapport', aksje: a });
+      const nøkkel = `${a.ticker}|${a.rapport_dato}`;
+      sett.add(nøkkel);
+      hendelser.push({ dato: a.rapport_dato, type: 'rapport', aksje: a, url: hendelseUrl[nøkkel] || null });
     }
   });
 
-  // Legg til akkumulerte rapport-hendelser fra hendelser.json (inkl. passerte datoer)
+  // Legg til akkumulerte rapport-hendelser fra hendelser.json (inkl. dagens dato)
   (alleHendelser || []).forEach(h => {
     const nøkkel = `${h.ticker}|${h.dato}`;
-    if (sett.has(nøkkel)) return; // allerede med
+    if (sett.has(nøkkel)) return;
     const a = alleAksjer.find(x => x.ticker === h.ticker);
     if (!a) return;
     if (sok && !a.ticker.toLowerCase().includes(sok) && !a.navn.toLowerCase().includes(sok)) return;
     sett.add(nøkkel);
-    hendelser.push({ dato: h.dato, type: h.type || 'rapport', aksje: a });
+    hendelser.push({ dato: h.dato, type: h.type || 'rapport', aksje: a, url: h.url || null });
   });
 
   hendelser.sort((x, y) => new Date(x.dato) - new Date(y.dato));
@@ -1369,7 +1374,7 @@ function visKalender() {
     const manedNavn = new Date(parseInt(year), parseInt(month)-1, 1)
       .toLocaleDateString('nb-NO', { month: 'long', year: 'numeric' });
 
-    const rader = hendelseListe.map(({ dato, type, aksje: a }) => {
+    const rader = hendelseListe.map(({ dato, type, aksje: a, url }) => {
       const d = new Date(dato + 'T00:00:00'); // lokal midnatt, ikke UTC
       const erPassert = d < idag;
       const dagerTil = Math.ceil((d - idag) / (1000*60*60*24));
@@ -1381,7 +1386,9 @@ function visKalender() {
       } else if (type === 'utbytte') {
         detalj = `Utbetaling: <strong>${fmt(a.siste_utbytte)} ${a.valuta}</strong> per aksje`;
       } else if (type === 'rapport') {
-        detalj = `Kvartalsrapport`;
+        detalj = url
+          ? `Kvartalsrapport &nbsp;<a href="${escHtml(url)}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-0.5 text-blue-500 hover:underline font-medium" onclick="event.stopPropagation()">Børsmelding <svg class="w-3 h-3 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg></a>`
+          : `Kvartalsrapport`;
       }
 
       return `
