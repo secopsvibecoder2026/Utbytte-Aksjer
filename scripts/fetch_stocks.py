@@ -1575,33 +1575,104 @@ def _beregn_mal_py(a):
 
 
 def _lag_investor_badges(a):
-    """Badges som viser risikoprofil og investormål — vises øverst på aksjesiden."""
+    """Badges med forklaringer for risikoprofil og investormål."""
     risiko = _beregn_risiko_py(a)
     mal    = _beregn_mal_py(a)
 
-    risiko_tekst = {'lav': 'Lav risiko', 'moderat': 'Moderat risiko', 'hoy': 'Høy risiko'}
+    sektor  = a.get('sektor', '')
+    ar      = a.get('ar_med_utbytte') or 0
+    payout  = a.get('payout_ratio') or 0
+    mv      = a.get('markedsverdi') or 0
+    yield_  = a.get('utbytte_yield') or 0
+    vekst   = a.get('utbytte_vekst_5ar') or 0
+    land    = a.get('inkorporeringsland', 'Norge')
+    ask     = a.get('ask_egnet', True)
+    frekvens = a.get('frekvens', '')
+
+    # --- Risikoforklaring ---
+    risiko_tekst  = {'lav': 'Lav risiko', 'moderat': 'Moderat risiko', 'hoy': 'Høy risiko'}
     risiko_klasse = {'lav': 'investor-risiko-lav', 'moderat': 'investor-risiko-moderat', 'hoy': 'investor-risiko-hoy'}
 
+    risiko_punkter = []
+    if sektor in _SYKLISKE_SEKTORER_PY:
+        risiko_punkter.append(f'Syklisk sektor ({sektor}) — utbytte svinger med konjunkturer')
+    elif sektor not in _DEFENSIVE_SEKTORER_PY:
+        risiko_punkter.append(f'Sektor ({sektor}) har viss konjunktureksponering')
+    else:
+        risiko_punkter.append(f'Defensiv sektor ({sektor}) — relativt stabile inntekter')
+
+    if ar < 3:
+        risiko_punkter.append(f'Kort utbyttehistorikk ({ar} år) — begrenset dokumentasjon')
+    elif ar < 7:
+        risiko_punkter.append(f'Moderat utbyttehistorikk ({ar} år)')
+    else:
+        risiko_punkter.append(f'Lang utbyttehistorikk ({ar} år) — vist evne til stabil utbetaling')
+
+    if payout > 90:
+        risiko_punkter.append(f'Svært høy payout ratio ({payout:.0f}%) — lite buffer ved inntjeningsfall')
+    elif payout > 75:
+        risiko_punkter.append(f'Høy payout ratio ({payout:.0f}%) — begrenset reinvesteringsevne')
+    elif 0 < payout < 50:
+        risiko_punkter.append(f'Sunn payout ratio ({payout:.0f}%) — god buffer')
+
+    if 0 < mv < 1e9:
+        risiko_punkter.append(f'Lav markedsverdi ({mv/1e9:.1f} mrd NOK) — økt kursvolatilitet')
+    elif mv > 10e9:
+        risiko_punkter.append(f'Stor markedsverdi ({mv/1e9:.0f} mrd NOK) — likvid og stabil')
+
+    if yield_ > 12:
+        risiko_punkter.append(f'Svært høy yield ({yield_:.1f}%) — kan indikere markedsskepsis til bærekraft')
+
+    if not ask:
+        risiko_punkter.append(f'Registrert utenfor EØS ({land}) — kan ikke holdes i ASK')
+
+    li_risiko = ''.join(f'<li>{p}</li>' for p in risiko_punkter)
+
+    risiko_html = (
+        f'<div class="investor-forklaring risiko-{risiko}">'
+        f'<div class="investor-forklaring-tittel">'
+        f'<span class="investor-badge {risiko_klasse.get(risiko, "")}">{risiko_tekst.get(risiko)}</span>'
+        f'</div>'
+        f'<ul class="investor-forklaring-liste">{li_risiko}</ul>'
+        f'</div>'
+    )
+
+    # --- Målforklaring ---
     mal_tekst = {
         'stabil':     'Stabil inntekt',
         'vekst':      'Utbyttevekst',
         'hoy_yield':  'Høy yield',
         'kvartalsvis': 'Kvartalsvis',
     }
+    mal_forklaring = {
+        'stabil':     f'Defensiv sektor ({sektor}), {ar} år med utbytte, payout {payout:.0f}%',
+        'vekst':      f'Utbyttevekst {vekst:+.1f}% per år siste 5 år',
+        'hoy_yield':  f'Direkteavkastning {yield_:.1f}%',
+        'kvartalsvis': f'Betaler {frekvens.lower()} — jevne utbetalinger gjennom året',
+    }
 
-    risiko_badge = (
-        f'<span class="investor-badge {risiko_klasse.get(risiko, "")}">'
-        f'{risiko_tekst.get(risiko, risiko)}</span>'
-    )
-    mal_badges = ''.join(
-        f'<span class="investor-badge investor-mal">{mal_tekst.get(m, m)}</span>'
-        for m in mal
+    if not mal:
+        mal_html = ''
+    else:
+        rader = ''.join(
+            f'<div class="investor-mal-rad">'
+            f'<span class="investor-badge investor-mal">{mal_tekst.get(m, m)}</span>'
+            f'<span class="investor-mal-tekst">{mal_forklaring.get(m, "")}</span>'
+            f'</div>'
+            for m in mal
+        )
+        mal_html = f'<div class="investor-mal-seksjon"><p class="investor-mal-header">Passer for</p>{rader}</div>'
+
+    badges_rad = (
+        f'<span class="investor-badge {risiko_klasse.get(risiko, "")}">{risiko_tekst.get(risiko)}</span>'
+        + ''.join(f'<span class="investor-badge investor-mal">{mal_tekst.get(m, m)}</span>' for m in mal)
     )
 
     return (
-        '<div class="investor-badges-rad">'
-        + risiko_badge + mal_badges +
-        '</div>'
+        f'<div class="investor-profil-seksjon">'
+        f'<div class="investor-badges-rad">{badges_rad}</div>'
+        + risiko_html + mal_html +
+        f'</div>'
     )
 
 
@@ -2171,7 +2242,28 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     .dark .konto-rad {{ background: #052e16; border-color: #166534; }}
     .dark .konto-rad p {{ color: #9ca3af; }}
     .dark .konto-rad.konto-ikke {{ background: #2d0a0a; border-color: #7f1d1d; }}
-    .investor-badges-rad {{ display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0.85rem 0 0.5rem; }}
+    .investor-profil-seksjon {{ margin: 1rem 0; }}
+    .investor-badges-rad {{ display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.75rem; }}
+    .investor-forklaring {{ border-radius: 0.6rem; padding: 0.75rem 1rem; margin-bottom: 0.6rem; border: 1px solid; }}
+    .risiko-lav {{ background: #f0fdf4; border-color: #86efac; }}
+    .risiko-moderat {{ background: #fffbeb; border-color: #fcd34d; }}
+    .risiko-hoy {{ background: #fef2f2; border-color: #fca5a5; }}
+    .dark .risiko-lav {{ background: #052e16; border-color: #166534; }}
+    .dark .risiko-moderat {{ background: #451a03; border-color: #92400e; }}
+    .dark .risiko-hoy {{ background: #2d0a0a; border-color: #7f1d1d; }}
+    .investor-forklaring-tittel {{ margin-bottom: 0.5rem; }}
+    .investor-forklaring-liste {{ list-style: none; padding: 0; margin: 0; }}
+    .investor-forklaring-liste li {{ font-size: 0.8rem; line-height: 1.55; padding: 0.2rem 0; color: #374151; }}
+    .investor-forklaring-liste li::before {{ content: "· "; color: #9ca3af; }}
+    .dark .investor-forklaring-liste li {{ color: #d1d5db; }}
+    .investor-mal-seksjon {{ border: 1px solid #e5e7eb; border-radius: 0.6rem; padding: 0.75rem 1rem; }}
+    .dark .investor-mal-seksjon {{ border-color: #374151; }}
+    .investor-mal-header {{ font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin: 0 0 0.5rem; }}
+    .investor-mal-rad {{ display: flex; align-items: flex-start; gap: 0.6rem; padding: 0.35rem 0; border-bottom: 1px solid #f3f4f6; }}
+    .investor-mal-rad:last-child {{ border-bottom: none; }}
+    .dark .investor-mal-rad {{ border-color: #1f2937; }}
+    .investor-mal-tekst {{ font-size: 0.8rem; color: #4b5563; line-height: 1.45; margin-top: 0.15rem; }}
+    .dark .investor-mal-tekst {{ color: #9ca3af; }}
     .investor-badge {{ display: inline-flex; align-items: center; padding: 0.2rem 0.7rem; border-radius: 9999px; font-size: 0.73rem; font-weight: 600; border: 1px solid; }}
     .investor-risiko-lav {{ background: #dcfce7; color: #15803d; border-color: #86efac; }}
     .investor-risiko-moderat {{ background: #fef3c7; color: #92400e; border-color: #fcd34d; }}

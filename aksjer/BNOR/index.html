@@ -172,7 +172,28 @@
     .dark .konto-rad { background: #052e16; border-color: #166534; }
     .dark .konto-rad p { color: #9ca3af; }
     .dark .konto-rad.konto-ikke { background: #2d0a0a; border-color: #7f1d1d; }
-    .investor-badges-rad { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0.85rem 0 0.5rem; }
+    .investor-profil-seksjon { margin: 1rem 0; }
+    .investor-badges-rad { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.75rem; }
+    .investor-forklaring { border-radius: 0.6rem; padding: 0.75rem 1rem; margin-bottom: 0.6rem; border: 1px solid; }
+    .risiko-lav { background: #f0fdf4; border-color: #86efac; }
+    .risiko-moderat { background: #fffbeb; border-color: #fcd34d; }
+    .risiko-hoy { background: #fef2f2; border-color: #fca5a5; }
+    .dark .risiko-lav { background: #052e16; border-color: #166534; }
+    .dark .risiko-moderat { background: #451a03; border-color: #92400e; }
+    .dark .risiko-hoy { background: #2d0a0a; border-color: #7f1d1d; }
+    .investor-forklaring-tittel { margin-bottom: 0.5rem; }
+    .investor-forklaring-liste { list-style: none; padding: 0; margin: 0; }
+    .investor-forklaring-liste li { font-size: 0.8rem; line-height: 1.55; padding: 0.2rem 0; color: #374151; }
+    .investor-forklaring-liste li::before { content: "· "; color: #9ca3af; }
+    .dark .investor-forklaring-liste li { color: #d1d5db; }
+    .investor-mal-seksjon { border: 1px solid #e5e7eb; border-radius: 0.6rem; padding: 0.75rem 1rem; }
+    .dark .investor-mal-seksjon { border-color: #374151; }
+    .investor-mal-header { font-size: 0.75rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin: 0 0 0.5rem; }
+    .investor-mal-rad { display: flex; align-items: flex-start; gap: 0.6rem; padding: 0.35rem 0; border-bottom: 1px solid #f3f4f6; }
+    .investor-mal-rad:last-child { border-bottom: none; }
+    .dark .investor-mal-rad { border-color: #1f2937; }
+    .investor-mal-tekst { font-size: 0.8rem; color: #4b5563; line-height: 1.45; margin-top: 0.15rem; }
+    .dark .investor-mal-tekst { color: #9ca3af; }
     .investor-badge { display: inline-flex; align-items: center; padding: 0.2rem 0.7rem; border-radius: 9999px; font-size: 0.73rem; font-weight: 600; border: 1px solid; }
     .investor-risiko-lav { background: #dcfce7; color: #15803d; border-color: #86efac; }
     .investor-risiko-moderat { background: #fef3c7; color: #92400e; border-color: #fcd34d; }
@@ -368,7 +389,7 @@
     <div class="kcard"><div class="label">P/E</div><div class="val">16.6</div></div>
   </div>
 
-  <div class="investor-badges-rad"><span class="investor-badge investor-risiko-hoy">Høy risiko</span><span class="investor-badge investor-mal">Høy yield</span><span class="investor-badge investor-mal">Kvartalsvis</span></div>
+  <div class="investor-profil-seksjon"><div class="investor-badges-rad"><span class="investor-badge investor-risiko-hoy">Høy risiko</span><span class="investor-badge investor-mal">Høy yield</span><span class="investor-badge investor-mal">Kvartalsvis</span></div><div class="investor-forklaring risiko-hoy"><div class="investor-forklaring-tittel"><span class="investor-badge investor-risiko-hoy">Høy risiko</span></div><ul class="investor-forklaring-liste"><li>Syklisk sektor (Energi) — utbytte svinger med konjunkturer</li><li>Kort utbyttehistorikk (2 år) — begrenset dokumentasjon</li></ul></div><div class="investor-mal-seksjon"><p class="investor-mal-header">Passer for</p><div class="investor-mal-rad"><span class="investor-badge investor-mal">Høy yield</span><span class="investor-mal-tekst">Direkteavkastning 9.6%</span></div><div class="investor-mal-rad"><span class="investor-badge investor-mal">Kvartalsvis</span><span class="investor-mal-tekst">Betaler kvartalsvis — jevne utbetalinger gjennom året</span></div></div></div>
 
   
 <div class="kurs-lenker">

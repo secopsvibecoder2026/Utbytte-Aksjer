@@ -624,6 +624,89 @@ function beregnMal(a) {
   return mål;
 }
 
+function forklarRisiko(a) {
+  const punkter = [];
+  const sektor = a.sektor || '';
+  const ar     = a.ar_med_utbytte || 0;
+  const payout = a.payout_ratio   || 0;
+  const mv     = a.markedsverdi   || 0;
+  const yield_ = a.utbytte_yield  || 0;
+
+  if (_SYKLISKE_SEKTORER.has(sektor))
+    punkter.push(`Syklisk sektor (${sektor}) — utbytte svinger med konjunkturer`);
+  else if (!_DEFENSIVE_SEKTORER.has(sektor))
+    punkter.push(`Sektor (${sektor}) har viss konjunktureksponering`);
+  else
+    punkter.push(`Defensiv sektor (${sektor}) — relativt stabile inntekter`);
+
+  if (ar < 3)       punkter.push(`Kort utbyttehistorikk (${ar} år) — begrenset dokumentasjon`);
+  else if (ar < 7)  punkter.push(`Moderat utbyttehistorikk (${ar} år)`);
+  else              punkter.push(`Lang utbyttehistorikk (${ar} år) — vist evne til stabil utbetaling`);
+
+  if (payout > 90)       punkter.push(`Svært høy payout ratio (${payout.toFixed(0)}%) — lite buffer ved inntjeningsfall`);
+  else if (payout > 75)  punkter.push(`Høy payout ratio (${payout.toFixed(0)}%) — begrenset reinvesteringsevne`);
+  else if (payout > 0 && payout < 50) punkter.push(`Sunn payout ratio (${payout.toFixed(0)}%) — god buffer`);
+
+  if (mv > 0 && mv < 1e9)  punkter.push(`Lav markedsverdi (${(mv/1e9).toFixed(1)} mrd NOK) — økt kursvolatilitet`);
+  else if (mv > 10e9)       punkter.push(`Stor markedsverdi (${(mv/1e9).toFixed(0)} mrd NOK) — likvid og stabil`);
+
+  if (yield_ > 12) punkter.push(`Svært høy yield (${yield_.toFixed(1)}%) — kan indikere markedsskepsis til bærekraft`);
+
+  if (a.ask_egnet === false) punkter.push(`Registrert utenfor EØS (${escHtml(a.inkorporeringsland || '')}) — kan ikke holdes i ASK`);
+
+  return punkter;
+}
+
+function forklarMal(a) {
+  const forklaringer = [];
+  const ar     = a.ar_med_utbytte || 0;
+  const payout = a.payout_ratio   || 0;
+  const vekst  = a.utbytte_vekst_5ar || 0;
+  const yield_ = a.utbytte_yield  || 0;
+
+  if (beregnMal(a).includes('stabil'))
+    forklaringer.push({ mal: 'Stabil inntekt', tekst: `Defensiv sektor (${escHtml(a.sektor)}), ${ar} år med utbytte, payout ratio ${payout.toFixed(0)}%` });
+  if (beregnMal(a).includes('vekst'))
+    forklaringer.push({ mal: 'Utbyttevekst', tekst: `Utbyttevekst ${vekst > 0 ? '+' : ''}${vekst.toFixed(1)}% per år siste 5 år` });
+  if (beregnMal(a).includes('hoy_yield'))
+    forklaringer.push({ mal: 'Høy yield', tekst: `Direkteavkastning ${yield_.toFixed(1)}%` });
+  if (beregnMal(a).includes('kvartalsvis'))
+    forklaringer.push({ mal: 'Kvartalsvis', tekst: `Betaler ${a.frekvens.toLowerCase()} — jevne utbetalinger gjennom året` });
+
+  return forklaringer;
+}
+
+function modalInvestorProfil(a) {
+  const risiko  = beregnRisiko(a);
+  const risikoTekst  = { lav: 'Lav risiko', moderat: 'Moderat risiko', hoy: 'Høy risiko' };
+  const risikoFarge  = { lav: 'text-green-700 dark:text-green-400 bg-green-50 dark:bg-green-950/40 border-green-200 dark:border-green-800',
+                         moderat: 'text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/40 border-amber-200 dark:border-amber-800',
+                         hoy: 'text-red-700 dark:text-red-400 bg-red-50 dark:bg-red-950/40 border-red-200 dark:border-red-800' };
+
+  const risikoHtml = `
+    <div class="rounded-lg border px-4 py-3 mb-2 ${risikoFarge[risiko]}">
+      <div class="font-semibold text-sm mb-2">${risikoTekst[risiko]}</div>
+      <ul class="space-y-1">
+        ${forklarRisiko(a).map(p => `<li class="text-xs opacity-80 flex gap-1.5"><span class="shrink-0 mt-0.5">·</span><span>${p}</span></li>`).join('')}
+      </ul>
+    </div>`;
+
+  const malForklaringer = forklarMal(a);
+  if (malForklaringer.length === 0) return risikoHtml;
+
+  const malHtml = malForklaringer.map(({ mal, tekst }) => `
+    <div class="flex items-start gap-2 py-1.5 border-b border-gray-100 dark:border-gray-800 last:border-0">
+      <span class="shrink-0 text-xs font-semibold px-2 py-0.5 rounded-full bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300">${mal}</span>
+      <span class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">${tekst}</span>
+    </div>`).join('');
+
+  return risikoHtml + `
+    <div class="rounded-lg border border-gray-200 dark:border-gray-700 px-4 py-2 mt-1">
+      <div class="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">Passer for</div>
+      ${malHtml}
+    </div>`;
+}
+
 function byggSektorFilter() {
   const sektorer = [...new Set(alleAksjer.map(a => a.sektor))].sort();
   const sel = document.getElementById('filter-sektor');
@@ -2338,6 +2421,10 @@ function visModal(a) {
         ? '<div class="ai-opp-boks"><p class="ai-opp-label">AI-oppsummering' + (a.ai_oppsummering_dato ? ' <span class="ai-opp-dato">' + escHtml(a.ai_oppsummering_dato) + '</span>' : '') + '</p><p class="ai-opp-tekst">' + escHtml(a.ai_oppsummering) + '</p></div>'
         : ''}
       ${modalKontoer(a)}
+      <div class="mt-3">
+        <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">Risiko og investorprofil</p>
+        ${modalInvestorProfil(a)}
+      </div>
     </div>
 
     <!-- ── UTBYTTE ── -->
