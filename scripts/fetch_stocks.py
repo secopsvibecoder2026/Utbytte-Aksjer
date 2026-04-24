@@ -1644,11 +1644,24 @@ def _lag_investor_badges(a):
         'hoy_yield':  'Høy yield',
         'kvartalsvis': 'Kvartalsvis',
     }
+    doblingsar = round(70 / vekst) if vekst > 0 else None
+    vekst_suffix = (f' Med +{vekst:.1f}% per år dobles utbyttet på ca. {doblingsar} år.'
+                    if doblingsar else f' Historisk vekst +{vekst:.1f}% per år.')
     mal_forklaring = {
-        'stabil':     f'Defensiv sektor ({sektor}), {ar} år med utbytte, payout {payout:.0f}%',
-        'vekst':      f'Utbyttevekst {vekst:+.1f}% per år siste 5 år',
-        'hoy_yield':  f'Direkteavkastning {yield_:.1f}%',
-        'kvartalsvis': f'Betaler {frekvens.lower()} — jevne utbetalinger gjennom året',
+        'stabil':
+            f'Passer investorer som vil ha forutsigbar utbytteinntekt uten store overraskelser. '
+            f'{ar} år med sammenhengende utbetaling i defensiv sektor gir god synlighet fremover.',
+        'vekst':
+            f'Passer investorer med lang horisont som vil at utbyttet skal vokse raskere enn inflasjonen.'
+            + vekst_suffix,
+        'hoy_yield':
+            f'Passer investorer som prioriterer løpende inntekt fremfor kursvekst. '
+            f'{yield_:.1f}% direkteavkastning er vesentlig over markedssnittet — '
+            + (f'vurder om utbyttet er bærekraftig på sikt.' if payout > 80
+               else f'payout ratio indikerer at utbyttet er håndterbart.'),
+        'kvartalsvis':
+            f'Passer investorer som trenger jevn kontantstrøm gjennom hele året — '
+            f'for eksempel for å dekke løpende utgifter uten å måtte selge aksjer.',
     }
 
     if not mal:
