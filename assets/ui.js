@@ -663,15 +663,30 @@ function forklarMal(a) {
   const payout = a.payout_ratio   || 0;
   const vekst  = a.utbytte_vekst_5ar || 0;
   const yield_ = a.utbytte_yield  || 0;
+  const mal    = beregnMal(a);
 
-  if (beregnMal(a).includes('stabil'))
-    forklaringer.push({ mal: 'Stabil inntekt', tekst: `Defensiv sektor (${escHtml(a.sektor)}), ${ar} år med utbytte, payout ratio ${payout.toFixed(0)}%` });
-  if (beregnMal(a).includes('vekst'))
-    forklaringer.push({ mal: 'Utbyttevekst', tekst: `Utbyttevekst ${vekst > 0 ? '+' : ''}${vekst.toFixed(1)}% per år siste 5 år` });
-  if (beregnMal(a).includes('hoy_yield'))
-    forklaringer.push({ mal: 'Høy yield', tekst: `Direkteavkastning ${yield_.toFixed(1)}%` });
-  if (beregnMal(a).includes('kvartalsvis'))
-    forklaringer.push({ mal: 'Kvartalsvis', tekst: `Betaler ${a.frekvens.toLowerCase()} — jevne utbetalinger gjennom året` });
+  if (mal.includes('stabil'))
+    forklaringer.push({ mal: 'Stabil inntekt',
+      tekst: `Passer investorer som vil ha forutsigbar utbytteinntekt uten store overraskelser. `
+           + `${ar} år med sammenhengende utbetaling i defensiv sektor gir god synlighet fremover.` });
+
+  if (mal.includes('vekst')) {
+    const doblingsar = vekst > 0 ? Math.round(70 / vekst) : null;
+    forklaringer.push({ mal: 'Utbyttevekst',
+      tekst: `Passer investorer med lang horisont som vil at utbyttet skal vokse raskere enn inflasjonen. `
+           + `Med +${vekst.toFixed(1)}% per år de siste 5 årene`
+           + (doblingsar ? ` dobles utbyttet på ca. ${doblingsar} år.` : '.') });
+  }
+
+  if (mal.includes('hoy_yield'))
+    forklaringer.push({ mal: 'Høy yield',
+      tekst: `Passer investorer som prioriterer løpende inntekt fremfor kursvekst. `
+           + `${yield_.toFixed(1)}% direkteavkastning er vesentlig over markedssnittet — `
+           + (payout > 80 ? 'vurder om utbyttet er bærekraftig på sikt.' : 'payout ratio indikerer at utbyttet er håndterbart.') });
+
+  if (mal.includes('kvartalsvis'))
+    forklaringer.push({ mal: 'Kvartalsvis utbytte',
+      tekst: `Passer investorer som trenger jevn kontantstrøm gjennom hele året — for eksempel for å dekke løpende utgifter uten å måtte selge aksjer.` });
 
   return forklaringer;
 }
