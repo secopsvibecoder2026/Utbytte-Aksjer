@@ -433,6 +433,15 @@ th.sort-desc::after { content: ' ↓'; color: #6b7280; }
   font-weight: 600; font-size: 0.875rem; color: #111827;
 }
 .dark .ak-cur, .dark .ak-title { color: #f3f4f6; }
+.ak-app-btn {
+  font-size: 0.75rem; font-weight: 600; padding: 0.35rem 0.75rem; border-radius: 0.5rem;
+  background: #16a34a; color: #fff !important; text-decoration: none; white-space: nowrap;
+  transition: background 0.15s;
+}
+.ak-app-btn:hover { background: #15803d; text-decoration: none; }
+.dark .ak-app-btn { background: #166534; }
+.dark .ak-app-btn:hover { background: #14532d; }
+
 .ak-toggle {
   padding: 0.4rem; border-radius: 0.5rem;
   border: none; cursor: pointer; background: transparent; color: #6b7280;

@@ -1516,7 +1516,7 @@ def _lag_investor_vurdering(a, sektor_snitt):
         f'</div>'
     )
 
-    return vurdering_html + driver_html + passer_html
+    return vurdering_html + driver_html
 
 
 _DEFENSIVE_SEKTORER_PY = {'Finans', 'Eiendom', 'Helse', 'Forsyning', 'Telekommunikasjon', 'Dagligvarer'}
@@ -2398,10 +2398,13 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
         <span class="ak-sep">/</span>
         <a href="/aksjer/sektor/{_sektor_slug(sektor)}/" class="ak-back">{sektor}</a>
       </div>
-      <button id="dark-toggle" class="ak-toggle" aria-label="Bytt fargemodus">
-        <svg class="sun-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
-        <svg class="moon-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display:none;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
-      </button>
+      <div style="display:flex;align-items:center;gap:0.5rem;">
+        <a href="https://exday.no/?aksje={ticker}" class="ak-app-btn">Åpne i appen →</a>
+        <button id="dark-toggle" class="ak-toggle" aria-label="Bytt fargemodus">
+          <svg class="sun-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+          <svg class="moon-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display:none;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+        </button>
+      </div>
     </div>
   </header>
 
@@ -2431,10 +2434,6 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
   <section id="oversikt">
 
   {om_seksjon}
-
-  {ai_oppsummering_seksjon}
-
-  <span class="badge">{f'{yield_:.2f}% direkteavkastning' if yield_ else 'Kurs ikke tilgjengelig'}</span>
 
   <div class="kgrid">
     <div class="kcard">
@@ -2474,6 +2473,8 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
 
   {investor_badges_html}
 
+  {ai_oppsummering_seksjon}
+
   {tv_chart_seksjon}
 
   </section>
@@ -2484,10 +2485,6 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
   {analyse_seksjon}
 
   {hist_seksjon}
-
-  {profil_html}
-
-  {hist_prosa_html}
 
   {vurdering_html}
 
