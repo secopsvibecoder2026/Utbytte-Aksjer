@@ -145,6 +145,29 @@ TICKER_YF            = {t["ticker"]: t.get("ticker_yf", t["ticker"] + ".OL") for
 ASK_EGNET            = {t["ticker"]: t.get("ask_egnet", True) for t in _ticker_data}
 INKORPORERINGSLAND   = {t["ticker"]: t.get("inkorporeringsland", "Norge") for t in _ticker_data}
 
+_FREKVENS_FRASE = {
+    "Månedlig":    "månedlig — tolv ganger per år",
+    "Kvartalsvis": "kvartalsvis — fire utbetalinger i året",
+    "Halvårlig":   "halvårlig — to utbetalinger i året",
+    "Årlig":       "én gang i året",
+    "Uregelmessig": "uregelmessig",
+}
+
+def _synk_frekvens_i_beskrivelse(besk: str, frekvens: str, ar: int) -> str:
+    """Erstatter den auto-genererte frekvens-setningen med korrekt verdi."""
+    import re
+    if not besk or not frekvens:
+        return besk
+    frase = _FREKVENS_FRASE.get(frekvens, frekvens.lower())
+    ar_tekst = (f"og selskapet har holdt dette gående i {ar} år på rad."
+                if ar >= 2 else f"og selskapet har betalt utbytte de siste {ar} år.")
+    ny = f"Utbyttet utbetales {frase}, {ar_tekst}"
+    # Erstatt standard mønster
+    besk = re.sub(r"Utbyttet utbetales [^.]+\.", ny, besk)
+    # Erstatt alternativt mønster («Betaler halvårlig utbytte...»)
+    besk = re.sub(r"[Bb]etaler\s+\S+\s+utbytte[^.]*\.", ny, besk)
+    return besk
+
 _fallback_path = os.path.join(os.path.dirname(__file__), "..", "data", "fallback_data.json")
 FALLBACK_DATA = {}
 if os.path.exists(_fallback_path):
@@ -726,7 +749,8 @@ def hent_aksje(meta):
             "siste_utbytte": siste_utbytte,
             "historiske_utbytter": historiske_utbytter,
             "snitt_yield_5ar": snitt_yield_5ar,
-            "beskrivelse": BESKRIVELSER.get(ticker, ""),
+            "beskrivelse": _synk_frekvens_i_beskrivelse(
+                BESKRIVELSER.get(ticker, ""), frekvens, ar_med_utbytte),
             "beskrivelse_fakta": BESKRIVELSE_FAKTA.get(ticker, ""),
             "valuta": valuta,
             "kurs_historikk": kurs_historikk,
