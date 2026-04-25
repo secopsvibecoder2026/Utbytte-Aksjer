@@ -3568,13 +3568,15 @@ def generer_topplistesider(aksjer, root_dir):
     print(f"Genererte {len(LISTER)} topplistesider under aksjer/{{slug}}/")
 
 
-def generer_sitemap(aksjer, root_dir, today):
+def generer_sitemap(aksjer, root_dir, today, alle_tickers=None):
     """Genererer sitemap.xml med alle sider inkludert individuelle aksjesider og sektorsider."""
     from collections import defaultdict
     sektorer = defaultdict(list)
     for a in aksjer:
         if a.get("sektor"):
             sektorer[a["sektor"]].append(a)
+    # Bruk alle_tickers for aksje-URL-er slik at sider ikke forsvinner ved midlertidige hente-feil
+    ticker_liste = alle_tickers if alle_tickers else aksjer
 
     urls = [
         f"""  <url>
@@ -3649,6 +3651,42 @@ def generer_sitemap(aksjer, root_dir, today):
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>""",
+        f"""  <url>
+    <loc>https://exday.no/faq/</loc>
+    <lastmod>{today}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>""",
+        f"""  <url>
+    <loc>https://exday.no/kalkulator/</loc>
+    <lastmod>{today}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>""",
+        f"""  <url>
+    <loc>https://exday.no/utforsk/</loc>
+    <lastmod>{today}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>""",
+        f"""  <url>
+    <loc>https://exday.no/artikler/</loc>
+    <lastmod>{today}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>""",
+        f"""  <url>
+    <loc>https://exday.no/artikler/hva-er-ex-dato/</loc>
+    <lastmod>{today}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>""",
+        f"""  <url>
+    <loc>https://exday.no/artikler/utbytte-og-skatt/</loc>
+    <lastmod>{today}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>""",
     ]
     for sektor in sorted(sektorer.keys()):
         slug = _sektor_slug(sektor)
@@ -3658,7 +3696,7 @@ def generer_sitemap(aksjer, root_dir, today):
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
   </url>""")
-    for a in aksjer:
+    for a in ticker_liste:
         urls.append(f"""  <url>
     <loc>https://exday.no/aksjer/{a["ticker"]}/</loc>
     <lastmod>{today}</lastmod>
@@ -3912,7 +3950,7 @@ def main():
     generer_sektorsider(resultater, root_dir)
     generer_topplistesider(resultater, root_dir)
     today = datetime.datetime.utcnow().strftime("%Y-%m-%d")
-    generer_sitemap(resultater, root_dir, today)
+    generer_sitemap(resultater, root_dir, today, AKSJER)
     oppdater_index_html_meta(len(resultater), root_dir)
 
 
