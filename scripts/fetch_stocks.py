@@ -1280,8 +1280,8 @@ _SEKTOR_DRIVER_UTDYPET = {
         "med balansen mellom tilbud av tonnasje og etterspørsel fra global handel. "
         "Ny tonnasje fra ordreboken, skraping av eldre skip og geopolitikk "
         "(Rødehavet, Suezkanalen) er viktige drivere. Mange shippingselskaper "
-        "betaler ut det meste av overskuddet kvartalsvis — høy yield kan forsvinne "
-        "like fort som den kom."
+        "deler ut det meste av overskuddet — hyppig utbytte er vanlig, men høy yield "
+        "kan forsvinne like fort som den kom."
     ),
     "Eiendom": (
         "Leieinntekter fra kontrakter gir forutsigbar kontantstrøm, men "
@@ -1642,8 +1642,13 @@ def _lag_investor_badges(a):
         'stabil':     'Stabil inntekt',
         'vekst':      'Utbyttevekst',
         'hoy_yield':  'Høy yield',
-        'kvartalsvis': 'Kvartalsvis',
+        'kvartalsvis': frekvens if frekvens in ('Kvartalsvis', 'Månedlig') else 'Kvartalsvis',
     }
+    frekvens_forklaring = (
+        'månedlig utbytte gir den jevneste kontantstrømmen av alle utbytteaksjer — tolv utbetalinger per år'
+        if frekvens == 'Månedlig' else
+        'kvartalsvis utbytte gir jevn kontantstrøm fire ganger i året'
+    )
     doblingsar = round(70 / vekst) if vekst > 0 else None
     vekst_suffix = (f' Med +{vekst:.1f}% per år dobles utbyttet på ca. {doblingsar} år.'
                     if doblingsar else f' Historisk vekst +{vekst:.1f}% per år.')
@@ -1660,8 +1665,7 @@ def _lag_investor_badges(a):
             + (f'vurder om utbyttet er bærekraftig på sikt.' if payout > 80
                else f'payout ratio indikerer at utbyttet er håndterbart.'),
         'kvartalsvis':
-            f'Passer investorer som trenger jevn kontantstrøm gjennom hele året — '
-            f'for eksempel for å dekke løpende utgifter uten å måtte selge aksjer.',
+            f'Passer investorer som trenger jevn kontantstrøm — {frekvens_forklaring}.',
     }
 
     if not mal:

@@ -684,9 +684,15 @@ function forklarMal(a) {
            + `${yield_.toFixed(1)}% direkteavkastning er vesentlig over markedssnittet — `
            + (payout > 80 ? 'vurder om utbyttet er bærekraftig på sikt.' : 'payout ratio indikerer at utbyttet er håndterbart.') });
 
-  if (mal.includes('kvartalsvis'))
-    forklaringer.push({ mal: 'Kvartalsvis utbytte',
-      tekst: `Passer investorer som trenger jevn kontantstrøm gjennom hele året — for eksempel for å dekke løpende utgifter uten å måtte selge aksjer.` });
+  if (mal.includes('kvartalsvis')) {
+    const erManedlig = a.frekvens === 'Månedlig';
+    const frekvensLabel = erManedlig ? 'Månedlig utbytte' : 'Kvartalsvis utbytte';
+    const frekvensDetalj = erManedlig
+      ? 'månedlig utbytte gir den jevneste kontantstrømmen — tolv utbetalinger per år'
+      : 'kvartalsvis utbytte gir jevn kontantstrøm fire ganger i året';
+    forklaringer.push({ mal: frekvensLabel,
+      tekst: `Passer investorer som trenger jevn kontantstrøm — ${frekvensDetalj}.` });
+  }
 
   return forklaringer;
 }
