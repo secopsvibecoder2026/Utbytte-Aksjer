@@ -2,6 +2,7 @@ User-agent: *
 Allow: /
 Disallow: /data/
 Disallow: /*?aksje=
+Disallow: /*?sammenlign=
 
 # /data/ inneholder rå JSON-datafiler som ikke skal indekseres.
 # ?aksje= er SPA-parametre – de individuelle aksjesidene finnes under /aksjer/<ticker>/
