@@ -14,22 +14,26 @@
     {
       "ticker": "ABL",
       "dato": "2026-04-28",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/671606"
     },
     {
       "ticker": "ATEA",
       "dato": "2026-04-28",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/671585"
     },
     {
       "ticker": "ITERA",
       "dato": "2026-04-28",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/671588"
     },
     {
       "ticker": "KCC",
       "dato": "2026-04-28",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/671587"
     },
     {
       "ticker": "NOD",
@@ -39,7 +43,8 @@
     {
       "ticker": "TEL",
       "dato": "2026-04-28",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/671580"
     },
     {
       "ticker": "ZAL",
@@ -327,6 +332,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "ABL",
+      "dato": "2026-05-07",
+      "type": "rapport"
+    },
+    {
       "ticker": "AKRBP",
       "dato": "2026-05-07",
       "type": "rapport"
@@ -403,6 +413,11 @@
     },
     {
       "ticker": "HAUTO",
+      "dato": "2026-05-08",
+      "type": "rapport"
+    },
+    {
+      "ticker": "ITERA",
       "dato": "2026-05-08",
       "type": "rapport"
     },
@@ -837,6 +852,16 @@
       "type": "rapport"
     },
     {
+      "ticker": "ATEA",
+      "dato": "2026-07-16",
+      "type": "rapport"
+    },
+    {
+      "ticker": "TEL",
+      "dato": "2026-07-16",
+      "type": "rapport"
+    },
+    {
       "ticker": "TOM",
       "dato": "2026-07-17",
       "type": "rapport"
@@ -849,6 +874,21 @@
     {
       "ticker": "VAR",
       "dato": "2026-07-21",
+      "type": "rapport"
+    },
+    {
+      "ticker": "NOD",
+      "dato": "2026-08-06",
+      "type": "rapport"
+    },
+    {
+      "ticker": "ZAL",
+      "dato": "2026-08-21",
+      "type": "rapport"
+    },
+    {
+      "ticker": "KCC",
+      "dato": "2026-08-25",
       "type": "rapport"
     },
     {
@@ -867,5 +907,5 @@
       "type": "rapport"
     }
   ],
-  "sist_oppdatert": "2026-04-27"
+  "sist_oppdatert": "2026-04-28"
 }
