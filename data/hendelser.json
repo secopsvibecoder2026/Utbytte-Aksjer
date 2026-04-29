@@ -59,27 +59,32 @@
     {
       "ticker": "GJF",
       "dato": "2026-04-29",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/671729"
     },
     {
       "ticker": "JIN",
       "dato": "2026-04-29",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/671788"
     },
     {
       "ticker": "MGN",
       "dato": "2026-04-29",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/671733"
     },
     {
       "ticker": "NHY",
       "dato": "2026-04-29",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/671722"
     },
     {
       "ticker": "OKEA",
       "dato": "2026-04-29",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/671710"
     },
     {
       "ticker": "SNOR",
@@ -89,7 +94,8 @@
     {
       "ticker": "STB",
       "dato": "2026-04-29",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/671730"
     },
     {
       "ticker": "VVL",
@@ -612,6 +618,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "VVL",
+      "dato": "2026-05-13",
+      "type": "rapport"
+    },
+    {
       "ticker": "WWIB",
       "dato": "2026-05-13",
       "type": "rapport"
@@ -747,6 +758,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "JIN",
+      "dato": "2026-05-29",
+      "type": "rapport"
+    },
+    {
       "ticker": "KMCP",
       "dato": "2026-05-29",
       "type": "rapport"
@@ -842,6 +858,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "GJF",
+      "dato": "2026-07-13",
+      "type": "rapport"
+    },
+    {
       "ticker": "DNB",
       "dato": "2026-07-14",
       "type": "rapport"
@@ -852,7 +873,27 @@
       "type": "rapport"
     },
     {
+      "ticker": "STB",
+      "dato": "2026-07-15",
+      "type": "rapport"
+    },
+    {
       "ticker": "ATEA",
+      "dato": "2026-07-16",
+      "type": "rapport"
+    },
+    {
+      "ticker": "BRG",
+      "dato": "2026-07-16",
+      "type": "rapport"
+    },
+    {
+      "ticker": "MGN",
+      "dato": "2026-07-16",
+      "type": "rapport"
+    },
+    {
+      "ticker": "OKEA",
       "dato": "2026-07-16",
       "type": "rapport"
     },
@@ -877,8 +918,18 @@
       "type": "rapport"
     },
     {
+      "ticker": "NHY",
+      "dato": "2026-07-22",
+      "type": "rapport"
+    },
+    {
       "ticker": "NOD",
       "dato": "2026-08-06",
+      "type": "rapport"
+    },
+    {
+      "ticker": "SNOR",
+      "dato": "2026-08-14",
       "type": "rapport"
     },
     {
@@ -907,5 +958,5 @@
       "type": "rapport"
     }
   ],
-  "sist_oppdatert": "2026-04-28"
+  "sist_oppdatert": "2026-04-29"
 }
