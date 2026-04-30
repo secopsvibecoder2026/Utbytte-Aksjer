@@ -105,7 +105,8 @@
     {
       "ticker": "AKBM",
       "dato": "2026-04-30",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/671944"
     },
     {
       "ticker": "AKSO",
@@ -120,7 +121,8 @@
     {
       "ticker": "B2I",
       "dato": "2026-04-30",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/672002"
     },
     {
       "ticker": "BMA",
@@ -130,12 +132,14 @@
     {
       "ticker": "BONHR",
       "dato": "2026-04-30",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/671691"
     },
     {
       "ticker": "BOR",
       "dato": "2026-04-30",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/671941"
     },
     {
       "ticker": "ELK",
@@ -150,7 +154,8 @@
     {
       "ticker": "ENTR",
       "dato": "2026-04-30",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/672048"
     },
     {
       "ticker": "EQVA",
@@ -170,7 +175,8 @@
     {
       "ticker": "KMCP",
       "dato": "2026-04-30",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/672048"
     },
     {
       "ticker": "KOA",
@@ -180,7 +186,8 @@
     {
       "ticker": "LSG",
       "dato": "2026-04-30",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/672007"
     },
     {
       "ticker": "NKR",
@@ -195,12 +202,14 @@
     {
       "ticker": "PARB",
       "dato": "2026-04-30",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/671943"
     },
     {
       "ticker": "PLSV",
       "dato": "2026-04-30",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/671977"
     },
     {
       "ticker": "RANA",
@@ -215,12 +224,14 @@
     {
       "ticker": "SATS",
       "dato": "2026-04-30",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/671968"
     },
     {
       "ticker": "SBMO",
       "dato": "2026-04-30",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/672048"
     },
     {
       "ticker": "SBNOR",
@@ -230,12 +241,14 @@
     {
       "ticker": "SRHA",
       "dato": "2026-04-30",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/672048"
     },
     {
       "ticker": "STRONG",
       "dato": "2026-04-30",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/672048"
     },
     {
       "ticker": "SUBC",
@@ -245,22 +258,26 @@
     {
       "ticker": "TGS",
       "dato": "2026-04-30",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/671971"
     },
     {
       "ticker": "VEND",
       "dato": "2026-04-30",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/671966"
     },
     {
       "ticker": "VISTIN",
       "dato": "2026-04-30",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/672048"
     },
     {
       "ticker": "WWIB",
       "dato": "2026-04-30",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/672048"
     },
     {
       "ticker": "BNOR",
@@ -279,6 +296,11 @@
     },
     {
       "ticker": "PEXIP",
+      "dato": "2026-05-05",
+      "type": "rapport"
+    },
+    {
+      "ticker": "REACH",
       "dato": "2026-05-05",
       "type": "rapport"
     },
@@ -369,6 +391,11 @@
     },
     {
       "ticker": "MORLD",
+      "dato": "2026-05-07",
+      "type": "rapport"
+    },
+    {
+      "ticker": "NKR",
       "dato": "2026-05-07",
       "type": "rapport"
     },
@@ -478,12 +505,27 @@
       "type": "rapport"
     },
     {
+      "ticker": "AUSS",
+      "dato": "2026-05-12",
+      "type": "rapport"
+    },
+    {
       "ticker": "BIEN",
       "dato": "2026-05-12",
       "type": "rapport"
     },
     {
+      "ticker": "BONHR",
+      "dato": "2026-05-12",
+      "type": "rapport"
+    },
+    {
       "ticker": "GRONG",
+      "dato": "2026-05-12",
+      "type": "rapport"
+    },
+    {
+      "ticker": "LSG",
       "dato": "2026-05-12",
       "type": "rapport"
     },
@@ -569,6 +611,11 @@
     },
     {
       "ticker": "ENTR",
+      "dato": "2026-05-13",
+      "type": "rapport"
+    },
+    {
+      "ticker": "EQVA",
       "dato": "2026-05-13",
       "type": "rapport"
     },
@@ -673,6 +720,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "BMA",
+      "dato": "2026-05-15",
+      "type": "rapport"
+    },
+    {
       "ticker": "SOGN",
       "dato": "2026-05-15",
       "type": "rapport"
@@ -773,6 +825,16 @@
       "type": "rapport"
     },
     {
+      "ticker": "B2I",
+      "dato": "2026-05-21",
+      "type": "rapport"
+    },
+    {
+      "ticker": "BOR",
+      "dato": "2026-05-21",
+      "type": "rapport"
+    },
+    {
       "ticker": "HSHP",
       "dato": "2026-05-21",
       "type": "rapport"
@@ -823,7 +885,17 @@
       "type": "rapport"
     },
     {
+      "ticker": "ENH",
+      "dato": "2026-05-29",
+      "type": "rapport"
+    },
+    {
       "ticker": "ENTR",
+      "dato": "2026-05-29",
+      "type": "rapport"
+    },
+    {
+      "ticker": "FRO",
       "dato": "2026-05-29",
       "type": "rapport"
     },
@@ -834,6 +906,11 @@
     },
     {
       "ticker": "KMCP",
+      "dato": "2026-05-29",
+      "type": "rapport"
+    },
+    {
+      "ticker": "PLSV",
       "dato": "2026-05-29",
       "type": "rapport"
     },
@@ -918,6 +995,16 @@
       "type": "rapport"
     },
     {
+      "ticker": "AKBM",
+      "dato": "2026-07-10",
+      "type": "rapport"
+    },
+    {
+      "ticker": "ELK",
+      "dato": "2026-07-10",
+      "type": "rapport"
+    },
+    {
       "ticker": "KIT",
       "dato": "2026-07-10",
       "type": "rapport"
@@ -930,6 +1017,11 @@
     {
       "ticker": "GJF",
       "dato": "2026-07-13",
+      "type": "rapport"
+    },
+    {
+      "ticker": "AKSO",
+      "dato": "2026-07-14",
       "type": "rapport"
     },
     {
@@ -958,6 +1050,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "KOA",
+      "dato": "2026-07-16",
+      "type": "rapport"
+    },
+    {
       "ticker": "MGN",
       "dato": "2026-07-16",
       "type": "rapport"
@@ -973,7 +1070,17 @@
       "type": "rapport"
     },
     {
+      "ticker": "PARB",
+      "dato": "2026-07-17",
+      "type": "rapport"
+    },
+    {
       "ticker": "TOM",
+      "dato": "2026-07-17",
+      "type": "rapport"
+    },
+    {
+      "ticker": "VEND",
       "dato": "2026-07-17",
       "type": "rapport"
     },
@@ -993,13 +1100,43 @@
       "type": "rapport"
     },
     {
+      "ticker": "TGS",
+      "dato": "2026-07-23",
+      "type": "rapport"
+    },
+    {
+      "ticker": "SUBC",
+      "dato": "2026-07-30",
+      "type": "rapport"
+    },
+    {
       "ticker": "NOD",
       "dato": "2026-08-06",
       "type": "rapport"
     },
     {
+      "ticker": "SBNOR",
+      "dato": "2026-08-11",
+      "type": "rapport"
+    },
+    {
+      "ticker": "HELG",
+      "dato": "2026-08-14",
+      "type": "rapport"
+    },
+    {
+      "ticker": "SATS",
+      "dato": "2026-08-14",
+      "type": "rapport"
+    },
+    {
       "ticker": "SNOR",
       "dato": "2026-08-14",
+      "type": "rapport"
+    },
+    {
+      "ticker": "OTEC",
+      "dato": "2026-08-21",
       "type": "rapport"
     },
     {
@@ -1023,10 +1160,15 @@
       "type": "rapport"
     },
     {
+      "ticker": "RANA",
+      "dato": "2026-08-26",
+      "type": "rapport"
+    },
+    {
       "ticker": "GSF",
       "dato": "2026-08-27",
       "type": "rapport"
     }
   ],
-  "sist_oppdatert": "2026-04-29"
+  "sist_oppdatert": "2026-04-30"
 }
