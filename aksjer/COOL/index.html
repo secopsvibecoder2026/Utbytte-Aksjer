@@ -507,6 +507,7 @@ Fraktrater varierer kraftig med globalt handelsmønster og flåtekapasitet, og u
   (function() {
     // Mørk/lys modus
     var btn = document.getElementById('dark-toggle');
+    if (!btn) return;
     var root = document.documentElement;
     var sun = btn.querySelector('.sun-icon');
     var moon = btn.querySelector('.moon-icon');

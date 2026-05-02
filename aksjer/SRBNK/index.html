@@ -507,6 +507,7 @@ Rentenivå og kredittap påvirker inntjeningen, mens regulatoriske kapitalkrav s
   (function() {
     // Mørk/lys modus
     var btn = document.getElementById('dark-toggle');
+    if (!btn) return;
     var root = document.documentElement;
     var sun = btn.querySelector('.sun-icon');
     var moon = btn.querySelector('.moon-icon');

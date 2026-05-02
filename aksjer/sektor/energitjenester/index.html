@@ -303,6 +303,7 @@
 <script>
   (function() {
     var btn = document.getElementById('dark-toggle');
+    if (!btn) return;
     var root = document.documentElement;
     var sun = btn.querySelector('.sun-icon');
     var moon = btn.querySelector('.moon-icon');

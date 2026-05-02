@@ -580,6 +580,7 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
   (function() {
     // Mørk/lys modus
     var btn = document.getElementById('dark-toggle');
+    if (!btn) return;
     var root = document.documentElement;
     var sun = btn.querySelector('.sun-icon');
     var moon = btn.querySelector('.moon-icon');

@@ -2544,6 +2544,7 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
   (function() {{
     // Mørk/lys modus
     var btn = document.getElementById('dark-toggle');
+    if (!btn) return;
     var root = document.documentElement;
     var sun = btn.querySelector('.sun-icon');
     var moon = btn.querySelector('.moon-icon');
@@ -3339,6 +3340,7 @@ def generer_sektorsider(aksjer, root_dir):
 <script>
   (function() {{
     var btn = document.getElementById('dark-toggle');
+    if (!btn) return;
     var root = document.documentElement;
     var sun = btn.querySelector('.sun-icon');
     var moon = btn.querySelector('.moon-icon');
@@ -3364,15 +3366,28 @@ def generer_sektorsider(aksjer, root_dir):
             f.write(html)
         generert.append((slug, sektor, len(aksjer_sortert)))
 
-    # Oversiktsside for alle sektorer
+    # Oversiktsside for alle sektorer — sortert etter antall aksjer (størst først)
+    generert_sortert = sorted(generert, key=lambda x: -x[2])
     sektorkort = ""
-    for slug, sektor, antall in generert:
+    for slug, sektor, antall in generert_sortert:
         aksjer_i = sektorer[sektor]
-        snitt = sum(a.get("utbytte_yield", 0) for a in aksjer_i) / len(aksjer_i)
+        med_utb = [a for a in aksjer_i if (a.get("utbytte_yield") or 0) > 0]
+        snitt = (sum(a.get("utbytte_yield", 0) for a in med_utb) / len(med_utb)) if med_utb else 0
+        # Topp 3 aksjer i sektoren etter yield
+        topp3 = sorted(med_utb, key=lambda x: x.get("utbytte_yield", 0), reverse=True)[:3]
+        topp_str = ", ".join(a["ticker"] for a in topp3) if topp3 else "—"
+        ikon = SEKTOR_IKONER.get(sektor, "📊")
         sektorkort += f"""
     <a href="/aksjer/sektor/{slug}/" class="sektor-kort">
-      <div class="sk-navn">{sektor}</div>
-      <div class="sk-antall">{antall} aksjer · snitt {snitt:.1f}%</div>
+      <div class="sk-header">
+        <span class="sk-ikon">{ikon}</span>
+        <div class="sk-tekst">
+          <div class="sk-navn">{sektor}</div>
+          <div class="sk-antall">{antall} aksjer · snitt {snitt:.1f}%</div>
+        </div>
+        <span class="sk-arrow">→</span>
+      </div>
+      <div class="sk-topp">Topp: {topp_str}</div>
     </a>"""
 
     sektor_oversikt = f"""<!DOCTYPE html>
@@ -3417,39 +3432,75 @@ def generer_sektorsider(aksjer, root_dir):
   </script>
   <style>
     *, *::before, *::after {{ box-sizing: border-box; margin: 0; padding: 0; }}
-    body {{ font-family: system-ui, -apple-system, sans-serif; line-height: 1.6; }}
-    a {{ color: #16a34a; text-decoration: none; }}
+    body {{ font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; line-height: 1.6; background: #f8fafc; color: #0f172a; }}
+    a {{ color: #1E5C5C; text-decoration: none; }}
     a:hover {{ text-decoration: underline; }}
-    .wrap {{ max-width: 900px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }}
-    .breadcrumb {{ font-size: 0.85rem; color: #6b7280; margin-bottom: 1.5rem; }}
-    .breadcrumb a {{ color: #6b7280; }}
+    .wrap {{ max-width: 1100px; margin: 0 auto; padding: 1rem 1rem 2rem; }}
+    .hero {{
+      background: linear-gradient(135deg, #132A50 0%, #1E5C5C 60%, #2E7B7B 100%);
+      color: #fff;
+      border-radius: 1rem;
+      padding: 2rem 1.5rem;
+      margin-bottom: 2rem;
+    }}
+    .hero h1 {{ font-size: 1.85rem; font-weight: 800; margin-bottom: 0.5rem; letter-spacing: -0.02em; }}
+    .hero p {{ color: rgba(255,255,255,0.85); font-size: 1rem; max-width: 36rem; }}
+    @media (max-width: 540px) {{
+      .hero {{ padding: 1.5rem 1.1rem; }}
+      .hero h1 {{ font-size: 1.45rem; }}
+    }}
+    .breadcrumb {{ font-size: 0.78rem; color: #64748b; margin-bottom: 1rem; }}
+    .breadcrumb a {{ color: #64748b; }}
     .breadcrumb span {{ margin: 0 0.35rem; }}
-    h1 {{ font-size: 1.75rem; font-weight: 700; margin-bottom: 0.25rem; }}
-    .sub {{ font-size: 0.95rem; margin-bottom: 1.5rem; }}
-    .grid {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; }}
-    .sektor-kort {{ display: block; border-radius: 0.75rem; padding: 1rem 1.25rem; border: 1px solid; transition: border-color 0.15s; text-decoration: none; }}
-    .sektor-kort:hover {{ border-color: #16a34a; text-decoration: none; }}
-    .sk-navn {{ font-weight: 600; font-size: 1rem; }}
-    .sk-antall {{ font-size: 0.8rem; margin-top: 0.25rem; }}
-
-    /* Light mode */
-    body {{ background: #f9fafb; color: #111827; }}
-    .breadcrumb {{ color: #6b7280; }}
-    .sub {{ color: #6b7280; }}
-    .sektor-kort {{ background: #fff; border-color: #e5e7eb; }}
-    .sk-navn {{ color: #111827; }}
-    .sk-antall {{ color: #6b7280; }}
-
+    .grid {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 0.85rem; }}
+    .sektor-kort {{
+      display: block;
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 0.85rem;
+      padding: 1rem 1.15rem;
+      transition: all 0.15s;
+      text-decoration: none !important;
+      color: inherit;
+    }}
+    .sektor-kort:hover {{
+      border-color: #2E7B7B;
+      box-shadow: 0 4px 14px rgba(46,123,123,0.1);
+      transform: translateY(-2px);
+    }}
+    .sk-header {{ display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; }}
+    .sk-ikon {{ font-size: 1.5rem; flex-shrink: 0; }}
+    .sk-tekst {{ flex: 1; min-width: 0; }}
+    .sk-navn {{ font-weight: 700; font-size: 1rem; color: #0f172a; }}
+    .sk-antall {{ font-size: 0.78rem; color: #64748b; margin-top: 0.1rem; }}
+    .sk-arrow {{ color: #94a3b8; font-size: 1.1rem; flex-shrink: 0; }}
+    .sektor-kort:hover .sk-arrow {{ color: #2E7B7B; transform: translateX(2px); transition: all 0.15s; }}
+    .sk-topp {{ font-size: 0.72rem; color: #94a3b8; padding-top: 0.4rem; border-top: 1px solid #f1f5f9; font-family: ui-monospace, monospace; }}
+    .info-bar {{
+      display: flex; align-items: flex-start; gap: 0.75rem;
+      background: #f0fafb;
+      border: 1px solid #ccebec;
+      border-left: 4px solid #2E7B7B;
+      border-radius: 0.6rem;
+      padding: 0.85rem 1rem;
+      margin-bottom: 2rem;
+      font-size: 0.85rem;
+      color: #134e4a;
+      line-height: 1.5;
+    }}
+    .info-bar svg {{ flex-shrink: 0; margin-top: 2px; }}
+    .info-bar strong {{ color: #0f172a; }}
     /* Dark mode */
-    .dark body {{ background: #030712; color: #f3f4f6; }}
-    .dark .breadcrumb {{ color: #9ca3af; }}
-    .dark .breadcrumb a {{ color: #9ca3af; }}
-    .dark .sub {{ color: #9ca3af; }}
-    .dark .sektor-kort {{ background: #111827; border-color: #1f2937; }}
-    .dark .sektor-kort:hover {{ border-color: #16a34a; }}
-    .dark .sk-navn {{ color: #f3f4f6; }}
-    .dark .sk-antall {{ color: #6b7280; }}
-    .dark a {{ color: #4ade80; }}
+    .dark body {{ background: #0f172a; color: #f1f5f9; }}
+    .dark a {{ color: #91C4D8; }}
+    .dark .breadcrumb, .dark .breadcrumb a {{ color: #94a3b8; }}
+    .dark .sektor-kort {{ background: #1e293b; border-color: #334155; }}
+    .dark .sektor-kort:hover {{ border-color: #2E7B7B; }}
+    .dark .sk-navn {{ color: #f1f5f9; }}
+    .dark .sk-antall, .dark .sk-topp {{ color: #94a3b8; }}
+    .dark .sk-topp {{ border-color: #334155; }}
+    .dark .info-bar {{ background: rgba(46,123,123,0.12); border-color: rgba(46,123,123,0.4); color: #91C4D8; }}
+    .dark .info-bar strong {{ color: #f1f5f9; }}
   </style>
 </head>
 <body>
@@ -3457,15 +3508,26 @@ def generer_sektorsider(aksjer, root_dir):
 {_site_nav_html('sektor')}
 
 <div class="wrap">
-  <div class="breadcrumb">
+  <nav class="breadcrumb" aria-label="Brødsmulesti">
     <a href="https://exday.no/">exday.no</a>
     <span>›</span>
     <a href="/aksjer/">Aksjer</a>
     <span>›</span>
     Sektorer
+  </nav>
+
+  <section class="hero">
+    <h1>Utforsk etter sektor</h1>
+    <p>Norske utbytteaksjer på Oslo Børs delt inn i {len(generert_sortert)} sektorer. Sammenlign yield, finn favorittene og bygg en diversifisert portefølje.</p>
+  </section>
+
+  <div class="info-bar">
+    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+    <div>
+      <strong>Tips:</strong> Diversifisering på tvers av sektorer reduserer risikoen i utbytteporteføljen. Bruk <a href="https://exday.no/" style="text-decoration:underline;">app-en</a> til å sette målvekter og se rebalanseringsforslag.
+    </div>
   </div>
-  <h1>Utbytteaksjer etter sektor</h1>
-  <p class="sub">Velg en sektor for å se alle aksjer med utbytte innen den kategorien.</p>
+
   <div class="grid">{sektorkort}
   </div>
 {STANDARD_FOOTER}
@@ -3474,6 +3536,7 @@ def generer_sektorsider(aksjer, root_dir):
 <script>
   (function() {{
     var btn = document.getElementById('dark-toggle');
+    if (!btn) return;
     var root = document.documentElement;
     var sun = btn.querySelector('.sun-icon');
     var moon = btn.querySelector('.moon-icon');
@@ -3788,6 +3851,7 @@ def generer_topplistesider(aksjer, root_dir):
 <script>
   (function() {{
     var btn = document.getElementById('dark-toggle');
+    if (!btn) return;
     var root = document.documentElement;
     var sun = btn.querySelector('.sun-icon');
     var moon = btn.querySelector('.moon-icon');
