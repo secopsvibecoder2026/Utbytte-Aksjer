@@ -2415,26 +2415,7 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
 </head>
 <body>
 
-  <!-- HEADER -->
-  <header class="ak-header">
-    <div class="ak-inner" style="max-width:760px;">
-      <div class="ak-left">
-        <a href="/utforsk/" class="ak-back">
-          <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
-          Utforsk
-        </a>
-        <span class="ak-sep">/</span>
-        <a href="/aksjer/sektor/{_sektor_slug(sektor)}/" class="ak-back">{sektor}</a>
-      </div>
-      <div style="display:flex;align-items:center;gap:0.5rem;">
-        <a href="https://exday.no/?aksje={ticker}" class="ak-app-btn">Åpne i appen →</a>
-        <button id="dark-toggle" class="ak-toggle" aria-label="Bytt fargemodus">
-          <svg class="sun-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
-          <svg class="moon-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display:none;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
-        </button>
-      </div>
-    </div>
-  </header>
+{_site_nav_html('aksjer')}
 
 <div class="wrap">
 
@@ -2755,14 +2736,8 @@ def generer_aksjesider(aksjer, root_dir):
   </style>
 </head>
 <body>
+{_site_nav_html('aksjer')}
 <div class="wrap">
-  <div class="page-nav">
-    <div class="page-nav-links"><a href="https://exday.no/">exday.no</a> <span>›</span> <span>Aksjer</span></div>
-    <button class="dk-btn" id="dark-toggle" aria-label="Bytt fargemodus" title="Bytt fargemodus">
-      <svg id="ov-moon" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
-      <svg id="ov-sun" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="display:none"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
-    </button>
-  </div>
   <h1>Norske utbytteaksjer</h1>
   <p class="sub">Oversikt over {len(aksjer)} utbytteaksjer på Oslo Børs, sortert etter direkteavkastning. Oppdateres daglig.</p>
   <table>
@@ -2797,6 +2772,50 @@ def generer_aksjesider(aksjer, root_dir):
     print(f"Genererte {len(aksjer)} aksjesider + oversiktsside under aksjer/")
 
 
+def _site_nav_html(active=""):
+    """Genererer den sitewide navbaren med aktiv-markering for gjeldende seksjon."""
+    def cls(name):
+        return "active" if active == name else ""
+    return f"""  <nav class="site-nav" aria-label="Hovedmeny">
+    <div class="site-nav-inner">
+      <a href="/" class="site-logo" aria-label="exday.no - hjem">
+        <span class="site-logo-mark">e</span>
+        <span>exday<span class="site-logo-dot">.no</span></span>
+      </a>
+      <ul class="site-nav-menu">
+        <li><a href="/aksjer/" class="{cls('aksjer')}">Aksjer</a></li>
+        <li><a href="/aksjer/sektor/" class="{cls('sektor')}">Sektorer</a></li>
+        <li><a href="/utbyttekalender/" class="{cls('kalender')}">Kalender</a></li>
+        <li><a href="/utbyttekalkulator/" class="{cls('kalkulator')}">Kalkulator</a></li>
+        <li><a href="/artikler/" class="{cls('artikler')}">Artikler</a></li>
+        <li><a href="/faq/" class="{cls('faq')}">FAQ</a></li>
+        <li><a href="/om/" class="{cls('om')}">Om</a></li>
+      </ul>
+      <div class="site-nav-actions">
+        <a href="https://exday.no/" class="site-app-btn">Åpne app</a>
+        <button id="dark-toggle" class="site-dark-btn" aria-label="Bytt fargemodus">
+          <svg class="sun-icon" width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+          <svg class="moon-icon" width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display:none;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+        </button>
+      </div>
+      <button class="site-nav-burger" aria-label="Vis meny" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+  <script>
+    (function() {{
+      var nav = document.querySelector('.site-nav');
+      var burger = nav && nav.querySelector('.site-nav-burger');
+      if (burger) {{
+        burger.addEventListener('click', function() {{
+          nav.classList.toggle('open');
+          burger.setAttribute('aria-expanded', nav.classList.contains('open'));
+        }});
+      }}
+    }})();
+  </script>"""
+
 STANDARD_FOOTER = """  <footer style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid #e5e7eb;font-size:0.78rem;text-align:center;color:#9ca3af;line-height:1.6;" class="std-footer">
     <p>Kurs og utbyttedata hentes fra Yahoo Finance og Euronext. Oppdateres daglig på børsdager.</p>
     <p style="max-width:36rem;margin:0.4rem auto;">
@@ -2809,6 +2828,8 @@ STANDARD_FOOTER = """  <footer style="margin-top:2rem;padding-top:1.5rem;border-
       <a href="/personvern/" style="color:#9ca3af;text-decoration:underline;">Personvern og informasjonskapsler</a>
       <span style="margin:0 0.4rem;">&#183;</span>
       <a href="/faq/" style="color:#9ca3af;text-decoration:underline;">Vanlige sp&#248;rsm&#229;l (FAQ)</a>
+      <span style="margin:0 0.4rem;">&#183;</span>
+      <a href="/om/" style="color:#9ca3af;text-decoration:underline;">Om exday.no</a>
     </p>
     <p style="margin-top:0.75rem;">
       <a href="https://www.facebook.com/share/17rMp8o9yF/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:0.375rem;color:#9ca3af;">
@@ -3017,22 +3038,7 @@ def generer_sektorsider(aksjer, root_dir):
   </style>
 </head>
 <body>
-  <header class="ak-header">
-    <div class="ak-inner">
-      <div class="ak-left">
-        <a href="/utforsk/" class="ak-back">
-          <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
-          Utforsk
-        </a>
-        <span class="ak-sep">/</span>
-        <span class="ak-title">{sektor}</span>
-      </div>
-      <button id="dark-toggle" aria-label="Bytt fargemodus" class="ak-toggle">
-        <svg class="sun-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
-        <svg class="moon-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display:none;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
-      </button>
-    </div>
-  </header>
+{_site_nav_html('sektor')}
 <div class="wrap">
   <div class="breadcrumb">
     <a href="https://exday.no/">exday.no</a>
@@ -3174,25 +3180,7 @@ def generer_sektorsider(aksjer, root_dir):
 </head>
 <body>
 
-  <!-- HEADER -->
-  <header class="ak-header">
-    <div class="ak-inner" style="max-width:900px;">
-      <div class="ak-left">
-        <a href="/" class="ak-back">
-          <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
-          exday.no
-        </a>
-        <span class="ak-sep">/</span>
-        <a href="/aksjer/" class="ak-back">Aksjer</a>
-        <span class="ak-sep">/</span>
-        <span style="font-size:0.85rem;color:#6b7280;">Sektorer</span>
-      </div>
-      <button id="dark-toggle" class="ak-toggle" aria-label="Bytt fargemodus">
-        <svg class="sun-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
-        <svg class="moon-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display:none;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
-      </button>
-    </div>
-  </header>
+{_site_nav_html('sektor')}
 
 <div class="wrap">
   <div class="breadcrumb">
@@ -3491,22 +3479,7 @@ def generer_topplistesider(aksjer, root_dir):
   <style>{CSS}</style>
 </head>
 <body>
-  <header class="ak-header">
-    <div class="ak-inner">
-      <div class="ak-left">
-        <a href="/" class="ak-back">
-          <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
-          exday.no
-        </a>
-        <span class="ak-sep">/</span>
-        <span class="ak-cur">{cfg['h1'][:30]}{'…' if len(cfg['h1']) > 30 else ''}</span>
-      </div>
-      <button id="dark-toggle" class="ak-toggle" aria-label="Bytt fargemodus">
-        <svg class="sun-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
-        <svg class="moon-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display:none;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
-      </button>
-    </div>
-  </header>
+{_site_nav_html('aksjer')}
 <div class="wrap">
   <div class="breadcrumb">
     <a href="https://exday.no/">exday.no</a>
