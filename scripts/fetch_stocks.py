@@ -3318,11 +3318,13 @@ def generer_sektorsider(aksjer, root_dir):
   <div class="breadcrumb">
     <a href="https://exday.no/">exday.no</a>
     <span>›</span>
-    <a href="/utforsk/">Utforsk</a>
+    <a href="/aksjer/">Aksjer</a>
+    <span>›</span>
+    <a href="/aksjer/sektor/">Sektorer</a>
     <span>›</span>
     {sektor}
   </div>
-  <h1>{sektor}-aksjer med utbytte</h1>
+  <h1>{SEKTOR_IKONER.get(sektor, '📊')} {sektor}-aksjer med utbytte</h1>
   <p class="sub">{len(aksjer_sortert)} norske {sektor.lower()}-aksjer på Oslo Børs. Sortert etter direkteavkastning.</p>
   <div class="stats">
     <div class="stat"><div class="stat-val">{len(aksjer_sortert)}</div><div class="stat-lbl">Aksjer</div></div>
