@@ -69,8 +69,15 @@
   <url>
     <loc>https://exday.no/personvern/</loc>
     <lastmod>2026-05-01</lastmod>
+    <lastmod>2026-05-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://exday.no/om/</loc>
+    <lastmod>2026-05-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
   </url>
   <url>
     <loc>https://exday.no/faq/</loc>
