@@ -2641,7 +2641,67 @@ def generer_aksjesider(aksjer, root_dir):
         with open(os.path.join(ticker_dir, "index.html"), "w", encoding="utf-8") as f:
             f.write(html)
 
-    # Oversiktsside
+    # Oversiktsside — bygger en skikkelig landingsside, ikke bare tabell
+    aksjer_med_utbytte = [a for a in aksjer if (a.get("utbytte_yield") or 0) > 0]
+    snitt_yield = (sum(a.get("utbytte_yield", 0) for a in aksjer_med_utbytte) / len(aksjer_med_utbytte)) if aksjer_med_utbytte else 0
+
+    # Topp 6 etter yield (filtrerer urealistiske > 25%)
+    topp_yield = sorted(
+        [a for a in aksjer_med_utbytte if (a.get("utbytte_yield") or 0) < 25],
+        key=lambda x: x.get("utbytte_yield", 0), reverse=True
+    )[:6]
+
+    # Topp 6 stabile (flest år med utbytte) med yield > 0
+    stabile = sorted(
+        aksjer_med_utbytte,
+        key=lambda x: (x.get("ar_med_utbytte") or 0, x.get("utbytte_yield") or 0),
+        reverse=True
+    )[:6]
+
+    # Månedlige og kvartalsvise utbetalere — skikkelig kontantstrøm
+    hyppige = sorted(
+        [a for a in aksjer_med_utbytte if a.get("frekvens") in ("Månedlig", "Kvartalsvis")],
+        key=lambda x: x.get("utbytte_yield", 0), reverse=True
+    )[:6]
+
+    def _kort(a):
+        t = a["ticker"]
+        navn = a["navn"]
+        if len(navn) > 28:
+            navn = navn[:26] + "…"
+        sektor = a.get("sektor") or ""
+        yield_ = a.get("utbytte_yield", 0)
+        ar = a.get("ar_med_utbytte") or 0
+        frekvens = a.get("frekvens") or ""
+        return f"""
+      <a href="/aksjer/{t}/" class="ak-kort">
+        <div class="ak-kort-topp">
+          <span class="ak-kort-tk">{t}</span>
+          <span class="ak-kort-yield">{yield_:.2f}%</span>
+        </div>
+        <div class="ak-kort-navn">{navn}</div>
+        <div class="ak-kort-meta">{sektor} · {frekvens}{f' · {ar} år' if ar > 0 else ''}</div>
+      </a>"""
+
+    topp_yield_html = "".join(_kort(a) for a in topp_yield)
+    stabile_html = "".join(_kort(a) for a in stabile)
+    hyppige_html = "".join(_kort(a) for a in hyppige)
+
+    # Sektor-snippets for sektor-grid
+    sektor_data2 = {}
+    for a in aksjer:
+        s = a.get("sektor") or "Annet"
+        sektor_data2.setdefault(s, []).append(a)
+    topp_sektorer = sorted(sektor_data2.items(), key=lambda x: -len(x[1]))[:8]
+    sektor_kort_html = "".join(
+        f"""<a href="/aksjer/sektor/{_sektor_slug(s)}/" class="sek-kort">
+          <span class="sek-ikon">{SEKTOR_IKONER.get(s, '📊')}</span>
+          <span class="sek-info"><span class="sek-navn">{s}</span><span class="sek-antall">{len(stk)} aksjer</span></span>
+        </a>"""
+        for s, stk in topp_sektorer
+    )
+
+    # Tabell med alle aksjer
     rader = ""
     for a in sorted(aksjer, key=lambda x: x.get("utbytte_yield", 0), reverse=True):
         t   = a["ticker"]
@@ -2701,50 +2761,263 @@ def generer_aksjesider(aksjer, root_dir):
   <meta name="twitter:description" content="Oversikt over {len(aksjer)} norske utbytteaksjer på Oslo Børs med yield, ex-dato og utbyttehistorikk. Oppdateres daglig."/>
   <meta name="twitter:image" content="https://exday.no/assets/og-image.png"/>
   <script type="application/ld+json">{json.dumps({"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Hjem","item":"https://exday.no/"},{"@type":"ListItem","position":2,"name":"Aksjer","item":"https://exday.no/aksjer/"}]}, ensure_ascii=False)}</script>
+  <link rel="stylesheet" href="/assets/style.css"/>
   <style>
     *, *::before, *::after {{ box-sizing: border-box; margin: 0; padding: 0; }}
-    body {{ font-family: system-ui, -apple-system, sans-serif; background: #f9fafb; color: #111827; line-height: 1.6; }}
-    a {{ color: #16a34a; text-decoration: none; }}
+    body {{ font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; background: #f8fafc; color: #0f172a; line-height: 1.6; }}
+    a {{ color: #1E5C5C; text-decoration: none; }}
     a:hover {{ text-decoration: underline; }}
-    .wrap {{ max-width: 900px; margin: 0 auto; padding: 1.5rem 1rem; }}
-    .page-nav {{ display:flex; align-items:center; justify-content:space-between; font-size: 0.85rem; color: #6b7280; margin-bottom: 1.5rem; }}
-    .page-nav-links {{ display:flex; align-items:center; gap:0.4rem; }}
-    h1 {{ font-size: 1.75rem; font-weight: 700; margin-bottom: 0.5rem; }}
-    .sub {{ color: #6b7280; margin-bottom: 1.5rem; }}
-    table {{ width: 100%; border-collapse: collapse; background: #fff; border: 1px solid #e5e7eb; border-radius: 0.75rem; overflow: hidden; font-size: 0.9rem; }}
-    th {{ background: #f3f4f6; padding: 0.6rem 1rem; text-align: left; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: #6b7280; }}
-    td {{ padding: 0.65rem 1rem; border-top: 1px solid #f3f4f6; }}
-    tr:hover td {{ background: #f9fafb; }}
-    .yield {{ color: #16a34a; font-weight: 600; }}
-    .cta {{ margin-top: 1.5rem; text-align: center; }}
-    .cta a {{ display: inline-block; background: #16a34a; color: #fff; font-weight: 600; padding: 0.65rem 1.5rem; border-radius: 0.5rem; }}
-    .updated {{ font-size: 0.78rem; color: #9ca3af; text-align: right; margin-top: 1rem; }}
-    .dk-btn {{ background:transparent; border:none; cursor:pointer; padding:0.3rem; color:#6b7280; border-radius:0.375rem; }}
-    .dk-btn:hover {{ background:#e5e7eb; }}
+    .wrap {{ max-width: 1100px; margin: 0 auto; padding: 1rem 1rem 2rem; }}
+    .hero {{
+      background: linear-gradient(135deg, #132A50 0%, #1E5C5C 60%, #2E7B7B 100%);
+      color: #fff;
+      border-radius: 1rem;
+      padding: 2rem 1.5rem;
+      margin-bottom: 2rem;
+    }}
+    .hero h1 {{ font-size: 2rem; font-weight: 800; margin-bottom: 0.5rem; letter-spacing: -0.02em; }}
+    .hero p {{ color: rgba(255,255,255,0.85); font-size: 1.05rem; max-width: 36rem; }}
+    .hero-stats {{ display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; margin-top: 1.5rem; }}
+    .hero-stat {{ background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 0.6rem; padding: 0.75rem 0.5rem; text-align: center; }}
+    .hero-stat-num {{ font-size: 1.4rem; font-weight: 800; }}
+    .hero-stat-lbl {{ font-size: 0.7rem; opacity: 0.8; text-transform: uppercase; letter-spacing: 0.05em; }}
+    @media (max-width: 540px) {{
+      .hero {{ padding: 1.5rem 1.1rem; }}
+      .hero h1 {{ font-size: 1.55rem; }}
+      .hero p {{ font-size: 0.95rem; }}
+      .hero-stats {{ grid-template-columns: repeat(2, 1fr); }}
+    }}
+    .seksjon {{ margin: 2.5rem 0; }}
+    .seksjon-tittel {{ display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 1rem; }}
+    .seksjon-tittel h2 {{ font-size: 1.25rem; font-weight: 700; color: #0f172a; }}
+    .seksjon-tittel .se-alle {{ font-size: 0.85rem; color: #2E7B7B; font-weight: 600; }}
+    .ak-grid {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 0.75rem; }}
+    .ak-kort {{
+      display: block;
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 0.75rem;
+      padding: 1rem;
+      transition: all 0.15s;
+      text-decoration: none !important;
+      color: inherit;
+    }}
+    .ak-kort:hover {{ border-color: #2E7B7B; box-shadow: 0 4px 12px rgba(46,123,123,0.1); transform: translateY(-1px); }}
+    .ak-kort-topp {{ display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.4rem; }}
+    .ak-kort-tk {{ font-family: ui-monospace, monospace; font-size: 0.95rem; font-weight: 700; color: #1E5C5C; }}
+    .ak-kort-yield {{ font-size: 0.95rem; font-weight: 700; color: #15803d; background: #dcfce7; padding: 0.15rem 0.5rem; border-radius: 0.4rem; }}
+    .ak-kort-navn {{ font-size: 0.85rem; font-weight: 500; color: #334155; line-height: 1.3; margin-bottom: 0.3rem; }}
+    .ak-kort-meta {{ font-size: 0.7rem; color: #94a3b8; }}
+    .topplister {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.75rem; }}
+    .topp-kort {{
+      display: flex; align-items: center; gap: 0.85rem;
+      background: #fff; border: 1px solid #e2e8f0; border-radius: 0.75rem;
+      padding: 1rem; text-decoration: none !important; color: inherit;
+      transition: all 0.15s;
+    }}
+    .topp-kort:hover {{ border-color: #2E7B7B; box-shadow: 0 4px 12px rgba(46,123,123,0.1); }}
+    .topp-ikon {{
+      width: 44px; height: 44px;
+      border-radius: 0.6rem;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem; flex-shrink: 0;
+    }}
+    .topp-ikon-1 {{ background: #fef3c7; color: #b45309; }}
+    .topp-ikon-2 {{ background: #dbeafe; color: #1d4ed8; }}
+    .topp-ikon-3 {{ background: #dcfce7; color: #15803d; }}
+    .topp-ikon-4 {{ background: #fce7f3; color: #be185d; }}
+    .topp-tittel {{ font-weight: 600; font-size: 0.95rem; color: #0f172a; margin-bottom: 0.15rem; }}
+    .topp-beskr {{ font-size: 0.75rem; color: #64748b; }}
+    .sek-grid {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 0.5rem; }}
+    .sek-kort {{
+      display: flex; align-items: center; gap: 0.6rem;
+      background: #fff; border: 1px solid #e2e8f0; border-radius: 0.6rem;
+      padding: 0.65rem 0.85rem; text-decoration: none !important; color: inherit;
+      transition: all 0.15s;
+    }}
+    .sek-kort:hover {{ border-color: #2E7B7B; }}
+    .sek-ikon {{ font-size: 1.3rem; flex-shrink: 0; }}
+    .sek-info {{ display: flex; flex-direction: column; min-width: 0; }}
+    .sek-navn {{ font-weight: 600; font-size: 0.85rem; color: #0f172a; }}
+    .sek-antall {{ font-size: 0.7rem; color: #94a3b8; }}
+    .alle-aksjer {{ background: #fff; border: 1px solid #e2e8f0; border-radius: 0.75rem; overflow: hidden; }}
+    .alle-aksjer-header {{ padding: 1rem 1.25rem; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; }}
+    .alle-aksjer-header h2 {{ font-size: 1.1rem; font-weight: 700; }}
+    .alle-aksjer-header .filter-info {{ font-size: 0.78rem; color: #64748b; }}
+    table {{ width: 100%; border-collapse: collapse; font-size: 0.88rem; }}
+    th {{ background: #f8fafc; padding: 0.65rem 1.25rem; text-align: left; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #64748b; border-bottom: 1px solid #e2e8f0; }}
+    td {{ padding: 0.7rem 1.25rem; border-bottom: 1px solid #f1f5f9; }}
+    tr:last-child td {{ border-bottom: none; }}
+    tr:hover td {{ background: #f8fafc; }}
+    td a {{ color: #1E5C5C; font-family: ui-monospace, monospace; font-weight: 600; }}
+    .yield-cell {{ color: #15803d; font-weight: 600; }}
+    .verktoy-bar {{
+      background: linear-gradient(135deg, #fef3c7 0%, #fed7aa 100%);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      margin: 2rem 0;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 1rem;
+    }}
+    .verktoy-bar h3 {{ font-size: 1.1rem; font-weight: 700; color: #78350f; margin-bottom: 0.25rem; }}
+    .verktoy-bar p {{ font-size: 0.88rem; color: #92400e; }}
+    .verktoy-bar a {{
+      background: #fff; color: #b45309 !important; padding: 0.6rem 1.25rem;
+      border-radius: 0.5rem; font-weight: 600; text-decoration: none !important;
+      white-space: nowrap; box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }}
+    @media (max-width: 540px) {{
+      .verktoy-bar {{ grid-template-columns: 1fr; text-align: center; }}
+    }}
+    .updated {{ font-size: 0.78rem; color: #94a3b8; text-align: right; margin-top: 1rem; }}
     /* Mørk modus */
-    .dark body {{ background: #111827; color: #f9fafb; }}
-    .dark a {{ color: #4ade80; }}
-    .dark table {{ background: #1f2937; border-color: #374151; }}
-    .dark th {{ background: #111827; color: #9ca3af; }}
-    .dark td {{ border-color: #374151; }}
-    .dark tr:hover td {{ background: #1e2d3d; }}
-    .dark .sub {{ color: #9ca3af; }}
-    .dark .updated {{ color: #6b7280; }}
-    .dark .dk-btn {{ color: #9ca3af; }}
-    .dark .dk-btn:hover {{ background: #374151; }}
-    .dark .cta a {{ background: #16a34a; }}
+    .dark body {{ background: #0f172a; color: #f1f5f9; }}
+    .dark a {{ color: #91C4D8; }}
+    .dark .seksjon-tittel h2 {{ color: #f1f5f9; }}
+    .dark .seksjon-tittel .se-alle {{ color: #91C4D8; }}
+    .dark .ak-kort, .dark .topp-kort, .dark .sek-kort, .dark .alle-aksjer {{ background: #1e293b; border-color: #334155; }}
+    .dark .ak-kort:hover, .dark .topp-kort:hover, .dark .sek-kort:hover {{ border-color: #2E7B7B; }}
+    .dark .ak-kort-tk {{ color: #91C4D8; }}
+    .dark .ak-kort-navn {{ color: #cbd5e1; }}
+    .dark .ak-kort-yield {{ background: rgba(34,197,94,0.2); color: #4ade80; }}
+    .dark .topp-tittel, .dark .sek-navn {{ color: #f1f5f9; }}
+    .dark .alle-aksjer-header {{ border-color: #334155; }}
+    .dark th {{ background: #0f172a; border-color: #334155; color: #94a3b8; }}
+    .dark td {{ border-color: #1e293b; }}
+    .dark tr:hover td {{ background: #0f172a; }}
+    .dark td a {{ color: #91C4D8; }}
+    .dark .yield-cell {{ color: #4ade80; }}
+    .dark .verktoy-bar {{ background: linear-gradient(135deg, rgba(146,64,14,0.3) 0%, rgba(154,52,18,0.2) 100%); }}
+    .dark .verktoy-bar h3 {{ color: #fde68a; }}
+    .dark .verktoy-bar p {{ color: #fcd34d; }}
+    .dark .verktoy-bar a {{ background: #1e293b; color: #fde68a !important; }}
   </style>
 </head>
 <body>
 {_site_nav_html('aksjer')}
 <div class="wrap">
-  <h1>Norske utbytteaksjer</h1>
-  <p class="sub">Oversikt over {len(aksjer)} utbytteaksjer på Oslo Børs, sortert etter direkteavkastning. Oppdateres daglig.</p>
-  <table>
-    <thead><tr><th>Ticker</th><th>Navn</th><th>Sektor</th><th>Kurs</th><th>Yield</th><th>Ex-dato</th></tr></thead>
-    <tbody>{rader}</tbody>
-  </table>
-  <div class="cta"><a href="https://exday.no/">Åpne full app med porteføljekalkulator →</a></div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <h1>Norske utbytteaksjer</h1>
+    <p>Komplett oversikt over alle utbyttebetalere på Oslo Børs. Yield, ex-datoer, historikk og analyser — oppdateres daglig på børsdager.</p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-num">{len(aksjer)}</div>
+        <div class="hero-stat-lbl">Aksjer</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">{len(aksjer_med_utbytte)}</div>
+        <div class="hero-stat-lbl">Med utbytte</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">{snitt_yield:.1f}%</div>
+        <div class="hero-stat-lbl">Snitt-yield</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">{len(topp_sektorer)}</div>
+        <div class="hero-stat-lbl">Sektorer</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TOPPLISTER -->
+  <section class="seksjon">
+    <div class="seksjon-tittel"><h2>Topplister</h2></div>
+    <div class="topplister">
+      <a href="/aksjer/hoyest-utbytte/" class="topp-kort">
+        <div class="topp-ikon topp-ikon-1">💰</div>
+        <div>
+          <div class="topp-tittel">Høyest utbytte</div>
+          <div class="topp-beskr">Aksjene med høyest direkteavkastning</div>
+        </div>
+      </a>
+      <a href="/aksjer/utbyttevekst/" class="topp-kort">
+        <div class="topp-ikon topp-ikon-2">📈</div>
+        <div>
+          <div class="topp-tittel">Sterkest utbyttevekst</div>
+          <div class="topp-beskr">Selskaper som hever utbyttet hvert år</div>
+        </div>
+      </a>
+      <a href="/aksjer/konsistente-utbytteaksjer/" class="topp-kort">
+        <div class="topp-ikon topp-ikon-3">🛡️</div>
+        <div>
+          <div class="topp-tittel">Mest konsistente</div>
+          <div class="topp-beskr">Lengst sammenhengende utbyttehistorikk</div>
+        </div>
+      </a>
+      <a href="/aksjer/lavest-payout/" class="topp-kort">
+        <div class="topp-ikon topp-ikon-4">⚖️</div>
+        <div>
+          <div class="topp-tittel">Lavest payout</div>
+          <div class="topp-beskr">Bærekraftig utbytte med stor margin</div>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- TOP YIELD -->
+  <section class="seksjon">
+    <div class="seksjon-tittel">
+      <h2>Høyest direkteavkastning akkurat nå</h2>
+      <a href="/aksjer/hoyest-utbytte/" class="se-alle">Se alle →</a>
+    </div>
+    <div class="ak-grid">{topp_yield_html}</div>
+  </section>
+
+  <!-- KALKULATOR CTA -->
+  <div class="verktoy-bar">
+    <div>
+      <h3>Beregn fremtidig utbytte</h3>
+      <p>Hvor mye trenger du for å leve av utbytte? Bruk vår utbyttekalkulator for å regne ut.</p>
+    </div>
+    <a href="/utbyttekalkulator/">Åpne kalkulator →</a>
+  </div>
+
+  <!-- STABILE -->
+  <section class="seksjon">
+    <div class="seksjon-tittel">
+      <h2>Konsistente utbyttebetalere</h2>
+      <a href="/aksjer/konsistente-utbytteaksjer/" class="se-alle">Se alle →</a>
+    </div>
+    <div class="ak-grid">{stabile_html}</div>
+  </section>
+
+  <!-- HYPPIGE -->
+  <section class="seksjon">
+    <div class="seksjon-tittel">
+      <h2>Månedlig og kvartalsvis utbytte</h2>
+    </div>
+    <div class="ak-grid">{hyppige_html}</div>
+  </section>
+
+  <!-- SEKTORER -->
+  <section class="seksjon">
+    <div class="seksjon-tittel">
+      <h2>Utforsk etter sektor</h2>
+      <a href="/aksjer/sektor/" class="se-alle">Alle sektorer →</a>
+    </div>
+    <div class="sek-grid">{sektor_kort_html}</div>
+  </section>
+
+  <!-- ALLE AKSJER -->
+  <section class="seksjon">
+    <div class="alle-aksjer">
+      <div class="alle-aksjer-header">
+        <h2>Alle {len(aksjer)} aksjer</h2>
+        <span class="filter-info">Sortert etter yield</span>
+      </div>
+      <div style="overflow-x:auto;">
+      <table>
+        <thead><tr><th>Ticker</th><th>Navn</th><th>Sektor</th><th>Kurs</th><th>Yield</th><th>Ex-dato</th></tr></thead>
+        <tbody>{rader}</tbody>
+      </table>
+      </div>
+    </div>
+  </section>
+
   <p class="updated">Sist oppdatert: {today}</p>
 {STANDARD_FOOTER}
 </div>
@@ -2752,9 +3025,10 @@ def generer_aksjesider(aksjer, root_dir):
   (function(){{
     var root = document.documentElement;
     var btn  = document.getElementById('dark-toggle');
-    var moon = document.getElementById('ov-moon');
-    var sun  = document.getElementById('ov-sun');
-    function sync(){{ var d=root.classList.contains('dark'); moon.style.display=d?'none':''; sun.style.display=d?'':'none'; }}
+    if (!btn) return;
+    var sun  = btn.querySelector('.sun-icon');
+    var moon = btn.querySelector('.moon-icon');
+    function sync(){{ var d=root.classList.contains('dark'); if(sun) sun.style.display=d?'none':''; if(moon) moon.style.display=d?'':'none'; }}
     sync();
     btn.addEventListener('click', function(){{
       var isDark = root.classList.toggle('dark');
