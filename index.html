@@ -39,7 +39,7 @@
 
   <!-- PWA -->
   <link rel="manifest" href="/manifest.json" />
-  <meta name="theme-color" content="#16a34a" />
+  <meta name="theme-color" content="#2E7B7B" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="apple-mobile-web-app-title" content="exday.no" />
@@ -137,7 +137,7 @@
   }
   </script>
 
-  <!-- Mørkt tema + startside-redirect -->
+  <!-- Mørkt tema + startside-redirect (kjøres tidlig for å unngå blink) -->
   <script>
     (function() {
       if (localStorage.getItem('tema') !== 'light') {
@@ -151,12 +151,24 @@
 
   <style>
     .hero-gradient {
-      background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #15803d 100%);
+      background: linear-gradient(135deg, #0f172a 0%, #132A50 45%, #1E5C5C 100%);
     }
     .stat-card {
       background: rgba(255,255,255,0.08);
       backdrop-filter: blur(8px);
       border: 1px solid rgba(255,255,255,0.15);
+    }
+    .trust-badge {
+      display: inline-flex; align-items: center; gap: 0.35rem;
+      font-size: 0.78rem; color: rgba(255,255,255,0.65);
+    }
+    .trust-badge svg { color: #5eead4; }
+    .feature-kort {
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .feature-kort:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.10);
     }
     .sektor-kort {
       display: flex !important;
@@ -182,6 +194,9 @@
       --vk-blue:  #eff6ff; --vk-blue-c:  #2563eb;
       --vk-purp:  #faf5ff; --vk-purp-c:  #9333ea;
       --vk-orng:  #fff7ed; --vk-orng-c:  #ea580c;
+      --brand-teal: #2E7B7B;
+      --brand-teal-dark: #1E5C5C;
+      --brand-navy: #132A50;
     }
     html.dark {
       --ib-orange: rgba(154,52,18,0.5);  --ib-orange-c: #fb923c;
@@ -199,10 +214,9 @@
       --vk-orng:  rgba(154,52,18,0.35); --vk-orng-c:  #fb923c;
     }
 
-    /* ── Mørk modus — dark:-varianter mangler i kompilert tailwind.css ── */
+    /* Mørk modus */
     body { background: #f9fafb; }
     .dark body { background: #030712; color: #f3f4f6; }
-    /* max-w-5xl og sm:-varianter mangler fra tailwind.css */
     .max-w-5xl { max-width: 64rem; }
     @media (min-width: 640px) {
       .sm\:inline { display: inline; }
@@ -211,6 +225,7 @@
       .sm\:hidden { display: none; }
       .sm\:flex-row { flex-direction: row; }
       .sm\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+      .sm\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .sm\:grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
       .sm\:items-center   { align-items: center; }
       .sm\:justify-center { justify-content: center; }
@@ -230,9 +245,10 @@
       .sm\:text-5xl  { font-size: 3rem;      line-height: 1; }
     }
 
-    /* Sektor-kort og verktøy-kort */
     .dark .sektor-kort { background: #111827; border-color: #1f2937; }
+    .dark .feature-kort { background: #111827 !important; border-color: #1f2937 !important; }
     .dark .vkt-seksjon { background: #111827; border-top-color: #1f2937; border-bottom-color: #1f2937; }
+    .dark .feature-seksjon { background: #0f172a; border-top-color: #1f2937; border-bottom-color: #1f2937; }
     .dark .faq-seksjon { background: #111827; border-top-color: #1f2937; border-bottom-color: #1f2937; }
     .dark .faq-item { border-color: #374151; }
     .dark .faq-item summary:hover { background: #1f2937; }
@@ -240,7 +256,6 @@
     .dark .artikel-kort { background: #111827; border-color: #1f2937; }
     .dark .artikel-ikon { background: rgba(20,83,45,0.3) !important; }
 
-    /* Tekst — (0,2,0) slår Tailwinds (0,1,0) */
     .dark .text-gray-900 { color: #f3f4f6; }
     .dark .text-gray-700 { color: #d1d5db; }
     .dark .text-gray-600 { color: #9ca3af; }
@@ -253,59 +268,100 @@
     .dark .border-gray-800 { border-color: #1f2937; }
     .dark .bg-green-100 { background: rgba(20,83,45,0.4); }
     .dark footer { border-top-color: #1f2937; color: #4b5563; }
-    .lp-cta { background: #f0fdf4; border-top: 1px solid #bbf7d0; border-bottom: 1px solid #bbf7d0; }
-    .dark .lp-cta { background: #052e16; border-top-color: #166534; border-bottom-color: #166534; }
+    .lp-cta { background: #f0fdf4; border-top: 1px solid #c6f6f4; border-bottom: 1px solid #c6f6f4; }
+    .dark .lp-cta { background: rgba(30,92,92,0.15); border-top-color: #1E5C5C; border-bottom-color: #1E5C5C; }
     .dark .lp-cta h2 { color: #f3f4f6; }
     .dark .lp-cta p { color: #d1d5db; }
+
+    .hero-cta-primary {
+      background: #2E7B7B;
+      color: #fff;
+    }
+    .hero-cta-primary:hover { background: #1E5C5C; }
   </style>
 </head>
 <body class="bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 min-h-screen">
 
-  <!-- ── HEADER ──────────────────────────────────────────────────────── -->
-  <header class="hero-gradient text-white">
-    <div class="max-w-5xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
-      <a href="/" class="flex items-center gap-2 font-bold text-lg text-white hover:text-green-300 transition-colors">
-        <svg class="w-7 h-7 text-green-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
-          <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/>
-        </svg>
-        exday.no
+  <!-- ── SITEWIDE NAVBAR ─────────────────────────────────────────────── -->
+  <nav class="site-nav" aria-label="Hovedmeny">
+    <div class="site-nav-inner">
+      <a href="/" class="site-logo" aria-label="exday.no - hjem">
+        <img src="/logo/exday_icon_primary.svg" class="site-logo-icon" alt="" width="28" height="28" loading="eager">
+        <span>exday<span class="site-logo-dot">.no</span></span>
       </a>
-      <nav class="flex items-center gap-4 text-sm">
-        <a href="/utforsk/" class="text-green-200 hover:text-white transition-colors">Utforsk</a>
-        <a href="/utbyttekalender/" class="text-green-200 hover:text-white transition-colors hidden sm:inline">Kalender</a>
-        <a href="/artikler/" class="text-green-200 hover:text-white transition-colors hidden sm:inline">Artikler</a>
-        <a href="/app/" style="background:#22c55e;color:#fff;padding:0.375rem 0.75rem;border-radius:0.5rem;font-size:0.875rem;font-weight:500;text-decoration:none;white-space:nowrap;">
-          Åpne appen →
-        </a>
-      </nav>
+      <ul class="site-nav-menu">
+        <li><a href="/aksjer/">Aksjer</a></li>
+        <li><a href="/aksjer/sektor/">Sektorer</a></li>
+        <li><a href="/utbyttekalender/">Kalender</a></li>
+        <li><a href="/utbyttekalkulator/">Kalkulator</a></li>
+        <li><a href="/artikler/">Artikler</a></li>
+        <li><a href="/faq/">FAQ</a></li>
+        <li><a href="/om/">Om</a></li>
+      </ul>
+      <div class="site-nav-actions">
+        <a href="/app/" class="site-app-btn">Åpne app</a>
+        <button id="dark-toggle" class="site-dark-btn" aria-label="Bytt fargemodus">
+          <svg class="sun-icon" width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+          <svg class="moon-icon" width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display:none;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+        </button>
+      </div>
+      <button class="site-nav-burger" aria-label="Vis meny" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
     </div>
+  </nav>
 
-    <!-- Hero -->
+  <!-- ── HERO ───────────────────────────────────────────────────────── -->
+  <section class="hero-gradient text-white">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 pt-12 pb-10 sm:pt-16 sm:pb-14 text-center">
+      <div class="inline-flex items-center gap-2 text-xs font-medium px-3 py-1.5 rounded-full mb-5"
+           style="background:rgba(46,123,123,0.35);color:#99f6e4;border:1px solid rgba(94,234,212,0.25);">
+        <span style="width:6px;height:6px;background:#2dd4bf;border-radius:50%;display:inline-block;"></span>
+        Oppdateres daglig · 191 aksjer på Oslo Børs
+      </div>
       <h1 class="text-3xl sm:text-5xl font-bold tracking-tight mb-4 leading-tight">
         Norske utbytteaksjer<br class="hidden sm:block" />
-        <span class="text-green-300">på ett sted</span>
+        <span style="color:#5eead4;">på ett sted</span>
       </h1>
-      <p class="text-lg sm:text-xl text-gray-200 max-w-2xl mx-auto mb-8 leading-relaxed">
+      <p class="text-lg sm:text-xl max-w-2xl mx-auto mb-8 leading-relaxed" style="color:rgba(255,255,255,0.8);">
         Følg yield, ex-datoer og utbyttehistorikk for 191 aksjer på Oslo Børs.
-        Gratis, uten registrering — oppdatert daglig.
+        Bygg og spor porteføljen din — gratis, uten registrering.
       </p>
-      <div class="flex flex-col sm:flex-row gap-3 justify-center">
+      <div class="flex flex-col sm:flex-row gap-3 justify-center mb-6">
         <a href="/app/"
-           class="inline-flex items-center justify-center gap-2 bg-green-500 hover:bg-green-400 text-white font-semibold px-6 py-3 rounded-xl text-base transition-colors shadow-lg">
+           class="hero-cta-primary inline-flex items-center justify-center gap-2 font-semibold px-6 py-3 rounded-xl text-base transition-colors shadow-lg">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
             <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/>
           </svg>
-          Åpne appen
+          Åpne appen gratis
         </a>
         <a href="/utbyttekalender/"
-           style="background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.25);"
-           class="inline-flex items-center justify-center gap-2 text-white font-medium px-6 py-3 rounded-xl text-base transition-colors">
+           style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);"
+           class="inline-flex items-center justify-center gap-2 text-white font-medium px-6 py-3 rounded-xl text-base transition-colors hover:bg-white/20">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
             <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
           </svg>
           Utbyttekalender
         </a>
+      </div>
+      <!-- Trust badges -->
+      <div class="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
+        <span class="trust-badge">
+          <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+          Gratis
+        </span>
+        <span class="trust-badge">
+          <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+          Ingen registrering
+        </span>
+        <span class="trust-badge">
+          <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+          Kurs hvert 15. min
+        </span>
+        <span class="trust-badge">
+          <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+          Fungerer offline (PWA)
+        </span>
       </div>
     </div>
 
@@ -313,24 +369,66 @@
     <div class="max-w-5xl mx-auto px-4 sm:px-6 pb-10">
       <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
         <div class="stat-card rounded-xl p-4 text-center">
-          <div class="text-2xl sm:text-3xl font-bold text-green-300">191</div>
-          <div class="text-xs sm:text-sm text-gray-300 mt-1">Aksjer fulgt</div>
+          <div class="text-2xl sm:text-3xl font-bold" style="color:#5eead4;">191</div>
+          <div class="text-xs sm:text-sm mt-1" style="color:rgba(255,255,255,0.6);">Aksjer fulgt</div>
         </div>
         <div class="stat-card rounded-xl p-4 text-center">
-          <div class="text-2xl sm:text-3xl font-bold text-green-300">16</div>
-          <div class="text-xs sm:text-sm text-gray-300 mt-1">Sektorer</div>
+          <div class="text-2xl sm:text-3xl font-bold" style="color:#5eead4;">16</div>
+          <div class="text-xs sm:text-sm mt-1" style="color:rgba(255,255,255,0.6);">Sektorer</div>
         </div>
         <div class="stat-card rounded-xl p-4 text-center">
-          <div class="text-2xl sm:text-3xl font-bold text-green-300">5+</div>
-          <div class="text-xs sm:text-sm text-gray-300 mt-1">År historikk</div>
+          <div class="text-2xl sm:text-3xl font-bold" style="color:#5eead4;">5+</div>
+          <div class="text-xs sm:text-sm mt-1" style="color:rgba(255,255,255,0.6);">År historikk</div>
         </div>
         <div class="stat-card rounded-xl p-4 text-center">
-          <div class="text-2xl sm:text-3xl font-bold text-green-300">15 min</div>
-          <div class="text-xs sm:text-sm text-gray-300 mt-1">Kursoppdatering</div>
+          <div class="text-2xl sm:text-3xl font-bold" style="color:#5eead4;">15 min</div>
+          <div class="text-xs sm:text-sm mt-1" style="color:rgba(255,255,255,0.6);">Kursoppdatering</div>
         </div>
       </div>
     </div>
-  </header>
+  </section>
+
+  <!-- ── FEATURES ───────────────────────────────────────────────────── -->
+  <section class="feature-seksjon bg-white border-t border-b border-gray-200">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 py-10 sm:py-12">
+      <h2 class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6 text-center">Alt du trenger for utbytteinvestering</h2>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+
+        <div class="feature-kort bg-white dark:bg-gray-900 rounded-xl p-5 border border-gray-200 dark:border-gray-800">
+          <div style="width:2.5rem;height:2.5rem;border-radius:0.6rem;background:rgba(46,123,123,0.1);display:flex;align-items:center;justify-content:center;margin-bottom:0.75rem;">
+            <svg width="20" height="20" fill="none" stroke="#2E7B7B" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+          </div>
+          <div class="font-semibold text-sm text-gray-900 dark:text-gray-100 mb-1">Live kursdata</div>
+          <div class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">Yield og kurs oppdateres hvert 15. minutt på børsdager — alltid ferskt.</div>
+        </div>
+
+        <div class="feature-kort bg-white dark:bg-gray-900 rounded-xl p-5 border border-gray-200 dark:border-gray-800">
+          <div style="width:2.5rem;height:2.5rem;border-radius:0.6rem;background:rgba(46,123,123,0.1);display:flex;align-items:center;justify-content:center;margin-bottom:0.75rem;">
+            <svg width="20" height="20" fill="none" stroke="#2E7B7B" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          </div>
+          <div class="font-semibold text-sm text-gray-900 dark:text-gray-100 mb-1">Ex-dato kalender</div>
+          <div class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">Alle kommende ex-datoer samlet. Gå aldri glipp av en utbyttedato igjen.</div>
+        </div>
+
+        <div class="feature-kort bg-white dark:bg-gray-900 rounded-xl p-5 border border-gray-200 dark:border-gray-800">
+          <div style="width:2.5rem;height:2.5rem;border-radius:0.6rem;background:rgba(46,123,123,0.1);display:flex;align-items:center;justify-content:center;margin-bottom:0.75rem;">
+            <svg width="20" height="20" fill="none" stroke="#2E7B7B" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+          </div>
+          <div class="font-semibold text-sm text-gray-900 dark:text-gray-100 mb-1">Porteføljetracker</div>
+          <div class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">FIFO-kostbasis, IRR, TWR og skatteberegning for utbytte og gevinst.</div>
+        </div>
+
+        <div class="feature-kort bg-white dark:bg-gray-900 rounded-xl p-5 border border-gray-200 dark:border-gray-800">
+          <div style="width:2.5rem;height:2.5rem;border-radius:0.6rem;background:rgba(46,123,123,0.1);display:flex;align-items:center;justify-content:center;margin-bottom:0.75rem;">
+            <svg width="20" height="20" fill="none" stroke="#2E7B7B" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <div class="font-semibold text-sm text-gray-900 dark:text-gray-100 mb-1">Privat &amp; gratis</div>
+          <div class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">Ingen konto. Alt lagres lokalt i nettleseren. Fungerer offline som en app.</div>
+        </div>
+
+      </div>
+    </div>
+  </section>
 
   <!-- ── INTRO ─────────────────────────────────────────────────────── -->
   <section class="max-w-3xl mx-auto px-4 sm:px-6 py-10 sm:py-14">
@@ -367,14 +465,13 @@
   <section class="max-w-5xl mx-auto px-4 sm:px-6 py-10 sm:py-14">
     <div class="flex items-center justify-between mb-6">
       <h2 class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100">Utforsk etter sektor</h2>
-      <a href="/utforsk/" class="text-sm text-green-600 dark:text-green-400 hover:underline font-medium">Se alle →</a>
+      <a href="/aksjer/sektor/" class="text-sm hover:underline font-medium" style="color:#2E7B7B;">Se alle sektorer →</a>
     </div>
     <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
 
-      <!-- Energi -->
       <a href="/aksjer/sektor/energi/" class="sektor-kort bg-white dark:bg-gray-900 rounded-xl p-4 border border-gray-200 dark:border-gray-800 flex flex-col gap-2 no-underline">
         <div style="background:var(--ib-orange);color:var(--ib-orange-c);align-self:flex-start;flex-shrink:0;width:2.25rem;height:2.25rem;min-width:2.25rem;border-radius:0.5rem;display:flex;align-items:center;justify-content:center;">
-          <svg class="w-5 h-5 text-orange-600 dark:text-orange-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
         </div>
         <div>
           <div class="font-semibold text-sm text-gray-900 dark:text-gray-100">Energi</div>
@@ -382,10 +479,9 @@
         </div>
       </a>
 
-      <!-- Finans -->
       <a href="/aksjer/sektor/finans/" class="sektor-kort bg-white dark:bg-gray-900 rounded-xl p-4 border border-gray-200 dark:border-gray-800 flex flex-col gap-2 no-underline">
         <div style="background:var(--ib-blue);color:var(--ib-blue-c);align-self:flex-start;flex-shrink:0;width:2.25rem;height:2.25rem;min-width:2.25rem;border-radius:0.5rem;display:flex;align-items:center;justify-content:center;">
-          <svg class="w-5 h-5 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 3H8a2 2 0 00-2 2v2h12V5a2 2 0 00-2-2z"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="8" y1="14" x2="16" y2="14"/></svg>
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 3H8a2 2 0 00-2 2v2h12V5a2 2 0 00-2-2z"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="8" y1="14" x2="16" y2="14"/></svg>
         </div>
         <div>
           <div class="font-semibold text-sm text-gray-900 dark:text-gray-100">Finans</div>
@@ -393,10 +489,9 @@
         </div>
       </a>
 
-      <!-- Shipping -->
       <a href="/aksjer/sektor/shipping/" class="sektor-kort bg-white dark:bg-gray-900 rounded-xl p-4 border border-gray-200 dark:border-gray-800 flex flex-col gap-2 no-underline">
         <div style="background:var(--ib-cyan);color:var(--ib-cyan-c);align-self:flex-start;flex-shrink:0;width:2.25rem;height:2.25rem;min-width:2.25rem;border-radius:0.5rem;display:flex;align-items:center;justify-content:center;">
-          <svg class="w-5 h-5 text-cyan-600 dark:text-cyan-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="5" r="3"/><line x1="12" y1="22" x2="12" y2="8"/><path d="M5 12H2a10 10 0 0017.54 7"/><path d="M19 12h3a10 10 0 01-17.54 7"/></svg>
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 20h20M5 20V10l7-7 7 7v10M9 20v-5h6v5"/></svg>
         </div>
         <div>
           <div class="font-semibold text-sm text-gray-900 dark:text-gray-100">Shipping</div>
@@ -404,10 +499,9 @@
         </div>
       </a>
 
-      <!-- Sjømat -->
       <a href="/aksjer/sektor/sjomat/" class="sektor-kort bg-white dark:bg-gray-900 rounded-xl p-4 border border-gray-200 dark:border-gray-800 flex flex-col gap-2 no-underline">
         <div style="background:var(--ib-teal);color:var(--ib-teal-c);align-self:flex-start;flex-shrink:0;width:2.25rem;height:2.25rem;min-width:2.25rem;border-radius:0.5rem;display:flex;align-items:center;justify-content:center;">
-          <svg class="w-5 h-5 text-teal-600 dark:text-teal-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 12c.94-3.46 4.94-6 10.5-6 0 5.56-2.54 9.56-6 10.5"/><path d="M18 11c0 4.97-4.03 9-9 9a9 9 0 010-18c4.97 0 9 4.03 9 9z"/></svg>
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 12c.94-3.46 4.94-6 10.5-6 0 5.56-2.54 9.56-6 10.5"/><path d="M18 11c0 4.97-4.03 9-9 9a9 9 0 010-18c4.97 0 9 4.03 9 9z"/></svg>
         </div>
         <div>
           <div class="font-semibold text-sm text-gray-900 dark:text-gray-100">Sjømat</div>
@@ -415,10 +509,9 @@
         </div>
       </a>
 
-      <!-- Eiendom -->
       <a href="/aksjer/sektor/eiendom/" class="sektor-kort bg-white dark:bg-gray-900 rounded-xl p-4 border border-gray-200 dark:border-gray-800 flex flex-col gap-2 no-underline">
         <div style="background:var(--ib-yellow);color:var(--ib-yellow-c);align-self:flex-start;flex-shrink:0;width:2.25rem;height:2.25rem;min-width:2.25rem;border-radius:0.5rem;display:flex;align-items:center;justify-content:center;">
-          <svg class="w-5 h-5 text-yellow-600 dark:text-yellow-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
         </div>
         <div>
           <div class="font-semibold text-sm text-gray-900 dark:text-gray-100">Eiendom</div>
@@ -426,10 +519,9 @@
         </div>
       </a>
 
-      <!-- Industri -->
       <a href="/aksjer/sektor/industri/" class="sektor-kort bg-white dark:bg-gray-900 rounded-xl p-4 border border-gray-200 dark:border-gray-800 flex flex-col gap-2 no-underline">
         <div style="background:var(--ib-gray);color:var(--ib-gray-c);align-self:flex-start;flex-shrink:0;width:2.25rem;height:2.25rem;min-width:2.25rem;border-radius:0.5rem;display:flex;align-items:center;justify-content:center;">
-          <svg class="w-5 h-5 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="7" width="20" height="15" rx="1"/><path d="M16 7V5a2 2 0 00-4 0v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="8" y1="14" x2="16" y2="14"/></svg>
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="7" width="20" height="15" rx="1"/><path d="M16 7V5a2 2 0 00-4 0v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="8" y1="14" x2="16" y2="14"/></svg>
         </div>
         <div>
           <div class="font-semibold text-sm text-gray-900 dark:text-gray-100">Industri</div>
@@ -437,10 +529,9 @@
         </div>
       </a>
 
-      <!-- Telekom -->
       <a href="/aksjer/sektor/telekommunikasjon/" class="sektor-kort bg-white dark:bg-gray-900 rounded-xl p-4 border border-gray-200 dark:border-gray-800 flex flex-col gap-2 no-underline">
         <div style="background:var(--ib-violet);color:var(--ib-violet-c);align-self:flex-start;flex-shrink:0;width:2.25rem;height:2.25rem;min-width:2.25rem;border-radius:0.5rem;display:flex;align-items:center;justify-content:center;">
-          <svg class="w-5 h-5 text-violet-600 dark:text-violet-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.07 1.18 2 2 0 012.03 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92v2z"/></svg>
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.07 1.18 2 2 0 012.03 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92v2z"/></svg>
         </div>
         <div>
           <div class="font-semibold text-sm text-gray-900 dark:text-gray-100">Telekom</div>
@@ -448,14 +539,13 @@
         </div>
       </a>
 
-      <!-- Se alle sektorer -->
-      <a href="/utforsk/" class="sektor-kort rounded-xl p-4 flex flex-col gap-2 no-underline" style="background:var(--card-green-bg);border:1px solid var(--card-green-border);">
-        <div style="background:var(--ib-green);color:var(--ib-green-c);align-self:flex-start;flex-shrink:0;width:2.25rem;height:2.25rem;min-width:2.25rem;border-radius:0.5rem;display:flex;align-items:center;justify-content:center;">
-          <svg class="w-5 h-5 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+      <a href="/aksjer/sektor/" class="sektor-kort rounded-xl p-4 flex flex-col gap-2 no-underline" style="background:rgba(46,123,123,0.07);border:1px solid rgba(46,123,123,0.25);">
+        <div style="background:rgba(46,123,123,0.15);color:#2E7B7B;align-self:flex-start;flex-shrink:0;width:2.25rem;height:2.25rem;min-width:2.25rem;border-radius:0.5rem;display:flex;align-items:center;justify-content:center;">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
         </div>
         <div>
-          <div class="font-semibold text-sm text-green-700 dark:text-green-300">Alle sektorer</div>
-          <div class="text-xs text-green-600 dark:text-green-500">16 sektorer totalt</div>
+          <div class="font-semibold text-sm" style="color:#2E7B7B;">Alle sektorer</div>
+          <div class="text-xs" style="color:#2E7B7B;opacity:0.7;">16 sektorer totalt</div>
         </div>
       </a>
 
@@ -468,9 +558,9 @@
       <h2 class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">Verktøy</h2>
       <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
 
-        <a href="/utbyttekalender/" class="group flex flex-col gap-3 p-4 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-green-400 dark:hover:border-green-600 transition-colors no-underline">
-          <div style="align-self:flex-start;flex-shrink:0;width:2.5rem;height:2.5rem;border-radius:0.75rem;display:flex;align-items:center;justify-content:center;background:var(--vk-green);color:var(--vk-green-c);">
-            <svg style="width:1.25rem;height:1.25rem;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true" class="text-green-600 dark:text-green-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        <a href="/utbyttekalender/" class="group flex flex-col gap-3 p-4 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-teal-400 transition-colors no-underline" style="--tw-ring-shadow:none;">
+          <div style="align-self:flex-start;flex-shrink:0;width:2.5rem;height:2.5rem;border-radius:0.75rem;display:flex;align-items:center;justify-content:center;background:rgba(46,123,123,0.1);color:#2E7B7B;">
+            <svg style="width:1.25rem;height:1.25rem;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
           </div>
           <div>
             <div class="font-semibold text-sm text-gray-900 dark:text-gray-100">Utbyttekalender</div>
@@ -478,9 +568,9 @@
           </div>
         </a>
 
-        <a href="/utbyttekalkulator/" class="group flex flex-col gap-3 p-4 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-green-400 dark:hover:border-green-600 transition-colors no-underline">
+        <a href="/utbyttekalkulator/" class="group flex flex-col gap-3 p-4 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-teal-400 transition-colors no-underline">
           <div style="align-self:flex-start;flex-shrink:0;width:2.5rem;height:2.5rem;border-radius:0.75rem;display:flex;align-items:center;justify-content:center;background:var(--vk-blue);color:var(--vk-blue-c);">
-            <svg style="width:1.25rem;height:1.25rem;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true" class="text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="12" y2="14"/></svg>
+            <svg style="width:1.25rem;height:1.25rem;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="12" y2="14"/></svg>
           </div>
           <div>
             <div class="font-semibold text-sm text-gray-900 dark:text-gray-100">Kalkulator</div>
@@ -488,9 +578,9 @@
           </div>
         </a>
 
-        <a href="/faq/" class="group flex flex-col gap-3 p-4 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-green-400 dark:hover:border-green-600 transition-colors no-underline">
+        <a href="/faq/" class="group flex flex-col gap-3 p-4 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-teal-400 transition-colors no-underline">
           <div style="align-self:flex-start;flex-shrink:0;width:2.5rem;height:2.5rem;border-radius:0.75rem;display:flex;align-items:center;justify-content:center;background:var(--vk-purp);color:var(--vk-purp-c);">
-            <svg style="width:1.25rem;height:1.25rem;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true" class="text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            <svg style="width:1.25rem;height:1.25rem;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
           </div>
           <div>
             <div class="font-semibold text-sm text-gray-900 dark:text-gray-100">FAQ</div>
@@ -498,9 +588,9 @@
           </div>
         </a>
 
-        <a href="/aksjer/" class="group flex flex-col gap-3 p-4 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-green-400 dark:hover:border-green-600 transition-colors no-underline">
+        <a href="/aksjer/" class="group flex flex-col gap-3 p-4 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-teal-400 transition-colors no-underline">
           <div style="align-self:flex-start;flex-shrink:0;width:2.5rem;height:2.5rem;border-radius:0.75rem;display:flex;align-items:center;justify-content:center;background:var(--vk-orng);color:var(--vk-orng-c);">
-            <svg style="width:1.25rem;height:1.25rem;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true" class="text-orange-600 dark:text-orange-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+            <svg style="width:1.25rem;height:1.25rem;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
           </div>
           <div>
             <div class="font-semibold text-sm text-gray-900 dark:text-gray-100">Alle aksjer</div>
@@ -516,22 +606,20 @@
   <section class="max-w-5xl mx-auto px-4 sm:px-6 py-10 sm:py-14">
     <div class="flex items-center justify-between mb-6">
       <h2 class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100">Siste artikler</h2>
-      <a href="/artikler/" class="text-sm text-green-600 dark:text-green-400 hover:underline font-medium">Se alle →</a>
+      <a href="/artikler/" class="text-sm hover:underline font-medium" style="color:#2E7B7B;">Se alle →</a>
     </div>
-    <div class="grid sm:grid-cols-1 gap-4">
+    <div class="grid sm:grid-cols-2 gap-4">
 
-      <a href="/artikler/hva-er-ex-dato/" class="artikel-kort group flex flex-col sm:flex-row gap-4 p-5 bg-white rounded-xl border border-gray-200 hover:border-green-400 transition-colors no-underline">
-        <div class="flex-shrink-0 w-full sm:w-14 h-2 sm:h-14 sm:flex sm:items-center sm:justify-center">
-          <div class="artikel-ikon hidden sm:flex w-14 h-14 rounded-xl bg-green-50 items-center justify-center">
-            <svg class="w-7 h-7 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-          </div>
+      <a href="/artikler/hva-er-ex-dato/" class="artikel-kort group flex flex-col gap-3 p-5 bg-white rounded-xl border border-gray-200 hover:border-teal-400 transition-colors no-underline">
+        <div class="flex items-center gap-2">
+          <span class="text-xs font-medium bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300 px-2 py-0.5 rounded-full">Guide</span>
+          <span class="text-xs text-gray-400">April 2026</span>
         </div>
-        <div class="flex-1">
-          <div class="flex items-center gap-2 mb-1">
-            <span class="text-xs font-medium bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300 px-2 py-0.5 rounded-full">Guide</span>
-            <span class="text-xs text-gray-400">April 2026</span>
-          </div>
-          <h3 class="font-semibold text-gray-900 dark:text-gray-100 group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors mb-1">
+        <div class="artikel-ikon flex w-11 h-11 rounded-xl bg-green-50 items-center justify-center flex-shrink-0">
+          <svg class="w-6 h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        </div>
+        <div>
+          <h3 class="font-semibold text-gray-900 dark:text-gray-100 group-hover:text-teal-700 dark:group-hover:text-teal-400 transition-colors mb-1">
             Hva er ex-dato? Alt du trenger å vite
           </h3>
           <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
@@ -540,10 +628,28 @@
         </div>
       </a>
 
+      <a href="/artikler/utbytte-og-skatt/" class="artikel-kort group flex flex-col gap-3 p-5 bg-white rounded-xl border border-gray-200 hover:border-teal-400 transition-colors no-underline">
+        <div class="flex items-center gap-2">
+          <span class="text-xs font-medium bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 px-2 py-0.5 rounded-full">Skatt</span>
+          <span class="text-xs text-gray-400">April 2026</span>
+        </div>
+        <div class="artikel-ikon flex w-11 h-11 rounded-xl items-center justify-center flex-shrink-0" style="background:rgba(219,234,254,0.8);">
+          <svg class="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="12" y2="14"/></svg>
+        </div>
+        <div>
+          <h3 class="font-semibold text-gray-900 dark:text-gray-100 group-hover:text-teal-700 dark:group-hover:text-teal-400 transition-colors mb-1">
+            Utbytte og skatt: slik beregnes 37,84&nbsp;%
+          </h3>
+          <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+            Hvordan beregnes skatt på utbytte? Aksjesparekonto, skjermingsfradrag og oppjusteringsfaktor — forklart med regneeksempler.
+          </p>
+        </div>
+      </a>
+
     </div>
 
     <div class="mt-6 text-center">
-      <a href="/artikler/" class="inline-flex items-center gap-2 text-sm font-medium text-green-600 dark:text-green-400 hover:underline">
+      <a href="/artikler/" class="inline-flex items-center gap-2 text-sm font-medium hover:underline" style="color:#2E7B7B;">
         Se alle artikler og guider →
       </a>
     </div>
@@ -564,7 +670,7 @@
             Ex-dato er den første handelsdagen der en aksje handles <em>uten</em> rett til kommende utbytte.
             Du må eie aksjen dagen <strong>før</strong> ex-dato for å motta utbyttet.
             På Oslo Børs gjelder T+2-oppgjør — kjøper du aksjen to børsdager eller mindre før ex-dato, er det for sent.
-            <a href="/artikler/hva-er-ex-dato/" class="text-green-600 dark:text-green-400 hover:underline ml-1">Les mer om ex-dato →</a>
+            <a href="/artikler/hva-er-ex-dato/" class="hover:underline ml-1" style="color:#2E7B7B;">Les mer om ex-dato →</a>
           </div>
         </details>
 
@@ -577,7 +683,7 @@
             Utbytteyield er årsutbyttet per aksje delt på aksjekursen, oppgitt i prosent.
             En yield på 5&nbsp;% betyr at du mottar 5 kroner i utbytte per 100 kroner investert.
             Yield endres daglig i takt med kursutviklingen — stiger kursen, faller yielden, og omvendt.
-            exday.no viser yield for 191 norske aksjer, oppdatert hver kvartert på børsdager.
+            exday.no viser yield for 191 norske aksjer, oppdatert hvert kvarter på børsdager.
           </div>
         </details>
 
@@ -621,7 +727,7 @@
 
       </div>
       <p class="mt-6 text-sm text-gray-500 dark:text-gray-400">
-        Flere spørsmål? Se vår <a href="/faq/" class="text-green-600 dark:text-green-400 hover:underline">fullstendige FAQ</a>.
+        Flere spørsmål? Se vår <a href="/faq/" class="hover:underline" style="color:#2E7B7B;">fullstendige FAQ</a>.
       </p>
     </div>
   </section>
@@ -633,7 +739,7 @@
       <p class="text-gray-600 mb-6 max-w-xl mx-auto text-sm sm:text-base leading-relaxed">
         Legg til aksjer, beregn avkastning og spor ex-datoer i en gratis PWA — ingen registrering, alt lagret lokalt.
       </p>
-      <a href="/app/" style="display:inline-block;background:#16a34a;color:#fff !important;font-weight:600;padding:0.65rem 1.5rem;border-radius:0.5rem;text-decoration:none;font-size:1rem;">
+      <a href="/app/" style="display:inline-block;background:#2E7B7B;color:#fff !important;font-weight:600;padding:0.65rem 1.5rem;border-radius:0.5rem;text-decoration:none;font-size:1rem;">
         Åpne appen gratis →
       </a>
     </div>
@@ -652,8 +758,8 @@
       <a href="/personvern/" class="underline hover:text-gray-400 dark:hover:text-gray-400 transition-colors">Personvern og informasjonskapsler</a>
       <span class="mx-2">·</span>
       <a href="/faq/" class="underline hover:text-gray-400 dark:hover:text-gray-400 transition-colors">Vanlige spørsmål (FAQ)</a>
-    <span class="mx-2">·</span>
-    <a href="/om/" class="underline hover:text-gray-400 dark:hover:text-gray-400 transition-colors">Om exday.no</a>
+      <span class="mx-2">·</span>
+      <a href="/om/" class="underline hover:text-gray-400 dark:hover:text-gray-400 transition-colors">Om exday.no</a>
     </p>
     <p class="mt-3">
       <a href="https://www.facebook.com/share/17rMp8o9yF/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-gray-400 hover:text-blue-500 dark:hover:text-blue-400 transition-colors">
@@ -662,6 +768,39 @@
       </a>
     </p>
   </footer>
+
+  <!-- ── MØRK/LYS MODUS + HAMBURGERMENY ────────────────────────────── -->
+  <script>
+    (function() {
+      // Mørk/lys modus toggle
+      var btn = document.getElementById('dark-toggle');
+      if (!btn) return;
+      var root = document.documentElement;
+      var sun = btn.querySelector('.sun-icon');
+      var moon = btn.querySelector('.moon-icon');
+      function syncIkoner() {
+        var mork = root.classList.contains('dark');
+        sun.style.display = mork ? 'none' : '';
+        moon.style.display = mork ? '' : 'none';
+      }
+      syncIkoner();
+      btn.addEventListener('click', function() {
+        var erMork = root.classList.toggle('dark');
+        localStorage.setItem('tema', erMork ? 'dark' : 'light');
+        syncIkoner();
+      });
+
+      // Hamburgermeny
+      var nav = document.querySelector('.site-nav');
+      var burger = nav && nav.querySelector('.site-nav-burger');
+      if (burger) {
+        burger.addEventListener('click', function() {
+          nav.classList.toggle('open');
+          burger.setAttribute('aria-expanded', nav.classList.contains('open'));
+        });
+      }
+    })();
+  </script>
 
 </body>
 </html>
