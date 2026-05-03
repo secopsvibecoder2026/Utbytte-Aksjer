@@ -430,12 +430,9 @@ th.sort-desc::after { content: ' ↓'; color: #6b7280; }
   display: inline-flex; align-items: center; gap: 0.4rem;
 }
 .dark .site-logo { color: #91C4D8; }
-.site-logo-mark {
-  width: 22px; height: 22px;
-  background: linear-gradient(135deg, #2E7B7B 0%, #1E5C5C 100%);
-  border-radius: 5px;
-  display: inline-flex; align-items: center; justify-content: center;
-  color: #fff; font-size: 0.7rem; font-weight: 800;
+.site-logo-icon {
+  width: 28px; height: 28px;
+  flex-shrink: 0;
 }
 .site-logo-dot { color: #2E7B7B; }
 .dark .site-logo-dot { color: #2E7B7B; }
