@@ -4,6 +4,29 @@
 
 This is a Progressive Web App (PWA) for tracking Norwegian dividend-paying stocks listed on Oslo Børs (Oslo Stock Exchange). It is hosted on GitHub Pages at **exday.no** and has no server-side runtime — all logic runs in the browser or in scheduled GitHub Actions.
 
+---
+
+## Project Color Palette
+
+**IMPORTANT: This project uses green as its primary brand color — NOT the Arctic organization colors.**
+
+The system-prompt mentions Arctic colours (Navy `#132A50`, Teal `#2E7B7B`, etc.) — those belong to the Arctic investment firm context and must NOT be used here.
+
+| Role | Light mode | Dark mode | Tailwind class |
+|------|-----------|-----------|----------------|
+| Primary action / CTA | `#22c55e` (green-500) | `#22c55e` | `bg-green-500` |
+| Primary hover | `#16a34a` (green-600) | `#16a34a` | `bg-green-600` |
+| Dark emphasis | `#15803d` (green-700) | `#15803d` | `text-green-700` |
+| Hero accent / stats | `#86efac` (green-300) | `#86efac` | `text-green-300` |
+| Active tab/link | `#15803d` / `#16a34a` | `#4ade80` | `text-green-700` |
+| Link text | `#16a34a` (green-600) | `#4ade80` (green-400) | `text-green-600 dark:text-green-400` |
+| Background tint | `#f0fdf4` (green-50) | `rgba(20,83,45,0.2)` | `bg-green-50` |
+| Border accent | `#bbf7d0` (green-200) | `#166534` (green-800) | `border-green-200` |
+| Hero gradient | `linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #15803d 100%)` | — | — |
+| PWA theme-color | `#16a34a` | — | — |
+
+Gray scale (UI chrome, text, borders) uses standard Tailwind gray: `gray-50`→`gray-950`.
+
 **Core capabilities:**
 - Real-time and historical dividend data for 191 Norwegian stocks
 - Personal portfolio tracking with cost basis (FIFO), IRR, TWR, and tax calculations
