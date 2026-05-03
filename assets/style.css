@@ -439,6 +439,8 @@ th.sort-desc::after { content: ' ↓'; color: #6b7280; }
 .dark .site-logo-icon-dark { display: inline-block; }
 .site-logo-dot { color: #16a34a; }
 .dark .site-logo-dot { color: #4ade80; }
+.site-logo-x { color: #16a34a; }
+.dark .site-logo-x { color: #4ade80; }
 .site-nav-menu {
   display: flex; gap: 0.15rem; flex-wrap: wrap;
   margin: 0; padding: 0; list-style: none;

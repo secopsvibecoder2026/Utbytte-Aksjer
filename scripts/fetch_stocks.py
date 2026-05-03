@@ -3055,7 +3055,7 @@ def _site_nav_html(active=""):
     <div class="site-nav-inner">
       <a href="/" class="site-logo" aria-label="exday.no - hjem">
         <img src="/logo/exday_icon_primary.svg" class="site-logo-icon site-logo-icon-light" alt="" width="28" height="28" loading="eager"><img src="/logo/exday_icon_inverse.svg" class="site-logo-icon site-logo-icon-dark" alt="" width="28" height="28" loading="eager">
-        <span>exday<span class="site-logo-dot">.no</span></span>
+        <span>e<span class="site-logo-x">x</span>day<span class="site-logo-dot">.no</span></span>
       </a>
       <ul class="site-nav-menu">
         <li><a href="/aksjer/" class="{cls('aksjer')}">Aksjer</a></li>
