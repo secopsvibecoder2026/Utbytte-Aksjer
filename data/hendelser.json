@@ -290,7 +290,8 @@
     {
       "ticker": "PUBLI",
       "dato": "2026-05-04",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/672210"
     },
     {
       "ticker": "ELO",
@@ -993,6 +994,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "BNOR",
+      "dato": "2026-07-09",
+      "type": "rapport"
+    },
+    {
       "ticker": "EPR",
       "dato": "2026-07-09",
       "type": "rapport"
@@ -1040,6 +1046,11 @@
     {
       "ticker": "NSKOG",
       "dato": "2026-07-14",
+      "type": "rapport"
+    },
+    {
+      "ticker": "PUBLI",
+      "dato": "2026-07-15",
       "type": "rapport"
     },
     {
@@ -1143,7 +1154,42 @@
       "type": "rapport"
     },
     {
+      "ticker": "ENTR",
+      "dato": "2026-08-21",
+      "type": "rapport"
+    },
+    {
+      "ticker": "KMCP",
+      "dato": "2026-08-21",
+      "type": "rapport"
+    },
+    {
       "ticker": "OTEC",
+      "dato": "2026-08-21",
+      "type": "rapport"
+    },
+    {
+      "ticker": "SBMO",
+      "dato": "2026-08-21",
+      "type": "rapport"
+    },
+    {
+      "ticker": "SRHA",
+      "dato": "2026-08-21",
+      "type": "rapport"
+    },
+    {
+      "ticker": "STRONG",
+      "dato": "2026-08-21",
+      "type": "rapport"
+    },
+    {
+      "ticker": "VISTIN",
+      "dato": "2026-08-21",
+      "type": "rapport"
+    },
+    {
+      "ticker": "WWIB",
       "dato": "2026-08-21",
       "type": "rapport"
     },
@@ -1213,5 +1259,5 @@
       "type": "rapport"
     }
   ],
-  "sist_oppdatert": "2026-05-01"
+  "sist_oppdatert": "2026-05-04"
 }
