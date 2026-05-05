@@ -301,12 +301,14 @@
     {
       "ticker": "PEXIP",
       "dato": "2026-05-05",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/672315"
     },
     {
       "ticker": "REACH",
       "dato": "2026-05-05",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/672319"
     },
     {
       "ticker": "EQNR",
@@ -640,6 +642,11 @@
     },
     {
       "ticker": "KID",
+      "dato": "2026-05-13",
+      "type": "rapport"
+    },
+    {
+      "ticker": "KMCP",
       "dato": "2026-05-13",
       "type": "rapport"
     },
@@ -1139,6 +1146,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "PEXIP",
+      "dato": "2026-08-13",
+      "type": "rapport"
+    },
+    {
       "ticker": "HELG",
       "dato": "2026-08-14",
       "type": "rapport"
@@ -1151,6 +1163,16 @@
     {
       "ticker": "SNOR",
       "dato": "2026-08-14",
+      "type": "rapport"
+    },
+    {
+      "ticker": "ELO",
+      "dato": "2026-08-18",
+      "type": "rapport"
+    },
+    {
+      "ticker": "REACH",
+      "dato": "2026-08-18",
       "type": "rapport"
     },
     {
@@ -1259,5 +1281,5 @@
       "type": "rapport"
     }
   ],
-  "sist_oppdatert": "2026-05-04"
+  "sist_oppdatert": "2026-05-05"
 }
