@@ -313,7 +313,8 @@
     {
       "ticker": "EQNR",
       "dato": "2026-05-06",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/672442"
     },
     {
       "ticker": "GENT",
@@ -323,12 +324,14 @@
     {
       "ticker": "HSPG",
       "dato": "2026-05-06",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/672479"
     },
     {
       "ticker": "KOG",
       "dato": "2026-05-06",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/672454"
     },
     {
       "ticker": "ODF",
@@ -348,12 +351,14 @@
     {
       "ticker": "STST",
       "dato": "2026-05-06",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/672449"
     },
     {
       "ticker": "WAWI",
       "dato": "2026-05-06",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/672487"
     },
     {
       "ticker": "WWI",
@@ -637,6 +642,11 @@
     },
     {
       "ticker": "HEX",
+      "dato": "2026-05-13",
+      "type": "rapport"
+    },
+    {
+      "ticker": "HGSB",
       "dato": "2026-05-13",
       "type": "rapport"
     },
@@ -1011,6 +1021,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "GENT",
+      "dato": "2026-07-09",
+      "type": "rapport"
+    },
+    {
       "ticker": "SNI",
       "dato": "2026-07-09",
       "type": "rapport"
@@ -1037,6 +1052,11 @@
     },
     {
       "ticker": "GJF",
+      "dato": "2026-07-13",
+      "type": "rapport"
+    },
+    {
+      "ticker": "KOG",
       "dato": "2026-07-13",
       "type": "rapport"
     },
@@ -1121,6 +1141,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "EQNR",
+      "dato": "2026-07-22",
+      "type": "rapport"
+    },
+    {
       "ticker": "NHY",
       "dato": "2026-07-22",
       "type": "rapport"
@@ -1136,6 +1161,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "STST",
+      "dato": "2026-08-05",
+      "type": "rapport"
+    },
+    {
       "ticker": "NOD",
       "dato": "2026-08-06",
       "type": "rapport"
@@ -1146,12 +1176,32 @@
       "type": "rapport"
     },
     {
+      "ticker": "WAWI",
+      "dato": "2026-08-11",
+      "type": "rapport"
+    },
+    {
+      "ticker": "ROGS",
+      "dato": "2026-08-12",
+      "type": "rapport"
+    },
+    {
+      "ticker": "WWI",
+      "dato": "2026-08-12",
+      "type": "rapport"
+    },
+    {
       "ticker": "PEXIP",
       "dato": "2026-08-13",
       "type": "rapport"
     },
     {
       "ticker": "HELG",
+      "dato": "2026-08-14",
+      "type": "rapport"
+    },
+    {
+      "ticker": "HSPG",
       "dato": "2026-08-14",
       "type": "rapport"
     },
@@ -1176,6 +1226,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "ODF",
+      "dato": "2026-08-20",
+      "type": "rapport"
+    },
+    {
       "ticker": "ENTR",
       "dato": "2026-08-21",
       "type": "rapport"
@@ -1192,6 +1247,11 @@
     },
     {
       "ticker": "SBMO",
+      "dato": "2026-08-21",
+      "type": "rapport"
+    },
+    {
+      "ticker": "SCATC",
       "dato": "2026-08-21",
       "type": "rapport"
     },
@@ -1281,5 +1341,5 @@
       "type": "rapport"
     }
   ],
-  "sist_oppdatert": "2026-05-05"
+  "sist_oppdatert": "2026-05-06"
 }
