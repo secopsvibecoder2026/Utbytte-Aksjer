@@ -1,0 +1,230 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f172a"/>
+      <stop offset="55%" style="stop-color:#1e293b"/>
+      <stop offset="100%" style="stop-color:#14532d"/>
+    </linearGradient>
+    <linearGradient id="cardGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e293b;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#162032;stop-opacity:1"/>
+    </linearGradient>
+    <linearGradient id="rightGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#162032;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#0f1f2e;stop-opacity:1"/>
+    </linearGradient>
+    <clipPath id="roundLeft">
+      <rect x="40" y="110" width="680" height="470" rx="12"/>
+    </clipPath>
+    <clipPath id="roundRight">
+      <rect x="740" y="110" width="420" height="470" rx="12"/>
+    </clipPath>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <!-- Subtle grid lines -->
+  <line x1="0" y1="200" x2="1200" y2="200" stroke="#ffffff" stroke-opacity="0.03" stroke-width="1"/>
+  <line x1="0" y1="400" x2="1200" y2="400" stroke="#ffffff" stroke-opacity="0.03" stroke-width="1"/>
+  <line x1="600" y1="0" x2="600" y2="630" stroke="#ffffff" stroke-opacity="0.03" stroke-width="1"/>
+
+  <!-- ═══ HEADER ═══ -->
+  <!-- Logo icon: rounded square with X -->
+  <rect x="40" y="24" width="48" height="48" rx="12" fill="#0f172a" stroke="#22c55e" stroke-width="2"/>
+  <!-- Teal stripe top of icon -->
+  <rect x="40" y="24" width="48" height="10" rx="6" fill="#14b8a6"/>
+  <rect x="40" y="29" width="48" height="5" fill="#14b8a6"/>
+  <!-- X lines -->
+  <line x1="51" y1="40" x2="77" y2="66" stroke="#ffffff" stroke-width="5" stroke-linecap="round"/>
+  <line x1="77" y1="40" x2="51" y2="66" stroke="#ffffff" stroke-width="5" stroke-linecap="round"/>
+
+  <!-- Logo text -->
+  <text x="100" y="53" font-size="30" font-weight="700" fill="#f1f5f9" letter-spacing="-0.5">e<tspan fill="#22c55e">x</tspan>day<tspan fill="#4ade80" font-weight="600">.no</tspan></text>
+
+  <!-- Divider dot -->
+  <circle cx="278" cy="46" r="3" fill="#475569"/>
+
+  <!-- Week label -->
+  <text x="294" y="55" font-size="22" font-weight="500" fill="#94a3b8">Uke 19  •  5. – 9. mai 2026</text>
+
+  <!-- Green accent line below header -->
+  <rect x="40" y="90" width="1120" height="2" rx="1" fill="#22c55e" opacity="0.4"/>
+
+  <!-- ═══ LEFT CARD: Ex-dato denne uke ═══ -->
+  <rect x="40" y="110" width="680" height="470" rx="12" fill="url(#cardGrad)" stroke="#1f2937" stroke-width="1"/>
+
+  <!-- Card header -->
+  <rect x="40" y="110" width="680" height="52" rx="0" fill="#15803d" opacity="0.25"/>
+  <rect x="40" y="110" width="680" height="12" rx="6" fill="#15803d" opacity="0.25"/>
+  <rect x="40" y="122" width="680" height="40" fill="#15803d" opacity="0.25"/>
+
+  <!-- Calendar icon -->
+  <rect x="60" y="122" width="22" height="22" rx="4" fill="none" stroke="#86efac" stroke-width="2"/>
+  <line x1="66" y1="120" x2="66" y2="126" stroke="#86efac" stroke-width="2" stroke-linecap="round"/>
+  <line x1="76" y1="120" x2="76" y2="126" stroke="#86efac" stroke-width="2" stroke-linecap="round"/>
+  <line x1="60" y1="130" x2="82" y2="130" stroke="#86efac" stroke-width="1.5"/>
+
+  <text x="92" y="138" font-size="17" font-weight="700" fill="#86efac" letter-spacing="0.3">EX-DATO DENNE UKE</text>
+  <text x="92" y="154" font-size="13" fill="#6ee7b7" opacity="0.8">11 aksjer utbetaler utbytte denne uken</text>
+
+  <!-- Column headers -->
+  <text x="62" y="188" font-size="12" fill="#64748b" font-weight="600" letter-spacing="0.5">AKSJE</text>
+  <text x="340" y="188" font-size="12" fill="#64748b" font-weight="600" letter-spacing="0.5">NAVN</text>
+  <text x="570" y="188" font-size="12" fill="#64748b" font-weight="600" letter-spacing="0.5" text-anchor="end">UTBYTTE</text>
+  <text x="695" y="188" font-size="12" fill="#64748b" font-weight="600" letter-spacing="0.5" text-anchor="end">YIELD</text>
+  <line x1="56" y1="193" x2="704" y2="193" stroke="#1f2937" stroke-width="1"/>
+
+  <!-- Row 1: VEI -->
+  <rect x="44" y="197" width="672" height="36" rx="4" fill="#ffffff" fill-opacity="0.02"/>
+  <text x="62" y="220" font-size="15" font-weight="700" fill="#f1f5f9">VEI</text>
+  <text x="340" y="220" font-size="14" fill="#cbd5e1">Veidekke ASA</text>
+  <text x="570" y="220" font-size="15" font-weight="600" fill="#f1f5f9" text-anchor="end">11,25 kr</text>
+  <rect x="620" y="208" width="76" height="20" rx="10" fill="#15803d"/>
+  <text x="658" y="222" font-size="13" font-weight="700" fill="#86efac" text-anchor="middle">6,0 %</text>
+
+  <!-- Row 2: ELMRA -->
+  <text x="62" y="254" font-size="15" font-weight="700" fill="#f1f5f9">ELMRA</text>
+  <text x="340" y="254" font-size="14" fill="#cbd5e1">Elmera Group ASA</text>
+  <text x="570" y="254" font-size="15" font-weight="600" fill="#f1f5f9" text-anchor="end">2,00 kr</text>
+  <rect x="620" y="242" width="76" height="20" rx="10" fill="#15803d"/>
+  <text x="658" y="256" font-size="13" font-weight="700" fill="#86efac" text-anchor="middle">5,8 %</text>
+
+  <!-- Row 3: KCC -->
+  <rect x="44" y="263" width="672" height="36" rx="4" fill="#ffffff" fill-opacity="0.02"/>
+  <text x="62" y="288" font-size="15" font-weight="700" fill="#f1f5f9">KCC</text>
+  <text x="340" y="288" font-size="14" fill="#cbd5e1">Klaveness Comb. Carriers</text>
+  <text x="570" y="288" font-size="15" font-weight="600" fill="#f1f5f9" text-anchor="end">4,79 kr</text>
+  <rect x="620" y="276" width="76" height="20" rx="10" fill="#166534"/>
+  <text x="658" y="290" font-size="13" font-weight="700" fill="#86efac" text-anchor="middle">4,7 %</text>
+
+  <!-- Row 4: NORCO -->
+  <text x="62" y="322" font-size="15" font-weight="700" fill="#f1f5f9">NORCO</text>
+  <text x="340" y="322" font-size="14" fill="#cbd5e1">Norconsult AS</text>
+  <text x="570" y="322" font-size="15" font-weight="600" fill="#f1f5f9" text-anchor="end">1,80 kr</text>
+  <rect x="620" y="310" width="76" height="20" rx="10" fill="#166534"/>
+  <text x="658" y="324" font-size="13" font-weight="700" fill="#86efac" text-anchor="middle">4,6 %</text>
+
+  <!-- Row 5: MEDI -->
+  <rect x="44" y="331" width="672" height="36" rx="4" fill="#ffffff" fill-opacity="0.02"/>
+  <text x="62" y="356" font-size="15" font-weight="700" fill="#f1f5f9">MEDI</text>
+  <text x="340" y="356" font-size="14" fill="#cbd5e1">Medistim ASA</text>
+  <text x="570" y="356" font-size="15" font-weight="600" fill="#f1f5f9" text-anchor="end">8,00 kr</text>
+  <rect x="620" y="344" width="76" height="20" rx="10" fill="#166534"/>
+  <text x="658" y="358" font-size="13" font-weight="700" fill="#86efac" text-anchor="middle">3,6 %</text>
+
+  <!-- Row 6: NHY -->
+  <text x="62" y="390" font-size="15" font-weight="700" fill="#f1f5f9">NHY</text>
+  <text x="340" y="390" font-size="14" fill="#cbd5e1">Norsk Hydro ASA</text>
+  <text x="570" y="390" font-size="15" font-weight="600" fill="#f1f5f9" text-anchor="end">3,00 kr</text>
+  <rect x="620" y="378" width="76" height="20" rx="10" fill="#1a4731"/>
+  <text x="658" y="392" font-size="13" font-weight="600" fill="#86efac" text-anchor="middle">2,9 %</text>
+
+  <!-- Row 7: WWI -->
+  <rect x="44" y="399" width="672" height="36" rx="4" fill="#ffffff" fill-opacity="0.02"/>
+  <text x="62" y="424" font-size="15" font-weight="700" fill="#f1f5f9">WWI</text>
+  <text x="340" y="424" font-size="14" fill="#cbd5e1">Wilh. Wilhelmsen Holding</text>
+  <text x="570" y="424" font-size="15" font-weight="600" fill="#f1f5f9" text-anchor="end">20,00 kr</text>
+  <rect x="620" y="412" width="76" height="20" rx="10" fill="#1a4731"/>
+  <text x="658" y="426" font-size="13" font-weight="600" fill="#86efac" text-anchor="middle">2,9 %</text>
+
+  <!-- Row 8: BAKKA -->
+  <text x="62" y="458" font-size="15" font-weight="700" fill="#f1f5f9">BAKKA</text>
+  <text x="340" y="458" font-size="14" fill="#cbd5e1">Bakkafrost P/F</text>
+  <text x="570" y="458" font-size="15" font-weight="600" fill="#f1f5f9" text-anchor="end">13,37 kr</text>
+  <rect x="620" y="446" width="76" height="20" rx="10" fill="#1a4731"/>
+  <text x="658" y="460" font-size="13" font-weight="600" fill="#86efac" text-anchor="middle">2,9 %</text>
+
+  <!-- More row -->
+  <line x1="56" y1="474" x2="704" y2="474" stroke="#1f2937" stroke-width="1" stroke-dasharray="4 4"/>
+  <text x="380" y="495" font-size="13" fill="#475569" text-anchor="middle">+ GOD, SBO, VEND og flere …</text>
+
+  <!-- Bottom hint -->
+  <text x="380" y="540" font-size="12" fill="#334155" text-anchor="middle">Husk: du må eie aksjen DAGEN FØR ex-dato for å motta utbytte</text>
+  <rect x="44" y="548" width="672" height="26" rx="6" fill="#15803d" fill-opacity="0.15"/>
+  <text x="380" y="565" font-size="13" font-weight="600" fill="#4ade80" text-anchor="middle">↗ Se alle ex-datoer og kalender på exday.no</text>
+
+  <!-- ═══ RIGHT CARD ═══ -->
+  <rect x="740" y="110" width="420" height="224" rx="12" fill="url(#rightGrad)" stroke="#1f2937" stroke-width="1"/>
+
+  <!-- Neste uke header -->
+  <rect x="740" y="110" width="420" height="52" rx="0" fill="#0e4429" opacity="0.5"/>
+  <rect x="740" y="110" width="420" height="12" rx="6" fill="#0e4429" opacity="0.5"/>
+  <rect x="740" y="122" width="420" height="40" fill="#0e4429" opacity="0.5"/>
+
+  <!-- Arrow icon -->
+  <text x="760" y="140" font-size="18" fill="#4ade80">⟶</text>
+  <text x="788" y="140" font-size="16" font-weight="700" fill="#4ade80" letter-spacing="0.3">NESTE UKE</text>
+  <text x="788" y="156" font-size="12" fill="#6ee7b7" opacity="0.8">11. – 17. mai — 4 aksjer</text>
+
+  <!-- EQNR highlight -->
+  <rect x="752" y="175" width="396" height="50" rx="8" fill="#22c55e" fill-opacity="0.12" stroke="#22c55e" stroke-opacity="0.3" stroke-width="1"/>
+  <text x="772" y="196" font-size="16" font-weight="800" fill="#f1f5f9">EQNR</text>
+  <text x="772" y="212" font-size="12" fill="#94a3b8">Equinor ASA — 13. mai</text>
+  <text x="1060" y="196" font-size="16" font-weight="700" fill="#f1f5f9" text-anchor="end">14,81 kr</text>
+  <rect x="1068" y="178" width="64" height="20" rx="10" fill="#15803d"/>
+  <text x="1100" y="192" font-size="13" font-weight="700" fill="#86efac" text-anchor="middle">4,0 %</text>
+
+  <!-- BOUV -->
+  <text x="772" y="244" font-size="15" font-weight="700" fill="#f1f5f9">BOUV</text>
+  <text x="900" y="244" font-size="13" fill="#94a3b8">Bouvet ASA — 15. mai</text>
+  <rect x="1068" y="228" width="64" height="20" rx="10" fill="#15803d"/>
+  <text x="1100" y="242" font-size="13" font-weight="700" fill="#86efac" text-anchor="middle">11,7 %</text>
+
+  <!-- KID + POL -->
+  <text x="772" y="278" font-size="14" fill="#94a3b8">KID</text>
+  <text x="820" y="278" font-size="13" fill="#475569">Kid ASA — 12. mai</text>
+  <text x="1100" y="278" font-size="13" fill="#6ee7b7" text-anchor="middle">3,8 %</text>
+  <text x="772" y="300" font-size="14" fill="#94a3b8">POL</text>
+  <text x="820" y="300" font-size="13" fill="#475569">Polaris Media — 12. mai</text>
+  <text x="1100" y="300" font-size="13" fill="#6ee7b7" text-anchor="middle">5,9 %</text>
+
+  <!-- ═══ MOVERS CARD ═══ -->
+  <rect x="740" y="344" width="420" height="236" rx="12" fill="url(#rightGrad)" stroke="#1f2937" stroke-width="1"/>
+
+  <!-- Movers header -->
+  <rect x="740" y="344" width="420" height="44" rx="0" fill="#1e293b" opacity="0.8"/>
+  <rect x="740" y="344" width="420" height="12" rx="6" fill="#1e293b" opacity="0.8"/>
+  <rect x="740" y="356" width="420" height="32" fill="#1e293b" opacity="0.8"/>
+
+  <text x="760" y="370" font-size="16" font-weight="700" fill="#f1f5f9">📊 UKENS KURSBEVEGELSER</text>
+
+  <!-- Winners -->
+  <text x="760" y="406" font-size="12" fill="#22c55e" font-weight="700" letter-spacing="0.5">VINNERE</text>
+  <!-- GENT -->
+  <rect x="752" y="412" width="190" height="28" rx="6" fill="#15803d" fill-opacity="0.2"/>
+  <text x="766" y="430" font-size="14" font-weight="700" fill="#f1f5f9">GENT</text>
+  <text x="826" y="430" font-size="12" fill="#94a3b8">Gentian</text>
+  <text x="934" y="430" font-size="14" font-weight="700" fill="#4ade80" text-anchor="end">+9,9 %</text>
+
+  <text x="766" y="458" font-size="14" font-weight="700" fill="#cbd5e1">AKVA</text>
+  <text x="826" y="458" font-size="12" fill="#475569">AKVA Group</text>
+  <text x="934" y="458" font-size="13" font-weight="600" fill="#4ade80" text-anchor="end">+5,5 %</text>
+
+  <text x="766" y="482" font-size="14" font-weight="700" fill="#cbd5e1">TIETO</text>
+  <text x="826" y="482" font-size="12" fill="#475569">TietoEVRY</text>
+  <text x="934" y="482" font-size="13" font-weight="600" fill="#4ade80" text-anchor="end">+5,0 %</text>
+
+  <!-- Divider -->
+  <line x1="952" y1="400" x2="952" y2="530" stroke="#1f2937" stroke-width="1"/>
+
+  <!-- Losers -->
+  <text x="966" y="406" font-size="12" fill="#f87171" font-weight="700" letter-spacing="0.5">TAPERE</text>
+  <rect x="958" y="412" width="190" height="28" rx="6" fill="#7f1d1d" fill-opacity="0.2"/>
+  <text x="972" y="430" font-size="14" font-weight="700" fill="#f1f5f9">2020</text>
+  <text x="1020" y="430" font-size="12" fill="#94a3b8">Bulkers</text>
+  <text x="1148" y="430" font-size="14" font-weight="700" fill="#f87171" text-anchor="end">−30,3 %</text>
+
+  <text x="972" y="458" font-size="14" font-weight="700" fill="#cbd5e1">PARB</text>
+  <text x="1022" y="458" font-size="12" fill="#475569">Pareto Bank</text>
+  <text x="1148" y="458" font-size="13" font-weight="600" fill="#f87171" text-anchor="end">−10,4 %</text>
+
+  <text x="972" y="482" font-size="14" font-weight="700" fill="#cbd5e1">POL</text>
+  <text x="1022" y="482" font-size="12" fill="#475569">Polaris Media</text>
+  <text x="1148" y="482" font-size="13" font-weight="600" fill="#f87171" text-anchor="end">−6,6 %</text>
+
+  <!-- ═══ FOOTER ═══ -->
+  <line x1="40" y1="596" x2="1160" y2="596" stroke="#1f2937" stroke-width="1"/>
+  <text x="600" y="618" font-size="13" fill="#475569" text-anchor="middle">exday.no  •  Norske utbytteaksjer  •  Data: Oslo Børs / Yahoo Finance  •  Oppdateres daglig på børsdager</text>
+
+</svg>
