@@ -336,7 +336,8 @@
     {
       "ticker": "ODF",
       "dato": "2026-05-06",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/672576"
     },
     {
       "ticker": "ROGS",
@@ -373,7 +374,8 @@
     {
       "ticker": "ABL",
       "dato": "2026-05-07",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/672592"
     },
     {
       "ticker": "AKRBP",
@@ -383,7 +385,8 @@
     {
       "ticker": "BEWI",
       "dato": "2026-05-07",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/672620"
     },
     {
       "ticker": "DNO",
@@ -393,7 +396,8 @@
     {
       "ticker": "MEDI",
       "dato": "2026-05-07",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/672661"
     },
     {
       "ticker": "MING",
@@ -408,7 +412,8 @@
     {
       "ticker": "NKR",
       "dato": "2026-05-07",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/672623"
     },
     {
       "ticker": "NONG",
@@ -423,22 +428,26 @@
     {
       "ticker": "SMOP",
       "dato": "2026-05-07",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/672594"
     },
     {
       "ticker": "SOFF",
       "dato": "2026-05-07",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/672652"
     },
     {
       "ticker": "SOMA",
       "dato": "2026-05-07",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/672650"
     },
     {
       "ticker": "VEI",
       "dato": "2026-05-07",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/672619"
     },
     {
       "ticker": "AKER",
@@ -1096,6 +1105,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "SMOP",
+      "dato": "2026-07-13",
+      "type": "rapport"
+    },
+    {
       "ticker": "AKSO",
       "dato": "2026-07-14",
       "type": "rapport"
@@ -1111,7 +1125,22 @@
       "type": "rapport"
     },
     {
+      "ticker": "AKRBP",
+      "dato": "2026-07-15",
+      "type": "rapport"
+    },
+    {
       "ticker": "PUBLI",
+      "dato": "2026-07-15",
+      "type": "rapport"
+    },
+    {
+      "ticker": "SOFF",
+      "dato": "2026-07-15",
+      "type": "rapport"
+    },
+    {
+      "ticker": "SOMA",
       "dato": "2026-07-15",
       "type": "rapport"
     },
@@ -1216,7 +1245,37 @@
       "type": "rapport"
     },
     {
+      "ticker": "ENTR",
+      "dato": "2026-08-12",
+      "type": "rapport"
+    },
+    {
+      "ticker": "KMCP",
+      "dato": "2026-08-12",
+      "type": "rapport"
+    },
+    {
       "ticker": "ROGS",
+      "dato": "2026-08-12",
+      "type": "rapport"
+    },
+    {
+      "ticker": "SBMO",
+      "dato": "2026-08-12",
+      "type": "rapport"
+    },
+    {
+      "ticker": "SRHA",
+      "dato": "2026-08-12",
+      "type": "rapport"
+    },
+    {
+      "ticker": "STRONG",
+      "dato": "2026-08-12",
+      "type": "rapport"
+    },
+    {
+      "ticker": "VISTIN",
       "dato": "2026-08-12",
       "type": "rapport"
     },
@@ -1226,7 +1285,42 @@
       "type": "rapport"
     },
     {
+      "ticker": "WWIB",
+      "dato": "2026-08-12",
+      "type": "rapport"
+    },
+    {
+      "ticker": "AASB",
+      "dato": "2026-08-13",
+      "type": "rapport"
+    },
+    {
+      "ticker": "DNO",
+      "dato": "2026-08-13",
+      "type": "rapport"
+    },
+    {
+      "ticker": "MING",
+      "dato": "2026-08-13",
+      "type": "rapport"
+    },
+    {
+      "ticker": "MORLD",
+      "dato": "2026-08-13",
+      "type": "rapport"
+    },
+    {
+      "ticker": "NONG",
+      "dato": "2026-08-13",
+      "type": "rapport"
+    },
+    {
       "ticker": "PEXIP",
+      "dato": "2026-08-13",
+      "type": "rapport"
+    },
+    {
+      "ticker": "SB1NO",
       "dato": "2026-08-13",
       "type": "rapport"
     },
@@ -1251,6 +1345,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "VEI",
+      "dato": "2026-08-14",
+      "type": "rapport"
+    },
+    {
       "ticker": "ELO",
       "dato": "2026-08-18",
       "type": "rapport"
@@ -1258,6 +1357,26 @@
     {
       "ticker": "REACH",
       "dato": "2026-08-18",
+      "type": "rapport"
+    },
+    {
+      "ticker": "BEWI",
+      "dato": "2026-08-19",
+      "type": "rapport"
+    },
+    {
+      "ticker": "MEDI",
+      "dato": "2026-08-19",
+      "type": "rapport"
+    },
+    {
+      "ticker": "ABL",
+      "dato": "2026-08-20",
+      "type": "rapport"
+    },
+    {
+      "ticker": "NKR",
+      "dato": "2026-08-20",
       "type": "rapport"
     },
     {
@@ -1376,5 +1495,5 @@
       "type": "rapport"
     }
   ],
-  "sist_oppdatert": "2026-05-06"
+  "sist_oppdatert": "2026-05-07"
 }
