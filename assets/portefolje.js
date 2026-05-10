@@ -2070,17 +2070,119 @@ function visAnalyse() {
       <div style="height:100%;width:${pct}%;background:${farge};border-radius:99px;transition:width .3s;"></div>
     </div>`;
   }
-  function dimKort(tittel, score, max, tekst) {
+  function dimKort(id, tittel, score, max, tekst, detaljHtml) {
     const farge = dimFarge(score, max);
-    return `<div class="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4 shadow-sm">
-      <div class="flex items-center justify-between gap-2 mb-2">
-        <span class="text-sm font-semibold text-gray-900 dark:text-gray-100">${tittel}</span>
-        <span class="text-sm font-bold tabular-nums" style="color:${farge};">${score}<span class="text-xs font-normal text-gray-400 dark:text-gray-600">&#8202;/&#8202;20</span></span>
+    return `<div class="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
+      <div class="p-4 cursor-pointer select-none" data-analyse-dim="${id}">
+        <div class="flex items-center justify-between gap-2 mb-2">
+          <span class="text-sm font-semibold text-gray-900 dark:text-gray-100">${tittel}</span>
+          <div class="flex items-center gap-2.5 shrink-0">
+            <span class="text-sm font-bold tabular-nums" style="color:${farge};">${score}<span class="text-xs font-normal text-gray-400 dark:text-gray-600">&#8202;/&#8202;20</span></span>
+            <svg data-analyse-chevron="${id}" style="width:16px;height:16px;color:#9ca3af;transition:transform .2s;flex-shrink:0;" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd"/></svg>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 mb-2.5">${dimBar(score, max)}</div>
+        <p class="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">${tekst}</p>
       </div>
-      <div class="flex items-center gap-2 mb-2.5">${dimBar(score, max)}</div>
-      <p class="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">${tekst}</p>
+      <div class="hidden" data-analyse-panel="${id}">
+        <div class="border-t border-gray-100 dark:border-gray-800 px-4 py-3">
+          ${detaljHtml}
+        </div>
+      </div>
     </div>`;
   }
+
+  // ── Detaljpanel D1: Diversifisering ──────────────────────────────────
+  const detaljD1 = '<p class="text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-2">Sektorfordeling</p>'
+    + sektorArr.map(function(s) {
+        const aksjer = beholdning.filter(function(a) { return (a.sektor || 'Ukjent') === s.sektor; });
+        const sf = s.pct > 35 ? 'color:#ef4444' : s.pct > 25 ? 'color:#d97706' : 'color:#15803d';
+        return '<div class="flex items-start gap-2 py-1.5 border-b border-gray-100 dark:border-gray-800 last:border-0">'
+          + '<div class="flex-1 min-w-0">'
+          + '<span class="text-xs font-medium text-gray-800 dark:text-gray-200">' + escHtml(s.sektor) + '</span>'
+          + '<div class="text-xs text-gray-400 dark:text-gray-600 mt-0.5">' + aksjer.map(function(a) { return escHtml(a.ticker); }).join(' · ') + '</div>'
+          + '</div>'
+          + '<span class="text-xs tabular-nums font-medium shrink-0" style="' + sf + '">' + s.pct.toFixed(0) + '%</span>'
+          + '</div>';
+      }).join('');
+
+  // ── Detaljpanel D2: Konsentrasjonsrisiko ─────────────────────────────
+  const detaljD2 = '<p class="text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-2">Posisjoner etter størrelse</p>'
+    + posisjoner.map(function(p) {
+        const pf = p.pct > 20 ? 'color:#ef4444' : p.pct > 15 ? 'color:#d97706' : 'color:#6b7280';
+        const adv = p.pct > 20 ? ' <span style="color:#ef4444;font-size:0.65rem;">⚠ Høy</span>' : p.pct > 15 ? ' <span style="color:#d97706;font-size:0.65rem;">↑</span>' : '';
+        return '<div class="flex items-center gap-2 py-1.5 border-b border-gray-100 dark:border-gray-800 last:border-0">'
+          + '<span class="text-xs font-medium text-gray-800 dark:text-gray-200 w-14 shrink-0">' + escHtml(p.ticker) + '</span>'
+          + '<span class="text-xs text-gray-400 dark:text-gray-600 flex-1 truncate">' + escHtml(p.navn) + '</span>'
+          + '<span class="text-xs tabular-nums font-medium shrink-0" style="' + pf + '">' + p.pct.toFixed(1) + '%' + adv + '</span>'
+          + '</div>';
+      }).join('');
+
+  // ── Detaljpanel D3: Risikoprofil ─────────────────────────────────────
+  const sykliskeAksjer = beholdning.filter(function(a) { return SYKLISKE.has(a.sektor); }).sort(function(a, b) { return b.verdi - a.verdi; });
+  const stabileAksjer  = beholdning.filter(function(a) { return !SYKLISKE.has(a.sektor); }).sort(function(a, b) { return b.verdi - a.verdi; });
+  const detaljD3 = (sykliskeAksjer.length > 0
+      ? '<p class="text-xs font-semibold uppercase tracking-widest mb-1.5" style="color:#d97706;">Sykliske — ' + sykliskPct.toFixed(0) + '%</p>'
+        + sykliskeAksjer.map(function(a) {
+            const pct = totalVerdi > 0 ? (a.verdi / totalVerdi * 100).toFixed(1) : '0.0';
+            return '<div class="flex items-center gap-2 py-1 border-b border-gray-100 dark:border-gray-800 last:border-0">'
+              + '<span class="text-xs font-medium text-gray-800 dark:text-gray-200 w-14 shrink-0">' + escHtml(a.ticker) + '</span>'
+              + '<span class="text-xs text-gray-500 dark:text-gray-400 flex-1">' + escHtml(a.sektor || '') + '</span>'
+              + '<span class="text-xs tabular-nums" style="color:#d97706;">' + pct + '%</span>'
+              + '</div>';
+          }).join('')
+        + '<div class="mb-3"></div>'
+      : '')
+    + (stabileAksjer.length > 0
+      ? '<p class="text-xs font-semibold uppercase tracking-widest mb-1.5" style="color:#15803d;">Stabile — ' + (100 - sykliskPct).toFixed(0) + '%</p>'
+        + stabileAksjer.map(function(a) {
+            const pct = totalVerdi > 0 ? (a.verdi / totalVerdi * 100).toFixed(1) : '0.0';
+            return '<div class="flex items-center gap-2 py-1 border-b border-gray-100 dark:border-gray-800 last:border-0">'
+              + '<span class="text-xs font-medium text-gray-800 dark:text-gray-200 w-14 shrink-0">' + escHtml(a.ticker) + '</span>'
+              + '<span class="text-xs text-gray-500 dark:text-gray-400 flex-1">' + escHtml(a.sektor || '') + '</span>'
+              + '<span class="text-xs tabular-nums" style="color:#15803d;">' + pct + '%</span>'
+              + '</div>';
+          }).join('')
+      : '');
+
+  // ── Detaljpanel D4: Yield-bærekraft ──────────────────────────────────
+  const d4Rader = beholdning.slice().sort(function(a, b) {
+    const ar = ((a.utbytte_yield || 0) > 15 ? 2 : 0) + ((a.payout_ratio || 0) > 80 && (a.payout_ratio || 0) < 400 ? 1 : 0);
+    const br = ((b.utbytte_yield || 0) > 15 ? 2 : 0) + ((b.payout_ratio || 0) > 80 && (b.payout_ratio || 0) < 400 ? 1 : 0);
+    return br - ar || ((b.payout_ratio || 0) - (a.payout_ratio || 0));
+  });
+  const detaljD4 = '<p class="text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-2">Yield og payout ratio per aksje</p>'
+    + d4Rader.map(function(a) {
+        const y   = a.utbytte_yield ? a.utbytte_yield.toFixed(1) + '%' : '—';
+        const p   = (a.payout_ratio > 0 && a.payout_ratio < 400) ? a.payout_ratio.toFixed(0) + '%' : '—';
+        const hiY = (a.utbytte_yield || 0) > 15;
+        const hiP = (a.payout_ratio || 0) > 80 && (a.payout_ratio || 0) < 400;
+        const yF  = hiY ? 'color:#ef4444' : (a.utbytte_yield || 0) > 10 ? 'color:#d97706' : 'color:#15803d';
+        const pF  = hiP ? 'color:#ef4444' : (a.payout_ratio || 0) > 60 ? 'color:#d97706' : 'color:#15803d';
+        const adv = hiY ? '<span style="color:#ef4444;font-size:0.65rem;"> ⚠ yield</span>' : hiP ? '<span style="color:#d97706;font-size:0.65rem;"> ⚠ payout</span>' : '';
+        return '<div class="flex items-center gap-2 py-1.5 border-b border-gray-100 dark:border-gray-800 last:border-0">'
+          + '<span class="text-xs font-medium text-gray-800 dark:text-gray-200 w-14 shrink-0">' + escHtml(a.ticker) + '</span>'
+          + '<span class="text-xs tabular-nums shrink-0" style="' + yF + '">Y: ' + y + '</span>'
+          + '<span class="text-xs text-gray-300 dark:text-gray-700 shrink-0">·</span>'
+          + '<span class="text-xs tabular-nums flex-1" style="' + pF + '">P: ' + p + adv + '</span>'
+          + '</div>';
+      }).join('')
+    + '<p class="text-xs text-gray-400 dark:text-gray-600 mt-2 pt-2 border-t border-gray-100 dark:border-gray-800">Y = utbytteyield &nbsp;·&nbsp; P = payout ratio</p>';
+
+  // ── Detaljpanel D5: Inntektsstabilitet ───────────────────────────────
+  const d5Rader = beholdning.slice().sort(function(a, b) { return (a.ar_med_utbytte || 0) - (b.ar_med_utbytte || 0); });
+  const detaljD5 = '<p class="text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-2">År med utbytte per aksje</p>'
+    + d5Rader.map(function(a) {
+        const ar   = a.ar_med_utbytte || 0;
+        const af   = ar >= 15 ? 'color:#15803d' : ar >= 5 ? 'color:#d97706' : 'color:#ef4444';
+        const ikon = ar >= 15 ? '✓' : ar >= 5 ? '→' : '⚠';
+        return '<div class="flex items-center gap-2 py-1.5 border-b border-gray-100 dark:border-gray-800 last:border-0">'
+          + '<span class="text-xs shrink-0" style="width:1rem;' + af + '">' + ikon + '</span>'
+          + '<span class="text-xs font-medium text-gray-800 dark:text-gray-200 w-14 shrink-0">' + escHtml(a.ticker) + '</span>'
+          + '<span class="text-xs text-gray-500 dark:text-gray-400 flex-1 truncate">' + escHtml(a.navn || '') + '</span>'
+          + '<span class="text-xs tabular-nums font-medium shrink-0" style="' + af + '">' + (ar > 0 ? ar + ' år' : '—') + '</span>'
+          + '</div>';
+      }).join('');
 
   const tipsHtml = tips.length > 0
     ? `<div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-4 shadow-sm" style="border-left:3px solid #d97706;">
@@ -2110,12 +2212,27 @@ function visAnalyse() {
     </div>
     ${tipsHtml}
     <p class="text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 px-1 pt-1">Dimensjoner</p>
-    ${dimKort('1. Diversifisering', d1, 20, d1Tekst)}
-    ${dimKort('2. Konsentrasjonsrisiko', d2, 20, d2Tekst)}
-    ${dimKort('3. Risikoprofil', d3, 20, d3Tekst)}
-    ${dimKort('4. Yield-bærekraft', d4, 20, d4Tekst)}
-    ${dimKort('5. Inntektsstabilitet', d5, 20, d5Tekst)}
+    ${dimKort(1, '1. Diversifisering', d1, 20, d1Tekst, detaljD1)}
+    ${dimKort(2, '2. Konsentrasjonsrisiko', d2, 20, d2Tekst, detaljD2)}
+    ${dimKort(3, '3. Risikoprofil', d3, 20, d3Tekst, detaljD3)}
+    ${dimKort(4, '4. Yield-bærekraft', d4, 20, d4Tekst, detaljD4)}
+    ${dimKort(5, '5. Inntektsstabilitet', d5, 20, d5Tekst, detaljD5)}
   `;
+
+  if (!el._analyseKlikkBound) {
+    el._analyseKlikkBound = true;
+    el.addEventListener('click', function(e) {
+      const header = e.target.closest('[data-analyse-dim]');
+      if (!header) return;
+      const id = header.dataset.analyseDim;
+      const panel = el.querySelector('[data-analyse-panel="' + id + '"]');
+      const chevron = el.querySelector('[data-analyse-chevron="' + id + '"]');
+      if (!panel) return;
+      const apner = panel.classList.contains('hidden');
+      panel.classList.toggle('hidden', !apner);
+      if (chevron) chevron.style.transform = apner ? 'rotate(180deg)' : '';
+    });
+  }
 }
 
 // Node.js test export
