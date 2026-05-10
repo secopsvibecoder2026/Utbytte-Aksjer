@@ -2093,7 +2093,7 @@ function visAnalyse() {
 
   el.innerHTML = `
     <div class="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-5 shadow-sm">
-      <div class="flex items-center gap-5">
+      <div class="flex items-center gap-6">
         <div style="position:relative;width:88px;height:88px;flex-shrink:0;">
           <div style="width:88px;height:88px;border-radius:50%;background:conic-gradient(${ringFarge} 0deg ${conicDeg}deg, ${trackFarge} ${conicDeg}deg 360deg);"></div>
           <div style="position:absolute;inset:10px;border-radius:50%;background:${innerBg};display:flex;flex-direction:column;align-items:center;justify-content:center;">
@@ -2101,10 +2101,10 @@ function visAnalyse() {
             <span class="text-xs text-gray-400 dark:text-gray-600">/100</span>
           </div>
         </div>
-        <div class="flex-1 min-w-0">
+        <div class="flex-1 min-w-0" style="padding-left:4px;">
           <p class="text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-0.5">Porteføljehelse</p>
           <p class="text-xl font-bold text-gray-900 dark:text-gray-100">${helseLabel}</p>
-          <p class="text-xs text-gray-500 dark:text-gray-400 mt-1 leading-relaxed">${beholdning.length} aksjer · ${antallSektorer} sektorer · ${beholdning.reduce((s,a)=>s+a.antall,0)} totalt</p>
+          <p class="text-xs text-gray-500 dark:text-gray-400 mt-1 leading-relaxed">${beholdning.length} aksjer · ${antallSektorer} sektorer</p>
         </div>
       </div>
     </div>
