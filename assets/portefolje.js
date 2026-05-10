@@ -144,8 +144,10 @@ function initPFSubTabs() {
     document.getElementById('pf-sub-beholdning').classList.toggle('hidden', tab !== 'beholdning');
     document.getElementById('pf-sub-statistikk').classList.toggle('hidden', tab !== 'statistikk');
     document.getElementById('pf-sub-watchlister').classList.toggle('hidden', tab !== 'watchlister');
+    document.getElementById('pf-sub-analyse').classList.toggle('hidden', tab !== 'analyse');
     if (tab === 'statistikk') visPortefolje();
     if (tab === 'watchlister') visWatchlister();
+    if (tab === 'analyse') visAnalyse();
   }
 
   document.getElementById('tab-portfolio').addEventListener('click', e => {
@@ -1917,6 +1919,203 @@ function visRebalansering(alleBeholdning) {
       visRebalansering(alleBeholdning);
     });
   });
+}
+
+function visAnalyse() {
+  const el = document.getElementById('pf-sub-analyse');
+  if (!el) return;
+
+  const pf = hentPF();
+  const beholdning = Object.entries(pf)
+    .map(([ticker, antall]) => {
+      const a = (window.alleAksjer || []).find(x => x.ticker === ticker);
+      if (!a || !antall) return null;
+      const verdi = antall * (a.pris || 0);
+      return { ...a, antall, verdi, forv_ar: antall * (a.utbytte_per_aksje || 0) };
+    })
+    .filter(Boolean);
+
+  if (beholdning.length === 0) {
+    el.innerHTML = `<div class="text-center py-10 text-gray-400 dark:text-gray-600">
+      <svg class="w-12 h-12 mx-auto mb-3 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+      <p class="text-sm font-medium">Ingen beholdning</p>
+      <p class="text-xs mt-1">Legg til aksjer i Beholdning for å se porteføljeanalysen.</p>
+    </div>`;
+    return;
+  }
+
+  const totalVerdi = beholdning.reduce((s, a) => s + a.verdi, 0);
+  const isDark = document.documentElement.classList.contains('dark');
+
+  // ── DIMENSJON 1: Diversifisering ─────────────────────────────────────
+  const antallAksjer = beholdning.length;
+  const sektorSett = new Set(beholdning.map(a => a.sektor).filter(Boolean));
+  const antallSektorer = sektorSett.size;
+  const d1Aksjer = antallAksjer >= 15 ? 10 : antallAksjer >= 10 ? 9 : antallAksjer >= 6 ? 6 : antallAksjer >= 3 ? 3 : 1;
+  const d1Sekt  = antallSektorer >= 6 ? 10 : antallSektorer >= 5 ? 9 : antallSektorer >= 4 ? 7 : antallSektorer >= 3 ? 5 : antallSektorer >= 2 ? 3 : 0;
+  const d1 = Math.min(20, d1Aksjer + d1Sekt);
+
+  const d1Tekst = antallAksjer < 6
+    ? `Du har kun ${antallAksjer} aksje${antallAksjer === 1 ? '' : 'r'} i ${antallSektorer} sektor${antallSektorer === 1 ? '' : 'er'}. Anbefalt: 12–18 aksjer i minst 5 sektorer.`
+    : antallAksjer > 25
+    ? `${antallAksjer} aksjer er mye — risikoen for «dyr indeks» øker. Vurder å konsentrere om de beste 15–20.`
+    : antallSektorer < 4
+    ? `${antallAksjer} aksjer, men bare ${antallSektorer} sektorer. God spredning innad, men sektorkonsentrasjonen er høy.`
+    : `${antallAksjer} aksjer fordelt på ${antallSektorer} sektorer — god diversifisering.`;
+
+  // ── DIMENSJON 2: Konsentrasjonsrisiko ────────────────────────────────
+  const posisjoner = beholdning
+    .map(a => ({ ticker: a.ticker, navn: a.navn, pct: totalVerdi > 0 ? a.verdi / totalVerdi * 100 : 0 }))
+    .sort((a, b) => b.pct - a.pct);
+  const storstePos = posisjoner[0];
+
+  const sektorVerdier = {};
+  beholdning.forEach(a => {
+    const s = a.sektor || 'Ukjent';
+    sektorVerdier[s] = (sektorVerdier[s] || 0) + a.verdi;
+  });
+  const sektorArr = Object.entries(sektorVerdier)
+    .map(([s, v]) => ({ sektor: s, pct: totalVerdi > 0 ? v / totalVerdi * 100 : 0 }))
+    .sort((a, b) => b.pct - a.pct);
+  const storsteSektor = sektorArr[0] || { sektor: '—', pct: 0 };
+
+  const posScore  = storstePos.pct < 10 ? 10 : storstePos.pct < 15 ? 8 : storstePos.pct < 20 ? 5 : storstePos.pct < 30 ? 2 : 0;
+  const sektScore = storsteSektor.pct < 25 ? 10 : storsteSektor.pct < 35 ? 7 : storsteSektor.pct < 45 ? 4 : storsteSektor.pct < 60 ? 2 : 0;
+  const d2 = Math.min(20, posScore + sektScore);
+
+  const d2Tekst = storsteSektor.pct > 35
+    ? `${storsteSektor.sektor} utgjør ${storsteSektor.pct.toFixed(0)}% av porteføljen — over anbefalt maks på 30%. Største enkeltposisjon er ${escHtml(storstePos.navn)} med ${storstePos.pct.toFixed(1)}%.`
+    : storstePos.pct > 15
+    ? `${escHtml(storstePos.navn)} (${storstePos.ticker}) er din største posisjon med ${storstePos.pct.toFixed(1)}% — vurder å spre litt mer. Største sektor er ${storsteSektor.sektor} med ${storsteSektor.pct.toFixed(0)}%.`
+    : `Lav konsentrasjonsrisiko. Største posisjon er ${escHtml(storstePos.navn)} med ${storstePos.pct.toFixed(1)}%, største sektor ${storsteSektor.sektor} med ${storsteSektor.pct.toFixed(0)}%.`;
+
+  // ── DIMENSJON 3: Risikoprofil ─────────────────────────────────────────
+  const SYKLISKE = new Set(['Energi', 'Shipping', 'Skipsfart', 'Havbruk', 'Energitjenester']);
+  const sykliskVerdi = beholdning.filter(a => SYKLISKE.has(a.sektor)).reduce((s, a) => s + a.verdi, 0);
+  const sykliskPct   = totalVerdi > 0 ? sykliskVerdi / totalVerdi * 100 : 0;
+  const d3 = sykliskPct < 20 ? 20 : sykliskPct < 30 ? 17 : sykliskPct < 40 ? 13 : sykliskPct < 50 ? 9 : sykliskPct < 60 ? 5 : 2;
+
+  const d3Tekst = sykliskPct < 20
+    ? `Lav eksponering mot sykliske sektorer (${sykliskPct.toFixed(0)}%). Porteføljen er godt forankret i stabile inntektskilder.`
+    : sykliskPct < 40
+    ? `${sykliskPct.toFixed(0)}% i sykliske sektorer (energi, shipping, havbruk) — akseptabelt nivå. Vær forberedt på utbyttesvingninger ved markedsfall.`
+    : `${sykliskPct.toFixed(0)}% er i sykliske sektorer. Disse kan kutte utbyttet kraftig ved lav oljepris eller svake fraktrater — vurder å øke stabileandelen.`;
+
+  // ── DIMENSJON 4: Yield-bærekraft ──────────────────────────────────────
+  const medPayout = beholdning.filter(a => (a.payout_ratio || 0) > 0 && (a.payout_ratio || 0) < 400);
+  const snittPayout = medPayout.length > 0
+    ? medPayout.reduce((s, a) => s + a.payout_ratio, 0) / medPayout.length
+    : null;
+  const hoeyYieldAksjer = beholdning.filter(a => (a.utbytte_yield || 0) > 15);
+  const hoeyYieldPct    = totalVerdi > 0
+    ? hoeyYieldAksjer.reduce((s, a) => s + a.verdi, 0) / totalVerdi * 100
+    : 0;
+
+  const payoutScore    = snittPayout === null ? 10 : snittPayout < 40 ? 15 : snittPayout < 60 ? 12 : snittPayout < 75 ? 8 : snittPayout < 90 ? 4 : 0;
+  const hoeyYieldScore = hoeyYieldPct < 5 ? 5 : hoeyYieldPct < 15 ? 2 : 0;
+  const d4 = Math.min(20, payoutScore + hoeyYieldScore);
+
+  const d4PayoutTekst = snittPayout === null
+    ? 'Payout ratio-data mangler for dine aksjer.'
+    : snittPayout > 80
+    ? `Snitt payout ratio er ${snittPayout.toFixed(0)}% — høyt. Mange selskaper har lite buffer mot inntjeningsfall.`
+    : snittPayout > 60
+    ? `Snitt payout ratio er ${snittPayout.toFixed(0)}% — akseptabelt, men følg med på inntjeningen.`
+    : `Snitt payout ratio er ${snittPayout.toFixed(0)}% — godt nivå med buffer til å opprettholde utbyttet.`;
+  const d4Tekst = hoeyYieldAksjer.length > 0
+    ? `${d4PayoutTekst} ${hoeyYieldAksjer.length} aksje${hoeyYieldAksjer.length > 1 ? 'r' : ''} (${hoeyYieldAksjer.map(a => a.ticker).join(', ')}) har yield over 15% — vurder bærekraften.`
+    : d4PayoutTekst;
+
+  // ── DIMENSJON 5: Inntektsstabilitet ──────────────────────────────────
+  const medAr = beholdning.filter(a => (a.ar_med_utbytte || 0) > 0);
+  const snittAr = medAr.length > 0
+    ? medAr.reduce((s, a) => s + a.ar_med_utbytte, 0) / medAr.length
+    : 0;
+  const d5 = snittAr >= 20 ? 20 : snittAr >= 15 ? 17 : snittAr >= 10 ? 13 : snittAr >= 5 ? 8 : 3;
+
+  const d5Tekst = snittAr >= 15
+    ? `Selskapene dine har i snitt betalt utbytte i ${snittAr.toFixed(0)} år — sterk track record gjennom ulike markedsperioder.`
+    : snittAr >= 10
+    ? `${snittAr.toFixed(0)} år i snitt er bra, men det er rom for flere stabile langsiktige utbyttebetalere (mål: 15+ år).`
+    : snittAr >= 5
+    ? `Snitt ${snittAr.toFixed(0)} år med utbytte. Porteføljen mangler erfarne utbyttebetalere — legg til selskaper med 15+ år.`
+    : `Kort utbyttehistorikk (snitt ${snittAr.toFixed(0)} år). Prioriter etablerte utbyttebetalere for mer stabil inntekt.`;
+
+  // ── Totalscore og helseetikett ────────────────────────────────────────
+  const total = d1 + d2 + d3 + d4 + d5;
+  const helseLabel = total >= 80 ? 'Utmerket' : total >= 65 ? 'God' : total >= 50 ? 'Middels' : 'Svak';
+  const ringFarge  = total >= 75 ? '#22c55e' : total >= 50 ? '#eab308' : '#ef4444';
+  const trackFarge = isDark ? '#1f2937' : '#e5e7eb';
+  const innerBg    = isDark ? '#111827' : '#ffffff';
+  const conicDeg   = (total / 100 * 360).toFixed(1);
+
+  // ── Forbedringspunkter ────────────────────────────────────────────────
+  const tips = [];
+  if (d1 < 12) tips.push('Legg til aksjer i nye sektorer — se oversikt under <strong>Sektorer</strong>.');
+  if (d2 < 12 && storsteSektor.pct > 35) tips.push(`Spre litt ut av <strong>${escHtml(storsteSektor.sektor)}</strong> — bruk <strong>Rebalansering</strong>-fanen for å beregne kjøpsbehov.`);
+  if (d2 < 12 && storstePos.pct > 20) tips.push(`Reduser <strong>${storstePos.ticker}</strong> til under 15% av porteføljen.`);
+  if (d3 < 12) tips.push('Øk andelen i stabile sektorer som sparebanker, IT-konsulenter eller forsyning.');
+  if (d4 < 12) tips.push('Se etter aksjer med payout ratio under 70% og yield i 4–10%-spennet.');
+  if (d5 < 12) tips.push('Prioriter selskaper med 15+ år med sammenhengende utbytte — f.eks. etablerte sparebanker.');
+
+  // ── Hjelpefunksjoner for HTML ─────────────────────────────────────────
+  function dimFarge(score, max) {
+    const r = score / max;
+    return r >= 0.75 ? '#15803d' : r >= 0.5 ? '#a16207' : '#b91c1c';
+  }
+  function dimBar(score, max) {
+    const pct = (score / max * 100).toFixed(0);
+    const farge = dimFarge(score, max);
+    return `<div style="height:6px;background:${trackFarge};border-radius:99px;overflow:hidden;flex:1;">
+      <div style="height:100%;width:${pct}%;background:${farge};border-radius:99px;transition:width .3s;"></div>
+    </div>`;
+  }
+  function dimKort(tittel, score, max, tekst) {
+    const farge = dimFarge(score, max);
+    return `<div class="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4 shadow-sm">
+      <div class="flex items-center justify-between gap-2 mb-2">
+        <span class="text-sm font-semibold text-gray-900 dark:text-gray-100">${tittel}</span>
+        <span class="text-sm font-bold tabular-nums" style="color:${farge};">${score}<span class="text-xs font-normal text-gray-400 dark:text-gray-600">&#8202;/&#8202;20</span></span>
+      </div>
+      <div class="flex items-center gap-2 mb-2.5">${dimBar(score, max)}</div>
+      <p class="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">${tekst}</p>
+    </div>`;
+  }
+
+  const tipsHtml = tips.length > 0
+    ? `<div class="bg-amber-50 dark:bg-amber-900/10 border border-amber-200 dark:border-amber-800 rounded-xl p-4 shadow-sm">
+        <p class="text-xs font-semibold uppercase tracking-widest text-amber-600 dark:text-amber-500 mb-2.5">Forbedringspunkter</p>
+        <ul class="space-y-2">${tips.map(t =>
+          `<li class="flex gap-2 text-xs text-amber-800 dark:text-amber-300 leading-relaxed"><span class="text-amber-400 shrink-0 mt-0.5">→</span><span>${t}</span></li>`
+        ).join('')}</ul>
+      </div>`
+    : '';
+
+  el.innerHTML = `
+    <div class="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-5 shadow-sm">
+      <div class="flex items-center gap-5">
+        <div style="position:relative;width:88px;height:88px;flex-shrink:0;">
+          <div style="width:88px;height:88px;border-radius:50%;background:conic-gradient(${ringFarge} 0deg ${conicDeg}deg, ${trackFarge} ${conicDeg}deg 360deg);"></div>
+          <div style="position:absolute;inset:10px;border-radius:50%;background:${innerBg};display:flex;flex-direction:column;align-items:center;justify-content:center;">
+            <span class="text-2xl font-bold text-gray-900 dark:text-gray-100">${total}</span>
+            <span class="text-xs text-gray-400 dark:text-gray-600">/100</span>
+          </div>
+        </div>
+        <div class="flex-1 min-w-0">
+          <p class="text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-0.5">Porteføljehelse</p>
+          <p class="text-xl font-bold text-gray-900 dark:text-gray-100">${helseLabel}</p>
+          <p class="text-xs text-gray-500 dark:text-gray-400 mt-1 leading-relaxed">${beholdning.length} aksjer · ${antallSektorer} sektorer · ${beholdning.reduce((s,a)=>s+a.antall,0)} totalt</p>
+        </div>
+      </div>
+    </div>
+    ${tipsHtml}
+    <p class="text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 px-1 pt-1">Dimensjoner</p>
+    ${dimKort('1. Diversifisering', d1, 20, d1Tekst)}
+    ${dimKort('2. Konsentrasjonsrisiko', d2, 20, d2Tekst)}
+    ${dimKort('3. Risikoprofil', d3, 20, d3Tekst)}
+    ${dimKort('4. Yield-bærekraft', d4, 20, d4Tekst)}
+    ${dimKort('5. Inntektsstabilitet', d5, 20, d5Tekst)}
+  `;
 }
 
 // Node.js test export
