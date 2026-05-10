@@ -2083,10 +2083,10 @@ function visAnalyse() {
   }
 
   const tipsHtml = tips.length > 0
-    ? `<div class="bg-amber-50 dark:bg-amber-900/10 border border-amber-200 dark:border-amber-800 rounded-xl p-4 shadow-sm">
-        <p class="text-xs font-semibold uppercase tracking-widest text-amber-600 dark:text-amber-500 mb-2.5">Forbedringspunkter</p>
+    ? `<div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-4 shadow-sm" style="border-left:3px solid #d97706;">
+        <p class="text-xs font-semibold uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-2.5">Forbedringspunkter</p>
         <ul class="space-y-2">${tips.map(t =>
-          `<li class="flex gap-2 text-xs text-amber-800 dark:text-amber-300 leading-relaxed"><span class="text-amber-400 shrink-0 mt-0.5">→</span><span>${t}</span></li>`
+          `<li class="flex gap-2 text-xs text-gray-600 dark:text-gray-400 leading-relaxed"><span class="text-yellow-500 dark:text-yellow-400 shrink-0 mt-0.5">→</span><span>${t}</span></li>`
         ).join('')}</ul>
       </div>`
     : '';
