@@ -2545,7 +2545,7 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
 
   <div class="cta">
     <p style="margin-bottom:0.75rem;">Se alle norske utbytteaksjer, bygg portefølje og spor ex-datoer</p>
-    <a href="https://exday.no/?aksje={ticker}">Åpne {ticker} i exday.no →</a>
+    <a href="https://exday.no/app/?aksje={ticker}">Åpne {ticker} i exday.no →</a>
   </div>
 
   <p class="updated">Sist oppdatert: {today}</p>
