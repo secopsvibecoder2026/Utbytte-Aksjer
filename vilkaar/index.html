@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Google Analytics med Consent Mode v2 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-X6C9PERKMB"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', {
+      analytics_storage: 'denied',
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      wait_for_update: 500
+    });
+    gtag('js', new Date());
+    gtag('config', 'G-X6C9PERKMB');
+  </script>
+  <link rel="icon" type="image/svg+xml" href="../logo/exday_icon_primary.svg">
+  <title>Vilkår for bruk – exday.no</title>
+  <meta name="description" content="Vilkår for bruk av exday.no — gratistjeneste for oversikt over norske utbytteaksjer på Oslo Børs." />
+  <link rel="canonical" href="https://exday.no/vilkaar/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://exday.no/vilkaar/" />
+  <meta property="og:title" content="Vilkår for bruk – exday.no" />
+  <meta property="og:description" content="Vilkår for bruk av exday.no — gratistjeneste for oversikt over norske utbytteaksjer på Oslo Børs." />
+  <link rel="stylesheet" href="../assets/tailwind.css" />
+  <link rel="stylesheet" href="../assets/style.css" />
+  <script>
+    (function() {
+      var t = localStorage.getItem('tema');
+      if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
+      }
+    })();
+  </script>
+  <script src="/assets/consent.js" defer></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+    .section-heading {
+      font-size: 1.1rem;
+      font-weight: 600;
+      padding-bottom: 0.5rem;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    .dark .section-heading { border-color: #374151; }
+  </style>
+</head>
+<body class="bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 min-h-screen">
+  <nav class="site-nav" aria-label="Hovedmeny">
+    <div class="site-nav-inner">
+      <a href="/" class="site-logo" aria-label="exday.no - hjem">
+        <img src="/logo/exday_icon_primary.svg" class="site-logo-icon site-logo-icon-light" alt="" width="28" height="28" loading="eager">
+        <img src="/logo/exday_icon_inverse.svg" class="site-logo-icon site-logo-icon-dark" alt="" width="28" height="28" loading="eager">
+        <span>e<span class="site-logo-x">x</span>day<span class="site-logo-dot">.no</span></span>
+      </a>
+      <ul class="site-nav-menu">
+        <li><a href="/aksjer/">Aksjer</a></li>
+        <li><a href="/aksjer/sektor/">Sektorer</a></li>
+        <li><a href="/utbyttekalender/">Kalender</a></li>
+        <li><a href="/utbyttekalkulator/">Kalkulator</a></li>
+        <li><a href="/artikler/">Artikler</a></li>
+        <li><a href="/faq/">FAQ</a></li>
+        <li><a href="/om/">Om</a></li>
+      </ul>
+      <div class="site-nav-actions">
+        <a href="/app/" class="site-app-btn">Åpne app</a>
+        <button id="site-dark-toggle" class="site-dark-btn" aria-label="Bytt fargemodus">
+          <svg class="sun-icon" width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+          <svg class="moon-icon" width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display:none;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+        </button>
+      </div>
+      <button class="site-nav-burger" aria-label="Vis meny" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+  <script>
+    (function() {
+      var toggle = document.getElementById('site-dark-toggle');
+      if (!toggle) return;
+      function update() {
+        var dark = document.documentElement.classList.contains('dark');
+        toggle.querySelector('.sun-icon').style.display = dark ? 'block' : 'none';
+        toggle.querySelector('.moon-icon').style.display = dark ? 'none' : 'block';
+      }
+      update();
+      toggle.addEventListener('click', function() {
+        var dark = document.documentElement.classList.toggle('dark');
+        localStorage.setItem('tema', dark ? 'dark' : 'light');
+        update();
+      });
+      var burger = document.querySelector('.site-nav-burger');
+      var menu = document.querySelector('.site-nav-menu');
+      if (burger && menu) {
+        burger.addEventListener('click', function() {
+          var open = menu.classList.toggle('open');
+          burger.setAttribute('aria-expanded', open);
+        });
+      }
+    })();
+  </script>
+
+  <main class="max-w-2xl mx-auto px-4 py-10 sm:py-14">
+    <!-- Brødsmule -->
+    <nav class="text-xs text-gray-400 dark:text-gray-600 mb-6" aria-label="Brødsmule">
+      <a href="/" class="hover:text-gray-600 dark:hover:text-gray-400 transition-colors">exday.no</a>
+      <span class="mx-1.5">›</span>
+      <span>Vilkår for bruk</span>
+    </nav>
+
+    <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">Vilkår for bruk</h1>
+    <p class="text-sm text-gray-500 dark:text-gray-400 mb-8">Sist oppdatert: 10. mai 2026</p>
+
+    <div class="space-y-8 text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+
+      <!-- 1 -->
+      <section>
+        <h2 class="section-heading text-gray-900 dark:text-gray-100">1. Om tjenesten</h2>
+        <p>
+          exday.no er en gratis informasjonstjeneste for oversikt over norske utbytteaksjer notert på Oslo Børs.
+          Tjenesten drives av en privatperson og er ikke tilknyttet noe verdipapirforetak, meglerhus eller finansinstitusjon.
+        </p>
+        <p class="mt-3">
+          Tjenesten tilbyr blant annet oversikt over utbyttedatoer (ex-dato og betalingsdato), direkteavkastning (yield),
+          utbyttehistorikk, sektorfordeling og et verktøy for å spore en personlig portefølje. All funksjonalitet er gratis å bruke.
+        </p>
+      </section>
+
+      <!-- 2 -->
+      <section>
+        <h2 class="section-heading text-gray-900 dark:text-gray-100">2. Aksept av vilkår</h2>
+        <p>
+          Ved å bruke exday.no aksepterer du disse vilkårene for bruk. Hvis du ikke aksepterer vilkårene, ber vi deg om å
+          avslutte bruken av tjenesten. Vilkårene kan endres uten forvarsel — den til enhver tid gjeldende versjonen finnes
+          alltid på denne siden.
+        </p>
+      </section>
+
+      <!-- 3 -->
+      <section>
+        <h2 class="section-heading text-gray-900 dark:text-gray-100">3. Ikke finansiell rådgivning</h2>
+        <p>
+          Innhold på exday.no er utelukkende ment som generell informasjon og er <strong>ikke</strong> finansiell, skattemessig
+          eller juridisk rådgivning. Ingenting på dette nettstedet skal tolkes som en anbefaling om å kjøpe eller selge
+          verdipapirer.
+        </p>
+        <p class="mt-3">
+          Alle investeringsbeslutninger tas på eget ansvar. Vi anbefaler alltid å konsultere en autorisert finansrådgiver
+          eller megler før du tar investeringsbeslutninger.
+        </p>
+      </section>
+
+      <!-- 4 -->
+      <section>
+        <h2 class="section-heading text-gray-900 dark:text-gray-100">4. Datagrunnlag og nøyaktighet</h2>
+        <p>
+          Kurs- og utbyttedata hentes primært fra Yahoo Finance og Euronext og oppdateres automatisk på børsdager.
+          Vi gjør vårt beste for at dataene skal være korrekte, men vi kan ikke garantere nøyaktighet, fullstendighet
+          eller aktualitet.
+        </p>
+        <p class="mt-3">
+          Data kan inneholde feil, forsinkelser eller mangler — spesielt rundt ex-datoer, ekstraordinære utbytter og
+          valutaomregning. Verifiser alltid viktige data direkte mot Oslo Børs, selskapenes egne rapporter eller din megler
+          før du handler.
+        </p>
+        <p class="mt-3">
+          Historisk utbytte er ingen garanti for fremtidig utbytte.
+        </p>
+      </section>
+
+      <!-- 5 -->
+      <section>
+        <h2 class="section-heading text-gray-900 dark:text-gray-100">5. Ansvarsfraskrivelse</h2>
+        <p>
+          exday.no og driftsansvarlig fraskriver seg ethvert ansvar for tap eller skade — direkte eller indirekte — som
+          oppstår som følge av bruk av informasjon fra dette nettstedet. Dette gjelder blant annet:
+        </p>
+        <ul class="mt-3 space-y-1.5 list-disc pl-5">
+          <li>Tap ved kjøp eller salg av verdipapirer basert på data fra tjenesten</li>
+          <li>Feil, forsinkelser eller mangler i kurs- og utbyttedata</li>
+          <li>Midlertidig utilgjengelighet av tjenesten</li>
+          <li>Tap av data lagret i nettleserens lokale lagring (localStorage)</li>
+        </ul>
+        <p class="mt-3">
+          Tjenesten leveres «som den er» uten garantier av noe slag.
+        </p>
+      </section>
+
+      <!-- 6 -->
+      <section>
+        <h2 class="section-heading text-gray-900 dark:text-gray-100">6. Tillatt bruk</h2>
+        <p>
+          exday.no er beregnet på personlig, ikke-kommersiell bruk. Du kan fritt bruke tjenesten til å følge med på
+          norske utbytteaksjer, planlegge investeringer og spore din portefølje.
+        </p>
+        <p class="mt-3">
+          Følgende er <strong>ikke</strong> tillatt uten skriftlig tillatelse:
+        </p>
+        <ul class="mt-3 space-y-1.5 list-disc pl-5">
+          <li>Systematisk uttrekk (scraping) av data fra tjenesten til kommersielle formål</li>
+          <li>Videredistribusjon eller salg av data hentet fra exday.no</li>
+          <li>Innbygging (embedding) av tjenesten i kommersielle produkter</li>
+          <li>Bruk som er i strid med norsk lov eller tredjeparters rettigheter</li>
+        </ul>
+      </section>
+
+      <!-- 7 -->
+      <section>
+        <h2 class="section-heading text-gray-900 dark:text-gray-100">7. Immaterielle rettigheter</h2>
+        <p>
+          Design, kode og redaksjonelt innhold på exday.no er opphavsrettslig beskyttet. Underliggende finansdata
+          (kurser, utbytter, etc.) eies av respektive dataleverandører (Yahoo Finance, Euronext m.fl.) og er underlagt
+          deres egne vilkår.
+        </p>
+      </section>
+
+      <!-- 8 -->
+      <section>
+        <h2 class="section-heading text-gray-900 dark:text-gray-100">8. Lenker til tredjeparter</h2>
+        <p>
+          Tjenesten kan inneholde lenker til eksterne nettsteder. exday.no har ingen kontroll over, og er ikke ansvarlig
+          for, innholdet på slike nettsteder. Lenking innebærer ikke at vi godkjenner eller anbefaler det lenkede innholdet.
+        </p>
+      </section>
+
+      <!-- 9 -->
+      <section>
+        <h2 class="section-heading text-gray-900 dark:text-gray-100">9. Endringer og tilgjengelighet</h2>
+        <p>
+          Vi forbeholder oss retten til å endre, begrense eller avslutte tjenesten — helt eller delvis — uten forvarsel.
+          Vi kan heller ikke garantere kontinuerlig tilgjengelighet; nedetid kan forekomme ved vedlikehold, oppdateringer
+          eller tekniske problemer.
+        </p>
+        <p class="mt-3">
+          Disse vilkårene kan oppdateres når som helst. Fortsatt bruk av tjenesten etter en endring innebærer aksept
+          av de oppdaterte vilkårene.
+        </p>
+      </section>
+
+      <!-- 10 -->
+      <section>
+        <h2 class="section-heading text-gray-900 dark:text-gray-100">10. Personvern</h2>
+        <p>
+          Informasjon om hvordan vi behandler personopplysninger og bruker informasjonskapsler finnes i vår
+          <a href="/personvern/" class="text-green-600 dark:text-green-400 underline hover:text-green-700 dark:hover:text-green-300 transition-colors">personvernerklæring</a>.
+        </p>
+      </section>
+
+      <!-- 11 -->
+      <section>
+        <h2 class="section-heading text-gray-900 dark:text-gray-100">11. Lovvalg og verneting</h2>
+        <p>
+          Disse vilkårene er underlagt norsk rett. Eventuelle tvister som ikke løses i minnelighet, avgjøres ved
+          Oslo tingrett som verneting.
+        </p>
+      </section>
+
+      <!-- 12 -->
+      <section>
+        <h2 class="section-heading text-gray-900 dark:text-gray-100">12. Kontakt</h2>
+        <p>
+          Spørsmål om disse vilkårene kan rettes til oss via siden
+          <a href="/om/" class="text-green-600 dark:text-green-400 underline hover:text-green-700 dark:hover:text-green-300 transition-colors">Om exday.no</a>.
+        </p>
+      </section>
+
+    </div>
+  </main>
+
+  <footer class="mt-8 sm:mt-12 border-t border-gray-200 dark:border-gray-800 py-6 text-center text-xs text-gray-400 dark:text-gray-600 space-y-1 px-4">
+    <p>Kurs og utbyttedata hentes fra Yahoo Finance og Euronext. Oppdateres daglig på børsdager.</p>
+    <p class="max-w-xl mx-auto leading-relaxed">
+      exday.no er ikke et verdipapirforetak og tilbyr ikke finansiell rådgivning.
+      Data kan inneholde feil eller forsinkelser — verifiser alltid mot Oslo Børs eller selskapets egne rapporter.
+      Historisk utbytte er ingen garanti for fremtidig utbytte.
+      Gjør alltid din egen analyse før du tar investeringsbeslutninger.
+    </p>
+    <p class="mt-2">
+      <a href="/personvern/" class="underline hover:text-gray-400 dark:hover:text-gray-400 transition-colors">Personvern og informasjonskapsler</a>
+      <span class="mx-2">·</span>
+      <a href="/faq/" class="underline hover:text-gray-400 dark:hover:text-gray-400 transition-colors">Vanlige spørsmål (FAQ)</a>
+      <span class="mx-2">·</span>
+      <a href="/vilkaar/" class="underline hover:text-gray-400 dark:hover:text-gray-400 transition-colors">Vilkår for bruk</a>
+      <span class="mx-2">·</span>
+      <a href="/om/" class="underline hover:text-gray-400 dark:hover:text-gray-400 transition-colors">Om exday.no</a>
+    </p>
+    <p class="mt-3">
+      <a href="https://www.facebook.com/share/17rMp8o9yF/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-gray-400 hover:text-blue-500 dark:hover:text-blue-400 transition-colors">
+        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/></svg>
+        Følg exday.no på Facebook
+      </a>
+    </p>
+  </footer>
+
+</body>
+</html>
