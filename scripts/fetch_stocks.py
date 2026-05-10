@@ -713,6 +713,22 @@ def hent_aksje(meta):
         payout_ratio = safe_float(info.get("payoutRatio", 0)) * 100
         payout_ratio = round(payout_ratio, 1)
 
+        # Korriger payout_ratio når Yahoo bruker stale/nedskrivingsbelastet EPS.
+        # Yahoo sin payoutRatio og trailingPE bruker noen ganger ulike EPS-tall
+        # (f.eks. payoutRatio basert på et kvartal med ekstraordinære tap, mens PE
+        # allerede reflekterer normalisert inntjening). Vi beregner payout fra PE
+        # og bruker den lavere verdien når avviket er vesentlig.
+        if pris > 0 and pe_ratio and 0.5 < pe_ratio < 200 and utbytte_per_aksje > 0:
+            eps_fra_pe = pris / pe_ratio
+            payout_fra_pe = round(utbytte_per_aksje / eps_fra_pe * 100, 1)
+            if payout_ratio > 150 and payout_fra_pe < payout_ratio * 0.6:
+                print(f"    Korrigerer [{ticker}]: payout_ratio {payout_ratio:.0f}% → {payout_fra_pe:.0f}% (PE-basert EPS {eps_fra_pe:.2f})")
+                payout_ratio = payout_fra_pe
+        # Cap: payout > 500% er meningsløst for visning (skyldes nær-null EPS-kvartal)
+        if payout_ratio > 500:
+            print(f"    Nullstiller [{ticker}]: payout_ratio {payout_ratio:.0f}% > 500% — settes til 0")
+            payout_ratio = 0
+
         valuta = info.get("currency", "NOK")
 
         # Sanity-sjekk: hvis yield er mer enn 3× historisk snitt-yield, bruk snitt i stedet
