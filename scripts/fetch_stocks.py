@@ -3120,6 +3120,8 @@ STANDARD_FOOTER = """  <footer style="margin-top:2rem;padding-top:1.5rem;border-
       <span style="margin:0 0.4rem;">&#183;</span>
       <a href="/faq/" style="color:#9ca3af;text-decoration:underline;">Vanlige sp&#248;rsm&#229;l (FAQ)</a>
       <span style="margin:0 0.4rem;">&#183;</span>
+      <a href="/vilkaar/" style="color:#9ca3af;text-decoration:underline;">Vilk&#229;r for bruk</a>
+      <span style="margin:0 0.4rem;">&#183;</span>
       <a href="/om/" style="color:#9ca3af;text-decoration:underline;">Om exday.no</a>
     </p>
     <p style="margin-top:0.75rem;">
