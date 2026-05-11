@@ -1855,27 +1855,73 @@ function parseCSV(tekst) {
   return { gyldig, ukjent, profil };
 }
 
+function parseNordnetCSV(tekst) {
+  const linjer = tekst.split(/\r?\n/).filter(l => l.trim());
+  if (!linjer.length) return { gyldig: [], ukjent: [], profil: null };
+
+  const header = linjer[0].split('\t').map(h => h.trim().toLowerCase());
+  const navnIdx   = header.findIndex(h => h === 'navn');
+  const antallIdx = header.findIndex(h => h === 'antall');
+  const gavIdx    = header.findIndex(h => h === 'gav');
+  if (navnIdx === -1 || antallIdx === -1) return { gyldig: [], ukjent: [], profil: null };
+
+  // Bygg navn→ticker-kart med normalisering (fjern ASA/AS-suffiks)
+  function norm(n) { return n.toLowerCase().replace(/\b(asa|as)\b\.?/g, '').replace(/\s+/g, ' ').trim(); }
+  const navnMap = {};
+  (window.alleAksjer || []).forEach(a => { navnMap[norm(a.navn)] = a.ticker; });
+
+  function finnTicker(nordnetNavn) {
+    const n = norm(nordnetNavn);
+    if (navnMap[n]) return navnMap[n];
+    // Delvis treff: søk etter lengste felles prefiks
+    return (window.alleAksjer || []).reduce((best, a) => {
+      const an = norm(a.navn);
+      if ((an.startsWith(n) || n.startsWith(an)) && (!best || an.length > norm(best.navn).length)) return a;
+      return best;
+    }, null)?.ticker || null;
+  }
+
+  const gyldig = [], ukjent = [];
+  for (let i = 1; i < linjer.length; i++) {
+    const deler = linjer[i].split('\t');
+    const navn = (deler[navnIdx] || '').trim();
+    if (!navn) continue;
+    const antall = parseInt((deler[antallIdx] || '').replace(/\s/g, ''), 10);
+    const gav = gavIdx !== -1 ? parseFloat((deler[gavIdx] || '').replace(/\s/g, '').replace(',', '.')) || 0 : 0;
+    const ticker = finnTicker(navn);
+    if (ticker && antall > 0) {
+      gyldig.push({ ticker, antall, gav, nordnetNavn: navn });
+    } else {
+      ukjent.push(navn + (antall > 0 ? '' : ' (antall=0)'));
+    }
+  }
+  return { gyldig, ukjent, profil: null };
+}
+
 function visImportPreview(gyldig, ukjent) {
   window._importData = gyldig;
   const previewEl = document.getElementById('pf-importer-preview');
   const innholdEl = document.getElementById('pf-importer-innhold');
+  const harGAV = gyldig.some(r => r.gav > 0);
 
   let html = '';
-
   if (!gyldig.length && !ukjent.length) {
     html = '<p class="text-sm text-red-500">Filen ser tom ut eller har uventet format.</p>';
     document.getElementById('pf-importer-bekreft-legg-til').classList.add('hidden');
     document.getElementById('pf-importer-bekreft-erstatt').classList.add('hidden');
   } else if (!gyldig.length) {
-    html = `<p class="text-sm text-red-500">Ingen kjente tickers funnet. Ukjente: ${ukjent.join(', ')}</p>`;
+    html = `<p class="text-sm text-red-500">Ingen kjente aksjer funnet. Ukjente: ${ukjent.map(escHtml).join(', ')}</p>`;
     document.getElementById('pf-importer-bekreft-legg-til').classList.add('hidden');
     document.getElementById('pf-importer-bekreft-erstatt').classList.add('hidden');
   } else {
-    const preview = gyldig.slice(0, 6).map(({ ticker, antall }) => `${ticker} (${antall})`).join(', ');
-    const mer = gyldig.length > 6 ? ` og ${gyldig.length - 6} til…` : '';
-    html += `<p class="text-sm text-green-600 dark:text-green-400">✅ ${gyldig.length} aksje${gyldig.length !== 1 ? 'r' : ''} funnet: ${preview}${mer}</p>`;
+    html += `<p class="text-sm text-green-600 dark:text-green-400 mb-2">✓ ${gyldig.length} aksje${gyldig.length !== 1 ? 'r' : ''} klar til import${harGAV ? ' med GAV (kjøpskurs)' : ''}:</p>`;
+    html += '<div class="space-y-1 mb-2">' + gyldig.map(({ ticker, antall, gav, nordnetNavn }) => {
+      const gavTekst = gav > 0 ? ` <span class="text-gray-400">@ ${gav.toLocaleString('nb-NO', { maximumFractionDigits: 2 })} kr</span>` : '';
+      const navnTekst = nordnetNavn ? ` <span class="text-gray-400 text-xs">(${escHtml(nordnetNavn)})</span>` : '';
+      return `<div class="flex items-center gap-1.5 text-xs"><span class="font-medium text-gray-800 dark:text-gray-200 w-16">${escHtml(ticker)}</span><span class="text-gray-600 dark:text-gray-400">${antall} aksjer${gavTekst}</span>${navnTekst}</div>`;
+    }).join('') + '</div>';
     if (ukjent.length) {
-      html += `<p class="text-sm text-yellow-600 dark:text-yellow-400 mt-1">⚠️ ${ukjent.length} ukjente tickers ignoreres: ${ukjent.join(', ')}</p>`;
+      html += `<p class="text-xs text-amber-600 dark:text-amber-400">⚠ Ikke funnet i app (hoppes over): ${ukjent.map(escHtml).join(', ')}</p>`;
     }
     document.getElementById('pf-importer-bekreft-legg-til').classList.remove('hidden');
     document.getElementById('pf-importer-bekreft-erstatt').classList.remove('hidden');
@@ -1888,17 +1934,31 @@ function visImportPreview(gyldig, ukjent) {
 
 function bekreftImport(data, erstatt) {
   if (!data || !data.length) return;
+  const idag = new Date().toISOString().split('T')[0];
   const pf = erstatt ? {} : hentPF();
-  data.forEach(({ ticker, antall }) => { pf[ticker] = antall; });
+  const tx = erstatt ? {} : hentTransaksjoner();
+
+  data.forEach(({ ticker, antall, gav }) => {
+    pf[ticker] = antall;
+    // Opprett kjøpstransaksjon med GAV når tilgjengelig (gir korrekt FIFO-grunnlag)
+    if (gav > 0) {
+      if (erstatt || !tx[ticker] || !tx[ticker].length) {
+        tx[ticker] = [{ id: Date.now() + Math.random(), type: 'kjøp', dato: idag, antall, kurs: gav }];
+      } else {
+        tx[ticker] = tx[ticker].concat([{ id: Date.now() + Math.random(), type: 'kjøp', dato: idag, antall, kurs: gav }]);
+      }
+    }
+  });
+
   lagrePF(pf);
-  // Restore profile data when doing a full replacement import
+  lagreTransaksjoner(tx);
   if (erstatt && window._importProfil) {
     const p = window._importProfil;
     lagreProfil(p.navn || '', parseFloat(p.mal_mnd) || 0, parseFloat(p.sparemaal) || 0);
     visGreeting();
   }
   document.getElementById('pf-importer-preview').classList.add('hidden');
-  window._importData  = null;
+  window._importData   = null;
   window._importProfil = null;
   visPortefolje();
 }
