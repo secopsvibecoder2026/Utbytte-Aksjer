@@ -67,6 +67,15 @@ document.addEventListener('DOMContentLoaded', () => {
   if (delParam) {
     try { visDeltPortefolje(JSON.parse(decodeURIComponent(atob(delParam)))); } catch(e) { /* ugyldig lenke */ }
   }
+
+  // Nordnet CSV-import via innstillinger-siden: hent pending CSV og prosesser etter data lastes
+  if (new URLSearchParams(location.search).get('nordnet-import') === '1') {
+    const csv = localStorage.getItem('pf_nordnet_pending');
+    if (csv) {
+      window._pendingNordnetCSV = csv;
+      localStorage.removeItem('pf_nordnet_pending');
+    }
+  }
 });
 
 // ── DATA ───────────────────────────────────────────────────────────────────
@@ -155,6 +164,16 @@ function lastInnData(json) {
     if (gyldig.length) {
       document.querySelector('[data-tab="portfolio"]').click();
       visImportPreview(gyldig, []);
+    }
+  }
+
+  if (window._pendingNordnetCSV) {
+    const csv = window._pendingNordnetCSV;
+    window._pendingNordnetCSV = null;
+    const result = parseNordnetCSV(csv);
+    if (result.gyldig.length || (result.dummy && result.dummy.length)) {
+      document.querySelector('[data-tab="portfolio"]').click();
+      visImportPreview(result.gyldig, result.dummy || [], result.ukjent);
     }
   }
 }

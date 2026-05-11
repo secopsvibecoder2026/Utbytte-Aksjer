@@ -239,7 +239,7 @@ function initPortefolje() {
       const erNordnet = forsteLinje.includes('\t') && /navn/i.test(forsteLinje);
       const result = erNordnet ? parseNordnetCSV(tekst) : parseCSV(tekst);
       window._importProfil = result.profil;
-      visImportPreview(result.gyldig, result.ukjent);
+      visImportPreview(result.gyldig, result.dummy || [], result.ukjent);
     };
     reader.readAsArrayBuffer(fil);
     filInput.value = '';
@@ -701,13 +701,53 @@ function visMiniSektorChart(beholdning) {
   }).join('');
 }
 
+// Sjekk om noen dummy-aksjer nå har blitt lagt til i appen, migrer dem automatisk
+function sjekkDummyAktivering() {
+  const meta = hentDummyMeta();
+  if (!Object.keys(meta).length) return false;
+  const pf = hentPF();
+  const tx = hentTransaksjoner();
+  function norm(n) { return n.toLowerCase().replace(/\b(asa|as)\b\.?/g, '').replace(/\s+/g, ' ').trim(); }
+  const navnMap = {};
+  (window.alleAksjer || []).forEach(a => { navnMap[norm(a.navn)] = a.ticker; });
+  let aktivert = false;
+  Object.entries(meta).forEach(([dummyTicker, info]) => {
+    const realTicker = navnMap[norm(info.nordnetNavn)];
+    if (!realTicker || !pf[dummyTicker]) return;
+    // Migrer beholdning
+    pf[realTicker] = (pf[realTicker] || 0) + pf[dummyTicker];
+    delete pf[dummyTicker];
+    // Migrer transaksjoner
+    if (tx[dummyTicker]) {
+      if (!tx[realTicker]) tx[realTicker] = [];
+      tx[realTicker] = tx[realTicker].concat(tx[dummyTicker]);
+      tx[realTicker].sort((a, b) => a.dato.localeCompare(b.dato));
+      delete tx[dummyTicker];
+    }
+    delete meta[dummyTicker];
+    aktivert = true;
+    const toast = document.getElementById('milestone-toast');
+    const text  = document.getElementById('milestone-toast-text');
+    if (toast && text) {
+      text.textContent = `${info.nordnetNavn} er nå tilgjengelig i appen (${realTicker}) — porteføljen er oppdatert!`;
+      toast.classList.remove('hidden');
+      setTimeout(() => toast.classList.add('hidden'), 8000);
+    }
+  });
+  if (aktivert) { lagrePF(pf); lagreTransaksjoner(tx); lagreDummyMeta(meta); }
+  return aktivert;
+}
+
 function visPortefolje() {
+  if (sjekkDummyAktivering()) return visPortefolje();
   fyllPFDropdown();
   const pf = hentPF();
   const sok = (document.getElementById('sok')?.value || '').toLowerCase().trim();
   const idag = new Date(); idag.setHours(0,0,0,0);
 
+  const dummyMeta = hentDummyMeta();
   const alleBeholdning = Object.entries(pf)
+    .filter(([ticker]) => !ticker.startsWith('_'))
     .map(([ticker, antall]) => {
       const a = alleAksjer.find(x => x.ticker === ticker);
       if (!a || antall < 1) return null;
@@ -716,11 +756,20 @@ function visPortefolje() {
     .filter(Boolean)
     .sort((a, b) => b.forv_ar - a.forv_ar);
 
+  const dummyBeholdning = Object.entries(pf)
+    .filter(([ticker]) => ticker.startsWith('_'))
+    .map(([ticker, antall]) => {
+      if (antall < 1) return null;
+      const meta = dummyMeta[ticker] || {};
+      return { ticker, navn: meta.nordnetNavn || ticker, antall, erDummy: true };
+    })
+    .filter(Boolean);
+
   const beholdning = sok
     ? alleBeholdning.filter(a => a.ticker.toLowerCase().includes(sok) || a.navn.toLowerCase().includes(sok))
     : alleBeholdning;
 
-  const harBeholdning = alleBeholdning.length > 0;
+  const harBeholdning = alleBeholdning.length > 0 || dummyBeholdning.length > 0;
   document.getElementById('pf-tom').classList.toggle('hidden', harBeholdning);
   document.getElementById('pf-beholdning-wrapper').classList.toggle('hidden', !harBeholdning);
   document.getElementById('pf-tidslinje-wrapper').classList.toggle('hidden', !harBeholdning);
@@ -1055,6 +1104,44 @@ function visPortefolje() {
     </tr>`;
   }).join('');
 
+  // Dummy-rader nederst i tabellen
+  if (dummyBeholdning.length) {
+    tbody.innerHTML += `<tr><td colspan="10" class="px-4 pt-4 pb-1 text-xs text-gray-400 dark:text-gray-600 uppercase tracking-wide">Plassholdere (ikke tilgjengelig i appen ennå)</td></tr>` +
+      dummyBeholdning.map(a => {
+        const kb = beregnKostbasis(a.ticker);
+        const harKb = kb.antall > 0 && kb.totalKost > 0;
+        const kostTd = harKb ? `<span class="text-xs">${fmtKr(kb.totalKost)}</span><br><span class="text-xs text-gray-400">${kb.vwap.toLocaleString('nb-NO',{maximumFractionDigits:1})} kr/stk</span>` : '—';
+        const isOpen = _aapneDetailRader.has(a.ticker);
+        return `
+    <tr class="table-row opacity-50" data-ticker="${escHtml(a.ticker)}">
+      <td class="px-4 py-3 font-mono text-xs text-gray-400 dark:text-gray-600">—</td>
+      <td class="px-4 py-3 hidden sm:table-cell text-gray-500 dark:text-gray-500 text-sm italic">${escHtml(a.navn)}</td>
+      <td class="px-4 py-3 text-right text-sm text-gray-500">${a.antall}</td>
+      <td class="px-4 py-3 text-right text-gray-400 text-xs">—</td>
+      <td class="px-4 py-3 text-right text-gray-400 text-xs">—</td>
+      <td class="px-4 py-3 text-right hidden lg:table-cell text-sm">${kostTd}</td>
+      <td class="px-4 py-3 text-right hidden lg:table-cell text-sm text-gray-400">—</td>
+      <td class="px-4 py-3 text-center hidden sm:table-cell text-gray-400 text-xs">—</td>
+      <td class="px-4 py-3 text-center hidden sm:table-cell"><span class="text-xs text-amber-500 dark:text-amber-400">plassholder</span></td>
+      <td class="px-4 py-3 text-center">
+        <div class="flex items-center justify-center gap-1">
+          <button class="pf-detail-toggle p-1 text-gray-400 hover:text-brand-500 transition-colors" data-ticker="${escHtml(a.ticker)}" aria-label="Vis transaksjoner" aria-expanded="${isOpen}">
+            <svg class="w-4 h-4 pointer-events-none transition-transform${isOpen ? ' rotate-180' : ''}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <button class="pf-slett p-1 text-gray-400 hover:text-red-500 transition-colors" data-ticker="${escHtml(a.ticker)}" aria-label="Fjern">
+            <svg class="w-4 h-4 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+          </button>
+        </div>
+      </td>
+    </tr>
+    <tr class="pf-detail-rad${isOpen ? '' : ' hidden'}" data-for="${escHtml(a.ticker)}">
+      <td colspan="10" class="px-4 pb-4 bg-gray-50 dark:bg-gray-900/30 border-b border-gray-100 dark:border-gray-800" style="border-left:3px solid #d97706">
+        ${byggDetailHtml(a.ticker, kb, 0)}
+      </td>
+    </tr>`;
+      }).join('');
+  }
+
   // Sum-rad i footer
   document.getElementById('pf-tabell-footer').innerHTML = `
     <tr>
@@ -1096,6 +1183,30 @@ function visPortefolje() {
         </div>
       </div>`;
     }).join('');
+
+    // Dummy-kort mobilvisning
+    if (dummyBeholdning.length) {
+      kortBody.innerHTML += `<div class="text-xs text-gray-400 dark:text-gray-600 uppercase tracking-wide px-1 pt-2">Plassholdere</div>` +
+        dummyBeholdning.map(a => {
+          const kb    = beregnKostbasis(a.ticker);
+          const isOpen = _aapneDetailRader.has(a.ticker);
+          return `<div class="bg-white dark:bg-gray-900 rounded-xl border border-amber-200 dark:border-amber-900/40 shadow-sm overflow-hidden opacity-60">
+        <div class="p-3 flex items-start justify-between gap-2 cursor-pointer select-none pf-kort-header" data-ticker="${escHtml(a.ticker)}">
+          <div class="min-w-0 flex-1">
+            <div class="flex items-center gap-2 mb-0.5">
+              <span class="text-xs text-amber-600 dark:text-amber-400 font-medium">Plassholder</span>
+            </div>
+            <div class="text-sm text-gray-600 dark:text-gray-400 italic">${escHtml(a.navn)}</div>
+            <div class="text-xs text-gray-400 mt-1">${a.antall} aksjer · data mangler</div>
+          </div>
+          <svg class="w-4 h-4 text-gray-400 shrink-0 mt-0.5 transition-transform${isOpen ? ' rotate-180' : ''}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </div>
+        <div class="pf-kort-detalj pf-detail-rad${isOpen ? '' : ' hidden'} border-t border-amber-100 dark:border-amber-900/30 px-3 pb-3" style="border-left:3px solid #d97706" data-for="${escHtml(a.ticker)}">
+          ${byggDetailHtml(a.ticker, kb, 0)}
+        </div>
+      </div>`;
+        }).join('');
+    }
 
     kortBody.onclick = e => {
       // Klikk inne i detalj-panel — håndter knapper
@@ -1202,9 +1313,15 @@ function visPortefolje() {
     // Fjern aksje fra portefølje
     const slett = e.target.closest('.pf-slett');
     if (slett) {
+      const ticker2 = slett.dataset.ticker;
       const pf2 = hentPF();
-      delete pf2[slett.dataset.ticker];
+      delete pf2[ticker2];
       lagrePF(pf2);
+      if (ticker2.startsWith('_')) {
+        const meta2 = hentDummyMeta();
+        delete meta2[ticker2];
+        lagreDummyMeta(meta2);
+      }
       visPortefolje();
       return;
     }

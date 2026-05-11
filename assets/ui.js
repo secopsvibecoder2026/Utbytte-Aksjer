@@ -157,6 +157,15 @@ function visVelkomstModal() {
     if (e.key === 'Enter') lagreOgLukk();
   });
 
+  document.getElementById('velk-nordnet')?.addEventListener('click', () => {
+    const navn = (document.getElementById('velk-navn-input').value || '').trim();
+    if (navn) lagreProfil(navn, 0, 0);
+    visGreeting();
+    lukkOgMerk();
+    document.querySelector('[data-tab="portfolio"]')?.click();
+    setTimeout(() => document.getElementById('pf-importer-fil')?.click(), 150);
+  });
+
   document.getElementById('velk-importer').addEventListener('click', () => {
     lukkOgMerk();
     document.querySelector('[data-tab="portfolio"]')?.click();
@@ -1855,15 +1864,24 @@ function parseCSV(tekst) {
   return { gyldig, ukjent, profil };
 }
 
+function lagDummyTicker(nordnetNavn) {
+  return '_' + nordnetNavn
+    .replace(/\b(asa|as)\b\.?/gi, '')
+    .trim()
+    .toUpperCase()
+    .replace(/[^A-Z0-9]+/g, '_')
+    .replace(/^_+|_+$/g, '');
+}
+
 function parseNordnetCSV(tekst) {
   const linjer = tekst.split(/\r?\n/).filter(l => l.trim());
-  if (!linjer.length) return { gyldig: [], ukjent: [], profil: null };
+  if (!linjer.length) return { gyldig: [], dummy: [], ukjent: [], profil: null };
 
   const header = linjer[0].split('\t').map(h => h.trim().toLowerCase());
   const navnIdx   = header.findIndex(h => h === 'navn');
   const antallIdx = header.findIndex(h => h === 'antall');
   const gavIdx    = header.findIndex(h => h === 'gav');
-  if (navnIdx === -1 || antallIdx === -1) return { gyldig: [], ukjent: [], profil: null };
+  if (navnIdx === -1 || antallIdx === -1) return { gyldig: [], dummy: [], ukjent: [], profil: null };
 
   // Bygg navn→ticker-kart med normalisering (fjern ASA/AS-suffiks)
   function norm(n) { return n.toLowerCase().replace(/\b(asa|as)\b\.?/g, '').replace(/\s+/g, ' ').trim(); }
@@ -1881,7 +1899,7 @@ function parseNordnetCSV(tekst) {
     }, null)?.ticker || null;
   }
 
-  const gyldig = [], ukjent = [];
+  const gyldig = [], dummy = [], ukjent = [];
   for (let i = 1; i < linjer.length; i++) {
     const deler = linjer[i].split('\t');
     const navn = (deler[navnIdx] || '').trim();
@@ -1891,37 +1909,49 @@ function parseNordnetCSV(tekst) {
     const ticker = finnTicker(navn);
     if (ticker && antall > 0) {
       gyldig.push({ ticker, antall, gav, nordnetNavn: navn });
+    } else if (antall > 0) {
+      dummy.push({ dummyTicker: lagDummyTicker(navn), nordnetNavn: navn, antall, gav });
     } else {
-      ukjent.push(navn + (antall > 0 ? '' : ' (antall=0)'));
+      ukjent.push(navn + ' (antall=0)');
     }
   }
-  return { gyldig, ukjent, profil: null };
+  return { gyldig, dummy, ukjent, profil: null };
 }
 
-function visImportPreview(gyldig, ukjent) {
-  window._importData = gyldig;
+function visImportPreview(gyldig, dummy, ukjent) {
+  window._importData = { gyldig, dummy: dummy || [] };
   const previewEl = document.getElementById('pf-importer-preview');
   const innholdEl = document.getElementById('pf-importer-innhold');
   const harGAV = gyldig.some(r => r.gav > 0);
+  const harNoe = gyldig.length > 0 || (dummy && dummy.length > 0);
 
   let html = '';
-  if (!gyldig.length && !ukjent.length) {
+  if (!harNoe && !ukjent.length) {
     html = '<p class="text-sm text-red-500">Filen ser tom ut eller har uventet format.</p>';
     document.getElementById('pf-importer-bekreft-legg-til').classList.add('hidden');
     document.getElementById('pf-importer-bekreft-erstatt').classList.add('hidden');
-  } else if (!gyldig.length) {
+  } else if (!harNoe) {
     html = `<p class="text-sm text-red-500">Ingen kjente aksjer funnet. Ukjente: ${ukjent.map(escHtml).join(', ')}</p>`;
     document.getElementById('pf-importer-bekreft-legg-til').classList.add('hidden');
     document.getElementById('pf-importer-bekreft-erstatt').classList.add('hidden');
   } else {
-    html += `<p class="text-sm text-green-600 dark:text-green-400 mb-2">✓ ${gyldig.length} aksje${gyldig.length !== 1 ? 'r' : ''} klar til import${harGAV ? ' med GAV (kjøpskurs)' : ''}:</p>`;
-    html += '<div class="space-y-1 mb-2">' + gyldig.map(({ ticker, antall, gav, nordnetNavn }) => {
-      const gavTekst = gav > 0 ? ` <span class="text-gray-400">@ ${gav.toLocaleString('nb-NO', { maximumFractionDigits: 2 })} kr</span>` : '';
-      const navnTekst = nordnetNavn ? ` <span class="text-gray-400 text-xs">(${escHtml(nordnetNavn)})</span>` : '';
-      return `<div class="flex items-center gap-1.5 text-xs"><span class="font-medium text-gray-800 dark:text-gray-200 w-16">${escHtml(ticker)}</span><span class="text-gray-600 dark:text-gray-400">${antall} aksjer${gavTekst}</span>${navnTekst}</div>`;
-    }).join('') + '</div>';
+    if (gyldig.length) {
+      html += `<p class="text-sm text-green-600 dark:text-green-400 mb-2">✓ ${gyldig.length} aksje${gyldig.length !== 1 ? 'r' : ''} klar til import${harGAV ? ' med GAV (kjøpskurs)' : ''}:</p>`;
+      html += '<div class="space-y-1 mb-2">' + gyldig.map(({ ticker, antall, gav, nordnetNavn }) => {
+        const gavTekst = gav > 0 ? ` <span class="text-gray-400">@ ${gav.toLocaleString('nb-NO', { maximumFractionDigits: 2 })} kr</span>` : '';
+        const navnTekst = nordnetNavn ? ` <span class="text-gray-400 text-xs">(${escHtml(nordnetNavn)})</span>` : '';
+        return `<div class="flex items-center gap-1.5 text-xs"><span class="font-medium text-gray-800 dark:text-gray-200 w-16">${escHtml(ticker)}</span><span class="text-gray-600 dark:text-gray-400">${antall} aksjer${gavTekst}</span>${navnTekst}</div>`;
+      }).join('') + '</div>';
+    }
+    if (dummy && dummy.length) {
+      html += `<p class="text-xs text-amber-600 dark:text-amber-400 mb-1">Ikke funnet i app — legges inn som plassholder (aktiveres automatisk når de legges til):</p>`;
+      html += '<div class="space-y-1 mb-2">' + dummy.map(({ dummyTicker, nordnetNavn, antall, gav }) => {
+        const gavTekst = gav > 0 ? ` <span class="text-gray-400">@ ${gav.toLocaleString('nb-NO', { maximumFractionDigits: 2 })} kr</span>` : '';
+        return `<div class="flex items-center gap-1.5 text-xs opacity-60"><span class="font-medium text-amber-700 dark:text-amber-400 w-32 truncate">${escHtml(nordnetNavn)}</span><span class="text-gray-600 dark:text-gray-400">${antall} aksjer${gavTekst}</span></div>`;
+      }).join('') + '</div>';
+    }
     if (ukjent.length) {
-      html += `<p class="text-xs text-amber-600 dark:text-amber-400">⚠ Ikke funnet i app (hoppes over): ${ukjent.map(escHtml).join(', ')}</p>`;
+      html += `<p class="text-xs text-gray-400">Hoppes over (antall=0): ${ukjent.map(escHtml).join(', ')}</p>`;
     }
     document.getElementById('pf-importer-bekreft-legg-til').classList.remove('hidden');
     document.getElementById('pf-importer-bekreft-erstatt').classList.remove('hidden');
@@ -1933,12 +1963,17 @@ function visImportPreview(gyldig, ukjent) {
 }
 
 function bekreftImport(data, erstatt) {
-  if (!data || !data.length) return;
+  if (!data) return;
+  // Støtt både gammelt format (array) og nytt format ({gyldig, dummy})
+  const gyldig = Array.isArray(data) ? data : (data.gyldig || []);
+  const dummy  = Array.isArray(data) ? [] : (data.dummy || []);
+  if (!gyldig.length && !dummy.length) return;
+
   const idag = new Date().toISOString().split('T')[0];
   const pf = erstatt ? {} : hentPF();
   const tx = erstatt ? {} : hentTransaksjoner();
 
-  data.forEach(({ ticker, antall, gav }) => {
+  gyldig.forEach(({ ticker, antall, gav }) => {
     pf[ticker] = antall;
     // Opprett kjøpstransaksjon med GAV når tilgjengelig (gir korrekt FIFO-grunnlag)
     if (gav > 0) {
@@ -1949,6 +1984,23 @@ function bekreftImport(data, erstatt) {
       }
     }
   });
+
+  // Dummy-aksjer: lagre med spesialticker og oppdater dummy-meta
+  if (dummy.length) {
+    const meta = erstatt ? {} : hentDummyMeta();
+    dummy.forEach(({ dummyTicker, nordnetNavn, antall, gav }) => {
+      pf[dummyTicker] = antall;
+      meta[dummyTicker] = { nordnetNavn, importDato: idag };
+      if (gav > 0) {
+        if (erstatt || !tx[dummyTicker] || !tx[dummyTicker].length) {
+          tx[dummyTicker] = [{ id: Date.now() + Math.random(), type: 'kjøp', dato: idag, antall, kurs: gav }];
+        } else {
+          tx[dummyTicker] = tx[dummyTicker].concat([{ id: Date.now() + Math.random(), type: 'kjøp', dato: idag, antall, kurs: gav }]);
+        }
+      }
+    });
+    lagreDummyMeta(meta);
+  }
 
   lagrePF(pf);
   lagreTransaksjoner(tx);

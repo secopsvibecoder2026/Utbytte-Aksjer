@@ -104,6 +104,12 @@ function lagreTransaksjoner(tx) {
   lagrePortefoljer(pfl);
 }
 
+// ── DUMMY-AKSJER META ──────────────────────────────────────────────────────
+function hentDummyMeta() {
+  try { return JSON.parse(localStorage.getItem('pf_dummy_meta') || '{}'); } catch { return {}; }
+}
+function lagreDummyMeta(meta) { localStorage.setItem('pf_dummy_meta', JSON.stringify(meta)); }
+
 // ── WATCHLISTER ────────────────────────────────────────────────────────────
 function hentWatchlister() {
   try { return JSON.parse(localStorage.getItem('pf_watchlister') || '[]'); } catch { return []; }
