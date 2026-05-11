@@ -251,6 +251,15 @@ function initPortefolje() {
   document.getElementById('pf-importer-bekreft-erstatt').addEventListener('click', () => {
     bekreftImport(window._importData, true);
   });
+  document.getElementById('pf-importer-bekreft-ny').addEventListener('click', () => {
+    const navnInput = document.getElementById('pf-importer-ny-navn');
+    const navn = navnInput.value.trim();
+    if (!navn) { navnInput.focus(); return; }
+    bekreftImport(window._importData, false, navn);
+  });
+  document.getElementById('pf-importer-ny-navn').addEventListener('keydown', e => {
+    if (e.key === 'Enter') document.getElementById('pf-importer-bekreft-ny').click();
+  });
   document.getElementById('pf-importer-avbryt').addEventListener('click', () => {
     document.getElementById('pf-importer-preview').classList.add('hidden');
     window._importData = null;
