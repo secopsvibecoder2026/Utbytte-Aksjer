@@ -228,11 +228,20 @@ function initPortefolje() {
     if (!fil) return;
     const reader = new FileReader();
     reader.onload = e => {
-      const { gyldig, ukjent, profil } = parseCSV(e.target.result);
-      window._importProfil = profil;
-      visImportPreview(gyldig, ukjent);
+      const buf = e.target.result;
+      const bytes = new Uint8Array(buf);
+      // Detekter UTF-16 LE BOM (FF FE) — brukt av Nordnet
+      const erUTF16 = bytes[0] === 0xFF && bytes[1] === 0xFE;
+      let tekst = new TextDecoder(erUTF16 ? 'utf-16le' : 'utf-8').decode(buf);
+      if (tekst.charCodeAt(0) === 0xFEFF) tekst = tekst.slice(1); // fjern BOM
+      // Nordnet-format: tab-separert med 'Navn'-kolonne
+      const forsteLinje = tekst.split(/\r?\n/)[0] || '';
+      const erNordnet = forsteLinje.includes('\t') && /navn/i.test(forsteLinje);
+      const result = erNordnet ? parseNordnetCSV(tekst) : parseCSV(tekst);
+      window._importProfil = result.profil;
+      visImportPreview(result.gyldig, result.ukjent);
     };
-    reader.readAsText(fil, 'UTF-8');
+    reader.readAsArrayBuffer(fil);
     filInput.value = '';
   });
 
