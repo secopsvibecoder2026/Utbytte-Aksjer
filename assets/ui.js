@@ -1925,6 +1925,16 @@ function visImportPreview(gyldig, dummy, ukjent) {
   const harGAV = gyldig.some(r => r.gav > 0);
   const harNoe = gyldig.length > 0 || (dummy && dummy.length > 0);
 
+  // Oppdater knapp-labels med aktiv porteføljenavn
+  const aktivPF = hentPortefoljer()[hentAktivPFId()];
+  const aktivNavn = aktivPF ? escHtml(aktivPF.navn) : 'aktiv portefølje';
+  const leggTilBtn = document.getElementById('pf-importer-bekreft-legg-til');
+  const erstattBtn = document.getElementById('pf-importer-bekreft-erstatt');
+  if (leggTilBtn) leggTilBtn.textContent = `Legg til i «${aktivNavn}»`;
+  if (erstattBtn) erstattBtn.textContent = `Erstatt «${aktivNavn}»`;
+  const nyNavnInput = document.getElementById('pf-importer-ny-navn');
+  if (nyNavnInput) nyNavnInput.value = '';
+
   let html = '';
   if (!harNoe && !ukjent.length) {
     html = '<p class="text-sm text-red-500">Filen ser tom ut eller har uventet format.</p>';
@@ -1962,12 +1972,23 @@ function visImportPreview(gyldig, dummy, ukjent) {
   previewEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
-function bekreftImport(data, erstatt) {
+function bekreftImport(data, erstatt, nyPortefoljeNavn) {
   if (!data) return;
   // Støtt både gammelt format (array) og nytt format ({gyldig, dummy})
   const gyldig = Array.isArray(data) ? data : (data.gyldig || []);
   const dummy  = Array.isArray(data) ? [] : (data.dummy || []);
   if (!gyldig.length && !dummy.length) return;
+
+  // Opprett og aktiver ny portefølje om ønsket
+  if (nyPortefoljeNavn) {
+    const nyId = 'pf_' + Date.now();
+    const pfl = hentPortefoljer();
+    pfl[nyId] = { id: nyId, navn: nyPortefoljeNavn, beholdning: {}, transaksjoner: {} };
+    lagrePortefoljer(pfl);
+    settAktivPFId(nyId);
+    oppdaterPortefoljeVelger();
+    erstatt = false;
+  }
 
   const idag = new Date().toISOString().split('T')[0];
   const pf = erstatt ? {} : hentPF();
