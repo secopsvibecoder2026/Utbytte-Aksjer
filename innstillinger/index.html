@@ -247,6 +247,19 @@
         <div id="autobackup-status" class="text-sm text-gray-400">Laster…</div>
       </div>
 
+      <!-- Importer fra Nordnet -->
+      <div class="px-5 py-4 border-b border-gray-100 dark:border-gray-800 space-y-3">
+        <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Importer fra Nordnet</p>
+        <p class="text-xs text-gray-500 dark:text-gray-400">Last opp CSV-aksjelisten din fra Nordnet. Navn, antall og GAV importeres automatisk til porteføljen.</p>
+        <div>
+          <button id="nordnet-importer-btn" class="inline-flex items-center gap-1.5 text-xs text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 px-3 py-1.5 rounded-lg transition-colors font-medium">
+            <svg class="w-3.5 h-3.5" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+            Velg Nordnet CSV-fil
+          </button>
+          <input type="file" id="nordnet-importer-fil" accept=".csv,.txt" class="hidden" />
+        </div>
+      </div>
+
       <!-- Manuell backup -->
       <div class="px-5 py-4 space-y-3">
         <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Manuell backup</p>
@@ -518,6 +531,27 @@
     a.download = filnavn;
     a.click();
     URL.revokeObjectURL(a.href);
+  });
+
+  // ── IMPORT FRA NORDNET ───────────────────────────────────────────────────────
+  document.getElementById('nordnet-importer-btn').addEventListener('click', () => {
+    document.getElementById('nordnet-importer-fil').click();
+  });
+  document.getElementById('nordnet-importer-fil').addEventListener('change', () => {
+    const fil = document.getElementById('nordnet-importer-fil').files[0];
+    if (!fil) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+      const buf = e.target.result;
+      const bytes = new Uint8Array(buf);
+      const erUTF16 = bytes[0] === 0xFF && bytes[1] === 0xFE;
+      let tekst = new TextDecoder(erUTF16 ? 'utf-16le' : 'utf-8').decode(buf);
+      if (tekst.charCodeAt(0) === 0xFEFF) tekst = tekst.slice(1);
+      localStorage.setItem('pf_nordnet_pending', tekst);
+      window.location.href = '/app/?nordnet-import=1';
+    };
+    reader.readAsArrayBuffer(fil);
+    document.getElementById('nordnet-importer-fil').value = '';
   });
 
   // ── IMPORT JSON ──────────────────────────────────────────────────────────────
