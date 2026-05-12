@@ -537,12 +537,14 @@
     {
       "ticker": "AUSS",
       "dato": "2026-05-12",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/673071"
     },
     {
       "ticker": "BIEN",
       "dato": "2026-05-12",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/673096"
     },
     {
       "ticker": "BONHR",
@@ -557,7 +559,8 @@
     {
       "ticker": "LSG",
       "dato": "2026-05-12",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/673068"
     },
     {
       "ticker": "MELG",
@@ -572,7 +575,8 @@
     {
       "ticker": "NORCO",
       "dato": "2026-05-12",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/673081"
     },
     {
       "ticker": "ODL",
@@ -587,7 +591,8 @@
     {
       "ticker": "POL",
       "dato": "2026-05-12",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/673078"
     },
     {
       "ticker": "SNTIA",
@@ -1140,6 +1145,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "BONHR",
+      "dato": "2026-07-09",
+      "type": "rapport"
+    },
+    {
       "ticker": "EPR",
       "dato": "2026-07-09",
       "type": "rapport"
@@ -1330,6 +1340,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "BIEN",
+      "dato": "2026-08-11",
+      "type": "rapport"
+    },
+    {
       "ticker": "SBNOR",
       "dato": "2026-08-11",
       "type": "rapport"
@@ -1395,6 +1410,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "MELG",
+      "dato": "2026-08-13",
+      "type": "rapport"
+    },
+    {
       "ticker": "MING",
       "dato": "2026-08-13",
       "type": "rapport"
@@ -1445,6 +1465,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "POL",
+      "dato": "2026-08-14",
+      "type": "rapport"
+    },
+    {
       "ticker": "SATS",
       "dato": "2026-08-14",
       "type": "rapport"
@@ -1470,12 +1495,37 @@
       "type": "rapport"
     },
     {
+      "ticker": "GRONG",
+      "dato": "2026-08-18",
+      "type": "rapport"
+    },
+    {
+      "ticker": "MULTI",
+      "dato": "2026-08-18",
+      "type": "rapport"
+    },
+    {
+      "ticker": "ODL",
+      "dato": "2026-08-18",
+      "type": "rapport"
+    },
+    {
       "ticker": "REACH",
       "dato": "2026-08-18",
       "type": "rapport"
     },
     {
+      "ticker": "AUSS",
+      "dato": "2026-08-19",
+      "type": "rapport"
+    },
+    {
       "ticker": "BEWI",
+      "dato": "2026-08-19",
+      "type": "rapport"
+    },
+    {
+      "ticker": "LSG",
       "dato": "2026-08-19",
       "type": "rapport"
     },
@@ -1496,6 +1546,11 @@
     },
     {
       "ticker": "NKR",
+      "dato": "2026-08-20",
+      "type": "rapport"
+    },
+    {
+      "ticker": "NORCO",
       "dato": "2026-08-20",
       "type": "rapport"
     },
@@ -1575,7 +1630,52 @@
       "type": "rapport"
     },
     {
+      "ticker": "SWON",
+      "dato": "2026-08-26",
+      "type": "rapport"
+    },
+    {
+      "ticker": "ENTR",
+      "dato": "2026-08-27",
+      "type": "rapport"
+    },
+    {
       "ticker": "GSF",
+      "dato": "2026-08-27",
+      "type": "rapport"
+    },
+    {
+      "ticker": "KMCP",
+      "dato": "2026-08-27",
+      "type": "rapport"
+    },
+    {
+      "ticker": "SBMO",
+      "dato": "2026-08-27",
+      "type": "rapport"
+    },
+    {
+      "ticker": "SNTIA",
+      "dato": "2026-08-27",
+      "type": "rapport"
+    },
+    {
+      "ticker": "SRHA",
+      "dato": "2026-08-27",
+      "type": "rapport"
+    },
+    {
+      "ticker": "STRONG",
+      "dato": "2026-08-27",
+      "type": "rapport"
+    },
+    {
+      "ticker": "VISTIN",
+      "dato": "2026-08-27",
+      "type": "rapport"
+    },
+    {
+      "ticker": "WWIB",
       "dato": "2026-08-27",
       "type": "rapport"
     },
@@ -1620,5 +1720,5 @@
       "type": "rapport"
     }
   ],
-  "sist_oppdatert": "2026-05-11"
+  "sist_oppdatert": "2026-05-12"
 }
