@@ -805,47 +805,56 @@
     {
       "ticker": "BMA",
       "dato": "2026-05-15",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/673570"
     },
     {
       "ticker": "ENTR",
       "dato": "2026-05-15",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/673591"
     },
     {
       "ticker": "KMCP",
       "dato": "2026-05-15",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/673591"
     },
     {
       "ticker": "SBMO",
       "dato": "2026-05-15",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/673591"
     },
     {
       "ticker": "SOGN",
       "dato": "2026-05-15",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/673591"
     },
     {
       "ticker": "SRHA",
       "dato": "2026-05-15",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/673591"
     },
     {
       "ticker": "STRONG",
       "dato": "2026-05-15",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/673591"
     },
     {
       "ticker": "VISTIN",
       "dato": "2026-05-15",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/673591"
     },
     {
       "ticker": "WWIB",
       "dato": "2026-05-15",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/673591"
     },
     {
       "ticker": "BWO",
@@ -1663,6 +1672,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "SOGN",
+      "dato": "2026-08-14",
+      "type": "rapport"
+    },
+    {
       "ticker": "TRSB",
       "dato": "2026-08-14",
       "type": "rapport"
@@ -1918,6 +1932,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "BMA",
+      "dato": "2026-08-28",
+      "type": "rapport"
+    },
+    {
       "ticker": "ITERA",
       "dato": "2026-08-28",
       "type": "rapport"
@@ -1958,5 +1977,5 @@
       "type": "rapport"
     }
   ],
-  "sist_oppdatert": "2026-05-14"
+  "sist_oppdatert": "2026-05-15"
 }
