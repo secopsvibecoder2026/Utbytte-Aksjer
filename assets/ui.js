@@ -3294,11 +3294,11 @@ function beregnHuslaan() {
   const vEl  = document.getElementById('hl-verdict');
   const diff = Math.abs(totalA - totalB);
   if (totalA >= totalB) {
-    vEl.className = 'rounded-xl p-4 text-center space-y-1 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-900/50';
+    vEl.className = 'rounded-xl p-4 text-center space-y-1 border hl-verdict-laan';
     vEl.innerHTML = `<p class="text-sm font-bold text-blue-700 dark:text-blue-400">Nedbetaling av lån lønner seg best</p>
       <p class="text-xs text-gray-500 dark:text-gray-400">Du er <strong>${fmtKr(diff)}</strong> bedre stilt enn ved investering over ${berAr} år</p>`;
   } else {
-    vEl.className = 'rounded-xl p-4 text-center space-y-1 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-900/50';
+    vEl.className = 'rounded-xl p-4 text-center space-y-1 border hl-verdict-invest';
     vEl.innerHTML = `<p class="text-sm font-bold text-green-700 dark:text-green-400">Investering lønner seg best</p>
       <p class="text-xs text-gray-500 dark:text-gray-400">Du er <strong>${fmtKr(diff)}</strong> bedre stilt enn ved nedbetaling over ${berAr} år</p>`;
   }
