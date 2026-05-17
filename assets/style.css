@@ -1,6 +1,16 @@
 /* ── BASE ─────────────────────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; }
 
+/* ── HUSLÅN VS. INVESTERING – dark mode cards ────────────────────────── */
+.hl-card-laan   { background: #eff6ff; border-color: #bfdbfe; }
+.hl-card-invest { background: #f0fdf4; border-color: #bbf7d0; }
+.hl-verdict-laan   { background: #eff6ff; border-color: #bfdbfe; }
+.hl-verdict-invest { background: #f0fdf4; border-color: #bbf7d0; }
+.dark .hl-card-laan      { background: rgba(23,37,84,0.2);  border-color: rgba(30,58,138,0.35); }
+.dark .hl-card-invest    { background: rgba(5,46,22,0.2);   border-color: rgba(20,83,45,0.35);  }
+.dark .hl-verdict-laan   { background: rgba(23,37,84,0.2);  border-color: rgba(30,58,138,0.35); }
+.dark .hl-verdict-invest { background: rgba(5,46,22,0.2);   border-color: rgba(20,83,45,0.35);  }
+
 /* ── STAT CARDS ──────────────────────────────────────────────────────── */
 .stat-card {
   background: #fff;
