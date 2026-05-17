@@ -1222,6 +1222,76 @@
         <!-- Tidslinje -->
         <div id="fire-ut-tidslinje" class="text-xs text-gray-500 dark:text-gray-400 space-y-0.5"></div>
       </div>
+
+      <!-- HUSLÅN VS. INVESTERING -->
+      <div class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-5 shadow-sm space-y-4">
+        <div>
+          <h2 class="font-semibold text-base">Huslån vs. Investering</h2>
+          <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Hva lønner seg mest — betale ned huslånet eller investere ekstrabeløpet? Beregnet med norsk rentefradrag (22 %) og investeringsskatt (37,84 %).</p>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Restgjeld (kr)</label>
+            <input id="hl-restgjeld" type="number" min="100000" step="50000" value="3000000" class="filter-input w-full" />
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Boliglånsrente (%)</label>
+            <input id="hl-rente" type="number" min="0.5" max="15" step="0.1" value="5.5" class="filter-input w-full" />
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Gjenstående løpetid (år)</label>
+            <input id="hl-lopetid" type="number" min="1" max="40" step="1" value="25" class="filter-input w-full" />
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Månedlig ekstrabeløp (kr)</label>
+            <input id="hl-ekstra" type="number" min="500" step="500" value="5000" class="filter-input w-full" />
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Forventet avkastning investering (%/år)</label>
+            <input id="hl-avkastning" type="number" min="1" max="30" step="0.5" value="8" class="filter-input w-full" />
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Beregningsperiode (år)</label>
+            <input id="hl-ar" type="number" min="1" max="40" step="1" value="10" class="filter-input w-full" />
+          </div>
+        </div>
+        <button id="hl-beregn" class="w-full py-2.5 bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold rounded-lg transition-colors">Beregn</button>
+
+        <!-- Resultat -->
+        <div id="hl-resultat" class="hidden space-y-4">
+          <!-- Verdict -->
+          <div id="hl-verdict" class="rounded-xl p-4 text-center space-y-1"></div>
+          <!-- Sammenligning -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div class="rounded-xl border border-blue-200 dark:border-blue-900/50 bg-blue-50 dark:bg-blue-900/20 p-4 space-y-2">
+              <p class="text-xs font-semibold text-blue-700 dark:text-blue-400 uppercase tracking-wide">Nedbetaling av lån</p>
+              <p class="text-xs text-gray-500 dark:text-gray-400">Spart rente (netto etter fradrag)</p>
+              <p id="hl-A-rente" class="text-lg font-bold tabular-nums">—</p>
+              <p class="text-xs text-gray-500 dark:text-gray-400">Redusert restgjeld</p>
+              <p id="hl-A-gjeld" class="text-base font-semibold tabular-nums">—</p>
+              <div class="border-t border-blue-200 dark:border-blue-900/50 pt-2">
+                <p class="text-xs text-gray-500 dark:text-gray-400">Total netto fordel</p>
+                <p id="hl-A-total" class="text-xl font-bold text-blue-700 dark:text-blue-400 tabular-nums">—</p>
+                <p id="hl-A-eff" class="text-xs text-gray-400 mt-0.5">—</p>
+              </div>
+            </div>
+            <div class="rounded-xl border border-green-200 dark:border-green-900/50 bg-green-50 dark:bg-green-900/20 p-4 space-y-2">
+              <p class="text-xs font-semibold text-green-700 dark:text-green-400 uppercase tracking-wide">Investering</p>
+              <p class="text-xs text-gray-500 dark:text-gray-400">Porteføljeverdi etter skatt</p>
+              <p id="hl-B-verdi" class="text-lg font-bold tabular-nums">—</p>
+              <p class="text-xs text-gray-500 dark:text-gray-400">Gevinst etter skatt</p>
+              <p id="hl-B-gevinst" class="text-base font-semibold tabular-nums">—</p>
+              <div class="border-t border-green-200 dark:border-green-900/50 pt-2">
+                <p class="text-xs text-gray-500 dark:text-gray-400">Total netto fordel</p>
+                <p id="hl-B-total" class="text-xl font-bold text-green-700 dark:text-green-400 tabular-nums">—</p>
+                <p id="hl-B-eff" class="text-xs text-gray-400 mt-0.5">—</p>
+              </div>
+            </div>
+          </div>
+          <!-- Detaljer -->
+          <div id="hl-detaljer" class="rounded-xl bg-gray-50 dark:bg-gray-800/50 border border-gray-100 dark:border-gray-800 p-4 text-xs text-gray-500 dark:text-gray-400 space-y-1"></div>
+        </div>
+      </div>
     </div>
 
     <!-- ANNONSERT UTBYTTE-KALKULATOR -->
