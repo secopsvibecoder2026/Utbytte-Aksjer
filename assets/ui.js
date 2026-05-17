@@ -3198,6 +3198,28 @@ function initKalkulator() {
   document.getElementById('hl-beregn').addEventListener('click', beregnHuslaan);
   ['hl-restgjeld','hl-rente','hl-lopetid','hl-ekstra','hl-avkastning','hl-ar']
     .forEach(id => document.getElementById(id).addEventListener('input', beregnHuslaan));
+
+  // Synkroniser rente-slider ↔ tallfeltet
+  const renteInput  = document.getElementById('hl-rente');
+  const renteSlider = document.getElementById('hl-rente-slider');
+  renteSlider.addEventListener('input', () => { renteInput.value = renteSlider.value; beregnHuslaan(); });
+  renteInput.addEventListener('input', () => { renteSlider.value = renteInput.value; });
+
+  // Presets for rente
+  document.querySelectorAll('.hl-rente-preset').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const v = btn.dataset.hlRente;
+      renteInput.value  = v;
+      renteSlider.value = v;
+      beregnHuslaan();
+    });
+  });
+
+  // Synkroniser avkastning-slider ↔ tallfeltet
+  const avkInput  = document.getElementById('hl-avkastning');
+  const avkSlider = document.getElementById('hl-avkastning-slider');
+  avkSlider.addEventListener('input', () => { avkInput.value = avkSlider.value; beregnHuslaan(); });
+  avkInput.addEventListener('input', () => { avkSlider.value = avkInput.value; });
 }
 
 function beregnHuslaan() {
