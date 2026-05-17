@@ -3193,6 +3193,106 @@ function initKalkulator() {
    'kal-skatt-aktiv','kal-skattesats','kal-inflasjon-aktiv','kal-inflasjon']
     .forEach(id => document.getElementById(id).addEventListener('input', beregnKalkulator));
   beregnKalkulator();
+
+  // Huslån vs. Investering
+  document.getElementById('hl-beregn').addEventListener('click', beregnHuslaan);
+  ['hl-restgjeld','hl-rente','hl-lopetid','hl-ekstra','hl-avkastning','hl-ar']
+    .forEach(id => document.getElementById(id).addEventListener('input', beregnHuslaan));
+}
+
+function beregnHuslaan() {
+  const restgjeld = parseFloat(document.getElementById('hl-restgjeld').value) || 3000000;
+  const rentePct  = parseFloat(document.getElementById('hl-rente').value)     || 5.5;
+  const lopetid   = parseInt(document.getElementById('hl-lopetid').value)     || 25;
+  const ekstra    = parseFloat(document.getElementById('hl-ekstra').value)    || 5000;
+  const avkPct    = parseFloat(document.getElementById('hl-avkastning').value)|| 8;
+  const berAr     = parseInt(document.getElementById('hl-ar').value)          || 10;
+
+  const rM     = rentePct / 100 / 12;
+  const nMnd   = lopetid * 12;
+  const berMnd = Math.min(berAr * 12, nMnd);
+
+  // Annuitetsbeløp (månedlig terminbeløp uten ekstra)
+  const stdBetaling = rM > 0
+    ? restgjeld * rM / (1 - Math.pow(1 + rM, -nMnd))
+    : restgjeld / nMnd;
+
+  // Option A: simuler amortisering med og uten ekstra innbetaling
+  let balBase = restgjeld, balExtra = restgjeld;
+  let renteBase = 0, renteExtra = 0;
+  let maanederSpart = 0;
+  for (let m = 0; m < berMnd; m++) {
+    if (balBase > 0.01) {
+      const ri = balBase * rM;
+      renteBase += ri;
+      balBase = Math.max(0, balBase - (stdBetaling - ri));
+    }
+    if (balExtra > 0.01) {
+      const ri = balExtra * rM;
+      renteExtra += ri;
+      balExtra = Math.max(0, balExtra - (stdBetaling + ekstra - ri));
+      if (balExtra === 0 && maanederSpart === 0) maanederSpart = berMnd - m;
+    }
+  }
+  const sparRenteGross = renteBase - renteExtra;
+  const sparRenteNetto = sparRenteGross * (1 - 0.22);
+  const balReduksjon   = balBase - balExtra;
+  const totalA         = sparRenteNetto;
+
+  // Option B: månedlig investering med renters rente
+  const avkM = avkPct / 100 / 12;
+  let pf = 0;
+  for (let m = 0; m < berMnd; m++) {
+    pf = (pf + ekstra) * (1 + avkM);
+  }
+  const totInnbetalt  = ekstra * berMnd;
+  const gevinst       = pf - totInnbetalt;
+  const gevinstNetto  = gevinst * (1 - 0.3784);
+  const pfNetto       = totInnbetalt + gevinstNetto;
+  const totalB        = gevinstNetto;
+
+  // Effektive rater
+  const effA = rentePct * (1 - 0.22);
+  const effB = avkPct   * (1 - 0.3784);
+
+  const fmtKr = v => Math.round(v).toLocaleString('nb-NO') + ' kr';
+
+  document.getElementById('hl-A-rente').textContent  = fmtKr(sparRenteNetto);
+  document.getElementById('hl-A-gjeld').textContent  = fmtKr(balReduksjon);
+  document.getElementById('hl-A-total').textContent  = fmtKr(totalA);
+  document.getElementById('hl-A-eff').textContent    = `Effektiv rente etter rentefradrag: ${effA.toFixed(2)}% p.a.`;
+
+  document.getElementById('hl-B-verdi').textContent   = fmtKr(pfNetto);
+  document.getElementById('hl-B-gevinst').textContent = fmtKr(gevinstNetto);
+  document.getElementById('hl-B-total').textContent   = fmtKr(totalB);
+  document.getElementById('hl-B-eff').textContent     = `Forventet netto avkastning etter skatt: ${effB.toFixed(2)}% p.a.`;
+
+  // Breakeven og verdikt
+  const breakeven = (avkPct * (1 - 0.3784) / (1 - 0.22)).toFixed(2);
+  const vEl  = document.getElementById('hl-verdict');
+  const diff = Math.abs(totalA - totalB);
+  if (totalA >= totalB) {
+    vEl.className = 'rounded-xl p-4 text-center space-y-1 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-900/50';
+    vEl.innerHTML = `<p class="text-sm font-bold text-blue-700 dark:text-blue-400">Nedbetaling av lån lønner seg best</p>
+      <p class="text-xs text-gray-500 dark:text-gray-400">Du er <strong>${fmtKr(diff)}</strong> bedre stilt enn ved investering over ${berAr} år</p>`;
+  } else {
+    vEl.className = 'rounded-xl p-4 text-center space-y-1 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-900/50';
+    vEl.innerHTML = `<p class="text-sm font-bold text-green-700 dark:text-green-400">Investering lønner seg best</p>
+      <p class="text-xs text-gray-500 dark:text-gray-400">Du er <strong>${fmtKr(diff)}</strong> bedre stilt enn ved nedbetaling over ${berAr} år</p>`;
+  }
+
+  // Detaljer
+  const tidligFerdigTekst = maanederSpart > 0
+    ? ` · Lånet nedbetalt <strong>${Math.round(maanederSpart/12 * 10)/10} år</strong> tidligere`
+    : '';
+  document.getElementById('hl-detaljer').innerHTML =
+    `<p><strong>Forutsetninger:</strong> Rentefradrag 22&nbsp;%, investeringsskatt 37,84&nbsp;% (skjermingsfradrag ikke inkludert — faktisk skatt kan bli noe lavere)</p>` +
+    `<p>Beregnet terminbeløp: ${fmtKr(stdBetaling)}/mnd &nbsp;·&nbsp; Ekstra innbetalt totalt: ${fmtKr(totInnbetalt)}${tidligFerdigTekst}</p>` +
+    `<p>Restgjeld etter ${berAr} år — uten ekstra: ${fmtKr(balBase)} &nbsp;·&nbsp; med ekstra: ${fmtKr(balExtra)}</p>` +
+    `<p>Portefølje bruttoverdi: ${fmtKr(pf)} &nbsp;·&nbsp; Netto etter skatt: ${fmtKr(pfNetto)}</p>` +
+    `<p>Break-even lånerente: <strong>${breakeven}%</strong> — over dette lønner nedbetaling seg fremfor ${avkPct}% investeringsavkastning</p>`;
+
+  document.getElementById('hl-resultat').classList.remove('hidden');
 }
 
 function brukPortefoljeData() {
