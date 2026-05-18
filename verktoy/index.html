@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3981936786393038" crossorigin="anonymous"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-X6C9PERKMB"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', { analytics_storage:'denied', ad_storage:'denied', ad_user_data:'denied', ad_personalization:'denied', wait_for_update:500 });
+    gtag('js', new Date());
+    gtag('config', 'G-X6C9PERKMB');
+  </script>
+  <script src="/assets/consent.js" defer></script>
+
+  <title>Verktøy for investering og utbytte | exday.no</title>
+  <meta name="description" content="Gratis kalkulatorer og verktøy for norske investorer: utbyttekalkulator, FIRE-kalkulator, huslån vs. investering og sektorrebalansering. Tilpasset Oslo Børs." />
+  <link rel="canonical" href="https://exday.no/verktoy/" />
+  <link rel="icon" type="image/png" sizes="512x512" href="/favicon.png">
+  <link rel="icon" type="image/svg+xml" href="/logo/exday_icon_primary.svg">
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#16a34a" />
+
+  <meta property="og:title" content="Verktøy for investering og utbytte | exday.no" />
+  <meta property="og:description" content="Gratis kalkulatorer og verktøy for norske investorer på Oslo Børs." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://exday.no/verktoy/" />
+  <meta property="og:image" content="https://exday.no/assets/og-image.png" />
+  <meta property="og:locale" content="nb_NO" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "Verktøy for investering og utbytte",
+    "url": "https://exday.no/verktoy/",
+    "description": "Gratis kalkulatorer og verktøy for norske investorer på Oslo Børs.",
+    "publisher": { "@type": "Organization", "name": "exday.no", "url": "https://exday.no" },
+    "hasPart": [
+      { "@type": "WebApplication", "name": "Utbyttekalkulator", "url": "https://exday.no/utbyttekalkulator/" },
+      { "@type": "WebApplication", "name": "Huslån vs. Investering", "url": "https://exday.no/verktoy/huslan-vs-investering/" }
+    ]
+  }
+  </script>
+
+  <link rel="stylesheet" href="/assets/tailwind.css" />
+  <link rel="stylesheet" href="/assets/style.css" />
+</head>
+<body class="bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 min-h-screen transition-colors duration-200">
+
+  <nav class="site-nav" aria-label="Hovedmeny">
+    <div class="site-nav-inner">
+      <a href="/" class="site-logo" aria-label="exday.no - hjem">
+        <img src="/logo/exday_icon_primary.svg" class="site-logo-icon site-logo-icon-light" alt="" width="28" height="28" loading="eager">
+        <img src="/logo/exday_icon_inverse.svg" class="site-logo-icon site-logo-icon-dark" alt="" width="28" height="28" loading="eager">
+        <span>e<span class="site-logo-x">x</span>day<span class="site-logo-dot">.no</span></span>
+      </a>
+      <ul class="site-nav-menu">
+        <li><a href="/aksjer/">Aksjer</a></li>
+        <li><a href="/aksjer/sektor/">Sektorer</a></li>
+        <li><a href="/utbyttekalender/">Kalender</a></li>
+        <li class="has-dropdown">
+          <a href="/verktoy/" class="active">Verktøy</a>
+          <ul class="nav-dropdown">
+            <li><a href="/utbyttekalkulator/">Kalkulator</a></li>
+            <li><a href="/verktoy/huslan-vs-investering/">Huslån vs. Investering</a></li>
+          </ul>
+        </li>
+        <li><a href="/artikler/">Artikler</a></li>
+        <li><a href="/faq/">FAQ</a></li>
+        <li><a href="/om/">Om</a></li>
+      </ul>
+      <div class="site-nav-actions">
+        <a href="https://exday.no/" class="site-app-btn">Åpne app</a>
+        <button id="site-dark-toggle" class="site-dark-btn" aria-label="Bytt fargemodus">
+          <svg class="sun-icon" width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+          <svg class="moon-icon" width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display:none;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+        </button>
+      </div>
+      <button class="site-nav-burger" aria-label="Vis meny" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+  <script>
+    (function() {
+      var root = document.documentElement;
+      if (localStorage.getItem('tema') === 'dark') root.classList.add('dark');
+      var nav = document.querySelector('.site-nav');
+      var burger = nav && nav.querySelector('.site-nav-burger');
+      if (burger) burger.addEventListener('click', function() {
+        nav.classList.toggle('open');
+        burger.setAttribute('aria-expanded', nav.classList.contains('open'));
+      });
+      var dt = document.getElementById('site-dark-toggle');
+      if (dt) dt.addEventListener('click', function() {
+        var isDark = root.classList.toggle('dark');
+        localStorage.setItem('tema', isDark ? 'dark' : 'light');
+      });
+    })();
+  </script>
+
+  <main class="max-w-4xl mx-auto px-4 py-8 sm:py-12">
+
+    <nav aria-label="Brødsmulesti" class="text-xs text-gray-400 dark:text-gray-500 mb-6">
+      <ol class="flex items-center gap-1.5 flex-wrap">
+        <li><a href="/" class="hover:text-green-600 dark:hover:text-green-400 transition-colors">exday.no</a></li>
+        <li aria-hidden="true">›</li>
+        <li class="text-gray-600 dark:text-gray-300 font-medium">Verktøy</li>
+      </ol>
+    </nav>
+
+    <header class="mb-8">
+      <h1 class="text-2xl sm:text-3xl font-bold mb-3">Verktøy for investering og utbytte</h1>
+      <p class="text-gray-600 dark:text-gray-400 max-w-2xl leading-relaxed">
+        Gratis kalkulatorer og analyseverktøy tilpasset norske investorer på Oslo Børs. Beregn utbytteinntekt, planlegg FIRE, finn ut om det lønner seg å betale ned huslånet eller investere, og rebalanser porteføljen din.
+      </p>
+    </header>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-12">
+
+      <a href="/utbyttekalkulator/" class="group block rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-5 shadow-sm hover:border-green-300 dark:hover:border-green-800 hover:shadow-md transition-all">
+        <div class="flex items-start gap-4">
+          <div class="shrink-0 w-10 h-10 rounded-lg bg-green-50 dark:bg-green-900/30 flex items-center justify-center text-green-600 dark:text-green-400">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+          </div>
+          <div>
+            <h2 class="font-semibold text-base group-hover:text-green-700 dark:group-hover:text-green-400 transition-colors">Utbyttekalkulator</h2>
+            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1 leading-relaxed">Beregn fremtidig utbytteinntekt med DRIP-reinvestering, skatt og inflasjonsjustering. Se hva porteføljen er verdt om 5, 10 eller 20 år.</p>
+            <span class="inline-flex items-center gap-1 mt-3 text-xs font-medium text-green-600 dark:text-green-400">
+              Bruk kalkulator <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+            </span>
+          </div>
+        </div>
+      </a>
+
+      <a href="/verktoy/huslan-vs-investering/" class="group block rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-5 shadow-sm hover:border-green-300 dark:hover:border-green-800 hover:shadow-md transition-all">
+        <div class="flex items-start gap-4">
+          <div class="shrink-0 w-10 h-10 rounded-lg bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-blue-600 dark:text-blue-400">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+          </div>
+          <div>
+            <h2 class="font-semibold text-base group-hover:text-green-700 dark:group-hover:text-green-400 transition-colors">Huslån vs. Investering</h2>
+            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1 leading-relaxed">Hva lønner seg mest med et ekstra månedlig beløp — betale ned huslånet raskere eller investere i aksjer? Beregnet med norsk rentefradrag (22&nbsp;%) og investeringsskatt (37,84&nbsp;%).</p>
+            <span class="inline-flex items-center gap-1 mt-3 text-xs font-medium text-green-600 dark:text-green-400">
+              Bruk kalkulator <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+            </span>
+          </div>
+        </div>
+      </a>
+
+      <a href="https://exday.no/" class="group block rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-5 shadow-sm hover:border-green-300 dark:hover:border-green-800 hover:shadow-md transition-all">
+        <div class="flex items-start gap-4">
+          <div class="shrink-0 w-10 h-10 rounded-lg bg-orange-50 dark:bg-orange-900/20 flex items-center justify-center text-orange-600 dark:text-orange-400">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+          </div>
+          <div>
+            <h2 class="font-semibold text-base group-hover:text-green-700 dark:group-hover:text-green-400 transition-colors">FIRE-kalkulator</h2>
+            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1 leading-relaxed">Beregn nødvendig kapital og antall år til du kan leve av utbytteinntekten. Tar hensyn til månedlig sparing, ASK-skatt og yield-vekst.</p>
+            <span class="inline-flex items-center gap-1 mt-3 text-xs font-medium text-gray-400">
+              Tilgjengelig i app <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+            </span>
+          </div>
+        </div>
+      </a>
+
+      <a href="https://exday.no/" class="group block rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-5 shadow-sm hover:border-green-300 dark:hover:border-green-800 hover:shadow-md transition-all">
+        <div class="flex items-start gap-4">
+          <div class="shrink-0 w-10 h-10 rounded-lg bg-purple-50 dark:bg-purple-900/20 flex items-center justify-center text-purple-600 dark:text-purple-400">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"/></svg>
+          </div>
+          <div>
+            <h2 class="font-semibold text-base group-hover:text-green-700 dark:group-hover:text-green-400 transition-colors">Sektorrebalansering</h2>
+            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1 leading-relaxed">Sammenlign faktisk og ønsket sektorfordeling i porteføljen. Se nøyaktig hvor mye du bør kjøpe eller selge i hver sektor.</p>
+            <span class="inline-flex items-center gap-1 mt-3 text-xs font-medium text-gray-400">
+              Tilgjengelig i app <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+            </span>
+          </div>
+        </div>
+      </a>
+
+    </div>
+
+    <div class="rounded-xl bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 p-6 text-center">
+      <h2 class="font-semibold text-lg mb-2">Alle verktøy samlet i én app</h2>
+      <p class="text-sm text-gray-600 dark:text-gray-400 mb-4 max-w-lg mx-auto">
+        I exday.no-appen finner du alle verktøyene koblet direkte mot din portefølje og 191 norske utbytteaksjer på Oslo Børs. Gratis og uten registrering.
+      </p>
+      <a href="https://exday.no/" class="inline-flex items-center gap-2 px-5 py-2.5 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition-colors text-sm">
+        Åpne gratis app
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+
+  </main>
+
+  <footer class="mt-8 sm:mt-12 border-t border-gray-200 dark:border-gray-800 py-6 text-center text-xs text-gray-400 dark:text-gray-600 space-y-1 px-4">
+    <p>Kurs og utbyttedata hentes fra Yahoo Finance og Euronext. Oppdateres daglig på børsdager.</p>
+    <p class="max-w-xl mx-auto leading-relaxed">
+      exday.no er ikke et verdipapirforetak og tilbyr ikke finansiell rådgivning.
+      Data kan inneholde feil eller forsinkelser — verifiser alltid mot Oslo Børs eller selskapets egne rapporter.
+      Historisk utbytte er ingen garanti for fremtidig utbytte.
+      Gjør alltid din egen analyse før du tar investeringsbeslutninger.
+    </p>
+    <p class="mt-2">
+      <a href="/personvern/" class="underline hover:text-gray-400 dark:hover:text-gray-400 transition-colors">Personvern og informasjonskapsler</a>
+      <span class="mx-2">·</span>
+      <a href="/faq/" class="underline hover:text-gray-400 dark:hover:text-gray-400 transition-colors">Vanlige spørsmål (FAQ)</a>
+    </p>
+    <p class="mt-3">
+      <a href="https://www.facebook.com/share/17rMp8o9yF/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-gray-400 hover:text-blue-500 dark:hover:text-blue-400 transition-colors">
+        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/></svg>
+        Følg exday.no på Facebook
+      </a>
+    </p>
+  </footer>
+
+  <button id="tilbake-topp" aria-label="Tilbake til toppen"
+    class="fixed bottom-5 right-4 z-50 hidden p-2.5 rounded-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-md text-gray-500 dark:text-gray-400 hover:text-brand-600 dark:hover:text-brand-400 transition-all">
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 15l7-7 7 7"/></svg>
+  </button>
+  <script>
+    (function() {
+      var btn = document.getElementById('tilbake-topp');
+      window.addEventListener('scroll', function() { btn.classList.toggle('hidden', window.scrollY < 400); }, {passive:true});
+      btn.addEventListener('click', function() { window.scrollTo({top:0,behavior:'smooth'}); });
+    })();
+  </script>
+</body>
+</html>
