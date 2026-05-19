@@ -2538,7 +2538,7 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     <span style="color:#9ca3af;">·</span>
     <a href="/utbyttekalender/">Utbyttekalender</a>
     <span style="color:#9ca3af;">·</span>
-    <a href="/utbyttekalkulator/">Kalkulator</a>
+    <a href="/verktoy/kalkulator/">Kalkulator</a>
     <span style="color:#9ca3af;">·</span>
     <a href="/aksjer/hoyest-utbytte/">Høyest yield</a>
   </div>
@@ -3077,7 +3077,15 @@ def _site_nav_html(active=""):
         <li><a href="/aksjer/" class="{cls('aksjer')}">Aksjer</a></li>
         <li><a href="/aksjer/sektor/" class="{cls('sektor')}">Sektorer</a></li>
         <li><a href="/utbyttekalender/" class="{cls('kalender')}">Kalender</a></li>
-        <li><a href="/utbyttekalkulator/" class="{cls('kalkulator')}">Kalkulator</a></li>
+        <li class="has-dropdown">
+          <a href="/verktoy/" class="{cls('verktoy')}">Verktøy</a>
+          <ul class="nav-dropdown">
+            <li><a href="/verktoy/kalkulator/">Kalkulator</a></li>
+            <li><a href="/verktoy/huslan-vs-investering/">Huslån vs. Investering</a></li>
+            <li><a href="/verktoy/fire-kalkulator/">FIRE-kalkulator</a></li>
+            <li><a href="/verktoy/sektorrebalansering/">Sektorrebalansering</a></li>
+          </ul>
+        </li>
         <li><a href="/artikler/" class="{cls('artikler')}">Artikler</a></li>
         <li><a href="/faq/" class="{cls('faq')}">FAQ</a></li>
         <li><a href="/om/" class="{cls('om')}">Om</a></li>
