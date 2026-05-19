@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3981936786393038" crossorigin="anonymous"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-X6C9PERKMB"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', { analytics_storage:'denied', ad_storage:'denied', ad_user_data:'denied', ad_personalization:'denied', wait_for_update:500 });
+    gtag('js', new Date());
+    gtag('config', 'G-X6C9PERKMB');
+  </script>
+  <script src="/assets/consent.js" defer></script>
+
+  <title>Sektorrebalansering – kalkulator for porteføljebalanse | exday.no</title>
+  <meta name="description" content="Beregn nøyaktig hva du bør kjøpe eller selge i hver sektor for å nå ønsket fordeling. Gratis verktøy for norske utbytteinvestorer på Oslo Børs." />
+  <link rel="canonical" href="https://exday.no/verktoy/sektorrebalansering/" />
+  <link rel="icon" type="image/png" sizes="512x512" href="/favicon.png">
+  <link rel="icon" type="image/svg+xml" href="/logo/exday_icon_primary.svg">
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#16a34a" />
+
+  <meta property="og:title" content="Sektorrebalansering – kalkulator for porteføljebalanse | exday.no" />
+  <meta property="og:description" content="Beregn nøyaktig hva du bør kjøpe eller selge i hver sektor for å nå ønsket fordeling. Gratis verktøy for norske utbytteinvestorer på Oslo Børs." />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://exday.no/verktoy/sektorrebalansering/" />
+  <meta property="og:image" content="https://exday.no/assets/og-image.png" />
+  <meta property="og:locale" content="nb_NO" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": ["WebApplication", "Article"],
+    "name": "Sektorrebalansering – kalkulator for porteføljebalanse",
+    "headline": "Sektorrebalansering – kalkulator for porteføljebalanse",
+    "url": "https://exday.no/verktoy/sektorrebalansering/",
+    "description": "Beregn nøyaktig hva du bør kjøpe eller selge i hver sektor for å nå ønsket fordeling. Gratis verktøy for norske utbytteinvestorer på Oslo Børs.",
+    "datePublished": "2025-05-19",
+    "dateModified": "2025-05-19",
+    "author": { "@type": "Organization", "name": "exday.no" },
+    "publisher": { "@type": "Organization", "name": "exday.no", "url": "https://exday.no" },
+    "applicationCategory": "FinanceApplication",
+    "operatingSystem": "Web",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "NOK" },
+    "inLanguage": "nb-NO"
+  }
+  </script>
+
+  <link rel="stylesheet" href="/assets/tailwind.css" />
+  <link rel="stylesheet" href="/assets/style.css" />
+</head>
+<body class="bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 min-h-screen transition-colors duration-200">
+
+  <nav class="site-nav" aria-label="Hovedmeny">
+    <div class="site-nav-inner">
+      <a href="/" class="site-logo" aria-label="exday.no - hjem">
+        <img src="/logo/exday_icon_primary.svg" class="site-logo-icon site-logo-icon-light" alt="" width="28" height="28" loading="eager">
+        <img src="/logo/exday_icon_inverse.svg" class="site-logo-icon site-logo-icon-dark" alt="" width="28" height="28" loading="eager">
+        <span>e<span class="site-logo-x">x</span>day<span class="site-logo-dot">.no</span></span>
+      </a>
+      <ul class="site-nav-menu">
+        <li><a href="/aksjer/">Aksjer</a></li>
+        <li><a href="/aksjer/sektor/">Sektorer</a></li>
+        <li><a href="/utbyttekalender/">Kalender</a></li>
+        <li class="has-dropdown">
+          <a href="/verktoy/" class="active">Verktøy</a>
+          <ul class="nav-dropdown">
+            <li><a href="/utbyttekalkulator/">Kalkulator</a></li>
+            <li><a href="/verktoy/huslan-vs-investering/">Huslån vs. Investering</a></li>
+            <li><a href="/verktoy/fire-kalkulator/">FIRE-kalkulator</a></li>
+            <li><a href="/verktoy/sektorrebalansering/" class="active">Sektorrebalansering</a></li>
+          </ul>
+        </li>
+        <li><a href="/artikler/">Artikler</a></li>
+        <li><a href="/faq/">FAQ</a></li>
+        <li><a href="/om/">Om</a></li>
+      </ul>
+      <div class="site-nav-actions">
+        <a href="https://exday.no/" class="site-app-btn">Åpne app</a>
+        <button id="site-dark-toggle" class="site-dark-btn" aria-label="Bytt fargemodus">
+          <svg class="sun-icon" width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+          <svg class="moon-icon" width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display:none;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+        </button>
+      </div>
+      <button class="site-nav-burger" aria-label="Vis meny" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+  <script>
+    (function() {
+      var root = document.documentElement;
+      if (localStorage.getItem('tema') === 'dark') root.classList.add('dark');
+      var nav = document.querySelector('.site-nav');
+      var burger = nav && nav.querySelector('.site-nav-burger');
+      if (burger) burger.addEventListener('click', function() {
+        nav.classList.toggle('open');
+        burger.setAttribute('aria-expanded', nav.classList.contains('open'));
+      });
+      var dt = document.getElementById('site-dark-toggle');
+      if (dt) dt.addEventListener('click', function() {
+        var isDark = root.classList.toggle('dark');
+        localStorage.setItem('tema', isDark ? 'dark' : 'light');
+      });
+    })();
+  </script>
+
+  <main class="max-w-3xl mx-auto px-4 py-8 sm:py-12">
+
+    <nav aria-label="Brødsmulesti" class="text-xs text-gray-400 dark:text-gray-500 mb-6">
+      <ol class="flex items-center gap-1.5 flex-wrap">
+        <li><a href="/" class="hover:text-green-600 dark:hover:text-green-400 transition-colors">exday.no</a></li>
+        <li aria-hidden="true">›</li>
+        <li><a href="/verktoy/" class="hover:text-green-600 dark:hover:text-green-400 transition-colors">Verktøy</a></li>
+        <li aria-hidden="true">›</li>
+        <li class="text-gray-600 dark:text-gray-300 font-medium">Sektorrebalansering</li>
+      </ol>
+    </nav>
+
+    <header class="mb-8">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-10 h-10 rounded-xl bg-purple-50 dark:bg-purple-900/20 flex items-center justify-center shrink-0">
+          <svg class="w-5 h-5 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"/>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"/>
+          </svg>
+        </div>
+        <h1 class="text-2xl sm:text-3xl font-bold">Sektorrebalansering</h1>
+      </div>
+      <p class="text-gray-600 dark:text-gray-400 leading-relaxed">
+        Legg inn nåværende verdi for hver sektor i porteføljen din og sett ønsket målfordeling. Kalkulatoren beregner nøyaktig hva du bør kjøpe eller selge for å nå ønsket vekting — uten at du trenger å selge deg ut av hele porteføljen.
+      </p>
+    </header>
+
+    <!-- ── KALKULATOR ── -->
+    <div class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-5 sm:p-6 shadow-sm mb-6">
+
+      <!-- Totalvisning -->
+      <div class="flex items-center justify-between mb-5 pb-4 border-b border-gray-100 dark:border-gray-800">
+        <div>
+          <p class="text-xs text-gray-500 dark:text-gray-400 mb-0.5">Total porteføljeverdi</p>
+          <p id="sb-total" class="text-2xl font-bold text-green-600 dark:text-green-400 tabular-nums">0 kr</p>
+        </div>
+        <div class="text-right">
+          <p class="text-xs text-gray-500 dark:text-gray-400 mb-0.5">Sum mål&nbsp;%</p>
+          <p id="sb-total-maal" class="text-2xl font-semibold tabular-nums text-orange-500">100.0%</p>
+        </div>
+      </div>
+
+      <!-- Tabell -->
+      <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;">
+        <table class="w-full min-w-[520px]">
+          <thead>
+            <tr class="border-b border-gray-200 dark:border-gray-700">
+              <th class="pb-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 w-36">Sektor</th>
+              <th class="pb-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400">Nåværende (kr)</th>
+              <th class="pb-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400">Nå&nbsp;%</th>
+              <th class="pb-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400">Mål&nbsp;%</th>
+              <th class="pb-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400">Diff</th>
+              <th class="pb-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400">Kjøp / Selg</th>
+              <th class="pb-2 w-6"></th>
+            </tr>
+          </thead>
+          <tbody id="sb-tabell">
+            <!-- Rader genereres av JS -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Handlingsknapper -->
+      <div class="flex items-center gap-3 mt-4 flex-wrap">
+        <select id="sb-legg-til-select" class="text-sm border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-1.5 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-400">
+          <option value="">+ Legg til sektor...</option>
+        </select>
+        <button id="sb-tilbakestill" class="text-xs px-3 py-1.5 rounded-lg border border-gray-300 dark:border-gray-600 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+          Tilbakestill til standard
+        </button>
+      </div>
+
+      <!-- Oppsummeringskort -->
+      <div id="sb-oppsummering" class="hidden mt-5 grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div class="rounded-xl bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-800 p-4">
+          <p class="text-xs font-semibold text-orange-700 dark:text-orange-400 uppercase tracking-wide mb-1">Størst overvekt</p>
+          <p id="sb-overvekt-navn" class="text-sm font-bold text-gray-800 dark:text-gray-200">–</p>
+          <p id="sb-overvekt-kr" class="text-xs text-orange-600 dark:text-orange-400 mt-0.5">–</p>
+        </div>
+        <div class="rounded-xl bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 p-4">
+          <p class="text-xs font-semibold text-green-700 dark:text-green-400 uppercase tracking-wide mb-1">Størst undervekt</p>
+          <p id="sb-undervekt-navn" class="text-sm font-bold text-gray-800 dark:text-gray-200">–</p>
+          <p id="sb-undervekt-kr" class="text-xs text-green-600 dark:text-green-400 mt-0.5">–</p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ── LES OGSÅ ── -->
+    <div class="mb-10 rounded-xl bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 p-5">
+      <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-3">Les også</p>
+      <ul class="space-y-2">
+        <li>
+          <a href="/verktoy/fire-kalkulator/" class="flex items-center gap-2 text-sm text-green-600 dark:text-green-400 hover:underline">
+            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+            FIRE-kalkulator – når kan du bli økonomisk fri?
+          </a>
+        </li>
+        <li>
+          <a href="/verktoy/huslan-vs-investering/" class="flex items-center gap-2 text-sm text-green-600 dark:text-green-400 hover:underline">
+            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+            Huslån vs. Investering – hva lønner seg?
+          </a>
+        </li>
+        <li>
+          <a href="/utbyttekalkulator/" class="flex items-center gap-2 text-sm text-green-600 dark:text-green-400 hover:underline">
+            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+            Utbyttekalkulator – beregn utbytteinntekt
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- ── INNHOLD ── -->
+    <article class="prose prose-sm sm:prose max-w-none dark:prose-invert prose-headings:font-bold prose-a:text-green-600 dark:prose-a:text-green-400 space-y-6">
+
+      <h2 id="hva-er-sektorrebalansering">Hva er sektorrebalansering?</h2>
+      <p>
+        Sektorrebalansering er prosessen med å justere vektingen av ulike bransjer i porteføljen din slik at den stemmer overens med den fordelingen du ønsker. Over tid vil noen sektorer vokse raskere enn andre — aksjer i energisektoren kan doble seg mens finansaksjer stagnerer — og da vil den faktiske sektorvektingen avvike fra den opprinnelige planen din.
+      </p>
+      <p>
+        For en utbytteinvestor på Oslo Børs er sektorrebalansering ekstra viktig. Ulike sektorer har svært forskjellige utbytteprofiler: energi og shipping betaler typisk høy yield men med stor variasjon fra år til år, mens eiendom og finans gjerne gir lavere men mer forutsigbare utbetalinger. Har du utilsiktet blitt tungt eksponert mot én enkelt sektor, øker du både den spesifikke næringsrisikoen og volatiliteten i utbytteinntektene dine.
+      </p>
+      <p>
+        Rebalansering handler ikke nødvendigvis om å selge det som har gått bra. Den vanligste og skattemessig gunstigste metoden er å <strong>kjøpe mer av de undervektede sektorene</strong> ved hjelp av nye sparepenger, slik at fordelingen gradvis normaliseres uten at du utløser realisasjonsbeskatning.
+      </p>
+
+      <h2 id="slik-bruker-du-kalkulatoren">Slik bruker du kalkulatoren</h2>
+      <p>Kalkulatoren er enkel å bruke og krever ingen registrering:</p>
+      <ol>
+        <li><strong>Legg inn nåværende verdi</strong> for hver sektor i kroner-kolonnen. Verdien er markedsverdi av dine beholdninger i den sektoren, ikke kostpris.</li>
+        <li><strong>Sett målprosent</strong> for hver sektor i Mål&nbsp;%-kolonnen. Summen av alle målprosenter bør bli nøyaktig 100&nbsp;%.</li>
+        <li>Kalkulatoren beregner automatisk nåværende vekting, avviket fra målet, og det kronebeløpet du bør kjøpe eller selge i hver sektor.</li>
+        <li>Bruk <strong>Legg til sektor</strong>-knappen for å legge til sektorer som ikke er forhåndsutfylt.</li>
+        <li>Trykk <strong>Tilbakestill til standard</strong> for å gå tilbake til de syv vanligste sektorene for norske utbytteinvestorer.</li>
+      </ol>
+      <p>
+        Kalkulatoren lagrer ikke noe — alle tall forsvinner når du lukker siden. For å bevare porteføljeoppsettet ditt over tid, anbefales det å bruke porteføljefunksjonen i exday.no-appen, som beregner rebalansering basert på faktiske beholdninger.
+      </p>
+
+      <h2 id="sektorer-paa-oslo-bors">Sektorer på Oslo Børs</h2>
+      <p>
+        Oslo Børs er en liten men ressursrik børs med tydelig bransjekonsentrasjon. De 191 aksjene i exday.no-databasen er fordelt på 16 sektorer:
+      </p>
+      <ul>
+        <li><strong>Energi</strong> — olje- og gassprodusenter som Equinor, Aker BP og DNO. Dominerer børsen målt i markedsverdi.</li>
+        <li><strong>Energitjenester</strong> — leverandørindustri til olje og gass, inkludert Subsea 7 og TechnipFMC.</li>
+        <li><strong>Finans</strong> — banker og forsikring, inkludert DNB, Gjensidige og Storebrand.</li>
+        <li><strong>Eiendom</strong> — eiendomsselskaper som Entra, Norwegian Property og Selvaag Bolig.</li>
+        <li><strong>Havbruk</strong> — lakseoppdrettere som Mowi, SalMar, Lerøy og Grieg Seafood.</li>
+        <li><strong>Industri</strong> — bredt spekter fra Kongsberg Gruppen til Tomra og Nel.</li>
+        <li><strong>Shipping</strong> — tankere, bulkskip og gasskip: Frontline, Golden Ocean, Flex LNG.</li>
+        <li><strong>Skipsfart</strong> — offshorefartøy og spesialiserte skip: DOF, Solstad, Bonheur.</li>
+        <li><strong>Forbruksvarer</strong> — detaljhandel og forbrukerprodukter, inkludert Europris og XXL.</li>
+        <li><strong>Fornybar energi</strong> — vind- og solkraft: Scatec, Aker Horizons.</li>
+        <li><strong>Forsyning</strong> — kraft og vannkraft: Hafslund Eco, Arendals Fossekompani.</li>
+        <li><strong>Helsevern</strong> — medisinteknikk og farmasøytika: Nordic Semiconductor, Photon Dynamics.</li>
+        <li><strong>Informasjonsteknologi</strong> — programvare og teknologi: Crayon, Visma-relaterte selskaper.</li>
+        <li><strong>Kommunikasjonstjenester</strong> — medier og teleoperatører.</li>
+        <li><strong>Materialer</strong> — råvareproduksjon, inkludert Norsk Hydro og Yara.</li>
+        <li><strong>Telekommunikasjon</strong> — Telenor og Telia Norway.</li>
+      </ul>
+
+      <h2 id="anbefalt-sektorfordeling">Anbefalt sektorfordeling for utbytteinvestorer</h2>
+      <p>
+        Det finnes ingen universell riktig fordeling — det avhenger av investeringshorisont, risikotoleranse og inntektsbehov. Men for en norsk utbytteinvestor som ønsker en balansert portefølje med stabile utbetalinger og moderat risiko, er følgende tommelfingerregel et godt utgangspunkt:
+      </p>
+      <ul>
+        <li><strong>Energi 15–25&nbsp;%</strong>: Stor eksponering mot norsk sokkel gir høy yield, men volatil dividende avhengig av oljeprisen. Equinor alene utgjør en stor del av OBX-indeksen.</li>
+        <li><strong>Finans 10–20&nbsp;%</strong>: Stabile banker med forutsigbar utbyttepolitikk. DNB og Gjensidige er foretrukne utbytteaksjer blant norske private investorer.</li>
+        <li><strong>Havbruk 10–20&nbsp;%</strong>: Lakseprisene svinger, men de store aktørene som Mowi og SalMar har lang historikk med sjenerøse utbytter i gode år.</li>
+        <li><strong>Eiendom 10–15&nbsp;%</strong>: Gir relativt stabile leiebaserte utbytter, men er rentesensitivt.</li>
+        <li><strong>Industri 10–15&nbsp;%</strong>: God diversifisering; Kongsberg Gruppen har vist sterk vekst i utbytte de siste årene.</li>
+        <li><strong>Shipping 5–15&nbsp;%</strong>: Svært syklisk med ekstraordinære utbytter i gode fraktmarkeder, men kan kutte drastisk i nedgangstider.</li>
+        <li><strong>Forbruksvarer 5–10&nbsp;%</strong>: Defensiv eksponering som Europris og Rema-kjeden.</li>
+      </ul>
+      <p>
+        Resten (5–15&nbsp;%) kan fordeles på fornybar energi, materialer og telekommunikasjon avhengig av preferanser. Merk at norske investorer naturlig vil ha høyere hjemlandseksponering enn en internasjonal investor ville anbefale — dette er akseptabelt for den som primært søker norske utbytteinntekter.
+      </p>
+
+      <h2 id="eksempel-rebalansering">Eksempel: Rebalansering av 500 000 kr</h2>
+      <p>
+        La oss si at du har en portefølje på 500 000 kr med følgende faktiske fordeling etter et år med sterk energioppgang:
+      </p>
+      <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;">
+        <table>
+          <thead>
+            <tr><th>Sektor</th><th>Verdi (kr)</th><th>Faktisk %</th><th>Mål %</th><th>Differanse</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Energi</td><td>150 000</td><td>30,0 %</td><td>20,0 %</td><td>+10,0 %</td></tr>
+            <tr><td>Finans</td><td>75 000</td><td>15,0 %</td><td>15,0 %</td><td>0,0 %</td></tr>
+            <tr><td>Havbruk</td><td>50 000</td><td>10,0 %</td><td>15,0 %</td><td>–5,0 %</td></tr>
+            <tr><td>Eiendom</td><td>75 000</td><td>15,0 %</td><td>15,0 %</td><td>0,0 %</td></tr>
+            <tr><td>Industri</td><td>75 000</td><td>15,0 %</td><td>15,0 %</td><td>0,0 %</td></tr>
+            <tr><td>Shipping</td><td>40 000</td><td>8,0 %</td><td>10,0 %</td><td>–2,0 %</td></tr>
+            <tr><td>Forbruksvarer</td><td>35 000</td><td>7,0 %</td><td>10,0 %</td><td>–3,0 %</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        Energi utgjør nå 30&nbsp;% mot et mål på 20&nbsp;%. Differansen er +10&nbsp;prosentpoeng, noe som tilsvarer 50 000 kr (10&nbsp;% av 500 000) som er overvektig. For å rebalansere uten å selge kan du la være å reinvestere utbyttet fra energiaksjene, og i stedet bruke 25 000 kr på havbruk (–5&nbsp;%) og 10 000 kr på shipping og 15 000 kr på forbruksvarer. Dersom du tilfører 50 000 kr ny kapital, kan du rebalansere fullt ut uten å selge en eneste aksje.
+      </p>
+
+      <h2 id="naar-bor-du-rebalansere">Når bør du rebalansere?</h2>
+      <p>
+        Det finnes to hovedstrategier for rebalanseringsfrekvens:
+      </p>
+      <h3>Tidsstyrt rebalansering</h3>
+      <p>
+        Du rebalanserer på faste tidspunkt — typisk én gang i kvartalet eller én gang i året. Dette er enkelt å gjennomføre og krever minimal oppfølging. Ulempen er at du kan rebalansere unødvendig mye når porteføljen faktisk er godt i balanse, eller for sjelden når store markedsbevegelser har skapt store avvik.
+      </p>
+      <h3>Terskelbasert rebalansering</h3>
+      <p>
+        Du rebalanserer kun når en sektor avviker mer enn en definert terskel fra målet — typisk 5 eller 10 prosentpoeng. Dette er mer effektivt siden du reagerer på faktiske avvik, men krever at du jevnlig sjekker porteføljen. Mange kombinerer metodene: sjekker kvartalsvis, men rebalanserer kun hvis avviket overstiger 5 prosentpoeng.
+      </p>
+      <p>
+        For norske utbytteinvestorer er det naturlig å rebalansere i forbindelse med utbyttesesongen (april–juni), siden man da mottar kapital som kan reinvesteres strategisk uten å utløse ekstra skatt.
+      </p>
+
+      <h2 id="faq">Vanlige spørsmål</h2>
+
+      <h3>Bør jeg selge overvektede aksjer for å rebalansere?</h3>
+      <p>
+        Ikke nødvendigvis. For de fleste private investorer er det best å unngå salg dersom det er mulig, siden realisasjon utløser skatteplikt. Bruk i stedet nye sparepenger og reinvestert utbytte til å bygge opp undervektede sektorer. Kun ved store avvik eller ved behov for kapital bør du vurdere salg.
+      </p>
+
+      <h3>Hvor mange sektorer bør jeg ha i porteføljen?</h3>
+      <p>
+        For en utbytteinvestor på Oslo Børs er 4–7 sektorer et godt utgangspunkt. Færre gir konsentrasjonsrisiko; flere kan gjøre porteføljen vanskelig å følge opp og kan redusere den effektive utbytteyielden hvis du tvinges til å kjøpe aksjer i sektorer med lav yield bare for diversifiseringens skyld.
+      </p>
+
+      <h3>Hva er forskjellen på rebalansering og diversifisering?</h3>
+      <p>
+        Diversifisering handler om å spre investeringene slik at enkeltselskap-risiko reduseres — det er noe du gjør én gang ved oppbygging av porteføljen. Rebalansering er vedlikeholdet av denne diversifiseringen over tid, etter at markedsbevegelser har endret vektingen din.
+      </p>
+
+      <h3>Kan jeg bruke kalkulatoren for hele porteføljen, inkludert globale aksjer?</h3>
+      <p>
+        Ja. Selv om kalkulatoren er tilpasset Oslo Børs-sektorer, kan du legge til egendefinerte sektorer ved å velge fra listen eller bruke standardsektorene som utgangspunkt. Du kan for eksempel legge til «Globale aksjer» som én post.
+      </p>
+
+      <h3>Hva er en fornuftig terskel for å utløse rebalansering?</h3>
+      <p>
+        De fleste profesjonelle porteføljeforvaltere bruker en terskel på 5 prosentpoeng. For en privatinvestor med lavere transaksjonskostnader (lav kurtasje gjennom nettmeglere) kan selv 3 prosentpoeng være en fornuftig terskel. Kalkulatoren markerer avvik under 1 prosentpoeng som «OK» siden det sjelden er verdt å handle på slike marginalavvik.
+      </p>
+
+    </article>
+
+    <div class="mt-10 rounded-xl bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 p-5">
+      <p class="text-sm font-semibold mb-1">Vil du rebalansere basert på faktiske beholdninger?</p>
+      <p class="text-xs text-gray-600 dark:text-gray-400 mb-3">I exday.no-appen kan du legge inn hele porteføljen din med kjøpstransaksjoner. Appen beregner automatisk sektorrebalansering basert på faktiske beholdninger og ønsket målfordeling.</p>
+      <a href="https://exday.no/" class="inline-flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition-colors text-sm">
+        Åpne gratis app
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+
+  </main>
+
+  <footer class="mt-8 sm:mt-12 border-t border-gray-200 dark:border-gray-800 py-6 text-center text-xs text-gray-400 dark:text-gray-600 space-y-1 px-4">
+    <p>Kurs og utbyttedata hentes fra Yahoo Finance og Euronext. Oppdateres daglig på børsdager.</p>
+    <p class="max-w-xl mx-auto leading-relaxed">
+      exday.no er ikke et verdipapirforetak og tilbyr ikke finansiell rådgivning.
+      Data kan inneholde feil eller forsinkelser — verifiser alltid mot Oslo Børs eller selskapets egne rapporter.
+      Historisk utbytte er ingen garanti for fremtidig utbytte.
+      Gjør alltid din egen analyse før du tar investeringsbeslutninger.
+    </p>
+    <p class="mt-2">
+      <a href="/personvern/" class="underline hover:text-gray-400 dark:hover:text-gray-400 transition-colors">Personvern og informasjonskapsler</a>
+      <span class="mx-2">·</span>
+      <a href="/faq/" class="underline hover:text-gray-400 dark:hover:text-gray-400 transition-colors">Vanlige spørsmål (FAQ)</a>
+    </p>
+    <p class="mt-3">
+      <a href="https://www.facebook.com/share/17rMp8o9yF/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-gray-400 hover:text-blue-500 dark:hover:text-blue-400 transition-colors">
+        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/></svg>
+        Følg exday.no på Facebook
+      </a>
+    </p>
+  </footer>
+
+  <button id="tilbake-topp" aria-label="Tilbake til toppen"
+    class="fixed bottom-5 right-4 z-50 hidden p-2.5 rounded-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-md text-gray-500 dark:text-gray-400 hover:text-brand-600 dark:hover:text-brand-400 transition-all">
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 15l7-7 7 7"/></svg>
+  </button>
+
+  <script>
+    (function() {
+      'use strict';
+
+      var STANDARD_RADER = [
+        { navn: 'Energi',        verdi: 0, maal: 20 },
+        { navn: 'Finans',        verdi: 0, maal: 15 },
+        { navn: 'Havbruk',       verdi: 0, maal: 15 },
+        { navn: 'Eiendom',       verdi: 0, maal: 15 },
+        { navn: 'Industri',      verdi: 0, maal: 15 },
+        { navn: 'Shipping',      verdi: 0, maal: 10 },
+        { navn: 'Forbruksvarer', verdi: 0, maal: 10 }
+      ];
+
+      var ALLE_SEKTORER = [
+        'Energi', 'Eiendom', 'Finans', 'Forbruksvarer', 'Fornybar energi',
+        'Forsyning', 'Havbruk', 'Helsevern', 'Industri', 'Informasjonsteknologi',
+        'Kommunikasjonstjenester', 'Materialer', 'Shipping', 'Skipsfart',
+        'Energitjenester', 'Telekommunikasjon'
+      ];
+
+      var tabell = document.getElementById('sb-tabell');
+      var select = document.getElementById('sb-legg-til-select');
+
+      function lagRadHTML(navn, verdi, maal) {
+        return '<tr class="sb-rad border-b border-gray-100 dark:border-gray-800">' +
+          '<td class="py-2 pr-2 text-sm font-medium text-gray-700 dark:text-gray-300 w-36">' + navn + '</td>' +
+          '<td class="py-2 pr-2"><input type="number" class="sb-verdi w-28 px-2 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100" min="0" step="1000" value="' + verdi + '" /></td>' +
+          '<td class="py-2 pr-2 text-sm text-gray-500 sb-na-pct">0.0%</td>' +
+          '<td class="py-2 pr-2"><input type="number" class="sb-maal w-16 px-2 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100" min="0" max="100" step="1" value="' + maal + '" /></td>' +
+          '<td class="py-2 pr-2 sb-diff text-sm font-medium text-gray-400">0.0%</td>' +
+          '<td class="py-2 pr-2 sb-kr text-sm text-gray-400">–</td>' +
+          '<td class="py-1"><button class="sb-slett text-gray-300 hover:text-red-500 dark:text-gray-600 dark:hover:text-red-400 transition-colors text-lg leading-none" title="Fjern rad">×</button></td>' +
+        '</tr>';
+      }
+
+      function hentAktiveSektorer() {
+        var rader = tabell.querySelectorAll('.sb-rad');
+        var aktive = [];
+        for (var i = 0; i < rader.length; i++) {
+          aktive.push(rader[i].querySelector('td').textContent.trim());
+        }
+        return aktive;
+      }
+
+      function oppdaterSelect() {
+        var aktive = hentAktiveSektorer();
+        select.innerHTML = '<option value="">+ Legg til sektor...</option>';
+        for (var i = 0; i < ALLE_SEKTORER.length; i++) {
+          var s = ALLE_SEKTORER[i];
+          if (aktive.indexOf(s) === -1) {
+            var opt = document.createElement('option');
+            opt.value = s;
+            opt.textContent = s;
+            select.appendChild(opt);
+          }
+        }
+      }
+
+      function byggTabell(rader) {
+        var html = '';
+        for (var i = 0; i < rader.length; i++) {
+          html += lagRadHTML(rader[i].navn, rader[i].verdi, rader[i].maal);
+        }
+        tabell.innerHTML = html;
+        oppdaterSelect();
+        oppdater();
+      }
+
+      function oppdater() {
+        var rader = tabell.querySelectorAll('.sb-rad');
+        var total = 0;
+        var i;
+        for (i = 0; i < rader.length; i++) {
+          var verdi = parseFloat(rader[i].querySelector('.sb-verdi').value) || 0;
+          total += verdi;
+        }
+
+        var totalMaal = 0;
+        for (i = 0; i < rader.length; i++) {
+          var maal = parseFloat(rader[i].querySelector('.sb-maal').value) || 0;
+          totalMaal += maal;
+        }
+
+        document.getElementById('sb-total').textContent = Math.round(total).toLocaleString('nb') + ' kr';
+
+        var maalEl = document.getElementById('sb-total-maal');
+        maalEl.textContent = totalMaal.toFixed(1) + '%';
+        maalEl.className = Math.abs(totalMaal - 100) <= 1
+          ? 'text-2xl font-semibold tabular-nums text-green-600 dark:text-green-400'
+          : 'text-2xl font-semibold tabular-nums text-orange-500';
+
+        var storsteOvervektDiff = 0, storsteOvervektNavn = '', storsteOvervektKr = 0;
+        var storsteUndervektDiff = 0, storsteUndervektNavn = '', storsteUndervektKr = 0;
+        var harData = total > 0;
+
+        for (i = 0; i < rader.length; i++) {
+          var rad = rader[i];
+          var v = parseFloat(rad.querySelector('.sb-verdi').value) || 0;
+          var m = parseFloat(rad.querySelector('.sb-maal').value) || 0;
+          var naPct = total > 0 ? (v / total * 100) : 0;
+          var diff = naPct - m;
+          var kr = diff / 100 * total;
+          var navn = rad.querySelector('td').textContent.trim();
+
+          rad.querySelector('.sb-na-pct').textContent = naPct.toFixed(1) + '%';
+
+          var diffEl = rad.querySelector('.sb-diff');
+          diffEl.textContent = (diff >= 0 ? '+' : '') + diff.toFixed(1) + '%';
+          diffEl.className = 'sb-diff text-sm font-medium ' + (Math.abs(diff) < 1 ? 'text-gray-400' : diff > 0 ? 'text-orange-500' : 'text-green-600');
+
+          var krEl = rad.querySelector('.sb-kr');
+          if (total === 0 || m === 0) {
+            krEl.textContent = '–';
+            krEl.className = 'sb-kr text-sm text-gray-400';
+          } else if (diff > 1) {
+            krEl.textContent = 'Selg ' + Math.abs(Math.round(kr)).toLocaleString('nb') + ' kr';
+            krEl.className = 'sb-kr text-sm font-medium text-orange-600 dark:text-orange-400';
+          } else if (diff < -1) {
+            krEl.textContent = 'Kjøp ' + Math.abs(Math.round(kr)).toLocaleString('nb') + ' kr';
+            krEl.className = 'sb-kr text-sm font-medium text-green-600 dark:text-green-400';
+          } else {
+            krEl.textContent = 'OK ✓';
+            krEl.className = 'sb-kr text-sm text-gray-400';
+          }
+
+          if (diff > storsteOvervektDiff) {
+            storsteOvervektDiff = diff;
+            storsteOvervektNavn = navn;
+            storsteOvervektKr = Math.abs(Math.round(kr));
+          }
+          if (diff < storsteUndervektDiff) {
+            storsteUndervektDiff = diff;
+            storsteUndervektNavn = navn;
+            storsteUndervektKr = Math.abs(Math.round(kr));
+          }
+        }
+
+        var oppsumEl = document.getElementById('sb-oppsummering');
+        if (harData && (storsteOvervektNavn || storsteUndervektNavn)) {
+          oppsumEl.classList.remove('hidden');
+          document.getElementById('sb-overvekt-navn').textContent = storsteOvervektNavn || '–';
+          document.getElementById('sb-overvekt-kr').textContent = storsteOvervektNavn
+            ? ('+' + storsteOvervektDiff.toFixed(1) + '% – selg ' + storsteOvervektKr.toLocaleString('nb') + ' kr')
+            : '';
+          document.getElementById('sb-undervekt-navn').textContent = storsteUndervektNavn || '–';
+          document.getElementById('sb-undervekt-kr').textContent = storsteUndervektNavn
+            ? (storsteUndervektDiff.toFixed(1) + '% – kjøp ' + storsteUndervektKr.toLocaleString('nb') + ' kr')
+            : '';
+        } else {
+          oppsumEl.classList.add('hidden');
+        }
+      }
+
+      // Event-delegering på tabellen
+      tabell.addEventListener('input', function(e) {
+        if (e.target && (e.target.classList.contains('sb-verdi') || e.target.classList.contains('sb-maal'))) {
+          oppdater();
+        }
+      });
+
+      tabell.addEventListener('click', function(e) {
+        if (e.target && e.target.classList.contains('sb-slett')) {
+          var rad = e.target.closest('.sb-rad');
+          if (rad) {
+            rad.parentNode.removeChild(rad);
+            oppdaterSelect();
+            oppdater();
+          }
+        }
+      });
+
+      // Legg til sektor fra dropdown
+      select.addEventListener('change', function() {
+        var valgt = select.value;
+        if (!valgt) return;
+        tabell.insertAdjacentHTML('beforeend', lagRadHTML(valgt, 0, 0));
+        select.value = '';
+        oppdaterSelect();
+        oppdater();
+      });
+
+      // Tilbakestill
+      document.getElementById('sb-tilbakestill').addEventListener('click', function() {
+        byggTabell(STANDARD_RADER);
+      });
+
+      // Tilbake til topp
+      var btnTopp = document.getElementById('tilbake-topp');
+      window.addEventListener('scroll', function() {
+        btnTopp.classList.toggle('hidden', window.scrollY < 400);
+      }, { passive: true });
+      btnTopp.addEventListener('click', function() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+
+      // Init
+      byggTabell(STANDARD_RADER);
+
+    })();
+  </script>
+</body>
+</html>

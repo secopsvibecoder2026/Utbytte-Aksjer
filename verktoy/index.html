@@ -39,7 +39,9 @@
     "publisher": { "@type": "Organization", "name": "exday.no", "url": "https://exday.no" },
     "hasPart": [
       { "@type": "WebApplication", "name": "Utbyttekalkulator", "url": "https://exday.no/utbyttekalkulator/" },
-      { "@type": "WebApplication", "name": "Huslån vs. Investering", "url": "https://exday.no/verktoy/huslan-vs-investering/" }
+      { "@type": "WebApplication", "name": "Huslån vs. Investering", "url": "https://exday.no/verktoy/huslan-vs-investering/" },
+      { "@type": "WebApplication", "name": "FIRE-kalkulator", "url": "https://exday.no/verktoy/fire-kalkulator/" },
+      { "@type": "WebApplication", "name": "Sektorrebalansering", "url": "https://exday.no/verktoy/sektorrebalansering/" }
     ]
   }
   </script>
@@ -65,6 +67,8 @@
           <ul class="nav-dropdown">
             <li><a href="/utbyttekalkulator/">Kalkulator</a></li>
             <li><a href="/verktoy/huslan-vs-investering/">Huslån vs. Investering</a></li>
+            <li><a href="/verktoy/fire-kalkulator/">FIRE-kalkulator</a></li>
+            <li><a href="/verktoy/sektorrebalansering/">Sektorrebalansering</a></li>
           </ul>
         </li>
         <li><a href="/artikler/">Artikler</a></li>
@@ -148,7 +152,7 @@
         </div>
       </a>
 
-      <a href="https://exday.no/" class="group block rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-5 shadow-sm hover:border-green-300 dark:hover:border-green-800 hover:shadow-md transition-all">
+      <a href="/verktoy/fire-kalkulator/" class="group block rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-5 shadow-sm hover:border-green-300 dark:hover:border-green-800 hover:shadow-md transition-all">
         <div class="flex items-start gap-4">
           <div class="shrink-0 w-10 h-10 rounded-lg bg-orange-50 dark:bg-orange-900/20 flex items-center justify-center text-orange-600 dark:text-orange-400">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
@@ -156,14 +160,14 @@
           <div>
             <h2 class="font-semibold text-base group-hover:text-green-700 dark:group-hover:text-green-400 transition-colors">FIRE-kalkulator</h2>
             <p class="text-sm text-gray-500 dark:text-gray-400 mt-1 leading-relaxed">Beregn nødvendig kapital og antall år til du kan leve av utbytteinntekten. Tar hensyn til månedlig sparing, ASK-skatt og yield-vekst.</p>
-            <span class="inline-flex items-center gap-1 mt-3 text-xs font-medium text-gray-400">
-              Tilgjengelig i app <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+            <span class="inline-flex items-center gap-1 mt-3 text-xs font-medium text-green-600 dark:text-green-400">
+              Bruk kalkulator <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
             </span>
           </div>
         </div>
       </a>
 
-      <a href="https://exday.no/" class="group block rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-5 shadow-sm hover:border-green-300 dark:hover:border-green-800 hover:shadow-md transition-all">
+      <a href="/verktoy/sektorrebalansering/" class="group block rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-5 shadow-sm hover:border-green-300 dark:hover:border-green-800 hover:shadow-md transition-all">
         <div class="flex items-start gap-4">
           <div class="shrink-0 w-10 h-10 rounded-lg bg-purple-50 dark:bg-purple-900/20 flex items-center justify-center text-purple-600 dark:text-purple-400">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"/></svg>
@@ -171,8 +175,8 @@
           <div>
             <h2 class="font-semibold text-base group-hover:text-green-700 dark:group-hover:text-green-400 transition-colors">Sektorrebalansering</h2>
             <p class="text-sm text-gray-500 dark:text-gray-400 mt-1 leading-relaxed">Sammenlign faktisk og ønsket sektorfordeling i porteføljen. Se nøyaktig hvor mye du bør kjøpe eller selge i hver sektor.</p>
-            <span class="inline-flex items-center gap-1 mt-3 text-xs font-medium text-gray-400">
-              Tilgjengelig i app <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+            <span class="inline-flex items-center gap-1 mt-3 text-xs font-medium text-green-600 dark:text-green-400">
+              Bruk verktøy <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
             </span>
           </div>
         </div>
