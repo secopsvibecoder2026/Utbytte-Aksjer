@@ -874,7 +874,8 @@
     {
       "ticker": "CMBTO",
       "dato": "2026-05-19",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/673779"
     },
     {
       "ticker": "ALNG",
@@ -1552,6 +1553,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "ARCH",
+      "dato": "2026-08-13",
+      "type": "rapport"
+    },
+    {
       "ticker": "DNO",
       "dato": "2026-08-13",
       "type": "rapport"
@@ -1887,6 +1893,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "CMBTO",
+      "dato": "2026-08-27",
+      "type": "rapport"
+    },
+    {
       "ticker": "ENTR",
       "dato": "2026-08-27",
       "type": "rapport"
@@ -1947,6 +1958,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "BAKKA",
+      "dato": "2026-08-31",
+      "type": "rapport"
+    },
+    {
       "ticker": "ENTR",
       "dato": "2026-08-31",
       "type": "rapport"
@@ -1982,5 +1998,5 @@
       "type": "rapport"
     }
   ],
-  "sist_oppdatert": "2026-05-18"
+  "sist_oppdatert": "2026-05-19"
 }
