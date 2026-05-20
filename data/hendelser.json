@@ -895,12 +895,14 @@
     {
       "ticker": "CADLR",
       "dato": "2026-05-20",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/673921"
     },
     {
       "ticker": "ENTR",
       "dato": "2026-05-20",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/673962"
     },
     {
       "ticker": "ISLAX",
@@ -910,12 +912,14 @@
     {
       "ticker": "KMCP",
       "dato": "2026-05-20",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/673962"
     },
     {
       "ticker": "ORK",
       "dato": "2026-05-20",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/673901"
     },
     {
       "ticker": "SALM",
@@ -925,22 +929,26 @@
     {
       "ticker": "SBMO",
       "dato": "2026-05-20",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/673962"
     },
     {
       "ticker": "SRHA",
       "dato": "2026-05-20",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/673962"
     },
     {
       "ticker": "STRONG",
       "dato": "2026-05-20",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/673962"
     },
     {
       "ticker": "VISTIN",
       "dato": "2026-05-20",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/673962"
     },
     {
       "ticker": "WSTEP",
@@ -950,7 +958,8 @@
     {
       "ticker": "WWIB",
       "dato": "2026-05-20",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/673962"
     },
     {
       "ticker": "B2I",
@@ -1488,6 +1497,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "BWE",
+      "dato": "2026-07-30",
+      "type": "rapport"
+    },
+    {
       "ticker": "SUBC",
       "dato": "2026-07-30",
       "type": "rapport"
@@ -1529,6 +1543,11 @@
     },
     {
       "ticker": "AURG",
+      "dato": "2026-08-12",
+      "type": "rapport"
+    },
+    {
+      "ticker": "BORR",
       "dato": "2026-08-12",
       "type": "rapport"
     },
@@ -1823,6 +1842,16 @@
       "type": "rapport"
     },
     {
+      "ticker": "ORK",
+      "dato": "2026-08-20",
+      "type": "rapport"
+    },
+    {
+      "ticker": "WSTEP",
+      "dato": "2026-08-20",
+      "type": "rapport"
+    },
+    {
       "ticker": "AFK",
       "dato": "2026-08-21",
       "type": "rapport"
@@ -1898,7 +1927,22 @@
       "type": "rapport"
     },
     {
+      "ticker": "CADLR",
+      "dato": "2026-08-25",
+      "type": "rapport"
+    },
+    {
+      "ticker": "ISLAX",
+      "dato": "2026-08-25",
+      "type": "rapport"
+    },
+    {
       "ticker": "KCC",
+      "dato": "2026-08-25",
+      "type": "rapport"
+    },
+    {
+      "ticker": "SALM",
       "dato": "2026-08-25",
       "type": "rapport"
     },
@@ -2033,5 +2077,5 @@
       "type": "rapport"
     }
   ],
-  "sist_oppdatert": "2026-05-19"
+  "sist_oppdatert": "2026-05-20"
 }
