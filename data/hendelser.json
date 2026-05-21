@@ -974,12 +974,14 @@
     {
       "ticker": "HSHP",
       "dato": "2026-05-21",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/674084"
     },
     {
       "ticker": "MAS",
       "dato": "2026-05-21",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/674050"
     },
     {
       "ticker": "PEN",
@@ -989,6 +991,47 @@
     {
       "ticker": "SBO",
       "dato": "2026-05-21",
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/674071"
+    },
+    {
+      "ticker": "ENTR",
+      "dato": "2026-05-22",
+      "type": "rapport"
+    },
+    {
+      "ticker": "FRO",
+      "dato": "2026-05-22",
+      "type": "rapport"
+    },
+    {
+      "ticker": "KMCP",
+      "dato": "2026-05-22",
+      "type": "rapport"
+    },
+    {
+      "ticker": "SBMO",
+      "dato": "2026-05-22",
+      "type": "rapport"
+    },
+    {
+      "ticker": "SRHA",
+      "dato": "2026-05-22",
+      "type": "rapport"
+    },
+    {
+      "ticker": "STRONG",
+      "dato": "2026-05-22",
+      "type": "rapport"
+    },
+    {
+      "ticker": "VISTIN",
+      "dato": "2026-05-22",
+      "type": "rapport"
+    },
+    {
+      "ticker": "WWIB",
+      "dato": "2026-05-22",
       "type": "rapport"
     },
     {
@@ -1597,7 +1640,17 @@
       "type": "rapport"
     },
     {
+      "ticker": "SBO",
+      "dato": "2026-08-06",
+      "type": "rapport"
+    },
+    {
       "ticker": "BIEN",
+      "dato": "2026-08-11",
+      "type": "rapport"
+    },
+    {
+      "ticker": "HSHP",
       "dato": "2026-08-11",
       "type": "rapport"
     },
@@ -1752,6 +1805,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "BOR",
+      "dato": "2026-08-14",
+      "type": "rapport"
+    },
+    {
       "ticker": "FFSB",
       "dato": "2026-08-14",
       "type": "rapport"
@@ -1887,6 +1945,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "B2I",
+      "dato": "2026-08-20",
+      "type": "rapport"
+    },
+    {
       "ticker": "ENDUR",
       "dato": "2026-08-20",
       "type": "rapport"
@@ -1913,6 +1976,11 @@
     },
     {
       "ticker": "ORK",
+      "dato": "2026-08-20",
+      "type": "rapport"
+    },
+    {
+      "ticker": "PEN",
       "dato": "2026-08-20",
       "type": "rapport"
     },
@@ -2062,6 +2130,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "MAS",
+      "dato": "2026-08-27",
+      "type": "rapport"
+    },
+    {
       "ticker": "SBMO",
       "dato": "2026-08-27",
       "type": "rapport"
@@ -2147,5 +2220,5 @@
       "type": "rapport"
     }
   ],
-  "sist_oppdatert": "2026-05-20"
+  "sist_oppdatert": "2026-05-21"
 }
