@@ -1046,42 +1046,50 @@
     {
       "ticker": "CAPT",
       "dato": "2026-05-26",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/674375"
     },
     {
       "ticker": "ENTR",
       "dato": "2026-05-26",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/674499"
     },
     {
       "ticker": "KMCP",
       "dato": "2026-05-26",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/674499"
     },
     {
       "ticker": "SBMO",
       "dato": "2026-05-26",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/674499"
     },
     {
       "ticker": "SRHA",
       "dato": "2026-05-26",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/674499"
     },
     {
       "ticker": "STRONG",
       "dato": "2026-05-26",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/674499"
     },
     {
       "ticker": "VISTIN",
       "dato": "2026-05-26",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/674499"
     },
     {
       "ticker": "WWIB",
       "dato": "2026-05-26",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/674499"
     },
     {
       "ticker": "ENTR",
@@ -2267,7 +2275,12 @@
       "ticker": "WWIB",
       "dato": "2026-08-31",
       "type": "rapport"
+    },
+    {
+      "ticker": "CAPT",
+      "dato": "2026-09-01",
+      "type": "rapport"
     }
   ],
-  "sist_oppdatert": "2026-05-25"
+  "sist_oppdatert": "2026-05-26"
 }
