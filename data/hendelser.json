@@ -1094,12 +1094,14 @@
     {
       "ticker": "ENTR",
       "dato": "2026-05-27",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/674544"
     },
     {
       "ticker": "HAFNI",
       "dato": "2026-05-27",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/674538"
     },
     {
       "ticker": "JIN",
@@ -1109,37 +1111,44 @@
     {
       "ticker": "KMCP",
       "dato": "2026-05-27",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/674544"
     },
     {
       "ticker": "MPCC",
       "dato": "2026-05-27",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/674529"
     },
     {
       "ticker": "SBMO",
       "dato": "2026-05-27",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/674544"
     },
     {
       "ticker": "SRHA",
       "dato": "2026-05-27",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/674544"
     },
     {
       "ticker": "STRONG",
       "dato": "2026-05-27",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/674544"
     },
     {
       "ticker": "VISTIN",
       "dato": "2026-05-27",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/674544"
     },
     {
       "ticker": "WWIB",
       "dato": "2026-05-27",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/674544"
     },
     {
       "ticker": "HUNT",
@@ -2152,6 +2161,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "MPCC",
+      "dato": "2026-08-26",
+      "type": "rapport"
+    },
+    {
       "ticker": "RANA",
       "dato": "2026-08-26",
       "type": "rapport"
@@ -2227,6 +2241,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "HAFNI",
+      "dato": "2026-08-28",
+      "type": "rapport"
+    },
+    {
       "ticker": "ITERA",
       "dato": "2026-08-28",
       "type": "rapport"
@@ -2243,6 +2262,11 @@
     },
     {
       "ticker": "FRO",
+      "dato": "2026-08-31",
+      "type": "rapport"
+    },
+    {
+      "ticker": "JIN",
       "dato": "2026-08-31",
       "type": "rapport"
     },
@@ -2282,5 +2306,5 @@
       "type": "rapport"
     }
   ],
-  "sist_oppdatert": "2026-05-26"
+  "sist_oppdatert": "2026-05-27"
 }
