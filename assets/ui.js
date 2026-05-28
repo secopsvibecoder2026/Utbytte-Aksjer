@@ -471,12 +471,17 @@ function oppdaterInvestorChips() {
   });
 }
 
+function _debounce(fn, ms) {
+  var t;
+  return function() { clearTimeout(t); t = setTimeout(fn, ms); };
+}
+
 function initFilter() {
-  document.getElementById('sok').addEventListener('input', () => {
+  document.getElementById('sok').addEventListener('input', _debounce(function() {
     if (aktivTab === 'kalender') visKalender();
     else if (aktivTab === 'portfolio') visPortefolje();
     else visOversikt();
-  });
+  }, 250));
   ['filter-sektor', 'filter-frekvens', 'filter-yield'].forEach(id => {
     document.getElementById(id).addEventListener('input', visOversikt);
   });

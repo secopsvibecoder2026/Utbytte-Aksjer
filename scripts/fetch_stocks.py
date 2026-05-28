@@ -3952,7 +3952,7 @@ def generer_sitemap(aksjer, root_dir, today, alle_tickers=None):
     <loc>https://exday.no/utbyttekalkulator/</loc>
     <lastmod>{today}</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
+    <priority>0.3</priority>
   </url>""",
         f"""  <url>
     <loc>https://exday.no/bevegelser/</loc>
@@ -4025,6 +4025,54 @@ def generer_sitemap(aksjer, root_dir, today, alle_tickers=None):
     <lastmod>{today}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
+  </url>""",
+        f"""  <url>
+    <loc>https://exday.no/artikler/aksjesparekonto-ask/</loc>
+    <lastmod>{today}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>""",
+        f"""  <url>
+    <loc>https://exday.no/artikler/utbytteportefolje-sektorvekting/</loc>
+    <lastmod>{today}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>""",
+        f"""  <url>
+    <loc>https://exday.no/artikler/reinvestering-av-utbytte/</loc>
+    <lastmod>2026-05-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>""",
+        f"""  <url>
+    <loc>https://exday.no/verktoy/</loc>
+    <lastmod>{today}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>""",
+        f"""  <url>
+    <loc>https://exday.no/verktoy/kalkulator/</loc>
+    <lastmod>{today}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>""",
+        f"""  <url>
+    <loc>https://exday.no/verktoy/huslan-vs-investering/</loc>
+    <lastmod>{today}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>""",
+        f"""  <url>
+    <loc>https://exday.no/verktoy/fire-kalkulator/</loc>
+    <lastmod>{today}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>""",
+        f"""  <url>
+    <loc>https://exday.no/verktoy/sektorrebalansering/</loc>
+    <lastmod>{today}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>""",
     ]
     for sektor in sorted(sektorer.keys()):

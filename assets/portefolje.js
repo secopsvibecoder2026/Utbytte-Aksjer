@@ -71,7 +71,7 @@ function byggDetailHtml(ticker, kb, marked) {
           <span class="px-1.5 py-0.5 rounded text-[10px] font-medium ${badge}">${label}</span>
           <span class="flex-1 text-gray-600 dark:text-gray-400">${t.antall} × ${fmtKurs(t.kurs)} kr</span>
           <span class="font-medium">${fmtKr(t.antall * t.kurs)}</span>
-          <button class="pf-tx-slett p-0.5 text-gray-300 hover:text-red-500 transition-colors" data-ticker="${ticker}" data-id="${t.id}" aria-label="Slett transaksjon">
+          <button class="pf-tx-slett p-0.5 text-gray-300 hover:text-red-500 transition-colors" data-ticker="${escHtml(ticker)}" data-id="${t.id}" aria-label="Slett transaksjon">
             <svg class="w-3.5 h-3.5 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
           </button>
         </div>`;
@@ -91,7 +91,7 @@ function byggDetailHtml(ticker, kb, marked) {
         <input type="date" class="pf-detail-dato filter-input text-xs py-1.5" value="${idag}" />
         <input type="number" min="1" class="pf-detail-antall filter-input text-xs py-1.5" placeholder="Antall" value="${beholdningAntall}" />
         <input type="number" min="0" step="0.01" class="pf-detail-kurs filter-input text-xs py-1.5" placeholder="Kurs / GAV (kr)" value="${prefillKurs}" />
-        <button class="pf-detail-legg-til bg-brand-600 hover:bg-brand-700 text-white text-xs font-medium px-3 py-1.5 rounded-lg transition-colors" data-ticker="${ticker}">+ Legg til</button>
+        <button class="pf-detail-legg-til bg-brand-600 hover:bg-brand-700 text-white text-xs font-medium px-3 py-1.5 rounded-lg transition-colors" data-ticker="${escHtml(ticker)}">+ Legg til</button>
       </div>
     </div>
     <div>
@@ -1081,26 +1081,26 @@ function visPortefolje() {
       : '—';
     const isOpen = _aapneDetailRader.has(a.ticker);
     return `
-    <tr class="table-row" data-ticker="${a.ticker}">
-      <td class="px-4 py-3 font-mono font-bold text-brand-700 dark:text-brand-400">${a.ticker}</td>
-      <td class="px-4 py-3 hidden sm:table-cell text-gray-600 dark:text-gray-400 text-sm">${a.navn}</td>
+    <tr class="table-row" data-ticker="${escHtml(a.ticker)}">
+      <td class="px-4 py-3 font-mono font-bold text-brand-700 dark:text-brand-400">${escHtml(a.ticker)}</td>
+      <td class="px-4 py-3 hidden sm:table-cell text-gray-600 dark:text-gray-400 text-sm">${escHtml(a.navn)}</td>
       <td class="px-4 py-3 text-right">
         <input type="number" min="1" value="${a.antall}"
           class="w-20 text-right text-sm border border-gray-200 dark:border-gray-700 rounded px-2 py-1 bg-transparent focus:outline-none focus:ring-1 focus:ring-brand-500"
-          data-ticker="${a.ticker}" />
+          data-ticker="${escHtml(a.ticker)}" />
       </td>
       <td class="px-4 py-3 text-right"><span class="yield-badge ${yieldKlasse(a.utbytte_yield)}">${a.utbytte_yield.toFixed(2)}%</span></td>
       <td class="px-4 py-3 text-right font-semibold">${fmtKr(a.forv_ar)}</td>
       <td class="px-4 py-3 text-right hidden lg:table-cell text-sm">${kostTd}</td>
       <td class="px-4 py-3 text-right hidden lg:table-cell text-sm">${gevTd}</td>
       <td class="px-4 py-3 text-center hidden sm:table-cell text-gray-500 text-sm">${a.ex_dato ? formaterDato(a.ex_dato) : '—'}</td>
-      <td class="px-4 py-3 text-center hidden sm:table-cell"><span class="frekvens-badge">${a.frekvens}</span></td>
+      <td class="px-4 py-3 text-center hidden sm:table-cell"><span class="frekvens-badge">${escHtml(a.frekvens)}</span></td>
       <td class="px-4 py-3 text-center">
         <div class="flex items-center justify-center gap-1">
-          <button class="pf-detail-toggle p-1 text-gray-400 hover:text-brand-500 transition-colors" data-ticker="${a.ticker}" aria-label="Vis transaksjoner" aria-expanded="${isOpen}">
+          <button class="pf-detail-toggle p-1 text-gray-400 hover:text-brand-500 transition-colors" data-ticker="${escHtml(a.ticker)}" aria-label="Vis transaksjoner" aria-expanded="${isOpen}">
             <svg class="w-4 h-4 pointer-events-none transition-transform${isOpen ? ' rotate-180' : ''}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
           </button>
-          <button class="pf-slett p-1 text-gray-400 hover:text-red-500 transition-colors" data-ticker="${a.ticker}" aria-label="Fjern">
+          <button class="pf-slett p-1 text-gray-400 hover:text-red-500 transition-colors" data-ticker="${escHtml(a.ticker)}" aria-label="Fjern">
             <svg class="w-4 h-4 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
           </button>
         </div>
@@ -1614,7 +1614,7 @@ function visSektorYieldChart(beholdning) {
   el.innerHTML = sektorer.map(({ sektor, avg, color }) => `
     <div>
       <div class="flex items-center justify-between mb-1">
-        <span class="text-xs font-medium text-gray-700 dark:text-gray-300">${sektor}</span>
+        <span class="text-xs font-medium text-gray-700 dark:text-gray-300">${escHtml(sektor)}</span>
         <span class="text-xs font-semibold tabular-nums" style="color:${color}">${avg.toFixed(1)}%</span>
       </div>
       <div class="h-3 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
@@ -1997,13 +1997,13 @@ function visRebalansering(alleBeholdning) {
     } else if (maalPct > 0 && naaværendePct === 0) {
       const kr = maalPct / 100 * totalVerdi;
       statusKlasse = 'text-orange-500'; statusTekst = `Kjøp +${maalPct}% · ${fmtKr(kr)}`; barFarge = 'bg-orange-400';
-      kjopLenke = `<a href="/aksjer/sektor/${slug}/" class="text-[11px] text-brand-600 dark:text-brand-400 font-medium hover:underline shrink-0">Utforsk aksjer →</a>`;
+      kjopLenke = `<a href="/aksjer/sektor/${escHtml(slug)}/" class="text-[11px] text-brand-600 dark:text-brand-400 font-medium hover:underline shrink-0">Utforsk aksjer →</a>`;
     } else if (Math.abs(diff) <= 5) {
       statusKlasse = 'text-green-600 dark:text-green-400'; statusTekst = 'OK'; barFarge = 'bg-green-500';
     } else if (diff < -5) {
       const kr = Math.abs(diff) / 100 * totalVerdi;
       statusKlasse = 'text-orange-500'; statusTekst = `Kjøp +${Math.abs(diff).toFixed(0)}% · ${fmtKr(kr)}`; barFarge = 'bg-orange-400';
-      kjopLenke = `<a href="/aksjer/sektor/${slug}/" class="text-[11px] text-brand-600 dark:text-brand-400 font-medium hover:underline shrink-0">Finn aksjer →</a>`;
+      kjopLenke = `<a href="/aksjer/sektor/${escHtml(slug)}/" class="text-[11px] text-brand-600 dark:text-brand-400 font-medium hover:underline shrink-0">Finn aksjer →</a>`;
     } else {
       const kr = Math.abs(diff) / 100 * totalVerdi;
       statusKlasse = 'text-red-500'; statusTekst = `Reduser −${diff.toFixed(0)}% · ${fmtKr(kr)}`; barFarge = 'bg-red-400';
@@ -2017,12 +2017,12 @@ function visRebalansering(alleBeholdning) {
     const maalBredde = Math.min(100, maalPct).toFixed(1);
 
     return `
-      <div class="py-3" data-sektor="${sektor}">
+      <div class="py-3" data-sektor="${escHtml(sektor)}">
         <div class="flex items-center justify-between gap-2 mb-1">
           <div class="min-w-0">
             <div class="flex items-center gap-1.5 flex-wrap">
-              <a href="/aksjer/sektor/${slug}/"
-                 class="text-sm font-semibold text-gray-900 dark:text-gray-100 hover:text-brand-600 dark:hover:text-brand-400 hover:underline">${sektor}</a>
+              <a href="/aksjer/sektor/${escHtml(slug)}/"
+                 class="text-sm font-semibold text-gray-900 dark:text-gray-100 hover:text-brand-600 dark:hover:text-brand-400 hover:underline">${escHtml(sektor)}</a>
               ${chipTekst ? `<span class="text-xs ${eid > 0 ? 'text-brand-500 dark:text-brand-400' : 'text-gray-400 dark:text-gray-500'} shrink-0">${chipTekst}</span>` : ''}
             </div>
             <div class="flex items-center gap-2 mt-0.5 flex-wrap">
@@ -2034,7 +2034,7 @@ function visRebalansering(alleBeholdning) {
             <span class="text-xs text-gray-400 dark:text-gray-600">${naaværendePct.toFixed(1)}% →</span>
             <input type="number" min="0" max="100" step="1" value="${maalPct}"
               class="w-12 text-xs text-center border border-gray-200 dark:border-gray-700 rounded-md px-1 py-1 bg-white dark:bg-gray-800 focus:outline-none focus:border-brand-400 focus:ring-1 focus:ring-brand-400/30"
-              data-rebal-sektor="${sektor}" />
+              data-rebal-sektor="${escHtml(sektor)}" />
             <span class="text-xs text-gray-400 dark:text-gray-600">%</span>
           </div>
         </div>
