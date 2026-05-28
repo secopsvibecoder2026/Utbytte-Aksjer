@@ -7,9 +7,9 @@
 
 | Alvorlighetsgrad | Antall | Status |
 |---|---|---|
-| 🔴 Kritisk | 4 | ✅ Fikset |
-| 🟠 Viktig | 8 | ✅ Fikset (5) · Se under (3) |
-| 🟡 Forbedring | 6 | Se under |
+| 🔴 Kritisk | 5 | ✅ Alle fikset |
+| 🟠 Viktig | 10 | ✅ Fikset (7) · Anbefalt (3) |
+| 🟡 Forbedring | 7 | Se under |
 | 🟢 Bra | — | Se under |
 
 ---
@@ -140,14 +140,53 @@
 | 5 | `sw.js` | `/verktoy/*` og `/utbyttekalender/` lagt til i PRECACHE |
 | 6 | `sitemap.xml` | Alle artikler og verktøy-URL-er lagt til |
 | 7 | `assets/ui.js` | 250ms debounce på søk-input |
+| 8 | `scripts/fetch_stocks.py` | `generer_sitemap()` oppdatert med artikler og verktøy (permanent fix) |
+| 9 | `.github/workflows/ai-oppsummering.yml` | Shell-injeksjon fikset: inputs via env-variabler |
+| 10 | `.github/workflows/oppdater-priser.yml` | `git pull --rebase` lagt til før push |
+
+---
+
+---
+
+## GitHub Actions og Python-scripts
+
+### 13. Shell-injeksjon i `ai-oppsummering.yml` 🔴 Fikset
+**Fil:** `.github/workflows/ai-oppsummering.yml` linje 42  
+**Årsak:** `${{ inputs.tickers }}` ble interpolert direkte i shell-kommandoen uten sanitering. En bruker med skrivetilgang som triggrer `workflow_dispatch` med `; malicious_command` som ticker-input, ville fått kjørt vilkårlig kode i CI-miljøet.  
+**Fix:** Moved inputs til env-variabler (`INPUT_TICKERS`, `INPUT_FORCE`) og refererer til disse i shell-kommandoen, slik at GitHub Actions håndterer escapingen.
+
+### 14. `oppdater-priser.yml` mangler `git pull --rebase` før push 🟠 Fikset
+**Fil:** `.github/workflows/oppdater-priser.yml` linje 48  
+**Årsak:** `git push` uten forutgående `git pull --rebase` feiler med 403/rejected dersom `update-og-deploy.yml` har committet endringer i mellomtiden. Daglig data-workflow kjører 4× daglig, pris-workflow 37× daglig — kollisjoner er sannsynlige.  
+**Fix:** La til `git pull --rebase origin main` før `git push`, konsistent med `update-og-deploy.yml`.
+
+### 15. `update-og-deploy.yml` — `git add` inkluderer ikke `verktoy/` og `artikler/` 🟡
+**Fil:** `.github/workflows/update-og-deploy.yml` linje 59  
+**Årsak:** `git add data/aksjer.json data/hendelser.json aksjer/ sitemap.xml index.html app/` dekker ikke `verktoy/` eller `artikler/`. Dette er OK i dag siden `fetch_stocks.py` ikke rører disse mappene — men hvis man legger til automatisk generering av verktøy-/artikkelsider, vil de ikke bli committet.  
+**Anbefaling:** Dokumentert som kjent begrensning; ingen umiddelbar risiko.
+
+### 16. `fetch_priser.py` mangler request-timeout 🟠
+**Fil:** `scripts/fetch_priser.py` linje 31–38  
+**Årsak:** `yf.download()` har ingen eksplisitt timeout. `yfinance` internt bruker `requests` med standard timeout (ubegrenset). Dersom Yahoo Finance henger, kan kjøringen bruke opp GitHub Actions-tidsbegrensningen og blokkere påfølgende 15-minutters kjøringer.  
+**Anbefaling:** `yf.download(..., timeout=30)` (støttes i nyere yfinance-versjoner) eller implementer en `signal.alarm`-basert timeout på topp-nivå.
+
+### 17. `fetch_stocks.py` har gode sikkerhetsrutiner 🟢
+- `_valider_ticker()` med regex `^[A-Z0-9]{1,10}$` forhindrer path traversal i filnavn
+- `urllib.parse.quote()` brukes konsekvent for URL-parametere
+- Alle HTTP-kall har eksplisitte timeouts (5–30 sek)
+- `Promise.allSettled()`-ekvivalent — enkeltfeil krasjer ikke hele pipelinen
+
+### 18. `ai-oppsummering.yml` bruker ikke pinned action-versjoner 🟡
+**Årsak:** `actions/checkout@v4`, `actions/setup-python@v5` bruker major-versjon-tags, ikke SHA-pinned. Sikkerhetsbeste-praksis for CI er å bruke full SHA for å forhindre supply chain-angrep.  
+**Anbefaling:** Lav risiko for et privat repo, men verdt å dokumentere. Eksempel: `uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2`
 
 ---
 
 ## Gjenstående anbefalinger (ikke fikset i denne omgang)
 
-1. **Legg til artikkel- og verktøy-URL-er i `fetch_stocks.py`** sin sitemap-generering slik at daglig CI ikke overskriver dem.
-2. **Skriv tester for `escHtml()`** i `tests/ui.test.js`.
-3. **Forbedre `404.html`** med nyttig navigasjon i stedet for stille redirect.
-4. **Legg til timeout/retry** i `scripts/fetch_priser.py`.
-5. **Endre `og:type`** fra `"article"` til `"website"` på interaktive verktøy-sider.
-6. **Vurder e2e-tester** for de nye verktøy-sidene i `tests/app.e2e.js`.
+1. **Skriv tester for `escHtml()`** i `tests/ui.test.js` — sikkerhetskritisk funksjon bør verifiseres.
+2. **Forbedre `404.html`** med nyttig navigasjon i stedet for stille redirect til forsiden.
+3. **Legg til timeout** i `scripts/fetch_priser.py` (`yf.download(..., timeout=30)`) for å forhindre at hengende API-kall blokkerer CI-køen.
+4. **Endre `og:type`** fra `"article"` til `"website"` på interaktive verktøy-sider.
+5. **Vurder e2e-tester** for de nye verktøy-sidene i `tests/app.e2e.js`.
+6. **Vurder SHA-pinning** av GitHub Actions for økt supply chain-sikkerhet.

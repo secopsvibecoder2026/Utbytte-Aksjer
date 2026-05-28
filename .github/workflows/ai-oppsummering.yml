@@ -36,10 +36,12 @@ jobs:
       - name: Generer AI-oppsummeringer
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          INPUT_FORCE: ${{ inputs.force }}
+          INPUT_TICKERS: ${{ inputs.tickers }}
         run: |
           ARGS=""
-          if [ "${{ inputs.force }}" = "true" ]; then ARGS="$ARGS --force"; fi
-          if [ -n "${{ inputs.tickers }}" ]; then ARGS="$ARGS --tickers ${{ inputs.tickers }}"; fi
+          if [ "$INPUT_FORCE" = "true" ]; then ARGS="$ARGS --force"; fi
+          if [ -n "$INPUT_TICKERS" ]; then ARGS="$ARGS --tickers $INPUT_TICKERS"; fi
           python3 scripts/ai_oppsummering.py $ARGS
 
       - name: Commit og push hvis endringer
