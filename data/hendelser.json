@@ -1158,22 +1158,26 @@
     {
       "ticker": "ACR",
       "dato": "2026-05-29",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/674842"
     },
     {
       "ticker": "DELIA",
       "dato": "2026-05-29",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/674844"
     },
     {
       "ticker": "ENH",
       "dato": "2026-05-29",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/674835"
     },
     {
       "ticker": "ENTR",
       "dato": "2026-05-29",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/674886"
     },
     {
       "ticker": "FRO",
@@ -1188,37 +1192,44 @@
     {
       "ticker": "KMCP",
       "dato": "2026-05-29",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/674886"
     },
     {
       "ticker": "PLSV",
       "dato": "2026-05-29",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/674856"
     },
     {
       "ticker": "SBMO",
       "dato": "2026-05-29",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/674886"
     },
     {
       "ticker": "SRHA",
       "dato": "2026-05-29",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/674886"
     },
     {
       "ticker": "STRONG",
       "dato": "2026-05-29",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/674886"
     },
     {
       "ticker": "VISTIN",
       "dato": "2026-05-29",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/674886"
     },
     {
       "ticker": "WWIB",
       "dato": "2026-05-29",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/674886"
     },
     {
       "ticker": "ENTR",
@@ -1826,6 +1837,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "ACR",
+      "dato": "2026-08-13",
+      "type": "rapport"
+    },
+    {
       "ticker": "ARCH",
       "dato": "2026-08-13",
       "type": "rapport"
@@ -2116,6 +2132,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "DELIA",
+      "dato": "2026-08-20",
+      "type": "rapport"
+    },
+    {
       "ticker": "ENDUR",
       "dato": "2026-08-20",
       "type": "rapport"
@@ -2256,6 +2277,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "ENH",
+      "dato": "2026-08-26",
+      "type": "rapport"
+    },
+    {
       "ticker": "EQVA",
       "dato": "2026-08-26",
       "type": "rapport"
@@ -2361,6 +2387,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "PLSV",
+      "dato": "2026-08-28",
+      "type": "rapport"
+    },
+    {
       "ticker": "BAKKA",
       "dato": "2026-08-31",
       "type": "rapport"
@@ -2414,7 +2445,42 @@
       "ticker": "CAPT",
       "dato": "2026-09-01",
       "type": "rapport"
+    },
+    {
+      "ticker": "ENTR",
+      "dato": "2026-09-30",
+      "type": "rapport"
+    },
+    {
+      "ticker": "KMCP",
+      "dato": "2026-09-30",
+      "type": "rapport"
+    },
+    {
+      "ticker": "SBMO",
+      "dato": "2026-09-30",
+      "type": "rapport"
+    },
+    {
+      "ticker": "SRHA",
+      "dato": "2026-09-30",
+      "type": "rapport"
+    },
+    {
+      "ticker": "STRONG",
+      "dato": "2026-09-30",
+      "type": "rapport"
+    },
+    {
+      "ticker": "VISTIN",
+      "dato": "2026-09-30",
+      "type": "rapport"
+    },
+    {
+      "ticker": "WWIB",
+      "dato": "2026-09-30",
+      "type": "rapport"
     }
   ],
-  "sist_oppdatert": "2026-05-28"
+  "sist_oppdatert": "2026-05-29"
 }
