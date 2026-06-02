@@ -1276,7 +1276,8 @@
     {
       "ticker": "BWLPG",
       "dato": "2026-06-02",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/675125"
     },
     {
       "ticker": "ENTR",
@@ -2419,6 +2420,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "BWLPG",
+      "dato": "2026-08-28",
+      "type": "rapport"
+    },
+    {
       "ticker": "HAFNI",
       "dato": "2026-08-28",
       "type": "rapport"
@@ -2524,5 +2530,5 @@
       "type": "rapport"
     }
   ],
-  "sist_oppdatert": "2026-06-01"
+  "sist_oppdatert": "2026-06-02"
 }
