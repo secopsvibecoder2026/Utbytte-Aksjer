@@ -1,5 +1,5 @@
 {
-  "sist_oppdatert": "2026-06-03T18:04:25Z",
+  "sist_oppdatert": "2026-06-03T19:50:10Z",
   "kilde": "Yahoo Finance (yfinance)",
   "aksjer": [
     {
@@ -1114,7 +1114,7 @@
       "utbytte_per_aksje": 18.0,
       "utbytte_yield": 6.33,
       "utbytte_vekst_5ar": 14.9,
-      "payout_ratio": 60.0,
+      "payout_ratio": 0.0,
       "pe_ratio": 10.2,
       "pb_ratio": 1.49,
       "ex_dato": null,
@@ -3314,7 +3314,7 @@
       "utbytte_per_aksje": 10.0,
       "utbytte_yield": 10.18,
       "utbytte_vekst_5ar": 18.9,
-      "payout_ratio": 62.0,
+      "payout_ratio": 0.0,
       "pe_ratio": 15.27,
       "pb_ratio": 2.0,
       "ex_dato": null,
@@ -3477,7 +3477,7 @@
         },
         {
           "d": "2022-01-16",
-          "k": 64.53
+          "k": 64.52
         },
         {
           "d": "2022-01-23",
@@ -4581,7 +4581,7 @@
         },
         {
           "d": "2022-01-23",
-          "k": 175.81
+          "k": 175.82
         },
         {
           "d": "2022-01-30",
@@ -5511,10 +5511,10 @@
       "52u_hoy": 373.8,
       "52u_lav": 240.6,
       "markedsverdi_mrd": 221.4,
-      "utbytte_per_aksje": 25.12,
-      "utbytte_yield": 7.17,
+      "utbytte_per_aksje": 26.28,
+      "utbytte_yield": 7.5,
       "utbytte_vekst_5ar": 14.8,
-      "payout_ratio": 280.0,
+      "payout_ratio": 0.0,
       "pe_ratio": 41.63,
       "pb_ratio": 2.07,
       "ex_dato": null,
@@ -7714,7 +7714,7 @@
       "utbytte_per_aksje": 5.0,
       "utbytte_yield": 0.97,
       "utbytte_vekst_5ar": 1.9,
-      "payout_ratio": 9.0,
+      "payout_ratio": 0.0,
       "pe_ratio": 10.15,
       "pb_ratio": 1.55,
       "ex_dato": null,
@@ -11082,17 +11082,17 @@
         },
         {
           "ar": 2023,
-          "utbytte": 28.71,
+          "utbytte": 28.72,
           "yield": 14.96
         },
         {
           "ar": 2024,
-          "utbytte": 27.03,
+          "utbytte": 27.04,
           "yield": 14.09
         },
         {
           "ar": 2025,
-          "utbytte": 12.3,
+          "utbytte": 12.31,
           "yield": 6.41
         },
         {
@@ -12165,7 +12165,7 @@
       "utbytte_per_aksje": 2.2,
       "utbytte_yield": 0.72,
       "utbytte_vekst_5ar": 16.8,
-      "payout_ratio": 37.0,
+      "payout_ratio": 0.0,
       "pe_ratio": 56.63,
       "pb_ratio": 11.36,
       "ex_dato": null,
@@ -13344,7 +13344,7 @@
         },
         {
           "ar": 2023,
-          "utbytte": 26.75,
+          "utbytte": 26.76,
           "yield": 8.29
         },
         {
@@ -16627,7 +16627,7 @@
       "utbytte_per_aksje": 12.0,
       "utbytte_yield": 1.7,
       "utbytte_vekst_5ar": 46.1,
-      "payout_ratio": 13.0,
+      "payout_ratio": 0.0,
       "pe_ratio": 5.06,
       "pb_ratio": 0.94,
       "ex_dato": null,
@@ -22134,8 +22134,8 @@
         },
         {
           "ar": 2024,
-          "utbytte": 12.78,
-          "yield": 18.14
+          "utbytte": 12.79,
+          "yield": 18.15
         },
         {
           "ar": 2025,
@@ -22144,7 +22144,7 @@
         },
         {
           "ar": 2026,
-          "utbytte": 4.32,
+          "utbytte": 4.33,
           "yield": 6.14
         }
       ],
@@ -25440,7 +25440,7 @@
       "utbytte_per_aksje": 6.5,
       "utbytte_yield": 3.64,
       "utbytte_vekst_5ar": 10.2,
-      "payout_ratio": 48.0,
+      "payout_ratio": 0.0,
       "pe_ratio": 17.03,
       "pb_ratio": 5.59,
       "ex_dato": null,
@@ -25623,7 +25623,7 @@
         },
         {
           "d": "2022-02-20",
-          "k": 159.11
+          "k": 159.1
         },
         {
           "d": "2022-02-27",
@@ -26537,10 +26537,10 @@
       "52u_hoy": 112.0,
       "52u_lav": 63.7,
       "markedsverdi_mrd": 21.3,
-      "utbytte_per_aksje": 9.26,
-      "utbytte_yield": 10.42,
-      "utbytte_vekst_5ar": 59.6,
-      "payout_ratio": 90.0,
+      "utbytte_per_aksje": 6.83,
+      "utbytte_yield": 7.68,
+      "utbytte_vekst_5ar": 59.5,
+      "payout_ratio": 0.0,
       "pe_ratio": 11.18,
       "pb_ratio": 1.59,
       "ex_dato": null,
@@ -30541,12 +30541,12 @@
       "historiske_utbytter": [
         {
           "ar": 2022,
-          "utbytte": 1.3,
+          "utbytte": 1.31,
           "yield": 2.85
         },
         {
           "ar": 2023,
-          "utbytte": 1.3,
+          "utbytte": 1.31,
           "yield": 2.85
         },
         {
@@ -31657,7 +31657,7 @@
       "utbytte_per_aksje": 10.0,
       "utbytte_yield": 4.06,
       "utbytte_vekst_5ar": 29.4,
-      "payout_ratio": 77.0,
+      "payout_ratio": 0.0,
       "pe_ratio": 18.88,
       "pb_ratio": 6.42,
       "ex_dato": null,
@@ -34987,7 +34987,7 @@
       "utbytte_vekst_5ar": 37.9,
       "payout_ratio": 0.0,
       "pe_ratio": 5.08,
-      "pb_ratio": 4.74,
+      "pb_ratio": 7.85,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-07-16",
@@ -37175,10 +37175,10 @@
       "52u_hoy": 280.0,
       "52u_lav": 209.0,
       "markedsverdi_mrd": 10.5,
-      "utbytte_per_aksje": 7.3,
-      "utbytte_yield": 2.97,
+      "utbytte_per_aksje": 6.75,
+      "utbytte_yield": 2.74,
       "utbytte_vekst_5ar": 14.1,
-      "payout_ratio": 18.0,
+      "payout_ratio": 0.0,
       "pe_ratio": 6.72,
       "pb_ratio": 1.17,
       "ex_dato": null,
@@ -38286,7 +38286,7 @@
       "rapport_dato": "2026-08-11",
       "frekvens": "Halvårlig",
       "ar_med_utbytte": 11,
-      "siste_utbytte": 9.41,
+      "siste_utbytte": 9.42,
       "historiske_utbytter": [
         {
           "ar": 2022,
@@ -38310,7 +38310,7 @@
         },
         {
           "ar": 2026,
-          "utbytte": 9.41,
+          "utbytte": 9.42,
           "yield": 7.64
         }
       ],
@@ -39378,7 +39378,7 @@
       "utbytte_per_aksje": 1.8,
       "utbytte_yield": 5.2,
       "utbytte_vekst_5ar": 22.5,
-      "payout_ratio": 89.0,
+      "payout_ratio": 0.0,
       "pe_ratio": 18.21,
       "pb_ratio": 3.3,
       "ex_dato": null,
@@ -42025,10 +42025,10 @@
       "52u_hoy": 21.96,
       "52u_lav": 12.17,
       "markedsverdi_mrd": 18.2,
-      "utbytte_per_aksje": 1.5,
-      "utbytte_yield": 8.03,
+      "utbytte_per_aksje": 1.38,
+      "utbytte_yield": 7.38,
       "utbytte_vekst_5ar": 30.3,
-      "payout_ratio": 122.0,
+      "payout_ratio": 0.0,
       "pe_ratio": 4.57,
       "pb_ratio": 2.1,
       "ex_dato": null,
@@ -43125,10 +43125,10 @@
       "52u_hoy": 151.7,
       "52u_lav": 84.0,
       "markedsverdi_mrd": 26.4,
-      "utbytte_per_aksje": 18.4,
-      "utbytte_yield": 13.31,
+      "utbytte_per_aksje": 22.82,
+      "utbytte_yield": 16.51,
       "utbytte_vekst_5ar": 50.7,
-      "payout_ratio": 92.0,
+      "payout_ratio": 0.0,
       "pe_ratio": 6.17,
       "pb_ratio": 2.23,
       "ex_dato": null,
@@ -47449,7 +47449,7 @@
         },
         {
           "ar": 2024,
-          "utbytte": 13.45,
+          "utbytte": 13.46,
           "yield": 15.03
         },
         {
@@ -48524,7 +48524,7 @@
       "52u_hoy": 541.0,
       "52u_lav": 213.5,
       "markedsverdi_mrd": 17.5,
-      "utbytte_per_aksje": 19.76,
+      "utbytte_per_aksje": 19.77,
       "utbytte_yield": 4.4,
       "utbytte_vekst_5ar": 29.5,
       "payout_ratio": 58.0,
@@ -48535,7 +48535,7 @@
       "rapport_dato": "2026-08-04",
       "frekvens": "Kvartalsvis",
       "ar_med_utbytte": 7,
-      "siste_utbytte": 18.64,
+      "siste_utbytte": 18.65,
       "historiske_utbytter": [
         {
           "ar": 2022,
@@ -48549,17 +48549,17 @@
         },
         {
           "ar": 2024,
-          "utbytte": 31.97,
+          "utbytte": 31.98,
           "yield": 7.12
         },
         {
           "ar": 2025,
-          "utbytte": 19.76,
+          "utbytte": 19.77,
           "yield": 4.4
         },
         {
           "ar": 2026,
-          "utbytte": 33.09,
+          "utbytte": 33.1,
           "yield": 7.37
         }
       ],
@@ -49629,7 +49629,7 @@
       "utbytte_vekst_5ar": 31.2,
       "payout_ratio": 32.0,
       "pe_ratio": 5.76,
-      "pb_ratio": 0.64,
+      "pb_ratio": 0.58,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-06-04",
@@ -50727,7 +50727,7 @@
       "utbytte_per_aksje": 0.63,
       "utbytte_yield": 1.57,
       "utbytte_vekst_5ar": 6.3,
-      "payout_ratio": 54.0,
+      "payout_ratio": 0.0,
       "pe_ratio": 16.68,
       "pb_ratio": 5.86,
       "ex_dato": null,
@@ -52912,7 +52912,7 @@
       "utbytte_per_aksje": 0.55,
       "utbytte_yield": 7.61,
       "utbytte_vekst_5ar": -13.9,
-      "payout_ratio": 77.0,
+      "payout_ratio": 0.0,
       "pe_ratio": 11.12,
       "pb_ratio": 3.31,
       "ex_dato": null,
@@ -57312,7 +57312,7 @@
       "utbytte_per_aksje": 1.1,
       "utbytte_yield": 1.08,
       "utbytte_vekst_5ar": -15.1,
-      "payout_ratio": 17.0,
+      "payout_ratio": 0.0,
       "pe_ratio": 16.14,
       "pb_ratio": 0.75,
       "ex_dato": null,
@@ -58407,7 +58407,7 @@
       "utbytte_per_aksje": 2.15,
       "utbytte_yield": 2.22,
       "utbytte_vekst_5ar": -8.0,
-      "payout_ratio": 67.0,
+      "payout_ratio": 0.0,
       "pe_ratio": 33.33,
       "pb_ratio": 4.38,
       "ex_dato": null,
@@ -60604,10 +60604,10 @@
       "52u_hoy": 152.0,
       "52u_lav": 2.56,
       "markedsverdi_mrd": 0.1,
-      "utbytte_per_aksje": 0.49,
-      "utbytte_yield": 11.64,
+      "utbytte_per_aksje": 0.66,
+      "utbytte_yield": 15.68,
       "utbytte_vekst_5ar": 43.5,
-      "payout_ratio": 113.0,
+      "payout_ratio": 0.0,
       "pe_ratio": 0.35,
       "pb_ratio": 0.04,
       "ex_dato": null,
@@ -60615,35 +60615,35 @@
       "rapport_dato": null,
       "frekvens": "Månedlig",
       "ar_med_utbytte": 8,
-      "siste_utbytte": 128.62,
+      "siste_utbytte": 128.67,
       "historiske_utbytter": [
         {
           "ar": 2022,
           "utbytte": 15.1,
-          "yield": 358.65
+          "yield": 358.78
         },
         {
           "ar": 2023,
-          "utbytte": 7.64,
-          "yield": 181.54
+          "utbytte": 7.65,
+          "yield": 181.61
         },
         {
           "ar": 2024,
-          "utbytte": 33.37,
-          "yield": 792.57
+          "utbytte": 33.38,
+          "yield": 792.87
         },
         {
           "ar": 2025,
           "utbytte": 13.61,
-          "yield": 323.23
+          "yield": 323.35
         },
         {
           "ar": 2026,
-          "utbytte": 133.1,
-          "yield": 3161.43
+          "utbytte": 133.15,
+          "yield": 3162.62
         }
       ],
-      "snitt_yield_5ar": 963.48,
+      "snitt_yield_5ar": 963.85,
       "beskrivelse": "Tørrbulkrederi med Newcastlemax-skip optimert for jernmalm og kull. Høy utbyttegrad fra sterk TCE.\n\nUtbyttet utbetales månedlig — tolv ganger per år, og selskapet har holdt dette gående i 8 år på rad. Direkteavkastningen er 9.0%, og 5-årsnittet på 11.5% plasserer 2020 blant de høyest-yielding aksjene i sin sektor. En utbetalingsgrad på 113% betyr at det meste av inntjeningen deles ut — utbyttet er dermed sensitivt for resultatsvingninger. Utbyttet har falt med i snitt 29.0% per år de siste fem årene.\n\nFraktrater varierer kraftig med globalt handelsmønster og flåtekapasitet, og utbyttet svinger tilsvarende. Historikken viser klare svingninger: høyest utbytte var 33.53 NOK per aksje i 2024, lavest 4.50 NOK i 2026.",
       "beskrivelse_fakta": "2020 Bulkers Ltd. owns and operates large dry bulk vessels worldwide. It operates six scrubber fitted 208,000 deadweight tonnage Newcastlemax dry bulk vessels. 2020 Bulkers Ltd. was incorporated in 2017 and is based in Hamilton, Bermuda.",
       "valuta": "NOK",
@@ -62825,7 +62825,7 @@
       "utbytte_per_aksje": 26.35,
       "utbytte_yield": 6.04,
       "utbytte_vekst_5ar": 36.8,
-      "payout_ratio": 55.0,
+      "payout_ratio": 0.0,
       "pe_ratio": 9.06,
       "pb_ratio": 1.56,
       "ex_dato": null,
@@ -63927,7 +63927,7 @@
       "utbytte_vekst_5ar": 24.5,
       "payout_ratio": 57.0,
       "pe_ratio": 12.39,
-      "pb_ratio": 0.89,
+      "pb_ratio": 0.91,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-08-14",
@@ -66117,10 +66117,10 @@
       "52u_hoy": 36.7,
       "52u_lav": 18.72,
       "markedsverdi_mrd": 4.2,
-      "utbytte_per_aksje": 2.22,
-      "utbytte_yield": 6.92,
+      "utbytte_per_aksje": 2.78,
+      "utbytte_yield": 8.66,
       "utbytte_vekst_5ar": -12.5,
-      "payout_ratio": 88.0,
+      "payout_ratio": 0.0,
       "pe_ratio": 3.91,
       "pb_ratio": 1.77,
       "ex_dato": null,
@@ -68302,10 +68302,10 @@
       "52u_hoy": 358.5,
       "52u_lav": 248.5,
       "markedsverdi_mrd": 20.2,
-      "utbytte_per_aksje": 18.5,
-      "utbytte_yield": 6.1,
+      "utbytte_per_aksje": 20.98,
+      "utbytte_yield": 6.91,
       "utbytte_vekst_5ar": 14.9,
-      "payout_ratio": 49.0,
+      "payout_ratio": 0.0,
       "pe_ratio": 7.09,
       "pb_ratio": 0.68,
       "ex_dato": null,
@@ -68317,22 +68317,22 @@
       "historiske_utbytter": [
         {
           "ar": 2022,
-          "utbytte": 13.98,
+          "utbytte": 13.99,
           "yield": 4.61
         },
         {
           "ar": 2023,
-          "utbytte": 20.97,
+          "utbytte": 20.98,
           "yield": 6.91
         },
         {
           "ar": 2024,
-          "utbytte": 25.63,
+          "utbytte": 25.64,
           "yield": 8.45
         },
         {
           "ar": 2025,
-          "utbytte": 20.97,
+          "utbytte": 20.98,
           "yield": 6.91
         },
         {
@@ -69405,7 +69405,7 @@
       "utbytte_per_aksje": 8.0,
       "utbytte_yield": 3.57,
       "utbytte_vekst_5ar": 20.9,
-      "payout_ratio": 70.0,
+      "payout_ratio": 0.0,
       "pe_ratio": 26.2,
       "pb_ratio": 8.09,
       "ex_dato": null,
@@ -69508,7 +69508,7 @@
         },
         {
           "d": "2021-10-03",
-          "k": 278.19
+          "k": 278.18
         },
         {
           "d": "2021-10-10",
@@ -72707,7 +72707,7 @@
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 0.0,
       "pe_ratio": 26.12,
-      "pb_ratio": 7.1,
+      "pb_ratio": 7.12,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-07-10",
@@ -73782,10 +73782,10 @@
       "52u_hoy": 159.9,
       "52u_lav": 70.05,
       "markedsverdi_mrd": 29.0,
-      "utbytte_per_aksje": 6.05,
-      "utbytte_yield": 4.1,
+      "utbytte_per_aksje": 6.46,
+      "utbytte_yield": 4.38,
       "utbytte_vekst_5ar": 3.8,
-      "payout_ratio": 52.0,
+      "payout_ratio": 0.0,
       "pe_ratio": 12.66,
       "pb_ratio": 1.51,
       "ex_dato": null,
@@ -74060,7 +74060,7 @@
         },
         {
           "d": "2022-07-31",
-          "k": 117.14
+          "k": 117.13
         },
         {
           "d": "2022-08-07",
@@ -78150,7 +78150,7 @@
       "utbytte_per_aksje": 0.3,
       "utbytte_yield": 3.86,
       "utbytte_vekst_5ar": -35.6,
-      "payout_ratio": 26.0,
+      "payout_ratio": 0.0,
       "pe_ratio": 1.68,
       "pb_ratio": 5.45,
       "ex_dato": null,
@@ -83579,7 +83579,7 @@
       "utbytte_per_aksje": 5.0,
       "utbytte_yield": 2.83,
       "utbytte_vekst_5ar": 102.1,
-      "payout_ratio": 30.0,
+      "payout_ratio": 0.0,
       "pe_ratio": 26.55,
       "pb_ratio": 8.62,
       "ex_dato": null,
@@ -86879,7 +86879,7 @@
       "utbytte_per_aksje": 22.27,
       "utbytte_yield": 6.85,
       "utbytte_vekst_5ar": 19.3,
-      "payout_ratio": 105.0,
+      "payout_ratio": 0.0,
       "pe_ratio": 15.31,
       "pb_ratio": 0.49,
       "ex_dato": null,
@@ -90603,7 +90603,7 @@
       "utbytte_per_aksje": 18.75,
       "utbytte_yield": 3.64,
       "utbytte_vekst_5ar": 16.9,
-      "payout_ratio": 45.0,
+      "payout_ratio": 0.0,
       "pe_ratio": 14.06,
       "pb_ratio": 1.44,
       "ex_dato": null,
@@ -92774,7 +92774,7 @@
       "52u_hoy": 165.0,
       "52u_lav": 129.0,
       "markedsverdi_mrd": 0.9,
-      "utbytte_per_aksje": 5.74,
+      "utbytte_per_aksje": 5.73,
       "utbytte_yield": 3.7,
       "utbytte_vekst_5ar": 8.0,
       "payout_ratio": 0.0,
@@ -93548,10 +93548,10 @@
       "52u_hoy": 650.0,
       "52u_lav": 399.5,
       "markedsverdi_mrd": 14.1,
-      "utbytte_per_aksje": 36.17,
-      "utbytte_yield": 6.55,
+      "utbytte_per_aksje": 54.24,
+      "utbytte_yield": 9.83,
       "utbytte_vekst_5ar": 45.7,
-      "payout_ratio": 76.0,
+      "payout_ratio": 0.0,
       "pe_ratio": 23.85,
       "pb_ratio": 9.01,
       "ex_dato": null,
@@ -94633,10 +94633,10 @@
       "52u_hoy": 273.25,
       "52u_lav": 228.0,
       "markedsverdi_mrd": 1.2,
-      "utbytte_per_aksje": 17.0,
-      "utbytte_yield": 6.57,
+      "utbytte_per_aksje": 15.0,
+      "utbytte_yield": 5.79,
       "utbytte_vekst_5ar": 40.7,
-      "payout_ratio": 31.0,
+      "payout_ratio": 0.0,
       "pe_ratio": 4.66,
       "pb_ratio": 0.51,
       "ex_dato": null,
@@ -95736,7 +95736,7 @@
       "utbytte_per_aksje": 12.0,
       "utbytte_yield": 6.5,
       "utbytte_vekst_5ar": 46.1,
-      "payout_ratio": 73.0,
+      "payout_ratio": 0.0,
       "pe_ratio": 11.19,
       "pb_ratio": 0.69,
       "ex_dato": null,
@@ -96836,7 +96836,7 @@
       "utbytte_per_aksje": 12.0,
       "utbytte_yield": 6.49,
       "utbytte_vekst_5ar": 31.1,
-      "payout_ratio": 51.0,
+      "payout_ratio": 0.0,
       "pe_ratio": 11.09,
       "pb_ratio": 1.35,
       "ex_dato": null,
@@ -97936,7 +97936,7 @@
       "utbytte_per_aksje": 11.0,
       "utbytte_yield": 5.96,
       "utbytte_vekst_5ar": 21.8,
-      "payout_ratio": 47.0,
+      "payout_ratio": 0.0,
       "pe_ratio": 10.18,
       "pb_ratio": 0.39,
       "ex_dato": null,
@@ -99031,7 +99031,7 @@
       "utbytte_per_aksje": 5.31,
       "utbytte_yield": 3.92,
       "utbytte_vekst_5ar": -2.1,
-      "payout_ratio": 128.0,
+      "payout_ratio": 0.0,
       "pe_ratio": 23.22,
       "pb_ratio": 4.38,
       "ex_dato": null,
@@ -102135,8 +102135,8 @@
       "52u_hoy": 16.12,
       "52u_lav": 10.6,
       "markedsverdi_mrd": 3.7,
-      "utbytte_per_aksje": 0.75,
-      "utbytte_yield": 5.56,
+      "utbytte_per_aksje": 0.4,
+      "utbytte_yield": 2.96,
       "utbytte_vekst_5ar": 153.3,
       "payout_ratio": 0.0,
       "pe_ratio": 28.72,
@@ -103223,7 +103223,7 @@
       "utbytte_per_aksje": 0.6,
       "utbytte_yield": 1.59,
       "utbytte_vekst_5ar": 50.0,
-      "payout_ratio": 47.0,
+      "payout_ratio": 0.0,
       "pe_ratio": 9.62,
       "pb_ratio": 3.14,
       "ex_dato": null,
@@ -104305,10 +104305,10 @@
       "52u_hoy": 210.0,
       "52u_lav": 123.0,
       "markedsverdi_mrd": 9.8,
-      "utbytte_per_aksje": 3.0,
-      "utbytte_yield": 1.69,
+      "utbytte_per_aksje": 2.0,
+      "utbytte_yield": 1.13,
       "utbytte_vekst_5ar": 12.7,
-      "payout_ratio": 22.0,
+      "payout_ratio": 0.0,
       "pe_ratio": 55.47,
       "pb_ratio": 2.03,
       "ex_dato": null,
@@ -108685,10 +108685,10 @@
       "52u_hoy": 56.0,
       "52u_lav": 33.4,
       "markedsverdi_mrd": 9.2,
-      "utbytte_per_aksje": 2.04,
-      "utbytte_yield": 5.93,
+      "utbytte_per_aksje": 1.86,
+      "utbytte_yield": 5.41,
       "utbytte_vekst_5ar": 10.0,
-      "payout_ratio": 70.0,
+      "payout_ratio": 0.0,
       "pe_ratio": 13.87,
       "pb_ratio": 2.38,
       "ex_dato": null,
@@ -112317,7 +112317,7 @@
         },
         {
           "ar": 2024,
-          "utbytte": 15.89,
+          "utbytte": 15.9,
           "yield": 7.01
         },
         {
@@ -113395,7 +113395,7 @@
       "utbytte_per_aksje": 1.49,
       "utbytte_yield": 9.93,
       "utbytte_vekst_5ar": -3.2,
-      "payout_ratio": 163.0,
+      "payout_ratio": 0.0,
       "pe_ratio": 10.64,
       "pb_ratio": 1.18,
       "ex_dato": null,
@@ -115566,10 +115566,10 @@
       "52u_hoy": 33.7,
       "52u_lav": 18.42,
       "markedsverdi_mrd": 2.4,
-      "utbytte_per_aksje": 0.75,
-      "utbytte_yield": 2.24,
+      "utbytte_per_aksje": 0.56,
+      "utbytte_yield": 1.67,
       "utbytte_vekst_5ar": 22.5,
-      "payout_ratio": 45.9,
+      "payout_ratio": 0.0,
       "pe_ratio": 20.52,
       "pb_ratio": 5.68,
       "ex_dato": null,
@@ -121477,7 +121477,7 @@
       "utbytte_per_aksje": 12.0,
       "utbytte_yield": 1.86,
       "utbytte_vekst_5ar": 46.1,
-      "payout_ratio": 13.0,
+      "payout_ratio": 0.0,
       "pe_ratio": 4.62,
       "pb_ratio": 0.85,
       "ex_dato": null,
@@ -125867,7 +125867,7 @@
       "utbytte_per_aksje": 11.7,
       "utbytte_yield": 8.1,
       "utbytte_vekst_5ar": 21.6,
-      "payout_ratio": 103.0,
+      "payout_ratio": 0.0,
       "pe_ratio": 12.68,
       "pb_ratio": 0.76,
       "ex_dato": null,
@@ -128067,7 +128067,7 @@
       "utbytte_per_aksje": 5.0,
       "utbytte_yield": 4.54,
       "utbytte_vekst_5ar": 4.2,
-      "payout_ratio": 33.0,
+      "payout_ratio": 0.0,
       "pe_ratio": 7.49,
       "pb_ratio": 0.49,
       "ex_dato": null,
@@ -131720,7 +131720,7 @@
       "utbytte_per_aksje": 4.9,
       "utbytte_yield": 4.26,
       "utbytte_vekst_5ar": 8.5,
-      "payout_ratio": 139.0,
+      "payout_ratio": 0.0,
       "pe_ratio": 32.67,
       "pb_ratio": 0.31,
       "ex_dato": null,
@@ -133920,7 +133920,7 @@
       "utbytte_per_aksje": 13.5,
       "utbytte_yield": 6.43,
       "utbytte_vekst_5ar": 40.1,
-      "payout_ratio": 83.0,
+      "payout_ratio": 0.0,
       "pe_ratio": 12.9,
       "pb_ratio": 0.38,
       "ex_dato": null,
@@ -134698,7 +134698,7 @@
         },
         {
           "d": "2025-03-09",
-          "k": 155.67
+          "k": 155.66
         },
         {
           "d": "2025-03-16",
@@ -137410,7 +137410,7 @@
         {
           "ar": 2023,
           "utbytte": 0.37,
-          "yield": 5.99
+          "yield": 6.0
         },
         {
           "ar": 2025,
@@ -137423,7 +137423,7 @@
           "yield": 2.7
         }
       ],
-      "snitt_yield_5ar": 7.04,
+      "snitt_yield_5ar": 7.05,
       "beskrivelse": "Hongkong-basert tørrlast-rederi notert på Oslo Børs med en flåte av supramax og handysize bulkskip. Betaler utbytte basert på inntjening og er kjent for høy utbyttebetaling i gode fraktmarkeder.\n\nUtbyttet utbetales én gang i året, og selskapet har holdt dette gående i 10 år på rad. Direkteavkastningen er 2.8%, og 5-årsnittet på 8.7% plasserer JIN i det lavere sjiktet aksjene i sin sektor. Utbetalingsgraden på 26% er lav og gir selskapet solid buffer til å opprettholde utbyttet ved svakere kvartaler.",
       "beskrivelse_fakta": "Jinhui Shipping and Transportation Limited, an investment holding company, engages in ship chartering and owning activities in China, Singapore, Japan, Norway, the United Arab Emirates, South Korea, Switzerland, and internationally. The company engages in money lending; property investment activities; and provision of ship management and shipping agent services. It operates a fleet of 25 owned vessels and 8 chartered-in vessels. The company was founded in 1987 and is based in Hong Kong, Hong Kong.",
       "valuta": "NOK",
@@ -138758,7 +138758,7 @@
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 0.0,
       "pe_ratio": 34.34,
-      "pb_ratio": 1.32,
+      "pb_ratio": 1.33,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-08-12",
@@ -141836,7 +141836,7 @@
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 0.0,
       "pe_ratio": 17.24,
-      "pb_ratio": 1.66,
+      "pb_ratio": 1.63,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-08-25",
@@ -149651,10 +149651,10 @@
       "52u_hoy": 21.4,
       "52u_lav": 15.0,
       "markedsverdi_mrd": 0.6,
-      "utbytte_per_aksje": 1.0,
-      "utbytte_yield": 6.08,
+      "utbytte_per_aksje": 0.5,
+      "utbytte_yield": 3.04,
       "utbytte_vekst_5ar": -37.5,
-      "payout_ratio": 500.0,
+      "payout_ratio": 0.0,
       "pe_ratio": 63.27,
       "pb_ratio": 0.9,
       "ex_dato": null,
@@ -150739,7 +150739,7 @@
       "utbytte_per_aksje": 0.42,
       "utbytte_yield": 7.58,
       "utbytte_vekst_5ar": 29.5,
-      "payout_ratio": 127.0,
+      "payout_ratio": 0.0,
       "pe_ratio": 4.78,
       "pb_ratio": 1.77,
       "ex_dato": null,
@@ -151836,7 +151836,7 @@
       "utbytte_vekst_5ar": -29.3,
       "payout_ratio": 133.0,
       "pe_ratio": 8.04,
-      "pb_ratio": 6.39,
+      "pb_ratio": 6.37,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-08-28",
@@ -151847,7 +151847,7 @@
         {
           "ar": 2024,
           "utbytte": 4.1,
-          "yield": 8.34
+          "yield": 8.35
         },
         {
           "ar": 2025,
@@ -151860,7 +151860,7 @@
           "yield": 4.17
         }
       ],
-      "snitt_yield_5ar": 9.73,
+      "snitt_yield_5ar": 9.74,
       "beskrivelse": "Norsk offshore brønnserviceselskap med spesialisering på brønnintervensjon og lettkabel-operasjoner. Betaler utbytte til aksjonærene basert på aktivitetsnivået i norsk og internasjonal olje- og gassindustri.\n\nUtbyttet utbetales kvartalsvis — fire utbetalinger i året, og selskapet har holdt dette gående i 3 år på rad. Direkteavkastningen er 18.2%, og 5-årsnittet på 10.0% plasserer PLSV blant de høyest-yielding aksjene i sin sektor. En utbetalingsgrad på 191% betyr at det meste av inntjeningen deles ut — utbyttet er dermed sensitivt for resultatsvingninger. Utbyttet har falt med i snitt 29.3% per år de siste fem årene.",
       "beskrivelse_fakta": "Paratus Energy Services Ltd., through its subsidiaries, provides drilling services and operates a fleet of jack-up rigs under contracts in Mexico. The company also operates a fleet of pipe-laying support vessels under contracts in Brazil; and offers subsea engineering, installation, and other services, as well as well integrity and intervention, plug and abandonment, and decommissioning services to its upstream oil and gas clients. The company was incorporated in 2018 and is based in Hamilton, Bermuda.",
       "valuta": "NOK",
@@ -152288,7 +152288,7 @@
       "pris": 4.8,
       "52u_hoy": 9.62,
       "52u_lav": 4.76,
-      "markedsverdi_mrd": 3.7,
+      "markedsverdi_mrd": 4.0,
       "utbytte_per_aksje": 0.0,
       "utbytte_yield": 0.0,
       "utbytte_vekst_5ar": 0.0,
@@ -154915,7 +154915,7 @@
       "utbytte_per_aksje": 2.5,
       "utbytte_yield": 1.03,
       "utbytte_vekst_5ar": 5.7,
-      "payout_ratio": 36.0,
+      "payout_ratio": 0.0,
       "pe_ratio": 23.78,
       "pb_ratio": 2.07,
       "ex_dato": null,
@@ -155510,7 +155510,7 @@
         },
         {
           "d": "2024-02-11",
-          "k": 205.24
+          "k": 205.25
         },
         {
           "d": "2024-02-18",
@@ -156017,7 +156017,7 @@
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 0.0,
       "pe_ratio": 174.24,
-      "pb_ratio": 6.46,
+      "pb_ratio": 6.47,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-08-06",
