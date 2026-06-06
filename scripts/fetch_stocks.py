@@ -4045,6 +4045,12 @@ def generer_sitemap(aksjer, root_dir, today, alle_tickers=None):
     <priority>0.6</priority>
   </url>""",
         f"""  <url>
+    <loc>https://exday.no/artikler/norske-shippingaksjer/</loc>
+    <lastmod>2026-06-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>""",
+        f"""  <url>
     <loc>https://exday.no/verktoy/</loc>
     <lastmod>{today}</lastmod>
     <changefreq>monthly</changefreq>
