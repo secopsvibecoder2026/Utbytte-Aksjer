@@ -1324,37 +1324,44 @@
     {
       "ticker": "ENTR",
       "dato": "2026-06-16",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/676281"
     },
     {
       "ticker": "KMCP",
       "dato": "2026-06-16",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/676281"
     },
     {
       "ticker": "SBMO",
       "dato": "2026-06-16",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/676281"
     },
     {
       "ticker": "SRHA",
       "dato": "2026-06-16",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/676281"
     },
     {
       "ticker": "STRONG",
       "dato": "2026-06-16",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/676281"
     },
     {
       "ticker": "VISTIN",
       "dato": "2026-06-16",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/676281"
     },
     {
       "ticker": "WWIB",
       "dato": "2026-06-16",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/676281"
     },
     {
       "ticker": "ENTR",
@@ -2177,6 +2184,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "ZAL",
+      "dato": "2026-08-14",
+      "type": "rapport"
+    },
+    {
       "ticker": "ELO",
       "dato": "2026-08-18",
       "type": "rapport"
@@ -2722,5 +2734,5 @@
       "type": "rapport"
     }
   ],
-  "sist_oppdatert": "2026-06-15"
+  "sist_oppdatert": "2026-06-16"
 }
