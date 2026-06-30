@@ -1408,37 +1408,44 @@
     {
       "ticker": "ENTR",
       "dato": "2026-06-30",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/677349"
     },
     {
       "ticker": "KMCP",
       "dato": "2026-06-30",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/677349"
     },
     {
       "ticker": "SBMO",
       "dato": "2026-06-30",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/677349"
     },
     {
       "ticker": "SRHA",
       "dato": "2026-06-30",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/677349"
     },
     {
       "ticker": "STRONG",
       "dato": "2026-06-30",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/677349"
     },
     {
       "ticker": "VISTIN",
       "dato": "2026-06-30",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/677349"
     },
     {
       "ticker": "WWIB",
       "dato": "2026-06-30",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/677349"
     },
     {
       "ticker": "ABG",
@@ -2894,7 +2901,42 @@
       "ticker": "WWIB",
       "dato": "2026-09-30",
       "type": "rapport"
+    },
+    {
+      "ticker": "ABL",
+      "dato": "2027-05-28",
+      "type": "rapport"
+    },
+    {
+      "ticker": "ENTR",
+      "dato": "2027-05-28",
+      "type": "rapport"
+    },
+    {
+      "ticker": "SBMO",
+      "dato": "2027-05-28",
+      "type": "rapport"
+    },
+    {
+      "ticker": "SRHA",
+      "dato": "2027-05-28",
+      "type": "rapport"
+    },
+    {
+      "ticker": "STRONG",
+      "dato": "2027-05-28",
+      "type": "rapport"
+    },
+    {
+      "ticker": "VISTIN",
+      "dato": "2027-05-28",
+      "type": "rapport"
+    },
+    {
+      "ticker": "WWIB",
+      "dato": "2027-05-28",
+      "type": "rapport"
     }
   ],
-  "sist_oppdatert": "2026-06-29"
+  "sist_oppdatert": "2026-06-30"
 }
