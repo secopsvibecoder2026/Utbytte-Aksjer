@@ -1,5 +1,5 @@
 {
-  "sist_oppdatert": "2026-07-02T15:19:05Z",
+  "sist_oppdatert": "2026-07-02T17:44:47Z",
   "kilde": "Yahoo Finance (yfinance)",
   "aksjer": [
     {
@@ -16,7 +16,7 @@
       "utbytte_vekst_5ar": 18.1,
       "payout_ratio": 67.0,
       "pe_ratio": 14.2,
-      "pb_ratio": 1.81,
+      "pb_ratio": 2.07,
       "ex_dato": "2026-08-13",
       "betaling_dato": "2026-08-27",
       "rapport_dato": "2026-07-22",
@@ -26,13 +26,13 @@
       "historiske_utbytter": [
         {
           "ar": 2022,
-          "utbytte": 16.6,
+          "utbytte": 16.61,
           "yield": 5.28
         },
         {
           "ar": 2023,
-          "utbytte": 36.41,
-          "yield": 11.58
+          "utbytte": 36.45,
+          "yield": 11.59
         },
         {
           "ar": 2024,
@@ -9972,7 +9972,7 @@
       "utbytte_vekst_5ar": -44.8,
       "payout_ratio": 47.0,
       "pe_ratio": 4.89,
-      "pb_ratio": 1.21,
+      "pb_ratio": 1.13,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-08-26",
@@ -9983,7 +9983,7 @@
         {
           "ar": 2022,
           "utbytte": 9.29,
-          "yield": 38.64
+          "yield": 38.65
         },
         {
           "ar": 2023,
@@ -10006,7 +10006,7 @@
           "yield": 3.6
         }
       ],
-      "snitt_yield_5ar": 20.68,
+      "snitt_yield_5ar": 20.69,
       "beskrivelse": "Containerrederi med svært høy utbyttegrad. Syklisk og volatilt – utbytte varierer sterkt med containerrater.\n\nUtbyttet utbetales kvartalsvis — fire utbetalinger i året, og selskapet har holdt dette gående i 5 år på rad. Direkteavkastningen er 8.5%, og 5-årsnittet på 21.6% plasserer MPCC blant de høyest-yielding aksjene i sin sektor. Utbetalingsgraden er 51%, noe som er balansert for en moden utbytteaksje. Utbyttet har falt med i snitt 52.2% per år de siste fem årene.\n\nFraktrater varierer kraftig med globalt handelsmønster og flåtekapasitet, og utbyttet svinger tilsvarende. Historikken viser klare svingninger: høyest utbytte var 9.20 NOK per aksje i 2022, lavest 0.48 NOK i 2026.",
       "beskrivelse_fakta": "MPC Container Ships ASA owns and operates a portfolio of container vessels. The company focuses on small-to mid-size vessels that are chartered out on time-charter contracts to global and regional liner shipping companies serving intra-regional trade lanes. It operates a fleet of 59 vessels with an aggregate capacity of approximately 140,894 twenty-foot equivalent units. MPC Container Ships ASA was incorporated in 2017 and is based in Oslo, Norway.",
       "valuta": "NOK",
@@ -11078,35 +11078,35 @@
       "rapport_dato": "2026-08-28",
       "frekvens": "Kvartalsvis",
       "ar_med_utbytte": 11,
-      "siste_utbytte": 6.59,
+      "siste_utbytte": 6.6,
       "historiske_utbytter": [
         {
           "ar": 2022,
-          "utbytte": 9.25,
-          "yield": 5.08
+          "utbytte": 9.26,
+          "yield": 5.09
         },
         {
           "ar": 2023,
-          "utbytte": 30.3,
-          "yield": 16.66
+          "utbytte": 30.34,
+          "yield": 16.68
         },
         {
           "ar": 2024,
-          "utbytte": 28.53,
-          "yield": 15.68
+          "utbytte": 28.57,
+          "yield": 15.7
         },
         {
           "ar": 2025,
-          "utbytte": 12.98,
-          "yield": 7.14
+          "utbytte": 13.0,
+          "yield": 7.15
         },
         {
           "ar": 2026,
-          "utbytte": 12.2,
+          "utbytte": 12.21,
           "yield": 6.71
         }
       ],
-      "snitt_yield_5ar": 10.25,
+      "snitt_yield_5ar": 10.27,
       "beskrivelse": "Verdens største LPG-tankrederi. Høy kontantstrøm og liberal utbyttepolitikk. Volatilt med shippingmarkedet. Aksjen er notert på Oslo Børs med en markedsverdi på rundt 26 milliarder kroner.\n\nUtbyttet utbetales kvartalsvis — fire utbetalinger i året, og selskapet har holdt dette gående i 11 år på rad. Direkteavkastningen er 8.4%, og 5-årsnittet på 9.5% plasserer BWLPG blant de høyest-yielding aksjene i sin sektor. En utbetalingsgrad på 82% betyr at det meste av inntjeningen deles ut — utbyttet er dermed sensitivt for resultatsvingninger. Utbyttet har vokst med i snitt 8.4% per år de siste fem årene.\n\nFraktrater varierer kraftig med globalt handelsmønster og flåtekapasitet, og utbyttet svinger tilsvarende. Historikken viser klare svingninger: høyest utbytte var 28.85 NOK per aksje i 2023, lavest 5.34 NOK i 2026.",
       "beskrivelse_fakta": "BW LPG Limited, an investment holding company, engages in ship owning and chartering activities worldwide. It operates through Shipping and Product Services segments. The company engages in the transportation of liquefied petroleum gas (LPG); provision of integrated LPG delivery services, as well as management services; wholesale and trade of LPG; and investment in commercial enterprises. As of December 31, 2025, it owned and operated a fleet of 54 vessels, including 28 very large gas carriers, 7 large gas carriers time chartered in by product services, and 8 VLGCs owned by BW LPG India Pte.",
       "valuta": "NOK",
@@ -12741,7 +12741,7 @@
         },
         {
           "d": "2024-01-28",
-          "k": 101.41
+          "k": 101.4
         },
         {
           "d": "2024-02-04",
@@ -13345,7 +13345,7 @@
       "52u_hoy": 424.6,
       "52u_lav": 170.3,
       "markedsverdi_mrd": 80.2,
-      "utbytte_per_aksje": 9.15,
+      "utbytte_per_aksje": 9.16,
       "utbytte_yield": 2.54,
       "utbytte_vekst_5ar": 103.6,
       "payout_ratio": 43.0,
@@ -13356,7 +13356,7 @@
       "rapport_dato": "2026-08-31",
       "frekvens": "Kvartalsvis",
       "ar_med_utbytte": 21,
-      "siste_utbytte": 15.25,
+      "siste_utbytte": 15.27,
       "historiske_utbytter": [
         {
           "ar": 2022,
@@ -13365,23 +13365,23 @@
         },
         {
           "ar": 2023,
-          "utbytte": 28.23,
-          "yield": 7.83
+          "utbytte": 28.27,
+          "yield": 7.84
         },
         {
           "ar": 2024,
-          "utbytte": 19.18,
-          "yield": 5.32
+          "utbytte": 19.21,
+          "yield": 5.33
         },
         {
           "ar": 2025,
-          "utbytte": 9.15,
+          "utbytte": 9.16,
           "yield": 2.54
         },
         {
           "ar": 2026,
-          "utbytte": 25.38,
-          "yield": 7.04
+          "utbytte": 25.41,
+          "yield": 7.05
         }
       ],
       "snitt_yield_5ar": 4.63,
@@ -21160,7 +21160,7 @@
         },
         {
           "d": "2021-12-12",
-          "k": 559.67
+          "k": 559.66
         },
         {
           "d": "2021-12-19",
@@ -22130,8 +22130,8 @@
       "52u_hoy": 86.7,
       "52u_lav": 50.58,
       "markedsverdi_mrd": 34.4,
-      "utbytte_per_aksje": 3.92,
-      "utbytte_yield": 5.7,
+      "utbytte_per_aksje": 3.93,
+      "utbytte_yield": 5.71,
       "utbytte_vekst_5ar": -1.2,
       "payout_ratio": 61.0,
       "pe_ratio": 7.63,
@@ -22145,31 +22145,31 @@
       "historiske_utbytter": [
         {
           "ar": 2022,
-          "utbytte": 4.79,
-          "yield": 6.97
+          "utbytte": 4.8,
+          "yield": 6.98
         },
         {
           "ar": 2023,
-          "utbytte": 10.59,
-          "yield": 15.39
+          "utbytte": 10.6,
+          "yield": 15.41
         },
         {
           "ar": 2024,
-          "utbytte": 13.49,
-          "yield": 19.61
+          "utbytte": 13.51,
+          "yield": 19.63
         },
         {
           "ar": 2025,
-          "utbytte": 3.92,
-          "yield": 5.7
+          "utbytte": 3.93,
+          "yield": 5.71
         },
         {
           "ar": 2026,
-          "utbytte": 4.56,
-          "yield": 6.63
+          "utbytte": 4.57,
+          "yield": 6.64
         }
       ],
-      "snitt_yield_5ar": 10.86,
+      "snitt_yield_5ar": 10.87,
       "beskrivelse": "Verdens største produkttankrederi. Frakter raffinerte petroleumsprodukter. Svært høy utbyttegrad fra sterk kontantstrøm. Aksjen er notert på Oslo Børs med en markedsverdi på rundt 39 milliarder kroner.\n\nUtbyttet utbetales kvartalsvis — fire utbetalinger i året, og selskapet har holdt dette gående i 6 år på rad. Direkteavkastningen er 4.8%, og 5-årsnittet på 8.5% plasserer HAFNI blant de solid-yielding aksjene i sin sektor. Utbetalingsgraden er 60%, noe som er balansert for en moden utbytteaksje. Utbyttet har falt med i snitt 22.5% per år de siste fem årene.\n\nFraktrater varierer kraftig med globalt handelsmønster og flåtekapasitet, og utbyttet svinger tilsvarende. Historikken viser klare svingninger: høyest utbytte var 12.84 NOK per aksje i 2024, lavest 1.65 NOK i 2026.",
       "beskrivelse_fakta": "Hafnia Limited owns and operates oil product tankers in Bermuda. It operates through Long Range II, Long Range I, Medium Range (MR), Handy size, and Specialized segments. The company transports clean and dirty, refined oil products, vegetable oil, and easy chemicals to national and international oil companies, and chemical companies, as well as trading and utility companies; and owns and operates 207 vessels. It provides ship owning, ship-management, investment, management, corporate support, and agency office services. In addition, the company provides chartering services.",
       "valuta": "NOK",
@@ -25628,7 +25628,7 @@
         },
         {
           "d": "2022-02-20",
-          "k": 159.1
+          "k": 159.11
         },
         {
           "d": "2022-02-27",
@@ -27664,7 +27664,7 @@
       "rapport_dato": null,
       "frekvens": "Uregelmessig",
       "ar_med_utbytte": 5,
-      "siste_utbytte": 6.83,
+      "siste_utbytte": 6.84,
       "historiske_utbytter": [],
       "snitt_yield_5ar": 0.0,
       "beskrivelse": "Ledende seismikkselskap som henter inn geofysiske data for olje- og gassindustrien. Gjenopptok utbytte etter restrukturering.",
@@ -30542,7 +30542,7 @@
       "rapport_dato": "2026-08-24",
       "frekvens": "Kvartalsvis",
       "ar_med_utbytte": 12,
-      "siste_utbytte": 0.61,
+      "siste_utbytte": 0.62,
       "historiske_utbytter": [
         {
           "ar": 2022,
@@ -30557,17 +30557,17 @@
         {
           "ar": 2024,
           "utbytte": 2.71,
-          "yield": 6.21
+          "yield": 6.22
         },
         {
           "ar": 2025,
-          "utbytte": 3.22,
-          "yield": 7.38
+          "utbytte": 3.23,
+          "yield": 7.39
         },
         {
           "ar": 2026,
           "utbytte": 2.42,
-          "yield": 5.53
+          "yield": 5.54
         }
       ],
       "snitt_yield_5ar": 5.09,
@@ -37490,7 +37490,7 @@
         },
         {
           "d": "2022-10-23",
-          "k": 268.24
+          "k": 268.23
         },
         {
           "d": "2022-10-30",
@@ -38282,7 +38282,7 @@
       "markedsverdi_mrd": 57.4,
       "utbytte_per_aksje": 13.11,
       "utbytte_yield": 9.66,
-      "utbytte_vekst_5ar": 62.0,
+      "utbytte_vekst_5ar": 62.1,
       "payout_ratio": 59.0,
       "pe_ratio": 5.62,
       "pb_ratio": 1.87,
@@ -38291,7 +38291,7 @@
       "rapport_dato": "2026-08-11",
       "frekvens": "Halvårlig",
       "ar_med_utbytte": 11,
-      "siste_utbytte": 9.94,
+      "siste_utbytte": 9.95,
       "historiske_utbytter": [
         {
           "ar": 2022,
@@ -38300,8 +38300,8 @@
         },
         {
           "ar": 2023,
-          "utbytte": 8.81,
-          "yield": 6.49
+          "utbytte": 8.82,
+          "yield": 6.5
         },
         {
           "ar": 2024,
@@ -38315,8 +38315,8 @@
         },
         {
           "ar": 2026,
-          "utbytte": 9.94,
-          "yield": 7.32
+          "utbytte": 9.95,
+          "yield": 7.33
         }
       ],
       "snitt_yield_5ar": 9.3,
@@ -41756,7 +41756,7 @@
         },
         {
           "d": "2025-02-16",
-          "k": 28.02
+          "k": 28.01
         },
         {
           "d": "2025-02-23",
@@ -48577,7 +48577,7 @@
       "52u_hoy": 561.0,
       "52u_lav": 224.5,
       "markedsverdi_mrd": 20.6,
-      "utbytte_per_aksje": 20.86,
+      "utbytte_per_aksje": 20.88,
       "utbytte_yield": 3.95,
       "utbytte_vekst_5ar": 66.0,
       "payout_ratio": 58.0,
@@ -48588,7 +48588,7 @@
       "rapport_dato": "2026-08-04",
       "frekvens": "Kvartalsvis",
       "ar_med_utbytte": 7,
-      "siste_utbytte": 19.68,
+      "siste_utbytte": 19.7,
       "historiske_utbytter": [
         {
           "ar": 2022,
@@ -48602,18 +48602,18 @@
         },
         {
           "ar": 2024,
-          "utbytte": 33.34,
-          "yield": 6.31
+          "utbytte": 33.37,
+          "yield": 6.32
         },
         {
           "ar": 2025,
-          "utbytte": 20.86,
+          "utbytte": 20.88,
           "yield": 3.95
         },
         {
           "ar": 2026,
-          "utbytte": 34.93,
-          "yield": 6.61
+          "utbytte": 34.97,
+          "yield": 6.62
         }
       ],
       "snitt_yield_5ar": 5.63,
@@ -57531,7 +57531,7 @@
         },
         {
           "d": "2022-02-27",
-          "k": 167.8
+          "k": 167.81
         },
         {
           "d": "2022-03-06",
@@ -60668,35 +60668,35 @@
       "rapport_dato": null,
       "frekvens": "Månedlig",
       "ar_med_utbytte": 8,
-      "siste_utbytte": 135.76,
+      "siste_utbytte": 135.92,
       "historiske_utbytter": [
         {
           "ar": 2022,
-          "utbytte": 15.94,
-          "yield": 468.75
+          "utbytte": 15.96,
+          "yield": 469.3
         },
         {
           "ar": 2023,
-          "utbytte": 8.07,
-          "yield": 237.27
+          "utbytte": 8.08,
+          "yield": 237.55
         },
         {
           "ar": 2024,
-          "utbytte": 35.22,
-          "yield": 1035.88
+          "utbytte": 35.26,
+          "yield": 1037.1
         },
         {
           "ar": 2025,
-          "utbytte": 14.36,
-          "yield": 422.45
+          "utbytte": 14.38,
+          "yield": 422.95
         },
         {
           "ar": 2026,
-          "utbytte": 140.49,
-          "yield": 4131.94
+          "utbytte": 140.65,
+          "yield": 4136.81
         }
       ],
-      "snitt_yield_5ar": 1259.26,
+      "snitt_yield_5ar": 1260.74,
       "beskrivelse": "Tørrbulkrederi med Newcastlemax-skip optimert for jernmalm og kull. Høy utbyttegrad fra sterk TCE.\n\nUtbyttet utbetales månedlig — tolv ganger per år, og selskapet har holdt dette gående i 8 år på rad. Direkteavkastningen er 9.0%, og 5-årsnittet på 11.5% plasserer 2020 blant de høyest-yielding aksjene i sin sektor. En utbetalingsgrad på 113% betyr at det meste av inntjeningen deles ut — utbyttet er dermed sensitivt for resultatsvingninger. Utbyttet har falt med i snitt 29.0% per år de siste fem årene.\n\nFraktrater varierer kraftig med globalt handelsmønster og flåtekapasitet, og utbyttet svinger tilsvarende. Historikken viser klare svingninger: høyest utbytte var 33.53 NOK per aksje i 2024, lavest 4.50 NOK i 2026.",
       "beskrivelse_fakta": "2020 Bulkers Ltd. owns and operates large dry bulk vessels worldwide. It operates six scrubber fitted 208,000 deadweight tonnage Newcastlemax dry bulk vessels. 2020 Bulkers Ltd. was incorporated in 2017 and is based in Hamilton, Bermuda.",
       "valuta": "NOK",
@@ -62937,7 +62937,7 @@
         },
         {
           "d": "2021-08-15",
-          "k": 211.02
+          "k": 211.01
         },
         {
           "d": "2021-08-22",
@@ -62949,7 +62949,7 @@
         },
         {
           "d": "2021-09-05",
-          "k": 211.02
+          "k": 211.01
         },
         {
           "d": "2021-09-12",
@@ -68366,31 +68366,31 @@
       "rapport_dato": "2026-07-09",
       "frekvens": "Halvårlig",
       "ar_med_utbytte": 22,
-      "siste_utbytte": 9.84,
+      "siste_utbytte": 9.85,
       "historiske_utbytter": [
         {
           "ar": 2022,
-          "utbytte": 14.75,
+          "utbytte": 14.77,
           "yield": 5.04
         },
         {
           "ar": 2023,
-          "utbytte": 22.13,
-          "yield": 7.55
+          "utbytte": 22.16,
+          "yield": 7.56
         },
         {
           "ar": 2024,
-          "utbytte": 27.05,
-          "yield": 9.23
+          "utbytte": 27.09,
+          "yield": 9.24
         },
         {
           "ar": 2025,
-          "utbytte": 22.13,
-          "yield": 7.55
+          "utbytte": 22.16,
+          "yield": 7.56
         },
         {
           "ar": 2026,
-          "utbytte": 9.84,
+          "utbytte": 9.85,
           "yield": 3.36
         }
       ],
@@ -72760,7 +72760,7 @@
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 0.0,
       "pe_ratio": 22.18,
-      "pb_ratio": 6.21,
+      "pb_ratio": 6.24,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-07-10",
@@ -74097,7 +74097,7 @@
         },
         {
           "d": "2022-07-31",
-          "k": 117.13
+          "k": 117.14
         },
         {
           "d": "2022-08-07",
@@ -76020,7 +76020,7 @@
       "utbytte_vekst_5ar": 79.1,
       "payout_ratio": 3.0,
       "pe_ratio": 3.26,
-      "pb_ratio": 1.04,
+      "pb_ratio": 1.1,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-07-15",
@@ -88494,7 +88494,7 @@
       "utbytte_vekst_5ar": 90.7,
       "payout_ratio": 94.0,
       "pe_ratio": 32.34,
-      "pb_ratio": 5.17,
+      "pb_ratio": 5.13,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-08-13",
@@ -99112,12 +99112,12 @@
       "rapport_dato": "2026-08-11",
       "frekvens": "Månedlig",
       "ar_med_utbytte": 3,
-      "siste_utbytte": 2.16,
+      "siste_utbytte": 2.17,
       "historiske_utbytter": [
         {
           "ar": 2024,
-          "utbytte": 4.72,
-          "yield": 3.33
+          "utbytte": 4.73,
+          "yield": 3.34
         },
         {
           "ar": 2025,
@@ -99126,11 +99126,11 @@
         },
         {
           "ar": 2026,
-          "utbytte": 6.69,
-          "yield": 4.72
+          "utbytte": 6.7,
+          "yield": 4.73
         }
       ],
-      "snitt_yield_5ar": 4.0,
+      "snitt_yield_5ar": 4.01,
       "beskrivelse": "Moderne tørrbulkrederi med Newcastlemax-skip som frakter jernmalm og kull. Liberal utbyttepolitikk med kvartalsvis utbetaling basert på inntjening og kontantstrøm. Himalaya Shipping Ltd.\n\nUtbyttet utbetales månedlig — tolv ganger per år, og selskapet har holdt dette gående i 3 år på rad. Direkteavkastningen er 5.3%, og 5-årsnittet på 3.2% plasserer HSHP blant de solid-yielding aksjene i sin sektor. En utbetalingsgrad på 150% betyr at det meste av inntjeningen deles ut — utbyttet er dermed sensitivt for resultatsvingninger. Utbyttet har falt med i snitt 19.6% per år de siste fem årene.\n\nFraktrater varierer kraftig med globalt handelsmønster og flåtekapasitet, og utbyttet svinger tilsvarende. Historikken viser klare svingninger: høyest utbytte var 5.34 NOK per aksje i 2025, lavest 2.90 NOK i 2026.",
       "beskrivelse_fakta": "Himalaya Shipping Ltd. provides dry bulk shipping services worldwide. The company serves major commodity trading, commodity and energy transition, and multi-modal transport companies. As of December 31, 2024, it owned and operated through a fleet of 12 Newcastlemax dry bulk vessels, each with capacity in the range of 210,000 dead weight tons. Himalaya Shipping Ltd. was incorporated in 2021 and is based in Hamilton, Bermuda.",
       "valuta": "NOK",
@@ -112427,8 +112427,8 @@
         },
         {
           "ar": 2025,
-          "utbytte": 16.88,
-          "yield": 7.9
+          "utbytte": 16.89,
+          "yield": 7.91
         },
         {
           "ar": 2026,
@@ -137354,8 +137354,8 @@
         },
         {
           "ar": 2026,
-          "utbytte": 8.36,
-          "yield": 5.67
+          "utbytte": 8.37,
+          "yield": 5.68
         }
       ],
       "snitt_yield_5ar": 3.0,
@@ -137579,7 +137579,7 @@
         {
           "ar": 2022,
           "utbytte": 0.98,
-          "yield": 16.34
+          "yield": 16.36
         },
         {
           "ar": 2023,
@@ -137589,7 +137589,7 @@
         {
           "ar": 2025,
           "utbytte": 0.3,
-          "yield": 4.9
+          "yield": 4.91
         },
         {
           "ar": 2026,
@@ -137597,7 +137597,7 @@
           "yield": 2.94
         }
       ],
-      "snitt_yield_5ar": 7.68,
+      "snitt_yield_5ar": 7.69,
       "beskrivelse": "Hongkong-basert tørrlast-rederi notert på Oslo Børs med en flåte av supramax og handysize bulkskip. Betaler utbytte basert på inntjening og er kjent for høy utbyttebetaling i gode fraktmarkeder.\n\nUtbyttet utbetales én gang i året, og selskapet har holdt dette gående i 10 år på rad. Direkteavkastningen er 2.8%, og 5-årsnittet på 8.7% plasserer JIN i det lavere sjiktet aksjene i sin sektor. Utbetalingsgraden på 26% er lav og gir selskapet solid buffer til å opprettholde utbyttet ved svakere kvartaler.",
       "beskrivelse_fakta": "Jinhui Shipping and Transportation Limited, an investment holding company, engages in ship chartering and owning activities in China, Singapore, Japan, Norway, the United Arab Emirates, South Korea, Switzerland, and internationally. The company engages in money lending; property investment activities; and provision of ship management and shipping agent services. It operates a fleet of 25 owned vessels and 8 chartered-in vessels. The company was founded in 1987 and is based in Hong Kong, Hong Kong.",
       "valuta": "NOK",
@@ -138959,10 +138959,10 @@
         {
           "ar": 2024,
           "utbytte": 3.18,
-          "yield": 7.16
+          "yield": 7.17
         }
       ],
-      "snitt_yield_5ar": 7.16,
+      "snitt_yield_5ar": 7.17,
       "beskrivelse": "Internasjonalt boreriggselskap spesialisert på jack-up rigger for grunt vann. Opererer globalt og betaler utbytte kvartalsvis etter hvert som dagsratene har styrket seg markant i dagens underskuddsmarked.",
       "beskrivelse_fakta": "Borr Drilling Limited operates as an offshore shallow-water drilling contractor to the oil and gas industry in the Americas, Southeast Asia, West Africa, the Middle East, North Africa, and Europe. It owns, contracts, and operates jack-up rigs for operations in shallow-water areas, such as the provision of related equipment and work crews to conduct oil and gas drilling and workover operations for exploration and production. It serves oil and gas exploration and production companies, such as integrated oil companies, state-owned national oil companies, and independent oil and gas companies.",
       "valuta": "NOK",
@@ -140890,7 +140890,7 @@
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 0.0,
       "pe_ratio": 112.66,
-      "pb_ratio": 1.06,
+      "pb_ratio": 1.07,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-09-01",
@@ -145562,16 +145562,16 @@
       "navn": "SoftwareOne Holding AG",
       "sektor": "Informasjonsteknologi",
       "bors": "Oslo Børs",
-      "pris": 8.07,
+      "pris": 8.12,
       "52u_hoy": 9.4,
       "52u_lav": 5.83,
       "markedsverdi_mrd": 1.7,
       "utbytte_per_aksje": 0.15,
-      "utbytte_yield": 1.86,
+      "utbytte_yield": 1.85,
       "utbytte_vekst_5ar": -17.9,
       "payout_ratio": 360.0,
       "pe_ratio": null,
-      "pb_ratio": 1.78,
+      "pb_ratio": 1.8,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-08-26",
@@ -145582,30 +145582,30 @@
         {
           "ar": 2022,
           "utbytte": 0.33,
-          "yield": 4.09
+          "yield": 4.06
         },
         {
           "ar": 2023,
           "utbytte": 0.35,
-          "yield": 4.34
+          "yield": 4.31
         },
         {
           "ar": 2024,
           "utbytte": 0.36,
-          "yield": 4.46
+          "yield": 4.43
         },
         {
           "ar": 2025,
           "utbytte": 0.3,
-          "yield": 3.72
+          "yield": 3.69
         },
         {
           "ar": 2026,
           "utbytte": 0.15,
-          "yield": 1.86
+          "yield": 1.85
         }
       ],
-      "snitt_yield_5ar": 3.69,
+      "snitt_yield_5ar": 3.67,
       "beskrivelse": "Sveitsisk global leverandør av programvarelisensstyring og skymigreringer, notert på Oslo Børs. Hjelper selskaper optimere IT-utgifter og digitalisere. Betaler utbytte til aksjonærene halvårlig.\n\nUtbyttet utbetales én gang i året, og selskapet har holdt dette gående i 7 år på rad. Direkteavkastningen er 2.1%, og 5-årsnittet på 4.8% plasserer SWON i det lavere sjiktet aksjene i sin sektor. En utbetalingsgrad på 360% betyr at det meste av inntjeningen deles ut — utbyttet er dermed sensitivt for resultatsvingninger.",
       "beskrivelse_fakta": "SoftwareOne Holding AG, together with its subsidiaries, provides software and cloud solutions in Germany, Austria, Switzerland, Middle East and Africa, Northern Europe, Central and Eastern Europe, the United States of America, Canada, Latin America, and Asia Pacific. The company develops and delivers the technology solutions that modernize applications and software in the cloud.",
       "valuta": "CHF",
@@ -146648,7 +146648,7 @@
         },
         {
           "d": "2026-07-05",
-          "k": 8.07
+          "k": 8.12
         }
       ],
       "ask_egnet": false,
@@ -152082,10 +152082,10 @@
       "markedsverdi_mrd": 7.4,
       "utbytte_per_aksje": 8.52,
       "utbytte_yield": 18.77,
-      "utbytte_vekst_5ar": -2.3,
+      "utbytte_vekst_5ar": -2.4,
       "payout_ratio": 133.0,
       "pe_ratio": 6.87,
-      "pb_ratio": 5.97,
+      "pb_ratio": 5.83,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-08-28",
@@ -152096,12 +152096,12 @@
         {
           "ar": 2024,
           "utbytte": 4.33,
-          "yield": 9.53
+          "yield": 9.54
         },
         {
           "ar": 2025,
-          "utbytte": 8.66,
-          "yield": 19.07
+          "utbytte": 8.67,
+          "yield": 19.09
         },
         {
           "ar": 2026,
@@ -152109,7 +152109,7 @@
           "yield": 9.1
         }
       ],
-      "snitt_yield_5ar": 12.57,
+      "snitt_yield_5ar": 12.58,
       "beskrivelse": "Norsk offshore brønnserviceselskap med spesialisering på brønnintervensjon og lettkabel-operasjoner. Betaler utbytte til aksjonærene basert på aktivitetsnivået i norsk og internasjonal olje- og gassindustri.\n\nUtbyttet utbetales kvartalsvis — fire utbetalinger i året, og selskapet har holdt dette gående i 3 år på rad. Direkteavkastningen er 18.2%, og 5-årsnittet på 10.0% plasserer PLSV blant de høyest-yielding aksjene i sin sektor. En utbetalingsgrad på 191% betyr at det meste av inntjeningen deles ut — utbyttet er dermed sensitivt for resultatsvingninger. Utbyttet har falt med i snitt 29.3% per år de siste fem årene.",
       "beskrivelse_fakta": "Paratus Energy Services Ltd., through its subsidiaries, provides drilling services and operates a fleet of jack-up rigs under contracts in Mexico. The company also operates a fleet of pipe-laying support vessels under contracts in Brazil; and offers subsea engineering, installation, and other services, as well as well integrity and intervention, plug and abandonment, and decommissioning services to its upstream oil and gas clients. The company was incorporated in 2018 and is based in Hamilton, Bermuda.",
       "valuta": "NOK",
@@ -154118,7 +154118,7 @@
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 0.0,
       "pe_ratio": 2.51,
-      "pb_ratio": 0.99,
+      "pb_ratio": 0.98,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-08-21",
@@ -155775,7 +155775,7 @@
         },
         {
           "d": "2024-02-11",
-          "k": 205.25
+          "k": 205.24
         },
         {
           "d": "2024-02-18",
@@ -156298,7 +156298,7 @@
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 0.0,
       "pe_ratio": 144.17,
-      "pb_ratio": 5.37,
+      "pb_ratio": 5.49,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-08-06",
@@ -158661,7 +158661,7 @@
         },
         {
           "ar": 2025,
-          "utbytte": 12.83,
+          "utbytte": 12.84,
           "yield": 31.08
         },
         {
