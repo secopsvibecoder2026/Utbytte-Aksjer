@@ -1,18 +1,12 @@
 {
   "hendelser": [
     {
-      "ticker": "ODLD",
-      "dato": "2026-04-23",
-      "type": "rapport",
-      "url": "https://newsweb.oslobors.no/message/671461"
-    },
-    {
       "ticker": "YAR",
       "dato": "2026-04-24",
       "type": "rapport"
     },
     {
-      "ticker": "ABL",
+      "ticker": "AQUA",
       "dato": "2026-04-28",
       "type": "rapport",
       "url": "https://newsweb.oslobors.no/message/671606"
@@ -373,7 +367,7 @@
       "url": "https://newsweb.oslobors.no/message/672775"
     },
     {
-      "ticker": "ABL",
+      "ticker": "AQUA",
       "dato": "2026-05-07",
       "type": "rapport",
       "url": "https://newsweb.oslobors.no/message/672592"
@@ -2207,7 +2201,7 @@
       "type": "rapport"
     },
     {
-      "ticker": "ABL",
+      "ticker": "AQUA",
       "dato": "2026-08-20",
       "type": "rapport"
     },
