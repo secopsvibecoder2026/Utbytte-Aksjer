@@ -461,9 +461,14 @@ This section documents recurring patterns where Yahoo Finance returns incorrect 
 **Each `ticker_yf` must be unique** — if two entries share the same `ticker_yf`, both will receive identical data from Yahoo Finance. Known incidents:
 - **STRO** (removed 2026-04-15): duplicate of SNI (Stolt-Nielsen)
 - **VENDA** (removed 2026-04-15): duplicate of VEND (Vend Marketplaces)
-- **ODLD**: currently uses `ODLD.OL` — different company from ODL (Odfjell Drilling vs Odfjell SE), but may be delisted; needs verification on next data fetch
+- **ODLD** (removed 2026-07-03): phantom `ODLD.OL` entry — Odfjell Drilling's real Oslo Børs ticker is **ODL**. The old **ODL** entry was mislabelled as "Odfjell SE"; corrected to **Odfjell Drilling Ltd** (sektor Energitjenester). Odfjell SE remains as **ODF** (A-aksje) + **ODFB** (B-aksje, added 2026-07-03).
 
-When adding new tickers, always verify `ticker_yf` is unique in `tickers.json`.
+### Ticker corrections / delistings (2026-07-03)
+
+- **COOL** (removed): Cool Company delisted from Oslo Børs 20 Jan 2026 (merged into EPS Ventures, cash $9.65/share).
+- **ABL → AQUA**: ABL Group ASA renamed to **Aqualis ASA** (new ticker `AQUA`, effective 17 Jun 2026). `ticker_yf` updated to `AQUA.OL`.
+
+When adding new tickers, always verify `ticker_yf` is unique in `tickers.json`, and confirm the ticker/name matches the current Oslo Børs / Euronext listing (companies get renamed, merged and delisted).
 
 ---
 
