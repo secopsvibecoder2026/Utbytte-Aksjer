@@ -367,15 +367,15 @@
       "url": "https://newsweb.oslobors.no/message/672775"
     },
     {
+      "ticker": "AKRBP",
+      "dato": "2026-05-07",
+      "type": "rapport"
+    },
+    {
       "ticker": "AQUA",
       "dato": "2026-05-07",
       "type": "rapport",
       "url": "https://newsweb.oslobors.no/message/672592"
-    },
-    {
-      "ticker": "AKRBP",
-      "dato": "2026-05-07",
-      "type": "rapport"
     },
     {
       "ticker": "BEWI",
@@ -1607,12 +1607,12 @@
       "type": "rapport"
     },
     {
-      "ticker": "AQUA",
+      "ticker": "AKRBP",
       "dato": "2026-07-15",
       "type": "rapport"
     },
     {
-      "ticker": "AKRBP",
+      "ticker": "AQUA",
       "dato": "2026-07-15",
       "type": "rapport"
     },
@@ -2062,12 +2062,12 @@
       "type": "rapport"
     },
     {
-      "ticker": "AQUA",
+      "ticker": "ACR",
       "dato": "2026-08-13",
       "type": "rapport"
     },
     {
-      "ticker": "ACR",
+      "ticker": "AQUA",
       "dato": "2026-08-13",
       "type": "rapport"
     },
@@ -2177,12 +2177,12 @@
       "type": "rapport"
     },
     {
-      "ticker": "AQUA",
+      "ticker": "AKVA",
       "dato": "2026-08-14",
       "type": "rapport"
     },
     {
-      "ticker": "AKVA",
+      "ticker": "AQUA",
       "dato": "2026-08-14",
       "type": "rapport"
     },
@@ -2702,12 +2702,12 @@
       "type": "rapport"
     },
     {
-      "ticker": "AQUA",
+      "ticker": "AFG",
       "dato": "2026-08-28",
       "type": "rapport"
     },
     {
-      "ticker": "AFG",
+      "ticker": "AQUA",
       "dato": "2026-08-28",
       "type": "rapport"
     },
@@ -2937,5 +2937,5 @@
       "type": "rapport"
     }
   ],
-  "sist_oppdatert": "2026-07-02"
+  "sist_oppdatert": "2026-07-03"
 }
