@@ -20,6 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      actions: write   # for å utløse deploy-only.yml etter commit
 
     steps:
       - name: Sjekk ut kode
@@ -45,13 +46,25 @@ jobs:
           python3 scripts/ai_oppsummering.py $ARGS
 
       - name: Commit og push hvis endringer
+        id: commit
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           if git diff --quiet data/aksjer.json; then
             echo "Ingen endringer."
+            echo "pushed=false" >> "$GITHUB_OUTPUT"
           else
             git add data/aksjer.json
             git commit -m "auto: oppdater AI-oppsummeringer $(date -u '+%Y-%m-%d')"
+            git pull --rebase origin main
             git push
+            echo "pushed=true" >> "$GITHUB_OUTPUT"
           fi
+
+      # Push med GITHUB_TOKEN trigger aldri on:push-workflows — utløs
+      # lettvekts-deployen så oppsummeringene når live-siten.
+      - name: Utløs deploy til GitHub Pages
+        if: steps.commit.outputs.pushed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run deploy-only.yml --ref main

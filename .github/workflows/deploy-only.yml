@@ -1,0 +1,48 @@
+name: Deploy til GitHub Pages (kun deploy)
+
+# Lettvekts-deploy som publiserer main til Pages uten datahenting.
+# Utløses av oppdater-priser.yml og ai-oppsummering.yml etter at de har
+# committet nye data, slik at priser.json/aksjer.json faktisk når live-siten.
+# (Push med GITHUB_TOKEN trigger aldri on:push-workflows; workflow_dispatch
+# via API er det dokumenterte unntaket.)
+#
+# NB: Bumper bevisst IKKE SW-cacheversjonen — JSON-data er network-first i
+# service workeren, så klienter får ferske priser uansett. En bump hvert
+# 15. minutt ville invalidert alle brukeres statiske cache 4x i timen.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  pages: write
+  id-token: write
+  contents: read
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    name: Deploy main til GitHub Pages
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Sjekk ut kode
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Konfigurer GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Last opp artefakt
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: "."
+
+      - name: Deploy til GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

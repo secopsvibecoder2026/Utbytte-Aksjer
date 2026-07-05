@@ -1781,10 +1781,10 @@ function visDeltPortefolje(data) {
     topp.innerHTML = `<p class="text-xs font-semibold uppercase tracking-wide text-gray-400 mb-2">Topp posisjoner</p>` +
       data.t.map(([ticker, vekt, y]) => `
         <div class="flex items-center justify-between py-1.5 border-b border-gray-100 dark:border-gray-800 last:border-0">
-          <span class="font-mono font-bold text-brand-700 dark:text-brand-400 text-sm">${ticker}</span>
+          <span class="font-mono font-bold text-brand-700 dark:text-brand-400 text-sm">${escHtml(ticker)}</span>
           <div class="text-right text-sm">
-            <span class="text-gray-500 dark:text-gray-400">${vekt}% av port.</span>
-            <span class="ml-3 font-semibold text-green-600 dark:text-green-400">${y}% yield</span>
+            <span class="text-gray-500 dark:text-gray-400">${escHtml(vekt)}% av port.</span>
+            <span class="ml-3 font-semibold text-green-600 dark:text-green-400">${escHtml(y)}% yield</span>
           </div>
         </div>`).join('');
   }
@@ -3116,7 +3116,7 @@ function notatSeksjon(a) {
         <div>
           <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Notat</label>
           <textarea id="modal-notat" rows="2" placeholder="Skriv en kort notis…"
-            class="filter-input w-full text-sm resize-none">${d.notat || ''}</textarea>
+            class="filter-input w-full text-sm resize-none">${escHtml(d.notat || '')}</textarea>
         </div>
       </div>
     </div>`;

@@ -28,31 +28,33 @@
 
 ## 🔴 Kritiske funn
 
-### K1. XSS via delt portefølje-lenke (`?del=`)
+> **Status 2026-07-04: Alle 5 kritiske funn er utbedret** (commit «fix: utbedre alle 5 kritiske funn fra kodegjennomgangen»). K1/K2: `escHtml()` lagt på. K3: `valider_aksje` gjort None-sikker + `safe_float` inf-sikker. K4: DNB-beløp brukes kun ved NOK-deklarert valuta; tilordning flyttet bak sjekken. K5: ny `deploy-only.yml` utløses fra pris- og AI-workflowene etter commit (AI-workflowen fikk samtidig manglende rebase — V19).
+
+### K1. XSS via delt portefølje-lenke (`?del=`) — ✅ FIKSET
 **Fil:** `assets/ui.js:1784–1787` (inngangspunkt `assets/app.js:66–69`)
 `ticker`, `vekt` og `y` fra URL-parameteren interpoleres uescapet i `innerHTML`. Payloaden er 100 % angriperstyrt (`JSON.parse(decodeURIComponent(atob(delParam)))`).
 **Scenario:** Angriper deler lenke med `{"t":[["<img src=x onerror=...>",1,2]]}` i base64 → mottaker åpner → vilkårlig script kjører og kan lese/endre hele porteføljen i localStorage.
 **Fix:** `escHtml()` rundt alle tre feltene (resten av funksjonen bruker allerede `textContent` korrekt).
 
-### K2. Lagret XSS via notatfeltet
+### K2. Lagret XSS via notatfeltet — ✅ FIKSET
 **Fil:** `assets/ui.js:3119`
 `<textarea>${d.notat || ''}</textarea>` — notatet interpoleres uescapet. Et notat som `</textarea><img src=x onerror=...>` bryter ut av taggen. `bekreftJSONImport` (ui.js:2126) skriver `aksje_data` uvalidert fra importert backupfil.
 **Scenario:** Bruker importerer en manipulert «backup» → åpner aksjemodal → script kjører.
 **Fix:** `escHtml(d.notat)`.
 
-### K3. Pipeline-krasj når fallback-aksjer har `pe_ratio: null`
+### K3. Pipeline-krasj når fallback-aksjer har `pe_ratio: null` — ✅ FIKSET
 **Fil:** `scripts/fetch_stocks.py:827` (rotårsak: `safe_float`:434 + `_sanitize`:4326)
 `safe_float` slipper `Infinity` gjennom; `_sanitize` lagrer det som `null`. Dagens `aksjer.json` har `pe_ratio: null` for DOF, MAS, SWON, KOA. Når en av disse feiler mot Yahoo, brukes fallback, og `valider_aksje` kjører `if 0 < pe > 500:` med `pe=None` → `TypeError` — uhåndtert i `main()`.
 **Scenario:** DOF får én 429 fra Yahoo → hele den daglige kjøringen krasjer; ingen data eller sider oppdateres.
 **Fix:** None-sjekk i `valider_aksje` + gjør `safe_float` inf-sikker.
 
-### K4. DNB-berikelsen blander valutaer for USD-betalere
+### K4. DNB-berikelsen blander valutaer for USD-betalere — ✅ FIKSET
 **Fil:** `scripts/fetch_stocks.py:4222–4239`
 (a) `siste_utbytte = dnb_belop` settes **ubetinget** før valutasjekken — et USD-beløp lagres og vises som NOK. (b) Valutasjekken sammenligner mot Yahoos *rapporteringsvaluta* (USD for GOGL/FLNG), ikke NOK som prisen er i.
 **Scenario:** GOGL deklarerer 0,30 USD → «match» mot rapporteringsvaluta → `utbytte_per_aksje` = 1,2 mot NOK-pris → yield 1,2 % i stedet for ~11 %.
 **Fix:** Konverter DNB-beløp til NOK eksplisitt (valutakurs), og flytt tilordningen bak sjekken.
 
-### K5. Prisoppdateringer hvert 15. minutt når aldri ut på nettsiden
+### K5. Prisoppdateringer hvert 15. minutt når aldri ut på nettsiden — ✅ FIKSET
 **Fil:** `.github/workflows/oppdater-priser.yml:39–50` + `update-og-deploy.yml:4–8`
 Siten deployes kun via `actions/deploy-pages` (artefakt). `oppdater-priser.yml` committer bare `data/priser.json`: push med `GITHUB_TOKEN` trigger aldri `on: push`-workflows, og `paths-ignore` ekskluderer uansett datafilene.
 **Konsekvens:** Live `/data/priser.json` oppdateres bare ved de 4 daglige deployene — 15-min-workflowen brenner CI-minutter uten brukersynlig effekt. Samme gjelder AI-oppsummeringer committet av `ai-oppsummering.yml`.

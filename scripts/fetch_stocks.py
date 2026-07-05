@@ -5,6 +5,7 @@ Kjøres daglig via GitHub Actions.
 """
 
 import json
+import math
 import os
 import re
 import sys
@@ -434,7 +435,7 @@ def hent_euronext_priser() -> dict:
 def safe_float(value, default=0.0):
     try:
         v = float(value)
-        return round(v, 2) if v == v else default  # NaN check
+        return round(v, 2) if math.isfinite(v) else default  # NaN/inf-sjekk
     except (TypeError, ValueError):
         return default
 
@@ -797,12 +798,17 @@ def valider_aksje(a):
     advarsler = []
     ticker = a.get("ticker", "?")
 
+    def _tall(felt):
+        """None-sikkert oppslag: felt kan finnes med verdi null (f.eks. fallback-data)."""
+        v = a.get(felt)
+        return v if isinstance(v, (int, float)) else 0
+
     # ── 1. Yield-kryssvalidering ──────────────────────────────────────────────
-    pris = a.get("pris", 0)
-    upa  = a.get("utbytte_per_aksje", 0)
+    pris = _tall("pris")
+    upa  = _tall("utbytte_per_aksje")
     if pris > 0 and upa > 0:
         beregnet = (upa / pris) * 100
-        lagret   = a.get("utbytte_yield", 0)
+        lagret   = _tall("utbytte_yield")
         if lagret > 0:
             avvik_pct = abs(beregnet - lagret) / max(beregnet, 0.01) * 100
             if avvik_pct > 25:
@@ -818,19 +824,19 @@ def valider_aksje(a):
         advarsler.append(f"[2] Mistenkelig høy pris: {pris}")
 
     # ── 3. Feltplausibilitet ──────────────────────────────────────────────────
-    payout = a.get("payout_ratio", 0)
-    pe     = a.get("pe_ratio", 0)
-    lav52  = a.get("52u_lav", 0)
-    hoy52  = a.get("52u_hoy", 0)
+    payout = _tall("payout_ratio")
+    pe     = _tall("pe_ratio")
+    lav52  = _tall("52u_lav")
+    hoy52  = _tall("52u_hoy")
     if payout > 300:
         advarsler.append(f"[3] Payout ratio ekstremt høy: {payout}%")
-    if 0 < pe > 500:
+    if pe > 500:
         advarsler.append(f"[3] Mistenkelig høy P/E: {pe}")
-    if a.get("utbytte_yield", 0) > 80:
+    if _tall("utbytte_yield") > 80:
         advarsler.append(f"[3] Ekstremt høy yield: {a.get('utbytte_yield')}% — sjekk manuelt")
-    if a.get("utbytte_per_aksje", 0) > 0 and a.get("pris", 0) > 0 and a["utbytte_per_aksje"] > a["pris"]:
+    if upa > 0 and pris > 0 and upa > pris:
         advarsler.append(
-            f"[3] Utbytte/aksje ({a['utbytte_per_aksje']}) > kurs ({a['pris']}) — umulig"
+            f"[3] Utbytte/aksje ({upa}) > kurs ({pris}) — umulig"
         )
     if lav52 > 0 and hoy52 > 0 and lav52 > hoy52:
         advarsler.append(
@@ -839,10 +845,10 @@ def valider_aksje(a):
 
     # ── 4. Manglende kritiske felt ────────────────────────────────────────────
     mangler = []
-    if a.get("pris", 0) == 0:               mangler.append("pris")
-    if a.get("utbytte_yield", 0) == 0:      mangler.append("utbytte_yield")
-    if a.get("utbytte_per_aksje", 0) == 0:  mangler.append("utbytte_per_aksje")
-    if not a.get("ex_dato"):         mangler.append("ex_dato")
+    if pris == 0:                       mangler.append("pris")
+    if _tall("utbytte_yield") == 0:     mangler.append("utbytte_yield")
+    if upa == 0:                        mangler.append("utbytte_per_aksje")
+    if not a.get("ex_dato"):            mangler.append("ex_dato")
     if mangler:
         advarsler.append(f"[4] Manglende felt: {', '.join(mangler)}")
 
@@ -4218,25 +4224,28 @@ def main():
                         dnb_treff += 1
                 if dnb.get("betaling_dato") and not aksje.get("betaling_dato"):
                     aksje["betaling_dato"] = dnb["betaling_dato"]
-                # Bruk DNBs annonserte utbyttebeløp som primærkilde
+                # Bruk DNBs annonserte utbyttebeløp som primærkilde.
+                # NB: Pris og lagrede utbyttefelter er alltid i NOK for .OL-tickere.
+                # aksje["valuta"] er selskapets RAPPORTERINGSvaluta (kan være USD for
+                # GOGL/FLNG o.l.) og kan derfor ikke brukes som sammenligningsgrunnlag.
+                # DNB-beløpet brukes kun når det er deklarert i NOK (tomt = antatt NOK);
+                # for USD-deklarerte utbytter beholdes Yahoos NOK-konverterte tall.
                 dnb_belop = dnb.get("utbytte", 0)
-                if dnb_belop and dnb_belop > 0:
+                dnb_valuta = dnb.get("valuta", "")
+                if dnb_belop and dnb_belop > 0 and dnb_valuta in ("NOK", ""):
                     aksje["siste_utbytte"] = dnb_belop
-                    dnb_valuta = dnb.get("valuta", "")
-                    aksje_valuta = aksje.get("valuta", "NOK")
-                    if dnb_valuta == aksje_valuta or dnb_valuta == "":
-                        frekvens_map = {
-                            "Månedlig": 12, "Kvartalsvis": 4,
-                            "Halvårlig": 2, "Årlig": 1, "Uregelmessig": 1,
-                        }
-                        per_ar = frekvens_map.get(aksje.get("frekvens", ""), 1)
-                        dnb_annual = round(dnb_belop * per_ar, 4)
-                        if dnb_annual > 0:
-                            aksje["utbytte_per_aksje"] = dnb_annual
-                            if aksje.get("pris", 0) > 0:
-                                aksje["utbytte_yield"] = round(
-                                    (dnb_annual / aksje["pris"]) * 100, 2
-                                )
+                    frekvens_map = {
+                        "Månedlig": 12, "Kvartalsvis": 4,
+                        "Halvårlig": 2, "Årlig": 1, "Uregelmessig": 1,
+                    }
+                    per_ar = frekvens_map.get(aksje.get("frekvens", ""), 1)
+                    dnb_annual = round(dnb_belop * per_ar, 4)
+                    if dnb_annual > 0:
+                        aksje["utbytte_per_aksje"] = dnb_annual
+                        if aksje.get("pris", 0) > 0:
+                            aksje["utbytte_yield"] = round(
+                                (dnb_annual / aksje["pris"]) * 100, 2
+                            )
         print(f"  DNB oppdaterte ex_dato for {dnb_treff} aksjer")
 
     # ── 5. Strukturert datakvalitetsrapport ───────────────────────────────────
