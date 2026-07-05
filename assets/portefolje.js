@@ -8,23 +8,29 @@ let _pfOsebxState = null;
 
 function beregnKostbasis(ticker, txMap) {
   const tx = (txMap !== undefined ? txMap : hentTransaksjoner())[ticker] || [];
-  let antall = 0, totalKost = 0, mottattUtbytte = 0;
-  tx.forEach(t => {
+  // Ekte FIFO (sktl. § 10-36): salg forbruker eldste kjøpslott først.
+  // Krever kronologisk rekkefølge — sortér på dato (stabil ved lik dato).
+  const sortert = tx.slice().sort((a, b) => (a.dato || '').localeCompare(b.dato || ''));
+  const lotter = [];  // { antall, kurs } — eldste først
+  let mottattUtbytte = 0;
+  sortert.forEach(t => {
     if (t.type === 'kjøp') {
-      totalKost += t.antall * t.kurs;
-      antall    += t.antall;
+      lotter.push({ antall: t.antall, kurs: t.kurs });
     } else if (t.type === 'salg') {
-      // FIFO-forenkling: reduser kostpris proporsjonalt
-      if (antall > 0) {
-        const solgt = Math.min(t.antall, antall);
-        const andel = solgt / antall;
-        totalKost  -= totalKost * andel;
-        antall     -= solgt;
+      let rest = t.antall;
+      while (rest > 0 && lotter.length > 0) {
+        const lott  = lotter[0];
+        const solgt = Math.min(rest, lott.antall);
+        lott.antall -= solgt;
+        rest        -= solgt;
+        if (lott.antall === 0) lotter.shift();
       }
     } else if (t.type === 'utbytte') {
       mottattUtbytte += t.antall * t.kurs;
     }
   });
+  let antall = 0, totalKost = 0;
+  lotter.forEach(l => { antall += l.antall; totalKost += l.antall * l.kurs; });
   const vwap = antall > 0 ? totalKost / antall : 0;
   return { antall, totalKost, vwap, mottattUtbytte };
 }
@@ -328,11 +334,20 @@ function beregnTWRSerie(historikk, datoer, txMap) {
     });
   });
 
+  // Snapshots lagres bare de dagene brukeren åpner appen, så transaksjoner
+  // kan lande på datoer UTEN snapshot. Summer derfor alle kontantstrømmer i
+  // vinduet [forrige snapshot, neste snapshot⟩ — ikke bare på snapshot-datoen.
+  const cfDatoer = Object.keys(cfPerDag).sort();
   const serie = [100];
   for (let i = 1; i < datoer.length; i++) {
-    const V0   = historikk[datoer[i - 1]];
-    const V1   = historikk[datoer[i]];
-    const CF   = cfPerDag[datoer[i - 1]] || 0;
+    const V0 = historikk[datoer[i - 1]];
+    const V1 = historikk[datoer[i]];
+    let CF = 0;
+    cfDatoer.forEach(d => {
+      if (d >= datoer[i - 1] && d < datoer[i]) CF += cfPerDag[d];
+    });
+    // Siste periode: ta også med flows på sluttdatoen, ellers mistes de helt
+    if (i === datoer.length - 1) CF += cfPerDag[datoer[i]] || 0;
     const denom = V0 + CF;
     serie.push(denom > 0 ? serie[i - 1] * (V1 / denom) : serie[i - 1]);
   }
@@ -1494,7 +1509,7 @@ function visMaanedChart(beholdning) {
       }).join('')}
     </div>
     <div class="flex justify-between text-xs text-gray-400 mt-2">
-      <span>Lavest: <strong>${fmtKr(Math.min(...mnd.filter(v=>v>0)))}</strong></span>
+      <span>Lavest: <strong>${fmtKr(mnd.some(v=>v>0) ? Math.min(...mnd.filter(v=>v>0)) : 0)}</strong></span>
       <span>Høyest: <strong>${fmtKr(Math.max(...mnd))}</strong></span>
     </div>`;
 }

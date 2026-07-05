@@ -69,9 +69,9 @@ Siten deployes kun via `actions/deploy-pages` (artefakt). `oppdater-priser.yml` 
 | # | Funn | Fil:linje | Konsekvens / scenario |
 |---|---|---|---|
 | V1 | Feltnavn-typo `utbytte_pr_aksje` (skal være `utbytte_per_aksje`) | `ui.js:1739` | Delte porteføljer viser alltid «0 kr utbytte/år, 0,0 % yield» |
-| V2 | TWR ignorerer kontantstrømmer mellom snapshots | `portefolje.js:317–340` | Innskudd 50 000 kr mellom to snapshots telles som *avkastning*; flows samme dag og på siste dato håndteres heller ikke |
-| V3 | «FIFO» er i realiteten snittkost-metode | `portefolje.js:16–23` | Kjøp 100@100 + 100@300, selg 100: FIFO gir kost 30 000, koden gir 20 000 — avviker fra sktl. § 10-36; påvirker gevinst og skjermingsfradrag |
-| V4 | Feil skattesats i FIRE-kalkulator for «Vanlig konto» (22 % i stedet for 37,84 %) | `ui.js:364` + `app/index.html:1269` | Kapitalbehov undervurderes med ~20 % (utbytte beskattes 37,84 %, ikke 22 %) |
+| V2 ✅ | ~~TWR ignorerer kontantstrømmer mellom snapshots~~ FIKSET | `portefolje.js:317–340` | Innskudd 50 000 kr mellom to snapshots telles som *avkastning*; flows samme dag og på siste dato håndteres heller ikke |
+| V3 ✅ | ~~«FIFO» er i realiteten snittkost-metode~~ FIKSET — ekte FIFO-lotter implementert | `portefolje.js:16–23` | Kjøp 100@100 + 100@300, selg 100: FIFO gir kost 30 000, koden gir 20 000 — avviker fra sktl. § 10-36; påvirker gevinst og skjermingsfradrag |
+| V4 ✅ | ~~Feil skattesats i FIRE-kalkulator for «Vanlig konto»~~ FIKSET (ui.js, app/index.html, verktoy-siden inkl. tekst) | `ui.js:364` + `app/index.html:1269` | Kapitalbehov undervurderes med ~20 % (utbytte beskattes 37,84 %, ikke 22 %) |
 | V5 | Akkumulerende `addEventListener` inne i render-funksjoner | `portefolje.js:1345`, `ui.js:3851`, `ui.js:4196` | Etter 30 renders utløser én endring 30 handler-kall → 30 nye fulle re-renders |
 | V6 | `JSON.parse` uten try/catch i migrasjonskode som kjører ved lasting | `storage.js:19–21` | Korrupt localStorage-verdi → uncaught exception → hele appen dør ved oppstart |
 | V7 | Systematiske brudd på escHtml-konvensjonen i innerHTML (10+ steder) | `ui.js:1037–1082, 1137–1230, 1370–1375, 1519–1520, 3596, 3830`; `portefolje.js:1109, 1743, 1783` | Lav utnyttbarhet i dag (egen pipeline), men ett råttent felt i aksjer.json rammer 10+ render-steder; inkonsistent med steder som escaper |
@@ -104,14 +104,14 @@ Siten deployes kun via `actions/deploy-pages` (artefakt). `oppdater-priser.yml` 
 ## 🟡 Forbedringsforslag
 
 ### Korrekthet / robusthet
-1. **«Lavest: ∞ kr» i månedschart** — `portefolje.js:1497`: `Math.min(...tomArray)` gir `Infinity` når alle månedsverdier er 0.
+1. ✅ FIKSET — **«Lavest: ∞ kr» i månedschart** — `portefolje.js:1497`: `Math.min(...tomArray)` gir `Infinity` når alle månedsverdier er 0.
 2. **Kryssvalideringen klipper reelle utbytteøkninger stille** — `fetch_stocks.py:599–604`: avvik > 50 % *erstatter* verdien med fjorårets i stedet for å flagge; en reell KOG-type økning underrapporteres et helt år.
 3. **`format_dato` bruker lokal tidssone på UTC-timestamps** — `fetch_stocks.py:450–457`: lokal kjøring vest for UTC gir ex-dato én dag for tidlig. Bruk `tz=timezone.utc`. (`datetime.utcnow()` er dessuten deprecated i 3.12.)
 4. **Ikke-atomiske JSON-skrivinger** — `ai_oppsummering.py:148`, `fetch_stocks.py:4334`, `fetch_priser.py:88`, `regenerer_sider.py:42`: krasj midt i dump etterlater trunkert fil. Bruk temp-fil + `os.replace`. (`ai_oppsummering.py` skriver dessuten kompakt JSON mens resten bruker `indent=2` → 190 000-linjers diff-churn.)
 5. **Push-race uten retry i update-og-deploy** — `update-og-deploy.yml:63–65`: lander en priser-commit mellom rebase og push, går hele den ~45 min lange datakjøringen tapt.
 
 ### Skattekonstanter og vedlikehold
-6. **Utdaterte/dupliserte skattekonstanter** — `storage.js:38`: `SKJERMINGSRENTE = 0.031 // (2024)` uten oppdateringsmekanisme; satsen `0.3784`/`0.6216`/`0.22` duplisert som magiske tall på 9+ steder (`ui.js:364, 2765, 2791, 3265, 3277, 3282, 3283, 3298, 4127`). Samle i én konfig.
+6. ✅ FIKSET (konstanter samlet i storage.js: SKATTESATS + ny KAPITALSKATT; 8 magiske tall erstattet) — **Utdaterte/dupliserte skattekonstanter** — `storage.js:38`: `SKJERMINGSRENTE = 0.031 // (2024)` uten oppdateringsmekanisme; satsen `0.3784`/`0.6216`/`0.22` duplisert som magiske tall på 9+ steder (`ui.js:364, 2765, 2791, 3265, 3277, 3282, 3283, 3298, 4127`). Samle i én konfig.
 7. **`fetch_stocks.py` er 4 372 linjer med tre duplerte HTML-templater** — `_aksje_side_html` (~690 linjer), `generer_sektorsider` (~410), `generer_topplistesider` (~310). Head/favicon/dark-mode-init/nav er duplisert på tvers; Newsweb-API-koden duplisert mot `oppdater_hendelser.py`. Splitt i moduler (henting / prosa / templating / sitemap) og del templatefragmenter (som `STANDARD_FOOTER` allerede gjør).
 8. **To foreldreløse AI-scripts** — `scripts/generer_ai_oppsummeringer.py` (503 linjer) og `scripts/_generer_ai_oppsummering_manuelt.py` (221 linjer) refereres ingen steder og dupliserer `ai_oppsummering.py`. Slett eller konsolider.
 9. **Hardkodet artikkel-liste i sitemap-generatoren** — `fetch_stocks.py:4011+`: ny artikkel som glemmes her faller ut av sitemap ved neste daglige kjøring. Generer ved å liste `artikler/*/index.html`.
@@ -169,7 +169,7 @@ Dagens 44 tester dekker kostbasis, IRR, TWR (happy path), favoritter og formatte
 **Runde 1 — små fikser, stor nedside (én økt):**
 K1, K2 (escHtml ×2) · V13 (exit ≠ 0 ved tom priser) · K3 (None-sjekk) · V1 (feltnavn-typo) · V11 (feltnavn i AI-prompt) · V16 (tema-nøkkel ×4) · V6 (try/catch) · V8 (clone før retur)
 
-**Runde 2 — regnefeil som påvirker brukere:**
+**Runde 2 — regnefeil som påvirker brukere: ✅ UTFØRT 2026-07-05**
 V4 (FIRE-skattesats) · V3 (FIFO vs. snittkost — minimum rett dokumentasjonen) · V2 (TWR-flows) · forbedring 1 og 6
 
 **Runde 3 — plattform:**

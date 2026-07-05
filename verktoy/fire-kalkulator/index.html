@@ -175,7 +175,7 @@
               </label>
               <label class="flex items-center gap-2 cursor-pointer text-sm">
                 <input type="radio" name="f-konto" value="vanlig" class="accent-green-600" />
-                <span>Vanlig konto <span class="text-xs text-gray-400 dark:text-gray-500">(22&nbsp;% skatt)</span></span>
+                <span>Vanlig konto <span class="text-xs text-gray-400 dark:text-gray-500">(37,84&nbsp;% skatt)</span></span>
               </label>
               <label class="flex items-center gap-2 cursor-pointer text-sm">
                 <input type="radio" name="f-konto" value="ingen" class="accent-green-600" />
@@ -246,7 +246,7 @@
       </p>
       <ul>
         <li><strong>ASK (37,84&nbsp;% skatt):</strong> Netto = Brutto × (1 &minus; 0,3784) → Brutto = Netto / 0,6216</li>
-        <li><strong>Vanlig konto (22&nbsp;% skatt):</strong> Netto = Brutto × (1 &minus; 0,22) → Brutto = Netto / 0,78</li>
+        <li><strong>Vanlig konto (37,84&nbsp;% skatt):</strong> Netto = Brutto × (1 &minus; 0,3784) → Brutto = Netto / 0,6216 — aksjeutbytte beskattes etter aksjonærmodellen også på vanlig konto</li>
         <li><strong>Ingen skatt (IPS/fond):</strong> Brutto = Netto (ingen korreksjon)</li>
       </ul>
       <p>
@@ -318,7 +318,7 @@ Kapital = 386 090 / 0,05 ≈ 7,72 mill. kr</code></pre>
           <strong>ASK — Aksjesparkonto (37,84&nbsp;% effektiv skatt):</strong> Utbytte beskattes etter aksjonærmodellen: 22&nbsp;% selskapsskatt er allerede trukket, og du betaler 22&nbsp;% × 1,72 = 37,84&nbsp;% på utbytte over skjermingsfradraget. Fordelen med ASK er at du kan <em>flytte penger mellom aksjer og fond uten å utløse skatt</em> — skatten betales kun ved uttak fra kontoen. For langsiktige utbytteinvestorer er dette normalt det beste alternativet.
         </li>
         <li>
-          <strong>Vanlig VPS-konto (22&nbsp;% skatt):</strong> Utbytte beskattes med flat 22&nbsp;% (selskapsskatt). Skatt utløses ved utbetaling, ikke ved uttak fra konto. For investorer med høy aktivitet og hyppige bytter kan vanlig konto i noen tilfeller være mer fleksibel, men for langsiktig holding er ASK skattemessig bedre fordi aksjonærmodellens effektive sats (37,84&nbsp;%) er det som gjelder for personlige investorer uansett — på VPS betales dette løpende, på ASK utsettes det til uttak.
+          <strong>Vanlig VPS-konto (37,84&nbsp;% skatt):</strong> Utbytte beskattes etter aksjonærmodellen med samme effektive sats som på ASK: 22&nbsp;% × 1,72 = 37,84&nbsp;% på utbytte over skjermingsfradraget. Forskjellen mot ASK er <em>tidspunktet</em>: på VPS-konto betales skatten løpende hvert år utbyttet mottas, mens den på ASK utsettes til uttak fra kontoen. For langsiktig holding er ASK derfor normalt skattemessig bedre — utsatt skatt gir mer kapital i arbeid underveis.
         </li>
         <li>
           <strong>Ingen skatt (IPS/pensjonssparefond):</strong> Individuell pensjonssparing (IPS) er skattefri mens du sparer, men beskattes ved uttak som alminnelig inntekt (22&nbsp;%). Kalkulatoren bruker 0&nbsp;% i beregningsfasen for å illustrere effekten av skattefrihet på veien — faktisk skatt ved uttak avhenger av din samlede inntekt i pensjonistfasen.
@@ -447,7 +447,8 @@ Kapital = 386 090 / 0,05 ≈ 7,72 mill. kr</code></pre>
         var sparing = parseFloat(document.getElementById('f-sparing').value) || 0;
         var konto = document.querySelector('input[name="f-konto"]:checked').value;
 
-        var SKATT = konto === 'ask' ? 0.3784 : konto === 'vanlig' ? 0.22 : 0;
+        // Aksjeutbytte beskattes 37,84 % (aksjonærmodellen) på både ASK og vanlig konto
+        var SKATT = konto === 'ingen' ? 0 : 0.3784;
         var yieldR = yieldPct / 100;
 
         var bruttoAar = (maaned * 12) / (1 - SKATT);

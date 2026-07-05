@@ -34,9 +34,12 @@ function sjekkLSVersjon() {
 
 sjekkLSVersjon();
 
-// Skjermingsrente for inneværende år (oppdateres årlig av Skatteetaten)
-const SKJERMINGSRENTE = 0.031; // 3,1 % (2024)
-const SKATTESATS      = 0.3784; // 37,84 % effektiv skatt på utbytte (aksjonærmodellen)
+// Skattekonstanter — samlet her som eneste kilde; ikke dupliser tallene i andre filer.
+// NB: Skjermingsrenten fastsettes årlig av Skatteetaten og MÅ oppdateres manuelt
+// her når ny sats publiseres (sjekk skatteetaten.no).
+const SKJERMINGSRENTE = 0.031;  // 3,1 % (inntektsåret 2024 — sjekk om ny sats er publisert)
+const SKATTESATS      = 0.3784; // 37,84 % effektiv skatt på aksjeutbytte/-gevinst (aksjonærmodellen: 22 % × 1,72)
+const KAPITALSKATT    = 0.22;   // 22 % skatt på renteinntekter / verdi av rentefradrag
 
 // ── PROFIL ─────────────────────────────────────────────────────────────────
 function hentProfil() {

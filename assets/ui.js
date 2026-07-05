@@ -361,7 +361,10 @@ function beregnFire() {
   const sparing  = parseFloat(document.getElementById('fire-sparing')?.value) || 0;
   const konto    = document.querySelector('input[name="fire-konto"]:checked')?.value || 'ask';
 
-  const SKATT = konto === 'ask' ? 0.3784 : konto === 'vanlig' ? 0.22 : 0;
+  // Aksjeutbytte beskattes 37,84 % (aksjonærmodellen) på BÅDE ASK og vanlig
+  // konto — forskjellen er tidspunkt (ASK: ved uttak) og skjermingsfradrag,
+  // ikke satsen. 22 % gjelder kun renteinntekter, aldri aksjeutbytte.
+  const SKATT = konto === 'ingen' ? 0 : SKATTESATS;
   const yieldR = yieldPct / 100;
 
   // Brutto utbytte nødvendig per år = netto / (1 - skatt)
@@ -2762,7 +2765,7 @@ function modalKalkulator(a) {
           </div>
           <div class="rounded-lg bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 p-2.5">
             <p class="text-gray-400 mb-0.5">Etter skatt</p>
-            <p id="modal-kal-netto" class="font-bold text-gray-700 dark:text-gray-300 text-base">${fmtKr(utbAar * 0.6216)}</p>
+            <p id="modal-kal-netto" class="font-bold text-gray-700 dark:text-gray-300 text-base">${fmtKr(utbAar * (1 - SKATTESATS))}</p>
             <p class="text-gray-400 mt-0.5">37,84% skatt</p>
           </div>
         </div>
@@ -2788,7 +2791,7 @@ function _oppdaterModalKalkulator(a) {
   antallEl.textContent = new Intl.NumberFormat('nb-NO').format(antall);
   aarEl.textContent    = fmtKr(utbAar);
   mndEl.textContent    = fmtKr(utbAar / 12) + ' / mnd';
-  nettoEl.textContent  = fmtKr(utbAar * 0.6216);
+  nettoEl.textContent  = fmtKr(utbAar * (1 - SKATTESATS));
 }
 
 function historiskChart(a) {
@@ -3262,7 +3265,7 @@ function beregnHuslaan() {
     }
   }
   const sparRenteGross = renteBase - renteExtra;
-  const sparRenteNetto = sparRenteGross * (1 - 0.22);
+  const sparRenteNetto = sparRenteGross * (1 - KAPITALSKATT);
   const balReduksjon   = balBase - balExtra;
   const totalA         = sparRenteNetto;
 
@@ -3274,13 +3277,13 @@ function beregnHuslaan() {
   }
   const totInnbetalt  = ekstra * berMnd;
   const gevinst       = pf - totInnbetalt;
-  const gevinstNetto  = gevinst * (1 - 0.3784);
+  const gevinstNetto  = gevinst * (1 - SKATTESATS);
   const pfNetto       = totInnbetalt + gevinstNetto;
   const totalB        = gevinstNetto;
 
   // Effektive rater
-  const effA = rentePct * (1 - 0.22);
-  const effB = avkPct   * (1 - 0.3784);
+  const effA = rentePct * (1 - KAPITALSKATT);
+  const effB = avkPct   * (1 - SKATTESATS);
 
   const fmtKr = v => Math.round(v).toLocaleString('nb-NO') + ' kr';
 
@@ -3295,7 +3298,7 @@ function beregnHuslaan() {
   document.getElementById('hl-B-eff').textContent     = `Forventet netto avkastning etter skatt: ${effB.toFixed(2)}% p.a.`;
 
   // Breakeven og verdikt
-  const breakeven = (avkPct * (1 - 0.3784) / (1 - 0.22)).toFixed(2);
+  const breakeven = (avkPct * (1 - SKATTESATS) / (1 - KAPITALSKATT)).toFixed(2);
   const vEl  = document.getElementById('hl-verdict');
   const diff = Math.abs(totalA - totalB);
   if (totalA >= totalB) {
@@ -4124,7 +4127,7 @@ function _annOppdaterResultat() {
   const faktiskBelop = antall * kurs;
   const utbytteAar   = upa > 0 ? antall * upa : (yield_ / 100) * faktiskBelop;
   const utbytteMnd   = utbytteAar / 12;
-  const netto        = utbytteAar * (1 - 0.3784);
+  const netto        = utbytteAar * (1 - SKATTESATS);
   const effYield     = faktiskBelop > 0 ? (utbytteAar / faktiskBelop) * 100 : yield_;
 
   const fmtKr = v => new Intl.NumberFormat('nb-NO', { style: 'currency', currency: 'NOK', maximumFractionDigits: 0 }).format(v);

@@ -67,9 +67,68 @@ test('beregnKostbasis: kjøp deretter salg gir riktig gjenværende VWAP', () => 
   };
   const result = beregnKostbasis('EQNR', txMap);
   assert.equal(result.antall, 50);
-  // etter FIFO-forenkling: totalKost = 30000 - 30000 * (50/100) = 15000
+  // FIFO: 50 av 100 aksjer à 300 kr solgt — gjenværende lott 50 × 300 = 15000
   assert.equal(result.totalKost, 15000);
   assert.equal(result.vwap, 300);
+});
+
+test('beregnKostbasis: ekte FIFO — salg forbruker eldste lott først', () => {
+  // Kjøp 100 @ 100, kjøp 100 @ 300, selg 100.
+  // FIFO (sktl. § 10-36): den eldste lotten (100 @ 100) selges.
+  // Gjenværende: 100 @ 300 = 30 000 kr (snittkost-metoden ville gitt 20 000).
+  const txMap = {
+    EQNR: [
+      { id: '1', dato: '2024-01-01', type: 'kjøp', antall: 100, kurs: 100 },
+      { id: '2', dato: '2024-03-01', type: 'kjøp', antall: 100, kurs: 300 },
+      { id: '3', dato: '2024-06-01', type: 'salg', antall: 100, kurs: 350 }
+    ]
+  };
+  const result = beregnKostbasis('EQNR', txMap);
+  assert.equal(result.antall, 100);
+  assert.equal(result.totalKost, 30000);
+  assert.equal(result.vwap, 300);
+});
+
+test('beregnKostbasis: FIFO håndterer salg på tvers av flere lotter', () => {
+  // Selg 150: hele lott 1 (100 @ 100) + 50 av lott 2 (@ 300).
+  // Gjenværende: 50 @ 300 = 15 000 kr.
+  const txMap = {
+    EQNR: [
+      { id: '1', dato: '2024-01-01', type: 'kjøp', antall: 100, kurs: 100 },
+      { id: '2', dato: '2024-03-01', type: 'kjøp', antall: 100, kurs: 300 },
+      { id: '3', dato: '2024-06-01', type: 'salg', antall: 150, kurs: 350 }
+    ]
+  };
+  const result = beregnKostbasis('EQNR', txMap);
+  assert.equal(result.antall, 50);
+  assert.equal(result.totalKost, 15000);
+  assert.equal(result.vwap, 300);
+});
+
+test('beregnKostbasis: FIFO sorterer på dato uavhengig av innleggsrekkefølge', () => {
+  // Transaksjonene ligger i «feil» rekkefølge i listen — dato skal styre.
+  const txMap = {
+    EQNR: [
+      { id: '3', dato: '2024-06-01', type: 'salg', antall: 100, kurs: 350 },
+      { id: '2', dato: '2024-03-01', type: 'kjøp', antall: 100, kurs: 300 },
+      { id: '1', dato: '2024-01-01', type: 'kjøp', antall: 100, kurs: 100 }
+    ]
+  };
+  const result = beregnKostbasis('EQNR', txMap);
+  assert.equal(result.totalKost, 30000);
+});
+
+test('beregnKostbasis: oversalg tømmer beholdningen uten negativt antall', () => {
+  const txMap = {
+    EQNR: [
+      { id: '1', dato: '2024-01-01', type: 'kjøp', antall: 50, kurs: 200 },
+      { id: '2', dato: '2024-06-01', type: 'salg', antall: 80, kurs: 220 }
+    ]
+  };
+  const result = beregnKostbasis('EQNR', txMap);
+  assert.equal(result.antall, 0);
+  assert.equal(result.totalKost, 0);
+  assert.equal(result.vwap, 0);
 });
 
 test('beregnKostbasis: kjøp pluss utbytte gir riktig mottattUtbytte', () => {
@@ -162,6 +221,29 @@ test('beregnTWRSerie: uten transaksjoner = lik prisutvikling', () => {
   assert.equal(serie[0], 100);
   assert.ok(Math.abs(serie[1] - 105) < 0.01);
   assert.ok(Math.abs(serie[2] - 110) < 0.01);
+});
+
+test('beregnTWRSerie: kontantstrøm MELLOM snapshots justeres også ut', () => {
+  // Snapshots 1. og 3. jan; kjøp 2. jan (ingen snapshot den dagen).
+  // Uten fix ble hele innskuddet talt som avkastning.
+  const historikk = { '2024-01-01': 100000, '2024-01-03': 115000 };
+  const datoer    = ['2024-01-01', '2024-01-03'];
+  const tx = { EQNR: [{ id: '1', dato: '2024-01-02', type: 'kjøp', antall: 50, kurs: 200 }] };
+  const serie = beregnTWRSerie(historikk, datoer, tx);
+  assert.equal(serie[0], 100);
+  // 115000 / (100000 + 10000) * 100 ≈ 104.55 — ikke 115
+  assert.ok(Math.abs(serie[1] - (115000 / 110000 * 100)) < 0.01);
+});
+
+test('beregnTWRSerie: kontantstrøm på siste snapshot-dato telles med', () => {
+  // Kjøp samme dag som siste snapshot: snapshotet inkluderer kjøpet,
+  // så innskuddet må inn i nevneren for ikke å telles som avkastning.
+  const historikk = { '2024-01-01': 100000, '2024-01-05': 112000 };
+  const datoer    = ['2024-01-01', '2024-01-05'];
+  const tx = { EQNR: [{ id: '1', dato: '2024-01-05', type: 'kjøp', antall: 50, kurs: 200 }] };
+  const serie = beregnTWRSerie(historikk, datoer, tx);
+  // 112000 / (100000 + 10000) * 100 ≈ 101.82 — ikke 112
+  assert.ok(Math.abs(serie[1] - (112000 / 110000 * 100)) < 0.01);
 });
 
 test('beregnTWRSerie: nyttinnskudd justeres ut av TWR', () => {
