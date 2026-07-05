@@ -1496,14 +1496,15 @@ function visMaanedChart(beholdning) {
   const navn = ['Jan','Feb','Mar','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Des'];
   const iMnd = new Date().getMonth();
   el.innerHTML = `
-    <div class="flex items-end gap-0.5 h-28">
+    <div class="flex items-end gap-0.5">
       ${mnd.map((v, i) => {
-        const h = maks > 0 ? (v / maks * 100).toFixed(1) : 0;
+        // Pikselhøyde, ikke prosent: %-høyde kollapser mot auto-høyde-forelder i items-end-flex
+        const hPx = v > 0 ? Math.max(4, Math.round(v / maks * 96)) : 0;
         const er = i === iMnd;
         const bg = er ? '#14b8a6' : '#3b82f6';
         const op = v > 0 ? '1' : '0.15';
         return `<div class="flex-1 flex flex-col items-center justify-end gap-0.5 group relative" title="${navn[i]}: ${fmtKr(v)}">
-          <div class="w-full rounded-t-sm transition-all duration-500" style="height:${h}%;background:${bg};opacity:${op};min-height:${v>0?'4px':'0'}"></div>
+          <div class="w-full rounded-t-sm transition-all duration-500" style="height:${hPx}px;background:${bg};opacity:${op}"></div>
           <span class="text-[9px] text-gray-400${er ? ' font-bold text-brand-500' : ''}">${navn[i][0]}</span>
         </div>`;
       }).join('')}
