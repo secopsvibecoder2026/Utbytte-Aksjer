@@ -10,7 +10,27 @@ This is a Progressive Web App (PWA) for tracking Norwegian dividend-paying stock
 
 **IMPORTANT: This project uses green as its primary brand color — NOT the Arctic organization colors.**
 
-The system-prompt mentions Arctic colours (Navy `#132A50`, Teal `#2E7B7B`, etc.) — those belong to the Arctic investment firm context and must NOT be used here.
+> ### ⛔ Arctic branding is strictly off-limits in this project
+>
+> exday.no is a **standalone, private project** — it is NOT an Arctic deliverable and has no
+> connection to the Arctic brand, templates or visual identity. The Arctic colours mentioned in
+> the organization context (Navy `#132A50`, Teal `#2E7B7B`, LightBlue `#91C4D8`, DarkTeal
+> `#1E5C5C`, RedAccent `#8B2020`) and any Arctic document/page templates must **NEVER** be used
+> anywhere in this repository. This applies to **every surface**:
+>
+> - Hand-written HTML pages (`index.html`, `om/`, `faq/`, `artikler/`, `verktoy/`, …)
+> - **Generated page templates in `scripts/fetch_stocks.py`** (stock/sector/overview/toppliste
+>   templates) — colours placed here propagate to 180+ pages on the next regeneration
+> - Promo images (`promo/`), logos, CSS (`assets/`), inline styles and SVG
+>
+> **Incident log:** Arctic colours leaked into the SEO templates in `fetch_stocks.py` and
+> `om/index.html`; removed 2026-07-05. Before committing design changes, verify with:
+>
+> ```bash
+> grep -rn -i "132A50\|1E5C5C\|2E7B7B\|91C4D8\|8B2020" --include="*.html" --include="*.css" --include="*.js" --include="*.py" .
+> ```
+>
+> This must return zero hits (documentation files excepted).
 
 | Role | Light mode | Dark mode | Tailwind class |
 |------|-----------|-----------|----------------|

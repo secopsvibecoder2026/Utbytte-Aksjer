@@ -94,7 +94,7 @@ Siten deployes kun via `actions/deploy-pages` (artefakt). `oppdater-priser.yml` 
 | # | Funn | Fil:linje | Konsekvens / scenario |
 |---|---|---|---|
 | V16 | Feil localStorage-nøkkel `'theme'` på fire sider (konvensjon: `'tema'`) | `uke/index.html:206,209`, `bevegelser/index.html:214,220`, `personvern/index.html:33,298`, `faq/index.html:500` | Mørk modus valgt i appen ignoreres; to toggles på samme side skriver til ulike nøkler |
-| V17 | Arctic-fargene (#132A50 m.fl.) i genererte oversiktssider — brudd på grønn brand-palett | `aksjer/index.html:44–110`, `aksjer/sektor/index.html:44–110` (kilde: `fetch_stocks.py:2789–2898, 3468–3511`) | Må fikses i malene og regenereres, ellers overskrives fiksen daglig |
+| V17 ✅ | ~~Arctic-fargene i genererte oversiktssider~~ FIKSET — malene i fetch_stocks.py + om/index.html renset, sider regenerert, instruks skjerpet i CLAUDE.md | `aksjer/index.html:44–110`, `aksjer/sektor/index.html:44–110` (kilde: `fetch_stocks.py:2789–2898, 3468–3511`) | Må fikses i malene og regenereres, ellers overskrives fiksen daglig |
 | V18 | `manifest.json` mangler `scope` | `manifest.json:5` | `start_url: "/app/"` gir default scope `/app/` → navigasjon til /aksjer/, /artikler/ osv. åpner med browser-UI i installert PWA; `sw.js:123` åpner `/` (utenfor scope) ved varselklikk |
 | V19 | `ai-oppsummering.yml` pusher uten rebase og uten concurrency-gruppe | `ai-oppsummering.yml:47–57` | Priser-workflow committer hvert 15. min → høy sannsynlighet for avvist push → tapte AI-oppsummeringer |
 | V20 | Hele repoet publiseres til exday.no (`path: "."`) | `update-og-deploy.yml:98` | `SECURITY_ROADMAP.md` (dokumenterte sikkerhetsfunn!), `CLAUDE.md`, `PROSJEKT_REVIEW.md`, `scripts/`, `tests/` er offentlig tilgjengelig på domenet |

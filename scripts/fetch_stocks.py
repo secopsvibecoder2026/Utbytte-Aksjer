@@ -2788,11 +2788,11 @@ def generer_aksjesider(aksjer, root_dir):
   <style>
     *, *::before, *::after {{ box-sizing: border-box; margin: 0; padding: 0; }}
     body {{ font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; background: #f8fafc; color: #0f172a; line-height: 1.6; }}
-    a {{ color: #1E5C5C; text-decoration: none; }}
+    a {{ color: #16a34a; text-decoration: none; }}
     a:hover {{ text-decoration: underline; }}
     .wrap {{ max-width: 1100px; margin: 0 auto; padding: 1rem 1rem 2rem; }}
     .hero {{
-      background: linear-gradient(135deg, #132A50 0%, #1E5C5C 60%, #2E7B7B 100%);
+      background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #15803d 100%);
       color: #fff;
       border-radius: 1rem;
       padding: 2rem 1.5rem;
@@ -2813,7 +2813,7 @@ def generer_aksjesider(aksjer, root_dir):
     .seksjon {{ margin: 2.5rem 0; }}
     .seksjon-tittel {{ display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 1rem; }}
     .seksjon-tittel h2 {{ font-size: 1.25rem; font-weight: 700; color: #0f172a; }}
-    .seksjon-tittel .se-alle {{ font-size: 0.85rem; color: #2E7B7B; font-weight: 600; }}
+    .seksjon-tittel .se-alle {{ font-size: 0.85rem; color: #22c55e; font-weight: 600; }}
     .ak-grid {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 0.75rem; }}
     .ak-kort {{
       display: block;
@@ -2825,9 +2825,9 @@ def generer_aksjesider(aksjer, root_dir):
       text-decoration: none !important;
       color: inherit;
     }}
-    .ak-kort:hover {{ border-color: #2E7B7B; box-shadow: 0 4px 12px rgba(46,123,123,0.1); transform: translateY(-1px); }}
+    .ak-kort:hover {{ border-color: #22c55e; box-shadow: 0 4px 12px rgba(34,197,94,0.1); transform: translateY(-1px); }}
     .ak-kort-topp {{ display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.4rem; }}
-    .ak-kort-tk {{ font-family: ui-monospace, monospace; font-size: 0.95rem; font-weight: 700; color: #1E5C5C; }}
+    .ak-kort-tk {{ font-family: ui-monospace, monospace; font-size: 0.95rem; font-weight: 700; color: #16a34a; }}
     .ak-kort-yield {{ font-size: 0.95rem; font-weight: 700; color: #15803d; background: #dcfce7; padding: 0.15rem 0.5rem; border-radius: 0.4rem; }}
     .ak-kort-navn {{ font-size: 0.85rem; font-weight: 500; color: #334155; line-height: 1.3; margin-bottom: 0.3rem; }}
     .ak-kort-meta {{ font-size: 0.7rem; color: #94a3b8; }}
@@ -2838,7 +2838,7 @@ def generer_aksjesider(aksjer, root_dir):
       padding: 1rem; text-decoration: none !important; color: inherit;
       transition: all 0.15s;
     }}
-    .topp-kort:hover {{ border-color: #2E7B7B; box-shadow: 0 4px 12px rgba(46,123,123,0.1); }}
+    .topp-kort:hover {{ border-color: #22c55e; box-shadow: 0 4px 12px rgba(34,197,94,0.1); }}
     .topp-ikon {{
       width: 44px; height: 44px;
       border-radius: 0.6rem;
@@ -2858,7 +2858,7 @@ def generer_aksjesider(aksjer, root_dir):
       padding: 0.65rem 0.85rem; text-decoration: none !important; color: inherit;
       transition: all 0.15s;
     }}
-    .sek-kort:hover {{ border-color: #2E7B7B; }}
+    .sek-kort:hover {{ border-color: #22c55e; }}
     .sek-ikon {{ font-size: 1.3rem; flex-shrink: 0; }}
     .sek-info {{ display: flex; flex-direction: column; min-width: 0; }}
     .sek-navn {{ font-weight: 600; font-size: 0.85rem; color: #0f172a; }}
@@ -2872,7 +2872,7 @@ def generer_aksjesider(aksjer, root_dir):
     td {{ padding: 0.7rem 1.25rem; border-bottom: 1px solid #f1f5f9; }}
     tr:last-child td {{ border-bottom: none; }}
     tr:hover td {{ background: #f8fafc; }}
-    td a {{ color: #1E5C5C; font-family: ui-monospace, monospace; font-weight: 600; }}
+    td a {{ color: #16a34a; font-family: ui-monospace, monospace; font-weight: 600; }}
     .yield-cell {{ color: #15803d; font-weight: 600; }}
     .verktoy-bar {{
       background: linear-gradient(135deg, #fef3c7 0%, #fed7aa 100%);
@@ -2897,12 +2897,12 @@ def generer_aksjesider(aksjer, root_dir):
     .updated {{ font-size: 0.78rem; color: #94a3b8; text-align: right; margin-top: 1rem; }}
     /* Mørk modus */
     .dark body {{ background: #0f172a; color: #f1f5f9; }}
-    .dark a {{ color: #91C4D8; }}
+    .dark a {{ color: #4ade80; }}
     .dark .seksjon-tittel h2 {{ color: #f1f5f9; }}
-    .dark .seksjon-tittel .se-alle {{ color: #91C4D8; }}
+    .dark .seksjon-tittel .se-alle {{ color: #4ade80; }}
     .dark .ak-kort, .dark .topp-kort, .dark .sek-kort, .dark .alle-aksjer {{ background: #1e293b; border-color: #334155; }}
-    .dark .ak-kort:hover, .dark .topp-kort:hover, .dark .sek-kort:hover {{ border-color: #2E7B7B; }}
-    .dark .ak-kort-tk {{ color: #91C4D8; }}
+    .dark .ak-kort:hover, .dark .topp-kort:hover, .dark .sek-kort:hover {{ border-color: #22c55e; }}
+    .dark .ak-kort-tk {{ color: #4ade80; }}
     .dark .ak-kort-navn {{ color: #cbd5e1; }}
     .dark .ak-kort-yield {{ background: rgba(34,197,94,0.2); color: #4ade80; }}
     .dark .topp-tittel, .dark .sek-navn {{ color: #f1f5f9; }}
@@ -2910,7 +2910,7 @@ def generer_aksjesider(aksjer, root_dir):
     .dark th {{ background: #0f172a; border-color: #334155; color: #94a3b8; }}
     .dark td {{ border-color: #1e293b; }}
     .dark tr:hover td {{ background: #0f172a; }}
-    .dark td a {{ color: #91C4D8; }}
+    .dark td a {{ color: #4ade80; }}
     .dark .yield-cell {{ color: #4ade80; }}
     .dark .verktoy-bar {{ background: linear-gradient(135deg, rgba(146,64,14,0.3) 0%, rgba(154,52,18,0.2) 100%); }}
     .dark .verktoy-bar h3 {{ color: #fde68a; }}
@@ -3467,11 +3467,11 @@ def generer_sektorsider(aksjer, root_dir):
   <style>
     *, *::before, *::after {{ box-sizing: border-box; margin: 0; padding: 0; }}
     body {{ font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; line-height: 1.6; background: #f8fafc; color: #0f172a; }}
-    a {{ color: #1E5C5C; text-decoration: none; }}
+    a {{ color: #16a34a; text-decoration: none; }}
     a:hover {{ text-decoration: underline; }}
     .wrap {{ max-width: 1100px; margin: 0 auto; padding: 1rem 1rem 2rem; }}
     .hero {{
-      background: linear-gradient(135deg, #132A50 0%, #1E5C5C 60%, #2E7B7B 100%);
+      background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #15803d 100%);
       color: #fff;
       border-radius: 1rem;
       padding: 2rem 1.5rem;
@@ -3498,8 +3498,8 @@ def generer_sektorsider(aksjer, root_dir):
       color: inherit;
     }}
     .sektor-kort:hover {{
-      border-color: #2E7B7B;
-      box-shadow: 0 4px 14px rgba(46,123,123,0.1);
+      border-color: #22c55e;
+      box-shadow: 0 4px 14px rgba(34,197,94,0.1);
       transform: translateY(-2px);
     }}
     .sk-header {{ display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; }}
@@ -3508,13 +3508,13 @@ def generer_sektorsider(aksjer, root_dir):
     .sk-navn {{ font-weight: 700; font-size: 1rem; color: #0f172a; }}
     .sk-antall {{ font-size: 0.78rem; color: #64748b; margin-top: 0.1rem; }}
     .sk-arrow {{ color: #94a3b8; font-size: 1.1rem; flex-shrink: 0; }}
-    .sektor-kort:hover .sk-arrow {{ color: #2E7B7B; transform: translateX(2px); transition: all 0.15s; }}
+    .sektor-kort:hover .sk-arrow {{ color: #22c55e; transform: translateX(2px); transition: all 0.15s; }}
     .sk-topp {{ font-size: 0.72rem; color: #94a3b8; padding-top: 0.4rem; border-top: 1px solid #f1f5f9; font-family: ui-monospace, monospace; }}
     .info-bar {{
       display: flex; align-items: flex-start; gap: 0.75rem;
       background: #f0fafb;
       border: 1px solid #ccebec;
-      border-left: 4px solid #2E7B7B;
+      border-left: 4px solid #22c55e;
       border-radius: 0.6rem;
       padding: 0.85rem 1rem;
       margin-bottom: 2rem;
@@ -3526,14 +3526,14 @@ def generer_sektorsider(aksjer, root_dir):
     .info-bar strong {{ color: #0f172a; }}
     /* Dark mode */
     .dark body {{ background: #0f172a; color: #f1f5f9; }}
-    .dark a {{ color: #91C4D8; }}
+    .dark a {{ color: #4ade80; }}
     .dark .breadcrumb, .dark .breadcrumb a {{ color: #94a3b8; }}
     .dark .sektor-kort {{ background: #1e293b; border-color: #334155; }}
-    .dark .sektor-kort:hover {{ border-color: #2E7B7B; }}
+    .dark .sektor-kort:hover {{ border-color: #22c55e; }}
     .dark .sk-navn {{ color: #f1f5f9; }}
     .dark .sk-antall, .dark .sk-topp {{ color: #94a3b8; }}
     .dark .sk-topp {{ border-color: #334155; }}
-    .dark .info-bar {{ background: rgba(46,123,123,0.12); border-color: rgba(46,123,123,0.4); color: #91C4D8; }}
+    .dark .info-bar {{ background: rgba(34,197,94,0.12); border-color: rgba(34,197,94,0.4); color: #4ade80; }}
     .dark .info-bar strong {{ color: #f1f5f9; }}
   </style>
 </head>
