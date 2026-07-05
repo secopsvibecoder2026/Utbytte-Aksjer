@@ -130,7 +130,7 @@ function byttStatsSubTab(tab) {
   if (window._pfSisteData) {
     const { beholdning, totalAr } = window._pfSisteData;
     if (tab === 'oversikt')      visYieldChart(beholdning);
-    if (tab === 'inntekt')       visMaanedChart(beholdning);
+    if (tab === 'inntekt')       { visUtbyttePrognose(beholdning); visMaanedChart(beholdning); }
     if (tab === 'beholdning')    { visVerdiChart(beholdning); visCharts(beholdning, totalAr); }
     if (tab === 'sektorer')      { visHHI(beholdning); visSektorYieldChart(beholdning); visCharts(beholdning, totalAr); }
   }
@@ -1418,7 +1418,7 @@ function visPortefolje() {
   window._pfSisteData = { beholdning: alleBeholdning, totalAr };
   // Tegn chart for aktiv stats-tab
   if (aktivStatsTab === 'oversikt')      visYieldChart(alleBeholdning);
-  if (aktivStatsTab === 'inntekt')       visMaanedChart(alleBeholdning);
+  if (aktivStatsTab === 'inntekt')       { visUtbyttePrognose(alleBeholdning); visMaanedChart(alleBeholdning); }
   if (aktivStatsTab === 'beholdning')    { visVerdiChart(alleBeholdning); visCharts(alleBeholdning, totalAr); }
   if (aktivStatsTab === 'sektorer')      { visHHI(alleBeholdning); visSektorYieldChart(alleBeholdning); visCharts(alleBeholdning, totalAr); }
   if (!['beholdning','sektorer'].includes(aktivStatsTab)) {
@@ -1512,6 +1512,170 @@ function visMaanedChart(beholdning) {
       <span>Lavest: <strong>${fmtKr(mnd.some(v=>v>0) ? Math.min(...mnd.filter(v=>v>0)) : 0)}</strong></span>
       <span>Høyest: <strong>${fmtKr(Math.max(...mnd))}</strong></span>
     </div>`;
+}
+
+// ── MIN UTBYTTELØNN: 12-måneders kontantstrømprognose ─────────────────────
+
+// Ren dato-strengaritmetikk (ingen Date-objekter) for å unngå tidssonefeil.
+// Dag klemmes til 28 så månedsstegene aldri flyter over til neste måned.
+function _leggTilMnd(isoDato, antMnd) {
+  let ar  = parseInt(isoDato.slice(0, 4), 10);
+  let mnd = parseInt(isoDato.slice(5, 7), 10) - 1 + antMnd;
+  const dag = Math.min(parseInt(isoDato.slice(8, 10), 10), 28);
+  ar += Math.floor(mnd / 12);
+  mnd = ((mnd % 12) + 12) % 12;
+  return `${ar}-${String(mnd + 1).padStart(2, '0')}-${String(dag).padStart(2, '0')}`;
+}
+
+function _leggTilDager(isoDato, dager) {
+  const d = new Date(isoDato + 'T12:00:00');
+  d.setDate(d.getDate() + dager);
+  return d.toISOString().slice(0, 10);
+}
+
+// Finn første forventede betalingsdato for en beholdningspost.
+// Prioritet: annonsert betaling_dato > ex_dato + 14 dager > typiske
+// betalingsmåneder for frekvensen (estimat, 15. i måneden).
+function _prognoseAnker(a, idag) {
+  if (a.betaling_dato) return { dato: a.betaling_dato, annonsert: a.betaling_dato >= idag };
+  if (a.ex_dato) {
+    const dato = _leggTilDager(a.ex_dato, 14);
+    return { dato, annonsert: dato >= idag };
+  }
+  if (a.frekvens && a.frekvens !== 'Uregelmessig') {
+    const mnder = _betalingsMaaneder(a);
+    const iAr  = parseInt(idag.slice(0, 4), 10);
+    const iMnd = parseInt(idag.slice(5, 7), 10) - 1;
+    let m  = mnder.find(x => x > iMnd || (x === iMnd && parseInt(idag.slice(8, 10), 10) <= 15));
+    let ar = iAr;
+    if (m === undefined) { m = mnder[0]; ar = iAr + 1; }
+    return { dato: `${ar}-${String(m + 1).padStart(2, '0')}-15`, annonsert: false };
+  }
+  return null; // Uregelmessig uten kjente datoer — kan ikke tidfestes
+}
+
+// Bygger prognosen: alle forventede utbetalinger de neste 12 månedene.
+// Ren funksjon (ingen DOM/localStorage) — testbar. idagIso kan overstyres i test.
+function beregnUtbyttePrognose(beholdning, idagIso) {
+  const idag  = idagIso || new Date().toISOString().slice(0, 10);
+  const slutt = _leggTilMnd(idag, 12);
+  const utbetalinger = [];
+  const utenDato = [];
+
+  beholdning.forEach(a => {
+    if (!a.forv_ar || a.forv_ar <= 0) return;
+    const perAr       = _frekvensAntall(a.frekvens);
+    const intervall   = 12 / perAr;
+    const perBetaling = a.forv_ar / perAr;
+
+    const anker = _prognoseAnker(a, idag);
+    if (!anker) {
+      utenDato.push({ ticker: a.ticker, navn: a.navn, belop: a.forv_ar });
+      return;
+    }
+    // Rull en passert dato frem til første fremtidige betaling.
+    // Bare en dato som kom direkte fra annonsert kilde beholder «annonsert».
+    let dato = anker.dato;
+    let annonsert = anker.annonsert;
+    while (dato < idag) { dato = _leggTilMnd(dato, intervall); annonsert = false; }
+
+    while (dato < slutt) {
+      utbetalinger.push({ dato, ticker: a.ticker, navn: a.navn, belop: perBetaling, annonsert });
+      dato = _leggTilMnd(dato, intervall);
+      annonsert = false; // kun første betaling kan være annonsert
+    }
+  });
+
+  utbetalinger.sort((a, b) => a.dato.localeCompare(b.dato));
+
+  // Rullerende 12-månederssummer fra og med inneværende måned
+  const mndNavn = ['Jan','Feb','Mar','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Des'];
+  const startMnd = idag.slice(0, 7);
+  const mndSum = Array.from({ length: 12 }, (_, k) => {
+    const key = _leggTilMnd(startMnd + '-01', k).slice(0, 7);
+    return { key, navn: mndNavn[parseInt(key.slice(5, 7), 10) - 1], belop: 0 };
+  });
+  utbetalinger.forEach(u => {
+    const t = mndSum.find(m => m.key === u.dato.slice(0, 7));
+    if (t) t.belop += u.belop;
+  });
+
+  const bruttoAr = utbetalinger.reduce((s, u) => s + u.belop, 0);
+  return { utbetalinger, mndSum, bruttoAr, utenDato };
+}
+
+function visUtbyttePrognose(beholdning) {
+  const el   = document.getElementById('pf-prognose');
+  const kort = document.getElementById('pf-prognose-card');
+  if (!el) return;
+  if (!beholdning.length) { if (kort) kort.classList.add('hidden'); return; }
+  if (kort) kort.classList.remove('hidden');
+
+  const p = beregnUtbyttePrognose(beholdning);
+  const fmtKr = v => Math.round(v).toLocaleString('nb-NO') + ' kr';
+
+  if (p.bruttoAr <= 0) {
+    el.innerHTML = '<p class="text-xs text-gray-400">Ingen forventede utbytter for aksjene i porteføljen.</p>';
+    return;
+  }
+
+  // Netto etter skjermingsfradrag og utbytteskatt (samme modell som stats-kortet)
+  let skjermingsfradrag = 0;
+  beholdning.forEach(a => {
+    const kb = beregnKostbasis(a.ticker);
+    if (kb.totalKost > 0) skjermingsfradrag += kb.totalKost * SKJERMINGSRENTE;
+  });
+  const skatt = Math.max(0, p.bruttoAr - skjermingsfradrag) * SKATTESATS;
+  const netto = p.bruttoAr - skatt;
+
+  const maks = Math.max(...p.mndSum.map(m => m.belop), 1);
+  const iKey = new Date().toISOString().slice(0, 7);
+  const fmtDato = iso => `${parseInt(iso.slice(8, 10), 10)}. ${['jan','feb','mar','apr','mai','jun','jul','aug','sep','okt','nov','des'][parseInt(iso.slice(5, 7), 10) - 1]}`;
+
+  const listeHtml = p.utbetalinger.map(u => `
+    <div class="flex items-center justify-between py-1.5 border-b border-gray-100 dark:border-gray-800 last:border-0 text-sm">
+      <div class="flex items-center gap-2 min-w-0">
+        <span class="text-xs text-gray-400 w-14 shrink-0">${fmtDato(u.dato)}</span>
+        <span class="font-mono font-bold text-brand-700 dark:text-brand-400">${escHtml(u.ticker)}</span>
+        ${u.annonsert
+          ? '<span class="text-[10px] font-semibold uppercase tracking-wide px-1.5 py-0.5 rounded-full bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-400 shrink-0">annonsert</span>'
+          : '<span class="text-[10px] uppercase tracking-wide px-1.5 py-0.5 rounded-full bg-gray-100 text-gray-400 dark:bg-gray-800 dark:text-gray-500 shrink-0">estimat</span>'}
+      </div>
+      <span class="font-semibold text-gray-700 dark:text-gray-300 shrink-0">${fmtKr(u.belop)}</span>
+    </div>`).join('');
+
+  const utenDatoHtml = p.utenDato.length
+    ? `<p class="text-xs text-gray-400 mt-2">I tillegg: ~${fmtKr(p.utenDato.reduce((s, u) => s + u.belop, 0))}/år fra ${p.utenDato.map(u => escHtml(u.ticker)).join(', ')} (uregelmessig — ingen kjent dato).</p>`
+    : '';
+
+  el.innerHTML = `
+    <div class="grid grid-cols-3 gap-3 mb-4">
+      <div>
+        <p class="text-[11px] uppercase tracking-wide text-gray-400">Brutto 12 mnd</p>
+        <p class="font-bold text-lg text-gray-900 dark:text-gray-100">${fmtKr(p.bruttoAr)}</p>
+      </div>
+      <div>
+        <p class="text-[11px] uppercase tracking-wide text-gray-400">Netto etter skatt</p>
+        <p class="font-bold text-lg text-green-600 dark:text-green-400">${fmtKr(netto)}</p>
+      </div>
+      <div>
+        <p class="text-[11px] uppercase tracking-wide text-gray-400">≈ per måned</p>
+        <p class="font-bold text-lg text-gray-900 dark:text-gray-100">${fmtKr(netto / 12)}</p>
+      </div>
+    </div>
+    <div class="flex items-end gap-0.5 mb-1">
+      ${p.mndSum.map(m => {
+        const hPx = m.belop > 0 ? Math.max(4, Math.round(m.belop / maks * 80)) : 0;
+        const er = m.key === iKey;
+        return `<div class="flex-1 flex flex-col items-center justify-end gap-0.5" title="${m.navn}: ${fmtKr(m.belop)}">
+          <div class="w-full rounded-t-sm" style="height:${hPx}px;background:${er ? '#14b8a6' : '#22c55e'};opacity:${m.belop > 0 ? '1' : '0.15'}"></div>
+          <span class="text-[9px] text-gray-400${er ? ' font-bold' : ''}">${m.navn[0]}</span>
+        </div>`;
+      }).join('')}
+    </div>
+    <div class="max-h-56 overflow-y-auto mt-3" id="pf-prognose-liste">${listeHtml}</div>
+    ${utenDatoHtml}
+    <p class="text-[11px] text-gray-400 dark:text-gray-600 mt-2">Estimater bygger på sist kjente utbytte og betalingsmønster — fremtidige utbytter er ikke garantert. Netto forutsetter skjermingsfradrag på årets kostbasis.</p>`;
 }
 
 // ── VERDIKONSENTRASJON (Beholdning) ───────────────────────────────────────
@@ -2386,4 +2550,4 @@ function visAnalyse() {
 }
 
 // Node.js test export
-if (typeof module !== 'undefined') module.exports = { beregnKostbasis, beregnIRR, beregnTWRSerie };
+if (typeof module !== 'undefined') module.exports = { beregnKostbasis, beregnIRR, beregnTWRSerie, beregnUtbyttePrognose, _leggTilMnd };

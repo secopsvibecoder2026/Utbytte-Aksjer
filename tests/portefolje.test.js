@@ -35,7 +35,7 @@ global.visModal = () => {};
 global.SEKTOR_FARGE = {};
 global.FARGE_FALLBACK = '#9ca3af';
 
-const { beregnKostbasis, beregnIRR, beregnTWRSerie } = require('../assets/portefolje.js');
+const { beregnKostbasis, beregnIRR, beregnTWRSerie, beregnUtbyttePrognose, _leggTilMnd } = require('../assets/portefolje.js');
 
 // ── beregnKostbasis ─────────────────────────────────────────────────────────
 
@@ -255,4 +255,87 @@ test('beregnTWRSerie: nyttinnskudd justeres ut av TWR', () => {
   const serie = beregnTWRSerie(historikk, datoer, tx);
   assert.equal(serie[0], 100);
   assert.ok(Math.abs(serie[1] - (115000 / 110000 * 100)) < 0.01);
+});
+
+// ── beregnUtbyttePrognose («Min utbyttelønn») ───────────────────────────────
+
+test('_leggTilMnd: håndterer årsskifte og klemmer dag til 28', () => {
+  assert.equal(_leggTilMnd('2026-11-15', 3), '2027-02-15');
+  assert.equal(_leggTilMnd('2026-01-31', 1), '2026-02-28');
+  assert.equal(_leggTilMnd('2026-07-01', 12), '2027-07-01');
+});
+
+test('prognose: kvartalsvis med annonsert fremtidig betalingsdato gir 4 betalinger', () => {
+  const beholdning = [{
+    ticker: 'EQNR', navn: 'Equinor', antall: 100, forv_ar: 1448,
+    frekvens: 'Kvartalsvis', ex_dato: '2026-08-13', betaling_dato: '2026-08-27'
+  }];
+  const p = beregnUtbyttePrognose(beholdning, '2026-07-05');
+  assert.equal(p.utbetalinger.length, 4);
+  assert.equal(p.utbetalinger[0].dato, '2026-08-27');
+  assert.equal(p.utbetalinger[0].annonsert, true);
+  assert.equal(p.utbetalinger[1].annonsert, false);
+  assert.ok(Math.abs(p.utbetalinger[0].belop - 362) < 0.01);
+  assert.ok(Math.abs(p.bruttoAr - 1448) < 0.01);
+});
+
+test('prognose: passert betalingsdato rulles frem og mister annonsert-status', () => {
+  const beholdning = [{
+    ticker: 'TEL', navn: 'Telenor', antall: 50, forv_ar: 500,
+    frekvens: 'Halvårlig', betaling_dato: '2026-05-20'
+  }];
+  const p = beregnUtbyttePrognose(beholdning, '2026-07-05');
+  assert.equal(p.utbetalinger.length, 2);
+  assert.equal(p.utbetalinger[0].dato, '2026-11-20');  // +6 mnd fra passert dato
+  assert.equal(p.utbetalinger[0].annonsert, false);
+});
+
+test('prognose: årlig betaler nøyaktig én gang på 12 måneder', () => {
+  const beholdning = [{
+    ticker: 'ORK', navn: 'Orkla', antall: 10, forv_ar: 100,
+    frekvens: 'Årlig', betaling_dato: '2026-04-15'
+  }];
+  const p = beregnUtbyttePrognose(beholdning, '2026-07-05');
+  assert.equal(p.utbetalinger.length, 1);
+  assert.equal(p.utbetalinger[0].dato, '2027-04-15');
+});
+
+test('prognose: uten datoer brukes typiske måneder som estimat', () => {
+  const beholdning = [{
+    ticker: 'X', navn: 'X ASA', antall: 10, forv_ar: 400, frekvens: 'Kvartalsvis'
+  }];
+  const p = beregnUtbyttePrognose(beholdning, '2026-07-05');
+  assert.equal(p.utbetalinger.length, 4);
+  assert.ok(p.utbetalinger.every(u => u.annonsert === false));
+  assert.equal(p.utbetalinger[0].dato, '2026-09-15');  // neste default-kvartalsmåned
+});
+
+test('prognose: uregelmessig uten dato havner i utenDato-listen', () => {
+  const beholdning = [{
+    ticker: 'Y', navn: 'Y ASA', antall: 5, forv_ar: 250, frekvens: 'Uregelmessig'
+  }];
+  const p = beregnUtbyttePrognose(beholdning, '2026-07-05');
+  assert.equal(p.utbetalinger.length, 0);
+  assert.equal(p.utenDato.length, 1);
+  assert.equal(p.utenDato[0].belop, 250);
+});
+
+test('prognose: månedssummer dekker 12 rullerende måneder og summerer til brutto', () => {
+  const beholdning = [
+    { ticker: 'A', navn: 'A', antall: 1, forv_ar: 1200, frekvens: 'Månedlig', betaling_dato: '2026-07-20' },
+    { ticker: 'B', navn: 'B', antall: 1, forv_ar: 400,  frekvens: 'Kvartalsvis', betaling_dato: '2026-09-10' }
+  ];
+  const p = beregnUtbyttePrognose(beholdning, '2026-07-05');
+  assert.equal(p.mndSum.length, 12);
+  assert.equal(p.mndSum[0].key, '2026-07');
+  assert.equal(p.mndSum[11].key, '2027-06');
+  const sumMnd = p.mndSum.reduce((s, m) => s + m.belop, 0);
+  assert.ok(Math.abs(sumMnd - p.bruttoAr) < 0.01);
+  assert.ok(Math.abs(p.bruttoAr - 1600) < 0.01);  // 12×100 + 4×100
+});
+
+test('prognose: aksjer uten utbytte bidrar ikke', () => {
+  const p = beregnUtbyttePrognose([{ ticker: 'Z', navn: 'Z', antall: 10, forv_ar: 0, frekvens: 'Årlig' }], '2026-07-05');
+  assert.equal(p.utbetalinger.length, 0);
+  assert.equal(p.bruttoAr, 0);
 });

@@ -52,15 +52,18 @@ Nye brukere bruker lang tid på manuell innlegging. Nordnet eksporterer CSV med 
 - [ ] Preview-modal: vis hva som importeres før det lagres
 - [ ] Deduplisering: ikke legg inn transaksjoner som allerede finnes
 
-### N3. Betalingskalender — «Når får jeg utbytte?»
+### N3. Betalingskalender — «Når får jeg utbytte?» ✅
 **Prioritet: Høy — svarer på det mest stilte spørsmålet**
 
-Brukere med portefølje vil vite nøyaktig hvilken måned de mottar utbytte fra sine aksjer. Kalender-fanen viser ex-datoer, men ikke betalingskalender.
+Levert 2026-07-05 som **«Min utbyttelønn»** i Portefølje → Statistikk → Inntekt
+(gikk lenger enn opprinnelig skisse: 12 mnd rullerende prognose i stedet for kalendervisning).
 
-- [ ] Ny visning i Kalender-fanen: «Mine utbetalinger»
-- [ ] Vis kun aksjer i brukerens portefølje
-- [ ] Grupper etter måned med forventet betalingsdato og beløp
-- [ ] Sum per måned (forventet innbetaling)
+- [x] 12-måneders kontantstrømprognose med daterte utbetalinger per aksje
+- [x] Vis kun aksjer i brukerens portefølje
+- [x] Månedssøyler + tidslinje med forventet betalingsdato og beløp
+- [x] Brutto/netto (skjermingsfradrag + 37,84 %) og ≈ per måned
+- [x] Skiller «annonsert» (fremtidig betalings-/ex-dato fra børsdata) fra «estimat» (rullet frem fra betalingsmønster)
+- [x] Ren, testbar prognosefunksjon (`beregnUtbyttePrognose`) med 8 enhetstester
 
 ### N4. Reinvesteringskalkulator (DRIP) ← fra ROADMAP.md #35 ✅
 **Prioritet: Høy**
