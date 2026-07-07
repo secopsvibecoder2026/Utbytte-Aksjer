@@ -1444,7 +1444,8 @@
     {
       "ticker": "ABG",
       "dato": "2026-07-07",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/677730"
     },
     {
       "ticker": "KID",
@@ -2907,6 +2908,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "ABG",
+      "dato": "2026-10-13",
+      "type": "rapport"
+    },
+    {
       "ticker": "AQUA",
       "dato": "2027-05-28",
       "type": "rapport"
@@ -2942,5 +2948,5 @@
       "type": "rapport"
     }
   ],
-  "sist_oppdatert": "2026-07-06"
+  "sist_oppdatert": "2026-07-07"
 }
