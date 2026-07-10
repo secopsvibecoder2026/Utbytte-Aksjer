@@ -1523,7 +1523,8 @@
     {
       "ticker": "AKBM",
       "dato": "2026-07-10",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/677954"
     },
     {
       "ticker": "ELK",
@@ -1533,47 +1534,56 @@
     {
       "ticker": "ENTR",
       "dato": "2026-07-10",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/677991"
     },
     {
       "ticker": "KIT",
       "dato": "2026-07-10",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/677959"
     },
     {
       "ticker": "KMCP",
       "dato": "2026-07-10",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/677991"
     },
     {
       "ticker": "PROT",
       "dato": "2026-07-10",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/677946"
     },
     {
       "ticker": "SBMO",
       "dato": "2026-07-10",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/677991"
     },
     {
       "ticker": "SRHA",
       "dato": "2026-07-10",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/677991"
     },
     {
       "ticker": "STRONG",
       "dato": "2026-07-10",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/677991"
     },
     {
       "ticker": "VISTIN",
       "dato": "2026-07-10",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/677991"
     },
     {
       "ticker": "WWIB",
       "dato": "2026-07-10",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/677991"
     },
     {
       "ticker": "GJF",
@@ -2991,8 +3001,28 @@
       "type": "rapport"
     },
     {
+      "ticker": "KIT",
+      "dato": "2026-10-22",
+      "type": "rapport"
+    },
+    {
+      "ticker": "PROT",
+      "dato": "2026-10-22",
+      "type": "rapport"
+    },
+    {
       "ticker": "BNOR",
       "dato": "2026-10-28",
+      "type": "rapport"
+    },
+    {
+      "ticker": "AKBM",
+      "dato": "2026-10-29",
+      "type": "rapport"
+    },
+    {
+      "ticker": "ELK",
+      "dato": "2026-10-29",
       "type": "rapport"
     },
     {
@@ -3041,5 +3071,5 @@
       "type": "rapport"
     }
   ],
-  "sist_oppdatert": "2026-07-09"
+  "sist_oppdatert": "2026-07-10"
 }
