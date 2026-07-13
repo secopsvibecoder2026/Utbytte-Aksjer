@@ -1588,22 +1588,26 @@
     {
       "ticker": "GJF",
       "dato": "2026-07-13",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/678044"
     },
     {
       "ticker": "KMAR",
       "dato": "2026-07-13",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/678037"
     },
     {
       "ticker": "KOG",
       "dato": "2026-07-13",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/678040"
     },
     {
       "ticker": "SMOP",
       "dato": "2026-07-13",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/678034"
     },
     {
       "ticker": "AKSO",
@@ -3011,6 +3015,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "GJF",
+      "dato": "2026-10-23",
+      "type": "rapport"
+    },
+    {
       "ticker": "BNOR",
       "dato": "2026-10-28",
       "type": "rapport"
@@ -3031,7 +3040,22 @@
       "type": "rapport"
     },
     {
+      "ticker": "KOG",
+      "dato": "2026-10-29",
+      "type": "rapport"
+    },
+    {
+      "ticker": "SMOP",
+      "dato": "2026-10-29",
+      "type": "rapport"
+    },
+    {
       "ticker": "BONHR",
+      "dato": "2026-10-30",
+      "type": "rapport"
+    },
+    {
+      "ticker": "KMAR",
       "dato": "2026-10-30",
       "type": "rapport"
     },
@@ -3071,5 +3095,5 @@
       "type": "rapport"
     }
   ],
-  "sist_oppdatert": "2026-07-10"
+  "sist_oppdatert": "2026-07-13"
 }
