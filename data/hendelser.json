@@ -1612,12 +1612,14 @@
     {
       "ticker": "AKSO",
       "dato": "2026-07-14",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/678126"
     },
     {
       "ticker": "DNB",
       "dato": "2026-07-14",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/678130"
     },
     {
       "ticker": "NSKOG",
@@ -3005,7 +3007,17 @@
       "type": "rapport"
     },
     {
+      "ticker": "DNB",
+      "dato": "2026-10-21",
+      "type": "rapport"
+    },
+    {
       "ticker": "KIT",
+      "dato": "2026-10-22",
+      "type": "rapport"
+    },
+    {
+      "ticker": "NSKOG",
       "dato": "2026-10-22",
       "type": "rapport"
     },
@@ -3020,7 +3032,17 @@
       "type": "rapport"
     },
     {
+      "ticker": "AKSO",
+      "dato": "2026-10-28",
+      "type": "rapport"
+    },
+    {
       "ticker": "BNOR",
+      "dato": "2026-10-28",
+      "type": "rapport"
+    },
+    {
+      "ticker": "SPOG",
       "dato": "2026-10-28",
       "type": "rapport"
     },
@@ -3095,5 +3117,5 @@
       "type": "rapport"
     }
   ],
-  "sist_oppdatert": "2026-07-13"
+  "sist_oppdatert": "2026-07-14"
 }
