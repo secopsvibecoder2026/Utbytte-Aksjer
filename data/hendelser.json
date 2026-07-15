@@ -1649,17 +1649,20 @@
     {
       "ticker": "ENTR",
       "dato": "2026-07-15",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/678220"
     },
     {
       "ticker": "KMCP",
       "dato": "2026-07-15",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/678220"
     },
     {
       "ticker": "ODFB",
       "dato": "2026-07-15",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/678220"
     },
     {
       "ticker": "PUBLI",
@@ -1669,42 +1672,50 @@
     {
       "ticker": "SBMO",
       "dato": "2026-07-15",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/678220"
     },
     {
       "ticker": "SOFF",
       "dato": "2026-07-15",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/678197"
     },
     {
       "ticker": "SOMA",
       "dato": "2026-07-15",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/678195"
     },
     {
       "ticker": "SRHA",
       "dato": "2026-07-15",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/678220"
     },
     {
       "ticker": "STB",
       "dato": "2026-07-15",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/678200"
     },
     {
       "ticker": "STRONG",
       "dato": "2026-07-15",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/678220"
     },
     {
       "ticker": "VISTIN",
       "dato": "2026-07-15",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/678220"
     },
     {
       "ticker": "WWIB",
       "dato": "2026-07-15",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/678220"
     },
     {
       "ticker": "AKER",
@@ -3012,6 +3023,51 @@
       "type": "rapport"
     },
     {
+      "ticker": "ENTR",
+      "dato": "2026-10-21",
+      "type": "rapport"
+    },
+    {
+      "ticker": "ODFB",
+      "dato": "2026-10-21",
+      "type": "rapport"
+    },
+    {
+      "ticker": "SBMO",
+      "dato": "2026-10-21",
+      "type": "rapport"
+    },
+    {
+      "ticker": "SRHA",
+      "dato": "2026-10-21",
+      "type": "rapport"
+    },
+    {
+      "ticker": "STB",
+      "dato": "2026-10-21",
+      "type": "rapport"
+    },
+    {
+      "ticker": "STRONG",
+      "dato": "2026-10-21",
+      "type": "rapport"
+    },
+    {
+      "ticker": "VISTIN",
+      "dato": "2026-10-21",
+      "type": "rapport"
+    },
+    {
+      "ticker": "WWIB",
+      "dato": "2026-10-21",
+      "type": "rapport"
+    },
+    {
+      "ticker": "ATEA",
+      "dato": "2026-10-22",
+      "type": "rapport"
+    },
+    {
       "ticker": "KIT",
       "dato": "2026-10-22",
       "type": "rapport"
@@ -3032,6 +3088,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "PUBLI",
+      "dato": "2026-10-27",
+      "type": "rapport"
+    },
+    {
       "ticker": "AKSO",
       "dato": "2026-10-28",
       "type": "rapport"
@@ -3048,6 +3109,11 @@
     },
     {
       "ticker": "AKBM",
+      "dato": "2026-10-29",
+      "type": "rapport"
+    },
+    {
+      "ticker": "AKRBP",
       "dato": "2026-10-29",
       "type": "rapport"
     },
@@ -3079,6 +3145,16 @@
     {
       "ticker": "KMAR",
       "dato": "2026-10-30",
+      "type": "rapport"
+    },
+    {
+      "ticker": "SOFF",
+      "dato": "2026-11-04",
+      "type": "rapport"
+    },
+    {
+      "ticker": "SOMA",
+      "dato": "2026-11-04",
       "type": "rapport"
     },
     {
@@ -3117,5 +3193,5 @@
       "type": "rapport"
     }
   ],
-  "sist_oppdatert": "2026-07-14"
+  "sist_oppdatert": "2026-07-15"
 }
