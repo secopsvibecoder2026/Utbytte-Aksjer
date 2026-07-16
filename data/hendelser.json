@@ -1721,12 +1721,14 @@
     {
       "ticker": "AKER",
       "dato": "2026-07-16",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/678272"
     },
     {
       "ticker": "ATEA",
       "dato": "2026-07-16",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/678255"
     },
     {
       "ticker": "BRG",
@@ -1746,12 +1748,14 @@
     {
       "ticker": "OKEA",
       "dato": "2026-07-16",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/678261"
     },
     {
       "ticker": "TEL",
       "dato": "2026-07-16",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/678177"
     },
     {
       "ticker": "AQUA",
@@ -3114,6 +3118,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "KOA",
+      "dato": "2026-10-22",
+      "type": "rapport"
+    },
+    {
       "ticker": "NSKOG",
       "dato": "2026-10-22",
       "type": "rapport"
@@ -3144,7 +3153,17 @@
       "type": "rapport"
     },
     {
+      "ticker": "BRG",
+      "dato": "2026-10-28",
+      "type": "rapport"
+    },
+    {
       "ticker": "SPOG",
+      "dato": "2026-10-28",
+      "type": "rapport"
+    },
+    {
+      "ticker": "TEL",
       "dato": "2026-10-28",
       "type": "rapport"
     },
@@ -3189,6 +3208,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "OKEA",
+      "dato": "2026-11-03",
+      "type": "rapport"
+    },
+    {
       "ticker": "SOFF",
       "dato": "2026-11-04",
       "type": "rapport"
@@ -3196,6 +3220,11 @@
     {
       "ticker": "SOMA",
       "dato": "2026-11-04",
+      "type": "rapport"
+    },
+    {
+      "ticker": "AKER",
+      "dato": "2026-11-05",
       "type": "rapport"
     },
     {
@@ -3234,5 +3263,5 @@
       "type": "rapport"
     }
   ],
-  "sist_oppdatert": "2026-07-15"
+  "sist_oppdatert": "2026-07-16"
 }
