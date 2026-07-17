@@ -1765,37 +1765,44 @@
     {
       "ticker": "ENTR",
       "dato": "2026-07-17",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/678357"
     },
     {
       "ticker": "GOD",
       "dato": "2026-07-17",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/678346"
     },
     {
       "ticker": "KMCP",
       "dato": "2026-07-17",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/678357"
     },
     {
       "ticker": "PARB",
       "dato": "2026-07-17",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/678340"
     },
     {
       "ticker": "SBMO",
       "dato": "2026-07-17",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/678357"
     },
     {
       "ticker": "SRHA",
       "dato": "2026-07-17",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/678357"
     },
     {
       "ticker": "STRONG",
       "dato": "2026-07-17",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/678357"
     },
     {
       "ticker": "TOM",
@@ -1805,22 +1812,26 @@
     {
       "ticker": "VEND",
       "dato": "2026-07-17",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/678347"
     },
     {
       "ticker": "VISTIN",
       "dato": "2026-07-17",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/678357"
     },
     {
       "ticker": "WWIB",
       "dato": "2026-07-17",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/678357"
     },
     {
       "ticker": "YAR",
       "dato": "2026-07-17",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/678357"
     },
     {
       "ticker": "AQUA",
@@ -3133,12 +3144,27 @@
       "type": "rapport"
     },
     {
+      "ticker": "YAR",
+      "dato": "2026-10-22",
+      "type": "rapport"
+    },
+    {
       "ticker": "GJF",
       "dato": "2026-10-23",
       "type": "rapport"
     },
     {
+      "ticker": "TOM",
+      "dato": "2026-10-23",
+      "type": "rapport"
+    },
+    {
       "ticker": "PUBLI",
+      "dato": "2026-10-27",
+      "type": "rapport"
+    },
+    {
+      "ticker": "VEND",
       "dato": "2026-10-27",
       "type": "rapport"
     },
@@ -3193,12 +3219,22 @@
       "type": "rapport"
     },
     {
+      "ticker": "PARB",
+      "dato": "2026-10-29",
+      "type": "rapport"
+    },
+    {
       "ticker": "SMOP",
       "dato": "2026-10-29",
       "type": "rapport"
     },
     {
       "ticker": "BONHR",
+      "dato": "2026-10-30",
+      "type": "rapport"
+    },
+    {
+      "ticker": "GOD",
       "dato": "2026-10-30",
       "type": "rapport"
     },
@@ -3263,5 +3299,5 @@
       "type": "rapport"
     }
   ],
-  "sist_oppdatert": "2026-07-16"
+  "sist_oppdatert": "2026-07-17"
 }
