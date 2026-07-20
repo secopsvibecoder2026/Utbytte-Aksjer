@@ -1,5 +1,5 @@
 {
-  "sist_oppdatert": "2026-07-20T15:15:05Z",
+  "sist_oppdatert": "2026-07-20T17:36:39Z",
   "kilde": "Yahoo Finance (yfinance)",
   "aksjer": [
     {
@@ -10,7 +10,7 @@
       "pris": 356.9,
       "52u_hoy": 422.3,
       "52u_lav": 226.4,
-      "markedsverdi_mrd": 848.5,
+      "markedsverdi_mrd": 848.3,
       "utbytte_per_aksje": 14.48,
       "utbytte_yield": 4.06,
       "utbytte_vekst_5ar": 18.3,
@@ -31,7 +31,7 @@
         },
         {
           "ar": 2023,
-          "utbytte": 35.99,
+          "utbytte": 35.97,
           "yield": 10.08
         },
         {
@@ -2210,13 +2210,13 @@
       "pris": 132.8,
       "52u_hoy": 178.7,
       "52u_lav": 125.2,
-      "markedsverdi_mrd": 181.2,
+      "markedsverdi_mrd": 0.0,
       "utbytte_per_aksje": 9.7,
       "utbytte_yield": 7.3,
       "utbytte_vekst_5ar": 4.6,
       "payout_ratio": 82.0,
       "pe_ratio": 11.33,
-      "pb_ratio": 2.4,
+      "pb_ratio": 0.0,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-10-28",
@@ -3310,13 +3310,13 @@
       "pris": 106.6,
       "52u_hoy": 131.2,
       "52u_lav": 96.15,
-      "markedsverdi_mrd": 102.8,
+      "markedsverdi_mrd": 0.0,
       "utbytte_per_aksje": 10.0,
       "utbytte_yield": 9.38,
       "utbytte_vekst_5ar": 18.9,
       "payout_ratio": 62.0,
       "pe_ratio": 16.58,
-      "pb_ratio": 2.2,
+      "pb_ratio": 0.0,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-08-20",
@@ -4416,7 +4416,7 @@
       "utbytte_vekst_5ar": 2.5,
       "payout_ratio": 33.0,
       "pe_ratio": 10.68,
-      "pb_ratio": 2.03,
+      "pb_ratio": 2.04,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-08-18",
@@ -4553,7 +4553,7 @@
         },
         {
           "d": "2022-01-23",
-          "k": 175.82
+          "k": 175.81
         },
         {
           "d": "2022-01-30",
@@ -5905,7 +5905,7 @@
         },
         {
           "d": "2023-04-09",
-          "k": 190.24
+          "k": 190.25
         },
         {
           "d": "2023-04-16",
@@ -6045,7 +6045,7 @@
         },
         {
           "d": "2023-12-10",
-          "k": 229.06
+          "k": 229.05
         },
         {
           "d": "2023-12-17",
@@ -6997,7 +6997,7 @@
         },
         {
           "d": "2023-03-26",
-          "k": 59.17
+          "k": 59.16
         },
         {
           "d": "2023-04-02",
@@ -9972,7 +9972,7 @@
       "utbytte_vekst_5ar": -44.7,
       "payout_ratio": 47.0,
       "pe_ratio": 4.85,
-      "pb_ratio": 1.14,
+      "pb_ratio": 1.2,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-08-26",
@@ -9982,8 +9982,8 @@
       "historiske_utbytter": [
         {
           "ar": 2022,
-          "utbytte": 9.26,
-          "yield": 38.84
+          "utbytte": 9.25,
+          "yield": 38.83
         },
         {
           "ar": 2023,
@@ -11078,35 +11078,35 @@
       "rapport_dato": "2026-08-28",
       "frekvens": "Kvartalsvis",
       "ar_med_utbytte": 11,
-      "siste_utbytte": 6.49,
+      "siste_utbytte": 6.48,
       "historiske_utbytter": [
         {
           "ar": 2022,
-          "utbytte": 9.1,
-          "yield": 4.46
+          "utbytte": 9.09,
+          "yield": 4.45
         },
         {
           "ar": 2023,
-          "utbytte": 29.81,
-          "yield": 14.6
+          "utbytte": 29.8,
+          "yield": 14.59
         },
         {
           "ar": 2024,
-          "utbytte": 28.07,
-          "yield": 13.75
+          "utbytte": 28.05,
+          "yield": 13.74
         },
         {
           "ar": 2025,
-          "utbytte": 12.78,
-          "yield": 6.26
+          "utbytte": 12.77,
+          "yield": 6.25
         },
         {
           "ar": 2026,
           "utbytte": 12.0,
-          "yield": 5.88
+          "yield": 5.87
         }
       ],
-      "snitt_yield_5ar": 8.99,
+      "snitt_yield_5ar": 8.98,
       "beskrivelse": "Verdens største LPG-tankrederi. Høy kontantstrøm og liberal utbyttepolitikk. Volatilt med shippingmarkedet. Aksjen er notert på Oslo Børs med en markedsverdi på rundt 26 milliarder kroner.\n\nUtbyttet utbetales kvartalsvis — fire utbetalinger i året, og selskapet har holdt dette gående i 11 år på rad. Direkteavkastningen er 8.4%, og 5-årsnittet på 9.5% plasserer BWLPG blant de høyest-yielding aksjene i sin sektor. En utbetalingsgrad på 82% betyr at det meste av inntjeningen deles ut — utbyttet er dermed sensitivt for resultatsvingninger. Utbyttet har vokst med i snitt 8.4% per år de siste fem årene.\n\nFraktrater varierer kraftig med globalt handelsmønster og flåtekapasitet, og utbyttet svinger tilsvarende. Historikken viser klare svingninger: høyest utbytte var 28.85 NOK per aksje i 2023, lavest 5.34 NOK i 2026.",
       "beskrivelse_fakta": "BW LPG Limited, an investment holding company, engages in ship owning and chartering activities worldwide. It operates through Shipping and Product Services segments. The company engages in the transportation of liquefied petroleum gas (LPG); provision of integrated LPG delivery services, as well as management services; wholesale and trade of LPG; and investment in commercial enterprises. As of December 31, 2025, it owned and operated a fleet of 54 vessels, including 28 very large gas carriers, 7 large gas carriers time chartered in by product services, and 8 VLGCs owned by BW LPG India Pte.",
       "valuta": "NOK",
@@ -11757,7 +11757,7 @@
         },
         {
           "d": "2024-09-08",
-          "k": 154.32
+          "k": 154.33
         },
         {
           "d": "2024-09-15",
@@ -13356,7 +13356,7 @@
       "pris": 362.8,
       "52u_hoy": 424.6,
       "52u_lav": 183.35,
-      "markedsverdi_mrd": 80.8,
+      "markedsverdi_mrd": 0.0,
       "utbytte_per_aksje": 9.0,
       "utbytte_yield": 2.48,
       "utbytte_vekst_5ar": 103.6,
@@ -13368,7 +13368,7 @@
       "rapport_dato": "2026-08-31",
       "frekvens": "Kvartalsvis",
       "ar_med_utbytte": 21,
-      "siste_utbytte": 15.0,
+      "siste_utbytte": 14.99,
       "historiske_utbytter": [
         {
           "ar": 2022,
@@ -13377,12 +13377,12 @@
         },
         {
           "ar": 2023,
-          "utbytte": 27.78,
-          "yield": 7.66
+          "utbytte": 27.76,
+          "yield": 7.65
         },
         {
           "ar": 2024,
-          "utbytte": 18.88,
+          "utbytte": 18.86,
           "yield": 5.2
         },
         {
@@ -13392,7 +13392,7 @@
         },
         {
           "ar": 2026,
-          "utbytte": 24.97,
+          "utbytte": 24.96,
           "yield": 6.88
         }
       ],
@@ -15562,7 +15562,7 @@
       "utbytte_vekst_5ar": 89.9,
       "payout_ratio": 77.0,
       "pe_ratio": 19.37,
-      "pb_ratio": 2.13,
+      "pb_ratio": 2.16,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-07-30",
@@ -16895,7 +16895,7 @@
         },
         {
           "d": "2022-07-10",
-          "k": 205.76
+          "k": 205.75
         },
         {
           "d": "2022-07-17",
@@ -22157,18 +22157,18 @@
       "historiske_utbytter": [
         {
           "ar": 2022,
-          "utbytte": 4.72,
+          "utbytte": 4.71,
           "yield": 6.57
         },
         {
           "ar": 2023,
-          "utbytte": 10.42,
-          "yield": 14.52
+          "utbytte": 10.41,
+          "yield": 14.51
         },
         {
           "ar": 2024,
           "utbytte": 13.27,
-          "yield": 18.5
+          "yield": 18.49
         },
         {
           "ar": 2025,
@@ -22178,10 +22178,10 @@
         {
           "ar": 2026,
           "utbytte": 4.49,
-          "yield": 6.26
+          "yield": 6.25
         }
       ],
-      "snitt_yield_5ar": 10.25,
+      "snitt_yield_5ar": 10.24,
       "beskrivelse": "Verdens største produkttankrederi. Frakter raffinerte petroleumsprodukter. Svært høy utbyttegrad fra sterk kontantstrøm. Aksjen er notert på Oslo Børs med en markedsverdi på rundt 39 milliarder kroner.\n\nUtbyttet utbetales kvartalsvis — fire utbetalinger i året, og selskapet har holdt dette gående i 6 år på rad. Direkteavkastningen er 4.8%, og 5-årsnittet på 8.5% plasserer HAFNI blant de solid-yielding aksjene i sin sektor. Utbetalingsgraden er 60%, noe som er balansert for en moden utbytteaksje. Utbyttet har falt med i snitt 22.5% per år de siste fem årene.\n\nFraktrater varierer kraftig med globalt handelsmønster og flåtekapasitet, og utbyttet svinger tilsvarende. Historikken viser klare svingninger: høyest utbytte var 12.84 NOK per aksje i 2024, lavest 1.65 NOK i 2026.",
       "beskrivelse_fakta": "Hafnia Limited owns and operates oil product tankers in Bermuda. It operates through Long Range II, Long Range I, Medium Range (MR), Handy size, and Specialized segments. The company transports clean and dirty, refined oil products, vegetable oil, and easy chemicals to national and international oil companies, and chemical companies, as well as trading and utility companies; and owns and operates 207 vessels. It provides ship owning, ship-management, investment, management, corporate support, and agency office services. In addition, the company provides chartering services.",
       "valuta": "NOK",
@@ -25628,7 +25628,7 @@
         },
         {
           "d": "2022-02-20",
-          "k": 159.1
+          "k": 159.11
         },
         {
           "d": "2022-02-27",
@@ -30542,35 +30542,35 @@
       "rapport_dato": "2026-08-24",
       "frekvens": "Kvartalsvis",
       "ar_med_utbytte": 12,
-      "siste_utbytte": 0.61,
+      "siste_utbytte": 0.6,
       "historiske_utbytter": [
         {
           "ar": 2022,
-          "utbytte": 1.36,
+          "utbytte": 1.35,
           "yield": 3.09
         },
         {
           "ar": 2023,
-          "utbytte": 1.36,
+          "utbytte": 1.35,
           "yield": 3.09
         },
         {
           "ar": 2024,
           "utbytte": 2.67,
-          "yield": 6.09
+          "yield": 6.08
         },
         {
           "ar": 2025,
           "utbytte": 3.17,
-          "yield": 7.24
+          "yield": 7.23
         },
         {
           "ar": 2026,
-          "utbytte": 2.38,
-          "yield": 5.43
+          "utbytte": 2.37,
+          "yield": 5.42
         }
       ],
-      "snitt_yield_5ar": 4.99,
+      "snitt_yield_5ar": 4.98,
       "beskrivelse": "FPSO-operatør (flytende produksjon og lagring av olje). Langvarige kontrakter gir stabil kontantstrøm.\n\nUtbyttet utbetales kvartalsvis — fire utbetalinger i året, og selskapet har holdt dette gående i 12 år på rad. Direkteavkastningen er 6.3%, og 5-årsnittet på 4.1% plasserer BWO blant de solid-yielding aksjene i sin sektor. Utbetalingsgraden på 44% er lav og gir selskapet solid buffer til å opprettholde utbyttet ved svakere kvartaler. Utbyttet har vokst med i snitt 11.8% per år de siste fem årene.",
       "beskrivelse_fakta": "BW Offshore Limited engages in the engineering of offshore production solutions in the Americas, Europe, Africa, Asia, and the Pacific. It operates through Floating Production, Storage, and Offloading (FPSO); and Floating Wind segments. The company is involved in the construction, lease, and operation of FPSOs, as well as floating offshore wind. BW Offshore Limited was founded in 1982 and is based in Hamilton, Bermuda.",
       "valuta": "NOK",
@@ -31658,7 +31658,7 @@
       "pris": 273.8,
       "52u_hoy": 303.0,
       "52u_lav": 241.4,
-      "markedsverdi_mrd": 136.9,
+      "markedsverdi_mrd": 0.0,
       "utbytte_per_aksje": 10.0,
       "utbytte_yield": 3.65,
       "utbytte_vekst_5ar": 29.4,
@@ -38263,7 +38263,7 @@
       "rapport_dato": "2026-08-11",
       "frekvens": "Halvårlig",
       "ar_med_utbytte": 11,
-      "siste_utbytte": 9.78,
+      "siste_utbytte": 9.77,
       "historiske_utbytter": [
         {
           "ar": 2022,
@@ -38273,7 +38273,7 @@
         {
           "ar": 2023,
           "utbytte": 8.73,
-          "yield": 6.34
+          "yield": 6.33
         },
         {
           "ar": 2024,
@@ -38287,11 +38287,11 @@
         },
         {
           "ar": 2026,
-          "utbytte": 9.78,
-          "yield": 7.1
+          "utbytte": 9.77,
+          "yield": 7.09
         }
       ],
-      "snitt_yield_5ar": 9.13,
+      "snitt_yield_5ar": 9.12,
       "beskrivelse": "Verdensledende innen bil- og høy-og-tung transport til sjøs (ro-ro). Betjener globale bilprodusenter med en moderne flåte. Aksjen er notert på Oslo Børs med en markedsverdi på rundt 50 milliarder kroner.\n\nUtbyttet utbetales halvårlig — to utbetalinger i året, og selskapet har holdt dette gående i 11 år på rad. Direkteavkastningen er 11.0%, og 5-årsnittet på 10.5% plasserer WAWI blant de høyest-yielding aksjene i sin sektor. Utbetalingsgraden er 59%, noe som er balansert for en moden utbytteaksje. Utbyttet har vokst med i snitt 60.1% per år de siste fem årene.\n\nFraktrater varierer kraftig med globalt handelsmønster og flåtekapasitet, og utbyttet svinger tilsvarende. Historikken viser klare svingninger: høyest utbytte var 24.26 NOK per aksje i 2025, lavest 1.44 NOK i 2022.",
       "beskrivelse_fakta": "Wallenius Wilhelmsen ASA, together with its subsidiaries, engages in the logistics and transportation business worldwide. It operates in three segments: Shipping Services, Logistics Services, and Government Services. The company provides ship management services, including crewing, technical, and management; insurance brokerage services; agency services; freight and liner services; and marine products to vessels. It also offers ocean transport of RoRo cargo, breakbulk and vehicles, as well as manufacturers, construction, and other high and heavy equipment.",
       "valuta": "NOK",
@@ -41740,7 +41740,7 @@
         },
         {
           "d": "2025-02-16",
-          "k": 28.01
+          "k": 28.02
         },
         {
           "d": "2025-02-23",
@@ -48585,7 +48585,7 @@
       "52u_hoy": 561.0,
       "52u_lav": 227.5,
       "markedsverdi_mrd": 20.7,
-      "utbytte_per_aksje": 20.52,
+      "utbytte_per_aksje": 20.51,
       "utbytte_yield": 3.86,
       "utbytte_vekst_5ar": 65.5,
       "payout_ratio": 58.0,
@@ -48596,7 +48596,7 @@
       "rapport_dato": "2026-08-04",
       "frekvens": "Kvartalsvis",
       "ar_med_utbytte": 7,
-      "siste_utbytte": 19.36,
+      "siste_utbytte": 19.35,
       "historiske_utbytter": [
         {
           "ar": 2022,
@@ -48610,17 +48610,17 @@
         },
         {
           "ar": 2024,
-          "utbytte": 32.92,
+          "utbytte": 32.91,
           "yield": 6.2
         },
         {
           "ar": 2025,
-          "utbytte": 20.52,
+          "utbytte": 20.51,
           "yield": 3.86
         },
         {
           "ar": 2026,
-          "utbytte": 34.37,
+          "utbytte": 34.34,
           "yield": 6.47
         }
       ],
@@ -51870,21 +51870,47 @@
       "52u_hoy": 116.3,
       "52u_lav": 55.75,
       "markedsverdi_mrd": 18.4,
-      "utbytte_per_aksje": 0.7,
-      "utbytte_yield": 0.83,
-      "utbytte_vekst_5ar": 0.0,
+      "utbytte_per_aksje": 0.35,
+      "utbytte_yield": 0.42,
+      "utbytte_vekst_5ar": 14.9,
       "payout_ratio": 20.0,
       "pe_ratio": 23.1,
       "pb_ratio": 4.77,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-10-22",
-      "frekvens": "Uregelmessig",
-      "ar_med_utbytte": 0,
-      "siste_utbytte": 0.0,
-      "historiske_utbytter": [],
-      "snitt_yield_5ar": 0.0,
-      "beskrivelse": "Nordisk elektronikkprodusent og kontraktsprodusent for forsvar, medisin og industri. Aksjen er notert på Oslo Børs med en markedsverdi på rundt 22 milliarder kroner.\n\nUtbyttet utbetales uregelmessig, og selskapet har betalt utbytte de siste 0 år. Direkteavkastningen er 0.3%, og 5-årsnittet på 0.5% plasserer KIT i det lavere sjiktet aksjene i sin sektor. Utbetalingsgraden på 13% er lav og gir selskapet solid buffer til å opprettholde utbyttet ved svakere kvartaler. Utbyttet har falt med i snitt 15.9% per år de siste fem årene.\n\nOrdreinngangen varierer med konjunkturen, men langsiktige kontrakter kan gi god sikt på inntjening. Historikken viser klare svingninger: høyest utbytte var 0.75 NOK per aksje i 2024, lavest 0.25 NOK i 2022.",
+      "frekvens": "Årlig",
+      "ar_med_utbytte": 16,
+      "siste_utbytte": 0.7,
+      "historiske_utbytter": [
+        {
+          "ar": 2022,
+          "utbytte": 0.25,
+          "yield": 0.3
+        },
+        {
+          "ar": 2023,
+          "utbytte": 0.5,
+          "yield": 0.59
+        },
+        {
+          "ar": 2024,
+          "utbytte": 0.75,
+          "yield": 0.89
+        },
+        {
+          "ar": 2025,
+          "utbytte": 0.35,
+          "yield": 0.42
+        },
+        {
+          "ar": 2026,
+          "utbytte": 0.7,
+          "yield": 0.83
+        }
+      ],
+      "snitt_yield_5ar": 0.61,
+      "beskrivelse": "Nordisk elektronikkprodusent og kontraktsprodusent for forsvar, medisin og industri. Aksjen er notert på Oslo Børs med en markedsverdi på rundt 22 milliarder kroner.\n\nUtbyttet utbetales én gang i året, og selskapet har holdt dette gående i 16 år på rad. Direkteavkastningen er 0.3%, og 5-årsnittet på 0.5% plasserer KIT i det lavere sjiktet aksjene i sin sektor. Utbetalingsgraden på 13% er lav og gir selskapet solid buffer til å opprettholde utbyttet ved svakere kvartaler. Utbyttet har falt med i snitt 15.9% per år de siste fem årene.\n\nOrdreinngangen varierer med konjunkturen, men langsiktige kontrakter kan gi god sikt på inntjening. Historikken viser klare svingninger: høyest utbytte var 0.75 NOK per aksje i 2024, lavest 0.25 NOK i 2022.",
       "beskrivelse_fakta": "Kitron ASA operates as an electronics manufacturing services provider in Norway, Sweden, Denmark, Lithuania, Germany, Poland, the Czech Republic, India, China, Malaysia, and the United States. The company manufactures and sells electronics that are embedded in the customer's own products; and box-built electronic products.",
       "valuta": "NOK",
       "kurs_historikk": [
@@ -60650,35 +60676,35 @@
       "rapport_dato": null,
       "frekvens": "Kvartalsvis",
       "ar_med_utbytte": 8,
-      "siste_utbytte": 133.59,
+      "siste_utbytte": 133.49,
       "historiske_utbytter": [
         {
           "ar": 2022,
-          "utbytte": 15.68,
-          "yield": 548.34
+          "utbytte": 15.67,
+          "yield": 547.94
         },
         {
           "ar": 2023,
-          "utbytte": 7.94,
-          "yield": 277.55
+          "utbytte": 7.93,
+          "yield": 277.35
         },
         {
           "ar": 2024,
-          "utbytte": 34.66,
-          "yield": 1211.76
+          "utbytte": 34.63,
+          "yield": 1210.88
         },
         {
           "ar": 2025,
-          "utbytte": 14.13,
-          "yield": 494.18
+          "utbytte": 14.12,
+          "yield": 493.82
         },
         {
           "ar": 2026,
-          "utbytte": 138.24,
-          "yield": 4833.52
+          "utbytte": 138.14,
+          "yield": 4830.01
         }
       ],
-      "snitt_yield_5ar": 1473.07,
+      "snitt_yield_5ar": 1472.0,
       "beskrivelse": "Tørrbulkrederi med Newcastlemax-skip optimert for jernmalm og kull. Høy utbyttegrad fra sterk TCE.\n\nUtbyttet utbetales kvartalsvis — fire utbetalinger i året, og selskapet har holdt dette gående i 8 år på rad. Direkteavkastningen er 9.0%, og 5-årsnittet på 11.5% plasserer 2020 blant de høyest-yielding aksjene i sin sektor. En utbetalingsgrad på 113% betyr at det meste av inntjeningen deles ut — utbyttet er dermed sensitivt for resultatsvingninger. Utbyttet har falt med i snitt 29.0% per år de siste fem årene.\n\nFraktrater varierer kraftig med globalt handelsmønster og flåtekapasitet, og utbyttet svinger tilsvarende. Historikken viser klare svingninger: høyest utbytte var 33.53 NOK per aksje i 2024, lavest 4.50 NOK i 2026.",
       "beskrivelse_fakta": "2020 Bulkers Ltd. owns and operates large dry bulk vessels worldwide. It operates six scrubber fitted 208,000 deadweight tonnage Newcastlemax dry bulk vessels. 2020 Bulkers Ltd. was incorporated in 2017 and is based in Hamilton, Bermuda.",
       "valuta": "NOK",
@@ -67241,47 +67267,47 @@
       "pris": 318.0,
       "52u_hoy": 358.5,
       "52u_lav": 281.5,
-      "markedsverdi_mrd": 21.1,
+      "markedsverdi_mrd": 0.0,
       "utbytte_per_aksje": 18.5,
       "utbytte_yield": 5.82,
       "utbytte_vekst_5ar": 14.9,
       "payout_ratio": 48.0,
       "pe_ratio": 7.56,
-      "pb_ratio": 0.68,
+      "pb_ratio": 0.7,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-10-01",
       "frekvens": "Halvårlig",
       "ar_med_utbytte": 22,
-      "siste_utbytte": 9.68,
+      "siste_utbytte": 9.67,
       "historiske_utbytter": [
         {
           "ar": 2022,
-          "utbytte": 14.52,
-          "yield": 4.57
+          "utbytte": 14.51,
+          "yield": 4.56
         },
         {
           "ar": 2023,
-          "utbytte": 21.78,
-          "yield": 6.85
+          "utbytte": 21.77,
+          "yield": 6.84
         },
         {
           "ar": 2024,
-          "utbytte": 26.62,
+          "utbytte": 26.6,
           "yield": 8.37
         },
         {
           "ar": 2025,
-          "utbytte": 21.78,
-          "yield": 6.85
+          "utbytte": 21.77,
+          "yield": 6.84
         },
         {
           "ar": 2026,
-          "utbytte": 9.68,
+          "utbytte": 9.67,
           "yield": 3.04
         }
       ],
-      "snitt_yield_5ar": 5.94,
+      "snitt_yield_5ar": 5.93,
       "beskrivelse": "Internasjonalt konsern innen kjemikalietankere, tankterminalvirksomhet og akvakultur. Diversifisert og solid utbyttebetaler over mange år. Aksjen er notert på Oslo Børs med en markedsverdi på rundt 20 milliarder kroner.\n\nUtbyttet utbetales halvårlig — to utbetalinger i året, og selskapet har holdt dette gående i 22 år på rad. Direkteavkastningen er 6.2%, og 5-årsnittet på 6.6% plasserer SNI blant de solid-yielding aksjene i sin sektor. Utbetalingsgraden på 49% er lav og gir selskapet solid buffer til å opprettholde utbyttet ved svakere kvartaler. Utbyttet har vokst med i snitt 31.6% per år de siste fem årene.\n\nFraktrater varierer kraftig med globalt handelsmønster og flåtekapasitet, og utbyttet svinger tilsvarende. Historikken viser klare svingninger: høyest utbytte var 25.76 NOK per aksje i 2024, lavest 14.05 NOK i 2022.",
       "beskrivelse_fakta": "Stolt-Nielsen Limited, together with its subsidiaries, provides transportation, storage, and distribution solutions for bulk liquid chemicals, edible oils, acids, and other specialty liquids worldwide. It operates through five segments: Tankers, Terminals, Tank Containers, Stolt Sea Farm, and Stolt-Nielsen Gas. The company also produces, processes, and markets seafood, including turbot and sole; and stores and handles chemicals, clean petroleum products, liquefied petroleum gases, vegetable oils, and biofuels, as well as alternative fuels and feedstocks.",
       "valuta": "NOK",
@@ -68420,7 +68446,7 @@
         },
         {
           "d": "2021-10-03",
-          "k": 278.18
+          "k": 278.19
         },
         {
           "d": "2021-10-10",
@@ -72727,7 +72753,7 @@
       "utbytte_vekst_5ar": 3.8,
       "payout_ratio": 50.5,
       "pe_ratio": 11.52,
-      "pb_ratio": 1.43,
+      "pb_ratio": 1.45,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-07-23",
@@ -73540,7 +73566,7 @@
         },
         {
           "d": "2025-04-20",
-          "k": 69.34
+          "k": 69.35
         },
         {
           "d": "2025-04-27",
@@ -84721,7 +84747,7 @@
       "utbytte_vekst_5ar": 10.3,
       "payout_ratio": 51.0,
       "pe_ratio": 5.89,
-      "pb_ratio": 0.95,
+      "pb_ratio": 0.94,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-08-20",
@@ -93631,7 +93657,7 @@
       "utbytte_vekst_5ar": 168.9,
       "payout_ratio": 305.0,
       "pe_ratio": 25.07,
-      "pb_ratio": 7.35,
+      "pb_ratio": 7.57,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-10-28",
@@ -96910,7 +96936,7 @@
       "pris": 205.5,
       "52u_hoy": 221.5,
       "52u_lav": 169.2,
-      "markedsverdi_mrd": 76.4,
+      "markedsverdi_mrd": 77.1,
       "utbytte_per_aksje": 12.0,
       "utbytte_yield": 5.84,
       "utbytte_vekst_5ar": 31.1,
@@ -99106,7 +99132,7 @@
       "52u_hoy": 154.0,
       "52u_lav": 67.4,
       "markedsverdi_mrd": 6.8,
-      "utbytte_per_aksje": 5.52,
+      "utbytte_per_aksje": 5.51,
       "utbytte_yield": 3.85,
       "utbytte_vekst_5ar": 36.9,
       "payout_ratio": 128.0,
@@ -99121,12 +99147,12 @@
       "historiske_utbytter": [
         {
           "ar": 2024,
-          "utbytte": 4.65,
+          "utbytte": 4.64,
           "yield": 3.24
         },
         {
           "ar": 2025,
-          "utbytte": 5.52,
+          "utbytte": 5.51,
           "yield": 3.85
         },
         {
@@ -120063,7 +120089,7 @@
       "markedsverdi_mrd": 18.8,
       "utbytte_per_aksje": 0.2,
       "utbytte_yield": 1.01,
-      "utbytte_vekst_5ar": 174.9,
+      "utbytte_vekst_5ar": 174.8,
       "payout_ratio": 122.0,
       "pe_ratio": 37.51,
       "pb_ratio": 0.91,
@@ -120082,10 +120108,10 @@
         {
           "ar": 2026,
           "utbytte": 0.55,
-          "yield": 2.77
+          "yield": 2.76
         }
       ],
-      "snitt_yield_5ar": 1.89,
+      "snitt_yield_5ar": 1.88,
       "beskrivelse": "Norsk eiendomsselskap spesialisert på offentlige leietakere som kommuner, sykehus og statlige etater. Svært stabile leieforhold og lang gjenværende leietid. Aksjen er notert på Oslo Børs med en markedsverdi på rundt 20 milliarder kroner.\n\nUtbyttet utbetales kvartalsvis — fire utbetalinger i året, og selskapet har holdt dette gående i 2 år på rad. Direkteavkastningen er 0.9%, og 5-årsnittet på 1.2% plasserer PUBLI i det lavere sjiktet aksjene i sin sektor. Utbetalingsgraden på 22% er lav og gir selskapet solid buffer til å opprettholde utbyttet ved svakere kvartaler. Utbyttet har vokst med i snitt 50.0% per år de siste fem årene.\n\nLeieinntekter gir forutsigbar kontantstrøm, men renteendringer påvirker både refinansiering og eiendomsverdier.",
       "beskrivelse_fakta": "Public Property Invest ASA, a real estate company, owns, develops, operates, and rents real estate properties in Norway. The company's property portfolio, including social infrastructure properties, as well as rental of office spaces. It serves tenants within the public sector, such as the police, judiciary functions, and public health organizations. Public Property Invest ASA was incorporated in August 16th, 2018 and is headquartered in Oslo, Norway.",
       "valuta": "NOK",
@@ -123495,7 +123521,7 @@
         },
         {
           "d": "2024-11-10",
-          "k": 397.6
+          "k": 397.59
         },
         {
           "d": "2024-11-17",
@@ -133831,7 +133857,7 @@
         },
         {
           "d": "2025-03-09",
-          "k": 155.67
+          "k": 155.66
         },
         {
           "d": "2025-03-16",
@@ -136353,7 +136379,7 @@
         },
         {
           "ar": 2026,
-          "utbytte": 8.23,
+          "utbytte": 8.22,
           "yield": 5.59
         }
       ],
@@ -136573,13 +136599,13 @@
       "pris": 6.02,
       "52u_hoy": 6.8,
       "52u_lav": 5.22,
-      "markedsverdi_mrd": 0.7,
+      "markedsverdi_mrd": 0.0,
       "utbytte_per_aksje": 0.17,
       "utbytte_yield": 2.82,
       "utbytte_vekst_5ar": -9.7,
       "payout_ratio": 26.0,
-      "pe_ratio": 28.67,
-      "pb_ratio": 0.18,
+      "pe_ratio": 0.0,
+      "pb_ratio": 0.0,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-08-31",
@@ -136590,7 +136616,7 @@
         {
           "ar": 2022,
           "utbytte": 0.97,
-          "yield": 16.08
+          "yield": 16.07
         },
         {
           "ar": 2023,
@@ -144621,7 +144647,7 @@
       "navn": "SoftwareOne Holding AG",
       "sektor": "Informasjonsteknologi",
       "bors": "Oslo Børs",
-      "pris": 8.38,
+      "pris": 8.39,
       "52u_hoy": 9.4,
       "52u_lav": 5.83,
       "markedsverdi_mrd": 1.8,
@@ -144641,17 +144667,17 @@
         {
           "ar": 2022,
           "utbytte": 0.33,
-          "yield": 3.94
+          "yield": 3.93
         },
         {
           "ar": 2023,
           "utbytte": 0.35,
-          "yield": 4.18
+          "yield": 4.17
         },
         {
           "ar": 2024,
           "utbytte": 0.36,
-          "yield": 4.3
+          "yield": 4.29
         },
         {
           "ar": 2025,
@@ -144664,7 +144690,7 @@
           "yield": 1.79
         }
       ],
-      "snitt_yield_5ar": 3.56,
+      "snitt_yield_5ar": 3.55,
       "beskrivelse": "Sveitsisk global leverandør av programvarelisensstyring og skymigreringer, notert på Oslo Børs. Hjelper selskaper optimere IT-utgifter og digitalisere. Betaler utbytte til aksjonærene halvårlig.\n\nUtbyttet utbetales én gang i året, og selskapet har holdt dette gående i 7 år på rad. Direkteavkastningen er 2.1%, og 5-årsnittet på 4.8% plasserer SWON i det lavere sjiktet aksjene i sin sektor. En utbetalingsgrad på 360% betyr at det meste av inntjeningen deles ut — utbyttet er dermed sensitivt for resultatsvingninger.",
       "beskrivelse_fakta": "SoftwareOne Holding AG, together with its subsidiaries, provides software and cloud solutions in Germany, Austria, Switzerland, Middle East and Africa, Northern Europe, Central and Eastern Europe, the United States of America, Canada, Latin America, and Asia Pacific. The company develops and delivers the technology solutions that modernize applications and software in the cloud.",
       "valuta": "CHF",
@@ -145707,7 +145733,7 @@
         },
         {
           "d": "2026-07-26",
-          "k": 8.39
+          "k": 8.4
         }
       ],
       "ask_egnet": false,
@@ -145724,13 +145750,13 @@
       "pris": 9.75,
       "52u_hoy": 20.0,
       "52u_lav": 6.3,
-      "markedsverdi_mrd": 3.2,
+      "markedsverdi_mrd": 0.0,
       "utbytte_per_aksje": 0.0,
       "utbytte_yield": 0.0,
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 0.0,
       "pe_ratio": 25.66,
-      "pb_ratio": 0.93,
+      "pb_ratio": 0.0,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-08-06",
@@ -151159,8 +151185,8 @@
         },
         {
           "ar": 2025,
-          "utbytte": 8.52,
-          "yield": 18.78
+          "utbytte": 8.51,
+          "yield": 18.77
         },
         {
           "ar": 2026,
@@ -151168,7 +151194,7 @@
           "yield": 9.11
         }
       ],
-      "snitt_yield_5ar": 12.43,
+      "snitt_yield_5ar": 12.42,
       "beskrivelse": "Norsk offshore brønnserviceselskap med spesialisering på brønnintervensjon og lettkabel-operasjoner. Betaler utbytte til aksjonærene basert på aktivitetsnivået i norsk og internasjonal olje- og gassindustri.\n\nUtbyttet utbetales kvartalsvis — fire utbetalinger i året, og selskapet har holdt dette gående i 3 år på rad. Direkteavkastningen er 18.2%, og 5-årsnittet på 10.0% plasserer PLSV blant de høyest-yielding aksjene i sin sektor. En utbetalingsgrad på 191% betyr at det meste av inntjeningen deles ut — utbyttet er dermed sensitivt for resultatsvingninger. Utbyttet har falt med i snitt 29.3% per år de siste fem årene.",
       "beskrivelse_fakta": "Paratus Energy Services Ltd., through its subsidiaries, provides drilling services and operates a fleet of jack-up rigs under contracts in Mexico. The company also operates a fleet of pipe-laying support vessels under contracts in Brazil; and offers subsea engineering, installation, and other services, as well as well integrity and intervention, plug and abandonment, and decommissioning services to its upstream oil and gas clients. The company was incorporated in 2018 and is based in Hamilton, Bermuda.",
       "valuta": "NOK",
