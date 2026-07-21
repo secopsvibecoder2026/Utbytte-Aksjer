@@ -1841,42 +1841,50 @@
     {
       "ticker": "ENTR",
       "dato": "2026-07-21",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/678472"
     },
     {
       "ticker": "KMCP",
       "dato": "2026-07-21",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/678472"
     },
     {
       "ticker": "SBMO",
       "dato": "2026-07-21",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/678472"
     },
     {
       "ticker": "SRHA",
       "dato": "2026-07-21",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/678472"
     },
     {
       "ticker": "STRONG",
       "dato": "2026-07-21",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/678472"
     },
     {
       "ticker": "VAR",
       "dato": "2026-07-21",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/678468"
     },
     {
       "ticker": "VISTIN",
       "dato": "2026-07-21",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/678472"
     },
     {
       "ticker": "WWIB",
       "dato": "2026-07-21",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/678472"
     },
     {
       "ticker": "EQNR",
@@ -3144,6 +3152,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "VAR",
+      "dato": "2026-10-21",
+      "type": "rapport"
+    },
+    {
       "ticker": "VISTIN",
       "dato": "2026-10-21",
       "type": "rapport"
@@ -3334,5 +3347,5 @@
       "type": "rapport"
     }
   ],
-  "sist_oppdatert": "2026-07-20"
+  "sist_oppdatert": "2026-07-21"
 }
