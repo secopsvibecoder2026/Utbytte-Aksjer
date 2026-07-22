@@ -1889,12 +1889,14 @@
     {
       "ticker": "EQNR",
       "dato": "2026-07-22",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/678526"
     },
     {
       "ticker": "NHY",
       "dato": "2026-07-22",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/678534"
     },
     {
       "ticker": "TGS",
@@ -3237,6 +3239,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "NHY",
+      "dato": "2026-10-23",
+      "type": "rapport"
+    },
+    {
       "ticker": "TOM",
       "dato": "2026-10-23",
       "type": "rapport"
@@ -3263,6 +3270,11 @@
     },
     {
       "ticker": "BRG",
+      "dato": "2026-10-28",
+      "type": "rapport"
+    },
+    {
+      "ticker": "EQNR",
       "dato": "2026-10-28",
       "type": "rapport"
     },
@@ -3382,5 +3394,5 @@
       "type": "rapport"
     }
   ],
-  "sist_oppdatert": "2026-07-21"
+  "sist_oppdatert": "2026-07-22"
 }
