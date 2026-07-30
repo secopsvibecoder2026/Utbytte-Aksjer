@@ -1959,27 +1959,32 @@
     {
       "ticker": "ENTR",
       "dato": "2026-07-30",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/678806"
     },
     {
       "ticker": "KMCP",
       "dato": "2026-07-30",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/678806"
     },
     {
       "ticker": "SBMO",
       "dato": "2026-07-30",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/678806"
     },
     {
       "ticker": "SRHA",
       "dato": "2026-07-30",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/678806"
     },
     {
       "ticker": "STRONG",
       "dato": "2026-07-30",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/678806"
     },
     {
       "ticker": "SUBC",
@@ -1989,12 +1994,14 @@
     {
       "ticker": "VISTIN",
       "dato": "2026-07-30",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/678806"
     },
     {
       "ticker": "WWIB",
       "dato": "2026-07-30",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/678806"
     },
     {
       "ticker": "ENTR",
@@ -3317,6 +3324,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "BWE",
+      "dato": "2026-10-29",
+      "type": "rapport"
+    },
+    {
       "ticker": "ELK",
       "dato": "2026-10-29",
       "type": "rapport"
@@ -3377,6 +3389,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "SUBC",
+      "dato": "2026-11-19",
+      "type": "rapport"
+    },
+    {
       "ticker": "AQUA",
       "dato": "2027-05-28",
       "type": "rapport"
@@ -3412,5 +3429,5 @@
       "type": "rapport"
     }
   ],
-  "sist_oppdatert": "2026-07-29"
+  "sist_oppdatert": "2026-07-30"
 }
