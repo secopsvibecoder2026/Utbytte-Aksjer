@@ -19,16 +19,17 @@ permissions:
   pages: write
   id-token: write
 
-concurrency:
-  group: "pages"
-  cancel-in-progress: true
-
 jobs:
   oppdater-data:
     name: Hent og oppdater aksjedata
     runs-on: ubuntu-latest
     # Kun kjøres på schedule og manuell trigger – ikke ved vanlig push
     if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    # Egen gruppe, atskilt fra Pages-deploy: en priscommit (som trigger
+    # deploy-only.yml) skal aldri kunne kansellere en pågående datahenting her.
+    concurrency:
+      group: "aksjedata-fetch"
+      cancel-in-progress: true
     steps:
       - name: Sjekk ut kode
         uses: actions/checkout@v4
@@ -75,6 +76,11 @@ jobs:
        needs.oppdater-data.result == 'skipped') &&
       github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+    # Delt med deploy-only.yml: overlappende deploy-forespørsler skal køes
+    # (ikke kansellere hverandre eller la deploy-pages time ut mot Pages-API).
+    concurrency:
+      group: "pages-deploy"
+      cancel-in-progress: false
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}

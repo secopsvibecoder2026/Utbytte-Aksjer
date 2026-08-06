@@ -19,8 +19,8 @@ permissions:
   contents: read
 
 concurrency:
-  group: "pages"
-  cancel-in-progress: true
+  group: "pages-deploy"
+  cancel-in-progress: false
 
 jobs:
   deploy:
