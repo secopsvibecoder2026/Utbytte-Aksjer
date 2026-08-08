@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3981936786393038"
+     crossorigin="anonymous"></script>
+
+  <!-- Google Analytics med Consent Mode v2 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-X6C9PERKMB"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', {
+      analytics_storage: 'denied',
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      wait_for_update: 500
+    });
+    gtag('js', new Date());
+    gtag('config', 'G-X6C9PERKMB');
+  </script>
+  <script src="/assets/consent.js" defer></script>
+
+  <link rel="icon" type="image/png" href="/favicon.png" sizes="512x512" />
+  <link rel="apple-touch-icon" href="/logo/apple_touch_icon_180.png" />
+  <link rel="icon" type="image/svg+xml" href="/logo/exday_icon_primary.svg" />
+
+  <title>Sparebanker på Oslo Børs — hvorfor de gir stabile utbytter år etter år | exday.no</title>
+  <meta name="description" content="30 sparebanker er notert på Oslo Børs, og flere har betalt utbytte 27 år på rad. Lær hvordan egenkapitalbevis og utjevningsfondet gjør utbyttet så stabilt — og hvilke risikoer du må kjenne." />
+  <link rel="canonical" href="https://exday.no/artikler/sparebanker-oslo-bors/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://exday.no/artikler/sparebanker-oslo-bors/" />
+  <meta property="og:title" content="Sparebanker på Oslo Børs — hvorfor de gir stabile utbytter år etter år" />
+  <meta property="og:description" content="30 sparebanker på Oslo Børs, flere med 27 år sammenhengende utbytte. Slik fungerer egenkapitalbevis, eierbrøk og utjevningsfondet." />
+  <meta property="og:site_name" content="exday.no" />
+
+  <link rel="stylesheet" href="/assets/tailwind.css" />
+  <link rel="stylesheet" href="/assets/style.css" />
+
+  <script>
+    (function() {
+      var t = localStorage.getItem('tema');
+      if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
+      }
+    })();
+  </script>
+
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+    .prose h2 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      margin-top: 2.5rem;
+      margin-bottom: 0.75rem;
+      color: inherit;
+    }
+    .prose h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-top: 1.75rem;
+      margin-bottom: 0.5rem;
+      color: inherit;
+    }
+    .prose p { margin-bottom: 1rem; line-height: 1.75; }
+    .prose ul { margin: 0.75rem 0 1rem 1.5rem; list-style: disc; }
+    .prose ol { margin: 0.75rem 0 1rem 1.5rem; list-style: decimal; }
+    .prose li { margin-bottom: 0.4rem; line-height: 1.7; }
+    .prose table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.9rem; display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .prose th { text-align: left; padding: 0.6rem 0.9rem; background: #f3f4f6; font-weight: 600; border: 1px solid #e5e7eb; }
+    .dark .prose th { background: #1f2937; border-color: #374151; }
+    .prose td { padding: 0.6rem 0.9rem; border: 1px solid #e5e7eb; vertical-align: top; }
+    .dark .prose td { border-color: #374151; }
+    .prose tr:nth-child(even) td { background: #f9fafb; }
+    .dark .prose tr:nth-child(even) td { background: #111827; }
+    .callout {
+      border-left: 4px solid #2563eb;
+      background: #eff6ff;
+      padding: 1rem 1.25rem;
+      border-radius: 0 0.5rem 0.5rem 0;
+      margin: 1.5rem 0;
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+    .dark .callout { background: #1e3a5f; border-color: #3b82f6; }
+    .callout-green {
+      border-color: #16a34a;
+      background: #f0fdf4;
+    }
+    .dark .callout-green { background: #052e16; border-color: #4ade80; }
+    .callout-warn {
+      border-color: #d97706;
+      background: #fffbeb;
+    }
+    .dark .callout-warn { background: #2d1f00; border-color: #f59e0b; }
+    .callout-red {
+      border-color: #dc2626;
+      background: #fef2f2;
+    }
+    .dark .callout-red { background: #2d0f0f; border-color: #f87171; }
+    details summary { cursor: pointer; list-style: none; }
+    details summary::-webkit-details-marker { display: none; }
+    details summary .chevron { transition: transform 0.2s ease; flex-shrink: 0; }
+    details[open] summary .chevron { transform: rotate(180deg); }
+    .toc a { color: #16a34a; text-decoration: none; }
+    .toc a:hover { text-decoration: underline; }
+    .dark .toc a { color: #4ade80; }
+    .tool-cta {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 0.75rem;
+      padding: 1rem 1.25rem;
+      margin: 1.75rem 0;
+      text-decoration: none;
+      color: inherit;
+      transition: border-color 0.15s;
+    }
+    .tool-cta:hover { border-color: #22c55e; }
+    .dark .tool-cta { background: rgba(20,83,45,0.2); border-color: #166534; }
+    .dark .tool-cta:hover { border-color: #4ade80; }
+    .tool-cta-icon {
+      width: 2.5rem;
+      height: 2.5rem;
+      background: #22c55e;
+      border-radius: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .sector-badge {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      padding: 0.15rem 0.55rem;
+      border-radius: 9999px;
+      background: #f3e8ff;
+      color: #7c3aed;
+    }
+    .dark .sector-badge { background: #1a0533; color: #c4b5fd; }
+    .guide-badge {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      padding: 0.15rem 0.55rem;
+      border-radius: 9999px;
+      background: #dcfce7;
+      color: #15803d;
+    }
+    .dark .guide-badge { background: #052e16; color: #4ade80; }
+    .les-ogsa-lenke {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+  </style>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Sparebanker på Oslo Børs — hvorfor de gir stabile utbytter år etter år",
+    "description": "30 sparebanker er notert på Oslo Børs, og flere har betalt utbytte 27 år på rad. Lær hvordan egenkapitalbevis og utjevningsfondet gjør utbyttet så stabilt — og hvilke risikoer du må kjenne.",
+    "datePublished": "2026-08-08",
+    "dateModified": "2026-08-08",
+    "author": { "@type": "Organization", "name": "exday.no", "url": "https://exday.no" },
+    "publisher": { "@type": "Organization", "name": "exday.no", "url": "https://exday.no" },
+    "mainEntityOfPage": { "@type": "WebPage", "@id": "https://exday.no/artikler/sparebanker-oslo-bors/" }
+  }
+  </script>
+</head>
+<body class="bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 min-h-screen">
+
+  <nav class="site-nav" aria-label="Hovedmeny">
+    <div class="site-nav-inner">
+      <a href="/" class="site-logo" aria-label="exday.no - hjem">
+        <img src="/logo/exday_icon_primary.svg" class="site-logo-icon site-logo-icon-light" alt="" width="28" height="28" loading="eager"><img src="/logo/exday_icon_inverse.svg" class="site-logo-icon site-logo-icon-dark" alt="" width="28" height="28" loading="eager">
+        <span>e<span class="site-logo-x">x</span>day<span class="site-logo-dot">.no</span></span>
+      </a>
+      <ul class="site-nav-menu">
+        <li><a href="/aksjer/">Aksjer</a></li>
+        <li><a href="/aksjer/sektor/">Sektorer</a></li>
+        <li><a href="/utbyttekalender/">Kalender</a></li>
+        <li class="has-dropdown">
+          <a href="/verktoy/">Verktøy</a>
+          <ul class="nav-dropdown">
+            <li><a href="/verktoy/kalkulator/">Kalkulator</a></li>
+            <li><a href="/verktoy/huslan-vs-investering/">Huslån vs. Investering</a></li>
+            <li><a href="/verktoy/fire-kalkulator/">FIRE-kalkulator</a></li>
+            <li><a href="/verktoy/sektorrebalansering/">Sektorrebalansering</a></li>
+          </ul>
+        </li>
+        <li><a href="/artikler/" class="active">Artikler</a></li>
+        <li><a href="/faq/">FAQ</a></li>
+        <li><a href="/om/">Om</a></li>
+      </ul>
+      <div class="site-nav-actions">
+        <a href="https://exday.no/" class="site-app-btn">Åpne app</a>
+        <button id="site-dark-toggle" class="site-dark-btn" aria-label="Bytt fargemodus">
+          <svg class="sun-icon" width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+          <svg class="moon-icon" width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display:none;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+        </button>
+      </div>
+      <button class="site-nav-burger" aria-label="Vis meny" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+  <script>
+    (function() {
+      var nav = document.querySelector('.site-nav');
+      var burger = nav && nav.querySelector('.site-nav-burger');
+      if (burger) {
+        burger.addEventListener('click', function() {
+          nav.classList.toggle('open');
+          burger.setAttribute('aria-expanded', nav.classList.contains('open'));
+        });
+      }
+      var darkToggle = document.getElementById('site-dark-toggle');
+      if (darkToggle) {
+        darkToggle.addEventListener('click', function() {
+          var html = document.documentElement;
+          var isDark = html.classList.toggle('dark');
+          localStorage.setItem('tema', isDark ? 'dark' : 'light');
+        });
+      }
+    })();
+  </script>
+
+  <div class="max-w-2xl mx-auto px-4 sm:px-6 pt-8 pb-20">
+
+    <!-- Breadcrumb -->
+    <nav class="text-xs text-gray-400 dark:text-gray-600 mb-6" aria-label="Brødsmulesti">
+      <a href="/" class="hover:text-gray-600 dark:hover:text-gray-400 transition-colors">exday.no</a>
+      <span class="mx-1.5">›</span>
+      <a href="/artikler/" class="hover:text-gray-600 dark:hover:text-gray-400 transition-colors">Artikler</a>
+      <span class="mx-1.5">›</span>
+      <span class="text-gray-600 dark:text-gray-400">Sparebanker på Oslo Børs</span>
+    </nav>
+
+    <!-- Header -->
+    <header class="mb-8">
+      <div class="flex flex-wrap gap-2 mb-3">
+        <span class="sector-badge">Sektor</span>
+        <span class="guide-badge">Guide</span>
+      </div>
+      <h1 class="text-2xl sm:text-3xl font-bold leading-tight mb-3">
+        Sparebanker på Oslo Børs — hvorfor de gir stabile utbytter år etter år
+      </h1>
+      <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed mb-4">
+        Tretti sparebanker er notert på Oslo Børs, og tre av dem har betalt utbytte 27 år på rad — like lenge som Orkla og Veidekke. Bak stabiliteten ligger en eierform de fleste investorer aldri har hørt om: egenkapitalbeviset, og fondet som er konstruert nettopp for å jevne ut utbyttet i dårlige år.
+      </p>
+      <p class="text-xs text-gray-400 dark:text-gray-600">8. august 2026 · 13 min lesing</p>
+    </header>
+
+    <!-- Innholdsfortegnelse -->
+    <nav class="toc bg-gray-50 dark:bg-gray-900 rounded-xl p-4 sm:p-5 mb-8 text-sm" aria-label="Innholdsfortegnelse">
+      <p class="font-semibold text-gray-700 dark:text-gray-300 mb-2">Innhold</p>
+      <ol class="space-y-1 list-decimal list-inside text-gray-600 dark:text-gray-400">
+        <li><a href="#modellen">Sparebankmodellen: banken uten eiere</a></li>
+        <li><a href="#egenkapitalbevis">Egenkapitalbevis er ikke aksjer</a></li>
+        <li><a href="#historikken">Utbyttehistorikken: tallenes tale</a></li>
+        <li><a href="#hvorfor-stabilt">Fire grunner til at utbyttet er så stabilt</a></li>
+        <li><a href="#yield">Yield og utbytte i dag</a></li>
+        <li><a href="#pb-rabatten">P/B under 1 — hvorfor er de så «billige»?</a></li>
+        <li><a href="#risiko">Risikofaktorer du må kjenne</a></li>
+        <li><a href="#slik-velger-du">Slik velger du sparebank</a></li>
+      </ol>
+    </nav>
+
+    <article class="prose text-gray-700 dark:text-gray-300">
+
+      <!-- 1 -->
+      <h2 id="modellen">Sparebankmodellen: banken uten eiere</h2>
+
+      <p>
+        Den første norske sparebanken ble opprettet i Christiania i 1822. Formålet var ikke å skape avkastning til investorer, men å gi vanlige folk et trygt sted å spare. Den grunnleggende ideen har overlevd i over 200 år, og den forklarer mer om utbyttestabiliteten i sektoren enn noe regnskapstall.
+      </p>
+
+      <p>
+        En tradisjonell sparebank er nemlig en <strong>selveiende institusjon</strong>. Den har ingen aksjonærer i vanlig forstand. Egenkapitalen — kalt grunnfondskapitalen eller samfunnskapitalen — er bygget opp gjennom generasjoner med tilbakeholdt overskudd, og den «tilhører» i praksis lokalsamfunnet banken opererer i. Det finnes ingen eier som kan selge banken, ta ut kapitalen eller kreve høyere avkastning.
+      </p>
+
+      <p>
+        Det skaper en helt annen styringslogikk enn i et børsnotert allmennaksjeselskap. Der en forretningsbank som DNB måler seg mot egenkapitalavkastning og aksjonærkrav, har en sparebank historisk hatt soliditet og lokal tilstedeværelse som primære mål. Overskuddet som ikke ble delt ut, ble stående i banken — år etter år, tiår etter tiår.
+      </p>
+
+      <p>
+        Resultatet er en sektor med usedvanlig sterke balanser. Det er dette kapitalgrunnlaget som senere gjorde det mulig å betale jevne utbytter selv i år der inntjeningen sviktet.
+      </p>
+
+      <!-- 2 -->
+      <h2 id="egenkapitalbevis">Egenkapitalbevis er ikke aksjer</h2>
+
+      <p>
+        Problemet med den rene sparebankmodellen er åpenbart: en bank uten eiere kan ikke hente inn ny egenkapital. Den kan bare vokse så raskt som det tilbakeholdte overskuddet tillater. For banker som ønsket å vokse raskere enn det, var dette en reell begrensning.
+      </p>
+
+      <p>
+        Løsningen kom i 1987, da <strong>grunnfondsbeviset</strong> ble innført — omdøpt til <strong>egenkapitalbevis</strong> i 2009. Dette er et verdipapir som gir eieren rett til en andel av bankens overskudd og av egenkapitalen, men som ikke gjør vedkommende til eier av banken i vanlig forstand.
+      </p>
+
+      <p>
+        Når du kjøper det som ser ut som en «aksje» i Sparebanken Møre eller SpareBank 1 SMN på Oslo Børs, kjøper du i realiteten et egenkapitalbevis. Forskjellene fra en vanlig aksje er reelle og verdt å forstå:
+      </p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Egenskap</th>
+            <th>Vanlig aksje</th>
+            <th>Egenkapitalbevis</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Eierskap til selskapet</td><td>Ja, full eierandel</td><td>Nei — rett til andel av overskudd og egenkapital</td></tr>
+          <tr><td>Stemmerett</td><td>Én stemme per aksje i generalforsamlingen</td><td>Begrenset — eierne velger en <em>andel</em> av generalforsamlingen, typisk minst 20 %</td></tr>
+          <tr><td>Andel av overskuddet</td><td>Hele overskuddet tilhører aksjonærene</td><td>Kun andelen som svarer til eierbrøken</td></tr>
+          <tr><td>Ved oppkjøp/avvikling</td><td>Aksjonærene har krav på hele verdien</td><td>Krav begrenset til eierandelskapitalen</td></tr>
+          <tr><td>Utbytteutjevning</td><td>Ingen egen mekanisme</td><td>Utjevningsfondet kan brukes til å opprettholde utbytte</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Eierbrøken — nøkkelen til alt</h3>
+
+      <p>
+        Det sentrale begrepet er <strong>eierbrøken</strong>: forholdet mellom eierandelskapitalen (den delen som egenkapitalbeviseierne har skutt inn) og bankens samlede egenkapital. Har en bank en eierbrøk på 60 %, betyr det at 60 % av overskuddet tilfaller egenkapitalbeviseierne, mens 40 % tilfaller samfunnskapitalen.
+      </p>
+
+      <p>
+        Samfunnskapitalens andel går ikke i noens lomme. Den blir enten stående i banken som styrket soliditet, eller den deles ut som <strong>gaver til allmennyttige formål</strong> i regionen — idrettslag, kulturhus, forskningsprosjekter. Flere av de store sparebankene har egne sparebankstiftelser som forvalter denne delen.
+      </p>
+
+      <div class="callout callout-green">
+        <strong>Hvorfor dette betyr noe for deg:</strong> Utbyttet du mottar beregnes av <em>din</em> andel av overskuddet, ikke av hele overskuddet. Når en sparebank oppgir en utbetalingsgrad på for eksempel 50 %, refererer det normalt til andelen av egenkapitalbeviseiernes resultat — ikke av bankens totale resultat. Sammenlign derfor alltid utbetalingsgrad mellom sparebanker, ikke mellom en sparebank og et vanlig industriselskap.
+      </div>
+
+      <!-- 3 -->
+      <h2 id="historikken">Utbyttehistorikken: tallenes tale</h2>
+
+      <p>
+        Påstanden om at sparebanker er stabile utbyttebetalere er lett å teste. På exday.no ligger det per august 2026 <strong>30 sparebanker</strong> registrert i finanssektoren, og for hver av dem er antall sammenhengende år med utbytte registrert.
+      </p>
+
+      <p>
+        Ti av de tretti har en ubrutt utbytterekke på 20 år eller mer. Sytten har 15 år eller mer. Det er en påfallende høy andel for én enkelt sektor.
+      </p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Ticker</th>
+            <th>Bank</th>
+            <th>År med utbytte</th>
+            <th>Yield i dag</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>MING</strong></td><td>SpareBank 1 SMN</td><td>27 år</td><td>6,71 %</td></tr>
+          <tr><td><strong>SBMO</strong></td><td>Sparebanken Møre</td><td>27 år</td><td>6,22 %</td></tr>
+          <tr><td><strong>SBNOR</strong></td><td>Sparebanken Norge</td><td>27 år</td><td>6,03 %</td></tr>
+          <tr><td><strong>MELG</strong></td><td>Melhus Sparebank</td><td>26 år</td><td>7,11 %</td></tr>
+          <tr><td><strong>VVL</strong></td><td>Voss Veksel- og Landmandsbank</td><td>26 år</td><td>4,15 %</td></tr>
+          <tr><td><strong>HSPG</strong></td><td>Høland og Setskog Sparebank</td><td>26 år</td><td>3,29 %</td></tr>
+          <tr><td><strong>SPOG</strong></td><td>Sparebanken Øst</td><td>25 år</td><td>9,50 %</td></tr>
+          <tr><td><strong>SKUE</strong></td><td>Skue Sparebank</td><td>24 år</td><td>6,63 %</td></tr>
+          <tr><td><strong>NONG</strong></td><td>SpareBank 1 Nord-Norge</td><td>24 år</td><td>5,32 %</td></tr>
+          <tr><td><strong>SRBNK</strong></td><td>SpareBank 1 SR-Bank</td><td>20 år</td><td>8,07 %</td></tr>
+        </tbody>
+      </table>
+
+      <p class="text-xs text-gray-400 dark:text-gray-600">Kilde: exday.no, data oppdatert 7. august 2026. Yield er beregnet på sist kjente utbytte per egenkapitalbevis og dagens kurs.</p>
+
+      <p>
+        For å sette dette i perspektiv: på hele Oslo Børs er det bare en håndfull selskaper med 27 års sammenhengende utbytte. Listen består av Orkla, Veidekke, TOMRA, Bonheur, Arendals Fossekompani, Wilh. Wilhelmsen — og tre sparebanker. Sektoren er altså kraftig overrepresentert blant børsens mest utholdende utbyttebetalere.
+      </p>
+
+      <h3>Men «stabilt» betyr ikke «alltid opp»</h3>
+
+      <p>
+        Det er verdt å være presis her. En ubrutt utbytterekke betyr at banken har betalt <em>noe</em> hvert år — ikke at beløpet har steget hvert år. Ser vi på de siste fem årene, er variasjonen reell:
+      </p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Bank</th>
+            <th>2022</th>
+            <th>2023</th>
+            <th>2024</th>
+            <th>2025</th>
+            <th>2026</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>MING</strong></td><td>7,50</td><td>6,50</td><td>12,00</td><td>12,50</td><td>13,50</td></tr>
+          <tr><td><strong>SBMO</strong></td><td>3,20</td><td>4,00</td><td>7,50</td><td>6,25</td><td>7,00</td></tr>
+          <tr><td><strong>SBNOR</strong></td><td>4,50</td><td>8,50</td><td>7,50</td><td>8,50</td><td>12,00</td></tr>
+          <tr><td><strong>MELG</strong></td><td>10,50</td><td>11,00</td><td>12,50</td><td>13,50</td><td>13,50</td></tr>
+          <tr><td><strong>NONG</strong></td><td>10,40</td><td>8,20</td><td>7,00</td><td>8,75</td><td>8,50</td></tr>
+          <tr><td><strong>HSPG</strong></td><td>7,00</td><td>7,00</td><td>7,00</td><td>9,00</td><td>5,00</td></tr>
+        </tbody>
+      </table>
+
+      <p class="text-xs text-gray-400 dark:text-gray-600">Utbytte i NOK per egenkapitalbevis, per utbetalingsår. Kilde: exday.no.</p>
+
+      <p>
+        SpareBank 1 SMN kuttet fra 7,50 til 6,50 kroner i 2023 før utbyttet nesten doblet seg året etter. SpareBank 1 Nord-Norge falt fra 10,40 kroner i 2022 til 7,00 i 2024 — et fall på 33 % over to år. Høland og Setskog Sparebank gikk fra 9,00 til 5,00 kroner fra 2025 til 2026, en reduksjon på 44 %.
+      </p>
+
+      <p>
+        Mønsteret er altså ikke en jevnt stigende linje, men en ubrutt <em>strøm</em> med betydelige svingninger i beløp. Det er en vesentlig forskjell fra for eksempel amerikanske «dividend aristocrats», som per definisjon har økt utbyttet hvert eneste år.
+      </p>
+
+      <a href="https://exday.no/" class="tool-cta">
+        <div class="tool-cta-icon">
+          <svg width="20" height="20" fill="none" stroke="white" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+        </div>
+        <div>
+          <p class="font-semibold text-green-700 dark:text-green-400 text-sm">Se alle 30 sparebanker på exday.no</p>
+          <p class="text-xs text-gray-500 dark:text-gray-400">Oppdatert yield, utbyttehistorikk og ex-datoer for hele finanssektoren</p>
+        </div>
+      </a>
+
+      <!-- 4 -->
+      <h2 id="hvorfor-stabilt">Fire grunner til at utbyttet er så stabilt</h2>
+
+      <p>
+        Hvorfor klarer akkurat denne sektoren å opprettholde utbytte i tiår etter tiår? Det er fire konkrete mekanismer i sving.
+      </p>
+
+      <h3>1. Utjevningsfondet — en innebygd utbyttebuffer</h3>
+
+      <p>
+        Dette er den viktigste og minst kjente forklaringen. Når en sparebank holder tilbake overskudd som tilhører egenkapitalbeviseierne, havner pengene i et eget fond kalt <strong>utjevningsfondet</strong>. Fondet har ett hovedformål: å kunne opprettholde utbyttet i år hvor inntjeningen er svak.
+      </p>
+
+      <p>
+        Det betyr at en sparebank kan betale utbytte selv i et år med lav eller negativ inntjening, ved å tære på fondet bygget opp i gode år. Ingen andre selskapsformer på Oslo Børs har en tilsvarende mekanisme skrevet inn i regelverket. Der et industriselskap må kutte utbyttet når resultatet svikter, har sparebanken en formell reserve å trekke på.
+      </p>
+
+      <p>
+        Størrelsen på utjevningsfondet er derfor et av de mest relevante tallene å slå opp i årsrapporten hvis du er ute etter utbyttestabilitet. Et stort fond gir banken mange års handlingsrom.
+      </p>
+
+      <h3>2. Forutsigbar forretningsmodell</h3>
+
+      <p>
+        En lokal sparebank tjener penger på rentenettoen — differansen mellom hva den betaler for innskudd og hva den tar for utlån — pluss provisjonsinntekter fra forsikring, betalingstjenester og eiendomsmegling. Utlånsporteføljen består i stor grad av boliglån til privatpersoner i regionen.
+      </p>
+
+      <p>
+        Norske boliglån har historisk hatt svært lave tap. Kombinasjonen av pantesikkerhet, personlig gjeldsansvar og et velfungerende arbeidsmarked gjør at kredittapene i normale år er marginale. Det gir en inntjening som svinger langt mindre enn i shipping, olje eller havbruk.
+      </p>
+
+      <h3>3. Sterk lokal markedsposisjon</h3>
+
+      <p>
+        Mange sparebanker har en dominerende posisjon i sitt geografiske nedslagsfelt, bygget gjennom over hundre år. Kundelojaliteten er høy, og kundeforholdet varer ofte livet ut. Det gir en stabil innskuddsbase — den billigste finansieringen en bank kan ha — og et forutsigbart utlånsvolum.
+      </p>
+
+      <p>
+        Denne lokale forankringen er også en strategisk fordel i kredittvurderingen: banken kjenner låntakerne og markedet på en måte en landsdekkende aktør ikke gjør.
+      </p>
+
+      <h3>4. Regulatoriske kapitalkrav som gulv, ikke tak</h3>
+
+      <p>
+        Norske banker er underlagt strenge krav til ren kjernekapital (CET1) fra Finanstilsynet, med tilhørende bufferkrav. Kravene begrenser hvor mye som kan deles ut — men de tvinger samtidig bankene til å holde solide kapitalreserver til enhver tid.
+      </p>
+
+      <p>
+        I praksis fungerer dette som en stabilisator: en bank som allerede har kapitaldekning godt over kravet, har både evne og et visst press til å dele ut overskuddet fremfor å bygge unødvendig kapital.
+      </p>
+
+      <div class="callout">
+        <strong>Slik henger det sammen:</strong> Lav inntjeningsvolatilitet (punkt 2 og 3) gjør at det sjelden <em>trengs</em> å kutte. Utjevningsfondet (punkt 1) gjør at banken ikke <em>må</em> kutte selv når det trengs. Kapitalkravene (punkt 4) sikrer at bufferen faktisk er der. Til sammen forklarer dette de 27-årige rekkene.
+      </div>
+
+      <!-- 5 -->
+      <h2 id="yield">Yield og utbytte i dag</h2>
+
+      <p>
+        Sparebankene ligger som gruppe over børssnittet på direkteavkastning. Median-yielden blant de 30 sparebankene er <strong>6,19 %</strong>, mot <strong>5,64 %</strong> for alle 137 utbyttebetalende selskaper på exday.no. Sytten av de tretti har en yield på 6 % eller høyere.
+      </p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Ticker</th>
+            <th>Bank</th>
+            <th>Kurs</th>
+            <th>Utbytte</th>
+            <th>Yield</th>
+            <th>Utbetalingsgrad</th>
+            <th>P/B</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>SPOG</strong></td><td>Sparebanken Øst</td><td>72,60</td><td>6,90</td><td>9,50 %</td><td>103 %</td><td>0,34</td></tr>
+          <tr><td><strong>SRBNK</strong></td><td>SpareBank 1 SR-Bank</td><td>148,60</td><td>12,00</td><td>8,07 %</td><td>60 %</td><td>1,20</td></tr>
+          <tr><td><strong>SBVG</strong></td><td>SpareBank 1 BV</td><td>98,40</td><td>7,80</td><td>7,93 %</td><td>61 %</td><td>1,00</td></tr>
+          <tr><td><strong>ROGS</strong></td><td>Rogaland Sparebank</td><td>150,00</td><td>11,70</td><td>7,80 %</td><td>103 %</td><td>0,85</td></tr>
+          <tr><td><strong>AASB</strong></td><td>Aasen Sparebank</td><td>134,30</td><td>10,00</td><td>7,45 %</td><td>90 %</td><td>0,29</td></tr>
+          <tr><td><strong>MELG</strong></td><td>Melhus Sparebank</td><td>190,00</td><td>13,50</td><td>7,11 %</td><td>96 %</td><td>0,30</td></tr>
+          <tr><td><strong>SOGN</strong></td><td>Sogn Sparebank</td><td>319,00</td><td>22,00</td><td>6,90 %</td><td>92 %</td><td>0,17</td></tr>
+          <tr><td><strong>ROMER</strong></td><td>Romerike Sparebank</td><td>153,02</td><td>10,50</td><td>6,86 %</td><td>14 %</td><td>0,19</td></tr>
+          <tr><td><strong>MING</strong></td><td>SpareBank 1 SMN</td><td>201,15</td><td>13,50</td><td>6,71 %</td><td>73 %</td><td>1,07</td></tr>
+          <tr><td><strong>SKUE</strong></td><td>Skue Sparebank</td><td>336,00</td><td>22,27</td><td>6,63 %</td><td>105 %</td><td>0,51</td></tr>
+          <tr><td><strong>SPOL</strong></td><td>SpareBank 1 Østlandet</td><td>191,90</td><td>12,70</td><td>6,62 %</td><td>71 %</td><td>1,08</td></tr>
+          <tr><td><strong>AURG</strong></td><td>Aurskog Sparebank</td><td>257,00</td><td>17,00</td><td>6,61 %</td><td>31 %</td><td>0,52</td></tr>
+          <tr><td><strong>SBMO</strong></td><td>Sparebanken Møre</td><td>112,56</td><td>7,00</td><td>6,22 %</td><td>32 %</td><td>0,58</td></tr>
+          <tr><td><strong>SBNOR</strong></td><td>Sparebanken Norge</td><td>199,14</td><td>12,00</td><td>6,03 %</td><td>73 %</td><td>0,75</td></tr>
+          <tr><td><strong>SRHA</strong></td><td>SpareBank 1 Ringerike Hadeland</td><td>440,00</td><td>26,35</td><td>5,99 %</td><td>55 %</td><td>1,57</td></tr>
+        </tbody>
+      </table>
+
+      <p class="text-xs text-gray-400 dark:text-gray-600">Kurs og utbytte i NOK per egenkapitalbevis. Data fra exday.no per 7. august 2026, sortert etter yield.</p>
+
+      <h3>Én utbetaling i året — planlegg deretter</h3>
+
+      <p>
+        Et praktisk poeng mange overser: <strong>26 av de 30 sparebankene betaler utbytte kun én gang i året</strong>. Bare fire — deriblant SpareBank 1 SR-Bank og SpareBank 1 BV — har gått over til halvårlige utbetalinger.
+      </p>
+
+      <p>
+        Utbetalingene kommer dessuten konsentrert i samme periode. Sparebankenes generalforsamlinger holdes typisk på senvinteren og våren, og ex-datoene faller i stor grad i mars, april og mai. Bygger du en portefølje tungt vektet mot sparebanker, får du altså en stor engangsutbetaling om våren og lite resten av året.
+      </p>
+
+      <div class="callout callout-warn">
+        <strong>Se opp for utbetalingsgrad over 100 %.</strong> Flere av bankene i tabellen deler ut mer enn årets resultat: Sparebanken Øst (103 %), Rogaland Sparebank (103 %) og Skue Sparebank (105 %). Det er ikke nødvendigvis et faresignal — det er ofte nettopp utjevningsfondet som brukes etter hensikten, eller kapital som frigjøres etter et sterkt år. Men det er ikke bærekraftig over tid, og du bør sjekke årsrapporten for begrunnelsen før du kjøper på yielden alene.
+      </div>
+
+      <!-- 6 -->
+      <h2 id="pb-rabatten">P/B under 1 — hvorfor er de så «billige»?</h2>
+
+      <p>
+        Ser du på P/B-kolonnen i tabellen over, legger du raskt merke til noe: mange sparebanker handles til langt under bokført egenkapital. Medianen blant de 30 er en P/B på <strong>0,53</strong>, og <strong>21 av 30 handles under 1,0</strong>. Sogn Sparebank ligger på 0,17, Høland og Setskog på 0,11.
+      </p>
+
+      <p>
+        En P/B på 0,17 betyr i teorien at du kjøper én krone bokført egenkapital for 17 øre. Hvorfor priser markedet dem slik? Det er flere reelle forklaringer, og de er verdt å forstå før du konkluderer med at sektoren er underpriset.
+      </p>
+
+      <h3>Likviditet er den største faktoren</h3>
+
+      <p>
+        De aller minste sparebankene har svært tynn omsetning. Egenkapitalbevisene eies i stor grad av lokale investorer som sitter langsiktig, og det kan gå dager mellom hver handel. For institusjonelle investorer med milliardporteføljer er slike papirer i praksis ikke investerbare — de får ikke bygget en posisjon uten å drive kursen kraftig, og enda mindre solgt seg ut igjen.
+      </p>
+
+      <p>
+        Denne illikviditeten prises inn som en rabatt. Den er reell også for deg som privatinvestor: forskjellen mellom kjøps- og salgskurs kan være flere prosent, og en større ordre kan flytte kursen merkbart.
+      </p>
+
+      <h3>Eierbrøken forklarer en del av rabatten</h3>
+
+      <p>
+        Husk at et egenkapitalbevis kun gir krav på eierandelskapitalen, ikke på hele bankens egenkapital. Hvordan bokført verdi per egenkapitalbevis regnes ut, varierer, og en P/B beregnet mot bankens totale egenkapital vil systematisk se lavere ut enn den reelt er for beviseieren. Sjekk alltid hva P/B-tallet faktisk måler før du sammenligner to banker.
+      </p>
+
+      <h3>Begrenset oppkjøpspremie</h3>
+
+      <p>
+        I et vanlig aksjeselskap kan en lav P/B utløse et oppkjøp som realiserer verdiene. Det skjer sjelden i en sparebank. Strukturen gjør fiendtlige oppkjøp praktisk talt umulige, og sammenslåinger krever omfattende prosesser og godkjenning. Uten oppkjøpsmuligheten mangler det en mekanisme som ellers lukker verdigapet.
+      </p>
+
+      <div class="callout callout-green">
+        <strong>Konsolidering skjer likevel.</strong> Sparebanksektoren har over tid blitt kraftig konsolidert gjennom frivillige fusjoner mellom banker som ønsker større fagmiljø og bedre kapitaldekning. Flere av navnene i tabellene over er resultat av slike sammenslåinger. For eiere av egenkapitalbevis i små banker kan en fusjon være en positiv trigger — men den kommer sjelden med en tradisjonell budpremie.
+      </div>
+
+      <!-- 7 -->
+      <h2 id="risiko">Risikofaktorer du må kjenne</h2>
+
+      <p>
+        Stabilitet er ikke det samme som risikofrihet. Her er det du faktisk bør vurdere.
+      </p>
+
+      <h3>1. Myndighetene kan stanse utbyttet</h3>
+
+      <p>
+        Dette er den viktigste risikoen, og den er ikke teoretisk. Under koronautbruddet våren 2020 oppfordret Finanstilsynet norske banker til å holde tilbake utbytte for å bevare utlånskapasiteten gjennom krisen. Mange banker utsatte eller reduserte utbetalinger som allerede var vedtatt av generalforsamlingen.
+      </p>
+
+      <p>
+        Poenget er strukturelt: en bank er en systemkritisk institusjon, og i en krise kan hensynet til finansiell stabilitet overstyre eiernes utbytteforventninger — uansett hvor sterk balansen er. Ingen annen sektor på Oslo Børs har denne typen politisk utbytterisiko i samme grad.
+      </p>
+
+      <h3>2. Rentenettoen svinger med rentenivået</h3>
+
+      <p>
+        Bankenes lønnsomhet henger tett sammen med rentenivået. Et fallende rentenivå presser typisk rentenettoen, fordi innskuddsrentene har et gulv nær null mens utlånsrentene fortsetter ned. Perioden med svært lave renter var utfordrende for marginene i hele sektoren.
+      </p>
+
+      <p>
+        Motsatt har de siste årenes høyere renter vært gunstige — noe som forklarer mye av utbytteveksten i tabellene over. Det er verdt å ha med seg at dagens høye yield delvis reflekterer et rentenivå som ikke nødvendigvis varer.
+      </p>
+
+      <h3>3. Konsentrert kredittrisiko mot boligmarkedet</h3>
+
+      <p>
+        Den lokale forankringen er en styrke i normale tider og en svakhet i en regional nedtur. En sparebank med utlånsporteføljen konsentrert i én kommune eller én næring er sårbar hvis den regionen rammes — for eksempel av en hjørnesteinsbedrift som legger ned.
+      </p>
+
+      <p>
+        I tillegg er norske husholdninger blant de mest gjeldsbelastede i verden. Et betydelig fall i boligprisene kombinert med økt arbeidsledighet vil slå gjennom i kredittapene, og da vil utbyttene rammes.
+      </p>
+
+      <h3>4. Lav likviditet i de minste bevisene</h3>
+
+      <p>
+        Som beskrevet over: i de minste bankene kan du oppleve store spreads, tynn ordrebok og problemer med å komme deg ut til ønsket kurs. Vurder posisjonsstørrelsen din opp mot den faktiske dagsomsetningen i papiret.
+      </p>
+
+      <h3>5. Digitalisering og konkurranse</h3>
+
+      <p>
+        Den lokale filialen er et svakere konkurransefortrinn i dag enn for tjue år siden. Digitale aktører konkurrerer på pris uten filialnett, og prissammenligningstjenester gjør det enkelt å flytte boliglånet. Mindre banker med høy kostnadsprosent er mest utsatt — sjekk kostnad/inntekt-forholdet i årsrapporten.
+      </p>
+
+      <div class="callout callout-red">
+        <strong>Ikke kjøp på yield alene.</strong> De høyeste yieldene i tabellen kommer i flere tilfeller sammen med en utbetalingsgrad over 100 %. Hvis banken deler ut mer enn den tjener, er yielden per definisjon ikke bærekraftig på dagens nivå — med mindre inntjeningen tar seg opp igjen. Se alltid utbetalingsgraden og utjevningsfondet i sammenheng med yielden.
+      </div>
+
+      <!-- 8 -->
+      <h2 id="slik-velger-du">Slik velger du sparebank</h2>
+
+      <p>
+        Skal du plukke enkeltbanker fremfor å spre deg over flere, er dette sjekklisten som betyr noe:
+      </p>
+
+      <ol>
+        <li><strong>Lengden på utbytterekken.</strong> Ubrutt utbytte i 20+ år er dokumentasjon på at banken har kommet seg gjennom finanskrisen, koronakrisen og et helt rentesyklusløp uten å stoppe utbetalingene.</li>
+        <li><strong>Utbetalingsgrad under 80 %.</strong> Gir rom for å opprettholde utbyttet i et svakere år uten å tære på fondet. Vær skeptisk til alt over 100 % med mindre det finnes en tydelig forklaring.</li>
+        <li><strong>Størrelsen på utjevningsfondet.</strong> Finnes i årsrapporten. Et stort fond er den beste enkeltindikatoren på utbyttestabilitet i denne sektoren.</li>
+        <li><strong>Ren kjernekapitaldekning (CET1) med god margin til kravet.</strong> Overskuddskapital kan deles ut; kapital under kravet kan det ikke.</li>
+        <li><strong>Kostnad/inntekt-forhold.</strong> Under 45 % regnes som effektivt for en norsk sparebank. Høye tall betyr sårbarhet i en marginskvis.</li>
+        <li><strong>Geografisk og næringsmessig spredning i utlånsporteføljen.</strong> Jo mer konsentrert, desto større regional risiko.</li>
+        <li><strong>Faktisk dagsomsetning i egenkapitalbeviset.</strong> Match posisjonsstørrelsen mot likviditeten.</li>
+      </ol>
+
+      <h3>Hvor mye bør sektoren utgjøre?</h3>
+
+      <p>
+        Sparebanker fungerer godt som stabiliserende kjerne i en norsk utbytteportefølje — motstykket til sykliske sektorer som shipping og olje. Men de er alle eksponert mot de samme faktorene: norsk rentenivå, norsk boligmarked og norsk regulering. Fem sparebanker gir langt mindre diversifisering enn fem selskaper fra fem ulike sektorer.
+      </p>
+
+      <p>
+        En vanlig tilnærming er å la finans utgjøre en betydelig, men ikke dominerende, del av porteføljen, og heller spre seg over flere banker med ulik geografi og størrelse enn å konsentrere alt i én. Vil du sette konkrete målvekter og se hva du bør kjøpe eller selge for å nå dem, gjør sektorrebalanseringsverktøyet regnestykket for deg.
+      </p>
+
+      <div class="callout callout-green">
+        <strong>Oppsummert:</strong> Sparebankene er trolig Oslo Børs' mest pålitelige utbyttebetalere, og utjevningsfondet er en reell strukturell fordel ingen andre sektorer har. Til gjengjeld får du én utbetaling i året, konsentrert risiko mot norsk økonomi, tidvis dårlig likviditet — og en myndighet som i en krise kan sette utbyttet på pause.
+      </div>
+
+      <!-- Les også -->
+      <h2>Les også</h2>
+      <ul class="list-none" style="margin-left:0;">
+        <li>
+          <a href="/artikler/utbytteportefolje-sektorvekting/" class="les-ogsa-lenke text-green-600 dark:text-green-400 hover:underline">
+            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"/></svg>
+            <span>Slik bygger du en utbytteportefølje — sektorvekting og rebalansering</span>
+          </a>
+        </li>
+        <li>
+          <a href="/artikler/norske-shippingaksjer/" class="les-ogsa-lenke text-green-600 dark:text-green-400 hover:underline">
+            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <span>Norske shippingaksjer og utbytte — høy yield, syklisitet og risiko</span>
+          </a>
+        </li>
+        <li>
+          <a href="/artikler/utbytte-og-skatt/" class="les-ogsa-lenke text-green-600 dark:text-green-400 hover:underline">
+            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+            <span>Utbytte og skatt i Norge — 37,84 %, skjermingsfradrag og ASK</span>
+          </a>
+        </li>
+        <li>
+          <a href="/artikler/hva-er-ex-dato/" class="les-ogsa-lenke text-green-600 dark:text-green-400 hover:underline">
+            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+            <span>Hva er ex-dato? Komplett guide for norske investorer</span>
+          </a>
+        </li>
+      </ul>
+
+      <a href="/verktoy/sektorrebalansering/" class="tool-cta">
+        <div class="tool-cta-icon">
+          <svg width="20" height="20" fill="none" stroke="white" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+        </div>
+        <div>
+          <p class="font-semibold text-green-700 dark:text-green-400 text-sm">Sektorrebalanseringsverktøy</p>
+          <p class="text-xs text-gray-500 dark:text-gray-400">Sett målvekt for finans og se hva du bør kjøpe eller selge</p>
+        </div>
+      </a>
+
+    </article>
+  </div>
+
+<footer class="mt-8 sm:mt-12 border-t border-gray-200 dark:border-gray-800 py-6 text-center text-xs text-gray-400 dark:text-gray-600 space-y-1 px-4">
+  <p>Kurs og utbyttedata hentes fra Yahoo Finance og Euronext. Oppdateres daglig på børsdager.</p>
+  <p class="max-w-xl mx-auto leading-relaxed">
+    exday.no er ikke et verdipapirforetak og tilbyr ikke finansiell rådgivning.
+    Data kan inneholde feil eller forsinkelser — verifiser alltid mot Oslo Børs eller selskapets egne rapporter.
+    Historisk utbytte er ingen garanti for fremtidig utbytte.
+    Gjør alltid din egen analyse før du tar investeringsbeslutninger.
+  </p>
+  <p class="mt-2">
+    <a href="/personvern/" class="underline hover:text-gray-400 dark:hover:text-gray-400 transition-colors">Personvern og informasjonskapsler</a>
+    <span class="mx-2">·</span>
+    <a href="/faq/" class="underline hover:text-gray-400 dark:hover:text-gray-400 transition-colors">Vanlige spørsmål (FAQ)</a>
+  </p>
+  <p class="mt-3">
+    <a href="https://www.facebook.com/share/17rMp8o9yF/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-gray-400 hover:text-blue-500 dark:hover:text-blue-400 transition-colors">
+      <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/></svg>
+      Følg exday.no på Facebook
+    </a>
+  </p>
+</footer>
+
+</body>
+</html>
