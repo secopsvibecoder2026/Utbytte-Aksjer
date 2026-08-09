@@ -315,6 +315,31 @@ Bruk `flex items-center gap-2` med ikon + tekst på én linje. Ikke legg beskriv
 
 Etter at en ny artikkel er ferdig: legg til et klikkbart kort under «Publisert» i `artikler/index.html` med tittel, ingress og dato. Flytt det tilhørende «Kommer snart»-kortet ut.
 
+### Gjør artikkelen synlig i appen
+
+Appen (`/app/`) har ingen automatisk kobling til `/artikler/` — den leser en egen
+liste. Legg derfor artikkelen inn i **`ARTIKLER`-konstanten øverst i `assets/ui.js`**
+(nyeste først). Det er én kilde til sannhet som driver to steder:
+
+1. **«Lær»-undertaben** under Verktøy — viser hele listen
+2. **Aksjemodalen** — viser artikkelen nederst i Oversikt-panelet for aksjer i
+   sektorene du oppgir
+
+```js
+{
+  slug: '/artikler/min-nye-artikkel/',
+  tittel: '…', ingress: '…', meta: '9. august 2026 · 11 min',
+  tags: ['Sektor', 'Guide'],
+  sektorer: ['Havbruk'],   // tomt array = ingen kontekstuell lenke i modalen
+}
+```
+
+`sektorer` må matche `sektor`-verdien i `data/aksjer.json` eksakt (f.eks. `Finans`,
+`Shipping`, `Skipsfart`, `Havbruk`). Feil verdi feiler stille — artikkelen dukker
+bare aldri opp i modalen.
+
+Husk også `sitemap.xml`.
+
 ---
 
 ## Portfolio Math (portefolje.js)
