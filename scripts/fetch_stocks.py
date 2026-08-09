@@ -176,6 +176,11 @@ if os.path.exists(_fallback_path):
         _fb_list = json.load(_ff)
         FALLBACK_DATA = {a["ticker"]: a for a in _fb_list}
 
+# Diagnostikk per ticker for hver kjøring, skrevet til data/hentelogg.json.
+# scripts/sjekk_utdaterte.py leser denne for å oppdage avnoteringer,
+# navneendringer og oppkjøp — signaler som ellers forsvinner i fallback-logikken.
+HENTEDIAGNOSTIKK = {}
+
 # ── DNB MARKETS INTEGRASJON ─────────────────────────────────────────────────
 
 class _DNBParser(html.parser.HTMLParser):
@@ -775,10 +780,33 @@ def hent_aksje(meta):
             "inkorporeringsland": INKORPORERINGSLAND.get(ticker, "Norge"),
             "data_kilde": "yahoo",
         }
+
+        # Diagnostikk for sjekk_utdaterte.py. Yahoos eget selskapsnavn lagres
+        # ikke i aksjer.json (der bruker vi navnet fra tickers.json), så uten
+        # denne loggen ville en navneendring aldri blitt synlig.
+        siste_handelsdato = None
+        if hist_prices is not None and not hist_prices.empty:
+            try:
+                siste_handelsdato = str(hist_prices.index[-1].date())
+            except (AttributeError, IndexError):
+                pass
+        HENTEDIAGNOSTIKK[ticker] = {
+            "ok": True,
+            "vart_navn": meta["navn"],
+            "yahoo_navn": info.get("longName") or info.get("shortName") or "",
+            "markedsverdi": mkt_cap or 0,
+            "siste_handelsdato": siste_handelsdato,
+        }
         return resultat
 
     except Exception as e:
         print(f"    FEIL for {ticker}: {e}")
+        HENTEDIAGNOSTIKK[ticker] = {
+            "ok": False,
+            "vart_navn": meta["navn"],
+            "yahoo_navn": "",
+            "feilmelding": str(e)[:200],
+        }
         return None
 
 
@@ -4345,6 +4373,18 @@ def main():
 
     print(f"\nFerdig! {len(resultater)} aksjer lagret til {output_path}")
     print(f"Sist oppdatert: {output['sist_oppdatert']}")
+
+    # Hentelogg for scripts/sjekk_utdaterte.py — fanger avnoteringer og
+    # navneendringer som ellers skjules av fallback-logikken over.
+    hentelogg_path = os.path.join(os.path.dirname(__file__), "..", "data", "hentelogg.json")
+    with open(hentelogg_path, "w", encoding="utf-8") as f:
+        json.dump({
+            "sist_oppdatert": output["sist_oppdatert"],
+            "antall_ok": sum(1 for d in HENTEDIAGNOSTIKK.values() if d.get("ok")),
+            "antall_feil": sum(1 for d in HENTEDIAGNOSTIKK.values() if not d.get("ok")),
+            "tickere": HENTEDIAGNOSTIKK,
+        }, f, ensure_ascii=False, indent=2)
+    print(f"Hentelogg skrevet til {hentelogg_path}")
 
     # Generer individuelle aksjesider, sektorsider og sitemap
     root_dir = os.path.join(os.path.dirname(__file__), "..")
