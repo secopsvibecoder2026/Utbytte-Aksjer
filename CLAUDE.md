@@ -568,6 +568,31 @@ This section documents recurring patterns where Yahoo Finance returns incorrect 
 - **COOL** (removed): Cool Company delisted from Oslo Børs 20 Jan 2026 (merged into EPS Ventures, cash $9.65/share).
 - **ABL → AQUA**: ABL Group ASA renamed to **Aqualis ASA** (new ticker `AQUA`, effective 17 Jun 2026). `ticker_yf` updated to `AQUA.OL`.
 
+### Ticker corrections / delistings (2026-08-09)
+
+Found by the first run of `scripts/sjekk_utdaterte.py` — all six had been failing
+silently, some for over three years, while the fallback logic kept serving old data.
+
+- **JAEDR → JAREN** (corrected, not removed): Jæren Sparebank is still listed and trading.
+  The ticker was simply wrong — Oslo Børs uses `JAREN` (ISIN NO0010359433), and `JAEDR.OL`
+  resolves to nothing. This *restores* a stock that had been missing from the site.
+- **FKRAFT** (removed): Fjordkraft Holding ASA renamed to **Elmera Group ASA** on
+  26 Apr 2022. `ELMRA` was already in the catalog, so this was a stale duplicate.
+- **HDLG** (removed): Höegh LNG Holdings delisted from Oslo Børs in May 2021, taken
+  private by Larus Holding (Leif Höegh & Co / Morgan Stanley Infrastructure Partners).
+  Not to be confused with **HAUTO** (Höegh Autoliners), which is a separate live company.
+- **NOFI** (removed): Norway Royal Salmon merged into SalMar, delisted 8 Nov 2022.
+  `SALM` covers it.
+- **TOTG** (removed): phantom entry — listed as "Tidewater Inc.", a NYSE company (`TDW`).
+  `TOTG.OL` has never existed on Oslo Børs. Same class of error as the old ODLD entry.
+- **WALWIL** (removed): duplicate of **WAWI** (Wallenius Wilhelmsen ASA) with an identical
+  company name but a dead `ticker_yf`.
+
+All six were also listed in `sitemap.xml` while having no page on disk, so the live sitemap
+advertised six 404s. `generer_sitemap()` now requires the page to exist on disk before
+including a ticker — a transient fetch failure still keeps yesterday's page in the sitemap,
+but a permanently dead ticker drops out.
+
 When adding new tickers, always verify `ticker_yf` is unique in `tickers.json`, and confirm the ticker/name matches the current Oslo Børs / Euronext listing (companies get renamed, merged and delisted).
 
 ---

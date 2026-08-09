@@ -200,7 +200,7 @@ def finn_duplikat_navn(tickere: list) -> list:
     return varsler
 
 
-def finn_manglende_data(tickere: list, aksjer: list) -> list:
+def finn_manglende_data(tickere: list, aksjer: list, hentelogg: dict = None) -> list:
     """
     Tickere som står i katalogen, men som ikke har en eneste rad i aksjer.json.
 
@@ -209,22 +209,39 @@ def finn_manglende_data(tickere: list, aksjer: list) -> list:
     er avnotert, fusjonert eller omdøpt for lenge siden, eller en ticker som
     aldri har eksistert.
 
+    En nylig lagt til ticker mangler også data, men er ikke et problem: den er
+    bare ikke hentet ennå. De skilles på hentelogget — har hentingen kjørt uten
+    å nevne tickeren i det hele tatt, ble den lagt til etter forrige kjøring.
+
     Sjekken krever ingen historikk og virker derfor fra første kjøring.
     """
     if not aksjer:
         # Uten aksjer.json vet vi ingenting — ikke rapporter alt som manglende.
         return []
     har_data = {a.get("ticker") for a in aksjer}
+    logg_tickere = set((hentelogg or {}).get("tickere", {}))
+
     varsler = []
     for t in sorted(tickere, key=lambda x: x.get("ticker") or ""):
         ticker = t.get("ticker")
-        if ticker and ticker not in har_data:
+        if not ticker or ticker in har_data:
+            continue
+        navn = t.get("navn", "?")
+        yf_ticker = t.get("ticker_yf", "?")
+
+        if logg_tickere and ticker not in logg_tickere:
             varsler.append(_varsel(
-                ticker,
-                "ingen_data",
-                ALVOR_KRITISK,
-                f"«{t.get('navn', '?')}» ({t.get('ticker_yf', '?')}) står i tickers.json, "
-                f"men har ingen rad i aksjer.json. Hentingen leverer ingenting.",
+                ticker, "ny_ticker", ALVOR_INFO,
+                f"«{navn}» ({yf_ticker}) er lagt til i tickers.json etter forrige "
+                f"datahenting og har derfor ingen data ennå.",
+                "Ingen handling nødvendig — data kommer ved neste kjøring av "
+                "fetch_stocks.py.",
+            ))
+        else:
+            varsler.append(_varsel(
+                ticker, "ingen_data", ALVOR_KRITISK,
+                f"«{navn}» ({yf_ticker}) står i tickers.json, men har ingen rad i "
+                f"aksjer.json. Hentingen leverer ingenting.",
                 "Kontroller om selskapet er avnotert, fusjonert eller omdøpt. "
                 "Fjern oppføringen fra data/tickers.json, eller rett ticker_yf.",
             ))
@@ -416,7 +433,7 @@ def analyser(tickere, aksjer, hentelogg, status, idag):
     varsler = []
     varsler.extend(finn_duplikat_ticker_yf(tickere))
     varsler.extend(finn_duplikat_navn(tickere))
-    varsler.extend(finn_manglende_data(tickere, aksjer))
+    varsler.extend(finn_manglende_data(tickere, aksjer, hentelogg))
     varsler.extend(finn_duplikat_data(aksjer))
 
     forrige_tickere = status.get("tickere", {})
