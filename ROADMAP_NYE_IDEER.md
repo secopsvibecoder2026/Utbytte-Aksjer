@@ -29,6 +29,57 @@ Modal viser "om 0 dager" når ex-dato er i dag. Aksjekortet håndterer dette kor
 
 - [x] Legg til `<link rel="canonical" href="https://exday.no/uke/" />`
 
+### B4. Stored XSS via JSON-backup-import
+**Prioritet: Kritisk — se [SECURITY_ROADMAP.md](SECURITY_ROADMAP.md)**
+
+`parseJSONBackup()` (`ui.js:2083`) validerer kun at `versjon` er et tall 1–5. `visJSONPreview()` interpolerer deretter `backup.profil.navn` rått inn i `innerHTML` — **i selve forhåndsvisningen, før brukeren bekrefter importen.** Verifisert med `{"versjon":3,"profil":{"navn":"<img src=x onerror=alert(document.domain)>"}}` — payloaden overlever intakt.
+
+`bekreftJSONImport()` skriver deretter `backup.portefoljer`/`backup.watchlister` uvalidert til localStorage, og porteføljenavn (`portefolje.js:1923`) og watchliste-navn (`portefolje.js:1963`) rendres rått i `<option>`-tagger ved hver applast — så et ondsinnet navn persisterer og kjører på nytt hver gang appen åpnes.
+
+- [ ] `escHtml()` på `p.navn` i `visJSONPreview()` (ui.js:2103)
+- [ ] `escHtml()` på `p.navn` i porteføljevelgeren (portefolje.js:1923)
+- [ ] `escHtml()` på `w.navn` i watchliste-velgeren (portefolje.js:1963)
+- [ ] Valider typer i `parseJSONBackup()` — ikke bare `versjon`
+
+### B5. IRR annualiserer korte perioder til absurde tall
+**Prioritet: Høy — ser ut som en bug for brukeren**
+
+`beregnIRR()` (`portefolje.js:401`) tillater annualisering ned til 30 dager. Newton-Raphson-matematikken er korrekt, men `(1+r)^365` gjør at helt normale gevinster blir meningsløse tall:
+
+| Scenario | Vises som |
+|---|---|
+| +15 % etter 31 dager | +418,4 % |
+| +5 % etter 31 dager | +77,6 % |
+| +20 % etter 60 dager | +203,2 % |
+| +10 % etter 365 dager | +10,0 % ✓ |
+
+Verifisert ved å kjøre den faktiske Newton-Raphson-koden isolert med flere cashflow-scenarier.
+
+- [ ] Hev grensen på linje 401 fra 30 til ~180 dager, eller
+- [ ] Vis ikke-annualisert periodeavkastning når `periodeAr < 1`
+
+### B6. Oversalg feiler i stillhet
+**Prioritet: Medium**
+
+`beregnKostbasis()` (`portefolje.js:19-27`) tømmer FIFO-lottene og kaster resten av salgsantallet uten varsel. Registrerer brukeren et salg større enn beholdningen (skrivefeil, f.eks. 1000 i stedet for 100), blir posisjonen bare 0 — ingen feilmelding, ingen indikasjon på at noe er galt.
+
+- [ ] Valider salgsantall mot gjeldende beholdning før registrering
+- [ ] Vis feilmelding i UI ved forsøk på oversalg
+
+### B7. Villedende IRR-feilmelding
+**Prioritet: Lav**
+
+`beregnIRR()` returnerer «trenger transaksjoner» for to ulike årsaker: `terminalVerdi <= 0` (portefolje.js:389) og manglende Newton-Raphson-konvergens (portefolje.js:417). Begge vises identisk selv når brukeren har mange registrerte transaksjoner.
+
+- [ ] Skill meldingene: «ingen gjeldende beholdning» vs. «kunne ikke beregne»
+
+### B8. Service worker venter ikke på cache-skriving
+**Prioritet: Lav — race condition, sjelden synlig**
+
+I `sw.js` (linje 68, 82, 96) kalles `caches.open(...).then(c => c.put(...))` uten å returneres/awaites inn i `event.respondWith()`-kjeden. Blir SW-prosessen drept før promisen løser (mobil bakgrunnsbegrensning, rask navigering), skrives aldri cachen — offline-fallback blir upålitelig over tid.
+
+- [ ] Kjed cache-skrivingen inn i responsen som returneres, eller flytt til `event.waitUntil()`
+
 ---
 
 ## 🚀 Høy prioritet
@@ -196,6 +247,14 @@ Eksisterende enhetstester dekker beregningslogikk. Brukerflyter testes ikke.
 
 - [ ] Netlify-deploy fra `dev`-branch
 - [ ] Preview-URL per PR
+
+### T11. kurs_historikk utgjør 1,18 MB av 1,54 MB i aksjer.json
+**Prioritet: Medium — unødvendig payload ved hver sidelast**
+
+`kurs_historikk` (5 år ukentlige kurspunkter × 162 aksjer) brukes kun to steder — begge i modalen for én enkelt aksje (`ui.js:23`, `ui.js:2689`). Likevel lastes hele feltet for alle 162 aksjer ved hver sidelast, og filen ligger i service workerens `PRECACHE` (`sw.js:25`) og hentes derfor på nytt ved hvert deploy. Gzippet er `aksjer.json` 374 kB — ikke katastrofalt, men grafdata for 161 aksjer brukeren aldri åpner er ren overhead.
+
+- [ ] Vurder å splitte `kurs_historikk` ut i egne filer per ticker (`data/kurs/{TICKER}.json`), hentet ved modalåpning
+- [ ] Fjern `kurs_historikk` fra hovedresponsen i `aksjer.json` når/hvis dette gjøres
 
 ---
 
