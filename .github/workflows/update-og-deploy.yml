@@ -18,6 +18,7 @@ permissions:
   contents: write
   pages: write
   id-token: write
+  issues: write   # for varsling om utdaterte tickere
 
 jobs:
   oppdater-data:
@@ -50,6 +51,12 @@ jobs:
       - name: Valider datakvalitet
         run: python scripts/valider_data.py
 
+      - name: Sjekk etter utdaterte aksjer
+        # Avnoteringer, navneendringer og oppkjøp. Blokkerer bevisst ikke
+        # deployen — et omdøpt selskap skal ikke stanse kursoppdateringene.
+        # Varsler havner i jobbsammendraget og i GitHub-issuet under.
+        run: python scripts/sjekk_utdaterte.py
+
       - name: Oppdater hendelseskalender
         run: python scripts/oppdater_hendelser.py
 
@@ -58,12 +65,58 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add data/aksjer.json data/hendelser.json aksjer/ sitemap.xml index.html app/
+          # Legges til enkeltvis: mangler én av dem (f.eks. fordi kontrollen
+          # feilet), skal ikke hele datacommiten ryke på en `git add`-feil.
+          for f in data/hentelogg.json data/ticker_status.json data/ticker_varsler.json; do
+            if [ -f "$f" ]; then git add "$f"; fi
+          done
           if git diff --staged --quiet; then
             echo "Ingen endringer."
           else
             git commit -m "auto: oppdater aksjedata og aksjesider $(date -u '+%Y-%m-%d %H:%M UTC')"
             git pull --rebase origin main
             git push
+          fi
+
+      - name: Varsle om utdaterte aksjer
+        # Holder ett enkelt issue oppdatert i stedet for å lage et nytt per
+        # kjøring, og lukker det automatisk når alle kritiske varsler er borte.
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TITTEL: "Utdaterte aksjer oppdaget i tickers.json"
+          ETIKETT: "utdaterte-aksjer"
+        run: |
+          set -euo pipefail
+          if [ ! -f data/ticker_varsler.json ]; then
+            echo "Ingen varselfil — hopper over."
+            exit 0
+          fi
+          ANTALL=$(python -c "import json;print(json.load(open('data/ticker_varsler.json')).get('antall_kritiske',0))")
+          EKSISTERENDE=$(gh issue list --state open --label "$ETIKETT" \
+                          --json number --jq '.[0].number // empty' || true)
+
+          if [ "$ANTALL" -eq 0 ]; then
+            if [ -n "$EKSISTERENDE" ]; then
+              gh issue close "$EKSISTERENDE" \
+                --comment "Alle kritiske varsler er borte. Lukkes automatisk."
+              echo "Lukket issue #$EKSISTERENDE."
+            else
+              echo "Ingen kritiske varsler."
+            fi
+            exit 0
+          fi
+
+          python scripts/sjekk_utdaterte.py --issue-tekst > /tmp/issue.md
+          gh label create "$ETIKETT" --color D93F0B \
+            --description "Ticker ser avnotert, omdøpt eller duplisert ut" 2>/dev/null || true
+
+          if [ -n "$EKSISTERENDE" ]; then
+            gh issue edit "$EKSISTERENDE" --body-file /tmp/issue.md
+            echo "Oppdaterte issue #$EKSISTERENDE ($ANTALL kritiske)."
+          else
+            gh issue create --title "$TITTEL" --label "$ETIKETT" --body-file /tmp/issue.md
+            echo "Opprettet nytt issue ($ANTALL kritiske)."
           fi
 
   deploy-pages:

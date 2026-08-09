@@ -76,13 +76,18 @@ Utbytte-Aksjer/
 │   ├── aksjer.json            # Auto-generated daily: full stock dataset
 │   ├── tickers.json           # Manually maintained: 191 stock definitions
 │   ├── priser.json            # Real-time prices, updated every 15 min
-│   └── fallback_data.json     # Fallback when API fetch fails
+│   ├── fallback_data.json     # Fallback when API fetch fails
+│   ├── hentelogg.json         # Auto-generated: per-ticker fetch diagnostics
+│   ├── ticker_status.json     # Auto-generated: stale-ticker state across runs
+│   └── ticker_varsler.json    # Auto-generated: current stale-ticker alerts
 ├── scripts/                   # Python data pipeline
 │   ├── fetch_stocks.py        # Main pipeline: Yahoo Finance → aksjer.json + SEO pages
 │   ├── fetch_priser.py        # Lightweight price updater → priser.json
 │   ├── regenerer_sider.py     # Regenerates /aksjer/{TICKER}/index.html without full fetch
 │   ├── utvid_beskrivelser.py  # Enriches stock descriptions in tickers.json
 │   ├── valider_data.py        # Data quality validation script
+│   ├── sjekk_utdaterte.py     # Detects delisted/renamed/duplicate tickers
+│   ├── test_sjekk_utdaterte.py # Tests for sjekk_utdaterte.py (stdlib unittest)
 │   └── requirements.txt       # Python deps: yfinance>=0.2.36
 ├── tests/                     # Node.js unit tests
 │   ├── portefolje.test.js     # Tests: FIFO, IRR, TWR
@@ -158,6 +163,8 @@ python scripts/regenerer_sider.py     # Regenerate HTML pages only (fast, no Yah
 python scripts/utvid_beskrivelser.py  # Expand descriptions in tickers.json
 python scripts/fetch_priser.py        # Update priser.json
 python scripts/valider_data.py        # Run data quality checks on aksjer.json
+python scripts/sjekk_utdaterte.py     # Detect delisted/renamed/duplicate tickers
+python scripts/test_sjekk_utdaterte.py  # Tests for the stale-ticker checks
 ```
 
 ### Local Development
@@ -408,6 +415,79 @@ Exit code 0 = OK, exit code 1 = critical errors found.
 ### Automatic execution
 
 The script runs automatically in the daily GitHub Actions workflow (`update-og-deploy.yml`) after `fetch_stocks.py` completes, before committing updated data. See the `Valider datakvalitet` step in the workflow.
+
+---
+
+## Detecting Outdated Tickers (delisted / renamed / acquired)
+
+`scripts/sjekk_utdaterte.py` catches tickers that have gone stale because the company was
+delisted, renamed, acquired or merged. Without it these failures are **silent**:
+
+- `fetch_stocks.py` uses the name from `tickers.json` and never compares it against the name
+  Yahoo Finance actually returns → renames are invisible.
+- When a fetch fails, the pipeline falls back to the previous run's data indefinitely →
+  delistings are invisible.
+
+Historic incidents this covers: STRO/SNI and VENDA/VEND duplicates, the phantom ODLD ticker,
+COOL's delisting in Jan 2026, and ABL Group → Aqualis (AQUA) in Jun 2026.
+
+### How it works
+
+`fetch_stocks.py` writes per-ticker diagnostics to `data/hentelogg.json` on every run
+(Yahoo's own company name, market cap, last trade date, success/failure). `sjekk_utdaterte.py`
+reads that log, compares it against state from earlier runs in `data/ticker_status.json`, and
+writes alerts to `data/ticker_varsler.json`.
+
+**State is measured in days, not runs**, so thresholds mean the same thing regardless of how
+often the workflow fires.
+
+### Checks
+
+| Check | Trigger | Severity | Needs history |
+|---|---|---|---|
+| `duplikat_ticker_yf` | Two entries share a `ticker_yf` | kritisk | No |
+| `duplikat_navn` | Two entries share a company name | kritisk | No |
+| `ingen_data` | In `tickers.json` but no row in `aksjer.json` | kritisk | No |
+| `identiske_data` | Two tickers with identical price/dividend/52w | kritisk | No |
+| `navneendring` | Yahoo's name differs from ours (<60 % similar) | advarsel → kritisk after 2 days | Yes |
+| `mulig_avnotering` | No successful fetch for 7 days | kritisk | Yes |
+| `hentefeil` | No successful fetch for 3 days | advarsel | Yes |
+| `fastfrosset_kurs` | Last trade ≥ 5 trading days ago | advarsel | No |
+| `markedsverdi_borte` | Market cap disappeared since last run | advarsel | Yes |
+
+The four checks that need no history work from the existing data files, so the script is useful
+on the very first run — before any `hentelogg.json` exists.
+
+### Name comparison
+
+`normaliser_navn()` strips legal forms (ASA, Ltd, PLC, Holding …) before comparing, so
+"Equinor ASA" vs "Equinor" is a match. Share-class markers are **preserved** — "Wilh. Wilhelmsen
+Holding" and "… Holding B" must not collapse to the same string. A prefix match counts as
+identical, since Yahoo is often more or less verbose than our catalog.
+
+### Running manually
+
+```bash
+python scripts/sjekk_utdaterte.py            # normal run, always exits 0
+python scripts/sjekk_utdaterte.py --streng   # exit 1 on critical alerts
+python scripts/sjekk_utdaterte.py --tort     # analyse without writing state files
+python scripts/sjekk_utdaterte.py --issue-tekst  # markdown body for the GitHub issue
+```
+
+### Automatic execution and alerting
+
+Runs in `update-og-deploy.yml` after `valider_data.py`. It **deliberately does not block the
+deploy** — a renamed company must not stop price updates. Instead:
+
+1. Alerts go to the GitHub Actions job summary as a markdown table.
+2. The `Varsle om utdaterte aksjer` step keeps a single issue (label `utdaterte-aksjer`)
+   up to date, and **closes it automatically** once all critical alerts are gone.
+
+Tests live in `scripts/test_sjekk_utdaterte.py` (stdlib `unittest`, no network, no pytest):
+
+```bash
+python scripts/test_sjekk_utdaterte.py
+```
 
 ---
 
