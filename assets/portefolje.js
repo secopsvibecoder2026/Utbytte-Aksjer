@@ -1935,7 +1935,7 @@ function oppdaterPortefoljeVelger() {
   const sel = document.getElementById('pf-portefolje-velg');
   if (!sel) return;
   sel.innerHTML = Object.values(pfl).map(p =>
-    `<option value="${p.id}" ${p.id === aktivId ? 'selected' : ''}>${p.navn}</option>`
+    `<option value="${escHtml(p.id)}" ${p.id === aktivId ? 'selected' : ''}>${escHtml(p.navn)}</option>`
   ).join('');
   // Deaktiver slett-knapp hvis bare én portefølje
   const slettBtn = document.getElementById('pf-portefolje-slett');
@@ -1975,7 +1975,7 @@ function visWatchlister() {
   const sel = document.getElementById('wl-velg');
   const valgt = sel.value || (lister[0]?.id);
   sel.innerHTML = lister.map(w =>
-    `<option value="${w.id}" ${w.id === valgt ? 'selected' : ''}>${w.navn} (${w.tickers.length})</option>`
+    `<option value="${escHtml(w.id)}" ${w.id === valgt ? 'selected' : ''}>${escHtml(w.navn)} (${w.tickers.length})</option>`
   ).join('');
 
   const aktivListe = lister.find(w => w.id === valgt) || lister[0];

@@ -10,7 +10,7 @@
 
 | Alvorlighetsgrad | Antall | Status |
 |---|---|---|
-| Kritisk | 3 | 2/3 fikset — se Fase 0 |
+| Kritisk | 3 | ✅ Fikset (2 stk 2026-04-06, 1 stk 2026-08-09) |
 | Høy | 1 | ✅ Fikset 2026-04-06 |
 | Medium | 4 | 1/4 fikset |
 | Lav | 8 | Åpen |
@@ -18,27 +18,29 @@
 
 ---
 
-## Fase 0 — Kritisk, funnet 2026-08-09 (app-review)
+## Fase 0 — Kritisk, funnet 2026-08-09 (app-review) ✅ Fikset 2026-08-09
 
 ### Stored XSS via JSON-backup-import
-**Filer:** `assets/ui.js` (linje 2083, 2103, 2110), `assets/portefolje.js` (linje 1923, 1963)
-**Status:** ⏳ Åpen — se [ROADMAP_NYE_IDEER.md § B4](ROADMAP_NYE_IDEER.md#b4-stored-xss-via-json-backup-import)
+**Filer:** `assets/ui.js`, `assets/portefolje.js`
+**Status:** ✅ **Fikset** — se [ROADMAP_NYE_IDEER.md § B4](ROADMAP_NYE_IDEER.md#b4-stored-xss-via-json-backup-import)
 
-`parseJSONBackup()` validerer kun at `versjon` er et tall 1–5 — ingen sjekk av innhold. `visJSONPreview()` interpolerer deretter `backup.profil.navn` rått inn i `innerHTML`, og dette skjer i selve forhåndsvisningen, **før** brukeren rekker å bekrefte eller avbryte importen.
+`parseJSONBackup()` validerte kun at `versjon` var et tall 1–5 — ingen sjekk av innhold. `visJSONPreview()` interpolerte deretter `backup.profil.navn` rått inn i `innerHTML`, og dette skjedde i selve forhåndsvisningen, **før** brukeren rakk å bekrefte eller avbryte importen.
 
 Verifisert ende-til-ende med testfil:
 ```json
 {"versjon": 3, "profil": {"navn": "<img src=x onerror=alert(document.domain)>"}}
 ```
-Payloaden overlever `parseJSONBackup()` uendret og eksekverer ved forhåndsvisning.
+Payloaden overlevde `parseJSONBackup()` uendret og eksekverte ved forhåndsvisning.
 
-Videre persisterer angrepet: `bekreftJSONImport()` skriver `backup.portefoljer`/`backup.watchlister` uvalidert til `localStorage`, og porteføljenavn/watchliste-navn rendres rått i `<option>`-elementer ved *hver* etterfølgende applast (`portefolje.js:1923`, `1963`) — altså persistent XSS som kjører på nytt hver gang brukeren åpner appen, med tilgang til hele porteføljen, transaksjonshistorikken og profildataene i `localStorage`.
+Videre persisterte angrepet: `bekreftJSONImport()` skrev `backup.portefoljer`/`backup.watchlister` uvalidert til `localStorage`, og porteføljenavn/watchliste-navn rendres rått i `<option>`-elementer ved *hver* etterfølgende applast — altså persistent XSS som ville kjørt på nytt hver gang brukeren åpner appen, med tilgang til hele porteføljen, transaksjonshistorikken og profildataene i `localStorage`.
 
-**Fix:**
-- `escHtml()` på `p.navn` i `visJSONPreview()` (ui.js:2103)
-- `escHtml()` på `p.navn` i porteføljevelgeren (portefolje.js:1923)
-- `escHtml()` på `w.navn` i watchliste-velgeren (portefolje.js:1963)
-- Utvid `parseJSONBackup()` til å validere feltyper, ikke bare `versjon`
+**Fikset:**
+- `escHtml()` på `p.navn` i `visJSONPreview()` (ui.js:2142)
+- `escHtml()` på `p.id`/`p.navn` i porteføljevelgeren (portefolje.js:1938)
+- `escHtml()` på `w.id`/`w.navn` i watchliste-velgeren (portefolje.js:1978)
+- Ny `_erGyldigBackupStruktur()` i `parseJSONBackup()`: validerer at `profil`/`portefoljer`/`watchlister`/`favoritter`/`notif_aksjer`/`rebalansering` har riktig grunnform (objekt vs. array) og at `navn`-felt er strenger, som andre forsvarslinje bak `escHtml()`
+
+Verifisert etter fiks: samme payload escapes til harmløs tekst; fire malformerte teststrukturer avvises; ekte v5-eksport, legacy v1-format og minimal `{"versjon":1}` godtas fortsatt uendret. 60/60 eksisterende tester grønne (ingen regresjon).
 
 ---
 
@@ -199,7 +201,7 @@ Ingen bruk av `subprocess`, `os.system()`, `eval()` eller `shell=True` funnet.
 
 ## Neste steg
 
-- [ ] Fase 0: Sanitér `p.navn`/`w.navn` i JSON-backup-import (se over)
+- [x] Fase 0: Sanitér `p.navn`/`w.navn` i JSON-backup-import (se over)
 - [x] Fase 1: Bytt inline onclick → data-attributter i `ui.js`
 - [x] Fase 1: Sanitér `beskrivelse`-felt i `innerHTML`
 - [x] Fase 2: Legg til `urllib.parse.quote()` i `fetch_stocks.py`

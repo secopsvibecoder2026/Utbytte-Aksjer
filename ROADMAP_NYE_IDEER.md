@@ -29,17 +29,19 @@ Modal viser "om 0 dager" når ex-dato er i dag. Aksjekortet håndterer dette kor
 
 - [x] Legg til `<link rel="canonical" href="https://exday.no/uke/" />`
 
-### B4. Stored XSS via JSON-backup-import
+### B4. Stored XSS via JSON-backup-import ✅
 **Prioritet: Kritisk — se [SECURITY_ROADMAP.md](SECURITY_ROADMAP.md)**
 
-`parseJSONBackup()` (`ui.js:2083`) validerer kun at `versjon` er et tall 1–5. `visJSONPreview()` interpolerer deretter `backup.profil.navn` rått inn i `innerHTML` — **i selve forhåndsvisningen, før brukeren bekrefter importen.** Verifisert med `{"versjon":3,"profil":{"navn":"<img src=x onerror=alert(document.domain)>"}}` — payloaden overlever intakt.
+`parseJSONBackup()` (`ui.js:2083`) validerte kun at `versjon` var et tall 1–5. `visJSONPreview()` interpolerte deretter `backup.profil.navn` rått inn i `innerHTML` — **i selve forhåndsvisningen, før brukeren bekreftet importen.** Verifisert med `{"versjon":3,"profil":{"navn":"<img src=x onerror=alert(document.domain)>"}}` — payloaden overlevde intakt.
 
-`bekreftJSONImport()` skriver deretter `backup.portefoljer`/`backup.watchlister` uvalidert til localStorage, og porteføljenavn (`portefolje.js:1923`) og watchliste-navn (`portefolje.js:1963`) rendres rått i `<option>`-tagger ved hver applast — så et ondsinnet navn persisterer og kjører på nytt hver gang appen åpnes.
+`bekreftJSONImport()` skrev deretter `backup.portefoljer`/`backup.watchlister` uvalidert til localStorage, og porteføljenavn og watchliste-navn rendres rått i `<option>`-tagger ved hver applast — så et ondsinnet navn ville persistert og kjørt på nytt hver gang appen åpnes.
 
-- [ ] `escHtml()` på `p.navn` i `visJSONPreview()` (ui.js:2103)
-- [ ] `escHtml()` på `p.navn` i porteføljevelgeren (portefolje.js:1923)
-- [ ] `escHtml()` på `w.navn` i watchliste-velgeren (portefolje.js:1963)
-- [ ] Valider typer i `parseJSONBackup()` — ikke bare `versjon`
+- [x] `escHtml()` på `p.navn` i `visJSONPreview()` (ui.js:2142)
+- [x] `escHtml()` på `p.id`/`p.navn` i porteføljevelgeren (portefolje.js:1938)
+- [x] `escHtml()` på `w.id`/`w.navn` i watchliste-velgeren (portefolje.js:1978)
+- [x] Valider typer i `parseJSONBackup()` — ny `_erGyldigBackupStruktur()` sjekker at `profil`/`portefoljer`/`watchlister`/`favoritter`/`notif_aksjer`/`rebalansering` har riktig grunnform (objekt vs. array) og at `navn`-felt er strenger, før dataene lagres
+
+Verifisert: samme XSS-payload escapes nå til harmløs tekst; fire ulike malformerte strukturer (array der objekt forventes, feil felttype) avvises av validatoren; ekte v5-eksport, legacy v1-format og minimal `{"versjon":1}` godtas fortsatt uendret.
 
 ### B5. IRR annualiserer korte perioder til absurde tall ✅
 **Prioritet: Høy — ser ut som en bug for brukeren**

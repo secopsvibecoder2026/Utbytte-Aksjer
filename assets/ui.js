@@ -2080,10 +2080,49 @@ function eksporterJSON() {
   URL.revokeObjectURL(url);
 }
 
+// Sjekker at strukturen matcher det nedstrøms kode (visJSONPreview,
+// bekreftJSONImport) forventer, slik at Object.entries/.map/.reduce ikke
+// kaster på skadet eller ondsinnet input. Går ikke i detalj på hvert felt —
+// escHtml() ved rendring er hovedforsvaret mot XSS — men fanger opp feil
+// grunnform (array der det skal være objekt, e.l.) før dataene lagres.
+function _erGyldigBackupStruktur(b) {
+  const erObjekt = v => v !== null && typeof v === 'object' && !Array.isArray(v);
+  if (!erObjekt(b)) return false;
+  if (typeof b.versjon !== 'number' || b.versjon < 1 || b.versjon > 5) return false;
+
+  if (b.profil !== undefined && !erObjekt(b.profil)) return false;
+  if (b.profil?.navn !== undefined && typeof b.profil.navn !== 'string') return false;
+
+  if (b.portefoljer !== undefined) {
+    if (!erObjekt(b.portefoljer)) return false;
+    for (const pf of Object.values(b.portefoljer)) {
+      if (!erObjekt(pf)) return false;
+      if (pf.navn !== undefined && typeof pf.navn !== 'string') return false;
+      if (pf.beholdning !== undefined && !erObjekt(pf.beholdning)) return false;
+      if (pf.transaksjoner !== undefined && !erObjekt(pf.transaksjoner)) return false;
+    }
+  }
+
+  if (b.watchlister !== undefined) {
+    if (!Array.isArray(b.watchlister)) return false;
+    for (const w of b.watchlister) {
+      if (!erObjekt(w)) return false;
+      if (w.navn !== undefined && typeof w.navn !== 'string') return false;
+      if (w.tickers !== undefined && !Array.isArray(w.tickers)) return false;
+    }
+  }
+
+  if (b.favoritter !== undefined && !Array.isArray(b.favoritter)) return false;
+  if (b.notif_aksjer !== undefined && !Array.isArray(b.notif_aksjer)) return false;
+  if (b.rebalansering !== undefined && !erObjekt(b.rebalansering)) return false;
+
+  return true;
+}
+
 function parseJSONBackup(tekst) {
   try {
     const b = JSON.parse(tekst);
-    if (!b || typeof b.versjon !== 'number' || b.versjon < 1 || b.versjon > 5) return null;
+    if (!_erGyldigBackupStruktur(b)) return null;
     return b;
   } catch { return null; }
 }
@@ -2100,7 +2139,7 @@ function visJSONPreview(backup) {
   const na  = backup.notif_aksjer || [];
   const antallRebal = Object.keys(backup.rebalansering || {}).length;
   const linjer = [
-    p.navn ? `Profil: ${p.navn}` : 'Profil: (ikke satt)',
+    p.navn ? `Profil: ${escHtml(p.navn)}` : 'Profil: (ikke satt)',
     `${antallPF} portefølje${antallPF !== 1 ? 'r' : ''} · ${antallPos} posisjoner · ${antallTx} transaksjoner`,
     `Favoritter: ${fav.length} · Watchlister: ${wl.length} · Varsler: ${na.length} aksjer`
       + (antallRebal ? ` · Rebalansering: ${antallRebal} sektormål` : ''),
