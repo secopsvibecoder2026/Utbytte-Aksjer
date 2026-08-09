@@ -211,6 +211,39 @@ test('beregnIRR: ingen aksjer med kjent pris gir harNokData=false', () => {
   assert.equal(result.harNokData, false);
 });
 
+// Regresjonstest for at annualisering over korte perioder ikke lenger vises
+// direkte som "IRR": +15 % kursgevinst på 31 dager annualisert til (1+r)^365
+// blir ca. +418 %, teknisk korrekt men villedende. Under ett år skal UI-en
+// vise periodeAvkastning (den faktiske gevinsten over perioden) i stedet.
+test('beregnIRR: kort periode (< 1 år) gir annualisert=false og korrekt periodeAvkastning', () => {
+  const for31Dager = new Date();
+  for31Dager.setDate(for31Dager.getDate() - 31);
+  const dato = for31Dager.toISOString().slice(0, 10);
+
+  const tx = { EQNR: [{ id: '1', dato, type: 'kjøp', antall: 100, kurs: 100 }] };
+  global.alleAksjer = [{ ticker: 'EQNR', pris: 115, navn: 'Equinor' }]; // +15 % kursgevinst
+  const result = beregnIRR(tx);
+
+  assert.equal(result.harNokData, true);
+  assert.equal(result.annualisert, false, 'periode under 1 år skal ikke annualiseres i UI');
+  assert.ok(typeof result.periodeAvkastning === 'number');
+  // periodeAvkastning skal reflektere den faktiske gevinsten (~15 %), ikke
+  // det annualiserte tallet (~418 %) — liten toleranse for rentesrente-effekt.
+  assert.ok(Math.abs(result.periodeAvkastning - 15) < 0.5,
+    `periodeAvkastning bør være ~15 %, var ${result.periodeAvkastning}`);
+  // irr_ar finnes fortsatt (brukes ikke i UI når annualisert=false, men skal
+  // ikke fjernes — andre steder i koden kan ønske det rå annualiserte tallet).
+  assert.ok(result.irr_ar > 100, 'annualisert tall over kort periode skal fortsatt være stort');
+});
+
+test('beregnIRR: lang periode (≥ 1 år) gir annualisert=true', () => {
+  const tx = { EQNR: [{ id: '1', dato: '2024-01-01', type: 'kjøp', antall: 100, kurs: 100 }] };
+  global.alleAksjer = [{ ticker: 'EQNR', pris: 120, navn: 'Equinor' }];
+  const result = beregnIRR(tx);
+  assert.equal(result.harNokData, true);
+  assert.equal(result.annualisert, true);
+});
+
 // ── beregnTWRSerie ──────────────────────────────────────────────────────────
 
 test('beregnTWRSerie: uten transaksjoner = lik prisutvikling', () => {

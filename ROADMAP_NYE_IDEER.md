@@ -41,7 +41,7 @@ Modal viser "om 0 dager" når ex-dato er i dag. Aksjekortet håndterer dette kor
 - [ ] `escHtml()` på `w.navn` i watchliste-velgeren (portefolje.js:1963)
 - [ ] Valider typer i `parseJSONBackup()` — ikke bare `versjon`
 
-### B5. IRR annualiserer korte perioder til absurde tall
+### B5. IRR annualiserer korte perioder til absurde tall ✅
 **Prioritet: Høy — ser ut som en bug for brukeren**
 
 `beregnIRR()` (`portefolje.js:401`) tillater annualisering ned til 30 dager. Newton-Raphson-matematikken er korrekt, men `(1+r)^365` gjør at helt normale gevinster blir meningsløse tall:
@@ -55,8 +55,7 @@ Modal viser "om 0 dager" når ex-dato er i dag. Aksjekortet håndterer dette kor
 
 Verifisert ved å kjøre den faktiske Newton-Raphson-koden isolert med flere cashflow-scenarier.
 
-- [ ] Hev grensen på linje 401 fra 30 til ~180 dager, eller
-- [ ] Vis ikke-annualisert periodeavkastning når `periodeAr < 1`
+- [x] Vis ikke-annualisert periodeavkastning når `periodeAr < 1` — `beregnIRR()` returnerer nå `periodeAvkastning` og `annualisert`; UI-en (`portefolje.js:1047-1069`) viser `periodeAvkastning` og bytter etikett til «Avkastning (periode)» når perioden er under ett år, «IRR (per år)» ellers. `irr_ar` beholdes uendret i returverdien. To nye tester i `tests/portefolje.test.js`.
 
 ### B6. Oversalg feiler i stillhet
 **Prioritet: Medium**

@@ -416,10 +416,19 @@ function beregnIRR(txMap) {
 
   if (!konvergen) return { harNokData: false };
 
+  const periodeAr = totalDager / 365;
   return {
     harNokData: true,
-    irr_ar:     (Math.pow(1 + r, 365) - 1) * 100,
-    periodeAr:  totalDager / 365,
+    // Årlig rate — meningsfull først når perioden nærmer seg eller
+    // overstiger ett år. Vises derfor kun når annualisert === true.
+    irr_ar: (Math.pow(1 + r, 365) - 1) * 100,
+    // Faktisk avkastning over den reelle perioden (ikke annualisert).
+    // For korte perioder gir annualisering absurde tall — en helt normal
+    // +15 % over 31 dager blir +418 % annualisert, teknisk korrekt men
+    // villedende. periodeAvkastning viser i stedet den ekte gevinsten.
+    periodeAvkastning: (Math.pow(1 + r, totalDager) - 1) * 100,
+    annualisert: periodeAr >= 1,
+    periodeAr,
     forsteDato: cashflows[0].dato
   };
 }
@@ -1036,12 +1045,16 @@ function visPortefolje() {
     visOsebxSammenligning(alleBeholdning, pfPctTotal, osebxPctTotal, invKost, totalReturnKr, forsteTxDato, osebxStartDato, osebxSluttDato, aktivPeriode);
 
     // ── IRR (annualisert intern avkastningsrate) ──────────────────────────────
-    const irrEl    = document.getElementById('pf-stat-irr');
-    const irrTekst = document.getElementById('pf-stat-irr-tekst');
+    const irrEl      = document.getElementById('pf-stat-irr');
+    const irrTekst   = document.getElementById('pf-stat-irr-tekst');
+    const irrLabelEl = document.getElementById('pf-stat-irr-label');
     if (irrEl) {
       const irr = beregnIRR();
       if (irr.harNokData) {
-        const pct = irr.irr_ar;
+        // Under ett år vises faktisk periodeavkastning, ikke annualisert —
+        // en annualisert +15 % over 31 dager blir +418 %, teknisk korrekt
+        // men villedende for brukeren.
+        const pct = irr.annualisert ? irr.irr_ar : irr.periodeAvkastning;
         irrEl.textContent  = (pct >= 0 ? '+' : '') + pct.toFixed(1) + '%';
         irrEl.className    = 'stat-value text-base ' + (pct >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-500');
         const mnd = Math.round(irr.periodeAr * 12);
@@ -1049,9 +1062,11 @@ function visPortefolje() {
           ? (mnd < 1 ? '< 1 mnd' : mnd + ' mnd')
           : irr.periodeAr.toFixed(1) + ' år';
         if (irrTekst) irrTekst.textContent = 'over ' + aar;
+        if (irrLabelEl) irrLabelEl.textContent = irr.annualisert ? 'IRR (per år)' : 'Avkastning (periode)';
       } else {
         irrEl.textContent  = '—';
         irrEl.className    = 'stat-value text-base';
+        if (irrLabelEl) irrLabelEl.textContent = 'IRR (per år)';
         if (irrTekst) irrTekst.textContent = irr.forKort ? 'trenger 30 dager' : 'trenger transaksjoner';
       }
     }
