@@ -37,6 +37,40 @@ function beregnKostbasis(ticker, txMap) {
 
 
 
+// Leser "Ny transaksjon"-skjemaet i en detail-rad og registrerer transaksjonen.
+// Delt av kortvisning (mobil) og tabellvisning (desktop) sine onclick-handlere.
+function _registrerTransaksjonFraRad(leggTilBtn, rad) {
+  const ticker  = leggTilBtn.dataset.ticker;
+  const type    = rad.querySelector('.pf-detail-type').value;
+  const datoRaw = rad.querySelector('.pf-detail-dato').value;
+  const dato    = datoRaw || new Date().toISOString().slice(0, 10);
+  const antall  = parseInt(rad.querySelector('.pf-detail-antall').value, 10);
+  const kurs    = parseFloat(rad.querySelector('.pf-detail-kurs').value);
+  if (!antall || antall < 1 || !kurs || kurs <= 0) return;
+
+  const txData = hentTransaksjoner();
+
+  // Salg kan ikke overstige gjeldende beholdning. Uten denne sjekken tømmer
+  // beregnKostbasis() FIFO-lottene og kaster resten av salgsantallet uten
+  // varsel — en skrivefeil (1000 i stedet for 100) gir da bare 0 i
+  // beholdning, uten forklaring på hvorfor.
+  if (type === 'salg') {
+    const eidAntall = beregnKostbasis(ticker, txData).antall;
+    if (antall > eidAntall) {
+      alert(`Kan ikke selge ${antall} aksjer — du eier ${eidAntall}.`);
+      return;
+    }
+  }
+
+  if (!txData[ticker]) txData[ticker] = [];
+  txData[ticker].push({ id: Date.now().toString(), dato, antall, kurs, type });
+  txData[ticker].sort((a, b) => a.dato.localeCompare(b.dato));
+  lagreTransaksjoner(txData);
+  _aapneDetailRader.add(ticker);
+  visPortefolje();
+}
+
+
 // Bygger HTML-innholdet for en rad sin detail-panel (kostbasis + tx-form + logg)
 function byggDetailHtml(ticker, kb, marked) {
   const fmtKr   = v => v.toLocaleString('nb-NO', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) + '\u00a0kr';
@@ -1252,21 +1286,7 @@ function visPortefolje() {
       if (e.target.closest('.pf-kort-detalj')) {
         const leggTilBtn = e.target.closest('.pf-detail-legg-til');
         if (leggTilBtn) {
-          const ticker  = leggTilBtn.dataset.ticker;
-          const rad     = leggTilBtn.closest('.pf-detail-rad');
-          const type    = rad.querySelector('.pf-detail-type').value;
-          const datoRaw = rad.querySelector('.pf-detail-dato').value;
-          const dato    = datoRaw || new Date().toISOString().slice(0, 10);
-          const antall  = parseInt(rad.querySelector('.pf-detail-antall').value, 10);
-          const kurs    = parseFloat(rad.querySelector('.pf-detail-kurs').value);
-          if (!antall || antall < 1 || !kurs || kurs <= 0) return;
-          const txData = hentTransaksjoner();
-          if (!txData[ticker]) txData[ticker] = [];
-          txData[ticker].push({ id: Date.now().toString(), dato, antall, kurs, type });
-          txData[ticker].sort((a, b) => a.dato.localeCompare(b.dato));
-          lagreTransaksjoner(txData);
-          _aapneDetailRader.add(ticker);
-          visPortefolje();
+          _registrerTransaksjonFraRad(leggTilBtn, leggTilBtn.closest('.pf-detail-rad'));
           return;
         }
         const txSlett = e.target.closest('.pf-tx-slett');
@@ -1318,21 +1338,7 @@ function visPortefolje() {
     // Legg til transaksjon fra detail-rad
     const leggTilBtn = e.target.closest('.pf-detail-legg-til');
     if (leggTilBtn) {
-      const ticker  = leggTilBtn.dataset.ticker;
-      const rad     = leggTilBtn.closest('.pf-detail-rad');
-      const type    = rad.querySelector('.pf-detail-type').value;
-      const datoRaw = rad.querySelector('.pf-detail-dato').value;
-      const dato    = datoRaw || new Date().toISOString().slice(0, 10);
-      const antall  = parseInt(rad.querySelector('.pf-detail-antall').value, 10);
-      const kurs    = parseFloat(rad.querySelector('.pf-detail-kurs').value);
-      if (!antall || antall < 1 || !kurs || kurs <= 0) return;
-      const txData = hentTransaksjoner();
-      if (!txData[ticker]) txData[ticker] = [];
-      txData[ticker].push({ id: Date.now().toString(), dato, antall, kurs, type });
-      txData[ticker].sort((a, b) => a.dato.localeCompare(b.dato));
-      lagreTransaksjoner(txData);
-      _aapneDetailRader.add(ticker);
-      visPortefolje();
+      _registrerTransaksjonFraRad(leggTilBtn, leggTilBtn.closest('.pf-detail-rad'));
       return;
     }
     // Slett transaksjon fra detail-rad

@@ -59,13 +59,17 @@ Verifisert ved å kjøre den faktiske Newton-Raphson-koden isolert med flere cas
 
 - [x] Vis ikke-annualisert periodeavkastning når `periodeAr < 1` — `beregnIRR()` returnerer nå `periodeAvkastning` og `annualisert`; UI-en (`portefolje.js:1047-1069`) viser `periodeAvkastning` og bytter etikett til «Avkastning (periode)» når perioden er under ett år, «IRR (per år)» ellers. `irr_ar` beholdes uendret i returverdien. To nye tester i `tests/portefolje.test.js`.
 
-### B6. Oversalg feiler i stillhet
+### B6. Oversalg feiler i stillhet ✅
 **Prioritet: Medium**
 
-`beregnKostbasis()` (`portefolje.js:19-27`) tømmer FIFO-lottene og kaster resten av salgsantallet uten varsel. Registrerer brukeren et salg større enn beholdningen (skrivefeil, f.eks. 1000 i stedet for 100), blir posisjonen bare 0 — ingen feilmelding, ingen indikasjon på at noe er galt.
+`beregnKostbasis()` (`portefolje.js`) tømmer FIFO-lottene og kaster resten av salgsantallet uten varsel. Registrerer brukeren et salg større enn beholdningen (skrivefeil, f.eks. 1000 i stedet for 100), ble posisjonen bare 0 — ingen feilmelding, ingen indikasjon på at noe er galt.
 
-- [ ] Valider salgsantall mot gjeldende beholdning før registrering
-- [ ] Vis feilmelding i UI ved forsøk på oversalg
+`beregnKostbasis()` selv er urørt — den er en robust beregningsfunksjon som bevisst håndterer historiske data (inkl. eventuell gammel skjev data) uten å kaste. Fiksen legger i stedet inn en sperre der nye transaksjoner faktisk registreres.
+
+- [x] Valider salgsantall mot gjeldende beholdning før registrering — ny delt hjelpefunksjon `_registrerTransaksjonFraRad()` (portefolje.js), brukt av både mobil-kortvisningen og desktop-tabellvisningen (som tidligere hadde identisk, duplisert registreringslogikk)
+- [x] Vis feilmelding i UI ved forsøk på oversalg — `alert()`, konsistent med eksisterende validering andre steder i kodebasen (JSON-import, QR-import)
+
+Verifisert direkte mot `beregnKostbasis()`: forsøk på å selge 1000 av 100 blokkeres, selge 50 eller nøyaktig 100 av 100 godtas, selge noe man aldri har eid (0) blokkeres. 60/60 eksisterende tester grønne (ingen regresjon i `beregnKostbasis()` selv).
 
 ### B7. Villedende IRR-feilmelding
 **Prioritet: Lav**
