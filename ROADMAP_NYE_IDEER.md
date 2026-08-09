@@ -71,12 +71,14 @@ Verifisert ved å kjøre den faktiske Newton-Raphson-koden isolert med flere cas
 
 Verifisert direkte mot `beregnKostbasis()`: forsøk på å selge 1000 av 100 blokkeres, selge 50 eller nøyaktig 100 av 100 godtas, selge noe man aldri har eid (0) blokkeres. 60/60 eksisterende tester grønne (ingen regresjon i `beregnKostbasis()` selv).
 
-### B7. Villedende IRR-feilmelding
+### B7. Villedende IRR-feilmelding ✅
 **Prioritet: Lav**
 
-`beregnIRR()` returnerer «trenger transaksjoner» for to ulike årsaker: `terminalVerdi <= 0` (portefolje.js:389) og manglende Newton-Raphson-konvergens (portefolje.js:417). Begge vises identisk selv når brukeren har mange registrerte transaksjoner.
+`beregnIRR()` returnerte «trenger transaksjoner» for fire ulike årsaker under ett: ingen transaksjoner i det hele tatt, `terminalVerdi <= 0` (solgt alt / mangler prisdata), for kort periode (< 30 dager), og manglende Newton-Raphson-konvergens. Alle fire ble vist identisk, selv når brukeren hadde mange registrerte transaksjoner.
 
-- [ ] Skill meldingene: «ingen gjeldende beholdning» vs. «kunne ikke beregne»
+- [x] Skill meldingene — hver `return { harNokData: false }`-gren i `beregnIRR()` har nå en egen `arsak`-kode (`ingen_transaksjoner`, `ingen_beholdning`, `for_kort_periode`, `ingen_konvergens`), og UI-en (`portefolje.js`) slår opp presis tekst per årsak i stedet for det tidligere binære `forKort`-flagget
+
+Verifisert direkte mot `beregnIRR()` for alle fire grener, inkludert et scenario for `ingen_konvergens` (99,5 %+ kurstap trigger Newton-Raphsons `rNy <= -1`-brudd pålitelig). Tre nye tester i `tests/portefolje.test.js`, 63/63 grønne.
 
 ### B8. Service worker venter ikke på cache-skriving
 **Prioritet: Lav — race condition, sjelden synlig**

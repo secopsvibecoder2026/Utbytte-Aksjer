@@ -395,7 +395,7 @@ function beregnIRR(txMap) {
     liste.map(t => ({ ...t, ticker }))
   ).sort((a, b) => a.dato.localeCompare(b.dato));
 
-  if (alle.length === 0) return { harNokData: false };
+  if (alle.length === 0) return { harNokData: false, arsak: 'ingen_transaksjoner' };
 
   // Kontantstrømmer: negative = penger ut (kjøp), positive = penger inn (salg, utbytte)
   const cashflows = [];
@@ -420,7 +420,10 @@ function beregnIRR(txMap) {
     if (aksje?.pris > 0) terminalVerdi += antall * aksje.pris;
   });
 
-  if (terminalVerdi <= 0) return { harNokData: false };
+  // Ikke nødvendigvis "trenger transaksjoner" — brukeren kan ha solgt hele
+  // beholdningen, eller aksjen mangler prisdata. Egen årsakskode slik at
+  // UI-en kan vise en presis melding i stedet for en generisk en.
+  if (terminalVerdi <= 0) return { harNokData: false, arsak: 'ingen_beholdning' };
 
   const idag = new Date().toISOString().slice(0, 10);
   cashflows.push({ dato: idag, cf: +terminalVerdi });
@@ -432,7 +435,7 @@ function beregnIRR(txMap) {
   }));
 
   const totalDager = cfArr[cfArr.length - 1].t;
-  if (totalDager < 30) return { harNokData: false, forKort: true };  // IRR er ikke meningsfull under 30 dager
+  if (totalDager < 30) return { harNokData: false, arsak: 'for_kort_periode' };  // IRR er ikke meningsfull under 30 dager
 
   const npv  = r => cfArr.reduce((s, {t, cf}) => s + cf / Math.pow(1 + r, t), 0);
   const dnpv = r => cfArr.reduce((s, {t, cf}) => s - t * cf / Math.pow(1 + r, t + 1), 0);
@@ -448,7 +451,7 @@ function beregnIRR(txMap) {
     r = rNy;
   }
 
-  if (!konvergen) return { harNokData: false };
+  if (!konvergen) return { harNokData: false, arsak: 'ingen_konvergens' };
 
   const periodeAr = totalDager / 365;
   return {
@@ -1101,7 +1104,17 @@ function visPortefolje() {
         irrEl.textContent  = '—';
         irrEl.className    = 'stat-value text-base';
         if (irrLabelEl) irrLabelEl.textContent = 'IRR (per år)';
-        if (irrTekst) irrTekst.textContent = irr.forKort ? 'trenger 30 dager' : 'trenger transaksjoner';
+        // Presis melding per årsak — «trenger transaksjoner» var tidligere
+        // vist selv når brukeren hadde mange registrerte transaksjoner, men
+        // beregningen feilet av en annen grunn (solgt alt, for kort periode,
+        // eller numerisk ikke-konvergens).
+        const IRR_ARSAK_TEKST = {
+          ingen_transaksjoner: 'trenger transaksjoner',
+          ingen_beholdning:    'ingen beholdning med kjent pris',
+          for_kort_periode:    'trenger 30 dager',
+          ingen_konvergens:    'kunne ikke beregne',
+        };
+        if (irrTekst) irrTekst.textContent = IRR_ARSAK_TEKST[irr.arsak] || 'trenger transaksjoner';
       }
     }
 

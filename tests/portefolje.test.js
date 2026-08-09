@@ -171,6 +171,7 @@ test('beregnIRR: ingen transaksjoner gir harNokData=false', () => {
   global.alleAksjer = [];
   const result = beregnIRR({});
   assert.equal(result.harNokData, false);
+  assert.equal(result.arsak, 'ingen_transaksjoner');
 });
 
 test('beregnIRR: positiv kontantstrøm gir positiv IRR', () => {
@@ -209,6 +210,46 @@ test('beregnIRR: ingen aksjer med kjent pris gir harNokData=false', () => {
   global.alleAksjer = [{ ticker: 'EQNR', pris: 0, navn: 'Equinor' }];
   const result = beregnIRR(tx);
   assert.equal(result.harNokData, false);
+  assert.equal(result.arsak, 'ingen_beholdning');
+});
+
+// Regresjonstester for B7: beregnIRR() viste tidligere «trenger transaksjoner»
+// for alle fire feilårsaker under ett, selv når brukeren hadde massevis av
+// registrerte transaksjoner. Hver gren skal nå ha sin egen årsakskode.
+test('beregnIRR: solgt hele beholdningen gir arsak=ingen_beholdning', () => {
+  const tx = {
+    EQNR: [
+      { id: '1', dato: '2024-01-01', type: 'kjøp', antall: 100, kurs: 100 },
+      { id: '2', dato: '2024-06-01', type: 'salg', antall: 100, kurs: 120 }
+    ]
+  };
+  global.alleAksjer = [{ ticker: 'EQNR', pris: 120, navn: 'Equinor' }];
+  const result = beregnIRR(tx);
+  assert.equal(result.harNokData, false);
+  assert.equal(result.arsak, 'ingen_beholdning');
+});
+
+test('beregnIRR: periode under 30 dager gir arsak=for_kort_periode', () => {
+  const for10Dager = new Date();
+  for10Dager.setDate(for10Dager.getDate() - 10);
+  const dato = for10Dager.toISOString().slice(0, 10);
+
+  const tx = { EQNR: [{ id: '1', dato, type: 'kjøp', antall: 100, kurs: 100 }] };
+  global.alleAksjer = [{ ticker: 'EQNR', pris: 110, navn: 'Equinor' }];
+  const result = beregnIRR(tx);
+  assert.equal(result.harNokData, false);
+  assert.equal(result.arsak, 'for_kort_periode');
+});
+
+test('beregnIRR: ekstremt tap som ikke konvergerer gir arsak=ingen_konvergens', () => {
+  // Newton-Raphson bryter tidlig når r beveger seg forbi -1 (total ruin).
+  // Verifisert manuelt: 99,5 %+ kurstap over flere år trigger dette
+  // pålitelig og er datouavhengig (2020-datoen er alltid > 30 dager gammel).
+  const tx = { EQNR: [{ id: '1', dato: '2020-01-01', type: 'kjøp', antall: 100, kurs: 1000 }] };
+  global.alleAksjer = [{ ticker: 'EQNR', pris: 0.5, navn: 'Equinor' }];
+  const result = beregnIRR(tx);
+  assert.equal(result.harNokData, false);
+  assert.equal(result.arsak, 'ingen_konvergens');
 });
 
 // Regresjonstest for at annualisering over korte perioder ikke lenger vises
