@@ -80,12 +80,14 @@ Verifisert direkte mot `beregnKostbasis()`: forsøk på å selge 1000 av 100 blo
 
 Verifisert direkte mot `beregnIRR()` for alle fire grener, inkludert et scenario for `ingen_konvergens` (99,5 %+ kurstap trigger Newton-Raphsons `rNy <= -1`-brudd pålitelig). Tre nye tester i `tests/portefolje.test.js`, 63/63 grønne.
 
-### B8. Service worker venter ikke på cache-skriving
+### B8. Service worker venter ikke på cache-skriving ✅
 **Prioritet: Lav — race condition, sjelden synlig**
 
-I `sw.js` (linje 68, 82, 96) kalles `caches.open(...).then(c => c.put(...))` uten å returneres/awaites inn i `event.respondWith()`-kjeden. Blir SW-prosessen drept før promisen løser (mobil bakgrunnsbegrensning, rask navigering), skrives aldri cachen — offline-fallback blir upålitelig over tid.
+I `sw.js` ble `caches.open(...).then(c => c.put(...))` kalt tre steder (aksjer.json, HTML-navigasjon, JS/CSS) uten å returneres/awaites inn i `event.respondWith()`-kjeden eller sendes til `event.waitUntil()`. Ble SW-prosessen drept før promisen løste (mobil bakgrunnsbegrensning, rask navigering), ble cachen aldri skrevet — offline-fallback ble upålitelig over tid.
 
-- [ ] Kjed cache-skrivingen inn i responsen som returneres, eller flytt til `event.waitUntil()`
+- [x] Kjed cache-skrivingen til `event.waitUntil()` — de tre identiske forekomstene er samlet i en delt `networkFirstMedBakgrunnsCache()`-funksjon, som svarer med nettverksresponsen umiddelbart mens `waitUntil()` holder SW-en i live til cache-skrivingen fullfører i bakgrunnen
+
+Verifisert med en simulert SW-kontekst i Node: `respondWith()` løses før cache-skrivingen er ferdig (responsen forsinkes ikke), `waitUntil()` kalles nøyaktig én gang per fetch-event, og cache-skrivingen fullfører når den promisen ventes på. Rørte ikke `CACHE`-versjonsstrengen (styres av deploy-workflowen, ikke manuelt).
 
 ---
 
