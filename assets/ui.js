@@ -433,6 +433,98 @@ function initFire() {
   beregnFire();
 }
 
+// ── ARTIKLER ────────────────────────────────────────────────────────────────
+// Én kilde til sannhet for artikkelmetadata. Driver både «Lær»-fanen under
+// Verktøy og de sektorkontekstuelle lenkene nederst i aksjemodalen.
+// Legger du til en ny artikkel: legg den øverst her (nyeste først), og sett
+// `sektorer` hvis den er sektorspesifikk — da dukker den automatisk opp i
+// modalen for alle aksjer i de sektorene.
+const ARTIKLER = [
+  {
+    slug: '/artikler/sparebanker-oslo-bors/',
+    tittel: 'Sparebanker på Oslo Børs — hvorfor de gir stabile utbytter år etter år',
+    ingress: 'Egenkapitalbevis, eierbrøk og utjevningsfondet — mekanismen bak børsens mest utholdende utbyttebetalere.',
+    meta: '8. august 2026 · 13 min',
+    tags: ['Sektor', 'Guide'],
+    sektorer: ['Finans'],
+  },
+  {
+    slug: '/artikler/norske-shippingaksjer/',
+    tittel: 'Norske shippingaksjer og utbytte — høy yield, syklisitet og risiko',
+    ingress: 'Hva som driver den høye yielden, hvorfor den svinger, og hva du bør analysere før du investerer.',
+    meta: '6. juni 2026 · 12 min',
+    tags: ['Sektor'],
+    sektorer: ['Shipping', 'Skipsfart'],
+  },
+  {
+    slug: '/artikler/reinvestering-av-utbytte/',
+    tittel: 'Reinvestering av utbytte — rentes-rente-effekten over 20 år',
+    ingress: 'Hva skjer med porteføljen når du reinvesterer i stedet for å ta ut? Tabeller over 5, 10, 15 og 20 år.',
+    meta: '24. mai 2026 · 10 min',
+    tags: ['Strategi'],
+    sektorer: [],
+  },
+  {
+    slug: '/artikler/utbytteportefolje-sektorvekting/',
+    tittel: 'Slik bygger du en utbytteportefølje — sektorvekting og rebalansering',
+    ingress: 'Hvilke sektorer passer i en utbytteportefølje, hvordan setter du målvekter og rebalanserer disiplinert.',
+    meta: '8. mai 2026 · 11 min',
+    tags: ['Strategi', 'Guide'],
+    sektorer: [],
+  },
+  {
+    slug: '/artikler/aksjesparekonto-ask/',
+    tittel: 'Aksjesparekonto (ASK) for utbytteinvestorer — komplett guide',
+    ingress: 'Hva skjer med utbyttet i ASK, hvilke aksjer er tillatt, og når lønner ASK seg fremfor vanlig VPS-konto.',
+    meta: '3. mai 2026 · 12 min',
+    tags: ['Skatt', 'Guide'],
+    sektorer: [],
+  },
+  {
+    slug: '/artikler/utbytte-og-skatt/',
+    tittel: 'Utbytte og skatt i Norge — 37,84 %, skjermingsfradrag og ASK',
+    ingress: 'Effektiv skattesats, skjermingsfradraget, ASK vs. VPS og kildeskatt på utenlandske aksjer.',
+    meta: '23. april 2026 · 10 min',
+    tags: ['Skatt', 'Guide'],
+    sektorer: [],
+  },
+  {
+    slug: '/artikler/hva-er-ex-dato/',
+    tittel: 'Hva er ex-dato? Komplett guide for norske investorer',
+    ingress: 'Hva ex-dato betyr, T+2 oppgjør på Oslo Børs, kursfallet på ex-dag, skatteregler og vanlige feil.',
+    meta: '19. april 2026 · 8 min',
+    tags: ['Guide', 'Grunnleggende'],
+    sektorer: [],
+  },
+];
+
+// Finner artikler som er relevante for en gitt sektor (brukt i aksjemodalen).
+function artiklerForSektor(sektor) {
+  if (!sektor) return [];
+  return ARTIKLER.filter(a => a.sektorer.includes(sektor));
+}
+
+function visLaerListe() {
+  const el = document.getElementById('laer-liste');
+  if (!el || el.dataset.rendret === '1') return;   // statisk liste — rendres én gang
+  el.innerHTML = ARTIKLER.map(a => `
+    <a href="${escHtml(a.slug)}" target="_blank" rel="noopener"
+       class="block bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4 shadow-sm hover:border-brand-400 dark:hover:border-brand-600 transition-colors group">
+      <div class="flex items-start justify-between gap-3">
+        <div class="flex-1 min-w-0">
+          <div class="flex flex-wrap gap-1.5 mb-1.5">
+            ${a.tags.map(t => `<span class="text-[10px] font-semibold uppercase tracking-wide px-1.5 py-0.5 rounded bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400">${escHtml(t)}</span>`).join('')}
+          </div>
+          <h3 class="font-semibold text-sm leading-snug group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">${escHtml(a.tittel)}</h3>
+          <p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed mt-1">${escHtml(a.ingress)}</p>
+          <p class="text-[11px] text-gray-400 dark:text-gray-600 mt-1.5">${escHtml(a.meta)}</p>
+        </div>
+        <svg class="w-4 h-4 text-gray-300 dark:text-gray-700 group-hover:text-brand-500 transition-colors shrink-0 mt-1" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+      </div>
+    </a>`).join('');
+  el.dataset.rendret = '1';
+}
+
 function initVerktoySubTabs() {
   const nav = document.getElementById('verktoy-sub-nav');
   if (!nav) return;
@@ -455,11 +547,13 @@ function initVerktoySubTabs() {
     document.getElementById('verktoy-subtab-annonsert').classList.toggle('hidden', subtab !== 'annonsert');
     document.getElementById('verktoy-subtab-fire').classList.toggle('hidden', subtab !== 'fire');
     document.getElementById('verktoy-subtab-rebalansering').classList.toggle('hidden', subtab !== 'rebalansering');
+    document.getElementById('verktoy-subtab-laer').classList.toggle('hidden', subtab !== 'laer');
     if (subtab === 'rebalansering' && typeof visRebalansering === 'function') {
       visRebalansering(window._pfSisteData?.beholdning || []);
     }
     if (subtab === 'fire') beregnFire();
     if (subtab === 'annonsert') initAnnonsertKalkulator();
+    if (subtab === 'laer') visLaerListe();
   });
 }
 
@@ -2080,10 +2174,49 @@ function eksporterJSON() {
   URL.revokeObjectURL(url);
 }
 
+// Sjekker at strukturen matcher det nedstrøms kode (visJSONPreview,
+// bekreftJSONImport) forventer, slik at Object.entries/.map/.reduce ikke
+// kaster på skadet eller ondsinnet input. Går ikke i detalj på hvert felt —
+// escHtml() ved rendring er hovedforsvaret mot XSS — men fanger opp feil
+// grunnform (array der det skal være objekt, e.l.) før dataene lagres.
+function _erGyldigBackupStruktur(b) {
+  const erObjekt = v => v !== null && typeof v === 'object' && !Array.isArray(v);
+  if (!erObjekt(b)) return false;
+  if (typeof b.versjon !== 'number' || b.versjon < 1 || b.versjon > 5) return false;
+
+  if (b.profil !== undefined && !erObjekt(b.profil)) return false;
+  if (b.profil?.navn !== undefined && typeof b.profil.navn !== 'string') return false;
+
+  if (b.portefoljer !== undefined) {
+    if (!erObjekt(b.portefoljer)) return false;
+    for (const pf of Object.values(b.portefoljer)) {
+      if (!erObjekt(pf)) return false;
+      if (pf.navn !== undefined && typeof pf.navn !== 'string') return false;
+      if (pf.beholdning !== undefined && !erObjekt(pf.beholdning)) return false;
+      if (pf.transaksjoner !== undefined && !erObjekt(pf.transaksjoner)) return false;
+    }
+  }
+
+  if (b.watchlister !== undefined) {
+    if (!Array.isArray(b.watchlister)) return false;
+    for (const w of b.watchlister) {
+      if (!erObjekt(w)) return false;
+      if (w.navn !== undefined && typeof w.navn !== 'string') return false;
+      if (w.tickers !== undefined && !Array.isArray(w.tickers)) return false;
+    }
+  }
+
+  if (b.favoritter !== undefined && !Array.isArray(b.favoritter)) return false;
+  if (b.notif_aksjer !== undefined && !Array.isArray(b.notif_aksjer)) return false;
+  if (b.rebalansering !== undefined && !erObjekt(b.rebalansering)) return false;
+
+  return true;
+}
+
 function parseJSONBackup(tekst) {
   try {
     const b = JSON.parse(tekst);
-    if (!b || typeof b.versjon !== 'number' || b.versjon < 1 || b.versjon > 5) return null;
+    if (!_erGyldigBackupStruktur(b)) return null;
     return b;
   } catch { return null; }
 }
@@ -2100,7 +2233,7 @@ function visJSONPreview(backup) {
   const na  = backup.notif_aksjer || [];
   const antallRebal = Object.keys(backup.rebalansering || {}).length;
   const linjer = [
-    p.navn ? `Profil: ${p.navn}` : 'Profil: (ikke satt)',
+    p.navn ? `Profil: ${escHtml(p.navn)}` : 'Profil: (ikke satt)',
     `${antallPF} portefølje${antallPF !== 1 ? 'r' : ''} · ${antallPos} posisjoner · ${antallTx} transaksjoner`,
     `Favoritter: ${fav.length} · Watchlister: ${wl.length} · Varsler: ${na.length} aksjer`
       + (antallRebal ? ` · Rebalansering: ${antallRebal} sektormål` : ''),
@@ -2518,6 +2651,25 @@ function modalKontoer(a) {
 }
 
 
+// Sektorkontekstuell artikkellenke nederst i modalens Oversikt-panel.
+// Returnerer tom streng når sektoren ikke har en tilhørende artikkel, slik at
+// modalen ser uendret ut for de aksjene.
+function modalSektorArtikler(a) {
+  const treff = artiklerForSektor(a.sektor);
+  if (!treff.length) return '';
+  return `
+      <div class="mt-4 pt-3 border-t border-gray-100 dark:border-gray-800">
+        <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">Les mer om ${escHtml(a.sektor)}</p>
+        ${treff.map(art => `
+          <a href="${escHtml(art.slug)}" target="_blank" rel="noopener"
+             class="flex items-center gap-2 py-1.5 text-sm text-brand-600 dark:text-brand-400 hover:underline">
+            <svg class="w-4 h-4 shrink-0" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+            <span>${escHtml(art.tittel)}</span>
+          </a>`).join('')}
+      </div>`;
+}
+
+
 function visModal(a) {
   const overlay = document.getElementById('modal-overlay');
   const body = document.getElementById('modal-body');
@@ -2584,6 +2736,7 @@ function visModal(a) {
         <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">Risiko og investorprofil</p>
         ${modalInvestorProfil(a)}
       </div>
+      ${modalSektorArtikler(a)}
     </div>
 
     <!-- ── UTBYTTE ── -->

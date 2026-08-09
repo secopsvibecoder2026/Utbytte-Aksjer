@@ -225,6 +225,7 @@
       <button class="sub-tab-btn" data-verktoy-subtab="annonsert">Annonsert utbytte</button>
       <button class="sub-tab-btn" data-verktoy-subtab="fire">FIRE</button>
       <button class="sub-tab-btn" data-verktoy-subtab="rebalansering">Rebalansering</button>
+      <button class="sub-tab-btn" data-verktoy-subtab="laer">Lær</button>
     </nav>
 
     <!-- FILTER BAR -->
@@ -794,7 +795,7 @@
             <p class="text-xs text-gray-400 mt-0.5" id="pf-stat-faktisk-tekst">trenger transaksjoner</p>
           </div>
           <div class="stat-card">
-            <p class="stat-label">IRR (per år)</p>
+            <p class="stat-label" id="pf-stat-irr-label">IRR (per år)</p>
             <p class="stat-value text-base" id="pf-stat-irr">—</p>
             <p class="text-xs text-gray-400 mt-0.5" id="pf-stat-irr-tekst">trenger transaksjoner</p>
           </div>
@@ -1404,6 +1405,16 @@
         <!-- Rader -->
         <div id="rebal-rader" class="divide-y divide-gray-100 dark:divide-gray-800"></div>
       </div>
+    </div>
+
+    <!-- LÆR: artikler og guider. Innholdet rendres fra ARTIKLER i ui.js,
+         som også driver de sektorkontekstuelle lenkene i aksjemodalen. -->
+    <div id="verktoy-subtab-laer" class="hidden space-y-4 max-w-2xl mx-auto">
+      <div>
+        <h2 class="font-semibold text-base">Artikler og guider</h2>
+        <p class="text-sm text-gray-500 dark:text-gray-400 mt-0.5">Grundige gjennomganger av utbytte, skatt og sektorene på Oslo Børs.</p>
+      </div>
+      <div id="laer-liste" class="space-y-3"></div>
     </div>
     </div><!-- /tab-verktoy -->
 

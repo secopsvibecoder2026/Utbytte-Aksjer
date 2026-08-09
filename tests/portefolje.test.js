@@ -171,6 +171,7 @@ test('beregnIRR: ingen transaksjoner gir harNokData=false', () => {
   global.alleAksjer = [];
   const result = beregnIRR({});
   assert.equal(result.harNokData, false);
+  assert.equal(result.arsak, 'ingen_transaksjoner');
 });
 
 test('beregnIRR: positiv kontantstrøm gir positiv IRR', () => {
@@ -209,6 +210,79 @@ test('beregnIRR: ingen aksjer med kjent pris gir harNokData=false', () => {
   global.alleAksjer = [{ ticker: 'EQNR', pris: 0, navn: 'Equinor' }];
   const result = beregnIRR(tx);
   assert.equal(result.harNokData, false);
+  assert.equal(result.arsak, 'ingen_beholdning');
+});
+
+// Regresjonstester for B7: beregnIRR() viste tidligere «trenger transaksjoner»
+// for alle fire feilårsaker under ett, selv når brukeren hadde massevis av
+// registrerte transaksjoner. Hver gren skal nå ha sin egen årsakskode.
+test('beregnIRR: solgt hele beholdningen gir arsak=ingen_beholdning', () => {
+  const tx = {
+    EQNR: [
+      { id: '1', dato: '2024-01-01', type: 'kjøp', antall: 100, kurs: 100 },
+      { id: '2', dato: '2024-06-01', type: 'salg', antall: 100, kurs: 120 }
+    ]
+  };
+  global.alleAksjer = [{ ticker: 'EQNR', pris: 120, navn: 'Equinor' }];
+  const result = beregnIRR(tx);
+  assert.equal(result.harNokData, false);
+  assert.equal(result.arsak, 'ingen_beholdning');
+});
+
+test('beregnIRR: periode under 30 dager gir arsak=for_kort_periode', () => {
+  const for10Dager = new Date();
+  for10Dager.setDate(for10Dager.getDate() - 10);
+  const dato = for10Dager.toISOString().slice(0, 10);
+
+  const tx = { EQNR: [{ id: '1', dato, type: 'kjøp', antall: 100, kurs: 100 }] };
+  global.alleAksjer = [{ ticker: 'EQNR', pris: 110, navn: 'Equinor' }];
+  const result = beregnIRR(tx);
+  assert.equal(result.harNokData, false);
+  assert.equal(result.arsak, 'for_kort_periode');
+});
+
+test('beregnIRR: ekstremt tap som ikke konvergerer gir arsak=ingen_konvergens', () => {
+  // Newton-Raphson bryter tidlig når r beveger seg forbi -1 (total ruin).
+  // Verifisert manuelt: 99,5 %+ kurstap over flere år trigger dette
+  // pålitelig og er datouavhengig (2020-datoen er alltid > 30 dager gammel).
+  const tx = { EQNR: [{ id: '1', dato: '2020-01-01', type: 'kjøp', antall: 100, kurs: 1000 }] };
+  global.alleAksjer = [{ ticker: 'EQNR', pris: 0.5, navn: 'Equinor' }];
+  const result = beregnIRR(tx);
+  assert.equal(result.harNokData, false);
+  assert.equal(result.arsak, 'ingen_konvergens');
+});
+
+// Regresjonstest for at annualisering over korte perioder ikke lenger vises
+// direkte som "IRR": +15 % kursgevinst på 31 dager annualisert til (1+r)^365
+// blir ca. +418 %, teknisk korrekt men villedende. Under ett år skal UI-en
+// vise periodeAvkastning (den faktiske gevinsten over perioden) i stedet.
+test('beregnIRR: kort periode (< 1 år) gir annualisert=false og korrekt periodeAvkastning', () => {
+  const for31Dager = new Date();
+  for31Dager.setDate(for31Dager.getDate() - 31);
+  const dato = for31Dager.toISOString().slice(0, 10);
+
+  const tx = { EQNR: [{ id: '1', dato, type: 'kjøp', antall: 100, kurs: 100 }] };
+  global.alleAksjer = [{ ticker: 'EQNR', pris: 115, navn: 'Equinor' }]; // +15 % kursgevinst
+  const result = beregnIRR(tx);
+
+  assert.equal(result.harNokData, true);
+  assert.equal(result.annualisert, false, 'periode under 1 år skal ikke annualiseres i UI');
+  assert.ok(typeof result.periodeAvkastning === 'number');
+  // periodeAvkastning skal reflektere den faktiske gevinsten (~15 %), ikke
+  // det annualiserte tallet (~418 %) — liten toleranse for rentesrente-effekt.
+  assert.ok(Math.abs(result.periodeAvkastning - 15) < 0.5,
+    `periodeAvkastning bør være ~15 %, var ${result.periodeAvkastning}`);
+  // irr_ar finnes fortsatt (brukes ikke i UI når annualisert=false, men skal
+  // ikke fjernes — andre steder i koden kan ønske det rå annualiserte tallet).
+  assert.ok(result.irr_ar > 100, 'annualisert tall over kort periode skal fortsatt være stort');
+});
+
+test('beregnIRR: lang periode (≥ 1 år) gir annualisert=true', () => {
+  const tx = { EQNR: [{ id: '1', dato: '2024-01-01', type: 'kjøp', antall: 100, kurs: 100 }] };
+  global.alleAksjer = [{ ticker: 'EQNR', pris: 120, navn: 'Equinor' }];
+  const result = beregnIRR(tx);
+  assert.equal(result.harNokData, true);
+  assert.equal(result.annualisert, true);
 });
 
 // ── beregnTWRSerie ──────────────────────────────────────────────────────────

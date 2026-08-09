@@ -53,6 +53,28 @@ self.addEventListener('activate', event => {
   );
 });
 
+// Nettverks-first: svarer med nettverksresponsen så snart den er klar, og
+// oppdaterer cachen i bakgrunnen. cache.put()-kallet var tidligere en
+// løs .then() — verken returnert inn i respondWith()-kjeden eller sendt til
+// event.waitUntil() — så nettleseren kunne drepe service worker-prosessen
+// før skrivingen fullførte (rask navigering, mobil bakgrunnsbegrensning),
+// og cachen ble da aldri oppdatert. event.waitUntil() holder nå SW-en i
+// live til cache-skrivingen er ferdig, uten å forsinke selve responsen.
+function networkFirstMedBakgrunnsCache(event, fetchOptions) {
+  const { request } = event;
+  event.respondWith(
+    fetch(fetchOptions ? new Request(request, fetchOptions) : request)
+      .then(resp => {
+        if (resp.ok) {
+          const kopi = resp.clone();
+          event.waitUntil(caches.open(CACHE).then(c => c.put(request, kopi)));
+        }
+        return resp;
+      })
+      .catch(() => caches.match(request))
+  );
+}
+
 // ── FETCH ─────────────────────────────────────────────────────────────────────
 self.addEventListener('fetch', event => {
   const { request } = event;
@@ -62,42 +84,21 @@ self.addEventListener('fetch', event => {
 
   // 1. aksjer.json: alltid nettverks-first
   if (url.pathname === '/data/aksjer.json') {
-    event.respondWith(
-      fetch(request)
-        .then(resp => {
-          if (resp.ok) caches.open(CACHE).then(c => c.put(request, resp.clone()));
-          return resp;
-        })
-        .catch(() => caches.match(request))
-    );
+    networkFirstMedBakgrunnsCache(event);
     return;
   }
 
   // 2. HTML-navigasjon: nettverks-first med cache-bypass — brukere ser alltid
   //    siste versjon, og omgår nettleserens egen HTTP-cache (max-age frå GitHub Pages)
   if (request.mode === 'navigate') {
-    event.respondWith(
-      fetch(new Request(request, { cache: 'no-cache' }))
-        .then(resp => {
-          if (resp.ok) caches.open(CACHE).then(c => c.put(request, resp.clone()));
-          return resp;
-        })
-        .catch(() => caches.match(request))
-    );
+    networkFirstMedBakgrunnsCache(event, { cache: 'no-cache' });
     return;
   }
 
   // 3. JS og CSS: nettverks-first med cache-bypass — samme som HTML-navigasjon
   //    for å omgå nettleserens HTTP-cache (GitHub Pages kan sette max-age)
   if (/\.(js|css)(\?.*)?$/.test(url.pathname)) {
-    event.respondWith(
-      fetch(new Request(request, { cache: 'no-cache' }))
-        .then(resp => {
-          if (resp.ok) caches.open(CACHE).then(c => c.put(request, resp.clone()));
-          return resp;
-        })
-        .catch(() => caches.match(request))
-    );
+    networkFirstMedBakgrunnsCache(event, { cache: 'no-cache' });
     return;
   }
 

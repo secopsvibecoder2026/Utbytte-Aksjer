@@ -37,6 +37,40 @@ function beregnKostbasis(ticker, txMap) {
 
 
 
+// Leser "Ny transaksjon"-skjemaet i en detail-rad og registrerer transaksjonen.
+// Delt av kortvisning (mobil) og tabellvisning (desktop) sine onclick-handlere.
+function _registrerTransaksjonFraRad(leggTilBtn, rad) {
+  const ticker  = leggTilBtn.dataset.ticker;
+  const type    = rad.querySelector('.pf-detail-type').value;
+  const datoRaw = rad.querySelector('.pf-detail-dato').value;
+  const dato    = datoRaw || new Date().toISOString().slice(0, 10);
+  const antall  = parseInt(rad.querySelector('.pf-detail-antall').value, 10);
+  const kurs    = parseFloat(rad.querySelector('.pf-detail-kurs').value);
+  if (!antall || antall < 1 || !kurs || kurs <= 0) return;
+
+  const txData = hentTransaksjoner();
+
+  // Salg kan ikke overstige gjeldende beholdning. Uten denne sjekken tømmer
+  // beregnKostbasis() FIFO-lottene og kaster resten av salgsantallet uten
+  // varsel — en skrivefeil (1000 i stedet for 100) gir da bare 0 i
+  // beholdning, uten forklaring på hvorfor.
+  if (type === 'salg') {
+    const eidAntall = beregnKostbasis(ticker, txData).antall;
+    if (antall > eidAntall) {
+      alert(`Kan ikke selge ${antall} aksjer — du eier ${eidAntall}.`);
+      return;
+    }
+  }
+
+  if (!txData[ticker]) txData[ticker] = [];
+  txData[ticker].push({ id: Date.now().toString(), dato, antall, kurs, type });
+  txData[ticker].sort((a, b) => a.dato.localeCompare(b.dato));
+  lagreTransaksjoner(txData);
+  _aapneDetailRader.add(ticker);
+  visPortefolje();
+}
+
+
 // Bygger HTML-innholdet for en rad sin detail-panel (kostbasis + tx-form + logg)
 function byggDetailHtml(ticker, kb, marked) {
   const fmtKr   = v => v.toLocaleString('nb-NO', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) + '\u00a0kr';
@@ -361,7 +395,7 @@ function beregnIRR(txMap) {
     liste.map(t => ({ ...t, ticker }))
   ).sort((a, b) => a.dato.localeCompare(b.dato));
 
-  if (alle.length === 0) return { harNokData: false };
+  if (alle.length === 0) return { harNokData: false, arsak: 'ingen_transaksjoner' };
 
   // Kontantstrømmer: negative = penger ut (kjøp), positive = penger inn (salg, utbytte)
   const cashflows = [];
@@ -386,7 +420,10 @@ function beregnIRR(txMap) {
     if (aksje?.pris > 0) terminalVerdi += antall * aksje.pris;
   });
 
-  if (terminalVerdi <= 0) return { harNokData: false };
+  // Ikke nødvendigvis "trenger transaksjoner" — brukeren kan ha solgt hele
+  // beholdningen, eller aksjen mangler prisdata. Egen årsakskode slik at
+  // UI-en kan vise en presis melding i stedet for en generisk en.
+  if (terminalVerdi <= 0) return { harNokData: false, arsak: 'ingen_beholdning' };
 
   const idag = new Date().toISOString().slice(0, 10);
   cashflows.push({ dato: idag, cf: +terminalVerdi });
@@ -398,7 +435,7 @@ function beregnIRR(txMap) {
   }));
 
   const totalDager = cfArr[cfArr.length - 1].t;
-  if (totalDager < 30) return { harNokData: false, forKort: true };  // IRR er ikke meningsfull under 30 dager
+  if (totalDager < 30) return { harNokData: false, arsak: 'for_kort_periode' };  // IRR er ikke meningsfull under 30 dager
 
   const npv  = r => cfArr.reduce((s, {t, cf}) => s + cf / Math.pow(1 + r, t), 0);
   const dnpv = r => cfArr.reduce((s, {t, cf}) => s - t * cf / Math.pow(1 + r, t + 1), 0);
@@ -414,12 +451,21 @@ function beregnIRR(txMap) {
     r = rNy;
   }
 
-  if (!konvergen) return { harNokData: false };
+  if (!konvergen) return { harNokData: false, arsak: 'ingen_konvergens' };
 
+  const periodeAr = totalDager / 365;
   return {
     harNokData: true,
-    irr_ar:     (Math.pow(1 + r, 365) - 1) * 100,
-    periodeAr:  totalDager / 365,
+    // Årlig rate — meningsfull først når perioden nærmer seg eller
+    // overstiger ett år. Vises derfor kun når annualisert === true.
+    irr_ar: (Math.pow(1 + r, 365) - 1) * 100,
+    // Faktisk avkastning over den reelle perioden (ikke annualisert).
+    // For korte perioder gir annualisering absurde tall — en helt normal
+    // +15 % over 31 dager blir +418 % annualisert, teknisk korrekt men
+    // villedende. periodeAvkastning viser i stedet den ekte gevinsten.
+    periodeAvkastning: (Math.pow(1 + r, totalDager) - 1) * 100,
+    annualisert: periodeAr >= 1,
+    periodeAr,
     forsteDato: cashflows[0].dato
   };
 }
@@ -1036,12 +1082,16 @@ function visPortefolje() {
     visOsebxSammenligning(alleBeholdning, pfPctTotal, osebxPctTotal, invKost, totalReturnKr, forsteTxDato, osebxStartDato, osebxSluttDato, aktivPeriode);
 
     // ── IRR (annualisert intern avkastningsrate) ──────────────────────────────
-    const irrEl    = document.getElementById('pf-stat-irr');
-    const irrTekst = document.getElementById('pf-stat-irr-tekst');
+    const irrEl      = document.getElementById('pf-stat-irr');
+    const irrTekst   = document.getElementById('pf-stat-irr-tekst');
+    const irrLabelEl = document.getElementById('pf-stat-irr-label');
     if (irrEl) {
       const irr = beregnIRR();
       if (irr.harNokData) {
-        const pct = irr.irr_ar;
+        // Under ett år vises faktisk periodeavkastning, ikke annualisert —
+        // en annualisert +15 % over 31 dager blir +418 %, teknisk korrekt
+        // men villedende for brukeren.
+        const pct = irr.annualisert ? irr.irr_ar : irr.periodeAvkastning;
         irrEl.textContent  = (pct >= 0 ? '+' : '') + pct.toFixed(1) + '%';
         irrEl.className    = 'stat-value text-base ' + (pct >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-500');
         const mnd = Math.round(irr.periodeAr * 12);
@@ -1049,10 +1099,22 @@ function visPortefolje() {
           ? (mnd < 1 ? '< 1 mnd' : mnd + ' mnd')
           : irr.periodeAr.toFixed(1) + ' år';
         if (irrTekst) irrTekst.textContent = 'over ' + aar;
+        if (irrLabelEl) irrLabelEl.textContent = irr.annualisert ? 'IRR (per år)' : 'Avkastning (periode)';
       } else {
         irrEl.textContent  = '—';
         irrEl.className    = 'stat-value text-base';
-        if (irrTekst) irrTekst.textContent = irr.forKort ? 'trenger 30 dager' : 'trenger transaksjoner';
+        if (irrLabelEl) irrLabelEl.textContent = 'IRR (per år)';
+        // Presis melding per årsak — «trenger transaksjoner» var tidligere
+        // vist selv når brukeren hadde mange registrerte transaksjoner, men
+        // beregningen feilet av en annen grunn (solgt alt, for kort periode,
+        // eller numerisk ikke-konvergens).
+        const IRR_ARSAK_TEKST = {
+          ingen_transaksjoner: 'trenger transaksjoner',
+          ingen_beholdning:    'ingen beholdning med kjent pris',
+          for_kort_periode:    'trenger 30 dager',
+          ingen_konvergens:    'kunne ikke beregne',
+        };
+        if (irrTekst) irrTekst.textContent = IRR_ARSAK_TEKST[irr.arsak] || 'trenger transaksjoner';
       }
     }
 
@@ -1237,21 +1299,7 @@ function visPortefolje() {
       if (e.target.closest('.pf-kort-detalj')) {
         const leggTilBtn = e.target.closest('.pf-detail-legg-til');
         if (leggTilBtn) {
-          const ticker  = leggTilBtn.dataset.ticker;
-          const rad     = leggTilBtn.closest('.pf-detail-rad');
-          const type    = rad.querySelector('.pf-detail-type').value;
-          const datoRaw = rad.querySelector('.pf-detail-dato').value;
-          const dato    = datoRaw || new Date().toISOString().slice(0, 10);
-          const antall  = parseInt(rad.querySelector('.pf-detail-antall').value, 10);
-          const kurs    = parseFloat(rad.querySelector('.pf-detail-kurs').value);
-          if (!antall || antall < 1 || !kurs || kurs <= 0) return;
-          const txData = hentTransaksjoner();
-          if (!txData[ticker]) txData[ticker] = [];
-          txData[ticker].push({ id: Date.now().toString(), dato, antall, kurs, type });
-          txData[ticker].sort((a, b) => a.dato.localeCompare(b.dato));
-          lagreTransaksjoner(txData);
-          _aapneDetailRader.add(ticker);
-          visPortefolje();
+          _registrerTransaksjonFraRad(leggTilBtn, leggTilBtn.closest('.pf-detail-rad'));
           return;
         }
         const txSlett = e.target.closest('.pf-tx-slett');
@@ -1303,21 +1351,7 @@ function visPortefolje() {
     // Legg til transaksjon fra detail-rad
     const leggTilBtn = e.target.closest('.pf-detail-legg-til');
     if (leggTilBtn) {
-      const ticker  = leggTilBtn.dataset.ticker;
-      const rad     = leggTilBtn.closest('.pf-detail-rad');
-      const type    = rad.querySelector('.pf-detail-type').value;
-      const datoRaw = rad.querySelector('.pf-detail-dato').value;
-      const dato    = datoRaw || new Date().toISOString().slice(0, 10);
-      const antall  = parseInt(rad.querySelector('.pf-detail-antall').value, 10);
-      const kurs    = parseFloat(rad.querySelector('.pf-detail-kurs').value);
-      if (!antall || antall < 1 || !kurs || kurs <= 0) return;
-      const txData = hentTransaksjoner();
-      if (!txData[ticker]) txData[ticker] = [];
-      txData[ticker].push({ id: Date.now().toString(), dato, antall, kurs, type });
-      txData[ticker].sort((a, b) => a.dato.localeCompare(b.dato));
-      lagreTransaksjoner(txData);
-      _aapneDetailRader.add(ticker);
-      visPortefolje();
+      _registrerTransaksjonFraRad(leggTilBtn, leggTilBtn.closest('.pf-detail-rad'));
       return;
     }
     // Slett transaksjon fra detail-rad
@@ -1920,7 +1954,7 @@ function oppdaterPortefoljeVelger() {
   const sel = document.getElementById('pf-portefolje-velg');
   if (!sel) return;
   sel.innerHTML = Object.values(pfl).map(p =>
-    `<option value="${p.id}" ${p.id === aktivId ? 'selected' : ''}>${p.navn}</option>`
+    `<option value="${escHtml(p.id)}" ${p.id === aktivId ? 'selected' : ''}>${escHtml(p.navn)}</option>`
   ).join('');
   // Deaktiver slett-knapp hvis bare én portefølje
   const slettBtn = document.getElementById('pf-portefolje-slett');
@@ -1960,7 +1994,7 @@ function visWatchlister() {
   const sel = document.getElementById('wl-velg');
   const valgt = sel.value || (lister[0]?.id);
   sel.innerHTML = lister.map(w =>
-    `<option value="${w.id}" ${w.id === valgt ? 'selected' : ''}>${w.navn} (${w.tickers.length})</option>`
+    `<option value="${escHtml(w.id)}" ${w.id === valgt ? 'selected' : ''}>${escHtml(w.navn)} (${w.tickers.length})</option>`
   ).join('');
 
   const aktivListe = lister.find(w => w.id === valgt) || lister[0];

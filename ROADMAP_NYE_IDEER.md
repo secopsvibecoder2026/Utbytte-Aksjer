@@ -29,6 +29,66 @@ Modal viser "om 0 dager" når ex-dato er i dag. Aksjekortet håndterer dette kor
 
 - [x] Legg til `<link rel="canonical" href="https://exday.no/uke/" />`
 
+### B4. Stored XSS via JSON-backup-import ✅
+**Prioritet: Kritisk — se [SECURITY_ROADMAP.md](SECURITY_ROADMAP.md)**
+
+`parseJSONBackup()` (`ui.js:2083`) validerte kun at `versjon` var et tall 1–5. `visJSONPreview()` interpolerte deretter `backup.profil.navn` rått inn i `innerHTML` — **i selve forhåndsvisningen, før brukeren bekreftet importen.** Verifisert med `{"versjon":3,"profil":{"navn":"<img src=x onerror=alert(document.domain)>"}}` — payloaden overlevde intakt.
+
+`bekreftJSONImport()` skrev deretter `backup.portefoljer`/`backup.watchlister` uvalidert til localStorage, og porteføljenavn og watchliste-navn rendres rått i `<option>`-tagger ved hver applast — så et ondsinnet navn ville persistert og kjørt på nytt hver gang appen åpnes.
+
+- [x] `escHtml()` på `p.navn` i `visJSONPreview()` (ui.js:2142)
+- [x] `escHtml()` på `p.id`/`p.navn` i porteføljevelgeren (portefolje.js:1938)
+- [x] `escHtml()` på `w.id`/`w.navn` i watchliste-velgeren (portefolje.js:1978)
+- [x] Valider typer i `parseJSONBackup()` — ny `_erGyldigBackupStruktur()` sjekker at `profil`/`portefoljer`/`watchlister`/`favoritter`/`notif_aksjer`/`rebalansering` har riktig grunnform (objekt vs. array) og at `navn`-felt er strenger, før dataene lagres
+
+Verifisert: samme XSS-payload escapes nå til harmløs tekst; fire ulike malformerte strukturer (array der objekt forventes, feil felttype) avvises av validatoren; ekte v5-eksport, legacy v1-format og minimal `{"versjon":1}` godtas fortsatt uendret.
+
+### B5. IRR annualiserer korte perioder til absurde tall ✅
+**Prioritet: Høy — ser ut som en bug for brukeren**
+
+`beregnIRR()` (`portefolje.js:401`) tillater annualisering ned til 30 dager. Newton-Raphson-matematikken er korrekt, men `(1+r)^365` gjør at helt normale gevinster blir meningsløse tall:
+
+| Scenario | Vises som |
+|---|---|
+| +15 % etter 31 dager | +418,4 % |
+| +5 % etter 31 dager | +77,6 % |
+| +20 % etter 60 dager | +203,2 % |
+| +10 % etter 365 dager | +10,0 % ✓ |
+
+Verifisert ved å kjøre den faktiske Newton-Raphson-koden isolert med flere cashflow-scenarier.
+
+- [x] Vis ikke-annualisert periodeavkastning når `periodeAr < 1` — `beregnIRR()` returnerer nå `periodeAvkastning` og `annualisert`; UI-en (`portefolje.js:1047-1069`) viser `periodeAvkastning` og bytter etikett til «Avkastning (periode)» når perioden er under ett år, «IRR (per år)» ellers. `irr_ar` beholdes uendret i returverdien. To nye tester i `tests/portefolje.test.js`.
+
+### B6. Oversalg feiler i stillhet ✅
+**Prioritet: Medium**
+
+`beregnKostbasis()` (`portefolje.js`) tømmer FIFO-lottene og kaster resten av salgsantallet uten varsel. Registrerer brukeren et salg større enn beholdningen (skrivefeil, f.eks. 1000 i stedet for 100), ble posisjonen bare 0 — ingen feilmelding, ingen indikasjon på at noe er galt.
+
+`beregnKostbasis()` selv er urørt — den er en robust beregningsfunksjon som bevisst håndterer historiske data (inkl. eventuell gammel skjev data) uten å kaste. Fiksen legger i stedet inn en sperre der nye transaksjoner faktisk registreres.
+
+- [x] Valider salgsantall mot gjeldende beholdning før registrering — ny delt hjelpefunksjon `_registrerTransaksjonFraRad()` (portefolje.js), brukt av både mobil-kortvisningen og desktop-tabellvisningen (som tidligere hadde identisk, duplisert registreringslogikk)
+- [x] Vis feilmelding i UI ved forsøk på oversalg — `alert()`, konsistent med eksisterende validering andre steder i kodebasen (JSON-import, QR-import)
+
+Verifisert direkte mot `beregnKostbasis()`: forsøk på å selge 1000 av 100 blokkeres, selge 50 eller nøyaktig 100 av 100 godtas, selge noe man aldri har eid (0) blokkeres. 60/60 eksisterende tester grønne (ingen regresjon i `beregnKostbasis()` selv).
+
+### B7. Villedende IRR-feilmelding ✅
+**Prioritet: Lav**
+
+`beregnIRR()` returnerte «trenger transaksjoner» for fire ulike årsaker under ett: ingen transaksjoner i det hele tatt, `terminalVerdi <= 0` (solgt alt / mangler prisdata), for kort periode (< 30 dager), og manglende Newton-Raphson-konvergens. Alle fire ble vist identisk, selv når brukeren hadde mange registrerte transaksjoner.
+
+- [x] Skill meldingene — hver `return { harNokData: false }`-gren i `beregnIRR()` har nå en egen `arsak`-kode (`ingen_transaksjoner`, `ingen_beholdning`, `for_kort_periode`, `ingen_konvergens`), og UI-en (`portefolje.js`) slår opp presis tekst per årsak i stedet for det tidligere binære `forKort`-flagget
+
+Verifisert direkte mot `beregnIRR()` for alle fire grener, inkludert et scenario for `ingen_konvergens` (99,5 %+ kurstap trigger Newton-Raphsons `rNy <= -1`-brudd pålitelig). Tre nye tester i `tests/portefolje.test.js`, 63/63 grønne.
+
+### B8. Service worker venter ikke på cache-skriving ✅
+**Prioritet: Lav — race condition, sjelden synlig**
+
+I `sw.js` ble `caches.open(...).then(c => c.put(...))` kalt tre steder (aksjer.json, HTML-navigasjon, JS/CSS) uten å returneres/awaites inn i `event.respondWith()`-kjeden eller sendes til `event.waitUntil()`. Ble SW-prosessen drept før promisen løste (mobil bakgrunnsbegrensning, rask navigering), ble cachen aldri skrevet — offline-fallback ble upålitelig over tid.
+
+- [x] Kjed cache-skrivingen til `event.waitUntil()` — de tre identiske forekomstene er samlet i en delt `networkFirstMedBakgrunnsCache()`-funksjon, som svarer med nettverksresponsen umiddelbart mens `waitUntil()` holder SW-en i live til cache-skrivingen fullfører i bakgrunnen
+
+Verifisert med en simulert SW-kontekst i Node: `respondWith()` løses før cache-skrivingen er ferdig (responsen forsinkes ikke), `waitUntil()` kalles nøyaktig én gang per fetch-event, og cache-skrivingen fullfører når den promisen ventes på. Rørte ikke `CACHE`-versjonsstrengen (styres av deploy-workflowen, ikke manuelt).
+
 ---
 
 ## 🚀 Høy prioritet
@@ -196,6 +256,14 @@ Eksisterende enhetstester dekker beregningslogikk. Brukerflyter testes ikke.
 
 - [ ] Netlify-deploy fra `dev`-branch
 - [ ] Preview-URL per PR
+
+### T11. kurs_historikk utgjør 1,18 MB av 1,54 MB i aksjer.json
+**Prioritet: Medium — unødvendig payload ved hver sidelast**
+
+`kurs_historikk` (5 år ukentlige kurspunkter × 162 aksjer) brukes kun to steder — begge i modalen for én enkelt aksje (`ui.js:23`, `ui.js:2689`). Likevel lastes hele feltet for alle 162 aksjer ved hver sidelast, og filen ligger i service workerens `PRECACHE` (`sw.js:25`) og hentes derfor på nytt ved hvert deploy. Gzippet er `aksjer.json` 374 kB — ikke katastrofalt, men grafdata for 161 aksjer brukeren aldri åpner er ren overhead.
+
+- [ ] Vurder å splitte `kurs_historikk` ut i egne filer per ticker (`data/kurs/{TICKER}.json`), hentet ved modalåpning
+- [ ] Fjern `kurs_historikk` fra hovedresponsen i `aksjer.json` når/hvis dette gjøres
 
 ---
 
