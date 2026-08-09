@@ -82,8 +82,11 @@ self.addEventListener('fetch', event => {
 
   const url = new URL(request.url);
 
-  // 1. aksjer.json: alltid nettverks-first
-  if (url.pathname === '/data/aksjer.json') {
+  // 1. aksjer.json og kurshistorikk: alltid nettverks-first.
+  //    data/kurs/{TICKER}.json lastes etterspørselsdrevet når en aksjemodal
+  //    åpnes. Uten denne grenen falt de i cache-first under, som aldri
+  //    populerer cachen — grafene ville dermed aldri fungert offline.
+  if (url.pathname === '/data/aksjer.json' || url.pathname.startsWith('/data/kurs/')) {
     networkFirstMedBakgrunnsCache(event);
     return;
   }

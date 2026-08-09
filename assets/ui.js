@@ -1,5 +1,28 @@
 'use strict';
 
+// ── KURSHISTORIKK ─────────────────────────────────────────────────────────────
+// kurs_historikk utgjorde 1,18 MB av aksjer.json, men brukes kun når brukeren
+// åpner modalen for én aksje. Den ligger derfor i data/kurs/{TICKER}.json og
+// lastes etterspørselsdrevet herfra.
+const _kursCache = new Map();
+
+async function hentKursHistorikk(aksje) {
+  // Eldre aksjer.json har feltet inline. Da brukes det direkte, slik at
+  // frontend fungerer mot begge dataformater (trygg utrulling og tilbakerulling).
+  if (Array.isArray(aksje.kurs_historikk) && aksje.kurs_historikk.length) {
+    return aksje.kurs_historikk;
+  }
+  const ticker = aksje.ticker;
+  if (_kursCache.has(ticker)) return _kursCache.get(ticker);
+
+  const løfte = fetch(`/data/kurs/${encodeURIComponent(ticker)}.json`)
+    .then(r => (r.ok ? r.json() : []))
+    .then(data => (Array.isArray(data) ? data : []))
+    .catch(() => []);
+  _kursCache.set(ticker, løfte);   // cache løftet, ikke resultatet — unngår
+  return løfte;                     // dobbelthenting ved raske gjentatte åpninger
+}
+
 // ── KURSGRAF CANVAS ───────────────────────────────────────────────────────────
 function _filtrerKursData(alleData, periode) {
   const nå = new Date();
@@ -15,12 +38,14 @@ function _filtrerKursData(alleData, periode) {
   return filtrert.length >= 4 ? filtrert : alleData;
 }
 
-function _tegnModalKursGraf(body, a, periode) {
+function _tegnModalKursGraf(body, a, periode, kursData) {
   const canvas = body.querySelector('#kurs-modal-canvas');
   const header = body.querySelector('#kurs-modal-header');
   if (!canvas || !header) return;
 
-  const data = _filtrerKursData(a.kurs_historikk, periode);
+  const kilde = kursData || a.kurs_historikk;
+  if (!Array.isArray(kilde) || kilde.length < 4) return;
+  const data = _filtrerKursData(kilde, periode);
   const priser = data.map(p => p.k);
   const datoer = data.map(p => p.d);
   const n = priser.length;
@@ -2832,29 +2857,39 @@ function visModal(a) {
       if (panel) panel.classList.remove('skjult');
       // Re-tegn kursgraf når oversikt-fanen aktiveres igjen
       if (tab.dataset.panel === 'oversikt') {
-        requestAnimationFrame(() => _tegnModalKursGraf(body, a, _gjeldendePeriode));
+        requestAnimationFrame(() => _tegnModalKursGraf(body, a, _gjeldendePeriode, _kursData));
       }
     });
   });
 
-  // Kursgraf (Canvas) – tegnes ETTER modal vises så offsetWidth er korrekt
+  // Kursgraf (Canvas) – tegnes ETTER modal vises så offsetWidth er korrekt.
+  // Kursdata hentes etterspørselsdrevet fra data/kurs/{TICKER}.json, så
+  // oppsettet skjer asynkront når dataene faktisk foreligger.
   const grafEl = body.querySelector('#kurs-graf-modal');
-  if (grafEl && a.kurs_historikk && a.kurs_historikk.length >= 4) {
-    const perioder = [['YTD','ytd'],['1å','1ar'],['2å','2ar'],['3å','3ar'],['5å','5ar']];
-    grafEl.innerHTML =
-      '<div class="flex gap-1 mb-2">' +
-      perioder.map(([l,p]) => '<button data-kgp="' + p + '" class="kurs-periode-knapp' + (p==='1ar' ? ' aktiv' : '') + '">' + l + '</button>').join('') +
-      '</div>' +
-      '<div id="kurs-modal-header" class="flex justify-between items-baseline mb-1 text-sm"></div>' +
-      '<canvas id="kurs-modal-canvas" style="display:block;border-radius:10px;width:100%;"></canvas>';
+  let _kursData = null;
+  if (grafEl) {
+    hentKursHistorikk(a).then(kursData => {
+      // Brukeren kan ha lukket modalen eller åpnet en annen aksje imens.
+      if (!body.isConnected || !grafEl.isConnected) return;
+      if (!Array.isArray(kursData) || kursData.length < 4) return;
+      _kursData = kursData;
 
-    requestAnimationFrame(() => _tegnModalKursGraf(body, a, '1ar'));
-    grafEl.querySelectorAll('.kurs-periode-knapp').forEach(btn => {
-      btn.addEventListener('click', () => {
-        grafEl.querySelectorAll('.kurs-periode-knapp').forEach(b => b.classList.remove('aktiv'));
-        btn.classList.add('aktiv');
-        _gjeldendePeriode = btn.dataset.kgp;
-        _tegnModalKursGraf(body, a, _gjeldendePeriode);
+      const perioder = [['YTD','ytd'],['1å','1ar'],['2å','2ar'],['3å','3ar'],['5å','5ar']];
+      grafEl.innerHTML =
+        '<div class="flex gap-1 mb-2">' +
+        perioder.map(([l,p]) => '<button data-kgp="' + p + '" class="kurs-periode-knapp' + (p==='1ar' ? ' aktiv' : '') + '">' + l + '</button>').join('') +
+        '</div>' +
+        '<div id="kurs-modal-header" class="flex justify-between items-baseline mb-1 text-sm"></div>' +
+        '<canvas id="kurs-modal-canvas" style="display:block;border-radius:10px;width:100%;"></canvas>';
+
+      requestAnimationFrame(() => _tegnModalKursGraf(body, a, _gjeldendePeriode, _kursData));
+      grafEl.querySelectorAll('.kurs-periode-knapp').forEach(btn => {
+        btn.addEventListener('click', () => {
+          grafEl.querySelectorAll('.kurs-periode-knapp').forEach(b => b.classList.remove('aktiv'));
+          btn.classList.add('aktiv');
+          _gjeldendePeriode = btn.dataset.kgp;
+          _tegnModalKursGraf(body, a, _gjeldendePeriode, _kursData);
+        });
       });
     });
   }

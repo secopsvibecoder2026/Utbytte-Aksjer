@@ -13,7 +13,8 @@ AKSJER_F  = os.path.join(ROOT, "data", "aksjer.json")
 
 # Importer genererings-funksjonene fra fetch_stocks
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from fetch_stocks import generer_aksjesider, generer_sektorsider, generer_topplistesider, generer_sitemap
+from fetch_stocks import (generer_aksjesider, generer_sektorsider, generer_topplistesider,
+                          generer_sitemap, _last_kurshistorikk_fra_disk)
 
 def main():
     with open(TICKERS_F, encoding="utf-8") as f:
@@ -45,6 +46,16 @@ def main():
 
     today  = datetime.date.today().isoformat()
     aksjer = data["aksjer"]
+
+    # Kurshistorikken ligger i data/kurs/{TICKER}.json, ikke i aksjer.json.
+    # Sidegenereringen tegner kursgrafen som SVG og trenger dataene i minnet —
+    # uten dette ville alle aksjesider blitt regenerert uten graf.
+    # Lastes etter at aksjer.json er skrevet over, så feltet ikke havner der.
+    kurs_dir = os.path.join(ROOT, "data", "kurs")
+    for a in aksjer:
+        a["kurs_historikk"] = _last_kurshistorikk_fra_disk(a["ticker"], kurs_dir)
+    med_graf = sum(1 for a in aksjer if a["kurs_historikk"])
+    print(f"Kurshistorikk lastet for {med_graf}/{len(aksjer)} aksjer")
 
     generer_aksjesider(aksjer, ROOT)
     print("Aksjesider regenerert")

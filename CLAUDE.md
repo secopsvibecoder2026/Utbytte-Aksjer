@@ -73,7 +73,8 @@ Utbytte-Aksjer/
 │   ├── tailwind.css           # Generated/minified Tailwind v4 output
 │   └── tw-input.css           # Tailwind config with brand colors
 ├── data/                      # JSON data files
-│   ├── aksjer.json            # Auto-generated daily: full stock dataset
+│   ├── aksjer.json            # Auto-generated daily: full stock dataset (uten kurs_historikk)
+│   ├── kurs/{TICKER}.json     # Auto-generated: kurshistorikk, lastes on-demand
 │   ├── tickers.json           # Manually maintained: 191 stock definitions
 │   ├── priser.json            # Real-time prices, updated every 15 min
 │   ├── fallback_data.json     # Fallback when API fetch fails
@@ -338,7 +339,12 @@ liste. Legg derfor artikkelen inn i **`ARTIKLER`-konstanten øverst i `assets/ui
 `Shipping`, `Skipsfart`, `Havbruk`). Feil verdi feiler stille — artikkelen dukker
 bare aldri opp i modalen.
 
-Husk også `sitemap.xml`.
+### Sitemap: legg URL-en i generatoren, ikke i filen
+
+Artikkel-URL-ene er **hardkodet i `generer_sitemap()` i `scripts/fetch_stocks.py`**.
+`sitemap.xml` er autogenerert, så redigerer du bare filen, forsvinner artikkelen
+neste gang `fetch_stocks.py` eller `regenerer_sider.py` kjører. Legg URL-en inn i
+listen i generatoren.
 
 ---
 
@@ -640,4 +646,5 @@ When adding new tickers, always verify `ticker_yf` is unique in `tickers.json`, 
 5. **`'use strict';` is required** — every JS file must have this at the top
 6. **Use `escHtml()` in innerHTML** — never interpolate raw stock data strings into HTML
 7. **Price data is separate** — `priser.json` is merged into `alleAksjer` at runtime; prices are not in `aksjer.json`
+8. **Kurshistorikk er separat** — ligger i `data/kurs/{TICKER}.json`, ikke i `aksjer.json`. Frontend henter den on-demand via `hentKursHistorikk()` når en aksjemodal åpnes. Python-kode som genererer sider må laste den tilbake med `_last_kurshistorikk_fra_disk()` — ellers regenereres alle SEO-sider uten kursgraf
 8. **`window.alleAksjer`** is set in `lastInnData()` in `app.js` for cross-file access

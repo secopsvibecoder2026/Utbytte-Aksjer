@@ -257,13 +257,22 @@ Eksisterende enhetstester dekker beregningslogikk. Brukerflyter testes ikke.
 - [ ] Netlify-deploy fra `dev`-branch
 - [ ] Preview-URL per PR
 
-### T11. kurs_historikk utgjør 1,18 MB av 1,54 MB i aksjer.json
+### T11. kurs_historikk utgjør 1,18 MB av 1,54 MB i aksjer.json ✅
 **Prioritet: Medium — unødvendig payload ved hver sidelast**
 
-`kurs_historikk` (5 år ukentlige kurspunkter × 162 aksjer) brukes kun to steder — begge i modalen for én enkelt aksje (`ui.js:23`, `ui.js:2689`). Likevel lastes hele feltet for alle 162 aksjer ved hver sidelast, og filen ligger i service workerens `PRECACHE` (`sw.js:25`) og hentes derfor på nytt ved hvert deploy. Gzippet er `aksjer.json` 374 kB — ikke katastrofalt, men grafdata for 161 aksjer brukeren aldri åpner er ren overhead.
+`kurs_historikk` (5 år ukentlige kurspunkter × 162 aksjer) brukes kun to steder — begge i modalen for én enkelt aksje. Likevel ble hele feltet lastet for alle 162 aksjer ved hver sidelast.
 
-- [ ] Vurder å splitte `kurs_historikk` ut i egne filer per ticker (`data/kurs/{TICKER}.json`), hentet ved modalåpning
-- [ ] Fjern `kurs_historikk` fra hovedresponsen i `aksjer.json` når/hvis dette gjøres
+- [x] Splittet ut i `data/kurs/{TICKER}.json`, hentet ved modalåpning via `hentKursHistorikk()` i `ui.js` (in-memory cache, degraderer til tom graf ved nettverksfeil)
+- [x] Fjernet fra `aksjer.json` — `fetch_stocks.py` stripper feltet ved serialisering, men beholder det i minnet så SEO-sidegenereringen i samme kjøring er upåvirket
+
+**Resultat: 347 kB → 72 kB gzippet ved hver sidelast (−79 %).** Én kursfil koster 1,7 kB gzippet, og lastes kun når en modal faktisk åpnes.
+
+Frontend leser fortsatt `a.kurs_historikk` hvis feltet finnes inline, så begge dataformater fungerer — trygg utrulling og tilbakerulling.
+
+Tre følgeproblemer som måtte løses samtidig:
+- `regenerer_sider.py` ville regenerert alle 162 SEO-sider **uten kursgraf**, stille. Laster nå dataene tilbake med `_last_kurshistorikk_fra_disk()`.
+- Tickere der hentingen feiler bruker forrige kjørings rad, som ikke lenger har feltet. Samme funksjon brukes i fallback-grenen.
+- `data/kurs/*.json` falt i service workerens cache-first-gren som aldri populerer cachen — grafene ville aldri fungert offline. Flyttet til nettverks-first med bakgrunnscache.
 
 ---
 

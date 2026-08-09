@@ -4092,6 +4092,12 @@ def generer_sitemap(aksjer, root_dir, today, alle_tickers=None):
     <priority>0.6</priority>
   </url>""",
         f"""  <url>
+    <loc>https://exday.no/artikler/sparebanker-oslo-bors/</loc>
+    <lastmod>2026-08-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>""",
+        f"""  <url>
     <loc>https://exday.no/verktoy/</loc>
     <lastmod>{today}</lastmod>
     <changefreq>monthly</changefreq>
@@ -4169,6 +4175,45 @@ def hent_osebx_historikk():
         return {}
 
 
+def skriv_kurshistorikk(aksjer, kurs_dir):
+    """
+    Skriver kurs_historikk til data/kurs/{TICKER}.json — én fil per ticker.
+
+    Filene lastes etterspørselsdrevet av frontend når brukeren åpner en
+    aksjemodal, i stedet for å ligge i aksjer.json som alle laster ved hver
+    sidelast. Tickere uten historikk hoppes over (ingen tom fil).
+    """
+    os.makedirs(kurs_dir, exist_ok=True)
+    skrevet = 0
+    for a in aksjer:
+        hist = a.get("kurs_historikk") or []
+        if not hist:
+            continue
+        ticker = _valider_ticker(a["ticker"])
+        with open(os.path.join(kurs_dir, f"{ticker}.json"), "w", encoding="utf-8") as f:
+            json.dump(hist, f, ensure_ascii=False, separators=(",", ":"))
+        skrevet += 1
+    print(f"  Kurshistorikk: {skrevet} filer skrevet til {kurs_dir}")
+
+
+def _last_kurshistorikk_fra_disk(ticker, kurs_dir):
+    """
+    Leser tilbake en tidligere skrevet kursfil.
+
+    Brukes for tickere der hentingen feilet og vi faller tilbake til forrige
+    kjørings rad: den raden inneholder ikke lenger kurs_historikk (feltet ble
+    skilt ut), så uten dette ville SEO-siden mistet kursgrafen sin den dagen.
+    """
+    try:
+        sti = os.path.join(kurs_dir, f"{_valider_ticker(ticker)}.json")
+        if os.path.exists(sti):
+            with open(sti, encoding="utf-8") as f:
+                return json.load(f)
+    except (OSError, ValueError, json.JSONDecodeError):
+        pass
+    return []
+
+
 def main():
     if yf is None:
         print("FEIL: yfinance er ikke installert eller kunne ikke importeres.")
@@ -4216,6 +4261,11 @@ def main():
             if fb.get("pris", 0) == 0 and meta["ticker"] in euronext_priser:
                 fb["pris"] = euronext_priser[meta["ticker"]]
                 fb["data_kilde"] = "euronext"
+            # aksjer.json inneholder ikke lenger kurs_historikk — hent forrige
+            # kjørings kursfil fra disk, ellers mister SEO-siden grafen i dag.
+            if not fb.get("kurs_historikk"):
+                fb["kurs_historikk"] = _last_kurshistorikk_fra_disk(
+                    meta["ticker"], os.path.join(os.path.dirname(output_path), "kurs"))
             print(f"    Bruker fallback-data for {meta['ticker']}")
             resultater.append(fb)
             feil.append(meta["ticker"])
@@ -4375,8 +4425,23 @@ def main():
         if isinstance(obj, list):
             return [_sanitize(v) for v in obj]
         return obj
+
+    # ── Kurshistorikk skrives til egne filer per ticker ──────────────────────
+    # kurs_historikk utgjorde 1,18 MB av 1,54 MB i aksjer.json, men brukes kun
+    # når brukeren åpner modalen for én enkelt aksje. Den lastes derfor nå
+    # etterspørselsdrevet fra data/kurs/{TICKER}.json.
+    #
+    # NB: feltet fjernes kun ved serialisering av aksjer.json — objektene i
+    # `resultater` beholder det i minnet, slik at SEO-sidegenereringen under
+    # (_generer_kurs_chart_svg) fungerer uendret i samme kjøring.
+    skriv_kurshistorikk(resultater, os.path.join(os.path.dirname(output_path), "kurs"))
+
+    output_uten_kurs = dict(output)
+    output_uten_kurs["aksjer"] = [
+        {k: v for k, v in a.items() if k != "kurs_historikk"} for a in resultater
+    ]
     with open(output_path, "w", encoding="utf-8") as f:
-        json.dump(_sanitize(output), f, ensure_ascii=False, indent=2)
+        json.dump(_sanitize(output_uten_kurs), f, ensure_ascii=False, indent=2)
 
     print(f"\nFerdig! {len(resultater)} aksjer lagret til {output_path}")
     print(f"Sist oppdatert: {output['sist_oppdatert']}")
