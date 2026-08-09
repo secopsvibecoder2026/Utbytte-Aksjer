@@ -3948,8 +3948,15 @@ def generer_sitemap(aksjer, root_dir, today, alle_tickers=None):
     for a in aksjer:
         if a.get("sektor"):
             sektorer[a["sektor"]].append(a)
-    # Bruk alle_tickers for aksje-URL-er slik at sider ikke forsvinner ved midlertidige hente-feil
+    # Bruk alle_tickers for aksje-URL-er slik at sider ikke forsvinner ved midlertidige hente-feil.
+    # Krev likevel at siden faktisk finnes på disk: ved en forbigående feil ligger gårsdagens
+    # side der fortsatt, mens en permanent død ticker aldri har fått en side — og skal ikke
+    # ligge igjen i sitemap som en 404. (FKRAFT, HDLG, NOFI m.fl. lå slik i over tre år.)
     ticker_liste = alle_tickers if alle_tickers else aksjer
+    ticker_liste = [
+        t for t in ticker_liste
+        if os.path.isdir(os.path.join(root_dir, "aksjer", t["ticker"]))
+    ]
 
     urls = [
         f"""  <url>

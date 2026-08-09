@@ -185,6 +185,38 @@ class TestManglendeData(unittest.TestCase):
         tickere = [{"ticker": "EQNR", "ticker_yf": "EQNR.OL", "navn": "Equinor ASA"}]
         self.assertEqual(finn_manglende_data(tickere, []), [])
 
+    def test_nylig_lagt_til_ticker_er_bare_info(self):
+        # JAREN-tilfellet: lagt til i katalogen etter forrige henting, så den
+        # mangler data uten at noe er galt.
+        tickere = [
+            {"ticker": "EQNR", "ticker_yf": "EQNR.OL", "navn": "Equinor ASA"},
+            {"ticker": "JAREN", "ticker_yf": "JAREN.OL", "navn": "Jæren Sparebank"},
+        ]
+        aksjer = [{"ticker": "EQNR", "pris": 300.0}]
+        hentelogg = {"tickere": {"EQNR": {"ok": True}}}
+        varsler = finn_manglende_data(tickere, aksjer, hentelogg)
+        self.assertEqual(len(varsler), 1)
+        self.assertEqual(varsler[0]["ticker"], "JAREN")
+        self.assertEqual(varsler[0]["type"], "ny_ticker")
+        self.assertEqual(varsler[0]["alvorlighet"], ALVOR_INFO)
+
+    def test_ticker_som_feiler_i_hentelogg_er_fortsatt_kritisk(self):
+        # Står i hentelogget med ok=False → reelt problem, ikke en ny ticker.
+        tickere = [{"ticker": "NOFI", "ticker_yf": "NOFI.OL", "navn": "Norway Royal Salmon"}]
+        aksjer = [{"ticker": "EQNR", "pris": 300.0}]
+        hentelogg = {"tickere": {"EQNR": {"ok": True}, "NOFI": {"ok": False}}}
+        varsler = finn_manglende_data(tickere, aksjer, hentelogg)
+        self.assertEqual(varsler[0]["type"], "ingen_data")
+        self.assertEqual(varsler[0]["alvorlighet"], ALVOR_KRITISK)
+
+    def test_uten_hentelogg_beholdes_kritisk(self):
+        # Første kjøring, ingen hentelogg ennå — da er den strenge tolkningen
+        # riktig, slik at katalogsjekken er nyttig fra dag én.
+        tickere = [{"ticker": "NOFI", "ticker_yf": "NOFI.OL", "navn": "Norway Royal Salmon"}]
+        aksjer = [{"ticker": "EQNR", "pris": 300.0}]
+        varsler = finn_manglende_data(tickere, aksjer, {})
+        self.assertEqual(varsler[0]["alvorlighet"], ALVOR_KRITISK)
+
 
 class TestHentestatus(unittest.TestCase):
 

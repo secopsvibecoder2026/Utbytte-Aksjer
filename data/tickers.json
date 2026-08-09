@@ -1136,68 +1136,13 @@
     "inkorporeringsland": "Norge"
   },
   {
-    "ticker": "JAEDR",
-    "ticker_yf": "JAEDR.OL",
+    "ticker": "JAREN",
+    "ticker_yf": "JAREN.OL",
     "navn": "Jæren Sparebank",
     "sektor": "Finans",
     "bors": "Oslo Børs",
     "beskrivelse": "Regional sparebank på Jæren med stabil utbytteutbetaling.\n\nRentenivå og kredittap påvirker inntjeningen, mens regulatoriske kapitalkrav setter rammer for hva som kan deles ut.",
     "navn_dnb": "Jæren Sparebank",
-    "ask_egnet": true,
-    "inkorporeringsland": "Norge"
-  },
-  {
-    "ticker": "HDLG",
-    "ticker_yf": "HDLG.OL",
-    "navn": "Hoegh LNG Holdings Ltd",
-    "sektor": "Energi",
-    "bors": "Oslo Børs",
-    "beskrivelse": "LNG infrastrukturselskap med stabil kontantstrøm og utbytte.\n\nInntjeningen er tett koblet til olje- og gasspriser, noe som gjør utbyttet mer syklisk enn i defensive sektorer.",
-    "navn_dnb": "Hoegh LNG Holdings",
-    "ask_egnet": false,
-    "inkorporeringsland": "Bermuda"
-  },
-  {
-    "ticker": "NOFI",
-    "ticker_yf": "NOFI.OL",
-    "navn": "Norway Royal Salmon ASA",
-    "sektor": "Havbruk",
-    "bors": "Oslo Børs",
-    "beskrivelse": "Norsk lakseoppdrettsselskap med utbytteutbetalinger.\n\nLaksepris og biologisk risiko er de viktigste variablene — gode biologiår kan gi ekstraordinære utbytter.",
-    "navn_dnb": "Norway Royal Salmon",
-    "ask_egnet": true,
-    "inkorporeringsland": "Norge"
-  },
-  {
-    "ticker": "FKRAFT",
-    "ticker_yf": "FKRAFT.OL",
-    "navn": "Fjordkraft Holding ASA",
-    "sektor": "Forsyning",
-    "bors": "Oslo Børs",
-    "beskrivelse": "Norsk strømleverandør med stabil utbyttepolitikk.\n\nRegulerte tariffer gir svært forutsigbar inntjening, men begrenser vekspotensialet i utbyttet.",
-    "navn_dnb": "Fjordkraft Holding",
-    "ask_egnet": true,
-    "inkorporeringsland": "Norge"
-  },
-  {
-    "ticker": "TOTG",
-    "ticker_yf": "TOTG.OL",
-    "navn": "Tidewater Inc.",
-    "sektor": "Energitjenester",
-    "bors": "Oslo Børs",
-    "beskrivelse": "Offshorefartøyselskap som betjener olje- og gassindustrien.",
-    "navn_dnb": "Tidewater",
-    "ask_egnet": false,
-    "inkorporeringsland": "USA"
-  },
-  {
-    "ticker": "WALWIL",
-    "ticker_yf": "WALWIL.OL",
-    "navn": "Wallenius Wilhelmsen ASA",
-    "sektor": "Shipping",
-    "bors": "Oslo Børs",
-    "beskrivelse": "Globalt bilfrakt- og logistikkselskap med kvartalsvis utbytte.\n\nFraktrater varierer kraftig med globalt handelsmønster og flåtekapasitet, og utbyttet svinger tilsvarende.",
-    "navn_dnb": "Wallenius Wilhelmsen",
     "ask_egnet": true,
     "inkorporeringsland": "Norge"
   },

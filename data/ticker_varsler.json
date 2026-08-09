@@ -1,56 +1,14 @@
 {
-  "generert": "2026-08-09T06:47:58Z",
-  "antall": 7,
-  "antall_kritiske": 7,
+  "generert": "2026-08-09T07:22:50Z",
+  "antall": 1,
+  "antall_kritiske": 1,
   "varsler": [
     {
-      "ticker": "FKRAFT",
+      "ticker": "JAREN",
       "type": "ingen_data",
       "alvorlighet": "kritisk",
-      "melding": "«Fjordkraft Holding ASA» (FKRAFT.OL) står i tickers.json, men har ingen rad i aksjer.json. Hentingen leverer ingenting.",
+      "melding": "«Jæren Sparebank» (JAREN.OL) står i tickers.json, men har ingen rad i aksjer.json. Hentingen leverer ingenting.",
       "forslag": "Kontroller om selskapet er avnotert, fusjonert eller omdøpt. Fjern oppføringen fra data/tickers.json, eller rett ticker_yf."
-    },
-    {
-      "ticker": "HDLG",
-      "type": "ingen_data",
-      "alvorlighet": "kritisk",
-      "melding": "«Hoegh LNG Holdings Ltd» (HDLG.OL) står i tickers.json, men har ingen rad i aksjer.json. Hentingen leverer ingenting.",
-      "forslag": "Kontroller om selskapet er avnotert, fusjonert eller omdøpt. Fjern oppføringen fra data/tickers.json, eller rett ticker_yf."
-    },
-    {
-      "ticker": "JAEDR",
-      "type": "ingen_data",
-      "alvorlighet": "kritisk",
-      "melding": "«Jæren Sparebank» (JAEDR.OL) står i tickers.json, men har ingen rad i aksjer.json. Hentingen leverer ingenting.",
-      "forslag": "Kontroller om selskapet er avnotert, fusjonert eller omdøpt. Fjern oppføringen fra data/tickers.json, eller rett ticker_yf."
-    },
-    {
-      "ticker": "NOFI",
-      "type": "ingen_data",
-      "alvorlighet": "kritisk",
-      "melding": "«Norway Royal Salmon ASA» (NOFI.OL) står i tickers.json, men har ingen rad i aksjer.json. Hentingen leverer ingenting.",
-      "forslag": "Kontroller om selskapet er avnotert, fusjonert eller omdøpt. Fjern oppføringen fra data/tickers.json, eller rett ticker_yf."
-    },
-    {
-      "ticker": "TOTG",
-      "type": "ingen_data",
-      "alvorlighet": "kritisk",
-      "melding": "«Tidewater Inc.» (TOTG.OL) står i tickers.json, men har ingen rad i aksjer.json. Hentingen leverer ingenting.",
-      "forslag": "Kontroller om selskapet er avnotert, fusjonert eller omdøpt. Fjern oppføringen fra data/tickers.json, eller rett ticker_yf."
-    },
-    {
-      "ticker": "WALWIL",
-      "type": "ingen_data",
-      "alvorlighet": "kritisk",
-      "melding": "«Wallenius Wilhelmsen ASA» (WALWIL.OL) står i tickers.json, men har ingen rad i aksjer.json. Hentingen leverer ingenting.",
-      "forslag": "Kontroller om selskapet er avnotert, fusjonert eller omdøpt. Fjern oppføringen fra data/tickers.json, eller rett ticker_yf."
-    },
-    {
-      "ticker": "WALWIL, WAWI",
-      "type": "duplikat_navn",
-      "alvorlighet": "kritisk",
-      "melding": "2 oppføringer har samme selskapsnavn: WALWIL, WAWI. Sannsynligvis en gammel og en ny ticker for samme selskap.",
-      "forslag": "Kontroller mot Euronext hvilken ticker som er gjeldende, og fjern den utdaterte fra data/tickers.json."
     }
   ]
 }
