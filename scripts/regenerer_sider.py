@@ -14,7 +14,8 @@ AKSJER_F  = os.path.join(ROOT, "data", "aksjer.json")
 # Importer genererings-funksjonene fra fetch_stocks
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from fetch_stocks import (generer_aksjesider, generer_sektorsider, generer_topplistesider,
-                          generer_sitemap, _last_kurshistorikk_fra_disk)
+                          generer_sitemap, _last_kurshistorikk_fra_disk,
+                          oppdater_app_noscript_liste)
 
 def main():
     with open(TICKERS_F, encoding="utf-8") as f:
@@ -68,6 +69,8 @@ def main():
 
     generer_sitemap(aksjer, ROOT, today)
     print("Sitemap oppdatert")
+
+    oppdater_app_noscript_liste(aksjer, ROOT)
 
     print("\nFerdig!")
 

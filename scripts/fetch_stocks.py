@@ -4524,6 +4524,7 @@ def main():
     today = datetime.datetime.utcnow().strftime("%Y-%m-%d")
     generer_sitemap(resultater, root_dir, today, AKSJER)
     oppdater_index_html_meta(len(resultater), root_dir)
+    oppdater_app_noscript_liste(resultater, root_dir)
 
 
 def oppdater_index_html_meta(antall_aksjer: int, root_dir: str):
@@ -4545,6 +4546,57 @@ def oppdater_index_html_meta(antall_aksjer: int, root_dir: str):
     with open(path, "w", encoding="utf-8") as f:
         f.write(oppdatert)
     print(f"  index.html meta-beskrivelse oppdatert → {antall_aksjer} aksjer")
+
+
+def oppdater_app_noscript_liste(aksjer, root_dir: str):
+    """
+    Regenererer aksjelisten i <noscript>-blokken i app/index.html.
+
+    Blokken er det søkemotorer ser av appen, siden alt annet der krever
+    JavaScript. Den var håndvedlikeholdt og hadde drevet kraftig fra
+    virkeligheten: 21 av 124 lenker pekte på avnoterte tickere (404), og 17
+    hadde feil selskapsnavn — KOG sto som «Kjøtt og Grønt» (er Kongsberg
+    Gruppen), MING som «MPC Container Ships» (er SpareBank 1 SMN). Altså
+    feilinformasjon servert til indeksering.
+
+    Genereres nå fra samme datasett som resten av siden, så den ikke kan
+    drive fra virkeligheten igjen.
+    """
+    path = os.path.join(root_dir, "app", "index.html")
+    if not os.path.exists(path):
+        print("  Advarsel: app/index.html ikke funnet, hopper over noscript-liste")
+        return
+    # NB: ikke kall denne variabelen «html» — det skygger html-modulen under.
+    with open(path, "r", encoding="utf-8") as f:
+        innhold = f.read()
+
+    start, slutt = "<!-- AKSJELISTE:START", "<!-- AKSJELISTE:SLUTT -->"
+    i, j = innhold.find(start), innhold.find(slutt)
+    if i == -1 or j == -1:
+        print("  Advarsel: AKSJELISTE-markører mangler i app/index.html")
+        return
+
+    # Bare aksjer som faktisk har en generert side — ellers lager vi nye 404-er.
+    med_side = [
+        a for a in sorted(aksjer, key=lambda x: x["ticker"])
+        if os.path.isdir(os.path.join(root_dir, "aksjer", a["ticker"]))
+    ]
+    lenker = "".join(
+        f'<li><a href="/aksjer/{html.escape(a["ticker"])}/">{html.escape(a["navn"])}</a></li>'
+        for a in med_side
+    )
+    ny_blokk = (
+        f"{start} — autogenerert av fetch_stocks.py, ikke rediger for hånd -->\n"
+        f"        {lenker}\n        "
+    )
+    oppdatert = innhold[:i] + ny_blokk + innhold[j:]
+
+    if oppdatert == innhold:
+        print(f"  app/index.html noscript-liste: ingen endring ({len(med_side)} aksjer)")
+        return
+    with open(path, "w", encoding="utf-8") as f:
+        f.write(oppdatert)
+    print(f"  app/index.html noscript-liste regenerert → {len(med_side)} aksjer")
 
 
 if __name__ == "__main__":

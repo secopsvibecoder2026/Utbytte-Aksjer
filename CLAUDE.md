@@ -639,7 +639,7 @@ When adding new tickers, always verify `ticker_yf` is unique in `tickers.json`, 
 
 ## Common Pitfalls
 
-1. **Do not edit auto-generated files** — `data/aksjer.json`, `/aksjer/*/index.html` are overwritten daily
+1. **Do not edit auto-generated files** — `data/aksjer.json`, `/aksjer/*/index.html`, `sitemap.xml` and the aksjeliste inside the `<noscript>` block in `app/index.html` (between the `AKSJELISTE:START`/`AKSJELISTE:SLUTT` markers) are all overwritten by `fetch_stocks.py` / `regenerer_sider.py`
 2. **CSS changes require rebuild** — run `npm run build:css` after changing `tw-input.css`
 3. **No JS bundler** — frontend files share global scope via `<script>` tags
 4. **Norwegian naming is mandatory** — all variables, functions, and UI text must be in Norwegian
