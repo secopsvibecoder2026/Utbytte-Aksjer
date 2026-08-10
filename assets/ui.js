@@ -818,7 +818,13 @@ function forklarMal(a) {
     forklaringer.push({ mal: 'Høy yield',
       tekst: `Passer investorer som prioriterer løpende inntekt fremfor kursvekst. `
            + `${yield_.toFixed(1)}% direkteavkastning er vesentlig over markedssnittet — `
-           + (payout > 80 ? 'vurder om utbyttet er bærekraftig på sikt.' : 'payout ratio indikerer at utbyttet er håndterbart.') });
+           // payout === 0 betyr «ukjent», ikke «lav». Uten dette skillet påsto
+           // vi at utbyttet var håndterbart for aksjer vi mangler payout for.
+           + (payout > 80
+                ? 'vurder om utbyttet er bærekraftig på sikt.'
+                : payout > 0
+                  ? 'payout ratio indikerer at utbyttet er håndterbart.'
+                  : 'vi mangler payout ratio for denne aksjen, så utbyttets dekning er ikke vurdert.') });
 
   if (mal.includes('kvartalsvis')) {
     const erManedlig = a.frekvens === 'Månedlig';

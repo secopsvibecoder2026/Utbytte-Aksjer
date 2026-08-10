@@ -578,7 +578,9 @@ This section documents recurring patterns where Yahoo Finance returns incorrect 
 
 **Root cause:** When EPS is near zero or negative, Yahoo's payout_ratio = dividend/EPS produces huge values. These are mathematically correct but meaningless for users.
 
-**Fix:** Values > 500% are zeroed out in the data pipeline.
+**Fix:** Values ≥ 500% are zeroed out in the data pipeline. (The bound is inclusive: with `> 500`, exactly 500.0% slipped through and rendered, while 500.1% became "—" — the more extreme the value, the less the user was told.)
+
+**⚠️ `payout_ratio == 0` means UNKNOWN, not LOW.** It is the value for both "Yahoo gave us nothing" and "the number was implausible and we zeroed it". Any branch that treats low payout as a positive signal **must** guard with `payout > 0`. This bit us once: the "høy yield"-investor blurb read `payout > 80 ? warn : 'payout ratio indikerer at utbyttet er håndterbart'`, so six stocks with unknown payout were told their dividend was manageable — an unfounded reassurance built from missing data. Fixed in both `assets/ui.js` and the SEO template in `scripts/fetch_stocks.py`; the same pattern is easy to reintroduce.
 
 ### Historical yields design decision
 

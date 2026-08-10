@@ -785,9 +785,12 @@ def hent_aksje(meta):
             if payout_ratio > 150 and payout_fra_pe < payout_ratio * 0.6:
                 print(f"    Korrigerer [{ticker}]: payout_ratio {payout_ratio:.0f}% → {payout_fra_pe:.0f}% (PE-basert EPS {eps_fra_pe:.2f})")
                 payout_ratio = payout_fra_pe
-        # Cap: payout > 500% er meningsløst for visning (skyldes nær-null EPS-kvartal)
-        if payout_ratio > 500:
-            print(f"    Nullstiller [{ticker}]: payout_ratio {payout_ratio:.0f}% > 500% — settes til 0")
+        # Cap: payout ≥ 500% er meningsløst for visning (skyldes nær-null
+        # EPS-kvartal). Grensen er inklusiv — med «> 500» slapp nøyaktig 500,0 %
+        # gjennom og ble vist, mens 500,1 % ble til «—». Jo mer ekstremt
+        # tallet var, jo mindre fikk brukeren vite.
+        if payout_ratio >= 500:
+            print(f"    Nullstiller [{ticker}]: payout_ratio {payout_ratio:.0f}% ≥ 500% — settes til 0 (ukjent)")
             payout_ratio = 0
 
         valuta = info.get("currency", "NOK")
@@ -1794,8 +1797,11 @@ def _lag_investor_badges(a):
         'hoy_yield':
             f'Passer investorer som prioriterer løpende inntekt fremfor kursvekst. '
             f'{yield_:.1f}% direkteavkastning er vesentlig over markedssnittet — '
-            + (f'vurder om utbyttet er bærekraftig på sikt.' if payout > 80
-               else f'payout ratio indikerer at utbyttet er håndterbart.'),
+            # payout == 0 betyr «ukjent», ikke «lav». Uten dette skillet påsto
+            # vi at utbyttet var håndterbart for aksjer vi mangler payout for.
+            + ('vurder om utbyttet er bærekraftig på sikt.' if payout > 80
+               else 'payout ratio indikerer at utbyttet er håndterbart.' if payout > 0
+               else 'vi mangler payout ratio for denne aksjen, så utbyttets dekning er ikke vurdert.'),
         'kvartalsvis':
             f'Passer investorer som trenger jevn kontantstrøm — {frekvens_forklaring}.',
     }
