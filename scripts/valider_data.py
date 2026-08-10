@@ -23,14 +23,22 @@ def valider_data(filsti=AKSJER_JSON):
     advarsler = []
     kritiske_feil = []
 
+    # Feltene kan være null i tillegg til fraværende: fetch_stocks.py setter
+    # bevisst snitt_yield_5ar til null når ingen yield er troverdig. dict.get()
+    # med standardverdi fanger kun det fraværende tilfellet, så en eksplisitt
+    # null ville krasjet sammenligningene under.
+    def _tall(kilde, felt, standard=0):
+        v = kilde.get(felt)
+        return v if isinstance(v, (int, float)) else standard
+
     for a in aksjer:
         ticker = a.get('ticker', '?')
-        pris = a.get('pris', 0)
-        utbytte_per_aksje = a.get('utbytte_per_aksje', 0)
-        utbytte_yield = a.get('utbytte_yield', 0)
-        snitt_yield_5ar = a.get('snitt_yield_5ar', 0)
-        payout_ratio = a.get('payout_ratio', 0)
-        historiske_utbytter = a.get('historiske_utbytter', [])
+        pris = _tall(a, 'pris')
+        utbytte_per_aksje = _tall(a, 'utbytte_per_aksje')
+        utbytte_yield = _tall(a, 'utbytte_yield')
+        snitt_yield_5ar = _tall(a, 'snitt_yield_5ar')
+        payout_ratio = _tall(a, 'payout_ratio')
+        historiske_utbytter = a.get('historiske_utbytter') or []
 
         # Sjekk 1: utbytte_yield skal stemme overens med utbytte_per_aksje / pris
         if pris > 0 and utbytte_per_aksje > 0:
@@ -62,10 +70,12 @@ def valider_data(filsti=AKSJER_JSON):
             )
 
         # Sjekk 4: historiske yields > 200% er mistenkelige
+        # yield kan være None når fetch_stocks.py ikke fant et troverdig tall —
+        # det er en bevisst markering, ikke et avvik å rapportere.
         for h in historiske_utbytter:
-            hist_yield = h.get('yield', 0)
+            hist_yield = h.get('yield')
             ar = h.get('ar', '?')
-            if hist_yield > 200:
+            if hist_yield is not None and hist_yield > 200:
                 advarsler.append(
                     f"ADVARSEL {ticker} {ar}: historisk yield={hist_yield}% er usannsynlig høy (>200%)"
                 )

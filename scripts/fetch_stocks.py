@@ -476,14 +476,31 @@ def frekvens_label(dividends_per_year):
     return "Uregelmessig"
 
 
+# Historisk yield over denne grensen regnes som ikke troverdig og utløser
+# fallback til årets faktiske kurs. En reell utbytteaksje betaler ikke ut
+# mer enn hele aksjekursen i løpet av ett år.
+MAKS_TROVERDIG_HIST_YIELD = 100.0
+
+
 def hent_historiske_utbytter(dividends, hist_prices, years=5, current_price=0.0):
     """Hent totalt utbytte og yield per kalenderår for siste N år.
 
-    Yields beregnes mot current_price (dagens kurs) for konsistens med
-    den viste current yield. Historiske yields vil da reflektere hva
-    en investor som kjøper NÅ ville fått i yield de historiske årene,
-    ikke hva en investor da faktisk fikk (som var basert på daværende kurs).
-    Dette er et bevisst designvalg for konsistent visning.
+    Yields beregnes normalt mot current_price (dagens kurs) for konsistens med
+    den viste current yield: en investor som sammenligner «2023-yield» mot
+    «yield i dag» sammenligner da mot samme prisbasis. Dette er et bevisst
+    designvalg.
+
+    Unntaket er aksjer der kursen har endret seg dramatisk. 2020 Bulkers
+    handles til 3,74 kr og betalte 135,52 kr per aksje i 2026 — mot dagens
+    kurs gir det en «yield» på 3623 %, som ikke er informativt under noen
+    tolkning. Når dagens-kurs-basisen gir over MAKS_TROVERDIG_HIST_YIELD,
+    faller vi derfor tilbake til aksjekursen ved utgangen av det året — altså
+    den yielden en investor det året faktisk fikk. Da settes `yield_basis`
+    til "arsslutt", slik at avviket er synlig i dataene og ikke skjult.
+
+    Finnes ikke årets kurs (tom hist_prices), utelates yielden fra snittet
+    heller enn å forurense det med et tall vi vet er feil. Utbyttebeløpet
+    beholdes uansett — det er korrekt og brukes av søylediagrammet.
     """
     if dividends.empty:
         return [], 0.0
@@ -497,34 +514,72 @@ def hent_historiske_utbytter(dividends, hist_prices, years=5, current_price=0.0)
         (div_per_year.index > cutoff_year) & (div_per_year.index <= current_year)
     ]
 
+    def _arsslutt_kurs(year):
+        """Sluttkurs for det aktuelle året, eller None om vi ikke har den."""
+        if hist_prices is None or hist_prices.empty or "Close" not in hist_prices.columns:
+            return None
+        year_hist = hist_prices[hist_prices.index.year == year]
+        if year_hist.empty:
+            return None
+        kurs = float(year_hist["Close"].iloc[-1])
+        return kurs if kurs > 0 else None
+
     historiske = []
     yields = []
-    ref_price = current_price  # Bruk dagens kurs for alle historiske yields
 
     for year, total_div in div_per_year.items():
+        year = int(year)
         total_div = float(total_div)
         if total_div <= 0:
             continue
 
-        # Fallback til årsluttpris hvis ingen current_price (f.eks. ved første fetch)
-        if ref_price <= 0 and not hist_prices.empty:
-            year_hist = hist_prices[hist_prices.index.year == year]
-            if not year_hist.empty:
-                ref_price_year = float(year_hist["Close"].iloc[-1])
-            else:
-                continue
-        else:
-            ref_price_year = ref_price if ref_price > 0 else 0.0
+        basis = "dagens_kurs"
+        ref_price = current_price if current_price > 0 else None
 
-        if ref_price_year <= 0:
+        # Ingen dagens-kurs (f.eks. første fetch) → bruk årets kurs direkte
+        if ref_price is None:
+            ref_price = _arsslutt_kurs(year)
+            basis = "arsslutt"
+
+        if not ref_price or ref_price <= 0:
             continue
 
-        year_yield = round((total_div / ref_price_year) * 100, 2)
-        historiske.append({"ar": int(year), "utbytte": round(total_div, 2), "yield": year_yield})
+        year_yield = round((total_div / ref_price) * 100, 2)
+
+        # Urimelig mot dagens kurs → prøv årets faktiske kurs i stedet
+        if year_yield > MAKS_TROVERDIG_HIST_YIELD and basis == "dagens_kurs":
+            aars_kurs = _arsslutt_kurs(year)
+            if aars_kurs:
+                year_yield = round((total_div / aars_kurs) * 100, 2)
+                basis = "arsslutt"
+
+        if year_yield > MAKS_TROVERDIG_HIST_YIELD:
+            # Urimelig mot begge prisbasiser. Da er ikke problemet hvilken kurs
+            # vi deler på — selve utbyttetallet fra Yahoo står ikke i forhold
+            # til kursen (typisk manglende splittjustering). Å vise «3623 %»
+            # er verre enn å vise ingenting, så yield settes til null.
+            # Utbyttebeløpet beholdes: det brukes av søylediagrammet og er
+            # riktig i seg selv.
+            post = {"ar": year, "utbytte": round(total_div, 2), "yield": None}
+            historiske.append(post)
+            continue
+
+        post = {"ar": year, "utbytte": round(total_div, 2), "yield": year_yield}
+        if basis != "dagens_kurs":
+            post["yield_basis"] = basis
+        historiske.append(post)
         yields.append(year_yield)
 
     historiske.sort(key=lambda x: x["ar"])
-    snitt_yield = round(sum(yields) / len(yields), 2) if yields else 0.0
+    if yields:
+        snitt_yield = round(sum(yields) / len(yields), 2)
+    elif historiske:
+        # Utbytter finnes, men ingen av yieldene er troverdige. 0.0 ville lest
+        # som «betaler ingenting», noe som er direkte feil — None sier ærlig at
+        # vi ikke har et tall. (Aksjer helt uten utbytte returnerer 0.0 over.)
+        snitt_yield = None
+    else:
+        snitt_yield = 0.0
     return historiske, snitt_yield
 
 
@@ -1005,7 +1060,9 @@ def _generer_hist_chart(hist, valuta="NOK"):
             f'<text x="{x:.1f}" y="{H - 6}" text-anchor="middle" '
             f'font-size="10" fill="#9ca3af">{h["ar"]}</text>'
         )
-        tip = f'{h["utbytte"]} {valuta} · {h["yield"]:.1f}% yield'
+        # yield kan være None når tallet ikke er troverdig (se hent_historiske_utbytter)
+        _y = h.get("yield")
+        tip = f'{h["utbytte"]} {valuta}' + (f' · {_y:.1f}% yield' if _y is not None else '')
         tooltips.append(
             f'<rect class="htip-bg" x="{min(x - 52, W - pad_r - 106):.1f}" y="{max(by - 28, 2):.1f}" '
             f'width="106" height="20" rx="4" fill="#111827" opacity="0" pointer-events="none"/>'
@@ -1211,10 +1268,11 @@ def _lag_historikk_prosa(a):
         f"{min_h['utbytte']:.2f} og {max_h['utbytte']:.2f} {valuta} per aksje i utbytte."
     )
     if max_h["ar"] != siste["ar"]:
+        _maks_y = max_h.get("yield")
         deler.append(
             f"Det høyeste utbyttet ble registrert i {max_h['ar']} "
-            f"med {max_h['utbytte']:.2f} {valuta} per aksje "
-            f"({max_h.get('yield', 0):.1f}% yield)."
+            f"med {max_h['utbytte']:.2f} {valuta} per aksje"
+            + (f" ({_maks_y:.1f}% yield)." if _maks_y is not None else ".")
         )
     if upa > 0 and yield_ > 0:
         deler.append(
@@ -2011,7 +2069,7 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
         <tr>
           <td>{h["ar"]}</td>
           <td>{h["utbytte"]} {valuta}</td>
-          <td>{h["yield"]:.2f}%</td>
+          <td>{f'{h["yield"]:.2f}%' if h.get("yield") is not None else "—"}</td>
         </tr>"""
 
     pe_rad = f"<tr><td>P/E</td><td>{pe:.1f}</td></tr>" if pe and pe > 0 else ""

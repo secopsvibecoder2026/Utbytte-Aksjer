@@ -11,10 +11,16 @@ Norsk utbytteaksje-tracker for Oslo Børs. Fullførte funksjoner: [ROADMAP_COMPL
 PGS, DOF, NRC, ENDUR, NKR, BWE, CADLR, KMCP, BORR, CAPT, ISLAX, AFISH, HEX, ACR, NOD, KOA
 - [ ] Fjern fra `tickers.json` og regenerer alle sider
 
-### Datakvalitet — fiks misvisende snitt_yield_5ar i fetch_stocks.py
-HUNT (298%), OTEC (105%), WEST (56%) har ekstreme snitt pga. historiske spesialutbytter ved nåværende lav kurs.
-- [ ] Ekskluder år med `yield > 100%` i snitt-beregningen i `hent_historiske_utbytter()`
-- [ ] Vis advarsel på sider der `snitt5ar > 50%`
+### Datakvalitet — fiks misvisende snitt_yield_5ar i fetch_stocks.py ✅
+Historisk yield beregnes mot *dagens* kurs (bevisst designvalg for konsistent visning). For aksjer der kursen har kollapset ga det meningsløse tall: 2020 Bulkers viste 5-årssnitt på **1104 %** med et enkeltår på 3623 %.
+
+- [x] `hent_historiske_utbytter()` faller nå tilbake til **årets faktiske sluttkurs** når dagens-kurs-basisen gir over 100 % — altså yielden en investor det året faktisk fikk. Året markeres med `yield_basis: "arsslutt"` så avviket er synlig i dataene.
+- [x] Er tallet urimelig mot *begge* basiser, står ikke utbyttet i forhold til kursen i det hele tatt (typisk manglende splittjustering hos Yahoo). Da settes `yield` til `null` og året utelates fra snittet — «—» er ærligere enn «3623 %». Utbyttebeløpet beholdes; det er riktig og driver søylediagrammet.
+- [x] `snitt_yield_5ar` settes til `null` (ikke `0.0`) når ingen yield er troverdig — `0.0` leste som «betaler ingenting».
+
+Rettet i eksisterende data samtidig: 2020 (1104 → 17,06 %), HUNT (203 → 14,71 %), OTEC (121 % → null), WEST (51,15 → 37,16 %), GSF (37,66 → 10,35 %). `valider_data.py` gir nå null advarsler, mot tidligere HUNT på 308 % og 475 %.
+
+- [ ] ~~Vis advarsel på sider der `snitt5ar > 50%`~~ — mindre relevant nå; WEST på 37 % er høyeste gjenværende
 
 ### Prisvarsel via push-notifikasjon
 `malPris`-feltet og push-infrastruktur finnes allerede i Service Worker.

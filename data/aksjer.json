@@ -2617,10 +2617,10 @@
         {
           "ar": 2026,
           "utbytte": 35.64,
-          "yield": 119.59
+          "yield": null
         }
       ],
-      "snitt_yield_5ar": 37.66,
+      "snitt_yield_5ar": 10.35,
       "beskrivelse": "Lakseoppdrettsselskap med virksomhet i Rogaland, Finnmark, Shetland og British Columbia.\n\nDirekteavkastningen er 4.3%, og 5-årsnittet på 4.3% plasserer GSF blant de solid-yielding aksjene i sin sektor. Utbyttet har falt med i snitt 23.6% per år de siste fem årene.\n\nLaksepris og biologisk risiko er de viktigste variablene — gode biologiår kan gi ekstraordinære utbytter. Historikken viser klare svingninger: høyest utbytte var 4.50 NOK per aksje i 2023, lavest 1.75 NOK i 2024.",
       "beskrivelse_fakta": "Grieg Seafood ASA, through its subsidiaries, operates as a fish farming company in Norway, the United Kingdom, rest of Europe, the United States, Canada, Asia, and internationally. It engages in the farming, production, and sale of Atlantic salmon. The company was incorporated in 1988 and is based in Bergen, Norway. Grieg Seafood ASA operates as a subsidiary of Grieg Aqua AS.",
       "valuta": "NOK",
@@ -3331,30 +3331,34 @@
         {
           "ar": 2022,
           "utbytte": 15.37,
-          "yield": 411.08
+          "yield": 19.15,
+          "yield_basis": "arsslutt"
         },
         {
           "ar": 2023,
           "utbytte": 7.78,
-          "yield": 208.08
+          "yield": 7.43,
+          "yield_basis": "arsslutt"
         },
         {
           "ar": 2024,
           "utbytte": 33.98,
-          "yield": 908.43
+          "yield": 30.58,
+          "yield_basis": "arsslutt"
         },
         {
           "ar": 2025,
           "utbytte": 13.86,
-          "yield": 370.48
+          "yield": 11.08,
+          "yield_basis": "arsslutt"
         },
         {
           "ar": 2026,
           "utbytte": 135.52,
-          "yield": 3623.59
+          "yield": null
         }
       ],
-      "snitt_yield_5ar": 1104.33,
+      "snitt_yield_5ar": 17.06,
       "beskrivelse": "Tørrbulkrederi med Newcastlemax-skip optimert for jernmalm og kull. Høy utbyttegrad fra sterk TCE.\n\nUtbyttet utbetales månedlig, og selskapet har holdt dette gående i 8 år på rad. Direkteavkastningen er 9.0%, og 5-årsnittet på 11.5% plasserer 2020 blant de høyest-yielding aksjene i sin sektor. En utbetalingsgrad på 113% betyr at det meste av inntjeningen deles ut — utbyttet er dermed sensitivt for resultatsvingninger. Utbyttet har falt med i snitt 29.0% per år de siste fem årene.\n\nFraktrater varierer kraftig med globalt handelsmønster og flåtekapasitet, og utbyttet svinger tilsvarende. Historikken viser klare svingninger: høyest utbytte var 33.53 NOK per aksje i 2024, lavest 4.50 NOK i 2026.",
       "beskrivelse_fakta": "2020 Bulkers Ltd. owns and operates large dry bulk vessels worldwide. It operates six scrubber fitted 208,000 deadweight tonnage Newcastlemax dry bulk vessels. 2020 Bulkers Ltd. was incorporated in 2017 and is based in Hamilton, Bermuda.",
       "valuta": "NOK",
@@ -4149,12 +4153,12 @@
         {
           "ar": 2022,
           "utbytte": 26.52,
-          "yield": 308.43
+          "yield": null
         },
         {
           "ar": 2023,
           "utbytte": 40.85,
-          "yield": 474.98
+          "yield": null
         },
         {
           "ar": 2025,
@@ -4167,7 +4171,7 @@
           "yield": 25.93
         }
       ],
-      "snitt_yield_5ar": 203.21,
+      "snitt_yield_5ar": 14.71,
       "beskrivelse": "VLCC-tankrederi med fokus på råoljetransport. Variabelt utbytte koblet til tankratene og inntjening per skip.\n\nUtbyttet utbetales kvartalsvis — fire utbetalinger i året, og selskapet har holdt dette gående i 5 år på rad. Direkteavkastningen er 5.2%, og 5-årsnittet på 297.4% plasserer HUNT blant de solid-yielding aksjene i sin sektor. Utbetalingsgraden på 30% er lav og gir selskapet solid buffer til å opprettholde utbyttet ved svakere kvartaler. Utbyttet har falt med i snitt 35.6% per år de siste fem årene.\n\nFraktrater varierer kraftig med globalt handelsmønster og flåtekapasitet, og utbyttet svinger tilsvarende. Historikken viser klare svingninger: høyest utbytte var 40.85 NOK per aksje i 2023, lavest 0.30 NOK i 2025.",
       "beskrivelse_fakta": "Hunter Group ASA provides oil tanker chartering services through VLCCs in Norway. It also focuses on shipping and oil service investments. The company was formerly known as Badger Explorer ASA and changed its name to Hunter Group ASA in May 2017. Hunter Group ASA was founded in 2003 and is headquartered in Oslo, Norway.",
       "valuta": "NOK",
@@ -7212,7 +7216,8 @@
         {
           "ar": 2022,
           "utbytte": 28.32,
-          "yield": 133.58
+          "yield": 91.62,
+          "yield_basis": "arsslutt"
         },
         {
           "ar": 2023,
@@ -7225,7 +7230,7 @@
           "yield": 5.71
         }
       ],
-      "snitt_yield_5ar": 51.15,
+      "snitt_yield_5ar": 37.16,
       "beskrivelse": "Norsk tørrlastrederi og handelsaktør innen supramax og handysize. Opererer med en kombinasjon av egne og innleide skip. Betaler halvårlig utbytte til aksjonærene basert på fraktmarkedets svingninger.\n\nUtbyttet utbetales én gang i året, og selskapet har betalt utbytte de siste 3 årene. Direkteavkastningen er 6.2%, og 5-årsnittet på 55.3% plasserer WEST blant de solid-yielding aksjene i sin sektor. Utbyttet har falt med i snitt 54.5% per år de siste fem årene.",
       "beskrivelse_fakta": "Western Bulk Chartering AS, together with its subsidiaries, operates as a dry bulk shipping company. The company engages in owning, chartering and operating ships, dry bulk vessels for the transportation of products, such as minerals, timber, cement, bauxite, steel products, grains, coal, and other products; and operation of chartered-in fleet varies between 100 and 150 vessels, including time charter trip vessels and period vessels.",
       "valuta": "NOK",
@@ -7886,10 +7891,10 @@
         {
           "ar": 2022,
           "utbytte": 21.0,
-          "yield": 121.11
+          "yield": null
         }
       ],
-      "snitt_yield_5ar": 121.11,
+      "snitt_yield_5ar": null,
       "beskrivelse": "Norsk teknologiselskap med mobilannonseringsteknologi og operatørbaserte løsninger globalt. Betaler utbytte til aksjonærene basert på kontantstrøm fra sine teknologiplattformer og programvarelisenser.",
       "beskrivelse_fakta": "Otello Corporation ASA, through its subsidiary, provides mobile solutions and platforms for digital payments, customer engagement, microfinance, and digital services in Norway. It provides Apps Club subscription service to mobile carriers and smartphone OEMs. The company was formerly known as Opera Software ASA and changed its name to Otello Corporation ASA in January 2018. Otello Corporation ASA was founded in 1995 and is based in Oslo, Norway.",
       "valuta": "NOK",
