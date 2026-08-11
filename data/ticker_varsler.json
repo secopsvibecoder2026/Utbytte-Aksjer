@@ -1,14 +1,112 @@
 {
-  "generert": "2026-08-09T07:22:50Z",
-  "antall": 1,
-  "antall_kritiske": 1,
+  "generert": "2026-08-11T08:04:47Z",
+  "antall": 15,
+  "antall_kritiske": 0,
   "varsler": [
     {
-      "ticker": "JAREN",
-      "type": "ingen_data",
-      "alvorlighet": "kritisk",
-      "melding": "«Jæren Sparebank» (JAREN.OL) står i tickers.json, men har ingen rad i aksjer.json. Hentingen leverer ingenting.",
-      "forslag": "Kontroller om selskapet er avnotert, fusjonert eller omdøpt. Fjern oppføringen fra data/tickers.json, eller rett ticker_yf."
+      "ticker": "AFG",
+      "type": "navneendring",
+      "alvorlighet": "advarsel",
+      "melding": "Nytt navnavvik: Yahoo sier «AF Gruppen ASA», vi har «Arendals Fossekompani ASA» (likhet 17%).",
+      "forslag": "Bekreftes som navneendring hvis avviket vedvarer i 2 dager."
+    },
+    {
+      "ticker": "ALNG",
+      "type": "navneendring",
+      "alvorlighet": "advarsel",
+      "melding": "Nytt navnavvik: Yahoo sier «ALNG ASA», vi har «Awilco LNG ASA» (likhet 57%).",
+      "forslag": "Bekreftes som navneendring hvis avviket vedvarer i 2 dager."
+    },
+    {
+      "ticker": "DOF",
+      "type": "aldri_hentet",
+      "alvorlighet": "advarsel",
+      "melding": "Ingen vellykket henting registrert for denne tickeren.",
+      "forslag": "Kontroller at ticker_yf er riktig i data/tickers.json."
+    },
+    {
+      "ticker": "FLNG",
+      "type": "aldri_hentet",
+      "alvorlighet": "advarsel",
+      "melding": "Ingen vellykket henting registrert for denne tickeren.",
+      "forslag": "Kontroller at ticker_yf er riktig i data/tickers.json."
+    },
+    {
+      "ticker": "GOGL",
+      "type": "aldri_hentet",
+      "alvorlighet": "advarsel",
+      "melding": "Ingen vellykket henting registrert for denne tickeren.",
+      "forslag": "Kontroller at ticker_yf er riktig i data/tickers.json."
+    },
+    {
+      "ticker": "KMCP",
+      "type": "aldri_hentet",
+      "alvorlighet": "advarsel",
+      "melding": "Ingen vellykket henting registrert for denne tickeren.",
+      "forslag": "Kontroller at ticker_yf er riktig i data/tickers.json."
+    },
+    {
+      "ticker": "OTEC",
+      "type": "aldri_hentet",
+      "alvorlighet": "advarsel",
+      "melding": "Ingen vellykket henting registrert for denne tickeren.",
+      "forslag": "Kontroller at ticker_yf er riktig i data/tickers.json."
+    },
+    {
+      "ticker": "PGS",
+      "type": "fastfrosset_kurs",
+      "alvorlighet": "advarsel",
+      "melding": "Siste registrerte handel var 2024-07-22 (536 børsdager siden). Kursen står stille.",
+      "forslag": "Kan bety at handelen er suspendert eller at papiret er avnotert."
+    },
+    {
+      "ticker": "RANA",
+      "type": "aldri_hentet",
+      "alvorlighet": "advarsel",
+      "melding": "Ingen vellykket henting registrert for denne tickeren.",
+      "forslag": "Kontroller at ticker_yf er riktig i data/tickers.json."
+    },
+    {
+      "ticker": "SBVG",
+      "type": "aldri_hentet",
+      "alvorlighet": "advarsel",
+      "melding": "Ingen vellykket henting registrert for denne tickeren.",
+      "forslag": "Kontroller at ticker_yf er riktig i data/tickers.json."
+    },
+    {
+      "ticker": "SRBNK",
+      "type": "aldri_hentet",
+      "alvorlighet": "advarsel",
+      "melding": "Ingen vellykket henting registrert for denne tickeren.",
+      "forslag": "Kontroller at ticker_yf er riktig i data/tickers.json."
+    },
+    {
+      "ticker": "TIETO",
+      "type": "fastfrosset_kurs",
+      "alvorlighet": "advarsel",
+      "melding": "Siste registrerte handel var 2026-06-29 (31 børsdager siden). Kursen står stille.",
+      "forslag": "Kan bety at handelen er suspendert eller at papiret er avnotert."
+    },
+    {
+      "ticker": "WILS",
+      "type": "aldri_hentet",
+      "alvorlighet": "advarsel",
+      "melding": "Ingen vellykket henting registrert for denne tickeren.",
+      "forslag": "Kontroller at ticker_yf er riktig i data/tickers.json."
+    },
+    {
+      "ticker": "BAKKA",
+      "type": "navnavvik",
+      "alvorlighet": "info",
+      "melding": "Navnet avviker litt fra Yahoo: «P/F Bakkafrost» vs «Bakkafrost P/F» (likhet 71%).",
+      "forslag": "Sannsynligvis bare ulik skrivemåte. Juster gjerne navnet i data/tickers.json for konsistens."
+    },
+    {
+      "ticker": "PUBLI",
+      "type": "navnavvik",
+      "alvorlighet": "info",
+      "melding": "Navnet avviker litt fra Yahoo: «PPI Public Property Invest AB (publ)» vs «Public Property Invest ASA» (likhet 83%).",
+      "forslag": "Sannsynligvis bare ulik skrivemåte. Juster gjerne navnet i data/tickers.json for konsistens."
     }
   ]
 }
