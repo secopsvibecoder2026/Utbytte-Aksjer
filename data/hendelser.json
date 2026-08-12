@@ -2124,7 +2124,8 @@
     {
       "ticker": "BORR",
       "dato": "2026-08-11",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/679518"
     },
     {
       "ticker": "ENTR",
@@ -2194,7 +2195,8 @@
     {
       "ticker": "BORR",
       "dato": "2026-08-12",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/679518"
     },
     {
       "ticker": "ENTR",
@@ -2513,6 +2515,11 @@
     {
       "ticker": "ZAL",
       "dato": "2026-08-14",
+      "type": "rapport"
+    },
+    {
+      "ticker": "ALNG",
+      "dato": "2026-08-18",
       "type": "rapport"
     },
     {
