@@ -2198,42 +2198,50 @@
     {
       "ticker": "ENTR",
       "dato": "2026-08-12",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/679479"
     },
     {
       "ticker": "KMCP",
       "dato": "2026-08-12",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/679479"
     },
     {
       "ticker": "ROGS",
       "dato": "2026-08-12",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/679460"
     },
     {
       "ticker": "SBMO",
       "dato": "2026-08-12",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/679479"
     },
     {
       "ticker": "SRHA",
       "dato": "2026-08-12",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/679479"
     },
     {
       "ticker": "STRONG",
       "dato": "2026-08-12",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/679479"
     },
     {
       "ticker": "VISTIN",
       "dato": "2026-08-12",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/679479"
     },
     {
       "ticker": "VVL",
       "dato": "2026-08-12",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/679457"
     },
     {
       "ticker": "WWI",
@@ -2243,7 +2251,8 @@
     {
       "ticker": "WWIB",
       "dato": "2026-08-12",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/679479"
     },
     {
       "ticker": "AASB",
@@ -3431,6 +3440,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "VVL",
+      "dato": "2026-10-28",
+      "type": "rapport"
+    },
+    {
       "ticker": "AKBM",
       "dato": "2026-10-29",
       "type": "rapport"
@@ -3511,6 +3525,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "WWI",
+      "dato": "2026-11-04",
+      "type": "rapport"
+    },
+    {
       "ticker": "AKER",
       "dato": "2026-11-05",
       "type": "rapport"
@@ -3521,8 +3540,18 @@
       "type": "rapport"
     },
     {
+      "ticker": "ROGS",
+      "dato": "2026-11-05",
+      "type": "rapport"
+    },
+    {
       "ticker": "SBO",
       "dato": "2026-11-05",
+      "type": "rapport"
+    },
+    {
+      "ticker": "AURG",
+      "dato": "2026-11-11",
       "type": "rapport"
     },
     {
@@ -3591,5 +3620,5 @@
       "type": "rapport"
     }
   ],
-  "sist_oppdatert": "2026-08-11"
+  "sist_oppdatert": "2026-08-12"
 }
