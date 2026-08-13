@@ -2260,7 +2260,8 @@
     {
       "ticker": "AASB",
       "dato": "2026-08-13",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/679720"
     },
     {
       "ticker": "ACR",
@@ -2388,7 +2389,8 @@
     {
       "ticker": "TINDE",
       "dato": "2026-08-13",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/679726"
     },
     {
       "ticker": "VISTIN",
@@ -3543,6 +3545,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "ENTR",
+      "dato": "2026-10-30",
+      "type": "rapport"
+    },
+    {
       "ticker": "GOD",
       "dato": "2026-10-30",
       "type": "rapport"
@@ -3554,6 +3561,41 @@
     },
     {
       "ticker": "NONG",
+      "dato": "2026-10-30",
+      "type": "rapport"
+    },
+    {
+      "ticker": "ODFB",
+      "dato": "2026-10-30",
+      "type": "rapport"
+    },
+    {
+      "ticker": "SBMO",
+      "dato": "2026-10-30",
+      "type": "rapport"
+    },
+    {
+      "ticker": "SBNOR",
+      "dato": "2026-10-30",
+      "type": "rapport"
+    },
+    {
+      "ticker": "SRHA",
+      "dato": "2026-10-30",
+      "type": "rapport"
+    },
+    {
+      "ticker": "STRONG",
+      "dato": "2026-10-30",
+      "type": "rapport"
+    },
+    {
+      "ticker": "VISTIN",
+      "dato": "2026-10-30",
+      "type": "rapport"
+    },
+    {
+      "ticker": "WWIB",
       "dato": "2026-10-30",
       "type": "rapport"
     },
