@@ -2321,7 +2321,8 @@
     {
       "ticker": "NISB",
       "dato": "2026-08-13",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/679800"
     },
     {
       "ticker": "NONG",
@@ -2407,7 +2408,8 @@
     {
       "ticker": "AKVA",
       "dato": "2026-08-14",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/679807"
     },
     {
       "ticker": "AQUA",
@@ -2422,12 +2424,14 @@
     {
       "ticker": "ENTR",
       "dato": "2026-08-14",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/679830"
     },
     {
       "ticker": "FFSB",
       "dato": "2026-08-14",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/679797"
     },
     {
       "ticker": "HELG",
@@ -2437,47 +2441,56 @@
     {
       "ticker": "HGSB",
       "dato": "2026-08-14",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/679802"
     },
     {
       "ticker": "HSPG",
       "dato": "2026-08-14",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/679805"
     },
     {
       "ticker": "KMCP",
       "dato": "2026-08-14",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/679830"
     },
     {
       "ticker": "ODFB",
       "dato": "2026-08-14",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/679830"
     },
     {
       "ticker": "POL",
       "dato": "2026-08-14",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/679781"
     },
     {
       "ticker": "ROMER",
       "dato": "2026-08-14",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/679799"
     },
     {
       "ticker": "SATS",
       "dato": "2026-08-14",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/679780"
     },
     {
       "ticker": "SB68",
       "dato": "2026-08-14",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/679706"
     },
     {
       "ticker": "SBMO",
       "dato": "2026-08-14",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/679830"
     },
     {
       "ticker": "SNOR",
@@ -2487,7 +2500,8 @@
     {
       "ticker": "SOAG",
       "dato": "2026-08-14",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/679794"
     },
     {
       "ticker": "SOGN",
@@ -2497,12 +2511,14 @@
     {
       "ticker": "SRHA",
       "dato": "2026-08-14",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/679830"
     },
     {
       "ticker": "STRONG",
       "dato": "2026-08-14",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/679830"
     },
     {
       "ticker": "TRSB",
@@ -2512,12 +2528,14 @@
     {
       "ticker": "VEI",
       "dato": "2026-08-14",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/679779"
     },
     {
       "ticker": "VISTIN",
       "dato": "2026-08-14",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/679830"
     },
     {
       "ticker": "WEST",
@@ -2527,7 +2545,8 @@
     {
       "ticker": "WWIB",
       "dato": "2026-08-14",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/679830"
     },
     {
       "ticker": "ZAL",
@@ -3430,7 +3449,17 @@
       "type": "rapport"
     },
     {
+      "ticker": "ZAL",
+      "dato": "2026-10-23",
+      "type": "rapport"
+    },
+    {
       "ticker": "PUBLI",
+      "dato": "2026-10-27",
+      "type": "rapport"
+    },
+    {
+      "ticker": "SATS",
       "dato": "2026-10-27",
       "type": "rapport"
     },
@@ -3515,6 +3544,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "HELG",
+      "dato": "2026-10-29",
+      "type": "rapport"
+    },
+    {
       "ticker": "KOG",
       "dato": "2026-10-29",
       "type": "rapport"
@@ -3546,6 +3580,11 @@
     },
     {
       "ticker": "BONHR",
+      "dato": "2026-10-30",
+      "type": "rapport"
+    },
+    {
+      "ticker": "BOR",
       "dato": "2026-10-30",
       "type": "rapport"
     },
@@ -3605,7 +3644,17 @@
       "type": "rapport"
     },
     {
+      "ticker": "HSPG",
+      "dato": "2026-11-03",
+      "type": "rapport"
+    },
+    {
       "ticker": "OKEA",
+      "dato": "2026-11-03",
+      "type": "rapport"
+    },
+    {
+      "ticker": "SOAG",
       "dato": "2026-11-03",
       "type": "rapport"
     },
@@ -3670,6 +3719,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "POL",
+      "dato": "2026-11-05",
+      "type": "rapport"
+    },
+    {
       "ticker": "ROGS",
       "dato": "2026-11-05",
       "type": "rapport"
@@ -3677,6 +3731,21 @@
     {
       "ticker": "SBO",
       "dato": "2026-11-05",
+      "type": "rapport"
+    },
+    {
+      "ticker": "AKVA",
+      "dato": "2026-11-06",
+      "type": "rapport"
+    },
+    {
+      "ticker": "FFSB",
+      "dato": "2026-11-06",
+      "type": "rapport"
+    },
+    {
+      "ticker": "SNOR",
+      "dato": "2026-11-10",
       "type": "rapport"
     },
     {
@@ -3730,6 +3799,36 @@
       "type": "rapport"
     },
     {
+      "ticker": "VEI",
+      "dato": "2026-11-12",
+      "type": "rapport"
+    },
+    {
+      "ticker": "HGSB",
+      "dato": "2026-11-13",
+      "type": "rapport"
+    },
+    {
+      "ticker": "ROMER",
+      "dato": "2026-11-13",
+      "type": "rapport"
+    },
+    {
+      "ticker": "SB68",
+      "dato": "2026-11-13",
+      "type": "rapport"
+    },
+    {
+      "ticker": "SOGN",
+      "dato": "2026-11-13",
+      "type": "rapport"
+    },
+    {
+      "ticker": "TRSB",
+      "dato": "2026-11-13",
+      "type": "rapport"
+    },
+    {
       "ticker": "BORR",
       "dato": "2026-11-18",
       "type": "rapport"
@@ -3775,5 +3874,5 @@
       "type": "rapport"
     }
   ],
-  "sist_oppdatert": "2026-08-13"
+  "sist_oppdatert": "2026-08-14"
 }
