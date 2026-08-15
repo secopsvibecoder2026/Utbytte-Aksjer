@@ -20,6 +20,12 @@ try:
 except (ImportError, Exception):
     yf = None
 
+# utvid_beskrivelser.lag_beskrivelse() bygger utbytteprofil- og
+# driver-avsnittene friskt fra levende tall hver gang — se bruken i
+# hent_aksje() lenger ned for hvorfor det er nødvendig.
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from utvid_beskrivelser import lag_beskrivelse
+
 _TICKER_RE = re.compile(r'^[A-Z0-9]{1,10}$')
 
 def _valider_ticker(ticker: str) -> str:
@@ -145,67 +151,6 @@ DNB_NAVN             = {t["ticker"]: t.get("navn_dnb", t["navn"]) for t in _tick
 TICKER_YF            = {t["ticker"]: t.get("ticker_yf", t["ticker"] + ".OL") for t in _ticker_data}
 ASK_EGNET            = {t["ticker"]: t.get("ask_egnet", True) for t in _ticker_data}
 INKORPORERINGSLAND   = {t["ticker"]: t.get("inkorporeringsland", "Norge") for t in _ticker_data}
-
-_FREKVENS_FRASE = {
-    "Månedlig":    "månedlig — tolv ganger per år",
-    "Kvartalsvis": "kvartalsvis — fire utbetalinger i året",
-    "Halvårlig":   "halvårlig — to utbetalinger i året",
-    "Årlig":       "én gang i året",
-    "Uregelmessig": "uregelmessig",
-}
-
-# Frekvensen som ett enkelt adverb — brukes når vi kun skal bytte ordet inne
-# i en setning malen selv har skrevet, ikke erstatte hele setningen.
-_FREKVENS_ORD = {
-    "Månedlig":     "månedlig",
-    "Kvartalsvis":  "kvartalsvis",
-    "Halvårlig":    "halvårlig",
-    "Årlig":        "årlig",
-    "Uregelmessig": "uregelmessig",
-}
-_FREKVENSORD_ALT = "|".join(sorted(set(_FREKVENS_ORD.values()), key=len, reverse=True))
-
-def _synk_frekvens_i_beskrivelse(besk: str, frekvens: str, ar: int) -> str:
-    """
-    Holder frekvens-påstandene i beskrivelsen i synk med levende data.
-
-    Teksten i tickers.json er en mal med to steder som kan påstå noe om
-    frekvens, og de behandles ulikt:
-
-    1. Den kanoniske setningen «Utbyttet utbetales … .» byttes ut i sin
-       helhet, inkludert antall år på rad.
-    2. Malens egen innledning («Betaler halvårlig utbytte basert på …»)
-       får kun selve frekvensordet byttet.
-
-    Fallgruvene som gjør at punkt 2 må gjøres slik, ikke som full erstatning:
-
-    * Setter vi inn hele den kanoniske setningen begge steder, står den to
-      ganger i samme beskrivelse (AKRBP hadde nøyaktig dette).
-    * Et mønster som matcher hvilket som helst ord etter «betaler» traff
-      vanlig prosa — RANA sin «… og betaler høyt utbytte med sterk kobling
-      til jernmalmprisene.» ble byttet ut midt i setningen. Derfor er kun
-      de faktiske frekvensordene med i mønsteret; «høyt», «regelmessig» og
-      «jevnlig» er beskrivelser malen selv har valgt, og de står urørt.
-    """
-    if not besk or not frekvens:
-        return besk
-    frase = _FREKVENS_FRASE.get(frekvens, frekvens.lower())
-    if ar >= 2:
-        ny = f"Utbyttet utbetales {frase}, og selskapet har holdt dette gående i {ar} år på rad."
-    elif ar == 1:
-        ny = f"Utbyttet utbetales {frase}, og selskapet betalte utbytte sist år."
-    else:
-        # Ingen registrerte utbytteår — utelat leddet helt. «de siste 0 år»
-        # er ikke en setning vi vil vise noen.
-        ny = f"Utbyttet utbetales {frase}."
-
-    besk = re.sub(r"Utbyttet utbetales [^.]+\.", ny, besk)
-
-    ord_ = _FREKVENS_ORD.get(frekvens)
-    if ord_:
-        besk = re.sub(rf"([Bb]etaler\s+)(?:{_FREKVENSORD_ALT})(\s+utbytte)",
-                      rf"\g<1>{ord_}\g<2>", besk)
-    return besk
 
 _fallback_path = os.path.join(os.path.dirname(__file__), "..", "data", "fallback_data.json")
 FALLBACK_DATA = {}
@@ -867,8 +812,19 @@ def hent_aksje(meta):
             "siste_utbytte": siste_utbytte,
             "historiske_utbytter": historiske_utbytter,
             "snitt_yield_5ar": snitt_yield_5ar,
-            "beskrivelse": _synk_frekvens_i_beskrivelse(
-                BESKRIVELSER.get(ticker, ""), frekvens, ar_med_utbytte),
+            # lag_beskrivelse() henter kun det manuelt forfattede innledningsavsnittet
+            # fra tickers.json (via _manuell_del) og bygger utbytteprofil- og
+            # driver-avsnittene på nytt fra DENNE kjøringens tall. Uten dette fryser
+            # yield, payout, vekst og historisk høyest/lavest til hva de var da
+            # tickers.json sist ble skrevet — se CLAUDE.md om «Utdaterte nøkkeltall».
+            "beskrivelse": lag_beskrivelse(
+                {"ticker": ticker, "navn": meta["navn"], "sektor": meta["sektor"],
+                 "bors": meta["bors"], "beskrivelse": BESKRIVELSER.get(ticker, "")},
+                {"utbytte_yield": utbytte_yield, "snitt_yield_5ar": snitt_yield_5ar,
+                 "ar_med_utbytte": ar_med_utbytte, "frekvens": frekvens,
+                 "payout_ratio": payout_ratio, "markedsverdi_mrd": markedsverdi_mrd,
+                 "utbytte_vekst_5ar": utbytte_vekst_5ar, "valuta": valuta,
+                 "historiske_utbytter": historiske_utbytter}),
             "beskrivelse_fakta": BESKRIVELSE_FAKTA.get(ticker, ""),
             "valuta": valuta,
             "kurs_historikk": kurs_historikk,

@@ -17,10 +17,11 @@ TICKERS_F = os.path.join(ROOT, "data", "tickers.json")
 AKSJER_F  = os.path.join(ROOT, "data", "aksjer.json")
 
 FREQ_MAP = {
-    "Kvartalsvis": "kvartalsvis — fire utbetalinger i året",
-    "Halvårlig":   "halvårlig — to utbetalinger i året",
-    "Månedlig":    "månedlig",
-    "Årlig":       "én gang i året",
+    "Kvartalsvis":  "kvartalsvis — fire utbetalinger i året",
+    "Halvårlig":    "halvårlig — to utbetalinger i året",
+    "Månedlig":     "månedlig — tolv ganger per år",
+    "Årlig":        "én gang i året",
+    "Uregelmessig": "uregelmessig",
 }
 
 SEKTOR_DRIVER = {
@@ -45,9 +46,10 @@ _AUTO_TEGN = [
     "utbetales", "direkteavkastning", "5-årssnitt", "plasserer",
     "payout ratio", "utbetalingsgrad", "noe som anses", "noe som gjør",
     "noe som reflekterer", "noe som gir selskapet",
+    "per år de siste fem årene",  # vekst-/fall-setningen i avsnitt 2
 ]
 
-def _manuell_del(beskrivelse: str) -> str:
+def _manuell_del(beskrivelse: str, sektor_driver: str = "") -> str:
     """Returner bare de opprinnelige (manuelle) setningene — hopp over auto-genererte."""
     import re
     if not beskrivelse:
@@ -55,18 +57,32 @@ def _manuell_del(beskrivelse: str) -> str:
     setninger = re.split(r'(?<=[.!?])\s+', beskrivelse.strip())
     manuell = []
     for s in setninger:
-        if any(t in s for t in _AUTO_TEGN):
+        # .lower() er nødvendig: en auto-generert setning som innleder et
+        # avsnitt (f.eks. «Direkteavkastningen er …») er stor forbokstav i
+        # teksten, mens taggen selv er skrevet med liten bokstav — uten
+        # denne matchet ikke sammenligningen, og den utdaterte setningen ble
+        # stående som om den var manuelt forfattet (SNTIA: «Direkteavkastningen
+        # er 14.0%.» ble aldri fjernet, selv om avsnitt 2 bygde en fersk en).
+        if any(t in s.lower() for t in _AUTO_TEGN):
+            break
+        # SEKTOR_DRIVER-setningen har ingen av taggene over (den nevner ikke
+        # "utbetales" el.l.), men er likevel auto-generert — den ble skrevet
+        # inn i tickers.json som avsnitt 3 av en tidligere kjøring, uten
+        # avsnittsskille foran. Uten denne sjekken sto den to ganger i JAREN
+        # sin beskrivelse: én gang "manuelt" bevart her, én gang friskt lagt
+        # til i avsnitt 3 nedenfor.
+        if sektor_driver and s.strip() == sektor_driver.strip():
             break
         manuell.append(s)
     return " ".join(manuell).strip()
 
 
 def lag_beskrivelse(t: dict, a: dict) -> str:
-    kort    = _manuell_del(t.get("beskrivelse") or "")
     navn    = t["navn"]
     ticker  = t["ticker"]
     sektor  = t.get("sektor") or ""
     bors    = t.get("bors") or "Oslo Børs"
+    kort    = _manuell_del(t.get("beskrivelse") or "", SEKTOR_DRIVER.get(sektor, ""))
 
     yield_  = a.get("utbytte_yield") or 0
     snitt5  = a.get("snitt_yield_5ar") or 0
@@ -104,11 +120,13 @@ def lag_beskrivelse(t: dict, a: dict) -> str:
     deler2 = []
     freq_tekst = FREQ_MAP.get(frekvens, "")
     if freq_tekst and ar_med > 0:
-        deler2.append(
-            f"Utbyttet utbetales {freq_tekst}, og selskapet har "
-            + (f"holdt dette gående i {ar_med} år på rad"
-               if ar_med >= 5 else f"betalt utbytte de siste {ar_med} årene") + "."
-        )
+        if ar_med >= 5:
+            ar_ledd = f"holdt dette gående i {ar_med} år på rad"
+        elif ar_med == 1:
+            ar_ledd = "betalt utbytte det siste året"
+        else:
+            ar_ledd = f"betalt utbytte de siste {ar_med} årene"
+        deler2.append(f"Utbyttet utbetales {freq_tekst}, og selskapet har {ar_ledd}.")
     elif freq_tekst:
         deler2.append(f"Utbyttet utbetales {freq_tekst}.")
 

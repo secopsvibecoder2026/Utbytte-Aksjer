@@ -15,7 +15,7 @@ AKSJER_F  = os.path.join(ROOT, "data", "aksjer.json")
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from fetch_stocks import (generer_aksjesider, generer_sektorsider, generer_topplistesider,
                           generer_sitemap, _last_kurshistorikk_fra_disk,
-                          oppdater_app_noscript_liste, _synk_frekvens_i_beskrivelse)
+                          oppdater_app_noscript_liste, lag_beskrivelse)
 
 def main():
     with open(TICKERS_F, encoding="utf-8") as f:
@@ -30,15 +30,17 @@ def main():
 
     oppdatert = 0
     for a in data["aksjer"]:
-        # Teksten i tickers.json er en mal: setningen om frekvens og antall år
-        # med utbytte synkes mot levende data av fetch_stocks.py. Kopierer vi
-        # råteksten rett inn, mister vi den synkingen og skriver tilbake
-        # årstellingen som tilfeldigvis sto i malen — DNB gikk fra 21 til 20 år
-        # og Orkla fra 27 til 26 på 89 aksjer før dette ble oppdaget.
-        ny_besk = _synk_frekvens_i_beskrivelse(
-            beskrivelser.get(a["ticker"], ""),
-            a.get("frekvens", ""),
-            a.get("ar_med_utbytte") or 0,
+        # Teksten i tickers.json er en mal der kun innledningsavsnittet er
+        # manuelt forfattet — utbytteprofil- og driver-avsnittene bygges på
+        # nytt her, akkurat som i fetch_stocks.py sin hent_aksje(). Kopierer
+        # vi råteksten fra tickers.json rett inn uten dette, fryser både
+        # årstellingen (DNB gikk fra 21 til 20 år, Orkla 27 til 26 på 89
+        # aksjer) og nøkkeltall som yield/payout/historisk høyest-lavest til
+        # hva de var da tickers.json sist ble skrevet.
+        ny_besk = lag_beskrivelse(
+            {"ticker": a["ticker"], "navn": a["navn"], "sektor": a["sektor"],
+             "bors": a["bors"], "beskrivelse": beskrivelser.get(a["ticker"], "")},
+            a,
         )
         if ny_besk and ny_besk != a.get("beskrivelse", ""):
             a["beskrivelse"] = ny_besk
