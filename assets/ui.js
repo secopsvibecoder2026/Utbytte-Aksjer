@@ -466,6 +466,14 @@ function initFire() {
 // modalen for alle aksjer i de sektorene.
 const ARTIKLER = [
   {
+    slug: '/artikler/hva-er-payout-ratio/',
+    tittel: 'Hva er payout ratio, og hva forteller den deg om utbyttets bærekraft?',
+    ingress: '26 av 124 utbytteaksjer betaler mer enn de tjener. Når tallet er nyttig, når det er støy, og hvorfor blankt ikke betyr lavt.',
+    meta: '15. august 2026 · 12 min',
+    tags: ['Guide', 'Nøkkeltall'],
+    sektorer: [],
+  },
+  {
     slug: '/artikler/sparebanker-oslo-bors/',
     tittel: 'Sparebanker på Oslo Børs — hvorfor de gir stabile utbytter år etter år',
     ingress: 'Egenkapitalbevis, eierbrøk og utjevningsfondet — mekanismen bak børsens mest utholdende utbyttebetalere.',

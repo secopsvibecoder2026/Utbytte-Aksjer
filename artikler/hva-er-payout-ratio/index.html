@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3981936786393038"
+     crossorigin="anonymous"></script>
+
+  <!-- Google Analytics med Consent Mode v2 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-X6C9PERKMB"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', {
+      analytics_storage: 'denied',
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      wait_for_update: 500
+    });
+    gtag('js', new Date());
+    gtag('config', 'G-X6C9PERKMB');
+  </script>
+  <script src="/assets/consent.js" defer></script>
+
+  <link rel="icon" type="image/png" href="/favicon.png" sizes="512x512" />
+  <link rel="apple-touch-icon" href="/logo/apple_touch_icon_180.png" />
+  <link rel="icon" type="image/svg+xml" href="/logo/exday_icon_primary.svg" />
+
+  <title>Hva er payout ratio? Slik leser du utbyttets bærekraft | exday.no</title>
+  <meta name="description" content="Payout ratio viser hvor mye av inntjeningen som deles ut som utbytte. Men 26 av 124 utbytteaksjer på Oslo Børs betaler mer enn de tjener — her er når tallet er nyttig, og når det er støy." />
+  <link rel="canonical" href="https://exday.no/artikler/hva-er-payout-ratio/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://exday.no/artikler/hva-er-payout-ratio/" />
+  <meta property="og:title" content="Hva er payout ratio, og hva forteller den deg om utbyttets bærekraft?" />
+  <meta property="og:description" content="26 av 124 utbytteaksjer på Oslo Børs betaler mer enn de tjener. Slik leser du payout ratio — og når tallet ikke betyr noe." />
+  <meta property="og:site_name" content="exday.no" />
+
+  <link rel="stylesheet" href="/assets/tailwind.css" />
+  <link rel="stylesheet" href="/assets/style.css" />
+
+  <script>
+    (function() {
+      var t = localStorage.getItem('tema');
+      if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
+      }
+    })();
+  </script>
+
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+    .prose h2 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      margin-top: 2.5rem;
+      margin-bottom: 0.75rem;
+      color: inherit;
+    }
+    .prose h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-top: 1.75rem;
+      margin-bottom: 0.5rem;
+      color: inherit;
+    }
+    .prose p { margin-bottom: 1rem; line-height: 1.75; }
+    .prose ul { margin: 0.75rem 0 1rem 1.5rem; list-style: disc; }
+    .prose ol { margin: 0.75rem 0 1rem 1.5rem; list-style: decimal; }
+    .prose li { margin-bottom: 0.4rem; line-height: 1.7; }
+    .prose table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.9rem; display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .prose th { text-align: left; padding: 0.6rem 0.9rem; background: #f3f4f6; font-weight: 600; border: 1px solid #e5e7eb; }
+    .dark .prose th { background: #1f2937; border-color: #374151; }
+    .prose td { padding: 0.6rem 0.9rem; border: 1px solid #e5e7eb; vertical-align: top; }
+    .dark .prose td { border-color: #374151; }
+    .prose tr:nth-child(even) td { background: #f9fafb; }
+    .dark .prose tr:nth-child(even) td { background: #111827; }
+    .callout {
+      border-left: 4px solid #2563eb;
+      background: #eff6ff;
+      padding: 1rem 1.25rem;
+      border-radius: 0 0.5rem 0.5rem 0;
+      margin: 1.5rem 0;
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+    .dark .callout { background: #1e3a5f; border-color: #3b82f6; }
+    .callout-green {
+      border-color: #16a34a;
+      background: #f0fdf4;
+    }
+    .dark .callout-green { background: #052e16; border-color: #4ade80; }
+    .callout-warn {
+      border-color: #d97706;
+      background: #fffbeb;
+    }
+    .dark .callout-warn { background: #2d1f00; border-color: #f59e0b; }
+    .callout-red {
+      border-color: #dc2626;
+      background: #fef2f2;
+    }
+    .dark .callout-red { background: #2d0f0f; border-color: #f87171; }
+    details summary { cursor: pointer; list-style: none; }
+    details summary::-webkit-details-marker { display: none; }
+    details summary .chevron { transition: transform 0.2s ease; flex-shrink: 0; }
+    details[open] summary .chevron { transform: rotate(180deg); }
+    .toc a { color: #16a34a; text-decoration: none; }
+    .toc a:hover { text-decoration: underline; }
+    .dark .toc a { color: #4ade80; }
+    .tool-cta {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 0.75rem;
+      padding: 1rem 1.25rem;
+      margin: 1.75rem 0;
+      text-decoration: none;
+      color: inherit;
+      transition: border-color 0.15s;
+    }
+    .tool-cta:hover { border-color: #22c55e; }
+    .dark .tool-cta { background: rgba(20,83,45,0.2); border-color: #166534; }
+    .dark .tool-cta:hover { border-color: #4ade80; }
+    .tool-cta-icon {
+      width: 2.5rem;
+      height: 2.5rem;
+      background: #22c55e;
+      border-radius: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .sector-badge {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      padding: 0.15rem 0.55rem;
+      border-radius: 9999px;
+      background: #f3e8ff;
+      color: #7c3aed;
+    }
+    .dark .sector-badge { background: #1a0533; color: #c4b5fd; }
+    .guide-badge {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      padding: 0.15rem 0.55rem;
+      border-radius: 9999px;
+      background: #dcfce7;
+      color: #15803d;
+    }
+    .dark .guide-badge { background: #052e16; color: #4ade80; }
+    .les-ogsa-lenke {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+  </style>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Hva er payout ratio, og hva forteller den deg om utbyttets bærekraft?",
+    "description": "Payout ratio viser hvor mye av inntjeningen som deles ut som utbytte. 26 av 124 utbytteaksjer på Oslo Børs betaler mer enn de tjener — her er når tallet er nyttig, og når det er støy.",
+    "datePublished": "2026-08-15",
+    "dateModified": "2026-08-15",
+    "author": { "@type": "Organization", "name": "exday.no", "url": "https://exday.no" },
+    "publisher": { "@type": "Organization", "name": "exday.no", "url": "https://exday.no" },
+    "mainEntityOfPage": { "@type": "WebPage", "@id": "https://exday.no/artikler/hva-er-payout-ratio/" }
+  }
+  </script>
+</head>
+<body class="bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 min-h-screen">
+
+  <nav class="site-nav" aria-label="Hovedmeny">
+    <div class="site-nav-inner">
+      <a href="/" class="site-logo" aria-label="exday.no - hjem">
+        <img src="/logo/exday_icon_primary.svg" class="site-logo-icon site-logo-icon-light" alt="" width="28" height="28" loading="eager"><img src="/logo/exday_icon_inverse.svg" class="site-logo-icon site-logo-icon-dark" alt="" width="28" height="28" loading="eager">
+        <span>e<span class="site-logo-x">x</span>day<span class="site-logo-dot">.no</span></span>
+      </a>
+      <ul class="site-nav-menu">
+        <li><a href="/aksjer/">Aksjer</a></li>
+        <li><a href="/aksjer/sektor/">Sektorer</a></li>
+        <li><a href="/utbyttekalender/">Kalender</a></li>
+        <li class="has-dropdown">
+          <a href="/verktoy/">Verktøy</a>
+          <ul class="nav-dropdown">
+            <li><a href="/verktoy/kalkulator/">Kalkulator</a></li>
+            <li><a href="/verktoy/huslan-vs-investering/">Huslån vs. Investering</a></li>
+            <li><a href="/verktoy/fire-kalkulator/">FIRE-kalkulator</a></li>
+            <li><a href="/verktoy/sektorrebalansering/">Sektorrebalansering</a></li>
+          </ul>
+        </li>
+        <li><a href="/artikler/" class="active">Artikler</a></li>
+        <li><a href="/faq/">FAQ</a></li>
+        <li><a href="/om/">Om</a></li>
+      </ul>
+      <div class="site-nav-actions">
+        <a href="https://exday.no/" class="site-app-btn">Åpne app</a>
+        <button id="site-dark-toggle" class="site-dark-btn" aria-label="Bytt fargemodus">
+          <svg class="sun-icon" width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+          <svg class="moon-icon" width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display:none;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+        </button>
+      </div>
+      <button class="site-nav-burger" aria-label="Vis meny" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+  <script>
+    (function() {
+      var nav = document.querySelector('.site-nav');
+      var burger = nav && nav.querySelector('.site-nav-burger');
+      if (burger) {
+        burger.addEventListener('click', function() {
+          nav.classList.toggle('open');
+          burger.setAttribute('aria-expanded', nav.classList.contains('open'));
+        });
+      }
+      var darkToggle = document.getElementById('site-dark-toggle');
+      if (darkToggle) {
+        darkToggle.addEventListener('click', function() {
+          var html = document.documentElement;
+          var isDark = html.classList.toggle('dark');
+          localStorage.setItem('tema', isDark ? 'dark' : 'light');
+        });
+      }
+    })();
+  </script>
+
+  <div class="max-w-2xl mx-auto px-4 sm:px-6 pt-8 pb-20">
+
+    <!-- Breadcrumb -->
+    <nav class="text-xs text-gray-400 dark:text-gray-600 mb-6" aria-label="Brødsmulesti">
+      <a href="/" class="hover:text-gray-600 dark:hover:text-gray-400 transition-colors">exday.no</a>
+      <span class="mx-1.5">›</span>
+      <a href="/artikler/" class="hover:text-gray-600 dark:hover:text-gray-400 transition-colors">Artikler</a>
+      <span class="mx-1.5">›</span>
+      <span class="text-gray-600 dark:text-gray-400">Hva er payout ratio?</span>
+    </nav>
+
+    <!-- Header -->
+    <header class="mb-8">
+      <div class="flex flex-wrap gap-2 mb-3">
+        <span class="guide-badge">Guide</span>
+        <span class="guide-badge">Nøkkeltall</span>
+      </div>
+      <h1 class="text-2xl sm:text-3xl font-bold leading-tight mb-3">
+        Hva er payout ratio, og hva forteller den deg om utbyttets bærekraft?
+      </h1>
+      <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed mb-4">
+        Tommelfingerregelen sier at under 50 % er sunt og over 100 % er faresignal. Men 26 av 124 utbytteaksjer på Oslo Børs betaler i dag mer enn de tjener — og for de fleste av dem er det verken en feil eller en katastrofe. Her er hva tallet faktisk måler, når det er nyttig, og når du bør ignorere det.
+      </p>
+      <p class="text-xs text-gray-400 dark:text-gray-600">15. august 2026 · 12 min lesing</p>
+    </header>
+
+    <!-- Innholdsfortegnelse -->
+    <nav class="toc bg-gray-50 dark:bg-gray-900 rounded-xl p-4 sm:p-5 mb-8 text-sm" aria-label="Innholdsfortegnelse">
+      <p class="font-semibold text-gray-700 dark:text-gray-300 mb-2">Innhold</p>
+      <ol class="space-y-1 list-decimal list-inside text-gray-600 dark:text-gray-400">
+        <li><a href="#hva-maaler-den">Hva payout ratio faktisk måler</a></li>
+        <li><a href="#oslo-bors">Slik ser tallet ut på Oslo Børs</a></li>
+        <li><a href="#over-100">Over 100 % — når selskapet deler ut mer enn det tjener</a></li>
+        <li><a href="#havbruk">Havbruk: samme sjokk, tre ulike svar</a></li>
+        <li><a href="#naar-tallet-lyver">Når tallet ikke betyr noe i det hele tatt</a></li>
+        <li><a href="#blankt">Blankt felt betyr ukjent — ikke lavt</a></li>
+        <li><a href="#sparebanker">Sparebankene regner annerledes</a></li>
+        <li><a href="#i-praksis">Slik bruker du tallet i praksis</a></li>
+      </ol>
+    </nav>
+
+    <article class="prose text-gray-700 dark:text-gray-300">
+
+      <!-- 1 -->
+      <h2 id="hva-maaler-den">Hva payout ratio faktisk måler</h2>
+
+      <p>
+        Payout ratio — utbetalingsgrad på norsk — svarer på ett spørsmål: <strong>hvor stor andel av overskuddet deler selskapet ut til aksjonærene?</strong> Regnestykket er enkelt:
+      </p>
+
+      <div class="callout callout-green">
+        <strong>Payout ratio = utbytte per aksje ÷ resultat per aksje (EPS)</strong><br>
+        Betaler et selskap 4 kroner i utbytte og tjener 10 kroner per aksje, er payout ratio 40 %. Resten — 6 kroner — beholdes i selskapet.
+      </div>
+
+      <p>
+        Det som gjør tallet interessant for en utbytteinvestor, er ikke nivået i seg selv, men hva det sier om <em>handlingsrommet</em>. Et selskap som deler ut 40 % av overskuddet kan halvere inntjeningen og fortsatt betale samme utbytte. Et selskap som deler ut 95 % har ingen slik buffer: faller inntjeningen, må enten utbyttet ned eller pengene hentes et annet sted.
+      </p>
+
+      <p>
+        Payout ratio er altså et mål på <strong>hvor sårbart utbyttet er</strong>, ikke på hvor godt selskapet er. Det er en viktig forskjell. Et modent selskap med stabil inntjening kan trygt ligge på 80 %, mens et syklisk selskap på 60 % kan være langt mer utsatt.
+      </p>
+
+      <h3>Den andre halvdelen av regnestykket</h3>
+
+      <p>
+        Det du <em>ikke</em> deler ut, brukes til noe. Lav payout ratio betyr at selskapet beholder mye kapital — men det er bare et gode hvis kapitalen brukes fornuftig. Beholdt overskudd kan gå til vekst, nedbetaling av gjeld, tilbakekjøp av aksjer, eller det kan bare hope seg opp uten avkastning.
+      </p>
+
+      <p>
+        Derfor sier en payout ratio på 25 % ingenting alene. Kombinert med god egenkapitalavkastning betyr den «selskapet reinvesterer lønnsomt». Kombinert med svak avkastning betyr den «selskapet sitter på pengene dine uten å skape verdi».
+      </p>
+
+      <!-- 2 -->
+      <h2 id="oslo-bors">Slik ser tallet ut på Oslo Børs</h2>
+
+      <p>
+        På exday.no ligger det per august 2026 <strong>138 utbyttebetalende aksjer</strong>. For 124 av dem har vi et payout-tall. Fordelingen ser slik ut:
+      </p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Payout ratio</th>
+            <th>Antall aksjer</th>
+            <th>Tolkning</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Under 30 %</td><td>14</td><td>Stor buffer — mye beholdes i selskapet</td></tr>
+          <tr><td>30–50 %</td><td>29</td><td>Komfortabelt for de fleste bransjer</td></tr>
+          <tr><td>50–75 %</td><td>31</td><td>Vanlig for modne utbyttebetalere</td></tr>
+          <tr><td>75–100 %</td><td>24</td><td>Lite handlingsrom ved inntjeningsfall</td></tr>
+          <tr><td><strong>Over 100 %</strong></td><td><strong>26</strong></td><td>Deler ut mer enn årets overskudd</td></tr>
+        </tbody>
+      </table>
+
+      <p class="text-xs text-gray-400 dark:text-gray-600">Kilde: exday.no, data oppdatert 14. august 2026. 14 av de 138 utbyttebetalende aksjene mangler payout-tall — se eget avsnitt.</p>
+
+      <p>
+        <strong>Medianen ligger på 67 %.</strong> Det er verdt å feste seg ved: den «typiske» norske utbytteaksjen deler ut to tredjedeler av overskuddet. Tommelfingerregelen om at under 50 % er normalt, stemmer altså dårlig for Oslo Børs — bare 43 av 124 aksjer ligger der.
+      </p>
+
+      <h3>Lav payout og lang historikk henger sammen</h3>
+
+      <p>
+        Ser man på selskapene med aller lengst ubrutt utbytterekke, går et mønster igjen:
+      </p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Ticker</th>
+            <th>Selskap</th>
+            <th>Payout</th>
+            <th>År med utbytte</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>WWI</strong></td><td>Wilh. Wilhelmsen Holding</td><td>23 %</td><td>27 år</td></tr>
+          <tr><td><strong>BONHR</strong></td><td>Bonheur</td><td>32 %</td><td>27 år</td></tr>
+          <tr><td><strong>SBMO</strong></td><td>Sparebanken Møre</td><td>36 %</td><td>27 år</td></tr>
+          <tr><td><strong>KOG</strong></td><td>Kongsberg Gruppen</td><td>37 %</td><td>25 år</td></tr>
+          <tr><td><strong>EQNR</strong></td><td>Equinor</td><td>41 %</td><td>25 år</td></tr>
+          <tr><td><strong>VVL</strong></td><td>Voss Veksel- og Landmandsbank</td><td>45 %</td><td>26 år</td></tr>
+          <tr><td><strong>AFG</strong></td><td>Arendals Fossekompani</td><td>48 %</td><td>27 år</td></tr>
+        </tbody>
+      </table>
+
+      <p>
+        Ingen av dem ligger over 50 %. Det er ikke tilfeldig: å holde utbyttet ubrutt gjennom finanskrisen, koronakrisen og et helt rentesyklusløp krever nettopp den bufferen en lav payout gir. Sammenhengen går begge veier — de har lang rekke <em>fordi</em> de har vært moderate, og de har råd til å være moderate fordi inntjeningen er stabil.
+      </p>
+
+      <a href="https://exday.no/aksjer/lavest-payout/" class="tool-cta">
+        <div class="tool-cta-icon">
+          <svg width="20" height="20" fill="none" stroke="white" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"/></svg>
+        </div>
+        <div>
+          <p class="font-semibold text-green-700 dark:text-green-400 text-sm">Se aksjer med lavest payout ratio</p>
+          <p class="text-xs text-gray-500 dark:text-gray-400">Sortert liste over utbytteaksjer med størst buffer i inntjeningen</p>
+        </div>
+      </a>
+
+      <!-- 3 -->
+      <h2 id="over-100">Over 100 % — når selskapet deler ut mer enn det tjener</h2>
+
+      <p>
+        Tjueseks aksjer, altså drøyt hver femte, betaler i dag ut mer enn årets overskudd. Det høres alarmerende ut, og noen ganger er det det. Men de fleste tilfellene har en helt prosaisk forklaring.
+      </p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Ticker</th>
+            <th>Selskap</th>
+            <th>Payout</th>
+            <th>Yield</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>BNOR</strong></td><td>BlueNord</td><td>305 %</td><td>12,66 %</td></tr>
+          <tr><td><strong>BRG</strong></td><td>Borregaard</td><td>281 %</td><td>2,98 %</td></tr>
+          <tr><td><strong>DNO</strong></td><td>DNO</td><td>193 %</td><td>8,23 %</td></tr>
+          <tr><td><strong>WSTEP</strong></td><td>Webstep</td><td>163 %</td><td>9,61 %</td></tr>
+          <tr><td><strong>SALM</strong></td><td>SalMar</td><td>145 %</td><td>4,25 %</td></tr>
+          <tr><td><strong>PLSV</strong></td><td>Paratus Energy Services</td><td>133 %</td><td>17,21 %</td></tr>
+          <tr><td><strong>AKRBP</strong></td><td>Aker BP</td><td>115 %</td><td>7,44 %</td></tr>
+          <tr><td><strong>SPOG</strong></td><td>Sparebanken Øst</td><td>103 %</td><td>9,45 %</td></tr>
+        </tbody>
+      </table>
+
+      <p class="text-xs text-gray-400 dark:text-gray-600">Utvalg fra de 26 aksjene med payout over 100 %. Data fra exday.no per 14. august 2026.</p>
+
+      <p>De vanligste grunnene til at et selskap havner her:</p>
+
+      <ul>
+        <li><strong>Inntjeningen falt, utbyttet fulgte ikke etter.</strong> Styret vurderer nedgangen som forbigående og vil ikke sende et negativt signal ved å kutte. Dette er den klart vanligste årsaken.</li>
+        <li><strong>Regnskapsmessige nedskrivninger.</strong> En nedskrivning reduserer resultatet på papiret uten å røre kontantstrømmen. Selskapet har fortsatt pengene — bare ikke overskuddet.</li>
+        <li><strong>Utbyttet betales fra kontantstrøm, ikke resultat.</strong> Særlig i kapitalintensive bransjer som shipping og eiendom, der avskrivninger trekker ned resultatet kraftig mens kontantstrømmen er solid.</li>
+        <li><strong>Ekstraordinært utbytte.</strong> Etter et salg av virksomhet eller eiendeler deles engangsgevinsten ut. Payout-tallet blir høyt ett år, og normaliseres året etter.</li>
+      </ul>
+
+      <div class="callout callout-warn">
+        <strong>Det avgjørende spørsmålet er hvor pengene kommer fra.</strong> Payout over 100 % finansiert av solid kontantstrøm er noe helt annet enn payout over 100 % finansiert av økt gjeld. Det første kan vare i årevis; det andre er en nedtelling. Regnskapets kontantstrømoppstilling gir svaret — se etter om «kontantstrøm fra drift» dekker utbytteutbetalingen.
+      </div>
+
+      <!-- 4 -->
+      <h2 id="havbruk">Havbruk: samme sjokk, tre ulike svar</h2>
+
+      <p>
+        Havbrukssektoren gir et uvanlig rent eksempel på hva payout ratio faktisk fanger opp. Lakseprisene har falt betydelig, inntjeningen med dem — og selskapene har svart helt ulikt.
+      </p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Selskap</th>
+            <th>Utbytte 2024</th>
+            <th>2025</th>
+            <th>2026</th>
+            <th>Payout i dag</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Mowi</strong></td><td>6,60</td><td>6,65</td><td>3,80</td><td>33 %</td></tr>
+          <tr><td><strong>Bakkafrost</strong></td><td>13,69</td><td>13,37</td><td>5,06</td><td>59 %</td></tr>
+          <tr><td><strong>SalMar</strong></td><td>35,00</td><td>22,00</td><td>10,00</td><td>145 %</td></tr>
+          <tr><td><strong>Lerøy Seafood</strong></td><td>2,50</td><td>2,50</td><td>2,50</td><td>145 %</td></tr>
+        </tbody>
+      </table>
+
+      <p class="text-xs text-gray-400 dark:text-gray-600">Utbytte i NOK per aksje, per utbetalingsår. Kilde: exday.no.</p>
+
+      <p>
+        <strong>Mowi kuttet tidlig og kraftig</strong> — fra 6,65 til 3,80 kroner — og har derfor en payout ratio på komfortable 33 %. Utbyttet er lavere, men dekket med god margin.
+      </p>
+
+      <p>
+        <strong>Lerøy holdt utbyttet helt flatt</strong> på 2,50 kroner i tre år. Beløpet ser stabilt ut i utbyttehistorikken, men payout på 145 % avslører at stabiliteten er lånt: utbyttet dekkes ikke lenger av inntjeningen. Her forteller payout ratio noe utbyttehistorikken alene skjuler.
+      </p>
+
+      <p>
+        <strong>SalMar kuttet mye</strong> — fra 35 til 10 kroner — og ligger <em>likevel</em> på 145 %. Det viser hvor hardt inntjeningen har falt: selv et kutt på over 70 % var ikke nok til å komme under hundre.
+      </p>
+
+      <div class="callout">
+        <strong>Poenget:</strong> tre selskaper i samme bransje, samme prissjokk, tre ulike payout-tall. Ser du bare på utbyttebeløpet, fremstår Lerøy som den mest stabile av dem. Ser du på payout ratio, er Mowi den eneste med reell dekning. Det er nettopp derfor tallet er verdt å slå opp.
+      </div>
+
+      <!-- 5 -->
+      <h2 id="naar-tallet-lyver">Når tallet ikke betyr noe i det hele tatt</h2>
+
+      <p>
+        Payout ratio har en matematisk svakhet: EPS står i nevneren. Nærmer inntjeningen seg null, eksploderer brøken — uten at det sier noe meningsfullt om utbyttet.
+      </p>
+
+      <p>
+        Et selskap som tjener 1 krone per aksje og betaler 3 kroner i utbytte har en payout på 300 %. Faller inntjeningen til 10 øre neste år, blir tallet 3000 %. Utbyttet er det samme; bare nevneren har kollapset.
+      </p>
+
+      <p>
+        På exday.no nullstilles derfor payout-verdier på 500 % eller mer, og feltet vises som «—». Alternativet — å presentere «1197 %» som et nøkkeltall — gir brukeren en presisjon som ikke finnes i dataene.
+      </p>
+
+      <div class="callout callout-red">
+        <strong>Vær særlig skeptisk når P/E mangler eller er ekstrem.</strong> P/E bygger på samme EPS-tall som payout ratio. Ser du et selskap med payout på flere hundre prosent <em>og</em> en P/E som enten mangler eller er absurd høy, er det nesten alltid nær-null-inntjening som driver begge tallene — ikke en reell utbyttebeslutning.
+      </div>
+
+      <!-- 6 -->
+      <h2 id="blankt">Blankt felt betyr ukjent — ikke lavt</h2>
+
+      <p>
+        Fjorten av de 138 utbyttebetalende aksjene på exday.no har ingen payout ratio i det hele tatt. Feltet vises som «—», og det er en viktig forskjell fra 0 %.
+      </p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Ticker</th>
+            <th>Selskap</th>
+            <th>Yield</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>STST</strong></td><td>Stainless Tankers</td><td>31,10 %</td></tr>
+          <tr><td><strong>GSF</strong></td><td>Grieg Seafood</td><td>10,33 %</td></tr>
+          <tr><td><strong>POL</strong></td><td>Polaris Media</td><td>10,26 %</td></tr>
+          <tr><td><strong>ARCH</strong></td><td>Archer</td><td>10,02 %</td></tr>
+          <tr><td><strong>SNTIA</strong></td><td>Sentia</td><td>6,90 %</td></tr>
+          <tr><td><strong>HGSB</strong></td><td>Haugesund Sparebank</td><td>6,27 %</td></tr>
+        </tbody>
+      </table>
+
+      <p class="text-xs text-gray-400 dark:text-gray-600">Utvalg av aksjer der payout ratio mangler. Data fra exday.no per 14. august 2026.</p>
+
+      <p>
+        Flere av disse har høy yield — og det er nettopp der fraværet av payout-tall svir mest. En yield på over 10 % er akkurat der du helst vil vite om utbyttet er dekket av inntjeningen. At tallet mangler, betyr ikke at dekningen er god; det betyr at du må finne svaret et annet sted, typisk i selskapets siste kvartalsrapport.
+      </p>
+
+      <div class="callout callout-green">
+        <strong>Merk:</strong> exday.no skiller nå eksplisitt mellom «ukjent payout» og «lav payout» i investorprofilene. Tidligere kunne en aksje med manglende payout-tall få beskjed om at utbyttet så håndterbart ut — en betryggelse bygget på data vi ikke hadde. Mangler tallet, sier siden det rett ut i stedet.
+      </div>
+
+      <!-- 7 -->
+      <h2 id="sparebanker">Sparebankene regner annerledes</h2>
+
+      <p>
+        Finans er den sektoren med flest selskaper over 100 % — seks stykker — og en god del av dem er sparebanker. Det skyldes delvis noe strukturelt.
+      </p>
+
+      <p>
+        Når du kjøper det som ser ut som en aksje i en sparebank, kjøper du i realiteten et <strong>egenkapitalbevis</strong>. Overskuddet fordeles mellom egenkapitalbeviseierne og bankens samfunnskapital etter en <em>eierbrøk</em>. En payout ratio for en sparebank refererer normalt til andelen av <em>egenkapitalbeviseiernes</em> resultat — ikke av bankens totale overskudd.
+      </p>
+
+      <p>
+        I tillegg har sparebankene <strong>utjevningsfondet</strong>: et fond bygget opp av tilbakeholdt overskudd, med det uttalte formålet å kunne opprettholde utbyttet i svake år. En sparebank med payout over 100 % kan altså tære på et fond som er konstruert nettopp for det — noe et industriselskap ikke har.
+      </p>
+
+      <p>
+        Sammenlign derfor payout ratio mellom sparebanker, ikke mellom en sparebank og et industriselskap. Tallene måler ikke helt det samme.
+      </p>
+
+      <!-- 8 -->
+      <h2 id="i-praksis">Slik bruker du tallet i praksis</h2>
+
+      <p>
+        Payout ratio er nyttig, men bare som ett av flere tall. Slik ville jeg lest det:
+      </p>
+
+      <ol>
+        <li><strong>Se på retningen, ikke bare nivået.</strong> En payout som har klatret fra 45 til 85 % over tre år forteller mer enn et enkelt øyeblikksbilde — inntjeningen faller mens utbyttet holdes oppe.</li>
+        <li><strong>Sammenlign innen samme bransje.</strong> 80 % er høyt for et syklisk selskap og helt greit for et kraftselskap med regulerte inntekter.</li>
+        <li><strong>Sjekk kontantstrømmen når tallet er over 100 %.</strong> Dekker driftskontantstrømmen utbyttet, er situasjonen langt mindre alvorlig enn resultatregnskapet antyder.</li>
+        <li><strong>Ignorer tallet ved nær-null inntjening.</strong> Mangler P/E, eller er den absurd, er payout ratio støy.</li>
+        <li><strong>Ikke tolk et blankt felt som lavt.</strong> «—» betyr at vi ikke vet, ikke at alt er i orden.</li>
+        <li><strong>Kombiner med utbytterekken.</strong> Lav payout <em>og</em> mange år med ubrutt utbytte er det sterkeste signalet du får på et bærekraftig utbytte.</li>
+      </ol>
+
+      <div class="callout callout-green">
+        <strong>Oppsummert:</strong> payout ratio måler hvor sårbart utbyttet er, ikke hvor godt selskapet er. Medianen på Oslo Børs er 67 %, og hver femte utbytteaksje betaler mer enn den tjener — som oftest fordi inntjeningen falt før utbyttet fikk følge etter. Tallet er på sitt mest nyttige når det leses over tid og sammen med kontantstrømmen, og på sitt mest villedende når inntjeningen nærmer seg null.
+      </div>
+
+      <!-- Les også -->
+      <h2>Les også</h2>
+      <ul class="list-none" style="margin-left:0;">
+        <li>
+          <a href="/artikler/sparebanker-oslo-bors/" class="les-ogsa-lenke text-green-600 dark:text-green-400 hover:underline">
+            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h12a2 2 0 012 2v12a2 2 0 01-2 2H6a2 2 0 01-2-2V6z"/></svg>
+            <span>Sparebanker på Oslo Børs — hvorfor de gir stabile utbytter år etter år</span>
+          </a>
+        </li>
+        <li>
+          <a href="/artikler/norske-shippingaksjer/" class="les-ogsa-lenke text-green-600 dark:text-green-400 hover:underline">
+            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <span>Norske shippingaksjer og utbytte — høy yield, syklisitet og risiko</span>
+          </a>
+        </li>
+        <li>
+          <a href="/artikler/utbytteportefolje-sektorvekting/" class="les-ogsa-lenke text-green-600 dark:text-green-400 hover:underline">
+            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"/></svg>
+            <span>Slik bygger du en utbytteportefølje — sektorvekting og rebalansering</span>
+          </a>
+        </li>
+        <li>
+          <a href="/artikler/hva-er-ex-dato/" class="les-ogsa-lenke text-green-600 dark:text-green-400 hover:underline">
+            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+            <span>Hva er ex-dato? Komplett guide for norske investorer</span>
+          </a>
+        </li>
+      </ul>
+
+      <a href="/verktoy/kalkulator/" class="tool-cta">
+        <div class="tool-cta-icon">
+          <svg width="20" height="20" fill="none" stroke="white" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+        </div>
+        <div>
+          <p class="font-semibold text-green-700 dark:text-green-400 text-sm">Utbyttekalkulator</p>
+          <p class="text-xs text-gray-500 dark:text-gray-400">Beregn forventet utbytteinntekt og se effekten av reinvestering</p>
+        </div>
+      </a>
+
+    </article>
+  </div>
+
+<footer class="mt-8 sm:mt-12 border-t border-gray-200 dark:border-gray-800 py-6 text-center text-xs text-gray-400 dark:text-gray-600 space-y-1 px-4">
+  <p>Kurs og utbyttedata hentes fra Yahoo Finance og Euronext. Oppdateres daglig på børsdager.</p>
+  <p class="max-w-xl mx-auto leading-relaxed">
+    exday.no er ikke et verdipapirforetak og tilbyr ikke finansiell rådgivning.
+    Data kan inneholde feil eller forsinkelser — verifiser alltid mot Oslo Børs eller selskapets egne rapporter.
+    Historisk utbytte er ingen garanti for fremtidig utbytte.
+    Gjør alltid din egen analyse før du tar investeringsbeslutninger.
+  </p>
+  <p class="mt-2">
+    <a href="/personvern/" class="underline hover:text-gray-400 dark:hover:text-gray-400 transition-colors">Personvern og informasjonskapsler</a>
+    <span class="mx-2">·</span>
+    <a href="/faq/" class="underline hover:text-gray-400 dark:hover:text-gray-400 transition-colors">Vanlige spørsmål (FAQ)</a>
+  </p>
+  <p class="mt-3">
+    <a href="https://www.facebook.com/share/17rMp8o9yF/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-gray-400 hover:text-blue-500 dark:hover:text-blue-400 transition-colors">
+      <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/></svg>
+      Følg exday.no på Facebook
+    </a>
+  </p>
+</footer>
+
+</body>
+</html>

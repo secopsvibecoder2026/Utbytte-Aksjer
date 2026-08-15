@@ -4162,6 +4162,12 @@ def generer_sitemap(aksjer, root_dir, today, alle_tickers=None):
     <priority>0.6</priority>
   </url>""",
         f"""  <url>
+    <loc>https://exday.no/artikler/hva-er-payout-ratio/</loc>
+    <lastmod>2026-08-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>""",
+        f"""  <url>
     <loc>https://exday.no/verktoy/</loc>
     <lastmod>{today}</lastmod>
     <changefreq>monthly</changefreq>
