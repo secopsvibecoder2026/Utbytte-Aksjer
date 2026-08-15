@@ -15,7 +15,7 @@ AKSJER_F  = os.path.join(ROOT, "data", "aksjer.json")
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from fetch_stocks import (generer_aksjesider, generer_sektorsider, generer_topplistesider,
                           generer_sitemap, _last_kurshistorikk_fra_disk,
-                          oppdater_app_noscript_liste)
+                          oppdater_app_noscript_liste, _synk_frekvens_i_beskrivelse)
 
 def main():
     with open(TICKERS_F, encoding="utf-8") as f:
@@ -30,7 +30,16 @@ def main():
 
     oppdatert = 0
     for a in data["aksjer"]:
-        ny_besk = beskrivelser.get(a["ticker"], "")
+        # Teksten i tickers.json er en mal: setningen om frekvens og antall år
+        # med utbytte synkes mot levende data av fetch_stocks.py. Kopierer vi
+        # råteksten rett inn, mister vi den synkingen og skriver tilbake
+        # årstellingen som tilfeldigvis sto i malen — DNB gikk fra 21 til 20 år
+        # og Orkla fra 27 til 26 på 89 aksjer før dette ble oppdaget.
+        ny_besk = _synk_frekvens_i_beskrivelse(
+            beskrivelser.get(a["ticker"], ""),
+            a.get("frekvens", ""),
+            a.get("ar_med_utbytte") or 0,
+        )
         if ny_besk and ny_besk != a.get("beskrivelse", ""):
             a["beskrivelse"] = ny_besk
             oppdatert += 1

@@ -154,19 +154,57 @@ _FREKVENS_FRASE = {
     "Uregelmessig": "uregelmessig",
 }
 
+# Frekvensen som ett enkelt adverb — brukes når vi kun skal bytte ordet inne
+# i en setning malen selv har skrevet, ikke erstatte hele setningen.
+_FREKVENS_ORD = {
+    "Månedlig":     "månedlig",
+    "Kvartalsvis":  "kvartalsvis",
+    "Halvårlig":    "halvårlig",
+    "Årlig":        "årlig",
+    "Uregelmessig": "uregelmessig",
+}
+_FREKVENSORD_ALT = "|".join(sorted(set(_FREKVENS_ORD.values()), key=len, reverse=True))
+
 def _synk_frekvens_i_beskrivelse(besk: str, frekvens: str, ar: int) -> str:
-    """Erstatter den auto-genererte frekvens-setningen med korrekt verdi."""
-    import re
+    """
+    Holder frekvens-påstandene i beskrivelsen i synk med levende data.
+
+    Teksten i tickers.json er en mal med to steder som kan påstå noe om
+    frekvens, og de behandles ulikt:
+
+    1. Den kanoniske setningen «Utbyttet utbetales … .» byttes ut i sin
+       helhet, inkludert antall år på rad.
+    2. Malens egen innledning («Betaler halvårlig utbytte basert på …»)
+       får kun selve frekvensordet byttet.
+
+    Fallgruvene som gjør at punkt 2 må gjøres slik, ikke som full erstatning:
+
+    * Setter vi inn hele den kanoniske setningen begge steder, står den to
+      ganger i samme beskrivelse (AKRBP hadde nøyaktig dette).
+    * Et mønster som matcher hvilket som helst ord etter «betaler» traff
+      vanlig prosa — RANA sin «… og betaler høyt utbytte med sterk kobling
+      til jernmalmprisene.» ble byttet ut midt i setningen. Derfor er kun
+      de faktiske frekvensordene med i mønsteret; «høyt», «regelmessig» og
+      «jevnlig» er beskrivelser malen selv har valgt, og de står urørt.
+    """
     if not besk or not frekvens:
         return besk
     frase = _FREKVENS_FRASE.get(frekvens, frekvens.lower())
-    ar_tekst = (f"og selskapet har holdt dette gående i {ar} år på rad."
-                if ar >= 2 else f"og selskapet har betalt utbytte de siste {ar} år.")
-    ny = f"Utbyttet utbetales {frase}, {ar_tekst}"
-    # Erstatt standard mønster
+    if ar >= 2:
+        ny = f"Utbyttet utbetales {frase}, og selskapet har holdt dette gående i {ar} år på rad."
+    elif ar == 1:
+        ny = f"Utbyttet utbetales {frase}, og selskapet betalte utbytte sist år."
+    else:
+        # Ingen registrerte utbytteår — utelat leddet helt. «de siste 0 år»
+        # er ikke en setning vi vil vise noen.
+        ny = f"Utbyttet utbetales {frase}."
+
     besk = re.sub(r"Utbyttet utbetales [^.]+\.", ny, besk)
-    # Erstatt alternativt mønster («Betaler halvårlig utbytte...»)
-    besk = re.sub(r"[Bb]etaler\s+\S+\s+utbytte[^.]*\.", ny, besk)
+
+    ord_ = _FREKVENS_ORD.get(frekvens)
+    if ord_:
+        besk = re.sub(rf"([Bb]etaler\s+)(?:{_FREKVENSORD_ALT})(\s+utbytte)",
+                      rf"\g<1>{ord_}\g<2>", besk)
     return besk
 
 _fallback_path = os.path.join(os.path.dirname(__file__), "..", "data", "fallback_data.json")
