@@ -1,0 +1,67 @@
+name: Tester
+
+# Kjører de eksisterende test-suitene (63 JS-tester, 44 Python-tester) på
+# kodeendringer. Ren lesetilgang, ingen commit/deploy — kan ikke påvirke
+# datapipelinen eller Pages-deployen i de andre workflow-filene.
+#
+# Kun kjørte tester finner regresjoner; uten dette kjørte 107 tester i
+# repoet, men ingenting fikk feile CI-en.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'assets/**'
+      - 'scripts/**'
+      - 'tests/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.github/workflows/tester.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'assets/**'
+      - 'scripts/**'
+      - 'tests/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.github/workflows/tester.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  js-tester:
+    name: JS-tester (node --test)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Sjekk ut kode
+        uses: actions/checkout@v4
+
+      - name: Sett opp Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      # Ingen npm ci: testene bruker kun node:test/node:assert og
+      # require()-er assets/*.js direkte, ingen npm-pakker.
+      - name: Kjør JS-tester
+        run: npm test
+
+  python-tester:
+    name: Python-tester (unittest)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Sjekk ut kode
+        uses: actions/checkout@v4
+
+      - name: Sett opp Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # Kjøres uten nettverk og uten tredjepartspakker (se docstring i
+      # test_sjekk_utdaterte.py), så ingen pip install trengs her.
+      - name: Kjør Python-tester
+        run: python scripts/test_sjekk_utdaterte.py
