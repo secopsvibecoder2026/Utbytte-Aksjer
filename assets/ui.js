@@ -577,17 +577,19 @@ function initVerktoySubTabs() {
     nav.querySelectorAll('[data-verktoy-subtab]').forEach(b => b.classList.toggle('active', b === btn));
     const subtab = btn.dataset.verktoySubtab;
     document.getElementById('verktoy-subtab-kalkulator').classList.toggle('hidden', subtab !== 'kalkulator');
+    document.getElementById('verktoy-subtab-annonsert').classList.toggle('hidden', subtab !== 'annonsert');
     document.getElementById('verktoy-subtab-rebalansering').classList.toggle('hidden', subtab !== 'rebalansering');
     document.getElementById('verktoy-subtab-laer').classList.toggle('hidden', subtab !== 'laer');
     if (subtab === 'rebalansering' && typeof visRebalansering === 'function') {
       visRebalansering(window._pfSisteData?.beholdning || []);
     }
+    if (subtab === 'annonsert') initAnnonsertKalkulator();
     if (subtab === 'laer') visLaerListe();
   });
 
-  // KALKULATOR-UNDERMENY: Utbyttekalkulator, Huslån, FIRE og Annonsert
-  // utbytte deler nå én fane (se app/index.html) i stedet for hver sin
-  // egen verktoy-subtab.
+  // KALKULATOR-UNDERMENY: Utbyttekalkulator, Huslån og FIRE deler én fane
+  // (se app/index.html) i stedet for hver sin egen verktoy-subtab.
+  // Annonsert utbytte har egen sub-tab, se listeneren over.
   const kalkNav = document.getElementById('kalk-sub-nav');
   kalkNav?.addEventListener('click', e => {
     const btn = e.target.closest('[data-kalk-tab]');
@@ -597,9 +599,7 @@ function initVerktoySubTabs() {
     document.getElementById('kalk-tab-utbytte').classList.toggle('hidden', kalkTab !== 'utbytte');
     document.getElementById('kalk-tab-huslan').classList.toggle('hidden', kalkTab !== 'huslan');
     document.getElementById('kalk-tab-fire').classList.toggle('hidden', kalkTab !== 'fire');
-    document.getElementById('kalk-tab-annonsert').classList.toggle('hidden', kalkTab !== 'annonsert');
     if (kalkTab === 'fire') beregnFire();
-    if (kalkTab === 'annonsert') initAnnonsertKalkulator();
   });
 }
 

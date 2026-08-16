@@ -222,6 +222,7 @@
     <!-- VERKTØY SUB-FANE NAVIGASJON (vises kun når Verktøy-fanen er aktiv) -->
     <nav id="verktoy-sub-nav" class="hidden flex gap-1 border-b border-gray-200 dark:border-gray-800">
       <button class="sub-tab-btn active" data-verktoy-subtab="kalkulator">Kalkulator</button>
+      <button class="sub-tab-btn" data-verktoy-subtab="annonsert">Annonsert utbytte</button>
       <button class="sub-tab-btn" data-verktoy-subtab="rebalansering">Rebalansering</button>
       <button class="sub-tab-btn" data-verktoy-subtab="laer">Lær</button>
     </nav>
@@ -1016,14 +1017,13 @@
     <!-- VERKTØY-FANE -->
     <div id="tab-verktoy" class="hidden">
     <div id="verktoy-subtab-kalkulator" class="space-y-6 max-w-2xl mx-auto">
-      <!-- KALKULATOR-UNDERMENY: samler utbyttekalkulator, huslån, FIRE og
-           annonsert utbytte under én fane i stedet for at hver har sin
-           egen sub-tab i verktoy-sub-nav. -->
+      <!-- KALKULATOR-UNDERMENY: samler utbyttekalkulator, huslån og FIRE
+           under én fane i stedet for at hver har sin egen sub-tab i
+           verktoy-sub-nav. Annonsert utbytte har egen sub-tab (se over). -->
       <nav id="kalk-sub-nav" class="flex flex-wrap gap-2 mb-1">
         <button class="toppliste-pill active" data-kalk-tab="utbytte">Utbyttekalkulator</button>
         <button class="toppliste-pill" data-kalk-tab="huslan">Huslån vs. investering</button>
         <button class="toppliste-pill" data-kalk-tab="fire">FIRE</button>
-        <button class="toppliste-pill" data-kalk-tab="annonsert">Annonsert utbytte</button>
       </nav>
 
       <div id="kalk-tab-utbytte" class="space-y-6">
@@ -1325,9 +1325,10 @@
         <div id="fire-ut-tidslinje" class="text-xs text-gray-500 dark:text-gray-400 space-y-0.5"></div>
       </div>
       </div><!-- /kalk-tab-fire -->
+    </div><!-- /verktoy-subtab-kalkulator -->
 
-      <!-- ANNONSERT UTBYTTE-KALKULATOR -->
-      <div id="kalk-tab-annonsert" class="hidden space-y-6">
+    <!-- ANNONSERT UTBYTTE-KALKULATOR -->
+    <div id="verktoy-subtab-annonsert" class="hidden space-y-6 max-w-2xl mx-auto">
       <div class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-5 shadow-sm space-y-4">
         <div>
           <h2 class="font-semibold text-base">Annonsert utbytte-kalkulator</h2>
@@ -1401,8 +1402,7 @@
         </div>
         <div id="ann-topp-liste" class="space-y-1.5 text-sm"></div>
       </div>
-      </div><!-- /kalk-tab-annonsert -->
-    </div><!-- /verktoy-subtab-kalkulator -->
+    </div><!-- /verktoy-subtab-annonsert -->
 
     <div id="verktoy-subtab-rebalansering" class="hidden space-y-4 max-w-2xl mx-auto">
       <div class="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4 shadow-sm">
