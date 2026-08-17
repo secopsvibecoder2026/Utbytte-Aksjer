@@ -57,8 +57,25 @@ jobs:
       # update-og-deploy har uansett paths-ignore på data/priser.json.
       # Uten dette steget når nye priser aldri live-siten før neste
       # scheduled deploy — derfor utløses lettvekts-deployen eksplisitt.
+      #
+      # Retry ved transiente feil (f.eks. 503 fra GitHub sitt API): uten
+      # dette rapporterte hele jobben feil selv når selve prisdataen var
+      # hentet og pushet helt fint — og siden dispatch-kallet er siste
+      # steg, sto den ferske commiten udeployet til neste tilfeldig
+      # vellykkede kjøring. 17. aug 2026 traff dette rett ved slutten av
+      # dagens kjørevindu (08–17 UTC), så neste forsøk ville først kommet
+      # neste morgen.
       - name: Utløs deploy til GitHub Pages
         if: steps.commit.outputs.pushed == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh workflow run deploy-only.yml --ref main
+        run: |
+          for forsok in 1 2 3 4; do
+            if gh workflow run deploy-only.yml --ref main; then
+              exit 0
+            fi
+            echo "Forsøk $forsok feilet, prøver igjen om $((forsok * 10))s…"
+            sleep $((forsok * 10))
+          done
+          echo "::error::Klarte ikke å utløse deploy-only.yml etter 4 forsøk."
+          exit 1
