@@ -148,14 +148,16 @@ Levert 2026-07-05 som **«Min utbyttelønn»** i Portefølje → Statistikk → 
 ### N6. Skattesammendrag — årsoppsummering
 **Prioritet: Medium**
 
-Skjermingsfradrag er allerede beregnet. Mangler en samlet årsvisning for skattemeldingen.
+Skjermingsfradrag og FIFO-kostbasis er allerede beregnet i `portefolje.js`. Mangler en samlet årsvisning brukeren faktisk kan bruke som støtte til skattemeldingen — i dag vises kun sammendragstall i UI, ingen eksportbar oversikt.
 
 - [ ] Ny seksjon i Statistikk-fanen: «Skatteåret {år}»
 - [ ] Totalt mottatt utbytte dette år (fra transaksjonslogg)
-- [ ] Skjermingsfradrag totalt
+- [ ] Skjermingsfradrag totalt — brukt og ubrukt/fremførbart beløp
 - [ ] Skattepliktig utbytte (etter fradrag)
+- [ ] Realisert gevinst/tap per aksje (FIFO), ikke bare utbytte
 - [ ] Estimert skatt å betale (37,84 %)
 - [ ] Eksporter som PDF eller kopier til utklippstavle
+- [ ] Merk tydelig som veiledende, ikke offisiell dokumentasjon — brukeren må selv verifisere mot Skatteetatens aksjeoppgave. Feil i skattetall er en annen alvorlighetsgrad enn feil i en yield-prognose.
 
 ### N7. Portefølje-rebalansering ✅
 **Prioritet: Medium**
