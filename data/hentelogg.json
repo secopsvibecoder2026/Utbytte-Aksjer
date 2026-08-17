@@ -1,69 +1,69 @@
 {
-  "sist_oppdatert": "2026-08-17T07:44:32Z",
-  "antall_ok": 154,
-  "antall_feil": 9,
+  "sist_oppdatert": "2026-08-17T10:26:26Z",
+  "antall_ok": 153,
+  "antall_feil": 10,
   "tickere": {
     "EQNR": {
       "ok": true,
       "vart_navn": "Equinor ASA",
       "yahoo_navn": "Equinor ASA",
-      "markedsverdi": 916705181696.0,
+      "markedsverdi": 919463395328.0,
       "siste_handelsdato": "2026-08-17"
     },
     "DNB": {
       "ok": true,
       "vart_navn": "DNB Bank ASA",
       "yahoo_navn": "DNB Bank ASA",
-      "markedsverdi": 449151008768.0,
+      "markedsverdi": 449865089024.0,
       "siste_handelsdato": "2026-08-17"
     },
     "TEL": {
       "ok": true,
       "vart_navn": "Telenor ASA",
-      "yahoo_navn": "Telenor ASA",
-      "markedsverdi": 183693443072.0,
+      "yahoo_navn": "TELENOR",
+      "markedsverdi": 182216212480.0,
       "siste_handelsdato": "2026-08-17"
     },
     "ORK": {
       "ok": true,
       "vart_navn": "Orkla ASA",
-      "yahoo_navn": "Orkla ASA",
-      "markedsverdi": 99539165184.0,
+      "yahoo_navn": "ORKLA",
+      "markedsverdi": 99154468864.0,
       "siste_handelsdato": "2026-08-17"
     },
     "MOWI": {
       "ok": true,
       "vart_navn": "Mowi ASA",
       "yahoo_navn": "Mowi ASA",
-      "markedsverdi": 105669033984.0,
+      "markedsverdi": 105985409024.0,
       "siste_handelsdato": "2026-08-17"
     },
     "AKRBP": {
       "ok": true,
       "vart_navn": "Aker BP ASA",
       "yahoo_navn": "Aker BP ASA",
-      "markedsverdi": 218076053504.0,
+      "markedsverdi": 218770948096.0,
       "siste_handelsdato": "2026-08-17"
     },
     "NHY": {
       "ok": true,
       "vart_navn": "Norsk Hydro ASA",
       "yahoo_navn": "Norsk Hydro ASA",
-      "markedsverdi": 177777459200.0,
+      "markedsverdi": 178839650304.0,
       "siste_handelsdato": "2026-08-17"
     },
     "YAR": {
       "ok": true,
       "vart_navn": "Yara International ASA",
       "yahoo_navn": "Yara International ASA",
-      "markedsverdi": 106093223936.0,
+      "markedsverdi": 106449838080.0,
       "siste_handelsdato": "2026-08-17"
     },
     "SALM": {
       "ok": true,
       "vart_navn": "SalMar ASA",
       "yahoo_navn": "SalMar ASA",
-      "markedsverdi": 69734383616.0,
+      "markedsverdi": 69937692672.0,
       "siste_handelsdato": "2026-08-17"
     },
     "SRBNK": {
@@ -82,21 +82,21 @@
       "ok": true,
       "vart_navn": "MPC Container Ships",
       "yahoo_navn": "MPC Container Ships ASA",
-      "markedsverdi": 12733754368.0,
+      "markedsverdi": 12704470016.0,
       "siste_handelsdato": "2026-08-17"
     },
     "BWLPG": {
       "ok": true,
       "vart_navn": "BW LPG Limited",
       "yahoo_navn": "BW LPG Limited",
-      "markedsverdi": 32913408000.0,
+      "markedsverdi": 32822317056.0,
       "siste_handelsdato": "2026-08-17"
     },
     "KOG": {
       "ok": true,
       "vart_navn": "Kongsberg Gruppen ASA",
       "yahoo_navn": "Kongsberg Gruppen ASA",
-      "markedsverdi": 291678420992.0,
+      "markedsverdi": 290886778880.0,
       "siste_handelsdato": "2026-08-17"
     },
     "KMAR": {
@@ -109,64 +109,64 @@
     "FRO": {
       "ok": true,
       "vart_navn": "Frontline PLC",
-      "yahoo_navn": "Frontline plc",
-      "markedsverdi": 87958306816.0,
+      "yahoo_navn": "FRONTLINE PLC",
+      "markedsverdi": 0,
       "siste_handelsdato": "2026-08-17"
     },
     "NONG": {
       "ok": true,
       "vart_navn": "SpareBank 1 Nord-Norge",
       "yahoo_navn": "SpareBank 1 Nord-Norge",
-      "markedsverdi": 17101797376.0,
+      "markedsverdi": 17017463808.0,
       "siste_handelsdato": "2026-08-17"
     },
     "SUBC": {
       "ok": true,
       "vart_navn": "Subsea 7 SA",
       "yahoo_navn": "Subsea 7 S.A.",
-      "markedsverdi": 102111748096.0,
+      "markedsverdi": 102407897088.0,
       "siste_handelsdato": "2026-08-17"
     },
     "WWI": {
       "ok": true,
       "vart_navn": "Wilh. Wilhelmsen Holding",
       "yahoo_navn": "Wilh. Wilhelmsen Holding ASA",
-      "markedsverdi": 33478340608.0,
+      "markedsverdi": 33312401408.0,
       "siste_handelsdato": "2026-08-17"
     },
     "SCATC": {
       "ok": true,
       "vart_navn": "Scatec ASA",
       "yahoo_navn": "Scatec ASA",
-      "markedsverdi": 15726993408.0,
+      "markedsverdi": 15782932480.0,
       "siste_handelsdato": "2026-08-17"
     },
     "AUSS": {
       "ok": true,
       "vart_navn": "Austevoll Seafood ASA",
       "yahoo_navn": "Austevoll Seafood ASA",
-      "markedsverdi": 17417418752.0,
+      "markedsverdi": 17538512896.0,
       "siste_handelsdato": "2026-08-17"
     },
     "LSG": {
       "ok": true,
       "vart_navn": "Lerøy Seafood Group ASA",
       "yahoo_navn": "Lerøy Seafood Group ASA",
-      "markedsverdi": 24962349056.0,
+      "markedsverdi": 25129082880.0,
       "siste_handelsdato": "2026-08-17"
     },
     "BAKKA": {
       "ok": true,
       "vart_navn": "Bakkafrost P/F",
       "yahoo_navn": "P/F Bakkafrost",
-      "markedsverdi": 27799152640.0,
+      "markedsverdi": 27787309056.0,
       "siste_handelsdato": "2026-08-17"
     },
     "HAFNI": {
       "ok": true,
       "vart_navn": "Hafnia Limited",
       "yahoo_navn": "Hafnia Limited",
-      "markedsverdi": 36958826496.0,
+      "markedsverdi": 37008805888.0,
       "siste_handelsdato": "2026-08-17"
     },
     "FLNG": {
@@ -179,56 +179,55 @@
       "ok": true,
       "vart_navn": "SpareBank 1 SMN",
       "yahoo_navn": "SpareBank 1 SMN",
-      "markedsverdi": 30018203648.0,
+      "markedsverdi": 29852356608.0,
       "siste_handelsdato": "2026-08-17"
     },
     "SPOL": {
       "ok": true,
       "vart_navn": "SpareBank 1 Østlandet",
       "yahoo_navn": "SpareBank 1 Østlandet",
-      "markedsverdi": 25954707456.0,
+      "markedsverdi": 26172014592.0,
       "siste_handelsdato": "2026-08-17"
     },
     "AFG": {
       "ok": true,
       "vart_navn": "Arendals Fossekompani ASA",
       "yahoo_navn": "AF Gruppen ASA",
-      "markedsverdi": 22229010432.0,
+      "markedsverdi": 22115481600.0,
       "siste_handelsdato": "2026-08-17"
     },
     "ODL": {
       "ok": true,
       "vart_navn": "Odfjell Drilling Ltd",
       "yahoo_navn": "Odfjell Drilling Ltd.",
-      "markedsverdi": 22110212096.0,
+      "markedsverdi": 22062252032.0,
       "siste_handelsdato": "2026-08-17"
     },
     "PGS": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "PGS ASA",
-      "yahoo_navn": "PGS ASA",
-      "markedsverdi": 8611237888.0,
-      "siste_handelsdato": "2024-07-22"
+      "yahoo_navn": "",
+      "feilmelding": "'RangeIndex' object has no attribute 'tz'"
     },
     "VEI": {
       "ok": true,
       "vart_navn": "Veidekke ASA",
       "yahoo_navn": "Veidekke ASA",
-      "markedsverdi": 28022970368.0,
+      "markedsverdi": 27955445760.0,
       "siste_handelsdato": "2026-08-17"
     },
     "AKER": {
       "ok": true,
       "vart_navn": "Aker ASA",
       "yahoo_navn": "Aker ASA",
-      "markedsverdi": 107917197312.0,
+      "markedsverdi": 108065226752.0,
       "siste_handelsdato": "2026-08-17"
     },
     "BWO": {
       "ok": true,
       "vart_navn": "BW Offshore Limited",
       "yahoo_navn": "BW Offshore Limited",
-      "markedsverdi": 8245315584.0,
+      "markedsverdi": 8254376448.0,
       "siste_handelsdato": "2026-08-17"
     },
     "SBVG": {
@@ -240,36 +239,36 @@
     "GJF": {
       "ok": true,
       "vart_navn": "Gjensidige Forsikring ASA",
-      "yahoo_navn": "Gjensidige Forsikring ASA",
-      "markedsverdi": 142089814016.0,
+      "yahoo_navn": "GJENSIDIGE FORSIKRING",
+      "markedsverdi": 0,
       "siste_handelsdato": "2026-08-17"
     },
     "STB": {
       "ok": true,
       "vart_navn": "Storebrand ASA",
       "yahoo_navn": "Storebrand ASA",
-      "markedsverdi": 86309814272.0,
+      "markedsverdi": 85975605248.0,
       "siste_handelsdato": "2026-08-17"
     },
     "AKSO": {
       "ok": true,
       "vart_navn": "Aker Solutions ASA",
       "yahoo_navn": "Aker Solutions ASA",
-      "markedsverdi": 20958590976.0,
+      "markedsverdi": 21055801344.0,
       "siste_handelsdato": "2026-08-17"
     },
     "OKEA": {
       "ok": true,
       "vart_navn": "OKEA ASA",
       "yahoo_navn": "OKEA ASA",
-      "markedsverdi": 3940299520.0,
+      "markedsverdi": 3922615808.0,
       "siste_handelsdato": "2026-08-17"
     },
     "BEWI": {
       "ok": true,
       "vart_navn": "BEWI ASA",
       "yahoo_navn": "BEWI ASA",
-      "markedsverdi": 4872359424.0,
+      "markedsverdi": 4955142144.0,
       "siste_handelsdato": "2026-08-17"
     },
     "WILS": {
@@ -289,7 +288,7 @@
       "ok": true,
       "vart_navn": "Wallenius Wilhelmsen ASA",
       "yahoo_navn": "Wallenius Wilhelmsen ASA",
-      "markedsverdi": 69900599296.0,
+      "markedsverdi": 69985173504.0,
       "siste_handelsdato": "2026-08-17"
     },
     "NORCO": {
@@ -303,28 +302,28 @@
       "ok": true,
       "vart_navn": "B2 Impact ASA",
       "yahoo_navn": "B2 Impact ASA",
-      "markedsverdi": 9828068352.0,
+      "markedsverdi": 9809524736.0,
       "siste_handelsdato": "2026-08-17"
     },
     "VAR": {
       "ok": true,
       "vart_navn": "Vår Energi ASA",
       "yahoo_navn": "Vår Energi ASA",
-      "markedsverdi": 121018195968.0,
+      "markedsverdi": 121192931328.0,
       "siste_handelsdato": "2026-08-17"
     },
     "DNO": {
       "ok": true,
       "vart_navn": "DNO ASA",
       "yahoo_navn": "DNO ASA",
-      "markedsverdi": 17696249856.0,
+      "markedsverdi": 17813250048.0,
       "siste_handelsdato": "2026-08-17"
     },
     "HAUTO": {
       "ok": true,
       "vart_navn": "Höegh Autoliners ASA",
       "yahoo_navn": "Höegh Autoliners ASA",
-      "markedsverdi": 36875702272.0,
+      "markedsverdi": 36761239552.0,
       "siste_handelsdato": "2026-08-17"
     },
     "BRG": {
@@ -338,63 +337,63 @@
       "ok": true,
       "vart_navn": "Europris ASA",
       "yahoo_navn": "Europris ASA",
-      "markedsverdi": 14041106432.0,
+      "markedsverdi": 13992010752.0,
       "siste_handelsdato": "2026-08-17"
     },
     "GSF": {
       "ok": true,
       "vart_navn": "Grieg Seafood ASA",
       "yahoo_navn": "Grieg Seafood ASA",
-      "markedsverdi": 3356048896.0,
+      "markedsverdi": 3344824576.0,
       "siste_handelsdato": "2026-08-17"
     },
     "KCC": {
       "ok": true,
       "vart_navn": "Klaveness Combination Carriers ASA",
       "yahoo_navn": "Klaveness Combination Carriers ASA",
-      "markedsverdi": 6038559744.0,
+      "markedsverdi": 6026696192.0,
       "siste_handelsdato": "2026-08-17"
     },
     "OET": {
       "ok": true,
       "vart_navn": "Okeanis Eco Tankers Corp",
       "yahoo_navn": "Okeanis Eco Tankers Corp.",
-      "markedsverdi": 22450677760.0,
+      "markedsverdi": 22411632640.0,
       "siste_handelsdato": "2026-08-17"
     },
     "SBMO": {
       "ok": true,
       "vart_navn": "Sparebanken Møre",
       "yahoo_navn": "Sparebanken Møre",
-      "markedsverdi": 5572027392.0,
+      "markedsverdi": 5596809728.0,
       "siste_handelsdato": "2026-08-17"
     },
     "SATS": {
       "ok": true,
       "vart_navn": "SATS ASA",
       "yahoo_navn": "Sats ASA",
-      "markedsverdi": 8689756160.0,
+      "markedsverdi": 8786309120.0,
       "siste_handelsdato": "2026-08-17"
     },
     "KIT": {
       "ok": true,
       "vart_navn": "Kitron ASA",
       "yahoo_navn": "Kitron ASA",
-      "markedsverdi": 20361199616.0,
+      "markedsverdi": 20208107520.0,
       "siste_handelsdato": "2026-08-17"
     },
     "ABG": {
       "ok": true,
       "vart_navn": "ABG Sundal Collier Holding ASA",
       "yahoo_navn": "ABG Sundal Collier Holding ASA",
-      "markedsverdi": 3904970496.0,
+      "markedsverdi": 3837194240.0,
       "siste_handelsdato": "2026-08-17"
     },
     "SBO": {
       "ok": true,
       "vart_navn": "Selvaag Bolig ASA",
       "yahoo_navn": "Selvaag Bolig ASA",
-      "markedsverdi": 3063799808.0,
+      "markedsverdi": 3068484608.0,
       "siste_handelsdato": "2026-08-17"
     },
     "ELMRA": {
@@ -408,35 +407,35 @@
       "ok": true,
       "vart_navn": "Pareto Bank ASA",
       "yahoo_navn": "Pareto Bank ASA",
-      "markedsverdi": 4714440704.0,
+      "markedsverdi": 4722119168.0,
       "siste_handelsdato": "2026-08-17"
     },
     "ENTR": {
       "ok": true,
       "vart_navn": "Entra ASA",
       "yahoo_navn": "Entra ASA",
-      "markedsverdi": 19408250880.0,
+      "markedsverdi": 19299010560.0,
       "siste_handelsdato": "2026-08-17"
     },
     "TOM": {
       "ok": true,
       "vart_navn": "TOMRA Systems ASA",
       "yahoo_navn": "Tomra Systems ASA",
-      "markedsverdi": 31314671616.0,
+      "markedsverdi": 31285100544.0,
       "siste_handelsdato": "2026-08-17"
     },
     "MULTI": {
       "ok": true,
       "vart_navn": "Multiconsult ASA",
       "yahoo_navn": "Multiconsult ASA",
-      "markedsverdi": 4161920000.0,
+      "markedsverdi": 4183970048.0,
       "siste_handelsdato": "2026-08-17"
     },
     "2020": {
       "ok": true,
       "vart_navn": "2020 Bulkers Ltd",
       "yahoo_navn": "2020 Bulkers Ltd.",
-      "markedsverdi": 82814624.0,
+      "markedsverdi": 85231392.0,
       "siste_handelsdato": "2026-08-17"
     },
     "DOF": {
@@ -449,7 +448,7 @@
       "ok": true,
       "vart_navn": "SpareBank 1 Ringerike Hadeland",
       "yahoo_navn": "SpareBank 1 Ringerike Hadeland",
-      "markedsverdi": 6964356096.0,
+      "markedsverdi": 6962008576.0,
       "siste_handelsdato": "2026-08-17"
     },
     "HELG": {
@@ -463,14 +462,14 @@
       "ok": true,
       "vart_navn": "Sparebanken Øst",
       "yahoo_navn": "Sparebanken Øst",
-      "markedsverdi": 1531619840.0,
+      "markedsverdi": 1505083904.0,
       "siste_handelsdato": "2026-08-17"
     },
     "PEN": {
       "ok": true,
       "vart_navn": "Panoro Energy ASA",
       "yahoo_navn": "Panoro Energy ASA",
-      "markedsverdi": 3795746048.0,
+      "markedsverdi": 3815688960.0,
       "siste_handelsdato": "2026-08-17"
     },
     "AKVA": {
@@ -483,8 +482,8 @@
     "SNI": {
       "ok": true,
       "vart_navn": "Stolt-Nielsen Limited",
-      "yahoo_navn": "Stolt-Nielsen Limited",
-      "markedsverdi": 21547122688.0,
+      "yahoo_navn": "STOLT-NIELSEN",
+      "markedsverdi": 0,
       "siste_handelsdato": "2026-08-17"
     },
     "MEDI": {
@@ -498,42 +497,42 @@
       "ok": true,
       "vart_navn": "Atea ASA",
       "yahoo_navn": "Atea ASA",
-      "markedsverdi": 19612248064.0,
+      "markedsverdi": 19411439616.0,
       "siste_handelsdato": "2026-08-17"
     },
     "BOUV": {
       "ok": true,
       "vart_navn": "Bouvet ASA",
       "yahoo_navn": "Bouvet ASA",
-      "markedsverdi": 4463029248.0,
+      "markedsverdi": 4437438464.0,
       "siste_handelsdato": "2026-08-17"
     },
     "AKBM": {
       "ok": true,
       "vart_navn": "Aker BioMarine ASA",
       "yahoo_navn": "Aker BioMarine ASA",
-      "markedsverdi": 10614546432.0,
+      "markedsverdi": 10807538688.0,
       "siste_handelsdato": "2026-08-17"
     },
     "TGS": {
       "ok": true,
       "vart_navn": "TGS ASA",
       "yahoo_navn": "TGS ASA",
-      "markedsverdi": 27353214976.0,
+      "markedsverdi": 28080275456.0,
       "siste_handelsdato": "2026-08-17"
     },
     "NSKOG": {
       "ok": true,
       "vart_navn": "Norske Skog ASA",
       "yahoo_navn": "Norske Skog ASA",
-      "markedsverdi": 4182524672.0,
+      "markedsverdi": 4076476928.0,
       "siste_handelsdato": "2026-08-17"
     },
     "SOFF": {
       "ok": true,
       "vart_navn": "Solstad Offshore ASA",
       "yahoo_navn": "Solstad Offshore ASA",
-      "markedsverdi": 7645792256.0,
+      "markedsverdi": 7602350080.0,
       "siste_handelsdato": "2026-08-17"
     },
     "ITERA": {
@@ -547,14 +546,14 @@
       "ok": true,
       "vart_navn": "Hunter Group ASA",
       "yahoo_navn": "Hunter Group ASA",
-      "markedsverdi": 1311660416.0,
+      "markedsverdi": 1314356608.0,
       "siste_handelsdato": "2026-08-17"
     },
     "ALNG": {
       "ok": true,
       "vart_navn": "Awilco LNG ASA",
       "yahoo_navn": "ALNG ASA",
-      "markedsverdi": 777288704.0,
+      "markedsverdi": 783857280.0,
       "siste_handelsdato": "2026-08-17"
     },
     "VISTIN": {
@@ -568,28 +567,28 @@
       "ok": true,
       "vart_navn": "Strongpoint ASA",
       "yahoo_navn": "StrongPoint ASA",
-      "markedsverdi": 450558592.0,
+      "markedsverdi": 457283328.0,
       "siste_handelsdato": "2026-08-17"
     },
     "NRC": {
       "ok": true,
       "vart_navn": "NRC Group ASA",
       "yahoo_navn": "NRC Group ASA",
-      "markedsverdi": 1448091008.0,
+      "markedsverdi": 1463624576.0,
       "siste_handelsdato": "2026-08-17"
     },
     "JAREN": {
       "ok": true,
       "vart_navn": "Jæren Sparebank",
       "yahoo_navn": "Jæren Sparebank",
-      "markedsverdi": 1633105792.0,
+      "markedsverdi": 1641712768.0,
       "siste_handelsdato": "2026-08-17"
     },
     "NORBT": {
       "ok": true,
       "vart_navn": "NORBIT ASA",
       "yahoo_navn": "Norbit ASA",
-      "markedsverdi": 11606180864.0,
+      "markedsverdi": 11753337856.0,
       "siste_handelsdato": "2026-08-17"
     },
     "KID": {
@@ -603,21 +602,21 @@
       "ok": true,
       "vart_navn": "Odfjell SE (A-aksje)",
       "yahoo_navn": "Odfjell SE",
-      "markedsverdi": 8963604480.0,
+      "markedsverdi": 8947767296.0,
       "siste_handelsdato": "2026-08-17"
     },
     "ODFB": {
       "ok": true,
       "vart_navn": "Odfjell SE (B-aksje)",
       "yahoo_navn": "Odfjell SE",
-      "markedsverdi": 8726052864.0,
+      "markedsverdi": 8836910080.0,
       "siste_handelsdato": "2026-08-17"
     },
     "SKUE": {
       "ok": true,
       "vart_navn": "Skue Sparebank",
       "yahoo_navn": "Skue Sparebank",
-      "markedsverdi": 1918534656.0,
+      "markedsverdi": 1959563648.0,
       "siste_handelsdato": "2026-08-17"
     },
     "HGSB": {
@@ -631,21 +630,21 @@
       "ok": true,
       "vart_navn": "Pexip Holding ASA",
       "yahoo_navn": "Pexip Holding ASA",
-      "markedsverdi": 8350577664.0,
+      "markedsverdi": 8402768896.0,
       "siste_handelsdato": "2026-08-17"
     },
     "EIOF": {
       "ok": true,
       "vart_navn": "Eidesvik Offshore ASA",
       "yahoo_navn": "Eidesvik Offshore ASA",
-      "markedsverdi": 1240716672.0,
+      "markedsverdi": 1258962560.0,
       "siste_handelsdato": "2026-08-17"
     },
     "VVL": {
       "ok": true,
       "vart_navn": "Voss Veksel- og Landmandsbank ASA",
       "yahoo_navn": "Voss Veksel- og Landmandsbank ASA",
-      "markedsverdi": 938783040.0,
+      "markedsverdi": 969635072.0,
       "siste_handelsdato": "2026-08-17"
     },
     "RANA": {
@@ -658,14 +657,14 @@
       "ok": true,
       "vart_navn": "Bien Sparebank ASA",
       "yahoo_navn": "Bien Sparebank ASA",
-      "markedsverdi": 829308928.0,
-      "siste_handelsdato": "2026-08-14"
+      "markedsverdi": 823628736.0,
+      "siste_handelsdato": "2026-08-17"
     },
     "BNOR": {
       "ok": true,
       "vart_navn": "BlueNord ASA",
       "yahoo_navn": "BlueNord ASA",
-      "markedsverdi": 13550616576.0,
+      "markedsverdi": 13525050368.0,
       "siste_handelsdato": "2026-08-17"
     },
     "AURG": {
@@ -679,14 +678,14 @@
       "ok": true,
       "vart_navn": "Sparebanken Norge",
       "yahoo_navn": "Sparebanken Norge",
-      "markedsverdi": 34439438336.0,
+      "markedsverdi": 34387517440.0,
       "siste_handelsdato": "2026-08-17"
     },
     "SB1NO": {
       "ok": true,
       "vart_navn": "SpareBank 1 Sør-Norge ASA",
       "yahoo_navn": "SpareBank 1 Sør-Norge ASA",
-      "markedsverdi": 82125815808.0,
+      "markedsverdi": 81754202112.0,
       "siste_handelsdato": "2026-08-17"
     },
     "SNOR": {
@@ -694,97 +693,97 @@
       "vart_navn": "SpareBank 1 Nordmøre",
       "yahoo_navn": "SpareBank 1 Nordmøre",
       "markedsverdi": 1639014528.0,
-      "siste_handelsdato": "2026-08-14"
+      "siste_handelsdato": "2026-08-17"
     },
     "HSHP": {
       "ok": true,
       "vart_navn": "Himalaya Shipping Ltd.",
       "yahoo_navn": "Himalaya Shipping Ltd.",
-      "markedsverdi": 7288617472.0,
+      "markedsverdi": 7250900992.0,
       "siste_handelsdato": "2026-08-17"
     },
     "GOD": {
       "ok": true,
       "vart_navn": "Goodtech ASA",
       "yahoo_navn": "Goodtech ASA",
-      "markedsverdi": 423849984.0,
+      "markedsverdi": 425347712.0,
       "siste_handelsdato": "2026-08-17"
     },
     "ZAL": {
       "ok": true,
       "vart_navn": "Zalaris ASA",
       "yahoo_navn": "Zalaris ASA",
-      "markedsverdi": 2112605824.0,
-      "siste_handelsdato": "2026-08-14"
+      "markedsverdi": 2221502976.0,
+      "siste_handelsdato": "2026-08-17"
     },
     "AKAST": {
       "ok": true,
       "vart_navn": "Akastor ASA",
       "yahoo_navn": "Akastor ASA",
-      "markedsverdi": 3941190656.0,
+      "markedsverdi": 3930288384.0,
       "siste_handelsdato": "2026-08-17"
     },
     "GENT": {
       "ok": true,
       "vart_navn": "Gentian Diagnostics ASA",
       "yahoo_navn": "Gentian Diagnostics ASA",
-      "markedsverdi": 599794624.0,
-      "siste_handelsdato": "2026-08-14"
+      "markedsverdi": 632257728.0,
+      "siste_handelsdato": "2026-08-17"
     },
     "AFK": {
       "ok": true,
       "vart_navn": "Arendals Fossekompani ASA (B-aksje)",
       "yahoo_navn": "Arendals Fossekompani ASA",
-      "markedsverdi": 10364194816.0,
+      "markedsverdi": 10446667776.0,
       "siste_handelsdato": "2026-08-17"
     },
     "ENH": {
       "ok": true,
       "vart_navn": "SED Energy Holdings PLC",
       "yahoo_navn": "SED Energy Holdings Plc",
-      "markedsverdi": 5842711040.0,
+      "markedsverdi": 5813460992.0,
       "siste_handelsdato": "2026-08-17"
     },
     "PROT": {
       "ok": true,
       "vart_navn": "Protector Forsikring ASA",
       "yahoo_navn": "Protector Forsikring ASA",
-      "markedsverdi": 41774772224.0,
+      "markedsverdi": 41815928832.0,
       "siste_handelsdato": "2026-08-17"
     },
     "ELK": {
       "ok": true,
       "vart_navn": "Elkem ASA",
       "yahoo_navn": "Elkem ASA",
-      "markedsverdi": 12399128576.0,
+      "markedsverdi": 12261360640.0,
       "siste_handelsdato": "2026-08-17"
     },
     "ELO": {
       "ok": true,
       "vart_navn": "Elopak ASA",
       "yahoo_navn": "Elopak ASA",
-      "markedsverdi": 9782014976.0,
+      "markedsverdi": 9755141120.0,
       "siste_handelsdato": "2026-08-17"
     },
     "ENDUR": {
       "ok": true,
       "vart_navn": "Endúr ASA",
       "yahoo_navn": "Endúr ASA",
-      "markedsverdi": 5822986240.0,
+      "markedsverdi": 5819488768.0,
       "siste_handelsdato": "2026-08-17"
     },
     "MORLD": {
       "ok": true,
       "vart_navn": "Moreld ASA",
       "yahoo_navn": "Moreld ASA",
-      "markedsverdi": 3875998464.0,
+      "markedsverdi": 3866446080.0,
       "siste_handelsdato": "2026-08-17"
     },
     "NKR": {
       "ok": true,
       "vart_navn": "Nekkar ASA",
       "yahoo_navn": "Nekkar ASA",
-      "markedsverdi": 1523841024.0,
+      "markedsverdi": 1502207616.0,
       "siste_handelsdato": "2026-08-17"
     },
     "TIETO": {
@@ -792,7 +791,7 @@
       "vart_navn": "TietoEVRY Corporation",
       "yahoo_navn": "Tieto Oyj",
       "markedsverdi": 24441212928.0,
-      "siste_handelsdato": "2026-06-29"
+      "siste_handelsdato": null
     },
     "WSTEP": {
       "ok": true,
@@ -805,35 +804,35 @@
       "ok": true,
       "vart_navn": "BW Energy Limited",
       "yahoo_navn": "BW Energy Limited",
-      "markedsverdi": 14544172032.0,
+      "markedsverdi": 14440839168.0,
       "siste_handelsdato": "2026-08-17"
     },
     "MGN": {
       "ok": true,
       "vart_navn": "Magnora ASA",
       "yahoo_navn": "Magnora ASA",
-      "markedsverdi": 2319130624.0,
+      "markedsverdi": 2311646720.0,
       "siste_handelsdato": "2026-08-17"
     },
     "ARCH": {
       "ok": true,
       "vart_navn": "Archer Limited",
       "yahoo_navn": "Archer Limited",
-      "markedsverdi": 2467461120.0,
+      "markedsverdi": 2452536832.0,
       "siste_handelsdato": "2026-08-17"
     },
     "AQUA": {
       "ok": true,
       "vart_navn": "Aqualis ASA",
       "yahoo_navn": "Aqualis ASA",
-      "markedsverdi": 1165181056.0,
+      "markedsverdi": 1170501504.0,
       "siste_handelsdato": "2026-08-17"
     },
     "CADLR": {
       "ok": true,
       "vart_navn": "Cadeler A/S",
       "yahoo_navn": "Cadeler A/S",
-      "markedsverdi": 21146445824.0,
+      "markedsverdi": 21165740032.0,
       "siste_handelsdato": "2026-08-17"
     },
     "KMCP": {
@@ -846,22 +845,22 @@
       "ok": true,
       "vart_navn": "Public Property Invest ASA",
       "yahoo_navn": "PPI Public Property Invest AB (publ)",
-      "markedsverdi": 17542141952.0,
+      "markedsverdi": 17438119936.0,
       "siste_handelsdato": "2026-08-17"
     },
     "WWIB": {
       "ok": true,
       "vart_navn": "Wilh. Wilhelmsen Holding B",
       "yahoo_navn": "Wilh. Wilhelmsen Holding ASA",
-      "markedsverdi": 31072215040.0,
+      "markedsverdi": 30657363968.0,
       "siste_handelsdato": "2026-08-17"
     },
     "POL": {
       "ok": true,
       "vart_navn": "Polaris Media ASA",
       "yahoo_navn": "Polaris Media ASA",
-      "markedsverdi": 2978704896.0,
-      "siste_handelsdato": "2026-08-14"
+      "markedsverdi": 2988503296.0,
+      "siste_handelsdato": "2026-08-17"
     },
     "GYL": {
       "ok": true,
@@ -874,21 +873,21 @@
       "ok": true,
       "vart_navn": "SpareBank 1 Østfold Akershus",
       "yahoo_navn": "SpareBank 1 Østfold Akershus",
-      "markedsverdi": 5457426432.0,
+      "markedsverdi": 5573871616.0,
       "siste_handelsdato": "2026-08-17"
     },
     "ROGS": {
       "ok": true,
       "vart_navn": "Rogaland Sparebank",
       "yahoo_navn": "Rogaland Sparebank",
-      "markedsverdi": 3483001088.0,
+      "markedsverdi": 3483924480.0,
       "siste_handelsdato": "2026-08-17"
     },
     "MELG": {
       "ok": true,
       "vart_navn": "Melhus Sparebank",
       "yahoo_navn": "Melhus Sparebank",
-      "markedsverdi": 510001440.0,
+      "markedsverdi": 521365632.0,
       "siste_handelsdato": "2026-08-17"
     },
     "TRSB": {
@@ -909,7 +908,7 @@
       "ok": true,
       "vart_navn": "Sogn Sparebank",
       "yahoo_navn": "Sogn Sparebank",
-      "markedsverdi": 206195008.0,
+      "markedsverdi": 211887504.0,
       "siste_handelsdato": "2026-08-17"
     },
     "GRONG": {
@@ -923,7 +922,7 @@
       "ok": true,
       "vart_navn": "Tinde Sparebank",
       "yahoo_navn": "Tinde Sparebank",
-      "markedsverdi": 599502336.0,
+      "markedsverdi": 600047296.0,
       "siste_handelsdato": "2026-08-17"
     },
     "ROMER": {
@@ -958,42 +957,42 @@
       "ok": true,
       "vart_navn": "CMB.TECH NV",
       "yahoo_navn": "Cmb.Tech NV",
-      "markedsverdi": 48110145536.0,
+      "markedsverdi": 47819976704.0,
       "siste_handelsdato": "2026-08-17"
     },
     "JIN": {
       "ok": true,
       "vart_navn": "Jinhui Shipping and Transportation Limited",
-      "yahoo_navn": "Jinhui Shipping and Transportation Limited",
-      "markedsverdi": 716738688.0,
+      "yahoo_navn": "JINHUI SHIPPING AND TRANSPORTAT",
+      "markedsverdi": 0,
       "siste_handelsdato": "2026-08-17"
     },
     "SOMA": {
       "ok": true,
       "vart_navn": "Solstad Maritime ASA",
       "yahoo_navn": "Solstad Maritime ASA",
-      "markedsverdi": 13658273792.0,
+      "markedsverdi": 13681541120.0,
       "siste_handelsdato": "2026-08-17"
     },
     "BORR": {
       "ok": true,
       "vart_navn": "Borr Drilling Limited",
       "yahoo_navn": "BORR DRILLING LIMITED",
-      "markedsverdi": 13366134784.0,
+      "markedsverdi": 13457198080.0,
       "siste_handelsdato": "2026-08-17"
     },
     "WEST": {
       "ok": true,
       "vart_navn": "Western Bulk Chartering AS",
       "yahoo_navn": "Western Bulk Chartering AS",
-      "markedsverdi": 706014016.0,
+      "markedsverdi": 699290048.0,
       "siste_handelsdato": "2026-08-17"
     },
     "CAPT": {
       "ok": true,
       "vart_navn": "Capital Tankers AS",
       "yahoo_navn": "Capital Tankers Corp.",
-      "markedsverdi": 18714288128.0,
+      "markedsverdi": 18821242880.0,
       "siste_handelsdato": "2026-08-17"
     },
     "MAS": {
@@ -1001,7 +1000,7 @@
       "vart_navn": "Måsøval ASA",
       "yahoo_navn": "Måsøval AS",
       "markedsverdi": 4618568704.0,
-      "siste_handelsdato": "2026-08-14"
+      "siste_handelsdato": "2026-08-17"
     },
     "ISLAX": {
       "ok": true,
@@ -1021,28 +1020,28 @@
       "ok": true,
       "vart_navn": "Smartoptics Group AS",
       "yahoo_navn": "Smartoptics Group ASA",
-      "markedsverdi": 4745403392.0,
+      "markedsverdi": 4686575616.0,
       "siste_handelsdato": "2026-08-17"
     },
     "SNTIA": {
       "ok": true,
       "vart_navn": "Sentia AS",
       "yahoo_navn": "SENTIA ASA",
-      "markedsverdi": 8036006400.0,
+      "markedsverdi": 7915466752.0,
       "siste_handelsdato": "2026-08-17"
     },
     "SWON": {
       "ok": true,
       "vart_navn": "SoftwareOne Holding AG",
       "yahoo_navn": "SoftwareOne Holding AG",
-      "markedsverdi": 1953408640.0,
+      "markedsverdi": 1955556224.0,
       "siste_handelsdato": "2026-08-17"
     },
     "HEX": {
       "ok": true,
       "vart_navn": "Hexagon Composites ASA",
-      "yahoo_navn": "Hexagon Composites ASA",
-      "markedsverdi": 4768286208.0,
+      "yahoo_navn": "HEXAGON COMPOSITES",
+      "markedsverdi": 0,
       "siste_handelsdato": "2026-08-17"
     },
     "BMA": {
@@ -1056,7 +1055,7 @@
       "ok": true,
       "vart_navn": "EQVA ASA",
       "yahoo_navn": "Eqva ASA",
-      "markedsverdi": 279428640.0,
+      "markedsverdi": 277648800.0,
       "siste_handelsdato": "2026-08-17"
     },
     "BOR": {
@@ -1070,28 +1069,28 @@
       "ok": true,
       "vart_navn": "Reach Subsea ASA",
       "yahoo_navn": "Reach Subsea ASA",
-      "markedsverdi": 1824431232.0,
+      "markedsverdi": 1795004928.0,
       "siste_handelsdato": "2026-08-17"
     },
     "PLSV": {
       "ok": true,
       "vart_navn": "Paratus Energy Services AS",
       "yahoo_navn": "PARATUS ENERGY SERVICES LTD.",
-      "markedsverdi": 8087932416.0,
+      "markedsverdi": 8096069120.0,
       "siste_handelsdato": "2026-08-17"
     },
     "ACR": {
       "ok": true,
       "vart_navn": "Axactor ASA",
       "yahoo_navn": "Axactor ASA",
-      "markedsverdi": 4566746624.0,
+      "markedsverdi": 4583474688.0,
       "siste_handelsdato": "2026-08-17"
     },
     "FFSB": {
       "ok": true,
       "vart_navn": "Flekkefjord Sparebank",
       "yahoo_navn": "Flekkefjord Sparebank",
-      "markedsverdi": 171357760.0,
+      "markedsverdi": 169880528.0,
       "siste_handelsdato": "2026-08-17"
     },
     "OTEC": {
@@ -1104,35 +1103,35 @@
       "ok": true,
       "vart_navn": "Vend Marketplaces ASA",
       "yahoo_navn": "VEND MARKETPLACES ASA",
-      "markedsverdi": 49782046720.0,
+      "markedsverdi": 49943543808.0,
       "siste_handelsdato": "2026-08-17"
     },
     "NOD": {
       "ok": true,
       "vart_navn": "Nordic Semiconductor ASA",
       "yahoo_navn": "Nordic Semiconductor ASA",
-      "markedsverdi": 33724076032.0,
+      "markedsverdi": 33921871872.0,
       "siste_handelsdato": "2026-08-17"
     },
     "KOA": {
       "ok": true,
       "vart_navn": "Kongsberg Automotive Holding ASA",
       "yahoo_navn": "Kongsberg Automotive ASA",
-      "markedsverdi": 1997043456.0,
+      "markedsverdi": 1987711488.0,
       "siste_handelsdato": "2026-08-17"
     },
     "DELIA": {
       "ok": true,
       "vart_navn": "Dellia Group ASA",
       "yahoo_navn": "DELLIA GROUP",
-      "markedsverdi": 880676032.0,
+      "markedsverdi": 891442240.0,
       "siste_handelsdato": "2026-08-17"
     },
     "STST": {
       "ok": true,
       "vart_navn": "Stainless Tankers AS",
       "yahoo_navn": "Stainless Tankers ASA",
-      "markedsverdi": 553500032.0,
+      "markedsverdi": 548099968.0,
       "siste_handelsdato": "2026-08-17"
     }
   }
