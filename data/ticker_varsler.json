@@ -1,6 +1,6 @@
 {
-  "generert": "2026-08-17T13:43:51Z",
-  "antall": 18,
+  "generert": "2026-08-17T16:24:16Z",
+  "antall": 15,
   "antall_kritiske": 2,
   "varsler": [
     {
@@ -32,32 +32,11 @@
       "forslag": "Kontroller at ticker_yf er riktig i data/tickers.json."
     },
     {
-      "ticker": "FRO",
-      "type": "markedsverdi_borte",
-      "alvorlighet": "advarsel",
-      "melding": "Markedsverdien er borte fra Yahoo (var 87,958,306,816 sist). Kan indikere strukturendring i selskapet.",
-      "forslag": "Kontroller om selskapet er under oppkjøp eller strykning."
-    },
-    {
-      "ticker": "GJF",
-      "type": "markedsverdi_borte",
-      "alvorlighet": "advarsel",
-      "melding": "Markedsverdien er borte fra Yahoo (var 142,089,814,016 sist). Kan indikere strukturendring i selskapet.",
-      "forslag": "Kontroller om selskapet er under oppkjøp eller strykning."
-    },
-    {
       "ticker": "GOGL",
       "type": "aldri_hentet",
       "alvorlighet": "advarsel",
       "melding": "Ingen vellykket henting registrert for denne tickeren.",
       "forslag": "Kontroller at ticker_yf er riktig i data/tickers.json."
-    },
-    {
-      "ticker": "JIN",
-      "type": "markedsverdi_borte",
-      "alvorlighet": "advarsel",
-      "melding": "Markedsverdien er borte fra Yahoo (var 716,738,688 sist). Kan indikere strukturendring i selskapet.",
-      "forslag": "Kontroller om selskapet er under oppkjøp eller strykning."
     },
     {
       "ticker": "KMCP",
@@ -74,6 +53,13 @@
       "forslag": "Kontroller at ticker_yf er riktig i data/tickers.json."
     },
     {
+      "ticker": "PGS",
+      "type": "fastfrosset_kurs",
+      "alvorlighet": "advarsel",
+      "melding": "Siste registrerte handel var 2024-07-22 (540 børsdager siden). Kursen står stille.",
+      "forslag": "Kan bety at handelen er suspendert eller at papiret er avnotert."
+    },
+    {
       "ticker": "RANA",
       "type": "aldri_hentet",
       "alvorlighet": "advarsel",
@@ -86,13 +72,6 @@
       "alvorlighet": "advarsel",
       "melding": "Ingen vellykket henting registrert for denne tickeren.",
       "forslag": "Kontroller at ticker_yf er riktig i data/tickers.json."
-    },
-    {
-      "ticker": "SNI",
-      "type": "markedsverdi_borte",
-      "alvorlighet": "advarsel",
-      "melding": "Markedsverdien er borte fra Yahoo (var 21,547,122,688 sist). Kan indikere strukturendring i selskapet.",
-      "forslag": "Kontroller om selskapet er under oppkjøp eller strykning."
     },
     {
       "ticker": "SRBNK",
