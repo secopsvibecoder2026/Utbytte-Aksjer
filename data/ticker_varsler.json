@@ -1,5 +1,5 @@
 {
-  "generert": "2026-08-14T16:53:14Z",
+  "generert": "2026-08-17T07:44:32Z",
   "antall": 15,
   "antall_kritiske": 2,
   "varsler": [
@@ -7,14 +7,14 @@
       "ticker": "AFG",
       "type": "navneendring",
       "alvorlighet": "kritisk",
-      "melding": "Yahoo Finance kaller selskapet «AF Gruppen ASA», vi har «Arendals Fossekompani ASA» (likhet 17%, avvik i 3 dager).",
+      "melding": "Yahoo Finance kaller selskapet «AF Gruppen ASA», vi har «Arendals Fossekompani ASA» (likhet 17%, avvik i 6 dager).",
       "forslag": "Sannsynlig navneendring eller oppkjøp. Oppdater navn — og trolig ticker_yf — i data/tickers.json."
     },
     {
       "ticker": "ALNG",
       "type": "navneendring",
       "alvorlighet": "kritisk",
-      "melding": "Yahoo Finance kaller selskapet «ALNG ASA», vi har «Awilco LNG ASA» (likhet 57%, avvik i 3 dager).",
+      "melding": "Yahoo Finance kaller selskapet «ALNG ASA», vi har «Awilco LNG ASA» (likhet 57%, avvik i 6 dager).",
       "forslag": "Sannsynlig navneendring eller oppkjøp. Oppdater navn — og trolig ticker_yf — i data/tickers.json."
     },
     {
@@ -56,7 +56,7 @@
       "ticker": "PGS",
       "type": "fastfrosset_kurs",
       "alvorlighet": "advarsel",
-      "melding": "Siste registrerte handel var 2024-07-22 (539 børsdager siden). Kursen står stille.",
+      "melding": "Siste registrerte handel var 2024-07-22 (540 børsdager siden). Kursen står stille.",
       "forslag": "Kan bety at handelen er suspendert eller at papiret er avnotert."
     },
     {
@@ -84,7 +84,7 @@
       "ticker": "TIETO",
       "type": "fastfrosset_kurs",
       "alvorlighet": "advarsel",
-      "melding": "Siste registrerte handel var 2026-06-29 (34 børsdager siden). Kursen står stille.",
+      "melding": "Siste registrerte handel var 2026-06-29 (35 børsdager siden). Kursen står stille.",
       "forslag": "Kan bety at handelen er suspendert eller at papiret er avnotert."
     },
     {
