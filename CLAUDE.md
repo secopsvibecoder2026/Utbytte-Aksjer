@@ -114,7 +114,7 @@ Utbytte-Aksjer/
 ├── index.html                 # Main SPA, all modal templates
 ├── manifest.json              # PWA manifest
 ├── sw.js                      # Service Worker (cache-first/network-first strategy)
-├── sitemap.xml                # SEO sitemap (208 URLs)
+├── sitemap.xml                # SEO sitemap (209 URLs)
 ├── robots.txt                 # Search engine directives
 ├── CNAME                      # Custom domain: exday.no
 ├── SECURITY_ROADMAP.md        # Security review findings and fix status

@@ -103,7 +103,7 @@ Ingen server-side runtime — all logikk kjører i nettleseren eller i planlagte
 ├── promo/                      # Markedsføringsmateriell + generatorer
 ├── sw.js                       # Service Worker
 ├── manifest.json               # PWA-manifest
-├── sitemap.xml                 # Auto-generert (208 URL-er)
+├── sitemap.xml                 # Auto-generert (209 URL-er)
 └── CNAME                       # exday.no
 ```
 
