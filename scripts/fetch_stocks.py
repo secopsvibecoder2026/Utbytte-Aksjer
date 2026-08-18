@@ -4089,6 +4089,14 @@ def generer_sitemap(aksjer, root_dir, today, alle_tickers=None):
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>""",
+        # /vilkaar/ er lenket fra footeren på ~200 sider, men manglet her og
+        # lå derfor aldri i sitemap.xml.
+        f"""  <url>
+    <loc>https://exday.no/vilkaar/</loc>
+    <lastmod>{today}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+  </url>""",
         f"""  <url>
     <loc>https://exday.no/om/</loc>
     <lastmod>{today}</lastmod>

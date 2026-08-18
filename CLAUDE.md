@@ -48,7 +48,7 @@ This is a Progressive Web App (PWA) for tracking Norwegian dividend-paying stock
 Gray scale (UI chrome, text, borders) uses standard Tailwind gray: `gray-50`→`gray-950`.
 
 **Core capabilities:**
-- Real-time and historical dividend data for 191 Norwegian stocks
+- Real-time and historical dividend data for 163 Norwegian stocks
 - Personal portfolio tracking with cost basis (FIFO), IRR, TWR, and tax calculations
 - Dividend calendar, sector filters, dividend score rankings, sector rebalancing tool
 - Offline-capable via Service Worker; installable as PWA
@@ -60,8 +60,11 @@ Gray scale (UI chrome, text, borders) uses standard Tailwind gray: `gray-50`→`
 ```
 Utbytte-Aksjer/
 ├── .github/workflows/         # GitHub Actions CI/CD
-│   ├── update-og-deploy.yml   # Daily data fetch + GitHub Pages deploy
-│   └── oppdater-priser.yml    # Price updates every 15 min on weekdays
+│   ├── update-og-deploy.yml   # Data fetch 4× daily + GitHub Pages deploy
+│   ├── oppdater-priser.yml    # Price updates every 15 min on weekdays
+│   ├── deploy-only.yml        # Lightweight Pages deploy (workflow_dispatch)
+│   ├── ai-oppsummering.yml    # Weekly AI summaries via Claude API
+│   └── tester.yml             # Runs the JS + Python test suites on push/PR
 ├── assets/                    # All frontend JS and CSS
 │   ├── app.js                 # Bootstrap, data loading, cache management, escHtml()
 │   ├── storage.js             # localStorage abstraction layer
@@ -75,7 +78,7 @@ Utbytte-Aksjer/
 ├── data/                      # JSON data files
 │   ├── aksjer.json            # Auto-generated daily: full stock dataset (uten kurs_historikk)
 │   ├── kurs/{TICKER}.json     # Auto-generated: kurshistorikk, lastes on-demand
-│   ├── tickers.json           # Manually maintained: 191 stock definitions
+│   ├── tickers.json           # Manually maintained: 163 stock definitions
 │   ├── priser.json            # Real-time prices, updated every 15 min
 │   ├── fallback_data.json     # Fallback when API fetch fails
 │   ├── hentelogg.json         # Auto-generated: per-ticker fetch diagnostics
@@ -88,13 +91,16 @@ Utbytte-Aksjer/
 │   ├── utvid_beskrivelser.py  # Enriches stock descriptions in tickers.json
 │   ├── valider_data.py        # Data quality validation script
 │   ├── sjekk_utdaterte.py     # Detects delisted/renamed/duplicate tickers
+│   ├── oppdater_hendelser.py  # Event calendar from Newsweb → hendelser.json
+│   ├── ai_oppsummering.py     # Weekly AI summaries (Claude API, see AI_OPPSUMMERING_SETUP.md)
+│   ├── hent_beskrivelser.py   # One-off: factual company descriptions from Yahoo
 │   ├── test_sjekk_utdaterte.py # Tests for sjekk_utdaterte.py (stdlib unittest)
 │   └── requirements.txt       # Python deps: yfinance>=0.2.36
 ├── tests/                     # Node.js unit tests
 │   ├── portefolje.test.js     # Tests: FIFO, IRR, TWR
 │   ├── storage.test.js        # Tests: favorites, watchlists
 │   └── ui.test.js             # Tests: formatting, scoring, classification
-├── aksjer/                    # Auto-generated SEO pages (one per stock ticker, 184 pages)
+├── aksjer/                    # Auto-generated SEO pages (one per stock ticker, 163 pages)
 ├── aksjer/sektor/             # Sector overview pages (16 sectors, auto-generated)
 ├── bevegelser/                # Stock movement history pages
 ├── faq/                       # FAQ pages
@@ -108,7 +114,7 @@ Utbytte-Aksjer/
 ├── index.html                 # Main SPA, all modal templates
 ├── manifest.json              # PWA manifest
 ├── sw.js                      # Service Worker (cache-first/network-first strategy)
-├── sitemap.xml                # SEO sitemap (212 URLs)
+├── sitemap.xml                # SEO sitemap (208 URLs)
 ├── robots.txt                 # Search engine directives
 ├── CNAME                      # Custom domain: exday.no
 ├── SECURITY_ROADMAP.md        # Security review findings and fix status
@@ -143,8 +149,13 @@ Utbytte-Aksjer/
 ### Running Tests
 
 ```bash
-npm test
+npm test                                # 63 JS tests (node:test)
+python scripts/test_sjekk_utdaterte.py  # 44 Python tests (stdlib unittest)
 ```
+
+Both suites run automatically in CI (`.github/workflows/tester.yml`) on push and PR
+touching `assets/`, `scripts/`, `tests/` or `package.json`. Neither needs network
+access or npm packages — the JS tests `require()` `assets/*.js` directly.
 
 ### Building CSS
 
@@ -182,7 +193,7 @@ Note: The Service Worker requires HTTPS or `localhost` to function.
 
 ### Daily Data Pipeline (`update-og-deploy.yml`)
 
-- **Trigger:** Weekdays 07:00 UTC (08:00 CET) + manual `workflow_dispatch`
+- **Trigger:** Weekdays 07:00, 10:00, 13:00 and 16:00 UTC + manual `workflow_dispatch`
 - **Steps:**
   1. `oppdater-data`: Runs `fetch_stocks.py`, commits updated `data/aksjer.json` and stock SEO pages to `main`
   2. `deploy-pages`: Bumps Service Worker cache version (`CACHE = 'exday-v{SHA}'`), deploys to GitHub Pages
@@ -241,11 +252,11 @@ All variable names, function names, UI strings, and comments are in **Norwegian*
 ## Architecture: Data Flow
 
 ```
-tickers.json (manual, 191 stocks)
+tickers.json (manual, 163 stocks)
        ↓
 fetch_stocks.py (daily GitHub Action)
        ↓
-data/aksjer.json + /aksjer/{TICKER}/index.html (auto-generated, 184 pages)
+data/aksjer.json + /aksjer/{TICKER}/index.html (auto-generated, 163 pages)
 
 fetch_priser.py (every 15 min)
        ↓
@@ -410,7 +421,7 @@ There are **3 HTML templates** in `fetch_stocks.py`:
 
 | Template | Function | Output | Dark mode |
 |----------|----------|--------|-----------|
-| Stock page | `_aksje_side_html()` | `/aksjer/{TICKER}/index.html` (184 pages) | ✓ Tailwind `dark:` classes |
+| Stock page | `_aksje_side_html()` | `/aksjer/{TICKER}/index.html` (163 pages) | ✓ Tailwind `dark:` classes |
 | Sector page | `generer_sektorsider()` | `/aksjer/sektor/{slug}/index.html` (16 pages) | ✓ Tailwind `dark:` classes |
 | Overview page | inline in `generer_aksjesider()` | `/aksjer/index.html` | ✓ Inline CSS `.dark` selectors |
 
@@ -639,6 +650,42 @@ When adding new tickers, always verify `ticker_yf` is unique in `tickers.json`, 
 
 ---
 
+## Stock descriptions: how they are built (and how they went stale)
+
+`beskrivelse` has three paragraphs, and only the **first** is hand-written:
+
+1. **Intro** — the manually authored sentences in `tickers.json`, extracted by
+   `_manuell_del()`, which stops at the first sentence matching `_AUTO_TEGN`.
+2. **Dividend profile** — frequency, years in a row, yield vs. 5-year average,
+   payout ratio, growth. Rebuilt from live numbers on every run.
+3. **Sector driver** — from `SEKTOR_DRIVER`, plus a high/low history sentence.
+
+`utvid_beskrivelser.py` writes the *whole* rendered text back into `tickers.json`,
+so the file contains a frozen snapshot of paragraphs 2–3. Both `fetch_stocks.py`
+and `regenerer_sider.py` therefore call `lag_beskrivelse()` to regenerate them
+instead of copying the stored text.
+
+**Incident (fixed 2026-08-18).** `regenerer_sider.py` copied the raw text straight
+from `tickers.json`, so it reverted the year count on 89 stocks (DNB 21 → 20 years)
+and served yield figures frozen from an earlier run — SNTIA showed 14,0 % against
+an actual 6,9 %. Four follow-on bugs surfaced while fixing it:
+
+- `_manuell_del()` compared case-sensitively against lowercase tags, so an
+  auto-generated sentence starting a paragraph («Direkteavkastningen er …») was
+  never recognised as generated and survived as if hand-written.
+- `FREQ_MAP` had no `"Uregelmessig"` entry — 30 of 163 stocks silently lost the
+  entire frequency sentence.
+- A frozen sector-driver or growth sentence sitting in `tickers.json` without a
+  paragraph break was not recognised as generated, so it appeared twice (JAREN,
+  OKEA, ALNG, MAS).
+- `ar_med_utbytte == 0` produced «de siste 0 år».
+
+If you touch this code, verify across all 163 stocks that no description has a
+duplicated sentence, a stale percentage, or a null year count — and that a second
+run changes nothing (it must be idempotent).
+
+---
+
 ## Common Pitfalls
 
 1. **Do not edit auto-generated files** — `data/aksjer.json`, `/aksjer/*/index.html`, `sitemap.xml` and the aksjeliste inside the `<noscript>` block in `app/index.html` (between the `AKSJELISTE:START`/`AKSJELISTE:SLUTT` markers) are all overwritten by `fetch_stocks.py` / `regenerer_sider.py`
@@ -649,4 +696,5 @@ When adding new tickers, always verify `ticker_yf` is unique in `tickers.json`, 
 6. **Use `escHtml()` in innerHTML** — never interpolate raw stock data strings into HTML
 7. **Price data is separate** — `priser.json` is merged into `alleAksjer` at runtime; prices are not in `aksjer.json`
 8. **Kurshistorikk er separat** — ligger i `data/kurs/{TICKER}.json`, ikke i `aksjer.json`. Frontend henter den on-demand via `hentKursHistorikk()` når en aksjemodal åpnes. Python-kode som genererer sider må laste den tilbake med `_last_kurshistorikk_fra_disk()` — ellers regenereres alle SEO-sider uten kursgraf
-8. **`window.alleAksjer`** is set in `lastInnData()` in `app.js` for cross-file access
+9. **`window.alleAksjer`** is set in `lastInnData()` in `app.js` for cross-file access
+10. **Beskrivelser bygges på nytt hver kjøring — ikke kopier råteksten** — `beskrivelse` i `aksjer.json` er ikke teksten fra `tickers.json`. Både `fetch_stocks.py` og `regenerer_sider.py` kaller `utvid_beskrivelser.lag_beskrivelse()`, som henter *kun* det manuelt forfattede innledningsavsnittet (via `_manuell_del()`) og bygger utbytteprofil- og driver-avsnittene på nytt fra denne kjøringens tall. Kopierer du råteksten fra `tickers.json` rett inn, fryser du yield, payout, vekst og årstelling til det som tilfeldigvis sto i malen. Se «Utdaterte nøkkeltall» under.

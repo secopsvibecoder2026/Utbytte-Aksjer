@@ -1,4 +1,15 @@
 # Prosjektgjennomgang — exday.no
+
+> ## 📌 Historisk øyeblikksbilde — ikke en levende oppgaveliste
+>
+> Dette dokumentet beskriver prosjektet slik det var **28. mai 2026**, og oppdateres ikke
+> løpende. Alle kritiske og de fleste viktige funn var allerede utbedret da det ble skrevet.
+> Det er senere avløst av [KODE_REVIEW.md](KODE_REVIEW.md) (4. juli 2026), som selv er et
+> øyeblikksbilde.
+>
+> 👉 Åpne saker følges i **[ROADMAP_NYE_IDEER.md](ROADMAP_NYE_IDEER.md)**, sikkerhet i
+> **[SECURITY_ROADMAP.md](SECURITY_ROADMAP.md)**.
+
 *Dato: 2026-05-28 · Gjennomgang av JS, HTML/SEO, Python-scripts og GitHub Actions*
 
 ---

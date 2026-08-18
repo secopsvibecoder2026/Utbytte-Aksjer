@@ -71,7 +71,7 @@ Manuell trigger via GitHub → Actions → "AI-oppsummering (ukentlig)" → "Run
 |-----------|--------|-----------------|
 | Faktabeskrivelse (oversettelse) | claude-haiku-4-5 | ~$0.001 per aksje |
 | AI-oppsummering | claude-haiku-4-5 | ~$0.001 per aksje |
-| Ukentlig full kjøring (172 aksjer) | claude-haiku-4-5 | ~$0.17 |
+| Ukentlig full kjøring (163 aksjer) | claude-haiku-4-5 | ~$0.16 |
 | Månedlig total | — | ~$0.70 |
 
 ---

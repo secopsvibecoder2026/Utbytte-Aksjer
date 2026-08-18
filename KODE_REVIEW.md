@@ -1,5 +1,18 @@
 # Kodegjennomgang — exday.no (Utbytte-Aksjer)
 
+> ## 📌 Historisk øyeblikksbilde — ikke en levende oppgaveliste
+>
+> Dette dokumentet beskriver kodebasen slik den var **4. juli 2026**, og oppdateres ikke
+> løpende. Mange av funnene er utbedret siden — blant annet alle de fem kritiske (K1–K5),
+> begge XSS-hullene, deploy-gapet for priser, og de to foreldreløse AI-scriptene i punkt 8,
+> som ble slettet 18. august 2026.
+>
+> **Statusfeltene under er ikke å stole på som nåtilstand.** Bruk dem som kontekst for
+> *hvorfor* koden ser ut som den gjør, ikke som en liste over hva som gjenstår.
+>
+> 👉 Åpne saker følges i **[ROADMAP_NYE_IDEER.md](ROADMAP_NYE_IDEER.md)**, sikkerhet i
+> **[SECURITY_ROADMAP.md](SECURITY_ROADMAP.md)**.
+
 **Dato:** 2026-07-04
 **Omfang:** Frontend-JavaScript, Python-datapipeline, HTML/PWA, CI/CD, SEO, tilgjengelighet og testdekning.
 **Metode:** Tre parallelle dybde-reviews (frontend, pipeline, plattform) + prosjektnivå-analyse. Alle funn er verifisert mot faktisk kildekode — de mest kritiske er dobbeltsjekket manuelt. Testsuiten (44 tester) passerer.
