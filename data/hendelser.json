@@ -2562,7 +2562,8 @@
     {
       "ticker": "AQUA",
       "dato": "2026-08-18",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/679934"
     },
     {
       "ticker": "ELO",
@@ -2572,7 +2573,8 @@
     {
       "ticker": "ENTR",
       "dato": "2026-08-18",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/680056"
     },
     {
       "ticker": "GRONG",
@@ -2582,12 +2584,14 @@
     {
       "ticker": "KMCP",
       "dato": "2026-08-18",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/680056"
     },
     {
       "ticker": "MOWI",
       "dato": "2026-08-18",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/680022"
     },
     {
       "ticker": "MULTI",
@@ -2597,7 +2601,8 @@
     {
       "ticker": "ODFB",
       "dato": "2026-08-18",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/680056"
     },
     {
       "ticker": "ODL",
@@ -2607,32 +2612,38 @@
     {
       "ticker": "REACH",
       "dato": "2026-08-18",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/680028"
     },
     {
       "ticker": "SBMO",
       "dato": "2026-08-18",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/680056"
     },
     {
       "ticker": "SRHA",
       "dato": "2026-08-18",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/680056"
     },
     {
       "ticker": "STRONG",
       "dato": "2026-08-18",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/680056"
     },
     {
       "ticker": "VISTIN",
       "dato": "2026-08-18",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/680056"
     },
     {
       "ticker": "WWIB",
       "dato": "2026-08-18",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/680056"
     },
     {
       "ticker": "AFISH",
@@ -2835,6 +2846,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "MEDI",
+      "dato": "2026-08-21",
+      "type": "rapport"
+    },
+    {
       "ticker": "OTEC",
       "dato": "2026-08-21",
       "type": "rapport"
@@ -3031,6 +3047,11 @@
     },
     {
       "ticker": "HUNT",
+      "dato": "2026-08-27",
+      "type": "rapport"
+    },
+    {
+      "ticker": "JIN",
       "dato": "2026-08-27",
       "type": "rapport"
     },
@@ -3455,6 +3476,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "ELO",
+      "dato": "2026-10-27",
+      "type": "rapport"
+    },
+    {
       "ticker": "PUBLI",
       "dato": "2026-10-27",
       "type": "rapport"
@@ -3685,6 +3711,16 @@
       "type": "rapport"
     },
     {
+      "ticker": "MULTI",
+      "dato": "2026-11-03",
+      "type": "rapport"
+    },
+    {
+      "ticker": "ODL",
+      "dato": "2026-11-03",
+      "type": "rapport"
+    },
+    {
       "ticker": "OKEA",
       "dato": "2026-11-03",
       "type": "rapport"
@@ -3696,6 +3732,11 @@
     },
     {
       "ticker": "ENTR",
+      "dato": "2026-11-04",
+      "type": "rapport"
+    },
+    {
+      "ticker": "MOWI",
       "dato": "2026-11-04",
       "type": "rapport"
     },
@@ -3905,7 +3946,22 @@
       "type": "rapport"
     },
     {
+      "ticker": "REACH",
+      "dato": "2026-11-17",
+      "type": "rapport"
+    },
+    {
+      "ticker": "ALNG",
+      "dato": "2026-11-18",
+      "type": "rapport"
+    },
+    {
       "ticker": "BORR",
+      "dato": "2026-11-18",
+      "type": "rapport"
+    },
+    {
+      "ticker": "GRONG",
       "dato": "2026-11-18",
       "type": "rapport"
     },
@@ -3950,5 +4006,5 @@
       "type": "rapport"
     }
   ],
-  "sist_oppdatert": "2026-08-17"
+  "sist_oppdatert": "2026-08-18"
 }
