@@ -1,6 +1,6 @@
 {
-  "generert": "2026-08-18T10:21:40Z",
-  "antall": 14,
+  "generert": "2026-08-18T13:46:03Z",
+  "antall": 15,
   "antall_kritiske": 2,
   "varsler": [
     {
@@ -79,6 +79,13 @@
       "alvorlighet": "advarsel",
       "melding": "Ingen vellykket henting registrert for denne tickeren.",
       "forslag": "Kontroller at ticker_yf er riktig i data/tickers.json."
+    },
+    {
+      "ticker": "TIETO",
+      "type": "fastfrosset_kurs",
+      "alvorlighet": "advarsel",
+      "melding": "Siste registrerte handel var 2026-06-29 (36 børsdager siden). Kursen står stille.",
+      "forslag": "Kan bety at handelen er suspendert eller at papiret er avnotert."
     },
     {
       "ticker": "WILS",
