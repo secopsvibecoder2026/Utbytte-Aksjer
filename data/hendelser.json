@@ -2736,7 +2736,8 @@
     {
       "ticker": "AQUA",
       "dato": "2026-08-20",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/680241"
     },
     {
       "ticker": "B2I",
@@ -2751,12 +2752,14 @@
     {
       "ticker": "ENDUR",
       "dato": "2026-08-20",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/680246"
     },
     {
       "ticker": "ENTR",
       "dato": "2026-08-20",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/680281"
     },
     {
       "ticker": "HAUTO",
@@ -2771,17 +2774,20 @@
     {
       "ticker": "KMCP",
       "dato": "2026-08-20",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/680281"
     },
     {
       "ticker": "NKR",
       "dato": "2026-08-20",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/680254"
     },
     {
       "ticker": "NORCO",
       "dato": "2026-08-20",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/680276"
     },
     {
       "ticker": "ODF",
@@ -2791,7 +2797,8 @@
     {
       "ticker": "ORK",
       "dato": "2026-08-20",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/680257"
     },
     {
       "ticker": "PEN",
@@ -2801,22 +2808,26 @@
     {
       "ticker": "SBMO",
       "dato": "2026-08-20",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/680281"
     },
     {
       "ticker": "SRHA",
       "dato": "2026-08-20",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/680281"
     },
     {
       "ticker": "STRONG",
       "dato": "2026-08-20",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/680281"
     },
     {
       "ticker": "VISTIN",
       "dato": "2026-08-20",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/680281"
     },
     {
       "ticker": "WSTEP",
@@ -2826,7 +2837,8 @@
     {
       "ticker": "WWIB",
       "dato": "2026-08-20",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/680281"
     },
     {
       "ticker": "AFK",
@@ -3559,6 +3571,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "AQUA",
+      "dato": "2026-10-29",
+      "type": "rapport"
+    },
+    {
       "ticker": "ARCH",
       "dato": "2026-10-29",
       "type": "rapport"
@@ -3729,6 +3746,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "NORCO",
+      "dato": "2026-11-03",
+      "type": "rapport"
+    },
+    {
       "ticker": "ODL",
       "dato": "2026-11-03",
       "type": "rapport"
@@ -3765,6 +3787,11 @@
     },
     {
       "ticker": "MOWI",
+      "dato": "2026-11-04",
+      "type": "rapport"
+    },
+    {
+      "ticker": "ODF",
       "dato": "2026-11-04",
       "type": "rapport"
     },
@@ -3839,6 +3866,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "B2I",
+      "dato": "2026-11-05",
+      "type": "rapport"
+    },
+    {
       "ticker": "HEX",
       "dato": "2026-11-05",
       "type": "rapport"
@@ -3849,7 +3881,17 @@
       "type": "rapport"
     },
     {
+      "ticker": "KID",
+      "dato": "2026-11-05",
+      "type": "rapport"
+    },
+    {
       "ticker": "MORLD",
+      "dato": "2026-11-05",
+      "type": "rapport"
+    },
+    {
+      "ticker": "NKR",
       "dato": "2026-11-05",
       "type": "rapport"
     },
@@ -3885,6 +3927,11 @@
     },
     {
       "ticker": "FFSB",
+      "dato": "2026-11-06",
+      "type": "rapport"
+    },
+    {
+      "ticker": "ORK",
       "dato": "2026-11-06",
       "type": "rapport"
     },
@@ -3925,6 +3972,11 @@
     },
     {
       "ticker": "ELMRA",
+      "dato": "2026-11-12",
+      "type": "rapport"
+    },
+    {
+      "ticker": "ENDUR",
       "dato": "2026-11-12",
       "type": "rapport"
     },
@@ -3994,6 +4046,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "WSTEP",
+      "dato": "2026-11-17",
+      "type": "rapport"
+    },
+    {
       "ticker": "ALNG",
       "dato": "2026-11-18",
       "type": "rapport"
@@ -4006,6 +4063,16 @@
     {
       "ticker": "GRONG",
       "dato": "2026-11-18",
+      "type": "rapport"
+    },
+    {
+      "ticker": "PEN",
+      "dato": "2026-11-18",
+      "type": "rapport"
+    },
+    {
+      "ticker": "HAUTO",
+      "dato": "2026-11-19",
       "type": "rapport"
     },
     {
@@ -4049,5 +4116,5 @@
       "type": "rapport"
     }
   ],
-  "sist_oppdatert": "2026-08-19"
+  "sist_oppdatert": "2026-08-20"
 }
