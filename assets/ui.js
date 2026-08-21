@@ -466,6 +466,14 @@ function initFire() {
 // modalen for alle aksjer i de sektorene.
 const ARTIKLER = [
   {
+    slug: '/artikler/slik-leser-du-utbyttekalenderen/',
+    tittel: 'Slik leser du utbyttekalenderen — planlegg kontantstrømmen din',
+    ingress: '91 % av de kvartalsvise betalerne er sykliske, mot 19 % av de årlige. Jevn kontantstrøm har en pris de færreste regner på.',
+    meta: '21. august 2026 · 11 min',
+    tags: ['Guide', 'Kalender'],
+    sektorer: ['Shipping', 'Skipsfart', 'Energi', 'Energitjenester'],
+  },
+  {
     slug: '/artikler/hva-er-payout-ratio/',
     tittel: 'Hva er payout ratio, og hva forteller den deg om utbyttets bærekraft?',
     ingress: '26 av 124 utbytteaksjer betaler mer enn de tjener. Når tallet er nyttig, når det er støy, og hvorfor blankt ikke betyr lavt.',

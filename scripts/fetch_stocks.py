@@ -1910,6 +1910,17 @@ def _lag_faq_seksjon(a, today):
                     f"Oslo Børs bruker T+2-oppgjør — handelen avregnes to børsdager etter kjøpsdato, "
                     f"så du må kjøpe senest én børsdag før ex-dato."
                 )
+            elif dager == 0:
+                # Uten denne grenen falt selve ex-dagen ned i «else» og siden påsto at
+                # datoen var passert og at neste ikke var bekreftet — samtidig som
+                # analyse-blokken lenger opp på samme side sa «Ex-dato er i dag».
+                # Teksten går også inn i FAQPage-schemaet, så feilen nådde Google.
+                svar = (
+                    f"Ex-dato for {navn} er i dag, {ex_str}. "
+                    f"Aksjen handles fra i dag uten rett til utbyttet — du måtte ha kjøpt "
+                    f"senest {kjop_str} for å motta det. Selger du i dag, beholder du likevel "
+                    f"utbyttet, fordi retten ble låst ved forrige børsdags slutt."
+                )
             else:
                 svar = (
                     f"Siste registrerte ex-dato for {navn} var {ex_str}. "
@@ -4156,6 +4167,12 @@ def generer_sitemap(aksjer, root_dir, today, alle_tickers=None):
     <lastmod>2026-06-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
+  </url>""",
+        f"""  <url>
+    <loc>https://exday.no/artikler/slik-leser-du-utbyttekalenderen/</loc>
+    <lastmod>{today}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>""",
         f"""  <url>
     <loc>https://exday.no/artikler/sparebanker-oslo-bors/</loc>
