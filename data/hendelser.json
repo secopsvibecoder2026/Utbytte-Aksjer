@@ -2792,7 +2792,8 @@
     {
       "ticker": "ODF",
       "dato": "2026-08-20",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/680427"
     },
     {
       "ticker": "ORK",
@@ -2843,12 +2844,14 @@
     {
       "ticker": "AFK",
       "dato": "2026-08-21",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/680446"
     },
     {
       "ticker": "AKAST",
       "dato": "2026-08-21",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/680435"
     },
     {
       "ticker": "ALNG",
@@ -2858,17 +2861,20 @@
     {
       "ticker": "EIOF",
       "dato": "2026-08-21",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/680431"
     },
     {
       "ticker": "ENTR",
       "dato": "2026-08-21",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/680456"
     },
     {
       "ticker": "KMCP",
       "dato": "2026-08-21",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/680456"
     },
     {
       "ticker": "MEDI",
@@ -2883,7 +2889,8 @@
     {
       "ticker": "SBMO",
       "dato": "2026-08-21",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/680456"
     },
     {
       "ticker": "SCATC",
@@ -2893,22 +2900,26 @@
     {
       "ticker": "SRHA",
       "dato": "2026-08-21",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/680456"
     },
     {
       "ticker": "STRONG",
       "dato": "2026-08-21",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/680456"
     },
     {
       "ticker": "VISTIN",
       "dato": "2026-08-21",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/680456"
     },
     {
       "ticker": "WWIB",
       "dato": "2026-08-21",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/680456"
     },
     {
       "ticker": "ZAL",
@@ -3486,6 +3497,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "MEDI",
+      "dato": "2026-10-23",
+      "type": "rapport"
+    },
+    {
       "ticker": "NHY",
       "dato": "2026-10-23",
       "type": "rapport"
@@ -3716,6 +3732,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "SCATC",
+      "dato": "2026-10-30",
+      "type": "rapport"
+    },
+    {
       "ticker": "SRHA",
       "dato": "2026-10-30",
       "type": "rapport"
@@ -3936,6 +3957,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "AFK",
+      "dato": "2026-11-10",
+      "type": "rapport"
+    },
+    {
       "ticker": "AUSS",
       "dato": "2026-11-10",
       "type": "rapport"
@@ -3948,6 +3974,11 @@
     {
       "ticker": "SNOR",
       "dato": "2026-11-10",
+      "type": "rapport"
+    },
+    {
+      "ticker": "AKAST",
+      "dato": "2026-11-11",
       "type": "rapport"
     },
     {
@@ -3968,6 +3999,11 @@
     {
       "ticker": "OET",
       "dato": "2026-11-11",
+      "type": "rapport"
+    },
+    {
+      "ticker": "EIOF",
+      "dato": "2026-11-12",
       "type": "rapport"
     },
     {
@@ -4116,5 +4152,5 @@
       "type": "rapport"
     }
   ],
-  "sist_oppdatert": "2026-08-20"
+  "sist_oppdatert": "2026-08-21"
 }

@@ -1,5 +1,5 @@
 {
-  "generert": "2026-08-20T16:31:30Z",
+  "generert": "2026-08-21T07:35:46Z",
   "antall": 18,
   "antall_kritiske": 2,
   "varsler": [
@@ -7,14 +7,14 @@
       "ticker": "AFG",
       "type": "navneendring",
       "alvorlighet": "kritisk",
-      "melding": "Yahoo Finance kaller selskapet «AF Gruppen ASA», vi har «Arendals Fossekompani ASA» (likhet 17%, avvik i 9 dager).",
+      "melding": "Yahoo Finance kaller selskapet «AF Gruppen ASA», vi har «Arendals Fossekompani ASA» (likhet 17%, avvik i 10 dager).",
       "forslag": "Sannsynlig navneendring eller oppkjøp. Oppdater navn — og trolig ticker_yf — i data/tickers.json."
     },
     {
       "ticker": "ALNG",
       "type": "navneendring",
       "alvorlighet": "kritisk",
-      "melding": "Yahoo Finance kaller selskapet «ALNG ASA», vi har «Awilco LNG ASA» (likhet 57%, avvik i 9 dager).",
+      "melding": "Yahoo Finance kaller selskapet «ALNG ASA», vi har «Awilco LNG ASA» (likhet 57%, avvik i 10 dager).",
       "forslag": "Sannsynlig navneendring eller oppkjøp. Oppdater navn — og trolig ticker_yf — i data/tickers.json."
     },
     {
