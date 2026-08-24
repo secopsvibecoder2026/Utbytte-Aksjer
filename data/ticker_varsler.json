@@ -1,20 +1,20 @@
 {
-  "generert": "2026-08-21T16:30:13Z",
-  "antall": 18,
+  "generert": "2026-08-24T07:50:49Z",
+  "antall": 15,
   "antall_kritiske": 2,
   "varsler": [
     {
       "ticker": "AFG",
       "type": "navneendring",
       "alvorlighet": "kritisk",
-      "melding": "Yahoo Finance kaller selskapet «AF Gruppen ASA», vi har «Arendals Fossekompani ASA» (likhet 17%, avvik i 10 dager).",
+      "melding": "Yahoo Finance kaller selskapet «AF Gruppen ASA», vi har «Arendals Fossekompani ASA» (likhet 17%, avvik i 13 dager).",
       "forslag": "Sannsynlig navneendring eller oppkjøp. Oppdater navn — og trolig ticker_yf — i data/tickers.json."
     },
     {
       "ticker": "ALNG",
       "type": "navneendring",
       "alvorlighet": "kritisk",
-      "melding": "Yahoo Finance kaller selskapet «ALNG ASA», vi har «Awilco LNG ASA» (likhet 57%, avvik i 10 dager).",
+      "melding": "Yahoo Finance kaller selskapet «ALNG ASA», vi har «Awilco LNG ASA» (likhet 57%, avvik i 13 dager).",
       "forslag": "Sannsynlig navneendring eller oppkjøp. Oppdater navn — og trolig ticker_yf — i data/tickers.json."
     },
     {
@@ -32,39 +32,11 @@
       "forslag": "Kontroller at ticker_yf er riktig i data/tickers.json."
     },
     {
-      "ticker": "FRO",
-      "type": "markedsverdi_borte",
-      "alvorlighet": "advarsel",
-      "melding": "Markedsverdien er borte fra Yahoo (var 90,162,274,304 sist). Kan indikere strukturendring i selskapet.",
-      "forslag": "Kontroller om selskapet er under oppkjøp eller strykning."
-    },
-    {
-      "ticker": "GJF",
-      "type": "markedsverdi_borte",
-      "alvorlighet": "advarsel",
-      "melding": "Markedsverdien er borte fra Yahoo (var 140,489,916,416 sist). Kan indikere strukturendring i selskapet.",
-      "forslag": "Kontroller om selskapet er under oppkjøp eller strykning."
-    },
-    {
       "ticker": "GOGL",
       "type": "aldri_hentet",
       "alvorlighet": "advarsel",
       "melding": "Ingen vellykket henting registrert for denne tickeren.",
       "forslag": "Kontroller at ticker_yf er riktig i data/tickers.json."
-    },
-    {
-      "ticker": "HEX",
-      "type": "markedsverdi_borte",
-      "alvorlighet": "advarsel",
-      "melding": "Markedsverdien er borte fra Yahoo (var 4,525,210,624 sist). Kan indikere strukturendring i selskapet.",
-      "forslag": "Kontroller om selskapet er under oppkjøp eller strykning."
-    },
-    {
-      "ticker": "JIN",
-      "type": "markedsverdi_borte",
-      "alvorlighet": "advarsel",
-      "melding": "Markedsverdien er borte fra Yahoo (var 721,108,992 sist). Kan indikere strukturendring i selskapet.",
-      "forslag": "Kontroller om selskapet er under oppkjøp eller strykning."
     },
     {
       "ticker": "KMCP",
@@ -81,6 +53,13 @@
       "forslag": "Kontroller at ticker_yf er riktig i data/tickers.json."
     },
     {
+      "ticker": "PGS",
+      "type": "fastfrosset_kurs",
+      "alvorlighet": "advarsel",
+      "melding": "Siste registrerte handel var 2024-07-22 (545 børsdager siden). Kursen står stille.",
+      "forslag": "Kan bety at handelen er suspendert eller at papiret er avnotert."
+    },
+    {
       "ticker": "RANA",
       "type": "aldri_hentet",
       "alvorlighet": "advarsel",
@@ -95,18 +74,18 @@
       "forslag": "Kontroller at ticker_yf er riktig i data/tickers.json."
     },
     {
-      "ticker": "SNI",
-      "type": "markedsverdi_borte",
-      "alvorlighet": "advarsel",
-      "melding": "Markedsverdien er borte fra Yahoo (var 21,414,322,176 sist). Kan indikere strukturendring i selskapet.",
-      "forslag": "Kontroller om selskapet er under oppkjøp eller strykning."
-    },
-    {
       "ticker": "SRBNK",
       "type": "aldri_hentet",
       "alvorlighet": "advarsel",
       "melding": "Ingen vellykket henting registrert for denne tickeren.",
       "forslag": "Kontroller at ticker_yf er riktig i data/tickers.json."
+    },
+    {
+      "ticker": "TIETO",
+      "type": "fastfrosset_kurs",
+      "alvorlighet": "advarsel",
+      "melding": "Siste registrerte handel var 2026-06-29 (40 børsdager siden). Kursen står stille.",
+      "forslag": "Kan bety at handelen er suspendert eller at papiret er avnotert."
     },
     {
       "ticker": "WILS",
