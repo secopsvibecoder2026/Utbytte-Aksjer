@@ -432,6 +432,63 @@ There are **3 HTML templates** in `fetch_stocks.py`:
 - Footer: `STANDARD_FOOTER` constant (defined after `generer_aksjesider()`) — uses inline styles with `.dark .std-footer` override
 - After changing any template: run `python scripts/regenerer_sider.py` to rebuild all pages
 
+### Content conventions on the stock pages
+
+A content review on 2026-08-26 found the same mistake repeated across many
+pages, because every one of them lives in a template. Keep these rules:
+
+**Numbers use Norwegian formatting.** `_nf(verdi, desimaler)` renders a comma
+decimal separator. Use it for anything a reader sees — percentages, NOK
+amounts, P/E, market cap, axis labels. The pages previously mixed `5.78%` from
+f-strings with `37,84 %` from hard-coded text in the same sentence.
+
+> ⚠️ **Never run `_nf()` on SVG coordinates.** `x`, `y`, `cx`, `cy`, `d`,
+> `points` and `width` must keep the period — a comma makes the attribute
+> invalid and the graph silently disappears. The safe rule when bulk-editing:
+> only convert numbers followed by `%`, a currency, `mrd` or `år`, since a
+> coordinate is never followed by any of those.
+
+**Headings must match their content.** The `Utbyttedatoer` section only
+contains dates when the company has announced them — that was true for just 18
+of 163 pages, while the other 120 showed a yield comparison under a heading
+promising dates. The heading is now picked from the content.
+
+**Label figures that measure different things.** `Utbytte/aksje` is an
+*annualised* rate for quarterly, semi-annual and monthly payers, while the
+current-year row in the history table is what has been *paid so far*. ATEA
+showed `7,50 NOK` above a `2026 — 3,75 NOK` row and read as a contradiction.
+The card is marked «annualisert» and the row «hittil i år».
+
+**Norwegian usage that has bitten us:** «halveres» (not «halves»), «har **en**
+viss konjunktureksponering», «5-års**s**nitt» (år + snitt gives a double s),
+«patentutløp» in one word. Sector names take a capital letter when they stand
+alone (`sektorsnittet for Finans`) but stay lowercase in compounds
+(`norske finans-aksjer`).
+
+**`beskrivelse_fakta` must be Norwegian.** All 154 descriptions were translated
+on 2026-08-26; 153 of them had been sitting in English straight from Yahoo.
+`scripts/hent_beskrivelser.py` refetches from Yahoo and will reintroduce
+English unless `ANTHROPIC_API_KEY` is set so it translates — check the output
+before committing a run of it.
+
+### tickers.json is the source of truth for `navn` and `sektor`
+
+`regenerer_sider.py` syncs `navn`, `sektor`, `beskrivelse`, `beskrivelse_fakta`,
+`ask_egnet` and `inkorporeringsland` from `tickers.json` into `aksjer.json`.
+
+**Incident (fixed 2026-08-26).** `AFG` was registered as «Arendals
+Fossekompani ASA» in sector «Fornybar energi» with a matching hand-written
+description — but `AFG.OL` is **AF Gruppen ASA**, a contractor in Industri.
+The whole page described the wrong company. `AFK` is Arendals Fossekompani.
+`sjekk_utdaterte.py` had flagged it as critical `navneendring` 15 days
+earlier and it sat unactioned in the open issue; the alerting worked, the
+follow-up did not. `ALNG` was renamed from «Awilco LNG ASA» in the same pass.
+
+Note that `navn` and `sektor` were *not* synced before this fix, so correcting
+a ticker only took effect on the next full `fetch_stocks.py` run. The
+`navneendring` alert itself clears one run later still, because it compares
+against `vart_navn` in `hentelogg.json` — a snapshot written during fetch.
+
 ---
 
 ## Data Quality Checks

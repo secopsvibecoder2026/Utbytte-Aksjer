@@ -24,12 +24,31 @@ def main():
         beskrivelse_fakta = {t["ticker"]: t.get("beskrivelse_fakta", "") for t in ticker_data}
         ask_egnet_map     = {t["ticker"]: t.get("ask_egnet", True) for t in ticker_data}
         inkorp_map        = {t["ticker"]: t.get("inkorporeringsland", "Norge") for t in ticker_data}
+        navn_map          = {t["ticker"]: t.get("navn", "") for t in ticker_data}
+        sektor_map        = {t["ticker"]: t.get("sektor", "") for t in ticker_data}
 
     with open(AKSJER_F, encoding="utf-8") as f:
         data = json.load(f)
 
     oppdatert = 0
     for a in data["aksjer"]:
+        # Navn og sektor er manuelt vedlikeholdt i tickers.json, men ble ikke
+        # synket hit. Retter man en feilregistrert ticker — AFG sto som
+        # «Arendals Fossekompani ASA» i sektor Fornybar energi, men er AF
+        # Gruppen ASA i Industri — slo rettelsen ikke gjennom før neste fulle
+        # fetch_stocks.py-kjøring. Beskrivelsen under bygges dessuten av
+        # sektoren, så den må være riktig før lag_beskrivelse() kalles.
+        nytt_navn   = navn_map.get(a["ticker"])
+        ny_sektor   = sektor_map.get(a["ticker"])
+        if nytt_navn and nytt_navn != a.get("navn"):
+            print(f"  {a['ticker']}: navn «{a.get('navn')}» → «{nytt_navn}»")
+            a["navn"] = nytt_navn
+            oppdatert += 1
+        if ny_sektor and ny_sektor != a.get("sektor"):
+            print(f"  {a['ticker']}: sektor «{a.get('sektor')}» → «{ny_sektor}»")
+            a["sektor"] = ny_sektor
+            oppdatert += 1
+
         # Teksten i tickers.json er en mal der kun innledningsavsnittet er
         # manuelt forfattet — utbytteprofil- og driver-avsnittene bygges på
         # nytt her, akkurat som i fetch_stocks.py sin hent_aksje(). Kopierer
