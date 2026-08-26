@@ -893,8 +893,8 @@ def valider_aksje(a):
             avvik_pct = abs(beregnet - lagret) / max(beregnet, 0.01) * 100
             if avvik_pct > 25:
                 advarsler.append(
-                    f"[1] Yield-avvik {avvik_pct:.0f}%: "
-                    f"beregnet {beregnet:.2f}% vs lagret {lagret:.2f}%"
+                    f"[1] Yield-avvik {_nf(avvik_pct, 0)}%: "
+                    f"beregnet {_nf(beregnet, 2)}% vs lagret {_nf(lagret, 2)}%"
                 )
 
     # ── 2. Pris-validering ────────────────────────────────────────────────────
@@ -977,7 +977,7 @@ def _generer_kurs_chart_svg(kurs_historikk, valuta="NOK"):
         y_labels += (
             f'<text x="{pad_l - 5}" y="{y + 4:.1f}" '
             f'text-anchor="end" font-size="10" fill="var(--chart-label,#9ca3af)">'
-            f'{val:,.0f}</text>'
+            f'{format(int(val), ",").replace(",", chr(160))}</text>'
             f'<line x1="{pad_l}" y1="{y:.1f}" x2="{W - pad_r}" y2="{y:.1f}" '
             f'stroke="var(--chart-grid,#1f2937)" stroke-width="1" stroke-dasharray="3,4"/>'
         )
@@ -995,7 +995,7 @@ def _generer_kurs_chart_svg(kurs_historikk, valuta="NOK"):
         )
 
     endring = ((priser[-1] - priser[0]) / priser[0] * 100) if priser[0] else 0
-    endring_tekst = f"{'▲' if er_opp else '▼'} {abs(endring):.1f}% siste 52 uker"
+    endring_tekst = f"{'▲' if er_opp else '▼'} {_nf(abs(endring), 1)}% siste 52 uker"
     endring_farge = farge
 
     return f"""<div class="kurs-chart-wrap">
@@ -1059,7 +1059,7 @@ def _generer_hist_chart(hist, valuta="NOK"):
         )
         # yield kan være None når tallet ikke er troverdig (se hent_historiske_utbytter)
         _y = h.get("yield")
-        tip = f'{h["utbytte"]} {valuta}' + (f' · {_y:.1f}% yield' if _y is not None else '')
+        tip = f'{_nf(h["utbytte"], 2)} {valuta}' + (f' · {_nf(_y, 1)}% yield' if _y is not None else '')
         tooltips.append(
             f'<rect class="htip-bg" x="{min(x - 52, W - pad_r - 106):.1f}" y="{max(by - 28, 2):.1f}" '
             f'width="106" height="20" rx="4" fill="#111827" opacity="0" pointer-events="none"/>'
@@ -1077,7 +1077,7 @@ def _generer_hist_chart(hist, valuta="NOK"):
             f'<line x1="{pad_l}" y1="{y:.1f}" x2="{W - pad_r}" y2="{y:.1f}" '
             f'stroke="#e5e7eb" stroke-width="1" class="ytick"/>'
             f'<text x="{pad_l - 4}" y="{y + 4:.1f}" text-anchor="end" '
-            f'font-size="10" fill="#9ca3af">{t}</text>'
+            f'font-size="10" fill="#9ca3af">{_nf(t, 2) if isinstance(t, float) else t}</text>'
         )
 
     svg = (
@@ -1097,6 +1097,19 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
 </script>"""
     )
     return svg
+
+
+def _nf(verdi, desimaler=1):
+    """Formaterer et tall med norsk desimalskilletegn (komma).
+
+    Sidene blandet tidligere «5.78%» fra f-strenger med «37,84 %» fra
+    hardkodet tekst — punktum og komma om hverandre i samme setning.
+    Brukes kun på brukervendte tall; SVG-koordinater skal fortsatt ha
+    punktum, ellers blir path-attributtene ugyldige.
+    """
+    if verdi is None:
+        return "—"
+    return f"{verdi:.{desimaler}f}".replace(".", ",")
 
 
 def _fmt_dato(iso):
@@ -1151,17 +1164,17 @@ def _lag_analyse_tekst(a, sektor_snitt=None):
         diff = yield_ - snitt_s
         if diff > 1.0:
             deler.append(
-                f"Yielden på {yield_:.1f}% er {diff:.1f} prosentpoeng over snittet "
-                f"for {sektor}-sektoren ({snitt_s:.1f}%)."
+                f"Yielden på {_nf(yield_, 1)}% er {_nf(diff, 1)} prosentpoeng over snittet "
+                f"for {sektor}-sektoren ({_nf(snitt_s, 1)}%)."
             )
         elif diff < -1.0:
             deler.append(
-                f"Yielden på {yield_:.1f}% er {abs(diff):.1f} prosentpoeng under snittet "
-                f"for {sektor}-sektoren ({snitt_s:.1f}%)."
+                f"Yielden på {_nf(yield_, 1)}% er {_nf(abs(diff), 1)} prosentpoeng under snittet "
+                f"for {sektor}-sektoren ({_nf(snitt_s, 1)}%)."
             )
         else:
             deler.append(
-                f"Yielden på {yield_:.1f}% er på linje med snittet for {sektor}-sektoren ({snitt_s:.1f}%)."
+                f"Yielden på {_nf(yield_, 1)}% er på linje med snittet for {sektor}-sektoren ({_nf(snitt_s, 1)}%)."
             )
 
     return " ".join(deler)
@@ -1204,18 +1217,18 @@ def _lag_utbytte_profil(a, sektor_snitt):
     if yield_ > 0 and sn > 0:
         if yield_ >= sn * 1.1:
             tekst_deler.append(
-                f"{ticker} gir {yield_:.1f}% direkteavkastning, "
-                f"over sektorsnittet for {sektor.lower()} på {sn:.1f}%."
+                f"{ticker} gir {_nf(yield_, 1)}% direkteavkastning, "
+                f"over sektorsnittet for {sektor} på {_nf(sn, 1)}%."
             )
         elif yield_ <= sn * 0.9:
             tekst_deler.append(
-                f"{ticker} gir {yield_:.1f}% direkteavkastning, "
-                f"noe under sektorsnittet for {sektor.lower()} på {sn:.1f}%."
+                f"{ticker} gir {_nf(yield_, 1)}% direkteavkastning, "
+                f"noe under sektorsnittet for {sektor} på {_nf(sn, 1)}%."
             )
         else:
             tekst_deler.append(
-                f"{ticker} gir {yield_:.1f}% direkteavkastning, "
-                f"nær sektorsnittet for {sektor.lower()} på {sn:.1f}%."
+                f"{ticker} gir {_nf(yield_, 1)}% direkteavkastning, "
+                f"nær sektorsnittet for {sektor} på {_nf(sn, 1)}%."
             )
     if ar_med >= 15:
         tekst_deler.append(
@@ -1262,19 +1275,19 @@ def _lag_historikk_prosa(a):
     deler = []
     deler.append(
         f"{navn} har de siste {antall_ar} årene betalt mellom "
-        f"{min_h['utbytte']:.2f} og {max_h['utbytte']:.2f} {valuta} per aksje i utbytte."
+        f"{_nf(min_h['utbytte'], 2)} og {_nf(max_h['utbytte'], 2)} {valuta} per aksje i utbytte."
     )
     if max_h["ar"] != siste["ar"]:
         _maks_y = max_h.get("yield")
         deler.append(
             f"Det høyeste utbyttet ble registrert i {max_h['ar']} "
-            f"med {max_h['utbytte']:.2f} {valuta} per aksje"
-            + (f" ({_maks_y:.1f}% yield)." if _maks_y is not None else ".")
+            f"med {_nf(max_h['utbytte'], 2)} {valuta} per aksje"
+            + (f" ({_nf(_maks_y, 1)}% yield)." if _maks_y is not None else ".")
         )
     if upa > 0 and yield_ > 0:
         deler.append(
-            f"I {siste['ar']} er utbyttet {siste['utbytte']:.2f} {valuta} per aksje, "
-            f"tilsvarende {yield_:.1f}% direkteavkastning."
+            f"I {siste['ar']} er utbyttet {_nf(siste['utbytte'], 2)} {valuta} per aksje, "
+            f"tilsvarende {_nf(yield_, 1)}% direkteavkastning."
         )
 
     return (
@@ -1560,24 +1573,24 @@ def _lag_investor_vurdering(a, sektor_snitt):
     if sn > 0:
         if yield_ >= sn * 1.2:
             vurdering_deler.append(
-                f"Yielden på {yield_:.1f}% er klart over sektorsnittet for "
-                f"{sektor.lower()} ({sn:.1f}%), noe som reflekterer enten "
+                f"Yielden på {_nf(yield_, 1)}% er klart over sektorsnittet for "
+                f"{sektor} ({_nf(sn, 1)}%), noe som reflekterer enten "
                 f"høy utbyttekapasitet eller at markedet priser inn høyere risiko."
             )
         elif yield_ <= sn * 0.8:
             vurdering_deler.append(
-                f"Yielden på {yield_:.1f}% er under sektorsnittet ({sn:.1f}%), "
+                f"Yielden på {_nf(yield_, 1)}% er under sektorsnittet ({_nf(sn, 1)}%), "
                 f"men {ticker} kompenserer typisk med høyere stabilitet "
                 f"eller sterkere langsiktig vekstutsikter."
             )
         else:
             vurdering_deler.append(
-                f"Yielden på {yield_:.1f}% er nær sektorsnittet for "
-                f"{sektor.lower()} ({sn:.1f}%)."
+                f"Yielden på {_nf(yield_, 1)}% er nær sektorsnittet for "
+                f"{sektor} ({_nf(sn, 1)}%)."
             )
     elif yield_ >= 7:
         vurdering_deler.append(
-            f"Med en direkteavkastning på {yield_:.1f}% er {ticker} "
+            f"Med en direkteavkastning på {_nf(yield_, 1)}% er {ticker} "
             f"blant de høyest-yielding aksjene på Oslo Børs."
         )
 
@@ -1585,12 +1598,12 @@ def _lag_investor_vurdering(a, sektor_snitt):
     if payout > 0:
         if payout < 45:
             vurdering_deler.append(
-                f"Utbetalingsgraden på {payout:.0f}% er lav, "
+                f"Utbetalingsgraden på {_nf(payout, 0)}% er lav, "
                 f"noe som gir solid buffer og rom for utbytteøkninger fremover."
             )
         elif payout > 90:
             vurdering_deler.append(
-                f"Utbetalingsgraden på {payout:.0f}% er høy — "
+                f"Utbetalingsgraden på {_nf(payout, 0)}% er høy — "
                 f"de fleste av overskuddskronene deles ut, "
                 f"og utbyttet er dermed sensitivt for inntjeningsfall."
             )
@@ -1598,12 +1611,12 @@ def _lag_investor_vurdering(a, sektor_snitt):
     # Veksttendensen
     if vekst is not None and vekst > 3:
         vurdering_deler.append(
-            f"Utbyttet har vokst med {vekst:.1f}% per år de siste fem årene, "
+            f"Utbyttet har vokst med {_nf(vekst, 1)}% per år de siste fem årene, "
             f"noe som gjør det attraktivt for langsiktige reinvesteringsstrategier."
         )
     elif vekst is not None and vekst < -5:
         vurdering_deler.append(
-            f"Utbyttet har falt med {abs(vekst):.1f}% per år de siste fem årene, "
+            f"Utbyttet har falt med {_nf(abs(vekst), 1)}% per år de siste fem årene, "
             f"noe som krever at investoren setter seg inn i hva som har drevet nedgangen."
         )
 
@@ -1738,19 +1751,19 @@ def _lag_investor_badges(a):
         risiko_punkter.append(f'Lang utbyttehistorikk ({ar} år) — vist evne til stabil utbetaling')
 
     if payout > 90:
-        risiko_punkter.append(f'Svært høy payout ratio ({payout:.0f}%) — lite buffer ved inntjeningsfall')
+        risiko_punkter.append(f'Svært høy payout ratio ({_nf(payout, 0)}%) — lite buffer ved inntjeningsfall')
     elif payout > 75:
-        risiko_punkter.append(f'Høy payout ratio ({payout:.0f}%) — begrenset reinvesteringsevne')
+        risiko_punkter.append(f'Høy payout ratio ({_nf(payout, 0)}%) — begrenset reinvesteringsevne')
     elif 0 < payout < 50:
-        risiko_punkter.append(f'Sunn payout ratio ({payout:.0f}%) — god buffer')
+        risiko_punkter.append(f'Sunn payout ratio ({_nf(payout, 0)}%) — god buffer')
 
     if 0 < mv < 1e9:
-        risiko_punkter.append(f'Lav markedsverdi ({mv/1e9:.1f} mrd NOK) — økt kursvolatilitet')
+        risiko_punkter.append(f'Lav markedsverdi ({_nf(mv/1e9, 1)} mrd NOK) — økt kursvolatilitet')
     elif mv > 10e9:
-        risiko_punkter.append(f'Stor markedsverdi ({mv/1e9:.0f} mrd NOK) — likvid og stabil')
+        risiko_punkter.append(f'Stor markedsverdi ({_nf(mv/1e9, 0)} mrd NOK) — likvid og stabil')
 
     if yield_ > 12:
-        risiko_punkter.append(f'Svært høy yield ({yield_:.1f}%) — kan indikere markedsskepsis til bærekraft')
+        risiko_punkter.append(f'Svært høy yield ({_nf(yield_, 1)}%) — kan indikere markedsskepsis til bærekraft')
 
     if not ask:
         risiko_punkter.append(f'Registrert utenfor EØS ({land}) — kan ikke holdes i ASK')
@@ -1779,8 +1792,8 @@ def _lag_investor_badges(a):
         'utbyttet kommer fire ganger i året'
     )
     doblingsar = round(70 / vekst) if vekst > 0 else None
-    vekst_suffix = (f' Med +{vekst:.1f}% per år dobles utbyttet på ca. {doblingsar} år.'
-                    if doblingsar else f' Historisk vekst +{vekst:.1f}% per år.')
+    vekst_suffix = (f' Med +{_nf(vekst, 1)}% per år dobles utbyttet på ca. {doblingsar} år.'
+                    if doblingsar else f' Historisk vekst +{_nf(vekst, 1)}% per år.')
     mal_forklaring = {
         'stabil':
             f'Passer investorer som vil ha forutsigbar utbytteinntekt uten store overraskelser. '
@@ -1790,7 +1803,7 @@ def _lag_investor_badges(a):
             + vekst_suffix,
         'hoy_yield':
             f'Passer investorer som prioriterer løpende inntekt fremfor kursvekst. '
-            f'{yield_:.1f}% direkteavkastning er vesentlig over markedssnittet — '
+            f'{_nf(yield_, 1)}% direkteavkastning er vesentlig over markedssnittet — '
             # payout == 0 betyr «ukjent», ikke «lav». Uten dette skillet påsto
             # vi at utbyttet var håndterbart for aksjer vi mangler payout for.
             + ('vurder om utbyttet er bærekraftig på sikt.' if payout > 80
@@ -1954,16 +1967,16 @@ def _lag_faq_seksjon(a, today):
         if snitt5 > 0:
             diff = yield_ - snitt5
             if diff > 1.5:
-                snitt_k = f"Det er {diff:.1f} prosentpoeng over det historiske 5-årssnittet på {snitt5:.1f}%, noe som kan indikere en attraktiv inngangskurs — men sjekk alltid om det skyldes kursfall."
+                snitt_k = f"Det er {_nf(diff, 1)} prosentpoeng over det historiske 5-årssnittet på {_nf(snitt5, 1)}%, noe som kan indikere en attraktiv inngangskurs — men sjekk alltid om det skyldes kursfall."
             elif diff < -1.5:
-                snitt_k = f"Det er {abs(diff):.1f} prosentpoeng under det historiske 5-årssnittet på {snitt5:.1f}%."
+                snitt_k = f"Det er {_nf(abs(diff), 1)} prosentpoeng under det historiske 5-årssnittet på {_nf(snitt5, 1)}%."
             else:
-                snitt_k = f"Det er på linje med det historiske 5-årssnittet på {snitt5:.1f}%."
+                snitt_k = f"Det er på linje med det historiske 5-årssnittet på {_nf(snitt5, 1)}%."
         else:
             snitt_k = ""
         svar = (
-            f"Direkteavkastningen (yield) for {ticker} er {yield_:.2f}%, beregnet som "
-            f"{upa} {valuta} i annualisert utbytte per aksje delt på aksjekursen. "
+            f"Direkteavkastningen (yield) for {ticker} er {_nf(yield_, 2)}%, beregnet som "
+            f"{_nf(upa, 2)} {valuta} i annualisert utbytte per aksje delt på aksjekursen. "
             f"{snitt_k} "
             f"Yield endres daglig fordi den er koblet til kursen: stiger kursen, faller yielden."
         ).strip()
@@ -1975,7 +1988,7 @@ def _lag_faq_seksjon(a, today):
         svar = (
             f"Utbytte fra {navn} beskattes med 37,84 % for personlige aksjonærer "
             f"som eier aksjen direkte (via VPS-konto). "
-            f"Med en yield på {yield_:.2f} % gir det en nettoyield etter skatt på ca. {netto:.2f} %. "
+            f"Med en yield på {_nf(yield_, 2)} % gir det en nettoyield etter skatt på ca. {_nf(netto, 2)} %. "
             f"Eier du aksjen via aksjesparekonto (ASK), utsettes skatten til du tar ut midler — "
             f"utbyttet reinvesteres skattefritt innen kontoen og gir renters-rente-effekt over tid."
         )
@@ -1990,9 +2003,9 @@ def _lag_faq_seksjon(a, today):
             vurd = (f"En payout ratio mellom 50 og 80 % er vanlig for etablerte utbytteaksjer og anses bærekraftig "
                     f"så lenge inntjeningen er stabil. Sjekk at EPS-trenden er positiv.")
         else:
-            vurd = (f"En payout ratio over {payout:.0f} % innebærer at {navn} deler ut en svært stor andel av inntjeningen. "
+            vurd = (f"En payout ratio over {_nf(payout, 0)} % innebærer at {navn} deler ut en svært stor andel av inntjeningen. "
                     f"Det kan holdes oppe med sterk kontantstrøm, men er mer sårbart ved svakere kvartaler.")
-        svar = f"Payout ratio for {navn} er {payout:.0f} % — det vil si andelen av inntjeningen per aksje som utbetales som utbytte. {vurd}"
+        svar = f"Payout ratio for {navn} er {_nf(payout, 0)} % — det vil si andelen av inntjeningen per aksje som utbetales som utbytte. {vurd}"
         qas.append((f"Er utbyttet fra {navn} bærekraftig?", svar))
 
     # 6. Historikk-oppsummering
@@ -2005,9 +2018,9 @@ def _lag_faq_seksjon(a, today):
         min_h    = min(sortert, key=lambda x: x["utbytte"])
         svar = (
             f"exday.no har utbyttedata for {navn} fra {f_ar} til {s_ar}. "
-            f"I denne perioden er det totalt utbetalt {total:.2f} {valuta} per aksje. "
-            f"Høyest enkeltutbytte var {max_h['utbytte']:.2f} {valuta} i {max_h['ar']}, "
-            f"lavest {min_h['utbytte']:.2f} {valuta} i {min_h['ar']}. "
+            f"I denne perioden er det totalt utbetalt {_nf(total, 2)} {valuta} per aksje. "
+            f"Høyest enkeltutbytte var {_nf(max_h['utbytte'], 2)} {valuta} i {max_h['ar']}, "
+            f"lavest {_nf(min_h['utbytte'], 2)} {valuta} i {min_h['ar']}. "
             f"Historikken gir et godt bilde av stabilitet og syklikalitet i selskapets utbetalinger."
         )
         qas.append((f"Hva er utbyttehistorikken til {ticker} de siste årene?", svar))
@@ -2058,6 +2071,11 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     ai_opp       = a.get("ai_oppsummering") or ""
     ai_opp_dato  = a.get("ai_oppsummering_dato") or ""
     hist         = a.get("historiske_utbytter") or []
+    # Betaler selskapet oftere enn årlig, er «Utbytte/aksje» en annualisert
+    # rate — ikke det som er utbetalt hittil. Uten dette leste kortet som om
+    # det motsa historikktabellen rett under.
+    upa_merknad  = (' <span class="kcard-note">annualisert</span>'
+                    if frekvens in ("Kvartalsvis", "Halvårlig", "Månedlig") else "")
     snitt5  = a.get("snitt_yield_5ar") or 0
     valuta  = a.get("valuta") or "NOK"
     payout  = a.get("payout_ratio") or 0
@@ -2067,37 +2085,45 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     lav52   = a.get("52u_lav") or 0
 
     meta_desc = (
-        f"{navn} ({ticker}) betaler {yield_:.2f}% utbytte ({sektor}). "
+        f"{navn} ({ticker}) betaler {_nf(yield_, 2)}% utbytte ({sektor}). "
         f"Ex-dato: {_fmt_dato(ex)}. "
-        f"5-årssnitt yield: {snitt5:.2f}%. "
-        f"Siste utbytte: {upa} {valuta} per aksje. "
+        f"5-årssnitt yield: {_nf(snitt5, 2)}%. "
+        f"Siste utbytte: {_nf(upa, 2)} {valuta} per aksje. "
         f"Oppdatert daglig på exday.no."
     )
 
+    # Inneværende år er ikke ferdig. Uten merking sto «2026 — 3,75 NOK» rett
+    # under stat-kortet «Utbytte/aksje 7,50 NOK» og så ut som en motsigelse:
+    # kortet viser annualisert rate, tabellraden viser det som er utbetalt så
+    # langt i år. Begge er riktige, men de måler ikke det samme.
+    inneverende_ar = int(today[:4]) if today and today[:4].isdigit() else None
     hist_rader = ""
     for h in sorted(hist, key=lambda x: x["ar"], reverse=True):
+        ar_celle = str(h["ar"])
+        if inneverende_ar and h["ar"] == inneverende_ar:
+            ar_celle += ' <span class="hist-paagaar">hittil i år</span>'
         hist_rader += f"""
         <tr>
-          <td>{h["ar"]}</td>
-          <td>{h["utbytte"]} {valuta}</td>
-          <td>{f'{h["yield"]:.2f}%' if h.get("yield") is not None else "—"}</td>
+          <td>{ar_celle}</td>
+          <td>{_nf(h["utbytte"], 2)} {valuta}</td>
+          <td>{f'{_nf(h["yield"], 2)}%' if h.get("yield") is not None else "—"}</td>
         </tr>"""
 
-    pe_rad = f"<tr><td>P/E</td><td>{pe:.1f}</td></tr>" if pe and pe > 0 else ""
+    pe_rad = f"<tr><td>P/E</td><td>{_nf(pe, 1)}</td></tr>" if pe and pe > 0 else ""
 
     pe_card = (
         f'<div class="kcard"><div class="label">P/E</div>'
-        f'<div class="val">{pe:.1f}</div></div>'
+        f'<div class="val">{_nf(pe, 1)}</div></div>'
     ) if pe and pe > 0 else ""
 
-    payout_rad = f"<tr><td>Payout ratio</td><td>{payout:.0f}%</td></tr>" if payout > 0 else ""
+    payout_rad = f"<tr><td>Payout ratio</td><td>{_nf(payout, 0)}%</td></tr>" if payout > 0 else ""
     vekst_rad  = (
-        f"<tr><td>Utbyttevekst 5 år</td><td>{'+' if vekst >= 0 else ''}{vekst:.1f}% p.a.</td></tr>"
+        f"<tr><td>Utbyttevekst 5 år</td><td>{'+' if vekst >= 0 else ''}{_nf(vekst, 1)}% p.a.</td></tr>"
         if vekst is not None else ""
     )
-    mrd_rad    = f"<tr><td>Markedsverdi</td><td>{mrd:.1f} mrd NOK</td></tr>" if mrd > 0 else ""
+    mrd_rad    = f"<tr><td>Markedsverdi</td><td>{_nf(mrd, 1)} mrd NOK</td></tr>" if mrd > 0 else ""
     kurs52_rad = (
-        f"<tr><td>52-ukers kurs</td><td>{lav52} – {hoy52} {valuta}</td></tr>"
+        f"<tr><td>52-ukers kurs</td><td>{_nf(lav52, 2)} – {_nf(hoy52, 2)} {valuta}</td></tr>"
         if hoy52 > 0 and lav52 > 0 else ""
     )
 
@@ -2131,9 +2157,9 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
         "<tbody>"
         f"<tr><td>Sektor</td><td>{sektor}</td></tr>"
         f"<tr><td>Frekvens</td><td>{frekvens}</td></tr>"
-        f"<tr><td>Utbytte per aksje</td><td>{upa} {valuta}</td></tr>"
-        f"<tr><td>Direkteavkastning</td><td>{f'{yield_:.2f}%' if yield_ else '—'}</td></tr>"
-        f"<tr><td>5-årssnitt yield</td><td>{snitt5:.2f}%</td></tr>"
+        f"<tr><td>Utbytte per aksje</td><td>{_nf(upa, 2)} {valuta}</td></tr>"
+        f"<tr><td>Direkteavkastning</td><td>{f'{_nf(yield_, 2)}%' if yield_ else '—'}</td></tr>"
+        f"<tr><td>5-årssnitt yield</td><td>{_nf(snitt5, 2)}%</td></tr>"
         f"<tr><td>År med utbytte</td><td>{ar_med}</td></tr>"
         f"{pe_rad}"
         f"{payout_rad}"
@@ -2245,7 +2271,7 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
             f'<a href="/aksjer/{r["ticker"]}/" class="rel-kort">'
             f'<span class="rel-ticker">{r["ticker"]}</span>'
             f'<span class="rel-navn">{r["navn"]}</span>'
-            f'<span class="rel-yield">{r.get("utbytte_yield", 0):.1f}%</span>'
+            f'<span class="rel-yield">{_nf(r.get("utbytte_yield", 0), 1)}%</span>'
             f'</a>'
             for r in relaterte
         )
@@ -2346,6 +2372,9 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     .kcard .label {{ font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.2rem; }}
     .kcard .val {{ font-size: 1.25rem; font-weight: 700; }}
     .kcard .val.green {{ color: #16a34a; }}
+    .kcard-note {{ font-weight: 500; text-transform: none; letter-spacing: 0; opacity: 0.7; }}
+    .hist-paagaar {{ font-size: 0.7rem; font-weight: 500; color: #6b7280; white-space: nowrap; }}
+    .dark .hist-paagaar {{ color: #9ca3af; }}
     .desc {{ border-radius: 0.75rem; padding: 1rem 1.25rem; margin-bottom: 1.5rem; border: 1px solid; }}
     .desc h2 {{ margin-bottom: 0.5rem; }}
     .analyse {{ border-radius: 0.75rem; padding: 1rem 1.25rem; margin: 1rem 0 1.5rem; border: 1px solid; line-height: 1.75; }}
@@ -2577,11 +2606,11 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     </div>
     <div class="kcard">
       <div class="label">Yield</div>
-      <div class="val green">{f'{yield_:.2f}%' if yield_ else '—'}</div>
+      <div class="val green">{f'{_nf(yield_, 2)}%' if yield_ else '—'}</div>
     </div>
     <div class="kcard">
-      <div class="label">Utbytte/aksje</div>
-      <div class="val">{upa} {valuta}</div>
+      <div class="label">Utbytte/aksje{upa_merknad}</div>
+      <div class="val">{_nf(upa, 2)} {valuta}</div>
     </div>
     <div class="kcard">
       <div class="label">Ex-dato</div>
@@ -2597,7 +2626,7 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     </div>
     <div class="kcard">
       <div class="label">5-årssnitt yield</div>
-      <div class="val green">{snitt5:.2f}%</div>
+      <div class="val green">{_nf(snitt5, 2)}%</div>
     </div>
     <div class="kcard">
       <div class="label">År med utbytte</div>
@@ -2804,7 +2833,7 @@ def generer_aksjesider(aksjer, root_dir):
       <a href="/aksjer/{t}/" class="ak-kort">
         <div class="ak-kort-topp">
           <span class="ak-kort-tk">{t}</span>
-          <span class="ak-kort-yield">{yield_:.2f}%</span>
+          <span class="ak-kort-yield">{_nf(yield_, 2)}%</span>
         </div>
         <div class="ak-kort-navn">{navn}</div>
         <div class="ak-kort-meta">{sektor} · {frekvens}{f' · {ar} år' if ar > 0 else ''}</div>
@@ -2839,7 +2868,7 @@ def generer_aksjesider(aksjer, root_dir):
           <td>{a["navn"]}</td>
           <td>{a.get("sektor") or "—"}</td>
           <td>{a.get("pris") or "—"} {a.get("valuta","NOK")}</td>
-          <td>{a.get("utbytte_yield", 0):.2f}%</td>
+          <td>{_nf(a.get("utbytte_yield", 0), 2)}%</td>
           <td>{ex}</td>
         </tr>"""
 
@@ -3040,7 +3069,7 @@ def generer_aksjesider(aksjer, root_dir):
         <div class="hero-stat-lbl">Med utbytte</div>
       </div>
       <div class="hero-stat">
-        <div class="hero-stat-num">{snitt_yield:.1f}%</div>
+        <div class="hero-stat-num">{_nf(snitt_yield, 1)}%</div>
         <div class="hero-stat-lbl">Snitt-yield</div>
       </div>
       <div class="hero-stat">
@@ -3310,12 +3339,12 @@ def generer_sektorsider(aksjer, root_dir):
           <td><a href="/aksjer/{t}/">{t}</a></td>
           <td>{a["navn"]}</td>
           <td>{a.get("pris") or "—"} {a.get("valuta","NOK")}</td>
-          <td class="yield">{a.get("utbytte_yield", 0):.2f}%</td>
+          <td class="yield">{_nf(a.get("utbytte_yield", 0), 2)}%</td>
           <td>{ex}</td>
         </tr>"""
 
         meta_desc = (f"{len(aksjer_sortert)} norske {sektor.lower()}-aksjer på Oslo Børs med "
-                     f"gjennomsnittlig utbytteyield på {snitt_yield:.1f}%. "
+                     f"gjennomsnittlig utbytteyield på {_nf(snitt_yield, 1)}%. "
                      f"Se yield, ex-dato og historikk på exday.no.")
 
         json_ld = json.dumps({
@@ -3464,8 +3493,8 @@ def generer_sektorsider(aksjer, root_dir):
   <p class="sub">{len(aksjer_sortert)} norske {sektor.lower()}-aksjer på Oslo Børs. Sortert etter direkteavkastning.</p>
   <div class="stats">
     <div class="stat"><div class="stat-val">{len(aksjer_sortert)}</div><div class="stat-lbl">Aksjer</div></div>
-    <div class="stat"><div class="stat-val">{snitt_yield:.1f}%</div><div class="stat-lbl">Snitt yield</div></div>
-    <div class="stat"><div class="stat-val">{max(a.get("utbytte_yield",0) for a in aksjer_sortert):.1f}%</div><div class="stat-lbl">Høyeste yield</div></div>
+    <div class="stat"><div class="stat-val">{_nf(snitt_yield, 1)}%</div><div class="stat-lbl">Snitt yield</div></div>
+    <div class="stat"><div class="stat-val">{_nf(max(a.get("utbytte_yield",0) for a in aksjer_sortert), 1)}%</div><div class="stat-lbl">Høyeste yield</div></div>
   </div>
   <table>
     <thead><tr><th>Ticker</th><th>Navn</th><th>Kurs</th><th>Yield</th><th>Ex-dato</th></tr></thead>
@@ -3521,7 +3550,7 @@ def generer_sektorsider(aksjer, root_dir):
         <span class="sk-ikon">{ikon}</span>
         <div class="sk-tekst">
           <div class="sk-navn">{sektor}</div>
-          <div class="sk-antall">{antall} aksjer · snitt {snitt:.1f}%</div>
+          <div class="sk-antall">{antall} aksjer · snitt {_nf(snitt, 1)}%</div>
         </div>
         <span class="sk-arrow">→</span>
       </div>
@@ -3715,15 +3744,15 @@ def generer_topplistesider(aksjer, root_dir):
             "sort_key": lambda a: a.get("utbytte_yield", 0),
             "reverse":  True,
             "kolonner": [
-                ("Yield",        lambda a: f'<td class="metric">{a["utbytte_yield"]:.2f}%</td>'),
+                ("Yield",        lambda a: f'<td class="metric">{_nf(a["utbytte_yield"], 2)}%</td>'),
                 ("Pris",         lambda a: f'<td>{a.get("pris") or "—"} {a.get("valuta","NOK")}</td>'),
-                ("Payout",       lambda a: f'<td>{a["payout_ratio"]:.0f}% </td>' if a.get("payout_ratio") else '<td>—</td>'),
+                ("Payout",       lambda a: f'<td>{_nf(a["payout_ratio"], 0)}% </td>' if a.get("payout_ratio") else '<td>—</td>'),
                 ("Ex-dato",      lambda a: f'<td>{_fmt_dato(a.get("ex_dato"))}</td>'),
             ],
             "stat_lbl": "Snitt yield",
-            "stat_fn":  lambda topp: f'{sum(a["utbytte_yield"] for a in topp)/len(topp):.1f}%',
+            "stat_fn":  lambda topp: f'{_nf(sum(a["utbytte_yield"] for a in topp)/len(topp), 1)}%',
             "stat2_lbl":"Høyeste yield",
-            "stat2_fn": lambda topp: f'{topp[0]["utbytte_yield"]:.2f}%',
+            "stat2_fn": lambda topp: f'{_nf(topp[0]["utbytte_yield"], 2)}%',
         },
         {
             "slug":     "utbyttevekst",
@@ -3735,15 +3764,15 @@ def generer_topplistesider(aksjer, root_dir):
             "sort_key": lambda a: a.get("utbytte_vekst_5ar", 0),
             "reverse":  True,
             "kolonner": [
-                ("Vekst 5år",    lambda a: f'<td class="metric">+{a["utbytte_vekst_5ar"]:.1f}%/år</td>'),
-                ("Yield nå",     lambda a: f'<td>{a.get("utbytte_yield",0):.2f}%</td>'),
+                ("Vekst 5år",    lambda a: f'<td class="metric">+{_nf(a["utbytte_vekst_5ar"], 1)}%/år</td>'),
+                ("Yield nå",     lambda a: f'<td>{_nf(a.get("utbytte_yield",0), 2)}%</td>'),
                 ("Pris",         lambda a: f'<td>{a.get("pris") or "—"} {a.get("valuta","NOK")}</td>'),
                 ("Ex-dato",      lambda a: f'<td>{_fmt_dato(a.get("ex_dato"))}</td>'),
             ],
             "stat_lbl": "Snitt vekst",
-            "stat_fn":  lambda topp: f'+{sum(a["utbytte_vekst_5ar"] for a in topp)/len(topp):.1f}%/år',
+            "stat_fn":  lambda topp: f'+{_nf(sum(a["utbytte_vekst_5ar"] for a in topp)/len(topp), 1)}%/år',
             "stat2_lbl":"Høyeste vekst",
-            "stat2_fn": lambda topp: f'+{topp[0]["utbytte_vekst_5ar"]:.1f}%/år',
+            "stat2_fn": lambda topp: f'+{_nf(topp[0]["utbytte_vekst_5ar"], 1)}%/år',
         },
         {
             "slug":     "konsistente-utbytteaksjer",
@@ -3756,12 +3785,12 @@ def generer_topplistesider(aksjer, root_dir):
             "reverse":  True,
             "kolonner": [
                 ("År m/utbytte", lambda a: f'<td class="metric">{a["ar_med_utbytte"]} år</td>'),
-                ("Yield",        lambda a: f'<td>{a.get("utbytte_yield",0):.2f}%</td>'),
+                ("Yield",        lambda a: f'<td>{_nf(a.get("utbytte_yield",0), 2)}%</td>'),
                 ("Pris",         lambda a: f'<td>{a.get("pris") or "—"} {a.get("valuta","NOK")}</td>'),
                 ("Ex-dato",      lambda a: f'<td>{_fmt_dato(a.get("ex_dato"))}</td>'),
             ],
             "stat_lbl": "Snitt år",
-            "stat_fn":  lambda topp: f'{sum(a["ar_med_utbytte"] for a in topp)/len(topp):.0f} år',
+            "stat_fn":  lambda topp: f'{_nf(sum(a["ar_med_utbytte"] for a in topp)/len(topp), 0)} år',
             "stat2_lbl":"Flest år",
             "stat2_fn": lambda topp: f'{topp[0]["ar_med_utbytte"]} år',
         },
@@ -3775,15 +3804,15 @@ def generer_topplistesider(aksjer, root_dir):
             "sort_key": lambda a: a.get("payout_ratio", 0),
             "reverse":  False,
             "kolonner": [
-                ("Payout ratio", lambda a: f'<td class="metric">{a["payout_ratio"]:.0f}%</td>'),
-                ("Yield",        lambda a: f'<td>{a.get("utbytte_yield",0):.2f}%</td>'),
+                ("Payout ratio", lambda a: f'<td class="metric">{_nf(a["payout_ratio"], 0)}%</td>'),
+                ("Yield",        lambda a: f'<td>{_nf(a.get("utbytte_yield",0), 2)}%</td>'),
                 ("Pris",         lambda a: f'<td>{a.get("pris") or "—"} {a.get("valuta","NOK")}</td>'),
                 ("Ex-dato",      lambda a: f'<td>{_fmt_dato(a.get("ex_dato"))}</td>'),
             ],
             "stat_lbl": "Snitt payout",
-            "stat_fn":  lambda topp: f'{sum(a["payout_ratio"] for a in topp)/len(topp):.0f}%',
+            "stat_fn":  lambda topp: f'{_nf(sum(a["payout_ratio"] for a in topp)/len(topp), 0)}%',
             "stat2_lbl":"Laveste payout",
-            "stat2_fn": lambda topp: f'{topp[0]["payout_ratio"]:.0f}%',
+            "stat2_fn": lambda topp: f'{_nf(topp[0]["payout_ratio"], 0)}%',
         },
     ]
 
