@@ -833,6 +833,11 @@ def hent_aksje(meta):
             "data_kilde": "yahoo",
         }
 
+        # Lagres i aksjer.json så både SEO-siden og appen viser samme tekst,
+        # bygget fra denne kjøringens tall. Erstatter ai_oppsummering, som var
+        # frosset prosa med tall støpt inn.
+        resultat["utbyttehistorikk_tekst"] = _lag_utbyttehistorikk_tekst(resultat)
+
         # Diagnostikk for sjekk_utdaterte.py. Yahoos eget selskapsnavn lagres
         # ikke i aksjer.json (der bruker vi navnet fra tickers.json), så uten
         # denne loggen ville en navneendring aldri blitt synlig.
@@ -1122,6 +1127,120 @@ def _fmt_dato(iso):
         return f"{d.day}. {mnd[d.month-1]} {d.year}"
     except Exception:
         return iso
+
+
+def _lag_utbyttehistorikk_tekst(a, i_dag_ar=None):
+    """Tolker aksjens EGEN utbyttehistorikk — form, stabilitet og yield mot eget snitt.
+
+    Erstatter den tidligere «AI-oppsummering», som var frosset prosa med tall
+    støpt inn: 42 av 139 hadde feil yield etter sju uker, og innholdet gjentok
+    stort sett «Vurdering som utbytteaksje». Denne bygges fra tallene ved hver
+    kjøring og er vinklet mot det de andre seksjonene ikke dekker — «Vurdering»
+    sammenligner mot sektoren, denne mot aksjens egen historie.
+
+    Inneværende år holdes utenfor mønsteranalysen. Raden er hittil-i-år og
+    ville fått nesten hver eneste aksje til å se ut som den nettopp kuttet.
+    """
+    hist = sorted((a.get("historiske_utbytter") or []), key=lambda h: h["ar"])
+    if i_dag_ar is None:
+        i_dag_ar = datetime.date.today().year
+    ferdige = [h for h in hist if h["ar"] < i_dag_ar and (h.get("utbytte") or 0) > 0]
+    if len(ferdige) < 3:
+        return ""
+
+    belop  = [h["utbytte"] for h in ferdige]
+    forste, siste = ferdige[0], ferdige[-1]
+    kutt   = sum(1 for i in range(1, len(belop)) if belop[i] < belop[i - 1] * 0.95)
+    okning = sum(1 for i in range(1, len(belop)) if belop[i] > belop[i - 1] * 1.05)
+    spenn  = (max(belop) / min(belop)) if min(belop) > 0 else 0
+    ar_str = f"{forste['ar']}–{siste['ar']}"
+
+    deler = []
+
+    # 1) Formen på utviklingen
+    if kutt == 0 and okning >= 2:
+        deler.append(
+            f"Utbyttet har steget uten et eneste kutt fra {ar_str}, "
+            f"fra {_nf(forste['utbytte'], 2)} til {_nf(siste['utbytte'], 2)} kroner per aksje."
+        )
+    elif kutt == 0:
+        deler.append(
+            f"Utbyttet har vært stabilt eller stigende gjennom hele {ar_str}, uten kutt."
+        )
+    elif siste["utbytte"] > forste["utbytte"] * 1.05:
+        deler.append(
+            f"Utbyttet er samlet opp fra {_nf(forste['utbytte'], 2)} til "
+            f"{_nf(siste['utbytte'], 2)} kroner per aksje i {ar_str}, men veien dit gikk "
+            f"gjennom {kutt} {'kutt' if kutt == 1 else 'kutt'} underveis."
+        )
+    elif siste["utbytte"] < forste["utbytte"] * 0.95:
+        deler.append(
+            f"Utbyttet er lavere nå enn i {forste['ar']} — ned fra "
+            f"{_nf(forste['utbytte'], 2)} til {_nf(siste['utbytte'], 2)} kroner per aksje, "
+            f"med {kutt} {'nedgangsår' if kutt == 1 else 'nedgangsår'} i perioden."
+        )
+    else:
+        deler.append(
+            f"Utbyttet ligger omtrent på samme nivå som i {forste['ar']}, "
+            f"men har svingt underveis med {kutt} {'nedgangsår' if kutt == 1 else 'nedgangsår'}."
+        )
+
+    # 2) Hva spennet mellom høyeste og laveste år faktisk betyr.
+    #    Uten kutt skyldes et stort spenn vekst, ikke uforutsigbarhet — WAWI fikk
+    #    ellers både «uten et eneste kutt» og «lite forutsigbar» i samme avsnitt,
+    #    og DNB ble kalt «jevn» etter å ha nær doblet utbyttet.
+    if kutt == 0:
+        if spenn >= 3:
+            deler.append(
+                f"Veksten er kraftig: siste år er {_nf(spenn, 1)} ganger det første. "
+                f"Så bratte løft holder sjelden samme takt over tid."
+            )
+        elif spenn >= 1.5:
+            deler.append(f"Samlet er utbetalingen {_nf(spenn, 1)}-doblet i perioden.")
+        elif len(ferdige) >= 4:
+            deler.append("Nivået har holdt seg jevnt fra år til år.")
+    elif spenn >= 3:
+        deler.append(
+            f"Spennet er stort: høyeste år er {_nf(spenn, 1)} ganger det laveste, "
+            f"så størrelsen på utbetalingen er lite forutsigbar fra år til år."
+        )
+    elif spenn >= 1.8:
+        deler.append(
+            f"Høyeste år er {_nf(spenn, 1)} ganger det laveste — merkbare svingninger, "
+            f"men innenfor et gjenkjennelig spenn."
+        )
+
+    # 3) Dagens yield mot aksjens eget snitt — «Vurdering» måler mot sektoren
+    y  = a.get("utbytte_yield") or 0
+    s5 = a.get("snitt_yield_5ar") or 0
+    if y > 0 and s5 > 0:
+        avvik = y - s5
+        if avvik > max(1.0, s5 * 0.2):
+            # Forklaringen må stemme med utviklingen over. Uten dette skillet
+            # sto det «ikke fordi utbyttet er hevet» rett under en setning om at
+            # utbyttet var mer enn tredoblet (ORK, WAWI).
+            if kutt == 0 and siste["utbytte"] > forste["utbytte"] * 1.5:
+                aarsak = " — her drevet av at utbyttet er kraftig hevet"
+            elif kutt == 0:
+                aarsak = ""
+            else:
+                aarsak = " — ofte fordi kursen har falt, ikke fordi utbyttet er hevet"
+            deler.append(
+                f"Dagens yield på {_nf(y, 1)} % ligger over aksjens eget 5-årssnitt "
+                f"på {_nf(s5, 1)} %{aarsak}."
+            )
+        elif avvik < -max(1.0, s5 * 0.2):
+            deler.append(
+                f"Dagens yield på {_nf(y, 1)} % er lavere enn aksjens eget 5-årssnitt "
+                f"på {_nf(s5, 1)} %."
+            )
+        else:
+            deler.append(
+                f"Dagens yield på {_nf(y, 1)} % ligger nær aksjens eget 5-årssnitt "
+                f"på {_nf(s5, 1)} %."
+            )
+
+    return " ".join(deler)
 
 
 def _lag_analyse_tekst(a, sektor_snitt=None):
@@ -2068,8 +2187,6 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     pe           = a.get("pe_ratio") or 0
     ar_med       = a.get("ar_med_utbytte") or 0
     besk         = a.get("beskrivelse_fakta") or a.get("beskrivelse") or ""
-    ai_opp       = a.get("ai_oppsummering") or ""
-    ai_opp_dato  = a.get("ai_oppsummering_dato") or ""
     hist         = a.get("historiske_utbytter") or []
     # Betaler selskapet oftere enn årlig, er «Utbytte/aksje» en annualisert
     # rate — ikke det som er utbetalt hittil. Uten dette leste kortet som om
@@ -2129,13 +2246,19 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
 
     om_seksjon = f'<div class="desc"><h2>Om selskapet</h2><p>{besk}</p></div>' if besk else ""
 
-    ai_dato_tekst = f' <span class="ai-dato">Oppdatert {ai_opp_dato}</span>' if ai_opp_dato else ""
+    # Het tidligere «AI-oppsummering» og viste frosset prosa med tall støpt inn.
+    # Teksten bygges nå fra levende tall ved hver kjøring, så navnet ville vært
+    # direkte feil — dette er ingen AI-generert tekst.
+    # Lest fra aksjer.json når det finnes, ellers bygget her — begge veier
+    # gir samme tekst, og appen viser den samme.
+    hist_tekst = a.get("utbyttehistorikk_tekst") or _lag_utbyttehistorikk_tekst(
+        a, int(today[:4]) if today[:4].isdigit() else None)
     ai_oppsummering_seksjon = (
         f'<div class="ai-oppsummering">'
-        f'<h2>AI-oppsummering{ai_dato_tekst}</h2>'
-        f'<p>{ai_opp}</p>'
+        f'<h2>Utbyttehistorikken kort fortalt</h2>'
+        f'<p>{hist_tekst}</p>'
         f'</div>'
-    ) if ai_opp else ""
+    ) if hist_tekst else ""
 
     analyse_tekst = _lag_analyse_tekst(a, sektor_snitt)
     # Overskriften må matche innholdet. Seksjonen inneholder datoer bare når
@@ -2381,7 +2504,6 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     .analyse h2 {{ margin-bottom: 0.4rem; }}
     .ai-oppsummering {{ border-radius: 0.75rem; padding: 1rem 1.25rem; margin: 1rem 0 1.5rem; border: 1px solid; line-height: 1.75; }}
     .ai-oppsummering h2 {{ margin-bottom: 0.4rem; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }}
-    .ai-dato {{ font-size: 0.7rem; font-weight: 400; padding: 0.15rem 0.5rem; border-radius: 9999px; }}
     h2 {{ font-size: 1rem; font-weight: 700; margin-bottom: 0.75rem; }}
     table {{ width: 100%; border-collapse: collapse; border-radius: 0.75rem; overflow: hidden; margin-bottom: 1.5rem; font-size: 0.9rem; border: 1px solid; }}
     th {{ padding: 0.6rem 1rem; text-align: left; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; }}
@@ -2491,7 +2613,6 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     .analyse h2 {{ color: #15803d; }}
     .ai-oppsummering {{ background: #eff6ff; border-color: #bfdbfe; color: #374151; }}
     .ai-oppsummering h2 {{ color: #1d4ed8; }}
-    .ai-dato {{ background: #dbeafe; color: #1e40af; }}
     h2 {{ color: #374151; }}
     table {{ background: #fff; border-color: #e5e7eb; }}
     th {{ background: #f3f4f6; color: #6b7280; }}
@@ -2532,7 +2653,6 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     .dark .analyse h2 {{ color: #4ade80; }}
     .dark .ai-oppsummering {{ background: #0f1729; border-color: #1e3a5f; color: #d1d5db; }}
     .dark .ai-oppsummering h2 {{ color: #93c5fd; }}
-    .dark .ai-dato {{ background: #1e3a5f; color: #93c5fd; }}
     .dark h2 {{ color: #d1d5db; }}
     .dark table {{ background: #111827; border-color: #1f2937; }}
     .dark th {{ background: #1f2937; color: #9ca3af; }}

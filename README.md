@@ -96,7 +96,6 @@ Ingen server-side runtime — all logikk kjører i nettleseren eller i planlagte
 │   ├── valider_data.py         # Datakvalitetssjekk (blokkerer ved kritiske feil)
 │   ├── sjekk_utdaterte.py      # Fanger avnoterte/omdøpte/dupliserte tickere
 │   ├── oppdater_hendelser.py   # Hendelseskalender fra Newsweb
-│   ├── ai_oppsummering.py      # Ukentlige AI-oppsummeringer (Claude API)
 │   ├── hent_beskrivelser.py    # Engangsjobb: faktabeskrivelser fra Yahoo
 │   └── test_sjekk_utdaterte.py # 44 tester (stdlib unittest, uten nettverk)
 ├── tests/*.test.js             # 63 JS-tester (portefølje, storage, ui)
@@ -132,7 +131,6 @@ python -m http.server 8000             # Lokal server (SW krever localhost/HTTPS
 | `update-og-deploy.yml` | Hverdager 07/10/13/16 UTC | Henter data, validerer, sjekker utdaterte tickere, committer, deployer |
 | `oppdater-priser.yml` | Hvert 15. min hverdager 08–17 UTC | Oppdaterer `priser.json`, utløser lettvekts-deploy |
 | `deploy-only.yml` | `workflow_dispatch` | Deployer main til Pages uten datahenting |
-| `ai-oppsummering.yml` | Mandager 06:00 UTC | Genererer AI-oppsummeringer via Claude API |
 | `tester.yml` | Push/PR mot `assets/`, `scripts/`, `tests/` | Kjører alle 107 tester |
 
 Datajobben og Pages-deployen bruker atskilte concurrency-grupper, så en priscommit aldri kan kansellere en pågående datahenting.
@@ -154,7 +152,7 @@ Datajobben og Pages-deployen bruker atskilte concurrency-grupper, så en priscom
 | `ROADMAP.md` / `ROADMAP_NYE_IDEER.md` | Planlagte features og levende backlog |
 | `ROADMAP_COMPLETED.md` | Logg over ferdigstilte features |
 | `SECURITY_ROADMAP.md` | Sikkerhetsgjennomgang og status |
-| `AI_OPPSUMMERING_SETUP.md` | Oppsett av AI-oppsummeringer |
+| `HENT_BESKRIVELSER_SETUP.md` | Oppsett av faktabeskrivelser fra Yahoo |
 | `KODE_REVIEW.md` / `PROSJEKT_REVIEW.md` | Historiske gjennomganger (øyeblikksbilder) |
 
 ## Ansvarsfraskrivelse

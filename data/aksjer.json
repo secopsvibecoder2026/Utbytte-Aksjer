@@ -57,8 +57,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 4,6 % er solid, og P/E på 14,2 er moderat. Utbetalingsgraden på 67 % er balansert og bærekraftig. Selskapet har en lang utbyttehistorikk på 25 år, og utbyttet har vokst sterkt (~18,1 %/år siste fem år). Som energiselskap er utbyttet tett koblet til olje- og gasspriser og dermed syklisk. Egnet for utbytteinvestorer som tåler sykliske svingninger og har en lang tidshorisont.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet er samlet opp fra 16,52 til 19,16 kroner per aksje i 2022–2025, men veien dit gikk gjennom 2 kutt underveis. Høyeste år er 2,1 ganger det laveste — merkbare svingninger, men innenfor et gjenkjennelig spenn. Dagens yield på 3,8 % er lavere enn aksjens eget 5-årssnitt på 5,9 %."
     },
     {
       "ticker": "DNB",
@@ -115,8 +114,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 6,1 % er høy og attraktiv for inntektsinvestorer, og P/E på 10,6 er moderat. Utbetalingsgraden på 60 % er balansert og bærekraftig. Selskapet har en lang utbyttehistorikk på 21 år, og utbyttet har vokst sterkt (~14,9 %/år siste fem år). Sparebanker og finansselskaper gir normalt stabile og forutsigbare utbytter år etter år. Godt egnet for langsiktige utbytteinvestorer som ønsker stabil kontantstrøm.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet har steget uten et eneste kutt fra 2022–2025, fra 9,75 til 16,75 kroner per aksje. Samlet er utbetalingen 1,7-doblet i perioden. Dagens yield på 5,7 % ligger over aksjens eget 5-årssnitt på 4,7 % — her drevet av at utbyttet er kraftig hevet."
     },
     {
       "ticker": "TEL",
@@ -173,8 +171,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 6,9 % er høy og attraktiv for inntektsinvestorer, og P/E på 11,5 er moderat. Utbetalingsgraden på 78 % er høy — mesteparten av inntjeningen deles ut. Selskapet har en lang utbyttehistorikk på 25 år, med moderat vekst (~4,6 %/år). Telekom er en defensiv sektor med jevn kontantstrøm som støtter forutsigbare utbytter. Godt egnet for langsiktige utbytteinvestorer som ønsker stabil kontantstrøm.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet har vært stabilt eller stigende gjennom hele 2022–2025, uten kutt. Nivået har holdt seg jevnt fra år til år. Dagens yield på 7,1 % ligger nær aksjens eget 5-årssnitt på 6,3 %."
     },
     {
       "ticker": "ORK",
@@ -231,8 +228,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 9,3 % er høy og attraktiv for inntektsinvestorer, og P/E på 16,8 er noe høy. Utbetalingsgraden på 62 % er balansert og bærekraftig. Selskapet har en lang utbyttehistorikk på 27 år, og utbyttet har vokst sterkt (~18,9 %/år siste fem år). Forbruksvarer er en relativt defensiv sektor med jevn etterspørsel. Godt egnet for langsiktige utbytteinvestorer som ønsker stabil kontantstrøm.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet har steget uten et eneste kutt fra 2022–2025, fra 3,00 til 10,00 kroner per aksje. Veksten er kraftig: siste år er 3,3 ganger det første. Så bratte løft holder sjelden samme takt over tid. Dagens yield på 10,4 % ligger over aksjens eget 5-årssnitt på 5,8 % — her drevet av at utbyttet er kraftig hevet."
     },
     {
       "ticker": "MOWI",
@@ -289,8 +285,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 3,6 % er moderat, og P/E på 10,1 er moderat. En lav utbetalingsgrad på 33 % gir god margin til å opprettholde og øke utbyttet. Selskapet har en lang utbyttehistorikk på 13 år, med moderat vekst (~2,5 %/år). Som havbruksselskap varierer inntjening og utbytte med laksepris og biologiske forhold. Egnet for utbytteinvestorer som tåler sykliske svingninger og har en lang tidshorisont.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet er lavere nå enn i 2022 — ned fra 7,35 til 6,65 kroner per aksje, med 1 nedgangsår i perioden. Dagens yield på 4,3 % ligger over aksjens eget 5-årssnitt på 3,0 % — ofte fordi kursen har falt, ikke fordi utbyttet er hevet."
     },
     {
       "ticker": "AKRBP",
@@ -347,8 +342,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 8,2 % er høy og attraktiv for inntektsinvestorer, og P/E på 33,4 er høy og priser inn videre vekst. Utbetalingsgraden over 100 % (280 %) betyr at utbyttet overstiger regnskapsmessig resultat og bør følges nøye. Selskapet har en lang utbyttehistorikk på 11 år, og utbyttet har vokst sterkt (~14,8 %/år siste fem år). Som energiselskap er utbyttet tett koblet til olje- og gasspriser og dermed syklisk. Best egnet for risikovillige investorer som forstår syklisiteten i sektoren.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet har steget uten et eneste kutt fra 2022–2025, fra 19,30 til 26,28 kroner per aksje. Nivået har holdt seg jevnt fra år til år. Dagens yield på 7,4 % ligger nær aksjens eget 5-årssnitt på 6,5 %."
     },
     {
       "ticker": "NHY",
@@ -405,8 +399,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 3,5 % er moderat, og P/E på 27,6 er høy og priser inn videre vekst. Utbetalingsgraden på 72 % er balansert og bærekraftig. Selskapet har en lang utbyttehistorikk på 26 år, men trenden har vært fallende. Som materialselskap er inntjeningen syklisk og følger råvarepriser og industriell etterspørsel. Egnet for utbytteinvestorer som tåler sykliske svingninger og har en lang tidshorisont.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet er lavere nå enn i 2022 — ned fra 6,85 til 2,25 kroner per aksje, med 3 nedgangsår i perioden. Spennet er stort: høyeste år er 3,0 ganger det laveste, så størrelsen på utbetalingen er lite forutsigbar fra år til år. Dagens yield på 3,2 % er lavere enn aksjens eget 5-årssnitt på 4,4 %."
     },
     {
       "ticker": "YAR",
@@ -463,8 +456,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 1,1 % er lav, og P/E på 7,9 ser lav ut, men lave multipler er vanlig på syklisk resultattopp. En lav utbetalingsgrad på 9 % gir god margin til å opprettholde og øke utbyttet. Selskapet har en lang utbyttehistorikk på 22 år, med moderat vekst (~1,9 %/år). Som materialselskap er inntjeningen syklisk og følger råvarepriser og industriell etterspørsel. Egnet for utbytteinvestorer som tåler sykliske svingninger og har en lang tidshorisont.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet er lavere nå enn i 2022 — ned fra 40,00 til 5,00 kroner per aksje, med 1 nedgangsår i perioden. Spennet er stort: høyeste år er 11,0 ganger det laveste, så størrelsen på utbetalingen er lite forutsigbar fra år til år. Dagens yield på 1,1 % er lavere enn aksjens eget 5-årssnitt på 5,6 %."
     },
     {
       "ticker": "SALM",
@@ -521,8 +513,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 4,8 % er solid, og P/E på 30,5 er høy og priser inn videre vekst. Utbetalingsgraden over 100 % (145 %) betyr at utbyttet overstiger regnskapsmessig resultat og bør følges nøye. Selskapet har en lang utbyttehistorikk på 17 år, men trenden har vært fallende. Som havbruksselskap varierer inntjening og utbytte med laksepris og biologiske forhold. Best egnet for risikovillige investorer som forstår syklisiteten i sektoren.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet er samlet opp fra 20,00 til 22,00 kroner per aksje i 2022–2025, men veien dit gikk gjennom 1 kutt underveis. Dagens yield på 3,8 % ligger nær aksjens eget 5-årssnitt på 3,7 %."
     },
     {
       "ticker": "SRBNK",
@@ -547,10 +538,9 @@
       "beskrivelse": "Ledende regional sparebank på Sør-Vestlandet. Kjent for høyt og stabilt utbytte med god vekst. Aksjen er notert på Oslo Børs med en markedsverdi på rundt 31 milliarder kroner.\n\nUtbyttet utbetales halvårlig — to utbetalinger i året, og selskapet har holdt dette gående i 20 år på rad. Direkteavkastningen er 8.1%. Utbetalingsgraden er 60%, noe som er balansert for en moden utbytteaksje. Utbyttet har vokst med i snitt 14.5% per år de siste fem årene.\n\nRentenivå og kredittap påvirker inntjeningen, mens regulatoriske kapitalkrav setter rammer for hva som kan deles ut.",
       "valuta": "NOK",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 8,1 % er høy og attraktiv for inntektsinvestorer, og P/E på 7,8 er lav — en attraktiv prising. Utbetalingsgraden på 60 % er balansert og bærekraftig. Selskapet har en lang utbyttehistorikk på 20 år, og utbyttet har vokst sterkt (~14,5 %/år siste fem år). Sparebanker og finansselskaper gir normalt stabile og forutsigbare utbytter år etter år. Godt egnet for langsiktige utbytteinvestorer som ønsker stabil kontantstrøm.",
-      "ai_oppsummering_dato": "2026-07-03",
       "ask_egnet": true,
-      "inkorporeringsland": "Norge"
+      "inkorporeringsland": "Norge",
+      "utbyttehistorikk_tekst": ""
     },
     {
       "ticker": "GOGL",
@@ -575,10 +565,9 @@
       "beskrivelse": "Verdens største tørrbulkrederi. Volatilt men potensielt svært høyt utbytte koblet til shippingratene. Aksjen er notert på Oslo Børs med en markedsverdi på rundt 21 milliarder kroner.\n\nUtbyttet utbetales kvartalsvis — fire utbetalinger i året, og selskapet har holdt dette gående i 8 år på rad. Direkteavkastningen er 11.0%. En utbetalingsgrad på 85% betyr at det meste av inntjeningen deles ut — utbyttet er dermed sensitivt for resultatsvingninger. Utbyttet har vokst med i snitt 22.1% per år de siste fem årene.\n\nFraktrater varierer kraftig med globalt handelsmønster og flåtekapasitet, og utbyttet svinger tilsvarende.",
       "valuta": "USD",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 11,0 % er svært høy og gjenspeiler ofte høy risiko eller en syklisk topp, og P/E på 6,2 ser lav ut, men lave multipler er vanlig på syklisk resultattopp. Utbetalingsgraden på 85 % er høy — mesteparten av inntjeningen deles ut. Med 8 års utbyttehistorikk er grunnlaget solid, og utbyttet har vokst sterkt (~22,1 %/år siste fem år). Som shippingselskap svinger inntjening og utbytte kraftig med fraktratene og den globale handelssyklusen. Egnet for utbytteinvestorer som tåler sykliske svingninger og har en lang tidshorisont.",
-      "ai_oppsummering_dato": "2026-07-03",
       "ask_egnet": false,
-      "inkorporeringsland": "Bermuda"
+      "inkorporeringsland": "Bermuda",
+      "utbyttehistorikk_tekst": ""
     },
     {
       "ticker": "MPCC",
@@ -635,8 +624,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 6,4 % er høy og attraktiv for inntektsinvestorer, og P/E på 4,9 ser lav ut, men lave multipler er vanlig på syklisk resultattopp. Utbetalingsgraden på 47 % er balansert og bærekraftig. Med 5 års utbyttehistorikk er grunnlaget solid, men trenden har vært fallende. Som shippingselskap svinger inntjening og utbytte kraftig med fraktratene og den globale handelssyklusen. Egnet for utbytteinvestorer som tåler sykliske svingninger og har en lang tidshorisont.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet er lavere nå enn i 2022 — ned fra 9,19 til 2,75 kroner per aksje, med 3 nedgangsår i perioden. Spennet er stort: høyeste år er 3,3 ganger det laveste, så størrelsen på utbetalingen er lite forutsigbar fra år til år. Dagens yield på 5,6 % er lavere enn aksjens eget 5-årssnitt på 18,0 %."
     },
     {
       "ticker": "BWLPG",
@@ -693,8 +681,7 @@
       "ask_egnet": false,
       "inkorporeringsland": "Bermuda",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 10,0 % er høy og attraktiv for inntektsinvestorer, og P/E på 7,6 ser lav ut, men lave multipler er vanlig på syklisk resultattopp. Utbetalingsgraden på 62 % er balansert og bærekraftig. Selskapet har en lang utbyttehistorikk på 11 år, og utbyttet har vokst sterkt (~44,0 %/år siste fem år). Som shippingselskap svinger inntjening og utbytte kraftig med fraktratene og den globale handelssyklusen. Egnet for utbytteinvestorer som tåler sykliske svingninger og har en lang tidshorisont.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet er samlet opp fra 8,79 til 12,35 kroner per aksje i 2022–2025, men veien dit gikk gjennom 2 kutt underveis. Spennet er stort: høyeste år er 3,3 ganger det laveste, så størrelsen på utbetalingen er lite forutsigbar fra år til år. Dagens yield på 8,2 % ligger nær aksjens eget 5-årssnitt på 8,0 %."
     },
     {
       "ticker": "KOG",
@@ -751,8 +738,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 0,7 % er lav, og P/E på 59,5 er høy og priser inn videre vekst. En lav utbetalingsgrad på 37 % gir god margin til å opprettholde og øke utbyttet. Selskapet har en lang utbyttehistorikk på 25 år, og utbyttet har vokst sterkt (~16,8 %/år siste fem år). Som industriselskap avhenger utbyttet av ordreinngang og konjunkturer. Mest aktuell for investorer som vektlegger kvalitet og vekst fremfor høy løpende yield.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet er samlet opp fra 3,06 til 4,40 kroner per aksje i 2022–2025, men veien dit gikk gjennom 1 kutt underveis. Høyeste år er 1,8 ganger det laveste — merkbare svingninger, men innenfor et gjenkjennelig spenn. Dagens yield på 0,7 % ligger nær aksjens eget 5-årssnitt på 1,2 %."
     },
     {
       "ticker": "KMAR",
@@ -783,8 +769,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Selskapet har foreløpig ikke et etablert løpende utbytte å verdsette på, og P/E på 12,7 er moderat. Utbyttehistorikken er kort eller uregelmessig, noe som gir begrenset forutsigbarhet. Som industriselskap avhenger utbyttet av ordreinngang og konjunkturer. Foreløpig mindre egnet som ren utbytteaksje.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": ""
     },
     {
       "ticker": "FRO",
@@ -841,8 +826,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Kypros",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 2,5 % er moderat, og P/E på 8,9 er moderat. Utbetalingsgraden på 43 % er balansert og bærekraftig. Selskapet har en lang utbyttehistorikk på 21 år, og utbyttet har økt kraftig de siste årene (fra et lavt utgangspunkt). Som shippingselskap svinger inntjening og utbytte kraftig med fraktratene og den globale handelssyklusen. Egnet for utbytteinvestorer som tåler sykliske svingninger og har en lang tidshorisont.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet er samlet opp fra 1,40 til 8,70 kroner per aksje i 2022–2025, men veien dit gikk gjennom 2 kutt underveis. Spennet er stort: høyeste år er 19,2 ganger det laveste, så størrelsen på utbetalingen er lite forutsigbar fra år til år. Dagens yield på 2,2 % er lavere enn aksjens eget 5-årssnitt på 4,0 %."
     },
     {
       "ticker": "NONG",
@@ -899,8 +883,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 5,5 % er solid, og P/E på 10,4 er moderat. Utbetalingsgraden over 100 % (116 %) betyr at utbyttet overstiger regnskapsmessig resultat og bør følges nøye. Selskapet har en lang utbyttehistorikk på 24 år, og utbyttet har vokst sterkt (~26,4 %/år siste fem år). Sparebanker og finansselskaper gir normalt stabile og forutsigbare utbytter år etter år. Kan passe utbytteinvestorer, forutsatt at inntjeningen holder seg stabil.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet er lavere nå enn i 2022 — ned fra 10,40 til 8,75 kroner per aksje, med 2 nedgangsår i perioden. Dagens yield på 5,0 % ligger nær aksjens eget 5-årssnitt på 5,0 %."
     },
     {
       "ticker": "SUBC",
@@ -957,8 +940,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Luxembourg",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 5,8 % er solid, og P/E på 20,2 er noe høy. Utbetalingsgraden på 77 % er høy — mesteparten av inntjeningen deles ut. Selskapet har en lang utbyttehistorikk på 16 år, og utbyttet har økt kraftig de siste årene (fra et lavt utgangspunkt). Som oljeservice-/energitjenesteselskap følger inntjeningen investeringsnivået i energisektoren og er syklisk. Egnet for utbytteinvestorer som tåler sykliske svingninger og har en lang tidshorisont.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet har steget uten et eneste kutt fra 2022–2025, fra 1,00 til 13,00 kroner per aksje. Veksten er kraftig: siste år er 13,0 ganger det første. Så bratte løft holder sjelden samme takt over tid. Dagens yield på 5,8 % ligger over aksjens eget 5-årssnitt på 2,2 % — her drevet av at utbyttet er kraftig hevet."
     },
     {
       "ticker": "WWI",
@@ -1015,8 +997,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 1,7 % er lav, og P/E på 4,7 ser lav ut, men lave multipler er vanlig på syklisk resultattopp. En lav utbetalingsgrad på 13 % gir god margin til å opprettholde og øke utbyttet. Selskapet har en lang utbyttehistorikk på 27 år, og utbyttet har vokst sterkt (~46,1 %/år siste fem år). Som shippingselskap svinger inntjening og utbytte kraftig med fraktratene og den globale handelssyklusen. Egnet for utbytteinvestorer som tåler sykliske svingninger og har en lang tidshorisont.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet er samlet opp fra 4,00 til 12,00 kroner per aksje i 2022–2025, men veien dit gikk gjennom 1 kutt underveis. Spennet er stort: høyeste år er 4,5 ganger det laveste, så størrelsen på utbetalingen er lite forutsigbar fra år til år. Dagens yield på 1,5 % ligger nær aksjens eget 5-årssnitt på 1,5 %."
     },
     {
       "ticker": "SCATC",
@@ -1058,8 +1039,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Selskapet har foreløpig ikke et etablert løpende utbytte å verdsette på, og P/E på 306,4 er høy og priser inn videre vekst. Utbetalingsgraden er ikke oppgitt, men utbyttet har vært utbetalt over flere år. Med 9 års utbyttehistorikk er grunnlaget solid, men trenden har vært fallende. Innen fornybar energi kan inntjeningen variere med kraftpriser og prosjektgjennomføring. Foreløpig mindre egnet som ren utbytteaksje.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": ""
     },
     {
       "ticker": "AUSS",
@@ -1116,8 +1096,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 8,2 % er høy og attraktiv for inntektsinvestorer, og P/E på 17,1 er noe høy. Utbetalingsgraden over 100 % (141 %) betyr at utbyttet overstiger regnskapsmessig resultat og bør følges nøye. Selskapet har en lang utbyttehistorikk på 18 år, med moderat vekst (~9,6 %/år). Som havbruksselskap varierer inntjening og utbytte med laksepris og biologiske forhold. Best egnet for risikovillige investorer som forstår syklisiteten i sektoren.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet er samlet opp fra 4,50 til 6,50 kroner per aksje i 2022–2025, men veien dit gikk gjennom 1 kutt underveis. Dagens yield på 7,2 % ligger nær aksjens eget 5-årssnitt på 6,1 %."
     },
     {
       "ticker": "LSG",
@@ -1174,8 +1153,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 6,3 % er høy og attraktiv for inntektsinvestorer, og P/E på 22,8 er noe høy. Utbetalingsgraden over 100 % (145 %) betyr at utbyttet overstiger regnskapsmessig resultat og bør følges nøye. Selskapet har en lang utbyttehistorikk på 24 år. Som havbruksselskap varierer inntjening og utbytte med laksepris og biologiske forhold. Best egnet for risikovillige investorer som forstår syklisiteten i sektoren.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet har vært stabilt eller stigende gjennom hele 2022–2025, uten kutt. Nivået har holdt seg jevnt fra år til år. Dagens yield på 5,4 % ligger nær aksjens eget 5-årssnitt på 5,4 %."
     },
     {
       "ticker": "BAKKA",
@@ -1232,8 +1210,7 @@
       "ask_egnet": false,
       "inkorporeringsland": "Færøyene",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 3,3 % er moderat, og P/E på 19,0 er noe høy. Utbetalingsgraden på 59 % er balansert og bærekraftig. Selskapet har en lang utbyttehistorikk på 15 år, men trenden har vært fallende. Som havbruksselskap varierer inntjening og utbytte med laksepris og biologiske forhold. Egnet for utbytteinvestorer som tåler sykliske svingninger og har en lang tidshorisont.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet er samlet opp fra 6,70 til 13,37 kroner per aksje i 2022–2025, men veien dit gikk gjennom 1 kutt underveis. Høyeste år er 2,3 ganger det laveste — merkbare svingninger, men innenfor et gjenkjennelig spenn. Dagens yield på 2,7 % ligger nær aksjens eget 5-årssnitt på 2,2 %."
     },
     {
       "ticker": "HAFNI",
@@ -1290,8 +1267,7 @@
       "ask_egnet": false,
       "inkorporeringsland": "Bermuda",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 5,7 % er solid, og P/E på 7,6 ser lav ut, men lave multipler er vanlig på syklisk resultattopp. Utbetalingsgraden på 61 % er balansert og bærekraftig. Med 6 års utbyttehistorikk er grunnlaget solid, men trenden har vært fallende. Som shippingselskap svinger inntjening og utbytte kraftig med fraktratene og den globale handelssyklusen. Egnet for utbytteinvestorer som tåler sykliske svingninger og har en lang tidshorisont.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet er lavere nå enn i 2022 — ned fra 4,56 til 3,73 kroner per aksje, med 1 nedgangsår i perioden. Spennet er stort: høyeste år er 3,4 ganger det laveste, så størrelsen på utbetalingen er lite forutsigbar fra år til år. Dagens yield på 5,1 % er lavere enn aksjens eget 5-årssnitt på 9,7 %."
     },
     {
       "ticker": "FLNG",
@@ -1316,10 +1292,9 @@
       "beskrivelse": "LNG-tankselskap med moderne flåte på langsiktige TC-kontrakter. Stabil og forutsigbar kontantstrøm.\n\nUtbyttet utbetales kvartalsvis — fire utbetalinger i året, og selskapet har holdt dette gående i 7 år på rad. Direkteavkastningen er 7.9%. Utbetalingsgraden er 78%, noe som er balansert for en moden utbytteaksje. Utbyttet har vokst med i snitt 12.4% per år de siste fem årene.\n\nFraktrater varierer kraftig med globalt handelsmønster og flåtekapasitet, og utbyttet svinger tilsvarende.",
       "valuta": "USD",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 7,9 % er høy og attraktiv for inntektsinvestorer, og P/E på 9,8 er moderat. Utbetalingsgraden på 78 % er høy — mesteparten av inntjeningen deles ut. Med 7 års utbyttehistorikk er grunnlaget solid, og utbyttet har vokst sterkt (~12,4 %/år siste fem år). Som shippingselskap svinger inntjening og utbytte kraftig med fraktratene og den globale handelssyklusen. Egnet for utbytteinvestorer som tåler sykliske svingninger og har en lang tidshorisont.",
-      "ai_oppsummering_dato": "2026-07-03",
       "ask_egnet": false,
-      "inkorporeringsland": "Bermuda"
+      "inkorporeringsland": "Bermuda",
+      "utbyttehistorikk_tekst": ""
     },
     {
       "ticker": "MING",
@@ -1376,8 +1351,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 7,1 % er høy og attraktiv for inntektsinvestorer, og P/E på 10,3 er moderat. Utbetalingsgraden på 73 % er balansert og bærekraftig. Selskapet har en lang utbyttehistorikk på 27 år, og utbyttet har vokst sterkt (~34,2 %/år siste fem år). Sparebanker og finansselskaper gir normalt stabile og forutsigbare utbytter år etter år. Godt egnet for langsiktige utbytteinvestorer som ønsker stabil kontantstrøm.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet er samlet opp fra 7,50 til 12,50 kroner per aksje i 2022–2025, men veien dit gikk gjennom 1 kutt underveis. Høyeste år er 1,9 ganger det laveste — merkbare svingninger, men innenfor et gjenkjennelig spenn. Dagens yield på 6,4 % ligger over aksjens eget 5-årssnitt på 4,9 % — ofte fordi kursen har falt, ikke fordi utbyttet er hevet."
     },
     {
       "ticker": "SPOL",
@@ -1434,8 +1408,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 6,7 % er høy og attraktiv for inntektsinvestorer, og P/E på 10,6 er moderat. Utbetalingsgraden på 71 % er balansert og bærekraftig. Med 9 års utbyttehistorikk er grunnlaget solid, og utbyttet har vokst sterkt (~33,1 %/år siste fem år). Sparebanker og finansselskaper gir normalt stabile og forutsigbare utbytter år etter år. Godt egnet for langsiktige utbytteinvestorer som ønsker stabil kontantstrøm.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet har steget uten et eneste kutt fra 2022–2025, fra 6,00 til 10,30 kroner per aksje. Samlet er utbetalingen 1,7-doblet i perioden. Dagens yield på 6,3 % ligger over aksjens eget 5-årssnitt på 4,4 % — her drevet av at utbyttet er kraftig hevet."
     },
     {
       "ticker": "AFG",
@@ -1492,8 +1465,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 3,3 % er moderat, og P/E på 18,7 er noe høy. Utbetalingsgraden på 48 % er balansert og bærekraftig. Selskapet har en lang utbyttehistorikk på 27 år, og utbyttet har vokst sterkt (~10,2 %/år siste fem år). Innen fornybar energi kan inntjeningen variere med kraftpriser og prosjektgjennomføring. Egnet for utbytteinvestorer som tåler sykliske svingninger og har en lang tidshorisont.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet er lavere nå enn i 2022 — ned fra 10,50 til 9,00 kroner per aksje, med 2 nedgangsår i perioden. Spennet er stort: høyeste år er 3,0 ganger det laveste, så størrelsen på utbetalingen er lite forutsigbar fra år til år. Dagens yield på 3,3 % ligger nær aksjens eget 5-årssnitt på 3,7 %."
     },
     {
       "ticker": "ODL",
@@ -1545,8 +1517,7 @@
       "ask_egnet": false,
       "inkorporeringsland": "Bermuda",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 11,2 % er svært høy og gjenspeiler ofte høy risiko eller en syklisk topp, og P/E på 9,6 er moderat. Utbetalingsgraden på 90 % er høy — mesteparten av inntjeningen deles ut. Med 5 års utbyttehistorikk er grunnlaget solid, og utbyttet har økt kraftig de siste årene (fra et lavt utgangspunkt). Som oljeservice-/energitjenesteselskap følger inntjeningen investeringsnivået i energisektoren og er syklisk. Egnet for utbytteinvestorer som tåler sykliske svingninger og har en lang tidshorisont.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet har steget uten et eneste kutt fra 2023–2025, fra 1,12 til 6,83 kroner per aksje. Veksten er kraftig: siste år er 6,1 ganger det første. Så bratte løft holder sjelden samme takt over tid. Dagens yield på 9,7 % ligger over aksjens eget 5-årssnitt på 4,1 % — her drevet av at utbyttet er kraftig hevet."
     },
     {
       "ticker": "PGS",
@@ -1577,8 +1548,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Selskapet har foreløpig ikke et etablert løpende utbytte å verdsette på, og P/E på 22,6 er noe høy. Utbetalingsgraden er ikke oppgitt, men utbyttet har vært utbetalt over flere år. Med 5 års utbyttehistorikk er grunnlaget solid. Som oljeservice-/energitjenesteselskap følger inntjeningen investeringsnivået i energisektoren og er syklisk. Foreløpig mindre egnet som ren utbytteaksje.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": ""
     },
     {
       "ticker": "VEI",
@@ -1635,8 +1605,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 5,9 % er solid, og P/E på 16,1 er noe høy. Utbetalingsgraden på 76 % er høy — mesteparten av inntjeningen deles ut. Selskapet har en lang utbyttehistorikk på 27 år, og utbyttet har vokst sterkt (~12,6 %/år siste fem år). Som industriselskap avhenger utbyttet av ordreinngang og konjunkturer. Godt egnet for langsiktige utbytteinvestorer som ønsker stabil kontantstrøm.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet har steget uten et eneste kutt fra 2022–2025, fra 7,00 til 9,00 kroner per aksje. Nivået har holdt seg jevnt fra år til år. Dagens yield på 5,5 % ligger over aksjens eget 5-årssnitt på 4,2 %."
     },
     {
       "ticker": "AKER",
@@ -1693,8 +1662,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 4,5 % er solid, og P/E på 21,8 er noe høy. Utbetalingsgraden på 97 % er høy — mesteparten av inntjeningen deles ut. Selskapet har en lang utbyttehistorikk på 22 år, og utbyttet har vokst sterkt (~19,8 %/år siste fem år). Som industriselskap avhenger utbyttet av ordreinngang og konjunkturer. Kan passe utbytteinvestorer, forutsatt at inntjeningen holder seg stabil.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet er samlet opp fra 29,00 til 53,00 kroner per aksje i 2022–2025, men veien dit gikk gjennom 1 kutt underveis. Spennet er stort: høyeste år er 3,4 ganger det laveste, så størrelsen på utbetalingen er lite forutsigbar fra år til år. Dagens yield på 3,6 % ligger over aksjens eget 5-årssnitt på 2,1 % — ofte fordi kursen har falt, ikke fordi utbyttet er hevet."
     },
     {
       "ticker": "BWO",
@@ -1751,8 +1719,7 @@
       "ask_egnet": false,
       "inkorporeringsland": "Bermuda",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 8,3 % er høy og attraktiv for inntektsinvestorer, og P/E på 5,9 ser lav ut, men lave multipler er vanlig på syklisk resultattopp. Utbetalingsgraden på 44 % er balansert og bærekraftig. Selskapet har en lang utbyttehistorikk på 12 år, og utbyttet har vokst sterkt (~28,5 %/år siste fem år). Som oljeservice-/energitjenesteselskap følger inntjeningen investeringsnivået i energisektoren og er syklisk. Egnet for utbytteinvestorer som tåler sykliske svingninger og har en lang tidshorisont.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet har steget uten et eneste kutt fra 2022–2025, fra 1,31 til 3,06 kroner per aksje. Samlet er utbetalingen 2,3-doblet i perioden. Dagens yield på 9,2 % ligger over aksjens eget 5-årssnitt på 5,4 % — her drevet av at utbyttet er kraftig hevet."
     },
     {
       "ticker": "SBVG",
@@ -1777,10 +1744,9 @@
       "beskrivelse": "Sparebank i Telemark og Vestfold. Stabil lokal bank med god utbyttehistorikk og solid kapitaldekning.\n\nUtbyttet utbetales halvårlig — to utbetalinger i året, og selskapet har holdt dette gående i 17 år på rad. Direkteavkastningen er 7.9%. Utbetalingsgraden er 61%, noe som er balansert for en moden utbytteaksje. Utbyttet har vokst med i snitt 9.8% per år de siste fem årene.\n\nRentenivå og kredittap påvirker inntjeningen, mens regulatoriske kapitalkrav setter rammer for hva som kan deles ut.",
       "valuta": "NOK",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 7,9 % er høy og attraktiv for inntektsinvestorer, og P/E på 7,7 er lav — en attraktiv prising. Utbetalingsgraden på 61 % er balansert og bærekraftig. Selskapet har en lang utbyttehistorikk på 17 år, med moderat vekst (~9,8 %/år). Sparebanker og finansselskaper gir normalt stabile og forutsigbare utbytter år etter år. Godt egnet for langsiktige utbytteinvestorer som ønsker stabil kontantstrøm.",
-      "ai_oppsummering_dato": "2026-07-03",
       "ask_egnet": true,
-      "inkorporeringsland": "Norge"
+      "inkorporeringsland": "Norge",
+      "utbyttehistorikk_tekst": ""
     },
     {
       "ticker": "GJF",
@@ -1837,8 +1803,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 3,7 % er moderat, og P/E på 20,9 er noe høy. Utbetalingsgraden på 77 % er høy — mesteparten av inntjeningen deles ut. Selskapet har en lang utbyttehistorikk på 16 år, og utbyttet har vokst sterkt (~29,4 %/år siste fem år). Sparebanker og finansselskaper gir normalt stabile og forutsigbare utbytter år etter år. Mest aktuell for investorer som vektlegger kvalitet og vekst fremfor høy løpende yield.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet har steget uten et eneste kutt fra 2022–2025, fra 7,70 til 10,00 kroner per aksje. Nivået har holdt seg jevnt fra år til år. Dagens yield på 3,5 % ligger nær aksjens eget 5-årssnitt på 3,5 %."
     },
     {
       "ticker": "STB",
@@ -1895,8 +1860,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 2,9 % er moderat, og P/E på 17,3 er noe høy. Utbetalingsgraden på 43 % er balansert og bærekraftig. Selskapet har en lang utbyttehistorikk på 17 år, og utbyttet har vokst sterkt (~11,5 %/år siste fem år). Sparebanker og finansselskaper gir normalt stabile og forutsigbare utbytter år etter år. Mest aktuell for investorer som vektlegger kvalitet og vekst fremfor høy løpende yield.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet har steget uten et eneste kutt fra 2022–2025, fra 3,50 til 4,70 kroner per aksje. Nivået har holdt seg jevnt fra år til år. Dagens yield på 2,6 % ligger nær aksjens eget 5-årssnitt på 2,1 %."
     },
     {
       "ticker": "AKSO",
@@ -1953,8 +1917,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 8,2 % er høy og attraktiv for inntektsinvestorer, og P/E på 8,3 er moderat. Utbetalingsgraden på 62 % er balansert og bærekraftig. Med 6 års utbyttehistorikk er grunnlaget solid, og utbyttet har økt kraftig de siste årene (fra et lavt utgangspunkt). Som oljeservice-/energitjenesteselskap følger inntjeningen investeringsnivået i energisektoren og er syklisk. Egnet for utbytteinvestorer som tåler sykliske svingninger og har en lang tidshorisont.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet har steget uten et eneste kutt fra 2022–2025, fra 0,20 til 3,30 kroner per aksje. Veksten er kraftig: siste år er 16,5 ganger det første. Så bratte løft holder sjelden samme takt over tid. Dagens yield på 8,3 % ligger nær aksjens eget 5-årssnitt på 7,0 %."
     },
     {
       "ticker": "OKEA",
@@ -1996,8 +1959,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Selskapet har foreløpig ikke et etablert løpende utbytte å verdsette på, og P/E på 3,6 ser lav ut, men lave multipler er vanlig på syklisk resultattopp. Utbyttehistorikken er kort eller uregelmessig, noe som gir begrenset forutsigbarhet. Historikken er relativt kort (2 år), og utbyttet har vokst sterkt (~37,9 %/år siste fem år). Som energiselskap er utbyttet tett koblet til olje- og gasspriser og dermed syklisk. Foreløpig mindre egnet som ren utbytteaksje.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": ""
     },
     {
       "ticker": "BEWI",
@@ -2034,8 +1996,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Selskapet har foreløpig ikke et etablert løpende utbytte å verdsette på, og P/E på 17,8 er noe høy. Utbyttehistorikken er kort eller uregelmessig, noe som gir begrenset forutsigbarhet. Historikken er relativt kort (2 år). Som industriselskap avhenger utbyttet av ordreinngang og konjunkturer. Foreløpig mindre egnet som ren utbytteaksje.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": ""
     },
     {
       "ticker": "WILS",
@@ -2060,10 +2021,9 @@
       "beskrivelse": "Europas ledende kysttransportselskap. Frakter tørrbulk og prosjektlast langs europakysten. Stabil inntjening.\n\nUtbyttet utbetales halvårlig — to utbetalinger i året, og selskapet har holdt dette gående i 10 år på rad. Direkteavkastningen er 8.6%. Utbetalingsgraden er 65%, noe som er balansert for en moden utbytteaksje. Utbyttet har vokst med i snitt 5.2% per år de siste fem årene.\n\nFraktrater varierer kraftig med globalt handelsmønster og flåtekapasitet, og utbyttet svinger tilsvarende.",
       "valuta": "NOK",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 8,6 % er høy og attraktiv for inntektsinvestorer, og P/E på 7,6 ser lav ut, men lave multipler er vanlig på syklisk resultattopp. Utbetalingsgraden på 65 % er balansert og bærekraftig. Selskapet har en lang utbyttehistorikk på 10 år, med moderat vekst (~5,2 %/år). Som shippingselskap svinger inntjening og utbytte kraftig med fraktratene og den globale handelssyklusen. Egnet for utbytteinvestorer som tåler sykliske svingninger og har en lang tidshorisont.",
-      "ai_oppsummering_dato": "2026-07-03",
       "ask_egnet": true,
-      "inkorporeringsland": "Norge"
+      "inkorporeringsland": "Norge",
+      "utbyttehistorikk_tekst": ""
     },
     {
       "ticker": "BONHR",
@@ -2120,8 +2080,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 3,3 % er moderat, og P/E på 6,1 ser lav ut, men lave multipler er vanlig på syklisk resultattopp. En lav utbetalingsgrad på 18 % gir god margin til å opprettholde og øke utbyttet. Selskapet har en lang utbyttehistorikk på 27 år, og utbyttet har vokst sterkt (~14,1 %/år siste fem år). Innen fornybar energi kan inntjeningen variere med kraftpriser og prosjektgjennomføring. Egnet for utbytteinvestorer som tåler sykliske svingninger og har en lang tidshorisont.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet har steget uten et eneste kutt fra 2022–2025, fra 4,30 til 6,75 kroner per aksje. Samlet er utbetalingen 1,6-doblet i perioden. Dagens yield på 2,9 % ligger nær aksjens eget 5-årssnitt på 2,3 %."
     },
     {
       "ticker": "WAWI",
@@ -2178,8 +2137,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 9,7 % er høy og attraktiv for inntektsinvestorer, og P/E på 5,6 ser lav ut, men lave multipler er vanlig på syklisk resultattopp. Utbetalingsgraden på 59 % er balansert og bærekraftig. Selskapet har en lang utbyttehistorikk på 11 år, og utbyttet har økt kraftig de siste årene (fra et lavt utgangspunkt). Som shippingselskap svinger inntjening og utbytte kraftig med fraktratene og den globale handelssyklusen. Egnet for utbytteinvestorer som tåler sykliske svingninger og har en lang tidshorisont.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet har steget uten et eneste kutt fra 2022–2025, fra 1,44 til 24,26 kroner per aksje. Veksten er kraftig: siste år er 16,8 ganger det første. Så bratte løft holder sjelden samme takt over tid. Dagens yield på 15,4 % ligger over aksjens eget 5-årssnitt på 8,6 % — her drevet av at utbyttet er kraftig hevet."
     },
     {
       "ticker": "NORCO",
@@ -2226,8 +2184,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 4,8 % er solid, og P/E på 19,6 er noe høy. Utbetalingsgraden på 89 % er høy — mesteparten av inntjeningen deles ut. Historikken er relativt kort (3 år), og utbyttet har vokst sterkt (~22,5 %/år siste fem år). Som industriselskap avhenger utbyttet av ordreinngang og konjunkturer. Kan passe utbytteinvestorer, forutsatt at inntjeningen holder seg stabil.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": ""
     },
     {
       "ticker": "B2I",
@@ -2284,8 +2241,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 7,9 % er høy og attraktiv for inntektsinvestorer, og P/E på 13,6 er moderat. Utbetalingsgraden på 85 % er høy — mesteparten av inntjeningen deles ut. Med 9 års utbyttehistorikk er grunnlaget solid, og utbyttet har økt kraftig de siste årene (fra et lavt utgangspunkt). Sparebanker og finansselskaper gir normalt stabile og forutsigbare utbytter år etter år. Godt egnet for langsiktige utbytteinvestorer som ønsker stabil kontantstrøm.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet er samlet opp fra 0,42 til 1,50 kroner per aksje i 2022–2025, men veien dit gikk gjennom 1 kutt underveis. Spennet er stort: høyeste år er 7,5 ganger det laveste, så størrelsen på utbetalingen er lite forutsigbar fra år til år. Dagens yield på 7,1 % ligger over aksjens eget 5-årssnitt på 4,0 % — ofte fordi kursen har falt, ikke fordi utbyttet er hevet."
     },
     {
       "ticker": "VAR",
@@ -2342,8 +2298,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 10,9 % er svært høy og gjenspeiler ofte høy risiko eller en syklisk topp, og P/E på 15,0 er noe høy. Utbetalingsgraden over 100 % (180 %) betyr at utbyttet overstiger regnskapsmessig resultat og bør følges nøye. Med 5 års utbyttehistorikk er grunnlaget solid, men trenden har vært fallende. Som energiselskap er utbyttet tett koblet til olje- og gasspriser og dermed syklisk. Best egnet for risikovillige investorer som forstår syklisiteten i sektoren.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet har vært stabilt eller stigende gjennom hele 2022–2025, uten kutt. Samlet er utbetalingen 1,6-doblet i perioden. Dagens yield på 11,2 % ligger over aksjens eget 5-årssnitt på 8,7 % — her drevet av at utbyttet er kraftig hevet."
     },
     {
       "ticker": "DNO",
@@ -2400,8 +2355,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 9,3 % er høy og attraktiv for inntektsinvestorer, og P/E på 3,9 ser lav ut, men lave multipler er vanlig på syklisk resultattopp. Utbetalingsgraden over 100 % (122 %) betyr at utbyttet overstiger regnskapsmessig resultat og bør følges nøye. Selskapet har en lang utbyttehistorikk på 11 år, og utbyttet har vokst sterkt (~30,3 %/år siste fem år). Som energiselskap er utbyttet tett koblet til olje- og gasspriser og dermed syklisk. Best egnet for risikovillige investorer som forstår syklisiteten i sektoren.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet har steget uten et eneste kutt fra 2022–2025, fra 0,70 til 1,38 kroner per aksje. Samlet er utbetalingen 2,0-doblet i perioden. Dagens yield på 8,4 % ligger over aksjens eget 5-årssnitt på 6,0 % — her drevet av at utbyttet er kraftig hevet."
     },
     {
       "ticker": "HAUTO",
@@ -2458,8 +2412,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 12,4 % er svært høy og gjenspeiler ofte høy risiko eller en syklisk topp, og P/E på 6,1 ser lav ut, men lave multipler er vanlig på syklisk resultattopp. Utbetalingsgraden på 92 % er høy — mesteparten av inntjeningen deles ut. Med 5 års utbyttehistorikk er grunnlaget solid, og utbyttet har økt kraftig de siste årene (fra et lavt utgangspunkt). Som shippingselskap svinger inntjening og utbytte kraftig med fraktratene og den globale handelssyklusen. Best egnet for risikovillige investorer som forstår syklisiteten i sektoren.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet er samlet opp fra 1,84 til 22,82 kroner per aksje i 2022–2025, men veien dit gikk gjennom 1 kutt underveis. Spennet er stort: høyeste år er 25,9 ganger det laveste, så størrelsen på utbetalingen er lite forutsigbar fra år til år. Dagens yield på 13,5 % ligger nær aksjens eget 5-årssnitt på 11,3 %."
     },
     {
       "ticker": "BRG",
@@ -2516,8 +2469,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 3,1 % er moderat, og P/E på 27,7 er høy og priser inn videre vekst. Utbetalingsgraden på 77 % er høy — mesteparten av inntjeningen deles ut. Selskapet har en lang utbyttehistorikk på 14 år, men trenden har vært fallende. Som materialselskap er inntjeningen syklisk og følger råvarepriser og industriell etterspørsel. Egnet for utbytteinvestorer som tåler sykliske svingninger og har en lang tidshorisont.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet er lavere nå enn i 2022 — ned fra 5,00 til 4,25 kroner per aksje, med 1 nedgangsår i perioden. Dagens yield på 3,0 % ligger nær aksjens eget 5-årssnitt på 2,6 %."
     },
     {
       "ticker": "EPR",
@@ -2574,8 +2526,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 4,2 % er solid, og P/E på 16,4 er noe høy. Utbetalingsgraden på 64 % er balansert og bærekraftig. Selskapet har en lang utbyttehistorikk på 11 år, men trenden har vært fallende. Forbruksvarer er en relativt defensiv sektor med jevn etterspørsel. Godt egnet for langsiktige utbytteinvestorer som ønsker stabil kontantstrøm.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet er lavere nå enn i 2022 — ned fra 4,00 til 3,50 kroner per aksje, med 2 nedgangsår i perioden. Dagens yield på 4,2 % ligger nær aksjens eget 5-årssnitt på 4,1 %."
     },
     {
       "ticker": "GSF",
@@ -2627,8 +2578,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 35,7 % er svært høy og gjenspeiler ofte høy risiko eller en syklisk topp, og P/E på 7,9 ser lav ut, men lave multipler er vanlig på syklisk resultattopp. Utbetalingsgraden er ikke oppgitt, men utbyttet har vært utbetalt over flere år. Selskapet har en lang utbyttehistorikk på 11 år, og utbyttet har økt kraftig de siste årene (fra et lavt utgangspunkt). Som havbruksselskap varierer inntjening og utbytte med laksepris og biologiske forhold. Egnet for utbytteinvestorer som tåler sykliske svingninger og har en lang tidshorisont.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet er lavere nå enn i 2022 — ned fra 3,00 til 1,75 kroner per aksje, med 1 nedgangsår i perioden. Høyeste år er 2,6 ganger det laveste — merkbare svingninger, men innenfor et gjenkjennelig spenn. Dagens yield på 10,1 % ligger nær aksjens eget 5-årssnitt på 10,1 %."
     },
     {
       "ticker": "KCC",
@@ -2685,8 +2635,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 5,4 % er solid, og P/E på 11,8 er moderat. Utbetalingsgraden på 48 % er balansert og bærekraftig. Med 8 års utbyttehistorikk er grunnlaget solid, og utbyttet har vokst sterkt (~31,9 %/år siste fem år). Som shippingselskap svinger inntjening og utbytte kraftig med fraktratene og den globale handelssyklusen. Egnet for utbytteinvestorer som tåler sykliske svingninger og har en lang tidshorisont.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet er lavere nå enn i 2022 — ned fra 8,03 til 3,93 kroner per aksje, med 1 nedgangsår i perioden. Spennet er stort: høyeste år er 3,4 ganger det laveste, så størrelsen på utbetalingen er lite forutsigbar fra år til år. Dagens yield på 3,7 % er lavere enn aksjens eget 5-årssnitt på 7,8 %."
     },
     {
       "ticker": "OET",
@@ -2743,8 +2692,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Hellas",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 4,0 % er moderat, og P/E på 9,3 er moderat. Utbetalingsgraden på 58 % er balansert og bærekraftig. Med 7 års utbyttehistorikk er grunnlaget solid, og utbyttet har økt kraftig de siste årene (fra et lavt utgangspunkt). Som shippingselskap svinger inntjening og utbytte kraftig med fraktratene og den globale handelssyklusen. Egnet for utbytteinvestorer som tåler sykliske svingninger og har en lang tidshorisont.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet er samlet opp fra 6,10 til 19,83 kroner per aksje i 2022–2025, men veien dit gikk gjennom 2 kutt underveis. Spennet er stort: høyeste år er 8,8 ganger det laveste, så størrelsen på utbetalingen er lite forutsigbar fra år til år. Dagens yield på 3,4 % er lavere enn aksjens eget 5-årssnitt på 6,7 %."
     },
     {
       "ticker": "SBMO",
@@ -2801,8 +2749,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 6,5 % er høy og attraktiv for inntektsinvestorer, og P/E på 5,6 er lav — en attraktiv prising. En lav utbetalingsgrad på 32 % gir god margin til å opprettholde og øke utbyttet. Selskapet har en lang utbyttehistorikk på 27 år, og utbyttet har vokst sterkt (~31,2 %/år siste fem år). Sparebanker og finansselskaper gir normalt stabile og forutsigbare utbytter år etter år. Godt egnet for langsiktige utbytteinvestorer som ønsker stabil kontantstrøm.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet er samlet opp fra 3,20 til 6,25 kroner per aksje i 2022–2025, men veien dit gikk gjennom 1 kutt underveis. Høyeste år er 2,3 ganger det laveste — merkbare svingninger, men innenfor et gjenkjennelig spenn. Dagens yield på 6,3 % ligger over aksjens eget 5-årssnitt på 5,0 % — ofte fordi kursen har falt, ikke fordi utbyttet er hevet."
     },
     {
       "ticker": "SATS",
@@ -2844,8 +2791,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 1,5 % er lav, og P/E på 17,4 er noe høy. Utbetalingsgraden på 54 % er balansert og bærekraftig. Historikken er relativt kort (2 år), med moderat vekst (~6,3 %/år). Forbruksvarer er en relativt defensiv sektor med jevn etterspørsel. Mest aktuell for investorer som vektlegger kvalitet og vekst fremfor høy løpende yield.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": ""
     },
     {
       "ticker": "KIT",
@@ -2902,8 +2848,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 0,3 % er lav, og P/E på 34,1 er høy og priser inn videre vekst. En lav utbetalingsgrad på 11 % gir god margin til å opprettholde og øke utbyttet. Selskapet har en lang utbyttehistorikk på 16 år, og utbyttet har vokst sterkt (~14,9 %/år siste fem år). Som industriselskap avhenger utbyttet av ordreinngang og konjunkturer. Mest aktuell for investorer som vektlegger kvalitet og vekst fremfor høy løpende yield.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet er samlet opp fra 0,25 til 0,35 kroner per aksje i 2022–2025, men veien dit gikk gjennom 1 kutt underveis. Spennet er stort: høyeste år er 3,0 ganger det laveste, så størrelsen på utbetalingen er lite forutsigbar fra år til år. Dagens yield på 0,4 % ligger nær aksjens eget 5-årssnitt på 0,6 %."
     },
     {
       "ticker": "ABG",
@@ -2960,8 +2905,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 7,6 % er høy og attraktiv for inntektsinvestorer, og P/E på 11,1 er moderat. Utbetalingsgraden på 77 % er høy — mesteparten av inntjeningen deles ut. Selskapet har en lang utbyttehistorikk på 25 år, men trenden har vært fallende. Sparebanker og finansselskaper gir normalt stabile og forutsigbare utbytter år etter år. Godt egnet for langsiktige utbytteinvestorer som ønsker stabil kontantstrøm.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet er lavere nå enn i 2022 — ned fra 1,00 til 0,50 kroner per aksje, med 1 nedgangsår i perioden. Høyeste år er 2,0 ganger det laveste — merkbare svingninger, men innenfor et gjenkjennelig spenn. Dagens yield på 7,4 % ligger nær aksjens eget 5-årssnitt på 8,2 %."
     },
     {
       "ticker": "SBO",
@@ -3018,8 +2962,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 3,0 % er moderat, og P/E på 23,1 er noe høy. Utbetalingsgraden på 87 % er høy — mesteparten av inntjeningen deles ut. Selskapet har en lang utbyttehistorikk på 13 år, men trenden har vært fallende. Eiendomsselskaper gir normalt jevne leieinntekter, men er følsomme for rentenivået. Mest aktuell for investorer som vektlegger kvalitet og vekst fremfor høy løpende yield.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet er lavere nå enn i 2022 — ned fra 5,00 til 1,25 kroner per aksje, med 2 nedgangsår i perioden. Spennet er stort: høyeste år er 5,0 ganger det laveste, så størrelsen på utbetalingen er lite forutsigbar fra år til år. Dagens yield på 3,0 % er lavere enn aksjens eget 5-årssnitt på 6,8 %."
     },
     {
       "ticker": "ELMRA",
@@ -3076,8 +3019,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 4,3 % er solid, og P/E på 26,6 er høy og priser inn videre vekst. Utbetalingsgraden over 100 % (173 %) betyr at utbyttet overstiger regnskapsmessig resultat og bør følges nøye. Med 8 års utbyttehistorikk er grunnlaget solid, men trenden har vært fallende. Som forsyningsselskap er kontantstrømmen normalt stabil og defensiv. Kan passe utbytteinvestorer, forutsatt at inntjeningen holder seg stabil.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet er lavere nå enn i 2022 — ned fra 3,50 til 3,00 kroner per aksje, med 1 nedgangsår i perioden. Høyeste år er 2,3 ganger det laveste — merkbare svingninger, men innenfor et gjenkjennelig spenn. Dagens yield på 4,4 % ligger nær aksjens eget 5-årssnitt på 5,4 %."
     },
     {
       "ticker": "PARB",
@@ -3134,8 +3076,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 5,9 % er solid, og P/E på 10,3 er moderat. Utbetalingsgraden er ikke oppgitt, men utbyttet har vært utbetalt over flere år. Selskapet har en lang utbyttehistorikk på 10 år, og utbyttet har vokst sterkt (~21,7 %/år siste fem år). Sparebanker og finansselskaper gir normalt stabile og forutsigbare utbytter år etter år. Godt egnet for langsiktige utbytteinvestorer som ønsker stabil kontantstrøm.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet har steget uten et eneste kutt fra 2022–2025, fra 3,50 til 4,15 kroner per aksje. Nivået har holdt seg jevnt fra år til år. Dagens yield på 6,9 % ligger nær aksjens eget 5-årssnitt på 7,8 %."
     },
     {
       "ticker": "ENTR",
@@ -3187,8 +3128,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 1,0 % er lav, og P/E på 17,1 er noe høy. En lav utbetalingsgrad på 18 % gir god margin til å opprettholde og øke utbyttet. Selskapet har en lang utbyttehistorikk på 11 år, men trenden har vært fallende. Eiendomsselskaper gir normalt jevne leieinntekter, men er følsomme for rentenivået. Mest aktuell for investorer som vektlegger kvalitet og vekst fremfor høy løpende yield.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet er lavere nå enn i 2022 — ned fra 5,20 til 1,10 kroner per aksje, med 2 nedgangsår i perioden. Spennet er stort: høyeste år er 4,7 ganger det laveste, så størrelsen på utbetalingen er lite forutsigbar fra år til år. Dagens yield på 1,0 % er lavere enn aksjens eget 5-årssnitt på 2,3 %."
     },
     {
       "ticker": "TOM",
@@ -3245,8 +3185,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 2,2 % er moderat, og P/E på 31,9 er høy og priser inn videre vekst. Utbetalingsgraden på 67 % er balansert og bærekraftig. Selskapet har en lang utbyttehistorikk på 27 år, men trenden har vært fallende. Som industriselskap avhenger utbyttet av ordreinngang og konjunkturer. Mest aktuell for investorer som vektlegger kvalitet og vekst fremfor høy løpende yield.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet er lavere nå enn i 2022 — ned fra 3,00 til 2,15 kroner per aksje, med 1 nedgangsår i perioden. Dagens yield på 2,0 % ligger nær aksjens eget 5-årssnitt på 2,0 %."
     },
     {
       "ticker": "MULTI",
@@ -3303,8 +3242,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 3,4 % er moderat, og P/E på 17,5 er noe høy. Utbetalingsgraden over 100 % (120 %) betyr at utbyttet overstiger regnskapsmessig resultat og bør følges nøye. Selskapet har en lang utbyttehistorikk på 11 år, men trenden har vært fallende. Som industriselskap avhenger utbyttet av ordreinngang og konjunkturer. Mest aktuell for investorer som vektlegger kvalitet og vekst fremfor høy løpende yield.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet er samlet opp fra 6,00 til 10,00 kroner per aksje i 2022–2025, men veien dit gikk gjennom 1 kutt underveis. Dagens yield på 3,5 % er lavere enn aksjens eget 5-årssnitt på 5,3 %."
     },
     {
       "ticker": "2020",
@@ -3365,8 +3303,7 @@
       "ask_egnet": false,
       "inkorporeringsland": "Bermuda",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 11,8 % er svært høy og gjenspeiler ofte høy risiko eller en syklisk topp, og P/E på 0,3 ser lav ut, men lave multipler er vanlig på syklisk resultattopp. Utbetalingsgraden over 100 % (113 %) betyr at utbyttet overstiger regnskapsmessig resultat og bør følges nøye. Med 8 års utbyttehistorikk er grunnlaget solid, og utbyttet har vokst sterkt (~47,4 %/år siste fem år). Som shippingselskap svinger inntjening og utbytte kraftig med fraktratene og den globale handelssyklusen. Best egnet for risikovillige investorer som forstår syklisiteten i sektoren.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet er lavere nå enn i 2022 — ned fra 15,15 til 13,66 kroner per aksje, med 2 nedgangsår i perioden. Spennet er stort: høyeste år er 4,4 ganger det laveste, så størrelsen på utbetalingen er lite forutsigbar fra år til år. Dagens yield på 11,7 % er lavere enn aksjens eget 5-årssnitt på 16,9 %."
     },
     {
       "ticker": "DOF",
@@ -3383,13 +3320,12 @@
       "beskrivelse": "Offshore supplyvesselselskap med AHTS, PSV og subsea-fartøyer. Høy etterspørsel fra olje og offshore vind.\n\nUtbyttet utbetales halvårlig — to utbetalinger i året. Direkteavkastningen er 0.6%.",
       "valuta": "NOK",
       "data_kilde": "euronext",
-      "ai_oppsummering": "Direkteavkastningen på 0,5 % er lav. Utbyttehistorikken er kort eller uregelmessig, noe som gir begrenset forutsigbarhet. Som oljeservice-/energitjenesteselskap følger inntjeningen investeringsnivået i energisektoren og er syklisk. Best egnet for risikovillige investorer som forstår syklisiteten i sektoren.",
-      "ai_oppsummering_dato": "2026-07-03",
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "ex_dato": "2026-08-27",
       "betaling_dato": "2026-06-04",
-      "siste_utbytte": 0.38
+      "siste_utbytte": 0.38,
+      "utbyttehistorikk_tekst": ""
     },
     {
       "ticker": "SRHA",
@@ -3446,8 +3382,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 6,1 % er høy og attraktiv for inntektsinvestorer, og P/E på 9,1 er moderat. Utbetalingsgraden på 55 % er balansert og bærekraftig. Selskapet har en lang utbyttehistorikk på 19 år, og utbyttet har vokst sterkt (~36,8 %/år siste fem år). Sparebanker og finansselskaper gir normalt stabile og forutsigbare utbytter år etter år. Godt egnet for langsiktige utbytteinvestorer som ønsker stabil kontantstrøm.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet er samlet opp fra 16,20 til 30,00 kroner per aksje i 2022–2025, men veien dit gikk gjennom 1 kutt underveis. Høyeste år er 2,3 ganger det laveste — merkbare svingninger, men innenfor et gjenkjennelig spenn. Dagens yield på 6,0 % ligger nær aksjens eget 5-årssnitt på 5,6 %."
     },
     {
       "ticker": "HELG",
@@ -3504,8 +3439,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 5,0 % er solid, og P/E på 11,5 er moderat. Utbetalingsgraden på 57 % er balansert og bærekraftig. Selskapet har en lang utbyttehistorikk på 18 år, og utbyttet har vokst sterkt (~24,5 %/år siste fem år). Sparebanker og finansselskaper gir normalt stabile og forutsigbare utbytter år etter år. Godt egnet for langsiktige utbytteinvestorer som ønsker stabil kontantstrøm.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet er samlet opp fra 3,19 til 8,43 kroner per aksje i 2022–2025, men veien dit gikk gjennom 1 kutt underveis. Spennet er stort: høyeste år er 3,4 ganger det laveste, så størrelsen på utbetalingen er lite forutsigbar fra år til år. Dagens yield på 4,9 % ligger nær aksjens eget 5-årssnitt på 5,2 %."
     },
     {
       "ticker": "SPOG",
@@ -3557,8 +3491,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 9,5 % er høy og attraktiv for inntektsinvestorer, og P/E på 9,1 er moderat. Utbetalingsgraden på 86 % er høy — mesteparten av inntjeningen deles ut. Selskapet har en lang utbyttehistorikk på 25 år, og utbyttet har vokst sterkt (~47,2 %/år siste fem år). Sparebanker og finansselskaper gir normalt stabile og forutsigbare utbytter år etter år. Godt egnet for langsiktige utbytteinvestorer som ønsker stabil kontantstrøm.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet har steget uten et eneste kutt fra 2022–2025, fra 3,85 til 6,40 kroner per aksje. Samlet er utbetalingen 1,7-doblet i perioden. Dagens yield på 9,7 % ligger over aksjens eget 5-årssnitt på 7,9 % — her drevet av at utbyttet er kraftig hevet."
     },
     {
       "ticker": "PEN",
@@ -3610,8 +3543,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 8,8 % er høy og attraktiv for inntektsinvestorer, og P/E på 2,9 ser lav ut, men lave multipler er vanlig på syklisk resultattopp. Utbetalingsgraden på 88 % er høy — mesteparten av inntjeningen deles ut. Historikken er relativt kort (4 år), men trenden har vært fallende. Som energiselskap er utbyttet tett koblet til olje- og gasspriser og dermed syklisk. Best egnet for risikovillige investorer som forstår syklisiteten i sektoren.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet har steget uten et eneste kutt fra 2023–2025, fra 1,21 til 2,78 kroner per aksje. Samlet er utbetalingen 2,3-doblet i perioden. Dagens yield på 5,3 % ligger nær aksjens eget 5-årssnitt på 5,8 %."
     },
     {
       "ticker": "AKVA",
@@ -3658,8 +3590,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 1,6 % er lav, og P/E på 23,6 er noe høy. En lav utbetalingsgrad på 37 % gir god margin til å opprettholde og øke utbyttet. Selskapet har en lang utbyttehistorikk på 12 år. Som havbruksselskap varierer inntjening og utbytte med laksepris og biologiske forhold. Egnet for utbytteinvestorer som tåler sykliske svingninger og har en lang tidshorisont.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": ""
     },
     {
       "ticker": "SNI",
@@ -3716,8 +3647,7 @@
       "ask_egnet": false,
       "inkorporeringsland": "Bermuda",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 6,3 % er høy og attraktiv for inntektsinvestorer, og P/E på 6,3 ser lav ut, men lave multipler er vanlig på syklisk resultattopp. Utbetalingsgraden på 49 % er balansert og bærekraftig. Selskapet har en lang utbyttehistorikk på 22 år, og utbyttet har vokst sterkt (~14,9 %/år siste fem år). Som shippingselskap svinger inntjening og utbytte kraftig med fraktratene og den globale handelssyklusen. Egnet for utbytteinvestorer som tåler sykliske svingninger og har en lang tidshorisont.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet er samlet opp fra 14,03 til 21,05 kroner per aksje i 2022–2025, men veien dit gikk gjennom 1 kutt underveis. Høyeste år er 1,8 ganger det laveste — merkbare svingninger, men innenfor et gjenkjennelig spenn. Dagens yield på 5,7 % ligger nær aksjens eget 5-årssnitt på 5,6 %."
     },
     {
       "ticker": "MEDI",
@@ -3774,8 +3704,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 3,5 % er moderat, og P/E på 26,9 er høy og priser inn videre vekst. Utbetalingsgraden på 70 % er balansert og bærekraftig. Selskapet har en lang utbyttehistorikk på 22 år, og utbyttet har vokst sterkt (~20,9 %/år siste fem år). Helsevern er en defensiv sektor med stabil underliggende etterspørsel. Mest aktuell for investorer som vektlegger kvalitet og vekst fremfor høy løpende yield.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet har steget uten et eneste kutt fra 2022–2025, fra 3,75 til 6,00 kroner per aksje. Samlet er utbetalingen 1,6-doblet i perioden. Dagens yield på 3,0 % ligger over aksjens eget 5-årssnitt på 2,0 % — her drevet av at utbyttet er kraftig hevet."
     },
     {
       "ticker": "ATEA",
@@ -3832,8 +3761,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 4,3 % er solid, og P/E på 17,8 er noe høy. Utbetalingsgraden på 72 % er balansert og bærekraftig. Selskapet har en lang utbyttehistorikk på 18 år, med moderat vekst (~8,4 %/år). IT-sektoren kan ha god vekst, men utbyttenivået varierer mellom selskapene. Godt egnet for langsiktige utbytteinvestorer som ønsker stabil kontantstrøm.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet har steget uten et eneste kutt fra 2022–2025, fra 5,50 til 7,00 kroner per aksje. Nivået har holdt seg jevnt fra år til år. Dagens yield på 4,3 % ligger nær aksjens eget 5-årssnitt på 3,4 %."
     },
     {
       "ticker": "BOUV",
@@ -3890,8 +3818,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 6,8 % er høy og attraktiv for inntektsinvestorer, og P/E på 13,7 er moderat. Utbetalingsgraden på 93 % er høy — mesteparten av inntjeningen deles ut. Selskapet har en lang utbyttehistorikk på 19 år, og utbyttet har vokst sterkt (~43,1 %/år siste fem år). IT-sektoren kan ha god vekst, men utbyttenivået varierer mellom selskapene. Kan passe utbytteinvestorer, forutsatt at inntjeningen holder seg stabil.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet har steget uten et eneste kutt fra 2022–2025, fra 2,31 til 3,70 kroner per aksje. Samlet er utbetalingen 1,6-doblet i perioden. Dagens yield på 6,1 % ligger nær aksjens eget 5-årssnitt på 6,3 %."
     },
     {
       "ticker": "AKBM",
@@ -3928,8 +3855,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Selskapet har foreløpig ikke et etablert løpende utbytte å verdsette på, og P/E på 22,2 er noe høy. Utbyttehistorikken er kort eller uregelmessig, noe som gir begrenset forutsigbarhet. Historikken er relativt kort (1 år). Som havbruksselskap varierer inntjening og utbytte med laksepris og biologiske forhold. Foreløpig mindre egnet som ren utbytteaksje.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": ""
     },
     {
       "ticker": "TGS",
@@ -3986,8 +3912,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 4,8 % er solid, og P/E på 10,2 er moderat. Utbetalingsgraden på 48 % er balansert og bærekraftig. Selskapet har en lang utbyttehistorikk på 17 år, med moderat vekst (~3,8 %/år). Som oljeservice-/energitjenesteselskap følger inntjeningen investeringsnivået i energisektoren og er syklisk. Egnet for utbytteinvestorer som tåler sykliske svingninger og har en lang tidshorisont.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet har steget uten et eneste kutt fra 2022–2025, fra 5,47 til 6,46 kroner per aksje. Nivået har holdt seg jevnt fra år til år. Dagens yield på 4,6 % ligger nær aksjens eget 5-årssnitt på 4,3 %."
     },
     {
       "ticker": "NSKOG",
@@ -4024,8 +3949,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Selskapet har foreløpig ikke et etablert løpende utbytte å verdsette på, og P/E på 10,6 er moderat. Utbyttehistorikken er kort eller uregelmessig, noe som gir begrenset forutsigbarhet. Historikken er relativt kort (2 år). Som materialselskap er inntjeningen syklisk og følger råvarepriser og industriell etterspørsel. Foreløpig mindre egnet som ren utbytteaksje.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": ""
     },
     {
       "ticker": "SOFF",
@@ -4067,8 +3991,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 0,9 % er lav, og P/E på 3,3 ser lav ut, men lave multipler er vanlig på syklisk resultattopp. En lav utbetalingsgrad på 3 % gir god margin til å opprettholde og øke utbyttet. Selskapet har en lang utbyttehistorikk på 17 år, og utbyttet har økt kraftig de siste årene (fra et lavt utgangspunkt). Som oljeservice-/energitjenesteselskap følger inntjeningen investeringsnivået i energisektoren og er syklisk. Egnet for utbytteinvestorer som tåler sykliske svingninger og har en lang tidshorisont.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": ""
     },
     {
       "ticker": "ITERA",
@@ -4125,8 +4048,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 4,8 % er solid, og P/E på 24,3 er noe høy. Utbetalingsgraden over 100 % (115 %) betyr at utbyttet overstiger regnskapsmessig resultat og bør følges nøye. Selskapet har en lang utbyttehistorikk på 21 år, og utbyttet har vokst sterkt (~14,9 %/år siste fem år). IT-sektoren kan ha god vekst, men utbyttenivået varierer mellom selskapene. Kan passe utbytteinvestorer, forutsatt at inntjeningen holder seg stabil.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet er lavere nå enn i 2022 — ned fra 0,50 til 0,30 kroner per aksje, med 2 nedgangsår i perioden. Høyeste år er 2,3 ganger det laveste — merkbare svingninger, men innenfor et gjenkjennelig spenn. Dagens yield på 4,6 % er lavere enn aksjens eget 5-årssnitt på 6,4 %."
     },
     {
       "ticker": "HUNT",
@@ -4178,8 +4100,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 4,0 % er solid, og P/E på 1,5 ser lav ut, men lave multipler er vanlig på syklisk resultattopp. En lav utbetalingsgrad på 26 % gir god margin til å opprettholde og øke utbyttet. Med 5 års utbyttehistorikk er grunnlaget solid, men trenden har vært fallende. Som shippingselskap svinger inntjening og utbytte kraftig med fraktratene og den globale handelssyklusen. Egnet for utbytteinvestorer som tåler sykliske svingninger og har en lang tidshorisont.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet er lavere nå enn i 2022 — ned fra 26,52 til 0,30 kroner per aksje, med 1 nedgangsår i perioden. Spennet er stort: høyeste år er 136,2 ganger det laveste, så størrelsen på utbetalingen er lite forutsigbar fra år til år. Dagens yield på 2,8 % er lavere enn aksjens eget 5-årssnitt på 11,9 %."
     },
     {
       "ticker": "ALNG",
@@ -4221,8 +4142,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Selskapet har foreløpig ikke et etablert løpende utbytte å verdsette på. Utbyttehistorikken er kort eller uregelmessig, noe som gir begrenset forutsigbarhet. Historikken er relativt kort (2 år), og utbyttet har vokst sterkt (~25,0 %/år siste fem år). Som shippingselskap svinger inntjening og utbytte kraftig med fraktratene og den globale handelssyklusen. Foreløpig mindre egnet som ren utbytteaksje.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": ""
     },
     {
       "ticker": "VISTIN",
@@ -4269,8 +4189,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 6,1 % er høy og attraktiv for inntektsinvestorer, og P/E på 12,3 er moderat. Utbetalingsgraden på 74 % er balansert og bærekraftig. Med 7 års utbyttehistorikk er grunnlaget solid, men trenden har vært fallende. Helsevern er en defensiv sektor med stabil underliggende etterspørsel. Godt egnet for langsiktige utbytteinvestorer som ønsker stabil kontantstrøm.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": ""
     },
     {
       "ticker": "STRONG",
@@ -4312,8 +4231,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Selskapet har foreløpig ikke et etablert løpende utbytte å verdsette på, og P/E på 149,3 er høy og priser inn videre vekst. Utbetalingsgraden er ikke oppgitt, men utbyttet har vært utbetalt over flere år. Selskapet har en lang utbyttehistorikk på 12 år, og utbyttet har vokst sterkt (~12,5 %/år siste fem år). IT-sektoren kan ha god vekst, men utbyttenivået varierer mellom selskapene. Foreløpig mindre egnet som ren utbytteaksje.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": ""
     },
     {
       "ticker": "NRC",
@@ -4344,8 +4262,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Selskapet har foreløpig ikke et etablert løpende utbytte å verdsette på, og P/E på 46,3 er høy og priser inn videre vekst. Utbetalingsgraden er ikke oppgitt, men utbyttet har vært utbetalt over flere år. Historikken er relativt kort (4 år). Som industriselskap avhenger utbyttet av ordreinngang og konjunkturer. Foreløpig mindre egnet som ren utbytteaksje.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": ""
     },
     {
       "ticker": "JAREN",
@@ -4401,7 +4318,8 @@
       "valuta": "NOK",
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
-      "data_kilde": "yahoo"
+      "data_kilde": "yahoo",
+      "utbyttehistorikk_tekst": "Utbyttet har steget uten et eneste kutt fra 2022–2025, fra 11,00 til 20,00 kroner per aksje. Samlet er utbetalingen 1,8-doblet i perioden. Dagens yield på 6,1 % ligger over aksjens eget 5-årssnitt på 4,8 % — her drevet av at utbyttet er kraftig hevet."
     },
     {
       "ticker": "NORBT",
@@ -4458,8 +4376,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 2,8 % er moderat, og P/E på 26,6 er høy og priser inn videre vekst. En lav utbetalingsgrad på 30 % gir god margin til å opprettholde og øke utbyttet. Med 7 års utbyttehistorikk er grunnlaget solid, og utbyttet har økt kraftig de siste årene (fra et lavt utgangspunkt). IT-sektoren kan ha god vekst, men utbyttenivået varierer mellom selskapene. Mest aktuell for investorer som vektlegger kvalitet og vekst fremfor høy løpende yield.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet har steget uten et eneste kutt fra 2022–2025, fra 0,30 til 6,00 kroner per aksje. Veksten er kraftig: siste år er 20,0 ganger det første. Så bratte løft holder sjelden samme takt over tid. Dagens yield på 3,1 % ligger over aksjens eget 5-årssnitt på 1,8 % — her drevet av at utbyttet er kraftig hevet."
     },
     {
       "ticker": "KID",
@@ -4516,8 +4433,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 8,3 % er høy og attraktiv for inntektsinvestorer, og P/E på 22,1 er noe høy. Utbetalingsgraden over 100 % (138 %) betyr at utbyttet overstiger regnskapsmessig resultat og bør følges nøye. Selskapet har en lang utbyttehistorikk på 11 år, men trenden har vært fallende. Forbruksvarer er en relativt defensiv sektor med jevn etterspørsel. Kan passe utbytteinvestorer, forutsatt at inntjeningen holder seg stabil.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet er samlet opp fra 6,50 til 7,50 kroner per aksje i 2022–2025, men veien dit gikk gjennom 1 kutt underveis. Dagens yield på 7,8 % ligger over aksjens eget 5-årssnitt på 4,5 % — ofte fordi kursen har falt, ikke fordi utbyttet er hevet."
     },
     {
       "ticker": "ODF",
@@ -4574,8 +4490,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 9,1 % er høy og attraktiv for inntektsinvestorer, og P/E på 5,4 ser lav ut, men lave multipler er vanlig på syklisk resultattopp. Utbetalingsgraden på 51 % er balansert og bærekraftig. Selskapet har en lang utbyttehistorikk på 18 år, og utbyttet har vokst sterkt (~10,3 %/år siste fem år). Som shippingselskap svinger inntjening og utbytte kraftig med fraktratene og den globale handelssyklusen. Egnet for utbytteinvestorer som tåler sykliske svingninger og har en lang tidshorisont.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet er samlet opp fra 3,20 til 13,67 kroner per aksje i 2022–2025, men veien dit gikk gjennom 1 kutt underveis. Spennet er stort: høyeste år er 5,4 ganger det laveste, så størrelsen på utbetalingen er lite forutsigbar fra år til år. Dagens yield på 8,8 % ligger nær aksjens eget 5-årssnitt på 10,2 %."
     },
     {
       "ticker": "ODFB",
@@ -4631,7 +4546,8 @@
       "valuta": "NOK",
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
-      "data_kilde": "yahoo"
+      "data_kilde": "yahoo",
+      "utbyttehistorikk_tekst": "Utbyttet er samlet opp fra 3,20 til 13,67 kroner per aksje i 2022–2025, men veien dit gikk gjennom 1 kutt underveis. Spennet er stort: høyeste år er 5,4 ganger det laveste, så størrelsen på utbetalingen er lite forutsigbar fra år til år. Dagens yield på 8,9 % ligger nær aksjens eget 5-årssnitt på 10,3 %."
     },
     {
       "ticker": "SKUE",
@@ -4683,8 +4599,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 6,8 % er høy og attraktiv for inntektsinvestorer, og P/E på 15,5 er noe høy. Utbetalingsgraden over 100 % (105 %) betyr at utbyttet overstiger regnskapsmessig resultat og bør følges nøye. Selskapet har en lang utbyttehistorikk på 24 år, og utbyttet har vokst sterkt (~19,3 %/år siste fem år). Sparebanker og finansselskaper gir normalt stabile og forutsigbare utbytter år etter år. Kan passe utbytteinvestorer, forutsatt at inntjeningen holder seg stabil.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet har steget uten et eneste kutt fra 2022–2025, fra 11,00 til 32,52 kroner per aksje. Samlet er utbetalingen 3,0-doblet i perioden. Dagens yield på 6,7 % ligger nær aksjens eget 5-årssnitt på 6,2 %."
     },
     {
       "ticker": "HGSB",
@@ -4726,8 +4641,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 6,5 % er høy og attraktiv for inntektsinvestorer, og P/E på 19,2 er noe høy. Utbyttehistorikken er kort eller uregelmessig, noe som gir begrenset forutsigbarhet. Historikken er relativt kort (2 år), men trenden har vært fallende. Sparebanker og finansselskaper gir normalt stabile og forutsigbare utbytter år etter år. Kan passe utbytteinvestorer, forutsatt at inntjeningen holder seg stabil.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": ""
     },
     {
       "ticker": "PEXIP",
@@ -4774,8 +4688,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 3,0 % er moderat, og P/E på 32,3 er høy og priser inn videre vekst. Utbetalingsgraden på 94 % er høy — mesteparten av inntjeningen deles ut. Historikken er relativt kort (3 år), og utbyttet har økt kraftig de siste årene (fra et lavt utgangspunkt). IT-sektoren kan ha god vekst, men utbyttenivået varierer mellom selskapene. Mest aktuell for investorer som vektlegger kvalitet og vekst fremfor høy løpende yield.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": ""
     },
     {
       "ticker": "EIOF",
@@ -4822,8 +4735,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 1,3 % er lav, og P/E på 18,5 er noe høy. En lav utbetalingsgrad på 37 % gir god margin til å opprettholde og øke utbyttet. Selskapet har en lang utbyttehistorikk på 12 år, men trenden har vært fallende. Som oljeservice-/energitjenesteselskap følger inntjeningen investeringsnivået i energisektoren og er syklisk. Egnet for utbytteinvestorer som tåler sykliske svingninger og har en lang tidshorisont.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": ""
     },
     {
       "ticker": "VVL",
@@ -4875,8 +4787,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 4,0 % er moderat, og P/E på 12,8 er moderat. Utbetalingsgraden på 45 % er balansert og bærekraftig. Selskapet har en lang utbyttehistorikk på 26 år, og utbyttet har vokst sterkt (~16,9 %/år siste fem år). Sparebanker og finansselskaper gir normalt stabile og forutsigbare utbytter år etter år. Mest aktuell for investorer som vektlegger kvalitet og vekst fremfor høy løpende yield.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet har steget uten et eneste kutt fra 2022–2025, fra 10,05 til 16,50 kroner per aksje. Samlet er utbetalingen 1,6-doblet i perioden. Dagens yield på 4,3 % ligger nær aksjens eget 5-årssnitt på 3,4 %."
     },
     {
       "ticker": "RANA",
@@ -4928,8 +4839,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 6,8 % er høy og attraktiv for inntektsinvestorer, og P/E på 9,7 er moderat. Utbetalingsgraden på 66 % er balansert og bærekraftig. Med 5 års utbyttehistorikk er grunnlaget solid, men trenden har vært fallende. Som materialselskap er inntjeningen syklisk og følger råvarepriser og industriell etterspørsel. Egnet for utbytteinvestorer som tåler sykliske svingninger og har en lang tidshorisont.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet er lavere nå enn i 2022 — ned fra 6,16 til 5,33 kroner per aksje, med 2 nedgangsår i perioden. Høyeste år er 2,1 ganger det laveste — merkbare svingninger, men innenfor et gjenkjennelig spenn. Dagens yield på 6,8 % er lavere enn aksjens eget 5-årssnitt på 10,2 %."
     },
     {
       "ticker": "BIEN",
@@ -4976,8 +4886,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 3,9 % er moderat, og P/E på 13,5 er moderat. Utbetalingsgraden er ikke oppgitt, men utbyttet har vært utbetalt over flere år. Historikken er relativt kort (3 år), med moderat vekst (~8,0 %/år). Sparebanker og finansselskaper gir normalt stabile og forutsigbare utbytter år etter år. Mest aktuell for investorer som vektlegger kvalitet og vekst fremfor høy løpende yield.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": ""
     },
     {
       "ticker": "BNOR",
@@ -5019,8 +4928,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 7,4 % er høy og attraktiv for inntektsinvestorer, og P/E på 19,4 er noe høy. Utbetalingsgraden på 76 % er høy — mesteparten av inntjeningen deles ut. Historikken er relativt kort (2 år), og utbyttet har vokst sterkt (~45,7 %/år siste fem år). Som energiselskap er utbyttet tett koblet til olje- og gasspriser og dermed syklisk. Best egnet for risikovillige investorer som forstår syklisiteten i sektoren.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": ""
     },
     {
       "ticker": "AURG",
@@ -5077,8 +4985,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 6,7 % er høy og attraktiv for inntektsinvestorer, og P/E på 4,6 er lav — en attraktiv prising. En lav utbetalingsgrad på 31 % gir god margin til å opprettholde og øke utbyttet. Selskapet har en lang utbyttehistorikk på 19 år, og utbyttet har vokst sterkt (~40,7 %/år siste fem år). Sparebanker og finansselskaper gir normalt stabile og forutsigbare utbytter år etter år. Godt egnet for langsiktige utbytteinvestorer som ønsker stabil kontantstrøm.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet har steget uten et eneste kutt fra 2022–2025, fra 8,87 til 15,00 kroner per aksje. Samlet er utbetalingen 1,7-doblet i perioden. Dagens yield på 6,6 % ligger over aksjens eget 5-årssnitt på 5,1 % — her drevet av at utbyttet er kraftig hevet."
     },
     {
       "ticker": "SBNOR",
@@ -5135,8 +5042,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 6,4 % er høy og attraktiv for inntektsinvestorer, og P/E på 11,4 er moderat. Utbetalingsgraden på 73 % er balansert og bærekraftig. Selskapet har en lang utbyttehistorikk på 27 år, og utbyttet har vokst sterkt (~46,1 %/år siste fem år). Sparebanker og finansselskaper gir normalt stabile og forutsigbare utbytter år etter år. Godt egnet for langsiktige utbytteinvestorer som ønsker stabil kontantstrøm.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet er samlet opp fra 4,50 til 8,50 kroner per aksje i 2022–2025, men veien dit gikk gjennom 1 kutt underveis. Høyeste år er 1,9 ganger det laveste — merkbare svingninger, men innenfor et gjenkjennelig spenn. Dagens yield på 5,9 % ligger over aksjens eget 5-årssnitt på 4,0 % — ofte fordi kursen har falt, ikke fordi utbyttet er hevet."
     },
     {
       "ticker": "SB1NO",
@@ -5193,8 +5099,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 6,1 % er høy og attraktiv for inntektsinvestorer, og P/E på 11,8 er moderat. Utbetalingsgraden på 51 % er balansert og bærekraftig. Selskapet har en lang utbyttehistorikk på 15 år, og utbyttet har vokst sterkt (~31,1 %/år siste fem år). Sparebanker og finansselskaper gir normalt stabile og forutsigbare utbytter år etter år. Godt egnet for langsiktige utbytteinvestorer som ønsker stabil kontantstrøm.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet har steget uten et eneste kutt fra 2022–2025, fra 6,00 til 8,50 kroner per aksje. Nivået har holdt seg jevnt fra år til år. Dagens yield på 5,4 % ligger over aksjens eget 5-årssnitt på 3,7 %."
     },
     {
       "ticker": "SNOR",
@@ -5246,8 +5151,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 6,1 % er høy og attraktiv for inntektsinvestorer, og P/E på 9,9 er moderat. Utbetalingsgraden på 47 % er balansert og bærekraftig. Med 7 års utbyttehistorikk er grunnlaget solid, og utbyttet har vokst sterkt (~21,8 %/år siste fem år). Sparebanker og finansselskaper gir normalt stabile og forutsigbare utbytter år etter år. Godt egnet for langsiktige utbytteinvestorer som ønsker stabil kontantstrøm.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet har steget uten et eneste kutt fra 2022–2025, fra 5,00 til 8,50 kroner per aksje. Samlet er utbetalingen 1,7-doblet i perioden. Dagens yield på 6,0 % ligger over aksjens eget 5-årssnitt på 4,3 % — her drevet av at utbyttet er kraftig hevet."
     },
     {
       "ticker": "HSHP",
@@ -5294,8 +5198,7 @@
       "ask_egnet": false,
       "inkorporeringsland": "Bermuda",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 4,0 % er moderat, og P/E på 22,4 er noe høy. Utbetalingsgraden over 100 % (128 %) betyr at utbyttet overstiger regnskapsmessig resultat og bør følges nøye. Historikken er relativt kort (3 år), og utbyttet har vokst sterkt (~19,0 %/år siste fem år). Som shippingselskap svinger inntjening og utbytte kraftig med fraktratene og den globale handelssyklusen. Best egnet for risikovillige investorer som forstår syklisiteten i sektoren.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": ""
     },
     {
       "ticker": "GOD",
@@ -5332,8 +5235,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 3,8 % er moderat, og P/E på 11,4 er moderat. Utbetalingsgraden er ikke oppgitt, men utbyttet har vært utbetalt over flere år. Med 5 års utbyttehistorikk er grunnlaget solid. Som industriselskap avhenger utbyttet av ordreinngang og konjunkturer. Mest aktuell for investorer som vektlegger kvalitet og vekst fremfor høy løpende yield.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": ""
     },
     {
       "ticker": "ZAL",
@@ -5375,8 +5277,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 0,9 % er lav, og P/E på 43,2 er høy og priser inn videre vekst. En lav utbetalingsgrad på 39 % gir god margin til å opprettholde og øke utbyttet. Med 7 års utbyttehistorikk er grunnlaget solid, og utbyttet har vokst sterkt (~37,0 %/år siste fem år). IT-sektoren kan ha god vekst, men utbyttenivået varierer mellom selskapene. Mest aktuell for investorer som vektlegger kvalitet og vekst fremfor høy løpende yield.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": ""
     },
     {
       "ticker": "AKAST",
@@ -5418,8 +5319,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 5,7 % er solid, og P/E på 28,3 er høy og priser inn videre vekst. Utbetalingsgraden er ikke oppgitt, men utbyttet har vært utbetalt over flere år. Selskapet har en lang utbyttehistorikk på 11 år, og utbyttet har økt kraftig de siste årene (fra et lavt utgangspunkt). Som oljeservice-/energitjenesteselskap følger inntjeningen investeringsnivået i energisektoren og er syklisk. Egnet for utbytteinvestorer som tåler sykliske svingninger og har en lang tidshorisont.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": ""
     },
     {
       "ticker": "GENT",
@@ -5461,8 +5361,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 1,5 % er lav, og P/E på 9,9 er moderat. Utbetalingsgraden på 47 % er balansert og bærekraftig. Historikken er relativt kort (2 år), og utbyttet har økt kraftig de siste årene (fra et lavt utgangspunkt). Helsevern er en defensiv sektor med stabil underliggende etterspørsel. Mest aktuell for investorer som vektlegger kvalitet og vekst fremfor høy løpende yield.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": ""
     },
     {
       "ticker": "AFK",
@@ -5519,8 +5418,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 1,7 % er lav, og P/E på 55,0 er høy og priser inn videre vekst. En lav utbetalingsgrad på 22 % gir god margin til å opprettholde og øke utbyttet. Selskapet har en lang utbyttehistorikk på 25 år, og utbyttet har vokst sterkt (~12,7 %/år siste fem år). Innen fornybar energi kan inntjeningen variere med kraftpriser og prosjektgjennomføring. Egnet for utbytteinvestorer som tåler sykliske svingninger og har en lang tidshorisont.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet er lavere nå enn i 2022 — ned fra 3,75 til 2,00 kroner per aksje, med 1 nedgangsår i perioden. Høyeste år er 2,0 ganger det laveste — merkbare svingninger, men innenfor et gjenkjennelig spenn. Dagens yield på 1,6 % ligger nær aksjens eget 5-årssnitt på 1,8 %."
     },
     {
       "ticker": "ENH",
@@ -5567,8 +5465,7 @@
       "ask_egnet": false,
       "inkorporeringsland": "Storbritannia",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 7,3 % er høy og attraktiv for inntektsinvestorer, og P/E på 12,6 er moderat. Utbetalingsgraden over 100 % (138 %) betyr at utbyttet overstiger regnskapsmessig resultat og bør følges nøye. Historikken er relativt kort (3 år), med moderat vekst (~4,8 %/år). Som energiselskap er utbyttet tett koblet til olje- og gasspriser og dermed syklisk. Best egnet for risikovillige investorer som forstår syklisiteten i sektoren.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": ""
     },
     {
       "ticker": "PROT",
@@ -5625,8 +5522,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 2,4 % er moderat, og P/E på 20,2 er noe høy. Utbetalingsgraden på 57 % er balansert og bærekraftig. Selskapet har en lang utbyttehistorikk på 14 år, og utbyttet har vokst sterkt (~33,2 %/år siste fem år). Sparebanker og finansselskaper gir normalt stabile og forutsigbare utbytter år etter år. Mest aktuell for investorer som vektlegger kvalitet og vekst fremfor høy løpende yield.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet ligger omtrent på samme nivå som i 2022, men har svingt underveis med 2 nedgangsår. Dagens yield på 2,5 % ligger nær aksjens eget 5-årssnitt på 2,5 %."
     },
     {
       "ticker": "ELK",
@@ -5673,8 +5569,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 1,0 % er lav, og P/E på 60,0 er høy og priser inn videre vekst. Utbetalingsgraden på 58 % er balansert og bærekraftig. Med 6 års utbyttehistorikk er grunnlaget solid, men trenden har vært fallende. Som materialselskap er inntjeningen syklisk og følger råvarepriser og industriell etterspørsel. Egnet for utbytteinvestorer som tåler sykliske svingninger og har en lang tidshorisont.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet er lavere nå enn i 2022 — ned fra 2,99 til 0,30 kroner per aksje, med 1 nedgangsår i perioden. Spennet er stort: høyeste år er 19,9 ganger det laveste, så størrelsen på utbetalingen er lite forutsigbar fra år til år. Dagens yield på 0,9 % er lavere enn aksjens eget 5-årssnitt på 9,5 %."
     },
     {
       "ticker": "ELO",
@@ -5731,8 +5626,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 5,8 % er solid, og P/E på 13,4 er moderat. Utbetalingsgraden på 70 % er balansert og bærekraftig. Med 5 års utbyttehistorikk er grunnlaget solid, og utbyttet har vokst sterkt (~10,0 %/år siste fem år). Som industriselskap avhenger utbyttet av ordreinngang og konjunkturer. Godt egnet for langsiktige utbytteinvestorer som ønsker stabil kontantstrøm.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet har steget uten et eneste kutt fra 2022–2025, fra 0,75 til 1,86 kroner per aksje. Samlet er utbetalingen 2,5-doblet i perioden. Dagens yield på 5,1 % ligger over aksjens eget 5-årssnitt på 3,4 % — her drevet av at utbyttet er kraftig hevet."
     },
     {
       "ticker": "ENDUR",
@@ -5769,8 +5663,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 0,7 % er lav, og P/E på 40,8 er høy og priser inn videre vekst. Utbyttehistorikken er kort eller uregelmessig, noe som gir begrenset forutsigbarhet. Historikken er relativt kort (1 år). Som industriselskap avhenger utbyttet av ordreinngang og konjunkturer. Mest aktuell for investorer som vektlegger kvalitet og vekst fremfor høy løpende yield.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": ""
     },
     {
       "ticker": "MORLD",
@@ -5812,8 +5705,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 6,8 % er høy og attraktiv for inntektsinvestorer, og P/E på 32,4 er høy og priser inn videre vekst. Utbetalingsgraden over 100 % (295 %) betyr at utbyttet overstiger regnskapsmessig resultat og bør følges nøye. Historikken er relativt kort (2 år), men trenden har vært fallende. Som industriselskap avhenger utbyttet av ordreinngang og konjunkturer. Kan passe utbytteinvestorer, forutsatt at inntjeningen holder seg stabil.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": ""
     },
     {
       "ticker": "NKR",
@@ -5844,8 +5736,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Selskapet har foreløpig ikke et etablert løpende utbytte å verdsette på, og P/E på 7,4 er lav — en attraktiv prising. Utbetalingsgraden er ikke oppgitt, men utbyttet har vært utbetalt over flere år. Med 5 års utbyttehistorikk er grunnlaget solid. Som industriselskap avhenger utbyttet av ordreinngang og konjunkturer. Foreløpig mindre egnet som ren utbytteaksje.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": ""
     },
     {
       "ticker": "TIETO",
@@ -5876,8 +5767,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Finland",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 4,7 % er solid, og P/E på 29,7 er høy og priser inn videre vekst. Utbetalingsgraden over 100 % (189 %) betyr at utbyttet overstiger regnskapsmessig resultat og bør følges nøye. Med 7 års utbyttehistorikk er grunnlaget solid, men trenden har vært fallende. IT-sektoren kan ha god vekst, men utbyttenivået varierer mellom selskapene. Kan passe utbytteinvestorer, forutsatt at inntjeningen holder seg stabil.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": ""
     },
     {
       "ticker": "WSTEP",
@@ -5934,8 +5824,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 10,9 % er svært høy og gjenspeiler ofte høy risiko eller en syklisk topp, og P/E på 9,7 er moderat. Utbetalingsgraden over 100 % (163 %) betyr at utbyttet overstiger regnskapsmessig resultat og bør følges nøye. Med 9 års utbyttehistorikk er grunnlaget solid, men trenden har vært fallende. IT-sektoren kan ha god vekst, men utbyttenivået varierer mellom selskapene. Kan passe utbytteinvestorer, forutsatt at inntjeningen holder seg stabil.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet er samlet opp fra 1,70 til 2,30 kroner per aksje i 2022–2025, men veien dit gikk gjennom 1 kutt underveis. Høyeste år er 2,3 ganger det laveste — merkbare svingninger, men innenfor et gjenkjennelig spenn. Dagens yield på 10,5 % ligger nær aksjens eget 5-årssnitt på 11,5 %."
     },
     {
       "ticker": "BWE",
@@ -5966,8 +5855,7 @@
       "ask_egnet": false,
       "inkorporeringsland": "Bermuda",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Selskapet har foreløpig ikke et etablert løpende utbytte å verdsette på, og P/E på 15,3 er noe høy. Utbyttehistorikken er kort eller uregelmessig, noe som gir begrenset forutsigbarhet. Som energiselskap er utbyttet tett koblet til olje- og gasspriser og dermed syklisk. Foreløpig mindre egnet som ren utbytteaksje.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": ""
     },
     {
       "ticker": "MGN",
@@ -6014,8 +5902,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 3,1 % er moderat, og P/E på 13,8 er moderat. Utbetalingsgraden på 43 % er balansert og bærekraftig. Med 7 års utbyttehistorikk er grunnlaget solid, og utbyttet har vokst sterkt (~22,5 %/år siste fem år). Som energiselskap er utbyttet tett koblet til olje- og gasspriser og dermed syklisk. Egnet for utbytteinvestorer som tåler sykliske svingninger og har en lang tidshorisont.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet er samlet opp fra 0,37 til 0,56 kroner per aksje i 2023–2025, men veien dit gikk gjennom 1 kutt underveis. Spennet er stort: høyeste år er 12,3 ganger det laveste, så størrelsen på utbetalingen er lite forutsigbar fra år til år. Dagens yield på 3,3 % er lavere enn aksjens eget 5-årssnitt på 8,1 %."
     },
     {
       "ticker": "ARCH",
@@ -6057,8 +5944,7 @@
       "ask_egnet": false,
       "inkorporeringsland": "Bermuda",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 10,6 % er svært høy og gjenspeiler ofte høy risiko eller en syklisk topp, og P/E på 4,5 ser lav ut, men lave multipler er vanlig på syklisk resultattopp. Utbyttehistorikken er kort eller uregelmessig, noe som gir begrenset forutsigbarhet. Historikken er relativt kort (2 år), men trenden har vært fallende. Som oljeservice-/energitjenesteselskap følger inntjeningen investeringsnivået i energisektoren og er syklisk. Best egnet for risikovillige investorer som forstår syklisiteten i sektoren.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": ""
     },
     {
       "ticker": "AQUA",
@@ -6115,8 +6001,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 9,7 % er høy og attraktiv for inntektsinvestorer, og P/E på 73,9 er høy og priser inn videre vekst. Utbetalingsgraden er ikke oppgitt, men utbyttet har vært utbetalt over flere år. Med 8 års utbyttehistorikk er grunnlaget solid, og utbyttet har vokst sterkt (~12,5 %/år siste fem år). Som oljeservice-/energitjenesteselskap følger inntjeningen investeringsnivået i energisektoren og er syklisk. Egnet for utbytteinvestorer som tåler sykliske svingninger og har en lang tidshorisont.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet har steget uten et eneste kutt fra 2022–2025, fra 0,60 til 0,90 kroner per aksje. Samlet er utbetalingen 1,5-doblet i perioden. Dagens yield på 10,2 % ligger over aksjens eget 5-årssnitt på 7,8 % — her drevet av at utbyttet er kraftig hevet."
     },
     {
       "ticker": "CADLR",
@@ -6147,8 +6032,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Danmark",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Selskapet har foreløpig ikke et etablert løpende utbytte å verdsette på, og P/E på 6,3 ser lav ut, men lave multipler er vanlig på syklisk resultattopp. Utbyttehistorikken er kort eller uregelmessig, noe som gir begrenset forutsigbarhet. Som oljeservice-/energitjenesteselskap følger inntjeningen investeringsnivået i energisektoren og er syklisk. Foreløpig mindre egnet som ren utbytteaksje.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": ""
     },
     {
       "ticker": "KMCP",
@@ -6179,8 +6063,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Selskapet har foreløpig ikke et etablert løpende utbytte å verdsette på, og P/E på 0,0 er lav — en attraktiv prising. Utbetalingsgraden er ikke oppgitt, men utbyttet har vært utbetalt over flere år. Med 5 års utbyttehistorikk er grunnlaget solid. Eiendomsselskaper gir normalt jevne leieinntekter, men er følsomme for rentenivået. Foreløpig mindre egnet som ren utbytteaksje.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": ""
     },
     {
       "ticker": "PUBLI",
@@ -6222,8 +6105,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 1,0 % er lav, og P/E på 17,0 er noe høy. Utbetalingsgraden på 43 % er balansert og bærekraftig. Historikken er relativt kort (2 år), og utbyttet har økt kraftig de siste årene (fra et lavt utgangspunkt). Eiendomsselskaper gir normalt jevne leieinntekter, men er følsomme for rentenivået. Mest aktuell for investorer som vektlegger kvalitet og vekst fremfor høy løpende yield.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": ""
     },
     {
       "ticker": "WWIB",
@@ -6280,8 +6162,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 1,9 % er lav, og P/E på 4,2 er lav — en attraktiv prising. En lav utbetalingsgrad på 13 % gir god margin til å opprettholde og øke utbyttet. Selskapet har en lang utbyttehistorikk på 27 år, og utbyttet har vokst sterkt (~46,1 %/år siste fem år). Som industriselskap avhenger utbyttet av ordreinngang og konjunkturer. Mest aktuell for investorer som vektlegger kvalitet og vekst fremfor høy løpende yield.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet er samlet opp fra 4,00 til 12,00 kroner per aksje i 2022–2025, men veien dit gikk gjennom 1 kutt underveis. Spennet er stort: høyeste år er 4,5 ganger det laveste, så størrelsen på utbetalingen er lite forutsigbar fra år til år. Dagens yield på 1,6 % ligger nær aksjens eget 5-årssnitt på 1,6 %."
     },
     {
       "ticker": "POL",
@@ -6338,8 +6219,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 10,9 % er svært høy og gjenspeiler ofte høy risiko eller en syklisk topp, og P/E på 259,1 er høy og priser inn videre vekst. Utbetalingsgraden er ikke oppgitt, men utbyttet har vært utbetalt over flere år. Selskapet har en lang utbyttehistorikk på 16 år, med moderat vekst (~2,4 %/år). Innen kommunikasjonstjenester varierer utbyttepolitikken mye mellom selskapene. Godt egnet for langsiktige utbytteinvestorer som ønsker stabil kontantstrøm.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet er samlet opp fra 3,00 til 22,40 kroner per aksje i 2022–2025, men veien dit gikk gjennom 2 kutt underveis. Spennet er stort: høyeste år er 22,4 ganger det laveste, så størrelsen på utbetalingen er lite forutsigbar fra år til år. Dagens yield på 10,4 % ligger nær aksjens eget 5-årssnitt på 10,4 %."
     },
     {
       "ticker": "GYL",
@@ -6391,8 +6271,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 0,9 % er lav, og P/E på 11,4 er moderat. En lav utbetalingsgrad på 10 % gir god margin til å opprettholde og øke utbyttet. Selskapet har en lang utbyttehistorikk på 25 år, men trenden har vært fallende. Innen kommunikasjonstjenester varierer utbyttepolitikken mye mellom selskapene. Mest aktuell for investorer som vektlegger kvalitet og vekst fremfor høy løpende yield.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet er lavere nå enn i 2022 — ned fra 10,00 til 3,50 kroner per aksje, med 2 nedgangsår i perioden. Høyeste år er 2,9 ganger det laveste — merkbare svingninger, men innenfor et gjenkjennelig spenn. Dagens yield på 0,8 % ligger nær aksjens eget 5-årssnitt på 1,6 %."
     },
     {
       "ticker": "SOAG",
@@ -6449,8 +6328,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 5,6 % er solid, og P/E på 8,7 er moderat. Utbetalingsgraden på 49 % er balansert og bærekraftig. Selskapet har en lang utbyttehistorikk på 19 år, og utbyttet har vokst sterkt (~47,6 %/år siste fem år). Sparebanker og finansselskaper gir normalt stabile og forutsigbare utbytter år etter år. Godt egnet for langsiktige utbytteinvestorer som ønsker stabil kontantstrøm.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet har steget uten et eneste kutt fra 2022–2025, fra 16,20 til 30,10 kroner per aksje. Samlet er utbetalingen 1,9-doblet i perioden. Dagens yield på 5,5 % ligger nær aksjens eget 5-årssnitt på 5,0 %."
     },
     {
       "ticker": "ROGS",
@@ -6507,8 +6385,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 8,0 % er høy og attraktiv for inntektsinvestorer, og P/E på 12,8 er moderat. Utbetalingsgraden over 100 % (103 %) betyr at utbyttet overstiger regnskapsmessig resultat og bør følges nøye. Selskapet har en lang utbyttehistorikk på 14 år, og utbyttet har vokst sterkt (~21,6 %/år siste fem år). Sparebanker og finansselskaper gir normalt stabile og forutsigbare utbytter år etter år. Kan passe utbytteinvestorer, forutsatt at inntjeningen holder seg stabil.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet har steget uten et eneste kutt fra 2022–2025, fra 5,35 til 9,50 kroner per aksje. Samlet er utbetalingen 1,8-doblet i perioden. Dagens yield på 7,8 % ligger over aksjens eget 5-årssnitt på 5,3 % — her drevet av at utbyttet er kraftig hevet."
     },
     {
       "ticker": "MELG",
@@ -6565,8 +6442,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 7,3 % er høy og attraktiv for inntektsinvestorer, og P/E på 13,3 er moderat. Utbetalingsgraden på 96 % er høy — mesteparten av inntjeningen deles ut. Selskapet har en lang utbyttehistorikk på 26 år, med moderat vekst (~6,5 %/år). Sparebanker og finansselskaper gir normalt stabile og forutsigbare utbytter år etter år. Kan passe utbytteinvestorer, forutsatt at inntjeningen holder seg stabil.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet har steget uten et eneste kutt fra 2022–2025, fra 10,50 til 13,50 kroner per aksje. Nivået har holdt seg jevnt fra år til år. Dagens yield på 7,5 % ligger nær aksjens eget 5-årssnitt på 6,8 %."
     },
     {
       "ticker": "TRSB",
@@ -6608,8 +6484,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 4,6 % er solid, og P/E på 7,4 er lav — en attraktiv prising. En lav utbetalingsgrad på 33 % gir god margin til å opprettholde og øke utbyttet. Historikken er relativt kort (2 år), med moderat vekst (~4,2 %/år). Sparebanker og finansselskaper gir normalt stabile og forutsigbare utbytter år etter år. Kan passe utbytteinvestorer, forutsatt at inntjeningen holder seg stabil.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": ""
     },
     {
       "ticker": "HSPG",
@@ -6666,8 +6541,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 3,2 % er moderat, og P/E på 29,5 er høy og priser inn videre vekst. Utbetalingsgraden på 94 % er høy — mesteparten av inntjeningen deles ut. Selskapet har en lang utbyttehistorikk på 26 år, men trenden har vært fallende. Sparebanker og finansselskaper gir normalt stabile og forutsigbare utbytter år etter år. Mest aktuell for investorer som vektlegger kvalitet og vekst fremfor høy løpende yield.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet har vært stabilt eller stigende gjennom hele 2022–2025, uten kutt. Nivået har holdt seg jevnt fra år til år. Dagens yield på 3,7 % er lavere enn aksjens eget 5-årssnitt på 5,2 %."
     },
     {
       "ticker": "SOGN",
@@ -6724,8 +6598,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 7,2 % er høy og attraktiv for inntektsinvestorer, og P/E på 14,0 er moderat. Utbetalingsgraden på 92 % er høy — mesteparten av inntjeningen deles ut. Selskapet har en lang utbyttehistorikk på 17 år, og utbyttet har vokst sterkt (~41,4 %/år siste fem år). Sparebanker og finansselskaper gir normalt stabile og forutsigbare utbytter år etter år. Kan passe utbytteinvestorer, forutsatt at inntjeningen holder seg stabil.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet har steget uten et eneste kutt fra 2022–2025, fra 5,50 til 20,00 kroner per aksje. Veksten er kraftig: siste år er 3,6 ganger det første. Så bratte løft holder sjelden samme takt over tid. Dagens yield på 6,6 % ligger over aksjens eget 5-årssnitt på 4,3 % — her drevet av at utbyttet er kraftig hevet."
     },
     {
       "ticker": "GRONG",
@@ -6782,8 +6655,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 5,6 % er solid, og P/E på 9,4 er moderat. Utbetalingsgraden på 50 % er balansert og bærekraftig. Med 9 års utbyttehistorikk er grunnlaget solid, med moderat vekst (~8,8 %/år). Sparebanker og finansselskaper gir normalt stabile og forutsigbare utbytter år etter år. Godt egnet for langsiktige utbytteinvestorer som ønsker stabil kontantstrøm.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet har steget uten et eneste kutt fra 2022–2025, fra 7,84 til 10,50 kroner per aksje. Nivået har holdt seg jevnt fra år til år. Dagens yield på 5,9 % ligger nær aksjens eget 5-årssnitt på 5,2 %."
     },
     {
       "ticker": "TINDE",
@@ -6840,8 +6712,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 4,3 % er solid, og P/E på 32,4 er høy og priser inn videre vekst. Utbetalingsgraden over 100 % (139 %) betyr at utbyttet overstiger regnskapsmessig resultat og bør følges nøye. Med 6 års utbyttehistorikk er grunnlaget solid, med moderat vekst (~8,5 %/år). Sparebanker og finansselskaper gir normalt stabile og forutsigbare utbytter år etter år. Kan passe utbytteinvestorer, forutsatt at inntjeningen holder seg stabil.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet er samlet opp fra 7,74 til 9,00 kroner per aksje i 2022–2025, men veien dit gikk gjennom 1 kutt underveis. Dagens yield på 4,4 % er lavere enn aksjens eget 5-årssnitt på 6,8 %."
     },
     {
       "ticker": "ROMER",
@@ -6898,8 +6769,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 6,8 % er høy og attraktiv for inntektsinvestorer, og P/E på 2,0 er lav — en attraktiv prising. En lav utbetalingsgrad på 14 % gir god margin til å opprettholde og øke utbyttet. Med 9 års utbyttehistorikk er grunnlaget solid, med moderat vekst (~5,7 %/år). Sparebanker og finansselskaper gir normalt stabile og forutsigbare utbytter år etter år. Godt egnet for langsiktige utbytteinvestorer som ønsker stabil kontantstrøm.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet er samlet opp fra 8,40 til 10,50 kroner per aksje i 2022–2025, men veien dit gikk gjennom 1 kutt underveis. Dagens yield på 7,0 % ligger nær aksjens eget 5-årssnitt på 6,0 %."
     },
     {
       "ticker": "SB68",
@@ -6951,8 +6821,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 6,3 % er høy og attraktiv for inntektsinvestorer, og P/E på 13,1 er moderat. Utbetalingsgraden på 83 % er høy — mesteparten av inntjeningen deles ut. Med 5 års utbyttehistorikk er grunnlaget solid, og utbyttet har vokst sterkt (~40,1 %/år siste fem år). Sparebanker og finansselskaper gir normalt stabile og forutsigbare utbytter år etter år. Godt egnet for langsiktige utbytteinvestorer som ønsker stabil kontantstrøm.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet har steget uten et eneste kutt fra 2023–2025, fra 9,50 til 15,00 kroner per aksje. Samlet er utbetalingen 1,6-doblet i perioden. Dagens yield på 6,3 % ligger nær aksjens eget 5-årssnitt på 5,8 %."
     },
     {
       "ticker": "NISB",
@@ -7009,8 +6878,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 5,4 % er solid, og P/E på 43,4 er høy og priser inn videre vekst. Utbetalingsgraden over 100 % (235 %) betyr at utbyttet overstiger regnskapsmessig resultat og bør følges nøye. Med 7 års utbyttehistorikk er grunnlaget solid, med moderat vekst (~1,4 %/år). Sparebanker og finansselskaper gir normalt stabile og forutsigbare utbytter år etter år. Kan passe utbytteinvestorer, forutsatt at inntjeningen holder seg stabil.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet ligger omtrent på samme nivå som i 2022, men har svingt underveis med 1 nedgangsår. Dagens yield på 5,7 % ligger nær aksjens eget 5-årssnitt på 6,3 %."
     },
     {
       "ticker": "AASB",
@@ -7067,8 +6935,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 7,5 % er høy og attraktiv for inntektsinvestorer, og P/E på 12,0 er moderat. Utbetalingsgraden på 90 % er høy — mesteparten av inntjeningen deles ut. Selskapet har en lang utbyttehistorikk på 10 år, og utbyttet har vokst sterkt (~11,2 %/år siste fem år). Sparebanker og finansselskaper gir normalt stabile og forutsigbare utbytter år etter år. Godt egnet for langsiktige utbytteinvestorer som ønsker stabil kontantstrøm.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet har vært stabilt eller stigende gjennom hele 2022–2025, uten kutt. Nivået har holdt seg jevnt fra år til år. Dagens yield på 7,5 % ligger over aksjens eget 5-årssnitt på 6,1 %."
     },
     {
       "ticker": "CMBTO",
@@ -7110,8 +6977,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Belgia",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 0,3 % er lav, og P/E på 8,5 er moderat. En lav utbetalingsgrad på 6 % gir god margin til å opprettholde og øke utbyttet. Historikken er relativt kort (2 år), og utbyttet har økt kraftig de siste årene (fra et lavt utgangspunkt). Som shippingselskap svinger inntjening og utbytte kraftig med fraktratene og den globale handelssyklusen. Best egnet for risikovillige investorer som forstår syklisiteten i sektoren.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": ""
     },
     {
       "ticker": "JIN",
@@ -7163,8 +7029,7 @@
       "ask_egnet": false,
       "inkorporeringsland": "Bermuda",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 2,8 % er moderat, og P/E på 28,7 er høy og priser inn videre vekst. En lav utbetalingsgrad på 26 % gir god margin til å opprettholde og øke utbyttet. Selskapet har en lang utbyttehistorikk på 10 år, men trenden har vært fallende. Som shippingselskap svinger inntjening og utbytte kraftig med fraktratene og den globale handelssyklusen. Egnet for utbytteinvestorer som tåler sykliske svingninger og har en lang tidshorisont.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet er lavere nå enn i 2022 — ned fra 0,94 til 0,28 kroner per aksje, med 2 nedgangsår i perioden. Spennet er stort: høyeste år er 3,4 ganger det laveste, så størrelsen på utbetalingen er lite forutsigbar fra år til år. Dagens yield på 2,3 % er lavere enn aksjens eget 5-årssnitt på 6,0 %."
     },
     {
       "ticker": "SOMA",
@@ -7206,8 +7071,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 7,3 % er høy og attraktiv for inntektsinvestorer, og P/E på 5,0 ser lav ut, men lave multipler er vanlig på syklisk resultattopp. Utbetalingsgraden på 42 % er balansert og bærekraftig. Historikken er relativt kort (2 år), men trenden har vært fallende. Som shippingselskap svinger inntjening og utbytte kraftig med fraktratene og den globale handelssyklusen. Best egnet for risikovillige investorer som forstår syklisiteten i sektoren.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": ""
     },
     {
       "ticker": "BORR",
@@ -7244,8 +7108,7 @@
       "ask_egnet": false,
       "inkorporeringsland": "Bermuda",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Selskapet har foreløpig ikke et etablert løpende utbytte å verdsette på, og P/E på 29,4 er høy og priser inn videre vekst. Utbyttehistorikken er kort eller uregelmessig, noe som gir begrenset forutsigbarhet. Historikken er relativt kort (1 år). Som oljeservice-/energitjenesteselskap følger inntjeningen investeringsnivået i energisektoren og er syklisk. Foreløpig mindre egnet som ren utbytteaksje.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": ""
     },
     {
       "ticker": "WEST",
@@ -7293,8 +7156,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 5,5 % er solid, og P/E på 13,8 er moderat. Utbetalingsgraden er ikke oppgitt, men utbyttet har vært utbetalt over flere år. Historikken er relativt kort (3 år), men trenden har vært fallende. Som shippingselskap svinger inntjening og utbytte kraftig med fraktratene og den globale handelssyklusen. Best egnet for risikovillige investorer som forstår syklisiteten i sektoren.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": ""
     },
     {
       "ticker": "CAPT",
@@ -7331,8 +7193,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 0,4 % er lav, og P/E på 112,7 er høy og priser inn videre vekst. Utbyttehistorikken er kort eller uregelmessig, noe som gir begrenset forutsigbarhet. Historikken er relativt kort (1 år). Som shippingselskap svinger inntjening og utbytte kraftig med fraktratene og den globale handelssyklusen. Best egnet for risikovillige investorer som forstår syklisiteten i sektoren.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": ""
     },
     {
       "ticker": "MAS",
@@ -7379,8 +7240,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Selskapet har foreløpig ikke et etablert løpende utbytte å verdsette på. Utbetalingsgraden er ikke oppgitt, men utbyttet har vært utbetalt over flere år. Historikken er relativt kort (3 år), men trenden har vært fallende. Som havbruksselskap varierer inntjening og utbytte med laksepris og biologiske forhold. Foreløpig mindre egnet som ren utbytteaksje.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet er lavere nå enn i 2022 — ned fra 1,00 til 0,50 kroner per aksje, med 1 nedgangsår i perioden. Høyeste år er 2,0 ganger det laveste — merkbare svingninger, men innenfor et gjenkjennelig spenn."
     },
     {
       "ticker": "ISLAX",
@@ -7411,8 +7271,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Selskapet har foreløpig ikke et etablert løpende utbytte å verdsette på, og P/E på 24,4 er noe høy. Utbyttehistorikken er kort eller uregelmessig, noe som gir begrenset forutsigbarhet. Som havbruksselskap varierer inntjening og utbytte med laksepris og biologiske forhold. Foreløpig mindre egnet som ren utbytteaksje.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": ""
     },
     {
       "ticker": "AFISH",
@@ -7443,8 +7302,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Selskapet har foreløpig ikke et etablert løpende utbytte å verdsette på, og P/E på 11,5 er moderat. Utbyttehistorikken er kort eller uregelmessig, noe som gir begrenset forutsigbarhet. Som havbruksselskap varierer inntjening og utbytte med laksepris og biologiske forhold. Foreløpig mindre egnet som ren utbytteaksje.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": ""
     },
     {
       "ticker": "SMOP",
@@ -7496,8 +7354,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 1,2 % er lav, og P/E på 99,2 er høy og priser inn videre vekst. Utbetalingsgraden over 100 % (120 %) betyr at utbyttet overstiger regnskapsmessig resultat og bør følges nøye. Historikken er relativt kort (4 år), med moderat vekst (~6,3 %/år). IT-sektoren kan ha god vekst, men utbyttenivået varierer mellom selskapene. Mest aktuell for investorer som vektlegger kvalitet og vekst fremfor høy løpende yield.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet har vært stabilt eller stigende gjennom hele 2023–2025, uten kutt. Dagens yield på 1,3 % ligger nær aksjens eget 5-årssnitt på 1,2 %."
     },
     {
       "ticker": "SNTIA",
@@ -7534,8 +7391,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 7,1 % er høy og attraktiv for inntektsinvestorer, og P/E på 12,8 er moderat. Utbyttehistorikken er kort eller uregelmessig, noe som gir begrenset forutsigbarhet. Historikken er relativt kort (1 år). IT-sektoren kan ha god vekst, men utbyttenivået varierer mellom selskapene. Kan passe utbytteinvestorer, forutsatt at inntjeningen holder seg stabil.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": ""
     },
     {
       "ticker": "SWON",
@@ -7592,8 +7448,7 @@
       "ask_egnet": false,
       "inkorporeringsland": "Sveits",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 1,9 % er lav. Utbetalingsgraden over 100 % (360 %) betyr at utbyttet overstiger regnskapsmessig resultat og bør følges nøye. Med 7 års utbyttehistorikk er grunnlaget solid, men trenden har vært fallende. IT-sektoren kan ha god vekst, men utbyttenivået varierer mellom selskapene. Mest aktuell for investorer som vektlegger kvalitet og vekst fremfor høy løpende yield.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet er lavere nå enn i 2022 — ned fra 0,33 til 0,30 kroner per aksje, med 1 nedgangsår i perioden. Dagens yield på 1,6 % er lavere enn aksjens eget 5-årssnitt på 3,1 %."
     },
     {
       "ticker": "HEX",
@@ -7624,8 +7479,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Selskapet har foreløpig ikke et etablert løpende utbytte å verdsette på, og P/E på 11,2 er moderat. Utbetalingsgraden er ikke oppgitt, men utbyttet har vært utbetalt over flere år. Med 6 års utbyttehistorikk er grunnlaget solid. Som industriselskap avhenger utbyttet av ordreinngang og konjunkturer. Foreløpig mindre egnet som ren utbytteaksje.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": ""
     },
     {
       "ticker": "BMA",
@@ -7662,8 +7516,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Selskapet har foreløpig ikke et etablert løpende utbytte å verdsette på, og P/E på 11,8 er moderat. Utbetalingsgraden er ikke oppgitt, men utbyttet har vært utbetalt over flere år. Selskapet har en lang utbyttehistorikk på 23 år. Som industriselskap avhenger utbyttet av ordreinngang og konjunkturer. Foreløpig mindre egnet som ren utbytteaksje.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": ""
     },
     {
       "ticker": "EQVA",
@@ -7700,8 +7553,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Selskapet har foreløpig ikke et etablert løpende utbytte å verdsette på, og P/E på 14,4 er moderat. Utbetalingsgraden er ikke oppgitt, men utbyttet har vært utbetalt over flere år. Historikken er relativt kort (3 år). Som industriselskap avhenger utbyttet av ordreinngang og konjunkturer. Foreløpig mindre egnet som ren utbytteaksje.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": ""
     },
     {
       "ticker": "BOR",
@@ -7743,8 +7595,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 5,9 % er solid, og P/E på 65,4 er høy og priser inn videre vekst. Utbetalingsgraden over 100 % (500 %) betyr at utbyttet overstiger regnskapsmessig resultat og bør følges nøye. Selskapet har en lang utbyttehistorikk på 12 år, men trenden har vært fallende. Som materialselskap er inntjeningen syklisk og følger råvarepriser og industriell etterspørsel. Best egnet for risikovillige investorer som forstår syklisiteten i sektoren.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": ""
     },
     {
       "ticker": "REACH",
@@ -7796,8 +7647,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 8,7 % er høy og attraktiv for inntektsinvestorer, og P/E på 4,2 ser lav ut, men lave multipler er vanlig på syklisk resultattopp. Utbetalingsgraden over 100 % (127 %) betyr at utbyttet overstiger regnskapsmessig resultat og bør følges nøye. Med 7 års utbyttehistorikk er grunnlaget solid, og utbyttet har vokst sterkt (~32,8 %/år siste fem år). Som oljeservice-/energitjenesteselskap følger inntjeningen investeringsnivået i energisektoren og er syklisk. Best egnet for risikovillige investorer som forstår syklisiteten i sektoren.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet har steget uten et eneste kutt fra 2022–2025, fra 0,18 til 0,42 kroner per aksje. Samlet er utbetalingen 2,3-doblet i perioden. Dagens yield på 6,8 % ligger over aksjens eget 5-årssnitt på 4,6 % — her drevet av at utbyttet er kraftig hevet."
     },
     {
       "ticker": "PLSV",
@@ -7844,8 +7694,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 18,8 % er svært høy og gjenspeiler ofte høy risiko eller en syklisk topp, og P/E på 6,9 ser lav ut, men lave multipler er vanlig på syklisk resultattopp. Utbetalingsgraden over 100 % (133 %) betyr at utbyttet overstiger regnskapsmessig resultat og bør følges nøye. Historikken er relativt kort (3 år), men trenden har vært fallende. Som oljeservice-/energitjenesteselskap følger inntjeningen investeringsnivået i energisektoren og er syklisk. Best egnet for risikovillige investorer som forstår syklisiteten i sektoren.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": ""
     },
     {
       "ticker": "ACR",
@@ -7876,8 +7725,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Selskapet har foreløpig ikke et etablert løpende utbytte å verdsette på, og P/E på 5,2 er lav — en attraktiv prising. Utbyttehistorikken er kort eller uregelmessig, noe som gir begrenset forutsigbarhet. Sparebanker og finansselskaper gir normalt stabile og forutsigbare utbytter år etter år. Foreløpig mindre egnet som ren utbytteaksje.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": ""
     },
     {
       "ticker": "FFSB",
@@ -7919,8 +7767,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 5,5 % er solid, og P/E på 1,3 er lav — en attraktiv prising. En lav utbetalingsgrad på 7 % gir god margin til å opprettholde og øke utbyttet. Historikken er relativt kort (2 år), og utbyttet har vokst sterkt (~39,1 %/år siste fem år). Sparebanker og finansselskaper gir normalt stabile og forutsigbare utbytter år etter år. Kan passe utbytteinvestorer, forutsatt at inntjeningen holder seg stabil.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": ""
     },
     {
       "ticker": "OTEC",
@@ -7957,8 +7804,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Selskapet har foreløpig ikke et etablert løpende utbytte å verdsette på, og P/E på 2,5 er lav — en attraktiv prising. Utbetalingsgraden er ikke oppgitt, men utbyttet har vært utbetalt over flere år. Med 9 års utbyttehistorikk er grunnlaget solid. Innen kommunikasjonstjenester varierer utbyttepolitikken mye mellom selskapene. Foreløpig mindre egnet som ren utbytteaksje.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": ""
     },
     {
       "ticker": "VEND",
@@ -8015,8 +7861,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 1,0 % er lav, og P/E på 23,8 er noe høy. En lav utbetalingsgrad på 36 % gir god margin til å opprettholde og øke utbyttet. Selskapet har en lang utbyttehistorikk på 10 år, med moderat vekst (~5,7 %/år). Innen kommunikasjonstjenester varierer utbyttepolitikken mye mellom selskapene. Mest aktuell for investorer som vektlegger kvalitet og vekst fremfor høy løpende yield.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": "Utbyttet er samlet opp fra 2,00 til 4,47 kroner per aksje i 2022–2025, men veien dit gikk gjennom 1 kutt underveis. Spennet er stort: høyeste år er 43,8 ganger det laveste, så størrelsen på utbetalingen er lite forutsigbar fra år til år. Dagens yield på 1,0 % er lavere enn aksjens eget 5-årssnitt på 7,5 %."
     },
     {
       "ticker": "NOD",
@@ -8047,8 +7892,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Selskapet har foreløpig ikke et etablert løpende utbytte å verdsette på, og P/E på 144,2 er høy og priser inn videre vekst. Utbetalingsgraden er ikke oppgitt, men utbyttet har vært utbetalt over flere år. Historikken er relativt kort (3 år). IT-sektoren kan ha god vekst, men utbyttenivået varierer mellom selskapene. Foreløpig mindre egnet som ren utbytteaksje.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": ""
     },
     {
       "ticker": "KOA",
@@ -8079,8 +7923,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Selskapet har foreløpig ikke et etablert løpende utbytte å verdsette på. Utbyttehistorikken er kort eller uregelmessig, noe som gir begrenset forutsigbarhet. Historikken er relativt kort (2 år). Som industriselskap avhenger utbyttet av ordreinngang og konjunkturer. Foreløpig mindre egnet som ren utbytteaksje.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": ""
     },
     {
       "ticker": "DELIA",
@@ -8117,8 +7960,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 2,5 % er moderat, og P/E på 18,6 er noe høy. Utbetalingsgraden på 46 % er balansert og bærekraftig. Historikken er relativt kort (1 år). Sparebanker og finansselskaper gir normalt stabile og forutsigbare utbytter år etter år. Mest aktuell for investorer som vektlegger kvalitet og vekst fremfor høy løpende yield.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": ""
     },
     {
       "ticker": "STST",
@@ -8165,8 +8007,7 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "ai_oppsummering": "Direkteavkastningen på 17,6 % er svært høy og gjenspeiler ofte høy risiko eller en syklisk topp, og P/E på 20,3 er noe høy. Utbetalingsgraden over 100 % (359 %) betyr at utbyttet overstiger regnskapsmessig resultat og bør følges nøye. Historikken er relativt kort (3 år), men trenden har vært fallende. Som shippingselskap svinger inntjening og utbytte kraftig med fraktratene og den globale handelssyklusen. Best egnet for risikovillige investorer som forstår syklisiteten i sektoren.",
-      "ai_oppsummering_dato": "2026-07-03"
+      "utbyttehistorikk_tekst": ""
     }
   ],
   "osebx_historikk": {}

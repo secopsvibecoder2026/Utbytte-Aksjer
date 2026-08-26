@@ -63,7 +63,6 @@ Utbytte-Aksjer/
 │   ├── update-og-deploy.yml   # Data fetch 4× daily + GitHub Pages deploy
 │   ├── oppdater-priser.yml    # Price updates every 15 min on weekdays
 │   ├── deploy-only.yml        # Lightweight Pages deploy (workflow_dispatch)
-│   ├── ai-oppsummering.yml    # Weekly AI summaries via Claude API
 │   └── tester.yml             # Runs the JS + Python test suites on push/PR
 ├── assets/                    # All frontend JS and CSS
 │   ├── app.js                 # Bootstrap, data loading, cache management, escHtml()
@@ -92,8 +91,7 @@ Utbytte-Aksjer/
 │   ├── valider_data.py        # Data quality validation script
 │   ├── sjekk_utdaterte.py     # Detects delisted/renamed/duplicate tickers
 │   ├── oppdater_hendelser.py  # Event calendar from Newsweb → hendelser.json
-│   ├── ai_oppsummering.py     # Weekly AI summaries (Claude API, see AI_OPPSUMMERING_SETUP.md)
-│   ├── hent_beskrivelser.py   # One-off: factual company descriptions from Yahoo
+│   ├── hent_beskrivelser.py   # One-off: factual descriptions from Yahoo (see HENT_BESKRIVELSER_SETUP.md)
 │   ├── test_sjekk_utdaterte.py # Tests for sjekk_utdaterte.py (stdlib unittest)
 │   └── requirements.txt       # Python deps: yfinance>=0.2.36
 ├── tests/                     # Node.js unit tests
@@ -470,6 +468,53 @@ on 2026-08-26; 153 of them had been sitting in English straight from Yahoo.
 `scripts/hent_beskrivelser.py` refetches from Yahoo and will reintroduce
 English unless `ANTHROPIC_API_KEY` is set so it translates — check the output
 before committing a run of it.
+
+### Never freeze live numbers into stored prose
+
+This is the single mistake this codebase keeps repeating. Three separate fields
+have now been bitten by it, each in the same way: a number is rendered into a
+sentence, the sentence is stored, and the number moves on without it.
+
+| Field | What went wrong | Fixed |
+|---|---|---|
+| `beskrivelse` | Yield/payout/year-count frozen in `tickers.json`; SNTIA showed 14,0 % against an actual 6,9 % | 2026-08-18 |
+| `ai_oppsummering` | Frozen at 2026-07-03; 42 of 139 had the wrong yield, 88 the wrong P/E | 2026-08-26 |
+| `utbytte_per_aksje` vs history table | Annualised rate shown next to year-to-date without labels | 2026-08-26 |
+
+**The rule: generate the sentence at build time from the current numbers.**
+`lag_beskrivelse()` and `_lag_utbyttehistorikk_tekst()` both do this, and both
+`fetch_stocks.py` and `regenerer_sider.py` call them on every run. If you add a
+field containing a number inside prose, it must be built the same way — never
+written once and stored.
+
+### `utbyttehistorikk_tekst` — what it is and why it replaced the AI summary
+
+`_lag_utbyttehistorikk_tekst()` in `fetch_stocks.py` renders the section
+«Utbyttehistorikken kort fortalt» on the stock page and in the app's modal. It
+interprets the stock's **own** dividend history — the shape of the trajectory,
+how much the payout swings, and today's yield against the stock's own 5-year
+average. That angle is deliberate: «Vurdering som utbytteaksje» already
+compares against the *sector*, so this section would otherwise just repeat it.
+
+Three things it must keep doing:
+
+- **Skip the current year.** That row is year-to-date, so including it makes
+  almost every stock look like it just cut its dividend.
+- **Require at least 3 complete years.** 101 of 163 stocks qualify; the rest
+  get no section rather than a claim built on two data points.
+- **Keep the sentences from contradicting each other.** A wide gap between the
+  highest and lowest year means *growth* when there were no cuts and
+  *unpredictability* when there were — WAWI got «uten et eneste kutt» and «lite
+  forutsigbar» in the same paragraph before this was split. Likewise, a yield
+  above the stock's own average is explained by a fallen share price only when
+  the dividend has not been raised; ORK had tripled its payout and was still
+  told the opposite.
+
+The old `ai_oppsummering` field, `scripts/ai_oppsummering.py` and the weekly
+`ai-oppsummering.yml` workflow were removed on 2026-08-26. The workflow had
+failed **all 20 runs since 13 April** with `ANTHROPIC_API_KEY er ikke satt` —
+the secret was never added — so the text had never once been refreshed
+automatically.
 
 ### tickers.json is the source of truth for `navn` and `sektor`
 

@@ -15,7 +15,8 @@ AKSJER_F  = os.path.join(ROOT, "data", "aksjer.json")
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from fetch_stocks import (generer_aksjesider, generer_sektorsider, generer_topplistesider,
                           generer_sitemap, _last_kurshistorikk_fra_disk,
-                          oppdater_app_noscript_liste, lag_beskrivelse)
+                          oppdater_app_noscript_liste, lag_beskrivelse,
+                          _lag_utbyttehistorikk_tekst)
 
 def main():
     with open(TICKERS_F, encoding="utf-8") as f:
@@ -70,6 +71,12 @@ def main():
             oppdatert += 1
         a["ask_egnet"] = ask_egnet_map.get(a["ticker"], True)
         a["inkorporeringsland"] = inkorp_map.get(a["ticker"], "Norge")
+        # Bygges på nytt fra tallene, som beskrivelsen over — appen leser feltet
+        # fra aksjer.json og ville ellers vist en frosset tekst.
+        a["utbyttehistorikk_tekst"] = _lag_utbyttehistorikk_tekst(a)
+        # Rydd bort den utdaterte AI-teksten som feltet erstatter.
+        a.pop("ai_oppsummering", None)
+        a.pop("ai_oppsummering_dato", None)
 
     with open(AKSJER_F, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)

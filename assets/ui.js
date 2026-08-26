@@ -2788,8 +2788,8 @@ function visModal(a) {
         : a.beskrivelse
           ? '<div class="om-selskap-boks"><p class="om-selskap-label">Om selskapet</p><p class="om-selskap-tekst">' + escHtml(a.beskrivelse) + '</p></div>'
           : ''}
-      ${a.ai_oppsummering
-        ? '<div class="ai-opp-boks"><p class="ai-opp-label">AI-oppsummering' + (a.ai_oppsummering_dato ? ' <span class="ai-opp-dato">' + escHtml(a.ai_oppsummering_dato) + '</span>' : '') + '</p><p class="ai-opp-tekst">' + escHtml(a.ai_oppsummering) + '</p></div>'
+      ${a.utbyttehistorikk_tekst
+        ? '<div class="ai-opp-boks"><p class="ai-opp-label">Utbyttehistorikken kort fortalt</p><p class="ai-opp-tekst">' + escHtml(a.utbyttehistorikk_tekst) + '</p></div>'
         : ''}
       ${modalKontoer(a)}
       <div class="mt-3">
