@@ -87,7 +87,7 @@ function byggDetailHtml(ticker, kb, marked) {
     <div class="flex flex-wrap gap-x-4 gap-y-1 text-xs py-2 border-b border-gray-100 dark:border-gray-800">
       <span class="text-gray-500">Sn.kurs: <span class="font-medium text-gray-700 dark:text-gray-300">${kb.vwap.toLocaleString('nb-NO', { maximumFractionDigits: 2 })} kr</span></span>
       <span class="text-gray-500">Kostpris: <span class="font-medium text-gray-700 dark:text-gray-300">${fmtKr(kb.totalKost)}</span></span>
-      <span class="text-gray-500">Gev./tap: <span class="font-semibold ${gevFarge}">${gevinst >= 0 ? '+' : ''}${fmtKr(gevinst)} (${gevPct >= 0 ? '+' : ''}${gevPct.toFixed(1)}%)</span></span>
+      <span class="text-gray-500">Gev./tap: <span class="font-semibold ${gevFarge}">${gevinst >= 0 ? '+' : ''}${fmtKr(gevinst)} (${gevPct >= 0 ? '+' : ''}${gevPct.toFixed(1).replace('.', ',')}%)</span></span>
       ${kb.mottattUtbytte > 0 ? `<span class="text-gray-500">Utbytte mottatt: <span class="font-medium text-yellow-600 dark:text-yellow-400">${fmtKr(kb.mottattUtbytte)}</span></span>` : ''}
     </div>` : '';
 
@@ -519,9 +519,9 @@ function _oppdaterOsebxPeriode(periode) {
       const slaer = diff >= 0;
       osebxEl.textContent = slaer ? '✓ Ja' : '✗ Nei';
       osebxEl.className   = 'stat-value text-base ' + (slaer ? 'text-green-600 dark:text-green-400' : 'text-red-500');
-      if (osebxTekst) osebxTekst.textContent = (diff >= 0 ? '+' : '') + diff.toFixed(1) + '% vs indeks';
+      if (osebxTekst) osebxTekst.textContent = (diff >= 0 ? '+' : '') + diff.toFixed(1).replace('.', ',') + '% vs indeks';
     } else {
-      osebxEl.textContent = (osebxPct >= 0 ? '+' : '') + osebxPct.toFixed(1) + '%';
+      osebxEl.textContent = (osebxPct >= 0 ? '+' : '') + osebxPct.toFixed(1).replace('.', ',') + '%';
       osebxEl.className   = 'stat-value text-base ' + (osebxPct >= 0 ? 'text-blue-600 dark:text-blue-400' : 'text-red-500');
       const label = { ytd: 'OSEBX YTD', '1ar': 'OSEBX 1 år', kjop: 'OSEBX siden kjøp' }[periode] || 'OSEBX';
       if (osebxTekst) osebxTekst.textContent = label;
@@ -557,7 +557,7 @@ function visOsebxSammenligning(alleBeholdning, pfPct, osebxPct, invKost, totalRe
 
   // Kun OSEBX – ingen porteføljedata ennå
   if (pfPct === null) {
-    const fmtPct = v => (v >= 0 ? '+' : '') + v.toFixed(2) + '%';
+    const fmtPct = v => (v >= 0 ? '+' : '') + v.toFixed(2).replace('.', ',') + '%';
     wrapper.classList.remove('hidden');
     innhold.innerHTML = `
       <div class="space-y-3">
@@ -582,7 +582,7 @@ function visOsebxSammenligning(alleBeholdning, pfPct, osebxPct, invKost, totalRe
   const totalVerdi = invKost + totalReturnKr;
   const diffKr = totalVerdi - hypoOsebx;
 
-  const fmtPct = v => (v >= 0 ? '+' : '') + v.toFixed(2) + '%';
+  const fmtPct = v => (v >= 0 ? '+' : '') + v.toFixed(2).replace('.', ',') + '%';
   const fmtKr  = v => v.toLocaleString('nb-NO', { maximumFractionDigits: 0 }) + ' kr';
 
   const maks = Math.max(Math.abs(pfPct), Math.abs(osebxPct), 0.01);
@@ -675,7 +675,7 @@ function visHistorikkKurve() {
   const areaD    = `M${pfPts[0][0]},${H} ` + pfPts.map(p => `L${p[0]},${p[1]}`).join(' ') + ` L${pfPts[pfPts.length-1][0]},${H} Z`;
 
   const endring    = pfNorm[pfNorm.length - 1] - 100;
-  const endringPct = endring.toFixed(1);
+  const endringPct = endring.toFixed(1).replace('.', ',');
   const positiv    = endring >= 0;
   const farge      = positiv ? '#16a34a' : '#dc2626';
   const fargeLys   = positiv ? '#dcfce7' : '#fee2e2';
@@ -766,7 +766,7 @@ function visMiniSektorChart(beholdning) {
       <div class="flex-1 bg-gray-100 dark:bg-gray-800 rounded-full h-2 overflow-hidden">
         <div class="h-2 rounded-full" style="width:${pct.toFixed(1)}%;background:${farge}"></div>
       </div>
-      <span class="w-9 text-right text-gray-500">${pct.toFixed(0)}%</span>
+      <span class="w-9 text-right text-gray-500">${pct.toFixed(0).replace('.', ',')}%</span>
     </div>`;
   }).join('');
 }
@@ -889,7 +889,7 @@ function visPortefolje() {
   if (mndMalEl) {
     if (malMnd > 0) {
       const mndPct = Math.min(100, ((totalAr / 12) / malMnd) * 100);
-      document.getElementById('pf-mnd-mål-pct').textContent = mndPct.toFixed(0) + '%';
+      document.getElementById('pf-mnd-mål-pct').textContent = mndPct.toFixed(0).replace('.', ',') + '%';
       document.getElementById('pf-mnd-mål-tekst').textContent = 'av ' + malMnd.toLocaleString('nb-NO') + ' kr';
       document.getElementById('pf-mnd-mål-bar').style.width = mndPct + '%';
       mndMalEl.classList.remove('hidden');
@@ -900,7 +900,7 @@ function visPortefolje() {
 
   // Vektet yield = totalAr / totalVerdi × 100
   const vektetYield = totalVerdi > 0 ? (totalAr / totalVerdi * 100) : 0;
-  document.getElementById('pf-stat-yield').textContent = vektetYield > 0 ? vektetYield.toFixed(2) + '%' : '—';
+  document.getElementById('pf-stat-yield').textContent = vektetYield > 0 ? vektetYield.toFixed(2).replace('.', ',') + '%' : '—';
 
   // Fyll sammendrag-strip øverst i Beholdning-fanen
   const topVerdiEl = document.getElementById('pf-top-verdi');
@@ -908,7 +908,7 @@ function visPortefolje() {
   const topArEl = document.getElementById('pf-top-ar');
   if (topArEl) topArEl.textContent = fmtKr(totalAr);
   const topYieldEl = document.getElementById('pf-top-yield');
-  if (topYieldEl) topYieldEl.textContent = vektetYield > 0 ? vektetYield.toFixed(2) + '%' : '—';
+  if (topYieldEl) topYieldEl.textContent = vektetYield > 0 ? vektetYield.toFixed(2).replace('.', ',') + '%' : '—';
   const topAntallEl = document.getElementById('pf-top-antall');
   if (topAntallEl) topAntallEl.textContent = alleBeholdning.length;
 
@@ -924,7 +924,7 @@ function visPortefolje() {
     if (malVisEl) malVisEl.textContent = fmtKr(malRaw);
     if (settBtn2) settBtn2.classList.add('hidden');
     const pct = Math.min(100, (ytdInntekt / malRaw) * 100);
-    document.getElementById('pf-inntekt-pct-tekst').textContent = pct.toFixed(0) + '%';
+    document.getElementById('pf-inntekt-pct-tekst').textContent = pct.toFixed(0).replace('.', ',') + '%';
     document.getElementById('pf-inntekt-mal-tekst').textContent = 'Mål: ' + fmtKr(malRaw);
     document.getElementById('pf-inntekt-bar').style.width = pct + '%';
     progEl.classList.remove('hidden');
@@ -973,7 +973,7 @@ function visPortefolje() {
     const vektetPE = totalVerdiPE > 0
       ? medPE.reduce((s, a) => s + (a.antall * (a.pris || 0) / totalVerdiPE) * a.pe_ratio, 0)
       : 0;
-    document.getElementById('pf-stat-pe').textContent = vektetPE > 0 ? vektetPE.toFixed(1) : '—';
+    document.getElementById('pf-stat-pe').textContent = vektetPE > 0 ? vektetPE.toFixed(1).replace('.', ',') : '—';
 
     // Totale utbetalingshendelser per år
     const totalUtbetalinger = alleBeholdning.reduce((s, a) => s + (frekvMap[a.frekvens] || 1), 0);
@@ -986,7 +986,7 @@ function visPortefolje() {
     const spareSettBtn = document.getElementById('pf-stat-sparemaal-sett');
     if (spareMaal > 0) {
       const sparePct = (totalVerdi / spareMaal * 100);
-      sparePctEl.textContent   = sparePct.toFixed(1) + '%';
+      sparePctEl.textContent   = sparePct.toFixed(1).replace('.', ',') + '%';
       spareTekstEl.textContent = 'av ' + spareMaal.toLocaleString('nb-NO') + ' kr';
       if (spareSettBtn) spareSettBtn.classList.add('hidden');
     } else {
@@ -999,11 +999,11 @@ function visPortefolje() {
     const sortYield = [...alleBeholdning].sort((a, b) => b.utbytte_yield - a.utbytte_yield);
     const best = sortYield[0];
     const lav  = sortYield[sortYield.length - 1];
-    document.getElementById('pf-profil-best-yield').textContent  = `${best.ticker} — ${best.utbytte_yield.toFixed(2)}%`;
-    document.getElementById('pf-profil-lav-yield').textContent   = `${lav.ticker} — ${lav.utbytte_yield.toFixed(2)}%`;
+    document.getElementById('pf-profil-best-yield').textContent  = `${best.ticker} — ${best.utbytte_yield.toFixed(2).replace('.', ',')}%`;
+    document.getElementById('pf-profil-lav-yield').textContent   = `${lav.ticker} — ${lav.utbytte_yield.toFixed(2).replace('.', ',')}%`;
 
     const storst = [...alleBeholdning].sort((a, b) => (b.antall * (b.pris||0)) - (a.antall * (a.pris||0)))[0];
-    const storstPct = totalVerdi > 0 ? (storst.antall * (storst.pris||0) / totalVerdi * 100).toFixed(1) : '0';
+    const storstPct = totalVerdi > 0 ? (storst.antall * (storst.pris||0) / totalVerdi * 100).toFixed(1).replace('.', ',') : '0';
     document.getElementById('pf-profil-storst').textContent = `${storst.ticker} — ${storstPct}%`;
 
     const antallSektorer = new Set(alleBeholdning.map(a => a.sektor).filter(Boolean)).size;
@@ -1033,7 +1033,7 @@ function visPortefolje() {
       totalReturnKr = invMarkert + invMottatt - invKost;
       pfPctTotal    = totalReturnKr / invKost * 100;
       if (faktiskEl) {
-        faktiskEl.textContent = (pfPctTotal >= 0 ? '+' : '') + pfPctTotal.toFixed(1) + '%';
+        faktiskEl.textContent = (pfPctTotal >= 0 ? '+' : '') + pfPctTotal.toFixed(1).replace('.', ',') + '%';
         faktiskEl.className   = 'stat-value text-base ' + (pfPctTotal >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-500');
         if (faktiskTekst) faktiskTekst.textContent = (totalReturnKr >= 0 ? '+' : '') + fmtKr(totalReturnKr);
       }
@@ -1068,9 +1068,9 @@ function visPortefolje() {
       const slaer = diff >= 0;
       osebxEl.textContent = slaer ? '✓ Ja' : '✗ Nei';
       osebxEl.className   = 'stat-value text-base ' + (slaer ? 'text-green-600 dark:text-green-400' : 'text-red-500');
-      if (osebxTekst) osebxTekst.textContent = (diff >= 0 ? '+' : '') + diff.toFixed(1) + '% vs indeks';
+      if (osebxTekst) osebxTekst.textContent = (diff >= 0 ? '+' : '') + diff.toFixed(1).replace('.', ',') + '% vs indeks';
     } else if (osebxEl && osebxPctTotal !== null) {
-      osebxEl.textContent = (osebxPctTotal >= 0 ? '+' : '') + osebxPctTotal.toFixed(1) + '%';
+      osebxEl.textContent = (osebxPctTotal >= 0 ? '+' : '') + osebxPctTotal.toFixed(1).replace('.', ',') + '%';
       osebxEl.className   = 'stat-value text-base ' + (osebxPctTotal >= 0 ? 'text-blue-600 dark:text-blue-400' : 'text-red-500');
       const label = { ytd: 'OSEBX YTD', '1ar': 'OSEBX 1 år', kjop: 'OSEBX siden kjøp' }[aktivPeriode] || 'OSEBX';
       if (osebxTekst) osebxTekst.textContent = label;
@@ -1092,12 +1092,12 @@ function visPortefolje() {
         // en annualisert +15 % over 31 dager blir +418 %, teknisk korrekt
         // men villedende for brukeren.
         const pct = irr.annualisert ? irr.irr_ar : irr.periodeAvkastning;
-        irrEl.textContent  = (pct >= 0 ? '+' : '') + pct.toFixed(1) + '%';
+        irrEl.textContent  = (pct >= 0 ? '+' : '') + pct.toFixed(1).replace('.', ',') + '%';
         irrEl.className    = 'stat-value text-base ' + (pct >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-500');
         const mnd = Math.round(irr.periodeAr * 12);
         const aar = irr.periodeAr < 1
           ? (mnd < 1 ? '< 1 mnd' : mnd + ' mnd')
-          : irr.periodeAr.toFixed(1) + ' år';
+          : irr.periodeAr.toFixed(1).replace('.', ',') + ' år';
         if (irrTekst) irrTekst.textContent = 'over ' + aar;
         if (irrLabelEl) irrLabelEl.textContent = irr.annualisert ? 'IRR (per år)' : 'Avkastning (periode)';
       } else {
@@ -1154,7 +1154,7 @@ function visPortefolje() {
       ? `<span class="text-xs">${fmtKr(kb.totalKost)}</span><br><span class="text-xs text-gray-400">${kb.vwap.toLocaleString('nb-NO',{maximumFractionDigits:1})} kr/stk</span>`
       : '—';
     const gevTd = gevinst !== null
-      ? `<span class="font-semibold ${gevFarge}">${gevinst >= 0 ? '+' : ''}${fmtKr(gevinst)}</span><br><span class="text-xs ${gevFarge}">${gevPct >= 0 ? '+' : ''}${gevPct.toFixed(1)}%</span>`
+      ? `<span class="font-semibold ${gevFarge}">${gevinst >= 0 ? '+' : ''}${fmtKr(gevinst)}</span><br><span class="text-xs ${gevFarge}">${gevPct >= 0 ? '+' : ''}${gevPct.toFixed(1).replace('.', ',')}%</span>`
       : '—';
     const isOpen = _aapneDetailRader.has(a.ticker);
     return `
@@ -1166,7 +1166,7 @@ function visPortefolje() {
           class="w-20 text-right text-sm border border-gray-200 dark:border-gray-700 rounded px-2 py-1 bg-transparent focus:outline-none focus:ring-1 focus:ring-brand-500"
           data-ticker="${escHtml(a.ticker)}" />
       </td>
-      <td class="px-4 py-3 text-right"><span class="yield-badge ${yieldKlasse(a.utbytte_yield)}">${a.utbytte_yield.toFixed(2)}%</span></td>
+      <td class="px-4 py-3 text-right"><span class="yield-badge ${yieldKlasse(a.utbytte_yield)}">${a.utbytte_yield.toFixed(2).replace('.', ',')}%</span></td>
       <td class="px-4 py-3 text-right font-semibold">${fmtKr(a.forv_ar)}</td>
       <td class="px-4 py-3 text-right hidden lg:table-cell text-sm">${kostTd}</td>
       <td class="px-4 py-3 text-right hidden lg:table-cell text-sm">${gevTd}</td>
@@ -1253,7 +1253,7 @@ function visPortefolje() {
           <div class="min-w-0 flex-1">
             <div class="flex items-center gap-2 mb-0.5">
               <span class="font-mono font-bold text-brand-700 dark:text-brand-400">${escHtml(a.ticker)}</span>
-              <span class="yield-badge ${yieldKlasse(a.utbytte_yield)}">${a.utbytte_yield.toFixed(2)}%</span>
+              <span class="yield-badge ${yieldKlasse(a.utbytte_yield)}">${a.utbytte_yield.toFixed(2).replace('.', ',')}%</span>
             </div>
             <div class="text-xs text-gray-500 dark:text-gray-400 truncate">${escHtml(a.navn)}</div>
             <div class="flex items-center gap-3 mt-1.5 text-xs">
@@ -1745,7 +1745,7 @@ function visVerdiChart(beholdning) {
     <div class="flex items-center gap-2 text-xs">
       <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background:${color}"></span>
       <span class="font-mono font-bold text-gray-700 dark:text-gray-200 shrink-0 w-14">${label}</span>
-      <span class="text-gray-400">${(value/totalVerdi*100).toFixed(1)}%</span>
+      <span class="text-gray-400">${(value/totalVerdi*100).toFixed(1).replace('.', ',')}%</span>
       <span class="ml-auto font-semibold tabular-nums">${fmtKr(value)}</span>
     </div>`).join('');
   el.innerHTML = `
@@ -1801,8 +1801,8 @@ function visHHI(beholdning) {
     (b.antall * (b.pris || 0)) - (a.antall * (a.pris || 0)))[0];
   const toppSektor = Object.entries(sektorMap).sort((a, b) => b[1] - a[1])[0];
 
-  const toppAksjeAndel = toppAksje ? (toppAksje.antall * (toppAksje.pris || 0) / totalVerdi * 100).toFixed(1) : 0;
-  const toppSektorAndel = toppSektor ? (toppSektor[1] / totalVerdi * 100).toFixed(1) : 0;
+  const toppAksjeAndel = toppAksje ? (toppAksje.antall * (toppAksje.pris || 0) / totalVerdi * 100).toFixed(1).replace('.', ',') : 0;
+  const toppSektorAndel = toppSektor ? (toppSektor[1] / totalVerdi * 100).toFixed(1).replace('.', ',') : 0;
 
   document.getElementById('hhi-detaljer').innerHTML =
     `<p>📌 Største aksjeposisjon: <strong>${toppAksje?.ticker || '—'}</strong> (${toppAksjeAndel}% av porteføljen)</p>` +
@@ -1894,7 +1894,7 @@ function visCharts(beholdning, totalAr) {
 
   document.getElementById('pf-topp-chart').innerHTML = topp.map((a, i) => {
     const pct = (a.forv_ar / maks * 100).toFixed(1);
-    const andel = (a.forv_ar / totalAr * 100).toFixed(1);
+    const andel = (a.forv_ar / totalAr * 100).toFixed(1).replace('.', ',');
     const farge = CHART_FARGER[i % CHART_FARGER.length];
     return `
       <div>
@@ -2029,7 +2029,7 @@ function visWatchlister() {
               <td class="px-4 py-3 font-mono font-bold text-brand-700 dark:text-brand-400">${ticker}</td>
               <td class="px-4 py-3 hidden sm:table-cell text-gray-600 dark:text-gray-400 text-sm">${a.navn}</td>
               <td class="px-4 py-3 text-right">${a.pris ? fmtKr(a.pris) : '—'}</td>
-              <td class="px-4 py-3 text-right"><span class="yield-badge ${yieldKlasse(a.utbytte_yield)}">${a.utbytte_yield.toFixed(2)}%</span></td>
+              <td class="px-4 py-3 text-right"><span class="yield-badge ${yieldKlasse(a.utbytte_yield)}">${a.utbytte_yield.toFixed(2).replace('.', ',')}%</span></td>
               <td class="px-4 py-3 text-center hidden sm:table-cell text-gray-500 text-sm">${a.ex_dato ? formaterDato(a.ex_dato) : '—'}</td>
               <td class="px-4 py-3 text-center">
                 <button class="wl-legg-til-pf text-gray-400 hover:text-brand-600 dark:hover:text-brand-400 transition-colors p-1" title="Legg til i portefølje" aria-label="Legg til i portefølje"
@@ -2216,11 +2216,11 @@ function visRebalansering(alleBeholdning) {
       statusKlasse = 'text-green-600 dark:text-green-400'; statusTekst = 'OK'; barFarge = 'bg-green-500';
     } else if (diff < -5) {
       const kr = Math.abs(diff) / 100 * totalVerdi;
-      statusKlasse = 'text-orange-500'; statusTekst = `Kjøp +${Math.abs(diff).toFixed(0)}% · ${fmtKr(kr)}`; barFarge = 'bg-orange-400';
+      statusKlasse = 'text-orange-500'; statusTekst = `Kjøp +${Math.abs(diff).toFixed(0).replace('.', ',')}% · ${fmtKr(kr)}`; barFarge = 'bg-orange-400';
       kjopLenke = `<a href="/aksjer/sektor/${escHtml(slug)}/" class="text-[11px] text-brand-600 dark:text-brand-400 font-medium hover:underline shrink-0">Finn aksjer →</a>`;
     } else {
       const kr = Math.abs(diff) / 100 * totalVerdi;
-      statusKlasse = 'text-red-500'; statusTekst = `Reduser −${diff.toFixed(0)}% · ${fmtKr(kr)}`; barFarge = 'bg-red-400';
+      statusKlasse = 'text-red-500'; statusTekst = `Reduser −${diff.toFixed(0).replace('.', ',')}% · ${fmtKr(kr)}`; barFarge = 'bg-red-400';
     }
 
     const chipTekst = totalt > 0
@@ -2245,7 +2245,7 @@ function visRebalansering(alleBeholdning) {
             </div>
           </div>
           <div class="flex items-center gap-1 shrink-0">
-            <span class="text-xs text-gray-400 dark:text-gray-600">${naaværendePct.toFixed(1)}% →</span>
+            <span class="text-xs text-gray-400 dark:text-gray-600">${naaværendePct.toFixed(1).replace('.', ',')}% →</span>
             <input type="number" min="0" max="100" step="1" value="${maalPct}"
               class="w-12 text-xs text-center border border-gray-200 dark:border-gray-700 rounded-md px-1 py-1 bg-white dark:bg-gray-800 focus:outline-none focus:border-brand-400 focus:ring-1 focus:ring-brand-400/30"
               data-rebal-sektor="${escHtml(sektor)}" />
@@ -2333,10 +2333,10 @@ function visAnalyse() {
   const d2 = Math.min(20, posScore + sektScore);
 
   const d2Tekst = storsteSektor.pct > 35
-    ? `${storsteSektor.sektor} utgjør ${storsteSektor.pct.toFixed(0)}% av porteføljen — over anbefalt maks på 30%. Største enkeltposisjon er ${escHtml(storstePos.navn)} med ${storstePos.pct.toFixed(1)}%.`
+    ? `${storsteSektor.sektor} utgjør ${storsteSektor.pct.toFixed(0).replace('.', ',')}% av porteføljen — over anbefalt maks på 30%. Største enkeltposisjon er ${escHtml(storstePos.navn)} med ${storstePos.pct.toFixed(1).replace('.', ',')}%.`
     : storstePos.pct > 15
-    ? `${escHtml(storstePos.navn)} (${storstePos.ticker}) er din største posisjon med ${storstePos.pct.toFixed(1)}% — vurder å spre litt mer. Største sektor er ${storsteSektor.sektor} med ${storsteSektor.pct.toFixed(0)}%.`
-    : `Lav konsentrasjonsrisiko. Største posisjon er ${escHtml(storstePos.navn)} med ${storstePos.pct.toFixed(1)}%, største sektor ${storsteSektor.sektor} med ${storsteSektor.pct.toFixed(0)}%.`;
+    ? `${escHtml(storstePos.navn)} (${storstePos.ticker}) er din største posisjon med ${storstePos.pct.toFixed(1).replace('.', ',')}% — vurder å spre litt mer. Største sektor er ${storsteSektor.sektor} med ${storsteSektor.pct.toFixed(0).replace('.', ',')}%.`
+    : `Lav konsentrasjonsrisiko. Største posisjon er ${escHtml(storstePos.navn)} med ${storstePos.pct.toFixed(1).replace('.', ',')}%, største sektor ${storsteSektor.sektor} med ${storsteSektor.pct.toFixed(0).replace('.', ',')}%.`;
 
   // ── DIMENSJON 3: Risikoprofil ─────────────────────────────────────────
   const SYKLISKE = new Set(['Energi', 'Shipping', 'Skipsfart', 'Havbruk', 'Energitjenester']);
@@ -2345,10 +2345,10 @@ function visAnalyse() {
   const d3 = sykliskPct < 20 ? 20 : sykliskPct < 30 ? 17 : sykliskPct < 40 ? 13 : sykliskPct < 50 ? 9 : sykliskPct < 60 ? 5 : 2;
 
   const d3Tekst = sykliskPct < 20
-    ? `Lav eksponering mot sykliske sektorer (${sykliskPct.toFixed(0)}%). Porteføljen er godt forankret i stabile inntektskilder.`
+    ? `Lav eksponering mot sykliske sektorer (${sykliskPct.toFixed(0).replace('.', ',')}%). Porteføljen er godt forankret i stabile inntektskilder.`
     : sykliskPct < 40
-    ? `${sykliskPct.toFixed(0)}% i sykliske sektorer (energi, shipping, havbruk) — akseptabelt nivå. Vær forberedt på utbyttesvingninger ved markedsfall.`
-    : `${sykliskPct.toFixed(0)}% er i sykliske sektorer. Disse kan kutte utbyttet kraftig ved lav oljepris eller svake fraktrater — vurder å øke stabileandelen.`;
+    ? `${sykliskPct.toFixed(0).replace('.', ',')}% i sykliske sektorer (energi, shipping, havbruk) — akseptabelt nivå. Vær forberedt på utbyttesvingninger ved markedsfall.`
+    : `${sykliskPct.toFixed(0).replace('.', ',')}% er i sykliske sektorer. Disse kan kutte utbyttet kraftig ved lav oljepris eller svake fraktrater — vurder å øke stabileandelen.`;
 
   // ── DIMENSJON 4: Yield-bærekraft ──────────────────────────────────────
   const medPayout = beholdning.filter(a => (a.payout_ratio || 0) > 0 && (a.payout_ratio || 0) < 400);
@@ -2367,10 +2367,10 @@ function visAnalyse() {
   const d4PayoutTekst = snittPayout === null
     ? 'Payout ratio-data mangler for dine aksjer.'
     : snittPayout > 80
-    ? `Snitt payout ratio er ${snittPayout.toFixed(0)}% — høyt. Mange selskaper har lite buffer mot inntjeningsfall.`
+    ? `Snitt payout ratio er ${snittPayout.toFixed(0).replace('.', ',')}% — høyt. Mange selskaper har lite buffer mot inntjeningsfall.`
     : snittPayout > 60
-    ? `Snitt payout ratio er ${snittPayout.toFixed(0)}% — akseptabelt, men følg med på inntjeningen.`
-    : `Snitt payout ratio er ${snittPayout.toFixed(0)}% — godt nivå med buffer til å opprettholde utbyttet.`;
+    ? `Snitt payout ratio er ${snittPayout.toFixed(0).replace('.', ',')}% — akseptabelt, men følg med på inntjeningen.`
+    : `Snitt payout ratio er ${snittPayout.toFixed(0).replace('.', ',')}% — godt nivå med buffer til å opprettholde utbyttet.`;
   const d4Tekst = hoeyYieldAksjer.length > 0
     ? `${d4PayoutTekst} ${hoeyYieldAksjer.length} aksje${hoeyYieldAksjer.length > 1 ? 'r' : ''} (${hoeyYieldAksjer.map(a => a.ticker).join(', ')}) har yield over 15% — vurder bærekraften.`
     : d4PayoutTekst;
@@ -2383,12 +2383,12 @@ function visAnalyse() {
   const d5 = snittAr >= 20 ? 20 : snittAr >= 15 ? 17 : snittAr >= 10 ? 13 : snittAr >= 5 ? 8 : 3;
 
   const d5Tekst = snittAr >= 15
-    ? `Selskapene dine har i snitt betalt utbytte i ${snittAr.toFixed(0)} år — sterk track record gjennom ulike markedsperioder.`
+    ? `Selskapene dine har i snitt betalt utbytte i ${snittAr.toFixed(0).replace('.', ',')} år — sterk track record gjennom ulike markedsperioder.`
     : snittAr >= 10
-    ? `${snittAr.toFixed(0)} år i snitt er bra, men det er rom for flere stabile langsiktige utbyttebetalere (mål: 15+ år).`
+    ? `${snittAr.toFixed(0).replace('.', ',')} år i snitt er bra, men det er rom for flere stabile langsiktige utbyttebetalere (mål: 15+ år).`
     : snittAr >= 5
-    ? `Snitt ${snittAr.toFixed(0)} år med utbytte. Porteføljen mangler erfarne utbyttebetalere — legg til selskaper med 15+ år.`
-    : `Kort utbyttehistorikk (snitt ${snittAr.toFixed(0)} år). Prioriter etablerte utbyttebetalere for mer stabil inntekt.`;
+    ? `Snitt ${snittAr.toFixed(0).replace('.', ',')} år med utbytte. Porteføljen mangler erfarne utbyttebetalere — legg til selskaper med 15+ år.`
+    : `Kort utbyttehistorikk (snitt ${snittAr.toFixed(0).replace('.', ',')} år). Prioriter etablerte utbyttebetalere for mer stabil inntekt.`;
 
   // ── Totalscore og helseetikett ────────────────────────────────────────
   const total = d1 + d2 + d3 + d4 + d5;
@@ -2396,7 +2396,7 @@ function visAnalyse() {
   const ringFarge  = total >= 75 ? '#22c55e' : total >= 50 ? '#eab308' : '#ef4444';
   const trackFarge = isDark ? '#1f2937' : '#e5e7eb';
   const innerBg    = isDark ? '#111827' : '#ffffff';
-  const conicDeg   = (total / 100 * 360).toFixed(1);
+  const conicDeg   = (total / 100 * 360).toFixed(1).replace('.', ',');
 
   // ── Forbedringspunkter ────────────────────────────────────────────────
   const tips = [];
@@ -2502,8 +2502,8 @@ function visAnalyse() {
   });
   const detaljD4 = '<p class="text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-2">Yield og payout ratio per aksje</p>'
     + d4Rader.map(function(a) {
-        const y   = a.utbytte_yield ? a.utbytte_yield.toFixed(1) + '%' : '—';
-        const p   = (a.payout_ratio > 0 && a.payout_ratio < 400) ? a.payout_ratio.toFixed(0) + '%' : '—';
+        const y   = a.utbytte_yield ? a.utbytte_yield.toFixed(1).replace('.', ',') + '%' : '—';
+        const p   = (a.payout_ratio > 0 && a.payout_ratio < 400) ? a.payout_ratio.toFixed(0).replace('.', ',') + '%' : '—';
         const hiY = (a.utbytte_yield || 0) > 15;
         const hiP = (a.payout_ratio || 0) > 80 && (a.payout_ratio || 0) < 400;
         const yF  = hiY ? 'color:#ef4444' : (a.utbytte_yield || 0) > 10 ? 'color:#d97706' : 'color:#15803d';

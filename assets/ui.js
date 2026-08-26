@@ -55,7 +55,7 @@ function _tegnModalKursGraf(body, a, periode, kursData) {
   const range = maxP - minP || 1;
   const erOpp = priser[n - 1] >= priser[0];
   const farge = erOpp ? '#22c55e' : '#ef4444';
-  const endring = ((priser[n - 1] - priser[0]) / priser[0] * 100).toFixed(1);
+  const endring = ((priser[n - 1] - priser[0]) / priser[0] * 100).toFixed(1).replace('.', ',');
 
   header.innerHTML = `<span class="font-bold text-gray-900 dark:text-gray-100">${priser[n-1].toLocaleString('nb-NO', {minimumFractionDigits:2, maximumFractionDigits:2})} ${escHtml(a.valuta || 'NOK')}</span><span style="color:${farge};font-size:0.75rem;font-weight:500">${erOpp ? '▲ +' : '▼ '}${endring}%</span>`;
 
@@ -374,7 +374,7 @@ function brukPortefoljeDataFire() {
   document.getElementById('fire-portefolje').value = Math.round(totalVerdi);
   document.getElementById('fire-yield').value = vektetYield.toFixed(2);
 
-  info.textContent = `Hentet fra portefølje: ${antallAksjer} selskaper · ${Math.round(totalVerdi).toLocaleString('nb-NO')} kr · vektet yield ${vektetYield.toFixed(2)}%`;
+  info.textContent = `Hentet fra portefølje: ${antallAksjer} selskaper · ${Math.round(totalVerdi).toLocaleString('nb-NO')} kr · vektet yield ${vektetYield.toFixed(2).replace('.', ',')}%`;
   info.classList.remove('hidden');
   beregnFire();
 }
@@ -422,7 +422,7 @@ function beregnFire() {
   document.getElementById('fire-ut-kapital').textContent = fmt(kapital);
   document.getElementById('fire-ut-brutto').textContent  = fmt(bruttoAar);
   document.getElementById('fire-ut-ar').textContent      = ar === null ? '> 100 år' : ar === 0 ? 'Allerede FIRE! 🎉' : ar + ' år';
-  document.getElementById('fire-ut-prosent').textContent = prosent.toFixed(1) + '%';
+  document.getElementById('fire-ut-prosent').textContent = prosent.toFixed(1).replace('.', ',') + '%';
   document.getElementById('fire-ut-bar').style.width     = prosent + '%';
 
   const tl = document.getElementById('fire-ut-tidslinje');
@@ -800,7 +800,7 @@ function forklarRisiko(a) {
   if (_SYKLISKE_SEKTORER.has(sektor))
     punkter.push(`Syklisk sektor (${sektor}) — utbytte svinger med konjunkturer`);
   else if (!_DEFENSIVE_SEKTORER.has(sektor))
-    punkter.push(`Sektor (${sektor}) har viss konjunktureksponering`);
+    punkter.push(`Sektor (${sektor}) har en viss konjunktureksponering`);
   else
     punkter.push(`Defensiv sektor (${sektor}) — relativt stabile inntekter`);
 
@@ -808,14 +808,14 @@ function forklarRisiko(a) {
   else if (ar < 7)  punkter.push(`Moderat utbyttehistorikk (${ar} år)`);
   else              punkter.push(`Lang utbyttehistorikk (${ar} år) — vist evne til stabil utbetaling`);
 
-  if (payout > 90)       punkter.push(`Svært høy payout ratio (${payout.toFixed(0)}%) — lite buffer ved inntjeningsfall`);
-  else if (payout > 75)  punkter.push(`Høy payout ratio (${payout.toFixed(0)}%) — begrenset reinvesteringsevne`);
-  else if (payout > 0 && payout < 50) punkter.push(`Sunn payout ratio (${payout.toFixed(0)}%) — god buffer`);
+  if (payout > 90)       punkter.push(`Svært høy payout ratio (${payout.toFixed(0).replace('.', ',')}%) — lite buffer ved inntjeningsfall`);
+  else if (payout > 75)  punkter.push(`Høy payout ratio (${payout.toFixed(0).replace('.', ',')}%) — begrenset reinvesteringsevne`);
+  else if (payout > 0 && payout < 50) punkter.push(`Sunn payout ratio (${payout.toFixed(0).replace('.', ',')}%) — god buffer`);
 
-  if (mv > 0 && mv < 1e9)  punkter.push(`Lav markedsverdi (${(mv/1e9).toFixed(1)} mrd NOK) — økt kursvolatilitet`);
-  else if (mv > 10e9)       punkter.push(`Stor markedsverdi (${(mv/1e9).toFixed(0)} mrd NOK) — likvid og stabil`);
+  if (mv > 0 && mv < 1e9)  punkter.push(`Lav markedsverdi (${(mv/1e9).toFixed(1).replace('.', ',')} mrd NOK) — økt kursvolatilitet`);
+  else if (mv > 10e9)       punkter.push(`Stor markedsverdi (${(mv/1e9).toFixed(0).replace('.', ',')} mrd NOK) — likvid og stabil`);
 
-  if (yield_ > 12) punkter.push(`Svært høy yield (${yield_.toFixed(1)}%) — kan indikere markedsskepsis til bærekraft`);
+  if (yield_ > 12) punkter.push(`Svært høy yield (${yield_.toFixed(1).replace('.', ',')}%) — kan indikere markedsskepsis til bærekraft`);
 
   if (a.ask_egnet === false) punkter.push(`Registrert utenfor EØS (${escHtml(a.inkorporeringsland || '')}) — kan ikke holdes i ASK`);
 
@@ -839,14 +839,14 @@ function forklarMal(a) {
     const doblingsar = vekst > 0 ? Math.round(70 / vekst) : null;
     forklaringer.push({ mal: 'Utbyttevekst',
       tekst: `Passer investorer med lang horisont som vil at utbyttet skal vokse raskere enn inflasjonen. `
-           + `Med +${vekst.toFixed(1)}% per år de siste 5 årene`
+           + `Med +${vekst.toFixed(1).replace('.', ',')}% per år de siste 5 årene`
            + (doblingsar ? ` dobles utbyttet på ca. ${doblingsar} år.` : '.') });
   }
 
   if (mal.includes('hoy_yield'))
     forklaringer.push({ mal: 'Høy yield',
       tekst: `Passer investorer som prioriterer løpende inntekt fremfor kursvekst. `
-           + `${yield_.toFixed(1)}% direkteavkastning er vesentlig over markedssnittet — `
+           + `${yield_.toFixed(1).replace('.', ',')}% direkteavkastning er vesentlig over markedssnittet — `
            // payout === 0 betyr «ukjent», ikke «lav». Uten dette skillet påsto
            // vi at utbyttet var håndterbart for aksjer vi mangler payout for.
            + (payout > 80
@@ -858,9 +858,11 @@ function forklarMal(a) {
   if (mal.includes('kvartalsvis')) {
     const erManedlig = a.frekvens === 'Månedlig';
     const frekvensLabel = erManedlig ? 'Månedlig utbytte' : 'Kvartalsvis utbytte';
+    // «... trenger jevn kontantstrøm — ... gir jevn kontantstrøm ...» gjentok
+    // samme uttrykk i én setning. Samme retting som i fetch_stocks.py.
     const frekvensDetalj = erManedlig
-      ? 'månedlig utbytte gir den jevneste kontantstrømmen — tolv utbetalinger per år'
-      : 'kvartalsvis utbytte gir jevn kontantstrøm fire ganger i året';
+      ? 'utbyttet kommer tolv ganger i året, den jevneste profilen som finnes på Oslo Børs'
+      : 'utbyttet kommer fire ganger i året';
     forklaringer.push({ mal: frekvensLabel,
       tekst: `Passer investorer som trenger jevn kontantstrøm — ${frekvensDetalj}.` });
   }
@@ -1011,7 +1013,7 @@ function oppdaterSpareMaalBar(pf) {
   document.getElementById('sparemaal-bar-tekst').textContent =
     totalVerdi.toLocaleString('nb-NO', { maximumFractionDigits: 0 }) + ' kr'
     + ' av ' + spareMaal.toLocaleString('nb-NO', { maximumFractionDigits: 0 }) + ' kr'
-    + ' (' + pct.toFixed(1) + '%)';
+    + ' (' + pct.toFixed(1).replace('.', ',') + '%)';
   wrapper.classList.remove('hidden');
 }
 
@@ -1027,9 +1029,9 @@ function oppdaterGeneriskSammendrag() {
   const medYield = alleAksjer.filter(a => a.utbytte_yield > 0);
   if (medYield.length) {
     const snitt = medYield.reduce((s, a) => s + a.utbytte_yield, 0) / medYield.length;
-    document.getElementById('stat-snitt-yield').textContent = snitt.toFixed(2) + '%';
+    document.getElementById('stat-snitt-yield').textContent = snitt.toFixed(2).replace('.', ',') + '%';
     const hoyest = [...medYield].sort((a, b) => b.utbytte_yield - a.utbytte_yield)[0];
-    document.getElementById('stat-hoyest-yield').textContent = hoyest.utbytte_yield.toFixed(2) + '%';
+    document.getElementById('stat-hoyest-yield').textContent = hoyest.utbytte_yield.toFixed(2).replace('.', ',') + '%';
     document.getElementById('stat-hoyest-navn').textContent = hoyest.ticker;
   }
 
@@ -1085,7 +1087,7 @@ function oppdaterPersonligSammendrag(pf, fav) {
     .sort((a, b) => b.utbytte_yield - a.utbytte_yield);
   document.getElementById('stat-card3-label').textContent = 'Høyeste yield';
   if (pfMedYield.length) {
-    document.getElementById('stat-snitt-yield').textContent = pfMedYield[0].utbytte_yield.toFixed(2) + '%';
+    document.getElementById('stat-snitt-yield').textContent = pfMedYield[0].utbytte_yield.toFixed(2).replace('.', ',') + '%';
     document.getElementById('stat-snitt-sub').textContent = pfMedYield[0].ticker + ' · ' + pfMedYield[0].navn.split(' ')[0];
   } else {
     document.getElementById('stat-snitt-yield').textContent = '—';
@@ -1205,29 +1207,29 @@ function visOversikt(bevarSide = false) {
       <td class="px-4 py-3 text-right font-medium">
         ${fmt(a.pris)}
         ${a.endring_pct !== undefined && a.endring_pct !== 0
-          ? `<span class="block text-xs font-normal ${a.endring_pct > 0 ? 'text-green-500 dark:text-green-400' : 'text-red-500 dark:text-red-400'}">${a.endring_pct > 0 ? '+' : ''}${a.endring_pct.toFixed(2)}%</span>`
+          ? `<span class="block text-xs font-normal ${a.endring_pct > 0 ? 'text-green-500 dark:text-green-400' : 'text-red-500 dark:text-red-400'}">${a.endring_pct > 0 ? '+' : ''}${a.endring_pct.toFixed(2).replace('.', ',')}%</span>`
           : `<span class="text-xs text-gray-400">${a.valuta}</span>`}
       </td>
       <td class="col-detalj px-4 py-3 w-36">
         ${rangebar(a.pris, a['52u_lav'], a['52u_hoy'])}
       </td>
       <td class="px-4 py-3 text-right">
-        <span class="yield-badge ${yieldKlasse(a.utbytte_yield)}">${a.utbytte_yield.toFixed(2)}%</span>
+        <span class="yield-badge ${yieldKlasse(a.utbytte_yield)}">${a.utbytte_yield.toFixed(2).replace('.', ',')}%</span>
       </td>
       <td class="px-4 py-3 text-center">${scoreBadge(beregnScore(a))}</td>
       <td class="col-detalj px-4 py-3 text-right">
-        ${a.snitt_yield_5ar > 0 ? `<span class="yield-badge ${yieldKlasse(a.snitt_yield_5ar)}">${a.snitt_yield_5ar.toFixed(1)}%</span>` : '<span class="text-gray-400">—</span>'}
+        ${a.snitt_yield_5ar > 0 ? `<span class="yield-badge ${yieldKlasse(a.snitt_yield_5ar)}">${a.snitt_yield_5ar.toFixed(1).replace('.', ',')}%</span>` : '<span class="text-gray-400">—</span>'}
       </td>
       <td class="col-detalj px-4 py-3 text-right">${fmt(a.utbytte_per_aksje)}</td>
       <td class="px-4 py-3 text-right">
-        <span class="${payoutKlasse(a.payout_ratio)}">${a.payout_ratio > 0 ? a.payout_ratio.toFixed(0) + '%' : '—'}</span>
+        <span class="${payoutKlasse(a.payout_ratio)}">${a.payout_ratio > 0 ? a.payout_ratio.toFixed(0).replace('.', ',') + '%' : '—'}</span>
       </td>
       <td class="px-4 py-3 text-right ${vekstKlasse(a.utbytte_vekst_5ar)}">
-        ${a.utbytte_vekst_5ar ? (a.utbytte_vekst_5ar > 0 ? '+' : '') + a.utbytte_vekst_5ar.toFixed(1) + '%' : '—'}
+        ${a.utbytte_vekst_5ar ? (a.utbytte_vekst_5ar > 0 ? '+' : '') + a.utbytte_vekst_5ar.toFixed(1).replace('.', ',') + '%' : '—'}
       </td>
       <td class="col-detalj px-4 py-3 text-right text-gray-600 dark:text-gray-400">${a.ar_med_utbytte > 0 ? a.ar_med_utbytte : '—'}</td>
-      <td class="col-detalj px-4 py-3 text-right text-gray-600 dark:text-gray-400">${a.pe_ratio > 0 ? a.pe_ratio.toFixed(1) : '—'}</td>
-      <td class="col-detalj px-4 py-3 text-right text-gray-600 dark:text-gray-400">${a.pb_ratio > 0 ? a.pb_ratio.toFixed(1) : '—'}</td>
+      <td class="col-detalj px-4 py-3 text-right text-gray-600 dark:text-gray-400">${a.pe_ratio > 0 ? a.pe_ratio.toFixed(1).replace('.', ',') : '—'}</td>
+      <td class="col-detalj px-4 py-3 text-right text-gray-600 dark:text-gray-400">${a.pb_ratio > 0 ? a.pb_ratio.toFixed(1).replace('.', ',') : '—'}</td>
       <td class="px-4 py-3 text-center ${snartEx ? 'font-semibold text-amber-700 dark:text-amber-400' : 'text-gray-600 dark:text-gray-400'}">
         ${a.ex_dato ? formaterDato(a.ex_dato) : '—'}
         ${snartEx ? '<span class="block text-xs text-orange-500">Snart!</span>' : ''}
@@ -1305,8 +1307,8 @@ function visOversikt(bevarSide = false) {
         <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18M5 8l-2 8M21 8l-2 8M3 16h4M17 16h4M5 8h4m6 0h4"/><circle cx="12" cy="3" r="1"/></svg>
       </button>
       <div class="text-right shrink-0 space-y-0.5">
-        <span class="yield-badge ${yieldKlasse(a.utbytte_yield)}">${a.utbytte_yield.toFixed(2)}%</span>
-        <div class="text-xs ${payoutKlasse(a.payout_ratio)}">Payout ${a.payout_ratio > 0 ? a.payout_ratio.toFixed(0)+'%' : '—'}</div>
+        <span class="yield-badge ${yieldKlasse(a.utbytte_yield)}">${a.utbytte_yield.toFixed(2).replace('.', ',')}%</span>
+        <div class="text-xs ${payoutKlasse(a.payout_ratio)}">Payout ${a.payout_ratio > 0 ? a.payout_ratio.toFixed(0).replace('.', ',')+'%' : '—'}</div>
       </div>
     </div>`;
 
@@ -1328,7 +1330,7 @@ function visOversikt(bevarSide = false) {
           </div>
         </div>
         <div class="flex flex-col items-end gap-1 shrink-0">
-          <span class="yield-badge ${yieldKlasse(a.utbytte_yield)} text-sm">${a.utbytte_yield.toFixed(2)}%</span>
+          <span class="yield-badge ${yieldKlasse(a.utbytte_yield)} text-sm">${a.utbytte_yield.toFixed(2).replace('.', ',')}%</span>
           ${scoreBadge(beregnScore(a))}
         </div>
       </div>
@@ -1337,7 +1339,7 @@ function visOversikt(bevarSide = false) {
           <div class="text-xs text-gray-400 leading-tight">Pris</div>
           <div class="font-semibold text-sm mt-0.5">${fmt(a.pris)}</div>
           ${a.endring_pct !== undefined && a.endring_pct !== 0
-            ? `<div class="text-xs font-medium ${a.endring_pct > 0 ? 'text-green-500 dark:text-green-400' : 'text-red-500 dark:text-red-400'}">${a.endring_pct > 0 ? '+' : ''}${a.endring_pct.toFixed(2)}%</div>`
+            ? `<div class="text-xs font-medium ${a.endring_pct > 0 ? 'text-green-500 dark:text-green-400' : 'text-red-500 dark:text-red-400'}">${a.endring_pct > 0 ? '+' : ''}${a.endring_pct.toFixed(2).replace('.', ',')}%</div>`
             : `<div class="text-xs text-gray-400">${a.valuta}</div>`}
         </div>
         <div class="bg-gray-50 dark:bg-gray-800 rounded-lg py-2 px-1">
@@ -1347,17 +1349,17 @@ function visOversikt(bevarSide = false) {
         </div>
         <div class="bg-gray-50 dark:bg-gray-800 rounded-lg py-2 px-1">
           <div class="text-xs text-gray-400 leading-tight">Payout</div>
-          <div class="font-semibold text-sm mt-0.5 ${payoutKlasse(a.payout_ratio)}">${a.payout_ratio > 0 ? a.payout_ratio.toFixed(0)+'%' : '—'}</div>
+          <div class="font-semibold text-sm mt-0.5 ${payoutKlasse(a.payout_ratio)}">${a.payout_ratio > 0 ? a.payout_ratio.toFixed(0).replace('.', ',')+'%' : '—'}</div>
         </div>
       </div>
       <div class="grid grid-cols-3 gap-2 text-center mb-3">
         <div class="bg-gray-50 dark:bg-gray-800 rounded-lg py-2 px-1">
           <div class="text-xs text-gray-400 leading-tight">Vekst 5år</div>
-          <div class="font-semibold text-sm mt-0.5 ${vekstKlasse(a.utbytte_vekst_5ar)}">${a.utbytte_vekst_5ar ? (a.utbytte_vekst_5ar>0?'+':'')+a.utbytte_vekst_5ar.toFixed(1)+'%' : '—'}</div>
+          <div class="font-semibold text-sm mt-0.5 ${vekstKlasse(a.utbytte_vekst_5ar)}">${a.utbytte_vekst_5ar ? (a.utbytte_vekst_5ar>0?'+':'')+a.utbytte_vekst_5ar.toFixed(1).replace('.', ',')+'%' : '—'}</div>
         </div>
         <div class="bg-gray-50 dark:bg-gray-800 rounded-lg py-2 px-1">
           <div class="text-xs text-gray-400 leading-tight">P/E</div>
-          <div class="font-semibold text-sm mt-0.5">${a.pe_ratio > 0 ? a.pe_ratio.toFixed(1) : '—'}</div>
+          <div class="font-semibold text-sm mt-0.5">${a.pe_ratio > 0 ? a.pe_ratio.toFixed(1).replace('.', ',') : '—'}</div>
         </div>
         <div class="bg-gray-50 dark:bg-gray-800 rounded-lg py-2 px-1">
           <div class="text-xs text-gray-400 leading-tight">År m/utb.</div>
@@ -1498,16 +1500,16 @@ function visTopplistor(liste = 'yield') {
   const LISTER = {
     yield:      { felt: 'utbytte_yield',    retning: 'desc',
                   filter: a => a.utbytte_yield > 0,
-                  label:  a => a.utbytte_yield.toFixed(2) + '% yield' },
+                  label:  a => a.utbytte_yield.toFixed(2).replace('.', ',') + '% yield' },
     vekst:      { felt: 'utbytte_vekst_5ar', retning: 'desc',
                   filter: a => a.utbytte_vekst_5ar > 0,
-                  label:  a => '+' + a.utbytte_vekst_5ar.toFixed(1) + '% vekst/år' },
+                  label:  a => '+' + a.utbytte_vekst_5ar.toFixed(1).replace('.', ',') + '% vekst/år' },
     konsistent: { felt: 'ar_med_utbytte',   retning: 'desc',
                   filter: a => a.ar_med_utbytte > 0,
                   label:  a => a.ar_med_utbytte + ' år m/utbytte' },
     payout:     { felt: 'payout_ratio',     retning: 'asc',
                   filter: a => a.payout_ratio > 0 && a.payout_ratio < 100,
-                  label:  a => a.payout_ratio.toFixed(0) + '% payout' },
+                  label:  a => a.payout_ratio.toFixed(0).replace('.', ',') + '% payout' },
   };
 
   const cfg = LISTER[liste];
@@ -1533,7 +1535,7 @@ function visTopplistor(liste = 'yield') {
       </div>
       <div class="toppliste-høyre">
         <span class="toppliste-metric">${cfg.label(a)}</span>
-        <span class="yield-badge ${yieldKlasse(a.utbytte_yield)}">${a.utbytte_yield.toFixed(2)}%</span>
+        <span class="yield-badge ${yieldKlasse(a.utbytte_yield)}">${a.utbytte_yield.toFixed(2).replace('.', ',')}%</span>
       </div>
     </div>`).join('');
 }
@@ -1569,11 +1571,11 @@ function visSektorer() {
         <div class="grid grid-cols-2 gap-3 text-sm">
           <div>
             <div class="text-xs text-gray-400 dark:text-gray-500 mb-0.5">Snitt yield</div>
-            <div class="font-semibold text-brand-600 dark:text-brand-400">${snittYield > 0 ? snittYield.toFixed(1) + ' %' : '—'}</div>
+            <div class="font-semibold text-brand-600 dark:text-brand-400">${snittYield > 0 ? snittYield.toFixed(1).replace('.', ',') + ' %' : '—'}</div>
           </div>
           <div>
             <div class="text-xs text-gray-400 dark:text-gray-500 mb-0.5">Høyeste yield</div>
-            <div class="font-semibold text-green-600 dark:text-green-400">${bestYield > 0 ? bestYield.toFixed(1) + ' %' : '—'}</div>
+            <div class="font-semibold text-green-600 dark:text-green-400">${bestYield > 0 ? bestYield.toFixed(1).replace('.', ',') + ' %' : '—'}</div>
           </div>
         </div>
         ${bestAksje ? `<div class="mt-3 pt-3 border-t border-gray-100 dark:border-gray-800 text-xs text-gray-400 dark:text-gray-500">Beste: <span class="font-medium text-gray-700 dark:text-gray-300">${bestAksje.ticker}</span> — ${bestAksje.navn}</div>` : ''}
@@ -1681,7 +1683,7 @@ function visKalender() {
         </div>
         <div class="flex items-center gap-2 shrink-0">
           <div class="text-right min-w-16 pointer-events-none">
-            ${type !== 'rapport' ? `<span class="yield-badge ${yieldKlasse(a.utbytte_yield)} text-sm">${a.utbytte_yield.toFixed(2)}%</span>` : ''}
+            ${type !== 'rapport' ? `<span class="yield-badge ${yieldKlasse(a.utbytte_yield)} text-sm">${a.utbytte_yield.toFixed(2).replace('.', ',')}%</span>` : ''}
             ${!erPassert ? `<div class="text-xs text-gray-400 mt-1">${dagerTil === 0 ? 'I dag!' : dagerTil === 1 ? 'I morgen' : `om ${dagerTil}d`}</div>` : '<div class="text-xs text-gray-400 mt-1">Passert</div>'}
           </div>
           <button class="kal-ics-btn p-1.5 rounded-lg text-gray-400 hover:text-brand-600 hover:bg-brand-50 dark:hover:bg-brand-900/20 transition-colors"
@@ -1931,7 +1933,7 @@ function visDeltPortefolje(data) {
   document.getElementById('del-modal-dato').textContent    = 'Delt ' + (data.d || '');
   document.getElementById('del-modal-verdi').textContent   = fmtK(data.v);
   document.getElementById('del-modal-utbytte').textContent = fmtK(data.y);
-  document.getElementById('del-modal-yield').textContent   = (data.yp || 0).toFixed(1) + '%';
+  document.getElementById('del-modal-yield').textContent   = (data.yp || 0).toFixed(1).replace('.', ',') + '%';
 
   const topp = document.getElementById('del-modal-topp');
   if (topp && data.t && data.t.length > 0) {
@@ -1963,9 +1965,9 @@ function eksporterCSV() {
     if (!a) return;
     rader.push([
       a.ticker, `"${a.navn}"`, antall,
-      a.pris.toFixed(2), (a.utbytte_per_aksje||0).toFixed(2),
-      (antall * (a.utbytte_per_aksje||0)).toFixed(2),
-      a.utbytte_yield.toFixed(2),
+      a.pris.toFixed(2).replace('.', ','), (a.utbytte_per_aksje||0).toFixed(2).replace('.', ','),
+      (antall * (a.utbytte_per_aksje||0)).toFixed(2).replace('.', ','),
+      a.utbytte_yield.toFixed(2).replace('.', ','),
       a.ex_dato || '', a.frekvens
     ]);
   });
@@ -2642,7 +2644,7 @@ function eksporterEnkeltICS(a, type, dato) {
   let summary, description;
   if (type === 'ex') {
     summary     = `${a.ticker} Ex-dato`;
-    description = `Ex-dato for ${a.navn}. Yield: ${a.utbytte_yield.toFixed(2)}%. Siste utbytte: ${a.siste_utbytte || '—'} ${a.valuta}.`;
+    description = `Ex-dato for ${a.navn}. Yield: ${a.utbytte_yield.toFixed(2).replace('.', ',')}%. Siste utbytte: ${a.siste_utbytte || '—'} ${a.valuta}.`;
   } else if (type === 'utbytte') {
     const belop = pf[a.ticker]
       ? `Estimert utbetaling: ${(pf[a.ticker] * (a.utbytte_per_aksje || 0) / (({Månedlig:12,Kvartalsvis:4,Halvårlig:2,Årlig:1}[a.frekvens]||1))).toLocaleString('nb-NO',{maximumFractionDigits:0})} kr. `
@@ -2779,9 +2781,9 @@ function visModal(a) {
       </div>
       <div class="grid grid-cols-2 gap-3 mb-4">
         ${modalKort('Kurs', fmt(a.pris) + ' ' + a.valuta)}
-        ${modalKort('P/E', a.pe_ratio > 0 ? a.pe_ratio.toFixed(1) : '—')}
-        ${modalKort('P/B', a.pb_ratio > 0 ? a.pb_ratio.toFixed(1) : '—')}
-        ${modalKort('Markedsverdi', a.markedsverdi_mrd > 0 ? a.markedsverdi_mrd.toFixed(1) + ' mrd' : '—')}
+        ${modalKort('P/E', a.pe_ratio > 0 ? a.pe_ratio.toFixed(1).replace('.', ',') : '—')}
+        ${modalKort('P/B', a.pb_ratio > 0 ? a.pb_ratio.toFixed(1).replace('.', ',') : '—')}
+        ${modalKort('Markedsverdi', a.markedsverdi_mrd > 0 ? a.markedsverdi_mrd.toFixed(1).replace('.', ',') + ' mrd' : '—')}
       </div>
       ${a.beskrivelse_fakta
         ? '<div class="om-selskap-boks"><p class="om-selskap-label">Om selskapet</p><p class="om-selskap-tekst">' + escHtml(a.beskrivelse_fakta) + '</p></div>'
@@ -2802,12 +2804,14 @@ function visModal(a) {
     <!-- ── UTBYTTE ── -->
     <div class="modal-panel skjult" id="mp-utbytte">
       <div class="grid grid-cols-2 gap-3 mb-4">
-        ${modalKort('Utbytteyield', '<span class="' + yieldKlasse(a.utbytte_yield) + '">' + a.utbytte_yield.toFixed(2) + '%</span>')}
-        ${modalKort('Snitt yield 5år', a.snitt_yield_5ar > 0 ? '<span class="' + yieldKlasse(a.snitt_yield_5ar) + '">' + a.snitt_yield_5ar.toFixed(1) + '%</span>' : '—')}
-        ${modalKort('Utbytte/aksje', fmt(a.utbytte_per_aksje) + ' ' + a.valuta)}
+        ${modalKort('Utbytteyield', '<span class="' + yieldKlasse(a.utbytte_yield) + '">' + a.utbytte_yield.toFixed(2).replace('.', ',') + '%</span>')}
+        ${modalKort('Snitt yield 5år', a.snitt_yield_5ar > 0 ? '<span class="' + yieldKlasse(a.snitt_yield_5ar) + '">' + a.snitt_yield_5ar.toFixed(1).replace('.', ',') + '%</span>' : '—')}
+        ${modalKort('Utbytte/aksje' + (['Kvartalsvis','Halvårlig','Månedlig'].includes(a.frekvens)
+            ? ' <span class="font-normal normal-case opacity-70">annualisert</span>' : ''),
+          fmt(a.utbytte_per_aksje) + ' ' + a.valuta)}
         ${modalKort('Siste utbytte', fmt(a.siste_utbytte) + ' ' + a.valuta)}
-        ${modalKort('Payout Ratio', '<span class="' + payoutKlasse(a.payout_ratio) + '">' + (a.payout_ratio > 0 ? a.payout_ratio.toFixed(0) + '%' : '—') + '</span>')}
-        ${modalKort('Utbyttevekst 5år', '<span class="' + vekstKlasse(a.utbytte_vekst_5ar) + '">' + (a.utbytte_vekst_5ar !== 0 ? (a.utbytte_vekst_5ar > 0 ? '+' : '') + a.utbytte_vekst_5ar.toFixed(1) + '%' : '—') + '</span>')}
+        ${modalKort('Payout Ratio', '<span class="' + payoutKlasse(a.payout_ratio) + '">' + (a.payout_ratio > 0 ? a.payout_ratio.toFixed(0).replace('.', ',') + '%' : '—') + '</span>')}
+        ${modalKort('Utbyttevekst 5år', '<span class="' + vekstKlasse(a.utbytte_vekst_5ar) + '">' + (a.utbytte_vekst_5ar !== 0 ? (a.utbytte_vekst_5ar > 0 ? '+' : '') + a.utbytte_vekst_5ar.toFixed(1).replace('.', ',') + '%' : '—') + '</span>')}
         ${modalKort('År m/utbytte', a.ar_med_utbytte > 0 ? a.ar_med_utbytte + ' år' : '—')}
       </div>
       <div class="rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden mb-4">
@@ -2846,17 +2850,17 @@ function visModal(a) {
       <div class="rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden text-sm">
         ${[
           ['Kurs',             fmt(a.pris) + ' ' + a.valuta],
-          ['Markedsverdi',     a.markedsverdi_mrd > 0 ? a.markedsverdi_mrd.toFixed(1) + ' mrd NOK' : '—'],
-          ['P/E',              a.pe_ratio > 0 ? a.pe_ratio.toFixed(1) : '—'],
-          ['P/B',              a.pb_ratio > 0 ? a.pb_ratio.toFixed(1) : '—'],
+          ['Markedsverdi',     a.markedsverdi_mrd > 0 ? a.markedsverdi_mrd.toFixed(1).replace('.', ',') + ' mrd NOK' : '—'],
+          ['P/E',              a.pe_ratio > 0 ? a.pe_ratio.toFixed(1).replace('.', ',') : '—'],
+          ['P/B',              a.pb_ratio > 0 ? a.pb_ratio.toFixed(1).replace('.', ',') : '—'],
           ['52u høy',          a['52u_hoy'] > 0 ? fmt(a['52u_hoy']) + ' ' + a.valuta : '—'],
           ['52u lav',          a['52u_lav'] > 0 ? fmt(a['52u_lav']) + ' ' + a.valuta : '—'],
-          ['Direkteavkastning',a.utbytte_yield > 0 ? a.utbytte_yield.toFixed(2) + '%' : '—'],
-          ['5-årssnitt yield', a.snitt_yield_5ar > 0 ? a.snitt_yield_5ar.toFixed(2) + '%' : '—'],
+          ['Direkteavkastning',a.utbytte_yield > 0 ? a.utbytte_yield.toFixed(2).replace('.', ',') + '%' : '—'],
+          ['5-årssnitt yield', a.snitt_yield_5ar > 0 ? a.snitt_yield_5ar.toFixed(2).replace('.', ',') + '%' : '—'],
           ['Utbytte/aksje',    fmt(a.utbytte_per_aksje) + ' ' + a.valuta],
           ['Siste utbytte',    fmt(a.siste_utbytte) + ' ' + a.valuta],
-          ['Payout Ratio',     a.payout_ratio > 0 ? a.payout_ratio.toFixed(0) + '%' : '—'],
-          ['Utbyttevekst 5år', a.utbytte_vekst_5ar !== 0 ? (a.utbytte_vekst_5ar > 0 ? '+' : '') + a.utbytte_vekst_5ar.toFixed(1) + '% p.a.' : '—'],
+          ['Payout Ratio',     a.payout_ratio > 0 ? a.payout_ratio.toFixed(0).replace('.', ',') + '%' : '—'],
+          ['Utbyttevekst 5år', a.utbytte_vekst_5ar !== 0 ? (a.utbytte_vekst_5ar > 0 ? '+' : '') + a.utbytte_vekst_5ar.toFixed(1).replace('.', ',') + '% p.a.' : '—'],
           ['År m/utbytte',     a.ar_med_utbytte > 0 ? a.ar_med_utbytte + ' år' : '—'],
           ['Frekvens',             a.frekvens],
           ['Neste kvartalsrapport', a.rapport_dato ? formaterDato(a.rapport_dato) : '—'],
@@ -3028,17 +3032,17 @@ function historiskChart(a) {
     const barColor = h.yield >= 7 ? 'bg-green-500' : h.yield >= 4 ? 'bg-blue-500' : 'bg-gray-400';
     return `
       <div class="flex flex-col items-center gap-0.5 flex-1 min-w-0">
-        <span class="text-xs text-gray-500 dark:text-gray-400">${h.yield.toFixed(1)}%</span>
+        <span class="text-xs text-gray-500 dark:text-gray-400">${h.yield.toFixed(1).replace('.', ',')}%</span>
         <div class="w-full flex items-end rounded-t overflow-hidden" style="height:52px">
           <div class="w-full ${barColor} rounded-t transition-all" style="height:${heightPct}%"></div>
         </div>
-        <span class="text-xs font-medium text-gray-700 dark:text-gray-300 tabular-nums">${h.utbytte.toFixed(2)}</span>
+        <span class="text-xs font-medium text-gray-700 dark:text-gray-300 tabular-nums">${h.utbytte.toFixed(2).replace('.', ',')}</span>
         <span class="text-xs text-gray-400">${h.ar}</span>
       </div>`;
   }).join('');
 
   const snittHtml = a.snitt_yield_5ar > 0
-    ? `<span class="text-xs text-gray-500 dark:text-gray-400">Snitt yield: <span class="font-semibold text-gray-700 dark:text-gray-300">${a.snitt_yield_5ar.toFixed(1)}%</span></span>`
+    ? `<span class="text-xs text-gray-500 dark:text-gray-400">Snitt yield: <span class="font-semibold text-gray-700 dark:text-gray-300">${a.snitt_yield_5ar.toFixed(1).replace('.', ',')}%</span></span>`
     : '';
 
   return `
@@ -3237,10 +3241,10 @@ function baerekraftVisning(a) {
         <span class="text-xs font-semibold px-2 py-0.5 rounded-full ${b.bg} ${b.farge}">${b.grad}</span>
       </div>
       <div class="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-3 space-y-0">
-        ${linje('Payout ratio',      po > 0 ? po.toFixed(0)+'%' : '—',   po > 0 && po <= 75)}
-        ${linje('Utbyttevekst 5 år', v != null ? (v>=0?'+':'')+v.toFixed(1)+'%' : '—', v != null && v > 0)}
+        ${linje('Payout ratio',      po > 0 ? po.toFixed(0).replace('.', ',')+'%' : '—',   po > 0 && po <= 75)}
+        ${linje('Utbyttevekst 5 år', v != null ? (v>=0?'+':'')+v.toFixed(1).replace('.', ',')+'%' : '—', v != null && v > 0)}
         ${linje('År med utbytte',    ar > 0 ? ar+' år' : '—',            ar >= 5)}
-        ${linje('Yield-konsistens',  snitt > 0 ? 'snitt '+snitt.toFixed(1)+'%' : '—', snitt > 0 && Math.abs((a.utbytte_yield||0) - snitt) / snitt <= 0.35)}
+        ${linje('Yield-konsistens',  snitt > 0 ? 'snitt '+snitt.toFixed(1).replace('.', ',')+'%' : '—', snitt > 0 && Math.abs((a.utbytte_yield||0) - snitt) / snitt <= 0.35)}
       </div>
     </div>`;
 }
@@ -3282,11 +3286,11 @@ function scoreForklaring(a) {
         ${scoreBadge(beregnScore(a))}
       </div>
       <div class="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-3 space-y-0">
-        ${rad('Yield-nivå', p1, 3, y > 0 ? y.toFixed(1)+'%' : '—')}
-        ${rad('Payout-bærekraft', p2, 2, po > 0 ? po.toFixed(0)+'%' : '—')}
-        ${rad('Vekst 5 år', p3, 2, vekst !== 0 ? (vekst>0?'+':'')+vekst.toFixed(1)+'%' : '—')}
+        ${rad('Yield-nivå', p1, 3, y > 0 ? y.toFixed(1).replace('.', ',')+'%' : '—')}
+        ${rad('Payout-bærekraft', p2, 2, po > 0 ? po.toFixed(0).replace('.', ',')+'%' : '—')}
+        ${rad('Vekst 5 år', p3, 2, vekst !== 0 ? (vekst>0?'+':'')+vekst.toFixed(1).replace('.', ',')+'%' : '—')}
         ${rad('År med utbytte', p4, 2, ar > 0 ? ar+' år' : '—')}
-        ${rad('Yield-stabilitet', p5, 1, snitt > 0 ? 'snitt '+snitt.toFixed(1)+'%' : '—')}
+        ${rad('Yield-stabilitet', p5, 1, snitt > 0 ? 'snitt '+snitt.toFixed(1).replace('.', ',')+'%' : '—')}
       </div>
     </div>
     ${baerekraftVisning(a)}`;
@@ -3336,7 +3340,7 @@ function notatSeksjon(a) {
             <input id="modal-malpris" type="number" min="0" step="1" placeholder="—"
               value="${d.malPris || ''}"
               class="filter-input w-28 text-sm text-right" />
-            <span class="text-xs text-gray-400">Nå: ${a.pris ? a.pris.toFixed(0) : '—'} ${a.valuta}${underMal ? ' · <span class="text-blue-500 dark:text-blue-400 font-semibold">Under mål ✓</span>' : ''}</span>
+            <span class="text-xs text-gray-400">Nå: ${a.pris ? a.pris.toFixed(0).replace('.', ',') : '—'} ${a.valuta}${underMal ? ' · <span class="text-blue-500 dark:text-blue-400 font-semibold">Under mål ✓</span>' : ''}</span>
           </div>
         </div>
         <div>
@@ -3379,7 +3383,7 @@ function rangebar(pris, lav, hoy, stor = false) {
     <div class="py-1">
       <div class="flex justify-between items-center mb-2">
         <span class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">52-ukers kursrange</span>
-        <span class="text-xs text-gray-500 dark:text-gray-400">${pct.toFixed(0)}% fra lavpunkt</span>
+        <span class="text-xs text-gray-500 dark:text-gray-400">${pct.toFixed(0).replace('.', ',')}% fra lavpunkt</span>
       </div>
       <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3 relative">
         <div class="${barColor} rounded-full h-3 transition-all" style="width:${pct}%"></div>
@@ -3400,7 +3404,7 @@ function rangebar(pris, lav, hoy, stor = false) {
       <div class="${barColor} rounded-full h-2" style="width:${pct}%"></div>
       <div class="absolute top-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full ${dotColor} border-2 border-white dark:border-gray-900 shadow" style="left:calc(${pct}% - 5px)"></div>
     </div>
-    <div class="flex justify-between text-xs text-gray-400 mt-0.5"><span>${fmt(lav)}</span><span>${pct.toFixed(0)}%</span><span>${fmt(hoy)}</span></div>
+    <div class="flex justify-between text-xs text-gray-400 mt-0.5"><span>${fmt(lav)}</span><span>${pct.toFixed(0).replace('.', ',')}%</span><span>${fmt(hoy)}</span></div>
   </div>`;
 }
 
@@ -3513,15 +3517,15 @@ function beregnHuslaan() {
   document.getElementById('hl-A-rente').textContent  = fmtKr(sparRenteNetto);
   document.getElementById('hl-A-gjeld').textContent  = fmtKr(balReduksjon);
   document.getElementById('hl-A-total').textContent  = fmtKr(totalA);
-  document.getElementById('hl-A-eff').textContent    = `Effektiv rente etter rentefradrag: ${effA.toFixed(2)}% p.a.`;
+  document.getElementById('hl-A-eff').textContent    = `Effektiv rente etter rentefradrag: ${effA.toFixed(2).replace('.', ',')}% p.a.`;
 
   document.getElementById('hl-B-verdi').textContent   = fmtKr(pfNetto);
   document.getElementById('hl-B-gevinst').textContent = fmtKr(gevinstNetto);
   document.getElementById('hl-B-total').textContent   = fmtKr(totalB);
-  document.getElementById('hl-B-eff').textContent     = `Forventet netto avkastning etter skatt: ${effB.toFixed(2)}% p.a.`;
+  document.getElementById('hl-B-eff').textContent     = `Forventet netto avkastning etter skatt: ${effB.toFixed(2).replace('.', ',')}% p.a.`;
 
   // Breakeven og verdikt
-  const breakeven = (avkPct * (1 - SKATTESATS) / (1 - KAPITALSKATT)).toFixed(2);
+  const breakeven = (avkPct * (1 - SKATTESATS) / (1 - KAPITALSKATT)).toFixed(2).replace('.', ',');
   const vEl  = document.getElementById('hl-verdict');
   const diff = Math.abs(totalA - totalB);
   if (totalA >= totalB) {
@@ -3580,7 +3584,7 @@ function brukPortefoljeData() {
   document.getElementById('kal-yield').value = vektetYield.toFixed(2);
 
   const info = document.getElementById('kal-pf-info');
-  info.textContent = `Hentet fra portefølje: ${antallAksjer} selskaper · markedsverdi ${Math.round(totalVerdi).toLocaleString('nb-NO')} kr · vektet yield ${vektetYield.toFixed(2)}%`;
+  info.textContent = `Hentet fra portefølje: ${antallAksjer} selskaper · markedsverdi ${Math.round(totalVerdi).toLocaleString('nb-NO')} kr · vektet yield ${vektetYield.toFixed(2).replace('.', ',')}%`;
   info.classList.remove('hidden');
 
   beregnKalkulator();
@@ -3621,12 +3625,12 @@ function tegneKalkulatorGraf(raderMed, raderUten) {
 
   const xS = i  => PAD.left + (n > 1 ? (i / (n - 1)) : 0.5) * iW;
   const yS = v  => PAD.top + iH - (v / maxVal) * iH;
-  const pts = r => r.map((p, i) => `${xS(i).toFixed(1)},${yS(p.verdi).toFixed(1)}`).join(' ');
+  const pts = r => r.map((p, i) => `${xS(i).toFixed(1).replace('.', ',')},${yS(p.verdi).toFixed(1).replace('.', ',')}`).join(' ');
 
-  const fmtY = v => v >= 1e6 ? (v/1e6).toFixed(1)+'M' : v >= 1e3 ? Math.round(v/1e3)+'k' : v.toFixed(0);
+  const fmtY = v => v >= 1e6 ? (v/1e6).toFixed(1).replace('.', ',')+'M' : v >= 1e3 ? Math.round(v/1e3)+'k' : v.toFixed(0).replace('.', ',');
 
   const gridLines = [0, 0.25, 0.5, 0.75, 1].map(f => {
-    const v = maxVal * f, y = yS(v).toFixed(1);
+    const v = maxVal * f, y = yS(v).toFixed(1).replace('.', ',');
     return `<line x1="${PAD.left}" y1="${y}" x2="${W - PAD.right}" y2="${y}" stroke="currentColor" stroke-opacity="0.08" stroke-width="1"/>
             <text x="${PAD.left - 5}" y="${y}" text-anchor="end" dominant-baseline="middle" font-size="9" fill="currentColor" opacity="0.45">${fmtY(v)}</text>`;
   }).join('');
@@ -3634,7 +3638,7 @@ function tegneKalkulatorGraf(raderMed, raderUten) {
   const step = Math.max(1, Math.floor(n / 5));
   const xLabels = raderMed
     .filter((_, i) => i === 0 || (i + 1) % step === 0 || i === n - 1)
-    .map(r => `<text x="${xS(r.ar - 1).toFixed(1)}" y="${H - PAD.bottom + 13}" text-anchor="middle" font-size="9" fill="currentColor" opacity="0.45">År ${r.ar}</text>`)
+    .map(r => `<text x="${xS(r.ar - 1).toFixed(1).replace('.', ',')}" y="${H - PAD.bottom + 13}" text-anchor="middle" font-size="9" fill="currentColor" opacity="0.45">År ${r.ar}</text>`)
     .join('');
 
   el.innerHTML = `
@@ -3814,7 +3818,7 @@ async function visDagensBevegelser() {
   }
 
   const radHtml = (b, pos) => {
-    const pctTxt = (pos ? '+' : '') + b.endring_pct.toFixed(2) + '%';
+    const pctTxt = (pos ? '+' : '') + b.endring_pct.toFixed(2).replace('.', ',') + '%';
     const pctCls = pos ? 'text-green-600 dark:text-green-400' : 'text-red-500 dark:text-red-400';
     const tickerCls = pos ? 'text-green-700 dark:text-green-300' : 'text-red-600 dark:text-red-400';
     const ikon = pos ? '▲' : '▼';
@@ -4143,16 +4147,16 @@ function visKomparasjonsModal() {
 
   const RADER = [
     { label: 'Kurs',            fn: a => fmt(a.pris) + ' ' + a.valuta },
-    { label: 'Yield',           fn: a => `<span class="${yieldKlasse(a.utbytte_yield)}">${a.utbytte_yield.toFixed(2)}%</span>` },
+    { label: 'Yield',           fn: a => `<span class="${yieldKlasse(a.utbytte_yield)}">${a.utbytte_yield.toFixed(2).replace('.', ',')}%</span>` },
     { label: 'Utbytte/aksje',   fn: a => fmt(a.utbytte_per_aksje) + ' ' + a.valuta },
-    { label: 'Payout ratio',    fn: a => a.payout_ratio > 0 ? `<span class="${payoutKlasse(a.payout_ratio)}">${a.payout_ratio.toFixed(0)}%</span>` : '—' },
-    { label: 'Vekst 5år',       fn: a => a.utbytte_vekst_5ar !== 0 ? `<span class="${vekstKlasse(a.utbytte_vekst_5ar)}">${a.utbytte_vekst_5ar > 0 ? '+' : ''}${a.utbytte_vekst_5ar.toFixed(1)}%</span>` : '—' },
-    { label: 'Snitt yield 5år', fn: a => a.snitt_yield_5ar > 0 ? `<span class="${yieldKlasse(a.snitt_yield_5ar)}">${a.snitt_yield_5ar.toFixed(1)}%</span>` : '—' },
-    { label: 'P/E',             fn: a => a.pe_ratio > 0 ? a.pe_ratio.toFixed(1) : '—' },
-    { label: 'P/B',             fn: a => a.pb_ratio > 0 ? a.pb_ratio.toFixed(1) : '—' },
+    { label: 'Payout ratio',    fn: a => a.payout_ratio > 0 ? `<span class="${payoutKlasse(a.payout_ratio)}">${a.payout_ratio.toFixed(0).replace('.', ',')}%</span>` : '—' },
+    { label: 'Vekst 5år',       fn: a => a.utbytte_vekst_5ar !== 0 ? `<span class="${vekstKlasse(a.utbytte_vekst_5ar)}">${a.utbytte_vekst_5ar > 0 ? '+' : ''}${a.utbytte_vekst_5ar.toFixed(1).replace('.', ',')}%</span>` : '—' },
+    { label: 'Snitt yield 5år', fn: a => a.snitt_yield_5ar > 0 ? `<span class="${yieldKlasse(a.snitt_yield_5ar)}">${a.snitt_yield_5ar.toFixed(1).replace('.', ',')}%</span>` : '—' },
+    { label: 'P/E',             fn: a => a.pe_ratio > 0 ? a.pe_ratio.toFixed(1).replace('.', ',') : '—' },
+    { label: 'P/B',             fn: a => a.pb_ratio > 0 ? a.pb_ratio.toFixed(1).replace('.', ',') : '—' },
     { label: 'Score',           fn: a => scoreBadge(beregnScore(a)) },
     { label: 'År m/utbytte',    fn: a => a.ar_med_utbytte > 0 ? a.ar_med_utbytte + ' år' : '—' },
-    { label: 'Markedsverdi',    fn: a => a.markedsverdi_mrd > 0 ? a.markedsverdi_mrd.toFixed(1) + ' mrd kr' : '—' },
+    { label: 'Markedsverdi',    fn: a => a.markedsverdi_mrd > 0 ? a.markedsverdi_mrd.toFixed(1).replace('.', ',') + ' mrd kr' : '—' },
     { label: 'Sektor',          fn: a => a.sektor },
     { label: 'Frekvens',        fn: a => `<span class="frekvens-badge">${a.frekvens}</span>` },
     { label: 'Ex-dato',         fn: a => a.ex_dato ? formaterDato(a.ex_dato) : '—' },
@@ -4269,7 +4273,7 @@ function initAnnonsertKalkulator() {
 
     forslagEl.innerHTML = treff.map(a => {
       const yield_ = a.utbytte_yield || 0;
-      const yieldStr = yield_ > 0 ? `<span class="text-green-600 dark:text-green-400 font-medium">${yield_.toFixed(1)}%</span>` : '<span class="text-gray-400">—</span>';
+      const yieldStr = yield_ > 0 ? `<span class="text-green-600 dark:text-green-400 font-medium">${yield_.toFixed(1).replace('.', ',')}%</span>` : '<span class="text-gray-400">—</span>';
       return `<li class="flex items-center justify-between px-3 py-2 hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer"
                   data-ticker="${escHtml(a.ticker)}">
         <span><span class="font-semibold">${escHtml(a.ticker)}</span> <span class="text-gray-500 dark:text-gray-400 text-xs">${escHtml(a.navn || '')}</span></span>
@@ -4360,13 +4364,13 @@ function _annOppdaterResultat() {
   document.getElementById('ann-res-kurs').textContent   = kurs > 0 ? `@ ${fmtTall(kurs)} ${valuta}` : '—';
   document.getElementById('ann-res-utbytte').textContent = fmtKr(utbytteAar);
   document.getElementById('ann-res-upa').textContent    = upa > 0 ? `${fmtTall(upa)} ${valuta} per aksje` : 'Basert på yield';
-  document.getElementById('ann-res-yield').textContent  = effYield > 0 ? `${effYield.toFixed(2)}%` : '—';
+  document.getElementById('ann-res-yield').textContent  = effYield > 0 ? `${effYield.toFixed(2).replace('.', ',')}%` : '—';
   document.getElementById('ann-res-mnd').textContent    = fmtKr(utbytteMnd);
   document.getElementById('ann-res-netto').textContent  = fmtKr(netto);
 
   const snitt5El = document.getElementById('ann-res-snitt5');
   if (snitt5 > 0) {
-    snitt5El.textContent = `5-årssnitt: ${snitt5.toFixed(1)}%`;
+    snitt5El.textContent = `5-årssnitt: ${snitt5.toFixed(1).replace('.', ',')}%`;
     snitt5El.classList.remove('hidden');
   } else {
     snitt5El.classList.add('hidden');
@@ -4407,7 +4411,7 @@ function _annBygTopp() {
   if (!topp.length) { liste.innerHTML = '<p class="text-xs text-gray-400">Ingen data tilgjengelig.</p>'; return; }
 
   liste.innerHTML = topp.map((a, i) => {
-    const yield_ = (a.utbytte_yield || 0).toFixed(1);
+    const yield_ = (a.utbytte_yield || 0).toFixed(1).replace('.', ',');
     return `<button class="ann-topp-btn w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-left"
                 data-ticker="${escHtml(a.ticker)}">
       <span class="flex items-center gap-2">
