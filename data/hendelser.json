@@ -3003,37 +3003,44 @@
     {
       "ticker": "ENH",
       "dato": "2026-08-26",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/680768"
     },
     {
       "ticker": "ENTR",
       "dato": "2026-08-26",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/680809"
     },
     {
       "ticker": "EQVA",
       "dato": "2026-08-26",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/680770"
     },
     {
       "ticker": "GYL",
       "dato": "2026-08-26",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/680790"
     },
     {
       "ticker": "MGN",
       "dato": "2026-08-26",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/680781"
     },
     {
       "ticker": "MPCC",
       "dato": "2026-08-26",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/680778"
     },
     {
       "ticker": "ODFB",
       "dato": "2026-08-26",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/680809"
     },
     {
       "ticker": "RANA",
@@ -3043,17 +3050,20 @@
     {
       "ticker": "SBMO",
       "dato": "2026-08-26",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/680809"
     },
     {
       "ticker": "SRHA",
       "dato": "2026-08-26",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/680809"
     },
     {
       "ticker": "STRONG",
       "dato": "2026-08-26",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/680809"
     },
     {
       "ticker": "SWON",
@@ -3063,12 +3073,14 @@
     {
       "ticker": "VISTIN",
       "dato": "2026-08-26",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/680809"
     },
     {
       "ticker": "WWIB",
       "dato": "2026-08-26",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/680809"
     },
     {
       "ticker": "AQUA",
@@ -3761,6 +3773,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "MGN",
+      "dato": "2026-10-30",
+      "type": "rapport"
+    },
+    {
       "ticker": "NONG",
       "dato": "2026-10-30",
       "type": "rapport"
@@ -4096,6 +4113,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "SWON",
+      "dato": "2026-11-11",
+      "type": "rapport"
+    },
+    {
       "ticker": "EIOF",
       "dato": "2026-11-12",
       "type": "rapport"
@@ -4107,6 +4129,11 @@
     },
     {
       "ticker": "ENDUR",
+      "dato": "2026-11-12",
+      "type": "rapport"
+    },
+    {
+      "ticker": "EQVA",
       "dato": "2026-11-12",
       "type": "rapport"
     },
@@ -4191,6 +4218,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "ENH",
+      "dato": "2026-11-18",
+      "type": "rapport"
+    },
+    {
       "ticker": "GRONG",
       "dato": "2026-11-18",
       "type": "rapport"
@@ -4217,6 +4249,11 @@
     },
     {
       "ticker": "BWO",
+      "dato": "2026-11-25",
+      "type": "rapport"
+    },
+    {
+      "ticker": "MPCC",
       "dato": "2026-11-25",
       "type": "rapport"
     },
@@ -4256,5 +4293,5 @@
       "type": "rapport"
     }
   ],
-  "sist_oppdatert": "2026-08-25"
+  "sist_oppdatert": "2026-08-26"
 }
