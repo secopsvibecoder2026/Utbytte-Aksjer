@@ -1297,7 +1297,7 @@ SEKTOR_RISIKOER = {
         "Syklisk inntjening gjør utbyttet konjunkturavhengig",
     ],
     "Shipping": [
-        "Fraktrater er svært volatile og kan halves på kort tid",
+        "Fraktrater er svært volatile og kan halveres på kort tid",
         "Bunkerspriser (drivstoff) påvirker driftsmarginene direkte",
         "Overkapasitet i markedet kan presse ratene ned i lengre perioder",
     ],
@@ -1342,7 +1342,7 @@ SEKTOR_RISIKOER = {
         "Råvarekostnader (emballasje, ingredienser) varierer",
     ],
     "Helsevern": [
-        "Regulatorisk godkjenning og patent-utløp kan endre inntjeningsbildet",
+        "Regulatorisk godkjenning og patentutløp kan endre inntjeningsbildet",
         "Prispress fra offentlige innkjøpere",
         "Høye FoU-kostnader kan begrense utbyttekapasitet",
     ],
@@ -1726,7 +1726,7 @@ def _lag_investor_badges(a):
     if sektor in _SYKLISKE_SEKTORER_PY:
         risiko_punkter.append(f'Syklisk sektor ({sektor}) — utbytte svinger med konjunkturer')
     elif sektor not in _DEFENSIVE_SEKTORER_PY:
-        risiko_punkter.append(f'Sektor ({sektor}) har viss konjunktureksponering')
+        risiko_punkter.append(f'Sektor ({sektor}) har en viss konjunktureksponering')
     else:
         risiko_punkter.append(f'Defensiv sektor ({sektor}) — relativt stabile inntekter')
 
@@ -1774,9 +1774,9 @@ def _lag_investor_badges(a):
         'kvartalsvis': frekvens if frekvens in ('Kvartalsvis', 'Månedlig') else 'Kvartalsvis',
     }
     frekvens_forklaring = (
-        'månedlig utbytte gir den jevneste kontantstrømmen av alle utbytteaksjer — tolv utbetalinger per år'
+        'utbyttet kommer tolv ganger i året, den jevneste profilen som finnes på Oslo Børs'
         if frekvens == 'Månedlig' else
-        'kvartalsvis utbytte gir jevn kontantstrøm fire ganger i året'
+        'utbyttet kommer fire ganger i året'
     )
     doblingsar = round(70 / vekst) if vekst > 0 else None
     vekst_suffix = (f' Med +{vekst:.1f}% per år dobles utbyttet på ca. {doblingsar} år.'
@@ -1954,11 +1954,11 @@ def _lag_faq_seksjon(a, today):
         if snitt5 > 0:
             diff = yield_ - snitt5
             if diff > 1.5:
-                snitt_k = f"Det er {diff:.1f} prosentpoeng over det historiske 5-årsnittet på {snitt5:.1f}%, noe som kan indikere en attraktiv inngangskurs — men sjekk alltid om det skyldes kursfall."
+                snitt_k = f"Det er {diff:.1f} prosentpoeng over det historiske 5-årssnittet på {snitt5:.1f}%, noe som kan indikere en attraktiv inngangskurs — men sjekk alltid om det skyldes kursfall."
             elif diff < -1.5:
-                snitt_k = f"Det er {abs(diff):.1f} prosentpoeng under det historiske 5-årsnittet på {snitt5:.1f}%."
+                snitt_k = f"Det er {abs(diff):.1f} prosentpoeng under det historiske 5-årssnittet på {snitt5:.1f}%."
             else:
-                snitt_k = f"Det er på linje med det historiske 5-årsnittet på {snitt5:.1f}%."
+                snitt_k = f"Det er på linje med det historiske 5-årssnittet på {snitt5:.1f}%."
         else:
             snitt_k = ""
         svar = (
@@ -2111,9 +2111,16 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
         f'</div>'
     ) if ai_opp else ""
 
-    analyse_tekst   = _lag_analyse_tekst(a, sektor_snitt)
+    analyse_tekst = _lag_analyse_tekst(a, sektor_snitt)
+    # Overskriften må matche innholdet. Seksjonen inneholder datoer bare når
+    # selskapet faktisk har annonsert dem — for 120 av 163 aksjer sto det
+    # «Utbyttedatoer» over en ren yield-sammenligning uten en eneste dato.
+    analyse_tittel = (
+        "Utbyttedatoer" if (a.get("ex_dato") or a.get("betaling_dato"))
+        else "Yield mot sektoren"
+    )
     analyse_seksjon = (
-        f'<div class="analyse"><h2>Utbyttedatoer</h2><p>{analyse_tekst}</p></div>'
+        f'<div class="analyse"><h2>{analyse_tittel}</h2><p>{analyse_tekst}</p></div>'
         if analyse_tekst else ""
     )
 
