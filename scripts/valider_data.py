@@ -150,6 +150,26 @@ def valider_data(filsti=AKSJER_JSON):
                     f"trolig et delår, og yielden ({utbytte_yield}%) for lav"
                 )
 
+        # Sjekk 8: én enkeltutbetaling større enn hele aksjekursen.
+        #
+        # siste_utbytte valideres ingen andre steder — alle sjekkene over går
+        # via utbytte_per_aksje, og den kan være 0 samtidig som siste_utbytte
+        # er tull. KMC Properties sto med siste_utbytte=6958,03 på en aksje
+        # til 24,80 kr, med utbytte_per_aksje=0 og tom utbyttehistorikk, og
+        # slapp gjennom hver eneste sjekk.
+        #
+        # Feltet er ikke bare pynt: appen viser det som «Siste utbytte» i
+        # aksjelisten og bruker det til å regne ut forventet utbetaling for
+        # porteføljen (assets/ui.js), så et vrøvletall gir brukeren en
+        # forventet utbetaling som er tusen ganger for høy.
+        siste_utbytte = _tall(a, 'siste_utbytte')
+        if pris > 0 and siste_utbytte > pris:
+            advarsler.append(
+                f"ADVARSEL {ticker}: siste_utbytte={siste_utbytte} er større "
+                f"enn hele aksjekursen ({pris}) — én utbetaling kan ikke "
+                f"overstige kursen uten en selskapshendelse"
+            )
+
     # Skriv ut rapport
     print("=" * 60)
     print("DATAKVALITETSRAPPORT — aksjer.json")
