@@ -1,5 +1,5 @@
 {
-  "generert": "2026-08-27T20:09:51Z",
+  "generert": "2026-08-27T22:55:17Z",
   "antall": 13,
   "antall_kritiske": 0,
   "varsler": [
@@ -40,10 +40,10 @@
     },
     {
       "ticker": "PGS",
-      "type": "hentefeil",
+      "type": "fastfrosset_kurs",
       "alvorlighet": "advarsel",
-      "melding": "Henting har feilet i 3 dager (sist OK 2026-08-24).",
-      "forslag": "Følg med. Vedvarer det til 7 dager, kontroller om tickeren fortsatt finnes."
+      "melding": "Siste registrerte handel var 2024-07-22 (548 børsdager siden). Kursen står stille.",
+      "forslag": "Kan bety at handelen er suspendert eller at papiret er avnotert."
     },
     {
       "ticker": "RANA",
@@ -68,10 +68,10 @@
     },
     {
       "ticker": "TIETO",
-      "type": "hentefeil",
+      "type": "fastfrosset_kurs",
       "alvorlighet": "advarsel",
-      "melding": "Henting har feilet i 3 dager (sist OK 2026-08-24).",
-      "forslag": "Følg med. Vedvarer det til 7 dager, kontroller om tickeren fortsatt finnes."
+      "melding": "Siste registrerte handel var 2026-06-29 (43 børsdager siden). Kursen står stille.",
+      "forslag": "Kan bety at handelen er suspendert eller at papiret er avnotert."
     },
     {
       "ticker": "WILS",

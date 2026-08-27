@@ -1,7 +1,7 @@
 {
-  "sist_oppdatert": "2026-08-27T20:09:51Z",
-  "antall_ok": 152,
-  "antall_feil": 11,
+  "sist_oppdatert": "2026-08-27T22:55:17Z",
+  "antall_ok": 154,
+  "antall_feil": 9,
   "tickere": {
     "EQNR": {
       "ok": true,
@@ -204,10 +204,11 @@
       "siste_handelsdato": "2026-08-27"
     },
     "PGS": {
-      "ok": false,
+      "ok": true,
       "vart_navn": "PGS ASA",
-      "yahoo_navn": "",
-      "feilmelding": "'RangeIndex' object has no attribute 'tz'"
+      "yahoo_navn": "PGS ASA",
+      "markedsverdi": 8611237888.0,
+      "siste_handelsdato": "2024-07-22"
     },
     "VEI": {
       "ok": true,
@@ -787,10 +788,11 @@
       "siste_handelsdato": "2026-08-27"
     },
     "TIETO": {
-      "ok": false,
+      "ok": true,
       "vart_navn": "TietoEVRY Corporation",
-      "yahoo_navn": "",
-      "feilmelding": "'RangeIndex' object has no attribute 'tz'"
+      "yahoo_navn": "Tieto Oyj",
+      "markedsverdi": 24441212928.0,
+      "siste_handelsdato": "2026-06-29"
     },
     "WSTEP": {
       "ok": true,
