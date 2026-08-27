@@ -547,6 +547,7 @@ against `vart_navn` in `hentelogg.json` — a snapshot written during fetch.
 - **5-year average yield:** `snitt_yield_5ar` > 200% is flagged as suspicious
 - **Historical yields:** any entry in `historiske_utbytter` with yield > 200% is flagged
 - **Forward vs. trailing mismatch:** `utbytte_per_aksje` > 5x the most recent year in `historiske_utbytter` is flagged (may indicate Yahoo is returning a forward estimate)
+- **Figures that cannot share a share base:** a historical dividend > 2x the current price, or `52u_hoy` > 3x the current price, is flagged. Every check above compares yield, `utbytte_per_aksje` and price — three numbers that move together — so a corporate action that breaks the *rest* of the page passed unnoticed. 2020 Bulkers showed «2026: 133,57 NOK per aksje» and «52-ukers kurs 2,56 – 152,00» on a 4,35 kr share and the report still said «Datakvalitet OK». The thresholds sit above genuine shipping peaks (GSF 1,2x, WEST 1,3x), so a real bumper year is not flagged.
 
 ### Running manually
 
@@ -662,6 +663,32 @@ This section documents recurring patterns where Yahoo Finance returns incorrect 
 **Affected stocks:** WAWI, GOGL (USD), FLNG (USD), COOL (USD) — all companies that declare dividends in USD but trade on Oslo Børs in NOK.
 
 **Note:** `valuta=USD` in our data for `.OL` stocks means the company reports in USD, not that prices or dividends are displayed in USD. Prices are always in NOK for `.OL` tickers.
+
+### 2b. Frequency derived from a disturbed dividend series
+
+**Symptom:** `frekvens` is wrong — the stock pays monthly but is listed as quarterly, or similar.
+
+**Root cause:** `frekvens` is not fetched; it is *derived* by `frekvens_label(div_count)`
+counting how many payments Yahoo returns in the trailing 12 months (3–9 → Kvartalsvis).
+A corporate action that breaks the series, or payments Yahoo simply has not recorded,
+silently changes the count and therefore the label.
+
+**Why it matters more than it looks.** The value is not shown once — it drives the
+subtitle, the nøkkeltall table, the investor-profile badge and its cash-flow blurb, the
+FAQ answer, the `FAQPage` JSON-LD, and the frequency sentence inside `beskrivelse` that
+`lag_beskrivelse()` builds. One wrong label is six wrong statements per page plus the app.
+
+**Fix:** set `"frekvens"` on the entry in `tickers.json`. `FREKVENS_OVERSTYRT` in
+`fetch_stocks.py` and `frekvens_map` in `regenerer_sider.py` both read it, so the
+override survives the next full fetch. Use it only when you have confirmed the real
+schedule from the company or Oslo Børs — it silences the derivation entirely.
+
+**Incident (fixed 2026-08-27).** `2020` (2020 Bulkers) pays **monthly** but showed
+«Kvartalsvis». Its dividend series is disturbed by a large capital distribution in
+May 2026 — the price fell from 117,02 to 3,01 in one week. The same event leaves the
+other figures on that page unreliable (`133,57 NOK` for 2026, `52-ukers høy 152,00`,
+`5-årssnitt yield 16,91 %`, `P/E 0,1`, `+55,9 %` growth); these are now flagged by
+Sjekk 6 in `valider_data.py` rather than passing silently.
 
 ### 3. Annualization inflation of single payment
 
