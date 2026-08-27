@@ -1,22 +1,8 @@
 {
-  "generert": "2026-08-26T17:46:24Z",
-  "antall": 18,
-  "antall_kritiske": 2,
+  "generert": "2026-08-27T18:01:34Z",
+  "antall": 13,
+  "antall_kritiske": 0,
   "varsler": [
-    {
-      "ticker": "AFG",
-      "type": "navneendring",
-      "alvorlighet": "kritisk",
-      "melding": "Yahoo Finance kaller selskapet «AF Gruppen ASA», vi har «Arendals Fossekompani ASA» (likhet 17%, avvik i 15 dager).",
-      "forslag": "Sannsynlig navneendring eller oppkjøp. Oppdater navn — og trolig ticker_yf — i data/tickers.json."
-    },
-    {
-      "ticker": "ALNG",
-      "type": "navneendring",
-      "alvorlighet": "kritisk",
-      "melding": "Yahoo Finance kaller selskapet «ALNG ASA», vi har «Awilco LNG ASA» (likhet 57%, avvik i 15 dager).",
-      "forslag": "Sannsynlig navneendring eller oppkjøp. Oppdater navn — og trolig ticker_yf — i data/tickers.json."
-    },
     {
       "ticker": "DOF",
       "type": "aldri_hentet",
@@ -32,39 +18,11 @@
       "forslag": "Kontroller at ticker_yf er riktig i data/tickers.json."
     },
     {
-      "ticker": "FRO",
-      "type": "markedsverdi_borte",
-      "alvorlighet": "advarsel",
-      "melding": "Markedsverdien er borte fra Yahoo (var 87,824,736,256 sist). Kan indikere strukturendring i selskapet.",
-      "forslag": "Kontroller om selskapet er under oppkjøp eller strykning."
-    },
-    {
-      "ticker": "GJF",
-      "type": "markedsverdi_borte",
-      "alvorlighet": "advarsel",
-      "melding": "Markedsverdien er borte fra Yahoo (var 142,389,772,288 sist). Kan indikere strukturendring i selskapet.",
-      "forslag": "Kontroller om selskapet er under oppkjøp eller strykning."
-    },
-    {
       "ticker": "GOGL",
       "type": "aldri_hentet",
       "alvorlighet": "advarsel",
       "melding": "Ingen vellykket henting registrert for denne tickeren.",
       "forslag": "Kontroller at ticker_yf er riktig i data/tickers.json."
-    },
-    {
-      "ticker": "HEX",
-      "type": "markedsverdi_borte",
-      "alvorlighet": "advarsel",
-      "melding": "Markedsverdien er borte fra Yahoo (var 4,618,444,800 sist). Kan indikere strukturendring i selskapet.",
-      "forslag": "Kontroller om selskapet er under oppkjøp eller strykning."
-    },
-    {
-      "ticker": "JIN",
-      "type": "markedsverdi_borte",
-      "alvorlighet": "advarsel",
-      "melding": "Markedsverdien er borte fra Yahoo (var 784,479,168 sist). Kan indikere strukturendring i selskapet.",
-      "forslag": "Kontroller om selskapet er under oppkjøp eller strykning."
     },
     {
       "ticker": "KMCP",
@@ -81,6 +39,13 @@
       "forslag": "Kontroller at ticker_yf er riktig i data/tickers.json."
     },
     {
+      "ticker": "PGS",
+      "type": "hentefeil",
+      "alvorlighet": "advarsel",
+      "melding": "Henting har feilet i 3 dager (sist OK 2026-08-24).",
+      "forslag": "Følg med. Vedvarer det til 7 dager, kontroller om tickeren fortsatt finnes."
+    },
+    {
       "ticker": "RANA",
       "type": "aldri_hentet",
       "alvorlighet": "advarsel",
@@ -95,18 +60,18 @@
       "forslag": "Kontroller at ticker_yf er riktig i data/tickers.json."
     },
     {
-      "ticker": "SNI",
-      "type": "markedsverdi_borte",
-      "alvorlighet": "advarsel",
-      "melding": "Markedsverdien er borte fra Yahoo (var 21,812,727,808 sist). Kan indikere strukturendring i selskapet.",
-      "forslag": "Kontroller om selskapet er under oppkjøp eller strykning."
-    },
-    {
       "ticker": "SRBNK",
       "type": "aldri_hentet",
       "alvorlighet": "advarsel",
       "melding": "Ingen vellykket henting registrert for denne tickeren.",
       "forslag": "Kontroller at ticker_yf er riktig i data/tickers.json."
+    },
+    {
+      "ticker": "TIETO",
+      "type": "hentefeil",
+      "alvorlighet": "advarsel",
+      "melding": "Henting har feilet i 3 dager (sist OK 2026-08-24).",
+      "forslag": "Følg med. Vedvarer det til 7 dager, kontroller om tickeren fortsatt finnes."
     },
     {
       "ticker": "WILS",

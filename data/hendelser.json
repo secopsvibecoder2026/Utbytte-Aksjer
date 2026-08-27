@@ -3090,12 +3090,14 @@
     {
       "ticker": "CMBTO",
       "dato": "2026-08-27",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/680941"
     },
     {
       "ticker": "ENTR",
       "dato": "2026-08-27",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/681069"
     },
     {
       "ticker": "GSF",
@@ -3115,47 +3117,56 @@
     {
       "ticker": "KMCP",
       "dato": "2026-08-27",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/681069"
     },
     {
       "ticker": "MAS",
       "dato": "2026-08-27",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/680922"
     },
     {
       "ticker": "ODFB",
       "dato": "2026-08-27",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/681069"
     },
     {
       "ticker": "SBMO",
       "dato": "2026-08-27",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/681069"
     },
     {
       "ticker": "SNTIA",
       "dato": "2026-08-27",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/680953"
     },
     {
       "ticker": "SRHA",
       "dato": "2026-08-27",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/681069"
     },
     {
       "ticker": "STRONG",
       "dato": "2026-08-27",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/681069"
     },
     {
       "ticker": "VISTIN",
       "dato": "2026-08-27",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/681069"
     },
     {
       "ticker": "WWIB",
       "dato": "2026-08-27",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/681069"
     },
     {
       "ticker": "AFG",
@@ -4128,6 +4139,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "SNTIA",
+      "dato": "2026-11-10",
+      "type": "rapport"
+    },
+    {
       "ticker": "AKAST",
       "dato": "2026-11-11",
       "type": "rapport"
@@ -4174,6 +4190,11 @@
     },
     {
       "ticker": "EQVA",
+      "dato": "2026-11-12",
+      "type": "rapport"
+    },
+    {
+      "ticker": "GSF",
       "dato": "2026-11-12",
       "type": "rapport"
     },
@@ -4238,6 +4259,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "MAS",
+      "dato": "2026-11-17",
+      "type": "rapport"
+    },
+    {
       "ticker": "REACH",
       "dato": "2026-11-17",
       "type": "rapport"
@@ -4298,6 +4324,21 @@
       "type": "rapport"
     },
     {
+      "ticker": "CMBTO",
+      "dato": "2026-11-26",
+      "type": "rapport"
+    },
+    {
+      "ticker": "HUNT",
+      "dato": "2026-11-26",
+      "type": "rapport"
+    },
+    {
+      "ticker": "JIN",
+      "dato": "2026-11-30",
+      "type": "rapport"
+    },
+    {
       "ticker": "AQUA",
       "dato": "2027-05-28",
       "type": "rapport"
@@ -4333,5 +4374,5 @@
       "type": "rapport"
     }
   ],
-  "sist_oppdatert": "2026-08-26"
+  "sist_oppdatert": "2026-08-27"
 }
