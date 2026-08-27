@@ -123,6 +123,33 @@ def valider_data(filsti=AKSJER_JSON):
                     f"selskapshendelse"
                 )
 
+        # Sjekk 7: årsraten er lavere enn én enkelt utbetaling.
+        #
+        # utbytte_per_aksje skal være utbyttet for et helt år. For en aksje
+        # som betaler flere ganger i året kan den derfor ikke være mindre enn
+        # én utbetaling — da er tallet en delsum, og yielden på siden blir for
+        # lav. Årsaken er kryssvalideringen i fetch_stocks.py, som bytter ut
+        # Yahoos rate med totalen for siste hele kalenderår: for et selskap
+        # som startet eller trappet opp utbyttet i løpet av det året er den
+        # totalen et delår. SATS viste 1,37 % mot reelle ~3 %, Entra 1,04 %
+        # mot 2,08 % (to like utbetalinger à 1,10 kr).
+        #
+        # Sjekken gir bare varsel — den retter ikke tallet. Å utlede den
+        # riktige årsraten krever at ordinære utbytter skilles fra
+        # ekstraordinære, og det finnes ingen regel som treffer for alle:
+        # summen av siste 12 mnd gjør GSF til 116 % yield, mens Yahoos rate
+        # gjør Entra til halvparten av det aksjonæren faktisk fikk.
+        pr_ar = {'Månedlig': 12, 'Kvartalsvis': 4, 'Halvårlig': 2}
+        if a.get('frekvens') in pr_ar and utbytte_per_aksje > 0:
+            siste_utbytte = _tall(a, 'siste_utbytte')
+            if 0 < utbytte_per_aksje < siste_utbytte:
+                advarsler.append(
+                    f"ADVARSEL {ticker}: utbytte_per_aksje={utbytte_per_aksje} "
+                    f"er lavere enn siste enkeltutbetaling ({siste_utbytte}) "
+                    f"for en {a['frekvens'].lower()} betaler — årsraten er "
+                    f"trolig et delår, og yielden ({utbytte_yield}%) for lav"
+                )
+
     # Skriv ut rapport
     print("=" * 60)
     print("DATAKVALITETSRAPPORT — aksjer.json")
