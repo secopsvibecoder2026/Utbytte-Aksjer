@@ -91,6 +91,38 @@ def valider_data(filsti=AKSJER_JSON):
                     f"— mulig delår eller feil"
                 )
 
+        # Sjekk 6: tall på siden som ikke kan stemme sammen.
+        #
+        # Alle sjekkene over måler yield mot utbytte_per_aksje og kurs, og de
+        # tre henger sammen. Men historiske beløp og 52-ukers høy sjekkes ikke
+        # mot dagens kurs i det hele tatt. 2020 Bulkers viste «2026: 133,57 NOK
+        # per aksje» og «52-ukers kurs 2,56 – 152,00» på en aksje som koster
+        # 4,35 kr — etter en stor kapitalutdeling i mai 2026 som gjorde de
+        # gamle tallene uforenlige med dagens kurs. Rapporten sa likevel
+        # «Datakvalitet OK».
+        if pris > 0:
+            for h in historiske_utbytter:
+                belop = h.get('utbytte') or 0
+                # Terskel 2x: et utbytte litt over kursen kan være et ekte
+                # toppår for en shippingaksje (GSF 1,2x, WEST 1,3x). Det
+                # dobbelte av kursen er derimot ikke en utbetaling — det er
+                # tall fra to ulike aksjebaser.
+                if belop > pris * 2:
+                    advarsler.append(
+                        f"ADVARSEL {ticker} {h.get('ar')}: historisk utbytte "
+                        f"{belop} > dagens kurs {pris} — beløpet kan ikke "
+                        f"sammenlignes med dagens kurs (splitt, spleis eller "
+                        f"kapitalutdeling?)"
+                    )
+                    break
+            hoy52 = _tall(a, '52u_hoy')
+            if hoy52 > pris * 3:
+                advarsler.append(
+                    f"ADVARSEL {ticker}: 52-ukers høy {hoy52} er {hoy52/pris:.0f}x "
+                    f"dagens kurs {pris} — serien er neppe justert for en "
+                    f"selskapshendelse"
+                )
+
     # Skriv ut rapport
     print("=" * 60)
     print("DATAKVALITETSRAPPORT — aksjer.json")

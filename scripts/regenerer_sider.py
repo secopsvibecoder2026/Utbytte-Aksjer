@@ -27,6 +27,7 @@ def main():
         inkorp_map        = {t["ticker"]: t.get("inkorporeringsland", "Norge") for t in ticker_data}
         navn_map          = {t["ticker"]: t.get("navn", "") for t in ticker_data}
         sektor_map        = {t["ticker"]: t.get("sektor", "") for t in ticker_data}
+        frekvens_map      = {t["ticker"]: t["frekvens"] for t in ticker_data if t.get("frekvens")}
 
     with open(AKSJER_F, encoding="utf-8") as f:
         data = json.load(f)
@@ -48,6 +49,12 @@ def main():
         if ny_sektor and ny_sektor != a.get("sektor"):
             print(f"  {a['ticker']}: sektor «{a.get('sektor')}» → «{ny_sektor}»")
             a["sektor"] = ny_sektor
+            oppdatert += 1
+        # Frekvens kan overstyres manuelt når Yahoos utbytteserie er mangelfull.
+        ny_frekvens = frekvens_map.get(a["ticker"])
+        if ny_frekvens and ny_frekvens != a.get("frekvens"):
+            print(f"  {a['ticker']}: frekvens «{a.get('frekvens')}» → «{ny_frekvens}»")
+            a["frekvens"] = ny_frekvens
             oppdatert += 1
 
         # Teksten i tickers.json er en mal der kun innledningsavsnittet er

@@ -151,6 +151,11 @@ DNB_NAVN             = {t["ticker"]: t.get("navn_dnb", t["navn"]) for t in _tick
 TICKER_YF            = {t["ticker"]: t.get("ticker_yf", t["ticker"] + ".OL") for t in _ticker_data}
 ASK_EGNET            = {t["ticker"]: t.get("ask_egnet", True) for t in _ticker_data}
 INKORPORERINGSLAND   = {t["ticker"]: t.get("inkorporeringsland", "Norge") for t in _ticker_data}
+# Frekvensen utledes normalt av antall utbetalinger siste 12 mnd. Den kan
+# overstyres i tickers.json for aksjer der Yahoos utbytteserie er mangelfull
+# eller forstyrret av en selskapshendelse — 2020 Bulkers betaler månedlig,
+# men ble talt til kvartalsvis etter kapitalutdelingen i mai 2026.
+FREKVENS_OVERSTYRT   = {t["ticker"]: t["frekvens"] for t in _ticker_data if t.get("frekvens")}
 
 _fallback_path = os.path.join(os.path.dirname(__file__), "..", "data", "fallback_data.json")
 FALLBACK_DATA = {}
@@ -680,7 +685,7 @@ def hent_aksje(meta):
             one_year_ago = one_year_ago.astimezone(dividends.index.tz)
         recent_divs = dividends[dividends.index >= one_year_ago]
         div_count = len(recent_divs)
-        frekvens = frekvens_label(div_count)
+        frekvens = FREKVENS_OVERSTYRT.get(ticker) or frekvens_label(div_count)
 
         # Utbyttevekst 5 år CAGR
         utbytte_vekst_5ar = beregn_utbytte_vekst(dividends, years=5)
