@@ -547,6 +547,8 @@ against `vart_navn` in `hentelogg.json` — a snapshot written during fetch.
 - **5-year average yield:** `snitt_yield_5ar` > 200% is flagged as suspicious
 - **Historical yields:** any entry in `historiske_utbytter` with yield > 200% is flagged
 - **Forward vs. trailing mismatch:** `utbytte_per_aksje` > 5x the most recent year in `historiske_utbytter` is flagged (may indicate Yahoo is returning a forward estimate)
+- **An annual rate below a single payment:** for a stock paying more than once a year, `utbytte_per_aksje` cannot be smaller than one payment — the figure is a part-year and the displayed yield is too low. Nine stocks break this (KOG shows 0,70 % against roughly 2,6 %; Entra 1,04 % against 2,08 % on two identical 1,10 kr payments). The check **warns only** — see the note below on why it does not correct the number.
+- **A single payment larger than the whole share price:** `siste_utbytte` is validated nowhere else, because every other check goes through `utbytte_per_aksje` — and that can be 0 while `siste_utbytte` is nonsense. KMC Properties sat at `6958,03` on a 24,80 kr share with an empty dividend history and passed all eight checks. The field is not decorative: `assets/ui.js` renders it as «Siste utbytte» and uses it to compute expected portfolio payouts.
 - **Figures that cannot share a share base:** a historical dividend > 2x the current price, or `52u_hoy` > 3x the current price, is flagged. Every check above compares yield, `utbytte_per_aksje` and price — three numbers that move together — so a corporate action that breaks the *rest* of the page passed unnoticed. 2020 Bulkers showed «2026: 133,57 NOK per aksje» and «52-ukers kurs 2,56 – 152,00» on a 4,35 kr share and the report still said «Datakvalitet OK». The thresholds sit above genuine shipping peaks (GSF 1,2x, WEST 1,3x), so a real bumper year is not flagged.
 
 ### Running manually
@@ -682,6 +684,19 @@ FAQ answer, the `FAQPage` JSON-LD, and the frequency sentence inside `beskrivels
 `fetch_stocks.py` and `frekvens_map` in `regenerer_sider.py` both read it, so the
 override survives the next full fetch. Use it only when you have confirmed the real
 schedule from the company or Oslo Børs — it silences the derivation entirely.
+
+**Verify with intervals, not counts.** When auditing this field, measure the median
+number of days between payments — counting payments in a 12-month window is the very
+thing that fails. A full audit of all 163 on 2026-08-27 (155 reachable before Yahoo
+rate-limited at HTTP 429) found exactly one further error this way, and correctly left
+AFK, VEND and MGN alone — all three changed dividend policy, so today's label is right.
+
+**Incident (fixed 2026-08-27).** `SATS` pays **semi-annually** — 1 Sep 2025, 4 Mar 2026,
+24 Aug 2026, roughly 180 days apart — but the 12-month window caught three of them and
+the `>= 3 → Kvartalsvis` threshold made it quarterly. The frozen description in
+`tickers.json` still read «utbetales halvårlig», so the label had drifted away from a
+value that was once right. Any semi-annual payer can hit this whenever the window edge
+catches a third payment.
 
 **Incident (fixed 2026-08-27).** `2020` (2020 Bulkers) pays **monthly** but showed
 «Kvartalsvis». Its dividend series is disturbed by a large capital distribution in
@@ -827,3 +842,27 @@ run changes nothing (it must be idempotent).
 8. **Kurshistorikk er separat** — ligger i `data/kurs/{TICKER}.json`, ikke i `aksjer.json`. Frontend henter den on-demand via `hentKursHistorikk()` når en aksjemodal åpnes. Python-kode som genererer sider må laste den tilbake med `_last_kurshistorikk_fra_disk()` — ellers regenereres alle SEO-sider uten kursgraf
 9. **`window.alleAksjer`** is set in `lastInnData()` in `app.js` for cross-file access
 10. **Beskrivelser bygges på nytt hver kjøring — ikke kopier råteksten** — `beskrivelse` i `aksjer.json` er ikke teksten fra `tickers.json`. Både `fetch_stocks.py` og `regenerer_sider.py` kaller `utvid_beskrivelser.lag_beskrivelse()`, som henter *kun* det manuelt forfattede innledningsavsnittet (via `_manuell_del()`) og bygger utbytteprofil- og driver-avsnittene på nytt fra denne kjøringens tall. Kopierer du råteksten fra `tickers.json` rett inn, fryser du yield, payout, vekst og årstelling til det som tilfeldigvis sto i malen. Se «Utdaterte nøkkeltall» under.
+
+### Why the yield is not auto-corrected when the annual rate is a part-year
+
+`utbytte_per_aksje` comes from Yahoo's `dividendRate`, but `hent_aksje()` replaces it
+with the **last complete calendar year's total** whenever the two differ by more than
+50 %. That guard exists to catch WAWI-style mixed-period stacking, and for a stable
+payer it works. For a company that *started* or *raised* its dividend during that year,
+the total is a part-year — and the guard actively makes the number worse. Nine stocks
+are affected; the stored value equals the 2025 calendar total exactly for SATS, SOFF,
+CMBTO, HUNT and FRO.
+
+Three replacement rules were simulated against real payment dates for all 155 reachable
+stocks, and **every one produced an obviously wrong figure somewhere**:
+
+| Rule | Fixes | Breaks |
+|---|---|---|
+| Trailing 12-month sum | SATS, SOFF, PUBLI | GSF → 116 % yield, HUNT → 23,9 %, AKAST → 21,3 % |
+| Median payment × frequency | SATS, EIOF, ENTR | HUNT → 18,5 %, BNOR → 29,3 % |
+| Uniform series matching frequency | ENTR, EIOF, MORLD, MPCC | halves SalMar and Bakkafrost, GSF → 116 % |
+
+The trailing sum includes special and capital distributions; Yahoo's rate excludes
+payments the company has just started making. Telling the two apart is a design task —
+classifying ordinary vs. extraordinary dividends — not a threshold. Until that exists,
+Sjekk 7 makes the affected stocks visible on every run rather than silently guessing.
