@@ -1,10 +1,10 @@
 {
-  "sist_oppdatert": "2026-08-28T19:11:11Z",
+  "sist_oppdatert": "2026-08-28T21:05:01Z",
   "tickere": {
     "EQNR": {
       "sist_ok": "2026-08-28",
       "sist_navn_yahoo": "Equinor ASA",
-      "sist_markedsverdi": 917290090496.0
+      "sist_markedsverdi": 917068644352.0
     },
     "DNB": {
       "sist_ok": "2026-08-28",
@@ -142,7 +142,8 @@
     "PGS": {
       "sist_ok": "2026-08-28",
       "sist_navn_yahoo": "PGS ASA",
-      "sist_markedsverdi": 8611237888.0
+      "sist_markedsverdi": 8611237888.0,
+      "feil_siden": "2026-08-28"
     },
     "VEI": {
       "sist_ok": "2026-08-28",
@@ -554,7 +555,8 @@
     "TIETO": {
       "sist_ok": "2026-08-28",
       "sist_navn_yahoo": "Tieto Oyj",
-      "sist_markedsverdi": 24441212928.0
+      "sist_markedsverdi": 24441212928.0,
+      "feil_siden": "2026-08-28"
     },
     "WSTEP": {
       "sist_ok": "2026-08-28",
@@ -569,7 +571,7 @@
     "MGN": {
       "sist_ok": "2026-08-28",
       "sist_navn_yahoo": "Magnora ASA",
-      "sist_markedsverdi": 2210111744.0
+      "sist_markedsverdi": 2202979584.0
     },
     "ARCH": {
       "sist_ok": "2026-08-28",
