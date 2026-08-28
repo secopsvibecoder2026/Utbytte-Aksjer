@@ -1,6 +1,6 @@
 {
-  "generert": "2026-08-27T22:55:17Z",
-  "antall": 13,
+  "generert": "2026-08-28T00:47:38Z",
+  "antall": 16,
   "antall_kritiske": 0,
   "varsler": [
     {
@@ -18,11 +18,39 @@
       "forslag": "Kontroller at ticker_yf er riktig i data/tickers.json."
     },
     {
+      "ticker": "FRO",
+      "type": "markedsverdi_borte",
+      "alvorlighet": "advarsel",
+      "melding": "Markedsverdien er borte fra Yahoo (var 91,008,237,568 sist). Kan indikere strukturendring i selskapet.",
+      "forslag": "Kontroller om selskapet er under oppkjøp eller strykning."
+    },
+    {
+      "ticker": "GJF",
+      "type": "markedsverdi_borte",
+      "alvorlighet": "advarsel",
+      "melding": "Markedsverdien er borte fra Yahoo (var 141,689,831,424 sist). Kan indikere strukturendring i selskapet.",
+      "forslag": "Kontroller om selskapet er under oppkjøp eller strykning."
+    },
+    {
       "ticker": "GOGL",
       "type": "aldri_hentet",
       "alvorlighet": "advarsel",
       "melding": "Ingen vellykket henting registrert for denne tickeren.",
       "forslag": "Kontroller at ticker_yf er riktig i data/tickers.json."
+    },
+    {
+      "ticker": "HEX",
+      "type": "markedsverdi_borte",
+      "alvorlighet": "advarsel",
+      "melding": "Markedsverdien er borte fra Yahoo (var 4,575,157,248 sist). Kan indikere strukturendring i selskapet.",
+      "forslag": "Kontroller om selskapet er under oppkjøp eller strykning."
+    },
+    {
+      "ticker": "JIN",
+      "type": "markedsverdi_borte",
+      "alvorlighet": "advarsel",
+      "melding": "Markedsverdien er borte fra Yahoo (var 701,442,432 sist). Kan indikere strukturendring i selskapet.",
+      "forslag": "Kontroller om selskapet er under oppkjøp eller strykning."
     },
     {
       "ticker": "KMCP",
@@ -39,13 +67,6 @@
       "forslag": "Kontroller at ticker_yf er riktig i data/tickers.json."
     },
     {
-      "ticker": "PGS",
-      "type": "fastfrosset_kurs",
-      "alvorlighet": "advarsel",
-      "melding": "Siste registrerte handel var 2024-07-22 (548 børsdager siden). Kursen står stille.",
-      "forslag": "Kan bety at handelen er suspendert eller at papiret er avnotert."
-    },
-    {
       "ticker": "RANA",
       "type": "aldri_hentet",
       "alvorlighet": "advarsel",
@@ -60,18 +81,18 @@
       "forslag": "Kontroller at ticker_yf er riktig i data/tickers.json."
     },
     {
+      "ticker": "SNI",
+      "type": "markedsverdi_borte",
+      "alvorlighet": "advarsel",
+      "melding": "Markedsverdien er borte fra Yahoo (var 21,613,524,992 sist). Kan indikere strukturendring i selskapet.",
+      "forslag": "Kontroller om selskapet er under oppkjøp eller strykning."
+    },
+    {
       "ticker": "SRBNK",
       "type": "aldri_hentet",
       "alvorlighet": "advarsel",
       "melding": "Ingen vellykket henting registrert for denne tickeren.",
       "forslag": "Kontroller at ticker_yf er riktig i data/tickers.json."
-    },
-    {
-      "ticker": "TIETO",
-      "type": "fastfrosset_kurs",
-      "alvorlighet": "advarsel",
-      "melding": "Siste registrerte handel var 2026-06-29 (43 børsdager siden). Kursen står stille.",
-      "forslag": "Kan bety at handelen er suspendert eller at papiret er avnotert."
     },
     {
       "ticker": "WILS",

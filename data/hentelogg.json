@@ -1,13 +1,13 @@
 {
-  "sist_oppdatert": "2026-08-27T22:55:17Z",
-  "antall_ok": 154,
-  "antall_feil": 9,
+  "sist_oppdatert": "2026-08-28T00:47:38Z",
+  "antall_ok": 152,
+  "antall_feil": 11,
   "tickere": {
     "EQNR": {
       "ok": true,
       "vart_navn": "Equinor ASA",
       "yahoo_navn": "Equinor ASA",
-      "markedsverdi": 911592652800.0,
+      "markedsverdi": 911372582912.0,
       "siste_handelsdato": "2026-08-27"
     },
     "DNB": {
@@ -110,7 +110,7 @@
       "ok": true,
       "vart_navn": "Frontline PLC",
       "yahoo_navn": "Frontline plc",
-      "markedsverdi": 91008237568.0,
+      "markedsverdi": 0,
       "siste_handelsdato": "2026-08-27"
     },
     "NONG": {
@@ -204,11 +204,10 @@
       "siste_handelsdato": "2026-08-27"
     },
     "PGS": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "PGS ASA",
-      "yahoo_navn": "PGS ASA",
-      "markedsverdi": 8611237888.0,
-      "siste_handelsdato": "2024-07-22"
+      "yahoo_navn": "",
+      "feilmelding": "'RangeIndex' object has no attribute 'tz'"
     },
     "VEI": {
       "ok": true,
@@ -241,7 +240,7 @@
       "ok": true,
       "vart_navn": "Gjensidige Forsikring ASA",
       "yahoo_navn": "Gjensidige Forsikring ASA",
-      "markedsverdi": 141689831424.0,
+      "markedsverdi": 0,
       "siste_handelsdato": "2026-08-27"
     },
     "STB": {
@@ -484,7 +483,7 @@
       "ok": true,
       "vart_navn": "Stolt-Nielsen Limited",
       "yahoo_navn": "Stolt-Nielsen Limited",
-      "markedsverdi": 21613524992.0,
+      "markedsverdi": 0,
       "siste_handelsdato": "2026-08-27"
     },
     "MEDI": {
@@ -784,15 +783,14 @@
       "ok": true,
       "vart_navn": "Nekkar ASA",
       "yahoo_navn": "Nekkar ASA",
-      "markedsverdi": 1486767872.0,
+      "markedsverdi": 1486281856.0,
       "siste_handelsdato": "2026-08-27"
     },
     "TIETO": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "TietoEVRY Corporation",
-      "yahoo_navn": "Tieto Oyj",
-      "markedsverdi": 24441212928.0,
-      "siste_handelsdato": "2026-06-29"
+      "yahoo_navn": "",
+      "feilmelding": "'RangeIndex' object has no attribute 'tz'"
     },
     "WSTEP": {
       "ok": true,
@@ -812,7 +810,7 @@
       "ok": true,
       "vart_navn": "Magnora ASA",
       "yahoo_navn": "Magnora ASA",
-      "markedsverdi": 2205156352.0,
+      "markedsverdi": 2198040320.0,
       "siste_handelsdato": "2026-08-27"
     },
     "ARCH": {
@@ -965,7 +963,7 @@
       "ok": true,
       "vart_navn": "Jinhui Shipping and Transportation Limited",
       "yahoo_navn": "Jinhui Shipping and Transportation Limited",
-      "markedsverdi": 701442432.0,
+      "markedsverdi": 0,
       "siste_handelsdato": "2026-08-27"
     },
     "SOMA": {
@@ -1042,7 +1040,7 @@
       "ok": true,
       "vart_navn": "Hexagon Composites ASA",
       "yahoo_navn": "Hexagon Composites ASA",
-      "markedsverdi": 4575157248.0,
+      "markedsverdi": 0,
       "siste_handelsdato": "2026-08-27"
     },
     "BMA": {
