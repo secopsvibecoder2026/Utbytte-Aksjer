@@ -7,7 +7,7 @@ Ingen server-side runtime — all logikk kjører i nettleseren eller i planlagte
 ## Funksjoner
 
 ### Oversikt og søk
-- 163 norske utbytteaksjer med live data (yield, payout ratio, 5-årssnitt, ex-dato, betalingsdato)
+- 162 norske utbytteaksjer med live data (yield, payout ratio, 5-årssnitt, ex-dato, betalingsdato)
 - Utbyttescore 0–10 basert på yield, payout, vekst og historikk
 - Sortering, sektorfilter, frekvensfilter og yield-range — valg huskes mellom besøk
 - Paginering (25/50/75/100/alle)
@@ -58,7 +58,7 @@ Ingen server-side runtime — all logikk kjører i nettleseren eller i planlagte
 | Data | Yahoo Finance via `yfinance`, DNB Markets, Euronext, Newsweb |
 | Pipeline | GitHub Actions — data 4× daglig, priser hvert 15. min |
 | Domene | exday.no (CNAME → secopsvibecoder2026.github.io) |
-| Tester | 63 JS-tester (`node:test`) + 44 Python-tester (`unittest`) |
+| Tester | 63 JS-tester (`node:test`) + 52 Python-tester (`unittest`) |
 
 ## Filstruktur
 
@@ -66,7 +66,7 @@ Ingen server-side runtime — all logikk kjører i nettleseren eller i planlagte
 ├── index.html                  # Landingsside
 ├── app/index.html              # Selve appen (/app/)
 ├── aksjer/
-│   ├── TICKER/index.html       # SEO-sider per aksje (163 stk, auto-generert)
+│   ├── TICKER/index.html       # SEO-sider per aksje (162 stk, auto-generert)
 │   └── sektor/{slug}/          # Sektorsider (16 stk, auto-generert)
 ├── artikler/{slug}/            # Artikler og guider (8 stk, håndskrevet)
 ├── verktoy/                    # SEO-sider for kalkulatorene
@@ -97,7 +97,8 @@ Ingen server-side runtime — all logikk kjører i nettleseren eller i planlagte
 │   ├── sjekk_utdaterte.py      # Fanger avnoterte/omdøpte/dupliserte tickere
 │   ├── oppdater_hendelser.py   # Hendelseskalender fra Newsweb
 │   ├── hent_beskrivelser.py    # Engangsjobb: faktabeskrivelser fra Yahoo
-│   └── test_sjekk_utdaterte.py # 44 tester (stdlib unittest, uten nettverk)
+│   ├── test_sjekk_utdaterte.py # 45 tester (stdlib unittest, uten nettverk)
+│   └── test_fetch_stocks.py     # 7 tester (RangeIndex-regresjon, frekvensgrenser)
 ├── tests/*.test.js             # 63 JS-tester (portefølje, storage, ui)
 ├── promo/                      # Markedsføringsmateriell + generatorer
 ├── sw.js                       # Service Worker
@@ -119,7 +120,8 @@ python scripts/fetch_stocks.py         # Full henting (~45 min)
 python scripts/regenerer_sider.py      # Kun HTML-regenerering (raskt)
 python scripts/valider_data.py         # Datakvalitetssjekk
 python scripts/sjekk_utdaterte.py      # Sjekk for utdaterte tickere
-python scripts/test_sjekk_utdaterte.py # 44 Python-tester
+python scripts/test_sjekk_utdaterte.py # 45 tester (utdaterte tickere)
+python scripts/test_fetch_stocks.py     # 7 tester (fetch_stocks, krever pandas)
 
 python -m http.server 8000             # Lokal server (SW krever localhost/HTTPS)
 ```
@@ -131,7 +133,7 @@ python -m http.server 8000             # Lokal server (SW krever localhost/HTTPS
 | `update-og-deploy.yml` | Hverdager 07/10/13/16 UTC | Henter data, validerer, sjekker utdaterte tickere, committer, deployer |
 | `oppdater-priser.yml` | Hvert 15. min hverdager 08–17 UTC | Oppdaterer `priser.json`, utløser lettvekts-deploy |
 | `deploy-only.yml` | `workflow_dispatch` | Deployer main til Pages uten datahenting |
-| `tester.yml` | Push/PR mot `assets/`, `scripts/`, `tests/` | Kjører alle 107 tester |
+| `tester.yml` | Push/PR mot `assets/`, `scripts/`, `tests/` | Kjører alle 115 tester |
 
 Datajobben og Pages-deployen bruker atskilte concurrency-grupper, så en priscommit aldri kan kansellere en pågående datahenting.
 

@@ -565,6 +565,57 @@ The script runs automatically in the daily GitHub Actions workflow (`update-og-d
 
 ---
 
+## A failed ticker is invisible on the site — guard the fetch accordingly
+
+**Incident (fixed 2026-08-29).** Nine tickers — RANA, SRBNK, GOGL, FLNG, SBVG,
+WILS, DOF, KMCP, OTEC — had failed on *every* run since 11 August and were
+served with 16-day-old numbers. Nothing on the page says so.
+
+The cause was a single unhandled type. `yfinance` sometimes returns a non-empty
+dividend series carrying a `RangeIndex` instead of a `DatetimeIndex`. Six places
+in `fetch_stocks.py` then read `dividends.index.tz` or compare the index against
+a date, and all raise `'RangeIndex' object has no attribute 'tz'`. The exception
+escapes `hent_aksje()`, the whole ticker fails, and the pipeline falls back to
+the previous run's data.
+
+`_datoindeksert()` now normalises the dividend series at the source, and
+`hist_prices` gets the same treatment. **Any new code that touches
+`dividends.index` or `hist_prices.index` must not assume a datetime index** —
+guard it or route it through the helper. `scripts/test_fetch_stocks.py` covers
+the regression.
+
+Three consequences worth remembering:
+
+- **A crash disables the other checks too.** `navneendring` compares our name
+  against Yahoo's, and Yahoo's was `""` because the fetch died — so SpareBank 1
+  SR-Bank's merger into **SpareBank 1 Sør-Norge** went unseen for the same
+  16 days. A silent fetch failure is not one bug, it is a blind spot.
+- **`aldri_hentet` never escalated.** Its severity was pinned to `advarsel`
+  regardless of duration, while `mulig_avnotering` escalates after 7 days. The
+  GitHub issue only tracks critical alerts, so nine broken tickers demanded
+  nothing. It now escalates off `feil_siden`.
+- **RANA was genuinely gone.** Rana Gruber was delisted from Euronext Oslo Børs
+  on **27 April 2026** (last trading day 24 April) after Drakkar
+  BidCo's compulsory acquisition. Removed from `tickers.json`, `aksjer.json`,
+  the sitemap, `aksjer/RANA/` and `data/kurs/`.
+
+### Price history is dividend-adjusted — do not infer corporate actions from it
+
+`stk.history()` returns adjusted closes, so an ex-date price drop is already
+removed. Measured across 543 payments, the median price fall is **−0.10× the
+dividend**, i.e. no drop at all. A large payment that is *not* followed by a
+price fall therefore proves nothing, and reasoning of that kind produced a wrong
+conclusion about GSF once. Verify large distributions against company
+announcements instead. Both of these turned out to be real:
+
+| Stock | Payment | What it was |
+|---|---|---|
+| 2020 Bulkers | NOK 129,45 (USD 13,8) | Special dividend after selling every vessel, ex 29 Apr 2026 |
+| GSF | ~NOK 35 | Proceeds from the NOK 10,2 bn Cermaq sale of the Canadian/Finnmark operations |
+
+2020 Bulkers is the one case where the raw drop survives adjustment (117,02 →
+3,01), because the adjustment factor would be negative.
+
 ## Detecting Outdated Tickers (delisted / renamed / acquired)
 
 `scripts/sjekk_utdaterte.py` catches tickers that have gone stale because the company was
