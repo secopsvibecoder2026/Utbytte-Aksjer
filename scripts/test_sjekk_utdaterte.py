@@ -255,6 +255,20 @@ class TestHentestatus(unittest.TestCase):
         logg = {"ok": False, "vart_navn": "Fantom ASA"}
         varsler, _ = vurder_ticker("ODLD", logg, None, IDAG)
         self.assertIn("aldri_hentet", _typer(varsler))
+        # Første dag: bare advarsel — kan være en forbigående nettverksfeil.
+        self.assertEqual(varsler[0]["alvorlighet"], ALVOR_ADVARSEL)
+
+    def test_aldri_hentet_blir_kritisk_etter_terskelen(self):
+        # Ni tickere feilet slik i 16 døgn uten å bli kritiske, fordi
+        # alvorligheten var låst til advarsel når sist_ok manglet. Siden
+        # GitHub-issuet bare følger kritiske varsler, krevde ingenting
+        # handling mens sidene viste gamle tall som ferske.
+        logg = {"ok": False, "vart_navn": "DOF Group ASA"}
+        forrige = {"feil_siden": _dato(16)}
+        varsler, _ = vurder_ticker("DOF", logg, forrige, IDAG)
+        self.assertIn("aldri_hentet", _typer(varsler))
+        self.assertEqual(varsler[0]["alvorlighet"], ALVOR_KRITISK)
+        self.assertIn("16 dager", varsler[0]["melding"])
 
 
 class TestNavneendring(unittest.TestCase):

@@ -595,6 +595,29 @@ def beregn_utbytte_vekst(dividends, years=5):
     return round(cagr * 100, 1)
 
 
+def _datoindeksert(serie):
+    """Returner utbytteserien bare hvis den faktisk er indeksert på dato.
+
+    yfinance gir av og til tilbake en ikke-tom serie med RangeIndex i stedet
+    for DatetimeIndex. Seks steder i denne filen gjør da `dividends.index.tz`
+    eller sammenligner indeksen med en dato, og alle kaster
+    «'RangeIndex' object has no attribute 'tz'». Unntaket bobler ut av
+    hent_aksje(), hele tickeren feiler, og pipelinen faller tilbake til
+    forrige kjørings data — stille, for siden ser like fersk ut.
+
+    Ni tickere (RANA, SRBNK, GOGL, FLNG, SBVG, WILS, DOF, KMCP, OTEC) hadde
+    feilet slik hver eneste kjøring siden 11. august 2026 og ble servert med
+    16 dager gamle tall. Uten dato på indeksen kan vi uansett ikke regne ut
+    noe tidsbasert, så tom serie er det ærlige svaret.
+    """
+    import pandas as pd
+    if serie is None:
+        return pd.Series(dtype="float64")
+    if not isinstance(serie.index, pd.DatetimeIndex):
+        return pd.Series(dtype="float64")
+    return serie
+
+
 def hent_aksje(meta):
     ticker_yf = meta["ticker_yf"]
     ticker = meta["ticker"]
@@ -603,7 +626,7 @@ def hent_aksje(meta):
     try:
         stk = yf.Ticker(ticker_yf)
         info = stk.info
-        dividends = stk.dividends
+        dividends = _datoindeksert(stk.dividends)
         calendar = stk.calendar
         try:
             hist_prices = stk.history(period="5y")
@@ -611,6 +634,12 @@ def hent_aksje(meta):
             print(f"    Advarsel: kunne ikke hente historiske kurser for {ticker}: {hist_err}")
             import pandas as pd
             hist_prices = pd.DataFrame()
+        # Samme forbehold som for utbytteserien: uten DatetimeIndex feiler
+        # både årsgrupperingen i hent_historiske_utbytter() og avlesningen av
+        # siste handelsdato.
+        import pandas as _pd
+        if not isinstance(hist_prices.index, _pd.DatetimeIndex):
+            hist_prices = _pd.DataFrame()
 
         pris = safe_float(info.get("currentPrice") or info.get("regularMarketPrice"))
         if pris == 0.0:

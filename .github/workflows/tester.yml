@@ -61,7 +61,14 @@ jobs:
         with:
           python-version: "3.12"
 
-      # Kjøres uten nettverk og uten tredjepartspakker (se docstring i
-      # test_sjekk_utdaterte.py), så ingen pip install trengs her.
+      # test_sjekk_utdaterte.py kjører uten nettverk og uten tredjepartspakker.
+      # test_fetch_stocks.py trenger pandas for regresjonstesten på
+      # RangeIndex-feilen som tok ned ni tickere i 16 dager — uten pandas
+      # hopper den testen over seg selv og ville ikke fanget noe.
+      - name: Installer pandas (kun for fetch_stocks-testene)
+        run: pip install "pandas>=2.0"
+
       - name: Kjør Python-tester
-        run: python scripts/test_sjekk_utdaterte.py
+        run: |
+          python scripts/test_sjekk_utdaterte.py
+          python scripts/test_fetch_stocks.py

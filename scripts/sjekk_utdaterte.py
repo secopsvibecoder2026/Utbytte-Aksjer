@@ -325,9 +325,20 @@ def vurder_ticker(ticker, logg, forrige, idag):
             ))
     elif not ok and not sist_ok:
         # Aldri sett vellykket henting for denne tickeren.
+        #
+        # Alvorligheten må trappes opp med tiden, akkurat som mulig_avnotering
+        # over. Uten dette lå ni tickere (RANA, SRBNK, GOGL, FLNG, SBVG, WILS,
+        # DOF, KMCP, OTEC) på «advarsel» i 16 døgn mens de ble servert med
+        # data fra før feilen — og siden issuet bare følger kritiske varsler,
+        # var det ingenting som krevde handling. En ticker som aldri har
+        # lykkes er om noe verre enn en som sluttet å svare, ikke bedre.
+        feil_siden = _som_dato(tilstand.get("feil_siden"))
+        dager = (idag - feil_siden).days if feil_siden else 0
+        alvor = ALVOR_KRITISK if dager >= DAGER_FOR_KRITISK else ALVOR_ADVARSEL
         varsler.append(_varsel(
-            ticker, "aldri_hentet", ALVOR_ADVARSEL,
-            "Ingen vellykket henting registrert for denne tickeren.",
+            ticker, "aldri_hentet", alvor,
+            "Ingen vellykket henting registrert for denne tickeren"
+            + (f" (feilet i {dager} dager)." if dager else "."),
             "Kontroller at ticker_yf er riktig i data/tickers.json.",
         ))
 
