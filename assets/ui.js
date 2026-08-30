@@ -466,6 +466,14 @@ function initFire() {
 // modalen for alle aksjer i de sektorene.
 const ARTIKLER = [
   {
+    slug: '/artikler/beste-utbytteaksjer-2026/',
+    tittel: 'Beste utbytteaksjer 2026 — en gjennomgang av Oslo Børs',
+    ingress: 'Fire av de ti høyeste direkteavkastningene deler ut mer enn de tjener, og bare to har betalt utbytte i over ti år.',
+    meta: '30. august 2026 · 13 min',
+    tags: ['Guide', 'Oslo Børs'],
+    sektorer: [],
+  },
+  {
     slug: '/artikler/slik-leser-du-utbyttekalenderen/',
     tittel: 'Slik leser du utbyttekalenderen — planlegg kontantstrømmen din',
     ingress: '91 % av de kvartalsvise betalerne er sykliske, mot 19 % av de årlige. Jevn kontantstrøm har en pris de færreste regner på.',

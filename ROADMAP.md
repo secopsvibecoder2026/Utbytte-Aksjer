@@ -88,18 +88,18 @@ Bærekraft-analyse vises i modal, men ikke i kortvisning.
 - [ ] Varsel i GitHub Actions ved yield > 30%, pris = 0 eller manglende felt på >50% av aksjene
 
 ### Bloggseksjon / artikler
-10 artikler planlagt (1 500–3 000 ord, norsk, SEO-optimalisert med JSON-LD, dark mode, samme design som FAQ):
+10 artikler planlagt — alle publisert per 30. august 2026 (1 500–3 000 ord, norsk, SEO-optimalisert med JSON-LD, dark mode, samme design som FAQ):
 
 - [x] `/artikler/hva-er-ex-dato/` — Alt om ex-dato: T+2, kursfall, skatt, strategi
-- [ ] `/artikler/beste-utbytteaksjer-2026/` — Redaksjonell gjennomgang av ledende norske utbytteaksjer
-- [ ] `/artikler/utbytte-skatt-norge/` — Skatteregler: ASK vs. VPS, skjermingsfradrag, 37,84%
-- [ ] `/artikler/aksjesparekonto-ask/` — Komplett guide til ASK for utbytteinvestorer
-- [ ] `/artikler/bygge-utbytteportefolje/` — Steg-for-steg: diversifisering, sektorvekting, rebalansering
-- [ ] `/artikler/reinvestering-utbytte/` — DRIP og rentes-rente-effekten over 20 år (med eksempler)
-- [ ] `/artikler/shipping-aksjer-utbytte/` — Norske shippingaksjer: høy yield, syklisitet, risiko
-- [ ] `/artikler/sparebanker-utbytte/` — Hvorfor sparebanker gir stabile utbytter år etter år
-- [ ] `/artikler/payout-ratio/` — Hva payout ratio forteller deg om utbyttets bærekraft
-- [ ] `/artikler/lese-utbyttekalender/` — Slik bruker du utbyttekalenderen til å planlegge kontantstrøm
+- [x] `/artikler/beste-utbytteaksjer-2026/` — Redaksjonell gjennomgang av ledende norske utbytteaksjer
+- [x] `/artikler/utbytte-og-skatt/` — Skatteregler: ASK vs. VPS, skjermingsfradrag, 37,84%
+- [x] `/artikler/aksjesparekonto-ask/` — Komplett guide til ASK for utbytteinvestorer
+- [x] `/artikler/utbytteportefolje-sektorvekting/` — Steg-for-steg: diversifisering, sektorvekting, rebalansering
+- [x] `/artikler/reinvestering-av-utbytte/` — DRIP og rentes-rente-effekten over 20 år (med eksempler)
+- [x] `/artikler/norske-shippingaksjer/` — Norske shippingaksjer: høy yield, syklisitet, risiko
+- [x] `/artikler/sparebanker-oslo-bors/` — Hvorfor sparebanker gir stabile utbytter år etter år
+- [x] `/artikler/hva-er-payout-ratio/` — Hva payout ratio forteller deg om utbyttets bærekraft
+- [x] `/artikler/slik-leser-du-utbyttekalenderen/` — Slik bruker du utbyttekalenderen til å planlegge kontantstrøm
 
 Også opprett `/artikler/index.html` som oversiktsside for alle artikler.
 
