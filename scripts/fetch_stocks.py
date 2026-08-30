@@ -1613,6 +1613,22 @@ _SEKTOR_DRIVER_UTDYPET = {
         "kvartalsvise svingninger — gode biologiår gir rom for "
         "ekstraordinære utbytter."
     ),
+    "Skipsfart": (
+        "Sektoren lever av å frakte gods på kontrakt, og skiller seg fra "
+        "Shipping ved at inntektene i større grad er bundet opp i "
+        "langsiktige avtaler enn i spotrater. Det gir jevnere kontantstrøm "
+        "og mindre dramatiske utbyttesvingninger, men også mindre oppside "
+        "når ratene topper seg. Kontraktsdekning, fornyelser og "
+        "drivstoffkostnader er de viktigste tallene å følge."
+    ),
+    "Kommunikasjonstjenester": (
+        "Inntektene kommer fra abonnement, annonsering eller innhold, og "
+        "forutsigbarheten avhenger sterkt av hvilken av delene som dominerer. "
+        "Abonnementsbaserte selskaper har stabil kontantstrøm og tåler "
+        "utbytte godt, mens annonsefinansierte er konjunkturutsatte — "
+        "annonsebudsjetter kuttes tidlig i en nedtur. Følg utviklingen i "
+        "abonnenttall og annonseinntekter hver for seg."
+    ),
     "Materialer": (
         "Råvarepriser (aluminium, gjødsel, trevirke m.m.) og "
         "valutakurser driver marginen. Sektoren er sensitiv for "
@@ -3466,6 +3482,168 @@ def _sektor_slug(sektor):
             .replace(' ', '-'))
 
 
+def _ordtall(n):
+    """Ett-tallet skrives med bokstav i løpende tekst, resten med siffer."""
+    return "én" if n == 1 else str(n)
+
+
+def _sektor_analyse(sektor, i_sektor, alle):
+    """Bygger analyseteksten på en sektorside fra denne kjøringens tall.
+
+    Sektorsidene besto tidligere av en tabell og tre nøkkeltall — rundt 190
+    ord, hvorav nesten alt var tabellinnhold. Det er akkurat den profilen
+    «low value content» beskriver, og med 16 slike sider talte de tungt.
+
+    Alt her regnes ut ved generering. Skriver man tallene inn i teksten én
+    gang, fryses de — samme feil som `beskrivelse` og `ai_oppsummering` ble
+    tatt av tidligere. Se «Never freeze live numbers into stored prose».
+    """
+    import statistics
+
+    def yld(a):
+        return a.get("utbytte_yield") or 0
+
+    med_y = [yld(a) for a in i_sektor if yld(a) > 0]
+    alle_y = [yld(a) for a in alle if yld(a) > 0]
+    if not med_y or not alle_y:
+        return ""
+
+    median_sektor = statistics.median(med_y)
+    median_bors = statistics.median(alle_y)
+    diff = median_sektor - median_bors
+    lavest, hoyest = min(med_y), max(med_y)
+
+    # payout_ratio == 0 betyr UKJENT, ikke lavt — se CLAUDE.md. Ukjente skal
+    # aldri telle som «lav utbetalingsgrad».
+    payouts = [a.get("payout_ratio") or 0 for a in i_sektor]
+    kjente = [p for p in payouts if p > 0]
+    ukjente = len(payouts) - len(kjente)
+    over_100 = sum(1 for p in kjente if p > 100)
+
+    frek = {}
+    for a in i_sektor:
+        f = a.get("frekvens") or "Uregelmessig"
+        frek[f] = frek.get(f, 0) + 1
+    flere_ganger = sum(n for f, n in frek.items() if f in ("Månedlig", "Kvartalsvis", "Halvårlig"))
+
+    lange = [a for a in i_sektor if (a.get("ar_med_utbytte") or 0) >= 10]
+    eldst = max(i_sektor, key=lambda a: a.get("ar_med_utbytte") or 0)
+
+    # ── Avsnitt 1: hvor sektoren ligger mot børsen ────────────────────────
+    if abs(diff) < 0.5:
+        plassering = (f"ligger omtrent på linje med resten av børsen, der "
+                      f"medianen er {_nf(median_bors, 2)} %")
+    elif diff > 0:
+        plassering = (f"ligger {_nf(abs(diff), 1)} prosentpoeng over medianen for "
+                      f"hele Oslo Børs på {_nf(median_bors, 2)} %")
+    else:
+        plassering = (f"ligger {_nf(abs(diff), 1)} prosentpoeng under medianen for "
+                      f"hele Oslo Børs på {_nf(median_bors, 2)} %")
+
+    # Én enkelt aksje er ikke en fordeling. «Medianen blant dem», «fra 7,10 %
+    # til 7,10 %» og «blant de 1» er alle meningsløse da, så små sektorer får
+    # egne formuleringer i stedet for tall som later som de beskriver et utvalg.
+    en = len(i_sektor) == 1
+    spenn = ""
+    if not en and hoyest > 0 and lavest > 0:
+        if hoyest / max(lavest, 0.01) >= 3:
+            spenn = (f" Spennet er stort: fra {_nf(lavest, 2)} % i bunn til "
+                     f"{_nf(hoyest, 2)} % på topp. Et snitt sier derfor lite om "
+                     f"den enkelte aksjen her — forskjellene innad i sektoren er "
+                     f"større enn forskjellen mot børsen samlet.")
+        else:
+            spenn = (f" Spredningen er moderat, fra {_nf(lavest, 2)} % til "
+                     f"{_nf(hoyest, 2)} %, så snittet er rimelig representativt.")
+
+    if en:
+        avsnitt1 = (f"exday.no følger én utbyttebetalende aksje i {sektor}: "
+                    f"{i_sektor[0]['navn']}. Direkteavkastningen er "
+                    f"{_nf(median_sektor, 2)} % og {plassering}. Med bare ett "
+                    f"selskap er dette ingen sektorstatistikk — tallet beskriver "
+                    f"denne aksjen, ikke en bransje.")
+    else:
+        avsnitt1 = (f"exday.no følger {len(i_sektor)} aksjer i {sektor} med "
+                    f"utbytte. Medianen blant dem er {_nf(median_sektor, 2)} % og "
+                    f"{plassering}.{spenn}")
+
+    # ── Avsnitt 2: utbetalingsgrad ────────────────────────────────────────
+    deler = []
+    if kjente and en:
+        deler.append(f"Utbetalingsgraden er {_nf(kjente[0], 0)} % av "
+                     f"inntjeningen")
+    elif kjente:
+        deler.append(f"Median utbetalingsgrad blant de {len(kjente)} aksjene med "
+                     f"kjent payout ratio er {_nf(statistics.median(kjente), 0)} %")
+        if over_100:
+            deler.append(f"Av dem deler {_ordtall(over_100)} ut mer enn de tjener, noe som "
+                         f"kan være holdbart en periode, men ikke varig uten at "
+                         f"inntjeningen tar seg opp")
+    if ukjente:
+        # payout_ratio == 0 er UKJENT, aldri «lavt» — se CLAUDE.md.
+        if ukjente == len(payouts):
+            deler.append("Vi mangler inntjeningstall for samtlige, så "
+                         "utbetalingsgraden kan ikke vurderes her")
+        else:
+            # «For 1 av aksjene» — tallordet skrives med bokstav når det står
+            # alene i løpende tekst.
+            antall = "én" if ukjente == 1 else str(ukjente)
+            deler.append(f"For {antall} av aksjene mangler vi inntjeningstall, "
+                         f"og blankt felt betyr ukjent — ikke lavt")
+    avsnitt2 = ". ".join(deler) + "." if deler else ""
+
+    # ── Avsnitt 3: frekvens og historikk ──────────────────────────────────
+    if en:
+        frek_tekst = ("Utbyttet utbetales flere ganger i året"
+                      if flere_ganger else "Utbyttet utbetales én gang i året")
+    elif flere_ganger == 0:
+        frek_tekst = (f"Samtlige betaler utbytte én gang i året. Bygger du "
+                      f"kontantstrøm på denne sektoren alene, kommer hele "
+                      f"årsinntekten i løpet av noen få uker")
+    elif flere_ganger == len(i_sektor):
+        frek_tekst = ("Alle betaler flere ganger i året, noe som gir jevnere "
+                      "kontantstrøm enn børsen for øvrig")
+    else:
+        frek_tekst = (f"Av de {len(i_sektor)} aksjene betaler {_ordtall(flere_ganger)} "
+                      f"flere ganger i året; resten utbetaler én gang årlig")
+
+    ar_eldst = eldst.get("ar_med_utbytte") or 0
+    if en:
+        hist_tekst = (f", og selskapet har betalt utbytte i {ar_eldst} år"
+                      if ar_eldst else "")
+        avsnitt3 = frek_tekst + hist_tekst + "."
+    else:
+        if lange:
+            hist_tekst = (f" Av dem har {_ordtall(len(lange))} betalt utbytte i ti år eller "
+                          f"mer, og lengst historikk har {eldst['navn']} med "
+                          f"{ar_eldst} år.")
+        else:
+            hist_tekst = (" Ingen av dem har ti sammenhengende år med utbytte "
+                          "ennå, så sektoren er ikke testet gjennom en full "
+                          "nedtur i denne formen.")
+        avsnitt3 = frek_tekst + "." + hist_tekst
+
+    driver = _SEKTOR_DRIVER_UTDYPET.get(sektor, "")
+    driver_blokk = (f'  <h2>Hva driver utbyttet i {sektor}?</h2>\n'
+                    f'  <p>{driver}</p>\n') if driver else ""
+
+    return f"""
+  <div class="sektor-analyse">
+  <h2>{sektor} som utbyttesektor</h2>
+  <p>{avsnitt1}</p>
+  {f'<p>{avsnitt2}</p>' if avsnitt2 else ''}
+  <p>{avsnitt3}</p>
+{driver_blokk}  <h2>Slik bruker du tabellen under</h2>
+  <p>Aksjene er sortert etter direkteavkastning, høyeste først. Husk at
+  yield er utbytte delt på kurs — tallet stiger like gjerne fordi kursen
+  faller som fordi utbyttet øker. En aksje som skiller seg kraftig fra
+  resten av {sektor} er derfor et spørsmål verdt å undersøke, ikke
+  automatisk et kupp. Klikk deg inn på den enkelte aksjen for å se hele
+  utbyttehistorikken, utbetalingsgraden og hvor mange år selskapet har
+  betalt sammenhengende.</p>
+  </div>
+"""
+
+
 def generer_sektorsider(aksjer, root_dir):
     """Genererer én HTML-oversiktsside per sektor under aksjer/sektor/{slug}/index.html."""
     today = datetime.datetime.utcnow().strftime("%Y-%m-%d")
@@ -3483,6 +3661,7 @@ def generer_sektorsider(aksjer, root_dir):
         slug = _sektor_slug(sektor)
         aksjer_sortert = sorted(aksjer_i_sektor, key=lambda x: x.get("utbytte_yield", 0), reverse=True)
         snitt_yield = sum(a.get("utbytte_yield", 0) for a in aksjer_sortert) / len(aksjer_sortert)
+        analyse_html = _sektor_analyse(sektor, aksjer_sortert, aksjer)
 
         rader = ""
         for a in aksjer_sortert:
@@ -3595,9 +3774,16 @@ def generer_sektorsider(aksjer, root_dir):
     .stat {{ border-radius: 0.5rem; padding: 0.75rem 1.25rem; border: 1px solid; }}
     .stat-val {{ font-size: 1.4rem; font-weight: 700; color: #16a34a; }}
     .stat-lbl {{ font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em; }}
-    table {{ width: 100%; border-collapse: collapse; border-radius: 0.75rem; overflow: hidden; font-size: 0.9rem; border: 1px solid; }}
-    th {{ padding: 0.6rem 1rem; text-align: left; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; }}
-    td {{ padding: 0.65rem 1rem; border-top: 1px solid; }}
+    .sektor-analyse {{ margin: 0 0 2rem; }}
+    .sektor-analyse h2 {{ font-size: 1.15rem; font-weight: 700; margin: 1.75rem 0 0.6rem; }}
+    .sektor-analyse p {{ margin: 0 0 0.9rem; line-height: 1.75; font-size: 0.95rem; }}
+    /* Tabellen er bredere enn en mobilskjerm (473 px mot 390 px), så den må
+       scrolle i sin egen ramme. Uten wrapperen dyttet den hele siden ut i
+       horisontal scroll på alle 16 sektorsidene. */
+    .tabell-ramme {{ overflow-x: auto; -webkit-overflow-scrolling: touch; margin-bottom: 1.5rem; }}
+    table {{ width: 100%; min-width: 30rem; border-collapse: collapse; border-radius: 0.75rem; overflow: hidden; font-size: 0.9rem; border: 1px solid; }}
+    th {{ padding: 0.6rem 1rem; text-align: left; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; white-space: nowrap; }}
+    td {{ padding: 0.65rem 1rem; border-top: 1px solid; white-space: nowrap; }}
     .yield {{ font-weight: 600; color: #16a34a; }}
     .cta {{ margin-top: 1.5rem; text-align: center; }}
     .cta a {{ display: inline-block; background: #16a34a; color: #fff !important; font-weight: 600; padding: 0.65rem 1.5rem; border-radius: 0.5rem; text-decoration: none; }}
@@ -3650,10 +3836,13 @@ def generer_sektorsider(aksjer, root_dir):
     <div class="stat"><div class="stat-val">{_nf(snitt_yield, 1)}%</div><div class="stat-lbl">Snitt yield</div></div>
     <div class="stat"><div class="stat-val">{_nf(max(a.get("utbytte_yield",0) for a in aksjer_sortert), 1)}%</div><div class="stat-lbl">Høyeste yield</div></div>
   </div>
+{analyse_html}
+  <div class="tabell-ramme">
   <table>
     <thead><tr><th>Ticker</th><th>Navn</th><th>Kurs</th><th>Yield</th><th>Ex-dato</th></tr></thead>
     <tbody>{rader}</tbody>
   </table>
+  </div>
   <div class="cta"><a href="https://exday.no/">Åpne full app med filtrering og porteføljekalkulator →</a></div>
   <p class="updated">Sist oppdatert: {today}</p>
 {STANDARD_FOOTER}

@@ -67,9 +67,16 @@
     .stat { border-radius: 0.5rem; padding: 0.75rem 1.25rem; border: 1px solid; }
     .stat-val { font-size: 1.4rem; font-weight: 700; color: #16a34a; }
     .stat-lbl { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em; }
-    table { width: 100%; border-collapse: collapse; border-radius: 0.75rem; overflow: hidden; font-size: 0.9rem; border: 1px solid; }
-    th { padding: 0.6rem 1rem; text-align: left; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; }
-    td { padding: 0.65rem 1rem; border-top: 1px solid; }
+    .sektor-analyse { margin: 0 0 2rem; }
+    .sektor-analyse h2 { font-size: 1.15rem; font-weight: 700; margin: 1.75rem 0 0.6rem; }
+    .sektor-analyse p { margin: 0 0 0.9rem; line-height: 1.75; font-size: 0.95rem; }
+    /* Tabellen er bredere enn en mobilskjerm (473 px mot 390 px), så den må
+       scrolle i sin egen ramme. Uten wrapperen dyttet den hele siden ut i
+       horisontal scroll på alle 16 sektorsidene. */
+    .tabell-ramme { overflow-x: auto; -webkit-overflow-scrolling: touch; margin-bottom: 1.5rem; }
+    table { width: 100%; min-width: 30rem; border-collapse: collapse; border-radius: 0.75rem; overflow: hidden; font-size: 0.9rem; border: 1px solid; }
+    th { padding: 0.6rem 1rem; text-align: left; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; white-space: nowrap; }
+    td { padding: 0.65rem 1rem; border-top: 1px solid; white-space: nowrap; }
     .yield { font-weight: 600; color: #16a34a; }
     .cta { margin-top: 1.5rem; text-align: center; }
     .cta a { display: inline-block; background: #16a34a; color: #fff !important; font-weight: 600; padding: 0.65rem 1.5rem; border-radius: 0.5rem; text-decoration: none; }
@@ -168,6 +175,25 @@
     <div class="stat"><div class="stat-val">1,5%</div><div class="stat-lbl">Snitt yield</div></div>
     <div class="stat"><div class="stat-val">2,9%</div><div class="stat-lbl">Høyeste yield</div></div>
   </div>
+
+  <div class="sektor-analyse">
+  <h2>Fornybar energi som utbyttesektor</h2>
+  <p>exday.no følger 3 aksjer i Fornybar energi med utbytte. Medianen blant dem er 2,25 % og ligger 3,0 prosentpoeng under medianen for hele Oslo Børs på 5,29 %. Spredningen er moderat, fra 1,65 % til 2,86 %, så snittet er rimelig representativt.</p>
+  <p>Median utbetalingsgrad blant de 2 aksjene med kjent payout ratio er 27 %. For én av aksjene mangler vi inntjeningstall, og blankt felt betyr ukjent — ikke lavt.</p>
+  <p>Samtlige betaler utbytte én gang i året. Bygger du kontantstrøm på denne sektoren alene, kommer hele årsinntekten i løpet av noen få uker. Av dem har 2 betalt utbytte i ti år eller mer, og lengst historikk har Bonheur ASA med 27 år.</p>
+  <h2>Hva driver utbyttet i Fornybar energi?</h2>
+  <p>Strømprisene i Nordic-markedet og tilgang på konsesjon er avgjørende. Høye strømpriser gir ekstraordinær inntjening og rom for sjenerøse utbytter, mens lave priser — særlig i fuktige år med mye vannkraft — kan halvere utbyttekapasiteten. Følg med på terminkurver for kraft og selskapets produksjonsveiledning.</p>
+  <h2>Slik bruker du tabellen under</h2>
+  <p>Aksjene er sortert etter direkteavkastning, høyeste først. Husk at
+  yield er utbytte delt på kurs — tallet stiger like gjerne fordi kursen
+  faller som fordi utbyttet øker. En aksje som skiller seg kraftig fra
+  resten av Fornybar energi er derfor et spørsmål verdt å undersøke, ikke
+  automatisk et kupp. Klikk deg inn på den enkelte aksjen for å se hele
+  utbyttehistorikken, utbetalingsgraden og hvor mange år selskapet har
+  betalt sammenhengende.</p>
+  </div>
+
+  <div class="tabell-ramme">
   <table>
     <thead><tr><th>Ticker</th><th>Navn</th><th>Kurs</th><th>Yield</th><th>Ex-dato</th></tr></thead>
     <tbody>
@@ -193,8 +219,9 @@
           <td>—</td>
         </tr></tbody>
   </table>
+  </div>
   <div class="cta"><a href="https://exday.no/">Åpne full app med filtrering og porteføljekalkulator →</a></div>
-  <p class="updated">Sist oppdatert: 2026-08-29</p>
+  <p class="updated">Sist oppdatert: 2026-08-30</p>
   <footer style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid #e5e7eb;font-size:0.78rem;text-align:center;color:#9ca3af;line-height:1.6;" class="std-footer">
     <p>Kurs og utbyttedata hentes fra Yahoo Finance og Euronext. Oppdateres daglig på børsdager.</p>
     <p style="max-width:36rem;margin:0.4rem auto;">
