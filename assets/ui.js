@@ -476,7 +476,7 @@ const ARTIKLER = [
   {
     slug: '/artikler/slik-leser-du-utbyttekalenderen/',
     tittel: 'Slik leser du utbyttekalenderen — planlegg kontantstrømmen din',
-    ingress: '91 % av de kvartalsvise betalerne er sykliske, mot 19 % av de årlige. Jevn kontantstrøm har en pris de færreste regner på.',
+    ingress: '90 % av de kvartalsvise betalerne er sykliske, mot 20 % av de årlige. Jevn kontantstrøm har en pris de færreste regner på.',
     meta: '21. august 2026 · 11 min',
     tags: ['Guide', 'Kalender'],
     sektorer: ['Shipping', 'Skipsfart', 'Energi', 'Energitjenester'],
