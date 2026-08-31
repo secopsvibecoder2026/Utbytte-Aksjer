@@ -1,20 +1,55 @@
 {
-  "generert": "2026-08-29T00:24:36Z",
+  "generert": "2026-08-31T14:34:57Z",
   "antall": 16,
-  "antall_kritiske": 0,
+  "antall_kritiske": 7,
   "varsler": [
     {
       "ticker": "DOF",
       "type": "aldri_hentet",
-      "alvorlighet": "advarsel",
-      "melding": "Ingen vellykket henting registrert for denne tickeren.",
+      "alvorlighet": "kritisk",
+      "melding": "Ingen vellykket henting registrert for denne tickeren (feilet i 20 dager).",
       "forslag": "Kontroller at ticker_yf er riktig i data/tickers.json."
     },
     {
       "ticker": "FLNG",
       "type": "aldri_hentet",
-      "alvorlighet": "advarsel",
-      "melding": "Ingen vellykket henting registrert for denne tickeren.",
+      "alvorlighet": "kritisk",
+      "melding": "Ingen vellykket henting registrert for denne tickeren (feilet i 20 dager).",
+      "forslag": "Kontroller at ticker_yf er riktig i data/tickers.json."
+    },
+    {
+      "ticker": "GOGL",
+      "type": "aldri_hentet",
+      "alvorlighet": "kritisk",
+      "melding": "Ingen vellykket henting registrert for denne tickeren (feilet i 20 dager).",
+      "forslag": "Kontroller at ticker_yf er riktig i data/tickers.json."
+    },
+    {
+      "ticker": "KMCP",
+      "type": "aldri_hentet",
+      "alvorlighet": "kritisk",
+      "melding": "Ingen vellykket henting registrert for denne tickeren (feilet i 20 dager).",
+      "forslag": "Kontroller at ticker_yf er riktig i data/tickers.json."
+    },
+    {
+      "ticker": "OTEC",
+      "type": "aldri_hentet",
+      "alvorlighet": "kritisk",
+      "melding": "Ingen vellykket henting registrert for denne tickeren (feilet i 20 dager).",
+      "forslag": "Kontroller at ticker_yf er riktig i data/tickers.json."
+    },
+    {
+      "ticker": "SBVG",
+      "type": "aldri_hentet",
+      "alvorlighet": "kritisk",
+      "melding": "Ingen vellykket henting registrert for denne tickeren (feilet i 20 dager).",
+      "forslag": "Kontroller at ticker_yf er riktig i data/tickers.json."
+    },
+    {
+      "ticker": "WILS",
+      "type": "aldri_hentet",
+      "alvorlighet": "kritisk",
+      "melding": "Ingen vellykket henting registrert for denne tickeren (feilet i 20 dager).",
       "forslag": "Kontroller at ticker_yf er riktig i data/tickers.json."
     },
     {
@@ -32,13 +67,6 @@
       "forslag": "Kontroller om selskapet er under oppkjøp eller strykning."
     },
     {
-      "ticker": "GOGL",
-      "type": "aldri_hentet",
-      "alvorlighet": "advarsel",
-      "melding": "Ingen vellykket henting registrert for denne tickeren.",
-      "forslag": "Kontroller at ticker_yf er riktig i data/tickers.json."
-    },
-    {
       "ticker": "HEX",
       "type": "markedsverdi_borte",
       "alvorlighet": "advarsel",
@@ -53,32 +81,11 @@
       "forslag": "Kontroller om selskapet er under oppkjøp eller strykning."
     },
     {
-      "ticker": "KMCP",
-      "type": "aldri_hentet",
+      "ticker": "PGS",
+      "type": "hentefeil",
       "alvorlighet": "advarsel",
-      "melding": "Ingen vellykket henting registrert for denne tickeren.",
-      "forslag": "Kontroller at ticker_yf er riktig i data/tickers.json."
-    },
-    {
-      "ticker": "OTEC",
-      "type": "aldri_hentet",
-      "alvorlighet": "advarsel",
-      "melding": "Ingen vellykket henting registrert for denne tickeren.",
-      "forslag": "Kontroller at ticker_yf er riktig i data/tickers.json."
-    },
-    {
-      "ticker": "RANA",
-      "type": "aldri_hentet",
-      "alvorlighet": "advarsel",
-      "melding": "Ingen vellykket henting registrert for denne tickeren.",
-      "forslag": "Kontroller at ticker_yf er riktig i data/tickers.json."
-    },
-    {
-      "ticker": "SBVG",
-      "type": "aldri_hentet",
-      "alvorlighet": "advarsel",
-      "melding": "Ingen vellykket henting registrert for denne tickeren.",
-      "forslag": "Kontroller at ticker_yf er riktig i data/tickers.json."
+      "melding": "Henting har feilet i 3 dager (sist OK 2026-08-28).",
+      "forslag": "Følg med. Vedvarer det til 7 dager, kontroller om tickeren fortsatt finnes."
     },
     {
       "ticker": "SNI",
@@ -88,18 +95,11 @@
       "forslag": "Kontroller om selskapet er under oppkjøp eller strykning."
     },
     {
-      "ticker": "SRBNK",
-      "type": "aldri_hentet",
+      "ticker": "TIETO",
+      "type": "hentefeil",
       "alvorlighet": "advarsel",
-      "melding": "Ingen vellykket henting registrert for denne tickeren.",
-      "forslag": "Kontroller at ticker_yf er riktig i data/tickers.json."
-    },
-    {
-      "ticker": "WILS",
-      "type": "aldri_hentet",
-      "alvorlighet": "advarsel",
-      "melding": "Ingen vellykket henting registrert for denne tickeren.",
-      "forslag": "Kontroller at ticker_yf er riktig i data/tickers.json."
+      "melding": "Henting har feilet i 3 dager (sist OK 2026-08-28).",
+      "forslag": "Følg med. Vedvarer det til 7 dager, kontroller om tickeren fortsatt finnes."
     },
     {
       "ticker": "BAKKA",
