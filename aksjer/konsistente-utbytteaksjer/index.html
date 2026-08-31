@@ -67,9 +67,13 @@
     .stat { border-radius: 0.5rem; padding: 0.75rem 1.25rem; border: 1px solid; }
     .stat-val { font-size: 1.4rem; font-weight: 700; color: #16a34a; }
     .stat-lbl { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em; }
-    table { width: 100%; border-collapse: collapse; border-radius: 0.75rem; overflow: hidden; font-size: 0.9rem; border: 1px solid; }
-    th { padding: 0.6rem 1rem; text-align: left; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; }
-    td { padding: 0.65rem 1rem; border-top: 1px solid; }
+    .tabell-ramme { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    table { width: 100%; min-width: 34rem; border-collapse: collapse; border-radius: 0.75rem; overflow: hidden; font-size: 0.9rem; border: 1px solid; }
+    th { padding: 0.6rem 1rem; text-align: left; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; white-space: nowrap; }
+    td { padding: 0.65rem 1rem; border-top: 1px solid; white-space: nowrap; }
+    .liste-analyse { margin: 0 0 1.75rem; }
+    .liste-analyse h2 { font-size: 1.15rem; font-weight: 700; margin: 1.75rem 0 0.6rem; }
+    .liste-analyse p { margin: 0 0 0.9rem; line-height: 1.75; font-size: 0.95rem; }
     .rang { font-size: 0.8rem; font-weight: 700; width: 2rem; }
     .ticker a { color: #16a34a; font-family: monospace; font-weight: 700; font-size: 0.95rem; }
     .metric { color: #16a34a; font-weight: 700; }
@@ -185,6 +189,16 @@
     <div class="stat"><div class="stat-val">26 år</div><div class="stat-lbl">Snitt år</div></div>
     <div class="stat"><div class="stat-val">27 år</div><div class="stat-lbl">Flest år</div></div>
   </div>
+
+  <div class="liste-analyse">
+  <h2>Hvorfor konsistens er verdt å måle</h2>
+  <p>Denne listen teller antall kalenderår med utbetalt utbytte. Det er det enkleste målet på om et selskap prioriterer utbyttet gjennom både gode og dårlige år — og for en utbytteinvestor er det ofte mer relevant enn nivået på yielden akkurat nå.</p>
+  <p>Et selskap som har betalt utbytte i tjue år, har gjort det gjennom finanskrisen, oljeprisfallet i 2014–2016 og pandemien. Det er ingen garanti for at det fortsetter, men det sier noe om hvordan styret prioriterer når det strammer seg til.</p>
+  <p>Legg merke til konsentrasjonen: 8 av de 20 aksjene her hører til Finans. Det er ikke tilfeldig — forretningsmodeller med jevn og forutsigbar inntjening tåler et fast utbytte, mens sykliske selskaper må justere. Bygger du portefølje ut fra denne listen alene, blir du derfor lite spredt.</p>
+  <p>Merk også at konsistens og høy yield er to forskjellige ting. 11 av de 20 aksjene her gir under børsmedianen på 5,29 % — du betaler for forutsigbarheten.</p>
+  </div>
+
+  <div class="tabell-ramme">
   <table>
     <thead><tr><th>#</th><th>Ticker</th><th>Selskap</th><th>År m/utbytte</th><th>Yield</th><th>Pris</th><th>Ex-dato</th></tr></thead>
     <tbody>
@@ -310,6 +324,7 @@
         </tr>
     </tbody>
   </table>
+  </div>
   <div class="cta">
     <p>Se yield, ex-dato, score og porteføljekalkulator for alle aksjer</p>
     <a href="https://exday.no/">Åpne exday.no →</a>
@@ -318,7 +333,7 @@
     <h2>Andre topplistor</h2>
     <ul><li><a href="/aksjer/hoyest-utbytte/">Aksjer med høyest utbytte</a></li><li><a href="/aksjer/utbyttevekst/">Aksjer med best utbyttevekst</a></li><li><a href="/aksjer/lavest-payout/">Aksjer med lavest payout ratio</a></li></ul>
   </div>
-  <p class="updated">Sist oppdatert: 2026-08-29</p>
+  <p class="updated">Sist oppdatert: 2026-08-31</p>
   <footer style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid #e5e7eb;font-size:0.78rem;text-align:center;color:#9ca3af;line-height:1.6;" class="std-footer">
     <p>Kurs og utbyttedata hentes fra Yahoo Finance og Euronext. Oppdateres daglig på børsdager.</p>
     <p style="max-width:36rem;margin:0.4rem auto;">

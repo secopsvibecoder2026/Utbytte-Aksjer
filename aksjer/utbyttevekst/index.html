@@ -67,9 +67,13 @@
     .stat { border-radius: 0.5rem; padding: 0.75rem 1.25rem; border: 1px solid; }
     .stat-val { font-size: 1.4rem; font-weight: 700; color: #16a34a; }
     .stat-lbl { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em; }
-    table { width: 100%; border-collapse: collapse; border-radius: 0.75rem; overflow: hidden; font-size: 0.9rem; border: 1px solid; }
-    th { padding: 0.6rem 1rem; text-align: left; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; }
-    td { padding: 0.65rem 1rem; border-top: 1px solid; }
+    .tabell-ramme { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    table { width: 100%; min-width: 34rem; border-collapse: collapse; border-radius: 0.75rem; overflow: hidden; font-size: 0.9rem; border: 1px solid; }
+    th { padding: 0.6rem 1rem; text-align: left; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; white-space: nowrap; }
+    td { padding: 0.65rem 1rem; border-top: 1px solid; white-space: nowrap; }
+    .liste-analyse { margin: 0 0 1.75rem; }
+    .liste-analyse h2 { font-size: 1.15rem; font-weight: 700; margin: 1.75rem 0 0.6rem; }
+    .liste-analyse p { margin: 0 0 0.9rem; line-height: 1.75; font-size: 0.95rem; }
     .rang { font-size: 0.8rem; font-weight: 700; width: 2rem; }
     .ticker a { color: #16a34a; font-family: monospace; font-weight: 700; font-size: 0.95rem; }
     .metric { color: #16a34a; font-weight: 700; }
@@ -185,6 +189,16 @@
     <div class="stat"><div class="stat-val">+189,9%/år</div><div class="stat-lbl">Snitt vekst</div></div>
     <div class="stat"><div class="stat-val">+1600,0%/år</div><div class="stat-lbl">Høyeste vekst</div></div>
   </div>
+
+  <div class="liste-analyse">
+  <h2>Slik leser du utbyttevekst</h2>
+  <p>Tallet er årlig gjennomsnittlig vekst (CAGR) i utbetalt utbytte over fem år. Det måler hvor raskt utbetalingen har økt — ikke hvor mye du får i dag, og ikke om veksten kan fortsette.</p>
+  <p>Den viktigste fellen er utgangspunktet. Et selskap som kuttet utbyttet kraftig for fem år siden og siden har hentet seg inn, får en enorm CAGR uten å ha gjort annet enn å komme tilbake dit det var. Sjekk derfor alltid hele utbyttehistorikken, ikke bare vekstprosenten: en jevn stigning er noe helt annet enn en V-formet gjenoppretting.</p>
+  <p>Legg også merke til at høy vekst og høy yield sjelden opptrer sammen. Et selskap som allerede deler ut det meste av overskuddet, har lite igjen å øke med. Medianen i dagens yield på denne listen er 4,50 %, mot 5,29 % for børsen samlet — det er prisen for veksten.</p>
+  <p>For en langsiktig portefølje er det ofte vekstlisten som betyr mest. En aksje som gir 3 % i dag og øker utbyttet 10 % i året, passerer en aksje som gir 7 % og står stille — det tar bare tid.</p>
+  </div>
+
+  <div class="tabell-ramme">
   <table>
     <thead><tr><th>#</th><th>Ticker</th><th>Selskap</th><th>Vekst 5år</th><th>Yield nå</th><th>Pris</th><th>Ex-dato</th></tr></thead>
     <tbody>
@@ -310,6 +324,7 @@
         </tr>
     </tbody>
   </table>
+  </div>
   <div class="cta">
     <p>Se yield, ex-dato, score og porteføljekalkulator for alle aksjer</p>
     <a href="https://exday.no/">Åpne exday.no →</a>
@@ -318,7 +333,7 @@
     <h2>Andre topplistor</h2>
     <ul><li><a href="/aksjer/hoyest-utbytte/">Aksjer med høyest utbytte</a></li><li><a href="/aksjer/konsistente-utbytteaksjer/">Mest konsistente utbytteaksjer</a></li><li><a href="/aksjer/lavest-payout/">Aksjer med lavest payout ratio</a></li></ul>
   </div>
-  <p class="updated">Sist oppdatert: 2026-08-29</p>
+  <p class="updated">Sist oppdatert: 2026-08-31</p>
   <footer style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid #e5e7eb;font-size:0.78rem;text-align:center;color:#9ca3af;line-height:1.6;" class="std-footer">
     <p>Kurs og utbyttedata hentes fra Yahoo Finance og Euronext. Oppdateres daglig på børsdager.</p>
     <p style="max-width:36rem;margin:0.4rem auto;">

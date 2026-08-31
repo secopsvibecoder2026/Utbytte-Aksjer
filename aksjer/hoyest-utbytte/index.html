@@ -67,9 +67,13 @@
     .stat { border-radius: 0.5rem; padding: 0.75rem 1.25rem; border: 1px solid; }
     .stat-val { font-size: 1.4rem; font-weight: 700; color: #16a34a; }
     .stat-lbl { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em; }
-    table { width: 100%; border-collapse: collapse; border-radius: 0.75rem; overflow: hidden; font-size: 0.9rem; border: 1px solid; }
-    th { padding: 0.6rem 1rem; text-align: left; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; }
-    td { padding: 0.65rem 1rem; border-top: 1px solid; }
+    .tabell-ramme { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    table { width: 100%; min-width: 34rem; border-collapse: collapse; border-radius: 0.75rem; overflow: hidden; font-size: 0.9rem; border: 1px solid; }
+    th { padding: 0.6rem 1rem; text-align: left; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; white-space: nowrap; }
+    td { padding: 0.65rem 1rem; border-top: 1px solid; white-space: nowrap; }
+    .liste-analyse { margin: 0 0 1.75rem; }
+    .liste-analyse h2 { font-size: 1.15rem; font-weight: 700; margin: 1.75rem 0 0.6rem; }
+    .liste-analyse p { margin: 0 0 0.9rem; line-height: 1.75; font-size: 0.95rem; }
     .rang { font-size: 0.8rem; font-weight: 700; width: 2rem; }
     .ticker a { color: #16a34a; font-family: monospace; font-weight: 700; font-size: 0.95rem; }
     .metric { color: #16a34a; font-weight: 700; }
@@ -185,6 +189,16 @@
     <div class="stat"><div class="stat-val">12,0%</div><div class="stat-lbl">Snitt yield</div></div>
     <div class="stat"><div class="stat-val">31,43%</div><div class="stat-lbl">Høyeste yield</div></div>
   </div>
+
+  <div class="liste-analyse">
+  <h2>Hva en høy yield faktisk betyr</h2>
+  <p>Direkteavkastning er utbytte delt på kurs. Tallet stiger derfor like gjerne fordi kursen faller som fordi utbyttet øker, og en aksje som skiller seg kraftig fra medianen på Oslo Børs (5,29 %) er først og fremst et spørsmål: hva er det markedet priser inn som du ennå ikke har sett?</p>
+  <p>Av de 20 aksjene på denne listen deler 4 ut mer enn de tjener, og for 5 mangler vi inntjeningstall — blankt felt betyr ukjent, ikke lavt. Til sammen er det 9 av 20 der utbetalingsgraden ikke bekrefter at utbyttet er bærekraftig.</p>
+  <p>Av dem har 9 betalt utbytte i ti år eller mer. Kort historikk er ikke i seg selv et faresignal, men det betyr at selskapet ikke er sett gjennom en nedtur ennå.</p>
+  <p>Vær særlig oppmerksom på engangsutbetalinger. Et selskap som selger virksomheten sin og deler ut pengene, får en yield som ser spektakulær ut i tolv måneder og deretter forsvinner. Kjennetegnet er at ett år stikker kraftig opp i utbyttehistorikken mens de andre ligger flatt.</p>
+  </div>
+
+  <div class="tabell-ramme">
   <table>
     <thead><tr><th>#</th><th>Ticker</th><th>Selskap</th><th>Yield</th><th>Pris</th><th>Payout</th><th>Ex-dato</th></tr></thead>
     <tbody>
@@ -310,6 +324,7 @@
         </tr>
     </tbody>
   </table>
+  </div>
   <div class="cta">
     <p>Se yield, ex-dato, score og porteføljekalkulator for alle aksjer</p>
     <a href="https://exday.no/">Åpne exday.no →</a>
@@ -318,7 +333,7 @@
     <h2>Andre topplistor</h2>
     <ul><li><a href="/aksjer/utbyttevekst/">Aksjer med best utbyttevekst</a></li><li><a href="/aksjer/konsistente-utbytteaksjer/">Mest konsistente utbytteaksjer</a></li><li><a href="/aksjer/lavest-payout/">Aksjer med lavest payout ratio</a></li></ul>
   </div>
-  <p class="updated">Sist oppdatert: 2026-08-29</p>
+  <p class="updated">Sist oppdatert: 2026-08-31</p>
   <footer style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid #e5e7eb;font-size:0.78rem;text-align:center;color:#9ca3af;line-height:1.6;" class="std-footer">
     <p>Kurs og utbyttedata hentes fra Yahoo Finance og Euronext. Oppdateres daglig på børsdager.</p>
     <p style="max-width:36rem;margin:0.4rem auto;">

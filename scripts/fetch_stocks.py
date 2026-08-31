@@ -4072,6 +4072,136 @@ def generer_sektorsider(aksjer, root_dir):
     print(f"Genererte {len(generert)} sektorsider under aksjer/sektor/")
 
 
+def _toppliste_analyse(slug, topp, alle):
+    """Analysetekst for en toppliste, bygget fra denne kjøringens tall.
+
+    Topplistene var 365–369 ord og besto nesten bare av tabellen. En liste
+    sortert på ett tall trenger dessuten forbeholdet som hører til: den
+    høyeste yielden er ikke den beste aksjen, og en toppliste uten den
+    konteksten er akkurat den «thin content» AdSense beskriver.
+
+    Som ellers regnes alt ut her og nå — tall skrevet inn i teksten ville
+    frosset ved neste kursendring.
+    """
+    import statistics
+
+    def yld(a):
+        return a.get("utbytte_yield") or 0
+
+    alle_y = [yld(a) for a in alle if yld(a) > 0]
+    median_bors = statistics.median(alle_y) if alle_y else 0
+    lange = sum(1 for a in topp if (a.get("ar_med_utbytte") or 0) >= 10)
+    topp_y = [yld(a) for a in topp if yld(a) > 0]
+    median_liste = statistics.median(topp_y) if topp_y else 0
+    under_median = sum(1 for a in topp if 0 < yld(a) < median_bors)
+
+    if slug == "hoyest-utbytte":
+        # payout_ratio == 0 er UKJENT, ikke lavt — se CLAUDE.md.
+        ukjent = sum(1 for a in topp if not a.get("payout_ratio"))
+        over100 = sum(1 for a in topp if (a.get("payout_ratio") or 0) > 100)
+        svake = ukjent + over100
+        tittel = "Hva en høy yield faktisk betyr"
+        avsnitt = [
+            f"Direkteavkastning er utbytte delt på kurs. Tallet stiger derfor "
+            f"like gjerne fordi kursen faller som fordi utbyttet øker, og en "
+            f"aksje som skiller seg kraftig fra medianen på Oslo Børs "
+            f"({_nf(median_bors, 2)} %) er først og fremst et spørsmål: hva er "
+            f"det markedet priser inn som du ennå ikke har sett?",
+            f"Av de {len(topp)} aksjene på denne listen deler {over100} ut mer "
+            f"enn de tjener, og for {ukjent} mangler vi inntjeningstall — blankt "
+            f"felt betyr ukjent, ikke lavt. Til sammen er det {svake} av "
+            f"{len(topp)} der utbetalingsgraden ikke bekrefter at utbyttet er "
+            f"bærekraftig." if svake else
+            f"Alle {len(topp)} aksjene på listen har kjent utbetalingsgrad under "
+            f"100 %, noe som er uvanlig for en høy-yield-liste.",
+            f"Av dem har {lange} betalt utbytte i ti år eller mer. Kort "
+            f"historikk er ikke i seg selv et faresignal, men det betyr at "
+            f"selskapet ikke er sett gjennom en nedtur ennå.",
+            "Vær særlig oppmerksom på engangsutbetalinger. Et selskap som "
+            "selger virksomheten sin og deler ut pengene, får en yield som ser "
+            "spektakulær ut i tolv måneder og deretter forsvinner. Kjennetegnet "
+            "er at ett år stikker kraftig opp i utbyttehistorikken mens de "
+            "andre ligger flatt.",
+        ]
+    elif slug == "utbyttevekst":
+        tittel = "Slik leser du utbyttevekst"
+        avsnitt = [
+            "Tallet er årlig gjennomsnittlig vekst (CAGR) i utbetalt utbytte "
+            "over fem år. Det måler hvor raskt utbetalingen har økt — ikke hvor "
+            "mye du får i dag, og ikke om veksten kan fortsette.",
+            "Den viktigste fellen er utgangspunktet. Et selskap som kuttet "
+            "utbyttet kraftig for fem år siden og siden har hentet seg inn, får "
+            "en enorm CAGR uten å ha gjort annet enn å komme tilbake dit det "
+            "var. Sjekk derfor alltid hele utbyttehistorikken, ikke bare "
+            "vekstprosenten: en jevn stigning er noe helt annet enn en "
+            "V-formet gjenoppretting.",
+            f"Legg også merke til at høy vekst og høy yield sjelden opptrer "
+            f"sammen. Et selskap som allerede deler ut det meste av "
+            f"overskuddet, har lite igjen å øke med. Medianen i dagens yield på "
+            f"denne listen er {_nf(median_liste, 2)} %, mot "
+            f"{_nf(median_bors, 2)} % for børsen samlet — det er prisen for "
+            f"veksten.",
+            "For en langsiktig portefølje er det ofte vekstlisten som betyr "
+            "mest. En aksje som gir 3 % i dag og øker utbyttet 10 % i året, "
+            "passerer en aksje som gir 7 % og står stille — det tar bare tid.",
+        ]
+    elif slug == "konsistente-utbytteaksjer":
+        sektorer = {}
+        for a in topp:
+            s = a.get("sektor") or "Ukjent"
+            sektorer[s] = sektorer.get(s, 0) + 1
+        storst, antall = max(sektorer.items(), key=lambda x: x[1])
+        tittel = "Hvorfor konsistens er verdt å måle"
+        avsnitt = [
+            "Denne listen teller antall kalenderår med utbetalt utbytte. Det er "
+            "det enkleste målet på om et selskap prioriterer utbyttet gjennom "
+            "både gode og dårlige år — og for en utbytteinvestor er det ofte "
+            "mer relevant enn nivået på yielden akkurat nå.",
+            f"Et selskap som har betalt utbytte i tjue år, har gjort det "
+            f"gjennom finanskrisen, oljeprisfallet i 2014–2016 og pandemien. "
+            f"Det er ingen garanti for at det fortsetter, men det sier noe om "
+            f"hvordan styret prioriterer når det strammer seg til.",
+            f"Legg merke til konsentrasjonen: {antall} av de {len(topp)} "
+            f"aksjene her hører til {storst}. Det er ikke tilfeldig — "
+            f"forretningsmodeller med jevn og forutsigbar inntjening tåler et "
+            f"fast utbytte, mens sykliske selskaper må justere. Bygger du "
+            f"portefølje ut fra denne listen alene, blir du derfor lite spredt.",
+            f"Merk også at konsistens og høy yield er to forskjellige ting. "
+            f"{under_median} av de {len(topp)} aksjene her gir under "
+            f"børsmedianen på {_nf(median_bors, 2)} % — du betaler for "
+            f"forutsigbarheten.",
+        ]
+    else:  # lavest-payout
+        tittel = "Hva lav payout ratio forteller"
+        avsnitt = [
+            "Payout ratio er utbytte delt på resultat per aksje. Lav "
+            "utbetalingsgrad betyr at selskapet beholder mesteparten av "
+            "overskuddet, og at det har rom til å opprettholde utbyttet selv om "
+            "inntjeningen faller.",
+            "Et selskap som deler ut 30 % av overskuddet, kan halvere "
+            "inntjeningen og fortsatt betale det samme. Et som deler ut 95 %, "
+            "har ingen slik buffer. Det er hele poenget med å se på tallet.",
+            "Listen inneholder bare selskaper med kjent payout ratio mellom 0 "
+            "og 100 %. Selskaper der vi mangler inntjeningstall er holdt "
+            "utenfor med vilje — et blankt felt betyr ukjent, ikke lavt, og å "
+            "presentere manglende data som en lav utbetalingsgrad ville vært "
+            "direkte misvisende.",
+            f"Baksiden er at lav payout og høy yield sjelden følges ad. Skal du "
+            f"bruke listen praktisk, se den sammen med dagens yield: en aksje "
+            f"med lav utbetalingsgrad og yield nær børsmedianen på "
+            f"{_nf(median_bors, 2)} % er som regel et mer holdbart utgangspunkt "
+            f"enn toppen av høy-yield-listen.",
+        ]
+
+    avsnitt_html = "\n  ".join(f"<p>{t}</p>" for t in avsnitt if t)
+    return f"""
+  <div class="liste-analyse">
+  <h2>{tittel}</h2>
+  {avsnitt_html}
+  </div>
+"""
+
+
 def generer_topplistesider(aksjer, root_dir):
     """Genererer 4 statiske SEO-sider for kuraterte topplistor."""
     today = datetime.datetime.utcnow().strftime("%Y-%m-%d")
@@ -4174,9 +4304,13 @@ def generer_topplistesider(aksjer, root_dir):
     .stat { border-radius: 0.5rem; padding: 0.75rem 1.25rem; border: 1px solid; }
     .stat-val { font-size: 1.4rem; font-weight: 700; color: #16a34a; }
     .stat-lbl { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em; }
-    table { width: 100%; border-collapse: collapse; border-radius: 0.75rem; overflow: hidden; font-size: 0.9rem; border: 1px solid; }
-    th { padding: 0.6rem 1rem; text-align: left; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; }
-    td { padding: 0.65rem 1rem; border-top: 1px solid; }
+    .tabell-ramme { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    table { width: 100%; min-width: 34rem; border-collapse: collapse; border-radius: 0.75rem; overflow: hidden; font-size: 0.9rem; border: 1px solid; }
+    th { padding: 0.6rem 1rem; text-align: left; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; white-space: nowrap; }
+    td { padding: 0.65rem 1rem; border-top: 1px solid; white-space: nowrap; }
+    .liste-analyse { margin: 0 0 1.75rem; }
+    .liste-analyse h2 { font-size: 1.15rem; font-weight: 700; margin: 1.75rem 0 0.6rem; }
+    .liste-analyse p { margin: 0 0 0.9rem; line-height: 1.75; font-size: 0.95rem; }
     .rang { font-size: 0.8rem; font-weight: 700; width: 2rem; }
     .ticker a { color: #16a34a; font-family: monospace; font-weight: 700; font-size: 0.95rem; }
     .metric { color: #16a34a; font-weight: 700; }
@@ -4243,6 +4377,7 @@ def generer_topplistesider(aksjer, root_dir):
 
         n = len(topp)
         desc = cfg["desc_tpl"].format(n=n)
+        analyse_html = _toppliste_analyse(cfg["slug"], topp, aksjer)
         col_headers = "".join(f"<th>{lbl}</th>" for lbl, _ in cfg["kolonner"])
         rader = ""
         for i, a in enumerate(topp, 1):
@@ -4342,11 +4477,14 @@ def generer_topplistesider(aksjer, root_dir):
     <div class="stat"><div class="stat-val">{cfg['stat_fn'](topp)}</div><div class="stat-lbl">{cfg['stat_lbl']}</div></div>
     <div class="stat"><div class="stat-val">{cfg['stat2_fn'](topp)}</div><div class="stat-lbl">{cfg['stat2_lbl']}</div></div>
   </div>
+{analyse_html}
+  <div class="tabell-ramme">
   <table>
     <thead><tr><th>#</th><th>Ticker</th><th>Selskap</th>{col_headers}</tr></thead>
     <tbody>{rader}
     </tbody>
   </table>
+  </div>
   <div class="cta">
     <p>Se yield, ex-dato, score og porteføljekalkulator for alle aksjer</p>
     <a href="https://exday.no/">Åpne exday.no →</a>

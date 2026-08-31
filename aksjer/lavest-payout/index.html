@@ -67,9 +67,13 @@
     .stat { border-radius: 0.5rem; padding: 0.75rem 1.25rem; border: 1px solid; }
     .stat-val { font-size: 1.4rem; font-weight: 700; color: #16a34a; }
     .stat-lbl { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em; }
-    table { width: 100%; border-collapse: collapse; border-radius: 0.75rem; overflow: hidden; font-size: 0.9rem; border: 1px solid; }
-    th { padding: 0.6rem 1rem; text-align: left; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; }
-    td { padding: 0.65rem 1rem; border-top: 1px solid; }
+    .tabell-ramme { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    table { width: 100%; min-width: 34rem; border-collapse: collapse; border-radius: 0.75rem; overflow: hidden; font-size: 0.9rem; border: 1px solid; }
+    th { padding: 0.6rem 1rem; text-align: left; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; white-space: nowrap; }
+    td { padding: 0.65rem 1rem; border-top: 1px solid; white-space: nowrap; }
+    .liste-analyse { margin: 0 0 1.75rem; }
+    .liste-analyse h2 { font-size: 1.15rem; font-weight: 700; margin: 1.75rem 0 0.6rem; }
+    .liste-analyse p { margin: 0 0 0.9rem; line-height: 1.75; font-size: 0.95rem; }
     .rang { font-size: 0.8rem; font-weight: 700; width: 2rem; }
     .ticker a { color: #16a34a; font-family: monospace; font-weight: 700; font-size: 0.95rem; }
     .metric { color: #16a34a; font-weight: 700; }
@@ -185,6 +189,16 @@
     <div class="stat"><div class="stat-val">22%</div><div class="stat-lbl">Snitt payout</div></div>
     <div class="stat"><div class="stat-val">6%</div><div class="stat-lbl">Laveste payout</div></div>
   </div>
+
+  <div class="liste-analyse">
+  <h2>Hva lav payout ratio forteller</h2>
+  <p>Payout ratio er utbytte delt på resultat per aksje. Lav utbetalingsgrad betyr at selskapet beholder mesteparten av overskuddet, og at det har rom til å opprettholde utbyttet selv om inntjeningen faller.</p>
+  <p>Et selskap som deler ut 30 % av overskuddet, kan halvere inntjeningen og fortsatt betale det samme. Et som deler ut 95 %, har ingen slik buffer. Det er hele poenget med å se på tallet.</p>
+  <p>Listen inneholder bare selskaper med kjent payout ratio mellom 0 og 100 %. Selskaper der vi mangler inntjeningstall er holdt utenfor med vilje — et blankt felt betyr ukjent, ikke lavt, og å presentere manglende data som en lav utbetalingsgrad ville vært direkte misvisende.</p>
+  <p>Baksiden er at lav payout og høy yield sjelden følges ad. Skal du bruke listen praktisk, se den sammen med dagens yield: en aksje med lav utbetalingsgrad og yield nær børsmedianen på 5,29 % er som regel et mer holdbart utgangspunkt enn toppen av høy-yield-listen.</p>
+  </div>
+
+  <div class="tabell-ramme">
   <table>
     <thead><tr><th>#</th><th>Ticker</th><th>Selskap</th><th>Payout ratio</th><th>Yield</th><th>Pris</th><th>Ex-dato</th></tr></thead>
     <tbody>
@@ -310,6 +324,7 @@
         </tr>
     </tbody>
   </table>
+  </div>
   <div class="cta">
     <p>Se yield, ex-dato, score og porteføljekalkulator for alle aksjer</p>
     <a href="https://exday.no/">Åpne exday.no →</a>
@@ -318,7 +333,7 @@
     <h2>Andre topplistor</h2>
     <ul><li><a href="/aksjer/hoyest-utbytte/">Aksjer med høyest utbytte</a></li><li><a href="/aksjer/utbyttevekst/">Aksjer med best utbyttevekst</a></li><li><a href="/aksjer/konsistente-utbytteaksjer/">Mest konsistente utbytteaksjer</a></li></ul>
   </div>
-  <p class="updated">Sist oppdatert: 2026-08-29</p>
+  <p class="updated">Sist oppdatert: 2026-08-31</p>
   <footer style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid #e5e7eb;font-size:0.78rem;text-align:center;color:#9ca3af;line-height:1.6;" class="std-footer">
     <p>Kurs og utbyttedata hentes fra Yahoo Finance og Euronext. Oppdateres daglig på børsdager.</p>
     <p style="max-width:36rem;margin:0.4rem auto;">
