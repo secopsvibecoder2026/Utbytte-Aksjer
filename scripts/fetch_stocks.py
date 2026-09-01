@@ -611,10 +611,16 @@ def _datoindeksert(serie):
     noe tidsbasert, så tom serie er det ærlige svaret.
     """
     import pandas as pd
+    # Den tomme serien må selv ha DatetimeIndex. `pd.Series(dtype="float64")`
+    # får en RangeIndex, og da kaster `dividends.index.tz` nøyaktig samme feil
+    # som helperen skulle fjerne — den ene av de seks bruksstedene som ikke
+    # ligger bak en `.empty`-sjekk. Det var grunnen til at første forsøk på
+    # denne fiksen ikke hjalp: de samme sju tickerne feilet videre.
+    tom = pd.Series(dtype="float64", index=pd.DatetimeIndex([]))
     if serie is None:
-        return pd.Series(dtype="float64")
+        return tom
     if not isinstance(serie.index, pd.DatetimeIndex):
-        return pd.Series(dtype="float64")
+        return tom
     return serie
 
 
@@ -814,8 +820,14 @@ def hent_aksje(meta):
 
         # Sanity-sjekk: hvis yield er mer enn 3× historisk snitt-yield, bruk snitt i stedet
         # (beskytter mot Yahoo Finance-feil med trailingAnnualDividendRate)
-        # Fallback: hvis snitt_yield_5ar=0 (tom hist_prices), bruk trailing 12 mnd yield
-        effective_snitt = snitt_yield_5ar
+        # Fallback: hvis snitt_yield_5ar=0 (tom hist_prices), bruk trailing 12 mnd yield.
+        #
+        # hent_historiske_utbytter() returnerer bevisst None når ingen historisk
+        # yield er troverdig — «ukjent» er noe annet enn «null». Her må den
+        # skilnaden bort igjen, ellers kaster `effective_snitt > 0` med
+        # «'>' not supported between instances of 'NoneType' and 'int'» og tar
+        # ned hele tickeren. Det var det som skjedde med OTEC.
+        effective_snitt = snitt_yield_5ar or 0
         if effective_snitt == 0 and pris > 0 and trailing_annual > 0:
             effective_snitt = round(trailing_annual / pris * 100, 2)
         if effective_snitt > 0 and utbytte_yield > effective_snitt * 3:

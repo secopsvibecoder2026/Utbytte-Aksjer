@@ -37,6 +37,22 @@ class TestDatoindeksert(unittest.TestCase):
         self.assertNotIsInstance(serie.index, pd.DatetimeIndex)
         self.assertTrue(fs._datoindeksert(serie).empty)
 
+    def test_tom_serie_har_datetimeindex(self):
+        """Den tomme serien må også tåle `.index.tz`.
+
+        Første forsøk på fiksen returnerte `pd.Series(dtype="float64")`, som får
+        en RangeIndex. hent_aksje() leser `dividends.index.tz` ett sted som
+        ikke ligger bak en `.empty`-sjekk, så de samme sju tickerne feilet
+        videre i produksjon. Testene over fanget det ikke, fordi både
+        beregn_utbytte_vekst() og hent_historiske_utbytter() returnerer tidlig
+        på tom serie.
+        """
+        for inn in (None, pd.Series([1.0, 2.0]), pd.Series(dtype="float64")):
+            ut = fs._datoindeksert(inn)
+            self.assertIsInstance(ut.index, pd.DatetimeIndex)
+            self.assertIsNone(ut.index.tz)          # skal ikke kaste
+            self.assertEqual(len(ut[ut.index >= pd.Timestamp("2020-01-01")]), 0)
+
     def test_datetimeindex_beholdes(self):
         serie = pd.Series([1.0, 2.0], index=pd.to_datetime(["2025-03-01", "2026-03-01"]))
         self.assertEqual(len(fs._datoindeksert(serie)), 2)
