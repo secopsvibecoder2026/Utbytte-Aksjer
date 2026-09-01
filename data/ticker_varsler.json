@@ -1,70 +1,21 @@
 {
-  "generert": "2026-08-31T21:20:35Z",
-  "antall": 11,
-  "antall_kritiske": 7,
+  "generert": "2026-09-01T12:12:24Z",
+  "antall": 4,
+  "antall_kritiske": 0,
   "varsler": [
-    {
-      "ticker": "DOF",
-      "type": "aldri_hentet",
-      "alvorlighet": "kritisk",
-      "melding": "Ingen vellykket henting registrert for denne tickeren (feilet i 20 dager).",
-      "forslag": "Kontroller at ticker_yf er riktig i data/tickers.json."
-    },
-    {
-      "ticker": "FLNG",
-      "type": "aldri_hentet",
-      "alvorlighet": "kritisk",
-      "melding": "Ingen vellykket henting registrert for denne tickeren (feilet i 20 dager).",
-      "forslag": "Kontroller at ticker_yf er riktig i data/tickers.json."
-    },
-    {
-      "ticker": "GOGL",
-      "type": "aldri_hentet",
-      "alvorlighet": "kritisk",
-      "melding": "Ingen vellykket henting registrert for denne tickeren (feilet i 20 dager).",
-      "forslag": "Kontroller at ticker_yf er riktig i data/tickers.json."
-    },
-    {
-      "ticker": "KMCP",
-      "type": "aldri_hentet",
-      "alvorlighet": "kritisk",
-      "melding": "Ingen vellykket henting registrert for denne tickeren (feilet i 20 dager).",
-      "forslag": "Kontroller at ticker_yf er riktig i data/tickers.json."
-    },
-    {
-      "ticker": "OTEC",
-      "type": "aldri_hentet",
-      "alvorlighet": "kritisk",
-      "melding": "Ingen vellykket henting registrert for denne tickeren (feilet i 20 dager).",
-      "forslag": "Kontroller at ticker_yf er riktig i data/tickers.json."
-    },
-    {
-      "ticker": "SBVG",
-      "type": "aldri_hentet",
-      "alvorlighet": "kritisk",
-      "melding": "Ingen vellykket henting registrert for denne tickeren (feilet i 20 dager).",
-      "forslag": "Kontroller at ticker_yf er riktig i data/tickers.json."
-    },
-    {
-      "ticker": "WILS",
-      "type": "aldri_hentet",
-      "alvorlighet": "kritisk",
-      "melding": "Ingen vellykket henting registrert for denne tickeren (feilet i 20 dager).",
-      "forslag": "Kontroller at ticker_yf er riktig i data/tickers.json."
-    },
     {
       "ticker": "PGS",
       "type": "fastfrosset_kurs",
       "alvorlighet": "advarsel",
-      "melding": "Siste registrerte handel var 2024-07-22 (550 børsdager siden). Kursen står stille.",
+      "melding": "Siste registrerte handel var 2024-07-22 (551 børsdager siden). Kursen står stille.",
       "forslag": "Kan bety at handelen er suspendert eller at papiret er avnotert."
     },
     {
       "ticker": "TIETO",
-      "type": "hentefeil",
+      "type": "markedsverdi_borte",
       "alvorlighet": "advarsel",
-      "melding": "Henting har feilet i 3 dager (sist OK 2026-08-28).",
-      "forslag": "Følg med. Vedvarer det til 7 dager, kontroller om tickeren fortsatt finnes."
+      "melding": "Markedsverdien er borte fra Yahoo (var 24,441,212,928 sist). Kan indikere strukturendring i selskapet.",
+      "forslag": "Kontroller om selskapet er under oppkjøp eller strykning."
     },
     {
       "ticker": "BAKKA",

@@ -3377,7 +3377,8 @@
     {
       "ticker": "CAPT",
       "dato": "2026-09-01",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/681341"
     },
     {
       "ticker": "ENTR",
@@ -4010,6 +4011,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "KMCP",
+      "dato": "2026-11-04",
+      "type": "rapport"
+    },
+    {
       "ticker": "MOWI",
       "dato": "2026-11-04",
       "type": "rapport"
@@ -4026,6 +4032,11 @@
     },
     {
       "ticker": "SBMO",
+      "dato": "2026-11-04",
+      "type": "rapport"
+    },
+    {
+      "ticker": "SBVG",
       "dato": "2026-11-04",
       "type": "rapport"
     },
@@ -4440,6 +4451,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "CAPT",
+      "dato": "2026-11-30",
+      "type": "rapport"
+    },
+    {
       "ticker": "FRO",
       "dato": "2026-11-30",
       "type": "rapport"
@@ -4447,6 +4463,11 @@
     {
       "ticker": "JIN",
       "dato": "2026-11-30",
+      "type": "rapport"
+    },
+    {
+      "ticker": "OTEC",
+      "dato": "2027-02-17",
       "type": "rapport"
     },
     {
@@ -4485,5 +4506,5 @@
       "type": "rapport"
     }
   ],
-  "sist_oppdatert": "2026-08-31"
+  "sist_oppdatert": "2026-09-01"
 }
