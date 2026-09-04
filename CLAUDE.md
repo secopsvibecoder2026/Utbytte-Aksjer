@@ -469,6 +469,40 @@ on 2026-08-26; 153 of them had been sitting in English straight from Yahoo.
 English unless `ANTHROPIC_API_KEY` is set so it translates — check the output
 before committing a run of it.
 
+### Stock counts in hand-written pages use markers — never type the number
+
+The catalog size appeared hard-coded in 28 places across `index.html`, `/om/`,
+`/utforsk/`, the tool pages, `/app/`, the article index and two articles. Every
+delisting meant editing all of them by hand, and it was missed every time: the
+pages said **191 while the catalog was 163**, then **161 while it was 160** —
+three rounds of manual correction in one week (163 → 161 → 160).
+
+Counts now sit between markers that `oppdater_antall_i_sider()` fills on every
+run, from both `fetch_stocks.py` and `regenerer_sider.py`:
+
+```html
+Oslo Børs · <!--N:aksjer-->160<!--/N--> aksjer · oppdateres daglig
+```
+
+Available keys: `aksjer` (catalog size), `utbytte` (yield > 0), `historikk`
+(`ar_med_utbytte` > 0), `exdato` (has an announced ex-date), `sektorer`.
+
+**Write a marker, not a number.** A bare digit will drift again and nothing
+will catch it. An unknown key is left untouched and reported, so a typo shows
+up in the run log rather than blanking the text.
+
+The marker is an HTML comment, not a template token — if the generator never
+runs, the previous number stays as ordinary text and the reader never sees
+something like `{{ANTALL}}`.
+
+**Attributes cannot hold comments.** `<meta>` descriptions, `og:description`,
+`<title>` and JSON-LD use a rounded figure instead — «over 150 norske
+utbytteaksjer» — which stays true as stocks come and go. Same for article
+ingresses that are duplicated in `assets/ui.js` and the article index: round
+them, and keep the exact, date-stamped figure in the article body only.
+
+Generated pages (`/aksjer/**`) compute their own numbers and are skipped.
+
 ### Never freeze live numbers into stored prose
 
 This is the single mistake this codebase keeps repeating. Three separate fields

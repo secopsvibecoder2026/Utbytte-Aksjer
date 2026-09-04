@@ -5109,6 +5109,7 @@ def main():
     generer_sitemap(resultater, root_dir, today, AKSJER)
     oppdater_index_html_meta(len(resultater), root_dir)
     oppdater_app_noscript_liste(resultater, root_dir)
+    oppdater_antall_i_sider(resultater, root_dir)
 
 
 def oppdater_index_html_meta(antall_aksjer: int, root_dir: str):
@@ -5130,6 +5131,85 @@ def oppdater_index_html_meta(antall_aksjer: int, root_dir: str):
     with open(path, "w", encoding="utf-8") as f:
         f.write(oppdatert)
     print(f"  index.html meta-beskrivelse oppdatert → {antall_aksjer} aksjer")
+
+
+def oppdater_antall_i_sider(aksjer, root_dir: str):
+    """Oppdaterer aksjetellingene som står i de håndskrevne sidene.
+
+    Antallet aksjer sto hardkodet 28 steder — hero-teksten på forsiden,
+    /om/, /utforsk/, verktøysidene, artikkelindeksen og to artikler. Hver
+    gang en ticker gikk ut måtte alle rettes for hånd, og det ble glemt:
+    tallet sa 191 da katalogen var 163, og 161 da den var 160. Tre runder
+    med manuell retting på én uke.
+
+    Tellingene står nå mellom markører som denne funksjonen fyller ut ved
+    hver kjøring:
+
+        <!--N:aksjer-->160<!--/N-->
+
+    Markøren er en HTML-kommentar, ikke en mal-token. Kjører generatoren
+    aldri, står forrige tall igjen som vanlig tekst — leseren ser aldri noe
+    som `{{ANTALL}}`.
+
+    Meta-beskrivelser og JSON-LD kan ikke inneholde kommentarer, og bruker
+    derfor et rundet tall («over 150») som ikke drifter av at én aksje går
+    ut. Se de aktuelle filene.
+    """
+    def _tall(a, felt):
+        v = a.get(felt)
+        return v if isinstance(v, (int, float)) else 0
+
+    verdier = {
+        "aksjer":    len(aksjer),
+        "utbytte":   sum(1 for a in aksjer if _tall(a, "utbytte_yield") > 0),
+        "historikk": sum(1 for a in aksjer if _tall(a, "ar_med_utbytte") > 0),
+        "exdato":    sum(1 for a in aksjer if a.get("ex_dato")),
+        "sektorer":  len({a.get("sektor") for a in aksjer if a.get("sektor")}),
+    }
+
+    monster = re.compile(r"(<!--N:(\w+)-->)(.*?)(<!--/N-->)", re.S)
+    ukjente = set()
+    endret_totalt = 0
+    filer_endret = []
+
+    for mappe, _, filnavn in os.walk(root_dir):
+        # Genererte sider har egne tall og skal ikke røres her.
+        if any(d in mappe for d in (".git", "node_modules", os.path.join("aksjer", "sektor"))):
+            continue
+        for navn in filnavn:
+            if not navn.endswith(".html"):
+                continue
+            sti = os.path.join(mappe, navn)
+            with open(sti, encoding="utf-8") as f:
+                innhold = f.read()
+            if "<!--N:" not in innhold:
+                continue
+
+            def _bytt(m):
+                nonlocal endret_totalt
+                nokkel = m.group(2)
+                if nokkel not in verdier:
+                    ukjente.add(nokkel)
+                    return m.group(0)
+                ny = str(verdier[nokkel])
+                if m.group(3) != ny:
+                    endret_totalt += 1
+                return f"{m.group(1)}{ny}{m.group(4)}"
+
+            nytt = monster.sub(_bytt, innhold)
+            if nytt != innhold:
+                with open(sti, "w", encoding="utf-8") as f:
+                    f.write(nytt)
+                filer_endret.append(os.path.relpath(sti, root_dir))
+
+    if ukjente:
+        print(f"  Advarsel: ukjente antallsmarkører: {', '.join(sorted(ukjente))}")
+    if endret_totalt:
+        print(f"  Antall oppdatert {endret_totalt} steder i {len(filer_endret)} filer: "
+              f"{', '.join(sorted(filer_endret))}")
+    else:
+        print("  Antall i sidene er allerede riktig")
+    return verdier
 
 
 def oppdater_app_noscript_liste(aksjer, root_dir: str):

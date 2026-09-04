@@ -8,7 +8,9 @@ suiten fortsatt kan kjøres uten tredjepartspakker.
 """
 
 import os
+import shutil
 import sys
+import tempfile
 import unittest
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -123,6 +125,72 @@ class TestTomResponsFeiler(unittest.TestCase):
         resultat, diag = self._kjor({"regularMarketPrice": 148.6})
         self.assertIsNotNone(resultat)
         self.assertTrue(diag.get("ok"))
+
+
+class TestAntallIMarkorer(unittest.TestCase):
+    """Aksjetellingene i de håndskrevne sidene fylles fra datasettet.
+
+    Tallet sto hardkodet 28 steder og måtte rettes for hånd hver gang en
+    ticker gikk ut. Det ble glemt gang på gang: sidene sa 191 da katalogen
+    var 163, og 161 da den var 160 — tre runder med manuell retting på én uke.
+    """
+
+    def setUp(self):
+        self.rot = tempfile.mkdtemp()
+        self.addCleanup(shutil.rmtree, self.rot, ignore_errors=True)
+        self.aksjer = [
+            {"ticker": "A", "sektor": "Finans", "utbytte_yield": 5.0, "ar_med_utbytte": 10, "ex_dato": "2026-04-01"},
+            {"ticker": "B", "sektor": "Finans", "utbytte_yield": 0.0, "ar_med_utbytte": 3},
+            {"ticker": "C", "sektor": "Shipping", "utbytte_yield": 7.5, "ar_med_utbytte": 0},
+        ]
+
+    def _skriv(self, navn, innhold):
+        sti = os.path.join(self.rot, navn)
+        os.makedirs(os.path.dirname(sti), exist_ok=True)
+        with open(sti, "w", encoding="utf-8") as f:
+            f.write(innhold)
+        return sti
+
+    def _les(self, sti):
+        with open(sti, encoding="utf-8") as f:
+            return f.read()
+
+    def test_retter_utdaterte_tall(self):
+        sti = self._skriv("index.html",
+                          "<p>Vi følger <!--N:aksjer-->999<!--/N--> aksjer i "
+                          "<!--N:sektorer-->1<!--/N--> sektorer.</p>")
+        fs.oppdater_antall_i_sider(self.aksjer, self.rot)
+        self.assertIn("<!--N:aksjer-->3<!--/N-->", self._les(sti))
+        self.assertIn("<!--N:sektorer-->2<!--/N-->", self._les(sti))
+
+    def test_alle_nokler(self):
+        sti = self._skriv("a/index.html",
+                          "<!--N:aksjer-->0<!--/N--> <!--N:utbytte-->0<!--/N--> "
+                          "<!--N:historikk-->0<!--/N--> <!--N:exdato-->0<!--/N-->")
+        fs.oppdater_antall_i_sider(self.aksjer, self.rot)
+        t = self._les(sti)
+        self.assertIn("<!--N:aksjer-->3<!--/N-->", t)        # alle
+        self.assertIn("<!--N:utbytte-->2<!--/N-->", t)       # yield > 0
+        self.assertIn("<!--N:historikk-->2<!--/N-->", t)     # ar_med_utbytte > 0
+        self.assertIn("<!--N:exdato-->1<!--/N-->", t)        # har ex_dato
+
+    def test_idempotent(self):
+        sti = self._skriv("index.html", "<!--N:aksjer-->3<!--/N-->")
+        fs.oppdater_antall_i_sider(self.aksjer, self.rot)
+        forste = self._les(sti)
+        fs.oppdater_antall_i_sider(self.aksjer, self.rot)
+        self.assertEqual(forste, self._les(sti))
+
+    def test_ukjent_nokkel_star_urort(self):
+        # En skrivefeil i markøren skal ikke tømme teksten.
+        sti = self._skriv("index.html", "<!--N:tullball-->42<!--/N-->")
+        fs.oppdater_antall_i_sider(self.aksjer, self.rot)
+        self.assertIn("<!--N:tullball-->42<!--/N-->", self._les(sti))
+
+    def test_rorer_ikke_sider_uten_markor(self):
+        sti = self._skriv("annen.html", "<p>160 aksjer uten markør</p>")
+        fs.oppdater_antall_i_sider(self.aksjer, self.rot)
+        self.assertIn("160 aksjer uten markør", self._les(sti))
 
 
 class TestFrekvensLabel(unittest.TestCase):
