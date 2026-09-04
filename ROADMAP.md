@@ -7,9 +7,10 @@ Norsk utbytteaksje-tracker for Oslo Børs. Fullførte funksjoner: [ROADMAP_COMPL
 ## Høy prioritet
 
 ### Datakvalitet — fjern aksjer uten utbyttedata
-16 aksjer har `upa=0`, `yield=0`, `hist=0` og hører ikke hjemme på en utbytteside:
-PGS, DOF, NRC, ENDUR, NKR, BWE, CADLR, KMCP, BORR, CAPT, ISLAX, AFISH, HEX, ACR, NOD, KOA
+15 aksjer har `upa=0`, `yield=0`, `hist=0` og hører ikke hjemme på en utbytteside:
+DOF, NRC, ENDUR, NKR, BWE, CADLR, KMCP, BORR, CAPT, ISLAX, AFISH, HEX, ACR, NOD, KOA
 - [ ] Fjern fra `tickers.json` og regenerer alle sider
+- PGS er allerede fjernet (4. sep 2026) — avnotert fra Oslo Børs 2. juli 2024 etter fusjonen inn i TGS, ikke bare uten utbyttedata
 
 ### Datakvalitet — fiks misvisende snitt_yield_5ar i fetch_stocks.py ✅
 Historisk yield beregnes mot *dagens* kurs (bevisst designvalg for konsistent visning). For aksjer der kursen har kollapset ga det meningsløse tall: 2020 Bulkers viste 5-årssnitt på **1104 %** med et enkeltår på 3623 %.
