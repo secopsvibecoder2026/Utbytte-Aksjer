@@ -1,6 +1,6 @@
 {
-  "generert": "2026-09-04T11:52:02Z",
-  "antall": 8,
+  "generert": "2026-09-04T13:56:17Z",
+  "antall": 9,
   "antall_kritiske": 0,
   "varsler": [
     {
@@ -30,6 +30,13 @@
       "alvorlighet": "advarsel",
       "melding": "Markedsverdien er borte fra Yahoo (var 727,664,576 sist). Kan indikere strukturendring i selskapet.",
       "forslag": "Kontroller om selskapet er under oppkjøp eller strykning."
+    },
+    {
+      "ticker": "PGS",
+      "type": "fastfrosset_kurs",
+      "alvorlighet": "advarsel",
+      "melding": "Siste registrerte handel var 2024-07-22 (554 børsdager siden). Kursen står stille.",
+      "forslag": "Kan bety at handelen er suspendert eller at papiret er avnotert."
     },
     {
       "ticker": "SNI",
