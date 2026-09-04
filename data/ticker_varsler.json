@@ -1,14 +1,42 @@
 {
-  "generert": "2026-09-03T19:06:58Z",
-  "antall": 4,
+  "generert": "2026-09-04T11:52:02Z",
+  "antall": 8,
   "antall_kritiske": 0,
   "varsler": [
     {
-      "ticker": "PGS",
-      "type": "fastfrosset_kurs",
+      "ticker": "FRO",
+      "type": "markedsverdi_borte",
       "alvorlighet": "advarsel",
-      "melding": "Siste registrerte handel var 2024-07-22 (553 børsdager siden). Kursen står stille.",
-      "forslag": "Kan bety at handelen er suspendert eller at papiret er avnotert."
+      "melding": "Markedsverdien er borte fra Yahoo (var 94,214,012,928 sist). Kan indikere strukturendring i selskapet.",
+      "forslag": "Kontroller om selskapet er under oppkjøp eller strykning."
+    },
+    {
+      "ticker": "GJF",
+      "type": "markedsverdi_borte",
+      "alvorlighet": "advarsel",
+      "melding": "Markedsverdien er borte fra Yahoo (var 141,889,814,528 sist). Kan indikere strukturendring i selskapet.",
+      "forslag": "Kontroller om selskapet er under oppkjøp eller strykning."
+    },
+    {
+      "ticker": "HEX",
+      "type": "markedsverdi_borte",
+      "alvorlighet": "advarsel",
+      "melding": "Markedsverdien er borte fra Yahoo (var 4,388,688,384 sist). Kan indikere strukturendring i selskapet.",
+      "forslag": "Kontroller om selskapet er under oppkjøp eller strykning."
+    },
+    {
+      "ticker": "JIN",
+      "type": "markedsverdi_borte",
+      "alvorlighet": "advarsel",
+      "melding": "Markedsverdien er borte fra Yahoo (var 727,664,576 sist). Kan indikere strukturendring i selskapet.",
+      "forslag": "Kontroller om selskapet er under oppkjøp eller strykning."
+    },
+    {
+      "ticker": "SNI",
+      "type": "markedsverdi_borte",
+      "alvorlighet": "advarsel",
+      "melding": "Markedsverdien er borte fra Yahoo (var 22,045,130,752 sist). Kan indikere strukturendring i selskapet.",
+      "forslag": "Kontroller om selskapet er under oppkjøp eller strykning."
     },
     {
       "ticker": "TIETO",
