@@ -71,6 +71,60 @@ class TestDatoindeksert(unittest.TestCase):
         self.assertEqual(historikk, [])
 
 
+@unittest.skipIf(pd is None, "pandas er ikke installert")
+class TestTomResponsFeiler(unittest.TestCase):
+    """En tom Yahoo-respons skal registreres som feil, ikke som «ok».
+
+    Da RangeIndex-krasjen ble fikset sluttet sju tickere å kaste, men Yahoo ga
+    fortsatt ingenting. Resultatet ble lagret som vellykket med kurs 0, yield 0
+    og tom historikk — Golden Ocean sto som «Uregelmessig utbytte» uten
+    direkteavkastning. Fordi ok=True var satt, kunne verken mulig_avnotering
+    eller navneendring slå ut, så ingenting varslet om det.
+    """
+
+    class _StubTicker:
+        """Minimal erstatning for yf.Ticker med en tom respons."""
+
+        def __init__(self, info):
+            self.info = info
+            self.dividends = pd.Series(dtype="float64", index=pd.DatetimeIndex([]))
+            self.calendar = {}
+
+        def history(self, period=None):
+            return pd.DataFrame()
+
+    def _kjor(self, info):
+        stub = self._StubTicker(info)
+        ekte_yf = fs.yf
+        # Newsweb-oppslaget stubbes også, ellers går testen på nettet og bruker
+        # fem sekunder på å time ut i CI.
+        ekte_newsweb = fs.hent_newsweb_rapport_dato
+        fs.yf = type("Yf", (), {"Ticker": staticmethod(lambda t: stub)})
+        fs.hent_newsweb_rapport_dato = lambda t: None
+        fs.HENTEDIAGNOSTIKK.pop("TEST", None)
+        try:
+            resultat = fs.hent_aksje({
+                "ticker": "TEST", "ticker_yf": "TEST.OL",
+                "navn": "Testselskap ASA", "sektor": "Finans", "bors": "Oslo Børs",
+            })
+        finally:
+            fs.yf = ekte_yf
+            fs.hent_newsweb_rapport_dato = ekte_newsweb
+        return resultat, fs.HENTEDIAGNOSTIKK.get("TEST", {})
+
+    def test_verken_navn_eller_kurs_gir_feil(self):
+        resultat, diag = self._kjor({})
+        self.assertIsNone(resultat)
+        self.assertFalse(diag.get("ok"))
+        self.assertIn("tom respons", diag.get("feilmelding", ""))
+
+    def test_kurs_uten_navn_slipper_gjennom(self):
+        # Navnet kan mangle uten at dataene er ubrukelige — kursen er nok.
+        resultat, diag = self._kjor({"regularMarketPrice": 148.6})
+        self.assertIsNotNone(resultat)
+        self.assertTrue(diag.get("ok"))
+
+
 class TestFrekvensLabel(unittest.TestCase):
     """Terskelen som gjorde SATS kvartalsvis og 2020 Bulkers kvartalsvis.
 

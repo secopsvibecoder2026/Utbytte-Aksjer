@@ -653,6 +653,24 @@ def hent_aksje(meta):
             if not history.empty:
                 pris = round(float(history["Close"].iloc[-1]), 2)
 
+        # Tom respons er ikke en vellykket henting.
+        #
+        # Da RangeIndex-krasjen ble fikset, sluttet disse tickerne å kaste — men
+        # Yahoo ga fortsatt ingenting, og resultatet ble lagret som «ok» med
+        # kurs 0, yield 0 og tom historikk. Golden Ocean sto som «Uregelmessig
+        # utbytte» uten direkteavkastning, og fordi ok=True var satt, kunne
+        # verken mulig_avnotering eller navneendring slå ut. Et krasj er
+        # dårlig; et stille nulltall som ser ut som ekte data er verre.
+        #
+        # Uten både navn og kurs har vi ikke noe å bygge en side av. Da skal
+        # tickeren feile, slik at fallbacken beholder forrige kjørings tall og
+        # varslingen trapper opp som normalt.
+        yahoo_navn_raa = info.get("longName") or info.get("shortName") or ""
+        if not yahoo_navn_raa and pris == 0.0:
+            raise ValueError(
+                "Yahoo returnerte verken selskapsnavn eller kurs — tom respons"
+            )
+
         raw_div_rate = safe_float(info.get("dividendRate") or info.get("trailingAnnualDividendRate"))
 
         # Cross-valider mot faktiske utbetalinger
