@@ -263,6 +263,50 @@ class TestSidetittelOgMeta(unittest.TestCase):
         self.assertNotIn("0,0 %", m)
 
 
+class TestUtbetalingsmaaneder(unittest.TestCase):
+    """Månedsmønsteret som gjør en utbyttekalender mulig.
+
+    Bare 11 av 160 aksjer har en annonsert ex-dato på et gitt tidspunkt, så en
+    kalender bygget på annonseringer er tom det meste av året. Historikken
+    lagret år og beløp, men ikke måned — datoene lå i Yahoo-serien og ble
+    kastet. Nå utledes mønsteret av dem.
+    """
+
+    def test_maaneder_som_gjentar_seg(self):
+        h = [{"ar": 2022, "maaneder": [5, 11]}, {"ar": 2023, "maaneder": [5, 11]},
+             {"ar": 2024, "maaneder": [5, 11]}, {"ar": 2025, "maaneder": [5, 11]}]
+        self.assertEqual(fs._typiske_utbetalingsmaaneder(h), [5, 11])
+
+    def test_engangsmaaned_faller_ut(self):
+        # Et ekstraordinært utbytte i august gjør ikke august til en
+        # utbetalingsmåned.
+        h = [{"ar": 2022, "maaneder": [5]}, {"ar": 2023, "maaneder": [5]},
+             {"ar": 2024, "maaneder": [5, 8]}, {"ar": 2025, "maaneder": [5]}]
+        self.assertEqual(fs._typiske_utbetalingsmaaneder(h), [5])
+
+    def test_inneverende_ar_holdes_utenfor(self):
+        # 2026 har bare rukket mai. Uten unntaket ville november falt ut fordi
+        # året ikke er ferdig.
+        h = [{"ar": 2024, "maaneder": [5, 11]}, {"ar": 2025, "maaneder": [5, 11]},
+             {"ar": 2026, "maaneder": [5]}]
+        self.assertEqual(fs._typiske_utbetalingsmaaneder(h), [5, 11])
+
+    def test_ett_ar_gir_likevel_svar(self):
+        # En fersk betaler har bare ett år. Da er det året det beste vi har.
+        self.assertEqual(fs._typiske_utbetalingsmaaneder([{"ar": 2025, "maaneder": [4]}]), [4])
+
+    def test_uten_data(self):
+        self.assertEqual(fs._typiske_utbetalingsmaaneder([]), [])
+        self.assertEqual(fs._typiske_utbetalingsmaaneder([{"ar": 2025, "utbytte": 5}]), [])
+
+    def test_maanedstekst(self):
+        self.assertEqual(fs._maaneder_tekst([5]), "mai")
+        self.assertEqual(fs._maaneder_tekst([5, 11]), "mai og november")
+        self.assertEqual(fs._maaneder_tekst([2, 5, 8]), "februar, mai og august")
+        self.assertEqual(fs._maaneder_tekst([]), "")
+        self.assertEqual(fs._maaneder_tekst([0, 13]), "")   # ugyldige måneder
+
+
 class TestFrekvensLabel(unittest.TestCase):
     """Terskelen som gjorde SATS kvartalsvis og 2020 Bulkers kvartalsvis.
 

@@ -498,6 +498,14 @@ def hent_historiske_utbytter(dividends, hist_prices, years=5, current_price=0.0)
 
     # Summer utbytter per kalenderår
     div_per_year = dividends.groupby(dividends.index.year).sum()
+    # Månedene utbetalingene faller i. Historikken lagret bare år og beløp, så
+    # spørsmålet «når på året får jeg betalt?» var ubesvarbart — det er 149 av
+    # 160 aksjer som ikke har en annonsert dato på et gitt tidspunkt. Månedene
+    # finnes i serien vi allerede summerer over; de ble bare kastet.
+    mnd_per_ar = {}
+    for _ts, _bel in dividends.items():
+        if float(_bel) > 0:
+            mnd_per_ar.setdefault(int(_ts.year), set()).add(int(_ts.month))
     div_per_year = div_per_year[
         (div_per_year.index > cutoff_year) & (div_per_year.index <= current_year)
     ]
@@ -549,10 +557,14 @@ def hent_historiske_utbytter(dividends, hist_prices, years=5, current_price=0.0)
             # Utbyttebeløpet beholdes: det brukes av søylediagrammet og er
             # riktig i seg selv.
             post = {"ar": year, "utbytte": round(total_div, 2), "yield": None}
+            if mnd_per_ar.get(year):
+                post["maaneder"] = sorted(mnd_per_ar[year])
             historiske.append(post)
             continue
 
         post = {"ar": year, "utbytte": round(total_div, 2), "yield": year_yield}
+        if mnd_per_ar.get(year):
+            post["maaneder"] = sorted(mnd_per_ar[year])
         if basis != "dagens_kurs":
             post["yield_basis"] = basis
         historiske.append(post)
@@ -875,6 +887,10 @@ def hent_aksje(meta):
             "ar_med_utbytte": ar_med_utbytte,
             "siste_utbytte": siste_utbytte,
             "historiske_utbytter": historiske_utbytter,
+            # Månedene aksjen pleier å betale i, utledet av historikken. Gir
+            # svar for alle som har betalt før, ikke bare de få med annonsert
+            # dato. Utledes hver kjøring, aldri skrevet én gang og lagret.
+            "utbetalingsmaaneder": _typiske_utbetalingsmaaneder(historiske_utbytter),
             "snitt_yield_5ar": snitt_yield_5ar,
             # lag_beskrivelse() henter kun det manuelt forfattede innledningsavsnittet
             # fra tickers.json (via _manuell_del) og bygger utbytteprofil- og
@@ -2251,6 +2267,52 @@ def _lag_faq_seksjon(a, today):
         + '</script>'
     )
     return faq_html, faq_jsonld
+
+
+MAANEDSNAVN = ["", "januar", "februar", "mars", "april", "mai", "juni",
+               "juli", "august", "september", "oktober", "november", "desember"]
+
+
+def _typiske_utbetalingsmaaneder(historiske, min_ar=2):
+    """Månedene aksjen faktisk pleier å betale i.
+
+    Bare 11 av 160 aksjer har en annonsert ex-dato på et gitt tidspunkt, så
+    en kalender bygget på annonseringer er tom det meste av året. Mønsteret
+    fra historikken dekker derimot alle som har betalt før, og svarer på det
+    spørsmålet en utbytteinvestor faktisk stiller: når på året kommer pengene?
+
+    En måned regnes som typisk når den går igjen i minst `min_ar` år. Ett
+    enkelt år er tilfeldig — et ekstraordinært utbytte i august gjør ikke
+    august til en utbetalingsmåned.
+
+    Inneværende år holdes utenfor: det er ikke ferdig, og en aksje som ennå
+    ikke har betalt i år ville sett ut som om den hadde endret mønster.
+    """
+    import collections
+    if not historiske:
+        return []
+    ar_med_mnd = [h for h in historiske if h.get("maaneder")]
+    if not ar_med_mnd:
+        return []
+    siste_ar = max(h["ar"] for h in ar_med_mnd)
+    teller = collections.Counter()
+    for h in ar_med_mnd:
+        if h["ar"] == siste_ar and len(ar_med_mnd) > 1:
+            continue                      # inneværende/siste år er ufullstendig
+        for m in h["maaneder"]:
+            teller[m] += 1
+    terskel = min(min_ar, max(teller.values())) if teller else min_ar
+    return sorted(m for m, n in teller.items() if n >= terskel)
+
+
+def _maaneder_tekst(maaneder):
+    """«mai og november» / «februar, mai og august». Tom streng uten data."""
+    navn = [MAANEDSNAVN[m] for m in maaneder if 1 <= m <= 12]
+    if not navn:
+        return ""
+    if len(navn) == 1:
+        return navn[0]
+    return ", ".join(navn[:-1]) + " og " + navn[-1]
 
 
 _SELSKAPSFORM = re.compile(

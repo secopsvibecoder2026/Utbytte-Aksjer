@@ -202,6 +202,43 @@ Bærekraft-analysen er implementert i modalen, men vi fjernet badget fra kortene
 
 ## 🔍 SEO og vekst
 
+### N11b. Utbyttekalender: årshjul, månedsvisning og rapportkalender
+**Prioritet: Høy — bygger på trafikkmønsteret vi faktisk kan måle**
+
+Search Console (28 dager, sept. 2026) viser at trafikken følger utbyttesyklusen:
+FRO steg **229 %** tre uker før ex-datoen sin, mens VAR falt **36 %** etter at
+sin var passert. Sider som svarer på «når får jeg betalt» treffer altså en
+etterspørsel som stiger og faller forutsigbart gjennom året.
+
+**Blokkeringen var data, ikke design.** Bare 11 av 160 aksjer har en annonsert
+ex-dato på et gitt tidspunkt, og historikken lagret år og beløp uten dato. En
+kalender bygget på annonseringer ville stått tom elleve måneder i året — og
+tre tomme visninger av de samme 11 hendelsene er nøyaktig den tynne,
+malbaserte sidetypen AdSense-saken handlet om.
+
+- [x] **Steg 1: lagre utbetalingsmåneden.** `historiske_utbytter[].maaneder` +
+  det utledede `utbetalingsmaaneder` per aksje. Gir mønsterdata for alle som
+  har betalt før, i stedet for annonserte datoer for 11. *(gjort 2026-09-05;
+  fylles ved neste fulle `fetch_stocks.py`-kjøring)*
+- [ ] **Steg 2: årshjul.** Den sterkeste av visningene, fordi den bygger på
+  mønster og derfor alltid er full. Svarer på «når på året betaler Oslo Børs
+  utbytte» — et spørsmål ingenting på siden svarer på i dag. Treffer
+  «utbyttesesong Oslo Børs», og er den mest delbare figuren vi kan lage
+  (norsk utbytte er stuet sammen i mars–mai). Beste lenkekandidat.
+- [ ] **Steg 3: rapportkalender.** Krever ingen ny data — `hendelser.json` har
+  236 hendelser framover (92 i oktober, 121 i november), brukt bare i appen i
+  dag. Treffer «kvartalsrapporter oktober Oslo Børs».
+- [ ] **Steg 4: månedssider**, men bare for måneder med reelt innhold. Norsk
+  utbytte er så vårtungt at okt.–des. blir tynne uansett hvor godt de skrives.
+  Ikke lag tolv for symmetriens skyld.
+- [ ] Frekvenssider («kvartalsvis» 31 stk, «halvårlig» 23 stk) er greie. Men
+  «månedlig utbytte» har **2** aksjer og blir tynn uansett.
+
+**Ikke gjør:** enda en ren listevisning. `/aksjer/` er allerede en sorterbar
+liste over alle 160 — en til er duplisering, ikke en ny inngang. Google
+belønner ikke variasjon i presentasjon, men at siden svarer på et spørsmål
+ingen andre svarer på.
+
 ### N12. Bloggseksjon / artikler
 **Prioritet: Medium — langsiktig SEO**
 

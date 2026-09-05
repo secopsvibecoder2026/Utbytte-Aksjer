@@ -503,6 +503,34 @@ them, and keep the exact, date-stamped figure in the article body only.
 
 Generated pages (`/aksjer/**`) compute their own numbers and are skipped.
 
+### `utbetalingsmaaneder` — when a stock actually pays, not when it announced
+
+Only **11 of 160** stocks have an announced `ex_dato` at any given moment, and
+`historiske_utbytter` stored year and amount but no date — the dates sat in the
+Yahoo series and were discarded. So «when in the year do I get paid?» was
+unanswerable for 93 % of the catalog, and any calendar built on announcements
+stands empty eleven months of the year.
+
+Two fields now carry the pattern:
+
+| Field | Where | What |
+|---|---|---|
+| `historiske_utbytter[].maaneder` | per year | `[5, 11]` — months with a payment that year |
+| `utbetalingsmaaneder` | per stock | `[5, 11]` — the months that recur |
+
+`_typiske_utbetalingsmaaneder()` derives the second from the first. A month
+counts as typical only when it appears in **at least two years** — a single
+extraordinary payment in August does not make August a payment month. The
+**most recent year is excluded** unless it is all we have, because it is
+incomplete: a stock that has not yet paid this year would otherwise look like
+it changed its schedule.
+
+Both `fetch_stocks.py` and `regenerer_sider.py` rebuild `utbetalingsmaaneder`
+on every run — it is derived, so it must never be written once and stored.
+`maaneder` itself comes only from a full fetch, since it needs the Yahoo series.
+
+`_maaneder_tekst()` renders them for prose: «mai og november».
+
 ### Never freeze live numbers into stored prose
 
 This is the single mistake this codebase keeps repeating. Three separate fields

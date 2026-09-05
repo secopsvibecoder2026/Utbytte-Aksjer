@@ -16,6 +16,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from fetch_stocks import (generer_aksjesider, generer_sektorsider, generer_topplistesider,
                           generer_sitemap, _last_kurshistorikk_fra_disk,
                           oppdater_app_noscript_liste, oppdater_antall_i_sider,
+                          _typiske_utbetalingsmaaneder,
                           lag_beskrivelse,
                           _lag_utbyttehistorikk_tekst)
 
@@ -82,6 +83,11 @@ def main():
         # Bygges på nytt fra tallene, som beskrivelsen over — appen leser feltet
         # fra aksjer.json og ville ellers vist en frosset tekst.
         a["utbyttehistorikk_tekst"] = _lag_utbyttehistorikk_tekst(a)
+        # Utbetalingsmånedene er utledet av historikken, ikke hentet. De må
+        # derfor bygges på nytt her også, ellers fryser de mellom fulle
+        # Yahoo-kjøringer. Månedene selv (per år) kommer fra fetch_stocks.py.
+        a["utbetalingsmaaneder"] = _typiske_utbetalingsmaaneder(
+            a.get("historiske_utbytter") or [])
         # Rydd bort den utdaterte AI-teksten som feltet erstatter.
         a.pop("ai_oppsummering", None)
         a.pop("ai_oppsummering_dato", None)
