@@ -8,7 +8,10 @@ suiten fortsatt kan kjøres uten tredjepartspakker.
 """
 
 import datetime
+import html
+import json
 import os
+import re
 import shutil
 import sys
 import tempfile
@@ -410,6 +413,88 @@ class TestFrekvensLabel(unittest.TestCase):
         # 2020 Bulkers og SATS er begge overstyrt manuelt.
         self.assertEqual(fs.FREKVENS_OVERSTYRT.get("2020"), "Månedlig")
         self.assertEqual(fs.FREKVENS_OVERSTYRT.get("SATS"), "Halvårlig")
+
+
+class TestRapportkalender(unittest.TestCase):
+    """Rapportkalenderen leser rapport_dato fra aksjer.json — ikke hendelser.json.
+
+    hendelser.json akkumulerer (ticker, dato)-par og sletter aldri noe, så
+    hver gang et selskap flytter rapportdatoen sin blir den gamle stående som
+    en framtidig hendelse. Ved oppdagelsen hadde 12 tickere mellom 8 og 12
+    «kommende» datoer hver — Entra sto med tolv rapporter på tre måneder — og
+    de sto for 96 av 236 hendelser, 41 %. Siden må vise ett selskap én gang.
+    """
+
+    def setUp(self):
+        self.rot = tempfile.mkdtemp()
+        self.addCleanup(shutil.rmtree, self.rot, ignore_errors=True)
+        self.i_dag = datetime.date(2026, 9, 5)
+        self.aksjer = [
+            {"ticker": "AAA", "navn": "Alfa ASA", "sektor": "Finans",
+             "utbytte_yield": 5.5, "rapport_dato": "2026-10-15", "ex_dato": "2026-04-01"},
+            {"ticker": "BBB", "navn": "Beta ASA", "sektor": "Finans",
+             "utbytte_yield": 0.0, "rapport_dato": "2026-11-03"},
+            {"ticker": "CCC", "navn": "Gamma ASA", "sektor": "Shipping",
+             "utbytte_yield": 7.0, "rapport_dato": "2026-08-01"},   # passert
+            {"ticker": "DDD", "navn": "Delta ASA", "sektor": "Shipping",
+             "utbytte_yield": 3.0},                                  # ingen dato
+        ]
+
+    def _generer(self):
+        fs.generer_rapportkalender(self.aksjer, self.rot, i_dag=self.i_dag)
+        sti = os.path.join(self.rot, "rapportkalender", "index.html")
+        with open(sti, encoding="utf-8") as f:
+            return f.read()
+
+    def test_bare_kommende_datoer(self):
+        h = self._generer()
+        self.assertIn("Alfa ASA", h)        # 15. okt, framover
+        self.assertIn("Beta ASA", h)        # 3. nov, framover
+        self.assertNotIn("Gamma ASA", h)    # passert
+        self.assertNotIn("Delta ASA", h)    # ingen rapport_dato
+
+    def test_ett_selskap_en_rad(self):
+        # Selv om hendelser.json skulle inneholde et titalls datoer for samme
+        # ticker, bygger siden på aksjer.json og kan ikke duplisere.
+        os.makedirs(os.path.join(self.rot, "data"), exist_ok=True)
+        with open(os.path.join(self.rot, "data", "hendelser.json"), "w", encoding="utf-8") as f:
+            json.dump({"hendelser": [
+                {"ticker": "AAA", "dato": d, "type": "rapport"}
+                for d in ("2026-09-23", "2026-09-30", "2026-10-15", "2026-10-21")
+            ]}, f)
+        h = self._generer()
+        self.assertEqual(h.count('<a href="/aksjer/AAA/"'), 1)
+
+    def test_ingen_kommende_gir_ingen_side(self):
+        for a in self.aksjer:
+            a.pop("rapport_dato", None)
+        fs.generer_rapportkalender(self.aksjer, self.rot, i_dag=self.i_dag)
+        self.assertFalse(os.path.exists(os.path.join(self.rot, "rapportkalender", "index.html")))
+
+    def test_faq_star_ordrett_i_json_ld(self):
+        h = self._generer()
+        blokker = re.findall(r'<script type="application/ld\+json">(.*?)</script>', h, re.S)
+        faq = next(json.loads(b) for b in blokker if json.loads(b)["@type"] == "FAQPage")
+        for e in faq["mainEntity"]:
+            self.assertIn(html.escape(e["name"]), h)
+            self.assertIn(html.escape(e["acceptedAnswer"]["text"]), h)
+
+    def test_tittel_holder_seg_under_60_tegn(self):
+        # Med « | exday.no» bak klipper Google alt over ca. 60.
+        h = self._generer()
+        tittel = re.search(r"<title>(.*?)</title>", h).group(1)
+        self.assertLessEqual(len(tittel), 60, tittel)
+        self.assertIn(str(self.i_dag.year), tittel)
+
+    def test_maaneder_nevnes_i_kalenderrekkefolge(self):
+        # «november og oktober» leses som en feil selv når tallene stemmer.
+        for i in range(5):
+            self.aksjer.append({"ticker": f"N{i}", "navn": f"Nov {i} ASA",
+                                "sektor": "Finans", "utbytte_yield": 1.0,
+                                "rapport_dato": "2026-11-10"})
+        h = self._generer()
+        self.assertIn("oktober og november", h)
+        self.assertNotIn("november og oktober", h)
 
 
 if __name__ == "__main__":

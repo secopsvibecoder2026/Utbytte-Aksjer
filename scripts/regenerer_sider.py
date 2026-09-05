@@ -15,6 +15,7 @@ AKSJER_F  = os.path.join(ROOT, "data", "aksjer.json")
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from fetch_stocks import (generer_aksjesider, generer_sektorsider, generer_topplistesider,
                           generer_sitemap, _last_kurshistorikk_fra_disk,
+                          generer_rapportkalender,
                           oppdater_app_noscript_liste, oppdater_antall_i_sider,
                           oppdater_aarstall_i_sider,
                           _typiske_utbetalingsmaaneder,
@@ -117,6 +118,7 @@ def main():
     print("Sektorsider regenerert")
 
     generer_topplistesider(aksjer, ROOT)
+    generer_rapportkalender(aksjer, ROOT)
     print("Topplistesider regenerert")
 
     generer_sitemap(aksjer, ROOT, today)

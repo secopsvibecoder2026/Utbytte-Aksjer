@@ -629,6 +629,46 @@ against `vart_navn` in `hentelogg.json` — a snapshot written during fetch.
 
 ---
 
+## `/rapportkalender/` — generated, and deliberately not from `hendelser.json`
+
+`generer_rapportkalender()` writes `/rapportkalender/index.html` from
+`rapport_dato` in `aksjer.json`. Unlike `/utbyttekalender/`, which is filled by
+JavaScript and therefore needed a static prose section bolted on so crawlers
+see something other than «Laster kalender…», this page is written complete by
+the generator — the rows are real HTML from the first byte.
+
+It exists because the report date is the **leading indicator**: dividends are
+announced in the quarterly report, so 140 companies have a known report date
+while only 11 have a confirmed ex-date. The dividend calendar stands nearly
+empty eleven months a year; this one does not.
+
+**Do not source the upcoming dates from `data/hendelser.json`.**
+`oppdater_hendelser.py` accumulates `(ticker, dato)` pairs and never deletes,
+so every time a company moves its report date the old one stays behind as a
+*future* event. Measured on 2026-09-05: 12 tickers carried between 8 and 12
+"upcoming" dates each — Entra was listed with twelve reports in three months —
+and they accounted for **96 of 236 events, 41 %**. `rapport_dato` in
+`aksjer.json` is rewritten every run and holds exactly one current date per
+company, so it cannot drift the same way.
+
+> ⚠️ **The same pollution is live in the app.** `visKalender()` in
+> `assets/ui.js` de-duplicates on `ticker|dato`, which stops the *same* date
+> appearing twice but does nothing about a dozen different stale dates for one
+> company. `/uke/` reads the same file. Fixing this means pruning future dates
+> in `oppdater_hendelser.py` when they no longer match the company's current
+> `rapport_dato` — while keeping past dates, which are a genuine historical
+> record. Not done yet.
+
+A «Nylig framlagt» section with NewsWeb links was built and then removed: the
+URLs attach to the accumulated dates, so the twenty newest rows consisted of
+ten tickers from exactly that polluted group. It can come back once the
+accumulator is fixed.
+
+The analysis paragraphs are built by `_rapportkalender_analyse()` from the
+current run's numbers — never stored — and name the busiest months in
+**calendar order**, not by count: «november og oktober» reads as an error even
+when the figures behind it are right.
+
 ## Data Quality Checks
 
 `scripts/valider_data.py` is a reusable validation script that reads `data/aksjer.json` and verifies data integrity after each data fetch.

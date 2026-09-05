@@ -3605,7 +3605,13 @@ def _site_nav_html(active=""):
       <ul class="site-nav-menu">
         <li><a href="/aksjer/" class="{cls('aksjer')}">Aksjer</a></li>
         <li><a href="/aksjer/sektor/" class="{cls('sektor')}">Sektorer</a></li>
-        <li><a href="/utbyttekalender/" class="{cls('kalender')}">Kalender</a></li>
+        <li class="has-dropdown">
+          <a href="/utbyttekalender/" class="{cls('kalender')}">Kalender</a>
+          <ul class="nav-dropdown">
+            <li><a href="/utbyttekalender/">Utbyttekalender</a></li>
+            <li><a href="/rapportkalender/">Rapportkalender</a></li>
+          </ul>
+        </li>
         <li class="has-dropdown">
           <a href="/verktoy/" class="{cls('verktoy')}">Verktøy</a>
           <ul class="nav-dropdown">
@@ -4747,6 +4753,432 @@ def generer_topplistesider(aksjer, root_dir):
     print(f"Genererte {len(LISTER)} topplistesider under aksjer/{{slug}}/")
 
 
+# ─── Rapportkalender ────────────────────────────────────────────────────────
+# Utbyttedatoer annonseres nesten alltid sammen med en kvartals- eller
+# årsrapport, så rapportdatoen er den ledende indikatoren. Forskjellen i
+# dekning er dramatisk: 141 selskaper har en kjent rapportdato mot 11 med en
+# bekreftet ex-dato, så dette er en søkeflate vi kan fylle i dag, mens
+# utbyttekalenderen står nesten tom elleve måneder i året.
+
+def _rapportkalender_analyse(kommende, per_maaned, aksjer, i_dag):
+    """Bygger analyseteksten fra denne kjøringens tall.
+
+    Setningene må aldri lagres — det er den ene feilen denne kodebasen har
+    gjentatt tre ganger (beskrivelse, ai_oppsummering, utbytte_per_aksje).
+    """
+    if not kommende:
+        return ""
+
+    ant = len(kommende)
+    selskaper = len({h["ticker"] for h in kommende})
+    travleste_key = max(per_maaned, key=lambda k: len(per_maaned[k]))
+    travleste_ant = len(per_maaned[travleste_key])
+    travleste_navn = MAANEDSNAVN[travleste_key[1]]
+
+    # Konsentrasjon: hvor mange av rapportene ligger i de to travleste månedene?
+    sortert = sorted(per_maaned.items(), key=lambda kv: len(kv[1]), reverse=True)
+    topp_to = sortert[:2]
+    i_topp_to = sum(len(v) for _, v in topp_to)
+    andel = round(i_topp_to / ant * 100)
+    # Nevn månedene i kalenderrekkefølge, ikke i antallsrekkefølge — «november
+    # og oktober» leses som en feil selv når tallene bak er riktige.
+    topp_to_navn = " og ".join(MAANEDSNAVN[m] for _, m in sorted(k for k, _ in topp_to))
+
+    # Hvilken sektor dominerer den travleste måneden?
+    sekt = {}
+    for h in per_maaned[travleste_key]:
+        s = (h.get("_aksje") or {}).get("sektor")
+        if s:
+            sekt[s] = sekt.get(s, 0) + 1
+    sektor_setning = ""
+    if sekt:
+        s_navn, s_ant = max(sekt.items(), key=lambda kv: kv[1])
+        if s_ant >= 3:
+            sektor_setning = (
+                f" Den største enkeltgruppen den måneden er {s_navn} med "
+                f"{s_ant} rapporter."
+            )
+
+    med_exdato = sum(1 for a in aksjer if a.get("ex_dato"))
+    med_utbytte = sum(1 for a in aksjer if (a.get("utbytte_yield") or 0) > 0)
+
+    return f"""  <div class="liste-analyse">
+    <h2>Rapportsesongen akkurat nå</h2>
+    <p>
+      Vi kjenner {ant} rapportdatoer for {selskaper} selskaper på Oslo Børs.
+      {i_topp_to} av dem — {andel} % — faller i {topp_to_navn}, og {travleste_navn} alene
+      har {travleste_ant}.{sektor_setning} Rapportsesongen på Oslo Børs er kort og
+      tett: børsen går fra nesten ingen meldinger til over hundre på noen uker,
+      og så stille igjen.
+    </p>
+    <h2>Hvorfor rapportdatoen betyr mer enn ex-datoen</h2>
+    <p>
+      Et selskap annonserer sjelden utbyttet sitt alene. Beløpet, ex-datoen og
+      utbetalingsdatoen kommer som regel i samme melding som kvartals- eller
+      årsresultatet. Derfor er rapportdatoen den datoen som forteller deg noe
+      om <em>framtiden</em>, mens ex-datoen bare bekrefter noe som allerede er
+      bestemt.
+    </p>
+    <p>
+      Forskjellen i dekning viser det tydelig: {med_utbytte} selskaper i
+      oversikten betaler utbytte, men bare {med_exdato} har en bekreftet
+      ex-dato akkurat nå. Resten venter på nettopp rapporten under. Vil du vite
+      når neste utbytte sannsynligvis blir kjent, er det denne siden du skal
+      følge — ikke <a href="/utbyttekalender/">utbyttekalenderen</a>.
+    </p>
+    <h2>Hva du bør se etter</h2>
+    <p>
+      For en utbytteinvestor er det tre ting i en kvartalsrapport som avgjør om
+      utbyttet holder: kontantstrømmen fra driften, gjeldsgraden, og hva
+      selskapet selv sier om utbyttepolitikken. Et resultat som faller er ikke i
+      seg selv et faresignal — mange norske selskaper betaler gjennom svake år —
+      men et selskap som betaler mer enn det tjener over tid, må enten låne
+      eller kutte. <a href="/artikler/hva-er-payout-ratio/">Payout ratio</a>
+      er det raskeste målet på hvor nær den grensen et selskap ligger.
+    </p>
+  </div>"""
+
+
+def _rapport_faq():
+    """FAQ-en. Teksten brukes både synlig og i FAQPage-JSON-LD.
+
+    Svarene må være ordrett like begge steder, så de bygges ett sted og
+    gjenbrukes. Ingen eksakte tall som kan drifte — de står i analysen over,
+    som bygges på nytt hver kjøring.
+    """
+    return [
+        ("Hva er en rapportkalender?",
+         "En rapportkalender viser når selskapene på Oslo Børs legger fram kvartals- "
+         "og årsresultater. Datoene kommer fra selskapenes egne finanskalendere, som "
+         "meldes til børsen i forkant."),
+        ("Når kommer kvartalsrapportene på Oslo Børs?",
+         "Rapportsesongen er kort og tett. Fjerdekvartals- og årsresultatene kommer i "
+         "februar, førstekvartal i april og mai, andrekvartal i juli og august, og "
+         "tredjekvartal i oktober og november. Utenfor disse periodene er det svært få "
+         "rapporter."),
+        ("Hvorfor er rapportdatoen viktig for utbytte?",
+         "Fordi utbyttet som regel annonseres i samme melding som resultatet. Beløp, "
+         "ex-dato og utbetalingsdato blir kjent der. Rapportdatoen forteller deg derfor "
+         "når neste utbytte sannsynligvis blir bestemt, mens ex-datoen bare bekrefter "
+         "noe som allerede er vedtatt."),
+        ("Er datoene bekreftet?",
+         "Datoene er hentet fra selskapenes annonserte finanskalendere og er de samme "
+         "som meldes til Oslo Børs. Selskapene kan likevel flytte en dato, og gjør det "
+         "av og til. Er datoen kritisk for deg, bekreft mot selskapets egen "
+         "investorside."),
+        ("Betyr en svak kvartalsrapport at utbyttet kuttes?",
+         "Ikke nødvendigvis. Mange norske selskaper betaler utbytte gjennom svake år, "
+         "og et enkelt kvartal sier lite alene. Det som avgjør er om selskapet over tid "
+         "betaler mer enn det tjener, og hva det selv sier om utbyttepolitikken."),
+        ("Hvor ofte oppdateres rapportkalenderen?",
+         "Siden bygges på nytt hver gang datasettet oppdateres, fire ganger daglig på "
+         "børsdager. Nye rapportdatoer kommer inn så snart selskapet har meldt dem."),
+    ]
+
+
+def generer_rapportkalender(aksjer, root_dir, i_dag=None):
+    """Genererer /rapportkalender/ — statisk, ikke JS-bygget.
+
+    Utbyttekalenderen fylles av JavaScript, og måtte derfor få et helt
+    statisk forklaringsavsnitt for at søkemotorer skulle se noe annet enn
+    «Laster kalender…». Denne siden slipper det problemet ved å bli skrevet
+    ferdig av generatoren: radene er ekte HTML fra første byte.
+    """
+    i_dag = i_dag or datetime.date.today()
+    i_dag_iso = i_dag.isoformat()
+    per_ticker = {a["ticker"]: a for a in aksjer}
+
+    # Kommende datoer kommer fra aksjer.json, ikke fra hendelser.json.
+    #
+    # hendelser.json akkumulerer (ticker, dato)-par og sletter aldri noe, så
+    # hver gang et selskap flytter rapportdatoen sin blir den gamle stående
+    # som en framtidig hendelse. Effekten er ikke marginal: 12 tickere hadde
+    # mellom 8 og 12 «kommende» datoer hver — Entra sto oppført med tolv
+    # rapporter på tre måneder — og de sto for 96 av 236 hendelser, 41 %.
+    # aksjer.json har derimot nøyaktig én gjeldende rapport_dato per selskap,
+    # skrevet på nytt hver kjøring, så den kan ikke drifte på samme måte.
+    #
+    # Siden viste opprinnelig også «Nylig framlagt» med lenke til børsmeldingen
+    # på NewsWeb. Den seksjonen er fjernet: URL-ene festes til de akkumulerte
+    # datoene, så de tjue nyeste radene besto av ti tickere fra nettopp den
+    # forurensede gruppen — Entra tre ganger. Den kan komme tilbake når
+    # oppdater_hendelser.py slutter å samle opp utdaterte datoer.
+    kommende = [
+        {"ticker": a["ticker"], "dato": a["rapport_dato"], "_aksje": a}
+        for a in aksjer
+        if a.get("rapport_dato") and a["rapport_dato"] >= i_dag_iso
+    ]
+
+    if not kommende:
+        print("  Rapportkalender: ingen kommende datoer, hopper over")
+        return
+
+    kommende.sort(key=lambda h: (h["dato"], h["_aksje"]["navn"]))
+
+    per_maaned = {}
+    for h in kommende:
+        d = datetime.date.fromisoformat(h["dato"])
+        per_maaned.setdefault((d.year, d.month), []).append(h)
+
+    analyse = _rapportkalender_analyse(kommende, per_maaned, aksjer, i_dag)
+    faq = _rapport_faq()
+    aar = i_dag.year
+    selskaper = len({h["ticker"] for h in kommende})
+
+    # ── Månedsseksjoner ────────────────────────────────────────────────────
+    seksjoner = ""
+    for (y, m), rader_h in sorted(per_maaned.items()):
+        rader = ""
+        for h in rader_h:
+            a = h["_aksje"]
+            d = datetime.date.fromisoformat(h["dato"])
+            y_ield = a.get("utbytte_yield") or 0
+            rader += f"""
+        <tr>
+          <td class="dag">{d.day}. {MAANEDSNAVN[d.month][:3]}</td>
+          <td class="ticker"><a href="/aksjer/{html.escape(a['ticker'])}/">{html.escape(a['ticker'])}</a></td>
+          <td class="selskap">{html.escape(a['navn'])}</td>
+          <td class="skjul-smal">{html.escape(a.get('sektor') or '—')}</td>
+          <td class="metric">{_nf(y_ield, 2) + '%' if y_ield > 0 else '—'}</td>
+          <td class="skjul-smal">{_fmt_dato(a.get('ex_dato'))}</td>
+        </tr>"""
+        seksjoner += f"""
+  <section id="mnd-{y}-{m:02d}">
+    <h2>{MAANEDSNAVN[m].capitalize()} {y} <span class="antall">{len(rader_h)} rapporter</span></h2>
+    <div class="tabell-ramme">
+    <table>
+      <thead><tr><th>Dato</th><th>Ticker</th><th class="selskap">Selskap</th><th class="skjul-smal">Sektor</th><th>Yield</th><th class="skjul-smal">Ex-dato</th></tr></thead>
+      <tbody>{rader}
+      </tbody>
+    </table>
+    </div>
+  </section>"""
+
+    hurtighopp = "".join(
+        f'<a href="#mnd-{y}-{m:02d}">{MAANEDSNAVN[m][:3]} {y}</a>'
+        for (y, m) in sorted(per_maaned)
+    )
+
+    faq_html = "".join(
+        f"""
+    <details>
+      <summary>{html.escape(sp)}</summary>
+      <p>{html.escape(sv)}</p>
+    </details>"""
+        for sp, sv in faq
+    )
+
+    # Med « | exday.no» bak må dette holde seg innenfor ~60 tegn, ellers
+    # klipper Google tittelen midt i domenenavnet.
+    tittel = f"Rapportkalender {aar}: kvartalsrapporter Oslo Børs"
+    desc = (f"Når legger selskapene på Oslo Børs fram kvartalstall? "
+            f"Rapportkalender for over {selskaper // 10 * 10} norske aksjer, "
+            f"måned for måned. Oppdateres daglig.")
+
+    json_ld = json.dumps({
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "name": tittel,
+        "description": desc,
+        "url": "https://exday.no/rapportkalender/",
+        "publisher": {"@type": "Organization", "name": "exday.no", "url": "https://exday.no"},
+    }, ensure_ascii=False)
+
+    faq_ld = json.dumps({
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {"@type": "Question", "name": sp,
+             "acceptedAnswer": {"@type": "Answer", "text": sv}}
+            for sp, sv in faq
+        ],
+    }, ensure_ascii=False)
+
+    CSS = """
+    *,*::before,*::after { box-sizing: border-box; }
+    body { margin:0; font-family: system-ui,-apple-system,'Segoe UI',Roboto,sans-serif; line-height:1.6; background:#f9fafb; color:#111827; }
+    .wrap { max-width: 56rem; margin: 0 auto; padding: 1.25rem 1rem 2rem; }
+    .breadcrumb { font-size:0.8rem; color:#6b7280; margin-bottom:0.75rem; }
+    .breadcrumb a { color:#6b7280; }
+    h1 { font-size:1.6rem; line-height:1.25; margin:0 0 0.5rem; }
+    .sub { color:#6b7280; font-size:0.92rem; margin:0 0 1.25rem; }
+    .stats { display:flex; flex-wrap:wrap; gap:0.6rem; margin-bottom:1.5rem; }
+    .stat { flex:1 1 8rem; border:1px solid #e5e7eb; background:#fff; border-radius:0.6rem; padding:0.75rem; text-align:center; }
+    .stat-val { font-size:1.35rem; font-weight:700; color:#16a34a; }
+    .stat-lbl { font-size:0.72rem; color:#6b7280; text-transform:uppercase; letter-spacing:0.03em; }
+    .hopp { display:flex; flex-wrap:wrap; gap:0.4rem; margin-bottom:1.75rem; }
+    .hopp a { font-size:0.8rem; border:1px solid #e5e7eb; background:#fff; border-radius:9999px; padding:0.25rem 0.75rem; text-decoration:none; color:#374151; }
+    .hopp a:hover { border-color:#16a34a; color:#15803d; }
+    .liste-analyse h2 { font-size:1.15rem; font-weight:700; margin:1.75rem 0 0.6rem; }
+    .liste-analyse p { margin:0 0 0.9rem; line-height:1.75; font-size:0.95rem; }
+    section h2 { font-size:1.15rem; margin:2rem 0 0.6rem; }
+    .antall { font-size:0.78rem; font-weight:500; color:#9ca3af; margin-left:0.4rem; }
+    .tabell-ramme { overflow-x:auto; -webkit-overflow-scrolling:touch; border-radius:0.6rem; }
+    table { width:100%; min-width:22rem; border-collapse:collapse; font-size:0.88rem; background:#fff; border:1px solid #e5e7eb; border-radius:0.6rem; }
+    th { background:#f3f4f6; color:#6b7280; font-size:0.72rem; text-transform:uppercase; letter-spacing:0.03em; text-align:left; padding:0.5rem 0.75rem; white-space:nowrap; }
+    td { padding:0.55rem 0.75rem; border-top:1px solid #f3f4f6; white-space:nowrap; }
+    tr:hover td { background:#f9fafb; }
+    .dag { font-weight:600; }
+    .ticker a { color:#16a34a; font-family:monospace; font-weight:700; }
+    .metric { color:#16a34a; font-weight:600; }
+    details { border:1px solid #e5e7eb; background:#fff; border-radius:0.6rem; padding:0.85rem 1rem; margin-bottom:0.6rem; }
+    summary { font-weight:600; cursor:pointer; }
+    details p { margin:0.6rem 0 0; font-size:0.92rem; color:#4b5563; }
+    .cta { margin-top:2rem; border-radius:0.75rem; padding:1.25rem; text-align:center; border:1px solid #bbf7d0; background:#f0fdf4; }
+    .cta a { display:inline-block; background:#16a34a; color:#fff !important; font-weight:600; padding:0.65rem 1.5rem; border-radius:0.5rem; margin-top:0.5rem; text-decoration:none; }
+    .cta a:hover { background:#15803d; }
+    .updated { font-size:0.78rem; text-align:right; margin-top:1rem; color:#9ca3af; }
+    a { color:#16a34a; }
+    /* På smal skjerm må yield-kolonnen få plass uten at leseren må dra
+       tabellen sidelengs — selskapsnavnet kappes i stedet. */
+    @media (max-width: 34rem) {
+      .skjul-smal { display:none; }
+      td.selskap { max-width:8rem; overflow:hidden; text-overflow:ellipsis; }
+      td, th { padding-left:0.55rem; padding-right:0.55rem; }
+    }
+
+    .dark body { background:#030712; color:#f3f4f6; }
+    .dark .breadcrumb, .dark .breadcrumb a, .dark .sub, .dark .stat-lbl { color:#9ca3af; }
+    .dark .stat { background:#111827; border-color:#1f2937; }
+    .dark .stat-val, .dark .metric, .dark .ticker a, .dark a { color:#4ade80; }
+    .dark .hopp a { background:#111827; border-color:#1f2937; color:#d1d5db; }
+    .dark .hopp a:hover { border-color:#4ade80; color:#4ade80; }
+    .dark table { background:#111827; border-color:#1f2937; }
+    .dark th { background:#1f2937; color:#9ca3af; }
+    .dark td { border-color:#1f2937; }
+    .dark tr:hover td { background:#1f2937; }
+    .dark .antall, .dark .updated { color:#6b7280; }
+    .dark details { background:#111827; border-color:#1f2937; }
+    .dark details p { color:#9ca3af; }
+    .dark .cta { background:#052e16; border-color:#166534; }
+    .dark .cta a { background:#16a34a; }
+"""
+
+    html_ut = f"""<!DOCTYPE html>
+<html lang="nb">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+  <!-- Google AdSense (håndterer også CMP for EØS/UK) -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3981936786393038"
+     crossorigin="anonymous"></script>
+
+  <!-- Google Analytics med Consent Mode v2 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-X6C9PERKMB"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){{dataLayer.push(arguments);}}
+    gtag('consent', 'default', {{
+      analytics_storage: 'denied',
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      wait_for_update: 500
+    }});
+    gtag('js', new Date());
+    gtag('config', 'G-X6C9PERKMB');
+  </script>
+  <script src="/assets/consent.js" defer></script>
+  <title>{tittel} | exday.no</title>
+  <meta name="description" content="{html.escape(desc, quote=True)}"/>
+  <link rel="canonical" href="https://exday.no/rapportkalender/"/>
+  <meta name="theme-color" content="#16a34a"/>
+  <link rel="icon" type="image/png" sizes="512x512" href="/favicon.png"/>
+  <link rel="icon" type="image/png" sizes="180x180" href="/logo/apple_touch_icon_180.png"/>
+  <link rel="icon" type="image/svg+xml" href="/logo/exday_icon_primary.svg"/>
+  <link rel="shortcut icon" href="/favicon.png"/>
+  <link rel="apple-touch-icon" href="/logo/apple_touch_icon_180.png"/>
+  <meta property="og:title" content="{tittel} | exday.no"/>
+  <meta property="og:description" content="{html.escape(desc, quote=True)}"/>
+  <meta property="og:url" content="https://exday.no/rapportkalender/"/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:image" content="https://exday.no/assets/og-image.png"/>
+  <meta property="og:image:width" content="1200"/>
+  <meta property="og:image:height" content="630"/>
+  <meta property="og:locale" content="nb_NO"/>
+  <meta property="og:site_name" content="exday.no"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="{tittel} | exday.no"/>
+  <meta name="twitter:description" content="{html.escape(desc, quote=True)}"/>
+  <meta name="twitter:image" content="https://exday.no/assets/og-image.png"/>
+  <script type="application/ld+json">{json_ld}</script>
+  <script type="application/ld+json">{faq_ld}</script>
+  <link rel="stylesheet" href="/assets/tailwind.css"/>
+  <link rel="stylesheet" href="/assets/style.css"/>
+  <script>
+    (function(){{
+      var t = localStorage.getItem('tema');
+      if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) {{
+        document.documentElement.classList.add('dark');
+      }}
+    }})();
+  </script>
+  <style>{CSS}</style>
+</head>
+<body>
+{_site_nav_html('kalender')}
+<div class="wrap">
+  <div class="breadcrumb">
+    <a href="https://exday.no/">exday.no</a>
+    <span>/</span>
+    Rapportkalender
+  </div>
+  <h1>Rapportkalender {aar} — kvartalsrapporter på Oslo Børs</h1>
+  <p class="sub">
+    Når legger selskapene fram tall? Alle kjente rapportdatoer for norske
+    aksjer, måned for måned, med direkteavkastning og ex-dato ved siden av.
+    Oppdateres daglig på børsdager.
+  </p>
+  <div class="stats">
+    <div class="stat"><div class="stat-val">{len(kommende)}</div><div class="stat-lbl">Kommende rapporter</div></div>
+    <div class="stat"><div class="stat-val">{selskaper}</div><div class="stat-lbl">Selskaper</div></div>
+    <div class="stat"><div class="stat-val">{len(per_maaned)}</div><div class="stat-lbl">Måneder</div></div>
+  </div>
+  <nav class="hopp" aria-label="Hopp til måned">{hurtighopp}</nav>
+{analyse}
+{seksjoner}
+  <section id="faq">
+    <h2>Vanlige spørsmål om rapportkalenderen</h2>{faq_html}
+  </section>
+  <div class="cta">
+    <p>Se yield, utbyttehistorikk og nøkkeltall for hver aksje</p>
+    <a href="https://exday.no/">Åpne exday.no →</a>
+  </div>
+  <p class="updated">Sist oppdatert: {i_dag_iso}</p>
+{STANDARD_FOOTER}
+</div>
+<script>
+  (function() {{
+    var btn = document.getElementById('dark-toggle');
+    if (!btn) return;
+    var root = document.documentElement;
+    var sun = btn.querySelector('.sun-icon');
+    var moon = btn.querySelector('.moon-icon');
+    function syncIcons() {{
+      var dark = root.classList.contains('dark');
+      sun.style.display = dark ? 'none' : '';
+      moon.style.display = dark ? '' : 'none';
+    }}
+    syncIcons();
+    btn.addEventListener('click', function() {{
+      var isDark = root.classList.toggle('dark');
+      localStorage.setItem('tema', isDark ? 'dark' : 'light');
+      syncIcons();
+    }});
+  }})();
+</script>
+</body>
+</html>"""
+
+    mappe = os.path.join(root_dir, "rapportkalender")
+    os.makedirs(mappe, exist_ok=True)
+    with open(os.path.join(mappe, "index.html"), "w", encoding="utf-8") as f:
+        f.write(html_ut)
+    print(f"Genererte rapportkalender: {len(kommende)} datoer for {selskaper} selskaper "
+          f"over {len(per_maaned)} måneder")
+
+
 def generer_sitemap(aksjer, root_dir, today, alle_tickers=None):
     """Genererer sitemap.xml med alle sider inkludert individuelle aksjesider og sektorsider."""
     from collections import defaultdict
@@ -4791,6 +5223,12 @@ def generer_sitemap(aksjer, root_dir, today, alle_tickers=None):
   </url>""",
         f"""  <url>
     <loc>https://exday.no/utbyttekalender/</loc>
+    <lastmod>{today}</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>""",
+        f"""  <url>
+    <loc>https://exday.no/rapportkalender/</loc>
     <lastmod>{today}</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
@@ -5295,6 +5733,7 @@ def main():
     generer_aksjesider(resultater, root_dir)
     generer_sektorsider(resultater, root_dir)
     generer_topplistesider(resultater, root_dir)
+    generer_rapportkalender(resultater, root_dir)
     today = datetime.datetime.utcnow().strftime("%Y-%m-%d")
     generer_sitemap(resultater, root_dir, today, AKSJER)
     oppdater_index_html_meta(len(resultater), root_dir)

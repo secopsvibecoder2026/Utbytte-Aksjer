@@ -155,7 +155,13 @@
       <ul class="site-nav-menu">
         <li><a href="/aksjer/" class="">Aksjer</a></li>
         <li><a href="/aksjer/sektor/" class="">Sektorer</a></li>
-        <li><a href="/utbyttekalender/" class="active">Kalender</a></li>
+        <li class="has-dropdown">
+          <a href="/utbyttekalender/" class="active">Kalender</a>
+          <ul class="nav-dropdown">
+            <li><a href="/utbyttekalender/">Utbyttekalender</a></li>
+            <li><a href="/rapportkalender/">Rapportkalender</a></li>
+          </ul>
+        </li>
         <li class="has-dropdown">
           <a href="/verktoy/">Verktøy</a>
           <ul class="nav-dropdown">
@@ -357,7 +363,9 @@
         <strong><!--N:rapportdato-->141<!--/N--> selskaper</strong> en kjent rapportdato, mot bare
         <!--N:exdato-->11<!--/N--> med en bekreftet ex-dato. Vil du vite når neste utbytte
         sannsynligvis blir annonsert, er det rapportdatoen du skal se på — filtrer på
-        <em>Rapport</em> i kalenderen over.
+        <em>Rapport</em> i kalenderen over, eller se hele
+        <a href="/rapportkalender/" class="text-green-600 dark:text-green-400 hover:underline">rapportkalenderen</a>
+        måned for måned.
       </p>
 
       <h3 class="text-base font-semibold text-gray-900 dark:text-gray-100 pt-2">Hvorfor noen datoer mangler</h3>
