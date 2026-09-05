@@ -7,6 +7,7 @@ Testene som krever pandas hoppes over hvis pakken ikke finnes, slik at
 suiten fortsatt kan kjøres uten tredjepartspakker.
 """
 
+import datetime
 import os
 import shutil
 import sys
@@ -191,6 +192,86 @@ class TestAntallIMarkorer(unittest.TestCase):
         sti = self._skriv("annen.html", "<p>160 aksjer uten markør</p>")
         fs.oppdater_antall_i_sider(self.aksjer, self.rot)
         self.assertIn("160 aksjer uten markør", self._les(sti))
+
+    def test_frekvensnokler(self):
+        # Utbyttekalenderen forklarer når på året pengene kommer, og svaret
+        # er en fordeling av betalingsfrekvens. Skrives den som tekst,
+        # drifter den akkurat som aksjetellingen gjorde.
+        for a, f in zip(self.aksjer, ["Årlig", "Kvartalsvis", "Årlig"]):
+            a["frekvens"] = f
+        self.aksjer[0]["rapport_dato"] = "2026-10-30"
+        sti = self._skriv("index.html",
+                          "<!--N:arlig-->0<!--/N--> <!--N:kvartalsvis-->0<!--/N--> "
+                          "<!--N:halvarlig-->9<!--/N--> <!--N:manedlig-->9<!--/N--> "
+                          "<!--N:rapportdato-->0<!--/N-->")
+        fs.oppdater_antall_i_sider(self.aksjer, self.rot)
+        t = self._les(sti)
+        self.assertIn("<!--N:arlig-->2<!--/N-->", t)
+        self.assertIn("<!--N:kvartalsvis-->1<!--/N-->", t)
+        self.assertIn("<!--N:halvarlig-->0<!--/N-->", t)
+        self.assertIn("<!--N:manedlig-->0<!--/N-->", t)
+        self.assertIn("<!--N:rapportdato-->1<!--/N-->", t)
+
+
+class TestAarstallISider(unittest.TestCase):
+    """«Utbyttekalender 2026» i en <title> er den samme fellen som antallet.
+
+    Årstallet er sidens sterkeste søketreff, men en <title> kan ikke
+    inneholde en HTML-kommentar, så markørene virker ikke der. Årstallet
+    synkes derfor på tekstankeret «utbyttekalender» — og bare i filer som
+    melder seg på med <!--AAR-SYNK-->.
+    """
+
+    def setUp(self):
+        self.rot = tempfile.mkdtemp()
+        self.addCleanup(shutil.rmtree, self.rot, ignore_errors=True)
+
+    def _skriv(self, navn, innhold):
+        sti = os.path.join(self.rot, navn)
+        os.makedirs(os.path.dirname(sti) or self.rot, exist_ok=True)
+        with open(sti, "w", encoding="utf-8") as f:
+            f.write(innhold)
+        return sti
+
+    def _les(self, sti):
+        with open(sti, encoding="utf-8") as f:
+            return f.read()
+
+    def test_oppdaterer_tittel_og_meta(self):
+        sti = self._skriv("utbyttekalender/index.html",
+                          "<!--AAR-SYNK-->\n"
+                          "<title>Utbyttekalender 2026 – Oslo Børs</title>\n"
+                          '<meta name="description" content="Utbyttekalender 2026 for Oslo Børs." />')
+        fs.oppdater_aarstall_i_sider(self.rot, i_dag=datetime.date(2029, 1, 2))
+        t = self._les(sti)
+        self.assertIn("<title>Utbyttekalender 2029 – Oslo Børs</title>", t)
+        self.assertIn("Utbyttekalender 2029 for Oslo Børs.", t)
+        self.assertNotIn("2026", t)
+
+    def test_krever_paamelding(self):
+        # Uten <!--AAR-SYNK--> skal årstallet stå urørt, så funksjonen ikke
+        # retter et årstall som står der med vilje.
+        sti = self._skriv("artikler/beste-utbytteaksjer-2026/index.html",
+                          "<title>Utbyttekalender 2026 i historisk lys</title>")
+        fs.oppdater_aarstall_i_sider(self.rot, i_dag=datetime.date(2029, 1, 2))
+        self.assertIn("Utbyttekalender 2026", self._les(sti))
+
+    def test_rorer_bare_arstall_etter_ankerordet(self):
+        sti = self._skriv("k/index.html",
+                          "<!--AAR-SYNK-->Utbyttekalender 2026. Kurs fra 2019. "
+                          "Oslo Børs 2020.")
+        fs.oppdater_aarstall_i_sider(self.rot, i_dag=datetime.date(2027, 6, 1))
+        t = self._les(sti)
+        self.assertIn("Utbyttekalender 2027", t)
+        self.assertIn("Kurs fra 2019", t)
+        self.assertIn("Oslo Børs 2020", t)
+
+    def test_idempotent(self):
+        sti = self._skriv("k/index.html", "<!--AAR-SYNK-->Utbyttekalender 2026")
+        fs.oppdater_aarstall_i_sider(self.rot, i_dag=datetime.date(2027, 6, 1))
+        forste = self._les(sti)
+        fs.oppdater_aarstall_i_sider(self.rot, i_dag=datetime.date(2027, 6, 1))
+        self.assertEqual(forste, self._les(sti))
 
 
 class TestSidetittelOgMeta(unittest.TestCase):

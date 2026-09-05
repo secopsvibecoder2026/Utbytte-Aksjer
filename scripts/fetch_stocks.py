@@ -5300,6 +5300,48 @@ def main():
     oppdater_index_html_meta(len(resultater), root_dir)
     oppdater_app_noscript_liste(resultater, root_dir)
     oppdater_antall_i_sider(resultater, root_dir)
+    oppdater_aarstall_i_sider(root_dir)
+
+
+def oppdater_aarstall_i_sider(root_dir: str, i_dag=None):
+    """Holder årstallet i utbyttekalenderens titler og beskrivelser à jour.
+
+    «Utbyttekalender 2026» er sidens sterkeste søketreff — de tre
+    kalendersøkene står for 2 340 visninger i Search Console — så årstallet
+    skal stå i <title>, og:title, twitter:title og begge beskrivelsene.
+
+    Men et årstall i en <title> er nøyaktig den feilen antallsmarkørene ble
+    laget for å hindre: et tall skrevet inn i tekst, som blir stående når
+    virkeligheten går videre. 1. januar ville siden reklamert for fjoråret.
+    Markører kan ikke stå i attributter, så årstallet synkes i stedet på et
+    tekstanker: sifrene som følger rett etter ordet «utbyttekalender».
+
+    Bare filer som melder seg på med <!--AAR-SYNK--> røres, så funksjonen kan
+    ikke rette et årstall som står der med vilje i en annen sammenheng.
+    """
+    aar = str((i_dag or datetime.date.today()).year)
+    monster = re.compile(r"(utbyttekalender\s+)(\d{4})", re.IGNORECASE)
+    endret = []
+
+    for mappe, _, filnavn in os.walk(root_dir):
+        if any(d in mappe for d in (".git", "node_modules")):
+            continue
+        for navn in filnavn:
+            if not navn.endswith(".html"):
+                continue
+            sti = os.path.join(mappe, navn)
+            with open(sti, encoding="utf-8") as f:
+                innhold = f.read()
+            if "<!--AAR-SYNK-->" not in innhold:
+                continue
+            nytt = monster.sub(lambda m: f"{m.group(1)}{aar}", innhold)
+            if nytt != innhold:
+                with open(sti, "w", encoding="utf-8") as f:
+                    f.write(nytt)
+                endret.append(os.path.relpath(sti, root_dir))
+
+    if endret:
+        print(f"  Årstall satt til {aar} i: {', '.join(sorted(endret))}")
 
 
 def oppdater_index_html_meta(antall_aksjer: int, root_dir: str):
@@ -5349,12 +5391,23 @@ def oppdater_antall_i_sider(aksjer, root_dir: str):
         v = a.get(felt)
         return v if isinstance(v, (int, float)) else 0
 
+    def _frekvens(etikett):
+        return sum(1 for a in aksjer if a.get("frekvens") == etikett)
+
     verdier = {
         "aksjer":    len(aksjer),
         "utbytte":   sum(1 for a in aksjer if _tall(a, "utbytte_yield") > 0),
         "historikk": sum(1 for a in aksjer if _tall(a, "ar_med_utbytte") > 0),
         "exdato":    sum(1 for a in aksjer if a.get("ex_dato")),
         "sektorer":  len({a.get("sektor") for a in aksjer if a.get("sektor")}),
+        # Utbyttekalenderen forklarer når på året pengene kommer, og det
+        # svaret er en fordeling av betalingsfrekvens. Skrives tallene som
+        # tekst, drifter de akkurat som aksjetellingen gjorde.
+        "arlig":       _frekvens("Årlig"),
+        "halvarlig":   _frekvens("Halvårlig"),
+        "kvartalsvis": _frekvens("Kvartalsvis"),
+        "manedlig":    _frekvens("Månedlig"),
+        "rapportdato": sum(1 for a in aksjer if a.get("rapport_dato")),
     }
 
     monster = re.compile(r"(<!--N:(\w+)-->)(.*?)(<!--/N-->)", re.S)

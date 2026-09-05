@@ -16,6 +16,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from fetch_stocks import (generer_aksjesider, generer_sektorsider, generer_topplistesider,
                           generer_sitemap, _last_kurshistorikk_fra_disk,
                           oppdater_app_noscript_liste, oppdater_antall_i_sider,
+                          oppdater_aarstall_i_sider,
                           _typiske_utbetalingsmaaneder,
                           lag_beskrivelse,
                           _lag_utbyttehistorikk_tekst)
@@ -126,6 +127,7 @@ def main():
     # Tellingene i de håndskrevne sidene fylles fra samme datasett, så de
     # ikke må rettes for hånd hver gang en ticker går ut.
     oppdater_antall_i_sider(aksjer, ROOT)
+    oppdater_aarstall_i_sider(ROOT)
 
     print("\nFerdig!")
 

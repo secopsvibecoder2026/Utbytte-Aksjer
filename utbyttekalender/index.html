@@ -3,6 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Google AdSense (håndterer også CMP for EØS/UK) -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3981936786393038"
+     crossorigin="anonymous"></script>
+
   <!-- Google Analytics med Consent Mode v2 -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-X6C9PERKMB"></script>
   <script>
@@ -20,7 +25,12 @@
   </script>
   <script src="/assets/consent.js" defer></script>
   <title>Utbyttekalender 2026 – Norske aksjer på Oslo Børs | exday.no</title>
-  <meta name="description" content="Komplett utbyttekalender for norske utbytteaksjer på Oslo Børs 2026. Se ex-dato og utbetalingsdato måned for måned – oppdatert daglig." />
+  <!--AAR-SYNK-->
+  <!-- Årstallet i <title>, og:title, twitter:title og de to beskrivelsene
+       synkes av oppdater_aarstall_i_sider() i fetch_stocks.py. Skriv derfor
+       alltid årstallet rett etter ordet «utbyttekalender» — det er ankeret
+       funksjonen finner det på. Attributter kan ikke inneholde markører. -->
+  <meta name="description" content="Utbyttekalender 2026 for Oslo Børs: ex-datoer, utbetalingsdatoer og rapportdatoer for norske utbytteaksjer, måned for måned. Oppdateres daglig." />
   <link rel="canonical" href="https://exday.no/utbyttekalender/" />
   <link rel="icon" type="image/svg+xml" href="/logo/exday_icon_primary.svg">
   <link rel="manifest" href="/manifest.json" />
@@ -48,13 +58,87 @@
     "@context": "https://schema.org",
     "@type": "WebPage",
     "name": "Utbyttekalender 2026 – Norske aksjer på Oslo Børs",
-    "description": "Komplett utbyttekalender for norske utbytteaksjer på Oslo Børs 2026. Ex-datoer og utbetalingsdatoer måned for måned.",
+    "description": "Utbyttekalender 2026 for Oslo Børs: ex-datoer, utbetalingsdatoer og rapportdatoer for norske utbytteaksjer, måned for måned.",
     "url": "https://exday.no/utbyttekalender/",
     "publisher": {
       "@type": "Organization",
       "name": "exday.no",
       "url": "https://exday.no"
     }
+  }
+  </script>
+
+  <!-- FAQPage: svarene under må stå ordrett i den synlige FAQ-seksjonen -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Hva er ex-dato?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Ex-dato er den første handelsdagen der aksjen omsettes uten rett til det kommende utbyttet. Kjøper du aksjen på eller etter ex-dato, går utbyttet til den forrige eieren."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Må jeg eie aksjen på ex-dato for å få utbytte?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Nei — du må ha kjøpt senest handelsdagen før ex-dato. Oslo Børs gjør opp handler to børsdager etter avtaletidspunktet, og ex-datoen er satt slik at et kjøp dagen før rekker fristen. Selger du på selve ex-dato eller senere, beholder du likevel utbyttet."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Når kommer utbyttet inn på kontoen?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Utbetalingsdatoen ligger normalt fra noen dager til noen uker etter ex-dato. For de fleste norske selskaper går det under to uker, men det varierer mellom selskapene og står oppgitt i innkallingen til generalforsamlingen."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Hvorfor faller kursen på ex-dato?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Fordi verdiene forlater selskapet. Kursen faller typisk med omtrent utbyttebeløpet den morgenen aksjen begynner å handles uten utbytterett. Å kjøpe rett før ex-dato gir derfor ingen gratis gevinst — du bytter kursverdi mot en utbetaling du i tillegg betaler skatt av."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Når er utbyttesesongen på Oslo Børs?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Tyngdepunktet ligger i mars, april og mai. De fleste norske selskaper holder generalforsamling om våren og vedtar utbyttet for foregående år der. Sparebankene, som er den største enkeltgruppen på børsen, betaler nesten alle én gang i året i denne perioden."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Hvor mange norske aksjer betaler utbytte?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Over 130 av selskapene i oversikten har positiv direkteavkastning nå, og over 150 har betalt utbytte minst ett år tidligere. Antallet endrer seg når selskaper starter, kutter eller gjenopptar utbyttet."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Hvorfor mangler ex-dato for de fleste aksjene?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Kalenderen viser bare datoer selskapene faktisk har annonsert, og de aller fleste annonserer først i forbindelse med kvartals- eller årsrapporten. På et gitt tidspunkt har derfor bare et fåtall av selskapene en bekreftet ex-dato. Estimerte datoer som ikke kan skilles fra bekreftede, er verre enn ingen datoer."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Hvor mye skatt betaler jeg av utbytte?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "For personlige aksjonærer bosatt i Norge oppjusteres utbyttet med en faktor før det skattlegges som alminnelig inntekt, noe som gir en effektiv sats på 37,84 prosent. Skjermingsfradraget trekkes fra før skatten beregnes. Holder du aksjene på aksjesparekonto, utsettes skatten til du tar penger ut av kontoen."
+        }
+      }
+    ]
   }
   </script>
 
@@ -128,7 +212,10 @@
           <span class="text-sm font-medium">exday.no</span>
         </a>
         <span class="text-gray-300 dark:text-gray-600">/</span>
-        <h1 class="text-sm font-semibold">Utbyttekalender</h1>
+        <!-- Brødsmule, ikke sidens overskrift. Sto som h1-element til
+             05.09.2026, slik at sidens eneste h1 var en navigasjonsetikett
+             i 13 px, mens den virkelige overskriften var en h2. -->
+        <span class="text-sm font-semibold">Utbyttekalender</span>
       </div>
       <button id="dark-toggle" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500 dark:text-gray-400 transition-colors" aria-label="Bytt fargemodus">
         <svg class="w-5 h-5 dark:hidden" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
@@ -140,9 +227,17 @@
   <main class="max-w-3xl mx-auto px-4 py-6 space-y-8">
 
     <!-- INTRO -->
-    <div>
-      <h2 class="text-2xl font-bold tracking-tight">Utbyttekalender <span id="aar">2026</span></h2>
-      <p class="text-sm text-gray-500 dark:text-gray-400 mt-1" id="undertittel">Laster kalender…</p>
+    <div class="space-y-3">
+      <h1 class="text-2xl sm:text-3xl font-bold tracking-tight leading-tight">
+        Utbyttekalender <span id="aar">2026</span> — ex-datoer og utbetalinger på Oslo Børs
+      </h1>
+      <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400 leading-relaxed">
+        Alle annonserte ex-datoer, utbetalingsdatoer og rapportdatoer for
+        <!--N:aksjer-->160<!--/N--> norske aksjer, sortert måned for måned og oppdatert
+        daglig på børsdager. Filtrer på hendelsestype, hopp til en måned, og klikk deg
+        videre til den enkelte aksjen for yield, historikk og nøkkeltall.
+      </p>
+      <p class="text-sm text-gray-500 dark:text-gray-400" id="undertittel">Laster kalender…</p>
     </div>
 
     <!-- FILTRE -->
@@ -196,6 +291,24 @@
         forutsigbarhet, og det er en avveining verdt å ta bevisst.
       </p>
 
+      <h3 class="text-base font-semibold text-gray-900 dark:text-gray-100 pt-2">Hvor mange betaler hvor ofte</h3>
+      <p>
+        Fordelingen forklarer hvorfor kalenderen ser ut som den gjør. Av de
+        <!--N:aksjer-->160<!--/N--> selskapene i oversikten betaler
+        <strong><!--N:arlig-->74<!--/N--> én gang i året</strong>,
+        <!--N:halvarlig-->23<!--/N--> to ganger,
+        <!--N:kvartalsvis-->31<!--/N--> kvartalsvis og bare
+        <!--N:manedlig-->2<!--/N--> månedlig. Resten har et uregelmessig mønster — de betaler
+        når resultatet tillater det, ikke etter en fast plan.
+      </p>
+      <p>
+        Med nesten halvparten av børsen på årlig frekvens blir utbytteåret kort og konsentrert.
+        Det er også grunnen til at antall utbetalinger i en måned sier lite alene: én måned med
+        femten ex-datoer i sparebanksektoren kan være mindre penger enn én måned med tre
+        utbetalinger fra tank og shipping. Bruk direkteavkastningen ved siden av datoen, ikke
+        antallet rader.
+      </p>
+
       <h3 class="text-base font-semibold text-gray-900 dark:text-gray-100 pt-2">Rekkefølgen på datoene</h3>
       <p>
         En utbytteutbetaling har fire datoer, og de kommer alltid i samme rekkefølge:
@@ -220,13 +333,56 @@
         vanligste misforståelsen blant nye utbytteinvestorer.
       </p>
 
+      <h3 class="text-base font-semibold text-gray-900 dark:text-gray-100 pt-2">Skatten gjør ex-dato-jakt til et tapsprosjekt</h3>
+      <p>
+        For personlige aksjonærer bosatt i Norge oppjusteres utbyttet med en faktor før det
+        skattlegges som alminnelig inntekt. Den effektive satsen blir <strong>37,84 %</strong>,
+        og skjermingsfradraget trekkes fra før skatten beregnes. Kjøper du en aksje dagen før
+        ex-dato utelukkende for utbyttet, bytter du altså en krone kursverdi mot en krone som
+        beskattes — regnestykket går i minus, uansett hvor høy direkteavkastningen ser ut.
+      </p>
+      <p>
+        Holder du aksjene på <a href="/artikler/aksjesparekonto-ask/" class="text-green-600 dark:text-green-400 hover:underline">aksjesparekonto</a>,
+        utsettes skatten til du tar penger ut av kontoen. Det endrer ikke at kursfallet på
+        ex-dato spiser opp utbetalingen — det endrer bare når skatten forfaller.
+        <a href="/artikler/utbytte-og-skatt/" class="text-green-600 dark:text-green-400 hover:underline">Artikkelen om utbytte og skatt</a>
+        går gjennom oppjusteringsfaktoren, skjermingsgrunnlaget og hva som skjer med utenlandske
+        aksjer i porteføljen.
+      </p>
+
+      <h3 class="text-base font-semibold text-gray-900 dark:text-gray-100 pt-2">Rapportdatoene kommer først</h3>
+      <p>
+        Utbyttedatoer annonseres nesten alltid sammen med en kvartals- eller årsrapport. Derfor er
+        rapportkalenderen den ledende indikatoren: akkurat nå har
+        <strong><!--N:rapportdato-->141<!--/N--> selskaper</strong> en kjent rapportdato, mot bare
+        <!--N:exdato-->11<!--/N--> med en bekreftet ex-dato. Vil du vite når neste utbytte
+        sannsynligvis blir annonsert, er det rapportdatoen du skal se på — filtrer på
+        <em>Rapport</em> i kalenderen over.
+      </p>
+
       <h3 class="text-base font-semibold text-gray-900 dark:text-gray-100 pt-2">Hvorfor noen datoer mangler</h3>
       <p>
-        Vi viser bare datoer selskapene faktisk har annonsert. De aller fleste selskapene på børsen har
-        ikke annonsert neste utbytte ennå på et gitt tidspunkt — det skjer først i forbindelse med
-        rapporten. Kalenderen er derfor alltid ufullstendig, og det er med vilje: estimerte datoer som
-        ikke kan skilles fra bekreftede, er verre enn ingen datoer.
+        Vi viser bare datoer selskapene faktisk har annonsert. Av
+        <!--N:utbytte-->135<!--/N--> selskaper som betaler utbytte i dag, har
+        <!--N:exdato-->11<!--/N--> en bekreftet ex-dato akkurat nå — resten annonserer først i
+        forbindelse med rapporten. Kalenderen er derfor alltid ufullstendig, og det er med vilje:
+        estimerte datoer som ikke kan skilles fra bekreftede, er verre enn ingen datoer.
       </p>
+      <p>
+        At et selskap mangler ex-dato betyr altså ikke at det har sluttet å betale utbytte.
+        <!--N:historikk-->152<!--/N--> av selskapene i oversikten har utbyttehistorikk, og for dem
+        finner du tidligere utbetalinger, år for år, på den enkelte aksjesiden.
+      </p>
+
+      <h3 class="text-base font-semibold text-gray-900 dark:text-gray-100 pt-2">Slik bruker du kalenderen</h3>
+      <ul class="list-disc ml-5 space-y-1">
+        <li><strong>Ex-dato</strong> — siste frist nærmer seg. Skal du ha utbyttet, må kjøpet være gjort dagen før.</li>
+        <li><strong>Utbetaling</strong> — pengene kommer på konto. Bruk dette filteret når du planlegger kontantstrøm.</li>
+        <li><strong>Rapport</strong> — her annonseres neste utbytte. Det er filteret som forteller deg hva som kommer.</li>
+        <li><strong>~est.</strong> ved siden av et selskapsnavn betyr at datoen ligger langt fram og er utledet av historikk, ikke bekreftet av selskapet.</li>
+        <li>Prosenttallet til høyre er direkteavkastningen på dagens kurs, ikke beløpet du får utbetalt i den enkelte måneden.</li>
+      </ul>
+
       <p>
         Vil du gå dypere, forklarer
         <a href="/artikler/slik-leser-du-utbyttekalenderen/" class="text-green-600 dark:text-green-400 hover:underline">artikkelen om å lese utbyttekalenderen</a>
@@ -234,6 +390,54 @@
         <a href="/artikler/hva-er-ex-dato/" class="text-green-600 dark:text-green-400 hover:underline">guiden om ex-dato</a>
         går grundig gjennom T+2, kursfallet og skattereglene.
       </p>
+    </section>
+
+    <!-- FAQ — teksten her må stå ordrett i FAQPage-blokken i <head>. -->
+    <section class="mt-10 space-y-4" aria-labelledby="faq-tittel">
+      <h2 id="faq-tittel" class="text-lg font-bold text-gray-900 dark:text-gray-100">Vanlige spørsmål om utbyttekalenderen</h2>
+      <div class="space-y-3 text-sm leading-relaxed">
+
+        <details class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-4">
+          <summary class="font-semibold text-gray-900 dark:text-gray-100 cursor-pointer">Hva er ex-dato?</summary>
+          <p class="mt-2 text-gray-600 dark:text-gray-400">Ex-dato er den første handelsdagen der aksjen omsettes uten rett til det kommende utbyttet. Kjøper du aksjen på eller etter ex-dato, går utbyttet til den forrige eieren.</p>
+        </details>
+
+        <details class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-4">
+          <summary class="font-semibold text-gray-900 dark:text-gray-100 cursor-pointer">Må jeg eie aksjen på ex-dato for å få utbytte?</summary>
+          <p class="mt-2 text-gray-600 dark:text-gray-400">Nei — du må ha kjøpt senest handelsdagen før ex-dato. Oslo Børs gjør opp handler to børsdager etter avtaletidspunktet, og ex-datoen er satt slik at et kjøp dagen før rekker fristen. Selger du på selve ex-dato eller senere, beholder du likevel utbyttet.</p>
+        </details>
+
+        <details class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-4">
+          <summary class="font-semibold text-gray-900 dark:text-gray-100 cursor-pointer">Når kommer utbyttet inn på kontoen?</summary>
+          <p class="mt-2 text-gray-600 dark:text-gray-400">Utbetalingsdatoen ligger normalt fra noen dager til noen uker etter ex-dato. For de fleste norske selskaper går det under to uker, men det varierer mellom selskapene og står oppgitt i innkallingen til generalforsamlingen.</p>
+        </details>
+
+        <details class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-4">
+          <summary class="font-semibold text-gray-900 dark:text-gray-100 cursor-pointer">Hvorfor faller kursen på ex-dato?</summary>
+          <p class="mt-2 text-gray-600 dark:text-gray-400">Fordi verdiene forlater selskapet. Kursen faller typisk med omtrent utbyttebeløpet den morgenen aksjen begynner å handles uten utbytterett. Å kjøpe rett før ex-dato gir derfor ingen gratis gevinst — du bytter kursverdi mot en utbetaling du i tillegg betaler skatt av.</p>
+        </details>
+
+        <details class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-4">
+          <summary class="font-semibold text-gray-900 dark:text-gray-100 cursor-pointer">Når er utbyttesesongen på Oslo Børs?</summary>
+          <p class="mt-2 text-gray-600 dark:text-gray-400">Tyngdepunktet ligger i mars, april og mai. De fleste norske selskaper holder generalforsamling om våren og vedtar utbyttet for foregående år der. Sparebankene, som er den største enkeltgruppen på børsen, betaler nesten alle én gang i året i denne perioden.</p>
+        </details>
+
+        <details class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-4">
+          <summary class="font-semibold text-gray-900 dark:text-gray-100 cursor-pointer">Hvor mange norske aksjer betaler utbytte?</summary>
+          <p class="mt-2 text-gray-600 dark:text-gray-400">Over 130 av selskapene i oversikten har positiv direkteavkastning nå, og over 150 har betalt utbytte minst ett år tidligere. Antallet endrer seg når selskaper starter, kutter eller gjenopptar utbyttet.</p>
+        </details>
+
+        <details class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-4">
+          <summary class="font-semibold text-gray-900 dark:text-gray-100 cursor-pointer">Hvorfor mangler ex-dato for de fleste aksjene?</summary>
+          <p class="mt-2 text-gray-600 dark:text-gray-400">Kalenderen viser bare datoer selskapene faktisk har annonsert, og de aller fleste annonserer først i forbindelse med kvartals- eller årsrapporten. På et gitt tidspunkt har derfor bare et fåtall av selskapene en bekreftet ex-dato. Estimerte datoer som ikke kan skilles fra bekreftede, er verre enn ingen datoer.</p>
+        </details>
+
+        <details class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-4">
+          <summary class="font-semibold text-gray-900 dark:text-gray-100 cursor-pointer">Hvor mye skatt betaler jeg av utbytte?</summary>
+          <p class="mt-2 text-gray-600 dark:text-gray-400">For personlige aksjonærer bosatt i Norge oppjusteres utbyttet med en faktor før det skattlegges som alminnelig inntekt, noe som gir en effektiv sats på 37,84 prosent. Skjermingsfradraget trekkes fra før skatten beregnes. Holder du aksjene på aksjesparekonto, utsettes skatten til du tar penger ut av kontoen.</p>
+        </details>
+
+      </div>
     </section>
 
     <!-- CTA -->
@@ -281,8 +485,14 @@
       localStorage.setItem('tema', isDark ? 'dark' : 'light');
     });
 
+    // ── Årstall i overskriften ───────────────────────────────────────────────
+    // Sto hardkodet «2026» i en <span id="aar"> som ingenting fylte ut, så
+    // overskriften ville blitt stående på fjoråret fra 1. januar.
+    const aarSpan = document.getElementById('aar');
+    if (aarSpan) aarSpan.textContent = String(new Date().getFullYear());
+
     // ── Konfig ───────────────────────────────────────────────────────────────
-    const MAANEDER = ['Januar','Februar','Mars','April','Mai','Juni','Juli','August','September','Oktober','November','Desember'];
+    const MAANEDER =['Januar','Februar','Mars','April','Mai','Juni','Juli','August','September','Oktober','November','Desember'];
 
     const HENDELSE_TYPER = {
       ex:      { label: 'Ex-dato',    bg: 'bg-green-100 dark:bg-green-900/40',   tekst: 'text-green-700 dark:text-green-300' },

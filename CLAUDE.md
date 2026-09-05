@@ -485,7 +485,9 @@ Oslo Børs · <!--N:aksjer-->160<!--/N--> aksjer · oppdateres daglig
 ```
 
 Available keys: `aksjer` (catalog size), `utbytte` (yield > 0), `historikk`
-(`ar_med_utbytte` > 0), `exdato` (has an announced ex-date), `sektorer`.
+(`ar_med_utbytte` > 0), `exdato` (has an announced ex-date), `sektorer`,
+`arlig` / `halvarlig` / `kvartalsvis` / `manedlig` (count per `frekvens`) and
+`rapportdato` (has an announced report date).
 
 **Write a marker, not a number.** A bare digit will drift again and nothing
 will catch it. An unknown key is left untouched and reported, so a typo shows
@@ -500,6 +502,35 @@ something like `{{ANTALL}}`.
 utbytteaksjer» — which stays true as stocks come and go. Same for article
 ingresses that are duplicated in `assets/ui.js` and the article index: round
 them, and keep the exact, date-stamped figure in the article body only.
+
+### A year in a `<title>` is the same trap — `oppdater_aarstall_i_sider()`
+
+Rounding does not work for a year: «Utbyttekalender 2026» is the single
+strongest query the site has (the three calendar searches carry 2 340
+impressions in Search Console), so the year has to be exact and it has to be
+in the `<title>`, where a marker cannot go. Left alone it would advertise last
+year's calendar from 1 January.
+
+`oppdater_aarstall_i_sider()` therefore syncs on a **text anchor** instead of a
+marker: the digits immediately following the word «utbyttekalender», anywhere
+in the file. Both `fetch_stocks.py` and `regenerer_sider.py` call it.
+
+Two rules when writing such a page:
+
+- **Opt in with `<!--AAR-SYNK-->`.** Files without it are never touched, so an
+  article that deliberately names a past year (`beste-utbytteaksjer-2026`)
+  cannot be rewritten by accident.
+- **Put the year straight after the anchor word.** «Utbyttekalender 2026 for
+  Oslo Børs» is synced; «for Oslo Børs 2026» is not. The meta description was
+  rephrased for exactly this reason.
+
+Anything else — a price year, a footnote date — stays untouched even in an
+opted-in file, because the anchor is required.
+
+The visible heading has a second, independent guard: `<span id="aar">` is set
+from `new Date().getFullYear()` on load, so the page is right in the browser
+even if the generator has not run. That span sat there unused until
+05.09.2026, with a hard-coded 2026 and nothing filling it.
 
 Generated pages (`/aksjer/**`) compute their own numbers and are skipped.
 
