@@ -2253,6 +2253,139 @@ def _lag_faq_seksjon(a, today):
     return faq_html, faq_jsonld
 
 
+_SELSKAPSFORM = re.compile(
+    r"\s+(ASA|AS|ASA\.|Ltd\.?|Limited|PLC|plc|SE|NV|N\.V\.|AB|A/S|P/F|Corp\.?|"
+    r"Corporation|Inc\.?|Group|Holding|Holdings)(?=\s|$)", re.I)
+
+
+def _kort_selskapsnavn(navn):
+    """Selskapsnavnet uten selskapsform, til bruk i tittel.
+
+    «Equinor ASA» → «Equinor». Folk søker på selskapsnavnet, ikke på
+    juridisk form, og tittelen har bare rundt 60 tegn før Google klipper.
+
+    Aksjeklasse beholdes: «Wilh. Wilhelmsen Holding B» må ikke bli identisk
+    med A-aksjen — det er to forskjellige papirer.
+    """
+    if not navn:
+        return ""
+    kort = navn
+    for _ in range(3):                      # «Group Holding ASA» tar tre runder
+        ny = _SELSKAPSFORM.sub("", kort).strip()
+        if ny == kort or not ny:
+            break
+        kort = ny
+    # Etterlatt aksjeklasse-parentes gir ingen mening uten navnet foran.
+    kort = re.sub(r"\s*\((A|B)-aksje\)\s*$", r" \1", kort).strip()
+    return kort or navn
+
+
+def _dager_til(iso, today):
+    """Antall dager fra today til iso. None hvis en av dem mangler."""
+    if not iso or not today:
+        return None
+    try:
+        d1 = datetime.datetime.strptime(str(iso)[:10], "%Y-%m-%d").date()
+        d0 = datetime.datetime.strptime(str(today)[:10], "%Y-%m-%d").date()
+    except (ValueError, TypeError):
+        return None
+    return (d1 - d0).days
+
+
+# Hvor lenge før ex-datoen den skal stå i tittelen. Søketrafikken bygger seg
+# opp noen uker i forkant — FRO steg 229 % tre uker før sin — så vinduet er
+# satt der interessen faktisk starter, ikke på selve dagen.
+DAGER_EX_DATO_I_TITTEL = 45
+
+
+def _lag_sidetittel(navn, ticker, yield_, ex, today):
+    """Tittel på en aksjeside, bygget for hvordan folk faktisk søker.
+
+    Den gamle formen var «EQNR – Equinor ASA | Utbytte og ex-dato | exday.no».
+    Den ledet med tickeren, som er det minst søkte ordet: folk skriver
+    «Equinor utbytte», ikke «EQNR». Search Console viste 29 900 visninger mot
+    601 klikk — 2,0 % CTR — så sidene rangerer, men treffet ble ikke kjent
+    igjen i resultatlisten.
+
+    Rekkefølgen er derfor: selskapsnavn, «utbytte», årstall, og deretter det
+    konkrete svaret. Nærmer ex-datoen seg, er det datoen som er svaret; ellers
+    er det direkteavkastningen. Tickeren står til slutt for de som søker på den.
+
+    Google klipper rundt 60 tegn, så tillegget droppes hvis tittelen blir for
+    lang. Da er navnet og «utbytte» uansett med.
+    """
+    kort = _kort_selskapsnavn(navn)
+    ar = (today or "")[:4]
+    base = f"{kort} utbytte {ar}".strip()
+    # For 16 selskaper er kortnavnet identisk med tickeren («DNO utbytte 2026
+    # | DNO»). Da er gjentakelsen bare bortkastet plass i en tittel som
+    # allerede er trang.
+    vis_ticker = kort.lower() != (ticker or "").lower()
+
+    dager = _dager_til(ex, today)
+    if dager is not None and 0 <= dager <= DAGER_EX_DATO_I_TITTEL:
+        tillegg = f"ex-dato {_fmt_dato(ex)}"
+    elif yield_ and yield_ > 0:
+        tillegg = f"yield {_nf(yield_, 1)} %"
+    else:
+        tillegg = ""
+
+    # Google klipper rundt 60 tegn, og malen legger ikke på noe etterpå —
+    # funksjonen eier hele tittelen. Merkenavnet er det første som ryker:
+    # ex-datoen og yielden er det leseren kjenner igjen treffet sitt på.
+    hale = f" | {ticker}" if vis_ticker else ""
+    for kandidat in (f"{base} – {tillegg}{hale} | exday.no" if tillegg else "",
+                     f"{base} – {tillegg}{hale}" if tillegg else "",
+                     f"{base}{hale} | exday.no",
+                     f"{base}{hale}",
+                     base):
+        if kandidat and len(kandidat) <= 60:
+            return kandidat
+    return f"{base}{hale}"
+
+
+def _lag_meta_beskrivelse(navn, ticker, yield_, ex, upa, snitt5, valuta, today):
+    """Meta-beskrivelse under Googles grense på rundt 155 tegn.
+
+    Den forrige var median 162 tegn og ble klippet midt i setningen, og den
+    åpnet med sektoren i parentes — støy på den mest verdifulle plassen.
+    Denne leder med svaret på spørsmålet folk stilte, og tar med ex-datoen
+    tidlig når den er kjent.
+    """
+    kort = _kort_selskapsnavn(navn)
+    deler = []
+    if yield_ and yield_ > 0:
+        deler.append(f"{kort} ({ticker}) har {_nf(yield_, 1)} % direkteavkastning")
+    else:
+        deler.append(f"{kort} ({ticker}) — utbytte, nøkkeltall og historikk")
+
+    dager = _dager_til(ex, today)
+    if dager is not None and dager >= 0:
+        deler.append(f"neste ex-dato er {_fmt_dato(ex)}")
+    elif upa and upa > 0:
+        deler.append(f"siste utbytte var {_nf(upa, 2)} {valuta} per aksje")
+
+    if snitt5 and snitt5 > 0 and len(". ".join(deler)) < 105:
+        deler.append(f"5-årssnittet er {_nf(snitt5, 1)} %")
+
+    # Første setning står for seg; resten bindes med «og». Bindes alle tre med
+    # komma, blir det komma mellom to hovedsetninger.
+    def _stor_forbokstav(t):
+        # .capitalize() ville små-bokstavert resten og gjort «NOK» til «nok».
+        return t[:1].upper() + t[1:] if t else t
+
+    if len(deler) > 2:
+        tekst = f"{deler[0]}. {_stor_forbokstav(deler[1])}, og {deler[2]}"
+    elif len(deler) == 2:
+        tekst = f"{deler[0]}. {_stor_forbokstav(deler[1])}"
+    else:
+        tekst = deler[0]
+    tekst += ". Oppdatert daglig."
+    if len(tekst) > 155:
+        tekst = deler[0] + ". Oppdatert daglig på exday.no."
+    return tekst
+
+
 def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     ticker  = a["ticker"]
     navn    = a["navn"]
@@ -2281,13 +2414,8 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     hoy52   = a.get("52u_hoy") or 0
     lav52   = a.get("52u_lav") or 0
 
-    meta_desc = (
-        f"{navn} ({ticker}) betaler {_nf(yield_, 2)}% utbytte ({sektor}). "
-        f"Ex-dato: {_fmt_dato(ex)}. "
-        f"5-årssnitt yield: {_nf(snitt5, 2)}%. "
-        f"Siste utbytte: {_nf(upa, 2)} {valuta} per aksje. "
-        f"Oppdatert daglig på exday.no."
-    )
+    sidetittel = _lag_sidetittel(navn, ticker, yield_, ex, today)
+    meta_desc = _lag_meta_beskrivelse(navn, ticker, yield_, ex, upa, snitt5, valuta, today)
 
     # Inneværende år er ikke ferdig. Uten merking sto «2026 — 3,75 NOK» rett
     # under stat-kortet «Utbytte/aksje 7,50 NOK» og så ut som en motsigelse:
@@ -2523,7 +2651,7 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     gtag('config', 'G-X6C9PERKMB');
   </script>
   <script src="/assets/consent.js" defer></script>
-  <title>{ticker} – {navn} | Utbytte og ex-dato | exday.no</title>
+  <title>{sidetittel}</title>
   <meta name="description" content="{meta_desc}"/>
   <link rel="canonical" href="https://exday.no/aksjer/{ticker}/"/>
   <meta name="theme-color" content="#16a34a"/>
@@ -2532,7 +2660,7 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
   <link rel="icon" type="image/svg+xml" href="/logo/exday_icon_primary.svg"/>
   <link rel="shortcut icon" href="/favicon.png"/>
   <link rel="apple-touch-icon" href="/logo/apple_touch_icon_180.png"/>
-  <meta property="og:title" content="{ticker} – {navn} | exday.no"/>
+  <meta property="og:title" content="{sidetittel}"/>
   <meta property="og:description" content="{meta_desc}"/>
   <meta property="og:url" content="https://exday.no/aksjer/{ticker}/"/>
   <meta property="og:type" content="website"/>
@@ -2542,7 +2670,7 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
   <meta property="og:locale" content="nb_NO"/>
   <meta property="og:site_name" content="exday.no"/>
   <meta name="twitter:card" content="summary_large_image"/>
-  <meta name="twitter:title" content="{ticker} – {navn} | exday.no"/>
+  <meta name="twitter:title" content="{sidetittel}"/>
   <meta name="twitter:description" content="{meta_desc}"/>
   <meta name="twitter:image" content="https://exday.no/assets/og-image.png"/>
   <script type="application/ld+json">{json_ld}</script>

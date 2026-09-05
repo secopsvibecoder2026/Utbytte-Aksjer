@@ -193,6 +193,76 @@ class TestAntallIMarkorer(unittest.TestCase):
         self.assertIn("160 aksjer uten markør", self._les(sti))
 
 
+class TestSidetittelOgMeta(unittest.TestCase):
+    """Tittel og meta er bygget for hvordan folk faktisk søker.
+
+    Search Console viste 29 900 visninger mot 601 klikk — 2,0 % CTR. Sidene
+    rangerte, men treffet ble ikke kjent igjen: tittelen ledet med tickeren
+    («EQNR – Equinor ASA»), og folk søker «Equinor utbytte». Meta-teksten var
+    median 162 tegn og ble klippet av Google rundt 155.
+    """
+
+    I_DAG = "2026-09-05"
+
+    def test_navnet_kommer_forst(self):
+        t = fs._lag_sidetittel("Equinor ASA", "EQNR", 3.71, None, self.I_DAG)
+        self.assertTrue(t.startswith("Equinor utbytte 2026"), t)
+        self.assertIn("EQNR", t)
+
+    def test_selskapsform_fjernes(self):
+        for navn, vent in [("Equinor ASA", "Equinor"),
+                           ("Frontline PLC", "Frontline"),
+                           ("Bakkafrost P/F", "Bakkafrost"),
+                           ("Hafnia Limited", "Hafnia"),
+                           ("Golden Ocean Group", "Golden Ocean")]:
+            self.assertEqual(fs._kort_selskapsnavn(navn), vent)
+
+    def test_aksjeklasse_bevares(self):
+        # A- og B-aksjen er to papirer og må ikke få samme tittel.
+        a = fs._kort_selskapsnavn("Wilh. Wilhelmsen Holding (A-aksje)")
+        b = fs._kort_selskapsnavn("Wilh. Wilhelmsen Holding (B-aksje)")
+        self.assertNotEqual(a, b)
+
+    def test_ex_dato_i_tittel_nar_den_naermer_seg(self):
+        # Trafikken bygger seg opp i forkant — FRO steg 229 % tre uker før.
+        nær = fs._lag_sidetittel("Frontline PLC", "FRO", 2.0, "2026-09-29", self.I_DAG)
+        self.assertIn("ex-dato", nær)
+        fjern = fs._lag_sidetittel("Equinor ASA", "EQNR", 3.7, "2027-05-20", self.I_DAG)
+        self.assertNotIn("ex-dato", fjern)
+        self.assertIn("yield", fjern)
+
+    def test_passert_ex_dato_gir_ikke_tittel(self):
+        t = fs._lag_sidetittel("Vår Energi ASA", "VAR", 10.8, "2026-08-21", self.I_DAG)
+        self.assertNotIn("ex-dato", t)
+
+    def test_tittel_holder_seg_under_60_tegn(self):
+        for navn in ["Klaveness Combination Carriers ASA", "SpareBank 1 Ringerike Hadeland",
+                     "Wilh. Wilhelmsen Holding (B-aksje)", "SED Energy Holdings PLC"]:
+            t = fs._lag_sidetittel(navn, "XXXXX", 12.34, "2026-09-20", self.I_DAG)
+            self.assertLessEqual(len(t), 60, t)
+
+    def test_meta_under_155_tegn(self):
+        for y, ex, upa, s5 in [(3.71, "2026-11-25", 14.59, 5.77), (10.82, None, 3.6, 12.1),
+                               (0.0, None, 0.0, 0.0), (5.32, "2026-09-10", 12.0, 6.1)]:
+            m = fs._lag_meta_beskrivelse("SpareBank 1 Ringerike Hadeland ASA", "SRHA",
+                                         y, ex, upa, s5, "NOK", self.I_DAG)
+            self.assertLessEqual(len(m), 155, m)
+
+    def test_meta_beholder_valuta_i_versaler(self):
+        # .capitalize() ville gjort «NOK» til «nok».
+        m = fs._lag_meta_beskrivelse("Vår Energi ASA", "VAR", 10.8, None, 3.6, 12.1,
+                                     "NOK", self.I_DAG)
+        self.assertIn("NOK", m)
+
+    def test_uten_utbytte_gir_meningsfull_tekst(self):
+        t = fs._lag_sidetittel("KMC Properties ASA", "KMCP", 0.0, None, self.I_DAG)
+        m = fs._lag_meta_beskrivelse("KMC Properties ASA", "KMCP", 0.0, None, 0.0, 0.0,
+                                     "NOK", self.I_DAG)
+        self.assertIn("KMC Properties", t)
+        self.assertIn("KMC Properties", m)
+        self.assertNotIn("0,0 %", m)
+
+
 class TestFrekvensLabel(unittest.TestCase):
     """Terskelen som gjorde SATS kvartalsvis og 2020 Bulkers kvartalsvis.
 
