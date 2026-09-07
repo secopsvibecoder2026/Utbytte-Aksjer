@@ -73,7 +73,19 @@ def _newsweb_get(url, timeout=10):
 def _parse_rapport_dato(body: str) -> str | None:
     """
     Parser kvartalsrapport-dato fra finansiell kalender body-tekst.
-    Foretrekker kvartal/halvår/årsrapporter fremfor andre hendelser.
+    Godtar bare hendelser som faktisk er en rapport.
+
+    Funksjonen returnerte tidligere `kommende[0]` — den nærmeste hendelsen av
+    *hvilken som helst* type — når ingen av dem matchet et rapport-nøkkelord.
+    Da ble generalforsamlinger, kapitalmarkedsdager og stillefaser lagret som
+    «neste kvartalsrapport», og siden datoen bare måtte ligge i framtiden,
+    flyttet den seg hver gang en av dem passerte. Entra fikk på den måten
+    38 forskjellige rapportdatoer mellom april og september 2026, og
+    oppdater_hendelser.py bevarte hver eneste en.
+
+    Uten et rapport-treff er riktig svar ingenting: kallstedet har to
+    Yahoo-kilder etter denne, og en manglende dato er langt bedre enn en
+    dato som er noe helt annet.
     """
     today = datetime.date.today()
     dato_pattern = re.compile(r"(\d{2})\.(\d{2})\.(\d{4})\s*[-–]\s*(.+)")
@@ -91,14 +103,14 @@ def _parse_rapport_dato(body: str) -> str | None:
         return None
     kommende.sort(key=lambda x: x[0])
 
-    # Prioriter rapport-hendelser over f.eks. kapitalmarkedsdag / generalforsamling
+    # Bare rapport-hendelser — ikke kapitalmarkedsdag, generalforsamling e.l.
     rapport_kw = ["quarterly", "kvartals", "annual report", "årsrapport",
                   "half-yearly", "halvår", "q1", "q2", "q3", "q4"]
     for d, event in kommende:
         if any(kw in event.lower() for kw in rapport_kw):
             return d.strftime("%Y-%m-%d")
 
-    return kommende[0][0].strftime("%Y-%m-%d")
+    return None
 
 
 _NEWSWEB_API = None   # Lazy-init én gang per kjøring

@@ -415,6 +415,52 @@ class TestFrekvensLabel(unittest.TestCase):
         self.assertEqual(fs.FREKVENS_OVERSTYRT.get("SATS"), "Halvårlig")
 
 
+class TestParseRapportDato(unittest.TestCase):
+    """Bare ekte rapporthendelser får bli rapport_dato.
+
+    Funksjonen returnerte tidligere nærmeste hendelse av *hvilken som helst*
+    type når ingen matchet et rapport-nøkkelord. Da ble generalforsamlinger,
+    kapitalmarkedsdager og stillefaser lagret som «neste kvartalsrapport» — og
+    fordi datoen bare måtte ligge i framtiden, flyttet den seg hver gang en av
+    dem passerte. Entra fikk 38 forskjellige rapportdatoer mellom april og
+    september 2026, og oppdater_hendelser.py bevarte hver eneste en.
+    """
+
+    def _kalender(self, *linjer):
+        return "\n".join(linjer)
+
+    def test_rapport_velges(self):
+        body = self._kalender(
+            "20.10.2099 - Kapitalmarkedsdag",
+            "28.10.2099 - Q3 2099 kvartalsrapport",
+        )
+        self.assertEqual(fs._parse_rapport_dato(body), "2099-10-28")
+
+    def test_rapport_velges_selv_om_annet_kommer_forst(self):
+        body = self._kalender(
+            "05.05.2099 - Ordinær generalforsamling",
+            "12.05.2099 - Stillefase starter",
+            "20.05.2099 - Quarterly report Q1",
+        )
+        self.assertEqual(fs._parse_rapport_dato(body), "2099-05-20")
+
+    def test_uten_rapport_gir_ingenting(self):
+        # Selve feilen: dette returnerte «2099-05-05» og ble lagret som
+        # neste kvartalsrapport.
+        body = self._kalender(
+            "05.05.2099 - Ordinær generalforsamling",
+            "12.05.2099 - Kapitalmarkedsdag",
+            "19.05.2099 - Ex-dato utbytte",
+        )
+        self.assertIsNone(fs._parse_rapport_dato(body))
+
+    def test_passerte_datoer_teller_ikke(self):
+        self.assertIsNone(fs._parse_rapport_dato("01.01.2001 - Q4 kvartalsrapport"))
+
+    def test_tom_body(self):
+        self.assertIsNone(fs._parse_rapport_dato(""))
+
+
 class TestRapportkalender(unittest.TestCase):
     """Rapportkalenderen leser rapport_dato fra aksjer.json — ikke hendelser.json.
 

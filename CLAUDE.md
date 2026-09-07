@@ -651,18 +651,38 @@ and they accounted for **96 of 236 events, 41 %**. `rapport_dato` in
 `aksjer.json` is rewritten every run and holds exactly one current date per
 company, so it cannot drift the same way.
 
-> ⚠️ **The same pollution is live in the app.** `visKalender()` in
-> `assets/ui.js` de-duplicates on `ticker|dato`, which stops the *same* date
-> appearing twice but does nothing about a dozen different stale dates for one
-> company. `/uke/` reads the same file. Fixing this means pruning future dates
-> in `oppdater_hendelser.py` when they no longer match the company's current
-> `rapport_dato` — while keeping past dates, which are a genuine historical
-> record. Not done yet.
-
 A «Nylig framlagt» section with NewsWeb links was built and then removed: the
 URLs attach to the accumulated dates, so the twenty newest rows consisted of
-ten tickers from exactly that polluted group. It can come back once the
-accumulator is fixed.
+ten tickers from exactly that polluted group. It can come back now that the
+accumulator prunes, once enough clean history has built up.
+
+### Both causes are fixed — keep them fixed (2026-09-07)
+
+**Root cause, `_parse_rapport_dato()` in `fetch_stocks.py`.** It ended with
+`return kommende[0]` — the nearest upcoming entry of *any* kind — whenever no
+entry matched a report keyword. General meetings, capital markets days and
+quiet-period starts were therefore stored as "next quarterly report", and since
+the only other condition was `d > today`, the value moved every time one of
+them passed. Entra collected 38 different report dates between April and
+September 2026 this way.
+
+It now returns `None` instead. The call site has two Yahoo sources after it
+(`earnings_dates`, then `calendar["Earnings Date"]`), and a missing date beats
+a date that is actually a general meeting.
+
+**Second cause, `rydd_framtidige()` in `oppdater_hendelser.py`.** A future entry
+is kept only when it equals the company's current `rapport_dato`. Past entries
+are never touched — they are history, they carry the NewsWeb URLs, and no
+calendar displays them (`assets/ui.js` filters on `dato >= i dag`; `/uke/` reads
+`aksjer.json` directly and never touched this file). One-off cleanup on
+2026-09-07 took the file from 836 to 740 entries; all 457 URLs survived.
+
+A ticker whose fetch failed has no `rapport_dato`, so its future entry is
+dropped too. That is deliberate and self-healing: the next successful run
+re-adds it, and until then no date is more truthful than an old guess.
+
+Tests: `scripts/test_oppdater_hendelser.py` (7, in CI) and
+`TestParseRapportDato` in `scripts/test_fetch_stocks.py`.
 
 The analysis paragraphs are built by `_rapportkalender_analyse()` from the
 current run's numbers — never stored — and name the busiest months in
