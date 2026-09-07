@@ -1,8 +1,22 @@
 {
-  "generert": "2026-09-04T18:48:47Z",
-  "antall": 9,
+  "generert": "2026-09-07T13:07:15Z",
+  "antall": 14,
   "antall_kritiske": 0,
   "varsler": [
+    {
+      "ticker": "DOF",
+      "type": "hentefeil",
+      "alvorlighet": "advarsel",
+      "melding": "Henting har feilet i 3 dager (sist OK 2026-09-04).",
+      "forslag": "Følg med. Vedvarer det til 7 dager, kontroller om tickeren fortsatt finnes."
+    },
+    {
+      "ticker": "FLNG",
+      "type": "hentefeil",
+      "alvorlighet": "advarsel",
+      "melding": "Henting har feilet i 3 dager (sist OK 2026-09-04).",
+      "forslag": "Følg med. Vedvarer det til 7 dager, kontroller om tickeren fortsatt finnes."
+    },
     {
       "ticker": "FRO",
       "type": "markedsverdi_borte",
@@ -16,6 +30,13 @@
       "alvorlighet": "advarsel",
       "melding": "Markedsverdien er borte fra Yahoo (var 141,889,814,528 sist). Kan indikere strukturendring i selskapet.",
       "forslag": "Kontroller om selskapet er under oppkjøp eller strykning."
+    },
+    {
+      "ticker": "GOGL",
+      "type": "hentefeil",
+      "alvorlighet": "advarsel",
+      "melding": "Henting har feilet i 3 dager (sist OK 2026-09-04).",
+      "forslag": "Følg med. Vedvarer det til 7 dager, kontroller om tickeren fortsatt finnes."
     },
     {
       "ticker": "HEX",
@@ -32,11 +53,18 @@
       "forslag": "Kontroller om selskapet er under oppkjøp eller strykning."
     },
     {
-      "ticker": "PGS",
-      "type": "fastfrosset_kurs",
+      "ticker": "KMCP",
+      "type": "hentefeil",
       "alvorlighet": "advarsel",
-      "melding": "Siste registrerte handel var 2024-07-22 (554 børsdager siden). Kursen står stille.",
-      "forslag": "Kan bety at handelen er suspendert eller at papiret er avnotert."
+      "melding": "Henting har feilet i 3 dager (sist OK 2026-09-04).",
+      "forslag": "Følg med. Vedvarer det til 7 dager, kontroller om tickeren fortsatt finnes."
+    },
+    {
+      "ticker": "SBVG",
+      "type": "hentefeil",
+      "alvorlighet": "advarsel",
+      "melding": "Henting har feilet i 3 dager (sist OK 2026-09-04).",
+      "forslag": "Følg med. Vedvarer det til 7 dager, kontroller om tickeren fortsatt finnes."
     },
     {
       "ticker": "SNI",
@@ -47,10 +75,17 @@
     },
     {
       "ticker": "TIETO",
-      "type": "markedsverdi_borte",
+      "type": "hentefeil",
       "alvorlighet": "advarsel",
-      "melding": "Markedsverdien er borte fra Yahoo (var 24,441,212,928 sist). Kan indikere strukturendring i selskapet.",
-      "forslag": "Kontroller om selskapet er under oppkjøp eller strykning."
+      "melding": "Henting har feilet i 3 dager (sist OK 2026-09-04).",
+      "forslag": "Følg med. Vedvarer det til 7 dager, kontroller om tickeren fortsatt finnes."
+    },
+    {
+      "ticker": "WILS",
+      "type": "hentefeil",
+      "alvorlighet": "advarsel",
+      "melding": "Henting har feilet i 3 dager (sist OK 2026-09-04).",
+      "forslag": "Følg med. Vedvarer det til 7 dager, kontroller om tickeren fortsatt finnes."
     },
     {
       "ticker": "BAKKA",
