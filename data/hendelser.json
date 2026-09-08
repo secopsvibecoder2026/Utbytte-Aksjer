@@ -4303,7 +4303,17 @@
       "type": "rapport"
     },
     {
+      "ticker": "ENTR",
+      "dato": "2026-11-11",
+      "type": "rapport"
+    },
+    {
       "ticker": "HSHP",
+      "dato": "2026-11-11",
+      "type": "rapport"
+    },
+    {
+      "ticker": "ODFB",
       "dato": "2026-11-11",
       "type": "rapport"
     },
@@ -4313,7 +4323,32 @@
       "type": "rapport"
     },
     {
+      "ticker": "SBMO",
+      "dato": "2026-11-11",
+      "type": "rapport"
+    },
+    {
+      "ticker": "SRHA",
+      "dato": "2026-11-11",
+      "type": "rapport"
+    },
+    {
+      "ticker": "STRONG",
+      "dato": "2026-11-11",
+      "type": "rapport"
+    },
+    {
       "ticker": "SWON",
+      "dato": "2026-11-11",
+      "type": "rapport"
+    },
+    {
+      "ticker": "VISTIN",
+      "dato": "2026-11-11",
+      "type": "rapport"
+    },
+    {
+      "ticker": "WWIB",
       "dato": "2026-11-11",
       "type": "rapport"
     },
@@ -4638,5 +4673,5 @@
       "type": "rapport"
     }
   ],
-  "sist_oppdatert": "2026-09-07"
+  "sist_oppdatert": "2026-09-08"
 }
