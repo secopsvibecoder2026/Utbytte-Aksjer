@@ -120,7 +120,13 @@
       <ul class="site-nav-menu">
         <li><a href="/aksjer/" class="">Aksjer</a></li>
         <li><a href="/aksjer/sektor/" class="active">Sektorer</a></li>
-        <li><a href="/utbyttekalender/" class="">Kalender</a></li>
+        <li class="has-dropdown">
+          <a href="/utbyttekalender/" class="">Kalender</a>
+          <ul class="nav-dropdown">
+            <li><a href="/utbyttekalender/">Utbyttekalender</a></li>
+            <li><a href="/rapportkalender/">Rapportkalender</a></li>
+          </ul>
+        </li>
         <li class="has-dropdown">
           <a href="/verktoy/" class="">Verktøy</a>
           <ul class="nav-dropdown">
@@ -473,7 +479,7 @@
   </table>
   </div>
   <div class="cta"><a href="https://exday.no/">Åpne full app med filtrering og porteføljekalkulator →</a></div>
-  <p class="updated">Sist oppdatert: 2026-09-07</p>
+  <p class="updated">Sist oppdatert: 2026-09-09</p>
   <footer style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid #e5e7eb;font-size:0.78rem;text-align:center;color:#9ca3af;line-height:1.6;" class="std-footer">
     <p>Kurs og utbyttedata hentes fra Yahoo Finance og Euronext. Oppdateres daglig på børsdager.</p>
     <p style="max-width:36rem;margin:0.4rem auto;">
