@@ -24,7 +24,22 @@ except (ImportError, Exception):
 # driver-avsnittene friskt fra levende tall hver gang — se bruken i
 # hent_aksje() lenger ned for hvorfor det er nødvendig.
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from utvid_beskrivelser import lag_beskrivelse
+from utvid_beskrivelser import lag_beskrivelse, _manuell_del, SEKTOR_DRIVER
+
+
+def _redaksjonell_intro(ticker: str, sektor: str) -> str:
+    """Den håndskrevne innledningen fra tickers.json, uten de genererte avsnittene.
+
+    «Om selskapet» viste `beskrivelse_fakta or beskrivelse` — og siden 153 av
+    160 aksjer har et faktasammendrag fra Yahoo, vant det alltid. Hele den
+    redaksjonelle teksten var dermed usynlig på alle sider unntatt sju, både
+    på aksjesiden og i appens modal.
+
+    Bare innledningen hentes ut. Avsnitt 2 (utbytteprofil) og 3 (sektordriver)
+    fra lag_beskrivelse() ville duplisert «Vurdering som utbytteaksje» og
+    «Hva driver utbyttet i …?», som allerede står lenger nede på siden.
+    """
+    return _manuell_del(BESKRIVELSER.get(ticker, ""), SEKTOR_DRIVER.get(sektor, ""))
 
 _TICKER_RE = re.compile(r'^[A-Z0-9]{1,10}$')
 
@@ -917,6 +932,7 @@ def hent_aksje(meta):
                  "payout_ratio": payout_ratio, "markedsverdi_mrd": markedsverdi_mrd,
                  "utbytte_vekst_5ar": utbytte_vekst_5ar, "valuta": valuta,
                  "historiske_utbytter": historiske_utbytter}),
+            "beskrivelse_intro": _redaksjonell_intro(ticker, meta["sektor"]),
             "beskrivelse_fakta": BESKRIVELSE_FAKTA.get(ticker, ""),
             "valuta": valuta,
             "kurs_historikk": kurs_historikk,
@@ -2526,7 +2542,17 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
         if hoy52 > 0 and lav52 > 0 else ""
     )
 
-    om_seksjon = f'<div class="desc"><h2>Om selskapet</h2><p>{besk}</p></div>' if besk else ""
+    # «Om selskapet» viste bare `beskrivelse_fakta or beskrivelse`. 153 av 160
+    # aksjer har et faktasammendrag fra Yahoo, så den redaksjonelle teksten
+    # tapte alltid or-uttrykket og sto usynlig. Nå vises begge: den skrevne
+    # innledningen først, Yahoos faktaavsnitt under.
+    intro = (a.get("beskrivelse_intro") or "").strip()
+    om_avsnitt = ""
+    if intro:
+        om_avsnitt += f"<p>{intro}</p>"
+    if besk and besk.strip() != intro:
+        om_avsnitt += f'<p class="desc-fakta">{besk}</p>'
+    om_seksjon = f'<div class="desc"><h2>Om selskapet</h2>{om_avsnitt}</div>' if om_avsnitt else ""
 
     # Het tidligere «AI-oppsummering» og viste frosset prosa med tall støpt inn.
     # Teksten bygges nå fra levende tall ved hver kjøring, så navnet ville vært
@@ -2782,6 +2808,8 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     .dark .hist-paagaar {{ color: #9ca3af; }}
     .desc {{ border-radius: 0.75rem; padding: 1rem 1.25rem; margin-bottom: 1.5rem; border: 1px solid; }}
     .desc h2 {{ margin-bottom: 0.5rem; }}
+    .desc p + p {{ margin-top: 0.75rem; }}
+    .desc-fakta {{ font-size: 0.92em; opacity: 0.85; }}
     .analyse {{ border-radius: 0.75rem; padding: 1rem 1.25rem; margin: 1rem 0 1.5rem; border: 1px solid; line-height: 1.75; }}
     .analyse h2 {{ margin-bottom: 0.4rem; }}
     .ai-oppsummering {{ border-radius: 0.75rem; padding: 1rem 1.25rem; margin: 1rem 0 1.5rem; border: 1px solid; line-height: 1.75; }}
@@ -3269,7 +3297,7 @@ def generer_aksjesider(aksjer, root_dir):
           <td><a href="/aksjer/{t}/">{t}</a></td>
           <td>{a["navn"]}</td>
           <td>{a.get("sektor") or "—"}</td>
-          <td>{a.get("pris") or "—"} {a.get("valuta","NOK")}</td>
+          <td>{_nf(a["pris"], 2) if a.get("pris") else "—"} {a.get("valuta","NOK")}</td>
           <td>{_nf(a.get("utbytte_yield", 0), 2)}%</td>
           <td>{ex}</td>
         </tr>"""
@@ -3909,7 +3937,7 @@ def generer_sektorsider(aksjer, root_dir):
         <tr>
           <td><a href="/aksjer/{t}/">{t}</a></td>
           <td>{a["navn"]}</td>
-          <td>{a.get("pris") or "—"} {a.get("valuta","NOK")}</td>
+          <td>{_nf(a["pris"], 2) if a.get("pris") else "—"} {a.get("valuta","NOK")}</td>
           <td class="yield">{_nf(a.get("utbytte_yield", 0), 2)}%</td>
           <td>{ex}</td>
         </tr>"""
@@ -4456,7 +4484,7 @@ def generer_topplistesider(aksjer, root_dir):
             "reverse":  True,
             "kolonner": [
                 ("Yield",        lambda a: f'<td class="metric">{_nf(a["utbytte_yield"], 2)}%</td>'),
-                ("Pris",         lambda a: f'<td>{a.get("pris") or "—"} {a.get("valuta","NOK")}</td>'),
+                ("Pris",         lambda a: f'<td>{_nf(a["pris"], 2) if a.get("pris") else "—"} {a.get("valuta","NOK")}</td>'),
                 ("Payout",       lambda a: f'<td>{_nf(a["payout_ratio"], 0)}% </td>' if a.get("payout_ratio") else '<td>—</td>'),
                 ("Ex-dato",      lambda a: f'<td>{_fmt_dato(a.get("ex_dato"))}</td>'),
             ],
@@ -4477,7 +4505,7 @@ def generer_topplistesider(aksjer, root_dir):
             "kolonner": [
                 ("Vekst 5år",    lambda a: f'<td class="metric">+{_nf(a["utbytte_vekst_5ar"], 1)}%/år</td>'),
                 ("Yield nå",     lambda a: f'<td>{_nf(a.get("utbytte_yield",0), 2)}%</td>'),
-                ("Pris",         lambda a: f'<td>{a.get("pris") or "—"} {a.get("valuta","NOK")}</td>'),
+                ("Pris",         lambda a: f'<td>{_nf(a["pris"], 2) if a.get("pris") else "—"} {a.get("valuta","NOK")}</td>'),
                 ("Ex-dato",      lambda a: f'<td>{_fmt_dato(a.get("ex_dato"))}</td>'),
             ],
             "stat_lbl": "Snitt vekst",
@@ -4497,7 +4525,7 @@ def generer_topplistesider(aksjer, root_dir):
             "kolonner": [
                 ("År m/utbytte", lambda a: f'<td class="metric">{a["ar_med_utbytte"]} år</td>'),
                 ("Yield",        lambda a: f'<td>{_nf(a.get("utbytte_yield",0), 2)}%</td>'),
-                ("Pris",         lambda a: f'<td>{a.get("pris") or "—"} {a.get("valuta","NOK")}</td>'),
+                ("Pris",         lambda a: f'<td>{_nf(a["pris"], 2) if a.get("pris") else "—"} {a.get("valuta","NOK")}</td>'),
                 ("Ex-dato",      lambda a: f'<td>{_fmt_dato(a.get("ex_dato"))}</td>'),
             ],
             "stat_lbl": "Snitt år",
@@ -4517,7 +4545,7 @@ def generer_topplistesider(aksjer, root_dir):
             "kolonner": [
                 ("Payout ratio", lambda a: f'<td class="metric">{_nf(a["payout_ratio"], 0)}%</td>'),
                 ("Yield",        lambda a: f'<td>{_nf(a.get("utbytte_yield",0), 2)}%</td>'),
-                ("Pris",         lambda a: f'<td>{a.get("pris") or "—"} {a.get("valuta","NOK")}</td>'),
+                ("Pris",         lambda a: f'<td>{_nf(a["pris"], 2) if a.get("pris") else "—"} {a.get("valuta","NOK")}</td>'),
                 ("Ex-dato",      lambda a: f'<td>{_fmt_dato(a.get("ex_dato"))}</td>'),
             ],
             "stat_lbl": "Snitt payout",

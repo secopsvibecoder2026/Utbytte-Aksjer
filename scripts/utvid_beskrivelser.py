@@ -154,7 +154,7 @@ def lag_beskrivelse(t: dict, a: dict) -> str:
         elif yield_ >= 4:
             yield_karakter = "blant de solid-yielding"
         else:
-            yield_karakter = "i det lavere sjiktet"
+            yield_karakter = "i det lavere sjiktet av"
         deler2.append(
             f"Direkteavkastningen er {_nf(yield_)} %, og 5-årssnittet på {_nf(snitt5)} % "
             f"plasserer {ticker} {yield_karakter} aksjene i sin sektor."
