@@ -1,7 +1,7 @@
 {
-  "sist_oppdatert": "2026-09-09T17:06:23Z",
-  "antall_ok": 153,
-  "antall_feil": 7,
+  "sist_oppdatert": "2026-09-09T19:04:48Z",
+  "antall_ok": 151,
+  "antall_feil": 9,
   "tickere": {
     "EQNR": {
       "ok": true,
@@ -775,11 +775,10 @@
       "feilmelding": "Yahoo returnerte verken selskapsnavn eller kurs — tom respons"
     },
     "WSTEP": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Webstep ASA",
-      "yahoo_navn": "Webstep ASA",
-      "markedsverdi": 349195296.0,
-      "siste_handelsdato": "2026-09-09"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "BWE": {
       "ok": true,
@@ -1089,11 +1088,10 @@
       "siste_handelsdato": "2026-09-09"
     },
     "NOD": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Nordic Semiconductor ASA",
-      "yahoo_navn": "Nordic Semiconductor ASA",
-      "markedsverdi": 34554814464.0,
-      "siste_handelsdato": "2026-09-09"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "KOA": {
       "ok": true,
