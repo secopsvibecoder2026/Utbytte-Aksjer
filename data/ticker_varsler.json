@@ -1,55 +1,90 @@
 {
-  "generert": "2026-09-08T19:16:38Z",
-  "antall": 9,
+  "generert": "2026-09-09T12:04:58Z",
+  "antall": 14,
   "antall_kritiske": 0,
   "varsler": [
     {
       "ticker": "DOF",
       "type": "hentefeil",
       "alvorlighet": "advarsel",
-      "melding": "Henting har feilet i 4 dager (sist OK 2026-09-04).",
+      "melding": "Henting har feilet i 5 dager (sist OK 2026-09-04).",
       "forslag": "Følg med. Vedvarer det til 7 dager, kontroller om tickeren fortsatt finnes."
     },
     {
       "ticker": "FLNG",
       "type": "hentefeil",
       "alvorlighet": "advarsel",
-      "melding": "Henting har feilet i 4 dager (sist OK 2026-09-04).",
+      "melding": "Henting har feilet i 5 dager (sist OK 2026-09-04).",
       "forslag": "Følg med. Vedvarer det til 7 dager, kontroller om tickeren fortsatt finnes."
+    },
+    {
+      "ticker": "FRO",
+      "type": "markedsverdi_borte",
+      "alvorlighet": "advarsel",
+      "melding": "Markedsverdien er borte fra Yahoo (var 95,059,976,192 sist). Kan indikere strukturendring i selskapet.",
+      "forslag": "Kontroller om selskapet er under oppkjøp eller strykning."
+    },
+    {
+      "ticker": "GJF",
+      "type": "markedsverdi_borte",
+      "alvorlighet": "advarsel",
+      "melding": "Markedsverdien er borte fra Yahoo (var 138,890,035,200 sist). Kan indikere strukturendring i selskapet.",
+      "forslag": "Kontroller om selskapet er under oppkjøp eller strykning."
     },
     {
       "ticker": "GOGL",
       "type": "hentefeil",
       "alvorlighet": "advarsel",
-      "melding": "Henting har feilet i 4 dager (sist OK 2026-09-04).",
+      "melding": "Henting har feilet i 5 dager (sist OK 2026-09-04).",
       "forslag": "Følg med. Vedvarer det til 7 dager, kontroller om tickeren fortsatt finnes."
+    },
+    {
+      "ticker": "HEX",
+      "type": "markedsverdi_borte",
+      "alvorlighet": "advarsel",
+      "melding": "Markedsverdien er borte fra Yahoo (var 4,461,943,808 sist). Kan indikere strukturendring i selskapet.",
+      "forslag": "Kontroller om selskapet er under oppkjøp eller strykning."
+    },
+    {
+      "ticker": "JIN",
+      "type": "markedsverdi_borte",
+      "alvorlighet": "advarsel",
+      "melding": "Markedsverdien er borte fra Yahoo (var 747,331,200 sist). Kan indikere strukturendring i selskapet.",
+      "forslag": "Kontroller om selskapet er under oppkjøp eller strykning."
     },
     {
       "ticker": "KMCP",
       "type": "hentefeil",
       "alvorlighet": "advarsel",
-      "melding": "Henting har feilet i 4 dager (sist OK 2026-09-04).",
+      "melding": "Henting har feilet i 5 dager (sist OK 2026-09-04).",
       "forslag": "Følg med. Vedvarer det til 7 dager, kontroller om tickeren fortsatt finnes."
     },
     {
       "ticker": "SBVG",
       "type": "hentefeil",
       "alvorlighet": "advarsel",
-      "melding": "Henting har feilet i 4 dager (sist OK 2026-09-04).",
+      "melding": "Henting har feilet i 5 dager (sist OK 2026-09-04).",
       "forslag": "Følg med. Vedvarer det til 7 dager, kontroller om tickeren fortsatt finnes."
+    },
+    {
+      "ticker": "SNI",
+      "type": "markedsverdi_borte",
+      "alvorlighet": "advarsel",
+      "melding": "Markedsverdien er borte fra Yahoo (var 21,713,125,376 sist). Kan indikere strukturendring i selskapet.",
+      "forslag": "Kontroller om selskapet er under oppkjøp eller strykning."
     },
     {
       "ticker": "TIETO",
       "type": "hentefeil",
       "alvorlighet": "advarsel",
-      "melding": "Henting har feilet i 4 dager (sist OK 2026-09-04).",
+      "melding": "Henting har feilet i 5 dager (sist OK 2026-09-04).",
       "forslag": "Følg med. Vedvarer det til 7 dager, kontroller om tickeren fortsatt finnes."
     },
     {
       "ticker": "WILS",
       "type": "hentefeil",
       "alvorlighet": "advarsel",
-      "melding": "Henting har feilet i 4 dager (sist OK 2026-09-04).",
+      "melding": "Henting har feilet i 5 dager (sist OK 2026-09-04).",
       "forslag": "Følg med. Vedvarer det til 7 dager, kontroller om tickeren fortsatt finnes."
     },
     {
