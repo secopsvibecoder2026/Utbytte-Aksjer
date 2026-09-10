@@ -114,6 +114,8 @@
     .dark .hist-paagaar { color: #9ca3af; }
     .desc { border-radius: 0.75rem; padding: 1rem 1.25rem; margin-bottom: 1.5rem; border: 1px solid; }
     .desc h2 { margin-bottom: 0.5rem; }
+    .desc p + p { margin-top: 0.75rem; }
+    .desc-fakta { font-size: 0.92em; opacity: 0.85; }
     .analyse { border-radius: 0.75rem; padding: 1rem 1.25rem; margin: 1rem 0 1.5rem; border: 1px solid; line-height: 1.75; }
     .analyse h2 { margin-bottom: 0.4rem; }
     .ai-oppsummering { border-radius: 0.75rem; padding: 1rem 1.25rem; margin: 1rem 0 1.5rem; border: 1px solid; line-height: 1.75; }
@@ -313,7 +315,13 @@
       <ul class="site-nav-menu">
         <li><a href="/aksjer/" class="active">Aksjer</a></li>
         <li><a href="/aksjer/sektor/" class="">Sektorer</a></li>
-        <li><a href="/utbyttekalender/" class="">Kalender</a></li>
+        <li class="has-dropdown">
+          <a href="/utbyttekalender/" class="">Kalender</a>
+          <ul class="nav-dropdown">
+            <li><a href="/utbyttekalender/">Utbyttekalender</a></li>
+            <li><a href="/rapportkalender/">Rapportkalender</a></li>
+          </ul>
+        </li>
         <li class="has-dropdown">
           <a href="/verktoy/" class="">Verktøy</a>
           <ul class="nav-dropdown">
@@ -377,7 +385,7 @@
   <!-- ── OVERSIKT ── -->
   <section id="oversikt">
 
-  <div class="desc"><h2>Om selskapet</h2><p>Frontline plc er et rederi som eier og driver råolje- og produkttankere globalt, herunder svært store råoljetankere (VLCC), Suezmax-tankere og LR2/Aframax-tankere. Per 31. desember 2025 opererte selskapet 80 fartøy, fordelt på 41 VLCC-er, 21 Suezmax-tankere og 18 LR2/Aframax-tankere. Frontline driver også befraktning samt kjøp og salg av fartøy. Selskapet ble stiftet i 1985 og har base i Limassol på Kypros.</p></div>
+  <div class="desc"><h2>Om selskapet</h2><p>Frontline er et av verdens største tankrederier og frakter råolje og oljeprodukter globalt. Flåten består av svært store råoljetankere (VLCC), Suezmax-tankere og LR2/Aframax-tankere, og selskapet driver i tillegg befraktning samt kjøp og salg av fartøy. Rederiet inngår i John Fredriksens shippinggruppe og har base på Kypros. Inntjeningen bestemmes av dagratene i spotmarkedet, som svinger med hvor langt oljen faktisk må fraktes: en omlegging av handelsmønsteret kan øke seilingsdistansene kraftig uten at oljevolumene endrer seg, og det slår rett inn i ratene. Kostnadssiden domineres av drivstoff og finanskostnader, og rederiet har historisk operert med relativt høy belåning. Kontantutdelingen er knyttet til inntjeningen kvartal for kvartal, slik at den følger ratene tett både opp og ned.</p><p class="desc-fakta">Frontline plc er et rederi som eier og driver råolje- og produkttankere globalt, herunder svært store råoljetankere (VLCC), Suezmax-tankere og LR2/Aframax-tankere. Per 31. desember 2025 opererte selskapet 80 fartøy, fordelt på 41 VLCC-er, 21 Suezmax-tankere og 18 LR2/Aframax-tankere. Frontline driver også befraktning samt kjøp og salg av fartøy. Selskapet ble stiftet i 1985 og har base i Limassol på Kypros.</p></div>
 
   <div class="kgrid">
     <div class="kcard">
@@ -574,7 +582,7 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
     <a href="https://exday.no/app/?aksje=FRO">Åpne FRO i exday.no →</a>
   </div>
 
-  <p class="updated">Sist oppdatert: 2026-09-09</p>
+  <p class="updated">Sist oppdatert: 2026-09-10</p>
   <footer style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid #e5e7eb;font-size:0.78rem;text-align:center;color:#9ca3af;line-height:1.6;" class="std-footer">
     <p>Kurs og utbyttedata hentes fra Yahoo Finance og Euronext. Oppdateres daglig på børsdager.</p>
     <p style="max-width:36rem;margin:0.4rem auto;">
