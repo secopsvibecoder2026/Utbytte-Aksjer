@@ -1032,6 +1032,87 @@ If you touch this code, verify across all 163 stocks that no description has a
 duplicated sentence, a stale percentage, or a null year count — and that a second
 run changes nothing (it must be idempotent).
 
+### The text was invisible on 153 of 160 pages (fixed 2026-09-09)
+
+Every incident above was about the description being *wrong*. This one is worse:
+for most of the catalog it was never rendered at all.
+
+«Om selskapet» was built as
+
+```python
+besk = a.get("beskrivelse_fakta") or a.get("beskrivelse") or ""
+```
+
+and 153 of 160 stocks carry a Yahoo business summary in `beskrivelse_fakta`, so
+the `or` always fell the same way. The whole of `beskrivelse` — hand-written
+intro, dividend profile, sector driver — appeared on **seven** stock pages.
+`assets/ui.js` had the identical expression, so it was missing from the app's
+modal too. EQNR had 261 unused words behind a 35-word Yahoo paragraph.
+
+So everything `lag_beskrivelse()` does, and every fix listed above, was
+maintaining text almost nobody saw.
+
+**What renders now.** `beskrivelse_intro` — a new field holding *only* the
+hand-written intro, built by `_redaksjonell_intro()` in `fetch_stocks.py` and
+synced by `regenerer_sider.py` — is shown first, with `beskrivelse_fakta` under
+it as a lighter factual note. `modalOmSelskapet()` in `ui.js` does the same.
+
+**Only the intro, deliberately.** Paragraph 2 (dividend profile) would repeat
+«Vurdering som utbytteaksje», and paragraph 3 (sector driver) would repeat «Hva
+driver utbyttet i …?» — both already sit further down the same page. Render the
+whole `beskrivelse` and every stock page says the same thing twice.
+
+**Why it matters beyond tidiness.** AdSense rejected the site twice for «Low
+value content». Measured with numbers and company names masked, 46 % of a stock
+page was word-for-word identical to at least half of the other 163, and 9 % was
+unique — roughly 7 % of ~900 words was company-specific. 85 % of the sitemap is
+generated pages, so that is the whole site's character. Rewriting an intro from
+18 to ~130 words moves one page to 41 % / 19 % and about 1 050 words.
+
+**When adding a field that holds prose, check that something renders it.** Grep
+the SEO template *and* `assets/ui.js` before assuming a field is live — and be
+suspicious of any `a or b` fallback where `a` is nearly always set.
+
+### Writing the hand-written intros
+
+The intro is the only editorial text on a stock page, and it is stored in
+`tickers.json` as the whole of `beskrivelse` (the generated paragraphs are
+rebuilt on every run, so nothing else belongs in the field).
+
+Two hard constraints, both easy to break silently:
+
+- **No phrase from `_AUTO_TEGN`.** `_manuell_del()` truncates at the first
+  match, so an intro containing «noe som gjør» loses everything after it with
+  no warning. The list includes ordinary Norwegian constructions — «noe som
+  gjør», «noe som gir selskapet», «er notert på» — so this is not hypothetical.
+- **No number that can drift.** No yield, payout, market cap or year count.
+  Fixed historical facts (a founding year, a rename year) are fine. DNB's intro
+  promised «ofte over 7% yield» while the sentence below it showed 5,6 %.
+
+Median intro length was **18 words** (124 of 160 under 25) before this work.
+Target is 120–150 words: what the company does, where the revenue comes from,
+and what is structurally specific to it — not the sector-generic drivers, which
+paragraph 3 and «Hva driver utbyttet i …?» already cover.
+
+**Check the facts against `beskrivelse_fakta`, not memory.** ENH was described
+as an «internasjonalt olje- og gasselskap»; it collects marine seismic data
+*for* the oil and gas industry. Same class of error as AFG/Arendals
+Fossekompani, and on the page with the highest CTR on the whole site.
+
+`scripts/valider_innledning.py` enforces both constraints and reports progress:
+
+```bash
+python scripts/valider_innledning.py            # errors + how many are written
+python scripts/valider_innledning.py --korte    # which stocks still need one
+python scripts/valider_innledning.py --streng   # exit 1 on any error
+```
+
+It validates the **extracted** intro (`_manuell_del()` output), not the raw
+field — for a stock not yet rewritten the field still holds the frozen
+generated paragraphs, and flagging those would be noise. Run it before
+committing new intros; it caught DNB and NORBT, both of which had frozen
+figures sitting in hand-written text.
+
 ---
 
 ## Common Pitfalls
