@@ -1,5 +1,5 @@
 {
-  "generert": "2026-09-10T18:57:03Z",
+  "generert": "2026-09-10T19:17:53Z",
   "antall": 9,
   "antall_kritiske": 0,
   "varsler": [
@@ -19,13 +19,6 @@
     },
     {
       "ticker": "GOGL",
-      "type": "hentefeil",
-      "alvorlighet": "advarsel",
-      "melding": "Henting har feilet i 6 dager (sist OK 2026-09-04).",
-      "forslag": "Følg med. Vedvarer det til 7 dager, kontroller om tickeren fortsatt finnes."
-    },
-    {
-      "ticker": "KMCP",
       "type": "hentefeil",
       "alvorlighet": "advarsel",
       "melding": "Henting har feilet i 6 dager (sist OK 2026-09-04).",
@@ -58,6 +51,13 @@
       "alvorlighet": "info",
       "melding": "Navnet avviker litt fra Yahoo: «P/F Bakkafrost» vs «Bakkafrost P/F» (likhet 71%).",
       "forslag": "Sannsynligvis bare ulik skrivemåte. Juster gjerne navnet i data/tickers.json for konsistens."
+    },
+    {
+      "ticker": "BINT",
+      "type": "ny_ticker",
+      "alvorlighet": "info",
+      "melding": "«BEWI Invest ASA» (BINT.OL) er lagt til i tickers.json etter forrige datahenting og har derfor ingen data ennå.",
+      "forslag": "Ingen handling nødvendig — data kommer ved neste kjøring av fetch_stocks.py."
     },
     {
       "ticker": "PUBLI",
