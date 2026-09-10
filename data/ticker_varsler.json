@@ -1,6 +1,6 @@
 {
-  "generert": "2026-09-10T11:57:17Z",
-  "antall": 9,
+  "generert": "2026-09-10T14:02:14Z",
+  "antall": 14,
   "antall_kritiske": 0,
   "varsler": [
     {
@@ -18,11 +18,39 @@
       "forslag": "Følg med. Vedvarer det til 7 dager, kontroller om tickeren fortsatt finnes."
     },
     {
+      "ticker": "FRO",
+      "type": "markedsverdi_borte",
+      "alvorlighet": "advarsel",
+      "melding": "Markedsverdien er borte fra Yahoo (var 97,286,209,536 sist). Kan indikere strukturendring i selskapet.",
+      "forslag": "Kontroller om selskapet er under oppkjøp eller strykning."
+    },
+    {
+      "ticker": "GJF",
+      "type": "markedsverdi_borte",
+      "alvorlighet": "advarsel",
+      "melding": "Markedsverdien er borte fra Yahoo (var 140,089,950,208 sist). Kan indikere strukturendring i selskapet.",
+      "forslag": "Kontroller om selskapet er under oppkjøp eller strykning."
+    },
+    {
       "ticker": "GOGL",
       "type": "hentefeil",
       "alvorlighet": "advarsel",
       "melding": "Henting har feilet i 6 dager (sist OK 2026-09-04).",
       "forslag": "Følg med. Vedvarer det til 7 dager, kontroller om tickeren fortsatt finnes."
+    },
+    {
+      "ticker": "HEX",
+      "type": "markedsverdi_borte",
+      "alvorlighet": "advarsel",
+      "melding": "Markedsverdien er borte fra Yahoo (var 4,425,315,840 sist). Kan indikere strukturendring i selskapet.",
+      "forslag": "Kontroller om selskapet er under oppkjøp eller strykning."
+    },
+    {
+      "ticker": "JIN",
+      "type": "markedsverdi_borte",
+      "alvorlighet": "advarsel",
+      "melding": "Markedsverdien er borte fra Yahoo (var 764,812,608 sist). Kan indikere strukturendring i selskapet.",
+      "forslag": "Kontroller om selskapet er under oppkjøp eller strykning."
     },
     {
       "ticker": "KMCP",
@@ -37,6 +65,13 @@
       "alvorlighet": "advarsel",
       "melding": "Henting har feilet i 6 dager (sist OK 2026-09-04).",
       "forslag": "Følg med. Vedvarer det til 7 dager, kontroller om tickeren fortsatt finnes."
+    },
+    {
+      "ticker": "SNI",
+      "type": "markedsverdi_borte",
+      "alvorlighet": "advarsel",
+      "melding": "Markedsverdien er borte fra Yahoo (var 22,509,936,640 sist). Kan indikere strukturendring i selskapet.",
+      "forslag": "Kontroller om selskapet er under oppkjøp eller strykning."
     },
     {
       "ticker": "TIETO",
