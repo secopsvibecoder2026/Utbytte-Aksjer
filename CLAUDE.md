@@ -987,6 +987,38 @@ but a permanently dead ticker drops out.
 
 When adding new tickers, always verify `ticker_yf` is unique in `tickers.json`, and confirm the ticker/name matches the current Oslo Børs / Euronext listing (companies get renamed, merged and delisted).
 
+### KMCP → BINT (corrected 2026-09-10)
+
+`KMC Properties ASA` (KMCP) merged with BEWI Invest AS. KMCP was the surviving
+legal entity, but the combined company was renamed **BEWI Invest ASA** and
+admitted to trading under the ticker **BINT** on 27 April 2026 — a Norwegian
+industrial owner with a portfolio in industrials, real estate and seafood,
+headquartered in Trondheim. Same class of correction as JAEDR→JAREN and
+ABL→AQUA: a rename, not a delisting.
+
+The stored row was worth deleting rather than carrying over. A reverse share
+split and ISIN change in February 2026 had left Yahoo's history unusable:
+`siste_utbytte` sat at 6958,03 on a 24,80 kr share (the figure Sjekk 8 in
+`valider_data.py` had been flagging), market cap was 0, and
+`historiske_utbytter` was empty. `beskrivelse_fakta` still described the old,
+emptied-out property company. The next full fetch picks BINT up clean.
+
+`BEWI ASA` (the packaging company) stays in the catalog as a separate listing —
+BEWI Invest is its owner. That is **not** a `duplikat_navn`: that check keys on
+the exact normalised name, so «bewi» and «bewi invest» are different entries.
+The prefix rule that would have collapsed them belongs to `navneendring`, which
+compares our name against Yahoo's.
+
+> ⚠️ **A failed fetch is not evidence that a company is gone.** KMCP's fetch had
+> been returning «Yahoo returnerte verken selskapsnavn eller kurs» for six days,
+> which looks damning until you notice that **six other tickers failed the same
+> way on the same day** — DOF, FLNG, GOGL, SBVG, TIETO and WILS, all
+> unquestionably alive, and very nearly the same group as the 2026-08-29
+> incident. Querying Yahoo directly proves nothing either: a control query for a
+> ticker known to be trading came back «No data found, symbol may be delisted»
+> too. Verify against Euronext or the company's own announcements before
+> removing anything — every removal listed above was checked that way.
+
 ---
 
 ## Adding a New Stock
