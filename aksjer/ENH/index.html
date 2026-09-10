@@ -114,6 +114,8 @@
     .dark .hist-paagaar { color: #9ca3af; }
     .desc { border-radius: 0.75rem; padding: 1rem 1.25rem; margin-bottom: 1.5rem; border: 1px solid; }
     .desc h2 { margin-bottom: 0.5rem; }
+    .desc p + p { margin-top: 0.75rem; }
+    .desc-fakta { font-size: 0.92em; opacity: 0.85; }
     .analyse { border-radius: 0.75rem; padding: 1rem 1.25rem; margin: 1rem 0 1.5rem; border: 1px solid; line-height: 1.75; }
     .analyse h2 { margin-bottom: 0.4rem; }
     .ai-oppsummering { border-radius: 0.75rem; padding: 1rem 1.25rem; margin: 1rem 0 1.5rem; border: 1px solid; line-height: 1.75; }
@@ -313,7 +315,13 @@
       <ul class="site-nav-menu">
         <li><a href="/aksjer/" class="active">Aksjer</a></li>
         <li><a href="/aksjer/sektor/" class="">Sektorer</a></li>
-        <li><a href="/utbyttekalender/" class="">Kalender</a></li>
+        <li class="has-dropdown">
+          <a href="/utbyttekalender/" class="">Kalender</a>
+          <ul class="nav-dropdown">
+            <li><a href="/utbyttekalender/">Utbyttekalender</a></li>
+            <li><a href="/rapportkalender/">Rapportkalender</a></li>
+          </ul>
+        </li>
         <li class="has-dropdown">
           <a href="/verktoy/" class="">Verktøy</a>
           <ul class="nav-dropdown">
@@ -377,7 +385,7 @@
   <!-- ── OVERSIKT ── -->
   <section id="oversikt">
 
-  <div class="desc"><h2>Om selskapet</h2><p>SED Energy Holdings Plc samler inn og bearbeider marine seismiske data for olje- og gassnæringen i Europa, Afrika, Midtøsten, Nord- og Sør-Amerika og Asia-Stillehavsregionen. Selskapet tilbyr 2D-seismikk og kildefartøy for konvensjonell undershoot, 4D-gjentaksundersøkelser, wide azimuth og push reverse, samt langtidsbefraktning og skipsforvaltning, egen kildemodellering og miljøanalyse, og spotbefraktning. Selskapet eier og driver også tenderassisterte borerigger.</p></div>
+  <div class="desc"><h2>Om selskapet</h2><p>SED Energy Holdings samler inn og bearbeider marine seismiske data for olje- og gassnæringen. Selskapet er altså ikke en oljeprodusent, men en tjenesteleverandør til leteselskapene: fartøyene skyter seismikk som kartlegger geologien under havbunnen, og dataene brukes til å vurdere hvor det er verdt å bore. Tjenestespekteret dekker todimensjonal seismikk, kildefartøy for undershoot, gjentaksundersøkelser over produserende felt, innsamling med bred azimut, egen kildemodellering og miljøanalyse. Oppdragene selges både som langtidskontrakter med tilhørende skipsforvaltning og i spotmarkedet. Virksomheten er global, med oppdrag i Europa, Afrika, Midtøsten, Nord- og Sør-Amerika og Asia-Stillehavsregionen. Etterspørselen følger leteaktiviteten hos oljeselskapene, som svinger med oljeprisen — men med et tydelig etterslep, siden leteinvesteringer besluttes i budsjettsykluser og ikke fra dag til dag.</p><p class="desc-fakta">SED Energy Holdings Plc samler inn og bearbeider marine seismiske data for olje- og gassnæringen i Europa, Afrika, Midtøsten, Nord- og Sør-Amerika og Asia-Stillehavsregionen. Selskapet tilbyr 2D-seismikk og kildefartøy for konvensjonell undershoot, 4D-gjentaksundersøkelser, wide azimuth og push reverse, samt langtidsbefraktning og skipsforvaltning, egen kildemodellering og miljøanalyse, og spotbefraktning. Selskapet eier og driver også tenderassisterte borerigger.</p></div>
 
   <div class="kgrid">
     <div class="kcard">

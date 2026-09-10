@@ -114,6 +114,8 @@
     .dark .hist-paagaar { color: #9ca3af; }
     .desc { border-radius: 0.75rem; padding: 1rem 1.25rem; margin-bottom: 1.5rem; border: 1px solid; }
     .desc h2 { margin-bottom: 0.5rem; }
+    .desc p + p { margin-top: 0.75rem; }
+    .desc-fakta { font-size: 0.92em; opacity: 0.85; }
     .analyse { border-radius: 0.75rem; padding: 1rem 1.25rem; margin: 1rem 0 1.5rem; border: 1px solid; line-height: 1.75; }
     .analyse h2 { margin-bottom: 0.4rem; }
     .ai-oppsummering { border-radius: 0.75rem; padding: 1rem 1.25rem; margin: 1rem 0 1.5rem; border: 1px solid; line-height: 1.75; }
@@ -313,7 +315,13 @@
       <ul class="site-nav-menu">
         <li><a href="/aksjer/" class="active">Aksjer</a></li>
         <li><a href="/aksjer/sektor/" class="">Sektorer</a></li>
-        <li><a href="/utbyttekalender/" class="">Kalender</a></li>
+        <li class="has-dropdown">
+          <a href="/utbyttekalender/" class="">Kalender</a>
+          <ul class="nav-dropdown">
+            <li><a href="/utbyttekalender/">Utbyttekalender</a></li>
+            <li><a href="/rapportkalender/">Rapportkalender</a></li>
+          </ul>
+        </li>
         <li class="has-dropdown">
           <a href="/verktoy/" class="">Verktøy</a>
           <ul class="nav-dropdown">
@@ -377,7 +385,7 @@
   <!-- ── OVERSIKT ── -->
   <section id="oversikt">
 
-  <div class="desc"><h2>Om selskapet</h2><p>Tinde Sparebank er en sparebank som leverer finansielle produkter og tjenester til privat- og bedriftskunder i Norge. Banken tilbyr spare- og pensjonskonti, kredittkort samt mobil- og nettbank. Den formidler også forsikring for bil, barn, innbo, hus, reise, hund og skade, og tilbyr billån, boliglån, forbrukslån og lån til motorsykkel, bobil og ATV, i tillegg til refinansiering av forbruksgjeld. Banken het tidligere Romsdal Sparebank og skiftet navn til Tinde Sparebank i juni 2025.</p></div>
+  <div class="desc"><h2>Om selskapet</h2><p>Regional sparebank på Sunnmøre i Møre og Romsdal. Betaler halvårlig utbytte til egenkapitalbeviseierne. Solid lokal bank med veldrevet virksomhet i et område med sterk industri og næringsvirksomhet.</p><p class="desc-fakta">Tinde Sparebank er en sparebank som leverer finansielle produkter og tjenester til privat- og bedriftskunder i Norge. Banken tilbyr spare- og pensjonskonti, kredittkort samt mobil- og nettbank. Den formidler også forsikring for bil, barn, innbo, hus, reise, hund og skade, og tilbyr billån, boliglån, forbrukslån og lån til motorsykkel, bobil og ATV, i tillegg til refinansiering av forbruksgjeld. Banken het tidligere Romsdal Sparebank og skiftet navn til Tinde Sparebank i juni 2025.</p></div>
 
   <div class="kgrid">
     <div class="kcard">

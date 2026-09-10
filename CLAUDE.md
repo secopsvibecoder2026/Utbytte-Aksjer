@@ -485,7 +485,9 @@ Oslo Børs · <!--N:aksjer-->160<!--/N--> aksjer · oppdateres daglig
 ```
 
 Available keys: `aksjer` (catalog size), `utbytte` (yield > 0), `historikk`
-(`ar_med_utbytte` > 0), `exdato` (has an announced ex-date), `sektorer`.
+(`ar_med_utbytte` > 0), `exdato` (has an announced ex-date), `sektorer`,
+`arlig` / `halvarlig` / `kvartalsvis` / `manedlig` (count per `frekvens`) and
+`rapportdato` (has an announced report date).
 
 **Write a marker, not a number.** A bare digit will drift again and nothing
 will catch it. An unknown key is left untouched and reported, so a typo shows
@@ -500,6 +502,35 @@ something like `{{ANTALL}}`.
 utbytteaksjer» — which stays true as stocks come and go. Same for article
 ingresses that are duplicated in `assets/ui.js` and the article index: round
 them, and keep the exact, date-stamped figure in the article body only.
+
+### A year in a `<title>` is the same trap — `oppdater_aarstall_i_sider()`
+
+Rounding does not work for a year: «Utbyttekalender 2026» is the single
+strongest query the site has (the three calendar searches carry 2 340
+impressions in Search Console), so the year has to be exact and it has to be
+in the `<title>`, where a marker cannot go. Left alone it would advertise last
+year's calendar from 1 January.
+
+`oppdater_aarstall_i_sider()` therefore syncs on a **text anchor** instead of a
+marker: the digits immediately following the word «utbyttekalender», anywhere
+in the file. Both `fetch_stocks.py` and `regenerer_sider.py` call it.
+
+Two rules when writing such a page:
+
+- **Opt in with `<!--AAR-SYNK-->`.** Files without it are never touched, so an
+  article that deliberately names a past year (`beste-utbytteaksjer-2026`)
+  cannot be rewritten by accident.
+- **Put the year straight after the anchor word.** «Utbyttekalender 2026 for
+  Oslo Børs» is synced; «for Oslo Børs 2026» is not. The meta description was
+  rephrased for exactly this reason.
+
+Anything else — a price year, a footnote date — stays untouched even in an
+opted-in file, because the anchor is required.
+
+The visible heading has a second, independent guard: `<span id="aar">` is set
+from `new Date().getFullYear()` on load, so the page is right in the browser
+even if the generator has not run. That span sat there unused until
+05.09.2026, with a hard-coded 2026 and nothing filling it.
 
 Generated pages (`/aksjer/**`) compute their own numbers and are skipped.
 
@@ -597,6 +628,66 @@ a ticker only took effect on the next full `fetch_stocks.py` run. The
 against `vart_navn` in `hentelogg.json` — a snapshot written during fetch.
 
 ---
+
+## `/rapportkalender/` — generated, and deliberately not from `hendelser.json`
+
+`generer_rapportkalender()` writes `/rapportkalender/index.html` from
+`rapport_dato` in `aksjer.json`. Unlike `/utbyttekalender/`, which is filled by
+JavaScript and therefore needed a static prose section bolted on so crawlers
+see something other than «Laster kalender…», this page is written complete by
+the generator — the rows are real HTML from the first byte.
+
+It exists because the report date is the **leading indicator**: dividends are
+announced in the quarterly report, so 140 companies have a known report date
+while only 11 have a confirmed ex-date. The dividend calendar stands nearly
+empty eleven months a year; this one does not.
+
+**Do not source the upcoming dates from `data/hendelser.json`.**
+`oppdater_hendelser.py` accumulates `(ticker, dato)` pairs and never deletes,
+so every time a company moves its report date the old one stays behind as a
+*future* event. Measured on 2026-09-05: 12 tickers carried between 8 and 12
+"upcoming" dates each — Entra was listed with twelve reports in three months —
+and they accounted for **96 of 236 events, 41 %**. `rapport_dato` in
+`aksjer.json` is rewritten every run and holds exactly one current date per
+company, so it cannot drift the same way.
+
+A «Nylig framlagt» section with NewsWeb links was built and then removed: the
+URLs attach to the accumulated dates, so the twenty newest rows consisted of
+ten tickers from exactly that polluted group. It can come back now that the
+accumulator prunes, once enough clean history has built up.
+
+### Both causes are fixed — keep them fixed (2026-09-07)
+
+**Root cause, `_parse_rapport_dato()` in `fetch_stocks.py`.** It ended with
+`return kommende[0]` — the nearest upcoming entry of *any* kind — whenever no
+entry matched a report keyword. General meetings, capital markets days and
+quiet-period starts were therefore stored as "next quarterly report", and since
+the only other condition was `d > today`, the value moved every time one of
+them passed. Entra collected 38 different report dates between April and
+September 2026 this way.
+
+It now returns `None` instead. The call site has two Yahoo sources after it
+(`earnings_dates`, then `calendar["Earnings Date"]`), and a missing date beats
+a date that is actually a general meeting.
+
+**Second cause, `rydd_framtidige()` in `oppdater_hendelser.py`.** A future entry
+is kept only when it equals the company's current `rapport_dato`. Past entries
+are never touched — they are history, they carry the NewsWeb URLs, and no
+calendar displays them (`assets/ui.js` filters on `dato >= i dag`; `/uke/` reads
+`aksjer.json` directly and never touched this file). One-off cleanup on
+2026-09-07 took the file from 836 to 740 entries; all 457 URLs survived.
+
+A ticker whose fetch failed has no `rapport_dato`, so its future entry is
+dropped too. That is deliberate and self-healing: the next successful run
+re-adds it, and until then no date is more truthful than an old guess.
+
+Tests: `scripts/test_oppdater_hendelser.py` (7, in CI) and
+`TestParseRapportDato` in `scripts/test_fetch_stocks.py`.
+
+The analysis paragraphs are built by `_rapportkalender_analyse()` from the
+current run's numbers — never stored — and name the busiest months in
+**calendar order**, not by count: «november og oktober» reads as an error even
+when the figures behind it are right.
 
 ## Data Quality Checks
 
@@ -940,6 +1031,87 @@ an actual 6,9 %. Four follow-on bugs surfaced while fixing it:
 If you touch this code, verify across all 163 stocks that no description has a
 duplicated sentence, a stale percentage, or a null year count — and that a second
 run changes nothing (it must be idempotent).
+
+### The text was invisible on 153 of 160 pages (fixed 2026-09-09)
+
+Every incident above was about the description being *wrong*. This one is worse:
+for most of the catalog it was never rendered at all.
+
+«Om selskapet» was built as
+
+```python
+besk = a.get("beskrivelse_fakta") or a.get("beskrivelse") or ""
+```
+
+and 153 of 160 stocks carry a Yahoo business summary in `beskrivelse_fakta`, so
+the `or` always fell the same way. The whole of `beskrivelse` — hand-written
+intro, dividend profile, sector driver — appeared on **seven** stock pages.
+`assets/ui.js` had the identical expression, so it was missing from the app's
+modal too. EQNR had 261 unused words behind a 35-word Yahoo paragraph.
+
+So everything `lag_beskrivelse()` does, and every fix listed above, was
+maintaining text almost nobody saw.
+
+**What renders now.** `beskrivelse_intro` — a new field holding *only* the
+hand-written intro, built by `_redaksjonell_intro()` in `fetch_stocks.py` and
+synced by `regenerer_sider.py` — is shown first, with `beskrivelse_fakta` under
+it as a lighter factual note. `modalOmSelskapet()` in `ui.js` does the same.
+
+**Only the intro, deliberately.** Paragraph 2 (dividend profile) would repeat
+«Vurdering som utbytteaksje», and paragraph 3 (sector driver) would repeat «Hva
+driver utbyttet i …?» — both already sit further down the same page. Render the
+whole `beskrivelse` and every stock page says the same thing twice.
+
+**Why it matters beyond tidiness.** AdSense rejected the site twice for «Low
+value content». Measured with numbers and company names masked, 46 % of a stock
+page was word-for-word identical to at least half of the other 163, and 9 % was
+unique — roughly 7 % of ~900 words was company-specific. 85 % of the sitemap is
+generated pages, so that is the whole site's character. Rewriting an intro from
+18 to ~130 words moves one page to 41 % / 19 % and about 1 050 words.
+
+**When adding a field that holds prose, check that something renders it.** Grep
+the SEO template *and* `assets/ui.js` before assuming a field is live — and be
+suspicious of any `a or b` fallback where `a` is nearly always set.
+
+### Writing the hand-written intros
+
+The intro is the only editorial text on a stock page, and it is stored in
+`tickers.json` as the whole of `beskrivelse` (the generated paragraphs are
+rebuilt on every run, so nothing else belongs in the field).
+
+Two hard constraints, both easy to break silently:
+
+- **No phrase from `_AUTO_TEGN`.** `_manuell_del()` truncates at the first
+  match, so an intro containing «noe som gjør» loses everything after it with
+  no warning. The list includes ordinary Norwegian constructions — «noe som
+  gjør», «noe som gir selskapet», «er notert på» — so this is not hypothetical.
+- **No number that can drift.** No yield, payout, market cap or year count.
+  Fixed historical facts (a founding year, a rename year) are fine. DNB's intro
+  promised «ofte over 7% yield» while the sentence below it showed 5,6 %.
+
+Median intro length was **18 words** (124 of 160 under 25) before this work.
+Target is 120–150 words: what the company does, where the revenue comes from,
+and what is structurally specific to it — not the sector-generic drivers, which
+paragraph 3 and «Hva driver utbyttet i …?» already cover.
+
+**Check the facts against `beskrivelse_fakta`, not memory.** ENH was described
+as an «internasjonalt olje- og gasselskap»; it collects marine seismic data
+*for* the oil and gas industry. Same class of error as AFG/Arendals
+Fossekompani, and on the page with the highest CTR on the whole site.
+
+`scripts/valider_innledning.py` enforces both constraints and reports progress:
+
+```bash
+python scripts/valider_innledning.py            # errors + how many are written
+python scripts/valider_innledning.py --korte    # which stocks still need one
+python scripts/valider_innledning.py --streng   # exit 1 on any error
+```
+
+It validates the **extracted** intro (`_manuell_del()` output), not the raw
+field — for a stock not yet rewritten the field still holds the frozen
+generated paragraphs, and flagging those would be noise. Run it before
+committing new intros; it caught DNB and NORBT, both of which had frozen
+figures sitting in hand-written text.
 
 ---
 

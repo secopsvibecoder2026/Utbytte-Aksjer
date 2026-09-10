@@ -2690,6 +2690,24 @@ function eksporterEnkeltICS(a, type, dato) {
 }
 
 
+// «Om selskapet» viste tidligere `beskrivelse_fakta || beskrivelse`. 153 av
+// 160 aksjer har et faktasammendrag fra Yahoo, så den redaksjonelle teksten
+// tapte alltid — og var usynlig både her og på aksjesiden. Nå vises begge:
+// den skrevne innledningen først, Yahoos faktaavsnitt under.
+function modalOmSelskapet(a) {
+  const intro = (a.beskrivelse_intro || '').trim();
+  const fakta = (a.beskrivelse_fakta || '').trim();
+  const deler = [];
+  if (intro) deler.push('<p class="om-selskap-tekst">' + escHtml(intro) + '</p>');
+  if (fakta && fakta !== intro) {
+    deler.push('<p class="om-selskap-tekst om-selskap-fakta">' + escHtml(fakta) + '</p>');
+  }
+  if (!deler.length) return '';
+  return '<div class="om-selskap-boks"><p class="om-selskap-label">Om selskapet</p>'
+    + deler.join('') + '</div>';
+}
+
+
 function modalKontoer(a) {
   const askEgnet = a.ask_egnet !== false;
   const land = escHtml(a.inkorporeringsland || 'Norge');
@@ -2793,11 +2811,7 @@ function visModal(a) {
         ${modalKort('P/B', a.pb_ratio > 0 ? a.pb_ratio.toFixed(1).replace('.', ',') : '—')}
         ${modalKort('Markedsverdi', a.markedsverdi_mrd > 0 ? a.markedsverdi_mrd.toFixed(1).replace('.', ',') + ' mrd' : '—')}
       </div>
-      ${a.beskrivelse_fakta
-        ? '<div class="om-selskap-boks"><p class="om-selskap-label">Om selskapet</p><p class="om-selskap-tekst">' + escHtml(a.beskrivelse_fakta) + '</p></div>'
-        : a.beskrivelse
-          ? '<div class="om-selskap-boks"><p class="om-selskap-label">Om selskapet</p><p class="om-selskap-tekst">' + escHtml(a.beskrivelse) + '</p></div>'
-          : ''}
+      ${modalOmSelskapet(a)}
       ${a.utbyttehistorikk_tekst
         ? '<div class="ai-opp-boks"><p class="ai-opp-label">Utbyttehistorikken kort fortalt</p><p class="ai-opp-tekst">' + escHtml(a.utbyttehistorikk_tekst) + '</p></div>'
         : ''}

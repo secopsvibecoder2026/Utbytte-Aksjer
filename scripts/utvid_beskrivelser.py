@@ -12,6 +12,24 @@ Genererer redaksjonell, ikke-repetitiv prosa i tre avsnitt:
 
 import json, os
 
+
+def _nf(verdi, desimaler=1):
+    """Norsk tallformat: komma som desimalskilletegn.
+
+    Beskrivelsene bygde tallene med rene f-strenger, så 140 av 160 aksjer
+    fikk «Direkteavkastningen er 5.6%» rett ved siden av «37,84 %» fra
+    håndskrevet tekst i samme avsnitt. Teksten vises både på aksjesiden og
+    i appens modal, så feilen sto to steder per aksje.
+
+    Samme regel som _nf() i fetch_stocks.py — og samme forbehold: dette skal
+    aldri brukes på SVG-koordinater, der komma gjør attributtet ugyldig.
+    """
+    try:
+        return f"{float(verdi):.{desimaler}f}".replace(".", ",")
+    except (TypeError, ValueError):
+        return "0"
+
+
 ROOT      = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TICKERS_F = os.path.join(ROOT, "data", "tickers.json")
 AKSJER_F  = os.path.join(ROOT, "data", "aksjer.json")
@@ -136,35 +154,35 @@ def lag_beskrivelse(t: dict, a: dict) -> str:
         elif yield_ >= 4:
             yield_karakter = "blant de solid-yielding"
         else:
-            yield_karakter = "i det lavere sjiktet"
+            yield_karakter = "i det lavere sjiktet av"
         deler2.append(
-            f"Direkteavkastningen er {yield_:.1f}%, og 5-årssnittet på {snitt5:.1f}% "
+            f"Direkteavkastningen er {_nf(yield_)} %, og 5-årssnittet på {_nf(snitt5)} % "
             f"plasserer {ticker} {yield_karakter} aksjene i sin sektor."
         )
     elif yield_ > 0:
-        deler2.append(f"Direkteavkastningen er {yield_:.1f}%.")
+        deler2.append(f"Direkteavkastningen er {_nf(yield_)} %.")
 
     if payout > 0:
         if payout < 50:
             deler2.append(
-                f"Utbetalingsgraden på {payout:.0f}% er lav og gir selskapet "
+                f"Utbetalingsgraden på {_nf(payout, 0)} % er lav og gir selskapet "
                 f"solid buffer til å opprettholde utbyttet ved svakere kvartaler."
             )
         elif payout < 80:
             deler2.append(
-                f"Utbetalingsgraden er {payout:.0f}%, noe som er balansert "
+                f"Utbetalingsgraden er {_nf(payout, 0)} %, noe som er balansert "
                 f"for en moden utbytteaksje."
             )
         else:
             deler2.append(
-                f"En utbetalingsgrad på {payout:.0f}% betyr at det meste av inntjeningen "
+                f"En utbetalingsgrad på {_nf(payout, 0)} % betyr at det meste av inntjeningen "
                 f"deles ut — utbyttet er dermed sensitivt for resultatsvingninger."
             )
 
     if vekst is not None and abs(vekst) > 0.5:
         retning = "vokst" if vekst > 0 else "falt"
         deler2.append(
-            f"Utbyttet har {retning} med i snitt {abs(vekst):.1f}% per år de siste fem årene."
+            f"Utbyttet har {retning} med i snitt {_nf(abs(vekst))} % per år de siste fem årene."
         )
 
     if deler2:
@@ -180,8 +198,8 @@ def lag_beskrivelse(t: dict, a: dict) -> str:
             if max_h["utbytte"] > min_h["utbytte"] * 1.5:
                 svingning = (
                     f" Historikken viser klare svingninger: høyest utbytte var "
-                    f"{max_h['utbytte']:.2f} {valuta} per aksje i {max_h['ar']}, "
-                    f"lavest {min_h['utbytte']:.2f} {valuta} i {min_h['ar']}."
+                    f"{_nf(max_h['utbytte'], 2)} {valuta} per aksje i {max_h['ar']}, "
+                    f"lavest {_nf(min_h['utbytte'], 2)} {valuta} i {min_h['ar']}."
                 )
             else:
                 svingning = ""

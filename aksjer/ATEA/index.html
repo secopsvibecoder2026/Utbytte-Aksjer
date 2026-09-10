@@ -114,6 +114,8 @@
     .dark .hist-paagaar { color: #9ca3af; }
     .desc { border-radius: 0.75rem; padding: 1rem 1.25rem; margin-bottom: 1.5rem; border: 1px solid; }
     .desc h2 { margin-bottom: 0.5rem; }
+    .desc p + p { margin-top: 0.75rem; }
+    .desc-fakta { font-size: 0.92em; opacity: 0.85; }
     .analyse { border-radius: 0.75rem; padding: 1rem 1.25rem; margin: 1rem 0 1.5rem; border: 1px solid; line-height: 1.75; }
     .analyse h2 { margin-bottom: 0.4rem; }
     .ai-oppsummering { border-radius: 0.75rem; padding: 1rem 1.25rem; margin: 1rem 0 1.5rem; border: 1px solid; line-height: 1.75; }
@@ -313,7 +315,13 @@
       <ul class="site-nav-menu">
         <li><a href="/aksjer/" class="active">Aksjer</a></li>
         <li><a href="/aksjer/sektor/" class="">Sektorer</a></li>
-        <li><a href="/utbyttekalender/" class="">Kalender</a></li>
+        <li class="has-dropdown">
+          <a href="/utbyttekalender/" class="">Kalender</a>
+          <ul class="nav-dropdown">
+            <li><a href="/utbyttekalender/">Utbyttekalender</a></li>
+            <li><a href="/rapportkalender/">Rapportkalender</a></li>
+          </ul>
+        </li>
         <li class="has-dropdown">
           <a href="/verktoy/" class="">Verktøy</a>
           <ul class="nav-dropdown">
@@ -377,7 +385,7 @@
   <!-- ── OVERSIKT ── -->
   <section id="oversikt">
 
-  <div class="desc"><h2>Om selskapet</h2><p>Atea ASA leverer IT-infrastruktur og tilhørende løsninger til bedrifter og offentlig sektor i Norden og Baltikum. Selskapet tilbyr datasenter- og nettverksløsninger, blant annet skysporing, kontinuitetsplanlegging, sikkerhetskopiering som tjeneste, driftet datasenter, skyintelligens og katastrofegjenoppretting. Atea driver også programvarelisensiering og skyløsninger, og leverer tjenester innen forretningsanalyse, tingenes internett, kunstig intelligens og maskinlæring.</p></div>
+  <div class="desc"><h2>Om selskapet</h2><p>Nordens ledende IT-infrastrukturleverandør. Distribuerer hardware, software og tjenester til offentlig og privat sektor. Stabilt og voksende utbytte.</p><p class="desc-fakta">Atea ASA leverer IT-infrastruktur og tilhørende løsninger til bedrifter og offentlig sektor i Norden og Baltikum. Selskapet tilbyr datasenter- og nettverksløsninger, blant annet skysporing, kontinuitetsplanlegging, sikkerhetskopiering som tjeneste, driftet datasenter, skyintelligens og katastrofegjenoppretting. Atea driver også programvarelisensiering og skyløsninger, og leverer tjenester innen forretningsanalyse, tingenes internett, kunstig intelligens og maskinlæring.</p></div>
 
   <div class="kgrid">
     <div class="kcard">

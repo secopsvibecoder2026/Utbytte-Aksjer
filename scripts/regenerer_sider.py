@@ -15,9 +15,11 @@ AKSJER_F  = os.path.join(ROOT, "data", "aksjer.json")
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from fetch_stocks import (generer_aksjesider, generer_sektorsider, generer_topplistesider,
                           generer_sitemap, _last_kurshistorikk_fra_disk,
+                          generer_rapportkalender,
                           oppdater_app_noscript_liste, oppdater_antall_i_sider,
+                          oppdater_aarstall_i_sider,
                           _typiske_utbetalingsmaaneder,
-                          lag_beskrivelse,
+                          lag_beskrivelse, _manuell_del, SEKTOR_DRIVER,
                           _lag_utbyttehistorikk_tekst)
 
 def main():
@@ -74,6 +76,15 @@ def main():
         if ny_besk and ny_besk != a.get("beskrivelse", ""):
             a["beskrivelse"] = ny_besk
             oppdatert += 1
+
+        # Innledningen alene — den er det eneste redaksjonelle avsnittet, og
+        # «Om selskapet» rendrer den ved siden av Yahoos faktasammendrag.
+        # Uten denne linjen forsvinner feltet ved første regenerering.
+        ny_intro = _manuell_del(beskrivelser.get(a["ticker"], ""),
+                                SEKTOR_DRIVER.get(a.get("sektor") or "", ""))
+        if ny_intro != a.get("beskrivelse_intro", ""):
+            a["beskrivelse_intro"] = ny_intro
+            oppdatert += 1
         ny_fakta = beskrivelse_fakta.get(a["ticker"], "")
         if ny_fakta and ny_fakta != a.get("beskrivelse_fakta", ""):
             a["beskrivelse_fakta"] = ny_fakta
@@ -116,6 +127,7 @@ def main():
     print("Sektorsider regenerert")
 
     generer_topplistesider(aksjer, ROOT)
+    generer_rapportkalender(aksjer, ROOT)
     print("Topplistesider regenerert")
 
     generer_sitemap(aksjer, ROOT, today)
@@ -126,6 +138,7 @@ def main():
     # Tellingene i de håndskrevne sidene fylles fra samme datasett, så de
     # ikke må rettes for hånd hver gang en ticker går ut.
     oppdater_antall_i_sider(aksjer, ROOT)
+    oppdater_aarstall_i_sider(ROOT)
 
     print("\nFerdig!")
 
