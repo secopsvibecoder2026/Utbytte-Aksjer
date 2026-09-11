@@ -22,6 +22,8 @@ from sjekk_utdaterte import (
     finn_duplikat_navn,
     finn_duplikat_ticker_yf,
     finn_manglende_data,
+    finn_ikke_pa_bors,
+    finn_ubrukte_symbolkart,
     navn_likhet,
     normaliser_navn,
     vurder_ticker,
@@ -271,6 +273,69 @@ class TestHentestatus(unittest.TestCase):
         self.assertIn("16 dager", varsler[0]["melding"])
 
 
+class TestBekreftetNotering(unittest.TestCase):
+    """Euronext-listen skal kunne frikjenne en ticker, ikke bare anklage den.
+
+    DOF feilet i sju dager og fikk «mulig_avnotering — fjern oppføringen»,
+    samtidig som den sto på Euronext Oslo. Nøyaktig den slutningen holdt på
+    å fjerne KMCP. Når børsen bekrefter noteringen er en hentefeil en
+    hentefeil, uansett hvor lenge den har vart.
+    """
+
+    def test_bekreftet_notering_gir_hentefeil_ikke_avnotering(self):
+        logg = {"ok": False, "vart_navn": "DOF Group ASA"}
+        forrige = {"sist_ok": _dato(8)}
+        varsler, _ = vurder_ticker("DOF", logg, forrige, IDAG, pa_bors=True)
+        typer = _typer(varsler)
+        self.assertIn("vedvarende_hentefeil", typer)
+        self.assertNotIn("mulig_avnotering", typer)
+        self.assertEqual(varsler[0]["alvorlighet"], ALVOR_ADVARSEL)
+        self.assertIn("Ikke fjern tickeren", varsler[0]["forslag"])
+
+    def test_uten_liste_oppforer_sjekken_seg_som_for(self):
+        # None betyr «vet ikke». Da må den kritiske meldingen stå.
+        logg = {"ok": False, "vart_navn": "Cool Company Ltd"}
+        forrige = {"sist_ok": _dato(8)}
+        varsler, _ = vurder_ticker("COOL", logg, forrige, IDAG, pa_bors=None)
+        self.assertIn("mulig_avnotering", _typer(varsler))
+        self.assertEqual(varsler[0]["alvorlighet"], ALVOR_KRITISK)
+
+    def test_bekreftet_notering_demper_aldri_hentet(self):
+        # Feil ticker_yf, ikke avnotering — aksjen handles beviselig.
+        logg = {"ok": False, "vart_navn": "Jæren Sparebank"}
+        forrige = {"feil_siden": _dato(16)}
+        varsler, _ = vurder_ticker("JAREN", logg, forrige, IDAG, pa_bors=True)
+        self.assertIn("aldri_hentet", _typer(varsler))
+        self.assertEqual(varsler[0]["alvorlighet"], ALVOR_ADVARSEL)
+
+    def test_analyser_frikjenner_ticker_som_star_pa_listen(self):
+        tickere = [{"ticker": "DOF", "ticker_yf": "DOF.OL", "navn": "DOF Group ASA"}]
+        aksjer = [{"ticker": "DOF", "navn": "DOF Group ASA", "pris": 90.0}]
+        hentelogg = {"tickere": {"DOF": {"ok": False, "vart_navn": "DOF Group ASA"}}}
+        status = {"tickere": {"DOF": {"sist_ok": _dato(9)}}}
+        noteringer = _liste(200)
+        noteringer["DOF"] = "DOF Group ASA"
+        varsler, _ = analyser(tickere, aksjer, hentelogg, status, IDAG,
+                              noteringer=noteringer)
+        typer = _typer(varsler)
+        self.assertIn("vedvarende_hentefeil", typer)
+        self.assertNotIn("mulig_avnotering", typer)
+        self.assertNotIn("ikke_pa_bors", typer)
+
+    def test_avkortet_liste_frikjenner_ingen(self):
+        # Under MIN_NOTERINGER er listen ubrukelig i begge retninger: den
+        # skal verken melde avnotering eller dempe et eksisterende varsel.
+        tickere = [{"ticker": "DOF", "ticker_yf": "DOF.OL", "navn": "DOF Group ASA"}]
+        aksjer = [{"ticker": "DOF", "navn": "DOF Group ASA", "pris": 90.0}]
+        hentelogg = {"tickere": {"DOF": {"ok": False, "vart_navn": "DOF Group ASA"}}}
+        status = {"tickere": {"DOF": {"sist_ok": _dato(9)}}}
+        varsler, _ = analyser(tickere, aksjer, hentelogg, status, IDAG,
+                              noteringer={"DOF": "DOF Group ASA"})
+        typer = _typer(varsler)
+        self.assertIn("mulig_avnotering", typer)
+        self.assertNotIn("vedvarende_hentefeil", typer)
+
+
 class TestNavneendring(unittest.TestCase):
 
     def test_forste_avvik_gir_kun_advarsel(self):
@@ -425,6 +490,82 @@ class TestAnalyserHelhet(unittest.TestCase):
         typer = _typer(varsler)
         self.assertIn("ingen_data", typer)
         self.assertNotIn("aldri_hentet", typer)
+
+
+def _liste(n, start=0):
+    """En Euronext-liste stor nok til å passere MIN_NOTERINGER."""
+    return {f"T{i:03d}": f"Selskap {i}" for i in range(start, start + n)}
+
+
+class TestIkkePaBors(unittest.TestCase):
+    """Den eneste sjekken som spør børsen selv framfor å utlede noe fra Yahoo.
+
+    KMCP hadde returnert tom respons fra Yahoo i seks dager og så avnotert ut,
+    men seks andre tickere feilet identisk samme dag og var alle i live. Første
+    kjøring av denne sjekken fant fem tickere som var reelt borte — Wilson i
+    over tre år — uten at noen Yahoo-basert sjekk hadde konkludert.
+    """
+
+    def setUp(self):
+        self.tickere = [
+            {"ticker": "EQNR", "navn": "Equinor ASA"},
+            {"ticker": "BORTE", "navn": "Avnotert ASA"},
+        ]
+
+    def test_flagger_ticker_som_ikke_er_notert(self):
+        noteringer = _liste(150)
+        noteringer["EQNR"] = "EQUINOR"
+        varsler = finn_ikke_pa_bors(self.tickere, noteringer)
+        self.assertEqual([v["ticker"] for v in varsler], ["BORTE"])
+        self.assertEqual(varsler[0]["alvorlighet"], "kritisk")
+        self.assertEqual(varsler[0]["type"], "ikke_pa_bors")
+
+    def test_notert_ticker_gir_ingen_varsel(self):
+        noteringer = _liste(150)
+        noteringer.update({"EQNR": "EQUINOR", "BORTE": "AVNOTERT"})
+        self.assertEqual(finn_ikke_pa_bors(self.tickere, noteringer), [])
+
+    def test_none_varsler_ingenting(self):
+        # Nedlastingen feilet. «Vi vet ikke» må aldri bli til «alt er avnotert».
+        self.assertEqual(finn_ikke_pa_bors(self.tickere, None), [])
+
+    def test_tom_liste_varsler_ingenting(self):
+        self.assertEqual(finn_ikke_pa_bors(self.tickere, {}), [])
+
+    def test_avkortet_liste_varsler_ingenting(self):
+        # En halvlastet respons har for få instrumenter til å konkludere.
+        self.assertEqual(finn_ikke_pa_bors(self.tickere, _liste(20)), [])
+
+    def test_hele_katalogen_kan_ikke_flagges_av_en_kort_liste(self):
+        mange = [{"ticker": f"A{i}", "navn": f"A{i}"} for i in range(160)]
+        self.assertEqual(finn_ikke_pa_bors(mange, _liste(99)), [])
+
+
+class TestUbruktSymbolkart(unittest.TestCase):
+    """Symbolkartet råtner når vi retter en ticker i tickers.json.
+
+    Fem av elleve oppføringer pekte på tickere som ikke lenger fantes da dette
+    ble oppdaget. Effekten er stille: prisfallbacken slår opp på feil nøkkel og
+    finner ingenting, så aksjen står med kurs 0 hvis Yahoo også feiler.
+    """
+
+    def setUp(self):
+        self.tickere = [{"ticker": "STRONG", "navn": "Strongpoint ASA"}]
+        self.noteringer = _liste(150)
+
+    def test_flagger_oppforing_uten_treff(self):
+        kart = {"STRO": "STRONG", "JAREN": "JAEDR"}
+        varsler = finn_ubrukte_symbolkart(kart, self.tickere, self.noteringer)
+        self.assertEqual([v["ticker"] for v in varsler], ["JAEDR"])
+        self.assertEqual(varsler[0]["alvorlighet"], "advarsel")
+
+    def test_gyldig_kart_gir_ingen_varsel(self):
+        kart = {"STRO": "STRONG"}
+        self.assertEqual(finn_ubrukte_symbolkart(kart, self.tickere, self.noteringer), [])
+
+    def test_uten_liste_varsles_ingenting(self):
+        kart = {"JAREN": "JAEDR"}
+        self.assertEqual(finn_ubrukte_symbolkart(kart, self.tickere, None), [])
 
 
 if __name__ == "__main__":

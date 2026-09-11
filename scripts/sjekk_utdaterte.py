@@ -137,7 +137,84 @@ def _varsel(ticker, type_, alvor, melding, forslag):
     }
 
 
+# Under dette antallet instrumenter regner vi listen som ufullstendig og lar
+# være å konkludere. Euronext Oslo har rundt 290 noterte instrumenter; en
+# avkortet eller halvlastet respons skal aldri kunne flagge hele katalogen.
+MIN_NOTERINGER = 100
+
+
 # ── Deteksjon ─────────────────────────────────────────────────────────────────
+
+def finn_ikke_pa_bors(tickere: list, noteringer) -> list:
+    """Tickere i katalogen som ikke finnes på Euronext Oslo.
+
+    Dette er den eneste sjekken som spør *børsen selv* framfor å utlede noe
+    fra Yahoo, og den er derfor den eneste som kan skille en avnotering fra
+    en hentefeil.
+
+    Behovet ble tydelig 10.09.2026: KMCP hadde returnert tom respons fra Yahoo
+    i seks dager og så avnotert ut, men seks andre tickere feilet på nøyaktig
+    samme måte samme dag og var alle i live. Yahoo svarte dessuten «may be
+    delisted» også på en kontrollspørring for en ticker som handles. Da denne
+    sjekken ble kjørt første gang, fant den fem tickere som var reelt borte fra
+    børsen — én av dem i over tre år — mens ingen av Yahoo-baserte sjekkene
+    hadde konkludert.
+
+    `noteringer` er None når nedlastingen feilet. None betyr «vi vet ikke», og
+    da varsles ingenting: en nettverksfeil må aldri kunne tolkes som at hele
+    katalogen er avnotert.
+    """
+    if not noteringer or len(noteringer) < MIN_NOTERINGER:
+        return []
+
+    varsler = []
+    for t in tickere:
+        ticker = t.get("ticker")
+        if not ticker or ticker in noteringer:
+            continue
+        varsler.append(_varsel(
+            ticker,
+            "ikke_pa_bors",
+            ALVOR_KRITISK,
+            f"«{t.get('navn') or ticker}» finnes ikke blant de "
+            f"{len(noteringer)} instrumentene på Euronext Oslo. Selskapet er "
+            f"avnotert, fusjonert eller har byttet ticker.",
+            "Kontroller mot Euronext eller selskapets egne børsmeldinger. Er "
+            "det en omdøping, rett ticker og navn i data/tickers.json; er det "
+            "en avnotering, fjern oppføringen.",
+        ))
+    return varsler
+
+
+def finn_ubrukte_symbolkart(symbolkart: dict, tickere: list, noteringer) -> list:
+    """Oppføringer i Euronext-symbolkartet som peker i tomme luften.
+
+    Kartet oversetter Euronext-symbol til vår ticker, og råtner når vi retter
+    en ticker i tickers.json uten å oppdatere det. Fem av elleve oppføringer
+    var stale da dette ble oppdaget, og effekten er stille: prisfallbacken
+    slår opp på en nøkkel som ikke finnes, og aksjen står med kurs 0 dersom
+    Yahoo også feiler. NORBT, JAREN og SNI var rammet.
+    """
+    if not noteringer or len(noteringer) < MIN_NOTERINGER:
+        return []
+
+    våre = {t.get("ticker") for t in tickere if t.get("ticker")}
+    varsler = []
+    for eu_symbol, vår_ticker in sorted(symbolkart.items()):
+        if vår_ticker in våre:
+            continue
+        varsler.append(_varsel(
+            vår_ticker,
+            "ubrukt_symbolkart",
+            ALVOR_ADVARSEL,
+            f"Euronext-symbolkartet oversetter «{eu_symbol}» til «{vår_ticker}», "
+            f"men «{vår_ticker}» finnes ikke i tickers.json.",
+            "Fjern oppføringen fra EURONEXT_SYMBOL_MAP i fetch_stocks.py, eller "
+            "rett den til tickeren vi faktisk bruker. Så lenge den står feil, "
+            "finner prisfallbacken ingen kurs for aksjen.",
+        ))
+    return varsler
+
 
 def finn_duplikat_ticker_yf(tickere: list) -> list:
     """
@@ -284,12 +361,18 @@ def finn_duplikat_data(aksjer: list) -> list:
     return varsler
 
 
-def vurder_ticker(ticker, logg, forrige, idag):
+def vurder_ticker(ticker, logg, forrige, idag, pa_bors=None):
     """
     Vurderer én ticker mot forrige kjente tilstand.
 
     Returnerer (varsler, ny_tilstand). Rendyrket funksjon uten I/O, slik at den
     kan testes med syntetiske data.
+
+    `pa_bors` er tre-verdig: True betyr at Euronext bekrefter at tickeren
+    fortsatt er notert, None at vi ikke vet (listen ble ikke hentet). False
+    forekommer ikke her — da har finn_ikke_pa_bors() allerede meldt fra.
+    Bekreftet notering gjør en langvarig hentefeil til et hentingsproblem,
+    ikke en mulig avnotering.
     """
     varsler = []
     tilstand = dict(forrige) if forrige else {}
@@ -308,7 +391,16 @@ def vurder_ticker(ticker, logg, forrige, idag):
     sist_ok = _som_dato(tilstand.get("sist_ok"))
     if not ok and sist_ok:
         dager = (idag - sist_ok).days
-        if dager >= DAGER_FOR_KRITISK:
+        if dager >= DAGER_FOR_KRITISK and pa_bors:
+            varsler.append(_varsel(
+                ticker, "vedvarende_hentefeil", ALVOR_ADVARSEL,
+                f"Ingen data fra Yahoo Finance på {dager} dager (sist OK {sist_ok.isoformat()}), "
+                f"men aksjen står fortsatt på Euronext Oslo. Dette er en hentefeil, "
+                f"ikke en avnotering. Siden vises med data fra den datoen.",
+                "Ikke fjern tickeren. Kontroller ticker_yf mot Yahoo og se om "
+                "feilen rammer flere tickere samtidig — da er det Yahoo som svikter.",
+            ))
+        elif dager >= DAGER_FOR_KRITISK:
             varsler.append(_varsel(
                 ticker, "mulig_avnotering", ALVOR_KRITISK,
                 f"Ingen data fra Yahoo Finance på {dager} dager (sist OK {sist_ok.isoformat()}). "
@@ -334,7 +426,11 @@ def vurder_ticker(ticker, logg, forrige, idag):
         # lykkes er om noe verre enn en som sluttet å svare, ikke bedre.
         feil_siden = _som_dato(tilstand.get("feil_siden"))
         dager = (idag - feil_siden).days if feil_siden else 0
-        alvor = ALVOR_KRITISK if dager >= DAGER_FOR_KRITISK else ALVOR_ADVARSEL
+        # Bekreftet notering demper den samme opptrappingen: da er ticker_yf
+        # eller Yahoo problemet, og en kritisk avnoteringsmelding ville sende
+        # oss mot å slette en aksje som beviselig handles.
+        alvor = (ALVOR_KRITISK if dager >= DAGER_FOR_KRITISK and not pa_bors
+                 else ALVOR_ADVARSEL)
         varsler.append(_varsel(
             ticker, "aldri_hentet", alvor,
             "Ingen vellykket henting registrert for denne tickeren"
@@ -435,13 +531,23 @@ def _les_json(sti, standard):
         return standard
 
 
-def analyser(tickere, aksjer, hentelogg, status, idag):
+def analyser(tickere, aksjer, hentelogg, status, idag,
+             noteringer=None, symbolkart=None):
     """
     Kjører alle sjekkene og returnerer (varsler, ny_status).
 
-    Rendyrket funksjon uten filsystem-tilgang — hele testdekningen går via denne.
+    Rendyrket funksjon uten filsystem- eller nettverkstilgang — hele
+    testdekningen går via denne. `noteringer` er Euronext-listen, som main()
+    henter; sendes den ikke inn, hoppes børssjekken over.
     """
     varsler = []
+    # Samme terskel som finn_ikke_pa_bors(): en avkortet liste skal verken
+    # utløse avnoteringsvarsler eller frikjenne noen.
+    brukbare_noteringer = (
+        noteringer if noteringer and len(noteringer) >= MIN_NOTERINGER else None
+    )
+    varsler.extend(finn_ikke_pa_bors(tickere, noteringer))
+    varsler.extend(finn_ubrukte_symbolkart(symbolkart or {}, tickere, noteringer))
     varsler.extend(finn_duplikat_ticker_yf(tickere))
     varsler.extend(finn_duplikat_navn(tickere))
     varsler.extend(finn_manglende_data(tickere, aksjer, hentelogg))
@@ -462,8 +568,13 @@ def analyser(tickere, aksjer, hentelogg, status, idag):
             if ticker in forrige_tickere:
                 ny_tickere[ticker] = forrige_tickere[ticker]
             continue
+        # Bare True når listen faktisk ble hentet og tickeren står i den.
+        # Uten liste er verdien None — «vet ikke» — og sjekkene oppfører seg
+        # som før.
+        pa_bors = bool(brukbare_noteringer) and ticker in brukbare_noteringer
         t_varsler, tilstand = vurder_ticker(
-            ticker, logg, forrige_tickere.get(ticker), idag
+            ticker, logg, forrige_tickere.get(ticker), idag,
+            pa_bors=pa_bors or None,
         )
         varsler.extend(t_varsler)
         ny_tickere[ticker] = tilstand
@@ -587,6 +698,9 @@ def main(argv=None):
                    help="Avslutt med kode 1 hvis det finnes kritiske varsler.")
     p.add_argument("--tort", action="store_true",
                    help="Kjør uten å skrive tilstands- og varselfiler.")
+    p.add_argument("--uten-nett", action="store_true",
+                   help="Hopp over Euronext-oppslaget. Da kan ikke avnoteringer "
+                        "skilles fra hentefeil, men resten av sjekkene kjører.")
     p.add_argument("--issue-tekst", action="store_true",
                    help="Skriv markdown for GitHub-issue til stdout, basert på "
                         "eksisterende data/ticker_varsler.json. Kjører ingen ny analyse.")
@@ -608,7 +722,24 @@ def main(argv=None):
         print("Kjør scripts/fetch_stocks.py først — den skriver loggen dette skriptet leser.")
         print("Kontrollerer katalogen for duplikater i mellomtiden.\n")
 
-    varsler, ny_status = analyser(tickere, aksjer, hentelogg, status, _idag())
+    # Den autoritative listen over hva som faktisk handles. Feiler nedlastingen
+    # blir den None, og børssjekken varsler ingenting — en nettverksfeil skal
+    # aldri kunne se ut som at hele katalogen er avnotert.
+    noteringer, symbolkart = None, {}
+    if not args.uten_nett:
+        try:
+            sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+            from fetch_stocks import hent_euronext_noteringer, EURONEXT_SYMBOL_MAP
+            noteringer = hent_euronext_noteringer()
+            symbolkart = EURONEXT_SYMBOL_MAP
+            print(f"Euronext Oslo: {len(noteringer)} noterte instrumenter\n"
+                  if noteringer else "Euronext Oslo: listen kunne ikke hentes — "
+                                     "børssjekken hoppes over\n")
+        except Exception as e:
+            print(f"Euronext-oppslag hoppet over: {e}\n")
+
+    varsler, ny_status = analyser(tickere, aksjer, hentelogg, status, _idag(),
+                                  noteringer, symbolkart)
 
     _skriv_rapport(varsler, len(tickere))
     _skriv_github_sammendrag(varsler)

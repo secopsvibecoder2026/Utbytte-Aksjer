@@ -1,45 +1,10 @@
 {
-  "generert": "2026-09-10T19:17:53Z",
-  "antall": 9,
+  "generert": "2026-09-10T19:44:50Z",
+  "antall": 4,
   "antall_kritiske": 0,
   "varsler": [
     {
       "ticker": "DOF",
-      "type": "hentefeil",
-      "alvorlighet": "advarsel",
-      "melding": "Henting har feilet i 6 dager (sist OK 2026-09-04).",
-      "forslag": "Følg med. Vedvarer det til 7 dager, kontroller om tickeren fortsatt finnes."
-    },
-    {
-      "ticker": "FLNG",
-      "type": "hentefeil",
-      "alvorlighet": "advarsel",
-      "melding": "Henting har feilet i 6 dager (sist OK 2026-09-04).",
-      "forslag": "Følg med. Vedvarer det til 7 dager, kontroller om tickeren fortsatt finnes."
-    },
-    {
-      "ticker": "GOGL",
-      "type": "hentefeil",
-      "alvorlighet": "advarsel",
-      "melding": "Henting har feilet i 6 dager (sist OK 2026-09-04).",
-      "forslag": "Følg med. Vedvarer det til 7 dager, kontroller om tickeren fortsatt finnes."
-    },
-    {
-      "ticker": "SBVG",
-      "type": "hentefeil",
-      "alvorlighet": "advarsel",
-      "melding": "Henting har feilet i 6 dager (sist OK 2026-09-04).",
-      "forslag": "Følg med. Vedvarer det til 7 dager, kontroller om tickeren fortsatt finnes."
-    },
-    {
-      "ticker": "TIETO",
-      "type": "hentefeil",
-      "alvorlighet": "advarsel",
-      "melding": "Henting har feilet i 6 dager (sist OK 2026-09-04).",
-      "forslag": "Følg med. Vedvarer det til 7 dager, kontroller om tickeren fortsatt finnes."
-    },
-    {
-      "ticker": "WILS",
       "type": "hentefeil",
       "alvorlighet": "advarsel",
       "melding": "Henting har feilet i 6 dager (sist OK 2026-09-04).",

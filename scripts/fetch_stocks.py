@@ -390,6 +390,82 @@ def hent_dnb_datoer() -> dict:
     return {}
 
 
+EURONEXT_CSV_URL = "https://live.euronext.com/pd_es/data/stocks/download?mics=XOSL%2CMERK%2CXOAS"
+
+# Noen selskaper har et annet symbol på Euronext enn tickeren vi bruker.
+# Nøkkelen er Euronext-symbolet, verdien er vår ticker.
+#
+# ⚠️ Kartet råtner når vi retter en ticker i tickers.json. Fem av elleve
+# oppføringer pekte på tickere som ikke lenger fantes da dette ble oppdaget
+# 10.09.2026 — JAREN→JAEDR, SNI→STRO og NORBT→NORBIT var stale etter at vi
+# rettet våre egne tickere, mens OTL→OLT og PNOR→PNORD pekte på selskaper vi
+# aldri har hatt. Effekten er stille: prisfallbacken slår opp på feil nøkkel og
+# finner ingenting, så aksjen står med kurs 0 hvis Yahoo også feiler.
+#
+# sjekk_utdaterte.py validerer kartet mot den faktiske Euronext-listen ved hver
+# kjøring og rapporterer oppføringer som peker i tomme luften.
+EURONEXT_SYMBOL_MAP = {
+    "ENTRA": "ENTR",   # Entra
+    "DOFG":  "DOF",    # DOF Group
+    "VISTN": "VISTIN", # Vistin Pharma
+    "MORG":  "SBMO",   # Sparebanken Møre
+    "RING":  "SRHA",   # SpareBank 1 Ringerike Hadeland
+    "STRO":  "STRONG", # Strongpoint (Euronext STRO → vår STRONG)
+}
+
+
+def _les_euronext_csv(timeout: int = 30):
+    """Laster ned Euronext-CSV-en og returnerer radene, eller None ved feil.
+
+    None betyr «vi vet ikke», ikke «tom liste». Skillet er avgjørende: en
+    nedlasting som feiler må aldri kunne tolkes som at alle aksjene er
+    avnotert.
+    """
+    import csv, io
+    headers = {
+        "User-Agent": "Mozilla/5.0 (compatible; exday.no/1.0)",
+        "Accept": "text/csv,text/plain,*/*",
+    }
+    try:
+        req = urllib.request.Request(EURONEXT_CSV_URL, headers=headers)
+        with urllib.request.urlopen(req, timeout=timeout) as r:
+            raw = r.read().decode("utf-8", errors="replace")
+    except Exception as e:
+        print(f"  Euronext CSV: {e}")
+        return None
+
+    lines = raw.splitlines()
+    skip = 0
+    for i, line in enumerate(lines):
+        if line.lstrip("﻿").startswith(("Name", '"Name')):
+            skip = i + 1
+            break
+    if not skip:
+        print("  Euronext CSV: fant ingen headerlinje")
+        return None
+    return list(csv.reader(io.StringIO("\n".join(lines[skip:])), delimiter=";"))
+
+
+def hent_euronext_noteringer(timeout: int = 30):
+    """Returnerer {vår_ticker: selskapsnavn} for alt som er notert på Euronext Oslo.
+
+    Dette er den autoritative listen over hva som faktisk handles — børsen
+    selv, ikke Yahoo. Returnerer None hvis nedlastingen feilet.
+    """
+    rader = _les_euronext_csv(timeout)
+    if rader is None:
+        return None
+    noteringer = {}
+    for row in rader:
+        if len(row) < 3:
+            continue
+        sym = row[2].strip().strip('"')
+        if not sym:
+            continue
+        noteringer[EURONEXT_SYMBOL_MAP.get(sym, sym)] = row[0].strip().strip('"')
+    return noteringer
+
+
 def hent_euronext_priser() -> dict:
     """
     Henter live-priser for alle Oslo Børs-aksjer fra Euronext CSV-nedlasting.
@@ -399,16 +475,7 @@ def hent_euronext_priser() -> dict:
     Kolonneindekser: Symbol=[2], Last price=[8]
     """
     import csv, io
-    # Noen tickers bruker annet symbol på Euronext enn på Oslo Børs
-    _EURONEXT_MAP = {
-        "ENTRA": "ENTR", "DOFG": "DOF", "OTL": "OLT", "VISTN": "VISTIN",
-        "NORBT": "NORBIT", "PNOR": "PNORD", "JAREN": "JAEDR",
-        # Sparebanker og andre med avvikende Euronext-ticker
-        "MORG": "SBMO",    # Sparebanken Møre
-        "RING": "SRHA",    # SpareBank 1 Ringerike Hadeland
-        "STRO": "STRONG",  # Strongpoint (Euronext STRO → vår STRONG; YF bruker STRO.OL)
-        "SNI":  "STRO",    # Stolt-Nielsen (Euronext SNI → vår STRO; YF bruker SNI.OL)
-    }
+    _EURONEXT_MAP = EURONEXT_SYMBOL_MAP
     headers = {
         "User-Agent": "Mozilla/5.0 (compatible; exday.no/1.0)",
         "Accept": "text/csv,text/plain,*/*",
