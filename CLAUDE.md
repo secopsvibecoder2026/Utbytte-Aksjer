@@ -148,7 +148,7 @@ Utbytte-Aksjer/
 
 ```bash
 npm test                                # 63 JS tests (node:test)
-python scripts/test_sjekk_utdaterte.py  # 44 Python tests (stdlib unittest)
+python scripts/test_sjekk_utdaterte.py  # 59 Python tests (stdlib unittest)
 ```
 
 Both suites run automatically in CI (`.github/workflows/tester.yml`) on push and PR
@@ -805,9 +805,13 @@ often the workflow fires.
 | `hentefeil` | No successful fetch for 3 days | advarsel | Yes |
 | `fastfrosset_kurs` | Last trade ≥ 5 trading days ago | advarsel | No |
 | `markedsverdi_borte` | Market cap disappeared since last run | advarsel | Yes |
+| `ikke_pa_bors` | Ticker missing from Euronext's own instrument list | kritisk | No |
+| `ubrukt_symbolkart` | `EURONEXT_SYMBOL_MAP` entry points at a ticker we no longer carry | advarsel | No |
+| `vedvarende_hentefeil` | No successful fetch for 7 days **but Euronext confirms the listing** | advarsel | Yes |
 
-The four checks that need no history work from the existing data files, so the script is useful
-on the very first run — before any `hentelogg.json` exists.
+The six checks that need no history work from the existing data files, so the script is useful
+on the very first run — before any `hentelogg.json` exists. `ikke_pa_bors` additionally needs
+the Euronext download to succeed; without it the check returns nothing at all (see below).
 
 ### Name comparison
 
@@ -816,12 +820,83 @@ on the very first run — before any `hentelogg.json` exists.
 Holding" and "… Holding B" must not collapse to the same string. A prefix match counts as
 identical, since Yahoo is often more or less verbose than our catalog.
 
+### `ikke_pa_bors` — ask the exchange, not Yahoo (added 2026-09-11)
+
+Every check above infers a delisting from **absence of data**: no successful fetch for N days,
+a market cap that vanished, a price that stopped moving. That inference is unreliable in both
+directions, and the KMCP episode showed why — a six-day fetch failure looked damning, but six
+unquestionably live tickers failed identically the same day, and a control query to Yahoo for a
+ticker known to be trading also answered «No data found, symbol may be delisted».
+
+Euronext publishes the list itself. `hent_euronext_noteringer()` in `fetch_stocks.py` reads the
+same CSV that `hent_euronext_priser()` already downloads (`EURONEXT_CSV_URL`, MICs
+`XOSL,MERK,XOAS` — roughly 294 instruments) and returns `{our_ticker: name}`. A ticker that is
+in `tickers.json` but not in that list is not failing to fetch; it is **not listed**. That is a
+fact, not an inference, so the alert is `kritisk` on the first run.
+
+Three guardrails, all load-bearing:
+
+- **`None` means "we don't know", not "nothing is listed".** `_les_euronext_csv()` returns
+  `None` on any network or parse failure, and `finn_ikke_pa_bors()` returns `[]` for a falsy
+  list. Without this, one failed download would report the entire catalog as delisted.
+- **`MIN_NOTERINGER = 100`.** A truncated or reshaped response that still parses is treated the
+  same way as a failure. 294 instruments against a floor of 100 leaves ample headroom.
+- **The check is one-directional on purpose.** 59 companies on Euronext's list are absent from
+  our catalog, and they are growth companies that pay no dividend — flagging them would be pure
+  noise. We only ask about tickers we already carry.
+
+`EURONEXT_SYMBOL_MAP` translates the six symbols where Euronext and our catalog disagree
+(`ENTRA→ENTR`, `DOFG→DOF`, `VISTN→VISTIN`, `MORG→SBMO`, `RING→SRHA`, `STRO→STRONG`). A stale
+entry there would silently suppress an `ikke_pa_bors` alert for the ticker it names, so
+`ubrukt_symbolkart` flags any entry whose target is no longer in `tickers.json`. That map had
+five stale entries when it was audited — the price fallback had been quietly broken for NORBT,
+JAREN and SNI.
+
+**First run found five genuine delistings**, each verified against Euronext or company
+announcements before removal (160 → 155 tickers):
+
+| Ticker | Fate |
+|---|---|
+| FLNG | Delisted from Oslo Børs 16 Sep 2025, trades on NYSE only |
+| GOGL | Merged into CMB.TECH, delisted Aug 2025 — `CMBTO` covers it |
+| TIETO | Delisted from Oslo Børs 29 Jun 2026 |
+| WILS | Delisted March 2023 — over three years of stale data served |
+| SBVG | SpareBank 1 BV merged into SpareBank 1 Sørøst-Norge |
+
+WILS is the one to remember: every existing check had been looking at it for three years and
+none of them said anything, because the fallback data kept the page looking alive.
+
+### The list must also be able to *clear* a ticker
+
+Adding the check exposed the mirror-image bug. DOF had failed to fetch for seven days and was
+reported as `mulig_avnotering` — «Sjekk om selskapet er avnotert … Fjern oppføringen» — while
+sitting in the very Euronext list the new check had just downloaded. Acting on that advice would
+have deleted a company that demonstrably trades. It is the same faulty inference that nearly
+removed KMCP, now with the disproof already in memory and unused.
+
+`vurder_ticker(..., pa_bors=...)` takes the confirmation. It is **three-valued**: `True` means
+Euronext lists it, `None` means we have no list (`--uten-nett`, a failed download, or a response
+under `MIN_NOTERINGER`). `False` never reaches it — that case is `ikke_pa_bors`. When the listing
+is confirmed:
+
+- `mulig_avnotering` (kritisk) becomes `vedvarende_hentefeil` (advarsel), whose `forslag` opens
+  with «Ikke fjern tickeren» and points at `ticker_yf` and at whether several tickers failed
+  together — which is what a Yahoo outage looks like.
+- `aldri_hentet` stops escalating to kritisk. A ticker that trades but has never fetched is a
+  wrong `ticker_yf`, which is exactly what JAEDR→JAREN turned out to be.
+
+With `None` both keep the old critical wording, so an offline run is no less cautious than
+before. After this change a full run over 155 tickers reports **no critical alerts at all**:
+the five real delistings are gone from the catalog and the one remaining failure is correctly
+described as a fetch problem.
+
 ### Running manually
 
 ```bash
 python scripts/sjekk_utdaterte.py            # normal run, always exits 0
 python scripts/sjekk_utdaterte.py --streng   # exit 1 on critical alerts
 python scripts/sjekk_utdaterte.py --tort     # analyse without writing state files
+python scripts/sjekk_utdaterte.py --uten-nett    # skip the Euronext download
 python scripts/sjekk_utdaterte.py --issue-tekst  # markdown body for the GitHub issue
 ```
 
@@ -987,37 +1062,54 @@ but a permanently dead ticker drops out.
 
 When adding new tickers, always verify `ticker_yf` is unique in `tickers.json`, and confirm the ticker/name matches the current Oslo Børs / Euronext listing (companies get renamed, merged and delisted).
 
-### KMCP → BINT (corrected 2026-09-10)
+### KMCP → BINT (corrected 2026-09-10, name fixed 2026-09-11)
 
 `KMC Properties ASA` (KMCP) merged with BEWI Invest AS. KMCP was the surviving
-legal entity, but the combined company was renamed **BEWI Invest ASA** and
-admitted to trading under the ticker **BINT** on 27 April 2026 — a Norwegian
-industrial owner with a portfolio in industrials, real estate and seafood,
-headquartered in Trondheim. Same class of correction as JAEDR→JAREN and
-ABL→AQUA: a rename, not a delisting.
+legal entity, but the combined company was renamed and admitted to trading under
+the ticker **BINT** on 27 April 2026 — a Norwegian industrial owner with a
+portfolio in industrials, real estate and seafood, headquartered in Trondheim.
+Same class of correction as JAEDR→JAREN and ABL→AQUA: a rename, not a delisting.
 
 The stored row was worth deleting rather than carrying over. A reverse share
 split and ISIN change in February 2026 had left Yahoo's history unusable:
 `siste_utbytte` sat at 6958,03 on a 24,80 kr share (the figure Sjekk 8 in
 `valider_data.py` had been flagging), market cap was 0, and
 `historiske_utbytter` was empty. `beskrivelse_fakta` still described the old,
-emptied-out property company. The next full fetch picks BINT up clean.
+emptied-out property company.
+
+**The company is `Bevest ASA`, not `BEWI Invest ASA`.** It was entered under the
+latter on the day of the correction, from the merger announcement — but the name
+was changed at listing. The first successful fetch settled it: Yahoo returns
+«Bevest ASA» and Euronext lists it as «BEVEST», and two independent sources
+agreeing beats an inference from the merger documents. Fixed in `tickers.json`
+the next day.
+
+Note the shape of that: the ticker was right, the row was clean, every check
+passed — and the name was still wrong for a day, because it had been *derived*
+rather than read off the exchange. `navneendring` is what caught it, one run
+later, exactly as designed.
 
 `BEWI ASA` (the packaging company) stays in the catalog as a separate listing —
-BEWI Invest is its owner. That is **not** a `duplikat_navn`: that check keys on
-the exact normalised name, so «bewi» and «bewi invest» are different entries.
-The prefix rule that would have collapsed them belongs to `navneendring`, which
-compares our name against Yahoo's.
+Bevest is its owner. That is **not** a `duplikat_navn`: that check keys on the
+exact normalised name, so «bewi» and «bevest» are different entries. The prefix
+rule that would have collapsed «bewi» and «bewi invest» belongs to
+`navneendring`, which compares our name against Yahoo's — another reason the
+corrected name is the safer one to carry.
 
-> ⚠️ **A failed fetch is not evidence that a company is gone.** KMCP's fetch had
-> been returning «Yahoo returnerte verken selskapsnavn eller kurs» for six days,
-> which looks damning until you notice that **six other tickers failed the same
-> way on the same day** — DOF, FLNG, GOGL, SBVG, TIETO and WILS, all
-> unquestionably alive, and very nearly the same group as the 2026-08-29
-> incident. Querying Yahoo directly proves nothing either: a control query for a
-> ticker known to be trading came back «No data found, symbol may be delisted»
-> too. Verify against Euronext or the company's own announcements before
-> removing anything — every removal listed above was checked that way.
+> ⚠️ **A failed fetch is evidence of nothing in either direction.** KMCP's fetch
+> had been returning «Yahoo returnerte verken selskapsnavn eller kurs» for six
+> days, which looks damning — but **six other tickers failed the same way on the
+> same day**: DOF, FLNG, GOGL, SBVG, TIETO and WILS. Querying Yahoo directly
+> proves nothing either: a control query for a ticker known to be trading came
+> back «No data found, symbol may be delisted» too.
+>
+> The sequel is the real lesson. Of those six, **DOF is alive and the other five
+> were genuinely delisted** — FLNG, GOGL, SBVG, TIETO and WILS were all removed
+> the next day once `ikke_pa_bors` asked Euronext instead of inferring from the
+> failure. So the same silent signal covered one false alarm and five real
+> delistings, and nothing in the failure itself separates them. Verify against
+> Euronext's instrument list or the company's own announcements before removing
+> anything — every removal listed above was checked that way.
 
 ---
 

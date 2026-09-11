@@ -1,49 +1,14 @@
 {
-  "generert": "2026-09-11T19:00:25Z",
-  "antall": 14,
-  "antall_kritiske": 6,
+  "generert": "2026-09-11T19:53:05Z",
+  "antall": 9,
+  "antall_kritiske": 0,
   "varsler": [
     {
       "ticker": "DOF",
-      "type": "mulig_avnotering",
-      "alvorlighet": "kritisk",
-      "melding": "Ingen data fra Yahoo Finance på 7 dager (sist OK 2026-09-04). Siden vises fortsatt med data fra den datoen.",
-      "forslag": "Sjekk om selskapet er avnotert, fusjonert eller har byttet ticker. Fjern eller rett oppføringen i data/tickers.json."
-    },
-    {
-      "ticker": "FLNG",
-      "type": "mulig_avnotering",
-      "alvorlighet": "kritisk",
-      "melding": "Ingen data fra Yahoo Finance på 7 dager (sist OK 2026-09-04). Siden vises fortsatt med data fra den datoen.",
-      "forslag": "Sjekk om selskapet er avnotert, fusjonert eller har byttet ticker. Fjern eller rett oppføringen i data/tickers.json."
-    },
-    {
-      "ticker": "GOGL",
-      "type": "mulig_avnotering",
-      "alvorlighet": "kritisk",
-      "melding": "Ingen data fra Yahoo Finance på 7 dager (sist OK 2026-09-04). Siden vises fortsatt med data fra den datoen.",
-      "forslag": "Sjekk om selskapet er avnotert, fusjonert eller har byttet ticker. Fjern eller rett oppføringen i data/tickers.json."
-    },
-    {
-      "ticker": "SBVG",
-      "type": "mulig_avnotering",
-      "alvorlighet": "kritisk",
-      "melding": "Ingen data fra Yahoo Finance på 7 dager (sist OK 2026-09-04). Siden vises fortsatt med data fra den datoen.",
-      "forslag": "Sjekk om selskapet er avnotert, fusjonert eller har byttet ticker. Fjern eller rett oppføringen i data/tickers.json."
-    },
-    {
-      "ticker": "TIETO",
-      "type": "mulig_avnotering",
-      "alvorlighet": "kritisk",
-      "melding": "Ingen data fra Yahoo Finance på 7 dager (sist OK 2026-09-04). Siden vises fortsatt med data fra den datoen.",
-      "forslag": "Sjekk om selskapet er avnotert, fusjonert eller har byttet ticker. Fjern eller rett oppføringen i data/tickers.json."
-    },
-    {
-      "ticker": "WILS",
-      "type": "mulig_avnotering",
-      "alvorlighet": "kritisk",
-      "melding": "Ingen data fra Yahoo Finance på 7 dager (sist OK 2026-09-04). Siden vises fortsatt med data fra den datoen.",
-      "forslag": "Sjekk om selskapet er avnotert, fusjonert eller har byttet ticker. Fjern eller rett oppføringen i data/tickers.json."
+      "type": "vedvarende_hentefeil",
+      "alvorlighet": "advarsel",
+      "melding": "Ingen data fra Yahoo Finance på 7 dager (sist OK 2026-09-04), men aksjen står fortsatt på Euronext Oslo. Dette er en hentefeil, ikke en avnotering. Siden vises med data fra den datoen.",
+      "forslag": "Ikke fjern tickeren. Kontroller ticker_yf mot Yahoo og se om feilen rammer flere tickere samtidig — da er det Yahoo som svikter."
     },
     {
       "ticker": "FRO",
