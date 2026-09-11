@@ -1062,27 +1062,39 @@ but a permanently dead ticker drops out.
 
 When adding new tickers, always verify `ticker_yf` is unique in `tickers.json`, and confirm the ticker/name matches the current Oslo Børs / Euronext listing (companies get renamed, merged and delisted).
 
-### KMCP → BINT (corrected 2026-09-10)
+### KMCP → BINT (corrected 2026-09-10, name fixed 2026-09-11)
 
 `KMC Properties ASA` (KMCP) merged with BEWI Invest AS. KMCP was the surviving
-legal entity, but the combined company was renamed **BEWI Invest ASA** and
-admitted to trading under the ticker **BINT** on 27 April 2026 — a Norwegian
-industrial owner with a portfolio in industrials, real estate and seafood,
-headquartered in Trondheim. Same class of correction as JAEDR→JAREN and
-ABL→AQUA: a rename, not a delisting.
+legal entity, but the combined company was renamed and admitted to trading under
+the ticker **BINT** on 27 April 2026 — a Norwegian industrial owner with a
+portfolio in industrials, real estate and seafood, headquartered in Trondheim.
+Same class of correction as JAEDR→JAREN and ABL→AQUA: a rename, not a delisting.
 
 The stored row was worth deleting rather than carrying over. A reverse share
 split and ISIN change in February 2026 had left Yahoo's history unusable:
 `siste_utbytte` sat at 6958,03 on a 24,80 kr share (the figure Sjekk 8 in
 `valider_data.py` had been flagging), market cap was 0, and
 `historiske_utbytter` was empty. `beskrivelse_fakta` still described the old,
-emptied-out property company. The next full fetch picks BINT up clean.
+emptied-out property company.
+
+**The company is `Bevest ASA`, not `BEWI Invest ASA`.** It was entered under the
+latter on the day of the correction, from the merger announcement — but the name
+was changed at listing. The first successful fetch settled it: Yahoo returns
+«Bevest ASA» and Euronext lists it as «BEVEST», and two independent sources
+agreeing beats an inference from the merger documents. Fixed in `tickers.json`
+the next day.
+
+Note the shape of that: the ticker was right, the row was clean, every check
+passed — and the name was still wrong for a day, because it had been *derived*
+rather than read off the exchange. `navneendring` is what caught it, one run
+later, exactly as designed.
 
 `BEWI ASA` (the packaging company) stays in the catalog as a separate listing —
-BEWI Invest is its owner. That is **not** a `duplikat_navn`: that check keys on
-the exact normalised name, so «bewi» and «bewi invest» are different entries.
-The prefix rule that would have collapsed them belongs to `navneendring`, which
-compares our name against Yahoo's.
+Bevest is its owner. That is **not** a `duplikat_navn`: that check keys on the
+exact normalised name, so «bewi» and «bevest» are different entries. The prefix
+rule that would have collapsed «bewi» and «bewi invest» belongs to
+`navneendring`, which compares our name against Yahoo's — another reason the
+corrected name is the safer one to carry.
 
 > ⚠️ **A failed fetch is evidence of nothing in either direction.** KMCP's fetch
 > had been returning «Yahoo returnerte verken selskapsnavn eller kurs» for six
