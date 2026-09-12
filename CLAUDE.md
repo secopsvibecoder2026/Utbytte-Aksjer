@@ -691,6 +691,30 @@ current run's numbers — never stored — and name the busiest months in
 **calendar order**, not by count: «november og oktober» reads as an error even
 when the figures behind it are right.
 
+## AdSense: timeline and target date
+
+| Date | What |
+|---|---|
+| ~2026-06 | First rejection, «Low value content» |
+| ~2026-09-09 | Second rejection, same reason |
+| **2026-09-12** | **Fase 1–3 live on exday.no** (PR #28) — template broken, sector pages written, seven empty pages deindexed |
+| 2026-09-26 | Checkpoint: verify in Search Console that the changed pages have been re-crawled |
+| **2026-10-06** | **Target date for the third application** |
+
+**Do not apply before the checkpoint passes.** A reviewer sees what Google has
+indexed, not what is on disk. Applying while the old version is still cached
+wastes the round, and a third rejection on unchanged-looking content makes the
+next one harder.
+
+The checkpoint is concrete: open Search Console → Inspect URL for three or four
+stock pages that changed most (DNB, HAUTO and one of the deindexed seven), and
+confirm «Last crawled» is after 2026-09-12. Submitting `sitemap.xml` again after
+the deploy speeds this up; the seven `noindex` pages dropping out of the index
+is the clearest confirmation that Google has been back.
+
+If the checkpoint has not passed by 2026-10-06, move the date rather than the
+standard — there is no cost to waiting except delayed revenue.
+
 ## Breaking the template — why the pages must differ in *shape* (2026-09-12)
 
 AdSense rejected the site twice for «Low value content». The rule actually
