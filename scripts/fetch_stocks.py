@@ -1775,6 +1775,32 @@ def _selskapsrisikoer(a):
     return ut
 
 
+def uten_utbyttebevis(a):
+    """Er dette en utbytteside uten spor av utbytte?
+
+    Brukes til å holde tomme skall utenfor søkeindeksen. Nettstedet heter
+    «Norske Utbytteaksjer», og en side som lover utbyttedata og ikke har noen
+    er ikke til å forsvare i en innholdsvurdering.
+
+    Regelen er bevisbasert med vilje. «Yield er null i dag» ville også fanget
+    de rundt atten aksjene som har ekte utbyttehistorikk men har sluttet å
+    betale — Scatec, Norske Skog, OKEA og flere. De sidene gjør jobben sin:
+    den som søker «Scatec utbytte» er godt tjent med å få vite at selskapet
+    betalte fram til 2023 og så stoppet. Her kreves fravær av *alt*.
+
+    Vurderingen tas på dataene slik de er nå, ikke på hvorfor de mangler. En
+    ticker med feilende henting kan havne her, og det er greit: siden er tom
+    uansett årsak, og den kommer tilbake av seg selv ved neste vellykkede
+    henting. Selvhelbredende slår en manuell liste.
+    """
+    return not (
+        (a.get("historiske_utbytter") or [])
+        or (a.get("ar_med_utbytte") or 0)
+        or (a.get("utbytte_yield") or 0)
+        or (a.get("utbytte_per_aksje") or 0)
+    )
+
+
 def _lag_utbytterekken(a):
     """«Utbytterekken» — bare for aksjer med lang, sammenhengende historikk.
 
@@ -3126,6 +3152,13 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     vurdering_html       = _lag_investor_vurdering(a, sektor_snitt or {})
     risiko_html          = _lag_risikofaktorer(a)
     kontoer_html         = _lag_kontoer_seksjon(a)
+    # Tomme skall holdes ute av søkeindeksen, men blir liggende for
+    # direktebesøk og for appen. «follow» slik at lenkene herfra fortsatt
+    # teller — det er innholdet som er tynt, ikke lenkene.
+    robots_meta = (
+        '\n  <meta name="robots" content="noindex,follow"/>'
+        if uten_utbyttebevis(a) else ""
+    )
     # Betingede seksjoner: vises bare der de har noe å si, slik at sidene får
     # ulik form og ikke bare ulike tall i samme fjorten bokser.
     rekke_html           = _lag_utbytterekken(a)
@@ -3191,7 +3224,7 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
   </script>
   <script src="/assets/consent.js" defer></script>
   <title>{sidetittel}</title>
-  <meta name="description" content="{meta_desc}"/>
+  <meta name="description" content="{meta_desc}"/>{robots_meta}
   <link rel="canonical" href="https://exday.no/aksjer/{ticker}/"/>
   <meta name="theme-color" content="#16a34a"/>
   <link rel="icon" type="image/png" sizes="512x512" href="/favicon.png"/>
@@ -5700,6 +5733,15 @@ def generer_sitemap(aksjer, root_dir, today, alle_tickers=None):
     # side der fortsatt, mens en permanent død ticker aldri har fått en side — og skal ikke
     # ligge igjen i sitemap som en 404. (FKRAFT, HDLG, NOFI m.fl. lå slik i over tre år.)
     ticker_liste = alle_tickers if alle_tickers else aksjer
+    # Sider som er satt til noindex skal ikke stå i sitemap heller — å be
+    # Google hente noe man samtidig ber den la være å indeksere er et
+    # motsigende signal. Samme regel som i malen, slik at de to ikke kan
+    # komme i utakt.
+    _uten_bevis = {a["ticker"] for a in aksjer if uten_utbyttebevis(a)}
+    if _uten_bevis:
+        ticker_liste = [t for t in ticker_liste if t.get("ticker") not in _uten_bevis]
+        print(f"  Sitemap: holder {len(_uten_bevis)} sider uten utbyttedata utenfor "
+              f"({', '.join(sorted(_uten_bevis))})")
     ticker_liste = [
         t for t in ticker_liste
         if os.path.isdir(os.path.join(root_dir, "aksjer", t["ticker"]))

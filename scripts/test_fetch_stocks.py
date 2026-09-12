@@ -543,5 +543,48 @@ class TestRapportkalender(unittest.TestCase):
         self.assertNotIn("november og oktober", h)
 
 
+class TestUtenUtbyttebevis(unittest.TestCase):
+    """Grensen mellom «tomt skall» og «har sluttet å betale».
+
+    Skillet er verdt en test fordi det er lett å ta feil av, og fordi feilen
+    er stille: en for vid regel avindekserer atten sider som gjør jobben sin.
+    Den som søker «Scatec utbytte» skal få vite at selskapet betalte fram til
+    2023 og så stoppet — det er et svar, ikke en tom side.
+    """
+
+    def test_helt_tom_er_uten_bevis(self):
+        self.assertTrue(fs.uten_utbyttebevis({"ticker": "ACR"}))
+
+    def test_nullverdier_teller_som_tomt(self):
+        self.assertTrue(fs.uten_utbyttebevis({
+            "ticker": "KMAR", "historiske_utbytter": [], "ar_med_utbytte": 0,
+            "utbytte_yield": 0, "utbytte_per_aksje": 0,
+        }))
+
+    def test_historikk_men_ingen_yield_beholdes(self):
+        # Scatec-tilfellet: sluttet å betale, men historikken er ekte.
+        self.assertFalse(fs.uten_utbyttebevis({
+            "ticker": "SCATC", "utbytte_yield": 0, "utbytte_per_aksje": 0,
+            "historiske_utbytter": [{"ar": 2023, "utbytte": 1.0}],
+        }))
+
+    def test_arstelling_alene_holder(self):
+        self.assertFalse(fs.uten_utbyttebevis({
+            "ticker": "X", "historiske_utbytter": [], "ar_med_utbytte": 4,
+        }))
+
+    def test_yield_alene_holder(self):
+        self.assertFalse(fs.uten_utbyttebevis({
+            "ticker": "X", "historiske_utbytter": [], "utbytte_yield": 3.2,
+        }))
+
+    def test_aktiv_utbyttebetaler_beholdes(self):
+        self.assertFalse(fs.uten_utbyttebevis({
+            "ticker": "ATEA", "ar_med_utbytte": 18, "utbytte_yield": 4.5,
+            "utbytte_per_aksje": 7.5,
+            "historiske_utbytter": [{"ar": 2025, "utbytte": 7.0}],
+        }))
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
