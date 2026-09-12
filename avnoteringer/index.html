@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Google AdSense (håndterer også CMP for EØS/UK) -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3981936786393038"
+     crossorigin="anonymous"></script>
+
+  <!-- Google Analytics med Consent Mode v2 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-X6C9PERKMB"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', {
+      analytics_storage: 'denied',
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      wait_for_update: 500
+    });
+    gtag('js', new Date());
+    gtag('config', 'G-X6C9PERKMB');
+  </script>
+  <script src="/assets/consent.js" defer></script>
+
+  <link rel="icon" type="image/svg+xml" href="/logo/exday_icon_primary.svg">
+  <title>Avnoterte utbytteaksjer på Oslo Børs – hva skjedde? | exday.no</title>
+  <meta name="description" content="Hva skjedde med aksjer som er borte fra Oslo Børs? Oversikt over avnoterte og omdøpte utbytteaksjer, og hva du gjør om du eier dem." />
+  <link rel="canonical" href="https://exday.no/avnoteringer/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://exday.no/avnoteringer/" />
+  <meta property="og:title" content="Avnoterte utbytteaksjer på Oslo Børs – hva skjedde?" />
+  <meta property="og:description" content="Hva skjedde med aksjer som er borte fra Oslo Børs? Oversikt over avnoterte og omdøpte utbytteaksjer, og hva du gjør om du eier dem." />
+
+  <link rel="stylesheet" href="/assets/tailwind.css" />
+  <link rel="stylesheet" href="/assets/style.css" />
+  <script>
+    (function() {
+      if (localStorage.getItem('tema') === 'dark') {
+        document.documentElement.classList.add('dark');
+      }
+    })();
+  </script>
+
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+    .avn-tabell { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+    .avn-boks { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .avn-tabell th, .avn-tabell td {
+      text-align: left; padding: 0.6rem 0.75rem 0.6rem 0;
+      border-bottom: 1px solid #e5e7eb; vertical-align: top;
+    }
+    .dark .avn-tabell th, .dark .avn-tabell td { border-color: #1f2937; }
+    .avn-tabell th {
+      font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em;
+      color: #6b7280; font-weight: 600;
+    }
+    .dark .avn-tabell th { color: #9ca3af; }
+    .avn-tick {
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-weight: 600; white-space: nowrap;
+    }
+    .avn-aar { white-space: nowrap; color: #6b7280; font-variant-numeric: tabular-nums; }
+    .dark .avn-aar { color: #9ca3af; }
+    .avn-lever { border-left: 3px solid #16a34a; padding-left: 0.9rem; }
+    .avn-borte  { border-left: 3px solid #d1d5db; padding-left: 0.9rem; }
+    .dark .avn-borte { border-left-color: #374151; }
+  </style>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Avnoterte utbytteaksjer på Oslo Børs – hva skjedde?",
+    "description": "Oversikt over utbytteaksjer som er avnotert eller omdøpt på Oslo Børs, hva som skjedde med hver av dem, og hva du gjør om du fortsatt eier dem.",
+    "datePublished": "2026-09-12",
+    "dateModified": "2026-09-12",
+    "author": { "@type": "Organization", "name": "exday.no" },
+    "publisher": {
+      "@type": "Organization",
+      "name": "exday.no",
+      "logo": { "@type": "ImageObject", "url": "https://exday.no/logo/exday_icon_primary.svg" }
+    },
+    "mainEntityOfPage": { "@type": "WebPage", "@id": "https://exday.no/avnoteringer/" }
+  }
+  </script>
+</head>
+<body class="bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 min-h-screen">
+  <nav class="site-nav" aria-label="Hovedmeny">
+    <div class="site-nav-inner">
+      <a href="/" class="site-logo" aria-label="exday.no - hjem">
+        <img src="/logo/exday_icon_primary.svg" class="site-logo-icon site-logo-icon-light" alt="" width="28" height="28" loading="eager"><img src="/logo/exday_icon_inverse.svg" class="site-logo-icon site-logo-icon-dark" alt="" width="28" height="28" loading="eager">
+        <span>e<span class="site-logo-x">x</span>day<span class="site-logo-dot">.no</span></span>
+      </a>
+      <ul class="site-nav-menu">
+        <li><a href="/aksjer/" class="">Aksjer</a></li>
+        <li><a href="/aksjer/sektor/" class="">Sektorer</a></li>
+        <li class="has-dropdown">
+          <a href="/utbyttekalender/" class="">Kalender</a>
+          <ul class="nav-dropdown">
+            <li><a href="/utbyttekalender/">Utbyttekalender</a></li>
+            <li><a href="/rapportkalender/">Rapportkalender</a></li>
+          </ul>
+        </li>
+        <li class="has-dropdown">
+          <a href="/verktoy/">Verktøy</a>
+          <ul class="nav-dropdown">
+            <li><a href="/verktoy/kalkulator/">Kalkulator</a></li>
+            <li><a href="/verktoy/huslan-vs-investering/">Huslån vs. Investering</a></li>
+            <li><a href="/verktoy/fire-kalkulator/">FIRE-kalkulator</a></li>
+            <li><a href="/verktoy/sektorrebalansering/">Sektorrebalansering</a></li>
+          </ul>
+        </li>
+        <li><a href="/artikler/" class="">Artikler</a></li>
+        <li><a href="/faq/" class="active">FAQ</a></li>
+        <li><a href="/om/" class="">Om</a></li>
+      </ul>
+      <div class="site-nav-actions">
+        <a href="https://exday.no/" class="site-app-btn">Åpne app</a>
+        <button id="site-dark-toggle" class="site-dark-btn" aria-label="Bytt fargemodus">
+          <svg class="sun-icon" width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+          <svg class="moon-icon" width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display:none;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+        </button>
+      </div>
+      <button class="site-nav-burger" aria-label="Vis meny" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <main class="max-w-3xl mx-auto px-4 py-8">
+
+    <nav class="text-xs text-gray-500 dark:text-gray-400 mb-6" aria-label="Brødsmuler">
+      <a href="/" class="hover:text-green-600 dark:hover:text-green-400">exday.no</a>
+      <span class="mx-1.5">›</span>
+      <span class="text-gray-700 dark:text-gray-300">Avnoteringer</span>
+    </nav>
+
+    <h1 class="text-2xl sm:text-3xl font-bold mb-3">Avnoterte utbytteaksjer på Oslo Børs</h1>
+    <p class="text-base text-gray-600 dark:text-gray-300 mb-8 leading-relaxed">
+      Selskaper forsvinner fra Oslo Børs hele tiden — de blir kjøpt opp, fusjonert,
+      omdøpt eller tatt av børs frivillig. Da forsvinner også aksjesiden, og det er
+      ikke alltid lett å finne ut hva som faktisk skjedde. Denne siden samler
+      utbytteaksjene som har gått ut av katalogen vår, med hva som skjedde med hver
+      av dem og hvor verdiene tok veien.
+    </p>
+
+    <div class="bg-green-50 dark:bg-green-950/30 border border-green-200 dark:border-green-900 rounded-lg p-4 mb-8 text-sm leading-relaxed">
+      <strong>Eier du en aksje som er borte?</strong> Den har ikke forsvunnet i løse
+      luften. Ved oppkjøp mot kontanter dukker pengene opp på kontoen, ved fusjon får
+      du aksjer i det overtakende selskapet, og ved en frivillig avnotering handles
+      aksjen ofte videre på en annen børs. Se
+      <a href="#hva-gjor-du" class="underline text-green-700 dark:text-green-400">hva du gjør</a>
+      nederst.
+    </div>
+
+    <h2 class="text-xl font-semibold mt-10 mb-2">Selskapet lever videre — bare under nytt navn</h2>
+    <p class="text-sm text-gray-600 dark:text-gray-300 mb-4 leading-relaxed">
+      Dette er de minst dramatiske tilfellene, og de mest forvirrende. Selskapet
+      handles fortsatt på Oslo Børs, men under en annen ticker. Eier du aksjen, har
+      du den fortsatt — den heter bare noe annet.
+    </p>
+
+    <div class="avn-boks avn-lever mb-8">
+      <table class="avn-tabell">
+        <thead>
+          <tr><th>Gammel</th><th>Ny</th><th>År</th><th>Hva skjedde</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="avn-tick">ABL</td>
+            <td class="avn-tick"><a href="/aksjer/AQUA/" class="text-green-600 dark:text-green-400 hover:underline">AQUA</a></td>
+            <td class="avn-aar">2026</td>
+            <td>ABL Group ASA skiftet navn til Aqualis ASA i juni 2026. Samme selskap, ny ticker.</td>
+          </tr>
+          <tr>
+            <td class="avn-tick">KMCP</td>
+            <td class="avn-tick"><a href="/aksjer/BINT/" class="text-green-600 dark:text-green-400 hover:underline">BINT</a></td>
+            <td class="avn-aar">2026</td>
+            <td>KMC Properties fusjonerte med BEWI Invest. KMC var overtakende selskap, men det sammenslåtte selskapet tok navnet Bevest og ble tatt opp til handel under ny ticker i april 2026.</td>
+          </tr>
+          <tr>
+            <td class="avn-tick">SBVG</td>
+            <td class="avn-tick"><a href="/aksjer/SB1NO/" class="text-green-600 dark:text-green-400 hover:underline">SB1NO</a></td>
+            <td class="avn-aar">2024</td>
+            <td>SpareBank 1 Sørøst-Norge fusjonerte med SpareBank 1 SR-Bank 1. oktober 2024. Den sammenslåtte banken heter SpareBank 1 Sør-Norge. Også den gamle SR-Bank-tickeren er borte av samme grunn.</td>
+          </tr>
+          <tr>
+            <td class="avn-tick">FKRAFT</td>
+            <td class="avn-tick"><a href="/aksjer/ELMRA/" class="text-green-600 dark:text-green-400 hover:underline">ELMRA</a></td>
+            <td class="avn-aar">2022</td>
+            <td>Fjordkraft Holding ASA skiftet navn til Elmera Group ASA i april 2022.</td>
+          </tr>
+          <tr>
+            <td class="avn-tick">JAEDR</td>
+            <td class="avn-tick"><a href="/aksjer/JAREN/" class="text-green-600 dark:text-green-400 hover:underline">JAREN</a></td>
+            <td class="avn-aar">—</td>
+            <td>Jæren Sparebank har alltid handlet under JAREN på Oslo Børs. JAEDR var rett og slett feil ticker hos oss, og aksjen var borte fra siden i flere år før feilen ble oppdaget.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 class="text-xl font-semibold mt-10 mb-2">Borte fra Oslo Børs</h2>
+    <p class="text-sm text-gray-600 dark:text-gray-300 mb-4 leading-relaxed">
+      Disse handles ikke lenger på Oslo Børs. Noen er kjøpt opp mot kontanter, noen
+      er fusjonert inn i et annet selskap, og noen handles videre på en utenlandsk
+      børs.
+    </p>
+
+    <div class="avn-boks avn-borte mb-8">
+      <table class="avn-tabell">
+        <thead>
+          <tr><th>Ticker</th><th>Selskap</th><th>År</th><th>Hva skjedde</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="avn-tick">TIETO</td>
+            <td>Tietoevry</td>
+            <td class="avn-aar">2026</td>
+            <td><strong>Handles videre i Norden.</strong> Selskapet søkte selv om å bli strøket fra sin sekundærnotering på Oslo Børs. Siste handelsdag var 26. juni 2026, avnotering 29. juni. Aksjen handles uendret på Nasdaq Helsinki og Nasdaq Stockholm, og registreringen i VPS opprettholdes til minst 29. juni 2027 slik at eiere rekker å konvertere.</td>
+          </tr>
+          <tr>
+            <td class="avn-tick">GOGL</td>
+            <td>Golden Ocean Group</td>
+            <td class="avn-aar">2025</td>
+            <td><strong>Fusjonert, ny aksje.</strong> CMB.TECH kjøpte den resterende eierandelen, og fusjonen ble gjennomført i august 2025. Eierne fikk 0,95 CMB.TECH-aksjer per Golden Ocean-aksje. CMB.TECH har sekundærnotering på Oslo Børs som <a href="/aksjer/CMBTO/" class="text-green-600 dark:text-green-400 hover:underline">CMBTO</a>.</td>
+          </tr>
+          <tr>
+            <td class="avn-tick">FLNG</td>
+            <td>Flex LNG</td>
+            <td class="avn-aar">2025</td>
+            <td><strong>Handles videre i USA.</strong> Avnotert fra Oslo Børs i september 2025. Aksjen handles fortsatt på New York Stock Exchange.</td>
+          </tr>
+          <tr>
+            <td class="avn-tick">PGS</td>
+            <td>Petroleum Geo-Services</td>
+            <td class="avn-aar">2024</td>
+            <td><strong>Fusjonert, ny aksje.</strong> Kjøpt opp av TGS i en ren aksjebytteavtale, gjennomført 2. juli 2024. Eierne fikk TGS-aksjer levert 4. juli, pluss et lite kontantoppgjør. <a href="/aksjer/TGS/" class="text-green-600 dark:text-green-400 hover:underline">TGS</a> er fortsatt notert.</td>
+          </tr>
+          <tr>
+            <td class="avn-tick">RANA</td>
+            <td>Rana Gruber</td>
+            <td class="avn-aar">2026</td>
+            <td><strong>Kjøpt opp mot kontanter.</strong> Drakkar BidCo gjennomførte tvangsinnløsning. Siste handelsdag 24. april 2026, avnotert 27. april.</td>
+          </tr>
+          <tr>
+            <td class="avn-tick">COOL</td>
+            <td>Cool Company</td>
+            <td class="avn-aar">2026</td>
+            <td><strong>Kjøpt opp mot kontanter.</strong> Fusjonert inn i EPS Ventures, avnotert 20. januar 2026. Eierne fikk 9,65 dollar per aksje.</td>
+          </tr>
+          <tr>
+            <td class="avn-tick">WILS</td>
+            <td>Wilson ASA</td>
+            <td class="avn-aar">2023</td>
+            <td>Avnotert fra Oslo Børs i mars 2023.</td>
+          </tr>
+          <tr>
+            <td class="avn-tick">NOFI</td>
+            <td>Norway Royal Salmon</td>
+            <td class="avn-aar">2022</td>
+            <td><strong>Fusjonert, ny aksje.</strong> Slått sammen med SalMar, avnotert 8. november 2022. <a href="/aksjer/SALM/" class="text-green-600 dark:text-green-400 hover:underline">SALM</a> dekker virksomheten i dag.</td>
+          </tr>
+          <tr>
+            <td class="avn-tick">HDLG</td>
+            <td>Höegh LNG Holdings</td>
+            <td class="avn-aar">2021</td>
+            <td><strong>Tatt av børs.</strong> Kjøpt ut og tatt privat av Larus Holding, et selskap eid av Leif Höegh &amp; Co og Morgan Stanley Infrastructure Partners. Ikke til å forveksle med <a href="/aksjer/HAUTO/" class="text-green-600 dark:text-green-400 hover:underline">HAUTO</a> (Höegh Autoliners), som er et eget, notert selskap.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 id="hva-gjor-du" class="text-xl font-semibold mt-10 mb-2">Hva gjør du om du eier en avnotert aksje?</h2>
+
+    <p class="text-sm text-gray-700 dark:text-gray-300 mb-4 leading-relaxed">
+      Det avhenger av hvorfor selskapet forsvant, og de fire tilfellene håndteres
+      helt ulikt.
+    </p>
+
+    <h3 class="font-semibold text-base mt-6 mb-2">Kjøpt opp mot kontanter</h3>
+    <p class="text-sm text-gray-700 dark:text-gray-300 mb-4 leading-relaxed">
+      Det enkleste tilfellet. Oppgjøret går automatisk inn på kontoen din hos
+      megleren, og aksjeposten forsvinner. Du trenger ikke gjøre noe. Husk likevel
+      at et slikt oppgjør er en <strong>realisasjon</strong> — gevinsten eller tapet
+      skal med i skattemeldingen, akkurat som ved et vanlig salg.
+    </p>
+
+    <h3 class="font-semibold text-base mt-6 mb-2">Fusjonert mot aksjer i et annet selskap</h3>
+    <p class="text-sm text-gray-700 dark:text-gray-300 mb-4 leading-relaxed">
+      Du får aksjer i det overtakende selskapet etter et bytteforhold som er fastsatt
+      i fusjonsavtalen, som 0,95 nye aksjer per gamle. De nye aksjene dukker opp på
+      kontoen av seg selv. En fusjon mellom to norske selskaper kan gjennomføres med
+      <strong>skattemessig kontinuitet</strong>, altså uten at det utløser skatt der
+      og da — men det avhenger av hvordan fusjonen er strukturert, og av om det
+      overtakende selskapet er norsk. Sjekk fusjonsmeldingen eller spør megleren.
+    </p>
+
+    <h3 class="font-semibold text-base mt-6 mb-2">Frivillig avnotering, men fortsatt børsnotert et annet sted</h3>
+    <p class="text-sm text-gray-700 dark:text-gray-300 mb-4 leading-relaxed">
+      Dette er tilfellet som krever noe av deg. Selskapet består og aksjen handles
+      videre, men på en annen børs — som Tietoevry i Helsinki og Stockholm, eller
+      Flex LNG i New York. Ikke alle norske meglere handler alle utenlandske børser,
+      så du må kanskje flytte posten. Selskapene setter som regel en frist for
+      konvertering, og den kan ligge et godt stykke fram i tid, men den er reell.
+      Sitter du med aksjen etter fristen, kan den bli tvangssolgt.
+    </p>
+
+    <h3 class="font-semibold text-base mt-6 mb-2">Konkurs eller sletting uten oppgjør</h3>
+    <p class="text-sm text-gray-700 dark:text-gray-300 mb-6 leading-relaxed">
+      Her er det ingenting å hente, men tapet er fradragsberettiget når det er
+      endelig konstatert. Det krever at selskapet faktisk er oppløst — ikke bare at
+      aksjen er verdiløs på papiret.
+    </p>
+
+    <h2 class="text-xl font-semibold mt-10 mb-2">Hvordan vi fanger opp dette</h2>
+    <p class="text-sm text-gray-700 dark:text-gray-300 mb-4 leading-relaxed">
+      En avnotering er stille. Datakilden slutter bare å svare, og en side som ikke
+      oppdateres ser helt normal ut — den viser bare gamle tall. Wilson lå på siden
+      med tall fra 2023 i over tre år før det ble oppdaget.
+    </p>
+    <p class="text-sm text-gray-700 dark:text-gray-300 mb-4 leading-relaxed">
+      Løsningen var å slutte å gjette. Hver kjøring sammenlignes katalogen vår mot
+      <strong>Euronexts egen liste over noterte instrumenter</strong> på Oslo Børs.
+      Står en ticker i katalogen men ikke i listen, er den ikke notert — det er et
+      faktum, ikke en slutning fra manglende data. Alle oppføringene over er dessuten
+      kontrollert mot selskapets egne børsmeldinger før de ble fjernet, fordi en
+      feilende datahenting like gjerne kan bety at kilden er nede som at selskapet
+      er borte.
+    </p>
+
+    <p class="text-xs text-gray-500 dark:text-gray-400 mt-8 leading-relaxed">
+      Listen dekker utbytteaksjer som har vært i katalogen på exday.no, ikke alle
+      avnoteringer på Oslo Børs. Datoer og vilkår er hentet fra selskapenes
+      børsmeldinger. Er noe feil eller mangler, sett gjerne opp en sak på
+      <a href="https://github.com/secopsvibecoder2026/utbytte-aksjer/issues" class="underline hover:text-gray-700 dark:hover:text-gray-300">GitHub</a>.
+    </p>
+
+    <div class="mt-8 pt-6 border-t border-gray-200 dark:border-gray-800 text-sm">
+      <p class="font-semibold mb-2">Les også</p>
+      <p class="flex items-center gap-2 mb-1.5">
+        <span aria-hidden="true">📅</span>
+        <a href="/utbyttekalender/" class="text-green-600 dark:text-green-400 hover:underline">Utbyttekalender for Oslo Børs</a>
+      </p>
+      <p class="flex items-center gap-2 mb-1.5">
+        <span aria-hidden="true">🏦</span>
+        <a href="/artikler/sparebanker-oslo-bors/" class="text-green-600 dark:text-green-400 hover:underline">Sparebankene på Oslo Børs</a>
+      </p>
+      <p class="flex items-center gap-2">
+        <span aria-hidden="true">📊</span>
+        <a href="/aksjer/" class="text-green-600 dark:text-green-400 hover:underline">Alle utbytteaksjer i katalogen</a>
+      </p>
+    </div>
+
+  </main>
+
+  <footer class="mt-8 sm:mt-12 border-t border-gray-200 dark:border-gray-800 py-6 text-center text-xs text-gray-400 dark:text-gray-600 space-y-1 px-4">
+    <p>Kurs og utbyttedata hentes fra Yahoo Finance og Euronext. Oppdateres daglig på børsdager.</p>
+    <p class="max-w-xl mx-auto leading-relaxed">
+      exday.no er ikke et verdipapirforetak og tilbyr ikke finansiell rådgivning.
+      Data kan inneholde feil eller forsinkelser — verifiser alltid mot Oslo Børs eller selskapets egne rapporter.
+      Historisk utbytte er ingen garanti for fremtidig utbytte.
+      Gjør alltid din egen analyse før du tar investeringsbeslutninger.
+    </p>
+    <p class="mt-2">
+      <a href="/personvern/" class="underline hover:text-gray-400 dark:hover:text-gray-400 transition-colors">Personvern og informasjonskapsler</a>
+      <span class="mx-2">·</span>
+      <a href="/faq/" class="underline hover:text-gray-400 dark:hover:text-gray-400 transition-colors">Vanlige spørsmål (FAQ)</a>
+      <span class="mx-2">·</span>
+      <a href="/vilkaar/" class="underline hover:text-gray-400 dark:hover:text-gray-400 transition-colors">Vilkår for bruk</a>
+    <span class="mx-2">·</span>
+    <a href="/om/" class="underline hover:text-gray-400 dark:hover:text-gray-400 transition-colors">Om exday.no</a>
+    </p>
+    <p class="mt-3">
+      <a href="https://www.facebook.com/share/17rMp8o9yF/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-gray-400 hover:text-blue-500 dark:hover:text-blue-400 transition-colors">
+        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/></svg>
+        Følg exday.no på Facebook
+      </a>
+    </p>
+  </footer>
+
+</body>
+</html>

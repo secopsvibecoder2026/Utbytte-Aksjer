@@ -994,10 +994,20 @@ announcements before removal (160 → 155 tickers):
 | GOGL | Merged into CMB.TECH, delisted Aug 2025 — `CMBTO` covers it |
 | TIETO | Delisted from Oslo Børs 29 Jun 2026 |
 | WILS | Delisted March 2023 — over three years of stale data served |
-| SBVG | SpareBank 1 BV merged into SpareBank 1 Sørøst-Norge |
+| SBVG | SpareBank 1 Sørøst-Norge merged into SpareBank 1 SR-Bank 1 Oct 2024 → **SpareBank 1 Sør-Norge**, which we carry as `SB1NO` |
 
 WILS is the one to remember: every existing check had been looking at it for three years and
 none of them said anything, because the fallback data kept the page looking alive.
+
+> **Correction (2026-09-12).** This table first said «SBVG — SpareBank 1 BV merged into
+> SpareBank 1 Sørøst-Norge». That is the wrong merger. SpareBank 1 BV *was* the acquiring
+> bank when it combined with Sparebanken Telemark in June 2021, and the resulting bank —
+> SpareBank 1 Sørøst-Norge — kept trading under `SBVG`. The ticker died in the *next*
+> merger, into SpareBank 1 SR-Bank on 1 October 2024, forming SpareBank 1 Sør-Norge.
+> That also explains the `SRBNK` removal on 2026-08-30 «as a duplicate of SB1NO»: both
+> legacy tickers resolve into the same merged bank. Written from memory the first time and
+> checked against sources only when it was going on a public page — which is the argument
+> for checking first.
 
 ### The list must also be able to *clear* a ticker
 
@@ -1243,6 +1253,43 @@ corrected name is the safer one to carry.
 > delistings, and nothing in the failure itself separates them. Verify against
 > Euronext's instrument list or the company's own announcements before removing
 > anything — every removal listed above was checked that way.
+
+---
+
+## `/avnoteringer/` — where removed tickers go to stay useful
+
+When a ticker is removed from `tickers.json` its page is deleted, and everything
+we learned verifying the removal disappears with it. Someone searching «hva
+skjedde med Rana Gruber» then gets nothing from us, even though we checked the
+answer against the company's own announcements.
+
+`avnoteringer/index.html` is a hand-written page holding that knowledge: what
+happened to each removed company, and what a holder should do about it. Two
+tables — renamed (still trading, new ticker) and gone from Oslo Børs — plus a
+section on the four outcomes a holder can face (cash buyout, share merger,
+voluntary delisting with the shares still trading abroad, and dissolution).
+
+**Add to it in the same commit that removes a ticker.** That is the moment the
+facts are verified and fresh; a week later they have to be looked up again.
+
+> ⚠️ **One page, never one per ticker.** A page per delisted company would rank
+> better individually and would be exactly the scaled-content pattern that got
+> the site rejected twice. Twenty thin pages about dead companies is the
+> temptation to refuse.
+
+**No numbers that drift** — the page carries only fixed historical facts
+(delisting dates, exchange ratios, cash-per-share). Nothing derived from the
+current dataset, so it never goes stale.
+
+The URL is registered in `generer_sitemap()` and linked from `/utforsk/`. An
+orphan page in the sitemap is a weak signal, so any future page needs both.
+
+**Verify before publishing, not after.** Writing this page surfaced an error in
+CLAUDE.md's own delisting table: SBVG was recorded as «SpareBank 1 BV merged
+into SpareBank 1 Sørøst-Norge», which is the wrong merger entirely — see the
+correction note in the `ikke_pa_bors` section. It had been written from memory
+and only checked against sources when it was about to become public. The
+sources are one search away; use them the first time.
 
 ---
 
