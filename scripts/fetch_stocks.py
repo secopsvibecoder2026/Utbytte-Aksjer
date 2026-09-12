@@ -1676,10 +1676,204 @@ STANDARD_RISIKOER = [
 ]
 
 
+def _selskapsrisikoer(a):
+    """Risikopunkter utledet av selskapets egne tall.
+
+    Seksjonen var ren sektortekst: tre punkter hentet fra SEKTOR_RISIKOER, som
+    ga 16 varianter fordelt på 155 sider — opptil 37 sider med ordrett samme
+    liste. Det er ekte duplikat, og det er også lite nyttig: en aksje med
+    payout på 95 % og en med 30 % fikk nøyaktig samme advarsel.
+
+    Punktene her leses ut av raden, så to selskaper i samme sektor bare får lik
+    liste når tallene deres faktisk ligner. Alle er formulert fra denne
+    kjøringens tall — aldri lagret, jf. regelen om frosne tall i prosa.
+    """
+    ut = []
+    hist = a.get("historiske_utbytter") or []
+    payout = a.get("payout_ratio") or 0
+    yield_ = a.get("utbytte_yield") or 0
+    snitt = a.get("snitt_yield_5ar") or 0
+    ar = a.get("ar_med_utbytte") or 0
+    iaar = datetime.date.today().year
+
+    # Payout: bare når vi faktisk har tallet. 0 betyr ukjent, ikke lav.
+    if payout >= 90:
+        ut.append(
+            f"Payout ratio på {_nf(payout, 0)} % betyr at nesten hele "
+            f"inntjeningen deles ut — det gir lite å gå på om resultatet faller"
+        )
+    elif payout > 75:
+        ut.append(
+            f"Payout ratio på {_nf(payout, 0)} % er i øvre sjikt, så utbyttet "
+            f"tåler mindre svikt i inntjeningen enn hos en lavere utdeler"
+        )
+
+    # Kutt i historikken — hopp over inneværende år, som er hittil-i-år.
+    komplette = sorted(
+        [h for h in hist if h.get("ar") and h["ar"] < iaar and h.get("utbytte")],
+        key=lambda h: h["ar"],
+    )
+    kutt = [
+        (komplette[i - 1], komplette[i])
+        for i in range(1, len(komplette))
+        if komplette[i]["utbytte"] < komplette[i - 1]["utbytte"] * 0.85
+    ]
+    if kutt:
+        forrige, etter = kutt[-1]
+        ut.append(
+            f"Utbyttet er kuttet før — fra {_nf(forrige['utbytte'], 2)} til "
+            f"{_nf(etter['utbytte'], 2)} kroner i {etter['ar']}"
+        )
+
+    # Kort historikk gir tynt grunnlag.
+    if 0 < ar <= 3:
+        ut.append(
+            f"Kort utbyttehistorikk ({ar} år) gir lite grunnlag for å vurdere "
+            f"hvor stabilt utbyttet er over en konjunktursyklus"
+        )
+
+    # Yield langt over eget snitt uten at utbyttet er hevet: kursen har falt.
+    if yield_ and snitt and yield_ > snitt * 1.8 and not kutt:
+        ut.append(
+            f"Yielden på {_nf(yield_, 1)} % ligger godt over aksjens eget "
+            f"5-årssnitt på {_nf(snitt, 1)} % — det kommer som regel av at "
+            f"kursen har falt, ikke av at utbyttet er hevet"
+        )
+
+    # Utbytte fastsatt i USD på en NOK-notert aksje.
+    if (a.get("valuta") or "NOK").upper() == "USD":
+        ut.append(
+            "Selskapet rapporterer i USD mens aksjen handles i kroner, så "
+            "utbyttet i norske kroner svinger med USDNOK"
+        )
+
+    if (a.get("frekvens") or "") == "Uregelmessig":
+        ut.append(
+            "Utbetalingene har ikke fulgt et fast mønster, så tidspunkt og "
+            "størrelse er vanskelige å planlegge etter"
+        )
+
+    # Inngangskurs. Dette er det eneste punktet som lar seg regne ut for
+    # praktisk talt alle, og det gir også de sunne utbytteaksjene — ATEA, DNB
+    # og andre uten røde flagg — minst ett punkt som handler om dem selv
+    # framfor om sektoren. Yield oppgis alltid mot dagens kurs, så spennet
+    # over året er reell informasjon en kjøper ikke ser noe annet sted.
+    hoy = a.get("52u_hoy") or 0
+    lav = a.get("52u_lav") or 0
+    upa = a.get("utbytte_per_aksje") or 0
+    if hoy and lav and upa and hoy > lav * 1.2:
+        y_lav, y_hoy = upa / hoy * 100, upa / lav * 100
+        if y_hoy - y_lav >= 0.5:
+            ut.append(
+                f"Yielden avhenger sterkt av inngangskursen: samme utbytte gir "
+                f"{_nf(y_lav, 1)} % på 12-månedershøyden "
+                f"({_nf(hoy, 2)} kr) og {_nf(y_hoy, 1)} % på bunnen "
+                f"({_nf(lav, 2)} kr)"
+            )
+
+    return ut
+
+
+def _driver_selskapsledd(a, sektor):
+    """Andre avsnitt i «Hva driver utbyttet i X?» — bygget av radens egne tall.
+
+    Sektoravsnittet over er identisk for alle i sektoren, mens overskriften
+    lover noe om denne aksjen. Dette leddet innfrir det løftet, og skiller
+    samtidig sider som ellers ville stått med ordrett samme tekst.
+    """
+    navn = a.get("navn") or a.get("ticker") or ""
+    vekst = a.get("utbytte_vekst_5ar")
+    payout = a.get("payout_ratio") or 0
+    ar = a.get("ar_med_utbytte") or 0
+    frekvens = (a.get("frekvens") or "").lower()
+    mnd = a.get("utbetalingsmaaneder") or []
+    setninger = []
+
+    # Hvor lenge, og hvor jevnt.
+    if ar >= 15:
+        setninger.append(
+            f"{navn} har betalt utbytte {ar} år på rad, altså gjennom både "
+            f"finanskrisen og pandemien — det sier mer om utbyttepolitikken enn "
+            f"noe enkeltår gjør"
+        )
+    elif ar >= 8:
+        setninger.append(
+            f"{navn} har {ar} år med sammenhengende utbytte bak seg, nok til å "
+            f"dekke en hel konjunktursyklus"
+        )
+    elif ar > 0:
+        setninger.append(
+            f"Med {ar} år med utbytte er historikken hos {navn} fortsatt kort, "
+            f"så utbyttepolitikken er ikke ferdig prøvd"
+        )
+
+    # Retningen på utbyttet. Femårsveksten kan bare nevnes når det faktisk
+    # finnes fem år å regne over — SATS har to år med utbytte og en beregnet
+    # femårsvekst på 120 %, som er en artefakt av en kort serie. Å skrive
+    # «historikken er kort» og «vokst 120 % over fem år» i samme avsnitt er
+    # den samme selvmotsigelsen som WAWI hadde i utbyttehistorikk-teksten.
+    if vekst is not None and ar >= 5:
+        if vekst >= 10:
+            setninger.append(
+                f"Utbyttet har vokst {_nf(vekst, 1)} % i året de siste fem årene"
+            )
+        elif vekst > 0:
+            setninger.append(
+                f"Veksten i utbyttet har ligget på {_nf(vekst, 1)} % i året over fem år"
+            )
+        elif vekst < 0:
+            setninger.append(
+                f"Utbyttet er samlet sett {_nf(abs(vekst), 1)} % lavere i året enn "
+                f"for fem år siden"
+            )
+
+    # Hva payout sier om rommet framover. 0 betyr ukjent — ikke lav.
+    if payout > 0:
+        if payout < 40:
+            setninger.append(
+                f"Payout ratio på {_nf(payout, 0)} % lar mesteparten av "
+                f"inntjeningen bli igjen i selskapet, så det er rom for å øke"
+            )
+        elif payout <= 75:
+            setninger.append(
+                f"Payout ratio på {_nf(payout, 0)} % er et nivå som pleier å "
+                f"kunne holdes over tid"
+            )
+
+    # Når pengene faktisk kommer. Månedslisten kan bare stå sammen med
+    # frekvensen når de to er enige: utbetalingsdatoer glir mellom år, så en
+    # halvårlig betaler kan fint ha tre typiske måneder — og «halvårlig, typisk
+    # i april, mai og november» leser som en feil selv når begge delene er
+    # riktige hver for seg.
+    _VENTET = {"årlig": 1, "halvårlig": 2, "kvartalsvis": 4, "månedlig": 12}
+    if mnd and frekvens and _VENTET.get(frekvens) == len(mnd):
+        setninger.append(
+            f"Utbetalingene kommer {frekvens}, i {_maaneder_tekst(mnd)}"
+        )
+    elif mnd and len(mnd) <= 4:
+        setninger.append(
+            f"Utbetalingene har de siste årene kommet i {_maaneder_tekst(mnd)}"
+        )
+    elif frekvens:
+        setninger.append(f"Utbyttet utbetales {frekvens}")
+
+    if not setninger:
+        return ""
+    return ". ".join(s.rstrip(".") for s in setninger) + "."
+
+
 def _lag_risikofaktorer(a):
-    """Sektor-spesifikke risikofaktorer for utbyttet."""
+    """Risiko for utbyttet: selskapets egne tall først, sektor som utfylling."""
     sektor = a.get("sektor") or ""
-    risikoer = SEKTOR_RISIKOER.get(sektor, STANDARD_RISIKOER)
+    egne = _selskapsrisikoer(a)
+    sektorrisiko = SEKTOR_RISIKOER.get(sektor, STANDARD_RISIKOER)
+
+    # Fyll opp til fire punkter med sektorteksten. Har selskapet mange egne,
+    # slipper sektorteksten helt til — da er den bare støy ved siden av noe
+    # konkret.
+    risikoer = egne + [r for r in sektorrisiko if r not in egne]
+    risikoer = risikoer[:4]
+
     punkter = "\n".join(f"<li>{r}</li>" for r in risikoer)
     return (
         f'<div class="risiko-seksjon">'
@@ -1939,11 +2133,16 @@ def _lag_investor_vurdering(a, sektor_snitt):
 
     # ── Hva driver utbyttet ─────────────────────────────────────────────────
     driver_tekst = _SEKTOR_DRIVER_UTDYPET.get(sektor, "")
+    # Sektorteksten alene ga 16 varianter på 155 sider. Overskriften lover noe
+    # om denne aksjen, så avsnittet skal også si noe om den — det andre leddet
+    # bygges av selskapets egne tall.
+    eget_ledd = _driver_selskapsledd(a, sektor)
     driver_html = (
         f'<div class="driver-seksjon">'
         f'<h2>Hva driver utbyttet i {ticker}?</h2>'
         f'<p class="driver-tekst">{driver_tekst}</p>'
-        f'</div>'
+        + (f'<p class="driver-tekst">{eget_ledd}</p>' if eget_ledd else "")
+        + f'</div>'
     ) if driver_tekst else ""
 
     # ── Passer for deg? ─────────────────────────────────────────────────────
@@ -2171,21 +2370,21 @@ def _lag_kontoer_seksjon(a):
             '</div>'
         )
 
+    # Aksje- og fondskonto og Zero var to egne rader med hver sin
+    # forklaringssetning, begge ordrett like på alle 155 sider — til sammen 24
+    # ord ren boilerplate per side, for å si noe som gjelder alle norske
+    # aksjer. Slått sammen til én linje: informasjonen er beholdt, gjentakelsen
+    # er borte. ASK-raden står igjen som egen rad, for den er den eneste som
+    # faktisk varierer og den eneste leseren lurer på.
     af_badge = (
         '<div class="konto-rad">'
         '<span class="konto-ok">✓</span>'
-        '<div><strong>Aksje- og fondskonto</strong>'
-        '<p>Kan handles fritt på alle norske og internasjonale meglere.</p></div>'
+        '<div><strong>Aksje- og fondskonto og Zero</strong>'
+        '<p>Ingen begrensning.</p></div>'
         '</div>'
     )
 
-    zero_badge = (
-        '<div class="konto-rad">'
-        '<span class="konto-ok">✓</span>'
-        '<div><strong>Zero-konto</strong>'
-        '<p>Kan handles — Zero er ikke begrenset til EØS-aksjer.</p></div>'
-        '</div>'
-    )
+    zero_badge = ""
 
     return (
         '<div class="kontoer-seksjon">'
