@@ -153,6 +153,21 @@
     .vurdering-tekst { font-size: 0.9rem; line-height: 1.75; color: #374151; margin: 0; }
     .dark .vurdering-seksjon { background: #0f172a; border-color: #1e293b; }
     .dark .vurdering-tekst { color: #cbd5e1; }
+    /* Betingede seksjoner — vises bare på sider der de har noe å si. */
+    .rekke-seksjon, .nedtur-seksjon, .utbetalingsaar-seksjon { margin: 1.5rem 0; padding: 1.1rem 1.25rem; background: #f8fafc; border-radius: 0.75rem; border: 1px solid #e2e8f0; }
+    .rekke-seksjon h2, .nedtur-seksjon h2, .utbetalingsaar-seksjon h2 { font-size: 1rem; font-weight: 700; margin-bottom: 0.6rem; }
+    .rekke-seksjon p, .nedtur-seksjon p, .utbetalingsaar-seksjon p { font-size: 0.9rem; line-height: 1.75; color: #374151; margin: 0 0 0.6rem; }
+    .rekke-seksjon p:last-child, .nedtur-seksjon p:last-child, .utbetalingsaar-seksjon p:last-child { margin-bottom: 0; }
+    .dark .rekke-seksjon, .dark .nedtur-seksjon, .dark .utbetalingsaar-seksjon { background: #0f172a; border-color: #1e293b; }
+    .dark .rekke-seksjon p, .dark .nedtur-seksjon p, .dark .utbetalingsaar-seksjon p { color: #cbd5e1; }
+    .rekke-seksjon { border-left: 3px solid #22c55e; }
+    .nedtur-seksjon { border-left: 3px solid #f59e0b; }
+    .mnd-strip { display: grid; grid-template-columns: repeat(12, 1fr); gap: 2px; margin-bottom: 0.85rem; }
+    .mnd-celle { text-align: center; padding: 0.4rem 0.1rem; font-size: 0.62rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.02em; color: #9ca3af; background: #f1f5f9; border-radius: 0.25rem; }
+    .mnd-celle.mnd-ja { background: #16a34a; color: #fff; }
+    .dark .mnd-celle { background: #1e293b; color: #64748b; }
+    .dark .mnd-celle.mnd-ja { background: #16a34a; color: #fff; }
+    @media (max-width: 480px) { .mnd-strip { grid-template-columns: repeat(6, 1fr); } }
     .driver-seksjon { margin: 1.5rem 0; }
     .driver-seksjon h2 { font-size: 1rem; font-weight: 700; margin-bottom: 0.6rem; }
     .driver-tekst { font-size: 0.875rem; line-height: 1.75; color: #4b5563; margin: 0; }
@@ -524,7 +539,13 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
           <td>9,21%</td>
         </tr></tbody></table>
 
+  
+
+  
+
   <div class="vurdering-seksjon"><h2>Vurdering som utbytteaksje</h2><p class="vurdering-tekst">Vistin Pharma ASA har vist konsistent utbytteevne over 7 år og er et etablert navn blant utbytteinvestorer. Yielden på 6,6% er klart over sektorsnittet for Helsevern (3,8%), noe som reflekterer enten høy utbyttekapasitet eller at markedet priser inn høyere risiko. Utbyttet har falt med 24,4% per år de siste fem årene, noe som krever at investoren setter seg inn i hva som har drevet nedgangen.</p></div><div class="driver-seksjon"><h2>Hva driver utbyttet i VISTIN?</h2><p class="driver-tekst">Produktgodkjenninger, patentstatus og refusjonsbeslutninger fra helsemyndigheter er de viktigste hendelsene. Marginen er relativt stabil, men ett negativt regulatorisk vedtak kan endre bildet raskt. Utbyttet er typisk lavere og mer stabilt enn i sykliske sektorer.</p><p class="driver-tekst">Med 7 år med utbytte er historikken hos Vistin Pharma ASA fortsatt kort, så utbyttepolitikken er ikke ferdig prøvd. Utbyttet er samlet sett 24,4 % lavere i året enn for fem år siden. Payout ratio på 63 % er et nivå som pleier å kunne holdes over tid. Utbetalingene kommer årlig, i juni.</p></div>
+
+  
 
   <div class="risiko-seksjon"><h2>Risiko for utbyttet</h2><ul class="risiko-liste"><li>Utbyttet er kuttet før — fra 1,75 til 1,25 kroner i 2025</li>
 <li>Yielden avhenger sterkt av inngangskursen: samme utbytte gir 5,3 % på 12-månedershøyden (23,80 kr) og 7,1 % på bunnen (17,70 kr)</li>

@@ -153,6 +153,21 @@
     .vurdering-tekst { font-size: 0.9rem; line-height: 1.75; color: #374151; margin: 0; }
     .dark .vurdering-seksjon { background: #0f172a; border-color: #1e293b; }
     .dark .vurdering-tekst { color: #cbd5e1; }
+    /* Betingede seksjoner — vises bare på sider der de har noe å si. */
+    .rekke-seksjon, .nedtur-seksjon, .utbetalingsaar-seksjon { margin: 1.5rem 0; padding: 1.1rem 1.25rem; background: #f8fafc; border-radius: 0.75rem; border: 1px solid #e2e8f0; }
+    .rekke-seksjon h2, .nedtur-seksjon h2, .utbetalingsaar-seksjon h2 { font-size: 1rem; font-weight: 700; margin-bottom: 0.6rem; }
+    .rekke-seksjon p, .nedtur-seksjon p, .utbetalingsaar-seksjon p { font-size: 0.9rem; line-height: 1.75; color: #374151; margin: 0 0 0.6rem; }
+    .rekke-seksjon p:last-child, .nedtur-seksjon p:last-child, .utbetalingsaar-seksjon p:last-child { margin-bottom: 0; }
+    .dark .rekke-seksjon, .dark .nedtur-seksjon, .dark .utbetalingsaar-seksjon { background: #0f172a; border-color: #1e293b; }
+    .dark .rekke-seksjon p, .dark .nedtur-seksjon p, .dark .utbetalingsaar-seksjon p { color: #cbd5e1; }
+    .rekke-seksjon { border-left: 3px solid #22c55e; }
+    .nedtur-seksjon { border-left: 3px solid #f59e0b; }
+    .mnd-strip { display: grid; grid-template-columns: repeat(12, 1fr); gap: 2px; margin-bottom: 0.85rem; }
+    .mnd-celle { text-align: center; padding: 0.4rem 0.1rem; font-size: 0.62rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.02em; color: #9ca3af; background: #f1f5f9; border-radius: 0.25rem; }
+    .mnd-celle.mnd-ja { background: #16a34a; color: #fff; }
+    .dark .mnd-celle { background: #1e293b; color: #64748b; }
+    .dark .mnd-celle.mnd-ja { background: #16a34a; color: #fff; }
+    @media (max-width: 480px) { .mnd-strip { grid-template-columns: repeat(6, 1fr); } }
     .driver-seksjon { margin: 1.5rem 0; }
     .driver-seksjon h2 { font-size: 1rem; font-weight: 700; margin-bottom: 0.6rem; }
     .driver-tekst { font-size: 0.875rem; line-height: 1.75; color: #4b5563; margin: 0; }
@@ -534,7 +549,13 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
           <td>1,03%</td>
         </tr></tbody></table>
 
+  
+
+  <div class="utbetalingsaar-seksjon"><h2>Utbyttet gjennom året</h2><div class="mnd-strip"><div class="mnd-celle"><span>jan</span></div><div class="mnd-celle mnd-ja"><span>feb</span></div><div class="mnd-celle"><span>mar</span></div><div class="mnd-celle"><span>apr</span></div><div class="mnd-celle mnd-ja"><span>mai</span></div><div class="mnd-celle"><span>jun</span></div><div class="mnd-celle"><span>jul</span></div><div class="mnd-celle mnd-ja"><span>aug</span></div><div class="mnd-celle mnd-ja"><span>sep</span></div><div class="mnd-celle"><span>okt</span></div><div class="mnd-celle mnd-ja"><span>nov</span></div><div class="mnd-celle"><span>des</span></div></div><p>Höegh Autoliners ASA betaler ut 5 ganger i året, i februar, mai, august, september og november — grovt regnet 4,56 kroner per aksje hver gang. Månedene er utledet av hvilke måneder som går igjen over flere år, ikke av en enkelt utbetaling.</p></div>
+
   <div class="vurdering-seksjon"><h2>Vurdering som utbytteaksje</h2><p class="vurdering-tekst">Höegh Autoliners ASA har betalt utbytte de siste 5 årene, men historikken er begrenset. Yielden på 12,7% er klart over sektorsnittet for Shipping (6,0%), noe som reflekterer enten høy utbyttekapasitet eller at markedet priser inn høyere risiko. Utbyttet har vokst med 53,8% per år de siste fem årene, noe som gjør det attraktivt for langsiktige reinvesteringsstrategier.</p></div><div class="driver-seksjon"><h2>Hva driver utbyttet i HAUTO?</h2><p class="driver-tekst">Fraktrater bestemmer inntjeningen nesten alene. Ratene svinger kraftig med balansen mellom tilbud av tonnasje og etterspørsel fra global handel. Ny tonnasje fra ordreboken, skraping av eldre skip og geopolitikk (Rødehavet, Suezkanalen) er viktige drivere. Mange shippingselskaper deler ut det meste av overskuddet — hyppig utbytte er vanlig, men høy yield kan forsvinne like fort som den kom.</p><p class="driver-tekst">Med 5 år med utbytte er historikken hos Höegh Autoliners ASA fortsatt kort, så utbyttepolitikken er ikke ferdig prøvd. Utbyttet har vokst 53,8 % i året de siste fem årene. Utbyttet utbetales kvartalsvis.</p></div>
+
+  <div class="nedtur-seksjon"><h2>Tåler utbyttet en nedtur?</h2><p>Med en payout ratio på 85 % kan inntjeningen falle rundt 15 % før utbyttet spiser hele overskuddet. Faller den mer enn det, må selskapet enten tære på kassen, låne, eller sette ned utbyttet. Selskapet har satt ned utbyttet før, så terskelen for å gjøre det igjen er neppe høy.</p></div>
 
   <div class="risiko-seksjon"><h2>Risiko for utbyttet</h2><ul class="risiko-liste"><li>Payout ratio på 85 % er i øvre sjikt, så utbyttet tåler mindre svikt i inntjeningen enn hos en lavere utdeler</li>
 <li>Utbyttet er kuttet før — fra 47,65 til 22,82 kroner i 2025</li>

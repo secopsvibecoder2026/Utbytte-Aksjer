@@ -153,6 +153,21 @@
     .vurdering-tekst { font-size: 0.9rem; line-height: 1.75; color: #374151; margin: 0; }
     .dark .vurdering-seksjon { background: #0f172a; border-color: #1e293b; }
     .dark .vurdering-tekst { color: #cbd5e1; }
+    /* Betingede seksjoner — vises bare på sider der de har noe å si. */
+    .rekke-seksjon, .nedtur-seksjon, .utbetalingsaar-seksjon { margin: 1.5rem 0; padding: 1.1rem 1.25rem; background: #f8fafc; border-radius: 0.75rem; border: 1px solid #e2e8f0; }
+    .rekke-seksjon h2, .nedtur-seksjon h2, .utbetalingsaar-seksjon h2 { font-size: 1rem; font-weight: 700; margin-bottom: 0.6rem; }
+    .rekke-seksjon p, .nedtur-seksjon p, .utbetalingsaar-seksjon p { font-size: 0.9rem; line-height: 1.75; color: #374151; margin: 0 0 0.6rem; }
+    .rekke-seksjon p:last-child, .nedtur-seksjon p:last-child, .utbetalingsaar-seksjon p:last-child { margin-bottom: 0; }
+    .dark .rekke-seksjon, .dark .nedtur-seksjon, .dark .utbetalingsaar-seksjon { background: #0f172a; border-color: #1e293b; }
+    .dark .rekke-seksjon p, .dark .nedtur-seksjon p, .dark .utbetalingsaar-seksjon p { color: #cbd5e1; }
+    .rekke-seksjon { border-left: 3px solid #22c55e; }
+    .nedtur-seksjon { border-left: 3px solid #f59e0b; }
+    .mnd-strip { display: grid; grid-template-columns: repeat(12, 1fr); gap: 2px; margin-bottom: 0.85rem; }
+    .mnd-celle { text-align: center; padding: 0.4rem 0.1rem; font-size: 0.62rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.02em; color: #9ca3af; background: #f1f5f9; border-radius: 0.25rem; }
+    .mnd-celle.mnd-ja { background: #16a34a; color: #fff; }
+    .dark .mnd-celle { background: #1e293b; color: #64748b; }
+    .dark .mnd-celle.mnd-ja { background: #16a34a; color: #fff; }
+    @media (max-width: 480px) { .mnd-strip { grid-template-columns: repeat(6, 1fr); } }
     .driver-seksjon { margin: 1.5rem 0; }
     .driver-seksjon h2 { font-size: 1rem; font-weight: 700; margin-bottom: 0.6rem; }
     .driver-tekst { font-size: 0.875rem; line-height: 1.75; color: #4b5563; margin: 0; }
@@ -534,7 +549,13 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
           <td>4,80%</td>
         </tr></tbody></table>
 
+  
+
+  
+
   <div class="vurdering-seksjon"><h2>Vurdering som utbytteaksje</h2><p class="vurdering-tekst">Aasen Sparebank har vist konsistent utbytteevne over 10 år og er et etablert navn blant utbytteinvestorer. Yielden på 7,3% er klart over sektorsnittet for Finans (5,8%), noe som reflekterer enten høy utbyttekapasitet eller at markedet priser inn høyere risiko. Utbetalingsgraden på 123% er høy — de fleste av overskuddskronene deles ut, og utbyttet er dermed sensitivt for inntjeningsfall. Utbyttet har vokst med 11,2% per år de siste fem årene, noe som gjør det attraktivt for langsiktige reinvesteringsstrategier.</p></div><div class="driver-seksjon"><h2>Hva driver utbyttet i AASB?</h2><p class="driver-tekst">Netto renteinntekter — differansen mellom utlåns- og innskuddsrenter — er den viktigste inntektskilden. Norges Banks styringsrente påvirker marginene direkte. Kredittap og myndighetenes kapitalkrav (CET1-ratio) setter øvre grense for hva som kan deles ut. Følg kvartalsmeldingene for utlånsvekst og mislighold.</p><p class="driver-tekst">Aasen Sparebank har 10 år med sammenhengende utbytte bak seg, nok til å dekke en hel konjunktursyklus. Utbyttet har vokst 11,2 % i året de siste fem årene. Utbetalingene kommer årlig, i mars.</p></div>
+
+  <div class="nedtur-seksjon"><h2>Tåler utbyttet en nedtur?</h2><p>Aasen Sparebank deler i dag ut mer enn selskapet tjener (123 % av inntjeningen). Det kan finansieres en stund av oppsparte midler eller salg av eiendeler, men det er ikke et nivå som kan holdes år etter år uten at inntjeningen tar seg opp. Selskapet har ikke kuttet utbyttet i perioden vi har tall for, noe som taler for at nivået er villet og ikke tilfeldig.</p></div>
 
   <div class="risiko-seksjon"><h2>Risiko for utbyttet</h2><ul class="risiko-liste"><li>Payout ratio på 123 % betyr at nesten hele inntjeningen deles ut — det gir lite å gå på om resultatet faller</li>
 <li>Yielden avhenger sterkt av inngangskursen: samme utbytte gir 6,6 % på 12-månedershøyden (151,48 kr) og 8,3 % på bunnen (120,00 kr)</li>

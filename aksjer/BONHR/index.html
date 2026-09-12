@@ -153,6 +153,21 @@
     .vurdering-tekst { font-size: 0.9rem; line-height: 1.75; color: #374151; margin: 0; }
     .dark .vurdering-seksjon { background: #0f172a; border-color: #1e293b; }
     .dark .vurdering-tekst { color: #cbd5e1; }
+    /* Betingede seksjoner — vises bare på sider der de har noe å si. */
+    .rekke-seksjon, .nedtur-seksjon, .utbetalingsaar-seksjon { margin: 1.5rem 0; padding: 1.1rem 1.25rem; background: #f8fafc; border-radius: 0.75rem; border: 1px solid #e2e8f0; }
+    .rekke-seksjon h2, .nedtur-seksjon h2, .utbetalingsaar-seksjon h2 { font-size: 1rem; font-weight: 700; margin-bottom: 0.6rem; }
+    .rekke-seksjon p, .nedtur-seksjon p, .utbetalingsaar-seksjon p { font-size: 0.9rem; line-height: 1.75; color: #374151; margin: 0 0 0.6rem; }
+    .rekke-seksjon p:last-child, .nedtur-seksjon p:last-child, .utbetalingsaar-seksjon p:last-child { margin-bottom: 0; }
+    .dark .rekke-seksjon, .dark .nedtur-seksjon, .dark .utbetalingsaar-seksjon { background: #0f172a; border-color: #1e293b; }
+    .dark .rekke-seksjon p, .dark .nedtur-seksjon p, .dark .utbetalingsaar-seksjon p { color: #cbd5e1; }
+    .rekke-seksjon { border-left: 3px solid #22c55e; }
+    .nedtur-seksjon { border-left: 3px solid #f59e0b; }
+    .mnd-strip { display: grid; grid-template-columns: repeat(12, 1fr); gap: 2px; margin-bottom: 0.85rem; }
+    .mnd-celle { text-align: center; padding: 0.4rem 0.1rem; font-size: 0.62rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.02em; color: #9ca3af; background: #f1f5f9; border-radius: 0.25rem; }
+    .mnd-celle.mnd-ja { background: #16a34a; color: #fff; }
+    .dark .mnd-celle { background: #1e293b; color: #64748b; }
+    .dark .mnd-celle.mnd-ja { background: #16a34a; color: #fff; }
+    @media (max-width: 480px) { .mnd-strip { grid-template-columns: repeat(6, 1fr); } }
     .driver-seksjon { margin: 1.5rem 0; }
     .driver-seksjon h2 { font-size: 1rem; font-weight: 700; margin-bottom: 0.6rem; }
     .driver-tekst { font-size: 0.875rem; line-height: 1.75; color: #4b5563; margin: 0; }
@@ -534,7 +549,13 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
           <td>1,65%</td>
         </tr></tbody></table>
 
+  <div class="rekke-seksjon"><h2>Utbytterekken til BONHR</h2><p>Bonheur ASA har betalt utbytte 27 år på rad. Rekken strekker seg tilbake til rundt 1999, og har dermed overlevd finanskrisen i 2008, oljeprisfallet i 2014, pandemien i 2020 og renteoppgangen fra 2022. I de årene vi har tall for har utbyttet aldri gått ned fra ett år til det neste.</p><p>En lang rekke er ingen garanti, men den sier noe en enkelt yield ikke gjør: at utbyttet har vært prioritert også i år da det kostet noe å opprettholde det.</p></div>
+
+  
+
   <div class="vurdering-seksjon"><h2>Vurdering som utbytteaksje</h2><p class="vurdering-tekst">Bonheur ASA er en av de mest rutinerte utbyttebetalerne på Oslo Børs med 27 sammenhengende år med utbytte. Yielden på 2,8% er klart over sektorsnittet for Fornybar energi (2,2%), noe som reflekterer enten høy utbyttekapasitet eller at markedet priser inn høyere risiko. Utbetalingsgraden på 32% er lav, noe som gir solid buffer og rom for utbytteøkninger fremover. Utbyttet har vokst med 14,1% per år de siste fem årene, noe som gjør det attraktivt for langsiktige reinvesteringsstrategier.</p></div><div class="driver-seksjon"><h2>Hva driver utbyttet i BONHR?</h2><p class="driver-tekst">Strømprisene i Nordic-markedet og tilgang på konsesjon er avgjørende. Høye strømpriser gir ekstraordinær inntjening og rom for sjenerøse utbytter, mens lave priser — særlig i fuktige år med mye vannkraft — kan halvere utbyttekapasiteten. Følg med på terminkurver for kraft og selskapets produksjonsveiledning.</p><p class="driver-tekst">Bonheur ASA har betalt utbytte 27 år på rad, altså gjennom både finanskrisen og pandemien — det sier mer om utbyttepolitikken enn noe enkeltår gjør. Utbyttet har vokst 14,1 % i året de siste fem årene. Payout ratio på 32 % lar mesteparten av inntjeningen bli igjen i selskapet, så det er rom for å øke. Utbetalingene kommer årlig, i mai.</p></div>
+
+  
 
   <div class="risiko-seksjon"><h2>Risiko for utbyttet</h2><ul class="risiko-liste"><li>Yielden avhenger sterkt av inngangskursen: samme utbytte gir 2,6 % på 12-månedershøyden (280,00 kr) og 3,5 % på bunnen (209,00 kr)</li>
 <li>Strømpris er volatil og avgjørende for inntjening</li>

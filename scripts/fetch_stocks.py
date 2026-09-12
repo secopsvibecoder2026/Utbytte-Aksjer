@@ -1774,6 +1774,173 @@ def _selskapsrisikoer(a):
     return ut
 
 
+def _lag_utbytterekken(a):
+    """«Utbytterekken» — bare for aksjer med lang, sammenhengende historikk.
+
+    Betinget seksjon. Poenget med disse er at sidene skal ha ulik *form*, ikke
+    bare ulike tall: en aksje med 20 år bak seg fortjener et avsnitt en toårig
+    ikke får. Variasjon i data alene flytter ikke inntrykket av at alle sidene
+    er samme mal.
+    """
+    ar = a.get("ar_med_utbytte") or 0
+    if ar < 12:
+        return ""
+
+    navn = a.get("navn") or a.get("ticker") or ""
+    iaar = datetime.date.today().year
+    start = iaar - ar
+
+    hendelser = []
+    if start <= 2008:
+        hendelser.append("finanskrisen i 2008")
+    if start <= 2014:
+        hendelser.append("oljeprisfallet i 2014")
+    if start <= 2020:
+        hendelser.append("pandemien i 2020")
+    if start <= 2022:
+        hendelser.append("renteoppgangen fra 2022")
+
+    if len(hendelser) >= 2:
+        liste = ", ".join(hendelser[:-1]) + " og " + hendelser[-1]
+        gjennom = (
+            f"Rekken strekker seg tilbake til rundt {start}, og har dermed "
+            f"overlevd {liste}."
+        )
+    elif hendelser:
+        gjennom = (
+            f"Rekken startet rundt {start} og har blant annet stått gjennom "
+            f"{hendelser[0]}."
+        )
+    else:
+        gjennom = f"Rekken startet rundt {start}."
+
+    # Har rekken vært jevn, eller har den svingt?
+    hist = [h for h in (a.get("historiske_utbytter") or [])
+            if h.get("ar") and h["ar"] < iaar and h.get("utbytte")]
+    hist.sort(key=lambda h: h["ar"])
+    jevnhet = ""
+    if len(hist) >= 4:
+        belop = [h["utbytte"] for h in hist]
+        nedganger = sum(1 for i in range(1, len(belop)) if belop[i] < belop[i - 1])
+        if nedganger == 0:
+            jevnhet = (
+                " I de årene vi har tall for har utbyttet aldri gått ned fra "
+                "ett år til det neste."
+            )
+        elif nedganger == 1:
+            jevnhet = (
+                " Utbyttet har gått ned ett enkelt år i perioden vi har tall "
+                "for — resten av tiden opp eller flatt."
+            )
+        else:
+            jevnhet = (
+                f" Lengden betyr ikke at nivået har vært jevnt: utbyttet er "
+                f"satt ned {nedganger} ganger i perioden vi har tall for."
+            )
+
+    return (
+        f'<div class="rekke-seksjon">'
+        f'<h2>Utbytterekken til {a.get("ticker", "")}</h2>'
+        f'<p>{navn} har betalt utbytte {ar} år på rad. {gjennom}{jevnhet}</p>'
+        f'<p>En lang rekke er ingen garanti, men den sier noe en enkelt '
+        f'yield ikke gjør: at utbyttet har vært prioritert også i år da det '
+        f'kostet noe å opprettholde det.</p>'
+        f'</div>'
+    )
+
+
+def _lag_nedtur_test(a):
+    """«Tåler utbyttet en nedtur?» — bare når payout er høy nok til å spørre.
+
+    Betinget seksjon, jf. _lag_utbytterekken. Regner ut hvor mye inntjeningen
+    kan falle før utbyttet spiser hele overskuddet — et tall leseren ikke
+    finner noe annet sted på siden.
+    """
+    payout = a.get("payout_ratio") or 0
+    if not 70 < payout < 500:
+        return ""
+
+    navn = a.get("navn") or a.get("ticker") or ""
+    # Hvor mye kan inntjeningen falle før payout treffer 100 %?
+    slark = (1 - payout / 100) * 100
+
+    if payout >= 100:
+        dom = (
+            f"{navn} deler i dag ut mer enn selskapet tjener "
+            f"({_nf(payout, 0)} % av inntjeningen). Det kan finansieres en "
+            f"stund av oppsparte midler eller salg av eiendeler, men det er "
+            f"ikke et nivå som kan holdes år etter år uten at inntjeningen "
+            f"tar seg opp."
+        )
+    else:
+        dom = (
+            f"Med en payout ratio på {_nf(payout, 0)} % kan inntjeningen falle "
+            f"rundt {_nf(slark, 0)} % før utbyttet spiser hele overskuddet. "
+            f"Faller den mer enn det, må selskapet enten tære på kassen, låne, "
+            f"eller sette ned utbyttet."
+        )
+
+    hist = [h for h in (a.get("historiske_utbytter") or []) if h.get("utbytte")]
+    kontekst = ""
+    if len(hist) >= 4:
+        belop = [h["utbytte"] for h in sorted(hist, key=lambda h: h.get("ar", 0))]
+        if any(belop[i] < belop[i - 1] * 0.85 for i in range(1, len(belop))):
+            kontekst = (
+                " Selskapet har satt ned utbyttet før, så terskelen for å "
+                "gjøre det igjen er neppe høy."
+            )
+        else:
+            kontekst = (
+                " Selskapet har ikke kuttet utbyttet i perioden vi har tall "
+                "for, noe som taler for at nivået er villet og ikke tilfeldig."
+            )
+
+    return (
+        f'<div class="nedtur-seksjon">'
+        f'<h2>Tåler utbyttet en nedtur?</h2>'
+        f'<p>{dom}{kontekst}</p>'
+        f'</div>'
+    )
+
+
+def _lag_utbetalingsaar(a):
+    """«Utbyttet gjennom året» — bare for aksjer som betaler flere ganger.
+
+    Betinget seksjon. For en årlig betaler sier en månedsoversikt ingenting,
+    så den vises ikke der. For en kvartalsvis eller månedlig betaler er det
+    nettopp dette som skiller den fra resten av katalogen.
+    """
+    mnd = a.get("utbetalingsmaaneder") or []
+    if len(mnd) < 2:
+        return ""
+
+    navn = a.get("navn") or a.get("ticker") or ""
+    upa = a.get("utbytte_per_aksje") or 0
+    celler = []
+    for m in range(1, 13):
+        aktiv = m in mnd
+        klasse = "mnd-celle mnd-ja" if aktiv else "mnd-celle"
+        celler.append(
+            f'<div class="{klasse}"><span>{MAANEDSNAVN[m][:3]}</span></div>'
+        )
+    strip = f'<div class="mnd-strip">{"".join(celler)}</div>'
+
+    per_gang = f" — grovt regnet {_nf(upa / len(mnd), 2)} kroner per aksje hver gang" if upa else ""
+    tekst = (
+        f"{navn} betaler ut {len(mnd)} ganger i året, i "
+        f"{_maaneder_tekst(mnd)}{per_gang}. Månedene er utledet av hvilke "
+        f"måneder som går igjen over flere år, ikke av en enkelt utbetaling."
+    )
+
+    return (
+        f'<div class="utbetalingsaar-seksjon">'
+        f'<h2>Utbyttet gjennom året</h2>'
+        f'{strip}'
+        f'<p>{tekst}</p>'
+        f'</div>'
+    )
+
+
 def _driver_selskapsledd(a, sektor):
     """Andre avsnitt i «Hva driver utbyttet i X?» — bygget av radens egne tall.
 
@@ -2958,6 +3125,11 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     vurdering_html       = _lag_investor_vurdering(a, sektor_snitt or {})
     risiko_html          = _lag_risikofaktorer(a)
     kontoer_html         = _lag_kontoer_seksjon(a)
+    # Betingede seksjoner: vises bare der de har noe å si, slik at sidene får
+    # ulik form og ikke bare ulike tall i samme fjorten bokser.
+    rekke_html           = _lag_utbytterekken(a)
+    nedtur_html          = _lag_nedtur_test(a)
+    utbetalingsaar_html  = _lag_utbetalingsaar(a)
     investor_badges_html = _lag_investor_badges(a)
     faq_html, faq_jsonld = _lag_faq_seksjon(a, today)
 
@@ -3113,6 +3285,21 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     .vurdering-tekst {{ font-size: 0.9rem; line-height: 1.75; color: #374151; margin: 0; }}
     .dark .vurdering-seksjon {{ background: #0f172a; border-color: #1e293b; }}
     .dark .vurdering-tekst {{ color: #cbd5e1; }}
+    /* Betingede seksjoner — vises bare på sider der de har noe å si. */
+    .rekke-seksjon, .nedtur-seksjon, .utbetalingsaar-seksjon {{ margin: 1.5rem 0; padding: 1.1rem 1.25rem; background: #f8fafc; border-radius: 0.75rem; border: 1px solid #e2e8f0; }}
+    .rekke-seksjon h2, .nedtur-seksjon h2, .utbetalingsaar-seksjon h2 {{ font-size: 1rem; font-weight: 700; margin-bottom: 0.6rem; }}
+    .rekke-seksjon p, .nedtur-seksjon p, .utbetalingsaar-seksjon p {{ font-size: 0.9rem; line-height: 1.75; color: #374151; margin: 0 0 0.6rem; }}
+    .rekke-seksjon p:last-child, .nedtur-seksjon p:last-child, .utbetalingsaar-seksjon p:last-child {{ margin-bottom: 0; }}
+    .dark .rekke-seksjon, .dark .nedtur-seksjon, .dark .utbetalingsaar-seksjon {{ background: #0f172a; border-color: #1e293b; }}
+    .dark .rekke-seksjon p, .dark .nedtur-seksjon p, .dark .utbetalingsaar-seksjon p {{ color: #cbd5e1; }}
+    .rekke-seksjon {{ border-left: 3px solid #22c55e; }}
+    .nedtur-seksjon {{ border-left: 3px solid #f59e0b; }}
+    .mnd-strip {{ display: grid; grid-template-columns: repeat(12, 1fr); gap: 2px; margin-bottom: 0.85rem; }}
+    .mnd-celle {{ text-align: center; padding: 0.4rem 0.1rem; font-size: 0.62rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.02em; color: #9ca3af; background: #f1f5f9; border-radius: 0.25rem; }}
+    .mnd-celle.mnd-ja {{ background: #16a34a; color: #fff; }}
+    .dark .mnd-celle {{ background: #1e293b; color: #64748b; }}
+    .dark .mnd-celle.mnd-ja {{ background: #16a34a; color: #fff; }}
+    @media (max-width: 480px) {{ .mnd-strip {{ grid-template-columns: repeat(6, 1fr); }} }}
     .driver-seksjon {{ margin: 1.5rem 0; }}
     .driver-seksjon h2 {{ font-size: 1rem; font-weight: 700; margin-bottom: 0.6rem; }}
     .driver-tekst {{ font-size: 0.875rem; line-height: 1.75; color: #4b5563; margin: 0; }}
@@ -3346,7 +3533,13 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
 
   {hist_seksjon}
 
+  {rekke_html}
+
+  {utbetalingsaar_html}
+
   {vurdering_html}
+
+  {nedtur_html}
 
   {risiko_html}
 
