@@ -6,11 +6,26 @@ Norsk utbytteaksje-tracker for Oslo Børs. Fullførte funksjoner: [ROADMAP_COMPL
 
 ## Høy prioritet
 
-### Datakvalitet — fjern aksjer uten utbyttedata
-15 aksjer har `upa=0`, `yield=0`, `hist=0` og hører ikke hjemme på en utbytteside:
-DOF, NRC, ENDUR, NKR, BWE, CADLR, KMCP, BORR, CAPT, ISLAX, AFISH, HEX, ACR, NOD, KOA
-- [ ] Fjern fra `tickers.json` og regenerer alle sider
-- PGS er allerede fjernet (4. sep 2026) — avnotert fra Oslo Børs 2. juli 2024 etter fusjonen inn i TGS, ikke bare uten utbyttedata
+### Datakvalitet — aksjer uten utbyttedata ✅ (løst annerledes enn planlagt, 12.09.2026)
+Punktet listet 15 aksjer med `upa=0`, `yield=0`, `hist=0` og foreslo å fjerne dem fra
+`tickers.json`. **Det viste seg å være for bredt, og ble ikke gjennomført slik.**
+
+Da listen ble kontrollert falt de i to grupper:
+
+- **Sju er tomme skall** — ACR, AFISH, BWE, CADLR, DOF, ISLAX, KMAR. De har verken
+  yield, historikk eller år med utbytte, og har fått `noindex,follow` og er ute av
+  sitemap. Ikke slettet: sidene brukes av appen og ved direktebesøk.
+- **Resten har ekte utbyttehistorikk** og har bare sluttet å betale — NKR, NOD, KOA,
+  BORR, HEX og flere. Å fjerne dem ville tatt bort sider som gjør jobben sin: den som
+  søker «Scatec utbytte» er godt tjent med å få vite at selskapet betalte fram til
+  2023 og så stoppet.
+
+- [x] `uten_utbyttebevis()` i `fetch_stocks.py` styrer både malen og sitemap, så de to
+      ikke kan komme i utakt. Tester: `TestUtenUtbyttebevis`, som dekker nettopp
+      grensen mellom de to gruppene.
+- [x] KMCP er ikke lenger på listen — den er omdøpt til **BINT** (Bevest ASA), ikke
+      uten data. Se `/avnoteringer/`.
+- [x] PGS fjernet 04.09.2026 — avnotert 2. juli 2024 etter fusjonen inn i TGS.
 
 ### Datakvalitet — fiks misvisende snitt_yield_5ar i fetch_stocks.py ✅
 Historisk yield beregnes mot *dagens* kurs (bevisst designvalg for konsistent visning). For aksjer der kursen har kollapset ga det meningsløse tall: 2020 Bulkers viste 5-årssnitt på **1104 %** med et enkeltår på 3623 %.
@@ -39,6 +54,44 @@ Ny bruker bruker lang tid på manuell innlegging. Nordnet eksporterer CSV med Da
 - [ ] Manuell annonseenhet mellom sammendragskort og aksjelist
 - [ ] Manuell annonseenhet i bunnen av aksjemodal
 - [ ] Rapporter klikk-rate og RPM i GA4
+
+### Automatisk publisering til Facebook og Instagram
+**Utsatt til AdSense er godkjent** (måldato 06.10.2026 — se «AdSense: timeline» i
+CLAUDE.md). Ikke fordi det er teknisk avhengig, men fordi oppmerksomheten bør ligge
+på søknaden først.
+
+Mye av grunnlaget finnes allerede: Actions kjører 4× daglig, `/promo/` har ferdige
+SVG/PNG-maler, og siden ligger statisk på GitHub Pages — som er nyttig i seg selv,
+fordi **Instagram krever en offentlig bilde-URL** og henter bildet selv. Jobben er i
+praksis ett workflow-steg, ikke ny infrastruktur.
+
+**Kjør disse to før noe bygges — de kan gjøres i dag og avgjør omfanget:**
+
+- [ ] **Test om et innlegg fra en app i utviklingsmodus er offentlig synlig.**
+      Dette er det eneste som avgjør om prosjektet er en ettermiddag eller en måned.
+      Kildene spriker: én sier innlegg i utviklermodus bare ses av sideadministratorer,
+      en annen at «Standard Access» på egen side holder. Er svaret det første, kreves
+      app review — 2–4 uker. Test med ett innlegg fra en tom testapp.
+- [ ] **Konverter Instagram til Business- eller Creator-konto.** Personlige kontoer
+      har ikke API-tilgang. Gratis og reversibelt, men det er en endring på kontoen.
+      For posting til *egen* konto trengs ingen app review — utviklingsmodus pluss
+      Instagram Tester-rolle holder.
+
+**Selve byggingen:**
+
+- [ ] Workflow som bygger bildet, committer det til en offentlig sti, og kaller
+      Graph API. Instagram publiserer i to steg: `POST /{ig-user-id}/media` lager en
+      container, `POST /{ig-user-id}/media_publish` publiserer den.
+- [ ] Langlevd Page Access Token i Actions secrets — ikke i repoet.
+- [ ] **`valider_data.py` må gate posten, ikke bare deployen.** Dette repoet har en
+      dokumentert historikk med feil tall som når ut på sider — SNTIA med 14 % mot
+      faktiske 6,9 %, `ai_oppsummering` frosset i to måneder. En nettside kan rettes
+      stille; et Facebook-innlegg med feil yield kan ikke det.
+
+> ⚠️ **`/promo/` er blokkert i robots.txt** siden 12.09.2026 (mappen er grafikk til
+> sosiale medier, ikke innhold for lesere). Om Metas bildehenter respekterer
+> robots.txt er uavklart — det kan altså komme i veien for nettopp denne flyten.
+> Test det, og løs eventuelt med en egen mappe eller en `Allow:`-regel.
 
 ### Statisk forside — SEO-vennlig frontdoor for exday.no
 

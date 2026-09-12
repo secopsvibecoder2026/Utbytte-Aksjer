@@ -715,6 +715,13 @@ is the clearest confirmation that Google has been back.
 If the checkpoint has not passed by 2026-10-06, move the date rather than the
 standard — there is no cost to waiting except delayed revenue.
 
+**Queued behind approval:** automatic publishing to Facebook and Instagram — see
+«Automatisk publisering til Facebook og Instagram» in `ROADMAP.md`. Two checks there
+can be run *before* approval and decide whether the job is an afternoon or a month;
+one of them may require converting the Instagram account, which has lead time. Note
+also that `/promo/` was blocked in `robots.txt` on 2026-09-12, and Instagram's
+publishing flow fetches images from a public URL — that block may sit in the way.
+
 ## Breaking the template — why the pages must differ in *shape* (2026-09-12)
 
 AdSense rejected the site twice for «Low value content». The rule actually
