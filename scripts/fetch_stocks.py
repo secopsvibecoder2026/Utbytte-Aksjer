@@ -25,6 +25,7 @@ except (ImportError, Exception):
 # hent_aksje() lenger ned for hvorfor det er nødvendig.
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from utvid_beskrivelser import lag_beskrivelse, _manuell_del, SEKTOR_DRIVER
+from sektortekster import SEKTOR_REDAKSJONELL
 
 
 def _redaksjonell_intro(ticker: str, sektor: str) -> str:
@@ -4351,13 +4352,22 @@ def _sektor_analyse(sektor, i_sektor, alle):
     driver_blokk = (f'  <h2>Hva driver utbyttet i {sektor}?</h2>\n'
                     f'  <p>{driver}</p>\n') if driver else ""
 
+    # Redaksjonell tekst — det eneste håndskrevne på siden. Sektorsidene besto
+    # ellers utelukkende av avsnitt bygget av tall, og var dermed seksten flere
+    # genererte sider på et nettsted som allerede har for mange av dem.
+    redaksjonell = SEKTOR_REDAKSJONELL.get(sektor, "").strip()
+    redaksjonell_blokk = (
+        f'  <h2>Slik fungerer utbytte i {sektor.lower()}</h2>\n'
+        f'{redaksjonell}\n'
+    ) if redaksjonell else ""
+
     return f"""
   <div class="sektor-analyse">
   <h2>{sektor} som utbyttesektor</h2>
   <p>{avsnitt1}</p>
   {f'<p>{avsnitt2}</p>' if avsnitt2 else ''}
   <p>{avsnitt3}</p>
-{driver_blokk}  <h2>Slik bruker du tabellen under</h2>
+{redaksjonell_blokk}{driver_blokk}  <h2>Slik bruker du tabellen under</h2>
   <p>Aksjene er sortert etter direkteavkastning, høyeste først. Husk at
   yield er utbytte delt på kurs — tallet stiger like gjerne fordi kursen
   faller som fordi utbyttet øker. En aksje som skiller seg kraftig fra
