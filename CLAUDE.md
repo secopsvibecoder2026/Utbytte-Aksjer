@@ -148,8 +148,9 @@ Utbytte-Aksjer/
 
 ```bash
 npm test                                # 63 JS tests (node:test)
-python scripts/test_sjekk_utdaterte.py  # 59 Python tests
-python scripts/test_fetch_stocks.py     # 52 Python tests (pipeline + maler) (stdlib unittest)
+python scripts/test_sjekk_utdaterte.py  # 59 Python tests (stdlib unittest)
+python scripts/test_fetch_stocks.py     # 52 Python tests (pipeline + maler)
+python scripts/test_oppdater_hendelser.py  # 7 Python tests (hendelseskalender)
 ```
 
 Both suites run automatically in CI (`.github/workflows/tester.yml`) on push and PR
