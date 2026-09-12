@@ -3774,7 +3774,7 @@ def generer_aksjesider(aksjer, root_dir):
     topp_sektorer = sorted(sektor_data2.items(), key=lambda x: -len(x[1]))[:8]
     sektor_kort_html = "".join(
         f"""<a href="/aksjer/sektor/{_sektor_slug(s)}/" class="sek-kort">
-          <span class="sek-ikon">{SEKTOR_IKONER.get(s, '📊')}</span>
+          {_sektor_ikon(s)}
           <span class="sek-info"><span class="sek-navn">{s}</span><span class="sek-antall">{len(stk)} aksjer</span></span>
         </a>"""
         for s, stk in topp_sektorer
@@ -3915,7 +3915,10 @@ def generer_aksjesider(aksjer, root_dir):
       transition: all 0.15s;
     }}
     .sek-kort:hover {{ border-color: #22c55e; }}
-    .sek-ikon {{ font-size: 1.3rem; flex-shrink: 0; }}
+    /* SVG, ikke emoji — font-size gjør ingenting her. Grønnfargen er
+       merkevarens; currentColor ville gitt tekstfarge og blitt for tung. */
+    .sek-ikon {{ width: 1.35rem; height: 1.35rem; flex-shrink: 0; color: #16a34a; }}
+    .dark .sek-ikon {{ color: #4ade80; }}
     .sek-info {{ display: flex; flex-direction: column; min-width: 0; }}
     .sek-navn {{ font-weight: 600; font-size: 0.85rem; color: #0f172a; }}
     .sek-antall {{ font-size: 0.7rem; color: #94a3b8; }}
@@ -4209,30 +4212,84 @@ STANDARD_FOOTER = """  <footer style="margin-top:2rem;padding-top:1.5rem;border-
   </footer>
   <style>.dark .std-footer {{ color:#6b7280 !important; border-color:#1f2937 !important; }} .dark .std-footer a {{ color:#6b7280 !important; }}</style>"""
 
-SEKTOR_IKONER = {
-    "Energi":          "⚡",
-    "Finans":          "🏦",
-    "Shipping":        "🚢",
-    "Sjømat":          "🐟",
-    "Havbruk":         "🐟",
-    "Teknologi":       "💻",
-    "Industri":        "🏗️",
-    "Eiendom":         "🏢",
-    "Forbruksvarer":   "🛒",
-    "Helsevern":       "🏥",
-    "Kommunikasjon":   "📡",
-    "Materialer":      "⛏️",
-    "Offshore":        "🛢️",
-    "Kraftproduksjon": "💧",
-    "Forsikring":      "🛡️",
+# Sektorikoner som inline SVG, ikke emoji.
+#
+# Emoji tegnes av operativsystemet, ikke av oss: samme tegn er en detaljert
+# miniatyrillustrasjon på iOS og noe helt annet på Android og Windows. De
+# danner heller ikke et sett — 🏦 og 🏥 var detaljerte, ⚡ og 🐟 flate. Resten
+# av nettstedet bruker allerede strek-SVG i menyen og på kortene, så emojiene
+# var det eneste som stakk seg ut.
+#
+# Nøklene er de **faktiske** sektornavnene i aksjer.json. Den gamle tabellen
+# hadde nøkler som «Teknologi» og «Kommunikasjon» som aldri traff, fordi
+# kallstedene brukte eksakt oppslag — sju av seksten sektorer havnet derfor
+# på samme reserveikon.
+#
+# Stil: 24×24 viewBox, stroke-width 2, runde ender, currentColor. Samme som
+# SVG-ene i navigasjonen, slik at de arver farge i både lys og mørk modus.
+SEKTOR_IKON_PATH = {
+    # Bygning med vinduer
+    "Eiendom": "M3 21h18M5 21V7l7-4 7 4v14M9 10h.01M9 14h.01M15 10h.01M15 14h.01",
+    # Oljedråpe
+    "Energi": "M12 3s6 6.5 6 10.5a6 6 0 01-12 0C6 9.5 12 3 12 3z",
+    # Skiftenøkkel — tjenester til oljeselskapene, ikke olje selv
+    "Energitjenester": "M15 3a5 5 0 00-4.6 7L3 17.4 5.6 20l7.4-7.4A5 5 0 1015 3z",
+    # Bank med søyler
+    "Finans": "M3 21h18M4 21V10M9 21V10M15 21V10M20 21V10M2 10h20L12 3 2 10z",
+    # Handlepose
+    "Forbruksvarer": "M5 8h14l1 13H4L5 8zM8.5 8V6a3.5 3.5 0 017 0v2",
+    # Sol med stråler
+    "Fornybar energi": "M12 8a4 4 0 100 8 4 4 0 000-8zM12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4",
+    # Lyn
+    "Forsyning": "M13 2L4 13h7l-1 9 9-11h-7l1-9z",
+    # Fisk
+    "Havbruk": "M7 12c0-3 3.6-5.5 8-5.5 3 0 5.6 1.6 7 5.5-1.4 3.9-4 5.5-7 5.5-4.4 0-8-2.5-8-5.5zM7 12L2.5 8.5v7L7 12zM17 11h.01",
+    # Hjerte. Et pluss-i-sirkel ble prøvd først, men leste som en
+    # «legg til»-knapp framfor som helse.
+    "Helsevern": "M12 20.8l-1.6-1.5C4.8 14.2 1.5 11.2 1.5 7.5A5.4 5.4 0 016.9 2c1.8 0 3.5.9 4.6 2.3l.5.6.5-.6A5.9 5.9 0 0117.1 2a5.4 5.4 0 015.4 5.5c0 3.7-3.3 6.7-8.9 11.8l-1.6 1.5z",
+    # Fabrikk med piper
+    "Industri": "M3 21h18M3 21V11l6 3.5V11l6 3.5V8l6 3.5V21M7 17.5h.01M13 17.5h.01M19 17.5h.01",
+    # Skjerm med kodeklammer
+    "Informasjonsteknologi": "M3 5h18v11H3zM8 20h8M12 16v4M9.5 8.5L8 10.5l1.5 2M14.5 8.5l1.5 2-1.5 2",
+    # Snakkeboble
+    "Kommunikasjonstjenester": "M21 11.5a8 8 0 01-11.6 7.1L3 21l2.4-6.4A8 8 0 1121 11.5z",
+    # Lagdelt kube
+    "Materialer": "M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5",
+    # Skip med bølger. Skroget må være bredest ØVERST — første forsøk gikk
+    # motsatt vei og leste som en bøtte.
+    "Shipping": "M2 18c1.5 1.4 3 1.4 4.5 0s3-1.4 4.5 0 3 1.4 4.5 0 3-1.4 4.5 0M5 9h14l-2 6H7L5 9zM12 9V3.5",
+    # Anker — skiller Skipsfart fra Shipping
+    "Skipsfart": "M12 8v13M12 8a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM8 12H5a7 7 0 0014 0h-3",
+    # Antennemast med signalbuer
+    "Telekommunikasjon": "M12 14a2 2 0 100-4 2 2 0 000 4zM12 14v7M7.8 7.8a6 6 0 000 8.4M16.2 7.8a6 6 0 010 8.4M4.9 4.9a10 10 0 000 14.2M19.1 4.9a10 10 0 010 14.2",
 }
 
+# Brukes når en ny sektor dukker opp uten eget ikon: et nøytralt diagram.
+_SEKTOR_IKON_RESERVE = "M3 21h18M7 17V9M12 17V5M17 17v-6"
 
-def _sektor_ikon(sektor):
-    for k, v in SEKTOR_IKONER.items():
-        if k.lower() in sektor.lower():
-            return v
-    return "📊"
+
+def _sektor_ikon(sektor, klasse="sek-ikon"):
+    """SVG-ikonet for en sektor, ferdig innpakket.
+
+    Delstreng-matchingen er beholdt som andre forsøk, slik at «Sjømat» treffer
+    havbruksikonet og en framtidig «Offshore-tjenester» treffer
+    energitjenester. Men eksakt treff går først — ellers ville «Energi» stjålet
+    ikonet fra «Energitjenester», som er nettopp den typen feil den gamle
+    tabellen inviterte til.
+    """
+    d = SEKTOR_IKON_PATH.get(sektor)
+    if d is None:
+        for navn, path in SEKTOR_IKON_PATH.items():
+            if navn.lower() in (sektor or "").lower():
+                d = path
+                break
+    if d is None:
+        d = _SEKTOR_IKON_RESERVE
+    return (
+        f'<svg class="{klasse}" viewBox="0 0 24 24" fill="none" stroke="currentColor" '
+        f'stroke-width="2" stroke-linecap="round" stroke-linejoin="round" '
+        f'aria-hidden="true"><path d="{d}"/></svg>'
+    )
 
 
 def _sektor_slug(sektor):
@@ -4537,6 +4594,11 @@ def generer_sektorsider(aksjer, root_dir):
     .breadcrumb a {{ color: #6b7280; }}
     .breadcrumb span {{ margin: 0 0.35rem; }}
     h1 {{ font-size: 1.75rem; font-weight: 700; margin-bottom: 0.5rem; }}
+    /* Ikonet i overskriften er dekorativt (aria-hidden) og skal stå på samme
+       linje som teksten uten å dra opp linjehøyden. */
+    .h1-ikon {{ width: 1.5rem; height: 1.5rem; vertical-align: -0.18em;
+                margin-right: 0.5rem; color: #16a34a; }}
+    .dark .h1-ikon {{ color: #4ade80; }}
     .sub {{ margin-bottom: 1.5rem; font-size: 0.95rem; }}
     .stats {{ display: flex; gap: 1.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }}
     .stat {{ border-radius: 0.5rem; padding: 0.75rem 1.25rem; border: 1px solid; }}
@@ -4597,7 +4659,7 @@ def generer_sektorsider(aksjer, root_dir):
     <span>›</span>
     {sektor}
   </div>
-  <h1>{SEKTOR_IKONER.get(sektor, '📊')} {sektor}-aksjer med utbytte</h1>
+  <h1>{_sektor_ikon(sektor, klasse="h1-ikon")}{sektor}-aksjer med utbytte</h1>
   <p class="sub">{len(aksjer_sortert)} norske {sektor.lower()}-aksjer på Oslo Børs. Sortert etter direkteavkastning.</p>
   <div class="stats">
     <div class="stat"><div class="stat-val">{len(aksjer_sortert)}</div><div class="stat-lbl">Aksjer</div></div>
@@ -4654,7 +4716,7 @@ def generer_sektorsider(aksjer, root_dir):
         # Topp 3 aksjer i sektoren etter yield
         topp3 = sorted(med_utb, key=lambda x: x.get("utbytte_yield", 0), reverse=True)[:3]
         topp_str = ", ".join(a["ticker"] for a in topp3) if topp3 else "—"
-        ikon = SEKTOR_IKONER.get(sektor, "📊")
+        ikon = _sektor_ikon(sektor, klasse="sk-ikon")
         sektorkort += f"""
     <a href="/aksjer/sektor/{slug}/" class="sektor-kort">
       <div class="sk-header">
@@ -4747,7 +4809,8 @@ def generer_sektorsider(aksjer, root_dir):
       transform: translateY(-2px);
     }}
     .sk-header {{ display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; }}
-    .sk-ikon {{ font-size: 1.5rem; flex-shrink: 0; }}
+    .sk-ikon {{ width: 1.5rem; height: 1.5rem; flex-shrink: 0; color: #16a34a; }}
+    .dark .sk-ikon {{ color: #4ade80; }}
     .sk-tekst {{ flex: 1; min-width: 0; }}
     .sk-navn {{ font-weight: 700; font-size: 1rem; color: #0f172a; }}
     .sk-antall {{ font-size: 0.78rem; color: #64748b; margin-top: 0.1rem; }}

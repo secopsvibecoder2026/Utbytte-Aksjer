@@ -62,6 +62,11 @@
     .breadcrumb a { color: #6b7280; }
     .breadcrumb span { margin: 0 0.35rem; }
     h1 { font-size: 1.75rem; font-weight: 700; margin-bottom: 0.5rem; }
+    /* Ikonet i overskriften er dekorativt (aria-hidden) og skal stå på samme
+       linje som teksten uten å dra opp linjehøyden. */
+    .h1-ikon { width: 1.5rem; height: 1.5rem; vertical-align: -0.18em;
+                margin-right: 0.5rem; color: #16a34a; }
+    .dark .h1-ikon { color: #4ade80; }
     .sub { margin-bottom: 1.5rem; font-size: 0.95rem; }
     .stats { display: flex; gap: 1.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
     .stat { border-radius: 0.5rem; padding: 0.75rem 1.25rem; border: 1px solid; }
@@ -174,7 +179,7 @@
     <span>›</span>
     Energitjenester
   </div>
-  <h1>📊 Energitjenester-aksjer med utbytte</h1>
+  <h1><svg class="h1-ikon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3a5 5 0 00-4.6 7L3 17.4 5.6 20l7.4-7.4A5 5 0 1015 3z"/></svg>Energitjenester-aksjer med utbytte</h1>
   <p class="sub">15 norske energitjenester-aksjer på Oslo Børs. Sortert etter direkteavkastning.</p>
   <div class="stats">
     <div class="stat"><div class="stat-val">15</div><div class="stat-lbl">Aksjer</div></div>

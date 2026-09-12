@@ -62,6 +62,11 @@
     .breadcrumb a { color: #6b7280; }
     .breadcrumb span { margin: 0 0.35rem; }
     h1 { font-size: 1.75rem; font-weight: 700; margin-bottom: 0.5rem; }
+    /* Ikonet i overskriften er dekorativt (aria-hidden) og skal stå på samme
+       linje som teksten uten å dra opp linjehøyden. */
+    .h1-ikon { width: 1.5rem; height: 1.5rem; vertical-align: -0.18em;
+                margin-right: 0.5rem; color: #16a34a; }
+    .dark .h1-ikon { color: #4ade80; }
     .sub { margin-bottom: 1.5rem; font-size: 0.95rem; }
     .stats { display: flex; gap: 1.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
     .stat { border-radius: 0.5rem; padding: 0.75rem 1.25rem; border: 1px solid; }
@@ -174,7 +179,7 @@
     <span>›</span>
     Materialer
   </div>
-  <h1>⛏️ Materialer-aksjer med utbytte</h1>
+  <h1><svg class="h1-ikon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>Materialer-aksjer med utbytte</h1>
   <p class="sub">6 norske materialer-aksjer på Oslo Børs. Sortert etter direkteavkastning.</p>
   <div class="stats">
     <div class="stat"><div class="stat-val">6</div><div class="stat-lbl">Aksjer</div></div>
