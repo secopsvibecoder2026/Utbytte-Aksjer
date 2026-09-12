@@ -1,10 +1,12 @@
 User-agent: *
 Allow: /
 Disallow: /data/
+Disallow: /promo/
 Disallow: /*?aksje=
 Disallow: /*?sammenlign=
 
 # /data/ inneholder rå JSON-datafiler som ikke skal indekseres.
+# /promo/ er grafikk og maler til sosiale medier, ikke innhold for lesere.
 # ?aksje= er SPA-parametre – de individuelle aksjesidene finnes under /aksjer/<ticker>/
 # Automatisert scraping og massenedlasting av innhold er ikke tillatt.
 # Kontakt: github.com/secopsvibecoder2026/utbytte-aksjer

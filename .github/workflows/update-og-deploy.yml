@@ -51,6 +51,13 @@ jobs:
       - name: Valider datakvalitet
         run: python scripts/valider_data.py
 
+      - name: Sjekk interne lenker
+        # Forsiden lenket til /aksjer/sektor/sjomat/ i lang tid — sektoren
+        # heter Havbruk, så det var en 404 i kortgalleriet på den mest
+        # besøkte siden. Blokkerer ikke deployen; rapporten havner i
+        # jobbsammendraget.
+        run: python scripts/sjekk_lenker.py
+
       - name: Sjekk etter utdaterte aksjer
         # Avnoteringer, navneendringer og oppkjøp. Blokkerer bevisst ikke
         # deployen — et omdøpt selskap skal ikke stanse kursoppdateringene.
