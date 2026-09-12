@@ -153,6 +153,21 @@
     .vurdering-tekst { font-size: 0.9rem; line-height: 1.75; color: #374151; margin: 0; }
     .dark .vurdering-seksjon { background: #0f172a; border-color: #1e293b; }
     .dark .vurdering-tekst { color: #cbd5e1; }
+    /* Betingede seksjoner — vises bare på sider der de har noe å si. */
+    .rekke-seksjon, .nedtur-seksjon, .utbetalingsaar-seksjon { margin: 1.5rem 0; padding: 1.1rem 1.25rem; background: #f8fafc; border-radius: 0.75rem; border: 1px solid #e2e8f0; }
+    .rekke-seksjon h2, .nedtur-seksjon h2, .utbetalingsaar-seksjon h2 { font-size: 1rem; font-weight: 700; margin-bottom: 0.6rem; }
+    .rekke-seksjon p, .nedtur-seksjon p, .utbetalingsaar-seksjon p { font-size: 0.9rem; line-height: 1.75; color: #374151; margin: 0 0 0.6rem; }
+    .rekke-seksjon p:last-child, .nedtur-seksjon p:last-child, .utbetalingsaar-seksjon p:last-child { margin-bottom: 0; }
+    .dark .rekke-seksjon, .dark .nedtur-seksjon, .dark .utbetalingsaar-seksjon { background: #0f172a; border-color: #1e293b; }
+    .dark .rekke-seksjon p, .dark .nedtur-seksjon p, .dark .utbetalingsaar-seksjon p { color: #cbd5e1; }
+    .rekke-seksjon { border-left: 3px solid #22c55e; }
+    .nedtur-seksjon { border-left: 3px solid #f59e0b; }
+    .mnd-strip { display: grid; grid-template-columns: repeat(12, 1fr); gap: 2px; margin-bottom: 0.85rem; }
+    .mnd-celle { text-align: center; padding: 0.4rem 0.1rem; font-size: 0.62rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.02em; color: #9ca3af; background: #f1f5f9; border-radius: 0.25rem; }
+    .mnd-celle.mnd-ja { background: #16a34a; color: #fff; }
+    .dark .mnd-celle { background: #1e293b; color: #64748b; }
+    .dark .mnd-celle.mnd-ja { background: #16a34a; color: #fff; }
+    @media (max-width: 480px) { .mnd-strip { grid-template-columns: repeat(6, 1fr); } }
     .driver-seksjon { margin: 1.5rem 0; }
     .driver-seksjon h2 { font-size: 1rem; font-weight: 700; margin-bottom: 0.6rem; }
     .driver-tekst { font-size: 0.875rem; line-height: 1.75; color: #4b5563; margin: 0; }
@@ -534,13 +549,20 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
           <td>2,50%</td>
         </tr></tbody></table>
 
-  <div class="vurdering-seksjon"><h2>Vurdering som utbytteaksje</h2><p class="vurdering-tekst">Protector Forsikring ASA har vist konsistent utbytteevne over 14 år og er et etablert navn blant utbytteinvestorer. Yielden på 2,6% er under sektorsnittet (5,8%), men PROT kompenserer typisk med høyere stabilitet eller sterkere langsiktig vekstutsikter. Utbyttet har vokst med 59,1% per år de siste fem årene, noe som gjør det attraktivt for langsiktige reinvesteringsstrategier.</p></div><div class="driver-seksjon"><h2>Hva driver utbyttet i PROT?</h2><p class="driver-tekst">Netto renteinntekter — differansen mellom utlåns- og innskuddsrenter — er den viktigste inntektskilden. Norges Banks styringsrente påvirker marginene direkte. Kredittap og myndighetenes kapitalkrav (CET1-ratio) setter øvre grense for hva som kan deles ut. Følg kvartalsmeldingene for utlånsvekst og mislighold.</p></div>
+  <div class="rekke-seksjon"><h2>Utbytterekken til PROT</h2><p>Protector Forsikring ASA har betalt utbytte 14 år på rad. Rekken strekker seg tilbake til rundt 2012, og har dermed overlevd oljeprisfallet i 2014, pandemien i 2020 og renteoppgangen fra 2022. Lengden betyr ikke at nivået har vært jevnt: utbyttet er satt ned 2 ganger i perioden vi har tall for.</p><p>En lang rekke er ingen garanti, men den sier noe en enkelt yield ikke gjør: at utbyttet har vært prioritert også i år da det kostet noe å opprettholde det.</p></div>
 
-  <div class="risiko-seksjon"><h2>Risiko for utbyttet</h2><ul class="risiko-liste"><li>Rentenivå påvirker netto renteinntekter og utlånsmargin</li>
-<li>Økte kredittap i nedgangstider kan presse resultater</li>
-<li>Regulatoriske kapitalkrav begrenser utbyttekapasitet</li></ul></div>
+  <div class="utbetalingsaar-seksjon"><h2>Utbyttet gjennom året</h2><div class="mnd-strip"><div class="mnd-celle"><span>jan</span></div><div class="mnd-celle mnd-ja"><span>feb</span></div><div class="mnd-celle"><span>mar</span></div><div class="mnd-celle mnd-ja"><span>apr</span></div><div class="mnd-celle mnd-ja"><span>mai</span></div><div class="mnd-celle"><span>jun</span></div><div class="mnd-celle mnd-ja"><span>jul</span></div><div class="mnd-celle"><span>aug</span></div><div class="mnd-celle"><span>sep</span></div><div class="mnd-celle"><span>okt</span></div><div class="mnd-celle"><span>nov</span></div><div class="mnd-celle"><span>des</span></div></div><p>Protector Forsikring ASA betaler ut 4 ganger i året, i februar, april, mai og juli — grovt regnet 3,00 kroner per aksje hver gang. Månedene er utledet av hvilke måneder som går igjen over flere år, ikke av en enkelt utbetaling.</p></div>
 
-  <div class="kontoer-seksjon"><h2>Hvilke kontoer kan du handle denne aksjen på?</h2><div class="konto-rad"><span class="konto-ok">✓</span><div><strong>Aksje- og fondskonto</strong><p>Kan handles fritt på alle norske og internasjonale meglere.</p></div></div><div class="konto-rad"><span class="konto-ok">✓</span><div><strong>Aksjesparekonto (ASK)</strong><p>EØS-registrert selskap — kan holdes i ASK.</p></div></div><div class="konto-rad"><span class="konto-ok">✓</span><div><strong>Zero-konto</strong><p>Kan handles — Zero er ikke begrenset til EØS-aksjer.</p></div></div></div>
+  <div class="vurdering-seksjon"><h2>Vurdering som utbytteaksje</h2><p class="vurdering-tekst">Protector Forsikring ASA har vist konsistent utbytteevne over 14 år og er et etablert navn blant utbytteinvestorer. Yielden på 2,6% er under sektorsnittet (5,8%), men PROT kompenserer typisk med høyere stabilitet eller sterkere langsiktig vekstutsikter. Utbyttet har vokst med 59,1% per år de siste fem årene, noe som gjør det attraktivt for langsiktige reinvesteringsstrategier.</p></div><div class="driver-seksjon"><h2>Hva driver utbyttet i PROT?</h2><p class="driver-tekst">Netto renteinntekter — differansen mellom utlåns- og innskuddsrenter — er den viktigste inntektskilden. Norges Banks styringsrente påvirker marginene direkte. Kredittap og myndighetenes kapitalkrav (CET1-ratio) setter øvre grense for hva som kan deles ut. Følg kvartalsmeldingene for utlånsvekst og mislighold.</p><p class="driver-tekst">Protector Forsikring ASA har 14 år med sammenhengende utbytte bak seg, nok til å dekke en hel konjunktursyklus. Utbyttet har vokst 59,1 % i året de siste fem årene. Utbetalingene kommer kvartalsvis, i februar, april, mai og juli.</p></div>
+
+  <div class="nedtur-seksjon"><h2>Tåler utbyttet en nedtur?</h2><p>Med en payout ratio på 77 % kan inntjeningen falle rundt 23 % før utbyttet spiser hele overskuddet. Faller den mer enn det, må selskapet enten tære på kassen, låne, eller sette ned utbyttet. Selskapet har ikke kuttet utbyttet i perioden vi har tall for, noe som taler for at nivået er villet og ikke tilfeldig.</p></div>
+
+  <div class="risiko-seksjon"><h2>Risiko for utbyttet</h2><ul class="risiko-liste"><li>Payout ratio på 77 % er i øvre sjikt, så utbyttet tåler mindre svikt i inntjeningen enn hos en lavere utdeler</li>
+<li>Yielden avhenger sterkt av inngangskursen: samme utbytte gir 2,1 % på 12-månedershøyden (559,00 kr) og 2,8 % på bunnen (436,00 kr)</li>
+<li>Rentenivå påvirker netto renteinntekter og utlånsmargin</li>
+<li>Økte kredittap i nedgangstider kan presse resultater</li></ul></div>
+
+  <div class="kontoer-seksjon"><h2>Hvilke kontoer kan du handle denne aksjen på?</h2><div class="konto-rad"><span class="konto-ok">✓</span><div><strong>Aksje- og fondskonto og Zero</strong><p>Ingen begrensning.</p></div></div><div class="konto-rad"><span class="konto-ok">✓</span><div><strong>Aksjesparekonto (ASK)</strong><p>EØS-registrert selskap — kan holdes i ASK.</p></div></div></div>
 
   </section>
 
@@ -581,7 +603,7 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
     <a href="https://exday.no/app/?aksje=PROT">Åpne PROT i exday.no →</a>
   </div>
 
-  <p class="updated">Sist oppdatert: 2026-09-11</p>
+  <p class="updated">Sist oppdatert: 2026-09-12</p>
   <footer style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid #e5e7eb;font-size:0.78rem;text-align:center;color:#9ca3af;line-height:1.6;" class="std-footer">
     <p>Kurs og utbyttedata hentes fra Yahoo Finance og Euronext. Oppdateres daglig på børsdager.</p>
     <p style="max-width:36rem;margin:0.4rem auto;">

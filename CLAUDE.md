@@ -149,6 +149,8 @@ Utbytte-Aksjer/
 ```bash
 npm test                                # 63 JS tests (node:test)
 python scripts/test_sjekk_utdaterte.py  # 59 Python tests (stdlib unittest)
+python scripts/test_fetch_stocks.py     # 52 Python tests (pipeline + maler)
+python scripts/test_oppdater_hendelser.py  # 7 Python tests (hendelseskalender)
 ```
 
 Both suites run automatically in CI (`.github/workflows/tester.yml`) on push and PR
@@ -688,6 +690,113 @@ The analysis paragraphs are built by `_rapportkalender_analyse()` from the
 current run's numbers — never stored — and name the busiest months in
 **calendar order**, not by count: «november og oktober» reads as an error even
 when the figures behind it are right.
+
+## Breaking the template — why the pages must differ in *shape* (2026-09-12)
+
+AdSense rejected the site twice for «Low value content». The rule actually
+being applied is almost certainly **scaled content abuse**: 85 % of URLs are
+generated, and the 159 stock pages had the same fourteen sections in the same
+order, differing only in numbers.
+
+**The measurement that matters.** `mal_analyse.py`-style shingling — 8-word
+sequences with numbers and company names masked, counted against how many
+other pages carry them — approximates how a page set is judged. On this
+measure the site went 41,2 % → 35,5 % template, and section *sets* went from
+one shared by all 159 pages to 92 distinct ones.
+
+**The lesson that cost a round to learn.** Varying the *data* inside fixed
+sentences barely moves the number. «Payout ratio på TALL % er et nivå som
+pleier å kunne holdes» is the same shingle on every page that renders it, no
+matter which company it describes. The first pass rewrote two sections to read
+from each row's own numbers, took variant counts from 16 to 144 — and moved
+the template share only 41,2 % → 38,3 %.
+
+What moved it was **conditional sections**: pages that have different sections,
+not the same sections with different values.
+
+> ⚠️ **Do not rotate synonyms to move this number.** Generating three phrasings
+> of the same sentence and picking one per page would drop the template share
+> quickly. That is text spinning, it is itself a spam signal, and it makes the
+> prose worse. The honest levers are conditional sections and hand-written text.
+
+### The three conditional sections
+
+| Section | Shown when | What it computes |
+|---|---|---|
+| `_lag_utbytterekken()` | `ar_med_utbytte >= 12` | Which crises the streak survived, and whether the level was actually steady — length and stability are not the same thing |
+| `_lag_nedtur_test()` | `payout_ratio > 70` | How far earnings can fall before the dividend exceeds them: 85 % payout tolerates 15 % |
+| `_lag_utbetalingsaar()` | two or more payments a year | A twelve-month strip plus amount per payment. Says nothing for an annual payer, so it is not shown there |
+
+Adding a fourth follows the same rule: **it must be absent on some pages.** A
+section that renders everywhere adds words without changing shape, which is
+what got us here.
+
+### Two contradiction traps these hit
+
+Both are the same class as the WAWI «uten et eneste kutt» / «lite forutsigbar»
+bug, and both were caught only by reading the generated output:
+
+- **A five-year growth figure on a stock with two years of dividends.** SATS
+  got «2 år med utbytte» and «vokst 120,6 % de siste fem årene» in one
+  paragraph — the growth number is an artifact of a short series. Guard any
+  five-year claim with `ar_med_utbytte >= 5`.
+- **A frequency label beside a month list that disagrees with it.** Payment
+  dates drift between years, so `utbetalingsmaaneder` can legitimately hold
+  three months for a semi-annual payer. «Halvårlig, typisk i april, mai og
+  november» reads as an error even though both halves are right. Only pair the
+  two when the count matches the frequency; otherwise state one or the other.
+
+### `scripts/sektortekster.py` — the only hand-written text on a generated page
+
+`SEKTOR_REDAKSJONELL` holds ~6 150 words, one section per sector, on why
+dividends in that sector behave as they do on Oslo Børs. Sector pages were
+233–608 words of pure generated prose; they are now 570–1 066.
+
+Keys must match `sektor` in `aksjer.json` exactly — a mismatch fails silently,
+the section just never appears.
+
+**No numbers that can drift.** No yield, payout, or company count: those are
+built by the generator and already on the page. Fixed historical facts are
+fine, and there are exactly three — the 2014 oil price fall, the 2023
+grunnrenteskatt on aquaculture, the rate rise from 2022. Same rule as
+`beskrivelse`; see «Never freeze live numbers into stored prose».
+
+Write what is specific to Norway where there is something to say:
+egenkapitalbevis and the grunnfond split for savings banks, grunnrenteskatt for
+aquaculture and hydropower, særskatt on the shelf, USD earnings against NOK
+dividends in shipping.
+
+> **A directory-based word count measures this wrong.** Sector pages live under
+> `aksjer/`, so splitting «generated vs written» by folder files those 6 150
+> hand-written words as generated — and the ratio appears to get *worse* when
+> you add editorial content. Count prose by who wrote it. On that basis original
+> prose is ~30 % of all words on the site (hand-written pages + sector editorial
+> + the 155 stock intros).
+
+### `uten_utbyttebevis()` — which pages stay out of the index
+
+Seven pages carry no yield, no history and no year count: ACR, AFISH, BWE,
+CADLR, DOF, ISLAX, KMAR. They get `noindex,follow` and drop out of the sitemap.
+Not deleted — they remain for direct visits and the app, and `follow` keeps the
+links working.
+
+**The rule is evidence-based on purpose.** «Yield is zero today» would also
+catch about eighteen stocks that have real dividend history and simply stopped
+paying — Scatec, Norske Skog, OKEA. Those pages do their job: someone searching
+«Scatec utbytte» is well served by learning it paid until 2023 and then
+stopped. Absence of *everything* is required.
+
+A ticker whose fetch is failing can land here (DOF did). That is fine and
+deliberate: the page is empty whatever the cause, and it returns by itself on
+the next successful fetch. Self-healing beats a manual exception list.
+
+The same function drives both the template and `generer_sitemap()`, so the two
+cannot drift apart — asking Google to fetch a URL you also tell it not to index
+is a contradictory signal. Tests: `TestUtenUtbyttebevis` in
+`scripts/test_fetch_stocks.py` (6), covering exactly the seven-versus-eighteen
+boundary, because a rule that is too wide fails silently.
+
+---
 
 ## Data Quality Checks
 

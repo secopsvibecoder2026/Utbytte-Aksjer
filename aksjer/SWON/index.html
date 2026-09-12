@@ -153,6 +153,21 @@
     .vurdering-tekst { font-size: 0.9rem; line-height: 1.75; color: #374151; margin: 0; }
     .dark .vurdering-seksjon { background: #0f172a; border-color: #1e293b; }
     .dark .vurdering-tekst { color: #cbd5e1; }
+    /* Betingede seksjoner — vises bare på sider der de har noe å si. */
+    .rekke-seksjon, .nedtur-seksjon, .utbetalingsaar-seksjon { margin: 1.5rem 0; padding: 1.1rem 1.25rem; background: #f8fafc; border-radius: 0.75rem; border: 1px solid #e2e8f0; }
+    .rekke-seksjon h2, .nedtur-seksjon h2, .utbetalingsaar-seksjon h2 { font-size: 1rem; font-weight: 700; margin-bottom: 0.6rem; }
+    .rekke-seksjon p, .nedtur-seksjon p, .utbetalingsaar-seksjon p { font-size: 0.9rem; line-height: 1.75; color: #374151; margin: 0 0 0.6rem; }
+    .rekke-seksjon p:last-child, .nedtur-seksjon p:last-child, .utbetalingsaar-seksjon p:last-child { margin-bottom: 0; }
+    .dark .rekke-seksjon, .dark .nedtur-seksjon, .dark .utbetalingsaar-seksjon { background: #0f172a; border-color: #1e293b; }
+    .dark .rekke-seksjon p, .dark .nedtur-seksjon p, .dark .utbetalingsaar-seksjon p { color: #cbd5e1; }
+    .rekke-seksjon { border-left: 3px solid #22c55e; }
+    .nedtur-seksjon { border-left: 3px solid #f59e0b; }
+    .mnd-strip { display: grid; grid-template-columns: repeat(12, 1fr); gap: 2px; margin-bottom: 0.85rem; }
+    .mnd-celle { text-align: center; padding: 0.4rem 0.1rem; font-size: 0.62rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.02em; color: #9ca3af; background: #f1f5f9; border-radius: 0.25rem; }
+    .mnd-celle.mnd-ja { background: #16a34a; color: #fff; }
+    .dark .mnd-celle { background: #1e293b; color: #64748b; }
+    .dark .mnd-celle.mnd-ja { background: #16a34a; color: #fff; }
+    @media (max-width: 480px) { .mnd-strip { grid-template-columns: repeat(6, 1fr); } }
     .driver-seksjon { margin: 1.5rem 0; }
     .driver-seksjon h2 { font-size: 1rem; font-weight: 700; margin-bottom: 0.6rem; }
     .driver-tekst { font-size: 0.875rem; line-height: 1.75; color: #4b5563; margin: 0; }
@@ -534,13 +549,20 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
           <td>3,49%</td>
         </tr></tbody></table>
 
-  <div class="vurdering-seksjon"><h2>Vurdering som utbytteaksje</h2><p class="vurdering-tekst">SoftwareOne Holding AG har vist konsistent utbytteevne over 7 år og er et etablert navn blant utbytteinvestorer. Yielden på 1,6% er under sektorsnittet (4,2%), men SWON kompenserer typisk med høyere stabilitet eller sterkere langsiktig vekstutsikter. Utbyttet har falt med 17,9% per år de siste fem årene, noe som krever at investoren setter seg inn i hva som har drevet nedgangen.</p></div><div class="driver-seksjon"><h2>Hva driver utbyttet i SWON?</h2><p class="driver-tekst">Omsetningsvekst og marginer drives av kontrakter, konsulentkapasitet og produktlisenser. IT-sektoren er generelt mindre syklisk enn energi og shipping, men utbyttet er sjelden høyt — selskaper foretrekker å reinvestere i vekst.</p></div>
+  
 
-  <div class="risiko-seksjon"><h2>Risiko for utbyttet</h2><ul class="risiko-liste"><li>Rask teknologiutvikling kan gjøre produkter utdaterte</li>
-<li>Høy konkurranse fra internasjonale aktører presser marginer</li>
-<li>Høye investeringsbehov i utvikling og salg</li></ul></div>
+  
 
-  <div class="kontoer-seksjon"><h2>Hvilke kontoer kan du handle denne aksjen på?</h2><div class="konto-rad"><span class="konto-ok">✓</span><div><strong>Aksje- og fondskonto</strong><p>Kan handles fritt på alle norske og internasjonale meglere.</p></div></div><div class="konto-rad konto-ikke"><span class="konto-nei">✗</span><div><strong>Aksjesparekonto (ASK)</strong><p>Selskapet er registrert i Sveits (utenfor EØS) og kan ikke holdes i ASK. Bruk aksje- og fondskonto.</p></div></div><div class="konto-rad"><span class="konto-ok">✓</span><div><strong>Zero-konto</strong><p>Kan handles — Zero er ikke begrenset til EØS-aksjer.</p></div></div></div>
+  <div class="vurdering-seksjon"><h2>Vurdering som utbytteaksje</h2><p class="vurdering-tekst">SoftwareOne Holding AG har vist konsistent utbytteevne over 7 år og er et etablert navn blant utbytteinvestorer. Yielden på 1,6% er under sektorsnittet (4,2%), men SWON kompenserer typisk med høyere stabilitet eller sterkere langsiktig vekstutsikter. Utbyttet har falt med 17,9% per år de siste fem årene, noe som krever at investoren setter seg inn i hva som har drevet nedgangen.</p></div><div class="driver-seksjon"><h2>Hva driver utbyttet i SWON?</h2><p class="driver-tekst">Omsetningsvekst og marginer drives av kontrakter, konsulentkapasitet og produktlisenser. IT-sektoren er generelt mindre syklisk enn energi og shipping, men utbyttet er sjelden høyt — selskaper foretrekker å reinvestere i vekst.</p><p class="driver-tekst">Med 7 år med utbytte er historikken hos SoftwareOne Holding AG fortsatt kort, så utbyttepolitikken er ikke ferdig prøvd. Utbyttet er samlet sett 17,9 % lavere i året enn for fem år siden. Utbetalingene kommer årlig, i mai.</p></div>
+
+  <div class="nedtur-seksjon"><h2>Tåler utbyttet en nedtur?</h2><p>Med en payout ratio på 83 % kan inntjeningen falle rundt 17 % før utbyttet spiser hele overskuddet. Faller den mer enn det, må selskapet enten tære på kassen, låne, eller sette ned utbyttet. Selskapet har satt ned utbyttet før, så terskelen for å gjøre det igjen er neppe høy.</p></div>
+
+  <div class="risiko-seksjon"><h2>Risiko for utbyttet</h2><ul class="risiko-liste"><li>Payout ratio på 83 % er i øvre sjikt, så utbyttet tåler mindre svikt i inntjeningen enn hos en lavere utdeler</li>
+<li>Utbyttet er kuttet før — fra 0,36 til 0,30 kroner i 2025</li>
+<li>Yielden avhenger sterkt av inngangskursen: samme utbytte gir 1,5 % på 12-månedershøyden (10,04 kr) og 2,6 % på bunnen (5,83 kr)</li>
+<li>Rask teknologiutvikling kan gjøre produkter utdaterte</li></ul></div>
+
+  <div class="kontoer-seksjon"><h2>Hvilke kontoer kan du handle denne aksjen på?</h2><div class="konto-rad"><span class="konto-ok">✓</span><div><strong>Aksje- og fondskonto og Zero</strong><p>Ingen begrensning.</p></div></div><div class="konto-rad konto-ikke"><span class="konto-nei">✗</span><div><strong>Aksjesparekonto (ASK)</strong><p>Selskapet er registrert i Sveits (utenfor EØS) og kan ikke holdes i ASK. Bruk aksje- og fondskonto.</p></div></div></div>
 
   </section>
 
@@ -581,7 +603,7 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
     <a href="https://exday.no/app/?aksje=SWON">Åpne SWON i exday.no →</a>
   </div>
 
-  <p class="updated">Sist oppdatert: 2026-09-11</p>
+  <p class="updated">Sist oppdatert: 2026-09-12</p>
   <footer style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid #e5e7eb;font-size:0.78rem;text-align:center;color:#9ca3af;line-height:1.6;" class="std-footer">
     <p>Kurs og utbyttedata hentes fra Yahoo Finance og Euronext. Oppdateres daglig på børsdager.</p>
     <p style="max-width:36rem;margin:0.4rem auto;">

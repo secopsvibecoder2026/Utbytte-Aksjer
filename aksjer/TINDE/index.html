@@ -153,6 +153,21 @@
     .vurdering-tekst { font-size: 0.9rem; line-height: 1.75; color: #374151; margin: 0; }
     .dark .vurdering-seksjon { background: #0f172a; border-color: #1e293b; }
     .dark .vurdering-tekst { color: #cbd5e1; }
+    /* Betingede seksjoner — vises bare på sider der de har noe å si. */
+    .rekke-seksjon, .nedtur-seksjon, .utbetalingsaar-seksjon { margin: 1.5rem 0; padding: 1.1rem 1.25rem; background: #f8fafc; border-radius: 0.75rem; border: 1px solid #e2e8f0; }
+    .rekke-seksjon h2, .nedtur-seksjon h2, .utbetalingsaar-seksjon h2 { font-size: 1rem; font-weight: 700; margin-bottom: 0.6rem; }
+    .rekke-seksjon p, .nedtur-seksjon p, .utbetalingsaar-seksjon p { font-size: 0.9rem; line-height: 1.75; color: #374151; margin: 0 0 0.6rem; }
+    .rekke-seksjon p:last-child, .nedtur-seksjon p:last-child, .utbetalingsaar-seksjon p:last-child { margin-bottom: 0; }
+    .dark .rekke-seksjon, .dark .nedtur-seksjon, .dark .utbetalingsaar-seksjon { background: #0f172a; border-color: #1e293b; }
+    .dark .rekke-seksjon p, .dark .nedtur-seksjon p, .dark .utbetalingsaar-seksjon p { color: #cbd5e1; }
+    .rekke-seksjon { border-left: 3px solid #22c55e; }
+    .nedtur-seksjon { border-left: 3px solid #f59e0b; }
+    .mnd-strip { display: grid; grid-template-columns: repeat(12, 1fr); gap: 2px; margin-bottom: 0.85rem; }
+    .mnd-celle { text-align: center; padding: 0.4rem 0.1rem; font-size: 0.62rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.02em; color: #9ca3af; background: #f1f5f9; border-radius: 0.25rem; }
+    .mnd-celle.mnd-ja { background: #16a34a; color: #fff; }
+    .dark .mnd-celle { background: #1e293b; color: #64748b; }
+    .dark .mnd-celle.mnd-ja { background: #16a34a; color: #fff; }
+    @media (max-width: 480px) { .mnd-strip { grid-template-columns: repeat(6, 1fr); } }
     .driver-seksjon { margin: 1.5rem 0; }
     .driver-seksjon h2 { font-size: 1rem; font-weight: 700; margin-bottom: 0.6rem; }
     .driver-tekst { font-size: 0.875rem; line-height: 1.75; color: #4b5563; margin: 0; }
@@ -534,13 +549,20 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
           <td>6,97%</td>
         </tr></tbody></table>
 
-  <div class="vurdering-seksjon"><h2>Vurdering som utbytteaksje</h2><p class="vurdering-tekst">Tinde Sparebank har betalt utbytte de siste 6 årene, men historikken er begrenset. Yielden på 4,4% er under sektorsnittet (5,8%), men TINDE kompenserer typisk med høyere stabilitet eller sterkere langsiktig vekstutsikter. Utbetalingsgraden på 110% er høy — de fleste av overskuddskronene deles ut, og utbyttet er dermed sensitivt for inntjeningsfall. Utbyttet har vokst med 8,5% per år de siste fem årene, noe som gjør det attraktivt for langsiktige reinvesteringsstrategier.</p></div><div class="driver-seksjon"><h2>Hva driver utbyttet i TINDE?</h2><p class="driver-tekst">Netto renteinntekter — differansen mellom utlåns- og innskuddsrenter — er den viktigste inntektskilden. Norges Banks styringsrente påvirker marginene direkte. Kredittap og myndighetenes kapitalkrav (CET1-ratio) setter øvre grense for hva som kan deles ut. Følg kvartalsmeldingene for utlånsvekst og mislighold.</p></div>
+  
 
-  <div class="risiko-seksjon"><h2>Risiko for utbyttet</h2><ul class="risiko-liste"><li>Rentenivå påvirker netto renteinntekter og utlånsmargin</li>
-<li>Økte kredittap i nedgangstider kan presse resultater</li>
-<li>Regulatoriske kapitalkrav begrenser utbyttekapasitet</li></ul></div>
+  
 
-  <div class="kontoer-seksjon"><h2>Hvilke kontoer kan du handle denne aksjen på?</h2><div class="konto-rad"><span class="konto-ok">✓</span><div><strong>Aksje- og fondskonto</strong><p>Kan handles fritt på alle norske og internasjonale meglere.</p></div></div><div class="konto-rad"><span class="konto-ok">✓</span><div><strong>Aksjesparekonto (ASK)</strong><p>EØS-registrert selskap — kan holdes i ASK.</p></div></div><div class="konto-rad"><span class="konto-ok">✓</span><div><strong>Zero-konto</strong><p>Kan handles — Zero er ikke begrenset til EØS-aksjer.</p></div></div></div>
+  <div class="vurdering-seksjon"><h2>Vurdering som utbytteaksje</h2><p class="vurdering-tekst">Tinde Sparebank har betalt utbytte de siste 6 årene, men historikken er begrenset. Yielden på 4,4% er under sektorsnittet (5,8%), men TINDE kompenserer typisk med høyere stabilitet eller sterkere langsiktig vekstutsikter. Utbetalingsgraden på 110% er høy — de fleste av overskuddskronene deles ut, og utbyttet er dermed sensitivt for inntjeningsfall. Utbyttet har vokst med 8,5% per år de siste fem årene, noe som gjør det attraktivt for langsiktige reinvesteringsstrategier.</p></div><div class="driver-seksjon"><h2>Hva driver utbyttet i TINDE?</h2><p class="driver-tekst">Netto renteinntekter — differansen mellom utlåns- og innskuddsrenter — er den viktigste inntektskilden. Norges Banks styringsrente påvirker marginene direkte. Kredittap og myndighetenes kapitalkrav (CET1-ratio) setter øvre grense for hva som kan deles ut. Følg kvartalsmeldingene for utlånsvekst og mislighold.</p><p class="driver-tekst">Med 6 år med utbytte er historikken hos Tinde Sparebank fortsatt kort, så utbyttepolitikken er ikke ferdig prøvd. Veksten i utbyttet har ligget på 8,5 % i året over fem år. Utbetalingene kommer årlig, i mars.</p></div>
+
+  <div class="nedtur-seksjon"><h2>Tåler utbyttet en nedtur?</h2><p>Tinde Sparebank deler i dag ut mer enn selskapet tjener (110 % av inntjeningen). Det kan finansieres en stund av oppsparte midler eller salg av eiendeler, men det er ikke et nivå som kan holdes år etter år uten at inntjeningen tar seg opp. Selskapet har satt ned utbyttet før, så terskelen for å gjøre det igjen er neppe høy.</p></div>
+
+  <div class="risiko-seksjon"><h2>Risiko for utbyttet</h2><ul class="risiko-liste"><li>Payout ratio på 110 % betyr at nesten hele inntjeningen deles ut — det gir lite å gå på om resultatet faller</li>
+<li>Yielden avhenger sterkt av inngangskursen: samme utbytte gir 3,9 % på 12-månedershøyden (125,00 kr) og 4,8 % på bunnen (101,12 kr)</li>
+<li>Rentenivå påvirker netto renteinntekter og utlånsmargin</li>
+<li>Økte kredittap i nedgangstider kan presse resultater</li></ul></div>
+
+  <div class="kontoer-seksjon"><h2>Hvilke kontoer kan du handle denne aksjen på?</h2><div class="konto-rad"><span class="konto-ok">✓</span><div><strong>Aksje- og fondskonto og Zero</strong><p>Ingen begrensning.</p></div></div><div class="konto-rad"><span class="konto-ok">✓</span><div><strong>Aksjesparekonto (ASK)</strong><p>EØS-registrert selskap — kan holdes i ASK.</p></div></div></div>
 
   </section>
 
@@ -581,7 +603,7 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
     <a href="https://exday.no/app/?aksje=TINDE">Åpne TINDE i exday.no →</a>
   </div>
 
-  <p class="updated">Sist oppdatert: 2026-09-11</p>
+  <p class="updated">Sist oppdatert: 2026-09-12</p>
   <footer style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid #e5e7eb;font-size:0.78rem;text-align:center;color:#9ca3af;line-height:1.6;" class="std-footer">
     <p>Kurs og utbyttedata hentes fra Yahoo Finance og Euronext. Oppdateres daglig på børsdager.</p>
     <p style="max-width:36rem;margin:0.4rem auto;">
