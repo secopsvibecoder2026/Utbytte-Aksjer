@@ -466,6 +466,14 @@ function initFire() {
 // modalen for alle aksjer i de sektorene.
 const ARTIKLER = [
   {
+    slug: '/artikler/nedbetale-boliglan-eller-investere/',
+    tittel: 'Nedbetale boliglånet eller investere? Slik regner du riktig',
+    ingress: 'Etter rentefradrag og aksjeskatt er marginen typisk under ett prosentpoeng — og utbytteaksjer utenfor ASK kommer dårligst ut.',
+    meta: '12. september 2026 · 12 min',
+    tags: ['Guide', 'Skatt'],
+    sektorer: [],
+  },
+  {
     slug: '/artikler/beste-utbytteaksjer-2026/',
     tittel: 'Beste utbytteaksjer 2026 — en gjennomgang av Oslo Børs',
     ingress: 'Fire av de ti høyeste direkteavkastningene deler ut mer enn de tjener, og bare to har betalt utbytte i over ti år.',
