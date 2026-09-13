@@ -1,12 +1,36 @@
 @import "tailwindcss";
 
+/* Tailwind v4 leter etter klasser med utgangspunkt i mappa denne fila ligger
+   i — altså assets/. Da ble bare assets/*.js skannet, og hver klasse som kun
+   står i en HTML-side falt ut av stilarket uten et eneste varsel.
+   bg-green-600 var blant dem: «Åpne gratis app»-knappen sto med hvit tekst
+   uten bakgrunn, usynlig i lys modus.
+   Kildene er listet eksplisitt, ikke som «hele prosjektroten». Tailwind
+   skanner nemlig alle filtyper, også .py og .md, og plukker opp klassenavn
+   som bare er *omtalt* der. En testfil som nevner «dark:bg-brand-950/30»
+   fikk stilarket til å vokse med regler ingen side bruker, og gjorde
+   byggeresultatet avhengig av hva som står i kommentarer.
+   De genererte sidene under aksjer/ dekkes av HTML-mønsteret; malene som
+   lager dem bor i scripts/, men klassene deres havner i HTML-en på disk. */
+@source "../**/*.html";
+@source "../assets/*.js";
+
+/* Hele green-skalaen, ikke bare de seks trinnene som først ble definert:
+   brand-200/300/400/800/950 var i bruk 71 steder uten å finnes, så
+   «text-brand-600 dark:text-brand-400» ga grønn lenke i lys modus og
+   arvet grå i mørk. Verdiene er Tailwinds green-skala, som i CLAUDE.md. */
 @theme {
   --color-brand-50: #f0fdf4;
   --color-brand-100: #dcfce7;
+  --color-brand-200: #bbf7d0;
+  --color-brand-300: #86efac;
+  --color-brand-400: #4ade80;
   --color-brand-500: #22c55e;
   --color-brand-600: #16a34a;
   --color-brand-700: #15803d;
+  --color-brand-800: #166534;
   --color-brand-900: #14532d;
+  --color-brand-950: #052e16;
 }
 
 @variant dark (&:where(.dark, .dark *));

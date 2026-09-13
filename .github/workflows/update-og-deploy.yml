@@ -65,6 +65,13 @@ jobs:
         # måler, holder ikke. Blokkerer ikke deployen.
         run: python scripts/sjekk_tema.py
 
+      - name: Sjekk CSS-klasser
+        # «Åpne gratis app» sto med hvit tekst uten bakgrunn i lys modus:
+        # Tailwind v4 skannet bare assets/, så bg-green-600 ble aldri
+        # generert. Denne fanger opp at en klasse mangler i stilarket —
+        # også hvis noen legger til en klasse uten å bygge CSS-en på nytt.
+        run: python scripts/sjekk_klasser.py
+
       - name: Sjekk etter utdaterte aksjer
         # Avnoteringer, navneendringer og oppkjøp. Blokkerer bevisst ikke
         # deployen — et omdøpt selskap skal ikke stanse kursoppdateringene.

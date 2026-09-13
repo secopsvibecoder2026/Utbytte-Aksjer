@@ -850,3 +850,34 @@ section[id] { scroll-margin-top: 100px; }
    tekst. Begge sto usynlige før 09.09.2026 — se modalOmSelskapet(). */
 .om-selskap-tekst + .om-selskap-tekst { margin-top: 0.6rem; }
 .om-selskap-fakta { font-size: 0.92em; opacity: 0.85; }
+
+/* Skjult rullefelt på vannrett scrollende faneremser.
+   .modal-tabs og .ak-tabnav gjorde dette allerede hver for seg; app/index.html
+   brukte klassen scrollbar-hide, som er en Tailwind-plugin vi ikke har
+   installert, så remsa sto med synlig rullefelt. Samme idiom som over. */
+.scrollbar-hide { scrollbar-width: none; }
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+
+/* Grunnstil for .prose.
+   Klassen brukes på 18 sider. Tretten artikler definerer den i sin egen
+   <style>-blokk; index.html og de fire kalkulatorene under verktoy/ gjorde
+   det ikke, og der sto «Skatt», «Inflasjonsjustering» og «Les videre» i
+   brødtekststørrelse — h2 og h3 uten noe hierarki i det hele tatt.
+   Modifikatorene ved siden av (prose-sm, dark:prose-invert, prose-a:*) er
+   syntaks fra @tailwindcss/typography, som ikke er installert; de har aldri
+   gjort noe. Dette er nettstedets egen prose, hentet fra artiklene.
+   Sidenes egne <style>-blokker kommer etter dette stilarket og vinner
+   fortsatt, så de tretten artiklene er uendret. */
+.prose h2 { font-size: 1.35rem; font-weight: 700; margin-top: 2.5rem; margin-bottom: 0.75rem; color: inherit; }
+.prose h3 { font-size: 1.1rem; font-weight: 600; margin-top: 1.75rem; margin-bottom: 0.5rem; color: inherit; }
+.prose p  { margin-bottom: 1rem; line-height: 1.75; }
+.prose ul { margin: 0.75rem 0 1rem 1.5rem; list-style: disc; }
+.prose ol { margin: 0.75rem 0 1rem 1.5rem; list-style: decimal; }
+.prose li { margin-bottom: 0.4rem; line-height: 1.7; }
+.prose table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.9rem; display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.prose th { text-align: left; padding: 0.6rem 0.9rem; background: #f3f4f6; font-weight: 600; border: 1px solid #e5e7eb; }
+.prose td { padding: 0.6rem 0.9rem; border: 1px solid #e5e7eb; vertical-align: top; }
+.prose tr:nth-child(even) td { background: #f9fafb; }
+.dark .prose th { background: #1f2937; border-color: #374151; }
+.dark .prose td { border-color: #374151; }
+.dark .prose tr:nth-child(even) td { background: #111827; }
