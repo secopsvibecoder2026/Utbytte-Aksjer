@@ -1300,6 +1300,49 @@ sources are one search away; use them the first time.
 
 ---
 
+## Dark mode: two failure modes, both silent (fixed 2026-09-13)
+
+Reported as «/verktoy/ loses dark mode». It turned out to be two separate
+bugs, and the reported page had the *milder* of the two.
+
+**1. The wrong key.** `uke/`, `personvern/` and `bevegelser/` read
+`localStorage.getItem('theme')` — the English word. Everything else on the
+site writes `'tema'`. Those three pages therefore kept a private theme state
+that nothing else ever wrote, so dark mode set anywhere else simply did not
+apply. `utbyttekalender/` read *both* keys as a fallback, which hid the same
+mistake behind a working page.
+
+This is already the documented rule («Dark mode via
+`localStorage.getItem('tema')` (ikke `theme`)»), and it was still wrong in
+four places. Grep for `'theme'` before adding a page.
+
+**2. The script after `</head>`.** Six pages — the four under `verktoy/`,
+plus `utbyttekalender/` and `innstillinger/` — ran the theme init *inside
+`<body>`*, wired together with the burger menu and the toggle. The class was
+applied, so it looked correct in a static check; but the body had already
+painted in light mode, so the reader saw a white flash on every load.
+
+**Every page that uses `dark:` classes needs this exact line in `<head>`,
+before any stylesheet:**
+
+```html
+<script>(function(){if(localStorage.getItem('tema')==='dark')document.documentElement.classList.add('dark');})()</script>
+```
+
+Keep the rest of the theme code where it is — the toggle and burger menu need
+the DOM. Only the class-setting has to be early, and running it twice is
+harmless.
+
+**How to check it, since neither bug shows up in a grep for correctness.**
+Measure `getComputedStyle(document.body).backgroundColor` at `waitUntil:
+'commit'` with `tema=dark` preset, and compare against the settled value. A
+page that paints light first returns `rgba(0, 0, 0, 0)` or a light colour at
+that point. All pages with `dark:` classes now return the dark value on the
+first frame; `app/index.html` is included, even though `ui.js` handles the
+theme correctly afterwards.
+
+---
+
 ## Adding a New Stock
 
 1. Add entry to `data/tickers.json`
