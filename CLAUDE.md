@@ -93,8 +93,10 @@ Utbytte-Aksjer/
 │   ├── oppdater_hendelser.py  # Event calendar from Newsweb → hendelser.json
 │   ├── hent_beskrivelser.py   # One-off: factual descriptions from Yahoo (see HENT_BESKRIVELSER_SETUP.md)
 │   ├── sjekk_tema.py          # Verifies dark mode init on every page
+│   ├── sjekk_klasser.py       # Verifies every Tailwind class is compiled
 │   ├── test_sjekk_utdaterte.py # Tests for sjekk_utdaterte.py (stdlib unittest)
 │   ├── test_sjekk_tema.py     # Tests for sjekk_tema.py
+│   ├── test_sjekk_klasser.py  # Tests for sjekk_klasser.py
 │   └── requirements.txt       # Python deps: yfinance>=0.2.36
 ├── tests/                     # Node.js unit tests
 │   ├── portefolje.test.js     # Tests: FIFO, IRR, TWR
@@ -154,6 +156,7 @@ python scripts/test_sjekk_utdaterte.py  # 59 Python tests (stdlib unittest)
 python scripts/test_fetch_stocks.py     # 52 Python tests (pipeline + maler)
 python scripts/test_oppdater_hendelser.py  # 7 Python tests (hendelseskalender)
 python scripts/test_sjekk_tema.py       # 10 Python tests (mørk modus på hver side)
+python scripts/test_sjekk_klasser.py    # 10 Python tests (CSS-klasser finnes)
 ```
 
 Both suites run automatically in CI (`.github/workflows/tester.yml`) on push and PR
@@ -1527,6 +1530,88 @@ committing new intros; it caught DNB and NORBT, both of which had frozen
 figures sitting in hand-written text.
 
 ---
+
+## The stylesheet only saw `assets/` — 147 classes never compiled (2026-09-13)
+
+Reported as «the text in that box is invisible in light mode» on `/verktoy/`.
+The markup was correct: `bg-green-600 … text-white`. The **background never
+existed**, so the button was white-on-near-white in light mode and only
+legible in dark by luck.
+
+**Root cause is the build, not the page.** Tailwind v4 roots its automatic
+source scan at the directory holding the CSS entry file. That file is
+`assets/tw-input.css`, so it scanned `assets/` and nothing else — every class
+that appears *only* in an HTML page was silently dropped from the stylesheet.
+`bg-green-500` survived because it happens to also appear in `assets/ui.js`;
+`bg-green-600` did not.
+
+Measured across the site: **147 classes, 4 428 occurrences** missing.
+
+The fix is `@source` in `tw-input.css`, and it must stay explicit:
+
+```css
+@source "../**/*.html";
+@source "../assets/*.js";
+```
+
+> ⚠️ **Do not write `@source "../"`.** Tailwind scans *every* file type,
+> including `.py` and `.md`, and harvests class-shaped strings from prose. A
+> test file that merely mentioned `dark:bg-brand-950/30` added rules no page
+> uses and made the build output depend on the wording of a comment. With the
+> globs above the build is idempotent; verify with two runs and a `diff`.
+
+### Three separate faults hid behind the same symptom
+
+| Fault | Effect |
+|---|---|
+| Scan root (above) | 147 utilities absent, incl. `bg-green-600` on 6 pages |
+| `brand-*` gaps in `@theme` | Only 50/100/500/600/700/900 were defined. `brand-200/300/400/800/950` were used **71 times** — `text-brand-600 dark:text-brand-400` gave a green link in light mode and inherited grey in dark |
+| Classes from an uninstalled plugin | `prose-sm`, `dark:prose-invert`, `prose-a:*`, `scrollbar-hide` are `@tailwindcss/typography` / scrollbar-plugin syntax. Never installed, so always inert |
+
+`.prose` itself is **hand-rolled, not the plugin**. Thirteen articles each
+define it in their own `<style>`; `index.html` and the four `verktoy/`
+calculators used the class without defining it, so `<h2>` and `<h3>` rendered
+at body size with no hierarchy and lists lost their bullets. A base `.prose`
+now lives in `assets/style.css`; per-page blocks come later in the document
+and still win, so the thirteen articles are untouched.
+
+The dead plugin modifiers were **removed rather than made to work**:
+installing typography would restyle twenty pages that nobody asked to change,
+and would collide with the thirteen hand-rolled definitions.
+
+### `scripts/sjekk_klasser.py`
+
+```bash
+python scripts/sjekk_klasser.py            # report, always exits 0
+python scripts/sjekk_klasser.py --streng   # exit 1 on any undefined class
+```
+
+**It checks Tailwind utilities only.** Custom names and JS hooks — `faq-q`,
+`sb-rad`, `sun-icon`, `mnd-ja`, `green` — are styled by a page's own
+`<style>` or picked up by an inline `<script>`, and a check that guesses at
+them is pure noise: the first draft reported 37 classes of which **none** was
+a real fault. That is worse than no check, because it reads as coverage.
+
+Two parser details it must keep, both caught by its own tests:
+
+- **`\\.` first in the alternation.** Otherwise the character class eats the
+  backslash and the match stops at the colon in `.dark\:text-gray-400`.
+- **An unescaped `.` ends a class name.** `.val.green` is two classes; an
+  escaped one belongs to the name, as in `.mx-1\.5`. Getting this wrong
+  reported `green` (310 uses) as undefined.
+
+**This check is also the staleness guard.** The stylesheet now depends on the
+HTML, and CI does not rebuild CSS — so a class added to a page without
+running `npm run build:css` is missing at deploy time. That is exactly what
+the check reports, and `test_sjekk_klasser.py` fails CI on it.
+
+Tests: `scripts/test_sjekk_klasser.py` (10).
+
+**Two more of the same class of bug, found by looking rather than grepping:**
+`/uke/` and `/bevegelser/` still carried an older logo markup whose
+`site-logo-mark` class exists nowhere, so the header rendered a bare letter
+«e» next to the wordmark, and both lacked the green **x**. Aligned with the
+markup every other page uses.
 
 ## Icons: stroke SVG, and look at every one you add
 
