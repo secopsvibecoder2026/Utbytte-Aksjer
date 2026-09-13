@@ -72,6 +72,13 @@ jobs:
         # også hvis noen legger til en klasse uten å bygge CSS-en på nytt.
         run: python scripts/sjekk_klasser.py
 
+      - name: Sjekk hardkodede aksjetellinger
+        # /om/ viste 191 «Aksjer fulgt» mens katalogen var 155 — nøyaktig det
+        # tallet oppdater_antall_i_sider() ble skrevet for å bli kvitt.
+        # Markøren virker; feilen er at noen skriver et bart tall i stedet,
+        # og da har generatoren ingenting å fylle ut.
+        run: python scripts/sjekk_antall.py
+
       - name: Sjekk etter utdaterte aksjer
         # Avnoteringer, navneendringer og oppkjøp. Blokkerer bevisst ikke
         # deployen — et omdøpt selskap skal ikke stanse kursoppdateringene.

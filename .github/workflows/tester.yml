@@ -87,3 +87,4 @@ jobs:
           python scripts/test_oppdater_hendelser.py
           python scripts/test_sjekk_tema.py
           python scripts/test_sjekk_klasser.py
+          python scripts/test_sjekk_antall.py

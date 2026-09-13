@@ -94,9 +94,11 @@ Utbytte-Aksjer/
 │   ├── hent_beskrivelser.py   # One-off: factual descriptions from Yahoo (see HENT_BESKRIVELSER_SETUP.md)
 │   ├── sjekk_tema.py          # Verifies dark mode init on every page
 │   ├── sjekk_klasser.py       # Verifies every Tailwind class is compiled
+│   ├── sjekk_antall.py        # Finds hard-coded stock counts that should be markers
 │   ├── test_sjekk_utdaterte.py # Tests for sjekk_utdaterte.py (stdlib unittest)
 │   ├── test_sjekk_tema.py     # Tests for sjekk_tema.py
 │   ├── test_sjekk_klasser.py  # Tests for sjekk_klasser.py
+│   ├── test_sjekk_antall.py   # Tests for sjekk_antall.py
 │   └── requirements.txt       # Python deps: yfinance>=0.2.36
 ├── tests/                     # Node.js unit tests
 │   ├── portefolje.test.js     # Tests: FIFO, IRR, TWR
@@ -157,6 +159,7 @@ python scripts/test_fetch_stocks.py     # 52 Python tests (pipeline + maler)
 python scripts/test_oppdater_hendelser.py  # 7 Python tests (hendelseskalender)
 python scripts/test_sjekk_tema.py       # 10 Python tests (mørk modus på hver side)
 python scripts/test_sjekk_klasser.py    # 10 Python tests (CSS-klasser finnes)
+python scripts/test_sjekk_antall.py     # 11 Python tests (aksjetellinger bruker markør)
 ```
 
 Both suites run automatically in CI (`.github/workflows/tester.yml`) on push and PR
@@ -512,7 +515,22 @@ Available keys: `aksjer` (catalog size), `utbytte` (yield > 0), `historikk`
 `rapportdato` (has an announced report date).
 
 **Write a marker, not a number.** A bare digit will drift again and nothing
-will catch it. An unknown key is left untouched and reported, so a typo shows
+will catch it.
+
+> **It drifted again anyway — `/om/` showed 191 (2026-09-13).** That is the
+> very number this function was written to eliminate, and the docstring names
+> it. The rest of `/om/` was converted to markers; the **hero stat at the top
+> of the page**, the largest and most visible number on it, was not.
+> `promo/facebook-post.html` sat at 124 the same way, and that figure is
+> rendered into an image that gets published.
+>
+> The mechanism was never broken. The failure is writing a bare digit instead
+> of a marker: it looks right the day it is written and goes stale in silence.
+> The catalog has gone 191 → 163 → 161 → 160 → 155 while those pages stood
+> still.
+>
+> `scripts/sjekk_antall.py` now measures it, for the same reason
+> `sjekk_tema.py` exists — a rule nobody measures does not hold. An unknown key is left untouched and reported, so a typo shows
 up in the run log rather than blanking the text.
 
 The marker is an HTML comment, not a template token — if the generator never
