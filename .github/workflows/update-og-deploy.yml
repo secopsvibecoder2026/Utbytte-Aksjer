@@ -58,6 +58,13 @@ jobs:
         # jobbsammendraget.
         run: python scripts/sjekk_lenker.py
 
+      - name: Sjekk mørk modus
+        # /verktoy/ mistet mørk modus fordi temaskriptet lå etter </head>, og
+        # tre andre sider leste den engelske nøkkelen 'theme'. Regelen sto
+        # allerede i CLAUDE.md og var brutt fire steder — en regel ingen
+        # måler, holder ikke. Blokkerer ikke deployen.
+        run: python scripts/sjekk_tema.py
+
       - name: Sjekk etter utdaterte aksjer
         # Avnoteringer, navneendringer og oppkjøp. Blokkerer bevisst ikke
         # deployen — et omdøpt selskap skal ikke stanse kursoppdateringene.
