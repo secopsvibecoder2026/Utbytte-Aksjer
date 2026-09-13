@@ -67,6 +67,11 @@
     .avn-lever { border-left: 3px solid #16a34a; padding-left: 0.9rem; }
     .avn-borte  { border-left: 3px solid #d1d5db; padding-left: 0.9rem; }
     .dark .avn-borte { border-left-color: #374151; }
+    .les-ogsa-lenke {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
   </style>
 
   <script type="application/ld+json">
@@ -341,17 +346,23 @@
 
     <div class="mt-8 pt-6 border-t border-gray-200 dark:border-gray-800 text-sm">
       <p class="font-semibold mb-2">Les også</p>
-      <p class="flex items-center gap-2 mb-1.5">
-        <span aria-hidden="true">📅</span>
-        <a href="/utbyttekalender/" class="text-green-600 dark:text-green-400 hover:underline">Utbyttekalender for Oslo Børs</a>
+      <p class="mb-1.5">
+        <a href="/utbyttekalender/" class="les-ogsa-lenke text-green-600 dark:text-green-400 hover:underline">
+          <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+          <span>Utbyttekalender for Oslo Børs</span>
+        </a>
       </p>
-      <p class="flex items-center gap-2 mb-1.5">
-        <span aria-hidden="true">🏦</span>
-        <a href="/artikler/sparebanker-oslo-bors/" class="text-green-600 dark:text-green-400 hover:underline">Sparebankene på Oslo Børs</a>
+      <p class="mb-1.5">
+        <a href="/artikler/sparebanker-oslo-bors/" class="les-ogsa-lenke text-green-600 dark:text-green-400 hover:underline">
+          <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+          <span>Sparebankene på Oslo Børs</span>
+        </a>
       </p>
-      <p class="flex items-center gap-2">
-        <span aria-hidden="true">📊</span>
-        <a href="/aksjer/" class="text-green-600 dark:text-green-400 hover:underline">Alle utbytteaksjer i katalogen</a>
+      <p>
+        <a href="/aksjer/" class="les-ogsa-lenke text-green-600 dark:text-green-400 hover:underline">
+          <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+          <span>Alle utbytteaksjer i katalogen</span>
+        </a>
       </p>
     </div>
 
