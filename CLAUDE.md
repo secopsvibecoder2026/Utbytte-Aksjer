@@ -92,7 +92,9 @@ Utbytte-Aksjer/
 │   ├── sjekk_utdaterte.py     # Detects delisted/renamed/duplicate tickers
 │   ├── oppdater_hendelser.py  # Event calendar from Newsweb → hendelser.json
 │   ├── hent_beskrivelser.py   # One-off: factual descriptions from Yahoo (see HENT_BESKRIVELSER_SETUP.md)
+│   ├── sjekk_tema.py          # Verifies dark mode init on every page
 │   ├── test_sjekk_utdaterte.py # Tests for sjekk_utdaterte.py (stdlib unittest)
+│   ├── test_sjekk_tema.py     # Tests for sjekk_tema.py
 │   └── requirements.txt       # Python deps: yfinance>=0.2.36
 ├── tests/                     # Node.js unit tests
 │   ├── portefolje.test.js     # Tests: FIFO, IRR, TWR
@@ -151,11 +153,13 @@ npm test                                # 63 JS tests (node:test)
 python scripts/test_sjekk_utdaterte.py  # 59 Python tests (stdlib unittest)
 python scripts/test_fetch_stocks.py     # 52 Python tests (pipeline + maler)
 python scripts/test_oppdater_hendelser.py  # 7 Python tests (hendelseskalender)
+python scripts/test_sjekk_tema.py       # 10 Python tests (mørk modus på hver side)
 ```
 
 Both suites run automatically in CI (`.github/workflows/tester.yml`) on push and PR
-touching `assets/`, `scripts/`, `tests/` or `package.json`. Neither needs network
-access or npm packages — the JS tests `require()` `assets/*.js` directly.
+touching `assets/`, `scripts/`, `tests/`, `package.json` or a hand-written `.html`
+page (`aksjer/**` excluded — generated). Neither needs network access or npm
+packages — the JS tests `require()` `assets/*.js` directly.
 
 ### Building CSS
 
@@ -1340,6 +1344,48 @@ page that paints light first returns `rgba(0, 0, 0, 0)` or a light colour at
 that point. All pages with `dark:` classes now return the dark value on the
 first frame; `app/index.html` is included, even though `ui.js` handles the
 theme correctly afterwards.
+
+### `scripts/sjekk_tema.py` — because the rule already existed and still broke
+
+The «use `'tema'`, not `'theme'`» rule was written in this file *before* the
+bug, and was violated in four places anyway. A rule nobody measures does not
+hold, so it is now a check rather than a paragraph:
+
+```bash
+python scripts/sjekk_tema.py            # report, always exits 0
+python scripts/sjekk_tema.py --streng   # exit 1 on any fault
+```
+
+It flags three things per page, and only for pages that actually use `dark:`
+classes — a page with no dark mode has none to lose:
+
+| Fault | What it means |
+|---|---|
+| `leser 'theme'` | The English key. Flagged even when `'tema'` is read beside it, since the dual-key fallback is exactly what hid this last time |
+| `temaskript ligger etter </head>` | The class is set, but after the body has painted |
+| `ingen temainitialisering` | Nothing reads the key at all |
+
+It matches on the *key and the `classList.add`*, not on the exact one-line
+spelling, because `personvern/` writes the same init across several lines and
+additionally honours `prefers-color-scheme`. A check that locked the
+formatting would have reported that correct page as broken — it did, on the
+first attempt, and the page was fine.
+
+`setItem` alone does not count as initialisation. The toggle writes the key on
+click; that is not the same as reading it before first paint.
+
+Runs in `update-og-deploy.yml` next to `sjekk_lenker.py`, and deliberately
+does not block the deploy — a theme flash must not stop price updates.
+
+**The path filter in `tester.yml` was the other half of the gap.** It listed
+`assets/`, `scripts/`, `tests/` and `package.json`, so a PR touching only HTML
+ran no tests at all — which is precisely how this bug arrived. Hand-written
+`**.html` is now in the filter, with `!aksjer/**` excluded because those pages
+are generated from the templates in `scripts/`, already covered.
+
+Tests: `scripts/test_sjekk_tema.py` (10). They reproduce both real bugs from
+the pre-fix markup verbatim — a checker that does not catch the failure it was
+written for is worse than none, because it reads as coverage.
 
 ---
 

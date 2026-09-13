@@ -1,11 +1,13 @@
 name: Tester
 
-# Kjører de eksisterende test-suitene (63 JS-tester, 44 Python-tester) på
-# kodeendringer. Ren lesetilgang, ingen commit/deploy — kan ikke påvirke
-# datapipelinen eller Pages-deployen i de andre workflow-filene.
+# Kjører test-suitene (63 JS-tester, 128 Python-tester) på kodeendringer.
+# Ren lesetilgang, ingen commit/deploy — kan ikke påvirke datapipelinen
+# eller Pages-deployen i de andre workflow-filene.
 #
 # Kun kjørte tester finner regresjoner; uten dette kjørte 107 tester i
-# repoet, men ingenting fikk feile CI-en.
+# repoet, men ingenting fikk feile CI-en. Samme lærdom ga håndskrevne
+# .html-sider i filteret: mørk modus-feilen kom inn i en PR som bare rørte
+# HTML, så ingen test kjørte på den.
 
 on:
   push:
@@ -17,6 +19,10 @@ on:
       - 'package.json'
       - 'package-lock.json'
       - '.github/workflows/tester.yml'
+      # Håndskrevne sider: sjekk_tema-testen leser dem. aksjer/** er
+      # generert fra malene i scripts/, som allerede står over.
+      - '**.html'
+      - '!aksjer/**'
   pull_request:
     branches: [main]
     paths:
@@ -26,6 +32,10 @@ on:
       - 'package.json'
       - 'package-lock.json'
       - '.github/workflows/tester.yml'
+      # Håndskrevne sider: sjekk_tema-testen leser dem. aksjer/** er
+      # generert fra malene i scripts/, som allerede står over.
+      - '**.html'
+      - '!aksjer/**'
   workflow_dispatch:
 
 permissions:
@@ -73,3 +83,4 @@ jobs:
           python scripts/test_sjekk_utdaterte.py
           python scripts/test_fetch_stocks.py
           python scripts/test_oppdater_hendelser.py
+          python scripts/test_sjekk_tema.py
