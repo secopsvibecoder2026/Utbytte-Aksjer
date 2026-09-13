@@ -325,7 +325,20 @@ Tabeller må alltid ha `display: block; overflow-x: auto; -webkit-overflow-scrol
 
 ### "Les også"-lenker
 
-Bruk `flex items-center gap-2` med ikon + tekst på én linje. Ikke legg beskrivelsestekst inline etter lenken — det bryter dårlig på mobil.
+Bruk `.les-ogsa-lenke` (`display: flex; align-items: center; gap: 0.5rem`) på
+`<a>`-en, med et strek-SVG og teksten i et `<span>`. Ikke legg
+beskrivelsestekst inline etter lenken — det bryter dårlig på mobil.
+
+```html
+<a href="/artikler/…/" class="les-ogsa-lenke text-green-600 dark:text-green-400 hover:underline">
+  <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="…"/></svg>
+  <span>Tittelen på artikkelen</span>
+</a>
+```
+
+`shrink-0` er ikke valgfritt — uten den klemmes ikonet flatt når tittelen
+brytes over to linjer på mobil. `currentColor` gjør at ikonet arver
+lenkefargen i begge temaer, så det trenger ingen egen `dark:`-regel.
 
 ### Oppdater indekssiden
 
@@ -1514,6 +1527,61 @@ committing new intros; it caught DNB and NORBT, both of which had frozen
 figures sitting in hand-written text.
 
 ---
+
+## Icons: stroke SVG, and look at every one you add
+
+Emoji were replaced across the site over #34, #35 and #38. They are drawn by
+the operating system, not by us, so they render differently on every device
+and never form a set — nine of the sixteen sector cards shared one fallback
+glyph and it read as a design choice rather than the bug it was.
+
+**The convention:** heroicons-style stroke SVG, `fill="none"`,
+`stroke="currentColor"`, `viewBox="0 0 24 24"`, `stroke-width="2"`,
+`stroke-linecap`/`stroke-linejoin` `round`, and `aria-hidden="true"`. Inline
+icons get `class="w-4 h-4 shrink-0"`. Inheriting `currentColor` means one
+definition works in both themes.
+
+**Where emoji are still correct.** Eighteen remain, all *inside sentences*:
+«🎉 Porteføljen din dekker allerede målet ditt!», «📌 Uke 37 (Oslo Børs): …».
+That is a different register from an icon, and swapping them for SVG makes
+the messages worse. `▲`/`▼` on `/bevegelser/` also stay — geometric
+characters that carry meaning, not colour emoji.
+
+**When an emoji stands alone, remove it rather than convert it.** `app/`
+had 💰 on «Min utbyttelønn» while the five sibling cards in the same panel
+had no icon at all; `innstillinger/` showed 💾 in only one of a button's two
+states. Converting those would have meant adding icons to six cards to
+justify one — widening the change instead of fixing it.
+
+### Valid SVG is not a correct icon — render it and look
+
+This has now happened three times in four PRs, and every automated check
+passed each time:
+
+| PR | Icon | What it actually looked like |
+|---|---|---|
+| #34 | Shipping | Hull upside-down — read as a bucket |
+| #34 | Helsevern | Plus-in-circle — read as an «add» button |
+| #35 | Vektskål | One pan instead of two — read as an upside-down umbrella |
+| #38 | Seddelbunke | Too much detail; a blob at 16 px |
+
+**Render at both 72 px and the real size before committing.** The 16 px pass
+is the one that catches density — the banknote was perfectly legible large.
+A screenshot through Playwright against a local `http.server` is enough;
+Chromium cannot reach the live site from this environment, so measure locally
+and verify the deployed HTML with `curl` afterwards.
+
+Note also that the icon should match what the label *says*. The FIRE
+calculator carried heroicons' «users» — a group of people — on a tool that
+computes capital and years to independence (#36), and the banknote became an
+arrow into a tray because the heading reads «pengene settes inn på kontoen
+din».
+
+> Unlike the dark-mode rule, this one is **not** enforced by a script, and
+> that is deliberate: a wrong icon is visible to anyone who opens the page,
+> while a theme that fails to apply is silent. Documentation is proportionate
+> where the failure announces itself; see `scripts/sjekk_tema.py` for the
+> case where it was not.
 
 ## Common Pitfalls
 
