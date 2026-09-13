@@ -60,6 +60,7 @@
     .uke-uke-label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #9ca3af; padding: 0.35rem 1rem; background: #f3f4f6; border-top: 1px solid #e5e7eb; }
     .dark .uke-uke-label { background: #1f2937; border-color: #374151; color: #6b7280; }
   </style>
+  <script>(function(){if(localStorage.getItem('tema')==='dark')document.documentElement.classList.add('dark');})()</script>
 </head>
 <body class="bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 min-h-screen transition-colors duration-200">
   <nav class="site-nav" aria-label="Hovedmeny">
@@ -262,10 +263,10 @@
   <script>
     // ── Tema ─────────────────────────────────────────────────────────────────
     const root = document.documentElement;
-    const savedTheme = localStorage.getItem('theme');
+    const savedTheme = localStorage.getItem('tema');
     if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) root.classList.add('dark');
     document.getElementById('dark-toggle').addEventListener('click', () => {
-      localStorage.setItem('theme', root.classList.toggle('dark') ? 'dark' : 'light');
+      localStorage.setItem('tema', root.classList.toggle('dark') ? 'dark' : 'light');
     });
 
     // ── Hjelp ────────────────────────────────────────────────────────────────
