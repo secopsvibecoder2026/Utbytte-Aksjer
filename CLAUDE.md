@@ -760,6 +760,21 @@ one of them may require converting the Instagram account, which has lead time. N
 also that `/promo/` was blocked in `robots.txt` on 2026-09-12, and Instagram's
 publishing flow fetches images from a public URL — that block may sit in the way.
 
+**Also queued: donations.** See «Monetisering — donasjoner» in `ROADMAP.md`
+(researched 2026-09-13). AdSense does not prohibit a donate button, so this is
+not blocked by the application — it is deferred because the arithmetic does not
+carry yet. Two things there are worth knowing before anyone revisits it:
+
+- **Vipps requires an organisation number**, and the duty to register in
+  Enhetsregisteret applies to entities that *carry on business*. You cannot
+  register an ENK for a hobby and keep hobby status, so adopting the one payment
+  method this audience expects means declaring the project a business.
+- **There is no kroner threshold** where hobby becomes business. Skatteetaten
+  applies four criteria — duration, scope, *suited to yield a surplus* over time,
+  and own account and risk — assessed objectively. Hosting is free and the domain
+  costs little, so almost any revenue is surplus; donations *plus* AdSense on a
+  site regenerated 4× daily is exactly the shape that test is looking for.
+
 ## Breaking the template — why the pages must differ in *shape* (2026-09-12)
 
 AdSense rejected the site twice for «Low value content». The rule actually

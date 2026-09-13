@@ -187,9 +187,67 @@ Også opprett `/artikler/index.html` som oversiktsside for alle artikler.
 **Staging-miljø**
 - [ ] Netlify-deploy fra `dev`-branch med preview-URL per PR
 
-### Monetisering
-- [ ] «Støtt prosjektet»-knapp (Ko-fi / Vipps) — vises etter 5 besøk
+### Monetisering — donasjoner
+
+**Utsatt, men ikke forkastet** (undersøkt 13.09.2026). Kort konklusjon: det er
+teknisk enkelt, men det alternativet publikummet faktisk forventer — Vipps —
+krever at prosjektet blir næringsvirksomhet. Det er en større beslutning enn
+knappen ser ut som.
+
+**Rammen vi jobber innenfor.** Siden er statisk på GitHub Pages: ingen server,
+ingen webhooks, ingen hemmeligheter. Alt må være en **ren utgående lenke**. Det
+er også en fordel — en lenke er ingen ny databehandler, så `/personvern/` er
+uberørt. En **innebygd widget** er derimot en ny tredjepart og må inn i
+tredjepartstabellen der.
+
+| Løsning | Gebyr | Krav | Passer publikum? |
+|---|---|---|---|
+| GitHub Sponsors | GitHub 0 % på personlige kontoer, Stripe-payout | Ingen org.nr., Norge støttes via Stripe Connect | ❌ krever GitHub-konto |
+| Ko-fi | 0 % på engangstips + Stripe ~2,9 % + $0,30 | Ingen org.nr. | ⚠️ kort, ikke Vipps |
+| Buy Me a Coffee | 5 % på alt, i tillegg til Stripe | Ingen org.nr. | Strengt dårligere enn Ko-fi |
+| Vipps på nett | — | **Org.nr. + bedriftskonto** | ✅ det folk forventer |
+
+> ⚠️ **Vipps-fella.** Vipps for bedrift krever norsk organisasjonsnummer.
+> Organisasjonsnummer er gratis i Enhetsregisteret, men registreringsplikten
+> gjelder foretak som *driver næringsvirksomhet* — man kan altså ikke registrere
+> et ENK for en hobby og beholde hobbystatusen. Å skaffe Vipps er i praksis å
+> erklære at dette er næring.
+>
+> Alternativet, å oppgi eget mobilnummer for privat-Vipps, betyr å publisere
+> telefonnummeret sitt på en side med 155 aksjesider. Frarådes.
+
+**Skatt: det finnes ingen kronegrense.** Skatteetaten opererer ikke med et beløp
+der hobby blir næring. Vurderingen er fire vilkår — aktiviteten må ha en viss
+**varighet**, et visst **omfang**, være **egnet til å gå med overskudd** over
+tid, og drives for **egen regning og risiko** — og den er *objektiv*, ikke basert
+på hva man selv mener hensikten er.
+
+Det som gjør exday.no sårbart er kostnadsbildet, ikke donasjonene: GitHub Pages
+er gratis og domenet koster småpenger, så nesten enhver inntekt blir overskudd.
+Kombinasjonen donasjoner **+** AdSense på en side som oppdateres 4× daglig er
+nettopp det som ser «egnet til å gå med overskudd» ut. Merk også at etiketten
+«donasjon» ikke avgjør skattespørsmålet — en støtteknapp på en tjeneste man
+leverer er ikke åpenbart en gave. Blir det reelle beløp, er dette et spørsmål
+for regnskapsfører.
+
+**AdSense er ikke i veien.** Donasjonsknapper er tillatt ved siden av annonser.
+Den ene reelle fellen er ordlyd som leder oppmerksomhet mot annonsene — «klikk
+en annonse hvis du ikke vil donere» er brudd. En ren «støtt prosjektet»-knapp
+er det ikke.
+
+**Rekkefølge — og hvorfor vi venter:**
+
+- [ ] **Nå, om ønskelig:** GitHub Sponsors-lenke i bunnteksten. Kontoen finnes,
+      koster ingenting, ingen personvernendring, null risiko. Fanger få, men
+      koster heller ingenting. *Ikke gjort — venter bevisst.*
+- [ ] **Etter AdSense-godkjenning + reell trafikk:** vurder Ko-fi.
+- [ ] **Sist, hvis beløpene forsvarer det:** Vipps og ENK vurdert samlet, med
+      regnskapsfører.
+
+Grunnen til å vente er ikke AdSense, men regnestykket: med dagens trafikk i
+Search Console gir donasjoner tilnærmet null i året. Å registrere ENK for å få
+Vipps ville koste regnskapsplikt og næringsstatus for en inntekt nær null.
 
 ---
 
-*Sist oppdatert: april 2026*
+*Sist oppdatert: 13. september 2026*
