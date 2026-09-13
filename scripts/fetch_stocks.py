@@ -3899,8 +3899,10 @@ def generer_aksjesider(aksjer, root_dir):
       width: 44px; height: 44px;
       border-radius: 0.6rem;
       display: flex; align-items: center; justify-content: center;
-      font-size: 1.2rem; flex-shrink: 0;
+      flex-shrink: 0;
     }}
+    /* SVG, ikke emoji — arver fargen fra .topp-ikon-N under. */
+    .topp-ikon svg {{ width: 22px; height: 22px; }}
     .topp-ikon-1 {{ background: #fef3c7; color: #b45309; }}
     .topp-ikon-2 {{ background: #dbeafe; color: #1d4ed8; }}
     .topp-ikon-3 {{ background: #dcfce7; color: #15803d; }}
@@ -4010,28 +4012,28 @@ def generer_aksjesider(aksjer, root_dir):
     <div class="seksjon-tittel"><h2>Topplister</h2></div>
     <div class="topplister">
       <a href="/aksjer/hoyest-utbytte/" class="topp-kort">
-        <div class="topp-ikon topp-ikon-1">💰</div>
+        <div class="topp-ikon topp-ikon-1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3c-4.4 0-8 1.6-8 3.5v11C4 19.4 7.6 21 12 21s8-1.6 8-3.5v-11C20 4.6 16.4 3 12 3zM4 6.5c0 1.9 3.6 3.5 8 3.5s8-1.6 8-3.5M4 12c0 1.9 3.6 3.5 8 3.5s8-1.6 8-3.5"/></svg></div>
         <div>
           <div class="topp-tittel">Høyest utbytte</div>
           <div class="topp-beskr">Aksjene med høyest direkteavkastning</div>
         </div>
       </a>
       <a href="/aksjer/utbyttevekst/" class="topp-kort">
-        <div class="topp-ikon topp-ikon-2">📈</div>
+        <div class="topp-ikon topp-ikon-2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 17l6-6 4 4 8-8M21 7v5M21 7h-5"/></svg></div>
         <div>
           <div class="topp-tittel">Sterkest utbyttevekst</div>
           <div class="topp-beskr">Selskaper som hever utbyttet hvert år</div>
         </div>
       </a>
       <a href="/aksjer/konsistente-utbytteaksjer/" class="topp-kort">
-        <div class="topp-ikon topp-ikon-3">🛡️</div>
+        <div class="topp-ikon topp-ikon-3"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.5l8 3v6c0 5-3.4 9.2-8 10.5-4.6-1.3-8-5.5-8-10.5v-6l8-3zM9 12l2 2 4-4"/></svg></div>
         <div>
           <div class="topp-tittel">Mest konsistente</div>
           <div class="topp-beskr">Lengst sammenhengende utbyttehistorikk</div>
         </div>
       </a>
       <a href="/aksjer/lavest-payout/" class="topp-kort">
-        <div class="topp-ikon topp-ikon-4">⚖️</div>
+        <div class="topp-ikon topp-ikon-4"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5v17.5M8 21h8M4 8h16M4 8l-2.5 5.5h5L4 8zM20 8l-2.5 5.5h5L20 8z"/></svg></div>
         <div>
           <div class="topp-tittel">Lavest payout</div>
           <div class="topp-beskr">Bærekraftig utbytte med stor margin</div>
