@@ -111,25 +111,68 @@ function visCacheBanner(ts) {
   };
 }
 
+/**
+ * Viser hvor gamle dataene er, og om noen tickere feilet i siste henting.
+ *
+ * Dette sto her fra før, men var usynlig i praksis: elementet har `hidden
+ * sm:block`, så advarselen «kan være utdatert» viste seg aldri på mobil —
+ * der de fleste leser. Og ingenting fortalte at en henting hadde feilet.
+ *
+ * Det er ikke et teoretisk problem. I august ble ni tickere servert med 16
+ * dager gamle tall uten at noe sa fra, og WILS i over tre år. En side som
+ * viser en direkteavkastning uten å si når tallet er fra, later som om det
+ * er ferskt.
+ *
+ * Teksten må være kort. Første forsøk skrev «Oppdatert 11. sep., 19:00 ·
+ * 2 dager gammel» — på 390 px kuttet `truncate` den til «Oppdatert 1…»,
+ * så advarselen forsvant likevel. Er tallene gamle, er *alderen* signalet,
+ * ikke klokkeslettet: da vises den i stedet for datoen, ikke i tillegg.
+ * Hele tidsstempelet ligger i `title`.
+ */
+function visDataFerskhet(json) {
+  const el = document.getElementById('sist-oppdatert');
+  if (!el || !json || !json.sist_oppdatert) return;
+
+  const d = new Date(json.sist_oppdatert);
+  if (isNaN(d.getTime())) return;
+
+  const dager = Math.floor((Date.now() - d.getTime()) / 86400000);
+  const kortDato = d.toLocaleDateString('nb-NO', { day: 'numeric', month: 'short' });
+
+  // Børsen er stengt i helgene, så ett døgn uten oppdatering er normalt.
+  // To døgn er det ikke, og da skal leseren se det.
+  const gammel = dager >= 2;
+  const deler = [gammel ? 'Tall ' + dager + ' dager gamle' : 'Oppdatert ' + kortDato];
+
+  // antall_feil mangler til neste fulle henting har kjørt — da skal raden
+  // bare utebli, ikke vises som «0 feilet».
+  const feil = Number(json.antall_feil) || 0;
+  if (feil > 0) deler.push(feil + ' feilet');
+
+  el.textContent = deler.join(' · ');
+  el.title = 'Tallene ble hentet ' + d.toLocaleString('nb-NO', {
+    day: 'numeric', month: 'long', year: 'numeric',
+    hour: '2-digit', minute: '2-digit',
+  }) + '.'
+    + (feil > 0 ? ' ' + feil + (feil === 1 ? ' ticker' : ' tickere')
+        + ' kunne ikke hentes, og viser tall fra forrige vellykkede henting.' : '')
+    + ' Kursdata hentes på børsdager.';
+  // Gråfargen må *av* når advarselen slås på. text-gray-500 og text-amber-600
+  // har samme spesifisitet, så med begge påsatt avgjør rekkefølgen i
+  // stilarket — og da sto advarselen grå.
+  const varsle = gammel || feil > 0;
+  el.classList.toggle('text-amber-600', varsle);
+  el.classList.toggle('dark:text-amber-400', varsle);
+  el.classList.toggle('text-gray-500', !varsle);
+  el.classList.toggle('dark:text-gray-400', !varsle);
+}
+
 function lastInnData(json) {
   alleAksjer     = Array.isArray(json) ? json : (json.aksjer || []);
   window.alleAksjer = alleAksjer;
   osebxHistorikk = json.osebx_historikk || {};
 
-  const ts = json.sist_oppdatert;
-  if (ts) {
-    const d = new Date(ts);
-    const timerSiden = (Date.now() - d.getTime()) / 3600000;
-    const tidstekst = 'Oppdatert ' + d.toLocaleDateString('nb-NO', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
-    const el = document.getElementById('sist-oppdatert');
-    if (el) {
-      el.textContent = tidstekst;
-      if (timerSiden > 24) {
-        el.textContent += ' – kan være utdatert';
-        el.classList.add('text-yellow-500');
-      }
-    }
-  }
+  visDataFerskhet(json);
 
   byggSektorFilter();
   byggListeFilter();
@@ -287,4 +330,10 @@ function sjekkStartsideForslag() {
       toast.remove();
     });
   }, 3000);
+}
+
+// Eksport for testene. Samme mønster som storage.js/ui.js/portefolje.js:
+// nettleseren ser ingen `module`, så dette er en no-op der.
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { escHtml, visDataFerskhet };
 }

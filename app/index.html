@@ -129,7 +129,6 @@
         <h1 class="sr-only">Norske Utbytteaksjer – exday.no</h1>
         <img src="/logo/exday_logo_primary.svg" class="h-8 sm:h-9 dark:hidden shrink-0" alt="exday.no" />
         <img src="/logo/exday_logo_inverse.svg" class="h-8 sm:h-9 hidden dark:block shrink-0" alt="exday.no" />
-        <p id="sist-oppdatert" class="text-xs text-gray-500 dark:text-gray-400 truncate hidden sm:block"><span class="skeleton inline-block h-3 rounded align-middle" style="width:8rem"></span></p>
       </div>
       <a href="/innstillinger/" id="profil-btn" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500 dark:text-gray-400 transition-colors shrink-0" title="Innstillinger" aria-label="Innstillinger">
         <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><circle cx="12" cy="12" r="3" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
@@ -140,8 +139,14 @@
       </button>
     </div>
     <div class="max-w-screen-2xl mx-auto px-4 pb-2 flex items-center justify-between">
-      <h2 class="text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500">Utbytteoversikt · Oslo Børs</h2>
-      <p id="profil-hilsen" class="hidden text-xs text-gray-500 dark:text-gray-400 font-medium"></p>
+      <h2 class="text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 truncate">Utbytteoversikt · Oslo Børs</h2>
+      <div class="flex items-center gap-3 shrink-0">
+        <p id="profil-hilsen" class="hidden text-xs text-gray-500 dark:text-gray-400 font-medium truncate"></p>
+        <!-- Står her, ikke ved logoen: der delte den linje med logo, tannhjul
+             og temabryter, og `truncate` kuttet «2 dager gamle» bort på mobil
+             — altså nettopp advarselen. Denne raden har plass. -->
+        <p id="sist-oppdatert" class="text-xs text-gray-500 dark:text-gray-400 shrink-0"><span class="skeleton inline-block h-3 rounded align-middle" style="width:7rem"></span></p>
+      </div>
     </div>
   </header>
 
