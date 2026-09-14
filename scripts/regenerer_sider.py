@@ -110,6 +110,13 @@ def main():
     today  = datetime.date.today().isoformat()
     aksjer = data["aksjer"]
 
+    # Bunnteksten skal vise når *dataene* ble hentet, ikke når sidene ble
+    # bygget. Dette scriptet regenererer nettopp uten å hente, så de to kan
+    # ligge dager fra hverandre — og det er da datoen betyr noe.
+    # Må settes på modulen: standard_footer() leser fetch_stocks sin globale.
+    import fetch_stocks
+    fetch_stocks.DATA_SIST_OPPDATERT = data.get("sist_oppdatert", "")
+
     # Kurshistorikken ligger i data/kurs/{TICKER}.json, ikke i aksjer.json.
     # Sidegenereringen tegner kursgrafen som SVG og trenger dataene i minnet —
     # uten dette ville alle aksjesider blitt regenerert uten graf.

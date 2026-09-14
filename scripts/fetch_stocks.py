@@ -3610,7 +3610,7 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     <a href="https://exday.no/app/?aksje={ticker}">Åpne {ticker} i exday.no →</a>
   </div>
 
-  <p class="updated">Sist oppdatert: {today}</p>
+{sist_oppdatert_html()}
 {STANDARD_FOOTER}
 </div>
 
@@ -4102,7 +4102,7 @@ def generer_aksjesider(aksjer, root_dir):
     </div>
   </section>
 
-  <p class="updated">Sist oppdatert: {today}</p>
+{sist_oppdatert_html()}
 {STANDARD_FOOTER}
 </div>
 <script>
@@ -4187,6 +4187,40 @@ def _site_nav_html(active=""):
       }}
     }})();
   </script>"""
+
+# Datoen dataene faktisk ble hentet, ikke datoen sidene ble bygget. De to er
+# ikke det samme: en deploy uten datahenting bygger sidene på nytt fra gamle
+# tall, og da skal leseren se hentedatoen.
+#
+# Settes én gang per kjøring — av fetch_stocks selv, og av regenerer_sider.py,
+# som importerer generatorene herfra. Står den tom, utelates datoen helt.
+# «Oppdateres daglig» uten dato er en påstand; en gjettet dato er verre.
+DATA_SIST_OPPDATERT = ""
+
+
+def sist_oppdatert_html():
+    """Den synlige datolinja nederst i innholdet.
+
+    Sto tidligere som «Sist oppdatert: {today}» — altså datoen *sidene* ble
+    bygget. Det er ikke det samme som når tallene ble hentet, og de to lå
+    tre dager fra hverandre da dette ble oppdaget: sida sa 14. september
+    over en direkteavkastning fra 11. september.
+
+    En deploy uten datahenting bygger alle sidene på nytt fra gamle tall, og
+    det skjer ofte — datajobben kjører på timeplan, deployen på hver push.
+    Derfor leses datoen fra dataene, ikke fra klokka.
+
+    Uten dato utelates linja helt. En gjettet dato er verre enn ingen.
+    """
+    if not DATA_SIST_OPPDATERT:
+        return ""
+    try:
+        d = datetime.datetime.strptime(str(DATA_SIST_OPPDATERT)[:10], "%Y-%m-%d")
+    except (ValueError, TypeError):
+        return ""
+    return (f'  <p class="updated">Tallene er hentet '
+            f'{d.day}. {MAANEDSNAVN[d.month]} {d.year}</p>')
+
 
 STANDARD_FOOTER = """  <footer style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid #e5e7eb;font-size:0.78rem;text-align:center;color:#9ca3af;line-height:1.6;" class="std-footer">
     <p>Kurs og utbyttedata hentes fra Yahoo Finance og Euronext. Oppdateres daglig på børsdager.</p>
@@ -4676,7 +4710,7 @@ def generer_sektorsider(aksjer, root_dir):
   </table>
   </div>
   <div class="cta"><a href="https://exday.no/">Åpne full app med filtrering og porteføljekalkulator →</a></div>
-  <p class="updated">Sist oppdatert: {today}</p>
+{sist_oppdatert_html()}
 {STANDARD_FOOTER}
 </div>
 <script>
@@ -4873,6 +4907,7 @@ def generer_sektorsider(aksjer, root_dir):
 
   <div class="grid">{sektorkort}
   </div>
+{sist_oppdatert_html()}
 {STANDARD_FOOTER}
 </div>
 
@@ -5326,7 +5361,7 @@ def generer_topplistesider(aksjer, root_dir):
     <h2>Andre topplistor</h2>
     <ul>{relatert_lenker}</ul>
   </div>
-  <p class="updated">Sist oppdatert: {today}</p>
+{sist_oppdatert_html()}
 {STANDARD_FOOTER}
 </div>
 <script>
@@ -5752,7 +5787,7 @@ def generer_rapportkalender(aksjer, root_dir, i_dag=None):
     <p>Se yield, utbyttehistorikk og nøkkeltall for hver aksje</p>
     <a href="https://exday.no/">Åpne exday.no →</a>
   </div>
-  <p class="updated">Sist oppdatert: {i_dag_iso}</p>
+{sist_oppdatert_html()}
 {STANDARD_FOOTER}
 </div>
 <script>
@@ -6305,9 +6340,17 @@ def main():
     osebx_data = hent_osebx_historikk()
 
     # Lagre til JSON
+    # antall_ok/antall_feil dupliseres fra hentelogg.json med vilje. Logga er
+    # 31 kB og full av per-ticker-detaljer nettleseren ikke trenger; appen
+    # laster aksjer.json uansett, så to heltall her koster ingen ekstra
+    # forespørsel. Uten dem kan ingen side fortelle leseren at en henting
+    # feilet — og ni tickere ble servert med 16 dager gamle tall i august
+    # nettopp fordi ingenting sa fra.
     output = {
         "sist_oppdatert": datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"),
         "kilde": "Yahoo Finance (yfinance)",
+        "antall_ok": sum(1 for d in HENTEDIAGNOSTIKK.values() if d.get("ok")),
+        "antall_feil": sum(1 for d in HENTEDIAGNOSTIKK.values() if not d.get("ok")),
         "aksjer": resultater,
         "osebx_historikk": osebx_data,
     }
@@ -6358,6 +6401,11 @@ def main():
 
     # Generer individuelle aksjesider, sektorsider og sitemap
     root_dir = os.path.join(os.path.dirname(__file__), "..")
+
+    # Må settes før generatorene kalles — standard_footer() leser den.
+    global DATA_SIST_OPPDATERT
+    DATA_SIST_OPPDATERT = output["sist_oppdatert"]
+
     generer_aksjesider(resultater, root_dir)
     generer_sektorsider(resultater, root_dir)
     generer_topplistesider(resultater, root_dir)

@@ -101,6 +101,7 @@ Utbytte-Aksjer/
 │   ├── test_sjekk_antall.py   # Tests for sjekk_antall.py
 │   └── requirements.txt       # Python deps: yfinance>=0.2.36
 ├── tests/                     # Node.js unit tests
+│   ├── app.test.js            # Tests: data freshness indicator, escHtml
 │   ├── portefolje.test.js     # Tests: FIFO, IRR, TWR
 │   ├── storage.test.js        # Tests: favorites, watchlists
 │   └── ui.test.js             # Tests: formatting, scoring, classification
@@ -160,6 +161,7 @@ python scripts/test_oppdater_hendelser.py  # 7 Python tests (hendelseskalender)
 python scripts/test_sjekk_tema.py       # 10 Python tests (mørk modus på hver side)
 python scripts/test_sjekk_klasser.py    # 10 Python tests (CSS-klasser finnes)
 python scripts/test_sjekk_antall.py     # 11 Python tests (aksjetellinger bruker markør)
+# npm test dekker også tests/app.test.js — ferskhetsindikator + escHtml
 ```
 
 Both suites run automatically in CI (`.github/workflows/tester.yml`) on push and PR
@@ -1645,6 +1647,69 @@ Tests: `scripts/test_sjekk_klasser.py` (10).
 `site-logo-mark` class exists nowhere, so the header rendered a bare letter
 «e» next to the wordmark, and both lacked the green **x**. Aligned with the
 markup every other page uses.
+
+## Data freshness: the page must say how old the numbers are (2026-09-14)
+
+A page that shows a dividend yield without saying when the figure is from
+implies it is from today. This site has served numbers that were **16 days
+old** with nothing saying so, and WILS for over three years. The fix is not
+better fetching — it is telling the reader.
+
+### The visible date was the *build* date, not the data date
+
+`<p class="updated">Sist oppdatert: {today}</p>` sat at the foot of every
+generated page and rendered the date the **pages were built**. Those are not
+the same thing: the data job runs on a schedule, the deploy runs on every
+push, so a deploy rebuilds all 155 pages from whatever data is on disk.
+
+When this was found the page said **14 September above a yield fetched on the
+11th**. It now reads «Tallene er hentet 11. september 2026», from
+`DATA_SIST_OPPDATERT`.
+
+- `sist_oppdatert_html()` in `fetch_stocks.py` renders the line.
+- `DATA_SIST_OPPDATERT` is set once per run — by `fetch_stocks` itself, and by
+  `regenerer_sider.py`, which must set it **on the module**
+  (`fetch_stocks.DATA_SIST_OPPDATERT = …`), not in its own namespace.
+- **No date means no line.** A guessed date is worse than none, so an empty or
+  unparseable value renders an empty string rather than falling back to today.
+
+### `antall_ok` / `antall_feil` in `aksjer.json`
+
+Duplicated from `hentelogg.json` on purpose. The log is 31 kB of per-ticker
+detail the browser does not need; the app loads `aksjer.json` anyway, so two
+integers in its header cost no extra request. Without them **nothing in the
+browser can say a fetch failed**.
+
+`visDataFerskhet()` in `app.js` reads them. Guard for absence: the fields only
+appear after the next full fetch, and a missing value must render nothing —
+not «0 feilet».
+
+### Three layout traps, each found by looking rather than by testing
+
+The machinery for this already existed in `app.js` and wrote into
+`#sist-oppdatert`. It was invisible anyway:
+
+1. **`hidden sm:block`** on the element — the «kan være utdatert» warning
+   never appeared on mobile, where most readers are.
+2. **`truncate` in the logo row.** With the element next to the logo, the
+   settings gear and the theme toggle, «Oppdatert 11. sep., 19:00 · 2 dager
+   gammel» was cut to «Oppdatert 1…» — the warning was the part that got
+   trimmed. It now sits in the header's *second* row, and when the data is
+   stale the **age replaces the date** rather than being appended to it.
+3. **Same-specificity colour classes.** `text-gray-500` and `text-amber-600`
+   both applied means stylesheet order decides, and the warning rendered grey.
+   Toggle the grey *off* when the amber goes on.
+
+The rule behind all three: **measure the rendered result, not the class list.**
+A `classList` assertion passes in every one of these cases.
+
+Tests: `tests/app.test.js` (14) — it also covers `escHtml`, which had no tests
+despite being the XSS guard the whole site relies on. `app.js` gained the
+`if (typeof module !== 'undefined')` export guard the other modules already had.
+
+> ⚠️ `global.navigator = {}` throws «Cannot set property navigator» in current
+> Node. `app.js` does not touch it at import time, so the test file simply
+> omits it.
 
 ## Icons: stroke SVG, and look at every one you add
 
