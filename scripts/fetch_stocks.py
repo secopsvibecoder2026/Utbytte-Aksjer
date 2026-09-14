@@ -773,6 +773,39 @@ def utbyttesplitt_stemmer(a):
             "valuta": s.get("valuta") or a.get("valuta") or "NOK"}
 
 
+def delaar_motbevist(a):
+    """Motbeviser børsmeldingen at årsraten er et delår?
+
+    `yield_er_delaar()` slutter fra «årsraten er mindre enn én utbetaling» at
+    raten dekker et delår. Den slutningen forutsetter at utbetalingen var
+    ordinær. Er en del av den ekstraordinær, faller den: en engangsutdeling
+    kan godt være større enn et helt års ordinære utbytte uten at årsraten er
+    feil i det hele tatt.
+
+    Regelen er at raten minst dekker den **ordinære** delen av utbetalingen
+    (``siste - ekstraordinaert``). Begge aksjene vi har splitt for havner der:
+
+    * **KOG** — 5,70 er 2,20 ordinært + 3,50 ekstraordinært, og årsraten på
+      4,40 er nesten to ordinære utbetalinger. Yielden er omtrent riktig.
+    * **HUNT** — hele utbetalingen på 1,25 var ekstraordinær, så den sier
+      ingenting om den ordinære raten.
+
+    `yield_er_delaar()` selv røres ikke: den finnes i tre eksemplarer som
+    `test_samsvar_med_valider_data` holder i sync, og Sjekk 7 i valider_data.py
+    skal fortsatt melde fra i loggen. Dette gjelder bare hva *leseren* får se.
+    """
+    splitt = utbyttesplitt_stemmer(a)
+    if not splitt:
+        return False
+    try:
+        upa = float(a.get("utbytte_per_aksje") or 0)
+        siste = float(a.get("siste_utbytte") or 0)
+    except (TypeError, ValueError):
+        return False
+    ordinaer_del = siste - splitt["ekstraordinaert"]
+    return upa >= ordinaer_del
+
+
 def utbetalt_hittil(a, i_aar=None):
     """Hva selskapet faktisk har betalt så langt i inneværende år.
 
@@ -834,6 +867,11 @@ def lag_delaar_varsel(a, nf):
     Avsnittet utelates når `utbetalt_hittil()` ikke kan svare, eller når den
     summen gir en lavere yield enn den vi nettopp kalte for lav — da ville
     tallet motsi setningen over det.
+
+    **Har børsmeldingen motbevist premisset, byttes hele boksen ut.** Da er
+    yielden ikke for lav, og en advarsel om at den er det ville vært usann;
+    se `delaar_motbevist()`. Leseren får i stedet en nøytral forklaring på
+    hvorfor én utbetaling er større enn årsraten.
     """
     if not yield_er_delaar(a):
         return ""
@@ -843,29 +881,31 @@ def lag_delaar_varsel(a, nf):
     valuta = a.get("valuta") or "NOK"
     frek = (a.get("frekvens") or "").lower()
 
-    # Børsens egen oppdeling av den utbetalingen, når den finnes og summen
-    # stemmer. Forklarer observasjonen over i stedet for å bare gjenta den.
+    # Børsmeldingen kan motbevise premisset helt. Da er ikke yielden for lav,
+    # og en advarsel om at den er det ville vært usann. Boksen byttes ut med en
+    # nøytral forklaring på det leseren faktisk kan se i tallene.
     splitt = utbyttesplitt_stemmer(a)
-    splitt_avsnitt = ""
-    if splitt and splitt["ordinaert"] > 0:
-        splitt_avsnitt = (
-            f'<p>Oslo Børs’ melding om utbetalingen deler den i to: '
-            f'<strong>{nf(splitt["ordinaert"], 2)} {splitt["valuta"]} ordinært '
-            f'utbytte</strong> og {nf(splitt["ekstraordinaert"], 2)} '
-            f'{splitt["valuta"]} ekstraordinært. Det er den ekstraordinære '
-            'delen som gjør enkeltutbetalingen større enn årsraten — den '
-            'gjentas ikke nødvendigvis neste år. Årsraten vi viser tilsvarer '
-            'her den ordinære delen av én utbetaling, ikke et helt år, så den '
-            f'reelle direkteavkastningen er høyere enn {nf(y, 2)} %.</p>'
-        )
-    elif splitt:
-        splitt_avsnitt = (
-            '<p>Oslo Børs’ melding klassifiserer <strong>hele denne '
-            f'utbetalingen på {nf(splitt["ekstraordinaert"], 2)} '
-            f'{splitt["valuta"]} som ekstraordinær</strong>. Den sier derfor '
-            'lite om hva selskapet betaler til vanlig — men årsraten vi viser '
-            'er mindre enn én enkelt utbetaling, så den reelle '
-            f'direkteavkastningen er likevel høyere enn {nf(y, 2)} %.</p>'
+    if splitt and delaar_motbevist(a):
+        if splitt["ordinaert"] > 0:
+            hva = (
+                f'<strong>{nf(splitt["ekstraordinaert"], 2)} {splitt["valuta"]} '
+                f'av den var ekstraordinært utbytte</strong>, og '
+                f'{nf(splitt["ordinaert"], 2)} {splitt["valuta"]} ordinært'
+            )
+        else:
+            hva = '<strong>hele beløpet var et ekstraordinært utbytte</strong>'
+        return (
+            '<div class="delaar-seksjon delaar-noytral">'
+            '<h2>Siste utbetaling var større enn årsraten</h2>'
+            f'<p>Siste enkeltutbetaling på {nf(siste, 2)} {valuta} er større '
+            f'enn årsraten vi viser ({nf(upa, 2)} {valuta}). Forklaringen står '
+            f'i selskapets børsmelding: {hva}.</p>'
+            '<p>Et ekstraordinært utbytte er en engangsutdeling og sier lite '
+            'om hva selskapet betaler til vanlig, så den kan godt overstige et '
+            'helt års ordinære utbytte. Den store enkeltutbetalingen er derfor '
+            f'ikke i seg selv et tegn på at direkteavkastningen på {nf(y, 2)} % '
+            'er for lav.</p>'
+            '</div>'
         )
 
     fakta = utbetalt_hittil(a)
@@ -899,14 +939,10 @@ def lag_delaar_varsel(a, nf):
         f'mer enn hele årsraten vi viser ({nf(upa, 2)} {valuta}). For en '
         f'{frek} betaler er det ikke mulig, så tallet er trolig en delsum '
         'av et år.</p>'
-        # Den generiske årsaken utelates når børsmeldingen har gitt oss den
-        # ekte. To konkurrerende forklaringer på samme observasjon leses som
-        # en selvmotsigelse, selv når begge isolert sett er rimelige.
-        + (splitt_avsnitt if splitt_avsnitt else
-           '<p>Det skjer når et selskap nylig har startet eller trappet opp '
-           'utbyttet: datakilden oppgir da fjorårets total, og for et år som '
-           'ikke var fullt blir den for lav. Den reelle direkteavkastningen er '
-           f'derfor sannsynligvis høyere enn {nf(y, 2)} %.</p>')
+        '<p>Det skjer når et selskap nylig har startet eller trappet opp '
+        'utbyttet: datakilden oppgir da fjorårets total, og for et år som '
+        'ikke var fullt blir den for lav. Den reelle direkteavkastningen er '
+        f'derfor sannsynligvis høyere enn {nf(y, 2)} %.</p>'
         + sluttavsnitt +
         '</div>'
     )
@@ -3338,7 +3374,9 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     # det motsa historikktabellen rett under.
     # Er årsraten et delår, er både Yield og Utbytte/aksje for lave. Merk
     # begge — det er de to tallene forbeholdet gjelder.
-    delaar        = yield_er_delaar(a)
+    # Motbevist av børsmeldingen betyr at tallet ikke er usikkert. Å merke
+    # det likevel ville motsagt den nøytrale boksen lenger nede på siden.
+    delaar        = yield_er_delaar(a) and not delaar_motbevist(a)
     delaar_note   = ' <span class="kcard-note">usikker</span>' if delaar else ""
     delaar_varsel = lag_delaar_varsel(a, _nf)
     # «annualisert» påstår at tallet dekker et helt år. Er det et delår, er
@@ -3721,6 +3759,9 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     .rekke-seksjon {{ border-left: 3px solid #22c55e; }}
     .nedtur-seksjon {{ border-left: 3px solid #f59e0b; }}
     .delaar-seksjon {{ border-left: 3px solid #f59e0b; }}
+    /* Nøytral variant: forklarer en observasjon, advarer ikke om en feil. */
+    .delaar-seksjon.delaar-noytral {{ border-left-color: #94a3b8; }}
+    .dark .delaar-seksjon.delaar-noytral {{ border-left-color: #475569; }}
     .mnd-strip {{ display: grid; grid-template-columns: repeat(12, 1fr); gap: 2px; margin-bottom: 0.85rem; }}
     .mnd-celle {{ text-align: center; padding: 0.4rem 0.1rem; font-size: 0.62rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.02em; color: #9ca3af; background: #f1f5f9; border-radius: 0.25rem; }}
     .mnd-celle.mnd-ja {{ background: #16a34a; color: #fff; }}

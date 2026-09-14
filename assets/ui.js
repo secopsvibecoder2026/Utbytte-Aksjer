@@ -2834,9 +2834,9 @@ function visModal(a) {
     <!-- ── UTBYTTE ── -->
     <div class="modal-panel skjult" id="mp-utbytte">
       <div class="grid grid-cols-2 gap-3 mb-4">
-        ${modalKort('Utbytteyield' + (yieldErDelaar(a) ? ' <span class="font-normal normal-case opacity-70">usikker</span>' : ''), '<span class="' + yieldKlasse(a.utbytte_yield) + '">' + a.utbytte_yield.toFixed(2).replace('.', ',') + '%</span>')}
+        ${modalKort('Utbytteyield' + ((yieldErDelaar(a) && !delaarMotbevist(a)) ? ' <span class="font-normal normal-case opacity-70">usikker</span>' : ''), '<span class="' + yieldKlasse(a.utbytte_yield) + '">' + a.utbytte_yield.toFixed(2).replace('.', ',') + '%</span>')}
         ${modalKort('Snitt yield 5år', a.snitt_yield_5ar > 0 ? '<span class="' + yieldKlasse(a.snitt_yield_5ar) + '">' + a.snitt_yield_5ar.toFixed(1).replace('.', ',') + '%</span>' : '—')}
-        ${modalKort('Utbytte/aksje' + (yieldErDelaar(a)
+        ${modalKort('Utbytte/aksje' + ((yieldErDelaar(a) && !delaarMotbevist(a))
             ? ' <span class="font-normal normal-case opacity-70">usikker</span>'
             : ['Kvartalsvis','Halvårlig','Månedlig'].includes(a.frekvens)
             ? ' <span class="font-normal normal-case opacity-70">annualisert</span>' : ''),
@@ -3241,25 +3241,57 @@ function utbetaltHittil(a) {
  * tall ville vært samme feil om igjen. Til slutt det vi faktisk vet: summen
  * som allerede er utbetalt i år. Samme tekst som på aksjesiden.
  */
+/**
+ * Motbeviser børsmeldingen at årsraten er et delår?
+ *
+ * Speiler `delaar_motbevist()` i fetch_stocks.py. yieldErDelaar() slutter fra
+ * «årsraten er mindre enn én utbetaling» at raten dekker et delår — men den
+ * slutningen forutsetter at utbetalingen var ordinær. Var en del av den
+ * ekstraordinær, faller den: en engangsutdeling kan godt overstige et helt års
+ * ordinære utbytte uten at årsraten er feil.
+ */
+function delaarMotbevist(a) {
+  const splitt = utbyttesplittStemmer(a);
+  if (!splitt) return false;
+  const upa = Number(a.utbytte_per_aksje) || 0;
+  const siste = Number(a.siste_utbytte) || 0;
+  return upa >= (siste - splitt.ekstraordinaert);
+}
+
+/**
+ * Forbeholdet under nøkkeltallene i modalen. Tom streng når det ikke gjelder.
+ *
+ * Sier hva som er observert, hvorfor, og hvilken vei feilen går — men oppgir
+ * bevisst ikke et korrigert årstall. Til slutt det vi faktisk vet: summen som
+ * allerede er utbetalt i år. Samme tekst som på aksjesiden.
+ *
+ * Har børsmeldingen motbevist premisset, byttes hele boksen ut med en nøytral
+ * forklaring — da er yielden ikke for lav, og en advarsel ville vært usann.
+ */
 function modalDelaarVarsel(a) {
   if (!yieldErDelaar(a)) return '';
   const valuta = escHtml(a.valuta || 'NOK');
   const frek = escHtml((a.frekvens || '').toLowerCase());
   const y = Number(a.utbytte_yield) || 0;
   const splitt = utbyttesplittStemmer(a);
-  // Når børsmeldingen gir oss den ekte årsaken, utelates den generiske
-  // gjetningen. To konkurrerende forklaringer på samme observasjon leses som
-  // en selvmotsigelse, selv når begge isolert sett er rimelige.
-  let aarsak = 'Det skjer når et selskap nylig har startet eller trappet opp utbyttet.';
-  if (splitt && splitt.ordinaert > 0) {
-    aarsak = `Oslo Børs’ melding deler den i to: <strong>${fmt(splitt.ordinaert)} ${escHtml(splitt.valuta)} ordinært utbytte</strong>
-        og ${fmt(splitt.ekstraordinaert)} ${escHtml(splitt.valuta)} ekstraordinært. Årsraten vi viser tilsvarer
-        her den ordinære delen av én utbetaling, ikke et helt år.`;
-  } else if (splitt) {
-    aarsak = `Oslo Børs’ melding klassifiserer <strong>hele denne utbetalingen på
-        ${fmt(splitt.ekstraordinaert)} ${escHtml(splitt.valuta)} som ekstraordinær</strong>, så den sier
-        lite om hva selskapet betaler til vanlig.`;
+
+  if (splitt && delaarMotbevist(a)) {
+    const hva = splitt.ordinaert > 0
+      ? `<strong>${fmt(splitt.ekstraordinaert)} ${escHtml(splitt.valuta)} av den var ekstraordinært
+         utbytte</strong>, og ${fmt(splitt.ordinaert)} ${escHtml(splitt.valuta)} ordinært`
+      : '<strong>hele beløpet var et ekstraordinært utbytte</strong>';
+    return `<div class="rounded-lg border-l-4 border-gray-400 dark:border-gray-600 bg-gray-50 dark:bg-gray-800/50 px-4 py-3 mb-4">
+      <p class="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-1">Siste utbetaling var større enn årsraten</p>
+      <p class="text-xs text-gray-700 dark:text-gray-300 leading-relaxed">
+        Siste enkeltutbetaling på ${fmt(a.siste_utbytte)} ${valuta} er større enn årsraten vi viser
+        (${fmt(a.utbytte_per_aksje)} ${valuta}). Forklaringen står i selskapets børsmelding: ${hva}.
+        Et ekstraordinært utbytte er en engangsutdeling og kan godt overstige et helt års ordinære
+        utbytte. Den store enkeltutbetalingen er derfor ikke i seg selv et tegn på at
+        direkteavkastningen på ${fmt(y)} % er for lav.
+      </p>
+    </div>`;
   }
+
   const fakta = utbetaltHittil(a);
   let slutt = 'Se utbyttehistorikken under for hva som faktisk er betalt.';
   if (fakta && fakta.yield > y) {
@@ -3274,7 +3306,8 @@ function modalDelaarVarsel(a) {
       <p class="text-xs text-amber-800 dark:text-amber-300 leading-relaxed">
         Siste enkeltutbetaling var ${fmt(a.siste_utbytte)} ${valuta} — mer enn hele
         årsraten vi viser (${fmt(a.utbytte_per_aksje)} ${valuta}). For en ${frek}
-        betaler er det ikke mulig, så tallet er trolig en delsum av et år. ${aarsak} ${slutt}
+        betaler er det ikke mulig, så tallet er trolig en delsum av et år. Det skjer
+        når et selskap nylig har startet eller trappet opp utbyttet. ${slutt}
       </p>
     </div>`;
 }
@@ -4588,4 +4621,4 @@ function _annBygTopp() {
 }
 
 // Node.js test export
-if (typeof module !== 'undefined') module.exports = { fmt, formaterDato, yieldKlasse, payoutKlasse, vekstKlasse, beregnScore, beregnBaerekraft, beregnYtdInntekt, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer };
+if (typeof module !== 'undefined') module.exports = { fmt, formaterDato, yieldKlasse, payoutKlasse, vekstKlasse, beregnScore, beregnBaerekraft, beregnYtdInntekt, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist };

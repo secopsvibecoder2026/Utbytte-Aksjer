@@ -32,7 +32,7 @@ const {
   vekstKlasse,
   beregnScore,
   beregnYtdInntekt
-, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer } = require('../assets/ui.js');
+, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist } = require('../assets/ui.js');
 
 // ── fmt ────────────────────────────────────────────────────────────────────
 test('fmt returnerer — for null', () => {
@@ -295,4 +295,45 @@ test('utbyttesplittStemmer takler søppel', () => {
                    { siste_utbytte: 5, utbyttesplitt: { ordinaert: 'x', ekstraordinaert: null } }]) {
     assert.equal(utbyttesplittStemmer(a), null, JSON.stringify(a));
   }
+});
+
+// ── delaarMotbevist: speiler delaar_motbevist() i fetch_stocks.py ───────────
+//
+// Var en del av utbetalingen ekstraordinær, faller slutningen «årsraten er
+// mindre enn én utbetaling, altså et delår». En engangsutdeling kan godt
+// overstige et helt års ordinære utbytte uten at årsraten er feil.
+const KOG = {
+  frekvens: 'Halvårlig', utbytte_per_aksje: 4.40, siste_utbytte: 5.70,
+  utbytte_yield: 1.44, valuta: 'NOK',
+  utbyttesplitt: { ordinaert: 2.20, ekstraordinaert: 3.50, valuta: 'NOK' },
+};
+const HUNT_A = {
+  frekvens: 'Kvartalsvis', utbytte_per_aksje: 0.30, siste_utbytte: 1.25,
+  utbytte_yield: 1.73, valuta: 'NOK',
+  utbyttesplitt: { ordinaert: 0, ekstraordinaert: 1.25, valuta: 'NOK' },
+};
+
+test('delaarMotbevist: årsraten dekker den ordinære delen', () => {
+  assert.equal(delaarMotbevist(KOG), true);
+});
+
+test('delaarMotbevist: hele utbetalingen ekstraordinær motbeviser alltid', () => {
+  assert.equal(delaarMotbevist(HUNT_A), true);
+});
+
+test('delaarMotbevist: uten splitt motbevises ingenting', () => {
+  const uten = Object.assign({}, KOG);
+  delete uten.utbyttesplitt;
+  assert.equal(delaarMotbevist(uten), false);
+});
+
+test('delaarMotbevist: årsrate under den ordinære delen står ved lag', () => {
+  assert.equal(delaarMotbevist(Object.assign({}, KOG, { utbytte_per_aksje: 1.00 })), false);
+});
+
+test('delaarMotbevist: flagget og regelen er fortsatt uenige med vilje', () => {
+  // yieldErDelaar skal fortsatt slå ut — den er delt med valider_data.py og
+  // Sjekk 7 skal melde fra i loggen. Det er bare leseren som skjermes.
+  assert.equal(yieldErDelaar(KOG), true);
+  assert.equal(yieldErDelaar(KOG) && !delaarMotbevist(KOG), false);
 });

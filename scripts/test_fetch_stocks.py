@@ -894,5 +894,77 @@ class TestUtbyttesplittStemmer(unittest.TestCase):
                                  f"{a['ticker']} har lagret splitt som vakten forkaster")
 
 
+class TestDelaarMotbevist(unittest.TestCase):
+    """Når børsmeldingen motbeviser premisset, må advarselen vike.
+
+    yield_er_delaar() slutter fra «årsraten er mindre enn én utbetaling» at
+    raten dekker et delår. Den slutningen forutsetter at utbetalingen var
+    ordinær — og begge aksjene vi har splitt for bryter forutsetningen.
+    """
+
+    KOG = {"frekvens": "Halvårlig", "utbytte_per_aksje": 4.40,
+           "siste_utbytte": 5.70, "utbytte_yield": 1.44, "valuta": "NOK",
+           "utbyttesplitt": {"ordinaert": 2.20, "ekstraordinaert": 3.50,
+                             "valuta": "NOK"}}
+    HUNT = {"frekvens": "Kvartalsvis", "utbytte_per_aksje": 0.30,
+            "siste_utbytte": 1.25, "utbytte_yield": 1.73, "valuta": "NOK",
+            "utbyttesplitt": {"ordinaert": 0.0, "ekstraordinaert": 1.25,
+                              "valuta": "NOK"}}
+
+    @staticmethod
+    def _nf(v, d=2):
+        return f"{v:.{d}f}".replace(".", ",")
+
+    def test_aarsraten_dekker_den_ordinaere_delen(self):
+        # 4,40 er større enn den ordinære delen på 2,20 — yielden er ikke for lav.
+        from fetch_stocks import delaar_motbevist
+        self.assertTrue(delaar_motbevist(self.KOG))
+
+    def test_hele_utbetalingen_ekstraordinaer_motbeviser_alltid(self):
+        from fetch_stocks import delaar_motbevist
+        self.assertTrue(delaar_motbevist(self.HUNT))
+
+    def test_uten_splitt_motbevises_ingenting(self):
+        from fetch_stocks import delaar_motbevist
+        a = dict(self.KOG)
+        a.pop("utbyttesplitt")
+        self.assertFalse(delaar_motbevist(a))
+
+    def test_aarsrate_under_den_ordinaere_delen_staar_ved_lag(self):
+        # Forklarer splitten bare en del av gapet, er premisset intakt.
+        from fetch_stocks import delaar_motbevist
+        self.assertFalse(delaar_motbevist(dict(self.KOG, utbytte_per_aksje=1.00)))
+
+    def test_boksen_blir_noytral_ikke_advarende(self):
+        from fetch_stocks import lag_delaar_varsel
+        h = lag_delaar_varsel(self.KOG, self._nf)
+        self.assertIn("delaar-noytral", h)
+        self.assertIn("Siste utbetaling var større enn årsraten", h)
+        self.assertNotIn("kan være for lav", h)
+        self.assertIn("3,50 NOK av den var ekstraordinært", h)
+        self.assertNotIn("bygger på den ordinære raten", h)
+
+    def test_hele_belopet_formuleres_riktig(self):
+        # «0,00 NOK ordinært» ville vært tullete — den grenen må ha egen tekst.
+        from fetch_stocks import lag_delaar_varsel
+        h = lag_delaar_varsel(self.HUNT, self._nf)
+        self.assertIn("hele beløpet", h)
+        self.assertNotIn("0,00", h)
+
+    def test_advarselen_staar_naar_ingenting_motbeviser_den(self):
+        from fetch_stocks import lag_delaar_varsel
+        a = dict(self.KOG)
+        a.pop("utbyttesplitt")
+        h = lag_delaar_varsel(a, self._nf)
+        self.assertIn("kan være for lav", h)
+        self.assertNotIn("delaar-noytral", h)
+
+    def test_kortetiketten_droppes_naar_premisset_er_motbevist(self):
+        # «usikker» på kortet ved siden av en boks som sier at tallet er greit
+        # ville vært den samme selvmotsigelsen, bare delt over to elementer.
+        from fetch_stocks import yield_er_delaar, delaar_motbevist
+        self.assertTrue(yield_er_delaar(self.KOG))
+        self.assertFalse(yield_er_delaar(self.KOG) and not delaar_motbevist(self.KOG))
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
