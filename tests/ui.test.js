@@ -32,7 +32,7 @@ const {
   vekstKlasse,
   beregnScore,
   beregnYtdInntekt
-} = require('../assets/ui.js');
+, yieldErDelaar } = require('../assets/ui.js');
 
 // ── fmt ────────────────────────────────────────────────────────────────────
 test('fmt returnerer — for null', () => {
@@ -160,4 +160,35 @@ test('beregnYtdInntekt inkluderer betaling som har passert i år', () => {
   }];
   const total = beregnYtdInntekt(beholdning);
   assert.equal(total, 500);
+});
+
+// ── yieldErDelaar: speiler yield_er_delaar() i scripts/fetch_stocks.py ─────
+//
+// Regelen finnes i to språk fordi appen og sidegeneratoren begge trenger den.
+// Tilfellene her er de samme som TestYieldErDelaar dekker på Python-siden, så
+// et avvik mellom implementasjonene gir rødt i minst én av dem.
+test('yieldErDelaar flagger en årsrate som er mindre enn én utbetaling', () => {
+  assert.equal(yieldErDelaar({ frekvens: 'Halvårlig', utbytte_per_aksje: 2.2, siste_utbytte: 5.7 }), true);
+  assert.equal(yieldErDelaar({ frekvens: 'Kvartalsvis', utbytte_per_aksje: 0.46, siste_utbytte: 5.94 }), true);
+  assert.equal(yieldErDelaar({ frekvens: 'Månedlig', utbytte_per_aksje: 0.47, siste_utbytte: 128.2 }), true);
+});
+
+test('yieldErDelaar lar en normal betaler i fred', () => {
+  assert.equal(yieldErDelaar({ frekvens: 'Kvartalsvis', utbytte_per_aksje: 12, siste_utbytte: 3 }), false);
+  assert.equal(yieldErDelaar({ frekvens: 'Halvårlig', utbytte_per_aksje: 10, siste_utbytte: 5 }), false);
+});
+
+test('yieldErDelaar sier ingenting om årlige betalere', () => {
+  // For en årlig betaler ER én utbetaling hele året, så regelen har ikke
+  // grunnlag — den må ikke flagge dem.
+  assert.equal(yieldErDelaar({ frekvens: 'Årlig', utbytte_per_aksje: 5, siste_utbytte: 5 }), false);
+  assert.equal(yieldErDelaar({ frekvens: 'Uregelmessig', utbytte_per_aksje: 1, siste_utbytte: 9 }), false);
+});
+
+test('yieldErDelaar takler manglende og ugyldige verdier', () => {
+  for (const a of [null, undefined, {}, { frekvens: 'Kvartalsvis' },
+                   { frekvens: 'Kvartalsvis', utbytte_per_aksje: 0, siste_utbytte: 5 },
+                   { frekvens: 'Kvartalsvis', utbytte_per_aksje: null, siste_utbytte: 'x' }]) {
+    assert.equal(yieldErDelaar(a), false, JSON.stringify(a));
+  }
 });

@@ -1802,3 +1802,48 @@ The trailing sum includes special and capital distributions; Yahoo's rate exclud
 payments the company has just started making. Telling the two apart is a design task —
 classifying ordinary vs. extraordinary dividends — not a threshold. Until that exists,
 Sjekk 7 makes the affected stocks visible on every run rather than silently guessing.
+
+### The reader is now told (2026-09-14)
+
+Making it visible in the run log was never the point — the *reader* saw an
+unqualified number. Ten stock pages and the app's modal now carry a warning
+box stating what is observed, why it happens, and which way the error runs.
+
+**It deliberately does not offer a corrected figure.** We cannot derive one,
+and a guessed number would be the same mistake again. It points at the
+dividend history instead, which is what the company actually paid.
+
+`yield_er_delaar(a)` in `fetch_stocks.py` is the rule; `lag_delaar_varsel()`
+builds the box. **It is computed at render time from fields already in
+`aksjer.json`** — not stored — so it cannot go stale and `regenerer_sider.py`
+gets it for free.
+
+The rule exists in **three** places of necessity: here (templates),
+`valider_data.py` Sjekk 7 (which must run without yfinance), and
+`yieldErDelaar()` in `assets/ui.js` (the app). `TestYieldErDelaar.test_samsvar_med_valider_data`
+compares two of them against the real dataset on every run, and `ui.test.js`
+covers the third with the same cases, so they cannot drift apart unnoticed.
+
+**«annualisert» is replaced, not joined.** The card label already carried that
+note for sub-annual payers. When the rate is a part-year the claim is false,
+so the flag replaces it — «annualisert usikker» asserted two things that
+cannot both hold.
+
+### The guard's boundary was exclusive, and KOG sat exactly on it
+
+`avvik > 0.5` means a deviation of *precisely* 50 % leaves Yahoo's own figure
+untouched. KOG had `ref` 4,40 against a rate of 2,20 — exactly 0,5 — so the
+page showed 2,20 and a yield of 0,73 %. **The same trap is documented for
+`payout_ratio`**, where `> 500` let exactly 500,0 % through. It is now `>= 0.5`.
+
+That does not make KOG *right* — 4,40 is still last year's total — but it is a
+figure the company actually paid rather than a Yahoo artefact, and it makes all
+ten fail the same way, so one rule marks them all.
+
+> ⚠️ **2020 Bulkers reaches the same place by a different route.** Its
+> deviation is 96,5 %, so the guard fires correctly and sets 13,56. The *next*
+> heuristic — «is this number really a yield-percent?», triggered when
+> amount/price > 100 % — then converts it to ~0,47, because the capital
+> distribution left the price at a few kroner. Two individually reasonable
+> rules compose into a figure ~29× too low. Fixing the boundary does not touch
+> this one.

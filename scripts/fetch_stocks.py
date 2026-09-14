@@ -546,6 +546,80 @@ def format_dato(ts):
         return None
 
 
+# Utbetalinger per år per frekvensetikett. «Årlig» og «Uregelmessig» står
+# med vilje ikke her: for dem er én utbetaling lik et helt år, så regelen
+# under kan ikke si noe.
+UTBETALINGER_PR_AAR = {"Månedlig": 12, "Kvartalsvis": 4, "Halvårlig": 2}
+
+
+def yield_er_delaar(a):
+    """Er den viste årsraten i virkeligheten en delsum av et år?
+
+    `utbytte_per_aksje` skal dekke et helt år. For en aksje som betaler
+    flere ganger i året kan den derfor ikke være mindre enn én enkelt
+    utbetaling — er den det, er tallet et delår og yielden på siden for lav.
+
+    Årsaken er kryssvalideringen i `hent_aksje()`: den bytter ut Yahoos rate
+    med totalen for siste hele kalenderår. Vakten er bygget mot WAWI-type
+    periodestabling, der Yahoos tall er for *høyt*, men den slår symmetrisk —
+    og for et selskap som startet eller trappet opp utbyttet i løpet av det
+    året er fjorårstotalen et delår. Åtte av ti berørte aksjer viser
+    2025-totalen helt nøyaktig.
+
+    Regelen er den samme som Sjekk 7 i `valider_data.py`. Den er *ikke*
+    importert derfra: valider_data kjører frittstående på aksjer.json og skal
+    slippe å dra inn yfinance. `TestYieldErDelaar` i test_fetch_stocks.py
+    sammenligner de to mot hele datasettet, så de ikke kan gli fra hverandre.
+
+    Dette retter ikke tallet — se «Why the yield is not auto-corrected» i
+    CLAUDE.md for hvorfor alle tre erstatningsreglene ble forkastet. Den
+    gjør det bare mulig å si fra på siden i stedet for bare i loggen.
+    """
+    if not isinstance(a, dict):
+        return False
+    if a.get("frekvens") not in UTBETALINGER_PR_AAR:
+        return False
+    try:
+        upa = float(a.get("utbytte_per_aksje") or 0)
+        siste = float(a.get("siste_utbytte") or 0)
+    except (TypeError, ValueError):
+        return False
+    return 0 < upa < siste
+
+
+def lag_delaar_varsel(a, nf):
+    """Synlig forbehold når årsraten er et delår. Tom streng ellers.
+
+    Sier tre ting, i den rekkefølgen: hva som er observert (siste utbetaling
+    er større enn hele årsraten), hvorfor det skjer, og hvilken vei feilen
+    går. Den oppgir bevisst **ikke** et korrigert tall — vi vet ikke hva det
+    er, og et gjettet tall ville vært samme feil en gang til.
+    """
+    if not yield_er_delaar(a):
+        return ""
+    upa = float(a.get("utbytte_per_aksje") or 0)
+    siste = float(a.get("siste_utbytte") or 0)
+    y = float(a.get("utbytte_yield") or 0)
+    valuta = a.get("valuta") or "NOK"
+    frek = (a.get("frekvens") or "").lower()
+    return (
+        '<div class="delaar-seksjon">'
+        '<h2>Direkteavkastningen kan være for lav</h2>'
+        f'<p>Siste enkeltutbetaling var <strong>{nf(siste, 2)} {valuta}</strong> — '
+        f'mer enn hele årsraten vi viser ({nf(upa, 2)} {valuta}). For en '
+        f'{frek} betaler er det ikke mulig, så tallet er trolig en delsum '
+        'av et år.</p>'
+        '<p>Det skjer når et selskap nylig har startet eller trappet opp '
+        'utbyttet: datakilden oppgir da fjorårets total, og for et år som '
+        'ikke var fullt blir den for lav. Den reelle direkteavkastningen er '
+        f'derfor sannsynligvis høyere enn {nf(y, 2)} %.</p>'
+        '<p>Vi viser ikke et korrigert tall, fordi vi ikke kan utlede det '
+        'pålitelig — se utbyttehistorikken under for hva selskapet faktisk '
+        'har betalt.</p>'
+        '</div>'
+    )
+
+
 def frekvens_label(dividends_per_year):
     """Estimer utbyttefrekvens basert på antall utbetalinger siste år."""
     if dividends_per_year >= 10:
@@ -808,7 +882,13 @@ def hent_aksje(meta):
         ref = last_year_total if last_year_total > 0 else trailing_annual
         if ref > 0 and raw_div_rate > 0:
             avvik = abs(ref - raw_div_rate) / ref
-            if avvik > 0.5:
+            # Grensen er inklusiv. Med «> 0.5» avsto vakten ved nøyaktig 50 %,
+            # og da overlevde Yahoos eget tall urørt: KOG hadde ref=4,40 og
+            # rate=2,20 — presis 0,5 — så siden viste 2,20 og en yield på
+            # 0,73 %. Samme felle som er dokumentert for payout_ratio, der
+            # «> 500» slapp nøyaktig 500,0 % gjennom. Jo nærmere grensen et
+            # tall ligger, jo mindre hjelp fikk leseren.
+            if avvik >= 0.5:
                 print(f"    Advarsel: Yahoo dividendRate={raw_div_rate:.2f} avviker {avvik*100:.0f}% fra ref={ref:.2f} ({last_complete_year}-total). Bruker ref.")
                 raw_div_rate = ref
         elif ref > 0 and raw_div_rate == 0:
@@ -2954,7 +3034,17 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     # Betaler selskapet oftere enn årlig, er «Utbytte/aksje» en annualisert
     # rate — ikke det som er utbetalt hittil. Uten dette leste kortet som om
     # det motsa historikktabellen rett under.
-    upa_merknad  = (' <span class="kcard-note">annualisert</span>'
+    # Er årsraten et delår, er både Yield og Utbytte/aksje for lave. Merk
+    # begge — det er de to tallene forbeholdet gjelder.
+    delaar        = yield_er_delaar(a)
+    delaar_note   = ' <span class="kcard-note">usikker</span>' if delaar else ""
+    delaar_varsel = lag_delaar_varsel(a, _nf)
+    # «annualisert» påstår at tallet dekker et helt år. Er det et delår, er
+    # nettopp den påstanden gal, så merket erstatter den framfor å stå ved
+    # siden av — «annualisert usikker» sa to ting som ikke kan være sanne
+    # samtidig.
+    upa_merknad  = ("" if delaar else
+                    ' <span class="kcard-note">annualisert</span>'
                     if frekvens in ("Kvartalsvis", "Halvårlig", "Månedlig") else "")
     snitt5  = a.get("snitt_yield_5ar") or 0
     valuta  = a.get("valuta") or "NOK"
@@ -3320,14 +3410,15 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     .dark .vurdering-seksjon {{ background: #0f172a; border-color: #1e293b; }}
     .dark .vurdering-tekst {{ color: #cbd5e1; }}
     /* Betingede seksjoner — vises bare på sider der de har noe å si. */
-    .rekke-seksjon, .nedtur-seksjon, .utbetalingsaar-seksjon {{ margin: 1.5rem 0; padding: 1.1rem 1.25rem; background: #f8fafc; border-radius: 0.75rem; border: 1px solid #e2e8f0; }}
-    .rekke-seksjon h2, .nedtur-seksjon h2, .utbetalingsaar-seksjon h2 {{ font-size: 1rem; font-weight: 700; margin-bottom: 0.6rem; }}
-    .rekke-seksjon p, .nedtur-seksjon p, .utbetalingsaar-seksjon p {{ font-size: 0.9rem; line-height: 1.75; color: #374151; margin: 0 0 0.6rem; }}
-    .rekke-seksjon p:last-child, .nedtur-seksjon p:last-child, .utbetalingsaar-seksjon p:last-child {{ margin-bottom: 0; }}
-    .dark .rekke-seksjon, .dark .nedtur-seksjon, .dark .utbetalingsaar-seksjon {{ background: #0f172a; border-color: #1e293b; }}
-    .dark .rekke-seksjon p, .dark .nedtur-seksjon p, .dark .utbetalingsaar-seksjon p {{ color: #cbd5e1; }}
+    .rekke-seksjon, .nedtur-seksjon, .utbetalingsaar-seksjon, .delaar-seksjon {{ margin: 1.5rem 0; padding: 1.1rem 1.25rem; background: #f8fafc; border-radius: 0.75rem; border: 1px solid #e2e8f0; }}
+    .rekke-seksjon h2, .nedtur-seksjon h2, .utbetalingsaar-seksjon h2, .delaar-seksjon h2 {{ font-size: 1rem; font-weight: 700; margin-bottom: 0.6rem; }}
+    .rekke-seksjon p, .nedtur-seksjon p, .utbetalingsaar-seksjon p, .delaar-seksjon p {{ font-size: 0.9rem; line-height: 1.75; color: #374151; margin: 0 0 0.6rem; }}
+    .rekke-seksjon p:last-child, .nedtur-seksjon p:last-child, .utbetalingsaar-seksjon p:last-child, .delaar-seksjon p:last-child {{ margin-bottom: 0; }}
+    .dark .rekke-seksjon, .dark .nedtur-seksjon, .dark .utbetalingsaar-seksjon, .dark .delaar-seksjon {{ background: #0f172a; border-color: #1e293b; }}
+    .dark .rekke-seksjon p, .dark .nedtur-seksjon p, .dark .utbetalingsaar-seksjon p, .dark .delaar-seksjon p {{ color: #cbd5e1; }}
     .rekke-seksjon {{ border-left: 3px solid #22c55e; }}
     .nedtur-seksjon {{ border-left: 3px solid #f59e0b; }}
+    .delaar-seksjon {{ border-left: 3px solid #f59e0b; }}
     .mnd-strip {{ display: grid; grid-template-columns: repeat(12, 1fr); gap: 2px; margin-bottom: 0.85rem; }}
     .mnd-celle {{ text-align: center; padding: 0.4rem 0.1rem; font-size: 0.62rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.02em; color: #9ca3af; background: #f1f5f9; border-radius: 0.25rem; }}
     .mnd-celle.mnd-ja {{ background: #16a34a; color: #fff; }}
@@ -3522,11 +3613,11 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
       <div class="val">{f'{pris:,.0f} {valuta}' if pris else '—'}</div>
     </div>
     <div class="kcard">
-      <div class="label">Yield</div>
+      <div class="label">Yield{delaar_note}</div>
       <div class="val green">{f'{_nf(yield_, 2)}%' if yield_ else '—'}</div>
     </div>
     <div class="kcard">
-      <div class="label">Utbytte/aksje{upa_merknad}</div>
+      <div class="label">Utbytte/aksje{upa_merknad}{delaar_note}</div>
       <div class="val">{_nf(upa, 2)} {valuta}</div>
     </div>
     <div class="kcard">
@@ -3551,6 +3642,8 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     </div>
     {pe_card}
   </div>
+
+  {delaar_varsel}
 
   {investor_badges_html}
 
