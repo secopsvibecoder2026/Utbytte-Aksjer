@@ -2834,9 +2834,11 @@ function visModal(a) {
     <!-- ── UTBYTTE ── -->
     <div class="modal-panel skjult" id="mp-utbytte">
       <div class="grid grid-cols-2 gap-3 mb-4">
-        ${modalKort('Utbytteyield', '<span class="' + yieldKlasse(a.utbytte_yield) + '">' + a.utbytte_yield.toFixed(2).replace('.', ',') + '%</span>')}
+        ${modalKort('Utbytteyield' + (yieldErDelaar(a) ? ' <span class="font-normal normal-case opacity-70">usikker</span>' : ''), '<span class="' + yieldKlasse(a.utbytte_yield) + '">' + a.utbytte_yield.toFixed(2).replace('.', ',') + '%</span>')}
         ${modalKort('Snitt yield 5år', a.snitt_yield_5ar > 0 ? '<span class="' + yieldKlasse(a.snitt_yield_5ar) + '">' + a.snitt_yield_5ar.toFixed(1).replace('.', ',') + '%</span>' : '—')}
-        ${modalKort('Utbytte/aksje' + (['Kvartalsvis','Halvårlig','Månedlig'].includes(a.frekvens)
+        ${modalKort('Utbytte/aksje' + (yieldErDelaar(a)
+            ? ' <span class="font-normal normal-case opacity-70">usikker</span>'
+            : ['Kvartalsvis','Halvårlig','Månedlig'].includes(a.frekvens)
             ? ' <span class="font-normal normal-case opacity-70">annualisert</span>' : ''),
           fmt(a.utbytte_per_aksje) + ' ' + a.valuta)}
         ${modalKort('Siste utbytte', fmt(a.siste_utbytte) + ' ' + a.valuta)}
@@ -2844,6 +2846,7 @@ function visModal(a) {
         ${modalKort('Utbyttevekst 5år', '<span class="' + vekstKlasse(a.utbytte_vekst_5ar) + '">' + (a.utbytte_vekst_5ar !== 0 ? (a.utbytte_vekst_5ar > 0 ? '+' : '') + a.utbytte_vekst_5ar.toFixed(1).replace('.', ',') + '%' : '—') + '</span>')}
         ${modalKort('År m/utbytte', a.ar_med_utbytte > 0 ? a.ar_med_utbytte + ' år' : '—')}
       </div>
+      ${modalDelaarVarsel(a)}
       <div class="rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden mb-4">
         <div class="bg-orange-50 dark:bg-orange-950/30 px-4 py-3">
           <h3 class="font-semibold text-sm text-orange-800 dark:text-orange-300">Viktige datoer</h3>
@@ -3158,6 +3161,51 @@ function formaterDato(str) {
   if (!str) return '—';
   const d = new Date(str);
   return d.toLocaleDateString('nb-NO', { day: 'numeric', month: 'short', year: 'numeric' });
+}
+
+// Utbetalinger per år. «Årlig» og «Uregelmessig» står med vilje ikke her:
+// for dem er én utbetaling lik et helt år, så regelen under kan ikke si noe.
+const UTBETALINGER_PR_AAR = { 'Månedlig': 12, 'Kvartalsvis': 4, 'Halvårlig': 2 };
+
+/**
+ * Er den viste årsraten i virkeligheten en delsum av et år?
+ *
+ * utbytte_per_aksje skal dekke et helt år, så for en aksje som betaler flere
+ * ganger i året kan den ikke være mindre enn én enkelt utbetaling. Er den
+ * det, er yielden på kortet for lav.
+ *
+ * Speiler `yield_er_delaar()` i scripts/fetch_stocks.py — samme regel, to
+ * språk. Endres den ene må den andre følge etter; tests/ui.test.js sjekker
+ * dem mot de samme tilfellene.
+ */
+function yieldErDelaar(a) {
+  if (!a || !(a.frekvens in UTBETALINGER_PR_AAR)) return false;
+  const upa = Number(a.utbytte_per_aksje) || 0;
+  const siste = Number(a.siste_utbytte) || 0;
+  return upa > 0 && upa < siste;
+}
+
+/**
+ * Forbeholdet under nøkkeltallene i modalen. Tom streng når det ikke gjelder.
+ *
+ * Sier hva som er observert, hvorfor, og hvilken vei feilen går — men oppgir
+ * bevisst ikke et korrigert tall. Vi vet ikke hva det er, og et gjettet tall
+ * ville vært samme feil om igjen. Samme tekst som på aksjesiden.
+ */
+function modalDelaarVarsel(a) {
+  if (!yieldErDelaar(a)) return '';
+  const valuta = escHtml(a.valuta || 'NOK');
+  const frek = escHtml((a.frekvens || '').toLowerCase());
+  return `<div class="rounded-lg border-l-4 border-amber-500 bg-amber-50 dark:bg-amber-950/30 px-4 py-3 mb-4">
+      <p class="text-sm font-semibold text-amber-900 dark:text-amber-200 mb-1">Direkteavkastningen kan være for lav</p>
+      <p class="text-xs text-amber-800 dark:text-amber-300 leading-relaxed">
+        Siste enkeltutbetaling var ${fmt(a.siste_utbytte)} ${valuta} — mer enn hele
+        årsraten vi viser (${fmt(a.utbytte_per_aksje)} ${valuta}). For en ${frek}
+        betaler er det ikke mulig, så tallet er trolig en delsum av et år. Det skjer
+        når et selskap nylig har startet eller trappet opp utbyttet. Se
+        utbyttehistorikken under for hva som faktisk er betalt.
+      </p>
+    </div>`;
 }
 
 function yieldKlasse(y) {
@@ -4469,4 +4517,4 @@ function _annBygTopp() {
 }
 
 // Node.js test export
-if (typeof module !== 'undefined') module.exports = { fmt, formaterDato, yieldKlasse, payoutKlasse, vekstKlasse, beregnScore, beregnBaerekraft, beregnYtdInntekt };
+if (typeof module !== 'undefined') module.exports = { fmt, formaterDato, yieldKlasse, payoutKlasse, vekstKlasse, beregnScore, beregnBaerekraft, beregnYtdInntekt, yieldErDelaar };

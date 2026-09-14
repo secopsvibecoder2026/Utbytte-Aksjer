@@ -586,5 +586,74 @@ class TestUtenUtbyttebevis(unittest.TestCase):
         }))
 
 
+class TestYieldErDelaar(unittest.TestCase):
+    """yield_er_delaar() — regelen som merker de ti aksjene med for lav yield.
+
+    Den finnes i tre eksemplarer av nødvendighet: her (maler), i
+    valider_data.py (Sjekk 7, som må kjøre uten yfinance) og i assets/ui.js
+    (appen). Testene under dekker de samme tilfellene som ui.test.js, og
+    test_samsvar_med_valider_data sammenligner mot det ekte datasettet.
+    """
+
+    def test_flagger_aarsrate_under_en_utbetaling(self):
+        from fetch_stocks import yield_er_delaar
+        self.assertTrue(yield_er_delaar(
+            {"frekvens": "Halvårlig", "utbytte_per_aksje": 2.2, "siste_utbytte": 5.7}))
+        self.assertTrue(yield_er_delaar(
+            {"frekvens": "Kvartalsvis", "utbytte_per_aksje": 0.46, "siste_utbytte": 5.94}))
+        self.assertTrue(yield_er_delaar(
+            {"frekvens": "Månedlig", "utbytte_per_aksje": 0.47, "siste_utbytte": 128.2}))
+
+    def test_lar_normal_betaler_i_fred(self):
+        from fetch_stocks import yield_er_delaar
+        self.assertFalse(yield_er_delaar(
+            {"frekvens": "Kvartalsvis", "utbytte_per_aksje": 12, "siste_utbytte": 3}))
+
+    def test_sier_ingenting_om_aarlige_betalere(self):
+        # For en årlig betaler ER én utbetaling hele året. Regelen har ikke
+        # grunnlag, og må ikke flagge dem.
+        from fetch_stocks import yield_er_delaar
+        self.assertFalse(yield_er_delaar(
+            {"frekvens": "Årlig", "utbytte_per_aksje": 5, "siste_utbytte": 5}))
+        self.assertFalse(yield_er_delaar(
+            {"frekvens": "Uregelmessig", "utbytte_per_aksje": 1, "siste_utbytte": 9}))
+
+    def test_takler_manglende_og_ugyldige_verdier(self):
+        from fetch_stocks import yield_er_delaar
+        for rar in [None, {}, [], "tull",
+                    {"frekvens": "Kvartalsvis"},
+                    {"frekvens": "Kvartalsvis", "utbytte_per_aksje": 0, "siste_utbytte": 5},
+                    {"frekvens": "Kvartalsvis", "utbytte_per_aksje": None, "siste_utbytte": "x"}]:
+            self.assertFalse(yield_er_delaar(rar), repr(rar))
+
+    def test_samsvar_med_valider_data(self):
+        """De to Python-implementasjonene må være enige om det ekte datasettet.
+
+        valider_data.py importerer ikke herfra — den skal kunne kjøre uten
+        yfinance — så kopiene kan gli fra hverandre. Denne fanger det.
+        """
+        import json
+        from fetch_stocks import yield_er_delaar
+        sti = os.path.join(os.path.dirname(__file__), "..", "data", "aksjer.json")
+        if not os.path.exists(sti):
+            self.skipTest("aksjer.json finnes ikke")
+        with open(sti, encoding="utf-8") as f:
+            aksjer = json.load(f).get("aksjer", [])
+
+        # Sjekk 7 sin regel, skrevet ut slik den står i valider_data.py
+        pr_ar = {"Månedlig": 12, "Kvartalsvis": 4, "Halvårlig": 2}
+        def sjekk7(a):
+            upa = a.get("utbytte_per_aksje") or 0
+            if a.get("frekvens") in pr_ar and upa > 0:
+                return 0 < upa < (a.get("siste_utbytte") or 0)
+            return False
+
+        mine = {a["ticker"] for a in aksjer if yield_er_delaar(a)}
+        deres = {a["ticker"] for a in aksjer if sjekk7(a)}
+        self.assertEqual(mine, deres,
+                         f"regelen har glidd fra hverandre: {mine ^ deres}")
+        self.assertTrue(mine, "ingen aksjer flagget — er datasettet tomt?")
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
