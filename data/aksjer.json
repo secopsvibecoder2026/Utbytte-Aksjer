@@ -1012,7 +1012,13 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "utbyttehistorikk_tekst": "Utbyttet er samlet opp fra 3,06 til 4,40 kroner per aksje i 2022–2025, men veien dit gikk gjennom 1 kutt underveis. Høyeste år er 1,8 ganger det laveste — merkbare svingninger, men innenfor et gjenkjennelig spenn. Dagens yield på 0,7 % ligger nær aksjens eget 5-årssnitt på 1,2 %."
+      "utbyttehistorikk_tekst": "Utbyttet er samlet opp fra 3,06 til 4,40 kroner per aksje i 2022–2025, men veien dit gikk gjennom 1 kutt underveis. Høyeste år er 1,8 ganger det laveste — merkbare svingninger, men innenfor et gjenkjennelig spenn. Dagens yield på 0,7 % ligger nær aksjens eget 5-årssnitt på 1,2 %.",
+      "utbyttesplitt": {
+        "ordinaert": 2.2,
+        "ekstraordinaert": 3.5,
+        "valuta": "NOK",
+        "melding_dato": "2026-02-06"
+      }
     },
     {
       "ticker": "KMAR",
@@ -5587,7 +5593,13 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "utbyttehistorikk_tekst": "Utbyttet er lavere nå enn i 2022 — ned fra 26,52 til 0,30 kroner per aksje, med 1 nedgangsår i perioden. Spennet er stort: høyeste år er 136,2 ganger det laveste, så størrelsen på utbetalingen er lite forutsigbar fra år til år. Dagens yield på 1,8 % er lavere enn aksjens eget 5-årssnitt på 7,5 %."
+      "utbyttehistorikk_tekst": "Utbyttet er lavere nå enn i 2022 — ned fra 26,52 til 0,30 kroner per aksje, med 1 nedgangsår i perioden. Spennet er stort: høyeste år er 136,2 ganger det laveste, så størrelsen på utbetalingen er lite forutsigbar fra år til år. Dagens yield på 1,8 % er lavere enn aksjens eget 5-årssnitt på 7,5 %.",
+      "utbyttesplitt": {
+        "ordinaert": 0.0,
+        "ekstraordinaert": 1.25,
+        "valuta": "NOK",
+        "melding_dato": "2026-06-03"
+      }
     },
     {
       "ticker": "ALNG",

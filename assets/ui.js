@@ -3190,6 +3190,26 @@ function yieldErDelaar(a) {
 }
 
 /**
+ * Børsens oppdeling av siste utbetaling — men bare når den beviselig gjelder
+ * den utbetalingen. Speiler `utbyttesplitt_stemmer()` i fetch_stocks.py.
+ *
+ * Summen er vakten: stemmer ordinært + ekstraordinært med siste_utbytte,
+ * beskriver meldingen den utbetalingen. Ellers kan den være fra et annet år
+ * eller i en annen valuta, og da viser vi ingenting.
+ */
+function utbyttesplittStemmer(a) {
+  if (!a || !a.utbyttesplitt || typeof a.utbyttesplitt !== 'object') return null;
+  const ordi = Number(a.utbyttesplitt.ordinaert) || 0;
+  const ekstra = Number(a.utbyttesplitt.ekstraordinaert) || 0;
+  const siste = Number(a.siste_utbytte) || 0;
+  // ordi === 0 er gyldig: hele utbetalingen er da klassifisert som ekstraordinær.
+  if (ordi < 0 || ekstra <= 0 || siste <= 0) return null;
+  if (Math.abs((ordi + ekstra) - siste) / siste > 0.01) return null;
+  return { ordinaert: ordi, ekstraordinaert: ekstra,
+           valuta: a.utbyttesplitt.valuta || a.valuta || 'NOK' };
+}
+
+/**
  * Hva selskapet faktisk har betalt så langt i inneværende år, eller null.
  *
  * Speiler `utbetalt_hittil()` i scripts/fetch_stocks.py. To vakter må følge
@@ -3226,6 +3246,20 @@ function modalDelaarVarsel(a) {
   const valuta = escHtml(a.valuta || 'NOK');
   const frek = escHtml((a.frekvens || '').toLowerCase());
   const y = Number(a.utbytte_yield) || 0;
+  const splitt = utbyttesplittStemmer(a);
+  // Når børsmeldingen gir oss den ekte årsaken, utelates den generiske
+  // gjetningen. To konkurrerende forklaringer på samme observasjon leses som
+  // en selvmotsigelse, selv når begge isolert sett er rimelige.
+  let aarsak = 'Det skjer når et selskap nylig har startet eller trappet opp utbyttet.';
+  if (splitt && splitt.ordinaert > 0) {
+    aarsak = `Oslo Børs’ melding deler den i to: <strong>${fmt(splitt.ordinaert)} ${escHtml(splitt.valuta)} ordinært utbytte</strong>
+        og ${fmt(splitt.ekstraordinaert)} ${escHtml(splitt.valuta)} ekstraordinært. Årsraten vi viser tilsvarer
+        her den ordinære delen av én utbetaling, ikke et helt år.`;
+  } else if (splitt) {
+    aarsak = `Oslo Børs’ melding klassifiserer <strong>hele denne utbetalingen på
+        ${fmt(splitt.ekstraordinaert)} ${escHtml(splitt.valuta)} som ekstraordinær</strong>, så den sier
+        lite om hva selskapet betaler til vanlig.`;
+  }
   const fakta = utbetaltHittil(a);
   let slutt = 'Se utbyttehistorikken under for hva som faktisk er betalt.';
   if (fakta && fakta.yield > y) {
@@ -3240,8 +3274,7 @@ function modalDelaarVarsel(a) {
       <p class="text-xs text-amber-800 dark:text-amber-300 leading-relaxed">
         Siste enkeltutbetaling var ${fmt(a.siste_utbytte)} ${valuta} — mer enn hele
         årsraten vi viser (${fmt(a.utbytte_per_aksje)} ${valuta}). For en ${frek}
-        betaler er det ikke mulig, så tallet er trolig en delsum av et år. Det skjer
-        når et selskap nylig har startet eller trappet opp utbyttet. ${slutt}
+        betaler er det ikke mulig, så tallet er trolig en delsum av et år. ${aarsak} ${slutt}
       </p>
     </div>`;
 }
@@ -4555,4 +4588,4 @@ function _annBygTopp() {
 }
 
 // Node.js test export
-if (typeof module !== 'undefined') module.exports = { fmt, formaterDato, yieldKlasse, payoutKlasse, vekstKlasse, beregnScore, beregnBaerekraft, beregnYtdInntekt, yieldErDelaar, utbetaltHittil };
+if (typeof module !== 'undefined') module.exports = { fmt, formaterDato, yieldKlasse, payoutKlasse, vekstKlasse, beregnScore, beregnBaerekraft, beregnYtdInntekt, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer };

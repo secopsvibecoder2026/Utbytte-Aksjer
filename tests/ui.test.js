@@ -32,7 +32,7 @@ const {
   vekstKlasse,
   beregnScore,
   beregnYtdInntekt
-, yieldErDelaar, utbetaltHittil } = require('../assets/ui.js');
+, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer } = require('../assets/ui.js');
 
 // ── fmt ────────────────────────────────────────────────────────────────────
 test('fmt returnerer — for null', () => {
@@ -248,4 +248,51 @@ test('utbetaltHittil gir antall 0 når maaneder mangler', () => {
   const rad = hafni();
   delete rad.historiske_utbytter[0].maaneder;
   assert.equal(utbetaltHittil(rad).antall, 0);
+});
+
+// ── utbyttesplittStemmer: speiler utbyttesplitt_stemmer() i fetch_stocks.py ──
+//
+// Sumvakten er hele poenget. En børsmelding vi har lagret er ikke nødvendigvis
+// den som hører til siste_utbytte — HUNT annonserte 1,50 med ex-dato fram i tid
+// mens siste_utbytte fortsatt var 1,25.
+function medSplitt(endring = {}) {
+  return Object.assign({
+    siste_utbytte: 5.70, valuta: 'NOK',
+    utbyttesplitt: { ordinaert: 2.20, ekstraordinaert: 3.50, valuta: 'NOK' },
+  }, endring);
+}
+
+test('utbyttesplittStemmer godtar når summen stemmer', () => {
+  const r = utbyttesplittStemmer(medSplitt());
+  assert.equal(r.ordinaert, 2.20);
+  assert.equal(r.ekstraordinaert, 3.50);
+  assert.equal(r.valuta, 'NOK');
+});
+
+test('utbyttesplittStemmer forkaster en melding om en annen utbetaling', () => {
+  assert.equal(utbyttesplittStemmer(medSplitt({ siste_utbytte: 1.25 })), null);
+});
+
+test('utbyttesplittStemmer godtar hele utbetalingen som ekstraordinær', () => {
+  const a = medSplitt({
+    siste_utbytte: 1.25,
+    utbyttesplitt: { ordinaert: 0, ekstraordinaert: 1.25, valuta: 'NOK' },
+  });
+  assert.equal(utbyttesplittStemmer(a).ekstraordinaert, 1.25);
+});
+
+test('utbyttesplittStemmer krever en ekstraordinær del', () => {
+  const a = medSplitt({
+    siste_utbytte: 2.20,
+    utbyttesplitt: { ordinaert: 2.20, ekstraordinaert: 0, valuta: 'NOK' },
+  });
+  assert.equal(utbyttesplittStemmer(a), null);
+});
+
+test('utbyttesplittStemmer takler søppel', () => {
+  for (const a of [null, undefined, {}, { utbyttesplitt: 'nei' },
+                   { siste_utbytte: 0, utbyttesplitt: { ordinaert: 1, ekstraordinaert: 1 } },
+                   { siste_utbytte: 5, utbyttesplitt: { ordinaert: 'x', ekstraordinaert: null } }]) {
+    assert.equal(utbyttesplittStemmer(a), null, JSON.stringify(a));
+  }
 });
