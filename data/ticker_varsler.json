@@ -1,62 +1,20 @@
 {
-  "generert": "2026-09-11T19:53:05Z",
-  "antall": 9,
+  "generert": "2026-09-14T13:29:33Z",
+  "antall": 3,
   "antall_kritiske": 0,
   "varsler": [
     {
       "ticker": "DOF",
       "type": "vedvarende_hentefeil",
       "alvorlighet": "advarsel",
-      "melding": "Ingen data fra Yahoo Finance på 7 dager (sist OK 2026-09-04), men aksjen står fortsatt på Euronext Oslo. Dette er en hentefeil, ikke en avnotering. Siden vises med data fra den datoen.",
+      "melding": "Ingen data fra Yahoo Finance på 10 dager (sist OK 2026-09-04), men aksjen står fortsatt på Euronext Oslo. Dette er en hentefeil, ikke en avnotering. Siden vises med data fra den datoen.",
       "forslag": "Ikke fjern tickeren. Kontroller ticker_yf mot Yahoo og se om feilen rammer flere tickere samtidig — da er det Yahoo som svikter."
-    },
-    {
-      "ticker": "FRO",
-      "type": "markedsverdi_borte",
-      "alvorlighet": "advarsel",
-      "melding": "Markedsverdien er borte fra Yahoo (var 98,087,649,280 sist). Kan indikere strukturendring i selskapet.",
-      "forslag": "Kontroller om selskapet er under oppkjøp eller strykning."
-    },
-    {
-      "ticker": "GJF",
-      "type": "markedsverdi_borte",
-      "alvorlighet": "advarsel",
-      "melding": "Markedsverdien er borte fra Yahoo (var 139,489,984,512 sist). Kan indikere strukturendring i selskapet.",
-      "forslag": "Kontroller om selskapet er under oppkjøp eller strykning."
-    },
-    {
-      "ticker": "HEX",
-      "type": "markedsverdi_borte",
-      "alvorlighet": "advarsel",
-      "melding": "Markedsverdien er borte fra Yahoo (var 4,431,975,936 sist). Kan indikere strukturendring i selskapet.",
-      "forslag": "Kontroller om selskapet er under oppkjøp eller strykning."
-    },
-    {
-      "ticker": "JIN",
-      "type": "markedsverdi_borte",
-      "alvorlighet": "advarsel",
-      "melding": "Markedsverdien er borte fra Yahoo (var 756,071,872 sist). Kan indikere strukturendring i selskapet.",
-      "forslag": "Kontroller om selskapet er under oppkjøp eller strykning."
-    },
-    {
-      "ticker": "SNI",
-      "type": "markedsverdi_borte",
-      "alvorlighet": "advarsel",
-      "melding": "Markedsverdien er borte fra Yahoo (var 22,277,533,696 sist). Kan indikere strukturendring i selskapet.",
-      "forslag": "Kontroller om selskapet er under oppkjøp eller strykning."
     },
     {
       "ticker": "BAKKA",
       "type": "navnavvik",
       "alvorlighet": "info",
       "melding": "Navnet avviker litt fra Yahoo: «P/F Bakkafrost» vs «Bakkafrost P/F» (likhet 71%).",
-      "forslag": "Sannsynligvis bare ulik skrivemåte. Juster gjerne navnet i data/tickers.json for konsistens."
-    },
-    {
-      "ticker": "BINT",
-      "type": "navnavvik",
-      "alvorlighet": "info",
-      "melding": "Navnet avviker litt fra Yahoo: «Bevest ASA» vs «BEWI Invest ASA» (likhet 71%).",
       "forslag": "Sannsynligvis bare ulik skrivemåte. Juster gjerne navnet i data/tickers.json for konsistens."
     },
     {
