@@ -587,6 +587,225 @@ def yield_er_delaar(a):
     return 0 < upa < siste
 
 
+# ── UTBYTTESPLITT FRA OSLO BØRS ──────────────────────────────────────────────
+# Børsens egen melding «Key information relating to the cash dividend» skiller
+# ordinært fra ekstraordinært utbytte i klartekst. Det er nøyaktig skillet vi
+# ellers ikke kan utlede — se «Why the yield is not auto-corrected» i CLAUDE.md,
+# der alle tre foreslåtte erstatningsreglene falt på nettopp dette.
+#
+# Målt over 20 utstedere: 18 har meldingen, 17 ga beløp med en enkel regex, men
+# bare 4 merker typen eksplisitt. Malen er altså et tillegg for noen få, ikke en
+# ny hovedkilde — og den brukes her kun til å *forklare* et tall vi allerede
+# viser, aldri til å erstatte det.
+
+_SPLITT_TYPER = (
+    ("ordinaert", re.compile(r"\bordinary\s+dividend\b", re.I)),
+    ("ekstraordinaert", re.compile(r"\b(?:special|extraordinary)\s+dividend\b", re.I)),
+)
+_SPLITT_BELOP = re.compile(
+    r"dividend\s+amount\s*[:\-–]?\s*(?:of\s+)?(?:[A-Z]{3}\s*)?([0-9]+(?:[.,][0-9]+)?)", re.I)
+# Valutaen må matches mot en kjent liste, ikke «tre bokstaver». DNBs melding
+# skriver «Declared currency: Norwegian kroner», og et løst mønster plukket
+# «Nor» som valutakode.
+_SPLITT_VALUTA = re.compile(
+    r"declared\s+currency\s*[:\-–]?\s*\b(NOK|USD|EUR|SEK|DKK|GBP|CHF)\b", re.I)
+# HUNT bruker en annen felttype enn KOG: «Dividend classification: NOK 1.50 as
+# extraordinary dividend» — hele utbetalingen er ekstraordinær, det finnes ingen
+# ordinær del å dele mot. Den sier mer enn en splitt, ikke mindre.
+_SPLITT_KLASSIFISERING = re.compile(
+    r"dividend\s+classification\s*[:\-–]?\s*(?:[A-Z]{3}\s*)?([0-9]+(?:[.,][0-9]+)?)"
+    r"\s*(?:[A-Z]{3}\s*)?as\s+(?:an?\s+)?(ordinary|special|extraordinary)\s+dividend", re.I)
+
+# Hvor mange meldingskropper vi henter per ticker før vi gir opp. Sumvakten
+# avgjør hvilken melding som gjelder, så vi må kunne se forbi den nyeste — men
+# ikke i det uendelige.
+MAKS_SPLITT_MELDINGER = 8
+
+
+def _parse_utbyttesplitt(body):
+    """Leser utbyttetypen ut av en børsmeldingskropp.
+
+    Returnerer ``{"ordinaert", "ekstraordinaert", "valuta"}`` eller ``None``.
+    ``ordinaert == 0`` betyr at *hele* utbetalingen er klassifisert som
+    ekstraordinær — det er HUNT-formen, og den er like gyldig som en splitt.
+
+    To former støttes, fordi utstederne bruker begge:
+
+    * **KOG:** overskriftene «Ordinary dividend» og «Special dividend», hver
+      med sin egen «Dividend amount». Overskriftene deler teksten i seksjoner
+      og beløpet hentes innenfor sin egen — uten den inndelingen ville den
+      første «Dividend amount» i meldingen blitt brukt for begge.
+    * **HUNT:** ett beløp pluss «Dividend classification: NOK 1.50 as
+      extraordinary dividend».
+
+    En melding som bare sier «Ordinary dividend» gir ``None``: at et ordinært
+    utbytte er ordinært forteller ingenting vi ikke visste.
+    """
+    if not isinstance(body, str) or not body:
+        return None
+    v = _SPLITT_VALUTA.search(body)
+    valuta = v.group(1).upper() if v else None
+
+    # Form 2 først — den er entydig og krever ingen seksjonsinndeling.
+    k = _SPLITT_KLASSIFISERING.search(body)
+    if k:
+        try:
+            belop = round(float(k.group(1).replace(",", ".")), 4)
+        except ValueError:
+            return None
+        if belop <= 0:
+            return None
+        if k.group(2).lower() in ("special", "extraordinary"):
+            return {"ordinaert": 0.0, "ekstraordinaert": belop, "valuta": valuta}
+        return None
+
+    treff = []
+    for navn, mønster in _SPLITT_TYPER:
+        for m in mønster.finditer(body):
+            treff.append((m.start(), navn))
+    treff.sort()
+    if len({navn for _, navn in treff}) < 2:
+        return None
+
+    belop = {}
+    for i, (start, navn) in enumerate(treff):
+        slutt = treff[i + 1][0] if i + 1 < len(treff) else len(body)
+        if navn in belop:
+            continue
+        m = _SPLITT_BELOP.search(body, start, slutt)
+        if m:
+            try:
+                belop[navn] = round(float(m.group(1).replace(",", ".")), 4)
+            except ValueError:
+                return None
+    if belop.get("ordinaert", 0) <= 0 or belop.get("ekstraordinaert", 0) <= 0:
+        return None
+    return {"ordinaert": belop["ordinaert"],
+            "ekstraordinaert": belop["ekstraordinaert"], "valuta": valuta}
+
+
+def hent_utbyttesplitt(ticker, siste_utbytte=0):
+    """Finner børsmeldingen som beskriver *den* utbetalingen vi viser.
+
+    Kalles bare for de få aksjene der `yield_er_delaar()` slår til, så dette
+    koster en håndfull ekstra forespørsler per full kjøring, ikke 155.
+
+    **Sumvakten velger meldingen, ikke rekkefølgen.** En utsteder har typisk
+    flere slike meldinger, og den nyeste kan gjelde et utbytte som ennå ikke er
+    utbetalt — HUNT annonserte 1,50 med ex-dato fram i tid mens `siste_utbytte`
+    fortsatt var 1,25. Å ta den nyeste ville festet feil tall til feil
+    utbetaling. Derfor gås meldingene gjennom til én stemmer med beløpet vi
+    faktisk viser.
+
+    Feil svelges med vilje: en aksje må aldri feile fordi børsmeldingen ikke
+    lot seg hente — se «A failed ticker is invisible on the site» i CLAUDE.md.
+    """
+    global _NEWSWEB_API
+    if _NEWSWEB_API is None:
+        _NEWSWEB_API = _newsweb_api_base()
+    try:
+        siste = float(siste_utbytte or 0)
+    except (TypeError, ValueError):
+        siste = 0
+    try:
+        resp = _newsweb_post(
+            f"{_NEWSWEB_API}/v1/newsreader/list"
+            f"?issuer={urllib.parse.quote(ticker, safe='')}&limit=500"
+        )
+        sett = 0
+        for msg in resp.get("data", {}).get("messages", []):
+            tittel = (msg.get("title") or "").lower()
+            if "dividend" not in tittel or "key information" not in tittel:
+                continue
+            if sett >= MAKS_SPLITT_MELDINGER:
+                break
+            sett += 1
+            full = _newsweb_get(
+                f"{_NEWSWEB_API}/v1/newsreader/message"
+                f"?messageId={urllib.parse.quote(str(msg.get('messageId')), safe='')}"
+            )
+            body = full.get("data", {}).get("message", {}).get("body", "")
+            if not body:
+                continue
+            splitt = _parse_utbyttesplitt(html.unescape(re.sub(r"<[^>]+>", "\n", body)))
+            if not splitt:
+                continue
+            sum_ = splitt["ordinaert"] + splitt["ekstraordinaert"]
+            if siste > 0 and abs(sum_ - siste) / siste > 0.01:
+                continue
+            splitt["melding_dato"] = (msg.get("publishedTime") or "")[:10]
+            return splitt
+    except Exception as e:
+        print(f"    Advarsel utbyttesplitt [{ticker}]: {e}")
+    return None
+
+
+def utbyttesplitt_stemmer(a):
+    """Beskriver splitten den utbetalingen vi faktisk viser? Ellers None.
+
+    Dette er den bærende vakten. En børsmelding vi fant er ikke nødvendigvis
+    den som hører til `siste_utbytte` — den kan være fra et tidligere år, eller
+    oppgitt i en annen valuta enn beløpene våre. Summen avgjør: stemmer
+    ordinært + ekstraordinært med `siste_utbytte`, beskriver meldingen den
+    utbetalingen, og da er det et verifisert faktum. Ellers viser vi ingenting.
+
+    Vakten gjør en egen valutasjekk unødvendig: er utbyttet erklært i USD mens
+    `siste_utbytte` står i NOK, går ikke summen opp, og meldingen forkastes.
+    """
+    if not isinstance(a, dict):
+        return None
+    s = a.get("utbyttesplitt")
+    if not isinstance(s, dict):
+        return None
+    try:
+        ordi = float(s.get("ordinaert") or 0)
+        ekstra = float(s.get("ekstraordinaert") or 0)
+        siste = float(a.get("siste_utbytte") or 0)
+    except (TypeError, ValueError):
+        return None
+    # ordi == 0 er gyldig: hele utbetalingen er da klassifisert som
+    # ekstraordinær. Det er den ekstraordinære delen som må finnes.
+    if ordi < 0 or ekstra <= 0 or siste <= 0:
+        return None
+    if abs((ordi + ekstra) - siste) / siste > 0.01:
+        return None
+    return {"ordinaert": ordi, "ekstraordinaert": ekstra,
+            "valuta": s.get("valuta") or a.get("valuta") or "NOK"}
+
+
+def delaar_motbevist(a):
+    """Motbeviser børsmeldingen at årsraten er et delår?
+
+    `yield_er_delaar()` slutter fra «årsraten er mindre enn én utbetaling» at
+    raten dekker et delår. Den slutningen forutsetter at utbetalingen var
+    ordinær. Er en del av den ekstraordinær, faller den: en engangsutdeling
+    kan godt være større enn et helt års ordinære utbytte uten at årsraten er
+    feil i det hele tatt.
+
+    Regelen er at raten minst dekker den **ordinære** delen av utbetalingen
+    (``siste - ekstraordinaert``). Begge aksjene vi har splitt for havner der:
+
+    * **KOG** — 5,70 er 2,20 ordinært + 3,50 ekstraordinært, og årsraten på
+      4,40 er nesten to ordinære utbetalinger. Yielden er omtrent riktig.
+    * **HUNT** — hele utbetalingen på 1,25 var ekstraordinær, så den sier
+      ingenting om den ordinære raten.
+
+    `yield_er_delaar()` selv røres ikke: den finnes i tre eksemplarer som
+    `test_samsvar_med_valider_data` holder i sync, og Sjekk 7 i valider_data.py
+    skal fortsatt melde fra i loggen. Dette gjelder bare hva *leseren* får se.
+    """
+    splitt = utbyttesplitt_stemmer(a)
+    if not splitt:
+        return False
+    try:
+        upa = float(a.get("utbytte_per_aksje") or 0)
+        siste = float(a.get("siste_utbytte") or 0)
+    except (TypeError, ValueError):
+        return False
+    ordinaer_del = siste - splitt["ekstraordinaert"]
+    return upa >= ordinaer_del
+
+
 def utbetalt_hittil(a, i_aar=None):
     """Hva selskapet faktisk har betalt så langt i inneværende år.
 
@@ -648,6 +867,11 @@ def lag_delaar_varsel(a, nf):
     Avsnittet utelates når `utbetalt_hittil()` ikke kan svare, eller når den
     summen gir en lavere yield enn den vi nettopp kalte for lav — da ville
     tallet motsi setningen over det.
+
+    **Har børsmeldingen motbevist premisset, byttes hele boksen ut.** Da er
+    yielden ikke for lav, og en advarsel om at den er det ville vært usann;
+    se `delaar_motbevist()`. Leseren får i stedet en nøytral forklaring på
+    hvorfor én utbetaling er større enn årsraten.
     """
     if not yield_er_delaar(a):
         return ""
@@ -656,6 +880,33 @@ def lag_delaar_varsel(a, nf):
     y = float(a.get("utbytte_yield") or 0)
     valuta = a.get("valuta") or "NOK"
     frek = (a.get("frekvens") or "").lower()
+
+    # Børsmeldingen kan motbevise premisset helt. Da er ikke yielden for lav,
+    # og en advarsel om at den er det ville vært usann. Boksen byttes ut med en
+    # nøytral forklaring på det leseren faktisk kan se i tallene.
+    splitt = utbyttesplitt_stemmer(a)
+    if splitt and delaar_motbevist(a):
+        if splitt["ordinaert"] > 0:
+            hva = (
+                f'<strong>{nf(splitt["ekstraordinaert"], 2)} {splitt["valuta"]} '
+                f'av den var ekstraordinært utbytte</strong>, og '
+                f'{nf(splitt["ordinaert"], 2)} {splitt["valuta"]} ordinært'
+            )
+        else:
+            hva = '<strong>hele beløpet var et ekstraordinært utbytte</strong>'
+        return (
+            '<div class="delaar-seksjon delaar-noytral">'
+            '<h2>Siste utbetaling var større enn årsraten</h2>'
+            f'<p>Siste enkeltutbetaling på {nf(siste, 2)} {valuta} er større '
+            f'enn årsraten vi viser ({nf(upa, 2)} {valuta}). Forklaringen står '
+            f'i selskapets børsmelding: {hva}.</p>'
+            '<p>Et ekstraordinært utbytte er en engangsutdeling og sier lite '
+            'om hva selskapet betaler til vanlig, så den kan godt overstige et '
+            'helt års ordinære utbytte. Den store enkeltutbetalingen er derfor '
+            f'ikke i seg selv et tegn på at direkteavkastningen på {nf(y, 2)} % '
+            'er for lav.</p>'
+            '</div>'
+        )
 
     fakta = utbetalt_hittil(a)
     if fakta and fakta["yield"] > y:
@@ -1170,6 +1421,16 @@ def hent_aksje(meta):
         # bygget fra denne kjøringens tall. Erstatter ai_oppsummering, som var
         # frosset prosa med tall støpt inn.
         resultat["utbyttehistorikk_tekst"] = _lag_utbyttehistorikk_tekst(resultat)
+
+        # Bare for de få aksjene der årsraten er mindre enn én utbetaling.
+        # Der er spørsmålet «hvorfor spriker tallene?», og børsmeldingen svarer
+        # på det når selskapet brukte malen med ordinært/ekstraordinært.
+        if yield_er_delaar(resultat):
+            splitt = hent_utbyttesplitt(ticker, siste_utbytte)
+            if splitt:
+                resultat["utbyttesplitt"] = splitt
+                print(f"    Utbyttesplitt: {splitt['ordinaert']} ordinært + "
+                      f"{splitt['ekstraordinaert']} ekstraordinært")
 
         # Diagnostikk for sjekk_utdaterte.py. Yahoos eget selskapsnavn lagres
         # ikke i aksjer.json (der bruker vi navnet fra tickers.json), så uten
@@ -3113,7 +3374,9 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     # det motsa historikktabellen rett under.
     # Er årsraten et delår, er både Yield og Utbytte/aksje for lave. Merk
     # begge — det er de to tallene forbeholdet gjelder.
-    delaar        = yield_er_delaar(a)
+    # Motbevist av børsmeldingen betyr at tallet ikke er usikkert. Å merke
+    # det likevel ville motsagt den nøytrale boksen lenger nede på siden.
+    delaar        = yield_er_delaar(a) and not delaar_motbevist(a)
     delaar_note   = ' <span class="kcard-note">usikker</span>' if delaar else ""
     delaar_varsel = lag_delaar_varsel(a, _nf)
     # «annualisert» påstår at tallet dekker et helt år. Er det et delår, er
@@ -3496,6 +3759,9 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     .rekke-seksjon {{ border-left: 3px solid #22c55e; }}
     .nedtur-seksjon {{ border-left: 3px solid #f59e0b; }}
     .delaar-seksjon {{ border-left: 3px solid #f59e0b; }}
+    /* Nøytral variant: forklarer en observasjon, advarer ikke om en feil. */
+    .delaar-seksjon.delaar-noytral {{ border-left-color: #94a3b8; }}
+    .dark .delaar-seksjon.delaar-noytral {{ border-left-color: #475569; }}
     .mnd-strip {{ display: grid; grid-template-columns: repeat(12, 1fr); gap: 2px; margin-bottom: 0.85rem; }}
     .mnd-celle {{ text-align: center; padding: 0.4rem 0.1rem; font-size: 0.62rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.02em; color: #9ca3af; background: #f1f5f9; border-radius: 0.25rem; }}
     .mnd-celle.mnd-ja {{ background: #16a34a; color: #fff; }}

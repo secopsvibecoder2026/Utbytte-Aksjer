@@ -1838,6 +1838,69 @@ counter-example in the dataset:
   under it reads as an error even when both halves are right. Same class as
   the WAWI «uten et eneste kutt» / «lite forutsigbar» contradiction.
 
+### The exchange knows the split — and it refuted the warning (2026-09-14)
+
+Everything above treats «ordinary vs extraordinary» as underivable. Oslo Børs
+publishes it. The regulated message «Key information relating to the cash
+dividend» carries it in two shapes, and issuers use both:
+
+| Shape | Example |
+|---|---|
+| Typed sections, each with its own amount | KOG: `Ordinary dividend / Dividend amount: 2.20` then `Special dividend / Dividend amount: 3.50` |
+| One amount plus a classification line | HUNT: `Dividend classification: NOK 1.50 as extraordinary dividend` |
+
+**Measured before building: 18 of 20 issuers carry the message, 17 yielded an
+amount to a five-line regex, but only 4 label the type.** So this is a
+supplement for a few, never a new primary source — `hent_utbyttesplitt()` is
+called only for the handful where `yield_er_delaar()` fires.
+
+**The sum picks the message, not the ordering.** An issuer has several such
+messages and the newest may describe a dividend not yet paid: HUNT announced
+1,50 with a future ex-date while `siste_utbytte` was still 1,25. Taking the
+newest would have pinned the wrong figures to the wrong payment. Messages are
+therefore walked until ordinary + extraordinary matches `siste_utbytte` within
+1 %. That guard also makes a currency check unnecessary — a dividend declared
+in USD cannot sum to a NOK figure.
+
+**Match the currency against a known list, not «three letters».** DNB writes
+«Declared currency: Norwegian kroner», and a loose pattern returned `Nor`.
+
+#### The finding that changed the feature: the split *refutes* the warning
+
+`yield_er_delaar()` infers «the annual rate is below one payment, so it is a
+part-year». **That inference assumes the payment was ordinary.** When part of
+it was not, the inference collapses — a one-off distribution can exceed a full
+year of ordinary dividends without the annual rate being wrong at all.
+
+Both stocks we have a split for land there:
+
+- **KOG** — 5,70 is 2,20 ordinary + 3,50 extraordinary, and after the boundary
+  fix the rate is 4,40, nearly two ordinary payments. The yield is roughly
+  right, so «direkteavkastningen kan være for lav» would have been *untrue*.
+- **HUNT** — the whole 1,25 was extraordinary, so the comparison proves nothing.
+
+`delaar_motbevist()` decides this, and the box is then replaced by a **neutral
+explanation** (grey left border, not amber) of something the reader can see for
+themselves. The «usikker» card label drops at the same time — leaving it beside
+a box saying the figure is fine is the same contradiction split across two
+elements.
+
+**`yield_er_delaar()` itself is untouched.** It exists in three copies that
+`test_samsvar_med_valider_data` keeps in sync, and Sjekk 7 should still report
+in the run log. Only the *reader* is spared a warning we have disproved.
+
+**Do not claim where `utbytte_per_aksje` comes from.** A draft said the yield
+«bygger på den ordinære raten». We have not verified that: KOG's 4,40 is last
+year's calendar total, which may itself contain special dividends. The text now
+says only that the large single payment is not in itself evidence the yield is
+too low.
+
+Tests: `TestParseUtbyttesplitt`, `TestUtbyttesplittStemmer`,
+`TestDelaarMotbevist` (19) and `ui.test.js` (10).
+`test_samsvar_med_datasettet` requires every stored split to pass the guard — a
+stored split rejected at render time is dead weight, and a sign the fetch
+pinned the wrong message to the stock.
+
 `utbetaltHittil()` in `assets/ui.js` mirrors it for the modal. Tests:
 `TestUtbetaltHittil` + `TestLagDelaarVarsel` (11) and `ui.test.js` (6).
 

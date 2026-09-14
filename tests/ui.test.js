@@ -32,7 +32,7 @@ const {
   vekstKlasse,
   beregnScore,
   beregnYtdInntekt
-, yieldErDelaar, utbetaltHittil } = require('../assets/ui.js');
+, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist } = require('../assets/ui.js');
 
 // ── fmt ────────────────────────────────────────────────────────────────────
 test('fmt returnerer — for null', () => {
@@ -248,4 +248,92 @@ test('utbetaltHittil gir antall 0 når maaneder mangler', () => {
   const rad = hafni();
   delete rad.historiske_utbytter[0].maaneder;
   assert.equal(utbetaltHittil(rad).antall, 0);
+});
+
+// ── utbyttesplittStemmer: speiler utbyttesplitt_stemmer() i fetch_stocks.py ──
+//
+// Sumvakten er hele poenget. En børsmelding vi har lagret er ikke nødvendigvis
+// den som hører til siste_utbytte — HUNT annonserte 1,50 med ex-dato fram i tid
+// mens siste_utbytte fortsatt var 1,25.
+function medSplitt(endring = {}) {
+  return Object.assign({
+    siste_utbytte: 5.70, valuta: 'NOK',
+    utbyttesplitt: { ordinaert: 2.20, ekstraordinaert: 3.50, valuta: 'NOK' },
+  }, endring);
+}
+
+test('utbyttesplittStemmer godtar når summen stemmer', () => {
+  const r = utbyttesplittStemmer(medSplitt());
+  assert.equal(r.ordinaert, 2.20);
+  assert.equal(r.ekstraordinaert, 3.50);
+  assert.equal(r.valuta, 'NOK');
+});
+
+test('utbyttesplittStemmer forkaster en melding om en annen utbetaling', () => {
+  assert.equal(utbyttesplittStemmer(medSplitt({ siste_utbytte: 1.25 })), null);
+});
+
+test('utbyttesplittStemmer godtar hele utbetalingen som ekstraordinær', () => {
+  const a = medSplitt({
+    siste_utbytte: 1.25,
+    utbyttesplitt: { ordinaert: 0, ekstraordinaert: 1.25, valuta: 'NOK' },
+  });
+  assert.equal(utbyttesplittStemmer(a).ekstraordinaert, 1.25);
+});
+
+test('utbyttesplittStemmer krever en ekstraordinær del', () => {
+  const a = medSplitt({
+    siste_utbytte: 2.20,
+    utbyttesplitt: { ordinaert: 2.20, ekstraordinaert: 0, valuta: 'NOK' },
+  });
+  assert.equal(utbyttesplittStemmer(a), null);
+});
+
+test('utbyttesplittStemmer takler søppel', () => {
+  for (const a of [null, undefined, {}, { utbyttesplitt: 'nei' },
+                   { siste_utbytte: 0, utbyttesplitt: { ordinaert: 1, ekstraordinaert: 1 } },
+                   { siste_utbytte: 5, utbyttesplitt: { ordinaert: 'x', ekstraordinaert: null } }]) {
+    assert.equal(utbyttesplittStemmer(a), null, JSON.stringify(a));
+  }
+});
+
+// ── delaarMotbevist: speiler delaar_motbevist() i fetch_stocks.py ───────────
+//
+// Var en del av utbetalingen ekstraordinær, faller slutningen «årsraten er
+// mindre enn én utbetaling, altså et delår». En engangsutdeling kan godt
+// overstige et helt års ordinære utbytte uten at årsraten er feil.
+const KOG = {
+  frekvens: 'Halvårlig', utbytte_per_aksje: 4.40, siste_utbytte: 5.70,
+  utbytte_yield: 1.44, valuta: 'NOK',
+  utbyttesplitt: { ordinaert: 2.20, ekstraordinaert: 3.50, valuta: 'NOK' },
+};
+const HUNT_A = {
+  frekvens: 'Kvartalsvis', utbytte_per_aksje: 0.30, siste_utbytte: 1.25,
+  utbytte_yield: 1.73, valuta: 'NOK',
+  utbyttesplitt: { ordinaert: 0, ekstraordinaert: 1.25, valuta: 'NOK' },
+};
+
+test('delaarMotbevist: årsraten dekker den ordinære delen', () => {
+  assert.equal(delaarMotbevist(KOG), true);
+});
+
+test('delaarMotbevist: hele utbetalingen ekstraordinær motbeviser alltid', () => {
+  assert.equal(delaarMotbevist(HUNT_A), true);
+});
+
+test('delaarMotbevist: uten splitt motbevises ingenting', () => {
+  const uten = Object.assign({}, KOG);
+  delete uten.utbyttesplitt;
+  assert.equal(delaarMotbevist(uten), false);
+});
+
+test('delaarMotbevist: årsrate under den ordinære delen står ved lag', () => {
+  assert.equal(delaarMotbevist(Object.assign({}, KOG, { utbytte_per_aksje: 1.00 })), false);
+});
+
+test('delaarMotbevist: flagget og regelen er fortsatt uenige med vilje', () => {
+  // yieldErDelaar skal fortsatt slå ut — den er delt med valider_data.py og
+  // Sjekk 7 skal melde fra i loggen. Det er bare leseren som skjermes.
+  assert.equal(yieldErDelaar(KOG), true);
+  assert.equal(yieldErDelaar(KOG) && !delaarMotbevist(KOG), false);
 });

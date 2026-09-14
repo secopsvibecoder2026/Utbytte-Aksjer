@@ -780,5 +780,191 @@ class TestLagDelaarVarsel(unittest.TestCase):
         self.assertNotIn("1 utbetalinger", html)
 
 
+class TestParseUtbyttesplitt(unittest.TestCase):
+    """Parseren for børsens utbyttemelding — to former, begge fra ekte tekst."""
+
+    KOG = """Ordinary dividend
+Dividend amount: 2.20 per share
+Declared currency: NOK
+Ex-date: 14 April 2026
+Special dividend
+Dividend amount: 3.50 per share
+Declared currency: NOK
+Ex-date: 14 April 2026"""
+
+    HUNT = """Key information relating to the cash dividend to be paid by Hunter Group ASA:
+Dividend amount: NOK 1.50 per share
+Declared currency: NOK
+Dividend classification: NOK 1.50 as extraordinary dividend
+Ex-date: 29 September 2026"""
+
+    ORK = """Ordinary dividend
+Dividend amount: 6.00 per share
+Declared currency: NOK"""
+
+    def test_splitt_med_to_overskrifter(self):
+        from fetch_stocks import _parse_utbyttesplitt
+        r = _parse_utbyttesplitt(self.KOG)
+        self.assertEqual(r["ordinaert"], 2.20)
+        self.assertEqual(r["ekstraordinaert"], 3.50)
+        self.assertEqual(r["valuta"], "NOK")
+
+    def test_belop_hentes_i_sin_egen_seksjon(self):
+        # Uten seksjonsinndeling ville den forste «Dividend amount» blitt
+        # brukt for begge typene, og splitten blitt 2,20 + 2,20.
+        from fetch_stocks import _parse_utbyttesplitt
+        r = _parse_utbyttesplitt(self.KOG)
+        self.assertNotEqual(r["ordinaert"], r["ekstraordinaert"])
+
+    def test_klassifisering_av_hele_utbetalingen(self):
+        from fetch_stocks import _parse_utbyttesplitt
+        r = _parse_utbyttesplitt(self.HUNT)
+        self.assertEqual(r["ordinaert"], 0.0)
+        self.assertEqual(r["ekstraordinaert"], 1.50)
+
+    def test_bare_ordinaert_gir_ingenting(self):
+        # At et ordinaert utbytte er ordinaert er ikke ny informasjon.
+        from fetch_stocks import _parse_utbyttesplitt
+        self.assertIsNone(_parse_utbyttesplitt(self.ORK))
+
+    def test_takler_soppel(self):
+        from fetch_stocks import _parse_utbyttesplitt
+        for rar in [None, "", 42, [], "Dividend amount: 5.00"]:
+            self.assertIsNone(_parse_utbyttesplitt(rar), repr(rar))
+
+
+class TestUtbyttesplittStemmer(unittest.TestCase):
+    """Sumvakten — den avgjor om meldingen beskriver DEN utbetalingen."""
+
+    def _a(self, **kw):
+        a = {"siste_utbytte": 5.70, "valuta": "NOK",
+             "utbyttesplitt": {"ordinaert": 2.20, "ekstraordinaert": 3.50,
+                               "valuta": "NOK"}}
+        a.update(kw)
+        return a
+
+    def test_godtar_naar_summen_stemmer(self):
+        from fetch_stocks import utbyttesplitt_stemmer
+        r = utbyttesplitt_stemmer(self._a())
+        self.assertEqual(r["ordinaert"], 2.20)
+
+    def test_forkaster_melding_om_en_annen_utbetaling(self):
+        # HUNT annonserte 1,50 med ex-dato fram i tid mens siste_utbytte var
+        # 1,25. A feste den meldingen til den utbetalingen ville vaert galt.
+        from fetch_stocks import utbyttesplitt_stemmer
+        self.assertIsNone(utbyttesplitt_stemmer(self._a(siste_utbytte=1.25)))
+
+    def test_godtar_hele_utbetalingen_som_ekstraordinaer(self):
+        from fetch_stocks import utbyttesplitt_stemmer
+        a = self._a(siste_utbytte=1.25,
+                    utbyttesplitt={"ordinaert": 0.0, "ekstraordinaert": 1.25,
+                                   "valuta": "NOK"})
+        self.assertEqual(utbyttesplitt_stemmer(a)["ekstraordinaert"], 1.25)
+
+    def test_krever_en_ekstraordinaer_del(self):
+        from fetch_stocks import utbyttesplitt_stemmer
+        a = self._a(siste_utbytte=2.20,
+                    utbyttesplitt={"ordinaert": 2.20, "ekstraordinaert": 0.0,
+                                   "valuta": "NOK"})
+        self.assertIsNone(utbyttesplitt_stemmer(a))
+
+    def test_takler_soppel(self):
+        from fetch_stocks import utbyttesplitt_stemmer
+        for rar in [None, {}, [], "tull", {"utbyttesplitt": "nei"},
+                    {"siste_utbytte": 0, "utbyttesplitt": {"ordinaert": 1, "ekstraordinaert": 1}},
+                    {"siste_utbytte": 5, "utbyttesplitt": {"ordinaert": "x", "ekstraordinaert": None}}]:
+            self.assertIsNone(utbyttesplitt_stemmer(rar), repr(rar))
+
+    def test_samsvar_med_datasettet(self):
+        """Hver lagret splitt i aksjer.json ma passere vakten.
+
+        En splitt som ligger lagret men blir forkastet ved rendring er dod
+        vekt — og et tegn pa at hentingen festet feil melding til aksjen.
+        """
+        import json
+        from fetch_stocks import utbyttesplitt_stemmer
+        sti = os.path.join(os.path.dirname(__file__), "..", "data", "aksjer.json")
+        if not os.path.exists(sti):
+            self.skipTest("aksjer.json finnes ikke")
+        with open(sti, encoding="utf-8") as f:
+            aksjer = json.load(f).get("aksjer", [])
+        med = [a for a in aksjer if a.get("utbyttesplitt")]
+        for a in med:
+            self.assertIsNotNone(utbyttesplitt_stemmer(a),
+                                 f"{a['ticker']} har lagret splitt som vakten forkaster")
+
+
+class TestDelaarMotbevist(unittest.TestCase):
+    """Når børsmeldingen motbeviser premisset, må advarselen vike.
+
+    yield_er_delaar() slutter fra «årsraten er mindre enn én utbetaling» at
+    raten dekker et delår. Den slutningen forutsetter at utbetalingen var
+    ordinær — og begge aksjene vi har splitt for bryter forutsetningen.
+    """
+
+    KOG = {"frekvens": "Halvårlig", "utbytte_per_aksje": 4.40,
+           "siste_utbytte": 5.70, "utbytte_yield": 1.44, "valuta": "NOK",
+           "utbyttesplitt": {"ordinaert": 2.20, "ekstraordinaert": 3.50,
+                             "valuta": "NOK"}}
+    HUNT = {"frekvens": "Kvartalsvis", "utbytte_per_aksje": 0.30,
+            "siste_utbytte": 1.25, "utbytte_yield": 1.73, "valuta": "NOK",
+            "utbyttesplitt": {"ordinaert": 0.0, "ekstraordinaert": 1.25,
+                              "valuta": "NOK"}}
+
+    @staticmethod
+    def _nf(v, d=2):
+        return f"{v:.{d}f}".replace(".", ",")
+
+    def test_aarsraten_dekker_den_ordinaere_delen(self):
+        # 4,40 er større enn den ordinære delen på 2,20 — yielden er ikke for lav.
+        from fetch_stocks import delaar_motbevist
+        self.assertTrue(delaar_motbevist(self.KOG))
+
+    def test_hele_utbetalingen_ekstraordinaer_motbeviser_alltid(self):
+        from fetch_stocks import delaar_motbevist
+        self.assertTrue(delaar_motbevist(self.HUNT))
+
+    def test_uten_splitt_motbevises_ingenting(self):
+        from fetch_stocks import delaar_motbevist
+        a = dict(self.KOG)
+        a.pop("utbyttesplitt")
+        self.assertFalse(delaar_motbevist(a))
+
+    def test_aarsrate_under_den_ordinaere_delen_staar_ved_lag(self):
+        # Forklarer splitten bare en del av gapet, er premisset intakt.
+        from fetch_stocks import delaar_motbevist
+        self.assertFalse(delaar_motbevist(dict(self.KOG, utbytte_per_aksje=1.00)))
+
+    def test_boksen_blir_noytral_ikke_advarende(self):
+        from fetch_stocks import lag_delaar_varsel
+        h = lag_delaar_varsel(self.KOG, self._nf)
+        self.assertIn("delaar-noytral", h)
+        self.assertIn("Siste utbetaling var større enn årsraten", h)
+        self.assertNotIn("kan være for lav", h)
+        self.assertIn("3,50 NOK av den var ekstraordinært", h)
+        self.assertNotIn("bygger på den ordinære raten", h)
+
+    def test_hele_belopet_formuleres_riktig(self):
+        # «0,00 NOK ordinært» ville vært tullete — den grenen må ha egen tekst.
+        from fetch_stocks import lag_delaar_varsel
+        h = lag_delaar_varsel(self.HUNT, self._nf)
+        self.assertIn("hele beløpet", h)
+        self.assertNotIn("0,00", h)
+
+    def test_advarselen_staar_naar_ingenting_motbeviser_den(self):
+        from fetch_stocks import lag_delaar_varsel
+        a = dict(self.KOG)
+        a.pop("utbyttesplitt")
+        h = lag_delaar_varsel(a, self._nf)
+        self.assertIn("kan være for lav", h)
+        self.assertNotIn("delaar-noytral", h)
+
+    def test_kortetiketten_droppes_naar_premisset_er_motbevist(self):
+        # «usikker» på kortet ved siden av en boks som sier at tallet er greit
+        # ville vært den samme selvmotsigelsen, bare delt over to elementer.
+        from fetch_stocks import yield_er_delaar, delaar_motbevist
+        self.assertTrue(yield_er_delaar(self.KOG))
+        self.assertFalse(yield_er_delaar(self.KOG) and not delaar_motbevist(self.KOG))
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
