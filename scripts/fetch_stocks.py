@@ -587,13 +587,67 @@ def yield_er_delaar(a):
     return 0 < upa < siste
 
 
+def utbetalt_hittil(a, i_aar=None):
+    """Hva selskapet faktisk har betalt så langt i inneværende år.
+
+    Returnerer ``{"ar", "belop", "antall", "yield"}`` eller ``None``.
+
+    Dette er det eneste tallet vi *vet* når årsraten er et delår: en måling
+    av fortida, ikke et anslag om framtida. Raden finnes allerede i
+    utbyttehistorikk-tabellen, merket «hittil i år» — her hentes tallet opp i
+    varselet, der leseren står med spørsmålet.
+
+    To vakter, begge nødvendige:
+
+    * **Ingen rad for i år gir None.** I januar har de fleste ikke betalt
+      ennå, og fjorårets total må ikke merkes «hittil i 2026».
+    * **Et beløp over det dobbelte av kursen forkastes.** Samme grense som
+      Sjekk 9 i `valider_data.py`. 2020 Bulkers står med 132,66 NOK på en
+      aksje som koster 4,06 etter kapitalutdelingen i mai — den summen er
+      ikke et utbyttetotal, og å presentere den som et faktum ville vært
+      akkurat feilen dette varselet finnes for å unngå.
+    """
+    if not isinstance(a, dict):
+        return None
+    aar = i_aar or datetime.date.today().year
+    try:
+        pris = float(a.get("pris") or 0)
+    except (TypeError, ValueError):
+        return None
+    if pris <= 0:
+        return None
+    for h in a.get("historiske_utbytter") or []:
+        if not isinstance(h, dict) or int(h.get("ar") or 0) != aar:
+            continue
+        try:
+            belop = float(h.get("utbytte") or 0)
+            yld = float(h.get("yield")) if h.get("yield") is not None else None
+        except (TypeError, ValueError):
+            return None
+        if belop <= 0 or yld is None or belop > 2 * pris:
+            return None
+        mnd = h.get("maaneder") or []
+        return {
+            "ar": aar,
+            "belop": belop,
+            "antall": len(mnd) if isinstance(mnd, list) else 0,
+            "yield": yld,
+        }
+    return None
+
+
 def lag_delaar_varsel(a, nf):
     """Synlig forbehold når årsraten er et delår. Tom streng ellers.
 
     Sier tre ting, i den rekkefølgen: hva som er observert (siste utbetaling
     er større enn hele årsraten), hvorfor det skjer, og hvilken vei feilen
-    går. Den oppgir bevisst **ikke** et korrigert tall — vi vet ikke hva det
-    er, og et gjettet tall ville vært samme feil en gang til.
+    går. Den oppgir bevisst **ikke** et korrigert årstall — vi vet ikke hva
+    det er, og et gjettet tall ville vært samme feil en gang til.
+
+    Til slutt det vi faktisk vet: summen som allerede er utbetalt i år.
+    Avsnittet utelates når `utbetalt_hittil()` ikke kan svare, eller når den
+    summen gir en lavere yield enn den vi nettopp kalte for lav — da ville
+    tallet motsi setningen over det.
     """
     if not yield_er_delaar(a):
         return ""
@@ -602,6 +656,31 @@ def lag_delaar_varsel(a, nf):
     y = float(a.get("utbytte_yield") or 0)
     valuta = a.get("valuta") or "NOK"
     frek = (a.get("frekvens") or "").lower()
+
+    fakta = utbetalt_hittil(a)
+    if fakta and fakta["yield"] > y:
+        if fakta["antall"] == 1:
+            fordelt = ", i én utbetaling"
+        elif fakta["antall"] > 1:
+            fordelt = f', fordelt på {fakta["antall"]} utbetalinger'
+        else:
+            fordelt = ""
+        sluttavsnitt = (
+            '<p>Det vi vet sikkert, er hva selskapet allerede har betalt: '
+            f'<strong>{nf(fakta["belop"], 2)} {valuta} per aksje hittil i '
+            f'{fakta["ar"]}</strong>{fordelt}. Målt mot dagens kurs er det '
+            f'{nf(fakta["yield"], 2)} %. Det er en måling av året så langt, '
+            'ikke et anslag for hele året — vi viser ikke et korrigert '
+            'årstall, fordi et delår ikke sier noe om hva resten av året '
+            'bringer.</p>'
+        )
+    else:
+        sluttavsnitt = (
+            '<p>Vi viser ikke et korrigert tall, fordi vi ikke kan utlede det '
+            'pålitelig — se utbyttehistorikken under for hva selskapet '
+            'faktisk har betalt.</p>'
+        )
+
     return (
         '<div class="delaar-seksjon">'
         '<h2>Direkteavkastningen kan være for lav</h2>'
@@ -613,9 +692,7 @@ def lag_delaar_varsel(a, nf):
         'utbyttet: datakilden oppgir da fjorårets total, og for et år som '
         'ikke var fullt blir den for lav. Den reelle direkteavkastningen er '
         f'derfor sannsynligvis høyere enn {nf(y, 2)} %.</p>'
-        '<p>Vi viser ikke et korrigert tall, fordi vi ikke kan utlede det '
-        'pålitelig — se utbyttehistorikken under for hva selskapet faktisk '
-        'har betalt.</p>'
+        + sluttavsnitt +
         '</div>'
     )
 

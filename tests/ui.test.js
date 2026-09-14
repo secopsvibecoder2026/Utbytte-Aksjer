@@ -32,7 +32,7 @@ const {
   vekstKlasse,
   beregnScore,
   beregnYtdInntekt
-, yieldErDelaar } = require('../assets/ui.js');
+, yieldErDelaar, utbetaltHittil } = require('../assets/ui.js');
 
 // ── fmt ────────────────────────────────────────────────────────────────────
 test('fmt returnerer — for null', () => {
@@ -191,4 +191,61 @@ test('yieldErDelaar takler manglende og ugyldige verdier', () => {
                    { frekvens: 'Kvartalsvis', utbytte_per_aksje: null, siste_utbytte: 'x' }]) {
     assert.equal(yieldErDelaar(a), false, JSON.stringify(a));
   }
+});
+
+// ── utbetaltHittil: speiler utbetalt_hittil() i scripts/fetch_stocks.py ────
+//
+// Det eneste tallet vi faktisk vet når årsraten er et delår. De to vaktene
+// er hele poenget, og begge har et konkret motstykke i datasettet.
+const I_AAR = new Date().getFullYear();
+
+function hafni(endring = {}) {
+  const rad = Object.assign(
+    { ar: I_AAR, utbytte: 8.96, yield: 10.1, maaneder: [3, 6, 9] }, endring);
+  return { pris: 88.65, historiske_utbytter: [rad] };
+}
+
+test('utbetaltHittil henter årets rad med beløp, antall og yield', () => {
+  const f = utbetaltHittil(hafni());
+  assert.equal(f.belop, 8.96);
+  assert.equal(f.antall, 3);
+  assert.equal(f.yield, 10.1);
+  assert.equal(f.ar, I_AAR);
+});
+
+test('utbetaltHittil gir null uten rad for i år', () => {
+  // Januar-tilfellet: fjorårets total må ikke merkes «hittil i år».
+  assert.equal(utbetaltHittil(hafni({ ar: I_AAR - 1 })), null);
+  assert.equal(utbetaltHittil({ pris: 100, historiske_utbytter: [] }), null);
+});
+
+test('utbetaltHittil forkaster et beløp over det dobbelte av kursen', () => {
+  // 2020 Bulkers etter kapitalutdelingen: 132,66 på en 4,06-kroners aksje.
+  assert.equal(utbetaltHittil({
+    pris: 4.06,
+    historiske_utbytter: [{ ar: I_AAR, utbytte: 132.66, yield: null, maaneder: [1, 2, 3, 4] }],
+  }), null);
+});
+
+test('utbetaltHittil krever både yield og kurs', () => {
+  assert.equal(utbetaltHittil(hafni({ yield: null })), null);
+  assert.equal(utbetaltHittil(hafni({ utbytte: 0 })), null);
+  const uten = hafni();
+  uten.pris = 0;
+  assert.equal(utbetaltHittil(uten), null);
+});
+
+test('utbetaltHittil takler søppel', () => {
+  for (const a of [null, undefined, {}, { pris: 'x' },
+                   { pris: 10, historiske_utbytter: null },
+                   { pris: 10, historiske_utbytter: [null] }]) {
+    assert.equal(utbetaltHittil(a), null, JSON.stringify(a));
+  }
+});
+
+test('utbetaltHittil gir antall 0 når maaneder mangler', () => {
+  // `maaneder` kommer bare fra en full henting. Beløpet skal vises likevel.
+  const rad = hafni();
+  delete rad.historiske_utbytter[0].maaneder;
+  assert.equal(utbetaltHittil(rad).antall, 0);
 });

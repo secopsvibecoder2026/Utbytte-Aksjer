@@ -3062,10 +3062,14 @@ function historiskChart(a) {
 
   const bars = hist.map(h => {
     const heightPct = maxDiv > 0 ? (h.utbytte / maxDiv * 100).toFixed(1) : 0;
-    const barColor = h.yield >= 7 ? 'bg-green-500' : h.yield >= 4 ? 'bg-blue-500' : 'bg-gray-400';
+    // yield kan være null når kurshistorikken mangler for året — 2020 Bulkers
+    // har det for 2026. Uten vakten her kaster `.toFixed` og hele modalen
+    // blir tom. SEO-malen skriver «—» i samme tilfelle.
+    const yld = h.yield == null ? null : Number(h.yield);
+    const barColor = yld >= 7 ? 'bg-green-500' : yld >= 4 ? 'bg-blue-500' : 'bg-gray-400';
     return `
       <div class="flex flex-col items-center gap-0.5 flex-1 min-w-0">
-        <span class="text-xs text-gray-500 dark:text-gray-400">${h.yield.toFixed(1).replace('.', ',')}%</span>
+        <span class="text-xs text-gray-500 dark:text-gray-400">${yld == null ? '—' : yld.toFixed(1).replace('.', ',') + '%'}</span>
         <div class="w-full flex items-end rounded-t overflow-hidden" style="height:52px">
           <div class="w-full ${barColor} rounded-t transition-all" style="height:${heightPct}%"></div>
         </div>
@@ -3186,24 +3190,58 @@ function yieldErDelaar(a) {
 }
 
 /**
+ * Hva selskapet faktisk har betalt så langt i inneværende år, eller null.
+ *
+ * Speiler `utbetalt_hittil()` i scripts/fetch_stocks.py. To vakter må følge
+ * med: ingen rad for i år gir null (i januar har de fleste ikke betalt ennå,
+ * og fjorårets total må ikke merkes «hittil i år»), og et beløp over det
+ * dobbelte av kursen forkastes — 2020 Bulkers står med 132,66 kr på en aksje
+ * som koster 4,06 etter kapitalutdelingen, og den summen er ikke et
+ * utbyttetotal.
+ */
+function utbetaltHittil(a) {
+  if (!a) return null;
+  const pris = Number(a.pris) || 0;
+  if (pris <= 0) return null;
+  const aar = new Date().getFullYear();
+  const h = (a.historiske_utbytter || []).find(x => x && Number(x.ar) === aar);
+  if (!h) return null;
+  const belop = Number(h.utbytte) || 0;
+  const yld = h.yield == null ? null : Number(h.yield);
+  if (belop <= 0 || yld === null || !isFinite(yld) || belop > 2 * pris) return null;
+  const mnd = Array.isArray(h.maaneder) ? h.maaneder.length : 0;
+  return { ar: aar, belop, antall: mnd, yield: yld };
+}
+
+/**
  * Forbeholdet under nøkkeltallene i modalen. Tom streng når det ikke gjelder.
  *
  * Sier hva som er observert, hvorfor, og hvilken vei feilen går — men oppgir
- * bevisst ikke et korrigert tall. Vi vet ikke hva det er, og et gjettet tall
- * ville vært samme feil om igjen. Samme tekst som på aksjesiden.
+ * bevisst ikke et korrigert årstall. Vi vet ikke hva det er, og et gjettet
+ * tall ville vært samme feil om igjen. Til slutt det vi faktisk vet: summen
+ * som allerede er utbetalt i år. Samme tekst som på aksjesiden.
  */
 function modalDelaarVarsel(a) {
   if (!yieldErDelaar(a)) return '';
   const valuta = escHtml(a.valuta || 'NOK');
   const frek = escHtml((a.frekvens || '').toLowerCase());
+  const y = Number(a.utbytte_yield) || 0;
+  const fakta = utbetaltHittil(a);
+  let slutt = 'Se utbyttehistorikken under for hva som faktisk er betalt.';
+  if (fakta && fakta.yield > y) {
+    const fordelt = fakta.antall === 1 ? ', i én utbetaling'
+      : fakta.antall > 1 ? `, fordelt på ${fakta.antall} utbetalinger` : '';
+    slutt = `Det vi vet sikkert, er hva selskapet allerede har betalt:
+        <strong>${fmt(fakta.belop)} ${valuta} per aksje hittil i ${fakta.ar}</strong>${fordelt}.
+        Målt mot dagens kurs er det ${fmt(fakta.yield)} %.`;
+  }
   return `<div class="rounded-lg border-l-4 border-amber-500 bg-amber-50 dark:bg-amber-950/30 px-4 py-3 mb-4">
       <p class="text-sm font-semibold text-amber-900 dark:text-amber-200 mb-1">Direkteavkastningen kan være for lav</p>
       <p class="text-xs text-amber-800 dark:text-amber-300 leading-relaxed">
         Siste enkeltutbetaling var ${fmt(a.siste_utbytte)} ${valuta} — mer enn hele
         årsraten vi viser (${fmt(a.utbytte_per_aksje)} ${valuta}). For en ${frek}
         betaler er det ikke mulig, så tallet er trolig en delsum av et år. Det skjer
-        når et selskap nylig har startet eller trappet opp utbyttet. Se
-        utbyttehistorikken under for hva som faktisk er betalt.
+        når et selskap nylig har startet eller trappet opp utbyttet. ${slutt}
       </p>
     </div>`;
 }
@@ -4517,4 +4555,4 @@ function _annBygTopp() {
 }
 
 // Node.js test export
-if (typeof module !== 'undefined') module.exports = { fmt, formaterDato, yieldKlasse, payoutKlasse, vekstKlasse, beregnScore, beregnBaerekraft, beregnYtdInntekt, yieldErDelaar };
+if (typeof module !== 'undefined') module.exports = { fmt, formaterDato, yieldKlasse, payoutKlasse, vekstKlasse, beregnScore, beregnBaerekraft, beregnYtdInntekt, yieldErDelaar, utbetaltHittil };
