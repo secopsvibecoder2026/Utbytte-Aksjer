@@ -248,6 +248,97 @@ Grunnen til å vente er ikke AdSense, men regnestykket: med dagens trafikk i
 Search Console gir donasjoner tilnærmet null i året. Å registrere ENK for å få
 Vipps ville koste regnskapsplikt og næringsstatus for en inntekt nær null.
 
+### Betalt datakilde for kurser og utbytte
+
+**Vurdert på nytt 14.09.2026. Konklusjon: ikke kjøp — og avslaget handler om
+passform, ikke om pris.**
+
+En tidligere vurdering ble aldri skrevet ned noe sted, så denne er gjort fra
+grunnen av. Skriv den ned denne gangen.
+
+#### Spør først hva som faktisk er ødelagt
+
+Kursene er ikke problemet. De hentes fra Yahoo, kryssjekkes mot Euronext-CSV-en
+og oppdateres hvert 15. minutt, og ingen av de dokumenterte hendelsene i
+CLAUDE.md handler om feil kurs. Det som er ødelagt er **utbyttedata**, og
+nærmere bestemt to ting:
+
+1. **Ordinært kontra ekstraordinært utbytte.** Hele «Why the yield is not
+   auto-corrected»-avsnittet finnes fordi vi ikke kan skille dem. Tre
+   erstatningsregler ble simulert og alle tre ga et åpenbart galt tall et sted.
+2. **Frekvens.** `frekvens` hentes ikke, den *utledes* ved å telle utbetalinger
+   i et 12-måneders vindu — og en forstyrret serie endrer etiketten stille.
+   SATS og 2020 Bulkers er dokumenterte tilfeller.
+
+En betalt kurskilde løser ingen av dem. Det er den egentlige testen, og de
+fleste leverandørene stryker på den før prisen i det hele tatt er relevant.
+
+#### Det som ble undersøkt
+
+| Kilde | Pris | Hva som stopper den |
+|---|---|---|
+| **Börsdata** (best nordisk dekning) | Pro+-medlemskap | **Vilkårene forbyr det eksplisitt** — se sitat under |
+| **EODHD** | 19,99 $/mnd personlig, **kommersielt fra 399 $/mnd** | Utbytte-API-et skiller **ikke** ordinært fra ekstraordinært, og oppgir ikke frekvens. Utvidede felter (erklærings-, record- og betalingsdato) er dokumentert kun for «major U.S. tickers» og «major European companies» |
+| **Euronext direkte** | Ikke offentlig prisliste; egen avtale | Rett kilde for kurs, men selger ikke utbytteklassifisering. Krever markedsdataavtale |
+| Finnhub / Twelve Data / FMP | 0–100 $/mnd | Fant ingen dokumentasjon på utbyttetype for Oslo Børs. Fravær av treff er ikke bevis — men det er heller ikke noe å bygge på |
+
+> ⚠️ **Börsdata er den beste passformen og samtidig umulig.** Den dekker
+> Norden inkludert Oslo Børs med utbyttekalender, og API-vilkårene sier:
+> «It is not permitted to use the Börsdata API for commercial purposes»,
+> «It is not permitted to distribute API data both commercially and
+> non-commercially», og «It is not allowed to build external systems/home
+> pages/widgets that display API data». Alle tre beskriver nøyaktig det
+> exday.no er. Ikke et forhandlingsrom — et nei.
+
+#### Videredistribusjon er et spørsmål vi allerede har
+
+Euronext gjør 15-minutters forsinkede data gratis tilgjengelig, men **gratis
+for internt bruk**; videredistribusjon krever markedsdataavtale. exday.no
+publiserer kurser på et offentlig nettsted, altså videredistribusjon.
+
+Det er verdt å merke seg at dette gjelder **uavhengig av om vi betaler noen**.
+Spørsmålet gjelder dagens oppsett, ikke bare et framtidig kjøp — og det er ikke
+et argument for å kjøpe, siden et retail-abonnement ikke gir
+videredistribusjonsrett det heller. Jeg er ikke jurist, og dette er ikke
+avklart. Det bør avklares på egen kjøl, med AdSense-godkjenning som naturlig
+anledning, siden annonser gjør siden utvetydig kommersiell.
+
+#### Hva gratisveien faktisk rekker — målt, ikke gjettet
+
+Oslo Børs' egen melding «Key information relating to the cash dividend» er
+primærkilden en betalt leverandør uansett ville lest. Skannet over et
+tilfeldig utvalg på 35 tickere (frø 42, opptil fire meldinger hver):
+
+| | Andel |
+|---|---|
+| Har meldingen | **25/35 (71 %)** |
+| Beløp uttrekkbart | 24/35 (69 %) |
+| **Merker utbyttetypen** | **4/35 (11 %)** |
+
+Taket på klassifisering er altså rundt **11 %** — lavt, men det er 11 % mer enn
+noen leverandør tilbyr oss i dag, og det koster ingenting. To av de fire var
+KOG og HUNT, og de alene motbeviste varselet på to aksjesider (#45). En tredje
+er **WAWI** — selve skoleeksempelet på periodestabling i CLAUDE.md.
+
+#### Beslutning
+
+**Ikke kjøp nå.** Ingen undersøkt leverandør selger det vi mangler, den ene som
+passer forbyr bruken, og de 399 $/mnd som kreves for kommersiell EODHD-lisens
+er ~4 800 $ i året for en side som ennå ikke har annonseinntekt.
+
+**Gjør i stedet:** les flere meldingstyper fra NewsWeb-lista vi allerede henter
+per ticker. «Ex-dividend NOK 5.70/share today» ligger i samme respons som
+rapportdatoen. Null nye kilder, null nye vilkår, null kroner.
+
+**Hva som ville snudd dette:**
+
+- En leverandør som dokumenterer utbyttetype *og* frekvens for Oslo Børs — da
+  er samtalen om pris, ikke om passform.
+- Reell annonseinntekt som gjør 399 $/mnd til en andel av noe, ikke en ren
+  utgift.
+- En avklaring som sier at videredistribusjon krever lisens uansett — da endres
+  regnestykket, fordi vi da betaler for noe vi må ha.
+
 ---
 
-*Sist oppdatert: 13. september 2026*
+*Sist oppdatert: 14. september 2026*

@@ -1803,6 +1803,32 @@ payments the company has just started making. Telling the two apart is a design 
 classifying ordinary vs. extraordinary dividends — not a threshold. Until that exists,
 Sjekk 7 makes the affected stocks visible on every run rather than silently guessing.
 
+### A paid data feed does not fix this — assessed 2026-09-14
+
+The obvious reaction to the section above is «buy better data». It was
+assessed properly and the answer is no; the full record is «Betalt datakilde
+for kurser og utbytte» in `ROADMAP.md`. Three things worth knowing before
+anyone re-opens it:
+
+- **Prices are not the problem.** Nothing in this file's incident log is a
+  wrong price. What is broken is dividend *classification* and *frequency*,
+  and a price feed sells neither.
+- **EODHD — the main general option — does not carry dividend type or
+  frequency**, and its commercial licence starts at 399 $/month. **Börsdata,
+  the best Nordic fit, forbids the use outright**: its API terms bar
+  commercial use, bar redistribution, and bar building home pages that display
+  the data. All three describe exactly this site.
+- **The ceiling of the free path is measured, not guessed.** Across a random
+  35-ticker sample, 71 % have the Oslo Børs «Key information» message, 69 %
+  yield an amount — and **11 % label the dividend type**. Low, but it is 11 %
+  more than any vendor offers, and it is the primary source a vendor would
+  resell.
+
+Separately: Euronext's delayed data is free *for internal use*, and
+redistribution requires a market data agreement. That question applies to what
+the site does today, not only to a purchase — and a retail subscription would
+not grant the right either, so it is not an argument for buying.
+
 ### The reader is now told (2026-09-14)
 
 Making it visible in the run log was never the point — the *reader* saw an
