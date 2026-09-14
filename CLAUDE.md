@@ -1813,6 +1813,39 @@ box stating what is observed, why it happens, and which way the error runs.
 and a guessed number would be the same mistake again. It points at the
 dividend history instead, which is what the company actually paid.
 
+### …and then told the one number we do know (2026-09-14)
+
+Pointing at the table below was still weaker than it needed to be. The
+warning named an estimate it distrusted and left the reader to go and find
+the measurement themselves. `utbetalt_hittil()` now lifts that row into the
+box: «8,96 NOK per aksje hittil i 2026, fordelt på 3 utbetalinger. Målt mot
+dagens kurs er det 10,10 %.» A fact about the past, explicitly not a claim
+about the year — the paragraph says so in the same breath, because an
+unlabelled year-to-date sum is the *original* bug wearing new clothes.
+
+Nine of the ten pages carry it. Three guards decide that, and each has a real
+counter-example in the dataset:
+
+- **No row for the current year → nothing.** In January most companies have
+  not paid yet, and last year's total must never be labelled «hittil i 2026».
+- **An amount above 2× the share price is discarded.** Same threshold as
+  Sjekk 9 in `valider_data.py`. 2020 Bulkers shows 132,66 NOK on a 4,06-krone
+  share after the May capital distribution; printing that as a fact would be
+  precisely the error the box exists to prevent. It falls back to the old
+  closing paragraph, so the warning still appears.
+- **A year-to-date yield *below* the one just called too low is dropped.**
+  The paragraph above says «sannsynligvis høyere enn X %»; a smaller figure
+  under it reads as an error even when both halves are right. Same class as
+  the WAWI «uten et eneste kutt» / «lite forutsigbar» contradiction.
+
+`utbetaltHittil()` in `assets/ui.js` mirrors it for the modal. Tests:
+`TestUtbetaltHittil` + `TestLagDelaarVarsel` (11) and `ui.test.js` (6).
+
+While there: `historiskChart()` in `ui.js` called `h.yield.toFixed(1)`
+unguarded, and 2020 Bulkers' 2026 row has `yield: null` — so opening that
+stock's modal threw. The SEO template had always written «—» in that case;
+the app now does the same.
+
 `yield_er_delaar(a)` in `fetch_stocks.py` is the rule; `lag_delaar_varsel()`
 builds the box. **It is computed at render time from fields already in
 `aksjer.json`** — not stored — so it cannot go stale and `regenerer_sider.py`

@@ -655,5 +655,130 @@ class TestYieldErDelaar(unittest.TestCase):
         self.assertTrue(mine, "ingen aksjer flagget — er datasettet tomt?")
 
 
+class TestUtbetaltHittil(unittest.TestCase):
+    """utbetalt_hittil() — det ene tallet vi faktisk vet når raten er et delår.
+
+    Vaktene er hele poenget: uten dem ville varselet presentert 2020 Bulkers'
+    132,66 NOK på en 4,06-kroners aksje som et faktum, og i januar ville det
+    merket fjorårets total «hittil i år».
+    """
+
+    def _rad(self, **kw):
+        base = {"ar": datetime.date.today().year, "utbytte": 8.96,
+                "yield": 10.1, "maaneder": [3, 6, 9]}
+        base.update(kw)
+        return {"pris": 88.65, "historiske_utbytter": [base]}
+
+    def test_henter_aarets_rad(self):
+        from fetch_stocks import utbetalt_hittil
+        f = utbetalt_hittil(self._rad())
+        self.assertEqual(f["belop"], 8.96)
+        self.assertEqual(f["antall"], 3)
+        self.assertEqual(f["yield"], 10.1)
+        self.assertEqual(f["ar"], datetime.date.today().year)
+
+    def test_ingen_rad_for_i_aar_gir_none(self):
+        # Januar-tilfellet: fjorårets total må ikke merkes «hittil i år».
+        from fetch_stocks import utbetalt_hittil
+        i_fjor = datetime.date.today().year - 1
+        self.assertIsNone(utbetalt_hittil(self._rad(ar=i_fjor)))
+        self.assertIsNone(utbetalt_hittil({"pris": 100, "historiske_utbytter": []}))
+
+    def test_forkaster_belop_over_dobbel_kurs(self):
+        # 2020 Bulkers etter kapitalutdelingen: 132,66 på en 4,06-kroners aksje.
+        from fetch_stocks import utbetalt_hittil
+        self.assertIsNone(utbetalt_hittil(
+            {"pris": 4.06,
+             "historiske_utbytter": [{"ar": datetime.date.today().year,
+                                      "utbytte": 132.66, "yield": None,
+                                      "maaneder": [1, 2, 3, 4]}]}))
+
+    def test_krever_yield_og_kurs(self):
+        from fetch_stocks import utbetalt_hittil
+        self.assertIsNone(utbetalt_hittil(self._rad(**{"yield": None})))
+        self.assertIsNone(utbetalt_hittil(self._rad(utbytte=0)))
+        rad = self._rad()
+        rad["pris"] = 0
+        self.assertIsNone(utbetalt_hittil(rad))
+
+    def test_takler_soppel(self):
+        from fetch_stocks import utbetalt_hittil
+        for rar in [None, {}, [], "tull", {"pris": "x"},
+                    {"pris": 10, "historiske_utbytter": None},
+                    {"pris": 10, "historiske_utbytter": ["tull"]}]:
+            self.assertIsNone(utbetalt_hittil(rar), repr(rar))
+
+    def test_manglende_maaneder_gir_antall_null(self):
+        # `maaneder` kommer bare fra en full henting. Uten den skal beløpet
+        # fortsatt vises — bare uten «fordelt på N utbetalinger».
+        from fetch_stocks import utbetalt_hittil
+        rad = self._rad()
+        del rad["historiske_utbytter"][0]["maaneder"]
+        self.assertEqual(utbetalt_hittil(rad)["antall"], 0)
+
+
+class TestLagDelaarVarsel(unittest.TestCase):
+    """Varselet skal ikke motsi seg selv — det er den gjentatte feilen her."""
+
+    @staticmethod
+    def _nf(v, d=2):
+        return f"{v:,.{d}f}".replace(",", " ").replace(".", ",")
+
+    def _hafni(self):
+        return {
+            "frekvens": "Kvartalsvis", "utbytte_per_aksje": 3.71,
+            "siste_utbytte": 4.65, "utbytte_yield": 4.18, "pris": 88.65,
+            "valuta": "NOK",
+            "historiske_utbytter": [{"ar": datetime.date.today().year,
+                                     "utbytte": 8.96, "yield": 10.1,
+                                     "maaneder": [3, 6, 9]}],
+        }
+
+    def test_viser_utbetalt_hittil(self):
+        from fetch_stocks import lag_delaar_varsel
+        html = lag_delaar_varsel(self._hafni(), self._nf)
+        self.assertIn("8,96 NOK per aksje hittil i", html)
+        self.assertIn("fordelt på 3 utbetalinger", html)
+        self.assertIn("10,10 %", html)
+
+    def test_tom_for_aksjer_som_ikke_er_berort(self):
+        from fetch_stocks import lag_delaar_varsel
+        a = self._hafni()
+        a["utbytte_per_aksje"] = 14.0
+        self.assertEqual(lag_delaar_varsel(a, self._nf), "")
+
+    def test_utelater_tallet_naar_det_ville_motsi_setningen_over(self):
+        # Teksten sier «sannsynligvis høyere enn X %». Et hittil-i-år-tall
+        # under X ville lest som en feil, så da faller avsnittet tilbake.
+        from fetch_stocks import lag_delaar_varsel
+        a = self._hafni()
+        a["historiske_utbytter"][0]["yield"] = 1.0
+        html = lag_delaar_varsel(a, self._nf)
+        self.assertNotIn("hittil i", html)
+        self.assertIn("se utbyttehistorikken under", html)
+
+    def test_faller_tilbake_naar_summen_er_usannsynlig(self):
+        # 2020 Bulkers: varselet skal fortsatt komme, men uten tallet.
+        from fetch_stocks import lag_delaar_varsel
+        a = {"frekvens": "Månedlig", "utbytte_per_aksje": 0.47,
+             "siste_utbytte": 128.2, "utbytte_yield": 11.58, "pris": 4.06,
+             "valuta": "NOK",
+             "historiske_utbytter": [{"ar": datetime.date.today().year,
+                                      "utbytte": 132.66, "yield": None,
+                                      "maaneder": [1, 2, 3, 4]}]}
+        html = lag_delaar_varsel(a, self._nf)
+        self.assertIn("Direkteavkastningen kan være for lav", html)
+        self.assertNotIn("132,66", html)
+        self.assertNotIn("hittil i", html)
+
+    def test_en_enkelt_utbetaling_boyes_riktig(self):
+        from fetch_stocks import lag_delaar_varsel
+        a = self._hafni()
+        a["historiske_utbytter"][0]["maaneder"] = [4]
+        html = lag_delaar_varsel(a, self._nf)
+        self.assertIn("i én utbetaling", html)
+        self.assertNotIn("1 utbetalinger", html)
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
