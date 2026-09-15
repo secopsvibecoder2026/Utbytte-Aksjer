@@ -32,7 +32,7 @@ const {
   vekstKlasse,
   beregnScore,
   beregnYtdInntekt
-, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist } = require('../assets/ui.js');
+, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst } = require('../assets/ui.js');
 
 // ── fmt ────────────────────────────────────────────────────────────────────
 test('fmt returnerer — for null', () => {
@@ -336,4 +336,31 @@ test('delaarMotbevist: flagget og regelen er fortsatt uenige med vilje', () => {
   // Sjekk 7 skal melde fra i loggen. Det er bare leseren som skjermes.
   assert.equal(yieldErDelaar(KOG), true);
   assert.equal(yieldErDelaar(KOG) && !delaarMotbevist(KOG), false);
+});
+
+// ── maanederTekst: erstatter «årlig / 12» i modalen ───────────────────────
+//
+// Et flatt månedssnitt antyder jevn inntekt. 47 % av norske utbetalinger ligger
+// i mars–mai, så for de aller fleste er det usant.
+test('maanederTekst skriver månedene som prosa', () => {
+  assert.equal(maanederTekst({ utbetalingsmaaneder: [5, 11] }), 'mai og november');
+  assert.equal(maanederTekst({ utbetalingsmaaneder: [4] }), 'april');
+  assert.equal(maanederTekst({ utbetalingsmaaneder: [3, 5, 11] }), 'mars, mai og november');
+});
+
+test('maanederTekst sorterer og fjerner duplikater', () => {
+  assert.equal(maanederTekst({ utbetalingsmaaneder: [11, 5, 5] }), 'mai og november');
+});
+
+test('maanederTekst kortes ned for hyppige betalere', () => {
+  // Tolv månedsnavn på rad ville sprengt kortet i modalen.
+  assert.equal(maanederTekst({ utbetalingsmaaneder: [1,2,3,4,5,6,7,8,9,10,11,12] }), '12 måneder i året');
+});
+
+test('maanederTekst gir tom streng uten mønster', () => {
+  // Tom streng, ikke en halv setning — kalleren faller tilbake på snittet.
+  for (const a of [null, undefined, {}, { utbetalingsmaaneder: [] },
+                   { utbetalingsmaaneder: 'tull' }, { utbetalingsmaaneder: [0, 13] }]) {
+    assert.equal(maanederTekst(a), '', JSON.stringify(a));
+  }
 });

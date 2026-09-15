@@ -1467,7 +1467,32 @@ function _frekvensAntall(f) {
   return { 'Månedlig': 12, 'Kvartalsvis': 4, 'Halvårlig': 2, 'Årlig': 1 }[f] || 1;
 }
 
+/**
+ * Månedene en aksje faktisk pleier å betale utbytte i (0-indeksert).
+ *
+ * `utbetalingsmaaneder` er utledet av flere års reelle utbetalinger og er det
+ * mest pålitelige mønsteret vi har — den krever at måneden går igjen i minst
+ * to år, og hopper over inneværende år fordi det er ufullstendig.
+ *
+ * Den ble beregnet for 142 av 155 aksjer og **brukt null steder i frontend**
+ * fram til 15.09.2026, mens denne funksjonen falt tilbake på en hardkodet
+ * gjetning. Målt mot datasettet bommet gjetningen på *samtlige* faktiske
+ * utbetalingsmåneder for 121 av de 136 aksjene den gjaldt: årlige betalere ble
+ * plassert i desember, mens de i praksis betaler i mars–mai. Bare 6 aksjer har
+ * en `betaling_dato` å forankre i, så fallbacken traff nesten hele katalogen.
+ *
+ * Tabellen nederst beholdes for de 13 aksjene uten mønsterdata — en gjetning
+ * er bedre enn ingenting når vi ikke har noe, men den skal aldri brukes når vi
+ * har noe.
+ */
 function _betalingsMaaneder(a) {
+  const ekte = Array.isArray(a.utbetalingsmaaneder) ? a.utbetalingsmaaneder : [];
+  if (ekte.length) {
+    const mnder = [...new Set(ekte.map(m => Number(m) - 1))]
+      .filter(m => Number.isInteger(m) && m >= 0 && m <= 11)
+      .sort((x, y) => x - y);
+    if (mnder.length) return mnder;
+  }
   const ant = _frekvensAntall(a.frekvens);
   if (a.betaling_dato) {
     const base = new Date(a.betaling_dato).getMonth();
@@ -1522,8 +1547,15 @@ function visMaanedChart(beholdning) {
   if (!el || !beholdning.length) return;
   const mnd = Array(12).fill(0);
   beholdning.forEach(a => {
-    const perBetaling = a.forv_ar / _frekvensAntall(a.frekvens);
-    _betalingsMaaneder(a).forEach(m => { mnd[m] += perBetaling; });
+    const mnder = _betalingsMaaneder(a);
+    if (!mnder.length) return;
+    // Del på antall måneder vi faktisk plasserer i, ikke på frekvensetiketten.
+    // utbetalingsmaaneder kan ha et annet antall enn etiketten tilsier — en
+    // halvårlig betaler kan ha tre måneder fordi datoene glir mellom år — og da
+    // ville årssummen i grafen blitt for høy. Se CLAUDE.md om frekvensetikett
+    // ved siden av en månedsliste som ikke stemmer med den.
+    const perBetaling = a.forv_ar / mnder.length;
+    mnder.forEach(m => { mnd[m] += perBetaling; });
   });
   const maks = Math.max(...mnd, 1);
   const fmtKr = v => v.toLocaleString('nb-NO', { maximumFractionDigits: 0 }) + ' kr';
@@ -1546,7 +1578,39 @@ function visMaanedChart(beholdning) {
     <div class="flex justify-between text-xs text-gray-400 mt-2">
       <span>Lavest: <strong>${fmtKr(mnd.some(v=>v>0) ? Math.min(...mnd.filter(v=>v>0)) : 0)}</strong></span>
       <span>Høyest: <strong>${fmtKr(Math.max(...mnd))}</strong></span>
-    </div>`;
+    </div>
+    ${_jevnhetTekst(mnd, navn)}`;
+}
+
+/**
+ * Hvor ujevnt utbyttet ditt kommer gjennom året, og hvilke måneder som er tomme.
+ *
+ * Norsk utbytte er stuet sammen om våren — 47 % av alle utbetalingsmåneder i
+ * katalogen ligger i mars–mai — så en portefølje satt sammen uten tanke på tid
+ * gir nesten alltid noen tomme måneder. Dette sier bare hva som er observert;
+ * det foreslår ingen aksjer, fordi det ville vært en anbefaling og ikke et tall.
+ */
+function _jevnhetTekst(mnd, navn) {
+  const sum = mnd.reduce((s, v) => s + v, 0);
+  if (sum <= 0) return '';
+  const topp3 = [...mnd].sort((a, b) => b - a).slice(0, 3).reduce((s, v) => s + v, 0);
+  const andel = Math.round(topp3 / sum * 100);
+  // Månedsnavn er små bokstaver i løpende norsk tekst, selv når de står med
+  // stor forbokstav som akseetiketter i grafen over.
+  const tomme = mnd.map((v, i) => (v > 0 ? null : navn[i].toLowerCase())).filter(Boolean);
+
+  // Uten tomme måneder ville «fordelt over hele året» stått ved siden av en
+  // konsentrasjonsandel på 80 % og lest som en selvmotsigelse. Derfor to ulike
+  // setninger, ikke én med et påheng.
+  const tommeTekst = tomme.length
+    ? `Ingen utbetalinger i ${tomme.length === 12 ? 'noen måned' :
+        tomme.slice(0, -1).join(', ') + (tomme.length > 1 ? ' og ' : '') + tomme[tomme.length - 1]}.`
+    : 'Du har utbetalinger i alle tolv måneder.';
+
+  return `<p class="text-xs text-gray-500 dark:text-gray-400 mt-2 leading-relaxed">
+      De tre største månedene står for <strong>${andel} %</strong> av årsinntekten.
+      ${tommeTekst}
+    </p>`;
 }
 
 // ── MIN UTBYTTELØNN: 12-måneders kontantstrømprognose ─────────────────────
@@ -1599,6 +1663,32 @@ function beregnUtbyttePrognose(beholdning, idagIso) {
 
   beholdning.forEach(a => {
     if (!a.forv_ar || a.forv_ar <= 0) return;
+
+    // Har aksjen et registrert betalingsmønster, plasseres utbetalingene i de
+    // månedene den faktisk pleier å betale i — ikke i jevne intervaller fra et
+    // anker. Den gamle veien rullet 12/frekvens måneder om gangen fra en
+    // hardkodet startmåned, og traff dermed feil for nesten hele katalogen.
+    const ekteMnder = Array.isArray(a.utbetalingsmaaneder) && a.utbetalingsmaaneder.length
+      ? _betalingsMaaneder(a) : null;
+
+    if (ekteMnder && ekteMnder.length) {
+      const perBetaling = a.forv_ar / ekteMnder.length;
+      // En annonsert betalingsdato er et faktum og overstyrer mønsteret for
+      // nettopp den utbetalingen — men bare den. Resten er mønsterestimat.
+      const annonsertMnd = a.betaling_dato && a.betaling_dato >= idag && a.betaling_dato < slutt
+        ? a.betaling_dato.slice(0, 7) : null;
+      for (let k = 0; k <= 12; k++) {
+        const key = _leggTilMnd(idag.slice(0, 7) + '-01', k).slice(0, 7);
+        if (!ekteMnder.includes(parseInt(key.slice(5, 7), 10) - 1)) continue;
+        const erAnnonsert = key === annonsertMnd;
+        const dato = erAnnonsert ? a.betaling_dato : `${key}-15`;
+        if (dato < idag || dato >= slutt) continue;
+        utbetalinger.push({ dato, ticker: a.ticker, navn: a.navn,
+                            belop: perBetaling, annonsert: erAnnonsert });
+      }
+      return;
+    }
+
     const perAr       = _frekvensAntall(a.frekvens);
     const intervall   = 12 / perAr;
     const perBetaling = a.forv_ar / perAr;

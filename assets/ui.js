@@ -1601,8 +1601,77 @@ function visSektorer() {
   grid.innerHTML = kort.join('');
 }
 
+/**
+ * Utbyttesesongen: hvor mange av aksjene som typisk betaler hver måned.
+ *
+ * Bygget på `utbetalingsmaaneder`, som finnes for de aller fleste — mot de 11
+ * aksjene som til enhver tid har en annonsert ex-dato. En kalender bygget på
+ * annonseringer står tom elleve måneder i året; denne gjør ikke det.
+ *
+ * Svarer på «når på året betaler Oslo Børs utbytte», som ingenting annet på
+ * siden svarer på. Tallene regnes ut ved rendring — aldri lagret.
+ */
+function visUtbyttesesong() {
+  const container = document.getElementById('kalender-innhold');
+  if (!container) return;
+  const MND = ['Januar','Februar','Mars','April','Mai','Juni',
+               'Juli','August','September','Oktober','November','Desember'];
+  const tell = Array(12).fill(0);
+  let medMonster = 0;
+  (alleAksjer || []).forEach(a => {
+    const m = Array.isArray(a.utbetalingsmaaneder) ? a.utbetalingsmaaneder : [];
+    if (!m.length) return;
+    medMonster++;
+    m.forEach(x => { const i = Number(x) - 1; if (i >= 0 && i <= 11) tell[i]++; });
+  });
+
+  if (!medMonster) {
+    container.innerHTML = '<p class="text-gray-400 py-8 text-center">Ingen betalingsmønstre i datasettet ennå.</p>';
+    return;
+  }
+
+  const maks = Math.max(...tell, 1);
+  const sum = tell.reduce((s, v) => s + v, 0);
+  const vaar = tell[2] + tell[3] + tell[4];
+  const vaarAndel = Math.round(vaar / sum * 100);
+  const iMnd = new Date().getMonth();
+  const travlest = tell.indexOf(maks);
+
+  const rader = tell.map((v, i) => {
+    const pct = Math.round(v / maks * 100);
+    const naa = i === iMnd;
+    const vaarMnd = i >= 2 && i <= 4;
+    const farge = vaarMnd ? 'bg-green-500' : 'bg-gray-300 dark:bg-gray-600';
+    return `<div class="flex items-center gap-2">
+        <span class="w-20 shrink-0 text-xs ${naa ? 'font-bold text-green-700 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'}">${escHtml(MND[i])}</span>
+        <div class="flex-1 h-4 bg-gray-100 dark:bg-gray-800 rounded-sm overflow-hidden">
+          <div class="h-full ${farge} rounded-sm transition-all duration-500" style="width:${pct}%"></div>
+        </div>
+        <span class="w-8 shrink-0 text-right text-xs tabular-nums text-gray-600 dark:text-gray-300">${v}</span>
+      </div>`;
+  }).join('');
+
+  container.innerHTML = `
+    <div class="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4 shadow-sm space-y-3">
+      <div>
+        <h3 class="font-semibold text-sm">Når betaler Oslo Børs utbytte?</h3>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+          Antall av ${medMonster} aksjer som typisk betaler hver måned, utledet av flere års utbetalinger.
+        </p>
+      </div>
+      <div class="space-y-1.5">${rader}</div>
+      <p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed pt-1 border-t border-gray-100 dark:border-gray-800">
+        <strong>${vaarAndel} %</strong> av utbetalingene skjer i mars, april og mai.
+        ${escHtml(MND[travlest])} er travlest med ${maks} aksjer.
+        Norsk utbytte betales stort sett etter generalforsamlingen om våren, så
+        en portefølje satt sammen uten tanke på tid får lett tomme måneder om høsten.
+      </p>
+    </div>`;
+}
+
 function visKalender() {
-  if (_kalAktivTab === 'mine') { visMineUtbetalinger(); return; }
+  if (_kalAktivTab === 'mine')    { visMineUtbetalinger(); return; }
+  if (_kalAktivTab === 'sesong')  { visUtbyttesesong();    return; }
   const container = document.getElementById('kalender-innhold');
   const idag = new Date(); idag.setHours(0,0,0,0);
   const sok = (document.getElementById('sok')?.value || '').toLowerCase().trim();
@@ -3021,7 +3090,7 @@ function modalKalkulator(a) {
           <div class="rounded-lg bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 p-2.5">
             <p class="text-gray-400 mb-0.5">Utbytte / år</p>
             <p id="modal-kal-aar" class="font-bold text-green-600 dark:text-green-400 text-base">${fmtKr(utbAar)}</p>
-            <p id="modal-kal-mnd" class="text-gray-400 mt-0.5">${fmtKr(utbAar / 12)} / mnd</p>
+            <p id="modal-kal-mnd" class="text-gray-400 mt-0.5">${maanederTekst(a) ? 'Betales i ' + escHtml(maanederTekst(a)) : fmtKr(utbAar / 12) + ' / mnd i snitt'}</p>
           </div>
           <div class="rounded-lg bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 p-2.5">
             <p class="text-gray-400 mb-0.5">Etter skatt</p>
@@ -3050,7 +3119,11 @@ function _oppdaterModalKalkulator(a) {
 
   antallEl.textContent = new Intl.NumberFormat('nb-NO').format(antall);
   aarEl.textContent    = fmtKr(utbAar);
-  mndEl.textContent    = fmtKr(utbAar / 12) + ' / mnd';
+  // Flatt årlig/12 antyder jevn månedsinntekt. 47 % av norske utbetalinger
+  // ligger i mars–mai, så for de aller fleste er det usant. Har vi mønsteret,
+  // si når pengene faktisk kommer; ellers merk snittet som et snitt.
+  const mndTekst = maanederTekst(a);
+  mndEl.textContent    = mndTekst ? 'Betales i ' + mndTekst : fmtKr(utbAar / 12) + ' / mnd i snitt';
   nettoEl.textContent  = fmtKr(utbAar * (1 - SKATTESATS));
 }
 
@@ -3219,6 +3292,27 @@ function utbyttesplittStemmer(a) {
  * som koster 4,06 etter kapitalutdelingen, og den summen er ikke et
  * utbyttetotal.
  */
+/**
+ * «mai og november» — månedene aksjen typisk betaler i, som prosa.
+ *
+ * Speiler `_maaneder_tekst()` i scripts/fetch_stocks.py. Tom streng når vi ikke
+ * har et mønster, slik at kalleren kan falle tilbake på noe annet i stedet for
+ * å skrive en halv setning.
+ */
+function maanederTekst(a) {
+  const MND = ['januar','februar','mars','april','mai','juni',
+               'juli','august','september','oktober','november','desember'];
+  const m = Array.isArray(a && a.utbetalingsmaaneder) ? a.utbetalingsmaaneder : [];
+  const navn = [...new Set(m.map(x => Number(x) - 1))]
+    .filter(i => Number.isInteger(i) && i >= 0 && i <= 11)
+    .sort((x, y) => x - y)
+    .map(i => MND[i]);
+  if (!navn.length) return '';
+  if (navn.length === 1) return navn[0];
+  if (navn.length > 4) return `${navn.length} måneder i året`;
+  return navn.slice(0, -1).join(', ') + ' og ' + navn[navn.length - 1];
+}
+
 function utbetaltHittil(a) {
   if (!a) return null;
   const pris = Number(a.pris) || 0;
@@ -4621,4 +4715,4 @@ function _annBygTopp() {
 }
 
 // Node.js test export
-if (typeof module !== 'undefined') module.exports = { fmt, formaterDato, yieldKlasse, payoutKlasse, vekstKlasse, beregnScore, beregnBaerekraft, beregnYtdInntekt, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist };
+if (typeof module !== 'undefined') module.exports = { fmt, formaterDato, yieldKlasse, payoutKlasse, vekstKlasse, beregnScore, beregnBaerekraft, beregnYtdInntekt, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst };
