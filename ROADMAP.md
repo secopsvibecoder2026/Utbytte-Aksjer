@@ -65,6 +65,28 @@ SVG/PNG-maler, og siden ligger statisk på GitHub Pages — som er nyttig i seg 
 fordi **Instagram krever en offentlig bilde-URL** og henter bildet selv. Jobben er i
 praksis ett workflow-steg, ikke ny infrastruktur.
 
+**To hindringer funnet 15.09.2026, begge uavhengige av de to sjekkene under.** De
+krever ingen Meta-konto og kan fikses når som helst, men de flytter anslaget
+«ettermiddag eller måned» og bør være kjent før noen setter av tid.
+
+> ⛔ **Instagram tar ikke PNG.** Metas egen dokumentasjon er utvetydig: «JPEG is the
+> only image format supported. Extended JPEG formats such as MPO and JPS are not
+> supported.» **Alle åtte bildene i `/promo/` er PNG**, og alle fire generatorene der
+> (`generate_image.py`, `facebook_mandag.py`, `generate_kalkulator_post.py`,
+> `generate_sparebank_post.py`) skriver PNG. Ingen av dem ville blitt godtatt slik de
+> er i dag.
+>
+> **Fiksen er én linje per generator**, og det er verifisert, ikke antatt: alle fire
+> ender med lerretet i RGB-modus (de kaller `.convert("RGB")` etter komponeringen), så
+> `img.save(..., "PNG")` kan bli `"JPEG"` uten videre. Hadde lerretet vært RGBA ville
+> Pillow kastet «cannot write mode RGBA as JPEG» — JPEG har ingen alfakanal. Sjekk det
+> igjen hvis en generator skrives om.
+>
+> Merk at kravet gjelder *Instagram*; Facebook er mer tolerant, så en flyt som virker
+> på Facebook sier ingenting om den andre.
+
+Kilde: [Metas dokumentasjon for content publishing](https://developers.facebook.com/docs/instagram-platform/content-publishing).
+
 **Kjør disse to før noe bygges — de kan gjøres i dag og avgjør omfanget:**
 
 - [ ] **Test om et innlegg fra en app i utviklingsmodus er offentlig synlig.**
@@ -89,9 +111,27 @@ praksis ett workflow-steg, ikke ny infrastruktur.
       stille; et Facebook-innlegg med feil yield kan ikke det.
 
 > ⚠️ **`/promo/` er blokkert i robots.txt** siden 12.09.2026 (mappen er grafikk til
-> sosiale medier, ikke innhold for lesere). Om Metas bildehenter respekterer
-> robots.txt er uavklart — det kan altså komme i veien for nettopp denne flyten.
-> Test det, og løs eventuelt med en egen mappe eller en `Allow:`-regel.
+> sosiale medier, ikke innhold for lesere), og det kan komme i veien for nettopp
+> denne flyten.
+>
+> **Oppdatert 15.09.2026 — fortsatt ikke bekreftet, men nå med et konkret symptom.**
+> Flere tredjepartskilder rapporterer feilkode **479**, «social network could not
+> download media from this URL», med «Restricted by robots.txt» i detaljene. Det er
+> spesifikt nok til å planlegge rundt.
+>
+> Men det står **ikke** i Metas egen dokumentasjon, som bare krever at bildet ligger
+> på «a publicly accessible server» og ikke nevner robots.txt i det hele tatt. Så
+> dette er rapportert, ikke verifisert ved kilden — behandle det deretter.
+>
+> Filene er teknisk tilgjengelige: `promo/facebook-post.png` svarer 200 med
+> `image/png`. robots.txt er en instruks, ikke en sperre, så spørsmålet er utelukkende
+> om Meta velger å følge den.
+>
+> **To veier ut, og den andre er mest robust:** en egen `User-agent`-gruppe for Metas
+> henter med `Allow: /promo/`, eller å legge de publiserte bildene i en mappe som ikke
+> er sperret. Den første forutsetter at vi vet hvilket user-agent-navn henteren
+> faktisk bruker — og det vet vi ikke. `robots.txt` er ikke endret; sperren ble satt
+> bevisst og skal ikke røres uten at flyten faktisk skal bygges.
 
 ### Statisk forside — SEO-vennlig frontdoor for exday.no
 
@@ -341,4 +381,4 @@ rapportdatoen. Null nye kilder, null nye vilkår, null kroner.
 
 ---
 
-*Sist oppdatert: 14. september 2026*
+*Sist oppdatert: 15. september 2026*
