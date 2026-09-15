@@ -413,3 +413,53 @@ test('prognose: aksjer uten utbytte bidrar ikke', () => {
   assert.equal(p.utbetalinger.length, 0);
   assert.equal(p.bruttoAr, 0);
 });
+
+// ── utbetalingsmaaneder i prognosen ───────────────────────────────────────
+//
+// Feltet ble beregnet for 142 av 155 aksjer og brukt null steder i frontend
+// fram til 15.09.2026. Fallbacken — en hardkodet tabell — bommet på samtlige
+// faktiske utbetalingsmåneder for 121 av de 136 aksjene den gjaldt.
+test('prognosen bruker de ekte utbetalingsmånedene', () => {
+  const p = beregnUtbyttePrognose(
+    [{ ticker: 'X', navn: 'X', forv_ar: 1200, frekvens: 'Halvårlig', utbetalingsmaaneder: [5, 11] }],
+    '2026-09-15');
+  const med = p.mndSum.filter(m => m.belop > 0).map(m => m.key);
+  assert.deepEqual(med, ['2026-11', '2027-05'], JSON.stringify(med));
+});
+
+test('prognosen faller tilbake når mønsteret mangler', () => {
+  // Uten mønster beholdes den gamle veien — en gjetning er bedre enn ingenting.
+  const p = beregnUtbyttePrognose(
+    [{ ticker: 'Y', navn: 'Y', forv_ar: 1200, frekvens: 'Halvårlig' }], '2026-09-15');
+  assert.ok(p.mndSum.some(m => m.belop > 0));
+});
+
+test('årssummen er intakt selv når antall måneder ikke matcher frekvensen', () => {
+  // En halvårlig betaler kan ha tre registrerte måneder fordi datoene glir
+  // mellom år. Deles beløpet på frekvensen i stedet for på antall måneder,
+  // blir årssummen 1,5x for høy.
+  const p = beregnUtbyttePrognose(
+    [{ ticker: 'Z', navn: 'Z', forv_ar: 900, frekvens: 'Halvårlig', utbetalingsmaaneder: [4, 5, 11] }],
+    '2026-01-10');
+  const sum = p.mndSum.reduce((s, m) => s + m.belop, 0);
+  assert.equal(Math.round(sum), 900, `sum ble ${sum}`);
+});
+
+test('en annonsert betalingsdato overstyrer mønsteret for den utbetalingen', () => {
+  const p = beregnUtbyttePrognose(
+    [{ ticker: 'A', navn: 'A', forv_ar: 1000, frekvens: 'Årlig',
+       utbetalingsmaaneder: [5], betaling_dato: '2026-05-22' }], '2026-05-01');
+  const annonsert = p.utbetalinger.filter(u => u.annonsert);
+  assert.equal(annonsert.length, 1);
+  assert.equal(annonsert[0].dato, '2026-05-22');
+});
+
+test('søppel i utbetalingsmaaneder faller trygt tilbake', () => {
+  for (const m of [null, [], 'tull', [0], [13], [NaN]]) {
+    const p = beregnUtbyttePrognose(
+      [{ ticker: 'S', navn: 'S', forv_ar: 600, frekvens: 'Årlig', utbetalingsmaaneder: m }],
+      '2026-09-15');
+    const sum = p.mndSum.reduce((s, x) => s + x.belop, 0);
+    assert.ok(sum >= 0 && Number.isFinite(sum), JSON.stringify(m));
+  }
+});
