@@ -216,6 +216,50 @@ def finn_ubrukte_symbolkart(symbolkart: dict, tickere: list, noteringer) -> list
     return varsler
 
 
+def finn_feil_yf_symbol(symbolkart: dict, tickere: list) -> list:
+    """Vi spør Yahoo om vårt eget symbol der Euronext bruker et annet.
+
+    Symbolkartet finnes nettopp fordi Euronext og katalogen vår er uenige om
+    seks symboler. Da må `ticker_yf` bygge på **Euronext sitt** symbol, ikke
+    vårt — Yahoo følger børsen, ikke oss.
+
+    **DOF (funnet 2026-09-16).** `ticker_yf` var `DOF.OL`, som Yahoo svarer «No
+    data found, symbol may be delisted» på. Børsen handler selskapet som
+    `DOFG`, og `DOFG.OL` gir DOF Group ASA med seks kvartalsutbytter og ~10 %
+    direkteavkastning. Siden sto med yield 0 og tom historikk, havnet i
+    `uten_utbyttebevis()` og ble tatt ut av indeksen — som om selskapet ikke
+    betalte utbytte i det hele tatt.
+
+    Beviset lå i vårt eget repo: kartet har `DOFG → DOF`, og det finnes bare
+    fordi børsen kaller den DOFG. Ingenting sammenlignet de to. Nå gjør dette.
+
+    Sjekken krever ingen historikk og ingen nettverkstilgang — den leser to
+    filer vi allerede har, og kan derfor kjøre på den aller første kjøringen.
+    """
+    yf_for = {t.get("ticker"): (t.get("ticker_yf") or "").strip().upper()
+              for t in tickere if t.get("ticker")}
+    varsler = []
+    for eu_symbol, vår_ticker in sorted(symbolkart.items()):
+        yf_ticker = yf_for.get(vår_ticker)
+        if not yf_ticker:
+            continue  # dekkes av ubrukt_symbolkart
+        base = yf_ticker.split(".", 1)[0]
+        if base == eu_symbol.upper():
+            continue
+        varsler.append(_varsel(
+            vår_ticker,
+            "feil_yf_symbol",
+            ALVOR_KRITISK,
+            f"Euronext handler «{vår_ticker}» som «{eu_symbol}», men ticker_yf "
+            f"er «{yf_ticker}» — vi spør Yahoo om vårt eget symbol, ikke børsens.",
+            f"Sett ticker_yf til «{eu_symbol}.OL» i tickers.json og verifiser at "
+            "Yahoo svarer med riktig selskapsnavn og kurs. En tom respons her "
+            "gir yield 0 og tom historikk, og da havner siden i "
+            "uten_utbyttebevis() som om selskapet ikke betaler utbytte.",
+        ))
+    return varsler
+
+
 def finn_duplikat_ticker_yf(tickere: list) -> list:
     """
     Samme ticker_yf på to oppføringer gir identiske data fra Yahoo for begge.
@@ -548,6 +592,8 @@ def analyser(tickere, aksjer, hentelogg, status, idag,
     )
     varsler.extend(finn_ikke_pa_bors(tickere, noteringer))
     varsler.extend(finn_ubrukte_symbolkart(symbolkart or {}, tickere, noteringer))
+    # Krever verken historikk eller nett — leser bare kartet mot tickers.json.
+    varsler.extend(finn_feil_yf_symbol(symbolkart or {}, tickere))
     varsler.extend(finn_duplikat_ticker_yf(tickere))
     varsler.extend(finn_duplikat_navn(tickere))
     varsler.extend(finn_manglende_data(tickere, aksjer, hentelogg))
