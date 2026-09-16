@@ -1,5 +1,5 @@
 {
-  "generert": "2026-09-15T19:30:47Z",
+  "generert": "2026-09-16T12:17:41Z",
   "antall": 8,
   "antall_kritiske": 0,
   "varsler": [
@@ -7,7 +7,7 @@
       "ticker": "DOF",
       "type": "vedvarende_hentefeil",
       "alvorlighet": "advarsel",
-      "melding": "Ingen data fra Yahoo Finance på 11 dager (sist OK 2026-09-04), men aksjen står fortsatt på Euronext Oslo. Dette er en hentefeil, ikke en avnotering. Siden vises med data fra den datoen.",
+      "melding": "Ingen data fra Yahoo Finance på 12 dager (sist OK 2026-09-04), men aksjen står fortsatt på Euronext Oslo. Dette er en hentefeil, ikke en avnotering. Siden vises med data fra den datoen.",
       "forslag": "Ikke fjern tickeren. Kontroller ticker_yf mot Yahoo og se om feilen rammer flere tickere samtidig — da er det Yahoo som svikter."
     },
     {
