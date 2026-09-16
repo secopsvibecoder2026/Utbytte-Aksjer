@@ -876,6 +876,32 @@ A ticker whose fetch is failing can land here (DOF did). That is fine and
 deliberate: the page is empty whatever the cause, and it returns by itself on
 the next successful fetch. Self-healing beats a manual exception list.
 
+> ⛔ **It did not self-heal — it hid a wrong ticker for months (2026-09-16).**
+> DOF sat here with yield 0, `ar_med_utbytte` 0 and an empty history, and the
+> rule dutifully took it out of the index. The rule worked exactly as written.
+> The premise was false: `ticker_yf` was `DOF.OL`, which Yahoo answers with «No
+> data found, symbol may be delisted». Oslo Børs trades the company as
+> **`DOFG`** (ISIN NO0012851874), and `DOFG.OL` returns DOF Group ASA at 135,10
+> NOK with **six quarterly dividends since May 2025** — roughly **10 %** yield.
+>
+> So the site told Google not to index a page about a 10 % yielder, on the
+> grounds that it paid nothing. The evidence was in our own repo the whole
+> time: `EURONEXT_SYMBOL_MAP` carries `DOFG → DOF`, which only exists because
+> Euronext calls it DOFG. Nothing cross-checked that against `ticker_yf`.
+>
+> **The lesson is about the word «self-healing».** It is true for a *transient*
+> fetch failure and false for a *wrong ticker* — and the two are
+> indistinguishable from inside `uten_utbyttebevis()`, because both produce an
+> empty row. An empty row is not evidence that a company pays no dividend; it
+> is evidence that we have no data, and those are different claims. Same shape
+> as «a failed fetch is evidence of nothing in either direction» further down.
+>
+> `vedvarende_hentefeil` had been reporting DOF correctly for twelve days —
+> «Kontroller ticker_yf mot Yahoo» is the first thing its `forslag` says. The
+> alerting worked; the follow-up did not, exactly as with AFG/Arendals
+> Fossekompani. **A ticker that fails while Euronext confirms the listing is a
+> wrong `ticker_yf` until proven otherwise** — that is what JAEDR→JAREN was too.
+
 The same function drives both the template and `generer_sitemap()`, so the two
 cannot drift apart — asking Google to fetch a URL you also tell it not to index
 is a contradictory signal. Tests: `TestUtenUtbyttebevis` in

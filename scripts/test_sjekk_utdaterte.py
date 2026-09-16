@@ -568,5 +568,69 @@ class TestUbruktSymbolkart(unittest.TestCase):
         self.assertEqual(finn_ubrukte_symbolkart(kart, self.tickere, None), [])
 
 
+class TestFeilYfSymbol(unittest.TestCase):
+    """feil_yf_symbol — vi må spørre Yahoo om børsens symbol, ikke vårt eget.
+
+    Reproduserer DOF-feilen ordrett fra tilstanden før 16.09.2026. En sjekk som
+    ikke fanger feilen den ble skrevet for er verre enn ingen sjekk, fordi den
+    leser som dekning.
+    """
+
+    KART = {"DOFG": "DOF", "ENTRA": "ENTR", "MORG": "SBMO"}
+
+    def test_fanger_dof_feilen(self):
+        from sjekk_utdaterte import finn_feil_yf_symbol, ALVOR_KRITISK
+        v = finn_feil_yf_symbol(self.KART, [{"ticker": "DOF", "ticker_yf": "DOF.OL"}])
+        self.assertEqual(len(v), 1)
+        self.assertEqual(v[0]["type"], "feil_yf_symbol")
+        self.assertEqual(v[0]["alvorlighet"], ALVOR_KRITISK)
+        self.assertIn("DOFG", v[0]["melding"])
+        self.assertIn("DOFG.OL", v[0]["forslag"])
+
+    def test_stille_naar_symbolet_er_riktig(self):
+        from sjekk_utdaterte import finn_feil_yf_symbol
+        riktige = [{"ticker": "DOF", "ticker_yf": "DOFG.OL"},
+                   {"ticker": "ENTR", "ticker_yf": "ENTRA.OL"},
+                   {"ticker": "SBMO", "ticker_yf": "MORG.OL"}]
+        self.assertEqual(finn_feil_yf_symbol(self.KART, riktige), [])
+
+    def test_ticker_utenfor_kartet_ignoreres(self):
+        # Bare de seks der Euronext og katalogen er uenige angår denne sjekken.
+        from sjekk_utdaterte import finn_feil_yf_symbol
+        self.assertEqual(
+            finn_feil_yf_symbol(self.KART, [{"ticker": "EQNR", "ticker_yf": "EQNR.OL"}]), [])
+
+    def test_manglende_ticker_overlates_til_ubrukt_symbolkart(self):
+        # Peker kartet på en ticker vi ikke har, er det den andre sjekkens sak.
+        from sjekk_utdaterte import finn_feil_yf_symbol
+        self.assertEqual(finn_feil_yf_symbol({"XXXX": "BORTE"}, []), [])
+
+    def test_stor_og_liten_bokstav_og_tomt_kart(self):
+        from sjekk_utdaterte import finn_feil_yf_symbol
+        self.assertEqual(
+            finn_feil_yf_symbol({"DOFG": "DOF"}, [{"ticker": "DOF", "ticker_yf": "dofg.ol"}]), [])
+        self.assertEqual(finn_feil_yf_symbol({}, [{"ticker": "DOF", "ticker_yf": "DOF.OL"}]), [])
+
+    def test_katalogen_var_i_takt_bortsett_fra_dof(self):
+        """Mot det ekte kartet og den ekte katalogen: ingen skal feile nå.
+
+        Denne fanger neste gang noen retter en ticker i tickers.json uten å se
+        på symbolkartet — som er nøyaktig slik DOF ble feil.
+        """
+        import json, os, re
+        rot = os.path.join(os.path.dirname(__file__), "..")
+        src = open(os.path.join(rot, "scripts", "fetch_stocks.py"), encoding="utf-8").read()
+        blokk = re.search(r"EURONEXT_SYMBOL_MAP\s*=\s*\{(.*?)\}", src, re.S)
+        if not blokk:
+            self.skipTest("fant ikke EURONEXT_SYMBOL_MAP")
+        kart = dict(re.findall(r'"([A-Z0-9]+)"\s*:\s*"([A-Z0-9]+)"', blokk.group(1)))
+        with open(os.path.join(rot, "data", "tickers.json"), encoding="utf-8") as f:
+            tickere = json.load(f)
+        from sjekk_utdaterte import finn_feil_yf_symbol
+        v = finn_feil_yf_symbol(kart, tickere)
+        self.assertEqual(v, [], f"ticker_yf er ute av takt med Euronext: "
+                               f"{[x['ticker'] for x in v]}")
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
