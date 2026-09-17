@@ -1610,6 +1610,7 @@ function _jevnhetTekst(mnd, navn) {
   return `<p class="text-xs text-gray-500 dark:text-gray-400 mt-2 leading-relaxed">
       De tre største månedene står for <strong>${andel} %</strong> av årsinntekten.
       ${tommeTekst}
+      Månedene er ex-datoer; utbetalingen kommer typisk halvannen til tre uker senere.
     </p>`;
 }
 
@@ -1800,7 +1801,7 @@ function visUtbyttePrognose(beholdning) {
     </div>
     <div class="max-h-56 overflow-y-auto mt-3" id="pf-prognose-liste">${listeHtml}</div>
     ${utenDatoHtml}
-    <p class="text-[11px] text-gray-400 dark:text-gray-600 mt-2">Estimater bygger på sist kjente utbytte og betalingsmønster — fremtidige utbytter er ikke garantert. Netto forutsetter skjermingsfradrag på årets kostbasis.</p>`;
+    <p class="text-[11px] text-gray-400 dark:text-gray-600 mt-2">Månedene er <strong>ex-datoer</strong> — pengene kommer typisk halvannen til tre uker senere, så en ex-dato sent i måneden utbetales i den neste. Estimater bygger på sist kjente utbytte og betalingsmønster; fremtidige utbytter er ikke garantert. Netto forutsetter skjermingsfradrag på årets kostbasis.</p>`;
 }
 
 // ── VERDIKONSENTRASJON (Beholdning) ───────────────────────────────────────

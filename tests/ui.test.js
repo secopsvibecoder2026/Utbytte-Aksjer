@@ -32,7 +32,7 @@ const {
   vekstKlasse,
   beregnScore,
   beregnYtdInntekt
-, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst } = require('../assets/ui.js');
+, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote } = require('../assets/ui.js');
 
 // ── fmt ────────────────────────────────────────────────────────────────────
 test('fmt returnerer — for null', () => {
@@ -363,4 +363,57 @@ test('maanederTekst gir tom streng uten mønster', () => {
                    { utbetalingsmaaneder: 'tull' }, { utbetalingsmaaneder: [0, 13] }]) {
     assert.equal(maanederTekst(a), '', JSON.stringify(a));
   }
+});
+
+// ── Ekstraordinær andel i annen valuta (WAWI) ─────────────────────────────
+//
+// WAWI erklærer USD 0,37 + 0,24 mens vi lagrer 5,75 NOK. Vi regner ikke om —
+// forholdet mellom delene er valutauavhengig, og er det vi kan si.
+function wawi(endring = {}) {
+  return Object.assign({
+    utbytte_yield: 13.46, siste_utbytte: 5.75, valuta: 'NOK',
+    frekvens: 'Halvårlig', utbytte_per_aksje: 24.26,
+    historiske_utbytter: [{ ar: 2026, maaneder: [3, 8] }],
+    utbyttesplitt: { ordinaert: 0.37, ekstraordinaert: 0.24, valuta: 'USD', melding_dato: '2026-08-11' },
+  }, endring);
+}
+
+test('annen valuta godtas som forholdstall', () => {
+  const r = utbyttesplittStemmer(wawi());
+  assert.equal(r.kunAndel, true);
+  assert.equal(r.ekstraordinaert, 0.24);
+});
+
+test('melding fra feil måned avvises', () => {
+  // Uten sumvakten er månedskoblingen alt som binder meldingen til utbetalingen.
+  const a = wawi();
+  a.utbyttesplitt = Object.assign({}, a.utbyttesplitt, { melding_dato: '2026-06-02' });
+  assert.equal(utbyttesplittStemmer(a), null);
+});
+
+test('uten månedsdata avvises forholdstallet', () => {
+  assert.equal(utbyttesplittStemmer(wawi({ historiske_utbytter: [] })), null);
+});
+
+test('et forholdstall kan ikke motbevise delår', () => {
+  // delaarMotbevist trekker den ekstraordinære delen fra siste_utbytte, og
+  // den subtraksjonen er meningsløs når valutaene spriker.
+  assert.equal(delaarMotbevist(wawi()), false);
+});
+
+test('noten rendres for høy yield med verifisert splitt', () => {
+  const h = modalEkstraordinaerNote(wawi());
+  assert.match(h, /39 % av siste utbetaling/);
+  assert.match(h, /13,46/);
+});
+
+test('ingen note når delårsvarselet alt gjelder', () => {
+  // To bokser om samme utbetaling ville vært støy.
+  assert.equal(modalEkstraordinaerNote(wawi({ utbytte_per_aksje: 1.0, siste_utbytte: 5.0 })), '');
+});
+
+test('eksakt sum bruker fortsatt beløp, ikke andel', () => {
+  const kog = { siste_utbytte: 5.70, valuta: 'NOK',
+                utbyttesplitt: { ordinaert: 2.20, ekstraordinaert: 3.50, valuta: 'NOK' } };
+  assert.equal(utbyttesplittStemmer(kog).kunAndel, false);
 });

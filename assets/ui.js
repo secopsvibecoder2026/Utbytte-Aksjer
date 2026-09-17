@@ -1602,7 +1602,7 @@ function visSektorer() {
 }
 
 /**
- * Utbyttesesongen: hvor mange av aksjene som typisk betaler hver måned.
+ * Utbyttesesongen: hvor mange av aksjene som typisk går ex-utbytte hver måned.
  *
  * Bygget på `utbetalingsmaaneder`, som finnes for de aller fleste — mot de 11
  * aksjene som til enhver tid har en annonsert ex-dato. En kalender bygget på
@@ -1654,9 +1654,10 @@ function visUtbyttesesong() {
   container.innerHTML = `
     <div class="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4 shadow-sm space-y-3">
       <div>
-        <h3 class="font-semibold text-sm">Når betaler Oslo Børs utbytte?</h3>
+        <h3 class="font-semibold text-sm">Når går Oslo Børs ex-utbytte?</h3>
         <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
-          Antall av ${medMonster} aksjer som typisk betaler hver måned, utledet av flere års utbetalinger.
+          Antall av ${medMonster} aksjer med ex-dato i hver måned, utledet av flere års utbetalinger.
+          Pengene kommer typisk halvannen til tre uker etter ex-datoen.
         </p>
       </div>
       <div class="space-y-1.5">${rader}</div>
@@ -2915,7 +2916,7 @@ function visModal(a) {
         ${modalKort('Utbyttevekst 5år', '<span class="' + vekstKlasse(a.utbytte_vekst_5ar) + '">' + (a.utbytte_vekst_5ar !== 0 ? (a.utbytte_vekst_5ar > 0 ? '+' : '') + a.utbytte_vekst_5ar.toFixed(1).replace('.', ',') + '%' : '—') + '</span>')}
         ${modalKort('År m/utbytte', a.ar_med_utbytte > 0 ? a.ar_med_utbytte + ' år' : '—')}
       </div>
-      ${modalDelaarVarsel(a)}
+      ${modalDelaarVarsel(a)}${modalEkstraordinaerNote(a)}
       <div class="rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden mb-4">
         <div class="bg-orange-50 dark:bg-orange-950/30 px-4 py-3">
           <h3 class="font-semibold text-sm text-orange-800 dark:text-orange-300">Viktige datoer</h3>
@@ -3090,7 +3091,7 @@ function modalKalkulator(a) {
           <div class="rounded-lg bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 p-2.5">
             <p class="text-gray-400 mb-0.5">Utbytte / år</p>
             <p id="modal-kal-aar" class="font-bold text-green-600 dark:text-green-400 text-base">${fmtKr(utbAar)}</p>
-            <p id="modal-kal-mnd" class="text-gray-400 mt-0.5">${maanederTekst(a) ? 'Betales i ' + escHtml(maanederTekst(a)) : fmtKr(utbAar / 12) + ' / mnd i snitt'}</p>
+            <p id="modal-kal-mnd" class="text-gray-400 mt-0.5">${maanederTekst(a) ? 'Ex-dato i ' + escHtml(maanederTekst(a)) : fmtKr(utbAar / 12) + ' / mnd i snitt'}</p>
           </div>
           <div class="rounded-lg bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 p-2.5">
             <p class="text-gray-400 mb-0.5">Etter skatt</p>
@@ -3123,7 +3124,7 @@ function _oppdaterModalKalkulator(a) {
   // ligger i mars–mai, så for de aller fleste er det usant. Har vi mønsteret,
   // si når pengene faktisk kommer; ellers merk snittet som et snitt.
   const mndTekst = maanederTekst(a);
-  mndEl.textContent    = mndTekst ? 'Betales i ' + mndTekst : fmtKr(utbAar / 12) + ' / mnd i snitt';
+  mndEl.textContent    = mndTekst ? 'Ex-dato i ' + mndTekst : fmtKr(utbAar / 12) + ' / mnd i snitt';
   nettoEl.textContent  = fmtKr(utbAar * (1 - SKATTESATS));
 }
 
@@ -3277,9 +3278,29 @@ function utbyttesplittStemmer(a) {
   const siste = Number(a.siste_utbytte) || 0;
   // ordi === 0 er gyldig: hele utbetalingen er da klassifisert som ekstraordinær.
   if (ordi < 0 || ekstra <= 0 || siste <= 0) return null;
-  if (Math.abs((ordi + ekstra) - siste) / siste > 0.01) return null;
+  if (Math.abs((ordi + ekstra) - siste) / siste <= 0.01) {
+    return { ordinaert: ordi, ekstraordinaert: ekstra,
+             valuta: a.utbyttesplitt.valuta || a.valuta || 'NOK', kunAndel: false };
+  }
+  // Summen stemmer ikke — men utbyttet kan være erklært i en annen valuta enn
+  // vi lagrer. WAWI erklærer USD 0,37 + 0,24 mens vi har 5,75 NOK. Vi regner
+  // ikke om; forholdet mellom delene er valutauavhengig og er det vi kan si.
+  // Da trengs en annen kobling til riktig utbetaling: meldingen må være
+  // publisert i en måned aksjen faktisk gikk ex-utbytte i.
+  if (!_meldingPasserUtbetaling(a, a.utbyttesplitt.melding_dato)) return null;
   return { ordinaert: ordi, ekstraordinaert: ekstra,
-           valuta: a.utbyttesplitt.valuta || a.valuta || 'NOK' };
+           valuta: a.utbyttesplitt.valuta || '', kunAndel: true };
+}
+
+/** Ble børsmeldingen publisert i en måned aksjen faktisk gikk ex-utbytte i? */
+function _meldingPasserUtbetaling(a, meldingDato) {
+  if (!meldingDato || String(meldingDato).length < 7) return false;
+  const aar = parseInt(String(meldingDato).slice(0, 4), 10);
+  const mnd = parseInt(String(meldingDato).slice(5, 7), 10);
+  if (!aar || !mnd) return false;
+  const rad = (a.historiske_utbytter || []).find(h => h && Number(h.ar) === aar);
+  if (!rad || !Array.isArray(rad.maaneder)) return false;
+  return rad.maaneder.map(Number).includes(mnd);
 }
 
 /**
@@ -3346,7 +3367,9 @@ function utbetaltHittil(a) {
  */
 function delaarMotbevist(a) {
   const splitt = utbyttesplittStemmer(a);
-  if (!splitt) return false;
+  // Med bare et forholdstall står beløpene i ulik valuta, og subtraksjonen
+  // under er meningsløs. Da har vi ikke grunnlag for å motbevise noe.
+  if (!splitt || splitt.kunAndel) return false;
   const upa = Number(a.utbytte_per_aksje) || 0;
   const siste = Number(a.siste_utbytte) || 0;
   return upa >= (siste - splitt.ekstraordinaert);
@@ -3362,6 +3385,32 @@ function delaarMotbevist(a) {
  * Har børsmeldingen motbevist premisset, byttes hele boksen ut med en nøytral
  * forklaring — da er yielden ikke for lav, og en advarsel ville vært usann.
  */
+/**
+ * Sier fra når en høy direkteavkastning inneholder et ekstraordinært utbytte.
+ * Speiler `lag_ekstraordinaer_note()` i scripts/fetch_stocks.py. Tom streng når
+ * delårsvarselet alt gjelder — to bokser om samme utbetaling ville vært støy.
+ */
+function modalEkstraordinaerNote(a) {
+  if (yieldErDelaar(a)) return '';
+  const splitt = utbyttesplittStemmer(a);
+  if (!splitt) return '';
+  const sum = splitt.ordinaert + splitt.ekstraordinaert;
+  if (sum <= 0) return '';
+  const y = Number(a.utbytte_yield) || 0;
+  const hva = splitt.kunAndel
+    ? `<strong>om lag ${Math.round(splitt.ekstraordinaert / sum * 100)} % av siste utbetaling var ekstraordinært utbytte</strong>`
+    : `<strong>${fmt(splitt.ekstraordinaert)} ${escHtml(splitt.valuta)} av siste utbetaling var ekstraordinært utbytte</strong>,
+       og ${fmt(splitt.ordinaert)} ${escHtml(splitt.valuta)} ordinært`;
+  return `<div class="rounded-lg border-l-4 border-gray-400 dark:border-gray-600 bg-gray-50 dark:bg-gray-800/50 px-4 py-3 mb-4">
+      <p class="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-1">Deler av utbyttet var ekstraordinært</p>
+      <p class="text-xs text-gray-700 dark:text-gray-300 leading-relaxed">
+        Ifølge selskapets børsmelding ${hva}. Et ekstraordinært utbytte er en engangsutdeling og
+        gjentas ikke nødvendigvis — direkteavkastningen på ${fmt(y)} % bygger på en periode som
+        inneholder den.
+      </p>
+    </div>`;
+}
+
 function modalDelaarVarsel(a) {
   if (!yieldErDelaar(a)) return '';
   const valuta = escHtml(a.valuta || 'NOK');
@@ -4715,4 +4764,4 @@ function _annBygTopp() {
 }
 
 // Node.js test export
-if (typeof module !== 'undefined') module.exports = { fmt, formaterDato, yieldKlasse, payoutKlasse, vekstKlasse, beregnScore, beregnBaerekraft, beregnYtdInntekt, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst };
+if (typeof module !== 'undefined') module.exports = { fmt, formaterDato, yieldKlasse, payoutKlasse, vekstKlasse, beregnScore, beregnBaerekraft, beregnYtdInntekt, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote };

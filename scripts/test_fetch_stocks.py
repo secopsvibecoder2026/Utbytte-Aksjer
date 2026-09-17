@@ -1004,5 +1004,215 @@ class TestNewswebUtsteder(unittest.TestCase):
         self.assertFalse(set(_NEWSWEB_UTSTEDER_EKSTRA) & set(EURONEXT_SYMBOL_MAP.values()))
 
 
+class TestUtbetalingsmaanederVindu(unittest.TestCase):
+    """Bare de tre nyeste årene teller — ellers vinner gamle år over nye.
+
+    WAWI gikk ex i april/november i 2022–2023, men i mars/august i både 2025 og
+    2026. Uten vindu sto vi med april/november, fordi de gamle årene hadde to
+    treff hver mens de nye hadde ett hver så lenge inneværende år var utelatt.
+    """
+
+    def test_omlagt_plan_slaar_gjennom(self):
+        from fetch_stocks import _typiske_utbetalingsmaaneder
+        wawi = [{"ar": 2022, "maaneder": [4, 11]}, {"ar": 2023, "maaneder": [4, 11]},
+                {"ar": 2024, "maaneder": [5, 9]}, {"ar": 2025, "maaneder": [3, 8]},
+                {"ar": 2026, "maaneder": [3, 8]}]
+        self.assertEqual(_typiske_utbetalingsmaaneder(wawi), [3, 8])
+
+    def test_stabil_betaler_er_urort(self):
+        from fetch_stocks import _typiske_utbetalingsmaaneder
+        stabil = [{"ar": a, "maaneder": [2, 5, 8, 11]} for a in range(2021, 2027)]
+        self.assertEqual(_typiske_utbetalingsmaaneder(stabil), [2, 5, 8, 11])
+
+    def test_enkelt_ekstrautbytte_blir_ikke_typisk(self):
+        # Én august gjør ikke august til en utbetalingsmåned.
+        from fetch_stocks import _typiske_utbetalingsmaaneder
+        h = [{"ar": 2024, "maaneder": [5]}, {"ar": 2025, "maaneder": [5, 8]},
+             {"ar": 2026, "maaneder": [5]}]
+        self.assertEqual(_typiske_utbetalingsmaaneder(h), [5])
+
+    def test_faller_tilbake_paa_nyeste_aar(self):
+        # Ulike måneder hvert år: det siste vi vet slår ingenting.
+        from fetch_stocks import _typiske_utbetalingsmaaneder
+        h = [{"ar": 2024, "maaneder": [5]}, {"ar": 2025, "maaneder": [8]},
+             {"ar": 2026, "maaneder": [4]}]
+        self.assertEqual(_typiske_utbetalingsmaaneder(h), [4])
+
+    def test_aar_uten_maanedsdata_filtreres_bort(self):
+        from fetch_stocks import _typiske_utbetalingsmaaneder
+        h = [{"ar": 2024, "maaneder": [5]}, {"ar": 2025, "maaneder": [5]},
+             {"ar": 2026, "maaneder": []}]
+        self.assertEqual(_typiske_utbetalingsmaaneder(h), [5])
+        self.assertEqual(_typiske_utbetalingsmaaneder([]), [])
+
+
+class TestProsasplittOgAndel(unittest.TestCase):
+    """WAWI-formen: «ordinary dividend of USD 0.37 … extraordinary portion of USD 0.24».
+
+    Parseren kjente bare KOGs seksjonsform og HUNTs klassifiseringsfelt, så
+    landets tydeligste utbyttesplitt ga ingenting — «portion» er ikke
+    «dividend», og beløpet står rett etter frasen, ikke i et eget felt.
+    """
+
+    WAWI_TEKST = ("The dividend is split in an ordinary dividend of USD 0.37 based on "
+                  "50% of net profit and an extraordinary portion of USD 0.24, "
+                  "totalling USD 0.61 per share.\nDeclared currency: USD")
+
+    def test_prosaformen_parses(self):
+        from fetch_stocks import _parse_utbyttesplitt
+        r = _parse_utbyttesplitt(self.WAWI_TEKST)
+        self.assertEqual(r["ordinaert"], 0.37)
+        self.assertEqual(r["ekstraordinaert"], 0.24)
+        self.assertEqual(r["valuta"], "USD")
+
+    def test_de_gamle_formene_er_urort(self):
+        from fetch_stocks import _parse_utbyttesplitt
+        kog = ("Ordinary dividend\nDividend amount: 2.20 per share\n"
+               "Declared currency: NOK\nSpecial dividend\nDividend amount: 3.50 per share")
+        self.assertEqual(_parse_utbyttesplitt(kog)["ekstraordinaert"], 3.50)
+        hunt = "Dividend amount: NOK 1.50\nDividend classification: NOK 1.50 as extraordinary dividend"
+        self.assertEqual(_parse_utbyttesplitt(hunt)["ordinaert"], 0.0)
+
+    def test_millionbelop_er_ikke_per_aksje(self):
+        """«an extraordinary dividend of USD 100m» er hundre millioner totalt.
+
+        WAWIs melding nevner både totalbeløpet og beløpet per aksje. Første
+        forsøk plukket 100 og ville rendret «om lag 100 % var ekstraordinært».
+        """
+        from fetch_stocks import _parse_utbyttesplitt
+        self.assertIsNone(_parse_utbyttesplitt(
+            "an ordinary dividend of USD 0.37 and an extraordinary dividend of USD 100m"))
+
+    def test_tallet_trunkeres_ikke_av_vakten(self):
+        """Regexen backtracket «100m» til «10», og da så vakten «0m», ikke «m».
+
+        Uten `(?![0-9])` slapp millionbeløpet gjennom som 10.
+        """
+        from fetch_stocks import _SPLITT_PROSA
+        funnet = [m.group(3) for m in _SPLITT_PROSA.finditer(
+            "an extraordinary dividend of USD 100m")]
+        self.assertEqual(funnet, [])
+
+    def test_desimalkomma_forveksles_ikke_med_skilletegn(self):
+        """«USD 0.24,» — kommaet etter er skilletegn, ikke del av tallet.
+
+        Første vakt avviste alle kommaer og mistet dermed 0,24 helt.
+        """
+        from fetch_stocks import _parse_utbyttesplitt
+        r = _parse_utbyttesplitt(
+            "an ordinary dividend of USD 0.37 and an extraordinary portion of "
+            "USD 0.24, totalling USD 0.61 per share")
+        self.assertEqual(r["ekstraordinaert"], 0.24)
+
+    def test_delene_maa_summere_til_oppgitt_total(self):
+        from fetch_stocks import _parse_utbyttesplitt
+        self.assertIsNone(_parse_utbyttesplitt(
+            "an ordinary dividend of USD 0.37 and an extraordinary portion of "
+            "USD 5.00, totalling USD 0.61 per share"))
+
+    def test_bare_ordinaert_gir_fortsatt_ingenting(self):
+        from fetch_stocks import _parse_utbyttesplitt
+        self.assertIsNone(_parse_utbyttesplitt("an ordinary dividend of NOK 6.00 per share"))
+
+    def _wawi(self, **kw):
+        a = {"utbytte_yield": 13.46, "siste_utbytte": 5.75, "valuta": "NOK",
+             "frekvens": "Halvårlig", "utbytte_per_aksje": 24.26,
+             "historiske_utbytter": [{"ar": 2026, "maaneder": [3, 8]}],
+             "utbyttesplitt": {"ordinaert": 0.37, "ekstraordinaert": 0.24,
+                               "valuta": "USD", "melding_dato": "2026-08-11"}}
+        a.update(kw)
+        return a
+
+    def test_annen_valuta_godtas_som_forholdstall(self):
+        from fetch_stocks import utbyttesplitt_stemmer
+        r = utbyttesplitt_stemmer(self._wawi())
+        self.assertTrue(r["kun_andel"])
+        self.assertEqual(r["ekstraordinaert"], 0.24)
+
+    def test_melding_fra_feil_maaned_avvises(self):
+        # Uten sumvakten er månedskoblingen alt som binder meldingen til
+        # utbetalingen. Ryker den, skal vi ikke vise noe.
+        from fetch_stocks import utbyttesplitt_stemmer
+        a = self._wawi()
+        a["utbyttesplitt"] = dict(a["utbyttesplitt"], melding_dato="2026-06-02")
+        self.assertIsNone(utbyttesplitt_stemmer(a))
+
+    def test_uten_maanedsdata_avvises(self):
+        from fetch_stocks import utbyttesplitt_stemmer
+        self.assertIsNone(utbyttesplitt_stemmer(self._wawi(historiske_utbytter=[])))
+
+    def test_eksakt_sum_bruker_fortsatt_belop(self):
+        from fetch_stocks import utbyttesplitt_stemmer
+        kog = {"siste_utbytte": 5.70, "valuta": "NOK",
+               "utbyttesplitt": {"ordinaert": 2.20, "ekstraordinaert": 3.50, "valuta": "NOK"}}
+        r = utbyttesplitt_stemmer(kog)
+        self.assertFalse(r["kun_andel"])
+
+    def test_forholdstall_kan_ikke_motbevise_delaar(self):
+        # delaar_motbevist() trekker den ekstraordinære delen fra siste_utbytte.
+        # Med beløp i ulike valutaer er den subtraksjonen meningsløs.
+        from fetch_stocks import delaar_motbevist
+        self.assertFalse(delaar_motbevist(self._wawi()))
+
+    def test_noten_rendres_for_hoy_yield(self):
+        from fetch_stocks import lag_ekstraordinaer_note
+        nf = lambda v, d=2: f"{v:.{d}f}".replace(".", ",")
+        h = lag_ekstraordinaer_note(self._wawi(), nf)
+        self.assertIn("39 % av siste utbetaling", h)
+        self.assertIn("13,46 %", h)
+
+    def test_ingen_note_naar_delaarsvarselet_gjelder(self):
+        from fetch_stocks import lag_ekstraordinaer_note
+        nf = lambda v, d=2: f"{v:.{d}f}"
+        a = self._wawi(utbytte_per_aksje=1.0, siste_utbytte=5.0)
+        self.assertEqual(lag_ekstraordinaer_note(a, nf), "")
+
+    def test_gaten_dekker_hoy_yield(self):
+        from fetch_stocks import bor_hente_utbyttesplitt
+        self.assertTrue(bor_hente_utbyttesplitt({"utbytte_yield": 13.46}))
+        self.assertFalse(bor_hente_utbyttesplitt({"utbytte_yield": 4.0}))
+        self.assertFalse(bor_hente_utbyttesplitt({"utbytte_yield": "tull"}))
+
+
+class TestUtbetalingsaar(unittest.TestCase):
+    """«Utbyttet gjennom året» må ikke motsi frekvensen på samme side."""
+
+    @staticmethod
+    def _aksje(frekvens, maaneder):
+        return {
+            "navn": "Testselskap ASA",
+            "ticker": "TEST",
+            "frekvens": frekvens,
+            "utbetalingsmaaneder": maaneder,
+            "utbytte_per_aksje": 12.0,
+        }
+
+    def test_antall_og_belop_naar_listen_stemmer(self):
+        from fetch_stocks import _lag_utbetalingsaar
+        h = _lag_utbetalingsaar(self._aksje("Halvårlig", [3, 8]))
+        self.assertIn("betaler ut 2 ganger i året", h)
+        self.assertIn("6,00 kroner per aksje hver gang", h)
+
+    def test_ingen_antallspaastand_naar_listen_er_kortere(self):
+        # DOF: kvartalsvis, men bare to måneder går igjen. «2 ganger i året»
+        # ville motsagt nøkkeltalltabellen, og 12/2 er dobbelt så mye som
+        # selskapet faktisk betaler per gang.
+        from fetch_stocks import _lag_utbetalingsaar
+        h = _lag_utbetalingsaar(self._aksje("Kvartalsvis", [5, 8]))
+        self.assertIn("Ex-datoene til Testselskap ASA har de siste årene", h)
+        self.assertIn("mai og august", h)
+        self.assertNotIn("ganger i året", h)
+        self.assertNotIn("hver gang", h)
+
+    def test_ukjent_frekvens_gir_ingen_antallspaastand(self):
+        from fetch_stocks import _lag_utbetalingsaar
+        h = _lag_utbetalingsaar(self._aksje("Uregelmessig", [5, 8]))
+        self.assertNotIn("ganger i året", h)
+
+    def test_seksjonen_uteblir_for_en_enkelt_maaned(self):
+        from fetch_stocks import _lag_utbetalingsaar
+        self.assertEqual(_lag_utbetalingsaar(self._aksje("Årlig", [5])), "")
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
