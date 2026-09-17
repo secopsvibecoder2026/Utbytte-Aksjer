@@ -3,8 +3,8 @@
 // visDataFerskhet() er skrevet fordi datoen var usynlig i praksis: elementet
 // hadde `hidden sm:block`, så «kan være utdatert» viste seg aldri på mobil.
 // Testene her holder på de tre beslutningene som er lette å rote bort igjen:
-// ett døgn er normalt (helg), null feilede tickere skal ikke nevnes, og et
-// manglende felt skal gi ingen tekst framfor «Invalid Date».
+// ett døgn er normalt (helg), antall_feil skal ikke nevnes i det hele tatt,
+// og et manglende felt skal gi ingen tekst framfor «Invalid Date».
 'use strict';
 
 const { test } = require('node:test');
@@ -87,32 +87,29 @@ test('16 dager — tilfellet som faktisk oppsto i august', () => {
   assert.ok(el.textContent.includes('16 dager gamle'), el.textContent);
 });
 
-// ── Feilede tickere ────────────────────────────────────────────────────────
-test('feilede tickere nevnes kort i teksten, utfyllende i title', () => {
+// ── Feilede tickere nevnes ikke ────────────────────────────────────────────
+// «N feilet» sto i topplinjen til 17.09.2026. Det er et tall om hentejobben,
+// ikke om aksjene leseren ser på, og det navnga aldri hvilken aksje det
+// gjaldt. Testene under holder det borte — også fra `title`, som er samme
+// påstand i samme element.
+test('antall_feil vises ikke i teksten', () => {
   const flere = kjor({ sist_oppdatert: timerSiden(1), antall_feil: 6 });
-  assert.ok(flere.textContent.includes('6 feilet'), flere.textContent);
-  assert.match(flere.title, /6 tickere kunne ikke hentes/);
+  assert.ok(!flere.textContent.includes('feilet'), flere.textContent);
+  assert.ok(!/kunne ikke hentes/.test(flere.title), flere.title);
 
   const en = kjor({ sist_oppdatert: timerSiden(1), antall_feil: 1 });
-  assert.ok(en.textContent.includes('1 feilet'), en.textContent);
-  assert.match(en.title, /1 ticker kunne ikke hentes/);
+  assert.ok(!en.textContent.includes('feilet'), en.textContent);
 });
 
-test('null feilede nevnes ikke', () => {
-  const el = kjor({ sist_oppdatert: timerSiden(1), antall_feil: 0 });
-  assert.ok(!el.textContent.includes('feilet'), el.textContent);
-  assert.equal(el.classList.contains('text-amber-600'), false);
-});
-
-test('manglende antall_feil er ikke det samme som null feil', () => {
-  // Feltet kommer først ved neste fulle henting. Fram til da skal raden
-  // utebli — ikke vises som «0 feilet», og ikke krasje.
-  const el = kjor({ sist_oppdatert: timerSiden(1) });
-  assert.ok(!el.textContent.includes('feilet'), el.textContent);
-});
-
-test('feil alene farger advarselen, selv når dataene er ferske', () => {
+test('antall_feil farger ikke advarselen når dataene er ferske', () => {
   const el = kjor({ sist_oppdatert: timerSiden(1), antall_feil: 3 });
+  assert.equal(el.classList.contains('text-amber-600'), false);
+  assert.equal(el.classList.contains('text-gray-500'), true);
+});
+
+test('alderen varsler fortsatt, uavhengig av antall_feil', () => {
+  const el = kjor({ sist_oppdatert: timerSiden(49), antall_feil: 0 });
+  assert.equal(el.textContent, 'Tall 2 dager gamle', el.textContent);
   assert.equal(el.classList.contains('text-amber-600'), true);
 });
 
