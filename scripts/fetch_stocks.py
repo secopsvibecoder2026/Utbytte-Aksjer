@@ -649,6 +649,26 @@ _SPLITT_VALUTA = re.compile(
 # HUNT bruker en annen felttype enn KOG: «Dividend classification: NOK 1.50 as
 # extraordinary dividend» — hele utbetalingen er ekstraordinær, det finnes ingen
 # ordinær del å dele mot. Den sier mer enn en splitt, ikke mindre.
+# Prosaformen: «an ordinary dividend of USD 0.37 … an extraordinary portion of
+# USD 0.24». WAWI skriver den slik, og «portion» er ikke «dividend» — parseren
+# fant derfor ingenting på landets tydeligste utbyttesplitt.
+_SPLITT_PROSA = re.compile(
+    r"\b(ordinary|extraordinary|special)\s+(?:cash\s+)?(?:dividend|portion|part)\s+"
+    r"of\s+(?:([A-Z]{3})\s*)?([0-9]+(?:[.,][0-9]+)?)"
+    # Hindrer at tallet trunkeres: uten denne backtracket «100m» til «10», og
+    # da så størrelsesvakten under «0m» i stedet for «m» og slapp den gjennom.
+    r"(?![0-9])(?![.,][0-9])"
+    # Et beløp etterfulgt av en størrelsesmarkør er totalen, ikke per aksje:
+    # WAWI skriver «an extraordinary dividend of USD 100m» om hundre millioner
+    # i samme melding som «an extraordinary portion of USD 0.24» per aksje.
+    # Uten denne tok parseren 100 og rendret «om lag 100 % ekstraordinært».
+    r"(?!\s*(?:m\b|mn\b|bn\b|mrd\b|mill|billion|milliard))", re.I)
+
+# «totalling USD 0.61 per share» / «Dividend amount: USD 0.61» — delene må
+# summere til totalen meldingen selv oppgir.
+_SPLITT_TOTAL = re.compile(
+    r"total(?:ling|ing|t)?\s+(?:[A-Z]{3}\s*)?([0-9]+(?:[.,][0-9]+)?)\s*per\s+share", re.I)
+
 _SPLITT_KLASSIFISERING = re.compile(
     r"dividend\s+classification\s*[:\-–]?\s*(?:[A-Z]{3}\s*)?([0-9]+(?:[.,][0-9]+)?)"
     r"\s*(?:[A-Z]{3}\s*)?as\s+(?:an?\s+)?(ordinary|special|extraordinary)\s+dividend", re.I)
@@ -696,6 +716,36 @@ def _parse_utbyttesplitt(body):
             return {"ordinaert": 0.0, "ekstraordinaert": belop, "valuta": valuta}
         return None
 
+    # Form 3 — prosa. Prøves før seksjonsformen, fordi en melding kan
+    # inneholde begge og prosaen er den mest eksplisitte.
+    prosa = {}
+    prosa_valuta = None
+    for m in _SPLITT_PROSA.finditer(body):
+        type_ = "ordinaert" if m.group(1).lower() == "ordinary" else "ekstraordinaert"
+        if type_ in prosa:
+            continue
+        try:
+            prosa[type_] = round(float(m.group(3).replace(",", ".")), 4)
+        except ValueError:
+            return None
+        if m.group(2):
+            prosa_valuta = m.group(2).upper()
+    if prosa.get("ordinaert", 0) > 0 and prosa.get("ekstraordinaert", 0) > 0:
+        # Oppgir meldingen en total per aksje, må delene summere til den.
+        # Det er den eneste vakten som fanger at vi har plukket feil tall ut
+        # av en melding som nevner flere beløp.
+        t = _SPLITT_TOTAL.search(body)
+        if t:
+            try:
+                total = float(t.group(1).replace(",", "."))
+            except ValueError:
+                return None
+            if total > 0 and abs(prosa["ordinaert"] + prosa["ekstraordinaert"] - total) / total > 0.02:
+                return None
+        return {"ordinaert": prosa["ordinaert"],
+                "ekstraordinaert": prosa["ekstraordinaert"],
+                "valuta": prosa_valuta or valuta}
+
     treff = []
     for navn, mønster in _SPLITT_TYPER:
         for m in mønster.finditer(body):
@@ -721,7 +771,7 @@ def _parse_utbyttesplitt(body):
             "ekstraordinaert": belop["ekstraordinaert"], "valuta": valuta}
 
 
-def hent_utbyttesplitt(ticker, siste_utbytte=0):
+def hent_utbyttesplitt(ticker, aksje=None):
     """Finner børsmeldingen som beskriver *den* utbetalingen vi viser.
 
     Kalles bare for de få aksjene der `yield_er_delaar()` slår til, så dette
@@ -740,10 +790,7 @@ def hent_utbyttesplitt(ticker, siste_utbytte=0):
     global _NEWSWEB_API
     if _NEWSWEB_API is None:
         _NEWSWEB_API = _newsweb_api_base()
-    try:
-        siste = float(siste_utbytte or 0)
-    except (TypeError, ValueError):
-        siste = 0
+    rad = aksje if isinstance(aksje, dict) else {}
     try:
         resp = _newsweb_post(
             f"{_NEWSWEB_API}/v1/newsreader/list"
@@ -767,11 +814,12 @@ def hent_utbyttesplitt(ticker, siste_utbytte=0):
             splitt = _parse_utbyttesplitt(html.unescape(re.sub(r"<[^>]+>", "\n", body)))
             if not splitt:
                 continue
-            sum_ = splitt["ordinaert"] + splitt["ekstraordinaert"]
-            if siste > 0 and abs(sum_ - siste) / siste > 0.01:
-                continue
             splitt["melding_dato"] = (msg.get("publishedTime") or "")[:10]
-            return splitt
+            # Samme validator som ved rendring. Den hadde to eksemplarer et
+            # øyeblikk — hentingen krevde eksakt sum mens rendringen godtok et
+            # forholdstall, så WAWIs splitt ble hentet og kastet i samme kall.
+            if utbyttesplitt_stemmer(dict(rad, utbyttesplitt=splitt)):
+                return splitt
     except Exception as e:
         print(f"    Advarsel utbyttesplitt [{ticker}]: {e}")
     return None
@@ -804,10 +852,50 @@ def utbyttesplitt_stemmer(a):
     # ekstraordinær. Det er den ekstraordinære delen som må finnes.
     if ordi < 0 or ekstra <= 0 or siste <= 0:
         return None
-    if abs((ordi + ekstra) - siste) / siste > 0.01:
+    if abs((ordi + ekstra) - siste) / siste <= 0.01:
+        return {"ordinaert": ordi, "ekstraordinaert": ekstra,
+                "valuta": s.get("valuta") or a.get("valuta") or "NOK",
+                "kun_andel": False}
+
+    # Summen stemmer ikke — men det kan være fordi utbyttet er *erklært* i en
+    # annen valuta enn vi lagrer. WAWI erklærer USD 0,37 + 0,24 mens vi har
+    # 5,75 NOK; beløpene svarer til hverandre, tallene gjør det ikke.
+    #
+    # Vi regner ikke om. En vekslingskurs vi gjetter oss til ville vært
+    # nøyaktig den slags oppdiktede tall dette prosjektet har blitt bitt av før.
+    # **Forholdet mellom delene er derimot valutauavhengig**, så det kan vi
+    # oppgi: «omtrent 61 % var ordinært utbytte».
+    #
+    # Uten sumvakten trengs en annen kobling til riktig utbetaling. Meldingens
+    # publiseringsmåned må derfor være en av månedene aksjen faktisk gikk ex i
+    # inneværende år. WAWIs melding er fra 11. august, og ex-månedene er mars
+    # og august — den beskriver altså den utbetalingen vi viser.
+    if not _melding_passer_utbetaling(a, s.get("melding_dato")):
         return None
     return {"ordinaert": ordi, "ekstraordinaert": ekstra,
-            "valuta": s.get("valuta") or a.get("valuta") or "NOK"}
+            "valuta": s.get("valuta") or "", "kun_andel": True}
+
+
+def _melding_passer_utbetaling(a, melding_dato):
+    """Ble meldingen publisert i en måned aksjen faktisk gikk ex-utbytte i?
+
+    Svakere enn sumvakten, og brukes bare når den ikke kan gjelde fordi
+    valutaene spriker. Krever at vi har ex-måneder for inneværende år — uten
+    dem er det ingen kobling, og da er svaret nei.
+    """
+    if not melding_dato or len(str(melding_dato)) < 7:
+        return False
+    try:
+        mnd = int(str(melding_dato)[5:7])
+        aar = int(str(melding_dato)[:4])
+    except ValueError:
+        return False
+    for h in a.get("historiske_utbytter") or []:
+        if not isinstance(h, dict) or int(h.get("ar") or 0) != aar:
+            continue
+        maaneder = h.get("maaneder") or []
+        return isinstance(maaneder, list) and mnd in [int(m) for m in maaneder]
+    return False
 
 
 def delaar_motbevist(a):
@@ -832,7 +920,10 @@ def delaar_motbevist(a):
     skal fortsatt melde fra i loggen. Dette gjelder bare hva *leseren* får se.
     """
     splitt = utbyttesplitt_stemmer(a)
-    if not splitt:
+    if not splitt or splitt.get("kun_andel"):
+        # Med bare et forholdstall kan vi ikke trekke den ekstraordinære delen
+        # fra siste_utbytte — beløpene står i ulike valutaer. Da har vi ikke
+        # grunnlag for å motbevise noe, og lar varselet stå.
         return False
     try:
         upa = float(a.get("utbytte_per_aksje") or 0)
@@ -890,6 +981,90 @@ def utbetalt_hittil(a, i_aar=None):
             "yield": yld,
         }
     return None
+
+
+# Yield fra og med dette nivået er høy nok til at et ekstraordinært innslag
+# endrer hvordan tallet skal leses. 20 av 155 aksjer ligger her.
+HOY_YIELD_FOR_SPLITT = 8.0
+
+
+def bor_hente_utbyttesplitt(a):
+    """Skal vi spørre børsen om ordinært/ekstraordinært for denne aksjen?
+
+    Opprinnelig gate var bare `yield_er_delaar()` — aksjer der årsraten er
+    *mindre* enn én utbetaling. **WAWI viste at den var for smal (2026-09-17).**
+
+    Wallenius Wilhelmsen står med 13,46 % direkteavkastning, og børsmeldingen
+    fra 11. august deler H1-utbyttet i «an ordinary dividend of USD 0.37 …
+    and an extraordinary portion of USD 0.24». Splitten ligger der, og vi
+    spurte aldri — fordi WAWIs årsrate på 24,26 er større enn siste utbetaling
+    på 5,75, så `yield_er_delaar()` slår ikke ut.
+
+    Gaten fanget altså aksjer der yielden er for *lav*, ikke aksjer der
+    yielden inneholder noe ekstraordinært. Det er to forskjellige spørsmål, og
+    det siste er det som villeder en leser: et tosifret tall ser ut som en
+    løpende rate.
+
+    Høy yield er en indikasjon, ikke et bevis — vi kan ikke vite om utbyttet
+    er sammensatt før vi spør. Derfor spør vi de høyeste, og sumvakten i
+    `utbyttesplitt_stemmer()` forkaster svaret om det ikke passer utbetalingen
+    vi faktisk viser.
+    """
+    if yield_er_delaar(a):
+        return True
+    try:
+        return float(a.get("utbytte_yield") or 0) >= HOY_YIELD_FOR_SPLITT
+    except (TypeError, ValueError):
+        return False
+
+
+def lag_ekstraordinaer_note(a, nf):
+    """Sier fra når en høy direkteavkastning inneholder et ekstraordinært utbytte.
+
+    `lag_delaar_varsel()` dekker aksjer der årsraten er for *lav*. Dette dekker
+    det motsatte: en yield som ser høy og løpende ut, men der børsen har
+    opplyst at siste utbetaling delvis var en engangsutdeling.
+
+    **WAWI er tilfellet som avdekket hullet.** 13,46 % direkteavkastning, og
+    børsmeldingen deler H1-utbyttet i «an ordinary dividend of USD 0.37 … and
+    an extraordinary portion of USD 0.24». Uten denne noten leser et tosifret
+    tall som en løpende rate.
+
+    Returnerer tom streng når aksjen alt har delårsvarselet — to bokser om
+    samme utbetaling på samme side ville vært støy.
+    """
+    if yield_er_delaar(a):
+        return ""
+    splitt = utbyttesplitt_stemmer(a)
+    if not splitt:
+        return ""
+    y = float(a.get("utbytte_yield") or 0)
+    ordi, ekstra = splitt["ordinaert"], splitt["ekstraordinaert"]
+    sum_ = ordi + ekstra
+    if sum_ <= 0:
+        return ""
+
+    if splitt.get("kun_andel"):
+        # Utbyttet er erklært i en annen valuta enn vi lagrer. Vi regner ikke
+        # om — forholdet mellom delene er valutauavhengig, og er det vi kan si.
+        andel = round(ekstra / sum_ * 100)
+        hva = (f'<strong>om lag {nf(andel, 0)} % av siste utbetaling var '
+               f'ekstraordinært utbytte</strong>')
+    else:
+        valuta = splitt.get("valuta") or a.get("valuta") or "NOK"
+        hva = (f'<strong>{nf(ekstra, 2)} {valuta} av siste utbetaling var '
+               f'ekstraordinært utbytte</strong>, og {nf(ordi, 2)} {valuta} ordinært')
+
+    return (
+        '<div class="delaar-seksjon delaar-noytral">'
+        '<h2>Deler av utbyttet var ekstraordinært</h2>'
+        f'<p>Ifølge selskapets børsmelding {hva}.</p>'
+        '<p>Et ekstraordinært utbytte er en engangsutdeling og gjentas ikke '
+        f'nødvendigvis. Direkteavkastningen på {nf(y, 2)} % bygger på en '
+        'periode som inneholder den, så den sier mindre om hva selskapet '
+        'betaler til vanlig enn tallet alene antyder.</p>'
+        '</div>'
+    )
 
 
 def lag_delaar_varsel(a, nf):
@@ -1459,11 +1634,8 @@ def hent_aksje(meta):
         # frosset prosa med tall støpt inn.
         resultat["utbyttehistorikk_tekst"] = _lag_utbyttehistorikk_tekst(resultat)
 
-        # Bare for de få aksjene der årsraten er mindre enn én utbetaling.
-        # Der er spørsmålet «hvorfor spriker tallene?», og børsmeldingen svarer
-        # på det når selskapet brukte malen med ordinært/ekstraordinært.
-        if yield_er_delaar(resultat):
-            splitt = hent_utbyttesplitt(ticker, siste_utbytte)
+        if bor_hente_utbyttesplitt(resultat):
+            splitt = hent_utbyttesplitt(ticker, resultat)
             if splitt:
                 resultat["utbyttesplitt"] = splitt
                 print(f"    Utbyttesplitt: {splitt['ordinaert']} ordinært + "
@@ -2409,9 +2581,11 @@ def _lag_utbetalingsaar(a):
 
     per_gang = f" — grovt regnet {_nf(upa / len(mnd), 2)} kroner per aksje hver gang" if upa else ""
     tekst = (
-        f"{navn} betaler ut {len(mnd)} ganger i året, i "
-        f"{_maaneder_tekst(mnd)}{per_gang}. Månedene er utledet av hvilke "
-        f"måneder som går igjen over flere år, ikke av en enkelt utbetaling."
+        f"{navn} betaler ut {len(mnd)} ganger i året, med ex-dato i "
+        f"{_maaneder_tekst(mnd)}{per_gang}. Månedene er ex-datoer utledet av "
+        f"hvilke måneder som går igjen over flere år, ikke av en enkelt "
+        f"utbetaling. Selve pengene kommer typisk halvannen til tre uker "
+        f"etter ex-datoen, så en ex-dato sent i måneden betales ut i den neste."
     )
 
     return (
@@ -2497,11 +2671,11 @@ def _driver_selskapsledd(a, sektor):
     _VENTET = {"årlig": 1, "halvårlig": 2, "kvartalsvis": 4, "månedlig": 12}
     if mnd and frekvens and _VENTET.get(frekvens) == len(mnd):
         setninger.append(
-            f"Utbetalingene kommer {frekvens}, i {_maaneder_tekst(mnd)}"
+            f"Utbyttet går ex {frekvens}, i {_maaneder_tekst(mnd)}"
         )
     elif mnd and len(mnd) <= 4:
         setninger.append(
-            f"Utbetalingene har de siste årene kommet i {_maaneder_tekst(mnd)}"
+            f"Ex-datoene har de siste årene ligget i {_maaneder_tekst(mnd)}"
         )
     elif frekvens:
         setninger.append(f"Utbyttet utbetales {frekvens}")
@@ -3216,7 +3390,7 @@ MAANEDSNAVN = ["", "januar", "februar", "mars", "april", "mai", "juni",
                "juli", "august", "september", "oktober", "november", "desember"]
 
 
-def _typiske_utbetalingsmaaneder(historiske, min_ar=2):
+def _typiske_utbetalingsmaaneder(historiske, min_ar=2, vindu=3):
     """Månedene aksjen faktisk pleier å betale i.
 
     Bare 11 av 160 aksjer har en annonsert ex-dato på et gitt tidspunkt, så
@@ -3228,8 +3402,23 @@ def _typiske_utbetalingsmaaneder(historiske, min_ar=2):
     enkelt år er tilfeldig — et ekstraordinært utbytte i august gjør ikke
     august til en utbetalingsmåned.
 
-    Inneværende år holdes utenfor: det er ikke ferdig, og en aksje som ennå
-    ikke har betalt i år ville sett ut som om den hadde endret mønster.
+    **Bare de `vindu` nyeste årene teller (fikset 2026-09-17).** Uten et
+    vindu vant gamle år over nye, og et selskap som la om utbytteplanen sto
+    med den gamle i årevis. WAWI gikk ex i april og november i 2022–2023, men
+    i mars og august både i 2025 og 2026 — vi viste fortsatt april/november,
+    fordi de to gamle årene hadde to treff hver mens de to nye hadde ett hver
+    så lenge inneværende år var utelatt. Fem aksjer var rammet.
+
+    **Inneværende år er nå med, men kan bare bekrefte.** Det var utelatt fordi
+    det er ufullstendig — en aksje som ennå ikke har betalt i år skulle ikke se
+    ut som om den hadde endret mønster. Med `min_ar = 2` kan et ufullstendig år
+    aldri gjøre en måned typisk alene; det kan bare støtte opp under året før.
+    Og fordi år uten månedsdata filtreres bort først, forsvinner ikke et helt
+    mønster fordi januar ikke har passert ennå.
+
+    Faller tilbake på det nyeste året med data når ingen måned når terskelen —
+    det skjer for en aksje som har lagt om planen hvert eneste år, og da er det
+    siste vi vet mer verdt enn ingenting.
     """
     import collections
     if not historiske:
@@ -3237,15 +3426,19 @@ def _typiske_utbetalingsmaaneder(historiske, min_ar=2):
     ar_med_mnd = [h for h in historiske if h.get("maaneder")]
     if not ar_med_mnd:
         return []
-    siste_ar = max(h["ar"] for h in ar_med_mnd)
+
+    ar_sortert = sorted(ar_med_mnd, key=lambda h: h["ar"], reverse=True)[:vindu]
     teller = collections.Counter()
-    for h in ar_med_mnd:
-        if h["ar"] == siste_ar and len(ar_med_mnd) > 1:
-            continue                      # inneværende/siste år er ufullstendig
+    for h in ar_sortert:
         for m in h["maaneder"]:
             teller[m] += 1
-    terskel = min(min_ar, max(teller.values())) if teller else min_ar
-    return sorted(m for m, n in teller.items() if n >= terskel)
+    if not teller:
+        return []
+
+    typiske = sorted(m for m, n in teller.items() if n >= min_ar)
+    if typiske:
+        return typiske
+    return sorted(ar_sortert[0]["maaneder"])
 
 
 def _maaneder_tekst(maaneder):
@@ -3416,6 +3609,8 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     delaar        = yield_er_delaar(a) and not delaar_motbevist(a)
     delaar_note   = ' <span class="kcard-note">usikker</span>' if delaar else ""
     delaar_varsel = lag_delaar_varsel(a, _nf)
+    # Gjensidig utelukkende: noten returnerer tom streng når varselet gjelder.
+    delaar_varsel += lag_ekstraordinaer_note(a, _nf)
     # «annualisert» påstår at tallet dekker et helt år. Er det et delår, er
     # nettopp den påstanden gal, så merket erstatter den framfor å stå ved
     # siden av — «annualisert usikker» sa to ting som ikke kan være sanne
