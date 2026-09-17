@@ -131,6 +131,42 @@ def _parse_rapport_dato(body: str) -> str | None:
 
 _NEWSWEB_API = None   # Lazy-init én gang per kjøring
 
+# Tickere der NewsWeb arkiverer under et annet navn enn vårt.
+#
+# **Åtte av 155 fikk ingen NewsWeb-data i det hele tatt fram til 17.09.2026**,
+# fordi vi spurte under vår egen ticker. Målt mot hele katalogen: vår ticker ga
+# 0 meldinger, børsens symbol ga 17–144. Samme rotårsak som DOF-feilen mot
+# Yahoo — vi spør under vårt eget navn i stedet for børsens.
+#
+# To grunner til at navnene spriker, og begge må dekkes:
+#
+# * **Euronext bruker et annet symbol** — de seks i `EURONEXT_SYMBOL_MAP`.
+#   Oversettelsen har ligget der hele tiden; den ble bare aldri brukt her.
+# * **Aksjeklasser.** ODFB og WWIB er B-aksjer, og selskapet melder under
+#   A-aksjens utsteder. Meldingene gjelder begge klassene, så oppslaget er
+#   riktig — og for `hent_utbyttesplitt()` beskytter sumvakten mot at et
+#   A-aksjeutbytte festes til B-aksjen dersom beløpene skulle avvike.
+#
+# `2020` (2020 Bulkers) gir 0 meldinger under alle navn vi har prøvd, så den
+# står uløst — NewsWeb bruker trolig en helt annen utsteder-ID for den.
+_NEWSWEB_UTSTEDER_EKSTRA = {
+    "ODFB": "ODF",   # Odfjell SE B-aksje → melder under A-aksjen
+    "WWIB": "WWI",   # Wilh. Wilhelmsen Holding B → samme
+}
+
+
+def _newsweb_utsteder(ticker: str) -> str:
+    """Navnet NewsWeb arkiverer denne tickeren under.
+
+    Bygger den inverse av `EURONEXT_SYMBOL_MAP` ved kall, slik at kartet blir
+    én kilde til sannhet — retter noen kartet, følger dette oppslaget etter.
+    """
+    for eu_symbol, vår_ticker in EURONEXT_SYMBOL_MAP.items():
+        if vår_ticker == ticker:
+            return eu_symbol
+    return _NEWSWEB_UTSTEDER_EKSTRA.get(ticker, ticker)
+
+
 def hent_newsweb_rapport_dato(ticker: str) -> str | None:
     """
     Henter neste kvartalsrapport-dato for en aksje fra Newsweb Oslo Børs.
@@ -143,7 +179,8 @@ def hent_newsweb_rapport_dato(ticker: str) -> str | None:
 
     try:
         resp = _newsweb_post(
-            f"{_NEWSWEB_API}/v1/newsreader/list?issuer={urllib.parse.quote(ticker, safe='')}&limit=500"
+            f"{_NEWSWEB_API}/v1/newsreader/list"
+            f"?issuer={urllib.parse.quote(_newsweb_utsteder(ticker), safe='')}&limit=500"
         )
         messages = resp.get("data", {}).get("messages", [])
 
@@ -710,7 +747,7 @@ def hent_utbyttesplitt(ticker, siste_utbytte=0):
     try:
         resp = _newsweb_post(
             f"{_NEWSWEB_API}/v1/newsreader/list"
-            f"?issuer={urllib.parse.quote(ticker, safe='')}&limit=500"
+            f"?issuer={urllib.parse.quote(_newsweb_utsteder(ticker), safe='')}&limit=500"
         )
         sett = 0
         for msg in resp.get("data", {}).get("messages", []):

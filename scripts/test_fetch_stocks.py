@@ -966,5 +966,43 @@ class TestDelaarMotbevist(unittest.TestCase):
         self.assertTrue(yield_er_delaar(self.KOG))
         self.assertFalse(yield_er_delaar(self.KOG) and not delaar_motbevist(self.KOG))
 
+class TestNewswebUtsteder(unittest.TestCase):
+    """NewsWeb arkiverer under børsens navn, ikke vårt.
+
+    Åtte av 155 tickere fikk null NewsWeb-data fram til 17.09.2026 fordi vi
+    spurte under vår egen ticker. Målt: vår ticker ga 0 meldinger, børsens
+    symbol ga 17–144. Samme rotårsak som DOF-feilen mot Yahoo.
+    """
+
+    def test_bruker_euronext_symbolet(self):
+        from fetch_stocks import _newsweb_utsteder
+        for vår, forventet in [("DOF", "DOFG"), ("ENTR", "ENTRA"), ("SBMO", "MORG"),
+                               ("SRHA", "RING"), ("VISTIN", "VISTN"), ("STRONG", "STRO")]:
+            self.assertEqual(_newsweb_utsteder(vår), forventet, vår)
+
+    def test_b_aksjer_melder_under_selskapet(self):
+        from fetch_stocks import _newsweb_utsteder
+        self.assertEqual(_newsweb_utsteder("ODFB"), "ODF")
+        self.assertEqual(_newsweb_utsteder("WWIB"), "WWI")
+
+    def test_vanlige_tickere_er_urørt(self):
+        from fetch_stocks import _newsweb_utsteder
+        for t in ["EQNR", "DNB", "MOWI", "2020", "", "UKJENT"]:
+            self.assertEqual(_newsweb_utsteder(t), t, t)
+
+    def test_avledet_av_symbolkartet_ikke_duplisert(self):
+        """Kartet skal være eneste kilde — retter noen der, følger dette etter.
+
+        En hardkodet kopi ville råtnet i stillhet, slik EURONEXT_SYMBOL_MAP selv
+        gjorde med fem stale oppføringer.
+        """
+        from fetch_stocks import _newsweb_utsteder, EURONEXT_SYMBOL_MAP, _NEWSWEB_UTSTEDER_EKSTRA
+        for eu_symbol, vår_ticker in EURONEXT_SYMBOL_MAP.items():
+            self.assertEqual(_newsweb_utsteder(vår_ticker), eu_symbol)
+        # De eksplisitte må ikke overlappe med kartet — da ville kartet vunnet
+        # og oppføringen vært død vekt.
+        self.assertFalse(set(_NEWSWEB_UTSTEDER_EKSTRA) & set(EURONEXT_SYMBOL_MAP.values()))
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
