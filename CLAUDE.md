@@ -593,16 +593,58 @@ Two fields now carry the pattern:
 
 `_typiske_utbetalingsmaaneder()` derives the second from the first. A month
 counts as typical only when it appears in **at least two years** — a single
-extraordinary payment in August does not make August a payment month. The
-**most recent year is excluded** unless it is all we have, because it is
-incomplete: a stock that has not yet paid this year would otherwise look like
-it changed its schedule.
+extraordinary payment in August does not make August a payment month.
 
 Both `fetch_stocks.py` and `regenerer_sider.py` rebuild `utbetalingsmaaneder`
 on every run — it is derived, so it must never be written once and stored.
 `maaneder` itself comes only from a full fetch, since it needs the Yahoo series.
 
 `_maaneder_tekst()` renders them for prose: «mai og november».
+
+#### They are **ex-dates**, and the site said «betales» for months (2026-09-17)
+
+A user was paid their WAWI dividend on 16 September and asked whether the site
+could show it. It could not — and three separate defects came out of looking.
+
+The Yahoo dividend series is **indexed by ex-date**. The money lands roughly
+1½–3 weeks later. The field name says «utbetaling» and every sentence built on
+it said «betales», so the site asserted a payment date it had never measured.
+The wording is now «Ex-dato i mars og august», the calendar heading is «Når går
+Oslo Børs ex-utbytte?», and both the stock page and the forecast footnote state
+the 1½–3 week lag. The data model is unchanged; only the claim is.
+
+#### The window: three years, and the current year may corroborate
+
+The original rule looked at the whole history and **always excluded the current
+year**. A company that changed its rhythm three years ago therefore kept the old
+one forever — WAWI moved from april/november to mars/august and the site never
+noticed.
+
+It now reads the **three most recent years with data**. The current year is
+included but can only *corroborate* a month, never establish one alone, because
+the year is incomplete — that was the point of the original exclusion and it
+still holds. If nothing survives, it falls back to the most recent year with
+data rather than saying nothing. 57 stocks changed on the first run.
+
+#### Never derive the number of payments from the length of this list
+
+`_lag_utbetalingsaar()` wrote «{navn} betaler ut N ganger i året» with N =
+`len(utbetalingsmaaneder)`, and divided the annual amount by that same N.
+
+**For 17 of 155 stocks the list is shorter than the frequency.** DOF is
+quarterly with two recognised months — a quarterly payer needs two full years
+before all four months repeat — so the page said «2 ganger i året» directly
+below a nøkkeltall table saying Kvartalsvis, and quoted an amount per payment
+twice the real one.
+
+The list is evidence about *which* months, never about *how many* payments.
+When `len(mnd) != UTBETALINGER_PR_AAR[frekvens]` the text now states only the
+observed months: «Ex-datoene til Aker BP ASA har de siste årene ligget i
+februar, mai og juli.» Same rule as the frequency-label trap documented under
+«Breaking the template» — only pair the two when the count matches.
+
+Tests: `TestUtbetalingsaar` in `scripts/test_fetch_stocks.py` (4), covering both
+branches, since a rule that only fires on the happy path is not measured.
 
 ### Never freeze live numbers into stored prose
 
@@ -861,8 +903,10 @@ dividends in shipping.
 
 ### `uten_utbyttebevis()` — which pages stay out of the index
 
-Seven pages carry no yield, no history and no year count: ACR, AFISH, BWE,
-CADLR, DOF, ISLAX, KMAR. They get `noindex,follow` and drop out of the sitemap.
+Six pages carry no yield, no history and no year count: ACR, AFISH, BWE,
+CADLR, ISLAX, KMAR. They get `noindex,follow` and drop out of the sitemap.
+(It was seven until the `ticker_yf` fix below; DOF returned on the first
+successful fetch — 134,40 kr, 10,31 % yield — and is indexed again.)
 Not deleted — they remain for direct visits and the app, and `follow` keeps the
 links working.
 
@@ -1952,6 +1996,42 @@ Tests: `TestParseUtbyttesplitt`, `TestUtbyttesplittStemmer`,
 `test_samsvar_med_datasettet` requires every stored split to pass the guard — a
 stored split rejected at render time is dead weight, and a sign the fetch
 pinned the wrong message to the stock.
+
+#### The gate was tied to the wrong question (2026-09-17)
+
+`bor_hente_utbyttesplitt()` asked NewsWeb only when `yield_er_delaar()` fired —
+ten stocks. But the split is useful wherever a yield looks too *good*, not only
+where the annual rate looks too low. WAWI sat at 13,46 % with 39 % of its last
+payment extraordinary, and we had never asked. The gate now also fires on
+`utbytte_yield >= HOY_YIELD_FOR_SPLITT` (8 %): **29 stocks**.
+
+`lag_ekstraordinaer_note()` renders the result as a **neutral** box — grey
+border, not amber. It explains; it does not warn. It returns empty when
+`yield_er_delaar(a)` already owns a box, so no stock gets two.
+
+**Widening the gate alone returned 0 of 14.** Four layers had to give:
+
+- `_SPLITT_PROSA` — the parser only knew the typed-section form, not «ordinary
+  dividend of USD 0.24 per share».
+- **Currency.** A USD message can never sum to a NOK `siste_utbytte`.
+  `utbyttesplitt_stemmer()` grew a currency-independent *ratio* path and
+  returns `kun_andel` so consumers know which kind they hold. `delaar_motbevist()`
+  rejects a ratio-only split — a share cannot refute a claim about a rate.
+- **A duplicate sum check inside the fetcher** rejected what the validator
+  accepted. One validator, two call sites now.
+- `_melding_passer_utbetaling()` — the message's publication month must appear
+  in that year's `maaneder`, or a newer announcement pins itself to an older
+  payment.
+
+> ⚠️ **Three false positives, all found by reading the generated output, none
+> by a passing test.** «USD 100m» parsed as `100.0` — a hundred *million* in
+> total, not per share — and would have rendered «om lag 100 % ekstraordinært».
+> The magnitude lookahead added to stop it then let the regex backtrack `100m`
+> to `10`. And the punctuation guard written to stop *that* discarded the
+> trailing comma in «USD 0.24,», losing the extraordinary part entirely. Each
+> now has its own regression test. A per-share parser must reject a magnitude
+> suffix **and** must not treat ordinary sentence punctuation as part of the
+> number.
 
 `utbetaltHittil()` in `assets/ui.js` mirrors it for the modal. Tests:
 `TestUtbetaltHittil` + `TestLagDelaarVarsel` (11) and `ui.test.js` (6).
