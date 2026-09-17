@@ -1174,5 +1174,45 @@ class TestProsasplittOgAndel(unittest.TestCase):
         self.assertFalse(bor_hente_utbyttesplitt({"utbytte_yield": "tull"}))
 
 
+class TestUtbetalingsaar(unittest.TestCase):
+    """«Utbyttet gjennom året» må ikke motsi frekvensen på samme side."""
+
+    @staticmethod
+    def _aksje(frekvens, maaneder):
+        return {
+            "navn": "Testselskap ASA",
+            "ticker": "TEST",
+            "frekvens": frekvens,
+            "utbetalingsmaaneder": maaneder,
+            "utbytte_per_aksje": 12.0,
+        }
+
+    def test_antall_og_belop_naar_listen_stemmer(self):
+        from fetch_stocks import _lag_utbetalingsaar
+        h = _lag_utbetalingsaar(self._aksje("Halvårlig", [3, 8]))
+        self.assertIn("betaler ut 2 ganger i året", h)
+        self.assertIn("6,00 kroner per aksje hver gang", h)
+
+    def test_ingen_antallspaastand_naar_listen_er_kortere(self):
+        # DOF: kvartalsvis, men bare to måneder går igjen. «2 ganger i året»
+        # ville motsagt nøkkeltalltabellen, og 12/2 er dobbelt så mye som
+        # selskapet faktisk betaler per gang.
+        from fetch_stocks import _lag_utbetalingsaar
+        h = _lag_utbetalingsaar(self._aksje("Kvartalsvis", [5, 8]))
+        self.assertIn("Ex-datoene til Testselskap ASA har de siste årene", h)
+        self.assertIn("mai og august", h)
+        self.assertNotIn("ganger i året", h)
+        self.assertNotIn("hver gang", h)
+
+    def test_ukjent_frekvens_gir_ingen_antallspaastand(self):
+        from fetch_stocks import _lag_utbetalingsaar
+        h = _lag_utbetalingsaar(self._aksje("Uregelmessig", [5, 8]))
+        self.assertNotIn("ganger i året", h)
+
+    def test_seksjonen_uteblir_for_en_enkelt_maaned(self):
+        from fetch_stocks import _lag_utbetalingsaar
+        self.assertEqual(_lag_utbetalingsaar(self._aksje("Årlig", [5])), "")
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

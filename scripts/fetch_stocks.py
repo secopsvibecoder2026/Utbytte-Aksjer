@@ -2579,10 +2579,32 @@ def _lag_utbetalingsaar(a):
         )
     strip = f'<div class="mnd-strip">{"".join(celler)}</div>'
 
-    per_gang = f" — grovt regnet {_nf(upa / len(mnd), 2)} kroner per aksje hver gang" if upa else ""
+    # Månedslisten er observert, frekvensen er utledet et helt annet sted, og
+    # for 17 aksjer er de uenige: DOF står som kvartalsvis med to gjenkjente
+    # måneder. Da kan vi verken påstå antall utbetalinger eller dele årsbeløpet
+    # på lengden av listen — begge deler ville motsagt nøkkeltalltabellen på
+    # samme side. Vi sier i stedet bare hvilke måneder vi faktisk har sett.
+    forventet = UTBETALINGER_PR_AAR.get(a.get("frekvens"))
+    stemmer = forventet == len(mnd)
+
+    if stemmer:
+        per_gang = (
+            f" — grovt regnet {_nf(upa / len(mnd), 2)} kroner per aksje hver gang"
+            if upa
+            else ""
+        )
+        innledning = (
+            f"{navn} betaler ut {len(mnd)} ganger i året, med ex-dato i "
+            f"{_maaneder_tekst(mnd)}{per_gang}."
+        )
+    else:
+        innledning = (
+            f"Ex-datoene til {navn} har de siste årene ligget i "
+            f"{_maaneder_tekst(mnd)}."
+        )
+
     tekst = (
-        f"{navn} betaler ut {len(mnd)} ganger i året, med ex-dato i "
-        f"{_maaneder_tekst(mnd)}{per_gang}. Månedene er ex-datoer utledet av "
+        f"{innledning} Månedene er ex-datoer utledet av "
         f"hvilke måneder som går igjen over flere år, ikke av en enkelt "
         f"utbetaling. Selve pengene kommer typisk halvannen til tre uker "
         f"etter ex-datoen, så en ex-dato sent i måneden betales ut i den neste."
