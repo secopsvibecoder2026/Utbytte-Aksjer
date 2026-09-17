@@ -38,6 +38,34 @@ Rettet i eksisterende data samtidig: 2020 (1104 → 17,06 %), HUNT (203 → 14,7
 
 - [ ] ~~Vis advarsel på sider der `snitt5ar > 50%`~~ — mindre relevant nå; WEST på 37 % er høyeste gjenværende
 
+### Datakvalitet — hent ex-datoene fra NewsWeb, ikke utled dem fra Yahoo
+
+Dette er det største gjenstående punktet under «data må være korrekt», og
+neste steg etter rettelsene 17.09.2026.
+
+`utbetalingsmaaneder` er i dag utledet av *hvilke måneder som går igjen* i
+Yahoo-serien. Det gir en måned, aldri en dato, og det bommer systematisk på to
+grupper: en kvartalsvis betaler trenger to hele år før alle fire månedene
+gjentar seg (DOF har to av fire), og et selskap som nettopp har lagt om har
+ingen gjentakelse å vise til. **17 av 155 har i dag en kortere liste enn
+frekvensen tilsier.**
+
+Oslo Børs publiserer den faktiske datoen. Meldingen «Key information relating
+to the cash dividend» bærer både ex-dato og betalingsdato, og
+`hent_utbyttesplitt()` leser allerede nettopp denne meldingstypen — parseren,
+utstederoppslaget og `_melding_passer_utbetaling()` finnes.
+
+- [ ] Utvid parseren med `Ex-date` og `Payment date`
+- [ ] Lagre faktisk ex-dato og betalingsdato per utbetaling
+- [ ] Utled `frekvens` av **intervallene** mellom reelle datoer, ikke av
+      antall utbetalinger i et 12-månedersvindu — det er den dokumenterte
+      årsaken til SATS- og 2020-feilene
+- [ ] Behold månedsutledningen som fallback der meldingen mangler
+
+**Mål dekningen først.** 11 % av utstederne merker *utbyttetypen*; andelen som
+oppgir *datoer* er ikke målt, og den avgjør om dette er en ny primærkilde eller
+et supplement. Kjør en telling før noe bygges.
+
 ### Prisvarsel via push-notifikasjon
 `malPris`-feltet og push-infrastruktur finnes allerede i Service Worker.
 - [ ] Legg til `malPris`-sjekk i `sjekkExDatoer()` i `sw.js`
@@ -54,6 +82,26 @@ Ny bruker bruker lang tid på manuell innlegging. Nordnet eksporterer CSV med Da
 - [ ] Manuell annonseenhet mellom sammendragskort og aksjelist
 - [ ] Manuell annonseenhet i bunnen av aksjemodal
 - [ ] Rapporter klikk-rate og RPM i GA4
+
+### Native.no — norsk annonsenettverk, vurdert 16.09.2026
+
+Kom opp som et alternativ til å vente på AdSense-runde tre. **Ikke et
+alternativ, men mulig et supplement** — og det er verdt å vite hvorfor før
+noen bruker tid på det.
+
+- **Native selger ikke plass, de selger et format.** «Nativ Pro» er et
+  abonnement på verktøyet som bygger innholdsannonser, ikke en etterspørselside
+  som fyller dem. Uten annonsører som allerede vil nå denne målgruppen står
+  plassene tomme.
+- **Det snur regnestykket.** AdSense koster ingenting før det tjener; et
+  abonnement koster fra dag én, mot en trafikk som i dag ikke bærer det.
+- **Det blokkerer ikke AdSense.** To nettverk på samme side er tillatt, så
+  dette kan prøves etter en godkjenning uten å sette den i fare.
+
+**Konklusjonen er å vente til etter 06.10.2026.** Blir søknaden godkjent, er
+dette et spørsmål om marginale kroner per visning og kan måles. Blir den
+avvist, er det først da et reelt alternativ å vurdere — og da med trafikktall
+som finnes, ikke antatte.
 
 ### Automatisk publisering til Facebook og Instagram
 **Utsatt til AdSense er godkjent** (måldato 06.10.2026 — se «AdSense: timeline» i
