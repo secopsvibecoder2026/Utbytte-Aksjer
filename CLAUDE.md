@@ -1750,9 +1750,27 @@ detail the browser does not need; the app loads `aksjer.json` anyway, so two
 integers in its header cost no extra request. Without them **nothing in the
 browser can say a fetch failed**.
 
-`visDataFerskhet()` in `app.js` reads them. Guard for absence: the fields only
-appear after the next full fetch, and a missing value must render nothing —
-not «0 feilet».
+> ⚠️ **The reader was never the right audience for `antall_feil` (2026-09-17).**
+> The header rendered «1 feilet» beside the date. That is a number about *our
+> fetch job*, not about the stocks in front of the reader: it never named which
+> ticker, it could not say whether that ticker was one they hold, and the other
+> 154 rows were exactly as fresh as before. It was developer telemetry in the
+> user's face, and it has been removed from both the visible line and the
+> `title`.
+>
+> **The field stays in `aksjer.json`.** It is the right place for it, and
+> `sjekk_utdaterte.py` already alerts the person who can act on it.
+>
+> **What would be worth showing is a per-stock signal**, on the stock whose
+> numbers are stale — but the aggregate cannot carry that. It needs a field per
+> ticker, and until that exists a count is worse than silence, because it
+> alarms without telling the reader what to do. Same shape as the
+> `uten_utbyttebevis()` lesson: an aggregate that says «something is wrong
+> somewhere» is not evidence about the row you are looking at.
+
+`visDataFerskhet()` in `app.js` reads `sist_oppdatert` and renders the age.
+Guard for absence: the fields only appear after the next full fetch, and a
+missing value must render nothing — not «Invalid Date».
 
 ### Three layout traps, each found by looking rather than by testing
 

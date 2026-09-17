@@ -112,11 +112,11 @@ function visCacheBanner(ts) {
 }
 
 /**
- * Viser hvor gamle dataene er, og om noen tickere feilet i siste henting.
+ * Viser hvor gamle dataene er.
  *
  * Dette sto her fra før, men var usynlig i praksis: elementet har `hidden
  * sm:block`, så advarselen «kan være utdatert» viste seg aldri på mobil —
- * der de fleste leser. Og ingenting fortalte at en henting hadde feilet.
+ * der de fleste leser.
  *
  * Det er ikke et teoretisk problem. I august ble ni tickere servert med 16
  * dager gamle tall uten at noe sa fra, og WILS i over tre år. En side som
@@ -128,6 +128,15 @@ function visCacheBanner(ts) {
  * så advarselen forsvant likevel. Er tallene gamle, er *alderen* signalet,
  * ikke klokkeslettet: da vises den i stedet for datoen, ikke i tillegg.
  * Hele tidsstempelet ligger i `title`.
+ *
+ * «N feilet» sto her til 17.09.2026 og er fjernet. Det var et tall om vår
+ * hentejobb, ikke om aksjene leseren ser på: «1 feilet» av 155 sier hverken
+ * hvilken aksje det gjelder eller om det er én leseren bryr seg om, og de
+ * 154 andre er like ferske som før. `antall_feil` beholdes i `aksjer.json`
+ * — det er riktig sted for det, og `sjekk_utdaterte.py` varsler den som
+ * faktisk kan gjøre noe. Skal leseren varsles, må varselet stå på *aksjen*
+ * som har gamle tall, og da trengs et felt per ticker; aggregatet holder
+ * ikke.
  */
 function visDataFerskhet(json) {
   const el = document.getElementById('sist-oppdatert');
@@ -142,29 +151,19 @@ function visDataFerskhet(json) {
   // Børsen er stengt i helgene, så ett døgn uten oppdatering er normalt.
   // To døgn er det ikke, og da skal leseren se det.
   const gammel = dager >= 2;
-  const deler = [gammel ? 'Tall ' + dager + ' dager gamle' : 'Oppdatert ' + kortDato];
 
-  // antall_feil mangler til neste fulle henting har kjørt — da skal raden
-  // bare utebli, ikke vises som «0 feilet».
-  const feil = Number(json.antall_feil) || 0;
-  if (feil > 0) deler.push(feil + ' feilet');
-
-  el.textContent = deler.join(' · ');
+  el.textContent = gammel ? 'Tall ' + dager + ' dager gamle' : 'Oppdatert ' + kortDato;
   el.title = 'Tallene ble hentet ' + d.toLocaleString('nb-NO', {
     day: 'numeric', month: 'long', year: 'numeric',
     hour: '2-digit', minute: '2-digit',
-  }) + '.'
-    + (feil > 0 ? ' ' + feil + (feil === 1 ? ' ticker' : ' tickere')
-        + ' kunne ikke hentes, og viser tall fra forrige vellykkede henting.' : '')
-    + ' Kursdata hentes på børsdager.';
+  }) + '. Kursdata hentes på børsdager.';
   // Gråfargen må *av* når advarselen slås på. text-gray-500 og text-amber-600
   // har samme spesifisitet, så med begge påsatt avgjør rekkefølgen i
   // stilarket — og da sto advarselen grå.
-  const varsle = gammel || feil > 0;
-  el.classList.toggle('text-amber-600', varsle);
-  el.classList.toggle('dark:text-amber-400', varsle);
-  el.classList.toggle('text-gray-500', !varsle);
-  el.classList.toggle('dark:text-gray-400', !varsle);
+  el.classList.toggle('text-amber-600', gammel);
+  el.classList.toggle('dark:text-amber-400', gammel);
+  el.classList.toggle('text-gray-500', !gammel);
+  el.classList.toggle('dark:text-gray-400', !gammel);
 }
 
 function lastInnData(json) {
