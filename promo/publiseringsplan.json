@@ -1,0 +1,20 @@
+{
+  "_om": "Publiseringsplan for sosiale medier. Eneste kilde til posttekstene — en AI-agent leser denne filen og publiserer innlegg der publiser_fra er i dag eller tidligere. Bilde-URL-ene peker på raw.githubusercontent.com fordi /promo/ er sperret i robots.txt på exday.no. Se promo/publiseringsprompt.md.",
+  "innlegg": [
+    {
+      "id": "boliglan-2026-09",
+      "publiser_fra": "2026-09-24",
+      "artikkel": "https://exday.no/artikler/nedbetale-boliglan-eller-investere/",
+      "facebook": {
+        "bilde": "https://raw.githubusercontent.com/secopsvibecoder2026/Utbytte-Aksjer/main/promo/facebook-boliglan.jpg",
+        "lenke": "https://exday.no/artikler/nedbetale-boliglan-eller-investere/",
+        "tekst": "Nedbetale boliglånet eller investere? Regnestykket er tettere enn du tror.\n\nMed 5,5 % rente på lånet og 8 % forventet avkastning på aksjer ser det ut som en klar seier for aksjer — 2,5 prosentpoeng i forsprang.\n\nMen renten gir fradrag, og aksjeinntekt skattlegges. Etter skatt krymper forspranget til 0,68 prosentpoeng. Og da har vi ennå ikke tatt med at det ene tallet er garantert og det andre bare forventet.\n\nDette går artikkelen gjennom:\n\n🔹 Hvorfor garantert og forventet avkastning ikke er samme vare\n🔹 Hvorfor utbytteaksjer kommer dårligere ut enn vekstaksjer her — og hva ASK gjør med det\n🔹 Skjermingsfradraget: hvorfor skatten ofte er lavere enn 37,84 % for en langsiktig sparer\n🔹 Flytende rente: hvorfor valget bør tas på nytt med jevne mellomrom\n🔹 Belåningsgrad: når nedbetaling gir lavere rente på hele lånet\n🔹 Hvorfor svaret sjelden er enten–eller\n\n👉 Les artikkelen: exday.no/artikler/nedbetale-boliglan-eller-investere/\n🧮 Regn på ditt eget lån: exday.no/verktoy/huslan-vs-investering/\n\nGenerell informasjon, ikke personlig økonomisk rådgivning.\n\n#boliglån #investering #aksjer #utbytte #aksjesparekonto #privatøkonomi #exday"
+      },
+      "instagram": {
+        "bilde": "https://raw.githubusercontent.com/secopsvibecoder2026/Utbytte-Aksjer/main/promo/instagram-boliglan.jpg",
+        "tekst": "Nedbetale boliglånet eller investere? 🏠📈\n\n8 % forventet avkastning mot 5,5 % rente ser ut som en enkel seier for aksjer. Etter rentefradrag og skatt krymper forspranget fra 2,5 til 0,68 prosentpoeng.\n\nOg det ene tallet er garantert. Det andre er bare forventet.\n\nI artikkelen går vi gjennom hva som faktisk avgjør valget: skjermingsfradraget, ASK, flytende rente, belåningsgrad — og hvorfor svaret sjelden er enten–eller.\n\nLes hele artikkelen på exday.no\n\nGenerell informasjon, ikke personlig økonomisk rådgivning.\n\n#boliglån #investering #aksjer #utbytte #aksjesparekonto #ask #privatøkonomi #sparing #økonomi #rente #oslobørs #exday"
+      },
+      "merknad": "Tallene er artikkelens faste regneeksempel, ikke levende data. Skattesatsene (22 % og 37,84 %) er 2026-satser — endres de, må artikkelen, kalkulatoren og bildet oppdateres sammen. Generator: promo/generate_boliglan_post.py"
+    }
+  ]
+}
