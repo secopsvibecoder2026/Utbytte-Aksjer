@@ -1710,7 +1710,7 @@ function visKalender() {
   hendelser.sort((x, y) => new Date(x.dato) - new Date(y.dato));
 
   // Vis kun hendelser fra og med i dag
-  const idagStr = idag.toISOString().slice(0, 10);
+  const idagStr = lokalIsoDato(idag);
   const synligeHendelser = hendelser.filter(h => h.dato >= idagStr);
 
   // Grupper per måned (kun synlige hendelser fra i dag)
@@ -2041,28 +2041,87 @@ function visDeltPortefolje(data) {
 }
 
 
+/**
+ * «ÅÅÅÅ-MM-DD» i *lokal* tid.
+ *
+ * `d.toISOString().slice(0, 10)` gir UTC-datoen. Etter `setHours(0,0,0,0)`
+ * er lokal midnatt 22:00 eller 23:00 UTC dagen *før* i Norge — så kalenderens
+ * «fra og med i dag» var i går, hele døgnet, hver dag.
+ */
+function lokalIsoDato(d) {
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
+
+// Semikolon, ikke komma. Tallene har norsk desimalkomma, og i en
+// kommaseparert fil ble kursen «406,20» to kolonner — headeren hadde 9
+// kolonner og hver rad 13, så alt til høyre for «Antall» havnet feil i Excel.
+// Norsk Excel bruker dessuten semikolon som listeskille og åpner da fila
+// riktig direkte.
+const CSV_SKILLE = ';';
+
+/** Ett CSV-felt, sitert bare når det må: skilletegn, anførselstegn eller linjeskift. */
+function csvFelt(v) {
+  const s = String(v ?? '');
+  return /[;"\r\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+}
+
 function eksporterCSV() {
   const pf = hentPF();
   const { navn, malMnd, spareMaal } = hentProfil();
-  const profilLinje = `#exday-profil,navn=${navn},sparemaal=${spareMaal},mal_mnd=${malMnd}`;
+  // Verdiene URI-kodes: et navn som «Ola Nordmann, Bergen» ble ellers kuttet
+  // ved komma når fila ble lest inn igjen.
+  const profilLinje = ['#exday-profil',
+    'navn=' + encodeURIComponent(navn),
+    'sparemaal=' + encodeURIComponent(spareMaal),
+    'mal_mnd=' + encodeURIComponent(malMnd)].join(CSV_SKILLE);
+  const nok = v => (Number(v) || 0).toFixed(2).replace('.', ',');
   const rader = [['Ticker','Selskap','Antall','Kurs','Utbytte/aksje','Forv. utbytte/år','Yield %','Ex-dato','Frekvens']];
   Object.entries(pf).forEach(([ticker, antall]) => {
     const a = alleAksjer.find(x => x.ticker === ticker);
     if (!a) return;
     rader.push([
-      a.ticker, `"${a.navn}"`, antall,
-      a.pris.toFixed(2).replace('.', ','), (a.utbytte_per_aksje||0).toFixed(2).replace('.', ','),
-      (antall * (a.utbytte_per_aksje||0)).toFixed(2).replace('.', ','),
-      a.utbytte_yield.toFixed(2).replace('.', ','),
-      a.ex_dato || '', a.frekvens
+      a.ticker, a.navn, antall,
+      nok(a.pris), nok(a.utbytte_per_aksje),
+      nok(antall * (a.utbytte_per_aksje || 0)),
+      nok(a.utbytte_yield),
+      a.ex_dato || '', a.frekvens || ''
     ]);
   });
-  const csv = profilLinje + '\n' + rader.map(r => r.join(',')).join('\n');
+  const csv = profilLinje + '\n' + rader.map(r => r.map(csvFelt).join(CSV_SKILLE)).join('\n');
   const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url; a.download = 'portef\u00F8lje-exday.csv'; a.click();
   URL.revokeObjectURL(url);
+}
+
+/**
+ * Deler én CSV-linje, med respekt for anførselstegn.
+ *
+ * `linje.split(',')` delte «"Wilh. Wilhelmsen Holding, B"» i to og flyttet
+ * antallet én kolonne til høyre. Tar både semikolon (nye filer) og komma
+ * (filer eksportert før 24.09.2026).
+ */
+function delCSVLinje(linje, skille) {
+  const ut = [];
+  let felt = '', sitert = false;
+  for (let i = 0; i < linje.length; i++) {
+    const c = linje[i];
+    if (sitert) {
+      if (c === '"' && linje[i + 1] === '"') { felt += '"'; i++; }
+      else if (c === '"') sitert = false;
+      else felt += c;
+    } else if (c === '"') sitert = true;
+    else if (c === skille) { ut.push(felt); felt = ''; }
+    else felt += c;
+  }
+  ut.push(felt);
+  return ut;
+}
+
+/** Profilverdi fra fil: URI-kodet i nye filer, rå i gamle. */
+function _profilVerdi(v) {
+  try { return decodeURIComponent(v); } catch { return v; }
 }
 
 function parseCSV(tekst) {
@@ -2073,22 +2132,27 @@ function parseCSV(tekst) {
 
   // Les profil-metadata fra første linje hvis den starter med #exday-profil
   let profil = null;
-  if (linjer[0].startsWith('#exday-profil,')) {
-    const deler = linjer[0].slice('#exday-profil,'.length).split(',');
+  const profilSkille = linjer[0].startsWith('#exday-profil;') ? ';'
+                     : linjer[0].startsWith('#exday-profil,') ? ',' : null;
+  if (profilSkille) {
+    const deler = linjer[0].slice('#exday-profil'.length + 1).split(profilSkille);
     profil = {};
     deler.forEach(del => {
       const eq = del.indexOf('=');
-      if (eq > -1) profil[del.slice(0, eq)] = del.slice(eq + 1);
+      if (eq > -1) profil[del.slice(0, eq)] = _profilVerdi(del.slice(eq + 1));
     });
     linjer = linjer.slice(1);
   }
+
+  // Semikolon i nye filer, komma i gamle. Headeren avgjør.
+  const skille = (linjer[0] || '').includes(';') ? ';' : ',';
 
   let tickerIdx = 0, antallIdx = 2;
 
   // Header-deteksjon: finn kolonne-indekser dynamisk
   const forste = linjer[0] ? linjer[0].toLowerCase() : '';
   if (forste.includes('ticker') || forste.includes('antall') || forste.includes('selskap')) {
-    const cols = linjer[0].split(',').map(c => c.trim().toLowerCase());
+    const cols = delCSVLinje(linjer[0], skille).map(c => c.trim().toLowerCase());
     const ti = cols.findIndex(c => c === 'ticker');
     const ai = cols.findIndex(c => c === 'antall');
     if (ti !== -1) tickerIdx = ti;
@@ -2100,9 +2164,9 @@ function parseCSV(tekst) {
   const gyldig = [], ukjent = [];
 
   for (const linje of linjer) {
-    const deler = linje.split(',');
-    const ticker = (deler[tickerIdx] || '').replace(/"/g, '').trim().toUpperCase();
-    const antall = parseInt((deler[antallIdx] || '').replace(/"/g, '').trim(), 10);
+    const deler = delCSVLinje(linje, skille);
+    const ticker = (deler[tickerIdx] || '').trim().toUpperCase();
+    const antall = parseInt((deler[antallIdx] || '').trim(), 10);
     if (!ticker) continue;
     if (kjenteTickers.has(ticker) && antall > 0) {
       gyldig.push({ ticker, antall });
@@ -4764,4 +4828,4 @@ function _annBygTopp() {
 }
 
 // Node.js test export
-if (typeof module !== 'undefined') module.exports = { fmt, formaterDato, yieldKlasse, payoutKlasse, vekstKlasse, beregnScore, beregnBaerekraft, beregnYtdInntekt, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote };
+if (typeof module !== 'undefined') module.exports = { csvFelt, delCSVLinje, parseCSV, lokalIsoDato, fmt, formaterDato, yieldKlasse, payoutKlasse, vekstKlasse, beregnScore, beregnBaerekraft, beregnYtdInntekt, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote };

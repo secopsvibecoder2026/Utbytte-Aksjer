@@ -1034,6 +1034,48 @@ announcements instead. Both of these turned out to be real:
 2020 Bulkers is the one case where the raw drop survives adjustment (117,02 →
 3,01), because the adjustment factor would be negative.
 
+## Ex-dates come from Oslo Børs — Yahoo and DNB do not tell the exchanges apart (2026-09-24)
+
+**EQNR showed the New York ex-date.** Equinor's own notice to Oslo Børs reads
+«Ex-date Oslo Børs: 13 November 2026» and «Ex-date New York Stock Exchange:
+16 November 2026». We showed 16 November — and from 11 to 23 September we
+showed **25 November, the payment date**. Anyone buying on Oslo Børs on 13–15
+November expecting the dividend would not have received it. EQNR is the most
+widely held stock in Norway.
+
+Two causes, and the second would have survived fixing the first:
+
+- **Neither Yahoo nor DNB Markets distinguishes between exchanges.** For a
+  dual-listed company either may return the foreign date.
+- **The Yahoo/DNB merge let the *later* date win** (`dnb_ex > aksje["ex_dato"]`).
+  With dual listings, the later date is exactly the foreign one.
+
+`hent_newsweb_ex_dato()` reads the «Key information relating to the cash
+dividend» notice and runs **after** the DNB merge, so the exchange's own
+statement has the last word. `_parse_ex_dato()` discards a label naming another
+exchange and prefers one naming Oslo — order in the notice does not decide.
+The payment date is taken from the same notice.
+
+First dry run over all 155: EQNR corrected 16 → 13 November, and **HUNT and
+ELO got ex-dates we had never shown** — HUNT's was five days away.
+
+Scope, measured 2026-09-20: 49 % of the catalog has such a notice with an
+ex-date, but NewsWeb's archive only reaches back ~16 months. So this gives the
+*next* ex-date, never the multi-year history — `utbetalingsmaaneder` and
+`frekvens` still come from Yahoo's series.
+
+**Parser traps, each found by reading real notices:** «Ex date» without a
+hyphen; «August 26, 2026» (month first, WAWI) next to «13 November 2026»;
+«Ex-date Oslo Børs:» with text before the colon; «Payment date: o/a …» and
+«from …»; abbreviated months («Apr», «Sept.»). Month names match as a
+**prefix** — truncating to three letters turned «Aprilis» into April.
+
+**Cost is bounded.** `_newsweb_meldinger()` caches the message list per run —
+rapport_dato, the dividend split and the ex-date read the same list, which was
+fetched up to three times per ticker. Only notices from the last 270 days are
+opened, and the walk stops at the first ex-date already passed. ~99 message
+fetches per run. Tests: `TestParseExDato`, `TestHentNewswebExDato` (16).
+
 ## Detecting Outdated Tickers (delisted / renamed / acquired)
 
 `scripts/sjekk_utdaterte.py` catches tickers that have gone stale because the company was
@@ -1073,6 +1115,7 @@ often the workflow fires.
 | `ikke_pa_bors` | Ticker missing from Euronext's own instrument list | kritisk | No |
 | `ubrukt_symbolkart` | `EURONEXT_SYMBOL_MAP` entry points at a ticker we no longer carry | advarsel | No |
 | `vedvarende_hentefeil` | No successful fetch for 7 days **but Euronext confirms the listing** | advarsel | Yes |
+| `feil_borssuffiks` | `ticker_yf` does not end in `.OL` — another exchange, another currency | kritisk | No |
 
 The six checks that need no history work from the existing data files, so the script is useful
 on the very first run — before any `hentelogg.json` exists. `ikke_pa_bors` additionally needs
@@ -1866,6 +1909,8 @@ din».
 8. **Kurshistorikk er separat** — ligger i `data/kurs/{TICKER}.json`, ikke i `aksjer.json`. Frontend henter den on-demand via `hentKursHistorikk()` når en aksjemodal åpnes. Python-kode som genererer sider må laste den tilbake med `_last_kurshistorikk_fra_disk()` — ellers regenereres alle SEO-sider uten kursgraf
 9. **`window.alleAksjer`** is set in `lastInnData()` in `app.js` for cross-file access
 10. **Beskrivelser bygges på nytt hver kjøring — ikke kopier råteksten** — `beskrivelse` i `aksjer.json` er ikke teksten fra `tickers.json`. Både `fetch_stocks.py` og `regenerer_sider.py` kaller `utvid_beskrivelser.lag_beskrivelse()`, som henter *kun* det manuelt forfattede innledningsavsnittet (via `_manuell_del()`) og bygger utbytteprofil- og driver-avsnittene på nytt fra denne kjøringens tall. Kopierer du råteksten fra `tickers.json` rett inn, fryser du yield, payout, vekst og årstelling til det som tilfeldigvis sto i malen. Se «Utdaterte nøkkeltall» under.
+11. **`toISOString().slice(0, 10)` is the UTC date, not today** — after `setHours(0,0,0,0)` local midnight is 22:00/23:00 UTC the day *before* in Norway, so the dividend calendar's «fra og med i dag» was yesterday, all day, every day (fixed 2026-09-24). Use `lokalIsoDato(d)` in `ui.js`. CI runs the JS tests with `TZ: Europe/Oslo` because in UTC this bug passes every test.
+12. **CSV export uses semicolons** — numbers carry a decimal comma, and a comma-separated file turned «406,20» into two columns (header 9, rows 13). `parseCSV()` still reads older comma files, quote-aware. Profile values in the `#exday-profil` line are URI-encoded; a name with a comma was truncated.
 
 ### Why the yield is not auto-corrected when the annual rate is a part-year
 
@@ -2093,3 +2138,23 @@ ten fail the same way, so one rule marks them all.
 > distribution left the price at a few kroner. Two individually reasonable
 > rules compose into a figure ~29× too low. Fixing the boundary does not touch
 > this one.
+
+### …and it is blind to dividend *cuts* (found 2026-09-24, not fixed)
+
+Everything above analyses the guard for companies that **raised** or
+**started** paying. A **cut** is the mirror image, and the guard makes it
+worse: Yahoo's rate falls, the deviation from last year's total passes 50 %,
+and the guard swaps the correct lower rate for last year's higher one.
+SoftwareOne halved its dividend (0,30 → 0,15 CHF) and was shown at 3,36 %
+yield against Yahoo's 1,68 %.
+
+Seven stocks have `utbytte_per_aksje` equal to last year's total while the
+last payment × frequency is below 60 % of it: SALM, BAKKA, WAWI, HAUTO, MULTI,
+SWON and STST (31,9 % shown). **These are candidates, not verified errors.**
+SALM and BAKKA are documented above as cases where last payment × frequency is
+the *wrong* number, and WAWI carries a known extraordinary part. Verify HAUTO
+and STST first — they are the most extreme.
+
+Not auto-corrected, for the same reason as the part-year case: every rule
+simulated so far produces an obviously wrong figure somewhere. The NewsWeb
+split (ordinary vs extraordinary) is the most promising lever.

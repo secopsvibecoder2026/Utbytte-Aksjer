@@ -32,7 +32,7 @@ const {
   vekstKlasse,
   beregnScore,
   beregnYtdInntekt
-, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote } = require('../assets/ui.js');
+, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote, csvFelt, delCSVLinje, parseCSV, lokalIsoDato } = require('../assets/ui.js');
 
 // ── fmt ────────────────────────────────────────────────────────────────────
 test('fmt returnerer — for null', () => {
@@ -416,4 +416,52 @@ test('eksakt sum bruker fortsatt beløp, ikke andel', () => {
   const kog = { siste_utbytte: 5.70, valuta: 'NOK',
                 utbyttesplitt: { ordinaert: 2.20, ekstraordinaert: 3.50, valuta: 'NOK' } };
   assert.equal(utbyttesplittStemmer(kog).kunAndel, false);
+});
+
+
+// ── CSV ────────────────────────────────────────────────────────────────────
+// Eksporten brukte komma som skilletegn og komma som desimaltegn. Kursen
+// «406,20» ble to kolonner: headeren hadde 9, hver rad 13.
+test('csvFelt siterer bare når det må', () => {
+  assert.equal(csvFelt('406,20'), '406,20', 'desimalkomma skal ikke siteres med semikolon som skille');
+  assert.equal(csvFelt('A;B'), '"A;B"');
+  assert.equal(csvFelt('Si "hei"'), '"Si ""hei"""');
+  assert.equal(csvFelt(null), '');
+});
+
+test('delCSVLinje respekterer anførselstegn', () => {
+  assert.deepEqual(delCSVLinje('EQNR;Equinor ASA;100;406,20', ';'), ['EQNR', 'Equinor ASA', '100', '406,20']);
+  assert.deepEqual(delCSVLinje('WWIB,"Wilh. Wilhelmsen Holding, B",25', ','), ['WWIB', 'Wilh. Wilhelmsen Holding, B', '25']);
+  assert.deepEqual(delCSVLinje('"Si ""hei""";x', ';'), ['Si "hei"', 'x']);
+});
+
+test('parseCSV leser ny semikolonfil med URI-kodet profil', () => {
+  global.alleAksjer = [{ ticker: 'EQNR' }, { ticker: 'DNB' }];
+  const r = parseCSV('﻿#exday-profil;navn=Ola%20Nordmann%2C%20Bergen;sparemaal=1000000;mal_mnd=5000\n'
+    + 'Ticker;Selskap;Antall;Kurs\nEQNR;Equinor ASA;100;406,20\nDNB;DNB Bank ASA;50;314,40\n');
+  assert.deepEqual(r.gyldig, [{ ticker: 'EQNR', antall: 100 }, { ticker: 'DNB', antall: 50 }]);
+  assert.equal(r.profil.navn, 'Ola Nordmann, Bergen', 'komma i navnet kuttet det tidligere');
+});
+
+test('parseCSV leser fortsatt gamle kommafiler, også med komma i et sitert navn', () => {
+  global.alleAksjer = [{ ticker: 'EQNR' }, { ticker: 'WWIB' }];
+  const r = parseCSV('#exday-profil,navn=Kari,sparemaal=500000,mal_mnd=2000\n'
+    + 'Ticker,Selskap,Antall,Kurs\nEQNR,"Equinor ASA",100,406,20\nWWIB,"Wilh. Wilhelmsen Holding, B",25,300,00\n');
+  assert.deepEqual(r.gyldig, [{ ticker: 'EQNR', antall: 100 }, { ticker: 'WWIB', antall: 25 }]);
+  assert.equal(r.profil.navn, 'Kari');
+});
+
+test('parseCSV tåler en profilverdi med ugyldig %-koding', () => {
+  global.alleAksjer = [];
+  const r = parseCSV('#exday-profil,navn=100%,sparemaal=1\nTicker,Antall\n');
+  assert.equal(r.profil.navn, '100%');
+});
+
+// ── Lokal dato ─────────────────────────────────────────────────────────────
+// toISOString() etter setHours(0,0,0,0) ga gårsdagen i Norge, hele døgnet.
+test('lokalIsoDato gir lokal dato også rett etter midnatt', () => {
+  const d = new Date(2026, 8, 24, 0, 0, 0);   // lokal midnatt 24. sep
+  assert.equal(lokalIsoDato(d), '2026-09-24');
+  const sen = new Date(2026, 11, 31, 23, 59, 0);
+  assert.equal(lokalIsoDato(sen), '2026-12-31');
 });

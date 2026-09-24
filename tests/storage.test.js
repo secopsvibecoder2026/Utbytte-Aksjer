@@ -16,7 +16,7 @@ global.localStorage = (() => {
 // Stub out caches (used by lagreNotifPrefs)
 global.window = { caches: undefined };
 
-const { hentFav, lagreFav, erFavoritt, toggleFav } = require('../assets/storage.js');
+const { hentFav, lagreFav, erFavoritt, toggleFav, hentPortefoljer, hentAktivPF, lagrePF } = require('../assets/storage.js');
 
 test('hentFav returnerer tom Set når localStorage er tom', () => {
   localStorage.clear();
@@ -74,3 +74,18 @@ test('hentFav returnerer tom Set ved ugyldig JSON', () => {
   const fav = hentFav();
   assert.equal(fav.size, 0);
 });
+
+
+// ── Porteføljelager som inneholder gyldig JSON av feil type ────────────────
+// JSON.parse('null') kaster ikke, så try/catch fanget det aldri. hentAktivPF()
+// krasjet da på pfl[id] hver gang porteføljefanen åpnet.
+for (const verdi of ['null', '[]', '42', '"tekst"']) {
+  test(`pf_portefoljer = ${verdi} gir tom portefølje, ikke krasj`, () => {
+    localStorage.clear();
+    localStorage.setItem('pf_portefoljer', verdi);
+    assert.deepEqual(hentPortefoljer(), {});
+    assert.doesNotThrow(() => hentAktivPF());
+    assert.doesNotThrow(() => lagrePF({ EQNR: 10 }));
+    assert.deepEqual(hentAktivPF().beholdning, { EQNR: 10 });
+  });
+}

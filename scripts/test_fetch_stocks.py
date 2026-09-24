@@ -1214,5 +1214,125 @@ class TestUtbetalingsaar(unittest.TestCase):
         self.assertEqual(_lag_utbetalingsaar(self._aksje("Årlig", [5])), "")
 
 
+
+class TestParseExDato(unittest.TestCase):
+    """Ex-dato for Oslo Børs fra «Key information relating to the cash dividend».
+
+    Hver variant her er hentet fra en ekte melding. EQNR-tilfellet er grunnen
+    til at funksjonen finnes: vi viste New York-datoen, tre dager for sent.
+    """
+
+    def _p(self, tekst):
+        from fetch_stocks import _parse_ex_dato
+        return _parse_ex_dato(tekst)
+
+    def test_kog_enkel_form(self):
+        self.assertEqual(self._p("Ex-date: 14 April 2026\nPayment date: 22 April 2026"),
+                         ("2026-04-14", "2026-04-22"))
+
+    def test_eqnr_oslo_foran_new_york(self):
+        t = ("Ex-date Oslo Børs: 13 November 2026\n"
+             "Ex-date New York Stock Exchange: 16 November 2026\n"
+             "Payment date: 25 November 2026")
+        self.assertEqual(self._p(t), ("2026-11-13", "2026-11-25"))
+
+    def test_eqnr_rekkefolgen_avgjor_ikke(self):
+        t = ("Ex-date New York Stock Exchange: 16 November 2026\n"
+             "Ex-date Oslo Børs: 13 November 2026")
+        self.assertEqual(self._p(t)[0], "2026-11-13")
+
+    def test_bare_utenlandsk_borsdato_gir_ingenting(self):
+        self.assertEqual(self._p("Ex-date NYSE: 16 November 2026"), (None, None))
+
+    def test_wawi_amerikansk_format_og_oa(self):
+        t = "Ex-date: August 26, 2026\nPayment date: o/a September 16, 2026"
+        self.assertEqual(self._p(t), ("2026-08-26", "2026-09-16"))
+
+    def test_dnb_from_foran_betalingsdato(self):
+        t = "Ex-date: 22 April 2026\nPayment date: from 30 April 2026"
+        self.assertEqual(self._p(t), ("2026-04-22", "2026-04-30"))
+
+    def test_mellomrom_i_stedet_for_bindestrek(self):
+        self.assertEqual(self._p("Ex date: 3 May 2026")[0], "2026-05-03")
+
+    def test_forkortede_maaneder(self):
+        self.assertEqual(self._p("Ex-date: 7 Apr 2026")[0], "2026-04-07")
+        self.assertEqual(self._p("Ex-date: 7 Sept. 2026")[0], "2026-09-07")
+
+    def test_ord_som_bare_begynner_som_en_maaned(self):
+        self.assertEqual(self._p("Ex-date: 14 Aprilis 2026"), (None, None))
+
+    def test_umulig_dato(self):
+        self.assertEqual(self._p("Ex-date: 31 February 2026"), (None, None))
+
+    def test_betalingsdato_for_ex_dato_forkastes(self):
+        t = "Ex-date: 14 April 2026\nPayment date: 2 April 2026"
+        self.assertEqual(self._p(t), ("2026-04-14", None))
+
+
+class TestHentNewswebExDato(unittest.TestCase):
+    """Utvalget av meldinger — uten nett, med en falsk NewsWeb."""
+
+    def _kjor(self, meldinger, i_dag="2026-09-24"):
+        import fetch_stocks as fs
+        bodies = {m["messageId"]: m.pop("body") for m in meldinger}
+        hentet = []
+
+        def falsk_get(url, timeout=10):
+            mid = int(url.rsplit("=", 1)[1])
+            hentet.append(mid)
+            return {"data": {"message": {"body": bodies[mid]}}}
+
+        gml = (fs._newsweb_get, dict(fs._NEWSWEB_LISTE), fs._NEWSWEB_API)
+        fs._newsweb_get = falsk_get
+        fs._NEWSWEB_API = "http://x"
+        fs._NEWSWEB_LISTE[fs._newsweb_utsteder("TEST")] = meldinger
+        try:
+            r = fs.hent_newsweb_ex_dato("TEST", datetime.date.fromisoformat(i_dag))
+        finally:
+            fs._newsweb_get = gml[0]
+            fs._NEWSWEB_LISTE.clear(); fs._NEWSWEB_LISTE.update(gml[1])
+            fs._NEWSWEB_API = gml[2]
+        return r, hentet
+
+    @staticmethod
+    def _m(mid, publ, body, tittel="Key information relating to the cash dividend"):
+        return {"messageId": mid, "publishedTime": publ + "T07:00:00Z", "title": tittel, "body": body}
+
+    def test_kommende_ex_dato_returneres(self):
+        r, _ = self._kjor([self._m(1, "2026-07-22", "Ex-date Oslo Børs: 13 November 2026")])
+        self.assertEqual(r["ex_dato"], "2026-11-13")
+
+    def test_passert_ex_dato_gir_ingenting_og_stopper(self):
+        r, hentet = self._kjor([
+            self._m(2, "2026-08-11", "Ex-date: August 26, 2026"),
+            self._m(1, "2026-02-01", "Ex-date: 13 November 2026"),
+        ])
+        self.assertIsNone(r)
+        self.assertEqual(hentet, [2], "eldre meldinger gjelder eldre utbytter og skal ikke hentes")
+
+    def test_for_gammel_melding_hentes_ikke(self):
+        r, hentet = self._kjor([self._m(1, "2025-10-01", "Ex-date: 13 November 2026")])
+        self.assertIsNone(r)
+        self.assertEqual(hentet, [])
+
+    def test_andre_meldinger_ignoreres(self):
+        r, hentet = self._kjor([
+            self._m(3, "2026-09-01", "Ex-date: 1 December 2026", tittel="Q2 2026 results"),
+            self._m(1, "2026-07-22", "Ex-date: 13 November 2026"),
+        ])
+        self.assertEqual(r["ex_dato"], "2026-11-13")
+        self.assertEqual(hentet, [1])
+
+    def test_nettverksfeil_gir_none(self):
+        import fetch_stocks as fs
+        gml = fs._newsweb_meldinger
+        fs._newsweb_meldinger = lambda t: (_ for _ in ()).throw(OSError("nede"))
+        try:
+            self.assertIsNone(fs.hent_newsweb_ex_dato("TEST"))
+        finally:
+            fs._newsweb_meldinger = gml
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

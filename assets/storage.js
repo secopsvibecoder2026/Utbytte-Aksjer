@@ -70,7 +70,13 @@ function toggleFav(ticker) {
 
 // ── PORTEFØLJER (multi) ────────────────────────────────────────────────────
 function hentPortefoljer() {
-  try { return JSON.parse(localStorage.getItem('pf_portefoljer') || '{}'); } catch { return {}; }
+  // JSON.parse('null') kaster ikke — den gir null, og da krasjet hentAktivPF()
+  // på pfl[id] hver gang porteføljefanen åpnet, til lagringen ble tømt.
+  // try/catch fanger bare ugyldig JSON, ikke gyldig JSON av feil type.
+  try {
+    const v = JSON.parse(localStorage.getItem('pf_portefoljer') || '{}');
+    return v && typeof v === 'object' && !Array.isArray(v) ? v : {};
+  } catch { return {}; }
 }
 function lagrePortefoljer(pfl) { localStorage.setItem('pf_portefoljer', JSON.stringify(pfl)); }
 function hentAktivPFId() { return localStorage.getItem('pf_aktiv') || 'default'; }
@@ -156,4 +162,4 @@ function lagreAksjeData(ticker, data) {
 }
 
 // Node.js test export
-if (typeof module !== 'undefined') module.exports = { hentFav, lagreFav, erFavoritt, toggleFav };
+if (typeof module !== 'undefined') module.exports = { hentFav, lagreFav, erFavoritt, toggleFav, hentPortefoljer, hentAktivPF, lagrePF };
