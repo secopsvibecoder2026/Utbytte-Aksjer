@@ -15,6 +15,21 @@
         "tekst": "Nedbetale boliglånet eller investere? 🏠📈\n\n8 % forventet avkastning mot 5,5 % rente ser ut som en enkel seier for aksjer. Etter rentefradrag og skatt krymper forspranget fra 2,5 til 0,68 prosentpoeng.\n\nOg det ene tallet er garantert. Det andre er bare forventet.\n\nI artikkelen går vi gjennom hva som faktisk avgjør valget: skjermingsfradraget, ASK, flytende rente, belåningsgrad — og hvorfor svaret sjelden er enten–eller.\n\nLes hele artikkelen på exday.no\n\nGenerell informasjon, ikke personlig økonomisk rådgivning.\n\n#boliglån #investering #aksjer #utbytte #aksjesparekonto #ask #privatøkonomi #sparing #økonomi #rente #oslobørs #exday"
       },
       "merknad": "Tallene er artikkelens faste regneeksempel, ikke levende data. Skattesatsene (22 % og 37,84 %) er 2026-satser — endres de, må artikkelen, kalkulatoren og bildet oppdateres sammen. Generator: promo/generate_boliglan_post.py"
+    },
+    {
+      "id": "betalt-2026-09",
+      "publiser_fra": "2026-09-29",
+      "artikkel": "https://exday.no/aksjer/",
+      "facebook": {
+        "bilde": "https://raw.githubusercontent.com/secopsvibecoder2026/Utbytte-Aksjer/main/promo/facebook-betalt.jpg",
+        "lenke": "https://exday.no/aksjer/",
+        "tekst": "Direkteavkastningen du ser på en aksje er ofte et anslag — ikke det selskapet faktisk har betalt.\n\nTallet regnes ut fra en anslått årlig utbytterate, og den kan bomme. Tre ting vi har sett skje med aksjer på Oslo Børs:\n\n🔹 Et engangsutbytte blir regnet som om det kommer hvert år\n🔹 To utbetalinger fra ulike perioder blir lagt sammen til én årsrate\n🔹 Et utbytte som er stoppet, står fortsatt oppført\n\nDerfor viser exday.no nå hva selskapet faktisk har betalt, ved siden av anslaget: siste 12 måneder, og snitt per år for de siste 1–5 årene. Er avstanden stor, forklarer siden hvorfor.\n\nEt tips uansett hvor du sjekker: sammenlign direkteavkastningen med det som faktisk er utbetalt det siste året.\n\n👉 Se aksjene: exday.no/aksjer/\n\nGenerell informasjon, ikke investeringsrådgivning.\n\n#utbytte #utbytteaksjer #direkteavkastning #aksjer #oslobørs #investering #exday"
+      },
+      "instagram": {
+        "bilde": "https://raw.githubusercontent.com/secopsvibecoder2026/Utbytte-Aksjer/main/promo/instagram-betalt.jpg",
+        "tekst": "Direkteavkastning er ofte et anslag 📊\n\nTallet regnes ut fra en anslått årlig utbytterate — og den kan bomme. Et engangsutbytte regnet som årlig. To utbetalinger fra ulike perioder lagt sammen. Et utbytte som er stoppet, men fortsatt står oppført.\n\nDerfor viser exday.no nå hva selskapet faktisk har betalt: siste 12 måneder, og snitt per år for de siste 1–5 årene. Er avstanden stor, forklarer siden hvorfor.\n\nTips: sammenlign alltid direkteavkastningen med det som faktisk er utbetalt det siste året.\n\nSe aksjene på exday.no\n\nGenerell informasjon, ikke investeringsrådgivning.\n\n#utbytte #utbytteaksjer #direkteavkastning #aksjer #oslobørs #investering #aksjesparekonto #sparing #privatøkonomi #økonomi #exday"
+      },
+      "merknad": "Et tips, ikke en kunngjøring. Bildet og teksten har bevisst ingen aksjenavn og ingen tall: søylene er en illustrasjon, og et ekte tall ville gått ut på dato. De tre mekanismene i teksten er alle målt på egne data 24.09.2026 (engangsutbytte × frekvens, to perioder summert, stoppet utbytte). Generator: promo/generate_betalt_post.py"
     }
   ]
 }
