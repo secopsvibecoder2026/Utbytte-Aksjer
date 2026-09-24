@@ -60,6 +60,10 @@ jobs:
       # require()-er assets/*.js direkte, ingen npm-pakker.
       - name: Kjør JS-tester
         run: npm test
+        # Brukerne er i Norge. I UTC gir toISOString() alltid riktig dato, så
+        # en test av «gårsdagen i stedet for i dag» består her selv med feilen.
+        env:
+          TZ: Europe/Oslo
 
   python-tester:
     name: Python-tester (unittest)
