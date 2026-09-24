@@ -1265,6 +1265,30 @@ class TestParseExDato(unittest.TestCase):
     def test_umulig_dato(self):
         self.assertEqual(self._p("Ex-date: 31 February 2026"), (None, None))
 
+    def test_salmar_numerisk_dato(self):
+        t = ("Ex-date: 23.06.2026\nRecord date: 24.06.2026\n"
+             "Payment date: On or about 06.07.2026")
+        self.assertEqual(self._p(t), ("2026-06-23", "2026-07-06"))
+
+    def test_stst_on_or_about(self):
+        t = "Ex-date: 7 August 2026\nPayment date: on or about 1 September 2026"
+        self.assertEqual(self._p(t), ("2026-08-07", "2026-09-01"))
+
+    def test_cmbto_felles_dato_for_to_borser(self):
+        t = "Ex-date on Euronext Belgium and Euronext Oslo Børs: expected on 14 April 2026"
+        self.assertEqual(self._p(t)[0], "2026-04-14")
+
+    def test_oslo_og_nyse_i_samme_merkelapp_beholdes(self):
+        self.assertEqual(self._p("Ex-date Oslo Børs and NYSE: 3 May 2026")[0], "2026-05-03")
+
+    def test_uten_arstall_gjettes_ikke(self):
+        # AFK skriver «Ex-date: 13 May». Å gjette året er verre enn ingenting.
+        self.assertEqual(self._p("Ex-date: 13 May"), (None, None))
+
+    def test_numerisk_umulig_dato(self):
+        self.assertEqual(self._p("Ex-date: 31.02.2026"), (None, None))
+        self.assertEqual(self._p("Ex-date: 12.13.2026"), (None, None))
+
     def test_betalingsdato_for_ex_dato_forkastes(self):
         t = "Ex-date: 14 April 2026\nPayment date: 2 April 2026"
         self.assertEqual(self._p(t), ("2026-04-14", None))
@@ -1332,6 +1356,56 @@ class TestHentNewswebExDato(unittest.TestCase):
             self.assertIsNone(fs.hent_newsweb_ex_dato("TEST"))
         finally:
             fs._newsweb_meldinger = gml
+
+
+
+class TestVelgArsrate(unittest.TestCase):
+    """Vakten var blind for kutt. Tallene er ekte serier fra 24.09.2026."""
+
+    def _v(self, *a):
+        from fetch_stocks import velg_arsrate
+        return velg_arsrate(*a)
+
+    # ── Kutt: trailing 12 mnd skal vinne ─────────────────────────────────
+    def test_salmar_arlig_kutt(self):
+        # NOK 22 i 2025, NOK 10 i 2026 — bekreftet mot SalMars melding.
+        self.assertEqual(self._v(22.0, 10.0, 1, "Årlig"), 10.0)
+
+    def test_stst_kvartalsvis_kutt(self):
+        self.assertAlmostEqual(self._v(12.757, 5.168, 4, "Kvartalsvis"), 5.168)
+
+    def test_wawi_halvarlig_kutt(self):
+        self.assertAlmostEqual(self._v(24.26, 15.377, 2, "Halvårlig"), 15.377)
+
+    # ── Enveis: kan aldri heve ───────────────────────────────────────────
+    def test_ekstraordinaer_i_vinduet_heves_ikke(self):
+        # GSF-type: trailing inneholder salgsprovenyet og er høyere enn
+        # fjoråret. Å bruke den ville gitt 116 % yield.
+        self.assertEqual(self._v(4.0, 39.0, 3, "Kvartalsvis"), 4.0)
+
+    def test_like_tall_endrer_ingenting(self):
+        self.assertEqual(self._v(8.0, 8.0, 4, "Kvartalsvis"), 8.0)
+
+    # ── Vinduet må være fullt ────────────────────────────────────────────
+    def test_halvfullt_vindu_brukes_ikke(self):
+        # Halvårlig betaler, septemberutbetalingen falt rett utenfor vinduet.
+        # Trailing er da en halv årsrate — ikke et kutt.
+        self.assertEqual(self._v(10.0, 5.0, 1, "Halvårlig"), 10.0)
+
+    def test_kvartalsvis_med_tre_i_vinduet_brukes_ikke(self):
+        self.assertEqual(self._v(8.0, 6.0, 3, "Kvartalsvis"), 8.0)
+
+    def test_ukjent_frekvens_brukes_ikke(self):
+        self.assertEqual(self._v(8.0, 2.0, 1, "Uregelmessig"), 8.0)
+        self.assertEqual(self._v(8.0, 2.0, 1, None), 8.0)
+
+    # ── Uten fjorår: som før ─────────────────────────────────────────────
+    def test_uten_fjorar_brukes_trailing(self):
+        # SWON etter byttet til .OL: bare ett utbytte, i 2026.
+        self.assertEqual(self._v(0.0, 1.72, 1, "Årlig"), 1.72)
+
+    def test_tom_trailing_gir_fjorar(self):
+        self.assertEqual(self._v(6.0, 0.0, 0, "Årlig"), 6.0)
 
 
 if __name__ == "__main__":
