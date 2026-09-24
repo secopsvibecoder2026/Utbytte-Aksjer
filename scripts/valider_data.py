@@ -14,6 +14,27 @@ import os
 AKSJER_JSON = os.path.join(os.path.dirname(__file__), '..', 'data', 'aksjer.json')
 
 
+# Sjekk 10 — samme grenser og samme regel som vist_over_betalt() i
+# fetch_stocks.py. Kopiert fordi dette skriptet må kjøre uten yfinance;
+# TestVistOverBetalt.test_samsvar_med_valider_data holder de to like.
+VIST_OVER_BETALT_PP = 1.0
+VIST_OVER_BETALT_ANDEL = 0.3
+
+
+def vist_over_betalt(a):
+    """(vist yield, betalt 12 mnd yield) når det viste tallet er vesentlig høyere."""
+    if a.get('utbytte_12m') is None:
+        return None
+    pris = a.get('pris') or 0
+    vist = float(a.get('utbytte_yield') or 0)
+    if pris <= 0 or vist <= 0:
+        return None
+    betalt = float(a['utbytte_12m']) / pris * 100
+    if vist - betalt >= VIST_OVER_BETALT_PP and (vist - betalt) / vist >= VIST_OVER_BETALT_ANDEL:
+        return round(vist, 2), round(betalt, 2)
+    return None
+
+
 def valider_data(filsti=AKSJER_JSON):
     """Les aksjer.json og kjør alle datakvalitetssjekker."""
     with open(filsti, encoding='utf-8') as f:
@@ -169,6 +190,46 @@ def valider_data(filsti=AKSJER_JSON):
                 f"enn hele aksjekursen ({pris}) — én utbetaling kan ikke "
                 f"overstige kursen uten en selskapshendelse"
             )
+
+    # Sjekk 10: vi viser en yield høyere enn det selskapet faktisk har betalt.
+    #
+    # Alle sjekkene over sammenligner våre egne felt med hverandre. Ingen av
+    # dem spør om tallet stemmer med virkeligheten, så et utbytte som hadde
+    # stoppet, eller et engangsbeløp regnet som årlig, passerte hver eneste
+    # en. Målt 24.09.2026: GOD 14,1 % mot 3,5 % betalt, KID 8,4 % mot 4,2 %,
+    # BOR 5,7 % mot 2,9 %, REACH og MGN med yield uten én utbetaling på over
+    # et år. Alle ble funnet fordi noen spurte, ikke fordi noe varslet.
+    #
+    # Bare retningen «vist over betalt»: under er som regel en ekstraordinær
+    # utdeling i vinduet, og da er det riktig å ikke vise den som løpende.
+    # Varsler, blokkerer ikke — en ny betaler som har tatt én kvartalsutbetaling
+    # vil ligge over, og det kan være riktig.
+    i_dag = data.get('sist_oppdatert', '')[:10]
+    over = []
+    for a in aksjer:
+        r = vist_over_betalt(a)
+        if not r:
+            continue
+        vist, betalt = r
+        hint = []
+        if not a.get('utbytte_12m'):
+            hint.append('ingen utbetaling siste 12 mnd — har utbyttet stoppet?')
+        ex = a.get('ex_dato') or ''
+        if ex and ex >= i_dag:
+            hint.append(f'kommende ex-dato {ex} — engangsbeløp regnet som årlig?')
+        forventet = {'Månedlig': 12, 'Kvartalsvis': 4, 'Halvårlig': 2, 'Årlig': 1}.get(a.get('frekvens'))
+        antall = a.get('utbytte_12m_antall') or 0
+        if forventet and 0 < antall < forventet:
+            hint.append(f'{antall} av {forventet} utbetalinger i vinduet — ny eller hevet betaler?')
+        over.append((vist - betalt, a.get('ticker', '?'), vist, betalt, hint))
+    for _, ticker, vist, betalt, hint in sorted(over, reverse=True):
+        advarsler.append(
+            f"ADVARSEL {ticker}: vist yield {vist} % er høyere enn det som er "
+            f"betalt siste 12 mnd ({betalt} %)"
+            + (f" — {'; '.join(hint)}" if hint else "")
+        )
+    if not any(a.get('utbytte_12m') is not None for a in aksjer):
+        print("Sjekk 10 hoppet over: utbytte_12m finnes ikke ennå (kommer ved neste fulle henting).")
 
     # Skriv ut rapport
     print("=" * 60)

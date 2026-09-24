@@ -32,7 +32,7 @@ const {
   vekstKlasse,
   beregnScore,
   beregnYtdInntekt
-, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote, csvFelt, delCSVLinje, parseCSV, lokalIsoDato } = require('../assets/ui.js');
+, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, utbyttePerioder, vistOverBetalt, modalBetaltBoks } = require('../assets/ui.js');
 
 // ── fmt ────────────────────────────────────────────────────────────────────
 test('fmt returnerer — for null', () => {
@@ -464,4 +464,51 @@ test('lokalIsoDato gir lokal dato også rett etter midnatt', () => {
   assert.equal(lokalIsoDato(d), '2026-09-24');
   const sen = new Date(2026, 11, 31, 23, 59, 0);
   assert.equal(lokalIsoDato(sen), '2026-12-31');
+});
+
+
+// ── Faktisk betalt — samme tilfeller som test_fetch_stocks.py ─────────────
+const KID_BETALT = { pris: 119.4, utbytte_yield: 8.38, utbytte_12m: 5.0, utbytte_12m_antall: 2,
+  utbytte_per_ar: { 2021: 4.0, 2022: 6.5, 2023: 5.75, 2024: 6.5, 2025: 7.5 }, utbytte_forste_ar: 2010 };
+const NY_BETALER = { pris: 50.0, utbytte_yield: 4.0, utbytte_12m: 2.0, utbytte_12m_antall: 2,
+  utbytte_per_ar: { 2021: 0, 2022: 0, 2023: 0, 2024: 1.0, 2025: 2.0 }, utbytte_forste_ar: 2024 };
+
+test('utbyttePerioder: KID, alle perioder', () => {
+  const r = Object.fromEntries(utbyttePerioder(KID_BETALT).map(x => [x.periode, x]));
+  assert.equal(r['12m'].belop, 5.0);
+  assert.equal(r['12m'].yield, 4.19);
+  assert.deepEqual([r['1'].belop, r['1'].fra, r['1'].til], [7.5, 2025, 2025]);
+  assert.equal(r['3'].belop, 6.58);
+  assert.deepEqual([r['5'].belop, r['5'].arBrukt], [6.05, 5]);   // 30,25 / 5
+});
+
+test('utbyttePerioder: år før første utbytte telles ikke som null', () => {
+  const r = Object.fromEntries(utbyttePerioder(NY_BETALER).map(x => [x.periode, x]));
+  assert.equal(r['5'].belop, 1.5);
+  assert.deepEqual([r['5'].arBrukt, r['5'].arOnsket, r['5'].fra], [2, 5, 2024]);
+});
+
+test('utbyttePerioder: over 2× kursen gir ingen yield, manglende felt gir tom liste', () => {
+  assert.equal(utbyttePerioder({ ...KID_BETALT, pris: 2 })[0].yield, null);
+  assert.deepEqual(utbyttePerioder({ pris: 10 }), []);
+});
+
+test('vistOverBetalt: samme utfall som Python', () => {
+  assert.deepEqual(vistOverBetalt(KID_BETALT), [8.38, 4.19]);
+  assert.deepEqual(vistOverBetalt({ ...KID_BETALT, utbytte_12m: 0 }), [8.38, 0]);
+  assert.equal(vistOverBetalt({ ...KID_BETALT, utbytte_yield: 2.0 }), null);
+  assert.equal(vistOverBetalt({ ...KID_BETALT, utbytte_yield: 4.9 }), null);
+});
+
+test('modalBetaltBoks: forklaring bare når vist er over betalt', () => {
+  assert.match(modalBetaltBoks(KID_BETALT), /tilsvarer 4,19/);
+  assert.doesNotMatch(modalBetaltBoks({ ...KID_BETALT, utbytte_yield: 4.2 }), /Direkteavkastningen over/);
+  assert.match(modalBetaltBoks({ ...KID_BETALT, utbytte_12m: 0 }), /ikke hatt noe utbytte/);
+  assert.equal(modalBetaltBoks({ pris: 10 }), '');
+});
+
+test('modalBetaltBoks: null betalt vises som 0,00 kr, ikke som strek', () => {
+  const h = modalBetaltBoks({ ...KID_BETALT, utbytte_12m: 0 });
+  assert.match(h, /0,00 kr/);
+  assert.doesNotMatch(h, /—\s*kr/);
 });

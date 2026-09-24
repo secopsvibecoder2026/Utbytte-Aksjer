@@ -2981,6 +2981,7 @@ function visModal(a) {
         ${modalKort('År m/utbytte', a.ar_med_utbytte > 0 ? a.ar_med_utbytte + ' år' : '—')}
       </div>
       ${modalDelaarVarsel(a)}${modalEkstraordinaerNote(a)}
+      ${modalBetaltBoks(a)}
       <div class="rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden mb-4">
         <div class="bg-orange-50 dark:bg-orange-950/30 px-4 py-3">
           <h3 class="font-semibold text-sm text-orange-800 dark:text-orange-300">Viktige datoer</h3>
@@ -3051,6 +3052,8 @@ function visModal(a) {
 
   overlay.classList.remove('hidden');
   overlay.classList.add('flex');
+
+  kobleBetaltBoks(body, a);
 
   // Tab-system
   let _gjeldendePeriode = '1ar';
@@ -3454,6 +3457,129 @@ function delaarMotbevist(a) {
  * Speiler `lag_ekstraordinaer_note()` i scripts/fetch_stocks.py. Tom streng når
  * delårsvarselet alt gjelder — to bokser om samme utbetaling ville vært støy.
  */
+// ── Faktisk betalt utbytte ──────────────────────────────────────────────────
+// Speiler utbytte_perioder() og vist_over_betalt() i scripts/fetch_stocks.py.
+// Hovedtallet er et anslag; dette er summen av utbetalingene, og kan derfor
+// ikke finne opp et utbytte. Samme testtilfeller i ui.test.js og
+// test_fetch_stocks.py holder de to kopiene like.
+const BETALT_ANTALL_AR = 5;
+const VIST_OVER_BETALT_PP = 1.0;
+const VIST_OVER_BETALT_ANDEL = 0.3;
+
+/** Snitt per år betalt: siste 12 mnd og siste 1–5 hele kalenderår. */
+function utbyttePerioder(a) {
+  if (!a || a.utbytte_12m == null || !a.utbytte_per_ar) return [];
+  const perAr = a.utbytte_per_ar;
+  if (!Object.keys(perAr).length) return [];
+  const pris = Number(a.pris) || 0;
+  const forste = a.utbytte_forste_ar;
+  const rad = (periode, belop, vindu, onsket) => ({
+    periode,
+    belop: Math.round(belop * 100) / 100,
+    // Over 2× kursen er nesten alltid en engangsutdeling — samme grense som
+    // utbetaltHittil() og Sjekk 9.
+    yield: pris > 0 && belop <= 2 * pris ? Math.round(belop / pris * 10000) / 100 : null,
+    fra: vindu ? Math.min(...vindu) : null,
+    til: vindu ? Math.max(...vindu) : null,
+    arBrukt: vindu ? vindu.length : null,
+    arOnsket: onsket ?? null,
+  });
+  const ut = [rad('12m', Number(a.utbytte_12m) || 0)];
+  const ar = Object.keys(perAr).map(Number).sort((x, y) => y - x);
+  for (let n = 1; n <= BETALT_ANTALL_AR; n++) {
+    const vindu = ar.slice(0, n).filter(y => forste == null || y >= forste);
+    if (!vindu.length) break;
+    const snitt = vindu.reduce((s, y) => s + (Number(perAr[String(y)]) || 0), 0) / vindu.length;
+    ut.push(rad(String(n), snitt, vindu, n));
+  }
+  return ut;
+}
+
+/** [vist, betalt] når vist yield ligger vesentlig over det som er betalt. */
+function vistOverBetalt(a) {
+  if (!a || a.utbytte_12m == null) return null;
+  const pris = Number(a.pris) || 0;
+  const vist = Number(a.utbytte_yield) || 0;
+  if (pris <= 0 || vist <= 0) return null;
+  const betalt = Number(a.utbytte_12m) / pris * 100;
+  if (vist - betalt >= VIST_OVER_BETALT_PP && (vist - betalt) / vist >= VIST_OVER_BETALT_ANDEL) {
+    return [Math.round(vist * 100) / 100, Math.round(betalt * 100) / 100];
+  }
+  return null;
+}
+
+function _betaltVisning(r) {
+  const periode = r.periode === '12m' ? 'Siste 12 måneder'
+    : r.periode === '1' ? `${r.til}`
+    : `Snitt per år ${r.fra}–${r.til}`;
+  const merknad = r.arBrukt != null && r.arBrukt < r.arOnsket
+    ? `Utbytte i historikken bare fra ${r.fra}, så snittet dekker ${r.arBrukt} år.`
+    : r.yield == null ? 'Over to ganger dagens kurs — som regel en engangsutdeling, vises ikke som yield.' : '';
+  return {
+    periode,
+    // Ikke fmt(): den skriver «—» for 0, og her er 0 et faktum — REACH har
+    // betalt null de siste 12 månedene, og det skal stå, ikke en strek.
+    belop: r.belop.toFixed(2).replace('.', ',') + ' kr',
+    yield: r.yield == null ? '—' : r.yield.toFixed(2).replace('.', ',') + ' %',
+    merknad,
+  };
+}
+
+function modalBetaltBoks(a) {
+  const rader = utbyttePerioder(a);
+  if (!rader.length) return '';
+  if (!a.utbytte_12m && !Object.values(a.utbytte_per_ar || {}).some(v => v > 0)) return '';
+  const ovb = vistOverBetalt(a);
+  const forklaring = !ovb ? ''
+    : !a.utbytte_12m
+      ? `Direkteavkastningen over er ${fmt(ovb[0])} %, men selskapet har ikke hatt noe utbytte med ex-dato de siste 12 månedene.`
+      : `Direkteavkastningen over er ${fmt(ovb[0])} %. Det som faktisk er betalt de siste 12 månedene, tilsvarer ${fmt(ovb[1])} % av dagens kurs.`;
+  const v = _betaltVisning(rader[0]);
+  const knapper = rader.map((r, i) =>
+    `<button type="button" data-betalt-periode="${r.periode}" aria-pressed="${i === 0}"
+       class="betalt-knapp px-2 py-1 text-xs rounded-md border ${i === 0
+         ? 'bg-green-600 text-white border-green-600'
+         : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 border-gray-200 dark:border-gray-700'}">${r.periode === '12m' ? '12 mnd' : r.periode + ' år'}</button>`).join('');
+  return `<div class="betalt-boks rounded-lg border border-gray-200 dark:border-gray-700 p-4 mb-4">
+      <p class="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-1">Faktisk betalt utbytte</p>
+      ${forklaring ? `<p class="text-xs text-gray-700 dark:text-gray-300 leading-relaxed mb-2">${forklaring}</p>` : ''}
+      <div class="betalt-velger flex flex-wrap gap-1 mb-3" role="group" aria-label="Velg periode">${knapper}</div>
+      <p class="text-xs text-gray-500 dark:text-gray-400 betalt-periode">${v.periode}</p>
+      <div class="flex items-baseline gap-3">
+        <span class="text-lg font-semibold betalt-belop">${v.belop}</span>
+        <span class="text-sm text-gray-500 dark:text-gray-400">per aksje per år ·</span>
+        <span class="text-lg font-semibold betalt-yield">${v.yield}</span>
+      </div>
+      <p class="text-xs text-gray-500 dark:text-gray-400 mt-1 betalt-merknad">${v.merknad}</p>
+      <p class="text-xs text-gray-400 dark:text-gray-500 mt-2">Summert etter ex-dato, inkludert eventuelle ekstraordinære utbytter. Yield mot dagens kurs.</p>
+    </div>`;
+}
+
+/** Kobler velgeren i en rendret boks. Én lytter på beholderen — ingen inline onclick. */
+function kobleBetaltBoks(rot, a) {
+  const boks = rot.querySelector('.betalt-boks');
+  if (!boks) return;
+  const rader = utbyttePerioder(a);
+  boks.querySelector('.betalt-velger').addEventListener('click', e => {
+    const knapp = e.target.closest('[data-betalt-periode]');
+    if (!knapp) return;
+    const r = rader.find(x => x.periode === knapp.dataset.betaltPeriode);
+    if (!r) return;
+    const v = _betaltVisning(r);
+    boks.querySelector('.betalt-periode').textContent = v.periode;
+    boks.querySelector('.betalt-belop').textContent = v.belop;
+    boks.querySelector('.betalt-yield').textContent = v.yield;
+    boks.querySelector('.betalt-merknad').textContent = v.merknad;
+    boks.querySelectorAll('.betalt-knapp').forEach(k => {
+      const aktiv = k === knapp;
+      k.setAttribute('aria-pressed', String(aktiv));
+      ['bg-green-600', 'text-white', 'border-green-600'].forEach(c => k.classList.toggle(c, aktiv));
+      ['bg-white', 'dark:bg-gray-800', 'text-gray-600', 'dark:text-gray-300', 'border-gray-200', 'dark:border-gray-700']
+        .forEach(c => k.classList.toggle(c, !aktiv));
+    });
+  });
+}
+
 function modalEkstraordinaerNote(a) {
   if (yieldErDelaar(a)) return '';
   const splitt = utbyttesplittStemmer(a);
@@ -4828,4 +4954,4 @@ function _annBygTopp() {
 }
 
 // Node.js test export
-if (typeof module !== 'undefined') module.exports = { csvFelt, delCSVLinje, parseCSV, lokalIsoDato, fmt, formaterDato, yieldKlasse, payoutKlasse, vekstKlasse, beregnScore, beregnBaerekraft, beregnYtdInntekt, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote };
+if (typeof module !== 'undefined') module.exports = { utbyttePerioder, vistOverBetalt, modalBetaltBoks, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, fmt, formaterDato, yieldKlasse, payoutKlasse, vekstKlasse, beregnScore, beregnBaerekraft, beregnYtdInntekt, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote };

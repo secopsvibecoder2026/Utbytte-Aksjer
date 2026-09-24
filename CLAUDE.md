@@ -967,6 +967,7 @@ boundary, because a rule that is too wide fails silently.
 - **Forward vs. trailing mismatch:** `utbytte_per_aksje` > 5x the most recent year in `historiske_utbytter` is flagged (may indicate Yahoo is returning a forward estimate)
 - **An annual rate below a single payment:** for a stock paying more than once a year, `utbytte_per_aksje` cannot be smaller than one payment — the figure is a part-year and the displayed yield is too low. Nine stocks break this (KOG shows 0,70 % against roughly 2,6 %; Entra 1,04 % against 2,08 % on two identical 1,10 kr payments). The check **warns only** — see the note below on why it does not correct the number.
 - **A single payment larger than the whole share price:** `siste_utbytte` is validated nowhere else, because every other check goes through `utbytte_per_aksje` — and that can be 0 while `siste_utbytte` is nonsense. KMC Properties sat at `6958,03` on a 24,80 kr share with an empty dividend history and passed all eight checks. The field is not decorative: `assets/ui.js` renders it as «Siste utbytte» and uses it to compute expected portfolio payouts.
+- **Shown yield above what was actually paid (Sjekk 10):** shown `utbytte_yield` ≥ 1 pp and ≥ 30 % above `utbytte_12m / pris`. The only check that compares our number with reality rather than with our other fields — see «What was actually paid» below.
 - **Figures that cannot share a share base:** a historical dividend > 2x the current price, or `52u_hoy` > 3x the current price, is flagged. Every check above compares yield, `utbytte_per_aksje` and price — three numbers that move together — so a corporate action that breaks the *rest* of the page passed unnoticed. 2020 Bulkers showed «2026: 133,57 NOK per aksje» and «52-ukers kurs 2,56 – 152,00» on a 4,35 kr share and the report still said «Datakvalitet OK». The thresholds sit above genuine shipping peaks (GSF 1,2x, WEST 1,3x), so a real bumper year is not flagged.
 
 ### Running manually
@@ -2215,3 +2216,77 @@ extraordinary split, not a threshold.
 «The distribution will constitute a repayment of the Company's paid-in
 capital». In Norway that is tax-free and reduces the cost basis; the portfolio
 tax calculation treats it as a dividend at 37,84 %. Not fixed — see ROADMAP.
+
+### What was actually paid — shown beside the estimate, and measured (2026-09-24)
+
+**The headline yield is an estimate** — Yahoo's rate plus a chain of guards.
+Every fix above closed one shape of wrong number, and the day the cut fix
+landed, measuring all 155 against what each company had *actually paid*
+found five more, each by a new route:
+
+| Stock | Shown | Paid, last 12 months | Route |
+|---|---|---|---|
+| GOD | 14,1 % | 3,5 % | Announced one-off NOK 2,00 («supplemental», excess capital) × frequency, via the DNB override |
+| KID | 8,4 % | 4,2 % | Yahoo's rate ~2× too high, but within the guard's 50 % band |
+| BOR | 5,7 % | 2,9 % | Same |
+| REACH | 6,4 % | 0 % | No payment in 16 months — a stopped dividend still shown |
+| MGN | 3,4 % | 0 % | No payment in 14 months |
+
+Another threshold would close one more shape. So instead, the site now shows
+**what was paid** next to the estimate, and **measures the gap on every run**.
+
+**Stored as amounts, from the Yahoo series** — `betalt_fra_serie()` in
+`hent_aksje()` writes `utbytte_12m`, `utbytte_12m_antall`, `utbytte_per_ar`
+(last five *complete* calendar years, 0 for a year without payment) and
+`utbytte_forste_ar`. Yield is computed at render time against today's price.
+
+> ⚠️ **Not from `historiske_utbytter`.** That list only covers 2022–2026 — at
+> most four complete years — so «5 år» cannot be computed from it. Extending it
+> would silently change `snitt_yield_5ar` and every «5-årssnitt» claim on the
+> pages. The new fields are separate on purpose.
+
+**`utbytte_perioder()`** (Python) / **`utbyttePerioder()`** (`ui.js`) give the
+last 12 months and the average per year over the last 1–5 complete years:
+
+- **A year before the first dividend is not a zero.** A company that started
+  paying in 2024 gets «snitt 2 år» with `ar_brukt < ar_onsket`, not an average
+  dragged down by three years it did not exist as a payer.
+- **Over 2× the share price → no yield**, amount only. Same limit as Sjekk 9
+  and `utbetalt_hittil()`: 2020 Bulkers paid ~30× its current price in twelve
+  months, and «2 116 %» is true and useless.
+- **By ex-date, and labelled so** — the Yahoo series is indexed by ex-date,
+  the WAWI lesson from 17 September.
+- **Includes extraordinary payments**, and says so. That is the honest cost of
+  a number that cannot be invented: after a one-off, «paid» is true but not
+  representative.
+
+**Where it shows.** Stock page: `lag_betalt_boks()` — a table under the key
+figures. App: `modalBetaltBoks()` in the Utbytte tab, with a 12 mnd / 1–5 år
+selector wired by one delegated listener (`kobleBetaltBoks()`). The sentence
+explaining the gap appears **only** where `vist_over_betalt()` fires — on
+every other page the box is just the table, so it does not raise the template
+share (see «Breaking the template»).
+
+**Sjekk 10 in `valider_data.py`** flags every stock whose shown yield is ≥ 1
+pp *and* ≥ 30 % above what was paid in the last 12 months, with a hint:
+«ingen utbetaling siste 12 mnd» (stopped?), «kommende ex-dato» (one-off
+counted as annual?), «2 av 4 utbetalinger i vinduet» (new or raised payer —
+may be right). One direction only: *below* paid is usually a one-off in the
+window, and not showing it as recurring is correct. Warns, does not block.
+Dry-run against real series found exactly the five above and nothing else.
+`vist_over_betalt()` exists in `fetch_stocks.py` and `valider_data.py`;
+`TestVistOverBetalt.test_samsvar_med_valider_data` keeps them equal on the
+real dataset.
+
+**Two defects found only by rendering it**, both invisible to the tests:
+
+- **`fmt(0)` returns «—».** REACH showed «— kr per aksje · 0,00 %» — a dash
+  beside a zero. Here zero is the fact, so the box formats its own amounts.
+- **The yield column fell off the screen on a 390 px phone.** The page's
+  generic `th`/`td` padding plus labels like «Snitt 5 år (2021–2025)» made the
+  table wider than the viewport, and `overflow-x: auto` hid the most important
+  column in the scroll area. Labels are now «Snitt 2021–25» with the year
+  range held together by `.nowrap`. Measured: table 314 px of 314 available.
+
+Tests: `TestBetaltFraSerie`, `TestUtbyttePerioder`, `TestVistOverBetalt` (13)
+and the same cases in `ui.test.js` (6), so template and app cannot drift.

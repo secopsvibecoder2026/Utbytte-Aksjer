@@ -1408,5 +1408,96 @@ class TestVelgArsrate(unittest.TestCase):
         self.assertEqual(self._v(6.0, 0.0, 0, "Årlig"), 6.0)
 
 
+
+# Felles tilfeller — de samme står i tests/ui.test.js, så malen og appen
+# ikke kan drive fra hverandre.
+KID_BETALT = {"pris": 119.4, "utbytte_yield": 8.38, "utbytte_12m": 5.0, "utbytte_12m_antall": 2,
+              "utbytte_per_ar": {"2021": 4.0, "2022": 6.5, "2023": 5.75, "2024": 6.5, "2025": 7.5},
+              "utbytte_forste_ar": 2010}
+NY_BETALER = {"pris": 50.0, "utbytte_yield": 4.0, "utbytte_12m": 2.0, "utbytte_12m_antall": 2,
+              "utbytte_per_ar": {"2021": 0.0, "2022": 0.0, "2023": 0.0, "2024": 1.0, "2025": 2.0},
+              "utbytte_forste_ar": 2024}
+
+
+class TestBetaltFraSerie(unittest.TestCase):
+    def _s(self, par):
+        import pandas as pd
+        return pd.Series([v for _, v in par], index=pd.to_datetime([d for d, _ in par]))
+
+    def test_kid(self):
+        from fetch_stocks import betalt_fra_serie
+        s = self._s([("2023-05-12", 3.0), ("2023-11-16", 2.75), ("2024-05-21", 3.5), ("2024-11-19", 3.0),
+                     ("2025-05-13", 5.0), ("2025-11-18", 2.5), ("2026-05-12", 2.5)])
+        tot, n, per_ar, forste = betalt_fra_serie(s, datetime.date(2026, 9, 24))
+        self.assertEqual((tot, n, forste), (5.0, 2, 2023))
+        self.assertEqual(per_ar, {"2021": 0.0, "2022": 0.0, "2023": 5.75, "2024": 6.5, "2025": 7.5})
+
+    def test_stoppet_utbytte_gir_null(self):
+        # REACH: siste utbetaling mai 2025.
+        from fetch_stocks import betalt_fra_serie
+        tot, n, _, _ = betalt_fra_serie(self._s([("2025-05-30", 0.42)]), datetime.date(2026, 9, 24))
+        self.assertEqual((tot, n), (0.0, 0))
+
+    def test_tom_serie(self):
+        import pandas as pd
+        from fetch_stocks import betalt_fra_serie
+        self.assertEqual(betalt_fra_serie(pd.Series(dtype=float), datetime.date(2026, 9, 24)), (0.0, 0, {}, None))
+
+
+class TestUtbyttePerioder(unittest.TestCase):
+    def test_kid_alle_perioder(self):
+        from fetch_stocks import utbytte_perioder
+        r = {x["periode"]: x for x in utbytte_perioder(KID_BETALT)}
+        self.assertEqual(r["12m"]["belop"], 5.0)
+        self.assertEqual(r["12m"]["yield"], 4.19)
+        self.assertEqual((r["1"]["belop"], r["1"]["fra"], r["1"]["til"]), (7.5, 2025, 2025))
+        self.assertEqual(r["3"]["belop"], 6.58)
+        self.assertEqual((r["5"]["belop"], r["5"]["ar_brukt"]), (6.05, 5))   # 30,25 / 5
+
+    def test_ny_betaler_teller_ikke_ar_for_forste_utbytte_som_null(self):
+        from fetch_stocks import utbytte_perioder
+        r = {x["periode"]: x for x in utbytte_perioder(NY_BETALER)}
+        self.assertEqual(r["5"]["belop"], 1.5, "snitt av 2024–2025, ikke av fem år med tre nuller")
+        self.assertEqual((r["5"]["ar_brukt"], r["5"]["ar_onsket"], r["5"]["fra"]), (2, 5, 2024))
+
+    def test_over_to_ganger_kursen_gir_ingen_yield(self):
+        from fetch_stocks import utbytte_perioder
+        a = dict(KID_BETALT, pris=2.0)   # 2020 Bulkers-form
+        self.assertIsNone(utbytte_perioder(a)[0]["yield"])
+
+    def test_mangler_feltene(self):
+        from fetch_stocks import utbytte_perioder
+        self.assertEqual(utbytte_perioder({"pris": 10}), [])
+
+
+class TestVistOverBetalt(unittest.TestCase):
+    def test_kid_flagges(self):
+        from fetch_stocks import vist_over_betalt
+        self.assertEqual(vist_over_betalt(KID_BETALT), (8.38, 4.19))
+
+    def test_stoppet_utbytte_flagges(self):
+        from fetch_stocks import vist_over_betalt
+        a = dict(KID_BETALT, utbytte_12m=0.0)
+        self.assertEqual(vist_over_betalt(a), (8.38, 0.0))
+
+    def test_under_betalt_flagges_ikke(self):
+        # Engangsutdeling i vinduet: vist er lavere enn betalt, og det er riktig.
+        from fetch_stocks import vist_over_betalt
+        self.assertIsNone(vist_over_betalt(dict(KID_BETALT, utbytte_yield=2.0)))
+
+    def test_lite_avvik_flagges_ikke(self):
+        from fetch_stocks import vist_over_betalt
+        self.assertIsNone(vist_over_betalt(dict(KID_BETALT, utbytte_yield=4.9)))   # 0,71 pp
+
+    def test_samsvar_med_valider_data(self):
+        import fetch_stocks, valider_data
+        tilfeller = [KID_BETALT, NY_BETALER, dict(KID_BETALT, utbytte_12m=0.0),
+                     dict(KID_BETALT, utbytte_yield=4.9), {"pris": 10}]
+        sti = os.path.join(os.path.dirname(__file__), "..", "data", "aksjer.json")
+        tilfeller += json.load(open(sti, encoding="utf-8"))["aksjer"]
+        for a in tilfeller:
+            self.assertEqual(fetch_stocks.vist_over_betalt(a), valider_data.vist_over_betalt(a), a.get("ticker"))
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
