@@ -154,15 +154,23 @@
     .dark .vurdering-seksjon { background: #0f172a; border-color: #1e293b; }
     .dark .vurdering-tekst { color: #cbd5e1; }
     /* Betingede seksjoner — vises bare på sider der de har noe å si. */
-    .rekke-seksjon, .nedtur-seksjon, .utbetalingsaar-seksjon, .delaar-seksjon { margin: 1.5rem 0; padding: 1.1rem 1.25rem; background: #f8fafc; border-radius: 0.75rem; border: 1px solid #e2e8f0; }
-    .rekke-seksjon h2, .nedtur-seksjon h2, .utbetalingsaar-seksjon h2, .delaar-seksjon h2 { font-size: 1rem; font-weight: 700; margin-bottom: 0.6rem; }
-    .rekke-seksjon p, .nedtur-seksjon p, .utbetalingsaar-seksjon p, .delaar-seksjon p { font-size: 0.9rem; line-height: 1.75; color: #374151; margin: 0 0 0.6rem; }
+    .rekke-seksjon, .nedtur-seksjon, .utbetalingsaar-seksjon, .delaar-seksjon, .betalt-seksjon { margin: 1.5rem 0; padding: 1.1rem 1.25rem; background: #f8fafc; border-radius: 0.75rem; border: 1px solid #e2e8f0; }
+    .rekke-seksjon h2, .nedtur-seksjon h2, .utbetalingsaar-seksjon h2, .delaar-seksjon h2, .betalt-seksjon h2 { font-size: 1rem; font-weight: 700; margin-bottom: 0.6rem; }
+    .rekke-seksjon p, .nedtur-seksjon p, .utbetalingsaar-seksjon p, .delaar-seksjon p, .betalt-seksjon p { font-size: 0.9rem; line-height: 1.75; color: #374151; margin: 0 0 0.6rem; }
     .rekke-seksjon p:last-child, .nedtur-seksjon p:last-child, .utbetalingsaar-seksjon p:last-child, .delaar-seksjon p:last-child { margin-bottom: 0; }
-    .dark .rekke-seksjon, .dark .nedtur-seksjon, .dark .utbetalingsaar-seksjon, .dark .delaar-seksjon { background: #0f172a; border-color: #1e293b; }
-    .dark .rekke-seksjon p, .dark .nedtur-seksjon p, .dark .utbetalingsaar-seksjon p, .dark .delaar-seksjon p { color: #cbd5e1; }
+    .dark .rekke-seksjon, .dark .nedtur-seksjon, .dark .utbetalingsaar-seksjon, .dark .delaar-seksjon, .dark .betalt-seksjon { background: #0f172a; border-color: #1e293b; }
+    .dark .rekke-seksjon p, .dark .nedtur-seksjon p, .dark .utbetalingsaar-seksjon p, .dark .delaar-seksjon p, .dark .betalt-seksjon p { color: #cbd5e1; }
     .rekke-seksjon { border-left: 3px solid #22c55e; }
     .nedtur-seksjon { border-left: 3px solid #f59e0b; }
     .delaar-seksjon { border-left: 3px solid #f59e0b; }
+    .betalt-seksjon .betalt-tabell { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; font-size: 0.875rem; margin: 0.25rem 0 0.5rem; }
+    .betalt-seksjon .betalt-tabell th, .betalt-seksjon .betalt-tabell td { text-align: left; padding: 0.45rem 0.75rem; }
+    .betalt-seksjon .betalt-tabell td:not(:first-child), .betalt-seksjon .betalt-tabell th:not(:first-child) { white-space: nowrap; text-align: right; }
+    .betalt-tabell th { font-weight: 600; color: #6b7280; font-size: 0.75rem; }
+    .betalt-tabell td:not(:first-child) { font-variant-numeric: tabular-nums; }
+    .betalt-seksjon p.betalt-fotnote { font-size: 0.75rem; color: #6b7280; }
+    .betalt-seksjon .nowrap { white-space: nowrap; }
+    .dark .betalt-tabell th, .dark .betalt-seksjon p.betalt-fotnote { color: #94a3b8; }
     /* Nøytral variant: forklarer en observasjon, advarer ikke om en feil. */
     .delaar-seksjon.delaar-noytral { border-left-color: #94a3b8; }
     .dark .delaar-seksjon.delaar-noytral { border-left-color: #475569; }
@@ -444,6 +452,8 @@
 
   
 
+  <div class="betalt-seksjon"><h2>Faktisk betalt utbytte</h2><table class="betalt-tabell"><thead><tr><th>Periode</th><th>Per aksje/år</th><th>Yield</th></tr></thead><tbody><tr><td>Siste 12 mnd</td><td>0,00 kr</td><td>0,00 %</td></tr><tr><td>2025</td><td>0,00 kr</td><td>0,00 %</td></tr><tr><td>Snitt <span class="nowrap">2024–25</span></td><td>0,92 kr</td><td>27,95 %</td></tr><tr><td>Snitt <span class="nowrap">2023–25</span></td><td>1,10 kr</td><td>33,54 %</td></tr></tbody></table><p class="betalt-fotnote">Summert etter ex-dato, inkludert eventuelle ekstraordinære utbytter. Yield regnet mot dagens kurs. Utbytte i vår historikk fra 2023.</p></div>
+
   <div class="investor-profil-seksjon"><div class="investor-badges-rad"><span class="investor-badge investor-risiko-hoy">Høy risiko</span><span class="investor-badge investor-mal">Utbyttevekst</span></div><div class="investor-forklaring risiko-hoy"><div class="investor-forklaring-tittel"><span class="investor-badge investor-risiko-hoy">Høy risiko</span></div><ul class="investor-forklaring-liste"><li>Syklisk sektor (Shipping) — utbytte svinger med konjunkturer</li><li>Kort utbyttehistorikk (2 år) — begrenset dokumentasjon</li></ul></div><div class="investor-mal-seksjon"><p class="investor-mal-header">Passer for</p><div class="investor-mal-rad"><span class="investor-badge investor-mal">Utbyttevekst</span><span class="investor-mal-tekst">Passer investorer med lang horisont som vil at utbyttet skal vokse raskere enn inflasjonen. Med +25,0% per år dobles utbyttet på ca. 3 år.</span></div></div></div>
 
   
@@ -570,10 +580,10 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
 </div>
   </section>
 
-  <div class="relaterte"><h2>Andre shipping-aksjer med utbytte</h2><div class="rel-grid"><a href="/aksjer/WAWI/" class="rel-kort"><span class="rel-ticker">WAWI</span><span class="rel-navn">Wallenius Wilhelmsen ASA</span><span class="rel-yield">13,4%</span></a>
-<a href="/aksjer/HAUTO/" class="rel-kort"><span class="rel-ticker">HAUTO</span><span class="rel-navn">Höegh Autoliners ASA</span><span class="rel-yield">12,3%</span></a>
-<a href="/aksjer/2020/" class="rel-kort"><span class="rel-ticker">2020</span><span class="rel-navn">2020 Bulkers Ltd</span><span class="rel-yield">11,7%</span></a>
-<a href="/aksjer/ODFB/" class="rel-kort"><span class="rel-ticker">ODFB</span><span class="rel-navn">Odfjell SE (B-aksje)</span><span class="rel-yield">7,6%</span></a></div></div>
+  <div class="relaterte"><h2>Andre shipping-aksjer med utbytte</h2><div class="rel-grid"><a href="/aksjer/2020/" class="rel-kort"><span class="rel-ticker">2020</span><span class="rel-navn">2020 Bulkers Ltd</span><span class="rel-yield">11,6%</span></a>
+<a href="/aksjer/WAWI/" class="rel-kort"><span class="rel-ticker">WAWI</span><span class="rel-navn">Wallenius Wilhelmsen ASA</span><span class="rel-yield">8,5%</span></a>
+<a href="/aksjer/ODFB/" class="rel-kort"><span class="rel-ticker">ODFB</span><span class="rel-navn">Odfjell SE (B-aksje)</span><span class="rel-yield">7,6%</span></a>
+<a href="/aksjer/ODF/" class="rel-kort"><span class="rel-ticker">ODF</span><span class="rel-navn">Odfjell SE (A-aksje)</span><span class="rel-yield">7,5%</span></a></div></div>
 
   <div class="mini-nav">
     <a href="/aksjer/sektor/shipping/">← Alle Shipping-aksjer</a>

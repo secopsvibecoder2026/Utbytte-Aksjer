@@ -154,15 +154,23 @@
     .dark .vurdering-seksjon { background: #0f172a; border-color: #1e293b; }
     .dark .vurdering-tekst { color: #cbd5e1; }
     /* Betingede seksjoner — vises bare på sider der de har noe å si. */
-    .rekke-seksjon, .nedtur-seksjon, .utbetalingsaar-seksjon, .delaar-seksjon { margin: 1.5rem 0; padding: 1.1rem 1.25rem; background: #f8fafc; border-radius: 0.75rem; border: 1px solid #e2e8f0; }
-    .rekke-seksjon h2, .nedtur-seksjon h2, .utbetalingsaar-seksjon h2, .delaar-seksjon h2 { font-size: 1rem; font-weight: 700; margin-bottom: 0.6rem; }
-    .rekke-seksjon p, .nedtur-seksjon p, .utbetalingsaar-seksjon p, .delaar-seksjon p { font-size: 0.9rem; line-height: 1.75; color: #374151; margin: 0 0 0.6rem; }
+    .rekke-seksjon, .nedtur-seksjon, .utbetalingsaar-seksjon, .delaar-seksjon, .betalt-seksjon { margin: 1.5rem 0; padding: 1.1rem 1.25rem; background: #f8fafc; border-radius: 0.75rem; border: 1px solid #e2e8f0; }
+    .rekke-seksjon h2, .nedtur-seksjon h2, .utbetalingsaar-seksjon h2, .delaar-seksjon h2, .betalt-seksjon h2 { font-size: 1rem; font-weight: 700; margin-bottom: 0.6rem; }
+    .rekke-seksjon p, .nedtur-seksjon p, .utbetalingsaar-seksjon p, .delaar-seksjon p, .betalt-seksjon p { font-size: 0.9rem; line-height: 1.75; color: #374151; margin: 0 0 0.6rem; }
     .rekke-seksjon p:last-child, .nedtur-seksjon p:last-child, .utbetalingsaar-seksjon p:last-child, .delaar-seksjon p:last-child { margin-bottom: 0; }
-    .dark .rekke-seksjon, .dark .nedtur-seksjon, .dark .utbetalingsaar-seksjon, .dark .delaar-seksjon { background: #0f172a; border-color: #1e293b; }
-    .dark .rekke-seksjon p, .dark .nedtur-seksjon p, .dark .utbetalingsaar-seksjon p, .dark .delaar-seksjon p { color: #cbd5e1; }
+    .dark .rekke-seksjon, .dark .nedtur-seksjon, .dark .utbetalingsaar-seksjon, .dark .delaar-seksjon, .dark .betalt-seksjon { background: #0f172a; border-color: #1e293b; }
+    .dark .rekke-seksjon p, .dark .nedtur-seksjon p, .dark .utbetalingsaar-seksjon p, .dark .delaar-seksjon p, .dark .betalt-seksjon p { color: #cbd5e1; }
     .rekke-seksjon { border-left: 3px solid #22c55e; }
     .nedtur-seksjon { border-left: 3px solid #f59e0b; }
     .delaar-seksjon { border-left: 3px solid #f59e0b; }
+    .betalt-seksjon .betalt-tabell { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; font-size: 0.875rem; margin: 0.25rem 0 0.5rem; }
+    .betalt-seksjon .betalt-tabell th, .betalt-seksjon .betalt-tabell td { text-align: left; padding: 0.45rem 0.75rem; }
+    .betalt-seksjon .betalt-tabell td:not(:first-child), .betalt-seksjon .betalt-tabell th:not(:first-child) { white-space: nowrap; text-align: right; }
+    .betalt-tabell th { font-weight: 600; color: #6b7280; font-size: 0.75rem; }
+    .betalt-tabell td:not(:first-child) { font-variant-numeric: tabular-nums; }
+    .betalt-seksjon p.betalt-fotnote { font-size: 0.75rem; color: #6b7280; }
+    .betalt-seksjon .nowrap { white-space: nowrap; }
+    .dark .betalt-tabell th, .dark .betalt-seksjon p.betalt-fotnote { color: #94a3b8; }
     /* Nøytral variant: forklarer en observasjon, advarer ikke om en feil. */
     .delaar-seksjon.delaar-noytral { border-left-color: #94a3b8; }
     .dark .delaar-seksjon.delaar-noytral { border-left-color: #475569; }
@@ -444,6 +452,8 @@
 
   
 
+  <div class="betalt-seksjon"><h2>Faktisk betalt utbytte</h2><table class="betalt-tabell"><thead><tr><th>Periode</th><th>Per aksje/år</th><th>Yield</th></tr></thead><tbody><tr><td>Siste 12 mnd</td><td>8,00 kr</td><td>1,96 %</td></tr><tr><td>2025</td><td>3,50 kr</td><td>0,86 %</td></tr><tr><td>Snitt <span class="nowrap">2024–25</span></td><td>1,75 kr</td><td>0,43 %</td></tr><tr><td>Snitt <span class="nowrap">2023–25</span></td><td>3,50 kr</td><td>0,86 %</td></tr><tr><td>Snitt <span class="nowrap">2022–25</span></td><td>5,12 kr</td><td>1,26 %</td></tr><tr><td>Snitt <span class="nowrap">2021–25</span></td><td>6,10 kr</td><td>1,50 %</td></tr></tbody></table><p class="betalt-fotnote">Summert etter ex-dato, inkludert eventuelle ekstraordinære utbytter. Yield regnet mot dagens kurs. </p></div>
+
   <div class="investor-profil-seksjon"><div class="investor-badges-rad"><span class="investor-badge investor-risiko-lav">Lav risiko</span></div><div class="investor-forklaring risiko-lav"><div class="investor-forklaring-tittel"><span class="investor-badge investor-risiko-lav">Lav risiko</span></div><ul class="investor-forklaring-liste"><li>Sektor (Kommunikasjonstjenester) har en viss konjunktureksponering</li><li>Lang utbyttehistorikk (25 år) — vist evne til stabil utbetaling</li><li>Sunn payout ratio (22%) — god buffer</li></ul></div></div>
 
   <div class="ai-oppsummering"><h2>Utbyttehistorikken kort fortalt</h2><p>Utbyttet er lavere nå enn i 2022 — ned fra 10,00 til 3,50 kroner per aksje, med 2 nedgangsår i perioden. Høyeste år er 2,9 ganger det laveste — merkbare svingninger, men innenfor et gjenkjennelig spenn. Dagens yield på 0,9 % ligger nær aksjens eget 5-årssnitt på 1,8 %.</p></div>
@@ -523,7 +533,7 @@
   <!-- ── UTBYTTE ── -->
   <section id="utbytte">
 
-  <div class="analyse"><h2>Yield mot sektoren</h2><p>Yielden på 0,9% er 3,2 prosentpoeng under snittet for Kommunikasjonstjenester-sektoren (4,1%).</p></div>
+  <div class="analyse"><h2>Yield mot sektoren</h2><p>Yielden på 0,9% er 1,6 prosentpoeng under snittet for Kommunikasjonstjenester-sektoren (2,5%).</p></div>
 
   <h2>Historiske utbytter</h2><svg viewBox="0 0 420 180" style="width:100%;max-width:420px;height:auto;display:block;margin-bottom:0.5rem;" aria-label="Historiske utbytter per aksje i NOK"><line x1="52" y1="148.0" x2="408" y2="148.0" stroke="#e5e7eb" stroke-width="1" class="ytick"/><text x="48" y="152.0" text-anchor="end" font-size="10" fill="#9ca3af">0,00</text><line x1="52" y1="104.0" x2="408" y2="104.0" stroke="#e5e7eb" stroke-width="1" class="ytick"/><text x="48" y="108.0" text-anchor="end" font-size="10" fill="#9ca3af">3,33</text><line x1="52" y1="60.0" x2="408" y2="60.0" stroke="#e5e7eb" stroke-width="1" class="ytick"/><text x="48" y="64.0" text-anchor="end" font-size="10" fill="#9ca3af">6,67</text><line x1="52" y1="16.0" x2="408" y2="16.0" stroke="#e5e7eb" stroke-width="1" class="ytick"/><text x="48" y="20.0" text-anchor="end" font-size="10" fill="#9ca3af">10,00</text><rect class="hbar" x="78.5" y="16.0" width="36" height="132.0" rx="3" fill="#16a34a" opacity="0.85"/><rect class="hbar" x="167.5" y="55.6" width="36" height="92.4" rx="3" fill="#16a34a" opacity="0.85"/><rect class="hbar" x="256.5" y="101.8" width="36" height="46.2" rx="3" fill="#16a34a" opacity="0.85"/><rect class="hbar" x="345.5" y="42.4" width="36" height="105.6" rx="3" fill="#16a34a" opacity="0.85"/><text x="96.5" y="174" text-anchor="middle" font-size="10" fill="#9ca3af">2022</text><text x="185.5" y="174" text-anchor="middle" font-size="10" fill="#9ca3af">2023</text><text x="274.5" y="174" text-anchor="middle" font-size="10" fill="#9ca3af">2025</text><text x="363.5" y="174" text-anchor="middle" font-size="10" fill="#9ca3af">2026</text><rect class="htip-bg" x="44.5" y="2.0" width="106" height="20" rx="4" fill="#111827" opacity="0" pointer-events="none"/><text class="htip-txt" x="96.5" y="14.0" text-anchor="middle" font-size="10" fill="#f3f4f6" opacity="0" pointer-events="none">10,00 NOK · 2,5% yield</text><rect class="htrig" x="52.0" y="16" width="89.0" height="132" fill="transparent" onmouseenter="showTip(this)" onmouseleave="hideTip(this)" data-i="0"/><rect class="htip-bg" x="133.5" y="27.6" width="106" height="20" rx="4" fill="#111827" opacity="0" pointer-events="none"/><text class="htip-txt" x="185.5" y="42.6" text-anchor="middle" font-size="10" fill="#f3f4f6" opacity="0" pointer-events="none">7,00 NOK · 1,7% yield</text><rect class="htrig" x="141.0" y="16" width="89.0" height="132" fill="transparent" onmouseenter="showTip(this)" onmouseleave="hideTip(this)" data-i="1"/><rect class="htip-bg" x="222.5" y="73.8" width="106" height="20" rx="4" fill="#111827" opacity="0" pointer-events="none"/><text class="htip-txt" x="274.5" y="88.8" text-anchor="middle" font-size="10" fill="#f3f4f6" opacity="0" pointer-events="none">3,50 NOK · 0,9% yield</text><rect class="htrig" x="230.0" y="16" width="89.0" height="132" fill="transparent" onmouseenter="showTip(this)" onmouseleave="hideTip(this)" data-i="2"/><rect class="htip-bg" x="302.0" y="14.4" width="106" height="20" rx="4" fill="#111827" opacity="0" pointer-events="none"/><text class="htip-txt" x="363.5" y="29.4" text-anchor="middle" font-size="10" fill="#f3f4f6" opacity="0" pointer-events="none">8,00 NOK · 2,0% yield</text><rect class="htrig" x="319.0" y="16" width="89.0" height="132" fill="transparent" onmouseenter="showTip(this)" onmouseleave="hideTip(this)" data-i="3"/><text x="16" y="82.0" text-anchor="middle" font-size="10" fill="#9ca3af" transform="rotate(-90,16,82.0)">NOK per aksje</text></svg><script>
 function showTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAll('.htip-bg')[i],tx=s.querySelectorAll('.htip-txt')[i];bg.setAttribute('opacity','0.92');tx.setAttribute('opacity','1');}
@@ -554,7 +564,7 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
 
   
 
-  <div class="vurdering-seksjon"><h2>Vurdering som utbytteaksje</h2><p class="vurdering-tekst">Gyldendal ASA er en av de mest rutinerte utbyttebetalerne på Oslo Børs med 25 sammenhengende år med utbytte. Yielden på 0,9% er under sektorsnittet (4,1%), men GYL kompenserer typisk med høyere stabilitet eller sterkere langsiktig vekstutsikter. Utbetalingsgraden på 22% er lav, noe som gir solid buffer og rom for utbytteøkninger fremover. Utbyttet har falt med 5,4% per år de siste fem årene, noe som krever at investoren setter seg inn i hva som har drevet nedgangen.</p></div><div class="driver-seksjon"><h2>Hva driver utbyttet i GYL?</h2><p class="driver-tekst">Inntektene kommer fra abonnement, annonsering eller innhold, og forutsigbarheten avhenger sterkt av hvilken av delene som dominerer. Abonnementsbaserte selskaper har stabil kontantstrøm og tåler utbytte godt, mens annonsefinansierte er konjunkturutsatte — annonsebudsjetter kuttes tidlig i en nedtur. Følg utviklingen i abonnenttall og annonseinntekter hver for seg.</p><p class="driver-tekst">Gyldendal ASA har betalt utbytte 25 år på rad, altså gjennom både finanskrisen og pandemien — det sier mer om utbyttepolitikken enn noe enkeltår gjør. Utbyttet er samlet sett 5,4 % lavere i året enn for fem år siden. Payout ratio på 22 % lar mesteparten av inntjeningen bli igjen i selskapet, så det er rom for å øke. Utbyttet går ex årlig, i juni.</p></div>
+  <div class="vurdering-seksjon"><h2>Vurdering som utbytteaksje</h2><p class="vurdering-tekst">Gyldendal ASA er en av de mest rutinerte utbyttebetalerne på Oslo Børs med 25 sammenhengende år med utbytte. Yielden på 0,9% er under sektorsnittet (2,5%), men GYL kompenserer typisk med høyere stabilitet eller sterkere langsiktig vekstutsikter. Utbetalingsgraden på 22% er lav, noe som gir solid buffer og rom for utbytteøkninger fremover. Utbyttet har falt med 5,4% per år de siste fem årene, noe som krever at investoren setter seg inn i hva som har drevet nedgangen.</p></div><div class="driver-seksjon"><h2>Hva driver utbyttet i GYL?</h2><p class="driver-tekst">Inntektene kommer fra abonnement, annonsering eller innhold, og forutsigbarheten avhenger sterkt av hvilken av delene som dominerer. Abonnementsbaserte selskaper har stabil kontantstrøm og tåler utbytte godt, mens annonsefinansierte er konjunkturutsatte — annonsebudsjetter kuttes tidlig i en nedtur. Følg utviklingen i abonnenttall og annonseinntekter hver for seg.</p><p class="driver-tekst">Gyldendal ASA har betalt utbytte 25 år på rad, altså gjennom både finanskrisen og pandemien — det sier mer om utbyttepolitikken enn noe enkeltår gjør. Utbyttet er samlet sett 5,4 % lavere i året enn for fem år siden. Payout ratio på 22 % lar mesteparten av inntjeningen bli igjen i selskapet, så det er rom for å øke. Utbyttet går ex årlig, i juni.</p></div>
 
   
 
@@ -584,7 +594,7 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
 </div>
   </section>
 
-  <div class="relaterte"><h2>Andre kommunikasjonstjenester-aksjer med utbytte</h2><div class="rel-grid"><a href="/aksjer/POL/" class="rel-kort"><span class="rel-ticker">POL</span><span class="rel-navn">Polaris Media ASA</span><span class="rel-yield">10,2%</span></a>
+  <div class="relaterte"><h2>Andre kommunikasjonstjenester-aksjer med utbytte</h2><div class="rel-grid"><a href="/aksjer/POL/" class="rel-kort"><span class="rel-ticker">POL</span><span class="rel-navn">Polaris Media ASA</span><span class="rel-yield">5,4%</span></a>
 <a href="/aksjer/VEND/" class="rel-kort"><span class="rel-ticker">VEND</span><span class="rel-navn">Vend Marketplaces ASA</span><span class="rel-yield">1,2%</span></a></div></div>
 
   <div class="mini-nav">

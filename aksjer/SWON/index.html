@@ -154,15 +154,23 @@
     .dark .vurdering-seksjon { background: #0f172a; border-color: #1e293b; }
     .dark .vurdering-tekst { color: #cbd5e1; }
     /* Betingede seksjoner — vises bare på sider der de har noe å si. */
-    .rekke-seksjon, .nedtur-seksjon, .utbetalingsaar-seksjon, .delaar-seksjon { margin: 1.5rem 0; padding: 1.1rem 1.25rem; background: #f8fafc; border-radius: 0.75rem; border: 1px solid #e2e8f0; }
-    .rekke-seksjon h2, .nedtur-seksjon h2, .utbetalingsaar-seksjon h2, .delaar-seksjon h2 { font-size: 1rem; font-weight: 700; margin-bottom: 0.6rem; }
-    .rekke-seksjon p, .nedtur-seksjon p, .utbetalingsaar-seksjon p, .delaar-seksjon p { font-size: 0.9rem; line-height: 1.75; color: #374151; margin: 0 0 0.6rem; }
+    .rekke-seksjon, .nedtur-seksjon, .utbetalingsaar-seksjon, .delaar-seksjon, .betalt-seksjon { margin: 1.5rem 0; padding: 1.1rem 1.25rem; background: #f8fafc; border-radius: 0.75rem; border: 1px solid #e2e8f0; }
+    .rekke-seksjon h2, .nedtur-seksjon h2, .utbetalingsaar-seksjon h2, .delaar-seksjon h2, .betalt-seksjon h2 { font-size: 1rem; font-weight: 700; margin-bottom: 0.6rem; }
+    .rekke-seksjon p, .nedtur-seksjon p, .utbetalingsaar-seksjon p, .delaar-seksjon p, .betalt-seksjon p { font-size: 0.9rem; line-height: 1.75; color: #374151; margin: 0 0 0.6rem; }
     .rekke-seksjon p:last-child, .nedtur-seksjon p:last-child, .utbetalingsaar-seksjon p:last-child, .delaar-seksjon p:last-child { margin-bottom: 0; }
-    .dark .rekke-seksjon, .dark .nedtur-seksjon, .dark .utbetalingsaar-seksjon, .dark .delaar-seksjon { background: #0f172a; border-color: #1e293b; }
-    .dark .rekke-seksjon p, .dark .nedtur-seksjon p, .dark .utbetalingsaar-seksjon p, .dark .delaar-seksjon p { color: #cbd5e1; }
+    .dark .rekke-seksjon, .dark .nedtur-seksjon, .dark .utbetalingsaar-seksjon, .dark .delaar-seksjon, .dark .betalt-seksjon { background: #0f172a; border-color: #1e293b; }
+    .dark .rekke-seksjon p, .dark .nedtur-seksjon p, .dark .utbetalingsaar-seksjon p, .dark .delaar-seksjon p, .dark .betalt-seksjon p { color: #cbd5e1; }
     .rekke-seksjon { border-left: 3px solid #22c55e; }
     .nedtur-seksjon { border-left: 3px solid #f59e0b; }
     .delaar-seksjon { border-left: 3px solid #f59e0b; }
+    .betalt-seksjon .betalt-tabell { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; font-size: 0.875rem; margin: 0.25rem 0 0.5rem; }
+    .betalt-seksjon .betalt-tabell th, .betalt-seksjon .betalt-tabell td { text-align: left; padding: 0.45rem 0.75rem; }
+    .betalt-seksjon .betalt-tabell td:not(:first-child), .betalt-seksjon .betalt-tabell th:not(:first-child) { white-space: nowrap; text-align: right; }
+    .betalt-tabell th { font-weight: 600; color: #6b7280; font-size: 0.75rem; }
+    .betalt-tabell td:not(:first-child) { font-variant-numeric: tabular-nums; }
+    .betalt-seksjon p.betalt-fotnote { font-size: 0.75rem; color: #6b7280; }
+    .betalt-seksjon .nowrap { white-space: nowrap; }
+    .dark .betalt-tabell th, .dark .betalt-seksjon p.betalt-fotnote { color: #94a3b8; }
     /* Nøytral variant: forklarer en observasjon, advarer ikke om en feil. */
     .delaar-seksjon.delaar-noytral { border-left-color: #94a3b8; }
     .dark .delaar-seksjon.delaar-noytral { border-left-color: #475569; }
@@ -439,10 +447,12 @@
       <div class="label">År med utbytte</div>
       <div class="val">1</div>
     </div>
-    <div class="kcard"><div class="label">P/E</div><div class="val">48,6</div></div>
+    <div class="kcard"><div class="label">P/E</div><div class="val">48,7</div></div>
   </div>
 
   
+
+  <div class="betalt-seksjon"><h2>Faktisk betalt utbytte</h2><table class="betalt-tabell"><thead><tr><th>Periode</th><th>Per aksje/år</th><th>Yield</th></tr></thead><tbody><tr><td>Siste 12 mnd</td><td>1,72 kr</td><td>1,71 %</td></tr></tbody></table><p class="betalt-fotnote">Summert etter ex-dato, inkludert eventuelle ekstraordinære utbytter. Yield regnet mot dagens kurs. </p></div>
 
   <div class="investor-profil-seksjon"><div class="investor-badges-rad"><span class="investor-badge investor-risiko-hoy">Høy risiko</span></div><div class="investor-forklaring risiko-hoy"><div class="investor-forklaring-tittel"><span class="investor-badge investor-risiko-hoy">Høy risiko</span></div><ul class="investor-forklaring-liste"><li>Sektor (Informasjonsteknologi) har en viss konjunktureksponering</li><li>Kort utbyttehistorikk (1 år) — begrenset dokumentasjon</li><li>Høy payout ratio (83%) — begrenset reinvesteringsevne</li><li>Registrert utenfor EØS (Sveits) — kan ikke holdes i ASK</li></ul></div></div>
 
@@ -462,7 +472,7 @@
   <canvas id="kurs-canvas-SWON" style="display:block;border-radius:10px;width:100%;"></canvas>
   <script>
   (function() {
-    var ALLE = [{"d": "2025-07-06", "k": 99.85}, {"d": "2025-07-13", "k": 92.86}, {"d": "2025-07-20", "k": 87.87}, {"d": "2025-07-27", "k": 87.38}, {"d": "2025-08-03", "k": 80.46}, {"d": "2025-08-10", "k": 83.27}, {"d": "2025-08-17", "k": 80.21}, {"d": "2025-08-24", "k": 84.59}, {"d": "2025-08-31", "k": 86.23}, {"d": "2025-09-07", "k": 91.9}, {"d": "2025-09-14", "k": 99.35}, {"d": "2025-09-21", "k": 109.0}, {"d": "2025-09-28", "k": 101.85}, {"d": "2025-10-05", "k": 102.9}, {"d": "2025-10-12", "k": 106.14}, {"d": "2025-10-19", "k": 102.05}, {"d": "2025-10-26", "k": 103.8}, {"d": "2025-11-02", "k": 102.6}, {"d": "2025-11-09", "k": 93.16}, {"d": "2025-11-16", "k": 108.96}, {"d": "2025-11-23", "k": 107.12}, {"d": "2025-11-30", "k": 112.81}, {"d": "2025-12-07", "k": 111.89}, {"d": "2025-12-14", "k": 113.71}, {"d": "2025-12-21", "k": 114.51}, {"d": "2025-12-28", "k": 112.65}, {"d": "2026-01-04", "k": 113.43}, {"d": "2026-01-11", "k": 110.63}, {"d": "2026-01-18", "k": 103.42}, {"d": "2026-01-25", "k": 102.17}, {"d": "2026-02-01", "k": 99.06}, {"d": "2026-02-08", "k": 86.61}, {"d": "2026-02-15", "k": 87.07}, {"d": "2026-02-22", "k": 84.51}, {"d": "2026-03-01", "k": 83.58}, {"d": "2026-03-08", "k": 86.16}, {"d": "2026-03-15", "k": 85.33}, {"d": "2026-03-22", "k": 79.35}, {"d": "2026-03-29", "k": 82.23}, {"d": "2026-04-05", "k": 77.24}, {"d": "2026-04-12", "k": 71.49}, {"d": "2026-04-19", "k": 84.57}, {"d": "2026-04-26", "k": 81.98}, {"d": "2026-05-03", "k": 81.98}, {"d": "2026-05-10", "k": 82.97}, {"d": "2026-05-17", "k": 95.16}, {"d": "2026-05-24", "k": 97.25}, {"d": "2026-05-31", "k": 98.7}, {"d": "2026-06-07", "k": 102.2}, {"d": "2026-06-14", "k": 94.5}, {"d": "2026-06-21", "k": 96.2}, {"d": "2026-06-28", "k": 94.0}, {"d": "2026-07-05", "k": 102.2}, {"d": "2026-07-12", "k": 101.8}, {"d": "2026-07-19", "k": 98.5}, {"d": "2026-07-26", "k": 98.1}, {"d": "2026-08-02", "k": 103.4}, {"d": "2026-08-09", "k": 111.4}, {"d": "2026-08-16", "k": 105.4}, {"d": "2026-08-23", "k": 95.6}, {"d": "2026-08-30", "k": 113.6}, {"d": "2026-09-06", "k": 110.0}, {"d": "2026-09-13", "k": 106.4}, {"d": "2026-09-20", "k": 105.6}, {"d": "2026-09-27", "k": 100.6}];
+    var ALLE = [{"d": "2025-07-06", "k": 99.85}, {"d": "2025-07-13", "k": 92.86}, {"d": "2025-07-20", "k": 87.87}, {"d": "2025-07-27", "k": 87.38}, {"d": "2025-08-03", "k": 80.46}, {"d": "2025-08-10", "k": 83.27}, {"d": "2025-08-17", "k": 80.21}, {"d": "2025-08-24", "k": 84.59}, {"d": "2025-08-31", "k": 86.23}, {"d": "2025-09-07", "k": 91.9}, {"d": "2025-09-14", "k": 99.35}, {"d": "2025-09-21", "k": 109.0}, {"d": "2025-09-28", "k": 101.85}, {"d": "2025-10-05", "k": 102.9}, {"d": "2025-10-12", "k": 106.14}, {"d": "2025-10-19", "k": 102.05}, {"d": "2025-10-26", "k": 103.8}, {"d": "2025-11-02", "k": 102.6}, {"d": "2025-11-09", "k": 93.16}, {"d": "2025-11-16", "k": 108.96}, {"d": "2025-11-23", "k": 107.12}, {"d": "2025-11-30", "k": 112.81}, {"d": "2025-12-07", "k": 111.89}, {"d": "2025-12-14", "k": 113.71}, {"d": "2025-12-21", "k": 114.51}, {"d": "2025-12-28", "k": 112.65}, {"d": "2026-01-04", "k": 113.43}, {"d": "2026-01-11", "k": 110.63}, {"d": "2026-01-18", "k": 103.42}, {"d": "2026-01-25", "k": 102.17}, {"d": "2026-02-01", "k": 99.06}, {"d": "2026-02-08", "k": 86.61}, {"d": "2026-02-15", "k": 87.07}, {"d": "2026-02-22", "k": 84.51}, {"d": "2026-03-01", "k": 83.58}, {"d": "2026-03-08", "k": 86.16}, {"d": "2026-03-15", "k": 85.33}, {"d": "2026-03-22", "k": 79.35}, {"d": "2026-03-29", "k": 82.23}, {"d": "2026-04-05", "k": 77.24}, {"d": "2026-04-12", "k": 71.49}, {"d": "2026-04-19", "k": 84.57}, {"d": "2026-04-26", "k": 81.98}, {"d": "2026-05-03", "k": 81.98}, {"d": "2026-05-10", "k": 82.97}, {"d": "2026-05-17", "k": 95.16}, {"d": "2026-05-24", "k": 97.25}, {"d": "2026-05-31", "k": 98.7}, {"d": "2026-06-07", "k": 102.2}, {"d": "2026-06-14", "k": 94.5}, {"d": "2026-06-21", "k": 96.2}, {"d": "2026-06-28", "k": 94.0}, {"d": "2026-07-05", "k": 102.2}, {"d": "2026-07-12", "k": 101.8}, {"d": "2026-07-19", "k": 98.5}, {"d": "2026-07-26", "k": 98.1}, {"d": "2026-08-02", "k": 103.4}, {"d": "2026-08-09", "k": 111.4}, {"d": "2026-08-16", "k": 105.4}, {"d": "2026-08-23", "k": 95.6}, {"d": "2026-08-30", "k": 113.6}, {"d": "2026-09-06", "k": 110.0}, {"d": "2026-09-13", "k": 106.4}, {"d": "2026-09-20", "k": 105.6}, {"d": "2026-09-27", "k": 100.8}];
     var VAL = 'NOK';
     function filtrer(p) {
       var now = new Date(), ar = now.getFullYear();
@@ -552,7 +562,7 @@
   <!-- ── NØKKELTALL ── -->
   <section id="nokkeltall">
 
-  <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Informasjonsteknologi</td></tr><tr><td>Frekvens</td><td>Årlig</td></tr><tr><td>Utbytte per aksje</td><td>1,77 NOK</td></tr><tr><td>Direkteavkastning</td><td>1,76%</td></tr><tr><td>5-årssnitt yield</td><td>1,71%</td></tr><tr><td>År med utbytte</td><td>1</td></tr><tr><td>P/E</td><td>48,6</td></tr><tr><td>Payout ratio</td><td>83%</td></tr><tr><td>Utbyttevekst 5 år</td><td>+0,0% p.a.</td></tr><tr><td>Markedsverdi</td><td>21,6 mrd NOK</td></tr><tr><td>52-ukers kurs</td><td>70,30 – 116,98 NOK</td></tr></tbody></table>
+  <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Informasjonsteknologi</td></tr><tr><td>Frekvens</td><td>Årlig</td></tr><tr><td>Utbytte per aksje</td><td>1,77 NOK</td></tr><tr><td>Direkteavkastning</td><td>1,76%</td></tr><tr><td>5-årssnitt yield</td><td>1,71%</td></tr><tr><td>År med utbytte</td><td>1</td></tr><tr><td>P/E</td><td>48,7</td></tr><tr><td>Payout ratio</td><td>83%</td></tr><tr><td>Utbyttevekst 5 år</td><td>+0,0% p.a.</td></tr><tr><td>Markedsverdi</td><td>21,6 mrd NOK</td></tr><tr><td>52-ukers kurs</td><td>70,30 – 116,98 NOK</td></tr></tbody></table>
 
   </section>
 

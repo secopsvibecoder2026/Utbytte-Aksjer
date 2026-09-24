@@ -154,15 +154,23 @@
     .dark .vurdering-seksjon { background: #0f172a; border-color: #1e293b; }
     .dark .vurdering-tekst { color: #cbd5e1; }
     /* Betingede seksjoner — vises bare på sider der de har noe å si. */
-    .rekke-seksjon, .nedtur-seksjon, .utbetalingsaar-seksjon, .delaar-seksjon { margin: 1.5rem 0; padding: 1.1rem 1.25rem; background: #f8fafc; border-radius: 0.75rem; border: 1px solid #e2e8f0; }
-    .rekke-seksjon h2, .nedtur-seksjon h2, .utbetalingsaar-seksjon h2, .delaar-seksjon h2 { font-size: 1rem; font-weight: 700; margin-bottom: 0.6rem; }
-    .rekke-seksjon p, .nedtur-seksjon p, .utbetalingsaar-seksjon p, .delaar-seksjon p { font-size: 0.9rem; line-height: 1.75; color: #374151; margin: 0 0 0.6rem; }
+    .rekke-seksjon, .nedtur-seksjon, .utbetalingsaar-seksjon, .delaar-seksjon, .betalt-seksjon { margin: 1.5rem 0; padding: 1.1rem 1.25rem; background: #f8fafc; border-radius: 0.75rem; border: 1px solid #e2e8f0; }
+    .rekke-seksjon h2, .nedtur-seksjon h2, .utbetalingsaar-seksjon h2, .delaar-seksjon h2, .betalt-seksjon h2 { font-size: 1rem; font-weight: 700; margin-bottom: 0.6rem; }
+    .rekke-seksjon p, .nedtur-seksjon p, .utbetalingsaar-seksjon p, .delaar-seksjon p, .betalt-seksjon p { font-size: 0.9rem; line-height: 1.75; color: #374151; margin: 0 0 0.6rem; }
     .rekke-seksjon p:last-child, .nedtur-seksjon p:last-child, .utbetalingsaar-seksjon p:last-child, .delaar-seksjon p:last-child { margin-bottom: 0; }
-    .dark .rekke-seksjon, .dark .nedtur-seksjon, .dark .utbetalingsaar-seksjon, .dark .delaar-seksjon { background: #0f172a; border-color: #1e293b; }
-    .dark .rekke-seksjon p, .dark .nedtur-seksjon p, .dark .utbetalingsaar-seksjon p, .dark .delaar-seksjon p { color: #cbd5e1; }
+    .dark .rekke-seksjon, .dark .nedtur-seksjon, .dark .utbetalingsaar-seksjon, .dark .delaar-seksjon, .dark .betalt-seksjon { background: #0f172a; border-color: #1e293b; }
+    .dark .rekke-seksjon p, .dark .nedtur-seksjon p, .dark .utbetalingsaar-seksjon p, .dark .delaar-seksjon p, .dark .betalt-seksjon p { color: #cbd5e1; }
     .rekke-seksjon { border-left: 3px solid #22c55e; }
     .nedtur-seksjon { border-left: 3px solid #f59e0b; }
     .delaar-seksjon { border-left: 3px solid #f59e0b; }
+    .betalt-seksjon .betalt-tabell { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; font-size: 0.875rem; margin: 0.25rem 0 0.5rem; }
+    .betalt-seksjon .betalt-tabell th, .betalt-seksjon .betalt-tabell td { text-align: left; padding: 0.45rem 0.75rem; }
+    .betalt-seksjon .betalt-tabell td:not(:first-child), .betalt-seksjon .betalt-tabell th:not(:first-child) { white-space: nowrap; text-align: right; }
+    .betalt-tabell th { font-weight: 600; color: #6b7280; font-size: 0.75rem; }
+    .betalt-tabell td:not(:first-child) { font-variant-numeric: tabular-nums; }
+    .betalt-seksjon p.betalt-fotnote { font-size: 0.75rem; color: #6b7280; }
+    .betalt-seksjon .nowrap { white-space: nowrap; }
+    .dark .betalt-tabell th, .dark .betalt-seksjon p.betalt-fotnote { color: #94a3b8; }
     /* Nøytral variant: forklarer en observasjon, advarer ikke om en feil. */
     .delaar-seksjon.delaar-noytral { border-left-color: #94a3b8; }
     .dark .delaar-seksjon.delaar-noytral { border-left-color: #475569; }
@@ -444,6 +452,8 @@
 
   
 
+  <div class="betalt-seksjon"><h2>Faktisk betalt utbytte</h2><table class="betalt-tabell"><thead><tr><th>Periode</th><th>Per aksje/år</th><th>Yield</th></tr></thead><tbody><tr><td>Siste 12 mnd</td><td>1,21 kr</td><td>5,26 %</td></tr><tr><td>2025</td><td>0,00 kr</td><td>0,00 %</td></tr><tr><td>Snitt <span class="nowrap">2024–25</span></td><td>0,00 kr</td><td>0,00 %</td></tr><tr><td>Snitt <span class="nowrap">2023–25</span></td><td>1,00 kr</td><td>4,35 %</td></tr><tr><td>Snitt <span class="nowrap">2022–25</span></td><td>7,83 kr</td><td>34,04 %</td></tr></tbody></table><p class="betalt-fotnote">Summert etter ex-dato, inkludert eventuelle ekstraordinære utbytter. Yield regnet mot dagens kurs. Utbytte i vår historikk fra 2022.</p></div>
+
   <div class="investor-profil-seksjon"><div class="investor-badges-rad"><span class="investor-badge investor-risiko-moderat">Moderat risiko</span></div><div class="investor-forklaring risiko-moderat"><div class="investor-forklaring-tittel"><span class="investor-badge investor-risiko-moderat">Moderat risiko</span></div><ul class="investor-forklaring-liste"><li>Sektor (Skipsfart) har en viss konjunktureksponering</li><li>Moderat utbyttehistorikk (3 år)</li></ul></div></div>
 
   
@@ -523,7 +533,7 @@
   <!-- ── UTBYTTE ── -->
   <section id="utbytte">
 
-  <div class="analyse"><h2>Yield mot sektoren</h2><p>Yielden på 5,3% er 2,8 prosentpoeng under snittet for Skipsfart-sektoren (8,1%).</p></div>
+  <div class="analyse"><h2>Yield mot sektoren</h2><p>Yielden på 5,3% er på linje med snittet for Skipsfart-sektoren (4,9%).</p></div>
 
   <h2>Historiske utbytter</h2><svg viewBox="0 0 420 180" style="width:100%;max-width:420px;height:auto;display:block;margin-bottom:0.5rem;" aria-label="Historiske utbytter per aksje i NOK"><line x1="52" y1="148.0" x2="408" y2="148.0" stroke="#e5e7eb" stroke-width="1" class="ytick"/><text x="48" y="152.0" text-anchor="end" font-size="10" fill="#9ca3af">0,00</text><line x1="52" y1="104.0" x2="408" y2="104.0" stroke="#e5e7eb" stroke-width="1" class="ytick"/><text x="48" y="108.0" text-anchor="end" font-size="10" fill="#9ca3af">9,44</text><line x1="52" y1="60.0" x2="408" y2="60.0" stroke="#e5e7eb" stroke-width="1" class="ytick"/><text x="48" y="64.0" text-anchor="end" font-size="10" fill="#9ca3af">18,88</text><line x1="52" y1="16.0" x2="408" y2="16.0" stroke="#e5e7eb" stroke-width="1" class="ytick"/><text x="48" y="20.0" text-anchor="end" font-size="10" fill="#9ca3af">28,32</text><rect class="hbar" x="93.3" y="16.0" width="36" height="132.0" rx="3" fill="#16a34a" opacity="0.85"/><rect class="hbar" x="212.0" y="134.0" width="36" height="14.0" rx="3" fill="#16a34a" opacity="0.85"/><rect class="hbar" x="330.7" y="142.4" width="36" height="5.6" rx="3" fill="#16a34a" opacity="0.85"/><text x="111.3" y="174" text-anchor="middle" font-size="10" fill="#9ca3af">2022</text><text x="230.0" y="174" text-anchor="middle" font-size="10" fill="#9ca3af">2023</text><text x="348.7" y="174" text-anchor="middle" font-size="10" fill="#9ca3af">2026</text><rect class="htip-bg" x="59.3" y="2.0" width="106" height="20" rx="4" fill="#111827" opacity="0" pointer-events="none"/><text class="htip-txt" x="111.3" y="14.0" text-anchor="middle" font-size="10" fill="#f3f4f6" opacity="0" pointer-events="none">28,32 NOK · 88,1% yield</text><rect class="htrig" x="52.0" y="16" width="118.7" height="132" fill="transparent" onmouseenter="showTip(this)" onmouseleave="hideTip(this)" data-i="0"/><rect class="htip-bg" x="178.0" y="106.0" width="106" height="20" rx="4" fill="#111827" opacity="0" pointer-events="none"/><text class="htip-txt" x="230.0" y="121.0" text-anchor="middle" font-size="10" fill="#f3f4f6" opacity="0" pointer-events="none">3,00 NOK · 13,0% yield</text><rect class="htrig" x="170.7" y="16" width="118.7" height="132" fill="transparent" onmouseenter="showTip(this)" onmouseleave="hideTip(this)" data-i="1"/><rect class="htip-bg" x="296.7" y="114.4" width="106" height="20" rx="4" fill="#111827" opacity="0" pointer-events="none"/><text class="htip-txt" x="348.7" y="129.4" text-anchor="middle" font-size="10" fill="#f3f4f6" opacity="0" pointer-events="none">1,21 NOK · 5,3% yield</text><rect class="htrig" x="289.3" y="16" width="118.7" height="132" fill="transparent" onmouseenter="showTip(this)" onmouseleave="hideTip(this)" data-i="2"/><text x="16" y="82.0" text-anchor="middle" font-size="10" fill="#9ca3af" transform="rotate(-90,16,82.0)">NOK per aksje</text></svg><script>
 function showTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAll('.htip-bg')[i],tx=s.querySelectorAll('.htip-txt')[i];bg.setAttribute('opacity','0.92');tx.setAttribute('opacity','1');}
@@ -549,7 +559,7 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
 
   
 
-  <div class="vurdering-seksjon"><h2>Vurdering som utbytteaksje</h2><p class="vurdering-tekst">Western Bulk Chartering AS har betalt utbytte de siste 3 årene, men historikken er begrenset. Yielden på 5,3% er under sektorsnittet (8,1%), men WEST kompenserer typisk med høyere stabilitet eller sterkere langsiktig vekstutsikter. Utbyttet har falt med 54,5% per år de siste fem årene, noe som krever at investoren setter seg inn i hva som har drevet nedgangen.</p></div><div class="driver-seksjon"><h2>Hva driver utbyttet i WEST?</h2><p class="driver-tekst">Sektoren lever av å frakte gods på kontrakt, og skiller seg fra Shipping ved at inntektene i større grad er bundet opp i langsiktige avtaler enn i spotrater. Det gir jevnere kontantstrøm og mindre dramatiske utbyttesvingninger, men også mindre oppside når ratene topper seg. Kontraktsdekning, fornyelser og drivstoffkostnader er de viktigste tallene å følge.</p><p class="driver-tekst">Med 3 år med utbytte er historikken hos Western Bulk Chartering AS fortsatt kort, så utbyttepolitikken er ikke ferdig prøvd. Utbyttet går ex årlig, i februar.</p></div>
+  <div class="vurdering-seksjon"><h2>Vurdering som utbytteaksje</h2><p class="vurdering-tekst">Western Bulk Chartering AS har betalt utbytte de siste 3 årene, men historikken er begrenset. Yielden på 5,3% er nær sektorsnittet for Skipsfart (4,9%). Utbyttet har falt med 54,5% per år de siste fem årene, noe som krever at investoren setter seg inn i hva som har drevet nedgangen.</p></div><div class="driver-seksjon"><h2>Hva driver utbyttet i WEST?</h2><p class="driver-tekst">Sektoren lever av å frakte gods på kontrakt, og skiller seg fra Shipping ved at inntektene i større grad er bundet opp i langsiktige avtaler enn i spotrater. Det gir jevnere kontantstrøm og mindre dramatiske utbyttesvingninger, men også mindre oppside når ratene topper seg. Kontraktsdekning, fornyelser og drivstoffkostnader er de viktigste tallene å følge.</p><p class="driver-tekst">Med 3 år med utbytte er historikken hos Western Bulk Chartering AS fortsatt kort, så utbyttepolitikken er ikke ferdig prøvd. Utbyttet går ex årlig, i februar.</p></div>
 
   
 
@@ -578,7 +588,7 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
 </div>
   </section>
 
-  <div class="relaterte"><h2>Andre skipsfart-aksjer med utbytte</h2><div class="rel-grid"><a href="/aksjer/STST/" class="rel-kort"><span class="rel-ticker">STST</span><span class="rel-navn">Stainless Tankers AS</span><span class="rel-yield">32,0%</span></a>
+  <div class="relaterte"><h2>Andre skipsfart-aksjer med utbytte</h2><div class="rel-grid"><a href="/aksjer/STST/" class="rel-kort"><span class="rel-ticker">STST</span><span class="rel-navn">Stainless Tankers AS</span><span class="rel-yield">12,8%</span></a>
 <a href="/aksjer/SOMA/" class="rel-kort"><span class="rel-ticker">SOMA</span><span class="rel-navn">Solstad Maritime ASA</span><span class="rel-yield">6,3%</span></a>
 <a href="/aksjer/JIN/" class="rel-kort"><span class="rel-ticker">JIN</span><span class="rel-navn">Jinhui Shipping and Transportation Limited</span><span class="rel-yield">2,5%</span></a>
 <a href="/aksjer/CAPT/" class="rel-kort"><span class="rel-ticker">CAPT</span><span class="rel-navn">Capital Tankers AS</span><span class="rel-yield">2,0%</span></a></div></div>

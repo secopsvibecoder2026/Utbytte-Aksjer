@@ -154,15 +154,23 @@
     .dark .vurdering-seksjon { background: #0f172a; border-color: #1e293b; }
     .dark .vurdering-tekst { color: #cbd5e1; }
     /* Betingede seksjoner — vises bare på sider der de har noe å si. */
-    .rekke-seksjon, .nedtur-seksjon, .utbetalingsaar-seksjon, .delaar-seksjon { margin: 1.5rem 0; padding: 1.1rem 1.25rem; background: #f8fafc; border-radius: 0.75rem; border: 1px solid #e2e8f0; }
-    .rekke-seksjon h2, .nedtur-seksjon h2, .utbetalingsaar-seksjon h2, .delaar-seksjon h2 { font-size: 1rem; font-weight: 700; margin-bottom: 0.6rem; }
-    .rekke-seksjon p, .nedtur-seksjon p, .utbetalingsaar-seksjon p, .delaar-seksjon p { font-size: 0.9rem; line-height: 1.75; color: #374151; margin: 0 0 0.6rem; }
+    .rekke-seksjon, .nedtur-seksjon, .utbetalingsaar-seksjon, .delaar-seksjon, .betalt-seksjon { margin: 1.5rem 0; padding: 1.1rem 1.25rem; background: #f8fafc; border-radius: 0.75rem; border: 1px solid #e2e8f0; }
+    .rekke-seksjon h2, .nedtur-seksjon h2, .utbetalingsaar-seksjon h2, .delaar-seksjon h2, .betalt-seksjon h2 { font-size: 1rem; font-weight: 700; margin-bottom: 0.6rem; }
+    .rekke-seksjon p, .nedtur-seksjon p, .utbetalingsaar-seksjon p, .delaar-seksjon p, .betalt-seksjon p { font-size: 0.9rem; line-height: 1.75; color: #374151; margin: 0 0 0.6rem; }
     .rekke-seksjon p:last-child, .nedtur-seksjon p:last-child, .utbetalingsaar-seksjon p:last-child, .delaar-seksjon p:last-child { margin-bottom: 0; }
-    .dark .rekke-seksjon, .dark .nedtur-seksjon, .dark .utbetalingsaar-seksjon, .dark .delaar-seksjon { background: #0f172a; border-color: #1e293b; }
-    .dark .rekke-seksjon p, .dark .nedtur-seksjon p, .dark .utbetalingsaar-seksjon p, .dark .delaar-seksjon p { color: #cbd5e1; }
+    .dark .rekke-seksjon, .dark .nedtur-seksjon, .dark .utbetalingsaar-seksjon, .dark .delaar-seksjon, .dark .betalt-seksjon { background: #0f172a; border-color: #1e293b; }
+    .dark .rekke-seksjon p, .dark .nedtur-seksjon p, .dark .utbetalingsaar-seksjon p, .dark .delaar-seksjon p, .dark .betalt-seksjon p { color: #cbd5e1; }
     .rekke-seksjon { border-left: 3px solid #22c55e; }
     .nedtur-seksjon { border-left: 3px solid #f59e0b; }
     .delaar-seksjon { border-left: 3px solid #f59e0b; }
+    .betalt-seksjon .betalt-tabell { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; font-size: 0.875rem; margin: 0.25rem 0 0.5rem; }
+    .betalt-seksjon .betalt-tabell th, .betalt-seksjon .betalt-tabell td { text-align: left; padding: 0.45rem 0.75rem; }
+    .betalt-seksjon .betalt-tabell td:not(:first-child), .betalt-seksjon .betalt-tabell th:not(:first-child) { white-space: nowrap; text-align: right; }
+    .betalt-tabell th { font-weight: 600; color: #6b7280; font-size: 0.75rem; }
+    .betalt-tabell td:not(:first-child) { font-variant-numeric: tabular-nums; }
+    .betalt-seksjon p.betalt-fotnote { font-size: 0.75rem; color: #6b7280; }
+    .betalt-seksjon .nowrap { white-space: nowrap; }
+    .dark .betalt-tabell th, .dark .betalt-seksjon p.betalt-fotnote { color: #94a3b8; }
     /* Nøytral variant: forklarer en observasjon, advarer ikke om en feil. */
     .delaar-seksjon.delaar-noytral { border-left-color: #94a3b8; }
     .dark .delaar-seksjon.delaar-noytral { border-left-color: #475569; }
@@ -439,8 +447,10 @@
       <div class="label">År med utbytte</div>
       <div class="val">2</div>
     </div>
-    <div class="kcard"><div class="label">P/E</div><div class="val">17,9</div></div>
+    <div class="kcard"><div class="label">P/E</div><div class="val">17,8</div></div>
   </div>
+
+  
 
   
 
@@ -547,7 +557,7 @@
   <!-- ── NØKKELTALL ── -->
   <section id="nokkeltall">
 
-  <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Industri</td></tr><tr><td>Frekvens</td><td>Uregelmessig</td></tr><tr><td>Utbytte per aksje</td><td>0,00 NOK</td></tr><tr><td>Direkteavkastning</td><td>—</td></tr><tr><td>5-årssnitt yield</td><td>0,00%</td></tr><tr><td>År med utbytte</td><td>2</td></tr><tr><td>P/E</td><td>17,9</td></tr><tr><td>Utbyttevekst 5 år</td><td>+0,0% p.a.</td></tr><tr><td>Markedsverdi</td><td>1,8 mrd NOK</td></tr><tr><td>52-ukers kurs</td><td>1,57 – 2,40 NOK</td></tr></tbody></table>
+  <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Industri</td></tr><tr><td>Frekvens</td><td>Uregelmessig</td></tr><tr><td>Utbytte per aksje</td><td>0,00 NOK</td></tr><tr><td>Direkteavkastning</td><td>—</td></tr><tr><td>5-årssnitt yield</td><td>0,00%</td></tr><tr><td>År med utbytte</td><td>2</td></tr><tr><td>P/E</td><td>17,8</td></tr><tr><td>Utbyttevekst 5 år</td><td>+0,0% p.a.</td></tr><tr><td>Markedsverdi</td><td>1,8 mrd NOK</td></tr><tr><td>52-ukers kurs</td><td>1,57 – 2,40 NOK</td></tr></tbody></table>
 
   </section>
 
@@ -558,9 +568,9 @@
   </section>
 
   <div class="relaterte"><h2>Andre industri-aksjer med utbytte</h2><div class="rel-grid"><a href="/aksjer/GOD/" class="rel-kort"><span class="rel-ticker">GOD</span><span class="rel-navn">Goodtech ASA</span><span class="rel-yield">14,1%</span></a>
-<a href="/aksjer/MULTI/" class="rel-kort"><span class="rel-ticker">MULTI</span><span class="rel-navn">Multiconsult ASA</span><span class="rel-yield">6,9%</span></a>
 <a href="/aksjer/SNTIA/" class="rel-kort"><span class="rel-ticker">SNTIA</span><span class="rel-navn">Sentia AS</span><span class="rel-yield">6,4%</span></a>
-<a href="/aksjer/MORLD/" class="rel-kort"><span class="rel-ticker">MORLD</span><span class="rel-navn">Moreld ASA</span><span class="rel-yield">5,3%</span></a></div></div>
+<a href="/aksjer/MORLD/" class="rel-kort"><span class="rel-ticker">MORLD</span><span class="rel-navn">Moreld ASA</span><span class="rel-yield">5,4%</span></a>
+<a href="/aksjer/VEI/" class="rel-kort"><span class="rel-ticker">VEI</span><span class="rel-navn">Veidekke ASA</span><span class="rel-yield">5,2%</span></a></div></div>
 
   <div class="mini-nav">
     <a href="/aksjer/sektor/industri/">← Alle Industri-aksjer</a>
