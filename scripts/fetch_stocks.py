@@ -865,14 +865,21 @@ _MND_NAVN = ("january", "february", "march", "april", "may", "june",
 # EQNR) og «August 26, 2026» (WAWI).
 _DATO_DM = r"(?P<d1>\d{1,2})\.?\s+(?P<m1>[A-Za-z]+)\.?,?\s+(?P<a1>\d{4})"
 _DATO_MD = r"(?P<m2>[A-Za-z]+)\.?\s+(?P<d2>\d{1,2})(?:st|nd|rd|th)?,?\s+(?P<a2>\d{4})"
-_DATO_ENTEN = f"(?:{_DATO_DM}|{_DATO_MD})"
+# Og numerisk: «Ex-date: 23.06.2026» (SalMar). Uten dette ga SalMars melding
+# ingen dato i det hele tatt — funnet dagen etter at parseren gikk i drift.
+_DATO_NUM = r"(?P<d3>\d{1,2})[./](?P<m3>\d{1,2})[./](?P<a3>\d{4})"
+_DATO_ENTEN = f"(?:{_DATO_NUM}|{_DATO_DM}|{_DATO_MD})"
+
+# «o/a», «from», «on or about», «about» foran datoen. STST skriver «Payment
+# date: on or about 1 September 2026», og uten prefikset matchet ingenting.
+_DATO_PREFIKS = r"(?:(?:on\s+or\s+)?about\s+|o/a\s+|from\s+|expected\s+(?:on\s+)?)?"
 
 # Etiketten kan bære tekst før kolonet — «Ex-date Oslo Børs:», «Ex date (OSE):».
 # Begrenset til 40 tegn uten linjeskift, ellers sluker den halve meldingen.
 _EX_DATO_RE = re.compile(
-    r"ex[\s-]?date(?P<merkelapp>[^:\n]{0,40})?:\s*(?:o/a\s+|from\s+)?" + _DATO_ENTEN, re.I)
+    r"ex[\s-]?date(?P<merkelapp>[^:\n]{0,60})?:\s*" + _DATO_PREFIKS + _DATO_ENTEN, re.I)
 _BETALINGSDATO_RE = re.compile(
-    r"payment\s+date(?:[^:\n]{0,40})?:\s*(?:o/a\s+|from\s+)?" + _DATO_ENTEN, re.I)
+    r"payment\s+date(?:[^:\n]{0,40})?:\s*" + _DATO_PREFIKS + _DATO_ENTEN, re.I)
 
 _ANDRE_BORSER = ("new york", "nyse", "nasdaq", "london", "stockholm", "copenhagen", "frankfurt")
 
@@ -888,11 +895,14 @@ def _dato_fra_treff(m):
     Navnet må være et *prefiks* av et månedsnavn: det tar «Apr» og «Sept.»,
     men avviser «Aprilis». Avkorting til tre bokstaver gjorde det ikke.
     """
-    dag = m.group("d1") or m.group("d2")
-    mnd = (m.group("m1") or m.group("m2") or "").lower().rstrip(".")
-    ar = m.group("a1") or m.group("a2")
-    nr = next((i for i, navn in enumerate(_MND_NAVN, 1)
-               if len(mnd) >= 3 and navn.startswith(mnd)), None)
+    if m.group("d3"):
+        dag, nr, ar = m.group("d3"), int(m.group("m3")), m.group("a3")
+    else:
+        dag = m.group("d1") or m.group("d2")
+        mnd = (m.group("m1") or m.group("m2") or "").lower().rstrip(".")
+        ar = m.group("a1") or m.group("a2")
+        nr = next((i for i, navn in enumerate(_MND_NAVN, 1)
+                   if len(mnd) >= 3 and navn.startswith(mnd)), None)
     if not nr:
         return None
     try:
@@ -914,9 +924,13 @@ def _parse_ex_dato(tekst):
         if not d:
             continue
         merke = (m.group("merkelapp") or "").lower()
-        if any(b in merke for b in _ANDRE_BORSER):
+        oslo = "oslo" in merke or "ose" in merke
+        # En felles dato for flere børser gjelder også Oslo — CMBTO skriver
+        # «Ex-date on Euronext Belgium and Euronext Oslo Børs». Bare en
+        # merkelapp som nevner en annen børs *og ikke Oslo* forkastes.
+        if not oslo and any(b in merke for b in _ANDRE_BORSER):
             continue
-        kandidater.append((0 if ("oslo" in merke or "ose" in merke) else 1, d))
+        kandidater.append((0 if oslo else 1, d))
     if not kandidater:
         return None, None
     ex = sorted(kandidater)[0][1]
@@ -1297,6 +1311,46 @@ def lag_delaar_varsel(a, nf):
     )
 
 
+def velg_arsrate(fjor_sum, trailing_sum, trailing_antall, frekvens):
+    """Årsraten vakten skal bruke når Yahoos rate avviker ≥ 50 % fra fjoråret.
+
+    Vakten ble laget for WAWI-type stabling: Yahoo summerer betalinger fra to
+    perioder, og fjorårets kalendersum er da et tryggere tall. Men den ble bare
+    analysert for selskaper som *hever*. For et selskap som **kutter** gjør den
+    det motsatte av det den skal: jo større kuttet, jo sikrere velges det
+    gamle, høye tallet.
+
+    Målt 24.09.2026 mot rå serier for alle 155, og hvert kutt bekreftet mot
+    selskapets egen melding til Oslo Børs:
+
+        SALM   22,00 → 10,00   (NOK 10 i 2026)        3,92 % → 1,78 %
+        BAKKA  13,37 →  5,06   (DKK 3,45 i 2026)       2,98 % → 1,13 %
+        MULTI  10,00 →  5,00   (NOK 5,00 i 2026)       6,69 % → 3,35 %
+        STST   12,76 →  5,17   (USD 0,135 per kvartal) 31,9 % → 12,9 %
+        HAUTO  22,82 → 11,87   (USD 0,52 → 0,08)       12,5 % →  6,5 %
+
+    Regelen er bevisst enveis: trailing 12 mnd brukes bare når den er *lavere*
+    enn fjoråret. Den kan dermed aldri heve et tall, og den rører ingen aksje
+    vakten ikke allerede har overstyrt — GSF, HUNT og AKAST, der trailing 12 mnd
+    inneholder ekstraordinære utdelinger og ville gitt 116 %, 23,9 % og 21,3 %,
+    er uberørt fordi trailing der er *høyere*.
+
+    **Vinduet må være fullt.** En halvårlig betaler med utbetaling 25. september
+    har ikke fjorårets septemberbetaling i vinduet 24. september — da er
+    trailing en halv årsrate, og å bruke den ville halvert yielden. Samme
+    vindusfelle som gjorde SATS kvartalsvis. Derfor kreves minst så mange
+    utbetalinger i vinduet som frekvensen tilsier.
+
+    Returnerer fjorårssummen når vilkårene ikke er oppfylt, som før.
+    """
+    if fjor_sum <= 0:
+        return trailing_sum
+    forventet = {"Årlig": 1, **UTBETALINGER_PR_AAR}.get(frekvens)
+    if forventet and trailing_antall >= forventet and 0 < trailing_sum < fjor_sum:
+        return trailing_sum
+    return fjor_sum
+
+
 def frekvens_label(dividends_per_year):
     """Estimer utbyttefrekvens basert på antall utbetalinger siste år."""
     if dividends_per_year >= 10:
@@ -1566,8 +1620,13 @@ def hent_aksje(meta):
             # «> 500» slapp nøyaktig 500,0 % gjennom. Jo nærmere grensen et
             # tall ligger, jo mindre hjelp fikk leseren.
             if avvik >= 0.5:
-                print(f"    Advarsel: Yahoo dividendRate={raw_div_rate:.2f} avviker {avvik*100:.0f}% fra ref={ref:.2f} ({last_complete_year}-total). Bruker ref.")
-                raw_div_rate = ref
+                # Ved et kutt er fjoråret det gale tallet — se velg_arsrate().
+                antall_12m = len(trailing_12m) if not dividends.empty else 0
+                frekv_nå = FREKVENS_OVERSTYRT.get(ticker) or frekvens_label(antall_12m)
+                valgt = velg_arsrate(last_year_total, trailing_annual, antall_12m, frekv_nå)
+                kilde = f"{last_complete_year}-total" if valgt == last_year_total else "trailing 12 mnd (kutt)"
+                print(f"    Advarsel: Yahoo dividendRate={raw_div_rate:.2f} avviker {avvik*100:.0f}% fra ref={ref:.2f}. Bruker {valgt:.2f} ({kilde}).")
+                raw_div_rate = valgt
         elif ref > 0 and raw_div_rate == 0:
             raw_div_rate = ref
 

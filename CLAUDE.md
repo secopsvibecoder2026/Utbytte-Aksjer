@@ -1070,6 +1070,15 @@ hyphen; «August 26, 2026» (month first, WAWI) next to «13 November 2026»;
 «from …»; abbreviated months («Apr», «Sept.»). Month names match as a
 **prefix** — truncating to three letters turned «Aprilis» into April.
 
+**Found the day after it went live** (2026-09-24): numeric dates
+(«Ex-date: 23.06.2026», SalMar), «Payment date: on or about …» (STST),
+«expected on …» (CMBTO), and a label naming *both* Oslo and another exchange
+(«Ex-date on Euronext Belgium and Euronext Oslo Børs», CMBTO) — which the
+first version discarded because it named a foreign exchange. A label is now
+dropped only if it names another exchange **and not Oslo**. ATEA, SALM and
+SATS parse since; AFK writes «Ex-date: 13 May» with no year and is left
+alone on purpose — guessing the year is worse than showing nothing.
+
 **Cost is bounded.** `_newsweb_meldinger()` caches the message list per run —
 rapport_dato, the dividend split and the ex-date read the same list, which was
 fetched up to three times per ticker. Only notices from the last 270 days are
@@ -1929,7 +1938,7 @@ stocks, and **every one produced an obviously wrong figure somewhere**:
 |---|---|---|
 | Trailing 12-month sum | SATS, SOFF, PUBLI | GSF → 116 % yield, HUNT → 23,9 %, AKAST → 21,3 % |
 | Median payment × frequency | SATS, EIOF, ENTR | HUNT → 18,5 %, BNOR → 29,3 % |
-| Uniform series matching frequency | ENTR, EIOF, MORLD, MPCC | halves SalMar and Bakkafrost, GSF → 116 % |
+| Uniform series matching frequency | ENTR, EIOF, MORLD, MPCC | halves SalMar and Bakkafrost *(→ that was correct, see «blind to dividend cuts» below)*, GSF → 116 % |
 
 The trailing sum includes special and capital distributions; Yahoo's rate excludes
 payments the company has just started making. Telling the two apart is a design task —
@@ -2139,22 +2148,70 @@ ten fail the same way, so one rule marks them all.
 > rules compose into a figure ~29× too low. Fixing the boundary does not touch
 > this one.
 
-### …and it is blind to dividend *cuts* (found 2026-09-24, not fixed)
+### …and it was blind to dividend *cuts* (fixed 2026-09-24)
 
 Everything above analyses the guard for companies that **raised** or
-**started** paying. A **cut** is the mirror image, and the guard makes it
-worse: Yahoo's rate falls, the deviation from last year's total passes 50 %,
-and the guard swaps the correct lower rate for last year's higher one.
-SoftwareOne halved its dividend (0,30 → 0,15 CHF) and was shown at 3,36 %
-yield against Yahoo's 1,68 %.
+**started** paying. A **cut** is the mirror image, and the guard made it worse:
+Yahoo's rate falls, the deviation from last year's total passes 50 %, and the
+guard swapped the correct lower rate for last year's higher one. The bigger
+the cut, the more certainly the stale number won.
 
-Seven stocks have `utbytte_per_aksje` equal to last year's total while the
-last payment × frequency is below 60 % of it: SALM, BAKKA, WAWI, HAUTO, MULTI,
-SWON and STST (31,9 % shown). **These are candidates, not verified errors.**
-SALM and BAKKA are documented above as cases where last payment × frequency is
-the *wrong* number, and WAWI carries a known extraordinary part. Verify HAUTO
-and STST first — they are the most extreme.
+Measured against raw Yahoo series for all 155 on 2026-09-24, and **every cut
+confirmed against the company's own notice to Oslo Børs**:
 
-Not auto-corrected, for the same reason as the part-year case: every rule
-simulated so far produces an obviously wrong figure somewhere. The NewsWeb
-split (ordinary vs extraordinary) is the most promising lever.
+| Stock | Shown | Actually paid, last 12 months | Now | Source |
+|---|---|---|---|---|
+| STST | 31,9 % | USD 0,135 per quarter | 12,9 % | notice 05.08.2026 |
+| HAUTO | 12,5 % | USD 0,52 → 0,49 → 0,08 per quarter | 6,4 % | notices Mar/May/Aug |
+| WAWI | 13,6 % | 9,59 + 5,79 NOK | 8,5 % | series |
+| ORK | 10,7 % | NOK 6,00 (10,00 in 2025) | 6,4 % | series |
+| POL | 10,2 % | NOK 3,30 (22,40 in 2025) | 5,4 % | series |
+| MULTI | 6,7 % | NOK 5,00 (10,00 in 2025) | 3,5 % | notice 10.02.2026 |
+| VISTIN | 6,9 % | NOK 1,00 (1,25 in 2025) | 5,5 % | series |
+| SALM | 3,9 % | NOK 10 (22 in 2025) | 1,8 % | notice 26.03.2026 |
+| BAKKA | 3,0 % | DKK 3,45 | 1,1 % | notice 09.02.2026 |
+
+> ⚠️ **Correction.** The table further up lists «halves SalMar and Bakkafrost»
+> as a way the uniform-series rule *breaks*, and on 2026-09-24 this file
+> repeated that claim to dismiss them as false positives. It was wrong both
+> times: SalMar paid NOK 22 in 2025 and **NOK 10** in 2026, Bakkafrost DKK
+> 3,45 against a prior NOK 13,37. Halving them was *right*. The judgement was
+> made from the numbers without reading the notices — which is the documented
+> lesson from GSF, repeated.
+
+**POL was three rules deep.** The guard picked last year's 22,40 — a one-off
+— giving 36,7 %. The sanity check saw more than 3× the 5-year average and
+swapped in the average, 10,23 %. But that average itself contains the 22,40.
+The company paid 3,30 this year: 5,41 %. Same shape as 2020 Bulkers: each
+rule reasonable, the composition wrong.
+
+**VISTIN is the case the guard was built for.** Yahoo stacked 1,25 + 1,00 =
+2,25 (12,3 %). The guard caught it and chose 1,25; the fix chooses 1,00, which
+is what the last twelve months actually paid.
+
+`velg_arsrate()` uses trailing 12 months **instead of** last year's total only
+when all three hold:
+
+1. **the guard has already fired** — no stock the guard leaves alone is touched;
+2. **trailing is lower** — the rule can only lower a number, never raise it. GSF,
+   HUNT and AKAST, where trailing contains extraordinary distributions and
+   would give 116 %, 23,9 % and 21,3 %, are untouched because trailing is higher
+   there;
+3. **the window is full** — at least as many payments as the frequency implies.
+   A semi-annual payer whose September payment falls a day outside the window
+   has half a year in it, not a cut. Same window trap that made SATS quarterly.
+
+Simulated on all 155: exactly nine change, all nine above. The real
+`hent_aksje()` was run for the nine and for a control group (GSF, HUNT, AKAST,
+SATS, KOG, EQNR, DNB) — the nine move as simulated, the controls do not.
+Tests: `TestVelgArsrate` (10).
+
+**Still wrong, different class:** GSF shows ~35,6 % — the sanity check's
+5-year average, which contains the Cermaq sale proceeds. Trailing is *higher*
+there, so this rule correctly leaves it alone; it needs the ordinary/
+extraordinary split, not a threshold.
+
+**STST's distributions are not dividends for tax.** Every 2026 notice says
+«The distribution will constitute a repayment of the Company's paid-in
+capital». In Norway that is tax-free and reduces the cost basis; the portfolio
+tax calculation treats it as a dividend at 37,84 %. Not fixed — see ROADMAP.
