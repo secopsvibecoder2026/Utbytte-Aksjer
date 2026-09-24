@@ -38,33 +38,25 @@ Rettet i eksisterende data samtidig: 2020 (1104 → 17,06 %), HUNT (203 → 14,7
 
 - [ ] ~~Vis advarsel på sider der `snitt5ar > 50%`~~ — mindre relevant nå; WEST på 37 % er høyeste gjenværende
 
-### Datakvalitet — hent ex-datoene fra NewsWeb, ikke utled dem fra Yahoo
+### Datakvalitet — ex-datoer fra NewsWeb (delvis gjort 24.09.2026)
 
-Dette er det største gjenstående punktet under «data må være korrekt», og
-neste steg etter rettelsene 17.09.2026.
+Punktet lovet opprinnelig at NewsWeb kunne gi flerårig historikk, slik at
+`frekvens` kunne utledes av intervaller og månedsmønsteret hentes i stedet
+for å gjettes. **Målingen 20.09.2026 viste at det ikke går:** arkivet går
+bare ~16 måneder tilbake — ingen ticker hadde mer enn to ulike år.
 
-`utbetalingsmaaneder` er i dag utledet av *hvilke måneder som går igjen* i
-Yahoo-serien. Det gir en måned, aldri en dato, og det bommer systematisk på to
-grupper: en kvartalsvis betaler trenger to hele år før alle fire månedene
-gjentar seg (DOF har to av fire), og et selskap som nettopp har lagt om har
-ingen gjentakelse å vise til. **17 av 155 har i dag en kortere liste enn
-frekvensen tilsier.**
+Det målingen støttet, er gjort:
 
-Oslo Børs publiserer den faktiske datoen. Meldingen «Key information relating
-to the cash dividend» bærer både ex-dato og betalingsdato, og
-`hent_utbyttesplitt()` leser allerede nettopp denne meldingstypen — parseren,
-utstederoppslaget og `_melding_passer_utbetaling()` finnes.
+- [x] **Neste ex-dato fra Oslo Børs' egen melding** — `hent_newsweb_ex_dato()`,
+      kjører etter DNB og har siste ord. Rettet EQNR (vi viste New York-datoen)
+      og ga HUNT og ELO ex-datoer vi aldri hadde vist. Se CLAUDE.md.
+- [x] **Betalingsdato fra samme melding** — 35 % av katalogen har den. Yahoo
+      har den ikke.
+- [ ] ~~Frekvens fra intervaller~~ — krever historikk NewsWeb ikke har.
+- [ ] ~~Månedsmønster fra NewsWeb~~ — samme grunn. Yahoo-serien forblir kilden.
 
-- [ ] Utvid parseren med `Ex-date` og `Payment date`
-- [ ] Lagre faktisk ex-dato og betalingsdato per utbetaling
-- [ ] Utled `frekvens` av **intervallene** mellom reelle datoer, ikke av
-      antall utbetalinger i et 12-månedersvindu — det er den dokumenterte
-      årsaken til SATS- og 2020-feilene
-- [ ] Behold månedsutledningen som fallback der meldingen mangler
-
-**Mål dekningen først.** 11 % av utstederne merker *utbyttetypen*; andelen som
-oppgir *datoer* er ikke målt, og den avgjør om dette er en ny primærkilde eller
-et supplement. Kjør en telling før noe bygges.
+Dekning (20.09.2026): 56 % har en utbyttemelding, 49 % gir ex-dato, 35 % gir
+betalingsdato.
 
 ### Prisvarsel via push-notifikasjon
 `malPris`-feltet og push-infrastruktur finnes allerede i Service Worker.

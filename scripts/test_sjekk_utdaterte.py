@@ -632,5 +632,40 @@ class TestFeilYfSymbol(unittest.TestCase):
                                f"{[x['ticker'] for x in v]}")
 
 
+
+class TestFeilBorssuffiks(unittest.TestCase):
+    """SWON sto som SWON.SW — Zürich, CHF — og porteføljen summerte det som NOK."""
+
+    def test_utenlandsk_suffiks_er_kritisk(self):
+        from sjekk_utdaterte import finn_feil_borssuffiks, ALVOR_KRITISK
+        v = finn_feil_borssuffiks([{"ticker": "SWON", "ticker_yf": "SWON.SW"}])
+        self.assertEqual(len(v), 1)
+        self.assertEqual(v[0]["type"], "feil_borssuffiks")
+        self.assertEqual(v[0]["alvorlighet"], ALVOR_KRITISK)
+        self.assertIn("SWON.OL", v[0]["forslag"])
+
+    def test_oslo_er_ok_uansett_store_bokstaver(self):
+        from sjekk_utdaterte import finn_feil_borssuffiks
+        self.assertEqual(finn_feil_borssuffiks([
+            {"ticker": "EQNR", "ticker_yf": "EQNR.OL"},
+            {"ticker": "DNB", "ticker_yf": "dnb.ol"},
+        ]), [])
+
+    def test_mangler_suffiks_helt(self):
+        from sjekk_utdaterte import finn_feil_borssuffiks
+        self.assertEqual(len(finn_feil_borssuffiks([{"ticker": "X", "ticker_yf": "X"}])), 1)
+
+    def test_tom_ticker_yf_hoppes_over(self):
+        # Dekkes av andre sjekker; denne skal ikke støye.
+        from sjekk_utdaterte import finn_feil_borssuffiks
+        self.assertEqual(finn_feil_borssuffiks([{"ticker": "X", "ticker_yf": ""}]), [])
+
+    def test_hele_katalogen_er_ren(self):
+        import json, os
+        from sjekk_utdaterte import finn_feil_borssuffiks
+        sti = os.path.join(os.path.dirname(__file__), "..", "data", "tickers.json")
+        self.assertEqual(finn_feil_borssuffiks(json.load(open(sti, encoding="utf-8"))), [])
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

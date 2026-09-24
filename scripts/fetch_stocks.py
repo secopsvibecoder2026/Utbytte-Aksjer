@@ -167,6 +167,32 @@ def _newsweb_utsteder(ticker: str) -> str:
     return _NEWSWEB_UTSTEDER_EKSTRA.get(ticker, ticker)
 
 
+_NEWSWEB_LISTE = {}   # utsteder → meldingsliste, fylt én gang per kjøring
+
+
+def _newsweb_meldinger(ticker: str) -> list:
+    """Meldingslista for en ticker, hentet én gang per kjøring.
+
+    Tre funksjoner leser den samme lista — rapportdato, utbyttesplitt og
+    ex-dato. Uten mellomlager ble den hentet opptil tre ganger per ticker,
+    fire ganger om dagen.
+
+    Kaster videre ved nettverksfeil, slik kallstedene alltid har forventet;
+    en feilet henting lagres ikke, så neste kall prøver på nytt.
+    """
+    global _NEWSWEB_API
+    if _NEWSWEB_API is None:
+        _NEWSWEB_API = _newsweb_api_base()
+    utsteder = _newsweb_utsteder(ticker)
+    if utsteder not in _NEWSWEB_LISTE:
+        resp = _newsweb_post(
+            f"{_NEWSWEB_API}/v1/newsreader/list"
+            f"?issuer={urllib.parse.quote(utsteder, safe='')}&limit=500"
+        )
+        _NEWSWEB_LISTE[utsteder] = resp.get("data", {}).get("messages", []) or []
+    return _NEWSWEB_LISTE[utsteder]
+
+
 def hent_newsweb_rapport_dato(ticker: str) -> str | None:
     """
     Henter neste kvartalsrapport-dato for en aksje fra Newsweb Oslo Børs.
@@ -178,13 +204,7 @@ def hent_newsweb_rapport_dato(ticker: str) -> str | None:
         print(f"  Newsweb API: {_NEWSWEB_API}")
 
     try:
-        resp = _newsweb_post(
-            f"{_NEWSWEB_API}/v1/newsreader/list"
-            f"?issuer={urllib.parse.quote(_newsweb_utsteder(ticker), safe='')}&limit=500"
-        )
-        messages = resp.get("data", {}).get("messages", [])
-
-        for msg in messages:
+        for msg in _newsweb_meldinger(ticker):
             title = msg.get("title", "").lower()
             if "financial calendar" in title or "finansiell kalender" in title:
                 msg_id = msg.get("messageId")
@@ -792,12 +812,8 @@ def hent_utbyttesplitt(ticker, aksje=None):
         _NEWSWEB_API = _newsweb_api_base()
     rad = aksje if isinstance(aksje, dict) else {}
     try:
-        resp = _newsweb_post(
-            f"{_NEWSWEB_API}/v1/newsreader/list"
-            f"?issuer={urllib.parse.quote(_newsweb_utsteder(ticker), safe='')}&limit=500"
-        )
         sett = 0
-        for msg in resp.get("data", {}).get("messages", []):
+        for msg in _newsweb_meldinger(ticker):
             tittel = (msg.get("title") or "").lower()
             if "dividend" not in tittel or "key information" not in tittel:
                 continue
@@ -822,6 +838,127 @@ def hent_utbyttesplitt(ticker, aksje=None):
                 return splitt
     except Exception as e:
         print(f"    Advarsel utbyttesplitt [{ticker}]: {e}")
+    return None
+
+
+# ── EX-DATO FRA OSLO BØRS ─────────────────────────────────────────────────────
+#
+# Yahoo og DNB Markets ga EQNR ex-dato 25. november fra 11. september — samme
+# dag som utbetalingen — og så 16. november fra 23. september. Equinors egen
+# melding til Oslo Børs sier «Ex-date Oslo Børs: 13 November 2026» og
+# «Ex-date New York Stock Exchange: 16 November 2026». Vi viste New York-
+# datoen. Den som kjøpte på Oslo Børs 13.–15. november i tro på at utbyttet
+# fulgte med, ville ikke fått det.
+#
+# Sammenslåingen av Yahoo og DNB lot dessuten den *seneste* datoen vinne. Ved
+# dobbeltnotering er den seneste nettopp den utenlandske.
+#
+# Meldingen «Key information relating to the cash dividend» er primærkilden,
+# og den skiller mellom børsene. Målt 20.09.2026: 49 % av katalogen har en
+# slik melding med ex-dato, men arkivet går bare ~16 måneder tilbake — så dette
+# brukes for den *neste* ex-datoen, ikke for historikken.
+
+_MND_NAVN = ("january", "february", "march", "april", "may", "june",
+             "july", "august", "september", "october", "november", "december")
+
+# To datoformater forekommer side om side: «13 November 2026» (KOG, DNB,
+# EQNR) og «August 26, 2026» (WAWI).
+_DATO_DM = r"(?P<d1>\d{1,2})\.?\s+(?P<m1>[A-Za-z]+)\.?,?\s+(?P<a1>\d{4})"
+_DATO_MD = r"(?P<m2>[A-Za-z]+)\.?\s+(?P<d2>\d{1,2})(?:st|nd|rd|th)?,?\s+(?P<a2>\d{4})"
+_DATO_ENTEN = f"(?:{_DATO_DM}|{_DATO_MD})"
+
+# Etiketten kan bære tekst før kolonet — «Ex-date Oslo Børs:», «Ex date (OSE):».
+# Begrenset til 40 tegn uten linjeskift, ellers sluker den halve meldingen.
+_EX_DATO_RE = re.compile(
+    r"ex[\s-]?date(?P<merkelapp>[^:\n]{0,40})?:\s*(?:o/a\s+|from\s+)?" + _DATO_ENTEN, re.I)
+_BETALINGSDATO_RE = re.compile(
+    r"payment\s+date(?:[^:\n]{0,40})?:\s*(?:o/a\s+|from\s+)?" + _DATO_ENTEN, re.I)
+
+_ANDRE_BORSER = ("new york", "nyse", "nasdaq", "london", "stockholm", "copenhagen", "frankfurt")
+
+# Hvor langt tilbake en melding kan ligge og fortsatt gjelde et kommende
+# utbytte. EQNRs melding kom 22. juli for en ex-dato 13. november.
+NEWSWEB_EX_DAGER = 270
+MAKS_EX_MELDINGER = 3
+
+
+def _dato_fra_treff(m):
+    """ISO-dato fra et datotreff, eller None om måneden ikke er en måned.
+
+    Navnet må være et *prefiks* av et månedsnavn: det tar «Apr» og «Sept.»,
+    men avviser «Aprilis». Avkorting til tre bokstaver gjorde det ikke.
+    """
+    dag = m.group("d1") or m.group("d2")
+    mnd = (m.group("m1") or m.group("m2") or "").lower().rstrip(".")
+    ar = m.group("a1") or m.group("a2")
+    nr = next((i for i, navn in enumerate(_MND_NAVN, 1)
+               if len(mnd) >= 3 and navn.startswith(mnd)), None)
+    if not nr:
+        return None
+    try:
+        return datetime.date(int(ar), nr, int(dag)).isoformat()
+    except ValueError:
+        return None
+
+
+def _parse_ex_dato(tekst):
+    """(ex_dato, betaling_dato) for Oslo Børs fra en utbyttemelding.
+
+    En merkelapp som nevner en annen børs forkastes; en som nevner Oslo
+    foretrekkes foran en umerket. Rekkefølgen i meldingen avgjør ikke —
+    Equinor kunne like gjerne ha listet New York først.
+    """
+    kandidater = []
+    for m in _EX_DATO_RE.finditer(tekst):
+        d = _dato_fra_treff(m)
+        if not d:
+            continue
+        merke = (m.group("merkelapp") or "").lower()
+        if any(b in merke for b in _ANDRE_BORSER):
+            continue
+        kandidater.append((0 if ("oslo" in merke or "ose" in merke) else 1, d))
+    if not kandidater:
+        return None, None
+    ex = sorted(kandidater)[0][1]
+    b = _BETALINGSDATO_RE.search(tekst)
+    bet = _dato_fra_treff(b) if b else None
+    # En betalingsdato før ex-datoen hører til noe annet i meldingen.
+    if bet and bet < ex:
+        bet = None
+    return ex, bet
+
+
+def hent_newsweb_ex_dato(ticker, i_dag=None):
+    """Neste ex-dato (og betalingsdato) for Oslo Børs, eller None.
+
+    Går gjennom de nyeste utbyttemeldingene og stopper ved den første med en
+    ex-dato som er passert — meldingene er nyest først, så alt eldre gjelder
+    eldre utbytter. Feil svelges: en aksje skal aldri feile på dette.
+    """
+    i_dag = i_dag or datetime.date.today()
+    grense = (i_dag - datetime.timedelta(days=NEWSWEB_EX_DAGER)).isoformat()
+    try:
+        sett = 0
+        for msg in _newsweb_meldinger(ticker):
+            tittel = (msg.get("title") or "").lower()
+            if "dividend" not in tittel or "key information" not in tittel:
+                continue
+            if (msg.get("publishedTime") or "")[:10] < grense or sett >= MAKS_EX_MELDINGER:
+                break
+            sett += 1
+            full = _newsweb_get(
+                f"{_NEWSWEB_API}/v1/newsreader/message"
+                f"?messageId={urllib.parse.quote(str(msg.get('messageId')), safe='')}"
+            )
+            body = full.get("data", {}).get("message", {}).get("body", "")
+            ex, bet = _parse_ex_dato(html.unescape(re.sub(r"<[^>]+>", "\n", body)))
+            if not ex:
+                continue
+            if ex < i_dag.isoformat():
+                return None
+            return {"ex_dato": ex, "betaling_dato": bet}
+    except Exception as e:
+        print(f"    Advarsel NewsWeb ex-dato [{ticker}]: {e}")
     return None
 
 
@@ -6955,6 +7092,24 @@ def main():
                                 (dnb_annual / aksje["pris"]) * 100, 2
                             )
         print(f"  DNB oppdaterte ex_dato for {dnb_treff} aksjer")
+
+    # ── Oslo Børs' egen melding har siste ord om ex-datoen ───────────────────
+    # Kjøres etter DNB med vilje. Yahoo og DNB skiller ikke mellom børsene, og
+    # sammenslåingen over lar den seneste datoen vinne — ved dobbeltnotering
+    # er det den utenlandske. Se kommentaren ved hent_newsweb_ex_dato().
+    print("\nHenter ex-datoer fra Oslo Børs (NewsWeb)...")
+    nw_rettet = 0
+    for aksje in resultater:
+        nw = hent_newsweb_ex_dato(aksje["ticker"])
+        if not nw:
+            continue
+        if nw["ex_dato"] != aksje.get("ex_dato"):
+            print(f"    {aksje['ticker']}: ex_dato {aksje.get('ex_dato')} → {nw['ex_dato']} (Oslo Børs)")
+            aksje["ex_dato"] = nw["ex_dato"]
+            nw_rettet += 1
+        if nw.get("betaling_dato"):
+            aksje["betaling_dato"] = nw["betaling_dato"]
+    print(f"  NewsWeb rettet ex_dato for {nw_rettet} aksjer")
 
     # ── 5. Strukturert datakvalitetsrapport ───────────────────────────────────
     linje = "=" * 54

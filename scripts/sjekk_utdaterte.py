@@ -260,6 +260,38 @@ def finn_feil_yf_symbol(symbolkart: dict, tickere: list) -> list:
     return varsler
 
 
+def finn_feil_borssuffiks(tickere: list) -> list:
+    """`ticker_yf` peker på en annen børs enn Oslo.
+
+    **SWON (funnet 2026-09-24).** `ticker_yf` var `SWON.SW` — SoftwareOne på
+    SIX i Zürich, priset i CHF. Siden viste kurs 8,92 til en norsk leser, mens
+    `SWON.OL` handles til rundt 101 NOK. Porteføljen regner `antall * pris`
+    uten valutaomregning, så 100 aksjer sto som 892 kr i stedet for ~10 100,
+    og en kjøpskurs ført i NOK så ut som et tap på 90 %.
+
+    Ingen annen sjekk kunne se det: navnet stemte, kursen var ikke null, og
+    `finn_feil_yf_symbol()` sammenligner bare det som står *foran* punktumet.
+    Hele katalogen er Oslo Børs, så alt annet enn `.OL` er feil.
+    """
+    varsler = []
+    for t in tickere:
+        ticker = t.get("ticker")
+        yf_ticker = (t.get("ticker_yf") or "").strip().upper()
+        if not ticker or not yf_ticker or yf_ticker.endswith(".OL"):
+            continue
+        varsler.append(_varsel(
+            ticker,
+            "feil_borssuffiks",
+            ALVOR_KRITISK,
+            f"ticker_yf er «{yf_ticker}» — ikke en Oslo Børs-notering. Kurs og "
+            "utbytte kommer da i en annen valuta enn NOK, og porteføljen summerer "
+            "dem som kroner.",
+            f"Sett ticker_yf til «{yf_ticker.split('.', 1)[0]}.OL» i tickers.json "
+            "hvis aksjen er notert i Oslo, og verifiser at Yahoo svarer i NOK.",
+        ))
+    return varsler
+
+
 def finn_duplikat_ticker_yf(tickere: list) -> list:
     """
     Samme ticker_yf på to oppføringer gir identiske data fra Yahoo for begge.
@@ -594,6 +626,7 @@ def analyser(tickere, aksjer, hentelogg, status, idag,
     varsler.extend(finn_ubrukte_symbolkart(symbolkart or {}, tickere, noteringer))
     # Krever verken historikk eller nett — leser bare kartet mot tickers.json.
     varsler.extend(finn_feil_yf_symbol(symbolkart or {}, tickere))
+    varsler.extend(finn_feil_borssuffiks(tickere))
     varsler.extend(finn_duplikat_ticker_yf(tickere))
     varsler.extend(finn_duplikat_navn(tickere))
     varsler.extend(finn_manglende_data(tickere, aksjer, hentelogg))
