@@ -1169,6 +1169,77 @@ def bor_hente_utbyttesplitt(a):
         return False
 
 
+def lag_betalt_boks(a, nf):
+    """«Faktisk betalt» — det selskapet har betalt, ved siden av hovedtallet.
+
+    Tabellen står på alle sider med utbyttehistorikk. Setningen under den står
+    bare der det viste tallet ligger vesentlig *over* det som er betalt — det
+    er der leseren trenger den, og en setning som står overalt ville bare økt
+    malandelen (se «Breaking the template» i CLAUDE.md).
+
+    Snitt for flere år enn selskapet har betalt i vises ikke som egne rader;
+    de ville gjentatt samme tall. En fotnote sier i stedet fra hvilket år.
+    """
+    rader = utbytte_perioder(a)
+    if not rader:
+        return ""
+    if not (a.get("utbytte_12m") or any((a.get("utbytte_per_ar") or {}).values())):
+        return ""
+
+    def periode_tekst(r):
+        if r["periode"] == "12m":
+            return "Siste 12 mnd"
+        if r["periode"] == "1":
+            return f"{r['til']}"
+        # Kort med vilje: med «Snitt 5 år (2021–2025)» ble tabellen for bred
+        # for 390 px, og yield-kolonnen — den viktigste — havnet utenfor skjermen.
+        # Årsspennet holdes samlet: uten det brøt «2024–25» etter tankestreken.
+        return f'Snitt <span class="nowrap">{r["fra"]}–{str(r["til"])[2:]}</span>'
+
+    html_rader, avkortet, over_kurs = [], None, False
+    for r in rader:
+        if r["ar_brukt"] is not None and r["ar_brukt"] < r["ar_onsket"]:
+            avkortet = r["fra"]
+            continue
+        if r["yield"] is None:
+            over_kurs = True
+        y = f"{nf(r['yield'], 2)} %" if r["yield"] is not None else "—"
+        html_rader.append(
+            f"<tr><td>{periode_tekst(r)}</td><td>{nf(r['belop'], 2)} kr</td><td>{y}</td></tr>")
+
+    fotnoter = []
+    if avkortet:
+        fotnoter.append(f"Utbytte i vår historikk fra {avkortet}.")
+    if over_kurs:
+        fotnoter.append("— betyr at beløpet er over to ganger dagens kurs, som regel en "
+                        "engangsutdeling; det vises ikke som yield.")
+
+    forklaring = ""
+    ovb = vist_over_betalt(a)
+    if ovb:
+        vist, betalt = ovb
+        if not a.get("utbytte_12m"):
+            forklaring = (f"<p>Direkteavkastningen over er {nf(vist, 2)} %, men "
+                          "selskapet har ikke hatt noe utbytte med ex-dato de siste "
+                          "12 månedene.</p>")
+        else:
+            forklaring = (f"<p>Direkteavkastningen over er {nf(vist, 2)} %. Det som faktisk "
+                          f"er betalt de siste 12 månedene, tilsvarer {nf(betalt, 2)} % av "
+                          "dagens kurs.</p>")
+
+    return (
+        '<div class="betalt-seksjon">'
+        '<h2>Faktisk betalt utbytte</h2>'
+        f'{forklaring}'
+        '<table class="betalt-tabell"><thead><tr><th>Periode</th>'
+        '<th>Per aksje/år</th><th>Yield</th></tr></thead>'
+        f'<tbody>{"".join(html_rader)}</tbody></table>'
+        '<p class="betalt-fotnote">Summert etter ex-dato, inkludert eventuelle '
+        'ekstraordinære utbytter. Yield regnet mot dagens kurs. ' + " ".join(fotnoter) + '</p>'
+        '</div>'
+    )
+
+
 def lag_ekstraordinaer_note(a, nf):
     """Sier fra når en høy direkteavkastning inneholder et ekstraordinært utbytte.
 
@@ -1309,6 +1380,111 @@ def lag_delaar_varsel(a, nf):
         + sluttavsnitt +
         '</div>'
     )
+
+
+# ── DET SOM FAKTISK ER BETALT ──────────────────────────────────────────────────
+#
+# Hovedtallet «direkteavkastning» er et *anslag*: Yahoos rate pluss en kjede
+# av regler som skal rette den. Hver regel har vært riktig for én form og gal
+# for en annen — målt 24.09.2026 viste fem aksjer mer enn de har betalt:
+# GOD (et varslet engangsutbytte regnet som årlig), KID og BOR (Yahoos rate
+# dobbelt så høy, men under vaktens 50 %-grense), REACH og MGN (ingen
+# utbetaling på 14–16 måneder, likevel vist med yield).
+#
+# Tallene under er ikke anslag. De er summen av utbetalingene i Yahoos serie,
+# og kan derfor ikke finne opp et utbytte. De lagres som *beløp*; yielden
+# regnes ved visning mot dagens kurs, så den følger kursoppdateringene.
+#
+# Serien er indeksert på **ex-dato**, ikke utbetalingsdato — samme felle som
+# WAWI-saken 17.09.2026. Etikettene sier «etter ex-dato».
+
+BETALT_ANTALL_AR = 5
+
+
+def betalt_fra_serie(dividends, i_dag):
+    """(sum 12 mnd, antall 12 mnd, {år: sum} for siste hele år, første år).
+
+    `utbytte_per_ar` holder de siste BETALT_ANTALL_AR *hele* kalenderårene,
+    med 0 for år uten utbetaling. Hvorvidt en 0 betyr «betalte ikke» eller
+    «fantes ikke ennå» avgjøres av `utbytte_forste_ar` ved visning.
+    """
+    if dividends is None or dividends.empty:
+        return 0.0, 0, {}, None
+    idx = dividends.index
+    datoer = [d.date() if hasattr(d, "date") else d for d in idx]
+    grense = i_dag - datetime.timedelta(days=365)
+    siste = [float(v) for d, v in zip(datoer, dividends.values) if d > grense]
+    sist_hele = i_dag.year - 1
+    per_ar = {str(ar): 0.0 for ar in range(sist_hele - BETALT_ANTALL_AR + 1, sist_hele + 1)}
+    for d, v in zip(datoer, dividends.values):
+        if str(d.year) in per_ar:
+            per_ar[str(d.year)] += float(v)
+    per_ar = {k: round(v, 4) for k, v in per_ar.items()}
+    return round(sum(siste), 4), len(siste), per_ar, min(d.year for d in datoer)
+
+
+def utbytte_perioder(a):
+    """Snitt per år betalt, for siste 12 mnd og siste 1–5 hele kalenderår.
+
+    Liste av dicter: {"periode", "belop", "yield", "fra", "til", "ar_brukt",
+    "ar_onsket"}. `periode` er "12m" eller "1"–"5". `yield` er None når beløpet overstiger 2× kursen — samme
+    grense som Sjekk 9 og utbetalt_hittil(): 2020 Bulkers har betalt ~30×
+    kursen på 12 måneder, og «2 116 %» som et faktum hjelper ingen.
+
+    Et år før selskapets første utbytte telles ikke som 0 — en ny betaler med
+    to års historikk får «snitt 2 år», og `ar_brukt` < `ar_onsket` sier ifra.
+    Returnerer [] når feltene mangler (før første fulle henting).
+    """
+    if a.get("utbytte_12m") is None or not a.get("utbytte_per_ar"):
+        return []
+    pris = a.get("pris") or 0
+
+    def rad(periode, belop, vindu=None, onsket=None):
+        y = round(belop / pris * 100, 2) if pris > 0 and belop <= 2 * pris else None
+        return {"periode": periode, "belop": round(belop, 2), "yield": y,
+                "fra": min(vindu) if vindu else None, "til": max(vindu) if vindu else None,
+                "ar_brukt": len(vindu) if vindu else None, "ar_onsket": onsket}
+
+    ut = [rad("12m", float(a["utbytte_12m"]))]
+    per_ar = a["utbytte_per_ar"]
+    forste = a.get("utbytte_forste_ar")
+    ar = sorted((int(k) for k in per_ar), reverse=True)   # nyeste først
+    for n in range(1, BETALT_ANTALL_AR + 1):
+        vindu = [y for y in ar[:n] if forste is None or y >= forste]
+        if not vindu:
+            break
+        snitt = sum(per_ar[str(y)] for y in vindu) / len(vindu)
+        ut.append(rad(str(n), snitt, vindu, n))
+    return ut
+
+
+VIST_OVER_BETALT_PP = 1.0
+VIST_OVER_BETALT_ANDEL = 0.3
+
+
+def vist_over_betalt(a):
+    """(vist yield, betalt 12 mnd yield) når det viste tallet er vesentlig høyere.
+
+    Bare den retningen: et vist tall *under* det betalte er som regel en
+    ekstraordinær utdeling i vinduet, og det er riktig å ikke vise den som
+    løpende yield. Et vist tall *over* det betalte er et utbytte vi har funnet
+    opp. Grensene — minst 1 prosentpoeng og minst 30 % — er satt slik at
+    avrunding og små kursbevegelser ikke gir støy.
+
+    Eksisterer i to eksemplarer av nødvendighet: her (malen) og Sjekk 10 i
+    valider_data.py, som må kjøre uten yfinance. TestVistOverBetalt
+    sammenligner dem mot det ekte datasettet.
+    """
+    if a.get("utbytte_12m") is None:
+        return None
+    pris = a.get("pris") or 0
+    vist = float(a.get("utbytte_yield") or 0)
+    if pris <= 0 or vist <= 0:
+        return None
+    betalt = float(a["utbytte_12m"]) / pris * 100
+    if vist - betalt >= VIST_OVER_BETALT_PP and (vist - betalt) / vist >= VIST_OVER_BETALT_ANDEL:
+        return round(vist, 2), round(betalt, 2)
+    return None
 
 
 def velg_arsrate(fjor_sum, trailing_sum, trailing_antall, frekvens):
@@ -1609,6 +1785,12 @@ def hent_aksje(meta):
             last_year_total = 0.0
             trailing_annual = 0.0
 
+        # Det selskapet faktisk har betalt — vises i egen boks ved siden av
+        # hovedtallet, og brukes av valider_data.py til å fange et vist tall
+        # som ligger over det som er utbetalt. Se utbytte_perioder().
+        utbytte_12m, utbytte_12m_antall, utbytte_per_ar, utbytte_forste_ar = (
+            betalt_fra_serie(dividends, today.date()))
+
         # Primær: sammenlign mot siste hele år (fanger opp WAWI-type periodestabling)
         ref = last_year_total if last_year_total > 0 else trailing_annual
         if ref > 0 and raw_div_rate > 0:
@@ -1797,6 +1979,10 @@ def hent_aksje(meta):
             "frekvens": frekvens,
             "ar_med_utbytte": ar_med_utbytte,
             "siste_utbytte": siste_utbytte,
+            "utbytte_12m": utbytte_12m,
+            "utbytte_12m_antall": utbytte_12m_antall,
+            "utbytte_per_ar": utbytte_per_ar,
+            "utbytte_forste_ar": utbytte_forste_ar,
             "historiske_utbytter": historiske_utbytter,
             # Månedene aksjen pleier å betale i, utledet av historikken. Gir
             # svar for alle som har betalt før, ikke bare de få med annonsert
@@ -3829,6 +4015,7 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     delaar_varsel = lag_delaar_varsel(a, _nf)
     # Gjensidig utelukkende: noten returnerer tom streng når varselet gjelder.
     delaar_varsel += lag_ekstraordinaer_note(a, _nf)
+    betalt_boks = lag_betalt_boks(a, _nf)
     # «annualisert» påstår at tallet dekker et helt år. Er det et delår, er
     # nettopp den påstanden gal, så merket erstatter den framfor å stå ved
     # siden av — «annualisert usikker» sa to ting som ikke kan være sanne
@@ -4200,15 +4387,23 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     .dark .vurdering-seksjon {{ background: #0f172a; border-color: #1e293b; }}
     .dark .vurdering-tekst {{ color: #cbd5e1; }}
     /* Betingede seksjoner — vises bare på sider der de har noe å si. */
-    .rekke-seksjon, .nedtur-seksjon, .utbetalingsaar-seksjon, .delaar-seksjon {{ margin: 1.5rem 0; padding: 1.1rem 1.25rem; background: #f8fafc; border-radius: 0.75rem; border: 1px solid #e2e8f0; }}
-    .rekke-seksjon h2, .nedtur-seksjon h2, .utbetalingsaar-seksjon h2, .delaar-seksjon h2 {{ font-size: 1rem; font-weight: 700; margin-bottom: 0.6rem; }}
-    .rekke-seksjon p, .nedtur-seksjon p, .utbetalingsaar-seksjon p, .delaar-seksjon p {{ font-size: 0.9rem; line-height: 1.75; color: #374151; margin: 0 0 0.6rem; }}
+    .rekke-seksjon, .nedtur-seksjon, .utbetalingsaar-seksjon, .delaar-seksjon, .betalt-seksjon {{ margin: 1.5rem 0; padding: 1.1rem 1.25rem; background: #f8fafc; border-radius: 0.75rem; border: 1px solid #e2e8f0; }}
+    .rekke-seksjon h2, .nedtur-seksjon h2, .utbetalingsaar-seksjon h2, .delaar-seksjon h2, .betalt-seksjon h2 {{ font-size: 1rem; font-weight: 700; margin-bottom: 0.6rem; }}
+    .rekke-seksjon p, .nedtur-seksjon p, .utbetalingsaar-seksjon p, .delaar-seksjon p, .betalt-seksjon p {{ font-size: 0.9rem; line-height: 1.75; color: #374151; margin: 0 0 0.6rem; }}
     .rekke-seksjon p:last-child, .nedtur-seksjon p:last-child, .utbetalingsaar-seksjon p:last-child, .delaar-seksjon p:last-child {{ margin-bottom: 0; }}
-    .dark .rekke-seksjon, .dark .nedtur-seksjon, .dark .utbetalingsaar-seksjon, .dark .delaar-seksjon {{ background: #0f172a; border-color: #1e293b; }}
-    .dark .rekke-seksjon p, .dark .nedtur-seksjon p, .dark .utbetalingsaar-seksjon p, .dark .delaar-seksjon p {{ color: #cbd5e1; }}
+    .dark .rekke-seksjon, .dark .nedtur-seksjon, .dark .utbetalingsaar-seksjon, .dark .delaar-seksjon, .dark .betalt-seksjon {{ background: #0f172a; border-color: #1e293b; }}
+    .dark .rekke-seksjon p, .dark .nedtur-seksjon p, .dark .utbetalingsaar-seksjon p, .dark .delaar-seksjon p, .dark .betalt-seksjon p {{ color: #cbd5e1; }}
     .rekke-seksjon {{ border-left: 3px solid #22c55e; }}
     .nedtur-seksjon {{ border-left: 3px solid #f59e0b; }}
     .delaar-seksjon {{ border-left: 3px solid #f59e0b; }}
+    .betalt-seksjon .betalt-tabell {{ display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; font-size: 0.875rem; margin: 0.25rem 0 0.5rem; }}
+    .betalt-seksjon .betalt-tabell th, .betalt-seksjon .betalt-tabell td {{ text-align: left; padding: 0.45rem 0.75rem; }}
+    .betalt-seksjon .betalt-tabell td:not(:first-child), .betalt-seksjon .betalt-tabell th:not(:first-child) {{ white-space: nowrap; text-align: right; }}
+    .betalt-tabell th {{ font-weight: 600; color: #6b7280; font-size: 0.75rem; }}
+    .betalt-tabell td:not(:first-child) {{ font-variant-numeric: tabular-nums; }}
+    .betalt-seksjon p.betalt-fotnote {{ font-size: 0.75rem; color: #6b7280; }}
+    .betalt-seksjon .nowrap {{ white-space: nowrap; }}
+    .dark .betalt-tabell th, .dark .betalt-seksjon p.betalt-fotnote {{ color: #94a3b8; }}
     /* Nøytral variant: forklarer en observasjon, advarer ikke om en feil. */
     .delaar-seksjon.delaar-noytral {{ border-left-color: #94a3b8; }}
     .dark .delaar-seksjon.delaar-noytral {{ border-left-color: #475569; }}
@@ -4437,6 +4632,8 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
   </div>
 
   {delaar_varsel}
+
+  {betalt_boks}
 
   {investor_badges_html}
 
