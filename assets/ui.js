@@ -487,7 +487,7 @@ const ARTIKLER = [
     ingress: '90 % av de kvartalsvise betalerne er sykliske, mot 20 % av de årlige. Jevn kontantstrøm har en pris de færreste regner på.',
     meta: '21. august 2026 · 11 min',
     tags: ['Guide', 'Kalender'],
-    sektorer: ['Shipping', 'Skipsfart', 'Energi', 'Energitjenester'],
+    sektorer: ['Shipping', 'Energi', 'Energitjenester'],
   },
   {
     slug: '/artikler/hva-er-payout-ratio/',
@@ -511,7 +511,7 @@ const ARTIKLER = [
     ingress: 'Hva som driver den høye yielden, hvorfor den svinger, og hva du bør analysere før du investerer.',
     meta: '6. juni 2026 · 12 min',
     tags: ['Sektor'],
-    sektorer: ['Shipping', 'Skipsfart'],
+    sektorer: ['Shipping'],
   },
   {
     slug: '/artikler/reinvestering-av-utbytte/',

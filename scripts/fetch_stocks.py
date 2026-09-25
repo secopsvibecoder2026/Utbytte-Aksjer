@@ -3175,14 +3175,6 @@ _SEKTOR_DRIVER_UTDYPET = {
         "kvartalsvise svingninger — gode biologiår gir rom for "
         "ekstraordinære utbytter."
     ),
-    "Skipsfart": (
-        "Sektoren lever av å frakte gods på kontrakt, og skiller seg fra "
-        "Shipping ved at inntektene i større grad er bundet opp i "
-        "langsiktige avtaler enn i spotrater. Det gir jevnere kontantstrøm "
-        "og mindre dramatiske utbyttesvingninger, men også mindre oppside "
-        "når ratene topper seg. Kontraktsdekning, fornyelser og "
-        "drivstoffkostnader er de viktigste tallene å følge."
-    ),
     "Kommunikasjonstjenester": (
         "Inntektene kommer fra abonnement, annonsering eller innhold, og "
         "forutsigbarheten avhenger sterkt av hvilken av delene som dominerer. "
@@ -4274,6 +4266,7 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
+{ADSENSE_HEAD}
   <!-- Google Analytics med Consent Mode v2 -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-X6C9PERKMB"></script>
   <script>
@@ -4883,6 +4876,7 @@ def generer_aksjesider(aksjer, root_dir):
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
+{ADSENSE_HEAD}
   <!-- Mørk modus init (før rendering for å unngå flimring) -->
   <script>(function(){{var t=localStorage.getItem('tema');if(t==='dark'||(!t&&window.matchMedia('(prefers-color-scheme: dark)').matches)){{document.documentElement.classList.add('dark');}}}})();</script>
   <!-- Favicon -->
@@ -5280,6 +5274,15 @@ def _site_nav_html(active=""):
 # «Oppdateres daglig» uten dato er en påstand; en gjettet dato er verre.
 DATA_SIST_OPPDATERT = ""
 
+# AdSense-skriptet i <head> på alle genererte sider. Det sto bare i
+# rapportkalenderen; de øvrige malene (aksje-, sektor-, oversikts- og
+# topplistesider — 175 av 200 URL-er i sitemap) hadde det aldri, så
+# annonser ville bare vist på 25 sider etter godkjenning. Én konstant, så
+# publisher-ID-en bare står ett sted i generatoren.
+ADSENSE_HEAD = """  <!-- Google AdSense (håndterer også CMP for EØS/UK) -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3981936786393038"
+     crossorigin="anonymous"></script>"""
+
 
 def sist_oppdatert_html():
     """Den synlige datolinja nederst i innholdet.
@@ -5377,8 +5380,6 @@ SEKTOR_IKON_PATH = {
     # Skip med bølger. Skroget må være bredest ØVERST — første forsøk gikk
     # motsatt vei og leste som en bøtte.
     "Shipping": "M2 18c1.5 1.4 3 1.4 4.5 0s3-1.4 4.5 0 3 1.4 4.5 0 3-1.4 4.5 0M5 9h14l-2 6H7L5 9zM12 9V3.5",
-    # Anker — skiller Skipsfart fra Shipping
-    "Skipsfart": "M12 8v13M12 8a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM8 12H5a7 7 0 0014 0h-3",
     # Antennemast med signalbuer
     "Telekommunikasjon": "M12 14a2 2 0 100-4 2 2 0 000 4zM12 14v7M7.8 7.8a6 6 0 000 8.4M16.2 7.8a6 6 0 010 8.4M4.9 4.9a10 10 0 000 14.2M19.1 4.9a10 10 0 010 14.2",
 }
@@ -5654,6 +5655,7 @@ def generer_sektorsider(aksjer, root_dir):
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
+{ADSENSE_HEAD}
   <!-- Google Analytics med Consent Mode v2 -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-X6C9PERKMB"></script>
   <script>
@@ -5854,6 +5856,7 @@ def generer_sektorsider(aksjer, root_dir):
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
+{ADSENSE_HEAD}
   <!-- Google Analytics med Consent Mode v2 -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-X6C9PERKMB"></script>
   <script>
@@ -6360,6 +6363,7 @@ def generer_topplistesider(aksjer, root_dir):
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
+{ADSENSE_HEAD}
   <!-- Google Analytics med Consent Mode v2 -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-X6C9PERKMB"></script>
   <script>
@@ -6785,9 +6789,7 @@ def generer_rapportkalender(aksjer, root_dir, i_dag=None):
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
-  <!-- Google AdSense (håndterer også CMP for EØS/UK) -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3981936786393038"
-     crossorigin="anonymous"></script>
+{ADSENSE_HEAD}
 
   <!-- Google Analytics med Consent Mode v2 -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-X6C9PERKMB"></script>

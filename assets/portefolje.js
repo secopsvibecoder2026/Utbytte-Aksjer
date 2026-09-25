@@ -2430,7 +2430,7 @@ function visAnalyse() {
     : `Lav konsentrasjonsrisiko. Største posisjon er ${escHtml(storstePos.navn)} med ${storstePos.pct.toFixed(1).replace('.', ',')}%, største sektor ${storsteSektor.sektor} med ${storsteSektor.pct.toFixed(0).replace('.', ',')}%.`;
 
   // ── DIMENSJON 3: Risikoprofil ─────────────────────────────────────────
-  const SYKLISKE = new Set(['Energi', 'Shipping', 'Skipsfart', 'Havbruk', 'Energitjenester']);
+  const SYKLISKE = new Set(['Energi', 'Shipping', 'Havbruk', 'Energitjenester']);
   const sykliskVerdi = beholdning.filter(a => SYKLISKE.has(a.sektor)).reduce((s, a) => s + a.verdi, 0);
   const sykliskPct   = totalVerdi > 0 ? sykliskVerdi / totalVerdi * 100 : 0;
   const d3 = sykliskPct < 20 ? 20 : sykliskPct < 30 ? 17 : sykliskPct < 40 ? 13 : sykliskPct < 50 ? 9 : sykliskPct < 60 ? 5 : 2;
