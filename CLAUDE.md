@@ -106,7 +106,7 @@ Utbytte-Aksjer/
 │   ├── storage.test.js        # Tests: favorites, watchlists
 │   └── ui.test.js             # Tests: formatting, scoring, classification
 ├── aksjer/                    # Auto-generated SEO pages (one per stock ticker, 163 pages)
-├── aksjer/sektor/             # Sector overview pages (16 sectors, auto-generated)
+├── aksjer/sektor/             # Sector overview pages (15 sectors, auto-generated)
 ├── bevegelser/                # Stock movement history pages
 ├── faq/                       # FAQ pages
 ├── innstillinger/             # Settings page (/innstillinger/)
@@ -372,7 +372,7 @@ liste. Legg derfor artikkelen inn i **`ARTIKLER`-konstanten øverst i `assets/ui
 ```
 
 `sektorer` må matche `sektor`-verdien i `data/aksjer.json` eksakt (f.eks. `Finans`,
-`Shipping`, `Skipsfart`, `Havbruk`). Feil verdi feiler stille — artikkelen dukker
+`Shipping`, `Havbruk`, `Energitjenester`). Feil verdi feiler stille — artikkelen dukker
 bare aldri opp i modalen.
 
 ### Sitemap: legg URL-en i generatoren, ikke i filen
@@ -447,7 +447,7 @@ There are **3 HTML templates** in `fetch_stocks.py`:
 | Template | Function | Output | Dark mode |
 |----------|----------|--------|-----------|
 | Stock page | `_aksje_side_html()` | `/aksjer/{TICKER}/index.html` (163 pages) | ✓ Tailwind `dark:` classes |
-| Sector page | `generer_sektorsider()` | `/aksjer/sektor/{slug}/index.html` (16 pages) | ✓ Tailwind `dark:` classes |
+| Sector page | `generer_sektorsider()` | `/aksjer/sektor/{slug}/index.html` (15 pages) | ✓ Tailwind `dark:` classes |
 | Overview page | inline in `generer_aksjesider()` | `/aksjer/index.html` | ✓ Inline CSS `.dark` selectors |
 
 **Key conventions for all 3 templates:**
@@ -796,6 +796,35 @@ is the clearest confirmation that Google has been back.
 
 If the checkpoint has not passed by 2026-10-06, move the date rather than the
 standard — there is no cost to waiting except delayed revenue.
+
+### Pre-application review (2026-09-25)
+
+Measured before the third application: 155 of 155 intros written, 11 articles
+at a median of 1 865 words, no broken links, no «kommer snart», roughly a
+third of each stock page shared with at least half of the others. The
+remaining risk is structural — 149 of ~200 indexed URLs come from one
+template — and more prose does not change that. Two faults were fixed:
+
+- **«Shipping» and «Skipsfart» were two sector pages for one industry**, in
+  two languages. The split was arbitrary (Frontline in one, Western Bulk in
+  the other) and the Skipsfart driver text claimed its members were
+  contract-based while two of them are spot dry bulk. Merged into
+  `Shipping`; Solstad Maritime went to `Energitjenester` beside Solstad
+  Offshore, and `WWI` joined `WWIB` in `Industri` — the A and B shares of
+  one company sat in different sectors. `/aksjer/sektor/skipsfart/` is now a
+  hand-written redirect; the generator no longer produces it. The sector
+  list on `/verktoy/sektorrebalansering/` named companies not in the catalog
+  (Golden Ocean, Aker Horizons, Hafslund Eco, Telia Norway, Nordic
+  Semiconductor under Helsevern) and was rewritten from `tickers.json`.
+- **The AdSense script was on 25 of 200 sitemap URLs.** None of the generated
+  templates except the report calendar carried it, so after approval ads
+  would have shown nowhere on the stock pages. `ADSENSE_HEAD` in
+  `fetch_stocks.py` now goes into every template; `/uke/` and `/bevegelser/`
+  got it by hand. `/personvern/` and `/vilkaar/` are left without on purpose.
+
+**After approval:** Google requires a certified CMP for ads in the EEA. Set up
+the GDPR message under «Privacy & messaging» in AdSense, and decide whether
+`consent.js` goes — two consent banners on one page is worse than either.
 
 **Queued behind approval:** automatic publishing to Facebook and Instagram — see
 «Automatisk publisering til Facebook og Instagram» in `ROADMAP.md`. Two checks there

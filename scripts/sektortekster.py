@@ -162,6 +162,26 @@ eksponering mot dagsraten. To shippingaksjer i samme tabell kan derfor være
 nesten motsatte investeringer, og kontraktsdekningen er det som avgjør
 hvilken av dem du har.</p>
 
+<p>Kostnadssiden domineres av drivstoff, mannskap og kapital. Drivstoff er
+den mest volatile, og hvem som bærer den kostnaden avhenger av
+kontraktsformen — i noen avtaler ligger den hos befrakteren, i andre hos
+rederiet. Det er en detalj som avgjør hvor mye en oljeprisoppgang faktisk
+betyr for resultatet.</p>
+
+<p>Miljøreguleringen er blitt en strukturell faktor. Krav til
+svovelinnhold i drivstoff, til energieffektivitet og til gradvis reduserte
+utslipp gjør at eldre og mindre effektive skip taper konkurransekraft eller
+må oppgraderes. For flåteeiere betyr det investeringer som konkurrerer med
+utbyttet, men også at eldre tonnasje faller ut av markedet raskere — noe som
+strammer tilbudet og støtter ratene for dem som har fornyet flåten.</p>
+
+<p>Gjeldsgraden avgjør hvem som overlever nedturen. Skip finansieres i stor
+grad med lån, og rentekostnaden løper uavhengig av om ratene er høye eller
+lave. Et rederi med lav belåning kan holde utbyttet gjennom et svakt år; et
+med høy belåning må prioritere bankforpliktelsene først. Balansen er derfor
+minst like viktig som ratenivået når man vurderer hvor sikkert et utbytte er
+i denne sektoren.</p>
+
 <p>Til slutt: <strong>ekstraordinære utbytter</strong> er vanligere her enn
 i noen annen sektor. Et rederi som selger skip i et sterkt marked deler
 gjerne ut salgssummen. Slike utbetalinger blåser opp yieldtallet for det
@@ -406,50 +426,6 @@ retning av store investeringer i årene som kommer. Det er samtidig en
 mulighet: metaller produsert med vannkraft har en lavere klimaprofil enn
 tilsvarende produsert på kull, og det kan gi en prispremie. For utbyttet er
 nettoeffekten på kort sikt likevel at kapital bindes opp.</p>
-""",
-
-    # ────────────────────────────────────────────────────────────────────
-    "Skipsfart": """
-<p>Skipsfart dekker her rederiene som frakter gods sjøveien, og den deler
-grunnmekanikk med shipping: ratene styrer inntekten, tilbudet er tregt, og
-utbyttet svinger deretter. Det som skiller selskapene i denne gruppen er
-først og fremst hvor mye av kapasiteten som er bundet opp i kontrakt.</p>
-
-<p>Et rederi som seiler i <strong>spotmarkedet</strong> selger transporten
-reise for reise til dagens pris. Inntjeningen følger da rateindeksen tett,
-og et sterkt kvartal kan gi et utbytte som ville vært utenkelig i et vanlig
-industriselskap. Et rederi på <strong>lange certepartier</strong> har leid
-ut skipene på flerårige kontrakter til en avtalt rate, og ligner mer på en
-utleier av infrastruktur: lavere topper, men en inntekt som lar seg
-planlegge. Kontraktsdekningen er dermed det enkelttallet som best forklarer
-hvorfor to skipsfartsaksjer oppfører seg ulikt.</p>
-
-<p>Kostnadssiden domineres av drivstoff, mannskap og kapital. Drivstoff er
-den mest volatile, og hvem som bærer den kostnaden avhenger av
-kontraktsformen — i noen avtaler ligger den hos befrakteren, i andre hos
-rederiet. Det er en detalj som avgjør hvor mye en oljeprisoppgang faktisk
-betyr for resultatet.</p>
-
-<p>Miljøreguleringen er blitt en strukturell faktor. Krav til
-svovelinnhold i drivstoff, til energieffektivitet og til gradvis reduserte
-utslipp gjør at eldre og mindre effektive skip taper konkurransekraft eller
-må oppgraderes. For flåteeiere betyr det investeringer som konkurrerer med
-utbyttet, men også at eldre tonnasje faller ut av markedet raskere — noe som
-strammer tilbudet og støtter ratene for dem som har fornyet flåten.</p>
-
-<p>Skipsverdier er en undervurdert del av bildet. Skip er omsettelige
-eiendeler med en annenhåndsmarkedspris som beveger seg med ratene. Et rederi
-kan realisere store gevinster ved å selge i et sterkt marked, og flere har
-delt ut slike gevinster som ekstraordinært utbytte. Det gir en høy yield det
-året, men det er kapital som deles ut, ikke løpende inntjening, og
-kapasiteten til å tjene penger er redusert tilsvarende.</p>
-
-<p>Gjeldsgraden avgjør hvem som overlever nedturen. Skip finansieres i stor
-grad med lån, og rentekostnaden løper uavhengig av om ratene er høye eller
-lave. Et rederi med lav belåning kan holde utbyttet gjennom et svakt år; et
-med høy belåning må prioritere bankforpliktelsene først. Balansen er derfor
-minst like viktig som ratenivået når man vurderer hvor sikkert et utbytte er
-i denne sektoren.</p>
 """,
 
     # ────────────────────────────────────────────────────────────────────
