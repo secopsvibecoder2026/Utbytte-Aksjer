@@ -84,5 +84,18 @@ class TestExDato(unittest.TestCase):
         self.assertIsNone(tk.sjekk_ex_dato({"ex_dato": "2026-11-16"}, None))
 
 
+
+class TestMarkdown(unittest.TestCase):
+    def test_teller_per_sjekk(self):
+        funn = {"DNB": [{"sjekk": "kursgraf_justert", "vist": 141.23, "kilde": 206.0, "alvor": "kritisk"}],
+                "EQNR": [{"sjekk": "kursgraf_justert", "vist": 165.47, "kilde": 224.8, "alvor": "kritisk"}]}
+        md = tk.markdown_rapport(I_DAG, 155, funn, [("X", "Yahoo: 429")])
+        self.assertIn("| `kursgraf_justert` | kritisk | 2 |", md)
+        self.assertIn("**2 med avvik**", md)
+        self.assertIn("X (Yahoo: 429)", md)
+
+    def test_ingen_avvik(self):
+        self.assertIn("Ingen avvik.", tk.markdown_rapport(I_DAG, 155, {}, []))
+
 if __name__ == "__main__":
     unittest.main(verbosity=1)

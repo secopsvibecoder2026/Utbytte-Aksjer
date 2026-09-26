@@ -241,10 +241,39 @@ def utbyttemeldinger(ticker, maks=3):
     return ut
 
 
+def markdown_rapport(i_dag, antall, resultat, feilet):
+    """Sammendrag for GitHub Actions: én linje per sjekk, eksempler under.
+
+    Er samme sjekk utløst på mange aksjer, er det nesten alltid én feil i
+    koden og ikke mange i dataene — derfor telles det per sjekk først.
+    """
+    per_sjekk = {}
+    for t, funn in resultat.items():
+        for f in funn:
+            per_sjekk.setdefault(f["sjekk"], []).append((t, f))
+    ut = [f"## Tallkontroll {i_dag.isoformat()}", "",
+          f"{antall} aksjer kontrollert mot Yahoos ujusterte rådata og Oslo Børs — "
+          f"**{len(resultat)} med avvik**, {len(feilet)} ikke kontrollert.", ""]
+    if not per_sjekk:
+        ut.append("Ingen avvik.")
+    else:
+        ut += ["| Sjekk | Alvor | Antall | Eksempler (vist → kilde) |", "|---|---|---|---|"]
+        for sjekk, liste in sorted(per_sjekk.items(), key=lambda x: -len(x[1])):
+            eks = "; ".join(f"{t} {f.get('vist')} → {f.get('kilde')}" for t, f in liste[:3])
+            ut.append(f"| `{sjekk}` | {liste[0][1]['alvor']} | {len(liste)} | {eks} |")
+    if feilet:
+        ut += ["", "Ikke kontrollert: " + ", ".join(f"{t} ({g})" for t, g in feilet[:10])]
+    ut += ["", "_Maskinell sammenligning. Etterprøving mot børsmeldingene gjøres av "
+           "tallkontroll-agenten (`.claude/agents/tallkontroll.md`)._"]
+    return "\n".join(ut)
+
+
 def main():
     p = argparse.ArgumentParser(description=__doc__.split("\n")[1])
     p.add_argument("tickere", nargs="*")
     p.add_argument("--json", action="store_true")
+    p.add_argument("--markdown", action="store_true",
+                   help="tabell for jobbsammendraget i GitHub Actions")
     p.add_argument("--uten-newsweb", action="store_true",
                    help="hopp over ex-dato mot Oslo Børs (raskere)")
     p.add_argument("--meldinger", metavar="TICKER",
@@ -288,7 +317,7 @@ def main():
         funn = kontroller(rad, pris, kh, kurs, utb, i_dag, nw)
         if funn:
             resultat[t] = funn
-        if not a.json:
+        if not (a.json or a.markdown):
             print(f"[{n + 1}/{len(valgt)}] {t}: {len(funn)} avvik", file=sys.stderr)
         time.sleep(0.4)
 
@@ -296,6 +325,10 @@ def main():
         print(json.dumps({"dato": i_dag.isoformat(), "kontrollert": len(valgt),
                           "avvik": resultat, "feilet": feilet},
                          ensure_ascii=False, indent=2))
+        return
+
+    if a.markdown:
+        print(markdown_rapport(i_dag, len(valgt), resultat, feilet))
         return
 
     print(f"\nTallkontroll {i_dag.isoformat()} — {len(valgt)} aksjer, "
