@@ -773,11 +773,37 @@ function byggListeFilter() {
 const _DEFENSIVE_SEKTORER = new Set(['Finans', 'Eiendom', 'Helse', 'Forsyning', 'Telekommunikasjon', 'Dagligvarer']);
 const _SYKLISKE_SEKTORER  = new Set(['Energi', 'Shipping', 'Sjømat', 'Materialer', 'Industri']);
 
+// Den sammenhengende rekken av år med utbytte — speiler utbytterekke() i
+// scripts/utvid_beskrivelser.py. `ar_med_utbytte` er et *antall* år med
+// utbytte noensinne; DNB fikk «21 år på rad» uten utbytte i 2009 og 2020.
+// null når utbytteaar mangler — da skal ingen «på rad»-påstand skrives.
+function utbytteRekke(a, iDag) {
+  if (!a || !Array.isArray(a.utbytteaar)) return null;
+  const sett = new Set(a.utbytteaar.map(Number));
+  const iAar = (iDag || new Date()).getFullYear();
+  let y = sett.has(iAar) ? iAar : iAar - 1;
+  let rad = 0;
+  while (sett.has(y)) { rad++; y--; }
+  return {
+    rad,
+    fra: rad ? y + 1 : null,
+    siste: sett.size ? Math.max(...sett) : null,
+    totalt: sett.size,
+    brutt: sett.size > rad,
+  };
+}
+
+// For merker og poeng: rekken når vi kjenner den, ellers antallet.
+function stabileAr(a) {
+  const r = utbytteRekke(a);
+  return r ? r.rad : (a.ar_med_utbytte || 0);
+}
+
 function beregnRisiko(a) {
   let poeng = 0;
   if (_SYKLISKE_SEKTORER.has(a.sektor)) poeng += 2;
   else if (!_DEFENSIVE_SEKTORER.has(a.sektor)) poeng += 1;
-  const ar = a.ar_med_utbytte || 0;
+  const ar = stabileAr(a);
   if (ar < 3) poeng += 2;
   else if (ar < 7) poeng += 1;
   const payout = a.payout_ratio || 0;
@@ -796,7 +822,7 @@ function beregnRisiko(a) {
 
 function beregnMal(a) {
   const mål = [];
-  if (_DEFENSIVE_SEKTORER.has(a.sektor) && (a.ar_med_utbytte || 0) >= 7 && (a.payout_ratio || 0) < 80 && (a.payout_ratio || 0) > 0) {
+  if (_DEFENSIVE_SEKTORER.has(a.sektor) && stabileAr(a) >= 7 && (a.payout_ratio || 0) < 80 && (a.payout_ratio || 0) > 0) {
     mål.push('stabil');
   }
   if ((a.utbytte_vekst_5ar || 0) > 3) mål.push('vekst');
@@ -849,7 +875,9 @@ function forklarMal(a) {
   if (mal.includes('stabil'))
     forklaringer.push({ mal: 'Stabil inntekt',
       tekst: `Passer investorer som vil ha forutsigbar utbytteinntekt uten store overraskelser. `
-           + `${ar} år med sammenhengende utbetaling i defensiv sektor gir god synlighet fremover.` });
+           + (utbytteRekke(a)
+               ? `${utbytteRekke(a).rad} år med sammenhengende utbetaling i defensiv sektor gir god synlighet fremover.`
+               : 'Lang utbyttehistorikk i defensiv sektor gir god synlighet fremover.') });
 
   if (mal.includes('vekst')) {
     const doblingsar = vekst > 0 ? Math.round(70 / vekst) : null;
@@ -4954,4 +4982,4 @@ function _annBygTopp() {
 }
 
 // Node.js test export
-if (typeof module !== 'undefined') module.exports = { utbyttePerioder, vistOverBetalt, modalBetaltBoks, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, fmt, formaterDato, yieldKlasse, payoutKlasse, vekstKlasse, beregnScore, beregnBaerekraft, beregnYtdInntekt, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote };
+if (typeof module !== 'undefined') module.exports = { utbytteRekke, stabileAr, utbyttePerioder, vistOverBetalt, modalBetaltBoks, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, fmt, formaterDato, yieldKlasse, payoutKlasse, vekstKlasse, beregnScore, beregnBaerekraft, beregnYtdInntekt, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote };

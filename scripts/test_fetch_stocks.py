@@ -1499,5 +1499,97 @@ class TestVistOverBetalt(unittest.TestCase):
             self.assertEqual(fetch_stocks.vist_over_betalt(a), valider_data.vist_over_betalt(a), a.get("ticker"))
 
 
+
+class TestUtbytterekke(unittest.TestCase):
+    """«År på rad» fra rekken, ikke fra antall år med utbytte (2026-09-26).
+
+    Tallkontrollen fant påstanden feil på 76 av 155 sider. Tilfellene under
+    er de virkelige: DNB uten utbytte i 2009 og 2020, Scatec som sluttet i 2023.
+    """
+    I_DAG = datetime.date(2026, 9, 26)
+    # DNB slik Yahoo har den: 2003–2008, 2010–2019, 2021–2026.
+    DNB = {"ar_med_utbytte": 22,
+           "utbytteaar": list(range(2003, 2009)) + list(range(2010, 2020)) + list(range(2021, 2027))}
+
+    def test_dnb_rekke_starter_etter_pandemien(self):
+        from fetch_stocks import utbytterekke
+        r = utbytterekke(self.DNB, self.I_DAG)
+        self.assertEqual((r["rad"], r["fra"], r["totalt"], r["brutt"]), (6, 2021, 22, True))
+
+    def test_arlig_betaler_teller_fra_i_fjor(self):
+        # Betaler i november: i september er årets utbytte ikke kommet ennå.
+        from fetch_stocks import utbytterekke
+        r = utbytterekke({"utbytteaar": [2022, 2023, 2024, 2025]}, self.I_DAG)
+        self.assertEqual(r["rad"], 4)
+
+    def test_stoppet_utbytte_gir_null(self):
+        from fetch_stocks import utbytterekke
+        r = utbytterekke({"utbytteaar": list(range(2015, 2024))}, self.I_DAG)
+        self.assertEqual((r["rad"], r["siste"], r["brutt"]), (0, 2023, True))
+
+    def test_uten_felt_ingen_rekke(self):
+        from fetch_stocks import utbytterekke
+        self.assertIsNone(utbytterekke({"ar_med_utbytte": 21}))
+
+    def test_ingen_pastand_uten_felt(self):
+        # Før første fulle henting finnes ikke utbytteaar. Da skal antallet
+        # aldri skrives som en rekke.
+        from fetch_stocks import _lag_utbytterekken, _driver_selskapsledd
+        a = {"ticker": "DNB", "navn": "DNB Bank ASA", "ar_med_utbytte": 21}
+        self.assertEqual(_lag_utbytterekken(a), "")
+        self.assertNotIn("på rad", _driver_selskapsledd(a, "Finans") or "")
+
+    def test_dnb_far_ikke_krisesetningen(self):
+        from fetch_stocks import _lag_utbytterekken, _driver_selskapsledd
+        a = dict(self.DNB, ticker="DNB", navn="DNB Bank ASA")
+        tekst = _driver_selskapsledd(a, "Finans") or ""
+        self.assertNotIn("finanskrisen", tekst)
+        self.assertNotIn("21 år på rad", tekst)
+        self.assertEqual(_lag_utbytterekken(a), "")  # 6 år er under terskelen
+
+    def test_lang_rekke_far_krisesetningen(self):
+        from fetch_stocks import _lag_utbytterekken
+        a = {"ticker": "X", "navn": "X ASA", "utbytteaar": list(range(2000, 2027))}
+        tekst = _lag_utbytterekken(a)
+        self.assertIn("27 år på rad", tekst)
+        self.assertIn("finanskrisen", tekst)
+
+    def test_stoppet_utbytte_sies_rett_ut(self):
+        from fetch_stocks import _driver_selskapsledd
+        a = {"ticker": "SCATC", "navn": "Scatec ASA", "ar_med_utbytte": 9,
+             "utbytteaar": list(range(2015, 2024))}
+        tekst = _driver_selskapsledd(a, "Fornybar energi") or ""
+        self.assertIn("ikke siden 2023", tekst)
+        self.assertNotIn("på rad", tekst)
+
+    def test_beskrivelsen_bruker_rekken(self):
+        from utvid_beskrivelser import lag_beskrivelse
+        t = {"ticker": "DNB", "navn": "DNB Bank ASA", "sektor": "Finans",
+             "bors": "Oslo Børs", "beskrivelse": ""}
+        tekst = lag_beskrivelse(t, dict(self.DNB, frekvens="Årlig", utbytte_yield=5.0))
+        self.assertNotIn("22 år på rad", tekst)
+        uten = lag_beskrivelse(t, {"ar_med_utbytte": 22, "frekvens": "Årlig", "utbytte_yield": 5.0})
+        self.assertNotIn("på rad", uten)
+
+    def test_samsvar_med_datasettet(self):
+        # Når feltet finnes, må antallet stemme med listen det bygger på.
+        sti = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "data", "aksjer.json")
+        with open(sti, encoding="utf-8") as f:
+            data = json.load(f)
+        rader = data["aksjer"] if isinstance(data, dict) else data
+        med = [a for a in rader if isinstance(a.get("utbytteaar"), list)]
+        if not med:
+            self.skipTest("utbytteaar finnes ikke før første fulle henting")
+        for a in med:
+            self.assertEqual(len(a["utbytteaar"]), a.get("ar_med_utbytte"), a["ticker"])
+
+
+class TestNfKurs(unittest.TestCase):
+    def test_norsk_tusenskille(self):
+        from fetch_stocks import _nf_kurs
+        self.assertEqual(_nf_kurs(1434), "1\u00a0434,00")   # Aker: ikke «1,434»
+        self.assertEqual(_nf_kurs(3.37), "3,37")             # ALNG: ikke «3»
+        self.assertEqual(_nf_kurs(None), "—")
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

@@ -10,7 +10,7 @@ Genererer redaksjonell, ikke-repetitiv prosa i tre avsnitt:
   3. Investorperspektiv: hva som driver utbyttet og hva man bør følge med på
 """
 
-import json, os
+import datetime, json, os
 
 
 def _nf(verdi, desimaler=1):
@@ -95,6 +95,52 @@ def _manuell_del(beskrivelse: str, sektor_driver: str = "") -> str:
     return " ".join(manuell).strip()
 
 
+def utbytterekke(a, i_dag=None):
+    """Den sammenhengende rekken av år med utbytte, regnet ut ved bygging.
+
+    `ar_med_utbytte` er et *antall* kalenderår med utbytte noensinne, og ble
+    lenge skrevet som «N år på rad». Tallkontrollen 26.09.2026 fant det feil på
+    76 av 155 sider: DNB fikk «21 år på rad, altså gjennom både finanskrisen og
+    pandemien» — og betalte ikke utbytte i 2009 eller 2020, akkurat de to
+    krisene. Scatec het «9 år på rad» og betalte sist i 2023.
+
+    Rekken telles bakover fra i år hvis selskapet har betalt i år, ellers fra
+    i fjor — et årlig utbytte i november er ikke borte i september. Er det
+    betalt verken i år eller i fjor, er rekken brutt (rad == 0).
+
+    Streng kalenderårstelling på vilje: et år uten ex-dato bryter rekken, også
+    når nabo-året har to. DNB 2021 hadde to utbetalinger fordi 2020 ble
+    hoppet over — å «bygge bro» der ville gjenskapt akkurat den feilen. Rekken
+    kan dermed bli for kort, aldri for lang. Yahoos historikk har også en
+    begynnelse, så `fra` er «minst tilbake til», ikke nødvendigvis starten.
+
+    Returnerer None når `utbytteaar` mangler (før første fulle henting) — da
+    skal ingen «på rad»-påstand skrives i det hele tatt.
+    """
+    aar = a.get("utbytteaar") if isinstance(a, dict) else None
+    if not isinstance(aar, list):
+        return None
+    sett = {int(x) for x in aar}
+    i_aar = (i_dag or datetime.date.today()).year
+    y = i_aar if i_aar in sett else i_aar - 1
+    rad = 0
+    while y in sett:
+        rad += 1
+        y -= 1
+    return {
+        "rad": rad,
+        "fra": y + 1 if rad else None,
+        "siste": max(sett) if sett else None,
+        "totalt": len(sett),
+        "brutt": len(sett) > rad,
+    }
+
+
+def _rekke_rad(a):
+    r = utbytterekke(a)
+    return r["rad"] if r else None
+
+
 def lag_beskrivelse(t: dict, a: dict) -> str:
     navn    = t["navn"]
     ticker  = t["ticker"]
@@ -137,13 +183,17 @@ def lag_beskrivelse(t: dict, a: dict) -> str:
     # ── Avsnitt 2: utbytteprofil ──
     deler2 = []
     freq_tekst = FREQ_MAP.get(frekvens, "")
-    if freq_tekst and ar_med > 0:
-        if ar_med >= 5:
-            ar_ledd = f"holdt dette gående i {ar_med} år på rad"
-        elif ar_med == 1:
+    # «På rad» krever den sammenhengende rekken, ikke antall år med utbytte
+    # noensinne — se utbytterekke() i fetch_stocks.py (DNB fikk «21 år på
+    # rad» uten utbytte i 2009 og 2020).
+    rad = _rekke_rad(a)
+    if freq_tekst and rad and rad > 0:
+        if rad >= 5:
+            ar_ledd = f"holdt dette gående i {rad} år på rad"
+        elif rad == 1:
             ar_ledd = "betalt utbytte det siste året"
         else:
-            ar_ledd = f"betalt utbytte de siste {ar_med} årene"
+            ar_ledd = f"betalt utbytte de siste {rad} årene"
         deler2.append(f"Utbyttet utbetales {freq_tekst}, og selskapet har {ar_ledd}.")
     elif freq_tekst:
         deler2.append(f"Utbyttet utbetales {freq_tekst}.")
