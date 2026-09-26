@@ -92,3 +92,4 @@ jobs:
           python scripts/test_sjekk_tema.py
           python scripts/test_sjekk_klasser.py
           python scripts/test_sjekk_antall.py
+          python scripts/test_tallkontroll.py
