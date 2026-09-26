@@ -872,7 +872,10 @@ _DATO_ENTEN = f"(?:{_DATO_NUM}|{_DATO_DM}|{_DATO_MD})"
 
 # «o/a», «from», «on or about», «about» foran datoen. STST skriver «Payment
 # date: on or about 1 September 2026», og uten prefikset matchet ingenting.
-_DATO_PREFIKS = r"(?:(?:on\s+or\s+)?about\s+|o/a\s+|from\s+|expected\s+(?:on\s+)?)?"
+# HUNT skriver «Payment date: Expected on or about 7 October 2026» — «expected»
+# og «on or about» sammen, som den første versjonen ikke tok (2026-09-26).
+_DATO_PREFIKS = (r"(?:expected\s+)?"
+                 r"(?:(?:on\s+or\s+)?about\s+|o/a\s+|from\s+|on\s+)?")
 
 # Etiketten kan bære tekst før kolonet — «Ex-date Oslo Børs:», «Ex date (OSE):».
 # Begrenset til 40 tegn uten linjeskift, ellers sluker den halve meldingen.
@@ -880,6 +883,15 @@ _EX_DATO_RE = re.compile(
     r"ex[\s-]?date(?P<merkelapp>[^:\n]{0,60})?:\s*" + _DATO_PREFIKS + _DATO_ENTEN, re.I)
 _BETALINGSDATO_RE = re.compile(
     r"payment\s+date(?:[^:\n]{0,40})?:\s*" + _DATO_PREFIKS + _DATO_ENTEN, re.I)
+
+_GODKJENNING_RE = re.compile(
+    r"date\s+of\s+approval(?:[^:\n]{0,40})?:\s*" + _DATO_PREFIKS + _DATO_ENTEN, re.I)
+# Ordlyd som sier at utbyttet ennå ikke er vedtatt.
+_FORBEHOLD_RE = re.compile(
+    r"subject\s+to\s+(?:\w+\s+){0,3}approval|will\s+propose|proposed\s+(?:\w+\s+){0,3}dividend",
+    re.I)
+# Grense mellom utbetalinger i én melding: «Dividend amount:» eller «Tranche N».
+_UTBETALING_GRENSE = re.compile(r"(?=\bdividend\s+amount\s*:|\btranche\s+\d+\s*:)", re.I)
 
 _ANDRE_BORSER = ("new york", "nyse", "nasdaq", "london", "stockholm", "copenhagen", "frankfurt")
 
@@ -942,6 +954,60 @@ def _parse_ex_dato(tekst):
     return ex, bet
 
 
+def _parse_utbetalinger(tekst):
+    """Alle utbetalingene i en utbyttemelding, én dict per ex-dato.
+
+    En melding kan dekke flere utbetalinger. Telenor meldte 5,00 i mai og
+    4,70 med ex-dato 15. oktober i samme melding; Public Property Invest fire
+    kvartalsvise. `_parse_ex_dato()` leste bare den første, og da den var
+    passert ga hentingen ingen ex-dato i det hele tatt — PUBLI viste «—» tre
+    dager før neste ex-dato (tallkontrollen 26.09.2026).
+
+    Hver blokk får også generalforsamlingsdatoen («Date of approval») og om
+    meldingen tar forbehold om godkjenning. Om forbeholdet fortsatt gjelder,
+    avgjør kallstedet — det avhenger av dagens dato.
+    """
+    blokker = [b for b in _UTBETALING_GRENSE.split(tekst) if b.strip()]
+    if len(blokker) < 2:
+        blokker = [tekst]
+    forbehold_i_teksten = bool(_FORBEHOLD_RE.search(tekst))
+    ut = []
+    sett = set()
+    for blokk in blokker:
+        ex, bet = _parse_ex_dato(blokk)
+        if not ex or ex in sett:
+            continue
+        sett.add(ex)
+        g = _GODKJENNING_RE.search(blokk) or (
+            _GODKJENNING_RE.search(tekst) if len(blokker) == 1 else None)
+        ut.append({
+            "ex_dato": ex,
+            "betaling_dato": bet,
+            "godkjenning_dato": _dato_fra_treff(g) if g else None,
+            "forbehold": forbehold_i_teksten,
+        })
+    return sorted(ut, key=lambda u: u["ex_dato"])
+
+
+def neste_utbetaling(tekst, i_dag):
+    """Første utbetaling med ex-dato i dag eller senere, eller None.
+
+    `ex_forbehold` er generalforsamlingsdatoen når utbyttet ennå ikke er
+    vedtatt: meldingen tar forbehold og godkjenningen er ikke passert. En
+    godkjenningsdato som er passert, betyr vedtatt — Telenors andre del ble
+    godkjent 19. mai selv om meldingen het «proposed».
+    """
+    i_dag_iso = i_dag.isoformat()
+    for u in _parse_utbetalinger(tekst):
+        if u["ex_dato"] < i_dag_iso:
+            continue
+        g = u["godkjenning_dato"]
+        uvedtatt = u["forbehold"] and (g is None or g >= i_dag_iso)
+        return {"ex_dato": u["ex_dato"], "betaling_dato": u["betaling_dato"],
+                "ex_forbehold": (g or "ukjent") if uvedtatt else None}
+    return None
+
+
 def hent_newsweb_ex_dato(ticker, i_dag=None):
     """Neste ex-dato (og betalingsdato) for Oslo Børs, eller None.
 
@@ -955,7 +1021,9 @@ def hent_newsweb_ex_dato(ticker, i_dag=None):
         sett = 0
         for msg in _newsweb_meldinger(ticker):
             tittel = (msg.get("title") or "").lower()
-            if "dividend" not in tittel or "key information" not in tittel:
+            # «distribution»: ENH erklærer utdelingene sine som tilbakebetaling
+            # av innbetalt kapital, og titlene sier aldri «dividend».
+            if not ("dividend" in tittel or "distribution" in tittel) or "key information" not in tittel:
                 continue
             if (msg.get("publishedTime") or "")[:10] < grense or sett >= MAKS_EX_MELDINGER:
                 break
@@ -965,12 +1033,12 @@ def hent_newsweb_ex_dato(ticker, i_dag=None):
                 f"?messageId={urllib.parse.quote(str(msg.get('messageId')), safe='')}"
             )
             body = full.get("data", {}).get("message", {}).get("body", "")
-            ex, bet = _parse_ex_dato(html.unescape(re.sub(r"<[^>]+>", "\n", body)))
-            if not ex:
+            tekst = html.unescape(re.sub(r"<[^>]+>", "\n", body))
+            if not _parse_utbetalinger(tekst):
                 continue
-            if ex < i_dag.isoformat():
-                return None
-            return {"ex_dato": ex, "betaling_dato": bet}
+            # Meldingen har datoer. Er alle passert, gjelder eldre meldinger
+            # eldre utbytter, og vi stopper som før.
+            return neste_utbetaling(tekst, i_dag)
     except Exception as e:
         print(f"    Advarsel NewsWeb ex-dato [{ticker}]: {e}")
     return None
@@ -2339,6 +2407,37 @@ def _nf_kurs(verdi):
     return f"{verdi:,.2f}".replace(",", "\u00a0").replace(".", ",")
 
 
+def ex_forbehold_gjelder(a, i_dag=None):
+    """Generalforsamlingsdatoen når utbyttet ennå ikke er vedtatt, ellers None.
+
+    Settes av NewsWeb-steget når meldingen tar forbehold om godkjenning og
+    godkjenningsdatoen ikke er passert. Sjekkes på nytt ved bygging, så et
+    felt fra en tidligere kjøring aldri henger igjen etter generalforsamlingen.
+    GOD og HUNT sto med «kjøp innen … for å motta utbytte» uten forbehold om
+    et utbytte generalforsamlingen ennå ikke hadde stemt over (2026-09-26).
+    """
+    g = a.get("ex_forbehold") if isinstance(a, dict) else None
+    ex = a.get("ex_dato") if isinstance(a, dict) else None
+    if not g or not ex:
+        return None
+    i_dag_iso = (i_dag or datetime.date.today()).isoformat()
+    if ex < i_dag_iso:
+        return None
+    if g != "ukjent" and g < i_dag_iso:
+        return None
+    return g
+
+
+def _forbehold_tekst(a):
+    """«forutsatt at generalforsamlingen 15. okt 2026 godkjenner det», eller ''."""
+    g = ex_forbehold_gjelder(a)
+    if not g:
+        return ""
+    if g == "ukjent":
+        return "forutsatt at generalforsamlingen godkjenner det"
+    return f"forutsatt at generalforsamlingen {_fmt_dato(g)} godkjenner det"
+
+
 def _fmt_dato(iso):
     """Formaterer ISO-dato til lesbar norsk form, f.eks. 14. mars 2026."""
     if not iso:
@@ -2486,7 +2585,14 @@ def _lag_analyse_tekst(a, sektor_snitt=None):
             kjop_str = f"{kjop_d.day}. {mnd[kjop_d.month-1]}"
             if dager > 0:
                 deler.append(
-                    f"Neste ex-dato er {_fmt_dato(ex)} — kjøp innen {kjop_str} for å motta utbytte."
+                    f"Neste ex-dato er {_fmt_dato(ex)} — kjøp innen {kjop_str} for å motta "
+                    # Beløpet bare når DNB oppga det for nettopp denne ex-datoen —
+                    # ellers kan det høre til en annen utbetaling (Telenor har to).
+                    # DNB-beløpet brukes bare når det er erklært i NOK.
+                    + (f"utbyttet på {_nf(a['annonsert_utbytte'], 2)} NOK"
+                       if a.get("annonsert_utbytte") and a.get("annonsert_ex") == ex
+                       else "utbytte")
+                    + (f", {_forbehold_tekst(a)}." if _forbehold_tekst(a) else ".")
                 )
             elif dager == 0:
                 deler.append(
@@ -3722,6 +3828,9 @@ def _lag_faq_seksjon(a, today):
                     f"Oslo Børs bruker T+2-oppgjør — handelen avregnes to børsdager etter kjøpsdato, "
                     f"så du må kjøpe senest én børsdag før ex-dato."
                 )
+                if _forbehold_tekst(a):
+                    svar += (f" Utbyttet er foreslått, ikke vedtatt — det utbetales "
+                             f"{_forbehold_tekst(a)}.")
             elif dager == 0:
                 # Uten denne grenen falt selve ex-dagen ned i «else» og siden påsto at
                 # datoen var passert og at neste ikke var bekreftet — samtidig som
@@ -4683,7 +4792,7 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
       <div class="val">{_nf(upa, 2)} {valuta}</div>
     </div>
     <div class="kcard">
-      <div class="label">Ex-dato</div>
+      <div class="label">Ex-dato{' · foreslått' if ex_forbehold_gjelder(a) else ''}</div>
       <div class="val" style="font-size:1rem">{_fmt_dato(ex)}</div>
     </div>
     <div class="kcard">
@@ -7423,7 +7532,16 @@ def main():
                 dnb_belop = dnb.get("utbytte", 0)
                 dnb_valuta = dnb.get("valuta", "")
                 if dnb_belop and dnb_belop > 0 and dnb_valuta in ("NOK", ""):
-                    aksje["siste_utbytte"] = dnb_belop
+                    # Annonsert, ikke betalt: `siste_utbytte` er det som faktisk
+                    # ble utbetalt, og appen viser det som «Siste utbytte». GOD
+                    # sto med 2,00 der — et forslag generalforsamlingen ennå
+                    # ikke hadde stemt over — mens siste utbetaling var 0,50.
+                    aksje["annonsert_utbytte"] = dnb_belop
+                    aksje["annonsert_ex"] = dnb.get("ex_dato")
+                    # Tallene før overstyringen, så NewsWeb-steget kan legge dem
+                    # tilbake om utbyttet viser seg å ikke være vedtatt.
+                    aksje["_for_dnb"] = {"utbytte_per_aksje": aksje.get("utbytte_per_aksje"),
+                                         "utbytte_yield": aksje.get("utbytte_yield")}
                     frekvens_map = {
                         "Månedlig": 12, "Kvartalsvis": 4,
                         "Halvårlig": 2, "Årlig": 1, "Uregelmessig": 1,
@@ -7454,6 +7572,24 @@ def main():
             nw_rettet += 1
         if nw.get("betaling_dato"):
             aksje["betaling_dato"] = nw["betaling_dato"]
+        # Generalforsamlingsdatoen når utbyttet ennå ikke er vedtatt, ellers
+        # fjernes feltet — det skal aldri henge igjen fra en tidligere kjøring.
+        if nw.get("ex_forbehold"):
+            aksje["ex_forbehold"] = nw["ex_forbehold"]
+            # Et forslag skal ikke bli hovedtallet. DNB-overstyringen over
+            # ganget GODs foreslåtte engangsutbytte med frekvensen og ga 14 %
+            # yield, mot 3,5 % faktisk betalt. Til generalforsamlingen har
+            # vedtatt det, står anslaget fra før overstyringen.
+            for_dnb = aksje.get("_for_dnb")
+            if for_dnb:
+                aksje["utbytte_per_aksje"] = for_dnb["utbytte_per_aksje"]
+                aksje["utbytte_yield"] = for_dnb["utbytte_yield"]
+                print(f"    {aksje['ticker']}: foreslått utbytte holdt utenfor yield "
+                      f"(generalforsamling {nw['ex_forbehold']})")
+        else:
+            aksje.pop("ex_forbehold", None)
+    for aksje in resultater:
+        aksje.pop("_for_dnb", None)
     print(f"  NewsWeb rettet ex_dato for {nw_rettet} aksjer")
 
     # ── 5. Strukturert datakvalitetsrapport ───────────────────────────────────

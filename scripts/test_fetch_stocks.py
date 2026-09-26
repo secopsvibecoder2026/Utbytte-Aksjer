@@ -1591,5 +1591,72 @@ class TestNfKurs(unittest.TestCase):
         self.assertEqual(_nf_kurs(3.37), "3,37")             # ALNG: ikke «3»
         self.assertEqual(_nf_kurs(None), "—")
 
+
+class TestUtbetalingerIMelding(unittest.TestCase):
+    """Flere utbetalinger i én melding, og forbehold om godkjenning (2026-09-26).
+
+    Tekstene er forkortet fra de virkelige meldingene på NewsWeb.
+    """
+    I_DAG = datetime.date(2026, 9, 26)
+    TEL = ("Dividend amount: NOK 5.00 per share\nEx-date: 20 May 2026\n"
+           "Record date: 21 May 2026\nPayment date: 2 June 2026\nDate of approval: 19 May 2026\n"
+           "Dividend amount: NOK 4.70 per share\nEx-date: 15 October 2026\n"
+           "Record date: 16 October 2026\nPayment date: 27 October 2026\nDate of approval:19 May 2026\n"
+           "Key information relating to the proposed cash dividend")
+    PUBLI = ("Tranche 1: \nDividend amount: SEK 0.25 per share.\nDate of approval: 26 June 2026.\n"
+             "Ex-date: 29 June 2026. \nPayment date: On or about 3 July 2026 for shares\n"
+             "Tranche 2: \nDividend amount: SEK 0.25 per share. \nDate of approval: 26 June 2026.\n"
+             "Ex-date: 29 September 2026. \nPayment date: On or about 5 October 2026 for shares\n"
+             "Tranche 3: \nDividend amount: SEK 0.25 per share. \nEx-date: 29 December 2026\n")
+    HUNT = ("Dividend amount: NOK 1.50 per share\nEx-date: 29 September 2026\n"
+            "Record date: 30 September 2026\nPayment date: Expected on or about 7 October 2026\n"
+            "Date of approval: Expected on 28 September 2026\n"
+            "Other: Please note that the cash dividend is subject to approval by the EGM")
+    GOD = ("The Board of Directors will propose to the Extraordinary General Meeting a "
+           "supplemental dividend of NOK 2.00 per share.\nSubject to approval by the "
+           "Extraordinary General Meeting\nDividend amount: 2.00\nEx date: 16 October 2026\n"
+           "Payment date: 28 October 2026\nDate of approval: 15 October 2026")
+
+    def test_telenor_andre_del(self):
+        from fetch_stocks import neste_utbetaling
+        u = neste_utbetaling(self.TEL, self.I_DAG)
+        self.assertEqual((u["ex_dato"], u["betaling_dato"]), ("2026-10-15", "2026-10-27"))
+        # «proposed» i teksten, men godkjent 19. mai: vedtatt.
+        self.assertIsNone(u["ex_forbehold"])
+
+    def test_publi_neste_kvartal(self):
+        from fetch_stocks import neste_utbetaling
+        u = neste_utbetaling(self.PUBLI, self.I_DAG)
+        self.assertEqual((u["ex_dato"], u["betaling_dato"]), ("2026-09-29", "2026-10-05"))
+
+    def test_hunt_forventet_betalingsdato_og_forbehold(self):
+        from fetch_stocks import neste_utbetaling
+        u = neste_utbetaling(self.HUNT, self.I_DAG)
+        self.assertEqual(u["betaling_dato"], "2026-10-07")   # «Expected on or about»
+        self.assertEqual(u["ex_forbehold"], "2026-09-28")
+
+    def test_god_ikke_vedtatt(self):
+        from fetch_stocks import neste_utbetaling
+        self.assertEqual(neste_utbetaling(self.GOD, self.I_DAG)["ex_forbehold"], "2026-10-15")
+
+    def test_alt_passert_gir_none(self):
+        from fetch_stocks import neste_utbetaling
+        self.assertIsNone(neste_utbetaling(self.TEL, datetime.date(2026, 11, 1)))
+
+    def test_forbeholdet_utloper_ved_bygging(self):
+        from fetch_stocks import ex_forbehold_gjelder
+        a = {"ex_dato": "2026-10-16", "ex_forbehold": "2026-10-15"}
+        self.assertEqual(ex_forbehold_gjelder(a, datetime.date(2026, 9, 26)), "2026-10-15")
+        self.assertIsNone(ex_forbehold_gjelder(a, datetime.date(2026, 10, 16)))
+        self.assertIsNone(ex_forbehold_gjelder({"ex_dato": "2026-10-16"}, datetime.date(2026, 9, 26)))
+
+    def test_enkel_melding_uendret(self):
+        # Meldinger med én utbetaling skal gi det samme som før.
+        from fetch_stocks import _parse_utbetalinger, _parse_ex_dato
+        tekst = "Ex-date Oslo Børs: 13 November 2026\nPayment date: 25 November 2026"
+        u = _parse_utbetalinger(tekst)
+        self.assertEqual(len(u), 1)
+        self.assertEqual((u[0]["ex_dato"], u[0]["betaling_dato"]), _parse_ex_dato(tekst))
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

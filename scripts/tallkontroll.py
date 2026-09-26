@@ -214,6 +214,9 @@ def hent_raadata(ticker_yf):
     return kurs, utb
 
 
+_UTBYTTEORD = ("dividend", "distribution", "utbytte", "utdeling")
+
+
 def utbyttemeldinger(ticker, maks=3):
     """Tekst fra de nyeste «Key information … dividend»-meldingene på NewsWeb."""
     import fetch_stocks as fs
@@ -222,7 +225,9 @@ def utbyttemeldinger(ticker, maks=3):
     ut = []
     for msg in fs._newsweb_meldinger(ticker):
         tittel = (msg.get("title") or "")
-        if "dividend" not in tittel.lower():
+        # «distribution» (ENH) og norske titler (SB68, SOAG) ble oversett da
+        # filteret bare så etter «dividend» — funnet av agenten selv.
+        if not any(o in tittel.lower() for o in _UTBYTTEORD):
             continue
         full = fs._newsweb_get(
             f"{fs._NEWSWEB_API}/v1/newsreader/message?messageId={msg.get('messageId')}")
