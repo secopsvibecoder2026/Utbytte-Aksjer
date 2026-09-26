@@ -793,6 +793,18 @@ function utbytteRekke(a, iDag) {
   };
 }
 
+// Generalforsamlingsdatoen når utbyttet ennå ikke er vedtatt — speiler
+// ex_forbehold_gjelder() i fetch_stocks.py. Sjekkes mot dagens dato, så et
+// gammelt felt aldri henger igjen etter generalforsamlingen.
+function exForbeholdGjelder(a, iDag) {
+  const g = a && a.ex_forbehold;
+  if (!g || !a.ex_dato) return null;
+  const idag = lokalIsoDato(iDag || new Date());
+  if (a.ex_dato < idag) return null;
+  if (g !== 'ukjent' && g < idag) return null;
+  return g;
+}
+
 // For merker og poeng: rekken når vi kjenner den, ellers antallet.
 function stabileAr(a) {
   const r = utbytteRekke(a);
@@ -3022,6 +3034,7 @@ function visModal(a) {
               ${_exDatoTekst ? '<span class="text-xs">(' + _exDatoTekst + ')</span>' : ''}
             </span>
           </div>
+          ${exForbeholdGjelder(a) ? `<p class="text-xs text-amber-700 dark:text-amber-400">Utbyttet er foreslått, ikke vedtatt — det utbetales forutsatt at generalforsamlingen${exForbeholdGjelder(a) !== 'ukjent' ? ' ' + escHtml(formaterDato(exForbeholdGjelder(a))) : ''} godkjenner det.</p>` : ''}
           <div class="flex justify-between">
             <span class="text-gray-500">Betalingsdato</span>
             <span class="font-medium">${a.betaling_dato ? formaterDato(a.betaling_dato) : '—'}</span>
@@ -4982,4 +4995,4 @@ function _annBygTopp() {
 }
 
 // Node.js test export
-if (typeof module !== 'undefined') module.exports = { utbytteRekke, stabileAr, utbyttePerioder, vistOverBetalt, modalBetaltBoks, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, fmt, formaterDato, yieldKlasse, payoutKlasse, vekstKlasse, beregnScore, beregnBaerekraft, beregnYtdInntekt, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote };
+if (typeof module !== 'undefined') module.exports = { utbytteRekke, stabileAr, exForbeholdGjelder, utbyttePerioder, vistOverBetalt, modalBetaltBoks, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, fmt, formaterDato, yieldKlasse, payoutKlasse, vekstKlasse, beregnScore, beregnBaerekraft, beregnYtdInntekt, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote };

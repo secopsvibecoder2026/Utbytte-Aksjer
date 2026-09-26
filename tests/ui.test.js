@@ -32,7 +32,7 @@ const {
   vekstKlasse,
   beregnScore,
   beregnYtdInntekt
-, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, utbyttePerioder, vistOverBetalt, modalBetaltBoks, utbytteRekke, stabileAr } = require('../assets/ui.js');
+, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, utbyttePerioder, vistOverBetalt, modalBetaltBoks, utbytteRekke, stabileAr, exForbeholdGjelder } = require('../assets/ui.js');
 
 // ── fmt ────────────────────────────────────────────────────────────────────
 test('fmt returnerer — for null', () => {
@@ -536,4 +536,12 @@ test('utbytteRekke: stoppet utbytte gir null', () => {
 test('utbytteRekke: uten felt ingen rekke, stabileAr faller tilbake på antallet', () => {
   assert.equal(utbytteRekke({ ar_med_utbytte: 21 }), null);
   assert.equal(stabileAr({ ar_med_utbytte: 21 }), 21);
+});
+
+// ── exForbeholdGjelder — foreslått, ikke vedtatt (2026-09-26) ────────────────
+test('exForbeholdGjelder: gjelder til generalforsamlingen, ikke etter', () => {
+  const a = { ex_dato: '2026-10-16', ex_forbehold: '2026-10-15' };
+  assert.equal(exForbeholdGjelder(a, new Date(2026, 8, 26)), '2026-10-15');
+  assert.equal(exForbeholdGjelder(a, new Date(2026, 9, 16)), null);
+  assert.equal(exForbeholdGjelder({ ex_dato: '2026-10-16' }, new Date(2026, 8, 26)), null);
 });

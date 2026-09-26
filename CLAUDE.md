@@ -1154,6 +1154,38 @@ fetched up to three times per ticker. Only notices from the last 270 days are
 opened, and the walk stops at the first ex-date already passed. ~99 message
 fetches per run. Tests: `TestParseExDato`, `TestHentNewswebExDato` (16).
 
+### One notice, several payments — and dividends not yet approved (2026-09-26)
+
+Found by the `tallkontroll` agent on its first run:
+
+- **Only the first payment in a notice was read.** Telenor announced NOK 5,00
+  (May) and 4,70 (ex 15 October) in one notice; Public Property Invest four
+  quarterly tranches. When the first ex-date had passed, `hent_newsweb_ex_dato()`
+  returned nothing — PUBLI showed «—» three days before its next ex-date.
+  `_parse_utbetalinger()` splits on «Dividend amount:» / «Tranche N:» and
+  `neste_utbetaling()` returns the first ex-date today or later.
+- **A proposal read as a fact.** GOD and HUNT said «kjøp innen … for å motta
+  utbytte» about dividends the general meeting had not voted on. The notice's
+  «Date of approval» plus wording like «subject to approval» sets
+  `ex_forbehold` (the meeting date). `ex_forbehold_gjelder()` / `exForbeholdGjelder()`
+  re-check it against today at render time, so it lapses by itself after the
+  meeting. A passed approval date means approved — Telenor's notice says
+  «proposed» and was approved 19 May.
+- **The DNB override wrote the announced amount into `siste_utbytte`.** The app
+  labels that field «Siste utbytte»; GOD showed 2,00 when the last payment was
+  0,50. The announced amount now goes to `annonsert_utbytte` (+ `annonsert_ex`,
+  shown only when it matches the displayed ex-date). While the dividend is
+  unapproved, `utbytte_per_aksje`/`utbytte_yield` are restored to their
+  pre-override values — GOD's 14 % came from a proposed one-off × frequency.
+  After approval the old behaviour returns; that remaining case is Sjekk 10's.
+- «Expected on or about» (HUNT) is now a valid date prefix, and «distribution»
+  titles are read (ENH: ex 9 November, never shown before).
+- Frequency overrides in `tickers.json`: NORBT, SB68 and SOAG are annual payers
+  whose one extra dividend in autumn 2025 made them «Halvårlig»; AKVA is
+  semi-annual, not quarterly.
+
+Tests: `TestUtbetalingerIMelding` (7) and `ui.test.js`.
+
 ## Detecting Outdated Tickers (delisted / renamed / acquired)
 
 `scripts/sjekk_utdaterte.py` catches tickers that have gone stale because the company was
