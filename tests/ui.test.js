@@ -32,7 +32,7 @@ const {
   vekstKlasse,
   beregnScore,
   beregnYtdInntekt
-, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, utbyttePerioder, vistOverBetalt, modalBetaltBoks } = require('../assets/ui.js');
+, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, utbyttePerioder, vistOverBetalt, modalBetaltBoks, utbytteRekke, stabileAr } = require('../assets/ui.js');
 
 // ── fmt ────────────────────────────────────────────────────────────────────
 test('fmt returnerer — for null', () => {
@@ -511,4 +511,29 @@ test('modalBetaltBoks: null betalt vises som 0,00 kr, ikke som strek', () => {
   const h = modalBetaltBoks({ ...KID_BETALT, utbytte_12m: 0 });
   assert.match(h, /0,00 kr/);
   assert.doesNotMatch(h, /—\s*kr/);
+});
+
+// ── utbytteRekke — «år på rad» fra rekken, ikke antallet (2026-09-26) ────────
+// Samme tilfeller som TestUtbytterekke i scripts/test_fetch_stocks.py.
+const I_DAG = new Date(2026, 8, 26);
+const DNB_AAR = [];
+for (let y = 2003; y <= 2026; y++) if (y !== 2009 && y !== 2020) DNB_AAR.push(y);
+
+test('utbytteRekke: DNB-rekken starter etter pandemien', () => {
+  const r = utbytteRekke({ utbytteaar: DNB_AAR }, I_DAG);
+  assert.deepEqual([r.rad, r.fra, r.totalt, r.brutt], [6, 2021, 22, true]);
+});
+
+test('utbytteRekke: årlig betaler teller fra i fjor', () => {
+  assert.equal(utbytteRekke({ utbytteaar: [2022, 2023, 2024, 2025] }, I_DAG).rad, 4);
+});
+
+test('utbytteRekke: stoppet utbytte gir null', () => {
+  const r = utbytteRekke({ utbytteaar: [2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023] }, I_DAG);
+  assert.deepEqual([r.rad, r.siste], [0, 2023]);
+});
+
+test('utbytteRekke: uten felt ingen rekke, stabileAr faller tilbake på antallet', () => {
+  assert.equal(utbytteRekke({ ar_med_utbytte: 21 }), null);
+  assert.equal(stabileAr({ ar_med_utbytte: 21 }), 21);
 });

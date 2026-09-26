@@ -1064,6 +1064,45 @@ announcements instead. Both of these turned out to be real:
 2020 Bulkers is the one case where the raw drop survives adjustment (117,02 →
 3,01), because the adjustment factor would be negative.
 
+### The chart used that adjusted series — and called it «Kursgraf» (fixed 2026-09-26)
+
+The same adjustment reached the reader. `kurs_historikk` was built from
+`stk.history()`, so the graph showed DNB at 141 kr in October 2021 when it
+traded at 206, and the header computed «+120 %» over five years against an
+actual +51 %. For a 12 % yielder even the one-year figure was inflated by
+roughly the yield. Found by `scripts/tallkontroll.py` on 131 of 155 pages.
+
+`hent_aksje()` now fetches with `auto_adjust=False`, takes the raw `Close` for
+the graph, and puts `Adj Close` back into `hist_prices["Close"]` so no other
+figure moves. Points carry the date of the week's last trading day — the old
+`resample("W")` labelled them with the Sunday, so the graph ended on a date
+that had not happened yet.
+
+## «År på rad» is the streak, not the count — `utbytterekke()` (2026-09-26)
+
+`ar_med_utbytte` is the number of calendar years with a dividend *ever*, and
+it was written as «N år på rad», «sammenhengende» and «gjennom både
+finanskrisen og pandemien» on 76 of 155 pages. DNB got «21 år på rad … gjennom
+både finanskrisen og pandemien» and paid nothing in 2009 or 2020 — exactly the
+two crises. Scatec «9 år på rad», last paid 2023.
+
+- `utbytteaar` (list of years) is stored by `hent_aksje()`; the streak is
+  computed at render time by `utbytterekke()` in `utvid_beskrivelser.py` —
+  imported by `fetch_stocks.py` — and `utbytteRekke()` in `ui.js`.
+- **Strict calendar years.** A year without an ex-date breaks the streak even
+  when the neighbouring year has two: DNB 2021 had two *because* 2020 was
+  skipped. The streak can be too short, never too long.
+- It counts back from this year if paid, otherwise from last year — an annual
+  November payment is not missing in September.
+- **No `utbytteaar`, no «på rad» claim at all.** Before the first full fetch
+  the field is absent, and falling back to the count would restore the bug.
+- `ar_med_utbytte` keeps its meaning. It still drives `uten_utbyttebevis()`
+  and every label that says «År med utbytte», which is a count.
+- Broken histories now say so: «har betalt utbytte i 22 av årene vi har tall
+  for, men rekken er brutt — den nåværende går tilbake til 2021».
+
+Tests: `TestUtbytterekke` (10) and the same cases in `ui.test.js` (4).
+
 ## Ex-dates come from Oslo Børs — Yahoo and DNB do not tell the exchanges apart (2026-09-24)
 
 **EQNR showed the New York ex-date.** Equinor's own notice to Oslo Børs reads

@@ -24,7 +24,7 @@ except (ImportError, Exception):
 # driver-avsnittene friskt fra levende tall hver gang — se bruken i
 # hent_aksje() lenger ned for hvorfor det er nødvendig.
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from utvid_beskrivelser import lag_beskrivelse, _manuell_del, SEKTOR_DRIVER
+from utvid_beskrivelser import lag_beskrivelse, _manuell_del, SEKTOR_DRIVER, utbytterekke
 from sektortekster import SEKTOR_REDAKSJONELL
 
 
@@ -1722,8 +1722,18 @@ def hent_aksje(meta):
         info = stk.info
         dividends = _datoindeksert(stk.dividends)
         calendar = stk.calendar
+        # Ujustert kurs til grafen (fikset 2026-09-26). history() justerer
+        # som standard bakover for utbytte, og grafen viste dermed DNB til
+        # 141 kr i oktober 2021, da aksjen ble omsatt for 206 — «+120 %» på
+        # fem år mot faktiske +51 %. Kursgrafen skal vise kursen folk handlet
+        # til. Resten av koden fikk den justerte kursen før, og får den
+        # fortsatt, så ingen andre tall flytter seg med denne endringen.
+        raa_kurs = None
         try:
-            hist_prices = stk.history(period="5y")
+            hist_prices = stk.history(period="5y", auto_adjust=False)
+            if "Close" in hist_prices.columns and "Adj Close" in hist_prices.columns:
+                raa_kurs = hist_prices["Close"].copy()
+                hist_prices["Close"] = hist_prices["Adj Close"]
         except Exception as hist_err:
             print(f"    Advarsel: kunne ikke hente historiske kurser for {ticker}: {hist_err}")
             import pandas as pd
@@ -1855,7 +1865,16 @@ def hent_aksje(meta):
         kurs_historikk = []
         if hist_prices is not None and not hist_prices.empty and "Close" in hist_prices.columns:
             try:
-                weekly = hist_prices["Close"].resample("W").last().dropna()
+                # Ujustert kurs når vi har den. Mangler den, ingen graf —
+                # en justert graf merket «kurs» er feilen vi rettet.
+                if raa_kurs is None:
+                    raise ValueError("mangler ujustert kurs")
+                # Siste handelsdag i hver uke, med sin egen dato. resample("W")
+                # merket punktet med ukens søndag, så grafen endte på en dato
+                # som ikke hadde vært ennå (27.09 på en fredag 26.09).
+                raa_kurs = raa_kurs.dropna()
+                iso = raa_kurs.index.isocalendar()
+                weekly = raa_kurs.groupby([iso.year.values, iso.week.values]).tail(1)
                 kurs_historikk = [
                     {"d": str(idx.date()), "k": round(float(val), 2)}
                     for idx, val in weekly.tail(260).items()  # 5 år
@@ -1863,11 +1882,14 @@ def hent_aksje(meta):
             except Exception:
                 pass
 
-        # Antall år med utbytte (unike kalenderår med faktisk utbyttebetaling)
+        # Antall år med utbytte (unike kalenderår med faktisk utbyttebetaling).
+        # Et *antall*, ikke en rekke — se utbytterekke() for «år på rad».
         if not dividends.empty:
             ar_med_utbytte = int(dividends.index.year.nunique())
+            utbytteaar = sorted({int(i.year) for i, v in dividends.items() if v and v > 0})
         else:
             ar_med_utbytte = 0
+            utbytteaar = []
 
         # Ex-dato og betalingsdato
         ex_dato = None
@@ -1978,6 +2000,7 @@ def hent_aksje(meta):
             "rapport_dato": rapport_dato,
             "frekvens": frekvens,
             "ar_med_utbytte": ar_med_utbytte,
+            "utbytteaar": utbytteaar,
             "siste_utbytte": siste_utbytte,
             "utbytte_12m": utbytte_12m,
             "utbytte_12m_antall": utbytte_12m_antall,
@@ -1998,7 +2021,8 @@ def hent_aksje(meta):
                 {"ticker": ticker, "navn": meta["navn"], "sektor": meta["sektor"],
                  "bors": meta["bors"], "beskrivelse": BESKRIVELSER.get(ticker, "")},
                 {"utbytte_yield": utbytte_yield, "snitt_yield_5ar": snitt_yield_5ar,
-                 "ar_med_utbytte": ar_med_utbytte, "frekvens": frekvens,
+                 "ar_med_utbytte": ar_med_utbytte, "utbytteaar": utbytteaar,
+                 "frekvens": frekvens,
                  "payout_ratio": payout_ratio, "markedsverdi_mrd": markedsverdi_mrd,
                  "utbytte_vekst_5ar": utbytte_vekst_5ar, "valuta": valuta,
                  "historiske_utbytter": historiske_utbytter}),
@@ -2190,7 +2214,7 @@ def _generer_kurs_chart_svg(kurs_historikk, valuta="NOK"):
 
     return f"""<div class="kurs-chart-wrap">
   <div class="kurs-chart-header">
-    <span class="kurs-chart-naa">{priser[-1]:,.2f} {valuta}</span>
+    <span class="kurs-chart-naa">{_nf_kurs(priser[-1])} {valuta}</span>
     <span class="kurs-chart-endring" style="color:{endring_farge}">{endring_tekst}</span>
   </div>
   <svg viewBox="0 0 {W} {H}" style="width:100%;height:{H}px;display:block;" role="img"
@@ -2300,6 +2324,19 @@ def _nf(verdi, desimaler=1):
     if verdi is None:
         return "—"
     return f"{verdi:.{desimaler}f}".replace(".", ",")
+
+
+def _nf_kurs(verdi):
+    """Kurs med norsk tusenskille og to desimaler: 1 434,00.
+
+    Kurskortet brukte `{pris:,.0f}` — engelsk tusenskille og ingen desimaler.
+    Aker ble «1,434 NOK», som på norsk leses som én krone og førti øre, og
+    ALNG 3,37 ble avrundet til «3 NOK». Hardt mellomrom, så tallet ikke
+    brytes over to linjer.
+    """
+    if verdi is None:
+        return "—"
+    return f"{verdi:,.2f}".replace(",", "\u00a0").replace(".", ",")
 
 
 def _fmt_dato(iso):
@@ -2501,7 +2538,7 @@ def _lag_utbytte_profil(a, sektor_snitt):
     badges = []
     if yield_ >= 5:
         badges.append(("Høy yield",      "badge-green"))
-    if ar_med >= 10:
+    if _stabile_ar(a) >= 10:
         badges.append(("Stabil betaler",  "badge-blue"))
     if vekst is not None and vekst > 1:
         badges.append(("Utbyttevekst",    "badge-teal"))
@@ -2534,14 +2571,16 @@ def _lag_utbytte_profil(a, sektor_snitt):
                 f"{ticker} gir {_nf(yield_, 1)}% direkteavkastning, "
                 f"nær sektorsnittet for {sektor} på {_nf(sn, 1)}%."
             )
-    if ar_med >= 15:
+    rekke = utbytterekke(a)
+    rad = rekke["rad"] if rekke else 0
+    if rad >= 15:
         tekst_deler.append(
-            f"Med {ar_med} år på rad med utbytte er {navn} "
+            f"Med {rad} år på rad med utbytte er {navn} "
             f"blant de mest stabile utbyttebetalerne på Oslo Børs."
         )
-    elif ar_med >= 5:
+    elif rad >= 5:
         tekst_deler.append(
-            f"Selskapet har betalt utbytte {ar_med} år på rad."
+            f"Selskapet har betalt utbytte {rad} år på rad."
         )
     if payout > 0 and payout < 50:
         tekst_deler.append("Lav utbetalingsgrad gir rom for fremtidige utbytteøkninger.")
@@ -2784,6 +2823,13 @@ def _selskapsrisikoer(a):
     return ut
 
 
+def _stabile_ar(a):
+    """År som teller for «stabil»-merker og poeng: rekken når vi kjenner den,
+    ellers antallet. Bare for vurderinger — aldri for tekst som sier «på rad»."""
+    r = utbytterekke(a)
+    return r["rad"] if r else (a.get("ar_med_utbytte") or 0)
+
+
 def uten_utbyttebevis(a):
     """Er dette en utbytteside uten spor av utbytte?
 
@@ -2818,13 +2864,16 @@ def _lag_utbytterekken(a):
     ikke får. Variasjon i data alene flytter ikke inntrykket av at alle sidene
     er samme mal.
     """
-    ar = a.get("ar_med_utbytte") or 0
-    if ar < 12:
+    rekke = utbytterekke(a)
+    if not rekke or rekke["rad"] < 12:
         return ""
+    ar = rekke["rad"]
 
     navn = a.get("navn") or a.get("ticker") or ""
     iaar = datetime.date.today().year
-    start = iaar - ar
+    # Første år i rekken. En krise telles bare som «overlevd» når rekken
+    # startet før den — da dekker den også året etter, når kuttene kom.
+    start = rekke["fra"]
 
     hendelser = []
     if start <= 2008:
@@ -2839,16 +2888,16 @@ def _lag_utbytterekken(a):
     if len(hendelser) >= 2:
         liste = ", ".join(hendelser[:-1]) + " og " + hendelser[-1]
         gjennom = (
-            f"Rekken strekker seg tilbake til rundt {start}, og har dermed "
+            f"Rekken strekker seg minst tilbake til {start}, og har dermed "
             f"overlevd {liste}."
         )
     elif hendelser:
         gjennom = (
-            f"Rekken startet rundt {start} og har blant annet stått gjennom "
-            f"{hendelser[0]}."
+            f"Rekken går minst tilbake til {start} og har blant annet stått "
+            f"gjennom {hendelser[0]}."
         )
     else:
-        gjennom = f"Rekken startet rundt {start}."
+        gjennom = f"Rekken går minst tilbake til {start}."
 
     # Har rekken vært jevn, eller har den svingt?
     hist = [h for h in (a.get("historiske_utbytter") or [])
@@ -3012,23 +3061,36 @@ def _driver_selskapsledd(a, sektor):
     vekst = a.get("utbytte_vekst_5ar")
     payout = a.get("payout_ratio") or 0
     ar = a.get("ar_med_utbytte") or 0
+    rekke = utbytterekke(a)
     frekvens = (a.get("frekvens") or "").lower()
     mnd = a.get("utbetalingsmaaneder") or []
     setninger = []
 
-    # Hvor lenge, og hvor jevnt.
-    if ar >= 15:
+    # Hvor lenge, og hvor jevnt. «På rad» krever rekken, ikke antallet.
+    if rekke and rekke["rad"] >= 15 and rekke["fra"] <= 2008:
         setninger.append(
-            f"{navn} har betalt utbytte {ar} år på rad, altså gjennom både "
+            f"{navn} har betalt utbytte {rekke['rad']} år på rad, altså gjennom både "
             f"finanskrisen og pandemien — det sier mer om utbyttepolitikken enn "
             f"noe enkeltår gjør"
         )
-    elif ar >= 8:
+    elif rekke and rekke["rad"] >= 8:
         setninger.append(
-            f"{navn} har {ar} år med sammenhengende utbytte bak seg, nok til å "
+            f"{navn} har {rekke['rad']} år med sammenhengende utbytte bak seg, nok til å "
             f"dekke en hel konjunktursyklus"
         )
-    elif ar > 0:
+    elif rekke and rekke["brutt"] and rekke["totalt"] >= 5:
+        if rekke["rad"] == 0:
+            setninger.append(
+                f"{navn} har betalt utbytte i {rekke['totalt']} av årene vi har tall "
+                f"for, men ikke siden {rekke['siste']}"
+            )
+        else:
+            setninger.append(
+                f"{navn} har betalt utbytte i {rekke['totalt']} av årene vi har tall "
+                f"for, men rekken er brutt — den nåværende går tilbake til "
+                f"{rekke['fra']}"
+            )
+    elif 0 < ar < 8:
         setninger.append(
             f"Med {ar} år med utbytte er historikken hos {navn} fortsatt kort, "
             f"så utbyttepolitikken er ikke ferdig prøvd"
@@ -3276,19 +3338,21 @@ def _lag_investor_vurdering(a, sektor_snitt):
     vurdering_deler = []
 
     # Stabilitetsvurdering
-    if ar_med >= 15:
+    rekke = utbytterekke(a)
+    rad = rekke["rad"] if rekke else 0
+    if rad >= 15:
         vurdering_deler.append(
             f"{navn} er en av de mest rutinerte utbyttebetalerne på Oslo Børs "
-            f"med {ar_med} sammenhengende år med utbytte."
+            f"med {rad} sammenhengende år med utbytte."
         )
-    elif ar_med >= 7:
+    elif rad >= 7:
         vurdering_deler.append(
-            f"{navn} har vist konsistent utbytteevne over {ar_med} år "
+            f"{navn} har vist konsistent utbytteevne over {rad} år på rad "
             f"og er et etablert navn blant utbytteinvestorer."
         )
-    elif ar_med >= 3:
+    elif rad >= 3:
         vurdering_deler.append(
-            f"{navn} har betalt utbytte de siste {ar_med} årene, "
+            f"{navn} har betalt utbytte de siste {rad} årene, "
             f"men historikken er begrenset."
         )
 
@@ -3400,7 +3464,7 @@ def _beregn_risiko_py(a):
         poeng += 2
     elif sektor not in _DEFENSIVE_SEKTORER_PY:
         poeng += 1
-    ar = a.get('ar_med_utbytte') or 0
+    ar = _stabile_ar(a)
     if ar < 3:
         poeng += 2
     elif ar < 7:
@@ -3432,7 +3496,7 @@ def _beregn_mal_py(a):
     mal = []
     sektor = a.get('sektor', '')
     if (sektor in _DEFENSIVE_SEKTORER_PY
-            and (a.get('ar_med_utbytte') or 0) >= 7
+            and _stabile_ar(a) >= 7
             and 0 < (a.get('payout_ratio') or 0) < 80):
         mal.append('stabil')
     if (a.get('utbytte_vekst_5ar') or 0) > 3:
@@ -3471,7 +3535,13 @@ def _lag_investor_badges(a):
     else:
         risiko_punkter.append(f'Defensiv sektor ({sektor}) — relativt stabile inntekter')
 
-    if ar < 3:
+    rekke = utbytterekke(a)
+    if rekke and rekke["brutt"] and rekke["totalt"] >= 7 and rekke["rad"] < 7:
+        # Langt antall, kort rekke: historikken er lang, men ikke stabil.
+        naa = (f"ingen utbytte siden {rekke['siste']}" if rekke["rad"] == 0
+               else f"sammenhengende bare siden {rekke['fra']}")
+        risiko_punkter.append(f'Utbytte i {rekke["totalt"]} år, men med brudd — {naa}')
+    elif ar < 3:
         risiko_punkter.append(f'Kort utbyttehistorikk ({ar} år) — begrenset dokumentasjon')
     elif ar < 7:
         risiko_punkter.append(f'Moderat utbyttehistorikk ({ar} år)')
@@ -3524,8 +3594,9 @@ def _lag_investor_badges(a):
                     if doblingsar else f' Historisk vekst +{_nf(vekst, 1)}% per år.')
     mal_forklaring = {
         'stabil':
-            f'Passer investorer som vil ha forutsigbar utbytteinntekt uten store overraskelser. '
-            f'{ar} år med sammenhengende utbetaling i defensiv sektor gir god synlighet fremover.',
+            'Passer investorer som vil ha forutsigbar utbytteinntekt uten store overraskelser. '
+            + (f'{rekke["rad"]} år med sammenhengende utbetaling i defensiv sektor gir god synlighet fremover.'
+             if rekke else 'Lang utbyttehistorikk i defensiv sektor gir god synlighet fremover.'),
         'vekst':
             f'Passer investorer med lang horisont som vil at utbyttet skal vokse raskere enn inflasjonen.'
             + vekst_suffix,
@@ -3680,14 +3751,24 @@ def _lag_faq_seksjon(a, today):
         "Årlig":       "én gang i året",
     }
     freq_tekst = freq_map.get(frekvens, frekvens.lower() if frekvens else "")
+    rekke = utbytterekke(a)
     if freq_tekst and ar_med > 0:
-        if ar_med >= 15:
-            kontinuitet = f"Med {ar_med} år sammenhengende er {ticker} blant de mest stabile utbyttebetalerne på Oslo Børs."
-        elif ar_med >= 7:
-            kontinuitet = f"Selskapet har utbetalt utbytte i {ar_med} år på rad, noe som viser en konsistent kapitalavkastningspolitikk."
+        rad = rekke["rad"] if rekke else 0
+        if rad >= 15:
+            kontinuitet = f"Med {rad} år sammenhengende er {ticker} blant de mest stabile utbyttebetalerne på Oslo Børs."
+        elif rad >= 7:
+            kontinuitet = f"Selskapet har utbetalt utbytte i {rad} år på rad, noe som viser en konsistent kapitalavkastningspolitikk."
+        elif rekke and rekke["brutt"] and rekke["rad"] == 0:
+            kontinuitet = (f"Selskapet har betalt utbytte i {rekke['totalt']} år, men ikke siden "
+                           f"{rekke['siste']}.")
+        elif rekke and rekke["brutt"]:
+            kontinuitet = (f"Selskapet har betalt utbytte i {rekke['totalt']} år, men ikke "
+                           f"sammenhengende — nåværende rekke går tilbake til {rekke['fra']}.")
+        elif rad > 1:
+            kontinuitet = f"Selskapet har betalt utbytte de siste {rad} årene."
         else:
-            kontinuitet = f"Selskapet har betalt utbytte de siste {ar_med} årene."
-        svar = f"{navn} betaler utbytte {freq_tekst}. {kontinuitet}"
+            kontinuitet = ""
+        svar = f"{navn} betaler utbytte {freq_tekst}." + (f" {kontinuitet}" if kontinuitet else "")
         qas.append((f"Betaler {navn} utbytte hvert år, og hvor ofte?", svar))
 
     # 3. Direkteavkastning i kontekst
@@ -4591,7 +4672,7 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
   <div class="kgrid">
     <div class="kcard">
       <div class="label">Kurs</div>
-      <div class="val">{f'{pris:,.0f} {valuta}' if pris else '—'}</div>
+      <div class="val">{f'{_nf_kurs(pris)} {valuta}' if pris else '—'}</div>
     </div>
     <div class="kcard">
       <div class="label">Yield{delaar_note}</div>
@@ -4809,7 +4890,7 @@ def generer_aksjesider(aksjer, root_dir):
     # Topp 6 stabile (flest år med utbytte) med yield > 0
     stabile = sorted(
         aksjer_med_utbytte,
-        key=lambda x: (x.get("ar_med_utbytte") or 0, x.get("utbytte_yield") or 0),
+        key=lambda x: (_stabile_ar(x), x.get("utbytte_yield") or 0),
         reverse=True
     )[:6]
 
@@ -4826,7 +4907,9 @@ def generer_aksjesider(aksjer, root_dir):
             navn = navn[:26] + "…"
         sektor = a.get("sektor") or ""
         yield_ = a.get("utbytte_yield", 0)
-        ar = a.get("ar_med_utbytte") or 0
+        # Kortet står under «Konsistente utbyttebetalere», så tallet er rekken.
+        rekke = utbytterekke(a)
+        ar = rekke["rad"] if rekke else 0
         frekvens = a.get("frekvens") or ""
         return f"""
       <a href="/aksjer/{t}/" class="ak-kort">
@@ -4835,7 +4918,7 @@ def generer_aksjesider(aksjer, root_dir):
           <span class="ak-kort-yield">{_nf(yield_, 2)}%</span>
         </div>
         <div class="ak-kort-navn">{navn}</div>
-        <div class="ak-kort-meta">{sektor} · {frekvens}{f' · {ar} år' if ar > 0 else ''}</div>
+        <div class="ak-kort-meta">{sektor} · {frekvens}{f' · {ar} år på rad' if ar > 0 else ''}</div>
       </a>"""
 
     topp_yield_html = "".join(_kort(a) for a in topp_yield)
@@ -5553,7 +5636,7 @@ def _sektor_analyse(sektor, i_sektor, alle):
                           f"mer, og lengst historikk har {eldst['navn']} med "
                           f"{ar_eldst} år.")
         else:
-            hist_tekst = (" Ingen av dem har ti sammenhengende år med utbytte "
+            hist_tekst = (" Ingen av dem har ti år med utbytte "
                           "ennå, så sektoren er ikke testet gjennom en full "
                           "nedtur i denne formen.")
         avsnitt3 = frek_tekst + "." + hist_tekst
@@ -6107,12 +6190,16 @@ def _toppliste_analyse(slug, topp, alle):
         storst, antall = max(sektorer.items(), key=lambda x: x[1])
         tittel = "Hvorfor konsistens er verdt å måle"
         avsnitt = [
-            "Denne listen teller antall kalenderår med utbetalt utbytte. Det er "
-            "det enkleste målet på om et selskap prioriterer utbyttet gjennom "
-            "både gode og dårlige år — og for en utbytteinvestor er det ofte "
-            "mer relevant enn nivået på yielden akkurat nå.",
-            f"Et selskap som har betalt utbytte i tjue år, har gjort det "
+            "Denne listen teller hvor mange år på rad selskapet har betalt "
+            "utbytte. Ett år uten utbytte nullstiller rekken — også for et "
+            "selskap med lang historikk ellers. Det er det enkleste målet på om "
+            "et selskap prioriterer utbyttet gjennom både gode og dårlige år, og "
+            "for en utbytteinvestor er det ofte mer relevant enn nivået på "
+            "yielden akkurat nå.",
+            f"Et selskap som har betalt utbytte tjue år på rad, har gjort det "
             f"gjennom finanskrisen, oljeprisfallet i 2014–2016 og pandemien. "
+            f"Derfor står noen kjente utbyttenavn lavere enn man skulle tro: "
+            f"flere holdt igjen utbyttet i 2009 eller 2020. "
             f"Det er ingen garanti for at det fortsetter, men det sier noe om "
             f"hvordan styret prioriterer når det strammer seg til.",
             f"Legg merke til konsentrasjonen: {antall} av de {len(topp)} "
@@ -6206,20 +6293,20 @@ def generer_topplistesider(aksjer, root_dir):
             "tittel":   "Mest konsistente utbytteaksjer på Oslo Børs",
             "h1":       "Mest konsistente utbytteaksjer",
             "desc_tpl": "De {n} norske aksjene som har betalt utbytte flest år på rad. Konsistens er et sentralt kriterium for utbytteinvestorer.",
-            "sub":      "Sortert etter antall kalenderår med utbyttebetaling — flest år først.",
-            "filter":   lambda a: a.get("ar_med_utbytte", 0) > 0,
-            "sort_key": lambda a: a.get("ar_med_utbytte", 0),
+            "sub":      "Sortert etter antall år på rad med utbytte — lengst rekke først. Et år uten utbytte bryter rekken.",
+            "filter":   lambda a: _stabile_ar(a) > 0,
+            "sort_key": lambda a: (_stabile_ar(a), a.get("utbytte_yield") or 0),
             "reverse":  True,
             "kolonner": [
-                ("År m/utbytte", lambda a: f'<td class="metric">{a["ar_med_utbytte"]} år</td>'),
+                ("År på rad", lambda a: f'<td class="metric">{_stabile_ar(a)} år</td>'),
                 ("Yield",        lambda a: f'<td>{_nf(a.get("utbytte_yield",0), 2)}%</td>'),
                 ("Pris",         lambda a: f'<td>{_nf(a["pris"], 2) if a.get("pris") else "—"} {a.get("valuta","NOK")}</td>'),
                 ("Ex-dato",      lambda a: f'<td>{_fmt_dato(a.get("ex_dato"))}</td>'),
             ],
             "stat_lbl": "Snitt år",
-            "stat_fn":  lambda topp: f'{_nf(sum(a["ar_med_utbytte"] for a in topp)/len(topp), 0)} år',
-            "stat2_lbl":"Flest år",
-            "stat2_fn": lambda topp: f'{topp[0]["ar_med_utbytte"]} år',
+            "stat_fn":  lambda topp: f'{_nf(sum(_stabile_ar(a) for a in topp)/len(topp), 0)} år',
+            "stat2_lbl":"Lengst rekke",
+            "stat2_fn": lambda topp: f'{_stabile_ar(topp[0])} år',
         },
         {
             "slug":     "lavest-payout",
