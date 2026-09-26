@@ -3,7 +3,10 @@ __pycache__/
 *.pyo
 .env
 .DS_Store
-.claude/
+# Lokale Claude-innstillinger holdes utenfor, men prosjektets agenter
+# (.claude/agents/) skal ligge i repoet — ellers forsvinner de med økten.
+.claude/*
+!.claude/agents/
 node_modules/
 test-results/
 playwright-report/
