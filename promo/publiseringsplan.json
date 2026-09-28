@@ -30,6 +30,21 @@
         "tekst": "Direkteavkastning er ofte et anslag 📊\n\nTallet regnes ut fra en anslått årlig utbytterate — og den kan bomme. Et engangsutbytte regnet som årlig. To utbetalinger fra ulike perioder lagt sammen. Et utbytte som er stoppet, men fortsatt står oppført.\n\nDerfor viser exday.no nå hva selskapet faktisk har betalt: siste 12 måneder, og snitt per år for de siste 1–5 årene. Er avstanden stor, forklarer siden hvorfor.\n\nTips: sammenlign alltid direkteavkastningen med det som faktisk er utbetalt det siste året.\n\nSe aksjene på exday.no\n\nGenerell informasjon, ikke investeringsrådgivning.\n\n#utbytte #utbytteaksjer #direkteavkastning #aksjer #oslobørs #investering #aksjesparekonto #sparing #privatøkonomi #økonomi #exday"
       },
       "merknad": "Et tips, ikke en kunngjøring. Bildet og teksten har bevisst ingen aksjenavn og ingen tall: søylene er en illustrasjon, og et ekte tall ville gått ut på dato. De tre mekanismene i teksten er alle målt på egne data 24.09.2026 (engangsutbytte × frekvens, to perioder summert, stoppet utbytte). Generator: promo/generate_betalt_post.py"
+    },
+    {
+      "id": "rekke-2026-10",
+      "publiser_fra": "2026-10-06",
+      "artikkel": "https://exday.no/aksjer/",
+      "facebook": {
+        "bilde": "https://raw.githubusercontent.com/secopsvibecoder2026/Utbytte-Aksjer/main/promo/facebook-rekke.jpg",
+        "lenke": "https://exday.no/aksjer/",
+        "tekst": "«Selskapet har betalt utbytte 21 år på rad» — men betyr det egentlig sammenhengende år?\n\nEt selskap kan ha betalt utbytte i 21 av de siste 25 årene og fortsatt bli beskrevet som å ha en ubrutt rekke — selv om det droppet utbyttet under finanskrisen i 2009 og igjen under pandemien i 2020. Da er ikke rekken sammenhengende. Den er brutt to ganger, og dagens rekke startet på nytt etter siste brudd.\n\nDet er en forskjell som er lett å blande sammen — og det gjorde vi også, på våre egne sider, helt til nylig.\n\n🔹 «År med utbytte» = totalt antall år selskapet noensinne har betalt\n🔹 «Rekke» = sammenhengende år uten brudd, regnet strengt år for år\n\nexday.no skiller nå tydelig mellom de to, og sier fra når en rekke er brutt i stedet for å late som alt er ubrutt.\n\nTips: neste gang du ser «X år på rad» om en utbytteaksje — spør om det faktisk betyr sammenhengende, eller bare totalt.\n\n👉 Se utbyttehistorikken: exday.no/aksjer/\n\nGenerell informasjon, ikke investeringsrådgivning.\n\n#utbytte #utbytteaksjer #aksjer #oslobørs #investering #sparing #aksjesparekonto #exday"
+      },
+      "instagram": {
+        "bilde": "https://raw.githubusercontent.com/secopsvibecoder2026/Utbytte-Aksjer/main/promo/instagram-rekke.jpg",
+        "tekst": "«X år på rad med utbytte» 📊 Men betyr det egentlig sammenhengende år?\n\nEt selskap som droppet utbyttet under finanskrisen i 2009 og pandemien i 2020 har ikke en ubrutt rekke, selv om det har betalt utbytte i de fleste av de siste 25 årene. Rekken er brutt to ganger — og dagens rekke startet på nytt etter siste brudd.\n\n«År med utbytte» = totalt antall år noensinne.\n«Rekke» = sammenhengende år uten brudd.\n\nexday.no skiller nå mellom de to, og sier fra når en rekke er brutt.\n\nSe utbyttehistorikken på exday.no\n\nGenerell informasjon, ikke investeringsrådgivning.\n\n#utbytte #utbytteaksjer #aksjer #oslobørs #investering #sparing #aksjesparekonto #privatøkonomi #børs #exday"
+      },
+      "merknad": "Et tips, ikke en kunngjøring. Bildet og teksten navngir ingen aksje og viser ingen faktiske årstall/antall — kvadratene i illustrasjonen er et generisk 14-punkts mønster (AAR_MONSTER i generate_rekke_post.py), ikke tall for en bestemt aksje, siden 'rekke' regnes på nytt hver kjøring og ville gått ut på dato i et lagret bilde. Årene 2009 og 2020 i teksten er faste historiske fakta (finanskrisen/pandemien), ikke et levende tall. Bakgrunn: fetch_stocks.py skilte tidligere ikke mellom ar_med_utbytte (totalt antall år) og en faktisk sammenhengende rekke — se «'År på rad' er streak, ikke tellingen» i CLAUDE.md, rettet 2026-09-26. Generator: promo/generate_rekke_post.py. Ingen video: ffmpeg_tilgjengelig() ga False i denne økten."
     }
   ]
 }
