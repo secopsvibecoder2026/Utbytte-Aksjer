@@ -22,6 +22,13 @@ datajobben» og «Ukentlig tallkontroll» i `CLAUDE.md`.
 
 ## 1. Agent for promo
 
+**Bygget 2026-09-28** — se `.claude/agents/promo.md`. Lager tekst og bilder
+som beskrevet under, og valgfritt en kort, stille video
+(`promo_felles.lag_kenburns_video()`) når ffmpeg finnes i økten; den mekaniske
+delen (hvilke artikler er aldri promotert, dager siden forrige innlegg) ligger
+i `promo/finn_kandidater.py`. Video-kodingen er ikke ende-til-ende testet i
+utviklingsøkten som bygget den — se advarselen i `CLAUDE.md`.
+
 **Hva den gjør:** Ser gjennom nye artikler, funksjoner og rettinger siden
 forrige promo, velger det som gir mest verdi, og lager Facebook/Instagram-bilde
 og -tekst etter mønsteret i `promo/promo_felles.py` og

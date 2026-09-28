@@ -1,5 +1,5 @@
 {
-  "_om": "Publiseringsplan for sosiale medier. Eneste kilde til posttekstene — en AI-agent leser denne filen og publiserer innlegg der publiser_fra er i dag eller tidligere. Bilde-URL-ene peker på raw.githubusercontent.com fordi /promo/ er sperret i robots.txt på exday.no. Se promo/publiseringsprompt.md.",
+  "_om": "Publiseringsplan for sosiale medier. Eneste kilde til posttekstene — en AI-agent leser denne filen og publiserer innlegg der publiser_fra er i dag eller tidligere. Bilde- og video-URL-ene peker på raw.githubusercontent.com fordi /promo/ er sperret i robots.txt på exday.no. Et 'video'-felt i et kanalobjekt er valgfritt — finnes det, brukes det i stedet for 'bilde'. Se promo/publiseringsprompt.md og .claude/agents/promo.md.",
   "innlegg": [
     {
       "id": "boliglan-2026-09",
