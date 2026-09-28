@@ -853,15 +853,17 @@ known footguns with a single looped still image. `ffmpeg_tilgjengelig()`
 must be checked first; when it's `False` the agent skips video and still
 delivers a complete text-plus-images post.
 
-> ⚠️ **The ffmpeg encoding path has not run end-to-end in this codebase yet.**
-> The development session that built it had no working ffmpeg (`apt-get
-> install ffmpeg` failed on missing packages in the mirror), so only the pure
-> PIL frame math was verified locally. `TestKodVideo` in
-> `promo/test_promo_felles.py` skips itself when ffmpeg is absent and actually
-> encodes and checks a real file when it's present — CI's `ubuntu-latest`
-> runner normally has ffmpeg preinstalled, so that is the first real test of
-> this path. If it fails there, fix it before trusting any video this agent
-> produces.
+> ⚠️ **The ffmpeg encoding path has never actually run.** The development
+> session that built it had no working ffmpeg (`apt-get install ffmpeg`
+> failed on missing packages in the mirror). PR #66's own CI run was checked
+> for this — GitHub's `ubuntu-latest` runner does **not** have ffmpeg on
+> `PATH` either: `TestKodVideo.test_koder_en_gyldig_mp4` (the one requiring
+> ffmpeg) was skipped there too, same as locally. So as of 2026-09-28,
+> `kod_video()`/`lag_kenburns_video()` have zero real executions anywhere —
+> only the pure-PIL frame math (`kenburns_rammer()`) is verified. Do not
+> report a video as delivered until `ffmpeg_tilgjengelig()` returns `True`
+> *and* the resulting file has actually been checked (size, and ideally
+> played back) in whatever environment the agent runs in next.
 
 `promo/publiseringsprompt.md` already understands an optional `"video"` field
 per channel in the plan — the posting AI uploads it instead of the image when
