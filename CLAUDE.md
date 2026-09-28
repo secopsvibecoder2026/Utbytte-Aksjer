@@ -833,6 +833,40 @@ one of them may require converting the Instagram account, which has lead time. N
 also that `/promo/` was blocked in `robots.txt` on 2026-09-12, and Instagram's
 publishing flow fetches images from a public URL — that block may sit in the way.
 
+## The promo agent (`.claude/agents/promo.md`, added 2026-09-28)
+
+Writes the text and images for a promo post, and optionally a short video, and
+adds the result to `promo/publiseringsplan.json` — never publishes itself.
+`promo/finn_kandidater.py` does the mechanical part (which articles in the
+`ARTIKLER` constant have never been promoted, how many days since the last
+`publiser_fra`); the agent does the judgment part (tip vs. announcement,
+whether a number or a stock name would drift or embarrass — see «What was
+actually paid» for why GOD, KID, BOR, REACH and MGN specifically must not be
+named in a promo that isn't about that).
+
+**Video is genuinely optional, not a stub.** `promo_felles.py` builds a Ken
+Burns zoom from a finished promo image: `kenburns_rammer()` generates the
+frame sequence in pure PIL (so it's testable without ffmpeg — see
+`promo/test_promo_felles.py`), and `kod_video()` is one plain
+image-sequence-to-h264 ffmpeg call, not the `zoompan` filter, which has
+known footguns with a single looped still image. `ffmpeg_tilgjengelig()`
+must be checked first; when it's `False` the agent skips video and still
+delivers a complete text-plus-images post.
+
+> ⚠️ **The ffmpeg encoding path has not run end-to-end in this codebase yet.**
+> The development session that built it had no working ffmpeg (`apt-get
+> install ffmpeg` failed on missing packages in the mirror), so only the pure
+> PIL frame math was verified locally. `TestKodVideo` in
+> `promo/test_promo_felles.py` skips itself when ffmpeg is absent and actually
+> encodes and checks a real file when it's present — CI's `ubuntu-latest`
+> runner normally has ffmpeg preinstalled, so that is the first real test of
+> this path. If it fails there, fix it before trusting any video this agent
+> produces.
+
+`promo/publiseringsprompt.md` already understands an optional `"video"` field
+per channel in the plan — the posting AI uploads it instead of the image when
+present. The «ordrett» rule applies the same way: no trimming, no re-encoding.
+
 **Also queued: donations.** See «Monetisering — donasjoner» in `ROADMAP.md`
 (researched 2026-09-13). AdSense does not prohibit a donate button, so this is
 not blocked by the application — it is deferred because the arithmetic does not

@@ -27,14 +27,16 @@ Du publiserer innlegg for exday.no på Facebook og Instagram.
 
 4. PUBLISER
    For hver kanal ("facebook", "instagram") innlegget har:
-   - Last ned bildet fra "bilde"-URL-en og last det opp som bilde i innlegget.
+   - Har kanalen et "video"-felt: last ned videoen derfra og last den opp
+     som video i innlegget, i stedet for bildet. Har den ikke det: last ned
+     bildet fra "bilde"-URL-en og last det opp som bilde.
    - Bruk "tekst" som posttekst, ORDRETT.
 
    Du skal IKKE:
    - omskrive, forkorte, oversette eller «forbedre» teksten
    - legge til eller endre tall, prosenter eller hashtags
    - legge til «lenke i bio» eller lenker som ikke står i teksten
-   - lage et nytt bilde eller beskjære det
+   - lage et nytt bilde eller beskjære det, eller klippe/forkorte en video
 
 5. STOPP HELLER ENN Å GJETTE
    Ikke post noe som helst hvis:

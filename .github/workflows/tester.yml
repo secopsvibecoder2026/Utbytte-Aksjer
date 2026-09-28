@@ -19,6 +19,7 @@ on:
       - 'package.json'
       - 'package-lock.json'
       - '.github/workflows/tester.yml'
+      - 'promo/*.py'
       # Håndskrevne sider: sjekk_tema-testen leser dem. aksjer/** er
       # generert fra malene i scripts/, som allerede står over.
       - '**.html'
@@ -33,6 +34,7 @@ on:
       - 'package.json'
       - 'package-lock.json'
       - '.github/workflows/tester.yml'
+      - 'promo/*.py'
       # Håndskrevne sider: sjekk_tema-testen leser dem. aksjer/** er
       # generert fra malene i scripts/, som allerede står over.
       - '**.html'
@@ -84,6 +86,12 @@ jobs:
       - name: Installer pandas (kun for fetch_stocks-testene)
         run: pip install "pandas>=2.0"
 
+      # promo/test_promo_felles.py bruker PIL til bildetestene, ikke ffmpeg —
+      # ffmpeg-delen (kod_video) er skrevet for å hoppe over seg selv når
+      # ffmpeg mangler, og ubuntu-latest-runneren har den ikke som standard.
+      - name: Installer Pillow (kun for promo-testene)
+        run: pip install "pillow>=10.0"
+
       - name: Kjør Python-tester
         run: |
           python scripts/test_sjekk_utdaterte.py
@@ -93,3 +101,5 @@ jobs:
           python scripts/test_sjekk_klasser.py
           python scripts/test_sjekk_antall.py
           python scripts/test_tallkontroll.py
+          python promo/test_promo_felles.py
+          python promo/test_finn_kandidater.py
