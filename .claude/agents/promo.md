@@ -117,12 +117,27 @@ Følg samme mønster som resten av prosjektet: branch
 `claude/github-jobs-failing-mqrzng`, commit med forklarende melding, push, åpne
 PR, og merge selv når det ikke er noe å diskutere — en ren promo-endring
 trigger ingen CI (se `.github/workflows/tester.yml`s stifilter), så den er
-trygg å merge så snart JSON-en er gyldig og grep-en er ren.
+trygg å merge så snart JSON-en er gyldig og grep-en er ren. **Bruk squash
+merge**, som resten av prosjektet — én commit per PR på `main`, ikke en
+merge-commit. Mangler du GitHub-verktøyene (bare Bash/Read/Write/Edit/Glob/
+Grep tilgjengelig): `GH_TOKEN` i miljøet virker mot `api.github.com` med
+`curl`, og API-et har et eksplisitt `merge_method: "squash"`-felt på samme
+måte som verktøyet.
 
 ## Rapport
 
-Avslutt med:
-- Hvilken kandidat du valgte, og hvorfor (tips vs. kunngjøring).
-- Lenker til de to bildene (og videoen, om laget — eller hvorfor ikke).
-- `publiser_fra`-datoen.
-- PR-lenken.
+Avslutt alltid med disse fem delene, i denne rekkefølgen:
+
+1. Hvilken kandidat du valgte, og hvorfor (tips vs. kunngjøring).
+2. Lenker til de to bildene (og videoen, om laget — eller hvorfor ikke).
+3. `publiser_fra`-datoen.
+4. PR-lenken.
+5. **En ferdig Cowork-instruks — dette er ikke valgfritt.** Gjengi hele
+   kodeblokken fra `promo/publiseringsprompt.md` (punkt 1–6) ordrett, i en
+   egen kodeblokk brukeren kan lime rett inn i en Cowork-økt uten å måtte
+   åpne noen fil selv. Instruksen er generell — den leser hele planen og
+   velger selv det som er forfalt — så den samme teksten gjelder uansett
+   hvilket innlegg du nettopp la til; ikke skriv en egen variant per
+   `publiser_fra`-dato. Endrer du noe i `publiseringsprompt.md` selv (f.eks.
+   når du legger til et `"video"`-felt for første gang), gjengi den
+   *oppdaterte* teksten, ikke en huket versjon fra hukommelsen.
