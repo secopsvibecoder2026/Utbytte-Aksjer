@@ -126,13 +126,24 @@ måte som verktøyet.
 
 ## Rapport
 
-Avslutt alltid med disse fem delene, i denne rekkefølgen:
+Avslutt alltid med disse seks delene, i denne rekkefølgen:
 
-1. Hvilken kandidat du valgte, og hvorfor (tips vs. kunngjøring).
-2. Lenker til de to bildene (og videoen, om laget — eller hvorfor ikke).
-3. `publiser_fra`-datoen.
-4. PR-lenken.
-5. **En ferdig Cowork-instruks — dette er ikke valgfritt.** Gjengi hele
+1. **Kort om posten — først, og lesbar i seg selv uten resten av rapporten.**
+   Et par linjer, ikke et avsnitt:
+   ```
+   Post: <id>
+   Kanaler: Facebook + Instagram
+   Publiseres: <publiser_fra, skrevet ut, f.eks. «6. oktober 2026»>
+   Innhold: <1–2 setninger — hva posten faktisk sier, ikke bare temaet>
+   ```
+   Dette er det brukeren spør etter når de vil vite «hva er dette» uten å
+   lese hele Facebook-teksten eller åpne JSON-en selv.
+2. Hvilken kandidat du valgte, og hvorfor (tips vs. kunngjøring).
+3. Lenker til de to bildene (og videoen, om laget — eller hvorfor ikke).
+4. `publiser_fra`-datoen — samme dato som i punkt 1, men her med
+   begrunnelsen (kolliderer ikke med `X`, som er neste i planen).
+5. PR-lenken.
+6. **En ferdig Cowork-instruks — dette er ikke valgfritt.** Gjengi hele
    kodeblokken fra `promo/publiseringsprompt.md` (punkt 1–6) ordrett, i en
    egen kodeblokk brukeren kan lime rett inn i en Cowork-økt uten å måtte
    åpne noen fil selv. Instruksen er generell — den leser hele planen og
