@@ -1139,6 +1139,24 @@ two crises. Scatec «9 år på rad», last paid 2023.
 
 Tests: `TestUtbytterekke` (10) and the same cases in `ui.test.js` (4).
 
+## Where the weekly tallkontroll report goes (2026-09-30)
+
+The routine «Ukentlig tallkontroll» (Mondays 17:24 UTC) starts a fresh
+session with **no repository attached**, so it has no GitHub tools and cannot
+write the `tallkontroll` issue its prompt describes. Its first run
+(2026-09-28) therefore left the report inside that session, where nobody
+found it. A routine's repository is chosen in the routine settings on
+claude.ai; it cannot be attached from a session.
+
+The report now goes to one private Artifact page that is replaced every week:
+https://claude.ai/artifact/GTKXEKi4zLJ67nNiZy5RMs.
+`scripts/tallkontroll_side.py` renders the agent's markdown into that page, so
+it looks the same whichever session writes it; the routine reads the artifact
+first (a publish to an artifact the session has not read is refused), then
+publishes to the same `url`. Markdown support is deliberately small and
+everything is escaped before formatting, since the report quotes stock-exchange
+notices. Tests: `scripts/test_tallkontroll_side.py` (11).
+
 ## Ex-dates come from Oslo Børs — Yahoo and DNB do not tell the exchanges apart (2026-09-24)
 
 **EQNR showed the New York ex-date.** Equinor's own notice to Oslo Børs reads
