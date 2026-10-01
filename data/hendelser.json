@@ -3425,7 +3425,8 @@
     {
       "ticker": "SNI",
       "dato": "2026-10-01",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/683388"
     },
     {
       "ticker": "ABG",
@@ -4168,5 +4169,5 @@
       "type": "rapport"
     }
   ],
-  "sist_oppdatert": "2026-09-30"
+  "sist_oppdatert": "2026-10-01"
 }

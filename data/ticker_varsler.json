@@ -1,43 +1,8 @@
 {
-  "generert": "2026-09-30T20:31:41Z",
-  "antall": 7,
+  "generert": "2026-10-01T14:03:37Z",
+  "antall": 2,
   "antall_kritiske": 0,
   "varsler": [
-    {
-      "ticker": "FRO",
-      "type": "markedsverdi_borte",
-      "alvorlighet": "advarsel",
-      "melding": "Markedsverdien er borte fra Yahoo (var 104,187,518,976 sist). Kan indikere strukturendring i selskapet.",
-      "forslag": "Kontroller om selskapet er under oppkjøp eller strykning."
-    },
-    {
-      "ticker": "GJF",
-      "type": "markedsverdi_borte",
-      "alvorlighet": "advarsel",
-      "melding": "Markedsverdien er borte fra Yahoo (var 129,990,672,384 sist). Kan indikere strukturendring i selskapet.",
-      "forslag": "Kontroller om selskapet er under oppkjøp eller strykning."
-    },
-    {
-      "ticker": "HEX",
-      "type": "markedsverdi_borte",
-      "alvorlighet": "advarsel",
-      "melding": "Markedsverdien er borte fra Yahoo (var 4,212,208,128 sist). Kan indikere strukturendring i selskapet.",
-      "forslag": "Kontroller om selskapet er under oppkjøp eller strykning."
-    },
-    {
-      "ticker": "JIN",
-      "type": "markedsverdi_borte",
-      "alvorlighet": "advarsel",
-      "melding": "Markedsverdien er borte fra Yahoo (var 714,553,472 sist). Kan indikere strukturendring i selskapet.",
-      "forslag": "Kontroller om selskapet er under oppkjøp eller strykning."
-    },
-    {
-      "ticker": "SNI",
-      "type": "markedsverdi_borte",
-      "alvorlighet": "advarsel",
-      "melding": "Markedsverdien er borte fra Yahoo (var 24,568,369,152 sist). Kan indikere strukturendring i selskapet.",
-      "forslag": "Kontroller om selskapet er under oppkjøp eller strykning."
-    },
     {
       "ticker": "BAKKA",
       "type": "navnavvik",
