@@ -35,9 +35,24 @@ function sjekkLSVersjon() {
 sjekkLSVersjon();
 
 // Skattekonstanter — samlet her som eneste kilde; ikke dupliser tallene i andre filer.
-// NB: Skjermingsrenten fastsettes årlig av Skatteetaten og MÅ oppdateres manuelt
-// her når ny sats publiseres (sjekk skatteetaten.no).
-const SKJERMINGSRENTE = 0.031;  // 3,1 % (inntektsåret 2024 — sjekk om ny sats er publisert)
+//
+// Skjermingsrenten for aksjer fastsettes av Skattedirektoratet i januar året
+// etter inntektsåret, og er ulik fra år til år. Kilde: skatteetaten.no/satser/
+// skjermingsrente-for-aksjer-og-enkeltpersonforetak (kontrollert 03.10.2026).
+// Legg inn ny sats her når den publiseres i januar.
+//
+// Fram til 03.10.2026 sto én sats her for alle år — 3,1 %, merket «inntektsåret
+// 2024». Satsen for 2024 var 3,9 %, og ingen år har vært 3,1 %.
+const SKJERMINGSRENTER = { 2022: 0.017, 2023: 0.032, 2024: 0.039, 2025: 0.036 };
+// Siste fastsatte sats. Brukes for anslag framover, der årets sats ikke finnes ennå.
+const SKJERMINGSRENTE = SKJERMINGSRENTER[Math.max(...Object.keys(SKJERMINGSRENTER).map(Number))];
+
+/** { sats, fastsatt, aar } — fastsatt=false betyr at siste kjente sats er brukt som anslag. */
+function skjermingsrenteFor(aar) {
+  if (SKJERMINGSRENTER[aar] != null) return { sats: SKJERMINGSRENTER[aar], fastsatt: true, aar };
+  const siste = Math.max(...Object.keys(SKJERMINGSRENTER).map(Number));
+  return { sats: SKJERMINGSRENTER[siste], fastsatt: false, aar: siste };
+}
 const SKATTESATS      = 0.3784; // 37,84 % effektiv skatt på aksjeutbytte/-gevinst (aksjonærmodellen: 22 % × 1,72)
 const KAPITALSKATT    = 0.22;   // 22 % skatt på renteinntekter / verdi av rentefradrag
 
@@ -162,4 +177,4 @@ function lagreAksjeData(ticker, data) {
 }
 
 // Node.js test export
-if (typeof module !== 'undefined') module.exports = { hentFav, lagreFav, erFavoritt, toggleFav, hentPortefoljer, hentAktivPF, lagrePF };
+if (typeof module !== 'undefined') module.exports = { hentFav, lagreFav, erFavoritt, toggleFav, hentPortefoljer, hentAktivPF, lagrePF, skjermingsrenteFor, SKJERMINGSRENTER };

@@ -35,7 +35,7 @@ global.visModal = () => {};
 global.SEKTOR_FARGE = {};
 global.FARGE_FALLBACK = '#9ca3af';
 
-const { beregnKostbasis, beregnIRR, beregnTWRSerie, beregnUtbyttePrognose, _leggTilMnd, beregnUtbytteskatt } = require('../assets/portefolje.js');
+const { beregnKostbasis, beregnIRR, beregnTWRSerie, beregnUtbyttePrognose, _leggTilMnd, beregnUtbytteskatt, beregnSkatteaar } = require('../assets/portefolje.js');
 
 // ── beregnKostbasis ─────────────────────────────────────────────────────────
 
@@ -491,4 +491,75 @@ test('beregnUtbytteskatt: skjerming på én aksje senker ikke skatten på en ann
 test('beregnUtbytteskatt: vanlig utbytte gir samme skatt som før', () => {
   const r = beregnUtbytteskatt([{ brutto: 1000, kostbasis: 10000, kapitalAndel: 0 }], 0.3784, 0.031);
   assert.ok(Math.abs(r.skatt - (1000 - 310) * 0.3784) < 1e-9);
+});
+
+// ── Tilbakebetalt kapital, realisert gevinst og skatteåret (2026-10-03) ─────
+test('beregnKostbasis: tilbakebetalt kapital trekkes fra inngangsverdien, eldste først', () => {
+  const tx = { X: [
+    { type: 'kjøp',    dato: '2024-01-10', antall: 100, kurs: 50 },
+    { type: 'kjøp',    dato: '2024-06-10', antall: 100, kurs: 40 },
+    { type: 'kapital', dato: '2025-03-01', antall: 150, kurs: 2 },
+  ] };
+  const kb = beregnKostbasis('X', tx);
+  assert.equal(kb.antall, 200);
+  assert.equal(kb.totalKost, 100 * 48 + 50 * 38 + 50 * 40);   // lott 2 deles i to
+  assert.equal(kb.mottattKapital, 300);
+  assert.deepEqual(kb.kapitalOverskudd, []);
+});
+
+test('beregnKostbasis: kapital over inngangsverdien skattes som utbytte', () => {
+  const tx = { X: [
+    { type: 'kjøp',    dato: '2024-01-10', antall: 10, kurs: 3 },
+    { type: 'kapital', dato: '2025-03-01', antall: 10, kurs: 5 },
+  ] };
+  const kb = beregnKostbasis('X', tx);
+  assert.equal(kb.totalKost, 0);
+  assert.deepEqual(kb.kapitalOverskudd, [{ dato: '2025-03-01', belop: 20 }]);
+});
+
+test('beregnKostbasis: salg etter tilbakebetaling gir høyere gevinst, FIFO', () => {
+  const tx = { X: [
+    { type: 'kjøp',    dato: '2024-01-10', antall: 100, kurs: 50 },
+    { type: 'kapital', dato: '2025-03-01', antall: 100, kurs: 5 },
+    { type: 'salg',    dato: '2025-09-01', antall: 40,  kurs: 60 },
+  ] };
+  const kb = beregnKostbasis('X', tx);
+  assert.deepEqual(kb.realisert, [{ dato: '2025-09-01', antall: 40, salgssum: 2400, kostpris: 1800, gevinst: 600 }]);
+  // tilDato: før salget
+  assert.equal(beregnKostbasis('X', tx, '2025-06-30').antall, 100);
+});
+
+test('beregnSkatteaar: skjerming per aksje og bare for aksjer eid 31.12', () => {
+  const tx = {
+    A: [ { type: 'kjøp', dato: '2024-01-10', antall: 100, kurs: 100 },     // kost 10 000
+         { type: 'utbytte', dato: '2025-05-01', antall: 100, kurs: 2 } ],  // 200 kr
+    B: [ { type: 'kjøp', dato: '2024-01-10', antall: 10, kurs: 100 },      // kost 1 000
+         { type: 'utbytte', dato: '2025-05-01', antall: 10, kurs: 10 } ],  // 100 kr
+    C: [ { type: 'kjøp', dato: '2024-01-10', antall: 10, kurs: 100 },
+         { type: 'utbytte', dato: '2025-04-01', antall: 10, kurs: 5 },     // 50 kr
+         { type: 'salg', dato: '2025-06-01', antall: 10, kurs: 90 } ],     // tap 100, ingen skjerming
+  };
+  const r = beregnSkatteaar(tx, 2025, 0.036, 0.3784);
+  const rad = t => r.rader.find(x => x.ticker === t);
+  assert.equal(rad('A').bruktSkjerming, 200);          // 360 skjerming, bare 200 utbytte
+  assert.ok(Math.abs(rad('A').ubruktSkjerming - 160) < 1e-9);
+  assert.equal(rad('B').bruktSkjerming, 36);
+  assert.equal(rad('C').skjerming, 0);
+  assert.equal(rad('C').gevinst, -100);
+  assert.ok(Math.abs(r.skattbartUtbytte - (0 + 64 + 50)) < 1e-9);
+  assert.ok(Math.abs(r.grunnlag - (114 - 100)) < 1e-9);
+  assert.ok(Math.abs(r.skatt - 14 * 0.3784) < 1e-9);
+});
+
+test('beregnSkatteaar: tilbakebetalt kapital er ikke skattepliktig, tap gir fradrag', () => {
+  const tx = { X: [
+    { type: 'kjøp',    dato: '2024-01-10', antall: 100, kurs: 50 },
+    { type: 'kapital', dato: '2025-03-01', antall: 100, kurs: 5 },
+    { type: 'salg',    dato: '2025-09-01', antall: 100, kurs: 30 },
+  ] };
+  const r = beregnSkatteaar(tx, 2025, 0.036, 0.3784);
+  assert.equal(r.kapital, 500);
+  assert.equal(r.skattbartUtbytte, 0);
+  assert.equal(r.gevinst, 3000 - 4500);
+  assert.ok(r.skatt < 0);
 });

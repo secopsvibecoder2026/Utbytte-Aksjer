@@ -16,7 +16,7 @@ global.localStorage = (() => {
 // Stub out caches (used by lagreNotifPrefs)
 global.window = { caches: undefined };
 
-const { hentFav, lagreFav, erFavoritt, toggleFav, hentPortefoljer, hentAktivPF, lagrePF } = require('../assets/storage.js');
+const { hentFav, lagreFav, erFavoritt, toggleFav, hentPortefoljer, hentAktivPF, lagrePF, skjermingsrenteFor } = require('../assets/storage.js');
 
 test('hentFav returnerer tom Set når localStorage er tom', () => {
   localStorage.clear();
@@ -89,3 +89,10 @@ for (const verdi of ['null', '[]', '42', '"tekst"']) {
     assert.deepEqual(hentAktivPF().beholdning, { EQNR: 10 });
   });
 }
+
+// Skjermingsrenten er ulik per år — Skatteetaten, kontrollert 03.10.2026.
+test('skjermingsrenteFor: fastsatte satser, og siste sats som anslag ellers', () => {
+  assert.deepEqual(skjermingsrenteFor(2024), { sats: 0.039, fastsatt: true, aar: 2024 });
+  assert.deepEqual(skjermingsrenteFor(2025), { sats: 0.036, fastsatt: true, aar: 2025 });
+  assert.deepEqual(skjermingsrenteFor(2026), { sats: 0.036, fastsatt: false, aar: 2025 });
+});

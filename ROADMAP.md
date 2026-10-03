@@ -226,16 +226,17 @@ aksjesidens FAQ sa «beskattes med 37,84 %».
 - [x] Skatteberegningen holder tilbakebetalingen utenfor — og regner nå
       skjermingsfradraget per aksje, ikke samlet for porteføljen.
 - [x] Tekst på aksjesiden (egen boks + FAQ) og i appens aksjevindu.
-- [ ] **Registrerte «Utbytte mottatt»-transaksjoner reduserer ikke
-      kostprisen.** Vi vet ikke hvilken klassifisering hver historiske
-      utbetaling hadde — merket gjelder bare den nyeste meldingen. Trengs for
-      et riktig skattesammendrag (gevinst ved salg), se under.
+- [x] Ny transaksjonstype «Tilbakebetalt kapital» (03.10.2026). Brukeren velger
+      type per utbetaling — appen hinter når siste melding sier tilbakebetaling,
+      men gjetter ikke på historiske utbetalinger. Beløpet trekkes fra
+      inngangsverdien (FIFO), overskytende skattes som utbytte.
 
-### Skattesammendrag — årsoppsummering
-Skjermingsfradrag er allerede beregnet. Mangler samlet årsvisning.
-- [ ] Ny seksjon i Statistikk-fanen: «Skatteåret {år}»
-- [ ] Totalt mottatt utbytte, skjermingsfradrag, skattepliktig beløp og estimert skatt (37,84%)
+### Skattesammendrag — årsoppsummering ✅ (03.10.2026)
+Statistikk → Skatt. Utbytte, tilbakebetalt kapital, skjerming per aksje med
+årets sats, realisert gevinst/tap (FIFO) og beregnet skatt eller fradrag.
 - [ ] Eksporter til PDF eller klippebord
+- [ ] Framført ubrukt skjerming over flere år
+- [ ] Merke en portefølje som ASK, så den holdes utenfor
 
 ### Utbyttebærekraft på aksjekortet
 Bærekraft-analyse vises i modal, men ikke i kortvisning.
