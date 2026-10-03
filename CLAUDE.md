@@ -1177,6 +1177,27 @@ historical payment. That is needed before a yearly tax summary can show gains
 correctly. Tests: `TestKapitalTilbake` (12), `ui.test.js` (3),
 `portefolje.test.js` (4).
 
+## «Måneder uten ex-dato» — a filter, not a recommendation (2026-10-03)
+
+The portfolio's Inntekt tab already said «Ingen utbetalinger i juli og
+desember» under the monthly chart, and `_jevnhetTekst()` deliberately named
+no stocks: a suggestion is a recommendation, not a number. The card
+`visTommeMaaneder()` adds the next step while keeping that line — it lists
+**which stocks have gone ex in that month**, as a fact about history.
+
+- `aksjerMedExIMaaned()` in `ui.js` does the selection, pure and tested. A
+  month must be in `utbetalingsmaaneder` (so it recurred in at least two
+  years), the company must have paid in the last 12 months (REACH and MGN keep
+  old patterns), and a payment above 2× the price is excluded — otherwise
+  2020 Bulkers, a monthly payer, would top all twelve months at ~2 000 %.
+- **Sorted by streak, then paid yield** — the question is «who reliably goes
+  ex in this month», not «who pays most». The yield shown is what was *paid*,
+  never the estimate (see «What was actually paid»).
+- Empty months come from `_maanedSummer()`, shared with the chart, so the card
+  and the sentence under the chart cannot disagree.
+- In-app only, by choice: no new public page while the AdSense application is
+  pending. Tests: `ui.test.js` (2).
+
 ## Where the weekly tallkontroll report goes (2026-09-30)
 
 The routine «Ukentlig tallkontroll» (Mondays 17:24 UTC) starts a fresh
@@ -2406,8 +2427,9 @@ extraordinary split, not a threshold.
 
 **STST's distributions are not dividends for tax.** Every 2026 notice says
 «The distribution will constitute a repayment of the Company's paid-in
-capital». In Norway that is tax-free and reduces the cost basis; the portfolio
-tax calculation treats it as a dividend at 37,84 %. Not fixed — see ROADMAP.
+capital». In Norway that is tax-free and reduces the cost basis. Fixed
+2026-10-03 for eight issuers — see «Return of paid-in capital is not a dividend
+for tax».
 
 ### What was actually paid — shown beside the estimate, and measured (2026-09-24)
 

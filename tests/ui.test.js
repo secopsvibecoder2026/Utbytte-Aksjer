@@ -32,7 +32,7 @@ const {
   vekstKlasse,
   beregnScore,
   beregnYtdInntekt
-, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, utbyttePerioder, vistOverBetalt, modalBetaltBoks, utbytteRekke, stabileAr, exForbeholdGjelder, kapitalAndel, modalKapitalNote, kapitalSkattTekst } = require('../assets/ui.js');
+, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, utbyttePerioder, vistOverBetalt, modalBetaltBoks, utbytteRekke, stabileAr, exForbeholdGjelder, kapitalAndel, modalKapitalNote, kapitalSkattTekst, aksjerMedExIMaaned } = require('../assets/ui.js');
 
 // ── fmt ────────────────────────────────────────────────────────────────────
 test('fmt returnerer — for null', () => {
@@ -566,4 +566,35 @@ test('modalKapitalNote: bare for aksjer med feltet', () => {
   const h = modalKapitalNote({ kapital_tilbake: { andel: 1, melding_dato: '2026-08-25' } });
   assert.match(h, /tilbakebetaling av innbetalt kapital/);
   assert.match(modalKapitalNote({ kapital_tilbake: { andel: 0.862 } }), /om lag 86 %/);
+});
+
+// ── aksjerMedExIMaaned — «Måneder uten ex-dato» (2026-10-03) ─────────────────
+test('aksjerMedExIMaaned: bare aksjer med måneden i mønsteret og betaling siste 12 mnd', () => {
+  const iAar = new Date().getFullYear();
+  const aksjer = [
+    { ticker: 'JUL', navn: 'Juli ASA', pris: 100, utbytte_12m: 5, utbetalingsmaaneder: [7],
+      utbytteaar: [iAar - 3, iAar - 2, iAar - 1] },
+    { ticker: 'MAI', navn: 'Mai ASA', pris: 100, utbytte_12m: 5, utbetalingsmaaneder: [5] },
+    { ticker: 'STOPP', navn: 'Stoppet ASA', pris: 100, utbytte_12m: 0, utbetalingsmaaneder: [7] },
+    { ticker: 'MANGLER', navn: 'Uten felt ASA', pris: 100, utbetalingsmaaneder: [7] },
+    { ticker: 'KAPITAL', navn: '2020-type', pris: 4, utbytte_12m: 130, utbetalingsmaaneder: [7] },
+    { ticker: 'EID', navn: 'Eid ASA', pris: 100, utbytte_12m: 5, utbetalingsmaaneder: [7] },
+  ];
+  const r = aksjerMedExIMaaned(aksjer, 7, new Set(['EID']));
+  assert.deepEqual(r.map(x => x.ticker), ['JUL']);
+  assert.equal(r[0].betaltYield, 5);
+  assert.equal(r[0].rekke, 3);
+});
+
+test('aksjerMedExIMaaned: lengst rekke først, så høyest betalt yield', () => {
+  const iAar = new Date().getFullYear();
+  const aar = n => Array.from({ length: n }, (_, i) => iAar - 1 - i);
+  const r = aksjerMedExIMaaned([
+    { ticker: 'HOY', pris: 100, utbytte_12m: 9, utbetalingsmaaneder: [10], utbytteaar: aar(2) },
+    { ticker: 'LANG', pris: 100, utbytte_12m: 3, utbetalingsmaaneder: [10], utbytteaar: aar(15) },
+    { ticker: 'MIDT', pris: 100, utbytte_12m: 6, utbetalingsmaaneder: [10], utbytteaar: aar(2) },
+    { ticker: 'UKJENT', pris: 100, utbytte_12m: 12, utbetalingsmaaneder: [10] },
+  ], 10);
+  assert.deepEqual(r.map(x => x.ticker), ['LANG', 'HOY', 'MIDT', 'UKJENT']);
+  assert.equal(r[3].rekke, null);
 });

@@ -206,7 +206,7 @@ function byttStatsSubTab(tab) {
   if (window._pfSisteData) {
     const { beholdning, totalAr } = window._pfSisteData;
     if (tab === 'oversikt')      visYieldChart(beholdning);
-    if (tab === 'inntekt')       { visUtbyttePrognose(beholdning); visMaanedChart(beholdning); }
+    if (tab === 'inntekt')       { visUtbyttePrognose(beholdning); visMaanedChart(beholdning); visTommeMaaneder(beholdning); }
     if (tab === 'beholdning')    { visVerdiChart(beholdning); visCharts(beholdning, totalAr); }
     if (tab === 'sektorer')      { visHHI(beholdning); visSektorYieldChart(beholdning); visCharts(beholdning, totalAr); }
   }
@@ -1495,7 +1495,7 @@ function visPortefolje() {
   window._pfSisteData = { beholdning: alleBeholdning, totalAr };
   // Tegn chart for aktiv stats-tab
   if (aktivStatsTab === 'oversikt')      visYieldChart(alleBeholdning);
-  if (aktivStatsTab === 'inntekt')       { visUtbyttePrognose(alleBeholdning); visMaanedChart(alleBeholdning); }
+  if (aktivStatsTab === 'inntekt')       { visUtbyttePrognose(alleBeholdning); visMaanedChart(alleBeholdning); visTommeMaaneder(alleBeholdning); }
   if (aktivStatsTab === 'beholdning')    { visVerdiChart(alleBeholdning); visCharts(alleBeholdning, totalAr); }
   if (aktivStatsTab === 'sektorer')      { visHHI(alleBeholdning); visSektorYieldChart(alleBeholdning); visCharts(alleBeholdning, totalAr); }
   if (!['beholdning','sektorer'].includes(aktivStatsTab)) {
@@ -1585,9 +1585,9 @@ function visYieldChart(beholdning) {
 }
 
 // ── MÅNEDLIG INNTEKT (Inntekt) ────────────────────────────────────────────
-function visMaanedChart(beholdning) {
-  const el = document.getElementById('pf-maaned-chart');
-  if (!el || !beholdning.length) return;
+// Forventet utbytte per måned (0–11). Delt av grafen og kortet «Måneder uten
+// ex-dato», så de to aldri kan være uenige om hvilke måneder som er tomme.
+function _maanedSummer(beholdning) {
   const mnd = Array(12).fill(0);
   beholdning.forEach(a => {
     const mnder = _betalingsMaaneder(a);
@@ -1597,9 +1597,16 @@ function visMaanedChart(beholdning) {
     // halvårlig betaler kan ha tre måneder fordi datoene glir mellom år — og da
     // ville årssummen i grafen blitt for høy. Se CLAUDE.md om frekvensetikett
     // ved siden av en månedsliste som ikke stemmer med den.
-    const perBetaling = a.forv_ar / mnder.length;
+    const perBetaling = (a.forv_ar || 0) / mnder.length;
     mnder.forEach(m => { mnd[m] += perBetaling; });
   });
+  return mnd;
+}
+
+function visMaanedChart(beholdning) {
+  const el = document.getElementById('pf-maaned-chart');
+  if (!el || !beholdning.length) return;
+  const mnd = _maanedSummer(beholdning);
   const maks = Math.max(...mnd, 1);
   const fmtKr = v => v.toLocaleString('nb-NO', { maximumFractionDigits: 0 }) + ' kr';
   const navn = ['Jan','Feb','Mar','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Des'];
@@ -1630,8 +1637,9 @@ function visMaanedChart(beholdning) {
  *
  * Norsk utbytte er stuet sammen om våren — 47 % av alle utbetalingsmåneder i
  * katalogen ligger i mars–mai — så en portefølje satt sammen uten tanke på tid
- * gir nesten alltid noen tomme måneder. Dette sier bare hva som er observert;
- * det foreslår ingen aksjer, fordi det ville vært en anbefaling og ikke et tall.
+ * gir nesten alltid noen tomme måneder. Dette sier bare hva som er observert.
+ * Hvilke aksjer som har gått ex i de tomme månedene, står i et eget kort
+ * (visTommeMaaneder()) — som et filter på historikken, ikke en anbefaling.
  */
 function _jevnhetTekst(mnd, navn) {
   const sum = mnd.reduce((s, v) => s + v, 0);
@@ -1655,6 +1663,107 @@ function _jevnhetTekst(mnd, navn) {
       ${tommeTekst}
       Månedene er ex-datoer; utbetalingen kommer typisk halvannen til tre uker senere.
     </p>`;
+}
+
+// ── MÅNEDER UTEN EX-DATO (Inntekt) ────────────────────────────────────────
+const MND_KORT = ['Jan','Feb','Mar','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Des'];
+const MND_LANG = ['januar','februar','mars','april','mai','juni',
+                  'juli','august','september','oktober','november','desember'];
+const TOMME_MND_VIS = 6;
+let _valgtTomMnd = null;   // 0–11, overlever re-render
+let _visAlleTomMnd = false;
+
+/**
+ * Månedene der ingen av aksjene i porteføljen pleier å gå ex-utbytte, og
+ * aksjene i katalogen som har gjort det. Utvalget gjøres av
+ * aksjerMedExIMaaned() i ui.js; her bygges bare kortet.
+ *
+ * Standardvalget er den første tomme måneden fra og med inneværende — det er
+ * den som er nærmest å merke i kontoen.
+ */
+function visTommeMaaneder(beholdning) {
+  const el = document.getElementById('pf-tomme-mnd');
+  if (!el) return;
+  const mnd = _maanedSummer(beholdning);
+  if (!mnd.some(v => v > 0)) { el.innerHTML = ''; el.parentElement?.classList.add('hidden'); return; }
+  el.parentElement?.classList.remove('hidden');
+
+  const tomme = mnd.map((v, i) => (v > 0 ? null : i)).filter(i => i !== null);
+  if (!tomme.length) {
+    el.innerHTML = '<p class="text-xs text-gray-500 dark:text-gray-400">Aksjene dine har ex-dato i alle tolv måneder.</p>';
+    return;
+  }
+  const iMnd = new Date().getMonth();
+  if (!tomme.includes(_valgtTomMnd)) {
+    _valgtTomMnd = tomme.find(i => i >= iMnd) ?? tomme[0];
+    _visAlleTomMnd = false;
+  }
+  const valgt = _valgtTomMnd;
+
+  const eide = new Set(beholdning.map(a => a.ticker));
+  const liste = aksjerMedExIMaaned(window.alleAksjer || [], valgt + 1, eide);
+  const synlige = _visAlleTomMnd ? liste : liste.slice(0, TOMME_MND_VIS);
+  const fmtPst = v => v.toLocaleString('nb-NO', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + ' %';
+
+  const tommeNavn = tomme.map(i => MND_LANG[i]);
+  const tommeTekst = tommeNavn.length === 1 ? tommeNavn[0]
+    : tommeNavn.slice(0, -1).join(', ') + ' og ' + tommeNavn[tommeNavn.length - 1];
+
+  const piller = tomme.map(i => `<button type="button" data-tom-mnd="${i}"
+      class="toppliste-pill${i === valgt ? ' active' : ''}" aria-pressed="${i === valgt}">${MND_KORT[i]}</button>`).join('');
+
+  const rader = synlige.map(k => `
+      <button type="button" data-ticker="${escHtml(k.ticker)}"
+        class="w-full flex items-center justify-between gap-3 py-2 border-b border-gray-100 dark:border-gray-800 last:border-0 text-left hover:bg-gray-50 dark:hover:bg-gray-800/50 rounded">
+        <span class="min-w-0">
+          <span class="font-mono font-bold text-sm text-brand-700 dark:text-brand-400">${escHtml(k.ticker)}</span>
+          <span class="block text-xs text-gray-500 dark:text-gray-400 truncate">${escHtml(k.navn)}${k.maaneder ? ' · ex i ' + escHtml(k.maaneder) : ''}</span>
+        </span>
+        <span class="text-right shrink-0">
+          <span class="block text-sm font-semibold text-gray-800 dark:text-gray-200 tabular-nums">${fmtPst(k.betaltYield)}</span>
+          <span class="block text-[11px] text-gray-400">${k.rekke ? k.rekke + ' år på rad' : 'betalt 12 mnd'}</span>
+        </span>
+      </button>`).join('');
+
+  const flere = liste.length > TOMME_MND_VIS
+    ? `<button type="button" data-tom-alle class="mt-2 text-xs font-medium text-brand-600 dark:text-brand-400 hover:underline">${
+        _visAlleTomMnd ? 'Vis færre' : `Vis alle ${liste.length}`}</button>`
+    : '';
+
+  el.innerHTML = `
+    <p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed mb-3">
+      Ingen av aksjene dine har pleid å gå ex-utbytte i <strong>${tommeTekst}</strong>.
+      Velg en måned for å se hvilke aksjer i katalogen som har gjort det i minst to av de siste årene.
+    </p>
+    <div class="flex flex-wrap gap-2 mb-3">${piller}</div>
+    ${liste.length
+      ? `<p class="text-xs text-gray-400 mb-1">${liste.length} ${liste.length === 1 ? 'aksje' : 'aksjer'} med ex-dato i ${MND_LANG[valgt]}, sortert etter hvor lenge utbytterekken har holdt. Yield er det som faktisk er betalt siste 12 måneder.</p>
+         <div>${rader}</div>${flere}`
+      : `<p class="text-xs text-gray-500 dark:text-gray-400">Ingen aksjer i katalogen har gått ex i ${MND_LANG[valgt]} i minst to av de siste årene og betalt utbytte det siste året.</p>`}
+    <p class="text-[11px] text-gray-400 dark:text-gray-600 mt-3">Et filter på historiske ex-datoer, ikke en anbefaling. Selskaper kan flytte, kutte eller stoppe utbyttet, og pengene kommer typisk halvannen til tre uker etter ex-datoen.</p>`;
+
+  if (!el.dataset.koblet) {
+    el.dataset.koblet = '1';
+    el.addEventListener('click', e => {
+      const pille = e.target.closest('[data-tom-mnd]');
+      if (pille) {
+        _valgtTomMnd = Number(pille.dataset.tomMnd);
+        _visAlleTomMnd = false;
+        visTommeMaaneder((window._pfSisteData || {}).beholdning || []);
+        return;
+      }
+      if (e.target.closest('[data-tom-alle]')) {
+        _visAlleTomMnd = !_visAlleTomMnd;
+        visTommeMaaneder((window._pfSisteData || {}).beholdning || []);
+        return;
+      }
+      const rad = e.target.closest('[data-ticker]');
+      if (rad) {
+        const a = (window.alleAksjer || []).find(x => x.ticker === rad.dataset.ticker);
+        if (a) visModal(a);
+      }
+    });
+  }
 }
 
 // ── MIN UTBYTTELØNN: 12-måneders kontantstrømprognose ─────────────────────
