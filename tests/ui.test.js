@@ -32,7 +32,7 @@ const {
   vekstKlasse,
   beregnScore,
   beregnYtdInntekt
-, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, utbyttePerioder, vistOverBetalt, modalBetaltBoks, utbytteRekke, stabileAr, exForbeholdGjelder } = require('../assets/ui.js');
+, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, utbyttePerioder, vistOverBetalt, modalBetaltBoks, utbytteRekke, stabileAr, exForbeholdGjelder, kapitalAndel, modalKapitalNote, kapitalSkattTekst } = require('../assets/ui.js');
 
 // ── fmt ────────────────────────────────────────────────────────────────────
 test('fmt returnerer — for null', () => {
@@ -544,4 +544,26 @@ test('exForbeholdGjelder: gjelder til generalforsamlingen, ikke etter', () => {
   assert.equal(exForbeholdGjelder(a, new Date(2026, 8, 26)), '2026-10-15');
   assert.equal(exForbeholdGjelder(a, new Date(2026, 9, 16)), null);
   assert.equal(exForbeholdGjelder({ ex_dato: '2026-10-16' }, new Date(2026, 8, 26)), null);
+});
+
+// ── Tilbakebetaling av innbetalt kapital (2026-10-03) ────────────────────────
+// Speiler kapital_andel() / lag_kapital_note() i fetch_stocks.py.
+test('kapitalAndel: leser feltet og avviser ugyldige verdier', () => {
+  assert.equal(kapitalAndel({}), 0);
+  assert.equal(kapitalAndel({ kapital_tilbake: { andel: 1.5 } }), 0);
+  assert.equal(kapitalAndel({ kapital_tilbake: { andel: 'x' } }), 0);
+  assert.equal(kapitalAndel({ kapital_tilbake: { andel: 0.86 } }), 0.86);
+});
+
+test('kapitalSkattTekst: sier ikke 37,84 % om en tilbakebetaling', () => {
+  assert.equal(kapitalSkattTekst({}), '37,84% skatt');
+  assert.equal(kapitalSkattTekst({ kapital_tilbake: { andel: 1 } }), 'skatt utsatt til salg');
+  assert.equal(kapitalSkattTekst({ kapital_tilbake: { andel: 0.862 } }), '37,84% på 14 % av beløpet');
+});
+
+test('modalKapitalNote: bare for aksjer med feltet', () => {
+  assert.equal(modalKapitalNote({ ticker: 'EQNR' }), '');
+  const h = modalKapitalNote({ kapital_tilbake: { andel: 1, melding_dato: '2026-08-25' } });
+  assert.match(h, /tilbakebetaling av innbetalt kapital/);
+  assert.match(modalKapitalNote({ kapital_tilbake: { andel: 0.862 } }), /om lag 86 %/);
 });

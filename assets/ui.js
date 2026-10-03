@@ -3021,7 +3021,7 @@ function visModal(a) {
         ${modalKort('År m/utbytte', a.ar_med_utbytte > 0 ? a.ar_med_utbytte + ' år' : '—')}
       </div>
       ${modalDelaarVarsel(a)}${modalEkstraordinaerNote(a)}
-      ${modalBetaltBoks(a)}
+      ${modalBetaltBoks(a)}${modalKapitalNote(a)}
       <div class="rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden mb-4">
         <div class="bg-orange-50 dark:bg-orange-950/30 px-4 py-3">
           <h3 class="font-semibold text-sm text-orange-800 dark:text-orange-300">Viktige datoer</h3>
@@ -3203,8 +3203,8 @@ function modalKalkulator(a) {
           </div>
           <div class="rounded-lg bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 p-2.5">
             <p class="text-gray-400 mb-0.5">Etter skatt</p>
-            <p id="modal-kal-netto" class="font-bold text-gray-700 dark:text-gray-300 text-base">${fmtKr(utbAar * (1 - SKATTESATS))}</p>
-            <p class="text-gray-400 mt-0.5">37,84% skatt</p>
+            <p id="modal-kal-netto" class="font-bold text-gray-700 dark:text-gray-300 text-base">${fmtKr(utbAar * (1 - SKATTESATS * (1 - kapitalAndel(a))))}</p>
+            <p class="text-gray-400 mt-0.5">${kapitalSkattTekst(a)}</p>
           </div>
         </div>
       </div>
@@ -3233,7 +3233,16 @@ function _oppdaterModalKalkulator(a) {
   // si når pengene faktisk kommer; ellers merk snittet som et snitt.
   const mndTekst = maanederTekst(a);
   mndEl.textContent    = mndTekst ? 'Ex-dato i ' + mndTekst : fmtKr(utbAar / 12) + ' / mnd i snitt';
-  nettoEl.textContent  = fmtKr(utbAar * (1 - SKATTESATS));
+  nettoEl.textContent  = fmtKr(utbAar * (1 - SKATTESATS * (1 - kapitalAndel(a))));
+}
+
+// Etiketten under «Etter skatt». Tilbakebetaling av innbetalt kapital
+// skattlegges ved salg, ikke ved utbetaling — «37,84% skatt» ville vært feil.
+function kapitalSkattTekst(a) {
+  const andel = kapitalAndel(a);
+  if (andel >= 0.999) return 'skatt utsatt til salg';
+  if (andel > 0) return `37,84% på ${Math.round((1 - andel) * 100)} % av beløpet`;
+  return '37,84% skatt';
 }
 
 function historiskChart(a) {
@@ -3619,6 +3628,39 @@ function kobleBetaltBoks(rot, a) {
         .forEach(c => k.classList.toggle(c, !aktiv));
     });
   });
+}
+
+/**
+ * Andelen av aksjens utbetalinger som er tilbakebetaling av innbetalt kapital,
+ * 0–1. Speiler `kapital_andel()` i fetch_stocks.py; feltet `kapital_tilbake`
+ * leses fra selskapets siste utbyttemelding hver kjøring. 0 betyr «ordinært
+ * utbytte, eller vi vet ikke» — begge gir full skatt, som før.
+ */
+function kapitalAndel(a) {
+  const k = a && a.kapital_tilbake;
+  if (!k || typeof k !== 'object') return 0;
+  const andel = Number(k.andel) || 0;
+  return andel > 0 && andel <= 1 ? andel : 0;
+}
+
+function modalKapitalNote(a) {
+  const andel = kapitalAndel(a);
+  if (!andel) return '';
+  const hva = andel >= 0.999
+    ? 'betaler selskapet ut <strong>tilbakebetaling av innbetalt kapital</strong>, ikke utbytte i skattemessig forstand'
+    : `var <strong>om lag ${Math.round(andel * 100)} % av siste utbetaling tilbakebetaling av innbetalt kapital</strong>, og resten ordinært utbytte`;
+  // Bare en ISO-dato slipper gjennom, og formaterDato() gir da sifre og
+  // månedsnavn — ingenting å escape, og aldri «Invalid Date».
+  const md = String(a.kapital_tilbake.melding_dato || '');
+  const dato = /^\d{4}-\d{2}-\d{2}$/.test(md) ? ` (${formaterDato(md)})` : '';
+  return `<div class="rounded-lg border-l-4 border-gray-400 dark:border-gray-600 bg-gray-50 dark:bg-gray-800/50 px-4 py-3 mb-4">
+      <p class="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-1">Utbetalingen er tilbakebetaling av kapital</p>
+      <p class="text-xs text-gray-700 dark:text-gray-300 leading-relaxed">
+        Ifølge selskapets siste utbyttemelding${dato} ${hva}. For en personlig aksjonær er den ikke
+        skattepliktig når den utbetales — den trekkes fra inngangsverdien, og skatten kommer som høyere
+        gevinst når du selger. Overstiger den inngangsverdien, skattlegges det overskytende som utbytte.
+      </p>
+    </div>`;
 }
 
 function modalEkstraordinaerNote(a) {
@@ -4995,4 +5037,4 @@ function _annBygTopp() {
 }
 
 // Node.js test export
-if (typeof module !== 'undefined') module.exports = { utbytteRekke, stabileAr, exForbeholdGjelder, utbyttePerioder, vistOverBetalt, modalBetaltBoks, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, fmt, formaterDato, yieldKlasse, payoutKlasse, vekstKlasse, beregnScore, beregnBaerekraft, beregnYtdInntekt, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote };
+if (typeof module !== 'undefined') module.exports = { utbytteRekke, stabileAr, exForbeholdGjelder, utbyttePerioder, vistOverBetalt, modalBetaltBoks, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, fmt, formaterDato, yieldKlasse, payoutKlasse, vekstKlasse, beregnScore, beregnBaerekraft, beregnYtdInntekt, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote, kapitalAndel, modalKapitalNote, kapitalSkattTekst };

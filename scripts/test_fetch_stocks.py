@@ -1658,5 +1658,113 @@ class TestUtbetalingerIMelding(unittest.TestCase):
         self.assertEqual(len(u), 1)
         self.assertEqual((u[0]["ex_dato"], u[0]["betaling_dato"]), _parse_ex_dato(tekst))
 
+
+class TestKapitalTilbake(unittest.TestCase):
+    """Tilbakebetaling av innbetalt kapital — utdrag fra ekte børsmeldinger."""
+
+    STST = ("Ex-date: 7 August 2026 Record date: 10 August 2026 Payment date: on or about "
+            "1 September 2026 Date of approval: 4 August 2026 Other information: The "
+            "distribution will constitute a repayment of the Company's paid-in capital.")
+    HUNT_DELT = ("Dividend amount: NOK 0.58 per share Declared currency: NOK Dividend "
+                 "classification: NOK 0.50 as repayment of paid-in capital and NOK 0.08 as "
+                 "ordinary dividend Last day including right: 25 March 2026 Ex-date: 26 March 2026")
+    HUNT_HEL = ("Dividend amount: NOK 0.40 per share Declared currency: NOK Dividend "
+                "classification: Repayment of paid-in capital Ex-date: 2 March 2026")
+    BOR = ("For Norwegian tax purposes, the distribution shall be in the form of repayment of "
+           "paid-in equity. Dividend amount: NOK 0.50 per share")
+    PEN = "Distributions will be paid in NOK The cash distribution will be paid as a return of paid in capital"
+    ENH = ("The approved cash distribution of USD 25.0 million will be distributed as a "
+           "repayment of paid in capital.")
+    SATS = ("For Norwegian tax-purposes, the dividend is considered repayment of paid-in "
+            "capital. Dividend amount: NOK 0.72 per share")
+    ORDINAER = ("Dividend amount: NOK 5.00 per share Declared currency: NOK Ex-date: "
+                "13 November 2026 Payment date: 25 November 2026")
+
+    def test_hele_utbetalingen(self):
+        for tekst in (self.STST, self.HUNT_HEL, self.BOR, self.PEN, self.ENH, self.SATS):
+            self.assertEqual(fs._parse_kapitaltilbake(tekst), 1.0, tekst[:40])
+
+    def test_delt_utbetaling_gir_andel(self):
+        self.assertAlmostEqual(fs._parse_kapitaltilbake(self.HUNT_DELT), 0.5 / 0.58, places=3)
+
+    def test_delt_uten_total_gir_intet_svar(self):
+        # En delt utbetaling er ikke det samme som en hel — uten totalen gjetter vi ikke.
+        tekst = "NOK 0.50 as repayment of paid-in capital and NOK 0.08 as ordinary dividend"
+        self.assertIsNone(fs._parse_kapitaltilbake(tekst))
+
+    def test_ordinaert_utbytte_gir_none(self):
+        self.assertIsNone(fs._parse_kapitaltilbake(self.ORDINAER))
+        self.assertIsNone(fs._parse_kapitaltilbake(""))
+
+    def test_nektende_formulering_teller_ikke(self):
+        tekst = "The dividend will not constitute a repayment of paid-in capital."
+        self.assertIsNone(fs._parse_kapitaltilbake(tekst))
+
+    def _med_meldinger(self, meldinger, tekster, feil=False):
+        gml_liste, gml_tekst = fs._newsweb_meldinger, fs._newsweb_tekst
+
+        def liste(_t):
+            if feil:
+                raise OSError("nett nede")
+            return meldinger
+        fs._newsweb_meldinger = liste
+        fs._newsweb_tekst = lambda mid: tekster[mid]
+        try:
+            return fs.hent_kapitaltilbake("X", i_dag=datetime.date(2026, 10, 3))
+        finally:
+            fs._newsweb_meldinger, fs._newsweb_tekst = gml_liste, gml_tekst
+
+    def test_nyeste_melding_avgjor(self):
+        # BOR: tilbakebetaling i 2026 etter ordinært utbytte i 2025.
+        m = [{"title": "Key information relating to the cash dividend", "messageId": 2,
+              "publishedTime": "2026-02-26T08:00"},
+             {"title": "Key information relating to the cash dividend", "messageId": 1,
+              "publishedTime": "2025-05-28T08:00"}]
+        kt = self._med_meldinger(m, {2: self.BOR, 1: self.ORDINAER})
+        self.assertEqual(kt, {"andel": 1.0, "melding_dato": "2026-02-26", "melding_id": 2})
+        # Og motsatt: en nyere ordinær melding opphever et gammelt merke.
+        kt = self._med_meldinger(m, {2: self.ORDINAER, 1: self.BOR})
+        self.assertIsNone(kt)
+
+    def test_andre_meldinger_hoppes_over(self):
+        m = [{"title": "Mandatory notification of trade", "messageId": 3,
+              "publishedTime": "2026-09-01T08:00"},
+             {"title": "Key information on cash distribution", "messageId": 2,
+              "publishedTime": "2026-08-20T08:00"}]
+        kt = self._med_meldinger(m, {2: self.PEN})
+        self.assertEqual(kt["melding_id"], 2)
+
+    def test_for_gammel_melding_gir_none(self):
+        m = [{"title": "Key information relating to the cash dividend", "messageId": 1,
+              "publishedTime": "2025-06-01T08:00"}]
+        self.assertIsNone(self._med_meldinger(m, {1: self.STST}))
+
+    def test_nettverksfeil_er_ukjent_ikke_none(self):
+        # En feilet henting er ikke bevis for at utbetalingen er vanlig utbytte.
+        self.assertIs(self._med_meldinger([], {}, feil=True), fs.UKJENT)
+
+    def test_kapital_andel_vakter(self):
+        self.assertEqual(fs.kapital_andel({}), 0.0)
+        self.assertEqual(fs.kapital_andel({"kapital_tilbake": {"andel": 1.5}}), 0.0)
+        self.assertEqual(fs.kapital_andel({"kapital_tilbake": {"andel": "x"}}), 0.0)
+        self.assertEqual(fs.kapital_andel({"kapital_tilbake": {"andel": 0.86}}), 0.86)
+
+    def test_note_bare_der_feltet_finnes(self):
+        self.assertEqual(fs.lag_kapital_note({"ticker": "EQNR"}, fs._nf), "")
+        a = {"kapital_tilbake": {"andel": 1.0, "melding_dato": "2026-08-25"}}
+        h = fs.lag_kapital_note(a, fs._nf)
+        self.assertIn("tilbakebetaling av innbetalt", h)
+        self.assertIn("25. aug 2026", h)
+        delt = fs.lag_kapital_note({"kapital_tilbake": {"andel": 0.862}}, fs._nf)
+        self.assertIn("om lag 86 %", delt)
+
+    def test_faq_sier_ikke_37_prosent_om_tilbakebetaling(self):
+        a = {"ticker": "STST", "navn": "Stainless Tankers ASA", "utbytte_yield": 12.9,
+             "pris": 10.0, "utbytte_per_aksje": 1.29, "kapital_tilbake": {"andel": 1.0}}
+        tekst = json.dumps(fs._lag_faq_seksjon(a, datetime.date(2026, 10, 3)), ensure_ascii=False)
+        self.assertIn("ikke skattepliktig når den utbetales", tekst)
+        self.assertNotIn("beskattes med 37,84 % for personlige", tekst)
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
