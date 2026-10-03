@@ -145,19 +145,19 @@ Levert 2026-07-05 som **«Min utbyttelønn»** i Portefølje → Statistikk → 
 - [x] Sammenlign: yield, payout, vekst, P/E, P/B, score, historikk
 - [x] Del-lenke: `?sammenlign=EQNR,DNB,ORK`
 
-### N6. Skattesammendrag — årsoppsummering
+### N6. Skattesammendrag — årsoppsummering ✅ (03.10.2026, se ROADMAP.md)
 **Prioritet: Medium**
 
 Skjermingsfradrag og FIFO-kostbasis er allerede beregnet i `portefolje.js`. Mangler en samlet årsvisning brukeren faktisk kan bruke som støtte til skattemeldingen — i dag vises kun sammendragstall i UI, ingen eksportbar oversikt.
 
-- [ ] Ny seksjon i Statistikk-fanen: «Skatteåret {år}»
-- [ ] Totalt mottatt utbytte dette år (fra transaksjonslogg)
-- [ ] Skjermingsfradrag totalt — brukt og ubrukt/fremførbart beløp
-- [ ] Skattepliktig utbytte (etter fradrag)
-- [ ] Realisert gevinst/tap per aksje (FIFO), ikke bare utbytte
-- [ ] Estimert skatt å betale (37,84 %)
+- [x] Ny seksjon i Statistikk-fanen: «Skatteåret {år}»
+- [x] Totalt mottatt utbytte dette år (fra transaksjonslogg)
+- [x] Skjermingsfradrag totalt — brukt og ubrukt/fremførbart beløp
+- [x] Skattepliktig utbytte (etter fradrag)
+- [x] Realisert gevinst/tap per aksje (FIFO), ikke bare utbytte
+- [x] Estimert skatt å betale (37,84 %)
 - [ ] Eksporter som PDF eller kopier til utklippstavle
-- [ ] Merk tydelig som veiledende, ikke offisiell dokumentasjon — brukeren må selv verifisere mot Skatteetatens aksjeoppgave. Feil i skattetall er en annen alvorlighetsgrad enn feil i en yield-prognose.
+- [x] Merk tydelig som veiledende, ikke offisiell dokumentasjon — brukeren må selv verifisere mot Skatteetatens aksjeoppgave. Feil i skattetall er en annen alvorlighetsgrad enn feil i en yield-prognose.
 
 ### N7. Portefølje-rebalansering ✅
 **Prioritet: Medium**

@@ -6,33 +6,127 @@ const _aapneDetailRader = new Set();
 // Lagrer OSEBX-tilstand for periodebytte uten full re-render av portefølje
 let _pfOsebxState = null;
 
-function beregnKostbasis(ticker, txMap) {
+/**
+ * FIFO-kostbasis for én aksje (sktl. § 10-36), og det som trengs for skatten.
+ *
+ * `tilDato` (ISO) tar bare med transaksjoner til og med den datoen — slik
+ * finnes beholdning og inngangsverdi ved årsslutt for skjermingsfradraget.
+ *
+ * Tre transaksjonstyper påvirker skatten ulikt:
+ * - **utbytte** er skattepliktig når det utbetales.
+ * - **kapital** — tilbakebetaling av innbetalt kapital — er ikke det. Den
+ *   trekkes fra inngangsverdien til aksjene den gjelder (eldste først, samme
+ *   FIFO som salg), og det som overstiger inngangsverdien skattlegges som
+ *   utbytte (`kapitalOverskudd`). Ni utstedere har brukt formen det siste året.
+ * - **salg** realiserer gevinst eller tap mot de eldste lottenes inngangsverdi,
+ *   redusert for eventuell tilbakebetaling (`realisert`).
+ */
+function beregnKostbasis(ticker, txMap, tilDato) {
   const tx = (txMap !== undefined ? txMap : hentTransaksjoner())[ticker] || [];
-  // Ekte FIFO (sktl. § 10-36): salg forbruker eldste kjøpslott først.
   // Krever kronologisk rekkefølge — sortér på dato (stabil ved lik dato).
-  const sortert = tx.slice().sort((a, b) => (a.dato || '').localeCompare(b.dato || ''));
-  const lotter = [];  // { antall, kurs } — eldste først
-  let mottattUtbytte = 0;
+  const sortert = tx.slice()
+    .filter(t => !tilDato || (t.dato || '') <= tilDato)
+    .sort((a, b) => (a.dato || '').localeCompare(b.dato || ''));
+  const lotter = [];  // { antall, kurs } — eldste først; kurs er inngangsverdi per aksje
+  let mottattUtbytte = 0, mottattKapital = 0;
+  const realisert = [];          // { dato, antall, salgssum, kostpris, gevinst }
+  const kapitalOverskudd = [];   // { dato, belop } — skattes som utbytte
   sortert.forEach(t => {
     if (t.type === 'kjøp') {
       lotter.push({ antall: t.antall, kurs: t.kurs });
     } else if (t.type === 'salg') {
-      let rest = t.antall;
+      let rest = t.antall, kostpris = 0, solgtTotalt = 0;
       while (rest > 0 && lotter.length > 0) {
         const lott  = lotter[0];
         const solgt = Math.min(rest, lott.antall);
+        kostpris   += solgt * lott.kurs;
+        solgtTotalt += solgt;
         lott.antall -= solgt;
         rest        -= solgt;
         if (lott.antall === 0) lotter.shift();
       }
+      if (solgtTotalt > 0) {
+        const salgssum = solgtTotalt * t.kurs;
+        realisert.push({ dato: t.dato, antall: solgtTotalt, salgssum, kostpris, gevinst: salgssum - kostpris });
+      }
     } else if (t.type === 'utbytte') {
       mottattUtbytte += t.antall * t.kurs;
+    } else if (t.type === 'kapital') {
+      mottattKapital += t.antall * t.kurs;
+      // Trekk beløpet per aksje fra de `antall` eldste aksjene. En lott som
+      // bare delvis omfattes, deles i to.
+      let rest = t.antall, overskudd = 0;
+      for (let i = 0; i < lotter.length && rest > 0; i++) {
+        const lott = lotter[i];
+        if (lott.antall > rest) {
+          lotter.splice(i + 1, 0, { antall: lott.antall - rest, kurs: lott.kurs });
+          lott.antall = rest;
+        }
+        const ned = Math.min(lott.kurs, t.kurs);
+        overskudd += (t.kurs - ned) * lott.antall;
+        lott.kurs -= ned;
+        rest -= lott.antall;
+      }
+      // Tilbakebetaling på aksjer vi ikke har kjøp registrert for, har ingen
+      // inngangsverdi å trekke fra — hele beløpet regnes da som overskytende.
+      if (rest > 0) overskudd += rest * t.kurs;
+      if (overskudd > 0) kapitalOverskudd.push({ dato: t.dato, belop: overskudd });
     }
   });
   let antall = 0, totalKost = 0;
   lotter.forEach(l => { antall += l.antall; totalKost += l.antall * l.kurs; });
   const vwap = antall > 0 ? totalKost / antall : 0;
-  return { antall, totalKost, vwap, mottattUtbytte };
+  return { antall, totalKost, vwap, mottattUtbytte, mottattKapital, realisert, kapitalOverskudd };
+}
+
+/**
+ * Skatteåret `aar` for en hel portefølje, ut fra registrerte transaksjoner.
+ *
+ * Per aksje: mottatt utbytte, tilbakebetalt kapital (og overskudd over
+ * inngangsverdien), skjermingsfradrag og realisert gevinst/tap.
+ *
+ * - **Skjerming gis bare for aksjer eid 31.12**, beregnet av inngangsverdien da,
+ *   med årets sats fra skjermingsrenteFor(). Den kan bare brukes mot utbytte på
+ *   *samme* aksje; det som ikke brukes, framføres (`ubruktSkjerming`) — det
+ *   følger vi ikke over flere år, og det står i kortet.
+ * - **Tap trekkes fra** — netto negativ gir et fradrag, ikke null.
+ * - Ingenting gjettes: en aksje uten registrerte transaksjoner er ikke med.
+ */
+function beregnSkatteaar(txMap, aar, rente, skattesats) {
+  const fra = `${aar}-01-01`, til = `${aar}-12-31`;
+  const iAar = d => d >= fra && d <= til;
+  const rader = [];
+  Object.keys(txMap || {}).forEach(ticker => {
+    const liste = txMap[ticker] || [];
+    if (!liste.some(t => (t.dato || '') <= til)) return;
+    const kb = beregnKostbasis(ticker, txMap, til);
+    const utbytte = liste.filter(t => t.type === 'utbytte' && iAar(t.dato)).reduce((s, t) => s + t.antall * t.kurs, 0);
+    const kapital = liste.filter(t => t.type === 'kapital' && iAar(t.dato)).reduce((s, t) => s + t.antall * t.kurs, 0);
+    const overskudd = kb.kapitalOverskudd.filter(o => iAar(o.dato)).reduce((s, o) => s + o.belop, 0);
+    const salg = kb.realisert.filter(r => iAar(r.dato));
+    const gevinst = salg.reduce((s, r) => s + r.gevinst, 0);
+    const skjerming = kb.antall > 0 ? kb.totalKost * rente : 0;
+    const grunnlag = utbytte + overskudd;
+    const bruktSkjerming = Math.min(skjerming, grunnlag);
+    if (!utbytte && !kapital && !salg.length && !skjerming) return;
+    rader.push({
+      ticker, utbytte, kapital, overskudd, gevinst, salg,
+      skjerming, bruktSkjerming, ubruktSkjerming: skjerming - bruktSkjerming,
+      skattbartUtbytte: grunnlag - bruktSkjerming,
+    });
+  });
+  rader.sort((a, b) => a.ticker.localeCompare(b.ticker, 'nb'));
+  const sum = k => rader.reduce((s, r) => s + r[k], 0);
+  const skattbartUtbytte = sum('skattbartUtbytte');
+  const gevinst = sum('gevinst');
+  const grunnlag = skattbartUtbytte + gevinst;
+  return {
+    aar, rader,
+    utbytte: sum('utbytte'), kapital: sum('kapital'), overskudd: sum('overskudd'),
+    skjerming: sum('skjerming'), bruktSkjerming: sum('bruktSkjerming'), ubruktSkjerming: sum('ubruktSkjerming'),
+    skattbartUtbytte, gevinst, grunnlag,
+    skatt: grunnlag * skattesats,   // negativ = fradrag
+  };
 }
 
 /**
@@ -135,18 +229,27 @@ function byggDetailHtml(ticker, kb, marked) {
 
   const idag = new Date().toISOString().slice(0, 10);
   const beholdningAntall = hentPF()[ticker] || '';
+  // Selskapets siste utbyttemelding sier tilbakebetaling — si fra, men la
+  // brukeren velge type per utbetaling: et selskap kan veksle (BOR, HUNT).
+  const aksjen = (window.alleAksjer || []).find(x => x.ticker === ticker);
+  const kapitalHint = aksjen && typeof kapitalAndel === 'function' && kapitalAndel(aksjen) > 0
+    ? `<p class="text-xs text-gray-500 dark:text-gray-400 -mt-1">Siste utbyttemelding fra selskapet sier at utbetalingen er tilbakebetaling av innbetalt kapital. Registrer den som «Tilbakebetalt kapital» — den trekkes fra kostprisen i stedet for å skattlegges som utbytte.</p>`
+    : '';
   const prefillKurs = kb && kb.vwap > 0 ? kb.vwap.toFixed(2) : '';
 
   const txLoggHtml = txListe.length > 0
     ? txListe.map(t => {
         const isKjøp    = t.type === 'kjøp';
         const isUtbytte = t.type === 'utbytte';
+        const isKapital = t.type === 'kapital';
         const badge = isKjøp
           ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
           : isUtbytte
             ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400'
-            : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400';
-        const label = isKjøp ? 'Kjøp' : isUtbytte ? 'Utbytte' : 'Salg';
+            : isKapital
+              ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
+              : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400';
+        const label = isKjøp ? 'Kjøp' : isUtbytte ? 'Utbytte' : isKapital ? 'Kapital' : 'Salg';
         const [y, m, d] = t.dato.split('-');
         return `<div class="flex items-center gap-2 py-1.5 text-xs border-b border-gray-100 dark:border-gray-800 last:border-0">
           <span class="text-gray-400 min-w-[4.5rem]">${d}.${m}.${y}</span>
@@ -169,6 +272,7 @@ function byggDetailHtml(ticker, kb, marked) {
           <option value="kjøp">Kjøp</option>
           <option value="salg">Salg</option>
           <option value="utbytte">Utbytte</option>
+          <option value="kapital">Tilbakebetalt kapital</option>
         </select>
         <input type="date" class="pf-detail-dato filter-input text-xs py-1.5" value="${idag}" />
         <input type="number" min="1" class="pf-detail-antall filter-input text-xs py-1.5" placeholder="Antall" value="${beholdningAntall}" />
@@ -176,6 +280,7 @@ function byggDetailHtml(ticker, kb, marked) {
         <button class="pf-detail-legg-til bg-brand-600 hover:bg-brand-700 text-white text-xs font-medium px-3 py-1.5 rounded-lg transition-colors" data-ticker="${escHtml(ticker)}">+ Legg til</button>
       </div>
     </div>
+    ${kapitalHint}
     <div>
       <p class="text-xs font-medium text-gray-400 dark:text-gray-500 uppercase tracking-wide mb-1">Historikk</p>
       <div class="divide-y divide-gray-100 dark:divide-gray-800">${txLoggHtml}</div>
@@ -184,7 +289,7 @@ function byggDetailHtml(ticker, kb, marked) {
 }
 
 
-const STATS_TABS = ['oversikt', 'inntekt', 'beholdning', 'sektorer'];
+const STATS_TABS = ['oversikt', 'inntekt', 'beholdning', 'sektorer', 'skatt'];
 let aktivStatsTab = 'oversikt';
 
 function byttStatsSubTab(tab) {
@@ -209,6 +314,7 @@ function byttStatsSubTab(tab) {
     if (tab === 'inntekt')       { visUtbyttePrognose(beholdning); visMaanedChart(beholdning); visTommeMaaneder(beholdning); }
     if (tab === 'beholdning')    { visVerdiChart(beholdning); visCharts(beholdning, totalAr); }
     if (tab === 'sektorer')      { visHHI(beholdning); visSektorYieldChart(beholdning); visCharts(beholdning, totalAr); }
+    if (tab === 'skatt')         visSkatteaar();
   }
 }
 
@@ -445,7 +551,8 @@ function beregnIRR(txMap) {
     const v = t.antall * t.kurs;
     if      (t.type === 'kjøp')    cashflows.push({ dato: t.dato, cf: -v });
     else if (t.type === 'salg')    cashflows.push({ dato: t.dato, cf: +v });
-    else if (t.type === 'utbytte') cashflows.push({ dato: t.dato, cf: +v });
+    // Tilbakebetalt kapital er kontanter ut til eieren, akkurat som utbytte.
+    else if (t.type === 'utbytte' || t.type === 'kapital') cashflows.push({ dato: t.dato, cf: +v });
   });
 
   // Terminalverdi: nåværende markedsverdi av beholdning
@@ -1064,6 +1171,8 @@ function visPortefolje() {
       const kb = beregnKostbasis(a.ticker, txMap);
       if (kb.totalKost > 0 || kb.mottattUtbytte > 0) {
         invKost    += kb.totalKost;
+        // Tilbakebetalt kapital legges ikke til her: den er alt trukket fra
+        // totalKost, så den ville blitt telt to ganger.
         invMottatt += kb.mottattUtbytte;
         invMarkert += kb.antall * (a.pris || 0);
         harTx = true;
@@ -1498,6 +1607,7 @@ function visPortefolje() {
   if (aktivStatsTab === 'inntekt')       { visUtbyttePrognose(alleBeholdning); visMaanedChart(alleBeholdning); visTommeMaaneder(alleBeholdning); }
   if (aktivStatsTab === 'beholdning')    { visVerdiChart(alleBeholdning); visCharts(alleBeholdning, totalAr); }
   if (aktivStatsTab === 'sektorer')      { visHHI(alleBeholdning); visSektorYieldChart(alleBeholdning); visCharts(alleBeholdning, totalAr); }
+  if (aktivStatsTab === 'skatt')         visSkatteaar();
   if (!['beholdning','sektorer'].includes(aktivStatsTab)) {
     const cw = document.getElementById('pf-charts-wrapper');
     if (cw) cw.style.display = 'none';
@@ -1764,6 +1874,97 @@ function visTommeMaaneder(beholdning) {
       }
     });
   }
+}
+
+// ── SKATTEÅRET (Statistikk → Skatt) ───────────────────────────────────────
+let _valgtSkatteaar = null;
+
+/**
+ * Årsoversikt til kontroll av skattemeldingen, bygget av beregnSkatteaar().
+ *
+ * Skattemeldingen er forhåndsutfylt fra VPS og forvalter, så dette er et
+ * kontrollgrunnlag — ikke en erstatning. Kortet sier det, sammen med det vi
+ * ikke vet: framført skjerming fra tidligere år, og hvilke aksjer som ligger på
+ * aksjesparekonto.
+ *
+ * Standardåret er fjoråret fram til og med mai (skattemeldingen leveres om
+ * våren), deretter inneværende år som et løpende anslag.
+ */
+function visSkatteaar() {
+  const el = document.getElementById('pf-skatteaar');
+  if (!el) return;
+  const txMap = hentTransaksjoner();
+  const datoer = Object.values(txMap).flat().map(t => t.dato).filter(Boolean).sort();
+  const naa = new Date();
+  const iAar = naa.getFullYear();
+  if (!datoer.length) {
+    el.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400">Oversikten bygger på transaksjonene du har registrert — kjøp, salg, utbytte og tilbakebetalt kapital. Åpne en aksje under Beholdning og legg dem inn der.</p>';
+    return;
+  }
+  const forste = Number(datoer[0].slice(0, 4));
+  const aarListe = [];
+  for (let y = iAar; y >= forste; y--) aarListe.push(y);
+  if (!aarListe.includes(_valgtSkatteaar)) {
+    const standard = naa.getMonth() <= 4 ? iAar - 1 : iAar;
+    _valgtSkatteaar = aarListe.includes(standard) ? standard : aarListe[0];
+  }
+  const aar = _valgtSkatteaar;
+  const rente = skjermingsrenteFor(aar);
+  const r = beregnSkatteaar(txMap, aar, rente.sats, SKATTESATS);
+  const kr = v => Math.round(v).toLocaleString('nb-NO') + ' kr';
+  const pstSats = v => (v * 100).toLocaleString('nb-NO', { maximumFractionDigits: 2 }) + ' %';
+  const pagaar = aar === iAar;
+
+  const rader = r.rader.map(x => `
+      <tr class="border-b border-gray-100 dark:border-gray-800 last:border-0">
+        <td class="py-1.5 font-mono font-bold text-brand-700 dark:text-brand-400">${escHtml(x.ticker)}</td>
+        <td class="py-1.5 text-right tabular-nums">${x.utbytte ? kr(x.utbytte) : '—'}</td>
+        <td class="py-1.5 text-right tabular-nums">${x.kapital ? kr(x.kapital) : '—'}</td>
+        <td class="py-1.5 text-right tabular-nums">${x.bruktSkjerming ? '−' + kr(x.bruktSkjerming) : '—'}</td>
+        <td class="py-1.5 text-right tabular-nums ${x.gevinst < 0 ? 'text-red-600 dark:text-red-400' : ''}">${x.salg.length ? (x.gevinst < 0 ? '−' : '') + kr(Math.abs(x.gevinst)) : '—'}</td>
+      </tr>`).join('');
+
+  const linje = (tekst, verdi, ekstra = '') => `<div class="flex justify-between gap-3 ${ekstra}"><span class="text-gray-600 dark:text-gray-400">${tekst}</span><span class="font-semibold tabular-nums whitespace-nowrap shrink-0">${verdi}</span></div>`;
+  const ikkeTomt = r.rader.length > 0;
+
+  el.innerHTML = `
+    <div class="flex items-center justify-between gap-3 mb-3">
+      <label class="text-xs text-gray-500 dark:text-gray-400">Inntektsår
+        <select id="pf-skatteaar-valg" class="filter-input ml-1 py-1 text-sm">${aarListe.map(y => `<option value="${y}"${y === aar ? ' selected' : ''}>${y}</option>`).join('')}</select>
+      </label>
+      ${pagaar ? '<span class="text-[11px] uppercase tracking-wide text-amber-600 dark:text-amber-400">Løpende anslag</span>' : ''}
+    </div>
+    ${ikkeTomt ? `
+    <div class="space-y-1.5 text-sm">
+      ${linje('Mottatt utbytte', kr(r.utbytte))}
+      ${r.kapital ? linje('Tilbakebetalt kapital <span class="text-xs">(ikke skattepliktig nå)</span>', kr(r.kapital)) : ''}
+      ${r.overskudd ? linje('— herav over inngangsverdien, skattes som utbytte', kr(r.overskudd)) : ''}
+      ${linje(`Skjermingsfradrag brukt <span class="text-xs">(${pstSats(rente.sats)}${rente.fastsatt ? '' : `, satsen for ${rente.aar} — ${aar} er ikke fastsatt`})</span>`, '−' + kr(r.bruktSkjerming))}
+      ${linje('Skattepliktig utbytte', kr(r.skattbartUtbytte))}
+      ${linje(r.gevinst >= 0 ? 'Realisert gevinst' : 'Realisert tap', (r.gevinst < 0 ? '−' : '') + kr(Math.abs(r.gevinst)))}
+      ${linje(r.skatt >= 0 ? `Beregnet skatt (${pstSats(SKATTESATS)})` : `Skattefradrag (${pstSats(SKATTESATS)})`, kr(Math.abs(r.skatt)), 'pt-2 mt-1 border-t border-gray-100 dark:border-gray-800')}
+    </div>
+    <details class="mt-3">
+      <summary class="cursor-pointer text-xs font-medium text-brand-600 dark:text-brand-400">Per aksje</summary>
+      <div class="overflow-x-auto mt-2">
+        <table class="w-full text-xs">
+          <thead><tr class="text-gray-400"><th class="text-left font-normal">Aksje</th><th class="text-right font-normal">Utbytte</th><th class="text-right font-normal">Kapital</th><th class="text-right font-normal">Skjerming</th><th class="text-right font-normal">Gevinst/tap</th></tr></thead>
+          <tbody>${rader}</tbody>
+        </table>
+      </div>
+    </details>
+    ${r.ubruktSkjerming > 0.5 ? `<p class="text-xs text-gray-500 dark:text-gray-400 mt-3">${kr(r.ubruktSkjerming)} skjermingsfradrag ble ikke brukt fordi utbyttet på de aksjene var mindre. Ubrukt skjerming framføres på samme aksje og kan trekkes fra senere utbytte eller gevinst ved salg.</p>` : ''}`
+    : `<p class="text-sm text-gray-500 dark:text-gray-400">Ingen utbytte, tilbakebetaling eller salg registrert i ${aar}, og ingen aksjer med kjøp registrert ved utgangen av året.</p>`}
+    <p class="text-[11px] text-gray-400 dark:text-gray-600 leading-relaxed mt-3">
+      Bygger bare på transaksjonene du har registrert her, og er et kontrollgrunnlag — skattemeldingen er forhåndsutfylt fra VPS og forvalter, og det er den som gjelder.
+      Skjerming gis for aksjer du eier 31.12, regnet av inngangsverdien da; ubrukt skjerming fra tidligere år er ikke med.
+      Aksjer på aksjesparekonto (ASK) skattlegges først ved uttak og skal ikke regnes med her. Skjermingsrenten fastsettes av Skatteetaten i januar året etter.
+    </p>`;
+
+  document.getElementById('pf-skatteaar-valg')?.addEventListener('change', e => {
+    _valgtSkatteaar = Number(e.target.value);
+    visSkatteaar();
+  });
 }
 
 // ── MIN UTBYTTELØNN: 12-måneders kontantstrømprognose ─────────────────────
@@ -2835,4 +3036,4 @@ function visAnalyse() {
 }
 
 // Node.js test export
-if (typeof module !== 'undefined') module.exports = { beregnKostbasis, beregnIRR, beregnTWRSerie, beregnUtbyttePrognose, _leggTilMnd, beregnUtbytteskatt };
+if (typeof module !== 'undefined') module.exports = { beregnKostbasis, beregnIRR, beregnTWRSerie, beregnUtbyttePrognose, _leggTilMnd, beregnUtbytteskatt, beregnSkatteaar };

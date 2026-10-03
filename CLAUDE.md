@@ -389,7 +389,8 @@ listen i generatoren.
 - **Cost basis:** FIFO — `beregnKostbasis()`
 - **IRR:** Newton-Raphson numerical method
 - **TWR:** Chain-links sub-period returns
-- **Tax rate:** 37.84% effective rate above shield allowance (`SKJERMINGSRENTE`)
+- **Tax rate:** 37.84% effective rate above shield allowance — per-year rates in `SKJERMINGSRENTER` (`storage.js`), looked up with `skjermingsrenteFor(aar)`
+- **Tax year:** `beregnSkatteaar()` — Statistikk → Skatt
 - **Sector rebalancing:** `visRebalansering()` — compares actual vs. target sector weights, shows kr-amount to buy/sell
 
 ---
@@ -1171,10 +1172,8 @@ roadmap said «measure first».
   position with a large cost basis and little dividend lowered the tax on the
   rest of the portfolio.
 
-**Not done:** registered «Utbytte mottatt» transactions do not reduce the cost
-basis — we only know the classification of the *newest* notice, not of each
-historical payment. That is needed before a yearly tax summary can show gains
-correctly. Tests: `TestKapitalTilbake` (12), `ui.test.js` (3),
+**Done the same day:** a transaction type `kapital` («Tilbakebetalt kapital»)
+reduces the cost basis — see «The tax year» below. Tests: `TestKapitalTilbake` (12), `ui.test.js` (3),
 `portefolje.test.js` (4).
 
 ## «Måneder uten ex-dato» — a filter, not a recommendation (2026-10-03)
@@ -1230,6 +1229,39 @@ What the calculation refuses rather than guesses:
   about the company, not about our data.
 
 Tests: `ui.test.js` (4).
+
+## The tax year — Statistikk → Skatt (2026-10-03)
+
+`beregnSkatteaar(txMap, aar, rente, skattesats)` in `portefolje.js` builds the
+year from the user's registered transactions: dividends received, paid-in
+capital returned, shield deduction per share, realised gain/loss (FIFO) and the
+tax — or deduction, when losses outweigh. It is a **check against the pre-filled
+tax return**, and the card says so.
+
+**The shield rate was wrong for every year.** `storage.js` held one constant,
+3,1 %, labelled «inntektsåret 2024». Skatteetaten's figures: 2022 1,7 %,
+2023 3,2 %, **2024 3,9 %**, 2025 3,6 % — no year was 3,1 %. Now
+`SKJERMINGSRENTER` per year and `skjermingsrenteFor(aar)`, which falls back to
+the latest set rate and says so (`fastsatt: false`). Add the new rate each
+January. The forward estimates elsewhere use the latest rate (3,6 %).
+
+- **`beregnKostbasis(ticker, txMap, tilDato)`** gained a cut-off date (holdings
+  at 31.12), `realisert` per sale, and type **`kapital`**: the amount per share
+  is subtracted from the oldest lots (a lot partly covered is split), and any
+  excess over the cost basis is returned as `kapitalOverskudd` — taxed as a
+  dividend. Without registered purchases there is no basis, so the whole
+  amount is excess.
+- **The user picks the type per payment.** The stock's newest notice only
+  classifies the newest payment, so the detail row shows a hint when
+  `kapitalAndel()` > 0 but never reclassifies history.
+- **Shield is per share and only for shares held 31.12**, usable only against
+  that share's dividend; the unused part is shown, not carried forward (yet).
+- «Faktisk avkastning» does *not* add returned capital to cash received — it
+  is already out of `totalKost`, and adding it would count it twice. IRR does
+  count it as a cash flow.
+- ASK holdings are not identified; the card says to leave them out.
+
+Tests: `portefolje.test.js` (5), `storage.test.js` (1).
 
 ## Where the weekly tallkontroll report goes (2026-09-30)
 
