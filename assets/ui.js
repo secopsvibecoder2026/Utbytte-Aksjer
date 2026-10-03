@@ -623,7 +623,9 @@ function initVerktoySubTabs() {
     document.getElementById('kalk-tab-utbytte').classList.toggle('hidden', kalkTab !== 'utbytte');
     document.getElementById('kalk-tab-huslan').classList.toggle('hidden', kalkTab !== 'huslan');
     document.getElementById('kalk-tab-fire').classList.toggle('hidden', kalkTab !== 'fire');
+    document.getElementById('kalk-tab-hvis')?.classList.toggle('hidden', kalkTab !== 'hvis');
     if (kalkTab === 'fire') beregnFire();
+    if (kalkTab === 'hvis') initHvisKjopt();
   });
 }
 
@@ -3587,6 +3589,218 @@ function utbyttePerioder(a) {
   return ut;
 }
 
+// ── HVA OM JEG HADDE KJØPT? ─────────────────────────────────────────────────
+// En ukes kursendring større enn dette (opp eller ned) er et brudd i serien —
+// en splitt, en spleis eller en kapitalutdeling — ikke en kursbevegelse.
+// BINT spleiset aksjen i februar 2026; 2020 Bulkers falt fra 117 til 3 i én uke
+// etter at alle skipene var solgt og pengene delt ut.
+const HVIS_BRUDD_FAKTOR = 3;
+
+/**
+ * Hva et kjøp i begynnelsen av `startAar` ville vært verdt i dag: kursendring
+ * pluss utbytte mottatt, mot samme beløp i OSEBX.
+ *
+ * Bare tall vi har målt, og ellers et ærlig nei:
+ * - **Ujustert kurs** fra data/kurs/{TICKER}.json. En utbyttejustert kurs ville
+ *   talt utbyttet to ganger — det var grafen som viste DNB +120 % mot faktisk
+ *   +51 % før 26.09.2026.
+ * - **Utbytte per kalenderår etter ex-dato** fra `utbytte_per_ar`, og hittil i
+ *   år fra `historiske_utbytter`. Ingen gjetning om datoer innenfor året.
+ * - **Hele aksjer.** Det som ikke rekker til én aksje til, blir liggende.
+ * - **Ikke reinvestert, før skatt.** OSEBX er en totalavkastningsindeks der
+ *   utbyttet er reinvestert, så sammenligningen favoriserer indeksen litt når
+ *   utbyttet er høyt. Det står i teksten.
+ * - **Brudd i serien gir intet svar** (se HVIS_BRUDD_FAKTOR), og det samme gjør
+ *   et utbytte over 2× kursen — samme grense som Sjekk 9.
+ *
+ * Returnerer et resultatobjekt, eller `{ feil }` med en forklaring som kan vises.
+ */
+function beregnHvisKjopt(a, kurs, osebx, belop, startAar, iDag) {
+  const idag = iDag || new Date();
+  const iAar = idag.getFullYear();
+  if (!a || !Array.isArray(kurs) || !kurs.length) return { feil: 'Vi har ingen kurshistorikk for denne aksjen.' };
+  if (!(belop > 0)) return { feil: 'Skriv inn et beløp.' };
+  const fra = `${startAar}-01-01`;
+  const i0 = kurs.findIndex(p => p.d >= fra);
+  // Serien må dekke begynnelsen av året — ellers ville «kjøpt i 2021» vært
+  // kjøpt i oktober 2021, og utbyttet fra våren regnet med likevel.
+  if (i0 < 0 || i0 === 0 && kurs[0].d > `${startAar}-01-14`) {
+    return { feil: `Kurshistorikken vår går ikke tilbake til begynnelsen av ${startAar}.` };
+  }
+  const periode = kurs.slice(i0);
+  for (let i = 1; i < periode.length; i++) {
+    const r = periode[i].k / periode[i - 1].k;
+    if (!(r > 0) || r > HVIS_BRUDD_FAKTOR || r < 1 / HVIS_BRUDD_FAKTOR) {
+      return { feil: `Kursserien har et brudd rundt ${formaterDato(periode[i].d)} — trolig en aksjesplitt, spleis eller kapitalutdeling. Da blir en sammenligning over perioden misvisende, så vi viser den ikke.` };
+    }
+  }
+  const startKurs = periode[0].k;
+  const sluttKurs = Number(a.pris) > 0 ? Number(a.pris) : periode[periode.length - 1].k;
+  const antall = Math.floor(belop / startKurs);
+  if (antall < 1) return { feil: `Beløpet rekker ikke til én aksje — kursen var ${fmt(startKurs)} kr i begynnelsen av ${startAar}.` };
+
+  const perAr = a.utbytte_per_ar || {};
+  const utbytte = [];
+  for (let y = startAar; y <= iAar; y++) {
+    let per;
+    if (y < iAar) {
+      if (perAr[String(y)] == null) {
+        // Et år før selskapets første utbytte er null, ikke ukjent.
+        if (a.utbytte_forste_ar != null && y < a.utbytte_forste_ar) per = 0;
+        else return { feil: `Vi mangler utbyttetall for ${y} for denne aksjen.` };
+      } else per = Number(perAr[String(y)]) || 0;
+    } else {
+      const h = (a.historiske_utbytter || []).find(x => x && Number(x.ar) === y);
+      per = h ? Number(h.utbytte) || 0 : 0;
+    }
+    if (per > 2 * startKurs || per > 2 * sluttKurs) {
+      return { feil: `Utbyttet i ${y} var større enn kursen — trolig en kapitalutdeling som gjør sammenligningen misvisende.` };
+    }
+    utbytte.push({ ar: y, perAksje: per, sum: per * antall, hittil: y === iAar });
+  }
+
+  const investert = antall * startKurs;
+  const kursverdi = antall * sluttKurs;
+  const utbytteSum = utbytte.reduce((s, u) => s + u.sum, 0);
+  const total = kursverdi + utbytteSum;
+  const startDato = periode[0].d;
+  const aar = (idag - new Date(startDato + 'T00:00:00')) / (365.25 * 864e5);
+  const pst = (total / investert - 1) * 100;
+  let osebxRes = null;
+  if (Array.isArray(osebx) && osebx.length) {
+    const j0 = osebx.findIndex(p => p.d >= fra);
+    if (j0 >= 0 && !(j0 === 0 && osebx[0].d > `${startAar}-01-14`)) {
+      const faktor = osebx[osebx.length - 1].k / osebx[j0].k;
+      osebxRes = { verdi: investert * faktor, pst: (faktor - 1) * 100, sluttDato: osebx[osebx.length - 1].d };
+    }
+  }
+  return {
+    startDato, startKurs, sluttKurs, antall, investert, kursverdi,
+    kursPst: (sluttKurs / startKurs - 1) * 100,
+    utbytte, utbytteSum, total, pst,
+    aar,
+    arligPst: aar >= 1 && total > 0 ? (Math.pow(total / investert, 1 / aar) - 1) * 100 : null,
+    rest: belop - investert,
+    osebx: osebxRes,
+  };
+}
+
+// Kobles første gang fanen åpnes — da finnes aksjelisten.
+let _hvisKoblet = false;
+
+function initHvisKjopt() {
+  const sel = document.getElementById('hvis-aksje');
+  if (!sel) return;
+  if (!_hvisKoblet) {
+    _hvisKoblet = true;
+    sel.innerHTML = [...(window.alleAksjer || [])]
+      // Bare aksjer med minst én registrert utbetaling. BINT står med null i
+      // alle år etter ISIN-byttet i februar 2026 — «0 kr mottatt» ville vært en
+      // påstand om selskapet, ikke om dataene våre.
+      .filter(a => a.utbytte_per_ar && (Object.values(a.utbytte_per_ar).some(v => v > 0) || a.utbytte_12m > 0))
+      .sort((x, y) => x.ticker.localeCompare(y.ticker, 'nb'))
+      .map(a => `<option value="${escHtml(a.ticker)}">${escHtml(a.ticker)} – ${escHtml(a.navn || '')}</option>`)
+      .join('');
+    if ([...sel.options].some(o => o.value === 'EQNR')) sel.value = 'EQNR';
+    sel.addEventListener('change', () => visHvisKjopt(true));
+    document.getElementById('hvis-aar')?.addEventListener('change', () => visHvisKjopt(false));
+    document.getElementById('hvis-belop')?.addEventListener('input', () => visHvisKjopt(false));
+    visHvisKjopt(true);
+  }
+}
+
+async function visHvisKjopt(nyAksje) {
+  const ut = document.getElementById('hvis-resultat');
+  const ticker = document.getElementById('hvis-aksje')?.value;
+  const a = (window.alleAksjer || []).find(x => x.ticker === ticker);
+  if (!ut || !a) return;
+  const aarSel = document.getElementById('hvis-aar');
+  const [kurs, osebx] = await Promise.all([hentKursHistorikk(a), hentKursHistorikk({ ticker: 'OSEBX' })]);
+  // Brukeren kan ha valgt en annen aksje mens vi ventet.
+  if (document.getElementById('hvis-aksje')?.value !== ticker) return;
+
+  if (nyAksje) {
+    const valgt = Number(aarSel.value);
+    const aar = hvisStartAar(kurs);
+    aarSel.innerHTML = aar.map(y => `<option value="${y}">${y}</option>`).join('');
+    if (aar.length) aarSel.value = aar.includes(valgt) ? valgt : aar[0];
+  }
+  const belop = parseFloat(document.getElementById('hvis-belop')?.value) || 0;
+  const r = beregnHvisKjopt(a, kurs, osebx, belop, Number(aarSel.value));
+  ut.innerHTML = r.feil
+    ? `<div class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-5 text-sm text-gray-600 dark:text-gray-400">${escHtml(r.feil)}</div>`
+    : _hvisHtml(a, r);
+}
+
+function _hvisHtml(a, r) {
+  const kr = v => Math.round(v).toLocaleString('nb-NO') + ' kr';
+  const pst = v => (v >= 0 ? '+' : '−') + Math.abs(v).toLocaleString('nb-NO', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + ' %';
+  const farge = v => (v >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400');
+  const navn = escHtml(a.navn || a.ticker);
+  const rader = r.utbytte.map(u => `
+      <tr class="border-b border-gray-100 dark:border-gray-800 last:border-0">
+        <td class="py-1.5">${u.ar}${u.hittil ? ' <span class="text-gray-400">(hittil)</span>' : ''}</td>
+        <td class="py-1.5 text-right tabular-nums">${u.perAksje ? fmt(u.perAksje) + ' kr' : '0 kr'}</td>
+        <td class="py-1.5 text-right tabular-nums font-medium">${kr(u.sum)}</td>
+      </tr>`).join('');
+  const osebx = r.osebx
+    ? `<div class="flex items-center justify-between gap-3">
+         <span class="text-gray-600 dark:text-gray-400">Samme beløp i OSEBX</span>
+         <span class="text-right whitespace-nowrap shrink-0"><span class="font-semibold tabular-nums">${kr(r.osebx.verdi)}</span>
+           <span class="block text-xs ${farge(r.osebx.pst)}">${pst(r.osebx.pst)}</span></span>
+       </div>
+       <p class="text-xs text-gray-500 dark:text-gray-400">${r.total >= r.osebx.verdi
+          ? `${navn} har gitt <strong>${kr(r.total - r.osebx.verdi)}</strong> mer enn indeksen i perioden.`
+          : `Indeksen har gitt <strong>${kr(r.osebx.verdi - r.total)}</strong> mer enn ${navn} i perioden.`}</p>`
+    : '<p class="text-xs text-gray-500 dark:text-gray-400">Vi har ikke OSEBX-tall for perioden.</p>';
+
+  return `
+    <div class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-5 shadow-sm space-y-4 text-sm">
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <p class="text-[11px] uppercase tracking-wide text-gray-400">Investert ${formaterDato(r.startDato)}</p>
+          <p class="font-bold text-lg tabular-nums">${kr(r.investert)}</p>
+          <p class="text-xs text-gray-500 dark:text-gray-400">${r.antall.toLocaleString('nb-NO')} aksjer à ${fmt(r.startKurs)} kr</p>
+        </div>
+        <div>
+          <p class="text-[11px] uppercase tracking-wide text-gray-400">Verdt i dag</p>
+          <p class="font-bold text-lg tabular-nums ${farge(r.pst)}">${kr(r.total)}</p>
+          <p class="text-xs ${farge(r.pst)}">${pst(r.pst)}${r.arligPst != null ? ` · <span class="whitespace-nowrap">${pst(r.arligPst)} per år</span>` : ''}</p>
+        </div>
+      </div>
+      <div class="space-y-1.5">
+        <div class="flex justify-between gap-3"><span class="text-gray-600 dark:text-gray-400">Aksjene <span class="whitespace-nowrap">(kurs ${fmt(r.sluttKurs)} kr, ${pst(r.kursPst)})</span></span><span class="font-semibold tabular-nums whitespace-nowrap shrink-0">${kr(r.kursverdi)}</span></div>
+        <div class="flex justify-between gap-3"><span class="text-gray-600 dark:text-gray-400">Utbytte mottatt</span><span class="font-semibold tabular-nums whitespace-nowrap shrink-0">${kr(r.utbytteSum)}</span></div>
+      </div>
+      <div class="pt-3 border-t border-gray-100 dark:border-gray-800 space-y-2">${osebx}</div>
+      <details class="pt-1">
+        <summary class="cursor-pointer text-xs font-medium text-brand-600 dark:text-brand-400">Utbytte år for år</summary>
+        <table class="w-full text-xs mt-2">
+          <thead><tr class="text-gray-400"><th class="text-left font-normal">År (ex-dato)</th><th class="text-right font-normal">Per aksje</th><th class="text-right font-normal">For ${r.antall.toLocaleString('nb-NO')} aksjer</th></tr></thead>
+          <tbody>${rader}</tbody>
+        </table>
+      </details>
+      <p class="text-[11px] text-gray-400 dark:text-gray-600 leading-relaxed">
+        Kjøpt første handelsuke i ${r.startDato.slice(0, 4)} til ujustert kurs, hele aksjer${r.rest >= 1 ? ` (${kr(r.rest)} ble ikke brukt)` : ''}.
+        Utbyttet er ikke reinvestert og regnet før skatt og kurtasje, etter året for ex-dato.
+        OSEBX er en totalavkastningsindeks med utbyttet reinvestert. Historisk avkastning er ingen garanti for framtidig avkastning.
+      </p>
+    </div>`;
+}
+
+/** Startårene vi kan regne fra: serien må dekke begynnelsen av året, og minst ett helt år. */
+function hvisStartAar(kurs, iDag) {
+  if (!Array.isArray(kurs) || !kurs.length) return [];
+  const iAar = (iDag || new Date()).getFullYear();
+  const forste = Number(kurs[0].d.slice(0, 4));
+  const ut = [];
+  for (let y = forste; y < iAar; y++) {
+    if (y === forste && kurs[0].d > `${y}-01-14`) continue;
+    ut.push(y);
+  }
+  return ut;
+}
+
 /** [vist, betalt] når vist yield ligger vesentlig over det som er betalt. */
 function vistOverBetalt(a) {
   if (!a || a.utbytte_12m == null) return null;
@@ -5079,4 +5293,4 @@ function _annBygTopp() {
 }
 
 // Node.js test export
-if (typeof module !== 'undefined') module.exports = { utbytteRekke, stabileAr, exForbeholdGjelder, utbyttePerioder, vistOverBetalt, modalBetaltBoks, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, fmt, formaterDato, yieldKlasse, payoutKlasse, vekstKlasse, beregnScore, beregnBaerekraft, beregnYtdInntekt, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote, kapitalAndel, modalKapitalNote, kapitalSkattTekst, aksjerMedExIMaaned };
+if (typeof module !== 'undefined') module.exports = { utbytteRekke, stabileAr, exForbeholdGjelder, utbyttePerioder, vistOverBetalt, modalBetaltBoks, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, fmt, formaterDato, yieldKlasse, payoutKlasse, vekstKlasse, beregnScore, beregnBaerekraft, beregnYtdInntekt, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote, kapitalAndel, modalKapitalNote, kapitalSkattTekst, aksjerMedExIMaaned, beregnHvisKjopt, hvisStartAar };

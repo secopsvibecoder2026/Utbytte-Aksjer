@@ -1037,6 +1037,7 @@
         <button class="toppliste-pill active" data-kalk-tab="utbytte">Utbyttekalkulator</button>
         <button class="toppliste-pill" data-kalk-tab="huslan">Huslån vs. investering</button>
         <button class="toppliste-pill" data-kalk-tab="fire">FIRE</button>
+        <button class="toppliste-pill" data-kalk-tab="hvis">Hva om jeg hadde kjøpt?</button>
       </nav>
 
       <div id="kalk-tab-utbytte" class="space-y-6">
@@ -1338,6 +1339,28 @@
         <div id="fire-ut-tidslinje" class="text-xs text-gray-500 dark:text-gray-400 space-y-0.5"></div>
       </div>
       </div><!-- /kalk-tab-fire -->
+
+      <!-- HVA OM JEG HADDE KJØPT? -->
+      <div id="kalk-tab-hvis" class="hidden space-y-5">
+        <div class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-5 shadow-sm space-y-4">
+          <div>
+            <h2 class="font-semibold text-base">Hva om jeg hadde kjøpt?</h2>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Hva et kjøp ville vært verdt i dag — kursendring pluss utbyttet du ville fått, mot samme beløp i Oslo Børs hovedindeks (OSEBX).</p>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <label class="block text-xs text-gray-500 dark:text-gray-400 sm:col-span-3">Aksje
+              <select id="hvis-aksje" class="filter-input w-full mt-1"></select>
+            </label>
+            <label class="block text-xs text-gray-500 dark:text-gray-400">Beløp (kr)
+              <input id="hvis-belop" type="number" min="1" step="1000" value="10000" class="filter-input w-full mt-1 text-right font-semibold" />
+            </label>
+            <label class="block text-xs text-gray-500 dark:text-gray-400 sm:col-span-2">Kjøpt i begynnelsen av
+              <select id="hvis-aar" class="filter-input w-full mt-1"></select>
+            </label>
+          </div>
+        </div>
+        <div id="hvis-resultat" aria-live="polite"></div>
+      </div><!-- /kalk-tab-hvis -->
     </div><!-- /verktoy-subtab-kalkulator -->
 
     <!-- ANNONSERT UTBYTTE-KALKULATOR -->

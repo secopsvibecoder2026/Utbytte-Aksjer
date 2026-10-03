@@ -76,7 +76,7 @@ Utbytte-Aksjer/
 │   └── tw-input.css           # Tailwind config with brand colors
 ├── data/                      # JSON data files
 │   ├── aksjer.json            # Auto-generated daily: full stock dataset (uten kurs_historikk)
-│   ├── kurs/{TICKER}.json     # Auto-generated: kurshistorikk, lastes on-demand
+│   ├── kurs/{TICKER}.json     # Auto-generated: kurshistorikk, lastes on-demand (+ OSEBX.json, ukentlig indeks)
 │   ├── tickers.json           # Manually maintained: 163 stock definitions
 │   ├── priser.json            # Real-time prices, updated every 15 min
 │   ├── fallback_data.json     # Fallback when API fetch fails
@@ -1197,6 +1197,39 @@ no stocks: a suggestion is a recommendation, not a number. The card
   and the sentence under the chart cannot disagree.
 - In-app only, by choice: no new public page while the AdSense application is
   pending. Tests: `ui.test.js` (2).
+
+## «Hva om jeg hadde kjøpt?» — and OSEBX had been empty (2026-10-03)
+
+Verktøy → Kalkulator → «Hva om jeg hadde kjøpt?»: one stock, an amount and a
+start year give today's value — price change plus dividends received — against
+the same amount in OSEBX. `beregnHvisKjopt()` / `hvisStartAar()` in `ui.js`.
+
+**Building it found a silent outage.** Yahoo stopped answering `^OSEAX`
+(«symbol may be delisted»), so `osebx_historikk` in `aksjer.json` was `{}` and
+the portfolio's «Din portefølje vs. OSEBX» had nothing to draw. `OSEBX.OL`
+returns the full series. `hent_osebx_historikk()` now fetches 5 years once and
+returns daily (2 years, into `aksjer.json` as before) and weekly (5 years,
+written to `data/kurs/OSEBX.json` in the stock format, loaded on demand).
+OSEBX is a total-return index — dividends reinvested — which is the right
+yardstick, and the tool says so because our stock side is *not* reinvested.
+
+What the calculation refuses rather than guesses:
+
+- **Raw prices only** — the dividend-adjusted series would count the dividend
+  twice. Yahoo's raw `Close` is still split-adjusted, so a split is not a break.
+- **A week-on-week move beyond 3× either way is a break** (capital
+  distribution, ISIN change) → no answer. 2020 Bulkers is refused at 30 April.
+- **A yearly dividend above 2× the price** → no answer (Sjekk 9's limit).
+- **A missing year** → no answer, except years before `utbytte_forste_ar`,
+  which are genuinely zero.
+- **The series must cover the start of the year**; history begins Oct 2021, so
+  the first start year is 2022.
+- Whole shares; dividends by ex-date year; before tax and brokerage.
+- **Stocks with no recorded payment are left out of the list.** BINT carries
+  zeros in every year since the ISIN change — «0 kr mottatt» would be a claim
+  about the company, not about our data.
+
+Tests: `ui.test.js` (4).
 
 ## Where the weekly tallkontroll report goes (2026-09-30)
 

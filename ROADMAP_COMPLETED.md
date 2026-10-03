@@ -87,3 +87,4 @@ Alle punkter som er ferdig implementert.
 - **N14. Internlenking mellom aksjesider** — «Andre {sektor}-aksjer med utbytte»-seksjon på bunnen av hver aksje-side; genereres automatisk i `_aksje_side_html()` med yield-info og lenke til sektorsiden
 - **Måneder uten ex-dato** — kort i Statistikk → Inntekt som viser månedene porteføljen ikke har ex-dato i, og hvilke aksjer i katalogen som har gått ex da i minst to år; sortert etter utbytterekke, med betalt yield siste 12 mnd. Et filter, ikke en anbefaling (03.10.2026)
 - **Tilbakebetaling av innbetalt kapital** — åtte utstedere merkes fra siste børsmelding; porteføljeskatten holder dem utenfor, og skjermingsfradraget regnes per aksje (03.10.2026, #73)
+- **Hva om jeg hadde kjøpt?** — Verktøy → Kalkulator: kursendring + mottatt utbytte siden starten av et valgt år, mot samme beløp i OSEBX. OSEBX-historikken var tom fordi Yahoo sluttet å svare på ^OSEAX; nå hentes OSEBX.OL (03.10.2026)
