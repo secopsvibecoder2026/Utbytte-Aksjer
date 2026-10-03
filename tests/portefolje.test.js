@@ -35,7 +35,7 @@ global.visModal = () => {};
 global.SEKTOR_FARGE = {};
 global.FARGE_FALLBACK = '#9ca3af';
 
-const { beregnKostbasis, beregnIRR, beregnTWRSerie, beregnUtbyttePrognose, _leggTilMnd } = require('../assets/portefolje.js');
+const { beregnKostbasis, beregnIRR, beregnTWRSerie, beregnUtbyttePrognose, _leggTilMnd, beregnUtbytteskatt } = require('../assets/portefolje.js');
 
 // ── beregnKostbasis ─────────────────────────────────────────────────────────
 
@@ -462,4 +462,33 @@ test('søppel i utbetalingsmaaneder faller trygt tilbake', () => {
     const sum = p.mndSum.reduce((s, x) => s + x.belop, 0);
     assert.ok(sum >= 0 && Number.isFinite(sum), JSON.stringify(m));
   }
+});
+
+// ── beregnUtbytteskatt — tilbakebetaling og skjerming per aksje (2026-10-03) ──
+test('beregnUtbytteskatt: tilbakebetaling av kapital skattlegges ikke ved utbetaling', () => {
+  const r = beregnUtbytteskatt([{ brutto: 1000, kostbasis: 0, kapitalAndel: 1 }], 0.3784, 0.031);
+  assert.equal(r.skatt, 0);
+  assert.equal(r.kapital, 1000);
+  assert.equal(r.netto, 1000);
+});
+
+test('beregnUtbytteskatt: delt utbetaling skattlegges bare på utbyttedelen', () => {
+  const r = beregnUtbytteskatt([{ brutto: 1000, kostbasis: 0, kapitalAndel: 0.25 }], 0.3784, 0.031);
+  assert.ok(Math.abs(r.skatt - 750 * 0.3784) < 1e-9);
+});
+
+test('beregnUtbytteskatt: skjerming på én aksje senker ikke skatten på en annen', () => {
+  // A: stor kostpris, lite utbytte → 3 100 kr skjerming, bare 100 kr å bruke den på.
+  // B: 1 000 kr utbytte uten kostpris. Felles skjerming ville gitt 0 kr skatt.
+  const r = beregnUtbytteskatt([
+    { brutto: 100,  kostbasis: 100000, kapitalAndel: 0 },
+    { brutto: 1000, kostbasis: 0,      kapitalAndel: 0 },
+  ], 0.3784, 0.031);
+  assert.ok(Math.abs(r.skattbart - 1000) < 1e-9);
+  assert.ok(Math.abs(r.skatt - 378.4) < 1e-9);
+});
+
+test('beregnUtbytteskatt: vanlig utbytte gir samme skatt som før', () => {
+  const r = beregnUtbytteskatt([{ brutto: 1000, kostbasis: 10000, kapitalAndel: 0 }], 0.3784, 0.031);
+  assert.ok(Math.abs(r.skatt - (1000 - 310) * 0.3784) < 1e-9);
 });

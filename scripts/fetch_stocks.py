@@ -1028,12 +1028,9 @@ def hent_newsweb_ex_dato(ticker, i_dag=None):
             if (msg.get("publishedTime") or "")[:10] < grense or sett >= MAKS_EX_MELDINGER:
                 break
             sett += 1
-            full = _newsweb_get(
-                f"{_NEWSWEB_API}/v1/newsreader/message"
-                f"?messageId={urllib.parse.quote(str(msg.get('messageId')), safe='')}"
-            )
-            body = full.get("data", {}).get("message", {}).get("body", "")
-            tekst = html.unescape(re.sub(r"<[^>]+>", "\n", body))
+            # Delt mellomlager med hent_kapitaltilbake(), som leser den samme
+            # nyeste meldingen.
+            tekst = _newsweb_tekst(msg.get("messageId"))
             if not _parse_utbetalinger(tekst):
                 continue
             # Meldingen har datoer. Er alle passert, gjelder eldre meldinger
@@ -1042,6 +1039,194 @@ def hent_newsweb_ex_dato(ticker, i_dag=None):
     except Exception as e:
         print(f"    Advarsel NewsWeb ex-dato [{ticker}]: {e}")
     return None
+
+
+# ── TILBAKEBETALING AV INNBETALT KAPITAL ──────────────────────────────────────
+#
+# Noen selskaper betaler ikke utbytte i skattemessig forstand, men tilbake
+# innbetalt kapital. For en personlig aksjonær i Norge er det skattefritt når
+# det utbetales — det reduserer inngangsverdien i stedet, og skattlegges først
+# som høyere gevinst ved salg. Porteføljen trakk 37,84 % av alt, og aksjesidens
+# FAQ sa «beskattes med 37,84 %» om selskaper som selv skriver det motsatte.
+#
+# Målt mot børsmeldingene 03.10.2026: ni utstedere har brukt formuleringen
+# det siste året — ATEA, AQUA, BOR, ENH, HUNT, MORLD, PEN, SATS og STST — og
+# åtte av dem i sin *nyeste* melding (HUNTs siste er et ekstraordinært
+# utbytte). Funnet først for STST (24.09.2026), men den var langt fra alene.
+#
+# **Det er utbetalingen som klassifiseres, ikke selskapet.** BOR betalte
+# ordinært utbytte i 2025 og tilbakebetaling i mars 2026; HUNT delte én
+# utbetaling i 0,50 tilbakebetaling og 0,08 ordinært. Derfor leses bare den
+# *nyeste* meldingen, og feltet skrives på nytt hver kjøring.
+
+_KAPITAL_RE = re.compile(
+    r"(?:repayment|return)\s+of\s+(?:the\s+)?(?:company'?s\s+)?"
+    r"(?:other\s+)?paid[\s-]?in\s+(?:capital|equity)"
+    r"|tilbakebetaling\s+av\s+innbetalt\s+(?:kapital|egenkapital)",
+    re.I)
+# «NOK 0.50 as repayment of paid-in capital and NOK 0.08 as ordinary dividend»
+_KAPITAL_DEL_RE = re.compile(
+    r"(?:NOK|USD|EUR|SEK|DKK)\s*(?P<belop>\d+(?:[.,]\d+)?)\s+(?:is\s+|will\s+be\s+)?as\s+(?:a\s+)?"
+    r"(?:repayment|return)\s+of\s+(?:the\s+)?(?:company'?s\s+)?paid[\s-]?in", re.I)
+_UTBYTTEBELOP_RE = re.compile(
+    r"(?:dividend|distribution)\s+amount\s*:\s*(?:NOK|USD|EUR|SEK|DKK)?\s*(?P<belop>\d+(?:[.,]\d+)?)",
+    re.I)
+_NEKTET_RE = re.compile(r"\b(?:not|no)\b[^.\n]{0,40}$", re.I)
+
+# Hvor gammel den nyeste utbyttemeldingen kan være og fortsatt beskrive neste
+# utbetaling. Et årlig utbytte meldes én gang i året, så kortere enn det går
+# ikke; lengre gjør at et selskap som har sluttet å betale beholder merket.
+KAPITAL_MAKS_DAGER = 400
+
+
+def _tall(s):
+    return float(s.replace(",", "."))
+
+
+def _parse_kapitaltilbake(tekst):
+    """Andelen av utbetalingen som er tilbakebetaling av innbetalt kapital.
+
+    Returnerer et tall i (0, 1], eller None når meldingen ikke sier det.
+
+    * Sier meldingen det om hele utbetalingen («The distribution will
+      constitute a repayment of the Company's paid-in capital»), er andelen 1.
+    * Deler den utbetalingen med beløp (HUNT: «NOK 0.50 as repayment of
+      paid-in capital and NOK 0.08 as ordinary dividend»), regnes andelen ut
+      mot «Dividend amount». Finnes ikke totalen, gis intet svar heller enn et
+      gjettet — en delt utbetaling er ikke det samme som en hel.
+    * En nektende formulering («will not constitute a repayment …») teller
+      ikke. Ingen melding vi har sett gjør det, men ordet står for nær til å
+      ignoreres.
+    """
+    if not tekst:
+        return None
+    treff = [m for m in _KAPITAL_RE.finditer(tekst)
+             if not _NEKTET_RE.search(tekst[max(0, m.start() - 60):m.start()])]
+    if not treff:
+        return None
+    deler = list(_KAPITAL_DEL_RE.finditer(tekst))
+    if deler:
+        tot = _UTBYTTEBELOP_RE.search(tekst)
+        if not tot:
+            return None
+        try:
+            total = _tall(tot.group("belop"))
+            kapital = sum(_tall(d.group("belop")) for d in deler)
+        except ValueError:
+            return None
+        if total <= 0 or kapital <= 0 or kapital > total * 1.001:
+            return None
+        return round(min(1.0, kapital / total), 4)
+    return 1.0
+
+
+_NEWSWEB_TEKST = {}   # messageId → ren tekst, fylt én gang per kjøring
+
+
+def _newsweb_tekst(msg_id):
+    """Teksten i én NewsWeb-melding, uten HTML. Hentet én gang per kjøring."""
+    global _NEWSWEB_API
+    if _NEWSWEB_API is None:
+        _NEWSWEB_API = _newsweb_api_base()
+    nokkel = str(msg_id)
+    if nokkel not in _NEWSWEB_TEKST:
+        full = _newsweb_get(
+            f"{_NEWSWEB_API}/v1/newsreader/message"
+            f"?messageId={urllib.parse.quote(nokkel, safe='')}"
+        )
+        body = full.get("data", {}).get("message", {}).get("body", "")
+        _NEWSWEB_TEKST[nokkel] = html.unescape(re.sub(r"<[^>]+>", "\n", body)) if body else ""
+    return _NEWSWEB_TEKST[nokkel]
+
+
+UKJENT = object()   # Hentingen feilet — behold det vi hadde fra forrige kjøring
+
+
+def hent_kapitaltilbake(ticker, i_dag=None):
+    """Klassifiseringen i aksjens nyeste utbyttemelding.
+
+    Returnerer ``{"andel", "melding_dato", "melding_id"}`` når meldingen sier
+    at utbetalingen (helt eller delvis) er tilbakebetaling av innbetalt
+    kapital, None når den ikke gjør det, og ``UKJENT`` ved nettverksfeil.
+
+    Skillet mellom None og UKJENT er hele poenget: en feilet henting er ikke
+    bevis for at utbetalingen er vanlig utbytte, og skal ikke slette et merke
+    vi hadde. Samme lærdom som «a failed fetch is evidence of nothing».
+    """
+    i_dag = i_dag or datetime.date.today()
+    grense = (i_dag - datetime.timedelta(days=KAPITAL_MAKS_DAGER)).isoformat()
+    try:
+        for msg in _newsweb_meldinger(ticker):
+            tittel = (msg.get("title") or "").lower()
+            if not ("dividend" in tittel or "distribution" in tittel) or "key information" not in tittel:
+                continue
+            dato = (msg.get("publishedTime") or "")[:10]
+            if dato < grense:
+                return None
+            tekst = _newsweb_tekst(msg.get("messageId"))
+            if not tekst.strip():
+                continue
+            andel = _parse_kapitaltilbake(tekst)
+            if andel is None:
+                return None
+            return {"andel": andel, "melding_dato": dato,
+                    "melding_id": msg.get("messageId")}
+    except Exception as e:
+        print(f"    Advarsel NewsWeb kapitaltilbakebetaling [{ticker}]: {e}")
+        return UKJENT
+    return None
+
+
+def kapital_andel(a):
+    """Andelen av aksjens utbetalinger som er tilbakebetaling av kapital, 0–1.
+
+    0 betyr «ordinært utbytte, eller vi vet ikke» — begge gir full skatt i
+    beregningene, slik de alltid har gjort.
+    """
+    k = a.get("kapital_tilbake") if isinstance(a, dict) else None
+    if not isinstance(k, dict):
+        return 0.0
+    try:
+        andel = float(k.get("andel") or 0)
+    except (TypeError, ValueError):
+        return 0.0
+    return andel if 0 < andel <= 1 else 0.0
+
+
+def lag_kapital_note(a, nf):
+    """Sier fra når utbetalingene ikke er utbytte i skattemessig forstand.
+
+    Vises bare for aksjer der siste børsmelding sier det — åtte i dag — så
+    seksjonen er fraværende på resten av sidene, slik «Breaking the template»
+    krever.
+    """
+    andel = kapital_andel(a)
+    if not andel:
+        return ""
+    k = a["kapital_tilbake"]
+    dato = _fmt_dato(k.get("melding_dato")) if k.get("melding_dato") else ""
+    kilde = f" ({dato})" if dato else ""
+    if andel >= 0.999:
+        hva = ("betaler selskapet ut <strong>tilbakebetaling av innbetalt "
+               "kapital</strong>, ikke utbytte i skattemessig forstand")
+    else:
+        hva = (f"var <strong>om lag {nf(andel * 100, 0)} % av siste utbetaling "
+               "tilbakebetaling av innbetalt kapital</strong>, og resten ordinært utbytte")
+    return (
+        '<div class="delaar-seksjon delaar-noytral">'
+        '<h2>Utbetalingen er tilbakebetaling av kapital</h2>'
+        f'<p>Ifølge selskapets siste utbyttemelding til Oslo Børs{kilde} {hva}.</p>'
+        '<p>For en personlig aksjonær i Norge er en slik tilbakebetaling ikke '
+        'skattepliktig når den utbetales. Den trekkes i stedet fra '
+        'inngangsverdien din, slik at gevinsten blir tilsvarende større — og '
+        'skatten kommer når du selger. Det gjelder så lenge tilbakebetalingen '
+        'ikke overstiger inngangsverdien; et overskytende beløp skattlegges som '
+        'utbytte.</p>'
+        '<p>Klassifiseringen gjelder hver utbetaling for seg, og et selskap kan '
+        'veksle mellom utbytte og tilbakebetaling. Den står i hver '
+        'utbyttemelding.</p>'
+        '</div>'
+    )
 
 
 def utbyttesplitt_stemmer(a):
@@ -3901,11 +4086,32 @@ def _lag_faq_seksjon(a, today):
         qas.append((f"Hva er direkteavkastningen (yield) til {ticker}?", svar))
 
     # 4. Skatt og ASK
-    if yield_ > 0:
-        netto = yield_ * (1 - 0.3784)
+    kap = kapital_andel(a)
+    if yield_ > 0 and kap >= 0.999:
+        # Selskapet sier selv at utbetalingen ikke er utbytte i skattemessig
+        # forstand. «Beskattes med 37,84 %» ville vært feil — se
+        # hent_kapitaltilbake().
+        svar = (
+            f"Ifølge siste utbyttemelding fra {navn} til Oslo Børs er utbetalingen "
+            f"tilbakebetaling av innbetalt kapital, ikke utbytte i skattemessig forstand. "
+            f"For personlige aksjonærer er den ikke skattepliktig når den utbetales; "
+            f"den reduserer i stedet inngangsverdien, slik at gevinsten — og skatten — "
+            f"blir tilsvarende høyere når du selger. Overstiger tilbakebetalingen "
+            f"inngangsverdien, skattlegges det overskytende som utbytte med 37,84 %. "
+            f"Klassifiseringen gjelder hver utbetaling for seg og står i hver utbyttemelding."
+        )
+        qas.append((f"Hva er skatten på utbytte fra {ticker}?", svar))
+    elif yield_ > 0:
+        netto = yield_ * (1 - 0.3784 * (1 - kap))
+        delvis = (
+            f"Ifølge siste utbyttemelding var om lag {_nf(kap * 100, 0)} % av utbetalingen "
+            f"tilbakebetaling av innbetalt kapital, som ikke beskattes ved utbetaling men "
+            f"reduserer inngangsverdien. Resten beskattes som utbytte. "
+        ) if kap else ""
         svar = (
             f"Utbytte fra {navn} beskattes med 37,84 % for personlige aksjonærer "
             f"som eier aksjen direkte (via VPS-konto). "
+            f"{delvis}"
             f"Med en yield på {_nf(yield_, 2)} % gir det en nettoyield etter skatt på ca. {_nf(netto, 2)} %. "
             f"Eier du aksjen via aksjesparekonto (ASK), utsettes skatten til du tar ut midler — "
             f"utbyttet reinvesteres skattefritt innen kontoen og gir renters-rente-effekt over tid."
@@ -4197,7 +4403,7 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     delaar_varsel = lag_delaar_varsel(a, _nf)
     # Gjensidig utelukkende: noten returnerer tom streng når varselet gjelder.
     delaar_varsel += lag_ekstraordinaer_note(a, _nf)
-    betalt_boks = lag_betalt_boks(a, _nf)
+    betalt_boks = lag_betalt_boks(a, _nf) + lag_kapital_note(a, _nf)
     # «annualisert» påstår at tallet dekker et helt år. Er det et delår, er
     # nettopp den påstanden gal, så merket erstatter den framfor å stå ved
     # siden av — «annualisert usikker» sa to ting som ikke kan være sanne
@@ -7591,6 +7797,27 @@ def main():
     for aksje in resultater:
         aksje.pop("_for_dnb", None)
     print(f"  NewsWeb rettet ex_dato for {nw_rettet} aksjer")
+
+    # ── Tilbakebetaling av innbetalt kapital ──────────────────────────────────
+    # Leser den samme nyeste meldingen som ex-dato-steget (mellomlagret), så
+    # dette koster ingen ekstra forespørsler for aksjer som alt har en. Se
+    # kommentaren ved hent_kapitaltilbake().
+    kt_antall = 0
+    for aksje in resultater:
+        kt = hent_kapitaltilbake(aksje["ticker"])
+        if kt is UKJENT:
+            # Behold forrige kjørings verdi. En fersk rad fra Yahoo har ikke
+            # feltet, så det må hentes fra fallback-dataene.
+            forrige = fallback.get(aksje["ticker"], {}).get("kapital_tilbake")
+            if forrige:
+                aksje["kapital_tilbake"] = forrige
+            continue
+        if kt:
+            aksje["kapital_tilbake"] = kt
+            kt_antall += 1
+        else:
+            aksje.pop("kapital_tilbake", None)
+    print(f"  Tilbakebetaling av innbetalt kapital: {kt_antall} aksjer")
 
     # ── 5. Strukturert datakvalitetsrapport ───────────────────────────────────
     linje = "=" * 54

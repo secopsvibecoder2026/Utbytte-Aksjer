@@ -208,22 +208,28 @@ exday.no/artikler/     → innhold (eksisterer)
 ## Medium prioritet
 
 
-### Tilbakebetaling av innbetalt kapital behandles som utbytte (funnet 24.09.2026)
+### Tilbakebetaling av innbetalt kapital behandles som utbytte ✅ (rettet 03.10.2026)
 
 Stainless Tankers (STST) skriver i hver eneste utbyttemelding i 2026: «The
 distribution will constitute a repayment of the Company's paid-in capital.»
-I Norge er det **skattefritt** og reduserer inngangsverdien; det skattlegges
-først ved salg. Porteføljens skatteberegning behandler det som utbytte med
-37,84 %, så den som eier STST får vist en skatt som ikke finnes.
+I Norge er det **skattefritt** ved utbetaling og reduserer inngangsverdien; det
+skattlegges først ved salg. Porteføljen trakk 37,84 % av alt sammen, og
+aksjesidens FAQ sa «beskattes med 37,84 %».
 
-- [ ] Mål hvor mange utstedere som bruker formuleringen — det er én melding
-      per utbetaling, og parseren for «Key information» finnes allerede
-- [ ] Merk utbetalingen i dataene, ikke aksjen: samme selskap kan veksle
-- [ ] Skatteberegningen: trekk fra inngangsverdien i stedet for å skattlegge
-- [ ] Tekst på aksjesiden — «utbytte» er strengt tatt feil ord for disse
-
-Ikke gjort ennå fordi det krever en ny klassifisering per utbetaling, og det
-er ikke målt om STST er alene.
+- [x] Målt: **ni utstedere** har brukt formuleringen det siste året (ATEA,
+      AQUA, BOR, ENH, HUNT, MORLD, PEN, SATS, STST) — åtte i sin nyeste melding.
+      STST var langt fra alene.
+- [x] Klassifiseringen leses fra den *nyeste* utbyttemeldingen og skrives på
+      nytt hver kjøring (`kapital_tilbake` i `aksjer.json`), så et selskap som
+      veksler (BOR, HUNT) følger med. Delte utbetalinger gir en andel (HUNT
+      mars 2026: 0,50 av 0,58).
+- [x] Skatteberegningen holder tilbakebetalingen utenfor — og regner nå
+      skjermingsfradraget per aksje, ikke samlet for porteføljen.
+- [x] Tekst på aksjesiden (egen boks + FAQ) og i appens aksjevindu.
+- [ ] **Registrerte «Utbytte mottatt»-transaksjoner reduserer ikke
+      kostprisen.** Vi vet ikke hvilken klassifisering hver historiske
+      utbetaling hadde — merket gjelder bare den nyeste meldingen. Trengs for
+      et riktig skattesammendrag (gevinst ved salg), se under.
 
 ### Skattesammendrag — årsoppsummering
 Skjermingsfradrag er allerede beregnet. Mangler samlet årsvisning.

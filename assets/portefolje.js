@@ -35,6 +35,48 @@ function beregnKostbasis(ticker, txMap) {
   return { antall, totalKost, vwap, mottattUtbytte };
 }
 
+/**
+ * Skatt på forventet utbytte etter aksjonærmodellen, posisjon for posisjon.
+ *
+ * `poster` er [{ brutto, kostbasis, kapitalAndel }]. To ting skiller dette fra
+ * den gamle utregningen, som trakk 37,84 % av summen minus samlet skjerming:
+ *
+ * - **Tilbakebetaling av innbetalt kapital er ikke skattepliktig ved
+ *   utbetaling** — den reduserer inngangsverdien og skattlegges som gevinst
+ *   ved salg. Åtte selskaper betaler slik i dag (STST, ATEA, SATS m.fl.), og
+ *   porteføljen viste skatt på alt sammen. `kapitalAndel` kommer fra
+ *   `kapitalAndel()` i ui.js, som leser selskapets siste utbyttemelding.
+ * - **Skjermingsfradraget gjelder aksjen det er beregnet for.** Ubrukt
+ *   skjerming på én aksje kan ikke trekkes fra utbytte på en annen, så en
+ *   posisjon med stor kostpris og lite utbytte skal ikke senke skatten på
+ *   resten av porteføljen. Skjerming brukes heller ikke mot den delen som er
+ *   tilbakebetaling — den er ikke skattepliktig i utgangspunktet.
+ */
+function beregnUtbytteskatt(poster, skattesats, skjermingsrente) {
+  let brutto = 0, kapital = 0, skattbart = 0;
+  (poster || []).forEach(p => {
+    const b = Number(p && p.brutto) || 0;
+    if (b <= 0) return;
+    const andel = Math.min(1, Math.max(0, Number(p.kapitalAndel) || 0));
+    const kap = b * andel;
+    const skjerming = Math.max(0, Number(p.kostbasis) || 0) * skjermingsrente;
+    brutto += b;
+    kapital += kap;
+    skattbart += Math.max(0, b - kap - skjerming);
+  });
+  const skatt = skattbart * skattesats;
+  return { brutto, kapital, skattbart, skatt, netto: brutto - skatt };
+}
+
+function _skatteposter(beholdning, bruttoPerTicker) {
+  return beholdning.map(a => ({
+    ticker: a.ticker,
+    brutto: bruttoPerTicker ? (bruttoPerTicker[a.ticker] || 0) : a.forv_ar,
+    kostbasis: beregnKostbasis(a.ticker).totalKost,
+    kapitalAndel: typeof kapitalAndel === 'function' ? kapitalAndel(a) : 0,
+  }));
+}
+
 
 
 // Leser "Ny transaksjon"-skjemaet i en detail-rad og registrerer transaksjonen.
@@ -1122,17 +1164,18 @@ function visPortefolje() {
     const nettoEl    = document.getElementById('pf-stat-netto-skatt');
     const skattTekst = document.getElementById('pf-stat-skatt-tekst');
     if (nettoEl) {
-      // Skjermingsfradrag = VWAP-kostpris × skjermingsrente per posisjon
-      let totalSkjermingsfradrag = 0;
-      alleBeholdning.forEach(a => {
-        const kb = beregnKostbasis(a.ticker);
-        if (kb.totalKost > 0) totalSkjermingsfradrag += kb.totalKost * SKJERMINGSRENTE;
-      });
-      const skattbartUtbytte = Math.max(0, totalAr - totalSkjermingsfradrag);
-      const skatt            = skattbartUtbytte * SKATTESATS;
-      const netto            = totalAr - skatt;
-      nettoEl.textContent    = fmtKr(netto);
-      if (skattTekst) skattTekst.textContent = `skatt: ${fmtKr(skatt)}`;
+      // Per posisjon: skjerming per aksje, og tilbakebetaling av innbetalt
+      // kapital holdt utenfor — se beregnUtbytteskatt().
+      const sk = beregnUtbytteskatt(_skatteposter(alleBeholdning), SKATTESATS, SKJERMINGSRENTE);
+      nettoEl.textContent = fmtKr(sk.netto);
+      if (skattTekst) {
+        skattTekst.textContent = sk.kapital > 0
+          ? `skatt: ${fmtKr(sk.skatt)} · ${fmtKr(sk.kapital)} uten skatt nå`
+          : `skatt: ${fmtKr(sk.skatt)}`;
+        skattTekst.title = sk.kapital > 0
+          ? 'Tilbakebetaling av innbetalt kapital skattlegges ikke ved utbetaling, men reduserer inngangsverdien og gir høyere gevinstskatt ved salg.'
+          : '';
+      }
     }
   }
 
@@ -1745,14 +1788,21 @@ function visUtbyttePrognose(beholdning) {
     return;
   }
 
-  // Netto etter skjermingsfradrag og utbytteskatt (samme modell som stats-kortet)
-  let skjermingsfradrag = 0;
-  beholdning.forEach(a => {
-    const kb = beregnKostbasis(a.ticker);
-    if (kb.totalKost > 0) skjermingsfradrag += kb.totalKost * SKJERMINGSRENTE;
+  // Netto etter skjermingsfradrag og utbytteskatt (samme modell som stats-kortet),
+  // men på beløpene som faktisk faller i de neste tolv månedene.
+  const perTicker = {};
+  p.utbetalinger.concat(p.utenDato).forEach(u => {
+    perTicker[u.ticker] = (perTicker[u.ticker] || 0) + u.belop;
   });
-  const skatt = Math.max(0, p.bruttoAr - skjermingsfradrag) * SKATTESATS;
-  const netto = p.bruttoAr - skatt;
+  const poster = _skatteposter(beholdning, perTicker);
+  const sk = beregnUtbytteskatt(poster, SKATTESATS, SKJERMINGSRENTE);
+  const netto = sk.netto;
+  const kapitalTickere = poster.filter(x => x.kapitalAndel > 0 && x.brutto > 0).map(x => x.ticker);
+  const kapitalHtml = sk.kapital > 0
+    ? `<p class="text-xs text-gray-500 dark:text-gray-400 mt-2">${fmtKr(sk.kapital)} av dette er tilbakebetaling av innbetalt kapital
+        (${kapitalTickere.map(t => escHtml(t)).join(', ')}). Den skattlegges ikke når den utbetales, men trekkes fra
+        inngangsverdien — skatten kommer som høyere gevinst når du selger.</p>`
+    : '';
 
   const maks = Math.max(...p.mndSum.map(m => m.belop), 1);
   const iKey = new Date().toISOString().slice(0, 7);
@@ -1800,7 +1850,7 @@ function visUtbyttePrognose(beholdning) {
       }).join('')}
     </div>
     <div class="max-h-56 overflow-y-auto mt-3" id="pf-prognose-liste">${listeHtml}</div>
-    ${utenDatoHtml}
+    ${utenDatoHtml}${kapitalHtml}
     <p class="text-[11px] text-gray-400 dark:text-gray-600 mt-2">Månedene er <strong>ex-datoer</strong> — pengene kommer typisk halvannen til tre uker senere, så en ex-dato sent i måneden utbetales i den neste. Estimater bygger på sist kjente utbytte og betalingsmønster; fremtidige utbytter er ikke garantert. Netto forutsetter skjermingsfradrag på årets kostbasis.</p>`;
 }
 
@@ -2676,4 +2726,4 @@ function visAnalyse() {
 }
 
 // Node.js test export
-if (typeof module !== 'undefined') module.exports = { beregnKostbasis, beregnIRR, beregnTWRSerie, beregnUtbyttePrognose, _leggTilMnd };
+if (typeof module !== 'undefined') module.exports = { beregnKostbasis, beregnIRR, beregnTWRSerie, beregnUtbyttePrognose, _leggTilMnd, beregnUtbytteskatt };

@@ -1139,6 +1139,44 @@ two crises. Scatec «9 år på rad», last paid 2023.
 
 Tests: `TestUtbytterekke` (10) and the same cases in `ui.test.js` (4).
 
+## Return of paid-in capital is not a dividend for tax — `kapital_tilbake` (2026-10-03)
+
+Some companies pay out *tilbakebetaling av innbetalt kapital* rather than a
+dividend. For a Norwegian personal shareholder that is not taxed when paid: it
+reduces the cost basis, and the tax arrives as a larger gain on sale. The
+portfolio took 37,84 % of everything, and the stock page FAQ said «beskattes
+med 37,84 %» about companies whose own notices say the opposite.
+
+Measured against NewsWeb: **nine issuers** used the wording in the last year
+(ATEA, AQUA, BOR, ENH, HUNT, MORLD, PEN, SATS, STST), eight of them in their
+newest notice. Found first for STST — it was far from alone, which is why the
+roadmap said «measure first».
+
+- `hent_kapitaltilbake()` reads the **newest** «Key information» dividend /
+  distribution notice and `_parse_kapitaltilbake()` returns the share, 0–1.
+  The *payment* is classified, not the company: BOR paid ordinary dividends in
+  2025 and capital in 2026; HUNT split one payment 0,50 capital + 0,08 ordinary,
+  then paid an extraordinary *dividend* in September — so HUNT is unmarked now.
+- **A network failure returns `UKJENT`, not `None`**, and the previous run's
+  value is kept from `fallback`. A failed fetch is evidence of nothing.
+- A partial classification without a parseable total gives no answer rather
+  than 1.0, and a negated phrase («will not constitute») does not count.
+- `_newsweb_tekst()` caches message bodies per run; the ex-date step reads the
+  same newest notice, so this costs no extra requests.
+- Rendered by `lag_kapital_note()` (conditional box — absent on other pages)
+  and the tax FAQ; `kapitalAndel()` / `modalKapitalNote()` /
+  `kapitalSkattTekst()` mirror it in `ui.js`.
+- `beregnUtbytteskatt()` in `portefolje.js` now also applies the
+  **skjermingsfradrag per share**, as the law does. The old code pooled it, so a
+  position with a large cost basis and little dividend lowered the tax on the
+  rest of the portfolio.
+
+**Not done:** registered «Utbytte mottatt» transactions do not reduce the cost
+basis — we only know the classification of the *newest* notice, not of each
+historical payment. That is needed before a yearly tax summary can show gains
+correctly. Tests: `TestKapitalTilbake` (12), `ui.test.js` (3),
+`portefolje.test.js` (4).
+
 ## Where the weekly tallkontroll report goes (2026-09-30)
 
 The routine «Ukentlig tallkontroll» (Mondays 17:24 UTC) starts a fresh
