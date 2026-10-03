@@ -32,7 +32,7 @@ const {
   vekstKlasse,
   beregnScore,
   beregnYtdInntekt
-, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, utbyttePerioder, vistOverBetalt, modalBetaltBoks, utbytteRekke, stabileAr, exForbeholdGjelder, kapitalAndel, modalKapitalNote, kapitalSkattTekst, aksjerMedExIMaaned } = require('../assets/ui.js');
+, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, utbyttePerioder, vistOverBetalt, modalBetaltBoks, utbytteRekke, stabileAr, exForbeholdGjelder, kapitalAndel, modalKapitalNote, kapitalSkattTekst, aksjerMedExIMaaned, beregnHvisKjopt, hvisStartAar } = require('../assets/ui.js');
 
 // ── fmt ────────────────────────────────────────────────────────────────────
 test('fmt returnerer — for null', () => {
@@ -597,4 +597,60 @@ test('aksjerMedExIMaaned: lengst rekke først, så høyest betalt yield', () => 
   ], 10);
   assert.deepEqual(r.map(x => x.ticker), ['LANG', 'HOY', 'MIDT', 'UKJENT']);
   assert.equal(r[3].rekke, null);
+});
+
+// ── beregnHvisKjopt — «Hva om jeg hadde kjøpt?» (2026-10-03) ─────────────────
+const HVIS_IDAG = new Date(2026, 9, 3);
+const hvisKurs = (start, slutt) => {
+  const ut = [];
+  const d = new Date(2022, 0, 7);
+  const uker = 247;
+  for (let i = 0; i < uker; i++) {
+    const x = new Date(d.getTime() + i * 7 * 864e5);
+    ut.push({ d: lokalIsoDato(x), k: start + (slutt - start) * i / (uker - 1) });
+  }
+  return ut;
+};
+
+test('beregnHvisKjopt: kursverdi pluss utbytte per år, hele aksjer, mot OSEBX', () => {
+  const a = { ticker: 'X', pris: 150, utbytte_per_ar: { '2022': 5, '2023': 5, '2024': 6, '2025': 6 },
+    historiske_utbytter: [{ ar: 2026, utbytte: 3 }] };
+  const r = beregnHvisKjopt(a, hvisKurs(100, 150), hvisKurs(1000, 1500), 10050, 2022, HVIS_IDAG);
+  assert.equal(r.feil, undefined);
+  assert.equal(r.antall, 100);               // 10 050 kr à 100 → 100 aksjer, 50 kr igjen
+  assert.equal(r.rest, 50);
+  assert.equal(r.kursverdi, 15000);
+  assert.equal(r.utbytteSum, (5 + 5 + 6 + 6 + 3) * 100);
+  assert.equal(r.total, 17500);
+  assert.ok(Math.abs(r.pst - 75) < 1e-9);
+  assert.ok(Math.abs(r.osebx.pst - 50) < 1e-9);
+  assert.equal(r.utbytte[r.utbytte.length - 1].hittil, true);
+});
+
+test('beregnHvisKjopt: brudd i kursserien gir intet svar (splitt / kapitalutdeling)', () => {
+  const kurs = hvisKurs(100, 120);
+  kurs[150].k = kurs[149].k / 30;            // 2020 Bulkers: 117 → 3 på én uke
+  for (let i = 151; i < kurs.length; i++) kurs[i].k = 4;
+  const r = beregnHvisKjopt({ pris: 4, utbytte_per_ar: { '2022': 1, '2023': 1, '2024': 1, '2025': 1 } },
+    kurs, [], 10000, 2022, HVIS_IDAG);
+  assert.match(r.feil, /brudd/);
+});
+
+test('beregnHvisKjopt: utbytte over 2× kursen og manglende år gir intet svar', () => {
+  const kurs = hvisKurs(100, 100);
+  assert.match(beregnHvisKjopt({ pris: 100, utbytte_per_ar: { '2022': 1, '2023': 250, '2024': 1, '2025': 1 } },
+    kurs, [], 10000, 2022, HVIS_IDAG).feil, /kapitalutdeling/);
+  assert.match(beregnHvisKjopt({ pris: 100, utbytte_per_ar: { '2023': 1, '2024': 1, '2025': 1 } },
+    kurs, [], 10000, 2022, HVIS_IDAG).feil, /mangler utbyttetall for 2022/);
+  // Før første utbytte er null, ikke ukjent.
+  const r = beregnHvisKjopt({ pris: 100, utbytte_forste_ar: 2024, utbytte_per_ar: { '2024': 1, '2025': 1 } },
+    kurs, [], 10000, 2022, HVIS_IDAG);
+  assert.equal(r.feil, undefined);
+  assert.equal(r.utbytteSum, 200);
+});
+
+test('hvisStartAar: serien må dekke begynnelsen av året', () => {
+  const kurs = [{ d: '2021-10-15', k: 1 }, { d: '2026-10-02', k: 1 }];
+  assert.deepEqual(hvisStartAar(kurs, HVIS_IDAG), [2022, 2023, 2024, 2025]);
+  assert.match(beregnHvisKjopt({ pris: 1 }, kurs, [], 100, 2021, HVIS_IDAG).feil, /går ikke tilbake/);
 });

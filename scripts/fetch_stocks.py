@@ -7576,23 +7576,40 @@ def generer_sitemap(aksjer, root_dir, today, alle_tickers=None):
     print(f"Sitemap oppdatert med {total} URL-er: {sitemap_path}")
 
 
+# Yahoo sluttet å svare på «^OSEAX» (og «^OSEBX») — «No data found, symbol
+# may be delisted». `osebx_historikk` sto derfor tom i aksjer.json, og «Din
+# portefølje vs. OSEBX» hadde ingenting å tegne. «OSEBX.OL» svarer med full
+# historikk (1 168 i oktober 2021, 2 063 i oktober 2026). OSEBX er en
+# totalavkastningsindeks — utbytte reinvestert — så den er riktig målestokk
+# for «kurs + utbytte». Funnet 03.10.2026.
+OSEBX_SYMBOL = "OSEBX.OL"
+
+
 def hent_osebx_historikk():
-    """Henter OSEBX (^OSEAX) 2-års historikk fra Yahoo Finance."""
+    """OSEBX: (daglig siste 2 år, ukentlig siste 5 år).
+
+    Den daglige serien går i aksjer.json som før (porteføljegrafen). Den
+    ukentlige skrives til data/kurs/OSEBX.json, i samme format som aksjenes
+    kurshistorikk, for «Hva om jeg hadde kjøpt?» i appen — den lastes bare når
+    verktøyet brukes. Ett kall dekker begge.
+    """
+    import pandas as pd
     try:
-        ticker = yf.Ticker("^OSEAX")
-        hist = ticker.history(period="2y")
-        if hist.empty:
+        hist = yf.Ticker(OSEBX_SYMBOL).history(period="5y", auto_adjust=False)
+        serie = _datoindeksert(hist["Close"]).dropna() if not hist.empty else None
+        if serie is None or serie.empty:
             print("  OSEBX: Ingen data returnert")
-            return {}
-        result = {}
-        for d, v in hist["Close"].items():
-            dato = str(d.date()) if hasattr(d, "date") else str(d)[:10]
-            result[dato] = round(float(v), 2)
-        print(f"  OSEBX: {len(result)} datapunkter hentet")
-        return result
+            return {}, []
+        grense = serie.index.max() - pd.Timedelta(days=731)
+        daglig = {str(d.date()): round(float(v), 2) for d, v in serie.items() if d >= grense}
+        iso = serie.index.isocalendar()
+        uke = serie.groupby([iso.year.values, iso.week.values]).tail(1)
+        ukentlig = [{"d": str(d.date()), "k": round(float(v), 2)} for d, v in uke.tail(260).items()]
+        print(f"  OSEBX: {len(daglig)} daglige og {len(ukentlig)} ukentlige punkter")
+        return daglig, ukentlig
     except Exception as e:
         print(f"  Kunne ikke hente OSEBX: {e}")
-        return {}
+        return {}, []
 
 
 def skriv_kurshistorikk(aksjer, kurs_dir):
@@ -7890,7 +7907,12 @@ def main():
 
     # Hent OSEBX-historikk
     print("\nHenter OSEBX-historikk...")
-    osebx_data = hent_osebx_historikk()
+    osebx_data, osebx_ukentlig = hent_osebx_historikk()
+    if osebx_ukentlig:
+        kurs_dir = os.path.join(os.path.dirname(output_path), "kurs")
+        os.makedirs(kurs_dir, exist_ok=True)
+        with open(os.path.join(kurs_dir, "OSEBX.json"), "w", encoding="utf-8") as f:
+            json.dump(osebx_ukentlig, f, ensure_ascii=False, separators=(",", ":"))
 
     # Lagre til JSON
     # antall_ok/antall_feil dupliseres fra hentelogg.json med vilje. Logga er
