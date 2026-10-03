@@ -3451,6 +3451,48 @@ function maanederTekst(a) {
   return navn.slice(0, -1).join(', ') + ' og ' + navn[navn.length - 1];
 }
 
+/**
+ * Aksjer som pleier å gå ex-utbytte i måned `mnd` (1–12) — for kortet «Måneder
+ * uten ex-dato» i porteføljen.
+ *
+ * Dette er et filter på observerte fakta, ikke en anbefaling, og kriteriene er
+ * valgt så det ikke kan påstå mer enn dataene bærer:
+ *
+ * - **Måneden må stå i `utbetalingsmaaneder`**, som krever at den går igjen i
+ *   minst to år. Et engangsutbytte i juli gjør ikke juli til en ex-måned.
+ * - **Selskapet må ha betalt siste 12 måneder.** Et stoppet utbytte (REACH,
+ *   MGN) har fortsatt et gammelt mønster, men ingen grunn til å stå her.
+ * - **Betalt beløp over 2× kursen utelukkes**, samme grense som Sjekk 9 og
+ *   utbyttePerioder(). 2020 Bulkers betaler månedlig og ville ellers stått
+ *   øverst i alle tolv måneder med en «yield» på over 2 000 %.
+ *
+ * Sortert etter hvor lenge rekken har holdt, så etter betalt yield: spørsmålet
+ * kortet svarer på er «hvem går pålitelig ex i denne måneden», ikke «hvem
+ * betaler mest». Viser betalt yield, ikke anslaget — se vistOverBetalt().
+ */
+function aksjerMedExIMaaned(aksjer, mnd, ekskluder) {
+  const ut = [];
+  (aksjer || []).forEach(a => {
+    if (!a || (ekskluder && ekskluder.has(a.ticker))) return;
+    const m = Array.isArray(a.utbetalingsmaaneder) ? a.utbetalingsmaaneder.map(Number) : [];
+    if (!m.includes(mnd)) return;
+    const pris = Number(a.pris) || 0;
+    const betalt = Number(a.utbytte_12m) || 0;
+    if (pris <= 0 || betalt <= 0 || betalt > 2 * pris) return;
+    const r = utbytteRekke(a);
+    ut.push({
+      ticker: a.ticker,
+      navn: a.navn || a.ticker,
+      rekke: r ? r.rad : null,
+      betaltYield: Math.round(betalt / pris * 10000) / 100,
+      maaneder: maanederTekst(a),
+    });
+  });
+  return ut.sort((x, y) => (y.rekke || 0) - (x.rekke || 0)
+    || y.betaltYield - x.betaltYield
+    || x.ticker.localeCompare(y.ticker));
+}
+
 function utbetaltHittil(a) {
   if (!a) return null;
   const pris = Number(a.pris) || 0;
@@ -5037,4 +5079,4 @@ function _annBygTopp() {
 }
 
 // Node.js test export
-if (typeof module !== 'undefined') module.exports = { utbytteRekke, stabileAr, exForbeholdGjelder, utbyttePerioder, vistOverBetalt, modalBetaltBoks, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, fmt, formaterDato, yieldKlasse, payoutKlasse, vekstKlasse, beregnScore, beregnBaerekraft, beregnYtdInntekt, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote, kapitalAndel, modalKapitalNote, kapitalSkattTekst };
+if (typeof module !== 'undefined') module.exports = { utbytteRekke, stabileAr, exForbeholdGjelder, utbyttePerioder, vistOverBetalt, modalBetaltBoks, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, fmt, formaterDato, yieldKlasse, payoutKlasse, vekstKlasse, beregnScore, beregnBaerekraft, beregnYtdInntekt, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote, kapitalAndel, modalKapitalNote, kapitalSkattTekst, aksjerMedExIMaaned };
