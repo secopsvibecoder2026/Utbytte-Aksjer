@@ -1047,6 +1047,7 @@
         <button class="toppliste-pill" data-kalk-tab="huslan">Huslån vs. investering</button>
         <button class="toppliste-pill" data-kalk-tab="fire">FIRE</button>
         <button class="toppliste-pill" data-kalk-tab="hvis">Hva om jeg hadde kjøpt?</button>
+        <button class="toppliste-pill" data-kalk-tab="ask">ASK eller vanlig konto?</button>
       </nav>
 
       <div id="kalk-tab-utbytte" class="space-y-6">
@@ -1370,6 +1371,37 @@
         </div>
         <div id="hvis-resultat" aria-live="polite"></div>
       </div><!-- /kalk-tab-hvis -->
+
+      <!-- ASK ELLER VANLIG KONTO? -->
+      <div id="kalk-tab-ask" class="hidden space-y-5">
+        <div class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-5 shadow-sm space-y-4">
+          <div>
+            <h2 class="font-semibold text-base">ASK eller vanlig konto?</h2>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Samme sparing på aksjesparekonto og vanlig konto, med utbyttet reinvestert — hva sitter du igjen med etter skatt når alt tas ut?</p>
+          </div>
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+            <label class="block text-xs text-gray-500 dark:text-gray-400">Startbeløp (kr)
+              <input id="ask-start" type="number" min="0" step="10000" value="100000" class="filter-input w-full mt-1 text-right" />
+            </label>
+            <label class="block text-xs text-gray-500 dark:text-gray-400">Sparing per år (kr)
+              <input id="ask-arlig" type="number" min="0" step="1000" value="24000" class="filter-input w-full mt-1 text-right" />
+            </label>
+            <label class="block text-xs text-gray-500 dark:text-gray-400">Antall år
+              <input id="ask-aar" type="number" min="0" step="1" value="20" class="filter-input w-full mt-1 text-right" />
+            </label>
+            <label class="block text-xs text-gray-500 dark:text-gray-400">Utbytte (yield %)
+              <input id="ask-yield" type="number" min="0" step="0.1" value="5" class="filter-input w-full mt-1 text-right" />
+            </label>
+            <label class="block text-xs text-gray-500 dark:text-gray-400">Kursvekst (% per år)
+              <input id="ask-vekst" type="number" min="0" step="0.1" value="3" class="filter-input w-full mt-1 text-right" />
+            </label>
+            <label class="block text-xs text-gray-500 dark:text-gray-400">Skjermingsrente (%)
+              <input id="ask-rente" type="number" min="0" step="0.1" value="" class="filter-input w-full mt-1 text-right" />
+            </label>
+          </div>
+        </div>
+        <div id="ask-resultat" aria-live="polite"></div>
+      </div><!-- /kalk-tab-ask -->
     </div><!-- /verktoy-subtab-kalkulator -->
 
     <!-- ANNONSERT UTBYTTE-KALKULATOR -->

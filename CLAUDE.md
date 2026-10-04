@@ -1263,6 +1263,22 @@ January. The forward estimates elsewhere use the latest rate (3,6 %).
 
 Tests: `portefolje.test.js` (5), `storage.test.js` (1).
 
+## «ASK eller vanlig konto?» (2026-10-04)
+
+Verktøy → Kalkulator. `beregnAskMotVanlig()` in `ui.js` runs the same savings
+on both accounts with dividends reinvested and everything taken out at the end.
+Rules checked against Skatteetaten: both taxed at 37,84 % over the shield; on a
+regular account the dividend is taxed each year and the shield base is the
+cost basis plus unused shield; on ASK the base is the **lowest deposit balance
+in the year plus unused shield**, nothing is taxed until withdrawal, and
+deposits come out first, tax-free. Unused shield is carried forward and added
+to the base on both.
+
+The difference the tool shows is **deferral, not rate** — it says so, and a
+one-year run returns identical results (a test pins that). The count of stocks
+that cannot sit on ASK is computed from `ask_egnet` at render time, never typed.
+Tests: `ui.test.js` (4).
+
 ## Where the weekly tallkontroll report goes (2026-09-30)
 
 The routine «Ukentlig tallkontroll» (Mondays 17:24 UTC) starts a fresh

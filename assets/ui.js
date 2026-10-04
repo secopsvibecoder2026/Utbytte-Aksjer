@@ -379,6 +379,130 @@ function brukPortefoljeDataFire() {
   beregnFire();
 }
 
+// ── ASK ELLER VANLIG KONTO? ──────────────────────────────────────────────────
+/**
+ * Samme sparing på aksjesparekonto og på vanlig konto, med utbyttet
+ * reinvestert, og alt tatt ut/solgt til slutt.
+ *
+ * Reglene er Skatteetatens, og de to kontoene skiller seg på tidspunkt, ikke
+ * sats — begge skattlegges med 37,84 % over skjermingsfradraget:
+ *
+ * - **Vanlig konto:** utbyttet skattlegges hvert år. Skjermingsgrunnlaget er
+ *   inngangsverdien (det som er investert, også reinvestert utbytte etter
+ *   skatt) pluss ubrukt skjerming fra tidligere år. Ubrukt skjerming framføres
+ *   og kan trekkes fra gevinsten ved salg.
+ * - **ASK:** ingen skatt før uttak. Grunnlaget er laveste innskudd i året pluss
+ *   ubrukt skjerming; skjermingen samles opp og trekkes fra gevinsten når den
+ *   tas ut. Innskuddet tas alltid ut først og er skattefritt.
+ *
+ * Forenklinger, og kortet sier dem: innskudd i begynnelsen av året, utbytte
+ * og kursvekst som jevne prosenter, samme skjermingsrente alle år, ingen
+ * kurtasje. Et tap gir fradrag (negativ skatt) på begge.
+ */
+function beregnAskMotVanlig({ start, arlig, yieldPst, vekstPst, aar, rente, skattesats }) {
+  const y = (Number(yieldPst) || 0) / 100;
+  const g = (Number(vekstPst) || 0) / 100;
+  const r = Number(rente) || 0;
+  const t = Number(skattesats) || 0;
+  const n = Math.max(0, Math.min(60, Math.round(Number(aar) || 0)));
+  const v = { verdi: 0, kost: 0, ubrukt: 0, skattUnderveis: 0 };
+  const a = { verdi: 0, innskudd: 0, ubrukt: 0 };
+  const rader = [];
+  for (let i = 1; i <= n; i++) {
+    const inn = (i === 1 ? Number(start) || 0 : 0) + (Number(arlig) || 0);
+    // Vanlig konto
+    v.verdi += inn; v.kost += inn;
+    const utbV = v.verdi * y;
+    v.verdi *= 1 + g;
+    const skjermV = (v.kost + v.ubrukt) * r + v.ubrukt;
+    const bruktV = Math.min(skjermV, utbV);
+    v.ubrukt = skjermV - bruktV;
+    const skattV = (utbV - bruktV) * t;
+    v.skattUnderveis += skattV;
+    v.verdi += utbV - skattV;
+    v.kost += utbV - skattV;          // reinvestert = nytt kjøp
+    // ASK
+    a.verdi += inn; a.innskudd += inn;
+    const utbA = a.verdi * y;
+    a.verdi = a.verdi * (1 + g) + utbA;
+    a.ubrukt += (a.innskudd + a.ubrukt) * r;
+    rader.push({ ar: i, vanlig: v.verdi, ask: a.verdi, skattAar: skattV });
+  }
+  const gevinstV = v.verdi - v.kost;
+  const skattSalg = (gevinstV > 0 ? Math.max(0, gevinstV - v.ubrukt) : gevinstV) * t;
+  const gevinstA = a.verdi - a.innskudd;
+  const skattUttak = (gevinstA > 0 ? Math.max(0, gevinstA - a.ubrukt) : gevinstA) * t;
+  const vanlig = { verdi: v.verdi, skattUnderveis: v.skattUnderveis, skattSalg, netto: v.verdi - skattSalg };
+  const ask = { verdi: a.verdi, skattUttak, netto: a.verdi - skattUttak, innskudd: a.innskudd };
+  return { rader, vanlig, ask, forskjell: ask.netto - vanlig.netto, innskutt: a.innskudd };
+}
+
+function visAskMotVanlig() {
+  const ut = document.getElementById('ask-resultat');
+  if (!ut) return;
+  const tall = id => parseFloat(document.getElementById(id)?.value);
+  const renteInn = tall('ask-rente');
+  const r = beregnAskMotVanlig({
+    start: tall('ask-start') || 0, arlig: tall('ask-arlig') || 0,
+    yieldPst: tall('ask-yield') || 0, vekstPst: tall('ask-vekst') || 0,
+    aar: tall('ask-aar') || 0,
+    rente: Number.isFinite(renteInn) ? renteInn / 100 : SKJERMINGSRENTE,
+    skattesats: SKATTESATS,
+  });
+  if (!r.rader.length || r.innskutt <= 0) {
+    ut.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400">Fyll inn et beløp og antall år.</p>';
+    return;
+  }
+  const kr = v => Math.round(v).toLocaleString('nb-NO') + ' kr';
+  const vinner = r.forskjell >= 0 ? 'ASK' : 'vanlig konto';
+  // Hvor mange aksjer i katalogen som ikke kan ligge på ASK — regnes fra
+  // dataene, så tallet aldri står fast i teksten.
+  const ikkeAsk = (window.alleAksjer || []).filter(x => x.ask_egnet === false).length;
+  const milepeler = r.rader.filter(x => x.ar % 5 === 0 || x.ar === r.rader.length);
+  ut.innerHTML = `
+    <div class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-5 shadow-sm space-y-4 text-sm">
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <p class="text-[11px] uppercase tracking-wide text-gray-400">ASK</p>
+          <p class="font-bold text-lg tabular-nums whitespace-nowrap">${kr(r.ask.netto)}</p>
+          <p class="text-xs text-gray-500 dark:text-gray-400">etter uttak · skatt <span class="whitespace-nowrap">${kr(Math.max(0, r.ask.skattUttak))}</span></p>
+        </div>
+        <div>
+          <p class="text-[11px] uppercase tracking-wide text-gray-400">Vanlig konto</p>
+          <p class="font-bold text-lg tabular-nums whitespace-nowrap">${kr(r.vanlig.netto)}</p>
+          <p class="text-xs text-gray-500 dark:text-gray-400">etter salg · skatt <span class="whitespace-nowrap">${kr(r.vanlig.skattUnderveis)}</span> underveis + <span class="whitespace-nowrap">${kr(Math.max(0, r.vanlig.skattSalg))}</span> ved salg</p>
+        </div>
+      </div>
+      <p class="text-sm">${Math.abs(r.forskjell) < 1
+        ? `Begge gir det samme etter skatt, med ${kr(r.innskutt)} satt inn totalt. Satsen er lik, og over så kort tid rekker ikke den utsatte skatten på ASK å gi noe ekstra.`
+        : `<strong>${escHtml(vinner)}</strong> gir <strong class="text-green-600 dark:text-green-400">${kr(Math.abs(r.forskjell))}</strong> mer etter skatt, med ${kr(r.innskutt)} satt inn totalt.
+        Satsen er den samme — forskjellen kommer av at skatten på ASK betales til slutt, så utbyttet som ellers ville gått til skatt hvert år, får vokse videre i mellomtiden.`}</p>
+      <div class="overflow-x-auto">
+        <table class="w-full text-xs">
+          <thead><tr class="text-gray-400"><th class="text-left font-normal">År</th><th class="text-right font-normal">ASK (før uttak)</th><th class="text-right font-normal">Vanlig konto</th></tr></thead>
+          <tbody>${milepeler.map(x => `<tr class="border-b border-gray-100 dark:border-gray-800 last:border-0"><td class="py-1.5">${x.ar}</td><td class="py-1.5 text-right tabular-nums">${kr(x.ask)}</td><td class="py-1.5 text-right tabular-nums">${kr(x.vanlig)}</td></tr>`).join('')}</tbody>
+        </table>
+      </div>
+      <p class="text-[11px] text-gray-400 dark:text-gray-600 leading-relaxed">
+        Begge skattlegges med ${(SKATTESATS * 100).toLocaleString('nb-NO')} % over skjermingsfradraget. Forenklet: innskudd i begynnelsen av året, jevn yield og kursvekst, samme skjermingsrente alle år, utbyttet reinvestert og ingen kurtasje.
+        Tar du ut utbyttet underveis, er uttak opp til innskuddet skattefritt på ASK.
+        Bare aksjer i selskaper hjemmehørende i EØS kan ligge på ASK${ikkeAsk ? ` — ${ikkeAsk} av aksjene her kan ikke det, blant annet de som er registrert på Bermuda` : ''}.
+      </p>
+    </div>`;
+}
+
+let _askKoblet = false;
+function initAskMotVanlig() {
+  if (!_askKoblet) {
+    _askKoblet = true;
+    const r = document.getElementById('ask-rente');
+    if (r && !r.value) r.value = (SKJERMINGSRENTE * 100).toLocaleString('en-US', { maximumFractionDigits: 2 });
+    ['ask-start', 'ask-arlig', 'ask-yield', 'ask-vekst', 'ask-aar', 'ask-rente']
+      .forEach(id => document.getElementById(id)?.addEventListener('input', visAskMotVanlig));
+  }
+  visAskMotVanlig();
+}
+
 function beregnFire() {
   const maaned   = parseFloat(document.getElementById('fire-maaned')?.value) || 0;
   const yieldPct = parseFloat(document.getElementById('fire-yield')?.value)  || 5;
@@ -624,6 +748,8 @@ function initVerktoySubTabs() {
     document.getElementById('kalk-tab-huslan').classList.toggle('hidden', kalkTab !== 'huslan');
     document.getElementById('kalk-tab-fire').classList.toggle('hidden', kalkTab !== 'fire');
     document.getElementById('kalk-tab-hvis')?.classList.toggle('hidden', kalkTab !== 'hvis');
+    document.getElementById('kalk-tab-ask')?.classList.toggle('hidden', kalkTab !== 'ask');
+    if (kalkTab === 'ask') initAskMotVanlig();
     if (kalkTab === 'fire') beregnFire();
     if (kalkTab === 'hvis') initHvisKjopt();
   });
@@ -5293,4 +5419,4 @@ function _annBygTopp() {
 }
 
 // Node.js test export
-if (typeof module !== 'undefined') module.exports = { utbytteRekke, stabileAr, exForbeholdGjelder, utbyttePerioder, vistOverBetalt, modalBetaltBoks, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, fmt, formaterDato, yieldKlasse, payoutKlasse, vekstKlasse, beregnScore, beregnBaerekraft, beregnYtdInntekt, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote, kapitalAndel, modalKapitalNote, kapitalSkattTekst, aksjerMedExIMaaned, beregnHvisKjopt, hvisStartAar };
+if (typeof module !== 'undefined') module.exports = { utbytteRekke, stabileAr, exForbeholdGjelder, utbyttePerioder, vistOverBetalt, modalBetaltBoks, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, fmt, formaterDato, yieldKlasse, payoutKlasse, vekstKlasse, beregnScore, beregnBaerekraft, beregnYtdInntekt, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote, kapitalAndel, modalKapitalNote, kapitalSkattTekst, aksjerMedExIMaaned, beregnHvisKjopt, hvisStartAar, beregnAskMotVanlig };
