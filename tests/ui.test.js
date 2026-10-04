@@ -32,7 +32,7 @@ const {
   vekstKlasse,
   beregnScore,
   beregnYtdInntekt
-, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, utbyttePerioder, vistOverBetalt, modalBetaltBoks, utbytteRekke, stabileAr, exForbeholdGjelder, kapitalAndel, modalKapitalNote, kapitalSkattTekst, aksjerMedExIMaaned, beregnHvisKjopt, hvisStartAar } = require('../assets/ui.js');
+, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, utbyttePerioder, vistOverBetalt, modalBetaltBoks, utbytteRekke, stabileAr, exForbeholdGjelder, kapitalAndel, modalKapitalNote, kapitalSkattTekst, aksjerMedExIMaaned, beregnHvisKjopt, hvisStartAar, beregnAskMotVanlig } = require('../assets/ui.js');
 
 // ── fmt ────────────────────────────────────────────────────────────────────
 test('fmt returnerer — for null', () => {
@@ -653,4 +653,31 @@ test('hvisStartAar: serien må dekke begynnelsen av året', () => {
   const kurs = [{ d: '2021-10-15', k: 1 }, { d: '2026-10-02', k: 1 }];
   assert.deepEqual(hvisStartAar(kurs, HVIS_IDAG), [2022, 2023, 2024, 2025]);
   assert.match(beregnHvisKjopt({ pris: 1 }, kurs, [], 100, 2021, HVIS_IDAG).feil, /går ikke tilbake/);
+});
+
+// ── beregnAskMotVanlig — ASK eller vanlig konto? (2026-10-04) ────────────────
+const ASK_T = 0.3784;
+test('beregnAskMotVanlig: uten avkastning gir begge nøyaktig innskuddet', () => {
+  const r = beregnAskMotVanlig({ start: 1000, arlig: 500, yieldPst: 0, vekstPst: 0, aar: 10, rente: 0.036, skattesats: ASK_T });
+  assert.equal(r.innskutt, 6000);   // 1 000 + 10 × 500
+  assert.ok(Math.abs(r.ask.netto - 6000) < 1e-9);
+  assert.ok(Math.abs(r.vanlig.netto - 6000) < 1e-9);
+});
+
+test('beregnAskMotVanlig: ett år uten skjerming gir samme netto — satsen er lik', () => {
+  const r = beregnAskMotVanlig({ start: 1000, arlig: 0, yieldPst: 10, vekstPst: 0, aar: 1, rente: 0, skattesats: ASK_T });
+  assert.ok(Math.abs(r.vanlig.netto - (1000 + 100 * (1 - ASK_T))) < 1e-9);
+  assert.ok(Math.abs(r.ask.netto - r.vanlig.netto) < 1e-9);
+});
+
+test('beregnAskMotVanlig: over mange år vinner ASK på utsatt skatt', () => {
+  const r = beregnAskMotVanlig({ start: 100000, arlig: 24000, yieldPst: 5, vekstPst: 3, aar: 20, rente: 0.036, skattesats: ASK_T });
+  assert.ok(r.forskjell > 0);
+  assert.ok(r.vanlig.skattUnderveis > 0);
+  assert.equal(r.rader.length, 20);
+});
+
+test('beregnAskMotVanlig: skjerming som dekker utbyttet gir ingen skatt underveis', () => {
+  const r = beregnAskMotVanlig({ start: 1000, arlig: 0, yieldPst: 3, vekstPst: 0, aar: 5, rente: 0.05, skattesats: ASK_T });
+  assert.equal(r.vanlig.skattUnderveis, 0);
 });
