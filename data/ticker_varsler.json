@@ -1,8 +1,15 @@
 {
-  "generert": "2026-10-02T20:21:00Z",
-  "antall": 7,
-  "antall_kritiske": 0,
+  "generert": "2026-10-05T15:25:16Z",
+  "antall": 8,
+  "antall_kritiske": 1,
   "varsler": [
+    {
+      "ticker": "AKBM",
+      "type": "ikke_pa_bors",
+      "alvorlighet": "kritisk",
+      "melding": "«Aker BioMarine ASA» finnes ikke blant de 295 instrumentene på Euronext Oslo. Selskapet er avnotert, fusjonert eller har byttet ticker.",
+      "forslag": "Kontroller mot Euronext eller selskapets egne børsmeldinger. Er det en omdøping, rett ticker og navn i data/tickers.json; er det en avnotering, fjern oppføringen."
+    },
     {
       "ticker": "FRO",
       "type": "markedsverdi_borte",
