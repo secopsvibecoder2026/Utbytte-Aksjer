@@ -3746,6 +3746,7 @@ function beregnHvisKjopt(a, kurs, osebx, belop, startAar, iDag) {
   const iAar = idag.getFullYear();
   if (!a || !Array.isArray(kurs) || !kurs.length) return { feil: 'Vi har ingen kurshistorikk for denne aksjen.' };
   if (!(belop > 0)) return { feil: 'Skriv inn et beløp.' };
+  if (!Number.isInteger(startAar) || startAar < 1900) return { feil: 'Velg et år.' };
   const fra = `${startAar}-01-01`;
   const i0 = kurs.findIndex(p => p.d >= fra);
   // Serien må dekke begynnelsen av året — ellers ville «kjøpt i 2021» vært
@@ -3845,11 +3846,25 @@ async function visHvisKjopt(nyAksje) {
   // Brukeren kan ha valgt en annen aksje mens vi ventet.
   if (document.getElementById('hvis-aksje')?.value !== ticker) return;
 
+  const aar = hvisStartAar(kurs);
   if (nyAksje) {
     const valgt = Number(aarSel.value);
-    const aar = hvisStartAar(kurs);
-    aarSel.innerHTML = aar.map(y => `<option value="${y}">${y}</option>`).join('');
+    aarSel.innerHTML = aar.length
+      ? aar.map(y => `<option value="${y}">${y}</option>`).join('')
+      : '<option value="">—</option>';
+    aarSel.disabled = !aar.length;
     if (aar.length) aarSel.value = aar.includes(valgt) ? valgt : aar[0];
+  }
+  // Nylig noterte aksjer (DELIA, CMBTO, SOMA m.fl.) har ingen kurs fra starten
+  // av et helt år. Da var årsvalget tomt, og Number('') ga «begynnelsen av 0».
+  if (!aar.length) {
+    const forste = Array.isArray(kurs) && kurs.length ? kurs[0].d : null;
+    // Første år serien dekker fra starten av — og verktøyet krever ett helt år.
+    const forsteAar = forste ? Number(forste.slice(0, 4)) + (forste > `${forste.slice(0, 4)}-01-14` ? 1 : 0) : null;
+    ut.innerHTML = `<div class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-5 text-sm text-gray-600 dark:text-gray-400">${forste
+      ? `Kurshistorikken vår for ${escHtml(a.navn || a.ticker)} starter ${escHtml(formaterDato(forste))}. Verktøyet regner fra starten av et kalenderår og trenger minst ett helt år, så første mulige kjøpsår er ${forsteAar} — det kan velges fra januar ${forsteAar + 1}.`
+      : `Vi har ingen kurshistorikk for ${escHtml(a.navn || a.ticker)}.`}</div>`;
+    return;
   }
   const belop = parseFloat(document.getElementById('hvis-belop')?.value) || 0;
   const r = beregnHvisKjopt(a, kurs, osebx, belop, Number(aarSel.value));

@@ -1222,7 +1222,11 @@ What the calculation refuses rather than guesses:
 - **A missing year** → no answer, except years before `utbytte_forste_ar`,
   which are genuinely zero.
 - **The series must cover the start of the year**; history begins Oct 2021, so
-  the first start year is 2022.
+  the first start year is 2022. Seven recently listed stocks (DELIA, CMBTO,
+  SOMA, SNTIA, SWON, CAPT, KMAR) have no full year yet — the year selector is
+  then disabled and the card says when the first year becomes available. Before
+  that fix (2026-10-05) the empty selector gave `Number('') = 0` and the card
+  read «begynnelsen av 0».
 - Whole shares; dividends by ex-date year; before tax and brokerage.
 - **Stocks with no recorded payment are left out of the list.** BINT carries
   zeros in every year since the ISIN change — «0 kr mottatt» would be a claim
