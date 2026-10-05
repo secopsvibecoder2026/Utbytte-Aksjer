@@ -681,3 +681,10 @@ test('beregnAskMotVanlig: skjerming som dekker utbyttet gir ingen skatt undervei
   const r = beregnAskMotVanlig({ start: 1000, arlig: 0, yieldPst: 3, vekstPst: 0, aar: 5, rente: 0.05, skattesats: ASK_T });
   assert.equal(r.vanlig.skattUnderveis, 0);
 });
+
+test('beregnHvisKjopt: ugyldig startår gir ikke «begynnelsen av 0»', () => {
+  const r = beregnHvisKjopt({ pris: 1 }, [{ d: '2025-10-03', k: 1 }], [], 100, 0, HVIS_IDAG);
+  assert.equal(r.feil, 'Velg et år.');
+  // Notert oktober 2025: ingen hele kalenderår ennå.
+  assert.deepEqual(hvisStartAar([{ d: '2025-10-03', k: 1 }, { d: '2026-10-02', k: 1 }], HVIS_IDAG), []);
+});
