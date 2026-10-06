@@ -1766,5 +1766,84 @@ class TestKapitalTilbake(unittest.TestCase):
         self.assertNotIn("beskattes med 37,84 % for personlige", tekst)
 
 
+class TestUtbyttevekst(unittest.TestCase):
+    """Vekst mellom hele kalenderår (2026-10-06). Seriene er de virkelige fra Yahoo."""
+    I_DAG = datetime.date(2026, 10, 6)
+    TEL = [("2021-05-28", 5.0), ("2021-10-07", 4.0), ("2022-05-12", 5.0), ("2022-10-06", 4.3),
+           ("2023-05-11", 5.0), ("2023-10-19", 4.4), ("2024-05-08", 5.0), ("2024-10-17", 4.5),
+           ("2025-05-22", 5.0), ("2025-10-16", 4.6), ("2026-05-20", 5.0)]
+    DNB = [("2021-02-24", 8.4), ("2021-10-28", 9.0), ("2022-04-27", 9.75), ("2023-04-26", 12.5),
+           ("2024-04-30", 16.0), ("2025-04-30", 16.75), ("2026-04-22", 18.0)]
+
+    def serie(self, punkter):
+        try:
+            import pandas as pd
+        except ImportError:
+            self.skipTest("pandas mangler")
+        return pd.Series([v for _, v in punkter],
+                         index=pd.DatetimeIndex([d for d, _ in punkter], tz="Europe/Oslo"))
+
+    def test_telenor_er_ikke_minus_14(self):
+        # Den gamle målte et fullt 2022 mot et 2026 med bare maiutbetalingen.
+        self.assertEqual(fs.beregn_utbytte_vekst(self.serie(self.TEL), i_dag=self.I_DAG), 1.6)
+
+    def test_dnb_etterslep_2021_flytter_startaaret(self):
+        # To års utbytte i 2021 ga ellers −0,9 % for et utbytte som har steget hvert år.
+        self.assertEqual(fs.beregn_utbytte_vekst(self.serie(self.DNB), i_dag=self.I_DAG), 19.8)
+
+    def test_ny_betaler_uten_startaar_gir_null(self):
+        # CMB.TECH toppet listen med +1 600 % fra én betaling i 2025.
+        cmbto = [("2025-10-01", 0.48), ("2026-01-10", 2.0), ("2026-04-10", 3.0), ("2026-06-10", 3.1)]
+        self.assertEqual(fs.beregn_utbytte_vekst(self.serie(cmbto), i_dag=self.I_DAG), 0.0)
+
+    def test_inneverende_aar_telles_ikke(self):
+        med = self.TEL + [("2026-10-01", 50.0)]
+        self.assertEqual(fs.beregn_utbytte_vekst(self.serie(med), i_dag=self.I_DAG), 1.6)
+
+
+class TestBelopIUtbyttemelding(unittest.TestCase):
+    """Beløpet for neste utbetaling, fra børsmeldingen (2026-10-06)."""
+    I_DAG = datetime.date(2026, 10, 6)
+
+    def test_telenor_oktober_er_470(self):
+        u = fs.neste_utbetaling(TestUtbetalingerIMelding.TEL, self.I_DAG)
+        self.assertEqual((u["ex_dato"], u["belop"], u["valuta"]), ("2026-10-15", 4.70, "NOK"))
+
+    def test_millioner_er_ikke_per_aksje(self):
+        enh = "Distribution amount: USD 25.0 million\nEx-date: 9 November 2026"
+        self.assertIsNone(fs.neste_utbetaling(enh, self.I_DAG)["belop"])
+
+    def test_uten_valuta_ingen_belop(self):
+        # GOD oppgir ikke valuta i beløpsfeltet; da vet vi ikke hva tallet er i.
+        u = fs.neste_utbetaling(TestUtbetalingerIMelding.GOD, self.I_DAG)
+        self.assertIsNone(u["belop"])
+
+    def test_valuta_fra_meldingen(self):
+        atea = ("Declared currency: NOK\nDividend amount:     3.75\nEx-date: 18 November 2026\n"
+                "Payment date: 23 November 2026")
+        u = fs.neste_utbetaling(atea, self.I_DAG)
+        self.assertEqual((u["belop"], u["valuta"]), (3.75, "NOK"))
+
+
+class TestOmSelskapet(unittest.TestCase):
+    """Innledningen skal stå én gang også uten faktasammendrag (2026-10-06)."""
+
+    def test_intro_ikke_doblet_uten_fakta(self):
+        sti = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "data", "aksjer.json")
+        if not os.path.exists(sti):
+            self.skipTest("aksjer.json finnes ikke")
+        with open(sti, encoding="utf-8") as f:
+            rader = json.load(f)["aksjer"]
+        uten = [a for a in rader if a.get("beskrivelse_intro") and not a.get("beskrivelse_fakta")]
+        if not uten:
+            self.skipTest("ingen aksje uten faktasammendrag")
+        for a in uten:
+            html_ = fs._aksje_side_html(dict(a, kurs_historikk=[]), "2026-10-06")
+            # Bare den synlige seksjonen — JSON-LD-beskrivelsen bærer den også.
+            om = re.search(r'<div class="desc"><h2>Om selskapet</h2>(.*?)</div>', html_, re.S)
+            self.assertIsNotNone(om, a["ticker"])
+            self.assertEqual(om.group(1).count(a["beskrivelse_intro"][:80]), 1, a["ticker"])
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

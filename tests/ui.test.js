@@ -32,7 +32,7 @@ const {
   vekstKlasse,
   beregnScore,
   beregnYtdInntekt
-, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, utbyttePerioder, vistOverBetalt, modalBetaltBoks, utbytteRekke, stabileAr, exForbeholdGjelder, kapitalAndel, modalKapitalNote, kapitalSkattTekst, aksjerMedExIMaaned, beregnHvisKjopt, hvisStartAar, beregnAskMotVanlig } = require('../assets/ui.js');
+, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, utbyttePerioder, vistOverBetalt, modalBetaltBoks, utbytteRekke, stabileAr, exForbeholdGjelder, kapitalAndel, modalKapitalNote, kapitalSkattTekst, aksjerMedExIMaaned, beregnHvisKjopt, hvisStartAar, beregnAskMotVanlig, fmtUtbytte, sisteUtbytteTekst } = require('../assets/ui.js');
 
 // ── fmt ────────────────────────────────────────────────────────────────────
 test('fmt returnerer — for null', () => {
@@ -687,4 +687,20 @@ test('beregnHvisKjopt: ugyldig startår gir ikke «begynnelsen av 0»', () => {
   assert.equal(r.feil, 'Velg et år.');
   // Notert oktober 2025: ingen hele kalenderår ennå.
   assert.deepEqual(hvisStartAar([{ d: '2025-10-03', k: 1 }, { d: '2026-10-02', k: 1 }], HVIS_IDAG), []);
+});
+
+
+// ── Siste utbytte: fire desimaler, og året når det er gammelt (2026-10-06) ──
+test('fmtUtbytte: 0,375 vises ikke som 0,38', () => {
+  assert.equal(fmtUtbytte(0.375), '0,375');
+  assert.equal(fmtUtbytte(5), '5,00');
+  assert.equal(fmtUtbytte(0), '—');
+});
+
+test('sisteUtbytteTekst: året står når ingenting er betalt siste 12 mnd', () => {
+  const otec = { siste_utbytte: 21, valuta: 'NOK', utbytte_12m: 0, utbytteaar: [2009, 2016, 2022] };
+  assert.equal(sisteUtbytteTekst(otec), '21,00 NOK (2022)');
+  const tel = { siste_utbytte: 5, valuta: 'NOK', utbytte_12m: 9.6, utbytteaar: [2025, 2026] };
+  assert.equal(sisteUtbytteTekst(tel), '5,00 NOK');
+  assert.equal(sisteUtbytteTekst({ siste_utbytte: 0 }), '—');
 });
