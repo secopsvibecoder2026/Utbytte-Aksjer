@@ -1,6 +1,6 @@
 {
-  "generert": "2026-10-06T16:28:52Z",
-  "antall": 3,
+  "generert": "2026-10-06T18:52:29Z",
+  "antall": 8,
   "antall_kritiske": 1,
   "varsler": [
     {
@@ -9,6 +9,41 @@
       "alvorlighet": "kritisk",
       "melding": "«Aker BioMarine ASA» finnes ikke blant de 295 instrumentene på Euronext Oslo. Selskapet er avnotert, fusjonert eller har byttet ticker.",
       "forslag": "Kontroller mot Euronext eller selskapets egne børsmeldinger. Er det en omdøping, rett ticker og navn i data/tickers.json; er det en avnotering, fjern oppføringen."
+    },
+    {
+      "ticker": "FRO",
+      "type": "markedsverdi_borte",
+      "alvorlighet": "advarsel",
+      "melding": "Markedsverdien er borte fra Yahoo (var 111,534,071,808 sist). Kan indikere strukturendring i selskapet.",
+      "forslag": "Kontroller om selskapet er under oppkjøp eller strykning."
+    },
+    {
+      "ticker": "GJF",
+      "type": "markedsverdi_borte",
+      "alvorlighet": "advarsel",
+      "melding": "Markedsverdien er borte fra Yahoo (var 124,891,037,696 sist). Kan indikere strukturendring i selskapet.",
+      "forslag": "Kontroller om selskapet er under oppkjøp eller strykning."
+    },
+    {
+      "ticker": "HEX",
+      "type": "markedsverdi_borte",
+      "alvorlighet": "advarsel",
+      "melding": "Markedsverdien er borte fra Yahoo (var 4,235,517,184 sist). Kan indikere strukturendring i selskapet.",
+      "forslag": "Kontroller om selskapet er under oppkjøp eller strykning."
+    },
+    {
+      "ticker": "JIN",
+      "type": "markedsverdi_borte",
+      "alvorlighet": "advarsel",
+      "melding": "Markedsverdien er borte fra Yahoo (var 721,108,992 sist). Kan indikere strukturendring i selskapet.",
+      "forslag": "Kontroller om selskapet er under oppkjøp eller strykning."
+    },
+    {
+      "ticker": "SNI",
+      "type": "markedsverdi_borte",
+      "alvorlighet": "advarsel",
+      "melding": "Markedsverdien er borte fra Yahoo (var 23,273,549,824 sist). Kan indikere strukturendring i selskapet.",
+      "forslag": "Kontroller om selskapet er under oppkjøp eller strykning."
     },
     {
       "ticker": "BAKKA",
