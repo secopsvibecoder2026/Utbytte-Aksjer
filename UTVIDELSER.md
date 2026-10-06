@@ -59,6 +59,11 @@ hver relevant endring — direkte på Pri 3.
 
 ## 2. Agent for artikler
 
+**Bygget 2026-10-06**, se `.claude/agents/artikkel.md`. Foreslår emne og
+disposisjon og venter på godkjenning før den skriver, som beskrevet under.
+Både den og promo-agenten følger `SKRIVESTIL.md`, og `scripts/sjekk_sprak.py`
+måler det som kan telles (tankestreker og maskinvendinger).
+
 **Hva den gjør:** Skriver nye artikler til `/artikler/` etter malen i
 `CLAUDE.md` (1 500–3 000 ord, footer, JSON-LD, innholdsfortegnelse), oppdaterer
 `artikler/index.html`, `ARTIKLER`-konstanten i `assets/ui.js` og
