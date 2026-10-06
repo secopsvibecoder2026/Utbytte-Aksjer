@@ -3030,7 +3030,10 @@ function modalOmSelskapet(a) {
   const intro = (a.beskrivelse_intro || '').trim();
   const fakta = (a.beskrivelse_fakta || '').trim();
   const deler = [];
-  if (intro) deler.push('<p class="om-selskap-tekst">' + escHtml(intro) + '</p>');
+  // Selskapsteksten kan ha flere avsnitt, skilt med blank linje.
+  intro.split(/\n\s*\n/).filter(d => d.trim()).forEach(d => {
+    deler.push('<p class="om-selskap-tekst">' + escHtml(d.trim()) + '</p>');
+  });
   if (fakta && fakta !== intro) {
     deler.push('<p class="om-selskap-tekst om-selskap-fakta">' + escHtml(fakta) + '</p>');
   }
@@ -5476,4 +5479,4 @@ function _annBygTopp() {
 }
 
 // Node.js test export
-if (typeof module !== 'undefined') module.exports = { utbytteRekke, stabileAr, exForbeholdGjelder, utbyttePerioder, vistOverBetalt, modalBetaltBoks, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, fmt, formaterDato, yieldKlasse, payoutKlasse, vekstKlasse, beregnScore, beregnBaerekraft, beregnYtdInntekt, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote, kapitalAndel, modalKapitalNote, kapitalSkattTekst, aksjerMedExIMaaned, beregnHvisKjopt, hvisStartAar, beregnAskMotVanlig, fmtUtbytte, sisteUtbytteTekst };
+if (typeof module !== 'undefined') module.exports = { utbytteRekke, stabileAr, exForbeholdGjelder, utbyttePerioder, vistOverBetalt, modalBetaltBoks, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, fmt, formaterDato, yieldKlasse, payoutKlasse, vekstKlasse, beregnScore, beregnBaerekraft, beregnYtdInntekt, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote, kapitalAndel, modalKapitalNote, kapitalSkattTekst, aksjerMedExIMaaned, beregnHvisKjopt, hvisStartAar, beregnAskMotVanlig, fmtUtbytte, sisteUtbytteTekst, modalOmSelskapet };

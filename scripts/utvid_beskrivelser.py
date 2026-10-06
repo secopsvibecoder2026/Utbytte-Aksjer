@@ -72,7 +72,22 @@ def _manuell_del(beskrivelse: str, sektor_driver: str = "") -> str:
     import re
     if not beskrivelse:
         return ""
-    setninger = re.split(r'(?<=[.!?])\s+', beskrivelse.strip())
+    # Avsnittsskiller i innledningen beholdes. Selskapsteksten kan ha to–tre
+    # avsnitt (se .claude/agents/selskapstekst.md), og en vegg av tekst i
+    # appens modal er tyngre å lese enn den samme teksten delt opp.
+    avsnitt = []
+    for blokk in re.split(r'\n\s*\n', beskrivelse.strip()):
+        setninger = re.split(r'(?<=[.!?])\s+', blokk.strip())
+        manuell, stopp = _manuelle_setninger(setninger, sektor_driver)
+        if manuell:
+            avsnitt.append(" ".join(manuell).strip())
+        if stopp:
+            break
+    return "\n\n".join(avsnitt).strip()
+
+
+def _manuelle_setninger(setninger, sektor_driver=""):
+    """(setninger før første genererte, om en generert setning ble funnet)."""
     manuell = []
     for s in setninger:
         # .lower() er nødvendig: en auto-generert setning som innleder et
@@ -82,7 +97,7 @@ def _manuell_del(beskrivelse: str, sektor_driver: str = "") -> str:
         # stående som om den var manuelt forfattet (SNTIA: «Direkteavkastningen
         # er 14.0%.» ble aldri fjernet, selv om avsnitt 2 bygde en fersk en).
         if any(t in s.lower() for t in _AUTO_TEGN):
-            break
+            return manuell, True
         # SEKTOR_DRIVER-setningen har ingen av taggene over (den nevner ikke
         # "utbetales" el.l.), men er likevel auto-generert — den ble skrevet
         # inn i tickers.json som avsnitt 3 av en tidligere kjøring, uten
@@ -90,9 +105,9 @@ def _manuell_del(beskrivelse: str, sektor_driver: str = "") -> str:
         # sin beskrivelse: én gang "manuelt" bevart her, én gang friskt lagt
         # til i avsnitt 3 nedenfor.
         if sektor_driver and s.strip() == sektor_driver.strip():
-            break
+            return manuell, True
         manuell.append(s)
-    return " ".join(manuell).strip()
+    return manuell, False
 
 
 def utbytterekke(a, i_dag=None):

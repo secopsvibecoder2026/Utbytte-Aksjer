@@ -1,7 +1,10 @@
 # Skrivestil for exday.no
 
-Gjelder alt som publiseres: artikler, promoinnlegg, håndskrevne innledninger
-og sektortekster. Promo- og artikkelagenten leser denne filen før de skriver.
+Gjelder alt som publiseres: artikler, promoinnlegg, selskapstekstene på
+aksjesidene og sektortekster. Promo-, artikkel- og selskapstekstagenten leser
+denne filen før de skriver. Selskapstekstene sjekkes med
+`python scripts/valider_innledning.py --ticker TICKER`, som bruker de samme
+målingene.
 
 Målet er at teksten skal lese som om en kunnskapsrik nordmann skrev den til
 en venn som sparer i aksjer. Ikke som en presentasjon, ikke som en

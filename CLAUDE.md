@@ -96,6 +96,7 @@ Utbytte-Aksjer/
 │   ├── sjekk_klasser.py       # Verifies every Tailwind class is compiled
 │   ├── sjekk_antall.py        # Finds hard-coded stock counts that should be markers
 │   ├── sjekk_sprak.py         # Counts dashes and AI phrasing in published text (SKRIVESTIL.md)
+│   ├── valider_innledning.py  # Gate for the company texts: --ko, --skriv, --ticker
 │   ├── test_sjekk_utdaterte.py # Tests for sjekk_utdaterte.py (stdlib unittest)
 │   ├── test_sjekk_tema.py     # Tests for sjekk_tema.py
 │   ├── test_sjekk_klasser.py  # Tests for sjekk_klasser.py
@@ -160,6 +161,7 @@ python scripts/test_sjekk_utdaterte.py  # 59 Python tests (stdlib unittest)
 python scripts/test_fetch_stocks.py     # 52 Python tests (pipeline + maler)
 python scripts/test_fetch_priser.py     # 6 Python tests (kurs skrives aldri bakover)
 python scripts/test_sjekk_sprak.py      # 9 Python tests (skrivestil)
+python scripts/test_valider_innledning.py  # 11 Python tests (selskapstekster)
 python scripts/test_oppdater_hendelser.py  # 7 Python tests (hendelseskalender)
 python scripts/test_sjekk_tema.py       # 10 Python tests (mørk modus på hver side)
 python scripts/test_sjekk_klasser.py    # 10 Python tests (CSS-klasser finnes)
@@ -2012,7 +2014,8 @@ Two hard constraints, both easy to break silently:
   promised «ofte over 7% yield» while the sentence below it showed 5,6 %.
 
 Median intro length was **18 words** (124 of 160 under 25) before this work.
-Target is 120–150 words: what the company does, where the revenue comes from,
+Target was 120–150 words, raised to 180–280 on 2026-10-06 (see the agent
+below): what the company does, where the revenue comes from,
 and what is structurally specific to it — not the sector-generic drivers, which
 paragraph 3 and «Hva driver utbyttet i …?» already cover.
 
@@ -2034,6 +2037,43 @@ field — for a stock not yet rewritten the field still holds the frozen
 generated paragraphs, and flagging those would be noise. Run it before
 committing new intros; it caught DNB and NORBT, both of which had frozen
 figures sitting in hand-written text.
+
+### The company-text agent (`.claude/agents/selskapstekst.md`, 2026-10-06)
+
+The intros written in September averaged 106 words in one paragraph, and 32
+of 155 broke the dash rule in `SKRIVESTIL.md`. The agent rewrites them a
+batch at a time (at most ten), checks every claim against the company's own
+site and NewsWeb, and saves only through the gate:
+
+```bash
+python scripts/valider_innledning.py --ko 10              # next in the queue
+python scripts/valider_innledning.py --skriv DNB tekst.txt  # saves only if every check passes
+python scripts/valider_innledning.py --streng --ticker DNB KOG
+```
+
+- **Length is now 180–280 words in two or three paragraphs** (was 120–150).
+  The intro is the only prose on a stock page written for that company alone,
+  which is what the AdSense «Low value content» rejections were about. Above
+  ~280 it becomes a wall in the app modal on a phone.
+- **Paragraphs survive.** `_manuell_del()` keeps blank-line breaks, and the
+  stock template and `modalOmSelskapet()` render one `<p>` per paragraph.
+  Output was verified identical for all 310 existing texts before the change.
+- **`--skriv` checks more than the old validator**: drifting numbers,
+  `_AUTO_TEGN`, dashes and phrases (via `sjekk_sprak.py`), length, and any
+  six-word phrase shared with three or more other intros, company name
+  masked. That last one is the template-share measure from «Breaking the
+  template», applied per text so a batch of ten banks cannot all start the
+  same way.
+- **The queue** puts style breaches first, then texts under the length
+  target, largest market cap first within each group.
+- **Only `data/tickers.json` is committed.** The data job regenerates the
+  pages four times a day; committing `aksjer.json` from a session collides
+  with the bot.
+- `--streng` without `--ticker` fails on the 31 old texts that still break
+  the style. It does not run in CI.
+
+Tests: `scripts/test_valider_innledning.py` (11), `TestManuellDelAvsnitt` (3)
+and `ui.test.js` (1). DNB was written as the pilot.
 
 ---
 

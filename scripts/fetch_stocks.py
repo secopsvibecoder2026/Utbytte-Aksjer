@@ -4518,7 +4518,8 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     fakta = (a.get("beskrivelse_fakta") or "").strip()
     om_avsnitt = ""
     if intro:
-        om_avsnitt += f"<p>{intro}</p>"
+        # Selskapsteksten kan ha flere avsnitt, skilt med blank linje.
+        om_avsnitt += "".join(f"<p>{d.strip()}</p>" for d in re.split(r"\n\s*\n", intro) if d.strip())
         if fakta and fakta != intro:
             om_avsnitt += f'<p class="desc-fakta">{fakta}</p>'
     elif besk:

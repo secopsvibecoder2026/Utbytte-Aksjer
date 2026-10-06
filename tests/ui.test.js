@@ -32,7 +32,7 @@ const {
   vekstKlasse,
   beregnScore,
   beregnYtdInntekt
-, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, utbyttePerioder, vistOverBetalt, modalBetaltBoks, utbytteRekke, stabileAr, exForbeholdGjelder, kapitalAndel, modalKapitalNote, kapitalSkattTekst, aksjerMedExIMaaned, beregnHvisKjopt, hvisStartAar, beregnAskMotVanlig, fmtUtbytte, sisteUtbytteTekst } = require('../assets/ui.js');
+, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, utbyttePerioder, vistOverBetalt, modalBetaltBoks, utbytteRekke, stabileAr, exForbeholdGjelder, kapitalAndel, modalKapitalNote, kapitalSkattTekst, aksjerMedExIMaaned, beregnHvisKjopt, hvisStartAar, beregnAskMotVanlig, fmtUtbytte, sisteUtbytteTekst, modalOmSelskapet } = require('../assets/ui.js');
 
 // ── fmt ────────────────────────────────────────────────────────────────────
 test('fmt returnerer — for null', () => {
@@ -703,4 +703,15 @@ test('sisteUtbytteTekst: året står når ingenting er betalt siste 12 mnd', () 
   const tel = { siste_utbytte: 5, valuta: 'NOK', utbytte_12m: 9.6, utbytteaar: [2025, 2026] };
   assert.equal(sisteUtbytteTekst(tel), '5,00 NOK');
   assert.equal(sisteUtbytteTekst({ siste_utbytte: 0 }), '—');
+});
+
+// ── modalOmSelskapet — selskapsteksten i flere avsnitt (2026-10-06) ─────────
+test('modalOmSelskapet: blank linje i innledningen gir egne avsnitt, og teksten escapes', () => {
+  global.escHtml = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  const h = modalOmSelskapet({ beskrivelse_intro: 'Første <b>avsnitt</b>.\n\nAndre avsnitt.', beskrivelse_fakta: 'Fakta.' });
+  assert.equal((h.match(/<p class="om-selskap-tekst">/g) || []).length, 2);
+  assert.match(h, /&lt;b&gt;/);
+  assert.match(h, /om-selskap-fakta">Fakta\./);
+  assert.equal(modalOmSelskapet({}), '');
+  delete global.escHtml;
 });

@@ -1844,6 +1844,36 @@ class TestOmSelskapet(unittest.TestCase):
             self.assertIsNotNone(om, a["ticker"])
             self.assertEqual(om.group(1).count(a["beskrivelse_intro"][:80]), 1, a["ticker"])
 
+    def test_flere_avsnitt_gir_flere_p(self):
+        sti = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "data", "aksjer.json")
+        if not os.path.exists(sti):
+            self.skipTest("aksjer.json finnes ikke")
+        with open(sti, encoding="utf-8") as f:
+            a = json.load(f)["aksjer"][0]
+        a = dict(a, kurs_historikk=[], beskrivelse_intro="Første avsnitt.\n\nAndre avsnitt.",
+                 beskrivelse_fakta="Fakta.")
+        html_ = fs._aksje_side_html(a, "2026-10-06")
+        om = re.search(r'<div class="desc"><h2>Om selskapet</h2>(.*?)</div>', html_, re.S)
+        self.assertIn("<p>Første avsnitt.</p><p>Andre avsnitt.</p>", om.group(1))
+
+
+class TestManuellDelAvsnitt(unittest.TestCase):
+    """Selskapsteksten kan ha flere avsnitt — skillene må overleve _manuell_del()."""
+
+    def test_avsnitt_beholdes(self):
+        from utvid_beskrivelser import _manuell_del
+        self.assertEqual(_manuell_del("Én. To.\n\nTre."), "Én. To.\n\nTre.")
+
+    def test_stopper_ved_generert_setning_i_senere_avsnitt(self):
+        from utvid_beskrivelser import _manuell_del
+        t = "Én.\n\nTo. Utbyttet utbetales kvartalsvis. Tre.\n\nFire."
+        self.assertEqual(_manuell_del(t), "Én.\n\nTo.")
+
+    def test_generert_avsnitt_alene_forsvinner(self):
+        from utvid_beskrivelser import _manuell_del
+        t = "Én.\n\nUtbyttet utbetales kvartalsvis."
+        self.assertEqual(_manuell_del(t), "Én.")
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
