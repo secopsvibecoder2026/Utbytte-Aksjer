@@ -95,6 +95,7 @@ Utbytte-Aksjer/
 │   ├── sjekk_tema.py          # Verifies dark mode init on every page
 │   ├── sjekk_klasser.py       # Verifies every Tailwind class is compiled
 │   ├── sjekk_antall.py        # Finds hard-coded stock counts that should be markers
+│   ├── sjekk_sprak.py         # Counts dashes and AI phrasing in published text (SKRIVESTIL.md)
 │   ├── test_sjekk_utdaterte.py # Tests for sjekk_utdaterte.py (stdlib unittest)
 │   ├── test_sjekk_tema.py     # Tests for sjekk_tema.py
 │   ├── test_sjekk_klasser.py  # Tests for sjekk_klasser.py
@@ -158,6 +159,7 @@ npm test                                # 63 JS tests (node:test)
 python scripts/test_sjekk_utdaterte.py  # 59 Python tests (stdlib unittest)
 python scripts/test_fetch_stocks.py     # 52 Python tests (pipeline + maler)
 python scripts/test_fetch_priser.py     # 6 Python tests (kurs skrives aldri bakover)
+python scripts/test_sjekk_sprak.py      # 9 Python tests (skrivestil)
 python scripts/test_oppdater_hendelser.py  # 7 Python tests (hendelseskalender)
 python scripts/test_sjekk_tema.py       # 10 Python tests (mørk modus på hver side)
 python scripts/test_sjekk_klasser.py    # 10 Python tests (CSS-klasser finnes)
@@ -1306,6 +1308,30 @@ owner; see the PR.
 
 - **The headline yield is far too low for companies that raised or have variable dividends.** The guard picks last year's total when Yahoo deviates by ≥ 50 %. Yara paid an **ordinary** NOK 22 (notice 11.02.2026), and the page shows 5,00 / 1,21 %. Other affected stocks: FRO 1,77 % against 11,8 % actually paid, OET, HAFNI, BWLPG, KCC, KIT, ENTR, SATS, MORLD, PUBLI, AFK, GYL, PEXIP and WWI. The rejected rule in «Why the yield is not auto-corrected» is still wrong for AKSO, GJF, SRHA, NORBT, SOAG and SUBC, where the window holds an extraordinary payment or a change of frequency.
 - STST at 17,44 % against 12,6 % paid: the cut sits at 44 %, under both the 50 % guard and the 30 % threshold in Sjekk 10.
+
+## Writing style: `SKRIVESTIL.md` and `sjekk_sprak.py` (2026-10-06)
+
+The articles read as machine-written, mostly because of em dashes: between 18
+and 49 per article, around two per hundred words. The promo posts had up to
+four in 180 words. Nobody asked for them, and nobody counted them. The agent
+prompts were themselves full of dashes, so the agents copied the style they
+were given.
+
+- **`SKRIVESTIL.md`** is the house style for everything published: at most one
+  dash per 200 words and never two in one paragraph, a list of phrases to avoid
+  («La oss», «Kort sagt», «Nøkkelen er», «ikke bare … men også» …), and how to
+  rewrite each case.
+- **`scripts/sjekk_sprak.py`** counts what can be counted. It reads the
+  `<article>` of an HTML page (not the nav or footer) or a post in
+  `promo/publiseringsplan.json` (`--plan [id]`). Number ranges like
+  «2021–2025» are not counted as dashes.
+- **The promo and article agents** (`.claude/agents/promo.md`,
+  `.claude/agents/artikkel.md`) read the guide first and run the check with
+  `--streng` before committing. Both prompts were rewritten without dashes,
+  for the same reason.
+- **It does not run in CI against existing pages.** The eleven old articles
+  would all fail. They are rewritten one at a time with the article agent
+  (section 5 in its prompt), not blocked.
 
 ## Where the weekly tallkontroll report goes (2026-09-30)
 
