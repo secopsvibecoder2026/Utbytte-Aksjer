@@ -88,6 +88,16 @@ skriver 2 000 ord.
 **Effekt:** Flere sider med egen, ikke-generert tekst — direkte på Pri 2
 (AdSense) og styrker organisk søk.
 
+### 2b. Agent for selskapstekster
+
+**Bygget 2026-10-06**, se `.claude/agents/selskapstekst.md`. Skriver om
+teksten under «Om selskapet» på aksjesidene og i appen, høyst ti aksjer per
+kjøring, til 180–280 ord i to eller tre avsnitt. Lagrer bare gjennom
+`valider_innledning.py --skriv`, som avviser tall som drifter, brudd på
+`SKRIVESTIL.md` og fraser som går igjen i mange tekster. Køen
+(`--ko`) tar stilbrudd først og de største selskapene først. DNB er skrevet
+som prøve; 154 gjenstår.
+
 ---
 
 ## 3. Exday Premium
