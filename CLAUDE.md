@@ -157,6 +157,7 @@ Utbytte-Aksjer/
 npm test                                # 63 JS tests (node:test)
 python scripts/test_sjekk_utdaterte.py  # 59 Python tests (stdlib unittest)
 python scripts/test_fetch_stocks.py     # 52 Python tests (pipeline + maler)
+python scripts/test_fetch_priser.py     # 6 Python tests (kurs skrives aldri bakover)
 python scripts/test_oppdater_hendelser.py  # 7 Python tests (hendelseskalender)
 python scripts/test_sjekk_tema.py       # 10 Python tests (mørk modus på hver side)
 python scripts/test_sjekk_klasser.py    # 10 Python tests (CSS-klasser finnes)
@@ -1282,6 +1283,29 @@ The difference the tool shows is **deferral, not rate** — it says so, and a
 one-year run returns identical results (a test pins that). The count of stocks
 that cannot sit on ASK is computed from `ask_egnet` at render time, never typed.
 Tests: `ui.test.js` (4).
+
+## Full audit 2026-10-06: bugs nothing measured
+
+These were found by opening all 155 modals and every tab in the app with
+Playwright, reading the generated pages, and checking against Yahoo and
+NewsWeb. None of them made any test or check fail.
+
+| Fault | Effect | Fix |
+|---|---|---|
+| `.replace('.', ',')` on SVG coordinates in the DRIP calculator | The calculator graph drew garbage — the exact trap documented under «Numbers use Norwegian formatting» | Coordinates keep the period; only `fmtY` labels get a comma |
+| `fetch_priser.py` overwrote newer prices with older ones | Yahoo drops Monday's daily bar in the evening. On **28.09** and **05.10** the 17:00 run (delayed by GitHub to 22–23) wrote Friday's closes for 140 of 155 stocks | Each entry carries `dato`/`forrige_dato`, and `slaa_sammen()` never writes an older trading day over a newer one. «Previous close» comes from the file when the series lacks the day |
+| «Utbyttevekst 5 år» compared *partial* years | Telenor −14,4 % a year (it raises every year), and «best utbyttevekst» was led by CMB.TECH at **+1 600 %** | `beregn_utbytte_vekst()` uses whole calendar years. When the first year has more payments than usual — 2021, when the banks paid deferred dividends — it starts a year later. DNB is 19,8 %, not −0,9 % |
+| Next payment = `siste_utbytte` | Telenor showed 1 000 / 960 / 960 kr for one payment; the right figure, 940, appeared nowhere | The amount is read per block in the NewsWeb notice → `annonsert_utbytte` (NOK only). `nesteUtbyttePerAksje()` is the single source for the stat card, Statistikk, Inntekt and the calendar |
+| «Om selskapet» without `beskrivelse_fakta` | KMAR, DOF, JAREN and BINT showed the intro twice | The full `beskrivelse` is used only when there is no intro |
+| OSEBX «siden kjøp» | A purchase in 2022 was measured against OSEBX from 2024, with the label «1. okt. – 2. okt.» (no year). YTD and «1 år» compared the portfolio *since purchase* against OSEBX *for the period* | The weekly 5-year series is loaded when needed and the label carries the year. YTD and «1 år» show OSEBX alone |
+| «Siste utbytte» without a date | OTEC 21,00 (2022) and BINT 6 958 (2016, adjusted for a reverse split) read as recent | The year is shown when nothing was paid in the last 12 months, with up to four decimals (DNO 0,375, not 0,38) |
+| Risk badge | BINT got «Moderat utbyttehistorikk (5 år)» with no dividend since 2016, and six stocks read «(0 år)» | «med brudd — ingen utbytte siden 2016», and «Ingen registrert utbyttehistorikk» |
+
+**Found but not fixed.** These are design decisions and are left to the
+owner; see the PR.
+
+- **The headline yield is far too low for companies that raised or have variable dividends.** The guard picks last year's total when Yahoo deviates by ≥ 50 %. Yara paid an **ordinary** NOK 22 (notice 11.02.2026), and the page shows 5,00 / 1,21 %. Other affected stocks: FRO 1,77 % against 11,8 % actually paid, OET, HAFNI, BWLPG, KCC, KIT, ENTR, SATS, MORLD, PUBLI, AFK, GYL, PEXIP and WWI. The rejected rule in «Why the yield is not auto-corrected» is still wrong for AKSO, GJF, SRHA, NORBT, SOAG and SUBC, where the window holds an extraordinary payment or a change of frequency.
+- STST at 17,44 % against 12,6 % paid: the cut sits at 44 %, under both the 50 % guard and the 30 % threshold in Sjekk 10.
 
 ## Where the weekly tallkontroll report goes (2026-09-30)
 

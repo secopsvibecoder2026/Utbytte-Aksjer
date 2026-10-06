@@ -986,7 +986,15 @@ function forklarRisiko(a) {
   else
     punkter.push(`Defensiv sektor (${sektor}) — relativt stabile inntekter`);
 
-  if (ar < 3)       punkter.push(`Kort utbyttehistorikk (${ar} år) — begrenset dokumentasjon`);
+  // Samme regel som aksjesiden: et brutt eller stoppet utbytte er ikke
+  // «vist evne til stabil utbetaling», uansett hvor mange år det er.
+  const rekke = utbytteRekke(a);
+  if (rekke && rekke.brutt && ((rekke.totalt >= 7 && rekke.rad < 7) || rekke.rad === 0)) {
+    punkter.push(`Utbytte i ${rekke.totalt} år, men med brudd — ` + (rekke.rad === 0
+      ? `ingen utbytte siden ${rekke.siste}` : `sammenhengende bare siden ${rekke.fra}`));
+  }
+  else if (ar === 0) punkter.push('Ingen registrert utbyttehistorikk');
+  else if (ar < 3)  punkter.push(`Kort utbyttehistorikk (${ar} år) — begrenset dokumentasjon`);
   else if (ar < 7)  punkter.push(`Moderat utbyttehistorikk (${ar} år)`);
   else              punkter.push(`Lang utbyttehistorikk (${ar} år) — vist evne til stabil utbetaling`);
 
@@ -1256,7 +1264,9 @@ function oppdaterPersonligSammendrag(pf, fav) {
     .sort((a, b) => new Date(a.betaling_dato) - new Date(b.betaling_dato))[0];
   document.getElementById('stat-card2-label').textContent = 'Neste utbetaling';
   if (nesteBetaling) {
-    const belop = pf[nesteBetaling.ticker] * (nesteBetaling.siste_utbytte || nesteBetaling.utbytte_per_aksje || 0);
+    // Samme beløp som Statistikk og Inntekt — se nesteUtbyttePerAksje().
+    const neste = nesteUtbyttePerAksje(nesteBetaling);
+    const belop = neste ? pf[nesteBetaling.ticker] * neste.belop : 0;
     document.getElementById('stat-hoyest-yield').textContent =
       belop > 0 ? belop.toLocaleString('nb-NO', { maximumFractionDigits: 0 }) + ' kr' : formaterDato(nesteBetaling.betaling_dato);
     document.getElementById('stat-hoyest-navn').textContent = nesteBetaling.ticker + ' · ' + formaterDato(nesteBetaling.betaling_dato);
@@ -1909,10 +1919,17 @@ function visKalender() {
       const cfg = KAL_TYPER[type];
 
       let detalj = '';
+      // Kommende hendelser viser det annonserte beløpet når vi har det.
+      // «Utbetaling: 5,00» for Telenors oktoberutbetaling var mai-beløpet.
+      const neste = !erPassert ? nesteUtbyttePerAksje(a) : null;
       if (type === 'ex') {
-        detalj = `Siste utbytte: <strong>${fmt(a.siste_utbytte)} ${a.valuta}</strong>`;
+        detalj = neste && neste.annonsert
+          ? `Annonsert utbytte: <strong>${fmtUtbytte(neste.belop)} NOK</strong>`
+          : `Siste utbytte: <strong>${fmtUtbytte(a.siste_utbytte)} ${escHtml(a.valuta)}</strong>`;
       } else if (type === 'utbytte') {
-        detalj = `Utbetaling: <strong>${fmt(a.siste_utbytte)} ${a.valuta}</strong> per aksje`;
+        detalj = neste && neste.annonsert
+          ? `Utbetaling: <strong>${fmtUtbytte(neste.belop)} NOK</strong> per aksje`
+          : `Siste utbytte: <strong>${fmtUtbytte(a.siste_utbytte)} ${escHtml(a.valuta)}</strong> per aksje`;
       } else if (type === 'rapport') {
         detalj = url
           ? `Kvartalsrapport &nbsp;<a href="${escHtml(url)}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-0.5 text-blue-500 hover:underline font-medium" onclick="event.stopPropagation()">Børsmelding <svg class="w-3 h-3 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg></a>`
@@ -2027,7 +2044,12 @@ function visMineUtbetalinger() {
     const a = alleAksjer.find(x => x.ticker === ticker);
     if (!a) return;
     const dato = a.betaling_dato || a.ex_dato;
-    const belopPerAksje = a.siste_utbytte || a.utbytte_per_aksje || 0;
+    // Passert: det som ble betalt. Kommende: det annonserte, ellers
+    // årsraten per utbetaling — ikke forrige utbetaling, og aldri hele
+    // årsraten, som `|| utbytte_per_aksje` ga for en kvartalsbetaler.
+    const passert = dato && new Date(dato + 'T00:00:00') < idag;
+    const neste = nesteUtbyttePerAksje(a);
+    const belopPerAksje = passert ? (a.siste_utbytte || 0) : (neste ? neste.belop : 0);
     if (dato) {
       const type = a.betaling_dato ? 'utbytte' : 'ex';
       medDato.push({ a, antall, dato, type, belopPerAksje, totalBelop: antall * belopPerAksje });
@@ -2962,7 +2984,7 @@ function eksporterEnkeltICS(a, type, dato) {
   let summary, description;
   if (type === 'ex') {
     summary     = `${a.ticker} Ex-dato`;
-    description = `Ex-dato for ${a.navn}. Yield: ${a.utbytte_yield.toFixed(2).replace('.', ',')}%. Siste utbytte: ${a.siste_utbytte || '—'} ${a.valuta}.`;
+    description = `Ex-dato for ${a.navn}. Yield: ${a.utbytte_yield.toFixed(2).replace('.', ',')}%. Siste utbytte: ${sisteUtbytteTekst(a)}.`;
   } else if (type === 'utbytte') {
     const belop = pf[a.ticker]
       ? `Estimert utbetaling: ${(pf[a.ticker] * (a.utbytte_per_aksje || 0) / (({Månedlig:12,Kvartalsvis:4,Halvårlig:2,Årlig:1}[a.frekvens]||1))).toLocaleString('nb-NO',{maximumFractionDigits:0})} kr. `
@@ -3143,7 +3165,7 @@ function visModal(a) {
             : ['Kvartalsvis','Halvårlig','Månedlig'].includes(a.frekvens)
             ? ' <span class="font-normal normal-case opacity-70">annualisert</span>' : ''),
           fmt(a.utbytte_per_aksje) + ' ' + a.valuta)}
-        ${modalKort('Siste utbytte', fmt(a.siste_utbytte) + ' ' + a.valuta)}
+        ${modalKort('Siste utbytte', escHtml(sisteUtbytteTekst(a)))}
         ${modalKort('Payout Ratio', '<span class="' + payoutKlasse(a.payout_ratio) + '">' + (a.payout_ratio > 0 ? a.payout_ratio.toFixed(0).replace('.', ',') + '%' : '—') + '</span>')}
         ${modalKort('Utbyttevekst 5år', '<span class="' + vekstKlasse(a.utbytte_vekst_5ar) + '">' + (a.utbytte_vekst_5ar !== 0 ? (a.utbytte_vekst_5ar > 0 ? '+' : '') + a.utbytte_vekst_5ar.toFixed(1).replace('.', ',') + '%' : '—') + '</span>')}
         ${modalKort('År m/utbytte', a.ar_med_utbytte > 0 ? a.ar_med_utbytte + ' år' : '—')}
@@ -3195,7 +3217,7 @@ function visModal(a) {
           ['Direkteavkastning',a.utbytte_yield > 0 ? a.utbytte_yield.toFixed(2).replace('.', ',') + '%' : '—'],
           ['5-årssnitt yield', a.snitt_yield_5ar > 0 ? a.snitt_yield_5ar.toFixed(2).replace('.', ',') + '%' : '—'],
           ['Utbytte/aksje',    fmt(a.utbytte_per_aksje) + ' ' + a.valuta],
-          ['Siste utbytte',    fmt(a.siste_utbytte) + ' ' + a.valuta],
+          ['Siste utbytte',    escHtml(sisteUtbytteTekst(a))],
           ['Payout Ratio',     a.payout_ratio > 0 ? a.payout_ratio.toFixed(0).replace('.', ',') + '%' : '—'],
           ['Utbyttevekst 5år', a.utbytte_vekst_5ar !== 0 ? (a.utbytte_vekst_5ar > 0 ? '+' : '') + a.utbytte_vekst_5ar.toFixed(1).replace('.', ',') + '% p.a.' : '—'],
           ['År m/utbytte',     a.ar_med_utbytte > 0 ? a.ar_med_utbytte + ' år' : '—'],
@@ -3478,6 +3500,23 @@ function modalKort(label, value) {
 function fmt(v) {
   if (v == null || v === 0) return '—';
   return Number(v).toLocaleString('nb-NO', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+// «Siste utbytte» med året når det ikke er betalt noe de siste 12 månedene.
+// Uten året leste OTECs 21,00 kr fra 2022 og BINTs 6 958 kr fra 2016 —
+// justert for en spleis — som ferske tall (2026-10-06).
+function sisteUtbytteTekst(a) {
+  if (!a || !(a.siste_utbytte > 0)) return '—';
+  const tekst = fmtUtbytte(a.siste_utbytte) + ' ' + (a.valuta || 'NOK');
+  const aar = Array.isArray(a.utbytteaar) && a.utbytteaar.length ? Math.max(...a.utbytteaar) : null;
+  return aar && a.utbytte_12m === 0 ? `${tekst} (${aar})` : tekst;
+}
+
+// Utbytte per aksje med inntil fire desimaler. DNO betalte 0,375 og fmt()
+// viste 0,38 — et beløp selskapet aldri har betalt.
+function fmtUtbytte(v) {
+  if (v == null || v === 0) return '—';
+  return Number(v).toLocaleString('nb-NO', { minimumFractionDigits: 2, maximumFractionDigits: 4 });
 }
 
 function formaterDato(str) {
@@ -4620,12 +4659,15 @@ function tegneKalkulatorGraf(raderMed, raderUten) {
 
   const xS = i  => PAD.left + (n > 1 ? (i / (n - 1)) : 0.5) * iW;
   const yS = v  => PAD.top + iH - (v / maxVal) * iH;
-  const pts = r => r.map((p, i) => `${xS(i).toFixed(1).replace('.', ',')},${yS(p.verdi).toFixed(1).replace('.', ',')}`).join(' ');
+  // Koordinater beholder punktum. Med komma ble «58,0,168,0» fire tall i
+  // points, og y="152,0" et ugyldig attributt — grafen tegnet bare søppel
+  // (2026-10-06). Bare teksten leseren ser, fmtY, får norsk komma.
+  const pts = r => r.map((p, i) => `${xS(i).toFixed(1)},${yS(p.verdi).toFixed(1)}`).join(' ');
 
   const fmtY = v => v >= 1e6 ? (v/1e6).toFixed(1).replace('.', ',')+'M' : v >= 1e3 ? Math.round(v/1e3)+'k' : v.toFixed(0).replace('.', ',');
 
   const gridLines = [0, 0.25, 0.5, 0.75, 1].map(f => {
-    const v = maxVal * f, y = yS(v).toFixed(1).replace('.', ',');
+    const v = maxVal * f, y = yS(v).toFixed(1);
     return `<line x1="${PAD.left}" y1="${y}" x2="${W - PAD.right}" y2="${y}" stroke="currentColor" stroke-opacity="0.08" stroke-width="1"/>
             <text x="${PAD.left - 5}" y="${y}" text-anchor="end" dominant-baseline="middle" font-size="9" fill="currentColor" opacity="0.45">${fmtY(v)}</text>`;
   }).join('');
@@ -4633,7 +4675,7 @@ function tegneKalkulatorGraf(raderMed, raderUten) {
   const step = Math.max(1, Math.floor(n / 5));
   const xLabels = raderMed
     .filter((_, i) => i === 0 || (i + 1) % step === 0 || i === n - 1)
-    .map(r => `<text x="${xS(r.ar - 1).toFixed(1).replace('.', ',')}" y="${H - PAD.bottom + 13}" text-anchor="middle" font-size="9" fill="currentColor" opacity="0.45">År ${r.ar}</text>`)
+    .map(r => `<text x="${xS(r.ar - 1).toFixed(1)}" y="${H - PAD.bottom + 13}" text-anchor="middle" font-size="9" fill="currentColor" opacity="0.45">År ${r.ar}</text>`)
     .join('');
 
   el.innerHTML = `
@@ -5434,4 +5476,4 @@ function _annBygTopp() {
 }
 
 // Node.js test export
-if (typeof module !== 'undefined') module.exports = { utbytteRekke, stabileAr, exForbeholdGjelder, utbyttePerioder, vistOverBetalt, modalBetaltBoks, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, fmt, formaterDato, yieldKlasse, payoutKlasse, vekstKlasse, beregnScore, beregnBaerekraft, beregnYtdInntekt, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote, kapitalAndel, modalKapitalNote, kapitalSkattTekst, aksjerMedExIMaaned, beregnHvisKjopt, hvisStartAar, beregnAskMotVanlig };
+if (typeof module !== 'undefined') module.exports = { utbytteRekke, stabileAr, exForbeholdGjelder, utbyttePerioder, vistOverBetalt, modalBetaltBoks, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, fmt, formaterDato, yieldKlasse, payoutKlasse, vekstKlasse, beregnScore, beregnBaerekraft, beregnYtdInntekt, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote, kapitalAndel, modalKapitalNote, kapitalSkattTekst, aksjerMedExIMaaned, beregnHvisKjopt, hvisStartAar, beregnAskMotVanlig, fmtUtbytte, sisteUtbytteTekst };

@@ -895,6 +895,14 @@ _UTBETALING_GRENSE = re.compile(r"(?=\bdividend\s+amount\s*:|\btranche\s+\d+\s*:
 
 _ANDRE_BORSER = ("new york", "nyse", "nasdaq", "london", "stockholm", "copenhagen", "frankfurt")
 
+# Beløpet per aksje i én utbetalingsblokk. Lookaheaden avviser en
+# størrelsesmarkør etter tallet — ENH skriver «Distribution amount: USD 25.0
+# million», som er totalen, ikke per aksje. `[\d.,]*` foran gjør at regexen
+# ikke kan backtracke til «25» eller «2» og slippe gjennom likevel.
+_BLOKK_BELOP_RE = re.compile(
+    r"(?:dividend|distribution)\s+amount\s*:\s*(?:(NOK|USD|EUR|SEK|DKK)\s*)?"
+    r"(\d+(?:[.,]\d+)?)(?![\d.,]*\s*(?:m\b|mn\b|mill|bn\b|billion|mrd))", re.I)
+
 # Hvor langt tilbake en melding kan ligge og fortsatt gjelde et kommende
 # utbytte. EQNRs melding kom 22. juli for en ex-dato 13. november.
 NEWSWEB_EX_DAGER = 270
@@ -971,6 +979,8 @@ def _parse_utbetalinger(tekst):
     if len(blokker) < 2:
         blokker = [tekst]
     forbehold_i_teksten = bool(_FORBEHOLD_RE.search(tekst))
+    v = _SPLITT_VALUTA.search(tekst)
+    valuta_i_teksten = v.group(1).upper() if v else None
     ut = []
     sett = set()
     for blokk in blokker:
@@ -980,11 +990,18 @@ def _parse_utbetalinger(tekst):
         sett.add(ex)
         g = _GODKJENNING_RE.search(blokk) or (
             _GODKJENNING_RE.search(tekst) if len(blokker) == 1 else None)
+        # Beløpet hører til blokken, valutaen kan stå én gang for hele
+        # meldingen. Uten oppgitt valuta vet vi ikke hva tallet er i.
+        b = _BLOKK_BELOP_RE.search(blokk)
+        belop = _tall(b.group(2)) if b else None
+        valuta = ((b.group(1) or "").upper() or valuta_i_teksten) if b else None
         ut.append({
             "ex_dato": ex,
             "betaling_dato": bet,
             "godkjenning_dato": _dato_fra_treff(g) if g else None,
             "forbehold": forbehold_i_teksten,
+            "belop": belop if belop and belop > 0 and valuta else None,
+            "valuta": valuta if belop else None,
         })
     return sorted(ut, key=lambda u: u["ex_dato"])
 
@@ -1004,7 +1021,8 @@ def neste_utbetaling(tekst, i_dag):
         g = u["godkjenning_dato"]
         uvedtatt = u["forbehold"] and (g is None or g >= i_dag_iso)
         return {"ex_dato": u["ex_dato"], "betaling_dato": u["betaling_dato"],
-                "ex_forbehold": (g or "ukjent") if uvedtatt else None}
+                "ex_forbehold": (g or "ukjent") if uvedtatt else None,
+                "belop": u.get("belop"), "valuta": u.get("valuta")}
     return None
 
 
@@ -1912,27 +1930,46 @@ def hent_historiske_utbytter(dividends, hist_prices, years=5, current_price=0.0)
     return historiske, snitt_yield
 
 
-def beregn_utbytte_vekst(dividends, years=5):
-    """Beregn CAGR for utbytte over angitte år."""
+def beregn_utbytte_vekst(dividends, years=5, i_dag=None):
+    """CAGR for utbyttet mellom første og siste *hele* kalenderår i vinduet.
+
+    Returnerer 0.0 når det ikke lar seg beregne — samme betydning som før,
+    og appen viser «—» for 0.
+
+    Den gamle versjonen tok et vindu på 5 × 365 dager bakover og summerte per
+    kalenderår, så både første og siste år var *delår*. Siste år var alltid
+    inneværende år, betalt så langt. Telenor, som har hevet utbyttet hvert
+    år (9,00 → 9,60), fikk −14,4 % per år fordi et fullt 2022 ble målt mot
+    et 2026 med bare maiutbetalingen. Toppliste-siden «best utbyttevekst»
+    ble ledet av CMB.TECH med +1 600 % per år — én betaling i 2025 mot tre
+    hittil i 2026 (2026-10-06).
+
+    Første år flyttes ett år fram når det har flere utbetalinger enn
+    selskapet pleier (median per år). Det er etterslepet fra 2021, da
+    bankene fikk betale utsatt utbytte: DNB betalte to års utbytte i 2021,
+    og et 2021 på 17,40 ga DNB −0,9 % per år mot de faktiske 9,75 → 16,75.
+    Siste år flyttes ikke — det er det nyeste vi vet.
+    """
     if dividends.empty:
         return 0.0
-    cutoff = datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(days=years * 365)
-    # Håndter både timezone-aware og naive DatetimeIndex
-    if dividends.index.tz is None:
-        cutoff = cutoff.replace(tzinfo=None)
-    recent = dividends[dividends.index >= cutoff]
-    if recent.empty or len(recent) < 2:
+    i_dag = i_dag or datetime.date.today()
+    siste = i_dag.year - 1
+    forste = siste - (years - 1)
+    per_ar = {}
+    for d, v in dividends.items():
+        if forste <= d.year <= siste:
+            per_ar.setdefault(d.year, []).append(float(v))
+    if not per_ar:
         return 0.0
-    # Summer utbytter per år
-    annual = recent.resample("YE").sum()
-    if len(annual) < 2:
+    antall = sorted(len(l) for l in per_ar.values())
+    median = antall[(len(antall) - 1) // 2]
+    if len(per_ar.get(forste, [])) > median:
+        forste += 1
+    start_val = sum(per_ar.get(forste, []))
+    end_val = sum(per_ar.get(siste, []))
+    if start_val <= 0 or end_val <= 0 or siste <= forste:
         return 0.0
-    start_val = annual.iloc[0]
-    end_val = annual.iloc[-1]
-    if start_val <= 0:
-        return 0.0
-    n = len(annual) - 1
-    cagr = (end_val / start_val) ** (1 / n) - 1
+    cagr = (end_val / start_val) ** (1 / (siste - forste)) - 1
     return round(cagr * 100, 1)
 
 
@@ -2098,7 +2135,12 @@ def hent_aksje(meta):
             utbytte_yield = round(raw if raw > 1 else raw * 100, 2)
 
         # Siste faktiske utbytte
-        siste_utbytte = safe_float(dividends.iloc[-1]) if not dividends.empty else 0.0
+        # Fire desimaler, ikke safe_float()s to: DNO betalte 0,375 og PEN
+        # 0,374, og siden viste 0,38 og 0,37 (tallkontrollen 05.10.2026).
+        siste_utbytte = 0.0
+        if not dividends.empty:
+            _siste = float(dividends.iloc[-1])
+            siste_utbytte = round(_siste, 4) if math.isfinite(_siste) else 0.0
 
         # Antall utbytter siste 12 mnd
         one_year_ago = datetime.datetime.today() - datetime.timedelta(days=365)
@@ -2771,9 +2813,9 @@ def _lag_analyse_tekst(a, sektor_snitt=None):
             if dager > 0:
                 deler.append(
                     f"Neste ex-dato er {_fmt_dato(ex)} — kjøp innen {kjop_str} for å motta "
-                    # Beløpet bare når DNB oppga det for nettopp denne ex-datoen —
-                    # ellers kan det høre til en annen utbetaling (Telenor har to).
-                    # DNB-beløpet brukes bare når det er erklært i NOK.
+                    # Beløpet bare når DNB eller børsmeldingen oppga det for nettopp
+                    # denne ex-datoen — ellers kan det høre til en annen utbetaling
+                    # (Telenor har to). Bare når det er erklært i NOK.
                     + (f"utbyttet på {_nf(a['annonsert_utbytte'], 2)} NOK"
                        if a.get("annonsert_utbytte") and a.get("annonsert_ex") == ex
                        else "utbytte")
@@ -3827,11 +3869,15 @@ def _lag_investor_badges(a):
         risiko_punkter.append(f'Defensiv sektor ({sektor}) — relativt stabile inntekter')
 
     rekke = utbytterekke(a)
-    if rekke and rekke["brutt"] and rekke["totalt"] >= 7 and rekke["rad"] < 7:
+    # Et selskap som ikke har betalt på flere år, skal ikke få «Moderat
+    # utbyttehistorikk (5 år)» — BINT sist i 2016 (2026-10-06).
+    if rekke and rekke["brutt"] and (rekke["totalt"] >= 7 and rekke["rad"] < 7 or rekke["rad"] == 0):
         # Langt antall, kort rekke: historikken er lang, men ikke stabil.
         naa = (f"ingen utbytte siden {rekke['siste']}" if rekke["rad"] == 0
                else f"sammenhengende bare siden {rekke['fra']}")
         risiko_punkter.append(f'Utbytte i {rekke["totalt"]} år, men med brudd — {naa}')
+    elif ar == 0:
+        risiko_punkter.append('Ingen registrert utbyttehistorikk')
     elif ar < 3:
         risiko_punkter.append(f'Kort utbyttehistorikk ({ar} år) — begrenset dokumentasjon')
     elif ar < 7:
@@ -4447,9 +4493,11 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     ) if pe and pe > 0 else ""
 
     payout_rad = f"<tr><td>Payout ratio</td><td>{_nf(payout, 0)}%</td></tr>" if payout > 0 else ""
+    # 0 betyr «kunne ikke beregnes», som i appen. Med `is not None` sto
+    # «+0,0 % p.a.» på sider for selskaper uten et eneste utbytte på fem år.
     vekst_rad  = (
         f"<tr><td>Utbyttevekst 5 år</td><td>{'+' if vekst >= 0 else ''}{_nf(vekst, 1)}% p.a.</td></tr>"
-        if vekst is not None else ""
+        if vekst else ""
     )
     mrd_rad    = f"<tr><td>Markedsverdi</td><td>{_nf(mrd, 1)} mrd NOK</td></tr>" if mrd > 0 else ""
     kurs52_rad = (
@@ -4461,11 +4509,19 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     # aksjer har et faktasammendrag fra Yahoo, så den redaksjonelle teksten
     # tapte alltid or-uttrykket og sto usynlig. Nå vises begge: den skrevne
     # innledningen først, Yahoos faktaavsnitt under.
+    #
+    # Uten faktasammendrag falt `besk` tilbake til hele `beskrivelse`, som
+    # *begynner* med innledningen — så KMAR, DOF, JAREN og BINT viste den samme
+    # teksten to ganger (2026-10-06). Hele beskrivelsen brukes nå bare når det
+    # ikke finnes noen innledning å vise; avsnitt 2–3 står uansett lenger ned.
     intro = (a.get("beskrivelse_intro") or "").strip()
+    fakta = (a.get("beskrivelse_fakta") or "").strip()
     om_avsnitt = ""
     if intro:
         om_avsnitt += f"<p>{intro}</p>"
-    if besk and besk.strip() != intro:
+        if fakta and fakta != intro:
+            om_avsnitt += f'<p class="desc-fakta">{fakta}</p>'
+    elif besk:
         om_avsnitt += f'<p class="desc-fakta">{besk}</p>'
     om_seksjon = f'<div class="desc"><h2>Om selskapet</h2>{om_avsnitt}</div>' if om_avsnitt else ""
 
@@ -7795,6 +7851,13 @@ def main():
             nw_rettet += 1
         if nw.get("betaling_dato"):
             aksje["betaling_dato"] = nw["betaling_dato"]
+        # Beløpet for *denne* utbetalingen, når meldingen oppgir det i NOK.
+        # Appen regnet neste utbetaling som antall × `siste_utbytte` — for
+        # Telenor 5,00 i mai, mens oktoberutbyttet er 4,70 (2026-10-06).
+        # Et beløp i USD/EUR kan ikke ganges med en NOK-kurs, så det hoppes over.
+        if nw.get("belop") and nw.get("valuta") == "NOK":
+            aksje["annonsert_utbytte"] = nw["belop"]
+            aksje["annonsert_ex"] = nw["ex_dato"]
         # Generalforsamlingsdatoen når utbyttet ennå ikke er vedtatt, ellers
         # fjernes feltet — det skal aldri henge igjen fra en tidligere kjøring.
         if nw.get("ex_forbehold"):

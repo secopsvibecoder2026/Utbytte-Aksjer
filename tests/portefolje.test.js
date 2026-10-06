@@ -35,7 +35,7 @@ global.visModal = () => {};
 global.SEKTOR_FARGE = {};
 global.FARGE_FALLBACK = '#9ca3af';
 
-const { beregnKostbasis, beregnIRR, beregnTWRSerie, beregnUtbyttePrognose, _leggTilMnd, beregnUtbytteskatt, beregnSkatteaar } = require('../assets/portefolje.js');
+const { beregnKostbasis, beregnIRR, beregnTWRSerie, beregnUtbyttePrognose, _leggTilMnd, beregnUtbytteskatt, beregnSkatteaar, nesteUtbyttePerAksje } = require('../assets/portefolje.js');
 
 // ── beregnKostbasis ─────────────────────────────────────────────────────────
 
@@ -562,4 +562,33 @@ test('beregnSkatteaar: tilbakebetalt kapital er ikke skattepliktig, tap gir frad
   assert.equal(r.skattbartUtbytte, 0);
   assert.equal(r.gevinst, 3000 - 4500);
   assert.ok(r.skatt < 0);
+});
+
+
+// ── Neste utbetaling: annonsert beløp, ikke forrige utbetaling (2026-10-06) ──
+const TEL_OKT = {
+  ticker: 'TEL', navn: 'Telenor', frekvens: 'Halvårlig', utbytte_per_aksje: 9.6, siste_utbytte: 5.0,
+  ex_dato: '2026-10-15', betaling_dato: '2026-10-27', annonsert_utbytte: 4.7, annonsert_ex: '2026-10-15',
+  utbetalingsmaaneder: [5, 10],
+};
+
+test('nesteUtbyttePerAksje: annonsert beløp for nettopp denne ex-datoen', () => {
+  assert.deepEqual(nesteUtbyttePerAksje(TEL_OKT), { belop: 4.7, annonsert: true });
+});
+
+test('nesteUtbyttePerAksje: annonsert for en annen ex-dato brukes ikke', () => {
+  const r = nesteUtbyttePerAksje({ ...TEL_OKT, annonsert_ex: '2026-05-20' });
+  assert.equal(r.annonsert, false);
+  assert.ok(Math.abs(r.belop - 4.8) < 1e-9);   // årsraten / 2, ikke siste_utbytte 5,00
+});
+
+test('nesteUtbyttePerAksje: uten årsrate og uten annonsering gir null', () => {
+  assert.equal(nesteUtbyttePerAksje({ frekvens: 'Årlig', siste_utbytte: 21 }), null);
+});
+
+test('prognose: annonsert utbetaling bruker det annonserte beløpet', () => {
+  const p = beregnUtbyttePrognose([{ ...TEL_OKT, antall: 200, forv_ar: 1920 }], '2026-10-06');
+  const okt = p.utbetalinger.find(u => u.dato === '2026-10-27');
+  assert.ok(okt && okt.annonsert);
+  assert.ok(Math.abs(okt.belop - 940) < 0.01);   // 200 × 4,70, ikke 960 eller 1 000
 });

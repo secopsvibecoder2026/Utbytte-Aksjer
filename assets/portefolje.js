@@ -6,6 +6,29 @@ const _aapneDetailRader = new Set();
 // Lagrer OSEBX-tilstand for periodebytte uten full re-render av portefølje
 let _pfOsebxState = null;
 
+// Ukentlig OSEBX fem år tilbake (data/kurs/OSEBX.json). Den daglige serien i
+// aksjer.json dekker to år, og et kjøp i 2022 ble stille målt mot OSEBX fra
+// oktober 2024 — med datolinjen «1. okt. – 2. okt.» uten årstall, som så ut
+// som én dag (2026-10-06). Lastes bare når første kjøp er eldre enn den.
+let _osebxUkentlig = null;
+
+function _osebxSerie() {
+  if (!_osebxUkentlig) return osebxHistorikk;
+  const forsteDaglig = Object.keys(osebxHistorikk).sort()[0] || '9999';
+  const ut = {};
+  for (const [d, v] of Object.entries(_osebxUkentlig)) if (d < forsteDaglig) ut[d] = v;
+  return Object.assign(ut, osebxHistorikk);
+}
+
+function _lastOsebxUkentlig() {
+  if (_osebxUkentlig || typeof hentKursHistorikk !== 'function') return;
+  _osebxUkentlig = {};   // hindrer dobbel henting mens den første pågår
+  hentKursHistorikk({ ticker: 'OSEBX' }).then(liste => {
+    liste.forEach(p => { if (p && p.d && p.k > 0) _osebxUkentlig[p.d] = p.k; });
+    if (_pfOsebxState) _oppdaterOsebxPeriode(_pfOsebxState.aktivPeriode);
+  });
+}
+
 /**
  * FIFO-kostbasis for én aksje (sktl. § 10-36), og det som trengs for skatten.
  *
@@ -647,13 +670,18 @@ function _osebxStartForPeriode(periode, osebxDatoer, osebxSluttDato, forsteTxDat
 
 function _oppdaterOsebxPeriode(periode) {
   if (!_pfOsebxState) return;
-  const { alleBeholdning, pfPct, invKost, totalReturnKr, forsteTxDato } = _pfOsebxState;
-  const osebxDatoer    = Object.keys(osebxHistorikk).sort();
+  const { alleBeholdning, invKost, totalReturnKr, forsteTxDato } = _pfOsebxState;
+  // Porteføljetallet er avkastningen *siden kjøp*. YTD og 1 år satte det opp
+  // mot OSEBX for perioden — en sammenligning av to ulike tidsrom. For de
+  // periodene vises OSEBX alene til vi kan regne porteføljen for perioden.
+  const pfPct = periode === 'kjop' ? _pfOsebxState.pfPct : null;
+  const serie          = _osebxSerie();
+  const osebxDatoer    = Object.keys(serie).sort();
   const osebxSluttDato = osebxDatoer[osebxDatoer.length - 1];
   const startDato      = _osebxStartForPeriode(periode, osebxDatoer, osebxSluttDato, forsteTxDato);
   let osebxPct = null;
   if (startDato && osebxSluttDato && startDato !== osebxSluttDato) {
-    osebxPct = (osebxHistorikk[osebxSluttDato] - osebxHistorikk[startDato]) / osebxHistorikk[startDato] * 100;
+    osebxPct = (serie[osebxSluttDato] - serie[startDato]) / serie[startDato] * 100;
   }
   _pfOsebxState.aktivPeriode = periode;
   visOsebxSammenligning(alleBeholdning, pfPct, osebxPct, invKost, totalReturnKr, forsteTxDato, startDato, osebxSluttDato, periode);
@@ -675,6 +703,10 @@ function _oppdaterOsebxPeriode(periode) {
       const label = { ytd: 'OSEBX YTD', '1ar': 'OSEBX 1 år', kjop: 'OSEBX siden kjøp' }[periode] || 'OSEBX';
       if (osebxTekst) osebxTekst.textContent = label;
     }
+  } else {
+    osebxEl.textContent = '—';
+    osebxEl.className   = 'stat-value text-base';
+    if (osebxTekst) osebxTekst.textContent = 'oppdateres daglig';
   }
 }
 
@@ -685,7 +717,7 @@ function visOsebxSammenligning(alleBeholdning, pfPct, osebxPct, invKost, totalRe
   if (!wrapper || !innhold) return;
 
   const periode = aktivPeriode || 'kjop';
-  const fmtDato = d => new Date(d + 'T00:00:00').toLocaleDateString('nb-NO', { day: 'numeric', month: 'short' });
+  const fmtDato = d => new Date(d + 'T00:00:00').toLocaleDateString('nb-NO', { day: 'numeric', month: 'short', year: 'numeric' });
 
   const periodeKnapper = `
     <div class="flex gap-1 mb-3" role="group" aria-label="Velg tidsperiode">
@@ -703,6 +735,13 @@ function visOsebxSammenligning(alleBeholdning, pfPct, osebxPct, invKost, totalRe
   const datoLabel = (osebxStartDato && osebxSluttDato)
     ? `${fmtDato(osebxStartDato)} – ${fmtDato(osebxSluttDato)}`
     : '—';
+  // Starter OSEBX-serien etter første kjøp, sier vi det — ellers ser det ut
+  // som om sammenligningen dekker hele perioden.
+  const kortSerie = periode === 'kjop' && forsteTxDato && osebxStartDato && osebxStartDato > forsteTxDato
+    && (new Date(osebxStartDato) - new Date(forsteTxDato)) > 14 * 86400000;
+  const serieMerknad = kortSerie
+    ? ` · OSEBX-tallene våre starter ${fmtDato(osebxStartDato)}, etter ditt første kjøp ${fmtDato(forsteTxDato)}`
+    : '';
 
   // Kun OSEBX – ingen porteføljedata ennå
   if (pfPct === null) {
@@ -720,7 +759,9 @@ function visOsebxSammenligning(alleBeholdning, pfPct, osebxPct, invKost, totalRe
             <div class="h-full rounded-full ${osebxPct >= 0 ? 'bg-blue-400' : 'bg-red-400'}" style="width:100%"></div>
           </div>
         </div>
-        <p class="text-xs text-gray-400 dark:text-gray-500">${datoLabel} · Legg til transaksjoner for å sammenligne mot din portefølje.</p>
+        <p class="text-xs text-gray-400 dark:text-gray-500">${datoLabel} · ${forsteTxDato && periode !== 'kjop'
+          ? 'Porteføljens avkastning regnes bare siden kjøp — velg «Siden kjøp» for å sammenligne.'
+          : 'Legg til transaksjoner for å sammenligne mot din portefølje.'}</p>
       </div>`;
     return;
   }
@@ -761,7 +802,7 @@ function visOsebxSammenligning(alleBeholdning, pfPct, osebxPct, invKost, totalRe
         </div>
       </div>
       <div class="pt-2 border-t border-gray-100 dark:border-gray-800 flex justify-between items-center">
-        <span class="text-xs text-gray-400">${datoLabel}</span>
+        <span class="text-xs text-gray-400">${datoLabel}${serieMerknad}</span>
         <span class="text-sm font-bold ${slaer ? 'text-teal-600 dark:text-teal-400' : 'text-red-500'}">
           ${fmtPct(diff)} (${diffKr >= 0 ? '+' : ''}${fmtKr(diffKr)})
         </span>
@@ -1111,7 +1152,8 @@ function visPortefolje() {
   if (harBeholdning) {
     // Estimert beløp neste utbetaling
     if (nestePayout) {
-      const perUtbetaling = nestePayout.a.forv_ar / (frekvMap[nestePayout.a.frekvens] || 1);
+      const neste = nesteUtbyttePerAksje(nestePayout.a);
+      const perUtbetaling = neste ? nestePayout.a.antall * neste.belop : 0;
       document.getElementById('pf-stat-neste-belop').textContent = fmtKr(perUtbetaling);
       document.getElementById('pf-stat-neste-belop-navn').textContent = nestePayout.a.ticker;
     }
@@ -1199,38 +1241,15 @@ function visPortefolje() {
       .flatMap(liste => liste.filter(t => t.type === 'kjøp').map(t => t.dato))
       .sort();
     const forsteTxDato   = alleTxDatoer[0] || null;
-    const osebxDatoer    = Object.keys(osebxHistorikk).sort();
-    const osebxSluttDato = osebxDatoer[osebxDatoer.length - 1];
-
     // Behold aktiv periode ved re-render, ellers velg 'kjop' (eller 'ytd' om ingen kjøp)
     const aktivPeriode   = (_pfOsebxState && _pfOsebxState.aktivPeriode) || (forsteTxDato ? 'kjop' : 'ytd');
-    const osebxStartDato = _osebxStartForPeriode(aktivPeriode, osebxDatoer, osebxSluttDato, forsteTxDato);
 
-    let osebxPctTotal = null;
-    if (osebxStartDato && osebxSluttDato && osebxStartDato !== osebxSluttDato) {
-      osebxPctTotal = (osebxHistorikk[osebxSluttDato] - osebxHistorikk[osebxStartDato]) / osebxHistorikk[osebxStartDato] * 100;
-    }
-
-    // Lagre tilstand for periodebytte uten full re-render
+    // Lagre tilstand for periodebytte uten full re-render. Kortet og
+    // sammenligningen tegnes ett sted, så de ikke kan si hver sin ting.
     _pfOsebxState = { alleBeholdning, pfPct: pfPctTotal, invKost, totalReturnKr, forsteTxDato, aktivPeriode };
-
-    if (osebxEl && pfPctTotal !== null && osebxPctTotal !== null) {
-      const diff  = pfPctTotal - osebxPctTotal;
-      const slaer = diff >= 0;
-      osebxEl.textContent = slaer ? '✓ Ja' : '✗ Nei';
-      osebxEl.className   = 'stat-value text-base ' + (slaer ? 'text-green-600 dark:text-green-400' : 'text-red-500');
-      if (osebxTekst) osebxTekst.textContent = (diff >= 0 ? '+' : '') + diff.toFixed(1).replace('.', ',') + '% vs indeks';
-    } else if (osebxEl && osebxPctTotal !== null) {
-      osebxEl.textContent = (osebxPctTotal >= 0 ? '+' : '') + osebxPctTotal.toFixed(1).replace('.', ',') + '%';
-      osebxEl.className   = 'stat-value text-base ' + (osebxPctTotal >= 0 ? 'text-blue-600 dark:text-blue-400' : 'text-red-500');
-      const label = { ytd: 'OSEBX YTD', '1ar': 'OSEBX 1 år', kjop: 'OSEBX siden kjøp' }[aktivPeriode] || 'OSEBX';
-      if (osebxTekst) osebxTekst.textContent = label;
-    } else if (osebxEl) {
-      osebxEl.textContent  = '—';
-      osebxEl.className    = 'stat-value text-base';
-      if (osebxTekst) osebxTekst.textContent = 'oppdateres daglig';
-    }
-    visOsebxSammenligning(alleBeholdning, pfPctTotal, osebxPctTotal, invKost, totalReturnKr, forsteTxDato, osebxStartDato, osebxSluttDato, aktivPeriode);
+    const forsteDaglig = Object.keys(osebxHistorikk).sort()[0];
+    if (forsteTxDato && forsteDaglig && forsteTxDato < forsteDaglig) _lastOsebxUkentlig();
+    _oppdaterOsebxPeriode(aktivPeriode);
 
     // ── IRR (annualisert intern avkastningsrate) ──────────────────────────────
     const irrEl      = document.getElementById('pf-stat-irr');
@@ -1618,6 +1637,27 @@ function visPortefolje() {
 // ── HJELPERE FOR MÅNEDLIG DISTRIBUSJON ────────────────────────────────────
 function _frekvensAntall(f) {
   return { 'Månedlig': 12, 'Kvartalsvis': 4, 'Halvårlig': 2, 'Årlig': 1 }[f] || 1;
+}
+
+/**
+ * Beløpet per aksje for den neste utbetalingen: { belop, annonsert } eller null.
+ *
+ * Det annonserte beløpet når selskapet har oppgitt det for nettopp denne
+ * ex-datoen, ellers årsraten delt på antall utbetalinger. Tre steder regnet
+ * dette hver for seg, og for Telenor sto tre tall på samme skjerm:
+ * «Neste utbetaling 1 000 kr» (antall × siste utbetaling, 5,00 i mai),
+ * «960 kr» (årsraten / 2) — og det riktige, 4,70 × antall, ingen steder
+ * (2026-10-06). `siste_utbytte` er det som *er* betalt, ikke det som kommer.
+ */
+function nesteUtbyttePerAksje(a) {
+  if (!a) return null;
+  if (a.annonsert_utbytte > 0 && a.annonsert_ex && a.annonsert_ex === a.ex_dato) {
+    return { belop: a.annonsert_utbytte, annonsert: true };
+  }
+  if (a.utbytte_per_aksje > 0) {
+    return { belop: a.utbytte_per_aksje / _frekvensAntall(a.frekvens), annonsert: false };
+  }
+  return null;
 }
 
 /**
@@ -2037,8 +2077,11 @@ function beregnUtbyttePrognose(beholdning, idagIso) {
         const erAnnonsert = key === annonsertMnd;
         const dato = erAnnonsert ? a.betaling_dato : `${key}-15`;
         if (dato < idag || dato >= slutt) continue;
+        // «Annonsert» betydde bare datoen — beløpet var fortsatt anslaget.
+        const neste = erAnnonsert ? nesteUtbyttePerAksje(a) : null;
+        const belop = neste && neste.annonsert && a.antall > 0 ? a.antall * neste.belop : perBetaling;
         utbetalinger.push({ dato, ticker: a.ticker, navn: a.navn,
-                            belop: perBetaling, annonsert: erAnnonsert });
+                            belop, annonsert: erAnnonsert });
       }
       return;
     }
@@ -2059,7 +2102,9 @@ function beregnUtbyttePrognose(beholdning, idagIso) {
     while (dato < idag) { dato = _leggTilMnd(dato, intervall); annonsert = false; }
 
     while (dato < slutt) {
-      utbetalinger.push({ dato, ticker: a.ticker, navn: a.navn, belop: perBetaling, annonsert });
+      const neste = annonsert ? nesteUtbyttePerAksje(a) : null;
+      const belop = neste && neste.annonsert && a.antall > 0 ? a.antall * neste.belop : perBetaling;
+      utbetalinger.push({ dato, ticker: a.ticker, navn: a.navn, belop, annonsert });
       dato = _leggTilMnd(dato, intervall);
       annonsert = false; // kun første betaling kan være annonsert
     }
@@ -3036,4 +3081,4 @@ function visAnalyse() {
 }
 
 // Node.js test export
-if (typeof module !== 'undefined') module.exports = { beregnKostbasis, beregnIRR, beregnTWRSerie, beregnUtbyttePrognose, _leggTilMnd, beregnUtbytteskatt, beregnSkatteaar };
+if (typeof module !== 'undefined') module.exports = { beregnKostbasis, beregnIRR, beregnTWRSerie, beregnUtbyttePrognose, _leggTilMnd, beregnUtbytteskatt, beregnSkatteaar, nesteUtbyttePerAksje };
