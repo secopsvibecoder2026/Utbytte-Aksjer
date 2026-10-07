@@ -10,3 +10,4 @@ __pycache__/
 node_modules/
 test-results/
 playwright-report/
+data/tickers.json.lock

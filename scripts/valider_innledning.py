@@ -29,6 +29,7 @@ Kjør:
     python3 scripts/valider_innledning.py --streng        # exit 1 ved funn
 """
 
+import fcntl
 import json
 import os
 import re
@@ -190,17 +191,21 @@ def skriv(ticker: str, tekst: str, sti: str = TICKERS_F) -> list:
     (indent 2, ikke-ASCII som det er, linjeskift til slutt), så diffen bare
     viser den ene teksten.
     """
-    with open(sti, encoding="utf-8") as f:
-        tickere = json.load(f)
-    tekst = normaliser(tekst)
-    feil = vurder_ny(ticker, tekst, tickere)
-    if feil:
-        return feil
-    for t in tickere:
-        if t["ticker"] == ticker:
-            t["beskrivelse"] = tekst
-    with open(sti, "w", encoding="utf-8") as f:
-        f.write(json.dumps(tickere, indent=2, ensure_ascii=False) + "\n")
+    # Lås rundt les–endre–skriv: flere agenter kan lagre samtidig, og uten
+    # låsen ville den siste som skrev, slettet de andres tekster.
+    with open(sti + ".lock", "w") as las:
+        fcntl.flock(las, fcntl.LOCK_EX)
+        with open(sti, encoding="utf-8") as f:
+            tickere = json.load(f)
+        tekst = normaliser(tekst)
+        feil = vurder_ny(ticker, tekst, tickere)
+        if feil:
+            return feil
+        for t in tickere:
+            if t["ticker"] == ticker:
+                t["beskrivelse"] = tekst
+        with open(sti, "w", encoding="utf-8") as f:
+            f.write(json.dumps(tickere, indent=2, ensure_ascii=False) + "\n")
     return []
 
 
