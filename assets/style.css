@@ -851,6 +851,34 @@ section[id] { scroll-margin-top: 100px; }
 .om-selskap-tekst + .om-selskap-tekst { margin-top: 0.6rem; }
 .om-selskap-fakta { font-size: 0.92em; opacity: 0.85; }
 
+/* «Les mer» i aksjemodalen: første avsnitt i fire linjer, resten skjult.
+   Fra 640 px er det plass nok, og alt vises uten knapp. */
+.om-selskap-lukket .om-selskap-mer { display: none; }
+.om-selskap-lukket > .om-selskap-tekst {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.om-selskap-mer > .om-selskap-tekst { margin-top: 0.6rem; }
+.om-selskap-vis-mer {
+  margin-top: 0.4rem;
+  padding: 0.25rem 0;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #16a34a;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+.om-selskap-vis-mer:hover { text-decoration: underline; }
+.dark .om-selskap-vis-mer { color: #4ade80; }
+@media (min-width: 640px) {
+  .om-selskap-lukket .om-selskap-mer { display: block; }
+  .om-selskap-lukket > .om-selskap-tekst { display: block; -webkit-line-clamp: unset; overflow: visible; }
+  .om-selskap-vis-mer { display: none; }
+}
+
 /* Skjult rullefelt på vannrett scrollende faneremser.
    .modal-tabs og .ak-tabnav gjorde dette allerede hver for seg; app/index.html
    brukte klassen scrollbar-hide, som er en Tailwind-plugin vi ikke har

@@ -32,7 +32,7 @@ const {
   vekstKlasse,
   beregnScore,
   beregnYtdInntekt
-, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, utbyttePerioder, vistOverBetalt, modalBetaltBoks, utbytteRekke, stabileAr, exForbeholdGjelder, kapitalAndel, modalKapitalNote, kapitalSkattTekst, aksjerMedExIMaaned, beregnHvisKjopt, hvisStartAar, beregnAskMotVanlig, fmtUtbytte, sisteUtbytteTekst, modalOmSelskapet } = require('../assets/ui.js');
+, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, utbyttePerioder, vistOverBetalt, modalBetaltBoks, utbytteRekke, stabileAr, exForbeholdGjelder, kapitalAndel, modalKapitalNote, kapitalSkattTekst, aksjerMedExIMaaned, beregnHvisKjopt, hvisStartAar, beregnAskMotVanlig, fmtUtbytte, sisteUtbytteTekst, modalOmSelskapet, vekslOmSelskapet } = require('../assets/ui.js');
 
 // ── fmt ────────────────────────────────────────────────────────────────────
 test('fmt returnerer — for null', () => {
@@ -705,13 +705,36 @@ test('sisteUtbytteTekst: året står når ingenting er betalt siste 12 mnd', () 
   assert.equal(sisteUtbytteTekst({ siste_utbytte: 0 }), '—');
 });
 
-// ── modalOmSelskapet — selskapsteksten i flere avsnitt (2026-10-06) ─────────
-test('modalOmSelskapet: blank linje i innledningen gir egne avsnitt, og teksten escapes', () => {
+// ── modalOmSelskapet — selskapsteksten i flere avsnitt, minimert (2026-10-07) ──
+test('modalOmSelskapet: første avsnitt synlig, resten og faktaavsnittet bak «Les mer»', () => {
   global.escHtml = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   const h = modalOmSelskapet({ beskrivelse_intro: 'Første <b>avsnitt</b>.\n\nAndre avsnitt.', beskrivelse_fakta: 'Fakta.' });
-  assert.equal((h.match(/<p class="om-selskap-tekst">/g) || []).length, 2);
+  assert.match(h, /om-selskap-boks om-selskap-lukket/);
   assert.match(h, /&lt;b&gt;/);
-  assert.match(h, /om-selskap-fakta">Fakta\./);
+  const [for_, mer] = h.split('<div class="om-selskap-mer"');
+  assert.match(for_, /Første/);
+  assert.match(mer, /Andre avsnitt\..*om-selskap-fakta">Fakta\./s);
+  assert.match(h, /aria-expanded="false"/);
   assert.equal(modalOmSelskapet({}), '');
   delete global.escHtml;
+});
+
+test('modalOmSelskapet: ett avsnitt og ingen fakta gir ingen knapp', () => {
+  global.escHtml = s => String(s);
+  const h = modalOmSelskapet({ beskrivelse_intro: 'Bare ett avsnitt.' });
+  assert.doesNotMatch(h, /om-selskap-vis-mer|om-selskap-lukket/);
+  delete global.escHtml;
+});
+
+test('vekslOmSelskapet: åpner og lukker, og oppdaterer aria og tekst', () => {
+  const klasser = new Set(['om-selskap-boks', 'om-selskap-lukket']);
+  const boks = { classList: { toggle: c => (klasser.has(c) ? (klasser.delete(c), false) : (klasser.add(c), true)) } };
+  const attr = {};
+  const knapp = { closest: () => boks, setAttribute: (k, v) => { attr[k] = v; }, textContent: '' };
+  vekslOmSelskapet(knapp);
+  assert.equal(attr['aria-expanded'], 'true');
+  assert.equal(knapp.textContent, 'Vis mindre');
+  vekslOmSelskapet(knapp);
+  assert.equal(attr['aria-expanded'], 'false');
+  assert.equal(knapp.textContent, 'Les mer om selskapet');
 });
