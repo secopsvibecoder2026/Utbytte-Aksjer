@@ -1305,11 +1305,60 @@ NewsWeb. None of them made any test or check fail.
 | «Siste utbytte» without a date | OTEC 21,00 (2022) and BINT 6 958 (2016, adjusted for a reverse split) read as recent | The year is shown when nothing was paid in the last 12 months, with up to four decimals (DNO 0,375, not 0,38) |
 | Risk badge | BINT got «Moderat utbyttehistorikk (5 år)» with no dividend since 2016, and six stocks read «(0 år)» | «med brudd — ingen utbytte siden 2016», and «Ingen registrert utbyttehistorikk» |
 
-**Found but not fixed.** These are design decisions and are left to the
-owner; see the PR.
+**Found but not fixed then, fixed 2026-10-07** — see the next section. STST
+(17,44 % shown against 12,6 % paid, a 44 % cut under both the 50 % guard and
+the 30 % threshold in Sjekk 10) is still open: its window holds capital
+distributions, and the fleet is being sold.
 
-- **The headline yield is far too low for companies that raised or have variable dividends.** The guard picks last year's total when Yahoo deviates by ≥ 50 %. Yara paid an **ordinary** NOK 22 (notice 11.02.2026), and the page shows 5,00 / 1,21 %. Other affected stocks: FRO 1,77 % against 11,8 % actually paid, OET, HAFNI, BWLPG, KCC, KIT, ENTR, SATS, MORLD, PUBLI, AFK, GYL, PEXIP and WWI. The rejected rule in «Why the yield is not auto-corrected» is still wrong for AKSO, GJF, SRHA, NORBT, SOAG and SUBC, where the window holds an extraordinary payment or a change of frequency.
-- STST at 17,44 % against 12,6 % paid: the cut sits at 44 %, under both the 50 % guard and the 30 % threshold in Sjekk 10.
+## Paid in the last 12 months as the annual rate (2026-10-07)
+
+Every guard in `hent_aksje()` could only choose between Yahoo's rate and last
+year's calendar total, and for a company that had **raised** its dividend both
+were too low. Yara paid an *ordinary* NOK 22 (notice 11.02.2026) and the page
+showed 5,00 and 1,21 %; Frontline 1,73 % against 11,5 % paid, Okeanis 2,4 %
+against 10,7 %.
+
+A new step runs **after** the DNB override and the NewsWeb ex-date step — last
+of everything that sets the rate, so nothing writes back over it — and uses
+`utbytte_12m` as the rate when:
+
+1. **the window holds exactly as many payments as the frequency** — more means
+   an extra payment or a changing schedule (HUNT 5 of 4), fewer a half year;
+2. **no dividend notice in the last 15 months calls a payment extraordinary,
+   special, additional or tillegg** (`ekstraordinaer_i_vindu()`; a negated
+   phrase and «Extraordinary General Meeting» do not count). A failed lookup or
+   no notices at all is `UKJENT`, and nothing changes;
+3. **the current figure deviates at least 30 %** (`BETALT_MIN_AVVIK`);
+4. it is **not above the share price**, and **not above 3× the best complete
+   year** when there are at least two complete years. GSF's Cermaq proceeds were
+   labelled plain «dividend», and the second guard is what stops them (7,9×);
+5. no approved, announced dividend is still to come — that is fresher.
+
+It works both ways. `arsrate_kilde: "betalt_12m"` marks the row, and the card
+then says «siste 12 mnd» instead of «annualisert», in the template, the FAQ
+answer and the app.
+
+Dry run on 2026-10-07 against real notices: **18 change** (YAR 1,22 → 5,36,
+FRO, OET, HAFNI, BWLPG, KCC, HSHP, BNOR, PUBLI, ENTR, SATS, KIT, PARB, PEXIP,
+AFK, PROT, MORLD, GYL). Kept by the notice text: KOG, WWI, WWIB, AFG, GJF,
+AKSO, SRHA, AKAST, BOR. Kept by the history guard: GSF. SUBC now has
+`frekvens: Årlig` in `tickers.json`; the 2026 dividend was paid in one go in
+May (notice 26.02.2026), and as «Halvårlig» the window double-counted.
+PARB's 15,75 % is real: NOK 8,00, called the annual dividend.
+
+Takes effect on the next full fetch. Tests: `TestBetaltSomArsrate` (10),
+`TestEkstraordinaerIVindu` (6).
+
+## «Les mer» in the app modal (2026-10-07)
+
+With the 180–280-word company texts plus Yahoo's paragraph, «Om selskapet»
+measured 1 177 px on a 390 px phone, more than a screen before account types
+and risk. `modalOmSelskapet()` now shows the first paragraph clamped to four
+lines and puts the rest, and the fact paragraph, behind «Les mer om
+selskapet» (one delegated listener, `vekslOmSelskapet()`, `aria-expanded`).
+Measured: 176 px closed, 1 212 px open. From 640 px everything is open and
+the button is hidden. The stock pages keep the full text — that is what
+Google reads. Tests: `ui.test.js` (3).
 
 ## Writing style: `SKRIVESTIL.md` and `sjekk_sprak.py` (2026-10-06)
 

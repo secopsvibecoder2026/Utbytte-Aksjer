@@ -3026,20 +3026,41 @@ function eksporterEnkeltICS(a, type, dato) {
 // 160 aksjer har et faktasammendrag fra Yahoo, så den redaksjonelle teksten
 // tapte alltid — og var usynlig både her og på aksjesiden. Nå vises begge:
 // den skrevne innledningen først, Yahoos faktaavsnitt under.
+//
+// Minimert på mobil (2026-10-07). Selskapstekstene ble 180–280 ord i tre
+// avsnitt, og med faktaavsnittet tok boksen 1 177 px på en 390 px skjerm,
+// før kontotyper og risiko. Første avsnitt vises (fire linjer), resten bak
+// «Les mer». Aksjesiden har hele teksten åpen; det er den Google leser.
 function modalOmSelskapet(a) {
   const intro = (a.beskrivelse_intro || '').trim();
   const fakta = (a.beskrivelse_fakta || '').trim();
-  const deler = [];
-  // Selskapsteksten kan ha flere avsnitt, skilt med blank linje.
-  intro.split(/\n\s*\n/).filter(d => d.trim()).forEach(d => {
-    deler.push('<p class="om-selskap-tekst">' + escHtml(d.trim()) + '</p>');
+  const avsnitt = intro.split(/\n\s*\n/).map(d => d.trim()).filter(Boolean)
+    .map(d => ({ tekst: d, klasse: 'om-selskap-tekst' }));
+  if (fakta && fakta !== intro) avsnitt.push({ tekst: fakta, klasse: 'om-selskap-tekst om-selskap-fakta' });
+  if (!avsnitt.length) return '';
+  const p = x => '<p class="' + x.klasse + '">' + escHtml(x.tekst) + '</p>';
+  const [forste, ...resten] = avsnitt;
+  const mer = resten.length
+    ? '<div class="om-selskap-mer" id="om-selskap-mer">' + resten.map(p).join('') + '</div>'
+      + '<button type="button" class="om-selskap-vis-mer" aria-expanded="false" aria-controls="om-selskap-mer">Les mer om selskapet</button>'
+    : '';
+  return '<div class="om-selskap-boks' + (resten.length ? ' om-selskap-lukket' : '') + '">'
+    + '<p class="om-selskap-label">Om selskapet</p>' + p(forste) + mer + '</div>';
+}
+
+// Én delegert lytter for «Les mer» — modalen bygges på nytt for hver aksje.
+function vekslOmSelskapet(knapp) {
+  const boks = knapp.closest('.om-selskap-boks');
+  if (!boks) return;
+  const apen = boks.classList.toggle('om-selskap-lukket') === false;
+  knapp.setAttribute('aria-expanded', String(apen));
+  knapp.textContent = apen ? 'Vis mindre' : 'Les mer om selskapet';
+}
+if (typeof document !== 'undefined' && document.addEventListener) {
+  document.addEventListener('click', e => {
+    const knapp = e.target && e.target.closest && e.target.closest('.om-selskap-vis-mer');
+    if (knapp) vekslOmSelskapet(knapp);
   });
-  if (fakta && fakta !== intro) {
-    deler.push('<p class="om-selskap-tekst om-selskap-fakta">' + escHtml(fakta) + '</p>');
-  }
-  if (!deler.length) return '';
-  return '<div class="om-selskap-boks"><p class="om-selskap-label">Om selskapet</p>'
-    + deler.join('') + '</div>';
 }
 
 
@@ -3163,7 +3184,9 @@ function visModal(a) {
       <div class="grid grid-cols-2 gap-3 mb-4">
         ${modalKort('Utbytteyield' + ((yieldErDelaar(a) && !delaarMotbevist(a)) ? ' <span class="font-normal normal-case opacity-70">usikker</span>' : ''), '<span class="' + yieldKlasse(a.utbytte_yield) + '">' + a.utbytte_yield.toFixed(2).replace('.', ',') + '%</span>')}
         ${modalKort('Snitt yield 5år', a.snitt_yield_5ar > 0 ? '<span class="' + yieldKlasse(a.snitt_yield_5ar) + '">' + a.snitt_yield_5ar.toFixed(1).replace('.', ',') + '%</span>' : '—')}
-        ${modalKort('Utbytte/aksje' + ((yieldErDelaar(a) && !delaarMotbevist(a))
+        ${modalKort('Utbytte/aksje' + (a.arsrate_kilde === 'betalt_12m'
+            ? ' <span class="font-normal normal-case opacity-70">siste 12 mnd</span>'
+            : (yieldErDelaar(a) && !delaarMotbevist(a))
             ? ' <span class="font-normal normal-case opacity-70">usikker</span>'
             : ['Kvartalsvis','Halvårlig','Månedlig'].includes(a.frekvens)
             ? ' <span class="font-normal normal-case opacity-70">annualisert</span>' : ''),
@@ -5479,4 +5502,4 @@ function _annBygTopp() {
 }
 
 // Node.js test export
-if (typeof module !== 'undefined') module.exports = { utbytteRekke, stabileAr, exForbeholdGjelder, utbyttePerioder, vistOverBetalt, modalBetaltBoks, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, fmt, formaterDato, yieldKlasse, payoutKlasse, vekstKlasse, beregnScore, beregnBaerekraft, beregnYtdInntekt, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote, kapitalAndel, modalKapitalNote, kapitalSkattTekst, aksjerMedExIMaaned, beregnHvisKjopt, hvisStartAar, beregnAskMotVanlig, fmtUtbytte, sisteUtbytteTekst, modalOmSelskapet };
+if (typeof module !== 'undefined') module.exports = { utbytteRekke, stabileAr, exForbeholdGjelder, utbyttePerioder, vistOverBetalt, modalBetaltBoks, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, fmt, formaterDato, yieldKlasse, payoutKlasse, vekstKlasse, beregnScore, beregnBaerekraft, beregnYtdInntekt, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote, kapitalAndel, modalKapitalNote, kapitalSkattTekst, aksjerMedExIMaaned, beregnHvisKjopt, hvisStartAar, beregnAskMotVanlig, fmtUtbytte, sisteUtbytteTekst, modalOmSelskapet, vekslOmSelskapet };

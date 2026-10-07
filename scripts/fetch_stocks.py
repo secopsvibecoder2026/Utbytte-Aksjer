@@ -1798,6 +1798,117 @@ def velg_arsrate(fjor_sum, trailing_sum, trailing_antall, frekvens):
     return fjor_sum
 
 
+# ── Betalt siste 12 mnd som årsrate (2026-10-07) ─────────────────────────────
+# Hovedtallet kom fra Yahoos rate og en kjede vakter, og alle vaktene kunne bare
+# velge mellom Yahoos tall og fjorårets kalendersum. For et selskap som hadde
+# hevet, var begge for lave: Yara betalte et *ordinært* utbytte på NOK 22
+# (melding 11.02.2026), og siden viste 5,00 og 1,21 %. Frontline 1,77 % mot
+# 11,5 % faktisk betalt, Okeanis 2,4 % mot 10,7 %, og samme mønster for HAFNI,
+# BWLPG, KCC, ENTR, SATS, WWI med flere.
+#
+# Det tallet vi faktisk vet, er hva selskapet betalte de siste tolv månedene.
+# Det er brukt som årsrate når tre ting holder:
+#
+#   1. Vinduet har nøyaktig så mange utbetalinger som frekvensen sier. Flere
+#      betyr en ekstra utbetaling eller en frekvens i endring (HUNT 5 av 4,
+#      SOAG 2 av 1), færre betyr et halvt år (vindusfella fra SATS).
+#   2. Ingen melding til Oslo Børs i perioden kaller en utbetaling
+#      ekstraordinær, spesiell eller tillegg. Det er dette som skiller Yara fra
+#      GSF, der vinduet inneholder salgsprovenyet fra Cermaq. Finner vi ikke
+#      meldingene, gjøres ingenting: et feilet oppslag er ikke bevis for at
+#      utbetalingene var ordinære.
+#   3. Tallet vi har avviker minst 30 % fra det som er betalt. Mindre avvik er
+#      ofte en nylig heving Yahoo har fått med seg og vinduet ikke, og da er
+#      Yahoos tall det ferskeste.
+#
+# Regelen virker begge veier: BOR viste 5,8 % for et selskap som betalte 2,9 %.
+BETALT_MIN_AVVIK = 0.3
+EKSTRA_VINDU_DAGER = 455   # meldingen kommer før ex-datoen, ofte flere måneder
+
+_EKSTRA_RE = re.compile(
+    r"\b(?:extra[\s-]?ordinary|special|additional|supplement(?:al|ary)|one[\s-]?off|"
+    r"ekstraordin\w*|ekstra|tilleggs?)\s+(?:cash\s+)?(?:dividends?|distributions?|utbytte|utdeling\w*)"
+    r"|\btilleggsutbytte\b"
+    r"|\bas\s+(?:an?\s+)?(?:extra[\s-]?ordinary|special)\b",
+    re.I)
+
+
+def _har_ekstraordinaer(tekst):
+    """Sier teksten at en utbetaling er ekstraordinær? Nektende form teller ikke."""
+    if not tekst:
+        return False
+    return any(not _NEKTET_RE.search(tekst[max(0, m.start() - 60):m.start()])
+               for m in _EKSTRA_RE.finditer(tekst))
+
+
+def ekstraordinaer_i_vindu(ticker, i_dag=None):
+    """True når en utbyttemelding fra perioden kaller en utbetaling ekstraordinær.
+
+    False når meldingene er lest og ingen gjør det, ``UKJENT`` når de ikke
+    kunne leses, eller når utstederen ikke har en eneste utbyttemelding i
+    perioden. Bare titler som handler om utbytte eller utdeling åpnes, så
+    «Extraordinary General Meeting» alene teller ikke.
+    """
+    i_dag = i_dag or datetime.date.today()
+    grense = (i_dag - datetime.timedelta(days=EKSTRA_VINDU_DAGER)).isoformat()
+    lest = 0
+    try:
+        for msg in _newsweb_meldinger(ticker):
+            dato = (msg.get("publishedTime") or "")[:10]
+            if dato < grense:
+                break
+            tittel = msg.get("title") or ""
+            if not re.search(r"dividend|distribution|utbytte|utdeling|capital", tittel, re.I):
+                continue
+            if _har_ekstraordinaer(tittel):
+                return True
+            lest += 1
+            if _har_ekstraordinaer(_newsweb_tekst(msg.get("messageId"))):
+                return True
+    except Exception as e:
+        print(f"    Advarsel NewsWeb ekstraordinært utbytte [{ticker}]: {e}")
+        return UKJENT
+    return False if lest else UKJENT
+
+
+def betalt_kan_bli_arsrate(a, i_dag=None):
+    """Vilkår 1 og 3 over, uten nettverk. Avgjør om NewsWeb skal spørres."""
+    i_dag = i_dag or datetime.date.today()
+    pris = a.get("pris") or 0
+    betalt = a.get("utbytte_12m") or 0
+    vist = a.get("utbytte_per_aksje") or 0
+    forventet = {"Årlig": 1, **UTBETALINGER_PR_AAR}.get(a.get("frekvens"))
+    if not forventet or pris <= 0 or betalt <= 0:
+        return False
+    if a.get("utbytte_12m_antall") != forventet:
+        return False
+    # Mer enn hele kursen på ett år er ikke en årsrate, uansett hva meldingen
+    # kaller det.
+    if betalt > pris:
+        return False
+    # Mer enn tre ganger selskapets beste hele år er en engangsutdeling også
+    # når meldingen ikke sier det. GSF kalte salgsprovenyet fra Cermaq bare
+    # «dividend», og betalt siste 12 mnd var 7,9 ganger det beste året før.
+    # Krever minst to hele år med utbytte, ellers ville en ny betaler (BNOR,
+    # PUBLI) blitt målt mot sitt første, halve år.
+    per_ar = a.get("utbytte_per_ar") or {}
+    tidligere = [v for v in per_ar.values() if v and v > 0] if isinstance(per_ar, dict) else []
+    if len(tidligere) >= 2 and betalt > 3 * max(tidligere):
+        return False
+    # Et kunngjort, vedtatt utbytte som kommer, er ferskere enn vinduet.
+    if (a.get("annonsert_utbytte") and (a.get("annonsert_ex") or "") >= i_dag.isoformat()
+            and not a.get("ex_forbehold")):
+        return False
+    return vist <= 0 or abs(betalt - vist) / vist >= BETALT_MIN_AVVIK
+
+
+def bruk_betalt_som_arsrate(a):
+    """Setter årsraten til det som er betalt siste 12 mnd. Muterer `a`."""
+    a["utbytte_per_aksje"] = round(a["utbytte_12m"], 2)
+    a["utbytte_yield"] = round(a["utbytte_12m"] / a["pris"] * 100, 2)
+    a["arsrate_kilde"] = "betalt_12m"
+
+
 def frekvens_label(dividends_per_year):
     """Estimer utbyttefrekvens basert på antall utbetalinger siste år."""
     if dividends_per_year >= 10:
@@ -4125,7 +4236,9 @@ def _lag_faq_seksjon(a, today):
             snitt_k = ""
         svar = (
             f"Direkteavkastningen (yield) for {ticker} er {_nf(yield_, 2)}%, beregnet som "
-            f"{_nf(upa, 2)} {valuta} i annualisert utbytte per aksje delt på aksjekursen. "
+            f"{_nf(upa, 2)} {valuta} i "
+            f"{'utbytte utbetalt de siste 12 månedene' if a.get('arsrate_kilde') == 'betalt_12m' else 'annualisert utbytte'}"
+            f" per aksje delt på aksjekursen. "
             f"{snitt_k} "
             f"Yield endres daglig fordi den er koblet til kursen: stiger kursen, faller yielden."
         ).strip()
@@ -4454,7 +4567,11 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     # nettopp den påstanden gal, så merket erstatter den framfor å stå ved
     # siden av — «annualisert usikker» sa to ting som ikke kan være sanne
     # samtidig.
-    upa_merknad  = ("" if delaar else
+    # Når årsraten er det som faktisk er betalt (se BETALT_MIN_AVVIK), er
+    # «annualisert» feil ord: ingenting er ganget opp.
+    upa_merknad  = (' <span class="kcard-note">siste 12 mnd</span>'
+                    if a.get("arsrate_kilde") == "betalt_12m" else
+                    "" if delaar else
                     ' <span class="kcard-note">annualisert</span>'
                     if frekvens in ("Kvartalsvis", "Halvårlig", "Månedlig") else "")
     snitt5  = a.get("snitt_yield_5ar") or 0
@@ -7878,6 +7995,23 @@ def main():
     for aksje in resultater:
         aksje.pop("_for_dnb", None)
     print(f"  NewsWeb rettet ex_dato for {nw_rettet} aksjer")
+
+    # ── Betalt siste 12 mnd som årsrate ──────────────────────────────────────
+    # Sist av alle stegene som setter årsraten, så DNB-overstyringen over ikke
+    # skriver tilbake over den. Se BETALT_MIN_AVVIK for regelen og hvorfor.
+    print("\nBetalt siste 12 mnd som årsrate...")
+    for aksje in resultater:
+        aksje.pop("arsrate_kilde", None)
+        if not betalt_kan_bli_arsrate(aksje):
+            continue
+        ekstra = ekstraordinaer_i_vindu(aksje["ticker"])
+        if ekstra is not False:
+            grunn = "ekstraordinær utbetaling i vinduet" if ekstra is True else "meldingene kunne ikke leses"
+            print(f"    {aksje['ticker']}: beholder {aksje.get('utbytte_yield')} % ({grunn})")
+            continue
+        for_ = aksje.get("utbytte_yield")
+        bruk_betalt_som_arsrate(aksje)
+        print(f"    {aksje['ticker']}: {for_} % → {aksje['utbytte_yield']} % (betalt siste 12 mnd)")
 
     # ── Tilbakebetaling av innbetalt kapital ──────────────────────────────────
     # Leser den samme nyeste meldingen som ex-dato-steget (mellomlagret), så

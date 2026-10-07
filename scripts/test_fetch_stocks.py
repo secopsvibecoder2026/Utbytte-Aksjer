@@ -1359,6 +1359,116 @@ class TestHentNewswebExDato(unittest.TestCase):
 
 
 
+class TestBetaltSomArsrate(unittest.TestCase):
+    """Betalt siste 12 mnd som årsrate (2026-10-07). Tallene er fra datasettet."""
+
+    I_DAG = datetime.date(2026, 10, 7)
+
+    def _yara(self, **k):
+        a = {"ticker": "YAR", "pris": 410.30, "frekvens": "Årlig", "utbytte_per_aksje": 5.0,
+             "utbytte_yield": 1.22, "utbytte_12m": 22.0, "utbytte_12m_antall": 1,
+             "utbytte_per_ar": {"2021": 40.0, "2022": 40.0, "2023": 55.0, "2024": 5.0, "2025": 5.0}}
+        a.update(k)
+        return a
+
+    def test_yara_er_kandidat(self):
+        self.assertTrue(fs.betalt_kan_bli_arsrate(self._yara(), self.I_DAG))
+
+    def test_antall_maa_stemme_med_frekvensen(self):
+        # HUNT: fem utbetalinger i et kvartalsvis vindu er en ekstra utbetaling.
+        a = self._yara(frekvens="Kvartalsvis", utbytte_12m_antall=5)
+        self.assertFalse(fs.betalt_kan_bli_arsrate(a, self.I_DAG))
+        # Og færre er et halvt år.
+        self.assertFalse(fs.betalt_kan_bli_arsrate(self._yara(utbytte_12m_antall=0), self.I_DAG))
+
+    def test_uregelmessig_gir_ingen_regel(self):
+        self.assertFalse(fs.betalt_kan_bli_arsrate(self._yara(frekvens="Uregelmessig"), self.I_DAG))
+
+    def test_lite_avvik_beholder_tallet(self):
+        self.assertFalse(fs.betalt_kan_bli_arsrate(self._yara(utbytte_per_aksje=20.0), self.I_DAG))
+
+    def test_virker_begge_veier(self):
+        # BOR: viste 1,00, betalte 0,50.
+        a = self._yara(pris=17.2, utbytte_per_aksje=1.0, utbytte_12m=0.5,
+                       utbytte_per_ar={"2025": 0.8})
+        self.assertTrue(fs.betalt_kan_bli_arsrate(a, self.I_DAG))
+
+    def test_gsf_engangsutdeling_stoppes_av_historikken(self):
+        a = self._yara(ticker="GSF", pris=23.40, utbytte_per_aksje=8.34, utbytte_12m=35.64 / 2,
+                       utbytte_per_ar={"2022": 3.0, "2023": 4.5, "2024": 1.75, "2025": 0.0})
+        self.assertFalse(fs.betalt_kan_bli_arsrate(a, self.I_DAG))
+
+    def test_mer_enn_hele_kursen_stoppes(self):
+        a = self._yara(pris=23.40, utbytte_12m=35.64, utbytte_per_ar={})
+        self.assertFalse(fs.betalt_kan_bli_arsrate(a, self.I_DAG))
+
+    def test_ny_betaler_maales_ikke_mot_sitt_forste_aar(self):
+        # BNOR begynte i 2025; 180 kr mot 54 kr i det første, halve året.
+        a = self._yara(ticker="BNOR", pris=570.0, frekvens="Kvartalsvis", utbytte_12m_antall=4,
+                       utbytte_per_aksje=66.82, utbytte_12m=180.58,
+                       utbytte_per_ar={"2021": 0.0, "2025": 54.24})
+        self.assertTrue(fs.betalt_kan_bli_arsrate(a, self.I_DAG))
+
+    def test_kunngjort_kommende_utbytte_vinner(self):
+        a = self._yara(annonsert_utbytte=24.0, annonsert_ex="2026-11-01")
+        self.assertFalse(fs.betalt_kan_bli_arsrate(a, self.I_DAG))
+        # Et forslag som ikke er vedtatt, er ingen grunn til å vente.
+        a["ex_forbehold"] = "2026-10-20"
+        self.assertTrue(fs.betalt_kan_bli_arsrate(a, self.I_DAG))
+
+    def test_bruk_setter_begge_tallene_og_kilden(self):
+        a = self._yara()
+        fs.bruk_betalt_som_arsrate(a)
+        self.assertEqual((a["utbytte_per_aksje"], a["utbytte_yield"], a["arsrate_kilde"]),
+                         (22.0, 5.36, "betalt_12m"))
+
+
+class TestEkstraordinaerIVindu(unittest.TestCase):
+    """Teksten i selskapets melding skiller Yara fra KOG og HUNT."""
+
+    def test_formuleringer_som_teller(self):
+        for t in ["Special dividend\nDividend amount: 3.50",            # KOG
+                  "NOK 1.50 as extraordinary dividend",                 # HUNT
+                  "an additional dividend of NOK 2.00",
+                  "foreslår et ekstraordinært utbytte på 5 kroner",
+                  "styret har vedtatt tilleggsutbytte"]:
+            self.assertTrue(fs._har_ekstraordinaer(t), t)
+
+    def test_generalforsamling_og_nektelse_teller_ikke(self):
+        for t in ["subject to approval by the extraordinary general meeting",
+                  "Notice of Extraordinary General Meeting",
+                  "The Board does not propose any extraordinary dividend",
+                  "Dividend amount: NOK 22.00\nThe dividend is an ordinary dividend"]:
+            self.assertFalse(fs._har_ekstraordinaer(t), t)
+
+    def _kjor(self, meldinger, tekster, i_dag=datetime.date(2026, 10, 7)):
+        gml = fs._newsweb_meldinger, fs._newsweb_tekst
+        fs._newsweb_meldinger = meldinger
+        fs._newsweb_tekst = lambda mid: tekster.get(mid, "")
+        try:
+            return fs.ekstraordinaer_i_vindu("X", i_dag)
+        finally:
+            fs._newsweb_meldinger, fs._newsweb_tekst = gml
+
+    def test_ordinaer_melding_gir_false(self):
+        m = lambda t: [{"publishedTime": "2026-02-11T07:00", "title": "Key information relating to the cash dividend", "messageId": 1}]
+        self.assertIs(self._kjor(m, {1: "Dividend amount: NOK 22.00"}), False)
+
+    def test_spesialutbytte_gir_true(self):
+        m = lambda t: [{"publishedTime": "2026-02-11T07:00", "title": "Key information relating to the cash dividend", "messageId": 1}]
+        self.assertIs(self._kjor(m, {1: "Ordinary dividend 2.20. Special dividend 3.50."}), True)
+
+    def test_bare_gamle_meldinger_er_ukjent(self):
+        # Ingen utbyttemelding i perioden: vi vet ikke, og skal ikke gjette.
+        m = lambda t: [{"publishedTime": "2024-01-01T07:00", "title": "Key information relating to the cash dividend", "messageId": 1}]
+        self.assertIs(self._kjor(m, {}), fs.UKJENT)
+
+    def test_nettverksfeil_er_ukjent(self):
+        def feil(t):
+            raise OSError("nede")
+        self.assertIs(self._kjor(feil, {}), fs.UKJENT)
+
+
 class TestVelgArsrate(unittest.TestCase):
     """Vakten var blind for kutt. Tallene er ekte serier fra 24.09.2026."""
 
