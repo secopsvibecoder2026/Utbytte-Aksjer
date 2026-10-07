@@ -119,6 +119,12 @@ Harde krav. `valider_innledning.py` fanger de fleste, men ikke alle:
   utbytteevne i en annen aksjes tekst. Hovedtallet vårt for dem er kjent for
   høyt (Sjekk 10 i `scripts/valider_data.py`).
 
+**Finner du ikke nok du kan belegge, skriv kortere eller hopp over.** Små
+selskaper har ofte tynne kilder. Fyll aldri opp til 180 ord med generelle
+setninger eller gjetning. Står det `IKKE LAGRET` bare fordi teksten er for kort,
+og du ikke har mer verifiserbart stoff, la den gamle teksten stå og si det i
+rapporten.
+
 Skriv om en eksisterende tekst? Behold det som er riktig og konkret i den.
 Kontroller det likevel mot kilden: de gamle tekstene ble ikke kontrollert
 like strengt.
