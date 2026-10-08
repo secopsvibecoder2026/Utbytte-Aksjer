@@ -469,7 +469,11 @@
           var s = u * skF;
           var net = u - s;
           v += sAr;
-          if (drip) v += net; else v += u;
+          // Uten DRIP tas utbyttet ut og vokser ikke videre. «else v += u» la
+          // det inn likevel, så begge valgene ga samme sluttverdi og
+          // DRIP-gevinsten ble 0 (eller negativ med skatt). Samme regel som
+          // _simulerKalkulator() i appen.
+          if (drip) v += net;
           v *= (1 + vF);
           totU += u; totN += net; totS += s; totI += sAr;
           rows.push({ a: a, v: v, vR: v / Math.pow(1 + inF, a), u: u, net: net });
@@ -490,14 +494,19 @@
         var inF   = inflAktiv ? (parseFloat(document.getElementById('k-infl').value) || 0) / 100 : 0;
 
         var r    = sim(start, yF, vF, sAr, n, drip, skF, inF);
-        var rRef = sim(start, yF, vF, sAr, n, false, 0, 0);
+        // Samme skatt som hovedberegningen, så «uten DRIP» er det samme
+        // valget med utbyttet tatt ut.
+        var rRef = sim(start, yF, vF, sAr, n, false, skF, inF);
 
         document.getElementById('k-verdi').textContent   = fmt(r.v);
         document.getElementById('k-utbytte').textContent = fmt(r.rows[r.rows.length-1].u);
         document.getElementById('k-verdi-real').textContent  = inflAktiv ? 'Reell verdi: ' + fmt(r.rows[r.rows.length-1].vR) : '';
         document.getElementById('k-utbytte-netto').textContent = skattAktiv ? 'Netto: ' + fmt(r.rows[r.rows.length-1].net) : '';
         document.getElementById('k-innbetalt').textContent  = fmt(r.totI);
-        document.getElementById('k-drip-gevinst').textContent = drip ? fmt(r.v - rRef.v) : '–';
+        // Uten DRIP er utbyttet utbetalt, ikke tapt. Gevinsten er det
+        // reinvesteringen ga utover det: 65 330 kr, ikke 165 330 kr, for
+        // 100 000 kr i 20 år med 5 % (samme regel som dripGevinst() i appen).
+        document.getElementById('k-drip-gevinst').textContent = drip ? fmt(r.v - (rRef.v + rRef.totN)) : '–';
 
         var skKort = document.getElementById('k-skatt-kort');
         if (skattAktiv) {

@@ -77,6 +77,11 @@
     .dark .prose td { border-color: #374151; }
     .prose tr:nth-child(even) td { background: #f9fafb; }
     .dark .prose tr:nth-child(even) td { background: #111827; }
+    @media (max-width: 480px) {
+      .prose table { font-size: 0.82rem; }
+      .prose th, .prose td { padding: 0.5rem 0.3rem; }
+      .prose td { white-space: nowrap; }
+    }
     .callout {
       border-left: 4px solid #2563eb;
       background: #eff6ff;
@@ -143,6 +148,11 @@
     }
     .highlight-row td { background: #f0fdf4 !important; font-weight: 600; }
     .dark .highlight-row td { background: #052e16 !important; }
+    .les-ogsa-lenke {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
   </style>
 
   <script type="application/ld+json">
@@ -153,7 +163,7 @@
     "description": "Se hva som skjer når du reinvesterer utbyttet i stedet for å ta det ut som kontanter. Tabeller og eksempler viser rentes-rente-effekten over 5, 10, 15 og 20 år på Oslo Børs.",
     "url": "https://exday.no/artikler/reinvestering-av-utbytte/",
     "datePublished": "2026-05-24",
-    "dateModified": "2026-05-24",
+    "dateModified": "2026-10-08",
     "author": { "@type": "Organization", "name": "exday.no" },
     "publisher": {
       "@type": "Organization",
@@ -244,9 +254,9 @@
     </div>
     <h1 class="text-3xl font-bold leading-tight mb-4">Reinvestering av utbytte&nbsp;— rentes-rente-effekten over 20&nbsp;år</h1>
     <p class="text-gray-600 dark:text-gray-400 leading-relaxed text-lg">
-      Det er én enkel vane som skiller langsiktige utbytteinvestorer fra de som stagnerer: de reinvesterer utbyttet i stedet for å bruke det. Denne artikkelen viser deg i klartall hva rentes-rente-effekten faktisk betyr over 5, 10, 15 og 20&nbsp;år.
+      Når du reinvesterer utbyttet, kjøper du flere aksjer, og de gir selv utbytte året etter. Her er regnestykket over 5, 10, 15 og 20&nbsp;år: med og uten reinvestering, med ulike yield-nivåer, med månedlig sparing og etter skatt.
     </p>
-    <p class="text-xs text-gray-400 dark:text-gray-600 mt-4">24. mai 2026 · 10 min lesing</p>
+    <p class="text-xs text-gray-400 dark:text-gray-600 mt-4">24. mai 2026 · oppdatert 8. oktober 2026 · 10 min lesing</p>
   </header>
 
   <!-- INNHOLDSFORTEGNELSE -->
@@ -259,7 +269,7 @@
       <li style="margin-bottom:0.4rem;"><a href="#yield-variasjon">Betydningen av yield-nivået</a></li>
       <li style="margin-bottom:0.4rem;"><a href="#maanedlig-sparing">Månedlig sparing + reinvestering</a></li>
       <li style="margin-bottom:0.4rem;"><a href="#praktisk">Slik reinvesterer du i praksis på Oslo Børs</a></li>
-      <li style="margin-bottom:0.4rem;"><a href="#skatt">Skatt og reinvestering — hva du faktisk beholder</a></li>
+      <li style="margin-bottom:0.4rem;"><a href="#skatt">Skatt og reinvestering: hva du faktisk beholder</a></li>
       <li style="margin-bottom:0.4rem;"><a href="#fire">Reinvestering og veien til finansiell frihet</a></li>
       <li><a href="#sammendrag">Sammendrag</a></li>
     </ol>
@@ -270,53 +280,53 @@
     <!-- SEKSJON 1 -->
     <h2 id="hva-er-drip">Hva betyr det å reinvestere utbytte?</h2>
 
-    <p>Når et selskap du eier aksjer i betaler utbytte, settes pengene inn på kontoen din. Hva du gjør med dem er opp til deg. De to vanligste valgene er:</p>
+    <p>Når et selskap du eier aksjer i betaler utbytte, kommer pengene inn på kontoen din. Da har du to valg:</p>
 
     <ul>
-      <li><strong>Ta ut pengene</strong> — bruk utbyttet som inntekt, betalt til din bankkonto.</li>
-      <li><strong>Reinvestere</strong> — kjøp flere aksjer (i samme eller andre selskaper) med utbyttebeløpet.</li>
+      <li><strong>Ta ut pengene</strong> og bruke utbyttet som inntekt.</li>
+      <li><strong>Reinvestere</strong>, altså kjøpe flere aksjer for utbyttet, i samme selskap eller i andre.</li>
     </ul>
 
-    <p>Reinvestering betyr kort sagt at utbyttet ditt jobber for deg i stedet for å ligge stille. Hver krone reinvestert kjøper nye aksjer, som igjen gir utbytte neste år — og det utbyttet reinvesteres igjen. Over tid bygger dette seg opp til en selvforsterkende effekt som er vanskelig å stoppe.</p>
+    <p>Reinvesterer du, gir de nye aksjene også utbytte neste år, og det utbyttet kan du sette inn igjen. Grunnlaget som utbyttet beregnes av, blir større for hvert år. Det er rentes rente, bare med aksjer i stedet for en bankkonto.</p>
 
-    <p>I USA kalles dette gjerne <em>DRIP</em> (Dividend Reinvestment Plan), og mange meglere tilbyr automatisk reinvestering. I Norge har du ikke den samme automatikken hos de fleste nettmeglere, men prinsippet er det samme — du kjøper manuelt for utbyttebeløpet etter at det er utbetalt.</p>
+    <p>Ett forbehold hører med. Kursen justeres normalt ned omtrent med utbyttet på <a href="/artikler/hva-er-ex-dato/" class="text-green-600 dark:text-green-400 hover:underline">ex-dato</a>, så utbyttet kommer ikke i tillegg til verdien av aksjen. Det er en del av avkastningen som enten tas ut eller blir stående. Reinvestering betyr at den blir stående.</p>
+
+    <p>I USA kalles dette gjerne <em>DRIP</em> (Dividend Reinvestment Plan), og mange meglere der reinvesterer utbyttet automatisk. I Norge finnes ikke den automatikken for enkeltaksjer. Nordnet skrev selv i mai 2026 at ingen aktører her i landet tilbyr en slik «DRIP-knapp». Prinsippet er det samme, men du må kjøpe selv når utbyttet er utbetalt. Det nærmeste du kommer automatikk, er et akkumulerende fond, der utbyttet blir værende i fondet.</p>
 
     <!-- SEKSJON 2 -->
     <h2 id="rentes-rente">Slik fungerer rentes-rente-effekten</h2>
 
-    <p>Albert Einstein skal visstnok ha kalt rentes rente for verdens åttende underverk — selv om det er usikkert om han faktisk sa det. Uansett: matematikken bak er ubestridelig kraftfull.</p>
-
-    <p>Grunnformelen er:</p>
+    <p>Sitatet om rentes rente som «verdens åttende underverk» blir ofte tillagt Albert Einstein, men det finnes ingen kilde på at han sa det. Regnestykket står seg uansett. Grunnformelen er:</p>
 
     <div class="formula-box">
       Fremtidig verdi = Startbeløp × (1 + avkastning)^antall år
     </div>
 
-    <p>Nøkkelen er eksponenten. Med enkel rente (ingen reinvestering) vokser porteføljen lineært — samme kronetilskudd hvert år. Med rentes rente vokser porteføljen eksponentielt — avkastningen øker i absolutte kroner hvert eneste år fordi grunnlaget blir større.</p>
+    <p>Det er eksponenten som gjør utslaget. Uten reinvestering får du det samme beløpet hvert år. Med reinvestering blir avkastningen i kroner større for hvert år som går, fordi den regnes av et større beløp.</p>
 
-    <p>Tenk deg at du har 100&nbsp;000 kr investert med 5&nbsp;% total avkastning (kursoppgang + utbytte):</p>
+    <p>Tenk deg at du har 100&nbsp;000&nbsp;kr investert med 5&nbsp;% samlet avkastning i året (kursoppgang pluss utbytte), og at alt blir stående:</p>
 
     <ul>
-      <li>År 1: du tjener 5&nbsp;000 kr</li>
-      <li>År 10: du tjener 8&nbsp;144 kr (på et grunnlag på 162&nbsp;889 kr)</li>
-      <li>År 20: du tjener 13&nbsp;266 kr (på et grunnlag på 265&nbsp;330 kr)</li>
+      <li>År 1: du tjener 5&nbsp;000&nbsp;kr (på et grunnlag på 100&nbsp;000&nbsp;kr)</li>
+      <li>År 10: du tjener 7&nbsp;757&nbsp;kr (på et grunnlag på 155&nbsp;133&nbsp;kr)</li>
+      <li>År 20: du tjener 12&nbsp;635&nbsp;kr (på et grunnlag på 252&nbsp;695&nbsp;kr)</li>
     </ul>
 
-    <p>Avkastningen i år 20 er nesten tre ganger så stor i kroner som i år 1 — uten at du har gjort noe annet enn å la utbyttet reinvesteres.</p>
+    <p>Avkastningen i år 20 er over 2,5 ganger så stor i kroner som i år 1, uten at du har satt inn en krone til.</p>
 
     <div class="callout callout-green">
-      <strong>Nøkkelpoeng:</strong> Rentes-rente-effekten er ikke lineær. De siste 5 årene av en 20-årsperiode bidrar like mye som de første 10. Det lønner seg å starte tidlig og holde seg investert.
+      Effekten er ikke lineær. Med 5&nbsp;% i året vokser porteføljen med 57&nbsp;437&nbsp;kr de siste fem årene av en 20-årsperiode. Det er nesten like mye som de 62&nbsp;889 kronene den vokste de første ti årene. Jo lenger pengene står, desto mer av veksten kommer mot slutten.
     </div>
 
     <!-- SEKSJON 3 -->
     <h2 id="talleksempel">Talleksempel: 100&nbsp;000&nbsp;kr over 20&nbsp;år</h2>
 
-    <p>La oss sammenligne tre scenarioer for en startinvestering på 100&nbsp;000&nbsp;kr med en utbytteyield på 5&nbsp;% og ingen kursoppgang (konservativt — bare utbytteeffekten):</p>
+    <p>Her er tre måter å håndtere utbyttet på, for en startinvestering på 100&nbsp;000&nbsp;kr med 5&nbsp;% utbytteyield og ingen kursoppgang. Det er et forsiktig anslag som bare viser hva utbyttet gjør:</p>
 
     <ol>
-      <li><strong>Ingen reinvestering</strong> — utbyttet tas ut hvert år</li>
-      <li><strong>Full reinvestering</strong> — alt utbytte kjøpes tilbake i aksjer</li>
-      <li><strong>Delvis reinvestering (50&nbsp;%)</strong> — halvparten reinvesteres, halvparten tas ut</li>
+      <li><strong>Ingen reinvestering:</strong> utbyttet tas ut hvert år.</li>
+      <li><strong>Full reinvestering:</strong> alt utbytte brukes til å kjøpe nye aksjer.</li>
+      <li><strong>Delvis reinvestering (50&nbsp;%):</strong> halvparten reinvesteres, halvparten tas ut.</li>
     </ol>
 
     <table>
@@ -344,30 +354,30 @@
         <tr>
           <td>10</td>
           <td>100 000 kr</td>
-          <td>128 009 kr</td>
+          <td>128 008 kr</td>
           <td>162 889 kr</td>
         </tr>
         <tr>
           <td>15</td>
           <td>100 000 kr</td>
-          <td>144 914 kr</td>
+          <td>144 830 kr</td>
           <td>207 893 kr</td>
         </tr>
         <tr class="highlight-row">
           <td>20</td>
           <td>100 000 kr</td>
-          <td>164 061 kr</td>
+          <td>163 862 kr</td>
           <td>265 330 kr</td>
         </tr>
       </tbody>
     </table>
 
-    <p>Etter 20 år er porteføljens verdi ved full reinvestering <strong>265&nbsp;330&nbsp;kr</strong> — mot 100&nbsp;000&nbsp;kr uten reinvestering. Det er en forskjell på 165&nbsp;330&nbsp;kr, bare fra utbytte på 100&nbsp;000 kr startet. I tillegg har du selvfølgelig mottatt 25&nbsp;000&nbsp;kr i kontantutbytte hvert år (5&nbsp;000 × 5 år) i scenarioet uten reinvestering — men den pengene ligger ikke i markedet og arbeider videre.</p>
+    <p>Tabellen viser verdien av aksjene. Etter 20&nbsp;år er porteføljen med full reinvestering verdt <strong>265&nbsp;330&nbsp;kr</strong>, mot 100&nbsp;000&nbsp;kr uten reinvestering. Den som tok ut utbyttet, har riktignok fått 5&nbsp;000&nbsp;kr i året, til sammen 100&nbsp;000&nbsp;kr, men de pengene har ikke gitt mer avkastning. Legger du dem sammen med aksjene, blir det 200&nbsp;000 mot 265&nbsp;330&nbsp;kr. Forskjellen på 65&nbsp;330&nbsp;kr er det rentes rente har gitt. Den som reinvesterte halvparten, har 163&nbsp;862&nbsp;kr i aksjer og har tatt ut 63&nbsp;862&nbsp;kr underveis.</p>
 
-    <p>Legg merke til at ved full reinvestering skjer det meste av veksten sent: fra år 15 til år 20 øker porteføljen med over 57&nbsp;000&nbsp;kr, mens den fra år 0 til år 5 bare øker med 27&nbsp;628&nbsp;kr.</p>
+    <p>Med full reinvestering kommer det meste av veksten sent: fra år 15 til år 20 øker porteføljen med over 57&nbsp;000&nbsp;kr, mens den fra år 0 til år 5 bare øker med 27&nbsp;628&nbsp;kr.</p>
 
     <div class="callout">
-      <strong>Merk:</strong> Eksempelet over viser kun rentes-rente-effekten fra reinvestert utbytte uten kursoppgang. I virkeligheten vil norske utbytteaksjer også (forhåpentlig) stige i kurs over tid, noe som forsterker effekten ytterligere.
+      <strong>Merk:</strong> Eksempelet regner bare med utbyttet og ingen kursoppgang. Stiger kursene over tid, blir sluttsummen større, men det er ingen garanti for at de gjør det.
     </div>
 
     <!-- VERKTØY-CTA 1 -->
@@ -376,15 +386,15 @@
         <svg width="20" height="20" fill="none" stroke="white" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
       </div>
       <div>
-        <p class="font-semibold text-green-700 dark:text-green-400" style="margin:0;">Utbyttekalkulator — beregn din egen portefølje</p>
-        <p class="text-sm text-gray-600 dark:text-gray-400" style="margin:0.2rem 0 0;">Legg inn startbeløp, yield og antall år for å se nøyaktig hva reinvestering gir deg.</p>
+        <p class="font-semibold text-green-700 dark:text-green-400" style="margin:0;">Utbyttekalkulator: regn på din egen portefølje</p>
+        <p class="text-sm text-gray-600 dark:text-gray-400" style="margin:0.2rem 0 0;">Legg inn startbeløp, yield, månedlig sparing og antall år, og se hvordan porteføljen vokser når utbyttet reinvesteres.</p>
       </div>
     </a>
 
     <!-- SEKSJON 4 -->
     <h2 id="yield-variasjon">Betydningen av yield-nivået</h2>
 
-    <p>Yield-nivået er ikke likegyldig — det avgjør farten på snøballen. Her er en sammenligning av ulike startyields med full reinvestering og 100&nbsp;000&nbsp;kr startbeløp over 20&nbsp;år:</p>
+    <p>Yield-nivået bestemmer hvor fort porteføljen vokser. Her er 100&nbsp;000&nbsp;kr med full reinvestering og ulike yielder over 20&nbsp;år, fortsatt uten kursoppgang:</p>
 
     <table>
       <thead>
@@ -435,25 +445,27 @@
       </tbody>
     </table>
 
-    <p>En yield på 10&nbsp;% kan virke attraktiv, men slike nivåer er sjelden bærekraftige over 20&nbsp;år uten at selskapet kutter utbyttet. Sektorer som shipping og offshore kan svinge mye. Et mer realistisk scenario for en norsk diversifisert utbytteportefølje er 4–6&nbsp;%.</p>
+    <p>Tabellen forutsetter at yielden holder seg i 20&nbsp;år, og ved 10&nbsp;% er det en sterk forutsetning. Av aksjene i katalogen vår som betalte 10&nbsp;% eller mer de siste tolv månedene (målt 8. oktober 2026), var elleve av seksten innen shipping og energitjenester. Der følger utbyttet rater og oppdragsmengde, og det svinger mye fra år til år.</p>
 
-    <p>Legg merke til spranget fra 5&nbsp;% til 7&nbsp;% yield: over 20 år gir det en forskjell på over 120&nbsp;000&nbsp;kr på en startinvestering på 100&nbsp;000&nbsp;kr. Det er derfor kvaliteten på aksjeplukket teller enormt over lang sikt.</p>
+    <p>Spranget fra 5 til 7&nbsp;% yield gir 121&nbsp;639&nbsp;kr mer etter 20&nbsp;år på en startinvestering på 100&nbsp;000&nbsp;kr. Det forutsetter at de 7 prosentene faktisk blir betalt hvert år. Et utbytte som kuttes, gir ingenting å reinvestere.</p>
 
-    <h3>Yield på Oslo Børs — hva er realistisk?</h3>
+    <h3>Yield på Oslo Børs: hva er realistisk?</h3>
 
-    <p>På Oslo Børs finner du en rekke sektorer med historisk stabil yield på 4–7&nbsp;%:</p>
+    <p>Prosenttallene under er det selskapene faktisk betalte de siste tolv månedene, målt mot sluttkursen 8.&nbsp;oktober 2026. Ekstraordinære utbytter er med, så noen selskaper ligger høyere enn de pleier.</p>
     <ul>
-      <li><strong>Sparebanker</strong> — typisk 5–8&nbsp;%, stabile over tid</li>
-      <li><strong>Eiendomsselskaper (REIT-lignende)</strong> — 4–7&nbsp;%, avhengig av rentenivå</li>
-      <li><strong>Energi (Equinor, DNO)</strong> — varierer mye med oljeprisen</li>
-      <li><strong>Sjømat/havbruk (Lerøy, Salmar)</strong> — høye år men ujevnt</li>
-      <li><strong>Diversifiserte holdingselskaper</strong> — 3–5&nbsp;%, jevnere vekst</li>
+      <li><strong>Sparebanker:</strong> medianen for de 28 sparebankene i katalogen var 6,4&nbsp;%, og 22 av dem lå mellom 4,5 og 8&nbsp;%. Også bankutbytte kan stanse. I 2020 la Finansdepartementet til grunn at bankene ikke skulle betale utbytte, og DNB betalte ikke noe det året.</li>
+      <li><strong>Eiendom:</strong> de tre eiendomsselskapene vi følger, lå mellom 2,4 og 4,9&nbsp;%. Utbyttet er følsomt for rentenivået. Entra betalte 5,20&nbsp;kr per aksje i 2022 og ingenting i 2024.</li>
+      <li><strong>Energi (Equinor, DNO):</strong> utbyttet følger olje- og gassprisen og kan endre seg mye fra ett år til det neste.</li>
+      <li><strong>Sjømat/havbruk (Lerøy, SalMar):</strong> ujevnt, også mellom selskapene. Lerøy har betalt 2,50&nbsp;kr per aksje hvert år fra 2022 til 2026, mens SalMar gikk fra 22&nbsp;kr i 2025 til 10&nbsp;kr i 2026.</li>
+      <li><strong>Shipping:</strong> medianen var 7,4&nbsp;%, men spennet gikk fra 1,8 til nesten 20&nbsp;%.</li>
     </ul>
+
+    <p>For alle utbyttebetalende aksjer i katalogen under ett var medianen 5,8&nbsp;%. Eksemplenes 5&nbsp;% ligger altså litt under det.</p>
 
     <!-- SEKSJON 5 -->
     <h2 id="maanedlig-sparing">Månedlig sparing + reinvestering</h2>
 
-    <p>Rentes-rente-effekten er kraftfull alene — men kombinert med jevnlig innskudd blir den enda mer dramatisk. La oss se hva som skjer om du starter med 100&nbsp;000&nbsp;kr og i tillegg setter inn 2&nbsp;000&nbsp;kr per måned, med full reinvestering av utbytte på 5&nbsp;%:</p>
+    <p>Effekten blir større når du i tillegg sparer fast. Her starter du med 100&nbsp;000&nbsp;kr og setter inn 2&nbsp;000&nbsp;kr i måneden, med full reinvestering av 5&nbsp;% utbytte og ingen kursoppgang. Innskuddene er regnet som jevnt fordelt gjennom året, slik utbyttekalkulatoren vår også gjør:</p>
 
     <table>
       <thead>
@@ -468,51 +480,51 @@
         <tr>
           <td>5</td>
           <td>127 628 kr</td>
-          <td>268 867 kr</td>
-          <td>+141 239 kr</td>
+          <td>263 559 kr</td>
+          <td>+135 931 kr</td>
         </tr>
         <tr>
           <td>10</td>
           <td>162 889 kr</td>
-          <td>468 994 kr</td>
-          <td>+306 105 kr</td>
+          <td>472 306 kr</td>
+          <td>+309 416 kr</td>
         </tr>
         <tr>
           <td>15</td>
           <td>207 893 kr</td>
-          <td>740 581 kr</td>
-          <td>+532 688 kr</td>
+          <td>738 725 kr</td>
+          <td>+530 833 kr</td>
         </tr>
         <tr class="highlight-row">
           <td>20</td>
           <td>265 330 kr</td>
-          <td>1 107 019 kr</td>
-          <td>+841 689 kr</td>
+          <td>1 078 752 kr</td>
+          <td>+813 422 kr</td>
         </tr>
       </tbody>
     </table>
 
-    <p>Med bare 2&nbsp;000&nbsp;kr ekstra i måneden (totalt 480&nbsp;000&nbsp;kr innskutt over 20&nbsp;år) når porteføljen over 1&nbsp;million — og det meste av den millionen er avkastning fra reinvestert utbytte.</p>
+    <p>Med 2&nbsp;000&nbsp;kr ekstra i måneden passerer porteføljen 1&nbsp;million etter 20&nbsp;år. Av det har du selv satt inn 580&nbsp;000&nbsp;kr: 100&nbsp;000 ved start og 480&nbsp;000 i månedlige innskudd. Resten, nesten 500&nbsp;000&nbsp;kr, er utbytte som er reinvestert og har gitt nytt utbytte.</p>
 
     <div class="callout callout-green">
-      <strong>Poeng:</strong> Konsistens slår beløp. Det er bedre å investere jevnlig, også i dårlige måneder, enn å vente på det perfekte tidspunktet. Reinvestering automatiserer og forsterker dette.
+      Over 20&nbsp;år betyr de faste innskuddene mer enn startbeløpet. Av sluttsummen kommer 813&nbsp;422&nbsp;kr fra månedssparingen og avkastningen på den, mot 265&nbsp;330&nbsp;kr fra startbeløpet.
     </div>
 
     <!-- SEKSJON 6 -->
     <h2 id="praktisk">Slik reinvesterer du i praksis på Oslo Børs</h2>
 
-    <p>I motsetning til USA finnes det ikke automatisk DRIP-tjeneste hos norske nettmeglere som Nordnet eller DNB Investor. Reinvestering skjer manuelt — men rutinen er enkel:</p>
+    <p>Siden ingen norsk megler reinvesterer utbyttet på enkeltaksjer for deg, må du gjøre det for hånd. Rutinen er enkel:</p>
 
     <ol>
-      <li><strong>Følg ex-datoene</strong> — du må eie aksjen <em>dagen før</em> ex-dato for å motta utbytte. Se <a href="/utbyttekalender/" style="color:#16a34a;">utbyttekalenderen på exday.no</a> for kommende utbetalinger.</li>
-      <li><strong>Vent på utbetalingen</strong> — typisk 2–5 virkedager etter ex-dato.</li>
-      <li><strong>Kjøp mer</strong> — bruk utbyttebeløpet til å kjøpe nye aksjer. Du kan kjøpe i samme selskap, eller spre det over porteføljen etter din ønskede sektorvekting.</li>
-      <li><strong>Gjenta</strong> — bygg vanen. De fleste norske utbytteaksjer betaler én gang i året (på generalforsamlingen om våren), noen halvårlig eller kvartalsvis.</li>
+      <li><strong>Følg ex-datoene.</strong> Du må ha kjøpt aksjen senest dagen før ex-dato for å få utbyttet. <a href="/utbyttekalender/" class="text-green-600 dark:text-green-400 hover:underline">Utbyttekalenderen på exday.no</a> viser kommende ex-datoer.</li>
+      <li><strong>Vent på utbetalingen.</strong> Pengene kommer noen dager til et par uker etter ex-dato, og datoen står i selskapets melding til Oslo Børs. Blant de ni selskapene som hadde kunngjort både ex-dato og betalingsdato 8.&nbsp;oktober 2026, gikk det mellom 4 og 13 dager.</li>
+      <li><strong>Kjøp mer.</strong> Bruk utbyttet til å kjøpe nye aksjer, i samme selskap eller fordelt over porteføljen etter sektorvektingen du har valgt. Har megleren din minstekurtasje, kan den spise en merkbar del av et lite beløp. Da kan det være bedre å samle opp flere utbetalinger før du kjøper.</li>
+      <li><strong>Gjenta.</strong> I katalogen vår betaler <!--N:arlig-->77<!--/N--> aksjer én gang i året, <!--N:halvarlig-->18<!--/N--> halvårlig, <!--N:kvartalsvis-->30<!--/N--> kvartalsvis og <!--N:manedlig-->2<!--/N--> hver måned. Årlig utbytte vedtas på generalforsamlingen om våren, og nesten alle de årlige betalerne har de siste årene gått ex-utbytte mellom mars og juni.</li>
     </ol>
 
     <h3>Tips: rebalansér samtidig</h3>
 
-    <p>Reinvesteringstidspunktet er et naturlig tidspunkt å sjekke om porteføljen har driftet fra målvektingen din. Har Energi-andelen vokst seg for stor? Bruk utbyttet til å kjøpe mer av sektoren som er undervektet i stedet. Dette gir deg både reinvestering og rebalansering i én operasjon — uten at du trenger å selge noe.</p>
+    <p>Når utbyttet skal reinvesteres, er det et naturlig tidspunkt å sjekke om porteføljen har drevet bort fra målvektingen din. Har energiandelen vokst seg for stor, kan utbyttet gå til sektoren som er undervektet. Da rebalanserer du uten å selge noe, og på en vanlig aksjekonto slipper du også å realisere en gevinst og betale skatt av den.</p>
 
     <!-- VERKTØY-CTA 2 -->
     <a href="/verktoy/sektorrebalansering/" class="tool-cta" style="text-decoration:none;">
@@ -521,69 +533,81 @@
       </div>
       <div>
         <p class="font-semibold text-green-700 dark:text-green-400" style="margin:0;">Sektorrebalanseringsverktøy</p>
-        <p class="text-sm text-gray-600 dark:text-gray-400" style="margin:0.2rem 0 0;">Legg inn faktisk verdi per sektor og målvekter — få opp nøyaktig kjøps- og salgsbeløp.</p>
+        <p class="text-sm text-gray-600 dark:text-gray-400" style="margin:0.2rem 0 0;">Legg inn verdien per sektor og målvektene dine, og se hvor mye du må kjøpe eller selge.</p>
       </div>
     </a>
 
     <!-- SEKSJON 7 -->
-    <h2 id="skatt">Skatt og reinvestering — hva du faktisk beholder</h2>
+    <h2 id="skatt">Skatt og reinvestering: hva du faktisk beholder</h2>
 
-    <p>Reinvestering er ikke gratis i Norge. Hver gang du mottar utbytte på en vanlig VPS-konto, er det skattepliktig med en effektiv sats på <strong>37,84&nbsp;%</strong> (etter skjermingsfradrag). Det betyr at du ikke reinvesterer hele utbyttet — bare det som er igjen etter skatt.</p>
+    <p>På en vanlig aksjekonto er ikke reinvestering skattefri. Utbyttet skattlegges det året du får det. Det som overstiger skjermingsfradraget, ganges med 1,72 og skattlegges med 22&nbsp;%, og det gir en effektiv sats på <strong>37,84&nbsp;%</strong> for 2025 og 2026. Du reinvesterer bare det som er igjen etter skatt.</p>
 
-    <p>La oss justere eksempelet fra seksjon 3 for skatt (uten skjermingsfradrag, for enkelhetens skyld):</p>
+    <p>Skjermingsfradraget er inngangsverdien på aksjen, pluss eventuell ubenyttet skjerming fra tidligere år, ganget med skjermingsrenten. Den delen av utbyttet er skattefri. Skatteetaten fastsetter renten for hvert år i januar året etter. Den var 1,7&nbsp;% for 2022, 3,2&nbsp;% for 2023, 3,9&nbsp;% for 2024 og 3,6&nbsp;% for 2025.</p>
+
+    <p>Slik blir talleksempelet over med skatt. Den ene kolonnen ser bort fra skjermingsfradraget, den andre bruker 3,6&nbsp;% skjermingsrente hvert år. Kursen er fortsatt flat, så inngangsverdien er lik verdien av aksjene:</p>
 
     <table>
       <thead>
         <tr>
           <th>Yield</th>
-          <th>Effektiv yield etter 37,84&nbsp;% skatt</th>
-          <th>Verdi etter 20 år (100 000 kr start)</th>
+          <th>Yield etter skatt, uten skjerming</th>
+          <th>Verdi etter 20 år, uten skjerming</th>
+          <th>Verdi etter 20 år, med skjerming</th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td>4&nbsp;%</td>
           <td>2,49&nbsp;%</td>
-          <td>163 800 kr</td>
+          <td>163 400 kr</td>
+          <td>212 800 kr</td>
         </tr>
         <tr class="highlight-row">
           <td>5&nbsp;%</td>
           <td>3,11&nbsp;%</td>
-          <td>184 500 kr</td>
+          <td>184 400 kr</td>
+          <td>239 800 kr</td>
         </tr>
         <tr>
           <td>7&nbsp;%</td>
           <td>4,35&nbsp;%</td>
-          <td>234 200 kr</td>
+          <td>234 400 kr</td>
+          <td>303 800 kr</td>
         </tr>
       </tbody>
     </table>
 
-    <p>Skatten biter merkbart — men reinvestering er fortsatt langt bedre enn å ta ut pengene og la dem stå i kontanter. Og skjermingsfradraget skjermer en del av kostprisen fra skatt hvert år — skjermingsrenten har de siste årene ligget rundt 3,5–4&nbsp;% (3,6&nbsp;% for 2025, 3,9&nbsp;% for 2024).</p>
+    <p>Uten skatt ble 5&nbsp;% til 265&nbsp;330&nbsp;kr. Skjermingsfradraget henter inn over to tredeler av det skatten tar, fordi bare den delen av yielden som ligger over skjermingsrenten, blir skattlagt i eksempelet. I et år med lav skjermingsrente, som 2022, er fradraget mindre.</p>
+
+    <p>Noen selskaper betaler tilbake innbetalt kapital i stedet for utbytte. Det er ikke utbytte og skattlegges ikke når du får pengene. Beløpet trekkes i stedet fra inngangsverdien og skjermingsgrunnlaget på aksjene, så skatten kommer som en større gevinst den dagen du selger. Hele beløpet kan derfor reinvesteres med en gang. Aksjesidene på exday.no sier fra når selskapets siste utbetaling var tilbakebetaling av kapital.</p>
 
     <h3>Aksjesparekonto (ASK) og reinvestering</h3>
 
-    <p>Har du aksjer i en <strong>aksjesparekonto (ASK)</strong>, er situasjonen annerledes: utbytte beskattes <em>ikke</em> løpende. Det legges i stedet til inngangsverdi for ASK-kontoen og beskattes først når du tar penger <em>ut</em> av kontoen. Dette gjør ASK til den overlegent beste kontoen for reinvestering — utbyttet reinvesteres i praksis brutto, uten skattetrekk.</p>
+    <p>Har du aksjene på en <strong>aksjesparekonto (ASK)</strong>, skattlegges ikke utbyttet når det kommer. Det blir stående på kontoen, og du kan reinvestere hele beløpet. Skatten kommer når du tar ut mer enn du har satt inn, med den samme effektive satsen. Utbyttet regnes ikke som innskudd, og skjermingsfradraget på ASK beregnes av det laveste innskuddet i løpet av året, ikke av utbyttet du har reinvestert.</p>
+
+    <p>Fordelen er at skatten kommer senere, ikke at satsen blir lavere. Regnet som over, med 5&nbsp;% yield og 3,6&nbsp;% skjermingsrente, sitter du igjen med om lag 241&nbsp;700&nbsp;kr etter skatt hvis du tar alt ut av ASK etter 20&nbsp;år, mot 239&nbsp;800&nbsp;kr på vanlig konto. Med 7&nbsp;% yield blir forskjellen rundt 13&nbsp;500&nbsp;kr. Utsettelsen er mer verdt jo høyere utbyttet er og jo lenger pengene står.</p>
+
+    <p>Aksjer i selskaper som er hjemmehørende utenfor EØS, kan ikke ligge på ASK. Det gjelder blant annet flere shippingselskaper registrert på Bermuda.</p>
 
     <div class="callout callout-green">
-      <strong>Anbefaling:</strong> Hvis du planlegger å reinvestere utbytte over mange år, gjør det i en aksjesparekonto (ASK). Den utsatte beskatningen gir deg full rentes-rente-effekt på hele utbyttet — ikke bare det som er igjen etter 37,84&nbsp;% skatt.
+      Kalkulatoren «ASK eller vanlig konto?» i <a href="/app/" class="text-green-700 dark:text-green-400 underline">appen</a> (Verktøy → Kalkulator) regner ut forskjellen med dine egne tall.
     </div>
 
-    <p>Les mer om skattereglene i artikkelen <a href="/artikler/utbytte-og-skatt/" style="color:#16a34a;">Utbytte og skatt i Norge</a> og <a href="/artikler/aksjesparekonto-ask/" style="color:#16a34a;">Aksjesparekonto (ASK) for utbytteinvestorer</a>.</p>
+    <p>Les mer om skattereglene i artikkelen <a href="/artikler/utbytte-og-skatt/" class="text-green-600 dark:text-green-400 hover:underline">Utbytte og skatt i Norge</a> og <a href="/artikler/aksjesparekonto-ask/" class="text-green-600 dark:text-green-400 hover:underline">Aksjesparekonto (ASK) for utbytteinvestorer</a>.</p>
 
     <!-- SEKSJON 8 -->
     <h2 id="fire">Reinvestering og veien til finansiell frihet</h2>
 
-    <p>FIRE-begrepet (<em>Financial Independence, Retire Early</em>) handler om å bygge en portefølje stor nok til at utbytteinntekten — eller avkastningen — dekker dine levekostnader. Reinvestering er motoren i denne strategien.</p>
+    <p>FIRE (<em>Financial Independence, Retire Early</em>) handler om å bygge en portefølje som er stor nok til at utbyttet, eller avkastningen, dekker levekostnadene dine. Mens du bygger den opp, er det innskuddene og det reinvesterte utbyttet som får den til å vokse.</p>
 
-    <p>Den vanligste tommelfingerregelen er <strong>4&nbsp;%-regelen</strong>: ta du 4&nbsp;% av porteføljens verdi i uttaksfase, tærer du statistisk sett ikke på kapitalen. For å leve av 30&nbsp;000&nbsp;kr i måneden trenger du altså:</p>
+    <p>Den mest brukte tommelfingerregelen er <strong>4&nbsp;%-regelen</strong>. Den kommer fra amerikanske studier av historisk avkastning, først William Bengen i 1994 og senere Trinity-studien. Tok du ut 4&nbsp;% av porteføljen det første året og justerte beløpet for inflasjon etterpå, varte pengene i minst 30&nbsp;år i nesten alle periodene som ble testet. Regelen lover ikke at kapitalen blir stående urørt, og den bygger på amerikanske aksjer og obligasjoner. For å leve av 30&nbsp;000&nbsp;kr i måneden før skatt trenger du etter regelen:</p>
 
     <div class="formula-box">
       Nødvendig portefølje = Månedlig forbruk × 12 / 0,04<br>
       = 30 000 × 12 / 0,04 = <strong>9 000 000 kr</strong>
     </div>
 
-    <p>Det virker som mye. Men se hva reinvestering gjør med tidslinjen:</p>
+    <p>Det virker som mye. Tabellen viser hvor lang tid det tar med 5&nbsp;% utbytte som reinvesteres, månedlige innskudd og ingen kursoppgang, før skatt og uten justering for inflasjon:</p>
 
     <table>
       <thead>
@@ -599,30 +623,30 @@
           <td>500 000 kr</td>
           <td>5 000 kr/mnd</td>
           <td>5&nbsp;%</td>
-          <td>~33 år</td>
+          <td>~37 år</td>
         </tr>
         <tr>
           <td>500 000 kr</td>
           <td>10 000 kr/mnd</td>
           <td>5&nbsp;%</td>
-          <td>~24 år</td>
+          <td>~28 år</td>
         </tr>
         <tr class="highlight-row">
           <td>500 000 kr</td>
           <td>15 000 kr/mnd</td>
           <td>5&nbsp;%</td>
-          <td>~20 år</td>
+          <td>~23 år</td>
         </tr>
         <tr>
           <td>1 000 000 kr</td>
           <td>10 000 kr/mnd</td>
           <td>5&nbsp;%</td>
-          <td>~21 år</td>
+          <td>~25 år</td>
         </tr>
       </tbody>
     </table>
 
-    <p>Legg merke til at det å øke månedlig sparing fra 10 000 til 15 000 kr kutter 4 år fra planen. Rentes-rente-effekten belønner deg ikke bare for avkastning, men også for å tilføre mer kapital til snøballen tidligst mulig.</p>
+    <p>Øker du den månedlige sparingen fra 10&nbsp;000 til 15&nbsp;000&nbsp;kr, kommer du dit om lag fem år tidligere. Startbeløpet betyr mindre: å doble det fra 500&nbsp;000&nbsp;kr til 1&nbsp;million, med 10&nbsp;000&nbsp;kr i måneden, sparer tre år. Husk også at 9 millioner om 25 eller 37 år vil kjøpe mindre enn 9 millioner i dag.</p>
 
     <!-- VERKTØY-CTA 3 -->
     <a href="/verktoy/fire-kalkulator/" class="tool-cta" style="text-decoration:none;">
@@ -630,48 +654,48 @@
         <svg width="20" height="20" fill="none" stroke="white" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z"/></svg>
       </div>
       <div>
-        <p class="font-semibold text-green-700 dark:text-green-400" style="margin:0;">FIRE-kalkulator — finn din vei til finansiell frihet</p>
-        <p class="text-sm text-gray-600 dark:text-gray-400" style="margin:0.2rem 0 0;">Legg inn dine tall og se nøyaktig hvilke år du kan slutte å jobbe basert på reinvestert avkastning.</p>
+        <p class="font-semibold text-green-700 dark:text-green-400" style="margin:0;">FIRE-kalkulator: regn ut din egen tidslinje</p>
+        <p class="text-sm text-gray-600 dark:text-gray-400" style="margin:0.2rem 0 0;">Legg inn ønsket månedlig forbruk, sparing og yield, og se hvor mange år det tar å bygge porteføljen.</p>
       </div>
     </a>
 
     <!-- SEKSJON 9 -->
     <h2 id="sammendrag">Sammendrag</h2>
 
-    <p>Reinvestering av utbytte er den enkleste og mest effektive måten å akselerere porteføljeveksten på over tid. Her er de viktigste punktene:</p>
+    <p>Dette er tallene å ta med seg fra artikkelen:</p>
 
     <ul>
-      <li><strong>Rentes-rente-effekten er eksponentiell</strong> — de siste 5 årene av en 20-årsperiode bidrar like mye som de første 10.</li>
-      <li><strong>Yield-nivå er avgjørende</strong> — en yield på 7&nbsp;% gir nesten 50&nbsp;% mer enn 5&nbsp;% over 20 år med reinvestering.</li>
-      <li><strong>Månedlig sparing forsterker effekten</strong> — kombinasjonen av jevnlig innskudd og reinvestering er ekstremt kraftfull.</li>
-      <li><strong>ASK er den beste kontoen for reinvestering</strong> — ingen løpende utbytteskatt betyr at du reinvesterer brutto og høster full rentes-rente-effekt.</li>
-      <li><strong>Reinvestering + rebalansering er en naturlig kombinasjon</strong> — bruk utbyttebetalingene til å kjøpe opp undervektede sektorer.</li>
-      <li><strong>Start tidlig og hold ut</strong> — tid i markedet er viktigere enn timing av markedet.</li>
+      <li><strong>Effekten vokser med tiden.</strong> Med 5&nbsp;% vokser porteføljen nesten like mye de siste fem årene av tjue som de første ti.</li>
+      <li><strong>Yield-nivået betyr mye, hvis det holder.</strong> 7&nbsp;% gir rundt 46&nbsp;% mer enn 5&nbsp;% etter 20&nbsp;år med reinvestering, men bare hvis utbyttet faktisk blir betalt hvert år.</li>
+      <li><strong>Faste innskudd betyr mest.</strong> Med 2&nbsp;000&nbsp;kr i måneden kommer rundt tre firedeler av sluttsummen etter 20&nbsp;år fra månedssparingen og avkastningen på den.</li>
+      <li><strong>Skjermingsfradraget demper skatten.</strong> Bare den delen av utbyttet som overstiger fradraget, skattlegges med 37,84&nbsp;%.</li>
+      <li><strong>ASK utsetter skatten, men senker ikke satsen.</strong> Du reinvesterer hele utbyttet og betaler skatt når du tar ut mer enn du har satt inn.</li>
+      <li><strong>Reinvestering og rebalansering passer sammen.</strong> Utbyttet kan gå til sektorene som er undervektet, uten at du selger noe.</li>
     </ul>
 
     <div class="callout callout-green">
-      <strong>Din neste handling:</strong> Sjekk hvilke aksjer i porteføljen din som betaler utbytte de neste 30 dagene på <a href="/utbyttekalender/" style="color:#15803d;dark:color:#4ade80;">utbyttekalenderen</a>, og sett opp en plan for å reinvestere neste utbyttebetaling.
+      Sjekk i <a href="/utbyttekalender/" class="text-green-700 dark:text-green-400 underline">utbyttekalenderen</a> hvilke av aksjene dine som går ex-utbytte den neste måneden. Da vet du omtrent når neste utbetaling kommer, og kan bestemme på forhånd hva den skal brukes til.
     </div>
 
     <!-- LES OGSÅ -->
     <h2 style="margin-top:2.5rem;">Les også</h2>
     <ul style="list-style:none;padding:0;margin:0;">
       <li style="margin-bottom:0.75rem;">
-        <a href="/artikler/utbytteportefolje-sektorvekting/" class="flex items-center gap-2" style="color:#16a34a;text-decoration:none;font-weight:500;">
-          <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="flex-shrink:0;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-          Slik bygger du en utbytteportefølje — sektorvekting og rebalansering
+        <a href="/artikler/utbytteportefolje-sektorvekting/" class="les-ogsa-lenke text-green-600 dark:text-green-400 hover:underline">
+          <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+          <span>Slik bygger du en utbytteportefølje</span>
         </a>
       </li>
       <li style="margin-bottom:0.75rem;">
-        <a href="/artikler/utbytte-og-skatt/" class="flex items-center gap-2" style="color:#16a34a;text-decoration:none;font-weight:500;">
-          <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="flex-shrink:0;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-          Utbytte og skatt i Norge — 37,84&nbsp;%, skjermingsfradrag og ASK
+        <a href="/artikler/utbytte-og-skatt/" class="les-ogsa-lenke text-green-600 dark:text-green-400 hover:underline">
+          <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+          <span>Utbytte og skatt i Norge</span>
         </a>
       </li>
       <li style="margin-bottom:0.75rem;">
-        <a href="/artikler/aksjesparekonto-ask/" class="flex items-center gap-2" style="color:#16a34a;text-decoration:none;font-weight:500;">
-          <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="flex-shrink:0;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-          Aksjesparekonto (ASK) for utbytteinvestorer — fordeler og ulemper
+        <a href="/artikler/aksjesparekonto-ask/" class="les-ogsa-lenke text-green-600 dark:text-green-400 hover:underline">
+          <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+          <span>Aksjesparekonto (ASK) for utbytteinvestorer</span>
         </a>
       </li>
     </ul>

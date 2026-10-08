@@ -1387,6 +1387,26 @@ The field stays in the data: it is still a fallback for a newly added stock
 and a pointer for the company-text agent, which is told not to trust it.
 Tests: `TestOmSelskapet` (3 new), `ui.test.js` (1 new).
 
+## Articles are rewritten one at a time — facts before language (2026-10-08)
+
+The eleven articles all broke the dash rule (18–48 each) and carried
+30–60 figures apiece. They are rewritten with the article agent, one per PR,
+and the brief is facts first: every calculation re-run, tax rules against
+Skatteetaten, company figures against `aksjer.json` or the company's notice,
+unsourced claims removed. `reinvestering-av-utbytte` was first: 48 → 0
+dashes, and twelve worked examples were wrong (year 10/20 were actually year
+11/21, monthly saving off by up to 28 000 kr, «years to 9 million» off by 3–4).
+
+**It found a bug in both DRIP calculators.** `/verktoy/kalkulator/` added the
+dividend to the portfolio even with DRIP off (`else v += u`), so both choices
+gave the same end value and «DRIP-gevinst» read 0 kr. And both that page and
+the app measured the gain as portfolio *with* minus portfolio *without* —
+counting dividends paid out in cash as lost. For 100 000 kr at 5 % over 20
+years that said 165 330 kr; the compound effect is 65 330 kr, because 100 000
+kr was paid out. `dripGevinst()` in `ui.js` and the page now compare against
+the portfolio without DRIP *plus* the net dividends received. Tests:
+`ui.test.js` (2).
+
 ## Writing style: `SKRIVESTIL.md` and `sjekk_sprak.py` (2026-10-06)
 
 The articles read as machine-written, mostly because of em dashes: between 18
