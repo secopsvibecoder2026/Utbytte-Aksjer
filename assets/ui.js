@@ -4676,6 +4676,16 @@ function _simulerKalkulator(startbelop, yieldFaktor, vekstFaktor, sparingAr, ant
   return { rader, totUtbytte, totUtbytteNetto, totSkatt, totInnbetalt, verdi };
 }
 
+// Hva reinvesteringen faktisk ga. Porteføljeverdi med DRIP minus
+// porteføljeverdi uten var feil mål: uten DRIP er utbyttet tatt ut, ikke
+// borte, og det ble regnet som tapt. 100 000 kr i 20 år med 5 % ga
+// «DRIP-gevinst» 165 330 kr; 100 000 av dem er utbyttet som ble utbetalt.
+// Rentes rente-effekten er 65 330 kr (2026-10-08). Utbetalt utbytte telles
+// etter skatt og uten avkastning, slik det ligger på kontoen.
+function dripGevinst(med, uten) {
+  return med.verdi - (uten.verdi + uten.totUtbytteNetto);
+}
+
 function tegneKalkulatorGraf(raderMed, raderUten) {
   const el = document.getElementById('kal-graf');
   if (!el) return;
@@ -4752,7 +4762,7 @@ function beregnKalkulator() {
   document.getElementById('kal-res-utbytte').textContent   = fmtKr(aktiv.totUtbytte);
   document.getElementById('kal-res-innbetalt').textContent = fmtKr(aktiv.totInnbetalt);
   document.getElementById('kal-res-mnd').textContent       = fmtKr(sisteRad.utbytteIAr / 12);
-  document.getElementById('kal-res-drip').textContent      = fmtKr(med.verdi - uten.verdi);
+  document.getElementById('kal-res-drip').textContent      = fmtKr(dripGevinst(med, uten));
 
   // Inflasjonsjustert verdi
   const verdiRealEl = document.getElementById('kal-res-verdi-real');
@@ -5505,4 +5515,4 @@ function _annBygTopp() {
 }
 
 // Node.js test export
-if (typeof module !== 'undefined') module.exports = { utbytteRekke, stabileAr, exForbeholdGjelder, utbyttePerioder, vistOverBetalt, modalBetaltBoks, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, fmt, formaterDato, yieldKlasse, payoutKlasse, vekstKlasse, beregnScore, beregnBaerekraft, beregnYtdInntekt, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote, kapitalAndel, modalKapitalNote, kapitalSkattTekst, aksjerMedExIMaaned, beregnHvisKjopt, hvisStartAar, beregnAskMotVanlig, fmtUtbytte, sisteUtbytteTekst, modalOmSelskapet, vekslOmSelskapet };
+if (typeof module !== 'undefined') module.exports = { utbytteRekke, stabileAr, exForbeholdGjelder, utbyttePerioder, vistOverBetalt, modalBetaltBoks, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, fmt, formaterDato, yieldKlasse, payoutKlasse, vekstKlasse, beregnScore, beregnBaerekraft, beregnYtdInntekt, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote, kapitalAndel, modalKapitalNote, kapitalSkattTekst, aksjerMedExIMaaned, beregnHvisKjopt, hvisStartAar, beregnAskMotVanlig, fmtUtbytte, sisteUtbytteTekst, modalOmSelskapet, vekslOmSelskapet, dripGevinst, _simulerKalkulator };

@@ -32,7 +32,7 @@ const {
   vekstKlasse,
   beregnScore,
   beregnYtdInntekt
-, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, utbyttePerioder, vistOverBetalt, modalBetaltBoks, utbytteRekke, stabileAr, exForbeholdGjelder, kapitalAndel, modalKapitalNote, kapitalSkattTekst, aksjerMedExIMaaned, beregnHvisKjopt, hvisStartAar, beregnAskMotVanlig, fmtUtbytte, sisteUtbytteTekst, modalOmSelskapet, vekslOmSelskapet } = require('../assets/ui.js');
+, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, utbyttePerioder, vistOverBetalt, modalBetaltBoks, utbytteRekke, stabileAr, exForbeholdGjelder, kapitalAndel, modalKapitalNote, kapitalSkattTekst, aksjerMedExIMaaned, beregnHvisKjopt, hvisStartAar, beregnAskMotVanlig, fmtUtbytte, sisteUtbytteTekst, modalOmSelskapet, vekslOmSelskapet, dripGevinst, _simulerKalkulator } = require('../assets/ui.js');
 
 // ── fmt ────────────────────────────────────────────────────────────────────
 test('fmt returnerer — for null', () => {
@@ -746,4 +746,21 @@ test('vekslOmSelskapet: åpner og lukker, og oppdaterer aria og tekst', () => {
   vekslOmSelskapet(knapp);
   assert.equal(attr['aria-expanded'], 'false');
   assert.equal(knapp.textContent, 'Les mer om selskapet');
+});
+
+// ── DRIP-gevinst: utbetalt utbytte er ikke tapt (2026-10-08) ─────────────────
+test('dripGevinst: 100 000 kr, 5 %, 20 år gir rentes rente-effekten, ikke hele forskjellen', () => {
+  const med  = _simulerKalkulator(100000, 0.05, 0, 0, 20, true,  0, 0);
+  const uten = _simulerKalkulator(100000, 0.05, 0, 0, 20, false, 0, 0);
+  assert.equal(Math.round(med.verdi), 265330);
+  assert.equal(Math.round(uten.verdi), 100000);
+  assert.equal(Math.round(dripGevinst(med, uten)), 65330);
+});
+
+test('dripGevinst: med skatt sammenlignes netto mot netto', () => {
+  const med  = _simulerKalkulator(100000, 0.05, 0, 0, 10, true,  0.3784, 0);
+  const uten = _simulerKalkulator(100000, 0.05, 0, 0, 10, false, 0.3784, 0);
+  // Uten DRIP: 10 år × 5 000 × 0,6216 = 31 080 kr på kontoen.
+  assert.equal(Math.round(uten.totUtbytteNetto), 31080);
+  assert.ok(dripGevinst(med, uten) > 0);
 });
