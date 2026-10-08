@@ -3024,8 +3024,8 @@ function eksporterEnkeltICS(a, type, dato) {
 
 // «Om selskapet» viste tidligere `beskrivelse_fakta || beskrivelse`. 153 av
 // 160 aksjer har et faktasammendrag fra Yahoo, så den redaksjonelle teksten
-// tapte alltid — og var usynlig både her og på aksjesiden. Nå vises begge:
-// den skrevne innledningen først, Yahoos faktaavsnitt under.
+// tapte alltid — og var usynlig både her og på aksjesiden. Nå vises den
+// skrevne teksten, og Yahoos avsnitt bare når selskapet mangler en.
 //
 // Minimert på mobil (2026-10-07). Selskapstekstene ble 180–280 ord i tre
 // avsnitt, og med faktaavsnittet tok boksen 1 177 px på en 390 px skjerm,
@@ -3036,7 +3036,10 @@ function modalOmSelskapet(a) {
   const fakta = (a.beskrivelse_fakta || '').trim();
   const avsnitt = intro.split(/\n\s*\n/).map(d => d.trim()).filter(Boolean)
     .map(d => ({ tekst: d, klasse: 'om-selskap-tekst' }));
-  if (fakta && fakta !== intro) avsnitt.push({ tekst: fakta, klasse: 'om-selskap-tekst om-selskap-fakta' });
+  // Yahoos faktaavsnitt bare når selskapet mangler en egen tekst — samme regel
+  // som aksjesiden (2026-10-07). Det var oversatt Yahoo-tekst, og rundt 40 av
+  // dem var utdaterte eller feil rett under en tekst som sa det riktige.
+  if (!avsnitt.length && fakta) avsnitt.push({ tekst: fakta, klasse: 'om-selskap-tekst om-selskap-fakta' });
   if (!avsnitt.length) return '';
   const p = x => '<p class="' + x.klasse + '">' + escHtml(x.tekst) + '</p>';
   const [forste, ...resten] = avsnitt;

@@ -1965,6 +1965,31 @@ class TestOmSelskapet(unittest.TestCase):
         html_ = fs._aksje_side_html(a, "2026-10-06")
         om = re.search(r'<div class="desc"><h2>Om selskapet</h2>(.*?)</div>', html_, re.S)
         self.assertIn("<p>Første avsnitt.</p><p>Andre avsnitt.</p>", om.group(1))
+        # Yahoos avsnitt vises ikke når selskapet har en egen tekst (2026-10-07).
+        self.assertNotIn("Fakta.", om.group(1))
+
+    def test_yahoo_avsnittet_brukes_uten_egen_tekst(self):
+        sti = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "data", "aksjer.json")
+        if not os.path.exists(sti):
+            self.skipTest("aksjer.json finnes ikke")
+        with open(sti, encoding="utf-8") as f:
+            a = json.load(f)["aksjer"][0]
+        a = dict(a, kurs_historikk=[], beskrivelse_intro="", beskrivelse_fakta="Bare fakta.")
+        html_ = fs._aksje_side_html(a, "2026-10-07")
+        om = re.search(r'<div class="desc"><h2>Om selskapet</h2>(.*?)</div>', html_, re.S)
+        self.assertIn('<p class="desc-fakta">Bare fakta.</p>', om.group(1))
+
+    def test_jsonld_beskrivelse_er_var_egen_tekst(self):
+        sti = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "data", "aksjer.json")
+        if not os.path.exists(sti):
+            self.skipTest("aksjer.json finnes ikke")
+        with open(sti, encoding="utf-8") as f:
+            a = json.load(f)["aksjer"][0]
+        a = dict(a, kurs_historikk=[], beskrivelse_intro="Vår tekst.\n\nMer tekst.",
+                 beskrivelse_fakta="Yahoo-tekst.")
+        html_ = fs._aksje_side_html(a, "2026-10-07")
+        self.assertIn('"description": "Vår tekst. Mer tekst."', html_)
+        self.assertNotIn("Yahoo-tekst.", html_)
 
 
 class TestManuellDelAvsnitt(unittest.TestCase):

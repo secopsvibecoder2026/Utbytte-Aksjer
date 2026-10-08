@@ -1356,9 +1356,36 @@ measured 1 177 px on a 390 px phone, more than a screen before account types
 and risk. `modalOmSelskapet()` now shows the first paragraph clamped to four
 lines and puts the rest, and the fact paragraph, behind «Les mer om
 selskapet» (one delegated listener, `vekslOmSelskapet()`, `aria-expanded`).
+The fact paragraph is no longer shown when a company text exists — see the
+next section.
 Measured: 176 px closed, 1 212 px open. From 640 px everything is open and
 the button is hidden. The stock pages keep the full text — that is what
 Google reads. Tests: `ui.test.js` (3).
+
+## Yahoo's fact paragraph is shown only without a company text (2026-10-08)
+
+`beskrivelse_fakta` (Yahoo's business summary, translated) stood under the
+company text on 150 stock pages and in the app. Now that all 154 have a
+checked 180–280-word text, it renders only when `beskrivelse_intro` is empty,
+in `_aksje_side_html()` and `modalOmSelskapet()` alike. The JSON-LD
+`description` uses our own text first for the same reason.
+
+**Why: correctness, not originality.** The company-text agents found about 40
+of the 150 outdated or wrong — Gjensidige still operating in the Baltics,
+Europris as a subsidiary of a former owner, Hexagon «founded 1985» — directly
+under a text that said the right thing.
+
+**What it did to the template measure.** Median words per stock page 1 178 →
+1 133; unique share 32,8 % → 30,0 %; template share 23,3 % → 24,1 % (6 October,
+before the company texts: 21,4 % unique, 27,7 % template). The paragraph was
+different on every page, so a page-against-page measure counted it as
+unique; that measure cannot see that it was translated from Yahoo. The case
+for removing it was argued on 2026-10-07 as «more original» — that is not
+what the numbers show, and the correctness argument is the one that holds.
+
+The field stays in the data: it is still a fallback for a newly added stock
+and a pointer for the company-text agent, which is told not to trust it.
+Tests: `TestOmSelskapet` (3 new), `ui.test.js` (1 new).
 
 ## Writing style: `SKRIVESTIL.md` and `sjekk_sprak.py` (2026-10-06)
 

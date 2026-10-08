@@ -706,16 +706,25 @@ test('sisteUtbytteTekst: året står når ingenting er betalt siste 12 mnd', () 
 });
 
 // ── modalOmSelskapet — selskapsteksten i flere avsnitt, minimert (2026-10-07) ──
-test('modalOmSelskapet: første avsnitt synlig, resten og faktaavsnittet bak «Les mer»', () => {
+test('modalOmSelskapet: første avsnitt synlig, resten bak «Les mer», Yahoo-avsnittet borte', () => {
   global.escHtml = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   const h = modalOmSelskapet({ beskrivelse_intro: 'Første <b>avsnitt</b>.\n\nAndre avsnitt.', beskrivelse_fakta: 'Fakta.' });
   assert.match(h, /om-selskap-boks om-selskap-lukket/);
   assert.match(h, /&lt;b&gt;/);
   const [for_, mer] = h.split('<div class="om-selskap-mer"');
   assert.match(for_, /Første/);
-  assert.match(mer, /Andre avsnitt\..*om-selskap-fakta">Fakta\./s);
+  assert.match(mer, /Andre avsnitt\./);
+  assert.doesNotMatch(h, /Fakta\./);
   assert.match(h, /aria-expanded="false"/);
   assert.equal(modalOmSelskapet({}), '');
+  delete global.escHtml;
+});
+
+test('modalOmSelskapet: uten egen tekst vises Yahoo-avsnittet, uten knapp', () => {
+  global.escHtml = s => String(s);
+  const h = modalOmSelskapet({ beskrivelse_fakta: 'Fakta.' });
+  assert.match(h, /om-selskap-fakta">Fakta\./);
+  assert.doesNotMatch(h, /om-selskap-vis-mer/);
   delete global.escHtml;
 });
 
