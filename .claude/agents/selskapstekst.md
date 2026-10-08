@@ -55,8 +55,10 @@ For hver ticker:
 
 - Dagens tekst: `beskrivelse` i `data/tickers.json`.
 - `beskrivelse_fakta` i `data/aksjer.json`. Dette er Yahoos faktasammendrag,
-  oversatt, og det står rett under din tekst på siden. **Ikke gjenta det.**
-  Teksten din skal forklare og sette i sammenheng, ikke liste det samme.
+  oversatt. Det vises ikke lenger når selskapet har en egen tekst, så din
+  tekst er det eneste leseren får om selskapet. Bruk det som en pekepinn, ikke
+  som kilde: rundt 40 av dem var utdaterte eller feil da de ble kontrollert i
+  oktober 2026.
 - Sektorteksten: `SEKTOR_REDAKSJONELL[sektor]` i `scripts/sektortekster.py` og
   `SEKTOR_DRIVER[sektor]` i `scripts/utvid_beskrivelser.py`. Begge står lenger
   ned på samme side. Det generelle om sektoren hører hjemme der, ikke i

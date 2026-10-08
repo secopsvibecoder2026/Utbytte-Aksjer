@@ -4624,21 +4624,25 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
 
     # «Om selskapet» viste bare `beskrivelse_fakta or beskrivelse`. 153 av 160
     # aksjer har et faktasammendrag fra Yahoo, så den redaksjonelle teksten
-    # tapte alltid or-uttrykket og sto usynlig. Nå vises begge: den skrevne
-    # innledningen først, Yahoos faktaavsnitt under.
+    # tapte alltid or-uttrykket og sto usynlig.
+    #
+    # Siden 2026-10-07 vises Yahoos faktaavsnitt bare når selskapet mangler en
+    # egen tekst. Alle 154 har nå en kontrollert tekst på 180–280 ord, og
+    # avsnittet under den var det eneste på siden som ikke var vårt eget:
+    # oversatt Yahoo-tekst, det «Low value content» handler om. Selskapstekst-
+    # agenten fant i tillegg rundt 40 av dem utdaterte eller feil (Gjensidige
+    # med virksomhet i Baltikum, Europris som datterselskap av en tidligere
+    # eier) rett under en tekst som sa det riktige.
     #
     # Uten faktasammendrag falt `besk` tilbake til hele `beskrivelse`, som
     # *begynner* med innledningen — så KMAR, DOF, JAREN og BINT viste den samme
     # teksten to ganger (2026-10-06). Hele beskrivelsen brukes nå bare når det
     # ikke finnes noen innledning å vise; avsnitt 2–3 står uansett lenger ned.
     intro = (a.get("beskrivelse_intro") or "").strip()
-    fakta = (a.get("beskrivelse_fakta") or "").strip()
     om_avsnitt = ""
     if intro:
         # Selskapsteksten kan ha flere avsnitt, skilt med blank linje.
         om_avsnitt += "".join(f"<p>{d.strip()}</p>" for d in re.split(r"\n\s*\n", intro) if d.strip())
-        if fakta and fakta != intro:
-            om_avsnitt += f'<p class="desc-fakta">{fakta}</p>'
     elif besk:
         om_avsnitt += f'<p class="desc-fakta">{besk}</p>'
     om_seksjon = f'<div class="desc"><h2>Om selskapet</h2>{om_avsnitt}</div>' if om_avsnitt else ""
@@ -4824,7 +4828,8 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
         {
             "@type": "FinancialProduct",
             "name": f"{navn} ({ticker})",
-            "description": (besk or meta_desc)[:500],
+            # Vår egen tekst først, av samme grunn som i «Om selskapet».
+            "description": (" ".join(intro.split()) or besk or meta_desc)[:500],
             "url": f"https://exday.no/aksjer/{ticker}/",
             "provider": {"@type": "Organization", "name": "exday.no", "url": "https://exday.no/"},
         },
