@@ -15,7 +15,7 @@ AKSJER_F  = os.path.join(ROOT, "data", "aksjer.json")
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from fetch_stocks import (generer_aksjesider, generer_sektorsider, generer_topplistesider,
                           generer_sitemap, _last_kurshistorikk_fra_disk,
-                          generer_rapportkalender,
+                          generer_rapportkalender, sett_ask_felter,
                           oppdater_app_noscript_liste, oppdater_antall_i_sider,
                           oppdater_aarstall_i_sider,
                           _typiske_utbetalingsmaaneder,
@@ -89,8 +89,8 @@ def main():
         if ny_fakta and ny_fakta != a.get("beskrivelse_fakta", ""):
             a["beskrivelse_fakta"] = ny_fakta
             oppdatert += 1
-        a["ask_egnet"] = ask_egnet_map.get(a["ticker"], True)
-        a["inkorporeringsland"] = inkorp_map.get(a["ticker"], "Norge")
+        sett_ask_felter(a, ask_egnet_map.get(a["ticker"], True),
+                        inkorp_map.get(a["ticker"], "Norge"))
         # Bygges på nytt fra tallene, som beskrivelsen over — appen leser feltet
         # fra aksjer.json og ville ellers vist en frosset tekst.
         a["utbyttehistorikk_tekst"] = _lag_utbyttehistorikk_tekst(a)

@@ -457,7 +457,7 @@ function visAskMotVanlig() {
   const vinner = r.forskjell >= 0 ? 'ASK' : 'vanlig konto';
   // Hvor mange aksjer i katalogen som ikke kan ligge på ASK — regnes fra
   // dataene, så tallet aldri står fast i teksten.
-  const ikkeAsk = (window.alleAksjer || []).filter(x => x.ask_egnet === false).length;
+  const ikkeAsk = (window.alleAksjer || []).filter(x => ['utenfor_eos', 'growth'].includes(askStatus(x))).length;
   const milepeler = r.rader.filter(x => x.ar % 5 === 0 || x.ar === r.rader.length);
   ut.innerHTML = `
     <div class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-5 shadow-sm space-y-4 text-sm">
@@ -486,7 +486,7 @@ function visAskMotVanlig() {
       <p class="text-[11px] text-gray-400 dark:text-gray-600 leading-relaxed">
         Begge skattlegges med ${(SKATTESATS * 100).toLocaleString('nb-NO')} % over skjermingsfradraget. Forenklet: innskudd i begynnelsen av året, jevn yield og kursvekst, samme skjermingsrente alle år, utbyttet reinvestert og ingen kurtasje.
         Tar du ut utbyttet underveis, er uttak opp til innskuddet skattefritt på ASK.
-        Bare aksjer i selskaper hjemmehørende i EØS kan ligge på ASK${ikkeAsk ? ` — ${ikkeAsk} av aksjene her kan ikke det, blant annet de som er registrert på Bermuda` : ''}.
+        Bare aksjer i selskaper hjemmehørende i EØS og notert på et regulert marked kan ligge på ASK.${ikkeAsk ? ` ${ikkeAsk} av aksjene her kan ikke det, blant annet de som er registrert på Bermuda og de som handles på Euronext Growth.` : ''}
       </p>
     </div>`;
 }
@@ -950,7 +950,7 @@ function beregnRisiko(a) {
   if (payout > 90) poeng += 2;
   else if (payout > 75) poeng += 1;
   else if (payout > 0 && payout < 50) poeng -= 1;
-  if (a.ask_egnet === false) poeng += 1;
+  if (a.ask_egnet === false) poeng += 1;   // null er «uavklart», ikke «nei»
   const mv = a.markedsverdi || 0;
   if (mv > 0 && mv < 1e9) poeng += 1;
   else if (mv > 10e9) poeng -= 1;
@@ -1007,7 +1007,9 @@ function forklarRisiko(a) {
 
   if (yield_ > 12) punkter.push(`Svært høy yield (${yield_.toFixed(1).replace('.', ',')}%) — kan indikere markedsskepsis til bærekraft`);
 
-  if (a.ask_egnet === false) punkter.push(`Registrert utenfor EØS (${escHtml(a.inkorporeringsland || '')}) — kan ikke holdes i ASK`);
+  const askSt = askStatus(a);
+  if (askSt === 'utenfor_eos') punkter.push(`Registrert utenfor EØS (${escHtml(a.inkorporeringsland || '')}) — kan ikke holdes i ASK`);
+  else if (askSt === 'growth') punkter.push('Handles på Euronext Growth, som ikke er et regulert marked — kan ikke holdes i ASK i dag');
 
   return punkter;
 }
@@ -3067,9 +3069,48 @@ if (typeof document !== 'undefined' && document.addEventListener) {
 }
 
 
+// ── ASK ─────────────────────────────────────────────────────────────────────
+// Samme regel og ordlyd som ask_status()/ask_tekst() i fetch_stocks.py, som
+// også skriver `ask_status` inn i aksjer.json. Utregningen her er bare for
+// rader fra før feltet fantes, og kjenner ikke datoen ASK åpnes for Growth.
+// `ask_egnet` gjelder hjemstedet: true, false eller null (uavklart).
+const ASK_MHF_FORSLAG_TIL = '2027-01-01';
+const _LAND_MED_PAA = new Set(['Bermuda', 'Marshalløyene', 'Kypros', 'Færøyene', 'Caymanøyene',
+  'Jersey', 'Guernsey', 'Isle of Man', 'Island', 'Malta', 'Jomfruøyene']);
+
+function registrertI(land) {
+  return `${_LAND_MED_PAA.has(land) ? 'på' : 'i'} ${land}`;
+}
+
+function askStatus(a) {
+  if (a.ask_status) return a.ask_status;
+  if (a.ask_egnet === false) return 'utenfor_eos';
+  if (/growth/i.test(a.bors || '')) return 'growth';
+  if (a.ask_egnet === null) return 'uavklart';
+  return 'ja';
+}
+
+function askTekst(a, iDag) {
+  const land = a.inkorporeringsland || 'Norge';
+  const status = askStatus(a);
+  if (status === 'utenfor_eos') {
+    return { status, tekst: `Selskapet er registrert ${registrertI(land)}, utenfor EØS, og aksjen kan ikke holdes i ASK.` };
+  }
+  if (status === 'growth') {
+    let tekst = 'Aksjen handles på Euronext Growth, som ikke er et regulert marked, og kan derfor ikke holdes i ASK i dag.';
+    if (lokalIsoDato(iDag || new Date()) < ASK_MHF_FORSLAG_TIL) {
+      tekst += ' Regjeringen foreslo i statsbudsjettet for 2027 å åpne ASK for slike aksjer fra 1. januar 2027.';
+    }
+    return { status, tekst };
+  }
+  if (status === 'uavklart') {
+    return { status, tekst: `Selskapet er registrert ${registrertI(land)}, utenfor EØS, men ledes fra et EØS-land. ASK krever at selskapet er skattemessig hjemmehørende i EØS, og det har vi ikke fått bekreftet. Spør banken eller megleren din før du kjøper aksjen på ASK.` };
+  }
+  return { status, tekst: `Selskapet er registrert ${registrertI(land)} og aksjen er notert på Oslo Børs, så den kan holdes i ASK.` };
+}
+
 function modalKontoer(a) {
-  const askEgnet = a.ask_egnet !== false;
-  const land = escHtml(a.inkorporeringsland || 'Norge');
+  const { status, tekst } = askTekst(a);
 
   const afRad = `<div class="modal-konto-rad">
     <span class="modal-konto-ikon">✓</span>
@@ -3081,14 +3122,19 @@ function modalKontoer(a) {
     <div><strong>Zero-konto</strong><p>Kan handles — Zero er ikke begrenset til EØS-aksjer.</p></div>
   </div>`;
 
-  const askRad = askEgnet
+  const askRad = status === 'ja'
     ? `<div class="modal-konto-rad">
         <span class="modal-konto-ikon">✓</span>
-        <div><strong>Aksjesparekonto (ASK)</strong><p>EØS-registrert selskap — kan holdes i ASK.</p></div>
+        <div><strong>Aksjesparekonto (ASK)</strong><p>${escHtml(tekst)}</p></div>
+      </div>`
+    : status === 'uavklart'
+    ? `<div class="modal-konto-rad uavklart">
+        <span class="modal-konto-ikon">?</span>
+        <div><strong>Aksjesparekonto (ASK)</strong><p>${escHtml(tekst)}</p></div>
       </div>`
     : `<div class="modal-konto-rad ikke">
         <span class="modal-konto-ikon">✗</span>
-        <div><strong>Aksjesparekonto (ASK)</strong><p>Selskapet er registrert i ${land} (utenfor EØS) — kan ikke holdes i ASK.</p></div>
+        <div><strong>Aksjesparekonto (ASK)</strong><p>${escHtml(tekst)}</p></div>
       </div>`;
 
   return `<div>
@@ -3188,7 +3234,7 @@ function visModal(a) {
         ${modalKort('Utbytteyield' + ((yieldErDelaar(a) && !delaarMotbevist(a)) ? ' <span class="font-normal normal-case opacity-70">usikker</span>' : ''), '<span class="' + yieldKlasse(a.utbytte_yield) + '">' + a.utbytte_yield.toFixed(2).replace('.', ',') + '%</span>')}
         ${modalKort('Snitt yield 5år', a.snitt_yield_5ar > 0 ? '<span class="' + yieldKlasse(a.snitt_yield_5ar) + '">' + a.snitt_yield_5ar.toFixed(1).replace('.', ',') + '%</span>' : '—')}
         ${modalKort('Utbytte/aksje' + (a.arsrate_kilde === 'betalt_12m'
-            ? ' <span class="font-normal normal-case opacity-70">siste 12 mnd</span>'
+            ? ' <span class="font-normal normal-case opacity-70">siste 12 mnd' + (a.arsrate_ekstra_trukket ? ', uten engangsutbytte' : '') + '</span>'
             : (yieldErDelaar(a) && !delaarMotbevist(a))
             ? ' <span class="font-normal normal-case opacity-70">usikker</span>'
             : ['Kvartalsvis','Halvårlig','Månedlig'].includes(a.frekvens)
@@ -4143,8 +4189,9 @@ function modalEkstraordinaerNote(a) {
       <p class="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-1">Deler av utbyttet var ekstraordinært</p>
       <p class="text-xs text-gray-700 dark:text-gray-300 leading-relaxed">
         Ifølge selskapets børsmelding ${hva}. Et ekstraordinært utbytte er en engangsutdeling og
-        gjentas ikke nødvendigvis — direkteavkastningen på ${fmt(y)} % bygger på en periode som
-        inneholder den.
+        gjentas ikke nødvendigvis. ${a.arsrate_ekstra_trukket
+          ? `Direkteavkastningen på ${fmt(y)} % bygger på det ordinære utbyttet de siste 12 månedene, med engangsutbyttet holdt utenfor.`
+          : `Direkteavkastningen på ${fmt(y)} % bygger på en periode som inneholder den.`}
       </p>
     </div>`;
 }
@@ -5515,4 +5562,4 @@ function _annBygTopp() {
 }
 
 // Node.js test export
-if (typeof module !== 'undefined') module.exports = { utbytteRekke, stabileAr, exForbeholdGjelder, utbyttePerioder, vistOverBetalt, modalBetaltBoks, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, fmt, formaterDato, yieldKlasse, payoutKlasse, vekstKlasse, beregnScore, beregnBaerekraft, beregnYtdInntekt, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote, kapitalAndel, modalKapitalNote, kapitalSkattTekst, aksjerMedExIMaaned, beregnHvisKjopt, hvisStartAar, beregnAskMotVanlig, fmtUtbytte, sisteUtbytteTekst, modalOmSelskapet, vekslOmSelskapet, dripGevinst, _simulerKalkulator };
+if (typeof module !== 'undefined') module.exports = { utbytteRekke, stabileAr, exForbeholdGjelder, utbyttePerioder, vistOverBetalt, modalBetaltBoks, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, fmt, formaterDato, yieldKlasse, payoutKlasse, vekstKlasse, beregnScore, beregnBaerekraft, beregnYtdInntekt, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote, kapitalAndel, modalKapitalNote, kapitalSkattTekst, aksjerMedExIMaaned, beregnHvisKjopt, hvisStartAar, beregnAskMotVanlig, fmtUtbytte, sisteUtbytteTekst, modalOmSelskapet, vekslOmSelskapet, dripGevinst, _simulerKalkulator, askStatus, askTekst, modalKontoer };
