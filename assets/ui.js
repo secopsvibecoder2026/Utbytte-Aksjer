@@ -633,7 +633,7 @@ const ARTIKLER = [
     slug: '/artikler/norske-shippingaksjer/',
     tittel: 'Norske shippingaksjer og utbytte — høy yield, syklisitet og risiko',
     ingress: 'Hva som driver den høye yielden, hvorfor den svinger, og hva du bør analysere før du investerer.',
-    meta: '6. juni 2026 · 12 min',
+    meta: '6. juni 2026 · 13 min',
     tags: ['Sektor'],
     sektorer: ['Shipping'],
   },

@@ -77,6 +77,11 @@
     .dark .prose td { border-color: #374151; }
     .prose tr:nth-child(even) td { background: #f9fafb; }
     .dark .prose tr:nth-child(even) td { background: #111827; }
+    .prose td.tall, .prose th.tall { text-align: right; white-space: nowrap; }
+    .prose table.kompakt th, .prose table.kompakt td { padding: 0.5rem 0.6rem; }
+    .prose a { color: #16a34a; }
+    .dark .prose a { color: #4ade80; }
+    .prose a:hover { text-decoration: underline; }
     .callout {
       border-left: 4px solid #2563eb;
       background: #eff6ff;
@@ -122,9 +127,10 @@
       color: inherit;
       transition: border-color 0.15s;
     }
-    .tool-cta:hover { border-color: #22c55e; }
+    .tool-cta:hover { border-color: #22c55e; text-decoration: none; }
     .dark .tool-cta { background: rgba(20,83,45,0.2); border-color: #166534; }
     .dark .tool-cta:hover { border-color: #4ade80; }
+    .prose a.tool-cta, .dark .prose a.tool-cta { color: inherit; }
     .tool-cta-icon {
       width: 2.5rem;
       height: 2.5rem;
@@ -147,6 +153,13 @@
       color: #7c3aed;
     }
     .dark .sector-badge { background: #1a0533; color: #c4b5fd; }
+    .sector-badge.badge-strategi { background: #fef3c7; color: #b45309; }
+    .dark .sector-badge.badge-strategi { background: #422006; color: #fcd34d; }
+    .les-ogsa-lenke {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
   </style>
 
   <script type="application/ld+json">
@@ -156,7 +169,7 @@
     "headline": "Norske shippingaksjer og utbytte — høy yield, syklisitet og risiko",
     "description": "Oslo Børs er et shippingmekka med over 20 noterte selskaper. Lær hva som driver den høye yielden, hvorfor den svinger så mye, og hva du bør analysere før du investerer.",
     "datePublished": "2026-06-06",
-    "dateModified": "2026-06-06",
+    "dateModified": "2026-10-09",
     "author": { "@type": "Organization", "name": "exday.no", "url": "https://exday.no" },
     "publisher": { "@type": "Organization", "name": "exday.no", "url": "https://exday.no" },
     "mainEntityOfPage": { "@type": "WebPage", "@id": "https://exday.no/artikler/norske-shippingaksjer/" }
@@ -242,15 +255,15 @@
     <header class="mb-8">
       <div class="flex flex-wrap gap-2 mb-3">
         <span class="sector-badge">Sektor</span>
-        <span class="sector-badge" style="background:#fef3c7;color:#b45309;" class="dark:bg-yellow-900 dark:text-yellow-300">Strategi</span>
+        <span class="sector-badge badge-strategi">Strategi</span>
       </div>
       <h1 class="text-2xl sm:text-3xl font-bold leading-tight mb-3">
         Norske shippingaksjer og utbytte — høy yield, syklisitet og risiko
       </h1>
       <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed mb-4">
-        Oslo Børs er et av verdens største markeder for børsnoterte shippingselskaper. Mange tilbyr imponerende utbytteyield — men bak de høye tallene skjuler det seg sykliske svingninger, valutarisiko og markedsforhold som få andre sektorer matcher. Denne guiden gir deg det du trenger å vite før du investerer.
+        Oslo Børs har flere noterte rederier enn nesten noen annen børs, og mange av dem deler ut store beløp. Beløpene svinger også mer enn i noen annen sektor. Her ser vi på hva rederiene faktisk har betalt det siste året, hvorfor utbyttet fra ett og samme selskap kan bli sju ganger så stort på under ett år eller falle med over 80 prosent fra ett kvartal til det neste, og hva du kan se på i stedet for P/E.
       </p>
-      <p class="text-xs text-gray-400 dark:text-gray-600">6. juni 2026 · 12 min lesing</p>
+      <p class="text-xs text-gray-400 dark:text-gray-600">6. juni 2026 · oppdatert 9. oktober 2026 · 13 min lesing</p>
     </header>
 
     <!-- Innholdsfortegnelse -->
@@ -259,10 +272,10 @@
       <ol class="space-y-1 list-decimal list-inside text-gray-600 dark:text-gray-400">
         <li><a href="#shippingmekka">Hvorfor Oslo Børs er et globalt shippingmekka</a></li>
         <li><a href="#sub-sektorer">De seks sub-sektorene</a></li>
-        <li><a href="#yield">Utbytteyield og historisk snitt</a></li>
+        <li><a href="#yield">Utbytteyield: hva som faktisk er betalt</a></li>
         <li><a href="#syklisitet">Syklisitet: fraktratenes opp- og nedturer</a></li>
         <li><a href="#valuta">USD-eksponering og valutaeffekten</a></li>
-        <li><a href="#analyse">Hva du bør analysere — ikke P/E</a></li>
+        <li><a href="#analyse">Hva du bør analysere i stedet for P/E</a></li>
         <li><a href="#risiko">Risikofaktorer</a></li>
         <li><a href="#egnethet">Er shippingaksjer riktig for deg?</a></li>
       </ol>
@@ -274,102 +287,115 @@
       <h2 id="shippingmekka">Hvorfor Oslo Børs er et globalt shippingmekka</h2>
 
       <p>
-        Norsk shipping har røtter tilbake til 1800-tallet, og i dag er Oslo Børs hjemsted for noen av verdens største og mest veldrevne shippingselskaper. Med over 20 noterte shippingaksjer innen segmenter som råoljetankere, LNG, tørrbulk, kjemikalieskip og bildebåter er børsen en unik destinasjon for investorer som vil ha eksponering mot global godstransport.
+        Norge har vært en stor sjøfartsnasjon siden 1800-tallet, og det preger børsen. Bransjemessen Nor-Shipping skrev i mai 2025 at Oslo er blitt verdens ledende markedsplass for børsnoterte rederier målt i antall selskaper.
       </p>
 
       <p>
-        Det som skiller Oslo Børs fra for eksempel New York-børsen er kombinasjonen av internasjonal orientering og norsk eierkompetanse. Selskaper som Frontline, Hafnia og Golden Ocean er globale operatører med flåter spredt over alle verdenshav — men de er notert i Oslo, rapporterer på engelsk og betaler utbytte i norske kroner (fra en USD-denominert inntjening).
+        Mange av rederiene er norske først og fremst fordi aksjen handles i Oslo. Frontline er registrert på Kypros og drives fra Oslo, Hafnia holder til i Singapore, og Okeanis Eco Tankers ledes fra Hellas. Felles for de fleste er at inntektene kommer i dollar. Utbyttet vedtas som regel også i dollar, men aksjonærer med aksjene i den norske verdipapirsentralen (VPS) får det utbetalt i kroner.
       </p>
 
       <p>
-        For utbytteinvestorer er shipping en av de mest attraktive sektorene på Oslo Børs — og en av de mest krevende. Yielden kan være tosifret i gode år og nær null i dårlige år. Det er ikke sektoren for de som vil ha forutsigbar, stabil kontantstrøm. Men for de som forstår syklene, kan det gi svært god avkastning over tid.
+        For en utbytteinvestor er shipping sektoren der utbyttet både kan bli størst og er minst forutsigbart. I et godt år kan utbyttet tilsvare en tidel av aksjekursen, og i et dårlig år kan det falle helt bort. Den som trenger et forutsigbart beløp hvert kvartal, finner det sjelden her.
       </p>
 
       <!-- 2 -->
       <h2 id="sub-sektorer">De seks sub-sektorene</h2>
 
       <p>
-        Shipping er ikke én homogen sektor — det er seks ganske ulike virksomheter med forskjellige drivere, risikoprofiler og utbyttemønstre. Her er en oversikt over de norsk-noterte subsegmentene:
+        Shipping er seks ganske forskjellige markeder. Et tankrederi kan ha rekordår mens et bilrederi kutter utbyttet, og det var akkurat det som skjedde i 2026.
       </p>
 
       <h3>Råolje- og produkttankere</h3>
       <p>
-        Transporterer råolje (VLCC, Suezmax, Aframax) og raffinerte produkter (MR-tankere) mellom produsenter og raffinerier. Inntjeningen drives av oljeprisen, geopolitikk og OPEC-produksjonsbeslutninger. Viktige selskaper: <strong>Frontline (FRO)</strong>, <strong>Okeanis Eco Tankers (OET)</strong>, <strong>Hafnia (HAFNI)</strong>.
+        Råoljetankere går i størrelsene VLCC, Suezmax og Aframax/LR2, mens produkttankere frakter bensin, diesel og flydrivstoff. Inntjeningen avhenger av hvor mye olje som skal fraktes og hvor langt, og dermed av OPEC-produksjon, sanksjoner og omveier. Her finner du <strong>Frontline (<a href="/aksjer/FRO/">FRO</a>)</strong>, <strong>Okeanis Eco Tankers (<a href="/aksjer/OET/">OET</a>)</strong> og <strong>Hafnia (<a href="/aksjer/HAFNI/">HAFNI</a>)</strong>, i tillegg til <strong>Hunter Group (<a href="/aksjer/HUNT/">HUNT</a>)</strong>, som leier inn VLCC-er og leier dem ut igjen, og det nye <strong>Capital Tankers (<a href="/aksjer/CAPT/">CAPT</a>)</strong> på Euronext Growth Oslo.
       </p>
 
       <h3>LNG og LPG</h3>
       <p>
-        Frakter flytende naturgass (LNG) og flytende petroleumsgass (LPG) i spesialbygde kryotankere. Høyere barriere for nybygg, og kontraktene er ofte lengre enn i spot-tankmarkedet. Viktige selskaper: <strong>Flex LNG (FLNG)</strong>, <strong>BW LPG (BWLPG)</strong>, <strong>ALNG (ALNG)</strong>.
+        Gasstankskip frakter flytende naturgass (LNG), som holdes nedkjølt til rundt minus 162 grader, og flytende petroleumsgass (LPG) som propan og butan. <strong>BW LPG (<a href="/aksjer/BWLPG/">BWLPG</a>)</strong> omtaler seg som verdens største eier og operatør av de store VLGC-skipene for LPG. <strong>ALNG (<a href="/aksjer/ALNG/">ALNG</a>)</strong>, tidligere Awilco LNG, har to LNG-skip og har ikke betalt utbytte siden 2024. Flex LNG ble strøket fra Oslo Børs i september 2025 og handles nå bare i New York (se <a href="/avnoteringer/">avnoterte aksjer</a>).
       </p>
 
       <h3>Tørrbulk</h3>
       <p>
-        Frakter tørre råvarer som kull, jernmalm, korn og gjødsel. Inntjeningen styres av Baltic Dry Index (BDI), som svinger kraftig med kinesisk etterspørsel og global industriaktivitet. Viktige selskaper: <strong>Golden Ocean (GOGL)</strong>, <strong>Himalaya Shipping (HSHP)</strong>, <strong>2020 Bulkers (2020)</strong>.
+        Tørrbulkskip frakter jernmalm, kull, korn og andre råvarer i løs vekt, og ratene svinger særlig med kinesisk import av malm og kull. <strong>Himalaya Shipping (<a href="/aksjer/HSHP/">HSHP</a>)</strong> eier store Newcastlemax-skip og deler ut penger hver måned. <strong>Jinhui (<a href="/aksjer/JIN/">JIN</a>)</strong> ledes fra Hongkong, og <strong>Western Bulk (<a href="/aksjer/WEST/">WEST</a>)</strong> leier stort sett inn skipene i stedet for å eie dem. Golden Ocean ble fusjonert inn i belgiske <strong>CMB.TECH (<a href="/aksjer/CMBTO/">CMBTO</a>)</strong> i august 2025, og eierne fikk CMB.TECH-aksjer, som nå er notert i Oslo. <strong>2020 Bulkers (<a href="/aksjer/2020/">2020</a>)</strong> hører ikke lenger hjemme her: selskapet solgte alle tørrbulkskipene i april 2026 og har siden kjøpt ankerhåndteringsfartøy for offshore.
       </p>
 
       <h3>Containere</h3>
       <p>
-        Frakter containeriserte varer. Markedet eksploderte under covid-pandemien og falt like bratt etterpå. <strong>MPC Container Ships (MPCC)</strong> er det eneste rene containerselskapet på Oslo Børs og et lærebokeksempel på syklisitet.
+        <strong>MPC Container Ships (<a href="/aksjer/MPCC/">MPCC</a>)</strong> driver ingen containerlinjer, men eier små og mellomstore containerskip og leier dem ut til linjerederiene på tidscertepartier, altså avtaler med fast dagrate over en periode. Det er det eneste rene containerselskapet blant shippingaksjene vi følger.
       </p>
 
       <h3>Bildebåter (RoRo/PCC)</h3>
       <p>
-        Frakter biler og rullende kjøretøy. Veksten i global bileksport — særlig fra Kina og Sør-Korea — har gitt kapasitetspress og gode rater. Viktige selskaper: <strong>Höegh Autoliners (HAUTO)</strong>, <strong>Wallenius Wilhelmsen (WAWI)</strong>.
+        <strong>Höegh Autoliners (<a href="/aksjer/HAUTO/">HAUTO</a>)</strong> og <strong>Wallenius Wilhelmsen (<a href="/aksjer/WAWI/">WAWI</a>)</strong> frakter biler, anleggsmaskiner og annen rullende last mellom kontinentene. Ifølge Höegh er det særlig eksporten fra Kina som driver etterspørselen nå. Begge har flerårige avtaler med bilprodusenter og bygger nye skip som kan gå på LNG.
       </p>
 
       <h3>Kjemikalieskip og kombinerte</h3>
       <p>
-        Frakter kjemikaler og spesialprodukter. Krever sertifiserte tankere og gir høyere marginer per tonn enn råoljetankere, men opererer i et mer nisjepreget marked. <strong>Stolt-Nielsen (SNI)</strong> og <strong>Odfjell SE (ODF)</strong> dominerer dette segmentet, mens <strong>Klaveness Combination Carriers (KCC)</strong> kombinerer tørrbulk og flytende last.
+        Kjemikalietankskip har mange atskilte tanker, ofte i rustfritt stål, slik at ett skip kan ta flere laster på samme tur. <strong>Stolt-Nielsen (<a href="/aksjer/SNI/">SNI</a>)</strong> og <strong>Odfjell (<a href="/aksjer/ODF/">ODF</a> og <a href="/aksjer/ODFB/">ODFB</a>)</strong> er to av de store i verdensmarkedet og eier også tankterminaler, alene eller med partnere. <strong>Stainless Tankers (<a href="/aksjer/STST/">STST</a>)</strong> er i ferd med å selge hele flåten. <strong>Klaveness Combination Carriers (<a href="/aksjer/KCC/">KCC</a>)</strong> tar flytende last den ene veien og tørrlast den andre, slik at skipene sjelden seiler tomme.
       </p>
 
       <!-- 3 -->
-      <h2 id="yield">Utbytteyield og historisk snitt</h2>
+      <h2 id="yield">Utbytteyield: hva som faktisk er betalt</h2>
 
       <p>
-        Tabellen under viser et utvalg norske shippingaksjer med sist kjente utbytte per aksje og gjennomsnittlig direkteavkastning beregnet på nåværende kurs over de siste fem år. Data er hentet fra exday.no og oppdateres daglig.
+        Tabellen viser hva rederiene har betalt per aksje de siste tolv månedene fram til 9. oktober 2026, fordelt etter ex-dato, og hva det utgjør målt mot sluttkursen den dagen. Vi viser det som er betalt og ikke et anslag for neste år, fordi et anslag sjelden holder i denne sektoren.
       </p>
 
-      <table>
+      <table class="kompakt">
         <thead>
           <tr>
-            <th>Ticker</th>
             <th>Selskap</th>
-            <th>Sub-sektor</th>
-            <th>Utbytte/aksje</th>
-            <th>Snitt yield 5 år</th>
-            <th>Frekvens</th>
+            <th class="tall">Yield</th>
+            <th class="tall">Betalt 12 mnd</th>
+            <th class="tall">Kurs 9.10.</th>
+            <th class="tall">Antall</th>
+            <th>Segment</th>
           </tr>
         </thead>
         <tbody>
-          <tr><td><strong>HAUTO</strong></td><td>Höegh Autoliners</td><td>Bildebåt</td><td>22,82 kr</td><td>11,3 %</td><td>Kvartalsvis</td></tr>
-          <tr><td><strong>SNI</strong></td><td>Stolt-Nielsen</td><td>Kjemikalie</td><td>18,50 kr</td><td>5,6 %</td><td>Halvårlig</td></tr>
-          <tr><td><strong>OET</strong></td><td>Okeanis Eco Tankers</td><td>Råoljetanker</td><td>19,87 kr</td><td>6,3 %</td><td>Kvartalsvis</td></tr>
-          <tr><td><strong>BWLPG</strong></td><td>BW LPG Limited</td><td>LPG-tanker</td><td>18,18 kr</td><td>7,9 %</td><td>Kvartalsvis</td></tr>
-          <tr><td><strong>FLNG</strong></td><td>Flex LNG Ltd</td><td>LNG-tanker</td><td>14,40 kr</td><td>—</td><td>Kvartalsvis</td></tr>
-          <tr><td><strong>WAWI</strong></td><td>Wallenius Wilhelmsen</td><td>Bildebåt / RoRo</td><td>24,26 kr</td><td>8,6 %</td><td>Halvårlig</td></tr>
-          <tr><td><strong>GOGL</strong></td><td>Golden Ocean Group</td><td>Tørrbulk</td><td>10,80 kr</td><td>—</td><td>Kvartalsvis</td></tr>
-          <tr><td><strong>ODF</strong></td><td>Odfjell SE</td><td>Kjemikalie</td><td>9,74 kr</td><td>10,2 %</td><td>Halvårlig</td></tr>
-          <tr><td><strong>HAFNI</strong></td><td>Hafnia Limited</td><td>Produkttanker</td><td>3,74 kr</td><td>9,2 %</td><td>Kvartalsvis</td></tr>
-          <tr><td><strong>KCC</strong></td><td>Klaveness Comb. Carriers</td><td>Kombinert</td><td>3,93 kr</td><td>7,8 %</td><td>Kvartalsvis</td></tr>
-          <tr><td><strong>FRO</strong></td><td>Frontline PLC</td><td>Råoljetanker</td><td>8,72 kr</td><td>3,8 %</td><td>Kvartalsvis</td></tr>
-          <tr><td><strong>MPCC</strong></td><td>MPC Container Ships</td><td>Container</td><td>1,74 kr</td><td>18,5 %</td><td>Kvartalsvis</td></tr>
-          <tr><td><strong>HSHP</strong></td><td>Himalaya Shipping</td><td>Tørrbulk</td><td>5,34 kr</td><td>4,4 %</td><td>Månedlig</td></tr>
+          <tr><td>Okeanis (OET)</td><td class="tall">10,2&nbsp;%</td><td class="tall">91,44 kr</td><td class="tall">896,00 kr</td><td class="tall">4</td><td>Råoljetank</td></tr>
+          <tr><td>Frontline (FRO)</td><td class="tall">10,9&nbsp;%</td><td class="tall">59,18 kr</td><td class="tall">543,60 kr</td><td class="tall">4</td><td>Råoljetank</td></tr>
+          <tr><td>Hafnia (HAFNI)</td><td class="tall">10,3&nbsp;%</td><td class="tall">10,64 kr</td><td class="tall">103,30 kr</td><td class="tall">4</td><td>Produkttank</td></tr>
+          <tr><td>BW LPG (BWLPG)</td><td class="tall">9,7&nbsp;%</td><td class="tall">24,60 kr</td><td class="tall">252,40 kr</td><td class="tall">4</td><td>LPG</td></tr>
+          <tr><td>Himalaya (HSHP)</td><td class="tall">9,1&nbsp;%</td><td class="tall">15,71 kr</td><td class="tall">173,00 kr</td><td class="tall">12</td><td>Tørrbulk</td></tr>
+          <tr><td>Klaveness (KCC)</td><td class="tall">6,7&nbsp;%</td><td class="tall">7,08 kr</td><td class="tall">105,40 kr</td><td class="tall">4</td><td>Kombinert</td></tr>
+          <tr><td>Höegh (HAUTO)</td><td class="tall">6,4&nbsp;%</td><td class="tall">11,87 kr</td><td class="tall">184,60 kr</td><td class="tall">4</td><td>Bilskip</td></tr>
+          <tr><td>Wallenius Wilh. (WAWI)</td><td class="tall">9,0&nbsp;%</td><td class="tall">15,51 kr</td><td class="tall">173,00 kr</td><td class="tall">2</td><td>Bilskip</td></tr>
+          <tr><td>Odfjell A (ODF)</td><td class="tall">7,4&nbsp;%</td><td class="tall">9,61 kr</td><td class="tall">129,20 kr</td><td class="tall">2</td><td>Kjemikalie</td></tr>
+          <tr><td>Stolt-Nielsen (SNI)</td><td class="tall">5,4&nbsp;%</td><td class="tall">19,15 kr</td><td class="tall">356,50 kr</td><td class="tall">2</td><td>Kjemikalie</td></tr>
+          <tr><td>MPC Container (MPCC)</td><td class="tall">6,0&nbsp;%</td><td class="tall">1,75 kr</td><td class="tall">28,94 kr</td><td class="tall">4</td><td>Container</td></tr>
         </tbody>
       </table>
 
-      <p class="text-xs text-gray-400 dark:text-gray-600">Kilde: exday.no / Yahoo Finance, tall per 30. august 2026. Utbytte per aksje er sist kjente annualiserte beløp. Snitt yield 5 år er beregnet på nåværende kurs — ikke historisk kurs (se forklaring nedenfor).</p>
+      <p class="text-xs text-gray-400 dark:text-gray-600">Kilde: exday.no (utbytteserien fra Yahoo Finance) og sluttkurs 9. oktober 2026, kontrollert mot selskapenes meldinger på NewsWeb. Yield er betalt siste 12 måneder delt på kursen. Se aksjesiden for dagens tall.</p>
+
+      <p>
+        To av tallene trenger en forklaring. Frontline betalte i september 2026 et engangsutbytte på 0,80 dollar per aksje etter salget av to VLCC-er, i tillegg til 2,61 dollar for andre kvartal. Uten det ville summen vært om lag en åttendedel lavere. Wallenius Wilhelmsen har lagt et ekstraordinært tillegg oppå det ordinære utbyttet i begge de siste utbetalingene: 0,47 av 1,01 dollar for andre halvår 2025 og 0,24 av 0,61 dollar for første halvår 2026. Tankrederiene øverst hadde dessuten et helt uvanlig 2026 (se neste avsnitt), så yielden deres viser et toppår.
+      </p>
+
+      <h3>Selskapene som ikke står i tabellen</h3>
+      <ul>
+        <li><strong>2020 Bulkers</strong> betalte ut salgssummen for hele flåten i april 2026. Målt mot dagens kurs blir det over 2&nbsp;000 prosent.</li>
+        <li><strong>Stainless Tankers</strong>, <strong>Hunter Group</strong> og <strong>Capital Tankers</strong> har gitt hele eller deler av utdelingene som tilbakebetaling av innbetalt kapital, ikke som utbytte. Stainless Tankers selger dessuten flåten.</li>
+        <li><strong>CMB.TECH</strong> har bare vært notert i Oslo siden august 2025. Utdelingen i juni 2026 var 0,20 dollar i utbytte og 0,44 dollar fra overkursfondet.</li>
+        <li><strong>ALNG</strong> har ikke betalt siden 2024, <strong>Jinhui</strong> betaler som regel én gang i året, og <strong>Western Bulk</strong> betalte ingenting for første kvartal 2026.</li>
+      </ul>
+      <p>
+        Tilbakebetalt kapital skattlegges normalt ikke når den utbetales til en personlig aksjonær i Norge. Beløpet trekkes fra inngangsverdien, og skatten kommer som en større gevinst når du selger. Vanlig utbytte skattlegges med effektivt 37,84 prosent av det som overstiger skjermingsfradraget. Se <a href="/artikler/utbytte-og-skatt/">artikkelen om utbytte og skatt</a>.
+      </p>
 
       <div class="callout callout-green">
-        <strong>Merk om snitt yield 5 år:</strong> Historisk yield på exday.no beregnes ved å dele historiske utbyttebeløp på <em>nåværende aksjekurs</em> — ikke kursen det aktuelle året. Det betyr at for selskaper der kursen har steget mye, vil de historiske yieldsene fremstå lavere enn hva investorer faktisk fikk, og omvendt for selskaper der kursen har falt.
+        <strong>Hvorfor ikke et femårssnitt?</strong> Et snitt over fem år blander toppår og bunnår til et tall som ingen av årene lignet. På aksjesidene finner du både hva som er betalt de siste tolv månedene og år for år, og den løpende yielden, som er et anslag.
       </div>
 
-      <a href="https://exday.no/" class="tool-cta">
+      <a href="/aksjer/sektor/shipping/" class="tool-cta">
         <div class="tool-cta-icon">
-          <svg width="20" height="20" fill="none" stroke="white" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+          <svg width="20" height="20" fill="none" stroke="white" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
         </div>
         <div>
-          <p class="font-semibold text-green-700 dark:text-green-400 text-sm">Se alle shippingaksjer på exday.no</p>
-          <p class="text-xs text-gray-500 dark:text-gray-400">Oppdatert yield, ex-dato og femårshistorikk for alle 20 shippingaksjer</p>
+          <p class="font-semibold text-green-700 dark:text-green-400 text-sm">Shippingaksjene på exday.no</p>
+          <p class="text-xs text-gray-500 dark:text-gray-400">Utbytte, ex-dato og historikk for hver aksje i sektoren</p>
         </div>
       </a>
 
@@ -377,113 +403,163 @@
       <h2 id="syklisitet">Syklisitet: fraktratenes opp- og nedturer</h2>
 
       <p>
-        Ingen egenskap ved shipping er viktigere å forstå enn syklisiteten. Fraktratene — og dermed selskapenes inntjening og utbytte — kan halvere seg fra ett kvartal til det neste. MPC Container Ships er det tydeligste eksempelet fra Oslo Børs i nyere tid:
+        Fraktratene, og dermed utbyttet, kan endre seg kraftig fra ett kvartal til det neste. Tabellen viser utbyttet for de fire siste kvartalene hos sju rederier, slik selskapene selv meldte det til Oslo Børs.
+      </p>
+
+      <table class="kompakt">
+        <thead>
+          <tr>
+            <th>Selskap</th>
+            <th class="tall">3. kv.<br>2025</th>
+            <th class="tall">4. kv.<br>2025</th>
+            <th class="tall">1. kv.<br>2026</th>
+            <th class="tall">2. kv.<br>2026</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Okeanis</td><td class="tall">0,75</td><td class="tall">1,55</td><td class="tall">2,00</td><td class="tall">5,25</td></tr>
+          <tr><td>Frontline</td><td class="tall">0,19</td><td class="tall">1,03</td><td class="tall">1,55</td><td class="tall">2,61*</td></tr>
+          <tr><td>Hafnia</td><td class="tall">0,15</td><td class="tall">0,18</td><td class="tall">0,29</td><td class="tall">0,50</td></tr>
+          <tr><td>BW LPG</td><td class="tall">0,40</td><td class="tall">0,57</td><td class="tall">0,67</td><td class="tall">0,95</td></tr>
+          <tr><td>Klaveness</td><td class="tall">0,12</td><td class="tall">0,08</td><td class="tall">0,25</td><td class="tall">0,30</td></tr>
+          <tr><td>Höegh</td><td class="tall">0,16</td><td class="tall">0,52</td><td class="tall">0,49</td><td class="tall">0,08</td></tr>
+          <tr><td>MPC Container</td><td class="tall">0,05</td><td class="tall">0,05</td><td class="tall">0,04</td><td class="tall">0,04</td></tr>
+        </tbody>
+      </table>
+
+      <p class="text-xs text-gray-400 dark:text-gray-600">Dollar per aksje, avrundet til to desimaler. Kvartalet er perioden utbyttet gjelder, og pengene kommer gjerne én til tre måneder etter at kvartalet er slutt. *I tillegg kom 0,80 dollar i engangsutbytte. Kilde: selskapenes utbyttemeldinger på NewsWeb.</p>
+
+      <p>
+        Hos Okeanis ble utbyttet sju ganger så stort på tre kvartaler, og Frontline gikk fra 0,19 til 2,61 dollar. Samtidig falt Höegh Autoliners fra 0,49 til 0,08 dollar, en nedgang på 83 prosent fra første til andre kvartal. Selskapet viste til dyrere drivstoff, som kundene først betaler tillegg for fem til seks måneder senere, og en engangs omlegging av last som bandt opp kontanter. Siden politikken er å dele ut kontantene over en fast minstebeholdning, slo det rett inn i utbyttet.
+      </p>
+
+      <h3>Fem år med MPC Container Ships</h3>
+      <p>
+        Containermarkedet hadde en kraftig oppgang under pandemien. MPCC betalte sitt første utbytte i 2022, og siden har det falt hvert år.
       </p>
 
       <table>
         <thead>
           <tr>
             <th>År</th>
-            <th>Markeds­situasjon</th>
-            <th>MPCC utbytte (illustrativt)</th>
+            <th class="tall">MPCC utbytte per aksje</th>
           </tr>
         </thead>
         <tbody>
-          <tr><td>2021</td><td>Container-boom etter covid</td><td>Svært høyt — tosifret yield</td></tr>
-          <tr><td>2022</td><td>Ratene når topp, deretter fall</td><td>Høyt første halvår, avtagende</td></tr>
-          <tr><td>2023</td><td>Normalisering av rater</td><td>Moderat til lavt</td></tr>
-          <tr><td>2024</td><td>Rødehavs-omvei gir midlertidig løft</td><td>Midlertidig høyere</td></tr>
-          <tr><td>2025</td><td>Normalisering igjen</td><td>Lavere</td></tr>
+          <tr><td>2021</td><td class="tall">0,00 kr</td></tr>
+          <tr><td>2022</td><td class="tall">9,24 kr</td></tr>
+          <tr><td>2023</td><td class="tall">7,03 kr</td></tr>
+          <tr><td>2024</td><td class="tall">4,92 kr</td></tr>
+          <tr><td>2025</td><td class="tall">2,75 kr</td></tr>
+          <tr><td>Siste 12 mnd, til 9.10.2026</td><td class="tall">1,75 kr</td></tr>
         </tbody>
       </table>
 
+      <p class="text-xs text-gray-400 dark:text-gray-600">Kilde: exday.no (utbytteserien fra Yahoo Finance), fordelt etter ex-dato. Kronebeløpene påvirkes også av dollarkursen på utbetalingstidspunktet.</p>
+
       <p>
-        Det samme mønsteret gjentar seg i tankmarkedet, bulkmarkedet og LNG-markedet — riktignok med ulike triggere og tidshorisonter. Fellesnevneren er at inntjeningen er tett koblet til spotratene, som igjen styres av balansen mellom tilgjengelig tonnasje og etterspørsel etter transport.
+        Rødehavskrisen ga høyere containerrater i 2024, men det løftet ikke MPCCs utbytte det året. Skipene er leid ut på faste tidscertepartier, så høyere markedsrater slår bare inn når en kontrakt løper ut og skipet leies ut på nytt. Samtidig går en del av pengene til nye skip.
       </p>
 
       <h3>Hva driver fraktratene?</h3>
 
       <p>
-        På <strong>etterspørselssiden</strong> er det den globale handelen som teller: oljeproduksjon, industriaktivitet, bilsalg og varehandel. På <strong>tilbudssiden</strong> er det ordreboken — antall skip under bygging — som er avgjørende. Norsk shipping har historisk hatt god innsikt i begge sider av dette markedet, og selskaper som snur raskest og posisjonerer seg riktig i bundene av syklusen, henter typisk den beste avkastningen.
+        På <strong>etterspørselssiden</strong> teller både mengde og distanse. En omvei rundt Afrika binder opp et skip flere uker lenger enn turen gjennom Suezkanalen, og det virker på markedet som om flåten var blitt mindre. På <strong>tilbudssiden</strong> avgjør ordreboken, altså hvor mange skip som er under bygging, og hvor mange gamle skip som hugges. Et nytt skip tar gjerne to til tre år fra bestilling til levering, så tilbudet kan ikke øke raskt når ratene stiger.
       </p>
 
       <p>
-        En viktig kortsiktig faktor er <strong>geopolitikk</strong>. Houthi-angrepene på skip i Rødehavet fra slutten av 2023 tvang mange rederier til å gå rundt Kapp det gode håp, noe som økte effektiv etterspørsel etter tonnasje og gav et midlertidig ratepush i 2024. Tilsvarende gjelder stengning av Suez eller Panama, trafikkrestriksjoner og sanksjonspolitikk mot Russland og Iran.
+        <strong>Geopolitikk</strong> kan flytte ratene mer enn noe annet, og de siste årene har gitt to eksempler. Houthi-angrepene i Rødehavet fra slutten av 2023 fikk mange rederier til å gå rundt Kapp det gode håp. I begynnelsen av mars 2026 erklærte Irans revolusjonsgarde Hormuzstredet stengt. Stredet er den eneste sjøveien ut av Persiabukta, og trafikken falt kraftig mens mange tankskip ble liggende fast i bukta. I september 2026 kostet det for første gang over én million dollar per dag å leie et VLCC fra Persiabukta til Kina, ifølge tall fra Baltic Exchange gjengitt av gCaptain. Det er mye av bakgrunnen for de høye tankutbyttene i 2026.
       </p>
 
       <div class="callout callout-warn">
-        <strong>Viktig:</strong> Svært høy historisk snitt-yield betyr ikke nødvendigvis at selskapet er et godt kjøp i dag. For 2020 Bulkers (2020) og Hunter Group (HUNT) viser femårs-snittet ekstreme tall som skyldes enkeltår med ekstraordinære utbetalinger. Slike selskaper kan godt betale lite eller ingenting de neste år.
+        <strong>Viktig:</strong> Et høyt utbytte etter et rekordkvartal er ikke et løfte om det neste. Når ratene faller, faller utbyttet med dem, ofte i løpet av ett eller to kvartaler.
       </div>
 
       <!-- 5 -->
       <h2 id="valuta">USD-eksponering og valutaeffekten</h2>
 
       <p>
-        De fleste norske shippingaksjer opererer i et dollarmarked. Fraktrater fastsettes i USD, driftskostnader er delvis i USD, og selskapenes regnskaper presenteres typisk i USD. Men aksjene handles på Oslo Børs i norske kroner, og utbyttet utbetales i NOK.
+        De fleste rederiene tjener pengene sine i dollar og fører regnskapet i dollar. Utbyttet vedtas derfor i dollar og regnes om til kroner før det betales ut til aksjonærene i VPS, så kronebeløpet avhenger av dollarkursen den dagen. Slik ville et utbytte på 1,50 dollar per aksje blitt i kroner med gjennomsnittskursen i noen ulike perioder:
       </p>
 
-      <p>
-        Det betyr at norske investorer i realiteten er eksponert mot USD/NOK-kursen. Tenk deg at et selskap erklærer et utbytte på 1,50 USD per aksje:
-      </p>
-
-      <table>
+      <table class="kompakt">
         <thead>
           <tr>
-            <th>USD/NOK-kurs</th>
-            <th>Utbytte i NOK</th>
-            <th>Effekt vs. 10,50-kurs</th>
+            <th>Periode</th>
+            <th class="tall">USD/NOK, snitt</th>
+            <th class="tall">1,50 USD i kroner</th>
           </tr>
         </thead>
         <tbody>
-          <tr><td>9,50</td><td>14,25 kr</td><td>−8,6 %</td></tr>
-          <tr><td>10,50 (nøytral)</td><td>15,75 kr</td><td>—</td></tr>
-          <tr><td>11,50</td><td>17,25 kr</td><td>+9,5 %</td></tr>
-          <tr><td>12,50</td><td>18,75 kr</td><td>+19,0 %</td></tr>
+          <tr><td>2014</td><td class="tall">6,30</td><td class="tall">9,45 kr</td></tr>
+          <tr><td>2021</td><td class="tall">8,60</td><td class="tall">12,90 kr</td></tr>
+          <tr><td>2023</td><td class="tall">10,56</td><td class="tall">15,85 kr</td></tr>
+          <tr><td>2024</td><td class="tall">10,74</td><td class="tall">16,11 kr</td></tr>
+          <tr><td>2025</td><td class="tall">10,39</td><td class="tall">15,59 kr</td></tr>
+          <tr><td>September 2026</td><td class="tall">9,38</td><td class="tall">14,07 kr</td></tr>
         </tbody>
       </table>
 
+      <p class="text-xs text-gray-400 dark:text-gray-600">Kilde: Norges Bank, snitt av daglige kurser for hvert år (for september 2026 snittet for måneden).</p>
+
       <p>
-        En svak krone er altså en fordel for norske investorer i shippingaksjer — utbyttet øker i NOK uten at noe har endret seg i skipsfartens økonomi. Det omvendte gjelder selvsagt ved en sterkere krone. Dette er en skjult valutarisiko mange glemmer når de ser på den historiske yielden i NOK.
+        Fra 2021 til 2024 ga det samme dollarutbyttet 25 prosent flere kroner, uten at noe hadde endret seg i fraktmarkedet. Fra 2024 til september 2026 ble kronebeløpet 13 prosent lavere. Over tiåret fra 2014 til 2024 steg dollaren med 70 prosent mot kronen.
       </p>
 
       <p>
-        Selskaper som <strong>Frontline (FRO)</strong>, <strong>Golden Ocean (GOGL)</strong> og <strong>Hafnia (HAFNI)</strong> rapporterer i USD. Utbyttet konverteres til NOK på utbetalingstidspunktet. Andre, som <strong>Stolt-Nielsen (SNI)</strong>, rapporterer i USD men betaler i ulike valutaer avhengig av aksjeklasse.
+        Yielden i prosent påvirkes mindre. For aksjer som også handles i New York, følger kursen i Oslo i praksis kursen der omregnet til kroner, så når dollaren svekkes, faller både utbyttet og aksjekursen målt i kroner. Det du merker, er kronebeløpet på konto.
       </p>
 
       <!-- 6 -->
-      <h2 id="analyse">Hva du bør analysere — ikke P/E</h2>
+      <h2 id="analyse">Hva du bør analysere i stedet for P/E</h2>
 
       <p>
-        P/E-ratio er et dårlig nøkkeltall for shippingselskaper. Inntjeningen svinger for mye fra kvartal til kvartal til at et øyeblikksbilde av P/E sier noe meningsfullt om verdsettelsen. Her er de målene som faktisk gir innsikt:
+        P/E sier lite om rederier. Resultatet svinger så mye at P/E blir lav på toppen av syklusen, når aksjen ofte er dyr, og høy eller umulig å regne ut i bunnen. Dette er målene bransjen selv bruker:
       </p>
 
-      <h3>NAV — netto aktivaverdi</h3>
+      <h3>NAV, netto aktivaverdi</h3>
       <p>
-        Net Asset Value beregner verdien av flåten (skip minus gjeld) per aksje. Handler aksjen med rabatt til NAV betyr det at markedet priser flåten lavere enn gjeninnkjøpsverdien — noe som kan indikere underprisning, eller at markedet tror ratene vil falle. Analytikere i shipping bruker NAV-premie/rabatt som primært verdsettelsesverktøy.
+        NAV er markedsverdien av flåten, beregnet fra meglertakster for tilsvarende brukte skip, pluss andre eiendeler og minus netto gjeld, delt på antall aksjer. Handler aksjen under NAV, priser markedet selskapet lavere enn det skipene kunne vært solgt for. Det kan bety at aksjen er billig, eller at markedet venter lavere rater og fallende skipsverdier.
       </p>
 
       <h3>TCE-rate (Time Charter Equivalent)</h3>
       <p>
-        TCE viser inntjeningen per skip per dag, justert for reisekostnader. Det er bransjens standardiserte mål på lønnsomhet og lar deg sammenligne selskaper med ulike kontraktstrukturer direkte. En TCE-rate godt over break-even er et positivt tegn; en rate under break-even betyr at selskapet taper penger på drift.
+        TCE er inntekten per skip per dag etter reisekostnader som drivstoff og havneavgifter, og gjør det mulig å sammenligne et skip i spotmarkedet med et på tidscerteparti. Sammenlign den med break-even, raten skipet må tjene for å dekke drift, administrasjon, renter og avdrag. Ligger TCE under break-even over tid, blir det lite igjen til utbytte.
       </p>
 
       <h3>Charter-dekning og kontraktlengde</h3>
       <p>
-        Et selskap med 80 % av flåten på langsiktige tidscertepartier (time charters) har forutsigbar inntjening uavhengig av spot-markedet — men mister oppsiden om ratene stiger. Et selskap som seiler primært i spotmarkedet har høyere volatilitet, men kan tjene mye i et sterkt marked. For utbytteinvestorer er charter-dekning avgjørende for å vurdere utbyttestabilitet.
+        Et rederi med det meste av flåten på flerårige tidscertepartier vet langt på vei hva det tjener det neste året, men går glipp av oppsiden når ratene stiger. MPC Container Ships oppgir i hver kvartalsrapport hvor stor del av de kommende skipsdøgnene som allerede er leid ut. Et rederi i spotmarkedet, som Okeanis, får hele effekten begge veier. Et tidscerteparti betyr heller ikke alltid fast rate: Himalaya Shipping har leid ut skipene til en rate som følger Baltic-indeksen for capesize.
       </p>
 
-      <h3>Orderbok og flåtefornyelse</h3>
+      <h3>Utbyttepolitikken</h3>
       <p>
-        Ordreboken — skip under bygging globalt — forteller deg om fremtidig tilbud. En stor orderbok betyr at mye ny kapasitet kommer inn i markedet de neste 2–3 år, noe som presser ratene ned. I perioder med lav orderbok (som i råoljetankmarkedet rundt 2022–2024) er kapasitetssiden stramt — og ratene holder seg høye.
+        Rederiene har svært ulike regler for hvor mye som deles ut. Noen eksempler fra selskapenes egne retningslinjer:
+      </p>
+      <ul>
+        <li>Frontline sikter mot et kvartalsvis utbytte lik eller nær det justerte resultatet per aksje.</li>
+        <li>Hafnia deler ut fra halvparten til ni tideler av det justerte resultatet, avhengig av hvor høy gjelden er målt mot verdien av skipene.</li>
+        <li>BW LPG deler ut halvparten av overskuddet i shippingdelen, og mer når gjelden er lav nok.</li>
+        <li>Odfjell og MPC Container Ships deler ut halvparten av det justerte nettoresultatet.</li>
+        <li>Klaveness Combination Carriers deler ut minst fire femdeler av den justerte frie kontantstrømmen.</li>
+        <li>Höegh Autoliners deler ut kontantene som overstiger en fastsatt minstebeholdning.</li>
+      </ul>
+      <p>
+        En høy andel gir høy yield i gode tider og raske kutt i dårlige. En politikk som avhenger av gjelden eller kontantene, kan gi lavere utbytte også i et år med god inntjening. Mer om utbetalingsgrad i <a href="/artikler/hva-er-payout-ratio/">artikkelen om payout ratio</a>.
+      </p>
+
+      <h3>Ordrebok og flåtefornyelse</h3>
+      <p>
+        Ordreboken er skipene som er bestilt, men ikke levert, gjerne målt som andel av flåten som seiler i dag. En stor ordrebok betyr at mye ny kapasitet kommer de neste årene og presser ratene når skipene leveres. Sommeren 2022 var ordreboken for råolje- og produkttankere bare 5,1 prosent av flåten, den laveste andelen siden 1996, ifølge bransjeorganisasjonen BIMCO. Dermed kom det lite ny kapasitet i årene etter.
       </p>
 
       <a href="/verktoy/kalkulator/" class="tool-cta">
         <div class="tool-cta-icon">
-          <svg width="20" height="20" fill="none" stroke="white" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+          <svg width="20" height="20" fill="none" stroke="white" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
         </div>
         <div>
           <p class="font-semibold text-green-700 dark:text-green-400 text-sm">Utbyttekalkulator</p>
-          <p class="text-xs text-gray-500 dark:text-gray-400">Beregn forventet utbytteinntekt fra shippingaksjer over tid</p>
+          <p class="text-xs text-gray-500 dark:text-gray-400">Regn på utbytte over tid med ulike yieldnivåer</p>
         </div>
       </a>
 
@@ -491,81 +567,113 @@
       <h2 id="risiko">Risikofaktorer</h2>
 
       <p>
-        Shipping er ikke for de som ønsker rolig søvn. Her er de viktigste risikofaktorene du bør ta stilling til:
+        Dette er de viktigste risikoene, og de fleste ligger utenfor selskapenes kontroll:
       </p>
 
       <h3>1. Ratevolatilitet</h3>
       <p>
-        Som vist over svinger fraktratene dramatisk. Et selskap som tjener godt i dag kan ha kraftig inntektsfall neste kvartal uten at noe spesielt har skjedd — bare at tilbudet og etterspørselen har endret seg. Utbyttet følger inntjeningen, og kuttes raskt når ratene faller.
+        Som tabellene over viser, kan utbyttet bli mange ganger større eller mindre i løpet av et år. De fleste rederiene deler ut en andel av resultatet eller kontantstrømmen og ikke et fast beløp, så når ratene faller, faller utbyttet raskt.
       </p>
 
-      <h3>2. Reguleringsrisiko (IMO og CII)</h3>
+      <h3>2. Reguleringsrisiko (IMO, EU og utslipp)</h3>
       <p>
-        Den internasjonale sjøfartsorganisasjonen IMO skjerper kravene til utslipp kontinuerlig. Carbon Intensity Indicator (CII) og Energy Efficiency Existing Ship Index (EEXI) tvinger rederier til å redusere fart (slow steaming), oppgradere eksisterende skip eller fase dem ut tidligere. Dette øker enten kostnadene eller reduserer den effektive kapasiteten — og påvirker kapitalallokering og utbytte.
+        FNs sjøfartsorganisasjon IMO har siden 1. januar 2023 stilt krav til skipenes energieffektivitet (EEXI) og gitt dem en årlig karakter for karbonintensitet (CII). I EU har skip på 5&nbsp;000 bruttotonn og mer vært med i kvotesystemet EU ETS siden januar 2024, med gradvis innfasing: kvoter for 40 prosent av utslippene i 2024, 70 prosent i 2025 og alle fra 2026. FuelEU Maritime stiller krav til drivstoffet fra 2025. Reglene gjør eldre skip dyrere å drive og kan tvinge fram lavere fart, ombygging eller tidligere opphugging. Det koster penger som ellers kunne gått til utbytte, men kan også stramme inn tilbudet av skip.
       </p>
 
       <h3>3. Geopolitikk og ruteforstyrrelser</h3>
       <p>
-        Suez og Panama-kanalene er kritiske flaskehalser. Stengninger eller omveistrafikk kan midlertidig løfte ratene kraftig — men kan like gjerne skape usikkerhet og forsikringsøkning som demper inntjeningen. Sanksjoner (mot Russland, Iran, Venezuela) omfordeler handelsstrømmene og skaper vinnere og tapere.
+        Stengninger og omveier løfter ofte ratene, men gir også høyere forsikring, fare for skip og mannskap og mer usikre inntekter, og det rammer ikke alle likt. Western Bulk droppet utbyttet for første kvartal 2026 og viste blant annet til tre skip som ventet på å komme seg gjennom Hormuzstredet.
       </p>
 
       <h3>4. Kapitalstruktur og refinansieringsrisiko</h3>
       <p>
-        Shipping er kapitalintensivt. Et VLCC (stort råoljetankskip) koster gjerne 100–130 millioner USD. Selskaper finansierer flåten med stor gjeldsandel, og refinansiering ved forfall kan bli kostbar dersom rentene er høye eller bankene stiller strengere krav. Høy gjeld i en nedgangsperiode for rater er en farlig kombinasjon.
+        En kontrakt på et nytt VLCC kostet rundt 130 millioner dollar i 2026, ifølge meglerhuset Allied. Rederiene finansierer flåten med mye lån, ofte banklån eller salg og tilbakeleie, og renter og avdrag kommer før utbyttet. Lånevilkårene kan også stoppe utdelinger. Hos Hafnia kan låneavtalene stanse utbytte hvis vilkårene brytes, og ALNG har fått to års pause i avdragene mot at de utsatte avdragene kommer i tillegg i 2029 og 2030. Høy gjeld og fallende rater er en farlig kombinasjon.
       </p>
 
       <h3>5. Selskapsrisiko og registreringssted</h3>
       <p>
-        Mange norsk-noterte shippingselskaper er juridisk registrert på Bermuda, Marshall Islands eller i Singapore — ikke i Norge. Det betyr at norsk selskapslovgivning ikke alltid gjelder fullt ut, og aksjonærbeskyttelsen kan være annerledes. Sjekk alltid styresammensetning, innsideeierprosent og stemmerettstruktur.
+        Mange av rederiene er registrert utenfor Norge: Stolt-Nielsen, Himalaya Shipping, Jinhui og 2020 Bulkers på Bermuda, Okeanis Eco Tankers og Capital Tankers på Marshalløyene, Frontline på Kypros og CMB.TECH i Belgia. Hafnia og BW LPG flyttet fra Bermuda til Singapore i 2024. Da gjelder selskapsretten i registreringslandet og ikke den norske allmennaksjeloven, så reglene for generalforsamling og minoritetsvern kan være annerledes. Se etter hvem som kontrollerer selskapet.
+      </p>
+      <p>
+        Hjemstedet avgjør også om aksjen kan stå på <a href="/artikler/aksjesparekonto-ask/">aksjesparekonto (ASK)</a>. Ifølge Skatteetaten gjelder ASK bare børsnoterte aksjer i selskaper hjemmehørende i EØS. Selskaper registrert på Bermuda eller i Singapore, som Stolt-Nielsen, Himalaya Shipping, Jinhui, Hafnia og BW LPG, kan derfor ikke stå der. I dag kan heller ikke aksjer på Euronext Growth, som Western Bulk, Stainless Tankers og Capital Tankers, stå på ASK. Regjeringen foreslo i statsbudsjettet for 2027, lagt fram 7. oktober 2026, å åpne ASK for slike aksjer fra 1. januar 2027. Forslaget blir lov først når Stortinget har vedtatt budsjettet.
+      </p>
+      <p>
+        Hjemlandet kan også trekke kildeskatt. Belgiske CMB.TECH opplyste at utbyttet i desember 2025 i sin helhet var underlagt 30 prosent kildeskatt, med mindre unntak eller reduksjon gjelder, mens delen av utdelingen i juni 2026 som kom fra overkursfondet, var fri for kildeskatt. Hvordan kildeskatt avregnes mot norsk skatt, står i <a href="/artikler/utbytte-og-skatt/#utenlandske">artikkelen om utbytte og skatt</a>.
       </p>
 
       <h3>6. Valutarisiko</h3>
       <p>
-        Som beskrevet over er norske investorer eksponert mot USD/NOK. En sterk krone kan spise opp mye av utbyttet selv om den underliggende operasjonen går bra.
+        En sterkere krone gir færre kroner for det samme dollarutbyttet, selv om driften går like godt. Fra 2021 til 2024 ga dollarkursen alene en fjerdedel flere kroner.
       </p>
 
       <div class="callout callout-red">
-        <strong>Ikke undervurder ordreboken.</strong> Mange investorer analyserer dagens rater, men glemmer å se på ordreboken for de neste 2–3 år. Et marked med lav orderbok i dag kan se helt annerledes ut om 36 måneder hvis nybygg er bestilt — men ikke listes i spotmarkedet ennå. Se etter ordreboken uttrykt som prosent av eksisterende flåte.
+        <strong>Ikke undervurder ordreboken.</strong> Høye rater får rederiene til å bestille nye skip, og skipene kommer to til tre år senere, ofte mange på en gang. Fra januar til juli 2026 ble det bestilt 139 nye VLCC-er, og ordreboken for tankskip steg til rundt en fjerdedel av dagens flåte målt i kapasitet, ifølge meglerhuset Allied. Sommeren 2022 var andelen for olje- og produkttankere 5,1 prosent.
       </div>
 
       <!-- 8 -->
       <h2 id="egnethet">Er shippingaksjer riktig for deg?</h2>
 
       <p>
-        Shipping passer for investorer som:
+        Shipping passer best for investorer som:
       </p>
 
       <ul>
-        <li>Forstår — og aksepterer — at yielden svinger kraftig fra år til år</li>
-        <li>Har en <strong>lang tidshorisont</strong> og kan sitte gjennom nedgangsperioder</li>
-        <li>Er komfortable med å følge med på fraktindekser og makroforhold</li>
-        <li>Vil ha eksponering mot global handel og råvareøkonomi</li>
-        <li>Ikke er avhengige av stabil utbytteinntekt for løpende utgifter</li>
+        <li>forstår og aksepterer at utbyttet kan svinge kraftig fra kvartal til kvartal og fra år til år</li>
+        <li>har en <strong>lang tidshorisont</strong> og kan sitte gjennom svake perioder uten å måtte selge</li>
+        <li>følger med på fraktmarkedet, eller er villige til å lese selskapenes kvartalsrapporter</li>
+        <li>ikke er avhengige av et bestemt utbyttebeløp til faste utgifter</li>
       </ul>
 
       <p>
-        Shipping er <em>ikke</em> riktig for deg hvis du ønsker stabil og forutsigbar kontantstrøm — da er sparebanker eller Orkla mer passende. Men som en del av en diversifisert utbytteportefølje, med 10–20 % eksponering mot shipping, kan sektoren gi en attraktiv risikokorrigert avkastning over en hel syklus.
+        Trenger du et jevnt og forutsigbart beløp hvert år, passer shipping dårlig til den delen av porteføljen. Hvor stor del sektoren skal utgjøre, må du avgjøre selv.
       </p>
 
       <p>
-        Et godt utgangspunkt er selskaper med lange tidscertepartier (charter-dekning) og lav gjeldsgrad — de er mer robuste i nedgangstider og kan opprettholde utbytte lenger. <strong>Höegh Autoliners (HAUTO)</strong>, <strong>Stolt-Nielsen (SNI)</strong> og <strong>Odfjell SE (ODF)</strong> er eksempler på selskaper med mer stabile inntektsstrømmer enn rene spoteksponerte tankere.
+        Noen kjennetegn gir jevnere utbytte, men ingen av dem er en garanti. Lange kontrakter demper svingningene, og Stolt-Nielsen har en stor terminalvirksomhet som kan dempe et svakt år på sjøen. Likevel falt utbyttet hos Höegh Autoliners med 83 prosent på ett kvartal, til tross for flerårige avtaler med bilprodusenter, fordi utbyttepolitikken følger kontantene og ikke kontraktene. Lav gjeld gir rom til å holde utbyttet oppe lenger når ratene faller.
       </p>
 
       <div class="callout callout-green">
-        <strong>Råd til nye investorer:</strong> Start med å forstå en sub-sektor grundig — for eksempel LPG-tankere eller bildebåter — før du bygger bred shippingeksponering. Hvert segment har sine egne drivere, og det er vanskelig å følge med på alle samtidig uten erfaring.
+        <strong>Tips:</strong> Det er lettere å sette seg grundig inn i ett segment, for eksempel LPG eller bilskip, enn å følge alle på en gang. Kvartalsrapportene til selskapene i segmentet forklarer ofte markedet bedre enn noen avisartikkel.
       </div>
 
       <!-- Les også -->
       <h2>Les også</h2>
-      <ul>
-        <li><a href="/artikler/utbytteportefolje-sektorvekting/" class="text-green-600 dark:text-green-400 hover:underline">Slik bygger du en utbytteportefølje — sektorvekting og rebalansering</a></li>
-        <li><a href="/artikler/reinvestering-av-utbytte/" class="text-green-600 dark:text-green-400 hover:underline">Reinvestering av utbytte — rentes-rente-effekten over 20 år</a></li>
-        <li><a href="/artikler/utbytte-og-skatt/" class="text-green-600 dark:text-green-400 hover:underline">Utbytte og skatt i Norge — 37,84 %, skjermingsfradrag og ASK</a></li>
+      <ul class="list-none" style="margin-left:0;padding-left:0;list-style:none;">
+        <li>
+          <a href="/artikler/utbytteportefolje-sektorvekting/" class="les-ogsa-lenke text-green-600 dark:text-green-400 hover:underline">
+            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            <span>Slik bygger du en utbytteportefølje</span>
+          </a>
+        </li>
+        <li>
+          <a href="/artikler/reinvestering-av-utbytte/" class="les-ogsa-lenke text-green-600 dark:text-green-400 hover:underline">
+            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            <span>Reinvestering av utbytte</span>
+          </a>
+        </li>
+        <li>
+          <a href="/artikler/utbytte-og-skatt/" class="les-ogsa-lenke text-green-600 dark:text-green-400 hover:underline">
+            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            <span>Utbytte og skatt i Norge</span>
+          </a>
+        </li>
+        <li>
+          <a href="/artikler/aksjesparekonto-ask/" class="les-ogsa-lenke text-green-600 dark:text-green-400 hover:underline">
+            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            <span>Aksjesparekonto (ASK) for utbytteinvestorer</span>
+          </a>
+        </li>
+        <li>
+          <a href="/avnoteringer/" class="les-ogsa-lenke text-green-600 dark:text-green-400 hover:underline">
+            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            <span>Avnoterte aksjer: hva skjedde med selskapene?</span>
+          </a>
+        </li>
       </ul>
 
       <a href="/verktoy/sektorrebalansering/" class="tool-cta">
         <div class="tool-cta-icon">
-          <svg width="20" height="20" fill="none" stroke="white" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+          <svg width="20" height="20" fill="none" stroke="white" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
         </div>
         <div>
           <p class="font-semibold text-green-700 dark:text-green-400 text-sm">Sektorrebalanseringsverktøy</p>
