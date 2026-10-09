@@ -1288,6 +1288,38 @@ one-year run returns identical results (a test pins that). The count of stocks
 that cannot sit on ASK is computed from `ask_egnet` at render time, never typed.
 Tests: `ui.test.js` (4).
 
+## ASK needs an EEA company *and* a regulated market (2026-10-09)
+
+All 14 stocks on Euronext Growth said «kan holdes i ASK». Growth is a
+multilateral trading facility, not a regulated market, so none of them can be.
+The FAQ promised deferred tax on ASK on every page, Bermuda companies included.
+
+- `ask_egnet` in `tickers.json` now answers only the domicile question: `true`,
+  `false`, or `null` when the company is registered outside the EEA but managed
+  from inside it, so its tax residence is not settled (OET and CAPT, Marshall
+  Islands and Greece). Nordnet's API has no ASK flag to check against.
+- `ask_status()` combines it with `bors`: `ja`, `utenfor_eos`, `growth` or
+  `uavklart`. `sett_ask_felter()` writes `ask_status` for every row in both
+  `fetch_stocks.py` and `regenerer_sider.py`, fallback rows included.
+  `askStatus()`/`askTekst()` in `ui.js` read it and fall back to the same rule.
+- **The government proposed opening ASK to Growth from 1 January 2027** in the
+  2027 budget (7 October 2026). `ASK_MHF_FRA = None` until the Storting has
+  adopted it; set it to the date the law applies from, and the 14 flip on that
+  day by themselves. The sentence about the proposal disappears after
+  `ASK_MHF_FORSLAG_TIL` either way, since it is stale whatever the outcome.
+- `uavklart` gets an amber «?» row, not a cross. It does not add a risk point.
+
+Domicile was checked against the ISIN country in Euronext's own CSV for all 154:
+HAFNI and BWLPG moved to Singapore in 2024 (were Bermuda), ENH is Cyprus (was
+Storbritannia, `ask_egnet` false), PUBLI is Swedish since May 2026, PLSV is
+Bermuda (was Norge and «kan holdes i ASK»), CAPT and OET are Marshall Islands.
+Legal forms were checked against Brønnøysund and Yahoo: Norconsult, Smartoptics,
+Sentia, Stainless Tankers and MPC Container Ships are ASA, Måsøval is AS, and
+CAPT, PLSV and PUBLI got their current names. The old name stays in `navn_dnb`
+where none was set, because the DNB lookup matches the name exactly.
+
+Tests: `TestAskStatus` (8), `ui.test.js` (3).
+
 ## Full audit 2026-10-06: bugs nothing measured
 
 These were found by opening all 155 modals and every tab in the app with
@@ -1348,6 +1380,78 @@ PARB's 15,75 % is real: NOK 8,00, called the annual dividend.
 
 Takes effect on the next full fetch. Tests: `TestBetaltSomArsrate` (10),
 `TestEkstraordinaerIVindu` (6).
+
+### A one-off with a known amount is subtracted, not a reason to give up (2026-10-09)
+
+Frontline showed 10,88 % «siste 12 mnd», and 0,80 dollar of it was a «special
+one-time dividend» after selling two VLCCs. The regex missed «special
+one-time dividend» (an adjective between «special» and «dividend»). Fixing
+only the regex would have made it *worse*: the rule would have stood down and
+FRO fallen back to last year's 8,90 kr, 1,6 %.
+
+`ekstraordinaere_i_vindu()` now returns the flagged payments with amounts, and
+`ekstra_i_kroner()` turns them into kroner using the payment's share of the
+Yahoo series (`utbytte_12m_liste`, new per-payment field): 0,80 of 3,41 dollar
+of 32,57 kr. The rule then runs on the sum without it, and the card says
+«siste 12 mnd, uten engangsutbytte» (`arsrate_ekstra_trukket`).
+
+- **Any payment without a readable amount stops the rule, as before.** AKSO,
+  GJF, KOG, WWI, AFG, SRHA, BOUV, AKAST and BOR all have at least one, and
+  none of them moved in the dry run. A guessed deduction is worse than none.
+- **The press release and the «Key information» notice come the same day.**
+  The press release is prose without «Dividend amount», so an unquantified
+  flag published on the same day as a quantified one is the same payment.
+- **WAWI showed why the regex had to grow again.** Its February notice says
+  «an extraordinary *portion* of USD 0.47», which matched nothing, so only the
+  August 0,24 would have been subtracted, and the label would have claimed
+  more than was true. `portion|element|component|part` now count.
+- **High yields are asked even when the sum alone fails the 30 % test.** WAWI's
+  shown rate already *was* the 12-month sum including both extraordinary
+  parts, so the deviation test never let it in. Yield ≥ `HOY_YIELD_FOR_SPLITT`
+  now also asks NewsWeb. Dry run: FRO 10,88 → 9,48 %, WAWI 8,97 → ~5,0 %;
+  nothing else changed.
+- `lag_ekstraordinaer_note()` and `modalEkstraordinaerNote()` no longer say
+  the yield «inneholder» the one-off when it has been taken out.
+
+Parser fixes found on the way: «Dividend amount: $0.80» (dollar sign) and
+«0.64 USD … Announced currency: USD» (CMB.TECH) gave no amount; the payment
+date now prefers the Oslo label like the ex-date does (CMB.TECH: 27 October
+for Oslo, not 22 October for Brussels and NYSE).
+
+### A company's first year of dividends is not a reference year
+
+The 50 % guard compared Yahoo's rate with last year's calendar total. For
+CMB.TECH, listed in Oslo in August 2025, that total was one payment, 0,48 kr,
+and the page showed **0,24 %** against 4,1 % paid in twelve months. SOMA's
+first year had three of four quarters. When `utbytte_forste_ar` is last year,
+the guard now treats last year as unknown and uses trailing 12 months.
+
+### NewsWeb answers an unknown issuer with *everyone's* news
+
+`?issuer=XYZFOO` returns the latest ~54 messages from the whole exchange, not an
+empty list. None of our tickers hit it on 09.10.2026 (all 154 checked), but a
+corrected ticker or a stale `EURONEXT_SYMBOL_MAP` entry would have given a stock
+another company's ex-date and report date with no warning.
+`_newsweb_meldinger()` now keeps only messages whose `issuerSign` matches.
+`2020` still returns nothing under any name tried.
+
+### 2020 Bulkers: history from a business it no longer has
+
+The company sold every ship in April 2026 and bought anchor handling vessels
+in September. The page showed 11,62 % yield, an artefact of the old monthly
+payments and the sale proceeds, «8 år på rad … konsistent» and «god buffer».
+`lopende_utbytte_fra` in `tickers.json` (here `2026-05-01`) sets the annual
+rate to 0 until a payment with an ex-date on or after that date appears, then
+stops acting by itself (`bruk_lopende_utbytte_fra()`). The history stays, the
+FAQ says the payments came from the business that was sold. Sector moved to
+`Energitjenester`, frequency to `Uregelmessig`. The 5-year average, P/E and
+growth figures on that page are still artefacts of the old business.
+
+HUNT's identical 26,52 kr in 2021 and 2022 is real: 17,68 + 8,84 in 2021 and
+one 26,52 payment in 2022, all adjusted for the 2023 reverse split.
+
+Tests: `TestEngangsutbytteTrukketFra` (6), `TestCmbTechMelding` (2),
+`TestLopendeUtbytteFra` (4), `TestNewswebUtsteder` (2), `ui.test.js` (1).
 
 ## «Les mer» in the app modal (2026-10-07)
 

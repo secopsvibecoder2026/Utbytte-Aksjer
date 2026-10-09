@@ -32,7 +32,7 @@ const {
   vekstKlasse,
   beregnScore,
   beregnYtdInntekt
-, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, utbyttePerioder, vistOverBetalt, modalBetaltBoks, utbytteRekke, stabileAr, exForbeholdGjelder, kapitalAndel, modalKapitalNote, kapitalSkattTekst, aksjerMedExIMaaned, beregnHvisKjopt, hvisStartAar, beregnAskMotVanlig, fmtUtbytte, sisteUtbytteTekst, modalOmSelskapet, vekslOmSelskapet, dripGevinst, _simulerKalkulator } = require('../assets/ui.js');
+, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, utbyttePerioder, vistOverBetalt, modalBetaltBoks, utbytteRekke, stabileAr, exForbeholdGjelder, kapitalAndel, modalKapitalNote, kapitalSkattTekst, aksjerMedExIMaaned, beregnHvisKjopt, hvisStartAar, beregnAskMotVanlig, fmtUtbytte, sisteUtbytteTekst, modalOmSelskapet, vekslOmSelskapet, dripGevinst, _simulerKalkulator, askStatus, askTekst, modalKontoer } = require('../assets/ui.js');
 
 // ── fmt ────────────────────────────────────────────────────────────────────
 test('fmt returnerer — for null', () => {
@@ -763,4 +763,50 @@ test('dripGevinst: med skatt sammenlignes netto mot netto', () => {
   // Uten DRIP: 10 år × 5 000 × 0,6216 = 31 080 kr på kontoen.
   assert.equal(Math.round(uten.totUtbytteNetto), 31080);
   assert.ok(dripGevinst(med, uten) > 0);
+});
+
+// ── ASK: EØS-hjemsted og regulert marked (2026-10-09) ────────────────────────
+// Samme tilfeller og ordlyd som TestAskStatus i scripts/test_fetch_stocks.py.
+test('askStatus: feltet fra aksjer.json vinner, ellers regnes det ut', () => {
+  assert.equal(askStatus({ ask_status: 'growth', ask_egnet: true }), 'growth');
+  assert.equal(askStatus({ ask_egnet: true, bors: 'Oslo Børs' }), 'ja');
+  assert.equal(askStatus({ ask_egnet: true, bors: 'Euronext Growth Oslo' }), 'growth');
+  assert.equal(askStatus({ ask_egnet: false, bors: 'Euronext Growth Oslo' }), 'utenfor_eos');
+  assert.equal(askStatus({ ask_egnet: null, bors: 'Oslo Børs' }), 'uavklart');
+  assert.equal(askStatus({ bors: 'Oslo Børs' }), 'ja');
+});
+
+test('askTekst: samme setninger som aksjesiden', () => {
+  const for27 = new Date(2026, 9, 9), etter27 = new Date(2027, 0, 2);
+  const growth = { ask_egnet: true, bors: 'Euronext Growth Oslo' };
+  assert.match(askTekst(growth, for27).tekst, /statsbudsjettet for 2027/);
+  assert.doesNotMatch(askTekst(growth, etter27).tekst, /statsbudsjettet/);
+  assert.match(askTekst({ ask_egnet: false, inkorporeringsland: 'Bermuda' }).tekst,
+    /registrert på Bermuda, utenfor EØS/);
+  assert.equal(askTekst({ ask_egnet: true, inkorporeringsland: 'Sverige', bors: 'Oslo Børs' }).tekst,
+    'Selskapet er registrert i Sverige og aksjen er notert på Oslo Børs, så den kan holdes i ASK.');
+});
+
+test('modalKontoer: uavklart hjemsted får egen rad, ikke kryss', () => {
+  global.escHtml = s => String(s);
+  const h = modalKontoer({ ask_egnet: null, inkorporeringsland: 'Marshalløyene', bors: 'Oslo Børs' });
+  assert.match(h, /modal-konto-rad uavklart/);
+  assert.match(h, /ikke fått bekreftet/);
+  assert.match(modalKontoer({ ask_status: 'growth', bors: 'Euronext Growth Oslo' }), /modal-konto-rad ikke/);
+  delete global.escHtml;
+});
+
+// ── Engangsutbytte trukket fra årsraten (FRO, WAWI — 2026-10-09) ─────────────
+test('modalEkstraordinaerNote: sier ikke at yielden inneholder et fratrukket engangsutbytte', () => {
+  global.escHtml = s => String(s);
+  const a = { utbytte_yield: 5.05, utbytte_per_aksje: 8.73, siste_utbytte: 5.8256, valuta: 'NOK',
+    frekvens: 'Halvårlig', arsrate_kilde: 'betalt_12m', arsrate_ekstra_trukket: 6.78,
+    utbyttesplitt: { ordinaert: 0.37, ekstraordinaert: 0.24, valuta: 'USD', melding_dato: '2026-08-11' },
+    historiske_utbytter: [{ ar: 2026, utbytte: 15.47, maaneder: [3, 8] }] };
+  const h = modalEkstraordinaerNote(a);
+  assert.match(h, /holdt utenfor/);
+  assert.doesNotMatch(h, /inneholder den/);
+  delete a.arsrate_ekstra_trukket;
+  assert.match(modalEkstraordinaerNote(a), /inneholder den/);
+  delete global.escHtml;
 });

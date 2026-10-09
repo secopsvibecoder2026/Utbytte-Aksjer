@@ -189,7 +189,15 @@ def _newsweb_meldinger(ticker: str) -> list:
             f"{_NEWSWEB_API}/v1/newsreader/list"
             f"?issuer={urllib.parse.quote(utsteder, safe='')}&limit=500"
         )
-        _NEWSWEB_LISTE[utsteder] = resp.get("data", {}).get("messages", []) or []
+        meldinger = resp.get("data", {}).get("messages", []) or []
+        # En utsteder NewsWeb ikke kjenner, gir ikke en tom liste, men de
+        # nyeste meldingene fra hele børsen (målt 09.10.2026: «XYZFOO» ga 54
+        # meldinger fra OTEC, AQUA, GSF …). Ingen av våre tickere traff det da,
+        # men en rettet ticker eller et feil symbolkart ville gitt aksjen et
+        # annet selskaps ex-dato og rapportdato uten et eneste varsel.
+        _NEWSWEB_LISTE[utsteder] = [
+            m for m in meldinger
+            if (m.get("issuerSign") or utsteder).upper() == utsteder.upper()]
     return _NEWSWEB_LISTE[utsteder]
 
 
@@ -241,6 +249,13 @@ INKORPORERINGSLAND   = {t["ticker"]: t.get("inkorporeringsland", "Norge") for t 
 # eller forstyrret av en selskapshendelse — 2020 Bulkers betaler månedlig,
 # men ble talt til kvartalsvis etter kapitalutdelingen i mai 2026.
 FREKVENS_OVERSTYRT   = {t["ticker"]: t["frekvens"] for t in _ticker_data if t.get("frekvens")}
+# Når selskapet bak tickeren har skiftet virksomhet, hører utbyttehistorikken
+# til et annet selskap. 2020 Bulkers solgte alle skipene i april 2026, betalte
+# ut salgssummen og kjøpte offshorefartøy i september. Historikken står, men
+# som løpende rate teller bare utbetalinger fra og med denne datoen — se
+# bruk_lopende_utbytte_fra().
+LOPENDE_UTBYTTE_FRA  = {t["ticker"]: t["lopende_utbytte_fra"] for t in _ticker_data
+                        if t.get("lopende_utbytte_fra")}
 
 _fallback_path = os.path.join(os.path.dirname(__file__), "..", "data", "fallback_data.json")
 FALLBACK_DATA = {}
@@ -665,7 +680,8 @@ _SPLITT_BELOP = re.compile(
 # skriver «Declared currency: Norwegian kroner», og et løst mønster plukket
 # «Nor» som valutakode.
 _SPLITT_VALUTA = re.compile(
-    r"declared\s+currency\s*[:\-–]?\s*\b(NOK|USD|EUR|SEK|DKK|GBP|CHF)\b", re.I)
+    # CMB.TECH skriver «Announced currency: USD» og beløpet som «0.64 USD».
+    r"(?:declared|announced)\s+currency\s*[:\-–]?\s*\b(NOK|USD|EUR|SEK|DKK|GBP|CHF)\b", re.I)
 # HUNT bruker en annen felttype enn KOG: «Dividend classification: NOK 1.50 as
 # extraordinary dividend» — hele utbetalingen er ekstraordinær, det finnes ingen
 # ordinær del å dele mot. Den sier mer enn en splitt, ikke mindre.
@@ -882,7 +898,7 @@ _DATO_PREFIKS = (r"(?:expected\s+)?"
 _EX_DATO_RE = re.compile(
     r"ex[\s-]?date(?P<merkelapp>[^:\n]{0,60})?:\s*" + _DATO_PREFIKS + _DATO_ENTEN, re.I)
 _BETALINGSDATO_RE = re.compile(
-    r"payment\s+date(?:[^:\n]{0,40})?:\s*" + _DATO_PREFIKS + _DATO_ENTEN, re.I)
+    r"payment\s+date(?P<merkelapp>[^:\n]{0,40})?:\s*" + _DATO_PREFIKS + _DATO_ENTEN, re.I)
 
 _GODKJENNING_RE = re.compile(
     r"date\s+of\s+approval(?:[^:\n]{0,40})?:\s*" + _DATO_PREFIKS + _DATO_ENTEN, re.I)
@@ -893,14 +909,15 @@ _FORBEHOLD_RE = re.compile(
 # Grense mellom utbetalinger i én melding: «Dividend amount:» eller «Tranche N».
 _UTBETALING_GRENSE = re.compile(r"(?=\bdividend\s+amount\s*:|\btranche\s+\d+\s*:)", re.I)
 
-_ANDRE_BORSER = ("new york", "nyse", "nasdaq", "london", "stockholm", "copenhagen", "frankfurt")
+_ANDRE_BORSER = ("new york", "nyse", "nasdaq", "london", "stockholm", "copenhagen", "frankfurt",
+                 "belgium", "brussels")
 
 # Beløpet per aksje i én utbetalingsblokk. Lookaheaden avviser en
 # størrelsesmarkør etter tallet — ENH skriver «Distribution amount: USD 25.0
 # million», som er totalen, ikke per aksje. `[\d.,]*` foran gjør at regexen
 # ikke kan backtracke til «25» eller «2» og slippe gjennom likevel.
 _BLOKK_BELOP_RE = re.compile(
-    r"(?:dividend|distribution)\s+amount\s*:\s*(?:(NOK|USD|EUR|SEK|DKK)\s*)?"
+    r"(?:dividend|distribution)\s+amount\s*:\s*(?:(NOK|USD|EUR|SEK|DKK|\$)\s*)?"
     r"(\d+(?:[.,]\d+)?)(?![\d.,]*\s*(?:m\b|mn\b|mill|bn\b|billion|mrd))", re.I)
 
 # Hvor langt tilbake en melding kan ligge og fortsatt gjelde et kommende
@@ -954,11 +971,21 @@ def _parse_ex_dato(tekst):
     if not kandidater:
         return None, None
     ex = sorted(kandidater)[0][1]
-    b = _BETALINGSDATO_RE.search(tekst)
-    bet = _dato_fra_treff(b) if b else None
-    # En betalingsdato før ex-datoen hører til noe annet i meldingen.
-    if bet and bet < ex:
-        bet = None
+    # Samme regel for betalingsdatoen. CMB.TECH oppgir 22. oktober for
+    # Belgia og NYSE og 27. oktober for Oslo, i den rekkefølgen, og vi
+    # viste den første.
+    betalinger = []
+    for m in _BETALINGSDATO_RE.finditer(tekst):
+        d = _dato_fra_treff(m)
+        # En betalingsdato før ex-datoen hører til noe annet i meldingen.
+        if not d or d < ex:
+            continue
+        merke = (m.group("merkelapp") or "").lower()
+        oslo = "oslo" in merke or "ose" in merke
+        if not oslo and any(b in merke for b in _ANDRE_BORSER):
+            continue
+        betalinger.append((0 if oslo else 1, d))
+    bet = sorted(betalinger)[0][1] if betalinger else None
     return ex, bet
 
 
@@ -994,7 +1021,9 @@ def _parse_utbetalinger(tekst):
         # meldingen. Uten oppgitt valuta vet vi ikke hva tallet er i.
         b = _BLOKK_BELOP_RE.search(blokk)
         belop = _tall(b.group(2)) if b else None
-        valuta = ((b.group(1) or "").upper() or valuta_i_teksten) if b else None
+        # «Dividend amount: $0.80 per share» — Frontline skriver dollartegnet.
+        kode = (b.group(1) or "").upper() if b else ""
+        valuta = (("USD" if kode == "$" else kode) or valuta_i_teksten) if b else None
         ut.append({
             "ex_dato": ex,
             "betaling_dato": bet,
@@ -1548,14 +1577,21 @@ def lag_ekstraordinaer_note(a, nf):
         hva = (f'<strong>{nf(ekstra, 2)} {valuta} av siste utbetaling var '
                f'ekstraordinært utbytte</strong>, og {nf(ordi, 2)} {valuta} ordinært')
 
+    if a.get("arsrate_ekstra_trukket"):
+        # Engangsutbyttet er alt trukket ut av årsraten (ekstra_i_kroner()).
+        # Den gamle setningen ville sagt det motsatte om samme tall.
+        om_yield = (f'Direkteavkastningen på {nf(y, 2)} % bygger på det ordinære '
+                    'utbyttet de siste 12 månedene, med engangsutbyttet holdt utenfor.')
+    else:
+        om_yield = (f'Direkteavkastningen på {nf(y, 2)} % bygger på en periode som '
+                    'inneholder den, så den sier mindre om hva selskapet betaler til '
+                    'vanlig enn tallet alene antyder.')
     return (
         '<div class="delaar-seksjon delaar-noytral">'
         '<h2>Deler av utbyttet var ekstraordinært</h2>'
         f'<p>Ifølge selskapets børsmelding {hva}.</p>'
         '<p>Et ekstraordinært utbytte er en engangsutdeling og gjentas ikke '
-        f'nødvendigvis. Direkteavkastningen på {nf(y, 2)} % bygger på en '
-        'periode som inneholder den, så den sier mindre om hva selskapet '
-        'betaler til vanlig enn tallet alene antyder.</p>'
+        f'nødvendigvis. {om_yield}</p>'
         '</div>'
     )
 
@@ -1694,6 +1730,24 @@ def betalt_fra_serie(dividends, i_dag):
     return round(sum(siste), 4), len(siste), per_ar, min(d.year for d in datoer)
 
 
+def betalinger_siste_12m(dividends, i_dag):
+    """[{"ex_dato", "belop"}] for utbetalingene i 12-månedersvinduet, i kroner.
+
+    Samme vindu som betalt_fra_serie(). Trengs for å trekke et engangsutbytte
+    ut av summen: meldingen oppgir beløpet i dollar, serien har kronene, og
+    forholdet mellom dem gjelder bare innenfor én utbetaling.
+    """
+    if dividends is None or dividends.empty:
+        return []
+    grense = i_dag - datetime.timedelta(days=365)
+    ut = []
+    for d, v in zip(dividends.index, dividends.values):
+        dato = d.date() if hasattr(d, "date") else d
+        if dato > grense:
+            ut.append({"ex_dato": dato.isoformat(), "belop": round(float(v), 4)})
+    return ut
+
+
 def utbytte_perioder(a):
     """Snitt per år betalt, for siste 12 mnd og siste 1–5 hele kalenderår.
 
@@ -1827,7 +1881,13 @@ EKSTRA_VINDU_DAGER = 455   # meldingen kommer før ex-datoen, ofte flere månede
 
 _EKSTRA_RE = re.compile(
     r"\b(?:extra[\s-]?ordinary|special|additional|supplement(?:al|ary)|one[\s-]?off|"
-    r"ekstraordin\w*|ekstra|tilleggs?)\s+(?:cash\s+)?(?:dividends?|distributions?|utbytte|utdeling\w*)"
+    r"one[\s-]?time|non[\s-]?recurring|ekstraordin\w*|ekstra|tilleggs?)\s+"
+    r"(?:(?:cash|one[\s-]?(?:time|off)|non[\s-]?recurring)\s+)*"
+    r"(?:dividends?|distributions?|utbytte|utdeling\w*)"
+    # WAWI: «an extraordinary portion of USD 0.47» / «extraordinary element of
+    # USD 200m». Uten disse ble bare den ene av to ekstraordinære utbetalinger
+    # i vinduet funnet, og fradraget ville blitt halvt.
+    r"|\bextra[\s-]?ordinary\s+(?:portion|element|component|part)\b"
     r"|\btilleggsutbytte\b"
     r"|\bas\s+(?:an?\s+)?(?:extra[\s-]?ordinary|special)\b",
     re.I)
@@ -1841,17 +1901,36 @@ def _har_ekstraordinaer(tekst):
                for m in _EKSTRA_RE.finditer(tekst))
 
 
-def ekstraordinaer_i_vindu(ticker, i_dag=None):
-    """True når en utbyttemelding fra perioden kaller en utbetaling ekstraordinær.
+def ekstraordinaere_i_vindu(ticker, i_dag=None):
+    """Utbetalingene i perioden som en utbyttemelding kaller ekstraordinære.
 
-    False når meldingene er lest og ingen gjør det, ``UKJENT`` når de ikke
-    kunne leses, eller når utstederen ikke har en eneste utbyttemelding i
-    perioden. Bare titler som handler om utbytte eller utdeling åpnes, så
-    «Extraordinary General Meeting» alene teller ikke.
+    Liste av ``{"ex_dato", "ekstra", "total", "valuta"}`` — tom når meldingene
+    er lest og ingen sier det, ``UKJENT`` når de ikke kunne leses eller
+    utstederen ikke har en eneste utbyttemelding i perioden. Bare titler som
+    handler om utbytte eller utdeling åpnes, så «Extraordinary General
+    Meeting» alene teller ikke.
+
+    ``ekstra`` og ``total`` er beløpet i meldingens valuta, eller None når
+    meldingen ikke lar oss lese det. Tre former gir et beløp:
+
+    * **Hele meldingen gjelder engangsutbyttet** (tittelen sier det, og den
+      har ett beløp). Frontline meldte 0,80 dollar i en egen melding, med
+      samme ex-dato som kvartalsutbyttet på 2,61.
+    * **Meldingen deler selv** i ordinært og ekstraordinært
+      (`_parse_utbyttesplitt()`: KOG, HUNT, WAWI).
+    * Totalen for en ex-dato er summen av ulike beløp i «Key
+      information»-meldinger med den ex-datoen. Like beløp telles én gang,
+      for WAWI sendte en «Clarification» med samme 0,61.
+
+    En melding som ikke lar seg tallfeste, står igjen uten beløp, og da holder
+    regelen seg unna. Unntaket er en melding fra samme dag som en tallfestet:
+    det er pressemeldingen om den samme utbetalingen.
     """
     i_dag = i_dag or datetime.date.today()
     grense = (i_dag - datetime.timedelta(days=EKSTRA_VINDU_DAGER)).isoformat()
     lest = 0
+    flagget = []
+    belop_per_ex = {}
     try:
         for msg in _newsweb_meldinger(ticker):
             dato = (msg.get("publishedTime") or "")[:10]
@@ -1860,15 +1939,79 @@ def ekstraordinaer_i_vindu(ticker, i_dag=None):
             tittel = msg.get("title") or ""
             if not re.search(r"dividend|distribution|utbytte|utdeling|capital", tittel, re.I):
                 continue
-            if _har_ekstraordinaer(tittel):
-                return True
             lest += 1
-            if _har_ekstraordinaer(_newsweb_tekst(msg.get("messageId"))):
-                return True
+            tekst = _newsweb_tekst(msg.get("messageId")) or ""
+            utb = [u for u in _parse_utbetalinger(tekst) if u["ex_dato"]]
+            if "key information" in tittel.lower():
+                for u in utb:
+                    if u["belop"]:
+                        belop_per_ex.setdefault((u["ex_dato"], u["valuta"]), set()).add(u["belop"])
+            i_tittel = _har_ekstraordinaer(tittel)
+            if not (i_tittel or _har_ekstraordinaer(tekst)):
+                continue
+            ex = utb[0]["ex_dato"] if len(utb) == 1 else None
+            splitt = _parse_utbyttesplitt(tekst)
+            if ex and splitt and splitt["ekstraordinaert"] > 0:
+                flagget.append({"ex_dato": ex, "ekstra": splitt["ekstraordinaert"],
+                                "total": splitt["ordinaert"] + splitt["ekstraordinaert"],
+                                "valuta": splitt["valuta"], "melding_dato": dato})
+            elif (ex and i_tittel and utb[0]["belop"]
+                  and len(_BLOKK_BELOP_RE.findall(tekst)) == 1):
+                flagget.append({"ex_dato": ex, "ekstra": utb[0]["belop"], "total": None,
+                                "valuta": utb[0]["valuta"], "melding_dato": dato})
+            else:
+                flagget.append({"ex_dato": ex, "ekstra": None, "total": None, "valuta": None,
+                                "melding_dato": dato})
     except Exception as e:
         print(f"    Advarsel NewsWeb ekstraordinært utbytte [{ticker}]: {e}")
         return UKJENT
-    return False if lest else UKJENT
+    if not lest:
+        return UKJENT
+    for f in flagget:
+        if f["ekstra"] is not None and f["total"] is None:
+            f["total"] = round(sum(belop_per_ex.get((f["ex_dato"], f["valuta"]), ())), 4) or None
+    # Pressemeldingen og «Key information»-meldingen om samme engangsutbytte
+    # kommer samme dag. Pressemeldingen har prosa og ingen «Dividend amount»,
+    # så den lar seg ikke tallfeste, men den sier ikke noe nytt heller.
+    tallfestet = {f["melding_dato"] for f in flagget if f["ekstra"] is not None}
+    return [f for f in flagget if f["ekstra"] is not None or f["melding_dato"] not in tallfestet]
+
+
+def ekstraordinaer_i_vindu(ticker, i_dag=None):
+    """True når en utbyttemelding fra perioden kaller en utbetaling ekstraordinær.
+
+    False når meldingene er lest og ingen gjør det, ``UKJENT`` ellers.
+    """
+    funn = ekstraordinaere_i_vindu(ticker, i_dag)
+    return funn if funn is UKJENT else bool(funn)
+
+
+def ekstra_i_kroner(a, funn, toleranse_dager=3):
+    """Kronebeløpet i 12-månedersvinduet som er engangsutbytte, eller None.
+
+    Hver ekstraordinær utbetaling må ha et beløp, en total og en utbetaling i
+    `utbytte_12m_liste` med samme ex-dato (± noen dager, Yahoo og Oslo kan
+    skille seg). Kronene fordeles etter meldingens andel: Frontline 0,80 av
+    3,41 dollar av 32,57 kroner. Mangler noe, er svaret None, og regelen
+    holder seg unna som før — et gjettet fradrag er verre enn intet.
+    """
+    liste = a.get("utbytte_12m_liste")
+    if not liste:
+        return None
+    trekk = 0.0
+    for f in funn:
+        if not (f.get("ex_dato") and f.get("ekstra") and f.get("total")):
+            return None
+        andel = f["ekstra"] / f["total"]
+        if not 0 < andel <= 1:
+            return None
+        ex = datetime.date.fromisoformat(f["ex_dato"])
+        treff = [b for b in liste
+                 if abs((datetime.date.fromisoformat(b["ex_dato"]) - ex).days) <= toleranse_dager]
+        if len(treff) != 1:
+            return None
+        trekk += treff[0]["belop"] * andel
+    return round(trekk, 4)
 
 
 def betalt_kan_bli_arsrate(a, i_dag=None):
@@ -1902,11 +2045,38 @@ def betalt_kan_bli_arsrate(a, i_dag=None):
     return vist <= 0 or abs(betalt - vist) / vist >= BETALT_MIN_AVVIK
 
 
-def bruk_betalt_som_arsrate(a):
-    """Setter årsraten til det som er betalt siste 12 mnd. Muterer `a`."""
-    a["utbytte_per_aksje"] = round(a["utbytte_12m"], 2)
-    a["utbytte_yield"] = round(a["utbytte_12m"] / a["pris"] * 100, 2)
+def bruk_betalt_som_arsrate(a, ekstra=0.0):
+    """Setter årsraten til det som er betalt siste 12 mnd. Muterer `a`.
+
+    `ekstra` er engangsutbytte i vinduet, i kroner (ekstra_i_kroner()). Det
+    trekkes fra, og `arsrate_ekstra_trukket` sier at det er gjort.
+    """
+    belop = a["utbytte_12m"] - ekstra
+    a["utbytte_per_aksje"] = round(belop, 2)
+    a["utbytte_yield"] = round(belop / a["pris"] * 100, 2)
     a["arsrate_kilde"] = "betalt_12m"
+    if ekstra:
+        a["arsrate_ekstra_trukket"] = round(ekstra, 2)
+    else:
+        a.pop("arsrate_ekstra_trukket", None)
+
+
+def bruk_lopende_utbytte_fra(a, fra):
+    """Nuller årsraten til selskapet har betalt etter `fra`. Muterer `a`.
+
+    2020 Bulkers viste 11,62 % yield i oktober 2026: et regnestykke av
+    månedsutbyttene og salgssummen fra skipene som var solgt. Selskapet som
+    eier aksjen i dag, har ikke betalt noe. Så snart det betaler, med ex-dato
+    fra og med `fra`, slutter dette å virke av seg selv, og de vanlige
+    reglene tar over. Returnerer True når raten ble nullet.
+    """
+    if any((b.get("ex_dato") or "") >= fra for b in a.get("utbytte_12m_liste") or []):
+        return False
+    a["utbytte_per_aksje"] = 0.0
+    a["utbytte_yield"] = 0.0
+    a["arsrate_kilde"] = "ingen_lopende"
+    a.pop("arsrate_ekstra_trukket", None)
+    return True
 
 
 def frekvens_label(dividends_per_year):
@@ -2201,6 +2371,15 @@ def hent_aksje(meta):
         # som ligger over det som er utbetalt. Se utbytte_perioder().
         utbytte_12m, utbytte_12m_antall, utbytte_per_ar, utbytte_forste_ar = (
             betalt_fra_serie(dividends, today.date()))
+        utbytte_12m_liste = betalinger_siste_12m(dividends, today.date())
+
+        # Var fjoråret selskapets første år med utbytte, er det et delår og
+        # ingen fasit. CMB.TECH gikk på Oslo Børs i august 2025 og hadde én
+        # utbetaling det året, 0,48 kr — vakten valgte den, og siden viste
+        # 0,24 % mot 4,1 % betalt siste 12 mnd. SOMA hadde tre av fire. Med 0
+        # her blir referansen trailing 12 mnd (se også velg_arsrate()).
+        if utbytte_forste_ar == last_complete_year:
+            last_year_total = 0.0
 
         # Primær: sammenlign mot siste hele år (fanger opp WAWI-type periodestabling)
         ref = last_year_total if last_year_total > 0 else trailing_annual
@@ -2410,6 +2589,7 @@ def hent_aksje(meta):
             "siste_utbytte": siste_utbytte,
             "utbytte_12m": utbytte_12m,
             "utbytte_12m_antall": utbytte_12m_antall,
+            "utbytte_12m_liste": utbytte_12m_liste,
             "utbytte_per_ar": utbytte_per_ar,
             "utbytte_forste_ar": utbytte_forste_ar,
             "historiske_utbytter": historiske_utbytter,
@@ -3920,7 +4100,8 @@ def _beregn_risiko_py(a):
         poeng += 1
     elif 0 < payout < 50:
         poeng -= 1
-    if not a.get('ask_egnet', True):
+    # Registrert utenfor EØS. None er «uavklart», ikke «nei» — se ask_status().
+    if a.get('ask_egnet', True) is False:
         poeng += 1
     mv = a.get('markedsverdi') or 0
     if 0 < mv < 1e9:
@@ -4011,8 +4192,11 @@ def _lag_investor_badges(a):
     if yield_ > 12:
         risiko_punkter.append(f'Svært høy yield ({_nf(yield_, 1)}%) — kan indikere markedsskepsis til bærekraft')
 
-    if not ask:
+    status = ask_tekst(a)[0]
+    if status == 'utenfor_eos':
         risiko_punkter.append(f'Registrert utenfor EØS ({land}) — kan ikke holdes i ASK')
+    elif status == 'growth':
+        risiko_punkter.append('Handles på Euronext Growth, som ikke er et regulert marked — kan ikke holdes i ASK i dag')
 
     li_risiko = ''.join(f'<li>{p}</li>' for p in risiko_punkter)
 
@@ -4085,17 +4269,105 @@ def _lag_investor_badges(a):
     )
 
 
+# ── Aksjesparekonto (ASK) ─────────────────────────────────────────────────────
+#
+# ASK krever to ting: at selskapet er hjemmehørende i EØS, og at aksjen er
+# notert på børs eller et annet regulert marked (skatteloven § 10-21).
+# `ask_egnet` i tickers.json svarer bare på det første: true, false, eller
+# null når selskapet er registrert utenfor EØS, men ledes fra et EØS-land, så
+# det skattemessige hjemstedet ikke er avklart (OET og CAPT, begge
+# Marshalløyene og Hellas). Børsen avgjør det andre. Euronext Growth er en
+# multilateral handelsfasilitet, ikke et regulert marked, og alle 14
+# Growth-aksjene sto som «kan holdes i ASK» fram til 2026-10-09.
+#
+# Regjeringen foreslo i statsbudsjettet for 2027 (7.10.2026) å åpne ASK for
+# aksjer på multilaterale handelsfasiliteter fra 1. januar 2027. Sett
+# ASK_MHF_FRA til datoen loven gjelder fra når Stortinget har vedtatt den,
+# ikke før. ASK_MHF_FORSLAG_TIL er bare for teksten: etter den datoen er
+# «foreslått fra 1. januar 2027» foreldet uansett utfall, og setningen faller
+# bort.
+ASK_MHF_FRA = None
+ASK_MHF_FORSLAG_TIL = "2027-01-01"
+
+# «registrert på Bermuda», ikke «i Bermuda».
+_LAND_MED_PAA = {"Bermuda", "Marshalløyene", "Kypros", "Færøyene", "Caymanøyene",
+                 "Jersey", "Guernsey", "Isle of Man", "Island", "Malta", "Jomfruøyene"}
+
+
+def _registrert_i(land):
+    return f"{'på' if land in _LAND_MED_PAA else 'i'} {land}"
+
+
+def ask_status(eos, bors, i_dag=None):
+    """Kan aksjen holdes i ASK? 'ja', 'utenfor_eos', 'growth' eller 'uavklart'.
+
+    `eos` er `ask_egnet` fra tickers.json. Registrert utenfor EØS vinner over
+    Growth, for det er grunnen som ikke går bort 1. januar 2027.
+    """
+    if eos is False:
+        return "utenfor_eos"
+    if "growth" in (bors or "").lower():
+        dag = (i_dag or datetime.date.today()).isoformat()
+        if not (ASK_MHF_FRA and dag >= ASK_MHF_FRA):
+            return "growth"
+    if eos is None:
+        return "uavklart"
+    return "ja"
+
+
+def sett_ask_felter(a, eos, land, i_dag=None):
+    """Skriver ask_egnet, inkorporeringsland og ask_status på raden. Muterer `a`.
+
+    `ask_egnet` beholder betydningen fra tickers.json (hjemstedet), og
+    `ask_status` er svaret leseren får. Statusen regnes ut på hver kjøring,
+    så den skifter av seg selv den dagen ASK_MHF_FRA nås.
+    """
+    a["ask_egnet"] = eos
+    a["inkorporeringsland"] = land
+    a["ask_status"] = ask_status(eos, a.get("bors"), i_dag)
+
+
+def ask_tekst(a, i_dag=None):
+    """(status, setning) om ASK for aksjesiden. Samme ordlyd som askTekst() i ui.js."""
+    land = a.get("inkorporeringsland") or "Norge"
+    status = a.get("ask_status") or ask_status(a.get("ask_egnet", True), a.get("bors"), i_dag)
+    if status == "utenfor_eos":
+        return status, (f"Selskapet er registrert {_registrert_i(land)}, utenfor EØS, "
+                        f"og aksjen kan ikke holdes i ASK.")
+    if status == "growth":
+        tekst = ("Aksjen handles på Euronext Growth, som ikke er et regulert marked, "
+                 "og kan derfor ikke holdes i ASK i dag.")
+        dag = (i_dag or datetime.date.today()).isoformat()
+        if dag < ASK_MHF_FORSLAG_TIL:
+            tekst += (" Regjeringen foreslo i statsbudsjettet for 2027 å åpne ASK "
+                      "for slike aksjer fra 1. januar 2027.")
+        return status, tekst
+    if status == "uavklart":
+        return status, (f"Selskapet er registrert {_registrert_i(land)}, utenfor EØS, men "
+                        f"ledes fra et EØS-land. ASK krever at selskapet er skattemessig "
+                        f"hjemmehørende i EØS, og det har vi ikke fått bekreftet. Spør "
+                        f"banken eller megleren din før du kjøper aksjen på ASK.")
+    return status, (f"Selskapet er registrert {_registrert_i(land)} og aksjen er notert "
+                    f"på Oslo Børs, så den kan holdes i ASK.")
+
+
 def _lag_kontoer_seksjon(a):
     """Viser hvilke kontotyper aksjen kan handles på (ASK-eligibilitet)."""
-    ask      = a.get("ask_egnet", True)
-    land     = a.get("inkorporeringsland", "Norge")
-
-    if ask:
+    status, tekst = ask_tekst(a)
+    if status == "ja":
         ask_badge = (
             '<div class="konto-rad">'
             '<span class="konto-ok">✓</span>'
             '<div><strong>Aksjesparekonto (ASK)</strong>'
-            '<p>EØS-registrert selskap — kan holdes i ASK.</p></div>'
+            f'<p>{tekst}</p></div>'
+            '</div>'
+        )
+    elif status == "uavklart":
+        ask_badge = (
+            '<div class="konto-rad konto-uavklart">'
+            '<span class="konto-usikker">?</span>'
+            '<div><strong>Aksjesparekonto (ASK)</strong>'
+            f'<p>{tekst}</p></div>'
             '</div>'
         )
     else:
@@ -4103,8 +4375,7 @@ def _lag_kontoer_seksjon(a):
             '<div class="konto-rad konto-ikke">'
             '<span class="konto-nei">✗</span>'
             '<div><strong>Aksjesparekonto (ASK)</strong>'
-            f'<p>Selskapet er registrert i {land} (utenfor EØS) og kan ikke holdes i ASK. '
-            f'Bruk aksje- og fondskonto.</p></div>'
+            f'<p>{tekst} Bruk aksje- og fondskonto.</p></div>'
             '</div>'
         )
 
@@ -4220,6 +4491,13 @@ def _lag_faq_seksjon(a, today):
         else:
             kontinuitet = ""
         svar = f"{navn} betaler utbytte {freq_tekst}." + (f" {kontinuitet}" if kontinuitet else "")
+        if a.get("arsrate_kilde") == "ingen_lopende":
+            # Ny virksomhet bak tickeren (se bruk_lopende_utbytte_fra()). «8 år
+            # på rad … konsistent» beskrev selskapet som solgte skipene.
+            fra = LOPENDE_UTBYTTE_FRA.get(ticker, "")
+            svar = (f"{navn} har ikke betalt utbytte fra den nåværende virksomheten. "
+                    f"Utbetalingene før {_fmt_dato(fra) if fra else 'omleggingen'} kom fra "
+                    f"virksomheten selskapet har solgt, og sier ikke noe om hva det betaler framover.")
         qas.append((f"Betaler {navn} utbytte hvert år, og hvor ofte?", svar))
 
     # 3. Direkteavkastning i kontekst
@@ -4237,7 +4515,7 @@ def _lag_faq_seksjon(a, today):
         svar = (
             f"Direkteavkastningen (yield) for {ticker} er {_nf(yield_, 2)}%, beregnet som "
             f"{_nf(upa, 2)} {valuta} i "
-            f"{'utbytte utbetalt de siste 12 månedene' if a.get('arsrate_kilde') == 'betalt_12m' else 'annualisert utbytte'}"
+            f"{('ordinært utbytte utbetalt de siste 12 månedene, uten engangsutbytte,' if a.get('arsrate_ekstra_trukket') else 'utbytte utbetalt de siste 12 månedene') if a.get('arsrate_kilde') == 'betalt_12m' else 'annualisert utbytte'}"
             f" per aksje delt på aksjekursen. "
             f"{snitt_k} "
             f"Yield endres daglig fordi den er koblet til kursen: stiger kursen, faller yielden."
@@ -4267,18 +4545,25 @@ def _lag_faq_seksjon(a, today):
             f"tilbakebetaling av innbetalt kapital, som ikke beskattes ved utbetaling men "
             f"reduserer inngangsverdien. Resten beskattes som utbytte. "
         ) if kap else ""
+        # Setningen om ASK sto på alle sider, også der aksjen ikke kan stå på
+        # ASK (2026-10-09).
+        status, ask_setning = ask_tekst(a)
+        ask_faq = (
+            "Eier du aksjen via aksjesparekonto (ASK), utsettes skatten til du tar ut midler, "
+            "og utbyttet kan reinvesteres innen kontoen uten skatt underveis."
+            if status == "ja" else ask_setning
+        )
         svar = (
             f"Utbytte fra {navn} beskattes med 37,84 % for personlige aksjonærer "
             f"som eier aksjen direkte (via VPS-konto). "
             f"{delvis}"
             f"Med en yield på {_nf(yield_, 2)} % gir det en nettoyield etter skatt på ca. {_nf(netto, 2)} %. "
-            f"Eier du aksjen via aksjesparekonto (ASK), utsettes skatten til du tar ut midler — "
-            f"utbyttet reinvesteres skattefritt innen kontoen og gir renters-rente-effekt over tid."
+            f"{ask_faq}"
         )
         qas.append((f"Hva er skatten på utbytte fra {ticker}?", svar))
 
-    # 5. Utbyttebærekraft
-    if payout > 0:
+    # 5. Utbyttebærekraft — ikke når det ikke er noe løpende utbytte å bære.
+    if payout > 0 and a.get("arsrate_kilde") != "ingen_lopende":
         if payout < 50:
             vurd = (f"En payout ratio under 50 % betyr at mer enn halvparten av overskuddet beholdes i selskapet. "
                     f"Det gir {navn} god buffer til å opprettholde — eller øke — utbyttet selv om inntjeningen svinger.")
@@ -4569,7 +4854,11 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     # samtidig.
     # Når årsraten er det som faktisk er betalt (se BETALT_MIN_AVVIK), er
     # «annualisert» feil ord: ingenting er ganget opp.
-    upa_merknad  = (' <span class="kcard-note">siste 12 mnd</span>'
+    # Med et engangsutbytte trukket fra står det, så tallet ikke ser ut til å
+    # motsi «betalt siste 12 mnd» i tabellen lenger ned (FRO, WAWI).
+    upa_merknad  = (' <span class="kcard-note">siste 12 mnd, uten engangsutbytte</span>'
+                    if a.get("arsrate_kilde") == "betalt_12m" and a.get("arsrate_ekstra_trukket") else
+                    ' <span class="kcard-note">siste 12 mnd</span>'
                     if a.get("arsrate_kilde") == "betalt_12m" else
                     "" if delaar else
                     ' <span class="kcard-note">annualisert</span>'
@@ -5004,6 +5293,10 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     .dark .konto-rad {{ background: #052e16; border-color: #166534; }}
     .dark .konto-rad p {{ color: #9ca3af; }}
     .dark .konto-rad.konto-ikke {{ background: #2d0a0a; border-color: #7f1d1d; }}
+    .konto-rad.konto-uavklart {{ border-color: #fde68a; background: #fffbeb; }}
+    .konto-usikker {{ font-size: 1rem; font-weight: 700; color: #b45309; flex-shrink: 0; margin-top: 0.1rem; }}
+    .dark .konto-rad.konto-uavklart {{ background: #2a1f05; border-color: #78350f; }}
+    .dark .konto-usikker {{ color: #fbbf24; }}
     .investor-profil-seksjon {{ margin: 1rem 0; }}
     .investor-badges-rad {{ display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.75rem; }}
     .investor-forklaring {{ border-radius: 0.6rem; padding: 0.75rem 1rem; margin-bottom: 0.6rem; border: 1px solid; }}
@@ -8007,16 +8300,39 @@ def main():
     print("\nBetalt siste 12 mnd som årsrate...")
     for aksje in resultater:
         aksje.pop("arsrate_kilde", None)
-        if not betalt_kan_bli_arsrate(aksje):
+        aksje.pop("arsrate_ekstra_trukket", None)
+        # NewsWeb spørres når summen alene oppfyller vilkårene, og når yielden
+        # er så høy at et engangsutbytte kan ligge i den. WAWI viste 8,97 %
+        # med to ekstraordinære deler inne; summen var lik den viste raten, så
+        # vilkåret om 30 % avvik slapp den aldri til.
+        if not (betalt_kan_bli_arsrate(aksje)
+                or (aksje.get("utbytte_yield") or 0) >= HOY_YIELD_FOR_SPLITT):
             continue
-        ekstra = ekstraordinaer_i_vindu(aksje["ticker"])
-        if ekstra is not False:
-            grunn = "ekstraordinær utbetaling i vinduet" if ekstra is True else "meldingene kunne ikke leses"
-            print(f"    {aksje['ticker']}: beholder {aksje.get('utbytte_yield')} % ({grunn})")
+        funn = ekstraordinaere_i_vindu(aksje["ticker"])
+        if funn is UKJENT:
+            print(f"    {aksje['ticker']}: beholder {aksje.get('utbytte_yield')} % (meldingene kunne ikke leses)")
+            continue
+        ekstra = 0.0
+        if funn:
+            # Et engangsutbytte med kjent beløp trekkes fra; ellers står regelen
+            # over.
+            ekstra = ekstra_i_kroner(aksje, funn)
+            if ekstra is None:
+                print(f"    {aksje['ticker']}: beholder {aksje.get('utbytte_yield')} % "
+                      f"(ekstraordinær utbetaling i vinduet)")
+                continue
+        if not betalt_kan_bli_arsrate(dict(aksje, utbytte_12m=aksje["utbytte_12m"] - ekstra)):
             continue
         for_ = aksje.get("utbytte_yield")
-        bruk_betalt_som_arsrate(aksje)
-        print(f"    {aksje['ticker']}: {for_} % → {aksje['utbytte_yield']} % (betalt siste 12 mnd)")
+        bruk_betalt_som_arsrate(aksje, ekstra)
+        merk = f", {_nf(ekstra, 2)} kr engangsutbytte trukket fra" if ekstra else ""
+        print(f"    {aksje['ticker']}: {for_} % → {aksje['utbytte_yield']} % (betalt siste 12 mnd{merk})")
+
+    # Ny virksomhet bak tickeren: ingen løpende rate før den har betalt noe.
+    for aksje in resultater:
+        fra = LOPENDE_UTBYTTE_FRA.get(aksje["ticker"])
+        if fra and bruk_lopende_utbytte_fra(aksje, fra):
+            print(f"    {aksje['ticker']}: ingen utbetaling siden {fra} — årsrate 0")
 
     # ── Tilbakebetaling av innbetalt kapital ──────────────────────────────────
     # Leser den samme nyeste meldingen som ex-dato-steget (mellomlagret), så
@@ -8038,6 +8354,13 @@ def main():
         else:
             aksje.pop("kapital_tilbake", None)
     print(f"  Tilbakebetaling av innbetalt kapital: {kt_antall} aksjer")
+
+    # ── ASK ───────────────────────────────────────────────────────────────────
+    # For alle rader, også fallback: hjemsted og børs kommer fra tickers.json,
+    # ikke fra Yahoo, og en rettelse der skal slå inn uten en vellykket henting.
+    for aksje in resultater:
+        sett_ask_felter(aksje, ASK_EGNET.get(aksje["ticker"], True),
+                        INKORPORERINGSLAND.get(aksje["ticker"], "Norge"))
 
     # ── 5. Strukturert datakvalitetsrapport ───────────────────────────────────
     linje = "=" * 54

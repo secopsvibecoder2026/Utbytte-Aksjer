@@ -783,6 +783,17 @@ section[id] { scroll-margin-top: 100px; }
   color: #16a34a;
 }
 .modal-konto-rad.ikke .modal-konto-ikon { color: #dc2626; }
+/* Hjemstedet er ikke avklart (OET, CAPT) — se askTekst() i ui.js */
+.modal-konto-rad.uavklart {
+  border-color: #fde68a;
+  background: #fffbeb;
+}
+.dark .modal-konto-rad.uavklart {
+  border-color: #78350f;
+  background: #2a1f05;
+}
+.modal-konto-rad.uavklart .modal-konto-ikon { color: #b45309; font-weight: 700; }
+.dark .modal-konto-rad.uavklart .modal-konto-ikon { color: #fbbf24; }
 .modal-konto-rad strong { font-size: 0.82rem; }
 .modal-konto-rad p {
   font-size: 0.78rem;

@@ -410,8 +410,10 @@ class TestFrekvensLabel(unittest.TestCase):
         self.assertEqual(fs.frekvens_label(0), "Uregelmessig")
 
     def test_overstyring_leses_fra_tickers(self):
-        # 2020 Bulkers og SATS er begge overstyrt manuelt.
-        self.assertEqual(fs.FREKVENS_OVERSTYRT.get("2020"), "Månedlig")
+        # 2020 Bulkers og SATS er begge overstyrt manuelt. 2020 betalte
+        # månedlig til skipene var solgt i april 2026; den nye virksomheten
+        # har ikke betalt noe ennå (se TestLopendeUtbytteFra).
+        self.assertEqual(fs.FREKVENS_OVERSTYRT.get("2020"), "Uregelmessig")
         self.assertEqual(fs.FREKVENS_OVERSTYRT.get("SATS"), "Halvårlig")
 
 
@@ -2008,6 +2010,247 @@ class TestManuellDelAvsnitt(unittest.TestCase):
         from utvid_beskrivelser import _manuell_del
         t = "Én.\n\nUtbyttet utbetales kvartalsvis."
         self.assertEqual(_manuell_del(t), "Én.")
+
+
+class TestAskStatus(unittest.TestCase):
+    """ASK krever EØS-hjemsted *og* et regulert marked.
+
+    Alle 14 aksjene på Euronext Growth sto som «kan holdes i ASK», og FAQ-en
+    lovet utsatt skatt på ASK også for Bermuda-selskapene (2026-10-09).
+    """
+
+    FOR = datetime.date(2026, 10, 9)
+    ETTER = datetime.date(2027, 1, 2)
+
+    def test_status(self):
+        self.assertEqual(fs.ask_status(True, "Oslo Børs", self.FOR), "ja")
+        self.assertEqual(fs.ask_status(True, "Euronext Growth Oslo", self.FOR), "growth")
+        self.assertEqual(fs.ask_status(False, "Oslo Børs", self.FOR), "utenfor_eos")
+        # Hjemstedet er grunnen som ikke går bort i 2027.
+        self.assertEqual(fs.ask_status(False, "Euronext Growth Oslo", self.FOR), "utenfor_eos")
+        self.assertEqual(fs.ask_status(None, "Oslo Børs", self.FOR), "uavklart")
+        self.assertEqual(fs.ask_status(None, "Euronext Growth Oslo", self.FOR), "growth")
+
+    def test_growth_aapnes_forst_naar_datoen_er_satt(self):
+        self.assertEqual(fs.ask_status(True, "Euronext Growth Oslo", self.ETTER), "growth")
+        gml = fs.ASK_MHF_FRA
+        try:
+            fs.ASK_MHF_FRA = "2027-01-01"
+            self.assertEqual(fs.ask_status(True, "Euronext Growth Oslo", self.FOR), "growth")
+            self.assertEqual(fs.ask_status(True, "Euronext Growth Oslo", self.ETTER), "ja")
+        finally:
+            fs.ASK_MHF_FRA = gml
+
+    def test_forslaget_nevnes_bare_for_2027(self):
+        a = {"ask_egnet": True, "bors": "Euronext Growth Oslo"}
+        self.assertIn("statsbudsjettet for 2027", fs.ask_tekst(a, self.FOR)[1])
+        self.assertNotIn("statsbudsjettet", fs.ask_tekst(a, self.ETTER)[1])
+
+    def test_paa_og_i(self):
+        bm = fs.ask_tekst({"ask_egnet": False, "inkorporeringsland": "Bermuda"}, self.FOR)[1]
+        self.assertIn("registrert på Bermuda, utenfor EØS", bm)
+        se = fs.ask_tekst({"ask_egnet": True, "inkorporeringsland": "Sverige",
+                           "bors": "Oslo Børs"}, self.FOR)[1]
+        self.assertIn("registrert i Sverige", se)
+        oet = fs.ask_tekst({"ask_egnet": None, "inkorporeringsland": "Marshalløyene",
+                            "bors": "Oslo Børs"}, self.FOR)
+        self.assertEqual(oet[0], "uavklart")
+        self.assertIn("ikke fått bekreftet", oet[1])
+
+    def test_kontoraden(self):
+        h = fs._lag_kontoer_seksjon({"ask_egnet": True, "bors": "Euronext Growth Oslo"})
+        self.assertIn("konto-ikke", h)
+        self.assertIn("Euronext Growth", h)
+        h = fs._lag_kontoer_seksjon({"ask_egnet": None, "inkorporeringsland": "Marshalløyene"})
+        self.assertIn("konto-uavklart", h)
+
+    def test_faq_lover_ikke_ask_der_det_ikke_gjelder(self):
+        for rad, skal in ((dict(ask_egnet=True, bors="Oslo Børs"), True),
+                          (dict(ask_egnet=True, bors="Euronext Growth Oslo"), False),
+                          (dict(ask_egnet=False, inkorporeringsland="Bermuda"), False)):
+            a = {"ticker": "X", "navn": "X ASA", "utbytte_yield": 5.0, "pris": 100.0,
+                 "utbytte_per_aksje": 5.0, **rad}
+            tekst = json.dumps(fs._lag_faq_seksjon(a, self.FOR), ensure_ascii=False)
+            self.assertEqual("utsettes skatten" in tekst, skal, rad)
+
+    def test_uavklart_teller_ikke_som_utenfor_eos_i_risikoen(self):
+        base = {"sektor": "Shipping", "payout_ratio": 0, "markedsverdi": 5e9, "utbytte_yield": 5}
+        self.assertEqual(fs._beregn_risiko_py(dict(base, ask_egnet=True)),
+                         fs._beregn_risiko_py(dict(base, ask_egnet=None)))
+
+    def test_katalogen(self):
+        """Ingen Growth-aksje får «ja», og land helt utenfor EØS står som false."""
+        with open(os.path.join(os.path.dirname(__file__), "..", "data", "tickers.json"),
+                  encoding="utf-8") as f:
+            tickere = json.load(f)
+        for t in tickere:
+            st = fs.ask_status(t.get("ask_egnet", True), t["bors"], self.FOR)
+            if "Growth" in t["bors"]:
+                self.assertNotEqual(st, "ja", t["ticker"])
+            if t.get("inkorporeringsland", "Norge") in ("Bermuda", "Singapore", "Sveits", "Færøyene"):
+                self.assertIs(t.get("ask_egnet"), False, t["ticker"])
+
+
+class TestEngangsutbytteTrukketFra(unittest.TestCase):
+    """Frontline: 0,80 dollar engangsutbytte i en egen melding (11.09.2026).
+
+    «special one-time dividend» slapp gjennom regexen, så 12-månederssummen
+    med engangsutbyttet ble årsraten. Å bare rette regexen ville sendt
+    Frontline tilbake til fjorårets 8,90 kr (1,6 %). Beløpet trekkes derfor
+    ut når meldingene oppgir det.
+    """
+
+    FRO_Q2 = ("Dividend amount: $2.61 per share\nDeclared currency: USD.\n"
+              "Ex-date: 17 September, 2026\nPayment date: On or about 28 September, 2026.")
+    FRO_SPESIAL = ("Dividend amount: $0.80 per share\nDeclared currency: USD.\n"
+                   "Ex-date: 17 September, 2026\nPayment date: On or about 28 September, 2026.")
+    FRO_PRESSE = ("the Board of Directors has declared a special one-time dividend of $0.80 "
+                  "per share ... in addition to the previously declared dividend of $2.61")
+
+    def _kjor(self, meldinger, tekster, i_dag=datetime.date(2026, 10, 9)):
+        gml = fs._newsweb_meldinger, fs._newsweb_tekst
+        fs._newsweb_meldinger = lambda t: meldinger
+        fs._newsweb_tekst = lambda mid: tekster.get(mid, "")
+        try:
+            return fs.ekstraordinaere_i_vindu("FRO", i_dag)
+        finally:
+            fs._newsweb_meldinger, fs._newsweb_tekst = gml
+
+    def _fro(self):
+        m = [{"publishedTime": "2026-09-11T22:00", "messageId": 3,
+              "title": "Key information relating to the special one-time dividend after sale of two VLLCs"},
+             {"publishedTime": "2026-09-11T22:00", "messageId": 2,
+              "title": "FRO - Declares special one-time dividend after sale of two VLLCs"},
+             {"publishedTime": "2026-08-28T07:00", "messageId": 1,
+              "title": "Key information relating to the dividend to be paid by Frontline plc for the second quarter, 2026"}]
+        return self._kjor(m, {1: self.FRO_Q2, 2: self.FRO_PRESSE, 3: self.FRO_SPESIAL})
+
+    def test_formuleringene(self):
+        for t in ["Key information relating to the special one-time dividend",
+                  "declares a one-time dividend", "an extraordinary portion of USD 0.47"]:
+            self.assertTrue(fs._har_ekstraordinaer(t), t)
+        self.assertFalse(fs._har_ekstraordinaer("excluding one-time items"))
+
+    def test_dollartegn_er_usd(self):
+        u = fs._parse_utbetalinger(self.FRO_SPESIAL)
+        self.assertEqual((u[0]["belop"], u[0]["valuta"]), (0.8, "USD"))
+
+    def test_frontline_tallfestes(self):
+        funn = self._fro()
+        # Pressemeldingen samme dag lar seg ikke tallfeste, men er samme utbetaling.
+        self.assertEqual(len(funn), 1)
+        self.assertEqual((funn[0]["ex_dato"], funn[0]["ekstra"], funn[0]["total"]),
+                         ("2026-09-17", 0.8, 3.41))
+        a = {"utbytte_12m_liste": [{"ex_dato": "2026-06-11", "belop": 14.8028},
+                                   {"ex_dato": "2026-09-17", "belop": 32.5661}]}
+        self.assertAlmostEqual(fs.ekstra_i_kroner(a, funn), 32.5661 * 0.8 / 3.41, places=3)
+
+    def test_uten_belop_holdes_regelen_unna(self):
+        a = {"utbytte_12m_liste": [{"ex_dato": "2026-09-17", "belop": 32.5661}]}
+        self.assertIsNone(fs.ekstra_i_kroner(a, [{"ex_dato": None, "ekstra": None, "total": None}]))
+        # Ingen utbetaling med den ex-datoen i serien.
+        self.assertIsNone(fs.ekstra_i_kroner(
+            a, [{"ex_dato": "2026-03-11", "ekstra": 0.8, "total": 3.41}]))
+        # Før første fulle henting finnes ikke listen.
+        self.assertIsNone(fs.ekstra_i_kroner({}, [{"ex_dato": "2026-09-17", "ekstra": 0.8, "total": 3.41}]))
+
+    def test_bruk_med_fradrag(self):
+        a = {"utbytte_12m": 59.15, "pris": 543.6}
+        fs.bruk_betalt_som_arsrate(a, 7.64)
+        self.assertEqual((a["utbytte_per_aksje"], a["utbytte_yield"], a["arsrate_ekstra_trukket"]),
+                         (51.51, 9.48, 7.64))
+        fs.bruk_betalt_som_arsrate(a)
+        self.assertNotIn("arsrate_ekstra_trukket", a)
+
+    def test_noten_motsier_ikke_fradraget(self):
+        a = {"utbytte_yield": 5.05, "utbytte_per_aksje": 8.73, "siste_utbytte": 5.8256,
+             "valuta": "NOK", "frekvens": "Halvårlig", "arsrate_kilde": "betalt_12m",
+             "arsrate_ekstra_trukket": 6.78,
+             "utbyttesplitt": {"ordinaert": 0.37, "ekstraordinaert": 0.24, "valuta": "USD",
+                               "melding_dato": "2026-08-11"},
+             "historiske_utbytter": [{"ar": 2026, "utbytte": 15.47, "maaneder": [3, 8]}]}
+        h = fs.lag_ekstraordinaer_note(a, fs._nf)
+        self.assertIn("holdt utenfor", h)
+        self.assertNotIn("inneholder den", h)
+        a.pop("arsrate_ekstra_trukket")
+        self.assertIn("inneholder den", fs.lag_ekstraordinaer_note(a, fs._nf))
+
+
+class TestCmbTechMelding(unittest.TestCase):
+    """CMB.TECH: valutaen etter beløpet og tre betalingsdatoer (08.10.2026)."""
+
+    TEKST = ("Distribution amount: 0.64 USD per share\nAnnounced currency: USD.\n"
+             "Ex-date on Euronext Belgium and Euronext Oslo Børs: expected on 15 October 2026\n"
+             "Ex-date on NYSE: expected on 16 October 2026\n"
+             "Payment date on Euronext Belgium and NYSE: expected on 22 October 2026.\n"
+             "Payment date on Euronext Oslo Børs: Expected on or about 27 October 2026.")
+
+    def test_oslo_vinner_for_betalingsdatoen_ogsaa(self):
+        self.assertEqual(fs._parse_ex_dato(self.TEKST), ("2026-10-15", "2026-10-27"))
+
+    def test_belop_med_valuta_fra_announced_currency(self):
+        u = fs._parse_utbetalinger(self.TEKST)
+        self.assertEqual((u[0]["belop"], u[0]["valuta"]), (0.64, "USD"))
+
+
+class TestLopendeUtbytteFra(unittest.TestCase):
+    """2020 Bulkers: ny virksomhet, gammel historikk, 11,62 % yield (2026-10-09)."""
+
+    def test_nulles_til_ny_utbetaling(self):
+        a = {"utbytte_per_aksje": 0.73, "utbytte_yield": 11.62, "pris": 6.3,
+             "utbytte_12m_liste": [{"ex_dato": "2026-04-29", "belop": 129.45}]}
+        self.assertTrue(fs.bruk_lopende_utbytte_fra(a, "2026-05-01"))
+        self.assertEqual((a["utbytte_per_aksje"], a["utbytte_yield"], a["arsrate_kilde"]),
+                         (0.0, 0.0, "ingen_lopende"))
+
+    def test_slutter_av_seg_selv(self):
+        a = {"utbytte_per_aksje": 0.5, "utbytte_yield": 8.0,
+             "utbytte_12m_liste": [{"ex_dato": "2026-04-29", "belop": 129.45},
+                                   {"ex_dato": "2026-11-20", "belop": 0.5}]}
+        self.assertFalse(fs.bruk_lopende_utbytte_fra(a, "2026-05-01"))
+        self.assertEqual(a["utbytte_yield"], 8.0)
+
+    def test_katalogen(self):
+        self.assertEqual(fs.LOPENDE_UTBYTTE_FRA.get("2020"), "2026-05-01")
+
+    def test_faq_lover_ikke_rekke_eller_buffer(self):
+        a = {"ticker": "2020", "navn": "2020 Bulkers Ltd", "frekvens": "Uregelmessig",
+             "ar_med_utbytte": 8, "utbytteaar": list(range(2019, 2027)), "payout_ratio": 18,
+             "utbytte_yield": 0.0, "utbytte_per_aksje": 0.0, "pris": 6.3,
+             "arsrate_kilde": "ingen_lopende"}
+        tekst = json.dumps(fs._lag_faq_seksjon(a, datetime.date(2026, 10, 9)), ensure_ascii=False)
+        self.assertIn("ikke betalt utbytte fra den nåværende virksomheten", tekst)
+        self.assertNotIn("på rad", tekst)
+        self.assertNotIn("buffer", tekst)
+
+
+class TestNewswebUtsteder(unittest.TestCase):
+    """En ukjent utsteder gir hele børsens nyeste meldinger, ikke en tom liste."""
+
+    def test_fremmede_meldinger_filtreres_bort(self):
+        gml = fs._newsweb_post, fs._NEWSWEB_API
+        fs._NEWSWEB_API = "https://x"
+        fs._newsweb_post = lambda url, data=None, timeout=10: {"data": {"messages": [
+            {"issuerSign": "OTEC", "title": "Otello"},
+            {"issuerSign": "AQUA", "title": "Aqualis"}]}}
+        fs._NEWSWEB_LISTE.pop("XYZFOO", None)
+        try:
+            self.assertEqual(fs._newsweb_meldinger("XYZFOO"), [])
+        finally:
+            fs._newsweb_post, fs._NEWSWEB_API = gml
+            fs._NEWSWEB_LISTE.pop("XYZFOO", None)
+
+    def test_egne_meldinger_beholdes(self):
+        gml = fs._newsweb_post, fs._NEWSWEB_API
+        fs._NEWSWEB_API = "https://x"
+        fs._newsweb_post = lambda url, data=None, timeout=10: {"data": {"messages": [
+            {"issuerSign": "EQNR", "title": "Equinor"}, {"title": "uten utsteder"}]}}
+        fs._NEWSWEB_LISTE.pop("EQNR", None)
+        try:
+            self.assertEqual(len(fs._newsweb_meldinger("EQNR")), 2)
+        finally:
+            fs._newsweb_post, fs._NEWSWEB_API = gml
+            fs._NEWSWEB_LISTE.pop("EQNR", None)
 
 
 if __name__ == "__main__":
