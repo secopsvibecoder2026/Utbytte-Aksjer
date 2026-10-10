@@ -1535,6 +1535,36 @@ were given.
   would all fail. They are rewritten one at a time with the article agent
   (section 5 in its prompt), not blocked.
 
+## Catalog metadata is checked every run, and pages are read every week (2026-10-10)
+
+The ASK, domicile and name errors fixed on 2026-10-09 were found by accident,
+by the article agent. Nothing measured them: `navneendring` strips legal forms
+before comparing, and no check looked at `inkorporeringsland`, `bors` or
+`ask_egnet` at all. Three changes, each where it fits:
+
+- **`sjekk_utdaterte.py` checks the fields mechanically** on every data run:
+  the four rows at the bottom of the table above. `hent_euronext_instrumenter()`
+  reads ISIN and market from the same Euronext CSV, so it costs no extra
+  download. Run against the catalog as it was before the fix,
+  `feil_selskapsform` finds all eight name errors. `ask_mot_hjemsted` finds
+  none, correctly: the old rows were internally consistent and simply had the
+  wrong country, which is what `feil_hjemsted` is for. Tests:
+  `TestHjemstedOgBors` (8).
+- **The tallkontroll agent reads ten whole pages a week** («Sidelesing» in
+  `.claude/agents/tallkontroll.md`). `tallkontroll.py --sideutvalg` gives the
+  week's tickers, alphabetical and rotating by ISO week so the catalog is read
+  in about 16 weeks; `--sidetekst TICKER` gives the page as the reader sees it,
+  title and meta description first. The agent looks for sections that
+  contradict each other and claims the data does not carry, and names the
+  template function behind each. The first test read found one:
+  the meta description said «siste utbytte var 91,22 NOK» about OET's sum of
+  four quarters (`_lag_meta_beskrivelse()`, every page with no announced
+  ex-date). Tests: `TestSidelesing` (4).
+- **The company-text agent reports metadata it can see in its sources**
+  (`navn`, `inkorporeringsland`, `ask_egnet`, `bors`, `sektor`), but does not
+  fix it in the same round. It reads the company's own pages anyway; Paratus'
+  own text said Bermuda while `tickers.json` said Norge.
+
 ## Where the weekly tallkontroll report goes (2026-09-30)
 
 The routine «Ukentlig tallkontroll» (Mondays 17:24 UTC) starts a fresh
@@ -1676,6 +1706,10 @@ often the workflow fires.
 | `ubrukt_symbolkart` | `EURONEXT_SYMBOL_MAP` entry points at a ticker we no longer carry | advarsel | No |
 | `vedvarende_hentefeil` | No successful fetch for 7 days **but Euronext confirms the listing** | advarsel | Yes |
 | `feil_borssuffiks` | `ticker_yf` does not end in `.OL` — another exchange, another currency | kritisk | No |
+| `feil_hjemsted` | `inkorporeringsland` differs from the ISIN country in Euronext's list | kritisk if it flips EØS, else advarsel | No |
+| `feil_bors` | `bors` differs from Euronext's market (Growth vs Oslo Børs/Expand) | kritisk | No |
+| `ask_mot_hjemsted` | `ask_egnet` true outside EØS (kritisk), or false/null inside it (advarsel) | see left | No |
+| `feil_selskapsform` | Legal form in our `navn` differs from Yahoo's (AS vs ASA, Ltd …) | advarsel | No |
 
 The six checks that need no history work from the existing data files, so the script is useful
 on the very first run — before any `hentelogg.json` exists. `ikke_pa_bors` additionally needs

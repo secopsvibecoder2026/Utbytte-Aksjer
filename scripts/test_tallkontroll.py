@@ -97,5 +97,40 @@ class TestMarkdown(unittest.TestCase):
     def test_ingen_avvik(self):
         self.assertIn("Ingen avvik.", tk.markdown_rapport(I_DAG, 155, {}, []))
 
+class TestSidelesing(unittest.TestCase):
+    """Ukens utvalg og siden som ren tekst (2026-10-09)."""
+
+    ALLE = [f"T{i:03d}" for i in range(154)]
+
+    def test_samme_uke_samme_utvalg(self):
+        man, son = datetime.date(2026, 10, 5), datetime.date(2026, 10, 11)
+        self.assertEqual(tk.ukens_sider(self.ALLE, man), tk.ukens_sider(self.ALLE, son))
+        self.assertEqual(len(tk.ukens_sider(self.ALLE, man)), tk.SIDER_PER_UKE)
+
+    def test_hele_katalogen_leses_i_lopet_av_rundene(self):
+        sett = set()
+        dag = datetime.date(2026, 10, 5)
+        for uke in range(16):
+            sett.update(tk.ukens_sider(self.ALLE, dag + datetime.timedelta(weeks=uke)))
+        self.assertEqual(sett, set(self.ALLE))
+
+    def test_tom_katalog(self):
+        self.assertEqual(tk.ukens_sider([], I_DAG), [])
+
+    def test_sidetekst(self):
+        kilde = ("<html><head><title>DNB utbytte 2026 – yield 5,6 %</title>"
+                 '<meta name="description" content="DNB har 5,6 % yield.">'
+                 "<style>.x{color:red}</style><script>var a=1;</script></head><body>"
+                 "<nav>Meny</nav><h1>DNB</h1><p>Om selskapet.</p>"
+                 "<table><tr><th>År</th><th>Utbytte</th></tr><tr><td>2025</td><td>16,75</td></tr></table>"
+                 "<svg><text>9</text></svg><footer>Bunn</footer></body></html>")
+        t = tk.sidetekst(kilde)
+        self.assertTrue(t.startswith("TITTEL: DNB utbytte 2026 – yield 5,6 %\nMETA: DNB har 5,6 % yield."))
+        self.assertIn("## DNB", t)
+        self.assertIn("2025 | 16,75", t)
+        for borte in ("color:red", "var a", "Meny", "Bunn", "9"):
+            self.assertNotIn(borte, t.split("META:")[1].split("\n", 1)[1])
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=1)
