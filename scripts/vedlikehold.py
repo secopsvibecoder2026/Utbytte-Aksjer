@@ -69,7 +69,7 @@ UT_MULIG = re.compile(
 # Børsen endres: Oslo Børs ↔ Euronext Growth/Expand. Avgjør ASK.
 MARKED = re.compile(
     r"euronext growth|euronext expand|transfer (of (the )?listing|to euronext)|\buplist"
-    r"|re-?listing|listing prospectus|overføring (av notering|til)|flytt\w* (av )?notering",
+    r"|re-?listing|overføring (av notering|til)|flytt\w* (av )?notering",
     re.I)
 
 NAVN = re.compile(
@@ -85,8 +85,11 @@ INN = re.compile(
     r"first day of trading|første handelsdag|admission to trading|opptak til handel"
     r"|approved for listing|godkjent for notering|listing on euronext|notering på euronext"
     r"|initial public offering|\bIPO\b|application for listing of shares"
-    r"|søknad om notering av aksjer|listing prospectus",
+    r"|søknad om notering av aksjer",
     re.I)
+# «Listing prospectus» sto i begge mønstrene til første kjøring 10.10.2026:
+# HOFSETH BIOCARE ASA: APPROVAL AND PUBLICATION OF LISTING PROSPECTUS var et
+# prospekt for nye aksjer i et selskap som allerede er notert.
 
 UTBYTTE = re.compile(
     r"dividend|utbytte|cash distribution|kapitalutdeling|distribution to shareholders"

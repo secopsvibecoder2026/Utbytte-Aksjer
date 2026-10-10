@@ -220,8 +220,14 @@ def hent_raadata(ticker_yf):
 _UTBYTTEORD = ("dividend", "distribution", "utbytte", "utdeling")
 
 
-def utbyttemeldinger(ticker, maks=3):
-    """Tekst fra de nyeste «Key information … dividend»-meldingene på NewsWeb."""
+def utbyttemeldinger(ticker, maks=8):
+    """Tekst fra de nyeste «Key information … dividend»-meldingene på NewsWeb.
+
+    Taket var 3. Equinor melder på norsk og engelsk, og et utbytte har ofte
+    både en kunngjøring og en «Key information»-melding, så tre meldinger
+    rakk bare én utbytterunde. Tallkontrollen 05.10.2026 fikk derfor EQNRs
+    ex-dato 13. november som «uavklart», enda melding 678527 sa det rett ut.
+    """
     import fetch_stocks as fs
     if fs._NEWSWEB_API is None:
         fs._NEWSWEB_API = fs._newsweb_api_base()

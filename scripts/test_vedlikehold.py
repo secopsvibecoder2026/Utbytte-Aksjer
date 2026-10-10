@@ -83,6 +83,14 @@ class TestInnIKatalogen(unittest.TestCase):
                                    "Document", kategori=1103)], KATALOG)
         self.assertEqual([f["utsteder"] for f in r["nye_noteringer"]], ["VLCC"])
 
+    def test_prospekt_for_nye_aksjer_er_ikke_ny_notering(self):
+        # Første kjøring meldte HBC som ny notering; det var en emisjon.
+        tittel = "HOFSETH BIOCARE ASA: APPROVAL AND PUBLICATION OF LISTING PROSPECTUS"
+        r = v.klassifiser([melding("HBC", tittel, kategori=1103),
+                           melding("AKVA", tittel, kategori=1103, mid=2)], KATALOG)
+        self.assertEqual(r["nye_noteringer"], [])
+        self.assertEqual(r["marked"], [])
+
     def test_obligasjoner_er_ikke_nye_aksjer(self):
         r = v.klassifiser([
             melding("NPRO", "Euronext Oslo Børs – Norwegian Property ASA - Received "
