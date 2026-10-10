@@ -665,7 +665,7 @@ const ARTIKLER = [
     slug: '/artikler/utbytte-og-skatt/',
     tittel: 'Utbytte og skatt i Norge — 37,84 %, skjermingsfradrag og ASK',
     ingress: 'Effektiv skattesats, skjermingsfradraget, ASK vs. VPS og kildeskatt på utenlandske aksjer.',
-    meta: '23. april 2026 · 10 min',
+    meta: '23. april 2026 · 13 min',
     tags: ['Skatt', 'Guide'],
     sektorer: [],
   },
