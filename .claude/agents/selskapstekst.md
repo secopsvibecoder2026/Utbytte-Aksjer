@@ -81,9 +81,31 @@ Bruk, i denne rekkefølgen:
 3. Andre kilder (Wikipedia, aviser) bare for å finne fram til 1 og 2.
 
 Hver påstand i teksten skal kunne pekes tilbake til en kilde. Noter kildene
-per ticker. De skal i rapporten, ikke i teksten. Finner du at `navn`,
-`sektor` eller `beskrivelse_fakta` er feil, si fra i rapporten. Ikke rett det
-selv i samme runde.
+per ticker. De skal i rapporten, ikke i teksten.
+
+**Sammenlign kildene med katalogdataene mens du har dem oppe.** Du leser
+selskapets egne sider og meldinger uansett, og det er de samme kildene som
+avgjør disse feltene i `data/tickers.json`:
+
+| Felt | Hva du sjekker |
+|---|---|
+| `navn` | Riktig navn og selskapsform (ASA, AS, Ltd, Corp …). Brønnøysundregistrene for norske selskaper |
+| `inkorporeringsland` | Landet selskapet er registrert i, ikke der hovedkontoret ligger |
+| `ask_egnet` | `true` for registrert i EØS, `false` utenfor, `null` når selskapet er registrert utenfor EØS men ledes fra et EØS-land |
+| `bors` | «Oslo Børs» eller «Euronext Growth Oslo». Growth-aksjer kan ikke stå på ASK i dag |
+| `sektor` | Passer sektoren det selskapet faktisk driver med nå? |
+
+Les også den genererte siden (steg 2) med samme øyne: står det noe i FAQ,
+risikopunkter eller kontoraden som kildene dine motsier? Finner du feil i noe
+av dette, si fra i rapporten med kilde. **Ikke rett det selv i samme runde.**
+Rettingen gjøres i en egen omgang, fordi den ofte gjelder flere aksjer enn de
+ti du har. Paratus sto i september som norsk og ASK-egnet, og Hafnia og BW LPG
+på Bermuda to år etter at de flyttet til Singapore; begge deler sto i
+kildene agentene leste.
+
+`scripts/sjekk_utdaterte.py` fanger mye av dette maskinelt ved hver
+datakjøring, men ikke alt: et selskap som er registrert ett sted og ledes fra
+et annet, eller en sektor som ikke lenger passer, krever at noen leser.
 
 ### 4. Skriv teksten
 
@@ -192,7 +214,9 @@ Avslutt med:
 1. **Tickerne** du skrev, med antall ord per tekst.
 2. **Én hel tekst** gjengitt, så brukeren kan lese stilen uten å åpne filer.
 3. **Kildene per ticker.**
-4. **Funn underveis:** feil i `navn`, `sektor` eller `beskrivelse_fakta`, og
-   påstander i den gamle teksten som viste seg å være feil.
+4. **Funn underveis:** feil i `navn`, `inkorporeringsland`, `ask_egnet`,
+   `bors`, `sektor` eller `beskrivelse_fakta`, ting på den genererte siden som
+   kildene motsier, og påstander i den gamle teksten som viste seg å være
+   feil. Oppgi kilde for hvert funn.
 5. PR-lenken, og hvor mange tekster som gjenstår i køen
    (`python scripts/valider_innledning.py --ko 0`).

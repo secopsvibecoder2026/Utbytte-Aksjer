@@ -667,5 +667,97 @@ class TestFeilBorssuffiks(unittest.TestCase):
         self.assertEqual(finn_feil_borssuffiks(json.load(open(sti, encoding="utf-8"))), [])
 
 
+def _instrumenter(ekstra):
+    """Euronext-instrumenter stor nok til MIN_NOTERINGER, pluss de vi tester."""
+    liste = {f"T{i:03d}": {"navn": f"S{i}", "isin": f"NO{i:010d}", "marked": "Oslo Børs"}
+             for i in range(120)}
+    liste.update(ekstra)
+    return liste
+
+
+class TestHjemstedOgBors(unittest.TestCase):
+    """Feilene som ble funnet for hånd 09.10.2026, nå målt ved hver kjøring."""
+
+    def test_paratus_var_norsk_og_ask_egnet(self):
+        from sjekk_utdaterte import finn_feil_hjemsted
+        t = [{"ticker": "PLSV", "inkorporeringsland": "Norge", "ask_egnet": True}]
+        v = finn_feil_hjemsted(t, _instrumenter(
+            {"PLSV": {"navn": "PARATUS", "isin": "BMG6904D1083", "marked": "Oslo Børs"}}))
+        self.assertEqual([(x["type"], x["alvorlighet"]) for x in v],
+                         [("feil_hjemsted", ALVOR_KRITISK)])
+        self.assertIn("Bermuda", v[0]["melding"])
+
+    def test_bermuda_til_singapore_er_advarsel(self):
+        # Utenfor EØS i begge tilfeller: ASK-svaret snur ikke.
+        from sjekk_utdaterte import finn_feil_hjemsted
+        t = [{"ticker": "HAFNI", "inkorporeringsland": "Bermuda", "ask_egnet": False}]
+        v = finn_feil_hjemsted(t, _instrumenter(
+            {"HAFNI": {"navn": "HAFNIA", "isin": "SGXZ53070850", "marked": "Oslo Børs"}}))
+        self.assertEqual(v[0]["alvorlighet"], ALVOR_ADVARSEL)
+
+    def test_samme_land_og_ukjent_prefiks_er_stille(self):
+        from sjekk_utdaterte import finn_feil_hjemsted
+        t = [{"ticker": "EQNR"}, {"ticker": "X", "inkorporeringsland": "Norge"}]
+        self.assertEqual(finn_feil_hjemsted(t, _instrumenter({
+            "EQNR": {"navn": "EQUINOR", "isin": "NO0010096985", "marked": "Oslo Børs"},
+            "X": {"navn": "X", "isin": "XS0000000001", "marked": "Oslo Børs"}})), [])
+
+    def test_growth_som_oslo_bors(self):
+        from sjekk_utdaterte import finn_feil_bors
+        t = [{"ticker": "WEST", "bors": "Oslo Børs"},
+             {"ticker": "CAPT", "bors": "Euronext Growth Oslo"},
+             {"ticker": "PFE", "bors": "Oslo Børs"}]
+        v = finn_feil_bors(t, _instrumenter({
+            "WEST": {"navn": "W", "isin": "NO1", "marked": "Euronext Growth Oslo"},
+            "CAPT": {"navn": "C", "isin": "MH1", "marked": "Euronext Growth Oslo"},
+            "PFE": {"navn": "P", "isin": "NO2", "marked": "Euronext Expand Oslo"}}))
+        # Expand er et regulert marked og regnes som Oslo Børs.
+        self.assertEqual([x["ticker"] for x in v], ["WEST"])
+        self.assertEqual(v[0]["alvorlighet"], ALVOR_KRITISK)
+
+    def test_uten_liste_ingen_konklusjon(self):
+        from sjekk_utdaterte import finn_feil_bors, finn_feil_hjemsted
+        t = [{"ticker": "WEST", "bors": "Oslo Børs", "inkorporeringsland": "Bermuda"}]
+        kort = {"WEST": {"navn": "W", "isin": "NO1", "marked": "Euronext Growth Oslo"}}
+        for f in (finn_feil_bors, finn_feil_hjemsted):
+            self.assertEqual(f(t, None), [])
+            self.assertEqual(f(t, kort), [])   # under MIN_NOTERINGER
+
+    def test_ask_mot_hjemsted(self):
+        from sjekk_utdaterte import finn_ask_mot_hjemsted
+        v = finn_ask_mot_hjemsted([
+            {"ticker": "A", "inkorporeringsland": "Bermuda", "ask_egnet": True},
+            {"ticker": "B", "inkorporeringsland": "Kypros", "ask_egnet": False},
+            {"ticker": "C", "inkorporeringsland": "Marshalløyene", "ask_egnet": None},
+            {"ticker": "D", "inkorporeringsland": "Færøyene", "ask_egnet": False},
+            {"ticker": "E"}])
+        self.assertEqual([(x["ticker"], x["alvorlighet"]) for x in v],
+                         [("A", ALVOR_KRITISK), ("B", ALVOR_ADVARSEL)])
+
+    def test_selskapsform(self):
+        from sjekk_utdaterte import finn_feil_selskapsform, selskapsform
+        self.assertEqual(selskapsform("Odfjell SE (A-aksje)"), "se")
+        self.assertEqual(selskapsform("PPI Public Property Invest AB (publ)"), "ab")
+        self.assertEqual(selskapsform("Paratus Energy Services Ltd."), "ltd")
+        self.assertEqual(selskapsform("Hafnia Limited"), "ltd")
+        self.assertIsNone(selskapsform("Wilh. Wilhelmsen Holding B"))
+        logg = {"tickere": {"MAS": {"yahoo_navn": "Måsøval AS"},
+                            "HAFNI": {"yahoo_navn": "Hafnia Ltd"},
+                            "WWIB": {"yahoo_navn": "Wilh. Wilhelmsen Holding ASA"}}}
+        v = finn_feil_selskapsform([{"ticker": "MAS", "navn": "Måsøval ASA"},
+                                    {"ticker": "HAFNI", "navn": "Hafnia Limited"},
+                                    {"ticker": "WWIB", "navn": "Wilh. Wilhelmsen Holding B"}], logg)
+        self.assertEqual([x["ticker"] for x in v], ["MAS"])
+
+    def test_katalogen_er_ren(self):
+        # Bare tickers.json. Selskapsformen sjekkes mot hentelogg.json, som
+        # boten skriver fire ganger om dagen — en omdøping der skal gi et
+        # varsel i datakjøringen, ikke røde tester på en urelatert PR.
+        import json, os
+        from sjekk_utdaterte import finn_ask_mot_hjemsted
+        sti = os.path.join(os.path.dirname(__file__), "..", "data", "tickers.json")
+        self.assertEqual(finn_ask_mot_hjemsted(json.load(open(sti, encoding="utf-8"))), [])
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

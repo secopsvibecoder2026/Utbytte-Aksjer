@@ -8,6 +8,8 @@ Brukes av agenten `.claude/agents/tallkontroll.md`, men kan kjøres for hånd:
     python scripts/tallkontroll.py DNB EQNR        # utvalgte tickere
     python scripts/tallkontroll.py --json          # maskinlesbart
     python scripts/tallkontroll.py --meldinger WAWI  # utbyttemeldinger fra NewsWeb
+    python scripts/tallkontroll.py --sideutvalg      # ukens sider til sidelesing
+    python scripts/tallkontroll.py --sidetekst DNB   # aksjesiden som ren tekst
 
 Leser bare. Skriver aldri til data/ eller sidene.
 
@@ -26,6 +28,7 @@ import argparse
 import datetime
 import html
 import json
+import math
 import os
 import re
 import statistics
@@ -241,6 +244,90 @@ def utbyttemeldinger(ticker, maks=3):
     return ut
 
 
+# ── Sidelesing (2026-10-09) ──────────────────────────────────────────────────
+# Tallsjekkene over sammenligner felt mot kilder. De ser ikke at en side sier
+# to ting som ikke kan være sanne samtidig: 2020 Bulkers fikk «8 år på rad …
+# konsistent kapitalavkastningspolitikk» og «god buffer» om et selskap som
+# hadde solgt hele virksomheten, og alle 14 Growth-aksjene sto som «kan holdes
+# i ASK». Det ble funnet ved å lese sidene. Agenten leser derfor noen hele
+# sider hver uke, i fast rekkefølge, så hele katalogen er lest på ~16 uker.
+
+SIDER_PER_UKE = 10
+
+
+def ukens_sider(tickere, i_dag, antall=SIDER_PER_UKE):
+    """Aksjesidene som leses i sin helhet denne ISO-uken.
+
+    Alfabetisk rekkefølge, og samme uke gir samme utvalg uansett når på dagen
+    eller hvor mange ganger det kjøres.
+    """
+    tickere = sorted(set(tickere))
+    if not tickere:
+        return []
+    runder = math.ceil(len(tickere) / antall)
+    aar, uke, _ = i_dag.isocalendar()
+    n = (aar * 53 + uke) % runder
+    return tickere[n * antall:(n + 1) * antall]
+
+
+def sidetekst(kilde):
+    """Teksten leseren ser på en generert side, med overskrifter merket ##.
+
+    Tittel og metabeskrivelse først, for de har egne tall som kan motsi
+    siden. Skript, stil, SVG og navigasjon tas bort; tabellrader blir én linje
+    med | mellom cellene.
+    """
+    from html.parser import HTMLParser
+
+    class Leser(HTMLParser):
+        HOPP = {"script", "style", "svg", "noscript", "nav", "header", "footer"}
+        BLOKK = {"p", "div", "li", "tr", "section", "article", "details", "summary",
+                 "br", "table", "ul", "ol", "dt", "dd"}
+
+        def __init__(self):
+            super().__init__(convert_charrefs=True)
+            self.deler, self.dybde, self.tittel, self.meta = [], 0, "", ""
+            self._i_tittel = False
+
+        def handle_starttag(self, tag, attrs):
+            a = dict(attrs)
+            if tag == "meta" and a.get("name") == "description":
+                self.meta = a.get("content") or ""
+            if tag == "title":
+                self._i_tittel = True
+            if tag in self.HOPP:
+                self.dybde += 1
+            elif not self.dybde:
+                if tag in ("h1", "h2", "h3", "h4"):
+                    self.deler.append("\n\n## ")
+                elif tag in ("td", "th"):
+                    self.deler.append(" | ")
+                elif tag in self.BLOKK:
+                    self.deler.append("\n")
+
+        def handle_endtag(self, tag):
+            if tag == "title":
+                self._i_tittel = False
+            if tag in self.HOPP and self.dybde:
+                self.dybde -= 1
+            elif not self.dybde and tag in ("h1", "h2", "h3", "h4"):
+                self.deler.append("\n")
+
+        def handle_data(self, data):
+            if self._i_tittel:
+                self.tittel += data
+            elif not self.dybde:
+                self.deler.append(data)
+
+    leser = Leser()
+    leser.feed(kilde)
+    tekst = "".join(leser.deler)
+    linjer = [re.sub(r"[ \t]+", " ", l).strip(" |") for l in tekst.splitlines()]
+    tekst = re.sub(r"\n{3,}", "\n\n", "\n".join(linjer)).strip()
+    return (f"TITTEL: {' '.join(leser.tittel.split())}\n"
+            f"META: {' '.join(leser.meta.split())}\n\n{tekst}")
+
+
 def markdown_rapport(i_dag, antall, resultat, feilet):
     """Sammendrag for GitHub Actions: én linje per sjekk, eksempler under.
 
@@ -278,7 +365,26 @@ def main():
                    help="hopp over ex-dato mot Oslo Børs (raskere)")
     p.add_argument("--meldinger", metavar="TICKER",
                    help="skriv ut utbyttemeldingene fra NewsWeb og avslutt")
+    p.add_argument("--sideutvalg", action="store_true",
+                   help="skriv ut ukens aksjesider til sidelesing og avslutt")
+    p.add_argument("--sidetekst", nargs="+", metavar="TICKER",
+                   help="skriv ut aksjesidene som ren tekst og avslutt")
     a = p.parse_args()
+
+    if a.sideutvalg:
+        alle = [t["ticker"] for t in _les_json(os.path.join(ROT, "data", "tickers.json"), [])]
+        print(" ".join(ukens_sider(alle, datetime.date.today())))
+        return
+
+    if a.sidetekst:
+        for t in a.sidetekst:
+            sti = os.path.join(ROT, "aksjer", t.upper(), "index.html")
+            if not os.path.exists(sti):
+                print(f"=== {t.upper()}: finnes ikke ({sti})\n")
+                continue
+            with open(sti, encoding="utf-8") as f:
+                print(f"=== {t.upper()}\n{sidetekst(f.read())}\n")
+        return
 
     if a.meldinger:
         for m in utbyttemeldinger(a.meldinger.upper()):

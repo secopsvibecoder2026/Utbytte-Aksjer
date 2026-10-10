@@ -332,6 +332,12 @@ class TestSidetittelOgMeta(unittest.TestCase):
                                          y, ex, upa, s5, "NOK", self.I_DAG)
             self.assertLessEqual(len(m), 155, m)
 
+    def test_meta_kaller_ikke_arsraten_siste_utbytte(self):
+        m = fs._lag_meta_beskrivelse("Okeanis Eco Tankers Corp.", "OET", 10.2, None, 91.22,
+                                     4.4, "NOK", self.I_DAG)
+        self.assertNotIn("siste utbytte", m.lower())
+        self.assertIn("årlig utbytte er 91,22 NOK", m.lower().replace("nok", "NOK"))
+
     def test_meta_beholder_valuta_i_versaler(self):
         # .capitalize() ville gjort «NOK» til «nok».
         m = fs._lag_meta_beskrivelse("Vår Energi ASA", "VAR", 10.8, None, 3.6, 12.1,

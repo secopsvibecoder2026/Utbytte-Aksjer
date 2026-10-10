@@ -292,6 +292,183 @@ def finn_feil_borssuffiks(tickere: list) -> list:
     return varsler
 
 
+# ── Hjemsted, børs og selskapsform (2026-10-09) ──────────────────────────────
+#
+# Disse feltene i tickers.json avgjør hva aksjesiden sier om aksjesparekonto
+# (ASK), og de ble skrevet inn for hånd én gang og aldri kontrollert. Da de
+# ble sjekket mot Euronext og Brønnøysund 09.10.2026, sto alle 14 aksjene på
+# Euronext Growth som «kan holdes i ASK», Paratus (Bermuda) sto som norsk og
+# ASK-egnet, Hafnia og BW LPG hadde flyttet til Singapore to år tidligere, og
+# seks selskaper hadde feil selskapsform. Funnet tilfeldig, mens en artikkel
+# ble skrevet om. Nå kjøres det ved hver datakjøring.
+
+# ISIN-koden begynner med landet utstederen er registrert i. Navnene er de
+# samme som i `inkorporeringsland` i tickers.json.
+ISIN_LAND = {
+    "NO": "Norge", "SE": "Sverige", "DK": "Danmark", "FI": "Finland", "IS": "Island",
+    "FO": "Færøyene", "GB": "Storbritannia", "IE": "Irland", "BE": "Belgia",
+    "NL": "Nederland", "LU": "Luxembourg", "DE": "Tyskland", "FR": "Frankrike",
+    "CH": "Sveits", "AT": "Østerrike", "ES": "Spania", "IT": "Italia", "PT": "Portugal",
+    "PL": "Polen", "EE": "Estland", "LV": "Latvia", "LT": "Litauen", "CY": "Kypros",
+    "GR": "Hellas", "MT": "Malta", "LI": "Liechtenstein", "BM": "Bermuda",
+    "MH": "Marshalløyene", "KY": "Caymanøyene", "SG": "Singapore", "HK": "Hongkong",
+    "US": "USA", "CA": "Canada", "JE": "Jersey", "GG": "Guernsey", "IM": "Isle of Man",
+    "VG": "Jomfruøyene", "PA": "Panama", "LR": "Liberia",
+}
+
+# EØS: EU-landene pluss Norge, Island og Liechtenstein. Færøyene er ikke med,
+# selv om de hører til Danmark.
+EOS_LAND = {
+    "Norge", "Island", "Liechtenstein", "Sverige", "Danmark", "Finland", "Irland",
+    "Belgia", "Nederland", "Luxembourg", "Tyskland", "Frankrike", "Østerrike",
+    "Spania", "Italia", "Portugal", "Polen", "Estland", "Latvia", "Litauen",
+    "Kypros", "Hellas", "Malta", "Tsjekkia", "Slovakia", "Slovenia", "Ungarn",
+    "Romania", "Bulgaria", "Kroatia",
+}
+
+# «ASA» og «AS» er ulike former, ikke ulike stavemåter. Disse er det.
+_SAMME_FORM = {"limited": "ltd", "corporation": "corp", "ab (publ)": "ab",
+               "incorporated": "inc", "public limited company": "plc"}
+_FORMER = ("ab (publ)", "asa", "as", "a/s", "p/f", "ab", "plc", "ltd", "limited",
+           "corp", "corporation", "inc", "nv", "sa", "se", "ag", "oyj", "spa")
+
+
+def selskapsform(navn: str):
+    """Selskapsformen på slutten av et navn, eller None.
+
+    «Odfjell SE (A-aksje)» → «se»: en aksjeklasse i parentes er ikke en del av
+    formen. «Wilh. Wilhelmsen Holding B» → None.
+    """
+    if not navn:
+        return None
+    s = re.sub(r"\s*\([^)]*aksje[^)]*\)\s*$", "", navn.strip(), flags=re.I)
+    s = s.lower().replace(".", "").replace(",", "").strip()
+    for f in _FORMER:
+        if s == f or s.endswith(" " + f):
+            return _SAMME_FORM.get(f, f)
+    return None
+
+
+def _brukbar_liste(instrumenter):
+    return instrumenter if instrumenter and len(instrumenter) >= MIN_NOTERINGER else None
+
+
+def finn_feil_hjemsted(tickere: list, instrumenter) -> list:
+    """`inkorporeringsland` mot landet i ISIN-koden fra Euronext.
+
+    Kritisk når feilen snur ASK-svaret (EØS mot ikke-EØS), ellers advarsel.
+    """
+    instrumenter = _brukbar_liste(instrumenter)
+    if not instrumenter:
+        return []
+    varsler = []
+    for t in tickere:
+        ticker = t.get("ticker")
+        isin = (instrumenter.get(ticker) or {}).get("isin") or ""
+        isin_land = ISIN_LAND.get(isin[:2])
+        vart = t.get("inkorporeringsland") or "Norge"
+        if not isin_land or isin_land == vart:
+            continue
+        snur = (isin_land in EOS_LAND) != (vart in EOS_LAND)
+        varsler.append(_varsel(
+            ticker, "feil_hjemsted", ALVOR_KRITISK if snur else ALVOR_ADVARSEL,
+            f"tickers.json sier «{vart}», men ISIN {isin} er utstedt i {isin_land}."
+            + (" Det snur svaret på om aksjen kan stå på ASK." if snur else ""),
+            "Kontroller mot selskapets egne opplysninger og rett inkorporeringsland "
+            "og ask_egnet i data/tickers.json. Er selskapet registrert utenfor EØS, "
+            "men ledes fra et EØS-land, sett ask_egnet til null (uavklart).",
+        ))
+    return varsler
+
+
+def finn_feil_bors(tickere: list, instrumenter) -> list:
+    """`bors` mot markedet i Euronexts liste.
+
+    Euronext Growth er ikke et regulert marked, så feilen snur alltid
+    ASK-svaret. Euronext Expand er regulert og regnes som Oslo Børs her.
+    """
+    instrumenter = _brukbar_liste(instrumenter)
+    if not instrumenter:
+        return []
+    varsler = []
+    for t in tickere:
+        ticker = t.get("ticker")
+        marked = (instrumenter.get(ticker) or {}).get("marked") or ""
+        if not marked:
+            continue
+        ventet = "Euronext Growth Oslo" if "growth" in marked.lower() else "Oslo Børs"
+        vart = t.get("bors") or ""
+        if ("growth" in vart.lower()) == (ventet == "Euronext Growth Oslo"):
+            continue
+        varsler.append(_varsel(
+            ticker, "feil_bors", ALVOR_KRITISK,
+            f"tickers.json sier «{vart}», men Euronext oppgir markedet «{marked}». "
+            "Aksjesiden sier dermed feil om ASK.",
+            f"Sett bors til «{ventet}» i data/tickers.json.",
+        ))
+    return varsler
+
+
+def finn_ask_mot_hjemsted(tickere: list) -> list:
+    """`ask_egnet` som ikke passer med `inkorporeringsland`. Uten nett.
+
+    `ask_egnet` gjelder hjemstedet: true for EØS, false utenfor, null når et
+    selskap registrert utenfor EØS ledes fra et EØS-land (se ask_status() i
+    fetch_stocks.py). Et selskap registrert i EØS skal derfor aldri være
+    null, og ett registrert utenfor aldri true.
+    """
+    varsler = []
+    for t in tickere:
+        ticker = t.get("ticker")
+        land = t.get("inkorporeringsland") or "Norge"
+        ask = t.get("ask_egnet", True)
+        i_eos = land in EOS_LAND
+        if ask is True and not i_eos:
+            varsler.append(_varsel(
+                ticker, "ask_mot_hjemsted", ALVOR_KRITISK,
+                f"ask_egnet er true, men selskapet er registrert i {land}, utenfor EØS. "
+                "Aksjesiden sier at aksjen kan holdes i ASK.",
+                "Sett ask_egnet til false, eller til null hvis selskapet ledes fra "
+                "et EØS-land og det skattemessige hjemstedet ikke er avklart.",
+            ))
+        elif ask is not True and i_eos:
+            varsler.append(_varsel(
+                ticker, "ask_mot_hjemsted", ALVOR_ADVARSEL,
+                f"ask_egnet er {'null' if ask is None else 'false'}, men selskapet er "
+                f"registrert i {land}, som er i EØS.",
+                "Sett ask_egnet til true, med mindre selskapet er skattemessig "
+                "hjemmehørende utenfor EØS. Skriv i så fall hvorfor i commit-meldingen.",
+            ))
+    return varsler
+
+
+def finn_feil_selskapsform(tickere: list, hentelogg: dict) -> list:
+    """Selskapsformen i vårt navn mot Yahoos.
+
+    `navneendring` sammenligner navn uten selskapsform, og så derfor aldri at
+    Måsøval er AS og ikke ASA, eller at Paratus er Ltd og ikke AS. Varsler bare
+    når begge navnene har en form og de er ulike.
+    """
+    logg = (hentelogg or {}).get("tickere", {})
+    varsler = []
+    for t in tickere:
+        ticker = t.get("ticker")
+        yahoo = (logg.get(ticker) or {}).get("yahoo_navn") or ""
+        var_form, yahoo_form = selskapsform(t.get("navn")), selskapsform(yahoo)
+        if not var_form or not yahoo_form or var_form == yahoo_form:
+            continue
+        varsler.append(_varsel(
+            ticker, "feil_selskapsform", ALVOR_ADVARSEL,
+            f"Vårt navn «{t.get('navn')}» ender på {var_form.upper()}, Yahoo har "
+            f"«{yahoo}» ({yahoo_form.upper()}).",
+            "Kontroller i Brønnøysundregistrene (norske selskaper) eller mot "
+            "selskapets egne meldinger, og rett navn i data/tickers.json. Sett "
+            "navn_dnb til det gamle navnet hvis feltet mangler, for DNB-oppslaget "
+            "krever eksakt navn.",
+        ))
+    return varsler
+
+
 def finn_duplikat_ticker_yf(tickere: list) -> list:
     """
     Samme ticker_yf på to oppføringer gir identiske data fra Yahoo for begge.
@@ -608,7 +785,7 @@ def _les_json(sti, standard):
 
 
 def analyser(tickere, aksjer, hentelogg, status, idag,
-             noteringer=None, symbolkart=None):
+             noteringer=None, symbolkart=None, instrumenter=None):
     """
     Kjører alle sjekkene og returnerer (varsler, ny_status).
 
@@ -627,6 +804,10 @@ def analyser(tickere, aksjer, hentelogg, status, idag,
     # Krever verken historikk eller nett — leser bare kartet mot tickers.json.
     varsler.extend(finn_feil_yf_symbol(symbolkart or {}, tickere))
     varsler.extend(finn_feil_borssuffiks(tickere))
+    varsler.extend(finn_feil_hjemsted(tickere, instrumenter))
+    varsler.extend(finn_feil_bors(tickere, instrumenter))
+    varsler.extend(finn_ask_mot_hjemsted(tickere))
+    varsler.extend(finn_feil_selskapsform(tickere, hentelogg))
     varsler.extend(finn_duplikat_ticker_yf(tickere))
     varsler.extend(finn_duplikat_navn(tickere))
     varsler.extend(finn_manglende_data(tickere, aksjer, hentelogg))
@@ -804,12 +985,15 @@ def main(argv=None):
     # Den autoritative listen over hva som faktisk handles. Feiler nedlastingen
     # blir den None, og børssjekken varsler ingenting — en nettverksfeil skal
     # aldri kunne se ut som at hele katalogen er avnotert.
-    noteringer, symbolkart = None, {}
+    noteringer, symbolkart, instrumenter = None, {}, None
     if not args.uten_nett:
         try:
             sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-            from fetch_stocks import hent_euronext_noteringer, EURONEXT_SYMBOL_MAP
-            noteringer = hent_euronext_noteringer()
+            from fetch_stocks import hent_euronext_instrumenter, EURONEXT_SYMBOL_MAP
+            # Én nedlasting: noteringslisten er navnene i instrumentlisten.
+            instrumenter = hent_euronext_instrumenter()
+            noteringer = ({t: d["navn"] for t, d in instrumenter.items()}
+                          if instrumenter is not None else None)
             symbolkart = EURONEXT_SYMBOL_MAP
             print(f"Euronext Oslo: {len(noteringer)} noterte instrumenter\n"
                   if noteringer else "Euronext Oslo: listen kunne ikke hentes — "
@@ -818,7 +1002,7 @@ def main(argv=None):
             print(f"Euronext-oppslag hoppet over: {e}\n")
 
     varsler, ny_status = analyser(tickere, aksjer, hentelogg, status, _idag(),
-                                  noteringer, symbolkart)
+                                  noteringer, symbolkart, instrumenter)
 
     _skriv_rapport(varsler, len(tickere))
     _skriv_github_sammendrag(varsler)

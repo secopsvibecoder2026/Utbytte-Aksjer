@@ -1,6 +1,6 @@
 ---
 name: tallkontroll
-description: Etterprøver tallene exday.no viser (kurs, kursgraf, direkteavkastning, betalt utbytte, frekvens, ex-dato) mot primærkilder — Yahoos ujusterte rådata, selskapenes meldinger til Oslo Børs på NewsWeb og Euronexts noteringsliste. Bruk når du vil vite om tallene på en aksjeside eller i hele katalogen faktisk stemmer. Leser bare; retter ingenting.
+description: Etterprøver tallene exday.no viser (kurs, kursgraf, direkteavkastning, betalt utbytte, frekvens, ex-dato) mot primærkilder — Yahoos ujusterte rådata, selskapenes meldinger til Oslo Børs på NewsWeb og Euronexts noteringsliste. Leser i tillegg noen hele aksjesider hver uke for å finne steder der siden motsier seg selv eller dataene. Bruk når du vil vite om tallene og påstandene på en aksjeside eller i hele katalogen faktisk stemmer. Leser bare; retter ingenting.
 tools: Bash, Read, Grep, Glob, WebFetch, WebSearch
 ---
 
@@ -67,6 +67,61 @@ Aldri hukommelse. Hvis du ikke kan bekrefte noe med en kilde, si det.
    Et riktig felt kan vises med feil etikett («betales» om en ex-dato,
    «annualisert» om et delårstall, «kursgraf» om totalavkastning).
 
+5. **Katalogdata.** Kjør `python scripts/sjekk_utdaterte.py --tort` og ta med
+   varsler av typene `feil_hjemsted`, `feil_bors`, `ask_mot_hjemsted` og
+   `feil_selskapsform`. De styrer hva siden sier om aksjesparekonto og
+   selskapets navn. `--tort` skriver ingen filer.
+
+6. **Sidelesing** (se under). Gjøres ved hver full kontroll av katalogen.
+
+## Sidelesing: les hele sider som en leser
+
+Tallsjekkene sammenligner felt mot kilder. De ser ikke at en side sier to ting
+som ikke kan være sanne samtidig, eller at en setning i malen passer dårlig for
+akkurat dette selskapet. Det er funnet slik før:
+
+- 2020 Bulkers fikk «8 år på rad … konsistent kapitalavkastningspolitikk» og
+  «god buffer» om et selskap som hadde solgt hele virksomheten.
+- Alle 14 aksjene på Euronext Growth sto som «kan holdes i ASK».
+- Metabeskrivelsen sa «siste utbytte var 91,22 NOK» om summen av fire kvartaler.
+
+Ti sider leses hver uke i fast rekkefølge, så hele katalogen er lest i løpet
+av omtrent 16 uker:
+
+```bash
+python scripts/tallkontroll.py --sideutvalg          # ukens ti tickere
+python scripts/tallkontroll.py --sidetekst DNB KOG   # sidene som ren tekst
+```
+
+`--sidetekst` gir tittel, metabeskrivelse og teksten leseren ser, med
+overskrifter merket `##`. Les hver side fra toppen og se etter:
+
+- **Tall som motsier hverandre**: tittel, metabeskrivelse, nøkkelkort,
+  nøkkeltalltabell, «Faktisk betalt utbytte», FAQ og bokser skal si det samme
+  om yield, utbytte per aksje, frekvens og ex-dato. Sjekk også at merkelappen
+  passer («annualisert», «siste 12 mnd», «hittil i år»).
+- **Påstander dataene ikke bærer**: «N år på rad», «stabil», «god buffer»,
+  «forutsigbar», vurderinger i risikopunktene og investorprofilen. Sammenlign
+  med historikktabellen på samme side.
+- **ASK og kontoer**: stemmer raden med landet og børsen selskapsteksten
+  oppgir?
+- **Selskapsteksten mot resten av siden**: sektor, navn, hva selskapet driver
+  med. Står det noe i «Om selskapet» som en boks eller FAQ lenger ned motsier?
+- **Utdaterte formuleringer**: «kommende» om noe som har skjedd, en
+  generalforsamling som er avholdt, et ex-dato-varsel for en dato som er passert.
+- **Språk** fra listen i CLAUDE.md («halveres», «5-årssnitt») og ord som ikke
+  passer selskapet (et rederi omtalt som bank, «sparebank» om et forsikringsselskap).
+
+**Finn årsaken i malen.** Nesten alle sidene bygges av `_aksje_side_html()` og
+hjelpefunksjonene rundt i `scripts/fetch_stocks.py`. Når en setning er feil på
+én side, er den som regel feil på alle sider der samme vilkår gjelder. Finn
+funksjonen som skrev setningen (`grep` på en bit av den), si hvilket vilkår
+som slipper den gjennom, og anslå hvor mange aksjer som rammes. Det er den
+opplysningen som gjør funnet til en retting.
+
+Les ikke `data/aksjer.json` først og siden etterpå. Les siden først, som en
+leser, og slå opp i dataene når noe ser rart ut.
+
 ## Feller du skal kjenne
 
 - **En feilet henting beviser ingenting** — verken at aksjen er avnotert eller at
@@ -96,6 +151,15 @@ Returner en rapport i denne formen, viktigst først:
 
 ## Bekreftede enkeltfeil
 | Aksje | Hva vises | Hva er riktig | Kilde (sitat + dato/meldings-id) |
+
+## Sidelesing (uke N: TICKER, TICKER, …)
+<per funn: siden, sitat av det som står, hva som er riktig eller hva det
+motsier, funksjonen i fetch_stocks.py som skrev det, og omtrent hvor mange
+aksjer samme vilkår gjelder for>
+
+## Katalogdata
+<kritiske og nye varsler fra sjekk_utdaterte.py om hjemsted, børs, ASK og
+selskapsform; «ingen» hvis ingen>
 
 ## Uavklart
 <funn du ikke kunne bekrefte eller avkrefte, og hva som mangler>

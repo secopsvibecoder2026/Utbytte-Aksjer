@@ -519,24 +519,43 @@ def _les_euronext_csv(timeout: int = 30):
     return list(csv.reader(io.StringIO("\n".join(lines[skip:])), delimiter=";"))
 
 
+def hent_euronext_instrumenter(timeout: int = 30):
+    """{vår_ticker: {"navn", "isin", "marked"}} for alt som er notert på Euronext Oslo.
+
+    Samme nedlasting som noteringslisten, med to kolonner til. ISIN-koden
+    begynner med landet selskapet er registrert i, og markedet skiller Oslo
+    Børs og Euronext Expand (regulerte markeder) fra Euronext Growth. Begge
+    avgjør om aksjen kan stå på ASK, og begge sto feil for flere aksjer før
+    de ble sjekket mot denne listen 09.10.2026. Returnerer None ved feil.
+    """
+    rader = _les_euronext_csv(timeout)
+    if rader is None:
+        return None
+    instrumenter = {}
+    for row in rader:
+        if len(row) < 4:
+            continue
+        sym = row[2].strip().strip('"')
+        if not sym:
+            continue
+        instrumenter[EURONEXT_SYMBOL_MAP.get(sym, sym)] = {
+            "navn": row[0].strip().strip('"'),
+            "isin": row[1].strip().strip('"').upper(),
+            "marked": row[3].strip().strip('"'),
+        }
+    return instrumenter
+
+
 def hent_euronext_noteringer(timeout: int = 30):
     """Returnerer {vår_ticker: selskapsnavn} for alt som er notert på Euronext Oslo.
 
     Dette er den autoritative listen over hva som faktisk handles — børsen
     selv, ikke Yahoo. Returnerer None hvis nedlastingen feilet.
     """
-    rader = _les_euronext_csv(timeout)
-    if rader is None:
+    instrumenter = hent_euronext_instrumenter(timeout)
+    if instrumenter is None:
         return None
-    noteringer = {}
-    for row in rader:
-        if len(row) < 3:
-            continue
-        sym = row[2].strip().strip('"')
-        if not sym:
-            continue
-        noteringer[EURONEXT_SYMBOL_MAP.get(sym, sym)] = row[0].strip().strip('"')
-    return noteringer
+    return {t: d["navn"] for t, d in instrumenter.items()}
 
 
 def hent_euronext_priser() -> dict:
@@ -4797,7 +4816,10 @@ def _lag_meta_beskrivelse(navn, ticker, yield_, ex, upa, snitt5, valuta, today):
     if dager is not None and dager >= 0:
         deler.append(f"neste ex-dato er {_fmt_dato(ex)}")
     elif upa and upa > 0:
-        deler.append(f"siste utbytte var {_nf(upa, 2)} {valuta} per aksje")
+        # `upa` er årsraten, ikke siste utbetaling. OET sto med «siste utbytte
+        # var 91,22 NOK» — summen av fire kvartaler (funnet ved sidelesing
+        # 09.10.2026).
+        deler.append(f"årlig utbytte er {_nf(upa, 2)} {valuta} per aksje")
 
     if snitt5 and snitt5 > 0 and len(". ".join(deler)) < 105:
         deler.append(f"5-årssnittet er {_nf(snitt5, 1)} %")
