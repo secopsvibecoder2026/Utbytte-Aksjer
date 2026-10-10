@@ -77,6 +77,13 @@
     .dark .prose td { border-color: #374151; }
     .prose tr:nth-child(even) td { background: #f9fafb; }
     .dark .prose tr:nth-child(even) td { background: #111827; }
+    .prose td.tall, .prose th.tall { text-align: right; font-variant-numeric: tabular-nums; }
+    .prose td.tall { white-space: nowrap; }
+    @media (max-width: 480px) {
+      .prose table { font-size: 0.8rem; }
+      .prose th, .prose td { padding: 0.45rem 0.5rem; }
+      .formula-box { font-size: 0.8rem; padding: 0.75rem 0.9rem; }
+    }
     .callout {
       border-left: 4px solid #2563eb;
       background: #eff6ff;
@@ -86,6 +93,8 @@
       font-size: 0.95rem;
       line-height: 1.7;
     }
+    .callout p { margin-bottom: 0.5rem; }
+    .callout p:last-child { margin-bottom: 0; }
     .dark .callout { background: #1e3a5f; border-color: #3b82f6; }
     .callout-green {
       border-color: #16a34a;
@@ -111,7 +120,7 @@
       line-height: 1.8;
     }
     .dark .formula-box { background: #0f172a; border-color: #334155; }
-    .step-list { counter-reset: steps; margin: 1rem 0; padding: 0; list-style: none; }
+    .prose ol.step-list { counter-reset: steps; margin: 1rem 0; padding: 0; list-style: none; }
     .step-list li {
       counter-increment: steps;
       padding-left: 2.75rem;
@@ -129,6 +138,11 @@
       font-size: 0.8rem; font-weight: 700;
       top: 0.1rem;
     }
+    .les-ogsa-lenke {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
   </style>
 
   <script type="application/ld+json">
@@ -139,7 +153,7 @@
     "description": "Komplett guide til aksjesparekonto (ASK) for deg som investerer i utbytteaksjer: utbyttebehandling, skjermingsfradrag, tillatte aksjer og når ASK lønner seg.",
     "url": "https://exday.no/artikler/aksjesparekonto-ask/",
     "datePublished": "2026-05-03",
-    "dateModified": "2026-05-03",
+    "dateModified": "2026-10-10",
     "author": { "@type": "Organization", "name": "exday.no" },
     "publisher": {
       "@type": "Organization",
@@ -232,9 +246,9 @@
     </div>
     <h1 class="text-3xl font-bold leading-tight mb-4">Aksjesparekonto (ASK) for utbytteinvestorer — komplett guide</h1>
     <p class="text-gray-600 dark:text-gray-400 leading-relaxed text-lg">
-      ASK er Norges mest populære investeringskonto — men for utbytteinvestorer gjelder egne regler. Utbytte havner ikke på bankkontoen din, og skatten betales ikke løpende. Denne guiden forklarer nøyaktig hva som skjer med utbyttet ditt, hvilke aksjer du kan eie i ASK, og når det faktisk lønner seg.
+      På aksjesparekonto blir utbyttet stående på kontoen, og skatten kommer først når du tar ut mer enn du har satt inn. Satsen er den samme som på vanlig konto. Guiden forklarer hva som skjer med utbyttet, hvordan skjerming og uttak regnes, hvilke aksjer på Oslo Børs som kan stå på kontoen, og hvor mye det gir å utsette skatten. Reglene er kontrollert mot Skatteetaten og skatteloven i oktober 2026.
     </p>
-    <p class="text-xs text-gray-400 dark:text-gray-600 mt-4">3. mai 2026 · 12 min lesing</p>
+    <p class="text-xs text-gray-400 dark:text-gray-600 mt-4">3. mai 2026 · oppdatert 10. oktober 2026 · 13 min lesing</p>
   </header>
 
   <!-- INNHOLDSFORTEGNELSE -->
@@ -245,10 +259,10 @@
       <li style="margin-bottom:0.4rem;"><a href="#utbytte-i-ask">Slik behandles utbytte i ASK</a></li>
       <li style="margin-bottom:0.4rem;"><a href="#skjermingsfradrag">Skjermingsfradraget i ASK</a></li>
       <li style="margin-bottom:0.4rem;"><a href="#uttak">Slik fungerer uttak fra ASK</a></li>
-      <li style="margin-bottom:0.4rem;"><a href="#hvilke-aksjer">Hvilke aksjer kan legges i ASK?</a></li>
-      <li style="margin-bottom:0.4rem;"><a href="#eksempel">Regneeksempel: ASK vs. VPS over 15 år</a></li>
+      <li style="margin-bottom:0.4rem;"><a href="#hvilke-aksjer">Hvilke aksjer kan stå på ASK?</a></li>
+      <li style="margin-bottom:0.4rem;"><a href="#eksempel">Regneeksempel: ASK og vanlig konto over 15 år</a></li>
       <li style="margin-bottom:0.4rem;"><a href="#tips">Praktiske tips for utbytteinvestorer</a></li>
-      <li><a href="#sammendrag">Sammendrag</a></li>
+      <li><a href="#sammendrag">Sjekkliste før du bruker ASK</a></li>
     </ol>
   </nav>
 
@@ -257,306 +271,394 @@
     <!-- SEKSJON 1 -->
     <h2 id="hva-er-ask">Hva er aksjesparekonto (ASK)?</h2>
 
-    <p>Aksjesparekontoen ble innført i Norge i 2017 og er en særnorsk kontoform som lar deg utsette skatten på gevinster og utbytte fra aksjer og aksjefond. Prinsippet er enkelt: innenfor ASK-kontoen betaler du ikke skatt løpende. Skatten utsettes til du faktisk tar penger ut av kontoen, og da kun på det som overstiger det du opprinnelig satte inn.</p>
+    <p>Aksjesparekontoen kom i 2017. Det er en konto der du kan kjøpe og selge aksjer og aksjefond uten at gevinsten skattlegges underveis, og siden 2019 gjelder det samme for utbytte. Skatten kommer når du tar ut mer enn du har satt inn. Tap gir fradrag først når kontoen avsluttes. Kontoen er for personer bosatt i EØS, ikke for selskaper.</p>
 
-    <p>For mange investorer er dette en stor fordel — pengene som ellers ville gått til skatt kan i stedet stå investert og jobbe for deg. Over mange år er skatteeffekten av denne utsettingen betydelig.</p>
+    <p>Satsen er den samme som på en vanlig aksjekonto, ofte kalt VPS-konto: 37,84&nbsp;% for skattepliktige uttak i 2025 og 2026, som er 22&nbsp;% ganget med oppjusteringsfaktoren 1,72. Det du ellers ville betalt i skatt på utbyttet hvert år, får stå investert til du tar pengene ut.</p>
 
-    <p>ASK er tilgjengelig gjennom de fleste norske meglerhus og banker: Nordnet, DNB, Sbanken (nå DNB), Storebrand, KLP, og mange andre tilbyr ASK. Priser, tilgjengelige produkter og grensesnitt varierer — men selve skattereglene er de samme uavhengig av hvem du bruker.</p>
+    <p>Banker og nettmeglere tilbyr ASK, og skattereglene er de samme hos alle. Det som skiller, er pris og hvilke aksjer og fond du kan handle.</p>
 
     <div class="callout-green callout">
-      <strong>Kjernepunktet:</strong> I ASK utsettes skatten på utbytte og gevinst til du tar penger ut av kontoen. Du betaler ikke skatt på utbytte det året du mottar det — men du betaler heller ikke lavere skatt totalt. Det er tidspunktet for skattebetalingen som er forskjellig, ikke satsen (37,84&nbsp;%).
+      <p><strong>Hovedregelen:</strong> På ASK betaler du ikke skatt på utbyttet det året du får det, men skatten forsvinner ikke. Den kommer når uttakene dine blir større enn det du har satt inn, og satsen er 37,84&nbsp;% også da. Det er tidspunktet som er annerledes, ikke satsen.</p>
     </div>
 
     <!-- SEKSJON 2 -->
     <h2 id="utbytte-i-ask">Slik behandles utbytte i ASK</h2>
 
-    <p>Dette er det som oftest overrasker nye utbytteinvestorer: når en aksje i ASK betaler utbytte, <strong>går pengene ikke til din bankkonto</strong>. De havner i en kontantsaldo (cash) internt på ASK-kontoen.</p>
-
-    <p>Fra denne kontantsaldoen kan du:</p>
+    <p>Når en aksje på ASK betaler utbytte, kommer pengene inn på ASK-kontoen, <strong>ikke på bankkontoen din</strong>. Der kan du:</p>
     <ul>
-      <li>Kjøpe flere aksjer (reinvestere) uten å utløse skatt</li>
-      <li>La pengene stå i kontantsaldoen (renter avhenger av megler)</li>
-      <li>Ta dem ut — men da utløser du beskatning (se seksjon om uttak)</li>
+      <li>kjøpe nye aksjer eller fond. Det utløser ingen skatt.</li>
+      <li>la dem stå som kontanter. Da gir de ingen avkastning, for etter skatteloven kan det ikke opptjenes renter på kontoen.</li>
+      <li>ta dem ut. Uttaket er skattefritt så lenge de samlede uttakene dine ikke er større enn det du har satt inn (se <a href="#uttak">uttak</a>).</li>
     </ul>
 
-    <p>Dette er en fundamental forskjell fra en vanlig VPS-konto, der utbytte alltid betales direkte til bankkontoen din og skattlegges samme år.</p>
+    <p>Utbyttet øker ikke innskuddet ditt. Innskudd er bare det du selv har satt inn, som kontanter eller som aksjer og fond du har flyttet inn på kontoen. Det betyr noe når du tar ut, fordi det er innskuddet som avgjør hvor mye du kan ta ut uten skatt.</p>
+
+    <p>På en vanlig konto er utbyttet skattepliktig det året det utbetales, enten pengene går til bankkontoen din eller blir stående hos megleren.</p>
 
     <h3>Hva skjer rent praktisk hos megleren?</h3>
 
-    <p>La oss si at du eier 1&nbsp;000 aksjer i Gjensidige Forsikring i din ASK. Gjensidige betaler ut 10 kr per aksje i utbytte. Hos megleren din ser du dette:</p>
+    <p>Si at du eier 1&nbsp;000 aksjer på ASK i et selskap som betaler 10 kr per aksje i utbytte.</p>
 
     <ol class="step-list">
-      <li><strong>Utbyttedato:</strong> Gjensidige registrerer utbytteutbetalingen til deg som aksjonær.</li>
-      <li><strong>Utbetalingsdato (ca. 2–4 uker etter ex-dato):</strong> 10&nbsp;000 kr dukker opp i kontantsaldoen på ASK-kontoen din — ikke i banken.</li>
-      <li><strong>Ingen skattemelding:</strong> Du trenger ikke gjøre noe. Beløpet er ikke skattepliktig dette året. Megleren rapporterer det internt, men det havner ikke som skattbar inntekt i årets skattemelding.</li>
-      <li><strong>Valgfrihet:</strong> Du velger selv om du vil reinvestere eller la pengene stå.</li>
+      <li><strong>Ex-dato:</strong> Du må ha kjøpt aksjene senest dagen før ex-datoen for å få utbyttet. Det gjelder på samme måte for ASK og vanlig konto.</li>
+      <li><strong>Utbetalingsdato:</strong> Vanligvis én til tre uker etter ex-datoen kommer 10&nbsp;000 kr inn som kontanter på ASK-kontoen.</li>
+      <li><strong>Ingen skatt det året:</strong> Utbyttet kommer ikke med som skattepliktig inntekt i skattemeldingen, og du trenger ikke gjøre noe.</li>
+      <li><strong>Du velger selv:</strong> Pengene kan brukes til nye kjøp, bli stående eller tas ut.</li>
     </ol>
 
+    <h3>Utbytte fra utenlandske selskaper</h3>
+
+    <p>Trekker et utenlandsk selskap kildeskatt av utbyttet, regner Skatteetaten skatten som tatt ut av kontoen. Får du 1&nbsp;000 kr i utbytte og 150 kr trekkes i kildeskatt, kommer 850 kr inn på kontoen, og innskuddet ditt går ned med 150 kr. Du kan dermed ta ut 150 kr mindre uten skatt senere. Fradrag i norsk skatt for kildeskatten, kalt kreditfradrag, kan bli aktuelt først når du gjør et skattepliktig uttak. Hvor mye som trekkes i de ulike landene, står i artikkelen om <a href="/artikler/utbytte-og-skatt/#utenlandske" class="text-green-600 dark:text-green-400 hover:underline">utbytte og skatt</a>.</p>
+
+    <h3>Når selskapet betaler tilbake kapital</h3>
+
+    <p>Noen selskaper på Oslo Børs betaler tilbake innbetalt kapital i stedet for utbytte. På vanlig konto er det skattefritt når pengene kommer, og inngangsverdien på aksjene går ned. På ASK spiller forskjellen ingen rolle. Pengene kommer inn på kontoen, innskuddet endres ikke, og beløpet blir skattlagt som annen avkastning når uttakene blir større enn innskuddet. <a href="/artikler/utbytte-og-skatt/#kapital" class="text-green-600 dark:text-green-400 hover:underline">Reglene for vanlig konto</a> er forklart i skatteartikkelen.</p>
+
     <div class="callout-warn callout">
-      <strong>Viktig:</strong> Direkteavkastning (yield) som vises på exday.no og andre steder er alltid <em>bruttoyield</em> — utbytte per aksje delt på kursen, uten hensyn til skatt. I ASK er skatten utsatt, ikke eliminert. Reell netto yield i ASK beregnes først ved uttak.
+      <p><strong>Om direkteavkastning:</strong> Direkteavkastningen på exday.no og andre steder er utbytte per aksje delt på kursen, før skatt. På ASK er skatten utsatt, ikke borte. Hva du sitter igjen med etter skatt, avhenger av når og hvor mye du tar ut.</p>
     </div>
 
     <!-- SEKSJON 3 -->
     <h2 id="skjermingsfradrag">Skjermingsfradraget i ASK</h2>
 
-    <p>ASK har ett samlet skjermingsfradrag for hele kontoen — i motsetning til vanlig VPS-konto, der hvert enkelt aksjeinnkjøp har sitt eget skjermingsgrunnlag.</p>
+    <p>Skjermingsfradraget skal tilsvare en risikofri rente, og bare avkastning utover den blir skattlagt. På ASK regnes skjermingen for hele kontoen samlet. På vanlig konto regnes den for hver aksje, ut fra hva du betalte for den.</p>
 
     <h3>Slik beregnes skjermingsgrunnlaget</h3>
 
-    <p>Skjermingsgrunnlaget på ASK er summen av alle innskuddene dine på kontoen — altså penger du har overført til megleren. Kjøp og salg av aksjer internt endrer <em>ikke</em> skjermingsgrunnlaget. Det er pengeoverføringen inn (innskuddet) som teller, ikke investeringsverdien.</p>
+    <p>Grunnlaget er det laveste innskuddet du har hatt på kontoen i løpet av året, pluss skjerming du ikke har brukt i tidligere år. Kjøp og salg inne på kontoen endrer ikke innskuddet, og det gjør heller ikke kursutviklingen. Setter du inn mer midt i året, teller det ikke det året, fordi saldoen var lavere før innskuddet.</p>
 
     <div class="formula-box">
-      Skjermingsgrunnlag = Totale innskudd til ASK (hittil)<br>
-      Årets skjermingsfradrag = Skjermingsgrunnlag × Skjermingsrente<br>
-      Skjermingsrente 2025: 3,6 %<br>
-      Skjermingsrente 2024: 3,9 %
+      Skjermingsgrunnlag = laveste innskuddssaldo i året + ubenyttet skjerming fra tidligere år<br>
+      Årets skjerming = skjermingsgrunnlag × skjermingsrente<br>
+      Skjermingsrente 2024: 3,9&nbsp;%<br>
+      Skjermingsrente 2025: 3,6&nbsp;%<br>
+      Skjermingsrente 2026: fastsettes i januar 2027
     </div>
 
-    <p>Ubrukt skjermingsfradrag akkumuleres og fremføres. Det brukes mot gevinst og utbytte ved uttak — ikke ved mottak av utbytte internt i ASK.</p>
+    <p>Skjermingen regnes ut per 31. desember. Den kan bare trekkes fra skattepliktige uttak, altså det du tar ut utover innskuddet. Det du ikke bruker, føres videre og legges til grunnlaget året etter, så også den ubrukte skjermingen vokser med skjermingsrenten.</p>
 
     <h3>Eksempel på skjermingsfradrag i ASK</h3>
 
-    <p>Du har satt inn 500&nbsp;000 kr i ASK over fem år. Skjermingsgrunnlaget er 500&nbsp;000 kr. Med skjermingsrente 3,6&nbsp;% får du et fradrag på 18&nbsp;000 kr det sjette året. Siden du ikke tar ut penger, akkumuleres fradraget. Etter 10 år uten uttak kan du ha et ubrukt skjermingsfradrag på godt over 100&nbsp;000 kr som reduserer skatten ved fremtidige uttak.</p>
+    <p>Du har 200&nbsp;000 kr i innskudd på ASK ved inngangen til 2025 og 4&nbsp;000 kr i ubenyttet skjerming fra tidligere år. I mars tar du ut 50&nbsp;000 kr, og i oktober setter du inn 100&nbsp;000 kr.</p>
+
+    <div class="formula-box">
+      Laveste innskuddssaldo i 2025: 200&nbsp;000 − 50&nbsp;000 = 150&nbsp;000 kr<br>
+      Skjermingsgrunnlag: 150&nbsp;000 + 4&nbsp;000 = 154&nbsp;000 kr<br>
+      Skjerming for 2025: 154&nbsp;000 × 3,6&nbsp;% = 5&nbsp;544 kr<br>
+      Ubenyttet skjerming ved utgangen av 2025: 4&nbsp;000 + 5&nbsp;544 = 9&nbsp;544 kr
+    </div>
+
+    <p>Uttaket i mars er skattefritt, fordi det er mindre enn innskuddet. Etter innskuddet i oktober har du 250&nbsp;000 kr i innskudd, og det er det beløpet som teller fra 2026 hvis du ikke tar ut mer.</p>
+
+    <p>Over tid kan den ubrukte skjermingen bli stor. Står 500&nbsp;000 kr i innskudd urørt i ti år med en skjermingsrente på 3,6&nbsp;% hvert år, har du rundt 212&nbsp;000 kr i ubenyttet skjerming til slutt. Den trekkes fra når du en gang tar ut mer enn innskuddet.</p>
 
     <div class="callout">
-      <strong>Merk:</strong> Skjermingsfradraget på ASK er knyttet til <em>innskudd</em>, ikke til investeringsverdien. Har du satt inn 500&nbsp;000 kr, men kontoverdien er 800&nbsp;000 kr på grunn av kursoppgang, beregnes skjermingen fortsatt av 500&nbsp;000 kr.
+      <p><strong>Merk:</strong> Skjermingen på ASK er knyttet til innskuddet, ikke til hva kontoen er verdt. Har du satt inn 500&nbsp;000 kr og kontoen er verdt 800&nbsp;000 kr, regnes skjermingen av 500&nbsp;000 kr pluss det du har av ubenyttet skjerming.</p>
     </div>
 
     <!-- SEKSJON 4 -->
     <h2 id="uttak">Slik fungerer uttak fra ASK</h2>
 
-    <p>Her er kjernen i ASK-beskatningen. Når du tar penger ut av ASK, skjer det i en bestemt rekkefølge fastsatt i skatteloven:</p>
+    <p>Når du tar ut penger eller aksjer, regnes innskuddet ditt som tatt ut først. Det følger av skatteloven § 10-21 fjerde ledd. Rekkefølgen er denne:</p>
 
     <ol class="step-list">
-      <li><strong>Skjermingsfradrag trekkes fra (skattefritt)</strong> — Akkumulert ubrukt skjermingsfradrag trekkes fra uttaket uten skatt.</li>
-      <li><strong>Innskudd tilbakebetales (skattefritt)</strong> — Du kan ta ut det du opprinnelig satte inn på kontoen uten å betale skatt. Har du satt inn 500&nbsp;000 kr, kan du ta ut 500&nbsp;000 kr skattefritt (etter at skjerming er brukt).</li>
-      <li><strong>Avkastning beskattes med 37,84&nbsp;%</strong> — Alt utover innskudd og skjermingsfradrag er skattepliktig gevinst, som inkluderer akkumulerte utbytter og kursgevinster.</li>
+      <li><strong>Innskuddet kommer ut først, uten skatt.</strong> Har du satt inn 500&nbsp;000 kr, kan du ta ut 500&nbsp;000 kr uten å skatte av noe, uansett hva kontoen er verdt.</li>
+      <li><strong>Deretter blir uttakene skattepliktige.</strong> Det du tar ut utover innskuddet, er gevinst og utbytte som har vokst på kontoen.</li>
+      <li><strong>Skjermingen trekkes fra det skattepliktige beløpet.</strong> Resten skattlegges med 37,84&nbsp;% i 2025 og 2026.</li>
     </ol>
 
-    <p>Denne rekkefølgen betyr at du i prinsippet kan ta ut pengene dine (innskuddet) skattefritt når som helst. Skatten utløses kun på avkastning — gevinst og reinvesterte utbytter.</p>
+    <p>Skjermingen brukes altså ikke før uttakene har passert innskuddet. Tar du ut aksjer i stedet for penger, regnes de som tatt ut til markedsverdien den dagen. Det er ikke et salg, men verdien teller som uttak på samme måte som kontanter.</p>
 
-    <h3>Deluttak og planlegging</h3>
+    <h3>Et eksempel med to uttak</h3>
 
-    <p>Mange velger å ta ut penger gradvis fra ASK, for eksempel som en del av pensjonisttilværelsen, og sørger for at de holder seg under frikortgrensen eller at inntekten samlet sett er lav nok til at effektiv skatt på uttaket blir moderat. Dette er lovlig og vanlig skatteplanlegging.</p>
+    <p>Du har satt inn 500&nbsp;000 kr, kontoen er verdt 800&nbsp;000 kr, og du har 40&nbsp;000 kr i skjerming som ikke er brukt.</p>
+
+    <div class="formula-box">
+      Første uttak: 300&nbsp;000 kr<br>
+      Innenfor innskuddet, skatt 0 kr. Innskudd igjen: 200&nbsp;000 kr<br>
+      <br>
+      Andre uttak: resten, 500&nbsp;000 kr<br>
+      Innskudd som er igjen: 200&nbsp;000 kr, skattefritt<br>
+      Over innskuddet: 300&nbsp;000 kr<br>
+      Fradrag for skjerming: 40&nbsp;000 kr<br>
+      Skattepliktig: 260&nbsp;000 kr<br>
+      <strong>Skatt: 260&nbsp;000 × 37,84&nbsp;% = 98&nbsp;384 kr</strong>
+    </div>
+
+    <p>Det første uttaket gjør også at du får mindre skjerming i årene etter, fordi innskuddet som er igjen, er lavere.</p>
 
     <table>
       <thead>
         <tr>
           <th>Hva du tar ut</th>
-          <th>Skattemessig behandling</th>
+          <th>Skatt</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td>Akkumulert skjermingsfradrag</td>
-          <td>Skattefritt</td>
+          <td>Opp til det du har satt inn</td>
+          <td>Ingen. Innskuddet går ned like mye</td>
         </tr>
         <tr>
-          <td>Opprinnelig innskudd</td>
-          <td>Skattefritt</td>
+          <td>Det som overstiger innskuddet</td>
+          <td>37,84&nbsp;% etter fradrag for skjerming</td>
         </tr>
         <tr>
-          <td>Reinvesterte utbytter og kursgevinster</td>
-          <td>37,84 % effektiv sats</td>
+          <td>Hele kontoen, med tap</td>
+          <td>Tapet gir fradrag med 37,84&nbsp;% når kontoen avsluttes</td>
         </tr>
       </tbody>
     </table>
 
+    <h3>Tap på ASK</h3>
+
+    <p>Selger du en aksje med tap inne på kontoen, får du ikke fradrag for det. Tapet regnes først når kontoen avsluttes. Er det som står på kontoen da, mindre enn innskuddet, er forskjellen et tap som gir fradrag på samme måte som tap ved salg av aksjer.</p>
+
+    <h3>Deluttak og planlegging</h3>
+
+    <p>Det skattepliktige uttaket regnes som alminnelig inntekt, ikke som personinntekt. Det gir verken trinnskatt eller trygdeavgift, og satsen er den samme om du tjener lite eller mye det året.</p>
+
+    <p>Fordeler du uttakene over flere år, får resten stå investert uten skatt så lenge. Det er den samme utsettelsen som gjør ASK lønnsom i utgangspunktet.</p>
+
     <!-- SEKSJON 5 -->
-    <h2 id="hvilke-aksjer">Hvilke aksjer kan legges i ASK?</h2>
+    <h2 id="hvilke-aksjer">Hvilke aksjer kan stå på ASK?</h2>
 
-    <p>Dette er det spørsmålet som oftest fanger opp investorer som handler norske aksjer med utenlandsk selskapsregistrering. Reglene er klare, men konsekvensene er ikke alltid intuitive.</p>
+    <p>Etter skatteloven § 10-21 kan pengene på kontoen bare brukes til børsnoterte aksjer og egenkapitalbevis i selskaper som hører hjemme i EØS, og til andeler i aksjefond som hører hjemme i EØS. For aksjer er det altså to krav, og begge må være oppfylt. Egenkapitalbevis i norske sparebanker kan stå på ASK når de er notert på Oslo Børs.</p>
 
-    <h3>Grunnregelen: EØS-børsnotert</h3>
+    <h3>Selskapet må høre hjemme i EØS</h3>
 
-    <p>For at en aksje skal kunne legges i ASK, må den være notert på en <strong>børs godkjent i EØS-området</strong>. Oslo Børs og Euronext Expand er begge EØS-godkjente, så norske aksjer notert der er tillatt.</p>
+    <p>Det er selskapets hjemland som avgjør, ikke hvor aksjen handles. Flere selskaper på Oslo Børs er registrert på Bermuda eller i Singapore, og aksjene deres kan ikke stå på ASK selv om de handles i Oslo. Skatteetaten skriver selv at flere av selskapene på Oslo Børs ikke kvalifiserer. Mange av dem er shipping- og offshoreselskaper.</p>
 
-    <p>Selve selskapets registreringsland spiller i utgangspunktet ingen rolle — det er <em>børsen</em> som avgjør. En aksje registrert i Bermuda, men notert på Oslo Børs, er ASK-tillatt.</p>
+    <h3>Aksjen må være børsnotert</h3>
 
-    <h3>Norske utbytteaksjer — hva er tillatt?</h3>
+    <p>Euronext Oslo Børs og Euronext Expand regnes som børs. Euronext Growth er ikke et regulert marked og regnes ikke som børs, så aksjer der kan ikke stå på ASK i dag, heller ikke når selskapet er norsk.</p>
+
+    <p>Regjeringen foreslo i statsbudsjettet for 2027, lagt fram 7. oktober 2026, å åpne ASK for aksjer og egenkapitalbevis på multilaterale handelsfasiliteter som Euronext Growth fra 1. januar 2027. De andre kravene, også kravet om hjemsted i EØS, skal fortsatt gjelde. Det er ikke foreslått noen overgangsregel, så aksjer du allerede eier på vanlig konto, kan ikke flyttes inn uten at det regnes som salg. Forslaget er ikke vedtatt og gjelder først hvis Stortinget vedtar det.</p>
+
+    <h3>Norske utbytteaksjer: noen eksempler</h3>
 
     <table>
       <thead>
         <tr>
           <th>Aksje</th>
-          <th>Registrert</th>
-          <th>Notert på</th>
-          <th>ASK-tillatt?</th>
+          <th>Hjemland</th>
+          <th>Handles på</th>
+          <th>Kan stå på ASK?</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td>Equinor (EQNR)</td>
+          <td>Equinor</td>
           <td>Norge</td>
           <td>Oslo Børs</td>
           <td>Ja</td>
         </tr>
         <tr>
-          <td>DNB Bank (DNB)</td>
+          <td>DNB Bank</td>
           <td>Norge</td>
           <td>Oslo Børs</td>
           <td>Ja</td>
         </tr>
         <tr>
-          <td>Frontline (FRO)</td>
+          <td>Frontline</td>
           <td>Kypros</td>
           <td>Oslo Børs</td>
           <td>Ja</td>
         </tr>
         <tr>
-          <td>Golden Ocean (GOGL)</td>
+          <td>Stolt-Nielsen</td>
           <td>Bermuda</td>
           <td>Oslo Børs</td>
-          <td>Ja</td>
+          <td>Nei</td>
         </tr>
         <tr>
-          <td>Stolt-Nielsen (SNI)</td>
-          <td>Luxembourg</td>
+          <td>Hafnia</td>
+          <td>Singapore</td>
           <td>Oslo Børs</td>
-          <td>Ja</td>
+          <td>Nei</td>
         </tr>
         <tr>
-          <td>US-aksje på NYSE/Nasdaq</td>
+          <td>Okeanis Eco Tankers</td>
+          <td>Marshalløyene</td>
+          <td>Oslo Børs</td>
+          <td>Uavklart</td>
+        </tr>
+        <tr>
+          <td>Western Bulk Chartering</td>
+          <td>Norge</td>
+          <td>Euronext Growth</td>
+          <td>Nei, ikke i dag</td>
+        </tr>
+        <tr>
+          <td>Amerikansk selskap</td>
           <td>USA</td>
-          <td>NYSE/Nasdaq</td>
+          <td>NYSE eller Nasdaq</td>
           <td>Nei</td>
         </tr>
       </tbody>
     </table>
 
-    <p>Praktisk sett kan du altså legge alle norske aksjer som handles på Oslo Børs eller Euronext Expand inn i ASK — uavhengig av om selskapet er registrert i Bermuda, Cayman Islands eller Luxembourg. Det er handelsbørsen som teller.</p>
+    <p>Okeanis er registrert på Marshalløyene, men har hovedkontoret i Hellas. Om et slikt selskap regnes som hjemmehørende i EØS, er ikke avklart, og vi skriver derfor ikke at aksjen kan stå på ASK. Spør megleren før du kjøper den der. For de andre er det hjemlandet som avgjør: Frontline er registrert på Kypros, som er med i EØS, mens Stolt-Nielsen og Hafnia ikke er det. Hver aksjeside på exday.no viser om aksjen kan stå på ASK.</p>
 
-    <h3>ETFer og aksjefond</h3>
+    <h3>Når en aksje endrer status</h3>
 
-    <p>Aksjefond og ETFer kan legges i ASK dersom de inneholder minst 80&nbsp;% aksjer (som kvalifiserer etter EØS-reglene). De aller fleste norske aksjefond og de store globale ETFene notert på Oslo Børs (f.eks. fra iShares og Xtrackers) er ASK-tillatte. Sjekk med megleren din for det konkrete produktet.</p>
+    <p>En aksje som oppfylte kravene da du kjøpte den, kan bli stående på kontoen selv om selskapet senere flytter ut av EØS eller blir tatt av børs. Får du derimot utbytte i form av noe som ikke kan stå på ASK, for eksempel aksjer i et selskap utenfor EØS, må det tas ut av kontoen med en gang. Det regnes som et uttak.</p>
+
+    <h3>Aksjefond og ETF-er</h3>
+
+    <p>Andeler i aksjefond kan stå på ASK når fondet hører hjemme i EØS og hadde mer enn 80&nbsp;% aksjer ved inngangen til året. Et fond som oppfylte kravet da du kjøpte det, kan bli stående selv om aksjeandelen senere faller. Rentefond kan ikke stå på kontoen, og det kan heller ikke kombinasjonsfond med lavere aksjeandel. For børshandlede fond (ETF-er) er det de samme kravene som avgjør, så spør megleren om det konkrete fondet.</p>
 
     <div class="callout-warn callout">
-      <strong>Kan ikke overføres direkte:</strong> Du kan ikke flytte aksjer fra en vanlig VPS-konto til ASK uten å selge dem først. Et salg utløser beskatning av eventuell gevinst. Dersom du ønsker å flytte en eksisterende portefølje inn i ASK, bør du vurdere skatteeffekten nøye — særlig om du har store urealiserte gevinster.
+      <p><strong>Flytting fra vanlig konto regnes som salg:</strong> Du kan ikke flytte aksjer fra en vanlig konto til ASK uten skatt. Skatteetaten behandler det som et salg fra den vanlige kontoen og et nytt kjøp på ASK. Gevinsten skattlegges, og tap gir fradrag. Overgangsreglene som lot deg flytte uten skatt, gjaldt bare for 2017–2019. Har du store urealiserte gevinster, bør du regne ut skatten før du flytter.</p>
     </div>
 
     <!-- SEKSJON 6 -->
-    <h2 id="eksempel">Regneeksempel: ASK vs. VPS over 15 år</h2>
+    <h2 id="eksempel">Regneeksempel: ASK og vanlig konto over 15 år</h2>
 
-    <p>La oss sammenligne to investorer som begge investerer 300&nbsp;000 kr i en kurv av norske utbytteaksjer med 6&nbsp;% bruttoyield og 4&nbsp;% kursoppgang per år. Den ene bruker ASK, den andre vanlig VPS-konto.</p>
+    <p>To personer setter inn 300&nbsp;000 kr hver i en kurv av utbytteaksjer. Den ene bruker ASK, den andre en vanlig konto. Begge bruker hele utbyttet, etter eventuell skatt, til nye aksjer. Til slutt selges alt eller tas ut, og skatten betales.</p>
 
     <h3>Forutsetninger</h3>
     <ul>
-      <li>Startinvestering: 300&nbsp;000 kr</li>
-      <li>Bruttoyield: 6&nbsp;% (18&nbsp;000 kr første år)</li>
-      <li>Kursoppgang: 4&nbsp;% per år</li>
-      <li>Skattesats: 37,84&nbsp;%</li>
-      <li>Skjermingsfradrag: 3,6&nbsp;% (forenklet)</li>
-      <li>Begge reinvesterer all avkastning</li>
+      <li>Innskudd: 300&nbsp;000 kr én gang, ved start</li>
+      <li>Utbytte: 6&nbsp;% av verdien hvert år (18&nbsp;000 kr det første året)</li>
+      <li>Kursvekst: 4&nbsp;% i året</li>
+      <li>Skatt: 37,84&nbsp;% over skjermingen</li>
+      <li>Skjermingsrente: 3,6&nbsp;% alle år (forenklet)</li>
+      <li>Ingen kurtasje</li>
     </ul>
 
     <div class="formula-box">
-      VPS-konto, år 1:<br>
-      Bruttoutbytte: 18 000 kr<br>
-      Skjermingsfradrag: 300 000 × 3,6 % = 10 800 kr<br>
-      Skattepliktig: 18 000 − 10 800 = 7 200 kr<br>
-      Skatt: 7 200 × 37,84 % = 2 724 kr<br>
-      Til reinvestering: 15 276 kr<br>
+      Vanlig konto, år 1:<br>
+      Utbytte: 300&nbsp;000 × 6&nbsp;% = 18&nbsp;000 kr<br>
+      Skjerming: 300&nbsp;000 × 3,6&nbsp;% = 10&nbsp;800 kr<br>
+      Skattepliktig: 18&nbsp;000 − 10&nbsp;800 = 7&nbsp;200 kr<br>
+      Skatt: 7&nbsp;200 × 37,84&nbsp;% = 2&nbsp;724 kr<br>
+      Til nye aksjer: 15&nbsp;276 kr<br>
       <br>
       ASK, år 1:<br>
-      Bruttoutbytte: 18 000 kr → havner i kontantsaldo<br>
-      Skatt dette år: 0 kr<br>
-      Til reinvestering: 18 000 kr
+      Utbytte: 18&nbsp;000 kr, inn på kontoen<br>
+      Skatt dette året: 0 kr<br>
+      Til nye aksjer: 18&nbsp;000 kr
     </div>
 
-    <p>Differansen hvert år — at ASK-investoren reinvesterer ca. 2&nbsp;724 kr mer enn VPS-investoren — akkumuleres med rentes-rente over 15 år. Det er disse ekstra reinvesterte kronene som gjør den store forskjellen:</p>
+    <p>Etter det første året har ASK-investoren 2&nbsp;724 kr mer i aksjer. Forskjellen vokser for hvert år, fordi kronene som ikke gikk til skatt, også gir utbytte og kursvekst. Men skatten på ASK er bare utsatt, og den må betales når pengene tas ut:</p>
 
     <table>
       <thead>
         <tr>
-          <th>Etter</th>
-          <th>VPS-konto</th>
-          <th>ASK (før uttaksskatt)</th>
-          <th>ASK (etter uttaksskatt)</th>
+          <th>Kroner etter</th>
+          <th class="tall">ASK før skatt</th>
+          <th class="tall">ASK etter skatt</th>
+          <th class="tall">Vanlig etter skatt</th>
+          <th class="tall">Forskjell</th>
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>5 år</td>
-          <td>ca. 450 000 kr</td>
-          <td>ca. 485 000 kr</td>
-          <td>ca. 455 000 kr</td>
-        </tr>
-        <tr>
-          <td>10 år</td>
-          <td>ca. 680 000 kr</td>
-          <td>ca. 760 000 kr</td>
-          <td>ca. 700 000 kr</td>
-        </tr>
-        <tr>
-          <td>15 år</td>
-          <td>ca. 990 000 kr</td>
-          <td>ca. 1 160 000 kr</td>
-          <td>ca. 1 050 000 kr</td>
-        </tr>
+        <tr><td>1 år</td><td class="tall">330&nbsp;000</td><td class="tall">322&nbsp;735</td><td class="tall">322&nbsp;735</td><td class="tall">0</td></tr>
+        <tr><td>5 år</td><td class="tall">483&nbsp;153</td><td class="tall">435&nbsp;807</td><td class="tall">434&nbsp;385</td><td class="tall">1&nbsp;422</td></tr>
+        <tr><td>10 år</td><td class="tall">778&nbsp;123</td><td class="tall">645&nbsp;366</td><td class="tall">635&nbsp;448</td><td class="tall">9&nbsp;918</td></tr>
+        <tr><td>15 år</td><td class="tall">1&nbsp;253&nbsp;174</td><td class="tall">971&nbsp;934</td><td class="tall">936&nbsp;510</td><td class="tall">35&nbsp;424</td></tr>
       </tbody>
     </table>
 
-    <p>Etter 15 år sitter ASK-investoren med ca. 60&nbsp;000 kr mer etter skatt — selv etter at uttaksskatten er betalt. Jo lenger tidshorisonten er, og jo mer du reinvesterer, desto større er fordelen.</p>
+    <p>Etter ett år er resultatet likt. Satsen er den samme, og uten tid til å vokse gir den utsatte skatten ingenting. Etter 15 år sitter ASK-investoren igjen med 35&nbsp;424 kr mer etter skatt, eller 3,8&nbsp;% mer enn på vanlig konto. Fordelen kommer av at skatten er utsatt, ikke av at den er lavere.</p>
+
+    <p>Kolonnen «ASK før skatt» er det du ser hos megleren, og den får forskjellen til å se større ut enn den er. Etter 15 år er ASK-kontoen verdt 1&nbsp;253&nbsp;174 kr mot 1&nbsp;068&nbsp;837 kr på den vanlige kontoen før salget, men 281&nbsp;241 kr av ASK-kontoen er skatt som ikke er betalt ennå. På vanlig konto er det betalt 105&nbsp;416 kr i skatt underveis og 132&nbsp;327 kr ved salget, til sammen 237&nbsp;743 kr. ASK-investoren betaler altså mer skatt i kroner, fordi kontoen er større, og sitter likevel igjen med mest.</p>
+
+    <p>Hvor stor forskjellen blir, avhenger mest av hvor mye av utbyttet som ligger over skjermingen. Med 8&nbsp;% utbytte og 4&nbsp;% kursvekst er ASK 3,4&nbsp;% bedre etter ti år. Med 3&nbsp;% utbytte og 4&nbsp;% kursvekst er det ingen forskjell etter ti år, fordi utbyttet de første årene ligger under skjermingen og ikke blir skattlagt på vanlig konto heller. For en aksje uten utbytte som du ikke selger før til slutt, er det ingen forskjell i det hele tatt. Med 100&nbsp;000 kr, 5&nbsp;% utbytte og 3&nbsp;% kursvekst, som i artikkelen om <a href="/artikler/utbytte-og-skatt/#eksempler" class="text-green-600 dark:text-green-400 hover:underline">utbytte og skatt</a>, blir forskjellen 1&nbsp;255 kr etter ti år og 11&nbsp;258 kr etter 20 år.</p>
+
+    <p>Tallene kommer fra samme modell som kalkulatoren «ASK eller vanlig konto?» i <a href="/app/" class="text-green-600 dark:text-green-400 hover:underline">appen</a>, under Verktøy og Kalkulator, der du kan prøve egne tall.</p>
 
     <div class="callout">
-      <strong>Merk:</strong> Eksemplet er forenklet og bruker faste satser. I virkeligheten varierer yield, kursutvikling og skjermingsrente fra år til år. Poenget er å illustrere at <em>utsettingseffekten</em> er reell og vokser med tid.
+      <p><strong>Merk:</strong> Eksemplet er forenklet. Utbytte, kursutvikling og skjermingsrente varierer fra år til år, og modellen setter inn alt ved start og tar ut alt på slutten. Kjøper og selger du inne på kontoen, kommer en fordel til: Gevinsten ved hvert salg skattlegges ikke før du tar pengene ut.</p>
     </div>
 
     <!-- SEKSJON 7 -->
     <h2 id="tips">Praktiske tips for utbytteinvestorer med ASK</h2>
 
-    <h3>1. Bruk ASK for aksjer du planlegger å holde lenge</h3>
+    <h3>1. Fordelen vokser med tiden</h3>
 
-    <p>Jo lenger du holder aksjen, desto mer får du ut av ASK. For aksjer du planlegger å selge innen 1–2 år er fordelen begrenset. For aksjer du vil holde 10–20 år er ASK klart overlegen.</p>
+    <p>For aksjer du skal eie i ett eller to år, gir ASK nesten ingenting. Over 10 til 20 år blir forskjellen merkbar.</p>
 
-    <h3>2. Reinvester utbyttet med én gang</h3>
+    <h3>2. Utbyttet kan brukes til nye kjøp uten skatt</h3>
 
-    <p>Utbytte i ASK er allerede skattefritt til du tar det ut. Men det jobber heller ikke for deg mens det ligger i kontantsaldoen. Reinvester løpende i de aksjene du ønsker å bygge videre — da maximerer du rentes-rente-effekten.</p>
+    <p>Utbyttet kan gå til hvilke som helst aksjer eller fond som kan stå på kontoen, ikke bare til selskapet som betalte det. Det gjør det enkelt å flytte vekt mellom sektorer uten å selge noe. Utsettelsen gir bare noe så lenge pengene er investert.</p>
 
-    <h3>3. Ha en plan for kontantsaldoen</h3>
+    <h3>3. Kontanter på ASK gir ikke rente</h3>
 
-    <p>Mange meglere betaler lav eller ingen rente på ASK-kontantsaldoen. Sjekk hva din megler betaler — noen tilbyr nå 3–4&nbsp;% på kontanter i ASK, andre nesten ingenting. Uansett: la ikke utbyttet bare ligge og sove.</p>
+    <p>Etter skatteloven kan det ikke opptjenes renter på kontoen. Utbytte som blir liggende som kontanter, står derfor stille. Penger du vil ha som buffer, gir ingen avkastning på ASK.</p>
 
     <h3>4. Du kan ha flere ASK-kontoer</h3>
 
-    <p>Det er fullt lovlig å ha ASK hos flere meglere. Dette gir deg tilgang til ulikt utvalg av aksjer og fond, og mulighet til å sammenligne kostnader. Hvert ASK har sitt eget skjermingsfradrag beregnet av innskuddene på akkurat den kontoen.</p>
+    <p>Du kan ha så mange kontoer du vil, hos samme eller ulike tilbydere. Skjermingen regnes for hver konto for seg, ut fra den laveste innskuddssaldoen på akkurat den kontoen.</p>
 
-    <h3>5. Overfør mellom ASK-tilbydere uten å utløse skatt</h3>
+    <h3>5. Du kan flytte ASK til en annen tilbyder uten skatt</h3>
 
-    <p>Ønsker du å bytte megler, kan du overføre hele ASK-beholdningen (aksjer, fond og kontanter) til en annen ASK-leverandør uten at det utløser skatt. Dette kalles en <em>ASK-til-ASK-overføring</em> og er skattenøytral.</p>
+    <p>Aksjer, fond og kontanter kan flyttes mellom dine egne ASK-kontoer uten skatt, også når kontoene er hos ulike tilbydere. Innskudd og ubenyttet skjerming følger med i samme forhold som verdiene som flyttes. Begge tilbyderne må være med på flyttingen.</p>
 
-    <h3>6. Tenk på uttak i år med lav annen inntekt</h3>
+    <h3>6. Lav inntekt gir ikke lavere sats på uttak</h3>
 
-    <p>Skatt på ASK-gevinst beregnes av personinntekten samlet. Et år der du har lavere lønn, pensjon eller annen inntekt, kan det lønne seg å ta ut mer fra ASK. Snakk med en regnskapsfører eller finansrådgiver for personlig planlegging.</p>
+    <p>Å vente med uttaket til et år med lav lønn eller pensjon senker ikke satsen, fordi uttaket ikke regnes som personinntekt. Unntaket er hvis den alminnelige inntekten din er så lav at personfradraget ikke blir brukt opp.</p>
 
-    <h3>7. VPS-konto for aksjer du vil leve av nå</h3>
+    <h3>7. Hvis du lever av utbyttet</h3>
 
-    <p>Er du allerede i pensjonsfasen og trenger løpende utbytteinntekt til å dekke utgifter? Da kan en vanlig VPS-konto faktisk passe bedre — utbytte går direkte til bankkontoen, enkelt og forutsigbart. ASK krever mer planlegging rundt uttak.</p>
+    <p>På vanlig konto får du utbyttet utbetalt hvert år og skatter av det samme år. På ASK må du ta pengene ut selv, men uttakene er skattefrie til de når innskuddet ditt. Aksjer som ikke kan stå på ASK, må uansett ligge på vanlig konto, så det kan være aktuelt å ha begge.</p>
 
     <!-- SEKSJON 8 -->
-    <h2 id="sammendrag">Sammendrag</h2>
+    <h2 id="sammendrag">Sjekkliste før du bruker ASK</h2>
 
     <ul>
-      <li><strong>Utbytte i ASK</strong> havner i kontantsaldoen på kontoen — ikke i banken. Det er ikke skattepliktig det året det mottas.</li>
-      <li><strong>Skjermingsfradraget</strong> i ASK beregnes samlet på alle innskudd, akkumuleres og brukes ved uttak.</li>
-      <li><strong>Uttak beskattes</strong> i denne rekkefølgen: skjermingsfradrag (skattefritt) → innskudd (skattefritt) → avkastning (37,84&nbsp;%).</li>
-      <li><strong>Alle norske aksjer på Oslo Børs</strong> og Euronext Expand er ASK-tillatte, uavhengig av selskapsregistrering.</li>
-      <li><strong>ASK lønner seg klart</strong> for langsiktige investorer som reinvesterer utbyttene — fordelen øker med tid.</li>
-      <li><strong>Du kan ikke flytte aksjer</strong> fra VPS til ASK uten å selge dem først. Vurder skatteeffekten nøye.</li>
-      <li><strong>ASK-til-ASK-overføring</strong> mellom meglere er skattenøytral og kan gjøres fritt.</li>
+      <li><strong>Sjekk hjemlandet til selskapet,</strong> ikke bare børsen. Selskaper registrert på Bermuda eller i Singapore kan ikke stå på ASK. Er selskapet registrert utenfor EØS, men ledet fra et EØS-land, er det uavklart.</li>
+      <li><strong>Sjekk markedsplassen.</strong> Aksjer på Euronext Growth kan ikke stå på ASK i 2026.</li>
+      <li><strong>Hold oversikt over innskuddet.</strong> Det er det du kan ta ut uten skatt, og kildeskatt og uttak gjør det mindre.</li>
+      <li><strong>Regn på skatten før du flytter aksjer fra vanlig konto.</strong> Flyttingen regnes som salg.</li>
+      <li><strong>Kontroller skattemeldingen</strong> det året du tar ut mer enn innskuddet. Tilbyderen rapporterer, og skattepliktige uttak skal være forhåndsutfylt.</li>
+      <li><strong>Prøv egne tall</strong> i kalkulatoren «ASK eller vanlig konto?» i appen.</li>
     </ul>
 
     <div class="callout-green callout">
-      <strong>Se utbytteyield og ex-datoer for alle norske aksjer på <a href="https://exday.no/" style="color:inherit;text-decoration:underline;">exday.no</a></strong> — med historisk utbyttehistorikk, porteføljetracking og skatteberegning.
+      <p>På <a href="https://exday.no/" style="color:inherit;text-decoration:underline;">exday.no</a> finner du utbyttehistorikk og kommende ex-datoer for norske utbytteaksjer. I appen kan du føre porteføljen din og se skatteåret for aksjer på vanlig konto.</p>
     </div>
+
+    <!-- KILDER -->
+    <h2 id="kilder">Kilder</h2>
+
+    <ul>
+      <li>Skatteetaten: <a href="https://www.skatteetaten.no/person/skatt/hjelp-til-riktig-skatt/aksjer-og-verdipapirer/om/aksjesparekonto-ask/" class="text-green-600 dark:text-green-400 hover:underline">aksjesparekonto (ASK)</a>, satsene for <a href="https://www.skatteetaten.no/satser/faktor-for-oppjustering-av-gevinsttap-eller-utbytte-pa-aksjer/" class="text-green-600 dark:text-green-400 hover:underline">aksjeinntekt</a> og <a href="https://www.skatteetaten.no/satser/skjermingsrente-for-aksjer-og-enkeltpersonforetak/" class="text-green-600 dark:text-green-400 hover:underline">skjermingsrente</a></li>
+      <li>Skatte-ABC: <a href="https://www.skatteetaten.no/rettskilder/type/handboker/skatte-abc/gjeldende/a-10-aksjesparekonto/" class="text-green-600 dark:text-green-400 hover:underline">A-10 Aksjesparekonto</a></li>
+      <li>Skatteloven § 10-21</li>
+      <li>Regjeringen: <a href="https://www.regjeringen.no/no/aktuelt/aksjesparekonto-far-flere-investeringsmuligheter/id3174678/" class="text-green-600 dark:text-green-400 hover:underline">Aksjesparekonto får flere investeringsmuligheter</a>, 7. oktober 2026</li>
+    </ul>
+
+    <p class="text-xs text-gray-400 dark:text-gray-600">Skrevet om 10. oktober 2026. Den forrige versjonen sa at det er børsen og ikke hjemlandet som avgjør, og at selskaper registrert på Bermuda kan stå på ASK. Det er feil. Den beskrev også skjermingsgrunnlaget og rekkefølgen ved uttak feil, og regneeksemplet overdrev forskjellen mellom ASK og vanlig konto.</p>
 
     <!-- LES OGSÅ -->
     <h2>Les også</h2>
-    <ul>
-      <li><a href="/artikler/utbytte-og-skatt/" style="color:#2563eb;">Utbytte og skatt i Norge — 37,84&nbsp;%, skjermingsfradrag og ASK</a></li>
-      <li><a href="/artikler/hva-er-ex-dato/" style="color:#2563eb;">Hva er ex-dato? Alt du trenger å vite</a></li>
-      <li><a href="/utbyttekalender/" style="color:#2563eb;">Utbyttekalender — kommende ex-datoer på Oslo Børs</a></li>
-      <li><a href="/verktoy/kalkulator/" style="color:#2563eb;">Utbyttekalkulator — estimer din avkastning etter skatt</a></li>
+    <ul class="list-none" style="margin-left:0;padding-left:0;list-style:none;">
+      <li>
+        <a href="/artikler/utbytte-og-skatt/" class="les-ogsa-lenke text-green-600 dark:text-green-400 hover:underline">
+          <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+          <span>Utbytte og skatt i Norge: 37,84&nbsp;%, skjermingsfradrag og ASK</span>
+        </a>
+      </li>
+      <li>
+        <a href="/artikler/hva-er-ex-dato/" class="les-ogsa-lenke text-green-600 dark:text-green-400 hover:underline">
+          <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+          <span>Hva er ex-dato? Komplett guide for norske investorer</span>
+        </a>
+      </li>
+      <li>
+        <a href="/utbyttekalender/" class="les-ogsa-lenke text-green-600 dark:text-green-400 hover:underline">
+          <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+          <span>Utbyttekalender: kommende ex-datoer på Oslo Børs</span>
+        </a>
+      </li>
+      <li>
+        <a href="/verktoy/kalkulator/" class="les-ogsa-lenke text-green-600 dark:text-green-400 hover:underline">
+          <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+          <span>Utbyttekalkulator: utbytteinntekt før og etter skatt</span>
+        </a>
+      </li>
     </ul>
 
   </article>

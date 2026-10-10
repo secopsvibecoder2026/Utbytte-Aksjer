@@ -657,7 +657,7 @@ const ARTIKLER = [
     slug: '/artikler/aksjesparekonto-ask/',
     tittel: 'Aksjesparekonto (ASK) for utbytteinvestorer — komplett guide',
     ingress: 'Hva skjer med utbyttet i ASK, hvilke aksjer er tillatt, og når lønner ASK seg fremfor vanlig VPS-konto.',
-    meta: '3. mai 2026 · 12 min',
+    meta: '3. mai 2026 · 13 min',
     tags: ['Skatt', 'Guide'],
     sektorer: [],
   },
