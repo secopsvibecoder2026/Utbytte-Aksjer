@@ -95,12 +95,14 @@ Utbytte-Aksjer/
 │   ├── sjekk_tema.py          # Verifies dark mode init on every page
 │   ├── sjekk_klasser.py       # Verifies every Tailwind class is compiled
 │   ├── sjekk_antall.py        # Finds hard-coded stock counts that should be markers
+│   ├── vedlikehold.py         # Daily maintenance: Actions runs, live site, stocks in/out from NewsWeb
 │   ├── sjekk_sprak.py         # Counts dashes and AI phrasing in published text (SKRIVESTIL.md)
 │   ├── valider_innledning.py  # Gate for the company texts: --ko, --skriv, --ticker
 │   ├── test_sjekk_utdaterte.py # Tests for sjekk_utdaterte.py (stdlib unittest)
 │   ├── test_sjekk_tema.py     # Tests for sjekk_tema.py
 │   ├── test_sjekk_klasser.py  # Tests for sjekk_klasser.py
 │   ├── test_sjekk_antall.py   # Tests for sjekk_antall.py
+│   ├── test_vedlikehold.py    # Tests for vedlikehold.py
 │   └── requirements.txt       # Python deps: yfinance>=0.2.36
 ├── tests/                     # Node.js unit tests
 │   ├── app.test.js            # Tests: data freshness indicator, escHtml
@@ -166,6 +168,7 @@ python scripts/test_oppdater_hendelser.py  # 7 Python tests (hendelseskalender)
 python scripts/test_sjekk_tema.py       # 10 Python tests (mørk modus på hver side)
 python scripts/test_sjekk_klasser.py    # 10 Python tests (CSS-klasser finnes)
 python scripts/test_sjekk_antall.py     # 11 Python tests (aksjetellinger bruker markør)
+python scripts/test_vedlikehold.py      # 25 Python tests (inn/ut fra NewsWeb, ferskhet)
 # npm test dekker også tests/app.test.js — ferskhetsindikator + escHtml
 ```
 
@@ -1596,7 +1599,55 @@ it looks the same whichever session writes it; the routine reads the artifact
 first (a publish to an artifact the session has not read is refused), then
 publishes to the same `url`. Markdown support is deliberately small and
 everything is escaped before formatting, since the report quotes stock-exchange
-notices. Tests: `scripts/test_tallkontroll_side.py` (11).
+notices. Tests: `scripts/test_tallkontroll_side.py` (13).
+
+## The daily maintenance agent (2026-10-10)
+
+`.claude/agents/vedlikehold.md` runs every morning from the routine «Daglig
+vedlikehold» (06:47 Europe/Oslo) and publishes to one private page that is
+replaced each day: https://claude.ai/artifact/5q8jTVvPxkuQRjUJTWXQcV. Same
+setup as the weekly tallkontroll: the routine clones the public repo, has no
+GitHub write access, and **only reports**. To let it open pull requests, the
+repository must be attached in the routine's settings on claude.ai; a session
+cannot do that.
+
+It exists for three gaps that kept recurring: bugs that only show when someone
+looks (the 06.10 audit found eight, none caught by a test), stocks that leave
+without warning (`sjekk_utdaterte.py` sees a delisting only after the fact),
+and findings nobody acts on (AFG, 15 days). The report therefore leads with
+what needs action and carries open findings forward with their age.
+
+`scripts/vedlikehold.py` is the mechanical part:
+
+- **NewsWeb for the whole exchange.** `/v1/newsreader/list?fromDate=…&toDate=…`
+  without an issuer returns every message in the range, **capped at about 600
+  per call without saying so** (30 days gave 601, reaching back only 10 days).
+  The script asks in 3-day windows and splits a window into single days when
+  it comes back near the cap.
+- **Titles are sorted, not judged:** decided exit, possible exit (offer,
+  merger plan), change of market (Growth ↔ Oslo Børs, which flips ASK), name
+  change and trading halt for our issuers; new listings and dividend notices
+  for issuers outside the catalog. Bonds and interest adjustments are dropped.
+  The agent reads each message (`--melding ID`) before it says anything.
+- **The acquirer is not leaving.** «Aker ASA: Conditions for completion of
+  merger with Aker BioMarine satisfied» first matched as a decided exit for
+  Aker. Patterns are tested against real titles in both directions.
+- **Live site against the repo.** A failed Pages deploy is invisible in the
+  repo; the data is right there and old for the reader. Five deploys failed
+  between 30.09 and 09.10.2026.
+- Every source answers `None` when it does not respond, and the text says
+  «kunne ikke hentes», never «ingenting å melde».
+
+First run, on ten days of messages: AKVA has a recommended cash offer from
+Yanmar (2 October), Aqualis applied to move to Euronext Growth (9 October;
+existing ASK holders may keep their shares), and Pioneer Property Group pays
+dividends without being in the catalog.
+
+Each weekday has one deep dive: Monday the app in a browser, Tuesday the
+hand-written pages, Wednesday one article, Thursday the week's code changes,
+Friday SEO and AdSense, Saturday open findings, Sunday a broad in/out scan and
+one roadmap item. The weekly tallkontroll keeps the numbers; this agent does
+not redo that work. Tests: `scripts/test_vedlikehold.py` (25).
 
 ## Ex-dates come from Oslo Børs — Yahoo and DNB do not tell the exchanges apart (2026-09-24)
 
