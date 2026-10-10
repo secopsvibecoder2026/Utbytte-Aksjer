@@ -39,8 +39,11 @@ function _lastOsebxUkentlig() {
  * - **utbytte** er skattepliktig når det utbetales.
  * - **kapital** — tilbakebetaling av innbetalt kapital — er ikke det. Den
  *   trekkes fra inngangsverdien til aksjene den gjelder (eldste først, samme
- *   FIFO som salg), og det som overstiger inngangsverdien skattlegges som
- *   utbytte (`kapitalOverskudd`). Ni utstedere har brukt formen det siste året.
+ *   FIFO som salg). Overstiger den inngangsverdien, blir inngangsverdien
+ *   negativ, og alt kommer med i gevinsten ved salg (sktl. § 10-35, Skatte-ABC
+ *   A-6-7.1). Til 2026-10-10 skattla vi det overskytende som utbytte; det er
+ *   regelen et høringsforslag fra 2025 ville innføre, ikke gjeldende rett.
+ *   `skjermingsgrunnlag` regner en negativ inngangsverdi som 0.
  * - **salg** realiserer gevinst eller tap mot de eldste lottenes inngangsverdi,
  *   redusert for eventuell tilbakebetaling (`realisert`).
  */
@@ -53,7 +56,6 @@ function beregnKostbasis(ticker, txMap, tilDato) {
   const lotter = [];  // { antall, kurs } — eldste først; kurs er inngangsverdi per aksje
   let mottattUtbytte = 0, mottattKapital = 0;
   const realisert = [];          // { dato, antall, salgssum, kostpris, gevinst }
-  const kapitalOverskudd = [];   // { dato, belop } — skattes som utbytte
   sortert.forEach(t => {
     if (t.type === 'kjøp') {
       lotter.push({ antall: t.antall, kurs: t.kurs });
@@ -77,36 +79,36 @@ function beregnKostbasis(ticker, txMap, tilDato) {
     } else if (t.type === 'kapital') {
       mottattKapital += t.antall * t.kurs;
       // Trekk beløpet per aksje fra de `antall` eldste aksjene. En lott som
-      // bare delvis omfattes, deles i to.
-      let rest = t.antall, overskudd = 0;
+      // bare delvis omfattes, deles i to. Inngangsverdien kan bli negativ.
+      // Tilbakebetaling på aksjer uten registrert kjøp har ingen
+      // inngangsverdi vi kan trekke fra, og gir heller ingen skatt nå.
+      let rest = t.antall;
       for (let i = 0; i < lotter.length && rest > 0; i++) {
         const lott = lotter[i];
         if (lott.antall > rest) {
           lotter.splice(i + 1, 0, { antall: lott.antall - rest, kurs: lott.kurs });
           lott.antall = rest;
         }
-        const ned = Math.min(lott.kurs, t.kurs);
-        overskudd += (t.kurs - ned) * lott.antall;
-        lott.kurs -= ned;
+        lott.kurs -= t.kurs;
         rest -= lott.antall;
       }
-      // Tilbakebetaling på aksjer vi ikke har kjøp registrert for, har ingen
-      // inngangsverdi å trekke fra — hele beløpet regnes da som overskytende.
-      if (rest > 0) overskudd += rest * t.kurs;
-      if (overskudd > 0) kapitalOverskudd.push({ dato: t.dato, belop: overskudd });
     }
   });
-  let antall = 0, totalKost = 0;
-  lotter.forEach(l => { antall += l.antall; totalKost += l.antall * l.kurs; });
+  let antall = 0, totalKost = 0, skjermingsgrunnlag = 0;
+  lotter.forEach(l => {
+    antall += l.antall;
+    totalKost += l.antall * l.kurs;
+    skjermingsgrunnlag += l.antall * Math.max(0, l.kurs);
+  });
   const vwap = antall > 0 ? totalKost / antall : 0;
-  return { antall, totalKost, vwap, mottattUtbytte, mottattKapital, realisert, kapitalOverskudd };
+  return { antall, totalKost, vwap, skjermingsgrunnlag, mottattUtbytte, mottattKapital, realisert };
 }
 
 /**
  * Skatteåret `aar` for en hel portefølje, ut fra registrerte transaksjoner.
  *
- * Per aksje: mottatt utbytte, tilbakebetalt kapital (og overskudd over
- * inngangsverdien), skjermingsfradrag og realisert gevinst/tap.
+ * Per aksje: mottatt utbytte, tilbakebetalt kapital (ikke skattepliktig ved
+ * utbetaling, se beregnKostbasis()), skjermingsfradrag og realisert gevinst/tap.
  *
  * - **Skjerming gis bare for aksjer eid 31.12**, beregnet av inngangsverdien da,
  *   med årets sats fra skjermingsrenteFor(). Den kan bare brukes mot utbytte på
@@ -125,15 +127,14 @@ function beregnSkatteaar(txMap, aar, rente, skattesats) {
     const kb = beregnKostbasis(ticker, txMap, til);
     const utbytte = liste.filter(t => t.type === 'utbytte' && iAar(t.dato)).reduce((s, t) => s + t.antall * t.kurs, 0);
     const kapital = liste.filter(t => t.type === 'kapital' && iAar(t.dato)).reduce((s, t) => s + t.antall * t.kurs, 0);
-    const overskudd = kb.kapitalOverskudd.filter(o => iAar(o.dato)).reduce((s, o) => s + o.belop, 0);
     const salg = kb.realisert.filter(r => iAar(r.dato));
     const gevinst = salg.reduce((s, r) => s + r.gevinst, 0);
-    const skjerming = kb.antall > 0 ? kb.totalKost * rente : 0;
-    const grunnlag = utbytte + overskudd;
+    const skjerming = kb.antall > 0 ? kb.skjermingsgrunnlag * rente : 0;
+    const grunnlag = utbytte;
     const bruktSkjerming = Math.min(skjerming, grunnlag);
     if (!utbytte && !kapital && !salg.length && !skjerming) return;
     rader.push({
-      ticker, utbytte, kapital, overskudd, gevinst, salg,
+      ticker, utbytte, kapital, gevinst, salg,
       skjerming, bruktSkjerming, ubruktSkjerming: skjerming - bruktSkjerming,
       skattbartUtbytte: grunnlag - bruktSkjerming,
     });
@@ -145,7 +146,7 @@ function beregnSkatteaar(txMap, aar, rente, skattesats) {
   const grunnlag = skattbartUtbytte + gevinst;
   return {
     aar, rader,
-    utbytte: sum('utbytte'), kapital: sum('kapital'), overskudd: sum('overskudd'),
+    utbytte: sum('utbytte'), kapital: sum('kapital'),
     skjerming: sum('skjerming'), bruktSkjerming: sum('bruktSkjerming'), ubruktSkjerming: sum('ubruktSkjerming'),
     skattbartUtbytte, gevinst, grunnlag,
     skatt: grunnlag * skattesats,   // negativ = fradrag
@@ -189,7 +190,7 @@ function _skatteposter(beholdning, bruttoPerTicker) {
   return beholdning.map(a => ({
     ticker: a.ticker,
     brutto: bruttoPerTicker ? (bruttoPerTicker[a.ticker] || 0) : a.forv_ar,
-    kostbasis: beregnKostbasis(a.ticker).totalKost,
+    kostbasis: beregnKostbasis(a.ticker).skjermingsgrunnlag,
     kapitalAndel: typeof kapitalAndel === 'function' ? kapitalAndel(a) : 0,
   }));
 }
@@ -1977,8 +1978,7 @@ function visSkatteaar() {
     ${ikkeTomt ? `
     <div class="space-y-1.5 text-sm">
       ${linje('Mottatt utbytte', kr(r.utbytte))}
-      ${r.kapital ? linje('Tilbakebetalt kapital <span class="text-xs">(ikke skattepliktig nå)</span>', kr(r.kapital)) : ''}
-      ${r.overskudd ? linje('— herav over inngangsverdien, skattes som utbytte', kr(r.overskudd)) : ''}
+      ${r.kapital ? linje('Tilbakebetalt kapital <span class="text-xs">(ikke skattepliktig nå, trekkes fra inngangsverdien)</span>', kr(r.kapital)) : ''}
       ${linje(`Skjermingsfradrag brukt <span class="text-xs">(${pstSats(rente.sats)}${rente.fastsatt ? '' : `, satsen for ${rente.aar} — ${aar} er ikke fastsatt`})</span>`, '−' + kr(r.bruktSkjerming))}
       ${linje('Skattepliktig utbytte', kr(r.skattbartUtbytte))}
       ${linje(r.gevinst >= 0 ? 'Realisert gevinst' : 'Realisert tap', (r.gevinst < 0 ? '−' : '') + kr(Math.abs(r.gevinst)))}

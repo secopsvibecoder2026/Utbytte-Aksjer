@@ -4169,7 +4169,7 @@ function modalKapitalNote(a) {
       <p class="text-xs text-gray-700 dark:text-gray-300 leading-relaxed">
         Ifølge selskapets siste utbyttemelding${dato} ${hva}. For en personlig aksjonær er den ikke
         skattepliktig når den utbetales — den trekkes fra inngangsverdien, og skatten kommer som høyere
-        gevinst når du selger. Overstiger den inngangsverdien, skattlegges det overskytende som utbytte.
+        gevinst når du selger. Det gjelder også om den overstiger inngangsverdien, som da blir negativ.
       </p>
     </div>`;
 }

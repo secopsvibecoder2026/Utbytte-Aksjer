@@ -1881,7 +1881,25 @@ class TestKapitalTilbake(unittest.TestCase):
              "pris": 10.0, "utbytte_per_aksje": 1.29, "kapital_tilbake": {"andel": 1.0}}
         tekst = json.dumps(fs._lag_faq_seksjon(a, datetime.date(2026, 10, 3)), ensure_ascii=False)
         self.assertIn("ikke skattepliktig når den utbetales", tekst)
-        self.assertNotIn("beskattes med 37,84 % for personlige", tekst)
+        self.assertNotIn("beskattes med 37,84 %", tekst)
+        # Overskytende kapital er ikke utbytte (sktl. § 10-35, Skatte-ABC A-6-7.1).
+        self.assertNotIn("overskytende", tekst)
+        self.assertIn("negativ", tekst)
+
+    def test_faq_nevner_skjerming_og_kildeskatt(self):
+        def faq(land):
+            a = {"ticker": "X", "navn": "X", "utbytte_yield": 5.0, "pris": 100.0,
+                 "utbytte_per_aksje": 5.0, "inkorporeringsland": land, "bors": "Oslo Børs"}
+            return json.dumps(fs._lag_faq_seksjon(a, datetime.date(2026, 10, 10)), ensure_ascii=False)
+        self.assertIn("overstiger skjermingsfradraget", faq("Norge"))
+        self.assertNotIn("kildeskatt", faq("Norge"))
+        self.assertIn("registrert i Belgia, som kan trekke kildeskatt", faq("Belgia"))
+        self.assertNotIn("kildeskatt", faq("Bermuda"))
+
+    def test_kapitalnoten_sier_ikke_at_overskytende_er_utbytte(self):
+        h = fs.lag_kapital_note({"kapital_tilbake": {"andel": 1.0}}, fs._nf)
+        self.assertNotIn("overskytende", h)
+        self.assertIn("negativ", h)
 
 
 class TestUtbyttevekst(unittest.TestCase):
