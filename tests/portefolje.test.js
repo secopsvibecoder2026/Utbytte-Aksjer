@@ -504,17 +504,34 @@ test('beregnKostbasis: tilbakebetalt kapital trekkes fra inngangsverdien, eldste
   assert.equal(kb.antall, 200);
   assert.equal(kb.totalKost, 100 * 48 + 50 * 38 + 50 * 40);   // lott 2 deles i to
   assert.equal(kb.mottattKapital, 300);
-  assert.deepEqual(kb.kapitalOverskudd, []);
+  assert.equal(kb.skjermingsgrunnlag, kb.totalKost);
 });
 
-test('beregnKostbasis: kapital over inngangsverdien skattes som utbytte', () => {
+// Overskytende tilbakebetaling er ikke utbytte (sktl. § 10-35, Skatte-ABC
+// A-6-7.1): inngangsverdien blir negativ, og alt kommer med i gevinsten.
+// Til 2026-10-10 skattla appen de 20 kronene under som utbytte.
+test('beregnKostbasis: kapital over inngangsverdien gir negativ inngangsverdi, ikke utbytte', () => {
   const tx = { X: [
     { type: 'kjøp',    dato: '2024-01-10', antall: 10, kurs: 3 },
     { type: 'kapital', dato: '2025-03-01', antall: 10, kurs: 5 },
+    { type: 'salg',    dato: '2025-09-01', antall: 10, kurs: 4 },
   ] };
-  const kb = beregnKostbasis('X', tx);
-  assert.equal(kb.totalKost, 0);
-  assert.deepEqual(kb.kapitalOverskudd, [{ dato: '2025-03-01', belop: 20 }]);
+  const før = beregnKostbasis('X', tx, '2025-06-30');
+  assert.equal(før.totalKost, -20);
+  assert.equal(før.skjermingsgrunnlag, 0);    // negativ inngangsverdi gir ingen skjerming
+  assert.equal(før.kapitalOverskudd, undefined);
+  const etter = beregnKostbasis('X', tx);
+  assert.deepEqual(etter.realisert, [{ dato: '2025-09-01', antall: 10, salgssum: 40, kostpris: -20, gevinst: 60 }]);
+  const s = beregnSkatteaar(tx, 2025, 0.036, 0.3784);
+  assert.equal(s.skattbartUtbytte, 0);
+  assert.equal(s.gevinst, 60);
+});
+
+test('beregnKostbasis: kapital uten registrert kjøp gir ingen skatt nå', () => {
+  const tx = { X: [{ type: 'kapital', dato: '2025-03-01', antall: 10, kurs: 5 }] };
+  const s = beregnSkatteaar(tx, 2025, 0.036, 0.3784);
+  assert.equal(s.skattbartUtbytte, 0);
+  assert.equal(s.skatt, 0);
 });
 
 test('beregnKostbasis: salg etter tilbakebetaling gir høyere gevinst, FIFO', () => {

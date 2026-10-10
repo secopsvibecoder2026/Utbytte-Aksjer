@@ -1285,9 +1285,9 @@ def lag_kapital_note(a, nf):
         '<p>For en personlig aksjonær i Norge er en slik tilbakebetaling ikke '
         'skattepliktig når den utbetales. Den trekkes i stedet fra '
         'inngangsverdien din, slik at gevinsten blir tilsvarende større — og '
-        'skatten kommer når du selger. Det gjelder så lenge tilbakebetalingen '
-        'ikke overstiger inngangsverdien; et overskytende beløp skattlegges som '
-        'utbytte.</p>'
+        'skatten kommer når du selger. Det gjelder også når tilbakebetalingen '
+        'overstiger det du betalte for aksjen: inngangsverdien blir da negativ, '
+        'og alt kommer med i gevinsten ved salg.</p>'
         '<p>Klassifiseringen gjelder hver utbetaling for seg, og et selskap kan '
         'veksle mellom utbytte og tilbakebetaling. Den står i hver '
         'utbyttemelding.</p>'
@@ -4552,8 +4552,8 @@ def _lag_faq_seksjon(a, today):
             f"tilbakebetaling av innbetalt kapital, ikke utbytte i skattemessig forstand. "
             f"For personlige aksjonærer er den ikke skattepliktig når den utbetales; "
             f"den reduserer i stedet inngangsverdien, slik at gevinsten — og skatten — "
-            f"blir tilsvarende høyere når du selger. Overstiger tilbakebetalingen "
-            f"inngangsverdien, skattlegges det overskytende som utbytte med 37,84 %. "
+            f"blir tilsvarende høyere når du selger. Det gjelder også om tilbakebetalingen "
+            f"overstiger inngangsverdien, som da blir negativ. "
             f"Klassifiseringen gjelder hver utbetaling for seg og står i hver utbyttemelding."
         )
         qas.append((f"Hva er skatten på utbytte fra {ticker}?", svar))
@@ -4572,11 +4572,24 @@ def _lag_faq_seksjon(a, today):
             "og utbyttet kan reinvesteres innen kontoen uten skatt underveis."
             if status == "ja" else ask_setning
         )
+        # Kildeskatt i hjemlandet kommer i tillegg for utenlandske selskaper.
+        # Bermuda, Singapore og Kypros trekker ikke kildeskatt på utbytte til
+        # utlendinger (PwC Worldwide Tax Summaries, kontrollert 2026-10-10);
+        # for de andre sier vi bare at landet kan trekke det.
+        land = a.get("inkorporeringsland") or "Norge"
+        kildeskatt = (
+            f"Selskapet er registrert {_registrert_i(land)}, som kan trekke kildeskatt på "
+            f"utbyttet. Den kan gi fradrag i norsk skatt opp til satsen i skatteavtalen, "
+            f"og det som er trukket for mye, må søkes tilbake. "
+            if land not in ("Norge", "Bermuda", "Singapore", "Kypros") else ""
+        )
         svar = (
-            f"Utbytte fra {navn} beskattes med 37,84 % for personlige aksjonærer "
-            f"som eier aksjen direkte (via VPS-konto). "
+            f"Utbytte fra {navn} beskattes med 37,84 % av det som overstiger "
+            f"skjermingsfradraget, for personlige aksjonærer som eier aksjen på vanlig konto. "
             f"{delvis}"
-            f"Med en yield på {_nf(yield_, 2)} % gir det en nettoyield etter skatt på ca. {_nf(netto, 2)} %. "
+            f"Med en yield på {_nf(yield_, 2)} % gir det en nettoyield på ca. {_nf(netto, 2)} % "
+            f"etter skatt, før skjermingsfradraget. "
+            f"{kildeskatt}"
             f"{ask_faq}"
         )
         qas.append((f"Hva er skatten på utbytte fra {ticker}?", svar))

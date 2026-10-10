@@ -1256,10 +1256,25 @@ January. The forward estimates elsewhere use the latest rate (3,6 %).
 
 - **`beregnKostbasis(ticker, txMap, tilDato)`** gained a cut-off date (holdings
   at 31.12), `realisert` per sale, and type **`kapital`**: the amount per share
-  is subtracted from the oldest lots (a lot partly covered is split), and any
-  excess over the cost basis is returned as `kapitalOverskudd` — taxed as a
-  dividend. Without registered purchases there is no basis, so the whole
-  amount is excess.
+  is subtracted from the oldest lots (a lot partly covered is split). The
+  basis **may go negative**, and the excess is taxed only as a larger gain on
+  sale; `skjermingsgrunnlag` counts a negative lot as 0.
+
+  > ⛔ **Corrected 2026-10-10.** Until then the excess over the cost basis was
+  > returned as `kapitalOverskudd` and taxed as a dividend, and the stock pages,
+  > the FAQ and the app modal said so. That is not the law: sktl. § 10-35 and
+  > Skatte-ABC A-6-7.1 reduce the basis «selv om aksjenes inngangsverdi er eller
+  > blir negativ». Taxing the excess as a dividend is what the Finance Ministry's
+  > consultation of 15 October 2025 *proposed* from 2027, not adopted. Found by
+  > the article agent while rewriting «Utbytte og skatt», which was told the
+  > wrong rule in its brief and checked it against Skatteetaten instead. Tests:
+  > `portefolje.test.js` (2), `TestKapitalTilbake` (2).
+  >
+  > The tax FAQ on the stock pages was fixed in the same pass: it said
+  > «beskattes med 37,84 %» without «av det som overstiger
+  > skjermingsfradraget», and said nothing about withholding tax for companies
+  > registered abroad. It now does, except for Bermuda, Singapore and Cyprus,
+  > which levy none on dividends to non-residents.
 - **The user picks the type per payment.** The stock's newest notice only
   classifies the newest payment, so the detail row shows a hint when
   `kapitalAndel()` > 0 but never reclassifies history.
