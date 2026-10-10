@@ -168,7 +168,7 @@ python scripts/test_oppdater_hendelser.py  # 7 Python tests (hendelseskalender)
 python scripts/test_sjekk_tema.py       # 10 Python tests (mørk modus på hver side)
 python scripts/test_sjekk_klasser.py    # 10 Python tests (CSS-klasser finnes)
 python scripts/test_sjekk_antall.py     # 11 Python tests (aksjetellinger bruker markør)
-python scripts/test_vedlikehold.py      # 25 Python tests (inn/ut fra NewsWeb, ferskhet)
+python scripts/test_vedlikehold.py      # 26 Python tests (inn/ut fra NewsWeb, ferskhet)
 # npm test dekker også tests/app.test.js — ferskhetsindikator + escHtml
 ```
 
@@ -1638,16 +1638,20 @@ what needs action and carries open findings forward with their age.
 - Every source answers `None` when it does not respond, and the text says
   «kunne ikke hentes», never «ingenting å melde».
 
-First run, on ten days of messages: AKVA has a recommended cash offer from
-Yanmar (2 October), Aqualis applied to move to Euronext Growth (9 October;
-existing ASK holders may keep their shares), and Pioneer Property Group pays
-dividends without being in the catalog.
+First run, on ten days of messages: ELMRA is leaving (Fortum holds 95,8 %,
+compulsory acquisition and delisting announced), AKVA has a recommended cash
+offer from Yanmar (2 October), and Aqualis applied to move to Euronext Growth
+(9 October; existing ASK holders may keep their shares). Integrated Wind
+Solutions (IWS, Oslo Børs, Norway) pays quarterly and is a catalog candidate.
+Pioneer Property Group's dividend notices are for its **preference shares**,
+which are not on Euronext's equity list, so a dividend title from an issuer
+outside the catalog is a lead, never a candidate until the message is read.
 
 Each weekday has one deep dive: Monday the app in a browser, Tuesday the
 hand-written pages, Wednesday one article, Thursday the week's code changes,
 Friday SEO and AdSense, Saturday open findings, Sunday a broad in/out scan and
 one roadmap item. The weekly tallkontroll keeps the numbers; this agent does
-not redo that work. Tests: `scripts/test_vedlikehold.py` (25).
+not redo that work. Tests: `scripts/test_vedlikehold.py` (26).
 
 ## Ex-dates come from Oslo Børs — Yahoo and DNB do not tell the exchanges apart (2026-09-24)
 
