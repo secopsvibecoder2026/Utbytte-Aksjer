@@ -76,6 +76,18 @@ class TestSide(unittest.TestCase):
         for farge in ("132a50", "1e5c5c", "2e7b7b", "91c4d8", "8b2020"):
             self.assertNotIn(farge, s)
 
+    def test_vedlikehold_har_egen_tittel(self):
+        s = ts.bygg_side(RAPPORT, dato="2026-10-11", neste="2026-10-12", type="vedlikehold")
+        self.assertTrue(s.startswith("<title>Vedlikehold exday.no</title>"))
+        self.assertIn("Vedlikehold 11. oktober 2026", s)
+        self.assertIn("Neste runde: 12. oktober 2026.", s)
+        self.assertIn("daglig vedlikehold", s)
+        self.assertNotIn("Tallkontroll", s)
+
+    def test_standard_er_fortsatt_tallkontroll(self):
+        # Den ukentlige rutinen kaller skriptet uten --type.
+        self.assertIn("ukentlig tallkontroll", ts.bygg_side(RAPPORT))
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=1)

@@ -10,6 +10,10 @@ stedet — samme adresse hver uke — og denne fila bygger HTML-en, så siden se
 lik ut uansett hvilken økt som skriver den.
 
     python scripts/tallkontroll_side.py rapport.md --dato 2026-10-05 > side.html
+    python scripts/tallkontroll_side.py rapport.md --type vedlikehold --dato 2026-10-11 > side.html
+
+Den daglige vedlikeholdsrunden (`.claude/agents/vedlikehold.md`) bruker samme
+side med `--type vedlikehold`: samme utseende og samme escaping, egen tittel.
 
 Markdown-støtten er bevisst liten: overskrifter, avsnitt, punktlister,
 tabeller, **fet**, `kode` og [lenker](https://…). Det er det agenten skriver.
@@ -177,27 +181,55 @@ footer { color: var(--demp); font-size: 13px; border-top: 1px solid var(--kant);
 </style>"""
 
 
-def bygg_side(md, dato=None, neste=None):
+RAPPORTTYPER = {
+    "tallkontroll": {
+        "tittel": "Tallkontroll",
+        "merke": "exday.no · ukentlig tallkontroll",
+        "ingress": "Tallene på exday.no sammenlignet med Yahoos ujusterte rådata, "
+                   "selskapenes meldinger til Oslo Børs og Euronexts noteringsliste.",
+        "neste": "Neste kontroll",
+        "tom": "Ingen rapport ennå. Den første fra den ukentlige kontrollen kommer "
+               "hit så snart den er kjørt.",
+        "bunn": "Skrevet av tallkontroll-agenten (<code>.claude/agents/tallkontroll.md</code>). "
+                "Siden erstattes hver uke; ingenting her er rettet ennå — rettingene "
+                "gjøres i en egen økt.",
+    },
+    "vedlikehold": {
+        "tittel": "Vedlikehold",
+        "merke": "exday.no · daglig vedlikehold",
+        "ingress": "Gårsdagens kjøringer, aksjer på vei inn og ut av Oslo Børs, feil "
+                   "funnet på siden og i appen, og ett forslag til forbedring.",
+        "neste": "Neste runde",
+        "tom": "Ingen rapport ennå. Den første fra den daglige runden kommer hit så "
+               "snart den er kjørt.",
+        "bunn": "Skrevet av vedlikeholdsagenten (<code>.claude/agents/vedlikehold.md</code>). "
+                "Siden erstattes hver dag. Agenten leser og foreslår, men endrer ingenting; "
+                "rettingene gjøres i en egen økt.",
+    },
+}
+
+
+def bygg_side(md, dato=None, neste=None, type="tallkontroll"):
     """Hele sideinnholdet (uten <html>/<body> — Artifact legger det til)."""
+    t = RAPPORTTYPER[type]
     tittel_dato = norsk_dato(dato) if dato else ""
-    kropp = markdown_til_html(md) if md.strip() else (
-        '<div class="tom">Ingen rapport ennå. Den første fra den ukentlige '
-        'kontrollen kommer hit så snart den er kjørt.</div>')
-    neste_tekst = f" Neste kontroll: {norsk_dato(neste)}." if neste and norsk_dato(neste) else ""
-    return f"""<title>Tallkontroll exday.no</title>
+    kropp = markdown_til_html(md) if md.strip() else f'<div class="tom">{t["tom"]}</div>'
+    neste_tekst = (f" {t['neste']}: {norsk_dato(neste)}."
+                   if neste and norsk_dato(neste) else "")
+    return f"""<title>{t["tittel"]} exday.no</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&family=JetBrains+Mono:wght@500;600&display=swap">
 {STIL}
 <div class="side">
 <header>
-  <span class="merke">exday.no · ukentlig tallkontroll</span>
-  <h1>Tallkontroll{(" " + tittel_dato) if tittel_dato else ""}</h1>
-  <p class="meta">Tallene på exday.no sammenlignet med Yahoos ujusterte rådata, selskapenes meldinger til Oslo Børs og Euronexts noteringsliste.{neste_tekst}</p>
+  <span class="merke">{t["merke"]}</span>
+  <h1>{t["tittel"]}{(" " + tittel_dato) if tittel_dato else ""}</h1>
+  <p class="meta">{t["ingress"]}{neste_tekst}</p>
 </header>
 <main>
 {kropp}
 </main>
-<footer>Skrevet av tallkontroll-agenten (<code>.claude/agents/tallkontroll.md</code>). Siden erstattes hver uke; ingenting her er rettet ennå — rettingene gjøres i en egen økt.</footer>
+<footer>{t["bunn"]}</footer>
 </div>
 """
 
@@ -207,9 +239,10 @@ def main():
     p.add_argument("rapport", nargs="?", help="markdown-fil (utelat for tom side)")
     p.add_argument("--dato", help="rapportens dato, ISO")
     p.add_argument("--neste", help="neste planlagte kontroll, ISO")
+    p.add_argument("--type", choices=sorted(RAPPORTTYPER), default="tallkontroll")
     a = p.parse_args()
     md = open(a.rapport, encoding="utf-8").read() if a.rapport else ""
-    sys.stdout.write(bygg_side(md, a.dato, a.neste))
+    sys.stdout.write(bygg_side(md, a.dato, a.neste, a.type))
 
 
 if __name__ == "__main__":
