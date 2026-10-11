@@ -1188,6 +1188,35 @@ roadmap said «measure first».
 reduces the cost basis — see «The tax year» below. Tests: `TestKapitalTilbake` (12), `ui.test.js` (3),
 `portefolje.test.js` (4).
 
+## Five-year growth from a trough is not growth — `vekst_fra_topp()` (2026-10-11)
+
+`utbytte_vekst_5ar` is measured from the first to the last complete year and
+cannot see what happened in between. EQNR showed +40,1 % a year because 2021
+(4,97 kr) was a trough. The dividend had in fact fallen from 35,64 kr in 2023
+to 19,16 kr in 2025. The page still gave it the «Utbyttevekst» badge, called it
+«attraktivt for langsiktige reinvesteringsstrategier» and said «dobles
+utbyttet på ca. 2 år». The number was measured correctly; every reading of it
+was wrong.
+
+`vekst_fra_topp()` in `fetch_stocks.py` and `vekstFraTopp()` in `ui.js` fire
+when the last complete year in `utbytte_per_ar` is below 90 % of the highest
+year after the first. The first year is the starting point, and for the banks
+in 2021 it is the deferred dividend that `beregn_utbytte_vekst()` skips. When
+the rule fires:
+
+- there is no «Utbyttevekst» badge or goal, so the stock also drops out of the
+  app's goal filter;
+- the assessment states the peak and the last year in kroner;
+- the driver sentence adds «men det høyeste året i perioden var …».
+
+The figure itself, the toplist and the score are unchanged. 17 of the 60 stocks
+above 3 % growth are affected, among them EQNR, OET, NHY, BWLPG, KCC and WWI.
+
+The doubling time is a projection. It is now phrased as a condition («Holder
+veksten på … seg, dobles utbyttet på ca. N år»).
+
+Tests: `TestVekstFraTopp` (7) and `ui.test.js` (3).
+
 ## «Måneder uten ex-dato» — a filter, not a recommendation (2026-10-03)
 
 The portfolio's Inntekt tab already said «Ingen utbetalinger i juli og

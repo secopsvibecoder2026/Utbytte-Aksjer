@@ -24,7 +24,7 @@ global.document = {
 // ui.js uses alleAksjer global — stub it
 global.alleAksjer = [];
 
-const {
+const { vekstFraTopp, beregnMal, forklarMal,
   fmt,
   formaterDato,
   yieldKlasse,
@@ -817,4 +817,31 @@ test('bevegelser: overskriften har datoen når prisene ikke er fra i dag', () =>
   assert.equal(bevegelserOverskrift('2026-10-09', '2026-10-09'), 'Dagens bevegelser');
   assert.equal(bevegelserOverskrift('2026-10-09', '2026-10-10'), 'Bevegelser fredag 9. oktober');
   assert.equal(bevegelserOverskrift('', '2026-10-10'), 'Dagens bevegelser');
+});
+
+// ── vekstFraTopp: femårsvekst fra et bunnår (2026-10-11) ────────────────────
+// Samme tilfeller som TestVekstFraTopp i scripts/test_fetch_stocks.py.
+const EQNR_VEKST = { sektor: 'Energi', utbytte_vekst_5ar: 40.1, utbytte_yield: 3.48, frekvens: 'Kvartalsvis',
+  utbytte_per_ar: { 2021: 4.9699, 2022: 16.5531, 2023: 35.6415, 2024: 32.1646, 2025: 19.1553 } };
+const DNB_VEKST = { sektor: 'Finans', utbytte_vekst_5ar: 19.8, utbytte_yield: 6.0, frekvens: 'Årlig',
+  utbytte_per_ar: { 2021: 17.4, 2022: 9.75, 2023: 12.5, 2024: 16.0, 2025: 16.75 } };
+
+test('vekstFraTopp: EQNR har falt fra toppen i 2023', () => {
+  const t = vekstFraTopp(EQNR_VEKST);
+  assert.equal(t.toppAr, 2023);
+  assert.equal(t.sisteAr, 2025);
+});
+
+test('vekstFraTopp: første år er startpunkt, liten dupp er fortsatt vekst, kort serie gir null', () => {
+  assert.equal(vekstFraTopp(DNB_VEKST), null);
+  assert.equal(vekstFraTopp({ utbytte_per_ar: { 2021: 4.45, 2022: 7.35, 2023: 7.2, 2024: 6.6, 2025: 6.65 } }), null);
+  assert.equal(vekstFraTopp({ utbytte_per_ar: { 2024: 1, 2025: 0.5 } }), null);
+  assert.equal(vekstFraTopp({}), null);
+});
+
+test('beregnMal/forklarMal: ingen vekstmål for EQNR, dobling som betingelse for DNB', () => {
+  assert.ok(!beregnMal(EQNR_VEKST).includes('vekst'));
+  assert.ok(beregnMal(DNB_VEKST).includes('vekst'));
+  const tekst = forklarMal(DNB_VEKST).find(f => f.mal === 'Utbyttevekst').tekst;
+  assert.ok(tekst.includes('Holder veksten på +19,8% per år seg, dobles utbyttet på ca. 4 år.'), tekst);
 });

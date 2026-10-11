@@ -178,16 +178,13 @@ på resultatet i nettleser på 390 px og 1280 px i begge temaer før commit.
 
 ## Funnet underveis (innhold, ikke stil)
 
-- **Forsiden sier feil om når du må kjøpe.** `index.html` sier fire steder
-  (linje 101, 125, 362–363, 621 og 657–659, også i FAQ-ens JSON-LD) at du må
-  kjøpe «senest to børsdager før ex-dato». Riktig er senest dagen før ex-dato:
-  med T+2 er registreringsdatoen dagen etter ex-dato. Aksjesidene
-  (`fetch_stocks.py` linje 4460) og `/uke/` sier det riktig.
-- **EQNR lover dobling av utbyttet.** «Med +40,1 % per år dobles utbyttet på
-  ca. 2 år» (`fetch_stocks.py` linje 4244, `assets/ui.js` linje 1036). Tallet er
-  regnet fra 2021 (4,97 kr), et bunnår, til 2025 (19,16 kr). Utbyttet har falt
-  fra 35,64 kr i 2023, og samme side nevner to kutt. Doblingsteksten bør ikke
-  vises når siste hele år ligger under toppen i perioden.
+- **Forsiden sa feil om når du må kjøpe.** `index.html` og `/faq/` sa at du
+  må kjøpe «senest to børsdager før ex-dato». Riktig er senest dagen før: med
+  T+2 er registreringsdatoen børsdagen etter ex-dato. *Rettet 11.10.2026.*
+- **EQNR lovet dobling av utbyttet.** «Med +40,1 % per år dobles utbyttet på
+  ca. 2 år», regnet fra et bunnår, mens utbyttet hadde falt siden 2023. Rettet
+  11.10.2026 med `vekst_fra_topp()`, se «Five-year growth from a trough» i
+  `CLAUDE.md`.
 - **Interne dokumenter blir publisert.** Så lenge Pages også publiserer fra
   branchen, gjør Jekyll `.md`-filene i roten til HTML-sider. Denne fila blir da
   `/STYLE.html`, som `/CLAUDE.html` og `/ROADMAP.html`. Rettes når Pages-kilden

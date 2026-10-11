@@ -960,12 +960,30 @@ function beregnRisiko(a) {
   return 'hoy';
 }
 
+// Speiler vekst_fra_topp() i fetch_stocks.py. Femårsveksten måler fra første
+// til siste hele år; EQNR fikk «Utbyttevekst» og «dobles på ca. 2 år» fra et
+// bunnår i 2021 mens utbyttet hadde falt fra 35,64 kr (2023) til 19,16 kr
+// (2025). Første år regnes ikke som topp: det er startpunktet.
+const VEKST_TOPP_ANDEL = 0.9;
+
+function vekstFraTopp(a) {
+  const ar = Object.entries(a.utbytte_per_ar || {})
+    .map(([k, v]) => [Number(k), Number(v) || 0])
+    .filter(([k]) => Number.isFinite(k))
+    .sort((x, y) => x[0] - y[0]);
+  if (ar.length < 3) return null;
+  const [sisteAr, siste] = ar[ar.length - 1];
+  const [toppAr, topp] = ar.slice(1).reduce((m, x) => (x[1] > m[1] ? x : m));
+  if (topp <= 0 || siste >= VEKST_TOPP_ANDEL * topp) return null;
+  return { toppAr, topp, sisteAr, siste };
+}
+
 function beregnMal(a) {
   const mål = [];
   if (_DEFENSIVE_SEKTORER.has(a.sektor) && stabileAr(a) >= 7 && (a.payout_ratio || 0) < 80 && (a.payout_ratio || 0) > 0) {
     mål.push('stabil');
   }
-  if ((a.utbytte_vekst_5ar || 0) > 3) mål.push('vekst');
+  if ((a.utbytte_vekst_5ar || 0) > 3 && !vekstFraTopp(a)) mål.push('vekst');
   if ((a.utbytte_yield || 0) >= 6) mål.push('hoy_yield');
   if (a.frekvens === 'Kvartalsvis' || a.frekvens === 'Månedlig') mål.push('kvartalsvis');
   return mål;
@@ -1033,8 +1051,10 @@ function forklarMal(a) {
     const doblingsar = vekst > 0 ? Math.round(70 / vekst) : null;
     forklaringer.push({ mal: 'Utbyttevekst',
       tekst: `Passer investorer med lang horisont som vil at utbyttet skal vokse raskere enn inflasjonen. `
-           + `Med +${vekst.toFixed(1).replace('.', ',')}% per år de siste 5 årene`
-           + (doblingsar ? ` dobles utbyttet på ca. ${doblingsar} år.` : '.') });
+           // Doblingstiden er en framskriving og står derfor som en betingelse.
+           + (doblingsar
+               ? `Holder veksten på +${vekst.toFixed(1).replace('.', ',')}% per år seg, dobles utbyttet på ca. ${doblingsar} år.`
+               : `Historisk vekst +${vekst.toFixed(1).replace('.', ',')}% per år.`) });
   }
 
   if (mal.includes('hoy_yield'))
@@ -5578,4 +5598,4 @@ function _annBygTopp() {
 }
 
 // Node.js test export
-if (typeof module !== 'undefined') module.exports = { bevegelserOverskrift, utbytteRekke, stabileAr, exForbeholdGjelder, utbyttePerioder, vistOverBetalt, modalBetaltBoks, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, fmt, formaterDato, yieldKlasse, payoutKlasse, vekstKlasse, beregnScore, beregnBaerekraft, beregnYtdInntekt, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote, kapitalAndel, modalKapitalNote, kapitalSkattTekst, aksjerMedExIMaaned, beregnHvisKjopt, hvisStartAar, beregnAskMotVanlig, fmtUtbytte, sisteUtbytteTekst, modalOmSelskapet, vekslOmSelskapet, dripGevinst, _simulerKalkulator, askStatus, askTekst, modalKontoer };
+if (typeof module !== 'undefined') module.exports = { vekstFraTopp, beregnMal, forklarMal, bevegelserOverskrift, utbytteRekke, stabileAr, exForbeholdGjelder, utbyttePerioder, vistOverBetalt, modalBetaltBoks, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, fmt, formaterDato, yieldKlasse, payoutKlasse, vekstKlasse, beregnScore, beregnBaerekraft, beregnYtdInntekt, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote, kapitalAndel, modalKapitalNote, kapitalSkattTekst, aksjerMedExIMaaned, beregnHvisKjopt, hvisStartAar, beregnAskMotVanlig, fmtUtbytte, sisteUtbytteTekst, modalOmSelskapet, vekslOmSelskapet, dripGevinst, _simulerKalkulator, askStatus, askTekst, modalKontoer };

@@ -3183,7 +3183,7 @@ def _lag_utbytte_profil(a, sektor_snitt):
         badges.append(("Høy yield",      "badge-green"))
     if _stabile_ar(a) >= 10:
         badges.append(("Stabil betaler",  "badge-blue"))
-    if vekst is not None and vekst > 1:
+    if vekst is not None and vekst > 1 and not vekst_fra_topp(a):
         badges.append(("Utbyttevekst",    "badge-teal"))
     if sektor in SYKLISKE:
         badges.append(("Syklisk",         "badge-orange"))
@@ -3744,14 +3744,18 @@ def _driver_selskapsledd(a, sektor):
     # femårsvekst på 120 %, som er en artefakt av en kort serie. Å skrive
     # «historikken er kort» og «vokst 120 % over fem år» i samme avsnitt er
     # den samme selvmotsigelsen som WAWI hadde i utbyttehistorikk-teksten.
+    # Har utbyttet falt fra en topp i perioden, sies det i samme setning, så
+    # veksttallet ikke leses som at utbyttet stiger nå (EQNR, se vekst_fra_topp).
+    topp = vekst_fra_topp(a)
+    topp_ledd = f", men det høyeste året i perioden var {topp[0]}" if topp else ""
     if vekst is not None and ar >= 5:
         if vekst >= 10:
             setninger.append(
-                f"Utbyttet har vokst {_nf(vekst, 1)} % i året de siste fem årene"
+                f"Utbyttet har vokst {_nf(vekst, 1)} % i året de siste fem årene{topp_ledd}"
             )
         elif vekst > 0:
             setninger.append(
-                f"Veksten i utbyttet har ligget på {_nf(vekst, 1)} % i året over fem år"
+                f"Veksten i utbyttet har ligget på {_nf(vekst, 1)} % i året over fem år{topp_ledd}"
             )
         elif vekst < 0:
             setninger.append(
@@ -4039,7 +4043,15 @@ def _lag_investor_vurdering(a, sektor_snitt):
             )
 
     # Veksttendensen
-    if vekst is not None and vekst > 3:
+    topp = vekst_fra_topp(a)
+    if vekst is not None and vekst > 3 and topp:
+        topp_ar, topp_belop, siste_ar, siste_belop = topp
+        vurdering_deler.append(
+            f"Målt fra første til siste hele år har utbyttet vokst med {_nf(vekst, 1)}% per år, "
+            f"men toppen var {_nf(topp_belop, 2)} NOK i {topp_ar}, og {siste_ar} endte på "
+            f"{_nf(siste_belop, 2)} NOK."
+        )
+    elif vekst is not None and vekst > 3:
         vurdering_deler.append(
             f"Utbyttet har vokst med {_nf(vekst, 1)}% per år de siste fem årene, "
             f"noe som gjør det attraktivt for langsiktige reinvesteringsstrategier."
@@ -4136,6 +4148,38 @@ def _beregn_risiko_py(a):
     return 'hoy'
 
 
+# Siste hele år må ligge på minst 90 % av toppen for at femårsveksten skal
+# kunne leses som vekst. Under det har utbyttet falt fra et høyere nivå.
+VEKST_TOPP_ANDEL = 0.9
+
+
+def vekst_fra_topp(a):
+    """(topp_ar, topp, siste_ar, siste) når siste hele år ligger klart under toppen.
+
+    `utbytte_vekst_5ar` måler fra første til siste hele år og ser ikke hva som
+    skjedde imellom. EQNR fikk «Utbyttevekst» og «dobles utbyttet på ca. 2 år»
+    fra +40,1 % per år, fordi 2021 (4,97 kr) var et bunnår, mens utbyttet hadde
+    falt fra 35,64 kr i 2023 til 19,16 kr i 2025 (2026-10-11). Tallet er riktig
+    målt, tolkningen var det ikke.
+
+    Første år i `utbytte_per_ar` regnes ikke som topp. Det er startpunktet, og
+    for bankene i 2021 er det det utsatte utbyttet beregn_utbytte_vekst()
+    hopper over. None når veksten ikke er brutt eller serien mangler.
+    """
+    per_ar = a.get("utbytte_per_ar") or {}
+    try:
+        ar = sorted((int(k), float(v or 0)) for k, v in per_ar.items())
+    except (TypeError, ValueError):
+        return None
+    if len(ar) < 3:
+        return None
+    siste_ar, siste = ar[-1]
+    topp_ar, topp = max(ar[1:], key=lambda x: x[1])
+    if topp <= 0 or siste >= VEKST_TOPP_ANDEL * topp:
+        return None
+    return topp_ar, topp, siste_ar, siste
+
+
 def _beregn_mal_py(a):
     mal = []
     sektor = a.get('sektor', '')
@@ -4143,7 +4187,7 @@ def _beregn_mal_py(a):
             and _stabile_ar(a) >= 7
             and 0 < (a.get('payout_ratio') or 0) < 80):
         mal.append('stabil')
-    if (a.get('utbytte_vekst_5ar') or 0) > 3:
+    if (a.get('utbytte_vekst_5ar') or 0) > 3 and not vekst_fra_topp(a):
         mal.append('vekst')
     if (a.get('utbytte_yield') or 0) >= 6:
         mal.append('hoy_yield')
@@ -4240,8 +4284,10 @@ def _lag_investor_badges(a):
         if frekvens == 'Månedlig' else
         'utbyttet kommer fire ganger i året'
     )
+    # Doblingstiden er en framskriving og står derfor som en betingelse.
     doblingsar = round(70 / vekst) if vekst > 0 else None
-    vekst_suffix = (f' Med +{_nf(vekst, 1)}% per år dobles utbyttet på ca. {doblingsar} år.'
+    vekst_suffix = (f' Holder veksten på +{_nf(vekst, 1)}% per år seg, dobles utbyttet '
+                    f'på ca. {doblingsar} år.'
                     if doblingsar else f' Historisk vekst +{_nf(vekst, 1)}% per år.')
     mal_forklaring = {
         'stabil':

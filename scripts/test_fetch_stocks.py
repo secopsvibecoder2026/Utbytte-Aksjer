@@ -1937,6 +1937,61 @@ class TestUtbyttevekst(unittest.TestCase):
         self.assertEqual(fs.beregn_utbytte_vekst(self.serie(med), i_dag=self.I_DAG), 1.6)
 
 
+class TestVekstFraTopp(unittest.TestCase):
+    """Femårsvekst fra et bunnår er ikke vekst når utbyttet har falt siden (2026-10-11).
+
+    Seriene er de lagrede `utbytte_per_ar` fra aksjer.json. Samme tilfeller
+    står i tests/ui.test.js, så malen og appen ikke kan gli fra hverandre.
+    """
+    EQNR = {"ticker": "EQNR", "navn": "Equinor ASA", "sektor": "Energi",
+            "utbytte_vekst_5ar": 40.1, "ar_med_utbytte": 25, "utbytte_yield": 3.48,
+            "payout_ratio": 40, "frekvens": "Kvartalsvis",
+            "utbytte_per_ar": {"2021": 4.9699, "2022": 16.5531, "2023": 35.6415,
+                               "2024": 32.1646, "2025": 19.1553}}
+    # 2021 er utsatt bankutbytte; beregn_utbytte_vekst() starter i 2022.
+    DNB = {"ticker": "DNB", "navn": "DNB Bank ASA", "sektor": "Finans",
+           "utbytte_vekst_5ar": 19.8, "ar_med_utbytte": 22, "utbytte_yield": 6.0,
+           "payout_ratio": 60, "frekvens": "Årlig",
+           "utbytte_per_ar": {"2021": 17.4, "2022": 9.75, "2023": 12.5,
+                              "2024": 16.0, "2025": 16.75}}
+    MOWI = {"utbytte_vekst_5ar": 10.6,
+            "utbytte_per_ar": {"2021": 4.45, "2022": 7.35, "2023": 7.2,
+                               "2024": 6.6, "2025": 6.65}}
+
+    def test_eqnr_har_falt_fra_toppen(self):
+        topp_ar, topp, siste_ar, siste = fs.vekst_fra_topp(self.EQNR)
+        self.assertEqual((topp_ar, siste_ar), (2023, 2025))
+        self.assertAlmostEqual(topp, 35.6415)
+        self.assertAlmostEqual(siste, 19.1553)
+
+    def test_forste_aar_er_startpunkt_ikke_topp(self):
+        self.assertIsNone(fs.vekst_fra_topp(self.DNB))
+
+    def test_liten_dupp_er_fortsatt_vekst(self):
+        # 6,65 er 90,5 % av 7,35.
+        self.assertIsNone(fs.vekst_fra_topp(self.MOWI))
+
+    def test_mangler_serie(self):
+        self.assertIsNone(fs.vekst_fra_topp({"utbytte_vekst_5ar": 40.1}))
+        self.assertIsNone(fs.vekst_fra_topp({"utbytte_per_ar": {"2024": 1.0, "2025": 0.5}}))
+
+    def test_eqnr_faar_ikke_vekstmaal_eller_dobling(self):
+        self.assertNotIn("vekst", fs._beregn_mal_py(self.EQNR))
+        self.assertNotIn("dobles", fs._lag_investor_badges(self.EQNR))
+        self.assertNotIn("Utbyttevekst", fs._lag_utbytte_profil(self.EQNR, {}))
+
+    def test_eqnr_vurdering_nevner_toppen(self):
+        tekst = fs._lag_investor_vurdering(self.EQNR, {})
+        self.assertIn("toppen var 35,64 NOK i 2023, og 2025 endte på 19,16 NOK", tekst)
+        self.assertNotIn("attraktivt for langsiktige", tekst)
+        self.assertIn("det høyeste året i perioden var 2023", tekst)
+
+    def test_dobling_er_en_betingelse(self):
+        self.assertIn("vekst", fs._beregn_mal_py(self.DNB))
+        tekst = fs._lag_investor_badges(self.DNB)
+        self.assertIn("Holder veksten på +19,8% per år seg, dobles utbyttet på ca. 4 år.", tekst)
+
+
 class TestBelopIUtbyttemelding(unittest.TestCase):
     """Beløpet for neste utbetaling, fra børsmeldingen (2026-10-06)."""
     I_DAG = datetime.date(2026, 10, 6)
