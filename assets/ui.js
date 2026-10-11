@@ -4909,6 +4909,18 @@ async function hentPriser() {
   } catch { return null; }
 }
 
+// «Dagens bevegelser» bare når prisene faktisk er fra i dag. Prisjobben kom
+// i oktober 2026 først etter børsslutt, så fram til da var vinnerne og
+// taperne forrige børsdags, uten at noe sa det. Da står datoen i stedet.
+function bevegelserOverskrift(dato, iDag) {
+  if (!dato || dato === iDag) return 'Dagens bevegelser';
+  const d = new Date(dato + 'T12:00:00Z');
+  if (isNaN(d)) return 'Dagens bevegelser';
+  return 'Bevegelser ' + d.toLocaleDateString('nb-NO', {
+    weekday: 'long', day: 'numeric', month: 'long', timeZone: 'UTC',
+  });
+}
+
 async function visDagensBevegelser() {
   const el = document.getElementById('dagens-bevegelser');
   const tomEl = document.getElementById('bevegelser-tom');
@@ -4924,9 +4936,13 @@ async function visDagensBevegelser() {
 
   const aksjerMap = Object.fromEntries(alleAksjer.map(a => [a.ticker, a]));
 
+  // Den nyeste børsdagen i fila. En aksje uten handel i dag beholder
+  // gårsdagens rad, og den endringen hører ikke hjemme blant dagens.
+  const sisteDato = Object.values(data.aksjer).map(p => p.dato || '').sort().pop() || '';
   const bevegelser = Object.entries(data.aksjer)
     .map(([ticker, p]) => ({ ticker, ...p, aksje: aksjerMap[ticker] }))
-    .filter(b => b.aksje && (b.endring_pct !== 0 || b.endring_krs !== 0));
+    .filter(b => b.aksje && (b.endring_pct !== 0 || b.endring_krs !== 0))
+    .filter(b => !sisteDato || !b.dato || b.dato === sisteDato);
 
   if (!bevegelser.length) { el.classList.add('hidden'); return; }
 
@@ -4960,7 +4976,7 @@ async function visDagensBevegelser() {
   el.innerHTML = `
     <div class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-3 shadow-sm">
       <div class="flex items-center justify-between mb-2">
-        <p class="text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500">Dagens bevegelser</p>
+        <p class="text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500">${escHtml(bevegelserOverskrift(sisteDato, osloDato(Date.now())))}</p>
         ${ts ? `<span class="text-xs text-gray-400 dark:text-gray-600">Oppdatert ${ts}</span>` : ''}
       </div>
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-4">
@@ -5562,4 +5578,4 @@ function _annBygTopp() {
 }
 
 // Node.js test export
-if (typeof module !== 'undefined') module.exports = { utbytteRekke, stabileAr, exForbeholdGjelder, utbyttePerioder, vistOverBetalt, modalBetaltBoks, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, fmt, formaterDato, yieldKlasse, payoutKlasse, vekstKlasse, beregnScore, beregnBaerekraft, beregnYtdInntekt, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote, kapitalAndel, modalKapitalNote, kapitalSkattTekst, aksjerMedExIMaaned, beregnHvisKjopt, hvisStartAar, beregnAskMotVanlig, fmtUtbytte, sisteUtbytteTekst, modalOmSelskapet, vekslOmSelskapet, dripGevinst, _simulerKalkulator, askStatus, askTekst, modalKontoer };
+if (typeof module !== 'undefined') module.exports = { bevegelserOverskrift, utbytteRekke, stabileAr, exForbeholdGjelder, utbyttePerioder, vistOverBetalt, modalBetaltBoks, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, fmt, formaterDato, yieldKlasse, payoutKlasse, vekstKlasse, beregnScore, beregnBaerekraft, beregnYtdInntekt, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote, kapitalAndel, modalKapitalNote, kapitalSkattTekst, aksjerMedExIMaaned, beregnHvisKjopt, hvisStartAar, beregnAskMotVanlig, fmtUtbytte, sisteUtbytteTekst, modalOmSelskapet, vekslOmSelskapet, dripGevinst, _simulerKalkulator, askStatus, askTekst, modalKontoer };
