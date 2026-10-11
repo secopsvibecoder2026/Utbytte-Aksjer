@@ -2029,6 +2029,26 @@ class TestKurshode(unittest.TestCase):
         self.assertEqual(fs._lag_korttall({}, "NOK"), "")
 
 
+class TestIngenDobleParenteser(unittest.TestCase):
+    """{{ }} hører bare hjemme i f-strenger. Settes en vanlig streng med {{ inn i
+    en mal, står parentesene doble i HTML-en og CSS-regelen forkastes. Slik var
+    mørk modus i bunnteksten død på 176 sider (2026-10-11)."""
+
+    def test_bunnteksten(self):
+        self.assertNotIn("{{", fs.STANDARD_FOOTER)
+        self.assertIn(".dark .std-footer {", fs.STANDARD_FOOTER)
+
+    def test_aksjesiden(self):
+        sti = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "data", "aksjer.json")
+        if not os.path.exists(sti):
+            self.skipTest("aksjer.json finnes ikke")
+        with open(sti, encoding="utf-8") as f:
+            a = json.load(f)["aksjer"][0]
+        html_ = fs._aksje_side_html(dict(a, kurs_historikk=[]), "2026-10-11")
+        # Bare {{: }} forekommer lovlig når JSON-LD avslutter nestede objekter.
+        self.assertNotIn("{{", html_)
+
+
 class TestBelopIUtbyttemelding(unittest.TestCase):
     """Beløpet for neste utbetaling, fra børsmeldingen (2026-10-06)."""
     I_DAG = datetime.date(2026, 10, 6)

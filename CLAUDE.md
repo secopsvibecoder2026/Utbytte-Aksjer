@@ -481,7 +481,10 @@ There are **3 HTML templates** in `fetch_stocks.py`:
 - Dark mode init script reads `localStorage.getItem('tema')` (Norwegian key — matches main app)
 - Dark mode toggle saves `localStorage.setItem('tema', 'dark'|'light')`
 - Favicon block: `/favicon.png` (512), `/logo/apple_touch_icon_180.png`, SVG icon
-- Footer: `STANDARD_FOOTER` constant (defined after `generer_aksjesider()`) — uses inline styles with `.dark .std-footer` override
+- Footer: `STANDARD_FOOTER` constant (defined after `generer_aksjesider()`) — uses inline styles with `.dark .std-footer` override.
+  It is a **plain string**, inserted into the templates as a value, so its CSS takes single braces. It was written
+  with `{{ }}` as if it were an f-string, and the dark-mode rule reached 176 pages with doubled braces, which the
+  browser discards (fixed 2026-10-11, `TestIngenDobleParenteser`).
 - After changing any template: run `python scripts/regenerer_sider.py` to rebuild all pages
 
 ### Content conventions on the stock pages

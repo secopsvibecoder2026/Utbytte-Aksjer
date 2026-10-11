@@ -5439,7 +5439,7 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     .utbytte-sep::before, .utbytte-sep::after {{ content: ''; flex: 1; height: 1px; background: #e5e7eb; }}
     .dark .utbytte-sep {{ color: #6b7280; }}
     .dark .utbytte-sep::before, .dark .utbytte-sep::after {{ background: #1f2937; }}
-    .mini-nav a {{ color: #16a34a; }}
+    .mini-nav a {{ color: #15803d; }}
     .til-toppen {{ position: fixed; bottom: 1.5rem; right: 1.25rem; z-index: 40; background: #15803d; color: #fff; border: none; border-radius: 9999px; width: 2.5rem; height: 2.5rem; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.18); opacity: 0; pointer-events: none; transition: opacity 0.2s; }}
     .til-toppen.synlig {{ opacity: 1; pointer-events: auto; }}
     .til-toppen:hover {{ background: #166534; }}
@@ -6350,6 +6350,10 @@ def sist_oppdatert_html():
             f'{d.day}. {MAANEDSNAVN[d.month]} {d.year}</p>')
 
 
+# Vanlig streng, ikke f-streng: den settes inn i malene som en verdi, og
+# Python tolker ikke krøllparentesene i en verdi. Med {{ }} her sto
+# mørk-modus-regelen ordrett med doble parenteser i HTML-en på 176 sider,
+# og nettleseren forkastet den (funnet 2026-10-11).
 STANDARD_FOOTER = """  <footer style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid #e5e7eb;font-size:0.78rem;text-align:center;color:#9ca3af;line-height:1.6;" class="std-footer">
     <p>Kurs og utbyttedata hentes fra Yahoo Finance og Euronext. Oppdateres daglig på børsdager.</p>
     <p style="max-width:36rem;margin:0.4rem auto;">
@@ -6374,7 +6378,7 @@ STANDARD_FOOTER = """  <footer style="margin-top:2rem;padding-top:1.5rem;border-
       </a>
     </p>
   </footer>
-  <style>.dark .std-footer {{ color:#6b7280 !important; border-color:#1f2937 !important; }} .dark .std-footer a {{ color:#6b7280 !important; }}</style>"""
+  <style>.dark .std-footer { color:#6b7280 !important; border-color:#1f2937 !important; } .dark .std-footer a { color:#6b7280 !important; }</style>"""
 
 # Sektorikoner som inline SVG, ikke emoji.
 #
