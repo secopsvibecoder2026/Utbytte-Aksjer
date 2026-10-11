@@ -7,11 +7,14 @@ on:
       - 'data/aksjer.json'   # unngå loop når auto-commit oppdaterer data
       - 'data/priser.json'   # priser oppdateres av egen workflow
   schedule:
-    # Kjør hverdager 4× daglig: 07:00, 10:00, 13:00, 16:00 UTC
-    - cron: "0 7 * * 1-5"
-    - cron: "0 10 * * 1-5"
-    - cron: "0 13 * * 1-5"
-    - cron: "0 16 * * 1-5"
+    # Kjør hverdager 4× daglig: 07:41, 10:41, 13:41, 16:41 UTC. Ikke på hel
+    # time: GitHub forsinker planlagte kjøringer mest der, og i oktober 2026
+    # startet denne jobben ikke før 13–15 UTC. scripts/vedlikehold.py leser
+    # tidene herfra.
+    - cron: "41 7 * * 1-5"
+    - cron: "41 10 * * 1-5"
+    - cron: "41 13 * * 1-5"
+    - cron: "41 16 * * 1-5"
   workflow_dispatch:  # Tillat manuell kjøring
 
 permissions:

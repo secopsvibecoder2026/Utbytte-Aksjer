@@ -59,6 +59,32 @@ class TestUtAvKatalogen(unittest.TestCase):
         self.assertEqual(r["ut_vedtatt"][0]["tickere"], ["ODF", "ODFB"])
 
 
+class TestHjemland(unittest.TestCase):
+    KAT = {**KATALOG, "CADLR": ["CADLR"]}
+
+    def test_redomisilering_fanges(self):
+        # Cadeler 21.09.2026 (melding 682824), som første versjon gikk glipp av.
+        r = v.klassifiser([melding("CADLR", "Cadeler initiates its redomiciliation from "
+                                   "Denmark to the United Kingdom, to be implemented through "
+                                   "a share exchange offer by Cadeler plc for all outstanding "
+                                   "shares")], self.KAT)
+        self.assertEqual([f["utsteder"] for f in r["hjemland"]], ["CADLR"])
+
+    def test_spleis_og_nytt_isin_fanges(self):
+        r = v.klassifiser([melding("AKER", "Aker ASA: Reverse share split and new ISIN")],
+                          self.KAT)
+        self.assertEqual(len(r["hjemland"]), 1)
+
+    def test_vanlig_bud_er_ikke_hjemlandsbytte(self):
+        r = v.klassifiser([
+            melding("CADLR", "Cadeler A/S – Independent statement related to the voluntary "
+                    "offer by Cadeler plc for the shares in Cadeler A/S"),
+            melding("TORM", "TORM plc announces secondary public offering of its class A "
+                    "common shares by a selling shareholder", mid=2)], self.KAT)
+        self.assertEqual(r["hjemland"], [])
+        self.assertEqual([f["utsteder"] for f in r["ut_mulig"]], ["CADLR"])
+
+
 class TestMarkedOgStans(unittest.TestCase):
     def test_flytting_til_growth_fanges(self):
         r = v.klassifiser([melding("AQUA", "Aqualis ASA: Initiates the process of re-listing "
@@ -162,9 +188,29 @@ class TestFerskhet(unittest.TestCase):
         self.assertTrue(v.ferskhet("2026-10-06T16:40:00Z", naa, v.DATAJOBB_TIDER)["gammel"])
 
     def test_slakk_for_forsinket_kjoring(self):
-        # 10:00-kjøringen er ennå innenfor de tre timene GitHub kan forsinke den.
+        # 10:41-kjøringen er ennå innenfor de tre timene GitHub kan forsinke den.
         naa = datetime.datetime(2026, 10, 7, 12, 0, tzinfo=UTC)
-        self.assertFalse(v.ferskhet("2026-10-07T07:40:00Z", naa, v.DATAJOBB_TIDER)["gammel"])
+        self.assertFalse(v.ferskhet("2026-10-07T07:50:00Z", naa, v.DATAJOBB_TIDER)["gammel"])
+
+
+class TestPlanlagteTider(unittest.TestCase):
+    def test_leser_tidene_fra_workflowene(self):
+        self.assertEqual(v.DATAJOBB_TIDER, [(7, 41), (10, 41), (13, 41), (16, 41)])
+        self.assertEqual(len(v.PRISJOBB_TIDER), 37)
+        self.assertEqual(v.PRISJOBB_TIDER[0], (8, 7))
+        self.assertEqual(v.PRISJOBB_TIDER[-1], (17, 7))
+
+    def test_ingen_planlagte_kjoringer_paa_hel_eller_kvartertime(self):
+        # GitHub forsinker og dropper mest ved starten av timen. Flytter noen
+        # en kjøring tilbake dit, skal det være et bevisst valg.
+        for t, m in v.DATAJOBB_TIDER + v.PRISJOBB_TIDER:
+            self.assertNotIn(m, (0, 15, 30, 45), f"{t:02d}:{m:02d}")
+
+    def test_cron_lesing(self):
+        self.assertEqual(v.planlagte_tider('- cron: "0,30 8-9 * * 1-5"'),
+                         [(8, 0), (8, 30), (9, 0), (9, 30)])
+        self.assertEqual(v.planlagte_tider('- cron: "*/15 8 * * 1-5"'), [])
+        self.assertEqual(v.planlagte_tider("ingen cron her"), [])
 
     def test_uten_tidsstempel_ingen_pastand(self):
         f = v.ferskhet(None, datetime.datetime(2026, 10, 7, tzinfo=UTC), v.DATAJOBB_TIDER)
