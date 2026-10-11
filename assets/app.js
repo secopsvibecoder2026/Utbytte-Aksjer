@@ -8,6 +8,7 @@ function escHtml(s) {
 // ── STATE ──────────────────────────────────────────────────────────────────
 let alleAksjer = [];
 let osebxHistorikk = {};   // { "2026-03-01": 1423.5, ... } fra aksjer.json
+let aksjerSistOppdatert = '';  // sist_oppdatert fra aksjer.json, se slaaSammenKurs()
 
 // (SKJERMINGSRENTE og SKATTESATS er definert i storage.js)
 let sortering = (() => {
@@ -170,6 +171,7 @@ function lastInnData(json) {
   alleAksjer     = Array.isArray(json) ? json : (json.aksjer || []);
   window.alleAksjer = alleAksjer;
   osebxHistorikk = json.osebx_historikk || {};
+  aksjerSistOppdatert = (json && json.sist_oppdatert) || '';
 
   visDataFerskhet(json);
 
@@ -220,6 +222,75 @@ function lastInnData(json) {
   }
 }
 
+// ── KURS: aksjer.json mot priser.json ──────────────────────────────────────
+// Begge filene har kurs, og den nyeste skal vinne. mergPriser() lot alltid
+// priser.json vinne. Datajobben og prisjobben går hver for seg, og GitHub
+// forsinker dem kraftig: 09.10.2026 kom datajobben 13:57 UTC med dagens kurs,
+// mens priser.json fortsatt hadde gårsdagens sluttkurs til 15:03. I den timen
+// viste appen 08.10-kurser for 135 av 154 aksjer, opptil 5,4 % feil, mens
+// aksjesidene viste dagens.
+
+// Datoen et tidspunkt faller på i Oslo. Børsdagen følger Oslo, ikke
+// nettleserens tidssone.
+function osloDato(tid) {
+  const d = new Date(tid);
+  if (!tid || isNaN(d)) return '';
+  return new Intl.DateTimeFormat('sv-SE', { timeZone: 'Europe/Oslo' }).format(d);
+}
+
+function _isoPluss(iso, dager) {
+  const d = new Date(iso + 'T12:00:00Z');
+  d.setUTCDate(d.getUTCDate() + dager);
+  return d.toISOString().slice(0, 10);
+}
+
+// Børsdagen en dato hører til: lørdag og søndag er fredagens. Helligdager
+// kjenner funksjonen ikke, og der blir svaret bare mer forsiktig (se under).
+function borsdag(iso) {
+  if (!iso) return '';
+  const ukedag = new Date(iso + 'T12:00:00Z').getUTCDay();
+  return ukedag === 6 ? _isoPluss(iso, -1) : ukedag === 0 ? _isoPluss(iso, -2) : iso;
+}
+
+function forrigeBorsdag(iso) {
+  return iso ? borsdag(_isoPluss(borsdag(iso), -1)) : '';
+}
+
+function _endringMot(pris, forrige) {
+  if (!(pris > 0) || !(forrige > 0)) return { endringPct: undefined, endringKrs: undefined };
+  return {
+    endringPct: Math.round((pris / forrige - 1) * 1000000) / 10000,
+    endringKrs: Math.round((pris - forrige) * 100) / 100,
+  };
+}
+
+/**
+ * Kursen og dagens endring for én aksje, fra den nyeste av de to filene.
+ *
+ * p.dato er børsdagen kursen i priser.json gjelder. aksjer.json har ingen
+ * kursdato per aksje, bare tidspunktet datajobben gikk; kursen den hentet
+ * gjelder børsdagen det tidspunktet faller på.
+ *
+ * Endring som ikke er kjent, er undefined, og da viser kortet ingenting.
+ * Gårsdagens endring ved siden av dagens kurs ville vært feil på en ny måte.
+ */
+function slaaSammenKurs(aksjePris, p, priserOppdatert, aksjerOppdatert) {
+  const fraPriser = { pris: p.pris, endringPct: p.endring_pct, endringKrs: p.endring_krs };
+  const dag = borsdag(osloDato(aksjerOppdatert));
+  // Mangler en av datoene, vet vi ikke hvem som er nyest. Da som før.
+  if (!p.dato || !dag || !(aksjePris > 0) || p.dato > dag) return fraPriser;
+  if (p.dato === dag) {
+    // Samme børsdag: den som ble hentet sist, har kursen. Endringen regnes
+    // mot gårsdagens sluttkurs uansett, så den passer til kursen som vises.
+    if (Date.parse(priserOppdatert) >= Date.parse(aksjerOppdatert)) return fraPriser;
+    return { pris: aksjePris, ..._endringMot(aksjePris, p.forrige_kurs) };
+  }
+  // priser.json gjelder en tidligere børsdag. Er det dagen før, er kursen der
+  // gårsdagens sluttkurs, og endringen kan regnes. Ellers er den ukjent.
+  const iGaar = p.dato === forrigeBorsdag(dag) ? p.pris : undefined;
+  return { pris: aksjePris, ..._endringMot(aksjePris, iGaar) };
+}
+
 async function mergPriser() {
   const data = await hentPriser();
   if (!data || !data.aksjer) return;
@@ -228,16 +299,17 @@ async function mergPriser() {
   alleAksjer.forEach(a => {
     const p = data.aksjer[a.ticker];
     if (!p) return;
-    if (p.pris > 0) {
-      a.pris = p.pris;
+    const k = slaaSammenKurs(a.pris, p, data.oppdatert, aksjerSistOppdatert);
+    if (k.pris > 0) {
+      a.pris = k.pris;
       // Recalkuler yield basert på ny kurs
       if (a.utbytte_per_aksje > 0) {
-        a.utbytte_yield = Math.round((a.utbytte_per_aksje / p.pris) * 10000) / 100;
+        a.utbytte_yield = Math.round((a.utbytte_per_aksje / k.pris) * 10000) / 100;
       }
-      changed = true;
     }
-    a.endring_pct = p.endring_pct ?? 0;
-    a.endring_krs = p.endring_krs ?? 0;
+    a.endring_pct = k.endringPct;
+    a.endring_krs = k.endringKrs;
+    changed = true;
   });
 
   // Re-render kun om brukeren faktisk ser oversikten
@@ -334,5 +406,5 @@ function sjekkStartsideForslag() {
 // Eksport for testene. Samme mønster som storage.js/ui.js/portefolje.js:
 // nettleseren ser ingen `module`, så dette er en no-op der.
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { escHtml, visDataFerskhet };
+  module.exports = { escHtml, visDataFerskhet, osloDato, borsdag, forrigeBorsdag, slaaSammenKurs };
 }

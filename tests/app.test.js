@@ -42,7 +42,7 @@ global.window = {
 // Node og kaster «Cannot set property navigator». app.js rører den ikke ved
 // import — bare inne i funksjoner som testene ikke kaller.
 
-const { visDataFerskhet, escHtml } = require('../assets/app.js');
+const { visDataFerskhet, escHtml, osloDato, borsdag, forrigeBorsdag, slaaSammenKurs } = require('../assets/app.js');
 
 /** Bygger et tidsstempel N timer tilbake i tid. */
 function timerSiden(t) {
@@ -158,4 +158,65 @@ test('gråfargen slås av når advarselen slås på', () => {
   const fersk = kjor({ sist_oppdatert: timerSiden(1) });
   assert.equal(fersk.classList.contains('text-gray-500'), true);
   assert.equal(fersk.classList.contains('text-amber-600'), false);
+});
+
+// ── Kurs: den nyeste av aksjer.json og priser.json vinner ─────────────────
+// Det ekte tilfellet 09.10.2026: datajobben kom 13:57 UTC med dagens kurs,
+// priser.json hadde fortsatt 08.10. Appen viste 08.10-kursen i en time.
+const SCATC_0810 = { pris: 98.55, forrige_kurs: 97.1, endring_pct: 1.4933, endring_krs: 1.45,
+                     dato: '2026-10-08', forrige_dato: '2026-10-07' };
+
+test('osloDato følger Oslo, ikke UTC', () => {
+  assert.equal(osloDato('2026-10-09T22:30:00Z'), '2026-10-10');  // 00:30 i Oslo
+  assert.equal(osloDato(''), '');
+  assert.equal(osloDato('tull'), '');
+});
+
+test('helg hører til fredagen, og dagen før mandag er fredag', () => {
+  assert.equal(borsdag('2026-10-10'), '2026-10-09');
+  assert.equal(borsdag('2026-10-11'), '2026-10-09');
+  assert.equal(forrigeBorsdag('2026-10-12'), '2026-10-09');
+  assert.equal(forrigeBorsdag('2026-10-09'), '2026-10-08');
+});
+
+test('eldre priser.json skriver ikke over dagens kurs fra aksjer.json', () => {
+  const k = slaaSammenKurs(104.2, SCATC_0810, '2026-10-08T21:42:00Z', '2026-10-09T13:57:00Z');
+  assert.equal(k.pris, 104.2);
+  // Gårsdagens sluttkurs er kjent, så dagens endring kan regnes.
+  assert.equal(k.endringKrs, 5.65);
+  assert.equal(k.endringPct, 5.7331);
+});
+
+test('priser.json fra flere børsdager tilbake gir ingen endring', () => {
+  const gammel = { ...SCATC_0810, dato: '2026-10-06' };
+  const k = slaaSammenKurs(104.2, gammel, '2026-10-06T21:00:00Z', '2026-10-09T13:57:00Z');
+  assert.equal(k.pris, 104.2);
+  assert.equal(k.endringPct, undefined);  // ikke tre dagers endring som «i dag»
+});
+
+test('nyere priser.json vinner, som før', () => {
+  const ny = { ...SCATC_0810, pris: 105, dato: '2026-10-09', forrige_kurs: 98.55 };
+  const k = slaaSammenKurs(104.2, ny, '2026-10-09T15:03:00Z', '2026-10-09T13:57:00Z');
+  assert.equal(k.pris, 105);
+  assert.equal(k.endringPct, ny.endring_pct);
+});
+
+test('samme børsdag: den som ble hentet sist, har kursen', () => {
+  const p = { pris: 104.0, forrige_kurs: 98.55, endring_pct: 5.53, endring_krs: 5.45, dato: '2026-10-09' };
+  const k = slaaSammenKurs(104.2, p, '2026-10-09T12:00:00Z', '2026-10-09T13:57:00Z');
+  assert.equal(k.pris, 104.2);
+  assert.equal(k.endringKrs, 5.65);  // regnet mot gårsdagens slutt, passer til kursen som vises
+});
+
+test('fredagens priser gjelder fortsatt på lørdag', () => {
+  const p = { pris: 104.5, forrige_kurs: 98.55, endring_pct: 6.04, endring_krs: 5.95, dato: '2026-10-09' };
+  const k = slaaSammenKurs(104.2, p, '2026-10-09T21:25:00Z', '2026-10-09T20:32:00Z');
+  assert.equal(k.pris, 104.5);
+  assert.equal(k.endringPct, 6.04);
+});
+
+test('uten dato i priser.json eller tidsstempel i aksjer.json: som før', () => {
+  const udatert = { pris: 99, endring_pct: 1, endring_krs: 1 };
+  assert.equal(slaaSammenKurs(104.2, udatert, '2026-10-08T21:00:00Z', '2026-10-09T13:57:00Z').pris, 99);
+  assert.equal(slaaSammenKurs(104.2, SCATC_0810, '2026-10-08T21:00:00Z', '').pris, 98.55);
 });

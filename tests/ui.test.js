@@ -32,7 +32,7 @@ const {
   vekstKlasse,
   beregnScore,
   beregnYtdInntekt
-, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, utbyttePerioder, vistOverBetalt, modalBetaltBoks, utbytteRekke, stabileAr, exForbeholdGjelder, kapitalAndel, modalKapitalNote, kapitalSkattTekst, aksjerMedExIMaaned, beregnHvisKjopt, hvisStartAar, beregnAskMotVanlig, fmtUtbytte, sisteUtbytteTekst, modalOmSelskapet, vekslOmSelskapet, dripGevinst, _simulerKalkulator, askStatus, askTekst, modalKontoer } = require('../assets/ui.js');
+, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, utbyttePerioder, vistOverBetalt, modalBetaltBoks, utbytteRekke, stabileAr, exForbeholdGjelder, kapitalAndel, modalKapitalNote, kapitalSkattTekst, aksjerMedExIMaaned, beregnHvisKjopt, hvisStartAar, beregnAskMotVanlig, fmtUtbytte, sisteUtbytteTekst, modalOmSelskapet, vekslOmSelskapet, dripGevinst, _simulerKalkulator, askStatus, askTekst, modalKontoer , bevegelserOverskrift } = require('../assets/ui.js');
 
 // ── fmt ────────────────────────────────────────────────────────────────────
 test('fmt returnerer — for null', () => {
@@ -809,4 +809,12 @@ test('modalEkstraordinaerNote: sier ikke at yielden inneholder et fratrukket eng
   delete a.arsrate_ekstra_trukket;
   assert.match(modalEkstraordinaerNote(a), /inneholder den/);
   delete global.escHtml;
+});
+
+// «Dagens bevegelser» sa det samme på lørdag som på fredag, og fram til
+// prisjobben hadde gått hver dag. Datoen står når prisene ikke er fra i dag.
+test('bevegelser: overskriften har datoen når prisene ikke er fra i dag', () => {
+  assert.equal(bevegelserOverskrift('2026-10-09', '2026-10-09'), 'Dagens bevegelser');
+  assert.equal(bevegelserOverskrift('2026-10-09', '2026-10-10'), 'Bevegelser fredag 9. oktober');
+  assert.equal(bevegelserOverskrift('', '2026-10-10'), 'Dagens bevegelser');
 });
