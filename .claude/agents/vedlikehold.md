@@ -64,8 +64,8 @@ svarte. Det betyr at vi ikke vet, ikke at alt er i orden.
   samme workflow lykkes? Da var det forbigående. Feiler den igjen, er det et funn.
 - **Åpne issues** med alder.
 - **NewsWeb:** meldinger fra hele børsen, sortert i avgjort ut, mulig ut, bytter
-  markedsplass, nytt navn, handelsstans, nye noteringer og utbyttemeldinger fra
-  selskaper utenfor katalogen.
+  markedsplass, bytter hjemland eller ISIN, nytt navn, handelsstans, nye
+  noteringer og utbyttemeldinger fra selskaper utenfor katalogen.
 - **Euronext:** hvor mange som er notert og hvilke av våre som ikke er det.
 
 Treffene i NewsWeb er titler. Les meldingen før du sier noe om den:
@@ -77,8 +77,11 @@ python scripts/vedlikehold.py --melding 683894
 For hver aksje på vei ut eller som bytter markedsplass: hva er meldt, hvilken
 dato gjelder, og hva sier siden vår nå? En aksje som flytter til Euronext Growth,
 skifter ASK-status (`bors` i `tickers.json`, se «ASK needs an EEA company *and*
-a regulated market» i CLAUDE.md). Når en aksje faktisk går ut, skal den inn på
-`/avnoteringer/`.
+a regulated market» i CLAUDE.md). Et selskap som bytter hjemland, endrer
+`inkorporeringsland` og `ask_egnet`, og ofte ISIN og Yahoo-symbol; Cadeler
+flyttet fra Danmark til Storbritannia høsten 2026. En spleis eller et nytt ISIN
+har brutt Yahoo-historikken før (KMCP/BINT). Når en aksje faktisk går ut, skal
+den inn på `/avnoteringer/`.
 
 For hver kandidat til katalogen: er den på Euronext-lista, hvilket marked, hvilket
 hjemland (ISIN-koden i Euronext-lista begynner med landet), og hva har den betalt?
@@ -86,7 +89,10 @@ hjemland (ISIN-koden i Euronext-lista begynner med landet), og hva har den betal
 hvilket som helst selskap. En kandidat er et forslag med kilde, ikke en anbefaling
 om å kjøpe noe.
 
-Kjør deretter sjekkene og testene. Rapporter bare det som feiler eller er nytt:
+Kjør deretter sjekkene og testene. Rapporter bare det som feiler eller er nytt.
+Feiler en test på `ModuleNotFoundError` eller `ImportError`, er det miljøet,
+ikke repoet: installer pakken (`pip install -r scripts/requirements.txt pillow`)
+og kjør testen på nytt før du skriver noe om den.
 
 ```bash
 npm test

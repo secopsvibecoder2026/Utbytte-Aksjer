@@ -168,7 +168,7 @@ python scripts/test_oppdater_hendelser.py  # 7 Python tests (hendelseskalender)
 python scripts/test_sjekk_tema.py       # 10 Python tests (mørk modus på hver side)
 python scripts/test_sjekk_klasser.py    # 10 Python tests (CSS-klasser finnes)
 python scripts/test_sjekk_antall.py     # 11 Python tests (aksjetellinger bruker markør)
-python scripts/test_vedlikehold.py      # 26 Python tests (inn/ut fra NewsWeb, ferskhet)
+python scripts/test_vedlikehold.py      # 32 Python tests (inn/ut fra NewsWeb, ferskhet)
 # npm test dekker også tests/app.test.js — ferskhetsindikator + escHtml
 ```
 
@@ -213,14 +213,18 @@ Note: The Service Worker requires HTTPS or `localhost` to function.
 
 ### Daily Data Pipeline (`update-og-deploy.yml`)
 
-- **Trigger:** Weekdays 07:00, 10:00, 13:00 and 16:00 UTC + manual `workflow_dispatch`
+- **Trigger:** Weekdays 07:41, 10:41, 13:41 and 16:41 UTC + manual `workflow_dispatch`
 - **Steps:**
   1. `oppdater-data`: Runs `fetch_stocks.py`, commits updated `data/aksjer.json` and stock SEO pages to `main`
   2. `deploy-pages`: Bumps Service Worker cache version (`CACHE = 'exday-v{SHA}'`), deploys to GitHub Pages
 
 ### Real-Time Price Updates (`oppdater-priser.yml`)
 
-- **Trigger:** Every 15 min, Mon–Fri 08:00–16:45 UTC + extra run at 17:00 UTC
+- **Trigger:** Every 15 min, Mon–Fri 08:07–16:52 UTC + extra run at 17:07 UTC
+- **Why not on the hour:** GitHub delays and drops scheduled runs most at the start of each hour. On
+  `0,15,30,45` the price job ran three times per trading day instead of 37 from 27.08.2026, the first
+  after the market had closed, and the data job never started before 13 UTC. Moved 2026-10-11.
+  `scripts/vedlikehold.py` reads the times from the workflow files, so keep them as plain cron lists.
 - **Job:** Runs `fetch_priser.py`, commits `data/priser.json` if prices changed
 - **Concurrency:** Cancels previous in-progress run to avoid queue buildup
 
@@ -1651,7 +1655,15 @@ Each weekday has one deep dive: Monday the app in a browser, Tuesday the
 hand-written pages, Wednesday one article, Thursday the week's code changes,
 Friday SEO and AdSense, Saturday open findings, Sunday a broad in/out scan and
 one roadmap item. The weekly tallkontroll keeps the numbers; this agent does
-not redo that work. Tests: `scripts/test_vedlikehold.py` (26).
+not redo that work. Tests: `scripts/test_vedlikehold.py` (32).
+
+**A change of domicile is its own group (2026-10-11).** Cadeler's «initiates its
+redomiciliation from Denmark to the United Kingdom, to be implemented through a share
+exchange offer» (21.09) matched nothing, and was seen only through a side hit four days
+later. Domicile decides ASK, and a new ISIN or reverse split has broken Yahoo's history
+before (KMCP/BINT), so `HJEMLAND` now catches redomiciliation, share exchange offers,
+new ISINs and reverse splits for our issuers. On 25 days of messages it matched exactly
+that one.
 
 ## Ex-dates come from Oslo Børs — Yahoo and DNB do not tell the exchanges apart (2026-09-24)
 

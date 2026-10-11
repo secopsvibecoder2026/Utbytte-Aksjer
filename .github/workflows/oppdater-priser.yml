@@ -2,10 +2,15 @@ name: Oppdater kurspriser
 
 on:
   schedule:
-    # Hvert 15. minutt man-fre mellom 08:00–16:45 UTC (= 09:00–17:45 Oslo-tid)
-    - cron: "0,15,30,45 8-16 * * 1-5"
-    # Ekstra kjøring kl 17:00 UTC for sluttkurs
-    - cron: "0 17 * * 1-5"
+    # Hvert 15. minutt man-fre mellom 08:07 og 16:52 UTC (10:07–18:52 Oslo om
+    # sommeren, 09:07–17:52 om vinteren), pluss én kjøring 17:07 for sluttkurs.
+    #
+    # Minuttene er bevisst ikke 0/15/30/45. GitHub forsinker og dropper
+    # planlagte kjøringer mest ved starten av hver time, og fra 27.08.2026
+    # gikk denne jobben bare tre ganger per børsdag i stedet for 37, første
+    # gang etter børsslutt. scripts/vedlikehold.py leser tidene herfra.
+    - cron: "7,22,37,52 8-16 * * 1-5"
+    - cron: "7 17 * * 1-5"
   workflow_dispatch:  # Tillat manuell kjøring
 
 permissions:

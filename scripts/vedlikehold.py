@@ -77,6 +77,20 @@ NAVN = re.compile(
     r"|endring av (fore)?taksnavn|new ticker|ticker change|change of ticker|endring av ticker",
     re.I)
 
+# Selskapet bytter hjemland eller ISIN. Hjemlandet avgjør ASK, og et nytt
+# ISIN eller en spleis har brutt Yahoo-historikken før (KMCP/BINT, 2026).
+# Lagt til etter Cadeler 21.09.2026: «Cadeler initiates its redomiciliation
+# from Denmark to the United Kingdom, to be implemented through a share
+# exchange offer …» havnet i ingen gruppe, og ble bare sett gjennom et
+# sidetreff fire dager senere.
+HJEMLAND = re.compile(
+    r"re-?domicil|redomestic|change of (domicile|jurisdiction)|domicile change"
+    r"|share exchange offer|scheme of arrangement|new (holding|parent) company"
+    r"|new isin|isin change|change of isin|ny isin|endring av isin"
+    r"|reverse (share )?split|share consolidation|aksjespleis|spleis av aksjer"
+    r"|nytt hjemland|flytt\w* (av )?(hjemsted|forretningskontor)",
+    re.I)
+
 HANDELSSTANS = re.compile(r"trading (suspension|halt)|handelsstans|suspensjon", re.I)
 HANDELSSTANS_KATEGORI = 1202
 
@@ -144,7 +158,7 @@ def klassifiser(meldinger, katalog, euronext_symboler=None):
     euronext_symboler  utstedere Euronext lister som aksjer, eller None når
                        lista ikke kunne hentes
     """
-    ut = {"ut_vedtatt": [], "ut_mulig": [], "marked": [], "navn": [],
+    ut = {"ut_vedtatt": [], "ut_mulig": [], "marked": [], "hjemland": [], "navn": [],
           "handelsstans": [], "nye_noteringer": [], "utbytte_utenfor_katalogen": []}
     kandidater = {}
     for m in meldinger:
@@ -159,6 +173,8 @@ def klassifiser(meldinger, katalog, euronext_symboler=None):
                 ut["ut_mulig"].append(f)
             if MARKED.search(tittel) and not IKKE_AKSJE.search(tittel):
                 ut["marked"].append(f)
+            if HJEMLAND.search(tittel):
+                ut["hjemland"].append(f)
             if NAVN.search(tittel):
                 ut["navn"].append(f)
             if HANDELSSTANS_KATEGORI in kat or HANDELSSTANS.search(tittel):
@@ -180,7 +196,8 @@ def klassifiser(meldinger, katalog, euronext_symboler=None):
         k["antall"] = len(k["meldinger"])
     ut["utbytte_utenfor_katalogen"] = sorted(
         kandidater.values(), key=lambda k: (-k["antall"], k["utsteder"]))
-    for nokkel in ("ut_vedtatt", "ut_mulig", "marked", "navn", "handelsstans", "nye_noteringer"):
+    for nokkel in ("ut_vedtatt", "ut_mulig", "marked", "hjemland", "navn", "handelsstans",
+                   "nye_noteringer"):
         ut[nokkel].sort(key=lambda x: x["dato"], reverse=True)
     return ut
 
@@ -310,8 +327,52 @@ def hent_issues():
 
 # ── Ferskhet ─────────────────────────────────────────────────────────────────
 
-DATAJOBB_TIDER = [(7, 0), (10, 0), (13, 0), (16, 0)]            # UTC, man–fre
-PRISJOBB_TIDER = [(h, m) for h in range(8, 17) for m in (0, 15, 30, 45)] + [(17, 0)]
+def _cron_felt(felt, lav, hoy):
+    """Verdiene i ett cron-felt: «7», «7,22», «8-16» eller «*». None ellers."""
+    if felt == "*":
+        return list(range(lav, hoy + 1))
+    verdier = []
+    for del_ in felt.split(","):
+        if re.fullmatch(r"\d+", del_):
+            verdier.append(int(del_))
+        elif re.fullmatch(r"\d+-\d+", del_):
+            a, b = map(int, del_.split("-"))
+            verdier.extend(range(a, b + 1))
+        else:
+            return None
+    return verdier
+
+
+def planlagte_tider(yml):
+    """(time, minutt) i UTC fra cron-linjene i en workflow, for kjøringer
+    mandag til fredag. Tom liste når ingen linje kan leses.
+
+    Tidene ble først skrevet inn her som en egen kopi, og samme dag ble
+    workflowene flyttet til andre minutter. To kopier av samme tall glir fra
+    hverandre; derfor leses de fra kilden.
+    """
+    tider = set()
+    for m in re.finditer(r'cron:\s*"([^"]+)"', yml):
+        deler = m.group(1).split()
+        if len(deler) != 5 or deler[2:4] != ["*", "*"] or deler[4] not in ("1-5", "*"):
+            continue
+        minutter, timer = _cron_felt(deler[0], 0, 59), _cron_felt(deler[1], 0, 23)
+        if minutter and timer:
+            tider.update((t, mi) for t in timer for mi in minutter)
+    return sorted(tider)
+
+
+def _tider_fra(fil, reserve):
+    try:
+        with open(os.path.join(ROT, ".github", "workflows", fil), encoding="utf-8") as f:
+            return planlagte_tider(f.read()) or reserve
+    except OSError:
+        return reserve
+
+
+DATAJOBB_TIDER = _tider_fra("update-og-deploy.yml", [(7, 41), (10, 41), (13, 41), (16, 41)])
+PRISJOBB_TIDER = _tider_fra("oppdater-priser.yml",
+                            [(h, m) for h in range(8, 17) for m in (7, 22, 37, 52)] + [(17, 7)])
 SLAKK = datetime.timedelta(hours=3)   # GitHub forsinker planlagte jobber, ofte mye
 
 
@@ -540,6 +601,7 @@ def som_tekst(r):
                     ("ut_vedtatt", "Avgjort ut (avnotering, fusjon gjennomført)"),
                     ("ut_mulig", "Mulig ut (bud, fusjonsplan)"),
                     ("marked", "Bytter markedsplass (påvirker ASK)"),
+                    ("hjemland", "Bytter hjemland, ISIN eller aksjestruktur (påvirker ASK og kurshistorikk)"),
                     ("navn", "Navn eller ticker endres"),
                     ("handelsstans", "Handelsstans"),
                     ("nye_noteringer", "Nye noteringer (utenfor katalogen)")):
