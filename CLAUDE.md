@@ -47,6 +47,20 @@ This is a Progressive Web App (PWA) for tracking Norwegian dividend-paying stock
 
 Gray scale (UI chrome, text, borders) uses standard Tailwind gray: `gray-50`→`gray-950`.
 
+**Visual roles (`STYLE.md`, 2026-10-11).** Numbers are neutral (`gray-900` /
+`gray-100`). Green and red mean direction only, as in the price chart. Links and
+buttons use `green-700`. Boxes are coloured only when the colour means something:
+amber warns, grey explains. The stock page template follows these rules; the
+app and the hand-written pages still use the table above until they are
+converted.
+
+**Font: Inter, self-hosted** in `assets/fonts/` (variable, latin subset, SIL
+OFL). It is set as `--font-sans` in `tw-input.css`. Never load it from Google
+Fonts: that request sends the visitor's IP address to Google before consent.
+`table` gets `tabular-nums` globally. Percentages read `3,48 %`, with a
+non-breaking space; `_pst()` in `fetch_stocks.py` writes them that way. Never
+use it for SVG or CSS values.
+
 **Core capabilities:**
 - Real-time and historical dividend data for 163 Norwegian stocks
 - Personal portfolio tracking with cost basis (FIFO), IRR, TWR, and tax calculations
@@ -467,7 +481,10 @@ There are **3 HTML templates** in `fetch_stocks.py`:
 - Dark mode init script reads `localStorage.getItem('tema')` (Norwegian key — matches main app)
 - Dark mode toggle saves `localStorage.setItem('tema', 'dark'|'light')`
 - Favicon block: `/favicon.png` (512), `/logo/apple_touch_icon_180.png`, SVG icon
-- Footer: `STANDARD_FOOTER` constant (defined after `generer_aksjesider()`) — uses inline styles with `.dark .std-footer` override
+- Footer: `STANDARD_FOOTER` constant (defined after `generer_aksjesider()`) — uses inline styles with `.dark .std-footer` override.
+  It is a **plain string**, inserted into the templates as a value, so its CSS takes single braces. It was written
+  with `{{ }}` as if it were an f-string, and the dark-mode rule reached 176 pages with doubled braces, which the
+  browser discards (fixed 2026-10-11, `TestIngenDobleParenteser`).
 - After changing any template: run `python scripts/regenerer_sider.py` to rebuild all pages
 
 ### Content conventions on the stock pages

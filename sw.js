@@ -20,6 +20,7 @@ const PRECACHE = [
   '/assets/app.js',
   '/assets/tailwind.css',
   '/assets/style.css',
+  '/assets/fonts/inter-latin-wght-normal.woff2',
   '/assets/consent.js',
   '/assets/icon.svg',
   '/data/aksjer.json',

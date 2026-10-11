@@ -31,6 +31,29 @@
   --color-brand-800: #166534;
   --color-brand-900: #14532d;
   --color-brand-950: #052e16;
+
+  /* Inter fra vår egen server, ikke Google Fonts: en forespørsel dit sender
+     den besøkendes IP-adresse til Google før noe samtykke er gitt. Uten egen
+     font så siden ulik ut på Mac, Windows, Android og Linux (STYLE.md). */
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+/* Variabel font, vekt 100–900, latin-utvalget (dekker æøå). Lisens: SIL OFL,
+   se fonts/LICENSE-Inter.txt. «swap» viser systemfonten til Inter er lastet. */
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url("fonts/inter-latin-wght-normal.woff2") format("woff2-variations"),
+       url("fonts/inter-latin-wght-normal.woff2") format("woff2");
+}
+
+/* Tall under hverandre skal stå på linje, og en kolonne skal ikke hoppe når
+   et tall endres. Gjelder alle tabeller; enkeltstående tall merkes med
+   tabular-nums der de står. */
+@layer base {
+  table { font-variant-numeric: tabular-nums; }
 }
 
 @variant dark (&:where(.dark, .dark *));

@@ -1992,6 +1992,63 @@ class TestVekstFraTopp(unittest.TestCase):
         self.assertIn("Holder veksten på +19,8% per år seg, dobles utbyttet på ca. 4 år.", tekst)
 
 
+class TestKurshode(unittest.TestCase):
+    """Kurshodet og den kompakte nøkkeltabellen på aksjesiden (STYLE.md, 2026-10-11)."""
+    EQNR = {"ticker": "EQNR", "pris": 417.9, "utbytte_yield": 3.48, "utbytte_per_aksje": 14.55,
+            "ex_dato": "2026-11-13", "52u_hoy": 426.0, "52u_lav": 226.4,
+            "betaling_dato": "2026-11-25", "snitt_yield_5ar": 5.47, "ar_med_utbytte": 25,
+            "pe_ratio": 11.6, "payout_ratio": 40.0, "markedsverdi_mrd": 990.1}
+
+    def test_prosent_med_komma_og_hardt_mellomrom(self):
+        self.assertEqual(fs._pst(3.48), "3,48 %")
+        self.assertIn("3,48 %", fs._lag_kurshode(self.EQNR, "NOK"))
+
+    def test_spenn_med_punktum_i_css(self):
+        html = fs._lag_kurshode(self.EQNR, "NOK")
+        self.assertIn("left:95.9%", html)          # (417,9 − 226,4) / (426 − 226,4)
+        self.assertIn("226,40", html)
+
+    def test_spenn_utelates_naar_toppen_er_over_3x_kursen(self):
+        # 2020 Bulkers etter kapitalutdelingen: 52-ukers høy 152,00 på 4,35 kr.
+        a = dict(self.EQNR, pris=4.35, **{"52u_hoy": 152.0, "52u_lav": 2.56})
+        self.assertNotIn("kh-spenn", fs._lag_kurshode(a, "NOK"))
+        a = dict(self.EQNR, pris=430.0)            # over 52-ukers høy: spennet er gammelt
+        self.assertNotIn("kh-spenn", fs._lag_kurshode(a, "NOK"))
+
+    def test_ukjent_ex_dato_sies(self):
+        a = dict(self.EQNR, ex_dato="")
+        self.assertIn("Ikke kjent", fs._lag_kurshode(a, "NOK"))
+
+    def test_tomme_felt_utelates(self):
+        a = dict(self.EQNR, betaling_dato="", pe_ratio=0, payout_ratio=0)
+        html = fs._lag_korttall(a, "NOK")
+        self.assertNotIn("Utbetalingsdato", html)
+        self.assertNotIn("P/E", html)
+        self.assertNotIn("Payout", html)       # 0 er ukjent, ikke lav
+        self.assertIn("5-årssnitt yield", html)
+        self.assertEqual(fs._lag_korttall({}, "NOK"), "")
+
+
+class TestIngenDobleParenteser(unittest.TestCase):
+    """{{ }} hører bare hjemme i f-strenger. Settes en vanlig streng med {{ inn i
+    en mal, står parentesene doble i HTML-en og CSS-regelen forkastes. Slik var
+    mørk modus i bunnteksten død på 176 sider (2026-10-11)."""
+
+    def test_bunnteksten(self):
+        self.assertNotIn("{{", fs.STANDARD_FOOTER)
+        self.assertIn(".dark .std-footer {", fs.STANDARD_FOOTER)
+
+    def test_aksjesiden(self):
+        sti = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "data", "aksjer.json")
+        if not os.path.exists(sti):
+            self.skipTest("aksjer.json finnes ikke")
+        with open(sti, encoding="utf-8") as f:
+            a = json.load(f)["aksjer"][0]
+        html_ = fs._aksje_side_html(dict(a, kurs_historikk=[]), "2026-10-11")
+        # Bare {{: }} forekommer lovlig når JSON-LD avslutter nestede objekter.
+        self.assertNotIn("{{", html_)
+
+
 class TestBelopIUtbyttemelding(unittest.TestCase):
     """Beløpet for neste utbetaling, fra børsmeldingen (2026-10-06)."""
     I_DAG = datetime.date(2026, 10, 6)
