@@ -4901,6 +4901,113 @@ def _lag_meta_beskrivelse(navn, ticker, yield_, ex, upa, snitt5, valuta, today):
     return tekst
 
 
+def _pst(verdi, desimaler=2):
+    """Prosent med desimalkomma og hardt mellomrom: «3,48 %» (STYLE.md).
+
+    Bare til synlig tekst. Aldri i SVG-koordinater eller CSS, der et komma
+    gjør verdien ugyldig.
+    """
+    return f"{_nf(verdi, desimaler)} %"
+
+
+def _data_dato_kort():
+    """«9. okt. 2026» fra DATA_SIST_OPPDATERT, eller tom streng uten dato."""
+    try:
+        return _fmt_dato(str(DATA_SIST_OPPDATERT)[:10]) if DATA_SIST_OPPDATERT else ""
+    except Exception:
+        return ""
+
+
+def _lag_kurshode(a, valuta, upa_merknad="", delaar_note=""):
+    """Kurshodet øverst på aksjesiden: kurs, 52-ukers spenn og tre nøkkeltall.
+
+    Erstatter de ni kortene som sto under selskapsteksten (STYLE.md, tiltak 3).
+    Tallene er nøytrale. Grønt og rødt er forbeholdt retning, og kurshodet har
+    ingen dagsendring: aksjer.json har bare kursen fra datajobben.
+    """
+    pris   = a.get("pris") or 0
+    yield_ = a.get("utbytte_yield") or 0
+    upa    = a.get("utbytte_per_aksje") or 0
+    ex     = a.get("ex_dato") or ""
+    hoy52  = a.get("52u_hoy") or 0
+    lav52  = a.get("52u_lav") or 0
+
+    dato = _data_dato_kort()
+    meta = f"Kurs {dato}" if dato else "Kurs"
+
+    # Spennet vises bare når kursen ligger innenfor det, og toppen ikke er
+    # mer enn 3× kursen. 2020 Bulkers hadde 52-ukers høy 152,00 på en kurs
+    # rundt 4 kroner etter kapitalutdelingen (Sjekk 9 i valider_data.py).
+    spenn = ""
+    if 0 < lav52 <= pris <= hoy52 and hoy52 <= 3 * pris and hoy52 > lav52:
+        # CSS-verdi: punktum, ikke _nf().
+        pos = (pris - lav52) / (hoy52 - lav52) * 100
+        spenn = (
+            f'<div class="kh-spenn" aria-label="52 ukers spenn fra {_nf(lav52, 2)} til {_nf(hoy52, 2)}">'
+            f'<span class="kh-spenn-tekst">52 uker</span>'
+            f'<span class="kh-spenn-tall">{_nf(lav52, 2)}</span>'
+            f'<span class="kh-spenn-linje"><span class="kh-spenn-punkt" style="left:{pos:.1f}%"></span></span>'
+            f'<span class="kh-spenn-tall">{_nf(hoy52, 2)}</span>'
+            f'</div>'
+        )
+
+    forbehold = " · foreslått" if ex_forbehold_gjelder(a) else ""
+    ex_verdi = _fmt_dato(ex) if ex else '<span class="kh-ukjent">Ikke kjent</span>'
+    upa_note = f'<span class="kh-note">{upa_merknad.strip()}</span>' if upa_merknad else ""
+
+    return (
+        f'<div class="kurshode">'
+        f'<div class="kh-topp">'
+        f'<div><div class="kh-pris">{_nf_kurs(pris) if pris else "—"}'
+        f'<span class="kh-valuta">{valuta if pris else ""}</span></div>'
+        f'<div class="kh-meta">{meta}</div></div>'
+        f'{spenn}'
+        f'</div>'
+        f'<dl class="kh-tall">'
+        f'<div><dt>Yield{delaar_note}</dt><dd>{_pst(yield_) if yield_ else "—"}</dd></div>'
+        f'<div><dt>Utbytte/aksje{delaar_note}</dt><dd>{_nf(upa, 2)} {valuta}</dd>{upa_note}</div>'
+        f'<div><dt>Ex-dato{forbehold}</dt><dd>{ex_verdi}</dd></div>'
+        f'</dl>'
+        f'</div>'
+    )
+
+
+def _lag_korttall(a, valuta):
+    """Resten av de gamle nøkkelkortene som en kompakt tabell. Tomme felt utelates.
+
+    Kortet «Kvartalsrapport —» sto tomt på sider uten kjent rapportdato, og
+    P/E sto alene på tredje rad (STYLE.md).
+    """
+    bet     = a.get("betaling_dato") or ""
+    rapport = a.get("rapport_dato") or ""
+    snitt5  = a.get("snitt_yield_5ar") or 0
+    ar_med  = a.get("ar_med_utbytte") or 0
+    pe      = a.get("pe_ratio") or 0
+    payout  = a.get("payout_ratio") or 0
+    mrd     = a.get("markedsverdi_mrd") or 0
+
+    rader = []
+    if bet:
+        rader.append(("Utbetalingsdato", _fmt_dato(bet)))
+    if rapport:
+        rader.append(("Neste kvartalsrapport", _fmt_dato(rapport)))
+    if snitt5:
+        rader.append(("5-årssnitt yield", _pst(snitt5)))
+    if ar_med:
+        rader.append(("År med utbytte", str(ar_med)))
+    if pe and pe > 0:
+        rader.append(("P/E", _nf(pe, 1)))
+    # 0 betyr ukjent, ikke lav.
+    if payout > 0:
+        rader.append(("Payout ratio", _pst(payout, 0)))
+    if mrd > 0:
+        rader.append(("Markedsverdi", f"{_nf(mrd, 1)} mrd NOK"))
+    if not rader:
+        return ""
+    celler = "".join(f'<div><dt>{n}</dt><dd>{v}</dd></div>' for n, v in rader)
+    return f'<dl class="korttall">{celler}</dl>'
+
+
 def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     ticker  = a["ticker"]
     navn    = a["navn"]
@@ -4974,11 +5081,6 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
 
     pe_rad = f"<tr><td>P/E</td><td>{_nf(pe, 1)}</td></tr>" if pe and pe > 0 else ""
 
-    pe_card = (
-        f'<div class="kcard"><div class="label">P/E</div>'
-        f'<div class="val">{_nf(pe, 1)}</div></div>'
-    ) if pe and pe > 0 else ""
-
     payout_rad = f"<tr><td>Payout ratio</td><td>{_nf(payout, 0)}%</td></tr>" if payout > 0 else ""
     # 0 betyr «kunne ikke beregnes», som i appen. Med `is not None` sto
     # «+0,0 % p.a.» på sider for selskaper uten et eneste utbytte på fem år.
@@ -5016,6 +5118,9 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     elif besk:
         om_avsnitt += f'<p class="desc-fakta">{besk}</p>'
     om_seksjon = f'<div class="desc"><h2>Om selskapet</h2>{om_avsnitt}</div>' if om_avsnitt else ""
+
+    kurshode_html = _lag_kurshode(a, valuta, upa_merknad, delaar_note)
+    korttall_html = _lag_korttall(a, valuta)
 
     # Het tidligere «AI-oppsummering» og viste frosset prosa med tall støpt inn.
     # Teksten bygges nå fra levende tall ved hver kjøring, så navnet ville vært
@@ -5102,13 +5207,15 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
       return ALLE.filter(function(x) {{ return x.d >= s; }});
     }}
     function tegn(periode) {{
-      var data = filtrer(periode); if (data.length<4) data=ALLE; if (data.length<4) return;
+      var data = filtrer(periode), hele = false; if (data.length<4) {{ data=ALLE; hele = true; }} if (data.length<4) return;
+      var PERIODER = {{'1ar':'Siste år','ytd':'Hittil i år','2ar':'Siste 2 år','3ar':'Siste 3 år','5ar':'Siste 5 år'}};
       var pr = data.map(function(x){{return x.k;}}), da = data.map(function(x){{return x.d;}}), n=pr.length;
       var mn=Math.min.apply(null,pr), mx=Math.max.apply(null,pr), rng=mx-mn||1;
       var opp=pr[n-1]>=pr[0], fg=opp?'#22c55e':'#ef4444';
-      var end=((pr[n-1]-pr[0])/pr[0]*100).toFixed(1);
+      var end=((pr[n-1]-pr[0])/pr[0]*100).toLocaleString('nb-NO',{{minimumFractionDigits:1,maximumFractionDigits:1}});
       var hdr=document.getElementById('kurs-header-{ticker}');
-      if(hdr) hdr.innerHTML='<span style="font-size:1.05rem;font-weight:700">'+pr[n-1].toLocaleString('nb-NO',{{minimumFractionDigits:2}})+' '+VAL+'</span><span style="font-size:0.78rem;font-weight:500;color:'+fg+'">'+(opp?'▲ +':'▼ ')+end+'%</span>';
+      var dkHdr=document.documentElement.classList.contains('dark');
+      if(hdr) hdr.innerHTML='<span style="font-size:0.85rem;color:'+(dkHdr?'#9ca3af':'#6b7280')+'">'+(hele?'Hele perioden':PERIODER[periode])+'</span><span style="font-size:0.85rem;font-weight:600;font-variant-numeric:tabular-nums;color:'+fg+'">'+(opp?'▲ +':'▼ ')+end+'\u00a0%</span>';
       var cv=document.getElementById('kurs-canvas-{ticker}'); if(!cv) return;
       var dk=document.documentElement.classList.contains('dark');
       var DPR=Math.min(window.devicePixelRatio||1,2), CW=cv.parentElement.offsetWidth||680, CH=200;
@@ -5121,20 +5228,20 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
       ctx.strokeStyle=dk?'#1f2937':'#e5e7eb'; ctx.lineWidth=1; ctx.setLineDash([4,4]);
       [mn,(mn+mx)/2,mx].forEach(function(v){{ctx.beginPath();ctx.moveTo(pL,sy(v));ctx.lineTo(CW-pR,sy(v));ctx.stroke();}});
       ctx.setLineDash([]);
-      ctx.fillStyle=dk?'#6b7280':'#9ca3af'; ctx.font='11px sans-serif'; ctx.textAlign='right';
+      ctx.fillStyle=dk?'#6b7280':'#9ca3af'; ctx.font='11px Inter, system-ui, sans-serif'; ctx.textAlign='right';
       [[mn,sy(mn)],[(mn+mx)/2,sy((mn+mx)/2)],[mx,sy(mx)]].forEach(function(pair){{ctx.fillText(pair[0].toLocaleString('nb-NO',{{maximumFractionDigits:0}}),pL-4,pair[1]+4);}});
       var grad=ctx.createLinearGradient(0,pT,0,CH-pB);
-      grad.addColorStop(0,opp?'rgba(34,197,94,0.25)':'rgba(239,68,68,0.2)'); grad.addColorStop(1,'rgba(0,0,0,0)');
+      grad.addColorStop(0,opp?'rgba(34,197,94,0.12)':'rgba(239,68,68,0.1)'); grad.addColorStop(1,'rgba(0,0,0,0)');
       ctx.beginPath(); ctx.moveTo(sx(0),CH-pB);
       pr.forEach(function(p,i){{ctx.lineTo(sx(i),sy(p));}});
       ctx.lineTo(sx(n-1),CH-pB); ctx.closePath(); ctx.fillStyle=grad; ctx.fill();
-      ctx.beginPath(); ctx.lineWidth=2.5; ctx.strokeStyle=fg; ctx.lineJoin='round';
+      ctx.beginPath(); ctx.lineWidth=1.75; ctx.strokeStyle=fg; ctx.lineJoin='round';
       pr.forEach(function(p,i){{if(i===0)ctx.moveTo(sx(i),sy(p));else ctx.lineTo(sx(i),sy(p));}});
       ctx.stroke();
       ctx.beginPath(); ctx.arc(sx(n-1),sy(pr[n-1]),4,0,Math.PI*2); ctx.fillStyle=fg; ctx.fill();
       ctx.strokeStyle=dk?'#111827':'#fff'; ctx.lineWidth=2; ctx.stroke();
       ctx.fillStyle=dk?'#6b7280':'#9ca3af'; ctx.textAlign='center';
-      [0,Math.floor(n/3),Math.floor(2*n/3),n-1].forEach(function(i){{var d=da[i].slice(5);ctx.fillText(d.slice(3,5)+'.'+d.slice(0,2),sx(i),CH-8);}});
+      [0,Math.floor(n/3),Math.floor(2*n/3),n-1].forEach(function(i){{var d=da[i].slice(5);ctx.textAlign=i===0?'left':i===n-1?'right':'center';ctx.fillText(d.slice(3,5)+'.'+d.slice(0,2),sx(i),CH-8);}});
     }}
     document.querySelectorAll('.kp-btn').forEach(function(btn){{
       btn.addEventListener('click',function(){{
@@ -5252,6 +5359,7 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
   <meta name="twitter:image" content="https://exday.no/assets/og-image.png"/>
   <script type="application/ld+json">{json_ld}</script>
   {faq_jsonld}
+  <link rel="preload" href="/assets/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin/>
   <link rel="stylesheet" href="/assets/tailwind.css"/>
   <link rel="stylesheet" href="/assets/style.css"/>
   <script>
@@ -5264,8 +5372,10 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
   </script>
   <style>
     *, *::before, *::after {{ box-sizing: border-box; margin: 0; padding: 0; }}
-    body {{ font-family: system-ui, -apple-system, sans-serif; line-height: 1.6; }}
-    a {{ color: #16a34a; text-decoration: none; }}
+    body {{ font-family: "Inter", system-ui, -apple-system, sans-serif; line-height: 1.6; }}
+    /* Lenker og knapper i green-700: roligere enn green-600, og grønt er
+       ellers forbeholdt retning (kursgrafen) og aksenter (STYLE.md). */
+    a {{ color: #15803d; text-decoration: none; }}
     a:hover {{ text-decoration: underline; }}
     .wrap {{ max-width: 760px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }}
     .breadcrumb {{ font-size: 0.85rem; color: #6b7280; margin-bottom: 1.5rem; }}
@@ -5275,12 +5385,37 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     .sub {{ font-size: 0.95rem; margin-bottom: 1.5rem; }}
     .badge {{ display: inline-block; font-size: 0.75rem; font-weight: 600; padding: 0.2rem 0.6rem;
               border-radius: 9999px; margin-bottom: 1.25rem; }}
-    .kgrid {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }}
-    .kcard {{ border-radius: 0.75rem; padding: 1rem; border: 1px solid; }}
-    .kcard .label {{ font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.2rem; }}
-    .kcard .val {{ font-size: 1.25rem; font-weight: 700; }}
-    .kcard .val.green {{ color: #16a34a; }}
-    .kcard-note {{ font-weight: 500; text-transform: none; letter-spacing: 0; opacity: 0.7; }}
+    /* Kurshodet: kurs, 52-ukers spenn og tre nøkkeltall, nøytrale farger. */
+    .kurshode {{ margin: 0 0 1.25rem; }}
+    .kh-pris, .kh-spenn-tall, .kh-tall dd, .korttall dd {{ font-variant-numeric: tabular-nums; }}
+    .kh-topp {{ display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 0.75rem 1.5rem; margin-bottom: 1rem; }}
+    .kh-pris {{ font-size: 2.25rem; font-weight: 700; line-height: 1.1; letter-spacing: -0.02em; color: #111827; }}
+    .kh-valuta {{ font-size: 1rem; font-weight: 500; letter-spacing: 0; color: #6b7280; margin-left: 0.35rem; }}
+    .kh-meta {{ font-size: 0.8rem; color: #6b7280; margin-top: 0.25rem; }}
+    .kh-spenn {{ display: flex; align-items: center; gap: 0.5rem; font-size: 0.78rem; color: #6b7280; flex: 0 1 300px; min-width: 240px; }}
+    .kh-spenn-tekst {{ font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; white-space: nowrap; }}
+    .kh-spenn-linje {{ position: relative; flex: 1; height: 4px; min-width: 70px; border-radius: 2px; background: #e5e7eb; }}
+    .kh-spenn-punkt {{ position: absolute; top: 50%; width: 10px; height: 10px; margin: -5px 0 0 -5px; border-radius: 50%; background: #111827; box-shadow: 0 0 0 2px #f9fafb; }}
+    .kh-tall {{ display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid #e5e7eb; border-radius: 0.75rem; background: #fff; }}
+    .kh-tall > div {{ padding: 0.75rem 1rem; min-width: 0; }}
+    .kh-tall > div + div {{ border-left: 1px solid #e5e7eb; }}
+    .kh-tall dt {{ font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #6b7280; }}
+    .kh-tall dd {{ font-size: 1.15rem; font-weight: 600; color: #111827; margin-top: 0.15rem; white-space: nowrap; }}
+    .kh-note {{ display: block; font-size: 0.72rem; color: #6b7280; margin-top: 0.1rem; }}
+    .kh-ukjent {{ font-weight: 500; color: #9ca3af; }}
+    .kcard-note {{ font-weight: 500; text-transform: none; letter-spacing: 0; opacity: 0.85; }}
+    .kh-note .kcard-note {{ opacity: 1; }}
+    @media (max-width: 480px) {{
+      .kh-pris {{ font-size: 1.9rem; }}
+      .kh-tall > div {{ padding: 0.6rem 0.65rem; }}
+      .kh-tall dd {{ font-size: 0.98rem; }}
+    }}
+    /* Resten av de gamle nøkkelkortene, som en kompakt tabell i to spalter. */
+    .korttall {{ display: grid; grid-template-columns: 1fr 1fr; column-gap: 2rem; margin: 0 0 1.5rem; }}
+    .korttall > div {{ display: flex; justify-content: space-between; gap: 1rem; padding: 0.55rem 0; border-bottom: 1px solid #e5e7eb; font-size: 0.9rem; }}
+    .korttall dt {{ color: #6b7280; }}
+    .korttall dd {{ font-weight: 600; color: #111827; text-align: right; white-space: nowrap; }}
+    @media (max-width: 560px) {{ .korttall {{ grid-template-columns: 1fr; }} }}
     .hist-paagaar {{ font-size: 0.7rem; font-weight: 500; color: #6b7280; white-space: nowrap; }}
     .dark .hist-paagaar {{ color: #9ca3af; }}
     .desc {{ border-radius: 0.75rem; padding: 1rem 1.25rem; margin-bottom: 1.5rem; border: 1px solid; }}
@@ -5296,8 +5431,8 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     th {{ padding: 0.6rem 1rem; text-align: left; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; }}
     td {{ padding: 0.6rem 1rem; border-top: 1px solid; }}
     .cta {{ text-align: center; margin-top: 2rem; padding: 1.5rem; border-radius: 0.75rem; border: 1px solid; }}
-    .cta a {{ display: inline-block; background: #16a34a; color: #fff !important; font-weight: 600; padding: 0.65rem 1.5rem; border-radius: 0.5rem; text-decoration: none; }}
-    .cta a:hover {{ background: #15803d; }}
+    .cta a {{ display: inline-block; background: #15803d; color: #fff !important; font-weight: 600; padding: 0.65rem 1.5rem; border-radius: 0.5rem; text-decoration: none; }}
+    .cta a:hover {{ background: #166534; }}
     .updated {{ font-size: 0.78rem; text-align: right; margin-top: 1rem; }}
     .mini-nav {{ display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.5rem; font-size: 0.85rem; }}
     .utbytte-sep {{ display: flex; align-items: center; gap: 0.75rem; margin: 1.75rem 0 1.25rem; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #9ca3af; }}
@@ -5305,17 +5440,15 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     .dark .utbytte-sep {{ color: #6b7280; }}
     .dark .utbytte-sep::before, .dark .utbytte-sep::after {{ background: #1f2937; }}
     .mini-nav a {{ color: #16a34a; }}
-    .til-toppen {{ position: fixed; bottom: 1.5rem; right: 1.25rem; z-index: 40; background: #16a34a; color: #fff; border: none; border-radius: 9999px; width: 2.5rem; height: 2.5rem; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.18); opacity: 0; pointer-events: none; transition: opacity 0.2s; }}
+    .til-toppen {{ position: fixed; bottom: 1.5rem; right: 1.25rem; z-index: 40; background: #15803d; color: #fff; border: none; border-radius: 9999px; width: 2.5rem; height: 2.5rem; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.18); opacity: 0; pointer-events: none; transition: opacity 0.2s; }}
     .til-toppen.synlig {{ opacity: 1; pointer-events: auto; }}
-    .til-toppen:hover {{ background: #15803d; }}
+    .til-toppen:hover {{ background: #166534; }}
     .profil-seksjon {{ margin: 1.5rem 0; }}
     .profil-badges {{ display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem; }}
     .profil-badge {{ font-size: 0.75rem; font-weight: 600; padding: 0.25rem 0.75rem; border-radius: 9999px; }}
-    .badge-green {{ background: #dcfce7; color: #15803d; }}
-    .badge-blue {{ background: #dbeafe; color: #1d4ed8; }}
-    .badge-teal {{ background: #ccfbf1; color: #0f766e; }}
-    .badge-orange {{ background: #ffedd5; color: #c2410c; }}
-    .badge-gray {{ background: #f3f4f6; color: #374151; }}
+    /* Profilmerkene har én nøytral stil. Fem farger uten fast betydning
+       konkurrerte med tallene (STYLE.md). */
+    .profil-badge {{ background: #f3f4f6; color: #374151; border: 1px solid #e5e7eb; }}
     .profil-tekst {{ font-size: 0.9rem; line-height: 1.65; }}
     .historikk-prosa {{ margin: 1.5rem 0; }}
     .historikk-prosa p {{ font-size: 0.9rem; line-height: 1.7; }}
@@ -5339,6 +5472,7 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     .betalt-seksjon .betalt-tabell td:not(:first-child), .betalt-seksjon .betalt-tabell th:not(:first-child) {{ white-space: nowrap; text-align: right; }}
     .betalt-tabell th {{ font-weight: 600; color: #6b7280; font-size: 0.75rem; }}
     .betalt-tabell td:not(:first-child) {{ font-variant-numeric: tabular-nums; }}
+    @media (min-width: 640px) {{ .betalt-seksjon .betalt-tabell {{ display: table; }} }}
     .betalt-seksjon p.betalt-fotnote {{ font-size: 0.75rem; color: #6b7280; }}
     .betalt-seksjon .nowrap {{ white-space: nowrap; }}
     .dark .betalt-tabell th, .dark .betalt-seksjon p.betalt-fotnote {{ color: #94a3b8; }}
@@ -5347,9 +5481,9 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     .dark .delaar-seksjon.delaar-noytral {{ border-left-color: #475569; }}
     .mnd-strip {{ display: grid; grid-template-columns: repeat(12, 1fr); gap: 2px; margin-bottom: 0.85rem; }}
     .mnd-celle {{ text-align: center; padding: 0.4rem 0.1rem; font-size: 0.62rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.02em; color: #9ca3af; background: #f1f5f9; border-radius: 0.25rem; }}
-    .mnd-celle.mnd-ja {{ background: #16a34a; color: #fff; }}
+    .mnd-celle.mnd-ja {{ background: #15803d; color: #fff; }}
     .dark .mnd-celle {{ background: #1e293b; color: #64748b; }}
-    .dark .mnd-celle.mnd-ja {{ background: #16a34a; color: #fff; }}
+    .dark .mnd-celle.mnd-ja {{ background: #15803d; color: #fff; }}
     @media (max-width: 480px) {{ .mnd-strip {{ grid-template-columns: repeat(6, 1fr); }} }}
     .driver-seksjon {{ margin: 1.5rem 0; }}
     .driver-seksjon h2 {{ font-size: 1rem; font-weight: 700; margin-bottom: 0.6rem; }}
@@ -5381,12 +5515,9 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     .investor-profil-seksjon {{ margin: 1rem 0; }}
     .investor-badges-rad {{ display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.75rem; }}
     .investor-forklaring {{ border-radius: 0.6rem; padding: 0.75rem 1rem; margin-bottom: 0.6rem; border: 1px solid; }}
-    .risiko-lav {{ background: #f0fdf4; border-color: #86efac; }}
-    .risiko-moderat {{ background: #fffbeb; border-color: #fcd34d; }}
-    .risiko-hoy {{ background: #fef2f2; border-color: #fca5a5; }}
-    .dark .risiko-lav {{ background: #052e16; border-color: #166534; }}
-    .dark .risiko-moderat {{ background: #451a03; border-color: #92400e; }}
-    .dark .risiko-hoy {{ background: #2d0a0a; border-color: #7f1d1d; }}
+    /* Boksen er nøytral; merket inni beholder fargen, for der betyr den noe. */
+    .risiko-lav, .risiko-moderat, .risiko-hoy {{ background: #fff; border-color: #e5e7eb; }}
+    .dark .risiko-lav, .dark .risiko-moderat, .dark .risiko-hoy {{ background: #111827; border-color: #1f2937; }}
     .investor-forklaring-tittel {{ margin-bottom: 0.5rem; }}
     .investor-forklaring-liste {{ list-style: none; padding: 0; margin: 0; }}
     .investor-forklaring-liste li {{ font-size: 0.8rem; line-height: 1.55; padding: 0.2rem 0; color: #374151; }}
@@ -5404,39 +5535,31 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     .investor-risiko-lav {{ background: #dcfce7; color: #15803d; border-color: #86efac; }}
     .investor-risiko-moderat {{ background: #fef3c7; color: #92400e; border-color: #fcd34d; }}
     .investor-risiko-hoy {{ background: #fee2e2; color: #991b1b; border-color: #fca5a5; }}
-    .investor-mal {{ background: #eff6ff; color: #1e40af; border-color: #bfdbfe; }}
+    .investor-mal {{ background: #f3f4f6; color: #374151; border-color: #e5e7eb; }}
     .dark .investor-risiko-lav {{ background: #052e16; color: #86efac; border-color: #166534; }}
     .dark .investor-risiko-moderat {{ background: #451a03; color: #fcd34d; border-color: #92400e; }}
     .dark .investor-risiko-hoy {{ background: #2d0a0a; color: #fca5a5; border-color: #7f1d1d; }}
-    .dark .investor-mal {{ background: #1e3a5f; color: #93c5fd; border-color: #1d4ed8; }}
-    .kcard-rapport {{ color: #2563eb; }}
-    .dark .kcard-rapport {{ color: #93c5fd; }}
+    .dark .investor-mal {{ background: #1f2937; color: #d1d5db; border-color: #374151; }}
     .relaterte {{ margin: 1.5rem 0; }}
     .relaterte h2 {{ margin-bottom: 0.75rem; }}
     .rel-grid {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 0.75rem; }}
     .rel-kort {{ border-radius: 0.75rem; padding: 0.75rem 1rem; border: 1px solid; display: flex; flex-direction: column; gap: 0.2rem; text-decoration: none; transition: border-color 0.15s; }}
     .rel-kort:hover {{ border-color: #16a34a; text-decoration: none; }}
-    .rel-ticker {{ font-weight: 700; font-size: 1rem; color: #16a34a; }}
+    .rel-ticker {{ font-weight: 700; font-size: 1rem; color: #111827; }}
     .rel-navn {{ font-size: 0.75rem; }}
-    .rel-yield {{ font-size: 0.8rem; font-weight: 600; color: #16a34a; }}
+    .rel-yield {{ font-size: 0.8rem; font-weight: 600; color: #374151; font-variant-numeric: tabular-nums; }}
     @media (max-width: 480px) {{ h1 {{ font-size: 1.4rem; }} }}
 
     /* Light mode */
     body {{ background: #f9fafb; color: #111827; }}
-    .kcard {{ background: #fff; border-color: #e5e7eb; }}
-    .kcard .label {{ color: #9ca3af; }}
-    .kcard .val {{ color: #111827; }}
     .desc {{ background: #fff; border-color: #e5e7eb; color: #374151; }}
-    .analyse {{ background: #f0fdf4; border-color: #bbf7d0; color: #374151; }}
-    .analyse h2 {{ color: #15803d; }}
-    .ai-oppsummering {{ background: #eff6ff; border-color: #bfdbfe; color: #374151; }}
-    .ai-oppsummering h2 {{ color: #1d4ed8; }}
+    .analyse, .ai-oppsummering {{ background: #fff; border-color: #e5e7eb; color: #374151; }}
     h2 {{ color: #374151; }}
     table {{ background: #fff; border-color: #e5e7eb; }}
     th {{ background: #f3f4f6; color: #6b7280; }}
     td {{ border-color: #f3f4f6; }}
     tr:hover td {{ background: #f9fafb; }}
-    .cta {{ background: #f0fdf4; border-color: #bbf7d0; }}
+    .cta {{ background: #fff; border-color: #e5e7eb; }}
     .cta p {{ color: #374151; }}
     .updated {{ color: #9ca3af; }}
     .breadcrumb {{ color: #6b7280; }}
@@ -5449,7 +5572,7 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     .faq-item details summary::after {{ content: '+'; font-size: 1.1rem; flex-shrink: 0; margin-left: 0.5rem; color: #9ca3af; }}
     .faq-item details[open] summary::after {{ content: '−'; }}
     .faq-item details summary:hover {{ background: #f9fafb; }}
-    .faq-item details[open] summary {{ background: #f0fdf4; color: #15803d; }}
+    .faq-item details[open] summary {{ background: #f9fafb; color: #111827; }}
     .faq-svar {{ padding: 0.75rem 1.25rem 1rem; font-size: 0.85rem; color: #4b5563; line-height: 1.65; border-top: 1px solid #f3f4f6; }}
     .rel-kort {{ background: #fff; border-color: #e5e7eb; }}
     .rel-navn {{ color: #6b7280; }}
@@ -5463,20 +5586,23 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
 
     /* Dark mode */
     .dark body {{ background: #030712; color: #f3f4f6; }}
-    .dark .kcard {{ background: #111827; border-color: #1f2937; }}
-    .dark .kcard .label {{ color: #6b7280; }}
-    .dark .kcard .val {{ color: #f3f4f6; }}
+    .dark .kh-pris, .dark .kh-tall dd, .dark .korttall dd {{ color: #f3f4f6; }}
+    .dark .kh-valuta, .dark .kh-meta, .dark .kh-spenn, .dark .kh-tall dt, .dark .kh-note, .dark .korttall dt {{ color: #9ca3af; }}
+    .dark .kh-tall {{ background: #111827; border-color: #1f2937; }}
+    .dark .kh-tall > div + div, .dark .korttall > div {{ border-color: #1f2937; }}
+    .dark .kh-spenn-linje {{ background: #374151; }}
+    .dark .kh-spenn-punkt {{ background: #f3f4f6; box-shadow: 0 0 0 2px #030712; }}
+    .dark .kh-ukjent {{ color: #6b7280; }}
+    .dark .rel-ticker {{ color: #f3f4f6; }}
+    .dark .rel-yield {{ color: #d1d5db; }}
     .dark .desc {{ background: #111827; border-color: #1f2937; color: #d1d5db; }}
-    .dark .analyse {{ background: #052e16; border-color: #166534; color: #d1d5db; }}
-    .dark .analyse h2 {{ color: #4ade80; }}
-    .dark .ai-oppsummering {{ background: #0f1729; border-color: #1e3a5f; color: #d1d5db; }}
-    .dark .ai-oppsummering h2 {{ color: #93c5fd; }}
+    .dark .analyse, .dark .ai-oppsummering {{ background: #111827; border-color: #1f2937; color: #d1d5db; }}
     .dark h2 {{ color: #d1d5db; }}
     .dark table {{ background: #111827; border-color: #1f2937; }}
     .dark th {{ background: #1f2937; color: #9ca3af; }}
     .dark td {{ border-color: #1f2937; }}
     .dark tr:hover td {{ background: #1f2937; }}
-    .dark .cta {{ background: #052e16; border-color: #166534; }}
+    .dark .cta {{ background: #111827; border-color: #1f2937; }}
     .dark .cta p {{ color: #d1d5db; }}
     .dark .updated {{ color: #6b7280; }}
     .dark .breadcrumb {{ color: #9ca3af; }}
@@ -5484,15 +5610,10 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     .dark .sub {{ color: #9ca3af; }}
     .dark .badge {{ background: #14532d; color: #86efac; }}
     .dark a {{ color: #4ade80; }}
-    .dark .cta a {{ background: #16a34a; color: #fff !important; }}
-    .dark .kcard .val.green {{ color: #4ade80; }}
+    .dark .cta a {{ background: #15803d; color: #fff !important; }}
     .dark .ytick {{ stroke: #1f2937; }}
     .dark .hbar {{ fill: #22c55e; }}
-    .dark .badge-green {{ background: #14532d; color: #86efac; }}
-    .dark .badge-blue {{ background: #1e3a5f; color: #93c5fd; }}
-    .dark .badge-teal {{ background: #134e4a; color: #5eead4; }}
-    .dark .badge-orange {{ background: #431407; color: #fdba74; }}
-    .dark .badge-gray {{ background: #1f2937; color: #d1d5db; }}
+    .dark .profil-badge {{ background: #1f2937; color: #d1d5db; border-color: #374151; }}
     .dark .profil-tekst {{ color: #9ca3af; }}
     .dark .historikk-prosa p {{ color: #9ca3af; }}
     .dark .risiko-liste li {{ border-left-color: #7f1d1d; color: #9ca3af; }}
@@ -5502,7 +5623,7 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     .dark .faq-item {{ border-color: #374151; }}
     .dark .faq-item details summary {{ color: #e5e7eb; }}
     .dark .faq-item details summary:hover {{ background: #1f2937; }}
-    .dark .faq-item details[open] summary {{ background: #052e16; color: #4ade80; }}
+    .dark .faq-item details[open] summary {{ background: #1f2937; color: #f3f4f6; }}
     .dark .faq-svar {{ color: #9ca3af; border-top-color: #1f2937; }}
   </style>
 </head>
@@ -5525,6 +5646,8 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
   <h1>{ticker} – {navn}</h1>
   <p class="sub">{sektor} · {frekvens} utbytte · Oslo Børs</p>
 
+  {kurshode_html}
+
   <nav class="ak-tabnav" id="ak-tabnav" aria-label="Sideseksjoner">
     <a href="#oversikt" class="ak-tab aktiv">Oversikt</a>
     <a href="#utbytte" class="ak-tab">Utbytte</a>
@@ -5533,55 +5656,23 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
   </nav>
 
   <!-- ── OVERSIKT ── -->
+  <!-- Tallene først, så grafen, så teksten (STYLE.md, tiltak 3). Kurshodet
+       over fanene erstatter de ni nøkkelkortene. -->
   <section id="oversikt">
 
-  {om_seksjon}
+  {tv_chart_seksjon}
 
-  <div class="kgrid">
-    <div class="kcard">
-      <div class="label">Kurs</div>
-      <div class="val">{f'{_nf_kurs(pris)} {valuta}' if pris else '—'}</div>
-    </div>
-    <div class="kcard">
-      <div class="label">Yield{delaar_note}</div>
-      <div class="val green">{f'{_nf(yield_, 2)}%' if yield_ else '—'}</div>
-    </div>
-    <div class="kcard">
-      <div class="label">Utbytte/aksje{upa_merknad}{delaar_note}</div>
-      <div class="val">{_nf(upa, 2)} {valuta}</div>
-    </div>
-    <div class="kcard">
-      <div class="label">Ex-dato{' · foreslått' if ex_forbehold_gjelder(a) else ''}</div>
-      <div class="val" style="font-size:1rem">{_fmt_dato(ex)}</div>
-    </div>
-    <div class="kcard">
-      <div class="label">Utbetalingsdato</div>
-      <div class="val" style="font-size:1rem">{_fmt_dato(bet)}</div>
-    </div>
-    <div class="kcard">
-      <div class="label">Kvartalsrapport</div>
-      <div class="val kcard-rapport" style="font-size:1rem">{_fmt_dato(rapport_dato) if rapport_dato else '—'}</div>
-    </div>
-    <div class="kcard">
-      <div class="label">5-årssnitt yield</div>
-      <div class="val green">{_nf(snitt5, 2)}%</div>
-    </div>
-    <div class="kcard">
-      <div class="label">År med utbytte</div>
-      <div class="val">{ar_med}</div>
-    </div>
-    {pe_card}
-  </div>
+  {korttall_html}
 
   {delaar_varsel}
 
   {betalt_boks}
 
+  {om_seksjon}
+
   {investor_badges_html}
 
   {ai_oppsummering_seksjon}
-
-  {tv_chart_seksjon}
 
   </section>
 

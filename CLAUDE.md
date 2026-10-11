@@ -47,6 +47,20 @@ This is a Progressive Web App (PWA) for tracking Norwegian dividend-paying stock
 
 Gray scale (UI chrome, text, borders) uses standard Tailwind gray: `gray-50`→`gray-950`.
 
+**Visual roles (`STYLE.md`, 2026-10-11).** Numbers are neutral (`gray-900` /
+`gray-100`). Green and red mean direction only, as in the price chart. Links and
+buttons use `green-700`. Boxes are coloured only when the colour means something:
+amber warns, grey explains. The stock page template follows these rules; the
+app and the hand-written pages still use the table above until they are
+converted.
+
+**Font: Inter, self-hosted** in `assets/fonts/` (variable, latin subset, SIL
+OFL). It is set as `--font-sans` in `tw-input.css`. Never load it from Google
+Fonts: that request sends the visitor's IP address to Google before consent.
+`table` gets `tabular-nums` globally. Percentages read `3,48 %`, with a
+non-breaking space; `_pst()` in `fetch_stocks.py` writes them that way. Never
+use it for SVG or CSS values.
+
 **Core capabilities:**
 - Real-time and historical dividend data for 163 Norwegian stocks
 - Personal portfolio tracking with cost basis (FIFO), IRR, TWR, and tax calculations

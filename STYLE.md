@@ -41,9 +41,10 @@ Google Fonts: det sender besøkendes IP til Google før samtykke, og
 tall endres, og tall under hverandre står ikke på linje.
 
 **Forslag:** `font-variant-numeric: tabular-nums` på alle tabeller, nøkkelkort,
-kurs og endring. Med Inter i tillegg `font-feature-settings: "tnum", "cv11"`
-for tydelig skille mellom 1 og l. Dette er det billigste enkelttiltaket for et
-finansuttrykk.
+kurs og endring. Dette er det billigste enkelttiltaket for et finansuttrykk.
+Latin-utvalget av Inter vi bruker har `tnum`, men ikke stilvariantene
+(`cv01`–`cv13`), så `font-feature-settings` trengs ikke. (Første utgave av denne
+fila nevnte `cv11` for å skille 1 og l. Det var feil: `cv11` er en enetasjes a.)
 
 ### Tallformatet varierer
 
@@ -159,6 +160,22 @@ brødsmulesti som på aksjesidene.
   eller skravert, merket «hittil i år», slik tabellen under gjør.
 - Linjen kan være tynnere og fyllet svakere; grafen er i dag det sterkeste
   fargeinntrykket på siden.
+
+## Status
+
+**Tiltak 1–3 er prøvd ut på aksjesidene (11.10.2026)**, i en PR som venter på
+godkjenning:
+
+- Inter ligger i `assets/fonts/` og gjelder alle sider som bruker `tailwind.css`.
+  Aksjesidene laster den også direkte.
+- `tabular-nums` gjelder alle tabeller.
+- Aksjesidene har fått kurshode og kompakt nøkkeltabell, nøytrale tall, og
+  `3,48 %` med hardt mellomrom i kurshodet, tabellen og kursgrafen.
+
+Gjenstår:
+- samme tallformat i resten av malen og i appen
+- fargerollene i appen og på de håndskrevne sidene
+- kurshodet i appens aksjemodal
 
 ## Rekkefølge
 
