@@ -1,6 +1,6 @@
 {
-  "generert": "2026-10-09T20:32:34Z",
-  "antall": 7,
+  "generert": "2026-10-12T17:06:47Z",
+  "antall": 6,
   "antall_kritiske": 0,
   "varsler": [
     {
@@ -43,13 +43,6 @@
       "type": "navnavvik",
       "alvorlighet": "info",
       "melding": "Navnet avviker litt fra Yahoo: «P/F Bakkafrost» vs «Bakkafrost P/F» (likhet 71%).",
-      "forslag": "Sannsynligvis bare ulik skrivemåte. Juster gjerne navnet i data/tickers.json for konsistens."
-    },
-    {
-      "ticker": "PUBLI",
-      "type": "navnavvik",
-      "alvorlighet": "info",
-      "melding": "Navnet avviker litt fra Yahoo: «PPI Public Property Invest AB (publ)» vs «Public Property Invest ASA» (likhet 83%).",
       "forslag": "Sannsynligvis bare ulik skrivemåte. Juster gjerne navnet i data/tickers.json for konsistens."
     }
   ]

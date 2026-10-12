@@ -84,6 +84,7 @@
   ]
 }</script>
   <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Betaler Nordic Semiconductor ASA utbytte hvert år, og hvor ofte?", "acceptedAnswer": {"@type": "Answer", "text": "Nordic Semiconductor ASA betaler utbytte uregelmessig. Selskapet har betalt utbytte i 3 år, men ikke siden 2011."}}]}</script>
+  <link rel="preload" href="/assets/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin/>
   <link rel="stylesheet" href="/assets/tailwind.css"/>
   <link rel="stylesheet" href="/assets/style.css"/>
   <script>
@@ -96,8 +97,10 @@
   </script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: system-ui, -apple-system, sans-serif; line-height: 1.6; }
-    a { color: #16a34a; text-decoration: none; }
+    body { font-family: "Inter", system-ui, -apple-system, sans-serif; line-height: 1.6; }
+    /* Lenker og knapper i green-700: roligere enn green-600, og grønt er
+       ellers forbeholdt retning (kursgrafen) og aksenter (STYLE.md). */
+    a { color: #15803d; text-decoration: none; }
     a:hover { text-decoration: underline; }
     .wrap { max-width: 760px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
     .breadcrumb { font-size: 0.85rem; color: #6b7280; margin-bottom: 1.5rem; }
@@ -107,12 +110,37 @@
     .sub { font-size: 0.95rem; margin-bottom: 1.5rem; }
     .badge { display: inline-block; font-size: 0.75rem; font-weight: 600; padding: 0.2rem 0.6rem;
               border-radius: 9999px; margin-bottom: 1.25rem; }
-    .kgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
-    .kcard { border-radius: 0.75rem; padding: 1rem; border: 1px solid; }
-    .kcard .label { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.2rem; }
-    .kcard .val { font-size: 1.25rem; font-weight: 700; }
-    .kcard .val.green { color: #16a34a; }
-    .kcard-note { font-weight: 500; text-transform: none; letter-spacing: 0; opacity: 0.7; }
+    /* Kurshodet: kurs, 52-ukers spenn og tre nøkkeltall, nøytrale farger. */
+    .kurshode { margin: 0 0 1.25rem; }
+    .kh-pris, .kh-spenn-tall, .kh-tall dd, .korttall dd { font-variant-numeric: tabular-nums; }
+    .kh-topp { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 0.75rem 1.5rem; margin-bottom: 1rem; }
+    .kh-pris { font-size: 2.25rem; font-weight: 700; line-height: 1.1; letter-spacing: -0.02em; color: #111827; }
+    .kh-valuta { font-size: 1rem; font-weight: 500; letter-spacing: 0; color: #6b7280; margin-left: 0.35rem; }
+    .kh-meta { font-size: 0.8rem; color: #6b7280; margin-top: 0.25rem; }
+    .kh-spenn { display: flex; align-items: center; gap: 0.5rem; font-size: 0.78rem; color: #6b7280; flex: 0 1 300px; min-width: 240px; }
+    .kh-spenn-tekst { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; white-space: nowrap; }
+    .kh-spenn-linje { position: relative; flex: 1; height: 4px; min-width: 70px; border-radius: 2px; background: #e5e7eb; }
+    .kh-spenn-punkt { position: absolute; top: 50%; width: 10px; height: 10px; margin: -5px 0 0 -5px; border-radius: 50%; background: #111827; box-shadow: 0 0 0 2px #f9fafb; }
+    .kh-tall { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid #e5e7eb; border-radius: 0.75rem; background: #fff; }
+    .kh-tall > div { padding: 0.75rem 1rem; min-width: 0; }
+    .kh-tall > div + div { border-left: 1px solid #e5e7eb; }
+    .kh-tall dt { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #6b7280; }
+    .kh-tall dd { font-size: 1.15rem; font-weight: 600; color: #111827; margin-top: 0.15rem; white-space: nowrap; }
+    .kh-note { display: block; font-size: 0.72rem; color: #6b7280; margin-top: 0.1rem; }
+    .kh-ukjent { font-weight: 500; color: #9ca3af; }
+    .kcard-note { font-weight: 500; text-transform: none; letter-spacing: 0; opacity: 0.85; }
+    .kh-note .kcard-note { opacity: 1; }
+    @media (max-width: 480px) {
+      .kh-pris { font-size: 1.9rem; }
+      .kh-tall > div { padding: 0.6rem 0.65rem; }
+      .kh-tall dd { font-size: 0.98rem; }
+    }
+    /* Resten av de gamle nøkkelkortene, som en kompakt tabell i to spalter. */
+    .korttall { display: grid; grid-template-columns: 1fr 1fr; column-gap: 2rem; margin: 0 0 1.5rem; }
+    .korttall > div { display: flex; justify-content: space-between; gap: 1rem; padding: 0.55rem 0; border-bottom: 1px solid #e5e7eb; font-size: 0.9rem; }
+    .korttall dt { color: #6b7280; }
+    .korttall dd { font-weight: 600; color: #111827; text-align: right; white-space: nowrap; }
+    @media (max-width: 560px) { .korttall { grid-template-columns: 1fr; } }
     .hist-paagaar { font-size: 0.7rem; font-weight: 500; color: #6b7280; white-space: nowrap; }
     .dark .hist-paagaar { color: #9ca3af; }
     .desc { border-radius: 0.75rem; padding: 1rem 1.25rem; margin-bottom: 1.5rem; border: 1px solid; }
@@ -128,26 +156,24 @@
     th { padding: 0.6rem 1rem; text-align: left; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; }
     td { padding: 0.6rem 1rem; border-top: 1px solid; }
     .cta { text-align: center; margin-top: 2rem; padding: 1.5rem; border-radius: 0.75rem; border: 1px solid; }
-    .cta a { display: inline-block; background: #16a34a; color: #fff !important; font-weight: 600; padding: 0.65rem 1.5rem; border-radius: 0.5rem; text-decoration: none; }
-    .cta a:hover { background: #15803d; }
+    .cta a { display: inline-block; background: #15803d; color: #fff !important; font-weight: 600; padding: 0.65rem 1.5rem; border-radius: 0.5rem; text-decoration: none; }
+    .cta a:hover { background: #166534; }
     .updated { font-size: 0.78rem; text-align: right; margin-top: 1rem; }
     .mini-nav { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.5rem; font-size: 0.85rem; }
     .utbytte-sep { display: flex; align-items: center; gap: 0.75rem; margin: 1.75rem 0 1.25rem; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #9ca3af; }
     .utbytte-sep::before, .utbytte-sep::after { content: ''; flex: 1; height: 1px; background: #e5e7eb; }
     .dark .utbytte-sep { color: #6b7280; }
     .dark .utbytte-sep::before, .dark .utbytte-sep::after { background: #1f2937; }
-    .mini-nav a { color: #16a34a; }
-    .til-toppen { position: fixed; bottom: 1.5rem; right: 1.25rem; z-index: 40; background: #16a34a; color: #fff; border: none; border-radius: 9999px; width: 2.5rem; height: 2.5rem; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.18); opacity: 0; pointer-events: none; transition: opacity 0.2s; }
+    .mini-nav a { color: #15803d; }
+    .til-toppen { position: fixed; bottom: 1.5rem; right: 1.25rem; z-index: 40; background: #15803d; color: #fff; border: none; border-radius: 9999px; width: 2.5rem; height: 2.5rem; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.18); opacity: 0; pointer-events: none; transition: opacity 0.2s; }
     .til-toppen.synlig { opacity: 1; pointer-events: auto; }
-    .til-toppen:hover { background: #15803d; }
+    .til-toppen:hover { background: #166534; }
     .profil-seksjon { margin: 1.5rem 0; }
     .profil-badges { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem; }
     .profil-badge { font-size: 0.75rem; font-weight: 600; padding: 0.25rem 0.75rem; border-radius: 9999px; }
-    .badge-green { background: #dcfce7; color: #15803d; }
-    .badge-blue { background: #dbeafe; color: #1d4ed8; }
-    .badge-teal { background: #ccfbf1; color: #0f766e; }
-    .badge-orange { background: #ffedd5; color: #c2410c; }
-    .badge-gray { background: #f3f4f6; color: #374151; }
+    /* Profilmerkene har én nøytral stil. Fem farger uten fast betydning
+       konkurrerte med tallene (STYLE.md). */
+    .profil-badge { background: #f3f4f6; color: #374151; border: 1px solid #e5e7eb; }
     .profil-tekst { font-size: 0.9rem; line-height: 1.65; }
     .historikk-prosa { margin: 1.5rem 0; }
     .historikk-prosa p { font-size: 0.9rem; line-height: 1.7; }
@@ -171,6 +197,7 @@
     .betalt-seksjon .betalt-tabell td:not(:first-child), .betalt-seksjon .betalt-tabell th:not(:first-child) { white-space: nowrap; text-align: right; }
     .betalt-tabell th { font-weight: 600; color: #6b7280; font-size: 0.75rem; }
     .betalt-tabell td:not(:first-child) { font-variant-numeric: tabular-nums; }
+    @media (min-width: 640px) { .betalt-seksjon .betalt-tabell { display: table; } }
     .betalt-seksjon p.betalt-fotnote { font-size: 0.75rem; color: #6b7280; }
     .betalt-seksjon .nowrap { white-space: nowrap; }
     .dark .betalt-tabell th, .dark .betalt-seksjon p.betalt-fotnote { color: #94a3b8; }
@@ -179,9 +206,9 @@
     .dark .delaar-seksjon.delaar-noytral { border-left-color: #475569; }
     .mnd-strip { display: grid; grid-template-columns: repeat(12, 1fr); gap: 2px; margin-bottom: 0.85rem; }
     .mnd-celle { text-align: center; padding: 0.4rem 0.1rem; font-size: 0.62rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.02em; color: #9ca3af; background: #f1f5f9; border-radius: 0.25rem; }
-    .mnd-celle.mnd-ja { background: #16a34a; color: #fff; }
+    .mnd-celle.mnd-ja { background: #15803d; color: #fff; }
     .dark .mnd-celle { background: #1e293b; color: #64748b; }
-    .dark .mnd-celle.mnd-ja { background: #16a34a; color: #fff; }
+    .dark .mnd-celle.mnd-ja { background: #15803d; color: #fff; }
     @media (max-width: 480px) { .mnd-strip { grid-template-columns: repeat(6, 1fr); } }
     .driver-seksjon { margin: 1.5rem 0; }
     .driver-seksjon h2 { font-size: 1rem; font-weight: 700; margin-bottom: 0.6rem; }
@@ -206,15 +233,16 @@
     .dark .konto-rad { background: #052e16; border-color: #166534; }
     .dark .konto-rad p { color: #9ca3af; }
     .dark .konto-rad.konto-ikke { background: #2d0a0a; border-color: #7f1d1d; }
+    .konto-rad.konto-uavklart { border-color: #fde68a; background: #fffbeb; }
+    .konto-usikker { font-size: 1rem; font-weight: 700; color: #b45309; flex-shrink: 0; margin-top: 0.1rem; }
+    .dark .konto-rad.konto-uavklart { background: #2a1f05; border-color: #78350f; }
+    .dark .konto-usikker { color: #fbbf24; }
     .investor-profil-seksjon { margin: 1rem 0; }
     .investor-badges-rad { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.75rem; }
     .investor-forklaring { border-radius: 0.6rem; padding: 0.75rem 1rem; margin-bottom: 0.6rem; border: 1px solid; }
-    .risiko-lav { background: #f0fdf4; border-color: #86efac; }
-    .risiko-moderat { background: #fffbeb; border-color: #fcd34d; }
-    .risiko-hoy { background: #fef2f2; border-color: #fca5a5; }
-    .dark .risiko-lav { background: #052e16; border-color: #166534; }
-    .dark .risiko-moderat { background: #451a03; border-color: #92400e; }
-    .dark .risiko-hoy { background: #2d0a0a; border-color: #7f1d1d; }
+    /* Boksen er nøytral; merket inni beholder fargen, for der betyr den noe. */
+    .risiko-lav, .risiko-moderat, .risiko-hoy { background: #fff; border-color: #e5e7eb; }
+    .dark .risiko-lav, .dark .risiko-moderat, .dark .risiko-hoy { background: #111827; border-color: #1f2937; }
     .investor-forklaring-tittel { margin-bottom: 0.5rem; }
     .investor-forklaring-liste { list-style: none; padding: 0; margin: 0; }
     .investor-forklaring-liste li { font-size: 0.8rem; line-height: 1.55; padding: 0.2rem 0; color: #374151; }
@@ -232,39 +260,31 @@
     .investor-risiko-lav { background: #dcfce7; color: #15803d; border-color: #86efac; }
     .investor-risiko-moderat { background: #fef3c7; color: #92400e; border-color: #fcd34d; }
     .investor-risiko-hoy { background: #fee2e2; color: #991b1b; border-color: #fca5a5; }
-    .investor-mal { background: #eff6ff; color: #1e40af; border-color: #bfdbfe; }
+    .investor-mal { background: #f3f4f6; color: #374151; border-color: #e5e7eb; }
     .dark .investor-risiko-lav { background: #052e16; color: #86efac; border-color: #166534; }
     .dark .investor-risiko-moderat { background: #451a03; color: #fcd34d; border-color: #92400e; }
     .dark .investor-risiko-hoy { background: #2d0a0a; color: #fca5a5; border-color: #7f1d1d; }
-    .dark .investor-mal { background: #1e3a5f; color: #93c5fd; border-color: #1d4ed8; }
-    .kcard-rapport { color: #2563eb; }
-    .dark .kcard-rapport { color: #93c5fd; }
+    .dark .investor-mal { background: #1f2937; color: #d1d5db; border-color: #374151; }
     .relaterte { margin: 1.5rem 0; }
     .relaterte h2 { margin-bottom: 0.75rem; }
     .rel-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 0.75rem; }
     .rel-kort { border-radius: 0.75rem; padding: 0.75rem 1rem; border: 1px solid; display: flex; flex-direction: column; gap: 0.2rem; text-decoration: none; transition: border-color 0.15s; }
     .rel-kort:hover { border-color: #16a34a; text-decoration: none; }
-    .rel-ticker { font-weight: 700; font-size: 1rem; color: #16a34a; }
+    .rel-ticker { font-weight: 700; font-size: 1rem; color: #111827; }
     .rel-navn { font-size: 0.75rem; }
-    .rel-yield { font-size: 0.8rem; font-weight: 600; color: #16a34a; }
+    .rel-yield { font-size: 0.8rem; font-weight: 600; color: #374151; font-variant-numeric: tabular-nums; }
     @media (max-width: 480px) { h1 { font-size: 1.4rem; } }
 
     /* Light mode */
     body { background: #f9fafb; color: #111827; }
-    .kcard { background: #fff; border-color: #e5e7eb; }
-    .kcard .label { color: #9ca3af; }
-    .kcard .val { color: #111827; }
     .desc { background: #fff; border-color: #e5e7eb; color: #374151; }
-    .analyse { background: #f0fdf4; border-color: #bbf7d0; color: #374151; }
-    .analyse h2 { color: #15803d; }
-    .ai-oppsummering { background: #eff6ff; border-color: #bfdbfe; color: #374151; }
-    .ai-oppsummering h2 { color: #1d4ed8; }
+    .analyse, .ai-oppsummering { background: #fff; border-color: #e5e7eb; color: #374151; }
     h2 { color: #374151; }
     table { background: #fff; border-color: #e5e7eb; }
     th { background: #f3f4f6; color: #6b7280; }
     td { border-color: #f3f4f6; }
     tr:hover td { background: #f9fafb; }
-    .cta { background: #f0fdf4; border-color: #bbf7d0; }
+    .cta { background: #fff; border-color: #e5e7eb; }
     .cta p { color: #374151; }
     .updated { color: #9ca3af; }
     .breadcrumb { color: #6b7280; }
@@ -277,7 +297,7 @@
     .faq-item details summary::after { content: '+'; font-size: 1.1rem; flex-shrink: 0; margin-left: 0.5rem; color: #9ca3af; }
     .faq-item details[open] summary::after { content: '−'; }
     .faq-item details summary:hover { background: #f9fafb; }
-    .faq-item details[open] summary { background: #f0fdf4; color: #15803d; }
+    .faq-item details[open] summary { background: #f9fafb; color: #111827; }
     .faq-svar { padding: 0.75rem 1.25rem 1rem; font-size: 0.85rem; color: #4b5563; line-height: 1.65; border-top: 1px solid #f3f4f6; }
     .rel-kort { background: #fff; border-color: #e5e7eb; }
     .rel-navn { color: #6b7280; }
@@ -291,20 +311,23 @@
 
     /* Dark mode */
     .dark body { background: #030712; color: #f3f4f6; }
-    .dark .kcard { background: #111827; border-color: #1f2937; }
-    .dark .kcard .label { color: #6b7280; }
-    .dark .kcard .val { color: #f3f4f6; }
+    .dark .kh-pris, .dark .kh-tall dd, .dark .korttall dd { color: #f3f4f6; }
+    .dark .kh-valuta, .dark .kh-meta, .dark .kh-spenn, .dark .kh-tall dt, .dark .kh-note, .dark .korttall dt { color: #9ca3af; }
+    .dark .kh-tall { background: #111827; border-color: #1f2937; }
+    .dark .kh-tall > div + div, .dark .korttall > div { border-color: #1f2937; }
+    .dark .kh-spenn-linje { background: #374151; }
+    .dark .kh-spenn-punkt { background: #f3f4f6; box-shadow: 0 0 0 2px #030712; }
+    .dark .kh-ukjent { color: #6b7280; }
+    .dark .rel-ticker { color: #f3f4f6; }
+    .dark .rel-yield { color: #d1d5db; }
     .dark .desc { background: #111827; border-color: #1f2937; color: #d1d5db; }
-    .dark .analyse { background: #052e16; border-color: #166534; color: #d1d5db; }
-    .dark .analyse h2 { color: #4ade80; }
-    .dark .ai-oppsummering { background: #0f1729; border-color: #1e3a5f; color: #d1d5db; }
-    .dark .ai-oppsummering h2 { color: #93c5fd; }
+    .dark .analyse, .dark .ai-oppsummering { background: #111827; border-color: #1f2937; color: #d1d5db; }
     .dark h2 { color: #d1d5db; }
     .dark table { background: #111827; border-color: #1f2937; }
     .dark th { background: #1f2937; color: #9ca3af; }
     .dark td { border-color: #1f2937; }
     .dark tr:hover td { background: #1f2937; }
-    .dark .cta { background: #052e16; border-color: #166534; }
+    .dark .cta { background: #111827; border-color: #1f2937; }
     .dark .cta p { color: #d1d5db; }
     .dark .updated { color: #6b7280; }
     .dark .breadcrumb { color: #9ca3af; }
@@ -312,15 +335,10 @@
     .dark .sub { color: #9ca3af; }
     .dark .badge { background: #14532d; color: #86efac; }
     .dark a { color: #4ade80; }
-    .dark .cta a { background: #16a34a; color: #fff !important; }
-    .dark .kcard .val.green { color: #4ade80; }
+    .dark .cta a { background: #15803d; color: #fff !important; }
     .dark .ytick { stroke: #1f2937; }
     .dark .hbar { fill: #22c55e; }
-    .dark .badge-green { background: #14532d; color: #86efac; }
-    .dark .badge-blue { background: #1e3a5f; color: #93c5fd; }
-    .dark .badge-teal { background: #134e4a; color: #5eead4; }
-    .dark .badge-orange { background: #431407; color: #fdba74; }
-    .dark .badge-gray { background: #1f2937; color: #d1d5db; }
+    .dark .profil-badge { background: #1f2937; color: #d1d5db; border-color: #374151; }
     .dark .profil-tekst { color: #9ca3af; }
     .dark .historikk-prosa p { color: #9ca3af; }
     .dark .risiko-liste li { border-left-color: #7f1d1d; color: #9ca3af; }
@@ -330,7 +348,7 @@
     .dark .faq-item { border-color: #374151; }
     .dark .faq-item details summary { color: #e5e7eb; }
     .dark .faq-item details summary:hover { background: #1f2937; }
-    .dark .faq-item details[open] summary { background: #052e16; color: #4ade80; }
+    .dark .faq-item details[open] summary { background: #1f2937; color: #f3f4f6; }
     .dark .faq-svar { color: #9ca3af; border-top-color: #1f2937; }
   </style>
 </head>
@@ -405,6 +423,8 @@
   <h1>NOD – Nordic Semiconductor ASA</h1>
   <p class="sub">Informasjonsteknologi · Uregelmessig utbytte · Oslo Børs</p>
 
+  <div class="kurshode"><div class="kh-topp"><div><div class="kh-pris">173,50<span class="kh-valuta">NOK</span></div><div class="kh-meta">Kurs 12. okt 2026</div></div><div class="kh-spenn" aria-label="52 ukers spenn fra 123,70 til 211,00"><span class="kh-spenn-tekst">52 uker</span><span class="kh-spenn-tall">123,70</span><span class="kh-spenn-linje"><span class="kh-spenn-punkt" style="left:57.0%"></span></span><span class="kh-spenn-tall">211,00</span></div></div><dl class="kh-tall"><div><dt>Yield</dt><dd>—</dd></div><div><dt>Utbytte/aksje</dt><dd>0,00 NOK</dd></div><div><dt>Ex-dato</dt><dd><span class="kh-ukjent">Ikke kjent</span></dd></div></dl></div>
+
   <nav class="ak-tabnav" id="ak-tabnav" aria-label="Sideseksjoner">
     <a href="#oversikt" class="ak-tab aktiv">Oversikt</a>
     <a href="#utbytte" class="ak-tab">Utbytte</a>
@@ -413,53 +433,9 @@
   </nav>
 
   <!-- ── OVERSIKT ── -->
+  <!-- Tallene først, så grafen, så teksten (STYLE.md, tiltak 3). Kurshodet
+       over fanene erstatter de ni nøkkelkortene. -->
   <section id="oversikt">
-
-  <div class="desc"><h2>Om selskapet</h2><p>Nordic Semiconductor deler ikke ut utbytte i dag, og selskapet sier det rett ut: aksjonærene skal først og fremst få avkastning gjennom kursen. For 2025 foreslo styret at hele overskuddet i morselskapet ble holdt tilbake. Begrunnelsen er en vekststrategi som krever store beløp til forskning, salg og markedsføring, og en bransje som svinger kraftig. Selskapet vil derfor ha høy egenkapitalandel og god likviditet. Det langsiktige målet er utbytte basert på overskuddslikviditet, og styret sier at det vil vurdere å gi penger tilbake når kontantbeholdningen er større enn det likviditetspolitikken krever.</p><p>Nordic ble etablert i 1983 og har hovedkontor i Trondheim. Selskapet designer brikker for trådløs kommunikasjon med svært lavt strømforbruk, men eier ingen fabrikker. Produksjonen settes ut til underleverandører i Europa og Asia, blant dem TSMC og GlobalFoundries, og brikkene selges gjennom distributører til elektronikkprodusenter over hele verden. Nordic var tidlig ute med Bluetooth Low Energy og beskriver seg som verdensledende der. Kortrekkende brikker gir fortsatt nesten hele omsetningen, og den nye nRF54-serien skal etter hvert ta over etter nRF52, som fortsatt står for det meste av inntektene.</p><p>Ved siden av kjernen bygger Nordic opp mobilbasert tingenes internett, også med satellittforbindelse. Wi-Fi og strømstyringsbrikker omtaler selskapet selv som oppstartsvirksomheter. I 2025 kjøpte det Memfault, som gjør det mulig å selge skytjenester for å overvåke og oppdatere ferdige produkter. Omsetningen er i dollar. Nedturer i halvlederbransjen kommer ofte sammen med lagerkorreksjoner hos kundene, og Nordic har tidligere fått lavere inntekter i slike perioder. Selskapet skriver selv at behovet for å fortsette utviklingen begrenser hvor mye kostnadene kan kuttes. Folketrygdfondet er største aksjonær.</p></div>
-
-  <div class="kgrid">
-    <div class="kcard">
-      <div class="label">Kurs</div>
-      <div class="val">176,20 NOK</div>
-    </div>
-    <div class="kcard">
-      <div class="label">Yield</div>
-      <div class="val green">—</div>
-    </div>
-    <div class="kcard">
-      <div class="label">Utbytte/aksje</div>
-      <div class="val">0,00 NOK</div>
-    </div>
-    <div class="kcard">
-      <div class="label">Ex-dato</div>
-      <div class="val" style="font-size:1rem">—</div>
-    </div>
-    <div class="kcard">
-      <div class="label">Utbetalingsdato</div>
-      <div class="val" style="font-size:1rem">—</div>
-    </div>
-    <div class="kcard">
-      <div class="label">Kvartalsrapport</div>
-      <div class="val kcard-rapport" style="font-size:1rem">22. okt 2026</div>
-    </div>
-    <div class="kcard">
-      <div class="label">5-årssnitt yield</div>
-      <div class="val green">0,00%</div>
-    </div>
-    <div class="kcard">
-      <div class="label">År med utbytte</div>
-      <div class="val">3</div>
-    </div>
-    <div class="kcard"><div class="label">P/E</div><div class="val">111,5</div></div>
-  </div>
-
-  
-
-  
-
-  <div class="investor-profil-seksjon"><div class="investor-badges-rad"><span class="investor-badge investor-risiko-moderat">Moderat risiko</span></div><div class="investor-forklaring risiko-moderat"><div class="investor-forklaring-tittel"><span class="investor-badge investor-risiko-moderat">Moderat risiko</span></div><ul class="investor-forklaring-liste"><li>Sektor (Informasjonsteknologi) har en viss konjunktureksponering</li><li>Utbytte i 3 år, men med brudd — ingen utbytte siden 2011</li></ul></div></div>
-
-  
 
   
 <div class="kurs-lenker">
@@ -475,7 +451,7 @@
   <canvas id="kurs-canvas-NOD" style="display:block;border-radius:10px;width:100%;"></canvas>
   <script>
   (function() {
-    var ALLE = [{"d": "2021-10-22", "k": 265.2}, {"d": "2021-10-29", "k": 250.0}, {"d": "2021-11-05", "k": 276.6}, {"d": "2021-11-12", "k": 292.2}, {"d": "2021-11-19", "k": 306.0}, {"d": "2021-11-26", "k": 278.6}, {"d": "2021-12-03", "k": 288.0}, {"d": "2021-12-10", "k": 297.4}, {"d": "2021-12-17", "k": 273.2}, {"d": "2021-12-23", "k": 286.4}, {"d": "2021-12-30", "k": 297.6}, {"d": "2022-01-07", "k": 276.2}, {"d": "2022-01-14", "k": 269.0}, {"d": "2022-01-21", "k": 260.2}, {"d": "2022-01-28", "k": 243.4}, {"d": "2022-02-04", "k": 246.0}, {"d": "2022-02-11", "k": 232.0}, {"d": "2022-02-18", "k": 221.2}, {"d": "2022-02-25", "k": 230.6}, {"d": "2022-03-04", "k": 219.0}, {"d": "2022-03-11", "k": 218.6}, {"d": "2022-03-18", "k": 241.6}, {"d": "2022-03-25", "k": 235.8}, {"d": "2022-04-01", "k": 218.6}, {"d": "2022-04-08", "k": 177.85}, {"d": "2022-04-13", "k": 172.35}, {"d": "2022-04-22", "k": 174.8}, {"d": "2022-04-29", "k": 191.45}, {"d": "2022-05-06", "k": 177.35}, {"d": "2022-05-13", "k": 175.65}, {"d": "2022-05-20", "k": 173.75}, {"d": "2022-05-27", "k": 178.0}, {"d": "2022-06-03", "k": 185.7}, {"d": "2022-06-10", "k": 166.8}, {"d": "2022-06-17", "k": 147.05}, {"d": "2022-06-24", "k": 162.0}, {"d": "2022-07-01", "k": 150.4}, {"d": "2022-07-08", "k": 156.9}, {"d": "2022-07-15", "k": 148.0}, {"d": "2022-07-22", "k": 169.2}, {"d": "2022-07-29", "k": 168.0}, {"d": "2022-08-05", "k": 174.3}, {"d": "2022-08-12", "k": 170.0}, {"d": "2022-08-19", "k": 158.95}, {"d": "2022-08-26", "k": 152.4}, {"d": "2022-09-02", "k": 143.05}, {"d": "2022-09-09", "k": 151.8}, {"d": "2022-09-16", "k": 136.9}, {"d": "2022-09-23", "k": 133.85}, {"d": "2022-09-30", "k": 145.5}, {"d": "2022-10-07", "k": 141.75}, {"d": "2022-10-14", "k": 137.6}, {"d": "2022-10-21", "k": 147.5}, {"d": "2022-10-28", "k": 147.4}, {"d": "2022-11-04", "k": 146.6}, {"d": "2022-11-11", "k": 177.9}, {"d": "2022-11-18", "k": 176.65}, {"d": "2022-11-25", "k": 178.0}, {"d": "2022-12-02", "k": 181.1}, {"d": "2022-12-09", "k": 176.8}, {"d": "2022-12-16", "k": 173.45}, {"d": "2022-12-23", "k": 166.15}, {"d": "2022-12-30", "k": 163.9}, {"d": "2023-01-06", "k": 174.25}, {"d": "2023-01-13", "k": 168.65}, {"d": "2023-01-20", "k": 154.2}, {"d": "2023-01-27", "k": 168.05}, {"d": "2023-02-03", "k": 174.4}, {"d": "2023-02-10", "k": 141.05}, {"d": "2023-02-17", "k": 149.7}, {"d": "2023-02-24", "k": 149.45}, {"d": "2023-03-03", "k": 161.55}, {"d": "2023-03-10", "k": 163.25}, {"d": "2023-03-17", "k": 161.45}, {"d": "2023-03-24", "k": 156.6}, {"d": "2023-03-31", "k": 159.5}, {"d": "2023-04-05", "k": 151.35}, {"d": "2023-04-14", "k": 152.55}, {"d": "2023-04-21", "k": 115.5}, {"d": "2023-04-28", "k": 115.15}, {"d": "2023-05-05", "k": 114.15}, {"d": "2023-05-12", "k": 109.25}, {"d": "2023-05-19", "k": 114.5}, {"d": "2023-05-26", "k": 116.7}, {"d": "2023-06-02", "k": 122.45}, {"d": "2023-06-09", "k": 133.0}, {"d": "2023-06-16", "k": 135.5}, {"d": "2023-06-23", "k": 125.2}, {"d": "2023-06-30", "k": 130.45}, {"d": "2023-07-07", "k": 122.7}, {"d": "2023-07-14", "k": 144.05}, {"d": "2023-07-21", "k": 142.35}, {"d": "2023-07-28", "k": 149.2}, {"d": "2023-08-04", "k": 145.65}, {"d": "2023-08-11", "k": 140.95}, {"d": "2023-08-18", "k": 131.0}, {"d": "2023-08-25", "k": 128.65}, {"d": "2023-09-01", "k": 129.25}, {"d": "2023-09-08", "k": 120.5}, {"d": "2023-09-15", "k": 122.65}, {"d": "2023-09-22", "k": 111.9}, {"d": "2023-09-29", "k": 111.05}, {"d": "2023-10-06", "k": 108.4}, {"d": "2023-10-13", "k": 116.2}, {"d": "2023-10-20", "k": 89.56}, {"d": "2023-10-27", "k": 88.64}, {"d": "2023-11-03", "k": 91.86}, {"d": "2023-11-10", "k": 93.98}, {"d": "2023-11-17", "k": 104.65}, {"d": "2023-11-24", "k": 98.22}, {"d": "2023-12-01", "k": 98.76}, {"d": "2023-12-08", "k": 110.9}, {"d": "2023-12-15", "k": 126.95}, {"d": "2023-12-22", "k": 124.25}, {"d": "2023-12-29", "k": 126.0}, {"d": "2024-01-05", "k": 112.15}, {"d": "2024-01-12", "k": 112.3}, {"d": "2024-01-19", "k": 111.9}, {"d": "2024-01-26", "k": 110.3}, {"d": "2024-02-02", "k": 104.55}, {"d": "2024-02-09", "k": 97.3}, {"d": "2024-02-16", "k": 97.48}, {"d": "2024-02-23", "k": 91.8}, {"d": "2024-03-01", "k": 92.8}, {"d": "2024-03-08", "k": 86.14}, {"d": "2024-03-15", "k": 84.88}, {"d": "2024-03-22", "k": 85.58}, {"d": "2024-03-27", "k": 85.8}, {"d": "2024-04-05", "k": 77.44}, {"d": "2024-04-12", "k": 94.24}, {"d": "2024-04-19", "k": 88.9}, {"d": "2024-04-26", "k": 116.4}, {"d": "2024-05-03", "k": 128.65}, {"d": "2024-05-10", "k": 134.35}, {"d": "2024-05-16", "k": 132.95}, {"d": "2024-05-24", "k": 135.0}, {"d": "2024-05-31", "k": 134.5}, {"d": "2024-06-07", "k": 142.95}, {"d": "2024-06-14", "k": 144.35}, {"d": "2024-06-21", "k": 137.95}, {"d": "2024-06-28", "k": 142.6}, {"d": "2024-07-05", "k": 150.0}, {"d": "2024-07-12", "k": 156.35}, {"d": "2024-07-19", "k": 146.05}, {"d": "2024-07-26", "k": 130.85}, {"d": "2024-08-02", "k": 128.05}, {"d": "2024-08-09", "k": 137.4}, {"d": "2024-08-16", "k": 140.4}, {"d": "2024-08-23", "k": 140.6}, {"d": "2024-08-30", "k": 143.4}, {"d": "2024-09-06", "k": 125.5}, {"d": "2024-09-13", "k": 131.1}, {"d": "2024-09-20", "k": 141.85}, {"d": "2024-09-27", "k": 105.9}, {"d": "2024-10-04", "k": 98.92}, {"d": "2024-10-11", "k": 96.62}, {"d": "2024-10-18", "k": 98.54}, {"d": "2024-10-25", "k": 105.35}, {"d": "2024-11-01", "k": 108.25}, {"d": "2024-11-08", "k": 100.5}, {"d": "2024-11-15", "k": 98.94}, {"d": "2024-11-22", "k": 96.0}, {"d": "2024-11-29", "k": 98.94}, {"d": "2024-12-06", "k": 101.5}, {"d": "2024-12-13", "k": 99.7}, {"d": "2024-12-20", "k": 97.56}, {"d": "2024-12-27", "k": 101.85}, {"d": "2025-01-03", "k": 103.7}, {"d": "2025-01-10", "k": 109.0}, {"d": "2025-01-17", "k": 116.15}, {"d": "2025-01-24", "k": 118.0}, {"d": "2025-01-31", "k": 114.0}, {"d": "2025-02-07", "k": 144.3}, {"d": "2025-02-14", "k": 143.25}, {"d": "2025-02-21", "k": 153.5}, {"d": "2025-02-28", "k": 137.45}, {"d": "2025-03-07", "k": 132.25}, {"d": "2025-03-14", "k": 133.15}, {"d": "2025-03-21", "k": 134.05}, {"d": "2025-03-28", "k": 128.0}, {"d": "2025-04-04", "k": 110.6}, {"d": "2025-04-11", "k": 104.1}, {"d": "2025-04-16", "k": 108.0}, {"d": "2025-04-25", "k": 121.9}, {"d": "2025-05-02", "k": 112.0}, {"d": "2025-05-09", "k": 116.4}, {"d": "2025-05-16", "k": 123.8}, {"d": "2025-05-23", "k": 121.8}, {"d": "2025-05-30", "k": 125.1}, {"d": "2025-06-06", "k": 135.0}, {"d": "2025-06-13", "k": 137.1}, {"d": "2025-06-20", "k": 135.9}, {"d": "2025-06-27", "k": 133.9}, {"d": "2025-07-04", "k": 139.2}, {"d": "2025-07-11", "k": 137.6}, {"d": "2025-07-18", "k": 145.0}, {"d": "2025-07-25", "k": 136.6}, {"d": "2025-08-01", "k": 141.0}, {"d": "2025-08-08", "k": 137.7}, {"d": "2025-08-15", "k": 168.3}, {"d": "2025-08-22", "k": 165.2}, {"d": "2025-08-29", "k": 165.9}, {"d": "2025-09-05", "k": 155.0}, {"d": "2025-09-12", "k": 151.8}, {"d": "2025-09-19", "k": 161.8}, {"d": "2025-09-26", "k": 153.7}, {"d": "2025-10-03", "k": 161.3}, {"d": "2025-10-10", "k": 164.5}, {"d": "2025-10-17", "k": 164.1}, {"d": "2025-10-24", "k": 163.6}, {"d": "2025-10-31", "k": 147.0}, {"d": "2025-11-07", "k": 132.3}, {"d": "2025-11-14", "k": 137.0}, {"d": "2025-11-21", "k": 130.4}, {"d": "2025-11-28", "k": 134.2}, {"d": "2025-12-05", "k": 136.9}, {"d": "2025-12-12", "k": 131.5}, {"d": "2025-12-19", "k": 128.3}, {"d": "2025-12-23", "k": 129.9}, {"d": "2026-01-02", "k": 137.3}, {"d": "2026-01-09", "k": 138.1}, {"d": "2026-01-16", "k": 137.3}, {"d": "2026-01-23", "k": 134.1}, {"d": "2026-01-30", "k": 129.6}, {"d": "2026-02-06", "k": 155.2}, {"d": "2026-02-13", "k": 142.2}, {"d": "2026-02-20", "k": 144.5}, {"d": "2026-02-27", "k": 143.3}, {"d": "2026-03-06", "k": 141.4}, {"d": "2026-03-13", "k": 148.9}, {"d": "2026-03-20", "k": 146.0}, {"d": "2026-03-27", "k": 146.3}, {"d": "2026-04-01", "k": 152.7}, {"d": "2026-04-10", "k": 162.0}, {"d": "2026-04-17", "k": 185.8}, {"d": "2026-04-24", "k": 188.2}, {"d": "2026-04-30", "k": 189.0}, {"d": "2026-05-08", "k": 199.3}, {"d": "2026-05-15", "k": 204.0}, {"d": "2026-05-22", "k": 207.6}, {"d": "2026-05-29", "k": 200.4}, {"d": "2026-06-05", "k": 193.2}, {"d": "2026-06-12", "k": 187.3}, {"d": "2026-06-19", "k": 188.6}, {"d": "2026-06-26", "k": 177.7}, {"d": "2026-07-03", "k": 182.2}, {"d": "2026-07-10", "k": 168.2}, {"d": "2026-07-17", "k": 159.8}, {"d": "2026-07-24", "k": 158.4}, {"d": "2026-07-31", "k": 158.7}, {"d": "2026-08-07", "k": 164.7}, {"d": "2026-08-14", "k": 169.9}, {"d": "2026-08-21", "k": 163.1}, {"d": "2026-08-28", "k": 167.7}, {"d": "2026-09-04", "k": 168.1}, {"d": "2026-09-11", "k": 175.2}, {"d": "2026-09-18", "k": 177.5}, {"d": "2026-09-25", "k": 184.6}, {"d": "2026-10-02", "k": 188.9}, {"d": "2026-10-09", "k": 176.2}];
+    var ALLE = [{"d": "2021-10-29", "k": 250.0}, {"d": "2021-11-05", "k": 276.6}, {"d": "2021-11-12", "k": 292.2}, {"d": "2021-11-19", "k": 306.0}, {"d": "2021-11-26", "k": 278.6}, {"d": "2021-12-03", "k": 288.0}, {"d": "2021-12-10", "k": 297.4}, {"d": "2021-12-17", "k": 273.2}, {"d": "2021-12-23", "k": 286.4}, {"d": "2021-12-30", "k": 297.6}, {"d": "2022-01-07", "k": 276.2}, {"d": "2022-01-14", "k": 269.0}, {"d": "2022-01-21", "k": 260.2}, {"d": "2022-01-28", "k": 243.4}, {"d": "2022-02-04", "k": 246.0}, {"d": "2022-02-11", "k": 232.0}, {"d": "2022-02-18", "k": 221.2}, {"d": "2022-02-25", "k": 230.6}, {"d": "2022-03-04", "k": 219.0}, {"d": "2022-03-11", "k": 218.6}, {"d": "2022-03-18", "k": 241.6}, {"d": "2022-03-25", "k": 235.8}, {"d": "2022-04-01", "k": 218.6}, {"d": "2022-04-08", "k": 177.85}, {"d": "2022-04-13", "k": 172.35}, {"d": "2022-04-22", "k": 174.8}, {"d": "2022-04-29", "k": 191.45}, {"d": "2022-05-06", "k": 177.35}, {"d": "2022-05-13", "k": 175.65}, {"d": "2022-05-20", "k": 173.75}, {"d": "2022-05-27", "k": 178.0}, {"d": "2022-06-03", "k": 185.7}, {"d": "2022-06-10", "k": 166.8}, {"d": "2022-06-17", "k": 147.05}, {"d": "2022-06-24", "k": 162.0}, {"d": "2022-07-01", "k": 150.4}, {"d": "2022-07-08", "k": 156.9}, {"d": "2022-07-15", "k": 148.0}, {"d": "2022-07-22", "k": 169.2}, {"d": "2022-07-29", "k": 168.0}, {"d": "2022-08-05", "k": 174.3}, {"d": "2022-08-12", "k": 170.0}, {"d": "2022-08-19", "k": 158.95}, {"d": "2022-08-26", "k": 152.4}, {"d": "2022-09-02", "k": 143.05}, {"d": "2022-09-09", "k": 151.8}, {"d": "2022-09-16", "k": 136.9}, {"d": "2022-09-23", "k": 133.85}, {"d": "2022-09-30", "k": 145.5}, {"d": "2022-10-07", "k": 141.75}, {"d": "2022-10-14", "k": 137.6}, {"d": "2022-10-21", "k": 147.5}, {"d": "2022-10-28", "k": 147.4}, {"d": "2022-11-04", "k": 146.6}, {"d": "2022-11-11", "k": 177.9}, {"d": "2022-11-18", "k": 176.65}, {"d": "2022-11-25", "k": 178.0}, {"d": "2022-12-02", "k": 181.1}, {"d": "2022-12-09", "k": 176.8}, {"d": "2022-12-16", "k": 173.45}, {"d": "2022-12-23", "k": 166.15}, {"d": "2022-12-30", "k": 163.9}, {"d": "2023-01-06", "k": 174.25}, {"d": "2023-01-13", "k": 168.65}, {"d": "2023-01-20", "k": 154.2}, {"d": "2023-01-27", "k": 168.05}, {"d": "2023-02-03", "k": 174.4}, {"d": "2023-02-10", "k": 141.05}, {"d": "2023-02-17", "k": 149.7}, {"d": "2023-02-24", "k": 149.45}, {"d": "2023-03-03", "k": 161.55}, {"d": "2023-03-10", "k": 163.25}, {"d": "2023-03-17", "k": 161.45}, {"d": "2023-03-24", "k": 156.6}, {"d": "2023-03-31", "k": 159.5}, {"d": "2023-04-05", "k": 151.35}, {"d": "2023-04-14", "k": 152.55}, {"d": "2023-04-21", "k": 115.5}, {"d": "2023-04-28", "k": 115.15}, {"d": "2023-05-05", "k": 114.15}, {"d": "2023-05-12", "k": 109.25}, {"d": "2023-05-19", "k": 114.5}, {"d": "2023-05-26", "k": 116.7}, {"d": "2023-06-02", "k": 122.45}, {"d": "2023-06-09", "k": 133.0}, {"d": "2023-06-16", "k": 135.5}, {"d": "2023-06-23", "k": 125.2}, {"d": "2023-06-30", "k": 130.45}, {"d": "2023-07-07", "k": 122.7}, {"d": "2023-07-14", "k": 144.05}, {"d": "2023-07-21", "k": 142.35}, {"d": "2023-07-28", "k": 149.2}, {"d": "2023-08-04", "k": 145.65}, {"d": "2023-08-11", "k": 140.95}, {"d": "2023-08-18", "k": 131.0}, {"d": "2023-08-25", "k": 128.65}, {"d": "2023-09-01", "k": 129.25}, {"d": "2023-09-08", "k": 120.5}, {"d": "2023-09-15", "k": 122.65}, {"d": "2023-09-22", "k": 111.9}, {"d": "2023-09-29", "k": 111.05}, {"d": "2023-10-06", "k": 108.4}, {"d": "2023-10-13", "k": 116.2}, {"d": "2023-10-20", "k": 89.56}, {"d": "2023-10-27", "k": 88.64}, {"d": "2023-11-03", "k": 91.86}, {"d": "2023-11-10", "k": 93.98}, {"d": "2023-11-17", "k": 104.65}, {"d": "2023-11-24", "k": 98.22}, {"d": "2023-12-01", "k": 98.76}, {"d": "2023-12-08", "k": 110.9}, {"d": "2023-12-15", "k": 126.95}, {"d": "2023-12-22", "k": 124.25}, {"d": "2023-12-29", "k": 126.0}, {"d": "2024-01-05", "k": 112.15}, {"d": "2024-01-12", "k": 112.3}, {"d": "2024-01-19", "k": 111.9}, {"d": "2024-01-26", "k": 110.3}, {"d": "2024-02-02", "k": 104.55}, {"d": "2024-02-09", "k": 97.3}, {"d": "2024-02-16", "k": 97.48}, {"d": "2024-02-23", "k": 91.8}, {"d": "2024-03-01", "k": 92.8}, {"d": "2024-03-08", "k": 86.14}, {"d": "2024-03-15", "k": 84.88}, {"d": "2024-03-22", "k": 85.58}, {"d": "2024-03-27", "k": 85.8}, {"d": "2024-04-05", "k": 77.44}, {"d": "2024-04-12", "k": 94.24}, {"d": "2024-04-19", "k": 88.9}, {"d": "2024-04-26", "k": 116.4}, {"d": "2024-05-03", "k": 128.65}, {"d": "2024-05-10", "k": 134.35}, {"d": "2024-05-16", "k": 132.95}, {"d": "2024-05-24", "k": 135.0}, {"d": "2024-05-31", "k": 134.5}, {"d": "2024-06-07", "k": 142.95}, {"d": "2024-06-14", "k": 144.35}, {"d": "2024-06-21", "k": 137.95}, {"d": "2024-06-28", "k": 142.6}, {"d": "2024-07-05", "k": 150.0}, {"d": "2024-07-12", "k": 156.35}, {"d": "2024-07-19", "k": 146.05}, {"d": "2024-07-26", "k": 130.85}, {"d": "2024-08-02", "k": 128.05}, {"d": "2024-08-09", "k": 137.4}, {"d": "2024-08-16", "k": 140.4}, {"d": "2024-08-23", "k": 140.6}, {"d": "2024-08-30", "k": 143.4}, {"d": "2024-09-06", "k": 125.5}, {"d": "2024-09-13", "k": 131.1}, {"d": "2024-09-20", "k": 141.85}, {"d": "2024-09-27", "k": 105.9}, {"d": "2024-10-04", "k": 98.92}, {"d": "2024-10-11", "k": 96.62}, {"d": "2024-10-18", "k": 98.54}, {"d": "2024-10-25", "k": 105.35}, {"d": "2024-11-01", "k": 108.25}, {"d": "2024-11-08", "k": 100.5}, {"d": "2024-11-15", "k": 98.94}, {"d": "2024-11-22", "k": 96.0}, {"d": "2024-11-29", "k": 98.94}, {"d": "2024-12-06", "k": 101.5}, {"d": "2024-12-13", "k": 99.7}, {"d": "2024-12-20", "k": 97.56}, {"d": "2024-12-27", "k": 101.85}, {"d": "2025-01-03", "k": 103.7}, {"d": "2025-01-10", "k": 109.0}, {"d": "2025-01-17", "k": 116.15}, {"d": "2025-01-24", "k": 118.0}, {"d": "2025-01-31", "k": 114.0}, {"d": "2025-02-07", "k": 144.3}, {"d": "2025-02-14", "k": 143.25}, {"d": "2025-02-21", "k": 153.5}, {"d": "2025-02-28", "k": 137.45}, {"d": "2025-03-07", "k": 132.25}, {"d": "2025-03-14", "k": 133.15}, {"d": "2025-03-21", "k": 134.05}, {"d": "2025-03-28", "k": 128.0}, {"d": "2025-04-04", "k": 110.6}, {"d": "2025-04-11", "k": 104.1}, {"d": "2025-04-16", "k": 108.0}, {"d": "2025-04-25", "k": 121.9}, {"d": "2025-05-02", "k": 112.0}, {"d": "2025-05-09", "k": 116.4}, {"d": "2025-05-16", "k": 123.8}, {"d": "2025-05-23", "k": 121.8}, {"d": "2025-05-30", "k": 125.1}, {"d": "2025-06-06", "k": 135.0}, {"d": "2025-06-13", "k": 137.1}, {"d": "2025-06-20", "k": 135.9}, {"d": "2025-06-27", "k": 133.9}, {"d": "2025-07-04", "k": 139.2}, {"d": "2025-07-11", "k": 137.6}, {"d": "2025-07-18", "k": 145.0}, {"d": "2025-07-25", "k": 136.6}, {"d": "2025-08-01", "k": 141.0}, {"d": "2025-08-08", "k": 137.7}, {"d": "2025-08-15", "k": 168.3}, {"d": "2025-08-22", "k": 165.2}, {"d": "2025-08-29", "k": 165.9}, {"d": "2025-09-05", "k": 155.0}, {"d": "2025-09-12", "k": 151.8}, {"d": "2025-09-19", "k": 161.8}, {"d": "2025-09-26", "k": 153.7}, {"d": "2025-10-03", "k": 161.3}, {"d": "2025-10-10", "k": 164.5}, {"d": "2025-10-17", "k": 164.1}, {"d": "2025-10-24", "k": 163.6}, {"d": "2025-10-31", "k": 147.0}, {"d": "2025-11-07", "k": 132.3}, {"d": "2025-11-14", "k": 137.0}, {"d": "2025-11-21", "k": 130.4}, {"d": "2025-11-28", "k": 134.2}, {"d": "2025-12-05", "k": 136.9}, {"d": "2025-12-12", "k": 131.5}, {"d": "2025-12-19", "k": 128.3}, {"d": "2025-12-23", "k": 129.9}, {"d": "2026-01-02", "k": 137.3}, {"d": "2026-01-09", "k": 138.1}, {"d": "2026-01-16", "k": 137.3}, {"d": "2026-01-23", "k": 134.1}, {"d": "2026-01-30", "k": 129.6}, {"d": "2026-02-06", "k": 155.2}, {"d": "2026-02-13", "k": 142.2}, {"d": "2026-02-20", "k": 144.5}, {"d": "2026-02-27", "k": 143.3}, {"d": "2026-03-06", "k": 141.4}, {"d": "2026-03-13", "k": 148.9}, {"d": "2026-03-20", "k": 146.0}, {"d": "2026-03-27", "k": 146.3}, {"d": "2026-04-01", "k": 152.7}, {"d": "2026-04-10", "k": 162.0}, {"d": "2026-04-17", "k": 185.8}, {"d": "2026-04-24", "k": 188.2}, {"d": "2026-04-30", "k": 189.0}, {"d": "2026-05-08", "k": 199.3}, {"d": "2026-05-15", "k": 204.0}, {"d": "2026-05-22", "k": 207.6}, {"d": "2026-05-29", "k": 200.4}, {"d": "2026-06-05", "k": 193.2}, {"d": "2026-06-12", "k": 187.3}, {"d": "2026-06-19", "k": 188.6}, {"d": "2026-06-26", "k": 177.7}, {"d": "2026-07-03", "k": 182.2}, {"d": "2026-07-10", "k": 168.2}, {"d": "2026-07-17", "k": 159.8}, {"d": "2026-07-24", "k": 158.4}, {"d": "2026-07-31", "k": 158.7}, {"d": "2026-08-07", "k": 164.7}, {"d": "2026-08-14", "k": 169.9}, {"d": "2026-08-21", "k": 163.1}, {"d": "2026-08-28", "k": 167.7}, {"d": "2026-09-04", "k": 168.1}, {"d": "2026-09-11", "k": 175.2}, {"d": "2026-09-18", "k": 177.5}, {"d": "2026-09-25", "k": 184.6}, {"d": "2026-10-02", "k": 188.9}, {"d": "2026-10-09", "k": 176.2}, {"d": "2026-10-12", "k": 173.5}];
     var VAL = 'NOK';
     function filtrer(p) {
       var now = new Date(), ar = now.getFullYear();
@@ -486,13 +462,15 @@
       return ALLE.filter(function(x) { return x.d >= s; });
     }
     function tegn(periode) {
-      var data = filtrer(periode); if (data.length<4) data=ALLE; if (data.length<4) return;
+      var data = filtrer(periode), hele = false; if (data.length<4) { data=ALLE; hele = true; } if (data.length<4) return;
+      var PERIODER = {'1ar':'Siste år','ytd':'Hittil i år','2ar':'Siste 2 år','3ar':'Siste 3 år','5ar':'Siste 5 år'};
       var pr = data.map(function(x){return x.k;}), da = data.map(function(x){return x.d;}), n=pr.length;
       var mn=Math.min.apply(null,pr), mx=Math.max.apply(null,pr), rng=mx-mn||1;
       var opp=pr[n-1]>=pr[0], fg=opp?'#22c55e':'#ef4444';
-      var end=((pr[n-1]-pr[0])/pr[0]*100).toFixed(1);
+      var end=((pr[n-1]-pr[0])/pr[0]*100).toLocaleString('nb-NO',{minimumFractionDigits:1,maximumFractionDigits:1});
       var hdr=document.getElementById('kurs-header-NOD');
-      if(hdr) hdr.innerHTML='<span style="font-size:1.05rem;font-weight:700">'+pr[n-1].toLocaleString('nb-NO',{minimumFractionDigits:2})+' '+VAL+'</span><span style="font-size:0.78rem;font-weight:500;color:'+fg+'">'+(opp?'▲ +':'▼ ')+end+'%</span>';
+      var dkHdr=document.documentElement.classList.contains('dark');
+      if(hdr) hdr.innerHTML='<span style="font-size:0.85rem;color:'+(dkHdr?'#9ca3af':'#6b7280')+'">'+(hele?'Hele perioden':PERIODER[periode])+'</span><span style="font-size:0.85rem;font-weight:600;font-variant-numeric:tabular-nums;color:'+fg+'">'+(opp?'▲ +':'▼ ')+end+' %</span>';
       var cv=document.getElementById('kurs-canvas-NOD'); if(!cv) return;
       var dk=document.documentElement.classList.contains('dark');
       var DPR=Math.min(window.devicePixelRatio||1,2), CW=cv.parentElement.offsetWidth||680, CH=200;
@@ -505,20 +483,20 @@
       ctx.strokeStyle=dk?'#1f2937':'#e5e7eb'; ctx.lineWidth=1; ctx.setLineDash([4,4]);
       [mn,(mn+mx)/2,mx].forEach(function(v){ctx.beginPath();ctx.moveTo(pL,sy(v));ctx.lineTo(CW-pR,sy(v));ctx.stroke();});
       ctx.setLineDash([]);
-      ctx.fillStyle=dk?'#6b7280':'#9ca3af'; ctx.font='11px sans-serif'; ctx.textAlign='right';
+      ctx.fillStyle=dk?'#6b7280':'#9ca3af'; ctx.font='11px Inter, system-ui, sans-serif'; ctx.textAlign='right';
       [[mn,sy(mn)],[(mn+mx)/2,sy((mn+mx)/2)],[mx,sy(mx)]].forEach(function(pair){ctx.fillText(pair[0].toLocaleString('nb-NO',{maximumFractionDigits:0}),pL-4,pair[1]+4);});
       var grad=ctx.createLinearGradient(0,pT,0,CH-pB);
-      grad.addColorStop(0,opp?'rgba(34,197,94,0.25)':'rgba(239,68,68,0.2)'); grad.addColorStop(1,'rgba(0,0,0,0)');
+      grad.addColorStop(0,opp?'rgba(34,197,94,0.12)':'rgba(239,68,68,0.1)'); grad.addColorStop(1,'rgba(0,0,0,0)');
       ctx.beginPath(); ctx.moveTo(sx(0),CH-pB);
       pr.forEach(function(p,i){ctx.lineTo(sx(i),sy(p));});
       ctx.lineTo(sx(n-1),CH-pB); ctx.closePath(); ctx.fillStyle=grad; ctx.fill();
-      ctx.beginPath(); ctx.lineWidth=2.5; ctx.strokeStyle=fg; ctx.lineJoin='round';
+      ctx.beginPath(); ctx.lineWidth=1.75; ctx.strokeStyle=fg; ctx.lineJoin='round';
       pr.forEach(function(p,i){if(i===0)ctx.moveTo(sx(i),sy(p));else ctx.lineTo(sx(i),sy(p));});
       ctx.stroke();
       ctx.beginPath(); ctx.arc(sx(n-1),sy(pr[n-1]),4,0,Math.PI*2); ctx.fillStyle=fg; ctx.fill();
       ctx.strokeStyle=dk?'#111827':'#fff'; ctx.lineWidth=2; ctx.stroke();
       ctx.fillStyle=dk?'#6b7280':'#9ca3af'; ctx.textAlign='center';
-      [0,Math.floor(n/3),Math.floor(2*n/3),n-1].forEach(function(i){var d=da[i].slice(5);ctx.fillText(d.slice(3,5)+'.'+d.slice(0,2),sx(i),CH-8);});
+      [0,Math.floor(n/3),Math.floor(2*n/3),n-1].forEach(function(i){var d=da[i].slice(5);ctx.textAlign=i===0?'left':i===n-1?'right':'center';ctx.fillText(d.slice(3,5)+'.'+d.slice(0,2),sx(i),CH-8);});
     }
     document.querySelectorAll('.kp-btn').forEach(function(btn){
       btn.addEventListener('click',function(){
@@ -530,6 +508,18 @@
   })();
   </script>
 </div>
+
+  <dl class="korttall"><div><dt>Neste kvartalsrapport</dt><dd>22. okt 2026</dd></div><div><dt>År med utbytte</dt><dd>3</dd></div><div><dt>P/E</dt><dd>109,8</dd></div><div><dt>Markedsverdi</dt><dd>34,3 mrd NOK</dd></div></dl>
+
+  
+
+  
+
+  <div class="desc"><h2>Om selskapet</h2><p>Nordic Semiconductor deler ikke ut utbytte i dag, og selskapet sier det rett ut: aksjonærene skal først og fremst få avkastning gjennom kursen. For 2025 foreslo styret at hele overskuddet i morselskapet ble holdt tilbake. Begrunnelsen er en vekststrategi som krever store beløp til forskning, salg og markedsføring, og en bransje som svinger kraftig. Selskapet vil derfor ha høy egenkapitalandel og god likviditet. Det langsiktige målet er utbytte basert på overskuddslikviditet, og styret sier at det vil vurdere å gi penger tilbake når kontantbeholdningen er større enn det likviditetspolitikken krever.</p><p>Nordic ble etablert i 1983 og har hovedkontor i Trondheim. Selskapet designer brikker for trådløs kommunikasjon med svært lavt strømforbruk, men eier ingen fabrikker. Produksjonen settes ut til underleverandører i Europa og Asia, blant dem TSMC og GlobalFoundries, og brikkene selges gjennom distributører til elektronikkprodusenter over hele verden. Nordic var tidlig ute med Bluetooth Low Energy og beskriver seg som verdensledende der. Kortrekkende brikker gir fortsatt nesten hele omsetningen, og den nye nRF54-serien skal etter hvert ta over etter nRF52, som fortsatt står for det meste av inntektene.</p><p>Ved siden av kjernen bygger Nordic opp mobilbasert tingenes internett, også med satellittforbindelse. Wi-Fi og strømstyringsbrikker omtaler selskapet selv som oppstartsvirksomheter. I 2025 kjøpte det Memfault, som gjør det mulig å selge skytjenester for å overvåke og oppdatere ferdige produkter. Omsetningen er i dollar. Nedturer i halvlederbransjen kommer ofte sammen med lagerkorreksjoner hos kundene, og Nordic har tidligere fått lavere inntekter i slike perioder. Selskapet skriver selv at behovet for å fortsette utviklingen begrenser hvor mye kostnadene kan kuttes. Folketrygdfondet er største aksjonær.</p></div>
+
+  <div class="investor-profil-seksjon"><div class="investor-badges-rad"><span class="investor-badge investor-risiko-moderat">Moderat risiko</span></div><div class="investor-forklaring risiko-moderat"><div class="investor-forklaring-tittel"><span class="investor-badge investor-risiko-moderat">Moderat risiko</span></div><ul class="investor-forklaring-liste"><li>Sektor (Informasjonsteknologi) har en viss konjunktureksponering</li><li>Utbytte i 3 år, men med brudd — ingen utbytte siden 2011</li></ul></div></div>
+
+  
 
   </section>
 
@@ -553,14 +543,14 @@
 <li>Rask teknologiutvikling kan gjøre produkter utdaterte</li>
 <li>Høy konkurranse fra internasjonale aktører presser marginer</li></ul></div>
 
-  <div class="kontoer-seksjon"><h2>Hvilke kontoer kan du handle denne aksjen på?</h2><div class="konto-rad"><span class="konto-ok">✓</span><div><strong>Aksje- og fondskonto og Zero</strong><p>Ingen begrensning.</p></div></div><div class="konto-rad"><span class="konto-ok">✓</span><div><strong>Aksjesparekonto (ASK)</strong><p>EØS-registrert selskap — kan holdes i ASK.</p></div></div></div>
+  <div class="kontoer-seksjon"><h2>Hvilke kontoer kan du handle denne aksjen på?</h2><div class="konto-rad"><span class="konto-ok">✓</span><div><strong>Aksje- og fondskonto og Zero</strong><p>Ingen begrensning.</p></div></div><div class="konto-rad"><span class="konto-ok">✓</span><div><strong>Aksjesparekonto (ASK)</strong><p>Selskapet er registrert i Norge og aksjen er notert på Oslo Børs, så den kan holdes i ASK.</p></div></div></div>
 
   </section>
 
   <!-- ── NØKKELTALL ── -->
   <section id="nokkeltall">
 
-  <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Informasjonsteknologi</td></tr><tr><td>Frekvens</td><td>Uregelmessig</td></tr><tr><td>Utbytte per aksje</td><td>0,00 NOK</td></tr><tr><td>Direkteavkastning</td><td>—</td></tr><tr><td>5-årssnitt yield</td><td>0,00%</td></tr><tr><td>År med utbytte</td><td>3</td></tr><tr><td>P/E</td><td>111,5</td></tr><tr><td>Markedsverdi</td><td>34,9 mrd NOK</td></tr><tr><td>52-ukers kurs</td><td>123,70 – 211,00 NOK</td></tr></tbody></table>
+  <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Informasjonsteknologi</td></tr><tr><td>Frekvens</td><td>Uregelmessig</td></tr><tr><td>Utbytte per aksje</td><td>0,00 NOK</td></tr><tr><td>Direkteavkastning</td><td>—</td></tr><tr><td>5-årssnitt yield</td><td>0,00%</td></tr><tr><td>År med utbytte</td><td>3</td></tr><tr><td>P/E</td><td>109,8</td></tr><tr><td>Markedsverdi</td><td>34,3 mrd NOK</td></tr><tr><td>52-ukers kurs</td><td>123,70 – 211,00 NOK</td></tr></tbody></table>
 
   </section>
 
@@ -570,10 +560,10 @@
 </div>
   </section>
 
-  <div class="relaterte"><h2>Andre informasjonsteknologi-aksjer med utbytte</h2><div class="rel-grid"><a href="/aksjer/WSTEP/" class="rel-kort"><span class="rel-ticker">WSTEP</span><span class="rel-navn">Webstep ASA</span><span class="rel-yield">11,6%</span></a>
+  <div class="relaterte"><h2>Andre informasjonsteknologi-aksjer med utbytte</h2><div class="rel-grid"><a href="/aksjer/WSTEP/" class="rel-kort"><span class="rel-ticker">WSTEP</span><span class="rel-navn">Webstep ASA</span><span class="rel-yield">11,9%</span></a>
 <a href="/aksjer/BOUV/" class="rel-kort"><span class="rel-ticker">BOUV</span><span class="rel-navn">Bouvet ASA</span><span class="rel-yield">6,3%</span></a>
-<a href="/aksjer/ITERA/" class="rel-kort"><span class="rel-ticker">ITERA</span><span class="rel-navn">Itera ASA</span><span class="rel-yield">5,3%</span></a>
-<a href="/aksjer/PEXIP/" class="rel-kort"><span class="rel-ticker">PEXIP</span><span class="rel-navn">Pexip Holding ASA</span><span class="rel-yield">5,2%</span></a></div></div>
+<a href="/aksjer/ITERA/" class="rel-kort"><span class="rel-ticker">ITERA</span><span class="rel-navn">Itera ASA</span><span class="rel-yield">5,2%</span></a>
+<a href="/aksjer/PEXIP/" class="rel-kort"><span class="rel-ticker">PEXIP</span><span class="rel-navn">Pexip Holding ASA</span><span class="rel-yield">5,1%</span></a></div></div>
 
   <div class="mini-nav">
     <a href="/aksjer/sektor/informasjonsteknologi/">← Alle Informasjonsteknologi-aksjer</a>
@@ -590,7 +580,7 @@
     <a href="https://exday.no/app/?aksje=NOD">Åpne NOD i exday.no →</a>
   </div>
 
-  <p class="updated">Tallene er hentet 9. oktober 2026</p>
+  <p class="updated">Tallene er hentet 12. oktober 2026</p>
   <footer style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid #e5e7eb;font-size:0.78rem;text-align:center;color:#9ca3af;line-height:1.6;" class="std-footer">
     <p>Kurs og utbyttedata hentes fra Yahoo Finance og Euronext. Oppdateres daglig på børsdager.</p>
     <p style="max-width:36rem;margin:0.4rem auto;">
@@ -615,7 +605,7 @@
       </a>
     </p>
   </footer>
-  <style>.dark .std-footer {{ color:#6b7280 !important; border-color:#1f2937 !important; }} .dark .std-footer a {{ color:#6b7280 !important; }}</style>
+  <style>.dark .std-footer { color:#6b7280 !important; border-color:#1f2937 !important; } .dark .std-footer a { color:#6b7280 !important; }</style>
 </div>
 
 <button class="til-toppen" id="til-toppen" aria-label="Til toppen">
