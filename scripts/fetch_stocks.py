@@ -1802,6 +1802,59 @@ def utbytte_perioder(a):
     return ut
 
 
+# Et snitt over færre hele år enn dette er ikke et snitt, bare ett eller to år.
+SNITT_MIN_AR = 3
+
+
+def sett_snitt_felter(a):
+    """Bygg `snitt_yield_5ar` fra hele kalenderår og sett `snitt_yield_ar`.
+
+    Det gamle snittet fra hent_historiske_utbytter() tok med inneværende år,
+    som bare er betalt så langt, og hoppet over år uten utbytte. SNTIA fikk
+    «5-årssnitt 6,88 %» fra 2026 alene, SKUE et snitt der 2023 manglet, og
+    SOFF viste 1,99 % i nøkkeltallene og 0,14 % i tabellen «Faktisk betalt
+    utbytte» på samme side (tallkontrollen 2026-10-12).
+
+    Nå er det samme tall som tabellens lengste snitt (utbytte_perioder()):
+    hele år, inntil fem, år uten utbytte teller som 0, år før første utbytte
+    teller ikke. Under SNITT_MIN_AR år settes 0, som betyr ukjent og vises
+    som «—». Uten `utbytte_per_ar` (før første fulle henting) beholdes det
+    lagrede tallet. Avledet, så både fetch_stocks og regenerer_sider kaller
+    den på hver kjøring.
+    """
+    perioder = utbytte_perioder(a)
+    if not perioder:
+        return
+    lengst = perioder[-1]
+    ar = lengst["ar_brukt"] or 0
+    if lengst["periode"] == "12m" or ar < SNITT_MIN_AR or lengst["yield"] is None:
+        a["snitt_yield_5ar"] = 0
+        a["snitt_yield_ar"] = ar
+        return
+    a["snitt_yield_5ar"] = lengst["yield"]
+    a["snitt_yield_ar"] = ar
+
+
+def snitt_navn(a):
+    """«5-årssnitt», eller «3-årssnitt» når snittet bygger på færre år."""
+    ar = a.get("snitt_yield_ar")
+    return f"{ar}-årssnitt" if ar and SNITT_MIN_AR <= ar < 5 else "5-årssnitt"
+
+
+def snitt_har_nullar(a):
+    """True når et år i snittet er uten utbytte (etter selskapets første).
+
+    Da er snittet lavt fordi selskapet sto over, ikke fordi det pleier å
+    betale lite. SOFF fikk «langt over det selskapet pleier å betale» for
+    et utbytte som nettopp var tatt opp igjen.
+    """
+    per_ar = a.get("utbytte_per_ar") or {}
+    forste = a.get("utbytte_forste_ar")
+    ar = a.get("snitt_yield_ar") or 0
+    siste = sorted((int(k) for k in per_ar), reverse=True)[:ar]
+    return any(not per_ar.get(str(y)) for y in siste if forste is None or y >= forste)
+
+
 VIST_OVER_BETALT_PP = 1.0
 VIST_OVER_BETALT_ANDEL = 0.3
 
@@ -2584,6 +2637,16 @@ def hent_aksje(meta):
             utbytte_yield = effective_snitt
             utbytte_per_aksje = round(pris * effective_snitt / 100, 2) if pris > 0 else 0
 
+        # Snittet som vises, bygges fra hele år som tabellen «Faktisk betalt»
+        # (sett_snitt_felter()). Det gamle fra hent_historiske_utbytter() er
+        # brukt i kontrollene over og skal ikke vises (tallkontrollen 2026-10-12).
+        _snitt = {"utbytte_12m": utbytte_12m, "utbytte_per_ar": utbytte_per_ar,
+                  "utbytte_forste_ar": utbytte_forste_ar, "pris": pris,
+                  "snitt_yield_5ar": snitt_yield_5ar}
+        sett_snitt_felter(_snitt)
+        snitt_yield_5ar = _snitt["snitt_yield_5ar"]
+        snitt_yield_ar = _snitt.get("snitt_yield_ar")
+
         resultat = {
             "ticker": ticker,
             "navn": meta["navn"],
@@ -2617,6 +2680,7 @@ def hent_aksje(meta):
             # dato. Utledes hver kjøring, aldri skrevet én gang og lagret.
             "utbetalingsmaaneder": _typiske_utbetalingsmaaneder(historiske_utbytter),
             "snitt_yield_5ar": snitt_yield_5ar,
+            "snitt_yield_ar": snitt_yield_ar,
             # lag_beskrivelse() henter kun det manuelt forfattede innledningsavsnittet
             # fra tickers.json (via _manuell_del) og bygger utbytteprofil- og
             # driver-avsnittene på nytt fra DENNE kjøringens tall. Uten dette fryser
@@ -3012,11 +3076,30 @@ def _lag_utbyttehistorikk_tekst(a, i_dag_ar=None):
     okning = sum(1 for i in range(1, len(belop)) if belop[i] > belop[i - 1] * 1.05)
     spenn  = (max(belop) / min(belop)) if min(belop) > 0 else 0
     ar_str = f"{forste['ar']}–{siste['ar']}"
+    # Et år uten registrert utbytte mellom to år med utbytte er ikke «uten
+    # kutt». SKUE fikk «steget uten et eneste kutt fra 2022–2025» med 2023
+    # tomt, fordi år med 0 er filtrert bort over (tallkontrollen 2026-10-12).
+    # Det kan være et hull i Yahoos serie og ikke et stoppet utbytte, så
+    # teksten sier bare at vi ikke har registrert noe.
+    registrert = {h["ar"] for h in ferdige}
+    hull = [y for y in range(forste["ar"], siste["ar"] + 1) if y not in registrert]
 
     deler = []
 
     # 1) Formen på utviklingen
-    if kutt == 0 and okning >= 2:
+    if hull:
+        hull_tekst = (str(hull[0]) if len(hull) == 1
+                      else ", ".join(str(y) for y in hull[:-1]) + f" og {hull[-1]}")
+        fra, til = _nf(forste["utbytte"], 2), _nf(siste["utbytte"], 2)
+        if siste["utbytte"] > forste["utbytte"] * 1.05:
+            forlop = f"Utbyttet er opp fra {fra} til {til} kroner per aksje i {ar_str}"
+        elif siste["utbytte"] < forste["utbytte"] * 0.95:
+            forlop = f"Utbyttet er ned fra {fra} til {til} kroner per aksje i {ar_str}"
+        else:
+            forlop = (f"Utbyttet var {fra} kroner per aksje i {forste['ar']} "
+                      f"og {til} i {siste['ar']}")
+        deler.append(f"{forlop}, men for {hull_tekst} har vi ikke registrert noe utbytte.")
+    elif kutt == 0 and okning >= 2:
         deler.append(
             f"Utbyttet har steget uten et eneste kutt fra {ar_str}, "
             f"fra {_nf(forste['utbytte'], 2)} til {_nf(siste['utbytte'], 2)} kroner per aksje."
@@ -3047,7 +3130,7 @@ def _lag_utbyttehistorikk_tekst(a, i_dag_ar=None):
     #    Uten kutt skyldes et stort spenn vekst, ikke uforutsigbarhet — WAWI fikk
     #    ellers både «uten et eneste kutt» og «lite forutsigbar» i samme avsnitt,
     #    og DNB ble kalt «jevn» etter å ha nær doblet utbyttet.
-    if kutt == 0:
+    if kutt == 0 and not hull:
         if spenn >= 3:
             deler.append(
                 f"Veksten er kraftig: siste år er {_nf(spenn, 1)} ganger det første. "
@@ -3073,28 +3156,24 @@ def _lag_utbyttehistorikk_tekst(a, i_dag_ar=None):
     s5 = a.get("snitt_yield_5ar") or 0
     if y > 0 and s5 > 0:
         avvik = y - s5
+        navn_s = snitt_navn(a)
         if avvik > max(1.0, s5 * 0.2):
-            # Forklaringen må stemme med utviklingen over. Uten dette skillet
-            # sto det «ikke fordi utbyttet er hevet» rett under en setning om at
-            # utbyttet var mer enn tredoblet (ORK, WAWI).
-            if kutt == 0 and siste["utbytte"] > forste["utbytte"] * 1.5:
-                aarsak = " — her drevet av at utbyttet er kraftig hevet"
-            elif kutt == 0:
-                aarsak = ""
-            else:
-                aarsak = " — ofte fordi kursen har falt, ikke fordi utbyttet er hevet"
+            # Begge er regnet mot dagens kurs, så forskjellen ligger alltid i
+            # utbyttet. «Ofte fordi kursen har falt» kunne derfor aldri stemme,
+            # og OET fikk den med kursen nær 52-ukers toppen (2026-10-12).
+            # Forklaringen står i FAQ-en på samme side; her bare målingen.
             deler.append(
-                f"Dagens yield på {_nf(y, 1)} % ligger over aksjens eget 5-årssnitt "
-                f"på {_nf(s5, 1)} %{aarsak}."
+                f"Dagens yield på {_nf(y, 1)} % ligger over aksjens eget {navn_s} "
+                f"på {_nf(s5, 1)} %."
             )
         elif avvik < -max(1.0, s5 * 0.2):
             deler.append(
-                f"Dagens yield på {_nf(y, 1)} % er lavere enn aksjens eget 5-årssnitt "
+                f"Dagens yield på {_nf(y, 1)} % er lavere enn aksjens eget {navn_s} "
                 f"på {_nf(s5, 1)} %."
             )
         else:
             deler.append(
-                f"Dagens yield på {_nf(y, 1)} % ligger nær aksjens eget 5-årssnitt "
+                f"Dagens yield på {_nf(y, 1)} % ligger nær aksjens eget {navn_s} "
                 f"på {_nf(s5, 1)} %."
             )
 
@@ -3424,12 +3503,14 @@ def _selskapsrisikoer(a):
             f"hvor stabilt utbyttet er over en konjunktursyklus"
         )
 
-    # Yield langt over eget snitt uten at utbyttet er hevet: kursen har falt.
-    if yield_ and snitt and yield_ > snitt * 1.8 and not kutt:
+    # Yield langt over eget snitt. Begge er regnet mot dagens kurs, så det er
+    # årsraten som er høy, ikke kursen som har falt (tallkontrollen 2026-10-12).
+    if yield_ and snitt and yield_ > snitt * 1.8 and not kutt and not snitt_har_nullar(a):
         ut.append(
-            f"Yielden på {_nf(yield_, 1)} % ligger godt over aksjens eget "
-            f"5-årssnitt på {_nf(snitt, 1)} % — det kommer som regel av at "
-            f"kursen har falt, ikke av at utbyttet er hevet"
+            f"Yielden på {_nf(yield_, 1)} % er langt over aksjens eget "
+            f"{snitt_navn(a)} på {_nf(snitt, 1)} %, regnet mot samme kurs. Et "
+            f"utbytte så langt over det selskapet pleier å betale, er ikke sikkert "
+            f"å holde"
         )
 
     # Utbytte fastsatt i USD på en NOK-notert aksje.
@@ -3717,9 +3798,11 @@ def _driver_selskapsledd(a, sektor):
             f"noe enkeltår gjør"
         )
     elif rekke and rekke["rad"] >= 8:
+        # «Nok til å dekke en hel konjunktursyklus» ble skrevet fra 8 år, også
+        # for SOGN med brudd før 2019 (tallkontrollen 2026-10-12). Nå bare året.
         setninger.append(
-            f"{navn} har {rekke['rad']} år med sammenhengende utbytte bak seg, nok til å "
-            f"dekke en hel konjunktursyklus"
+            f"{navn} har betalt utbytte {rekke['rad']} år på rad, siden {rekke['fra']}"
+            + (", og hadde år uten utbytte før det" if rekke["brutt"] else "")
         )
     elif rekke and rekke["brutt"] and rekke["totalt"] >= 5:
         if rekke["rad"] == 0:
@@ -3993,10 +4076,9 @@ def _lag_investor_vurdering(a, sektor_snitt):
             f"med {rad} sammenhengende år med utbytte."
         )
     elif rad >= 7:
-        vurdering_deler.append(
-            f"{navn} har vist konsistent utbytteevne over {rad} år på rad "
-            f"og er et etablert navn blant utbytteinvestorer."
-        )
+        # «Konsistent utbytteevne» sa noe om nivået som rekken ikke viser: OET
+        # fikk det med to kutt og åttedobling mellom laveste og høyeste år.
+        vurdering_deler.append(f"{navn} har betalt utbytte {rad} år på rad.")
     elif rad >= 3:
         vurdering_deler.append(
             f"{navn} har betalt utbytte de siste {rad} årene, "
@@ -4012,10 +4094,12 @@ def _lag_investor_vurdering(a, sektor_snitt):
                 f"høy utbyttekapasitet eller at markedet priser inn høyere risiko."
             )
         elif yield_ <= sn * 0.8:
+            # «Men X kompenserer typisk med høyere stabilitet eller sterkere
+            # vekstutsikter» sto på 50 sider uten at noe i dataene bar den
+            # (tallkontrollen 2026-10-12).
             vurdering_deler.append(
-                f"Yielden på {_nf(yield_, 1)}% er under sektorsnittet ({_nf(sn, 1)}%), "
-                f"men {ticker} kompenserer typisk med høyere stabilitet "
-                f"eller sterkere langsiktig vekstutsikter."
+                f"Yielden på {_nf(yield_, 1)}% er under sektorsnittet for "
+                f"{sektor} ({_nf(sn, 1)}%)."
             )
         else:
             vurdering_deler.append(
@@ -4225,20 +4309,23 @@ def _lag_investor_badges(a):
 
     rekke = utbytterekke(a)
     # Et selskap som ikke har betalt på flere år, skal ikke få «Moderat
-    # utbyttehistorikk (5 år)» — BINT sist i 2016 (2026-10-06).
-    if rekke and rekke["brutt"] and (rekke["totalt"] >= 7 and rekke["rad"] < 7 or rekke["rad"] == 0):
-        # Langt antall, kort rekke: historikken er lang, men ikke stabil.
+    # utbyttehistorikk (5 år)» — BINT sist i 2016 (2026-10-06). Og et brudd
+    # nevnes uansett hvor lang den nåværende rekken er: SOGN fikk «Lang
+    # utbyttehistorikk (17 år) — vist evne til stabil utbetaling» med 8 år på
+    # rad (tallkontrollen 2026-10-12). Lengden bygger på rekken, ikke antallet.
+    lengde = rekke["rad"] if rekke else ar
+    if rekke and rekke["brutt"]:
         naa = (f"ingen utbytte siden {rekke['siste']}" if rekke["rad"] == 0
-               else f"sammenhengende bare siden {rekke['fra']}")
+               else f"sammenhengende siden {rekke['fra']}")
         risiko_punkter.append(f'Utbytte i {rekke["totalt"]} år, men med brudd — {naa}')
-    elif ar == 0:
+    elif lengde == 0:
         risiko_punkter.append('Ingen registrert utbyttehistorikk')
-    elif ar < 3:
-        risiko_punkter.append(f'Kort utbyttehistorikk ({ar} år) — begrenset dokumentasjon')
-    elif ar < 7:
-        risiko_punkter.append(f'Moderat utbyttehistorikk ({ar} år)')
+    elif lengde < 3:
+        risiko_punkter.append(f'Kort utbyttehistorikk ({lengde} år) — begrenset dokumentasjon')
+    elif lengde < 7:
+        risiko_punkter.append(f'Moderat utbyttehistorikk ({lengde} år)')
     else:
-        risiko_punkter.append(f'Lang utbyttehistorikk ({ar} år) — vist evne til stabil utbetaling')
+        risiko_punkter.append(f'Lang utbyttehistorikk ({lengde} år på rad)')
 
     if payout > 90:
         risiko_punkter.append(f'Svært høy payout ratio ({_nf(payout, 0)}%) — lite buffer ved inntjeningsfall')
@@ -4541,10 +4628,11 @@ def _lag_faq_seksjon(a, today):
     rekke = utbytterekke(a)
     if freq_tekst and ar_med > 0:
         rad = rekke["rad"] if rekke else 0
+        # Rekken viser at det er betalt hvert år, ikke at nivået er stabilt.
         if rad >= 15:
-            kontinuitet = f"Med {rad} år sammenhengende er {ticker} blant de mest stabile utbyttebetalerne på Oslo Børs."
+            kontinuitet = f"Med {rad} år på rad har {ticker} en av de lengste sammenhengende utbytterekkene på Oslo Børs."
         elif rad >= 7:
-            kontinuitet = f"Selskapet har utbetalt utbytte i {rad} år på rad, noe som viser en konsistent kapitalavkastningspolitikk."
+            kontinuitet = f"Selskapet har utbetalt utbytte i {rad} år på rad."
         elif rekke and rekke["brutt"] and rekke["rad"] == 0:
             kontinuitet = (f"Selskapet har betalt utbytte i {rekke['totalt']} år, men ikke siden "
                            f"{rekke['siste']}.")
@@ -4568,13 +4656,21 @@ def _lag_faq_seksjon(a, today):
     # 3. Direkteavkastning i kontekst
     if yield_ > 0:
         if snitt5 > 0:
+            # Relativ grense: 1,5 prosentpoeng kalte SOFFs 0,70 % «på linje med»
+            # 1,99 %. Begge tall er regnet mot dagens kurs, så avviket sier noe
+            # om utbyttet, aldri om en «attraktiv inngangskurs» (2026-10-12).
             diff = yield_ - snitt5
-            if diff > 1.5:
-                snitt_k = f"Det er {_nf(diff, 1)} prosentpoeng over det historiske 5-årssnittet på {_nf(snitt5, 1)}%, noe som kan indikere en attraktiv inngangskurs — men sjekk alltid om det skyldes kursfall."
-            elif diff < -1.5:
-                snitt_k = f"Det er {_nf(abs(diff), 1)} prosentpoeng under det historiske 5-årssnittet på {_nf(snitt5, 1)}%."
+            navn_s = snitt_navn(a)
+            if diff > snitt5 * 0.2:
+                snitt_k = (f"Det er {_nf(diff, 1)} prosentpoeng over {navn_s}et på {_nf(snitt5, 1)}%. "
+                           f"Begge er regnet mot dagens kurs, så forskjellen betyr at årsraten nå er "
+                           f"høyere enn det selskapet i snitt har betalt per år.")
+            elif diff < -snitt5 * 0.2:
+                snitt_k = (f"Det er {_nf(abs(diff), 1)} prosentpoeng under {navn_s}et på {_nf(snitt5, 1)}%. "
+                           f"Begge er regnet mot dagens kurs, så årsraten nå er lavere enn det "
+                           f"selskapet i snitt har betalt per år.")
             else:
-                snitt_k = f"Det er på linje med det historiske 5-årssnittet på {_nf(snitt5, 1)}%."
+                snitt_k = f"Det er på linje med {navn_s}et på {_nf(snitt5, 1)}%."
         else:
             snitt_k = ""
         svar = (
@@ -4649,7 +4745,9 @@ def _lag_faq_seksjon(a, today):
             vurd = (f"En payout ratio mellom 50 og 80 % er vanlig for etablerte utbytteaksjer og anses bærekraftig "
                     f"så lenge inntjeningen er stabil. Sjekk at EPS-trenden er positiv.")
         else:
-            vurd = (f"En payout ratio over {_nf(payout, 0)} % innebærer at {navn} deler ut en svært stor andel av inntjeningen. "
+            # Grensen er 80 %, ikke aksjens eget tall: «over 110 %» for en aksje
+            # med 110 % (tallkontrollen 2026-10-12).
+            vurd = (f"En payout ratio over 80 % innebærer at {navn} deler ut en svært stor andel av inntjeningen. "
                     f"Det kan holdes oppe med sterk kontantstrøm, men er mer sårbart ved svakere kvartaler.")
         svar = f"Payout ratio for {navn} er {_nf(payout, 0)} % — det vil si andelen av inntjeningen per aksje som utbetales som utbytte. {vurd}"
         qas.append((f"Er utbyttet fra {navn} bærekraftig?", svar))
@@ -4856,7 +4954,8 @@ def _lag_sidetittel(navn, ticker, yield_, ex, today):
     return f"{base}{hale}"
 
 
-def _lag_meta_beskrivelse(navn, ticker, yield_, ex, upa, snitt5, valuta, today):
+def _lag_meta_beskrivelse(navn, ticker, yield_, ex, upa, snitt5, valuta, today,
+                          navn_snitt="5-årssnitt"):
     """Meta-beskrivelse under Googles grense på rundt 155 tegn.
 
     Den forrige var median 162 tegn og ble klippet midt i setningen, og den
@@ -4881,7 +4980,7 @@ def _lag_meta_beskrivelse(navn, ticker, yield_, ex, upa, snitt5, valuta, today):
         deler.append(f"årlig utbytte er {_nf(upa, 2)} {valuta} per aksje")
 
     if snitt5 and snitt5 > 0 and len(". ".join(deler)) < 105:
-        deler.append(f"5-årssnittet er {_nf(snitt5, 1)} %")
+        deler.append(f"{navn_snitt}et er {_nf(snitt5, 1)} %")
 
     # Første setning står for seg; resten bindes med «og». Bindes alle tre med
     # komma, blir det komma mellom to hovedsetninger.
@@ -4992,7 +5091,7 @@ def _lag_korttall(a, valuta):
     if rapport:
         rader.append(("Neste kvartalsrapport", _fmt_dato(rapport)))
     if snitt5:
-        rader.append(("5-årssnitt yield", _pst(snitt5)))
+        rader.append((f"{snitt_navn(a)} yield", _pst(snitt5)))
     if ar_med:
         rader.append(("År med utbytte", str(ar_med)))
     if pe and pe > 0:
@@ -5060,7 +5159,8 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     lav52   = a.get("52u_lav") or 0
 
     sidetittel = _lag_sidetittel(navn, ticker, yield_, ex, today)
-    meta_desc = _lag_meta_beskrivelse(navn, ticker, yield_, ex, upa, snitt5, valuta, today)
+    meta_desc = _lag_meta_beskrivelse(navn, ticker, yield_, ex, upa, snitt5, valuta, today,
+                                      snitt_navn(a))
 
     # Inneværende år er ikke ferdig. Uten merking sto «2026 — 3,75 NOK» rett
     # under stat-kortet «Utbytte/aksje 7,50 NOK» og så ut som en motsigelse:
@@ -5158,7 +5258,7 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
         f"<tr><td>Frekvens</td><td>{frekvens}</td></tr>"
         f"<tr><td>Utbytte per aksje</td><td>{_nf(upa, 2)} {valuta}</td></tr>"
         f"<tr><td>Direkteavkastning</td><td>{f'{_nf(yield_, 2)}%' if yield_ else '—'}</td></tr>"
-        f"<tr><td>5-årssnitt yield</td><td>{_nf(snitt5, 2)}%</td></tr>"
+        f"<tr><td>{snitt_navn(a)} yield</td><td>{_nf(snitt5, 2) + '%' if snitt5 else '—'}</td></tr>"
         f"<tr><td>År med utbytte</td><td>{ar_med}</td></tr>"
         f"{pe_rad}"
         f"{payout_rad}"
@@ -8537,6 +8637,10 @@ def main():
     for aksje in resultater:
         sett_ask_felter(aksje, ASK_EGNET.get(aksje["ticker"], True),
                         INKORPORERINGSLAND.get(aksje["ticker"], "Norge"))
+        # Også reserveradene fra forrige kjøring, og kursen kan ha endret seg
+        # etter hent_aksje(). Teksten bygges på nytt fordi den bruker snittet.
+        sett_snitt_felter(aksje)
+        aksje["utbyttehistorikk_tekst"] = _lag_utbyttehistorikk_tekst(aksje)
 
     # ── 5. Strukturert datakvalitetsrapport ───────────────────────────────────
     linje = "=" * 54

@@ -24,7 +24,7 @@ global.document = {
 // ui.js uses alleAksjer global — stub it
 global.alleAksjer = [];
 
-const { vekstFraTopp, beregnMal, forklarMal,
+const { snittNavn, forklarRisiko, vekstFraTopp, beregnMal, forklarMal,
   fmt,
   formaterDato,
   yieldKlasse,
@@ -844,4 +844,32 @@ test('beregnMal/forklarMal: ingen vekstmål for EQNR, dobling som betingelse for
   assert.ok(beregnMal(DNB_VEKST).includes('vekst'));
   const tekst = forklarMal(DNB_VEKST).find(f => f.mal === 'Utbyttevekst').tekst;
   assert.ok(tekst.includes('Holder veksten på +19,8% per år seg, dobles utbyttet på ca. 4 år.'), tekst);
+});
+
+// ── Tallkontrollen 2026-10-12: snittets navn og brudd i rekken ──────────────
+// Samme regler som TestTallkontroll1210 i scripts/test_fetch_stocks.py.
+test('snittNavn: antall år fra tre og opp, ellers 5-årssnitt', () => {
+  assert.equal(snittNavn({ snitt_yield_ar: 5 }), '5-årssnitt');
+  assert.equal(snittNavn({ snitt_yield_ar: 4 }), '4-årssnitt');
+  assert.equal(snittNavn({ snitt_yield_ar: 3 }), '3-årssnitt');
+  assert.equal(snittNavn({ snitt_yield_ar: 1 }), '5-årssnitt');
+  assert.equal(snittNavn({}), '5-årssnitt');
+});
+
+test('forklarRisiko: et brudd nevnes også når den nåværende rekken er lang (SOGN)', () => {
+  const iAar = new Date().getFullYear();
+  const aar = [];
+  for (let y = iAar - 24; y <= iAar - 16; y++) aar.push(y);
+  for (let y = iAar - 7; y <= iAar; y++) aar.push(y);
+  const punkter = forklarRisiko({ sektor: 'Finans', ar_med_utbytte: 17, utbytteaar: aar, ask_status: 'ja' });
+  assert.ok(punkter.some(p => p.includes(`med brudd — sammenhengende siden ${iAar - 7}`)), punkter.join(' | '));
+  assert.ok(!punkter.some(p => p.includes('vist evne til stabil utbetaling')));
+});
+
+test('forklarRisiko: lengden bygger på rekken uten brudd', () => {
+  const iAar = new Date().getFullYear();
+  const aar = [];
+  for (let y = iAar - 6; y <= iAar; y++) aar.push(y);
+  const punkter = forklarRisiko({ sektor: 'Shipping', ar_med_utbytte: 7, utbytteaar: aar, ask_status: 'ja' });
+  assert.ok(punkter.includes('Lang utbyttehistorikk (7 år på rad)'), punkter.join(' | '));
 });

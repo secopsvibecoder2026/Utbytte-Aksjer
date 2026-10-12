@@ -1234,6 +1234,69 @@ veksten på … seg, dobles utbyttet på ca. N år»).
 
 Tests: `TestVekstFraTopp` (7) and `ui.test.js` (3).
 
+## Template text from the tallkontroll of 2026-10-12
+
+The weekly check read ten pages in full and found six sentence patterns that
+the data did not support. All six are fixed at the template level.
+
+**The average is built from whole years.** `snitt_yield_5ar` came from
+`hent_historiske_utbytter()`. That function counted the current year, which is
+only paid so far, and skipped years without a dividend. SNTIA showed «5-årssnitt
+6,88 %» from 2026 alone. SOFF showed 1,99 % in the key figures and 0,14 % in
+«Faktisk betalt utbytte» on the same page. `sett_snitt_felter()` now sets the
+field from the longest average in `utbytte_perioder()`, so it is the same
+number the table shows:
+
+- whole years only, up to five;
+- a year without a dividend counts as 0;
+- a year before the first dividend does not count;
+- with fewer than `SNITT_MIN_AR` (3) years the field is set to 0 and renders as «—».
+
+`snitt_yield_ar` holds the number of years. `snitt_navn()` / `snittNavn()`
+turn it into «3-årssnitt» or «4-årssnitt». The function is derived like
+`utbetalingsmaaneder` and is called in `hent_aksje()`, in fetch
+post-processing and in `regenerer_sider.py`. The old value is still used
+*inside* `hent_aksje()` by the sanity checks, before it is replaced.
+
+On the first run the average changed for 140 of 154 stocks. 39 now show «—»,
+up from 12.
+
+**Both yields are measured against today's price.** Historical yields use the
+current price by design (see «Historical yields design decision»). A gap
+between today's yield and the stock's own average is therefore always about
+the dividend and never about the price. Three sentences said the opposite:
+
+- «ofte fordi kursen har falt, ikke fordi utbyttet er hevet» (OET, with the
+  price near its 52-week high);
+- the risk point «det kommer som regel av at kursen har falt»;
+- the FAQ's «kan indikere en attraktiv inngangskurs».
+
+The FAQ now says the annual rate is above or below what the company has paid
+on average.
+
+**The other four:**
+
+- **Payout above 80 %.** The FAQ said «over 110 %» about a stock with 110 %.
+  It now says «over 80 %», which is the actual threshold.
+- **«På linje med».** It is now a relative band of ±20 % of the average. A
+  fixed 1,5 percentage points called 0,70 % «på linje med» 1,99 %.
+- **Streak words.** They describe the streak (`utbytterekke()`), not the count
+  of years with a dividend, and a break is always mentioned. SOGN had 17 years
+  with a dividend but only 8 in a row, and was told «Lang utbyttehistorikk
+  (17 år) — vist evne til stabil utbetaling». «Konsistent», «hel
+  konjunktursyklus» and «blant de mest stabile» were claims about the level of
+  the dividend that a streak does not show. They are now plain facts: «har
+  betalt utbytte N år på rad».
+- **Gaps and unsupported claims.**
+  - A year without a recorded dividend between two paid years now gives «for
+    2023 har vi ikke registrert noe utbytte», not «uten et eneste kutt». It
+    may be a hole in Yahoo's series, so the text claims nothing about the
+    company.
+  - «Kompenserer typisk med høyere stabilitet …» is removed. It stood on 50
+    pages, and nothing in the data supported it.
+
+Tests: `TestTallkontroll1210` (10) and `ui.test.js` (3).
+
 ## «Måneder uten ex-dato» — a filter, not a recommendation (2026-10-03)
 
 The portfolio's Inntekt tab already said «Ingen utbetalinger i juli og

@@ -15,7 +15,7 @@ AKSJER_F  = os.path.join(ROOT, "data", "aksjer.json")
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from fetch_stocks import (generer_aksjesider, generer_sektorsider, generer_topplistesider,
                           generer_sitemap, _last_kurshistorikk_fra_disk,
-                          generer_rapportkalender, sett_ask_felter,
+                          generer_rapportkalender, sett_ask_felter, sett_snitt_felter,
                           oppdater_app_noscript_liste, oppdater_antall_i_sider,
                           oppdater_aarstall_i_sider,
                           _typiske_utbetalingsmaaneder,
@@ -60,6 +60,10 @@ def main():
             print(f"  {a['ticker']}: frekvens «{a.get('frekvens')}» → «{ny_frekvens}»")
             a["frekvens"] = ny_frekvens
             oppdatert += 1
+
+        # Snittet er avledet av utbytte_per_ar og kursen, og må stå før
+        # beskrivelsen og historikkteksten under, som begge siterer det.
+        sett_snitt_felter(a)
 
         # Teksten i tickers.json er en mal der kun innledningsavsnittet er
         # manuelt forfattet — utbytteprofil- og driver-avsnittene bygges på
