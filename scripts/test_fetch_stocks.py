@@ -2049,6 +2049,98 @@ class TestIngenDobleParenteser(unittest.TestCase):
         self.assertNotIn("{{", html_)
 
 
+class TestTallkontroll1210(unittest.TestCase):
+    """Tekstfeilene tallkontrollen fant 2026-10-12, med radene slik de så ut."""
+    I_DAG = datetime.date(2026, 10, 12)
+
+    def rad(self, **felt):
+        a = {"ticker": "TST", "navn": "Test ASA", "sektor": "Finans", "frekvens": "Årlig",
+             "pris": 100.0, "utbytte_yield": 6.0, "utbytte_per_aksje": 6.0,
+             "payout_ratio": 60, "ar_med_utbytte": 10, "valuta": "NOK",
+             "utbytte_12m": 6.0, "utbytte_forste_ar": 2010,
+             "utbytte_per_ar": {"2021": 4.0, "2022": 4.0, "2023": 5.0, "2024": 5.0, "2025": 6.0},
+             "utbytteaar": list(range(2010, 2027)), "historiske_utbytter": []}
+        a.update(felt)
+        return a
+
+    # 2) Snittet: hele år, nullår teller, år før første utbytte teller ikke
+    def test_snitt_fra_hele_ar(self):
+        a = self.rad()
+        fs.sett_snitt_felter(a)
+        self.assertEqual((a["snitt_yield_5ar"], a["snitt_yield_ar"]), (4.8, 5))
+
+    def test_snitt_under_tre_ar_er_ukjent(self):
+        # SNTIA viste «5-årssnitt 6,88 %» fra 2026 alene.
+        a = self.rad(utbytte_forste_ar=2025, snitt_yield_5ar=6.88)
+        fs.sett_snitt_felter(a)
+        self.assertEqual(a["snitt_yield_5ar"], 0)
+        self.assertEqual(fs.snitt_navn(a), "5-årssnitt")
+
+    def test_nullar_teller_og_navnet_folger_arene(self):
+        a = self.rad(utbytte_forste_ar=2022,
+                     utbytte_per_ar={"2021": 0, "2022": 3.0, "2023": 0, "2024": 3.0, "2025": 3.0})
+        fs.sett_snitt_felter(a)
+        self.assertEqual((a["snitt_yield_5ar"], a["snitt_yield_ar"]), (2.25, 4))
+        self.assertEqual(fs.snitt_navn(a), "4-årssnitt")
+        self.assertTrue(fs.snitt_har_nullar(a))
+
+    def test_uten_serie_beholdes_lagret_snitt(self):
+        a = self.rad(utbytte_per_ar=None, snitt_yield_5ar=5.5)
+        fs.sett_snitt_felter(a)
+        self.assertEqual(a["snitt_yield_5ar"], 5.5)
+
+    # 1) Payout-grensen
+    def test_payout_over_80_ikke_egen_verdi(self):
+        html_ = " ".join(fs._lag_faq_seksjon(self.rad(payout_ratio=110), "2026-10-12"))
+        self.assertIn("payout ratio over 80 %", html_)
+        self.assertNotIn("over 110 %", html_)
+
+    # 3) «På linje med» er relativt, og kursen er aldri forklaringen
+    def test_paa_linje_relativt(self):
+        a = self.rad(utbytte_yield=0.70, snitt_yield_5ar=1.99, snitt_yield_ar=5)
+        html_ = " ".join(fs._lag_faq_seksjon(a, "2026-10-12"))
+        self.assertNotIn("på linje med", html_)
+        self.assertIn("under 5-årssnittet", html_)
+        self.assertNotIn("inngangskurs", html_)
+
+    # 5 og 7) Hull er ikke «uten kutt», og «kursen har falt» kan ikke stemme
+    def test_hull_er_ikke_uten_kutt(self):
+        a = self.rad(historiske_utbytter=[{"ar": 2022, "utbytte": 11.0}, {"ar": 2024, "utbytte": 20.0},
+                                          {"ar": 2025, "utbytte": 32.52}],
+                     utbytte_yield=9.0, snitt_yield_5ar=3.9, snitt_yield_ar=5)
+        tekst = fs._lag_utbyttehistorikk_tekst(a, 2026)
+        self.assertNotIn("uten et eneste kutt", tekst)
+        self.assertIn("for 2023 har vi ikke registrert noe utbytte", tekst)
+
+    def test_aldri_kursen_som_forklaring(self):
+        a = self.rad(historiske_utbytter=[{"ar": 2022, "utbytte": 6.1}, {"ar": 2023, "utbytte": 53.4},
+                                          {"ar": 2024, "utbytte": 32.6}, {"ar": 2025, "utbytte": 20.3}],
+                     utbytte_yield=9.7, snitt_yield_5ar=2.6, snitt_yield_ar=5)
+        self.assertNotIn("kursen har falt", fs._lag_utbyttehistorikk_tekst(a, 2026))
+        for p in fs._lag_risikofaktorer(a):
+            self.assertNotIn("kursen har falt", p)
+
+    # 4) Rekken, ikke antallet, og et brudd nevnes alltid
+    def test_brudd_med_lang_rekke(self):
+        # SOGN: 17 år med utbytte, 8 på rad siden 2019.
+        a = self.rad(ar_med_utbytte=17, utbytteaar=list(range(2002, 2009)) + list(range(2010, 2018))
+                     + list(range(2019, 2027)))
+        html_ = fs._lag_investor_badges(a)
+        self.assertIn("med brudd — sammenhengende siden 2019", html_)
+        self.assertNotIn("Lang utbyttehistorikk (17 år)", html_)
+        self.assertNotIn("vist evne til stabil utbetaling", html_)
+
+    # 4 og 6) Ingen påstander dataene ikke bærer
+    def test_ingen_konsistent_eller_kompenserer(self):
+        a = self.rad(utbytte_yield=2.0, utbytteaar=list(range(2019, 2027)))
+        vurd = fs._lag_investor_vurdering(a, {"Finans": 6.0})
+        faq = " ".join(fs._lag_faq_seksjon(a, "2026-10-12"))
+        for tekst in (vurd, faq):
+            self.assertNotIn("konsistent", tekst)
+            self.assertNotIn("kompenserer", tekst)
+            self.assertNotIn("konjunktursyklus", tekst)
+
+
 class TestBelopIUtbyttemelding(unittest.TestCase):
     """Beløpet for neste utbetaling, fra børsmeldingen (2026-10-06)."""
     I_DAG = datetime.date(2026, 10, 6)

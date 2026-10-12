@@ -989,6 +989,14 @@ function beregnMal(a) {
   return mål;
 }
 
+// «5-årssnitt», eller «3-årssnitt» når snittet bygger på færre hele år.
+// Speiler snitt_navn() i fetch_stocks.py; snitt_yield_ar settes av
+// sett_snitt_felter() (tallkontrollen 2026-10-12).
+function snittNavn(a) {
+  const ar = a && a.snitt_yield_ar;
+  return ar && ar >= 3 && ar < 5 ? `${ar}-årssnitt` : '5-årssnitt';
+}
+
 function forklarRisiko(a) {
   const punkter = [];
   const sektor = a.sektor || '';
@@ -1004,17 +1012,19 @@ function forklarRisiko(a) {
   else
     punkter.push(`Defensiv sektor (${sektor}) — relativt stabile inntekter`);
 
-  // Samme regel som aksjesiden: et brutt eller stoppet utbytte er ikke
-  // «vist evne til stabil utbetaling», uansett hvor mange år det er.
+  // Samme regel som aksjesiden: et brudd nevnes uansett hvor lang den
+  // nåværende rekken er, og lengden bygger på rekken, ikke antallet år. SOGN
+  // fikk «Lang utbyttehistorikk (17 år)» med 8 år på rad (2026-10-12).
   const rekke = utbytteRekke(a);
-  if (rekke && rekke.brutt && ((rekke.totalt >= 7 && rekke.rad < 7) || rekke.rad === 0)) {
+  const lengde = rekke ? rekke.rad : ar;
+  if (rekke && rekke.brutt) {
     punkter.push(`Utbytte i ${rekke.totalt} år, men med brudd — ` + (rekke.rad === 0
-      ? `ingen utbytte siden ${rekke.siste}` : `sammenhengende bare siden ${rekke.fra}`));
+      ? `ingen utbytte siden ${rekke.siste}` : `sammenhengende siden ${rekke.fra}`));
   }
-  else if (ar === 0) punkter.push('Ingen registrert utbyttehistorikk');
-  else if (ar < 3)  punkter.push(`Kort utbyttehistorikk (${ar} år) — begrenset dokumentasjon`);
-  else if (ar < 7)  punkter.push(`Moderat utbyttehistorikk (${ar} år)`);
-  else              punkter.push(`Lang utbyttehistorikk (${ar} år) — vist evne til stabil utbetaling`);
+  else if (lengde === 0) punkter.push('Ingen registrert utbyttehistorikk');
+  else if (lengde < 3)  punkter.push(`Kort utbyttehistorikk (${lengde} år) — begrenset dokumentasjon`);
+  else if (lengde < 7)  punkter.push(`Moderat utbyttehistorikk (${lengde} år)`);
+  else                  punkter.push(`Lang utbyttehistorikk (${lengde} år på rad)`);
 
   if (payout > 90)       punkter.push(`Svært høy payout ratio (${payout.toFixed(0).replace('.', ',')}%) — lite buffer ved inntjeningsfall`);
   else if (payout > 75)  punkter.push(`Høy payout ratio (${payout.toFixed(0).replace('.', ',')}%) — begrenset reinvesteringsevne`);
@@ -3252,7 +3262,7 @@ function visModal(a) {
     <div class="modal-panel skjult" id="mp-utbytte">
       <div class="grid grid-cols-2 gap-3 mb-4">
         ${modalKort('Utbytteyield' + ((yieldErDelaar(a) && !delaarMotbevist(a)) ? ' <span class="font-normal normal-case opacity-70">usikker</span>' : ''), '<span class="' + yieldKlasse(a.utbytte_yield) + '">' + a.utbytte_yield.toFixed(2).replace('.', ',') + '%</span>')}
-        ${modalKort('Snitt yield 5år', a.snitt_yield_5ar > 0 ? '<span class="' + yieldKlasse(a.snitt_yield_5ar) + '">' + a.snitt_yield_5ar.toFixed(1).replace('.', ',') + '%</span>' : '—')}
+        ${modalKort(`Snitt yield ${a.snitt_yield_ar && a.snitt_yield_ar < 5 ? a.snitt_yield_ar : 5} år`, a.snitt_yield_5ar > 0 ? '<span class="' + yieldKlasse(a.snitt_yield_5ar) + '">' + a.snitt_yield_5ar.toFixed(1).replace('.', ',') + '%</span>' : '—')}
         ${modalKort('Utbytte/aksje' + (a.arsrate_kilde === 'betalt_12m'
             ? ' <span class="font-normal normal-case opacity-70">siste 12 mnd' + (a.arsrate_ekstra_trukket ? ', uten engangsutbytte' : '') + '</span>'
             : (yieldErDelaar(a) && !delaarMotbevist(a))
@@ -3310,7 +3320,7 @@ function visModal(a) {
           ['52u høy',          a['52u_hoy'] > 0 ? fmt(a['52u_hoy']) + ' ' + a.valuta : '—'],
           ['52u lav',          a['52u_lav'] > 0 ? fmt(a['52u_lav']) + ' ' + a.valuta : '—'],
           ['Direkteavkastning',a.utbytte_yield > 0 ? a.utbytte_yield.toFixed(2).replace('.', ',') + '%' : '—'],
-          ['5-årssnitt yield', a.snitt_yield_5ar > 0 ? a.snitt_yield_5ar.toFixed(2).replace('.', ',') + '%' : '—'],
+          [`${snittNavn(a)} yield`, a.snitt_yield_5ar > 0 ? a.snitt_yield_5ar.toFixed(2).replace('.', ',') + '%' : '—'],
           ['Utbytte/aksje',    fmt(a.utbytte_per_aksje) + ' ' + a.valuta],
           ['Siste utbytte',    escHtml(sisteUtbytteTekst(a))],
           ['Payout Ratio',     a.payout_ratio > 0 ? a.payout_ratio.toFixed(0).replace('.', ',') + '%' : '—'],
@@ -4443,7 +4453,7 @@ function visScoreInfoModal() {
         ['Payout-bærekraft', '0–2 p', '≤50%→2p · ≤75%→1p · >75%→0p'],
         ['Utbyttevekst 5år', '0–2 p', 'CAGR >10%→2p · >0%→1p'],
         ['År med utbytte',   '0–2 p', '≥10 år→2p · ≥5 år→1p'],
-        ['Yield-stabilitet', '0–1 p', 'Snitt yield 5å avviker ≤30% fra dagens yield'],
+        ['Yield-stabilitet', '0–1 p', 'Snitt yield (inntil 5 hele år) avviker ≤30% fra dagens yield'],
       ].map(([k, p, t]) => `
         <div class="rounded-lg bg-gray-50 dark:bg-gray-800 p-3 flex items-start justify-between gap-4">
           <div>
@@ -5310,7 +5320,7 @@ function visKomparasjonsModal() {
     { label: 'Utbytte/aksje',   fn: a => fmt(a.utbytte_per_aksje) + ' ' + a.valuta },
     { label: 'Payout ratio',    fn: a => a.payout_ratio > 0 ? `<span class="${payoutKlasse(a.payout_ratio)}">${a.payout_ratio.toFixed(0).replace('.', ',')}%</span>` : '—' },
     { label: 'Vekst 5år',       fn: a => a.utbytte_vekst_5ar !== 0 ? `<span class="${vekstKlasse(a.utbytte_vekst_5ar)}">${a.utbytte_vekst_5ar > 0 ? '+' : ''}${a.utbytte_vekst_5ar.toFixed(1).replace('.', ',')}%</span>` : '—' },
-    { label: 'Snitt yield 5år', fn: a => a.snitt_yield_5ar > 0 ? `<span class="${yieldKlasse(a.snitt_yield_5ar)}">${a.snitt_yield_5ar.toFixed(1).replace('.', ',')}%</span>` : '—' },
+    { label: 'Snitt yield', fn: a => a.snitt_yield_5ar > 0 ? `<span class="${yieldKlasse(a.snitt_yield_5ar)}">${a.snitt_yield_5ar.toFixed(1).replace('.', ',')}%</span>` : '—' },
     { label: 'P/E',             fn: a => a.pe_ratio > 0 ? a.pe_ratio.toFixed(1).replace('.', ',') : '—' },
     { label: 'P/B',             fn: a => a.pb_ratio > 0 ? a.pb_ratio.toFixed(1).replace('.', ',') : '—' },
     { label: 'Score',           fn: a => scoreBadge(beregnScore(a)) },
@@ -5529,7 +5539,7 @@ function _annOppdaterResultat() {
 
   const snitt5El = document.getElementById('ann-res-snitt5');
   if (snitt5 > 0) {
-    snitt5El.textContent = `5-årssnitt: ${snitt5.toFixed(1).replace('.', ',')}%`;
+    snitt5El.textContent = `${snittNavn(a)}: ${snitt5.toFixed(1).replace('.', ',')}%`;
     snitt5El.classList.remove('hidden');
   } else {
     snitt5El.classList.add('hidden');
@@ -5598,4 +5608,4 @@ function _annBygTopp() {
 }
 
 // Node.js test export
-if (typeof module !== 'undefined') module.exports = { vekstFraTopp, beregnMal, forklarMal, bevegelserOverskrift, utbytteRekke, stabileAr, exForbeholdGjelder, utbyttePerioder, vistOverBetalt, modalBetaltBoks, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, fmt, formaterDato, yieldKlasse, payoutKlasse, vekstKlasse, beregnScore, beregnBaerekraft, beregnYtdInntekt, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote, kapitalAndel, modalKapitalNote, kapitalSkattTekst, aksjerMedExIMaaned, beregnHvisKjopt, hvisStartAar, beregnAskMotVanlig, fmtUtbytte, sisteUtbytteTekst, modalOmSelskapet, vekslOmSelskapet, dripGevinst, _simulerKalkulator, askStatus, askTekst, modalKontoer };
+if (typeof module !== 'undefined') module.exports = { snittNavn, forklarRisiko, vekstFraTopp, beregnMal, forklarMal, bevegelserOverskrift, utbytteRekke, stabileAr, exForbeholdGjelder, utbyttePerioder, vistOverBetalt, modalBetaltBoks, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, fmt, formaterDato, yieldKlasse, payoutKlasse, vekstKlasse, beregnScore, beregnBaerekraft, beregnYtdInntekt, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote, kapitalAndel, modalKapitalNote, kapitalSkattTekst, aksjerMedExIMaaned, beregnHvisKjopt, hvisStartAar, beregnAskMotVanlig, fmtUtbytte, sisteUtbytteTekst, modalOmSelskapet, vekslOmSelskapet, dripGevinst, _simulerKalkulator, askStatus, askTekst, modalKontoer };
