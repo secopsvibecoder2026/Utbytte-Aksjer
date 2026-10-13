@@ -1107,6 +1107,202 @@ def hent_newsweb_ex_dato(ticker, i_dag=None):
     return None
 
 
+# ── UTBETALINGER YAHOO MANGLER ────────────────────────────────────────────────
+#
+# Yahoos utbytteserie mangler av og til en utbetaling selskapet har meldt til
+# Oslo Børs. Solstad Offshore gikk ex 10. mars 2026 med 0,48320 kr per aksje
+# (melding 667879), og serien hoppet rett fra november til mai. Kvartalsbetaleren
+# fikk tre utbetalinger i vinduet, «betalt siste 12 mnd» ble 2,89 kr mot 3,37,
+# og regelen om betalt som årsrate kunne ikke slå inn, for den krever fire.
+#
+# Målt 13.10.2026 mot alle 154: 363 ex-datoer fra NewsWeb siste 12 måneder,
+# 358 av dem med en utbetaling hos Yahoo innen ti dager. Resten er tre
+# utbetalinger: SOFF 10.03.2026 og Wilh. Wilhelmsens tilleggsutbytte på 8,00 kr
+# 12.11.2025 (WWI og WWIB). Hullet er sjeldent, men det flytter alle tallene
+# som bygger på serien: betalt, snitt, historikk, måneder og frekvens.
+#
+# **Kilden er meldingen som sier at aksjen går ex i dag**, ikke «Key
+# information». Den kommer på selve ex-dagen, så den er bekreftelsen på at
+# utbetalingen skjedde, og publiseringsdatoen er ex-datoen. Beløpet brukes bare
+# når det står i kroner («Dividend amount in NOK: 0.48320», «ex dividend NOK
+# 8.00»). Et dollarbeløp regnes ikke om: Yahoo har kronene, og en gjettet kurs
+# ville gitt et tall som ser målt ut uten å være det.
+#
+# Fire vakter gjør at dette ikke kan finne opp et utbytte:
+#   * Serien må ha en utbetaling det siste året. Et hull fylles, en serie
+#     skapes ikke — en tom serie kan være feil ticker (DOF), og det skal
+#     vedvarende_hentefeil si fra om, ikke vi skjule.
+#   * Beløpet må ligge innenfor en femdel og fem ganger medianen av Yahoos
+#     utbetalinger de siste to årene, og under to ganger kursen.
+#   * Meldingen må være entydig: ett kronebeløp, og en ex-dato som er
+#     publiseringsdagen (± tre dager). Kommer en utbyttemelding med «correct»,
+#     «korrig» eller «clarification» i tittelen innen 30 dager, brukes ingen av
+#     dem (Grong 2026: 10,50 i meldingen, 11 i rettelsen dagen etter).
+#   * Ingen aksjesplitt etter ex-datoen. Yahoo justerer bakover, meldingen
+#     ikke: Dellia meldte 4,60 kr, Yahoo har 0,575 etter splitten 1:8.
+#
+# Bare meldinger uten en Yahoo-utbetaling innen ti dager åpnes, så dette koster
+# rundt fem meldinger per kjøring. Lista hentes uansett for rapportdatoen.
+# Feiler NewsWeb, brukes Yahoos serie som den er.
+
+SUPPLER_DAGER = 365
+SUPPLER_TOLERANSE_DAGER = 10
+SUPPLER_MAKS_FAKTOR = 5
+
+_EX_I_DAG_TITTEL = re.compile(
+    r"\bex[\s.-]*(?:dividend|distribution|utbytte)\b|\bquoted\s+ex[\s-]*dividend\b", re.I)
+_I_DAG_RE = re.compile(r"\btoday\b|\bi\s+dag\b", re.I)
+_RETTELSE_RE = re.compile(r"correct|korrig|rettelse|clarification", re.I)
+_UTBYTTE_TITTEL_RE = re.compile(r"dividend|distribution|utbytte|utdeling", re.I)
+# «Ex. Date: 10 March 2026» — punktumet gjør at _EX_DATO_RE ikke treffer.
+# Kolonet må følge rett etter, så «Ex-date New York Stock Exchange:» aldri gjør det.
+_EX_PUNKT_DATO_RE = re.compile(
+    r"\bex\.?[\s-]?date\s*:\s*" + _DATO_PREFIKS + _DATO_ENTEN, re.I)
+_NOK_I_NOK_RE = re.compile(
+    r"amount\s+in\s+NOK\s*:\s*(?:NOK\s*)?(\d+(?:[.,]\d+)?)", re.I)
+# Samme vakt mot størrelsesmarkør som _BLOKK_BELOP_RE: «NOK 10.2 billion» er
+# ikke et beløp per aksje.
+_NOK_BELOP_RE = re.compile(
+    r"\bNOK\s*(\d+(?:[.,]\d+)?)(?![\d.,]*\s*(?:m\b|mn\b|mill|bn\b|billion|mrd))", re.I)
+
+
+def _oslo_dato(publisert):
+    """Datoen i Oslo for et NewsWeb-tidsstempel («2026-03-10T06:00:13.806Z»)."""
+    if not publisert:
+        return None
+    try:
+        from zoneinfo import ZoneInfo
+        t = datetime.datetime.fromisoformat(publisert.replace("Z", "+00:00"))
+        return t.astimezone(ZoneInfo("Europe/Oslo")).date()
+    except Exception:
+        try:
+            return datetime.date.fromisoformat(publisert[:10])
+        except ValueError:
+            return None
+
+
+def _parse_ex_melding(tittel, tekst, publisert):
+    """{"ex_dato", "belop"} fra en melding om at aksjen går ex i dag, eller None.
+
+    `belop` er i kroner. Meldinger uten et entydig kronebeløp gir None.
+    """
+    if not _EX_I_DAG_TITTEL.search(tittel or ""):
+        return None
+    pub = _oslo_dato(publisert)
+    if not pub:
+        return None
+    hele = f"{tittel}\n{tekst or ''}"
+    m = _EX_PUNKT_DATO_RE.search(hele)
+    d = _dato_fra_treff(m) if m else None
+    if d:
+        ex = datetime.date.fromisoformat(d)
+    elif _I_DAG_RE.search(hele):
+        ex = pub
+    else:
+        return None
+    if abs((ex - pub).days) > 3:
+        return None
+    n = _NOK_I_NOK_RE.search(hele)
+    if n:
+        belop = _tall(n.group(1))
+    else:
+        verdier = {_tall(v) for v in _NOK_BELOP_RE.findall(hele)}
+        if len(verdier) != 1:
+            return None
+        belop = verdier.pop()
+    if not belop or belop <= 0:
+        return None
+    return {"ex_dato": ex.isoformat(), "belop": belop}
+
+
+def newsweb_ex_meldinger(ticker, i_dag, kjente_datoer):
+    """Ex-meldinger siste SUPPLER_DAGER uten en kjent utbetaling i nærheten.
+
+    `kjente_datoer` er ex-datoene i Yahoos serie. En melding publisert innen
+    SUPPLER_TOLERANSE_DAGER fra en av dem åpnes ikke. Liste av
+    {"ex_dato", "belop", "melding_id"}; tom ved nettverksfeil.
+    """
+    grense = i_dag - datetime.timedelta(days=SUPPLER_DAGER)
+    ut = []
+    try:
+        meldinger = _newsweb_meldinger(ticker)
+        # Grong Sparebank meldte «ex utbytte NOK 10,5» 9. april 2026 og rettet
+        # det til 11 kroner dagen etter, i en ny melding. NewsWebs eget felt
+        # for rettelser er 0 på begge, så tittelen er det eneste som sier ifra.
+        rettelser = [_oslo_dato(m.get("publishedTime")) for m in meldinger
+                     if _RETTELSE_RE.search(m.get("title") or "")
+                     and _UTBYTTE_TITTEL_RE.search(m.get("title") or "")]
+        for msg in meldinger:
+            tittel = msg.get("title") or ""
+            if not _EX_I_DAG_TITTEL.search(tittel) or _RETTELSE_RE.search(tittel):
+                continue
+            pub = _oslo_dato(msg.get("publishedTime"))
+            if not pub or pub > i_dag:
+                continue
+            if pub < grense:
+                break
+            if any(abs((pub - d).days) <= SUPPLER_TOLERANSE_DAGER for d in kjente_datoer):
+                continue
+            if any(r and 0 <= (r - pub).days <= 30 for r in rettelser):
+                continue
+            funn = _parse_ex_melding(tittel, _newsweb_tekst(msg.get("messageId")),
+                                     msg.get("publishedTime"))
+            if funn:
+                funn["melding_id"] = str(msg.get("messageId"))
+                ut.append(funn)
+    except Exception as e:
+        print(f"    Advarsel NewsWeb ex-meldinger [{ticker}]: {e}")
+        return []
+    return ut
+
+
+def suppler_utbytteserie(dividends, funn, pris, i_dag, splitter=()):
+    """(serie, lagt_til): Yahoos serie med utbetalingene fra `funn` som mangler.
+
+    Vaktene står i kommentaren over SUPPLER_DAGER. `lagt_til` er listen som
+    lagres i `utbytte_supplert`, så det synes i dataene hvor et tall kom fra.
+
+    `splitter` er datoene for aksjesplitter. Yahoo justerer utbyttene bakover
+    for en splitt, meldingen oppgir beløpet slik det var. Dellia meldte 4,60
+    kr i mars 2026, og Yahoo har 0,575 etter splitten 1:8. En utbetaling før
+    en splitt legges derfor aldri til; medianvakten alene tar bare de store.
+    """
+    import statistics
+    import pandas as pd
+    if dividends is None or dividends.empty or not funn:
+        return dividends, []
+    kjente = [(d.date() if hasattr(d, "date") else d, float(v))
+              for d, v in zip(dividends.index, dividends.values)]
+    siste_ar = [d for d, v in kjente if v > 0 and (i_dag - d).days <= 365]
+    to_ar = [v for d, v in kjente if v > 0 and (i_dag - d).days <= 730]
+    if not siste_ar or not to_ar:
+        return dividends, []
+    median = statistics.median(to_ar)
+    nye = []
+    for f in sorted(funn, key=lambda x: x["ex_dato"]):
+        ex = datetime.date.fromisoformat(f["ex_dato"])
+        if ex > i_dag or any(s >= ex for s in splitter):
+            continue
+        datoer = [d for d, _ in kjente] + [datetime.date.fromisoformat(n["ex_dato"]) for n in nye]
+        if any(abs((ex - d).days) <= SUPPLER_TOLERANSE_DAGER for d in datoer):
+            continue
+        b = f["belop"]
+        if not (median / SUPPLER_MAKS_FAKTOR <= b <= median * SUPPLER_MAKS_FAKTOR):
+            continue
+        if pris > 0 and b > 2 * pris:
+            continue
+        nye.append({"ex_dato": f["ex_dato"], "belop": round(b, 4),
+                    "melding_id": f.get("melding_id")})
+    if not nye:
+        return dividends, []
+    tz = dividends.index.tz
+    indeks = pd.DatetimeIndex([pd.Timestamp(n["ex_dato"]) for n in nye])
+    if tz is not None:
+        indeks = indeks.tz_localize(tz)
+    tillegg = pd.Series([n["belop"] for n in nye], index=indeks, dtype="float64")
+    return pd.concat([dividends, tillegg]).sort_index(), nye
+
+
 # ── TILBAKEBETALING AV INNBETALT KAPITAL ──────────────────────────────────────
 #
 # Noen selskaper betaler ikke utbytte i skattemessig forstand, men tilbake
@@ -1488,6 +1684,21 @@ def bor_hente_utbyttesplitt(a):
         return False
 
 
+def supplert_fotnote(a):
+    """Sier hvilke utbetalinger som er hentet fra børsmeldingen, ikke fra Yahoo.
+
+    Står bare på sidene der suppler_utbytteserie() har lagt noe til.
+    """
+    lagt = [s for s in a.get("utbytte_supplert") or [] if s.get("ex_dato")]
+    if not lagt:
+        return ""
+    datoer = [_fmt_dato(s["ex_dato"]) for s in sorted(lagt, key=lambda s: s["ex_dato"])]
+    liste = datoer[0] if len(datoer) == 1 else ", ".join(datoer[:-1]) + " og " + datoer[-1]
+    flertall = len(datoer) > 1
+    return (f"Utbetaling{'ene' if flertall else 'en'} med ex-dato {liste} mangler i Yahoos "
+            f"utbytteserie og er hentet fra selskapets melding til Oslo Børs.")
+
+
 def lag_betalt_boks(a, nf):
     """«Faktisk betalt» — det selskapet har betalt, ved siden av hovedtallet.
 
@@ -1529,6 +1740,9 @@ def lag_betalt_boks(a, nf):
     fotnoter = []
     if avkortet:
         fotnoter.append(f"Utbytte i vår historikk fra {avkortet}.")
+    supplert = supplert_fotnote(a)
+    if supplert:
+        fotnoter.append(supplert)
     if over_kurs:
         fotnoter.append("— betyr at beløpet er over to ganger dagens kurs, som regel en "
                         "engangsutdeling; det vises ikke som yield.")
@@ -2421,6 +2635,24 @@ def hent_aksje(meta):
         # summerer trailing 12 mnd betalinger fra ulike perioder og gir for høy verdi.
         today = datetime.datetime.today()
         last_complete_year = today.year - 1
+
+        # Utbetalinger Oslo Børs har meldt ex-dato for, men som Yahoo mangler.
+        # Først, så alle tallene under bygger på den samme serien. Se
+        # kommentaren over SUPPLER_DAGER.
+        utbytte_supplert = []
+        if not dividends.empty:
+            try:
+                splitter = [d.date() for d in _datoindeksert(stk.splits).index]
+            except Exception:
+                splitter = []
+            funn = newsweb_ex_meldinger(
+                ticker, today.date(), [d.date() for d in dividends.index])
+            dividends, utbytte_supplert = suppler_utbytteserie(
+                dividends, funn, pris, today.date(), splitter)
+            for s in utbytte_supplert:
+                print(f"    {ticker}: la til {s['belop']} kr med ex-dato {s['ex_dato']} "
+                      f"fra NewsWeb (mangler hos Yahoo)")
+
         if not dividends.empty:
             tz = dividends.index.tz
             y_start = datetime.datetime(last_complete_year, 1, 1, tzinfo=tz) if tz else datetime.datetime(last_complete_year, 1, 1)
@@ -2672,6 +2904,7 @@ def hent_aksje(meta):
             "utbytte_12m": utbytte_12m,
             "utbytte_12m_antall": utbytte_12m_antall,
             "utbytte_12m_liste": utbytte_12m_liste,
+            "utbytte_supplert": utbytte_supplert,
             "utbytte_per_ar": utbytte_per_ar,
             "utbytte_forste_ar": utbytte_forste_ar,
             "historiske_utbytter": historiske_utbytter,

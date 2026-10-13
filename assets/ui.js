@@ -4142,8 +4142,20 @@ function modalBetaltBoks(a) {
         <span class="text-lg font-semibold betalt-yield">${v.yield}</span>
       </div>
       <p class="text-xs text-gray-500 dark:text-gray-400 mt-1 betalt-merknad">${v.merknad}</p>
-      <p class="text-xs text-gray-400 dark:text-gray-500 mt-2">Summert etter ex-dato, inkludert eventuelle ekstraordinære utbytter. Yield mot dagens kurs.</p>
+      <p class="text-xs text-gray-400 dark:text-gray-500 mt-2">Summert etter ex-dato, inkludert eventuelle ekstraordinære utbytter. Yield mot dagens kurs.${supplertFotnote(a) ? ' ' + escHtml(supplertFotnote(a)) : ''}</p>
     </div>`;
+}
+
+// Utbetalinger Yahoo mangler og fetch_stocks.py har hentet fra børsmeldingen
+// (suppler_utbytteserie()). Samme setning som supplert_fotnote() på aksjesiden.
+function supplertFotnote(a) {
+  const lagt = (a.utbytte_supplert || []).filter(s => s && s.ex_dato)
+    .sort((x, y) => x.ex_dato.localeCompare(y.ex_dato));
+  if (!lagt.length) return '';
+  const datoer = lagt.map(s => formaterDato(s.ex_dato));
+  const liste = datoer.length === 1 ? datoer[0]
+    : datoer.slice(0, -1).join(', ') + ' og ' + datoer[datoer.length - 1];
+  return `Utbetaling${datoer.length > 1 ? 'ene' : 'en'} med ex-dato ${liste} mangler i Yahoos utbytteserie og er hentet fra selskapets melding til Oslo Børs.`;
 }
 
 /** Kobler velgeren i en rendret boks. Én lytter på beholderen — ingen inline onclick. */
@@ -5608,4 +5620,4 @@ function _annBygTopp() {
 }
 
 // Node.js test export
-if (typeof module !== 'undefined') module.exports = { snittNavn, forklarRisiko, vekstFraTopp, beregnMal, forklarMal, bevegelserOverskrift, utbytteRekke, stabileAr, exForbeholdGjelder, utbyttePerioder, vistOverBetalt, modalBetaltBoks, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, fmt, formaterDato, yieldKlasse, payoutKlasse, vekstKlasse, beregnScore, beregnBaerekraft, beregnYtdInntekt, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote, kapitalAndel, modalKapitalNote, kapitalSkattTekst, aksjerMedExIMaaned, beregnHvisKjopt, hvisStartAar, beregnAskMotVanlig, fmtUtbytte, sisteUtbytteTekst, modalOmSelskapet, vekslOmSelskapet, dripGevinst, _simulerKalkulator, askStatus, askTekst, modalKontoer };
+if (typeof module !== 'undefined') module.exports = { snittNavn, forklarRisiko, vekstFraTopp, beregnMal, forklarMal, bevegelserOverskrift, utbytteRekke, stabileAr, exForbeholdGjelder, utbyttePerioder, vistOverBetalt, modalBetaltBoks, supplertFotnote, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, fmt, formaterDato, yieldKlasse, payoutKlasse, vekstKlasse, beregnScore, beregnBaerekraft, beregnYtdInntekt, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote, kapitalAndel, modalKapitalNote, kapitalSkattTekst, aksjerMedExIMaaned, beregnHvisKjopt, hvisStartAar, beregnAskMotVanlig, fmtUtbytte, sisteUtbytteTekst, modalOmSelskapet, vekslOmSelskapet, dripGevinst, _simulerKalkulator, askStatus, askTekst, modalKontoer };

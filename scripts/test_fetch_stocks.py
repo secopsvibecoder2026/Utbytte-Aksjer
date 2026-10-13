@@ -2481,5 +2481,214 @@ class TestNewswebUtsteder(unittest.TestCase):
             fs._NEWSWEB_LISTE.pop("EQNR", None)
 
 
+class TestParseExMelding(unittest.TestCase):
+    """Meldingen om at aksjen går ex i dag: ex-dato og beløp i kroner."""
+
+    # Meldingene er forkortet; kontaktlinjene er tatt ut.
+    SOFF = ("Issuer: Solstad Offshore ASA\n\nEx. Date: 10 March 2026\n\n"
+            "Dividend amount: USD 0.05 per share\n\n"
+            "Dividend amount in NOK: 0.48320 per share\n\n"
+            "Announced currency: USD (please note that the dividend will be paid out in NOK)\n")
+    WWI = ("The shares in Wilh. Wilhelmsen Holding ASA (ticker: WWI and WWIB) will be "
+           "traded ex dividend NOK 8.00 as from today, 12 November 2025.\n\n"
+           "The expected dividend payment date is 20 November 2025.")
+
+    def test_soff_belop_i_kroner_fra_egen_linje(self):
+        r = fs._parse_ex_melding("SOLSTAD OFFSHORE ASA: EX DIVIDEND USD 0.05 PER SHARE TODAY",
+                                 self.SOFF, "2026-03-10T07:00:12.000Z")
+        self.assertEqual(r, {"ex_dato": "2026-03-10", "belop": 0.4832})
+
+    def test_wwi_publiseringsdagen_er_ex_dato(self):
+        r = fs._parse_ex_melding("Wilh. Wilhelmsen Holding ASA: Ex dividend NOK 8.00 today",
+                                 self.WWI, "2025-11-12T06:30:00.000Z")
+        self.assertEqual(r, {"ex_dato": "2025-11-12", "belop": 8.0})
+
+    def test_kronebelop_ved_siden_av_dollar(self):
+        tekst = ("The shares in Odfjell SE will trade ex-dividend of USD 0.52/ NOK 4.87 "
+                 "per share as from today August 26, 2026.")
+        r = fs._parse_ex_melding("Odfjell SE: Shares trade ex-dividend USD 0.52 today",
+                                 tekst, "2026-08-26T06:00:00Z")
+        self.assertEqual(r["belop"], 4.87)
+
+    def test_norsk_melding_med_desimalkomma(self):
+        tekst = ("Egenkapitalbevisene i Grong Sparebank noteres ex utbytte NOK 10,5 "
+                 "fra og med i dag, 09.04.2026.")
+        r = fs._parse_ex_melding("Ex utbytte", tekst, "2026-04-09T06:00:00Z")
+        self.assertEqual(r, {"ex_dato": "2026-04-09", "belop": 10.5})
+
+    def test_bare_dollar_gir_ingenting(self):
+        tekst = "The shares in Frontline plc will be traded ex dividend USD 1.55 as from today."
+        self.assertIsNone(fs._parse_ex_melding("FRO - Ex dividend USD 1.55 today",
+                                               tekst, "2026-06-11T06:00:00Z"))
+
+    def test_to_ulike_kronebelop_er_tvetydig(self):
+        tekst = "Ex dividend NOK 2.50 today. Last year the dividend was NOK 2.00."
+        self.assertIsNone(fs._parse_ex_melding("Ex dividend today", tekst, "2026-05-04T06:00:00Z"))
+
+    def test_storrelse_er_ikke_belop_per_aksje(self):
+        tekst = "Ex dividend NOK 5.00 per share today, in total NOK 10.2 billion."
+        r = fs._parse_ex_melding("Ex dividend today", tekst, "2026-05-04T06:00:00Z")
+        self.assertEqual(r["belop"], 5.0)
+
+    def test_ex_dato_langt_fra_publisering_avvises(self):
+        tekst = "Ex. Date: 20 March 2026\nDividend amount in NOK: 1.00"
+        self.assertIsNone(fs._parse_ex_melding("Ex dividend", tekst, "2026-03-05T06:00:00Z"))
+
+    def test_annen_tittel_avvises(self):
+        self.assertIsNone(fs._parse_ex_melding(
+            "Key information relating to the cash dividend",
+            "Ex-date: 10 March 2026\nDividend amount: NOK 1.00", "2026-02-16T06:00:00Z"))
+        self.assertIsNone(fs._parse_ex_melding(
+            "Extraordinary dividend NOK 1.00", "today", "2026-02-16T06:00:00Z"))
+
+    def test_oslo_dato_fra_utc(self):
+        # 23:30 UTC 9. mars er 00:30 10. mars i Oslo.
+        self.assertEqual(fs._oslo_dato("2026-03-09T23:30:00.000Z"), datetime.date(2026, 3, 10))
+
+
+@unittest.skipIf(pd is None, "pandas er ikke installert")
+class TestSupplerUtbytteserie(unittest.TestCase):
+    """SOFF manglet ex-datoen 10. mars 2026 hos Yahoo, som NewsWeb bekreftet."""
+
+    I_DAG = datetime.date(2026, 10, 13)
+
+    def serie(self, punkter):
+        idx = pd.DatetimeIndex([pd.Timestamp(d) for d, _ in punkter]).tz_localize("Europe/Oslo")
+        return pd.Series([v for _, v in punkter], index=idx, dtype="float64")
+
+    def soff(self):
+        return self.serie([("2015-05-01", 1.0), ("2025-11-25", 0.5119),
+                           ("2026-05-20", 0.9169), ("2026-07-17", 1.4592)])
+
+    def test_soff_hullet_fylles(self):
+        funn = [{"ex_dato": "2026-03-10", "belop": 0.4832, "melding_id": "667879"}]
+        ny, lagt = fs.suppler_utbytteserie(self.soff(), funn, 72.0, self.I_DAG)
+        self.assertEqual(lagt, funn)
+        self.assertEqual(len(ny), 5)
+        self.assertTrue(ny.index.is_monotonic_increasing)
+        self.assertEqual(str(ny.index.tz), "Europe/Oslo")
+        sum12, antall, _, _ = fs.betalt_fra_serie(ny, self.I_DAG)
+        self.assertEqual((sum12, antall), (3.3712, 4))
+
+    def test_kjent_utbetaling_legges_ikke_til_igjen(self):
+        funn = [{"ex_dato": "2026-05-22", "belop": 0.92}]
+        ny, lagt = fs.suppler_utbytteserie(self.soff(), funn, 72.0, self.I_DAG)
+        self.assertEqual((len(ny), lagt), (4, []))
+
+    def test_samme_utbetaling_to_meldinger_gir_en(self):
+        # Equinor sender både «Ex. dividend» og «Ex. utbytte».
+        funn = [{"ex_dato": "2026-03-10", "belop": 0.4832},
+                {"ex_dato": "2026-03-10", "belop": 0.4832}]
+        _, lagt = fs.suppler_utbytteserie(self.soff(), funn, 72.0, self.I_DAG)
+        self.assertEqual(len(lagt), 1)
+
+    def test_en_tom_serie_skapes_ikke(self):
+        tom = pd.Series(dtype="float64", index=pd.DatetimeIndex([]))
+        funn = [{"ex_dato": "2026-03-10", "belop": 0.4832}]
+        ny, lagt = fs.suppler_utbytteserie(tom, funn, 72.0, self.I_DAG)
+        self.assertEqual((len(ny), lagt), (0, []))
+
+    def test_ingen_utbetaling_siste_ar_gir_ingen_tillegg(self):
+        gammel = self.serie([("2024-05-01", 1.0), ("2024-09-01", 1.0)])
+        funn = [{"ex_dato": "2026-03-10", "belop": 1.0}]
+        self.assertEqual(fs.suppler_utbytteserie(gammel, funn, 72.0, self.I_DAG)[1], [])
+
+    def test_belop_langt_fra_medianen_avvises(self):
+        # Dellia: 4,60 i meldingen, 0,575 hos Yahoo etter splitten 1:8.
+        s = self.serie([("2025-11-01", 0.5), ("2026-06-01", 0.575)])
+        funn = [{"ex_dato": "2026-03-16", "belop": 4.6}]
+        self.assertEqual(fs.suppler_utbytteserie(s, funn, 19.6, self.I_DAG)[1], [])
+
+    def test_utbetaling_for_en_splitt_avvises(self):
+        s = self.serie([("2025-11-01", 0.5), ("2026-06-01", 0.6)])
+        funn = [{"ex_dato": "2026-03-16", "belop": 0.55}]
+        _, lagt = fs.suppler_utbytteserie(s, funn, 19.6, self.I_DAG,
+                                          splitter=[datetime.date(2026, 4, 1)])
+        self.assertEqual(lagt, [])
+        _, lagt = fs.suppler_utbytteserie(s, funn, 19.6, self.I_DAG,
+                                          splitter=[datetime.date(2026, 3, 1)])
+        self.assertEqual(len(lagt), 1)
+
+    def test_framtidig_ex_dato_avvises(self):
+        funn = [{"ex_dato": "2026-10-20", "belop": 1.0}]
+        self.assertEqual(fs.suppler_utbytteserie(self.soff(), funn, 72.0, self.I_DAG)[1], [])
+
+
+class TestSupplertFotnote(unittest.TestCase):
+    """Fotnoten i «Faktisk betalt» står bare der en utbetaling er lagt til."""
+
+    def test_ingen_tillegg_ingen_fotnote(self):
+        self.assertEqual(fs.supplert_fotnote({}), "")
+        self.assertEqual(fs.supplert_fotnote({"utbytte_supplert": []}), "")
+
+    def test_en_og_flere(self):
+        en = fs.supplert_fotnote({"utbytte_supplert": [{"ex_dato": "2026-03-10", "belop": 0.4832}]})
+        self.assertTrue(en.startswith("Utbetalingen med ex-dato 10. mar 2026 mangler"))
+        to = fs.supplert_fotnote({"utbytte_supplert": [
+            {"ex_dato": "2026-03-10", "belop": 0.48}, {"ex_dato": "2025-11-12", "belop": 8.0}]})
+        self.assertIn("Utbetalingene med ex-dato 12. nov 2025 og 10. mar 2026", to)
+
+    def test_star_i_betalt_boksen(self):
+        a = {"pris": 72.3, "utbytte_12m": 3.3712, "utbytte_forste_ar": 2000,
+             "utbytte_per_ar": {"2021": 0.0, "2022": 0.0, "2023": 0.0, "2024": 0.0, "2025": 0.5119}}
+        self.assertNotIn("Yahoos utbytteserie", fs.lag_betalt_boks(a, fs._nf))
+        a["utbytte_supplert"] = [{"ex_dato": "2026-03-10", "belop": 0.4832}]
+        self.assertIn("hentet fra selskapets melding til Oslo Børs", fs.lag_betalt_boks(a, fs._nf))
+
+
+class TestNewswebExMeldinger(unittest.TestCase):
+    """Bare meldinger uten en Yahoo-utbetaling i nærheten åpnes."""
+
+    def kjor(self, meldinger, tekster, kjente):
+        gml = fs._newsweb_meldinger, fs._newsweb_tekst
+        apnet = []
+
+        def tekst(mid):
+            apnet.append(mid)
+            return tekster.get(mid, "")
+        fs._newsweb_meldinger = lambda t: meldinger
+        fs._newsweb_tekst = tekst
+        try:
+            funn = fs.newsweb_ex_meldinger("SOFF", datetime.date(2026, 10, 13), kjente)
+        finally:
+            fs._newsweb_meldinger, fs._newsweb_tekst = gml
+        return funn, apnet
+
+    def test_apner_bare_hullet(self):
+        meldinger = [
+            {"messageId": 3, "publishedTime": "2026-07-17T06:00:00Z",
+             "title": "SOLSTAD OFFSHORE ASA: EX DIVIDEND USD 0.15 PER SHARE TODAY"},
+            {"messageId": 2, "publishedTime": "2026-03-10T06:00:00Z",
+             "title": "SOLSTAD OFFSHORE ASA: EX DIVIDEND USD 0.05 PER SHARE TODAY"},
+            {"messageId": 1, "publishedTime": "2026-02-16T06:00:00Z",
+             "title": "Solstad Offshore ASA - Key information relating to Q4 2025 dividend"},
+        ]
+        funn, apnet = self.kjor(meldinger, {2: TestParseExMelding.SOFF},
+                                [datetime.date(2026, 7, 17)])
+        self.assertEqual(apnet, [2])
+        self.assertEqual(funn, [{"ex_dato": "2026-03-10", "belop": 0.4832, "melding_id": "2"}])
+
+    def test_rettet_melding_brukes_ikke(self):
+        # Grong: 10,50 i meldingen 9. april, 11 i rettelsen dagen etter.
+        meldinger = [
+            {"messageId": 2, "publishedTime": "2026-04-10T06:00:00Z", "title": "Ex utbytte, korrigert"},
+            {"messageId": 1, "publishedTime": "2026-04-09T06:00:00Z", "title": "Ex utbytte"},
+        ]
+        tekster = {1: "noteres ex utbytte NOK 10,5 fra og med i dag, 09.04.2026."}
+        funn, _ = self.kjor(meldinger, tekster, [datetime.date(2025, 4, 9)])
+        self.assertEqual(funn, [])
+
+    def test_nettverksfeil_gir_tom_liste(self):
+        gml = fs._newsweb_meldinger
+
+        def feil(t):
+            raise OSError("tidsavbrudd")
+        fs._newsweb_meldinger = feil
+        try:
+            self.assertEqual(fs.newsweb_ex_meldinger("SOFF", datetime.date(2026, 10, 13), []), [])
+        finally:
+            fs._newsweb_meldinger = gml
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
