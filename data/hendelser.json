@@ -3431,7 +3431,8 @@
     {
       "ticker": "ABG",
       "dato": "2026-10-13",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/683974"
     },
     {
       "ticker": "ENTR",
@@ -4159,6 +4160,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "ABG",
+      "dato": "2027-02-10",
+      "type": "rapport"
+    },
+    {
       "ticker": "ORK",
       "dato": "2027-02-10",
       "type": "rapport"
@@ -4169,5 +4175,5 @@
       "type": "rapport"
     }
   ],
-  "sist_oppdatert": "2026-10-12"
+  "sist_oppdatert": "2026-10-13"
 }
