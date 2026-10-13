@@ -1584,6 +1584,61 @@ one 26,52 payment in 2022, all adjusted for the 2023 reverse split.
 Tests: `TestEngangsutbytteTrukketFra` (6), `TestCmbTechMelding` (2),
 `TestLopendeUtbytteFra` (4), `TestNewswebUtsteder` (2), `ui.test.js` (1).
 
+## Payments Yahoo is missing are filled from NewsWeb (2026-10-13)
+
+Solstad Offshore went ex on 10 March 2026 with 0,48320 kr per share (NewsWeb
+message 667879), and Yahoo's series jumped straight from November to May. A
+quarterly payer had three payments in the window, so «betalt siste 12 mnd» read
+2,89 kr against 3,37, the 5-year average and the month pattern were built on a
+gap, and the paid-as-annual-rate rule could not fire because it needs four. The
+page showed 0,71 % and an amber «delår» warning; with the payment it is 4,66 %
+«siste 12 mnd» and no warning.
+
+**Measured before building.** For all 154: 363 ex-dates from NewsWeb in the
+last 12 months, 358 with a Yahoo payment within ten days. The rest is three
+payments: SOFF 10.03.2026 and Wilh. Wilhelmsen's additional NOK 8,00 on
+12.11.2025 (WWI and WWIB). Rare, but it moves every number built on the series.
+
+`suppler_utbytteserie()` runs first in `hent_aksje()`, so every figure after it
+uses the same series. The source is the **«ex dividend today» notice**, not
+«Key information»: it is published on the ex-date, so it confirms the payment
+happened, and `_parse_ex_melding()` takes the amount only in kroner («Dividend
+amount in NOK: 0.48320», «ex dividend NOK 8.00»). A dollar amount is never
+converted.
+
+Parsed against Yahoo where both have the payment: 165 of 170 amounts agree
+within 2 %. The five that do not are the reason for the guards:
+
+- **A hole is filled, a series is never created.** Yahoo must have a payment in
+  the last year. An empty series can be a wrong ticker (DOF), and that is
+  `vedvarende_hentefeil`'s to report.
+- **No split after the ex-date, and within 1/5–5× the median.** Yahoo adjusts
+  backwards for a split; the notice does not. Dellia announced 4,60 kr and Yahoo
+  holds 0,575 after a 1:8 split.
+- **A correction within 30 days voids the notice.** Grong Sparebank wrote «NOK
+  10,5» and corrected it to 11 kr the next day in a new message titled «Ex
+  utbytte, korrigert». NewsWeb's `correctedByMessageId` is 0 on both, so the
+  title is the only signal. Yahoo had 11 all along.
+- **One unambiguous kroner amount**, and an ex-date within three days of
+  publication. BWLPG, WAWI and PLSV differ by 2–7 %: dollar conversions on
+  different days, not holes.
+
+Only notices without a Yahoo payment within ten days are opened, so the cost is
+about five messages a run; the list itself is already fetched for the report
+date. If NewsWeb fails, Yahoo's series is used as before.
+
+`utbytte_supplert` stores what was added, and `supplert_fotnote()` /
+`supplertFotnote()` say so in the «Faktisk betalt» box on those pages only.
+
+**WWI and WWIB turn «Halvårlig».** With the November payment there are two in
+the window, and the label is derived from the count. Wilhelmsen paid in May
+and November in both 2024 and 2025, so the label describes the last two years;
+the company calls the November one «additional». Set `frekvens` in
+`tickers.json` if it should read «Årlig», as for NORBT, SB68 and SOAG.
+
+Tests: `TestParseExMelding` (10), `TestSupplerUtbytteserie` (8),
+`TestNewswebExMeldinger` (3), `TestSupplertFotnote` (3) and `ui.test.js` (2).
+
 ## «Les mer» in the app modal (2026-10-07)
 
 With the 180–280-word company texts plus Yahoo's paragraph, «Om selskapet»

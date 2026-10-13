@@ -32,7 +32,7 @@ const { snittNavn, forklarRisiko, vekstFraTopp, beregnMal, forklarMal,
   vekstKlasse,
   beregnScore,
   beregnYtdInntekt
-, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, utbyttePerioder, vistOverBetalt, modalBetaltBoks, utbytteRekke, stabileAr, exForbeholdGjelder, kapitalAndel, modalKapitalNote, kapitalSkattTekst, aksjerMedExIMaaned, beregnHvisKjopt, hvisStartAar, beregnAskMotVanlig, fmtUtbytte, sisteUtbytteTekst, modalOmSelskapet, vekslOmSelskapet, dripGevinst, _simulerKalkulator, askStatus, askTekst, modalKontoer , bevegelserOverskrift } = require('../assets/ui.js');
+, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, utbyttePerioder, vistOverBetalt, modalBetaltBoks, supplertFotnote, utbytteRekke, stabileAr, exForbeholdGjelder, kapitalAndel, modalKapitalNote, kapitalSkattTekst, aksjerMedExIMaaned, beregnHvisKjopt, hvisStartAar, beregnAskMotVanlig, fmtUtbytte, sisteUtbytteTekst, modalOmSelskapet, vekslOmSelskapet, dripGevinst, _simulerKalkulator, askStatus, askTekst, modalKontoer , bevegelserOverskrift } = require('../assets/ui.js');
 
 // ── fmt ────────────────────────────────────────────────────────────────────
 test('fmt returnerer — for null', () => {
@@ -505,6 +505,26 @@ test('modalBetaltBoks: forklaring bare når vist er over betalt', () => {
   assert.doesNotMatch(modalBetaltBoks({ ...KID_BETALT, utbytte_yield: 4.2 }), /Direkteavkastningen over/);
   assert.match(modalBetaltBoks({ ...KID_BETALT, utbytte_12m: 0 }), /ikke hatt noe utbytte/);
   assert.equal(modalBetaltBoks({ pris: 10 }), '');
+});
+
+test('supplertFotnote: sier hvilke utbetalinger som kom fra børsmeldingen', () => {
+  assert.equal(supplertFotnote(KID_BETALT), '');
+  const en = supplertFotnote({ utbytte_supplert: [{ ex_dato: '2026-03-10', belop: 0.4832 }] });
+  assert.match(en, /^Utbetalingen med ex-dato 10\. mar/);
+  const to = supplertFotnote({ utbytte_supplert: [
+    { ex_dato: '2026-03-10', belop: 0.48 }, { ex_dato: '2025-11-12', belop: 8 }] });
+  assert.match(to, /^Utbetalingene med ex-dato 12\. nov.* og 10\. mar/);
+});
+
+test('modalBetaltBoks: fotnoten står bare der noe er lagt til', () => {
+  global.escHtml = s => String(s);
+  try {
+    assert.doesNotMatch(modalBetaltBoks(KID_BETALT), /Yahoos utbytteserie/);
+    const h = modalBetaltBoks({ ...KID_BETALT, utbytte_supplert: [{ ex_dato: '2026-03-10', belop: 0.48 }] });
+    assert.match(h, /mangler i Yahoos utbytteserie og er hentet fra selskapets melding til Oslo Børs/);
+  } finally {
+    delete global.escHtml;
+  }
 });
 
 test('modalBetaltBoks: null betalt vises som 0,00 kr, ikke som strek', () => {
