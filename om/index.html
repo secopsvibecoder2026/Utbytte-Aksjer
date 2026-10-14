@@ -272,11 +272,11 @@
 
     <p>Data hentes og oppdateres automatisk via to GitHub Actions-jobber:</p>
     <ul>
-      <li><strong>Daglig pipeline (kl. 08:00 CET, hverdager)</strong> — henter utbytteinformasjon, ex-datoer, historiske utbytter og nøkkeltall for alle <!--N:aksjer-->154<!--/N--> aksjer via Yahoo Finance. Genererer individuelle SEO-sider per aksje og oppdaterer datagrunnlaget.</li>
-      <li><strong>Kurspriser hvert 15. minutt (08:00–17:00 CET, hverdager)</strong> — henter siste kurs fra Euronext og Oslo Børs slik at direkteavkastningen alltid beregnes mot oppdatert kurs.</li>
+      <li><strong>Utbyttedata fire ganger hver børsdag, fra morgen til ettermiddag:</strong> henter utbytteinformasjon, historiske utbytter og nøkkeltall for alle <!--N:aksjer-->154<!--/N--> aksjer fra Yahoo Finance, og ex-datoer, rapportdatoer og utbyttemeldinger fra selskapenes egne meldinger til Oslo Børs. Deretter bygges sidene for hver aksje på nytt.</li>
+      <li><strong>Kurser omtrent hvert kvarter mens børsen er åpen:</strong> henter siste kurs fra Euronext og Oslo Børs, slik at direkteavkastningen regnes mot en oppdatert kurs.</li>
     </ul>
 
-    <p>Automatiseringen gjør at siden holder seg oppdatert uten manuelt arbeid, selv om ingen er innom siden på dager.</p>
+    <p>Automatiseringen gjør at siden holder seg oppdatert uten manuelt arbeid, selv om ingen er innom siden på dager. Jobbene har faste tider, men GitHub starter dem først når det er ledig kapasitet, og de kan komme flere timer for sent. Hver aksjeside og appen sier derfor når tallene sist ble hentet.</p>
 
     <h2 id="data">Datakilder og nøyaktighet</h2>
 

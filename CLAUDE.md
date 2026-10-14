@@ -27,10 +27,12 @@ This is a Progressive Web App (PWA) for tracking Norwegian dividend-paying stock
 > `om/index.html`; removed 2026-07-05. Before committing design changes, verify with:
 >
 > ```bash
-> grep -rn -i "132A50\|1E5C5C\|2E7B7B\|91C4D8\|8B2020" --include="*.html" --include="*.css" --include="*.js" --include="*.py" .
+> grep -rn -i -E "132A50|1E5C5C|2E7B7B|91C4D8|8B2020|rgba?\((19, ?42, ?80|30, ?92, ?92|46, ?123, ?123|145, ?196, ?216|139, ?32, ?32)\b" --include="*.html" --include="*.css" --include="*.js" --include="*.py" .
 > ```
 >
-> This must return zero hits (documentation files excepted).
+> This must return zero hits (documentation files excepted). The `rgba()` half
+> was added on 2026-10-14: the «Alle sektorer» card on the front page carried
+> the Arctic teal as `rgba(46,123,123,0.07)`, which the hex-only grep never saw.
 
 | Role | Light mode | Dark mode | Tailwind class |
 |------|-----------|-----------|----------------|
@@ -564,6 +566,11 @@ will catch it.
 > `scripts/sjekk_antall.py` now measures it, for the same reason
 > `sjekk_tema.py` exists — a rule nobody measures does not hold. An unknown key is left untouched and reported, so a typo shows
 up in the run log rather than blanking the text.
+
+`sjekk_antall.py` also flags a bare sector count («16 sektorer totalt» stood
+on the front page for a month after Shipping and Skipsfart were merged into
+15), with its own pattern because the number is too small for the stock-count
+range. A span such as «4–7 sektorer» is advice and is left alone.
 
 The marker is an HTML comment, not a template token — if the generator never
 runs, the previous number stays as ordinary text and the reader never sees
@@ -1820,6 +1827,26 @@ hand-written pages, Wednesday one article, Thursday the week's code changes,
 Friday SEO and AdSense, Saturday open findings, Sunday a broad in/out scan and
 one roadmap item. The weekly tallkontroll keeps the numbers; this agent does
 not redo that work. Tests: `scripts/test_vedlikehold.py` (32).
+
+**Mergers (2026-10-14).** Multiconsult announced a cross-border merger into
+Rejlers on 7 September («… through a merger of equals»), and Skue and Romerike
+Sparebank a «intensjonsavtale om sammenslåing» on 24 September. Neither title
+matched anything, and MULTI went five weeks without a line in the report.
+`UT_MULIG` now also catches «merger of equals», «cross-border merger»,
+«proposed merger», «combined company» and «sammenslåing», and `KONSERNINTERN`
+keeps intragroup mergers out (AKVA «Completion of intragroup merger»). On
+NewsWeb 1.9–14.10 the new patterns hit MULTI (3), SKUE, ROMER and NISB, and
+nothing else. Who survives is in the message, not the title: Skue takes over
+Romerike, Nidaros takes over Stadsbygd (not in the catalog), Rejlers takes over
+Multiconsult.
+
+**The data job did not commit what the generator wrote outside its list
+(fixed 2026-10-14).** `git add` named `aksjer/`, `index.html`, `app/` and the
+data files. `/rapportkalender/` and every hand-written page where
+`oppdater_antall_i_sider()` fills in a count were written each run and then
+stashed away before the rebase, so the report calendar read «hentet 7. oktober»
+for a week. `git add -u -- '*.html'` now takes every tracked page the run
+changed, and never a new file.
 
 **A change of domicile is its own group (2026-10-11).** Cadeler's «initiates its
 redomiciliation from Denmark to the United Kingdom, to be implemented through a share

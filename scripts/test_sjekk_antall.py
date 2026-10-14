@@ -15,7 +15,7 @@ import unittest
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from sjekk_antall import _TELLING, _FORBEHOLD, _synlig_tekst, MIN_ANTALL, MAKS_ANTALL  # noqa: E402
+from sjekk_antall import _TELLING, _FORBEHOLD, _SEKTORER, _synlig_tekst, MIN_ANTALL, MAKS_ANTALL  # noqa: E402
 
 
 def treffer(tekst):
@@ -40,6 +40,16 @@ class TestFangerEkteFeil(unittest.TestCase):
 
     def test_selskaper_teller_ogsa(self):
         self.assertTrue(treffer("Vi følger 155 selskaper på Oslo Børs"))
+
+    def test_sektorantall_paa_forsiden(self):
+        """Forsiden sto med «16 sektorer totalt» mens katalogen hadde 15."""
+        self.assertTrue(_SEKTORER.search("Alle sektorer 16 sektorer totalt"))
+        self.assertTrue(_SEKTORER.search(_synlig_tekst(
+            "<div>Alle sektorer</div><div>16 sektorer totalt</div>")))
+        self.assertIsNone(_SEKTORER.search(_synlig_tekst(
+            "<div><!--N:sektorer-->15<!--/N--> sektorer totalt</div>")))
+        # Et råd med spenn er ikke en telling.
+        self.assertIsNone(_SEKTORER.search("er 4–7 sektorer et godt utgangspunkt"))
 
 
 class TestLarStaIFred(unittest.TestCase):

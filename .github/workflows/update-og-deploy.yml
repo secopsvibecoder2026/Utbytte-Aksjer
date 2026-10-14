@@ -100,6 +100,12 @@ jobs:
           # endringer, og `git pull --rebase` under nektet å kjøre med
           # «cannot pull with rebase: You have unstaged changes».
           git add data/aksjer.json data/hendelser.json data/kurs/ aksjer/ sitemap.xml index.html app/
+          # Sider generatoren skriver i utenfor listen over: /rapportkalender/,
+          # og håndskrevne sider der oppdater_antall_i_sider() og
+          # oppdater_aarstall_i_sider() fyller inn tall. Uten denne ble de
+          # stashet bort under, og rapportkalenderen sto på «hentet 7. oktober»
+          # i en uke. -u tar bare filer git alt kjenner, aldri nye.
+          git add -u -- '*.html'
           # Legges til enkeltvis: mangler én av dem (f.eks. fordi kontrollen
           # feilet), skal ikke hele datacommiten ryke på en `git add`-feil.
           for f in data/hentelogg.json data/ticker_status.json data/ticker_varsler.json; do

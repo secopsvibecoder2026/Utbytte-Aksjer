@@ -63,8 +63,20 @@ UT_MULIG = re.compile(
     r"\btender offer\b|\b(voluntary|mandatory|recommended|unconditional)\b.{0,40}\boffer\b"
     r"|\boffer (for|to acquire) all\b|\bmandatory offer\b"
     r"|\b(frivillig|pliktig|anbefalt)\w*\b.{0,20}\btilbud\b"
-    r"|\bmerger plan\b|fusjonsplan|\bagreed to merge\b",
+    r"|\bmerger plan\b|fusjonsplan|\bagreed to merge\b"
+    # Lagt til 14.10.2026. Multiconsult og Rejlers meldte «… through a merger
+    # of equals» 7.9, og Skue og Romerike Sparebank «intensjonsavtale om
+    # sammenslåing» 24.9. Ingen av dem havnet i en gruppe, og MULTI sto uten
+    # varsel i fem uker. Målt mot NewsWeb 1.9–14.10: treffer MULTI (3), SKUE,
+    # ROMER og NISB, og ingen konserninterne fusjoner.
+    r"|\bmerger of equals\b|\bcross[\s-]*border merger\b|\bproposed merger\b"
+    r"|\bcombined company\b|sammenslåing",
     re.I)
+
+# En fusjon innad i konsernet flytter ingen aksje. AKVA meldte «Completion of
+# intragroup merger with Submerged AS» 23.9.
+KONSERNINTERN = re.compile(
+    r"intra-?\s?group|konsernintern|internal transfer|konsernstruktur", re.I)
 
 # Børsen endres: Oslo Børs ↔ Euronext Growth/Expand. Avgjør ASK.
 MARKED = re.compile(
@@ -169,7 +181,7 @@ def klassifiser(meldinger, katalog, euronext_symboler=None):
             f["tickere"] = katalog[utsteder]
             if UT_VEDTATT.search(tittel):
                 ut["ut_vedtatt"].append(f)
-            elif UT_MULIG.search(tittel):
+            elif UT_MULIG.search(tittel) and not KONSERNINTERN.search(tittel):
                 ut["ut_mulig"].append(f)
             if MARKED.search(tittel) and not IKKE_AKSJE.search(tittel):
                 ut["marked"].append(f)
