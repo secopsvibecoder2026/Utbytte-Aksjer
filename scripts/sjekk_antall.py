@@ -42,6 +42,14 @@ HOPP_OVER = {".git", "node_modules", "data", "logo", "test-results",
 # høyere er neppe et selskapsantall på Oslo Børs.
 MIN_ANTALL, MAKS_ANTALL = 100, 400
 
+# Antall sektorer har sin egen markør (`sektorer`). Forsiden sto med «16
+# sektorer totalt» i en måned etter at Shipping og Skipsfart ble slått sammen
+# til 15 (vedlikeholdsrapporten 13.10.2026). Tallet er for lite til å fanges
+# av grensene over, så det har et eget mønster.
+# Et spenn («4–7 sektorer» på /verktoy/sektorrebalansering/) er et råd, ikke en telling.
+_SEKTORER = re.compile(r"(?<![\d.,–-])(\d{1,2})(?![\d.,])\s+sektorer\b", re.I)
+MIN_SEKTORER, MAKS_SEKTORER = 5, 40
+
 # «over 150 norske utbytteaksjer» er den godkjente rundede formen.
 _FORBEHOLD = re.compile(r"(over|mer enn|rundt|nesten|minst|under|ca\.?|opptil)\s*$", re.I)
 
@@ -76,6 +84,13 @@ def finn_hardkodede(rot="."):
             for m in _TELLING.finditer(tekst):
                 n = int(m.group(1))
                 if not (MIN_ANTALL <= n <= MAKS_ANTALL):
+                    continue
+                if _FORBEHOLD.search(tekst[max(0, m.start() - 20):m.start()]):
+                    continue
+                kontekst = tekst[max(0, m.start() - 55):m.end() + 25]
+                funn.append((os.path.relpath(sti, rot), m.group(0), kontekst))
+            for m in _SEKTORER.finditer(tekst):
+                if not (MIN_SEKTORER <= int(m.group(1)) <= MAKS_SEKTORER):
                     continue
                 if _FORBEHOLD.search(tekst[max(0, m.start() - 20):m.start()]):
                     continue

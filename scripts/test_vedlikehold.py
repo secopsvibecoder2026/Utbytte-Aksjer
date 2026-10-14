@@ -22,7 +22,8 @@ def melding(utsteder, tittel, kategori=1010, dato="2026-10-02T08:00:00Z", mid=1)
 
 
 KATALOG = {"AKVA": ["AKVA"], "AQUA": ["AQUA"], "ELMRA": ["ELMRA"], "AKER": ["AKER"],
-           "ODF": ["ODF", "ODFB"], "TORM": ["TORM"]}
+           "ODF": ["ODF", "ODFB"], "TORM": ["TORM"], "MULTI": ["MULTI"], "SKUE": ["SKUE"],
+           "ROMER": ["ROMER"], "NOHAL": ["NOHAL"]}
 
 
 class TestUtAvKatalogen(unittest.TestCase):
@@ -57,6 +58,39 @@ class TestUtAvKatalogen(unittest.TestCase):
     def test_b_aksjen_folger_utstederen(self):
         r = v.klassifiser([melding("ODF", "Odfjell SE: Last day of trading")], KATALOG)
         self.assertEqual(r["ut_vedtatt"][0]["tickere"], ["ODF", "ODFB"])
+
+
+class TestFusjon(unittest.TestCase):
+    """Fusjoner som ikke ble fanget før 14.10.2026. Titlene er ekte."""
+
+    def test_fusjon_mellom_likeverdige(self):
+        r = v.klassifiser([
+            melding("MULTI", "Multiconsult and Rejlers to create a leading pan-Nordic "
+                    "multidisciplinary consultancy group through a merger of equals"),
+            melding("MULTI", "The nomination committees of Rejlers and Multiconsult present a "
+                    "proposal for the board of directors of the combined company", mid=2),
+            # Navnet på finansdirektøren er tatt ut av tittelen.
+            melding("MULTI", "Multiconsult CFO to step down upon completion of the proposed "
+                    "merger with Rejlers", mid=3)], KATALOG)
+        self.assertEqual(len(r["ut_mulig"]), 3)
+
+    def test_sammenslaaing_av_sparebanker(self):
+        r = v.klassifiser([
+            melding("SKUE", "Skue Sparebank og Romerike Sparebank inngår intensjonsavtale om "
+                    "sammenslåing"),
+            melding("ROMER", "Skue Sparebank og Romerike Sparebank inngår intensjonsavtale om "
+                    "sammenslåing", mid=2)], KATALOG)
+        self.assertEqual(sorted(f["utsteder"] for f in r["ut_mulig"]), ["ROMER", "SKUE"])
+
+    def test_konsernintern_fusjon_er_ikke_paa_vei_ut(self):
+        r = v.klassifiser([
+            melding("AKVA", "AKVA group ASA: Completion of intragroup merger with Submerged AS"),
+            melding("AKER", "Aker ASA: Internal transfer of shares in Aker BioMarine in "
+                    "preparation for completion of merger", mid=2),
+            melding("NOHAL", "Nordic Halibut AS – Intra-group merger between Nordic Halibut "
+                    "and Thule Marine AS", mid=3)], KATALOG)
+        self.assertEqual(r["ut_mulig"], [])
+        self.assertEqual(r["ut_vedtatt"], [])
 
 
 class TestHjemland(unittest.TestCase):

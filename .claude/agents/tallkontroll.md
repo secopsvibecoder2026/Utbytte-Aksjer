@@ -170,3 +170,6 @@ selskapsform; «ingen» hvis ingen>
 
 Skill tydelig mellom **bekreftet** (sitat fra fasit) og **mistenkt** (bare
 tallsammenligning). Et funn uten kilde er en mistanke, og skal merkes slik.
+Skriv ordene som vanlig tekst, aldri som HTML: `scripts/tallkontroll_side.py`
+gjør dem til merker selv og escaper all HTML først, så en `<span>` blir stående
+som synlig kode på siden.

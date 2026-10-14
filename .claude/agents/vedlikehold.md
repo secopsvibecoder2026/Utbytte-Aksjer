@@ -181,3 +181,8 @@ Hvert funn merkes **bekreftet** når du har en kilde (sitat fra meldingen, utdat
 fra et skript, et skjermbilde du har sett på) og **mistenkt** når du bare har en
 sammenligning. «Åpne funn» tar med seg funnene fra forrige rapport som ikke er
 løst, med datoen de først ble sett, så det synes hvor lenge noe har ligget.
+
+Skriv ordene «bekreftet», «mistenkt», «kritisk» og «advarsel» som vanlig tekst,
+aldri som HTML. `scripts/tallkontroll_side.py` gjør dem til merker selv og escaper
+all HTML først, så en `<span>` i rapporten blir stående som synlig kode på siden
+(rapporten 14.10.2026 hadde to slike).
