@@ -3437,7 +3437,8 @@
     {
       "ticker": "ENTR",
       "dato": "2026-10-15",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/684126"
     },
     {
       "ticker": "GENT",
@@ -4165,6 +4166,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "ENTR",
+      "dato": "2027-02-10",
+      "type": "rapport"
+    },
+    {
       "ticker": "ORK",
       "dato": "2027-02-10",
       "type": "rapport"
@@ -4175,5 +4181,5 @@
       "type": "rapport"
     }
   ],
-  "sist_oppdatert": "2026-10-14"
+  "sist_oppdatert": "2026-10-15"
 }
