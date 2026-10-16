@@ -3576,11 +3576,6 @@
       "type": "rapport"
     },
     {
-      "ticker": "TEL",
-      "dato": "2026-10-28",
-      "type": "rapport"
-    },
-    {
       "ticker": "VVL",
       "dato": "2026-10-28",
       "type": "rapport"
@@ -4161,6 +4156,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "TEL",
+      "dato": "2027-02-03",
+      "type": "rapport"
+    },
+    {
       "ticker": "ABG",
       "dato": "2027-02-10",
       "type": "rapport"
@@ -4181,5 +4181,5 @@
       "type": "rapport"
     }
   ],
-  "sist_oppdatert": "2026-10-15"
+  "sist_oppdatert": "2026-10-16"
 }
