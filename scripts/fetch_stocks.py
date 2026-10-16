@@ -619,6 +619,22 @@ def safe_float(value, default=0.0):
         return default
 
 
+def markedsverdi_fra_fast_info(stk):
+    """Markedsverdien fra Yahoos fast_info, eller 0.
+
+    `info` lar marketCap og sharesOutstanding stå tomme for noen aksjer, og
+    hvilke skifter fra kjøring til kjøring. FRO, GJF, HEX, JIN og SNI viste
+    «—» for markedsverdi 5.10, hadde den 7.10 og mistet den igjen 12.10, og
+    sjekk_utdaterte.py meldte markedsverdi_borte hver gang. fast_info regner
+    den ut fra antall aksjer og siste kurs (Frontline 16.10.2026: 222,6 mill.
+    aksjer × 499 kr = 111 mrd.). Koster ett kall, og bare når info mangler.
+    """
+    try:
+        return safe_float(stk.fast_info.get("marketCap"))
+    except Exception:
+        return 0.0
+
+
 def safe_int(value, default=0):
     try:
         v = int(value)
@@ -2164,6 +2180,7 @@ def velg_arsrate(fjor_sum, trailing_sum, trailing_antall, frekvens):
 # Regelen virker begge veier: BOR viste 5,8 % for et selskap som betalte 2,9 %.
 BETALT_MIN_AVVIK = 0.3
 EKSTRA_VINDU_DAGER = 455   # meldingen kommer før ex-datoen, ofte flere måneder
+EKSTRA_SAMME_SAK_DAGER = 90   # rapport → pressemelding → «Key information» → ex-dag
 
 _EKSTRA_RE = re.compile(
     r"\b(?:extra[\s-]?ordinary|special|additional|supplement(?:al|ary)|one[\s-]?off|"
@@ -2256,11 +2273,61 @@ def ekstraordinaere_i_vindu(ticker, i_dag=None):
     for f in flagget:
         if f["ekstra"] is not None and f["total"] is None:
             f["total"] = round(sum(belop_per_ex.get((f["ex_dato"], f["valuta"]), ())), 4) or None
-    # Pressemeldingen og «Key information»-meldingen om samme engangsutbytte
-    # kommer samme dag. Pressemeldingen har prosa og ingen «Dividend amount»,
-    # så den lar seg ikke tallfeste, men den sier ikke noe nytt heller.
-    tallfestet = {f["melding_dato"] for f in flagget if f["ekstra"] is not None}
-    return [f for f in flagget if f["ekstra"] is not None or f["melding_dato"] not in tallfestet]
+    # Et engangsutbytte omtales i flere meldinger enn den som tallfester det:
+    # rapporten som varsler det, styrets pressemelding, godkjenningen og
+    # ex-dagsmeldingen. Goodtech (2026): rapport 17.07, pressemelding 17.09,
+    # «Key information» 18.09. Aker Solutions: ex-dagsmeldingen 17.04 etter
+    # forslaget 18.03. Gjensidige: godkjenningen 10.02 etter meldingen 29.01.
+    # Uten beløp kan disse ikke trekkes fra, og før 16.10.2026 stoppet hver av
+    # dem regelen. En melding uten beløp innen EKSTRA_SAMME_SAK_DAGER fra en
+    # tallfestet regnes nå som samme sak, så lenge den ikke selv har en annen
+    # ex-dato — da er det en annen utbetaling, og den stopper regelen som før.
+    tallfestet = [f for f in flagget if f["ekstra"] is not None]
+
+    def samme_sak(u):
+        du = datetime.date.fromisoformat(u["melding_dato"])
+        for q in tallfestet:
+            if abs((datetime.date.fromisoformat(q["melding_dato"]) - du).days) > EKSTRA_SAMME_SAK_DAGER:
+                continue
+            if u["ex_dato"] and q["ex_dato"] and abs(
+                    (datetime.date.fromisoformat(u["ex_dato"])
+                     - datetime.date.fromisoformat(q["ex_dato"])).days) > 3:
+                continue
+            return True
+        return False
+
+    return [f for f in flagget if f["ekstra"] is not None or not samme_sak(f)]
+
+
+def annonsert_er_ekstraordinaer(ticker, ex_dato, i_dag=None):
+    """Kaller en utbyttemelding utbetalingen med denne ex-datoen ekstraordinær?
+
+    False også når meldingene ikke kunne leses: da gjør DNB-steget det samme
+    som før, og regelen om betalt siste 12 mnd tar det senere.
+    """
+    if not ex_dato:
+        return False
+    funn = ekstraordinaere_i_vindu(ticker, i_dag)
+    if funn is UKJENT:
+        return False
+    try:
+        ex = datetime.date.fromisoformat(ex_dato)
+    except ValueError:
+        return False
+    return any(f.get("ex_dato") and abs((datetime.date.fromisoformat(f["ex_dato"]) - ex).days) <= 3
+               for f in funn)
+
+
+def hele_engangsutbetalinger(funn):
+    """Antall utbetalinger i `funn` som i sin helhet er engangsutbytte.
+
+    En hel engangsutbetaling er en egen utbetaling i vinduet og skal ut av
+    antallet når beløpet trekkes fra. Goodtech betalte 0,50 ordinært og 2,00
+    som tillegg: to utbetalinger, men én i året. Frontlines 0,80 lå i samme
+    utbetaling som kvartalsutbyttet, og antallet står.
+    """
+    return sum(1 for f in funn or []
+               if f.get("ekstra") and f.get("total") and f["ekstra"] >= f["total"] * 0.999)
 
 
 def ekstraordinaer_i_vindu(ticker, i_dag=None):
@@ -2300,6 +2367,23 @@ def ekstra_i_kroner(a, funn, toleranse_dager=3):
     return round(trekk, 4)
 
 
+def _i_vinduet(a, ex_dato, toleranse_dager=3):
+    """Har `utbytte_12m_liste` en utbetaling med denne ex-datoen (± noen dager)?"""
+    if not ex_dato:
+        return False
+    try:
+        ex = datetime.date.fromisoformat(ex_dato)
+    except ValueError:
+        return False
+    for b in a.get("utbytte_12m_liste") or []:
+        try:
+            if abs((datetime.date.fromisoformat(b["ex_dato"]) - ex).days) <= toleranse_dager:
+                return True
+        except (KeyError, ValueError):
+            continue
+    return False
+
+
 def betalt_kan_bli_arsrate(a, i_dag=None):
     """Vilkår 1 og 3 over, uten nettverk. Avgjør om NewsWeb skal spørres."""
     i_dag = i_dag or datetime.date.today()
@@ -2324,9 +2408,12 @@ def betalt_kan_bli_arsrate(a, i_dag=None):
     tidligere = [v for v in per_ar.values() if v and v > 0] if isinstance(per_ar, dict) else []
     if len(tidligere) >= 2 and betalt > 3 * max(tidligere):
         return False
-    # Et kunngjort, vedtatt utbytte som kommer, er ferskere enn vinduet.
+    # Et kunngjort, vedtatt utbytte som kommer, er ferskere enn vinduet. Står
+    # det alt i vinduet, er det ikke kommende lenger: på ex-dagen har Yahoo
+    # utbetalingen, og GOD ble stående med 26 % til dagen etter (16.10.2026).
     if (a.get("annonsert_utbytte") and (a.get("annonsert_ex") or "") >= i_dag.isoformat()
-            and not a.get("ex_forbehold")):
+            and not a.get("ex_forbehold")
+            and not _i_vinduet(a, a.get("annonsert_ex"))):
         return False
     return vist <= 0 or abs(betalt - vist) / vist >= BETALT_MIN_AVVIK
 
@@ -2345,6 +2432,36 @@ def bruk_betalt_som_arsrate(a, ekstra=0.0):
         a["arsrate_ekstra_trukket"] = round(ekstra, 2)
     else:
         a.pop("arsrate_ekstra_trukket", None)
+
+
+# Siste utbetaling for mer enn 15 måneder siden: utbyttet har stoppet. Femten,
+# ikke tolv, fordi en årlig betaler kan gå ex noen uker senere enn året før.
+STOPPET_DAGER = 456
+
+
+def utbytte_stoppet(a, i_dag=None):
+    """Har selskapet sluttet å betale, mens siden fortsatt viser en årsrate?
+
+    REACH viste 6,99 % og MGN 3,6 % i oktober 2026; begge betalte sist i 2025.
+    Vakten mot Yahoos rate bruker fjorårets total som fasit, og den sto igjen
+    etter at utbyttet var borte. Valideringen meldte dem fra 24.09.2026.
+
+    Krever datoen for siste utbetaling (`siste_utbytte_dato`) og ingen
+    kunngjort ex-dato fram i tid. Uten datoen sier regelen ingenting.
+    """
+    i_dag = i_dag or datetime.date.today()
+    if not (a.get("utbytte_per_aksje") or 0) > 0:
+        return False
+    siste = a.get("siste_utbytte_dato")
+    if not siste:
+        return False
+    try:
+        dager = (i_dag - datetime.date.fromisoformat(siste)).days
+    except ValueError:
+        return False
+    if dager <= STOPPET_DAGER:
+        return False
+    return not (a.get("ex_dato") and a["ex_dato"] >= i_dag.isoformat())
 
 
 def bruk_lopende_utbytte_fra(a, fra):
@@ -2732,9 +2849,11 @@ def hent_aksje(meta):
         # Fire desimaler, ikke safe_float()s to: DNO betalte 0,375 og PEN
         # 0,374, og siden viste 0,38 og 0,37 (tallkontrollen 05.10.2026).
         siste_utbytte = 0.0
+        siste_utbytte_dato = None
         if not dividends.empty:
             _siste = float(dividends.iloc[-1])
             siste_utbytte = round(_siste, 4) if math.isfinite(_siste) else 0.0
+            siste_utbytte_dato = dividends.index[-1].date().isoformat()
 
         # Antall utbytter siste 12 mnd
         one_year_ago = datetime.datetime.today() - datetime.timedelta(days=365)
@@ -2823,6 +2942,8 @@ def hent_aksje(meta):
 
         # Markedsverdi i milliarder NOK
         mkt_cap = safe_float(info.get("marketCap"))
+        if not mkt_cap:
+            mkt_cap = markedsverdi_fra_fast_info(stk)
         markedsverdi_mrd = round(mkt_cap / 1e9, 1)
 
         # Nøkkeltall
@@ -2901,6 +3022,7 @@ def hent_aksje(meta):
             "ar_med_utbytte": ar_med_utbytte,
             "utbytteaar": utbytteaar,
             "siste_utbytte": siste_utbytte,
+            "siste_utbytte_dato": siste_utbytte_dato,
             "utbytte_12m": utbytte_12m,
             "utbytte_12m_antall": utbytte_12m_antall,
             "utbytte_12m_liste": utbytte_12m_liste,
@@ -4880,10 +5002,12 @@ def _lag_faq_seksjon(a, today):
         if a.get("arsrate_kilde") == "ingen_lopende":
             # Ny virksomhet bak tickeren (se bruk_lopende_utbytte_fra()). «8 år
             # på rad … konsistent» beskrev selskapet som solgte skipene.
+            # Grieg Seafood (2026-10-16) beholdt Rogaland og solgte resten, så
+            # «virksomheten selskapet har solgt» passet bare for 2020 Bulkers.
             fra = LOPENDE_UTBYTTE_FRA.get(ticker, "")
-            svar = (f"{navn} har ikke betalt utbytte fra den nåværende virksomheten. "
-                    f"Utbetalingene før {_fmt_dato(fra) if fra else 'omleggingen'} kom fra "
-                    f"virksomheten selskapet har solgt, og sier ikke noe om hva det betaler framover.")
+            svar = (f"{navn} har ikke betalt utbytte etter {_fmt_dato(fra) if fra else 'omleggingen'}. "
+                    f"Selskapet hadde da solgt hele eller deler av virksomheten, og utbetalingene "
+                    f"før det sier lite om hva det betaler framover.")
         qas.append((f"Betaler {navn} utbytte hvert år, og hvor ofte?", svar))
 
     # 3. Direkteavkastning i kontekst
@@ -8752,6 +8876,13 @@ def main():
                     }
                     per_ar = frekvens_map.get(aksje.get("frekvens", ""), 1)
                     dnb_annual = round(dnb_belop * per_ar, 4)
+                    # Et engangsutbytte er ikke en rate. Goodtech meldte 2,00 kr
+                    # i tillegg til det ordinære utbyttet, og som «Halvårlig»
+                    # ble det 4,00 kr og 26,32 % (16.10.2026). Kaller børsmeldingen
+                    # utbetalingen ekstraordinær, beholdes tallet fra Yahoo.
+                    if dnb_annual > 0 and annonsert_er_ekstraordinaer(t, dnb.get("ex_dato")):
+                        print(f"    {t}: DNB-beløpet {dnb_belop} er et engangsutbytte, ikke ganget opp")
+                        dnb_annual = 0
                     if dnb_annual > 0:
                         aksje["utbytte_per_aksje"] = dnb_annual
                         if aksje.get("pris", 0) > 0:
@@ -8830,7 +8961,10 @@ def main():
                 print(f"    {aksje['ticker']}: beholder {aksje.get('utbytte_yield')} % "
                       f"(ekstraordinær utbetaling i vinduet)")
                 continue
-        if not betalt_kan_bli_arsrate(dict(aksje, utbytte_12m=aksje["utbytte_12m"] - ekstra)):
+        uten = dict(aksje, utbytte_12m=aksje["utbytte_12m"] - ekstra,
+                    utbytte_12m_antall=(aksje.get("utbytte_12m_antall") or 0)
+                    - (hele_engangsutbetalinger(funn) if ekstra else 0))
+        if not betalt_kan_bli_arsrate(uten):
             continue
         for_ = aksje.get("utbytte_yield")
         bruk_betalt_som_arsrate(aksje, ekstra)
@@ -8842,6 +8976,14 @@ def main():
         fra = LOPENDE_UTBYTTE_FRA.get(aksje["ticker"])
         if fra and bruk_lopende_utbytte_fra(aksje, fra):
             print(f"    {aksje['ticker']}: ingen utbetaling siden {fra} — årsrate 0")
+
+    # Et utbytte som har stoppet, er ikke en årsrate. Se utbytte_stoppet().
+    for aksje in resultater:
+        if utbytte_stoppet(aksje):
+            print(f"    {aksje['ticker']}: ingen utbetaling siden {aksje['siste_utbytte_dato']} — årsrate 0")
+            aksje["utbytte_per_aksje"] = 0.0
+            aksje["utbytte_yield"] = 0.0
+            aksje["arsrate_kilde"] = "stoppet"
 
     # ── Tilbakebetaling av innbetalt kapital ──────────────────────────────────
     # Leser den samme nyeste meldingen som ex-dato-steget (mellomlagret), så

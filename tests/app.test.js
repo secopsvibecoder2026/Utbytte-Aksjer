@@ -42,16 +42,21 @@ global.window = {
 // Node og kaster «Cannot set property navigator». app.js rører den ikke ved
 // import — bare inne i funksjoner som testene ikke kaller.
 
-const { visDataFerskhet, escHtml, osloDato, borsdag, forrigeBorsdag, slaaSammenKurs } = require('../assets/app.js');
+const { visDataFerskhet, escHtml, osloDato, borsdag, forrigeBorsdag, kursdag, borsdagerMellom, slaaSammenKurs } = require('../assets/app.js');
 
-/** Bygger et tidsstempel N timer tilbake i tid. */
+// Alderen telles i børsdager, så testene må ha en fast «nå». Med Date.now()
+// ville utfallet avhengt av hvilken ukedag testene kjøres. Onsdag 14.10.2026
+// kl. 14:00 i Oslo.
+const NAA = Date.parse('2026-10-14T12:00:00Z');
+
+/** Bygger et tidsstempel N timer før NAA. */
 function timerSiden(t) {
-  return new Date(Date.now() - t * 3600000).toISOString();
+  return new Date(NAA - t * 3600000).toISOString();
 }
 
-function kjor(json) {
+function kjor(json, naa = NAA) {
   element = lagElement();
-  visDataFerskhet(json);
+  visDataFerskhet(json, naa);
   return element;
 }
 
@@ -66,25 +71,42 @@ test('fersk henting viser dato uten advarsel', () => {
   assert.match(el.title, /Tallene ble hentet/);
 });
 
-test('ett døgn er normalt — børsen er stengt i helgene', () => {
-  const el = kjor({ sist_oppdatert: timerSiden(30) });
+test('én børsdag bak er normalt', () => {
+  // Tirsdag 14:00 mot onsdag 14:00. 30 timer tilbake ville vært tirsdag 08:00,
+  // før børsåpning, altså mandagens kurser: to børsdager bak.
+  const el = kjor({ sist_oppdatert: timerSiden(24) });
   assert.ok(!el.textContent.includes('gamle'), el.textContent);
   assert.match(el.textContent, /^Oppdatert /);
   assert.equal(el.classList.contains('text-amber-600'), false);
 });
 
 // ── Gamle data ─────────────────────────────────────────────────────────────
-test('to døgn markeres som gammelt', () => {
+test('to børsdager markeres som gammelt', () => {
   const el = kjor({ sist_oppdatert: timerSiden(49) });
-  assert.equal(el.textContent, 'Tall 2 dager gamle', el.textContent);
+  assert.equal(el.textContent, 'Tall 2 børsdager gamle', el.textContent);
   assert.ok(!el.textContent.includes('Oppdatert'), 'alder erstatter datoen, den kommer ikke i tillegg');
   assert.equal(el.classList.contains('text-amber-600'), true);
   assert.ok(el.title.length > 0);
 });
 
 test('16 dager — tilfellet som faktisk oppsto i august', () => {
+  // 28.09 kl. 14 til 14.10 kl. 14: tolv børsdager.
   const el = kjor({ sist_oppdatert: timerSiden(16 * 24) });
-  assert.ok(el.textContent.includes('16 dager gamle'), el.textContent);
+  assert.ok(el.textContent.includes('12 børsdager gamle'), el.textContent);
+});
+
+test('fredagens tall er ikke gamle mandag morgen', () => {
+  // Datajobben gikk sist fredag 16.10 kl. 21:41 (Oslo). Mandag 19.10 kl. 08:30
+  // er det ingen nyere sluttkurs å hente. Med døgn sto det «Tall 2 dager gamle».
+  const fredag = '2026-10-16T19:41:00Z';
+  const el = kjor({ sist_oppdatert: fredag }, Date.parse('2026-10-19T06:30:00Z'));
+  assert.match(el.textContent, /^Oppdatert /);
+  assert.equal(el.classList.contains('text-amber-600'), false);
+  // Mandag ettermiddag mangler én børsdag. Det er normalt med GitHubs forsinkelser.
+  assert.match(kjor({ sist_oppdatert: fredag }, Date.parse('2026-10-19T13:00:00Z')).textContent, /^Oppdatert /);
+  // Tirsdag ettermiddag mangler to, og da skal leseren se det.
+  assert.equal(kjor({ sist_oppdatert: fredag }, Date.parse('2026-10-20T13:00:00Z')).textContent,
+               'Tall 2 børsdager gamle');
 });
 
 // ── Feilede tickere nevnes ikke ────────────────────────────────────────────
@@ -109,7 +131,7 @@ test('antall_feil farger ikke advarselen når dataene er ferske', () => {
 
 test('alderen varsler fortsatt, uavhengig av antall_feil', () => {
   const el = kjor({ sist_oppdatert: timerSiden(49), antall_feil: 0 });
-  assert.equal(el.textContent, 'Tall 2 dager gamle', el.textContent);
+  assert.equal(el.textContent, 'Tall 2 børsdager gamle', el.textContent);
   assert.equal(el.classList.contains('text-amber-600'), true);
 });
 
@@ -213,6 +235,32 @@ test('fredagens priser gjelder fortsatt på lørdag', () => {
   const k = slaaSammenKurs(104.2, p, '2026-10-09T21:25:00Z', '2026-10-09T20:32:00Z');
   assert.equal(k.pris, 104.5);
   assert.equal(k.endringPct, 6.04);
+});
+
+test('kursen hentet før børsåpning gjelder forrige børsdag', () => {
+  assert.equal(kursdag('2026-10-12T23:21:00Z'), '2026-10-12');  // 01:21 tirsdag i Oslo
+  assert.equal(kursdag('2026-10-13T06:59:00Z'), '2026-10-12');  // 08:59
+  assert.equal(kursdag('2026-10-13T07:00:00Z'), '2026-10-13');  // 09:00
+  assert.equal(kursdag('2026-10-19T05:00:00Z'), '2026-10-16');  // mandag 07:00 → fredag
+  assert.equal(kursdag('2026-10-17T10:00:00Z'), '2026-10-16');  // lørdag
+  assert.equal(kursdag(''), '');
+});
+
+test('datajobben etter midnatt gir ikke 0 % i hele appen', () => {
+  // 13.10.2026: aksjer.json skrevet 01:21 Oslo med mandagens sluttkurs 104,20.
+  // priser.json har også mandagens kurs, med fredagens sluttkurs som forrige.
+  const p = { pris: 104.2, forrige_kurs: 98.55, endring_pct: 5.7331, endring_krs: 5.65,
+              dato: '2026-10-12' };
+  const k = slaaSammenKurs(104.2, p, '2026-10-12T21:47:00Z', '2026-10-12T23:21:00Z');
+  assert.equal(k.pris, 104.2);
+  assert.equal(k.endringKrs, 5.65);  // mot fredagen, ikke 0 mot mandagen selv
+});
+
+test('børsdager mellom to datoer hopper over helgen', () => {
+  assert.equal(borsdagerMellom('2026-10-16', '2026-10-19'), 1);  // fredag → mandag
+  assert.equal(borsdagerMellom('2026-10-16', '2026-10-16'), 0);
+  assert.equal(borsdagerMellom('2026-10-19', '2026-10-16'), 0);
+  assert.equal(borsdagerMellom('2026-10-12', '2026-10-23'), 9);
 });
 
 test('uten dato i priser.json eller tidsstempel i aksjer.json: som før', () => {

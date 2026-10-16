@@ -139,7 +139,7 @@ Utbytte-Aksjer/
 ├── index.html                 # Main SPA, all modal templates
 ├── manifest.json              # PWA manifest
 ├── sw.js                      # Service Worker (cache-first/network-first strategy)
-├── sitemap.xml                # SEO sitemap (209 URLs)
+├── sitemap.xml                # SEO sitemap (~200 URLs, generated)
 ├── robots.txt                 # Search engine directives
 ├── CNAME                      # Custom domain: exday.no
 ├── SECURITY_ROADMAP.md        # Security review findings and fix status
@@ -1645,6 +1645,95 @@ the company calls the November one «additional». Set `frekvens` in
 
 Tests: `TestParseExMelding` (10), `TestSupplerUtbytteserie` (8),
 `TestNewswebExMeldinger` (3), `TestSupplertFotnote` (3) and `ui.test.js` (2).
+
+## From the bot logs, 2026-10-16
+
+Every job had been green for days, and the data job log still carried the
+findings. Read `valider_data.py` and `sjekk_utdaterte.py` output in the log,
+not only the conclusion line.
+
+**GOD showed 26,32 % against 16,45 % paid.** Goodtech paid 0,50 kr ordinary
+and announced 2,00 kr as a «supplemental dividend». Two rules failed together:
+
+- **The DNB step multiplied the announced amount by the frequency.** The
+  one-off payment had made the derived frequency «Halvårlig», so 2,00 became
+  4,00. `annonsert_er_ekstraordinaer()` now stops the multiplication when a
+  NewsWeb notice calls the payment with that ex-date extraordinary.
+- **The paid-12m rule stood down.** The Q2 report and the board's press release
+  mention the same one-off without a per-share amount. Any unquantified flag
+  stopped the rule. `ekstraordinaere_i_vindu()` now treats an unquantified
+  flag within `EKSTRA_SAMME_SAK_DAGER` (90) of a quantified one as the same
+  case, unless it carries a different ex-date. Aker Solutions (ex-day notice)
+  and Gjensidige (approval notice) have the same shape; their rate was
+  already the ordinary one, so they do not move.
+
+Two smaller rules came with it:
+
+- A payment that is wholly one-off also leaves the count (`hele_engangsutbetalinger()`).
+- An announced payment already in `utbytte_12m_liste` is no longer «coming»
+  (`_i_vinduet()`).
+
+GOD has `frekvens: Årlig` in `tickers.json`. Dry run: GOD 26,32 → 3,29 %
+«siste 12 mnd, uten engangsutbytte», and nothing else changed.
+
+**A dividend that stopped kept its rate.** REACH (6,99 %), MGN (3,6 %), ELK
+and ZAL last paid in May or July 2025. The guard against Yahoo's rate uses last
+year's total, and that total stayed after the payments ended.
+`utbytte_stoppet()` sets the rate to 0 (`arsrate_kilde: "stoppet"`) when the
+last payment (`siste_utbytte_dato`, new field) is more than `STOPPET_DAGER`
+(456) days old and no ex-date is announced. It is 15 months, not 12, because
+an annual payer can go ex a few weeks later than the year before. Without the
+date the rule says nothing.
+
+**GSF showed 35,64 %, top of the app's «Høyeste yield» card.** The 35,64 kr
+in April 2026 was the Cermaq sale proceeds on a share now trading at 23 kr.
+The notice calls it plain «dividend», and the 2025 ordinary dividend was 0.
+`lopende_utbytte_fra: 2026-04-21`, the same mechanism as 2020 Bulkers. The FAQ
+text for it no longer says the earlier payments came «from the business that
+was sold». Grieg kept Rogaland, so it now reads «hele eller deler av
+virksomheten».
+
+**The app showed 0,00 % for every stock when the data job wrote after
+midnight.** 13.10 at 01:21 Oslo, `aksjer.json` held Monday's closes and was
+dated Tuesday, so `slaaSammenKurs()` measured Monday's close against Monday's
+close. `kursdag()` in `app.js` counts a fetch before 09:00 Oslo as the
+previous trading day. `visDataFerskhet()` counts age in trading days with the
+same function (`borsdagerMellom()`), so Friday's closes are no longer «Tall
+2 dager gamle» on Monday morning. The tests take a fixed «now»; with
+`Date.now()` their outcome depended on the weekday they ran.
+
+**Market cap went missing for FRO, GJF, HEX, JIN and SNI.** Yahoo's `info`
+leaves `marketCap` and `sharesOutstanding` empty for some stocks, and which
+ones changes between runs. `sjekk_utdaterte.py` reported
+`markedsverdi_borte` for them every few days. `markedsverdi_fra_fast_info()`
+falls back to `fast_info`, which computes it from the share count; it costs
+one call, and only when `info` lacks the value.
+
+**`oppdater_hendelser.py` spent 106 seconds a run on 136 lookups that never
+hit.** The report-title keywords missed «Second quarter 2026 results»,
+«Delårsregnskap 1. kvartal», «… in 1Q». Each event also fetched the issuer's
+list again. The list is now cached per issuer and filtered on `issuerSign`.
+Keywords include «quarter», «kvartal», «delårs» and «results», and dividend,
+general meeting and invitation titles are excluded. An event gets
+`MAKS_URL_FORSOK` (3) tries; a failed fetch is not a try. Dry run: 84 of the
+136 found.
+
+**The app's Verktøy sub-menu** wrapped «Annonsert utbytte» onto two lines at
+390 px and was wider than smaller screens. Sub-tabs no longer wrap and the
+menus scroll. The rank column in «Høyest annonsert yield» was 16 px for «10.».
+
+**Left for the owner:**
+
+- **WEST** shows «Halvårlig» while the company decides quarter by quarter: it
+  paid for 2025 and Q3 2026, and not for Q1 or Q2. «Uregelmessig» would move
+  the rate from 10,83 % «siste 12 mnd» (paid) to 5,79 % (one payment). That is
+  not more correct, so it is unchanged.
+- **The DNB page-data endpoint** answers 404, and the HTML fallback finds
+  7 companies.
+
+Tests: `TestGoodtechTillegg` (6), `TestUtbytteStoppet` (5),
+`TestMarkedsverdiFastInfo` (2), `TestLopendeUtbytteFra` (+1),
+`TestVelgRapportMelding` (4) and `app.test.js` (+4).
 
 ## «Les mer» in the app modal (2026-10-07)
 

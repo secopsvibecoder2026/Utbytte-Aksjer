@@ -139,21 +139,23 @@ function visCacheBanner(ts) {
  * som har gamle tall, og da trengs et felt per ticker; aggregatet holder
  * ikke.
  */
-function visDataFerskhet(json) {
+function visDataFerskhet(json, naa = Date.now()) {
   const el = document.getElementById('sist-oppdatert');
   if (!el || !json || !json.sist_oppdatert) return;
 
   const d = new Date(json.sist_oppdatert);
   if (isNaN(d.getTime())) return;
 
-  const dager = Math.floor((Date.now() - d.getTime()) / 86400000);
   const kortDato = d.toLocaleDateString('nb-NO', { day: 'numeric', month: 'short' });
 
-  // Børsen er stengt i helgene, så ett døgn uten oppdatering er normalt.
-  // To døgn er det ikke, og da skal leseren se det.
-  const gammel = dager >= 2;
+  // Alderen telles i børsdager. Med døgn sto «Tall 2 dager gamle» i gult
+  // hver mandag morgen, over fredagens sluttkurser, som var de nyeste som
+  // fantes. Én børsdag uten ny henting er normalt, siden GitHub ofte starter
+  // datajobben timer for sent. To er det ikke, og da skal leseren se det.
+  const borsdager = borsdagerMellom(kursdag(json.sist_oppdatert), kursdag(naa));
+  const gammel = borsdager >= 2;
 
-  el.textContent = gammel ? 'Tall ' + dager + ' dager gamle' : 'Oppdatert ' + kortDato;
+  el.textContent = gammel ? 'Tall ' + borsdager + ' børsdager gamle' : 'Oppdatert ' + kortDato;
   el.title = 'Tallene ble hentet ' + d.toLocaleString('nb-NO', {
     day: 'numeric', month: 'long', year: 'numeric',
     hour: '2-digit', minute: '2-digit',
@@ -256,6 +258,41 @@ function forrigeBorsdag(iso) {
   return iso ? borsdag(_isoPluss(borsdag(iso), -1)) : '';
 }
 
+// Oslo Børs åpner 09:00. En kurs hentet før det, er forrige børsdags
+// sluttkurs, selv om kalenderen har gått videre.
+const BORS_APNER_TIME = 9;
+
+function _osloTime(tid) {
+  const d = new Date(tid);
+  if (!tid || isNaN(d)) return NaN;
+  return Number(new Intl.DateTimeFormat('en-GB', {
+    timeZone: 'Europe/Oslo', hour: '2-digit', hourCycle: 'h23',
+  }).format(d));
+}
+
+// Børsdagen kursen fra et tidspunkt gjelder. Datajobben skrev aksjer.json
+// 01:21 natt til tirsdag 13.10.2026 med mandagens sluttkurs. Som «tirsdag»
+// ble den målt mot mandagens sluttkurs i priser.json, og hele appen viste
+// 0,00 % til prisjobben kom ti timer senere.
+function kursdag(tid) {
+  const dato = osloDato(tid);
+  if (!dato) return '';
+  return borsdag(_osloTime(tid) < BORS_APNER_TIME ? _isoPluss(dato, -1) : dato);
+}
+
+// Antall børsdager etter `fra`, til og med `til`. Helligdager telles med.
+function borsdagerMellom(fra, til) {
+  if (!fra || !til || til <= fra) return 0;
+  let n = 0;
+  let d = fra;
+  for (let i = 0; i < 400 && d < til; i++) {
+    d = _isoPluss(d, 1);
+    const ukedag = new Date(d + 'T12:00:00Z').getUTCDay();
+    if (ukedag !== 0 && ukedag !== 6) n++;
+  }
+  return n;
+}
+
 function _endringMot(pris, forrige) {
   if (!(pris > 0) || !(forrige > 0)) return { endringPct: undefined, endringKrs: undefined };
   return {
@@ -269,14 +306,15 @@ function _endringMot(pris, forrige) {
  *
  * p.dato er børsdagen kursen i priser.json gjelder. aksjer.json har ingen
  * kursdato per aksje, bare tidspunktet datajobben gikk; kursen den hentet
- * gjelder børsdagen det tidspunktet faller på.
+ * gjelder børsdagen det tidspunktet faller på, og før børsåpning den forrige
+ * (kursdag()).
  *
  * Endring som ikke er kjent, er undefined, og da viser kortet ingenting.
  * Gårsdagens endring ved siden av dagens kurs ville vært feil på en ny måte.
  */
 function slaaSammenKurs(aksjePris, p, priserOppdatert, aksjerOppdatert) {
   const fraPriser = { pris: p.pris, endringPct: p.endring_pct, endringKrs: p.endring_krs };
-  const dag = borsdag(osloDato(aksjerOppdatert));
+  const dag = kursdag(aksjerOppdatert);
   // Mangler en av datoene, vet vi ikke hvem som er nyest. Da som før.
   if (!p.dato || !dag || !(aksjePris > 0) || p.dato > dag) return fraPriser;
   if (p.dato === dag) {
@@ -406,5 +444,5 @@ function sjekkStartsideForslag() {
 // Eksport for testene. Samme mønster som storage.js/ui.js/portefolje.js:
 // nettleseren ser ingen `module`, så dette er en no-op der.
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { escHtml, visDataFerskhet, osloDato, borsdag, forrigeBorsdag, slaaSammenKurs };
+  module.exports = { escHtml, visDataFerskhet, osloDato, borsdag, forrigeBorsdag, kursdag, borsdagerMellom, slaaSammenKurs };
 }

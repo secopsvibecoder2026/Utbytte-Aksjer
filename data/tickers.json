@@ -609,7 +609,8 @@
     "beskrivelse_fakta_kilde": "yahoo_finance",
     "beskrivelse_fakta_sprak": "en",
     "ask_egnet": true,
-    "inkorporeringsland": "Norge"
+    "inkorporeringsland": "Norge",
+    "lopende_utbytte_fra": "2026-04-21"
   },
   {
     "ticker": "KCC",
@@ -1306,7 +1307,8 @@
     "beskrivelse_fakta_kilde": "yahoo_finance",
     "beskrivelse_fakta_sprak": "en",
     "ask_egnet": true,
-    "inkorporeringsland": "Norge"
+    "inkorporeringsland": "Norge",
+    "frekvens": "Årlig"
   },
   {
     "ticker": "ZAL",

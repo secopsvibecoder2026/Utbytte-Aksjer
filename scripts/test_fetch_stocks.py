@@ -2404,6 +2404,146 @@ class TestEngangsutbytteTrukketFra(unittest.TestCase):
         self.assertIn("inneholder den", fs.lag_ekstraordinaer_note(a, fs._nf))
 
 
+class TestGoodtechTillegg(unittest.TestCase):
+    """Goodtech: 0,50 ordinært og 2,00 som tillegg. Siden viste 26,32 % (16.10.2026).
+
+    DNB-steget ganget tillegget med «Halvårlig», og regelen om betalt siste
+    12 mnd ga opp fordi rapporten og pressemeldingen om det samme tillegget
+    ikke oppgir beløpet per aksje i et format vi leser.
+    """
+
+    ORDINAER = "Dividend amount: NOK 0.50 per share\nEx-date: 4 May 2026\n"
+    TILLEGG = "Dividend amount: NOK 2.00 per share\nEx-date: 16 October 2026\n"
+
+    def _meldinger(self, ekstra=()):
+        m = [{"publishedTime": "2026-09-18T06:00", "messageId": 4,
+              "title": "Key information relating to the proposed supplemental cash dividend "
+                       "for the Financial Year 2025"},
+             {"publishedTime": "2026-09-17T16:00", "messageId": 3,
+              "title": "Goodtech ASA: The Board resolves to distribute a supplemental dividend "
+                       "of NOK 2.00 per share"},
+             {"publishedTime": "2026-07-17T06:00", "messageId": 2,
+              "title": "Goodtech ASA Q2 2026 and first half 2026 Strong financial position "
+                       "supports planned NOK 60 million capital distribution"},
+             {"publishedTime": "2026-03-20T06:00", "messageId": 1,
+              "title": "Key information relating to the proposed cash dividend for the "
+                       "Financial Year 2025"}]
+        return list(ekstra) + m
+
+    def _kjor(self, meldinger, tekster):
+        gml = fs._newsweb_meldinger, fs._newsweb_tekst
+        fs._newsweb_meldinger = lambda t: meldinger
+        fs._newsweb_tekst = lambda mid: tekster.get(mid, "")
+        try:
+            return fs.ekstraordinaere_i_vindu("GOD", datetime.date(2026, 10, 16))
+        finally:
+            fs._newsweb_meldinger, fs._newsweb_tekst = gml
+
+    TEKSTER = {1: ORDINAER, 2: "The board intends to propose supplemental dividends.",
+               3: "The Board has resolved to distribute a supplemental dividend.",
+               4: TILLEGG}
+
+    def test_rapport_og_pressemelding_er_samme_sak(self):
+        funn = self._kjor(self._meldinger(), self.TEKSTER)
+        self.assertEqual([(f["ex_dato"], f["ekstra"], f["total"]) for f in funn],
+                         [("2026-10-16", 2.0, 2.0)])
+
+    def test_en_annen_ex_dato_stopper_fortsatt_regelen(self):
+        annen = {"publishedTime": "2026-09-30T06:00", "messageId": 5,
+                 "title": "Key information relating to the extraordinary dividend"}
+        tekster = {**self.TEKSTER, 5: "Ex-date: 1 December 2026\nextraordinary dividend"}
+        funn = self._kjor(self._meldinger([annen]), tekster)
+        self.assertIn(("2026-12-01", None), [(f["ex_dato"], f["ekstra"]) for f in funn])
+
+    def test_hel_engangsutbetaling_tas_ut_av_antallet(self):
+        self.assertEqual(fs.hele_engangsutbetalinger(
+            [{"ex_dato": "2026-10-16", "ekstra": 2.0, "total": 2.0}]), 1)
+        # Frontlines 0,80 lå i samme utbetaling som kvartalsutbyttet.
+        self.assertEqual(fs.hele_engangsutbetalinger(
+            [{"ex_dato": "2026-09-17", "ekstra": 0.8, "total": 3.41}]), 0)
+
+    def test_paa_ex_dagen_er_utbyttet_ikke_lenger_kommende(self):
+        a = {"pris": 15.2, "frekvens": "Årlig", "utbytte_12m": 0.5, "utbytte_12m_antall": 1,
+             "utbytte_per_aksje": 2.5, "annonsert_utbytte": 2.0, "annonsert_ex": "2026-10-16",
+             "utbytte_12m_liste": [{"ex_dato": "2026-05-04", "belop": 0.5},
+                                   {"ex_dato": "2026-10-16", "belop": 2.0}]}
+        self.assertTrue(fs.betalt_kan_bli_arsrate(a, datetime.date(2026, 10, 16)))
+        # Før Yahoo har utbetalingen, er det kunngjorte utbyttet ferskere.
+        b = dict(a, utbytte_12m_liste=a["utbytte_12m_liste"][:1])
+        self.assertFalse(fs.betalt_kan_bli_arsrate(b, datetime.date(2026, 10, 14)))
+
+    def test_dnb_beloepet_gangs_ikke_opp_naar_det_er_engangs(self):
+        gml = fs.ekstraordinaere_i_vindu
+        fs.ekstraordinaere_i_vindu = lambda t, i_dag=None: [
+            {"ex_dato": "2026-10-16", "ekstra": 2.0, "total": 2.0}]
+        try:
+            self.assertTrue(fs.annonsert_er_ekstraordinaer("GOD", "2026-10-16"))
+            self.assertFalse(fs.annonsert_er_ekstraordinaer("GOD", "2026-05-04"))
+            self.assertFalse(fs.annonsert_er_ekstraordinaer("GOD", None))
+            fs.ekstraordinaere_i_vindu = lambda t, i_dag=None: fs.UKJENT
+            self.assertFalse(fs.annonsert_er_ekstraordinaer("GOD", "2026-10-16"))
+        finally:
+            fs.ekstraordinaere_i_vindu = gml
+
+    def test_katalogen_er_aarlig(self):
+        self.assertEqual(fs.FREKVENS_OVERSTYRT.get("GOD"), "Årlig")
+
+
+class TestUtbytteStoppet(unittest.TestCase):
+    """REACH 6,99 % og MGN 3,6 % i oktober 2026, siste utbetaling i 2025."""
+
+    I_DAG = datetime.date(2026, 10, 16)
+
+    def rad(self, **kw):
+        a = {"utbytte_per_aksje": 0.42, "utbytte_yield": 6.99, "utbytte_12m": 0,
+             "siste_utbytte_dato": "2025-05-20", "ex_dato": None}
+        a.update(kw)
+        return a
+
+    def test_reach(self):
+        self.assertTrue(fs.utbytte_stoppet(self.rad(), self.I_DAG))
+
+    def test_aarlig_betaler_noen_uker_sent_er_ikke_stoppet(self):
+        # 13 måneder siden: årlig betaler som går ex litt senere i år.
+        self.assertFalse(fs.utbytte_stoppet(self.rad(siste_utbytte_dato="2025-09-10"), self.I_DAG))
+
+    def test_kunngjort_ex_dato_holder_raten(self):
+        self.assertFalse(fs.utbytte_stoppet(self.rad(ex_dato="2026-11-02"), self.I_DAG))
+        # En passert ex-dato teller ikke.
+        self.assertTrue(fs.utbytte_stoppet(self.rad(ex_dato="2025-05-20"), self.I_DAG))
+
+    def test_uten_dato_sier_regelen_ingenting(self):
+        self.assertFalse(fs.utbytte_stoppet(self.rad(siste_utbytte_dato=None), self.I_DAG))
+        self.assertFalse(fs.utbytte_stoppet(self.rad(siste_utbytte_dato="tull"), self.I_DAG))
+
+    def test_rate_null_fra_for_er_ikke_et_funn(self):
+        self.assertFalse(fs.utbytte_stoppet(self.rad(utbytte_per_aksje=0.0), self.I_DAG))
+
+
+class TestMarkedsverdiFastInfo(unittest.TestCase):
+    """Yahoos info manglet marketCap for FRO, GJF, HEX, JIN og SNI (oktober 2026)."""
+
+    class _Aksje:
+        def __init__(self, fast_info):
+            self._fi = fast_info
+
+        @property
+        def fast_info(self):
+            if isinstance(self._fi, Exception):
+                raise self._fi
+            return self._fi
+
+    def test_bruker_fast_info(self):
+        stk = self._Aksje({"marketCap": 111088821611.0, "shares": 222622889})
+        self.assertEqual(fs.markedsverdi_fra_fast_info(stk), 111088821611.0)
+
+    def test_mangler_eller_feiler_gir_null(self):
+        self.assertEqual(fs.markedsverdi_fra_fast_info(self._Aksje({})), 0.0)
+        self.assertEqual(fs.markedsverdi_fra_fast_info(self._Aksje({"marketCap": None})), 0.0)
+        self.assertEqual(fs.markedsverdi_fra_fast_info(self._Aksje(KeyError("x"))), 0.0)
+        self.assertEqual(fs.markedsverdi_fra_fast_info(self._Aksje({"marketCap": float("nan")})), 0.0)
+
+
 class TestCmbTechMelding(unittest.TestCase):
     """CMB.TECH: valutaen etter beløpet og tre betalingsdatoer (08.10.2026)."""
 
@@ -2440,6 +2580,16 @@ class TestLopendeUtbytteFra(unittest.TestCase):
 
     def test_katalogen(self):
         self.assertEqual(fs.LOPENDE_UTBYTTE_FRA.get("2020"), "2026-05-01")
+        # Grieg Seafood: 35,64 kr i april 2026 var salgssummen fra Cermaq, på en
+        # aksje til 23 kr. Siden og appens toppkort viste 35,64 % yield.
+        self.assertEqual(fs.LOPENDE_UTBYTTE_FRA.get("GSF"), "2026-04-21")
+
+    def test_grieg_faar_ingen_lopende_rate(self):
+        a = {"utbytte_per_aksje": 8.29, "utbytte_yield": 35.64, "pris": 23.26,
+             "utbytte_12m_liste": [{"ex_dato": "2026-04-20", "belop": 35.6371}]}
+        self.assertTrue(fs.bruk_lopende_utbytte_fra(a, "2026-04-21"))
+        self.assertEqual((a["utbytte_per_aksje"], a["utbytte_yield"], a["arsrate_kilde"]),
+                         (0.0, 0.0, "ingen_lopende"))
 
     def test_faq_lover_ikke_rekke_eller_buffer(self):
         a = {"ticker": "2020", "navn": "2020 Bulkers Ltd", "frekvens": "Uregelmessig",
@@ -2447,7 +2597,8 @@ class TestLopendeUtbytteFra(unittest.TestCase):
              "utbytte_yield": 0.0, "utbytte_per_aksje": 0.0, "pris": 6.3,
              "arsrate_kilde": "ingen_lopende"}
         tekst = json.dumps(fs._lag_faq_seksjon(a, datetime.date(2026, 10, 9)), ensure_ascii=False)
-        self.assertIn("ikke betalt utbytte fra den nåværende virksomheten", tekst)
+        self.assertIn("ikke betalt utbytte etter 1. mai 2026", tekst)
+        self.assertIn("hele eller deler av virksomheten", tekst)
         self.assertNotIn("på rad", tekst)
         self.assertNotIn("buffer", tekst)
 

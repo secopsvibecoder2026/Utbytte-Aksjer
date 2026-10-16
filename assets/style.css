@@ -90,6 +90,10 @@
 
 /* ── OVERSIKT SUB-TABS ────────────────────────────────────────────────── */
 .sub-tab-btn {
+  /* «Annonsert utbytte» brøt over to linjer på 390 px, og menyen ble bredere
+     enn skjermen på smalere telefoner. Menyen ruller heller sidelengs. */
+  white-space: nowrap;
+  flex-shrink: 0;
   padding: 0.375rem 0.75rem;
   font-size: 0.8125rem;
   font-weight: 500;

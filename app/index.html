@@ -218,7 +218,7 @@
     </div>
 
     <!-- OVERSIKT SUB-FANE NAVIGASJON (vises kun når Oversikt-fanen er aktiv) -->
-    <nav id="oversikt-sub-nav" class="flex gap-1 border-b border-gray-200 dark:border-gray-800">
+    <nav id="oversikt-sub-nav" class="flex gap-1 border-b border-gray-200 dark:border-gray-800 overflow-x-auto">
       <button class="sub-tab-btn active" data-subtab="aksjer">Aksjer</button>
       <button class="sub-tab-btn" data-subtab="bevegelser">Bevegelser</button>
       <button class="sub-tab-btn" data-subtab="sektor">Sektorer</button>
@@ -226,9 +226,9 @@
     </nav>
 
     <!-- VERKTØY SUB-FANE NAVIGASJON (vises kun når Verktøy-fanen er aktiv) -->
-    <nav id="verktoy-sub-nav" class="hidden flex gap-1 border-b border-gray-200 dark:border-gray-800">
+    <nav id="verktoy-sub-nav" class="hidden flex gap-1 border-b border-gray-200 dark:border-gray-800 overflow-x-auto">
       <button class="sub-tab-btn active" data-verktoy-subtab="kalkulator">Kalkulator</button>
-      <button class="sub-tab-btn" data-verktoy-subtab="annonsert">Annonsert utbytte</button>
+      <button class="sub-tab-btn" data-verktoy-subtab="annonsert">Annonsert<span class="hidden sm:inline"> utbytte</span></button>
       <button class="sub-tab-btn" data-verktoy-subtab="rebalansering">Rebalansering</button>
       <button class="sub-tab-btn" data-verktoy-subtab="laer">Lær</button>
     </nav>
