@@ -24,7 +24,29 @@ RAPPORT_KW = [
     "q1 ", "q2 ", "q3 ", "q4 ", " q1", " q2", " q3", " q4",
     "årsrapport", "annual report", "half-year", "halvår",
     "financial results", "results for", "resultat",
+    # Lagt til 16.10.2026. «Second quarter 2026 results» (Aker BP), «Second
+    # quarter and first half results 2026» (BW Offshore) og Tomras «… in the
+    # second quarter» traff ingenting, og 136 passerte rapporter sto uten lenke.
+    # Mange er overskrifter: «Delårsregnskap 1. kvartal 2026», «Yara reports
+    # increased margins … in 1Q», «EBITDA1 of NOK 428 million in the 1st
+    # quarter». Utbyttemeldinger som nevner kvartalet, holdes ute av
+    # IKKE_RAPPORT_KW under.
+    "quarter", "kvartal", "delårs", "regnskap", "first half", "results",
+    " 1q", " 2q", " 3q", " 4q",
 ]
+# Meldinger samme dag som rapporten som ikke er rapporten: utbyttemeldingen
+# kommer ofte samme morgen og kan nevne kvartalet («dividend for Q3 2026»).
+# «Results of the 2026 Annual General Meeting» (Panoro) og «Invitation to
+# presentation of the first quarter results» (Reach) er heller ikke rapporten.
+IKKE_RAPPORT_KW = ["key information", "ex-dividend", "ex dividend", "financial calendar",
+                   "finansiell kalender", "general meeting", "generalforsamling",
+                   "invitation", "invitasjon"]
+
+# En hendelse som ikke er funnet etter så mange kjøringer, finnes ikke: datoen
+# ble flyttet, eller meldingen bruker ord vi ikke kjenner. Før 16.10.2026 ble
+# hver av dem søkt opp på nytt i hver kjøring, 136 oppslag og 106 sekunder,
+# uten et eneste treff.
+MAKS_URL_FORSOK = 3
 
 
 def _api_base():
@@ -44,13 +66,21 @@ def _api_base():
     return _NEWSWEB_API
 
 
-def _hent_rapport_url(ticker: str, dato: str) -> str | None:
-    """Finner NewsWeb-URL til kvartalsrapport publisert på gitt dato (±2 dager)."""
-    try:
+_MELDINGER = {}   # ticker → meldingsliste, hentet én gang per kjøring
+
+
+def _meldinger(ticker: str) -> list:
+    """NewsWeb-meldingene til en utsteder, bare dens egne.
+
+    En ukjent utsteder gir hele børsens nyeste meldinger, ikke en tom liste
+    (se _newsweb_meldinger() i fetch_stocks.py), så issuerSign må stemme.
+    Kaster videre ved nettverksfeil; en feilet henting lagres ikke.
+    """
+    if ticker not in _MELDINGER:
         api = _api_base()
         endpoint = (
             f"{api}/v1/newsreader/list"
-            f"?issuer={urllib.parse.quote(ticker, safe='')}&limit=200"
+            f"?issuer={urllib.parse.quote(ticker, safe='')}&limit=500"
         )
         req = urllib.request.Request(
             endpoint,
@@ -60,30 +90,33 @@ def _hent_rapport_url(ticker: str, dato: str) -> str | None:
         )
         with urllib.request.urlopen(req, timeout=10) as r:
             resp = json.loads(r.read())
+        meldinger = resp.get("data", {}).get("messages", []) or []
+        _MELDINGER[ticker] = [m for m in meldinger
+                              if (m.get("issuerSign") or ticker).upper() == ticker.upper()]
+    return _MELDINGER[ticker]
 
-        messages = resp.get("data", {}).get("messages", [])
-        target = datetime.date.fromisoformat(dato)
 
-        for msg in messages:
-            title = (msg.get("title") or "").lower()
-            pub   = (msg.get("publishedTime") or "")[:10]
-            if not pub:
-                continue
-            try:
-                pub_date = datetime.date.fromisoformat(pub)
-            except ValueError:
-                continue
-            if abs((pub_date - target).days) > 2:
-                continue
-            if any(kw in title for kw in RAPPORT_KW):
-                msg_id = msg.get("messageId")
-                if msg_id:
-                    return f"https://newsweb.oslobors.no/message/{msg_id}"
+def velg_rapport_melding(meldinger, dato: str):
+    """messageId for rapporten publisert på `dato` (± 2 dager), eller None.
 
-    except Exception as e:
-        print(f"    Advarsel NewsWeb URL [{ticker}]: {e}")
-
-    return None
+    Nærmeste dato vinner; ved likt antall dager den første (nyeste) i lista.
+    """
+    target = datetime.date.fromisoformat(dato)
+    beste = None
+    for msg in meldinger:
+        title = (msg.get("title") or "").lower()
+        pub = (msg.get("publishedTime") or "")[:10]
+        try:
+            avstand = abs((datetime.date.fromisoformat(pub) - target).days)
+        except ValueError:
+            continue
+        if avstand > 2 or not msg.get("messageId"):
+            continue
+        if any(kw in title for kw in IKKE_RAPPORT_KW) or not any(kw in title for kw in RAPPORT_KW):
+            continue
+        if beste is None or avstand < beste[0]:
+            beste = (avstand, msg["messageId"])
+    return beste[1] if beste else None
 
 
 def rydd_framtidige(hendelser, aksjer, i_dag):
@@ -171,17 +204,28 @@ def main():
             continue
         if h["dato"] > today:
             continue  # rapport ikke publisert ennå
+        if h.get("url_forsok", 0) >= MAKS_URL_FORSOK:
+            continue
 
+        ny_liste = h["ticker"] not in _MELDINGER
         print(f"  Søker NewsWeb URL: {h['ticker']} {h['dato']} ...", end=" ", flush=True)
-        url = _hent_rapport_url(h["ticker"], h["dato"])
-        if url:
-            h["url"] = url
+        try:
+            msg_id = velg_rapport_melding(_meldinger(h["ticker"]), h["dato"])
+        except Exception as e:
+            # En feilet henting er ikke et forsøk: neste kjøring prøver igjen.
+            print(f"feil ({e})")
+            continue
+        if msg_id:
+            h["url"] = f"https://newsweb.oslobors.no/message/{msg_id}"
+            h.pop("url_forsok", None)
             url_lagt_til += 1
             print(f"funnet")
         else:
+            h["url_forsok"] = h.get("url_forsok", 0) + 1
             print("ikke funnet")
 
-        time.sleep(0.3)  # skånsom mot NewsWeb
+        if ny_liste:
+            time.sleep(0.3)  # skånsom mot NewsWeb
 
     hendelser.sort(key=lambda x: (x["dato"], x["ticker"]))
 

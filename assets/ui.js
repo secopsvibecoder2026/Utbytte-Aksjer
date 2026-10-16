@@ -5596,7 +5596,7 @@ function _annBygTopp() {
     return `<button class="ann-topp-btn w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-left"
                 data-ticker="${escHtml(a.ticker)}">
       <span class="flex items-center gap-2">
-        <span class="text-xs font-mono text-gray-400 w-4">${i + 1}.</span>
+        <span class="text-xs font-mono text-gray-400 w-6 text-right shrink-0">${i + 1}.</span>
         <span class="font-semibold">${escHtml(a.ticker)}</span>
         <span class="text-gray-500 dark:text-gray-400 text-xs hidden sm:inline">${escHtml(a.navn || '')}</span>
       </span>
