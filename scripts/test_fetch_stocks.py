@@ -2841,5 +2841,55 @@ class TestNewswebExMeldinger(unittest.TestCase):
             fs._newsweb_meldinger = gml
 
 
+class TestSidemeny(unittest.TestCase):
+    """Menyen står kopiert inn i hver håndskrevne side og i malen.
+
+    17.10.2026: /avnoteringer/ fantes ikke i menyen, undermenyene var skjult
+    på mobil, «Åpne app» gikk til forsiden på 203 sider, og /avnoteringer/
+    manglet skriptet som åpner menyen. Ingenting målte at kopiene var like.
+    """
+
+    ROT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+    @staticmethod
+    def _lenker(tekst):
+        m = re.search(r'<ul class="site-nav-menu">(.*?)</ul>\s*<div class="site-nav-actions">',
+                      tekst, re.S)
+        return re.findall(r'<a href="([^"]+)"[^>]*>([^<]+)</a>', m.group(1)) if m else None
+
+    def _haandskrevne(self):
+        for mappe, undermapper, filer in os.walk(self.ROT):
+            rel = os.path.relpath(mappe, self.ROT).replace(os.sep, "/")
+            undermapper[:] = [d for d in undermapper
+                              if not d.startswith(".") and d != "node_modules"
+                              and not (rel == "." and d in ("aksjer", "rapportkalender"))]
+            for f in filer:
+                if f.endswith(".html"):
+                    sti = os.path.join(mappe, f)
+                    with open(sti, encoding="utf-8") as fh:
+                        tekst = fh.read()
+                    if 'class="site-nav"' in tekst:
+                        yield os.path.relpath(sti, self.ROT), tekst
+
+    def test_malen_har_avnoteringer_og_appen(self):
+        mal = fs._site_nav_html()
+        self.assertIn(("/avnoteringer/", "Avnoterte aksjer"), self._lenker(mal))
+        self.assertIn('href="/app/" class="site-app-btn"', mal)
+
+    def test_haandskrevne_sider_har_samme_meny_som_malen(self):
+        mal = self._lenker(fs._site_nav_html())
+        sider = list(self._haandskrevne())
+        self.assertGreater(len(sider), 20)
+        for sti, tekst in sider:
+            with self.subTest(side=sti):
+                self.assertEqual(self._lenker(tekst), mal)
+                self.assertIn('href="/app/" class="site-app-btn"', tekst)
+                self.assertIn("toggle('open')", tekst, "menyknappen gjør ingenting uten skriptet")
+                knapp = re.search(r'<button id="([^"]+)" class="site-dark-btn"', tekst)
+                self.assertTrue(knapp, "ingen temaknapp")
+                self.assertRegex(tekst, r"getElementById\(['\"]%s['\"]\)" % re.escape(knapp.group(1)),
+                                 "ingen skript leser temaknappens id")
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

@@ -18,14 +18,18 @@
 .dark .site-nav-menu .nav-dropdown a { color: #d1d5db; }
 .site-nav-menu .nav-dropdown a:hover { background: #f3f4f6; color: #111827; }
 .dark .site-nav-menu .nav-dropdown a:hover { background: #374151; color: #f9fafb; }
-/* On mobile, show dropdown items inline below parent */
-@media (max-width: 767px) {
-  .site-nav-menu .nav-dropdown {
-    position: static; box-shadow: none; border: none;
-    background: transparent; padding-left: 1rem;
+/* I hamburgermenyen ligger undermenyene alltid åpne, rykket inn under
+   forelderen. Før 17.10.2026 var de skjult til man holdt pekeren over dem,
+   og det kan man ikke på en telefon: et trykk på «Kalender» åpnet
+   utbyttekalenderen, og Rapportkalender, kalkulatorene og Avnoterte aksjer
+   fantes ikke i menyen. Grensen må være den samme som for hamburgeren. */
+@media (max-width: 860px) {
+  .site-nav-menu .nav-dropdown,
+  .dark .site-nav-menu .nav-dropdown {
+    display: flex; position: static; box-shadow: none; border: none;
+    background: transparent; padding: 0 0 0.25rem 1rem; min-width: 0;
   }
-  .site-nav-menu .has-dropdown:hover .nav-dropdown,
-  .site-nav-menu .has-dropdown:focus-within .nav-dropdown { display: flex; }
+  .site-nav-menu .nav-dropdown a { padding: 0.5rem 0.85rem; }
 }
 
 /* ── BASE ─────────────────────────────────────────────────────────────── */
@@ -562,6 +566,8 @@ th.sort-desc::after { content: ' ↓'; color: #6b7280; }
   }
   .dark .site-nav-menu { background: #0f172a; border-color: #1f2937; }
   .site-nav.open .site-nav-menu { display: flex; }
+  /* Med undermenyene åpne er lista høyere enn en liten skjerm. */
+  .site-nav-menu { max-height: calc(100vh - 3.5rem); overflow-y: auto; flex-wrap: nowrap; }
   .site-nav-menu a { padding: 0.7rem 0.85rem; }
   .site-nav-menu { flex: 0 0 auto; }
   .site-nav-actions { margin-left: auto; }

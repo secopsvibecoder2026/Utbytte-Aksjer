@@ -6717,7 +6717,13 @@ def _site_nav_html(active=""):
         <span>e<span class="site-logo-x">x</span>day<span class="site-logo-dot">.no</span></span>
       </a>
       <ul class="site-nav-menu">
-        <li><a href="/aksjer/" class="{cls('aksjer')}">Aksjer</a></li>
+        <li class="has-dropdown">
+          <a href="/aksjer/" class="{cls('aksjer')}">Aksjer</a>
+          <ul class="nav-dropdown">
+            <li><a href="/aksjer/">Alle aksjer</a></li>
+            <li><a href="/avnoteringer/">Avnoterte aksjer</a></li>
+          </ul>
+        </li>
         <li><a href="/aksjer/sektor/" class="{cls('sektor')}">Sektorer</a></li>
         <li class="has-dropdown">
           <a href="/utbyttekalender/" class="{cls('kalender')}">Kalender</a>
@@ -6740,7 +6746,7 @@ def _site_nav_html(active=""):
         <li><a href="/om/" class="{cls('om')}">Om</a></li>
       </ul>
       <div class="site-nav-actions">
-        <a href="https://exday.no/" class="site-app-btn">Åpne app</a>
+        <a href="/app/" class="site-app-btn">Åpne app</a>
         <button id="dark-toggle" class="site-dark-btn" aria-label="Bytt fargemodus">
           <svg class="sun-icon" width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
           <svg class="moon-icon" width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display:none;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
@@ -7297,7 +7303,7 @@ def generer_sektorsider(aksjer, root_dir):
     <tbody>{rader}</tbody>
   </table>
   </div>
-  <div class="cta"><a href="https://exday.no/">Åpne full app med filtrering og porteføljekalkulator →</a></div>
+  <div class="cta"><a href="/app/">Åpne full app med filtrering og porteføljekalkulator →</a></div>
 {sist_oppdatert_html()}
 {STANDARD_FOOTER}
 </div>
@@ -7490,7 +7496,7 @@ def generer_sektorsider(aksjer, root_dir):
   <div class="info-bar">
     <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
     <div>
-      <strong>Tips:</strong> Diversifisering på tvers av sektorer reduserer risikoen i utbytteporteføljen. Bruk <a href="https://exday.no/" style="text-decoration:underline;">app-en</a> til å sette målvekter og se rebalanseringsforslag.
+      <strong>Tips:</strong> Diversifisering på tvers av sektorer reduserer risikoen i utbytteporteføljen. Bruk <a href="/app/" style="text-decoration:underline;">app-en</a> til å sette målvekter og se rebalanseringsforslag.
     </div>
   </div>
 

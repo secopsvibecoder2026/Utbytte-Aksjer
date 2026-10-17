@@ -2836,6 +2836,35 @@ despite being the XSS guard the whole site relies on. `app.js` gained the
 > Node. `app.js` does not touch it at import time, so the test file simply
 > omits it.
 
+## The menu is copied into every page — `TestSidemeny` (2026-10-17)
+
+The owner could not find `/avnoteringer/` in the menu. It was never there, and
+looking for it turned up four faults:
+
+- **Submenus did not exist on phones.** `.nav-dropdown` opened on `:hover`,
+  and tapping «Kalender» opened the dividend calendar. Rapportkalender and the
+  four calculators were unreachable from the menu below 861 px. In the
+  hamburger menu the submenus are now always open and indented, and the list
+  scrolls (`flex-wrap: nowrap`; with wrap, «Om» moved into a second column).
+- **«Åpne app» went to the front page on 203 pages**, as did «Åpne full app»
+  on the sector pages, «appen» on `/verktoy/` and every row on `/bevegelser/`
+  (`/?aksje=` does nothing there). The app is `/app/`. The front page only
+  redirects when the visitor has chosen the app as start page.
+- **`/avnoteringer/` had no menu script**, so the hamburger and the theme
+  button did nothing. Its button had the wrong id, and its menu marked FAQ as
+  active, because the page was copied from `/faq/`.
+- **Nothing compared the copies.** `_site_nav_html()` in `fetch_stocks.py` is
+  the template for the generated pages, and the ~29 hand-written pages each
+  carry their own copy.
+
+`TestSidemeny` in `scripts/test_fetch_stocks.py` now requires every
+hand-written page with a `.site-nav` to have the template's menu links in the
+template's order, `/app/` on the app button, a script that toggles `open`, and
+a script that reads the theme button's id. **Changing the menu therefore means
+changing the template and all hand-written pages in the same commit.**
+«Avnoterte aksjer» sits under «Aksjer». Generated pages get the new menu on
+the next data run, since the deploy job does not regenerate pages.
+
 ## Icons: stroke SVG, and look at every one you add
 
 Emoji were replaced across the site over #34, #35 and #38. They are drawn by
