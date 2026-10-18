@@ -1,0 +1,47 @@
+name: Klokke for børsdagen
+
+# GitHub starter planlagte kjøringer for sent eller ikke i det hele tatt. I
+# oktober 2026 gikk prisjobben rundt tre av 37 ganger per børsdag, og
+# datajobben startet tre til fem timer for sent. Denne workflowen går hele
+# børsdagen i én kjøring og starter oppdater-priser.yml hvert kvarter og
+# update-og-deploy.yml fire ganger med workflow_dispatch, som kjøres med en
+# gang. Planen og reglene står i scripts/klokke.py.
+#
+# Den trenger bare å komme i gang én gang. Timeplanen under prøver hver halve
+# time; mens en kjøring går, står neste i kø (cancel-in-progress: false) og
+# starter når den første er ferdig, ser at dagen er over, og avslutter. Før
+# sekstimersgrensen starter klokka en ny kjøring av seg selv.
+#
+# Timeplanene i oppdater-priser.yml og update-og-deploy.yml står som før, som
+# reserve. Starter begge samme jobb samtidig, avbryter jobbens egen
+# samtidighetsgruppe den eldste.
+
+on:
+  schedule:
+    - cron: "13,43 6-15 * * 1-5"
+  workflow_dispatch:
+
+permissions:
+  actions: write    # starte de to jobbene og en ny klokke
+  contents: read
+
+concurrency:
+  group: "klokke"
+  cancel-in-progress: false
+
+jobs:
+  klokke:
+    name: Start pris- og datajobbene
+    runs-on: ubuntu-latest
+    timeout-minutes: 355
+    steps:
+      - name: Sjekk ut klokka
+        uses: actions/checkout@v4
+        with:
+          sparse-checkout: scripts/klokke.py
+          sparse-checkout-cone-mode: false
+
+      - name: Gå gjennom børsdagen
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 scripts/klokke.py

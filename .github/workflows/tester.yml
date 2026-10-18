@@ -106,5 +106,6 @@ jobs:
           python scripts/test_tallkontroll.py
           python scripts/test_tallkontroll_side.py
           python scripts/test_vedlikehold.py
+          python scripts/test_klokke.py
           python promo/test_promo_felles.py
           python promo/test_finn_kandidater.py

@@ -80,6 +80,7 @@ Utbytte-Aksjer/
 │   ├── oppdater-priser.yml    # Price updates every 15 min on weekdays
 │   ├── deploy-only.yml        # Lightweight Pages deploy (workflow_dispatch)
 │   ├── kodeendring.yml        # Starts the data job when the code behind the numbers changes
+│   ├── klokke.yml             # Runs the trading day: starts the price and data jobs itself
 │   └── tester.yml             # Runs the JS + Python test suites on push/PR
 ├── assets/                    # All frontend JS and CSS
 │   ├── app.js                 # Bootstrap, data loading, cache management, escHtml()
@@ -244,6 +245,31 @@ Before this, a fix merged on a Friday evening reached the pages on Monday
 afternoon. The data job's own commits touch none of these files, and the job
 is skipped for `github-actions[bot]` in any case. A run on a weekend is fine:
 `kursdag()` in `app.js` dates it to Friday.
+
+### The trading-day clock (`klokke.yml` + `scripts/klokke.py`, 2026-10-18)
+
+GitHub's scheduler kept failing even after the minutes were moved off the hour:
+in October 2026 the price job ran about three of 37 times a day and the data job
+started three to five hours late. `klokke.yml` therefore runs the whole trading
+day as one job and starts the work itself with `workflow_dispatch`, which GitHub
+runs at once:
+
+- **The plan is in Oslo time** (`plan()`): prices at :07/:22/:37/:52 from 09:07
+  to 16:52 plus 17:07 and 17:37, data at 08:41, 11:41, 14:41 and 17:41. Unlike
+  the UTC crons it does not shift an hour with daylight saving.
+- **It only has to start once.** Its own cron tries every half hour 06–15 UTC;
+  with `cancel-in-progress: false` the next attempt waits in the queue, starts
+  when the running clock ends, sees the day is over and exits.
+- **Before each start it asks GitHub when the job last started** (`skal_startes()`).
+  If that was after the planned time, because the cron did fire or a previous
+  clock just started it, it does nothing. Several missed slots give one start,
+  not one per slot. An unknown answer starts the job: an extra run costs little.
+- **A run lasts at most six hours.** At 5½ hours (`GRENSE`) the clock starts a
+  new clock and exits; a full day needs two.
+- Holidays are not in the plan. A price run on a closed exchange commits nothing.
+
+The old crons in `oppdater-priser.yml` and `update-og-deploy.yml` stay as a
+fallback; `vedlikehold.py` still reads them. Tests: `scripts/test_klokke.py` (11).
 
 ### Real-Time Price Updates (`oppdater-priser.yml`)
 
