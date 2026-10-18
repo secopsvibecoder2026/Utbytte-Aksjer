@@ -361,7 +361,13 @@
         <span>e<span class="site-logo-x">x</span>day<span class="site-logo-dot">.no</span></span>
       </a>
       <ul class="site-nav-menu">
-        <li><a href="/aksjer/" class="active">Aksjer</a></li>
+        <li class="has-dropdown">
+          <a href="/aksjer/" class="active">Aksjer</a>
+          <ul class="nav-dropdown">
+            <li><a href="/aksjer/">Alle aksjer</a></li>
+            <li><a href="/avnoteringer/">Avnoterte aksjer</a></li>
+          </ul>
+        </li>
         <li><a href="/aksjer/sektor/" class="">Sektorer</a></li>
         <li class="has-dropdown">
           <a href="/utbyttekalender/" class="">Kalender</a>
@@ -384,7 +390,7 @@
         <li><a href="/om/" class="">Om</a></li>
       </ul>
       <div class="site-nav-actions">
-        <a href="https://exday.no/" class="site-app-btn">Åpne app</a>
+        <a href="/app/" class="site-app-btn">Åpne app</a>
         <button id="dark-toggle" class="site-dark-btn" aria-label="Bytt fargemodus">
           <svg class="sun-icon" width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
           <svg class="moon-icon" width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display:none;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
@@ -423,7 +429,7 @@
   <h1>CAPT – Capital Tankers Corp.</h1>
   <p class="sub">Shipping · Halvårlig utbytte · Oslo Børs</p>
 
-  <div class="kurshode"><div class="kh-topp"><div><div class="kh-pris">195,10<span class="kh-valuta">NOK</span></div><div class="kh-meta">Kurs 16. okt 2026</div></div><div class="kh-spenn" aria-label="52 ukers spenn fra 113,00 til 215,95"><span class="kh-spenn-tekst">52 uker</span><span class="kh-spenn-tall">113,00</span><span class="kh-spenn-linje"><span class="kh-spenn-punkt" style="left:79.7%"></span></span><span class="kh-spenn-tall">215,95</span></div></div><dl class="kh-tall"><div><dt>Yield</dt><dd>1,79 %</dd></div><div><dt>Utbytte/aksje</dt><dd>3,50 NOK</dd><span class="kh-note"><span class="kcard-note">annualisert</span></span></div><div><dt>Ex-dato</dt><dd><span class="kh-ukjent">Ikke kjent</span></dd></div></dl></div>
+  <div class="kurshode"><div class="kh-topp"><div><div class="kh-pris">195,10<span class="kh-valuta">NOK</span></div><div class="kh-meta">Kurs 18. okt 2026</div></div><div class="kh-spenn" aria-label="52 ukers spenn fra 113,00 til 215,95"><span class="kh-spenn-tekst">52 uker</span><span class="kh-spenn-tall">113,00</span><span class="kh-spenn-linje"><span class="kh-spenn-punkt" style="left:79.7%"></span></span><span class="kh-spenn-tall">215,95</span></div></div><dl class="kh-tall"><div><dt>Yield</dt><dd>1,79 %</dd></div><div><dt>Utbytte/aksje</dt><dd>3,50 NOK</dd><span class="kh-note"><span class="kcard-note">annualisert</span></span></div><div><dt>Ex-dato</dt><dd><span class="kh-ukjent">Ikke kjent</span></dd></div></dl></div>
 
   <nav class="ak-tabnav" id="ak-tabnav" aria-label="Sideseksjoner">
     <a href="#oversikt" class="ak-tab aktiv">Oversikt</a>
@@ -526,7 +532,7 @@
   <!-- ── UTBYTTE ── -->
   <section id="utbytte">
 
-  <div class="analyse"><h2>Yield mot sektoren</h2><p>Yielden på 1,8% er 5,6 prosentpoeng under snittet for Shipping-sektoren (7,4%).</p></div>
+  <div class="analyse"><h2>Yield mot sektoren</h2><p>Yielden på 1,8% er 5,3 prosentpoeng under snittet for Shipping-sektoren (7,1%).</p></div>
 
   <h2>Historiske utbytter</h2><table><thead><tr><th>År</th><th>Utbytte</th><th>Yield</th></tr></thead><tbody>
         <tr>
@@ -539,7 +545,7 @@
 
   <div class="utbetalingsaar-seksjon"><h2>Utbyttet gjennom året</h2><div class="mnd-strip"><div class="mnd-celle"><span>jan</span></div><div class="mnd-celle"><span>feb</span></div><div class="mnd-celle"><span>mar</span></div><div class="mnd-celle"><span>apr</span></div><div class="mnd-celle"><span>mai</span></div><div class="mnd-celle mnd-ja"><span>jun</span></div><div class="mnd-celle"><span>jul</span></div><div class="mnd-celle"><span>aug</span></div><div class="mnd-celle mnd-ja"><span>sep</span></div><div class="mnd-celle"><span>okt</span></div><div class="mnd-celle"><span>nov</span></div><div class="mnd-celle"><span>des</span></div></div><p>Capital Tankers Corp. betaler ut 2 ganger i året, med ex-dato i juni og september — grovt regnet 1,75 kroner per aksje hver gang. Månedene er ex-datoer utledet av hvilke måneder som går igjen over flere år, ikke av en enkelt utbetaling. Selve pengene kommer typisk halvannen til tre uker etter ex-datoen, så en ex-dato sent i måneden betales ut i den neste.</p></div>
 
-  <div class="vurdering-seksjon"><h2>Vurdering som utbytteaksje</h2><p class="vurdering-tekst">Yielden på 1,8% er under sektorsnittet for Shipping (7,4%).</p></div><div class="driver-seksjon"><h2>Hva driver utbyttet i CAPT?</h2><p class="driver-tekst">Fraktrater bestemmer inntjeningen nesten alene. Ratene svinger kraftig med balansen mellom tilbud av tonnasje og etterspørsel fra global handel. Ny tonnasje fra ordreboken, skraping av eldre skip og geopolitikk (Rødehavet, Suezkanalen) er viktige drivere. Mange shippingselskaper deler ut det meste av overskuddet — hyppig utbytte er vanlig, men høy yield kan forsvinne like fort som den kom.</p><p class="driver-tekst">Med 1 år med utbytte er historikken hos Capital Tankers Corp. fortsatt kort, så utbyttepolitikken er ikke ferdig prøvd. Utbyttet går ex halvårlig, i juni og september.</p></div>
+  <div class="vurdering-seksjon"><h2>Vurdering som utbytteaksje</h2><p class="vurdering-tekst">Yielden på 1,8% er under sektorsnittet for Shipping (7,1%).</p></div><div class="driver-seksjon"><h2>Hva driver utbyttet i CAPT?</h2><p class="driver-tekst">Fraktrater bestemmer inntjeningen nesten alene. Ratene svinger kraftig med balansen mellom tilbud av tonnasje og etterspørsel fra global handel. Ny tonnasje fra ordreboken, skraping av eldre skip og geopolitikk (Rødehavet, Suezkanalen) er viktige drivere. Mange shippingselskaper deler ut det meste av overskuddet — hyppig utbytte er vanlig, men høy yield kan forsvinne like fort som den kom.</p><p class="driver-tekst">Med 1 år med utbytte er historikken hos Capital Tankers Corp. fortsatt kort, så utbyttepolitikken er ikke ferdig prøvd. Utbyttet går ex halvårlig, i juni og september.</p></div>
 
   
 
@@ -567,8 +573,8 @@
 </div>
   </section>
 
-  <div class="relaterte"><h2>Andre shipping-aksjer med utbytte</h2><div class="rel-grid"><a href="/aksjer/STST/" class="rel-kort"><span class="rel-ticker">STST</span><span class="rel-navn">Stainless Tankers ASA</span><span class="rel-yield">17,4%</span></a>
-<a href="/aksjer/HAFNI/" class="rel-kort"><span class="rel-ticker">HAFNI</span><span class="rel-navn">Hafnia Limited</span><span class="rel-yield">11,1%</span></a>
+  <div class="relaterte"><h2>Andre shipping-aksjer med utbytte</h2><div class="rel-grid"><a href="/aksjer/STST/" class="rel-kort"><span class="rel-ticker">STST</span><span class="rel-navn">Stainless Tankers ASA</span><span class="rel-yield">12,6%</span></a>
+<a href="/aksjer/HAFNI/" class="rel-kort"><span class="rel-ticker">HAFNI</span><span class="rel-navn">Hafnia Limited</span><span class="rel-yield">11,0%</span></a>
 <a href="/aksjer/WEST/" class="rel-kort"><span class="rel-ticker">WEST</span><span class="rel-navn">Western Bulk Chartering AS</span><span class="rel-yield">10,8%</span></a>
 <a href="/aksjer/OET/" class="rel-kort"><span class="rel-ticker">OET</span><span class="rel-navn">Okeanis Eco Tankers Corp.</span><span class="rel-yield">10,5%</span></a></div></div>
 
@@ -587,7 +593,7 @@
     <a href="https://exday.no/app/?aksje=CAPT">Åpne CAPT i exday.no →</a>
   </div>
 
-  <p class="updated">Tallene er hentet 16. oktober 2026</p>
+  <p class="updated">Tallene er hentet 18. oktober 2026</p>
   <footer style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid #e5e7eb;font-size:0.78rem;text-align:center;color:#9ca3af;line-height:1.6;" class="std-footer">
     <p>Kurs og utbyttedata hentes fra Yahoo Finance og Euronext. Oppdateres daglig på børsdager.</p>
     <p style="max-width:36rem;margin:0.4rem auto;">

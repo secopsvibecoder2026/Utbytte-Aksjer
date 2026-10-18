@@ -1,7 +1,7 @@
 {
-  "sist_oppdatert": "2026-10-16T19:49:05Z",
+  "sist_oppdatert": "2026-10-18T17:06:22Z",
   "kilde": "Yahoo Finance (yfinance)",
-  "antall_ok": 154,
+  "antall_ok": 155,
   "antall_feil": 0,
   "aksjer": [
     {
@@ -18,7 +18,7 @@
       "utbytte_vekst_5ar": 40.3,
       "payout_ratio": 40.0,
       "pe_ratio": 12.0,
-      "pb_ratio": 2.57,
+      "pb_ratio": 2.59,
       "ex_dato": "2026-11-13",
       "betaling_dato": "2026-11-25",
       "rapport_dato": null,
@@ -52,6 +52,7 @@
         2026
       ],
       "siste_utbytte": 3.6882,
+      "siste_utbytte_dato": "2026-08-13",
       "utbytte_12m": 14.5496,
       "utbytte_12m_antall": 4,
       "utbytte_12m_liste": [
@@ -74,9 +75,9 @@
       ],
       "utbytte_supplert": [],
       "utbytte_per_ar": {
-        "2021": 4.9476,
-        "2022": 16.5308,
-        "2023": 35.3075,
+        "2021": 4.945,
+        "2022": 16.5282,
+        "2023": 35.2684,
         "2024": 32.1646,
         "2025": 19.1553
       },
@@ -95,8 +96,8 @@
         },
         {
           "ar": 2023,
-          "utbytte": 35.31,
-          "yield": 8.16,
+          "utbytte": 35.27,
+          "yield": 8.15,
           "maaneder": [
             1,
             5,
@@ -145,7 +146,7 @@
       ],
       "snitt_yield_5ar": 5.0,
       "snitt_yield_ar": 5,
-      "beskrivelse": "Equinor ble stiftet av staten som Statoil i 1972 og fikk i 1981, som første norske selskap, operatøransvaret for et felt, Gullfaks. Selskapet kom på børs i 2001, slo seg sammen med olje- og gassvirksomheten til Norsk Hydro i 2007 og tok navnet Equinor i 2018. Staten er største eier gjennom Nærings- og fiskeridepartementet, og et stortingsvedtak fra 2001 slår fast at staten skal eie minst to tredjedeler av selskapet.\n\nNorsk sokkel er ryggraden i virksomheten og skal ifølge strategien fra kapitalmarkedsdagen i 2026 få størstedelen av investeringene fram mot 2030. Derfra selges olje, rørgass og LNG, mest til Europa. Utenfor Norge produserer Equinor olje og gass i blant annet USA, Brasil, Angola, Storbritannia og Canada. I tillegg kommer en kraftvirksomhet med havvind og annen produksjon som fortsatt er liten sammenlignet med olje og gass, og en handelsavdeling som kjøper og selger olje, gass og kraft.\n\nKontantutbyttet vedtas kvartalsvis i amerikanske dollar. Kronebeløpet regnes om etter Norges Banks dollarkurs rundt registreringsdatoen, så en norsk aksjonær kan få et annet beløp i kroner fra kvartal til kvartal selv om utbyttet i dollar står stille. Målet er å øke kvartalsutbyttet per aksje hvert år. Resten av det selskapet vil dele ut, går til tilbakekjøp av aksjer, og omfanget av dem følger olje- og gassprisene og hvor sterk balansen er. Staten deltar i tilbakekjøpene ved at en forholdsmessig del av statens aksjer innløses, slik at eierandelen ligger fast. Aksjene som kjøpes tilbake, slettes, og senere utbytter deles dermed på færre aksjer. Selskapet er notert på Oslo Børs med en markedsverdi på rundt 1025 milliarder kroner og er ett av de største børsnoterte selskapene i Norge.\n\nUtbyttet utbetales kvartalsvis — fire utbetalinger i året, og selskapet har holdt dette gående i 25 år på rad. Direkteavkastningen er 3,4 %, og 5-årssnittet på 5,0 % plasserer EQNR i det lavere sjiktet av aksjene i sin sektor. Utbetalingsgraden på 40 % er lav og gir selskapet solid buffer til å opprettholde utbyttet ved svakere kvartaler. Utbyttet har vokst med i snitt 40,3 % per år de siste fem årene.\n\nInntjeningen er tett koblet til olje- og gasspriser, noe som gjør utbyttet mer syklisk enn i defensive sektorer. Historikken viser klare svingninger: høyest utbytte var 35,31 NOK per aksje i 2023, lavest 10,82 NOK i 2026.",
+      "beskrivelse": "Equinor ble stiftet av staten som Statoil i 1972 og fikk i 1981, som første norske selskap, operatøransvaret for et felt, Gullfaks. Selskapet kom på børs i 2001, slo seg sammen med olje- og gassvirksomheten til Norsk Hydro i 2007 og tok navnet Equinor i 2018. Staten er største eier gjennom Nærings- og fiskeridepartementet, og et stortingsvedtak fra 2001 slår fast at staten skal eie minst to tredjedeler av selskapet.\n\nNorsk sokkel er ryggraden i virksomheten og skal ifølge strategien fra kapitalmarkedsdagen i 2026 få størstedelen av investeringene fram mot 2030. Derfra selges olje, rørgass og LNG, mest til Europa. Utenfor Norge produserer Equinor olje og gass i blant annet USA, Brasil, Angola, Storbritannia og Canada. I tillegg kommer en kraftvirksomhet med havvind og annen produksjon som fortsatt er liten sammenlignet med olje og gass, og en handelsavdeling som kjøper og selger olje, gass og kraft.\n\nKontantutbyttet vedtas kvartalsvis i amerikanske dollar. Kronebeløpet regnes om etter Norges Banks dollarkurs rundt registreringsdatoen, så en norsk aksjonær kan få et annet beløp i kroner fra kvartal til kvartal selv om utbyttet i dollar står stille. Målet er å øke kvartalsutbyttet per aksje hvert år. Resten av det selskapet vil dele ut, går til tilbakekjøp av aksjer, og omfanget av dem følger olje- og gassprisene og hvor sterk balansen er. Staten deltar i tilbakekjøpene ved at en forholdsmessig del av statens aksjer innløses, slik at eierandelen ligger fast. Aksjene som kjøpes tilbake, slettes, og senere utbytter deles dermed på færre aksjer. Selskapet er notert på Oslo Børs med en markedsverdi på rundt 1025 milliarder kroner og er ett av de største børsnoterte selskapene i Norge.\n\nUtbyttet utbetales kvartalsvis — fire utbetalinger i året, og selskapet har holdt dette gående i 25 år på rad. Direkteavkastningen er 3,4 %, og 5-årssnittet på 5,0 % plasserer EQNR i det lavere sjiktet av aksjene i sin sektor. Utbetalingsgraden på 40 % er lav og gir selskapet solid buffer til å opprettholde utbyttet ved svakere kvartaler. Utbyttet har vokst med i snitt 40,3 % per år de siste fem årene.\n\nInntjeningen er tett koblet til olje- og gasspriser, noe som gjør utbyttet mer syklisk enn i defensive sektorer. Historikken viser klare svingninger: høyest utbytte var 35,27 NOK per aksje i 2023, lavest 10,82 NOK i 2026.",
       "beskrivelse_intro": "Equinor ble stiftet av staten som Statoil i 1972 og fikk i 1981, som første norske selskap, operatøransvaret for et felt, Gullfaks. Selskapet kom på børs i 2001, slo seg sammen med olje- og gassvirksomheten til Norsk Hydro i 2007 og tok navnet Equinor i 2018. Staten er største eier gjennom Nærings- og fiskeridepartementet, og et stortingsvedtak fra 2001 slår fast at staten skal eie minst to tredjedeler av selskapet.\n\nNorsk sokkel er ryggraden i virksomheten og skal ifølge strategien fra kapitalmarkedsdagen i 2026 få størstedelen av investeringene fram mot 2030. Derfra selges olje, rørgass og LNG, mest til Europa. Utenfor Norge produserer Equinor olje og gass i blant annet USA, Brasil, Angola, Storbritannia og Canada. I tillegg kommer en kraftvirksomhet med havvind og annen produksjon som fortsatt er liten sammenlignet med olje og gass, og en handelsavdeling som kjøper og selger olje, gass og kraft.\n\nKontantutbyttet vedtas kvartalsvis i amerikanske dollar. Kronebeløpet regnes om etter Norges Banks dollarkurs rundt registreringsdatoen, så en norsk aksjonær kan få et annet beløp i kroner fra kvartal til kvartal selv om utbyttet i dollar står stille. Målet er å øke kvartalsutbyttet per aksje hvert år. Resten av det selskapet vil dele ut, går til tilbakekjøp av aksjer, og omfanget av dem følger olje- og gassprisene og hvor sterk balansen er. Staten deltar i tilbakekjøpene ved at en forholdsmessig del av statens aksjer innløses, slik at eierandelen ligger fast. Aksjene som kjøpes tilbake, slettes, og senere utbytter deles dermed på færre aksjer.",
       "beskrivelse_fakta": "Equinor ASA er et energiselskap med virksomhet i Norge og internasjonalt. Selskapet er organisert i segmentene Leting og produksjon Norge, Leting og produksjon internasjonalt, Leting og produksjon USA, Markedsføring, midtstrøm og prosessering, samt Fornybar energi.",
       "valuta": "NOK",
@@ -199,6 +200,7 @@
         2026
       ],
       "siste_utbytte": 18.0,
+      "siste_utbytte_dato": "2026-04-22",
       "utbytte_12m": 18.0,
       "utbytte_12m_antall": 1,
       "utbytte_12m_liste": [
@@ -321,6 +323,7 @@
         2026
       ],
       "siste_utbytte": 4.7,
+      "siste_utbytte_dato": "2026-10-15",
       "utbytte_12m": 9.7,
       "utbytte_12m_antall": 2,
       "utbytte_12m_liste": [
@@ -455,6 +458,7 @@
         2026
       ],
       "siste_utbytte": 6.0,
+      "siste_utbytte_dato": "2026-04-24",
       "utbytte_12m": 6.0,
       "utbytte_12m_antall": 1,
       "utbytte_12m_liste": [
@@ -565,6 +569,7 @@
         2026
       ],
       "siste_utbytte": 2.3,
+      "siste_utbytte_dato": "2026-08-28",
       "utbytte_12m": 7.6,
       "utbytte_12m_antall": 4,
       "utbytte_12m_liste": [
@@ -682,7 +687,7 @@
       "utbytte_vekst_5ar": 22.9,
       "payout_ratio": 113.0,
       "pe_ratio": 16.87,
-      "pb_ratio": 2.12,
+      "pb_ratio": 2.14,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-10-29",
@@ -702,6 +707,7 @@
         2026
       ],
       "siste_utbytte": 6.4259,
+      "siste_utbytte_dato": "2026-07-20",
       "utbytte_12m": 25.1805,
       "utbytte_12m_antall": 4,
       "utbytte_12m_liste": [
@@ -817,7 +823,7 @@
       "utbytte_yield": 3.9,
       "utbytte_vekst_5ar": 15.8,
       "payout_ratio": 60.0,
-      "pe_ratio": 15.46,
+      "pe_ratio": 15.65,
       "pb_ratio": 1.46,
       "ex_dato": null,
       "betaling_dato": null,
@@ -853,6 +859,7 @@
         2026
       ],
       "siste_utbytte": 3.0,
+      "siste_utbytte_dato": "2026-05-08",
       "utbytte_12m": 3.0,
       "utbytte_12m_antall": 1,
       "utbytte_12m_liste": [
@@ -973,6 +980,7 @@
         2026
       ],
       "siste_utbytte": 22.0,
+      "siste_utbytte_dato": "2026-05-13",
       "utbytte_12m": 22.0,
       "utbytte_12m_antall": 1,
       "utbytte_12m_liste": [
@@ -1062,7 +1070,7 @@
       "utbytte_yield": 1.83,
       "utbytte_vekst_5ar": 2.4,
       "payout_ratio": 61.0,
-      "pe_ratio": 33.56,
+      "pe_ratio": 33.31,
       "pb_ratio": 4.23,
       "ex_dato": null,
       "betaling_dato": null,
@@ -1089,6 +1097,7 @@
         2026
       ],
       "siste_utbytte": 10.0,
+      "siste_utbytte_dato": "2026-06-23",
       "utbytte_12m": 10.0,
       "utbytte_12m_antall": 1,
       "utbytte_12m_liste": [
@@ -1170,14 +1179,14 @@
       "bors": "Oslo Børs",
       "pris": 28.82,
       "52u_hoy": 30.14,
-      "52u_lav": 15.84,
+      "52u_lav": 16.11,
       "markedsverdi_mrd": 14.1,
       "utbytte_per_aksje": 1.51,
       "utbytte_yield": 5.24,
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 40.0,
       "pe_ratio": 6.22,
-      "pb_ratio": 1.35,
+      "pb_ratio": 1.36,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-11-25",
@@ -1191,6 +1200,7 @@
         2026
       ],
       "siste_utbytte": 0.3768,
+      "siste_utbytte_dato": "2026-09-21",
       "utbytte_12m": 1.7485,
       "utbytte_12m_antall": 4,
       "utbytte_12m_liste": [
@@ -1214,7 +1224,7 @@
       "utbytte_supplert": [],
       "utbytte_per_ar": {
         "2021": 0.0,
-        "2022": 9.2076,
+        "2022": 9.2048,
         "2023": 7.0301,
         "2024": 4.9193,
         "2025": 2.7522
@@ -1223,8 +1233,8 @@
       "historiske_utbytter": [
         {
           "ar": 2022,
-          "utbytte": 9.21,
-          "yield": 31.95,
+          "utbytte": 9.2,
+          "yield": 31.94,
           "maaneder": [
             2,
             3,
@@ -1286,14 +1296,14 @@
       ],
       "snitt_yield_5ar": 20.74,
       "snitt_yield_ar": 4,
-      "beskrivelse": "MPC Container Ships driver ingen containerlinjer selv. Selskapet eier små og mellomstore containerskip og leier dem ut til linjerederiene på tidscertepartier, avtaler der befrakteren betaler en fast dagrate i en avtalt periode og selv tar seg av last, ruter og kunder. Skipene går stort sett i regional trafikk, ikke på de store hovedrutene mellom kontinentene. Selskapet ble startet i 2017 med det tyske MPC-konsernet i Hamburg som stifter og sponsor, og har forretningskontor i Oslo.\n\nDet viktigste å forstå er kontraktsdekningen. MPCC oppgir i hver kvartalsrapport hvor stor del av de kommende årenes skipsdøgn som allerede er leid ut, så inntekten for det nærmeste året er langt på vei kjent. Risikoen ligger i fornyelsen: når en avtale løper ut, må skipet leies ut igjen til den raten markedet gir da. Selskapet er dessuten midt i en flåtefornyelse. Det har bestilt nybygg mot langsiktige avtaler med linjerederier, solgt eldre skip og i 2026 kjøpt nyere skip i en større størrelsesklasse, med treårige kontrakter på plass. Nybyggene finansieres med banklån og egne midler, og sommeren 2026 hentet selskapet i tillegg ny egenkapital i en rettet emisjon.\n\nUtbyttet kommer hvert kvartal, og retningslinjen er halvparten av det justerte nettoresultatet. Det fastsettes i dollar og betales i kroner. Siden det følger resultatet og ikke et fast beløp, beveger det seg med ratene på kontraktene som fornyes, og investeringene i nye skip trekker på de samme pengene.\n\nUtbyttet utbetales kvartalsvis — fire utbetalinger i året, og selskapet har holdt dette gående i 5 år på rad. Direkteavkastningen er 5,2 %, og 5-årssnittet på 20,7 % plasserer MPCC blant de solid-yielding aksjene i sin sektor. Utbetalingsgraden på 40 % er lav og gir selskapet solid buffer til å opprettholde utbyttet ved svakere kvartaler.\n\nFraktrater varierer kraftig med globalt handelsmønster og flåtekapasitet, og utbyttet svinger tilsvarende. Historikken viser klare svingninger: høyest utbytte var 9,21 NOK per aksje i 2022, lavest 1,24 NOK i 2026.",
+      "beskrivelse": "MPC Container Ships driver ingen containerlinjer selv. Selskapet eier små og mellomstore containerskip og leier dem ut til linjerederiene på tidscertepartier, avtaler der befrakteren betaler en fast dagrate i en avtalt periode og selv tar seg av last, ruter og kunder. Skipene går stort sett i regional trafikk, ikke på de store hovedrutene mellom kontinentene. Selskapet ble startet i 2017 med det tyske MPC-konsernet i Hamburg som stifter og sponsor, og har forretningskontor i Oslo.\n\nDet viktigste å forstå er kontraktsdekningen. MPCC oppgir i hver kvartalsrapport hvor stor del av de kommende årenes skipsdøgn som allerede er leid ut, så inntekten for det nærmeste året er langt på vei kjent. Risikoen ligger i fornyelsen: når en avtale løper ut, må skipet leies ut igjen til den raten markedet gir da. Selskapet er dessuten midt i en flåtefornyelse. Det har bestilt nybygg mot langsiktige avtaler med linjerederier, solgt eldre skip og i 2026 kjøpt nyere skip i en større størrelsesklasse, med treårige kontrakter på plass. Nybyggene finansieres med banklån og egne midler, og sommeren 2026 hentet selskapet i tillegg ny egenkapital i en rettet emisjon.\n\nUtbyttet kommer hvert kvartal, og retningslinjen er halvparten av det justerte nettoresultatet. Det fastsettes i dollar og betales i kroner. Siden det følger resultatet og ikke et fast beløp, beveger det seg med ratene på kontraktene som fornyes, og investeringene i nye skip trekker på de samme pengene.\n\nUtbyttet utbetales kvartalsvis — fire utbetalinger i året, og selskapet har holdt dette gående i 5 år på rad. Direkteavkastningen er 5,2 %, og 5-årssnittet på 20,7 % plasserer MPCC blant de solid-yielding aksjene i sin sektor. Utbetalingsgraden på 40 % er lav og gir selskapet solid buffer til å opprettholde utbyttet ved svakere kvartaler.\n\nFraktrater varierer kraftig med globalt handelsmønster og flåtekapasitet, og utbyttet svinger tilsvarende. Historikken viser klare svingninger: høyest utbytte var 9,20 NOK per aksje i 2022, lavest 1,24 NOK i 2026.",
       "beskrivelse_intro": "MPC Container Ships driver ingen containerlinjer selv. Selskapet eier små og mellomstore containerskip og leier dem ut til linjerederiene på tidscertepartier, avtaler der befrakteren betaler en fast dagrate i en avtalt periode og selv tar seg av last, ruter og kunder. Skipene går stort sett i regional trafikk, ikke på de store hovedrutene mellom kontinentene. Selskapet ble startet i 2017 med det tyske MPC-konsernet i Hamburg som stifter og sponsor, og har forretningskontor i Oslo.\n\nDet viktigste å forstå er kontraktsdekningen. MPCC oppgir i hver kvartalsrapport hvor stor del av de kommende årenes skipsdøgn som allerede er leid ut, så inntekten for det nærmeste året er langt på vei kjent. Risikoen ligger i fornyelsen: når en avtale løper ut, må skipet leies ut igjen til den raten markedet gir da. Selskapet er dessuten midt i en flåtefornyelse. Det har bestilt nybygg mot langsiktige avtaler med linjerederier, solgt eldre skip og i 2026 kjøpt nyere skip i en større størrelsesklasse, med treårige kontrakter på plass. Nybyggene finansieres med banklån og egne midler, og sommeren 2026 hentet selskapet i tillegg ny egenkapital i en rettet emisjon.\n\nUtbyttet kommer hvert kvartal, og retningslinjen er halvparten av det justerte nettoresultatet. Det fastsettes i dollar og betales i kroner. Siden det følger resultatet og ikke et fast beløp, beveger det seg med ratene på kontraktene som fornyes, og investeringene i nye skip trekker på de samme pengene.",
       "beskrivelse_fakta": "MPC Container Ships ASA eier og driver en portefølje av containerskip. Selskapet satser på små og mellomstore fartøy som leies ut på tidscertepartier til globale og regionale linjerederier i regional handel. Flåten består av 59 fartøy med samlet kapasitet på rundt 140 894 TEU. Selskapet ble stiftet i 2017 og har base i Oslo.",
       "valuta": "NOK",
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "utbyttehistorikk_tekst": "Utbyttet er lavere nå enn i 2022 — ned fra 9,21 til 2,75 kroner per aksje, med 3 nedgangsår i perioden. Spennet er stort: høyeste år er 3,3 ganger det laveste, så størrelsen på utbetalingen er lite forutsigbar fra år til år. Dagens yield på 5,2 % er lavere enn aksjens eget 4-årssnitt på 20,7 %.",
+      "utbyttehistorikk_tekst": "Utbyttet er lavere nå enn i 2022 — ned fra 9,20 til 2,75 kroner per aksje, med 3 nedgangsår i perioden. Spennet er stort: høyeste år er 3,3 ganger det laveste, så størrelsen på utbetalingen er lite forutsigbar fra år til år. Dagens yield på 5,2 % er lavere enn aksjens eget 4-årssnitt på 20,7 %.",
       "ask_status": "ja"
     },
     {
@@ -1305,12 +1315,12 @@
       "52u_hoy": 255.0,
       "52u_lav": 117.8,
       "markedsverdi_mrd": 35.7,
-      "utbytte_per_aksje": 24.35,
-      "utbytte_yield": 10.36,
+      "utbytte_per_aksje": 24.33,
+      "utbytte_yield": 10.35,
       "utbytte_vekst_5ar": 16.4,
       "payout_ratio": 63.0,
       "pe_ratio": 8.12,
-      "pb_ratio": 1.96,
+      "pb_ratio": 1.97,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-11-24",
@@ -1330,20 +1340,21 @@
         2026
       ],
       "siste_utbytte": 8.8914,
-      "utbytte_12m": 24.3539,
+      "siste_utbytte_dato": "2026-09-07",
+      "utbytte_12m": 24.3295,
       "utbytte_12m_antall": 4,
       "utbytte_12m_liste": [
         {
           "ex_dato": "2025-12-11",
-          "belop": 3.7713
+          "belop": 3.7654
         },
         {
           "ex_dato": "2026-03-12",
-          "belop": 5.3742
+          "belop": 5.3657
         },
         {
           "ex_dato": "2026-06-11",
-          "belop": 6.317
+          "belop": 6.307
         },
         {
           "ex_dato": "2026-09-07",
@@ -1352,17 +1363,17 @@
       ],
       "utbytte_supplert": [],
       "utbytte_per_ar": {
-        "2021": 6.7884,
-        "2022": 8.8627,
-        "2023": 29.0394,
-        "2024": 27.3423,
-        "2025": 12.4454
+        "2021": 6.7777,
+        "2022": 8.8487,
+        "2023": 28.9936,
+        "2024": 27.2991,
+        "2025": 12.4258
       },
       "utbytte_forste_ar": 2014,
       "historiske_utbytter": [
         {
           "ar": 2022,
-          "utbytte": 8.86,
+          "utbytte": 8.85,
           "yield": 3.77,
           "maaneder": [
             3,
@@ -1373,8 +1384,8 @@
         },
         {
           "ar": 2023,
-          "utbytte": 29.04,
-          "yield": 12.36,
+          "utbytte": 28.99,
+          "yield": 12.34,
           "maaneder": [
             3,
             5,
@@ -1384,8 +1395,8 @@
         },
         {
           "ar": 2024,
-          "utbytte": 27.34,
-          "yield": 11.64,
+          "utbytte": 27.3,
+          "yield": 11.62,
           "maaneder": [
             3,
             6,
@@ -1395,8 +1406,8 @@
         },
         {
           "ar": 2025,
-          "utbytte": 12.45,
-          "yield": 5.3,
+          "utbytte": 12.43,
+          "yield": 5.29,
           "maaneder": [
             3,
             5,
@@ -1406,8 +1417,8 @@
         },
         {
           "ar": 2026,
-          "utbytte": 20.58,
-          "yield": 8.76,
+          "utbytte": 20.56,
+          "yield": 8.75,
           "maaneder": [
             3,
             6,
@@ -1421,16 +1432,16 @@
         9,
         12
       ],
-      "snitt_yield_5ar": 7.19,
+      "snitt_yield_5ar": 7.18,
       "snitt_yield_ar": 5,
-      "beskrivelse": "BW LPG eier og driver svært store gasstankskip, såkalte VLGC-er, som frakter flytende propan og butan over lange havstrekninger. Selskapet omtaler seg selv som verdens største eier og operatør av slike skip. Historien går tilbake til Bergesen-rederiet i Stavanger, som kom inn i gassfrakt i 1978. Sohmen-familien kjøpte flertallet i Bergesen i 2003, og virksomheten ble til BW. LPG-delen ble skilt ut og notert på Oslo Børs i 2013. I 2024 kom aksjen også på børsen i New York, selskapet flyttet sitt juridiske hjemsted fra Bermuda til Singapore, og det kjøpte tolv skip fra Avance Gas. BW Group er fortsatt største aksjonær.\n\nEn stor del av flåten kan gå på LPG som drivstoff. Ved siden av rederiet har BW LPG en handelsdel, Product Services, som kjøper og selger LPG-laster og sikrer prisene med derivater. Den lever av prisforskjeller mellom markeder, og det regnskapsførte resultatet kan svinge kraftig fra kvartal til kvartal fordi åpne posisjoner verdsettes til dagens priser. Selskapet eier også flertallet i BW LPG India, som frakter gass i indisk farvann.\n\nUtbyttet kommer hvert kvartal og regnes av overskuddet i shippingdelen, ikke av handelsdelen. Retningslinjen er halvparten av dette overskuddet, økt til tre firedeler eller hele overskuddet når netto gjeldsgrad er lav nok. Handelsdelen teller bare med gjennom det den sender videre til morselskapet. Styret kan dessuten justere for ekstraordinære poster, som gevinster når eldre skip selges. Utbyttet fastsettes i dollar og regnes om til kroner for aksjonærene på Oslo Børs, så kronebeløpet beveger seg også med valutakursen. Aksjen er notert på Oslo Børs med en markedsverdi på rundt 36 milliarder kroner.\n\nUtbyttet utbetales kvartalsvis — fire utbetalinger i året, og selskapet har holdt dette gående i 8 år på rad. Direkteavkastningen er 5,3 %, og 5-årssnittet på 7,2 % plasserer BWLPG blant de solid-yielding aksjene i sin sektor. Utbetalingsgraden er 63 %, noe som er balansert for en moden utbytteaksje. Utbyttet har vokst med i snitt 16,4 % per år de siste fem årene.\n\nFraktrater varierer kraftig med globalt handelsmønster og flåtekapasitet, og utbyttet svinger tilsvarende. Historikken viser klare svingninger: høyest utbytte var 29,04 NOK per aksje i 2023, lavest 8,86 NOK i 2022.",
+      "beskrivelse": "BW LPG eier og driver svært store gasstankskip, såkalte VLGC-er, som frakter flytende propan og butan over lange havstrekninger. Selskapet omtaler seg selv som verdens største eier og operatør av slike skip. Historien går tilbake til Bergesen-rederiet i Stavanger, som kom inn i gassfrakt i 1978. Sohmen-familien kjøpte flertallet i Bergesen i 2003, og virksomheten ble til BW. LPG-delen ble skilt ut og notert på Oslo Børs i 2013. I 2024 kom aksjen også på børsen i New York, selskapet flyttet sitt juridiske hjemsted fra Bermuda til Singapore, og det kjøpte tolv skip fra Avance Gas. BW Group er fortsatt største aksjonær.\n\nEn stor del av flåten kan gå på LPG som drivstoff. Ved siden av rederiet har BW LPG en handelsdel, Product Services, som kjøper og selger LPG-laster og sikrer prisene med derivater. Den lever av prisforskjeller mellom markeder, og det regnskapsførte resultatet kan svinge kraftig fra kvartal til kvartal fordi åpne posisjoner verdsettes til dagens priser. Selskapet eier også flertallet i BW LPG India, som frakter gass i indisk farvann.\n\nUtbyttet kommer hvert kvartal og regnes av overskuddet i shippingdelen, ikke av handelsdelen. Retningslinjen er halvparten av dette overskuddet, økt til tre firedeler eller hele overskuddet når netto gjeldsgrad er lav nok. Handelsdelen teller bare med gjennom det den sender videre til morselskapet. Styret kan dessuten justere for ekstraordinære poster, som gevinster når eldre skip selges. Utbyttet fastsettes i dollar og regnes om til kroner for aksjonærene på Oslo Børs, så kronebeløpet beveger seg også med valutakursen. Aksjen er notert på Oslo Børs med en markedsverdi på rundt 36 milliarder kroner.\n\nUtbyttet utbetales kvartalsvis — fire utbetalinger i året, og selskapet har holdt dette gående i 8 år på rad. Direkteavkastningen er 5,3 %, og 5-årssnittet på 7,2 % plasserer BWLPG blant de solid-yielding aksjene i sin sektor. Utbetalingsgraden er 63 %, noe som er balansert for en moden utbytteaksje. Utbyttet har vokst med i snitt 16,4 % per år de siste fem årene.\n\nFraktrater varierer kraftig med globalt handelsmønster og flåtekapasitet, og utbyttet svinger tilsvarende. Historikken viser klare svingninger: høyest utbytte var 28,99 NOK per aksje i 2023, lavest 8,85 NOK i 2022.",
       "beskrivelse_intro": "BW LPG eier og driver svært store gasstankskip, såkalte VLGC-er, som frakter flytende propan og butan over lange havstrekninger. Selskapet omtaler seg selv som verdens største eier og operatør av slike skip. Historien går tilbake til Bergesen-rederiet i Stavanger, som kom inn i gassfrakt i 1978. Sohmen-familien kjøpte flertallet i Bergesen i 2003, og virksomheten ble til BW. LPG-delen ble skilt ut og notert på Oslo Børs i 2013. I 2024 kom aksjen også på børsen i New York, selskapet flyttet sitt juridiske hjemsted fra Bermuda til Singapore, og det kjøpte tolv skip fra Avance Gas. BW Group er fortsatt største aksjonær.\n\nEn stor del av flåten kan gå på LPG som drivstoff. Ved siden av rederiet har BW LPG en handelsdel, Product Services, som kjøper og selger LPG-laster og sikrer prisene med derivater. Den lever av prisforskjeller mellom markeder, og det regnskapsførte resultatet kan svinge kraftig fra kvartal til kvartal fordi åpne posisjoner verdsettes til dagens priser. Selskapet eier også flertallet i BW LPG India, som frakter gass i indisk farvann.\n\nUtbyttet kommer hvert kvartal og regnes av overskuddet i shippingdelen, ikke av handelsdelen. Retningslinjen er halvparten av dette overskuddet, økt til tre firedeler eller hele overskuddet når netto gjeldsgrad er lav nok. Handelsdelen teller bare med gjennom det den sender videre til morselskapet. Styret kan dessuten justere for ekstraordinære poster, som gevinster når eldre skip selges. Utbyttet fastsettes i dollar og regnes om til kroner for aksjonærene på Oslo Børs, så kronebeløpet beveger seg også med valutakursen.",
       "beskrivelse_fakta": "BW LPG Limited er et investeringsholdingselskap som driver skipseie og befraktning globalt, delt i segmentene Shipping og Produkttjenester. Virksomheten omfatter transport av flytende petroleumsgass (LPG), integrerte LPG-leveransetjenester og forvaltningstjenester, engroshandel med LPG, samt investeringer i kommersielle virksomheter. Per 31. desember 2025 eide og drev selskapet 54 fartøy, blant dem 28 svært store gasstankere, 7 store gasstankere innleid på tidscerteparti og 8 VLGC-er eid av BW LPG India.",
       "valuta": "NOK",
       "ask_egnet": false,
       "inkorporeringsland": "Singapore",
       "data_kilde": "yahoo",
-      "utbyttehistorikk_tekst": "Utbyttet er samlet opp fra 8,86 til 12,45 kroner per aksje i 2022–2025, men veien dit gikk gjennom 2 kutt underveis. Spennet er stort: høyeste år er 3,3 ganger det laveste, så størrelsen på utbetalingen er lite forutsigbar fra år til år. Dagens yield på 10,4 % ligger over aksjens eget 5-årssnitt på 7,2 %.",
+      "utbyttehistorikk_tekst": "Utbyttet er samlet opp fra 8,85 til 12,43 kroner per aksje i 2022–2025, men veien dit gikk gjennom 2 kutt underveis. Spennet er stort: høyeste år er 3,3 ganger det laveste, så størrelsen på utbetalingen er lite forutsigbar fra år til år. Dagens yield på 10,3 % ligger over aksjens eget 5-årssnitt på 7,2 %.",
       "arsrate_kilde": "betalt_12m",
       "ask_status": "utenfor_eos"
     },
@@ -1482,6 +1493,7 @@
         2026
       ],
       "siste_utbytte": 5.7,
+      "siste_utbytte_dato": "2026-04-14",
       "utbytte_12m": 5.7,
       "utbytte_12m_antall": 1,
       "utbytte_12m_liste": [
@@ -1581,6 +1593,7 @@
       "ar_med_utbytte": 0,
       "utbytteaar": [],
       "siste_utbytte": 0.0,
+      "siste_utbytte_dato": null,
       "utbytte_12m": 0.0,
       "utbytte_12m_antall": 0,
       "utbytte_12m_liste": [],
@@ -1609,13 +1622,13 @@
       "pris": 499.0,
       "52u_hoy": 574.2,
       "52u_lav": 207.1,
-      "markedsverdi_mrd": 0.0,
-      "utbytte_per_aksje": 50.72,
-      "utbytte_yield": 10.17,
+      "markedsverdi_mrd": 111.1,
+      "utbytte_per_aksje": 50.64,
+      "utbytte_yield": 10.15,
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 47.0,
       "pe_ratio": 7.6,
-      "pb_ratio": 3.71,
+      "pb_ratio": 3.73,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-11-30",
@@ -1644,34 +1657,35 @@
         2025,
         2026
       ],
-      "siste_utbytte": 32.1507,
-      "utbytte_12m": 58.2673,
+      "siste_utbytte": 32.1,
+      "siste_utbytte_dato": "2026-09-17",
+      "utbytte_12m": 58.1754,
       "utbytte_12m_antall": 4,
       "utbytte_12m_liste": [
         {
           "ex_dato": "2025-12-11",
-          "belop": 1.7914
+          "belop": 1.7886
         },
         {
           "ex_dato": "2026-03-11",
-          "belop": 9.7112
+          "belop": 9.6959
         },
         {
           "ex_dato": "2026-06-11",
-          "belop": 14.614
+          "belop": 14.5909
         },
         {
           "ex_dato": "2026-09-17",
-          "belop": 32.1507
+          "belop": 32.1
         }
       ],
       "utbytte_supplert": [],
       "utbytte_per_ar": {
         "2021": 0.0,
-        "2022": 1.4143,
-        "2023": 27.0594,
-        "2024": 18.3853,
-        "2025": 8.7684
+        "2022": 1.412,
+        "2023": 27.0167,
+        "2024": 18.3563,
+        "2025": 8.7546
       },
       "utbytte_forste_ar": 2001,
       "historiske_utbytter": [
@@ -1685,8 +1699,8 @@
         },
         {
           "ar": 2023,
-          "utbytte": 27.06,
-          "yield": 5.42,
+          "utbytte": 27.02,
+          "yield": 5.41,
           "maaneder": [
             3,
             6,
@@ -1696,7 +1710,7 @@
         },
         {
           "ar": 2024,
-          "utbytte": 18.39,
+          "utbytte": 18.36,
           "yield": 3.68,
           "maaneder": [
             3,
@@ -1707,8 +1721,8 @@
         },
         {
           "ar": 2025,
-          "utbytte": 8.77,
-          "yield": 1.76,
+          "utbytte": 8.75,
+          "yield": 1.75,
           "maaneder": [
             3,
             6,
@@ -1718,8 +1732,8 @@
         },
         {
           "ar": 2026,
-          "utbytte": 56.48,
-          "yield": 11.32,
+          "utbytte": 56.39,
+          "yield": 11.3,
           "maaneder": [
             3,
             6,
@@ -1735,16 +1749,16 @@
       ],
       "snitt_yield_5ar": 2.23,
       "snitt_yield_ar": 5,
-      "beskrivelse": "Frontline eier tankskip for råolje og oljeprodukter i tre størrelser, fra de svære VLCC-ene ned til LR2/Aframax. Selskapet er registrert på Kypros, men den daglige driften ledes fra Oslo av Frontline Management AS. Juridisk hjemsted ble flyttet fra Bermuda til Kypros i desember 2022. Aksjen handles både i Oslo og i New York, og største aksjonær er Hemen Holding, som eies gjennom truster John Fredriksen har opprettet for familien sin.\n\nDet meste av flåten går i spotmarkedet, der inntekten følger dagraten tur for tur. I perioder med høye rater låser Frontline inn en del av inntekten ved å leie ut skip på tidscerteparti. Det gjorde selskapet med ettårige avtaler for flere VLCC-er i januar 2026, og med to- og treårige avtaler sommeren etter. Samtidig fornyes flåten. Tidlig i 2026 solgte Frontline flere av sine eldste VLCC-er og kjøpte nybyggkontrakter for moderne skip med scrubber fra et selskap tilknyttet Hemen. Kjøpet finansieres med kontanter og nye lån, og gevinsten fra salget av gamle skip er en engangspost.\n\nMålet er et kvartalsvis utbytte lik eller nær det justerte resultatet per aksje. Dermed speiler utbyttet fraktmarkedet nesten direkte og kan svinge kraftig fra ett kvartal til det neste. Salgsgevinster kan også gå rett tilbake til aksjonærene: etter salget av to VLCC-er høsten 2026 kom et engangsutbytte på toppen av kvartalsutbyttet. Utbyttet fastsettes i dollar. Lån finansierer en stor del av flåten, og renter og avdrag kommer før utdelingen. I 2026 forhandlet selskapet ned rentemarginen på flere av lånene.\n\nUtbyttet utbetales kvartalsvis — fire utbetalinger i året, og selskapet har holdt dette gående i 5 år på rad. Direkteavkastningen er 1,8 %, og 5-årssnittet på 2,2 % plasserer FRO i det lavere sjiktet av aksjene i sin sektor. Utbetalingsgraden på 47 % er lav og gir selskapet solid buffer til å opprettholde utbyttet ved svakere kvartaler.\n\nFraktrater varierer kraftig med globalt handelsmønster og flåtekapasitet, og utbyttet svinger tilsvarende. Historikken viser klare svingninger: høyest utbytte var 56,48 NOK per aksje i 2026, lavest 1,41 NOK i 2022.",
+      "beskrivelse": "Frontline eier tankskip for råolje og oljeprodukter i tre størrelser, fra de svære VLCC-ene ned til LR2/Aframax. Selskapet er registrert på Kypros, men den daglige driften ledes fra Oslo av Frontline Management AS. Juridisk hjemsted ble flyttet fra Bermuda til Kypros i desember 2022. Aksjen handles både i Oslo og i New York, og største aksjonær er Hemen Holding, som eies gjennom truster John Fredriksen har opprettet for familien sin.\n\nDet meste av flåten går i spotmarkedet, der inntekten følger dagraten tur for tur. I perioder med høye rater låser Frontline inn en del av inntekten ved å leie ut skip på tidscerteparti. Det gjorde selskapet med ettårige avtaler for flere VLCC-er i januar 2026, og med to- og treårige avtaler sommeren etter. Samtidig fornyes flåten. Tidlig i 2026 solgte Frontline flere av sine eldste VLCC-er og kjøpte nybyggkontrakter for moderne skip med scrubber fra et selskap tilknyttet Hemen. Kjøpet finansieres med kontanter og nye lån, og gevinsten fra salget av gamle skip er en engangspost.\n\nMålet er et kvartalsvis utbytte lik eller nær det justerte resultatet per aksje. Dermed speiler utbyttet fraktmarkedet nesten direkte og kan svinge kraftig fra ett kvartal til det neste. Salgsgevinster kan også gå rett tilbake til aksjonærene: etter salget av to VLCC-er høsten 2026 kom et engangsutbytte på toppen av kvartalsutbyttet. Utbyttet fastsettes i dollar. Lån finansierer en stor del av flåten, og renter og avdrag kommer før utdelingen. I 2026 forhandlet selskapet ned rentemarginen på flere av lånene. Selskapet er notert på Oslo Børs med en markedsverdi på rundt 111 milliarder kroner og er ett av de største børsnoterte selskapene i Norge.\n\nUtbyttet utbetales kvartalsvis — fire utbetalinger i året, og selskapet har holdt dette gående i 5 år på rad. Direkteavkastningen er 1,8 %, og 5-årssnittet på 2,2 % plasserer FRO i det lavere sjiktet av aksjene i sin sektor. Utbetalingsgraden på 47 % er lav og gir selskapet solid buffer til å opprettholde utbyttet ved svakere kvartaler.\n\nFraktrater varierer kraftig med globalt handelsmønster og flåtekapasitet, og utbyttet svinger tilsvarende. Historikken viser klare svingninger: høyest utbytte var 56,39 NOK per aksje i 2026, lavest 1,41 NOK i 2022.",
       "beskrivelse_intro": "Frontline eier tankskip for råolje og oljeprodukter i tre størrelser, fra de svære VLCC-ene ned til LR2/Aframax. Selskapet er registrert på Kypros, men den daglige driften ledes fra Oslo av Frontline Management AS. Juridisk hjemsted ble flyttet fra Bermuda til Kypros i desember 2022. Aksjen handles både i Oslo og i New York, og største aksjonær er Hemen Holding, som eies gjennom truster John Fredriksen har opprettet for familien sin.\n\nDet meste av flåten går i spotmarkedet, der inntekten følger dagraten tur for tur. I perioder med høye rater låser Frontline inn en del av inntekten ved å leie ut skip på tidscerteparti. Det gjorde selskapet med ettårige avtaler for flere VLCC-er i januar 2026, og med to- og treårige avtaler sommeren etter. Samtidig fornyes flåten. Tidlig i 2026 solgte Frontline flere av sine eldste VLCC-er og kjøpte nybyggkontrakter for moderne skip med scrubber fra et selskap tilknyttet Hemen. Kjøpet finansieres med kontanter og nye lån, og gevinsten fra salget av gamle skip er en engangspost.\n\nMålet er et kvartalsvis utbytte lik eller nær det justerte resultatet per aksje. Dermed speiler utbyttet fraktmarkedet nesten direkte og kan svinge kraftig fra ett kvartal til det neste. Salgsgevinster kan også gå rett tilbake til aksjonærene: etter salget av to VLCC-er høsten 2026 kom et engangsutbytte på toppen av kvartalsutbyttet. Utbyttet fastsettes i dollar. Lån finansierer en stor del av flåten, og renter og avdrag kommer før utdelingen. I 2026 forhandlet selskapet ned rentemarginen på flere av lånene.",
       "beskrivelse_fakta": "Frontline plc er et rederi som eier og driver råolje- og produkttankere globalt, herunder svært store råoljetankere (VLCC), Suezmax-tankere og LR2/Aframax-tankere. Per 31. desember 2025 opererte selskapet 80 fartøy, fordelt på 41 VLCC-er, 21 Suezmax-tankere og 18 LR2/Aframax-tankere. Frontline driver også befraktning samt kjøp og salg av fartøy. Selskapet ble stiftet i 1985 og har base i Limassol på Kypros.",
       "valuta": "NOK",
       "ask_egnet": true,
       "inkorporeringsland": "Kypros",
       "data_kilde": "yahoo",
-      "utbyttehistorikk_tekst": "Utbyttet er samlet opp fra 1,41 til 8,77 kroner per aksje i 2022–2025, men veien dit gikk gjennom 2 kutt underveis. Spennet er stort: høyeste år er 19,2 ganger det laveste, så størrelsen på utbetalingen er lite forutsigbar fra år til år. Dagens yield på 10,2 % ligger over aksjens eget 5-årssnitt på 2,2 %.",
+      "utbyttehistorikk_tekst": "Utbyttet er samlet opp fra 1,41 til 8,75 kroner per aksje i 2022–2025, men veien dit gikk gjennom 2 kutt underveis. Spennet er stort: høyeste år er 19,2 ganger det laveste, så størrelsen på utbetalingen er lite forutsigbar fra år til år. Dagens yield på 10,2 % ligger over aksjens eget 5-årssnitt på 2,2 %.",
       "arsrate_kilde": "betalt_12m",
-      "arsrate_ekstra_trukket": 7.54,
+      "arsrate_ekstra_trukket": 7.53,
       "ask_status": "ja"
     },
     {
@@ -1794,6 +1808,7 @@
         2026
       ],
       "siste_utbytte": 8.5,
+      "siste_utbytte_dato": "2026-03-27",
       "utbytte_12m": 8.5,
       "utbytte_12m_antall": 1,
       "utbytte_12m_liste": [
@@ -1883,7 +1898,7 @@
       "utbytte_vekst_5ar": 59.7,
       "payout_ratio": 94.0,
       "pe_ratio": 16.57,
-      "pb_ratio": 2.41,
+      "pb_ratio": 2.43,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-11-19",
@@ -1908,6 +1923,7 @@
         2026
       ],
       "siste_utbytte": 13.0,
+      "siste_utbytte_dato": "2026-05-20",
       "utbytte_12m": 19.5,
       "utbytte_12m_antall": 2,
       "utbytte_12m_liste": [
@@ -2003,7 +2019,7 @@
       "utbytte_vekst_5ar": 60.7,
       "payout_ratio": 22.0,
       "pe_ratio": 7.3,
-      "pb_ratio": 1.11,
+      "pb_ratio": 1.12,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-11-04",
@@ -2039,6 +2055,7 @@
         2026
       ],
       "siste_utbytte": 20.0,
+      "siste_utbytte_dato": "2026-05-04",
       "utbytte_12m": 28.0,
       "utbytte_12m_antall": 2,
       "utbytte_12m_liste": [
@@ -2158,6 +2175,7 @@
         2023
       ],
       "siste_utbytte": 1.94,
+      "siste_utbytte_dato": "2023-04-19",
       "utbytte_12m": 0,
       "utbytte_12m_antall": 0,
       "utbytte_12m_liste": [],
@@ -2244,6 +2262,7 @@
         2026
       ],
       "siste_utbytte": 6.5,
+      "siste_utbytte_dato": "2026-05-29",
       "utbytte_12m": 6.5,
       "utbytte_12m_antall": 1,
       "utbytte_12m_liste": [
@@ -2365,6 +2384,7 @@
         2026
       ],
       "siste_utbytte": 2.5,
+      "siste_utbytte_dato": "2026-05-28",
       "utbytte_12m": 2.5,
       "utbytte_12m_antall": 1,
       "utbytte_12m_liste": [
@@ -2453,7 +2473,7 @@
       "utbytte_vekst_5ar": 28.1,
       "payout_ratio": 24.0,
       "pe_ratio": 20.88,
-      "pb_ratio": 1.67,
+      "pb_ratio": 1.68,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-11-02",
@@ -2477,6 +2497,7 @@
         2026
       ],
       "siste_utbytte": 5.0564,
+      "siste_utbytte_dato": "2026-05-04",
       "utbytte_12m": 5.0564,
       "utbytte_12m_antall": 1,
       "utbytte_12m_liste": [
@@ -2560,12 +2581,12 @@
       "52u_hoy": 106.0,
       "52u_lav": 51.7,
       "markedsverdi_mrd": 50.8,
-      "utbytte_per_aksje": 10.48,
-      "utbytte_yield": 11.05,
+      "utbytte_per_aksje": 10.46,
+      "utbytte_yield": 11.03,
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 57.0,
       "pe_ratio": 7.47,
-      "pb_ratio": 1.88,
+      "pb_ratio": 1.9,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-11-18",
@@ -2579,34 +2600,35 @@
         2025,
         2026
       ],
-      "siste_utbytte": 4.7174,
-      "utbytte_12m": 10.4776,
+      "siste_utbytte": 4.7096,
+      "siste_utbytte_dato": "2026-09-07",
+      "utbytte_12m": 10.4603,
       "utbytte_12m_antall": 4,
       "utbytte_12m_liste": [
         {
           "ex_dato": "2025-12-08",
-          "belop": 1.3861
+          "belop": 1.3838
         },
         {
           "ex_dato": "2026-03-05",
-          "belop": 1.6614
+          "belop": 1.6587
         },
         {
           "ex_dato": "2026-06-03",
-          "belop": 2.7128
+          "belop": 2.7083
         },
         {
           "ex_dato": "2026-09-07",
-          "belop": 4.7174
+          "belop": 4.7096
         }
       ],
       "utbytte_supplert": [],
       "utbytte_per_ar": {
         "2021": 0.0,
-        "2022": 4.5948,
-        "2023": 10.1467,
-        "2024": 12.9301,
-        "2025": 3.7613
+        "2022": 4.5872,
+        "2023": 10.1299,
+        "2024": 12.9087,
+        "2025": 3.755
       },
       "utbytte_forste_ar": 2020,
       "historiske_utbytter": [
@@ -2622,8 +2644,8 @@
         },
         {
           "ar": 2023,
-          "utbytte": 10.15,
-          "yield": 10.7,
+          "utbytte": 10.13,
+          "yield": 10.68,
           "maaneder": [
             3,
             5,
@@ -2633,8 +2655,8 @@
         },
         {
           "ar": 2024,
-          "utbytte": 12.93,
-          "yield": 13.63,
+          "utbytte": 12.91,
+          "yield": 13.61,
           "maaneder": [
             3,
             5,
@@ -2645,7 +2667,7 @@
         {
           "ar": 2025,
           "utbytte": 3.76,
-          "yield": 3.97,
+          "yield": 3.96,
           "maaneder": [
             3,
             5,
@@ -2655,8 +2677,8 @@
         },
         {
           "ar": 2026,
-          "utbytte": 9.09,
-          "yield": 9.59,
+          "utbytte": 9.08,
+          "yield": 9.57,
           "maaneder": [
             3,
             6,
@@ -2670,16 +2692,16 @@
         9,
         12
       ],
-      "snitt_yield_5ar": 6.63,
+      "snitt_yield_5ar": 6.62,
       "snitt_yield_ar": 5,
-      "beskrivelse": "Hafnia eier og driver produkttankskip som frakter bensin, diesel, flydrivstoff og andre raffinerte oljeprodukter, i tillegg til vegetabilske oljer og enkle kjemikalier. Selskapet fikk dagens form i 2019, da Hafnia Tankers og BW Tankers ble slått sammen. Aksjen kom på Oslo Axess samme høst, ble flyttet til Oslo Børs i 2020 og handles i dag også i New York. Hovedkontoret ligger i Singapore, og i 2024 flyttet selskapet også sitt juridiske hjemsted dit fra Bermuda. Største eier er BW Group, som kontrolleres av familien Sohmen.\n\nEn stor del av flåten går i spotmarkedet eller i pooler som Hafnia selv driver, der også skip eid av andre rederier seiler. Det gir honorarer for poolforvaltning og drivstoffinnkjøp ved siden av fraktinntektene, men resultatet følger likevel dagens rater tett. Fra slutten av 2025 har Hafnia også bygget opp en stor minoritetspost i TORM, et annet produkttankrederi, og selskapet har sagt at det ser logikken i konsolidering i bransjen.\n\nUtbyttet kommer hvert kvartal og er en fast andel av nettoresultatet, justert for ekstraordinære poster. Hvor stor andelen er, avhenger av gjelden. Jo lavere netto belåning målt mot verdien av skipene og TORM-aksjene, jo mer av overskuddet deles ut, fra halvparten når gjelden er høy til ni tideler når den er lav. Utbyttet svinger dermed både med fraktratene og med skipsverdiene. Fra 2027 regnes også forpliktelser til nybygg inn i belåningen. Utbyttet fastsettes i dollar, så beløpet i kroner beveger seg med valutakursen, og låneavtalene kan stanse utdelinger hvis vilkårene i dem brytes. Aksjen er notert på Oslo Børs med en markedsverdi på rundt 51 milliarder kroner.\n\nUtbyttet utbetales kvartalsvis — fire utbetalinger i året, og selskapet har holdt dette gående i 5 år på rad. Direkteavkastningen er 4,0 %, og 5-årssnittet på 6,6 % plasserer HAFNI i det lavere sjiktet av aksjene i sin sektor. Utbetalingsgraden er 57 %, noe som er balansert for en moden utbytteaksje.\n\nFraktrater varierer kraftig med globalt handelsmønster og flåtekapasitet, og utbyttet svinger tilsvarende. Historikken viser klare svingninger: høyest utbytte var 12,93 NOK per aksje i 2024, lavest 3,76 NOK i 2025.",
+      "beskrivelse": "Hafnia eier og driver produkttankskip som frakter bensin, diesel, flydrivstoff og andre raffinerte oljeprodukter, i tillegg til vegetabilske oljer og enkle kjemikalier. Selskapet fikk dagens form i 2019, da Hafnia Tankers og BW Tankers ble slått sammen. Aksjen kom på Oslo Axess samme høst, ble flyttet til Oslo Børs i 2020 og handles i dag også i New York. Hovedkontoret ligger i Singapore, og i 2024 flyttet selskapet også sitt juridiske hjemsted dit fra Bermuda. Største eier er BW Group, som kontrolleres av familien Sohmen.\n\nEn stor del av flåten går i spotmarkedet eller i pooler som Hafnia selv driver, der også skip eid av andre rederier seiler. Det gir honorarer for poolforvaltning og drivstoffinnkjøp ved siden av fraktinntektene, men resultatet følger likevel dagens rater tett. Fra slutten av 2025 har Hafnia også bygget opp en stor minoritetspost i TORM, et annet produkttankrederi, og selskapet har sagt at det ser logikken i konsolidering i bransjen.\n\nUtbyttet kommer hvert kvartal og er en fast andel av nettoresultatet, justert for ekstraordinære poster. Hvor stor andelen er, avhenger av gjelden. Jo lavere netto belåning målt mot verdien av skipene og TORM-aksjene, jo mer av overskuddet deles ut, fra halvparten når gjelden er høy til ni tideler når den er lav. Utbyttet svinger dermed både med fraktratene og med skipsverdiene. Fra 2027 regnes også forpliktelser til nybygg inn i belåningen. Utbyttet fastsettes i dollar, så beløpet i kroner beveger seg med valutakursen, og låneavtalene kan stanse utdelinger hvis vilkårene i dem brytes. Aksjen er notert på Oslo Børs med en markedsverdi på rundt 51 milliarder kroner.\n\nUtbyttet utbetales kvartalsvis — fire utbetalinger i året, og selskapet har holdt dette gående i 5 år på rad. Direkteavkastningen er 4,0 %, og 5-årssnittet på 6,6 % plasserer HAFNI i det lavere sjiktet av aksjene i sin sektor. Utbetalingsgraden er 57 %, noe som er balansert for en moden utbytteaksje.\n\nFraktrater varierer kraftig med globalt handelsmønster og flåtekapasitet, og utbyttet svinger tilsvarende. Historikken viser klare svingninger: høyest utbytte var 12,91 NOK per aksje i 2024, lavest 3,76 NOK i 2025.",
       "beskrivelse_intro": "Hafnia eier og driver produkttankskip som frakter bensin, diesel, flydrivstoff og andre raffinerte oljeprodukter, i tillegg til vegetabilske oljer og enkle kjemikalier. Selskapet fikk dagens form i 2019, da Hafnia Tankers og BW Tankers ble slått sammen. Aksjen kom på Oslo Axess samme høst, ble flyttet til Oslo Børs i 2020 og handles i dag også i New York. Hovedkontoret ligger i Singapore, og i 2024 flyttet selskapet også sitt juridiske hjemsted dit fra Bermuda. Største eier er BW Group, som kontrolleres av familien Sohmen.\n\nEn stor del av flåten går i spotmarkedet eller i pooler som Hafnia selv driver, der også skip eid av andre rederier seiler. Det gir honorarer for poolforvaltning og drivstoffinnkjøp ved siden av fraktinntektene, men resultatet følger likevel dagens rater tett. Fra slutten av 2025 har Hafnia også bygget opp en stor minoritetspost i TORM, et annet produkttankrederi, og selskapet har sagt at det ser logikken i konsolidering i bransjen.\n\nUtbyttet kommer hvert kvartal og er en fast andel av nettoresultatet, justert for ekstraordinære poster. Hvor stor andelen er, avhenger av gjelden. Jo lavere netto belåning målt mot verdien av skipene og TORM-aksjene, jo mer av overskuddet deles ut, fra halvparten når gjelden er høy til ni tideler når den er lav. Utbyttet svinger dermed både med fraktratene og med skipsverdiene. Fra 2027 regnes også forpliktelser til nybygg inn i belåningen. Utbyttet fastsettes i dollar, så beløpet i kroner beveger seg med valutakursen, og låneavtalene kan stanse utdelinger hvis vilkårene i dem brytes.",
       "beskrivelse_fakta": "Hafnia Limited eier og driver produkttankere for oljeprodukter, med base på Bermuda. Virksomheten er delt i segmentene Long Range II, Long Range I, Medium Range, Handy size og Spesialiserte fartøy. Selskapet frakter rene og urene raffinerte oljeprodukter, vegetabilsk olje og enkle kjemikalier for nasjonale og internasjonale oljeselskaper, kjemikalieselskaper samt handels- og forsyningsselskaper, og opererer 207 fartøy. Hafnia leverer også skipseie, skipsforvaltning, investerings- og forvaltningstjenester, selskapsstøtte, agenturtjenester og befraktning.",
       "valuta": "NOK",
       "ask_egnet": false,
       "inkorporeringsland": "Singapore",
       "data_kilde": "yahoo",
-      "utbyttehistorikk_tekst": "Utbyttet er lavere nå enn i 2022 — ned fra 4,59 til 3,76 kroner per aksje, med 1 nedgangsår i perioden. Spennet er stort: høyeste år er 3,4 ganger det laveste, så størrelsen på utbetalingen er lite forutsigbar fra år til år. Dagens yield på 11,1 % ligger over aksjens eget 5-årssnitt på 6,6 %.",
+      "utbyttehistorikk_tekst": "Utbyttet er lavere nå enn i 2022 — ned fra 4,59 til 3,76 kroner per aksje, med 1 nedgangsår i perioden. Spennet er stort: høyeste år er 3,4 ganger det laveste, så størrelsen på utbetalingen er lite forutsigbar fra år til år. Dagens yield på 11,0 % ligger over aksjens eget 5-årssnitt på 6,6 %.",
       "arsrate_kilde": "betalt_12m",
       "ask_status": "utenfor_eos"
     },
@@ -2696,7 +2718,7 @@
       "utbytte_yield": 6.26,
       "utbytte_vekst_5ar": 18.6,
       "payout_ratio": 73.0,
-      "pe_ratio": 11.71,
+      "pe_ratio": 11.73,
       "pb_ratio": 1.1,
       "ex_dato": null,
       "betaling_dato": null,
@@ -2733,6 +2755,7 @@
         2026
       ],
       "siste_utbytte": 13.5,
+      "siste_utbytte_dato": "2026-03-27",
       "utbytte_12m": 13.5,
       "utbytte_12m_antall": 1,
       "utbytte_12m_liste": [
@@ -2820,7 +2843,7 @@
       "utbytte_yield": 6.38,
       "utbytte_vekst_5ar": 19.7,
       "payout_ratio": 73.0,
-      "pe_ratio": 11.38,
+      "pe_ratio": 11.37,
       "pb_ratio": 1.09,
       "ex_dato": null,
       "betaling_dato": null,
@@ -2839,6 +2862,7 @@
         2026
       ],
       "siste_utbytte": 12.7,
+      "siste_utbytte_dato": "2026-03-27",
       "utbytte_12m": 12.7,
       "utbytte_12m_antall": 1,
       "utbytte_12m_liste": [
@@ -2963,6 +2987,7 @@
         2026
       ],
       "siste_utbytte": 6.5,
+      "siste_utbytte_dato": "2026-05-15",
       "utbytte_12m": 10.5,
       "utbytte_12m_antall": 2,
       "utbytte_12m_liste": [
@@ -3050,14 +3075,14 @@
       "bors": "Oslo Børs",
       "pris": 104.8,
       "52u_hoy": 112.0,
-      "52u_lav": 73.6,
+      "52u_lav": 75.0,
       "markedsverdi_mrd": 25.1,
       "utbytte_per_aksje": 8.89,
       "utbytte_yield": 8.48,
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 92.0,
       "pe_ratio": 11.09,
-      "pb_ratio": 1.84,
+      "pb_ratio": 1.85,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-11-03",
@@ -3071,6 +3096,7 @@
         2026
       ],
       "siste_utbytte": 2.334,
+      "siste_utbytte_dato": "2026-09-03",
       "utbytte_12m": 8.8928,
       "utbytte_12m_antall": 4,
       "utbytte_12m_liste": [
@@ -3095,7 +3121,7 @@
       "utbytte_per_ar": {
         "2021": 0.0,
         "2022": 0.0,
-        "2023": 1.1315,
+        "2023": 1.1296,
         "2024": 2.5732,
         "2025": 6.828
       },
@@ -3211,6 +3237,7 @@
         2026
       ],
       "siste_utbytte": 11.25,
+      "siste_utbytte_dato": "2026-05-07",
       "utbytte_12m": 11.25,
       "utbytte_12m_antall": 1,
       "utbytte_12m_liste": [
@@ -3292,7 +3319,7 @@
       "bors": "Oslo Børs",
       "pris": 1260.0,
       "52u_hoy": 1638.0,
-      "52u_lav": 708.0,
+      "52u_lav": 718.0,
       "markedsverdi_mrd": 92.9,
       "utbytte_per_aksje": 58.0,
       "utbytte_yield": 4.6,
@@ -3330,6 +3357,7 @@
         2026
       ],
       "siste_utbytte": 29.0,
+      "siste_utbytte_dato": "2026-04-23",
       "utbytte_12m": 55.5,
       "utbytte_12m_antall": 2,
       "utbytte_12m_liste": [
@@ -3425,7 +3453,7 @@
       "utbytte_vekst_5ar": 23.7,
       "payout_ratio": 44.0,
       "pe_ratio": 12.26,
-      "pb_ratio": 0.74,
+      "pb_ratio": 0.75,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-11-25",
@@ -3445,34 +3473,35 @@
         2025,
         2026
       ],
-      "siste_utbytte": 0.5893,
-      "utbytte_12m": 3.4933,
+      "siste_utbytte": 0.5883,
+      "siste_utbytte_dato": "2026-08-27",
+      "utbytte_12m": 3.4877,
       "utbytte_12m_antall": 4,
       "utbytte_12m_liste": [
         {
           "ex_dato": "2025-11-19",
-          "belop": 0.5893
+          "belop": 0.5883
         },
         {
           "ex_dato": "2026-03-04",
-          "belop": 1.7254
+          "belop": 1.7227
         },
         {
           "ex_dato": "2026-05-21",
-          "belop": 0.5893
+          "belop": 0.5883
         },
         {
           "ex_dato": "2026-08-27",
-          "belop": 0.5893
+          "belop": 0.5883
         }
       ],
       "utbytte_supplert": [],
       "utbytte_per_ar": {
-        "2021": 1.32,
-        "2022": 1.32,
-        "2023": 1.32,
-        "2024": 2.5976,
-        "2025": 3.0879
+        "2021": 1.3179,
+        "2022": 1.3179,
+        "2023": 1.3179,
+        "2024": 2.5934,
+        "2025": 3.0829
       },
       "utbytte_forste_ar": 2011,
       "historiske_utbytter": [
@@ -3500,8 +3529,8 @@
         },
         {
           "ar": 2024,
-          "utbytte": 2.6,
-          "yield": 6.4,
+          "utbytte": 2.59,
+          "yield": 6.39,
           "maaneder": [
             3,
             5,
@@ -3511,8 +3540,8 @@
         },
         {
           "ar": 2025,
-          "utbytte": 3.09,
-          "yield": 7.61,
+          "utbytte": 3.08,
+          "yield": 7.59,
           "maaneder": [
             3,
             6,
@@ -3523,7 +3552,7 @@
         {
           "ar": 2026,
           "utbytte": 2.9,
-          "yield": 7.15,
+          "yield": 7.14,
           "maaneder": [
             3,
             5,
@@ -3537,16 +3566,16 @@
         9,
         11
       ],
-      "snitt_yield_5ar": 4.75,
+      "snitt_yield_5ar": 4.74,
       "snitt_yield_ar": 5,
-      "beskrivelse": "BW Offshore eier og driver flytende produksjonsskip, såkalte FPSO-er, for oljeselskaper. Selskapet er registrert på Bermuda, og rederigruppen BW Group er største eier. Flåten i drift er liten, så hvert skip betyr mye. BW Catcher produserer for Harbour Energy på britisk sokkel og har kontrakt ut 2030. BW Adolo ligger i Gabon for BW Energy, et annet selskap i BW-gruppen. BW Opal produserer gass for Santos på Barossa-feltet utenfor Australia. Ved siden av eier BW Offshore det meste av BW Ideol, som utvikler flytende fundamenter for havvind, og har sammen med BW Group startet BW Elara, som skal bygge flytende anlegg for avsalting av sjøvann.\n\nBW Opal avgjør mye av de neste årene. Skipet kom i produksjon i 2025, men den faste kontrakten på 15 år begynner først når anlegget er godkjent som ferdig. Den datoen er flyttet til andre kvartal 2027, fordi utstyr fra en underleverandør må skiftes ut. Fram til da får BW Offshore betalt etter hvor mye som produseres, og forsinkelsen ga en stor nedskrivning sommeren 2026. Samtidig forprosjekterer selskapet et produksjonsskip for Equinors Bay du Nord-felt utenfor Canada. I desember 2025 bekreftet BW Offshore at det vurderer strategiske alternativer etter interesse utenfra, men den prosessen er også forsinket av BW Opal.\n\nUtbyttet fastsettes i dollar hvert kvartal. I 2025 kom tre like kvartalsutbytter og et større for fjerde kvartal, slik at året samlet ble halvparten av resultatet. Hvor mye som kan deles ut framover, avhenger av når BW Opal går over på den faste dagraten, og av hvor mye kapital et nytt skip til Bay du Nord vil kreve.\n\nUtbyttet utbetales kvartalsvis — fire utbetalinger i året, og selskapet har holdt dette gående i 7 år på rad. Direkteavkastningen er 8,8 %, og 5-årssnittet på 4,8 % plasserer BWO blant de høyest-yielding aksjene i sin sektor. Utbetalingsgraden på 44 % er lav og gir selskapet solid buffer til å opprettholde utbyttet ved svakere kvartaler. Utbyttet har vokst med i snitt 23,7 % per år de siste fem årene.",
+      "beskrivelse": "BW Offshore eier og driver flytende produksjonsskip, såkalte FPSO-er, for oljeselskaper. Selskapet er registrert på Bermuda, og rederigruppen BW Group er største eier. Flåten i drift er liten, så hvert skip betyr mye. BW Catcher produserer for Harbour Energy på britisk sokkel og har kontrakt ut 2030. BW Adolo ligger i Gabon for BW Energy, et annet selskap i BW-gruppen. BW Opal produserer gass for Santos på Barossa-feltet utenfor Australia. Ved siden av eier BW Offshore det meste av BW Ideol, som utvikler flytende fundamenter for havvind, og har sammen med BW Group startet BW Elara, som skal bygge flytende anlegg for avsalting av sjøvann.\n\nBW Opal avgjør mye av de neste årene. Skipet kom i produksjon i 2025, men den faste kontrakten på 15 år begynner først når anlegget er godkjent som ferdig. Den datoen er flyttet til andre kvartal 2027, fordi utstyr fra en underleverandør må skiftes ut. Fram til da får BW Offshore betalt etter hvor mye som produseres, og forsinkelsen ga en stor nedskrivning sommeren 2026. Samtidig forprosjekterer selskapet et produksjonsskip for Equinors Bay du Nord-felt utenfor Canada. I desember 2025 bekreftet BW Offshore at det vurderer strategiske alternativer etter interesse utenfra, men den prosessen er også forsinket av BW Opal.\n\nUtbyttet fastsettes i dollar hvert kvartal. I 2025 kom tre like kvartalsutbytter og et større for fjerde kvartal, slik at året samlet ble halvparten av resultatet. Hvor mye som kan deles ut framover, avhenger av når BW Opal går over på den faste dagraten, og av hvor mye kapital et nytt skip til Bay du Nord vil kreve.\n\nUtbyttet utbetales kvartalsvis — fire utbetalinger i året, og selskapet har holdt dette gående i 7 år på rad. Direkteavkastningen er 8,8 %, og 5-årssnittet på 4,7 % plasserer BWO blant de høyest-yielding aksjene i sin sektor. Utbetalingsgraden på 44 % er lav og gir selskapet solid buffer til å opprettholde utbyttet ved svakere kvartaler. Utbyttet har vokst med i snitt 23,7 % per år de siste fem årene.",
       "beskrivelse_intro": "BW Offshore eier og driver flytende produksjonsskip, såkalte FPSO-er, for oljeselskaper. Selskapet er registrert på Bermuda, og rederigruppen BW Group er største eier. Flåten i drift er liten, så hvert skip betyr mye. BW Catcher produserer for Harbour Energy på britisk sokkel og har kontrakt ut 2030. BW Adolo ligger i Gabon for BW Energy, et annet selskap i BW-gruppen. BW Opal produserer gass for Santos på Barossa-feltet utenfor Australia. Ved siden av eier BW Offshore det meste av BW Ideol, som utvikler flytende fundamenter for havvind, og har sammen med BW Group startet BW Elara, som skal bygge flytende anlegg for avsalting av sjøvann.\n\nBW Opal avgjør mye av de neste årene. Skipet kom i produksjon i 2025, men den faste kontrakten på 15 år begynner først når anlegget er godkjent som ferdig. Den datoen er flyttet til andre kvartal 2027, fordi utstyr fra en underleverandør må skiftes ut. Fram til da får BW Offshore betalt etter hvor mye som produseres, og forsinkelsen ga en stor nedskrivning sommeren 2026. Samtidig forprosjekterer selskapet et produksjonsskip for Equinors Bay du Nord-felt utenfor Canada. I desember 2025 bekreftet BW Offshore at det vurderer strategiske alternativer etter interesse utenfra, men den prosessen er også forsinket av BW Opal.\n\nUtbyttet fastsettes i dollar hvert kvartal. I 2025 kom tre like kvartalsutbytter og et større for fjerde kvartal, slik at året samlet ble halvparten av resultatet. Hvor mye som kan deles ut framover, avhenger av når BW Opal går over på den faste dagraten, og av hvor mye kapital et nytt skip til Bay du Nord vil kreve.",
       "beskrivelse_fakta": "BW Offshore Limited prosjekterer offshore produksjonsløsninger i Amerika, Europa, Afrika, Asia og Stillehavsregionen, gjennom segmentene Flytende produksjon, lagring og lossing (FPSO) og Flytende vindkraft. Selskapet bygger, leier ut og drifter FPSO-er samt flytende havvind. BW Offshore ble grunnlagt i 1982 og har base i Hamilton på Bermuda.",
       "valuta": "NOK",
       "ask_egnet": false,
       "inkorporeringsland": "Bermuda",
       "data_kilde": "yahoo",
-      "utbyttehistorikk_tekst": "Utbyttet har steget uten et eneste kutt fra 2022–2025, fra 1,32 til 3,09 kroner per aksje. Samlet er utbetalingen 2,3-doblet i perioden. Dagens yield på 8,8 % ligger over aksjens eget 5-årssnitt på 4,8 %.",
+      "utbyttehistorikk_tekst": "Utbyttet har steget uten et eneste kutt fra 2022–2025, fra 1,32 til 3,08 kroner per aksje. Samlet er utbetalingen 2,3-doblet i perioden. Dagens yield på 8,8 % ligger over aksjens eget 5-årssnitt på 4,7 %.",
       "ask_status": "utenfor_eos"
     },
     {
@@ -3557,7 +3586,7 @@
       "pris": 263.6,
       "52u_hoy": 303.0,
       "52u_lav": 241.4,
-      "markedsverdi_mrd": 0.0,
+      "markedsverdi_mrd": 131.8,
       "utbytte_per_aksje": 10.0,
       "utbytte_yield": 3.79,
       "utbytte_vekst_5ar": 9.1,
@@ -3588,6 +3617,7 @@
         2026
       ],
       "siste_utbytte": 14.5,
+      "siste_utbytte_dato": "2026-03-27",
       "utbytte_12m": 14.5,
       "utbytte_12m_antall": 1,
       "utbytte_12m_liste": [
@@ -3652,7 +3682,7 @@
       ],
       "snitt_yield_5ar": 3.68,
       "snitt_yield_ar": 5,
-      "beskrivelse": "Gjensidige ble opprettet som et kundeeid forsikringsselskap, og det preger eierskapet fortsatt. Største eier er Gjensidigestiftelsen, som etter vedtektene sender utbyttet knyttet til årets resultat videre til skadeforsikringskundene i Norge. Norske kunder har fått et slikt kundeutbytte hvert år siden børsnoteringen i 2010. For en vanlig aksjonær betyr det at storparten av det regulære utbyttet går til en eier som sender pengene videre, og som har som mål å eie godt over halvparten av aksjene over tid. Ordningen er også en del av forretningsmodellen, fordi kundeutbyttet gir kundene en grunn til å bli.\n\nInntektene kommer i hovedsak fra skadeforsikring til privatpersoner, bedrifter, landbruk og offentlig sektor i Norge og Danmark. I Sverige er Gjensidige mindre og utfordrer de etablerte selskapene. Bil, bolig, reise og personforsikring er de største produktene. Virksomheten i Baltikum ble solgt til ERGO, og salget ble fullført i januar 2026. Ved siden av forsikringen tilbyr et datterselskap innskuddspensjon og sparing i Norge, og Gjensidige Mobility Group eier bilbergingsselskapet REDGO og Flyt, som administrerer bompengeinnkreving.\n\nUtbyttepolitikken har to deler. Det regulære utbyttet skal vokse over tid og utgjøre minst fire femdeler av resultatet etter skatt. Er kapitalen større enn selskapet trenger, deles overskuddet ut i tillegg som et særskilt utbytte, slik det ble gjort for regnskapsåret 2025. Hvor mye som er overskudd, avgjøres av solvenskravene for forsikringsselskaper, og den gangen måtte Finanstilsynet godkjenne utdelingen før generalforsamlingen stemte over den. Resultatet har to kilder: forsikringsdriften, der erstatninger og kostnader skal være lavere enn premiene, og avkastningen på pengene selskapet har investert.\n\nUtbyttet utbetales én gang i året, og selskapet har holdt dette gående i 16 år på rad. Direkteavkastningen er 3,8 %, og 5-årssnittet på 3,7 % plasserer GJF i det lavere sjiktet av aksjene i sin sektor. Utbetalingsgraden er 78 %, noe som er balansert for en moden utbytteaksje. Utbyttet har vokst med i snitt 9,1 % per år de siste fem årene.\n\nRentenivå og kredittap påvirker inntjeningen, mens regulatoriske kapitalkrav setter rammer for hva som kan deles ut. Historikken viser klare svingninger: høyest utbytte var 14,50 NOK per aksje i 2026, lavest 7,70 NOK i 2022.",
+      "beskrivelse": "Gjensidige ble opprettet som et kundeeid forsikringsselskap, og det preger eierskapet fortsatt. Største eier er Gjensidigestiftelsen, som etter vedtektene sender utbyttet knyttet til årets resultat videre til skadeforsikringskundene i Norge. Norske kunder har fått et slikt kundeutbytte hvert år siden børsnoteringen i 2010. For en vanlig aksjonær betyr det at storparten av det regulære utbyttet går til en eier som sender pengene videre, og som har som mål å eie godt over halvparten av aksjene over tid. Ordningen er også en del av forretningsmodellen, fordi kundeutbyttet gir kundene en grunn til å bli.\n\nInntektene kommer i hovedsak fra skadeforsikring til privatpersoner, bedrifter, landbruk og offentlig sektor i Norge og Danmark. I Sverige er Gjensidige mindre og utfordrer de etablerte selskapene. Bil, bolig, reise og personforsikring er de største produktene. Virksomheten i Baltikum ble solgt til ERGO, og salget ble fullført i januar 2026. Ved siden av forsikringen tilbyr et datterselskap innskuddspensjon og sparing i Norge, og Gjensidige Mobility Group eier bilbergingsselskapet REDGO og Flyt, som administrerer bompengeinnkreving.\n\nUtbyttepolitikken har to deler. Det regulære utbyttet skal vokse over tid og utgjøre minst fire femdeler av resultatet etter skatt. Er kapitalen større enn selskapet trenger, deles overskuddet ut i tillegg som et særskilt utbytte, slik det ble gjort for regnskapsåret 2025. Hvor mye som er overskudd, avgjøres av solvenskravene for forsikringsselskaper, og den gangen måtte Finanstilsynet godkjenne utdelingen før generalforsamlingen stemte over den. Resultatet har to kilder: forsikringsdriften, der erstatninger og kostnader skal være lavere enn premiene, og avkastningen på pengene selskapet har investert. Selskapet er notert på Oslo Børs med en markedsverdi på rundt 132 milliarder kroner og er ett av de største børsnoterte selskapene i Norge.\n\nUtbyttet utbetales én gang i året, og selskapet har holdt dette gående i 16 år på rad. Direkteavkastningen er 3,8 %, og 5-årssnittet på 3,7 % plasserer GJF i det lavere sjiktet av aksjene i sin sektor. Utbetalingsgraden er 78 %, noe som er balansert for en moden utbytteaksje. Utbyttet har vokst med i snitt 9,1 % per år de siste fem årene.\n\nRentenivå og kredittap påvirker inntjeningen, mens regulatoriske kapitalkrav setter rammer for hva som kan deles ut. Historikken viser klare svingninger: høyest utbytte var 14,50 NOK per aksje i 2026, lavest 7,70 NOK i 2022.",
       "beskrivelse_intro": "Gjensidige ble opprettet som et kundeeid forsikringsselskap, og det preger eierskapet fortsatt. Største eier er Gjensidigestiftelsen, som etter vedtektene sender utbyttet knyttet til årets resultat videre til skadeforsikringskundene i Norge. Norske kunder har fått et slikt kundeutbytte hvert år siden børsnoteringen i 2010. For en vanlig aksjonær betyr det at storparten av det regulære utbyttet går til en eier som sender pengene videre, og som har som mål å eie godt over halvparten av aksjene over tid. Ordningen er også en del av forretningsmodellen, fordi kundeutbyttet gir kundene en grunn til å bli.\n\nInntektene kommer i hovedsak fra skadeforsikring til privatpersoner, bedrifter, landbruk og offentlig sektor i Norge og Danmark. I Sverige er Gjensidige mindre og utfordrer de etablerte selskapene. Bil, bolig, reise og personforsikring er de største produktene. Virksomheten i Baltikum ble solgt til ERGO, og salget ble fullført i januar 2026. Ved siden av forsikringen tilbyr et datterselskap innskuddspensjon og sparing i Norge, og Gjensidige Mobility Group eier bilbergingsselskapet REDGO og Flyt, som administrerer bompengeinnkreving.\n\nUtbyttepolitikken har to deler. Det regulære utbyttet skal vokse over tid og utgjøre minst fire femdeler av resultatet etter skatt. Er kapitalen større enn selskapet trenger, deles overskuddet ut i tillegg som et særskilt utbytte, slik det ble gjort for regnskapsåret 2025. Hvor mye som er overskudd, avgjøres av solvenskravene for forsikringsselskaper, og den gangen måtte Finanstilsynet godkjenne utdelingen før generalforsamlingen stemte over den. Resultatet har to kilder: forsikringsdriften, der erstatninger og kostnader skal være lavere enn premiene, og avkastningen på pengene selskapet har investert.",
       "beskrivelse_fakta": "Gjensidige Forsikring ASA leverer skadeforsikring og pensjonsprodukter i Norge, Sverige, Danmark, Finland, Latvia, Litauen og Estland. Virksomheten er delt i fire segmenter: Skadeforsikring privat, Skadeforsikring næringsliv, Skadeforsikring Sverige og Pensjon.",
       "valuta": "NOK",
@@ -3669,13 +3699,13 @@
       "bors": "Oslo Børs",
       "pris": 190.6,
       "52u_hoy": 208.2,
-      "52u_lav": 152.6,
+      "52u_lav": 153.0,
       "markedsverdi_mrd": 79.2,
       "utbytte_per_aksje": 5.4,
       "utbytte_yield": 2.83,
       "utbytte_vekst_5ar": 9.7,
       "payout_ratio": 48.0,
-      "pe_ratio": 16.87,
+      "pe_ratio": 16.91,
       "pb_ratio": 2.5,
       "ex_dato": null,
       "betaling_dato": null,
@@ -3702,6 +3732,7 @@
         2026
       ],
       "siste_utbytte": 5.4,
+      "siste_utbytte_dato": "2026-04-10",
       "utbytte_12m": 5.4,
       "utbytte_12m_antall": 1,
       "utbytte_12m_liste": [
@@ -3805,6 +3836,7 @@
         2026
       ],
       "siste_utbytte": 8.6,
+      "siste_utbytte_dato": "2026-04-17",
       "utbytte_12m": 8.6,
       "utbytte_12m_antall": 1,
       "utbytte_12m_liste": [
@@ -3886,14 +3918,14 @@
       "bors": "Oslo Børs",
       "pris": 46.2,
       "52u_hoy": 47.8,
-      "52u_lav": 16.9,
+      "52u_lav": 17.36,
       "markedsverdi_mrd": 4.8,
       "utbytte_per_aksje": 0.0,
       "utbytte_yield": 0.0,
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 0.0,
       "pe_ratio": 4.69,
-      "pb_ratio": 4.72,
+      "pb_ratio": 4.76,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-11-03",
@@ -3904,6 +3936,7 @@
         2023
       ],
       "siste_utbytte": 1.0,
+      "siste_utbytte_dato": "2023-12-01",
       "utbytte_12m": 0,
       "utbytte_12m_antall": 0,
       "utbytte_12m_liste": [],
@@ -3969,7 +4002,7 @@
       "utbytte_yield": 0.0,
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 0,
-      "pe_ratio": 13.69,
+      "pe_ratio": 13.73,
       "pb_ratio": 0.91,
       "ex_dato": null,
       "betaling_dato": null,
@@ -3981,6 +4014,7 @@
         2022
       ],
       "siste_utbytte": 1.1,
+      "siste_utbytte_dato": "2022-11-10",
       "utbytte_12m": 0,
       "utbytte_12m_antall": 0,
       "utbytte_12m_liste": [],
@@ -4068,6 +4102,7 @@
         2026
       ],
       "siste_utbytte": 7.3,
+      "siste_utbytte_dato": "2026-05-28",
       "utbytte_12m": 7.3,
       "utbytte_12m_antall": 1,
       "utbytte_12m_liste": [
@@ -4149,10 +4184,10 @@
       "bors": "Oslo Børs",
       "pris": 175.8,
       "52u_hoy": 186.0,
-      "52u_lav": 75.0,
+      "52u_lav": 75.1,
       "markedsverdi_mrd": 77.4,
-      "utbytte_per_aksje": 8.58,
-      "utbytte_yield": 4.88,
+      "utbytte_per_aksje": 8.57,
+      "utbytte_yield": 4.87,
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 77.0,
       "pe_ratio": 10.89,
@@ -4175,24 +4210,25 @@
         2025,
         2026
       ],
-      "siste_utbytte": 5.7518,
-      "utbytte_12m": 15.2752,
+      "siste_utbytte": 5.7422,
+      "siste_utbytte_dato": "2026-08-26",
+      "utbytte_12m": 15.2499,
       "utbytte_12m_antall": 2,
       "utbytte_12m_liste": [
         {
           "ex_dato": "2026-03-10",
-          "belop": 9.5234
+          "belop": 9.5076
         },
         {
           "ex_dato": "2026-08-26",
-          "belop": 5.7518
+          "belop": 5.7422
         }
       ],
       "utbytte_supplert": [],
       "utbytte_per_ar": {
         "2021": 0.0,
         "2022": 1.4409,
-        "2023": 8.6041,
+        "2023": 8.5961,
         "2024": 18.6493,
         "2025": 24.2599
       },
@@ -4236,8 +4272,8 @@
         },
         {
           "ar": 2026,
-          "utbytte": 15.28,
-          "yield": 8.69,
+          "utbytte": 15.25,
+          "yield": 8.67,
           "maaneder": [
             3,
             8
@@ -4265,7 +4301,7 @@
         "melding_dato": "2026-08-11"
       },
       "arsrate_kilde": "betalt_12m",
-      "arsrate_ekstra_trukket": 6.69,
+      "arsrate_ekstra_trukket": 6.68,
       "ask_status": "ja"
     },
     {
@@ -4294,6 +4330,7 @@
         2026
       ],
       "siste_utbytte": 1.8,
+      "siste_utbytte_dato": "2026-05-05",
       "utbytte_12m": 1.8,
       "utbytte_12m_antall": 1,
       "utbytte_12m_liste": [
@@ -4384,6 +4421,7 @@
         2026
       ],
       "siste_utbytte": 1.9,
+      "siste_utbytte_dato": "2026-05-26",
       "utbytte_12m": 1.9,
       "utbytte_12m_antall": 1,
       "utbytte_12m_liste": [
@@ -4473,7 +4511,7 @@
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 90.0,
       "pe_ratio": 10.68,
-      "pb_ratio": 63.8,
+      "pb_ratio": 64.27,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-10-21",
@@ -4487,6 +4525,7 @@
         2026
       ],
       "siste_utbytte": 1.355,
+      "siste_utbytte_dato": "2026-08-21",
       "utbytte_12m": 4.885,
       "utbytte_12m_antall": 4,
       "utbytte_12m_liste": [
@@ -4602,7 +4641,7 @@
       "utbytte_vekst_5ar": 61.9,
       "payout_ratio": 190.0,
       "pe_ratio": 27.85,
-      "pb_ratio": 2.33,
+      "pb_ratio": 2.34,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-10-29",
@@ -4622,6 +4661,7 @@
         2026
       ],
       "siste_utbytte": 0.375,
+      "siste_utbytte_dato": "2026-08-21",
       "utbytte_12m": 1.5,
       "utbytte_12m_antall": 4,
       "utbytte_12m_liste": [
@@ -4738,7 +4778,7 @@
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 83.0,
       "pe_ratio": 8.5,
-      "pb_ratio": 2.95,
+      "pb_ratio": 2.97,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-11-19",
@@ -4752,6 +4792,7 @@
         2026
       ],
       "siste_utbytte": 0.7885,
+      "siste_utbytte_dato": "2026-08-24",
       "utbytte_12m": 11.8716,
       "utbytte_12m_antall": 4,
       "utbytte_12m_liste": [
@@ -4889,6 +4930,7 @@
         2026
       ],
       "siste_utbytte": 4.75,
+      "siste_utbytte_dato": "2026-04-17",
       "utbytte_12m": 4.75,
       "utbytte_12m_antall": 1,
       "utbytte_12m_liste": [
@@ -4997,6 +5039,7 @@
         2026
       ],
       "siste_utbytte": 3.75,
+      "siste_utbytte_dato": "2026-04-30",
       "utbytte_12m": 3.75,
       "utbytte_12m_antall": 1,
       "utbytte_12m_liste": [
@@ -5080,8 +5123,8 @@
       "52u_hoy": 78.35,
       "52u_lav": 22.5,
       "markedsverdi_mrd": 2.6,
-      "utbytte_per_aksje": 8.29,
-      "utbytte_yield": 35.64,
+      "utbytte_per_aksje": 0.0,
+      "utbytte_yield": 0.0,
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 67.0,
       "pe_ratio": 9.39,
@@ -5105,6 +5148,7 @@
         2026
       ],
       "siste_utbytte": 35.6371,
+      "siste_utbytte_dato": "2026-04-20",
       "utbytte_12m": 35.6371,
       "utbytte_12m_antall": 1,
       "utbytte_12m_liste": [
@@ -5168,7 +5212,8 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "utbyttehistorikk_tekst": "Utbyttet er lavere nå enn i 2022 — ned fra 3,00 til 1,75 kroner per aksje, med 1 nedgangsår i perioden. Høyeste år er 2,6 ganger det laveste — merkbare svingninger, men innenfor et gjenkjennelig spenn. Dagens yield på 35,6 % ligger over aksjens eget 5-årssnitt på 8,0 %.",
+      "utbyttehistorikk_tekst": "Utbyttet er lavere nå enn i 2022 — ned fra 3,00 til 1,75 kroner per aksje, med 1 nedgangsår i perioden. Høyeste år er 2,6 ganger det laveste — merkbare svingninger, men innenfor et gjenkjennelig spenn.",
+      "arsrate_kilde": "ingen_lopende",
       "ask_status": "ja"
     },
     {
@@ -5178,14 +5223,14 @@
       "bors": "Oslo Børs",
       "pris": 104.2,
       "52u_hoy": 110.0,
-      "52u_lav": 70.0,
+      "52u_lav": 70.4,
       "markedsverdi_mrd": 6.2,
       "utbytte_per_aksje": 7.08,
       "utbytte_yield": 6.8,
       "utbytte_vekst_5ar": 32.5,
       "payout_ratio": 50.0,
       "pe_ratio": 10.8,
-      "pb_ratio": 1.7,
+      "pb_ratio": 1.72,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-10-27",
@@ -5202,6 +5247,7 @@
         2026
       ],
       "siste_utbytte": 2.794,
+      "siste_utbytte_dato": "2026-09-01",
       "utbytte_12m": 7.084,
       "utbytte_12m_antall": 4,
       "utbytte_12m_liste": [
@@ -5227,7 +5273,7 @@
         "2021": 1.276,
         "2022": 8.033,
         "2023": 12.787,
-        "2024": 13.4869,
+        "2024": 13.482,
         "2025": 3.9338
       },
       "utbytte_forste_ar": 2019,
@@ -5256,7 +5302,7 @@
         },
         {
           "ar": 2024,
-          "utbytte": 13.49,
+          "utbytte": 13.48,
           "yield": 12.94,
           "maaneder": [
             2,
@@ -5294,7 +5340,7 @@
       ],
       "snitt_yield_5ar": 7.58,
       "snitt_yield_ar": 5,
-      "beskrivelse": "Klaveness Combination Carriers eier kombinasjonsskip, fartøy som kan ta både flytende last og tørrlast. Poenget er å slippe å seile tomme. Et vanlig tankskip eller bulkskip går ofte i ballast tilbake etter levering, mens KCC kombinerer lastene slik at skipet er lastet på flere av etappene. CABU-skipene frakter kaustisk soda den ene veien og tørrbulk som jernmalm, alumina og korn den andre. CLEANBU-skipene kombinerer raffinerte oljeprodukter med tørrbulk. Selskapet tjener dermed både på tankmarkedet og tørrlastmarkedet, men følger ingen av dem fullt ut.\n\nKonseptet er utviklet over flere tiår av Klaveness-rederiet, og selskapet ble etablert som eget holdingselskap i 2018 og børsnotert året etter. Rederiaksjeselskapet Torvald Klaveness er fortsatt største eier. I september 2026 solgte det seg ned til under halvparten av aksjene for å bedre likviditeten i aksjen, men har sagt at det vil beholde minst negativ kontroll. Det siste nybygget i tredje generasjon CABU-skip ble levert i august 2026. Dermed er det store byggeprogrammet avsluttet, og hele flåten er i drift.\n\nUtbyttet kommer hvert kvartal og fastsettes i dollar. Politikken er å dele ut minst fire femdeler av den justerte frie kontantstrømmen til egenkapitalen, og for andre kvartal 2026 ble hele denne kontantstrømmen delt ut. Utbyttet svinger dermed med fraktinntektene i begge markedene, og med hvor mange av skipene som ligger i dokk det enkelte kvartalet.\n\nUtbyttet utbetales kvartalsvis — fire utbetalinger i året, og selskapet har holdt dette gående i 8 år på rad. Direkteavkastningen er 3,8 %, og 5-årssnittet på 7,6 % plasserer KCC i det lavere sjiktet av aksjene i sin sektor. Utbetalingsgraden er 50 %, noe som er balansert for en moden utbytteaksje. Utbyttet har vokst med i snitt 32,5 % per år de siste fem årene.\n\nFraktrater varierer kraftig med globalt handelsmønster og flåtekapasitet, og utbyttet svinger tilsvarende. Historikken viser klare svingninger: høyest utbytte var 13,49 NOK per aksje i 2024, lavest 3,93 NOK i 2025.",
+      "beskrivelse": "Klaveness Combination Carriers eier kombinasjonsskip, fartøy som kan ta både flytende last og tørrlast. Poenget er å slippe å seile tomme. Et vanlig tankskip eller bulkskip går ofte i ballast tilbake etter levering, mens KCC kombinerer lastene slik at skipet er lastet på flere av etappene. CABU-skipene frakter kaustisk soda den ene veien og tørrbulk som jernmalm, alumina og korn den andre. CLEANBU-skipene kombinerer raffinerte oljeprodukter med tørrbulk. Selskapet tjener dermed både på tankmarkedet og tørrlastmarkedet, men følger ingen av dem fullt ut.\n\nKonseptet er utviklet over flere tiår av Klaveness-rederiet, og selskapet ble etablert som eget holdingselskap i 2018 og børsnotert året etter. Rederiaksjeselskapet Torvald Klaveness er fortsatt største eier. I september 2026 solgte det seg ned til under halvparten av aksjene for å bedre likviditeten i aksjen, men har sagt at det vil beholde minst negativ kontroll. Det siste nybygget i tredje generasjon CABU-skip ble levert i august 2026. Dermed er det store byggeprogrammet avsluttet, og hele flåten er i drift.\n\nUtbyttet kommer hvert kvartal og fastsettes i dollar. Politikken er å dele ut minst fire femdeler av den justerte frie kontantstrømmen til egenkapitalen, og for andre kvartal 2026 ble hele denne kontantstrømmen delt ut. Utbyttet svinger dermed med fraktinntektene i begge markedene, og med hvor mange av skipene som ligger i dokk det enkelte kvartalet.\n\nUtbyttet utbetales kvartalsvis — fire utbetalinger i året, og selskapet har holdt dette gående i 8 år på rad. Direkteavkastningen er 3,8 %, og 5-årssnittet på 7,6 % plasserer KCC i det lavere sjiktet av aksjene i sin sektor. Utbetalingsgraden er 50 %, noe som er balansert for en moden utbytteaksje. Utbyttet har vokst med i snitt 32,5 % per år de siste fem årene.\n\nFraktrater varierer kraftig med globalt handelsmønster og flåtekapasitet, og utbyttet svinger tilsvarende. Historikken viser klare svingninger: høyest utbytte var 13,48 NOK per aksje i 2024, lavest 3,93 NOK i 2025.",
       "beskrivelse_intro": "Klaveness Combination Carriers eier kombinasjonsskip, fartøy som kan ta både flytende last og tørrlast. Poenget er å slippe å seile tomme. Et vanlig tankskip eller bulkskip går ofte i ballast tilbake etter levering, mens KCC kombinerer lastene slik at skipet er lastet på flere av etappene. CABU-skipene frakter kaustisk soda den ene veien og tørrbulk som jernmalm, alumina og korn den andre. CLEANBU-skipene kombinerer raffinerte oljeprodukter med tørrbulk. Selskapet tjener dermed både på tankmarkedet og tørrlastmarkedet, men følger ingen av dem fullt ut.\n\nKonseptet er utviklet over flere tiår av Klaveness-rederiet, og selskapet ble etablert som eget holdingselskap i 2018 og børsnotert året etter. Rederiaksjeselskapet Torvald Klaveness er fortsatt største eier. I september 2026 solgte det seg ned til under halvparten av aksjene for å bedre likviditeten i aksjen, men har sagt at det vil beholde minst negativ kontroll. Det siste nybygget i tredje generasjon CABU-skip ble levert i august 2026. Dermed er det store byggeprogrammet avsluttet, og hele flåten er i drift.\n\nUtbyttet kommer hvert kvartal og fastsettes i dollar. Politikken er å dele ut minst fire femdeler av den justerte frie kontantstrømmen til egenkapitalen, og for andre kvartal 2026 ble hele denne kontantstrømmen delt ut. Utbyttet svinger dermed med fraktinntektene i begge markedene, og med hvor mange av skipene som ligger i dokk det enkelte kvartalet.",
       "beskrivelse_fakta": "Klaveness Combination Carriers ASA eier og driver kombinasjonsskip for tørrbulk- og produkttankmarkedet i Midtøsten, Australia, Oseania, Nordøst-Asia, Sør-Amerika, Nord-Amerika, Europa, Afrika, Sørøst-Asia og Sør-Asia. Fartøyene frakter kaustisk sodalut, flytende gjødsel, melasse, rene petroleumsprodukter, tunge flytende laster og ulike tørrbulkvarer. Selskapet eier og driver åtte CABU-skip, tre CABU-nybyggkontrakter og åtte CLEANBU-skip.",
       "valuta": "NOK",
@@ -5312,10 +5358,10 @@
       "bors": "Oslo Børs",
       "pris": 855.0,
       "52u_hoy": 966.0,
-      "52u_lav": 299.0,
+      "52u_lav": 305.5,
       "markedsverdi_mrd": 33.4,
-      "utbytte_per_aksje": 90.05,
-      "utbytte_yield": 10.53,
+      "utbytte_per_aksje": 89.9,
+      "utbytte_yield": 10.51,
       "utbytte_vekst_5ar": 19.0,
       "payout_ratio": 46.0,
       "pe_ratio": 8.04,
@@ -5334,25 +5380,26 @@
         2025,
         2026
       ],
-      "siste_utbytte": 49.5061,
-      "utbytte_12m": 90.0539,
+      "siste_utbytte": 49.4209,
+      "siste_utbytte_dato": "2026-08-13",
+      "utbytte_12m": 89.8989,
       "utbytte_12m_antall": 4,
       "utbytte_12m_liste": [
         {
           "ex_dato": "2025-12-01",
-          "belop": 7.0723
+          "belop": 7.0601
         },
         {
           "ex_dato": "2026-03-02",
-          "belop": 14.6161
+          "belop": 14.5909
         },
         {
           "ex_dato": "2026-05-27",
-          "belop": 18.8595
+          "belop": 18.827
         },
         {
           "ex_dato": "2026-08-13",
-          "belop": 49.5061
+          "belop": 49.4209
         }
       ],
       "utbytte_supplert": [],
@@ -5360,8 +5407,8 @@
         "2021": 9.96,
         "2022": 6.1,
         "2023": 53.4,
-        "2024": 32.2588,
-        "2025": 19.991
+        "2024": 32.2158,
+        "2025": 19.9566
       },
       "utbytte_forste_ar": 2020,
       "historiske_utbytter": [
@@ -5387,7 +5434,7 @@
         },
         {
           "ar": 2024,
-          "utbytte": 32.26,
+          "utbytte": 32.22,
           "yield": 3.77,
           "maaneder": [
             3,
@@ -5398,8 +5445,8 @@
         },
         {
           "ar": 2025,
-          "utbytte": 19.99,
-          "yield": 2.34,
+          "utbytte": 19.96,
+          "yield": 2.33,
           "maaneder": [
             2,
             6,
@@ -5409,8 +5456,8 @@
         },
         {
           "ar": 2026,
-          "utbytte": 82.98,
-          "yield": 9.71,
+          "utbytte": 82.84,
+          "yield": 9.69,
           "maaneder": [
             3,
             5,
@@ -5425,14 +5472,14 @@
       ],
       "snitt_yield_5ar": 2.85,
       "snitt_yield_ar": 5,
-      "beskrivelse": "Okeanis Eco Tankers er et gresk rederi med hovedkontor i Athen-området og juridisk hjemsted på Marshalløyene. Selskapet ble stiftet i 2018, og familien Alafouzos står bak som sponsor og største eier. Aksjen handles både i Oslo og i New York, der den har tickeren ECO.\n\nFlåten består av VLCC- og Suezmax-tankere bygget med drivstoffbesparende design, og alle skipene har scrubber, et renseanlegg som lar dem bruke billigere tungolje og likevel holde svovelkravene. Okeanis sier selv at det velger spotmarkedet for å få hele gevinsten av dette. På en spottur er det rederiet som betaler drivstoffet, og et skip som bruker mindre olje gir derfor mer igjen per døgn. Baksiden er at resultatet følger dagratene tett. Flåten har vokst ved kjøp av nye Suezmax-skip fra et koreansk verft i 2025 og 2026, delvis finansiert med nye aksjer. Det gir flere skip å tjene penger på, men også flere aksjer å fordele utbyttet på.\n\nStyret fastsetter utbyttet hvert kvartal, uten at meldingene oppgir en fast andel av resultatet. Utbyttet vedtas i dollar, mens aksjonærer i den norske verdipapirsentralen får det i kroner. To praktiske detaljer følger av den doble noteringen. Ex-datoen i Oslo er én dag før ex-datoen i New York, fordi handler i Oslo gjøres opp en dag senere. Pengene kommer også noen dager senere til norske aksjonærer enn til dem i USA. Aksjen er notert på Oslo Børs med en markedsverdi på rundt 33 milliarder kroner.\n\nUtbyttet utbetales kvartalsvis — fire utbetalinger i året, og selskapet har holdt dette gående i 7 år på rad. Direkteavkastningen er 2,3 %, og 5-årssnittet på 2,9 % plasserer OET i det lavere sjiktet av aksjene i sin sektor. Utbetalingsgraden på 46 % er lav og gir selskapet solid buffer til å opprettholde utbyttet ved svakere kvartaler. Utbyttet har vokst med i snitt 19,0 % per år de siste fem årene.\n\nFraktrater varierer kraftig med globalt handelsmønster og flåtekapasitet, og utbyttet svinger tilsvarende. Historikken viser klare svingninger: høyest utbytte var 82,98 NOK per aksje i 2026, lavest 6,10 NOK i 2022.",
+      "beskrivelse": "Okeanis Eco Tankers er et gresk rederi med hovedkontor i Athen-området og juridisk hjemsted på Marshalløyene. Selskapet ble stiftet i 2018, og familien Alafouzos står bak som sponsor og største eier. Aksjen handles både i Oslo og i New York, der den har tickeren ECO.\n\nFlåten består av VLCC- og Suezmax-tankere bygget med drivstoffbesparende design, og alle skipene har scrubber, et renseanlegg som lar dem bruke billigere tungolje og likevel holde svovelkravene. Okeanis sier selv at det velger spotmarkedet for å få hele gevinsten av dette. På en spottur er det rederiet som betaler drivstoffet, og et skip som bruker mindre olje gir derfor mer igjen per døgn. Baksiden er at resultatet følger dagratene tett. Flåten har vokst ved kjøp av nye Suezmax-skip fra et koreansk verft i 2025 og 2026, delvis finansiert med nye aksjer. Det gir flere skip å tjene penger på, men også flere aksjer å fordele utbyttet på.\n\nStyret fastsetter utbyttet hvert kvartal, uten at meldingene oppgir en fast andel av resultatet. Utbyttet vedtas i dollar, mens aksjonærer i den norske verdipapirsentralen får det i kroner. To praktiske detaljer følger av den doble noteringen. Ex-datoen i Oslo er én dag før ex-datoen i New York, fordi handler i Oslo gjøres opp en dag senere. Pengene kommer også noen dager senere til norske aksjonærer enn til dem i USA. Aksjen er notert på Oslo Børs med en markedsverdi på rundt 33 milliarder kroner.\n\nUtbyttet utbetales kvartalsvis — fire utbetalinger i året, og selskapet har holdt dette gående i 7 år på rad. Direkteavkastningen er 2,3 %, og 5-årssnittet på 2,9 % plasserer OET i det lavere sjiktet av aksjene i sin sektor. Utbetalingsgraden på 46 % er lav og gir selskapet solid buffer til å opprettholde utbyttet ved svakere kvartaler. Utbyttet har vokst med i snitt 19,0 % per år de siste fem årene.\n\nFraktrater varierer kraftig med globalt handelsmønster og flåtekapasitet, og utbyttet svinger tilsvarende. Historikken viser klare svingninger: høyest utbytte var 82,84 NOK per aksje i 2026, lavest 6,10 NOK i 2022.",
       "beskrivelse_intro": "Okeanis Eco Tankers er et gresk rederi med hovedkontor i Athen-området og juridisk hjemsted på Marshalløyene. Selskapet ble stiftet i 2018, og familien Alafouzos står bak som sponsor og største eier. Aksjen handles både i Oslo og i New York, der den har tickeren ECO.\n\nFlåten består av VLCC- og Suezmax-tankere bygget med drivstoffbesparende design, og alle skipene har scrubber, et renseanlegg som lar dem bruke billigere tungolje og likevel holde svovelkravene. Okeanis sier selv at det velger spotmarkedet for å få hele gevinsten av dette. På en spottur er det rederiet som betaler drivstoffet, og et skip som bruker mindre olje gir derfor mer igjen per døgn. Baksiden er at resultatet følger dagratene tett. Flåten har vokst ved kjøp av nye Suezmax-skip fra et koreansk verft i 2025 og 2026, delvis finansiert med nye aksjer. Det gir flere skip å tjene penger på, men også flere aksjer å fordele utbyttet på.\n\nStyret fastsetter utbyttet hvert kvartal, uten at meldingene oppgir en fast andel av resultatet. Utbyttet vedtas i dollar, mens aksjonærer i den norske verdipapirsentralen får det i kroner. To praktiske detaljer følger av den doble noteringen. Ex-datoen i Oslo er én dag før ex-datoen i New York, fordi handler i Oslo gjøres opp en dag senere. Pengene kommer også noen dager senere til norske aksjonærer enn til dem i USA.",
       "beskrivelse_fakta": "Okeanis Eco Tankers Corp. er et rederi som eier og driver tankskip globalt. Flåten består av 16 tankskip, fordelt på åtte moderne Suezmax-tankere og åtte moderne VLCC-tankere, med hovedvekt på transport av råolje. Selskapet ble stiftet i 2018 og har base i Neo Faliro i Hellas.",
       "valuta": "NOK",
       "ask_egnet": null,
       "inkorporeringsland": "Marshalløyene",
       "data_kilde": "yahoo",
-      "utbyttehistorikk_tekst": "Utbyttet er samlet opp fra 6,10 til 19,99 kroner per aksje i 2022–2025, men veien dit gikk gjennom 2 kutt underveis. Spennet er stort: høyeste år er 8,8 ganger det laveste, så størrelsen på utbetalingen er lite forutsigbar fra år til år. Dagens yield på 10,5 % ligger over aksjens eget 5-årssnitt på 2,9 %.",
+      "utbyttehistorikk_tekst": "Utbyttet er samlet opp fra 6,10 til 19,96 kroner per aksje i 2022–2025, men veien dit gikk gjennom 2 kutt underveis. Spennet er stort: høyeste år er 8,8 ganger det laveste, så størrelsen på utbetalingen er lite forutsigbar fra år til år. Dagens yield på 10,5 % ligger over aksjens eget 5-årssnitt på 2,9 %.",
       "arsrate_kilde": "betalt_12m",
       "ask_status": "uavklart"
     },
@@ -5486,6 +5533,7 @@
         2026
       ],
       "siste_utbytte": 7.0,
+      "siste_utbytte_dato": "2026-04-09",
       "utbytte_12m": 7.0,
       "utbytte_12m_antall": 1,
       "utbytte_12m_liste": [
@@ -5585,6 +5633,7 @@
         2026
       ],
       "siste_utbytte": 0.72,
+      "siste_utbytte_dato": "2026-08-24",
       "utbytte_12m": 1.39,
       "utbytte_12m_antall": 2,
       "utbytte_12m_liste": [
@@ -5685,6 +5734,7 @@
         2026
       ],
       "siste_utbytte": 0.7,
+      "siste_utbytte_dato": "2026-04-27",
       "utbytte_12m": 0.7,
       "utbytte_12m_antall": 1,
       "utbytte_12m_liste": [
@@ -5808,6 +5858,7 @@
         2026
       ],
       "siste_utbytte": 0.55,
+      "siste_utbytte_dato": "2026-04-17",
       "utbytte_12m": 0.55,
       "utbytte_12m_antall": 1,
       "utbytte_12m_liste": [
@@ -5918,6 +5969,7 @@
         2026
       ],
       "siste_utbytte": 1.0,
+      "siste_utbytte_dato": "2026-05-04",
       "utbytte_12m": 1.0,
       "utbytte_12m_antall": 1,
       "utbytte_12m_liste": [
@@ -6025,6 +6077,7 @@
         2026
       ],
       "siste_utbytte": 2.0,
+      "siste_utbytte_dato": "2026-05-04",
       "utbytte_12m": 2.0,
       "utbytte_12m_antall": 1,
       "utbytte_12m_liste": [
@@ -6105,7 +6158,7 @@
       "sektor": "Finans",
       "bors": "Oslo Børs",
       "pris": 50.7,
-      "52u_hoy": 92.8,
+      "52u_hoy": 92.4,
       "52u_lav": 50.0,
       "markedsverdi_mrd": 3.9,
       "utbytte_per_aksje": 8.0,
@@ -6132,6 +6185,7 @@
         2026
       ],
       "siste_utbytte": 8.0,
+      "siste_utbytte_dato": "2026-04-10",
       "utbytte_12m": 8.0,
       "utbytte_12m_antall": 1,
       "utbytte_12m_liste": [
@@ -6213,15 +6267,15 @@
       "sektor": "Eiendom",
       "bors": "Oslo Børs",
       "pris": 94.7,
-      "52u_hoy": 121.8,
+      "52u_hoy": 119.0,
       "52u_lav": 89.9,
       "markedsverdi_mrd": 17.2,
       "utbytte_per_aksje": 2.2,
       "utbytte_yield": 2.32,
       "utbytte_vekst_5ar": -40.4,
       "payout_ratio": 18.0,
-      "pe_ratio": 15.28,
-      "pb_ratio": 0.7,
+      "pe_ratio": 15.25,
+      "pb_ratio": 0.74,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2027-02-10",
@@ -6241,6 +6295,7 @@
         2026
       ],
       "siste_utbytte": 1.1,
+      "siste_utbytte_dato": "2026-04-22",
       "utbytte_12m": 2.2,
       "utbytte_12m_antall": 2,
       "utbytte_12m_liste": [
@@ -6327,7 +6382,7 @@
       "utbytte_vekst_5ar": 9.4,
       "payout_ratio": 69.0,
       "pe_ratio": 29.28,
-      "pb_ratio": 4.43,
+      "pb_ratio": 4.45,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-10-23",
@@ -6363,6 +6418,7 @@
         2026
       ],
       "siste_utbytte": 2.15,
+      "siste_utbytte_dato": "2026-04-24",
       "utbytte_12m": 2.15,
       "utbytte_12m_antall": 1,
       "utbytte_12m_liste": [
@@ -6450,7 +6506,7 @@
       "utbytte_yield": 3.74,
       "utbytte_vekst_5ar": 5.7,
       "payout_ratio": 49.0,
-      "pe_ratio": 13.21,
+      "pe_ratio": 13.77,
       "pb_ratio": 3.0,
       "ex_dato": null,
       "betaling_dato": null,
@@ -6471,6 +6527,7 @@
         2026
       ],
       "siste_utbytte": 5.0,
+      "siste_utbytte_dato": "2026-04-17",
       "utbytte_12m": 5.0,
       "utbytte_12m_antall": 1,
       "utbytte_12m_liste": [
@@ -6559,7 +6616,7 @@
       "utbytte_vekst_5ar": -15.6,
       "payout_ratio": 18.0,
       "pe_ratio": 0.08,
-      "pb_ratio": 2.89,
+      "pb_ratio": 2.91,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": null,
@@ -6575,49 +6632,50 @@
         2025,
         2026
       ],
-      "siste_utbytte": 130.1303,
-      "utbytte_12m": 138.4284,
+      "siste_utbytte": 129.9063,
+      "siste_utbytte_dato": "2026-04-29",
+      "utbytte_12m": 138.1902,
       "utbytte_12m_antall": 6,
       "utbytte_12m_liste": [
         {
           "ex_dato": "2025-11-20",
-          "belop": 1.7916
+          "belop": 1.7886
         },
         {
           "ex_dato": "2025-12-18",
-          "belop": 1.9802
+          "belop": 1.9768
         },
         {
           "ex_dato": "2026-01-15",
-          "belop": 2.1688
+          "belop": 2.1651
         },
         {
           "ex_dato": "2026-02-18",
-          "belop": 1.4145
+          "belop": 1.412
         },
         {
           "ex_dato": "2026-03-17",
-          "belop": 0.943
+          "belop": 0.9414
         },
         {
           "ex_dato": "2026-04-29",
-          "belop": 130.1303
+          "belop": 129.9063
         }
       ],
       "utbytte_supplert": [],
       "utbytte_per_ar": {
-        "2021": 27.1576,
-        "2022": 15.2762,
-        "2023": 7.7324,
-        "2024": 33.7584,
-        "2025": 13.7674
+        "2021": 27.1109,
+        "2022": 15.2499,
+        "2023": 7.7191,
+        "2024": 33.7003,
+        "2025": 13.7437
       },
       "utbytte_forste_ar": 2019,
       "historiske_utbytter": [
         {
           "ar": 2022,
-          "utbytte": 15.28,
-          "yield": 19.3,
+          "utbytte": 15.25,
+          "yield": 19.26,
           "maaneder": [
             1,
             2,
@@ -6636,8 +6694,8 @@
         },
         {
           "ar": 2023,
-          "utbytte": 7.73,
-          "yield": 7.39,
+          "utbytte": 7.72,
+          "yield": 7.37,
           "maaneder": [
             1,
             2,
@@ -6656,8 +6714,8 @@
         },
         {
           "ar": 2024,
-          "utbytte": 33.76,
-          "yield": 30.85,
+          "utbytte": 33.7,
+          "yield": 30.79,
           "maaneder": [
             1,
             2,
@@ -6676,8 +6734,8 @@
         },
         {
           "ar": 2025,
-          "utbytte": 13.77,
-          "yield": 10.65,
+          "utbytte": 13.74,
+          "yield": 10.63,
           "maaneder": [
             1,
             2,
@@ -6696,7 +6754,7 @@
         },
         {
           "ar": 2026,
-          "utbytte": 134.66,
+          "utbytte": 134.42,
           "yield": null,
           "maaneder": [
             1,
@@ -6729,7 +6787,7 @@
       "ask_egnet": false,
       "inkorporeringsland": "Bermuda",
       "data_kilde": "yahoo",
-      "utbyttehistorikk_tekst": "Utbyttet er lavere nå enn i 2022 — ned fra 15,28 til 13,77 kroner per aksje, med 2 nedgangsår i perioden. Spennet er stort: høyeste år er 4,4 ganger det laveste, så størrelsen på utbetalingen er lite forutsigbar fra år til år.",
+      "utbyttehistorikk_tekst": "Utbyttet er lavere nå enn i 2022 — ned fra 15,25 til 13,74 kroner per aksje, med 2 nedgangsår i perioden. Spennet er stort: høyeste år er 4,4 ganger det laveste, så størrelsen på utbetalingen er lite forutsigbar fra år til år.",
       "arsrate_kilde": "ingen_lopende",
       "ask_status": "utenfor_eos"
     },
@@ -6747,7 +6805,7 @@
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 71.0,
       "pe_ratio": 7.01,
-      "pb_ratio": 1.62,
+      "pb_ratio": 1.63,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-11-12",
@@ -6758,6 +6816,7 @@
         2026
       ],
       "siste_utbytte": 3.5478,
+      "siste_utbytte_dato": "2026-08-27",
       "utbytte_12m": 13.8615,
       "utbytte_12m_antall": 4,
       "utbytte_12m_liste": [
@@ -6867,6 +6926,7 @@
         2026
       ],
       "siste_utbytte": 44.0,
+      "siste_utbytte_dato": "2026-03-27",
       "utbytte_12m": 44.0,
       "utbytte_12m_antall": 1,
       "utbytte_12m_liste": [
@@ -6982,6 +7042,7 @@
         2026
       ],
       "siste_utbytte": 7.67,
+      "siste_utbytte_dato": "2026-03-25",
       "utbytte_12m": 7.67,
       "utbytte_12m_antall": 1,
       "utbytte_12m_liste": [
@@ -7104,6 +7165,7 @@
         2026
       ],
       "siste_utbytte": 6.9,
+      "siste_utbytte_dato": "2026-03-27",
       "utbytte_12m": 6.9,
       "utbytte_12m_antall": 1,
       "utbytte_12m_liste": [
@@ -7183,8 +7245,8 @@
       "utbytte_yield": 5.83,
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 87.0,
-      "pe_ratio": 4.43,
-      "pb_ratio": 4.59,
+      "pe_ratio": 4.44,
+      "pb_ratio": 4.6,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-11-18",
@@ -7197,6 +7259,7 @@
         2026
       ],
       "siste_utbytte": 0.374,
+      "siste_utbytte_dato": "2026-09-02",
       "utbytte_12m": 1.893,
       "utbytte_12m_antall": 4,
       "utbytte_12m_liste": [
@@ -7328,6 +7391,7 @@
         2026
       ],
       "siste_utbytte": 1.0,
+      "siste_utbytte_dato": "2026-09-15",
       "utbytte_12m": 3.0,
       "utbytte_12m_antall": 3,
       "utbytte_12m_liste": [
@@ -7404,13 +7468,13 @@
       "pris": 353.0,
       "52u_hoy": 375.0,
       "52u_lav": 281.5,
-      "markedsverdi_mrd": 0.0,
+      "markedsverdi_mrd": 23.4,
       "utbytte_per_aksje": 18.5,
       "utbytte_yield": 5.24,
       "utbytte_vekst_5ar": 31.6,
       "payout_ratio": 44.0,
       "pe_ratio": 7.93,
-      "pb_ratio": 0.75,
+      "pb_ratio": 0.76,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": null,
@@ -7440,33 +7504,34 @@
         2025,
         2026
       ],
-      "siste_utbytte": 9.4291,
-      "utbytte_12m": 18.8583,
+      "siste_utbytte": 9.4135,
+      "siste_utbytte_dato": "2026-04-21",
+      "utbytte_12m": 18.827,
       "utbytte_12m_antall": 2,
       "utbytte_12m_liste": [
         {
           "ex_dato": "2025-11-19",
-          "belop": 9.4291
+          "belop": 9.4135
         },
         {
           "ex_dato": "2026-04-21",
-          "belop": 9.4291
+          "belop": 9.4135
         }
       ],
       "utbytte_supplert": [],
       "utbytte_per_ar": {
-        "2021": 7.0719,
-        "2022": 14.1437,
-        "2023": 21.2156,
-        "2024": 25.9301,
-        "2025": 21.2156
+        "2021": 7.0601,
+        "2022": 14.1203,
+        "2023": 21.1804,
+        "2024": 25.8871,
+        "2025": 21.1804
       },
       "utbytte_forste_ar": 2005,
       "historiske_utbytter": [
         {
           "ar": 2022,
-          "utbytte": 14.14,
-          "yield": 4.01,
+          "utbytte": 14.12,
+          "yield": 4.0,
           "maaneder": [
             4,
             11
@@ -7474,8 +7539,8 @@
         },
         {
           "ar": 2023,
-          "utbytte": 21.22,
-          "yield": 6.01,
+          "utbytte": 21.18,
+          "yield": 6.0,
           "maaneder": [
             4,
             11
@@ -7483,8 +7548,8 @@
         },
         {
           "ar": 2024,
-          "utbytte": 25.93,
-          "yield": 7.35,
+          "utbytte": 25.89,
+          "yield": 7.33,
           "maaneder": [
             4,
             11
@@ -7492,8 +7557,8 @@
         },
         {
           "ar": 2025,
-          "utbytte": 21.22,
-          "yield": 6.01,
+          "utbytte": 21.18,
+          "yield": 6.0,
           "maaneder": [
             4,
             11
@@ -7501,7 +7566,7 @@
         },
         {
           "ar": 2026,
-          "utbytte": 9.43,
+          "utbytte": 9.41,
           "yield": 2.67,
           "maaneder": [
             4
@@ -7512,16 +7577,16 @@
         4,
         11
       ],
-      "snitt_yield_5ar": 5.08,
+      "snitt_yield_5ar": 5.07,
       "snitt_yield_ar": 5,
-      "beskrivelse": "Stolt-Nielsen ble grunnlagt i 1959 av Jacob Stolt-Nielsen, og familien er fortsatt største eier. Selskapet er registrert på Bermuda, men ledes fra London og omtaler seg som en langsiktig eier av virksomheter innen logistikk, distribusjon og oppdrett. Aksjen handles på Oslo Børs, og selskapet låner også penger i det norske obligasjonsmarkedet.\n\nKjernen er transport og lagring av kjemikalier og andre flytende spesialprodukter, fordelt på tre virksomheter som rapporteres hver for seg. Stolt Tankers driver kjemikalietankskip, og resultatet der følger fraktratene, volumene og drivstoffprisen. Stolthaven Terminals eier tankanlegg i havner og leier ut lagerplass. Stolt Tank Containers frakter væsker i tankcontainere på skip, tog og bil, og ble større da selskapet kjøpte det britiske Suttons i 2025. Ved siden av dette driver Stolt Sea Farm oppdrett av piggvar og tunge, og gjennom Stolt-Nielsen Gas er LNG-selskapet Avenir LNG nå eid sammen med japanske NYK, etter at halvparten ble solgt dit i 2026. Bredden gjør at et svakt år for skipene kan dempes av terminalene, men den gjør også selskapet tyngre å sammenligne med rene rederier.\n\nRegnskapsåret slutter 30. november, så kvartalene ligger forskjøvet i forhold til kalenderen. Utbyttet fastsettes i dollar og kommer to ganger i året: et interimutbytte om høsten og et sluttutbytte som styret anbefaler etter årsregnskapet og generalforsamlingen på Bermuda vedtar i april. Utdelingen konkurrerer med oppkjøp og investeringer i terminaler og skip, og konsernet finansierer seg både med banklån og obligasjoner.\n\nUtbyttet utbetales halvårlig — to utbetalinger i året, og selskapet har holdt dette gående i 22 år på rad. Direkteavkastningen er 5,2 %, og 5-årssnittet på 5,1 % plasserer SNI blant de solid-yielding aksjene i sin sektor. Utbetalingsgraden på 44 % er lav og gir selskapet solid buffer til å opprettholde utbyttet ved svakere kvartaler. Utbyttet har vokst med i snitt 31,6 % per år de siste fem årene.\n\nFraktrater varierer kraftig med globalt handelsmønster og flåtekapasitet, og utbyttet svinger tilsvarende. Historikken viser klare svingninger: høyest utbytte var 25,93 NOK per aksje i 2024, lavest 9,43 NOK i 2026.",
+      "beskrivelse": "Stolt-Nielsen ble grunnlagt i 1959 av Jacob Stolt-Nielsen, og familien er fortsatt største eier. Selskapet er registrert på Bermuda, men ledes fra London og omtaler seg som en langsiktig eier av virksomheter innen logistikk, distribusjon og oppdrett. Aksjen handles på Oslo Børs, og selskapet låner også penger i det norske obligasjonsmarkedet.\n\nKjernen er transport og lagring av kjemikalier og andre flytende spesialprodukter, fordelt på tre virksomheter som rapporteres hver for seg. Stolt Tankers driver kjemikalietankskip, og resultatet der følger fraktratene, volumene og drivstoffprisen. Stolthaven Terminals eier tankanlegg i havner og leier ut lagerplass. Stolt Tank Containers frakter væsker i tankcontainere på skip, tog og bil, og ble større da selskapet kjøpte det britiske Suttons i 2025. Ved siden av dette driver Stolt Sea Farm oppdrett av piggvar og tunge, og gjennom Stolt-Nielsen Gas er LNG-selskapet Avenir LNG nå eid sammen med japanske NYK, etter at halvparten ble solgt dit i 2026. Bredden gjør at et svakt år for skipene kan dempes av terminalene, men den gjør også selskapet tyngre å sammenligne med rene rederier.\n\nRegnskapsåret slutter 30. november, så kvartalene ligger forskjøvet i forhold til kalenderen. Utbyttet fastsettes i dollar og kommer to ganger i året: et interimutbytte om høsten og et sluttutbytte som styret anbefaler etter årsregnskapet og generalforsamlingen på Bermuda vedtar i april. Utdelingen konkurrerer med oppkjøp og investeringer i terminaler og skip, og konsernet finansierer seg både med banklån og obligasjoner. Aksjen er notert på Oslo Børs med en markedsverdi på rundt 23 milliarder kroner.\n\nUtbyttet utbetales halvårlig — to utbetalinger i året, og selskapet har holdt dette gående i 22 år på rad. Direkteavkastningen er 5,2 %, og 5-årssnittet på 5,1 % plasserer SNI blant de solid-yielding aksjene i sin sektor. Utbetalingsgraden på 44 % er lav og gir selskapet solid buffer til å opprettholde utbyttet ved svakere kvartaler. Utbyttet har vokst med i snitt 31,6 % per år de siste fem årene.\n\nFraktrater varierer kraftig med globalt handelsmønster og flåtekapasitet, og utbyttet svinger tilsvarende. Historikken viser klare svingninger: høyest utbytte var 25,89 NOK per aksje i 2024, lavest 9,41 NOK i 2026.",
       "beskrivelse_intro": "Stolt-Nielsen ble grunnlagt i 1959 av Jacob Stolt-Nielsen, og familien er fortsatt største eier. Selskapet er registrert på Bermuda, men ledes fra London og omtaler seg som en langsiktig eier av virksomheter innen logistikk, distribusjon og oppdrett. Aksjen handles på Oslo Børs, og selskapet låner også penger i det norske obligasjonsmarkedet.\n\nKjernen er transport og lagring av kjemikalier og andre flytende spesialprodukter, fordelt på tre virksomheter som rapporteres hver for seg. Stolt Tankers driver kjemikalietankskip, og resultatet der følger fraktratene, volumene og drivstoffprisen. Stolthaven Terminals eier tankanlegg i havner og leier ut lagerplass. Stolt Tank Containers frakter væsker i tankcontainere på skip, tog og bil, og ble større da selskapet kjøpte det britiske Suttons i 2025. Ved siden av dette driver Stolt Sea Farm oppdrett av piggvar og tunge, og gjennom Stolt-Nielsen Gas er LNG-selskapet Avenir LNG nå eid sammen med japanske NYK, etter at halvparten ble solgt dit i 2026. Bredden gjør at et svakt år for skipene kan dempes av terminalene, men den gjør også selskapet tyngre å sammenligne med rene rederier.\n\nRegnskapsåret slutter 30. november, så kvartalene ligger forskjøvet i forhold til kalenderen. Utbyttet fastsettes i dollar og kommer to ganger i året: et interimutbytte om høsten og et sluttutbytte som styret anbefaler etter årsregnskapet og generalforsamlingen på Bermuda vedtar i april. Utdelingen konkurrerer med oppkjøp og investeringer i terminaler og skip, og konsernet finansierer seg både med banklån og obligasjoner.",
       "beskrivelse_fakta": "Stolt-Nielsen Limited leverer transport-, lagrings- og distribusjonsløsninger for flytende bulkkjemikalier, spiselige oljer, syrer og andre spesialvæsker globalt, gjennom fem segmenter: Tankskip, Terminaler, Tankcontainere, Stolt Sea Farm og Stolt-Nielsen Gas. Selskapet produserer, bearbeider og markedsfører også sjømat som piggvar og tunge, og lagrer og håndterer kjemikalier, rene petroleumsprodukter, LPG, vegetabilske oljer og biodrivstoff, samt alternative drivstoff og råstoffer.",
       "valuta": "NOK",
       "ask_egnet": false,
       "inkorporeringsland": "Bermuda",
       "data_kilde": "yahoo",
-      "utbyttehistorikk_tekst": "Utbyttet er samlet opp fra 14,14 til 21,22 kroner per aksje i 2022–2025, men veien dit gikk gjennom 1 kutt underveis. Høyeste år er 1,8 ganger det laveste — merkbare svingninger, men innenfor et gjenkjennelig spenn. Dagens yield på 5,2 % ligger nær aksjens eget 5-årssnitt på 5,1 %.",
+      "utbyttehistorikk_tekst": "Utbyttet er samlet opp fra 14,12 til 21,18 kroner per aksje i 2022–2025, men veien dit gikk gjennom 1 kutt underveis. Høyeste år er 1,8 ganger det laveste — merkbare svingninger, men innenfor et gjenkjennelig spenn. Dagens yield på 5,2 % ligger nær aksjens eget 5-årssnitt på 5,1 %.",
       "ask_status": "utenfor_eos"
     },
     {
@@ -7569,6 +7634,7 @@
         2026
       ],
       "siste_utbytte": 8.0,
+      "siste_utbytte_dato": "2026-05-07",
       "utbytte_12m": 8.0,
       "utbytte_12m_antall": 1,
       "utbytte_12m_liste": [
@@ -7684,6 +7750,7 @@
         2026
       ],
       "siste_utbytte": 3.75,
+      "siste_utbytte_dato": "2026-05-20",
       "utbytte_12m": 7.25,
       "utbytte_12m_antall": 2,
       "utbytte_12m_liste": [
@@ -7816,6 +7883,7 @@
         2026
       ],
       "siste_utbytte": 3.0,
+      "siste_utbytte_dato": "2026-05-15",
       "utbytte_12m": 3.7,
       "utbytte_12m_antall": 2,
       "utbytte_12m_liste": [
@@ -7906,14 +7974,14 @@
       "bors": "Oslo Børs",
       "pris": 138.5,
       "52u_hoy": 159.9,
-      "52u_lav": 74.9,
+      "52u_lav": 75.4,
       "markedsverdi_mrd": 27.2,
       "utbytte_per_aksje": 5.96,
       "utbytte_yield": 4.3,
       "utbytte_vekst_5ar": 8.0,
       "payout_ratio": 127.0,
       "pe_ratio": 29.28,
-      "pb_ratio": 1.47,
+      "pb_ratio": 1.48,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-10-22",
@@ -7939,6 +8007,7 @@
         2026
       ],
       "siste_utbytte": 1.49,
+      "siste_utbytte_dato": "2026-07-30",
       "utbytte_12m": 5.96,
       "utbytte_12m_antall": 4,
       "utbytte_12m_liste": [
@@ -8067,6 +8136,7 @@
         2023
       ],
       "siste_utbytte": 0.67,
+      "siste_utbytte_dato": "2023-11-20",
       "utbytte_12m": 0,
       "utbytte_12m_antall": 0,
       "utbytte_12m_liste": [],
@@ -8118,7 +8188,7 @@
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 8.0,
       "pe_ratio": 4.23,
-      "pb_ratio": 1.35,
+      "pb_ratio": 1.36,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-11-04",
@@ -8144,6 +8214,7 @@
         2026
       ],
       "siste_utbytte": 1.4592,
+      "siste_utbytte_dato": "2026-07-17",
       "utbytte_12m": 3.3712,
       "utbytte_12m_antall": 4,
       "utbytte_12m_liste": [
@@ -8261,6 +8332,7 @@
         2026
       ],
       "siste_utbytte": 0.2,
+      "siste_utbytte_dato": "2026-05-28",
       "utbytte_12m": 0.3,
       "utbytte_12m_antall": 2,
       "utbytte_12m_liste": [
@@ -8349,14 +8421,14 @@
       "bors": "Oslo Børs",
       "pris": 17.56,
       "52u_hoy": 21.1,
-      "52u_lav": 1.3,
+      "52u_lav": 1.31,
       "markedsverdi_mrd": 2.4,
       "utbytte_per_aksje": 0.3,
       "utbytte_yield": 1.71,
       "utbytte_vekst_5ar": -77.6,
       "payout_ratio": 15.0,
       "pe_ratio": 2.18,
-      "pb_ratio": 2.78,
+      "pb_ratio": 2.8,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-11-26",
@@ -8370,6 +8442,7 @@
         2026
       ],
       "siste_utbytte": 1.5,
+      "siste_utbytte_dato": "2026-09-29",
       "utbytte_12m": 4.03,
       "utbytte_12m_antall": 5,
       "utbytte_12m_liste": [
@@ -8476,7 +8549,7 @@
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 161.0,
       "pe_ratio": -16.7,
-      "pb_ratio": 0.55,
+      "pb_ratio": 0.56,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-11-18",
@@ -8487,6 +8560,7 @@
         2024
       ],
       "siste_utbytte": 0.2292,
+      "siste_utbytte_dato": "2024-09-02",
       "utbytte_12m": 0,
       "utbytte_12m_antall": 0,
       "utbytte_12m_liste": [],
@@ -8552,7 +8626,7 @@
       "utbytte_yield": 5.56,
       "utbytte_vekst_5ar": 25.7,
       "payout_ratio": 63.0,
-      "pe_ratio": 11.32,
+      "pe_ratio": 11.39,
       "pb_ratio": 2.49,
       "ex_dato": null,
       "betaling_dato": null,
@@ -8569,6 +8643,7 @@
         2026
       ],
       "siste_utbytte": 1.0,
+      "siste_utbytte_dato": "2026-05-22",
       "utbytte_12m": 1.0,
       "utbytte_12m_antall": 1,
       "utbytte_12m_liste": [
@@ -8642,7 +8717,7 @@
       "utbytte_yield": 0.0,
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 0.0,
-      "pe_ratio": 111.11,
+      "pe_ratio": 90.91,
       "pb_ratio": 1.01,
       "ex_dato": null,
       "betaling_dato": null,
@@ -8664,6 +8739,7 @@
         2023
       ],
       "siste_utbytte": 0.9,
+      "siste_utbytte_dato": "2023-04-28",
       "utbytte_12m": 0,
       "utbytte_12m_antall": 0,
       "utbytte_12m_liste": [],
@@ -8736,6 +8812,7 @@
         2018
       ],
       "siste_utbytte": 1.5296,
+      "siste_utbytte_dato": "2018-04-20",
       "utbytte_12m": 0,
       "utbytte_12m_antall": 0,
       "utbytte_12m_liste": [],
@@ -8801,6 +8878,7 @@
         2026
       ],
       "siste_utbytte": 20.0,
+      "siste_utbytte_dato": "2026-03-27",
       "utbytte_12m": 20.0,
       "utbytte_12m_antall": 1,
       "utbytte_12m_liste": [
@@ -8905,6 +8983,7 @@
         2026
       ],
       "siste_utbytte": 5.0,
+      "siste_utbytte_dato": "2026-05-21",
       "utbytte_12m": 8.0,
       "utbytte_12m_antall": 2,
       "utbytte_12m_liste": [
@@ -8997,7 +9076,7 @@
       "utbytte_yield": 3.59,
       "utbytte_vekst_5ar": -4.5,
       "payout_ratio": 78.0,
-      "pe_ratio": 21.78,
+      "pe_ratio": 22.78,
       "pb_ratio": 4.19,
       "ex_dato": null,
       "betaling_dato": null,
@@ -9018,6 +9097,7 @@
         2026
       ],
       "siste_utbytte": 2.5,
+      "siste_utbytte_dato": "2026-05-12",
       "utbytte_12m": 5.0,
       "utbytte_12m_antall": 2,
       "utbytte_12m_liste": [
@@ -9114,8 +9194,8 @@
       "utbytte_yield": 7.77,
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 44.0,
-      "pe_ratio": 6.06,
-      "pb_ratio": 1.01,
+      "pe_ratio": 6.08,
+      "pb_ratio": 1.02,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-11-04",
@@ -9142,6 +9222,7 @@
         2026
       ],
       "siste_utbytte": 4.87,
+      "siste_utbytte_dato": "2026-08-26",
       "utbytte_12m": 9.61,
       "utbytte_12m_antall": 2,
       "utbytte_12m_liste": [
@@ -9239,7 +9320,7 @@
       "utbytte_yield": 7.91,
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 44.0,
-      "pe_ratio": 5.96,
+      "pe_ratio": 6.02,
       "pb_ratio": 1.0,
       "ex_dato": null,
       "betaling_dato": null,
@@ -9267,6 +9348,7 @@
         2026
       ],
       "siste_utbytte": 4.87,
+      "siste_utbytte_dato": "2026-08-26",
       "utbytte_12m": 9.61,
       "utbytte_12m_antall": 2,
       "utbytte_12m_liste": [
@@ -9398,6 +9480,7 @@
         2026
       ],
       "siste_utbytte": 22.27,
+      "siste_utbytte_dato": "2026-03-26",
       "utbytte_12m": 22.27,
       "utbytte_12m_antall": 1,
       "utbytte_12m_liste": [
@@ -9489,6 +9572,7 @@
         2026
       ],
       "siste_utbytte": 10.1,
+      "siste_utbytte_dato": "2026-04-23",
       "utbytte_12m": 10.1,
       "utbytte_12m_antall": 1,
       "utbytte_12m_liste": [
@@ -9553,7 +9637,7 @@
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 87.7,
       "pe_ratio": 26.74,
-      "pb_ratio": 6.47,
+      "pb_ratio": 6.52,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-11-05",
@@ -9565,6 +9649,7 @@
         2026
       ],
       "siste_utbytte": 4.0,
+      "siste_utbytte_dato": "2026-04-20",
       "utbytte_12m": 4.0,
       "utbytte_12m_antall": 1,
       "utbytte_12m_liste": [
@@ -9659,6 +9744,7 @@
         2026
       ],
       "siste_utbytte": 0.2,
+      "siste_utbytte_dato": "2026-04-24",
       "utbytte_12m": 0.2,
       "utbytte_12m_antall": 1,
       "utbytte_12m_liste": [
@@ -9766,6 +9852,7 @@
         2026
       ],
       "siste_utbytte": 18.75,
+      "siste_utbytte_dato": "2026-04-30",
       "utbytte_12m": 18.75,
       "utbytte_12m_antall": 1,
       "utbytte_12m_liste": [
@@ -9858,6 +9945,7 @@
         2026
       ],
       "siste_utbytte": 5.738,
+      "siste_utbytte_dato": "2026-04-09",
       "utbytte_12m": 5.738,
       "utbytte_12m_antall": 1,
       "utbytte_12m_liste": [
@@ -9929,8 +10017,8 @@
       "utbytte_yield": 29.6,
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 288.0,
-      "pe_ratio": 44.23,
-      "pb_ratio": 9.97,
+      "pe_ratio": 44.27,
+      "pb_ratio": 10.05,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-10-28",
@@ -9941,6 +10029,7 @@
         2026
       ],
       "siste_utbytte": 66.82,
+      "siste_utbytte_dato": "2026-07-17",
       "utbytte_12m": 180.58,
       "utbytte_12m_antall": 4,
       "utbytte_12m_liste": [
@@ -10048,6 +10137,7 @@
         2026
       ],
       "siste_utbytte": 17.0,
+      "siste_utbytte_dato": "2026-03-26",
       "utbytte_12m": 17.0,
       "utbytte_12m_antall": 1,
       "utbytte_12m_liste": [
@@ -10172,6 +10262,7 @@
         2026
       ],
       "siste_utbytte": 12.0,
+      "siste_utbytte_dato": "2026-03-27",
       "utbytte_12m": 12.0,
       "utbytte_12m_antall": 1,
       "utbytte_12m_liste": [
@@ -10285,6 +10376,7 @@
         2026
       ],
       "siste_utbytte": 12.0,
+      "siste_utbytte_dato": "2026-04-24",
       "utbytte_12m": 12.0,
       "utbytte_12m_antall": 1,
       "utbytte_12m_liste": [
@@ -10389,6 +10481,7 @@
         2026
       ],
       "siste_utbytte": 11.0,
+      "siste_utbytte_dato": "2026-04-16",
       "utbytte_12m": 11.0,
       "utbytte_12m_antall": 1,
       "utbytte_12m_liste": [
@@ -10469,9 +10562,9 @@
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 101.0,
       "pe_ratio": 13.48,
-      "pb_ratio": 4.57,
-      "ex_dato": "2026-10-16",
-      "betaling_dato": "2026-10-27",
+      "pb_ratio": 4.61,
+      "ex_dato": null,
+      "betaling_dato": null,
       "rapport_dato": "2026-11-11",
       "frekvens": "Månedlig",
       "ar_med_utbytte": 3,
@@ -10480,61 +10573,58 @@
         2025,
         2026
       ],
-      "siste_utbytte": 2.6397,
-      "utbytte_12m": 18.1005,
-      "utbytte_12m_antall": 13,
+      "siste_utbytte": 2.6358,
+      "siste_utbytte_dato": "2026-10-16",
+      "utbytte_12m": 17.1326,
+      "utbytte_12m_antall": 12,
       "utbytte_12m_liste": [
         {
-          "ex_dato": "2025-10-17",
-          "belop": 0.9427
-        },
-        {
           "ex_dato": "2025-11-14",
-          "belop": 0.6599
+          "belop": 0.6589
         },
         {
           "ex_dato": "2025-12-12",
-          "belop": 0.9427
+          "belop": 0.9414
         },
         {
           "ex_dato": "2026-01-19",
-          "belop": 1.2256
+          "belop": 1.2238
         },
         {
           "ex_dato": "2026-02-19",
-          "belop": 0.5656
+          "belop": 0.5648
         },
         {
           "ex_dato": "2026-03-16",
-          "belop": 0.5656
+          "belop": 0.5648
         },
         {
           "ex_dato": "2026-04-17",
-          "belop": 0.5656
+          "belop": 0.5648
         },
         {
           "ex_dato": "2026-05-18",
-          "belop": 1.4141
+          "belop": 1.412
         },
         {
           "ex_dato": "2026-06-19",
-          "belop": 2.074
+          "belop": 2.071
         },
         {
           "ex_dato": "2026-07-17",
-          "belop": 2.074
+          "belop": 2.071
         },
         {
           "ex_dato": "2026-08-20",
-          "belop": 2.074
+          "belop": 2.071
         },
         {
           "ex_dato": "2026-09-17",
-          "belop": 2.3568
+          "belop": 2.3534
         },
         {
           "ex_dato": "2026-10-16",
-          "belop": 2.6397
+          "belop": 2.6358
         }
       ],
       "utbytte_supplert": [],
@@ -10542,15 +10632,15 @@
         "2021": 0.0,
         "2022": 0.0,
         "2023": 0.0,
-        "2024": 4.5251,
-        "2025": 5.3736
+        "2024": 4.5185,
+        "2025": 5.3657
       },
       "utbytte_forste_ar": 2024,
       "historiske_utbytter": [
         {
           "ar": 2024,
-          "utbytte": 4.53,
-          "yield": 3.02,
+          "utbytte": 4.52,
+          "yield": 3.01,
           "maaneder": [
             2,
             3,
@@ -10586,8 +10676,8 @@
         },
         {
           "ar": 2026,
-          "utbytte": 15.56,
-          "yield": 10.37,
+          "utbytte": 15.53,
+          "yield": 10.35,
           "maaneder": [
             1,
             2,
@@ -10618,7 +10708,7 @@
       ],
       "snitt_yield_5ar": 0,
       "snitt_yield_ar": 2,
-      "beskrivelse": "Himalaya Shipping ble stiftet på Bermuda i 2021 med ett formål: å eie nye Newcastlemax-skip, store tørrbulkskip for capesize-markedet. Alle skipene ble bygget ved New Times-verftet i Kina, kan gå på LNG i tillegg til vanlig drivstoff og har scrubber. Største aksjonær er Drew Holdings, som eies av en trust opprettet for Tor Olav Trøim og familien hans. Ledelsen er ikke ansatt i selskapet. Konsernsjef, finansdirektør og den daglige driften leies inn fra 2020 Bulkers Management, der Himalaya etter avtale skulle bli majoritetseier fra april 2026.\n\nAksjen kom først på Euronext Growth Oslo, ble flyttet til Euronext Expand i 2022, fikk notering i New York i 2023 og gikk over til Oslo Børs i juni 2025. Skipene er leid ut på tidscerteparti der dagraten følger Baltic-indeksen for capesize pluss et tillegg, så inntekten går opp og ned med markedet uten at skipene må befraktes på nytt. Etter avtale med befrakteren kan raten låses til en fast sats for en periode, og det har selskapet gjort for flere skip i 2026. Skipene er finansiert ved salg og tilbakeleie med kinesiske leasingselskaper.\n\nHimalaya deler ut penger hver måned, så lenge skipene tjener nok til det. Beløpet fastsettes i dollar og kommer i kroner til aksjonærer i den norske verdipapirsentralen. Utdelingene tas fra kontoen for innskutt overskudd (contributed surplus), og i august 2026 vedtok aksjonærene å flytte mer kapital over til den. Leieavtalene krever at hvert skipseiende datterselskap holder igjen en kontantbuffer, og leien går foran utdelingene. Derfor varierer beløpet fra måned til måned med capesizeratene.\n\nUtbyttet utbetales månedlig — tolv ganger per år, og selskapet har betalt utbytte de siste 3 årene. Direkteavkastningen er 3,6 %. En utbetalingsgrad på 101 % betyr at det meste av inntjeningen deles ut — utbyttet er dermed sensitivt for resultatsvingninger.\n\nFraktrater varierer kraftig med globalt handelsmønster og flåtekapasitet, og utbyttet svinger tilsvarende. Historikken viser klare svingninger: høyest utbytte var 15,56 NOK per aksje i 2026, lavest 4,53 NOK i 2024.",
+      "beskrivelse": "Himalaya Shipping ble stiftet på Bermuda i 2021 med ett formål: å eie nye Newcastlemax-skip, store tørrbulkskip for capesize-markedet. Alle skipene ble bygget ved New Times-verftet i Kina, kan gå på LNG i tillegg til vanlig drivstoff og har scrubber. Største aksjonær er Drew Holdings, som eies av en trust opprettet for Tor Olav Trøim og familien hans. Ledelsen er ikke ansatt i selskapet. Konsernsjef, finansdirektør og den daglige driften leies inn fra 2020 Bulkers Management, der Himalaya etter avtale skulle bli majoritetseier fra april 2026.\n\nAksjen kom først på Euronext Growth Oslo, ble flyttet til Euronext Expand i 2022, fikk notering i New York i 2023 og gikk over til Oslo Børs i juni 2025. Skipene er leid ut på tidscerteparti der dagraten følger Baltic-indeksen for capesize pluss et tillegg, så inntekten går opp og ned med markedet uten at skipene må befraktes på nytt. Etter avtale med befrakteren kan raten låses til en fast sats for en periode, og det har selskapet gjort for flere skip i 2026. Skipene er finansiert ved salg og tilbakeleie med kinesiske leasingselskaper.\n\nHimalaya deler ut penger hver måned, så lenge skipene tjener nok til det. Beløpet fastsettes i dollar og kommer i kroner til aksjonærer i den norske verdipapirsentralen. Utdelingene tas fra kontoen for innskutt overskudd (contributed surplus), og i august 2026 vedtok aksjonærene å flytte mer kapital over til den. Leieavtalene krever at hvert skipseiende datterselskap holder igjen en kontantbuffer, og leien går foran utdelingene. Derfor varierer beløpet fra måned til måned med capesizeratene.\n\nUtbyttet utbetales månedlig — tolv ganger per år, og selskapet har betalt utbytte de siste 3 årene. Direkteavkastningen er 3,6 %. En utbetalingsgrad på 101 % betyr at det meste av inntjeningen deles ut — utbyttet er dermed sensitivt for resultatsvingninger.\n\nFraktrater varierer kraftig med globalt handelsmønster og flåtekapasitet, og utbyttet svinger tilsvarende. Historikken viser klare svingninger: høyest utbytte var 15,53 NOK per aksje i 2026, lavest 4,52 NOK i 2024.",
       "beskrivelse_intro": "Himalaya Shipping ble stiftet på Bermuda i 2021 med ett formål: å eie nye Newcastlemax-skip, store tørrbulkskip for capesize-markedet. Alle skipene ble bygget ved New Times-verftet i Kina, kan gå på LNG i tillegg til vanlig drivstoff og har scrubber. Største aksjonær er Drew Holdings, som eies av en trust opprettet for Tor Olav Trøim og familien hans. Ledelsen er ikke ansatt i selskapet. Konsernsjef, finansdirektør og den daglige driften leies inn fra 2020 Bulkers Management, der Himalaya etter avtale skulle bli majoritetseier fra april 2026.\n\nAksjen kom først på Euronext Growth Oslo, ble flyttet til Euronext Expand i 2022, fikk notering i New York i 2023 og gikk over til Oslo Børs i juni 2025. Skipene er leid ut på tidscerteparti der dagraten følger Baltic-indeksen for capesize pluss et tillegg, så inntekten går opp og ned med markedet uten at skipene må befraktes på nytt. Etter avtale med befrakteren kan raten låses til en fast sats for en periode, og det har selskapet gjort for flere skip i 2026. Skipene er finansiert ved salg og tilbakeleie med kinesiske leasingselskaper.\n\nHimalaya deler ut penger hver måned, så lenge skipene tjener nok til det. Beløpet fastsettes i dollar og kommer i kroner til aksjonærer i den norske verdipapirsentralen. Utdelingene tas fra kontoen for innskutt overskudd (contributed surplus), og i august 2026 vedtok aksjonærene å flytte mer kapital over til den. Leieavtalene krever at hvert skipseiende datterselskap holder igjen en kontantbuffer, og leien går foran utdelingene. Derfor varierer beløpet fra måned til måned med capesizeratene.",
       "beskrivelse_fakta": "Himalaya Shipping Ltd. leverer tørrbulktransport globalt, og betjener store råvarehandelsselskaper, aktører innen råvarer og energiomstilling samt multimodale transportselskaper. Per 31. desember 2024 eide og drev selskapet en flåte på 12 Newcastlemax tørrbulkskip, hvert med kapasitet på rundt 210 000 dødvekttonn. Selskapet ble stiftet i 2021 og har base i Hamilton på Bermuda.",
       "valuta": "NOK",
@@ -10637,16 +10727,16 @@
       "52u_hoy": 18.2,
       "52u_lav": 8.24,
       "markedsverdi_mrd": 0.5,
-      "utbytte_per_aksje": 4.0,
-      "utbytte_yield": 26.32,
+      "utbytte_per_aksje": 0.5,
+      "utbytte_yield": 3.29,
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 40.0,
       "pe_ratio": 11.78,
       "pb_ratio": 1.59,
-      "ex_dato": "2026-10-16",
-      "betaling_dato": "2026-10-28",
+      "ex_dato": null,
+      "betaling_dato": null,
       "rapport_dato": "2026-10-30",
-      "frekvens": "Halvårlig",
+      "frekvens": "Årlig",
       "ar_med_utbytte": 5,
       "utbytteaar": [
         2010,
@@ -10656,6 +10746,7 @@
         2026
       ],
       "siste_utbytte": 2.0,
+      "siste_utbytte_dato": "2026-10-16",
       "utbytte_12m": 2.5,
       "utbytte_12m_antall": 2,
       "utbytte_12m_liste": [
@@ -10694,7 +10785,7 @@
       ],
       "snitt_yield_5ar": 0.0,
       "snitt_yield_ar": 5,
-      "beskrivelse": "En transformatorstasjon i Narvik som skal få nytt mellomspenningsanlegg og styringssystem, og et lager i Våler der roboter med kamerasyn skal tømme containere: slike oppdrag er typiske for Goodtech. Selskapet er systemintegrator innen industriell automasjon og digitalisering, og leverer prosjektering, programvare, installasjon og service til kunder innen energi, industri og infrastruktur. Hovedkontoret ligger på Helsfyr i Oslo, og arbeidet utføres fra regionkontorer rundt i Norge.\n\nDagens Goodtech er resultatet av en omfattende opprydding. I 2025 solgte selskapet det svenske datterselskapet Goodtech Solutions, og virksomheten innen miljøløsninger på Åland ble solgt og senere avviklet. Begge endte senere i konkurs, og tapene fra dem, blant annet trekk på gamle bankgarantier, preget regnskapet det året. For å beholde en fot i Sverige ble et nytt selskap, Goodtech AB, opprettet, og en del av de ansatte ble flyttet dit. Ved utgangen av 2025 hadde konsernet ingen rentebærende gjeld. Mange av de ansatte eier aksjer i selskapet, blant annet gjennom et eget kjøpsprogram.\n\nFor 2025 foreslo styret et ordinært utbytte i tråd med en politikk om å dele ut om lag halvparten av resultatet fra den videreførte virksomheten. I 2024 ble det ikke delt ut noe. Høsten 2026 foreslo styret i tillegg et tilleggsutbytte, som skulle vedtas på en ekstraordinær generalforsamling i oktober. Styret begrunnet det med at selskapet hadde mer kapital enn en prosjektvirksomhet som binder lite kapital trenger. Utdelingen gjelder kapital styret mener er til overs etter omstillingen, og er noe annet enn det ordinære utbyttet, som følger resultatet.\n\nUtbyttet utbetales halvårlig — to utbetalinger i året, og selskapet har betalt utbytte det siste året. Direkteavkastningen er 16,4 %. Utbetalingsgraden på 40 % er lav og gir selskapet solid buffer til å opprettholde utbyttet ved svakere kvartaler.\n\nOrdreinngangen varierer med konjunkturen, men langsiktige kontrakter kan gi god sikt på inntjening.",
+      "beskrivelse": "En transformatorstasjon i Narvik som skal få nytt mellomspenningsanlegg og styringssystem, og et lager i Våler der roboter med kamerasyn skal tømme containere: slike oppdrag er typiske for Goodtech. Selskapet er systemintegrator innen industriell automasjon og digitalisering, og leverer prosjektering, programvare, installasjon og service til kunder innen energi, industri og infrastruktur. Hovedkontoret ligger på Helsfyr i Oslo, og arbeidet utføres fra regionkontorer rundt i Norge.\n\nDagens Goodtech er resultatet av en omfattende opprydding. I 2025 solgte selskapet det svenske datterselskapet Goodtech Solutions, og virksomheten innen miljøløsninger på Åland ble solgt og senere avviklet. Begge endte senere i konkurs, og tapene fra dem, blant annet trekk på gamle bankgarantier, preget regnskapet det året. For å beholde en fot i Sverige ble et nytt selskap, Goodtech AB, opprettet, og en del av de ansatte ble flyttet dit. Ved utgangen av 2025 hadde konsernet ingen rentebærende gjeld. Mange av de ansatte eier aksjer i selskapet, blant annet gjennom et eget kjøpsprogram.\n\nFor 2025 foreslo styret et ordinært utbytte i tråd med en politikk om å dele ut om lag halvparten av resultatet fra den videreførte virksomheten. I 2024 ble det ikke delt ut noe. Høsten 2026 foreslo styret i tillegg et tilleggsutbytte, som skulle vedtas på en ekstraordinær generalforsamling i oktober. Styret begrunnet det med at selskapet hadde mer kapital enn en prosjektvirksomhet som binder lite kapital trenger. Utdelingen gjelder kapital styret mener er til overs etter omstillingen, og er noe annet enn det ordinære utbyttet, som følger resultatet.\n\nUtbyttet utbetales én gang i året, og selskapet har betalt utbytte det siste året. Direkteavkastningen er 16,4 %. Utbetalingsgraden på 40 % er lav og gir selskapet solid buffer til å opprettholde utbyttet ved svakere kvartaler.\n\nOrdreinngangen varierer med konjunkturen, men langsiktige kontrakter kan gi god sikt på inntjening.",
       "beskrivelse_intro": "En transformatorstasjon i Narvik som skal få nytt mellomspenningsanlegg og styringssystem, og et lager i Våler der roboter med kamerasyn skal tømme containere: slike oppdrag er typiske for Goodtech. Selskapet er systemintegrator innen industriell automasjon og digitalisering, og leverer prosjektering, programvare, installasjon og service til kunder innen energi, industri og infrastruktur. Hovedkontoret ligger på Helsfyr i Oslo, og arbeidet utføres fra regionkontorer rundt i Norge.\n\nDagens Goodtech er resultatet av en omfattende opprydding. I 2025 solgte selskapet det svenske datterselskapet Goodtech Solutions, og virksomheten innen miljøløsninger på Åland ble solgt og senere avviklet. Begge endte senere i konkurs, og tapene fra dem, blant annet trekk på gamle bankgarantier, preget regnskapet det året. For å beholde en fot i Sverige ble et nytt selskap, Goodtech AB, opprettet, og en del av de ansatte ble flyttet dit. Ved utgangen av 2025 hadde konsernet ingen rentebærende gjeld. Mange av de ansatte eier aksjer i selskapet, blant annet gjennom et eget kjøpsprogram.\n\nFor 2025 foreslo styret et ordinært utbytte i tråd med en politikk om å dele ut om lag halvparten av resultatet fra den videreførte virksomheten. I 2024 ble det ikke delt ut noe. Høsten 2026 foreslo styret i tillegg et tilleggsutbytte, som skulle vedtas på en ekstraordinær generalforsamling i oktober. Styret begrunnet det med at selskapet hadde mer kapital enn en prosjektvirksomhet som binder lite kapital trenger. Utdelingen gjelder kapital styret mener er til overs etter omstillingen, og er noe annet enn det ordinære utbyttet, som følger resultatet.",
       "beskrivelse_fakta": "Goodtech ASA leverer styringssystemer, digitalisering og produksjonsløsninger til produksjonsbedrifter i Norge, Sverige, Finland, Europa for øvrig og internasjonalt.",
       "valuta": "NOK",
@@ -10702,8 +10793,8 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "",
-      "annonsert_utbytte": 2.0,
-      "annonsert_ex": "2026-10-16",
+      "arsrate_kilde": "betalt_12m",
+      "arsrate_ekstra_trukket": 2.0,
       "ask_status": "ja"
     },
     {
@@ -10715,8 +10806,8 @@
       "52u_hoy": 130.0,
       "52u_lav": 70.8,
       "markedsverdi_mrd": 2.8,
-      "utbytte_per_aksje": 0.9,
-      "utbytte_yield": 0.69,
+      "utbytte_per_aksje": 0.0,
+      "utbytte_yield": 0.0,
       "utbytte_vekst_5ar": -2.6,
       "payout_ratio": 0.0,
       "pe_ratio": 132.14,
@@ -10736,6 +10827,7 @@
         2025
       ],
       "siste_utbytte": 0.9,
+      "siste_utbytte_dato": "2025-05-23",
       "utbytte_12m": 0,
       "utbytte_12m_antall": 0,
       "utbytte_12m_liste": [],
@@ -10779,6 +10871,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "",
+      "arsrate_kilde": "stoppet",
       "ask_status": "ja"
     },
     {
@@ -10815,6 +10908,7 @@
         2026
       ],
       "siste_utbytte": 0.5,
+      "siste_utbytte_dato": "2026-08-25",
       "utbytte_12m": 2.8,
       "utbytte_12m_antall": 4,
       "utbytte_12m_liste": [
@@ -10907,6 +11001,7 @@
         2026
       ],
       "siste_utbytte": 0.6,
+      "siste_utbytte_dato": "2026-05-06",
       "utbytte_12m": 0.6,
       "utbytte_12m_antall": 1,
       "utbytte_12m_liste": [
@@ -11005,6 +11100,7 @@
         2026
       ],
       "siste_utbytte": 3.0,
+      "siste_utbytte_dato": "2026-05-13",
       "utbytte_12m": 3.0,
       "utbytte_12m_antall": 1,
       "utbytte_12m_liste": [
@@ -11105,7 +11201,7 @@
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 106.0,
       "pe_ratio": 7.36,
-      "pb_ratio": 1.51,
+      "pb_ratio": 1.52,
       "ex_dato": "2026-11-09",
       "betaling_dato": "2026-11-13",
       "rapport_dato": "2026-11-18",
@@ -11117,6 +11213,7 @@
         2026
       ],
       "siste_utbytte": 0.3231,
+      "siste_utbytte_dato": "2026-08-17",
       "utbytte_12m": 0.872,
       "utbytte_12m_antall": 3,
       "utbytte_12m_liste": [
@@ -11229,6 +11326,7 @@
         2026
       ],
       "siste_utbytte": 3.0,
+      "siste_utbytte_dato": "2026-07-14",
       "utbytte_12m": 20.0,
       "utbytte_12m_antall": 4,
       "utbytte_12m_liste": [
@@ -11338,8 +11436,8 @@
       "52u_hoy": 37.66,
       "52u_lav": 24.2,
       "markedsverdi_mrd": 11.8,
-      "utbytte_per_aksje": 0.3,
-      "utbytte_yield": 0.92,
+      "utbytte_per_aksje": 0.0,
+      "utbytte_yield": 0.0,
       "utbytte_vekst_5ar": 18.9,
       "payout_ratio": 0.0,
       "pe_ratio": 45.06,
@@ -11358,6 +11456,7 @@
         2025
       ],
       "siste_utbytte": 0.2991,
+      "siste_utbytte_dato": "2025-05-02",
       "utbytte_12m": 0,
       "utbytte_12m_antall": 0,
       "utbytte_12m_liste": [],
@@ -11408,7 +11507,8 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "utbyttehistorikk_tekst": "Utbyttet er ned fra 2,99 til 0,30 kroner per aksje i 2022–2025, men for 2024 har vi ikke registrert noe utbytte. Spennet er stort: høyeste år er 19,9 ganger det laveste, så størrelsen på utbetalingen er lite forutsigbar fra år til år. Dagens yield på 0,9 % er lavere enn aksjens eget 5-årssnitt på 5,8 %.",
+      "utbyttehistorikk_tekst": "Utbyttet er ned fra 2,99 til 0,30 kroner per aksje i 2022–2025, men for 2024 har vi ikke registrert noe utbytte. Spennet er stort: høyeste år er 19,9 ganger det laveste, så størrelsen på utbetalingen er lite forutsigbar fra år til år.",
+      "arsrate_kilde": "stoppet",
       "ask_status": "ja"
     },
     {
@@ -11425,7 +11525,7 @@
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 70.0,
       "pe_ratio": 12.04,
-      "pb_ratio": 2.49,
+      "pb_ratio": 2.5,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-10-27",
@@ -11439,6 +11539,7 @@
         2026
       ],
       "siste_utbytte": 0.6886,
+      "siste_utbytte_dato": "2026-10-15",
       "utbytte_12m": 1.7872,
       "utbytte_12m_antall": 2,
       "utbytte_12m_liste": [
@@ -11544,6 +11645,7 @@
         2026
       ],
       "siste_utbytte": 0.8,
+      "siste_utbytte_dato": "2026-05-21",
       "utbytte_12m": 0.8,
       "utbytte_12m_antall": 1,
       "utbytte_12m_liste": [
@@ -11611,6 +11713,7 @@
         2026
       ],
       "siste_utbytte": 0.5,
+      "siste_utbytte_dato": "2026-08-17",
       "utbytte_12m": 1.84,
       "utbytte_12m_antall": 4,
       "utbytte_12m_liste": [
@@ -11690,7 +11793,7 @@
       "bors": "Oslo Børs",
       "pris": 15.2,
       "52u_hoy": 16.5,
-      "52u_lav": 10.5,
+      "52u_lav": 10.55,
       "markedsverdi_mrd": 1.5,
       "utbytte_per_aksje": 0.0,
       "utbytte_yield": 0.0,
@@ -11711,6 +11814,7 @@
         2019
       ],
       "siste_utbytte": 4.0,
+      "siste_utbytte_dato": "2019-09-20",
       "utbytte_12m": 0,
       "utbytte_12m_antall": 0,
       "utbytte_12m_liste": [],
@@ -11769,6 +11873,7 @@
         2026
       ],
       "siste_utbytte": 1.49,
+      "siste_utbytte_dato": "2026-05-20",
       "utbytte_12m": 1.49,
       "utbytte_12m_antall": 1,
       "utbytte_12m_liste": [
@@ -11857,7 +11962,7 @@
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 0.0,
       "pe_ratio": 18.82,
-      "pb_ratio": 1.63,
+      "pb_ratio": 1.64,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-10-29",
@@ -11865,6 +11970,7 @@
       "ar_med_utbytte": 0,
       "utbytteaar": [],
       "siste_utbytte": 0.0,
+      "siste_utbytte_dato": null,
       "utbytte_12m": 0.0,
       "utbytte_12m_antall": 0,
       "utbytte_12m_liste": [],
@@ -11897,8 +12003,8 @@
       "utbytte_per_aksje": 0.75,
       "utbytte_yield": 3.6,
       "utbytte_vekst_5ar": 0.0,
-      "payout_ratio": 46.2,
-      "pe_ratio": 12.84,
+      "payout_ratio": 46.5,
+      "pe_ratio": 12.93,
       "pb_ratio": 2.02,
       "ex_dato": null,
       "betaling_dato": null,
@@ -11915,6 +12021,7 @@
         2025
       ],
       "siste_utbytte": 0.187,
+      "siste_utbytte_dato": "2025-07-22",
       "utbytte_12m": 0,
       "utbytte_12m_antall": 0,
       "utbytte_12m_liste": [],
@@ -11982,14 +12089,14 @@
       "bors": "Oslo Børs",
       "pris": 22.4,
       "52u_hoy": 30.25,
-      "52u_lav": 20.05,
+      "52u_lav": 20.45,
       "markedsverdi_mrd": 2.2,
       "utbytte_per_aksje": 2.48,
       "utbytte_yield": 11.07,
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 0.0,
       "pe_ratio": 17.5,
-      "pb_ratio": 1.35,
+      "pb_ratio": 1.36,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-11-12",
@@ -12000,6 +12107,7 @@
         2026
       ],
       "siste_utbytte": 0.62,
+      "siste_utbytte_dato": "2026-08-18",
       "utbytte_12m": 2.48,
       "utbytte_12m_antall": 4,
       "utbytte_12m_liste": [
@@ -12079,8 +12187,8 @@
       "utbytte_per_aksje": 0.9,
       "utbytte_yield": 10.18,
       "utbytte_vekst_5ar": 15.8,
-      "payout_ratio": 70.0,
-      "pe_ratio": 6.88,
+      "payout_ratio": 70.1,
+      "pe_ratio": 6.89,
       "pb_ratio": 1.43,
       "ex_dato": null,
       "betaling_dato": null,
@@ -12098,6 +12206,7 @@
         2026
       ],
       "siste_utbytte": 0.45,
+      "siste_utbytte_dato": "2026-05-28",
       "utbytte_12m": 0.9,
       "utbytte_12m_antall": 2,
       "utbytte_12m_liste": [
@@ -12208,6 +12317,7 @@
       "ar_med_utbytte": 0,
       "utbytteaar": [],
       "siste_utbytte": 0.0,
+      "siste_utbytte_dato": null,
       "utbytte_12m": 0.0,
       "utbytte_12m_antall": 0,
       "utbytte_12m_liste": [],
@@ -12256,6 +12366,7 @@
         2016
       ],
       "siste_utbytte": 6958.027,
+      "siste_utbytte_dato": "2016-05-27",
       "utbytte_12m": 0,
       "utbytte_12m_antall": 0,
       "utbytte_12m_liste": [],
@@ -12306,8 +12417,9 @@
         2025,
         2026
       ],
-      "siste_utbytte": 0.2376,
-      "utbytte_12m": 0.7752,
+      "siste_utbytte": 0.2377,
+      "siste_utbytte_dato": "2026-09-29",
+      "utbytte_12m": 0.7753,
       "utbytte_12m_antall": 4,
       "utbytte_12m_liste": [
         {
@@ -12320,11 +12432,11 @@
         },
         {
           "ex_dato": "2026-06-29",
-          "belop": 0.2376
+          "belop": 0.2377
         },
         {
           "ex_dato": "2026-09-29",
-          "belop": 0.2376
+          "belop": 0.2377
         }
       ],
       "utbytte_supplert": [],
@@ -12426,6 +12538,7 @@
         2026
       ],
       "siste_utbytte": 20.0,
+      "siste_utbytte_dato": "2026-05-04",
       "utbytte_12m": 28.0,
       "utbytte_12m_antall": 2,
       "utbytte_12m_liste": [
@@ -12552,6 +12665,7 @@
         2026
       ],
       "siste_utbytte": 3.3,
+      "siste_utbytte_dato": "2026-05-12",
       "utbytte_12m": 3.3,
       "utbytte_12m_antall": 1,
       "utbytte_12m_liste": [
@@ -12674,6 +12788,7 @@
         2026
       ],
       "siste_utbytte": 8.0,
+      "siste_utbytte_dato": "2026-06-19",
       "utbytte_12m": 8.0,
       "utbytte_12m_antall": 1,
       "utbytte_12m_liste": [
@@ -12754,7 +12869,7 @@
       "utbytte_yield": 5.51,
       "utbytte_vekst_5ar": 22.9,
       "payout_ratio": 55.0,
-      "pe_ratio": 9.91,
+      "pe_ratio": 10.0,
       "pb_ratio": 1.11,
       "ex_dato": null,
       "betaling_dato": null,
@@ -12783,6 +12898,7 @@
         2026
       ],
       "siste_utbytte": 24.5,
+      "siste_utbytte_dato": "2026-03-26",
       "utbytte_12m": 34.5,
       "utbytte_12m_antall": 2,
       "utbytte_12m_liste": [
@@ -12899,6 +13015,7 @@
         2026
       ],
       "siste_utbytte": 11.7,
+      "siste_utbytte_dato": "2026-03-26",
       "utbytte_12m": 11.7,
       "utbytte_12m_antall": 1,
       "utbytte_12m_liste": [
@@ -12986,7 +13103,7 @@
       "utbytte_yield": 7.4,
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 66.0,
-      "pe_ratio": 6.17,
+      "pe_ratio": 6.12,
       "pb_ratio": 0.32,
       "ex_dato": null,
       "betaling_dato": null,
@@ -13022,6 +13139,7 @@
         2026
       ],
       "siste_utbytte": 13.5,
+      "siste_utbytte_dato": "2026-03-20",
       "utbytte_12m": 13.5,
       "utbytte_12m_antall": 1,
       "utbytte_12m_liste": [
@@ -13121,6 +13239,7 @@
         2026
       ],
       "siste_utbytte": 5.0,
+      "siste_utbytte_dato": "2026-03-27",
       "utbytte_12m": 5.0,
       "utbytte_12m_antall": 1,
       "utbytte_12m_liste": [
@@ -13220,6 +13339,7 @@
         2026
       ],
       "siste_utbytte": 5.0,
+      "siste_utbytte_dato": "2026-03-20",
       "utbytte_12m": 5.0,
       "utbytte_12m_antall": 1,
       "utbytte_12m_liste": [
@@ -13301,7 +13421,7 @@
       "bors": "Oslo Børs",
       "pris": 300.8,
       "52u_hoy": 380.0,
-      "52u_lav": 247.1,
+      "52u_lav": 249.0,
       "markedsverdi_mrd": 0.2,
       "utbytte_per_aksje": 22.0,
       "utbytte_yield": 7.31,
@@ -13334,6 +13454,7 @@
         2026
       ],
       "siste_utbytte": 22.0,
+      "siste_utbytte_dato": "2026-04-16",
       "utbytte_12m": 22.0,
       "utbytte_12m_antall": 1,
       "utbytte_12m_liste": [
@@ -13415,13 +13536,13 @@
       "bors": "Euronext Growth Oslo",
       "pris": 170.98,
       "52u_hoy": 200.0,
-      "52u_lav": 145.0,
+      "52u_lav": 147.02,
       "markedsverdi_mrd": 0.7,
       "utbytte_per_aksje": 11.0,
       "utbytte_yield": 6.43,
       "utbytte_vekst_5ar": 19.0,
       "payout_ratio": 57.0,
-      "pe_ratio": 8.92,
+      "pe_ratio": 8.98,
       "pb_ratio": 0.47,
       "ex_dato": null,
       "betaling_dato": null,
@@ -13440,6 +13561,7 @@
         2026
       ],
       "siste_utbytte": 11.0,
+      "siste_utbytte_dato": "2026-04-09",
       "utbytte_12m": 11.0,
       "utbytte_12m_antall": 1,
       "utbytte_12m_liste": [
@@ -13543,6 +13665,7 @@
         2026
       ],
       "siste_utbytte": 4.9,
+      "siste_utbytte_dato": "2026-03-27",
       "utbytte_12m": 4.9,
       "utbytte_12m_antall": 1,
       "utbytte_12m_liste": [
@@ -13630,7 +13753,7 @@
       "utbytte_yield": 6.73,
       "utbytte_vekst_5ar": 11.6,
       "payout_ratio": 15.0,
-      "pe_ratio": 2.17,
+      "pe_ratio": 2.22,
       "pb_ratio": 0.19,
       "ex_dato": null,
       "betaling_dato": null,
@@ -13649,6 +13772,7 @@
         2026
       ],
       "siste_utbytte": 10.5,
+      "siste_utbytte_dato": "2026-03-27",
       "utbytte_12m": 10.5,
       "utbytte_12m_antall": 1,
       "utbytte_12m_liste": [
@@ -13730,7 +13854,7 @@
       "bors": "Euronext Growth Oslo",
       "pris": 200.0,
       "52u_hoy": 232.75,
-      "52u_lav": 183.24,
+      "52u_lav": 186.02,
       "markedsverdi_mrd": 0.6,
       "utbytte_per_aksje": 13.5,
       "utbytte_yield": 6.75,
@@ -13751,6 +13875,7 @@
         2026
       ],
       "siste_utbytte": 13.5,
+      "siste_utbytte_dato": "2026-03-27",
       "utbytte_12m": 16.5,
       "utbytte_12m_antall": 2,
       "utbytte_12m_liste": [
@@ -13852,6 +13977,7 @@
         2026
       ],
       "siste_utbytte": 5.75,
+      "siste_utbytte_dato": "2026-03-20",
       "utbytte_12m": 5.75,
       "utbytte_12m_antall": 1,
       "utbytte_12m_liste": [
@@ -13959,6 +14085,7 @@
         2026
       ],
       "siste_utbytte": 10.0,
+      "siste_utbytte_dato": "2026-03-20",
       "utbytte_12m": 10.0,
       "utbytte_12m_antall": 1,
       "utbytte_12m_liste": [
@@ -14042,12 +14169,12 @@
       "52u_hoy": 204.0,
       "52u_lav": 90.1,
       "markedsverdi_mrd": 48.6,
-      "utbytte_per_aksje": 14.14,
-      "utbytte_yield": 8.45,
+      "utbytte_per_aksje": 14.13,
+      "utbytte_yield": 8.44,
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 30.0,
       "pe_ratio": 5.74,
-      "pb_ratio": 1.64,
+      "pb_ratio": 1.65,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-11-26",
@@ -14057,25 +14184,26 @@
         2025,
         2026
       ],
-      "siste_utbytte": 6.0343,
-      "utbytte_12m": 14.0485,
+      "siste_utbytte": 6.0246,
+      "siste_utbytte_dato": "2026-10-15",
+      "utbytte_12m": 14.0261,
       "utbytte_12m_antall": 4,
       "utbytte_12m_liste": [
         {
           "ex_dato": "2026-01-06",
-          "belop": 0.4714
+          "belop": 0.4707
         },
         {
           "ex_dato": "2026-04-14",
-          "belop": 1.5086
+          "belop": 1.5062
         },
         {
           "ex_dato": "2026-06-02",
-          "belop": 6.0343
+          "belop": 6.0246
         },
         {
           "ex_dato": "2026-10-15",
-          "belop": 6.0343
+          "belop": 6.0246
         }
       ],
       "utbytte_supplert": [],
@@ -14084,7 +14212,7 @@
         "2022": 0.0,
         "2023": 0.0,
         "2024": 0.0,
-        "2025": 0.4714
+        "2025": 0.4707
       },
       "utbytte_forste_ar": 2025,
       "historiske_utbytter": [
@@ -14098,8 +14226,8 @@
         },
         {
           "ar": 2026,
-          "utbytte": 14.05,
-          "yield": 8.39,
+          "utbytte": 14.03,
+          "yield": 8.38,
           "maaneder": [
             1,
             4,
@@ -14131,7 +14259,7 @@
       "pris": 6.76,
       "52u_hoy": 7.5,
       "52u_lav": 5.22,
-      "markedsverdi_mrd": 0.0,
+      "markedsverdi_mrd": 0.8,
       "utbytte_per_aksje": 0.17,
       "utbytte_yield": 2.51,
       "utbytte_vekst_5ar": 0.0,
@@ -14155,29 +14283,30 @@
         2025,
         2026
       ],
-      "siste_utbytte": 0.1697,
-      "utbytte_12m": 0.1697,
+      "siste_utbytte": 0.1694,
+      "siste_utbytte_dato": "2026-05-28",
+      "utbytte_12m": 0.1694,
       "utbytte_12m_antall": 1,
       "utbytte_12m_liste": [
         {
           "ex_dato": "2026-05-28",
-          "belop": 0.1697
+          "belop": 0.1694
         }
       ],
       "utbytte_supplert": [],
       "utbytte_per_ar": {
-        "2021": 0.2829,
-        "2022": 0.9429,
-        "2023": 0.3771,
+        "2021": 0.2824,
+        "2022": 0.9413,
+        "2023": 0.3765,
         "2024": 0.0,
-        "2025": 0.2829
+        "2025": 0.2824
       },
       "utbytte_forste_ar": 2005,
       "historiske_utbytter": [
         {
           "ar": 2022,
           "utbytte": 0.94,
-          "yield": 13.95,
+          "yield": 13.93,
           "maaneder": [
             5,
             8
@@ -14186,7 +14315,7 @@
         {
           "ar": 2023,
           "utbytte": 0.38,
-          "yield": 5.58,
+          "yield": 5.57,
           "maaneder": [
             5
           ]
@@ -14211,7 +14340,7 @@
       "utbetalingsmaaneder": [
         5
       ],
-      "snitt_yield_5ar": 5.58,
+      "snitt_yield_5ar": 5.57,
       "snitt_yield_ar": 5,
       "beskrivelse": "Jinhui Shipping ble registrert på Bermuda i 1994 og har vært notert i Oslo helt siden da, men ledes fra Hongkong og har ingen skattepliktig virksomhet i Norge. Morselskapet er Jinhui Holdings Company Limited, som har aksjene sine på børsen i Hongkong og eier mer enn halvparten av aksjene. Begge selskapene ledes av brødrene Ng. Styreleder Ng Siu Fai og administrerende direktør Ng Kam Wah Thomas har sittet i ledelsen siden tidlig på 1990-tallet. Aksjonærer i Oslo eier dermed en minoritetspost i et selskap med en klar hovedeier.\n\nFlåten er tørrbulkskip fra supramax opp til capesize, både egne og leide inn på lengre kontrakter. I 2025 gikk det meste av flåten på lengre kontrakter, mens resten seilte i spotmarkedet. I 2025 solgte Jinhui åtte gamle supramaxer og bestilte nye ultramaxer med levering i 2028, og i 2026 har det kommet flere nybyggkontrakter. Ved siden av skipene eier konsernet børsnoterte aksjer, fondsandeler og næringseiendom i form av lokaler og parkeringsplasser som leies ut. Kursendringer på disse postene går rett inn i resultatet, så overskuddet kan svinge av grunner som ikke har med fraktratene å gjøre.\n\nUtbyttet kommer som regel én gang i året, vedtas av generalforsamlingen i mai og fastsettes i dollar. Målet er et stabilt utbytte med jevn vekst når inntjeningen tillater det, men selskapet skriver selv at et forutsigbart utbytte er vanskelig å love i et så syklisk marked, og enkelte år har det ikke kommet noe. Store nybyggprogram og lånevilkårene i bankene veier med når styret foreslår beløpet. Ved utgangen av 2025 var det meste av balansen finansiert med egenkapital.\n\nUtbyttet utbetales én gang i året, og selskapet har betalt utbytte de siste 2 årene. Direkteavkastningen er 2,5 %, og 5-årssnittet på 5,6 % plasserer JIN i det lavere sjiktet av aksjene i sin sektor. Utbetalingsgraden på 28 % er lav og gir selskapet solid buffer til å opprettholde utbyttet ved svakere kvartaler.\n\nFraktrater varierer kraftig med globalt handelsmønster og flåtekapasitet, og utbyttet svinger tilsvarende. Historikken viser klare svingninger: høyest utbytte var 0,94 NOK per aksje i 2022, lavest 0,17 NOK i 2026.",
       "beskrivelse_intro": "Jinhui Shipping ble registrert på Bermuda i 1994 og har vært notert i Oslo helt siden da, men ledes fra Hongkong og har ingen skattepliktig virksomhet i Norge. Morselskapet er Jinhui Holdings Company Limited, som har aksjene sine på børsen i Hongkong og eier mer enn halvparten av aksjene. Begge selskapene ledes av brødrene Ng. Styreleder Ng Siu Fai og administrerende direktør Ng Kam Wah Thomas har sittet i ledelsen siden tidlig på 1990-tallet. Aksjonærer i Oslo eier dermed en minoritetspost i et selskap med en klar hovedeier.\n\nFlåten er tørrbulkskip fra supramax opp til capesize, både egne og leide inn på lengre kontrakter. I 2025 gikk det meste av flåten på lengre kontrakter, mens resten seilte i spotmarkedet. I 2025 solgte Jinhui åtte gamle supramaxer og bestilte nye ultramaxer med levering i 2028, og i 2026 har det kommet flere nybyggkontrakter. Ved siden av skipene eier konsernet børsnoterte aksjer, fondsandeler og næringseiendom i form av lokaler og parkeringsplasser som leies ut. Kursendringer på disse postene går rett inn i resultatet, så overskuddet kan svinge av grunner som ikke har med fraktratene å gjøre.\n\nUtbyttet kommer som regel én gang i året, vedtas av generalforsamlingen i mai og fastsettes i dollar. Målet er et stabilt utbytte med jevn vekst når inntjeningen tillater det, men selskapet skriver selv at et forutsigbart utbytte er vanskelig å love i et så syklisk marked, og enkelte år har det ikke kommet noe. Store nybyggprogram og lånevilkårene i bankene veier med når styret foreslår beløpet. Ved utgangen av 2025 var det meste av balansen finansiert med egenkapital.",
@@ -14237,7 +14366,7 @@
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 38.0,
       "pe_ratio": 5.57,
-      "pb_ratio": 1.55,
+      "pb_ratio": 1.56,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-11-04",
@@ -14248,6 +14377,7 @@
         2026
       ],
       "siste_utbytte": 0.9728,
+      "siste_utbytte_dato": "2026-07-17",
       "utbytte_12m": 2.3931,
       "utbytte_12m_antall": 4,
       "utbytte_12m_liste": [
@@ -14329,7 +14459,7 @@
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 0.0,
       "pe_ratio": 12.55,
-      "pb_ratio": 1.46,
+      "pb_ratio": 1.47,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-11-18",
@@ -14338,7 +14468,8 @@
       "utbytteaar": [
         2024
       ],
-      "siste_utbytte": 0.1886,
+      "siste_utbytte": 0.1883,
+      "siste_utbytte_dato": "2024-11-28",
       "utbytte_12m": 0,
       "utbytte_12m_antall": 0,
       "utbytte_12m_liste": [],
@@ -14347,7 +14478,7 @@
         "2021": 0.0,
         "2022": 0.0,
         "2023": 0.0,
-        "2024": 3.0696,
+        "2024": 3.0656,
         "2025": 0.0
       },
       "utbytte_forste_ar": 2024,
@@ -14355,7 +14486,7 @@
         {
           "ar": 2024,
           "utbytte": 3.07,
-          "yield": 7.1,
+          "yield": 7.09,
           "maaneder": [
             1,
             3,
@@ -14398,11 +14529,11 @@
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 0,
       "pe_ratio": 120.0,
-      "pb_ratio": 1.67,
+      "pb_ratio": 1.68,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": null,
-      "frekvens": "Halvårlig",
+      "frekvens": "Uregelmessig",
       "ar_med_utbytte": 3,
       "utbytteaar": [
         2022,
@@ -14410,6 +14541,7 @@
         2026
       ],
       "siste_utbytte": 1.39,
+      "siste_utbytte_dato": "2026-10-15",
       "utbytte_12m": 2.6,
       "utbytte_12m_antall": 2,
       "utbytte_12m_liste": [
@@ -14468,7 +14600,7 @@
       ],
       "snitt_yield_5ar": 32.62,
       "snitt_yield_ar": 4,
-      "beskrivelse": "Western Bulk Chartering lever av å leie inn tørrbulkskip fra andre redere og skaffe dem last. Skipene er i størrelsene fra handysize til kamsarmax, og lastene er blant annet korn, kull, malm, bauxitt, sement, tømmer og stålprodukter. Kundene er råvareselskaper og industri over hele verden, og selskapet har kontorer i Oslo, Bergen, Singapore, Dubai, Seattle, Santiago, Sydney og Casablanca. I Chile har det vært aktivt siden 1982. Kistefos-gruppen kontrollerer et klart flertall av aksjene, og aksjen handles på Euronext Growth Oslo, der den kom i 2021.\n\nFortjenesten er marginen mellom leien selskapet betaler for skipet og det kunden betaler for frakten, så den kommer av å treffe på tid og sted, ikke av å eie tonnasje. Et eget handelsbord bruker fraktderivater (FFA) både til å sikre posisjoner og til å ta egne posisjoner. Selskapet beskriver selv balansen som gjeldfri, men når markedet går mot selskapet, er det ingen skipsverdier å falle tilbake på. I desember 2025 gikk Western Bulk inn som deleier i ett kamsarmaxskip sammen med Mowinckels Rederi og to investorer, og tar seg av den kommersielle driften av det.\n\nUtbyttepolitikken er å dele ut opptil fire femtedeler av nettoresultatet hvert kvartal. Fordi resultatet avhenger av posisjonene, kan utbyttet falle bort helt. Det skjedde for både første og andre kvartal 2026, da stengingen av Hormuzstredet holdt tre skip fast i Persiabukta, drivstoffet ble dyrere og selskapet bevisst bygde posisjoner for andre halvår. For 2025 utsatte styret beslutningen til årsresultatet var klart, og det ble ett utbytte, vedtatt i februar 2026.\n\nUtbyttet utbetales halvårlig — to utbetalinger i året, og selskapet har betalt utbytte det siste året. Direkteavkastningen er 5,8 %, og 5-årssnittet på 32,6 % plasserer WEST blant de solid-yielding aksjene i sin sektor.\n\nFraktrater varierer kraftig med globalt handelsmønster og flåtekapasitet, og utbyttet svinger tilsvarende. Historikken viser klare svingninger: høyest utbytte var 28,32 NOK per aksje i 2022, lavest 2,60 NOK i 2026.",
+      "beskrivelse": "Western Bulk Chartering lever av å leie inn tørrbulkskip fra andre redere og skaffe dem last. Skipene er i størrelsene fra handysize til kamsarmax, og lastene er blant annet korn, kull, malm, bauxitt, sement, tømmer og stålprodukter. Kundene er råvareselskaper og industri over hele verden, og selskapet har kontorer i Oslo, Bergen, Singapore, Dubai, Seattle, Santiago, Sydney og Casablanca. I Chile har det vært aktivt siden 1982. Kistefos-gruppen kontrollerer et klart flertall av aksjene, og aksjen handles på Euronext Growth Oslo, der den kom i 2021.\n\nFortjenesten er marginen mellom leien selskapet betaler for skipet og det kunden betaler for frakten, så den kommer av å treffe på tid og sted, ikke av å eie tonnasje. Et eget handelsbord bruker fraktderivater (FFA) både til å sikre posisjoner og til å ta egne posisjoner. Selskapet beskriver selv balansen som gjeldfri, men når markedet går mot selskapet, er det ingen skipsverdier å falle tilbake på. I desember 2025 gikk Western Bulk inn som deleier i ett kamsarmaxskip sammen med Mowinckels Rederi og to investorer, og tar seg av den kommersielle driften av det.\n\nUtbyttepolitikken er å dele ut opptil fire femtedeler av nettoresultatet hvert kvartal. Fordi resultatet avhenger av posisjonene, kan utbyttet falle bort helt. Det skjedde for både første og andre kvartal 2026, da stengingen av Hormuzstredet holdt tre skip fast i Persiabukta, drivstoffet ble dyrere og selskapet bevisst bygde posisjoner for andre halvår. For 2025 utsatte styret beslutningen til årsresultatet var klart, og det ble ett utbytte, vedtatt i februar 2026.\n\nUtbyttet utbetales uregelmessig, og selskapet har betalt utbytte det siste året. Direkteavkastningen er 5,8 %, og 5-årssnittet på 32,6 % plasserer WEST blant de solid-yielding aksjene i sin sektor.\n\nFraktrater varierer kraftig med globalt handelsmønster og flåtekapasitet, og utbyttet svinger tilsvarende. Historikken viser klare svingninger: høyest utbytte var 28,32 NOK per aksje i 2022, lavest 2,60 NOK i 2026.",
       "beskrivelse_intro": "Western Bulk Chartering lever av å leie inn tørrbulkskip fra andre redere og skaffe dem last. Skipene er i størrelsene fra handysize til kamsarmax, og lastene er blant annet korn, kull, malm, bauxitt, sement, tømmer og stålprodukter. Kundene er råvareselskaper og industri over hele verden, og selskapet har kontorer i Oslo, Bergen, Singapore, Dubai, Seattle, Santiago, Sydney og Casablanca. I Chile har det vært aktivt siden 1982. Kistefos-gruppen kontrollerer et klart flertall av aksjene, og aksjen handles på Euronext Growth Oslo, der den kom i 2021.\n\nFortjenesten er marginen mellom leien selskapet betaler for skipet og det kunden betaler for frakten, så den kommer av å treffe på tid og sted, ikke av å eie tonnasje. Et eget handelsbord bruker fraktderivater (FFA) både til å sikre posisjoner og til å ta egne posisjoner. Selskapet beskriver selv balansen som gjeldfri, men når markedet går mot selskapet, er det ingen skipsverdier å falle tilbake på. I desember 2025 gikk Western Bulk inn som deleier i ett kamsarmaxskip sammen med Mowinckels Rederi og to investorer, og tar seg av den kommersielle driften av det.\n\nUtbyttepolitikken er å dele ut opptil fire femtedeler av nettoresultatet hvert kvartal. Fordi resultatet avhenger av posisjonene, kan utbyttet falle bort helt. Det skjedde for både første og andre kvartal 2026, da stengingen av Hormuzstredet holdt tre skip fast i Persiabukta, drivstoffet ble dyrere og selskapet bevisst bygde posisjoner for andre halvår. For 2025 utsatte styret beslutningen til årsresultatet var klart, og det ble ett utbytte, vedtatt i februar 2026.",
       "beskrivelse_fakta": "Western Bulk Chartering AS er et tørrbulkrederi som eier, befrakter og opererer skip for transport av blant annet mineraler, tømmer, sement, bauxitt, stålprodukter, korn og kull. Den innleide flåten varierer mellom 100 og 150 fartøy, både på reisecerteparti og periodecerteparti.",
       "valuta": "NOK",
@@ -14493,7 +14625,7 @@
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 0.0,
       "pe_ratio": 161.24,
-      "pb_ratio": 1.33,
+      "pb_ratio": 1.34,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-11-30",
@@ -14503,6 +14635,7 @@
         2026
       ],
       "siste_utbytte": 3.0,
+      "siste_utbytte_dato": "2026-09-10",
       "utbytte_12m": 3.5,
       "utbytte_12m_antall": 2,
       "utbytte_12m_liste": [
@@ -14577,6 +14710,7 @@
         2024
       ],
       "siste_utbytte": 0.5,
+      "siste_utbytte_dato": "2024-06-05",
       "utbytte_12m": 0,
       "utbytte_12m_antall": 0,
       "utbytte_12m_liste": [],
@@ -14652,6 +14786,7 @@
       "ar_med_utbytte": 0,
       "utbytteaar": [],
       "siste_utbytte": 0.0,
+      "siste_utbytte_dato": null,
       "utbytte_12m": 0.0,
       "utbytte_12m_antall": 0,
       "utbytte_12m_liste": [],
@@ -14686,7 +14821,7 @@
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 0.0,
       "pe_ratio": 15.89,
-      "pb_ratio": 1.3,
+      "pb_ratio": 1.31,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-11-04",
@@ -14694,6 +14829,7 @@
       "ar_med_utbytte": 0,
       "utbytteaar": [],
       "siste_utbytte": 0.0,
+      "siste_utbytte_dato": null,
       "utbytte_12m": 0.0,
       "utbytte_12m_antall": 0,
       "utbytte_12m_liste": [],
@@ -14721,14 +14857,14 @@
       "bors": "Oslo Børs",
       "pris": 50.8,
       "52u_hoy": 66.0,
-      "52u_lav": 20.1,
+      "52u_lav": 20.6,
       "markedsverdi_mrd": 5.0,
       "utbytte_per_aksje": 0.6,
       "utbytte_yield": 1.18,
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 82.0,
-      "pe_ratio": 69.59,
-      "pb_ratio": 18.76,
+      "pe_ratio": 72.57,
+      "pb_ratio": 18.8,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-10-29",
@@ -14741,6 +14877,7 @@
         2026
       ],
       "siste_utbytte": 0.6,
+      "siste_utbytte_dato": "2026-05-08",
       "utbytte_12m": 0.6,
       "utbytte_12m_antall": 1,
       "utbytte_12m_liste": [
@@ -14831,6 +14968,7 @@
         2026
       ],
       "siste_utbytte": 5.5,
+      "siste_utbytte_dato": "2026-05-13",
       "utbytte_12m": 5.5,
       "utbytte_12m_antall": 1,
       "utbytte_12m_liste": [
@@ -14887,7 +15025,7 @@
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 83.0,
       "pe_ratio": 49.06,
-      "pb_ratio": 2.09,
+      "pb_ratio": 2.08,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-11-11",
@@ -14896,13 +15034,14 @@
       "utbytteaar": [
         2026
       ],
-      "siste_utbytte": 1.7162,
-      "utbytte_12m": 1.7162,
+      "siste_utbytte": 1.7166,
+      "siste_utbytte_dato": "2026-05-27",
+      "utbytte_12m": 1.7166,
       "utbytte_12m_antall": 1,
       "utbytte_12m_liste": [
         {
           "ex_dato": "2026-05-27",
-          "belop": 1.7162
+          "belop": 1.7166
         }
       ],
       "utbytte_supplert": [],
@@ -14947,7 +15086,7 @@
       "pris": 12.06,
       "52u_hoy": 15.0,
       "52u_lav": 6.3,
-      "markedsverdi_mrd": 0.0,
+      "markedsverdi_mrd": 4.0,
       "utbytte_per_aksje": 0.0,
       "utbytte_yield": 0.0,
       "utbytte_vekst_5ar": 0.0,
@@ -14968,6 +15107,7 @@
         2018
       ],
       "siste_utbytte": 0.2933,
+      "siste_utbytte_dato": "2018-04-20",
       "utbytte_12m": 0,
       "utbytte_12m_antall": 0,
       "utbytte_12m_liste": [],
@@ -15040,6 +15180,7 @@
         2022
       ],
       "siste_utbytte": 1.0,
+      "siste_utbytte_dato": "2022-06-01",
       "utbytte_12m": 0,
       "utbytte_12m_antall": 0,
       "utbytte_12m_liste": [],
@@ -15103,6 +15244,7 @@
         2024
       ],
       "siste_utbytte": 0.2,
+      "siste_utbytte_dato": "2024-04-16",
       "utbytte_12m": 0,
       "utbytte_12m_antall": 0,
       "utbytte_12m_liste": [],
@@ -15175,6 +15317,7 @@
         2026
       ],
       "siste_utbytte": 0.5,
+      "siste_utbytte_dato": "2026-03-02",
       "utbytte_12m": 0.5,
       "utbytte_12m_antall": 1,
       "utbytte_12m_liste": [
@@ -15239,8 +15382,8 @@
       "52u_hoy": 7.51,
       "52u_lav": 4.69,
       "markedsverdi_mrd": 2.0,
-      "utbytte_per_aksje": 0.42,
-      "utbytte_yield": 6.99,
+      "utbytte_per_aksje": 0.0,
+      "utbytte_yield": 0.0,
       "utbytte_vekst_5ar": 29.5,
       "payout_ratio": 127.0,
       "pe_ratio": 5.18,
@@ -15260,6 +15403,7 @@
         2025
       ],
       "siste_utbytte": 0.42,
+      "siste_utbytte_dato": "2025-05-30",
       "utbytte_12m": 0,
       "utbytte_12m_antall": 0,
       "utbytte_12m_liste": [],
@@ -15318,7 +15462,8 @@
       "ask_egnet": true,
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
-      "utbyttehistorikk_tekst": "Utbyttet har steget uten et eneste kutt fra 2022–2025, fra 0,18 til 0,42 kroner per aksje. Samlet er utbetalingen 2,3-doblet i perioden. Dagens yield på 7,0 % ligger over aksjens eget 5-årssnitt på 4,3 %.",
+      "utbyttehistorikk_tekst": "Utbyttet har steget uten et eneste kutt fra 2022–2025, fra 0,18 til 0,42 kroner per aksje. Samlet er utbetalingen 2,3-doblet i perioden.",
+      "arsrate_kilde": "stoppet",
       "ask_status": "ja"
     },
     {
@@ -15328,14 +15473,14 @@
       "bors": "Oslo Børs",
       "pris": 48.5,
       "52u_hoy": 52.5,
-      "52u_lav": 38.0,
+      "52u_lav": 38.1,
       "markedsverdi_mrd": 7.9,
       "utbytte_per_aksje": 8.41,
       "utbytte_yield": 17.34,
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 149.0,
       "pe_ratio": 8.65,
-      "pb_ratio": 8.76,
+      "pb_ratio": 8.82,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-11-27",
@@ -15347,12 +15492,13 @@
         2026
       ],
       "siste_utbytte": 2.05,
-      "utbytte_12m": 8.2541,
+      "siste_utbytte_dato": "2026-09-03",
+      "utbytte_12m": 8.251,
       "utbytte_12m_antall": 4,
       "utbytte_12m_liste": [
         {
           "ex_dato": "2025-12-02",
-          "belop": 2.0741
+          "belop": 2.071
         },
         {
           "ex_dato": "2026-03-05",
@@ -15372,15 +15518,15 @@
         "2021": 0.0,
         "2022": 0.0,
         "2023": 0.0,
-        "2024": 4.1483,
-        "2025": 8.2965
+        "2024": 4.1419,
+        "2025": 8.2839
       },
       "utbytte_forste_ar": 2024,
       "historiske_utbytter": [
         {
           "ar": 2024,
-          "utbytte": 4.15,
-          "yield": 8.55,
+          "utbytte": 4.14,
+          "yield": 8.54,
           "maaneder": [
             9,
             12
@@ -15388,8 +15534,8 @@
         },
         {
           "ar": 2025,
-          "utbytte": 8.3,
-          "yield": 17.11,
+          "utbytte": 8.28,
+          "yield": 17.08,
           "maaneder": [
             3,
             6,
@@ -15448,6 +15594,7 @@
       "ar_med_utbytte": 0,
       "utbytteaar": [],
       "siste_utbytte": 0.0,
+      "siste_utbytte_dato": null,
       "utbytte_12m": 0.0,
       "utbytte_12m_antall": 0,
       "utbytte_12m_liste": [],
@@ -15493,6 +15640,7 @@
         2026
       ],
       "siste_utbytte": 6.4,
+      "siste_utbytte_dato": "2026-03-27",
       "utbytte_12m": 6.4,
       "utbytte_12m_antall": 1,
       "utbytte_12m_liste": [
@@ -15550,14 +15698,14 @@
       "bors": "Oslo Børs",
       "pris": 21.2,
       "52u_hoy": 21.8,
-      "52u_lav": 14.75,
+      "52u_lav": 14.8,
       "markedsverdi_mrd": 1.4,
       "utbytte_per_aksje": 0.0,
       "utbytte_yield": 0.0,
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 0.0,
       "pe_ratio": 30.72,
-      "pb_ratio": 1.16,
+      "pb_ratio": 1.17,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2027-02-17",
@@ -15575,6 +15723,7 @@
         2022
       ],
       "siste_utbytte": 21.0,
+      "siste_utbytte_dato": "2022-08-09",
       "utbytte_12m": 0,
       "utbytte_12m_antall": 0,
       "utbytte_12m_liste": [],
@@ -15645,6 +15794,7 @@
         2026
       ],
       "siste_utbytte": 2.5,
+      "siste_utbytte_dato": "2026-05-04",
       "utbytte_12m": 2.5,
       "utbytte_12m_antall": 1,
       "utbytte_12m_liste": [
@@ -15736,7 +15886,7 @@
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 0.0,
       "pe_ratio": 107.34,
-      "pb_ratio": 5.01,
+      "pb_ratio": 5.05,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-10-22",
@@ -15748,6 +15898,7 @@
         2011
       ],
       "siste_utbytte": 0.4,
+      "siste_utbytte_dato": "2011-06-17",
       "utbytte_12m": 0,
       "utbytte_12m_antall": 0,
       "utbytte_12m_liste": [],
@@ -15799,6 +15950,7 @@
         2007
       ],
       "siste_utbytte": 1.4895,
+      "siste_utbytte_dato": "2007-06-04",
       "utbytte_12m": 0,
       "utbytte_12m_antall": 0,
       "utbytte_12m_liste": [],
@@ -15849,6 +16001,7 @@
         2026
       ],
       "siste_utbytte": 0.575,
+      "siste_utbytte_dato": "2026-03-16",
       "utbytte_12m": 0.575,
       "utbytte_12m_antall": 1,
       "utbytte_12m_liste": [
@@ -15900,8 +16053,8 @@
       "52u_hoy": 47.9,
       "52u_lav": 36.3,
       "markedsverdi_mrd": 0.6,
-      "utbytte_per_aksje": 7.15,
-      "utbytte_yield": 17.4,
+      "utbytte_per_aksje": 5.17,
+      "utbytte_yield": 12.58,
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 0,
       "pe_ratio": 22.58,
@@ -15917,6 +16070,7 @@
         2026
       ],
       "siste_utbytte": 1.2544,
+      "siste_utbytte_dato": "2026-08-07",
       "utbytte_12m": 5.1705,
       "utbytte_12m_antall": 4,
       "utbytte_12m_liste": [
@@ -15943,7 +16097,7 @@
         "2022": 0.0,
         "2023": 0.0,
         "2024": 10.9835,
-        "2025": 12.7422
+        "2025": 12.739
       },
       "utbytte_forste_ar": 2024,
       "historiske_utbytter": [
@@ -15997,12 +16151,97 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "",
+      "arsrate_kilde": "betalt_12m",
       "kapital_tilbake": {
         "andel": 1.0,
         "melding_dato": "2026-08-25",
         "melding_id": 680668
       },
       "ask_status": "growth"
+    },
+    {
+      "ticker": "IWS",
+      "navn": "Integrated Wind Solutions ASA",
+      "sektor": "Energitjenester",
+      "bors": "Oslo Børs",
+      "pris": 61.8,
+      "52u_hoy": 66.0,
+      "52u_lav": 40.0,
+      "markedsverdi_mrd": 2.5,
+      "utbytte_per_aksje": 5.0,
+      "utbytte_yield": 8.09,
+      "utbytte_vekst_5ar": 0.0,
+      "payout_ratio": 66.0,
+      "pe_ratio": 10.35,
+      "pb_ratio": 1.4,
+      "ex_dato": null,
+      "betaling_dato": null,
+      "rapport_dato": null,
+      "frekvens": "Kvartalsvis",
+      "ar_med_utbytte": 1,
+      "utbytteaar": [
+        2026
+      ],
+      "siste_utbytte": 1.0,
+      "siste_utbytte_dato": "2026-09-07",
+      "utbytte_12m": 5.0,
+      "utbytte_12m_antall": 3,
+      "utbytte_12m_liste": [
+        {
+          "ex_dato": "2026-03-02",
+          "belop": 3.0
+        },
+        {
+          "ex_dato": "2026-06-01",
+          "belop": 1.0
+        },
+        {
+          "ex_dato": "2026-09-07",
+          "belop": 1.0
+        }
+      ],
+      "utbytte_supplert": [],
+      "utbytte_per_ar": {
+        "2021": 0.0,
+        "2022": 0.0,
+        "2023": 0.0,
+        "2024": 0.0,
+        "2025": 0.0
+      },
+      "utbytte_forste_ar": 2026,
+      "historiske_utbytter": [
+        {
+          "ar": 2026,
+          "utbytte": 5.0,
+          "yield": 8.09,
+          "maaneder": [
+            3,
+            6,
+            9
+          ]
+        }
+      ],
+      "utbetalingsmaaneder": [
+        3,
+        6,
+        9
+      ],
+      "snitt_yield_5ar": 0,
+      "snitt_yield_ar": 0,
+      "beskrivelse": "Integrated Wind Solutions leverer skip og tjenester til havvindindustrien. Kjernen er IWS Fleet, som eier serviceskip av typen CSOV. Skipene har en gangvei og en kran som kompenserer for bølgebevegelsene, slik at teknikerne kan gå direkte over til turbinene, og de bor om bord mens de arbeider på feltet. IWS eier om lag tre fjerdedeler av IWS Fleet. Ved utgangen av 2025 var alle de seks skipene i drift, tre for utbyggingen av Dogger Bank i Nordsjøen og tre for turbinprodusenten Siemens Gamesa.\n\nVed siden av skipene eier IWS selskapet IWS Services, som leverer utstyr, ingeniørarbeid og personell til leverandørkjeden i havvind. Hovedvirksomheten der er arbeid på overgangsstykkene mellom fundament og tårn, og datterselskapet ProCon er slått sammen med Hyndla. IWS eier også nesten halvparten av PEAK Wind, som gir råd, selger analyser og drifter vindparker for andre. Etterspørselen etter alt dette avhenger av hvor mye havvind som bygges og vedlikeholdes, ikke av oljeprisen.\n\nStyret besluttet i desember 2025 å begynne med utdelinger, og den første kom i mars 2026. Etter utbyttepolitikken skal minst halve årsresultatet tilbake til aksjonærene over tid, med et ordinært utbytte hvert kvartal og eventuelt et ekstraordinært i første kvartal når selskapet har mer kapital enn det trenger. Utdelingene i 2026 er klassifisert som tilbakebetaling av innbetalt kapital, som skattlegges annerledes enn vanlig utbytte. I september 2026 bestilte IWS Fleet fire nye skip fra et kinesisk verft for levering i 2029 og 2030, og selskapet har sagt at de skal finansieres uten ny egenkapital og uten å kutte det ordinære utbyttet.\n\nUtbyttet utbetales kvartalsvis — fire utbetalinger i året, og selskapet har betalt utbytte det siste året. Direkteavkastningen er 8,1 %. Utbetalingsgraden er 66 %, noe som er balansert for en moden utbytteaksje.",
+      "beskrivelse_intro": "Integrated Wind Solutions leverer skip og tjenester til havvindindustrien. Kjernen er IWS Fleet, som eier serviceskip av typen CSOV. Skipene har en gangvei og en kran som kompenserer for bølgebevegelsene, slik at teknikerne kan gå direkte over til turbinene, og de bor om bord mens de arbeider på feltet. IWS eier om lag tre fjerdedeler av IWS Fleet. Ved utgangen av 2025 var alle de seks skipene i drift, tre for utbyggingen av Dogger Bank i Nordsjøen og tre for turbinprodusenten Siemens Gamesa.\n\nVed siden av skipene eier IWS selskapet IWS Services, som leverer utstyr, ingeniørarbeid og personell til leverandørkjeden i havvind. Hovedvirksomheten der er arbeid på overgangsstykkene mellom fundament og tårn, og datterselskapet ProCon er slått sammen med Hyndla. IWS eier også nesten halvparten av PEAK Wind, som gir råd, selger analyser og drifter vindparker for andre. Etterspørselen etter alt dette avhenger av hvor mye havvind som bygges og vedlikeholdes, ikke av oljeprisen.\n\nStyret besluttet i desember 2025 å begynne med utdelinger, og den første kom i mars 2026. Etter utbyttepolitikken skal minst halve årsresultatet tilbake til aksjonærene over tid, med et ordinært utbytte hvert kvartal og eventuelt et ekstraordinært i første kvartal når selskapet har mer kapital enn det trenger. Utdelingene i 2026 er klassifisert som tilbakebetaling av innbetalt kapital, som skattlegges annerledes enn vanlig utbytte. I september 2026 bestilte IWS Fleet fire nye skip fra et kinesisk verft for levering i 2029 og 2030, og selskapet har sagt at de skal finansieres uten ny egenkapital og uten å kutte det ordinære utbyttet.",
+      "beskrivelse_fakta": "",
+      "valuta": "NOK",
+      "ask_egnet": true,
+      "inkorporeringsland": "Norge",
+      "data_kilde": "yahoo",
+      "utbyttehistorikk_tekst": "",
+      "kapital_tilbake": {
+        "andel": 1.0,
+        "melding_dato": "2026-08-27",
+        "melding_id": 680956
+      },
+      "ask_status": "ja"
     }
   ],
   "osebx_historikk": {

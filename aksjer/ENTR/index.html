@@ -361,7 +361,13 @@
         <span>e<span class="site-logo-x">x</span>day<span class="site-logo-dot">.no</span></span>
       </a>
       <ul class="site-nav-menu">
-        <li><a href="/aksjer/" class="active">Aksjer</a></li>
+        <li class="has-dropdown">
+          <a href="/aksjer/" class="active">Aksjer</a>
+          <ul class="nav-dropdown">
+            <li><a href="/aksjer/">Alle aksjer</a></li>
+            <li><a href="/avnoteringer/">Avnoterte aksjer</a></li>
+          </ul>
+        </li>
         <li><a href="/aksjer/sektor/" class="">Sektorer</a></li>
         <li class="has-dropdown">
           <a href="/utbyttekalender/" class="">Kalender</a>
@@ -384,7 +390,7 @@
         <li><a href="/om/" class="">Om</a></li>
       </ul>
       <div class="site-nav-actions">
-        <a href="https://exday.no/" class="site-app-btn">Åpne app</a>
+        <a href="/app/" class="site-app-btn">Åpne app</a>
         <button id="dark-toggle" class="site-dark-btn" aria-label="Bytt fargemodus">
           <svg class="sun-icon" width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
           <svg class="moon-icon" width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display:none;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
@@ -423,7 +429,7 @@
   <h1>ENTR – Entra ASA</h1>
   <p class="sub">Eiendom · Halvårlig utbytte · Oslo Børs</p>
 
-  <div class="kurshode"><div class="kh-topp"><div><div class="kh-pris">94,70<span class="kh-valuta">NOK</span></div><div class="kh-meta">Kurs 16. okt 2026</div></div><div class="kh-spenn" aria-label="52 ukers spenn fra 89,90 til 121,80"><span class="kh-spenn-tekst">52 uker</span><span class="kh-spenn-tall">89,90</span><span class="kh-spenn-linje"><span class="kh-spenn-punkt" style="left:15.0%"></span></span><span class="kh-spenn-tall">121,80</span></div></div><dl class="kh-tall"><div><dt>Yield</dt><dd>2,32 %</dd></div><div><dt>Utbytte/aksje</dt><dd>2,20 NOK</dd><span class="kh-note"><span class="kcard-note">siste 12 mnd</span></span></div><div><dt>Ex-dato</dt><dd><span class="kh-ukjent">Ikke kjent</span></dd></div></dl></div>
+  <div class="kurshode"><div class="kh-topp"><div><div class="kh-pris">94,70<span class="kh-valuta">NOK</span></div><div class="kh-meta">Kurs 18. okt 2026</div></div><div class="kh-spenn" aria-label="52 ukers spenn fra 89,90 til 119,00"><span class="kh-spenn-tekst">52 uker</span><span class="kh-spenn-tall">89,90</span><span class="kh-spenn-linje"><span class="kh-spenn-punkt" style="left:16.5%"></span></span><span class="kh-spenn-tall">119,00</span></div></div><dl class="kh-tall"><div><dt>Yield</dt><dd>2,32 %</dd></div><div><dt>Utbytte/aksje</dt><dd>2,20 NOK</dd><span class="kh-note"><span class="kcard-note">siste 12 mnd</span></span></div><div><dt>Ex-dato</dt><dd><span class="kh-ukjent">Ikke kjent</span></dd></div></dl></div>
 
   <nav class="ak-tabnav" id="ak-tabnav" aria-label="Sideseksjoner">
     <a href="#oversikt" class="ak-tab aktiv">Oversikt</a>
@@ -509,7 +515,7 @@
   </script>
 </div>
 
-  <dl class="korttall"><div><dt>Neste kvartalsrapport</dt><dd>10. feb 2027</dd></div><div><dt>5-årssnitt yield</dt><dd>2,91 %</dd></div><div><dt>År med utbytte</dt><dd>11</dd></div><div><dt>P/E</dt><dd>15,3</dd></div><div><dt>Payout ratio</dt><dd>18 %</dd></div><div><dt>Markedsverdi</dt><dd>17,2 mrd NOK</dd></div></dl>
+  <dl class="korttall"><div><dt>Neste kvartalsrapport</dt><dd>10. feb 2027</dd></div><div><dt>5-årssnitt yield</dt><dd>2,91 %</dd></div><div><dt>År med utbytte</dt><dd>11</dd></div><div><dt>P/E</dt><dd>15,2</dd></div><div><dt>Payout ratio</dt><dd>18 %</dd></div><div><dt>Markedsverdi</dt><dd>17,2 mrd NOK</dd></div></dl>
 
   
 
@@ -562,7 +568,7 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
   
 
   <div class="risiko-seksjon"><h2>Risiko for utbyttet</h2><ul class="risiko-liste"><li>Utbyttet er kuttet før — fra 2,50 til 1,10 kroner i 2025</li>
-<li>Yielden avhenger sterkt av inngangskursen: samme utbytte gir 1,8 % på 12-månedershøyden (121,80 kr) og 2,4 % på bunnen (89,90 kr)</li>
+<li>Yielden avhenger sterkt av inngangskursen: samme utbytte gir 1,8 % på 12-månedershøyden (119,00 kr) og 2,4 % på bunnen (89,90 kr)</li>
 <li>Renteøkninger øker finansieringskostnader og presser verdivurderinger</li>
 <li>Ledighetsgrad og leiepriser varierer med konjunktur</li></ul></div>
 
@@ -573,7 +579,7 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
   <!-- ── NØKKELTALL ── -->
   <section id="nokkeltall">
 
-  <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Eiendom</td></tr><tr><td>Frekvens</td><td>Halvårlig</td></tr><tr><td>Utbytte per aksje</td><td>2,20 NOK</td></tr><tr><td>Direkteavkastning</td><td>2,32%</td></tr><tr><td>5-årssnitt yield</td><td>2,91%</td></tr><tr><td>År med utbytte</td><td>11</td></tr><tr><td>P/E</td><td>15,3</td></tr><tr><td>Payout ratio</td><td>18%</td></tr><tr><td>Utbyttevekst 5 år</td><td>-40,4% p.a.</td></tr><tr><td>Markedsverdi</td><td>17,2 mrd NOK</td></tr><tr><td>52-ukers kurs</td><td>89,90 – 121,80 NOK</td></tr></tbody></table>
+  <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Eiendom</td></tr><tr><td>Frekvens</td><td>Halvårlig</td></tr><tr><td>Utbytte per aksje</td><td>2,20 NOK</td></tr><tr><td>Direkteavkastning</td><td>2,32%</td></tr><tr><td>5-årssnitt yield</td><td>2,91%</td></tr><tr><td>År med utbytte</td><td>11</td></tr><tr><td>P/E</td><td>15,2</td></tr><tr><td>Payout ratio</td><td>18%</td></tr><tr><td>Utbyttevekst 5 år</td><td>-40,4% p.a.</td></tr><tr><td>Markedsverdi</td><td>17,2 mrd NOK</td></tr><tr><td>52-ukers kurs</td><td>89,90 – 119,00 NOK</td></tr></tbody></table>
 
   </section>
 
@@ -605,7 +611,7 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
     <a href="https://exday.no/app/?aksje=ENTR">Åpne ENTR i exday.no →</a>
   </div>
 
-  <p class="updated">Tallene er hentet 16. oktober 2026</p>
+  <p class="updated">Tallene er hentet 18. oktober 2026</p>
   <footer style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid #e5e7eb;font-size:0.78rem;text-align:center;color:#9ca3af;line-height:1.6;" class="std-footer">
     <p>Kurs og utbyttedata hentes fra Yahoo Finance og Euronext. Oppdateres daglig på børsdager.</p>
     <p style="max-width:36rem;margin:0.4rem auto;">

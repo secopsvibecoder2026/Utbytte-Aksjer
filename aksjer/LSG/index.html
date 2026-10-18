@@ -361,7 +361,13 @@
         <span>e<span class="site-logo-x">x</span>day<span class="site-logo-dot">.no</span></span>
       </a>
       <ul class="site-nav-menu">
-        <li><a href="/aksjer/" class="active">Aksjer</a></li>
+        <li class="has-dropdown">
+          <a href="/aksjer/" class="active">Aksjer</a>
+          <ul class="nav-dropdown">
+            <li><a href="/aksjer/">Alle aksjer</a></li>
+            <li><a href="/avnoteringer/">Avnoterte aksjer</a></li>
+          </ul>
+        </li>
         <li><a href="/aksjer/sektor/" class="">Sektorer</a></li>
         <li class="has-dropdown">
           <a href="/utbyttekalender/" class="">Kalender</a>
@@ -384,7 +390,7 @@
         <li><a href="/om/" class="">Om</a></li>
       </ul>
       <div class="site-nav-actions">
-        <a href="https://exday.no/" class="site-app-btn">Åpne app</a>
+        <a href="/app/" class="site-app-btn">Åpne app</a>
         <button id="dark-toggle" class="site-dark-btn" aria-label="Bytt fargemodus">
           <svg class="sun-icon" width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
           <svg class="moon-icon" width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display:none;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
@@ -423,7 +429,7 @@
   <h1>LSG – Lerøy Seafood Group ASA</h1>
   <p class="sub">Havbruk · Årlig utbytte · Oslo Børs</p>
 
-  <div class="kurshode"><div class="kh-topp"><div><div class="kh-pris">41,90<span class="kh-valuta">NOK</span></div><div class="kh-meta">Kurs 16. okt 2026</div></div><div class="kh-spenn" aria-label="52 ukers spenn fra 37,74 til 52,40"><span class="kh-spenn-tekst">52 uker</span><span class="kh-spenn-tall">37,74</span><span class="kh-spenn-linje"><span class="kh-spenn-punkt" style="left:28.4%"></span></span><span class="kh-spenn-tall">52,40</span></div></div><dl class="kh-tall"><div><dt>Yield</dt><dd>5,97 %</dd></div><div><dt>Utbytte/aksje</dt><dd>2,50 NOK</dd></div><div><dt>Ex-dato</dt><dd><span class="kh-ukjent">Ikke kjent</span></dd></div></dl></div>
+  <div class="kurshode"><div class="kh-topp"><div><div class="kh-pris">41,90<span class="kh-valuta">NOK</span></div><div class="kh-meta">Kurs 18. okt 2026</div></div><div class="kh-spenn" aria-label="52 ukers spenn fra 37,74 til 52,40"><span class="kh-spenn-tekst">52 uker</span><span class="kh-spenn-tall">37,74</span><span class="kh-spenn-linje"><span class="kh-spenn-punkt" style="left:28.4%"></span></span><span class="kh-spenn-tall">52,40</span></div></div><dl class="kh-tall"><div><dt>Yield</dt><dd>5,97 %</dd></div><div><dt>Utbytte/aksje</dt><dd>2,50 NOK</dd></div><div><dt>Ex-dato</dt><dd><span class="kh-ukjent">Ikke kjent</span></dd></div></dl></div>
 
   <nav class="ak-tabnav" id="ak-tabnav" aria-label="Sideseksjoner">
     <a href="#oversikt" class="ak-tab aktiv">Oversikt</a>
@@ -526,7 +532,7 @@
   <!-- ── UTBYTTE ── -->
   <section id="utbytte">
 
-  <div class="analyse"><h2>Yield mot sektoren</h2><p>Yielden på 6,0% er 2,2 prosentpoeng under snittet for Havbruk-sektoren (8,2%).</p></div>
+  <div class="analyse"><h2>Yield mot sektoren</h2><p>Yielden på 6,0% er 2,3 prosentpoeng over snittet for Havbruk-sektoren (3,6%).</p></div>
 
   <h2>Historiske utbytter</h2><svg viewBox="0 0 420 180" style="width:100%;max-width:420px;height:auto;display:block;margin-bottom:0.5rem;" aria-label="Historiske utbytter per aksje i NOK"><line x1="52" y1="148.0" x2="408" y2="148.0" stroke="#e5e7eb" stroke-width="1" class="ytick"/><text x="48" y="152.0" text-anchor="end" font-size="10" fill="#9ca3af">0,00</text><line x1="52" y1="104.2" x2="408" y2="104.2" stroke="#e5e7eb" stroke-width="1" class="ytick"/><text x="48" y="108.2" text-anchor="end" font-size="10" fill="#9ca3af">0,83</text><line x1="52" y1="59.8" x2="408" y2="59.8" stroke="#e5e7eb" stroke-width="1" class="ytick"/><text x="48" y="63.8" text-anchor="end" font-size="10" fill="#9ca3af">1,67</text><line x1="52" y1="16.0" x2="408" y2="16.0" stroke="#e5e7eb" stroke-width="1" class="ytick"/><text x="48" y="20.0" text-anchor="end" font-size="10" fill="#9ca3af">2,50</text><rect class="hbar" x="69.6" y="16.0" width="36" height="132.0" rx="3" fill="#16a34a" opacity="0.85"/><rect class="hbar" x="140.8" y="16.0" width="36" height="132.0" rx="3" fill="#16a34a" opacity="0.85"/><rect class="hbar" x="212.0" y="16.0" width="36" height="132.0" rx="3" fill="#16a34a" opacity="0.85"/><rect class="hbar" x="283.2" y="16.0" width="36" height="132.0" rx="3" fill="#16a34a" opacity="0.85"/><rect class="hbar" x="354.4" y="16.0" width="36" height="132.0" rx="3" fill="#16a34a" opacity="0.85"/><text x="87.6" y="174" text-anchor="middle" font-size="10" fill="#9ca3af">2022</text><text x="158.8" y="174" text-anchor="middle" font-size="10" fill="#9ca3af">2023</text><text x="230.0" y="174" text-anchor="middle" font-size="10" fill="#9ca3af">2024</text><text x="301.2" y="174" text-anchor="middle" font-size="10" fill="#9ca3af">2025</text><text x="372.4" y="174" text-anchor="middle" font-size="10" fill="#9ca3af">2026</text><rect class="htip-bg" x="35.6" y="2.0" width="106" height="20" rx="4" fill="#111827" opacity="0" pointer-events="none"/><text class="htip-txt" x="87.6" y="14.0" text-anchor="middle" font-size="10" fill="#f3f4f6" opacity="0" pointer-events="none">2,50 NOK · 6,0% yield</text><rect class="htrig" x="52.0" y="16" width="71.2" height="132" fill="transparent" onmouseenter="showTip(this)" onmouseleave="hideTip(this)" data-i="0"/><rect class="htip-bg" x="106.8" y="2.0" width="106" height="20" rx="4" fill="#111827" opacity="0" pointer-events="none"/><text class="htip-txt" x="158.8" y="14.0" text-anchor="middle" font-size="10" fill="#f3f4f6" opacity="0" pointer-events="none">2,50 NOK · 6,0% yield</text><rect class="htrig" x="123.2" y="16" width="71.2" height="132" fill="transparent" onmouseenter="showTip(this)" onmouseleave="hideTip(this)" data-i="1"/><rect class="htip-bg" x="178.0" y="2.0" width="106" height="20" rx="4" fill="#111827" opacity="0" pointer-events="none"/><text class="htip-txt" x="230.0" y="14.0" text-anchor="middle" font-size="10" fill="#f3f4f6" opacity="0" pointer-events="none">2,50 NOK · 6,0% yield</text><rect class="htrig" x="194.4" y="16" width="71.2" height="132" fill="transparent" onmouseenter="showTip(this)" onmouseleave="hideTip(this)" data-i="2"/><rect class="htip-bg" x="249.2" y="2.0" width="106" height="20" rx="4" fill="#111827" opacity="0" pointer-events="none"/><text class="htip-txt" x="301.2" y="14.0" text-anchor="middle" font-size="10" fill="#f3f4f6" opacity="0" pointer-events="none">2,50 NOK · 6,0% yield</text><rect class="htrig" x="265.6" y="16" width="71.2" height="132" fill="transparent" onmouseenter="showTip(this)" onmouseleave="hideTip(this)" data-i="3"/><rect class="htip-bg" x="302.0" y="2.0" width="106" height="20" rx="4" fill="#111827" opacity="0" pointer-events="none"/><text class="htip-txt" x="372.4" y="14.0" text-anchor="middle" font-size="10" fill="#f3f4f6" opacity="0" pointer-events="none">2,50 NOK · 6,0% yield</text><rect class="htrig" x="336.8" y="16" width="71.2" height="132" fill="transparent" onmouseenter="showTip(this)" onmouseleave="hideTip(this)" data-i="4"/><text x="16" y="82.0" text-anchor="middle" font-size="10" fill="#9ca3af" transform="rotate(-90,16,82.0)">NOK per aksje</text></svg><script>
 function showTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAll('.htip-bg')[i],tx=s.querySelectorAll('.htip-txt')[i];bg.setAttribute('opacity','0.92');tx.setAttribute('opacity','1');}
@@ -562,7 +568,7 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
 
   
 
-  <div class="vurdering-seksjon"><h2>Vurdering som utbytteaksje</h2><p class="vurdering-tekst">Lerøy Seafood Group ASA er en av de mest rutinerte utbyttebetalerne på Oslo Børs med 24 sammenhengende år med utbytte. Yielden på 6,0% er under sektorsnittet for Havbruk (8,2%). Utbetalingsgraden på 210% er høy — de fleste av overskuddskronene deles ut, og utbyttet er dermed sensitivt for inntjeningsfall. Utbyttet har vokst med 5,7% per år de siste fem årene, noe som gjør det attraktivt for langsiktige reinvesteringsstrategier.</p></div><div class="driver-seksjon"><h2>Hva driver utbyttet i LSG?</h2><p class="driver-tekst">Laksepris er den suverent viktigste faktoren. En sterk laksekvart kan mer enn doble utbyttekapasiteten fra et svakt år. Biologisk risiko — lakselus, sykdom, smolt-overlevelse — er umulig å planlegge fullt ut og kan gi overraskende svake kvartal. Følg spotprisene på laks og selskapets biologiske driftsrapporter.</p><p class="driver-tekst">Lerøy Seafood Group ASA har betalt utbytte 24 år på rad, altså gjennom både finanskrisen og pandemien — det sier mer om utbyttepolitikken enn noe enkeltår gjør. Veksten i utbyttet har ligget på 5,7 % i året over fem år. Utbyttet går ex årlig, i mai.</p></div>
+  <div class="vurdering-seksjon"><h2>Vurdering som utbytteaksje</h2><p class="vurdering-tekst">Lerøy Seafood Group ASA er en av de mest rutinerte utbyttebetalerne på Oslo Børs med 24 sammenhengende år med utbytte. Yielden på 6,0% er klart over sektorsnittet for Havbruk (3,6%), noe som reflekterer enten høy utbyttekapasitet eller at markedet priser inn høyere risiko. Utbetalingsgraden på 210% er høy — de fleste av overskuddskronene deles ut, og utbyttet er dermed sensitivt for inntjeningsfall. Utbyttet har vokst med 5,7% per år de siste fem årene, noe som gjør det attraktivt for langsiktige reinvesteringsstrategier.</p></div><div class="driver-seksjon"><h2>Hva driver utbyttet i LSG?</h2><p class="driver-tekst">Laksepris er den suverent viktigste faktoren. En sterk laksekvart kan mer enn doble utbyttekapasiteten fra et svakt år. Biologisk risiko — lakselus, sykdom, smolt-overlevelse — er umulig å planlegge fullt ut og kan gi overraskende svake kvartal. Følg spotprisene på laks og selskapets biologiske driftsrapporter.</p><p class="driver-tekst">Lerøy Seafood Group ASA har betalt utbytte 24 år på rad, altså gjennom både finanskrisen og pandemien — det sier mer om utbyttepolitikken enn noe enkeltår gjør. Veksten i utbyttet har ligget på 5,7 % i året over fem år. Utbyttet går ex årlig, i mai.</p></div>
 
   <div class="nedtur-seksjon"><h2>Tåler utbyttet en nedtur?</h2><p>Lerøy Seafood Group ASA deler i dag ut mer enn selskapet tjener (210 % av inntjeningen). Det kan finansieres en stund av oppsparte midler eller salg av eiendeler, men det er ikke et nivå som kan holdes år etter år uten at inntjeningen tar seg opp. Selskapet har ikke kuttet utbyttet i perioden vi har tall for, noe som taler for at nivået er villet og ikke tilfeldig.</p></div>
 
@@ -592,10 +598,10 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
 </div>
   </section>
 
-  <div class="relaterte"><h2>Andre havbruk-aksjer med utbytte</h2><div class="rel-grid"><a href="/aksjer/GSF/" class="rel-kort"><span class="rel-ticker">GSF</span><span class="rel-navn">Grieg Seafood ASA</span><span class="rel-yield">35,6%</span></a>
-<a href="/aksjer/AUSS/" class="rel-kort"><span class="rel-ticker">AUSS</span><span class="rel-navn">Austevoll Seafood ASA</span><span class="rel-yield">7,9%</span></a>
+  <div class="relaterte"><h2>Andre havbruk-aksjer med utbytte</h2><div class="rel-grid"><a href="/aksjer/AUSS/" class="rel-kort"><span class="rel-ticker">AUSS</span><span class="rel-navn">Austevoll Seafood ASA</span><span class="rel-yield">7,9%</span></a>
 <a href="/aksjer/MOWI/" class="rel-kort"><span class="rel-ticker">MOWI</span><span class="rel-navn">Mowi ASA</span><span class="rel-yield">3,7%</span></a>
-<a href="/aksjer/SALM/" class="rel-kort"><span class="rel-ticker">SALM</span><span class="rel-navn">SalMar ASA</span><span class="rel-yield">1,8%</span></a></div></div>
+<a href="/aksjer/SALM/" class="rel-kort"><span class="rel-ticker">SALM</span><span class="rel-navn">SalMar ASA</span><span class="rel-yield">1,8%</span></a>
+<a href="/aksjer/AKVA/" class="rel-kort"><span class="rel-ticker">AKVA</span><span class="rel-navn">AKVA Group ASA</span><span class="rel-yield">1,3%</span></a></div></div>
 
   <div class="mini-nav">
     <a href="/aksjer/sektor/havbruk/">← Alle Havbruk-aksjer</a>
@@ -612,7 +618,7 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
     <a href="https://exday.no/app/?aksje=LSG">Åpne LSG i exday.no →</a>
   </div>
 
-  <p class="updated">Tallene er hentet 16. oktober 2026</p>
+  <p class="updated">Tallene er hentet 18. oktober 2026</p>
   <footer style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid #e5e7eb;font-size:0.78rem;text-align:center;color:#9ca3af;line-height:1.6;" class="std-footer">
     <p>Kurs og utbyttedata hentes fra Yahoo Finance og Euronext. Oppdateres daglig på børsdager.</p>
     <p style="max-width:36rem;margin:0.4rem auto;">

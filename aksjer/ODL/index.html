@@ -361,7 +361,13 @@
         <span>e<span class="site-logo-x">x</span>day<span class="site-logo-dot">.no</span></span>
       </a>
       <ul class="site-nav-menu">
-        <li><a href="/aksjer/" class="active">Aksjer</a></li>
+        <li class="has-dropdown">
+          <a href="/aksjer/" class="active">Aksjer</a>
+          <ul class="nav-dropdown">
+            <li><a href="/aksjer/">Alle aksjer</a></li>
+            <li><a href="/avnoteringer/">Avnoterte aksjer</a></li>
+          </ul>
+        </li>
         <li><a href="/aksjer/sektor/" class="">Sektorer</a></li>
         <li class="has-dropdown">
           <a href="/utbyttekalender/" class="">Kalender</a>
@@ -384,7 +390,7 @@
         <li><a href="/om/" class="">Om</a></li>
       </ul>
       <div class="site-nav-actions">
-        <a href="https://exday.no/" class="site-app-btn">Åpne app</a>
+        <a href="/app/" class="site-app-btn">Åpne app</a>
         <button id="dark-toggle" class="site-dark-btn" aria-label="Bytt fargemodus">
           <svg class="sun-icon" width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
           <svg class="moon-icon" width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display:none;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
@@ -423,7 +429,7 @@
   <h1>ODL – Odfjell Drilling Ltd</h1>
   <p class="sub">Energitjenester · Kvartalsvis utbytte · Oslo Børs</p>
 
-  <div class="kurshode"><div class="kh-topp"><div><div class="kh-pris">104,80<span class="kh-valuta">NOK</span></div><div class="kh-meta">Kurs 16. okt 2026</div></div><div class="kh-spenn" aria-label="52 ukers spenn fra 73,60 til 112,00"><span class="kh-spenn-tekst">52 uker</span><span class="kh-spenn-tall">73,60</span><span class="kh-spenn-linje"><span class="kh-spenn-punkt" style="left:81.2%"></span></span><span class="kh-spenn-tall">112,00</span></div></div><dl class="kh-tall"><div><dt>Yield</dt><dd>8,48 %</dd></div><div><dt>Utbytte/aksje</dt><dd>8,89 NOK</dd><span class="kh-note"><span class="kcard-note">annualisert</span></span></div><div><dt>Ex-dato</dt><dd><span class="kh-ukjent">Ikke kjent</span></dd></div></dl></div>
+  <div class="kurshode"><div class="kh-topp"><div><div class="kh-pris">104,80<span class="kh-valuta">NOK</span></div><div class="kh-meta">Kurs 18. okt 2026</div></div><div class="kh-spenn" aria-label="52 ukers spenn fra 75,00 til 112,00"><span class="kh-spenn-tekst">52 uker</span><span class="kh-spenn-tall">75,00</span><span class="kh-spenn-linje"><span class="kh-spenn-punkt" style="left:80.5%"></span></span><span class="kh-spenn-tall">112,00</span></div></div><dl class="kh-tall"><div><dt>Yield</dt><dd>8,48 %</dd></div><div><dt>Utbytte/aksje</dt><dd>8,89 NOK</dd><span class="kh-note"><span class="kcard-note">annualisert</span></span></div><div><dt>Ex-dato</dt><dd><span class="kh-ukjent">Ikke kjent</span></dd></div></dl></div>
 
   <nav class="ak-tabnav" id="ak-tabnav" aria-label="Sideseksjoner">
     <a href="#oversikt" class="ak-tab aktiv">Oversikt</a>
@@ -526,7 +532,7 @@
   <!-- ── UTBYTTE ── -->
   <section id="utbytte">
 
-  <div class="analyse"><h2>Yield mot sektoren</h2><p>Yielden på 8,5% er på linje med snittet for Energitjenester-sektoren (7,8%).</p></div>
+  <div class="analyse"><h2>Yield mot sektoren</h2><p>Yielden på 8,5% er på linje med snittet for Energitjenester-sektoren (7,9%).</p></div>
 
   <h2>Historiske utbytter</h2><svg viewBox="0 0 420 180" style="width:100%;max-width:420px;height:auto;display:block;margin-bottom:0.5rem;" aria-label="Historiske utbytter per aksje i NOK"><line x1="52" y1="148.0" x2="408" y2="148.0" stroke="#e5e7eb" stroke-width="1" class="ytick"/><text x="48" y="152.0" text-anchor="end" font-size="10" fill="#9ca3af">0,00</text><line x1="52" y1="104.1" x2="408" y2="104.1" stroke="#e5e7eb" stroke-width="1" class="ytick"/><text x="48" y="108.1" text-anchor="end" font-size="10" fill="#9ca3af">2,29</text><line x1="52" y1="59.9" x2="408" y2="59.9" stroke="#e5e7eb" stroke-width="1" class="ytick"/><text x="48" y="63.9" text-anchor="end" font-size="10" fill="#9ca3af">4,59</text><line x1="52" y1="16.0" x2="408" y2="16.0" stroke="#e5e7eb" stroke-width="1" class="ytick"/><text x="48" y="20.0" text-anchor="end" font-size="10" fill="#9ca3af">6,88</text><rect class="hbar" x="78.5" y="126.3" width="36" height="21.7" rx="3" fill="#16a34a" opacity="0.85"/><rect class="hbar" x="167.5" y="98.7" width="36" height="49.3" rx="3" fill="#16a34a" opacity="0.85"/><rect class="hbar" x="256.5" y="17.0" width="36" height="131.0" rx="3" fill="#16a34a" opacity="0.85"/><rect class="hbar" x="345.5" y="16.0" width="36" height="132.0" rx="3" fill="#16a34a" opacity="0.85"/><text x="96.5" y="174" text-anchor="middle" font-size="10" fill="#9ca3af">2023</text><text x="185.5" y="174" text-anchor="middle" font-size="10" fill="#9ca3af">2024</text><text x="274.5" y="174" text-anchor="middle" font-size="10" fill="#9ca3af">2025</text><text x="363.5" y="174" text-anchor="middle" font-size="10" fill="#9ca3af">2026</text><rect class="htip-bg" x="44.5" y="98.3" width="106" height="20" rx="4" fill="#111827" opacity="0" pointer-events="none"/><text class="htip-txt" x="96.5" y="113.3" text-anchor="middle" font-size="10" fill="#f3f4f6" opacity="0" pointer-events="none">1,13 NOK · 1,1% yield</text><rect class="htrig" x="52.0" y="16" width="89.0" height="132" fill="transparent" onmouseenter="showTip(this)" onmouseleave="hideTip(this)" data-i="0"/><rect class="htip-bg" x="133.5" y="70.7" width="106" height="20" rx="4" fill="#111827" opacity="0" pointer-events="none"/><text class="htip-txt" x="185.5" y="85.7" text-anchor="middle" font-size="10" fill="#f3f4f6" opacity="0" pointer-events="none">2,57 NOK · 2,5% yield</text><rect class="htrig" x="141.0" y="16" width="89.0" height="132" fill="transparent" onmouseenter="showTip(this)" onmouseleave="hideTip(this)" data-i="1"/><rect class="htip-bg" x="222.5" y="2.0" width="106" height="20" rx="4" fill="#111827" opacity="0" pointer-events="none"/><text class="htip-txt" x="274.5" y="14.0" text-anchor="middle" font-size="10" fill="#f3f4f6" opacity="0" pointer-events="none">6,83 NOK · 6,5% yield</text><rect class="htrig" x="230.0" y="16" width="89.0" height="132" fill="transparent" onmouseenter="showTip(this)" onmouseleave="hideTip(this)" data-i="2"/><rect class="htip-bg" x="302.0" y="2.0" width="106" height="20" rx="4" fill="#111827" opacity="0" pointer-events="none"/><text class="htip-txt" x="363.5" y="14.0" text-anchor="middle" font-size="10" fill="#f3f4f6" opacity="0" pointer-events="none">6,88 NOK · 6,6% yield</text><rect class="htrig" x="319.0" y="16" width="89.0" height="132" fill="transparent" onmouseenter="showTip(this)" onmouseleave="hideTip(this)" data-i="3"/><text x="16" y="82.0" text-anchor="middle" font-size="10" fill="#9ca3af" transform="rotate(-90,16,82.0)">NOK per aksje</text></svg><script>
 function showTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAll('.htip-bg')[i],tx=s.querySelectorAll('.htip-txt')[i];bg.setAttribute('opacity','0.92');tx.setAttribute('opacity','1');}
@@ -557,12 +563,12 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
 
   <div class="utbetalingsaar-seksjon"><h2>Utbyttet gjennom året</h2><div class="mnd-strip"><div class="mnd-celle"><span>jan</span></div><div class="mnd-celle"><span>feb</span></div><div class="mnd-celle mnd-ja"><span>mar</span></div><div class="mnd-celle"><span>apr</span></div><div class="mnd-celle mnd-ja"><span>mai</span></div><div class="mnd-celle"><span>jun</span></div><div class="mnd-celle"><span>jul</span></div><div class="mnd-celle"><span>aug</span></div><div class="mnd-celle mnd-ja"><span>sep</span></div><div class="mnd-celle"><span>okt</span></div><div class="mnd-celle mnd-ja"><span>nov</span></div><div class="mnd-celle"><span>des</span></div></div><p>Odfjell Drilling Ltd betaler ut 4 ganger i året, med ex-dato i mars, mai, september og november — grovt regnet 2,22 kroner per aksje hver gang. Månedene er ex-datoer utledet av hvilke måneder som går igjen over flere år, ikke av en enkelt utbetaling. Selve pengene kommer typisk halvannen til tre uker etter ex-datoen, så en ex-dato sent i måneden betales ut i den neste.</p></div>
 
-  <div class="vurdering-seksjon"><h2>Vurdering som utbytteaksje</h2><p class="vurdering-tekst">Odfjell Drilling Ltd har betalt utbytte de siste 4 årene, men historikken er begrenset. Yielden på 8,5% er nær sektorsnittet for Energitjenester (7,8%). Utbetalingsgraden på 92% er høy — de fleste av overskuddskronene deles ut, og utbyttet er dermed sensitivt for inntjeningsfall.</p></div><div class="driver-seksjon"><h2>Hva driver utbyttet i ODL?</h2><p class="driver-tekst">Aktivitetsnivået på norsk sokkel og internasjonalt offshore er den primære driveren. Oljepris påvirker kundenes vilje til å sette i gang nye prosjekter. Kontraktsdekning og dag-rater for rigger og fartøy gir direkte innsikt i inntjeningsutsiktene.</p><p class="driver-tekst">Odfjell Drilling Ltd har betalt utbytte i 5 av årene vi har tall for, men rekken er brutt — den nåværende går tilbake til 2023. Utbyttet går ex kvartalsvis, i mars, mai, september og november.</p></div>
+  <div class="vurdering-seksjon"><h2>Vurdering som utbytteaksje</h2><p class="vurdering-tekst">Odfjell Drilling Ltd har betalt utbytte de siste 4 årene, men historikken er begrenset. Yielden på 8,5% er nær sektorsnittet for Energitjenester (7,9%). Utbetalingsgraden på 92% er høy — de fleste av overskuddskronene deles ut, og utbyttet er dermed sensitivt for inntjeningsfall.</p></div><div class="driver-seksjon"><h2>Hva driver utbyttet i ODL?</h2><p class="driver-tekst">Aktivitetsnivået på norsk sokkel og internasjonalt offshore er den primære driveren. Oljepris påvirker kundenes vilje til å sette i gang nye prosjekter. Kontraktsdekning og dag-rater for rigger og fartøy gir direkte innsikt i inntjeningsutsiktene.</p><p class="driver-tekst">Odfjell Drilling Ltd har betalt utbytte i 5 av årene vi har tall for, men rekken er brutt — den nåværende går tilbake til 2023. Utbyttet går ex kvartalsvis, i mars, mai, september og november.</p></div>
 
   <div class="nedtur-seksjon"><h2>Tåler utbyttet en nedtur?</h2><p>Med en payout ratio på 92 % kan inntjeningen falle rundt 8 % før utbyttet spiser hele overskuddet. Faller den mer enn det, må selskapet enten tære på kassen, låne, eller sette ned utbyttet. Selskapet har ikke kuttet utbyttet i perioden vi har tall for, noe som taler for at nivået er villet og ikke tilfeldig.</p></div>
 
   <div class="risiko-seksjon"><h2>Risiko for utbyttet</h2><ul class="risiko-liste"><li>Payout ratio på 92 % betyr at nesten hele inntjeningen deles ut — det gir lite å gå på om resultatet faller</li>
-<li>Yielden avhenger sterkt av inngangskursen: samme utbytte gir 7,9 % på 12-månedershøyden (112,00 kr) og 12,1 % på bunnen (73,60 kr)</li>
+<li>Yielden avhenger sterkt av inngangskursen: samme utbytte gir 7,9 % på 12-månedershøyden (112,00 kr) og 11,9 % på bunnen (75,00 kr)</li>
 <li>Aktivitetsnivå i olje- og gassektoren styrer etterspørselen</li>
 <li>Prispress fra internasjonale konkurrenter</li></ul></div>
 
@@ -573,7 +579,7 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
   <!-- ── NØKKELTALL ── -->
   <section id="nokkeltall">
 
-  <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Energitjenester</td></tr><tr><td>Frekvens</td><td>Kvartalsvis</td></tr><tr><td>Utbytte per aksje</td><td>8,89 NOK</td></tr><tr><td>Direkteavkastning</td><td>8,48%</td></tr><tr><td>5-årssnitt yield</td><td>2,01%</td></tr><tr><td>År med utbytte</td><td>5</td></tr><tr><td>P/E</td><td>11,1</td></tr><tr><td>Payout ratio</td><td>92%</td></tr><tr><td>Markedsverdi</td><td>25,1 mrd NOK</td></tr><tr><td>52-ukers kurs</td><td>73,60 – 112,00 NOK</td></tr></tbody></table>
+  <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Energitjenester</td></tr><tr><td>Frekvens</td><td>Kvartalsvis</td></tr><tr><td>Utbytte per aksje</td><td>8,89 NOK</td></tr><tr><td>Direkteavkastning</td><td>8,48%</td></tr><tr><td>5-årssnitt yield</td><td>2,01%</td></tr><tr><td>År med utbytte</td><td>5</td></tr><tr><td>P/E</td><td>11,1</td></tr><tr><td>Payout ratio</td><td>92%</td></tr><tr><td>Markedsverdi</td><td>25,1 mrd NOK</td></tr><tr><td>52-ukers kurs</td><td>75,00 – 112,00 NOK</td></tr></tbody></table>
 
   </section>
 
@@ -607,7 +613,7 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
     <a href="https://exday.no/app/?aksje=ODL">Åpne ODL i exday.no →</a>
   </div>
 
-  <p class="updated">Tallene er hentet 16. oktober 2026</p>
+  <p class="updated">Tallene er hentet 18. oktober 2026</p>
   <footer style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid #e5e7eb;font-size:0.78rem;text-align:center;color:#9ca3af;line-height:1.6;" class="std-footer">
     <p>Kurs og utbyttedata hentes fra Yahoo Finance og Euronext. Oppdateres daglig på børsdager.</p>
     <p style="max-width:36rem;margin:0.4rem auto;">

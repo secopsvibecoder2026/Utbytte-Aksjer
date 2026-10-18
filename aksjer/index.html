@@ -30,10 +30,10 @@
   </script>
   <script src="/assets/consent.js" defer></script>
   <title>Norske utbytteaksjer – oversikt | exday.no</title>
-  <meta name="description" content="Oversikt over 154 norske utbytteaksjer på Oslo Børs med yield, ex-dato og utbyttehistorikk. Oppdateres daglig."/>
+  <meta name="description" content="Oversikt over 155 norske utbytteaksjer på Oslo Børs med yield, ex-dato og utbyttehistorikk. Oppdateres daglig."/>
   <link rel="canonical" href="https://exday.no/aksjer/"/>
   <meta property="og:title" content="Norske utbytteaksjer – oversikt | exday.no"/>
-  <meta property="og:description" content="Oversikt over 154 norske utbytteaksjer på Oslo Børs med yield, ex-dato og utbyttehistorikk. Oppdateres daglig."/>
+  <meta property="og:description" content="Oversikt over 155 norske utbytteaksjer på Oslo Børs med yield, ex-dato og utbyttehistorikk. Oppdateres daglig."/>
   <meta property="og:url" content="https://exday.no/aksjer/"/>
   <meta property="og:type" content="website"/>
   <meta property="og:image" content="https://exday.no/assets/og-image.png"/>
@@ -43,7 +43,7 @@
   <meta property="og:site_name" content="exday.no"/>
   <meta name="twitter:card" content="summary_large_image"/>
   <meta name="twitter:title" content="Norske utbytteaksjer – oversikt | exday.no"/>
-  <meta name="twitter:description" content="Oversikt over 154 norske utbytteaksjer på Oslo Børs med yield, ex-dato og utbyttehistorikk. Oppdateres daglig."/>
+  <meta name="twitter:description" content="Oversikt over 155 norske utbytteaksjer på Oslo Børs med yield, ex-dato og utbyttehistorikk. Oppdateres daglig."/>
   <meta name="twitter:image" content="https://exday.no/assets/og-image.png"/>
   <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Hjem", "item": "https://exday.no/"}, {"@type": "ListItem", "position": 2, "name": "Aksjer", "item": "https://exday.no/aksjer/"}]}</script>
   <link rel="stylesheet" href="/assets/style.css"/>
@@ -193,7 +193,13 @@
         <span>e<span class="site-logo-x">x</span>day<span class="site-logo-dot">.no</span></span>
       </a>
       <ul class="site-nav-menu">
-        <li><a href="/aksjer/" class="active">Aksjer</a></li>
+        <li class="has-dropdown">
+          <a href="/aksjer/" class="active">Aksjer</a>
+          <ul class="nav-dropdown">
+            <li><a href="/aksjer/">Alle aksjer</a></li>
+            <li><a href="/avnoteringer/">Avnoterte aksjer</a></li>
+          </ul>
+        </li>
         <li><a href="/aksjer/sektor/" class="">Sektorer</a></li>
         <li class="has-dropdown">
           <a href="/utbyttekalender/" class="">Kalender</a>
@@ -216,7 +222,7 @@
         <li><a href="/om/" class="">Om</a></li>
       </ul>
       <div class="site-nav-actions">
-        <a href="https://exday.no/" class="site-app-btn">Åpne app</a>
+        <a href="/app/" class="site-app-btn">Åpne app</a>
         <button id="dark-toggle" class="site-dark-btn" aria-label="Bytt fargemodus">
           <svg class="sun-icon" width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
           <svg class="moon-icon" width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display:none;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
@@ -247,15 +253,15 @@
     <p>Komplett oversikt over alle utbyttebetalere på Oslo Børs. Yield, ex-datoer, historikk og analyser — oppdateres daglig på børsdager.</p>
     <div class="hero-stats">
       <div class="hero-stat">
-        <div class="hero-stat-num">154</div>
+        <div class="hero-stat-num">155</div>
         <div class="hero-stat-lbl">Aksjer</div>
       </div>
       <div class="hero-stat">
-        <div class="hero-stat-num">130</div>
+        <div class="hero-stat-num">127</div>
         <div class="hero-stat-lbl">Med utbytte</div>
       </div>
       <div class="hero-stat">
-        <div class="hero-stat-num">6,2%</div>
+        <div class="hero-stat-num">5,8%</div>
         <div class="hero-stat-lbl">Snitt-yield</div>
       </div>
       <div class="hero-stat">
@@ -307,14 +313,6 @@
       <a href="/aksjer/hoyest-utbytte/" class="se-alle">Se alle →</a>
     </div>
     <div class="ak-grid">
-      <a href="/aksjer/STST/" class="ak-kort">
-        <div class="ak-kort-topp">
-          <span class="ak-kort-tk">STST</span>
-          <span class="ak-kort-yield">17,40%</span>
-        </div>
-        <div class="ak-kort-navn">Stainless Tankers ASA</div>
-        <div class="ak-kort-meta">Shipping · Kvartalsvis · 3 år på rad</div>
-      </a>
       <a href="/aksjer/PLSV/" class="ak-kort">
         <div class="ak-kort-topp">
           <span class="ak-kort-tk">PLSV</span>
@@ -330,6 +328,14 @@
         </div>
         <div class="ak-kort-navn">Pareto Bank ASA</div>
         <div class="ak-kort-meta">Finans · Årlig · 10 år på rad</div>
+      </a>
+      <a href="/aksjer/STST/" class="ak-kort">
+        <div class="ak-kort-topp">
+          <span class="ak-kort-tk">STST</span>
+          <span class="ak-kort-yield">12,58%</span>
+        </div>
+        <div class="ak-kort-navn">Stainless Tankers ASA</div>
+        <div class="ak-kort-meta">Shipping · Kvartalsvis · 3 år på rad</div>
       </a>
       <a href="/aksjer/WSTEP/" class="ak-kort">
         <div class="ak-kort-topp">
@@ -350,7 +356,7 @@
       <a href="/aksjer/HAFNI/" class="ak-kort">
         <div class="ak-kort-topp">
           <span class="ak-kort-tk">HAFNI</span>
-          <span class="ak-kort-yield">11,05%</span>
+          <span class="ak-kort-yield">11,03%</span>
         </div>
         <div class="ak-kort-navn">Hafnia Limited</div>
         <div class="ak-kort-meta">Shipping · Kvartalsvis · 5 år på rad</div>
@@ -437,14 +443,6 @@
         <div class="ak-kort-navn">BlueNord ASA</div>
         <div class="ak-kort-meta">Energi · Kvartalsvis · 2 år på rad</div>
       </a>
-      <a href="/aksjer/STST/" class="ak-kort">
-        <div class="ak-kort-topp">
-          <span class="ak-kort-tk">STST</span>
-          <span class="ak-kort-yield">17,40%</span>
-        </div>
-        <div class="ak-kort-navn">Stainless Tankers ASA</div>
-        <div class="ak-kort-meta">Shipping · Kvartalsvis · 3 år på rad</div>
-      </a>
       <a href="/aksjer/PLSV/" class="ak-kort">
         <div class="ak-kort-topp">
           <span class="ak-kort-tk">PLSV</span>
@@ -452,6 +450,14 @@
         </div>
         <div class="ak-kort-navn">Paratus Energy Services Ltd.</div>
         <div class="ak-kort-meta">Energitjenester · Kvartalsvis · 3 år på rad</div>
+      </a>
+      <a href="/aksjer/STST/" class="ak-kort">
+        <div class="ak-kort-topp">
+          <span class="ak-kort-tk">STST</span>
+          <span class="ak-kort-yield">12,58%</span>
+        </div>
+        <div class="ak-kort-navn">Stainless Tankers ASA</div>
+        <div class="ak-kort-meta">Shipping · Kvartalsvis · 3 år på rad</div>
       </a>
       <a href="/aksjer/ARCH/" class="ak-kort">
         <div class="ak-kort-topp">
@@ -464,7 +470,7 @@
       <a href="/aksjer/HAFNI/" class="ak-kort">
         <div class="ak-kort-topp">
           <span class="ak-kort-tk">HAFNI</span>
-          <span class="ak-kort-yield">11,05%</span>
+          <span class="ak-kort-yield">11,03%</span>
         </div>
         <div class="ak-kort-navn">Hafnia Limited</div>
         <div class="ak-kort-meta">Shipping · Kvartalsvis · 5 år på rad</div>
@@ -496,7 +502,7 @@
           <span class="sek-info"><span class="sek-navn">Shipping</span><span class="sek-antall">19 aksjer</span></span>
         </a><a href="/aksjer/sektor/energitjenester/" class="sek-kort">
           <svg class="sek-ikon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3a5 5 0 00-4.6 7L3 17.4 5.6 20l7.4-7.4A5 5 0 1015 3z"/></svg>
-          <span class="sek-info"><span class="sek-navn">Energitjenester</span><span class="sek-antall">17 aksjer</span></span>
+          <span class="sek-info"><span class="sek-navn">Energitjenester</span><span class="sek-antall">18 aksjer</span></span>
         </a><a href="/aksjer/sektor/informasjonsteknologi/" class="sek-kort">
           <svg class="sek-ikon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5h18v11H3zM8 20h8M12 16v4M9.5 8.5L8 10.5l1.5 2M14.5 8.5l1.5 2-1.5 2"/></svg>
           <span class="sek-info"><span class="sek-navn">Informasjonsteknologi</span><span class="sek-antall">11 aksjer</span></span>
@@ -516,7 +522,7 @@
   <section class="seksjon">
     <div class="alle-aksjer">
       <div class="alle-aksjer-header">
-        <h2>Alle 154 aksjer</h2>
+        <h2>Alle 155 aksjer</h2>
         <span class="filter-info">Sortert etter yield</span>
       </div>
       <div style="overflow-x:auto;">
@@ -524,35 +530,11 @@
         <thead><tr><th>Ticker</th><th>Navn</th><th>Sektor</th><th>Kurs</th><th>Yield</th><th>Ex-dato</th></tr></thead>
         <tbody>
         <tr>
-          <td><a href="/aksjer/GSF/">GSF</a></td>
-          <td>Grieg Seafood ASA</td>
-          <td>Havbruk</td>
-          <td>23,26 NOK</td>
-          <td>35,64%</td>
-          <td>—</td>
-        </tr>
-        <tr>
           <td><a href="/aksjer/BNOR/">BNOR</a></td>
           <td>BlueNord ASA</td>
           <td>Energi</td>
           <td>610,00 NOK</td>
           <td>29,60%</td>
-          <td>—</td>
-        </tr>
-        <tr>
-          <td><a href="/aksjer/GOD/">GOD</a></td>
-          <td>Goodtech ASA</td>
-          <td>Industri</td>
-          <td>15,20 NOK</td>
-          <td>26,32%</td>
-          <td>16. okt 2026</td>
-        </tr>
-        <tr>
-          <td><a href="/aksjer/STST/">STST</a></td>
-          <td>Stainless Tankers ASA</td>
-          <td>Shipping</td>
-          <td>41,10 NOK</td>
-          <td>17,40%</td>
           <td>—</td>
         </tr>
         <tr>
@@ -569,6 +551,14 @@
           <td>Finans</td>
           <td>50,70 NOK</td>
           <td>15,78%</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td><a href="/aksjer/STST/">STST</a></td>
+          <td>Stainless Tankers ASA</td>
+          <td>Shipping</td>
+          <td>41,10 NOK</td>
+          <td>12,58%</td>
           <td>—</td>
         </tr>
         <tr>
@@ -592,7 +582,7 @@
           <td>Hafnia Limited</td>
           <td>Shipping</td>
           <td>94,85 NOK</td>
-          <td>11,05%</td>
+          <td>11,03%</td>
           <td>—</td>
         </tr>
         <tr>
@@ -616,7 +606,7 @@
           <td>Okeanis Eco Tankers Corp.</td>
           <td>Shipping</td>
           <td>855,00 NOK</td>
-          <td>10,53%</td>
+          <td>10,51%</td>
           <td>—</td>
         </tr>
         <tr>
@@ -624,7 +614,7 @@
           <td>BW LPG Limited</td>
           <td>Shipping</td>
           <td>235,00 NOK</td>
-          <td>10,36%</td>
+          <td>10,35%</td>
           <td>—</td>
         </tr>
         <tr>
@@ -640,7 +630,7 @@
           <td>Frontline PLC</td>
           <td>Shipping</td>
           <td>499,00 NOK</td>
-          <td>10,17%</td>
+          <td>10,15%</td>
           <td>—</td>
         </tr>
         <tr>
@@ -696,7 +686,7 @@
           <td>CMB.TECH NV</td>
           <td>Shipping</td>
           <td>167,40 NOK</td>
-          <td>8,45%</td>
+          <td>8,44%</td>
           <td>—</td>
         </tr>
         <tr>
@@ -713,6 +703,14 @@
           <td>Finans</td>
           <td>23,40 NOK</td>
           <td>8,12%</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td><a href="/aksjer/IWS/">IWS</a></td>
+          <td>Integrated Wind Solutions ASA</td>
+          <td>Energitjenester</td>
+          <td>61,80 NOK</td>
+          <td>8,09%</td>
           <td>—</td>
         </tr>
         <tr>
@@ -793,14 +791,6 @@
           <td>Finans</td>
           <td>300,80 NOK</td>
           <td>7,31%</td>
-          <td>—</td>
-        </tr>
-        <tr>
-          <td><a href="/aksjer/REACH/">REACH</a></td>
-          <td>Reach Subsea ASA</td>
-          <td>Energitjenester</td>
-          <td>6,01 NOK</td>
-          <td>6,99%</td>
           <td>—</td>
         </tr>
         <tr>
@@ -1108,20 +1098,20 @@
           <td>—</td>
         </tr>
         <tr>
-          <td><a href="/aksjer/WAWI/">WAWI</a></td>
-          <td>Wallenius Wilhelmsen ASA</td>
-          <td>Shipping</td>
-          <td>175,80 NOK</td>
-          <td>4,88%</td>
-          <td>—</td>
-        </tr>
-        <tr>
           <td><a href="/aksjer/PUBLI/">PUBLI</a></td>
           <td>PPI Public Property Invest AB</td>
           <td>Eiendom</td>
           <td>16,18 NOK</td>
           <td>4,88%</td>
           <td>29. des 2026</td>
+        </tr>
+        <tr>
+          <td><a href="/aksjer/WAWI/">WAWI</a></td>
+          <td>Wallenius Wilhelmsen ASA</td>
+          <td>Shipping</td>
+          <td>175,80 NOK</td>
+          <td>4,87%</td>
+          <td>—</td>
         </tr>
         <tr>
           <td><a href="/aksjer/NONG/">NONG</a></td>
@@ -1305,7 +1295,7 @@
           <td>Shipping</td>
           <td>150,00 NOK</td>
           <td>3,58%</td>
-          <td>16. okt 2026</td>
+          <td>—</td>
         </tr>
         <tr>
           <td><a href="/aksjer/AFG/">AFG</a></td>
@@ -1337,6 +1327,14 @@
           <td>Eiendom</td>
           <td>30,25 NOK</td>
           <td>3,31%</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td><a href="/aksjer/GOD/">GOD</a></td>
+          <td>Goodtech ASA</td>
+          <td>Industri</td>
+          <td>15,20 NOK</td>
+          <td>3,29%</td>
           <td>—</td>
         </tr>
         <tr>
@@ -1532,27 +1530,11 @@
           <td>—</td>
         </tr>
         <tr>
-          <td><a href="/aksjer/ELK/">ELK</a></td>
-          <td>Elkem ASA</td>
-          <td>Materialer</td>
-          <td>32,44 NOK</td>
-          <td>0,92%</td>
-          <td>—</td>
-        </tr>
-        <tr>
           <td><a href="/aksjer/KIT/">KIT</a></td>
           <td>Kitron ASA</td>
           <td>Industri</td>
           <td>100,40 NOK</td>
           <td>0,70%</td>
-          <td>—</td>
-        </tr>
-        <tr>
-          <td><a href="/aksjer/ZAL/">ZAL</a></td>
-          <td>Zalaris ASA</td>
-          <td>Informasjonsteknologi</td>
-          <td>129,50 NOK</td>
-          <td>0,69%</td>
           <td>—</td>
         </tr>
         <tr>
@@ -1596,6 +1578,14 @@
           <td>—</td>
         </tr>
         <tr>
+          <td><a href="/aksjer/GSF/">GSF</a></td>
+          <td>Grieg Seafood ASA</td>
+          <td>Havbruk</td>
+          <td>23,26 NOK</td>
+          <td>0,00%</td>
+          <td>—</td>
+        </tr>
+        <tr>
           <td><a href="/aksjer/2020/">2020</a></td>
           <td>2020 Bulkers Ltd</td>
           <td>Energitjenester</td>
@@ -1632,6 +1622,22 @@
           <td>NRC Group ASA</td>
           <td>Industri</td>
           <td>9,60 NOK</td>
+          <td>0,00%</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td><a href="/aksjer/ZAL/">ZAL</a></td>
+          <td>Zalaris ASA</td>
+          <td>Informasjonsteknologi</td>
+          <td>129,50 NOK</td>
+          <td>0,00%</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td><a href="/aksjer/ELK/">ELK</a></td>
+          <td>Elkem ASA</td>
+          <td>Materialer</td>
+          <td>32,44 NOK</td>
           <td>0,00%</td>
           <td>—</td>
         </tr>
@@ -1724,6 +1730,14 @@
           <td>—</td>
         </tr>
         <tr>
+          <td><a href="/aksjer/REACH/">REACH</a></td>
+          <td>Reach Subsea ASA</td>
+          <td>Energitjenester</td>
+          <td>6,01 NOK</td>
+          <td>0,00%</td>
+          <td>—</td>
+        </tr>
+        <tr>
           <td><a href="/aksjer/ACR/">ACR</a></td>
           <td>Axactor ASA</td>
           <td>Finans</td>
@@ -1760,7 +1774,7 @@
     </div>
   </section>
 
-  <p class="updated">Tallene er hentet 16. oktober 2026</p>
+  <p class="updated">Tallene er hentet 18. oktober 2026</p>
   <footer style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid #e5e7eb;font-size:0.78rem;text-align:center;color:#9ca3af;line-height:1.6;" class="std-footer">
     <p>Kurs og utbyttedata hentes fra Yahoo Finance og Euronext. Oppdateres daglig på børsdager.</p>
     <p style="max-width:36rem;margin:0.4rem auto;">

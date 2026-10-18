@@ -361,7 +361,13 @@
         <span>e<span class="site-logo-x">x</span>day<span class="site-logo-dot">.no</span></span>
       </a>
       <ul class="site-nav-menu">
-        <li><a href="/aksjer/" class="active">Aksjer</a></li>
+        <li class="has-dropdown">
+          <a href="/aksjer/" class="active">Aksjer</a>
+          <ul class="nav-dropdown">
+            <li><a href="/aksjer/">Alle aksjer</a></li>
+            <li><a href="/avnoteringer/">Avnoterte aksjer</a></li>
+          </ul>
+        </li>
         <li><a href="/aksjer/sektor/" class="">Sektorer</a></li>
         <li class="has-dropdown">
           <a href="/utbyttekalender/" class="">Kalender</a>
@@ -384,7 +390,7 @@
         <li><a href="/om/" class="">Om</a></li>
       </ul>
       <div class="site-nav-actions">
-        <a href="https://exday.no/" class="site-app-btn">Åpne app</a>
+        <a href="/app/" class="site-app-btn">Åpne app</a>
         <button id="dark-toggle" class="site-dark-btn" aria-label="Bytt fargemodus">
           <svg class="sun-icon" width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
           <svg class="moon-icon" width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display:none;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
@@ -423,7 +429,7 @@
   <h1>PARB – Pareto Bank ASA</h1>
   <p class="sub">Finans · Årlig utbytte · Oslo Børs</p>
 
-  <div class="kurshode"><div class="kh-topp"><div><div class="kh-pris">50,70<span class="kh-valuta">NOK</span></div><div class="kh-meta">Kurs 16. okt 2026</div></div><div class="kh-spenn" aria-label="52 ukers spenn fra 50,00 til 92,80"><span class="kh-spenn-tekst">52 uker</span><span class="kh-spenn-tall">50,00</span><span class="kh-spenn-linje"><span class="kh-spenn-punkt" style="left:1.6%"></span></span><span class="kh-spenn-tall">92,80</span></div></div><dl class="kh-tall"><div><dt>Yield</dt><dd>15,78 %</dd></div><div><dt>Utbytte/aksje</dt><dd>8,00 NOK</dd><span class="kh-note"><span class="kcard-note">siste 12 mnd</span></span></div><div><dt>Ex-dato</dt><dd><span class="kh-ukjent">Ikke kjent</span></dd></div></dl></div>
+  <div class="kurshode"><div class="kh-topp"><div><div class="kh-pris">50,70<span class="kh-valuta">NOK</span></div><div class="kh-meta">Kurs 18. okt 2026</div></div><div class="kh-spenn" aria-label="52 ukers spenn fra 50,00 til 92,40"><span class="kh-spenn-tekst">52 uker</span><span class="kh-spenn-tall">50,00</span><span class="kh-spenn-linje"><span class="kh-spenn-punkt" style="left:1.7%"></span></span><span class="kh-spenn-tall">92,40</span></div></div><dl class="kh-tall"><div><dt>Yield</dt><dd>15,78 %</dd></div><div><dt>Utbytte/aksje</dt><dd>8,00 NOK</dd><span class="kh-note"><span class="kcard-note">siste 12 mnd</span></span></div><div><dt>Ex-dato</dt><dd><span class="kh-ukjent">Ikke kjent</span></dd></div></dl></div>
 
   <nav class="ak-tabnav" id="ak-tabnav" aria-label="Sideseksjoner">
     <a href="#oversikt" class="ak-tab aktiv">Oversikt</a>
@@ -568,7 +574,7 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
 
   <div class="risiko-seksjon"><h2>Risiko for utbyttet</h2><ul class="risiko-liste"><li>Payout ratio på 89 % er i øvre sjikt, så utbyttet tåler mindre svikt i inntjeningen enn hos en lavere utdeler</li>
 <li>Yielden på 15,8 % er langt over aksjens eget 5-årssnitt på 7,3 %, regnet mot samme kurs. Et utbytte så langt over det selskapet pleier å betale, er ikke sikkert å holde</li>
-<li>Yielden avhenger sterkt av inngangskursen: samme utbytte gir 8,6 % på 12-månedershøyden (92,80 kr) og 16,0 % på bunnen (50,00 kr)</li>
+<li>Yielden avhenger sterkt av inngangskursen: samme utbytte gir 8,7 % på 12-månedershøyden (92,40 kr) og 16,0 % på bunnen (50,00 kr)</li>
 <li>Rentenivå påvirker netto renteinntekter og utlånsmargin</li></ul></div>
 
   <div class="kontoer-seksjon"><h2>Hvilke kontoer kan du handle denne aksjen på?</h2><div class="konto-rad"><span class="konto-ok">✓</span><div><strong>Aksje- og fondskonto og Zero</strong><p>Ingen begrensning.</p></div></div><div class="konto-rad"><span class="konto-ok">✓</span><div><strong>Aksjesparekonto (ASK)</strong><p>Selskapet er registrert i Norge og aksjen er notert på Oslo Børs, så den kan holdes i ASK.</p></div></div></div>
@@ -578,7 +584,7 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
   <!-- ── NØKKELTALL ── -->
   <section id="nokkeltall">
 
-  <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Finans</td></tr><tr><td>Frekvens</td><td>Årlig</td></tr><tr><td>Utbytte per aksje</td><td>8,00 NOK</td></tr><tr><td>Direkteavkastning</td><td>15,78%</td></tr><tr><td>5-årssnitt yield</td><td>7,26%</td></tr><tr><td>År med utbytte</td><td>10</td></tr><tr><td>P/E</td><td>10,9</td></tr><tr><td>Payout ratio</td><td>89%</td></tr><tr><td>Utbyttevekst 5 år</td><td>+8,5% p.a.</td></tr><tr><td>Markedsverdi</td><td>3,9 mrd NOK</td></tr><tr><td>52-ukers kurs</td><td>50,00 – 92,80 NOK</td></tr></tbody></table>
+  <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Finans</td></tr><tr><td>Frekvens</td><td>Årlig</td></tr><tr><td>Utbytte per aksje</td><td>8,00 NOK</td></tr><tr><td>Direkteavkastning</td><td>15,78%</td></tr><tr><td>5-årssnitt yield</td><td>7,26%</td></tr><tr><td>År med utbytte</td><td>10</td></tr><tr><td>P/E</td><td>10,9</td></tr><tr><td>Payout ratio</td><td>89%</td></tr><tr><td>Utbyttevekst 5 år</td><td>+8,5% p.a.</td></tr><tr><td>Markedsverdi</td><td>3,9 mrd NOK</td></tr><tr><td>52-ukers kurs</td><td>50,00 – 92,40 NOK</td></tr></tbody></table>
 
   </section>
 
@@ -612,7 +618,7 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
     <a href="https://exday.no/app/?aksje=PARB">Åpne PARB i exday.no →</a>
   </div>
 
-  <p class="updated">Tallene er hentet 16. oktober 2026</p>
+  <p class="updated">Tallene er hentet 18. oktober 2026</p>
   <footer style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid #e5e7eb;font-size:0.78rem;text-align:center;color:#9ca3af;line-height:1.6;" class="std-footer">
     <p>Kurs og utbyttedata hentes fra Yahoo Finance og Euronext. Oppdateres daglig på børsdager.</p>
     <p style="max-width:36rem;margin:0.4rem auto;">

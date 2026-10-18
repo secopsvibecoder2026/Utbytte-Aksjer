@@ -361,7 +361,13 @@
         <span>e<span class="site-logo-x">x</span>day<span class="site-logo-dot">.no</span></span>
       </a>
       <ul class="site-nav-menu">
-        <li><a href="/aksjer/" class="active">Aksjer</a></li>
+        <li class="has-dropdown">
+          <a href="/aksjer/" class="active">Aksjer</a>
+          <ul class="nav-dropdown">
+            <li><a href="/aksjer/">Alle aksjer</a></li>
+            <li><a href="/avnoteringer/">Avnoterte aksjer</a></li>
+          </ul>
+        </li>
         <li><a href="/aksjer/sektor/" class="">Sektorer</a></li>
         <li class="has-dropdown">
           <a href="/utbyttekalender/" class="">Kalender</a>
@@ -384,7 +390,7 @@
         <li><a href="/om/" class="">Om</a></li>
       </ul>
       <div class="site-nav-actions">
-        <a href="https://exday.no/" class="site-app-btn">Åpne app</a>
+        <a href="/app/" class="site-app-btn">Åpne app</a>
         <button id="dark-toggle" class="site-dark-btn" aria-label="Bytt fargemodus">
           <svg class="sun-icon" width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
           <svg class="moon-icon" width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display:none;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
@@ -423,7 +429,7 @@
   <h1>HUNT – Hunter Group ASA</h1>
   <p class="sub">Shipping · Kvartalsvis utbytte · Oslo Børs</p>
 
-  <div class="kurshode"><div class="kh-topp"><div><div class="kh-pris">17,56<span class="kh-valuta">NOK</span></div><div class="kh-meta">Kurs 16. okt 2026</div></div><div class="kh-spenn" aria-label="52 ukers spenn fra 1,30 til 21,10"><span class="kh-spenn-tekst">52 uker</span><span class="kh-spenn-tall">1,30</span><span class="kh-spenn-linje"><span class="kh-spenn-punkt" style="left:82.1%"></span></span><span class="kh-spenn-tall">21,10</span></div></div><dl class="kh-tall"><div><dt>Yield</dt><dd>1,71 %</dd></div><div><dt>Utbytte/aksje</dt><dd>0,30 NOK</dd><span class="kh-note"><span class="kcard-note">annualisert</span></span></div><div><dt>Ex-dato</dt><dd><span class="kh-ukjent">Ikke kjent</span></dd></div></dl></div>
+  <div class="kurshode"><div class="kh-topp"><div><div class="kh-pris">17,56<span class="kh-valuta">NOK</span></div><div class="kh-meta">Kurs 18. okt 2026</div></div><div class="kh-spenn" aria-label="52 ukers spenn fra 1,31 til 21,10"><span class="kh-spenn-tekst">52 uker</span><span class="kh-spenn-tall">1,31</span><span class="kh-spenn-linje"><span class="kh-spenn-punkt" style="left:82.1%"></span></span><span class="kh-spenn-tall">21,10</span></div></div><dl class="kh-tall"><div><dt>Yield</dt><dd>1,71 %</dd></div><div><dt>Utbytte/aksje</dt><dd>0,30 NOK</dd><span class="kh-note"><span class="kcard-note">annualisert</span></span></div><div><dt>Ex-dato</dt><dd><span class="kh-ukjent">Ikke kjent</span></dd></div></dl></div>
 
   <nav class="ak-tabnav" id="ak-tabnav" aria-label="Sideseksjoner">
     <a href="#oversikt" class="ak-tab aktiv">Oversikt</a>
@@ -526,7 +532,7 @@
   <!-- ── UTBYTTE ── -->
   <section id="utbytte">
 
-  <div class="analyse"><h2>Yield mot sektoren</h2><p>Yielden på 1,7% er 5,7 prosentpoeng under snittet for Shipping-sektoren (7,4%).</p></div>
+  <div class="analyse"><h2>Yield mot sektoren</h2><p>Yielden på 1,7% er 5,4 prosentpoeng under snittet for Shipping-sektoren (7,1%).</p></div>
 
   <h2>Historiske utbytter</h2><svg viewBox="0 0 420 180" style="width:100%;max-width:420px;height:auto;display:block;margin-bottom:0.5rem;" aria-label="Historiske utbytter per aksje i NOK"><line x1="52" y1="148.0" x2="408" y2="148.0" stroke="#e5e7eb" stroke-width="1" class="ytick"/><text x="48" y="152.0" text-anchor="end" font-size="10" fill="#9ca3af">0,00</text><line x1="52" y1="104.0" x2="408" y2="104.0" stroke="#e5e7eb" stroke-width="1" class="ytick"/><text x="48" y="108.0" text-anchor="end" font-size="10" fill="#9ca3af">13,62</text><line x1="52" y1="60.0" x2="408" y2="60.0" stroke="#e5e7eb" stroke-width="1" class="ytick"/><text x="48" y="64.0" text-anchor="end" font-size="10" fill="#9ca3af">27,23</text><line x1="52" y1="16.0" x2="408" y2="16.0" stroke="#e5e7eb" stroke-width="1" class="ytick"/><text x="48" y="20.0" text-anchor="end" font-size="10" fill="#9ca3af">40,85</text><rect class="hbar" x="78.5" y="62.3" width="36" height="85.7" rx="3" fill="#16a34a" opacity="0.85"/><rect class="hbar" x="167.5" y="16.0" width="36" height="132.0" rx="3" fill="#16a34a" opacity="0.85"/><rect class="hbar" x="256.5" y="147.0" width="36" height="1.0" rx="3" fill="#16a34a" opacity="0.85"/><rect class="hbar" x="345.5" y="135.9" width="36" height="12.1" rx="3" fill="#16a34a" opacity="0.85"/><text x="96.5" y="174" text-anchor="middle" font-size="10" fill="#9ca3af">2022</text><text x="185.5" y="174" text-anchor="middle" font-size="10" fill="#9ca3af">2023</text><text x="274.5" y="174" text-anchor="middle" font-size="10" fill="#9ca3af">2025</text><text x="363.5" y="174" text-anchor="middle" font-size="10" fill="#9ca3af">2026</text><rect class="htip-bg" x="44.5" y="34.3" width="106" height="20" rx="4" fill="#111827" opacity="0" pointer-events="none"/><text class="htip-txt" x="96.5" y="49.3" text-anchor="middle" font-size="10" fill="#f3f4f6" opacity="0" pointer-events="none">26,52 NOK</text><rect class="htrig" x="52.0" y="16" width="89.0" height="132" fill="transparent" onmouseenter="showTip(this)" onmouseleave="hideTip(this)" data-i="0"/><rect class="htip-bg" x="133.5" y="2.0" width="106" height="20" rx="4" fill="#111827" opacity="0" pointer-events="none"/><text class="htip-txt" x="185.5" y="14.0" text-anchor="middle" font-size="10" fill="#f3f4f6" opacity="0" pointer-events="none">40,85 NOK</text><rect class="htrig" x="141.0" y="16" width="89.0" height="132" fill="transparent" onmouseenter="showTip(this)" onmouseleave="hideTip(this)" data-i="1"/><rect class="htip-bg" x="222.5" y="119.0" width="106" height="20" rx="4" fill="#111827" opacity="0" pointer-events="none"/><text class="htip-txt" x="274.5" y="134.0" text-anchor="middle" font-size="10" fill="#f3f4f6" opacity="0" pointer-events="none">0,30 NOK · 1,7% yield</text><rect class="htrig" x="230.0" y="16" width="89.0" height="132" fill="transparent" onmouseenter="showTip(this)" onmouseleave="hideTip(this)" data-i="2"/><rect class="htip-bg" x="302.0" y="107.9" width="106" height="20" rx="4" fill="#111827" opacity="0" pointer-events="none"/><text class="htip-txt" x="363.5" y="122.9" text-anchor="middle" font-size="10" fill="#f3f4f6" opacity="0" pointer-events="none">3,73 NOK · 21,2% yield</text><rect class="htrig" x="319.0" y="16" width="89.0" height="132" fill="transparent" onmouseenter="showTip(this)" onmouseleave="hideTip(this)" data-i="3"/><text x="16" y="82.0" text-anchor="middle" font-size="10" fill="#9ca3af" transform="rotate(-90,16,82.0)">NOK per aksje</text></svg><script>
 function showTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAll('.htip-bg')[i],tx=s.querySelectorAll('.htip-txt')[i];bg.setAttribute('opacity','0.92');tx.setAttribute('opacity','1');}
@@ -557,12 +563,12 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
 
   <div class="utbetalingsaar-seksjon"><h2>Utbyttet gjennom året</h2><div class="mnd-strip"><div class="mnd-celle"><span>jan</span></div><div class="mnd-celle"><span>feb</span></div><div class="mnd-celle mnd-ja"><span>mar</span></div><div class="mnd-celle"><span>apr</span></div><div class="mnd-celle"><span>mai</span></div><div class="mnd-celle mnd-ja"><span>jun</span></div><div class="mnd-celle"><span>jul</span></div><div class="mnd-celle"><span>aug</span></div><div class="mnd-celle mnd-ja"><span>sep</span></div><div class="mnd-celle"><span>okt</span></div><div class="mnd-celle"><span>nov</span></div><div class="mnd-celle"><span>des</span></div></div><p>Ex-datoene til Hunter Group ASA har de siste årene ligget i mars, juni og september. Månedene er ex-datoer utledet av hvilke måneder som går igjen over flere år, ikke av en enkelt utbetaling. Selve pengene kommer typisk halvannen til tre uker etter ex-datoen, så en ex-dato sent i måneden betales ut i den neste.</p></div>
 
-  <div class="vurdering-seksjon"><h2>Vurdering som utbytteaksje</h2><p class="vurdering-tekst">Yielden på 1,7% er under sektorsnittet for Shipping (7,4%). Utbetalingsgraden på 15% er lav, noe som gir solid buffer og rom for utbytteøkninger fremover. Utbyttet har falt med 77,6% per år de siste fem årene, noe som krever at investoren setter seg inn i hva som har drevet nedgangen.</p></div><div class="driver-seksjon"><h2>Hva driver utbyttet i HUNT?</h2><p class="driver-tekst">Fraktrater bestemmer inntjeningen nesten alene. Ratene svinger kraftig med balansen mellom tilbud av tonnasje og etterspørsel fra global handel. Ny tonnasje fra ordreboken, skraping av eldre skip og geopolitikk (Rødehavet, Suezkanalen) er viktige drivere. Mange shippingselskaper deler ut det meste av overskuddet — hyppig utbytte er vanlig, men høy yield kan forsvinne like fort som den kom.</p><p class="driver-tekst">Hunter Group ASA har betalt utbytte i 5 av årene vi har tall for, men rekken er brutt — den nåværende går tilbake til 2025. Utbyttet er samlet sett 77,6 % lavere i året enn for fem år siden. Payout ratio på 15 % lar mesteparten av inntjeningen bli igjen i selskapet, så det er rom for å øke. Ex-datoene har de siste årene ligget i mars, juni og september.</p></div>
+  <div class="vurdering-seksjon"><h2>Vurdering som utbytteaksje</h2><p class="vurdering-tekst">Yielden på 1,7% er under sektorsnittet for Shipping (7,1%). Utbetalingsgraden på 15% er lav, noe som gir solid buffer og rom for utbytteøkninger fremover. Utbyttet har falt med 77,6% per år de siste fem årene, noe som krever at investoren setter seg inn i hva som har drevet nedgangen.</p></div><div class="driver-seksjon"><h2>Hva driver utbyttet i HUNT?</h2><p class="driver-tekst">Fraktrater bestemmer inntjeningen nesten alene. Ratene svinger kraftig med balansen mellom tilbud av tonnasje og etterspørsel fra global handel. Ny tonnasje fra ordreboken, skraping av eldre skip og geopolitikk (Rødehavet, Suezkanalen) er viktige drivere. Mange shippingselskaper deler ut det meste av overskuddet — hyppig utbytte er vanlig, men høy yield kan forsvinne like fort som den kom.</p><p class="driver-tekst">Hunter Group ASA har betalt utbytte i 5 av årene vi har tall for, men rekken er brutt — den nåværende går tilbake til 2025. Utbyttet er samlet sett 77,6 % lavere i året enn for fem år siden. Payout ratio på 15 % lar mesteparten av inntjeningen bli igjen i selskapet, så det er rom for å øke. Ex-datoene har de siste årene ligget i mars, juni og september.</p></div>
 
   
 
   <div class="risiko-seksjon"><h2>Risiko for utbyttet</h2><ul class="risiko-liste"><li>Utbyttet er kuttet før — fra 40,85 til 0,30 kroner i 2025</li>
-<li>Yielden avhenger sterkt av inngangskursen: samme utbytte gir 1,4 % på 12-månedershøyden (21,10 kr) og 23,1 % på bunnen (1,30 kr)</li>
+<li>Yielden avhenger sterkt av inngangskursen: samme utbytte gir 1,4 % på 12-månedershøyden (21,10 kr) og 22,9 % på bunnen (1,31 kr)</li>
 <li>Fraktrater er svært volatile og kan halveres på kort tid</li>
 <li>Bunkerspriser (drivstoff) påvirker driftsmarginene direkte</li></ul></div>
 
@@ -573,7 +579,7 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
   <!-- ── NØKKELTALL ── -->
   <section id="nokkeltall">
 
-  <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Shipping</td></tr><tr><td>Frekvens</td><td>Kvartalsvis</td></tr><tr><td>Utbytte per aksje</td><td>0,30 NOK</td></tr><tr><td>Direkteavkastning</td><td>1,71%</td></tr><tr><td>5-årssnitt yield</td><td>107,29%</td></tr><tr><td>År med utbytte</td><td>5</td></tr><tr><td>P/E</td><td>2,2</td></tr><tr><td>Payout ratio</td><td>15%</td></tr><tr><td>Utbyttevekst 5 år</td><td>-77,6% p.a.</td></tr><tr><td>Markedsverdi</td><td>2,4 mrd NOK</td></tr><tr><td>52-ukers kurs</td><td>1,30 – 21,10 NOK</td></tr></tbody></table>
+  <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Shipping</td></tr><tr><td>Frekvens</td><td>Kvartalsvis</td></tr><tr><td>Utbytte per aksje</td><td>0,30 NOK</td></tr><tr><td>Direkteavkastning</td><td>1,71%</td></tr><tr><td>5-årssnitt yield</td><td>107,29%</td></tr><tr><td>År med utbytte</td><td>5</td></tr><tr><td>P/E</td><td>2,2</td></tr><tr><td>Payout ratio</td><td>15%</td></tr><tr><td>Utbyttevekst 5 år</td><td>-77,6% p.a.</td></tr><tr><td>Markedsverdi</td><td>2,4 mrd NOK</td></tr><tr><td>52-ukers kurs</td><td>1,31 – 21,10 NOK</td></tr></tbody></table>
 
   </section>
 
@@ -587,8 +593,8 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
 </div>
   </section>
 
-  <div class="relaterte"><h2>Andre shipping-aksjer med utbytte</h2><div class="rel-grid"><a href="/aksjer/STST/" class="rel-kort"><span class="rel-ticker">STST</span><span class="rel-navn">Stainless Tankers ASA</span><span class="rel-yield">17,4%</span></a>
-<a href="/aksjer/HAFNI/" class="rel-kort"><span class="rel-ticker">HAFNI</span><span class="rel-navn">Hafnia Limited</span><span class="rel-yield">11,1%</span></a>
+  <div class="relaterte"><h2>Andre shipping-aksjer med utbytte</h2><div class="rel-grid"><a href="/aksjer/STST/" class="rel-kort"><span class="rel-ticker">STST</span><span class="rel-navn">Stainless Tankers ASA</span><span class="rel-yield">12,6%</span></a>
+<a href="/aksjer/HAFNI/" class="rel-kort"><span class="rel-ticker">HAFNI</span><span class="rel-navn">Hafnia Limited</span><span class="rel-yield">11,0%</span></a>
 <a href="/aksjer/WEST/" class="rel-kort"><span class="rel-ticker">WEST</span><span class="rel-navn">Western Bulk Chartering AS</span><span class="rel-yield">10,8%</span></a>
 <a href="/aksjer/OET/" class="rel-kort"><span class="rel-ticker">OET</span><span class="rel-navn">Okeanis Eco Tankers Corp.</span><span class="rel-yield">10,5%</span></a></div></div>
 
@@ -607,7 +613,7 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
     <a href="https://exday.no/app/?aksje=HUNT">Åpne HUNT i exday.no →</a>
   </div>
 
-  <p class="updated">Tallene er hentet 16. oktober 2026</p>
+  <p class="updated">Tallene er hentet 18. oktober 2026</p>
   <footer style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid #e5e7eb;font-size:0.78rem;text-align:center;color:#9ca3af;line-height:1.6;" class="std-footer">
     <p>Kurs og utbyttedata hentes fra Yahoo Finance og Euronext. Oppdateres daglig på børsdager.</p>
     <p style="max-width:36rem;margin:0.4rem auto;">
