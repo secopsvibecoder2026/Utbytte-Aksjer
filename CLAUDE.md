@@ -1477,8 +1477,8 @@ NewsWeb. None of them made any test or check fail.
 
 **Found but not fixed then, fixed 2026-10-07** — see the next section. STST
 (17,44 % shown against 12,6 % paid, a 44 % cut under both the 50 % guard and
-the 30 % threshold in Sjekk 10) is still open: its window holds capital
-distributions, and the fleet is being sold.
+the 30 % threshold in Sjekk 10) stayed open until 2026-10-18; see «STST: 30 %
+of what?».
 
 ## Paid in the last 12 months as the annual rate (2026-10-07)
 
@@ -1735,6 +1735,37 @@ Tests: `TestGoodtechTillegg` (6), `TestUtbytteStoppet` (5),
 `TestMarkedsverdiFastInfo` (2), `TestLopendeUtbytteFra` (+1),
 `TestVelgRapportMelding` (4) and `app.test.js` (+4).
 
+## STST: 30 % of what? (2026-10-18)
+
+STST showed 17,40 % against 12,58 % paid in the last 12 months: four quarterly
+payments, 5,17 kr, all of them repayment of paid-in capital and none called
+extraordinary. Neither the paid-12m rule nor Sjekk 10 caught it, because both
+divided the gap by the *shown* figure: (7,15 − 5,17) / 7,15 = 27,7 %, under
+30 %. Measured against what was paid it is 38 %, and this file has always
+defined Sjekk 10 as «≥ 30 % above utbytte_12m / pris». The code did not do
+what the definition said.
+
+- `betalt_kan_bli_arsrate()` now divides by the smaller of the two figures, so
+  30 % means the same in both directions. Raises fire exactly as before; only
+  cuts of 23–30 % of the shown figure are new.
+- `vist_over_betalt()` divides by the paid figure, in all three copies
+  (`fetch_stocks.py`, `valider_data.py`, `vistOverBetalt()` in `ui.js`).
+- Simulated against all 154 rows: STST is the only stock that moves, in both
+  rules. NewsWeb has no one-off for STST in the window, so the next full fetch
+  sets it to 12,58 % «siste 12 mnd».
+
+Where Yahoo's 7,15 comes from is not established. It is neither the last 12
+months, last year's 12,74 nor four times the last payment.
+
+**BOR is not fixed by this, and is not a parser bug.** Borgestad's window is one
+payment, 0,50 kr in March 2026, which its notice calls an «additional dividend».
+Taken out as a one-off, nothing is left, and the rule stands down; Yahoo's 1,00
+(5,92 %) stays. Whether 0,50 is the annual rate or an extra is a reading of the
+company's policy, and Sjekk 10 keeps reporting it. The maintenance report of
+18.10 said Monday's run might fix BOR; it cannot.
+
+Tests: `TestBetaltSomArsrate` (+2), `TestVistOverBetalt` (+1) and `ui.test.js`.
+
 ## «Les mer» in the app modal (2026-10-07)
 
 With the 180–280-word company texts plus Yahoo's paragraph, «Om selskapet»
@@ -1944,6 +1975,28 @@ later. Domicile decides ASK, and a new ISIN or reverse split has broken Yahoo's 
 before (KMCP/BINT), so `HJEMLAND` now catches redomiciliation, share exchange offers,
 new ISINs and reverse splits for our issuers. On 25 days of messages it matched exactly
 that one.
+
+## The fixer agent (`.claude/agents/fikser.md`, 2026-10-18)
+
+The maintenance and tallkontroll agents only report, and their findings waited
+until someone set aside a session: STST sat for six days after the maintenance
+agent had found the cause. `fikser` closes that gap. It reads both report pages,
+sorts each finding (already fixed, fixable, the owner's, waiting for a date,
+wrong, unverifiable), and fixes at most five per round in one pull request.
+
+What it must do before changing anything, because the reporting agents are
+sometimes wrong (BOR on 18.10, SalMar and Bakkafrost in September):
+
+- reproduce the finding from `aksjer.json`, the NewsWeb notice or the page;
+- simulate a rule change against all rows and list every stock that moves;
+- write a test that fails before the fix, and keep the two or three copies of a
+  rule in step;
+- leave generated files alone, never choose between two defensible readings
+  (WEST), and never merge its own PR.
+
+Run it in a session with «kjør fikser-agenten». As a routine it needs the
+repository attached with write access in the routine's settings on claude.ai,
+like the other two would to open pull requests.
 
 ## Ex-dates come from Oslo Børs — Yahoo and DNB do not tell the exchanges apart (2026-09-24)
 
