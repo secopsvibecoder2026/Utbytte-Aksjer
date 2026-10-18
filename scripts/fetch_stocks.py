@@ -2095,12 +2095,17 @@ def vist_over_betalt(a):
     Bare den retningen: et vist tall *under* det betalte er som regel en
     ekstraordinær utdeling i vinduet, og det er riktig å ikke vise den som
     løpende yield. Et vist tall *over* det betalte er et utbytte vi har funnet
-    opp. Grensene — minst 1 prosentpoeng og minst 30 % — er satt slik at
-    avrunding og små kursbevegelser ikke gir støy.
+    opp. Grensene — minst 1 prosentpoeng og minst 30 % over det betalte — er
+    satt slik at avrunding og små kursbevegelser ikke gir støy.
 
-    Eksisterer i to eksemplarer av nødvendighet: her (malen) og Sjekk 10 i
-    valider_data.py, som må kjøre uten yfinance. TestVistOverBetalt
-    sammenligner dem mot det ekte datasettet.
+    30 % måles mot det betalte, ikke mot det viste. Før 18.10.2026 delte
+    koden på det viste tallet, og STST (17,40 % vist, 12,58 % betalt, 38 %
+    over) slapp under med 27,7 %.
+
+    Eksisterer i tre eksemplarer av nødvendighet: her (malen), Sjekk 10 i
+    valider_data.py, som må kjøre uten yfinance, og vistOverBetalt() i
+    assets/ui.js. TestVistOverBetalt sammenligner de to første mot det ekte
+    datasettet, og ui.test.js har de samme tilfellene.
     """
     if a.get("utbytte_12m") is None:
         return None
@@ -2109,7 +2114,8 @@ def vist_over_betalt(a):
     if pris <= 0 or vist <= 0:
         return None
     betalt = float(a["utbytte_12m"]) / pris * 100
-    if vist - betalt >= VIST_OVER_BETALT_PP and (vist - betalt) / vist >= VIST_OVER_BETALT_ANDEL:
+    if vist - betalt >= VIST_OVER_BETALT_PP and (
+            betalt <= 0 or (vist - betalt) / betalt >= VIST_OVER_BETALT_ANDEL):
         return round(vist, 2), round(betalt, 2)
     return None
 
@@ -2415,7 +2421,11 @@ def betalt_kan_bli_arsrate(a, i_dag=None):
             and not a.get("ex_forbehold")
             and not _i_vinduet(a, a.get("annonsert_ex"))):
         return False
-    return vist <= 0 or abs(betalt - vist) / vist >= BETALT_MIN_AVVIK
+    # Avviket måles mot det minste av de to tallene, så 30 % betyr det samme
+    # begge veier. Før 18.10.2026 ble det delt på det viste: en heving på 30 %
+    # slo inn, men et vist tall 38 % over det betalte (STST, 7,15 mot 5,17)
+    # ble 27,7 % og sto.
+    return vist <= 0 or max(betalt, vist) / min(betalt, vist) - 1 >= BETALT_MIN_AVVIK
 
 
 def bruk_betalt_som_arsrate(a, ekstra=0.0):
