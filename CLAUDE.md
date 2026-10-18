@@ -79,6 +79,7 @@ Utbytte-Aksjer/
 │   ├── update-og-deploy.yml   # Data fetch 4× daily + GitHub Pages deploy
 │   ├── oppdater-priser.yml    # Price updates every 15 min on weekdays
 │   ├── deploy-only.yml        # Lightweight Pages deploy (workflow_dispatch)
+│   ├── kodeendring.yml        # Starts the data job when the code behind the numbers changes
 │   └── tester.yml             # Runs the JS + Python test suites on push/PR
 ├── assets/                    # All frontend JS and CSS
 │   ├── app.js                 # Bootstrap, data loading, cache management, escHtml()
@@ -233,6 +234,16 @@ Note: The Service Worker requires HTTPS or `localhost` to function.
 - **Steps:**
   1. `oppdater-data`: Runs `fetch_stocks.py`, commits updated `data/aksjer.json` and stock SEO pages to `main`
   2. `deploy-pages`: Bumps Service Worker cache version (`CACHE = 'exday-v{SHA}'`), deploys to GitHub Pages
+
+### Data run on code change (`kodeendring.yml`, 2026-10-18)
+
+A push to `main` that changes `fetch_stocks.py`, the modules it imports
+(`utvid_beskrivelser.py`, `sektortekster.py`), `oppdater_hendelser.py` or
+`data/tickers.json` starts `update-og-deploy.yml` through `workflow_dispatch`.
+Before this, a fix merged on a Friday evening reached the pages on Monday
+afternoon. The data job's own commits touch none of these files, and the job
+is skipped for `github-actions[bot]` in any case. A run on a weekend is fine:
+`kursdag()` in `app.js` dates it to Friday.
 
 ### Real-Time Price Updates (`oppdater-priser.yml`)
 
@@ -1724,10 +1735,8 @@ menus scroll. The rank column in «Høyest annonsert yield» was 16 px for «10.
 
 **Left for the owner:**
 
-- **WEST** shows «Halvårlig» while the company decides quarter by quarter: it
-  paid for 2025 and Q3 2026, and not for Q1 or Q2. «Uregelmessig» would move
-  the rate from 10,83 % «siste 12 mnd» (paid) to 5,79 % (one payment). That is
-  not more correct, so it is unchanged.
+- **WEST** showed «Halvårlig» while the company decides quarter by quarter.
+  Settled 2026-10-18, see «WEST and IWS».
 - **The DNB page-data endpoint** answers 404, and the HTML fallback finds
   7 companies.
 
@@ -1765,6 +1774,40 @@ company's policy, and Sjekk 10 keeps reporting it. The maintenance report of
 18.10 said Monday's run might fix BOR; it cannot.
 
 Tests: `TestBetaltSomArsrate` (+2), `TestVistOverBetalt` (+1) and `ui.test.js`.
+
+## WEST and IWS (2026-10-18)
+
+**WEST is «Uregelmessig», and an irregular payer's rate is what it paid.**
+Western Bulk paid four times in 2022, once in February 2023, nothing in 2024
+or 2025, then in February and October 2026. Two payments in the window made
+the derived label «Halvårlig», which claims a rhythm the company does not have.
+`frekvens: Uregelmessig` is set in `tickers.json`. Until now the paid-12m rule
+skipped irregular payers, since there was no count to check, and the page would
+have fallen back to Yahoo's 1,39 (5,79 %) against 2,60 paid (10,83 %).
+`betalt_kan_bli_arsrate()` now accepts «Uregelmessig» with at least one payment
+in the window; every other guard applies as before. Of the 28 irregular payers
+only 2020 Bulkers has payments in the window, and `lopende_utbytte_fra` holds
+it. NewsWeb has no one-off for WEST.
+
+**Integrated Wind Solutions (IWS) joined the catalog.** Oslo Børs, Norwegian
+(ISIN NO0013461350), in `Energitjenester` beside Eidesvik and Solstad, which
+also run service vessels for offshore wind. Quarterly dividends since March
+2026, all three classified as repayment of paid-in capital, which
+`hent_kapitaltilbake()` picks up by itself. The March payment of 3,00 kr was
+1,00 ordinary and 2,00 extraordinary (Q4 report, message 666653), but only the
+report says so and it carries no ex-date, so the one-off is not quantified and
+the shown rate includes it until March 2027 (8,09 % in a dry run, against
+roughly 6,5 % ordinary). The company text was written for this commit and
+passed `valider_innledning.py --skriv`.
+
+**Open: policy text reads as a one-off.** IWS's ex-day notices repeat the
+dividend policy, «Extraordinary dividends will be assessed and paid annually in
+Q1», and `_EKSTRA_RE` flags that as an extraordinary payment. Harmless today,
+since the window holds three payments and the rule needs four. It will matter
+once the window holds four ordinary payments, and any issuer that quotes its
+policy in a notice can hit it.
+
+Tests: `TestBetaltSomArsrate` (2 replace the old «Uregelmessig gives no rule»).
 
 ## «Les mer» in the app modal (2026-10-07)
 
