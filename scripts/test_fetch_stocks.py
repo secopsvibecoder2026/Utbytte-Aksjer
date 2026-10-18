@@ -1389,8 +1389,17 @@ class TestBetaltSomArsrate(unittest.TestCase):
         # Og færre er et halvt år.
         self.assertFalse(fs.betalt_kan_bli_arsrate(self._yara(utbytte_12m_antall=0), self.I_DAG))
 
-    def test_uregelmessig_gir_ingen_regel(self):
-        self.assertFalse(fs.betalt_kan_bli_arsrate(self._yara(frekvens="Uregelmessig"), self.I_DAG))
+    def test_uregelmessig_bruker_det_betalte(self):
+        # WEST: to utbetalinger etter to år uten, ingen rytme å telle mot.
+        # Yahoo ga 1,39 (én utbetaling); betalt siste 12 mnd er 2,60.
+        a = self._yara(ticker="WEST", pris=24.0, frekvens="Uregelmessig", utbytte_per_aksje=1.39,
+                       utbytte_12m=2.60, utbytte_12m_antall=2,
+                       utbytte_per_ar={"2021": 0.0, "2022": 28.32, "2023": 3.0, "2024": 0.0, "2025": 0.0})
+        self.assertTrue(fs.betalt_kan_bli_arsrate(a, self.I_DAG))
+
+    def test_uregelmessig_uten_utbetaling_gir_ingen_regel(self):
+        a = self._yara(frekvens="Uregelmessig", utbytte_12m=0.0, utbytte_12m_antall=0)
+        self.assertFalse(fs.betalt_kan_bli_arsrate(a, self.I_DAG))
 
     def test_lite_avvik_beholder_tallet(self):
         self.assertFalse(fs.betalt_kan_bli_arsrate(self._yara(utbytte_per_aksje=20.0), self.I_DAG))

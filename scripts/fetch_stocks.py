@@ -2396,10 +2396,18 @@ def betalt_kan_bli_arsrate(a, i_dag=None):
     pris = a.get("pris") or 0
     betalt = a.get("utbytte_12m") or 0
     vist = a.get("utbytte_per_aksje") or 0
-    forventet = {"Årlig": 1, **UTBETALINGER_PR_AAR}.get(a.get("frekvens"))
-    if not forventet or pris <= 0 or betalt <= 0:
+    frekvens = a.get("frekvens")
+    forventet = {"Årlig": 1, **UTBETALINGER_PR_AAR}.get(frekvens)
+    if pris <= 0 or betalt <= 0:
         return False
-    if a.get("utbytte_12m_antall") != forventet:
+    if frekvens == "Uregelmessig":
+        # Uten en rytme er det ingenting å telle utbetalingene mot, og det
+        # betalte er det eneste tallet vi vet. WEST betalte i februar og
+        # oktober 2026 etter to år uten utbytte, og Yahoos rate (én utbetaling)
+        # ga 5,79 % mot 10,83 % betalt (18.10.2026).
+        if (a.get("utbytte_12m_antall") or 0) < 1:
+            return False
+    elif not forventet or a.get("utbytte_12m_antall") != forventet:
         return False
     # Mer enn hele kursen på ett år er ikke en årsrate, uansett hva meldingen
     # kaller det.

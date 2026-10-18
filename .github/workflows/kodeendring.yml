@@ -1,0 +1,52 @@
+name: Datakjøring etter kodeendring
+
+# Når koden som lager tallene og sidene endres, starter datajobben med en
+# gang i stedet for å vente på neste planlagte kjøring. 16.10.2026 ble
+# rettelsene for GOD, GSF, REACH og MGN merget fredag kveld, og de sto på
+# main uten å nå siden før mandag ettermiddag. Menyen med «Avnoterte aksjer»
+# ventet like lenge på aksjesidene.
+#
+# Datajobben (update-og-deploy.yml) kjører bare på timeplan og manuelt; en
+# vanlig push gir bare deploy. Denne workflowen starter den manuelt, så det er
+# én datajobb med én samtidighetsgruppe, ikke to.
+#
+# Listen er filene datajobben bruker for å lage tall og sider: fetch_stocks.py
+# og modulene den importerer, hendelseskalenderen og katalogen. Endringer i
+# assets/ og håndskrevne sider trenger ingen datakjøring; de går ut med
+# deployen på pushen.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "scripts/fetch_stocks.py"
+      - "scripts/utvid_beskrivelser.py"
+      - "scripts/sektortekster.py"
+      - "scripts/oppdater_hendelser.py"
+      - "data/tickers.json"
+
+permissions:
+  actions: write   # for å starte update-og-deploy.yml
+
+jobs:
+  start-datajobb:
+    name: Start datajobben
+    runs-on: ubuntu-latest
+    # Datajobbens egne commits rører ingen av filene over, men skulle det skje,
+    # skal den aldri starte seg selv på nytt.
+    if: github.actor != 'github-actions[bot]'
+    steps:
+      - name: Start update-og-deploy.yml
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          for forsok in 1 2 3 4; do
+            if gh workflow run update-og-deploy.yml --ref main --repo "${{ github.repository }}"; then
+              echo "Datajobben er startet for ${{ github.sha }}."
+              exit 0
+            fi
+            echo "Forsøk $forsok feilet, prøver igjen om $((forsok * 10))s…"
+            sleep $((forsok * 10))
+          done
+          echo "::error::Klarte ikke å starte update-og-deploy.yml etter 4 forsøk."
+          exit 1
