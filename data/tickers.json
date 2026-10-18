@@ -1821,7 +1821,8 @@
     "beskrivelse_fakta_kilde": "yahoo_finance",
     "beskrivelse_fakta_sprak": "en",
     "ask_egnet": true,
-    "inkorporeringsland": "Norge"
+    "inkorporeringsland": "Norge",
+    "frekvens": "Uregelmessig"
   },
   {
     "ticker": "CAPT",
@@ -2101,5 +2102,15 @@
     "ask_egnet": true,
     "inkorporeringsland": "Norge",
     "navn_dnb": "Stainless Tankers AS"
+  },
+  {
+    "ticker": "IWS",
+    "ticker_yf": "IWS.OL",
+    "navn": "Integrated Wind Solutions ASA",
+    "sektor": "Energitjenester",
+    "bors": "Oslo Børs",
+    "beskrivelse": "Integrated Wind Solutions leverer skip og tjenester til havvindindustrien. Kjernen er IWS Fleet, som eier serviceskip av typen CSOV. Skipene har en gangvei og en kran som kompenserer for bølgebevegelsene, slik at teknikerne kan gå direkte over til turbinene, og de bor om bord mens de arbeider på feltet. IWS eier om lag tre fjerdedeler av IWS Fleet. Ved utgangen av 2025 var alle de seks skipene i drift, tre for utbyggingen av Dogger Bank i Nordsjøen og tre for turbinprodusenten Siemens Gamesa.\n\nVed siden av skipene eier IWS selskapet IWS Services, som leverer utstyr, ingeniørarbeid og personell til leverandørkjeden i havvind. Hovedvirksomheten der er arbeid på overgangsstykkene mellom fundament og tårn, og datterselskapet ProCon er slått sammen med Hyndla. IWS eier også nesten halvparten av PEAK Wind, som gir råd, selger analyser og drifter vindparker for andre. Etterspørselen etter alt dette avhenger av hvor mye havvind som bygges og vedlikeholdes, ikke av oljeprisen.\n\nStyret besluttet i desember 2025 å begynne med utdelinger, og den første kom i mars 2026. Etter utbyttepolitikken skal minst halve årsresultatet tilbake til aksjonærene over tid, med et ordinært utbytte hvert kvartal og eventuelt et ekstraordinært i første kvartal når selskapet har mer kapital enn det trenger. Utdelingene i 2026 er klassifisert som tilbakebetaling av innbetalt kapital, som skattlegges annerledes enn vanlig utbytte. I september 2026 bestilte IWS Fleet fire nye skip fra et kinesisk verft for levering i 2029 og 2030, og selskapet har sagt at de skal finansieres uten ny egenkapital og uten å kutte det ordinære utbyttet.",
+    "ask_egnet": true,
+    "inkorporeringsland": "Norge"
   }
 ]
