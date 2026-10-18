@@ -1401,6 +1401,20 @@ class TestBetaltSomArsrate(unittest.TestCase):
                        utbytte_per_ar={"2025": 0.8})
         self.assertTrue(fs.betalt_kan_bli_arsrate(a, self.I_DAG))
 
+    def test_stst_maales_mot_betalt(self):
+        # 7,15 vist mot 5,17 betalt er 38 % over det betalte. Delt på det
+        # viste ble det 27,7 %, og STST sto på 17,40 % (18.10.2026).
+        a = self._yara(ticker="STST", pris=41.10, frekvens="Kvartalsvis", utbytte_per_aksje=7.15,
+                       utbytte_12m=5.1705, utbytte_12m_antall=4,
+                       utbytte_per_ar={"2024": 10.9835, "2025": 12.7422})
+        self.assertTrue(fs.betalt_kan_bli_arsrate(a, self.I_DAG))
+
+    def test_avviket_er_likt_begge_veier(self):
+        for vist, betalt, ventet in ((1.25, 1.0, False), (1.0, 1.25, False),
+                                     (1.31, 1.0, True), (1.0, 1.31, True)):
+            a = self._yara(utbytte_per_aksje=vist, utbytte_12m=betalt, utbytte_per_ar={})
+            self.assertEqual(fs.betalt_kan_bli_arsrate(a, self.I_DAG), ventet, (vist, betalt))
+
     def test_gsf_engangsutdeling_stoppes_av_historikken(self):
         a = self._yara(ticker="GSF", pris=23.40, utbytte_per_aksje=8.34, utbytte_12m=35.64 / 2,
                        utbytte_per_ar={"2022": 3.0, "2023": 4.5, "2024": 1.75, "2025": 0.0})
@@ -1535,6 +1549,9 @@ KID_BETALT = {"pris": 119.4, "utbytte_yield": 8.38, "utbytte_12m": 5.0, "utbytte
 NY_BETALER = {"pris": 50.0, "utbytte_yield": 4.0, "utbytte_12m": 2.0, "utbytte_12m_antall": 2,
               "utbytte_per_ar": {"2021": 0.0, "2022": 0.0, "2023": 0.0, "2024": 1.0, "2025": 2.0},
               "utbytte_forste_ar": 2024}
+STST_BETALT = {"pris": 41.1, "utbytte_yield": 17.4, "utbytte_12m": 5.1705, "utbytte_12m_antall": 4,
+               "utbytte_per_ar": {"2021": 0.0, "2022": 0.0, "2023": 0.0, "2024": 10.9835, "2025": 12.7422},
+               "utbytte_forste_ar": 2024}
 
 
 class TestBetaltFraSerie(unittest.TestCase):
@@ -1607,9 +1624,17 @@ class TestVistOverBetalt(unittest.TestCase):
         from fetch_stocks import vist_over_betalt
         self.assertIsNone(vist_over_betalt(dict(KID_BETALT, utbytte_yield=4.9)))   # 0,71 pp
 
+    def test_tretti_prosent_over_det_betalte(self):
+        # STST: 17,40 vist, 12,58 betalt. 38 % over det betalte, men bare
+        # 27,7 % av det viste, og Sjekk 10 tidde til 18.10.2026.
+        from fetch_stocks import vist_over_betalt
+        self.assertEqual(vist_over_betalt(STST_BETALT), (17.4, 12.58))
+        # 25 % over det betalte er under grensen.
+        self.assertIsNone(vist_over_betalt(dict(STST_BETALT, utbytte_yield=15.73)))
+
     def test_samsvar_med_valider_data(self):
         import fetch_stocks, valider_data
-        tilfeller = [KID_BETALT, NY_BETALER, dict(KID_BETALT, utbytte_12m=0.0),
+        tilfeller = [KID_BETALT, NY_BETALER, STST_BETALT, dict(KID_BETALT, utbytte_12m=0.0),
                      dict(KID_BETALT, utbytte_yield=4.9), {"pris": 10}]
         sti = os.path.join(os.path.dirname(__file__), "..", "data", "aksjer.json")
         tilfeller += json.load(open(sti, encoding="utf-8"))["aksjer"]

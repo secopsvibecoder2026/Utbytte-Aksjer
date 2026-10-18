@@ -30,7 +30,9 @@ def vist_over_betalt(a):
     if pris <= 0 or vist <= 0:
         return None
     betalt = float(a['utbytte_12m']) / pris * 100
-    if vist - betalt >= VIST_OVER_BETALT_PP and (vist - betalt) / vist >= VIST_OVER_BETALT_ANDEL:
+    # 30 % over det betalte, ikke 30 % av det viste (STST, 18.10.2026).
+    if vist - betalt >= VIST_OVER_BETALT_PP and (
+            betalt <= 0 or (vist - betalt) / betalt >= VIST_OVER_BETALT_ANDEL):
         return round(vist, 2), round(betalt, 2)
     return None
 

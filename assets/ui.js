@@ -4093,7 +4093,9 @@ function vistOverBetalt(a) {
   const vist = Number(a.utbytte_yield) || 0;
   if (pris <= 0 || vist <= 0) return null;
   const betalt = Number(a.utbytte_12m) / pris * 100;
-  if (vist - betalt >= VIST_OVER_BETALT_PP && (vist - betalt) / vist >= VIST_OVER_BETALT_ANDEL) {
+  // 30 % over det betalte, ikke 30 % av det viste (STST, 18.10.2026).
+  if (vist - betalt >= VIST_OVER_BETALT_PP
+      && (betalt <= 0 || (vist - betalt) / betalt >= VIST_OVER_BETALT_ANDEL)) {
     return [Math.round(vist * 100) / 100, Math.round(betalt * 100) / 100];
   }
   return null;

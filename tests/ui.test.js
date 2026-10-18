@@ -498,6 +498,10 @@ test('vistOverBetalt: samme utfall som Python', () => {
   assert.deepEqual(vistOverBetalt({ ...KID_BETALT, utbytte_12m: 0 }), [8.38, 0]);
   assert.equal(vistOverBetalt({ ...KID_BETALT, utbytte_yield: 2.0 }), null);
   assert.equal(vistOverBetalt({ ...KID_BETALT, utbytte_yield: 4.9 }), null);
+  // STST: 38 % over det betalte, men 27,7 % av det viste (18.10.2026).
+  const stst = { pris: 41.1, utbytte_yield: 17.4, utbytte_12m: 5.1705, utbytte_12m_antall: 4 };
+  assert.deepEqual(vistOverBetalt(stst), [17.4, 12.58]);
+  assert.equal(vistOverBetalt({ ...stst, utbytte_yield: 15.73 }), null);
 });
 
 test('modalBetaltBoks: forklaring bare når vist er over betalt', () => {
