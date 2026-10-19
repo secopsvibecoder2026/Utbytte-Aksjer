@@ -4,6 +4,72 @@ Norsk utbytteaksje-tracker for Oslo Børs. Fullførte funksjoner: [ROADMAP_COMPL
 
 ---
 
+## Vekst: gjenbesøk og trafikk fra Google (19.10.2026)
+
+Gjennomgang 19.10.2026 av det som finnes, mot det konkurrentene gjør. To ting
+mangler mest: en kanal som henter folk tilbake uten at de må huske siden (varsler
+virker i dag bare på Android med installert app, via periodic sync), og sider som
+svarer på søk bare vi kan svare på. Dataene finnes alt; mye brukes bare i appen.
+
+Konkurrentene: DNB Carnegies utbyttekalender oppdateres sjelden og sier selv at
+den ikke er komplett. Dividendpedia viste andre datoer for Equinor enn Equinors
+egne meldinger. Ingen av dem har abonnement, e-post eller Oslo-datoer kontrollert
+mot børsmeldingene.
+
+Alt under er én side eller en betinget seksjon, ikke mange tynne sider, så det
+står ikke i veien for AdSense (se «Breaking the template» i CLAUDE.md).
+
+**Få folk tilbake dag etter dag**
+
+1. **Kalender man kan abonnere på (ICS/webcal).** Alle ex-datoer og rapportdatoer
+   i iPhone- og Google-kalenderen, pluss én fil per aksje. Hver hendelse lenker til
+   aksjesiden. En statisk fil datajobben skriver; ingen konto, ingen persondata.
+   I dag finnes bare nedlasting av én hendelse om gangen i appen. *Liten.*
+2. **«Denne uka på Oslo Børs» på forsiden.** Ex-datoer med siste kjøpsdag,
+   utbetalinger og rapporter de neste sju dagene, skrevet som statisk HTML av
+   datajobben. Forsiden hadde ingen ferske tall. *Liten.* **Gjort 19.10.2026.**
+   Arbeidet fant en feil i «kjøp senest»: den var regnet som kalenderdagen før
+   ex-datoen, så en ex-dato på mandag ga søndag. Nå er det forrige børsdag, også
+   på aksjesidene, og «dagen før ex-dato» er rettet til «børsdagen før» på ni
+   håndskrevne sider.
+3. **«Nye utbyttemeldinger».** Én side med RSS: de nyeste utbyttene meldt til Oslo
+   Børs, med beløp, ex-dato, yield og lenke til meldingen. Vi leser meldingene alt.
+   *Middels.*
+4. **Ukentlig e-post, «Utbytteuka».** Sendes automatisk fra RSS-en i punkt 3 via
+   en gratis e-posttjeneste. Eieren må opprette konto, og personvernsiden må
+   oppdateres med samtykke. Sterkest for gjenbesøk. *Middels.*
+5. **«Din uke» øverst i appen.** Dine aksjer som går ex, har rapport eller har
+   meldt utbytte denne uka, fra porteføljen som ligger i nettleseren. *Liten.*
+
+**Trafikk fra Google**
+
+6. **«Utbyttekalender 2027» i tide.** Det sterkeste søket (2 340 visninger) bytter
+   år, og siden bytter først 1. januar. «2026 og 2027» i tittelen fra november, med
+   forventede måneder for 2027, gir forsprang før vårsesongen. DNB gjør det alt.
+   *Liten; bør ut før desember.*
+7. **«Når betaler Oslo Børs utbytte?»** Årshjul over hvilke måneder hver aksje går
+   ex, fra `utbetalingsmaaneder`. Er steg 2 i N11b i ROADMAP_NYE_IDEER.md. Unikt og
+   delbart. *Middels.*
+8. **Tre verktøy som egne sider.** «Hva om jeg hadde kjøpt?» og «ASK eller vanlig
+   konto?» finnes bare i appen; en kalkulator for skjermingsfradrag og utbytteskatt
+   finnes ikke. Skattesesongen er januar–mai. *Middels.*
+9. **Betingede seksjoner på aksjesidene med egne data.** «Siste utbyttemelding»
+   (dato, beløp, lenke) og «Kursfallet på ex-dagen» (hvor mye kursen pleier å falle
+   mot utbyttet, fra ujusterte kurser). Bare der det finnes data. *Middels.*
+10. **Artikler fra kunnskap bare vi har.** Tilbakebetaling av innbetalt kapital og
+    skatt (ni selskaper bruker det), kildeskatt for selskaper registrert utenfor
+    Norge (Bermuda, Kypros, Singapore …), og «Skjermingsrenten 2027», som søkes hver
+    januar. Med artikkelagenten, fakta først.
+11. **Side for aksjer med kvartalsvis utbytte.** Står alt i N11b. Ikke månedlig;
+    den har bare to aksjer.
+12. **`lastmod` i sitemap.** Settes til i dag på 195 av 199 sider ved hver kjøring,
+    så Google lærer å overse den. Bør bare endres når innholdet endres. *Liten.*
+
+**Rekkefølge:** 6, 1 og 2 først (alle små; 6 haster), så 7 og 3, så 4.
+Search Console-eksport vil kunne rangere resten etter faktisk etterspørsel.
+
+---
+
 ## Høy prioritet
 
 ### Datakvalitet — aksjer uten utbyttedata ✅ (løst annerledes enn planlagt, 12.09.2026)

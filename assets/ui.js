@@ -5162,7 +5162,9 @@ async function sjekkExDatoerDirekte() {
       ? `${a.ticker} ex-dato er i dag!`
       : `${a.ticker} ex-dato om ${dager} dag${dager === 1 ? '' : 'er'}`;
     const kropp = dager === 0
-      ? `${a.navn} – du må eie aksjen i dag for å motta utbytte`
+      // På ex-dagen er det for sent å kjøpe: retten ble låst ved forrige
+      // børsdags slutt. Teksten sa «du må eie aksjen i dag» til 19.10.2026.
+      ? `${a.navn} handles uten utbytte fra i dag. Utbyttet går til dem som eide aksjen ved forrige børsdags slutt.`
       : `${a.navn} – ex-dato ${new Date(a.ex_dato).toLocaleDateString('nb-NO', { day: 'numeric', month: 'long' })}`;
 
     new Notification(tittel, { body: kropp, icon: '/assets/icon.svg', tag: key });

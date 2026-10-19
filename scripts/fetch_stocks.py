@@ -3424,6 +3424,54 @@ def _fmt_dato(iso):
         return iso
 
 
+# ── Børsdager på Oslo Børs ───────────────────────────────────────────────────
+# «Kjøp innen» ble regnet som dagen før ex-datoen. For en ex-dato på mandag ga
+# det søndag, og IWS' egen melding sier «Last day including right: 4 September
+# 2026» om ex-datoen mandag 7. september (rettet 19.10.2026). Den siste dagen
+# med rett er forrige børsdag, og da må helger og børsens fridager hoppes over.
+
+def _paaskedag(aar):
+    """Første påskedag i den gregorianske kalenderen (Meeus/Jones/Butcher)."""
+    a, b, c = aar % 19, aar // 100, aar % 100
+    d, e = b // 4, b % 4
+    f = (b + 8) // 25
+    g = (b - f + 1) // 3
+    h = (19 * a + b - d - g + 15) % 30
+    i, k = c // 4, c % 4
+    l = (32 + 2 * e + 2 * i - h - k) % 7
+    m = (a + 11 * h + 22 * l) // 451
+    mnd = (h + l - 7 * m + 114) // 31
+    dag = (h + l - 7 * m + 114) % 31 + 1
+    return datetime.date(aar, mnd, dag)
+
+
+def borsfridager(aar):
+    """Hverdager Oslo Børs er stengt.
+
+    Kontrollert mot Euronexts handelskalender for 2026: 1. januar, skjærtorsdag,
+    langfredag, 2. påskedag, 1. mai, Kristi himmelfartsdag, 2. pinsedag, 24., 25.
+    og 31. desember. 17. mai og 26. desember falt på helg det året, men børsen er
+    stengt de dagene når de er hverdager.
+    """
+    p = _paaskedag(aar)
+    fast = {(1, 1), (5, 1), (5, 17), (12, 24), (12, 25), (12, 26), (12, 31)}
+    dager = {datetime.date(aar, m, d) for m, d in fast}
+    dager |= {p + datetime.timedelta(days=n) for n in (-3, -2, 1, 39, 50)}
+    return dager
+
+
+def er_borsdag(d):
+    return d.weekday() < 5 and d not in borsfridager(d.year)
+
+
+def forrige_borsdag(d):
+    """Siste børsdag før `d`: for en ex-dato, siste dag å kjøpe med rett på utbyttet."""
+    d = d - datetime.timedelta(days=1)
+    while not er_borsdag(d):
+        d -= datetime.timedelta(days=1)
+    return d
+
+
 def _lag_utbyttehistorikk_tekst(a, i_dag_ar=None):
     """Tolker aksjens EGEN utbyttehistorikk — form, stabilitet og yield mot eget snitt.
 
@@ -3569,7 +3617,7 @@ def _lag_analyse_tekst(a, sektor_snitt=None):
             ex_d  = datetime.date.fromisoformat(ex)
             today = datetime.date.today()
             dager = (ex_d - today).days
-            kjop_d = ex_d - datetime.timedelta(days=1)
+            kjop_d = forrige_borsdag(ex_d)
             mnd = ["jan","feb","mar","apr","mai","jun","jul","aug","sep","okt","nov","des"]
             kjop_str = f"{kjop_d.day}. {mnd[kjop_d.month-1]}"
             if dager > 0:
@@ -3584,8 +3632,12 @@ def _lag_analyse_tekst(a, sektor_snitt=None):
                     + (f", {_forbehold_tekst(a)}." if _forbehold_tekst(a) else ".")
                 )
             elif dager == 0:
+                # Sto før 19.10.2026 som «du må eie aksjen ved børsslutt for å
+                # motta utbytte», som sier at et kjøp på ex-dagen holder. Det
+                # gjør det ikke: retten ble låst ved forrige børsdags slutt.
                 deler.append(
-                    f"Ex-dato er i dag ({_fmt_dato(ex)}) — du må eie aksjen ved børsslutt for å motta utbytte."
+                    f"Ex-datoen er {_fmt_dato(ex)}. Aksjen handles uten utbytte fra den dagen, "
+                    f"og utbyttet går til dem som eide den ved børsslutt {kjop_str}."
                 )
             else:
                 deler.append(f"Siste registrerte ex-dato var {_fmt_dato(ex)}.")
@@ -4956,7 +5008,7 @@ def _lag_faq_seksjon(a, today):
             ex_d    = datetime.date.fromisoformat(ex)
             today_d = datetime.date.fromisoformat(today)
             dager   = (ex_d - today_d).days
-            kjop_d  = ex_d - datetime.timedelta(days=1)
+            kjop_d  = forrige_borsdag(ex_d)
             kjop_str = f"{kjop_d.day}. {mnd_lang[kjop_d.month-1]}"
             ex_str   = f"{ex_d.day}. {mnd_lang[ex_d.month-1]} {ex_d.year}"
             if dager > 0:
@@ -9196,6 +9248,7 @@ def main():
     oppdater_app_noscript_liste(resultater, root_dir)
     oppdater_antall_i_sider(resultater, root_dir)
     oppdater_aarstall_i_sider(root_dir)
+    oppdater_forside_uka(resultater, root_dir)
 
 
 def oppdater_aarstall_i_sider(root_dir: str, i_dag=None):
@@ -9258,6 +9311,194 @@ def oppdater_index_html_meta(antall_aksjer: int, root_dir: str):
     with open(path, "w", encoding="utf-8") as f:
         f.write(oppdatert)
     print(f"  index.html meta-beskrivelse oppdatert → {antall_aksjer} aksjer")
+
+
+# ── «Denne uka på Oslo Børs» på forsiden (19.10.2026) ────────────────────────
+# Forsiden hadde ingen ferske tall: hver seksjon var den samme hver dag, og
+# ingenting ga en grunn til å komme tilbake. Blokken viser ex-datoer med siste
+# kjøpsdag, utbetalinger og rapporter de neste sju dagene. Den skrives som
+# statisk HTML mellom markørene <!--UKA:START--> og <!--UKA:SLUTT--> av
+# datajobben, så Google ser innholdet uten JavaScript.
+#
+# Datoene er absolutte («tor. 12. nov»), aldri «i dag» eller «i morgen»: siden
+# bygges på hverdager og leses i helgen.
+
+UKA_DAGER = 7
+UKA_MAKS_RADER = 6
+_UKEDAG_KORT = ["man.", "tir.", "ons.", "tor.", "fre.", "lør.", "søn."]
+_MND_KORT = ["jan", "feb", "mar", "apr", "mai", "jun", "jul", "aug", "sep", "okt", "nov", "des"]
+
+
+def _kort_dato(d):
+    return f"{_UKEDAG_KORT[d.weekday()]} {d.day}. {_MND_KORT[d.month - 1]}"
+
+
+def _iso_dato(s):
+    try:
+        return datetime.date.fromisoformat(str(s)[:10]) if s else None
+    except ValueError:
+        return None
+
+
+def uka_hendelser(aksjer, i_dag, dager=UKA_DAGER):
+    """Ex-datoer, utbetalinger og rapporter fra `i_dag` og `dager` dager fram.
+
+    Ex-datoer tas med bare når det fortsatt er mulig å kjøpe med rett på
+    utbyttet, altså når ex-datoen er etter i dag. Beløpet vises bare når det
+    er meldt for nettopp den ex-datoen (`annonsert_ex`), og bare i kroner.
+    Rekkefølge: dato, så største selskap først.
+
+    `neste` er første ex-dato og første rapport etter perioden, så en tom
+    liste kan si når det skjer noe neste gang.
+    """
+    slutt = i_dag + datetime.timedelta(days=dager)
+    ex, utbetaling, rapport = [], [], []
+    neste = {"ex": None, "rapport": None}
+
+    def _neste(nokkel, rad):
+        if neste[nokkel] is None or (rad["dato"], -rad["mv"]) < (neste[nokkel]["dato"], -neste[nokkel]["mv"]):
+            neste[nokkel] = rad
+
+    for a in aksjer:
+        ticker = a.get("ticker") or ""
+        if not _TICKER_RE.match(ticker):
+            continue
+        felles = {"ticker": ticker, "navn": a.get("navn") or ticker,
+                  "mv": a.get("markedsverdi_mrd") or 0}
+        ex_d = _iso_dato(a.get("ex_dato"))
+        belop = (a.get("annonsert_utbytte")
+                 if a.get("annonsert_utbytte") and a.get("annonsert_ex") == a.get("ex_dato") else None)
+        if ex_d and ex_d > i_dag:
+            rad = dict(felles, dato=ex_d, kjop_senest=forrige_borsdag(ex_d), belop=belop,
+                       forslag=ex_forbehold_gjelder(a, i_dag))
+            if ex_d <= slutt:
+                ex.append(rad)
+            else:
+                _neste("ex", rad)
+        bet_d = _iso_dato(a.get("betaling_dato"))
+        if bet_d and i_dag <= bet_d <= slutt:
+            utbetaling.append(dict(felles, dato=bet_d, belop=belop))
+        rap_d = _iso_dato(a.get("rapport_dato"))
+        if rap_d and rap_d >= i_dag:
+            if rap_d <= slutt:
+                rapport.append(dict(felles, dato=rap_d))
+            else:
+                _neste("rapport", dict(felles, dato=rap_d))
+
+    def _sorter(rader):
+        return sorted(rader, key=lambda r: (r["dato"], -r["mv"], r["ticker"]))
+
+    return {"ex": _sorter(ex), "utbetaling": _sorter(utbetaling),
+            "rapport": _sorter(rapport), "neste": neste}
+
+
+def _uka_kort(tittel, forklaring, rader, linje, tom, mer_lenke):
+    import html as _html
+    deler = [
+        '      <div class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-5">',
+        f'        <h3 class="font-semibold text-gray-900 dark:text-gray-100 mb-1">{tittel}</h3>',
+        f'        <p class="text-xs text-gray-500 dark:text-gray-400 mb-3">{forklaring}</p>',
+    ]
+    if rader:
+        deler.append('        <ul class="space-y-2 text-sm">')
+        for r in rader[:UKA_MAKS_RADER]:
+            deler.append(
+                '          <li>'
+                f'<a href="/aksjer/{r["ticker"]}/" class="font-semibold text-green-700 dark:text-green-400 hover:underline">{r["ticker"]}</a> '
+                f'<span class="text-gray-700 dark:text-gray-300">{_html.escape(r["navn"])}</span><br>'
+                f'<span class="text-xs text-gray-500 dark:text-gray-400">{linje(r)}</span></li>')
+        deler.append('        </ul>')
+        if len(rader) > UKA_MAKS_RADER:
+            deler.append(f'        <p class="text-xs mt-3"><a href="{mer_lenke}" class="text-green-700 dark:text-green-400 hover:underline">'
+                         f'Se alle {len(rader)}</a></p>')
+    else:
+        deler.append(f'        <p class="text-sm text-gray-600 dark:text-gray-400">{tom}</p>')
+    deler.append('      </div>')
+    return "\n".join(deler)
+
+
+def lag_uka_blokk(hendelser, i_dag, hentet=None):
+    """HTML-en mellom markørene. Ren funksjon; `hentet` er når tallene ble hentet."""
+    import html as _html
+
+    def _kr(b):
+        return f" · {_nf(b, 2)} kr" if b else ""
+
+    def _ex_linje(r):
+        tekst = f"Ex {_kort_dato(r['dato'])} · kjøp senest {_kort_dato(r['kjop_senest'])}{_kr(r['belop'])}"
+        return tekst + (" · foreslått, ikke vedtatt" if r.get("forslag") else "")
+
+    def _tom(nokkel, flertall, entall):
+        n = hendelser["neste"].get(nokkel)
+        if not n:
+            return f"Ingen {flertall} de neste sju dagene."
+        return (f"Ingen {flertall} de neste sju dagene. Neste {entall} er {_kort_dato(n['dato'])}, for "
+                f'<a href="/aksjer/{n["ticker"]}/" class="text-green-700 dark:text-green-400 hover:underline">'
+                f'{_html.escape(n["navn"])}</a>.')
+
+    kort = [
+        _uka_kort("Ex-dato", "Eier du aksjen ved børsslutt siste kjøpsdag, får du utbyttet.",
+                  hendelser["ex"], _ex_linje, _tom("ex", "ex-datoer", "ex-dato"), "/utbyttekalender/"),
+        _uka_kort("Utbetaling", "Utbyttet kommer på kontoen denne dagen.",
+                  hendelser["utbetaling"], lambda r: f"{_kort_dato(r['dato'])}{_kr(r['belop'])}",
+                  "Ingen kjente utbetalinger de neste sju dagene.", "/utbyttekalender/"),
+        _uka_kort("Kvartalsrapport", "Utbytte meldes som regel sammen med rapporten.",
+                  hendelser["rapport"], lambda r: _kort_dato(r["dato"]),
+                  _tom("rapport", "rapporter", "rapport"), "/rapportkalender/"),
+    ]
+    hentet_tekst = ""
+    if hentet:
+        try:
+            from zoneinfo import ZoneInfo
+            t = datetime.datetime.fromisoformat(str(hentet).replace("Z", "+00:00"))
+            if t.tzinfo is None:
+                t = t.replace(tzinfo=datetime.timezone.utc)
+            t = t.astimezone(ZoneInfo("Europe/Oslo"))
+            hentet_tekst = f" Tallene er hentet {_kort_dato(t.date())} kl. {t:%H.%M}."
+        except (ValueError, TypeError, ImportError):
+            hentet_tekst = ""
+    return "\n".join([
+        '  <section class="max-w-5xl mx-auto px-4 sm:px-6 pt-10" aria-labelledby="uka-tittel">',
+        '    <div class="flex items-center justify-between mb-2">',
+        '      <h2 id="uka-tittel" class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100">Denne uka på Oslo Børs</h2>',
+        '      <a href="/uke/" class="text-sm hover:underline font-medium" style="color:#16a34a;">Hele uka →</a>',
+        '    </div>',
+        f'    <p class="text-sm text-gray-500 dark:text-gray-400 mb-6">De neste sju dagene fra {_kort_dato(i_dag)}.{hentet_tekst}</p>',
+        '    <div class="grid gap-4 sm:grid-cols-3">',
+        *kort,
+        '    </div>',
+        '  </section>',
+    ])
+
+
+_UKA_MONSTER = re.compile(r"<!--UKA:START-->.*?<!--UKA:SLUTT-->", re.S)
+
+
+def oppdater_forside_uka(aksjer, root_dir: str, i_dag=None, hentet=None):
+    """Fyller blokken på forsiden. True når filen ble endret."""
+    if i_dag is None:
+        try:
+            from zoneinfo import ZoneInfo
+            i_dag = datetime.datetime.now(ZoneInfo("Europe/Oslo")).date()
+        except ImportError:
+            i_dag = datetime.date.today()
+    sti = os.path.join(root_dir, "index.html")
+    try:
+        with open(sti, encoding="utf-8") as f:
+            innhold = f.read()
+    except OSError:
+        return False
+    if not _UKA_MONSTER.search(innhold):
+        print("  Forsiden mangler <!--UKA:START-->-markøren; blokken er ikke oppdatert.")
+        return False
+    blokk = lag_uka_blokk(uka_hendelser(aksjer, i_dag), i_dag,
+                          hentet if hentet is not None else DATA_SIST_OPPDATERT)
+    nytt = _UKA_MONSTER.sub(lambda m: "<!--UKA:START-->\n" + blokk + "\n  <!--UKA:SLUTT-->", innhold, count=1)
+    if nytt == innhold:
+        return False
+    with open(sti, "w", encoding="utf-8") as f:
+        f.write(nytt)
+    return True
 
 
 def oppdater_antall_i_sider(aksjer, root_dir: str):

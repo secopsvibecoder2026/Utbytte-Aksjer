@@ -17,7 +17,7 @@ from fetch_stocks import (generer_aksjesider, generer_sektorsider, generer_toppl
                           generer_sitemap, _last_kurshistorikk_fra_disk,
                           generer_rapportkalender, sett_ask_felter, sett_snitt_felter,
                           oppdater_app_noscript_liste, oppdater_antall_i_sider,
-                          oppdater_aarstall_i_sider,
+                          oppdater_aarstall_i_sider, oppdater_forside_uka,
                           _typiske_utbetalingsmaaneder,
                           lag_beskrivelse, _manuell_del, SEKTOR_DRIVER,
                           _lag_utbyttehistorikk_tekst)
@@ -150,6 +150,7 @@ def main():
     # ikke må rettes for hånd hver gang en ticker går ut.
     oppdater_antall_i_sider(aksjer, ROOT)
     oppdater_aarstall_i_sider(ROOT)
+    oppdater_forside_uka(aksjer, ROOT)
 
     print("\nFerdig!")
 
