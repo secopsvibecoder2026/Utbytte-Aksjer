@@ -86,7 +86,7 @@ def lag_posttekst(d):
         antall_ex = len(d["ex_denne"])
         ex_tekst = "Én aksje har" if antall_ex == 1 else f"{antall_ex} aksjer har"
         linjer.append(f"📌 {ex_tekst} ex-dato denne uken.")
-        linjer.append("Kjøper du innen dagen FØR ex-dato, er du med på utbyttet 💰")
+        linjer.append("Kjøper du senest børsdagen FØR ex-dato, er du med på utbyttet 💰")
         linjer.append("")
         for a in d["ex_denne"]:
             yield_str = f"  →  {a['utbytte_yield']:.1f}% yield" if a.get("utbytte_yield") else ""

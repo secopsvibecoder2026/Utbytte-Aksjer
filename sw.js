@@ -179,7 +179,8 @@ async function sjekkExDatoer() {
       ? `${a.ticker} ex-dato er i dag!`
       : `${a.ticker} ex-dato om ${dager} dag${dager === 1 ? '' : 'er'}`;
     const kropp = dager === 0
-      ? `${a.navn} – du må eie aksjen i dag for å motta utbytte`
+      // Samme rettelse som i ui.js (19.10.2026): på ex-dagen er det for sent.
+      ? `${a.navn} handles uten utbytte fra i dag. Utbyttet går til dem som eide aksjen ved forrige børsdags slutt.`
       : `${a.navn} – ex-dato ${new Date(a.ex_dato).toLocaleDateString('nb-NO', { day: 'numeric', month: 'long' })}`;
 
     await self.registration.showNotification(tittel, {

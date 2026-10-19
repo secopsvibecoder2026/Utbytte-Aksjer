@@ -2925,5 +2925,144 @@ class TestSidemeny(unittest.TestCase):
                                  "ingen skript leser temaknappens id")
 
 
+class TestBorsdager(unittest.TestCase):
+    """«Kjøp senest» er forrige børsdag, ikke dagen før (19.10.2026).
+
+    En ex-dato på mandag ga søndag. IWS' egen melding sier «Last day including
+    right: 4 September 2026» om ex-datoen mandag 7. september.
+    """
+
+    D = datetime.date
+
+    def test_fridager_2026_som_euronext(self):
+        forventet = {self.D(2026, 1, 1), self.D(2026, 4, 2), self.D(2026, 4, 3),
+                     self.D(2026, 4, 6), self.D(2026, 5, 1), self.D(2026, 5, 14),
+                     self.D(2026, 5, 25), self.D(2026, 12, 24), self.D(2026, 12, 25),
+                     self.D(2026, 12, 31)}
+        hverdager = {d for d in fs.borsfridager(2026) if d.weekday() < 5}
+        self.assertEqual(hverdager, forventet)
+
+    def test_paaske(self):
+        self.assertEqual(fs._paaskedag(2026), self.D(2026, 4, 5))
+        self.assertEqual(fs._paaskedag(2027), self.D(2027, 3, 28))
+        self.assertEqual(fs._paaskedag(2025), self.D(2025, 4, 20))
+
+    def test_mandag_gir_fredag(self):
+        self.assertEqual(fs.forrige_borsdag(self.D(2026, 9, 7)), self.D(2026, 9, 4))
+
+    def test_vanlig_ukedag_gir_dagen_for(self):
+        self.assertEqual(fs.forrige_borsdag(self.D(2026, 11, 13)), self.D(2026, 11, 12))
+
+    def test_etter_paaske_hopper_over_fridagene(self):
+        # Tirsdag etter påske: 2. påskedag, langfredag og skjærtorsdag er stengt.
+        self.assertEqual(fs.forrige_borsdag(self.D(2026, 4, 7)), self.D(2026, 4, 1))
+
+    def test_ingen_borsdag_i_helg(self):
+        self.assertFalse(fs.er_borsdag(self.D(2026, 10, 17)))
+        self.assertTrue(fs.er_borsdag(self.D(2026, 10, 19)))
+
+    def test_faq_sier_fredag_for_mandag(self):
+        a = {"ticker": "IWS", "navn": "Integrated Wind Solutions ASA", "ex_dato": "2026-09-07"}
+        faq = fs._lag_faq_seksjon(a, "2026-09-01")[0]
+        self.assertIn("senest 4. september", faq)
+        self.assertNotIn("6. september", faq)
+
+
+class TestUkaBlokk(unittest.TestCase):
+    """«Denne uka på Oslo Børs» på forsiden."""
+
+    I_DAG = datetime.date(2026, 11, 9)  # mandag
+
+    def _aksje(self, ticker, **felt):
+        return dict({"ticker": ticker, "navn": f"{ticker} ASA", "markedsverdi_mrd": 10}, **felt)
+
+    def test_ex_i_dag_er_for_sent(self):
+        h = fs.uka_hendelser([self._aksje("AAA", ex_dato="2026-11-09")], self.I_DAG)
+        self.assertEqual(h["ex"], [])
+
+    def test_ex_innen_sju_dager_og_neste_etter(self):
+        aksjer = [self._aksje("AAA", ex_dato="2026-11-16"),
+                  self._aksje("BBB", ex_dato="2026-11-17"),
+                  self._aksje("CCC", ex_dato="2026-12-01")]
+        h = fs.uka_hendelser(aksjer, self.I_DAG)
+        self.assertEqual([r["ticker"] for r in h["ex"]], ["AAA"])
+        self.assertEqual(h["ex"][0]["kjop_senest"], datetime.date(2026, 11, 13))
+        self.assertEqual(h["neste"]["ex"]["ticker"], "BBB")
+
+    def test_sortert_paa_dato_saa_storst(self):
+        aksjer = [self._aksje("LITEN", rapport_dato="2026-11-10", markedsverdi_mrd=1),
+                  self._aksje("STOR", rapport_dato="2026-11-10", markedsverdi_mrd=500),
+                  self._aksje("TIDLIG", rapport_dato="2026-11-09", markedsverdi_mrd=0)]
+        h = fs.uka_hendelser(aksjer, self.I_DAG)
+        self.assertEqual([r["ticker"] for r in h["rapport"]], ["TIDLIG", "STOR", "LITEN"])
+
+    def test_belop_bare_for_samme_ex_dato(self):
+        aksjer = [self._aksje("AAA", ex_dato="2026-11-12", annonsert_utbytte=2.5,
+                              annonsert_ex="2026-11-12"),
+                  self._aksje("BBB", ex_dato="2026-11-12", annonsert_utbytte=2.5,
+                              annonsert_ex="2026-05-12")]
+        rader = {r["ticker"]: r for r in fs.uka_hendelser(aksjer, self.I_DAG)["ex"]}
+        self.assertEqual(rader["AAA"]["belop"], 2.5)
+        self.assertIsNone(rader["BBB"]["belop"])
+        html_ut = fs.lag_uka_blokk(fs.uka_hendelser(aksjer, self.I_DAG), self.I_DAG)
+        self.assertIn("2,50 kr", html_ut)
+
+    def test_ugyldig_ticker_hoppes_over_og_navn_escapes(self):
+        aksjer = [self._aksje("x<y", ex_dato="2026-11-12"),
+                  self._aksje("AAA", navn="A & <B>", ex_dato="2026-11-12")]
+        h = fs.uka_hendelser(aksjer, self.I_DAG)
+        self.assertEqual([r["ticker"] for r in h["ex"]], ["AAA"])
+        html_ut = fs.lag_uka_blokk(h, self.I_DAG)
+        self.assertIn("A &amp; &lt;B&gt;", html_ut)
+        self.assertNotIn("<B>", html_ut)
+
+    def test_tom_liste_sier_naar_neste_kommer(self):
+        h = fs.uka_hendelser([self._aksje("ENH", navn="Energi PLC", ex_dato="2026-11-30")], self.I_DAG)
+        html_ut = fs.lag_uka_blokk(h, self.I_DAG)
+        self.assertIn("Ingen ex-datoer de neste sju dagene. Neste ex-dato er man. 30. nov", html_ut)
+        self.assertIn('href="/aksjer/ENH/"', html_ut)
+
+    def test_maks_seks_rader_og_se_alle(self):
+        aksjer = [self._aksje(f"R{i}", rapport_dato="2026-11-10") for i in range(9)]
+        html_ut = fs.lag_uka_blokk(fs.uka_hendelser(aksjer, self.I_DAG), self.I_DAG)
+        self.assertEqual(html_ut.count("<li>"), 6)
+        self.assertIn("Se alle 9", html_ut)
+
+    def test_forslag_merkes(self):
+        a = self._aksje("GOD", ex_dato="2026-11-12", ex_forbehold="2026-11-11")
+        html_ut = fs.lag_uka_blokk(fs.uka_hendelser([a], self.I_DAG), self.I_DAG)
+        self.assertIn("foreslått, ikke vedtatt", html_ut)
+
+    def test_hentet_i_oslotid(self):
+        html_ut = fs.lag_uka_blokk(fs.uka_hendelser([], self.I_DAG), self.I_DAG,
+                                   hentet="2026-11-09T06:41:00Z")
+        self.assertIn("Tallene er hentet man. 9. nov kl. 07.41.", html_ut)
+
+    def test_oppdater_forside_er_idempotent(self):
+        with tempfile.TemporaryDirectory() as mappe:
+            sti = os.path.join(mappe, "index.html")
+            with open(sti, "w", encoding="utf-8") as f:
+                f.write("<main>\n  <!--UKA:START-->\n  <!--UKA:SLUTT-->\n</main>\n")
+            aksjer = [self._aksje("AAA", ex_dato="2026-11-12")]
+            self.assertTrue(fs.oppdater_forside_uka(aksjer, mappe, self.I_DAG, hentet=""))
+            self.assertFalse(fs.oppdater_forside_uka(aksjer, mappe, self.I_DAG, hentet=""))
+            with open(sti, encoding="utf-8") as f:
+                tekst = f.read()
+            self.assertIn("Ex tor. 12. nov · kjøp senest ons. 11. nov", tekst)
+            self.assertTrue(tekst.startswith("<main>") and tekst.endswith("</main>\n"))
+
+    def test_uten_markor_endres_ingenting(self):
+        with tempfile.TemporaryDirectory() as mappe:
+            sti = os.path.join(mappe, "index.html")
+            with open(sti, "w", encoding="utf-8") as f:
+                f.write("<main></main>\n")
+            self.assertFalse(fs.oppdater_forside_uka([], mappe, self.I_DAG, hentet=""))
+
+    def test_forsiden_har_markorene(self):
+        rot = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        with open(os.path.join(rot, "index.html"), encoding="utf-8") as f:
+            self.assertRegex(f.read(), r"(?s)<!--UKA:START-->.*<!--UKA:SLUTT-->")
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

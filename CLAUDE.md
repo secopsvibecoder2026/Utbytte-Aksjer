@@ -2958,6 +2958,46 @@ despite being the XSS guard the whole site relies on. `app.js` gained the
 > Node. `app.js` does not touch it at import time, so the test file simply
 > omits it.
 
+## «Denne uka på Oslo Børs» on the front page (2026-10-19)
+
+The front page had no fresh numbers, so nothing on it changed from one day to
+the next. A block under the hero now lists the next seven days: ex-dates with
+the last day to buy, payments and quarterly reports. Item 2 of «Vekst» in
+`ROADMAP.md`.
+
+- **Static HTML, written by the data job.** `oppdater_forside_uka()` in
+  `fetch_stocks.py` fills the space between `<!--UKA:START-->` and
+  `<!--UKA:SLUTT-->` in `index.html`; `regenerer_sider.py` calls it too. Google
+  sees the rows without JavaScript. Do not edit the block by hand.
+- `uka_hendelser()` picks the rows and `lag_uka_blokk()` renders them; both are
+  pure and tested. An ex-date counts only when it is after today, since buying
+  on the ex-date is too late. The amount is shown only when `annonsert_ex`
+  equals `ex_dato`. A dividend not yet approved says «foreslått, ikke vedtatt»
+  (`ex_forbehold_gjelder()`).
+- **Dates are absolute** («tor. 12. nov»), never «i dag» or «i morgen»: the page
+  is built on weekdays and read at weekends. The line under the heading says
+  when the numbers were fetched, in Oslo time.
+- Each card shows six rows and «Se alle N». An empty card names the next
+  ex-date or report after the window.
+
+### «Kjøp senest» is the previous trading day
+
+Building the block found that every «kjøp innen» on the stock pages was the
+calendar day before the ex-date. A Monday ex-date gave Sunday. IWS's own notice
+says «Last day including right: 4 September 2026» for the ex-date Monday
+7 September. `forrige_borsdag()` skips weekends and the holidays in
+`borsfridager()` (Easter from `_paaskedag()`; checked against Euronext's 2026
+calendar). The analysis text, the FAQ and the block all use it.
+
+The ex-day text also said «du må eie aksjen ved børsslutt for å motta
+utbytte», which tells the reader that buying that day is enough. It now says
+the right was locked at the close of the previous trading day, and the app's
+and service worker's day-of notification says the same. «Senest dagen før
+ex-dato» on nine hand-written pages is now «børsdagen før», and `/uke/` no
+longer calls the ex-date «siste dag for å kjøpe».
+
+Tests: `TestBorsdager` (7), `TestUkaBlokk` (12).
+
 ## The menu is copied into every page — `TestSidemeny` (2026-10-17)
 
 The owner could not find `/avnoteringer/` in the menu. It was never there, and
