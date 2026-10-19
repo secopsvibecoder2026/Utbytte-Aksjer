@@ -94,9 +94,11 @@ Ta høyst fem rettinger per runde. Resten står igjen til neste runde.
    `fetch_stocks.py`, Sjekk-funksjonene i `valider_data.py` og speilene i
    `assets/ui.js`. CLAUDE.md sier hvilke. Rett alle, og legg samme tilfelle i
    `tests/ui.test.js`.
-6. **Data som bare et selskap kan avgjøre**, som `frekvens` eller
-   `lopende_utbytte_fra` i `data/tickers.json`, endres bare når selskapets egen
-   melding avgjør det. Siter meldingen i commit og PR.
+6. **Data som bare et selskap kan avgjøre**, som `frekvens`,
+   `lopende_utbytte_fra`, `bransje` eller `hendelse` i `data/tickers.json`,
+   endres bare når selskapets egen melding avgjør det. Siter meldingen i commit
+   og PR. En `hendelse` får meldingens id i `melding` og en tekst uten tall som
+   kan endre seg.
 7. **Skriv i CLAUDE.md**: ett kort avsnitt per retting i samme stil som de andre.
    Hva som ble vist, hva som var riktig, årsaken, rettingen og testene.
 

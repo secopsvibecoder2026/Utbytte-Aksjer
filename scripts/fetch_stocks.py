@@ -256,6 +256,15 @@ FREKVENS_OVERSTYRT   = {t["ticker"]: t["frekvens"] for t in _ticker_data if t.ge
 # bruk_lopende_utbytte_fra().
 LOPENDE_UTBYTTE_FRA  = {t["ticker"]: t["lopende_utbytte_fra"] for t in _ticker_data
                         if t.get("lopende_utbytte_fra")}
+# Bransje innenfor sektoren, for selskaper som sektorteksten ikke passer på.
+# Alle 37 i Finans fikk banktekst om rentenetto og utlån, også forsikrings-
+# selskapene, og TGS fikk «dag-rater for rigger og fartøy» (tallkontrollen
+# 2026-10-19). Se _BRANSJE_DRIVER_UTDYPET og BRANSJE_RISIKOER.
+BRANSJE              = {t["ticker"]: t["bransje"] for t in _ticker_data if t.get("bransje")}
+# Oppkjøp, fusjon eller avvikling som er meldt, men ikke gjennomført. Se
+# lag_hendelse_boks(). Feltet fjernes for hånd når saken er avgjort; går
+# aksjen av børs, forsvinner det med tickeren.
+HENDELSE             = {t["ticker"]: t["hendelse"] for t in _ticker_data if t.get("hendelse")}
 
 _fallback_path = os.path.join(os.path.dirname(__file__), "..", "data", "fallback_data.json")
 FALLBACK_DATA = {}
@@ -1165,8 +1174,10 @@ SUPPLER_DAGER = 365
 SUPPLER_TOLERANSE_DAGER = 10
 SUPPLER_MAKS_FAKTOR = 5
 
+# «eks utbytte» og «Eks. utbytte» er norsk skrivemåte (Skue og Voss Veksel- og
+# Landmandsbank 2023); uten den ble hullene deres aldri fylt.
 _EX_I_DAG_TITTEL = re.compile(
-    r"\bex[\s.-]*(?:dividend|distribution|utbytte)\b|\bquoted\s+ex[\s-]*dividend\b", re.I)
+    r"\be(?:x|ks)[\s.-]*(?:dividend|distribution|utbytte)\b|\bquoted\s+ex[\s-]*dividend\b", re.I)
 _I_DAG_RE = re.compile(r"\btoday\b|\bi\s+dag\b", re.I)
 _RETTELSE_RE = re.compile(r"correct|korrig|rettelse|clarification", re.I)
 _UTBYTTE_TITTEL_RE = re.compile(r"dividend|distribution|utbytte|utdeling", re.I)
@@ -1177,9 +1188,10 @@ _EX_PUNKT_DATO_RE = re.compile(
 _NOK_I_NOK_RE = re.compile(
     r"amount\s+in\s+NOK\s*:\s*(?:NOK\s*)?(\d+(?:[.,]\d+)?)", re.I)
 # Samme vakt mot størrelsesmarkør som _BLOKK_BELOP_RE: «NOK 10.2 billion» er
-# ikke et beløp per aksje.
+# ikke et beløp per aksje. «Kr 10,50» er Voss Veksel- og Landmandsbank sin
+# skrivemåte (2023).
 _NOK_BELOP_RE = re.compile(
-    r"\bNOK\s*(\d+(?:[.,]\d+)?)(?![\d.,]*\s*(?:m\b|mn\b|mill|bn\b|billion|mrd))", re.I)
+    r"\b(?:NOK|kr\.?)\s*(\d+(?:[.,]\d+)?)(?![\d.,]*\s*(?:m\b|mn\b|mill|bn\b|billion|mrd))", re.I)
 
 
 def _oslo_dato(publisert):
@@ -1231,41 +1243,90 @@ def _parse_ex_melding(tittel, tekst, publisert):
     return {"ex_dato": ex.isoformat(), "belop": belop}
 
 
+# Hele år uten utbetaling mellom to år med utbetaling (2026-10-19). Yahoo
+# mangler Sparebanken Østs 3,80 kr fra 24.03.2023 (NewsWeb 586067), og
+# 5-årssnittet regnet 2023 som 0. Lista per utsteder rekker bare om lag 16
+# måneder tilbake, men et oppslag med fromDate/toDate når lenger. Bare disse
+# årene slås opp, så det koster ett listekall per hull.
+HULL_AR_BAKOVER = 5
+
+
+def hullaar(kjente_datoer, i_dag, ar_bakover=HULL_AR_BAKOVER):
+    """Hele år de siste `ar_bakover` årene uten utbetaling, med utbetaling før og etter."""
+    ar_med = {d.year for d in kjente_datoer}
+    if not ar_med:
+        return []
+    return [y for y in range(i_dag.year - ar_bakover, i_dag.year)
+            if y not in ar_med and min(ar_med) < y < max(ar_med)]
+
+
+_NEWSWEB_PERIODE = {}   # (utsteder, fra, til) → meldinger, én gang per kjøring
+
+
+def _newsweb_meldinger_periode(ticker, fra, til):
+    """Meldingene til én utsteder mellom to datoer, også eldre enn lista når."""
+    global _NEWSWEB_API
+    if _NEWSWEB_API is None:
+        _NEWSWEB_API = _newsweb_api_base()
+    utsteder = _newsweb_utsteder(ticker)
+    nokkel = (utsteder, fra.isoformat(), til.isoformat())
+    if nokkel not in _NEWSWEB_PERIODE:
+        resp = _newsweb_post(
+            f"{_NEWSWEB_API}/v1/newsreader/list"
+            f"?issuer={urllib.parse.quote(utsteder, safe='')}"
+            f"&fromDate={fra.isoformat()}&toDate={til.isoformat()}"
+        )
+        meldinger = resp.get("data", {}).get("messages", []) or []
+        _NEWSWEB_PERIODE[nokkel] = [
+            m for m in meldinger
+            if (m.get("issuerSign") or utsteder).upper() == utsteder.upper()]
+    return _NEWSWEB_PERIODE[nokkel]
+
+
+def _ex_funn_i(meldinger, i_dag, grense, kjente_datoer):
+    """Ex-meldingene i `meldinger` som ikke har en kjent utbetaling i nærheten."""
+    ut = []
+    # Grong Sparebank meldte «ex utbytte NOK 10,5» 9. april 2026 og rettet
+    # det til 11 kroner dagen etter, i en ny melding. NewsWebs eget felt
+    # for rettelser er 0 på begge, så tittelen er det eneste som sier ifra.
+    rettelser = [_oslo_dato(m.get("publishedTime")) for m in meldinger
+                 if _RETTELSE_RE.search(m.get("title") or "")
+                 and _UTBYTTE_TITTEL_RE.search(m.get("title") or "")]
+    for msg in meldinger:
+        tittel = msg.get("title") or ""
+        if not _EX_I_DAG_TITTEL.search(tittel) or _RETTELSE_RE.search(tittel):
+            continue
+        pub = _oslo_dato(msg.get("publishedTime"))
+        if not pub or pub > i_dag:
+            continue
+        if pub < grense:
+            break
+        if any(abs((pub - d).days) <= SUPPLER_TOLERANSE_DAGER for d in kjente_datoer):
+            continue
+        if any(r and 0 <= (r - pub).days <= 30 for r in rettelser):
+            continue
+        funn = _parse_ex_melding(tittel, _newsweb_tekst(msg.get("messageId")),
+                                 msg.get("publishedTime"))
+        if funn:
+            funn["melding_id"] = str(msg.get("messageId"))
+            ut.append(funn)
+    return ut
+
+
 def newsweb_ex_meldinger(ticker, i_dag, kjente_datoer):
-    """Ex-meldinger siste SUPPLER_DAGER uten en kjent utbetaling i nærheten.
+    """Ex-meldinger siste SUPPLER_DAGER, og i hullår, uten en kjent utbetaling i nærheten.
 
     `kjente_datoer` er ex-datoene i Yahoos serie. En melding publisert innen
     SUPPLER_TOLERANSE_DAGER fra en av dem åpnes ikke. Liste av
     {"ex_dato", "belop", "melding_id"}; tom ved nettverksfeil.
     """
     grense = i_dag - datetime.timedelta(days=SUPPLER_DAGER)
-    ut = []
     try:
-        meldinger = _newsweb_meldinger(ticker)
-        # Grong Sparebank meldte «ex utbytte NOK 10,5» 9. april 2026 og rettet
-        # det til 11 kroner dagen etter, i en ny melding. NewsWebs eget felt
-        # for rettelser er 0 på begge, så tittelen er det eneste som sier ifra.
-        rettelser = [_oslo_dato(m.get("publishedTime")) for m in meldinger
-                     if _RETTELSE_RE.search(m.get("title") or "")
-                     and _UTBYTTE_TITTEL_RE.search(m.get("title") or "")]
-        for msg in meldinger:
-            tittel = msg.get("title") or ""
-            if not _EX_I_DAG_TITTEL.search(tittel) or _RETTELSE_RE.search(tittel):
-                continue
-            pub = _oslo_dato(msg.get("publishedTime"))
-            if not pub or pub > i_dag:
-                continue
-            if pub < grense:
-                break
-            if any(abs((pub - d).days) <= SUPPLER_TOLERANSE_DAGER for d in kjente_datoer):
-                continue
-            if any(r and 0 <= (r - pub).days <= 30 for r in rettelser):
-                continue
-            funn = _parse_ex_melding(tittel, _newsweb_tekst(msg.get("messageId")),
-                                     msg.get("publishedTime"))
-            if funn:
-                funn["melding_id"] = str(msg.get("messageId"))
-                ut.append(funn)
+        ut = _ex_funn_i(_newsweb_meldinger(ticker), i_dag, grense, kjente_datoer)
+        for y in hullaar(kjente_datoer, i_dag):
+            fra, til = datetime.date(y, 1, 1), datetime.date(y, 12, 31)
+            ut += _ex_funn_i(_newsweb_meldinger_periode(ticker, fra, til),
+                             i_dag, fra, kjente_datoer)
     except Exception as e:
         print(f"    Advarsel NewsWeb ex-meldinger [{ticker}]: {e}")
         return []
@@ -1469,6 +1530,67 @@ def kapital_andel(a):
     except (TypeError, ValueError):
         return 0.0
     return andel if 0 < andel <= 1 else 0.0
+
+
+# ── Selskapshendelser (tallkontrollen 2026-10-19) ───────────────────────────
+# STST-siden lovet «utbyttet kommer fire ganger i året» og «jevn kontantstrøm»,
+# mens styret 5. august hadde vedtatt å selge hele flåten innen 18 måneder.
+# SUBC skal fusjonere med Saipem, Elmera og AKVA er kjøpt opp eller har et
+# anbefalt bud, og Multiconsult går inn i Rejlers. Ingen av sidene sa noe om
+# det. Teksten skrives for hånd i tickers.json fra børsmeldingen; den kan
+# ikke utledes av tallene.
+
+HENDELSE_TITTEL = {
+    "oppkjop": "Selskapet er i ferd med å bli kjøpt opp",
+    "fusjon": "Selskapet skal slås sammen med et annet",
+    "mulig_fusjon": "Mulig sammenslåing",
+    "avvikling": "Virksomheten skal avvikles",
+    "bytte_av_marked": "Aksjen skal flytte til Euronext Growth",
+}
+# Ved disse sier ikke historikken noe om utbyttet framover, så sidene gir
+# ingen «Passer for deg»-mål.
+HENDELSE_UTEN_MAL = {"oppkjop", "fusjon", "avvikling"}
+
+
+def gyldig_hendelse(h):
+    return (isinstance(h, dict) and h.get("type") in HENDELSE_TITTEL
+            and isinstance(h.get("tekst"), str) and h["tekst"].strip() != "")
+
+
+def sett_hendelse(a, h):
+    """Kopierer hendelsen fra tickers.json inn i raden, eller fjerner den."""
+    if gyldig_hendelse(h):
+        a["hendelse"] = {k: h[k] for k in ("type", "dato", "melding", "tekst") if h.get(k)}
+    else:
+        a.pop("hendelse", None)
+
+
+def hendelse_uten_mal(a):
+    h = a.get("hendelse") if isinstance(a, dict) else None
+    return gyldig_hendelse(h) and h["type"] in HENDELSE_UTEN_MAL
+
+
+def lag_hendelse_boks(a):
+    """Gul boks øverst på aksjesiden når en selskapshendelse er meldt."""
+    h = a.get("hendelse") if isinstance(a, dict) else None
+    if not gyldig_hendelse(h):
+        return ""
+    import html as _html
+    kilde = []
+    if h.get("dato"):
+        kilde.append(f"meldt {_fmt_dato(h['dato'])}")
+    melding = str(h.get("melding") or "")
+    if melding.isdigit():
+        kilde.append(f'<a href="https://newsweb.oslobors.no/message/{melding}" '
+                     f'target="_blank" rel="noopener">børsmeldingen</a>')
+    kilde_html = f'<p class="hendelse-kilde">Kilde: {", ".join(kilde)}.</p>' if kilde else ""
+    return (
+        '<div class="delaar-seksjon hendelse-seksjon">'
+        f'<h2>{HENDELSE_TITTEL[h["type"]]}</h2>'
+        f'<p>{_html.escape(h["tekst"].strip())}</p>'
+        f'{kilde_html}'
+        '</div>'
+    )
 
 
 def lag_kapital_note(a, nf):
@@ -3578,7 +3700,10 @@ def _lag_utbyttehistorikk_tekst(a, i_dag_ar=None):
     if y > 0 and s5 > 0:
         avvik = y - s5
         navn_s = snitt_navn(a)
-        if avvik > max(1.0, s5 * 0.2):
+        # Samme relative bånd som FAQ-en. Med et gulv på 1 prosentpoeng het
+        # STBs 2,9 % mot 2,0 % «nær» snittet, mens FAQ-en sa «0,8 prosentpoeng
+        # over» (tallkontrollen 2026-10-19).
+        if avvik > s5 * 0.2:
             # Begge er regnet mot dagens kurs, så forskjellen ligger alltid i
             # utbyttet. «Ofte fordi kursen har falt» kunne derfor aldri stemme,
             # og OET fikk den med kursen nær 52-ukers toppen (2026-10-12).
@@ -3587,7 +3712,7 @@ def _lag_utbyttehistorikk_tekst(a, i_dag_ar=None):
                 f"Dagens yield på {_nf(y, 1)} % ligger over aksjens eget {navn_s} "
                 f"på {_nf(s5, 1)} %."
             )
-        elif avvik < -max(1.0, s5 * 0.2):
+        elif avvik < -s5 * 0.2:
             deler.append(
                 f"Dagens yield på {_nf(y, 1)} % er lavere enn aksjens eget {navn_s} "
                 f"på {_nf(s5, 1)} %."
@@ -3893,7 +4018,14 @@ def _selskapsrisikoer(a):
     iaar = datetime.date.today().year
 
     # Payout: bare når vi faktisk har tallet. 0 betyr ukjent, ikke lav.
-    if payout >= 90:
+    # Over 100 % er ikke «nesten hele»: SPOG fikk det med 130 %, mens samme
+    # side sa «deler i dag ut mer enn selskapet tjener» (2026-10-19).
+    if payout >= 100:
+        ut.append(
+            f"Payout ratio på {_nf(payout, 0)} % betyr at selskapet deler ut mer "
+            f"enn det tjener. Det kan ikke vare uten at inntjeningen tar seg opp"
+        )
+    elif payout >= 90:
         ut.append(
             f"Payout ratio på {_nf(payout, 0)} % betyr at nesten hele "
             f"inntjeningen deles ut — det gir lite å gå på om resultatet faller"
@@ -3905,15 +4037,7 @@ def _selskapsrisikoer(a):
         )
 
     # Kutt i historikken — hopp over inneværende år, som er hittil-i-år.
-    komplette = sorted(
-        [h for h in hist if h.get("ar") and h["ar"] < iaar and h.get("utbytte")],
-        key=lambda h: h["ar"],
-    )
-    kutt = [
-        (komplette[i - 1], komplette[i])
-        for i in range(1, len(komplette))
-        if komplette[i]["utbytte"] < komplette[i - 1]["utbytte"] * 0.85
-    ]
+    kutt = utbyttekutt(a, iaar)
     if kutt:
         forrige, etter = kutt[-1]
         ut.append(
@@ -3921,8 +4045,10 @@ def _selskapsrisikoer(a):
             f"{_nf(etter['utbytte'], 2)} kroner i {etter['ar']}"
         )
 
-    # Kort historikk gir tynt grunnlag.
-    if 0 < ar <= 3:
+    # Kort historikk gir tynt grunnlag. Samme grense som merket «Kort
+    # utbyttehistorikk» i _lag_investor_badges(): med <= 3 sto STST med både
+    # «Moderat utbyttehistorikk (3 år)» og «Kort utbyttehistorikk (3 år)».
+    if 0 < ar < 3:
         ut.append(
             f"Kort utbyttehistorikk ({ar} år) gir lite grunnlag for å vurdere "
             f"hvor stabilt utbyttet er over en konjunktursyklus"
@@ -3970,6 +4096,39 @@ def _selskapsrisikoer(a):
             )
 
     return ut
+
+
+# Et kutt er et helt år under 85 % av året før. Delt av risikopunktene,
+# nedtur-testen, «Stabil inntekt» og risikopoengene, så sidene ikke kan si
+# «kuttet før» og «uten store overraskelser» om samme aksje.
+KUTT_ANDEL = 0.85
+
+
+def utbyttekutt(a, i_dag_ar=None):
+    """[(forrige, etter)] for hvert kutt mellom to hele år i historiske_utbytter.
+
+    Inneværende år er hittil i år og tas aldri med. Nedtur-testen sammenlignet
+    hele lista, og 13 sider fikk «har satt ned utbyttet før» fordi 2026 bare
+    hadde tre av fire kvartaler. TGS sto med det samtidig som siden sa «uten et
+    eneste kutt» (tallkontrollen 2026-10-19). Speiles av utbytteKutt() i ui.js.
+    """
+    iaar = i_dag_ar or datetime.date.today().year
+    komplette = sorted(
+        [h for h in (a.get("historiske_utbytter") or [])
+         if h.get("ar") and h["ar"] < iaar and h.get("utbytte")],
+        key=lambda h: h["ar"],
+    )
+    return [
+        (komplette[i - 1], komplette[i])
+        for i in range(1, len(komplette))
+        if komplette[i]["utbytte"] < komplette[i - 1]["utbytte"] * KUTT_ANDEL
+    ]
+
+
+def _hele_ar_med_utbytte(a, i_dag_ar=None):
+    iaar = i_dag_ar or datetime.date.today().year
+    return [h for h in (a.get("historiske_utbytter") or [])
+            if h.get("ar") and h["ar"] < iaar and h.get("utbytte")]
 
 
 def _stabile_ar(a):
@@ -4114,11 +4273,10 @@ def _lag_nedtur_test(a):
             f"eller sette ned utbyttet."
         )
 
-    hist = [h for h in (a.get("historiske_utbytter") or []) if h.get("utbytte")]
+    # Bare hele år: inneværende år er hittil i år og så ut som et kutt.
     kontekst = ""
-    if len(hist) >= 4:
-        belop = [h["utbytte"] for h in sorted(hist, key=lambda h: h.get("ar", 0))]
-        if any(belop[i] < belop[i - 1] * 0.85 for i in range(1, len(belop))):
+    if len(_hele_ar_med_utbytte(a)) >= 3:
+        if utbyttekutt(a):
             kontekst = (
                 " Selskapet har satt ned utbyttet før, så terskelen for å "
                 "gjøre det igjen er neppe høy."
@@ -4310,7 +4468,8 @@ def _lag_risikofaktorer(a):
     """Risiko for utbyttet: selskapets egne tall først, sektor som utfylling."""
     sektor = a.get("sektor") or ""
     egne = _selskapsrisikoer(a)
-    sektorrisiko = SEKTOR_RISIKOER.get(sektor, STANDARD_RISIKOER)
+    sektorrisiko = (BRANSJE_RISIKOER.get(BRANSJE.get(a.get("ticker")))
+                    or SEKTOR_RISIKOER.get(sektor, STANDARD_RISIKOER))
 
     # Fyll opp til fire punkter med sektorteksten. Har selskapet mange egne,
     # slipper sektorteksten helt til — da er den bare støy ved siden av noe
@@ -4325,6 +4484,89 @@ def _lag_risikofaktorer(a):
         f'<ul class="risiko-liste">{punkter}</ul>'
         f'</div>'
     )
+
+
+# Brukes foran sektorteksten når tickers.json gir aksjen en bransje. Ingen tall
+# som kan drive, samme regel som sektortekstene.
+_BRANSJE_DRIVER_UTDYPET = {
+    "forsikring": (
+        "Resultatet har to kilder: forsikringsdriften, der premiene skal dekke "
+        "erstatninger og kostnader, og avkastningen på pengene selskapet "
+        "forvalter for kundene. Store skadeår med storm og flom presser "
+        "forsikringsresultatet, mens høyere renter gir bedre avkastning på "
+        "porteføljen. For pensjon og sparing er det forvaltet kapital og "
+        "gebyrer som teller. Solvenskravene setter grensen for hva som kan "
+        "deles ut, så følg solvensgraden i kvartalsrapportene."
+    ),
+    "inkasso": (
+        "Selskapet kjøper porteføljer av misligholdte lån og lever av det som "
+        "kreves inn over mange år. Inntjeningen avhenger av hvor mye som betales "
+        "tilbake sammenlignet med prisen porteføljen ble kjøpt for, og av "
+        "rentekostnaden på gjelden som finansierer kjøpene. Høyere renter gjør "
+        "nye porteføljer dyrere å finansiere. Følg innkrevingen mot prognosen "
+        "og hvor høyt belånt selskapet er."
+    ),
+    "meglerhus": (
+        "Inntektene kommer fra aksjemegling, rådgivning ved oppkjøp og "
+        "børsnoteringer, og tilrettelegging av emisjoner og obligasjonslån. "
+        "Aktiviteten følger kapitalmarkedene: i gode markeder er det mange "
+        "transaksjoner, i svake faller inntektene raskt. En stor del av "
+        "kostnadene er bonuser som følger inntektene, så selskapet kan dele ut "
+        "mye av overskuddet, men beløpet svinger med markedet."
+    ),
+    "seismikk": (
+        "Inntektene kommer fra salg av seismiske data og fra innsamling på "
+        "oppdrag. Data som allerede er samlet inn, kan selges til flere "
+        "oljeselskaper over mange år, så inntjeningen følger lete- og "
+        "lisensaktiviteten, særlig når myndighetene åpner nye områder. "
+        "Oljeprisen avgjør hvor mye kundene vil bruke på leting. Følg salget "
+        "fra databiblioteket og ordreboken for innsamling."
+    ),
+    "prosjekt": (
+        "Inntektene kommer fra prosjekter og oppdrag for energiselskaper, innen "
+        "både olje og gass og havvind. Ordreinngangen gir sikt på inntektene "
+        "noen kvartaler fram, mens marginen avhenger av hvor godt prosjektene "
+        "gjennomføres. Store kontrakter med fast pris kan gi tap om kostnadene "
+        "løper. Følg ordrereserven og nye tildelinger."
+    ),
+    "investeringsselskap": (
+        "Selskapet er et investeringsselskap med eierposter i andre selskaper, "
+        "ikke et driftsselskap. Utbyttet kommer når en eierpost selges eller selv "
+        "deler ut, og derfor ujevnt. Følg verdien av eierpostene og salg av dem."
+    ),
+}
+
+BRANSJE_RISIKOER = {
+    "forsikring": [
+        "Store skadeår med storm og flom kan presse forsikringsresultatet",
+        "Svake finansmarkeder gir lavere avkastning på kundenes og selskapets midler",
+        "Solvenskravene begrenser hva som kan deles ut",
+    ],
+    "inkasso": [
+        "Svakere betalingsevne hos skyldnerne gir lavere innkreving enn beregnet",
+        "Høyere renter gjør det dyrere å finansiere nye porteføljer",
+        "Høy gjeld gjør utbyttet avhengig av lånevilkårene",
+    ],
+    "meglerhus": [
+        "Inntektene faller raskt når kapitalmarkedene er svake",
+        "Konkurranse om nøkkelpersoner og kunder",
+        "Utbyttet følger årets transaksjonsvolum og kan svinge mye",
+    ],
+    "seismikk": [
+        "Oljeselskapenes letebudsjetter styrer etterspørselen etter data",
+        "Nye data krever store investeringer før salget er sikret",
+        "Syklisk inntjening gjør utbyttet konjunkturavhengig",
+    ],
+    "prosjekt": [
+        "Fastpriskontrakter kan gi tap om kostnadene øker",
+        "Ordreinngangen avhenger av kundenes investeringsbeslutninger",
+        "Syklisk inntjening gjør utbyttet konjunkturavhengig",
+    ],
+    "investeringsselskap": [
+        "Utbyttet avhenger av salg av eierposter og kommer ujevnt",
+        "Verdien av eierpostene følger markedene de er i",
+    ],
+}
 
 
 _SEKTOR_DRIVER_UTDYPET = {
@@ -4504,10 +4746,20 @@ def _lag_investor_vurdering(a, sektor_snitt):
         # «Konsistent utbytteevne» sa noe om nivået som rekken ikke viser: OET
         # fikk det med to kutt og åttedobling mellom laveste og høyeste år.
         vurdering_deler.append(f"{navn} har betalt utbytte {rad} år på rad.")
-    elif rad >= 3:
+    elif rad >= 3 and rekke["brutt"]:
+        # «Historikken er begrenset» sto om STB med 17 år og SPOG med 25 år,
+        # fordi bare den nåværende rekken ble lest (tallkontrollen 2026-10-19).
         vurdering_deler.append(
-            f"{navn} har betalt utbytte de siste {rad} årene, "
-            f"men historikken er begrenset."
+            f"{navn} har betalt utbytte de siste {rad} årene. Medregnet årene "
+            f"før bruddet har selskapet betalt i {rekke['totalt']} av årene vi "
+            f"har tall for."
+        )
+    elif rad >= 3:
+        # Samme ord som merket «Moderat utbyttehistorikk»; «begrenset» sto
+        # ved siden av det på 14 sider (2026-10-19).
+        vurdering_deler.append(
+            f"{navn} har betalt utbytte de siste {rad} årene, en kortere rekke "
+            f"enn de mest etablerte utbyttebetalerne på børsen."
         )
 
     # Yield-karakter relativt til sektor
@@ -4579,7 +4831,8 @@ def _lag_investor_vurdering(a, sektor_snitt):
     ) if vurdering_deler else ""
 
     # ── Hva driver utbyttet ─────────────────────────────────────────────────
-    driver_tekst = _SEKTOR_DRIVER_UTDYPET.get(sektor, "")
+    driver_tekst = (_BRANSJE_DRIVER_UTDYPET.get(BRANSJE.get(ticker))
+                    or _SEKTOR_DRIVER_UTDYPET.get(sektor, ""))
     # Sektorteksten alene ga 16 varianter på 155 sider. Overskriften lover noe
     # om denne aksjen, så avsnittet skal også si noe om den — det andre leddet
     # bygges av selskapets egne tall.
@@ -4650,11 +4903,18 @@ def _beregn_risiko_py(a):
         poeng -= 1
     if (a.get('utbytte_yield') or 0) > 12:
         poeng += 1
-    if poeng <= 1:
+    # En aksje som har satt ned utbyttet mellom to hele år, er ikke lav
+    # utbytterisiko: «Lav risiko» sto ved «Utbyttet er kuttet før» på 18 sider
+    # (tallkontrollen 2026-10-19). Kuttet løfter den til minst moderat.
+    if poeng <= 1 and not utbyttekutt(a):
         return 'lav'
     if poeng <= 3:
         return 'moderat'
     return 'hoy'
+
+
+# Over denne årlige veksten skrives ingen doblingstid (speiles i ui.js).
+VEKST_FRAMSKRIV_MAKS = 25
 
 
 # Siste hele år må ligge på minst 90 % av toppen for at femårsveksten skal
@@ -4691,10 +4951,15 @@ def vekst_fra_topp(a):
 
 def _beregn_mal_py(a):
     mal = []
+    if hendelse_uten_mal(a):
+        return mal
     sektor = a.get('sektor', '')
+    # Uten kutt: SRHA fikk «Stabil inntekt … uten store overraskelser» med
+    # «kuttet før, fra 16,20 til 13,10 kroner i 2023» på samme side (2026-10-19).
     if (sektor in _DEFENSIVE_SEKTORER_PY
             and _stabile_ar(a) >= 7
-            and 0 < (a.get('payout_ratio') or 0) < 80):
+            and 0 < (a.get('payout_ratio') or 0) < 80
+            and not utbyttekutt(a)):
         mal.append('stabil')
     if (a.get('utbytte_vekst_5ar') or 0) > 3 and not vekst_fra_topp(a):
         mal.append('vekst')
@@ -4752,6 +5017,10 @@ def _lag_investor_badges(a):
     else:
         risiko_punkter.append(f'Lang utbyttehistorikk ({lengde} år på rad)')
 
+    kutt = utbyttekutt(a)
+    if kutt:
+        risiko_punkter.append(f'Utbyttet er satt ned før, sist i {kutt[-1][1]["ar"]}')
+
     if payout > 90:
         risiko_punkter.append(f'Svært høy payout ratio ({_nf(payout, 0)}%) — lite buffer ved inntjeningsfall')
     elif payout > 75:
@@ -4796,11 +5065,20 @@ def _lag_investor_badges(a):
         if frekvens == 'Månedlig' else
         'utbyttet kommer fire ganger i året'
     )
-    # Doblingstiden er en framskriving og står derfor som en betingelse.
-    doblingsar = round(70 / vekst) if vekst > 0 else None
-    vekst_suffix = (f' Holder veksten på +{_nf(vekst, 1)}% per år seg, dobles utbyttet '
-                    f'på ca. {doblingsar} år.'
-                    if doblingsar else f' Historisk vekst +{_nf(vekst, 1)}% per år.')
+    # Doblingstiden er en framskriving og står derfor som en betingelse. Over
+    # VEKST_FRAMSKRIV_MAKS regnes den ikke ut: SUBC fikk «dobles på ca. 1 år»
+    # fra +59,7 % (tallkontrollen 2026-10-19). Så høy vekst over fem år sier
+    # mest om hvor lavt utbyttet startet.
+    doblingsar = (round(70 / vekst)
+                  if 0 < vekst <= VEKST_FRAMSKRIV_MAKS else None)
+    if doblingsar:
+        vekst_suffix = (f' Holder veksten på +{_nf(vekst, 1)}% per år seg, dobles utbyttet '
+                        f'på ca. {doblingsar} år.')
+    elif vekst > VEKST_FRAMSKRIV_MAKS:
+        vekst_suffix = (f' Historisk vekst +{_nf(vekst, 1)}% per år. En så høy takt sier mest '
+                        f'om hvor lavt utbyttet startet, så vi regner den ikke fram.')
+    else:
+        vekst_suffix = f' Historisk vekst +{_nf(vekst, 1)}% per år.'
     mal_forklaring = {
         'stabil':
             'Passer investorer som vil ha forutsigbar utbytteinntekt uten store overraskelser. '
@@ -5292,7 +5570,9 @@ def _maaneder_tekst(maaneder):
 
 _SELSKAPSFORM = re.compile(
     r"\s+(ASA|AS|ASA\.|Ltd\.?|Limited|PLC|plc|SE|NV|N\.V\.|AB|A/S|P/F|Corp\.?|"
-    r"Corporation|Inc\.?|Group|Holding|Holdings)(?=\s|$)", re.I)
+    r"Corporation|Inc\.?|Group|Holding|Holdings|AG|SA|S\.A\.)(?=\s|$)", re.I)
+# AG og SA kom med 2026-10-19: «SoftwareOne Holding AG» ble «SoftwareOne AG» i
+# tittelen, et navn selskapet ikke har, og «Subsea 7 SA» beholdt formen.
 
 
 def _kort_selskapsnavn(navn):
@@ -5558,7 +5838,7 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     # det likevel ville motsagt den nøytrale boksen lenger nede på siden.
     delaar        = yield_er_delaar(a) and not delaar_motbevist(a)
     delaar_note   = ' <span class="kcard-note">usikker</span>' if delaar else ""
-    delaar_varsel = lag_delaar_varsel(a, _nf)
+    delaar_varsel = lag_hendelse_boks(a) + lag_delaar_varsel(a, _nf)
     # Gjensidig utelukkende: noten returnerer tom streng når varselet gjelder.
     delaar_varsel += lag_ekstraordinaer_note(a, _nf)
     betalt_boks = lag_betalt_boks(a, _nf) + lag_kapital_note(a, _nf)
@@ -5994,6 +6274,9 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     .rekke-seksjon {{ border-left: 3px solid #22c55e; }}
     .nedtur-seksjon {{ border-left: 3px solid #f59e0b; }}
     .delaar-seksjon {{ border-left: 3px solid #f59e0b; }}
+    /* Den mørke regelen over setter border-color på alle sider og tok med seg
+       den gule kanten; varselet så ut som en vanlig boks (2026-10-19). */
+    .dark .delaar-seksjon {{ border-left-color: #f59e0b; }}
     .betalt-seksjon .betalt-tabell {{ display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; font-size: 0.875rem; margin: 0.25rem 0 0.5rem; }}
     .betalt-seksjon .betalt-tabell th, .betalt-seksjon .betalt-tabell td {{ text-align: left; padding: 0.45rem 0.75rem; }}
     .betalt-seksjon .betalt-tabell td:not(:first-child), .betalt-seksjon .betalt-tabell th:not(:first-child) {{ white-space: nowrap; text-align: right; }}
@@ -6006,6 +6289,8 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     /* Nøytral variant: forklarer en observasjon, advarer ikke om en feil. */
     .delaar-seksjon.delaar-noytral {{ border-left-color: #94a3b8; }}
     .dark .delaar-seksjon.delaar-noytral {{ border-left-color: #475569; }}
+    .hendelse-seksjon p.hendelse-kilde {{ font-size: 0.8rem; color: #6b7280; }}
+    .dark .hendelse-seksjon p.hendelse-kilde {{ color: #9ca3af; }}
     .mnd-strip {{ display: grid; grid-template-columns: repeat(12, 1fr); gap: 2px; margin-bottom: 0.85rem; }}
     .mnd-celle {{ text-align: center; padding: 0.4rem 0.1rem; font-size: 0.62rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.02em; color: #9ca3af; background: #f1f5f9; border-radius: 0.25rem; }}
     .mnd-celle.mnd-ja {{ background: #15803d; color: #fff; }}
@@ -9088,6 +9373,7 @@ def main():
     for aksje in resultater:
         sett_ask_felter(aksje, ASK_EGNET.get(aksje["ticker"], True),
                         INKORPORERINGSLAND.get(aksje["ticker"], "Norge"))
+        sett_hendelse(aksje, HENDELSE.get(aksje["ticker"]))
         # Også reserveradene fra forrige kjøring, og kursen kan ha endret seg
         # etter hent_aksje(). Teksten bygges på nytt fordi den bruker snittet.
         sett_snitt_felter(aksje)

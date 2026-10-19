@@ -24,7 +24,7 @@ global.document = {
 // ui.js uses alleAksjer global — stub it
 global.alleAksjer = [];
 
-const { snittNavn, forklarRisiko, vekstFraTopp, beregnMal, forklarMal,
+const { snittNavn, forklarRisiko, vekstFraTopp, beregnMal, forklarMal, utbytteKutt, beregnRisiko, modalHendelse,
   fmt,
   formaterDato,
   yieldKlasse,
@@ -896,4 +896,57 @@ test('forklarRisiko: lengden bygger på rekken uten brudd', () => {
   for (let y = iAar - 6; y <= iAar; y++) aar.push(y);
   const punkter = forklarRisiko({ sektor: 'Shipping', ar_med_utbytte: 7, utbytteaar: aar, ask_status: 'ja' });
   assert.ok(punkter.includes('Lang utbyttehistorikk (7 år på rad)'), punkter.join(' | '));
+});
+
+// ── Tallkontrollen 19.10.2026 ──────────────────────────────────────────────
+function histMed(belop, iAarBelop) {
+  const iAar = new Date().getFullYear();
+  const rader = belop.map((b, i) => ({ ar: iAar - belop.length + i, utbytte: b }));
+  if (iAarBelop != null) rader.push({ ar: iAar, utbytte: iAarBelop });
+  return rader;
+}
+
+test('utbytteKutt: delårsraden for i år er ikke et kutt (TGS)', () => {
+  assert.equal(utbytteKutt({ historiske_utbytter: histMed([5.47, 5.91, 6.03, 6.46], 4.40) }).length, 0);
+  assert.equal(utbytteKutt({ historiske_utbytter: histMed([5.0, 3.25, 3.75, 4.25], 4.75) }).length, 1);
+});
+
+test('kutt gir verken «Stabil inntekt» eller «Lav risiko» (SRHA)', () => {
+  const iAar = new Date().getFullYear();
+  const aar = [];
+  for (let y = iAar - 10; y <= iAar; y++) aar.push(y);
+  const a = { sektor: 'Finans', payout_ratio: 40, markedsverdi: 20e9, utbytteaar: aar,
+    ar_med_utbytte: aar.length, historiske_utbytter: histMed([16.2, 13.1, 14.0, 15.0], 9.0) };
+  assert.ok(!beregnMal(a).includes('stabil'));
+  assert.notEqual(beregnRisiko(a), 'lav');
+  assert.ok(forklarRisiko(a).some(p => p.startsWith('Utbyttet er satt ned før')));
+  a.historiske_utbytter = histMed([12.0, 13.1, 14.0, 15.0], 9.0);
+  assert.ok(beregnMal(a).includes('stabil'));
+  assert.equal(beregnRisiko(a), 'lav');
+});
+
+test('forklarMal: ingen doblingstid over 25 % i året (SUBC)', () => {
+  const tekst = forklarMal({ utbytte_vekst_5ar: 59.7 }).map(f => f.tekst).join(' ');
+  assert.ok(!tekst.includes('dobles utbyttet'), tekst);
+  assert.ok(tekst.includes('regner den ikke fram'));
+  assert.ok(forklarMal({ utbytte_vekst_5ar: 10 }).map(f => f.tekst).join(' ').includes('dobles utbyttet på ca. 7 år'));
+});
+
+test('modalHendelse og beregnMal: selskapshendelse fra tickers.json', () => {
+  global.escHtml = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  try {
+    const h = { type: 'oppkjop', dato: '2026-10-02', melding: '683486', tekst: 'Bud på <161> kroner.' };
+    const html = modalHendelse({ hendelse: h });
+    assert.ok(html.includes('Selskapet er i ferd med å bli kjøpt opp'));
+    assert.ok(html.includes('&lt;161&gt;'));
+    assert.ok(html.includes('https://newsweb.oslobors.no/message/683486'));
+    assert.ok(!modalHendelse({ hendelse: { ...h, melding: '1"><x' } }).includes('newsweb'));
+    assert.equal(modalHendelse({ hendelse: { type: 'ukjent', tekst: 'x' } }), '');
+    const a = { sektor: 'Finans', utbytte_yield: 7, frekvens: 'Kvartalsvis' };
+    assert.ok(beregnMal(a).length > 0);
+    assert.deepEqual(beregnMal({ ...a, hendelse: h }), []);
+    assert.ok(beregnMal({ ...a, hendelse: { ...h, type: 'mulig_fusjon' } }).length > 0);
+  } finally {
+    delete global.escHtml;
+  }
 });

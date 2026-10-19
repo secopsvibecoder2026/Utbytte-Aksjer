@@ -83,6 +83,12 @@ flyttet fra Danmark til Storbritannia høsten 2026. En spleis eller et nytt ISIN
 har brutt Yahoo-historikken før (KMCP/BINT). Når en aksje faktisk går ut, skal
 den inn på `/avnoteringer/`.
 
+Et oppkjøp, en fusjon, en avvikling eller en flytting til Growth som er meldt,
+men ikke gjennomført, skal stå i feltet `hendelse` i `tickers.json`. Siden viser
+det da i en gul boks og dropper «Passer for deg» (se «Selskapshendelser» i
+CLAUDE.md). Sjekk om aksjen har feltet. Mangler det, eller er saken avgjort så
+feltet skal bort, skriv det som et funn med meldingens id.
+
 For hver kandidat til katalogen: er den på Euronext-lista, hvilket marked, hvilket
 hjemland (ISIN-koden i Euronext-lista begynner med landet), og hva har den betalt?
 `python scripts/tallkontroll.py --meldinger TICKER` gir utbyttemeldingene for et

@@ -298,7 +298,10 @@ class TestSidetittelOgMeta(unittest.TestCase):
                            ("Frontline PLC", "Frontline"),
                            ("Bakkafrost P/F", "Bakkafrost"),
                            ("Hafnia Limited", "Hafnia"),
-                           ("Golden Ocean Group", "Golden Ocean")]:
+                           ("Golden Ocean Group", "Golden Ocean"),
+                           # «SoftwareOne AG» er et navn selskapet ikke har (2026-10-19).
+                           ("SoftwareOne Holding AG", "SoftwareOne"),
+                           ("Subsea 7 SA", "Subsea 7")]:
             self.assertEqual(fs._kort_selskapsnavn(navn), vent)
 
     def test_aksjeklasse_bevares(self):
@@ -2923,6 +2926,190 @@ class TestSidemeny(unittest.TestCase):
                 self.assertTrue(knapp, "ingen temaknapp")
                 self.assertRegex(tekst, r"getElementById\(['\"]%s['\"]\)" % re.escape(knapp.group(1)),
                                  "ingen skript leser temaknappens id")
+
+
+class TestTallkontroll1910(unittest.TestCase):
+    """Malfunnene fra tallkontrollen 19.10.2026, hvert med sin motsigelse."""
+
+    IAAR = datetime.date.today().year
+
+    def _hist(self, belop, iaar_belop=None):
+        """Hele år bakover fra i fjor, pluss en delvis rad for i år."""
+        start = self.IAAR - len(belop)
+        rader = [{"ar": start + i, "utbytte": b} for i, b in enumerate(belop)]
+        if iaar_belop is not None:
+            rader.append({"ar": self.IAAR, "utbytte": iaar_belop})
+        return rader
+
+    def _rad(self, **felt):
+        a = {"ticker": "TEST", "navn": "Test ASA", "sektor": "Finans", "payout_ratio": 85,
+             "utbytte_yield": 4.0, "markedsverdi": 5e9}
+        a.update(felt)
+        return a
+
+    # S1: delårsraden er ikke et kutt (TGS).
+    def test_delaar_er_ikke_kutt(self):
+        a = self._rad(historiske_utbytter=self._hist([5.47, 5.91, 6.03, 6.46], 4.40))
+        self.assertEqual(fs.utbyttekutt(a), [])
+        tekst = fs._lag_nedtur_test(a)
+        self.assertNotIn("satt ned utbyttet før", tekst)
+        self.assertIn("ikke kuttet", tekst)
+
+    def test_kutt_mellom_hele_ar_teller(self):
+        a = self._rad(historiske_utbytter=self._hist([5.0, 3.25, 3.75, 4.25], 4.75))
+        self.assertEqual(len(fs.utbyttekutt(a)), 1)
+        self.assertIn("satt ned utbyttet før", fs._lag_nedtur_test(a))
+
+    # S2: tre år er «Moderat» i merket, og da ikke «Kort» i risikolista (STST).
+    def test_tre_ar_er_ikke_kort(self):
+        a = self._rad(ar_med_utbytte=3, utbytteaar=[self.IAAR - 2, self.IAAR - 1, self.IAAR])
+        self.assertIn("Moderat utbyttehistorikk (3 år)", fs._lag_investor_badges(a))
+        self.assertFalse(any("Kort utbyttehistorikk" in r for r in fs._selskapsrisikoer(a)))
+        self.assertNotIn("begrenset", fs._lag_investor_vurdering(a, {}))
+
+    # S3: en lang historikk med brudd er ikke «begrenset» (STB, SPOG).
+    def test_brutt_lang_historikk(self):
+        aar = list(range(self.IAAR - 20, self.IAAR - 6)) + list(range(self.IAAR - 4, self.IAAR + 1))
+        a = self._rad(ar_med_utbytte=len(aar), utbytteaar=aar)
+        tekst = fs._lag_investor_vurdering(a, {})
+        self.assertNotIn("begrenset", tekst)
+        self.assertIn(f"i {len(aar)} av årene", tekst)
+
+    # S4: kutt gir verken «Stabil inntekt» eller «Lav risiko» (SRHA).
+    def test_kutt_gir_ikke_stabil_eller_lav(self):
+        aar = list(range(self.IAAR - 10, self.IAAR + 1))
+        a = self._rad(payout_ratio=40, markedsverdi=20e9, utbytteaar=aar, ar_med_utbytte=len(aar),
+                      historiske_utbytter=self._hist([16.2, 13.1, 14.0, 15.0], 9.0))
+        self.assertNotIn("stabil", fs._beregn_mal_py(a))
+        self.assertNotEqual(fs._beregn_risiko_py(a), "lav")
+        a["historiske_utbytter"] = self._hist([12.0, 13.1, 14.0, 15.0], 9.0)
+        self.assertIn("stabil", fs._beregn_mal_py(a))
+        self.assertEqual(fs._beregn_risiko_py(a), "lav")
+
+    # S5: 40 % over snittet er ikke «nær» (STB 2,9 mot 2,0).
+    def test_relativt_band_mot_eget_snitt(self):
+        a = self._rad(utbytte_yield=2.9, snitt_yield_5ar=2.0, snitt_yield_ar=5,
+                      historiske_utbytter=self._hist([1, 1, 1, 1]))
+        tekst = fs._lag_utbyttehistorikk_tekst(a)
+        self.assertIn("ligger over aksjens eget", tekst)
+        self.assertNotIn("nær", tekst)
+
+    # S6: payout over 100 % er ikke «nesten hele» (SPOG 130 %).
+    def test_payout_over_hundre(self):
+        risiko = " ".join(fs._selskapsrisikoer(self._rad(payout_ratio=130)))
+        self.assertIn("mer enn det tjener", risiko)
+        self.assertNotIn("nesten hele", risiko)
+        self.assertIn("nesten hele", " ".join(fs._selskapsrisikoer(self._rad(payout_ratio=95))))
+
+    # SUBC: ingen doblingstid fra +59,7 % per år.
+    def test_ingen_doblingstid_over_taket(self):
+        a = self._rad(utbytte_vekst_5ar=59.7, utbytte_yield=3.0)
+        tekst = fs._lag_investor_badges(a)
+        self.assertNotIn("dobles utbyttet", tekst)
+        self.assertIn("regner den ikke fram", tekst)
+        a["utbytte_vekst_5ar"] = 10.0
+        self.assertIn("dobles utbyttet på ca. 7 år", fs._lag_investor_badges(a))
+
+
+class TestBransje(unittest.TestCase):
+    """Forsikring fikk banktekst og seismikk riggtekst (tallkontrollen 2026-10-19)."""
+
+    def test_hver_bransje_har_tekst_og_risiko(self):
+        with open(os.path.join(os.path.dirname(__file__), "..", "data", "tickers.json"),
+                  encoding="utf-8") as f:
+            bransjer = {t["bransje"] for t in json.load(f) if t.get("bransje")}
+        self.assertTrue(bransjer)
+        for b in bransjer:
+            with self.subTest(bransje=b):
+                self.assertIn(b, fs._BRANSJE_DRIVER_UTDYPET)
+                self.assertIn(b, fs.BRANSJE_RISIKOER)
+
+    def test_storebrand_far_forsikringstekst(self):
+        self.assertEqual(fs.BRANSJE.get("STB"), "forsikring")
+        a = {"ticker": "STB", "navn": "Storebrand ASA", "sektor": "Finans", "utbytte_yield": 3.0}
+        side = fs._lag_investor_vurdering(a, {})
+        self.assertIn("Solvenskravene", side)
+        self.assertNotIn("Netto renteinntekter", side)
+        self.assertIn("Store skadeår", fs._lag_risikofaktorer(a))
+
+
+class TestHendelse(unittest.TestCase):
+    """Oppkjøp, fusjon og avvikling på aksjesiden (tallkontrollen 2026-10-19)."""
+
+    H = {"type": "avvikling", "dato": "2026-08-05", "melding": "679057",
+         "tekst": "Styret vil selge flåten <innen> 18 måneder."}
+
+    def test_boks_med_kilde_og_escaping(self):
+        boks = fs.lag_hendelse_boks({"hendelse": self.H})
+        self.assertIn("Virksomheten skal avvikles", boks)
+        self.assertIn("&lt;innen&gt;", boks)
+        self.assertIn("https://newsweb.oslobors.no/message/679057", boks)
+        self.assertIn("5. aug", boks)
+
+    def test_ugyldig_gir_ingenting(self):
+        self.assertEqual(fs.lag_hendelse_boks({"hendelse": {"type": "noe", "tekst": "x"}}), "")
+        self.assertEqual(fs.lag_hendelse_boks({}), "")
+        boks = fs.lag_hendelse_boks({"hendelse": dict(self.H, melding="x\"><script>")})
+        self.assertNotIn("newsweb", boks)
+
+    def test_mal_faller_bort_bare_ved_avgjorte_hendelser(self):
+        a = {"sektor": "Finans", "utbytte_yield": 7.0, "frekvens": "Kvartalsvis"}
+        self.assertTrue(fs._beregn_mal_py(a))
+        self.assertEqual(fs._beregn_mal_py(dict(a, hendelse=self.H)), [])
+        mulig = dict(self.H, type="mulig_fusjon")
+        self.assertTrue(fs._beregn_mal_py(dict(a, hendelse=mulig)))
+
+    def test_sett_hendelse(self):
+        a = {"hendelse": {"type": "gammel"}}
+        fs.sett_hendelse(a, None)
+        self.assertNotIn("hendelse", a)
+        fs.sett_hendelse(a, self.H)
+        self.assertEqual(a["hendelse"]["melding"], "679057")
+
+    def test_hendelsene_i_tickers_er_gyldige(self):
+        with open(os.path.join(os.path.dirname(__file__), "..", "data", "tickers.json"),
+                  encoding="utf-8") as f:
+            hendelser = {t["ticker"]: t["hendelse"] for t in json.load(f) if t.get("hendelse")}
+        self.assertTrue(hendelser)
+        for ticker, h in hendelser.items():
+            with self.subTest(ticker=ticker):
+                self.assertTrue(fs.gyldig_hendelse(h))
+                self.assertRegex(h.get("melding", ""), r"^\d+$")
+                datetime.date.fromisoformat(h["dato"])
+                self.assertNotIn("—", h["tekst"])
+
+
+class TestHullaar(unittest.TestCase):
+    """Hele år uten utbetaling mellom to betalte år slås opp i NewsWeb-arkivet."""
+
+    I_DAG = datetime.date(2026, 10, 19)
+    D = datetime.date
+
+    def test_spog_2023(self):
+        kjente = [self.D(y, 3, 24) for y in (2020, 2021, 2022, 2024, 2025, 2026)]
+        self.assertEqual(fs.hullaar(kjente, self.I_DAG), [2023])
+
+    def test_ar_for_forste_utbetaling_er_ikke_hull(self):
+        kjente = [self.D(y, 5, 1) for y in (2024, 2025, 2026)]
+        self.assertEqual(fs.hullaar(kjente, self.I_DAG), [])
+
+    def test_bare_innenfor_vinduet(self):
+        kjente = [self.D(2010, 5, 1), self.D(2025, 5, 1)]
+        self.assertEqual(fs.hullaar(kjente, self.I_DAG), [2021, 2022, 2023, 2024])
+        self.assertEqual(fs.hullaar([], self.I_DAG), [])
+
+    def test_norske_ex_titler(self):
+        f = fs._parse_ex_melding("Skue Sparebank - eks utbytte NOK 12,50 i dag", "",
+                                 "2023-03-24T06:00:00Z")
+        self.assertEqual(f, {"ex_dato": "2023-03-24", "belop": 12.5})
+        f = fs._parse_ex_melding("Eks. utbytte kr 10,50 frå i dag",
+                                 "Kr 10,50 i utbytte vart vedteke på generalforsamlinga.",
+                                 "2023-04-27T06:00:00Z")
+        self.assertEqual(f, {"ex_dato": "2023-04-27", "belop": 10.5})
+        # Et beløp i millioner er ikke per aksje.
+        self.assertIsNone(fs._parse_ex_melding("Eks. utbytte i dag",
+                                               "Samlet utbytte kr 120 millioner.",
+                                               "2023-04-27T06:00:00Z"))
 
 
 class TestBorsdager(unittest.TestCase):

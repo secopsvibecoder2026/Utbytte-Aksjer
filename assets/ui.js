@@ -939,6 +939,23 @@ function stabileAr(a) {
   return r ? r.rad : (a.ar_med_utbytte || 0);
 }
 
+// Speiler utbyttekutt() i fetch_stocks.py: et helt år under 85 % av året
+// før. Inneværende år er hittil i år og tas aldri med (tallkontrollen
+// 2026-10-19: «Stabil inntekt» og «Lav risiko» sto ved «kuttet før»).
+const KUTT_ANDEL = 0.85;
+
+function utbytteKutt(a, iDag) {
+  const iaar = (iDag || new Date()).getFullYear();
+  const hele = (a.historiske_utbytter || [])
+    .filter(h => h.ar && h.ar < iaar && h.utbytte)
+    .sort((x, y) => x.ar - y.ar);
+  const kutt = [];
+  for (let i = 1; i < hele.length; i++) {
+    if (hele[i].utbytte < hele[i - 1].utbytte * KUTT_ANDEL) kutt.push([hele[i - 1], hele[i]]);
+  }
+  return kutt;
+}
+
 function beregnRisiko(a) {
   let poeng = 0;
   if (_SYKLISKE_SEKTORER.has(a.sektor)) poeng += 2;
@@ -955,7 +972,8 @@ function beregnRisiko(a) {
   if (mv > 0 && mv < 1e9) poeng += 1;
   else if (mv > 10e9) poeng -= 1;
   if ((a.utbytte_yield || 0) > 12) poeng += 1;
-  if (poeng <= 1) return 'lav';
+  // Et kutt mellom to hele år løfter aksjen til minst moderat (2026-10-19).
+  if (poeng <= 1 && !utbytteKutt(a).length) return 'lav';
   if (poeng <= 3) return 'moderat';
   return 'hoy';
 }
@@ -965,6 +983,8 @@ function beregnRisiko(a) {
 // bunnår i 2021 mens utbyttet hadde falt fra 35,64 kr (2023) til 19,16 kr
 // (2025). Første år regnes ikke som topp: det er startpunktet.
 const VEKST_TOPP_ANDEL = 0.9;
+// Over denne årlige veksten skrives ingen doblingstid (VEKST_FRAMSKRIV_MAKS i fetch_stocks.py).
+const VEKST_FRAMSKRIV_MAKS = 25;
 
 function vekstFraTopp(a) {
   const ar = Object.entries(a.utbytte_per_ar || {})
@@ -978,9 +998,43 @@ function vekstFraTopp(a) {
   return { toppAr, topp, sisteAr, siste };
 }
 
+// Speiler HENDELSE_TITTEL / HENDELSE_UTEN_MAL i fetch_stocks.py. Teksten
+// skrives for hånd i tickers.json fra børsmeldingen (tallkontrollen 2026-10-19:
+// STST lovet «jevn kontantstrøm» etter at styret hadde vedtatt å selge flåten).
+const HENDELSE_TITTEL = {
+  oppkjop: 'Selskapet er i ferd med å bli kjøpt opp',
+  fusjon: 'Selskapet skal slås sammen med et annet',
+  mulig_fusjon: 'Mulig sammenslåing',
+  avvikling: 'Virksomheten skal avvikles',
+  bytte_av_marked: 'Aksjen skal flytte til Euronext Growth',
+};
+const HENDELSE_UTEN_MAL = new Set(['oppkjop', 'fusjon', 'avvikling']);
+
+function gyldigHendelse(h) {
+  return !!(h && typeof h === 'object' && HENDELSE_TITTEL[h.type]
+    && typeof h.tekst === 'string' && h.tekst.trim());
+}
+
+function modalHendelse(a) {
+  const h = a && a.hendelse;
+  if (!gyldigHendelse(h)) return '';
+  const kilde = [];
+  if (/^\d{4}-\d{2}-\d{2}$/.test(String(h.dato || ''))) kilde.push(`meldt ${formaterDato(h.dato)}`);
+  if (/^\d+$/.test(String(h.melding || ''))) {
+    kilde.push(`<a href="https://newsweb.oslobors.no/message/${h.melding}" target="_blank" rel="noopener" class="underline">børsmeldingen</a>`);
+  }
+  return `<div class="rounded-lg border-l-4 border-amber-500 bg-amber-50 dark:bg-amber-950/30 px-4 py-3 mb-4">
+      <p class="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-1">${HENDELSE_TITTEL[h.type]}</p>
+      <p class="text-xs text-gray-700 dark:text-gray-300 leading-relaxed">${escHtml(h.tekst.trim())}</p>
+      ${kilde.length ? `<p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Kilde: ${kilde.join(', ')}.</p>` : ''}
+    </div>`;
+}
+
 function beregnMal(a) {
   const mål = [];
-  if (_DEFENSIVE_SEKTORER.has(a.sektor) && stabileAr(a) >= 7 && (a.payout_ratio || 0) < 80 && (a.payout_ratio || 0) > 0) {
+  if (gyldigHendelse(a.hendelse) && HENDELSE_UTEN_MAL.has(a.hendelse.type)) return mål;
+  if (_DEFENSIVE_SEKTORER.has(a.sektor) && stabileAr(a) >= 7 && (a.payout_ratio || 0) < 80 && (a.payout_ratio || 0) > 0
+      && !utbytteKutt(a).length) {
     mål.push('stabil');
   }
   if ((a.utbytte_vekst_5ar || 0) > 3 && !vekstFraTopp(a)) mål.push('vekst');
@@ -1026,6 +1080,9 @@ function forklarRisiko(a) {
   else if (lengde < 7)  punkter.push(`Moderat utbyttehistorikk (${lengde} år)`);
   else                  punkter.push(`Lang utbyttehistorikk (${lengde} år på rad)`);
 
+  const kutt = utbytteKutt(a);
+  if (kutt.length) punkter.push(`Utbyttet er satt ned før, sist i ${kutt[kutt.length - 1][1].ar}`);
+
   if (payout > 90)       punkter.push(`Svært høy payout ratio (${payout.toFixed(0).replace('.', ',')}%) — lite buffer ved inntjeningsfall`);
   else if (payout > 75)  punkter.push(`Høy payout ratio (${payout.toFixed(0).replace('.', ',')}%) — begrenset reinvesteringsevne`);
   else if (payout > 0 && payout < 50) punkter.push(`Sunn payout ratio (${payout.toFixed(0).replace('.', ',')}%) — god buffer`);
@@ -1058,13 +1115,17 @@ function forklarMal(a) {
                : 'Lang utbyttehistorikk i defensiv sektor gir god synlighet fremover.') });
 
   if (mal.includes('vekst')) {
-    const doblingsar = vekst > 0 ? Math.round(70 / vekst) : null;
+    // Doblingstiden er en framskriving og står derfor som en betingelse. Over
+    // VEKST_FRAMSKRIV_MAKS regnes den ikke ut (SUBC «dobles på ca. 1 år»).
+    const doblingsar = vekst > 0 && vekst <= VEKST_FRAMSKRIV_MAKS ? Math.round(70 / vekst) : null;
+    const v = vekst.toFixed(1).replace('.', ',');
     forklaringer.push({ mal: 'Utbyttevekst',
       tekst: `Passer investorer med lang horisont som vil at utbyttet skal vokse raskere enn inflasjonen. `
-           // Doblingstiden er en framskriving og står derfor som en betingelse.
            + (doblingsar
-               ? `Holder veksten på +${vekst.toFixed(1).replace('.', ',')}% per år seg, dobles utbyttet på ca. ${doblingsar} år.`
-               : `Historisk vekst +${vekst.toFixed(1).replace('.', ',')}% per år.`) });
+               ? `Holder veksten på +${v}% per år seg, dobles utbyttet på ca. ${doblingsar} år.`
+               : vekst > VEKST_FRAMSKRIV_MAKS
+                 ? `Historisk vekst +${v}% per år. En så høy takt sier mest om hvor lavt utbyttet startet, så vi regner den ikke fram.`
+                 : `Historisk vekst +${v}% per år.`) });
   }
 
   if (mal.includes('hoy_yield'))
@@ -3275,7 +3336,7 @@ function visModal(a) {
         ${modalKort('Utbyttevekst 5år', '<span class="' + vekstKlasse(a.utbytte_vekst_5ar) + '">' + (a.utbytte_vekst_5ar !== 0 ? (a.utbytte_vekst_5ar > 0 ? '+' : '') + a.utbytte_vekst_5ar.toFixed(1).replace('.', ',') + '%' : '—') + '</span>')}
         ${modalKort('År m/utbytte', a.ar_med_utbytte > 0 ? a.ar_med_utbytte + ' år' : '—')}
       </div>
-      ${modalDelaarVarsel(a)}${modalEkstraordinaerNote(a)}
+      ${modalHendelse(a)}${modalDelaarVarsel(a)}${modalEkstraordinaerNote(a)}
       ${modalBetaltBoks(a)}${modalKapitalNote(a)}
       <div class="rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden mb-4">
         <div class="bg-orange-50 dark:bg-orange-950/30 px-4 py-3">
@@ -5624,4 +5685,4 @@ function _annBygTopp() {
 }
 
 // Node.js test export
-if (typeof module !== 'undefined') module.exports = { snittNavn, forklarRisiko, vekstFraTopp, beregnMal, forklarMal, bevegelserOverskrift, utbytteRekke, stabileAr, exForbeholdGjelder, utbyttePerioder, vistOverBetalt, modalBetaltBoks, supplertFotnote, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, fmt, formaterDato, yieldKlasse, payoutKlasse, vekstKlasse, beregnScore, beregnBaerekraft, beregnYtdInntekt, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote, kapitalAndel, modalKapitalNote, kapitalSkattTekst, aksjerMedExIMaaned, beregnHvisKjopt, hvisStartAar, beregnAskMotVanlig, fmtUtbytte, sisteUtbytteTekst, modalOmSelskapet, vekslOmSelskapet, dripGevinst, _simulerKalkulator, askStatus, askTekst, modalKontoer };
+if (typeof module !== 'undefined') module.exports = { snittNavn, utbytteKutt, modalHendelse, beregnRisiko, forklarRisiko, vekstFraTopp, beregnMal, forklarMal, bevegelserOverskrift, utbytteRekke, stabileAr, exForbeholdGjelder, utbyttePerioder, vistOverBetalt, modalBetaltBoks, supplertFotnote, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, fmt, formaterDato, yieldKlasse, payoutKlasse, vekstKlasse, beregnScore, beregnBaerekraft, beregnYtdInntekt, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote, kapitalAndel, modalKapitalNote, kapitalSkattTekst, aksjerMedExIMaaned, beregnHvisKjopt, hvisStartAar, beregnAskMotVanlig, fmtUtbytte, sisteUtbytteTekst, modalOmSelskapet, vekslOmSelskapet, dripGevinst, _simulerKalkulator, askStatus, askTekst, modalKontoer };
