@@ -9535,6 +9535,148 @@ def main():
     oppdater_antall_i_sider(resultater, root_dir)
     oppdater_aarstall_i_sider(root_dir)
     oppdater_forside_uka(resultater, root_dir)
+    oppdater_kalender_maaneder(resultater, root_dir)
+
+
+# ── Utbyttekalender for neste år (19.10.2026) ────────────────────────────────
+# «Utbyttekalender 2026» er det sterkeste søket nettstedet har, og årstallet i
+# tittelen byttet først 1. januar. Søkene etter neste års kalender kommer i
+# november og desember, og DNB viser alt neste år da. Fra november står derfor
+# begge årene i tittelen, og månedsoversikten under handler om neste år.
+KALENDER_NESTE_AAR_FRA_MND = 11
+EXMND_VIS = 8   # selskaper per måned før «Vis alle»
+
+
+def kalenderaar_tekst(i_dag):
+    """«2026», eller «2026 og 2027» fra november. Speilet i utbyttekalenderens skript."""
+    if i_dag.month >= KALENDER_NESTE_AAR_FRA_MND:
+        return f"{i_dag.year} og {i_dag.year + 1}"
+    return str(i_dag.year)
+
+
+def ex_maaneder(aksjer):
+    """{1..12: [rader]}: aksjer som betaler i dag, etter månedene de pleier å gå ex.
+
+    Månedene er `utbetalingsmaaneder`, som tross navnet er ex-måneder: en måned
+    teller når aksjen har gått ex i den i minst to av de siste årene. Aksjer
+    der et oppkjøp, en fusjon eller en avvikling er meldt, er ikke med, siden
+    de kanskje ikke finnes neste år. Største selskap først i hver måned.
+    """
+    ut = {m: [] for m in range(1, 13)}
+    for a in aksjer:
+        if not _TICKER_RE.match(a.get("ticker") or ""):
+            continue
+        if not (a.get("utbytte_yield") or 0) > 0 or hendelse_uten_mal(a):
+            continue
+        for m in set(a.get("utbetalingsmaaneder") or []):
+            if isinstance(m, int) and 1 <= m <= 12:
+                ut[m].append(a)
+    for rader in ut.values():
+        rader.sort(key=lambda a: (-(a.get("markedsverdi_mrd") or 0), a["ticker"]))
+    return ut
+
+
+def _travleste_maaneder(per_mnd, antall=3):
+    """«mars (38), april (29) og mai (49)»: de travleste, i kalenderrekkefølge."""
+    topp = sorted(sorted(per_mnd, key=lambda m: -len(per_mnd[m]))[:antall])
+    deler = [f"{MAANEDSNAVN[m]} ({len(per_mnd[m])})" for m in topp if per_mnd[m]]
+    if not deler:
+        return ""
+    return deler[0] if len(deler) == 1 else ", ".join(deler[:-1]) + " og " + deler[-1]
+
+
+def lag_exmnd_blokk(aksjer, i_dag):
+    """Statisk månedsoversikt til utbyttekalenderen. Ren funksjon."""
+    import html as _html
+    per_mnd = ex_maaneder(aksjer)
+    # Årstallet i overskriften følger søket: neste år fra november, inneværende
+    # år fram til sommeren. Fra juli er det meste av året passert, og da er
+    # spørsmålet «når i året», ikke «når i år».
+    if i_dag.month >= KALENDER_NESTE_AAR_FRA_MND:
+        tittel = f"Når går aksjene ex-utbytte i {i_dag.year + 1}?"
+        intro = (f"Selskapene har ikke annonsert ex-datoene for {i_dag.year + 1} ennå. "
+                 "Oversikten viser i hvilke måneder hver aksje har gått ex de siste årene, "
+                 "og er det beste anslaget til datoene kommer.")
+    else:
+        tittel = (f"Når går aksjene ex-utbytte i {i_dag.year}?" if i_dag.month <= 6
+                  else "Når i året går aksjene ex-utbytte?")
+        intro = ("Kalenderen over viser bare datoer selskapene har annonsert, og de fleste "
+                 "annonserer først med kvartalsrapporten. Oversikten viser i hvilke måneder "
+                 "hver aksje har gått ex de siste årene.")
+    intro += (" En måned er med når aksjen har gått ex i den i minst to av de siste årene, "
+              "og utbyttet kommer på kontoen 1½–3 uker etter ex-datoen.")
+    travlest = _travleste_maaneder(per_mnd)
+    if travlest:
+        intro += f" Flest går ex i {travlest}."
+
+    def _lenke(a):
+        navn = _html.escape(_kort_selskapsnavn(a.get("navn") or a["ticker"]))
+        return (f'<a href="/aksjer/{a["ticker"]}/" class="text-green-700 dark:text-green-400 '
+                f'hover:underline">{navn}</a>')
+
+    kort = []
+    for m in range(1, 13):
+        rader = per_mnd[m]
+        n = len(rader)
+        hode = (f'        <h3 class="font-semibold text-gray-900 dark:text-gray-100">'
+                f'{MAANEDSNAVN[m].capitalize()} <span class="text-xs font-normal text-gray-500 '
+                f'dark:text-gray-400">· {n} {"aksje" if n == 1 else "aksjer"}</span></h3>')
+        if not rader:
+            kropp = ('        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">'
+                     'Ingen aksjer har pleid å gå ex i denne måneden.</p>')
+        else:
+            kropp = (f'        <p class="text-sm mt-1 leading-relaxed">'
+                     f'{", ".join(_lenke(a) for a in rader[:EXMND_VIS])}</p>')
+            if n > EXMND_VIS:
+                kropp += (
+                    '\n        <details class="text-sm mt-2">'
+                    f'<summary class="cursor-pointer text-green-700 dark:text-green-400">Vis alle {n}</summary>'
+                    f'<p class="mt-1 leading-relaxed">{", ".join(_lenke(a) for a in rader[EXMND_VIS:])}</p>'
+                    '</details>')
+        kort.append('      <div class="rounded-xl border border-gray-200 dark:border-gray-800 '
+                    'bg-white dark:bg-gray-900 p-4">\n' + hode + "\n" + kropp + "\n      </div>")
+    return "\n".join([
+        '    <section class="space-y-4" aria-labelledby="exmnd-tittel">',
+        f'      <h2 id="exmnd-tittel" class="text-lg font-bold text-gray-900 dark:text-gray-100">{tittel}</h2>',
+        f'      <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">{intro}</p>',
+        '      <div class="grid gap-3 sm:grid-cols-2">',
+        *kort,
+        '      </div>',
+        '      <p class="text-xs text-gray-500 dark:text-gray-400">Selskaper der et oppkjøp, en '
+        'fusjon eller en avvikling er meldt, er ikke med. Anslaget bygger på historikken og '
+        'er ingen garanti for at selskapet betaler.</p>',
+        '    </section>',
+    ])
+
+
+_EXMND_MONSTER = re.compile(r"<!--EXMND:START-->.*?<!--EXMND:SLUTT-->", re.S)
+
+
+def oppdater_kalender_maaneder(aksjer, root_dir: str, i_dag=None):
+    """Fyller månedsoversikten i /utbyttekalender/. True når filen ble endret."""
+    if i_dag is None:
+        try:
+            from zoneinfo import ZoneInfo
+            i_dag = datetime.datetime.now(ZoneInfo("Europe/Oslo")).date()
+        except ImportError:
+            i_dag = datetime.date.today()
+    sti = os.path.join(root_dir, "utbyttekalender", "index.html")
+    try:
+        with open(sti, encoding="utf-8") as f:
+            innhold = f.read()
+    except OSError:
+        return False
+    if not _EXMND_MONSTER.search(innhold):
+        print("  Utbyttekalenderen mangler <!--EXMND:START-->-markøren; oversikten er ikke oppdatert.")
+        return False
+    blokk = lag_exmnd_blokk(aksjer, i_dag)
+    nytt = _EXMND_MONSTER.sub(lambda m: "<!--EXMND:START-->\n" + blokk + "\n    <!--EXMND:SLUTT-->",
+                              innhold, count=1)
+    if nytt == innhold:
+        return False
+    with open(sti, "w", encoding="utf-8") as f:
+        f.write(nytt)
+    return True
 
 
 def oppdater_aarstall_i_sider(root_dir: str, i_dag=None):
@@ -9552,9 +9694,15 @@ def oppdater_aarstall_i_sider(root_dir: str, i_dag=None):
 
     Bare filer som melder seg på med <!--AAR-SYNK--> røres, så funksjonen kan
     ikke rette et årstall som står der med vilje i en annen sammenheng.
+
+    Fra november står også neste år der, se kalenderaar_tekst(). Mønsteret tar
+    med et «og 2027» som allerede står, så funksjonen er idempotent og 1. januar
+    blir det ett årstall igjen. <span id="aar"> i overskriften synkes også, så
+    HTML-en Google leser sier det samme som JavaScript skriver i nettleseren.
     """
-    aar = str((i_dag or datetime.date.today()).year)
-    monster = re.compile(r"(utbyttekalender\s+)(\d{4})", re.IGNORECASE)
+    aar = kalenderaar_tekst(i_dag or datetime.date.today())
+    monster = re.compile(r"(utbyttekalender\s+)(\d{4})(?:\s+og\s+\d{4})?", re.IGNORECASE)
+    span = re.compile(r'(<span id="aar">)[^<]*(</span>)')
     endret = []
 
     for mappe, _, filnavn in os.walk(root_dir):
@@ -9569,6 +9717,7 @@ def oppdater_aarstall_i_sider(root_dir: str, i_dag=None):
             if "<!--AAR-SYNK-->" not in innhold:
                 continue
             nytt = monster.sub(lambda m: f"{m.group(1)}{aar}", innhold)
+            nytt = span.sub(lambda m: f"{m.group(1)}{aar}{m.group(2)}", nytt)
             if nytt != innhold:
                 with open(sti, "w", encoding="utf-8") as f:
                     f.write(nytt)

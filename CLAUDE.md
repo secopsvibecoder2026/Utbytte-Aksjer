@@ -650,6 +650,42 @@ even if the generator has not run. That span sat there unused until
 
 Generated pages (`/aksjer/**`) compute their own numbers and are skipped.
 
+#### Next year from November (2026-10-19)
+
+The year used to switch only on 1 January, so the page advertised the
+current year through the weeks when people start searching for next year's
+calendar. DNB already shows next year by then. `kalenderaar_tekst()` now
+gives «2026 og 2027» from 1 November (`KALENDER_NESTE_AAR_FRA_MND`):
+
+- **Title and meta.** The pattern also consumes an existing «og 2027», so the
+  sync stays idempotent and returns to one year on 1 January.
+- **Heading.** `<span id="aar">` is synced in the HTML, and the page script
+  applies the same rule in the browser.
+- **The data job carries it.** The switch lands with the first data run after
+  1 November; the script handles readers in between.
+
+**A static month overview** sits under the calendar, between
+`<!--EXMND:START-->` and `<!--EXMND:SLUTT-->`, filled by
+`oppdater_kalender_maaneder()` in both `fetch_stocks.py` and
+`regenerer_sider.py`. The JS calendar holds only announced dates, a handful
+most of the year, so this is what Google and most readers see.
+
+- **What it lists.** `ex_maaneder()` places every paying stock under the months
+  in `utbetalingsmaaneder` (ex-months, see below). It leaves out stocks with a
+  `hendelse` of type oppkjøp, fusjon or avvikling, since they may be gone by
+  next year.
+- **Layout.** Eight per month, largest first, then «Vis alle N» in a
+  `<details>` that is still crawlable.
+- **Heading.** It names next year from November and the current year until
+  June. From July it reads «Når i året …».
+- **Busiest months.** They are named in calendar order
+  (`_travleste_maaneder()`).
+
+It is labelled as an estimate from history, never as dates. That keeps the
+rule above about not mixing estimated and confirmed dates.
+
+Tests: `TestAarstallISider` (+2), `TestKalenderMaaneder` (6).
+
 ### `utbetalingsmaaneder` — when a stock actually pays, not when it announced
 
 Only **11 of 160** stocks have an announced `ex_dato` at any given moment, and

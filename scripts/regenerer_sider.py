@@ -18,6 +18,7 @@ from fetch_stocks import (generer_aksjesider, generer_sektorsider, generer_toppl
                           generer_rapportkalender, sett_ask_felter, sett_hendelse, sett_snitt_felter,
                           oppdater_app_noscript_liste, oppdater_antall_i_sider,
                           oppdater_aarstall_i_sider, oppdater_forside_uka,
+                          oppdater_kalender_maaneder,
                           _typiske_utbetalingsmaaneder,
                           lag_beskrivelse, _manuell_del, SEKTOR_DRIVER,
                           _lag_utbyttehistorikk_tekst)
@@ -153,6 +154,7 @@ def main():
     oppdater_antall_i_sider(aksjer, ROOT)
     oppdater_aarstall_i_sider(ROOT)
     oppdater_forside_uka(aksjer, ROOT)
+    oppdater_kalender_maaneder(aksjer, ROOT)
 
     print("\nFerdig!")
 

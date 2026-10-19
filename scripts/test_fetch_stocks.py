@@ -276,6 +276,98 @@ class TestAarstallISider(unittest.TestCase):
         fs.oppdater_aarstall_i_sider(self.rot, i_dag=datetime.date(2027, 6, 1))
         self.assertEqual(forste, self._les(sti))
 
+    # Neste år fra november (2026-10-19): «utbyttekalender 2027» søkes før nyttår.
+    def test_kalenderaar_tekst(self):
+        D = datetime.date
+        self.assertEqual(fs.kalenderaar_tekst(D(2026, 10, 31)), "2026")
+        self.assertEqual(fs.kalenderaar_tekst(D(2026, 11, 1)), "2026 og 2027")
+        self.assertEqual(fs.kalenderaar_tekst(D(2026, 12, 31)), "2026 og 2027")
+        self.assertEqual(fs.kalenderaar_tekst(D(2027, 1, 1)), "2027")
+
+    def test_begge_ar_fra_november_og_tilbake_i_januar(self):
+        sti = self._skriv("utbyttekalender/index.html",
+                          "<!--AAR-SYNK--><title>Utbyttekalender 2026 – Oslo Børs</title>"
+                          '<h1>Utbyttekalender <span id="aar">2026</span></h1>')
+        fs.oppdater_aarstall_i_sider(self.rot, i_dag=datetime.date(2026, 11, 2))
+        t = self._les(sti)
+        self.assertIn("<title>Utbyttekalender 2026 og 2027 – Oslo Børs</title>", t)
+        self.assertIn('<span id="aar">2026 og 2027</span>', t)
+        fs.oppdater_aarstall_i_sider(self.rot, i_dag=datetime.date(2026, 11, 3))
+        self.assertEqual(t, self._les(sti))
+        fs.oppdater_aarstall_i_sider(self.rot, i_dag=datetime.date(2027, 1, 4))
+        t = self._les(sti)
+        self.assertIn("<title>Utbyttekalender 2027 – Oslo Børs</title>", t)
+        self.assertIn('<span id="aar">2027</span>', t)
+        self.assertNotIn(" og ", t)
+
+
+class TestKalenderMaaneder(unittest.TestCase):
+    """Månedsoversikten i /utbyttekalender/ (2026-10-19)."""
+
+    def _a(self, ticker, mnd, **felt):
+        return dict({"ticker": ticker, "navn": f"{ticker} ASA", "utbytte_yield": 4.0,
+                     "markedsverdi_mrd": 10, "utbetalingsmaaneder": mnd}, **felt)
+
+    def test_hvem_som_er_med(self):
+        aksjer = [self._a("STOR", [3, 3], markedsverdi_mrd=500),
+                  self._a("LITEN", [3], markedsverdi_mrd=1),
+                  self._a("STOPPET", [3], utbytte_yield=0),
+                  self._a("KJOPT", [3], hendelse={"type": "oppkjop", "tekst": "Bud."}),
+                  self._a("MULIG", [3], hendelse={"type": "mulig_fusjon", "tekst": "Intensjon."}),
+                  self._a("x<y", [3])]
+        mars = [a["ticker"] for a in fs.ex_maaneder(aksjer)[3]]
+        self.assertEqual(mars, ["STOR", "MULIG", "LITEN"])
+
+    def test_travleste_i_kalenderrekkefolge(self):
+        per = {m: [] for m in range(1, 13)}
+        per[5] = [1] * 49
+        per[3] = [1] * 38
+        per[4] = [1] * 29
+        per[2] = [1] * 16
+        self.assertEqual(fs._travleste_maaneder(per), "mars (38), april (29) og mai (49)")
+
+    def test_blokk_overskrift_folger_datoen(self):
+        D = datetime.date
+        aksjer = [self._a("AAA", [5])]
+        self.assertIn("ex-utbytte i 2027?", fs.lag_exmnd_blokk(aksjer, D(2026, 11, 2)))
+        self.assertIn("har ikke annonsert ex-datoene for 2027", fs.lag_exmnd_blokk(aksjer, D(2026, 11, 2)))
+        self.assertIn("ex-utbytte i 2027?", fs.lag_exmnd_blokk(aksjer, D(2027, 3, 1)))
+        self.assertIn("Når i året går aksjene ex-utbytte?", fs.lag_exmnd_blokk(aksjer, D(2027, 8, 1)))
+
+    def test_vis_alle_og_escaping(self):
+        aksjer = [self._a(f"A{i}", [4], markedsverdi_mrd=100 - i) for i in range(11)]
+        aksjer.append(self._a("ESC", [6], navn="A & <B> ASA"))
+        blokk = fs.lag_exmnd_blokk(aksjer, datetime.date(2026, 11, 2))
+        self.assertIn("Vis alle 11", blokk)
+        self.assertIn("· 11 aksjer", blokk)
+        self.assertIn("· 1 aksje<", blokk)
+        self.assertIn("A &amp; &lt;B&gt;", blokk)
+        self.assertNotIn("<B>", blokk)
+        self.assertIn("Ingen aksjer har pleid å gå ex i denne måneden.", blokk)
+
+    def test_oppdater_er_idempotent(self):
+        with tempfile.TemporaryDirectory() as rot:
+            os.makedirs(os.path.join(rot, "utbyttekalender"))
+            sti = os.path.join(rot, "utbyttekalender", "index.html")
+            with open(sti, "w", encoding="utf-8") as f:
+                f.write("<main>\n    <!--EXMND:START-->\n    <!--EXMND:SLUTT-->\n</main>\n")
+            aksjer = [self._a("AAA", [5])]
+            dag = datetime.date(2026, 11, 2)
+            self.assertTrue(fs.oppdater_kalender_maaneder(aksjer, rot, dag))
+            self.assertFalse(fs.oppdater_kalender_maaneder(aksjer, rot, dag))
+            with open(sti, encoding="utf-8") as f:
+                self.assertIn('href="/aksjer/AAA/"', f.read())
+            with open(sti, "w", encoding="utf-8") as f:
+                f.write("<main></main>")
+            self.assertFalse(fs.oppdater_kalender_maaneder(aksjer, rot, dag))
+
+    def test_kalendersiden_har_markorene(self):
+        rot = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        with open(os.path.join(rot, "utbyttekalender", "index.html"), encoding="utf-8") as f:
+            t = f.read()
+        self.assertRegex(t, r"(?s)<!--EXMND:START-->.*<!--EXMND:SLUTT-->")
+        self.assertIn("<!--AAR-SYNK-->", t)
+
 
 class TestSidetittelOgMeta(unittest.TestCase):
     """Tittel og meta er bygget for hvordan folk faktisk søker.

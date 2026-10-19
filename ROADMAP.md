@@ -46,7 +46,10 @@ står ikke i veien for AdSense (se «Breaking the template» i CLAUDE.md).
 6. **«Utbyttekalender 2027» i tide.** Det sterkeste søket (2 340 visninger) bytter
    år, og siden bytter først 1. januar. «2026 og 2027» i tittelen fra november, med
    forventede måneder for 2027, gir forsprang før vårsesongen. DNB gjør det alt.
-   *Liten; bør ut før desember.*
+   *Liten; bør ut før desember.* **Gjort 19.10.2026.** Fra 1. november står
+   «2026 og 2027» i tittel, beskrivelser og overskrift, og kalenderen har en
+   statisk månedsoversikt over når hver aksje pleier å gå ex. Den dekker også
+   kjernen i punkt 7 på kalendersiden selv.
 7. **«Når betaler Oslo Børs utbytte?»** Årshjul over hvilke måneder hver aksje går
    ex, fra `utbetalingsmaaneder`. Er steg 2 i N11b i ROADMAP_NYE_IDEER.md. Unikt og
    delbart. *Middels.*
