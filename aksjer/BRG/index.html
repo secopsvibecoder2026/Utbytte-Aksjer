@@ -192,6 +192,9 @@
     .rekke-seksjon { border-left: 3px solid #22c55e; }
     .nedtur-seksjon { border-left: 3px solid #f59e0b; }
     .delaar-seksjon { border-left: 3px solid #f59e0b; }
+    /* Den mørke regelen over setter border-color på alle sider og tok med seg
+       den gule kanten; varselet så ut som en vanlig boks (2026-10-19). */
+    .dark .delaar-seksjon { border-left-color: #f59e0b; }
     .betalt-seksjon .betalt-tabell { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; font-size: 0.875rem; margin: 0.25rem 0 0.5rem; }
     .betalt-seksjon .betalt-tabell th, .betalt-seksjon .betalt-tabell td { text-align: left; padding: 0.45rem 0.75rem; }
     .betalt-seksjon .betalt-tabell td:not(:first-child), .betalt-seksjon .betalt-tabell th:not(:first-child) { white-space: nowrap; text-align: right; }
@@ -204,6 +207,8 @@
     /* Nøytral variant: forklarer en observasjon, advarer ikke om en feil. */
     .delaar-seksjon.delaar-noytral { border-left-color: #94a3b8; }
     .dark .delaar-seksjon.delaar-noytral { border-left-color: #475569; }
+    .hendelse-seksjon p.hendelse-kilde { font-size: 0.8rem; color: #6b7280; }
+    .dark .hendelse-seksjon p.hendelse-kilde { color: #9ca3af; }
     .mnd-strip { display: grid; grid-template-columns: repeat(12, 1fr); gap: 2px; margin-bottom: 0.85rem; }
     .mnd-celle { text-align: center; padding: 0.4rem 0.1rem; font-size: 0.62rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.02em; color: #9ca3af; background: #f1f5f9; border-radius: 0.25rem; }
     .mnd-celle.mnd-ja { background: #15803d; color: #fff; }
@@ -523,9 +528,9 @@
 
   <div class="desc"><h2>Om selskapet</h2><p>Borregaard begynte som The Kellner Partington Paper Pulp Company, stiftet i Manchester i 1889. Selskapet kom på norske hender i 1918 og tok da navnet Borregaard. I 1986 ble det slått sammen med Orkla, og i oktober 2012 ble Borregaard skilt ut og notert på Oslo Børs som eget selskap.</p><p>Kjernen er bioraffineriet i Sarpsborg, som selskapet selv beskriver som et av verdens mest avanserte. Der skilles granvirket i bestanddelene, og hver av dem blir et eget produkt: spesialcellulose, ligninbaserte bindemidler og tilsetningsstoffer, vanillin og bioetanol. Borregaard har laget vanillin av tre siden 1962 og er ifølge seg selv den eneste i verden som gjør det. Ved siden av Sarpsborg har konsernet fem fabrikker i andre land som bare lager ligninprodukter. Kundene finnes i landbruk, betong, batterier, mat, legemidler og vannrensing, og konsernsjefen pekte i 2026 på den brede kundebasen som grunnen til at resultatet holdt seg i et vanskelig marked.</p><p>Tømmer er råvaren, og energi, kjemikalier og frakt er de andre store kostnadene. Andre kvartal 2026 viste hvordan de virker: tømmeret ble billigere, mens konflikten i Midtøsten gjorde energi, logistikk og kjemikalier dyrere. Samme kvartal skrev Borregaard ned investeringen i Alginor, som hadde frosset byggingen av demonstrasjonsanlegget sitt. Utbyttepolitikken er et jevnt og gradvis stigende utbytte på mellom fire og seks tideler av årsresultatet. Det vedtas av generalforsamlingen hver vår. Aksjene Borregaard kjøper tilbake, går til aksjeprogrammene for de ansatte og er ikke en ekstra utdeling til aksjonærene.</p></div>
 
-  <div class="investor-profil-seksjon"><div class="investor-badges-rad"><span class="investor-badge investor-risiko-hoy">Høy risiko</span></div><div class="investor-forklaring risiko-hoy"><div class="investor-forklaring-tittel"><span class="investor-badge investor-risiko-hoy">Høy risiko</span></div><ul class="investor-forklaring-liste"><li>Syklisk sektor (Materialer) — utbytte svinger med konjunkturer</li><li>Lang utbyttehistorikk (14 år på rad)</li><li>Svært høy payout ratio (279%) — lite buffer ved inntjeningsfall</li></ul></div></div>
+  <div class="investor-profil-seksjon"><div class="investor-badges-rad"><span class="investor-badge investor-risiko-hoy">Høy risiko</span></div><div class="investor-forklaring risiko-hoy"><div class="investor-forklaring-tittel"><span class="investor-badge investor-risiko-hoy">Høy risiko</span></div><ul class="investor-forklaring-liste"><li>Syklisk sektor (Materialer) — utbytte svinger med konjunkturer</li><li>Lang utbyttehistorikk (14 år på rad)</li><li>Utbyttet er satt ned før, sist i 2023</li><li>Svært høy payout ratio (279%) — lite buffer ved inntjeningsfall</li></ul></div></div>
 
-  <div class="ai-oppsummering"><h2>Utbyttehistorikken kort fortalt</h2><p>Utbyttet er lavere nå enn i 2022 — ned fra 5,00 til 4,25 kroner per aksje, med 1 nedgangsår i perioden. Dagens yield på 3,3 % ligger nær aksjens eget 5-årssnitt på 2,6 %.</p></div>
+  <div class="ai-oppsummering"><h2>Utbyttehistorikken kort fortalt</h2><p>Utbyttet er lavere nå enn i 2022 — ned fra 5,00 til 4,25 kroner per aksje, med 1 nedgangsår i perioden. Dagens yield på 3,3 % ligger over aksjens eget 5-årssnitt på 2,6 %.</p></div>
 
   </section>
 
@@ -572,7 +577,7 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
 
   <div class="nedtur-seksjon"><h2>Tåler utbyttet en nedtur?</h2><p>Borregaard ASA deler i dag ut mer enn selskapet tjener (279 % av inntjeningen). Det kan finansieres en stund av oppsparte midler eller salg av eiendeler, men det er ikke et nivå som kan holdes år etter år uten at inntjeningen tar seg opp. Selskapet har satt ned utbyttet før, så terskelen for å gjøre det igjen er neppe høy.</p></div>
 
-  <div class="risiko-seksjon"><h2>Risiko for utbyttet</h2><ul class="risiko-liste"><li>Payout ratio på 279 % betyr at nesten hele inntjeningen deles ut — det gir lite å gå på om resultatet faller</li>
+  <div class="risiko-seksjon"><h2>Risiko for utbyttet</h2><ul class="risiko-liste"><li>Payout ratio på 279 % betyr at selskapet deler ut mer enn det tjener. Det kan ikke vare uten at inntjeningen tar seg opp</li>
 <li>Utbyttet er kuttet før — fra 5,00 til 3,25 kroner i 2023</li>
 <li>Yielden avhenger sterkt av inngangskursen: samme utbytte gir 2,4 % på 12-månedershøyden (200,50 kr) og 3,5 % på bunnen (137,60 kr)</li>
 <li>Råvareprisene er sykliske og konjunkturfølsomme</li></ul></div>

@@ -192,6 +192,9 @@
     .rekke-seksjon { border-left: 3px solid #22c55e; }
     .nedtur-seksjon { border-left: 3px solid #f59e0b; }
     .delaar-seksjon { border-left: 3px solid #f59e0b; }
+    /* Den mørke regelen over setter border-color på alle sider og tok med seg
+       den gule kanten; varselet så ut som en vanlig boks (2026-10-19). */
+    .dark .delaar-seksjon { border-left-color: #f59e0b; }
     .betalt-seksjon .betalt-tabell { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; font-size: 0.875rem; margin: 0.25rem 0 0.5rem; }
     .betalt-seksjon .betalt-tabell th, .betalt-seksjon .betalt-tabell td { text-align: left; padding: 0.45rem 0.75rem; }
     .betalt-seksjon .betalt-tabell td:not(:first-child), .betalt-seksjon .betalt-tabell th:not(:first-child) { white-space: nowrap; text-align: right; }
@@ -204,6 +207,8 @@
     /* Nøytral variant: forklarer en observasjon, advarer ikke om en feil. */
     .delaar-seksjon.delaar-noytral { border-left-color: #94a3b8; }
     .dark .delaar-seksjon.delaar-noytral { border-left-color: #475569; }
+    .hendelse-seksjon p.hendelse-kilde { font-size: 0.8rem; color: #6b7280; }
+    .dark .hendelse-seksjon p.hendelse-kilde { color: #9ca3af; }
     .mnd-strip { display: grid; grid-template-columns: repeat(12, 1fr); gap: 2px; margin-bottom: 0.85rem; }
     .mnd-celle { text-align: center; padding: 0.4rem 0.1rem; font-size: 0.62rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.02em; color: #9ca3af; background: #f1f5f9; border-radius: 0.25rem; }
     .mnd-celle.mnd-ja { background: #15803d; color: #fff; }
@@ -568,14 +573,14 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
 
   <div class="utbetalingsaar-seksjon"><h2>Utbyttet gjennom året</h2><div class="mnd-strip"><div class="mnd-celle"><span>jan</span></div><div class="mnd-celle mnd-ja"><span>feb</span></div><div class="mnd-celle"><span>mar</span></div><div class="mnd-celle mnd-ja"><span>apr</span></div><div class="mnd-celle"><span>mai</span></div><div class="mnd-celle"><span>jun</span></div><div class="mnd-celle mnd-ja"><span>jul</span></div><div class="mnd-celle"><span>aug</span></div><div class="mnd-celle"><span>sep</span></div><div class="mnd-celle"><span>okt</span></div><div class="mnd-celle"><span>nov</span></div><div class="mnd-celle"><span>des</span></div></div><p>Ex-datoene til Protector Forsikring ASA har de siste årene ligget i februar, april og juli. Månedene er ex-datoer utledet av hvilke måneder som går igjen over flere år, ikke av en enkelt utbetaling. Selve pengene kommer typisk halvannen til tre uker etter ex-datoen, så en ex-dato sent i måneden betales ut i den neste.</p></div>
 
-  <div class="vurdering-seksjon"><h2>Vurdering som utbytteaksje</h2><p class="vurdering-tekst">Protector Forsikring ASA har betalt utbytte de siste 6 årene, men historikken er begrenset. Yielden på 4,6% er under sektorsnittet for Finans (6,2%).</p></div><div class="driver-seksjon"><h2>Hva driver utbyttet i PROT?</h2><p class="driver-tekst">Netto renteinntekter — differansen mellom utlåns- og innskuddsrenter — er den viktigste inntektskilden. Norges Banks styringsrente påvirker marginene direkte. Kredittap og myndighetenes kapitalkrav (CET1-ratio) setter øvre grense for hva som kan deles ut. Følg kvartalsmeldingene for utlånsvekst og mislighold.</p><p class="driver-tekst">Protector Forsikring ASA har betalt utbytte i 14 av årene vi har tall for, men rekken er brutt — den nåværende går tilbake til 2021. Veksten i utbyttet har ligget på 1,4 % i året over fem år. Ex-datoene har de siste årene ligget i februar, april og juli.</p></div>
+  <div class="vurdering-seksjon"><h2>Vurdering som utbytteaksje</h2><p class="vurdering-tekst">Protector Forsikring ASA har betalt utbytte de siste 6 årene. Medregnet årene før bruddet har selskapet betalt i 14 av årene vi har tall for. Yielden på 4,6% er under sektorsnittet for Finans (6,2%).</p></div><div class="driver-seksjon"><h2>Hva driver utbyttet i PROT?</h2><p class="driver-tekst">Resultatet har to kilder: forsikringsdriften, der premiene skal dekke erstatninger og kostnader, og avkastningen på pengene selskapet forvalter for kundene. Store skadeår med storm og flom presser forsikringsresultatet, mens høyere renter gir bedre avkastning på porteføljen. For pensjon og sparing er det forvaltet kapital og gebyrer som teller. Solvenskravene setter grensen for hva som kan deles ut, så følg solvensgraden i kvartalsrapportene.</p><p class="driver-tekst">Protector Forsikring ASA har betalt utbytte i 14 av årene vi har tall for, men rekken er brutt — den nåværende går tilbake til 2021. Veksten i utbyttet har ligget på 1,4 % i året over fem år. Ex-datoene har de siste årene ligget i februar, april og juli.</p></div>
 
   <div class="nedtur-seksjon"><h2>Tåler utbyttet en nedtur?</h2><p>Med en payout ratio på 76 % kan inntjeningen falle rundt 24 % før utbyttet spiser hele overskuddet. Faller den mer enn det, må selskapet enten tære på kassen, låne, eller sette ned utbyttet. Selskapet har ikke kuttet utbyttet i perioden vi har tall for, noe som taler for at nivået er villet og ikke tilfeldig.</p></div>
 
   <div class="risiko-seksjon"><h2>Risiko for utbyttet</h2><ul class="risiko-liste"><li>Payout ratio på 76 % er i øvre sjikt, så utbyttet tåler mindre svikt i inntjeningen enn hos en lavere utdeler</li>
 <li>Yielden på 4,6 % er langt over aksjens eget 5-årssnitt på 2,3 %, regnet mot samme kurs. Et utbytte så langt over det selskapet pleier å betale, er ikke sikkert å holde</li>
 <li>Yielden avhenger sterkt av inngangskursen: samme utbytte gir 3,6 % på 12-månedershøyden (559,00 kr) og 5,0 % på bunnen (398,20 kr)</li>
-<li>Rentenivå påvirker netto renteinntekter og utlånsmargin</li></ul></div>
+<li>Store skadeår med storm og flom kan presse forsikringsresultatet</li></ul></div>
 
   <div class="kontoer-seksjon"><h2>Hvilke kontoer kan du handle denne aksjen på?</h2><div class="konto-rad"><span class="konto-ok">✓</span><div><strong>Aksje- og fondskonto og Zero</strong><p>Ingen begrensning.</p></div></div><div class="konto-rad"><span class="konto-ok">✓</span><div><strong>Aksjesparekonto (ASK)</strong><p>Selskapet er registrert i Norge og aksjen er notert på Oslo Børs, så den kan holdes i ASK.</p></div></div></div>
 

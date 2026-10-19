@@ -192,6 +192,9 @@
     .rekke-seksjon { border-left: 3px solid #22c55e; }
     .nedtur-seksjon { border-left: 3px solid #f59e0b; }
     .delaar-seksjon { border-left: 3px solid #f59e0b; }
+    /* Den mørke regelen over setter border-color på alle sider og tok med seg
+       den gule kanten; varselet så ut som en vanlig boks (2026-10-19). */
+    .dark .delaar-seksjon { border-left-color: #f59e0b; }
     .betalt-seksjon .betalt-tabell { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; font-size: 0.875rem; margin: 0.25rem 0 0.5rem; }
     .betalt-seksjon .betalt-tabell th, .betalt-seksjon .betalt-tabell td { text-align: left; padding: 0.45rem 0.75rem; }
     .betalt-seksjon .betalt-tabell td:not(:first-child), .betalt-seksjon .betalt-tabell th:not(:first-child) { white-space: nowrap; text-align: right; }
@@ -204,6 +207,8 @@
     /* Nøytral variant: forklarer en observasjon, advarer ikke om en feil. */
     .delaar-seksjon.delaar-noytral { border-left-color: #94a3b8; }
     .dark .delaar-seksjon.delaar-noytral { border-left-color: #475569; }
+    .hendelse-seksjon p.hendelse-kilde { font-size: 0.8rem; color: #6b7280; }
+    .dark .hendelse-seksjon p.hendelse-kilde { color: #9ca3af; }
     .mnd-strip { display: grid; grid-template-columns: repeat(12, 1fr); gap: 2px; margin-bottom: 0.85rem; }
     .mnd-celle { text-align: center; padding: 0.4rem 0.1rem; font-size: 0.62rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.02em; color: #9ca3af; background: #f1f5f9; border-radius: 0.25rem; }
     .mnd-celle.mnd-ja { background: #15803d; color: #fff; }
@@ -523,7 +528,7 @@
 
   <div class="desc"><h2>Om selskapet</h2><p>Måsøval ble grunnlagt på Frøya i 1973 av Edvin Måsøval og sønnene Bjørn og Karsten. De første fire årene var det regnbueørret i merdene, så gikk selskapet over til laks. I 1991 var familien med på å starte SalMar sammen med Witzøe-familien, men gikk ut igjen i 1998 for å satse på egen drift. Aksjen har handlet på Euronext Growth Oslo siden 2021, samme år som selskapet kjøpte flere oppdretts- og settefiskselskaper og fikk egen postsmoltkapasitet.</p><p>Driften er delt i to regioner. Region Midt ligger rundt Frøya og Hitra, i produksjonsområde 6, og der har selskapet også slakteri. Region Vest ligger i Møre og Romsdal, i produksjonsområde 5. Settefisken kommer fra egne anlegg, og Måsøval slakter, bearbeider og selger fisken selv. En del av fisken står på tillatelser som eies av andre, etter avtaler der overskuddet deles mellom den som eier tillatelsen og Måsøval som driver. Frøy Havbruk sa opp sin avtale i september 2026, og den løper ut når fisken som står i sjøen er slaktet.</p><p>Utbyttet har vært lite og ujevnt, og for regnskapsårene 2024 og 2025 ble det ikke delt ut noe. I 2026 meldte selskapet om lavere gjeldsgrad og en bedre posisjon mot lånevilkårene. Den viktigste nyheten for aksjonærene kom i juli 2026, da hovedaksjonæren Heimstø AS avtalte å selge hele sin post til SalMar. Avtalen krever godkjenning fra myndighetene, og SalMar har sagt at minoritetsaksjonærene etter gjennomføringen skal få selge til samme pris. Måsøval havner da under selskapet familien var med på å starte.</p></div>
 
-  <div class="investor-profil-seksjon"><div class="investor-badges-rad"><span class="investor-badge investor-risiko-moderat">Moderat risiko</span></div><div class="investor-forklaring risiko-moderat"><div class="investor-forklaring-tittel"><span class="investor-badge investor-risiko-moderat">Moderat risiko</span></div><ul class="investor-forklaring-liste"><li>Sektor (Havbruk) har en viss konjunktureksponering</li><li>Utbytte i 3 år, men med brudd — ingen utbytte siden 2024</li><li>Handles på Euronext Growth, som ikke er et regulert marked — kan ikke holdes i ASK i dag</li></ul></div></div>
+  <div class="investor-profil-seksjon"><div class="investor-badges-rad"><span class="investor-badge investor-risiko-moderat">Moderat risiko</span></div><div class="investor-forklaring risiko-moderat"><div class="investor-forklaring-tittel"><span class="investor-badge investor-risiko-moderat">Moderat risiko</span></div><ul class="investor-forklaring-liste"><li>Sektor (Havbruk) har en viss konjunktureksponering</li><li>Utbytte i 3 år, men med brudd — ingen utbytte siden 2024</li><li>Utbyttet er satt ned før, sist i 2023</li><li>Handles på Euronext Growth, som ikke er et regulert marked — kan ikke holdes i ASK i dag</li></ul></div></div>
 
   <div class="ai-oppsummering"><h2>Utbyttehistorikken kort fortalt</h2><p>Utbyttet er lavere nå enn i 2022 — ned fra 1,00 til 0,50 kroner per aksje, med 1 nedgangsår i perioden. Høyeste år er 2,0 ganger det laveste — merkbare svingninger, men innenfor et gjenkjennelig spenn.</p></div>
 
@@ -563,9 +568,9 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
   
 
   <div class="risiko-seksjon"><h2>Risiko for utbyttet</h2><ul class="risiko-liste"><li>Utbyttet er kuttet før — fra 1,00 til 0,50 kroner i 2023</li>
-<li>Kort utbyttehistorikk (3 år) gir lite grunnlag for å vurdere hvor stabilt utbyttet er over en konjunktursyklus</li>
 <li>Utbetalingene har ikke fulgt et fast mønster, så tidspunkt og størrelse er vanskelige å planlegge etter</li>
-<li>Laksepris varierer med globalt tilbud og etterspørsel</li></ul></div>
+<li>Laksepris varierer med globalt tilbud og etterspørsel</li>
+<li>Biologisk risiko (lakselus, sykdom) kan redusere produksjonsvolum</li></ul></div>
 
   <div class="kontoer-seksjon"><h2>Hvilke kontoer kan du handle denne aksjen på?</h2><div class="konto-rad"><span class="konto-ok">✓</span><div><strong>Aksje- og fondskonto og Zero</strong><p>Ingen begrensning.</p></div></div><div class="konto-rad konto-ikke"><span class="konto-nei">✗</span><div><strong>Aksjesparekonto (ASK)</strong><p>Aksjen handles på Euronext Growth, som ikke er et regulert marked, og kan derfor ikke holdes i ASK i dag. Regjeringen foreslo i statsbudsjettet for 2027 å åpne ASK for slike aksjer fra 1. januar 2027. Bruk aksje- og fondskonto.</p></div></div></div>
 

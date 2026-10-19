@@ -192,6 +192,9 @@
     .rekke-seksjon { border-left: 3px solid #22c55e; }
     .nedtur-seksjon { border-left: 3px solid #f59e0b; }
     .delaar-seksjon { border-left: 3px solid #f59e0b; }
+    /* Den mørke regelen over setter border-color på alle sider og tok med seg
+       den gule kanten; varselet så ut som en vanlig boks (2026-10-19). */
+    .dark .delaar-seksjon { border-left-color: #f59e0b; }
     .betalt-seksjon .betalt-tabell { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; font-size: 0.875rem; margin: 0.25rem 0 0.5rem; }
     .betalt-seksjon .betalt-tabell th, .betalt-seksjon .betalt-tabell td { text-align: left; padding: 0.45rem 0.75rem; }
     .betalt-seksjon .betalt-tabell td:not(:first-child), .betalt-seksjon .betalt-tabell th:not(:first-child) { white-space: nowrap; text-align: right; }
@@ -204,6 +207,8 @@
     /* Nøytral variant: forklarer en observasjon, advarer ikke om en feil. */
     .delaar-seksjon.delaar-noytral { border-left-color: #94a3b8; }
     .dark .delaar-seksjon.delaar-noytral { border-left-color: #475569; }
+    .hendelse-seksjon p.hendelse-kilde { font-size: 0.8rem; color: #6b7280; }
+    .dark .hendelse-seksjon p.hendelse-kilde { color: #9ca3af; }
     .mnd-strip { display: grid; grid-template-columns: repeat(12, 1fr); gap: 2px; margin-bottom: 0.85rem; }
     .mnd-celle { text-align: center; padding: 0.4rem 0.1rem; font-size: 0.62rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.02em; color: #9ca3af; background: #f1f5f9; border-radius: 0.25rem; }
     .mnd-celle.mnd-ja { background: #15803d; color: #fff; }
@@ -523,7 +528,7 @@
 
   <div class="desc"><h2>Om selskapet</h2><p>Polaris Media regner røttene sine tilbake til den første utgaven av Adresseavisen i 1767. Konsernet eier lokale og regionale mediehus i Norge og Sverige. Adresseavisen, Fædrelandsvennen og Sunnmørsposten er de tre største på norsk side, og de norske mediehusene er samlet i regionale underkonsern fra Nord-Norge til Sørlandet. I Sverige eier Polaris Stampen Media, der Göteborgs-Posten er det klart største mediehuset, og Stampen ble heleid i 2025.</p><p>Ved siden av journalistikken har konsernet egne trykkerier i Norge. De trykker nesten alle konsernets norske aviser, og i tillegg aviser og reklametrykk for andre kunder. Distribusjonsselskapene bærer ut papiraviser for egne og eksterne mediehus og leverer pakker fra netthandel gjennom Helthjem-nettverket, der Polaris også er medeier. I Sverige kjøper konsernet trykkingen fra andre. Eierskapet er samlet på få hender: Schibsted Media er største aksjonær, fulgt av svenske NWT Media og Must Invest.</p><p>Utbyttehistorikken har én tydelig topp. Polaris eide aksjer i Finn.no og Schibsted og solgte en stor del av dem i 2024, og pengene ble delt ut som et tilleggsutbytte i 2025, det største i selskapets historie. I juni 2026 solgte Polaris de siste aksjene i Vend Marketplaces, som det børsnoterte Schibsted heter etter at mediehusene ble skilt ut, og sa at pengene skulle investeres i en spredt portefølje for å beholde finansiell handlefrihet. Det ordinære utbyttet er langt lavere. Politikken er å gi eierne en jevn avkastning gjennom utbytte og samtidig ha rom til å utvikle konsernet, og styret setter nivået ut fra resultat, finansiell stilling og planer. Uten flere slike aksjesalg er det mediehusene, trykkeriene og distribusjonen som må tjene inn det som deles ut.</p></div>
 
-  <div class="investor-profil-seksjon"><div class="investor-badges-rad"><span class="investor-badge investor-risiko-moderat">Moderat risiko</span></div><div class="investor-forklaring risiko-moderat"><div class="investor-forklaring-tittel"><span class="investor-badge investor-risiko-moderat">Moderat risiko</span></div><ul class="investor-forklaring-liste"><li>Sektor (Kommunikasjonstjenester) har en viss konjunktureksponering</li><li>Utbytte i 16 år, men med brudd — sammenhengende siden 2022</li></ul></div></div>
+  <div class="investor-profil-seksjon"><div class="investor-badges-rad"><span class="investor-badge investor-risiko-moderat">Moderat risiko</span></div><div class="investor-forklaring risiko-moderat"><div class="investor-forklaring-tittel"><span class="investor-badge investor-risiko-moderat">Moderat risiko</span></div><ul class="investor-forklaring-liste"><li>Sektor (Kommunikasjonstjenester) har en viss konjunktureksponering</li><li>Utbytte i 16 år, men med brudd — sammenhengende siden 2022</li><li>Utbyttet er satt ned før, sist i 2024</li></ul></div></div>
 
   <div class="ai-oppsummering"><h2>Utbyttehistorikken kort fortalt</h2><p>Utbyttet er samlet opp fra 3,00 til 22,40 kroner per aksje i 2022–2025, men veien dit gikk gjennom 2 kutt underveis. Spennet er stort: høyeste år er 22,4 ganger det laveste, så størrelsen på utbetalingen er lite forutsigbar fra år til år. Dagens yield på 5,7 % er lavere enn aksjens eget 5-årssnitt på 9,6 %.</p></div>
 
@@ -568,7 +573,7 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
 
   
 
-  <div class="vurdering-seksjon"><h2>Vurdering som utbytteaksje</h2><p class="vurdering-tekst">Polaris Media ASA har betalt utbytte de siste 5 årene, men historikken er begrenset. Yielden på 5,7% er klart over sektorsnittet for Kommunikasjonstjenester (2,9%), noe som reflekterer enten høy utbyttekapasitet eller at markedet priser inn høyere risiko.</p></div><div class="driver-seksjon"><h2>Hva driver utbyttet i POL?</h2><p class="driver-tekst">Inntektene kommer fra abonnement, annonsering eller innhold, og forutsigbarheten avhenger sterkt av hvilken av delene som dominerer. Abonnementsbaserte selskaper har stabil kontantstrøm og tåler utbytte godt, mens annonsefinansierte er konjunkturutsatte — annonsebudsjetter kuttes tidlig i en nedtur. Følg utviklingen i abonnenttall og annonseinntekter hver for seg.</p><p class="driver-tekst">Polaris Media ASA har betalt utbytte i 16 av årene vi har tall for, men rekken er brutt — den nåværende går tilbake til 2022. Utbyttet går ex årlig, i mai.</p></div>
+  <div class="vurdering-seksjon"><h2>Vurdering som utbytteaksje</h2><p class="vurdering-tekst">Polaris Media ASA har betalt utbytte de siste 5 årene. Medregnet årene før bruddet har selskapet betalt i 16 av årene vi har tall for. Yielden på 5,7% er klart over sektorsnittet for Kommunikasjonstjenester (2,9%), noe som reflekterer enten høy utbyttekapasitet eller at markedet priser inn høyere risiko.</p></div><div class="driver-seksjon"><h2>Hva driver utbyttet i POL?</h2><p class="driver-tekst">Inntektene kommer fra abonnement, annonsering eller innhold, og forutsigbarheten avhenger sterkt av hvilken av delene som dominerer. Abonnementsbaserte selskaper har stabil kontantstrøm og tåler utbytte godt, mens annonsefinansierte er konjunkturutsatte — annonsebudsjetter kuttes tidlig i en nedtur. Følg utviklingen i abonnenttall og annonseinntekter hver for seg.</p><p class="driver-tekst">Polaris Media ASA har betalt utbytte i 16 av årene vi har tall for, men rekken er brutt — den nåværende går tilbake til 2022. Utbyttet går ex årlig, i mai.</p></div>
 
   
 

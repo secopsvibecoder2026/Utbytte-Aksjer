@@ -192,6 +192,9 @@
     .rekke-seksjon { border-left: 3px solid #22c55e; }
     .nedtur-seksjon { border-left: 3px solid #f59e0b; }
     .delaar-seksjon { border-left: 3px solid #f59e0b; }
+    /* Den mørke regelen over setter border-color på alle sider og tok med seg
+       den gule kanten; varselet så ut som en vanlig boks (2026-10-19). */
+    .dark .delaar-seksjon { border-left-color: #f59e0b; }
     .betalt-seksjon .betalt-tabell { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; font-size: 0.875rem; margin: 0.25rem 0 0.5rem; }
     .betalt-seksjon .betalt-tabell th, .betalt-seksjon .betalt-tabell td { text-align: left; padding: 0.45rem 0.75rem; }
     .betalt-seksjon .betalt-tabell td:not(:first-child), .betalt-seksjon .betalt-tabell th:not(:first-child) { white-space: nowrap; text-align: right; }
@@ -204,6 +207,8 @@
     /* Nøytral variant: forklarer en observasjon, advarer ikke om en feil. */
     .delaar-seksjon.delaar-noytral { border-left-color: #94a3b8; }
     .dark .delaar-seksjon.delaar-noytral { border-left-color: #475569; }
+    .hendelse-seksjon p.hendelse-kilde { font-size: 0.8rem; color: #6b7280; }
+    .dark .hendelse-seksjon p.hendelse-kilde { color: #9ca3af; }
     .mnd-strip { display: grid; grid-template-columns: repeat(12, 1fr); gap: 2px; margin-bottom: 0.85rem; }
     .mnd-celle { text-align: center; padding: 0.4rem 0.1rem; font-size: 0.62rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.02em; color: #9ca3af; background: #f1f5f9; border-radius: 0.25rem; }
     .mnd-celle.mnd-ja { background: #15803d; color: #fff; }
@@ -517,13 +522,13 @@
 
   <dl class="korttall"><div><dt>Neste kvartalsrapport</dt><dd>3. nov 2026</dd></div><div><dt>5-årssnitt yield</dt><dd>6,34 %</dd></div><div><dt>År med utbytte</dt><dd>11</dd></div><div><dt>P/E</dt><dd>12,8</dd></div><div><dt>Payout ratio</dt><dd>49 %</dd></div><div><dt>Markedsverdi</dt><dd>3,6 mrd NOK</dd></div></dl>
 
-  
+  <div class="delaar-seksjon hendelse-seksjon"><h2>Selskapet skal slås sammen med et annet</h2><p>Multiconsult skal slås sammen med svenske Rejlers, og generalforsamlingen godkjente fusjonsplanen 19. oktober 2026. Aksjonærene får 0,9725 B-aksjer i Rejlers for hver aksje i Multiconsult, og det sammenslåtte selskapet skal hete Multiconsult Rejlers. Multiconsult er det overdragende selskapet.</p><p class="hendelse-kilde">Kilde: meldt 19. okt 2026, <a href="https://newsweb.oslobors.no/message/684343" target="_blank" rel="noopener">børsmeldingen</a>.</p></div>
 
   <div class="betalt-seksjon"><h2>Faktisk betalt utbytte</h2><table class="betalt-tabell"><thead><tr><th>Periode</th><th>Per aksje/år</th><th>Yield</th></tr></thead><tbody><tr><td>Siste 12 mnd</td><td>5,00 kr</td><td>3,86 %</td></tr><tr><td>2025</td><td>10,00 kr</td><td>7,73 %</td></tr><tr><td>Snitt <span class="nowrap">2024–25</span></td><td>9,00 kr</td><td>6,96 %</td></tr><tr><td>Snitt <span class="nowrap">2023–25</span></td><td>9,00 kr</td><td>6,96 %</td></tr><tr><td>Snitt <span class="nowrap">2022–25</span></td><td>8,25 kr</td><td>6,38 %</td></tr><tr><td>Snitt <span class="nowrap">2021–25</span></td><td>8,20 kr</td><td>6,34 %</td></tr></tbody></table><p class="betalt-fotnote">Summert etter ex-dato, inkludert eventuelle ekstraordinære utbytter. Yield regnet mot dagens kurs. </p></div>
 
   <div class="desc"><h2>Om selskapet</h2><p>Multiconsult står foran en sammenslåing. I september 2026 la styrene i Multiconsult og svenske Rejlers fram en plan om å fusjonere selskapene til Multiconsult Rejlers, med hovedkontor i Stockholm og en hovedavdeling i Oslo. Blir fusjonen gjennomført, får aksjonærene i Multiconsult nye B-aksjer i Rejlers i bytte, og det sammenslåtte selskapet skal handles både i Stockholm og på Oslo Børs. Planen må vedtas av generalforsamlingene, med ekstraordinær generalforsamling i Multiconsult 19. oktober 2026, og konkurransemyndighetene må godkjenne den. Selskapene regner med å bli ferdige rundt årsskiftet 2026/2027.</p><p>Selskapet har røtter tilbake til 1908 og selger rådgivning fra ingeniører og arkitekter innen bygg og eiendom, samferdsel, energi og industri, og vann og miljø. Arkitektvirksomheten drives under navnet LINK Arkitektur, og utenfor Norge har Multiconsult virksomhet i Sverige, Danmark, Polen og Storbritannia. I desember 2025 kjøpte selskapet ViaNova. Største eier er Stiftelsen Multiconsult, som har som formål å støtte selskapets uavhengighet og de ansattes innflytelse. Stiftelsen støtter fusjonen og skal bli en langsiktig eier også i det nye selskapet, side om side med familien Rejler. De ansatte eier aksjer gjennom kjøpsprogram og overskuddsdeling.</p><p>Multiconsult delte ut utbytte hvert år fra børsnoteringen i 2015 til og med 2026. Politikken er å dele ut minst halvparten av årsresultatet, så lenge egenkapitalandelen holder seg over et fastsatt nivå. Fusjonsplanen endrer bildet: fram til fusjonen er gjennomført, kan ingen av selskapene dele ut utbytte uten samtykke fra det andre. Etter en fusjon er det styret og generalforsamlingen i det sammenslåtte selskapet som bestemmer utbyttet.</p></div>
 
-  <div class="investor-profil-seksjon"><div class="investor-badges-rad"><span class="investor-badge investor-risiko-lav">Lav risiko</span><span class="investor-badge investor-mal">Utbyttevekst</span></div><div class="investor-forklaring risiko-lav"><div class="investor-forklaring-tittel"><span class="investor-badge investor-risiko-lav">Lav risiko</span></div><ul class="investor-forklaring-liste"><li>Syklisk sektor (Industri) — utbytte svinger med konjunkturer</li><li>Lang utbyttehistorikk (11 år på rad)</li><li>Sunn payout ratio (49%) — god buffer</li></ul></div><div class="investor-mal-seksjon"><p class="investor-mal-header">Passer for</p><div class="investor-mal-rad"><span class="investor-badge investor-mal">Utbyttevekst</span><span class="investor-mal-tekst">Passer investorer med lang horisont som vil at utbyttet skal vokse raskere enn inflasjonen. Holder veksten på +5,7% per år seg, dobles utbyttet på ca. 12 år.</span></div></div></div>
+  <div class="investor-profil-seksjon"><div class="investor-badges-rad"><span class="investor-badge investor-risiko-lav">Lav risiko</span></div><div class="investor-forklaring risiko-lav"><div class="investor-forklaring-tittel"><span class="investor-badge investor-risiko-lav">Lav risiko</span></div><ul class="investor-forklaring-liste"><li>Syklisk sektor (Industri) — utbytte svinger med konjunkturer</li><li>Lang utbyttehistorikk (11 år på rad)</li><li>Sunn payout ratio (49%) — god buffer</li></ul></div></div>
 
   <div class="ai-oppsummering"><h2>Utbyttehistorikken kort fortalt</h2><p>Utbyttet er samlet opp fra 6,00 til 10,00 kroner per aksje i 2022–2025, men veien dit gikk gjennom 1 kutt underveis. Dagens yield på 3,9 % er lavere enn aksjens eget 5-årssnitt på 6,3 %.</p></div>
 

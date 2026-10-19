@@ -192,6 +192,9 @@
     .rekke-seksjon { border-left: 3px solid #22c55e; }
     .nedtur-seksjon { border-left: 3px solid #f59e0b; }
     .delaar-seksjon { border-left: 3px solid #f59e0b; }
+    /* Den mørke regelen over setter border-color på alle sider og tok med seg
+       den gule kanten; varselet så ut som en vanlig boks (2026-10-19). */
+    .dark .delaar-seksjon { border-left-color: #f59e0b; }
     .betalt-seksjon .betalt-tabell { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; font-size: 0.875rem; margin: 0.25rem 0 0.5rem; }
     .betalt-seksjon .betalt-tabell th, .betalt-seksjon .betalt-tabell td { text-align: left; padding: 0.45rem 0.75rem; }
     .betalt-seksjon .betalt-tabell td:not(:first-child), .betalt-seksjon .betalt-tabell th:not(:first-child) { white-space: nowrap; text-align: right; }
@@ -204,6 +207,8 @@
     /* Nøytral variant: forklarer en observasjon, advarer ikke om en feil. */
     .delaar-seksjon.delaar-noytral { border-left-color: #94a3b8; }
     .dark .delaar-seksjon.delaar-noytral { border-left-color: #475569; }
+    .hendelse-seksjon p.hendelse-kilde { font-size: 0.8rem; color: #6b7280; }
+    .dark .hendelse-seksjon p.hendelse-kilde { color: #9ca3af; }
     .mnd-strip { display: grid; grid-template-columns: repeat(12, 1fr); gap: 2px; margin-bottom: 0.85rem; }
     .mnd-celle { text-align: center; padding: 0.4rem 0.1rem; font-size: 0.62rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.02em; color: #9ca3af; background: #f1f5f9; border-radius: 0.25rem; }
     .mnd-celle.mnd-ja { background: #15803d; color: #fff; }
@@ -523,7 +528,7 @@
 
   <div class="desc"><h2>Om selskapet</h2><p>Elkem regner sin historie fra 1904 og lager silisiumbaserte materialer. Orkla solgte selskapet til kinesiske China National Bluestar i 2011, og Bluestar var fortsatt største eier i 2026. Det året ble eierskapet snudd på hodet. I februar avtalte Elkem å selge mesteparten av silikondivisjonen til Bluestar, og oppgjøret var ikke penger, men Bluestars egne Elkem-aksjer. De ble innløst og slettet da salget ble fullført 30. april 2026. Bluestar hadde eid over halvparten av selskapet, så aksjonærene som før var i mindretall, eier nå hele Elkem. En emisjon i mai, garantert av blant andre Folketrygdfondet og Must Invest, skulle styrke egenkapitalen og få ned gjelden.</p><p>Igjen står en produsent av metaller og materialer. Fra 2026 er Elkem organisert i tre divisjoner. Elkem Silicon lager silisium, ferrosilisium, Microsilica og kvarts ved verk i Norge, Island og Spania, og har beholdt ett silikonanlegg i Frankrike. Elkem Foundry Alloys lager legeringer til støperier, og Elkem Carbon lager elektrodemasse og andre karbonprodukter til metallindustrien. Prisene på silisium og ferrosilisium har vært lave, og EU innførte i november 2025 beskyttelsestiltak mot import av ferrolegeringer. Elkem vurderer hva som skal skje med verket på Island, som er skilt ut i regnskapet etter svake resultater. På kraftsiden kom en sjuårig avtale med Statkraft for Bjølvefossen i 2026.</p><p>Målet i utbyttepolitikken er tre til fem tideler av årsresultatet, i tråd med underliggende resultat og kontantstrøm. Utbyttet har fulgt syklusen tett: store beløp for 2021 og 2022, ingenting for 2023, og heller ingenting for 2025, fordi innløsningen av Bluestars aksjer svekket egenkapitalen. I 2026 har kostnadskutt, et tak på investeringene og nedbetaling av gjeld kommet først.</p></div>
 
-  <div class="investor-profil-seksjon"><div class="investor-badges-rad"><span class="investor-badge investor-risiko-hoy">Høy risiko</span></div><div class="investor-forklaring risiko-hoy"><div class="investor-forklaring-tittel"><span class="investor-badge investor-risiko-hoy">Høy risiko</span></div><ul class="investor-forklaring-liste"><li>Syklisk sektor (Materialer) — utbytte svinger med konjunkturer</li><li>Utbytte i 6 år, men med brudd — sammenhengende siden 2025</li></ul></div></div>
+  <div class="investor-profil-seksjon"><div class="investor-badges-rad"><span class="investor-badge investor-risiko-hoy">Høy risiko</span></div><div class="investor-forklaring risiko-hoy"><div class="investor-forklaring-tittel"><span class="investor-badge investor-risiko-hoy">Høy risiko</span></div><ul class="investor-forklaring-liste"><li>Syklisk sektor (Materialer) — utbytte svinger med konjunkturer</li><li>Utbytte i 6 år, men med brudd — sammenhengende siden 2025</li><li>Utbyttet er satt ned før, sist i 2025</li></ul></div></div>
 
   <div class="ai-oppsummering"><h2>Utbyttehistorikken kort fortalt</h2><p>Utbyttet er ned fra 2,99 til 0,30 kroner per aksje i 2022–2025, men for 2024 har vi ikke registrert noe utbytte. Spennet er stort: høyeste år er 19,9 ganger det laveste, så størrelsen på utbetalingen er lite forutsigbar fra år til år.</p></div>
 

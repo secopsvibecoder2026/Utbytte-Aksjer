@@ -192,6 +192,9 @@
     .rekke-seksjon { border-left: 3px solid #22c55e; }
     .nedtur-seksjon { border-left: 3px solid #f59e0b; }
     .delaar-seksjon { border-left: 3px solid #f59e0b; }
+    /* Den mørke regelen over setter border-color på alle sider og tok med seg
+       den gule kanten; varselet så ut som en vanlig boks (2026-10-19). */
+    .dark .delaar-seksjon { border-left-color: #f59e0b; }
     .betalt-seksjon .betalt-tabell { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; font-size: 0.875rem; margin: 0.25rem 0 0.5rem; }
     .betalt-seksjon .betalt-tabell th, .betalt-seksjon .betalt-tabell td { text-align: left; padding: 0.45rem 0.75rem; }
     .betalt-seksjon .betalt-tabell td:not(:first-child), .betalt-seksjon .betalt-tabell th:not(:first-child) { white-space: nowrap; text-align: right; }
@@ -204,6 +207,8 @@
     /* Nøytral variant: forklarer en observasjon, advarer ikke om en feil. */
     .delaar-seksjon.delaar-noytral { border-left-color: #94a3b8; }
     .dark .delaar-seksjon.delaar-noytral { border-left-color: #475569; }
+    .hendelse-seksjon p.hendelse-kilde { font-size: 0.8rem; color: #6b7280; }
+    .dark .hendelse-seksjon p.hendelse-kilde { color: #9ca3af; }
     .mnd-strip { display: grid; grid-template-columns: repeat(12, 1fr); gap: 2px; margin-bottom: 0.85rem; }
     .mnd-celle { text-align: center; padding: 0.4rem 0.1rem; font-size: 0.62rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.02em; color: #9ca3af; background: #f1f5f9; border-radius: 0.25rem; }
     .mnd-celle.mnd-ja { background: #15803d; color: #fff; }
@@ -557,7 +562,7 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
 
   <div class="nedtur-seksjon"><h2>Tåler utbyttet en nedtur?</h2><p>BlueNord ASA deler i dag ut mer enn selskapet tjener (288 % av inntjeningen). Det kan finansieres en stund av oppsparte midler eller salg av eiendeler, men det er ikke et nivå som kan holdes år etter år uten at inntjeningen tar seg opp.</p></div>
 
-  <div class="risiko-seksjon"><h2>Risiko for utbyttet</h2><ul class="risiko-liste"><li>Payout ratio på 288 % betyr at nesten hele inntjeningen deles ut — det gir lite å gå på om resultatet faller</li>
+  <div class="risiko-seksjon"><h2>Risiko for utbyttet</h2><ul class="risiko-liste"><li>Payout ratio på 288 % betyr at selskapet deler ut mer enn det tjener. Det kan ikke vare uten at inntjeningen tar seg opp</li>
 <li>Kort utbyttehistorikk (2 år) gir lite grunnlag for å vurdere hvor stabilt utbyttet er over en konjunktursyklus</li>
 <li>Yielden avhenger sterkt av inngangskursen: samme utbytte gir 29,1 % på 12-månedershøyden (621,00 kr) og 45,2 % på bunnen (399,50 kr)</li>
 <li>Olje- og gasspris påvirker inntjeningen direkte og kan svinge kraftig</li></ul></div>

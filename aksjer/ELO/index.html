@@ -192,6 +192,9 @@
     .rekke-seksjon { border-left: 3px solid #22c55e; }
     .nedtur-seksjon { border-left: 3px solid #f59e0b; }
     .delaar-seksjon { border-left: 3px solid #f59e0b; }
+    /* Den mørke regelen over setter border-color på alle sider og tok med seg
+       den gule kanten; varselet så ut som en vanlig boks (2026-10-19). */
+    .dark .delaar-seksjon { border-left-color: #f59e0b; }
     .betalt-seksjon .betalt-tabell { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; font-size: 0.875rem; margin: 0.25rem 0 0.5rem; }
     .betalt-seksjon .betalt-tabell th, .betalt-seksjon .betalt-tabell td { text-align: left; padding: 0.45rem 0.75rem; }
     .betalt-seksjon .betalt-tabell td:not(:first-child), .betalt-seksjon .betalt-tabell th:not(:first-child) { white-space: nowrap; text-align: right; }
@@ -204,6 +207,8 @@
     /* Nøytral variant: forklarer en observasjon, advarer ikke om en feil. */
     .delaar-seksjon.delaar-noytral { border-left-color: #94a3b8; }
     .dark .delaar-seksjon.delaar-noytral { border-left-color: #475569; }
+    .hendelse-seksjon p.hendelse-kilde { font-size: 0.8rem; color: #6b7280; }
+    .dark .hendelse-seksjon p.hendelse-kilde { color: #9ca3af; }
     .mnd-strip { display: grid; grid-template-columns: repeat(12, 1fr); gap: 2px; margin-bottom: 0.85rem; }
     .mnd-celle { text-align: center; padding: 0.4rem 0.1rem; font-size: 0.62rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.02em; color: #9ca3af; background: #f1f5f9; border-radius: 0.25rem; }
     .mnd-celle.mnd-ja { background: #15803d; color: #fff; }
@@ -568,7 +573,7 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
 
   <div class="utbetalingsaar-seksjon"><h2>Utbyttet gjennom året</h2><div class="mnd-strip"><div class="mnd-celle"><span>jan</span></div><div class="mnd-celle"><span>feb</span></div><div class="mnd-celle"><span>mar</span></div><div class="mnd-celle"><span>apr</span></div><div class="mnd-celle mnd-ja"><span>mai</span></div><div class="mnd-celle"><span>jun</span></div><div class="mnd-celle"><span>jul</span></div><div class="mnd-celle"><span>aug</span></div><div class="mnd-celle"><span>sep</span></div><div class="mnd-celle mnd-ja"><span>okt</span></div><div class="mnd-celle"><span>nov</span></div><div class="mnd-celle"><span>des</span></div></div><p>Elopak ASA betaler ut 2 ganger i året, med ex-dato i mai og oktober — grovt regnet 0,90 kroner per aksje hver gang. Månedene er ex-datoer utledet av hvilke måneder som går igjen over flere år, ikke av en enkelt utbetaling. Selve pengene kommer typisk halvannen til tre uker etter ex-datoen, så en ex-dato sent i måneden betales ut i den neste.</p></div>
 
-  <div class="vurdering-seksjon"><h2>Vurdering som utbytteaksje</h2><p class="vurdering-tekst">Elopak ASA har betalt utbytte de siste 5 årene, men historikken er begrenset. Yielden på 5,2% er klart over sektorsnittet for Industri (3,8%), noe som reflekterer enten høy utbyttekapasitet eller at markedet priser inn høyere risiko.</p></div><div class="driver-seksjon"><h2>Hva driver utbyttet i ELO?</h2><p class="driver-tekst">Ordreinngangen gir 6–18 måneders forutsikt på inntjening. Backlog-størrelse og book-to-bill-ratio er de viktigste ledende indikatorene. Konjunktursensitivitet varierer — selskaper med langsiktige forsvars- eller infrastrukturkontrakter er mer defensive enn de som lever av korte industrioppdrag.</p><p class="driver-tekst">Med 5 år med utbytte er historikken hos Elopak ASA fortsatt kort, så utbyttepolitikken er ikke ferdig prøvd. Payout ratio på 70 % er et nivå som pleier å kunne holdes over tid. Utbyttet går ex halvårlig, i mai og oktober.</p></div>
+  <div class="vurdering-seksjon"><h2>Vurdering som utbytteaksje</h2><p class="vurdering-tekst">Elopak ASA har betalt utbytte de siste 5 årene, en kortere rekke enn de mest etablerte utbyttebetalerne på børsen. Yielden på 5,2% er klart over sektorsnittet for Industri (3,8%), noe som reflekterer enten høy utbyttekapasitet eller at markedet priser inn høyere risiko.</p></div><div class="driver-seksjon"><h2>Hva driver utbyttet i ELO?</h2><p class="driver-tekst">Ordreinngangen gir 6–18 måneders forutsikt på inntjening. Backlog-størrelse og book-to-bill-ratio er de viktigste ledende indikatorene. Konjunktursensitivitet varierer — selskaper med langsiktige forsvars- eller infrastrukturkontrakter er mer defensive enn de som lever av korte industrioppdrag.</p><p class="driver-tekst">Med 5 år med utbytte er historikken hos Elopak ASA fortsatt kort, så utbyttepolitikken er ikke ferdig prøvd. Payout ratio på 70 % er et nivå som pleier å kunne holdes over tid. Utbyttet går ex halvårlig, i mai og oktober.</p></div>
 
   
 

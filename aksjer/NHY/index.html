@@ -192,6 +192,9 @@
     .rekke-seksjon { border-left: 3px solid #22c55e; }
     .nedtur-seksjon { border-left: 3px solid #f59e0b; }
     .delaar-seksjon { border-left: 3px solid #f59e0b; }
+    /* Den mørke regelen over setter border-color på alle sider og tok med seg
+       den gule kanten; varselet så ut som en vanlig boks (2026-10-19). */
+    .dark .delaar-seksjon { border-left-color: #f59e0b; }
     .betalt-seksjon .betalt-tabell { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; font-size: 0.875rem; margin: 0.25rem 0 0.5rem; }
     .betalt-seksjon .betalt-tabell th, .betalt-seksjon .betalt-tabell td { text-align: left; padding: 0.45rem 0.75rem; }
     .betalt-seksjon .betalt-tabell td:not(:first-child), .betalt-seksjon .betalt-tabell th:not(:first-child) { white-space: nowrap; text-align: right; }
@@ -204,6 +207,8 @@
     /* Nøytral variant: forklarer en observasjon, advarer ikke om en feil. */
     .delaar-seksjon.delaar-noytral { border-left-color: #94a3b8; }
     .dark .delaar-seksjon.delaar-noytral { border-left-color: #475569; }
+    .hendelse-seksjon p.hendelse-kilde { font-size: 0.8rem; color: #6b7280; }
+    .dark .hendelse-seksjon p.hendelse-kilde { color: #9ca3af; }
     .mnd-strip { display: grid; grid-template-columns: repeat(12, 1fr); gap: 2px; margin-bottom: 0.85rem; }
     .mnd-celle { text-align: center; padding: 0.4rem 0.1rem; font-size: 0.62rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.02em; color: #9ca3af; background: #f1f5f9; border-radius: 0.25rem; }
     .mnd-celle.mnd-ja { background: #15803d; color: #fff; }
@@ -523,7 +528,7 @@
 
   <div class="desc"><h2>Om selskapet</h2><p>Norsk Hydro ble grunnlagt i 1905 av Sam Eyde og Kristian Birkeland, og gjødselvirksomheten ble skilt ut som Yara i 2004. Igjen står et aluminiumskonsern som eier kjeden fra gruve til ferdig profil. Bauxitten graves ut i Paragominas i delstaten Pará i Brasil og raffineres til alumina ved Alunorte, som Hydro selv omtaler som verdens største aluminaraffineri utenfor Kina. Begge ble kjøpt fra gruveselskapet Vale i 2011, sammen med majoriteten i smelteverket Albras ved siden av. Alumina blir til metall blant annet ved verkene i Norge og ved Qatalum i Qatar, som Hydro eier halvparten av. Lengst ute i kjeden lager Hydro profiler til bygg, bil og industri og smelter om brukt aluminium.</p><p>Strøm og gass er de tunge kostnadene. De norske verkene går på vannkraft, delvis fra egne kraftverk og delvis på lange kontrakter. I 2025 sikret Hydro strøm til Sunndal og Høyanger for årene 2031 til 2040 gjennom to avtaler med Hafslund, og selskapet investerer i pumpekraftverket Illvatn. Utenfor Norge er gassen sårbarheten. Da gassleveransene i Qatar ble kuttet i mars 2026, måtte Qatalum skru produksjonen kraftig ned, og fra august samme år fikk Alunorte ikke gassen kontrakten lovet og måtte kjøpe til spotpris.</p><p>Etter utbyttepolitikken skal minst halvparten av justert resultat gå til ordinært utbytte, regnet over en hel syklus, og et fast minstebeløp per aksje er gulvet. I sterke år kommer tilbakekjøp eller ekstrautbytte i tillegg. Resultatet følger aluminiumsprisen på London Metal Exchange, prisen på alumina og kronekursen, så utbyttet svinger mye mellom årene, mens gulvet setter grensen nedover. Staten er største eier.</p></div>
 
-  <div class="investor-profil-seksjon"><div class="investor-badges-rad"><span class="investor-badge investor-risiko-moderat">Moderat risiko</span></div><div class="investor-forklaring risiko-moderat"><div class="investor-forklaring-tittel"><span class="investor-badge investor-risiko-moderat">Moderat risiko</span></div><ul class="investor-forklaring-liste"><li>Syklisk sektor (Materialer) — utbytte svinger med konjunkturer</li><li>Utbytte i 26 år, men med brudd — sammenhengende siden 2010</li></ul></div></div>
+  <div class="investor-profil-seksjon"><div class="investor-badges-rad"><span class="investor-badge investor-risiko-moderat">Moderat risiko</span></div><div class="investor-forklaring risiko-moderat"><div class="investor-forklaring-tittel"><span class="investor-badge investor-risiko-moderat">Moderat risiko</span></div><ul class="investor-forklaring-liste"><li>Syklisk sektor (Materialer) — utbytte svinger med konjunkturer</li><li>Utbytte i 26 år, men med brudd — sammenhengende siden 2010</li><li>Utbyttet er satt ned før, sist i 2024</li></ul></div></div>
 
   <div class="ai-oppsummering"><h2>Utbyttehistorikken kort fortalt</h2><p>Utbyttet er lavere nå enn i 2022 — ned fra 6,85 til 2,25 kroner per aksje, med 3 nedgangsår i perioden. Spennet er stort: høyeste år er 3,0 ganger det laveste, så størrelsen på utbetalingen er lite forutsigbar fra år til år. Dagens yield på 4,0 % ligger nær aksjens eget 5-årssnitt på 4,9 %.</p></div>
 

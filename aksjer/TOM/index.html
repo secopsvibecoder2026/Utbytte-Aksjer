@@ -192,6 +192,9 @@
     .rekke-seksjon { border-left: 3px solid #22c55e; }
     .nedtur-seksjon { border-left: 3px solid #f59e0b; }
     .delaar-seksjon { border-left: 3px solid #f59e0b; }
+    /* Den mørke regelen over setter border-color på alle sider og tok med seg
+       den gule kanten; varselet så ut som en vanlig boks (2026-10-19). */
+    .dark .delaar-seksjon { border-left-color: #f59e0b; }
     .betalt-seksjon .betalt-tabell { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; font-size: 0.875rem; margin: 0.25rem 0 0.5rem; }
     .betalt-seksjon .betalt-tabell th, .betalt-seksjon .betalt-tabell td { text-align: left; padding: 0.45rem 0.75rem; }
     .betalt-seksjon .betalt-tabell td:not(:first-child), .betalt-seksjon .betalt-tabell th:not(:first-child) { white-space: nowrap; text-align: right; }
@@ -204,6 +207,8 @@
     /* Nøytral variant: forklarer en observasjon, advarer ikke om en feil. */
     .delaar-seksjon.delaar-noytral { border-left-color: #94a3b8; }
     .dark .delaar-seksjon.delaar-noytral { border-left-color: #475569; }
+    .hendelse-seksjon p.hendelse-kilde { font-size: 0.8rem; color: #6b7280; }
+    .dark .hendelse-seksjon p.hendelse-kilde { color: #9ca3af; }
     .mnd-strip { display: grid; grid-template-columns: repeat(12, 1fr); gap: 2px; margin-bottom: 0.85rem; }
     .mnd-celle { text-align: center; padding: 0.4rem 0.1rem; font-size: 0.62rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.02em; color: #9ca3af; background: #f1f5f9; border-radius: 0.25rem; }
     .mnd-celle.mnd-ja { background: #15803d; color: #fff; }
@@ -523,7 +528,7 @@
 
   <div class="desc"><h2>Om selskapet</h2><p>TOMRA ble grunnlagt i 1972 rundt en oppfinnelse: den første automaten som tok imot returflasker i en norsk butikk. Panteautomatene er fortsatt kjernen, men selskapet lager i dag sensorbaserte sorteringsmaskiner for langt mer enn flasker. Recycling sorterer avfall og metallskrap for gjenvinningsindustrien og leverer også til gruvedrift. Food sorterer poteter, nøtter, frukt og grønnsaker hos matprodusenter og pakkerier. Under navnet Horizon prøver selskapet ut nye forretningsområder, som et anlegg i Norge som sorterer plastemballasje til råstoff for gjenvinnere.</p><p>I Collection, panteautomatdelen, kommer mer av inntektene fra tjenester enn fra salg av maskiner. Selskapet tar betalt for service og for å hente og behandle materialet, og i noen markeder eier TOMRA automatene selv og får et gebyr per beholder. Etterspørselen styres av politikk: når et land innfører pant, kommer en bølge av installasjoner, og så følger mange år med service. Polen er det ferskeste eksempelet. Pantesystemet der er nytt, og i andre kvartal 2026 var det allerede selskapets nest største pantemarked i Europa. Recycling har derimot hatt svak ordreinngang, særlig fra avfallssortering i Nord-Amerika og plastgjenvinning i Europa.</p><p>Største eier er det svenske investeringsselskapet Latour, og Latours konsernsjef er styreleder i TOMRA. Regnskapet føres i euro, men utbyttet deles ut i kroner. Utbyttepolitikken er å dele ut mellom to femtedeler og tre femtedeler av resultatet per aksje, så lenge selskapet beholder en kredittvurdering i investment grade. Avstanden til den grensen ble mindre i juni 2026, da Scope satte ned vurderingen ett hakk med lånefinansierte oppkjøp og svakere kontantstrøm som begrunnelse.</p></div>
 
-  <div class="investor-profil-seksjon"><div class="investor-badges-rad"><span class="investor-badge investor-risiko-moderat">Moderat risiko</span></div><div class="investor-forklaring risiko-moderat"><div class="investor-forklaring-tittel"><span class="investor-badge investor-risiko-moderat">Moderat risiko</span></div><ul class="investor-forklaring-liste"><li>Syklisk sektor (Industri) — utbytte svinger med konjunkturer</li><li>Lang utbyttehistorikk (27 år på rad)</li></ul></div></div>
+  <div class="investor-profil-seksjon"><div class="investor-badges-rad"><span class="investor-badge investor-risiko-moderat">Moderat risiko</span></div><div class="investor-forklaring risiko-moderat"><div class="investor-forklaring-tittel"><span class="investor-badge investor-risiko-moderat">Moderat risiko</span></div><ul class="investor-forklaring-liste"><li>Syklisk sektor (Industri) — utbytte svinger med konjunkturer</li><li>Lang utbyttehistorikk (27 år på rad)</li><li>Utbyttet er satt ned før, sist i 2023</li></ul></div></div>
 
   <div class="ai-oppsummering"><h2>Utbyttehistorikken kort fortalt</h2><p>Utbyttet er lavere nå enn i 2022 — ned fra 3,00 til 2,15 kroner per aksje, med 1 nedgangsår i perioden. Dagens yield på 2,3 % ligger nær aksjens eget 5-årssnitt på 2,2 %.</p></div>
 

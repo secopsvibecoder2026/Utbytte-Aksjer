@@ -192,6 +192,9 @@
     .rekke-seksjon { border-left: 3px solid #22c55e; }
     .nedtur-seksjon { border-left: 3px solid #f59e0b; }
     .delaar-seksjon { border-left: 3px solid #f59e0b; }
+    /* Den mørke regelen over setter border-color på alle sider og tok med seg
+       den gule kanten; varselet så ut som en vanlig boks (2026-10-19). */
+    .dark .delaar-seksjon { border-left-color: #f59e0b; }
     .betalt-seksjon .betalt-tabell { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; font-size: 0.875rem; margin: 0.25rem 0 0.5rem; }
     .betalt-seksjon .betalt-tabell th, .betalt-seksjon .betalt-tabell td { text-align: left; padding: 0.45rem 0.75rem; }
     .betalt-seksjon .betalt-tabell td:not(:first-child), .betalt-seksjon .betalt-tabell th:not(:first-child) { white-space: nowrap; text-align: right; }
@@ -204,6 +207,8 @@
     /* Nøytral variant: forklarer en observasjon, advarer ikke om en feil. */
     .delaar-seksjon.delaar-noytral { border-left-color: #94a3b8; }
     .dark .delaar-seksjon.delaar-noytral { border-left-color: #475569; }
+    .hendelse-seksjon p.hendelse-kilde { font-size: 0.8rem; color: #6b7280; }
+    .dark .hendelse-seksjon p.hendelse-kilde { color: #9ca3af; }
     .mnd-strip { display: grid; grid-template-columns: repeat(12, 1fr); gap: 2px; margin-bottom: 0.85rem; }
     .mnd-celle { text-align: center; padding: 0.4rem 0.1rem; font-size: 0.62rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.02em; color: #9ca3af; background: #f1f5f9; border-radius: 0.25rem; }
     .mnd-celle.mnd-ja { background: #15803d; color: #fff; }
@@ -523,7 +528,7 @@
 
   <div class="desc"><h2>Om selskapet</h2><p>Da Klæbu ble slått sammen med Trondheim i 2020, ble Nidaros Sparebank en Trondheimsbank også på papiret. Banken ble stiftet i 1858 og har fortsatt hovedkontoret i Klæbu, men byen var allerede blitt det største markedet, og den har et eget bykontor på Brattøra. Egenkapitalbevisene har vært handlet på Euronext Growth siden juni 2019.</p><p>Nidaros har gått ut av Eika Gruppen og er nå med i LOKALBANK. Bruddet hadde en pris. Eika ville ikke lenger selge sine produkter gjennom banken, så leverandørene måtte byttes, og skadeforsikringene til kundene måtte bygges opp på nytt hos Frende Forsikring. Nye boliglån som flyttes ut av balansen, går til Verd Boligkreditt. I august 2025 avtalte banken å overta innskudd og utlån fra Personellservice Trøndelag, en spareforening for ansatte og pensjonister i offentlig sektor i Trøndelag, der de fleste medlemmene bor i Trondheim. Porteføljen var for det meste innskudd. Det gir banken mindre behov for å låne i markedet og et større fotfeste i byen.</p><p>Neste steg kan bli en fusjon. I september 2026 inngikk banken en intensjonsavtale med nabobanken Stadsbygd Sparebank, som har kontorer i Rissa og Leksvik og også er med i LOKALBANK. Etter avtalen blir Nidaros overtakende bank, men forretningskontoret er foreslått lagt til Indre Fosen. Begge bankene skal opprette sparebankstiftelser som får egenkapitalbevis, og det vil gi beviseierne en klart større del av egenkapitalen enn i dag. Målet er juridisk sammenslåing 1. juli 2027. Inntil videre gjelder dagens politikk: mellom tre femdeler og fire femdeler av beviseiernes del av overskuddet skal gå til kontantutbytte, og banken vil ikke gå over den øvre grensen. De fleste av de store eierne er også kunder i banken.</p></div>
 
-  <div class="investor-profil-seksjon"><div class="investor-badges-rad"><span class="investor-badge investor-risiko-moderat">Moderat risiko</span></div><div class="investor-forklaring risiko-moderat"><div class="investor-forklaring-tittel"><span class="investor-badge investor-risiko-moderat">Moderat risiko</span></div><ul class="investor-forklaring-liste"><li>Defensiv sektor (Finans) — relativt stabile inntekter</li><li>Lang utbyttehistorikk (7 år på rad)</li><li>Svært høy payout ratio (112%) — lite buffer ved inntjeningsfall</li><li>Handles på Euronext Growth, som ikke er et regulert marked — kan ikke holdes i ASK i dag</li></ul></div></div>
+  <div class="investor-profil-seksjon"><div class="investor-badges-rad"><span class="investor-badge investor-risiko-moderat">Moderat risiko</span></div><div class="investor-forklaring risiko-moderat"><div class="investor-forklaring-tittel"><span class="investor-badge investor-risiko-moderat">Moderat risiko</span></div><ul class="investor-forklaring-liste"><li>Defensiv sektor (Finans) — relativt stabile inntekter</li><li>Lang utbyttehistorikk (7 år på rad)</li><li>Utbyttet er satt ned før, sist i 2024</li><li>Svært høy payout ratio (112%) — lite buffer ved inntjeningsfall</li><li>Handles på Euronext Growth, som ikke er et regulert marked — kan ikke holdes i ASK i dag</li></ul></div></div>
 
   <div class="ai-oppsummering"><h2>Utbyttehistorikken kort fortalt</h2><p>Utbyttet ligger omtrent på samme nivå som i 2022, men har svingt underveis med 1 nedgangsår. Dagens yield på 5,4 % er lavere enn aksjens eget 5-årssnitt på 6,9 %.</p></div>
 
@@ -572,7 +577,7 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
 
   <div class="nedtur-seksjon"><h2>Tåler utbyttet en nedtur?</h2><p>Nidaros Sparebank deler i dag ut mer enn selskapet tjener (112 % av inntjeningen). Det kan finansieres en stund av oppsparte midler eller salg av eiendeler, men det er ikke et nivå som kan holdes år etter år uten at inntjeningen tar seg opp. Selskapet har satt ned utbyttet før, så terskelen for å gjøre det igjen er neppe høy.</p></div>
 
-  <div class="risiko-seksjon"><h2>Risiko for utbyttet</h2><ul class="risiko-liste"><li>Payout ratio på 112 % betyr at nesten hele inntjeningen deles ut — det gir lite å gå på om resultatet faller</li>
+  <div class="risiko-seksjon"><h2>Risiko for utbyttet</h2><ul class="risiko-liste"><li>Payout ratio på 112 % betyr at selskapet deler ut mer enn det tjener. Det kan ikke vare uten at inntjeningen tar seg opp</li>
 <li>Utbyttet er kuttet før — fra 8,60 til 5,67 kroner i 2024</li>
 <li>Rentenivå påvirker netto renteinntekter og utlånsmargin</li>
 <li>Økte kredittap i nedgangstider kan presse resultater</li></ul></div>

@@ -192,6 +192,9 @@
     .rekke-seksjon { border-left: 3px solid #22c55e; }
     .nedtur-seksjon { border-left: 3px solid #f59e0b; }
     .delaar-seksjon { border-left: 3px solid #f59e0b; }
+    /* Den mørke regelen over setter border-color på alle sider og tok med seg
+       den gule kanten; varselet så ut som en vanlig boks (2026-10-19). */
+    .dark .delaar-seksjon { border-left-color: #f59e0b; }
     .betalt-seksjon .betalt-tabell { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; font-size: 0.875rem; margin: 0.25rem 0 0.5rem; }
     .betalt-seksjon .betalt-tabell th, .betalt-seksjon .betalt-tabell td { text-align: left; padding: 0.45rem 0.75rem; }
     .betalt-seksjon .betalt-tabell td:not(:first-child), .betalt-seksjon .betalt-tabell th:not(:first-child) { white-space: nowrap; text-align: right; }
@@ -204,6 +207,8 @@
     /* Nøytral variant: forklarer en observasjon, advarer ikke om en feil. */
     .delaar-seksjon.delaar-noytral { border-left-color: #94a3b8; }
     .dark .delaar-seksjon.delaar-noytral { border-left-color: #475569; }
+    .hendelse-seksjon p.hendelse-kilde { font-size: 0.8rem; color: #6b7280; }
+    .dark .hendelse-seksjon p.hendelse-kilde { color: #9ca3af; }
     .mnd-strip { display: grid; grid-template-columns: repeat(12, 1fr); gap: 2px; margin-bottom: 0.85rem; }
     .mnd-celle { text-align: center; padding: 0.4rem 0.1rem; font-size: 0.62rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.02em; color: #9ca3af; background: #f1f5f9; border-radius: 0.25rem; }
     .mnd-celle.mnd-ja { background: #15803d; color: #fff; }
@@ -523,7 +528,7 @@
 
   <div class="desc"><h2>Om selskapet</h2><p>Itera er et norsk konsulentselskap som har flyttet en stor del av utviklingsarbeidet østover i Europa. Røttene går tilbake til 1994, da Arne Mjøs grunnla konsulentselskapet Objectware, og Itera kom på Oslo Børs i 1999. Mjøs leder fortsatt selskapet, og investeringsselskapet hans er klart største aksjonær. Kundene finnes i bank og forsikring, energi, olje og gass, offentlig sektor, handel, forsvar og fiskeri, og blant de største er Gjensidige, Santander Consumer Bank, IMDi, Vattenfall, Mastercard og Landsbankinn.</p><p>Leveransemodellen er det særegne. Itera åpnet kontor i Kyiv i 2008 og i Lviv i 2011, senere kom Bratislava, og i 2022 Brno, Žilina og Kraków. Rådgivning og kundekontakt skjer i Norden, mens mye av utviklingen gjøres i Sentral- og Øst-Europa, i samme tidssone som kundene. Ifølge selskapet gjør det Itera i stand til å vokse raskere og ta større oppdrag enn kontorene i Norden kunne alene. Baksiden er en direkte eksponering mot krigen i Ukraina, der en stor gruppe ansatte har jobbet videre siden invasjonen. Det Itera selv omtaler som vekstmotoren, er drift og forvaltning av kundenes skyløsninger og applikasjoner, som gir mer gjentakende inntekter enn rene prosjekter.</p><p>Itera trenger lite arbeidskapital, og investeringene er små. Styret skal etter politikken foreslå utbytte på minst halve det justerte årsresultatet etter skatt, og selskapet skriver selv at overskuddslikviditet gjerne sendes til aksjonærene, typisk to ganger i året. Det skjer som et ordinært utbytte etter generalforsamlingen om våren, og generalforsamlingen kan i tillegg gi styret fullmakt til et tilleggsutbytte senere på året hvis økonomien tillater det. Høsten 2025 ble det delt ut et slikt tilleggsutbytte.</p></div>
 
-  <div class="investor-profil-seksjon"><div class="investor-badges-rad"><span class="investor-badge investor-risiko-moderat">Moderat risiko</span></div><div class="investor-forklaring risiko-moderat"><div class="investor-forklaring-tittel"><span class="investor-badge investor-risiko-moderat">Moderat risiko</span></div><ul class="investor-forklaring-liste"><li>Sektor (Informasjonsteknologi) har en viss konjunktureksponering</li><li>Utbytte i 21 år, men med brudd — sammenhengende siden 2013</li><li>Svært høy payout ratio (111%) — lite buffer ved inntjeningsfall</li></ul></div></div>
+  <div class="investor-profil-seksjon"><div class="investor-badges-rad"><span class="investor-badge investor-risiko-moderat">Moderat risiko</span></div><div class="investor-forklaring risiko-moderat"><div class="investor-forklaring-tittel"><span class="investor-badge investor-risiko-moderat">Moderat risiko</span></div><ul class="investor-forklaring-liste"><li>Sektor (Informasjonsteknologi) har en viss konjunktureksponering</li><li>Utbytte i 21 år, men med brudd — sammenhengende siden 2013</li><li>Utbyttet er satt ned før, sist i 2025</li><li>Svært høy payout ratio (111%) — lite buffer ved inntjeningsfall</li></ul></div></div>
 
   <div class="ai-oppsummering"><h2>Utbyttehistorikken kort fortalt</h2><p>Utbyttet er lavere nå enn i 2022 — ned fra 0,50 til 0,30 kroner per aksje, med 2 nedgangsår i perioden. Høyeste år er 2,3 ganger det laveste — merkbare svingninger, men innenfor et gjenkjennelig spenn. Dagens yield på 5,3 % er lavere enn aksjens eget 5-årssnitt på 8,0 %.</p></div>
 
@@ -572,7 +577,7 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
 
   <div class="nedtur-seksjon"><h2>Tåler utbyttet en nedtur?</h2><p>Itera ASA deler i dag ut mer enn selskapet tjener (111 % av inntjeningen). Det kan finansieres en stund av oppsparte midler eller salg av eiendeler, men det er ikke et nivå som kan holdes år etter år uten at inntjeningen tar seg opp. Selskapet har satt ned utbyttet før, så terskelen for å gjøre det igjen er neppe høy.</p></div>
 
-  <div class="risiko-seksjon"><h2>Risiko for utbyttet</h2><ul class="risiko-liste"><li>Payout ratio på 111 % betyr at nesten hele inntjeningen deles ut — det gir lite å gå på om resultatet faller</li>
+  <div class="risiko-seksjon"><h2>Risiko for utbyttet</h2><ul class="risiko-liste"><li>Payout ratio på 111 % betyr at selskapet deler ut mer enn det tjener. Det kan ikke vare uten at inntjeningen tar seg opp</li>
 <li>Utbyttet er kuttet før — fra 0,40 til 0,30 kroner i 2025</li>
 <li>Yielden avhenger sterkt av inngangskursen: samme utbytte gir 3,3 % på 12-månedershøyden (9,00 kr) og 5,4 % på bunnen (5,52 kr)</li>
 <li>Rask teknologiutvikling kan gjøre produkter utdaterte</li></ul></div>

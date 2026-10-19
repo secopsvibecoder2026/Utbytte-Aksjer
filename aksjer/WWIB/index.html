@@ -192,6 +192,9 @@
     .rekke-seksjon { border-left: 3px solid #22c55e; }
     .nedtur-seksjon { border-left: 3px solid #f59e0b; }
     .delaar-seksjon { border-left: 3px solid #f59e0b; }
+    /* Den mørke regelen over setter border-color på alle sider og tok med seg
+       den gule kanten; varselet så ut som en vanlig boks (2026-10-19). */
+    .dark .delaar-seksjon { border-left-color: #f59e0b; }
     .betalt-seksjon .betalt-tabell { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; font-size: 0.875rem; margin: 0.25rem 0 0.5rem; }
     .betalt-seksjon .betalt-tabell th, .betalt-seksjon .betalt-tabell td { text-align: left; padding: 0.45rem 0.75rem; }
     .betalt-seksjon .betalt-tabell td:not(:first-child), .betalt-seksjon .betalt-tabell th:not(:first-child) { white-space: nowrap; text-align: right; }
@@ -204,6 +207,8 @@
     /* Nøytral variant: forklarer en observasjon, advarer ikke om en feil. */
     .delaar-seksjon.delaar-noytral { border-left-color: #94a3b8; }
     .dark .delaar-seksjon.delaar-noytral { border-left-color: #475569; }
+    .hendelse-seksjon p.hendelse-kilde { font-size: 0.8rem; color: #6b7280; }
+    .dark .hendelse-seksjon p.hendelse-kilde { color: #9ca3af; }
     .mnd-strip { display: grid; grid-template-columns: repeat(12, 1fr); gap: 2px; margin-bottom: 0.85rem; }
     .mnd-celle { text-align: center; padding: 0.4rem 0.1rem; font-size: 0.62rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.02em; color: #9ca3af; background: #f1f5f9; border-radius: 0.25rem; }
     .mnd-celle.mnd-ja { background: #15803d; color: #fff; }
@@ -523,7 +528,7 @@
 
   <div class="desc"><h2>Om selskapet</h2><p>WWIB er B-aksjen i Wilh. Wilhelmsen Holding, og den eneste forskjellen fra A-aksjen (WWI) er stemmeretten. Ifølge selskapets egne opplysninger gir B-aksjen ingen stemme på generalforsamlingen, mens hver aksje ellers gir de samme rettighetene. Utbyttet per aksje er derfor det samme i begge klassene, og selskapet kjøper tilbake og sletter aksjer i begge. B-aksjene er en klar minoritet av aksjekapitalen. Kontrollen ligger uansett hos Tallyman AS, som Thomas Wilhelmsen kontrollerer og som har flertallet av stemmene, så heller ikke A-aksjonærer utenfor familien kan overstyre familien. Siden kroner i utbytte er like, er det bare kursforskjellen mellom de to klassene som gir ulik avkastning målt i prosent.</p><p>Selve virksomheten er den samme uansett klasse. Wilhelmsen ble grunnlagt i 1861 og lever av tre ting. Det første er salg av utstyr, kjemikalier og tjenester til skip i havner verden over. Det andre er NorSea, som driver forsyningsbaser for offshoreindustrien på norsk, dansk og britisk side. Det tredje er store eierposter i bilskipsrederiet Wallenius Wilhelmsen og i koreanske Hyundai Glovis, to selskaper som lever av å frakte og håndtere biler.</p><p>Selskapet vil gi aksjonærene et jevnt årlig utbytte, delt i to utbetalinger. Den første vedtas av generalforsamlingen om våren, og den andre deles ut om høsten etter en fullmakt som styret får samtidig. Mye av kontantene som gjør dette mulig, kommer fra utbyttet Wallenius Wilhelmsen betaler til sine eiere. Når bilfrakten går godt, øker det rommet for utdeling også i Wilhelmsen, og motsatt.</p></div>
 
-  <div class="investor-profil-seksjon"><div class="investor-badges-rad"><span class="investor-badge investor-risiko-lav">Lav risiko</span><span class="investor-badge investor-mal">Utbyttevekst</span></div><div class="investor-forklaring risiko-lav"><div class="investor-forklaring-tittel"><span class="investor-badge investor-risiko-lav">Lav risiko</span></div><ul class="investor-forklaring-liste"><li>Syklisk sektor (Industri) — utbytte svinger med konjunkturer</li><li>Lang utbyttehistorikk (27 år på rad)</li><li>Sunn payout ratio (22%) — god buffer</li></ul></div><div class="investor-mal-seksjon"><p class="investor-mal-header">Passer for</p><div class="investor-mal-rad"><span class="investor-badge investor-mal">Utbyttevekst</span><span class="investor-mal-tekst">Passer investorer med lang horisont som vil at utbyttet skal vokse raskere enn inflasjonen. Holder veksten på +60,7% per år seg, dobles utbyttet på ca. 1 år.</span></div></div></div>
+  <div class="investor-profil-seksjon"><div class="investor-badges-rad"><span class="investor-badge investor-risiko-lav">Lav risiko</span><span class="investor-badge investor-mal">Utbyttevekst</span></div><div class="investor-forklaring risiko-lav"><div class="investor-forklaring-tittel"><span class="investor-badge investor-risiko-lav">Lav risiko</span></div><ul class="investor-forklaring-liste"><li>Syklisk sektor (Industri) — utbytte svinger med konjunkturer</li><li>Lang utbyttehistorikk (27 år på rad)</li><li>Sunn payout ratio (22%) — god buffer</li></ul></div><div class="investor-mal-seksjon"><p class="investor-mal-header">Passer for</p><div class="investor-mal-rad"><span class="investor-badge investor-mal">Utbyttevekst</span><span class="investor-mal-tekst">Passer investorer med lang horisont som vil at utbyttet skal vokse raskere enn inflasjonen. Historisk vekst +60,7% per år. En så høy takt sier mest om hvor lavt utbyttet startet, så vi regner den ikke fram.</span></div></div></div>
 
   <div class="ai-oppsummering"><h2>Utbyttehistorikken kort fortalt</h2><p>Utbyttet har steget uten et eneste kutt fra 2022–2025, fra 4,00 til 20,00 kroner per aksje. Veksten er kraftig: siste år er 5,0 ganger det første. Så bratte løft holder sjelden samme takt over tid. Dagens yield på 2,4 % ligger over aksjens eget 5-årssnitt på 1,2 %.</p></div>
 

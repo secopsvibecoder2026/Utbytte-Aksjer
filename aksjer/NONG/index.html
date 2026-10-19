@@ -192,6 +192,9 @@
     .rekke-seksjon { border-left: 3px solid #22c55e; }
     .nedtur-seksjon { border-left: 3px solid #f59e0b; }
     .delaar-seksjon { border-left: 3px solid #f59e0b; }
+    /* Den mørke regelen over setter border-color på alle sider og tok med seg
+       den gule kanten; varselet så ut som en vanlig boks (2026-10-19). */
+    .dark .delaar-seksjon { border-left-color: #f59e0b; }
     .betalt-seksjon .betalt-tabell { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; font-size: 0.875rem; margin: 0.25rem 0 0.5rem; }
     .betalt-seksjon .betalt-tabell th, .betalt-seksjon .betalt-tabell td { text-align: left; padding: 0.45rem 0.75rem; }
     .betalt-seksjon .betalt-tabell td:not(:first-child), .betalt-seksjon .betalt-tabell th:not(:first-child) { white-space: nowrap; text-align: right; }
@@ -204,6 +207,8 @@
     /* Nøytral variant: forklarer en observasjon, advarer ikke om en feil. */
     .delaar-seksjon.delaar-noytral { border-left-color: #94a3b8; }
     .dark .delaar-seksjon.delaar-noytral { border-left-color: #475569; }
+    .hendelse-seksjon p.hendelse-kilde { font-size: 0.8rem; color: #6b7280; }
+    .dark .hendelse-seksjon p.hendelse-kilde { color: #9ca3af; }
     .mnd-strip { display: grid; grid-template-columns: repeat(12, 1fr); gap: 2px; margin-bottom: 0.85rem; }
     .mnd-celle { text-align: center; padding: 0.4rem 0.1rem; font-size: 0.62rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.02em; color: #9ca3af; background: #f1f5f9; border-radius: 0.25rem; }
     .mnd-celle.mnd-ja { background: #15803d; color: #fff; }
@@ -523,7 +528,7 @@
 
   <div class="desc"><h2>Om selskapet</h2><p>Tromsø Sparebank ble stiftet i 1836 som den første sparebanken i Nord-Norge. Dagens SpareBank 1 Nord-Norge er bygget av den banken og en lang rekke lokale sparebanker fra Finnmark til Nordland, og hovedkontoret ligger fortsatt i Storgata i Tromsø. Utlånene er tett knyttet til landsdelen: det meste går til kunder i Troms og Finnmark, Svalbard medregnet, og i Nordland, og personkundene står for mesteparten. Blant bedriftskundene er fiskeri og havbruk viktige bransjer, og i årsrapporten for 2025 trekker banken fram kvotenedgangen for torsk som en utfordring for fiskerinæringen.</p><p>Ved siden av banken eier konsernet tre selskaper som SpareBank 1 Helgeland er medeier i: SpareBank 1 Finans Nord-Norge, som driver med leasing og salgspantlån, EiendomsMegler 1 Nord-Norge og SpareBank 1 Regnskapshuset Nord-Norge. Gjennom SpareBank 1-alliansen er banken også en av de største eierne i SpareBank 1 Gruppen, som blant annet eier Fremtind Forsikring. Resultatandelen derfra kommer i tillegg til inntektene fra egen bankdrift.</p><p>Utbyttet har to mottakere. Representantskapet deler overskuddet mellom egenkapitalbeviseierne og samfunnskapitalen, med samme utdelingsgrad til begge. Samfunnets andel av egenkapitalen er større enn beviseiernes, og den delen går som samfunnsutbytte til Samfunnsløftet, Stiftelsen for Nord-Norge og Sparebankstiftelsen SpareBank 1 Nord-Norge. Sparebankstiftelsen sparer en del av pengene, slik at samfunnet kan være med hvis banken en dag trenger ny egenkapital, og den er også den største nordnorske eieren av egenkapitalbevisene. Målet er å dele ut mer enn halvparten av overskuddet. Styret sier samtidig at nivået må ta hensyn til kapitaldekningen og muligheten for lønnsom vekst.</p></div>
 
-  <div class="investor-profil-seksjon"><div class="investor-badges-rad"><span class="investor-badge investor-risiko-lav">Lav risiko</span><span class="investor-badge investor-mal">Stabil inntekt</span></div><div class="investor-forklaring risiko-lav"><div class="investor-forklaring-tittel"><span class="investor-badge investor-risiko-lav">Lav risiko</span></div><ul class="investor-forklaring-liste"><li>Defensiv sektor (Finans) — relativt stabile inntekter</li><li>Lang utbyttehistorikk (24 år på rad)</li></ul></div><div class="investor-mal-seksjon"><p class="investor-mal-header">Passer for</p><div class="investor-mal-rad"><span class="investor-badge investor-mal">Stabil inntekt</span><span class="investor-mal-tekst">Passer investorer som vil ha forutsigbar utbytteinntekt uten store overraskelser. 24 år med sammenhengende utbetaling i defensiv sektor gir god synlighet fremover.</span></div></div></div>
+  <div class="investor-profil-seksjon"><div class="investor-badges-rad"><span class="investor-badge investor-risiko-moderat">Moderat risiko</span></div><div class="investor-forklaring risiko-moderat"><div class="investor-forklaring-tittel"><span class="investor-badge investor-risiko-moderat">Moderat risiko</span></div><ul class="investor-forklaring-liste"><li>Defensiv sektor (Finans) — relativt stabile inntekter</li><li>Lang utbyttehistorikk (24 år på rad)</li><li>Utbyttet er satt ned før, sist i 2023</li></ul></div></div>
 
   <div class="ai-oppsummering"><h2>Utbyttehistorikken kort fortalt</h2><p>Utbyttet er lavere nå enn i 2022 — ned fra 10,40 til 8,75 kroner per aksje, med 2 nedgangsår i perioden. Dagens yield på 4,8 % ligger nær aksjens eget 5-årssnitt på 4,4 %.</p></div>
 

@@ -192,6 +192,9 @@
     .rekke-seksjon { border-left: 3px solid #22c55e; }
     .nedtur-seksjon { border-left: 3px solid #f59e0b; }
     .delaar-seksjon { border-left: 3px solid #f59e0b; }
+    /* Den mørke regelen over setter border-color på alle sider og tok med seg
+       den gule kanten; varselet så ut som en vanlig boks (2026-10-19). */
+    .dark .delaar-seksjon { border-left-color: #f59e0b; }
     .betalt-seksjon .betalt-tabell { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; font-size: 0.875rem; margin: 0.25rem 0 0.5rem; }
     .betalt-seksjon .betalt-tabell th, .betalt-seksjon .betalt-tabell td { text-align: left; padding: 0.45rem 0.75rem; }
     .betalt-seksjon .betalt-tabell td:not(:first-child), .betalt-seksjon .betalt-tabell th:not(:first-child) { white-space: nowrap; text-align: right; }
@@ -204,6 +207,8 @@
     /* Nøytral variant: forklarer en observasjon, advarer ikke om en feil. */
     .delaar-seksjon.delaar-noytral { border-left-color: #94a3b8; }
     .dark .delaar-seksjon.delaar-noytral { border-left-color: #475569; }
+    .hendelse-seksjon p.hendelse-kilde { font-size: 0.8rem; color: #6b7280; }
+    .dark .hendelse-seksjon p.hendelse-kilde { color: #9ca3af; }
     .mnd-strip { display: grid; grid-template-columns: repeat(12, 1fr); gap: 2px; margin-bottom: 0.85rem; }
     .mnd-celle { text-align: center; padding: 0.4rem 0.1rem; font-size: 0.62rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.02em; color: #9ca3af; background: #f1f5f9; border-radius: 0.25rem; }
     .mnd-celle.mnd-ja { background: #15803d; color: #fff; }
@@ -523,9 +528,9 @@
 
   <div class="desc"><h2>Om selskapet</h2><p>Entra ble opprettet sommeren 2000, da staten skilte ut sine utleiebygg i et eget selskap. Formålet var å dekke statens behov for lokaler, men selskapet fikk også leie ut til andre. Arven synes fortsatt i leietakerlisten. En stor del av leieinntekten kommer fra offentlige leietakere som Skatteetaten, politiet, Nasjonalbiblioteket, NAV, Universitetet i Oslo og Forsvaret, resten fra private firmaer som Sopra Steria og Norconsult. Staten solgte seg ned etter børsnoteringen i 2014. I dag er de to svenske eiendomsselskapene Fastighets AB Balder og Castellum klart største eiere, og begge har folk i styret og valgkomiteen.</p><p>Porteføljen består først og fremst av kontorbygg, og det meste av verdien ligger i Oslo. Resten er i Sandvika, Drammen, Bergen og Stavanger. Trondheim-porteføljen ble solgt i 2024. Leiekontraktene justeres med konsumprisindeksen, så leieinntekten følger inflasjonen. Verdien av byggene gjør det ikke på samme måte. Den bestemmes av avkastningskravet takstmennene bruker, og når det går opp, blir verdien skrevet ned og resultatet negativt selv om leien kommer inn som før.</p><p>For regnskapsårene 2023 og 2024 ble det ikke delt ut noe, for å styrke balansen. Fra 2025 er det tilbake med en ny politikk: minst tre tideler av kontantresultatet skal deles ut hvert halvår, mot rundt tre femdeler før, og tilbakekjøp av aksjer teller med. Styret vil ha rom til å holde på kredittvurderingen fra Moody's og til å investere i nye prosjekter. Det som avgjør, er leieinntekt minus drift og renter, ikke resultatet etter verdiendringer. Banklånene setter i tillegg grenser, med krav både til hvor mye av inntjeningen rentene kan ta og til gjelden målt mot eiendomsverdiene.</p></div>
 
-  <div class="investor-profil-seksjon"><div class="investor-badges-rad"><span class="investor-badge investor-risiko-lav">Lav risiko</span></div><div class="investor-forklaring risiko-lav"><div class="investor-forklaring-tittel"><span class="investor-badge investor-risiko-lav">Lav risiko</span></div><ul class="investor-forklaring-liste"><li>Defensiv sektor (Eiendom) — relativt stabile inntekter</li><li>Utbytte i 11 år, men med brudd — sammenhengende siden 2025</li><li>Sunn payout ratio (18%) — god buffer</li></ul></div></div>
+  <div class="investor-profil-seksjon"><div class="investor-badges-rad"><span class="investor-badge investor-risiko-moderat">Moderat risiko</span></div><div class="investor-forklaring risiko-moderat"><div class="investor-forklaring-tittel"><span class="investor-badge investor-risiko-moderat">Moderat risiko</span></div><ul class="investor-forklaring-liste"><li>Defensiv sektor (Eiendom) — relativt stabile inntekter</li><li>Utbytte i 11 år, men med brudd — sammenhengende siden 2025</li><li>Utbyttet er satt ned før, sist i 2025</li><li>Sunn payout ratio (18%) — god buffer</li></ul></div></div>
 
-  <div class="ai-oppsummering"><h2>Utbyttehistorikken kort fortalt</h2><p>Utbyttet er ned fra 5,20 til 1,10 kroner per aksje i 2022–2025, men for 2024 har vi ikke registrert noe utbytte. Spennet er stort: høyeste år er 4,7 ganger det laveste, så størrelsen på utbetalingen er lite forutsigbar fra år til år. Dagens yield på 2,4 % ligger nær aksjens eget 5-årssnitt på 3,0 %.</p></div>
+  <div class="ai-oppsummering"><h2>Utbyttehistorikken kort fortalt</h2><p>Utbyttet er ned fra 5,20 til 1,10 kroner per aksje i 2022–2025, men for 2024 har vi ikke registrert noe utbytte. Spennet er stort: høyeste år er 4,7 ganger det laveste, så størrelsen på utbetalingen er lite forutsigbar fra år til år. Dagens yield på 2,4 % er lavere enn aksjens eget 5-årssnitt på 3,0 %.</p></div>
 
   </section>
 

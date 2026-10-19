@@ -192,6 +192,9 @@
     .rekke-seksjon { border-left: 3px solid #22c55e; }
     .nedtur-seksjon { border-left: 3px solid #f59e0b; }
     .delaar-seksjon { border-left: 3px solid #f59e0b; }
+    /* Den mørke regelen over setter border-color på alle sider og tok med seg
+       den gule kanten; varselet så ut som en vanlig boks (2026-10-19). */
+    .dark .delaar-seksjon { border-left-color: #f59e0b; }
     .betalt-seksjon .betalt-tabell { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; font-size: 0.875rem; margin: 0.25rem 0 0.5rem; }
     .betalt-seksjon .betalt-tabell th, .betalt-seksjon .betalt-tabell td { text-align: left; padding: 0.45rem 0.75rem; }
     .betalt-seksjon .betalt-tabell td:not(:first-child), .betalt-seksjon .betalt-tabell th:not(:first-child) { white-space: nowrap; text-align: right; }
@@ -204,6 +207,8 @@
     /* Nøytral variant: forklarer en observasjon, advarer ikke om en feil. */
     .delaar-seksjon.delaar-noytral { border-left-color: #94a3b8; }
     .dark .delaar-seksjon.delaar-noytral { border-left-color: #475569; }
+    .hendelse-seksjon p.hendelse-kilde { font-size: 0.8rem; color: #6b7280; }
+    .dark .hendelse-seksjon p.hendelse-kilde { color: #9ca3af; }
     .mnd-strip { display: grid; grid-template-columns: repeat(12, 1fr); gap: 2px; margin-bottom: 0.85rem; }
     .mnd-celle { text-align: center; padding: 0.4rem 0.1rem; font-size: 0.62rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.02em; color: #9ca3af; background: #f1f5f9; border-radius: 0.25rem; }
     .mnd-celle.mnd-ja { background: #15803d; color: #fff; }
@@ -558,14 +563,14 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
 
   
 
-  <div class="vurdering-seksjon"><h2>Vurdering som utbytteaksje</h2><p class="vurdering-tekst">Pexip Holding ASA har betalt utbytte de siste 3 årene, men historikken er begrenset. Yielden på 5,3% er nær sektorsnittet for Informasjonsteknologi (5,0%).</p></div><div class="driver-seksjon"><h2>Hva driver utbyttet i PEXIP?</h2><p class="driver-tekst">Omsetningsvekst og marginer drives av kontrakter, konsulentkapasitet og produktlisenser. IT-sektoren er generelt mindre syklisk enn energi og shipping, men utbyttet er sjelden høyt — selskaper foretrekker å reinvestere i vekst.</p><p class="driver-tekst">Med 3 år med utbytte er historikken hos Pexip Holding ASA fortsatt kort, så utbyttepolitikken er ikke ferdig prøvd. Utbyttet går ex årlig, i april.</p></div>
+  <div class="vurdering-seksjon"><h2>Vurdering som utbytteaksje</h2><p class="vurdering-tekst">Pexip Holding ASA har betalt utbytte de siste 3 årene, en kortere rekke enn de mest etablerte utbyttebetalerne på børsen. Yielden på 5,3% er nær sektorsnittet for Informasjonsteknologi (5,0%).</p></div><div class="driver-seksjon"><h2>Hva driver utbyttet i PEXIP?</h2><p class="driver-tekst">Omsetningsvekst og marginer drives av kontrakter, konsulentkapasitet og produktlisenser. IT-sektoren er generelt mindre syklisk enn energi og shipping, men utbyttet er sjelden høyt — selskaper foretrekker å reinvestere i vekst.</p><p class="driver-tekst">Med 3 år med utbytte er historikken hos Pexip Holding ASA fortsatt kort, så utbyttepolitikken er ikke ferdig prøvd. Utbyttet går ex årlig, i april.</p></div>
 
   <div class="nedtur-seksjon"><h2>Tåler utbyttet en nedtur?</h2><p>Med en payout ratio på 88 % kan inntjeningen falle rundt 12 % før utbyttet spiser hele overskuddet. Faller den mer enn det, må selskapet enten tære på kassen, låne, eller sette ned utbyttet.</p></div>
 
   <div class="risiko-seksjon"><h2>Risiko for utbyttet</h2><ul class="risiko-liste"><li>Payout ratio på 88 % er i øvre sjikt, så utbyttet tåler mindre svikt i inntjeningen enn hos en lavere utdeler</li>
-<li>Kort utbyttehistorikk (3 år) gir lite grunnlag for å vurdere hvor stabilt utbyttet er over en konjunktursyklus</li>
 <li>Yielden avhenger sterkt av inngangskursen: samme utbytte gir 4,7 % på 12-månedershøyden (85,90 kr) og 7,4 % på bunnen (54,40 kr)</li>
-<li>Rask teknologiutvikling kan gjøre produkter utdaterte</li></ul></div>
+<li>Rask teknologiutvikling kan gjøre produkter utdaterte</li>
+<li>Høy konkurranse fra internasjonale aktører presser marginer</li></ul></div>
 
   <div class="kontoer-seksjon"><h2>Hvilke kontoer kan du handle denne aksjen på?</h2><div class="konto-rad"><span class="konto-ok">✓</span><div><strong>Aksje- og fondskonto og Zero</strong><p>Ingen begrensning.</p></div></div><div class="konto-rad"><span class="konto-ok">✓</span><div><strong>Aksjesparekonto (ASK)</strong><p>Selskapet er registrert i Norge og aksjen er notert på Oslo Børs, så den kan holdes i ASK.</p></div></div></div>
 

@@ -192,6 +192,9 @@
     .rekke-seksjon { border-left: 3px solid #22c55e; }
     .nedtur-seksjon { border-left: 3px solid #f59e0b; }
     .delaar-seksjon { border-left: 3px solid #f59e0b; }
+    /* Den mørke regelen over setter border-color på alle sider og tok med seg
+       den gule kanten; varselet så ut som en vanlig boks (2026-10-19). */
+    .dark .delaar-seksjon { border-left-color: #f59e0b; }
     .betalt-seksjon .betalt-tabell { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; font-size: 0.875rem; margin: 0.25rem 0 0.5rem; }
     .betalt-seksjon .betalt-tabell th, .betalt-seksjon .betalt-tabell td { text-align: left; padding: 0.45rem 0.75rem; }
     .betalt-seksjon .betalt-tabell td:not(:first-child), .betalt-seksjon .betalt-tabell th:not(:first-child) { white-space: nowrap; text-align: right; }
@@ -204,6 +207,8 @@
     /* Nøytral variant: forklarer en observasjon, advarer ikke om en feil. */
     .delaar-seksjon.delaar-noytral { border-left-color: #94a3b8; }
     .dark .delaar-seksjon.delaar-noytral { border-left-color: #475569; }
+    .hendelse-seksjon p.hendelse-kilde { font-size: 0.8rem; color: #6b7280; }
+    .dark .hendelse-seksjon p.hendelse-kilde { color: #9ca3af; }
     .mnd-strip { display: grid; grid-template-columns: repeat(12, 1fr); gap: 2px; margin-bottom: 0.85rem; }
     .mnd-celle { text-align: center; padding: 0.4rem 0.1rem; font-size: 0.62rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.02em; color: #9ca3af; background: #f1f5f9; border-radius: 0.25rem; }
     .mnd-celle.mnd-ja { background: #15803d; color: #fff; }
@@ -519,7 +524,7 @@
 
   
 
-  <div class="betalt-seksjon"><h2>Faktisk betalt utbytte</h2><table class="betalt-tabell"><thead><tr><th>Periode</th><th>Per aksje/år</th><th>Yield</th></tr></thead><tbody><tr><td>Siste 12 mnd</td><td>17,14 kr</td><td>11,27 %</td></tr><tr><td>2025</td><td>5,37 kr</td><td>3,53 %</td></tr><tr><td>Snitt <span class="nowrap">2024–25</span></td><td>4,94 kr</td><td>3,25 %</td></tr></tbody></table><p class="betalt-fotnote">Summert etter ex-dato, inkludert eventuelle ekstraordinære utbytter. Yield regnet mot dagens kurs. Utbytte i vår historikk fra 2024.</p></div>
+  <div class="betalt-seksjon"><h2>Faktisk betalt utbytte</h2><table class="betalt-tabell"><thead><tr><th>Periode</th><th>Per aksje/år</th><th>Yield</th></tr></thead><tbody><tr><td>Siste 12 mnd</td><td>17,14 kr</td><td>11,28 %</td></tr><tr><td>2025</td><td>5,37 kr</td><td>3,53 %</td></tr><tr><td>Snitt <span class="nowrap">2024–25</span></td><td>4,94 kr</td><td>3,25 %</td></tr></tbody></table><p class="betalt-fotnote">Summert etter ex-dato, inkludert eventuelle ekstraordinære utbytter. Yield regnet mot dagens kurs. Utbytte i vår historikk fra 2024.</p></div>
 
   <div class="desc"><h2>Om selskapet</h2><p>Himalaya Shipping ble stiftet på Bermuda i 2021 med ett formål: å eie nye Newcastlemax-skip, store tørrbulkskip for capesize-markedet. Alle skipene ble bygget ved New Times-verftet i Kina, kan gå på LNG i tillegg til vanlig drivstoff og har scrubber. Største aksjonær er Drew Holdings, som eies av en trust opprettet for Tor Olav Trøim og familien hans. Ledelsen er ikke ansatt i selskapet. Konsernsjef, finansdirektør og den daglige driften leies inn fra 2020 Bulkers Management, der Himalaya etter avtale skulle bli majoritetseier fra april 2026.</p><p>Aksjen kom først på Euronext Growth Oslo, ble flyttet til Euronext Expand i 2022, fikk notering i New York i 2023 og gikk over til Oslo Børs i juni 2025. Skipene er leid ut på tidscerteparti der dagraten følger Baltic-indeksen for capesize pluss et tillegg, så inntekten går opp og ned med markedet uten at skipene må befraktes på nytt. Etter avtale med befrakteren kan raten låses til en fast sats for en periode, og det har selskapet gjort for flere skip i 2026. Skipene er finansiert ved salg og tilbakeleie med kinesiske leasingselskaper.</p><p>Himalaya deler ut penger hver måned, så lenge skipene tjener nok til det. Beløpet fastsettes i dollar og kommer i kroner til aksjonærer i den norske verdipapirsentralen. Utdelingene tas fra kontoen for innskutt overskudd (contributed surplus), og i august 2026 vedtok aksjonærene å flytte mer kapital over til den. Leieavtalene krever at hvert skipseiende datterselskap holder igjen en kontantbuffer, og leien går foran utdelingene. Derfor varierer beløpet fra måned til måned med capesizeratene.</p></div>
 
@@ -558,14 +563,14 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
 
   <div class="utbetalingsaar-seksjon"><h2>Utbyttet gjennom året</h2><div class="mnd-strip"><div class="mnd-celle mnd-ja"><span>jan</span></div><div class="mnd-celle mnd-ja"><span>feb</span></div><div class="mnd-celle mnd-ja"><span>mar</span></div><div class="mnd-celle mnd-ja"><span>apr</span></div><div class="mnd-celle mnd-ja"><span>mai</span></div><div class="mnd-celle mnd-ja"><span>jun</span></div><div class="mnd-celle mnd-ja"><span>jul</span></div><div class="mnd-celle mnd-ja"><span>aug</span></div><div class="mnd-celle mnd-ja"><span>sep</span></div><div class="mnd-celle mnd-ja"><span>okt</span></div><div class="mnd-celle mnd-ja"><span>nov</span></div><div class="mnd-celle mnd-ja"><span>des</span></div></div><p>Himalaya Shipping Ltd. betaler ut 12 ganger i året, med ex-dato i januar, februar, mars, april, mai, juni, juli, august, september, oktober, november og desember — grovt regnet 0,45 kroner per aksje hver gang. Månedene er ex-datoer utledet av hvilke måneder som går igjen over flere år, ikke av en enkelt utbetaling. Selve pengene kommer typisk halvannen til tre uker etter ex-datoen, så en ex-dato sent i måneden betales ut i den neste.</p></div>
 
-  <div class="vurdering-seksjon"><h2>Vurdering som utbytteaksje</h2><p class="vurdering-tekst">Himalaya Shipping Ltd. har betalt utbytte de siste 3 årene, men historikken er begrenset. Yielden på 3,5% er under sektorsnittet for Shipping (7,1%). Utbetalingsgraden på 101% er høy — de fleste av overskuddskronene deles ut, og utbyttet er dermed sensitivt for inntjeningsfall.</p></div><div class="driver-seksjon"><h2>Hva driver utbyttet i HSHP?</h2><p class="driver-tekst">Fraktrater bestemmer inntjeningen nesten alene. Ratene svinger kraftig med balansen mellom tilbud av tonnasje og etterspørsel fra global handel. Ny tonnasje fra ordreboken, skraping av eldre skip og geopolitikk (Rødehavet, Suezkanalen) er viktige drivere. Mange shippingselskaper deler ut det meste av overskuddet — hyppig utbytte er vanlig, men høy yield kan forsvinne like fort som den kom.</p><p class="driver-tekst">Med 3 år med utbytte er historikken hos Himalaya Shipping Ltd. fortsatt kort, så utbyttepolitikken er ikke ferdig prøvd. Utbyttet går ex månedlig, i januar, februar, mars, april, mai, juni, juli, august, september, oktober, november og desember.</p></div>
+  <div class="vurdering-seksjon"><h2>Vurdering som utbytteaksje</h2><p class="vurdering-tekst">Himalaya Shipping Ltd. har betalt utbytte de siste 3 årene, en kortere rekke enn de mest etablerte utbyttebetalerne på børsen. Yielden på 3,5% er under sektorsnittet for Shipping (7,1%). Utbetalingsgraden på 101% er høy — de fleste av overskuddskronene deles ut, og utbyttet er dermed sensitivt for inntjeningsfall.</p></div><div class="driver-seksjon"><h2>Hva driver utbyttet i HSHP?</h2><p class="driver-tekst">Fraktrater bestemmer inntjeningen nesten alene. Ratene svinger kraftig med balansen mellom tilbud av tonnasje og etterspørsel fra global handel. Ny tonnasje fra ordreboken, skraping av eldre skip og geopolitikk (Rødehavet, Suezkanalen) er viktige drivere. Mange shippingselskaper deler ut det meste av overskuddet — hyppig utbytte er vanlig, men høy yield kan forsvinne like fort som den kom.</p><p class="driver-tekst">Med 3 år med utbytte er historikken hos Himalaya Shipping Ltd. fortsatt kort, så utbyttepolitikken er ikke ferdig prøvd. Utbyttet går ex månedlig, i januar, februar, mars, april, mai, juni, juli, august, september, oktober, november og desember.</p></div>
 
   <div class="nedtur-seksjon"><h2>Tåler utbyttet en nedtur?</h2><p>Himalaya Shipping Ltd. deler i dag ut mer enn selskapet tjener (101 % av inntjeningen). Det kan finansieres en stund av oppsparte midler eller salg av eiendeler, men det er ikke et nivå som kan holdes år etter år uten at inntjeningen tar seg opp.</p></div>
 
-  <div class="risiko-seksjon"><h2>Risiko for utbyttet</h2><ul class="risiko-liste"><li>Payout ratio på 101 % betyr at nesten hele inntjeningen deles ut — det gir lite å gå på om resultatet faller</li>
-<li>Kort utbyttehistorikk (3 år) gir lite grunnlag for å vurdere hvor stabilt utbyttet er over en konjunktursyklus</li>
+  <div class="risiko-seksjon"><h2>Risiko for utbyttet</h2><ul class="risiko-liste"><li>Payout ratio på 101 % betyr at selskapet deler ut mer enn det tjener. Det kan ikke vare uten at inntjeningen tar seg opp</li>
 <li>Yielden avhenger sterkt av inngangskursen: samme utbytte gir 2,9 % på 12-månedershøyden (183,80 kr) og 7,2 % på bunnen (75,00 kr)</li>
-<li>Fraktrater er svært volatile og kan halveres på kort tid</li></ul></div>
+<li>Fraktrater er svært volatile og kan halveres på kort tid</li>
+<li>Bunkerspriser (drivstoff) påvirker driftsmarginene direkte</li></ul></div>
 
   <div class="kontoer-seksjon"><h2>Hvilke kontoer kan du handle denne aksjen på?</h2><div class="konto-rad"><span class="konto-ok">✓</span><div><strong>Aksje- og fondskonto og Zero</strong><p>Ingen begrensning.</p></div></div><div class="konto-rad konto-ikke"><span class="konto-nei">✗</span><div><strong>Aksjesparekonto (ASK)</strong><p>Selskapet er registrert på Bermuda, utenfor EØS, og aksjen kan ikke holdes i ASK. Bruk aksje- og fondskonto.</p></div></div></div>
 
@@ -589,7 +594,7 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
   </section>
 
   <div class="relaterte"><h2>Andre shipping-aksjer med utbytte</h2><div class="rel-grid"><a href="/aksjer/STST/" class="rel-kort"><span class="rel-ticker">STST</span><span class="rel-navn">Stainless Tankers ASA</span><span class="rel-yield">12,5%</span></a>
-<a href="/aksjer/HAFNI/" class="rel-kort"><span class="rel-ticker">HAFNI</span><span class="rel-navn">Hafnia Limited</span><span class="rel-yield">11,0%</span></a>
+<a href="/aksjer/HAFNI/" class="rel-kort"><span class="rel-ticker">HAFNI</span><span class="rel-navn">Hafnia Limited</span><span class="rel-yield">11,1%</span></a>
 <a href="/aksjer/WEST/" class="rel-kort"><span class="rel-ticker">WEST</span><span class="rel-navn">Western Bulk Chartering AS</span><span class="rel-yield">10,6%</span></a>
 <a href="/aksjer/OET/" class="rel-kort"><span class="rel-ticker">OET</span><span class="rel-navn">Okeanis Eco Tankers Corp.</span><span class="rel-yield">10,6%</span></a></div></div>
 

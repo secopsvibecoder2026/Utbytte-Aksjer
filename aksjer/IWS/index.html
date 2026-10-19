@@ -192,6 +192,9 @@
     .rekke-seksjon { border-left: 3px solid #22c55e; }
     .nedtur-seksjon { border-left: 3px solid #f59e0b; }
     .delaar-seksjon { border-left: 3px solid #f59e0b; }
+    /* Den mørke regelen over setter border-color på alle sider og tok med seg
+       den gule kanten; varselet så ut som en vanlig boks (2026-10-19). */
+    .dark .delaar-seksjon { border-left-color: #f59e0b; }
     .betalt-seksjon .betalt-tabell { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; font-size: 0.875rem; margin: 0.25rem 0 0.5rem; }
     .betalt-seksjon .betalt-tabell th, .betalt-seksjon .betalt-tabell td { text-align: left; padding: 0.45rem 0.75rem; }
     .betalt-seksjon .betalt-tabell td:not(:first-child), .betalt-seksjon .betalt-tabell th:not(:first-child) { white-space: nowrap; text-align: right; }
@@ -204,6 +207,8 @@
     /* Nøytral variant: forklarer en observasjon, advarer ikke om en feil. */
     .delaar-seksjon.delaar-noytral { border-left-color: #94a3b8; }
     .dark .delaar-seksjon.delaar-noytral { border-left-color: #475569; }
+    .hendelse-seksjon p.hendelse-kilde { font-size: 0.8rem; color: #6b7280; }
+    .dark .hendelse-seksjon p.hendelse-kilde { color: #9ca3af; }
     .mnd-strip { display: grid; grid-template-columns: repeat(12, 1fr); gap: 2px; margin-bottom: 0.85rem; }
     .mnd-celle { text-align: center; padding: 0.4rem 0.1rem; font-size: 0.62rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.02em; color: #9ca3af; background: #f1f5f9; border-radius: 0.25rem; }
     .mnd-celle.mnd-ja { background: #15803d; color: #fff; }
@@ -532,7 +537,7 @@
   <!-- ── UTBYTTE ── -->
   <section id="utbytte">
 
-  <div class="analyse"><h2>Yield mot sektoren</h2><p>Yielden på 8,0% er på linje med snittet for Energitjenester-sektoren (8,0%).</p></div>
+  <div class="analyse"><h2>Yield mot sektoren</h2><p>Yielden på 8,0% er på linje med snittet for Energitjenester-sektoren (7,7%).</p></div>
 
   <h2>Historiske utbytter</h2><table><thead><tr><th>År</th><th>Utbytte</th><th>Yield</th></tr></thead><tbody>
         <tr>
@@ -545,7 +550,7 @@
 
   <div class="utbetalingsaar-seksjon"><h2>Utbyttet gjennom året</h2><div class="mnd-strip"><div class="mnd-celle"><span>jan</span></div><div class="mnd-celle"><span>feb</span></div><div class="mnd-celle mnd-ja"><span>mar</span></div><div class="mnd-celle"><span>apr</span></div><div class="mnd-celle"><span>mai</span></div><div class="mnd-celle mnd-ja"><span>jun</span></div><div class="mnd-celle"><span>jul</span></div><div class="mnd-celle"><span>aug</span></div><div class="mnd-celle mnd-ja"><span>sep</span></div><div class="mnd-celle"><span>okt</span></div><div class="mnd-celle"><span>nov</span></div><div class="mnd-celle"><span>des</span></div></div><p>Ex-datoene til Integrated Wind Solutions ASA har de siste årene ligget i mars, juni og september. Månedene er ex-datoer utledet av hvilke måneder som går igjen over flere år, ikke av en enkelt utbetaling. Selve pengene kommer typisk halvannen til tre uker etter ex-datoen, så en ex-dato sent i måneden betales ut i den neste.</p></div>
 
-  <div class="vurdering-seksjon"><h2>Vurdering som utbytteaksje</h2><p class="vurdering-tekst">Yielden på 8,0% er nær sektorsnittet for Energitjenester (8,0%).</p></div><div class="driver-seksjon"><h2>Hva driver utbyttet i IWS?</h2><p class="driver-tekst">Aktivitetsnivået på norsk sokkel og internasjonalt offshore er den primære driveren. Oljepris påvirker kundenes vilje til å sette i gang nye prosjekter. Kontraktsdekning og dag-rater for rigger og fartøy gir direkte innsikt i inntjeningsutsiktene.</p><p class="driver-tekst">Med 1 år med utbytte er historikken hos Integrated Wind Solutions ASA fortsatt kort, så utbyttepolitikken er ikke ferdig prøvd. Payout ratio på 66 % er et nivå som pleier å kunne holdes over tid. Ex-datoene har de siste årene ligget i mars, juni og september.</p></div>
+  <div class="vurdering-seksjon"><h2>Vurdering som utbytteaksje</h2><p class="vurdering-tekst">Yielden på 8,0% er nær sektorsnittet for Energitjenester (7,7%).</p></div><div class="driver-seksjon"><h2>Hva driver utbyttet i IWS?</h2><p class="driver-tekst">Aktivitetsnivået på norsk sokkel og internasjonalt offshore er den primære driveren. Oljepris påvirker kundenes vilje til å sette i gang nye prosjekter. Kontraktsdekning og dag-rater for rigger og fartøy gir direkte innsikt i inntjeningsutsiktene.</p><p class="driver-tekst">Med 1 år med utbytte er historikken hos Integrated Wind Solutions ASA fortsatt kort, så utbyttepolitikken er ikke ferdig prøvd. Payout ratio på 66 % er et nivå som pleier å kunne holdes over tid. Ex-datoene har de siste årene ligget i mars, juni og september.</p></div>
 
   
 

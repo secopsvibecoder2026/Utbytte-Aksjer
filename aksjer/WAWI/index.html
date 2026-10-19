@@ -192,6 +192,9 @@
     .rekke-seksjon { border-left: 3px solid #22c55e; }
     .nedtur-seksjon { border-left: 3px solid #f59e0b; }
     .delaar-seksjon { border-left: 3px solid #f59e0b; }
+    /* Den mørke regelen over setter border-color på alle sider og tok med seg
+       den gule kanten; varselet så ut som en vanlig boks (2026-10-19). */
+    .dark .delaar-seksjon { border-left-color: #f59e0b; }
     .betalt-seksjon .betalt-tabell { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; font-size: 0.875rem; margin: 0.25rem 0 0.5rem; }
     .betalt-seksjon .betalt-tabell th, .betalt-seksjon .betalt-tabell td { text-align: left; padding: 0.45rem 0.75rem; }
     .betalt-seksjon .betalt-tabell td:not(:first-child), .betalt-seksjon .betalt-tabell th:not(:first-child) { white-space: nowrap; text-align: right; }
@@ -204,6 +207,8 @@
     /* Nøytral variant: forklarer en observasjon, advarer ikke om en feil. */
     .delaar-seksjon.delaar-noytral { border-left-color: #94a3b8; }
     .dark .delaar-seksjon.delaar-noytral { border-left-color: #475569; }
+    .hendelse-seksjon p.hendelse-kilde { font-size: 0.8rem; color: #6b7280; }
+    .dark .hendelse-seksjon p.hendelse-kilde { color: #9ca3af; }
     .mnd-strip { display: grid; grid-template-columns: repeat(12, 1fr); gap: 2px; margin-bottom: 0.85rem; }
     .mnd-celle { text-align: center; padding: 0.4rem 0.1rem; font-size: 0.62rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.02em; color: #9ca3af; background: #f1f5f9; border-radius: 0.25rem; }
     .mnd-celle.mnd-ja { background: #15803d; color: #fff; }
@@ -519,7 +524,7 @@
 
   <div class="delaar-seksjon delaar-noytral"><h2>Deler av utbyttet var ekstraordinært</h2><p>Ifølge selskapets børsmelding <strong>om lag 39 % av siste utbetaling var ekstraordinært utbytte</strong>.</p><p>Et ekstraordinært utbytte er en engangsutdeling og gjentas ikke nødvendigvis. Direkteavkastningen på 4,87 % bygger på det ordinære utbyttet de siste 12 månedene, med engangsutbyttet holdt utenfor.</p></div>
 
-  <div class="betalt-seksjon"><h2>Faktisk betalt utbytte</h2><table class="betalt-tabell"><thead><tr><th>Periode</th><th>Per aksje/år</th><th>Yield</th></tr></thead><tbody><tr><td>Siste 12 mnd</td><td>15,26 kr</td><td>8,66 %</td></tr><tr><td>2025</td><td>24,26 kr</td><td>13,78 %</td></tr><tr><td>Snitt <span class="nowrap">2024–25</span></td><td>21,45 kr</td><td>12,18 %</td></tr><tr><td>Snitt <span class="nowrap">2023–25</span></td><td>17,17 kr</td><td>9,75 %</td></tr><tr><td>Snitt <span class="nowrap">2022–25</span></td><td>13,24 kr</td><td>7,52 %</td></tr><tr><td>Snitt <span class="nowrap">2021–25</span></td><td>10,59 kr</td><td>6,01 %</td></tr></tbody></table><p class="betalt-fotnote">Summert etter ex-dato, inkludert eventuelle ekstraordinære utbytter. Yield regnet mot dagens kurs. </p></div>
+  <div class="betalt-seksjon"><h2>Faktisk betalt utbytte</h2><table class="betalt-tabell"><thead><tr><th>Periode</th><th>Per aksje/år</th><th>Yield</th></tr></thead><tbody><tr><td>Siste 12 mnd</td><td>15,26 kr</td><td>8,67 %</td></tr><tr><td>2025</td><td>24,26 kr</td><td>13,78 %</td></tr><tr><td>Snitt <span class="nowrap">2024–25</span></td><td>21,45 kr</td><td>12,18 %</td></tr><tr><td>Snitt <span class="nowrap">2023–25</span></td><td>17,17 kr</td><td>9,75 %</td></tr><tr><td>Snitt <span class="nowrap">2022–25</span></td><td>13,24 kr</td><td>7,52 %</td></tr><tr><td>Snitt <span class="nowrap">2021–25</span></td><td>10,59 kr</td><td>6,01 %</td></tr></tbody></table><p class="betalt-fotnote">Summert etter ex-dato, inkludert eventuelle ekstraordinære utbytter. Yield regnet mot dagens kurs. </p></div>
 
   <div class="desc"><h2>Om selskapet</h2><p>Wallenius Wilhelmsen fikk dagens form i 2017. Da slo svenske Wallenius og norske Wilhelmsen sammen eierandelene de hadde hatt sammen i rederiene EUKOR og ARC og i logistikkselskapet Wallenius Wilhelmsen Logistics, et samarbeid som gikk tilbake til 1999. Wilh. Wilhelmsen Holding, som selv er børsnotert, er største eier. Wallenius Lines, eid av den svenske Soya-gruppen, er den andre store aksjonæren. Hovedkontoret ligger i Oslo.</p><p>Skipene frakter biler, anleggsmaskiner og annen rullende last på faste linjer mellom kontinentene, og logistikkdelen overtar på land med terminaler, klargjøring og transport videre mot forhandler. Mye av volumet går på flerårige avtaler med bil- og maskinprodusenter, og fornyelsene meldes jevnlig til børsen. Ett kundeforhold er tettere enn de andre: Hyundai Motor Group eier en minoritetspost i det koreanske datterselskapet EUKOR og har en fraktavtale med det som løper ut 2029. Selskapet bygger nye skip som kan gå på LNG, og i oktober 2026 hentet det ny egenkapital for å utvide nybyggprogrammet. Wilhelmsen tegnet seg for sin andel, mens Wallenius sto over.</p><p>Utbyttet kommer to ganger i året og fastsettes i dollar, men betales i kroner. For første halvår 2026 var det regnet som halvparten av det underliggende resultatet, med et ekstraordinært tillegg på toppen. Hvor mye som er igjen til aksjonærene avhenger dermed både av fraktmarkedet ut av Asia og av hvor mye kapital nybyggene binder i årene framover.</p></div>
 
@@ -541,7 +546,7 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
         <tr>
           <td>2026 <span class="hist-paagaar">hittil i år</span></td>
           <td>15,26 NOK</td>
-          <td>8,66%</td>
+          <td>8,67%</td>
         </tr>
         <tr>
           <td>2025</td>
@@ -568,9 +573,9 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
 
   <div class="utbetalingsaar-seksjon"><h2>Utbyttet gjennom året</h2><div class="mnd-strip"><div class="mnd-celle"><span>jan</span></div><div class="mnd-celle"><span>feb</span></div><div class="mnd-celle mnd-ja"><span>mar</span></div><div class="mnd-celle"><span>apr</span></div><div class="mnd-celle"><span>mai</span></div><div class="mnd-celle"><span>jun</span></div><div class="mnd-celle"><span>jul</span></div><div class="mnd-celle mnd-ja"><span>aug</span></div><div class="mnd-celle"><span>sep</span></div><div class="mnd-celle"><span>okt</span></div><div class="mnd-celle"><span>nov</span></div><div class="mnd-celle"><span>des</span></div></div><p>Wallenius Wilhelmsen ASA betaler ut 2 ganger i året, med ex-dato i mars og august — grovt regnet 4,29 kroner per aksje hver gang. Månedene er ex-datoer utledet av hvilke måneder som går igjen over flere år, ikke av en enkelt utbetaling. Selve pengene kommer typisk halvannen til tre uker etter ex-datoen, så en ex-dato sent i måneden betales ut i den neste.</p></div>
 
-  <div class="vurdering-seksjon"><h2>Vurdering som utbytteaksje</h2><p class="vurdering-tekst">Wallenius Wilhelmsen ASA har betalt utbytte de siste 5 årene, men historikken er begrenset. Yielden på 4,9% er under sektorsnittet for Shipping (7,1%).</p></div><div class="driver-seksjon"><h2>Hva driver utbyttet i WAWI?</h2><p class="driver-tekst">Fraktrater bestemmer inntjeningen nesten alene. Ratene svinger kraftig med balansen mellom tilbud av tonnasje og etterspørsel fra global handel. Ny tonnasje fra ordreboken, skraping av eldre skip og geopolitikk (Rødehavet, Suezkanalen) er viktige drivere. Mange shippingselskaper deler ut det meste av overskuddet — hyppig utbytte er vanlig, men høy yield kan forsvinne like fort som den kom.</p><p class="driver-tekst">Wallenius Wilhelmsen ASA har betalt utbytte i 11 av årene vi har tall for, men rekken er brutt — den nåværende går tilbake til 2022. Utbyttet går ex halvårlig, i mars og august.</p></div>
+  <div class="vurdering-seksjon"><h2>Vurdering som utbytteaksje</h2><p class="vurdering-tekst">Wallenius Wilhelmsen ASA har betalt utbytte de siste 5 årene. Medregnet årene før bruddet har selskapet betalt i 11 av årene vi har tall for. Yielden på 4,9% er under sektorsnittet for Shipping (7,1%).</p></div><div class="driver-seksjon"><h2>Hva driver utbyttet i WAWI?</h2><p class="driver-tekst">Fraktrater bestemmer inntjeningen nesten alene. Ratene svinger kraftig med balansen mellom tilbud av tonnasje og etterspørsel fra global handel. Ny tonnasje fra ordreboken, skraping av eldre skip og geopolitikk (Rødehavet, Suezkanalen) er viktige drivere. Mange shippingselskaper deler ut det meste av overskuddet — hyppig utbytte er vanlig, men høy yield kan forsvinne like fort som den kom.</p><p class="driver-tekst">Wallenius Wilhelmsen ASA har betalt utbytte i 11 av årene vi har tall for, men rekken er brutt — den nåværende går tilbake til 2022. Utbyttet går ex halvårlig, i mars og august.</p></div>
 
-  <div class="nedtur-seksjon"><h2>Tåler utbyttet en nedtur?</h2><p>Med en payout ratio på 77 % kan inntjeningen falle rundt 23 % før utbyttet spiser hele overskuddet. Faller den mer enn det, må selskapet enten tære på kassen, låne, eller sette ned utbyttet. Selskapet har satt ned utbyttet før, så terskelen for å gjøre det igjen er neppe høy.</p></div>
+  <div class="nedtur-seksjon"><h2>Tåler utbyttet en nedtur?</h2><p>Med en payout ratio på 77 % kan inntjeningen falle rundt 23 % før utbyttet spiser hele overskuddet. Faller den mer enn det, må selskapet enten tære på kassen, låne, eller sette ned utbyttet. Selskapet har ikke kuttet utbyttet i perioden vi har tall for, noe som taler for at nivået er villet og ikke tilfeldig.</p></div>
 
   <div class="risiko-seksjon"><h2>Risiko for utbyttet</h2><ul class="risiko-liste"><li>Payout ratio på 77 % er i øvre sjikt, så utbyttet tåler mindre svikt i inntjeningen enn hos en lavere utdeler</li>
 <li>Yielden avhenger sterkt av inngangskursen: samme utbytte gir 4,6 % på 12-månedershøyden (186,00 kr) og 11,4 % på bunnen (75,10 kr)</li>
@@ -599,7 +604,7 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
   </section>
 
   <div class="relaterte"><h2>Andre shipping-aksjer med utbytte</h2><div class="rel-grid"><a href="/aksjer/STST/" class="rel-kort"><span class="rel-ticker">STST</span><span class="rel-navn">Stainless Tankers ASA</span><span class="rel-yield">12,5%</span></a>
-<a href="/aksjer/HAFNI/" class="rel-kort"><span class="rel-ticker">HAFNI</span><span class="rel-navn">Hafnia Limited</span><span class="rel-yield">11,0%</span></a>
+<a href="/aksjer/HAFNI/" class="rel-kort"><span class="rel-ticker">HAFNI</span><span class="rel-navn">Hafnia Limited</span><span class="rel-yield">11,1%</span></a>
 <a href="/aksjer/WEST/" class="rel-kort"><span class="rel-ticker">WEST</span><span class="rel-navn">Western Bulk Chartering AS</span><span class="rel-yield">10,6%</span></a>
 <a href="/aksjer/OET/" class="rel-kort"><span class="rel-ticker">OET</span><span class="rel-navn">Okeanis Eco Tankers Corp.</span><span class="rel-yield">10,6%</span></a></div></div>
 

@@ -192,6 +192,9 @@
     .rekke-seksjon { border-left: 3px solid #22c55e; }
     .nedtur-seksjon { border-left: 3px solid #f59e0b; }
     .delaar-seksjon { border-left: 3px solid #f59e0b; }
+    /* Den mørke regelen over setter border-color på alle sider og tok med seg
+       den gule kanten; varselet så ut som en vanlig boks (2026-10-19). */
+    .dark .delaar-seksjon { border-left-color: #f59e0b; }
     .betalt-seksjon .betalt-tabell { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; font-size: 0.875rem; margin: 0.25rem 0 0.5rem; }
     .betalt-seksjon .betalt-tabell th, .betalt-seksjon .betalt-tabell td { text-align: left; padding: 0.45rem 0.75rem; }
     .betalt-seksjon .betalt-tabell td:not(:first-child), .betalt-seksjon .betalt-tabell th:not(:first-child) { white-space: nowrap; text-align: right; }
@@ -204,6 +207,8 @@
     /* Nøytral variant: forklarer en observasjon, advarer ikke om en feil. */
     .delaar-seksjon.delaar-noytral { border-left-color: #94a3b8; }
     .dark .delaar-seksjon.delaar-noytral { border-left-color: #475569; }
+    .hendelse-seksjon p.hendelse-kilde { font-size: 0.8rem; color: #6b7280; }
+    .dark .hendelse-seksjon p.hendelse-kilde { color: #9ca3af; }
     .mnd-strip { display: grid; grid-template-columns: repeat(12, 1fr); gap: 2px; margin-bottom: 0.85rem; }
     .mnd-celle { text-align: center; padding: 0.4rem 0.1rem; font-size: 0.62rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.02em; color: #9ca3af; background: #f1f5f9; border-radius: 0.25rem; }
     .mnd-celle.mnd-ja { background: #15803d; color: #fff; }
@@ -568,7 +573,7 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
 
   
 
-  <div class="vurdering-seksjon"><h2>Vurdering som utbytteaksje</h2><p class="vurdering-tekst">Bakkafrost P/F har betalt utbytte de siste 6 årene, men historikken er begrenset. Yielden på 1,1% er under sektorsnittet for Havbruk (3,6%). Utbetalingsgraden på 24% er lav, noe som gir solid buffer og rom for utbytteøkninger fremover. Målt fra første til siste hele år har utbyttet vokst med 28,1% per år, men toppen var 15,63 NOK i 2023, og 2025 endte på 13,37 NOK.</p></div><div class="driver-seksjon"><h2>Hva driver utbyttet i BAKKA?</h2><p class="driver-tekst">Laksepris er den suverent viktigste faktoren. En sterk laksekvart kan mer enn doble utbyttekapasiteten fra et svakt år. Biologisk risiko — lakselus, sykdom, smolt-overlevelse — er umulig å planlegge fullt ut og kan gi overraskende svake kvartal. Følg spotprisene på laks og selskapets biologiske driftsrapporter.</p><p class="driver-tekst">Bakkafrost P/F har betalt utbytte i 15 av årene vi har tall for, men rekken er brutt — den nåværende går tilbake til 2021. Utbyttet har vokst 28,1 % i året de siste fem årene, men det høyeste året i perioden var 2023. Payout ratio på 24 % lar mesteparten av inntjeningen bli igjen i selskapet, så det er rom for å øke. Utbyttet går ex årlig, i mai.</p></div>
+  <div class="vurdering-seksjon"><h2>Vurdering som utbytteaksje</h2><p class="vurdering-tekst">Bakkafrost P/F har betalt utbytte de siste 6 årene. Medregnet årene før bruddet har selskapet betalt i 15 av årene vi har tall for. Yielden på 1,1% er under sektorsnittet for Havbruk (3,6%). Utbetalingsgraden på 24% er lav, noe som gir solid buffer og rom for utbytteøkninger fremover. Målt fra første til siste hele år har utbyttet vokst med 28,1% per år, men toppen var 15,63 NOK i 2023, og 2025 endte på 13,37 NOK.</p></div><div class="driver-seksjon"><h2>Hva driver utbyttet i BAKKA?</h2><p class="driver-tekst">Laksepris er den suverent viktigste faktoren. En sterk laksekvart kan mer enn doble utbyttekapasiteten fra et svakt år. Biologisk risiko — lakselus, sykdom, smolt-overlevelse — er umulig å planlegge fullt ut og kan gi overraskende svake kvartal. Følg spotprisene på laks og selskapets biologiske driftsrapporter.</p><p class="driver-tekst">Bakkafrost P/F har betalt utbytte i 15 av årene vi har tall for, men rekken er brutt — den nåværende går tilbake til 2021. Utbyttet har vokst 28,1 % i året de siste fem årene, men det høyeste året i perioden var 2023. Payout ratio på 24 % lar mesteparten av inntjeningen bli igjen i selskapet, så det er rom for å øke. Utbyttet går ex årlig, i mai.</p></div>
 
   
 

@@ -192,6 +192,9 @@
     .rekke-seksjon { border-left: 3px solid #22c55e; }
     .nedtur-seksjon { border-left: 3px solid #f59e0b; }
     .delaar-seksjon { border-left: 3px solid #f59e0b; }
+    /* Den mørke regelen over setter border-color på alle sider og tok med seg
+       den gule kanten; varselet så ut som en vanlig boks (2026-10-19). */
+    .dark .delaar-seksjon { border-left-color: #f59e0b; }
     .betalt-seksjon .betalt-tabell { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; font-size: 0.875rem; margin: 0.25rem 0 0.5rem; }
     .betalt-seksjon .betalt-tabell th, .betalt-seksjon .betalt-tabell td { text-align: left; padding: 0.45rem 0.75rem; }
     .betalt-seksjon .betalt-tabell td:not(:first-child), .betalt-seksjon .betalt-tabell th:not(:first-child) { white-space: nowrap; text-align: right; }
@@ -204,6 +207,8 @@
     /* Nøytral variant: forklarer en observasjon, advarer ikke om en feil. */
     .delaar-seksjon.delaar-noytral { border-left-color: #94a3b8; }
     .dark .delaar-seksjon.delaar-noytral { border-left-color: #475569; }
+    .hendelse-seksjon p.hendelse-kilde { font-size: 0.8rem; color: #6b7280; }
+    .dark .hendelse-seksjon p.hendelse-kilde { color: #9ca3af; }
     .mnd-strip { display: grid; grid-template-columns: repeat(12, 1fr); gap: 2px; margin-bottom: 0.85rem; }
     .mnd-celle { text-align: center; padding: 0.4rem 0.1rem; font-size: 0.62rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.02em; color: #9ca3af; background: #f1f5f9; border-radius: 0.25rem; }
     .mnd-celle.mnd-ja { background: #15803d; color: #fff; }
@@ -517,13 +522,13 @@
 
   <dl class="korttall"><div><dt>Neste kvartalsrapport</dt><dd>6. nov 2026</dd></div><div><dt>5-årssnitt yield</dt><dd>0,51 %</dd></div><div><dt>År med utbytte</dt><dd>12</dd></div><div><dt>P/E</dt><dd>26,9</dd></div><div><dt>Payout ratio</dt><dd>33 %</dd></div><div><dt>Markedsverdi</dt><dd>5,8 mrd NOK</dd></div></dl>
 
-  
+  <div class="delaar-seksjon hendelse-seksjon"><h2>Selskapet er i ferd med å bli kjøpt opp</h2><p>Yanmar har lagt fram et anbefalt kontanttilbud på 161 kroner per aksje for alle aksjene i AKVA. Aksjonærer med om lag 92 prosent av aksjene har forpliktet seg til å akseptere. Blir tilbudet gjennomført, kan aksjen bli tatt av børs.</p><p class="hendelse-kilde">Kilde: meldt 2. okt 2026, <a href="https://newsweb.oslobors.no/message/683486" target="_blank" rel="noopener">børsmeldingen</a>.</p></div>
 
   <div class="betalt-seksjon"><h2>Faktisk betalt utbytte</h2><table class="betalt-tabell"><thead><tr><th>Periode</th><th>Per aksje/år</th><th>Yield</th></tr></thead><tbody><tr><td>Siste 12 mnd</td><td>3,00 kr</td><td>1,90 %</td></tr><tr><td>2025</td><td>2,00 kr</td><td>1,27 %</td></tr><tr><td>Snitt <span class="nowrap">2024–25</span></td><td>1,00 kr</td><td>0,63 %</td></tr><tr><td>Snitt <span class="nowrap">2023–25</span></td><td>0,67 kr</td><td>0,42 %</td></tr><tr><td>Snitt <span class="nowrap">2022–25</span></td><td>0,75 kr</td><td>0,47 %</td></tr><tr><td>Snitt <span class="nowrap">2021–25</span></td><td>0,80 kr</td><td>0,51 %</td></tr></tbody></table><p class="betalt-fotnote">Summert etter ex-dato, inkludert eventuelle ekstraordinære utbytter. Yield regnet mot dagens kurs. </p></div>
 
   <div class="desc"><h2>Om selskapet</h2><p>AKVA group lager utstyret og programvaren oppdretterne bruker, men driver ikke oppdrett selv. Røttene går tilbake til 1974, da verdens første plastmerd ble utviklet, og til AKVA AS, som oppfinneren Ole Molaug og partnere startet på Jæren i 1980 for å lage automatiske fôringssystemer. Konsernet har forretningsadresse i Egersund og ledes fra Klepp, og har selskaper i blant annet Chile, Canada, Storbritannia, Danmark og Australia.</p><p>Virksomheten er delt i tre. Sjøbasert omfatter fôrflåter, plastmerder fra fabrikken i Mo i Rana, stålmerder fra Puerto Montt i Chile, nøter fra Egersund Net og undervannsfarkoster fra Sperre på Notodden. Landbasert prosjekterer resirkuleringsanlegg for settefisk, postsmolt og matfisk på land, og har fått flere nye kontrakter i 2026. Digital selger styringssystemer som AKVA fishtalk og kamerabasert overvåking, styrket gjennom kjøpet av Observe Technologies i 2024. Hovedkundene er lakseoppdrettere, så inntektene følger hvor mye de investerer i nye anlegg og i utskifting av utstyr.</p><p>Egersund Group har vært kontrollerende eier, med Israel Corporation som nest største aksjonær. Etter to år uten utbytte har AKVA siden 2025 delt ut utbytte to ganger i året, vedtatt av styret etter fullmakt fra generalforsamlingen. I april 2026 startet styret en strategisk gjennomgang, og 2. oktober 2026 kunngjorde AKVA en avtale med det japanske industrikonsernet Yanmar om et anbefalt kontantbud på alle aksjene. Egersund Group, Israel Corporation og andre store eiere har forpliktet seg til å akseptere, og budet har som vilkår at Yanmar får minst ni tideler av aksjene. Lykkes det, vil Yanmar tvangsinnløse resten og foreslå at aksjen tas av børs. Utbytte som vedtas før oppgjøret, trekkes fra budprisen.</p></div>
 
-  <div class="investor-profil-seksjon"><div class="investor-badges-rad"><span class="investor-badge investor-risiko-moderat">Moderat risiko</span><span class="investor-badge investor-mal">Utbyttevekst</span></div><div class="investor-forklaring risiko-moderat"><div class="investor-forklaring-tittel"><span class="investor-badge investor-risiko-moderat">Moderat risiko</span></div><ul class="investor-forklaring-liste"><li>Sektor (Havbruk) har en viss konjunktureksponering</li><li>Utbytte i 12 år, men med brudd — sammenhengende siden 2025</li><li>Sunn payout ratio (33%) — god buffer</li></ul></div><div class="investor-mal-seksjon"><p class="investor-mal-header">Passer for</p><div class="investor-mal-rad"><span class="investor-badge investor-mal">Utbyttevekst</span><span class="investor-mal-tekst">Passer investorer med lang horisont som vil at utbyttet skal vokse raskere enn inflasjonen. Holder veksten på +18,9% per år seg, dobles utbyttet på ca. 4 år.</span></div></div></div>
+  <div class="investor-profil-seksjon"><div class="investor-badges-rad"><span class="investor-badge investor-risiko-moderat">Moderat risiko</span></div><div class="investor-forklaring risiko-moderat"><div class="investor-forklaring-tittel"><span class="investor-badge investor-risiko-moderat">Moderat risiko</span></div><ul class="investor-forklaring-liste"><li>Sektor (Havbruk) har en viss konjunktureksponering</li><li>Utbytte i 12 år, men med brudd — sammenhengende siden 2025</li><li>Sunn payout ratio (33%) — god buffer</li></ul></div></div>
 
   
 

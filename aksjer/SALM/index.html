@@ -192,6 +192,9 @@
     .rekke-seksjon { border-left: 3px solid #22c55e; }
     .nedtur-seksjon { border-left: 3px solid #f59e0b; }
     .delaar-seksjon { border-left: 3px solid #f59e0b; }
+    /* Den mørke regelen over setter border-color på alle sider og tok med seg
+       den gule kanten; varselet så ut som en vanlig boks (2026-10-19). */
+    .dark .delaar-seksjon { border-left-color: #f59e0b; }
     .betalt-seksjon .betalt-tabell { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; font-size: 0.875rem; margin: 0.25rem 0 0.5rem; }
     .betalt-seksjon .betalt-tabell th, .betalt-seksjon .betalt-tabell td { text-align: left; padding: 0.45rem 0.75rem; }
     .betalt-seksjon .betalt-tabell td:not(:first-child), .betalt-seksjon .betalt-tabell th:not(:first-child) { white-space: nowrap; text-align: right; }
@@ -204,6 +207,8 @@
     /* Nøytral variant: forklarer en observasjon, advarer ikke om en feil. */
     .delaar-seksjon.delaar-noytral { border-left-color: #94a3b8; }
     .dark .delaar-seksjon.delaar-noytral { border-left-color: #475569; }
+    .hendelse-seksjon p.hendelse-kilde { font-size: 0.8rem; color: #6b7280; }
+    .dark .hendelse-seksjon p.hendelse-kilde { color: #9ca3af; }
     .mnd-strip { display: grid; grid-template-columns: repeat(12, 1fr); gap: 2px; margin-bottom: 0.85rem; }
     .mnd-celle { text-align: center; padding: 0.4rem 0.1rem; font-size: 0.62rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.02em; color: #9ca3af; background: #f1f5f9; border-radius: 0.25rem; }
     .mnd-celle.mnd-ja { background: #15803d; color: #fff; }
@@ -523,7 +528,7 @@
 
   <div class="desc"><h2>Om selskapet</h2><p>SalMar ble startet på Frøya i 1991 av Witzøe-familien, sammen med familien bak Måsøval. Gründeren Gustav Witzøe er fortsatt styreleder og kontrollerer selskapet gjennom Kverva, som er største aksjonær. Fusjonen med Norway Royal Salmon og kjøpet av NTS i 2022 og 2023 gjorde SalMar til verdens nest største lakseprodusent, etter selskapets egen opptelling. I Norge er driften delt mellom Midt-Norge, der slakte- og foredlingsanlegget InnovaMar ligger på Frøya, og Nord-Norge fra Harstad til Sør-Varanger, med anlegget InnovaNor på Senja.</p><p>Utenfor Norge eier SalMar flertallet i Icelandic Salmon, som driver Arnarlax på Island, og halvparten av Scottish Sea Farms sammen med Lerøy. Oppdrett lenger ut i havet er samlet i SalMar Ocean, som SalMar har eid alene siden selskapet kjøpte ut Aker i 2025. Der står de halvt nedsenkbare anleggene Ocean Farm 1 i Frohavet og Arctic Offshore Farming i nord, mens et større havanlegg vest for Frøya er satt på vent til regelverket er avklart. I juli 2026 inngikk SalMar avtale om å kjøpe flertallsposten i nettopp Måsøval. Handelen krever godkjenning fra myndighetene.</p><p>Utbyttepolitikken tar utgangspunkt i gjelden. Netto rentebærende gjeld skal ligge mellom én og to og en halv ganger EBITDA, og innenfor det spennet skal overskuddslikviditet deles ut som årlig utbytte eller ved tilbakekjøp av aksjer. Investeringer og oppkjøp konkurrerer altså direkte med utbyttet. For regnskapsåret 2025 ble utbyttet mer enn halvert fra året før, etter et år med biologiske problemer og lavere priser, og i august 2026 kjøpte selskapet tilbake egne aksjer.</p></div>
 
-  <div class="investor-profil-seksjon"><div class="investor-badges-rad"><span class="investor-badge investor-risiko-lav">Lav risiko</span></div><div class="investor-forklaring risiko-lav"><div class="investor-forklaring-tittel"><span class="investor-badge investor-risiko-lav">Lav risiko</span></div><ul class="investor-forklaring-liste"><li>Sektor (Havbruk) har en viss konjunktureksponering</li><li>Utbytte i 17 år, men med brudd — sammenhengende siden 2014</li></ul></div></div>
+  <div class="investor-profil-seksjon"><div class="investor-badges-rad"><span class="investor-badge investor-risiko-moderat">Moderat risiko</span></div><div class="investor-forklaring risiko-moderat"><div class="investor-forklaring-tittel"><span class="investor-badge investor-risiko-moderat">Moderat risiko</span></div><ul class="investor-forklaring-liste"><li>Sektor (Havbruk) har en viss konjunktureksponering</li><li>Utbytte i 17 år, men med brudd — sammenhengende siden 2014</li><li>Utbyttet er satt ned før, sist i 2025</li></ul></div></div>
 
   <div class="ai-oppsummering"><h2>Utbyttehistorikken kort fortalt</h2><p>Utbyttet er samlet opp fra 20,00 til 22,00 kroner per aksje i 2022–2025, men veien dit gikk gjennom 1 kutt underveis. Dagens yield på 1,8 % er lavere enn aksjens eget 5-årssnitt på 4,2 %.</p></div>
 

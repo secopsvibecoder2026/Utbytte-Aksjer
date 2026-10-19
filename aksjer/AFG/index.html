@@ -192,6 +192,9 @@
     .rekke-seksjon { border-left: 3px solid #22c55e; }
     .nedtur-seksjon { border-left: 3px solid #f59e0b; }
     .delaar-seksjon { border-left: 3px solid #f59e0b; }
+    /* Den mørke regelen over setter border-color på alle sider og tok med seg
+       den gule kanten; varselet så ut som en vanlig boks (2026-10-19). */
+    .dark .delaar-seksjon { border-left-color: #f59e0b; }
     .betalt-seksjon .betalt-tabell { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; font-size: 0.875rem; margin: 0.25rem 0 0.5rem; }
     .betalt-seksjon .betalt-tabell th, .betalt-seksjon .betalt-tabell td { text-align: left; padding: 0.45rem 0.75rem; }
     .betalt-seksjon .betalt-tabell td:not(:first-child), .betalt-seksjon .betalt-tabell th:not(:first-child) { white-space: nowrap; text-align: right; }
@@ -204,6 +207,8 @@
     /* Nøytral variant: forklarer en observasjon, advarer ikke om en feil. */
     .delaar-seksjon.delaar-noytral { border-left-color: #94a3b8; }
     .dark .delaar-seksjon.delaar-noytral { border-left-color: #475569; }
+    .hendelse-seksjon p.hendelse-kilde { font-size: 0.8rem; color: #6b7280; }
+    .dark .hendelse-seksjon p.hendelse-kilde { color: #9ca3af; }
     .mnd-strip { display: grid; grid-template-columns: repeat(12, 1fr); gap: 2px; margin-bottom: 0.85rem; }
     .mnd-celle { text-align: center; padding: 0.4rem 0.1rem; font-size: 0.62rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.02em; color: #9ca3af; background: #f1f5f9; border-radius: 0.25rem; }
     .mnd-celle.mnd-ja { background: #15803d; color: #fff; }
@@ -523,7 +528,7 @@
 
   <div class="desc"><h2>Om selskapet</h2><p>AF Gruppen startet i 1985 som Arbeidsfellesskapet, en anleggsentreprenør, og bygger i dag alt fra tunneler og jernbane til skoler og boligprosjekter i Norge og Sverige. Konsernet er delt i forretningsområdene anlegg, bygg, energi og miljø, eiendom, Sverige og offshore. Energi og miljø river og sanerer bygg, gjenvinner masser og borer brønner for energi, og arbeider med energieffektivisering og klimaanlegg. Offshore fjerner og gjenvinner utrangerte installasjoner fra sokkelen, og AF har et eget anlegg for miljøsanering i Vats. I 2026 ble den delen styrket med kjøpet av Claxton Engineering Services, et internasjonalt selskap som lever av mange små oppdrag innen fjerning av offshoreinstallasjoner og utstyr til havvind.</p><p>Mange av eierne jobber i selskapet. Hvert år får ansatte, både funksjonærer og fagarbeidere, kjøpe aksjer med rabatt, og mange gjør det. OBOS er blant de største aksjonærene og er samtidig en viktig oppdragsgiver: AF bygger for OBOS på Fornebu, og de to deler hovedkontor i Construction City på Ulven sammen med Betonmast.</p><p>Utbyttepolitikken sier at minst halvparten av årets resultat skal deles ut over tid, fordelt på inntil to utbetalinger i året. Den første kommer etter generalforsamlingen i mai, den andre eventuelt etter tredjekvartalsrapporten i november. Før hvert forslag vurderer styret egenkapital, likviditet og planlagte oppkjøp, og utdelingen har fulgt resultatet tett. I 2024 kom bare én og lav utbetaling, mens 2025 ga to. Oppkjøpene konkurrerer om de samme pengene: Claxton ble betalt kontant fra selskapets egen likviditet.</p></div>
 
-  <div class="investor-profil-seksjon"><div class="investor-badges-rad"><span class="investor-badge investor-risiko-moderat">Moderat risiko</span></div><div class="investor-forklaring risiko-moderat"><div class="investor-forklaring-tittel"><span class="investor-badge investor-risiko-moderat">Moderat risiko</span></div><ul class="investor-forklaring-liste"><li>Syklisk sektor (Industri) — utbytte svinger med konjunkturer</li><li>Lang utbyttehistorikk (27 år på rad)</li></ul></div></div>
+  <div class="investor-profil-seksjon"><div class="investor-badges-rad"><span class="investor-badge investor-risiko-moderat">Moderat risiko</span></div><div class="investor-forklaring risiko-moderat"><div class="investor-forklaring-tittel"><span class="investor-badge investor-risiko-moderat">Moderat risiko</span></div><ul class="investor-forklaring-liste"><li>Syklisk sektor (Industri) — utbytte svinger med konjunkturer</li><li>Lang utbyttehistorikk (27 år på rad)</li><li>Utbyttet er satt ned før, sist i 2024</li></ul></div></div>
 
   <div class="ai-oppsummering"><h2>Utbyttehistorikken kort fortalt</h2><p>Utbyttet er lavere nå enn i 2022 — ned fra 10,50 til 9,00 kroner per aksje, med 2 nedgangsår i perioden. Spennet er stort: høyeste år er 3,0 ganger det laveste, så størrelsen på utbetalingen er lite forutsigbar fra år til år. Dagens yield på 3,5 % ligger nær aksjens eget 5-årssnitt på 4,3 %.</p></div>
 

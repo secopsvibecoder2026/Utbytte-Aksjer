@@ -192,6 +192,9 @@
     .rekke-seksjon { border-left: 3px solid #22c55e; }
     .nedtur-seksjon { border-left: 3px solid #f59e0b; }
     .delaar-seksjon { border-left: 3px solid #f59e0b; }
+    /* Den mørke regelen over setter border-color på alle sider og tok med seg
+       den gule kanten; varselet så ut som en vanlig boks (2026-10-19). */
+    .dark .delaar-seksjon { border-left-color: #f59e0b; }
     .betalt-seksjon .betalt-tabell { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; font-size: 0.875rem; margin: 0.25rem 0 0.5rem; }
     .betalt-seksjon .betalt-tabell th, .betalt-seksjon .betalt-tabell td { text-align: left; padding: 0.45rem 0.75rem; }
     .betalt-seksjon .betalt-tabell td:not(:first-child), .betalt-seksjon .betalt-tabell th:not(:first-child) { white-space: nowrap; text-align: right; }
@@ -204,6 +207,8 @@
     /* Nøytral variant: forklarer en observasjon, advarer ikke om en feil. */
     .delaar-seksjon.delaar-noytral { border-left-color: #94a3b8; }
     .dark .delaar-seksjon.delaar-noytral { border-left-color: #475569; }
+    .hendelse-seksjon p.hendelse-kilde { font-size: 0.8rem; color: #6b7280; }
+    .dark .hendelse-seksjon p.hendelse-kilde { color: #9ca3af; }
     .mnd-strip { display: grid; grid-template-columns: repeat(12, 1fr); gap: 2px; margin-bottom: 0.85rem; }
     .mnd-celle { text-align: center; padding: 0.4rem 0.1rem; font-size: 0.62rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.02em; color: #9ca3af; background: #f1f5f9; border-radius: 0.25rem; }
     .mnd-celle.mnd-ja { background: #15803d; color: #fff; }
@@ -574,7 +579,7 @@
   </section>
 
   <div class="relaterte"><h2>Andre shipping-aksjer med utbytte</h2><div class="rel-grid"><a href="/aksjer/STST/" class="rel-kort"><span class="rel-ticker">STST</span><span class="rel-navn">Stainless Tankers ASA</span><span class="rel-yield">12,5%</span></a>
-<a href="/aksjer/HAFNI/" class="rel-kort"><span class="rel-ticker">HAFNI</span><span class="rel-navn">Hafnia Limited</span><span class="rel-yield">11,0%</span></a>
+<a href="/aksjer/HAFNI/" class="rel-kort"><span class="rel-ticker">HAFNI</span><span class="rel-navn">Hafnia Limited</span><span class="rel-yield">11,1%</span></a>
 <a href="/aksjer/WEST/" class="rel-kort"><span class="rel-ticker">WEST</span><span class="rel-navn">Western Bulk Chartering AS</span><span class="rel-yield">10,6%</span></a>
 <a href="/aksjer/OET/" class="rel-kort"><span class="rel-ticker">OET</span><span class="rel-navn">Okeanis Eco Tankers Corp.</span><span class="rel-yield">10,6%</span></a></div></div>
 

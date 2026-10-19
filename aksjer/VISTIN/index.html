@@ -192,6 +192,9 @@
     .rekke-seksjon { border-left: 3px solid #22c55e; }
     .nedtur-seksjon { border-left: 3px solid #f59e0b; }
     .delaar-seksjon { border-left: 3px solid #f59e0b; }
+    /* Den mørke regelen over setter border-color på alle sider og tok med seg
+       den gule kanten; varselet så ut som en vanlig boks (2026-10-19). */
+    .dark .delaar-seksjon { border-left-color: #f59e0b; }
     .betalt-seksjon .betalt-tabell { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; font-size: 0.875rem; margin: 0.25rem 0 0.5rem; }
     .betalt-seksjon .betalt-tabell th, .betalt-seksjon .betalt-tabell td { text-align: left; padding: 0.45rem 0.75rem; }
     .betalt-seksjon .betalt-tabell td:not(:first-child), .betalt-seksjon .betalt-tabell th:not(:first-child) { white-space: nowrap; text-align: right; }
@@ -204,6 +207,8 @@
     /* Nøytral variant: forklarer en observasjon, advarer ikke om en feil. */
     .delaar-seksjon.delaar-noytral { border-left-color: #94a3b8; }
     .dark .delaar-seksjon.delaar-noytral { border-left-color: #475569; }
+    .hendelse-seksjon p.hendelse-kilde { font-size: 0.8rem; color: #6b7280; }
+    .dark .hendelse-seksjon p.hendelse-kilde { color: #9ca3af; }
     .mnd-strip { display: grid; grid-template-columns: repeat(12, 1fr); gap: 2px; margin-bottom: 0.85rem; }
     .mnd-celle { text-align: center; padding: 0.4rem 0.1rem; font-size: 0.62rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.02em; color: #9ca3af; background: #f1f5f9; border-radius: 0.25rem; }
     .mnd-celle.mnd-ja { background: #15803d; color: #fff; }
@@ -523,7 +528,7 @@
 
   <div class="desc"><h2>Om selskapet</h2><p>Vistin Pharma lager i praksis ett produkt: metformin, virkestoffet i førstevalget mot type 2-diabetes. Det skjer i en helautomatisert fabrikk på Fikkjebakke i Kragerø. Kundene er legemiddelselskaper som presser tablettene selv, både originalprodusenter og generikaprodusenter, og de kjøper enten rent virkestoff eller et ferdig granulat som kan presses direkte til tabletter. Tradisjonelt lages de fleste virkestoffer til legemidler i Asia. Vistin konkurrerer på kvalitet, leveringssikkerhet og et lavere klimaavtrykk, fordi fabrikken går på vannkraft der konkurrentene ofte bruker kullkraft. EUs nye regelverk for kritiske legemidler og ønsket om europeisk forsyning trekker i samme retning.</p><p>Metformin er likevel en råvare blant legemidler, og prisen følger prisene på innsatsstoffer og energi. Vistin styrer etter bruttomarginen, så omsetningen kan falle et år uten at overskuddet gjør det. Råstoffene kjøpes inn fra utlandet, og produktene eksporteres med salg i euro. Da kronen styrket seg mot euro i 2026, falt omsetningen selv om det ble solgt mer. Selskapet presser kapasiteten i fabrikken stadig høyere og leter etter flere ben å stå på, gjennom oppkjøp eller ved å produsere virkestoff på kontrakt for andre. Største aksjonær er Intertrade Shipping, selskapet til styreleder Øyvin Brøymer.</p><p>Målet er å dele ut halvparten av årsresultatet, men bare så langt økonomien og kapitalbehovet for vekst tillater det. Historikken viser at det ikke er et løfte. Det har vært flere år uten utbytte, og utbyttet for 2025 ble lavere enn året før. Fabrikken er pantsatt for lånene, og investeringer i kapasitet eller et oppkjøp konkurrerer direkte med utdelingen.</p></div>
 
-  <div class="investor-profil-seksjon"><div class="investor-badges-rad"><span class="investor-badge investor-risiko-moderat">Moderat risiko</span></div><div class="investor-forklaring risiko-moderat"><div class="investor-forklaring-tittel"><span class="investor-badge investor-risiko-moderat">Moderat risiko</span></div><ul class="investor-forklaring-liste"><li>Sektor (Helsevern) har en viss konjunktureksponering</li><li>Utbytte i 7 år, men med brudd — sammenhengende siden 2024</li></ul></div></div>
+  <div class="investor-profil-seksjon"><div class="investor-badges-rad"><span class="investor-badge investor-risiko-moderat">Moderat risiko</span></div><div class="investor-forklaring risiko-moderat"><div class="investor-forklaring-tittel"><span class="investor-badge investor-risiko-moderat">Moderat risiko</span></div><ul class="investor-forklaring-liste"><li>Sektor (Helsevern) har en viss konjunktureksponering</li><li>Utbytte i 7 år, men med brudd — sammenhengende siden 2024</li><li>Utbyttet er satt ned før, sist i 2025</li></ul></div></div>
 
   
 
@@ -558,7 +563,7 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
 
   
 
-  <div class="vurdering-seksjon"><h2>Vurdering som utbytteaksje</h2><p class="vurdering-tekst">Vistin Pharma ASA har betalt utbytte de siste 3 årene, men historikken er begrenset. Yielden på 5,4% er klart over sektorsnittet for Helsevern (3,3%), noe som reflekterer enten høy utbyttekapasitet eller at markedet priser inn høyere risiko. Målt fra første til siste hele år har utbyttet vokst med 25,7% per år, men toppen var 1,75 NOK i 2024, og 2025 endte på 1,25 NOK.</p></div><div class="driver-seksjon"><h2>Hva driver utbyttet i VISTIN?</h2><p class="driver-tekst">Produktgodkjenninger, patentstatus og refusjonsbeslutninger fra helsemyndigheter er de viktigste hendelsene. Marginen er relativt stabil, men ett negativt regulatorisk vedtak kan endre bildet raskt. Utbyttet er typisk lavere og mer stabilt enn i sykliske sektorer.</p><p class="driver-tekst">Vistin Pharma ASA har betalt utbytte i 7 av årene vi har tall for, men rekken er brutt — den nåværende går tilbake til 2024. Utbyttet har vokst 25,7 % i året de siste fem årene, men det høyeste året i perioden var 2024. Payout ratio på 63 % er et nivå som pleier å kunne holdes over tid. Utbyttet går ex årlig, i juni.</p></div>
+  <div class="vurdering-seksjon"><h2>Vurdering som utbytteaksje</h2><p class="vurdering-tekst">Vistin Pharma ASA har betalt utbytte de siste 3 årene. Medregnet årene før bruddet har selskapet betalt i 7 av årene vi har tall for. Yielden på 5,4% er klart over sektorsnittet for Helsevern (3,3%), noe som reflekterer enten høy utbyttekapasitet eller at markedet priser inn høyere risiko. Målt fra første til siste hele år har utbyttet vokst med 25,7% per år, men toppen var 1,75 NOK i 2024, og 2025 endte på 1,25 NOK.</p></div><div class="driver-seksjon"><h2>Hva driver utbyttet i VISTIN?</h2><p class="driver-tekst">Produktgodkjenninger, patentstatus og refusjonsbeslutninger fra helsemyndigheter er de viktigste hendelsene. Marginen er relativt stabil, men ett negativt regulatorisk vedtak kan endre bildet raskt. Utbyttet er typisk lavere og mer stabilt enn i sykliske sektorer.</p><p class="driver-tekst">Vistin Pharma ASA har betalt utbytte i 7 av årene vi har tall for, men rekken er brutt — den nåværende går tilbake til 2024. Utbyttet har vokst 25,7 % i året de siste fem årene, men det høyeste året i perioden var 2024. Payout ratio på 63 % er et nivå som pleier å kunne holdes over tid. Utbyttet går ex årlig, i juni.</p></div>
 
   
 
