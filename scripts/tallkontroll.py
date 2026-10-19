@@ -179,8 +179,36 @@ def sjekk_ex_dato(rad, newsweb):
     return None
 
 
+SUPPLERT_NABO_DAGER = 10
+
+
+def med_supplert(rad, utbytter):
+    """Rådata pluss utbetalingene pipelinen har lagt til fra NewsWeb.
+
+    `utbytte_supplert` er utbetalinger Yahoo mangler, hver bekreftet av en
+    ex-dagsmelding på Oslo Børs (suppler_utbytteserie() i fetch_stocks.py).
+    Uten dem meldte kontrollen SOFF, WWI og WWIB som avvik hver uke, mens det
+    var Yahoos serie som manglet en betaling (tallkontrollen 2026-10-19). En
+    tillagt betaling tas bare med når rådata ikke har en innen ti dager, så
+    ingenting telles to ganger.
+    """
+    ut = list(utbytter)
+    for s_ in rad.get("utbytte_supplert") or []:
+        try:
+            d = datetime.date.fromisoformat(str(s_.get("ex_dato"))[:10])
+            belop = float(s_.get("belop"))
+        except (TypeError, ValueError):
+            continue
+        naer = any(abs((datetime.date.fromisoformat(x) - d).days) <= SUPPLERT_NABO_DAGER
+                   for x, _ in ut)
+        if not naer:
+            ut.append((d.isoformat(), belop))
+    return sorted(ut)
+
+
 def kontroller(rad, pris, kurs_historikk, raa_kurs, utbytter, i_dag, newsweb=None):
     """Alle sjekker for én aksje. Returnerer liste med avvik."""
+    utbytter = med_supplert(rad, utbytter)
     funn = [
         sjekk_kurs(pris, raa_kurs),
         sjekk_kursgraf(kurs_historikk, raa_kurs),

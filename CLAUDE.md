@@ -1835,6 +1835,106 @@ policy in a notice can hit it.
 
 Tests: `TestBetaltSomArsrate` (2 replace the old «Uregelmessig gives no rule»).
 
+## From the tallkontroll of 2026-10-19
+
+The weekly page reading found six sentence patterns that contradicted each
+other on the same page. All are fixed at the template level, in `ui.js` where
+the app has a copy, and each has a test that failed before the fix.
+
+| Finding | Pages | Fix |
+|---|---|---|
+| «Har satt ned utbyttet før» from this year's partial row (TGS next to «uten et eneste kutt») | 13 | `utbyttekutt()` compares whole years only. It is shared by the risk list, the downturn test, «Stabil inntekt» and the risk score |
+| «Moderat utbyttehistorikk (3 år)» next to «Kort utbyttehistorikk (3 år)» and «begrenset» | 14 | «Kort» is under 3 years everywhere; the assessment no longer says «begrenset» |
+| «Historikken er begrenset» about STB (17 years) and SPOG (25) | 30 | A broken streak states how many years the company has paid in |
+| «Stabil inntekt … uten store overraskelser» and «Lav risiko» beside «kuttet før» | 6 / 18 | No «stabil» goal after a cut. A cut lifts the risk to at least «Moderat» (`utbytteKutt()` in `ui.js`) |
+| «Nær aksjens eget snitt» at 40 % above it | 8 | The same relative ±20 % band as the FAQ |
+| «Nesten hele inntjeningen» at a payout of 130 % | 27 | Over 100 % reads «deler ut mer enn det tjener» |
+
+**No doubling time above 25 % a year** (`VEKST_FRAMSKRIV_MAKS`). SUBC got
+«dobles på ca. 1 år» from +59,7 %. That rate says more about a low starting
+point than about the pace ahead.
+
+**`bransje` in `tickers.json`.** All 37 companies in Finans got bank text about
+interest margins, and TGS got «dag-rater for rigger og fartøy». Ten tickers now
+carry a `bransje`, and `_BRANSJE_DRIVER_UTDYPET` / `BRANSJE_RISIKOER` take
+precedence over the sector text:
+
+- `forsikring`: GJF, PROT, STB
+- `inkasso`: B2I, ACR
+- `meglerhus`: ABG
+- `seismikk`: TGS
+- `prosjekt`: AKSO, AQUA
+- `investeringsselskap`: AKAST
+
+`TestBransje` requires every value to have both texts.
+
+### Selskapshendelser: `hendelse` in `tickers.json`
+
+STST said «utbyttet kommer fire ganger i året» and «jevn kontantstrøm» after its
+board decided on 5 August 2026 to sell the whole fleet within 18 months (Q2
+report, NewsWeb 679057). Seven other pages said nothing about a pending
+buyout, merger or market move. A hand-written field now does:
+
+```json
+"hendelse": {"type": "oppkjop", "dato": "2026-10-02", "melding": "683486", "tekst": "…"}
+```
+
+- **Types:** `oppkjop`, `fusjon`, `mulig_fusjon`, `avvikling`, `bytte_av_marked`.
+  The first three drop the «Passer for deg» goals on the page and in the app,
+  since the history no longer says anything about the dividend ahead.
+- **Display:** `lag_hendelse_boks()` and `modalHendelse()` render an amber box at
+  the top with a link to the notice. `sett_hendelse()` copies the field into
+  `aksjer.json` in both `fetch_stocks.py` and `regenerer_sider.py`.
+- **Entries as of 19.10, each checked against the notice:**
+  - STST: avvikling
+  - SUBC: fusjon with Saipem
+  - ELMRA: Fortum 95,8 %, compulsory acquisition and delisting to follow
+  - AKVA: Yanmar offer, 161 kr
+  - MULTI: fusjon with Rejlers, approved 19 October
+  - ROMER and SKUE: letter of intent
+  - AQUA: move to Growth
+- **Remove the field by hand** when the matter is settled. If the ticker
+  leaves, the field leaves with it. The maintenance agent reports a missing or
+  stale entry.
+
+The dark rule for `.delaar-seksjon` set `border-color` on all four sides and
+removed the amber left edge, so in dark mode the warning box looked like any
+other box. That is fixed too.
+
+### Gap years are looked up in the NewsWeb archive
+
+Yahoo is missing Sparebanken Øst's 3,80 kr from 24.03.2023 (NewsWeb 586067), so
+the 5-year average counted 2023 as 0. The per-issuer list reaches back about 16
+months, but a query with `fromDate`/`toDate` reaches further.
+
+- **What is looked up:** `hullaar()` finds whole years in the last five with no
+  payment but with payments both before and after. `newsweb_ex_meldinger()`
+  looks up only those years, which costs one list call per gap. The guards in
+  `suppler_utbytteserie()` are unchanged.
+- **Title and amount parsing:** titles now match «eks utbytte», and amounts
+  match «kr 10,50».
+- **Dry run over the 13 gap years:**
+  - Filled: SPOG 2023, SKUE 2023, VVL 2023, SNOR 2023 and SB68 2022.
+  - Real pauses, with no ex notice in that year, so nothing is added: ENTR,
+    AKVA, HUNT, VISTIN, ZAL, ELK, GYL and JIN.
+
+**Other fixes in the same pass:**
+
+- `tallkontroll.py` now counts `utbytte_supplert` (`med_supplert()`). SOFF, WWI
+  and WWIB were reported as deviations every week.
+- `_kort_selskapsnavn()` strips AG and SA. The title read «SoftwareOne AG», a
+  name the company does not have.
+
+Tests: `TestTallkontroll1910` (8), `TestBransje` (2), `TestHendelse` (5),
+`TestHullaar` (4), `TestSupplert` (4) in `test_tallkontroll.py`, and
+`ui.test.js` (4).
+
+**Open:**
+
+- **VISTIN:** the board may pay up to 0,50 kr in November. «Årlig» and 1,00 kr
+  are right until it does.
+- **BOR:** an interpretation for the owner, see «STST: 30 % of what?».
+
 ## «Les mer» in the app modal (2026-10-07)
 
 With the 180–280-word company texts plus Yahoo's paragraph, «Om selskapet»

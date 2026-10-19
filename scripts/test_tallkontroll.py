@@ -59,6 +59,33 @@ class TestBetalt(unittest.TestCase):
         self.assertIsNone(tk.sjekk_yield_mot_betalt({"utbytte_yield": 3.0}, 100, I_DAG, self.UTB))
 
 
+class TestSupplert(unittest.TestCase):
+    """SOFF-formen: Yahoo mangler marsbetalingen, pipelinen har den fra NewsWeb."""
+
+    UTB = [("2025-11-05", 0.96), ("2026-05-20", 0.97), ("2026-08-19", 0.96)]
+    RAD = {"utbytte_12m": 3.37,
+           "utbytte_supplert": [{"ex_dato": "2026-03-10", "belop": 0.4832}]}
+
+    def test_tillagt_betaling_gir_ikke_falsk_alarm(self):
+        rader = tk.med_supplert(self.RAD, self.UTB)
+        self.assertIn(("2026-03-10", 0.4832), rader)
+        self.assertEqual(rader, sorted(rader))
+
+    def test_uten_supplert_er_rådata_uendret(self):
+        self.assertEqual(tk.med_supplert({}, self.UTB), self.UTB)
+
+    def test_telles_ikke_to_ganger(self):
+        rad = {"utbytte_supplert": [{"ex_dato": "2026-05-18", "belop": 0.97}]}
+        self.assertEqual(tk.med_supplert(rad, self.UTB), self.UTB)
+
+    def test_kontroller_bruker_den(self):
+        utb = [("2025-11-05", 1.0), ("2026-05-20", 1.0), ("2026-08-19", 1.0)]
+        rad = {"utbytte_12m": 4.0, "utbytte_yield": 4.0,
+               "utbytte_supplert": [{"ex_dato": "2026-03-10", "belop": 1.0}]}
+        funn = tk.kontroller(rad, 100, None, None, utb, I_DAG)
+        self.assertNotIn("betalt_12m", [f["sjekk"] for f in funn])
+
+
 class TestFrekvens(unittest.TestCase):
     # SATS-formen: tre utbetalinger i ett 12-månedersvindu, men ~180 dager mellom.
     HALVAAR = [("2025-03-04", 1), ("2025-09-01", 1), ("2026-03-04", 1), ("2026-08-24", 1)]
