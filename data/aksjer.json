@@ -1,5 +1,5 @@
 {
-  "sist_oppdatert": "2026-10-20T15:49:23Z",
+  "sist_oppdatert": "2026-10-20T18:14:38Z",
   "kilde": "Yahoo Finance (yfinance)",
   "antall_ok": 155,
   "antall_feil": 0,
@@ -77,7 +77,7 @@
       "utbytte_per_ar": {
         "2021": 4.9429,
         "2022": 16.5261,
-        "2023": 35.2371,
+        "2023": 35.2366,
         "2024": 32.1646,
         "2025": 19.1553
       },
@@ -1070,7 +1070,7 @@
       "utbytte_yield": 1.74,
       "utbytte_vekst_5ar": 2.4,
       "payout_ratio": 61.0,
-      "pe_ratio": 35.21,
+      "pe_ratio": 35.15,
       "pb_ratio": 4.44,
       "ex_dato": null,
       "betaling_dato": null,
@@ -1224,7 +1224,7 @@
       "utbytte_supplert": [],
       "utbytte_per_ar": {
         "2021": 0.0,
-        "2022": 9.2026,
+        "2022": 9.2025,
         "2023": 7.0301,
         "2024": 4.9193,
         "2025": 2.7522
@@ -1341,7 +1341,7 @@
       ],
       "siste_utbytte": 8.8914,
       "siste_utbytte_dato": "2026-09-07",
-      "utbytte_12m": 24.3098,
+      "utbytte_12m": 24.3097,
       "utbytte_12m_antall": 4,
       "utbytte_12m_liste": [
         {
@@ -1354,7 +1354,7 @@
         },
         {
           "ex_dato": "2026-06-11",
-          "belop": 6.299
+          "belop": 6.2989
         },
         {
           "ex_dato": "2026-09-07",
@@ -1364,10 +1364,10 @@
       "utbytte_supplert": [],
       "utbytte_per_ar": {
         "2021": 6.769,
-        "2022": 8.8374,
-        "2023": 28.9565,
-        "2024": 27.2642,
-        "2025": 12.4099
+        "2022": 8.8373,
+        "2023": 28.9562,
+        "2024": 27.264,
+        "2025": 12.4098
       },
       "utbytte_forste_ar": 2014,
       "historiske_utbytter": [
@@ -1623,7 +1623,7 @@
       "52u_hoy": 574.2,
       "52u_lav": 207.1,
       "markedsverdi_mrd": 106.4,
-      "utbytte_per_aksje": 50.59,
+      "utbytte_per_aksje": 50.58,
       "utbytte_yield": 10.59,
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 47.0,
@@ -1657,35 +1657,35 @@
         2025,
         2026
       ],
-      "siste_utbytte": 32.0624,
+      "siste_utbytte": 32.0598,
       "siste_utbytte_dato": "2026-09-17",
-      "utbytte_12m": 58.1072,
+      "utbytte_12m": 58.1026,
       "utbytte_12m_antall": 4,
       "utbytte_12m_liste": [
         {
           "ex_dato": "2025-12-11",
-          "belop": 1.7865
+          "belop": 1.7863
         },
         {
           "ex_dato": "2026-03-11",
-          "belop": 9.6845
+          "belop": 9.6838
         },
         {
           "ex_dato": "2026-06-11",
-          "belop": 14.5738
+          "belop": 14.5726
         },
         {
           "ex_dato": "2026-09-17",
-          "belop": 32.0624
+          "belop": 32.0598
         }
       ],
       "utbytte_supplert": [],
       "utbytte_per_ar": {
         "2021": 0.0,
-        "2022": 1.4104,
-        "2023": 26.9851,
-        "2024": 18.3348,
-        "2025": 8.7443
+        "2022": 1.4103,
+        "2023": 26.9829,
+        "2024": 18.3333,
+        "2025": 8.7436
       },
       "utbytte_forste_ar": 2001,
       "historiske_utbytter": [
@@ -1699,7 +1699,7 @@
         },
         {
           "ar": 2023,
-          "utbytte": 26.99,
+          "utbytte": 26.98,
           "yield": 5.65,
           "maaneder": [
             3,
@@ -1774,7 +1774,7 @@
       "utbytte_yield": 4.84,
       "utbytte_vekst_5ar": -5.6,
       "payout_ratio": 59.0,
-      "pe_ratio": 12.2,
+      "pe_ratio": 12.12,
       "pb_ratio": 0.94,
       "ex_dato": null,
       "betaling_dato": null,
@@ -2591,7 +2591,7 @@
       "utbytte_yield": 11.0,
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 57.0,
-      "pe_ratio": 7.48,
+      "pe_ratio": 7.47,
       "pb_ratio": 1.9,
       "ex_dato": null,
       "betaling_dato": null,
@@ -2606,35 +2606,35 @@
         2025,
         2026
       ],
-      "siste_utbytte": 4.7044,
+      "siste_utbytte": 4.7038,
       "siste_utbytte_dato": "2026-09-07",
-      "utbytte_12m": 10.4488,
+      "utbytte_12m": 10.4475,
       "utbytte_12m_antall": 4,
       "utbytte_12m_liste": [
         {
           "ex_dato": "2025-12-08",
-          "belop": 1.3823
+          "belop": 1.3821
         },
         {
           "ex_dato": "2026-03-05",
-          "belop": 1.6568
+          "belop": 1.6566
         },
         {
           "ex_dato": "2026-06-03",
-          "belop": 2.7053
+          "belop": 2.705
         },
         {
           "ex_dato": "2026-09-07",
-          "belop": 4.7044
+          "belop": 4.7038
         }
       ],
       "utbytte_supplert": [],
       "utbytte_per_ar": {
         "2021": 0.0,
-        "2022": 4.5822,
-        "2023": 10.1188,
-        "2024": 12.8946,
-        "2025": 3.7509
+        "2022": 4.5816,
+        "2023": 10.1175,
+        "2024": 12.893,
+        "2025": 3.7505
       },
       "utbytte_forste_ar": 2020,
       "historiske_utbytter": [
@@ -3127,7 +3127,7 @@
       "utbytte_per_ar": {
         "2021": 0.0,
         "2022": 0.0,
-        "2023": 1.1284,
+        "2023": 1.1282,
         "2024": 2.5732,
         "2025": 6.828
       },
@@ -3331,7 +3331,7 @@
       "utbytte_yield": 4.88,
       "utbytte_vekst_5ar": 22.5,
       "payout_ratio": 15.0,
-      "pe_ratio": 3.14,
+      "pe_ratio": 3.09,
       "pb_ratio": 1.3,
       "ex_dato": null,
       "betaling_dato": null,
@@ -3479,35 +3479,35 @@
         2025,
         2026
       ],
-      "siste_utbytte": 0.5877,
+      "siste_utbytte": 0.5876,
       "siste_utbytte_dato": "2026-08-27",
-      "utbytte_12m": 3.4837,
+      "utbytte_12m": 3.4834,
       "utbytte_12m_antall": 4,
       "utbytte_12m_liste": [
         {
           "ex_dato": "2025-11-19",
-          "belop": 0.5877
+          "belop": 0.5876
         },
         {
           "ex_dato": "2026-03-04",
-          "belop": 1.7207
+          "belop": 1.7206
         },
         {
           "ex_dato": "2026-05-21",
-          "belop": 0.5877
+          "belop": 0.5876
         },
         {
           "ex_dato": "2026-08-27",
-          "belop": 0.5877
+          "belop": 0.5876
         }
       ],
       "utbytte_supplert": [],
       "utbytte_per_ar": {
-        "2021": 1.3164,
-        "2022": 1.3164,
-        "2023": 1.3164,
-        "2024": 2.5904,
-        "2025": 3.0794
+        "2021": 1.3163,
+        "2022": 1.3163,
+        "2023": 1.3163,
+        "2024": 2.5903,
+        "2025": 3.0792
       },
       "utbytte_forste_ar": 2011,
       "historiske_utbytter": [
@@ -3711,7 +3711,7 @@
       "utbytte_yield": 2.83,
       "utbytte_vekst_5ar": 9.7,
       "payout_ratio": 48.0,
-      "pe_ratio": 16.87,
+      "pe_ratio": 16.72,
       "pb_ratio": 2.5,
       "ex_dato": null,
       "betaling_dato": null,
@@ -4216,18 +4216,18 @@
         2025,
         2026
       ],
-      "siste_utbytte": 5.7353,
+      "siste_utbytte": 5.7352,
       "siste_utbytte_dato": "2026-08-26",
-      "utbytte_12m": 15.2314,
+      "utbytte_12m": 15.2313,
       "utbytte_12m_antall": 2,
       "utbytte_12m_liste": [
         {
           "ex_dato": "2026-03-10",
-          "belop": 9.4961
+          "belop": 9.496
         },
         {
           "ex_dato": "2026-08-26",
-          "belop": 5.7353
+          "belop": 5.7352
         }
       ],
       "utbytte_supplert": [],
@@ -5024,7 +5024,7 @@
       "utbytte_yield": 4.36,
       "utbytte_vekst_5ar": 6.7,
       "payout_ratio": 71.0,
-      "pe_ratio": 16.28,
+      "pe_ratio": 16.15,
       "pb_ratio": 3.59,
       "ex_dato": null,
       "betaling_dato": null,
@@ -5279,7 +5279,7 @@
         "2021": 1.276,
         "2022": 8.033,
         "2023": 12.787,
-        "2024": 13.4787,
+        "2024": 13.4786,
         "2025": 3.9338
       },
       "utbytte_forste_ar": 2019,
@@ -5371,7 +5371,7 @@
       "utbytte_vekst_5ar": 18.9,
       "payout_ratio": 46.0,
       "pe_ratio": 7.94,
-      "pb_ratio": 3.98,
+      "pb_ratio": 3.93,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-11-11",
@@ -5386,26 +5386,26 @@
         2025,
         2026
       ],
-      "siste_utbytte": 49.3598,
+      "siste_utbytte": 49.3613,
       "siste_utbytte_dato": "2026-08-13",
-      "utbytte_12m": 89.7879,
+      "utbytte_12m": 89.7906,
       "utbytte_12m_antall": 4,
       "utbytte_12m_liste": [
         {
           "ex_dato": "2025-12-01",
-          "belop": 7.0514
+          "belop": 7.0516
         },
         {
           "ex_dato": "2026-03-02",
-          "belop": 14.5729
+          "belop": 14.5733
         },
         {
           "ex_dato": "2026-05-27",
-          "belop": 18.8037
+          "belop": 18.8043
         },
         {
           "ex_dato": "2026-08-13",
-          "belop": 49.3598
+          "belop": 49.3613
         }
       ],
       "utbytte_supplert": [],
@@ -5413,8 +5413,8 @@
         "2021": 9.96,
         "2022": 6.1,
         "2023": 53.4,
-        "2024": 32.185,
-        "2025": 19.932
+        "2024": 32.1857,
+        "2025": 19.9326
       },
       "utbytte_forste_ar": 2020,
       "historiske_utbytter": [
@@ -5440,7 +5440,7 @@
         },
         {
           "ar": 2024,
-          "utbytte": 32.18,
+          "utbytte": 32.19,
           "yield": 3.81,
           "maaneder": [
             3,
@@ -6645,14 +6645,14 @@
         2025,
         2026
       ],
-      "siste_utbytte": 129.7524,
+      "siste_utbytte": 129.7538,
       "siste_utbytte_dato": "2026-04-29",
-      "utbytte_12m": 138.0265,
+      "utbytte_12m": 138.028,
       "utbytte_12m_antall": 6,
       "utbytte_12m_liste": [
         {
           "ex_dato": "2025-11-20",
-          "belop": 1.7864
+          "belop": 1.7865
         },
         {
           "ex_dato": "2025-12-18",
@@ -6660,7 +6660,7 @@
         },
         {
           "ex_dato": "2026-01-15",
-          "belop": 2.1625
+          "belop": 2.1626
         },
         {
           "ex_dato": "2026-02-18",
@@ -6672,16 +6672,16 @@
         },
         {
           "ex_dato": "2026-04-29",
-          "belop": 129.7524
+          "belop": 129.7538
         }
       ],
       "utbytte_supplert": [],
       "utbytte_per_ar": {
-        "2021": 27.0788,
-        "2022": 15.2318,
-        "2023": 7.7099,
-        "2024": 33.6604,
-        "2025": 13.7274
+        "2021": 27.0791,
+        "2022": 15.232,
+        "2023": 7.71,
+        "2024": 33.6608,
+        "2025": 13.7276
       },
       "utbytte_forste_ar": 2019,
       "historiske_utbytter": [
@@ -6708,7 +6708,7 @@
         {
           "ar": 2023,
           "utbytte": 7.71,
-          "yield": 80.14,
+          "yield": 80.15,
           "maaneder": [
             1,
             2,
@@ -7544,27 +7544,27 @@
         2025,
         2026
       ],
-      "siste_utbytte": 9.4024,
+      "siste_utbytte": 9.4029,
       "siste_utbytte_dato": "2026-04-21",
-      "utbytte_12m": 18.8047,
+      "utbytte_12m": 18.8058,
       "utbytte_12m_antall": 2,
       "utbytte_12m_liste": [
         {
           "ex_dato": "2025-11-19",
-          "belop": 9.4024
+          "belop": 9.4029
         },
         {
           "ex_dato": "2026-04-21",
-          "belop": 9.4024
+          "belop": 9.4029
         }
       ],
       "utbytte_supplert": [],
       "utbytte_per_ar": {
-        "2021": 7.0518,
-        "2022": 14.1035,
-        "2023": 21.1553,
-        "2024": 25.8565,
-        "2025": 21.1553
+        "2021": 7.0522,
+        "2022": 14.1044,
+        "2023": 21.1565,
+        "2024": 25.858,
+        "2025": 21.1565
       },
       "utbytte_forste_ar": 2005,
       "historiske_utbytter": [
@@ -9116,7 +9116,7 @@
       "utbytte_yield": 3.63,
       "utbytte_vekst_5ar": -4.5,
       "payout_ratio": 78.0,
-      "pe_ratio": 21.53,
+      "pe_ratio": 22.52,
       "pb_ratio": 4.15,
       "ex_dato": null,
       "betaling_dato": null,
@@ -9235,7 +9235,7 @@
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 44.0,
       "pe_ratio": 5.99,
-      "pb_ratio": 1.01,
+      "pb_ratio": 0.99,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-11-04",
@@ -9361,7 +9361,7 @@
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 44.0,
       "pe_ratio": 5.87,
-      "pb_ratio": 0.99,
+      "pb_ratio": 0.97,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-11-04",
@@ -10664,9 +10664,9 @@
         2025,
         2026
       ],
-      "siste_utbytte": 2.6329,
+      "siste_utbytte": 2.6327,
       "siste_utbytte_dato": "2026-10-16",
-      "utbytte_12m": 17.1136,
+      "utbytte_12m": 17.1125,
       "utbytte_12m_antall": 12,
       "utbytte_12m_liste": [
         {
@@ -10675,47 +10675,47 @@
         },
         {
           "ex_dato": "2025-12-12",
-          "belop": 0.9403
+          "belop": 0.9402
         },
         {
           "ex_dato": "2026-01-19",
-          "belop": 1.2224
+          "belop": 1.2223
         },
         {
           "ex_dato": "2026-02-19",
-          "belop": 0.5642
+          "belop": 0.5641
         },
         {
           "ex_dato": "2026-03-16",
-          "belop": 0.5642
+          "belop": 0.5641
         },
         {
           "ex_dato": "2026-04-17",
-          "belop": 0.5642
+          "belop": 0.5641
         },
         {
           "ex_dato": "2026-05-18",
-          "belop": 1.4105
+          "belop": 1.4104
         },
         {
           "ex_dato": "2026-06-19",
-          "belop": 2.0687
+          "belop": 2.0685
         },
         {
           "ex_dato": "2026-07-17",
-          "belop": 2.0687
+          "belop": 2.0685
         },
         {
           "ex_dato": "2026-08-20",
-          "belop": 2.0687
+          "belop": 2.0685
         },
         {
           "ex_dato": "2026-09-17",
-          "belop": 2.3508
+          "belop": 2.3506
         },
         {
           "ex_dato": "2026-10-16",
-          "belop": 2.6329
+          "belop": 2.6327
         }
       ],
       "utbytte_supplert": [],
@@ -10723,8 +10723,8 @@
         "2021": 0.0,
         "2022": 0.0,
         "2023": 0.0,
-        "2024": 4.5135,
-        "2025": 5.3598
+        "2024": 4.5132,
+        "2025": 5.3594
       },
       "utbytte_forste_ar": 2024,
       "historiske_utbytter": [
@@ -10767,7 +10767,7 @@
         },
         {
           "ar": 2026,
-          "utbytte": 15.52,
+          "utbytte": 15.51,
           "yield": 10.22,
           "maaneder": [
             1,
@@ -10799,7 +10799,7 @@
       ],
       "snitt_yield_5ar": 0,
       "snitt_yield_ar": 2,
-      "beskrivelse": "Himalaya Shipping ble stiftet på Bermuda i 2021 med ett formål: å eie nye Newcastlemax-skip, store tørrbulkskip for capesize-markedet. Alle skipene ble bygget ved New Times-verftet i Kina, kan gå på LNG i tillegg til vanlig drivstoff og har scrubber. Største aksjonær er Drew Holdings, som eies av en trust opprettet for Tor Olav Trøim og familien hans. Ledelsen er ikke ansatt i selskapet. Konsernsjef, finansdirektør og den daglige driften leies inn fra 2020 Bulkers Management, der Himalaya etter avtale skulle bli majoritetseier fra april 2026.\n\nAksjen kom først på Euronext Growth Oslo, ble flyttet til Euronext Expand i 2022, fikk notering i New York i 2023 og gikk over til Oslo Børs i juni 2025. Skipene er leid ut på tidscerteparti der dagraten følger Baltic-indeksen for capesize pluss et tillegg, så inntekten går opp og ned med markedet uten at skipene må befraktes på nytt. Etter avtale med befrakteren kan raten låses til en fast sats for en periode, og det har selskapet gjort for flere skip i 2026. Skipene er finansiert ved salg og tilbakeleie med kinesiske leasingselskaper.\n\nHimalaya deler ut penger hver måned, så lenge skipene tjener nok til det. Beløpet fastsettes i dollar og kommer i kroner til aksjonærer i den norske verdipapirsentralen. Utdelingene tas fra kontoen for innskutt overskudd (contributed surplus), og i august 2026 vedtok aksjonærene å flytte mer kapital over til den. Leieavtalene krever at hvert skipseiende datterselskap holder igjen en kontantbuffer, og leien går foran utdelingene. Derfor varierer beløpet fra måned til måned med capesizeratene.\n\nUtbyttet utbetales månedlig — tolv ganger per år, og selskapet har betalt utbytte de siste 3 årene. Direkteavkastningen er 3,5 %. En utbetalingsgrad på 101 % betyr at det meste av inntjeningen deles ut — utbyttet er dermed sensitivt for resultatsvingninger.\n\nFraktrater varierer kraftig med globalt handelsmønster og flåtekapasitet, og utbyttet svinger tilsvarende. Historikken viser klare svingninger: høyest utbytte var 15,52 NOK per aksje i 2026, lavest 4,51 NOK i 2024.",
+      "beskrivelse": "Himalaya Shipping ble stiftet på Bermuda i 2021 med ett formål: å eie nye Newcastlemax-skip, store tørrbulkskip for capesize-markedet. Alle skipene ble bygget ved New Times-verftet i Kina, kan gå på LNG i tillegg til vanlig drivstoff og har scrubber. Største aksjonær er Drew Holdings, som eies av en trust opprettet for Tor Olav Trøim og familien hans. Ledelsen er ikke ansatt i selskapet. Konsernsjef, finansdirektør og den daglige driften leies inn fra 2020 Bulkers Management, der Himalaya etter avtale skulle bli majoritetseier fra april 2026.\n\nAksjen kom først på Euronext Growth Oslo, ble flyttet til Euronext Expand i 2022, fikk notering i New York i 2023 og gikk over til Oslo Børs i juni 2025. Skipene er leid ut på tidscerteparti der dagraten følger Baltic-indeksen for capesize pluss et tillegg, så inntekten går opp og ned med markedet uten at skipene må befraktes på nytt. Etter avtale med befrakteren kan raten låses til en fast sats for en periode, og det har selskapet gjort for flere skip i 2026. Skipene er finansiert ved salg og tilbakeleie med kinesiske leasingselskaper.\n\nHimalaya deler ut penger hver måned, så lenge skipene tjener nok til det. Beløpet fastsettes i dollar og kommer i kroner til aksjonærer i den norske verdipapirsentralen. Utdelingene tas fra kontoen for innskutt overskudd (contributed surplus), og i august 2026 vedtok aksjonærene å flytte mer kapital over til den. Leieavtalene krever at hvert skipseiende datterselskap holder igjen en kontantbuffer, og leien går foran utdelingene. Derfor varierer beløpet fra måned til måned med capesizeratene.\n\nUtbyttet utbetales månedlig — tolv ganger per år, og selskapet har betalt utbytte de siste 3 årene. Direkteavkastningen er 3,5 %. En utbetalingsgrad på 101 % betyr at det meste av inntjeningen deles ut — utbyttet er dermed sensitivt for resultatsvingninger.\n\nFraktrater varierer kraftig med globalt handelsmønster og flåtekapasitet, og utbyttet svinger tilsvarende. Historikken viser klare svingninger: høyest utbytte var 15,51 NOK per aksje i 2026, lavest 4,51 NOK i 2024.",
       "beskrivelse_intro": "Himalaya Shipping ble stiftet på Bermuda i 2021 med ett formål: å eie nye Newcastlemax-skip, store tørrbulkskip for capesize-markedet. Alle skipene ble bygget ved New Times-verftet i Kina, kan gå på LNG i tillegg til vanlig drivstoff og har scrubber. Største aksjonær er Drew Holdings, som eies av en trust opprettet for Tor Olav Trøim og familien hans. Ledelsen er ikke ansatt i selskapet. Konsernsjef, finansdirektør og den daglige driften leies inn fra 2020 Bulkers Management, der Himalaya etter avtale skulle bli majoritetseier fra april 2026.\n\nAksjen kom først på Euronext Growth Oslo, ble flyttet til Euronext Expand i 2022, fikk notering i New York i 2023 og gikk over til Oslo Børs i juni 2025. Skipene er leid ut på tidscerteparti der dagraten følger Baltic-indeksen for capesize pluss et tillegg, så inntekten går opp og ned med markedet uten at skipene må befraktes på nytt. Etter avtale med befrakteren kan raten låses til en fast sats for en periode, og det har selskapet gjort for flere skip i 2026. Skipene er finansiert ved salg og tilbakeleie med kinesiske leasingselskaper.\n\nHimalaya deler ut penger hver måned, så lenge skipene tjener nok til det. Beløpet fastsettes i dollar og kommer i kroner til aksjonærer i den norske verdipapirsentralen. Utdelingene tas fra kontoen for innskutt overskudd (contributed surplus), og i august 2026 vedtok aksjonærene å flytte mer kapital over til den. Leieavtalene krever at hvert skipseiende datterselskap holder igjen en kontantbuffer, og leien går foran utdelingene. Derfor varierer beløpet fra måned til måned med capesizeratene.",
       "beskrivelse_fakta": "Himalaya Shipping Ltd. leverer tørrbulktransport globalt, og betjener store råvarehandelsselskaper, aktører innen råvarer og energiomstilling samt multimodale transportselskaper. Per 31. desember 2024 eide og drev selskapet en flåte på 12 Newcastlemax tørrbulkskip, hvert med kapasitet på rundt 210 000 dødvekttonn. Selskapet ble stiftet i 2021 og har base i Hamilton på Bermuda.",
       "valuta": "NOK",
@@ -11636,9 +11636,9 @@
         2025,
         2026
       ],
-      "siste_utbytte": 0.6863,
+      "siste_utbytte": 0.6866,
       "siste_utbytte_dato": "2026-10-15",
-      "utbytte_12m": 1.7849,
+      "utbytte_12m": 1.7852,
       "utbytte_12m_antall": 2,
       "utbytte_12m_liste": [
         {
@@ -11647,7 +11647,7 @@
         },
         {
           "ex_dato": "2026-10-15",
-          "belop": 0.6863
+          "belop": 0.6866
         }
       ],
       "utbytte_supplert": [],
@@ -11695,7 +11695,7 @@
         },
         {
           "ar": 2026,
-          "utbytte": 1.78,
+          "utbytte": 1.79,
           "yield": 5.22,
           "maaneder": [
             5,
@@ -12285,9 +12285,9 @@
       "utbytte_per_aksje": 0.9,
       "utbytte_yield": 10.16,
       "utbytte_vekst_5ar": 15.8,
-      "payout_ratio": 70.5,
-      "pe_ratio": 6.94,
-      "pb_ratio": 1.44,
+      "payout_ratio": 70.0,
+      "pe_ratio": 6.89,
+      "pb_ratio": 1.43,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-10-29",
@@ -14330,26 +14330,26 @@
         2025,
         2026
       ],
-      "siste_utbytte": 6.0187,
+      "siste_utbytte": 6.0176,
       "siste_utbytte_dato": "2026-10-15",
-      "utbytte_12m": 14.0122,
+      "utbytte_12m": 14.0097,
       "utbytte_12m_antall": 4,
       "utbytte_12m_liste": [
         {
           "ex_dato": "2026-01-06",
-          "belop": 0.4702
+          "belop": 0.4701
         },
         {
           "ex_dato": "2026-04-14",
-          "belop": 1.5047
+          "belop": 1.5044
         },
         {
           "ex_dato": "2026-06-02",
-          "belop": 6.0187
+          "belop": 6.0176
         },
         {
           "ex_dato": "2026-10-15",
-          "belop": 6.0187
+          "belop": 6.0176
         }
       ],
       "utbytte_supplert": [],
@@ -14358,7 +14358,7 @@
         "2022": 0.0,
         "2023": 0.0,
         "2024": 0.0,
-        "2025": 0.4702
+        "2025": 0.4701
       },
       "utbytte_forste_ar": 2025,
       "historiske_utbytter": [
@@ -14429,21 +14429,21 @@
         2025,
         2026
       ],
-      "siste_utbytte": 0.1693,
+      "siste_utbytte": 0.1692,
       "siste_utbytte_dato": "2026-05-28",
-      "utbytte_12m": 0.1693,
+      "utbytte_12m": 0.1692,
       "utbytte_12m_antall": 1,
       "utbytte_12m_liste": [
         {
           "ex_dato": "2026-05-28",
-          "belop": 0.1693
+          "belop": 0.1692
         }
       ],
       "utbytte_supplert": [],
       "utbytte_per_ar": {
         "2021": 0.2821,
-        "2022": 0.9404,
-        "2023": 0.3762,
+        "2022": 0.9403,
+        "2023": 0.3761,
         "2024": 0.0,
         "2025": 0.2821
       },
@@ -14511,8 +14511,8 @@
       "utbytte_yield": 8.02,
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 38.0,
-      "pe_ratio": 5.5,
-      "pb_ratio": 1.54,
+      "pe_ratio": 5.65,
+      "pb_ratio": 1.52,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-11-04",
@@ -14624,7 +14624,7 @@
         "2021": 0.0,
         "2022": 0.0,
         "2023": 0.0,
-        "2024": 3.0632,
+        "2024": 3.0627,
         "2025": 0.0
       },
       "utbytte_forste_ar": 2024,
@@ -14632,7 +14632,7 @@
         {
           "ar": 2024,
           "utbytte": 3.06,
-          "yield": 7.68,
+          "yield": 7.67,
           "maaneder": [
             1,
             3,
@@ -15010,7 +15010,7 @@
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 82.0,
       "pe_ratio": 66.71,
-      "pb_ratio": 18.11,
+      "pb_ratio": 17.88,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-10-29",
@@ -15180,14 +15180,14 @@
       "utbytteaar": [
         2026
       ],
-      "siste_utbytte": 1.7092,
+      "siste_utbytte": 1.7094,
       "siste_utbytte_dato": "2026-05-27",
-      "utbytte_12m": 1.7092,
+      "utbytte_12m": 1.7094,
       "utbytte_12m_antall": 1,
       "utbytte_12m_liste": [
         {
           "ex_dato": "2026-05-27",
-          "belop": 1.7092
+          "belop": 1.7094
         }
       ],
       "utbytte_supplert": [],
@@ -15639,12 +15639,12 @@
       ],
       "siste_utbytte": 2.05,
       "siste_utbytte_dato": "2026-09-03",
-      "utbytte_12m": 8.2491,
+      "utbytte_12m": 8.2486,
       "utbytte_12m_antall": 4,
       "utbytte_12m_liste": [
         {
           "ex_dato": "2025-12-02",
-          "belop": 2.0691
+          "belop": 2.0686
         },
         {
           "ex_dato": "2026-03-05",
@@ -15664,8 +15664,8 @@
         "2021": 0.0,
         "2022": 0.0,
         "2023": 0.0,
-        "2024": 4.1381,
-        "2025": 8.2763
+        "2024": 4.1372,
+        "2025": 8.2743
       },
       "utbytte_forste_ar": 2024,
       "historiske_utbytter": [
@@ -15680,8 +15680,8 @@
         },
         {
           "ar": 2025,
-          "utbytte": 8.28,
-          "yield": 17.3,
+          "utbytte": 8.27,
+          "yield": 17.29,
           "maaneder": [
             3,
             6,
@@ -15731,8 +15731,8 @@
       "utbytte_yield": 0.0,
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 0.0,
-      "pe_ratio": 7.36,
-      "pb_ratio": 1.23,
+      "pe_ratio": 7.43,
+      "pb_ratio": 1.24,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2026-10-29",
@@ -16243,7 +16243,7 @@
         "2022": 0.0,
         "2023": 0.0,
         "2024": 10.9835,
-        "2025": 12.737
+        "2025": 12.7365
       },
       "utbytte_forste_ar": 2024,
       "historiske_utbytter": [
