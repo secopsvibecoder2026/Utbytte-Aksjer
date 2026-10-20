@@ -3579,7 +3579,8 @@
     {
       "ticker": "GENT",
       "dato": "2026-10-20",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/684368"
     },
     {
       "ticker": "DNB",
@@ -4317,5 +4318,5 @@
       "type": "rapport"
     }
   ],
-  "sist_oppdatert": "2026-10-19"
+  "sist_oppdatert": "2026-10-20"
 }
