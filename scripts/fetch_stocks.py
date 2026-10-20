@@ -239,6 +239,7 @@ AKSJER = [{"ticker_yf": t["ticker_yf"], "ticker": _valider_ticker(t["ticker"]),
           for t in _ticker_data]
 
 BESKRIVELSER         = {t["ticker"]: t.get("beskrivelse", "") for t in _ticker_data}
+TICKER_NAVN          = {t["ticker"]: t["navn"] for t in _ticker_data}
 BESKRIVELSE_FAKTA    = {t["ticker"]: t.get("beskrivelse_fakta", "") for t in _ticker_data}
 DNB_NAVN             = {t["ticker"]: t.get("navn_dnb", t["navn"]) for t in _ticker_data}
 TICKER_YF            = {t["ticker"]: t.get("ticker_yf", t["ticker"] + ".OL") for t in _ticker_data}
@@ -1283,7 +1284,37 @@ def _newsweb_meldinger_periode(ticker, fra, til):
     return _NEWSWEB_PERIODE[nokkel]
 
 
-def _ex_funn_i(meldinger, i_dag, grense, kjente_datoer):
+def melding_gjelder_annet_selskap(tittel, tekst, ticker, navn):
+    """Navngir meldingen et annet selskap enn vårt, i tittelen eller «Issuer:»?
+
+    Solstad Offshore publiserte 15.11.2024 «Solstad Maritime Holding AS: Ex
+    dividend today» om datterselskapets utbytte (NewsWeb 632333).
+    Hullårsoppslaget leste det som SOFFs eget, la 0,50 kr inn i serien og ga
+    selskapet to hele år med utbytte, og da stoppet tregangervakten SOFFs
+    årsrate: 4,66 % ble 0,71 % (20.10.2026). Et navn som er prefiks av det
+    andre teller som samme selskap, så «Wilh. Wilhelmsen Holding ASA» passer
+    for både WWI og WWIB, og tickeren alene («SNOR:») teller også.
+    """
+    kandidater = []
+    m = re.match(r"\s*([^:]{2,80}?)\s*(?::|\s[-–]\s)", tittel or "")
+    if m and not _EX_I_DAG_TITTEL.search(m.group(1)):
+        kandidater.append(m.group(1))
+    m = re.search(r"\bIssuer\s*:\s*(.+?)\s+(?:Ex\b|ISIN|Dividend|Date|Declared|Announced)",
+                  tekst or "", re.I)
+    if m:
+        kandidater.append(m.group(1))
+    vaar = _kort_selskapsnavn(navn or "").strip().lower()
+    for k in kandidater:
+        k = k.strip()
+        if not vaar or k.upper() == (ticker or "").upper():
+            continue
+        kn = _kort_selskapsnavn(k).strip().lower()
+        if kn and not (kn.startswith(vaar) or vaar.startswith(kn)):
+            return True
+    return False
+
+
+def _ex_funn_i(meldinger, i_dag, grense, kjente_datoer, ticker="", navn=""):
     """Ex-meldingene i `meldinger` som ikke har en kjent utbetaling i nærheten."""
     ut = []
     # Grong Sparebank meldte «ex utbytte NOK 10,5» 9. april 2026 og rettet
@@ -1305,8 +1336,10 @@ def _ex_funn_i(meldinger, i_dag, grense, kjente_datoer):
             continue
         if any(r and 0 <= (r - pub).days <= 30 for r in rettelser):
             continue
-        funn = _parse_ex_melding(tittel, _newsweb_tekst(msg.get("messageId")),
-                                 msg.get("publishedTime"))
+        tekst = _newsweb_tekst(msg.get("messageId"))
+        if melding_gjelder_annet_selskap(tittel, tekst, ticker, navn):
+            continue
+        funn = _parse_ex_melding(tittel, tekst, msg.get("publishedTime"))
         if funn:
             funn["melding_id"] = str(msg.get("messageId"))
             ut.append(funn)
@@ -1321,12 +1354,13 @@ def newsweb_ex_meldinger(ticker, i_dag, kjente_datoer):
     {"ex_dato", "belop", "melding_id"}; tom ved nettverksfeil.
     """
     grense = i_dag - datetime.timedelta(days=SUPPLER_DAGER)
+    navn = TICKER_NAVN.get(ticker, "")
     try:
-        ut = _ex_funn_i(_newsweb_meldinger(ticker), i_dag, grense, kjente_datoer)
+        ut = _ex_funn_i(_newsweb_meldinger(ticker), i_dag, grense, kjente_datoer, ticker, navn)
         for y in hullaar(kjente_datoer, i_dag):
             fra, til = datetime.date(y, 1, 1), datetime.date(y, 12, 31)
             ut += _ex_funn_i(_newsweb_meldinger_periode(ticker, fra, til),
-                             i_dag, fra, kjente_datoer)
+                             i_dag, fra, kjente_datoer, ticker, navn)
     except Exception as e:
         print(f"    Advarsel NewsWeb ex-meldinger [{ticker}]: {e}")
         return []
@@ -2512,6 +2546,11 @@ def _i_vinduet(a, ex_dato, toleranse_dager=3):
     return False
 
 
+# Én utbetaling over denne andelen av det betalte siste 12 mnd er en
+# engangsutdeling når summen også er over tre ganger beste hele år.
+ENGANGS_ANDEL = 0.5
+
+
 def betalt_kan_bli_arsrate(a, i_dag=None):
     """Vilkår 1 og 3 over, uten nettverk. Avgjør om NewsWeb skal spørres."""
     i_dag = i_dag or datetime.date.today()
@@ -2543,7 +2582,14 @@ def betalt_kan_bli_arsrate(a, i_dag=None):
     per_ar = a.get("utbytte_per_ar") or {}
     tidligere = [v for v in per_ar.values() if v and v > 0] if isinstance(per_ar, dict) else []
     if len(tidligere) >= 2 and betalt > 3 * max(tidligere):
-        return False
+        # Bare når én utbetaling står for mesteparten av summen: GSF 100 % og
+        # 2020 Bulkers 94 %. HSHP betalte 17,15 kr over tolv måneder (den
+        # største 15 %) og SOFF 3,37 kr over fire (43 %); det er hevinger, og
+        # vakten holdt dem på 3,53 og 0,71 % (20.10.2026).
+        liste = a.get("utbytte_12m_liste") or []
+        storst = max((x.get("belop") or 0 for x in liste), default=0)
+        if not liste or storst > ENGANGS_ANDEL * betalt:
+            return False
     # Et kunngjort, vedtatt utbytte som kommer, er ferskere enn vinduet. Står
     # det alt i vinduet, er det ikke kommende lenger: på ex-dagen har Yahoo
     # utbetalingen, og GOD ble stående med 26 % til dagen etter (16.10.2026).
@@ -4344,8 +4390,8 @@ def _lag_utbetalingsaar(a):
     tekst = (
         f"{innledning} Månedene er ex-datoer utledet av "
         f"hvilke måneder som går igjen over flere år, ikke av en enkelt "
-        f"utbetaling. Selve pengene kommer typisk halvannen til tre uker "
-        f"etter ex-datoen, så en ex-dato sent i måneden betales ut i den neste."
+        f"utbetaling. Selve pengene kommer som regel én til to uker etter "
+        f"ex-datoen, så en ex-dato sent i måneden betales ut i den neste."
     )
 
     return (
@@ -9535,6 +9581,7 @@ def main():
     oppdater_antall_i_sider(resultater, root_dir)
     oppdater_aarstall_i_sider(root_dir)
     oppdater_forside_uka(resultater, root_dir)
+    oppdater_forside_artikler(root_dir)
     oppdater_kalender_maaneder(resultater, root_dir)
 
 
@@ -9604,7 +9651,7 @@ def lag_exmnd_blokk(aksjer, i_dag):
                  "annonserer først med kvartalsrapporten. Oversikten viser i hvilke måneder "
                  "hver aksje har gått ex de siste årene.")
     intro += (" En måned er med når aksjen har gått ex i den i minst to av de siste årene, "
-              "og utbyttet kommer på kontoen 1½–3 uker etter ex-datoen.")
+              "og utbyttet kommer på kontoen én til to uker etter ex-datoen.")
     travlest = _travleste_maaneder(per_mnd)
     if travlest:
         intro += f" Flest går ex i {travlest}."
@@ -9929,6 +9976,99 @@ def oppdater_forside_uka(aksjer, root_dir: str, i_dag=None, hentet=None):
     blokk = lag_uka_blokk(uka_hendelser(aksjer, i_dag), i_dag,
                           hentet if hentet is not None else DATA_SIST_OPPDATERT)
     nytt = _UKA_MONSTER.sub(lambda m: "<!--UKA:START-->\n" + blokk + "\n  <!--UKA:SLUTT-->", innhold, count=1)
+    if nytt == innhold:
+        return False
+    with open(sti, "w", encoding="utf-8") as f:
+        f.write(nytt)
+    return True
+
+
+# ── «Siste artikler» på forsiden (20.10.2026) ─────────────────────────────────
+# Fire håndskrevne kort fra april og mai sto på forsiden mens seks nyere
+# artikler var publisert. Kortene hentes nå fra ARTIKLER i assets/ui.js, den
+# samme listen appen viser, så en ny artikkel kommer på forsiden med neste
+# kjøring. Blokken står mellom <!--ARTIKLER:START--> og <!--ARTIKLER:SLUTT-->.
+
+FORSIDE_ARTIKLER = 4
+_ARTIKLER_MONSTER = re.compile(r"<!--ARTIKLER:START-->.*?<!--ARTIKLER:SLUTT-->", re.S)
+_JS_STRENG = r"'((?:[^'\\]|\\.)*)'"
+
+
+def les_artikler(js_tekst):
+    """Artiklene i ARTIKLER-konstanten i ui.js, i samme rekkefølge (nyeste først).
+
+    Hvert element må ha slug, tittel, ingress og meta; mangler ett av dem,
+    hoppes elementet over i stedet for å gi et halvt kort.
+    """
+    m = re.search(r"const ARTIKLER\s*=\s*\[(.*?)\n\];", js_tekst or "", re.S)
+    if not m:
+        return []
+    ut = []
+    for obj in re.findall(r"\{(.*?)\n\s*\}", m.group(1), re.S):
+        felt = {}
+        for navn in ("slug", "tittel", "ingress", "meta"):
+            f = re.search(rf"\b{navn}\s*:\s*{_JS_STRENG}", obj)
+            if f:
+                felt[navn] = re.sub(r"\\(.)", r"\1", f.group(1))
+        t = re.search(r"\btags\s*:\s*\[(.*?)\]", obj, re.S)
+        felt["tags"] = [re.sub(r"\\(.)", r"\1", s) for s in re.findall(_JS_STRENG, t.group(1))] if t else []
+        if all(felt.get(k) for k in ("slug", "tittel", "ingress", "meta")) \
+                and re.fullmatch(r"/artikler/[a-z0-9-]+/", felt["slug"]):
+            ut.append(felt)
+    return ut
+
+
+def lag_artikkel_kort(artikler):
+    """Kortene i forsideblokken. Teksten er escapet; den kommer fra ui.js."""
+    import html as _html
+    kort = []
+    for a in artikler:
+        tag = (f'<span class="text-xs font-medium bg-green-100 dark:bg-green-900/40 '
+               f'text-green-700 dark:text-green-300 px-2 py-0.5 rounded-full">{_html.escape(a["tags"][0])}</span>\n'
+               if a.get("tags") else "")
+        kort.append(
+            f'      <a href="{_html.escape(a["slug"])}" class="artikel-kort group flex flex-col gap-3 p-5 bg-white '
+            'rounded-xl border border-gray-200 hover:border-green-400 transition-colors no-underline">\n'
+            '        <div class="flex items-center gap-2">\n'
+            f'          {tag}'
+            f'          <span class="text-xs text-gray-400">{_html.escape(a["meta"])}</span>\n'
+            '        </div>\n'
+            '        <div>\n'
+            '          <h3 class="font-semibold text-gray-900 dark:text-gray-100 group-hover:text-green-700 '
+            f'dark:group-hover:text-green-400 transition-colors mb-1">{_html.escape(a["tittel"])}</h3>\n'
+            '          <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">'
+            f'{_html.escape(a["ingress"])}</p>\n'
+            '        </div>\n'
+            '      </a>'
+        )
+    return "\n\n".join(kort)
+
+
+def oppdater_forside_artikler(root_dir: str):
+    """Fyller «Siste artikler» på forsiden fra ARTIKLER. True når filen ble endret.
+
+    Bare artikler med en side på disk tas med, så en feilskrevet slug ikke gir
+    en død lenke. Finnes ingen, står kortene som før.
+    """
+    try:
+        with open(os.path.join(root_dir, "assets", "ui.js"), encoding="utf-8") as f:
+            artikler = les_artikler(f.read())
+        sti = os.path.join(root_dir, "index.html")
+        with open(sti, encoding="utf-8") as f:
+            innhold = f.read()
+    except OSError:
+        return False
+    if not _ARTIKLER_MONSTER.search(innhold):
+        print("  Forsiden mangler <!--ARTIKLER:START-->-markøren; artiklene er ikke oppdatert.")
+        return False
+    artikler = [a for a in artikler
+                if os.path.isfile(os.path.join(root_dir, a["slug"].strip("/"), "index.html"))]
+    if not artikler:
+        print("  Fant ingen artikler i ARTIKLER; forsidekortene er ikke oppdatert.")
+        return False
+    blokk = lag_artikkel_kort(artikler[:FORSIDE_ARTIKLER])
+    nytt = _ARTIKLER_MONSTER.sub(
+        lambda m: "<!--ARTIKLER:START-->\n" + blokk + "\n      <!--ARTIKLER:SLUTT-->", innhold, count=1)
     if nytt == innhold:
         return False
     with open(sti, "w", encoding="utf-8") as f:

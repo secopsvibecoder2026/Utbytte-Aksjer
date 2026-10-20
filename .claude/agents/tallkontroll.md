@@ -127,7 +127,7 @@ leser, og slå opp i dataene når noe ser rart ut.
 - **En feilet henting beviser ingenting** — verken at aksjen er avnotert eller at
   den ikke betaler utbytte. Spør Euronext eller les meldingene.
 - **Yahoos utbytteserie er indeksert på ex-dato**, ikke betalingsdato. Pengene
-  kommer 1½–3 uker senere.
+  kommer som regel én til to uker senere (median 10 dager, målt 20.10.2026).
 - **`payout_ratio == 0` betyr ukjent**, ikke lav.
 - **Historisk yield regnes mot dagens kurs** — med vilje. Ikke rapporter det som feil.
 - **Under betalt er ikke et varsel.** Vises yield lavere enn det som ble betalt

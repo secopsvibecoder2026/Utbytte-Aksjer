@@ -1928,7 +1928,7 @@ function visUtbyttesesong() {
         <h3 class="font-semibold text-sm">Når går Oslo Børs ex-utbytte?</h3>
         <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
           Antall av ${medMonster} aksjer med ex-dato i hver måned, utledet av flere års utbetalinger.
-          Pengene kommer typisk halvannen til tre uker etter ex-datoen.
+          Pengene kommer som regel én til to uker etter ex-datoen.
         </p>
       </div>
       <div class="space-y-1.5">${rader}</div>

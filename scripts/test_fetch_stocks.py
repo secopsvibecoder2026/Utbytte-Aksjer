@@ -1528,6 +1528,27 @@ class TestBetaltSomArsrate(unittest.TestCase):
         a = self._yara(pris=23.40, utbytte_12m=35.64, utbytte_per_ar={})
         self.assertFalse(fs.betalt_kan_bli_arsrate(a, self.I_DAG))
 
+    def test_heving_over_mange_utbetalinger_er_ingen_engangsutdeling(self):
+        # HSHP: tolv månedlige utbetalinger på til sammen 17,15 kr mot 5,37
+        # i 2025. Den største er 15 % av summen, så det er en heving, og
+        # vakten holdt siden på 3,53 % (20.10.2026).
+        liste = [{"ex_dato": f"2026-{m:02d}-15", "belop": b} for m, b in
+                 enumerate([0.66, 0.94, 1.23, 0.57, 0.57, 0.57,
+                            1.41, 2.07, 2.07, 2.07, 2.36, 2.64], start=1)]
+        a = self._yara(ticker="HSHP", pris=152.0, frekvens="Månedlig", utbytte_12m_antall=12,
+                       utbytte_per_aksje=5.37, utbytte_12m=17.15, utbytte_12m_liste=liste,
+                       utbytte_per_ar={"2024": 4.52, "2025": 5.37})
+        self.assertTrue(fs.betalt_kan_bli_arsrate(a, self.I_DAG))
+
+    def test_en_dominerende_utbetaling_stoppes_fortsatt(self):
+        # 2020 Bulkers: salgsprovenyet er 94 % av det betalte.
+        liste = [{"ex_dato": "2026-04-29", "belop": 130.05}] + \
+                [{"ex_dato": f"2026-0{m}-20", "belop": 1.66} for m in (1, 2, 3, 5, 6)]
+        a = self._yara(ticker="2020", pris=8.68, frekvens="Uregelmessig", utbytte_12m_antall=6,
+                       utbytte_per_aksje=0.0, utbytte_12m=138.34, utbytte_12m_liste=liste,
+                       utbytte_per_ar={"2024": 33.74, "2025": 13.76})
+        self.assertFalse(fs.betalt_kan_bli_arsrate(a, self.I_DAG))
+
     def test_ny_betaler_maales_ikke_mot_sitt_forste_aar(self):
         # BNOR begynte i 2025; 180 kr mot 54 kr i det første, halve året.
         a = self._yara(ticker="BNOR", pris=570.0, frekvens="Kvartalsvis", utbytte_12m_antall=4,
@@ -3204,6 +3225,57 @@ class TestHullaar(unittest.TestCase):
                                                "2023-04-27T06:00:00Z"))
 
 
+class TestAnnetSelskap(unittest.TestCase):
+    """En ex-melding om et annet selskap er ikke vår utbetaling (20.10.2026).
+
+    SOFF publiserte «Solstad Maritime Holding AS: Ex dividend today» om
+    datterselskapets utbytte. Hullårsoppslaget la det inn i SOFFs serie, og
+    yielden falt fra 4,66 til 0,71 %. Tekstene her er syntetiske.
+    """
+
+    SOFF = ("SOFF", "Solstad Offshore ASA")
+
+    def test_datterselskap_i_tittelen(self):
+        self.assertTrue(fs.melding_gjelder_annet_selskap(
+            "Solstad Maritime Holding AS: Ex dividend today", "", *self.SOFF))
+
+    def test_annen_utsteder_i_teksten(self):
+        tekst = "Issuer: Solstad Maritime Holding AS Ex-date: 15 November 2024"
+        self.assertTrue(fs.melding_gjelder_annet_selskap("Ex dividend today", tekst, *self.SOFF))
+
+    def test_eget_selskap_gir_false(self):
+        tekst = "Issuer: Solstad Offshore ASA Ex-date: 10 March 2026 Dividend amount in NOK: 0.48"
+        for tittel in ("Solstad Offshore ASA: Ex dividend today", "Ex dividend today",
+                       "SOFF: Ex dividend today", "SOFF - Ex dividend today"):
+            self.assertFalse(fs.melding_gjelder_annet_selskap(tittel, tekst, *self.SOFF), tittel)
+
+    def test_prefiks_teller_som_samme_selskap(self):
+        # WWI og WWIB er A- og B-aksjen i samme selskap.
+        self.assertFalse(fs.melding_gjelder_annet_selskap(
+            "Wilh. Wilhelmsen Holding ASA: Ex dividend NOK 8.00 today", "",
+            "WWIB", "Wilh. Wilhelmsen Holding ASA B"))
+        self.assertFalse(fs.melding_gjelder_annet_selskap(
+            "Sparebanken Øst - eks utbytte i dag", "", "SPOG", "Sparebanken Øst"))
+
+    def test_ex_funn_hopper_over_annet_selskap(self):
+        meldinger = [
+            {"publishedTime": "2024-11-15T06:00:00Z", "messageId": 1,
+             "title": "Solstad Maritime Holding AS: Ex dividend today"},
+            {"publishedTime": "2026-03-10T06:00:00Z", "messageId": 2,
+             "title": "Solstad Offshore ASA: Ex dividend today"},
+        ]
+        tekster = {1: "Dividend amount in NOK: 0.50",
+                   2: "Dividend amount in NOK: 0.48320"}
+        gml = fs._newsweb_tekst
+        fs._newsweb_tekst = lambda mid: tekster.get(mid, "")
+        try:
+            funn = fs._ex_funn_i(meldinger, datetime.date(2026, 10, 20),
+                                 datetime.date(2024, 1, 1), [], *self.SOFF)
+        finally:
+            fs._newsweb_tekst = gml
+        self.assertEqual([f["ex_dato"] for f in funn], ["2026-03-10"])
+
+
 class TestBorsdager(unittest.TestCase):
     """«Kjøp senest» er forrige børsdag, ikke dagen før (19.10.2026).
 
@@ -3341,6 +3413,82 @@ class TestUkaBlokk(unittest.TestCase):
         rot = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         with open(os.path.join(rot, "index.html"), encoding="utf-8") as f:
             self.assertRegex(f.read(), r"(?s)<!--UKA:START-->.*<!--UKA:SLUTT-->")
+
+
+class TestForsideArtikler(unittest.TestCase):
+    """«Siste artikler» på forsiden fylles fra ARTIKLER i ui.js (20.10.2026).
+
+    De fire håndskrevne kortene var fra april og mai mens seks nyere artikler
+    var publisert.
+    """
+
+    ROT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    JS = """'use strict';
+const ARTIKLER = [
+  {
+    slug: '/artikler/ny/',
+    tittel: 'Ny artikkel om <utbytte>',
+    ingress: 'Selskapets \\'ordinære\\' utbytte.',
+    meta: '12. september 2026 · 12 min',
+    tags: ['Guide', 'Skatt'],
+    sektorer: [],
+  },
+  {
+    slug: '/artikler/eldre/',
+    tittel: 'Eldre artikkel',
+    ingress: 'Ingress.',
+    meta: '8. mai 2026 · 11 min',
+    tags: ['Strategi'],
+    sektorer: ['Finans'],
+  },
+  {
+    slug: 'javascript:alert(1)',
+    tittel: 'Ugyldig', ingress: 'x', meta: 'y', tags: [],
+  },
+];
+"""
+
+    def test_leser_i_rekkefolge_og_hopper_over_ugyldige(self):
+        a = fs.les_artikler(self.JS)
+        self.assertEqual([x["slug"] for x in a], ["/artikler/ny/", "/artikler/eldre/"])
+        self.assertEqual(a[0]["ingress"], "Selskapets 'ordinære' utbytte.")
+        self.assertEqual(a[0]["tags"], ["Guide", "Skatt"])
+
+    def test_kortet_escaper_teksten(self):
+        kort = fs.lag_artikkel_kort(fs.les_artikler(self.JS)[:1])
+        self.assertIn("Ny artikkel om &lt;utbytte&gt;", kort)
+        self.assertIn('href="/artikler/ny/"', kort)
+        self.assertIn(">Guide</span>", kort)
+
+    def test_ekte_ui_js_gir_alle_artiklene(self):
+        with open(os.path.join(self.ROT, "assets", "ui.js"), encoding="utf-8") as f:
+            js = f.read()
+        blokk = re.search(r"const ARTIKLER\s*=\s*\[(.*?)\n\];", js, re.S).group(1)
+        self.assertEqual(len(fs.les_artikler(js)), blokk.count("slug:"))
+
+    def test_oppdaterer_bare_med_side_paa_disk(self):
+        with tempfile.TemporaryDirectory() as mappe:
+            os.makedirs(os.path.join(mappe, "assets"))
+            os.makedirs(os.path.join(mappe, "artikler", "eldre"))
+            open(os.path.join(mappe, "artikler", "eldre", "index.html"), "w").close()
+            with open(os.path.join(mappe, "assets", "ui.js"), "w", encoding="utf-8") as f:
+                f.write(self.JS)
+            sti = os.path.join(mappe, "index.html")
+            with open(sti, "w", encoding="utf-8") as f:
+                f.write("<div>\n      <!--ARTIKLER:START-->\n      <!--ARTIKLER:SLUTT-->\n</div>\n")
+            self.assertTrue(fs.oppdater_forside_artikler(mappe))
+            self.assertFalse(fs.oppdater_forside_artikler(mappe))
+            with open(sti, encoding="utf-8") as f:
+                tekst = f.read()
+            self.assertIn('href="/artikler/eldre/"', tekst)
+            self.assertNotIn("/artikler/ny/", tekst)
+
+    def test_forsiden_viser_de_nyeste(self):
+        with open(os.path.join(self.ROT, "assets", "ui.js"), encoding="utf-8") as f:
+            nyeste = fs.les_artikler(f.read())[:fs.FORSIDE_ARTIKLER]
+        with open(os.path.join(self.ROT, "index.html"), encoding="utf-8") as f:
+            blokk = re.search(r"(?s)<!--ARTIKLER:START-->(.*)<!--ARTIKLER:SLUTT-->", f.read()).group(1)
+        self.assertEqual(re.findall(r'href="(/artikler/[^"]+)"', blokk), [a["slug"] for a in nyeste])
 
 
 if __name__ == "__main__":
