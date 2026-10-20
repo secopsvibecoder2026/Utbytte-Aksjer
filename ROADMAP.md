@@ -75,6 +75,47 @@ Search Console-eksport vil kunne rangere resten etter faktisk etterspørsel.
 
 ## Høy prioritet
 
+### Døgnklokke: pris- og datajobbene i gang om morgenen (lagt til 20.10.2026)
+
+**Problemet.** `klokke.yml` starter pris- og datajobbene selv gjennom børsdagen,
+men selve klokka må startes av GitHubs timeplan (`13,43 6-15 * * 1-5`), og den
+er upålitelig. Klokka selv startet første gang 14.59 mandag 19.10 (norsk tid),
+og tirsdag 20.10 hadde den ikke startet klokka 13.26. Prisene på siden var da
+fra kvelden før. Før klokka kom de første planlagte kjøringene rundt 14.45
+torsdag 15. og fredag 16.10. Formiddagen mangler dermed de fleste
+børsdager.
+
+**Forslaget.** La klokka gå døgnet rundt, også i helgene. Den starter allerede
+en ny klokke etter 5½ time (`GRENSE` i `scripts/klokke.py`), fordi GitHub
+stopper en jobb etter seks timer. Det som endres, er at den ikke lenger avslutter
+når dagens plan er ferdig, men fortsetter til neste dags plan. Da trenger den
+GitHubs timeplan bare for å komme i gang første gang. Cronen blir stående som
+reserve: brytes kjeden, starter neste vellykkede cron-forsøk den igjen, og
+`skal_startes()` hindrer doble kjøringer som i dag.
+
+- [ ] `kjor()` i `scripts/klokke.py`: vent til neste plantid på tvers av døgn
+      og helg i stedet for å avslutte når dagens plan er tom. Etterfølgeren
+      startes før `GRENSE` som nå.
+- [ ] Sørg for at to klokker aldri går samtidig: den nye starter først når den
+      gamle avslutter (`concurrency` med `cancel-in-progress: false` gjør dette i
+      dag), og en klokke som finner en annen i gang, avslutter.
+- [ ] Tester i `scripts/test_klokke.py`: neste plantid over natt, fredag til
+      mandag og over en helligdag; etterfølger startes før grensen.
+- [ ] Mål etterpå i en uke: første priskjøring hver børsdag skal være 09.07.
+
+**Kostnad og risiko.** Gratis, fordi repoet er offentlig. Én maskin hos GitHub
+står alltid og venter, også om natten og i helgene. GitHubs vilkår sier at gratis
+kjøretid ikke skal belastes unødig, og en jobb som venter hele døgnet kan i
+verste fall bli sett på slik. Skjer det, er alternativet under klart.
+
+**Alternativet: ekstern starter.** En tjeneste som cron-job.org kaller GitHubs
+API (`workflow_dispatch`) til riktig tid. Ingenting står og venter, men eieren
+må lage en tilgangsnøkkel i GitHub (finkornet, bare dette repoet, bare Actions)
+og registrere seg hos tjenesten. Nøkkelen ligger da hos en tredjepart.
+
+**Status:** foreslått 19.10.2026, lagt til side av eieren samme dag og satt på
+veikartet 20.10.2026. Ikke påbegynt.
+
 ### Datakvalitet — aksjer uten utbyttedata ✅ (løst annerledes enn planlagt, 12.09.2026)
 Punktet listet 15 aksjer med `upa=0`, `yield=0`, `hist=0` og foreslo å fjerne dem fra
 `tickers.json`. **Det viste seg å være for bredt, og ble ikke gjennomført slik.**
