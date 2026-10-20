@@ -1358,7 +1358,13 @@
     "beskrivelse_fakta_kilde": "yahoo_finance",
     "beskrivelse_fakta_sprak": "en",
     "ask_egnet": true,
-    "inkorporeringsland": "Norge"
+    "inkorporeringsland": "Norge",
+    "hendelse": {
+      "type": "oppkjop",
+      "dato": "2026-09-14",
+      "melding": "682188",
+      "tekst": "Kona BidCo eier om lag 88 prosent av aksjene etter et kontanttilbud på 100 kroner per aksje. Oslo Børs har vedtatt å stryke aksjen, og siste handelsdag er 10. november 2026. De øvrige aksjonærene fikk tilbud om samme pris fram til 18. september."
+    }
   },
   {
     "ticker": "AKAST",

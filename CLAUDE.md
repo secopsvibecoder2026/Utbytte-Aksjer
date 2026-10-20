@@ -716,12 +716,19 @@ on every run — it is derived, so it must never be written once and stored.
 A user was paid their WAWI dividend on 16 September and asked whether the site
 could show it. It could not — and three separate defects came out of looking.
 
-The Yahoo dividend series is **indexed by ex-date**. The money lands roughly
-1½–3 weeks later. The field name says «utbetaling» and every sentence built on
+The Yahoo dividend series is **indexed by ex-date**. The money lands one to
+two weeks later. The field name says «utbetaling» and every sentence built on
 it said «betales», so the site asserted a payment date it had never measured.
 The wording is now «Ex-dato i mars og august», the calendar heading is «Når går
 Oslo Børs ex-utbytte?», and both the stock page and the forecast footnote state
-the 1½–3 week lag. The data model is unchanged; only the claim is.
+the lag. The data model is unchanged; only the claim is.
+
+> **The lag itself was a guess until 2026-10-20.** The site said «1½–3 uker»
+> in three places, «2 til 4 uker» in the FAQ and an article, and «under to
+> uker» on the calendar. Measured from the newest «Key information» notices
+> of 74 companies (157 payments): median 10 days per company, 84 % between 7
+> and 14 days. Every place now says «én til to uker». The longest are ITERA,
+> JIN, TOM, STST and AQUA at three to four weeks.
 
 #### The window: three years, and the current year may corroborate
 
@@ -1574,7 +1581,10 @@ of everything that sets the rate, so nothing writes back over it — and uses
 3. **the current figure deviates at least 30 %** (`BETALT_MIN_AVVIK`);
 4. it is **not above the share price**, and **not above 3× the best complete
    year** when there are at least two complete years. GSF's Cermaq proceeds were
-   labelled plain «dividend», and the second guard is what stops them (7,9×);
+   labelled plain «dividend», and the second guard is what stops them (7,9×).
+   Since 2026-10-20 the 3× guard applies only when one payment is more than
+   half the sum (`ENGANGS_ANDEL`): a raise spread over many payments is not a
+   one-off (HSHP, see «From the maintenance report of 2026-10-20»);
 5. no approved, announced dividend is still to come — that is fresher.
 
 It works both ways. `arsrate_kilde: "betalt_12m"` marks the row, and the card
@@ -1970,6 +1980,63 @@ Tests: `TestTallkontroll1910` (8), `TestBransje` (2), `TestHendelse` (5),
 - **VISTIN:** the board may pay up to 0,50 kr in November. «Årlig» and 1,00 kr
   are right until it does.
 - **BOR:** an interpretation for the owner, see «STST: 30 % of what?».
+
+## From the maintenance report of 2026-10-20
+
+**The gap-year lookup took another company's dividend.** Solstad Offshore
+published «Solstad Maritime Holding AS: Ex dividend today» (NewsWeb 632333,
+November 2024) about its subsidiary's dividend. The lookup added in the
+previous section read it as SOFF's own and put 0,50 kr into 2024. That gave
+SOFF two complete years with a dividend, and the 3× guard in the paid-12m
+rule stopped the rate: the page went from 4,66 % «siste 12 mnd» to 0,71 %.
+Sjekk 7 in `valider_data.py` reported it the same night. Two fixes:
+
+- `melding_gjelder_annet_selskap()` skips an ex notice whose title prefix or
+  «Issuer:» line names another company. A name that is a prefix of ours counts
+  as ours («Wilh. Wilhelmsen Holding ASA» for WWIB), and so does the ticker
+  («SNOR:»). Of the 14 stored `utbytte_supplert` entries, only 632333 is
+  dropped.
+- The 3× guard needs one payment above half the paid sum (`ENGANGS_ANDEL`).
+  GSF (100 %) and 2020 Bulkers (94 %) are still stopped. HSHP, twelve monthly
+  payments rising from 0,66 to 2,64 kr, showed 3,53 % against 11,3 % paid and
+  now passes, as does SOFF.
+
+The lesson is the one from DOF and KMCP in another form: a new data source
+needs the same guards as the old one. The per-issuer list only holds the
+issuer's own messages; a date-range query returns what the issuer
+*published*, and an issuer can publish for a subsidiary.
+
+**The four findings in the report:**
+
+- **The calculator table in the app** was clipped on a 390 px phone
+  (`overflow-hidden`). It scrolls now, like the privacy table at 320 px.
+- **ZAL has a `hendelse`.** Oslo Børs decided on 11 September to delist
+  Zalaris; the last trading day is 10 November 2026 (NewsWeb 682158 and
+  682188). Move it to `/avnoteringer/` after that day.
+- **`/faq/` said «dagen FØR ex-dato»** in three places, and gave 14 May as the
+  last buy date for an ex-date on 15 May. 14 May 2026 is Ascension Day. It now
+  says «børsdagen før», with a Monday example instead of a date. The answer on
+  ex-date versus payment date said the ex-date was the last day to own the
+  share, and that the general meeting approves the dividend between ex-date and
+  payment; both are wrong and gone.
+- **«Siste artikler» on the front page** showed four cards from April and May.
+  `oppdater_forside_artikler()` fills `<!--ARTIKLER:START-->` from `ARTIKLER`
+  in `assets/ui.js` with the `FORSIDE_ARTIKLER` (4) newest, skipping any slug
+  without a page on disk. Both `fetch_stocks.py` and `regenerer_sider.py`
+  call it. A new article therefore needs only the `ARTIKLER` entry to reach
+  the front page; the article index is still hand-written.
+
+**The payout lag** said 1½–3, 2–4 and «under two» weeks on different pages.
+It is measured now (one to two weeks, see «They are **ex-dates**») and the
+same everywhere.
+
+**Smaller text fixes:** `/utforsk/` named IT among the lowest-yield sectors
+(it is in the middle) and said several sectors have «one or two» companies
+(two have one, none has two). `/om/` described only Yahoo's annualisation and
+now says when the paid figure replaces it.
+
+Tests: `TestAnnetSelskap` (5), `TestBetaltSomArsrate` (+2),
+`TestForsideArtikler` (5).
 
 ## «Les mer» in the app modal (2026-10-07)
 

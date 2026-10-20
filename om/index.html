@@ -286,11 +286,11 @@
 
     <h2 id="data">Datakilder og nøyaktighet</h2>
 
-    <p>Finansielle data hentes primært fra Yahoo Finance og Euronext. Begge kildene er gratis og offentlig tilgjengelige, men de har begrensninger som er viktige å kjenne til:</p>
+    <p>Finansielle data hentes primært fra Yahoo Finance og Euronext, og ex-datoer og utbyttebeløp fra selskapenes egne meldinger til Oslo Børs (NewsWeb). Kildene er gratis og offentlig tilgjengelige, men de har begrensninger som er viktige å kjenne til:</p>
 
     <ul>
       <li><strong>Forsinkelse:</strong> Kurspriser kan ha inntil 15 minutters forsinkelse i børsåpningstiden.</li>
-      <li><strong>Annualisering:</strong> Yahoo Finance annualiserer utbytte basert på siste betaling multiplisert med betalingsfrekvens. For selskaper med uregelmessige eller varierende utbytter kan dette gi misvisende høy eller lav yield.</li>
+      <li><strong>Annualisering:</strong> Yahoo Finance annualiserer utbyttet ut fra siste betaling ganger antall betalinger i året. Når utbyttet varierer, gir det misvisende høy eller lav yield. Avviker tallet mye fra det selskapet har betalt de siste tolv månedene, bruker vi det betalte i stedet, uten engangsutbytter selskapet selv har kalt ekstraordinære, og merker tallet «siste 12 mnd».</li>
       <li><strong>Valuta:</strong> Aksjer på Oslo Børs handles i NOK, men noen selskaper rapporterer i USD. Historiske utbytteverdier kan vise avvik sammenlignet med andre kilder på grunn av valutakursendringer.</li>
       <li><strong>Manglende data:</strong> Noen selskaper har ufullstendig historikk i Yahoo Finance, særlig nynoterte selskaper eller selskaper med liten internasjonal dekning.</li>
     </ul>

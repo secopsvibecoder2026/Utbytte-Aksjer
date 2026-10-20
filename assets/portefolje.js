@@ -1812,7 +1812,7 @@ function _jevnhetTekst(mnd, navn) {
   return `<p class="text-xs text-gray-500 dark:text-gray-400 mt-2 leading-relaxed">
       De tre største månedene står for <strong>${andel} %</strong> av årsinntekten.
       ${tommeTekst}
-      Månedene er ex-datoer; utbetalingen kommer typisk halvannen til tre uker senere.
+      Månedene er ex-datoer; utbetalingen kommer som regel én til to uker senere.
     </p>`;
 }
 
@@ -1891,7 +1891,7 @@ function visTommeMaaneder(beholdning) {
       ? `<p class="text-xs text-gray-400 mb-1">${liste.length} ${liste.length === 1 ? 'aksje' : 'aksjer'} med ex-dato i ${MND_LANG[valgt]}, sortert etter hvor lenge utbytterekken har holdt. Yield er det som faktisk er betalt siste 12 måneder.</p>
          <div>${rader}</div>${flere}`
       : `<p class="text-xs text-gray-500 dark:text-gray-400">Ingen aksjer i katalogen har gått ex i ${MND_LANG[valgt]} i minst to av de siste årene og betalt utbytte det siste året.</p>`}
-    <p class="text-[11px] text-gray-400 dark:text-gray-600 mt-3">Et filter på historiske ex-datoer, ikke en anbefaling. Selskaper kan flytte, kutte eller stoppe utbyttet, og pengene kommer typisk halvannen til tre uker etter ex-datoen.</p>`;
+    <p class="text-[11px] text-gray-400 dark:text-gray-600 mt-3">Et filter på historiske ex-datoer, ikke en anbefaling. Selskaper kan flytte, kutte eller stoppe utbyttet, og pengene kommer som regel én til to uker etter ex-datoen.</p>`;
 
   if (!el.dataset.koblet) {
     el.dataset.koblet = '1';
@@ -2206,7 +2206,7 @@ function visUtbyttePrognose(beholdning) {
     </div>
     <div class="max-h-56 overflow-y-auto mt-3" id="pf-prognose-liste">${listeHtml}</div>
     ${utenDatoHtml}${kapitalHtml}
-    <p class="text-[11px] text-gray-400 dark:text-gray-600 mt-2">Månedene er <strong>ex-datoer</strong> — pengene kommer typisk halvannen til tre uker senere, så en ex-dato sent i måneden utbetales i den neste. Estimater bygger på sist kjente utbytte og betalingsmønster; fremtidige utbytter er ikke garantert. Netto forutsetter skjermingsfradrag på årets kostbasis.</p>`;
+    <p class="text-[11px] text-gray-400 dark:text-gray-600 mt-2">Månedene er <strong>ex-datoer</strong>. Pengene kommer som regel én til to uker senere, så en ex-dato sent i måneden utbetales i den neste. Estimater bygger på sist kjente utbytte og betalingsmønster; fremtidige utbytter er ikke garantert. Netto forutsetter skjermingsfradrag på årets kostbasis.</p>`;
 }
 
 // ── VERDIKONSENTRASJON (Beholdning) ───────────────────────────────────────
