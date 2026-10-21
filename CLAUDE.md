@@ -52,9 +52,11 @@ Gray scale (UI chrome, text, borders) uses standard Tailwind gray: `gray-50`→`
 **Visual roles (`STYLE.md`, 2026-10-11).** Numbers are neutral (`gray-900` /
 `gray-100`). Green and red mean direction only, as in the price chart. Links and
 buttons use `green-700`. Boxes are coloured only when the colour means something:
-amber warns, grey explains. The stock page template follows these rules; the
-app and the hand-written pages still use the table above until they are
-converted.
+amber warns, grey explains. Tickers are semibold `gray-900` / `gray-100`, not
+green monospace. Only the score keeps a pill. The stock page template and the
+app (`/app/`, since 2026-10-20) follow these rules; the hand-written pages still
+use the table above until they are converted. Chart series that need telling
+apart (sector donut, OSEBX line) keep their palette.
 
 **Font: Inter, self-hosted** in `assets/fonts/` (variable, latin subset, SIL
 OFL). It is set as `--font-sans` in `tw-input.css`. Never load it from Google
@@ -2037,6 +2039,39 @@ now says when the paid figure replaces it.
 
 Tests: `TestAnnetSelskap` (5), `TestBetaltSomArsrate` (+2),
 `TestForsideArtikler` (5).
+
+## App review of 2026-10-20
+
+Every tab, sub-tab and fourteen stock modals were opened with Playwright at
+390 and 1280 px in both themes (226 views), with a test portfolio. The bugs
+below made no test fail.
+
+| Bug | Effect | Fix |
+|---|---|---|
+| Shared portfolio link read `utbytte_pr_aksje` | Every shared link showed 0 kr and 0 % | `delLenkeData()`, pure and tested |
+| Quarterly chart had its own placement rule | An annual payer without a known date went to Q1. DNB (ex in April) stood in Q1 under a monthly chart showing April | `_kvartalSummer()` sums `_maanedSummer()` |
+| Milestones reported the lowest one first | A portfolio with 12 000 kr a year got «1 000 kr» today, «5 000 kr» on the next visit | `nyMilepel()` reports the highest and marks the lower ones |
+| `Math.ceil` on day counts | «om 21 dager» for 20 days after the clocks went back | `dagerTil()` rounds local midnights |
+| `toISOString()` as today in the portfolio | Between midnight and 01/02 a transaction got yesterday's date | `_idagIso()` in `portefolje.js` |
+| `.filter-input` padding was unlayered | It beat `pl-10`, and the search icon sat on the text | Padding moved to `@layer components` |
+| Donut with one holding | An arc back to its own start point draws nothing | Sweep capped just under 360° |
+| Corporate events only under «Utbytte» | The modal opens on «Oversikt», so STST's wind-down and ZAL's delisting were hidden | `modalHendelse()` above the tabs, `hendelseMerke()` in rows and cards |
+| `conic-gradient` with a decimal comma | The health ring did not render | `toFixed(1)`, never locale |
+| Popups stacked | Backup toast and start-page prompt covered each other | `data-forslag`, one at a time |
+
+**Formatting is shared now.** `fmtPst()` (`3,48 %` with a non-breaking space
+and a real minus), `fmtTall()`, `datoKort()` («9. nov.», year only when it
+differs), `dagerTilTekst()`, `aksjerTekst()` and `pentAkse()` (round axis
+values) live in `ui.js`. About 90 places that wrote `toFixed() + '%'` use
+them. CSS widths and SVG coordinates still use `toFixed()` with a period.
+
+**Visual changes (STYLE.md 2, 3, 4 and 6):** neutral tickers and numbers, a
+price header in the modal, no welcome window (a dismissible banner instead),
+a tighter table that hides columns by width (`col-lg`, `col-xl`, `col-bred`),
+filters behind «Filter» on phones, round chart axes and a hatched
+«hittil» bar for the current year.
+
+Tests: `ui.test.js` (+13) and `portefolje.test.js` (+1).
 
 ## «Les mer» in the app modal (2026-10-07)
 

@@ -152,9 +152,22 @@
 .toppliste-metric { font-size: 0.8rem; font-weight: 600; color: #374151; }
 .dark .toppliste-metric { color: #e5e7eb; }
 
+/* ── FILTER PÅ TELEFON ─────────────────────────────────────────────────── */
+/* Lukket som standard; «Filter»-knappen ved søkefeltet åpner dem. */
+@media (max-width: 639px) {
+  #filter-bar:not(.filtre-apne) #filter-ekstra,
+  #filter-bar:not(.filtre-apne) #filter-chips { display: none; }
+}
+
 /* ── FILTER INPUTS ────────────────────────────────────────────────────── */
+/* Innrykket ligger i components-laget, så pl-10, pr-8 og py-1 på det enkelte
+   feltet vinner. Som ulagret regel slo det alle verktøyklasser, og søkeikonet
+   lå oppå teksten i søkefeltet (rettet 20.10.2026). Skriftstørrelsen under
+   blir stående ulagret med vilje: under 16px zoomer iOS Safari inn ved fokus. */
+@layer components {
+  .filter-input { padding: 0.5rem 0.75rem; }
+}
 .filter-input {
-  padding: 0.5rem 0.75rem;
   font-size: 1rem; /* 16px — hindrer iOS Safari auto-zoom ved focus */
   border-radius: 0.5rem;
   border: 1px solid #d1d5db;
@@ -185,6 +198,23 @@
 .row-highlight { background: #f3f4f6 !important; }
 .dark .row-highlight { background: rgb(255 255 255 / 0.04) !important; }
 
+/* Strammere hovedtabell (STYLE.md, tiltak 4). Med 17 kolonner og 16 px
+   polstring var tabellen 1 544 px bred i et vindu på 1 280, så ex-datoen
+   lå utenfor skjermen, og overskriftene brøt over to og tre linjer. */
+#hoved-tabell { font-variant-numeric: tabular-nums; }
+#hoved-tabell th { white-space: nowrap; padding: 0.625rem 0.5rem; font-size: 0.6875rem; }
+#hoved-tabell td { padding: 0.5rem 0.5rem; }
+#hoved-tabell td:first-child, #hoved-tabell th:first-child { padding-left: 0.75rem; padding-right: 0.25rem; }
+@media (max-width: 1535px) {
+  #hoved-tabell .col-bred { display: none; }
+}
+@media (max-width: 1279px) {
+  #hoved-tabell .col-xl { display: none; }
+}
+@media (max-width: 1023px) {
+  #hoved-tabell .col-lg { display: none; }
+}
+
 th.sortable {
   cursor: pointer;
   user-select: none;
@@ -198,34 +228,31 @@ th.sort-asc::after  { content: ' ↑'; color: #6b7280; }
 th.sort-desc::after { content: ' ↓'; color: #6b7280; }
 .dark th.sort-asc::after, .dark th.sort-desc::after { color: #9ca3af; }
 
-/* ── YIELD BADGES ─────────────────────────────────────────────────────── */
+/* ── YIELD ────────────────────────────────────────────────────────────── */
+/* Yield er et tall, ikke en retning (STYLE.md). Grønne og blå piller etter
+   nivå leste som kursoppgang, og nesten hvert tall i tabellen lå i en pille.
+   Klassene står igjen, så ingen mal må skrives om, men de gir nøytral tekst.
+   Bare scoren beholder pille. */
 .yield-badge {
-  display: inline-block;
-  padding: 0.125rem 0.5rem;
-  border-radius: 9999px;
-  font-size: 0.75rem;
-  font-weight: 700;
+  display: inline;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
 }
-.yield-hoy    { background: #f0fdf4; color: #166534; }
-.yield-god    { background: #f0f9ff; color: #075985; }
-.yield-middels{ background: #fafafa; color: #57534e; }
-.yield-lav    { background: #f3f4f6; color: #6b7280; }
-.dark .yield-hoy    { background: rgb(20 83 45 / 0.2); color: #86efac; }
-.dark .yield-god    { background: rgb(12 74 110 / 0.25); color: #7dd3fc; }
-.dark .yield-middels{ background: rgb(255 255 255 / 0.05); color: #a8a29e; }
-.dark .yield-lav    { background: #1f2937; color: #6b7280; }
+.yield-hoy, .yield-god, .yield-middels { color: #111827; }
+.yield-lav { color: #4b5563; }
+.dark .yield-hoy, .dark .yield-god, .dark .yield-middels { color: #f3f4f6; }
+.dark .yield-lav { color: #9ca3af; }
 
-/* ── FREKVENS BADGE ───────────────────────────────────────────────────── */
+/* ── FREKVENS ─────────────────────────────────────────────────────────── */
+/* Vanlig tekst, ikke pille: bare scoren har pille (STYLE.md). */
 .frekvens-badge {
-  display: inline-block;
-  padding: 0.125rem 0.5rem;
-  border-radius: 0.25rem;
-  font-size: 0.75rem;
-  font-weight: 500;
-  background: #f3f4f6;
+  display: inline;
+  font-size: 0.8125rem;
   color: #4b5563;
+  white-space: nowrap;
 }
-.dark .frekvens-badge { background: #1f2937; color: #9ca3af; }
+.dark .frekvens-badge { color: #9ca3af; }
 
 /* ── OPPORTUNITY KORT ─────────────────────────────────────────────────── */
 .opportunity-kort {
@@ -390,12 +417,14 @@ th.sort-desc::after { content: ' ↓'; color: #6b7280; }
   line-height: 1.4;
 }
 .score-av10 { font-size: 0.65rem; font-weight: 500; margin-left: 1px; opacity: 0.75; }
+/* Én aksentfarge pluss grå: høy score grønn, middels grå, lav amber. Blått
+   hadde ingen fast betydning, og rødt er forbeholdt kursfall. */
 .score-høy     { background: #dcfce7; color: #15803d; }
-.score-middels { background: #dbeafe; color: #1e40af; }
-.score-lav     { background: #fee2e2; color: #b91c1c; }
+.score-middels { background: #f3f4f6; color: #374151; }
+.score-lav     { background: #fef3c7; color: #92400e; }
 .dark .score-høy     { background: rgb(20 83 45 / 0.4); color: #86efac; }
-.dark .score-middels { background: rgb(30 58 138 / 0.4); color: #93c5fd; }
-.dark .score-lav     { background: rgb(127 29 29 / 0.4); color: #fca5a5; }
+.dark .score-middels { background: #1f2937; color: #d1d5db; }
+.dark .score-lav     { background: rgb(120 53 15 / 0.35); color: #fcd34d; }
 
 /* ── SKELETON LOADER ─────────────────────────────────────────────────── */
 .skeleton {
@@ -621,31 +650,32 @@ th.sort-desc::after { content: ' ↓'; color: #6b7280; }
 .dark .ak-toggle  { color: #9ca3af; }
 .dark .ak-toggle:hover { background: #1f2937; }
 
-/* AI-oppsummering boks i modal */
+/* «Utbyttehistorikken kort fortalt» i modalen. Grå, ikke blå: boksen
+   forklarer, den advarer ikke, og blått hadde ingen fast betydning. */
 .ai-opp-boks {
   margin-bottom: 1rem;
   padding: 0.75rem;
   border-radius: 0.5rem;
-  border: 1px solid #bfdbfe;
-  background: #eff6ff;
+  border: 1px solid #e5e7eb;
+  background: #f9fafb;
 }
 .dark .ai-opp-boks {
-  background: #0f1729;
-  border-color: #1e3a5f;
+  background: #111827;
+  border-color: #1f2937;
 }
 .ai-opp-label {
   font-size: 0.7rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  color: #1d4ed8;
+  color: #4b5563;
   margin-bottom: 0.35rem;
   display: flex;
   align-items: center;
   gap: 0.4rem;
   flex-wrap: wrap;
 }
-.dark .ai-opp-label { color: #93c5fd; }
+.dark .ai-opp-label { color: #9ca3af; }
 .ai-opp-dato {
   font-weight: 400;
   opacity: 0.7;
@@ -655,9 +685,9 @@ th.sort-desc::after { content: ' ↓'; color: #6b7280; }
 .ai-opp-tekst {
   font-size: 0.875rem;
   line-height: 1.65;
-  color: #1e3a8a;
+  color: #1f2937;
 }
-.dark .ai-opp-tekst { color: #bfdbfe; }
+.dark .ai-opp-tekst { color: #e5e7eb; }
 
 /* Faktabeskrivelse boks i modal */
 .om-selskap-boks {
@@ -718,6 +748,14 @@ th.sort-desc::after { content: ' ↓'; color: #6b7280; }
 .dark .modal-tab:hover { color: #f3f4f6; }
 .dark .modal-tab.aktiv { color: #4ade80; border-bottom-color: #4ade80; }
 
+/* På telefon deler fanene bredden. Med fast polstring var hovedmenyen 6 px
+   for bred på 390 px, og «Kalkulator» i aksjevinduet ble kuttet (20.10.2026). */
+@media (max-width: 639px) {
+  #tab-nav { min-width: 0; width: 100%; }
+  #tab-nav .tab-btn { flex: 1 1 0; padding-left: 0.25rem; padding-right: 0.25rem; text-align: center; }
+  .modal-tab { flex: 1 1 0; padding-left: 0.25rem; padding-right: 0.25rem; text-align: center; }
+}
+
 .modal-panel.skjult { display: none; }
 
 /* ── SEO-SIDE TABS ────────────────────────────────────────────────────────── */
@@ -764,44 +802,33 @@ section[id] { scroll-margin-top: 100px; }
   color: #6b7280;
   margin: 1rem 0 0.5rem;
 }
+/* Én liste med skillelinjer i stedet for tre grønne bokser; symbolet bærer
+   svaret (STYLE.md: farget boks bare når fargen betyr noe). */
 .modal-konto-rad {
   display: flex;
   gap: 0.75rem;
   align-items: flex-start;
-  padding: 0.65rem 0.9rem;
-  border-radius: 0.5rem;
-  margin-bottom: 0.4rem;
-  border: 1px solid #d1fae5;
-  background: #f0fdf4;
+  padding: 0.6rem 0.8rem;
+  border: 1px solid #e5e7eb;
+  border-bottom-width: 0;
+  background: #fff;
 }
-.modal-konto-rad.ikke {
-  border-color: #fca5a5;
-  background: #fff1f2;
-}
+.modal-konto-rad:first-of-type { border-top-left-radius: 0.5rem; border-top-right-radius: 0.5rem; }
+.modal-konto-rad:last-of-type { border-bottom-width: 1px; border-bottom-left-radius: 0.5rem; border-bottom-right-radius: 0.5rem; }
 .dark .modal-konto-rad {
-  border-color: #166534;
-  background: #052e16;
-}
-.dark .modal-konto-rad.ikke {
-  border-color: #7f1d1d;
-  background: #2d0a0a;
+  border-color: #1f2937;
+  background: #111827;
 }
 .modal-konto-ikon {
   font-size: 0.95rem;
   flex-shrink: 0;
   margin-top: 0.1rem;
-  color: #16a34a;
+  color: #15803d;
 }
+.dark .modal-konto-ikon { color: #4ade80; }
 .modal-konto-rad.ikke .modal-konto-ikon { color: #dc2626; }
 /* Hjemstedet er ikke avklart (OET, CAPT) — se askTekst() i ui.js */
-.modal-konto-rad.uavklart {
-  border-color: #fde68a;
-  background: #fffbeb;
-}
-.dark .modal-konto-rad.uavklart {
-  border-color: #78350f;
-  background: #2a1f05;
-}
+.dark .modal-konto-rad.ikke .modal-konto-ikon { color: #f87171; }
 .modal-konto-rad.uavklart .modal-konto-ikon { color: #b45309; font-weight: 700; }
 .dark .modal-konto-rad.uavklart .modal-konto-ikon { color: #fbbf24; }
 .modal-konto-rad strong { font-size: 0.82rem; }
@@ -853,18 +880,30 @@ section[id] { scroll-margin-top: 100px; }
 }
 
 /* Risiko-boks i modal — light */
-.risiko-boks-lav     { color: #15803d; background: #f0fdf4; border-color: #bbf7d0; }
-.risiko-boks-moderat { color: #b45309; background: #fffbeb; border-color: #fde68a; }
-.risiko-boks-hoy     { color: #b91c1c; background: #fef2f2; border-color: #fecaca; }
-/* Risiko-boks i modal — dark */
-.dark .risiko-boks-lav     { color: #4ade80; background: rgba(20,83,45,0.35); border-color: #166534; }
+/* Risiko-boks i modal. Lav risiko er en forklaring (grå); moderat og høy
+   advarer (amber, sterkere kant for høy). Rødt er forbeholdt kursfall. */
+.risiko-boks-lav     { color: #374151; background: #f9fafb; border-color: #e5e7eb; }
+.risiko-boks-moderat { color: #92400e; background: #fffbeb; border-color: #fde68a; }
+.risiko-boks-hoy     { color: #92400e; background: #fffbeb; border-color: #f59e0b; border-left-width: 3px; }
+.dark .risiko-boks-lav     { color: #d1d5db; background: #111827; border-color: #1f2937; }
 .dark .risiko-boks-moderat { color: #fbbf24; background: rgba(92,45,5,0.35);  border-color: #92400e; }
-.dark .risiko-boks-hoy     { color: #f87171; background: rgba(127,29,29,0.35); border-color: #991b1b; }
+.dark .risiko-boks-hoy     { color: #fbbf24; background: rgba(92,45,5,0.35);  border-color: #f59e0b; border-left-width: 3px; }
 
-/* «Passer for»-badge i modal */
+/* Inneværende år i «Historiske utbytter»: lysere og skravert, for det er
+   bare betalt hittil i år (STYLE.md, tiltak 6). */
+.stolpe-hittil {
+  background-color: #d1d5db;
+  background-image: repeating-linear-gradient(135deg, transparent 0 4px, rgba(255,255,255,0.55) 4px 7px);
+}
+.dark .stolpe-hittil {
+  background-color: #4b5563;
+  background-image: repeating-linear-gradient(135deg, transparent 0 4px, rgba(0,0,0,0.35) 4px 7px);
+}
+
+/* «Passer for»-merke i modal: nøytralt, som frekvensmerket. */
 .mal-badge { font-size: 0.7rem; font-weight: 600; padding: 0.125rem 0.5rem; border-radius: 9999px;
-             background: #dbeafe; color: #1d4ed8; }
-.dark .mal-badge { background: rgba(30,58,138,0.4); color: #93c5fd; }
+             background: #f3f4f6; color: #374151; }
+.dark .mal-badge { background: #1f2937; color: #d1d5db; }
 
 /* Yahoos faktasammendrag står under den redaksjonelle innledningen i
    «Om selskapet» og skal lese som en fotnote til den, ikke som likestilt

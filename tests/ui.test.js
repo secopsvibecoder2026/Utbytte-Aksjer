@@ -24,7 +24,7 @@ global.document = {
 // ui.js uses alleAksjer global — stub it
 global.alleAksjer = [];
 
-const { snittNavn, forklarRisiko, vekstFraTopp, beregnMal, forklarMal, utbytteKutt, beregnRisiko, modalHendelse,
+const { hendelseMerke, nyMilepel, delLenkeData, pentAkse, datoKort, aksjerTekst, fmtPst, fmtTall, dagerTil, dagerTilTekst, snittNavn, forklarRisiko, vekstFraTopp, beregnMal, forklarMal, utbytteKutt, beregnRisiko, modalHendelse,
   fmt,
   formaterDato,
   yieldKlasse,
@@ -89,28 +89,23 @@ test('payoutKlasse: payout <= 0 er grå', () => {
   assert.ok(payoutKlasse(0).includes('gray'));
 });
 
-test('payoutKlasse: payout <= 50 er normal', () => {
-  const k = payoutKlasse(50);
-  assert.ok(k.includes('gray-7') || k.includes('gray-3'));
+test('payoutKlasse: opp til 80 % er nøytralt', () => {
+  for (const p of [30, 50, 75, 80]) {
+    const k = payoutKlasse(p);
+    assert.ok(k.includes('gray-900') && !k.includes('amber') && !k.includes('red'), `${p}: ${k}`);
+  }
 });
 
-test('payoutKlasse: payout <= 75 er advarsel', () => {
-  const k = payoutKlasse(75);
-  assert.ok(k.includes('amber'));
-});
-
-test('payoutKlasse: payout > 75 er rød', () => {
-  const k = payoutKlasse(80);
-  assert.ok(k.includes('red'));
+test('payoutKlasse: over 80 % advarer med amber, aldri rødt', () => {
+  assert.ok(payoutKlasse(85).includes('amber'));
+  assert.ok(payoutKlasse(130).includes('amber') && payoutKlasse(130).includes('font-semibold'));
+  assert.ok(!payoutKlasse(130).includes('red'));
 });
 
 // ── vekstKlasse ─────────────────────────────────────────────────────────────
-test('vekstKlasse: vekst > 10 er emerald', () => {
-  assert.ok(vekstKlasse(11).includes('emerald'));
-});
-
-test('vekstKlasse: vekst > 0 er grå', () => {
-  assert.ok(vekstKlasse(5).includes('gray'));
+test('vekstKlasse: vekst er retning, grønn opp', () => {
+  assert.ok(vekstKlasse(11).includes('green'));
+  assert.ok(vekstKlasse(5).includes('green'));
 });
 
 test('vekstKlasse: vekst < 0 er rød', () => {
@@ -580,9 +575,9 @@ test('kapitalAndel: leser feltet og avviser ugyldige verdier', () => {
 });
 
 test('kapitalSkattTekst: sier ikke 37,84 % om en tilbakebetaling', () => {
-  assert.equal(kapitalSkattTekst({}), '37,84% skatt');
+  assert.equal(kapitalSkattTekst({}), '37,84\u00a0% skatt');
   assert.equal(kapitalSkattTekst({ kapital_tilbake: { andel: 1 } }), 'skatt utsatt til salg');
-  assert.equal(kapitalSkattTekst({ kapital_tilbake: { andel: 0.862 } }), '37,84% på 14 % av beløpet');
+  assert.equal(kapitalSkattTekst({ kapital_tilbake: { andel: 0.862 } }), '37,84\u00a0% på 14\u00a0% av beløpet');
 });
 
 test('modalKapitalNote: bare for aksjer med feltet', () => {
@@ -867,7 +862,7 @@ test('beregnMal/forklarMal: ingen vekstmål for EQNR, dobling som betingelse for
   assert.ok(!beregnMal(EQNR_VEKST).includes('vekst'));
   assert.ok(beregnMal(DNB_VEKST).includes('vekst'));
   const tekst = forklarMal(DNB_VEKST).find(f => f.mal === 'Utbyttevekst').tekst;
-  assert.ok(tekst.includes('Holder veksten på +19,8% per år seg, dobles utbyttet på ca. 4 år.'), tekst);
+  assert.ok(tekst.includes('Holder veksten på +19,8\u00a0% per år seg, dobles utbyttet på ca. 4 år.'), tekst);
 });
 
 // ── Tallkontrollen 2026-10-12: snittets navn og brudd i rekken ──────────────
@@ -949,4 +944,98 @@ test('modalHendelse og beregnMal: selskapshendelse fra tickers.json', () => {
   } finally {
     delete global.escHtml;
   }
+});
+
+// ── Tallformat og dager (app-gjennomgangen 20.10.2026) ─────────────────────
+test('fmtPst: desimalkomma og hardt mellomrom, aldri punktum', () => {
+  assert.equal(fmtPst(3.48), '3,48\u00a0%');
+  assert.equal(fmtPst(61.3, 1), '61,3\u00a0%');
+  assert.equal(fmtPst(-0.76), '\u22120,76\u00a0%');
+  assert.equal(fmtPst(-0.001, 1), '0,0\u00a0%');
+  assert.equal(fmtPst(null), '—');
+  assert.equal(fmtPst(NaN), '—');
+  assert.ok(!fmtPst(112.9, 1).includes('.'));
+});
+
+test('fmtTall: tusenskille i markedsverdi', () => {
+  assert.equal(fmtTall(1030.31, 1).replace(/\s/g, ' '), '1 030,3');
+  assert.equal(fmtTall(undefined), '—');
+});
+
+test('dagerTil: sommertidsslutt gir ikke en dag for mye (ENH 20.10 → 9.11)', () => {
+  const idag = new Date(2026, 9, 20, 13, 30);
+  assert.equal(dagerTil('2026-11-09', idag), 20);
+  assert.equal(dagerTil('2026-10-20', idag), 0);
+  assert.equal(dagerTil('2026-10-21', idag), 1);
+  assert.equal(dagerTil('2026-10-19', idag), -1);
+  assert.equal(dagerTil(new Date(2027, 3, 1), new Date(2027, 2, 20)), 12);
+  assert.equal(dagerTil(null), null);
+  assert.equal(dagerTilTekst(0), 'i dag');
+  assert.equal(dagerTilTekst(1), 'i morgen');
+  assert.equal(dagerTilTekst(20), 'om 20 dager');
+  assert.equal(dagerTilTekst(-2), '');
+});
+
+test('pentAkse: runde verdier som dekker hele kurven', () => {
+  const a = pentAkse(226.4, 440.3);
+  assert.deepEqual(a.verdier, [200, 250, 300, 350, 400, 450]);
+  assert.equal(a.desimaler, 0);
+  // Små kurser får desimaler, og aksen dekker alltid min og maks
+  const b = pentAkse(1.12, 1.87);
+  assert.ok(b.fra <= 1.12 && b.til >= 1.87);
+  assert.ok(b.verdier.length >= 3 && b.verdier.length <= 6);
+  assert.ok(b.desimaler >= 1);
+  // Flat kurve gir likevel en akse, ikke deling på null
+  const c = pentAkse(100, 100);
+  assert.ok(c.fra < 100 && c.til > 100);
+  assert.equal(pentAkse(NaN, 5), null);
+});
+
+test('datoKort: år bare når datoen er et annet år', () => {
+  const idag = new Date(2026, 9, 20);
+  assert.equal(datoKort('2026-11-09', idag).replace(/\s/g, ' '), '9. nov.');
+  assert.match(datoKort('2027-02-03', idag), /2027/);
+  assert.equal(datoKort(null, idag), '—');
+  assert.equal(datoKort('ikke-en-dato', idag), '—');
+});
+
+test('aksjerTekst: entall og flertall', () => {
+  assert.equal(aksjerTekst(1), '1 aksje');
+  assert.equal(aksjerTekst(0), '0 aksjer');
+  assert.equal(aksjerTekst(12), '12 aksjer');
+});
+
+test('delLenkeData: utbytte og yield regnes fra utbytte_per_aksje', () => {
+  const aksjer = [
+    { ticker: 'AAA', pris: 200, utbytte_per_aksje: 10, utbytte_yield: 5 },
+    { ticker: 'BBB', pris: 50,  utbytte_per_aksje: 1,  utbytte_yield: 2 },
+  ];
+  const d = delLenkeData('Test', { AAA: 10, BBB: 40, UKJENT: 5 }, aksjer, new Date(2026, 9, 20, 0, 30));
+  assert.equal(d.v, 4000);          // 2 000 + 2 000
+  assert.equal(d.y, 140);           // 100 + 40 — var 0 med feil feltnavn
+  assert.equal(d.yp, 3.5);
+  assert.deepEqual(d.t.map(x => x[0]).sort(), ['AAA', 'BBB']);
+  assert.equal(d.t[0][1], 50);      // andel i prosent med én desimal
+  assert.equal(d.d, '2026-10-20');  // lokal dato, også rett etter midnatt
+});
+
+test('nyMilepel: melder den høyeste som er nådd, ikke den laveste', () => {
+  const r = nyMilepel(12478, []);
+  assert.equal(r.vis, 10000);
+  assert.deepEqual(r.oppnaadde, [1000, 5000, 10000]);
+  // Neste besøk: ingenting nytt å melde
+  assert.equal(nyMilepel(12478, r.oppnaadde).vis, null);
+  // Vokser porteføljen forbi neste grense, meldes den
+  assert.equal(nyMilepel(26000, r.oppnaadde).vis, 25000);
+  assert.equal(nyMilepel(500, []).vis, null);
+});
+
+test('hendelseMerke: kort merke i lista, tomt uten gyldig hendelse', () => {
+  global.escHtml = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  assert.match(hendelseMerke({ hendelse: { type: 'avvikling', tekst: 'Flåten selges.' } }), />avvikles</);
+  assert.match(hendelseMerke({ hendelse: { type: 'oppkjop', tekst: 'Bud.' } }), />oppkjøp</);
+  assert.equal(hendelseMerke({ hendelse: { type: 'ukjent', tekst: 'x' } }), '');
+  assert.equal(hendelseMerke({ hendelse: { type: 'fusjon', tekst: '  ' } }), '');
+  assert.equal(hendelseMerke({}), '');
+  delete global.escHtml;
 });
