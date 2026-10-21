@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3981936786393038"
+     crossorigin="anonymous"></script>
+
+  <!-- Google Analytics med Consent Mode v2 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-X6C9PERKMB"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', {
+      analytics_storage: 'denied',
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      wait_for_update: 500
+    });
+    gtag('js', new Date());
+    gtag('config', 'G-X6C9PERKMB');
+  </script>
+  <script src="/assets/consent.js" defer></script>
+
+  <link rel="icon" type="image/png" href="/favicon.png" sizes="512x512" />
+  <link rel="apple-touch-icon" href="/logo/apple_touch_icon_180.png" />
+  <link rel="icon" type="image/svg+xml" href="/logo/exday_icon_primary.svg" />
+
+  <title>Hva er direkteavkastning? Slik regnes tallet, og hvorfor sidene viser ulike svar | exday.no</title>
+  <meta name="description" content="Direkteavkastning er utbytte delt på kurs, men årsutbyttet kan regnes på tre måter. Slik regnes de, når de spriker, og hvordan du sjekker tallet selv." />
+  <link rel="canonical" href="https://exday.no/artikler/hva-er-direkteavkastning/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://exday.no/artikler/hva-er-direkteavkastning/" />
+  <meta property="og:title" content="Hva er direkteavkastning? Slik regnes tallet, og hvorfor sidene viser ulike svar" />
+  <meta property="og:description" content="Samme aksje kan ha tre ulike direkteavkastninger samme dag. Slik regnes de, og slik ser du hvilket tall en side viser." />
+  <meta property="og:site_name" content="exday.no" />
+
+  <script>(function(){if(localStorage.getItem('tema')==='dark')document.documentElement.classList.add('dark');})()</script>
+
+  <link rel="stylesheet" href="/assets/tailwind.css" />
+  <link rel="stylesheet" href="/assets/style.css" />
+
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+    .prose h2 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      margin-top: 2.5rem;
+      margin-bottom: 0.75rem;
+      color: inherit;
+    }
+    .prose h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-top: 1.75rem;
+      margin-bottom: 0.5rem;
+      color: inherit;
+    }
+    .prose p { margin-bottom: 1rem; line-height: 1.75; }
+    .prose a { color: #16a34a; }
+    .dark .prose a { color: #4ade80; }
+    .prose a:hover { text-decoration: underline; }
+    .prose ul { margin: 0.75rem 0 1rem 1.5rem; list-style: disc; }
+    .prose ol { margin: 0.75rem 0 1rem 1.5rem; list-style: decimal; }
+    .prose li { margin-bottom: 0.4rem; line-height: 1.7; }
+    .prose table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.9rem; display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .prose th { text-align: left; padding: 0.6rem 0.9rem; background: #f3f4f6; font-weight: 600; border: 1px solid #e5e7eb; }
+    .dark .prose th { background: #1f2937; border-color: #374151; }
+    .prose td { padding: 0.6rem 0.9rem; border: 1px solid #e5e7eb; vertical-align: top; }
+    .dark .prose td { border-color: #374151; }
+    .prose tr:nth-child(even) td { background: #f9fafb; }
+    .dark .prose tr:nth-child(even) td { background: #111827; }
+    .prose td.tall, .prose th.tall { text-align: right; font-variant-numeric: tabular-nums; }
+    .prose td.tall { white-space: nowrap; }
+    .prose caption { caption-side: top; text-align: left; font-size: 0.8rem; color: #6b7280; padding-bottom: 0.4rem; }
+    .dark .prose caption { color: #9ca3af; }
+    @media (max-width: 480px) {
+      .prose table { font-size: 0.8rem; }
+      .prose th, .prose td { padding: 0.45rem 0.5rem; }
+      .formula-box { font-size: 0.8rem; padding: 0.75rem 0.9rem; }
+    }
+    .callout {
+      border-left: 4px solid #6b7280;
+      background: #f9fafb;
+      padding: 1rem 1.25rem;
+      border-radius: 0 0.5rem 0.5rem 0;
+      margin: 1.5rem 0;
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+    .callout p { margin-bottom: 0.5rem; }
+    .callout p:last-child { margin-bottom: 0; }
+    .dark .callout { background: #111827; border-color: #4b5563; }
+    .formula-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 0.5rem;
+      padding: 1rem 1.25rem;
+      margin: 1.25rem 0;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9rem;
+      line-height: 1.8;
+    }
+    .dark .formula-box { background: #0f172a; border-color: #334155; }
+    .toc a { color: #16a34a; text-decoration: none; }
+    .toc a:hover { text-decoration: underline; }
+    .dark .toc a { color: #4ade80; }
+    .guide-badge {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      padding: 0.15rem 0.55rem;
+      border-radius: 9999px;
+      background: #dcfce7;
+      color: #15803d;
+    }
+    .dark .guide-badge { background: #052e16; color: #4ade80; }
+    .les-ogsa-lenke {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+  </style>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Hva er direkteavkastning? Slik regnes tallet, og hvorfor sidene viser ulike svar",
+    "description": "Direkteavkastning er utbytte per aksje delt på kursen. Årsutbyttet kan regnes som siste utbetaling ganget opp, summen for siste tolv måneder eller fjorårets sum, og for samme aksje kan de gi svært ulike tall. Slik regnes de, slik regner exday.no, og slik kontrollerer du tallet mot selskapets melding til Oslo Børs.",
+    "url": "https://exday.no/artikler/hva-er-direkteavkastning/",
+    "datePublished": "2026-10-21",
+    "dateModified": "2026-10-21",
+    "author": { "@type": "Organization", "name": "exday.no", "url": "https://exday.no" },
+    "publisher": { "@type": "Organization", "name": "exday.no", "url": "https://exday.no" },
+    "mainEntityOfPage": { "@type": "WebPage", "@id": "https://exday.no/artikler/hva-er-direkteavkastning/" }
+  }
+  </script>
+</head>
+<body class="bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 min-h-screen">
+
+  <nav class="site-nav" aria-label="Hovedmeny">
+    <div class="site-nav-inner">
+      <a href="/" class="site-logo" aria-label="exday.no - hjem">
+        <img src="/logo/exday_icon_primary.svg" class="site-logo-icon site-logo-icon-light" alt="" width="28" height="28" loading="eager"><img src="/logo/exday_icon_inverse.svg" class="site-logo-icon site-logo-icon-dark" alt="" width="28" height="28" loading="eager">
+        <span>e<span class="site-logo-x">x</span>day<span class="site-logo-dot">.no</span></span>
+      </a>
+      <ul class="site-nav-menu">
+        <li class="has-dropdown">
+          <a href="/aksjer/">Aksjer</a>
+          <ul class="nav-dropdown">
+            <li><a href="/aksjer/">Alle aksjer</a></li>
+            <li><a href="/avnoteringer/">Avnoterte aksjer</a></li>
+          </ul>
+        </li>
+        <li><a href="/aksjer/sektor/">Sektorer</a></li>
+        <li class="has-dropdown">
+          <a href="/utbyttekalender/" class="">Kalender</a>
+          <ul class="nav-dropdown">
+            <li><a href="/utbyttekalender/">Utbyttekalender</a></li>
+            <li><a href="/rapportkalender/">Rapportkalender</a></li>
+          </ul>
+        </li>
+        <li class="has-dropdown">
+          <a href="/verktoy/">Verktøy</a>
+          <ul class="nav-dropdown">
+            <li><a href="/verktoy/kalkulator/">Kalkulator</a></li>
+            <li><a href="/verktoy/huslan-vs-investering/">Huslån vs. Investering</a></li>
+            <li><a href="/verktoy/fire-kalkulator/">FIRE-kalkulator</a></li>
+            <li><a href="/verktoy/sektorrebalansering/">Sektorrebalansering</a></li>
+          </ul>
+        </li>
+        <li><a href="/artikler/" class="active">Artikler</a></li>
+        <li><a href="/faq/">FAQ</a></li>
+        <li><a href="/om/">Om</a></li>
+      </ul>
+      <div class="site-nav-actions">
+        <a href="/app/" class="site-app-btn">Åpne app</a>
+        <button id="site-dark-toggle" class="site-dark-btn" aria-label="Bytt fargemodus">
+          <svg class="sun-icon" width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+          <svg class="moon-icon" width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display:none;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+        </button>
+      </div>
+      <button class="site-nav-burger" aria-label="Vis meny" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+  <script>
+    (function() {
+      var nav = document.querySelector('.site-nav');
+      var burger = nav && nav.querySelector('.site-nav-burger');
+      if (burger) {
+        burger.addEventListener('click', function() {
+          nav.classList.toggle('open');
+          burger.setAttribute('aria-expanded', nav.classList.contains('open'));
+        });
+      }
+      var darkToggle = document.getElementById('site-dark-toggle');
+      if (darkToggle) {
+        darkToggle.addEventListener('click', function() {
+          var html = document.documentElement;
+          var isDark = html.classList.toggle('dark');
+          localStorage.setItem('tema', isDark ? 'dark' : 'light');
+        });
+      }
+    })();
+  </script>
+
+  <div class="max-w-2xl mx-auto px-4 sm:px-6 pt-8 pb-20">
+
+    <!-- Brødsmulesti -->
+    <nav class="text-xs text-gray-400 dark:text-gray-600 mb-6" aria-label="Brødsmulesti">
+      <a href="/" class="hover:text-gray-600 dark:hover:text-gray-400 transition-colors">exday.no</a>
+      <span class="mx-1.5">›</span>
+      <a href="/artikler/" class="hover:text-gray-600 dark:hover:text-gray-400 transition-colors">Artikler</a>
+      <span class="mx-1.5">›</span>
+      <span class="text-gray-600 dark:text-gray-400">Hva er direkteavkastning?</span>
+    </nav>
+
+    <!-- Topp -->
+    <header class="mb-8">
+      <div class="flex flex-wrap gap-2 mb-3">
+        <span class="guide-badge">Guide</span>
+        <span class="guide-badge">Nøkkeltall</span>
+      </div>
+      <h1 class="text-2xl sm:text-3xl font-bold leading-tight mb-3">
+        Hva er direkteavkastning? Slik regnes tallet, og hvorfor sidene viser ulike svar
+      </h1>
+      <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed mb-4">
+        Samme aksje kan ha tre ulike direkteavkastninger samme dag, avhengig av om tallet bygger på siste utbetaling, siste tolv måneder eller fjoråret. Slik regnes de, og slik ser du hvilket du ser på.
+      </p>
+      <p class="text-xs text-gray-400 dark:text-gray-600">21. oktober 2026 · 11 min lesing</p>
+    </header>
+
+    <!-- Innholdsfortegnelse -->
+    <nav class="toc bg-gray-50 dark:bg-gray-900 rounded-xl p-4 sm:p-5 mb-8 text-sm" aria-label="Innholdsfortegnelse">
+      <p class="font-semibold text-gray-700 dark:text-gray-300 mb-2">Innhold</p>
+      <ol class="space-y-1 list-decimal list-inside text-gray-600 dark:text-gray-400">
+        <li><a href="#hva-er-det">Hva direkteavkastning er</a></li>
+        <li><a href="#tre-maater">Tre måter å regne årsutbyttet på</a></li>
+        <li><a href="#naar-tallene-spriker">Når tallene spriker</a></li>
+        <li><a href="#slik-regner-exday">Slik regner exday.no</a></li>
+        <li><a href="#snitt">Snittet og historisk direkteavkastning</a></li>
+        <li><a href="#hoy">Når direkteavkastningen er høy</a></li>
+        <li><a href="#skatt">Direkteavkastning etter skatt</a></li>
+        <li><a href="#kjopskurs">Direkteavkastning på kjøpskurs</a></li>
+        <li><a href="#sjekk-selv">Slik sjekker du tallet selv</a></li>
+      </ol>
+    </nav>
+
+    <article class="prose text-gray-700 dark:text-gray-300">
+
+      <!-- 1 -->
+      <h2 id="hva-er-det">Hva direkteavkastning er</h2>
+
+      <p>
+        Direkteavkastning er utbyttet du får for en aksje i løpet av et år, regnet i prosent av det aksjen koster. På engelsk heter det dividend yield, og mange norske sider skriver bare «yield».
+      </p>
+
+      <div class="formula-box">
+        Direkteavkastning = utbytte per aksje i et år ÷ kurs × 100
+      </div>
+
+      <p>
+        <a href="/aksjer/DNB/">DNB</a> er det enkleste eksemplet, fordi banken betaler én gang i året. For regnskapsåret 2025 betalte DNB 18 kr per aksje, med ex-dato 22. april 2026 og utbetaling fra 30. april. Koster aksjen 300 kr, er direkteavkastningen 18 ÷ 300 = 6&nbsp;%. Koster den 360 kr, er den 5&nbsp;%.
+      </p>
+
+      <p>
+        To ting følger av regnestykket. Tallet endrer seg hver dag børsen er åpen, fordi kursen gjør det, selv om utbyttet står stille. Og det sier ingenting om hva kursen gjør. En aksje kan gi 6&nbsp;% i utbytte og falle 20&nbsp;% samme år.
+      </p>
+
+      <p>
+        Det vanskelige er telleren. «Utbytte per aksje i et år» høres entydig ut, men for et selskap som betaler flere ganger i året, som har endret utbyttet, eller som har betalt et engangsbeløp, finnes det flere rimelige svar. Derfor kan to nettsider vise ulik direkteavkastning for samme aksje samme dag uten at noen av dem har regnet feil.
+      </p>
+
+      <!-- 2 -->
+      <h2 id="tre-maater">Tre måter å regne årsutbyttet på</h2>
+
+      <p>Nesten alle tall du ser, bygger på én av disse:</p>
+
+      <ol>
+        <li><strong>Siste utbetaling ganget opp.</strong> Det siste utbyttet ganges med antall utbetalinger i året. Dette kalles gjerne annualisert. Det fanger opp en endring med en gang, men blir skjevt når utbetalingene varierer.</li>
+        <li><strong>Summen for siste tolv måneder.</strong> Alt med ex-dato det siste året legges sammen. Det er det som faktisk er betalt, men det henger etter når utbyttet endres, og det tar med engangsbeløp.</li>
+        <li><strong>Siste hele kalenderår.</strong> Summen for i fjor. Den er stabil og lett å kontrollere, men i desember er den eldste utbetalingen i summen nesten to år gammel.</li>
+      </ol>
+
+      <p>
+        <a href="/aksjer/TEL/">Telenor</a> viser at de tre gir tre tall også for et selskap med jevnt utbytte. Selskapet deler utbyttet i to og betaler i mai og oktober. I 2025 gikk aksjen ex med 5,00 kr i mai og 4,60 kr i oktober. For regnskapsåret 2025 var delene 5,00 kr med ex-dato 20. mai 2026 og 4,70 kr med ex-dato 15. oktober 2026.
+      </p>
+
+      <table>
+        <caption>Telenor 21. oktober 2026, med en tenkt kurs på 125 kr</caption>
+        <thead>
+          <tr><th>Metode</th><th class="tall">Utbytte per aksje</th><th class="tall">Direkteavkastning</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Siste utbetaling × 2</td><td class="tall">4,70 × 2 = 9,40 kr</td><td class="tall">7,52&nbsp;%</td></tr>
+          <tr><td>Siste tolv måneder</td><td class="tall">5,00 + 4,70 = 9,70 kr</td><td class="tall">7,76&nbsp;%</td></tr>
+          <tr><td>Kalenderåret 2025</td><td class="tall">5,00 + 4,60 = 9,60 kr</td><td class="tall">7,68&nbsp;%</td></tr>
+        </tbody>
+      </table>
+
+      <p>
+        Oktoberutbetalingen fra 2025 hadde ex-dato 16. oktober og falt så vidt utenfor tolvmånedersvinduet. Forskjellen mellom tallene er 0,24 prosentpoeng og betyr lite. Legg likevel merke til hvorfor den første metoden gir det laveste tallet: Telenor betaler mindre i oktober enn i mai. Utbyttet er ikke satt ned. Hadde du ganget opp maiutbetalingen i stedet, ville du fått 10,00 kr.
+      </p>
+
+      <p>
+        <a href="/aksjer/FRO/">Frontline</a> er det motsatte ytterpunktet. Rederiet vedtar utbyttet i dollar for hvert kvartal, og beløpet varierer mye. De fire siste gangene aksjen gikk ex i Oslo, var beløpene slik:
+      </p>
+
+      <table>
+        <caption>Frontline, ex-dato i Oslo, utbytte per aksje i dollar</caption>
+        <thead>
+          <tr><th>Ex-dato</th><th class="tall">Utbytte</th><th>Merknad</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>11. desember 2025</td><td class="tall">0,19</td><td>3. kvartal 2025</td></tr>
+          <tr><td>11. mars 2026</td><td class="tall">1,03</td><td>4. kvartal 2025</td></tr>
+          <tr><td>11. juni 2026</td><td class="tall">1,55</td><td>1. kvartal 2026</td></tr>
+          <tr><td>17. september 2026</td><td class="tall">3,41</td><td>2,61 for 2. kvartal 2026 og 0,80 i engangsutbytte</td></tr>
+        </tbody>
+      </table>
+
+      <p>
+        Summen for tolv måneder er 6,18 dollar, eller 5,38 uten engangsutbyttet. Ganger du opp den siste utbetalingen, får du 13,64 dollar, og den ordinære delen alene gir 10,44. Det høyeste tallet er mer enn to og en halv gang det laveste. Alle er regnet riktig. De svarer bare på forskjellige spørsmål.
+      </p>
+
+      <p>
+        Til aksjonærer i VPS betales Frontlines utbytte ut i kroner. Kronebeløpet avhenger da av dollarkursen, så direkteavkastningen i kroner flytter seg også når dollaren gjør det.
+      </p>
+
+      <!-- 3 -->
+      <h2 id="naar-tallene-spriker">Når tallene spriker</h2>
+
+      <p>
+        Små forskjeller mellom metodene er normale. Store forskjeller har nesten alltid en av fire forklaringer, og de trekker i hver sin retning.
+      </p>
+
+      <h3>Selskapet har hevet utbyttet</h3>
+
+      <p>
+        <a href="/aksjer/YAR/">Yara</a> betalte 5,00 kr per aksje både i mai 2024 og i mai 2025. For regnskapsåret 2025 foreslo styret et ordinært utbytte på 22 kr, og aksjen gikk ex 13. mai 2026. Regner du med fjoråret, får du 5 kr. Regner du med siste utbetaling eller siste tolv måneder, får du 22 kr. Med en tenkt kurs på 400 kr er det forskjellen mellom 1,25&nbsp;% og 5,5&nbsp;%. Fjorårstallet beskriver her et nivå som allerede er passert.
+      </p>
+
+      <h3>Selskapet har satt ned utbyttet</h3>
+
+      <p>
+        <a href="/aksjer/SALM/">SalMar</a> betalte 22 kr per aksje i juni 2025 og 10 kr i juni 2026. Nå er det fjoråret som gir det høye tallet: med en tenkt kurs på 600 kr blir det 3,67&nbsp;% mot 1,67&nbsp;% for det som sist ble betalt. En side som bygger på i fjor, viser mer enn dobbelt så mye som selskapet betaler nå.
+      </p>
+
+      <h3>Et engangsbeløp ligger i tallet</h3>
+
+      <p>
+        De 0,80 dollarene Frontline betalte i september, var et engangsutbytte etter salget av to VLCC-er, store tankskip for råolje. Meldingen til Oslo Børs kalte det «special one-time dividend». Beløpet er med i summen for siste tolv måneder. Ganger du opp septemberutbetalingen, regnes det som om det skulle komme fire ganger i året.
+      </p>
+
+      <h3>Utbetalingen er tilbakebetalt kapital</h3>
+
+      <p>
+        <a href="/aksjer/ATEA/">Atea</a> har vedtatt to utbetalinger på 3,75 kr i 2026, med ex-dato 20. mai og 18. november. Selskapet skriver i meldingen at utbetalingene skattemessig skal regnes som tilbakebetaling av innbetalt kapital. Pengene kommer på samme måte som et utbytte, og exday.no regner dem med i direkteavkastningen. Skatten blir likevel en annen, som du ser lenger ned.
+      </p>
+
+      <h3>Hvor ofte tallene spriker</h3>
+
+      <p>
+        Vi målte dette på tallene som ble hentet 21. oktober 2026. Da hadde 127 aksjer på exday.no en årsrate over null. For 61 av dem var årsraten minst 30&nbsp;% høyere eller lavere enn summen selskapet betalte i 2025, regnet etter ex-dato, eller så betalte selskapet ingenting det året. Forskjellen mellom sektorene var stor:
+      </p>
+
+      <table>
+        <caption>Aksjer der årsraten avvek minst 30&nbsp;% fra 2025, per 21. oktober 2026</caption>
+        <thead>
+          <tr><th>Sektor</th><th class="tall">Med årsrate</th><th class="tall">Avvik på minst 30&nbsp;%</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Shipping</td><td class="tall">18</td><td class="tall">16</td></tr>
+          <tr><td>Energi</td><td class="tall">8</td><td class="tall">5</td></tr>
+          <tr><td>Energitjenester</td><td class="tall">14</td><td class="tall">6</td></tr>
+          <tr><td>Finans</td><td class="tall">36</td><td class="tall">7</td></tr>
+        </tbody>
+      </table>
+
+      <p>
+        Av de 18 shippingaksjene var bare én registrert som årlig betaler, og ti betalte hvert kvartal. Hos mange av dem varierer beløpet mye fra gang til gang, slik Frontline-tabellen viser. I Finans betalte 35 av 36 én gang i året, og der er fjoråret oftere en god pekepinn. For en shippingaksje lønner det seg derfor å se hvilken metode tallet bygger på.
+      </p>
+
+      <!-- 4 -->
+      <h2 id="slik-regner-exday">Slik regner exday.no</h2>
+
+      <p>
+        Direkteavkastningen øverst på aksjesidene og i appen er et anslag på hva selskapet betaler i året. Den bygges i flere steg, og det siste steget som slår til, bestemmer tallet:
+      </p>
+
+      <ol>
+        <li>Vi starter med årsraten fra Yahoo Finance. Den er ofte siste utbetaling ganget opp, men vi kan ikke se hvordan Yahoo har regnet den i hvert enkelt tilfelle.</li>
+        <li>Avviker Yahoos tall med halvparten eller mer fra det selskapet betalte i fjor, bruker vi fjorårets sum. Har selskapet satt ned utbyttet, og alle utbetalingene for et år er med i vinduet, bruker vi summen for siste tolv måneder i stedet.</li>
+        <li>Er et nytt utbytte annonsert i kroner, kan beløpet ganget opp til et år bli brukt. Det skjer ikke når selskapet kaller utbetalingen ekstraordinær, eller når generalforsamlingen ennå ikke har vedtatt den.</li>
+        <li>Til slutt sammenligner vi med det som faktisk er betalt de siste tolv månedene. Er forskjellen minst 30&nbsp;%, og vinduet har like mange utbetalinger som selskapet pleier å ha i et år, blir det betalte beløpet tallet vi viser. Et engangsutbytte som selskapet selv har kalt ekstraordinært, trekkes fra når meldingen oppgir beløpet.</li>
+        <li>Har selskapet ikke betalt noe på over 15 måneder, og ingen ny ex-dato er kjent, settes årsraten til null.</li>
+      </ol>
+
+      <p>
+        Ved utbytte per aksje, både øverst på aksjesiden og i appen, står en merknad om hvor tallet kommer fra. «Siste 12 mnd» betyr at det er summen av det som er betalt, fra steg 4. «Siste 12 mnd, uten engangsutbytte» betyr at et engangsbeløp i tillegg er trukket fra. «Annualisert» står ellers ved aksjer som betaler flere ganger i året, og betyr at tallet er en årsrate fra de første stegene, ikke en sum av det som er betalt. For aksjer som betaler én gang i året, står det som regel ingen merknad.
+      </p>
+
+      <p>
+        Lenger ned på aksjesiden står tabellen «Faktisk betalt utbytte». Den viser det som er betalt de siste tolv månedene, i fjor og i snitt over to til fem hele år. Alt er summert etter ex-dato, regnet mot dagens kurs og tar med engangsutbytter. Ligger tallet øverst minst ett prosentpoeng og 30&nbsp;% over det som er betalt de siste tolv månedene, står det en egen setning om det over tabellen.
+      </p>
+
+      <div class="callout">
+        <p>Tallet øverst er et anslag og kan ta feil i begge retninger. Tabellen viser det som har skjedd, men sier ingenting om hva som kommer.</p>
+      </div>
+
+      <!-- 5 -->
+      <h2 id="snitt">Snittet og historisk direkteavkastning</h2>
+
+      <p>
+        Mange sider, også exday.no, viser et snitt over flere år ved siden av dagens tall. Hos oss bygger det på hele kalenderår, inntil fem. Et år uten utbytte teller som null, mens årene før selskapet begynte å betale, ikke teller med. Har selskapet betalt i færre enn tre hele år, viser vi ikke noe snitt.
+      </p>
+
+      <p>
+        Både snittet og direkteavkastningen for hvert enkelt år er regnet mot dagens kurs, ikke kursen det året. Det er gjort med vilje. Når begge tallene har samme kurs under brøkstreken, betyr en forskjell mellom dagens tall og snittet at utbyttet har endret seg, ikke kursen. Ulempen er at tallet for 2023 ikke er det en aksjonær faktisk fikk i 2023, målt mot kursen den gang.
+      </p>
+
+      <p>
+        Et snitt over fem år tar også med ekstraordinære år. <a href="/aksjer/EQNR/">Equinor</a> gikk ex fire ganger i 2023 med 0,90 dollar hver gang, og 2,50 av de 3,60 dollarene var ekstraordinært utbytte. Selskapet regner om til kroner etter snittet av Norges Banks dollarkurs i sju børsdager rundt registreringsdatoen, og i 2023 ble det til sammen 37,85 kr per aksje. I 2025 var summen 19,16 kr, og bare den første av de fire utbetalingene hadde en ekstraordinær del. Et femårssnitt som tar med 2023, blir derfor dratt opp av utbetalinger selskapet selv kalte ekstraordinære.
+      </p>
+
+      <!-- 6 -->
+      <h2 id="hoy">Når direkteavkastningen er høy</h2>
+
+      <p>
+        En høy direkteavkastning kan bety at du får mye utbytte for pengene. Den kan også bety at noe i regnestykket er i ferd med å endre seg. Se etter dette før du stoler på et høyt tall:
+      </p>
+
+      <ul>
+        <li><strong>Kursen har falt.</strong> Betaler et selskap 10 kr og aksjen faller fra 200 til 125 kr, stiger direkteavkastningen fra 5 til 8&nbsp;% uten at selskapet har gjort noe. Faller kursen fordi markedet venter et lavere utbytte, er de 8 prosentene snart borte.</li>
+        <li><strong>Et engangsbeløp ligger i tallet.</strong> Se om meldingen kaller utbetalingen ekstraordinær, «special» eller «additional», og om selskapet nylig har solgt noe stort, slik Frontline solgte to skip.</li>
+        <li><strong>Utbyttet er satt ned eller stoppet.</strong> Bygger tallet på i fjor, kan det vise et utbytte selskapet ikke betaler lenger, slik SalMar-eksemplet over viser.</li>
+        <li><strong>Selskapet deler ut mer enn det tjener.</strong> Er <a href="/artikler/hva-er-payout-ratio/">payout ratio</a> over 100&nbsp;%, betales en del av utbyttet med noe annet enn årets overskudd. Det kan gå en stund, men ikke for alltid.</li>
+      </ul>
+
+      <p>
+        Et forslag fra styret er heller ikke et utbytte før generalforsamlingen har vedtatt det. I meldingen til Oslo Børs står vedtaksdatoen som «Date of approval». Til den datoen er passert, merker vi ex-datoen «foreslått» på aksjesiden, og det foreslåtte beløpet blir ikke ganget opp til en årsrate.
+      </p>
+
+      <!-- 7 -->
+      <h2 id="skatt">Direkteavkastning etter skatt</h2>
+
+      <p>
+        Direkteavkastningen er regnet før skatt. For en personlig aksjonær bosatt i Norge skattlegges utbytte med 37,84&nbsp;% i 2026: 22&nbsp;% skatt på alminnelig inntekt, ganget med en oppjusteringsfaktor på 1,72. Først trekkes skjermingsfradraget fra, og det regnes for hver aksje ut fra det du betalte for den.
+      </p>
+
+      <p>
+        Uten skjerming blir 6&nbsp;% direkteavkastning til 3,73&nbsp;% etter skatt. Med skjerming blir tallet høyere, så det finnes ingen fast regel for hva du sitter igjen med. Tre tilfeller skiller seg ut:
+      </p>
+
+      <ul>
+        <li><strong>Tilbakebetalt kapital.</strong> Er utbetalingen tilbakebetaling av innbetalt kapital, slik Atea skriver om sine i 2026, skattlegges den ikke når du får den. I stedet går inngangsverdien på aksjene ned like mye, og skatten kommer som en større gevinst den dagen du selger.</li>
+        <li><strong>Aksjesparekonto.</strong> Utbytte som blir stående på en <a href="/artikler/aksjesparekonto-ask/">aksjesparekonto</a>, skattlegges først når du tar ut mer enn du har satt inn. Ikke alle aksjer kan stå der.</li>
+        <li><strong>Selskaper registrert i utlandet.</strong> Hjemlandet kan trekke kildeskatt før pengene kommer til deg, og hvor mye avhenger av landet. Noen trekker ingenting. Utbyttet skattlegges i Norge i tillegg, men du kan få fradrag for kildeskatten innenfor det skatteavtalen tillater.</li>
+      </ul>
+
+      <p>
+        Reglene står mer utførlig i artikkelen om <a href="/artikler/utbytte-og-skatt/">utbytte og skatt</a>.
+      </p>
+
+      <!-- 8 -->
+      <h2 id="kjopskurs">Direkteavkastning på kjøpskurs</h2>
+
+      <p>
+        Noen regner direkteavkastningen mot det de selv betalte for aksjen, ikke mot dagens kurs. På engelsk kalles det yield on cost. Kjøpte du en aksje for 200 kr, og selskapet nå betaler 18 kr i året, er det 9&nbsp;% på kjøpskurs. Koster aksjen 360 kr i dag, er direkteavkastningen 5&nbsp;%.
+      </p>
+
+      <p>
+        Tallet forteller hvor mye beholdningen din gir i kontanter i forhold til det du la inn, og det kan være en grei måte å følge din egen portefølje på. Men det sier ingenting om aksjen er dyr eller billig i dag. Aksjen er verdt 360 kr, og det er det beløpet du må sammenligne med alternativene. Selger du og kjøper noe annet, er det dagens kurs som gjelder.
+      </p>
+
+      <!-- 9 -->
+      <h2 id="sjekk-selv">Slik sjekker du tallet selv</h2>
+
+      <p>
+        Selskapene melder utbyttet til Oslo Børs etter børsens regler, og meldingene ligger åpent på <a href="https://newsweb.oslobors.no/" target="_blank" rel="noopener noreferrer">NewsWeb</a>. Slik bruker du dem til å kontrollere en direkteavkastning:
+      </p>
+
+      <ol>
+        <li>Søk opp selskapet og finn meldingen med «Key information» eller «Nøkkelinformasjon» i tittelen. Den oppgir beløp per aksje («Dividend amount»), valuta, ex-dato, utbetalingsdato og datoen utbyttet ble eller skal bli vedtatt («Date of approval»).</li>
+        <li>Les teksten rundt beløpet. Står det «extraordinary», «special», «additional» eller «one-time», er det et engangsbeløp. Står det at utbetalingen skattemessig er «repayment of paid in capital», er det tilbakebetaling av kapital.</li>
+        <li>Legg sammen alle utbetalinger med ex-dato de siste tolv månedene. Selskapene sender også en kort melding på selve ex-dagen, for eksempel «Ex dividend NOK 4.70 today».</li>
+        <li>Del summen på dagens kurs. Er tallet langt fra det en side viser, se etter merknaden ved tallet. Den forteller om det er annualisert, summen for tolv måneder eller fjoråret.</li>
+      </ol>
+
+      <p>
+        Et utbytte i dollar må regnes om. Frontline skriver i meldingen at utbyttet betales ut i kroner til aksjer i VPS, og Equinor sender kronebeløpet i en egen melding etter registreringsdatoen.
+      </p>
+
+      <p>
+        Gjør du dette én gang for en aksje du eier, vet du hva tallet på skjermen består av neste gang det endrer seg.
+      </p>
+
+      <!-- Les også -->
+      <h2>Les også</h2>
+      <ul class="list-none" style="margin-left:0;">
+        <li>
+          <a href="/artikler/hva-er-payout-ratio/" class="les-ogsa-lenke text-green-600 dark:text-green-400 hover:underline">
+            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"/></svg>
+            <span>Hva er payout ratio, og hva forteller den deg om utbyttets bærekraft?</span>
+          </a>
+        </li>
+        <li>
+          <a href="/artikler/utbytte-og-skatt/" class="les-ogsa-lenke text-green-600 dark:text-green-400 hover:underline">
+            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+            <span>Utbytte og skatt i Norge: 37,84&nbsp;%, skjermingsfradrag og ASK</span>
+          </a>
+        </li>
+        <li>
+          <a href="/artikler/norske-shippingaksjer/" class="les-ogsa-lenke text-green-600 dark:text-green-400 hover:underline">
+            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"/></svg>
+            <span>Norske shippingaksjer og utbytte</span>
+          </a>
+        </li>
+        <li>
+          <a href="/artikler/hva-er-ex-dato/" class="les-ogsa-lenke text-green-600 dark:text-green-400 hover:underline">
+            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+            <span>Hva er ex-dato? Komplett guide for norske investorer</span>
+          </a>
+        </li>
+      </ul>
+
+    </article>
+  </div>
+
+<footer class="mt-8 sm:mt-12 border-t border-gray-200 dark:border-gray-800 py-6 text-center text-xs text-gray-400 dark:text-gray-600 space-y-1 px-4">
+  <p>Kurs og utbyttedata hentes fra Yahoo Finance og Euronext. Oppdateres daglig på børsdager.</p>
+  <p class="max-w-xl mx-auto leading-relaxed">
+    exday.no er ikke et verdipapirforetak og tilbyr ikke finansiell rådgivning.
+    Data kan inneholde feil eller forsinkelser — verifiser alltid mot Oslo Børs eller selskapets egne rapporter.
+    Historisk utbytte er ingen garanti for fremtidig utbytte.
+    Gjør alltid din egen analyse før du tar investeringsbeslutninger.
+  </p>
+  <p class="mt-2">
+    <a href="/personvern/" class="underline hover:text-gray-400 dark:hover:text-gray-400 transition-colors">Personvern og informasjonskapsler</a>
+    <span class="mx-2">·</span>
+    <a href="/faq/" class="underline hover:text-gray-400 dark:hover:text-gray-400 transition-colors">Vanlige spørsmål (FAQ)</a>
+  </p>
+  <p class="mt-3">
+    <a href="https://www.facebook.com/share/17rMp8o9yF/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-gray-400 hover:text-blue-500 dark:hover:text-blue-400 transition-colors">
+      <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/></svg>
+      Følg exday.no på Facebook
+    </a>
+  </p>
+</footer>
+
+</body>
+</html>

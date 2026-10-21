@@ -8952,6 +8952,12 @@ def generer_sitemap(aksjer, root_dir, today, alle_tickers=None):
     <priority>0.6</priority>
   </url>""",
         f"""  <url>
+    <loc>https://exday.no/artikler/hva-er-direkteavkastning/</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>""",
+        f"""  <url>
     <loc>https://exday.no/artikler/nedbetale-boliglan-eller-investere/</loc>
     <lastmod>{today}</lastmod>
     <changefreq>monthly</changefreq>
