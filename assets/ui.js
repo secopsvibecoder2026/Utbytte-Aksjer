@@ -608,6 +608,14 @@ function initFire() {
 // modalen for alle aksjer i de sektorene.
 const ARTIKLER = [
   {
+    slug: '/artikler/hva-er-direkteavkastning/',
+    tittel: 'Hva er direkteavkastning? Slik regnes tallet, og hvorfor sidene viser ulike svar',
+    ingress: 'Samme aksje kan ha tre ulike direkteavkastninger samme dag, avhengig av om tallet bygger på siste utbetaling, siste tolv måneder eller fjoråret. Slik regnes de, og slik ser du hvilket du ser på.',
+    meta: '21. oktober 2026 · 11 min',
+    tags: ['Guide', 'Nøkkeltall'],
+    sektorer: ['Shipping', 'Energi'],
+  },
+  {
     slug: '/artikler/nedbetale-boliglan-eller-investere/',
     tittel: 'Nedbetale boliglånet eller investere? Slik regner du riktig',
     ingress: 'Etter rentefradrag og aksjeskatt er marginen typisk under ett prosentpoeng — og utbytteaksjer utenfor ASK kommer dårligst ut.',
