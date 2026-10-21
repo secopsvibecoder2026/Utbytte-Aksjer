@@ -419,8 +419,12 @@ function sjekkStartsideForslag() {
   if (teller < 2) return;
 
   setTimeout(() => {
+    // Ett forslag om gangen. Backup-varselet og dette kom samtidig og la
+    // seg oppå hverandre midt i porteføljen (20.10.2026).
+    if (document.querySelector('[data-forslag]')) return;
     const toast = document.createElement('div');
     toast.id = 'startside-forslag-toast';
+    toast.dataset.forslag = 'startside';
     toast.style.cssText = 'position:fixed;bottom:5rem;left:50%;transform:translateX(-50%);z-index:9999;background:#1f2937;color:#f3f4f6;border-radius:0.75rem;box-shadow:0 8px 24px rgba(0,0,0,0.4);padding:1rem 1.25rem;max-width:22rem;width:calc(100% - 2rem);display:flex;flex-direction:column;gap:0.75rem;';
     toast.innerHTML = '<div style="font-size:0.875rem;font-weight:600;">Vil du åpne appen direkte?</div>'
       + '<div style="font-size:0.8rem;color:#9ca3af;line-height:1.4;">Hopp over landingssiden og gå rett hit når du besøker exday.no</div>'

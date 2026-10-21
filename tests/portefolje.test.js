@@ -35,7 +35,7 @@ global.visModal = () => {};
 global.SEKTOR_FARGE = {};
 global.FARGE_FALLBACK = '#9ca3af';
 
-const { beregnKostbasis, beregnIRR, beregnTWRSerie, beregnUtbyttePrognose, _leggTilMnd, beregnUtbytteskatt, beregnSkatteaar, nesteUtbyttePerAksje } = require('../assets/portefolje.js');
+const { _kvartalSummer, beregnKostbasis, beregnIRR, beregnTWRSerie, beregnUtbyttePrognose, _leggTilMnd, beregnUtbytteskatt, beregnSkatteaar, nesteUtbyttePerAksje } = require('../assets/portefolje.js');
 
 // ── beregnKostbasis ─────────────────────────────────────────────────────────
 
@@ -608,4 +608,17 @@ test('prognose: annonsert utbetaling bruker det annonserte beløpet', () => {
   const okt = p.utbetalinger.find(u => u.dato === '2026-10-27');
   assert.ok(okt && okt.annonsert);
   assert.ok(Math.abs(okt.belop - 940) < 0.01);   // 200 × 4,70, ikke 960 eller 1 000
+});
+
+test('_kvartalSummer: samme kvartal som månedsgrafen (DNB med ex i april havnet i K1)', () => {
+  const beholdning = [
+    // Årlig, ex i april, ingen kjent dato nå i oktober — som DNB
+    { ticker: 'AAA', frekvens: 'Årlig', utbetalingsmaaneder: [4], ex_dato: null, forv_ar: 3600 },
+    // Kvartalsvis med kjente måneder
+    { ticker: 'BBB', frekvens: 'Kvartalsvis', utbetalingsmaaneder: [2, 5, 8, 11], forv_ar: 400 },
+  ];
+  const k = _kvartalSummer(beholdning);
+  assert.deepEqual(k.map(v => Math.round(v)), [100, 3700, 100, 100]);
+  // Summen av kvartalene er hele årsbeløpet
+  assert.equal(Math.round(k.reduce((s, v) => s + v, 0)), 4000);
 });

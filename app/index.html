@@ -139,13 +139,15 @@
       </button>
     </div>
     <div class="max-w-screen-2xl mx-auto px-4 pb-2 flex items-center justify-between">
-      <h2 class="text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 truncate">Utbytteoversikt · Oslo Børs</h2>
-      <div class="flex items-center gap-3 shrink-0">
+      <!-- Undertittelen ble kuttet til «UTBYTTEOVERSIKT · …» på telefon, ved
+           siden av hilsenen og datoen. Der leses den bare av skjermlesere. -->
+      <h2 class="sr-only sm:not-sr-only text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 truncate">Utbytteoversikt · Oslo Børs</h2>
+      <div class="flex items-center gap-3 min-w-0 flex-1 sm:flex-none">
         <p id="profil-hilsen" class="hidden text-xs text-gray-500 dark:text-gray-400 font-medium truncate"></p>
         <!-- Står her, ikke ved logoen: der delte den linje med logo, tannhjul
              og temabryter, og `truncate` kuttet «2 dager gamle» bort på mobil
              — altså nettopp advarselen. Denne raden har plass. -->
-        <p id="sist-oppdatert" class="text-xs text-gray-500 dark:text-gray-400 shrink-0"><span class="skeleton inline-block h-3 rounded align-middle" style="width:7rem"></span></p>
+        <p id="sist-oppdatert" class="text-xs text-gray-500 dark:text-gray-400 shrink-0 ml-auto"><span class="skeleton inline-block h-3 rounded align-middle" style="width:7rem"></span></p>
       </div>
     </div>
   </header>
@@ -173,26 +175,49 @@
       </button>
     </div>
 
+    <!-- VELKOMST (første besøk). Var et vindu over dataene med spørsmål om
+         navn; nå en stripe som kan lukkes, så tallene vises først (STYLE.md,
+         tiltak 4). Navnet settes i Innstillinger. -->
+    <div id="velkommen-banner" class="hidden rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 px-4 py-3 shadow-sm">
+      <div class="flex items-start gap-3">
+        <div class="flex-1 min-w-0">
+          <p class="text-sm font-semibold text-gray-900 dark:text-gray-100">Velkommen til exday</p>
+          <p class="text-sm text-gray-600 dark:text-gray-400 mt-0.5">Utbytte, yield og ex-datoer for aksjene på Oslo Børs. Det du lagrer, blir i denne nettleseren. Ingen konto, ingen abonnement.</p>
+          <div class="flex flex-wrap items-center gap-x-4 gap-y-2 mt-2">
+            <button id="velk-nordnet" type="button" class="inline-flex items-center gap-1.5 text-sm font-medium text-green-700 dark:text-green-400 hover:underline">
+              <svg class="w-4 h-4 shrink-0" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+              Importer fra Nordnet
+            </button>
+            <button id="velk-importer" type="button" class="text-sm text-gray-600 dark:text-gray-400 hover:underline">Gjenopprett backup</button>
+          </div>
+        </div>
+        <button id="velk-lukk" type="button" class="p-1 -m-1 text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 shrink-0" aria-label="Lukk velkomsten">
+          <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+    </div>
+
     <!-- SAMMENDRAGSKORT -->
     <section class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
       <div class="stat-card">
         <p id="stat-card1-label" class="stat-label">Aksjer sporet</p>
         <p id="stat-antall" class="stat-value"><span class="skeleton block h-8 rounded" style="width:2.5rem"></span></p>
+        <p id="stat-antall-sub" class="text-xs text-gray-500 dark:text-gray-400 mt-0.5 truncate"></p>
       </div>
       <div class="stat-card">
         <p id="stat-card2-label" class="stat-label">Høyeste yield</p>
         <p id="stat-hoyest-yield" class="stat-value"><span class="skeleton block h-8 rounded" style="width:4rem"></span></p>
-        <p id="stat-hoyest-navn" class="text-xs text-gray-500 dark:text-gray-400 mt-0.5"></p>
+        <p id="stat-hoyest-navn" class="text-xs text-gray-500 dark:text-gray-400 mt-0.5 truncate"></p>
       </div>
       <div class="stat-card">
         <p id="stat-card3-label" class="stat-label">Gj.snitt yield</p>
         <p id="stat-snitt-yield" class="stat-value"><span class="skeleton block h-8 rounded" style="width:4rem"></span></p>
-        <p id="stat-snitt-sub" class="text-xs text-gray-500 dark:text-gray-400 mt-0.5"></p>
+        <p id="stat-snitt-sub" class="text-xs text-gray-500 dark:text-gray-400 mt-0.5 truncate"></p>
       </div>
       <div class="stat-card">
         <p id="stat-card4-label" class="stat-label">Neste ex-dato</p>
         <p id="stat-neste-ex" class="stat-value text-xl sm:text-2xl"><span class="skeleton block h-7 rounded" style="width:5rem"></span></p>
-        <p id="stat-neste-ex-navn" class="text-xs text-gray-500 dark:text-gray-400 mt-0.5"></p>
+        <p id="stat-neste-ex-navn" class="text-xs text-gray-500 dark:text-gray-400 mt-0.5 truncate"></p>
       </div>
     </section>
 
@@ -237,9 +262,18 @@
     <section id="filter-bar" class="space-y-2">
       <!-- Rad 1: søk + vanlige filtre -->
       <div class="sm:flex sm:flex-wrap sm:gap-3 sm:items-center space-y-2 sm:space-y-0">
-        <div class="relative w-full sm:flex-1 sm:min-w-48">
-          <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-          <input id="sok" type="search" placeholder="Søk ticker eller selskapsnavn…" class="filter-input pl-10 w-full" />
+        <!-- På telefon står filtrene bak «Filter». Uten det kom første aksje
+             først etter et helt skjermbilde med nedtrekkslister og knapper. -->
+        <div class="flex gap-2 sm:contents">
+          <div class="relative flex-1 min-w-0 sm:min-w-48">
+            <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            <input id="sok" type="search" placeholder="Søk ticker eller selskapsnavn…" class="filter-input pl-10 w-full" aria-label="Søk etter aksje" />
+          </div>
+          <button id="filter-veksle" type="button" class="sm:hidden filter-input text-sm inline-flex items-center gap-1.5 shrink-0 text-gray-700 dark:text-gray-300" aria-expanded="false" aria-controls="filter-ekstra filter-chips">
+            <svg class="w-4 h-4 shrink-0" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5h18M6 12h12M10 19h4"/></svg>
+            <span>Filter</span>
+            <span id="filter-antall" class="hidden min-w-5 h-5 px-1 rounded-full bg-green-700 text-white text-xs font-semibold leading-5 text-center"></span>
+          </button>
         </div>
         <div class="grid grid-cols-2 sm:flex gap-2 sm:gap-3" id="filter-ekstra">
           <select id="filter-sektor" class="filter-input w-full sm:w-auto">
@@ -260,8 +294,8 @@
             <option value="8">Yield ≥ 8%</option>
             <option value="10">Yield ≥ 10%</option>
           </select>
-          <button id="filter-fav" class="filter-input text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors text-center">
-            ☆ Favoritter
+          <button id="filter-fav" class="filter-input text-sm inline-flex items-center justify-center gap-1.5 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" aria-pressed="false">
+            Favoritter
           </button>
           <select id="filter-liste" class="filter-input w-full sm:w-auto">
             <option value="">Alle lister</option>
@@ -272,7 +306,7 @@
         </div>
       </div>
       <!-- Rad 2: investorprofil-chips -->
-      <div class="flex flex-wrap gap-2 items-center">
+      <div id="filter-chips" class="flex flex-wrap gap-2 items-center">
         <span class="text-xs text-gray-500 dark:text-gray-400 font-medium shrink-0">Mål:</span>
         <button data-mal-filter="stabil"     class="chip">Stabil inntekt</button>
         <button data-mal-filter="vekst"      class="chip">Utbyttevekst</button>
@@ -301,7 +335,7 @@
           <option value="utbytte_yield_desc">Høyest yield</option>
           <option value="utbytte_yield_asc">Lavest yield</option>
           <option value="snitt_yield_5ar_desc">Høyest snitt yield 5å</option>
-          <option value="utbytte_vekst_5ar_desc">Best vekst 5år</option>
+          <option value="utbytte_vekst_5ar_desc">Best vekst 5 år</option>
           <option value="payout_ratio_asc">Lavest payout</option>
           <option value="ar_med_utbytte_desc">Flest år m/utbytte</option>
           <option value="ex_dato_asc">Neste ex-dato</option>
@@ -327,24 +361,22 @@
               <th class="sortable px-4 py-3 text-left" data-col="ticker" aria-sort="none">Ticker</th>
               <th class="sortable px-4 py-3 text-left" data-col="navn" aria-sort="none">Selskap</th>
               <th class="sortable px-4 py-3 text-right" data-col="pris" aria-sort="none">Pris</th>
-              <th class="col-detalj px-4 py-3 text-center">52u range</th>
-              <th class="sortable px-4 py-3 text-right" data-col="utbytte_yield" aria-sort="descending">Yield %</th>
+              <th class="col-detalj col-bred px-4 py-3 text-center">52 uker</th>
+              <th class="sortable px-4 py-3 text-right" data-col="utbytte_yield" aria-sort="descending">Yield</th>
               <th class="sortable px-4 py-3 text-center" data-col="utbytte_score" aria-sort="none">
                 Score
                 <button id="score-info-btn" class="ml-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 align-middle" title="Hva er Score?" aria-label="Hva er utbytte-score?" onclick="event.stopPropagation(); visScoreInfoModal()">
                   <svg class="w-3.5 h-3.5 inline" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2"/><path stroke-linecap="round" stroke-width="2" d="M12 16v-4m0-4h.01"/></svg>
                 </button>
               </th>
-              <th class="col-detalj sortable px-4 py-3 text-right" data-col="snitt_yield_5ar" aria-sort="none" title="Snitt over inntil fem hele år, regnet mot dagens kurs">Snitt yield</th>
-              <th class="col-detalj sortable px-4 py-3 text-right" data-col="utbytte_per_aksje" aria-sort="none">Utb./aksje</th>
+              <th class="col-detalj col-xl sortable px-4 py-3 text-right" data-col="snitt_yield_5ar" aria-sort="none" title="Snitt over inntil fem hele år, regnet mot dagens kurs">Snitt yield</th>
+              <th class="col-detalj col-xl sortable px-4 py-3 text-right" data-col="utbytte_per_aksje" aria-sort="none">Utb./aksje</th>
               <th class="sortable px-4 py-3 text-right" data-col="payout_ratio" aria-sort="none">Payout</th>
-              <th class="sortable px-4 py-3 text-right" data-col="utbytte_vekst_5ar" aria-sort="none">Vekst 5å</th>
-              <th class="col-detalj sortable px-4 py-3 text-right" data-col="ar_med_utbytte" aria-sort="none">År m/utb.</th>
-              <th class="col-detalj sortable px-4 py-3 text-right" data-col="pe_ratio" aria-sort="none">P/E</th>
-              <th class="col-detalj sortable px-4 py-3 text-right" data-col="pb_ratio" aria-sort="none">P/B</th>
+              <th class="col-lg sortable px-4 py-3 text-right" data-col="utbytte_vekst_5ar" aria-sort="none" title="Årlig utbyttevekst over fem hele år">Vekst 5 år</th>
+              <th class="col-detalj col-xl sortable px-4 py-3 text-right" data-col="ar_med_utbytte" aria-sort="none">År m/utb.</th>
+              <th class="col-detalj col-bred sortable px-4 py-3 text-right" data-col="pe_ratio" aria-sort="none">P/E</th>
               <th class="sortable px-4 py-3 text-center" data-col="ex_dato" aria-sort="none">Ex-dato</th>
-              <th class="col-detalj sortable px-4 py-3 text-center" data-col="betaling_dato" aria-sort="none">Bet.-dato</th>
-              <th class="sortable px-4 py-3 text-center" data-col="frekvens" aria-sort="none">Frekvens</th>
+              <th class="col-lg sortable px-4 py-3 text-left" data-col="frekvens" aria-sort="none">Frekvens</th>
               <th class="px-2 py-3 text-center w-8" title="Sammenlign"></th>
             </tr>
           </thead>
@@ -419,7 +451,7 @@
 
       <!-- SUB-FANE: SEKTORER -->
       <div id="subtab-sektor" class="hidden">
-        <div id="sektor-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+        <div id="sektor-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"></div>
         <div class="mt-4 text-right">
           <a href="/aksjer/sektor/" class="text-xs text-brand-600 dark:text-brand-400 hover:underline">Åpne full side →</a>
         </div>
@@ -429,7 +461,7 @@
       <div id="subtab-topplistor" class="hidden">
         <div id="toppliste-pill-bar" class="flex flex-wrap gap-2 mb-4">
           <button class="toppliste-pill active" data-liste="yield">Høyest yield</button>
-          <button class="toppliste-pill" data-liste="vekst">Best vekst 5år</button>
+          <button class="toppliste-pill" data-liste="vekst">Best vekst 5 år</button>
           <button class="toppliste-pill" data-liste="konsistent">Mest konsistente</button>
           <button class="toppliste-pill" data-liste="payout">Lavest payout</button>
         </div>
@@ -477,7 +509,7 @@
           </div>
           <div class="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-3 text-center shadow-sm">
             <div class="text-xs text-gray-500 dark:text-gray-400 mb-1">Forv. utbytte/år</div>
-            <div id="pf-top-ar" class="text-base font-bold text-brand-700 dark:text-brand-400 truncate">—</div>
+            <div id="pf-top-ar" class="text-base font-bold text-gray-900 dark:text-gray-100 truncate">—</div>
           </div>
           <div class="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-3 text-center shadow-sm">
             <div class="text-xs text-gray-500 dark:text-gray-400 mb-1">Yield</div>
@@ -845,12 +877,12 @@
             <p class="stat-value" id="pf-stat-ar">—</p>
             <div id="pf-stat-ar-breakdown" class="hidden mt-1.5 space-y-0.5">
               <div class="flex justify-between text-xs">
-                <span class="text-green-600 dark:text-green-400">✓ Vedtatt</span>
-                <span class="font-medium text-green-600 dark:text-green-400" id="pf-stat-ar-vedtatt"></span>
+                <span class="text-gray-600 dark:text-gray-300">Vedtatt</span>
+                <span class="font-medium text-gray-900 dark:text-gray-100 tabular-nums" id="pf-stat-ar-vedtatt"></span>
               </div>
               <div class="flex justify-between text-xs">
-                <span class="text-gray-400">~ Estimert</span>
-                <span class="font-medium text-gray-400" id="pf-stat-ar-estimert"></span>
+                <span class="text-gray-400">Estimert</span>
+                <span class="font-medium text-gray-500 dark:text-gray-400 tabular-nums" id="pf-stat-ar-estimert"></span>
               </div>
             </div>
           </div>
@@ -913,6 +945,7 @@
         <div id="pf-tidslinje-wrapper" class="hidden bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4 shadow-sm">
           <h3 class="font-semibold text-sm mb-3">Forventet utbytteinntekt per kvartal</h3>
           <div id="pf-tidslinje" class="space-y-2"></div>
+          <p class="text-[11px] text-gray-400 dark:text-gray-500 mt-3">Kvartalet ex-datoen faller i, som i månedsgrafen. Pengene kommer som regel én til to uker senere.</p>
         </div>
 
           <!-- Månedlig utbytteinntekt -->
@@ -999,11 +1032,11 @@
         <div class="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4 shadow-sm space-y-3">
           <h3 class="font-semibold text-sm">Watchlister</h3>
           <div class="flex gap-2">
-            <input id="wl-ny-navn" type="text" placeholder="Navn på ny watchliste…" class="filter-input flex-1" />
+            <input id="wl-ny-navn" type="text" placeholder="Navn på ny watchliste…" class="filter-input flex-1 min-w-0" />
             <button id="wl-opprett" class="bg-brand-600 hover:bg-brand-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors shrink-0">Opprett</button>
           </div>
           <div id="wl-velg-wrapper" class="hidden flex items-center gap-2 flex-wrap">
-            <select id="wl-velg" class="filter-input flex-1 max-w-xs text-sm"></select>
+            <select id="wl-velg" class="filter-input flex-1 min-w-0 max-w-xs text-sm"></select>
             <button id="wl-slett-liste" class="text-xs text-red-400 hover:text-red-600 hover:underline font-medium">Slett liste</button>
           </div>
         </div>
@@ -1012,7 +1045,7 @@
         <div id="wl-legg-til-wrapper" class="hidden bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4 shadow-sm">
           <h3 class="font-semibold text-sm mb-3">Legg til aksje</h3>
           <div class="flex gap-2">
-            <select id="wl-velg-aksje" class="filter-input flex-1">
+            <select id="wl-velg-aksje" class="filter-input flex-1 min-w-0">
               <option value="">Velg aksje…</option>
             </select>
             <button id="wl-legg-til" class="bg-brand-600 hover:bg-brand-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors shrink-0">Legg til</button>
@@ -1130,30 +1163,30 @@
         <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
           <div class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-3 text-center shadow-sm">
             <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Verdi etter <span id="kal-res-ar">—</span> år</p>
-            <p id="kal-res-verdi" class="text-lg font-bold text-brand-600 dark:text-brand-400">—</p>
+            <p id="kal-res-verdi" class="text-lg font-bold text-gray-900 dark:text-gray-100 tabular-nums">—</p>
             <p id="kal-res-verdi-real" class="text-xs text-gray-400 dark:text-gray-500 mt-0.5 hidden"></p>
           </div>
           <div class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-3 text-center shadow-sm">
             <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Totalt utbytte</p>
-            <p id="kal-res-utbytte" class="text-lg font-bold text-green-600 dark:text-green-400">—</p>
+            <p id="kal-res-utbytte" class="text-lg font-bold text-gray-900 dark:text-gray-100 tabular-nums">—</p>
             <p id="kal-res-utbytte-netto" class="text-xs text-gray-400 dark:text-gray-500 mt-0.5 hidden"></p>
           </div>
           <div class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-3 text-center shadow-sm">
             <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Totalt innbetalt</p>
-            <p id="kal-res-innbetalt" class="text-lg font-bold text-gray-700 dark:text-gray-300">—</p>
+            <p id="kal-res-innbetalt" class="text-lg font-bold text-gray-900 dark:text-gray-100 tabular-nums">—</p>
           </div>
           <div class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-3 text-center shadow-sm">
             <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Månedlig utbytte (år <span id="kal-res-ar2">—</span>)</p>
-            <p id="kal-res-mnd" class="text-lg font-bold text-orange-500">—</p>
+            <p id="kal-res-mnd" class="text-lg font-bold text-gray-900 dark:text-gray-100 tabular-nums">—</p>
             <p id="kal-res-mnd-netto" class="text-xs text-gray-400 dark:text-gray-500 mt-0.5 hidden"></p>
           </div>
           <div class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-3 text-center shadow-sm">
             <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">DRIP-gevinst vs. uten reinvestering</p>
-            <p id="kal-res-drip" class="text-lg font-bold text-teal-600 dark:text-teal-400">—</p>
+            <p id="kal-res-drip" class="text-lg font-bold text-gray-900 dark:text-gray-100 tabular-nums">—</p>
           </div>
-          <div id="kal-res-skatt-kort" class="hidden rounded-xl border border-amber-200 dark:border-amber-900/40 bg-amber-50 dark:bg-amber-950/20 p-3 text-center shadow-sm">
-            <p class="text-xs text-amber-600 dark:text-amber-400 mb-1">Estimert skatt totalt</p>
-            <p id="kal-res-skatt" class="text-lg font-bold text-amber-600 dark:text-amber-400">—</p>
+          <div id="kal-res-skatt-kort" class="hidden rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-3 text-center shadow-sm">
+            <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Estimert skatt totalt</p>
+            <p id="kal-res-skatt" class="text-lg font-bold text-gray-900 dark:text-gray-100 tabular-nums">—</p>
           </div>
         </div>
 
@@ -1432,26 +1465,26 @@
           <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
             <div class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-3 text-center shadow-sm">
               <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Antall aksjer</p>
-              <p id="ann-res-antall" class="text-lg font-bold text-brand-600 dark:text-brand-400">—</p>
+              <p id="ann-res-antall" class="text-lg font-bold text-gray-900 dark:text-gray-100 tabular-nums">—</p>
               <p id="ann-res-kurs" class="text-xs text-gray-400 dark:text-gray-500 mt-0.5">—</p>
             </div>
             <div class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-3 text-center shadow-sm">
               <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Utbytte per år</p>
-              <p id="ann-res-utbytte" class="text-lg font-bold text-green-600 dark:text-green-400">—</p>
+              <p id="ann-res-utbytte" class="text-lg font-bold text-gray-900 dark:text-gray-100 tabular-nums">—</p>
               <p id="ann-res-upa" class="text-xs text-gray-400 dark:text-gray-500 mt-0.5">— per aksje</p>
             </div>
             <div class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-3 text-center shadow-sm">
               <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Yield</p>
-              <p id="ann-res-yield" class="text-lg font-bold text-orange-500">—</p>
+              <p id="ann-res-yield" class="text-lg font-bold text-gray-900 dark:text-gray-100 tabular-nums">—</p>
               <p id="ann-res-snitt5" class="text-xs text-gray-400 dark:text-gray-500 mt-0.5 hidden">5-årssnitt: —</p>
             </div>
             <div class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-3 text-center shadow-sm">
               <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Utbytte per måned</p>
-              <p id="ann-res-mnd" class="text-lg font-bold text-teal-600 dark:text-teal-400">—</p>
+              <p id="ann-res-mnd" class="text-lg font-bold text-gray-900 dark:text-gray-100 tabular-nums">—</p>
             </div>
             <div class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-3 text-center shadow-sm">
-              <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Etter skatt (37,84%)</p>
-              <p id="ann-res-netto" class="text-lg font-bold text-gray-700 dark:text-gray-300">—</p>
+              <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Etter skatt (37,84 %)</p>
+              <p id="ann-res-netto" class="text-lg font-bold text-gray-900 dark:text-gray-100 tabular-nums">—</p>
               <p class="text-xs text-gray-400 dark:text-gray-500 mt-0.5">per år</p>
             </div>
             <div id="ann-res-ex-kort" class="hidden rounded-xl border border-amber-200 dark:border-amber-900/40 bg-amber-50 dark:bg-amber-950/20 p-3 text-center shadow-sm">
@@ -1522,35 +1555,6 @@
   </button>
 
   <!-- VELKOMST-MODAL -->
-  <div id="velkommen-modal" class="fixed inset-0 bg-black/60 z-50 hidden items-center justify-center p-4" role="dialog" aria-modal="true" aria-labelledby="velk-tittel">
-    <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl w-full max-w-sm p-6 space-y-5">
-      <!-- Logo + tittel -->
-      <div class="flex items-center gap-3">
-        <img src="/logo/exday_icon_primary.svg" class="h-9 dark:hidden shrink-0" alt="" aria-hidden="true" />
-        <img src="/logo/exday_icon_primary.svg" class="h-9 hidden dark:block shrink-0" alt="" aria-hidden="true" />
-        <div>
-          <h2 id="velk-tittel" class="text-lg font-bold leading-tight">exday.no</h2>
-          <p class="text-xs text-gray-500 dark:text-gray-400">Norske utbytteaksjer, enkelt oversikt</p>
-        </div>
-      </div>
-      <p class="text-sm text-gray-600 dark:text-gray-400">Spor utbytte, yield og ex-datoer for aksjer på Oslo Børs. Alt lagres lokalt i nettleseren — ingen konto, ingen abonnement.</p>
-      <!-- Navn -->
-      <div>
-        <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1" for="velk-navn-input">Hva skal vi kalle deg? <span class="font-normal text-gray-400">(valgfritt)</span></label>
-        <input id="velk-navn-input" type="text" maxlength="30" placeholder="Navn eller kallenavn…" class="filter-input w-full" />
-      </div>
-      <!-- Handlinger -->
-      <div class="space-y-2">
-        <button id="velk-start" class="w-full py-2.5 bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold rounded-lg transition-colors">Kom i gang</button>
-        <button id="velk-nordnet" class="w-full py-2 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-700 text-sm text-gray-700 dark:text-gray-300 font-medium rounded-lg transition-colors flex items-center justify-center gap-2">
-          <svg class="w-4 h-4 shrink-0" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
-          Importer fra Nordnet
-        </button>
-        <button id="velk-importer" class="w-full py-2 text-xs text-gray-400 dark:text-gray-500 hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Har du brukt appen før? Gjenopprett backup →</button>
-      </div>
-    </div>
-  </div>
-
   <!-- MODAL -->
   <div id="modal-overlay" class="fixed inset-0 bg-black/60 z-50 hidden items-end sm:items-center justify-center sm:p-4" role="dialog" aria-modal="true" aria-labelledby="modal-aksje-tittel">
     <div id="modal-content" class="bg-white dark:bg-gray-900 rounded-t-2xl sm:rounded-2xl shadow-2xl w-full sm:max-w-xl flex flex-col">

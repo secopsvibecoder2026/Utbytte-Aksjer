@@ -172,10 +172,13 @@ godkjenning:
 - Aksjesidene har fått kurshode og kompakt nøkkeltabell, nøytrale tall, og
   `3,48 %` med hardt mellomrom i kurshodet, tabellen og kursgrafen.
 
+**Appen er gjort 20.10.2026** (tiltak 2, 3, 4 og 6): nøytrale tall og
+tickere, kurshode i aksjemodalen, banner i stedet for velkomstvindu, strammere
+tabell og runde akser. Se «App review of 2026-10-20» i `CLAUDE.md`.
+
 Gjenstår:
-- samme tallformat i resten av malen og i appen
-- fargerollene i appen og på de håndskrevne sidene
-- kurshodet i appens aksjemodal
+- samme tallformat i resten av malen
+- fargerollene på de håndskrevne sidene
 
 ## Rekkefølge
 
