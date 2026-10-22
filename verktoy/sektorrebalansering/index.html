@@ -156,7 +156,7 @@
         </div>
         <div class="text-right">
           <p class="text-xs text-gray-500 dark:text-gray-400 mb-0.5">Sum mål&nbsp;%</p>
-          <p id="sb-total-maal" class="text-2xl font-semibold tabular-nums text-orange-500">100.0%</p>
+          <p id="sb-total-maal" class="text-2xl font-semibold tabular-nums text-orange-500">100,0&nbsp;%</p>
         </div>
       </div>
 
@@ -285,13 +285,13 @@
         Det finnes ingen universell riktig fordeling — det avhenger av investeringshorisont, risikotoleranse og inntektsbehov. Men for en norsk utbytteinvestor som ønsker en balansert portefølje med stabile utbetalinger og moderat risiko, er følgende tommelfingerregel et godt utgangspunkt:
       </p>
       <ul>
-        <li><strong>Energi 15–25&nbsp;%</strong>: Stor eksponering mot norsk sokkel gir høy yield, men volatil dividende avhengig av oljeprisen. Equinor alene utgjør en stor del av OBX-indeksen.</li>
-        <li><strong>Finans 10–20&nbsp;%</strong>: Stabile banker med forutsigbar utbyttepolitikk. DNB og Gjensidige er foretrukne utbytteaksjer blant norske private investorer.</li>
+        <li><strong>Energi 15–25&nbsp;%</strong>: Stor eksponering mot norsk sokkel gir høy yield, men utbyttet svinger med olje- og gassprisen. Equinor alene utgjør en stor del av OBX-indeksen.</li>
+        <li><strong>Finans 10–20&nbsp;%</strong>: Banker og forsikringsselskaper, som DNB og Gjensidige, med lang utbyttehistorikk og en uttalt utbyttepolitikk.</li>
         <li><strong>Havbruk 10–20&nbsp;%</strong>: Lakseprisene svinger, men de store aktørene som Mowi og SalMar har lang historikk med sjenerøse utbytter i gode år.</li>
         <li><strong>Eiendom 10–15&nbsp;%</strong>: Gir relativt stabile leiebaserte utbytter, men er rentesensitivt.</li>
         <li><strong>Industri 10–15&nbsp;%</strong>: God diversifisering; Kongsberg Gruppen har vist sterk vekst i utbytte de siste årene.</li>
         <li><strong>Shipping 5–15&nbsp;%</strong>: Svært syklisk med ekstraordinære utbytter i gode fraktmarkeder, men kan kutte drastisk i nedgangstider.</li>
-        <li><strong>Forbruksvarer 5–10&nbsp;%</strong>: Defensiv eksponering som Europris og Rema-kjeden.</li>
+        <li><strong>Forbruksvarer 5–10&nbsp;%</strong>: Defensiv eksponering, som Orkla og Europris.</li>
       </ul>
       <p>
         Resten (5–15&nbsp;%) kan fordeles på fornybar energi, materialer og telekommunikasjon avhengig av preferanser. Merk at norske investorer naturlig vil ha høyere hjemlandseksponering enn en internasjonal investor ville anbefale — dette er akseptabelt for den som primært søker norske utbytteinntekter.
@@ -406,6 +406,7 @@
   <script>
     (function() {
       'use strict';
+      function pst(v, d) { return (v < 0 ? '\u2212' : '') + Math.abs(v).toFixed(d).replace('.', ',') + '\u00a0%'; }
 
       var STANDARD_RADER = [
         { navn: 'Energi',        verdi: 0, maal: 20 },
@@ -431,9 +432,9 @@
         return '<tr class="sb-rad border-b border-gray-100 dark:border-gray-800">' +
           '<td class="py-2 pr-2 text-sm font-medium text-gray-700 dark:text-gray-300 w-36">' + navn + '</td>' +
           '<td class="py-2 pr-2"><input type="number" class="sb-verdi w-28 px-2 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100" min="0" step="1000" value="' + verdi + '" /></td>' +
-          '<td class="py-2 pr-2 text-sm text-gray-500 sb-na-pct">0.0%</td>' +
+          '<td class="py-2 pr-2 text-sm text-gray-500 sb-na-pct">0,0&nbsp;%</td>' +
           '<td class="py-2 pr-2"><input type="number" class="sb-maal w-16 px-2 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100" min="0" max="100" step="1" value="' + maal + '" /></td>' +
-          '<td class="py-2 pr-2 sb-diff text-sm font-medium text-gray-400">0.0%</td>' +
+          '<td class="py-2 pr-2 sb-diff text-sm font-medium text-gray-400">0,0&nbsp;%</td>' +
           '<td class="py-2 pr-2 sb-kr text-sm text-gray-400">–</td>' +
           '<td class="py-1"><button class="sb-slett text-gray-300 hover:text-red-500 dark:text-gray-600 dark:hover:text-red-400 transition-colors text-lg leading-none" title="Fjern rad">×</button></td>' +
         '</tr>';
@@ -490,7 +491,7 @@
         document.getElementById('sb-total').textContent = Math.round(total).toLocaleString('nb') + ' kr';
 
         var maalEl = document.getElementById('sb-total-maal');
-        maalEl.textContent = totalMaal.toFixed(1) + '%';
+        maalEl.textContent = pst(totalMaal, 1);
         maalEl.className = Math.abs(totalMaal - 100) <= 1
           ? 'text-2xl font-semibold tabular-nums text-green-600 dark:text-green-400'
           : 'text-2xl font-semibold tabular-nums text-orange-500';
@@ -508,10 +509,10 @@
           var kr = diff / 100 * total;
           var navn = rad.querySelector('td').textContent.trim();
 
-          rad.querySelector('.sb-na-pct').textContent = naPct.toFixed(1) + '%';
+          rad.querySelector('.sb-na-pct').textContent = pst(naPct, 1);
 
           var diffEl = rad.querySelector('.sb-diff');
-          diffEl.textContent = (diff >= 0 ? '+' : '') + diff.toFixed(1) + '%';
+          diffEl.textContent = (diff >= 0 ? '+' : '') + pst(diff, 1);
           diffEl.className = 'sb-diff text-sm font-medium ' + (Math.abs(diff) < 1 ? 'text-gray-400' : diff > 0 ? 'text-orange-500' : 'text-green-600');
 
           var krEl = rad.querySelector('.sb-kr');
@@ -546,11 +547,11 @@
           oppsumEl.classList.remove('hidden');
           document.getElementById('sb-overvekt-navn').textContent = storsteOvervektNavn || '–';
           document.getElementById('sb-overvekt-kr').textContent = storsteOvervektNavn
-            ? ('+' + storsteOvervektDiff.toFixed(1) + '% – selg ' + storsteOvervektKr.toLocaleString('nb') + ' kr')
+            ? ('+' + pst(storsteOvervektDiff, 1) + ', selg for ' + storsteOvervektKr.toLocaleString('nb') + ' kr')
             : '';
           document.getElementById('sb-undervekt-navn').textContent = storsteUndervektNavn || '–';
           document.getElementById('sb-undervekt-kr').textContent = storsteUndervektNavn
-            ? (storsteUndervektDiff.toFixed(1) + '% – kjøp ' + storsteUndervektKr.toLocaleString('nb') + ' kr')
+            ? (pst(storsteUndervektDiff, 1) + ', kjøp for ' + storsteUndervektKr.toLocaleString('nb') + ' kr')
             : '';
         } else {
           oppsumEl.classList.add('hidden');

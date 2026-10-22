@@ -151,11 +151,11 @@
             <input id="hl-rente-slider" type="range" min="0.5" max="20" step="0.1" value="5.5" class="flex-1 accent-green-500" />
           </div>
           <div class="flex gap-1.5 mt-2 flex-wrap">
-            <button type="button" data-rente="3.5" class="rente-preset text-xs px-2 py-0.5 rounded border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">3,5%</button>
-            <button type="button" data-rente="4.5" class="rente-preset text-xs px-2 py-0.5 rounded border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">4,5%</button>
-            <button type="button" data-rente="5.5" class="rente-preset text-xs px-2 py-0.5 rounded border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">5,5%</button>
-            <button type="button" data-rente="6.5" class="rente-preset text-xs px-2 py-0.5 rounded border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">6,5%</button>
-            <button type="button" data-rente="7.5" class="rente-preset text-xs px-2 py-0.5 rounded border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">7,5%</button>
+            <button type="button" data-rente="3.5" class="rente-preset text-xs px-2 py-0.5 rounded border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">3,5&nbsp;%</button>
+            <button type="button" data-rente="4.5" class="rente-preset text-xs px-2 py-0.5 rounded border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">4,5&nbsp;%</button>
+            <button type="button" data-rente="5.5" class="rente-preset text-xs px-2 py-0.5 rounded border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">5,5&nbsp;%</button>
+            <button type="button" data-rente="6.5" class="rente-preset text-xs px-2 py-0.5 rounded border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">6,5&nbsp;%</button>
+            <button type="button" data-rente="7.5" class="rente-preset text-xs px-2 py-0.5 rounded border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">7,5&nbsp;%</button>
           </div>
         </div>
         <div>
@@ -343,6 +343,7 @@
 
   <script>
     (function() {
+      function pst(v, d) { return (v < 0 ? '\u2212' : '') + Math.abs(v).toFixed(d).replace('.', ',') + '\u00a0%'; }
       var btn = document.getElementById('tilbake-topp');
       window.addEventListener('scroll', function() { btn.classList.toggle('hidden', window.scrollY < 400); }, {passive:true});
       btn.addEventListener('click', function() { window.scrollTo({top:0,behavior:'smooth'}); });
@@ -375,12 +376,12 @@
         document.getElementById('hl-A-rente').textContent  = fmtKr(sparNetto);
         document.getElementById('hl-A-gjeld').textContent  = fmtKr(balRed);
         document.getElementById('hl-A-total').textContent  = fmtKr(sparNetto);
-        document.getElementById('hl-A-eff').textContent    = 'Effektiv rente etter rentefradrag: ' + effA.toFixed(2) + '% p.a.';
+        document.getElementById('hl-A-eff').textContent    = 'Effektiv rente etter rentefradrag: ' + pst(effA, 2) + ' per år';
         document.getElementById('hl-B-verdi').textContent  = fmtKr(pfNetto);
         document.getElementById('hl-B-gevinst').textContent= fmtKr(gevNetto);
         document.getElementById('hl-B-total').textContent  = fmtKr(gevNetto);
-        document.getElementById('hl-B-eff').textContent    = 'Forventet netto avkastning etter skatt: ' + effB.toFixed(2) + '% p.a.';
-        var be = (avkPct * 0.6216 / 0.78).toFixed(2);
+        document.getElementById('hl-B-eff').textContent    = 'Forventet netto avkastning etter skatt: ' + pst(effB, 2) + ' per år';
+        var be = avkPct * 0.6216 / 0.78;
         var vEl = document.getElementById('hl-verdict'), diff = Math.abs(sparNetto - gevNetto);
         if (sparNetto >= gevNetto) {
           vEl.className = 'rounded-xl p-4 text-center space-y-1 border hl-verdict-laan';
@@ -393,9 +394,9 @@
         document.getElementById('hl-detaljer').innerHTML =
           '<p><strong>Forutsetninger:</strong> Rentefradrag 22&nbsp;%, investeringsskatt 37,84&nbsp;% (skjermingsfradrag ikke inkludert)</p>' +
           '<p>Terminbeløp: ' + fmtKr(stdBetaling) + '/mnd · Ekstra innbetalt: ' + fmtKr(innbetalt) + tidlig + '</p>' +
-          '<p>Restgjeld etter ' + berAr + ' år — uten ekstra: ' + fmtKr(balBase) + ' · med ekstra: ' + fmtKr(balExtra) + '</p>' +
+          '<p>Restgjeld etter ' + berAr + ' år uten ekstra: ' + fmtKr(balBase) + ' · med ekstra: ' + fmtKr(balExtra) + '</p>' +
           '<p>Portefølje brutto: ' + fmtKr(pf) + ' · Netto etter skatt: ' + fmtKr(pfNetto) + '</p>' +
-          '<p>Break-even lånerente: <strong>' + be + '%</strong> — over dette lønner nedbetaling seg fremfor ' + avkPct + '% avkastning</p>';
+          '<p>Break-even lånerente: <strong>' + pst(be, 2) + '</strong>. Over den lønner nedbetaling seg mer enn ' + pst(avkPct, 1) + ' avkastning.</p>';
         document.getElementById('hl-resultat').classList.remove('hidden');
       }
 

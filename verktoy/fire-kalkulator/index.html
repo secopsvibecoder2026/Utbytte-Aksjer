@@ -164,11 +164,11 @@
               <input id="f-yield-slider" type="range" min="1" max="20" step="0.1" value="5.0" class="flex-1 accent-green-500" />
             </div>
             <div class="flex gap-1.5 mt-2 flex-wrap">
-              <button type="button" data-yield="3" class="yield-preset text-xs px-2 py-0.5 rounded border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">3%</button>
-              <button type="button" data-yield="4" class="yield-preset text-xs px-2 py-0.5 rounded border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">4%</button>
-              <button type="button" data-yield="5" class="yield-preset text-xs px-2 py-0.5 rounded border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">5%</button>
-              <button type="button" data-yield="6" class="yield-preset text-xs px-2 py-0.5 rounded border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">6%</button>
-              <button type="button" data-yield="8" class="yield-preset text-xs px-2 py-0.5 rounded border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">8%</button>
+              <button type="button" data-yield="3" class="yield-preset text-xs px-2 py-0.5 rounded border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">3&nbsp;%</button>
+              <button type="button" data-yield="4" class="yield-preset text-xs px-2 py-0.5 rounded border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">4&nbsp;%</button>
+              <button type="button" data-yield="5" class="yield-preset text-xs px-2 py-0.5 rounded border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">5&nbsp;%</button>
+              <button type="button" data-yield="6" class="yield-preset text-xs px-2 py-0.5 rounded border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">6&nbsp;%</button>
+              <button type="button" data-yield="8" class="yield-preset text-xs px-2 py-0.5 rounded border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">8&nbsp;%</button>
             </div>
           </div>
           <div>
@@ -492,7 +492,7 @@ Kapital = 386 090 / 0,05 ≈ 7,72 mill. kr</code></pre>
         document.getElementById('f-ut-kapital').textContent = fmt(kapital);
         document.getElementById('f-ut-brutto').textContent  = fmt(bruttoAar);
         document.getElementById('f-ut-ar').textContent      = ar === null ? '> 100 år' : ar === 0 ? 'Allerede FIRE!' : ar + ' år';
-        document.getElementById('f-ut-prosent').textContent = prosent.toFixed(1) + '%';
+        document.getElementById('f-ut-prosent').textContent = prosent.toFixed(1).replace('.', ',') + '\u00a0%';
         document.getElementById('f-ut-bar').style.width     = prosent.toFixed(1) + '%';
 
         var halvveis = null;

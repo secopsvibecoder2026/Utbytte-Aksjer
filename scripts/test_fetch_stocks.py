@@ -1293,7 +1293,7 @@ class TestUtbetalingsaar(unittest.TestCase):
     def test_antall_og_belop_naar_listen_stemmer(self):
         from fetch_stocks import _lag_utbetalingsaar
         h = _lag_utbetalingsaar(self._aksje("Halvårlig", [3, 8]))
-        self.assertIn("betaler ut 2 ganger i året", h)
+        self.assertIn("betaler ut to ganger i året", h)
         self.assertIn("6,00 kroner per aksje hver gang", h)
 
     def test_ingen_antallspaastand_naar_listen_er_kortere(self):
@@ -2139,7 +2139,7 @@ class TestVekstFraTopp(unittest.TestCase):
     def test_dobling_er_en_betingelse(self):
         self.assertIn("vekst", fs._beregn_mal_py(self.DNB))
         tekst = fs._lag_investor_badges(self.DNB)
-        self.assertIn("Holder veksten på +19,8% per år seg, dobles utbyttet på ca. 4 år.", tekst)
+        self.assertIn("Holder veksten på +19,8\u00a0% per år seg, dobles utbyttet på ca. 4 år.", tekst)
 
 
 class TestKurshode(unittest.TestCase):
@@ -3292,6 +3292,53 @@ class TestNokOmregning(unittest.TestCase):
         self.assertIn("kronebeløpet selskapet meldte til Oslo Børs", tekst)
         self.assertIn("foreløpig beløp", tekst)
         self.assertNotIn("mangler i Yahoos", tekst)
+
+
+class TestFaqHistorikk(unittest.TestCase):
+    """FAQ-svaret om historikken bruker hele år, ikke det som er betalt hittil i år.
+
+    Equinor 22.10.2026: «Høyest enkeltutbytte var 37,85 NOK i 2023, lavest
+    10,82 NOK i 2026», der 2026 bare var betalt hittil.
+    """
+
+    RAD = {"ticker": "EQNR", "navn": "Equinor ASA", "valuta": "NOK", "utbytte_yield": 3.37,
+           "utbytte_per_aksje": 14.55, "pris": 431.8, "utbytte_forste_ar": 2001,
+           "utbytte_per_ar": {"2021": 4.8078, "2022": 16.4282, "2023": 37.8522,
+                              "2024": 32.1646, "2025": 19.1553},
+           "historiske_utbytter": [{"ar": 2026, "utbytte": 10.82}, {"ar": 2025, "utbytte": 19.16},
+                                   {"ar": 2024, "utbytte": 32.16}]}
+
+    def svar(self, a, i_dag="2026-10-22"):
+        html_, _ = fs._lag_faq_seksjon(a, i_dag)
+        return html_
+
+    def test_inneverende_aar_er_ikke_lavest(self):
+        t = self.svar(self.RAD)
+        self.assertNotIn("lavest 10,82", t)
+        self.assertNotIn("enkeltutbytte", t)
+        self.assertIn("I de hele årene 2021–2025 betalte Equinor ASA til sammen 110,41 kroner", t)
+        self.assertIn("Høyest var 2023 med 37,85 kroner, lavest 2021 med 4,81 kroner.", t)
+        self.assertIn("Hittil i 2026 er det betalt 10,82 kroner per aksje.", t)
+
+    def test_aar_uten_utbytte_og_aar_for_forste(self):
+        a = dict(self.RAD, utbytte_forste_ar=2022,
+                 utbytte_per_ar={"2021": 0, "2022": 2.0, "2023": 0, "2024": 3.0, "2025": 3.5})
+        t = self.svar(a)
+        self.assertIn("2022–2025", t)                 # 2021 er før første utbytte
+        self.assertIn("I 2023 har vi ikke registrert noe utbytte.", t)
+
+    def test_kjop_senest_borsdagen_for(self):
+        a = dict(self.RAD, ex_dato="2026-11-13")
+        t = self.svar(a)
+        self.assertIn("må du kjøpe aksjen senest 12. november, børsdagen før ex-datoen", t)
+
+
+class TestTallformat(unittest.TestCase):
+    def test_tusenskille_og_prosent(self):
+        self.assertEqual(fs._nf_tusen(1022.7, 1), "1\u00a0022,7")
+        self.assertEqual(fs._pst(3.37), "3,37\u00a0%")
+        self.assertEqual(fs._ganger(2), "to ganger")
+        self.assertEqual(fs._ganger(12), "12 ganger")
 
 
 class TestAnnetSelskap(unittest.TestCase):
