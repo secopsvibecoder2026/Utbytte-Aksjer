@@ -2092,6 +2092,42 @@ to check against. Yahoo's conversion stands there, as before.
 Tests: `TestNokOmregning` (5), `TestKorrigert` in `test_tallkontroll.py` (2),
 `ui.test.js` (1).
 
+## Text and number pass of 2026-10-22
+
+The EQNR fix showed one more sentence that could not be true: the stock-page
+FAQ named this year's partial row as the «lowest» year. Every page was then
+scanned for the same kinds of fault. Fixed:
+
+- **The history FAQ uses whole years.** `_hele_utbytteaar()` reads
+  `utbytte_per_ar` (years before `utbytte_forste_ar` left out) and needs three
+  of them. The current year gets its own sentence, «Hittil i 2026 …».
+- **One number format in the template.** Every `{_nf(x)}%` is `_pst()` now,
+  market cap has a thousands space (`_nf_tusen()`), and counts below eleven are
+  words (`_ganger()`: «to ganger i året», «satt ned tre ganger»). The dead
+  `_lag_historikk_prosa()` is gone; nothing rendered it.
+- **`/utbyttekalender/` showed the previous payment** (`siste_utbytte`) as the
+  amount for the coming ex-date: PROT 3,00 against an announced 5,00. It now
+  shows `annonsert_utbytte` when `annonsert_ex` is the ex-date, or nothing. The
+  unit was `a.valuta`, the reporting currency, so a dollar reporter read «USD»
+  beside a kroner amount. Dates are parsed as local midnight: with `new
+  Date(str)` and `Math.ceil` an ex-date today read «I morgen». The «~est.»
+  mark on ex-dates more than 90 days out is gone; no date there is estimated,
+  and the page says so. Unapproved dividends read «foreslått, ikke vedtatt».
+- **`/bevegelser/` mixed trading days.** A ticker Yahoo had not updated kept
+  yesterday's change in `priser.json` and stood among «Dagens vinnere» (11 of
+  155 on the evening of 22.10). Only rows from the newest `dato` are shown, and
+  the headings name the day when it is not today.
+- **`/uke/`'s week number** used `Math.ceil` over a 25-hour day, which gives
+  one week too many after the clocks go back in a year where 1 January is a
+  Friday (2027).
+- Hand-written pages and calculators write `3,5 %` with a comma and a hard
+  space. `/verktoy/sektorrebalansering/` named Rema, which is not listed, and
+  called Gjensidige a bank.
+
+`skann.py`-style checks that found these: `\d%`, `None|nan|undefined`, a digit
+before «ganger», and a period decimal before «%» in the rendered text of every
+page. Tests: `TestFaqHistorikk` (3), `TestTallformat` (1).
+
 ## App review of 2026-10-20
 
 Every tab, sub-tab and fourteen stock modals were opened with Playwright at

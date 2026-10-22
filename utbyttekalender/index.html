@@ -593,9 +593,41 @@
     let aktivFilter = 'alle';
 
     // ── Hjelpefunksjoner ─────────────────────────────────────────────────────
-    function formaterDatoKort(str) {
-      const d = new Date(str);
-      return d.toLocaleDateString('nb-NO', { weekday: 'short', day: 'numeric', month: 'short' });
+    // «2026-11-13» leses som lokal midnatt. new Date(str) gir UTC-midnatt, og
+    // med Math.ceil ble en ex-dato i dag «I morgen» og i morgen «om 2d».
+    function fraIso(str) {
+      const [y, m, d] = str.split('-').map(Number);
+      return new Date(y, m - 1, d);
+    }
+    function lokalIso(d) {
+      return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+    }
+    function esc(s) {
+      return String(s == null ? '' : s).replace(/[&<>"']/g, c =>
+        ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    }
+    function pst(v, d) {
+      return v.toFixed(d).replace('.', ',') + '\u00a0%';
+    }
+    function kr(v) {
+      return v.toLocaleString('nb-NO', { minimumFractionDigits: 2, maximumFractionDigits: 4 });
+    }
+
+    // Beløpet for nettopp denne ex-datoen, eller null. Siden viste
+    // siste_utbytte, som er forrige utbetaling: PROT sto med 3,00 for en
+    // ex-dato der selskapet hadde meldt 5,00. Valutaen var a.valuta, som er
+    // selskapets regnskapsvaluta, mens beløpene våre er i kroner.
+    function belopForEx(a) {
+      if (a.annonsert_utbytte > 0 && a.annonsert_ex && a.annonsert_ex === a.ex_dato) return a.annonsert_utbytte;
+      if (a.siste_utbytte > 0 && a.siste_utbytte_dato && a.siste_utbytte_dato === a.ex_dato) return a.siste_utbytte;
+      return null;
+    }
+    // Som exForbeholdGjelder() i assets/ui.js: generalforsamlingen har ikke vedtatt utbyttet ennå.
+    function ikkeVedtatt(a) {
+      const g = a.ex_forbehold;
+      const idag = lokalIso(new Date());
+      if (!g || !a.ex_dato || a.ex_dato < idag) return false;
+      return g === 'ukjent' || g >= idag;
     }
 
     function yieldKlasse(y) {
@@ -606,15 +638,12 @@
     }
 
     function erPassert(datoStr) {
-      const d = new Date(datoStr);
-      const idag = new Date(); idag.setHours(0,0,0,0);
-      return d < idag;
+      return datoStr < lokalIso(new Date());
     }
 
     function dagerTilTekst(datoStr) {
-      const d = new Date(datoStr);
       const idag = new Date(); idag.setHours(0,0,0,0);
-      const dager = Math.ceil((d - idag) / 86400000);
+      const dager = Math.round((fraIso(datoStr) - idag) / 86400000);
       if (dager < 0) return 'Passert';
       if (dager === 0) return 'I dag!';
       if (dager === 1) return 'I morgen';
@@ -622,18 +651,20 @@
     }
 
     function byggHendelseRad(h) {
-      const { dato, type, aksje: a, estimert } = h;
+      const { dato, type, aksje: a } = h;
       const passert = erPassert(dato);
       const cfg = HENDELSE_TYPER[type];
-      const d = new Date(dato);
+      const d = fraIso(dato);
       const dagNr = d.getDate();
       const mndKort = MAANEDER[d.getMonth()].slice(0, 3).toLowerCase();
 
       let detalj = '';
-      if (type === 'ex') {
-        detalj = a.siste_utbytte ? `${a.siste_utbytte} ${a.valuta || 'NOK'} per aksje` : '';
-      } else if (type === 'utbytte') {
-        detalj = a.siste_utbytte ? `${a.siste_utbytte} ${a.valuta || 'NOK'} per aksje` : '';
+      if (type === 'ex' || type === 'utbytte') {
+        const b = belopForEx(a);
+        detalj = [
+          b ? `${kr(b)} kr per aksje` : '',
+          ikkeVedtatt(a) ? 'foreslått, ikke vedtatt' : '',
+        ].filter(Boolean).join(' · ');
       } else if (type === 'rapport') {
         detalj = 'Kvartalsrapport';
       }
@@ -648,14 +679,13 @@
             <div class="flex items-center gap-2 flex-wrap">
               <span class="text-xs font-semibold px-1.5 py-0.5 rounded ${cfg.bg} ${cfg.tekst}">${cfg.label}</span>
               <a href="/aksjer/${a.ticker}/" class="font-mono font-bold text-brand-700 dark:text-brand-400 hover:underline text-sm">${a.ticker}</a>
-              <span class="text-gray-600 dark:text-gray-400 text-sm truncate">${a.navn}</span>
-              ${estimert ? '<span class="text-xs text-gray-400 dark:text-gray-600" title="Estimert basert på historikk">~est.</span>' : ''}
+              <span class="text-gray-600 dark:text-gray-400 text-sm truncate">${esc(a.navn)}</span>
             </div>
             ${detalj ? `<div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">${detalj}</div>` : ''}
           </div>
           <div class="shrink-0 text-right min-w-[4rem]">
             ${type !== 'rapport' && a.utbytte_yield > 0
-              ? `<span class="text-xs font-semibold px-2 py-0.5 rounded-full ${yieldKlasse(a.utbytte_yield)}">${a.utbytte_yield.toFixed(1)}%</span>`
+              ? `<span class="text-xs font-semibold px-2 py-0.5 rounded-full ${yieldKlasse(a.utbytte_yield)}">${pst(a.utbytte_yield, 1)}</span>`
               : ''}
             <div class="text-xs text-gray-400 mt-1">${passert ? 'Passert' : dagerTilTekst(dato)}</div>
           </div>
@@ -673,7 +703,7 @@
       // Grupper per år + måned
       const grupper = {};
       filtrerte.forEach(h => {
-        const d = new Date(h.dato);
+        const d = fraIso(h.dato);
         const key = `${d.getFullYear()}-${d.getMonth()}`;
         if (!grupper[key]) grupper[key] = { aar: d.getFullYear(), mnd: d.getMonth(), hendelser: [] };
         grupper[key].hendelser.push(h);
@@ -741,20 +771,18 @@
       const data = await resp.json();
       const aksjer = data.aksjer || data;
 
-      const idag = new Date(); idag.setHours(0,0,0,0);
-
-      // Bygg flat liste av alle hendelser
+      // Bygg flat liste av alle hendelser. Alle datoene er meldt av selskapet
+      // eller hentet fra Yahoo/DNB; ingen er anslått. Merket «~est.» som sto
+      // på ex-datoer mer enn 90 dager fram, påsto noe vi ikke vet.
       aksjer.forEach(a => {
         if (a.ex_dato && a.utbytte_yield > 0) {
-          const d = new Date(a.ex_dato);
-          const diffDager = (d - idag) / 86400000;
-          alleHendelser.push({ dato: a.ex_dato, type: 'ex', aksje: a, estimert: diffDager > 90 });
+          alleHendelser.push({ dato: a.ex_dato, type: 'ex', aksje: a });
         }
         if (a.betaling_dato && a.utbytte_yield > 0) {
-          alleHendelser.push({ dato: a.betaling_dato, type: 'utbytte', aksje: a, estimert: false });
+          alleHendelser.push({ dato: a.betaling_dato, type: 'utbytte', aksje: a });
         }
         if (a.rapport_dato) {
-          alleHendelser.push({ dato: a.rapport_dato, type: 'rapport', aksje: a, estimert: false });
+          alleHendelser.push({ dato: a.rapport_dato, type: 'rapport', aksje: a });
         }
       });
 

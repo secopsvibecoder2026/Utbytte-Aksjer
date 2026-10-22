@@ -289,9 +289,17 @@
     function søndagI(mandag) {
       const r = new Date(mandag); r.setDate(r.getDate() + 6); r.setHours(23,59,59,999); return r;
     }
+    // ISO-uke. Dagene telles med Math.round: etter overgangen til vintertid
+    // er det 25 timer i ett av døgnene, og Math.ceil ga da én uke for mye i
+    // år der 1. januar er en fredag (2027).
     function ukenr(d) {
       const thu = new Date(d); thu.setDate(d.getDate() + (4 - (d.getDay() || 7)));
-      return Math.ceil(((thu - new Date(thu.getFullYear(),0,1)) / 86400000 + 1) / 7);
+      const dager = Math.round((thu - new Date(thu.getFullYear(), 0, 1)) / 86400000);
+      return Math.floor(dager / 7) + 1;
+    }
+    function esc(s) {
+      return String(s == null ? '' : s).replace(/[&<>"']/g, c =>
+        ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
     }
     function fmtDato(str) {
       return new Date(str).toLocaleDateString('nb-NO', { weekday: 'short', day: 'numeric', month: 'short' });
@@ -311,12 +319,12 @@
     // ── Bygg rad ─────────────────────────────────────────────────────────────
     function byggRad(a, datoStr, visYield = true) {
       const badge = visYield && a.utbytte_yield > 0
-        ? `<span class="uke-badge ${yieldCls(a.utbytte_yield)}">${a.utbytte_yield.toFixed(1)}%</span>`
+        ? `<span class="uke-badge ${yieldCls(a.utbytte_yield)}">${a.utbytte_yield.toFixed(1).replace('.', ',')}\u00a0%</span>`
         : '';
       return `<a href="/aksjer/${a.ticker}/" class="uke-rad">
         <span class="uke-rad-ticker">${a.ticker}</span>
         <div class="uke-rad-info">
-          <div class="uke-rad-navn">${a.navn}</div>
+          <div class="uke-rad-navn">${esc(a.navn)}</div>
           <div class="uke-rad-dato">${fmtDato(datoStr)}</div>
         </div>
         ${badge}
@@ -372,8 +380,8 @@
       }
 
       // Tittel og intro-tekst
-      const ukeLabel = erNesteUke ? `Neste uke — uke ${ukeNr}` : `Uke ${ukeNr}`;
-      document.getElementById('uke-tittel').textContent = `Utbytteoversikt Oslo Børs — ${ukeLabel}`;
+      const ukeLabel = erNesteUke ? `Neste uke (uke ${ukeNr})` : `Uke ${ukeNr}`;
+      document.getElementById('uke-tittel').textContent = `Utbytteoversikt Oslo Børs, ${ukeLabel.toLowerCase()}`;
       document.getElementById('uke-undertittel').textContent =
         `Ex-datoer, utbetalinger og rapporter · Oppdatert daglig`;
 
@@ -384,7 +392,7 @@
       if (rapListe.length) deler.push(`${rapListe.length} rapport${rapListe.length > 1 ? 'er' : ''}`);
       const linje1 = document.getElementById('intro-linje1');
       const linje2 = document.getElementById('intro-linje2');
-      linje1.textContent = `📌 ${ukeLabel} (Oslo Børs): ${deler.join(', ')}.`;
+      linje1.textContent = `📌 Oslo Børs, ${ukeLabel.toLowerCase()}: ${deler.join(', ')}.`;
       linje2.textContent = `Følg med på exday.no for daglig oppdatert oversikt over norske utbytteaksjer.`;
       document.getElementById('intro-tekst').classList.remove('hidden');
 
