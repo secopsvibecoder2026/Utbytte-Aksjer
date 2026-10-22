@@ -3603,42 +3603,50 @@
     {
       "ticker": "ATEA",
       "dato": "2026-10-22",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/684566"
     },
     {
       "ticker": "KIT",
       "dato": "2026-10-22",
-      "type": "rapport"
+      "type": "rapport",
+      "url_forsok": 1
     },
     {
       "ticker": "KOA",
       "dato": "2026-10-22",
-      "type": "rapport"
+      "type": "rapport",
+      "url_forsok": 1
     },
     {
       "ticker": "NOD",
       "dato": "2026-10-22",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/684560"
     },
     {
       "ticker": "NSKOG",
       "dato": "2026-10-22",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/684558"
     },
     {
       "ticker": "PROT",
       "dato": "2026-10-22",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/684546"
     },
     {
       "ticker": "TGS",
       "dato": "2026-10-22",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/684567"
     },
     {
       "ticker": "YAR",
       "dato": "2026-10-22",
-      "type": "rapport"
+      "type": "rapport",
+      "url_forsok": 1
     },
     {
       "ticker": "GJF",
@@ -3647,11 +3655,6 @@
     },
     {
       "ticker": "MEDI",
-      "dato": "2026-10-23",
-      "type": "rapport"
-    },
-    {
-      "ticker": "NHY",
       "dato": "2026-10-23",
       "type": "rapport"
     },
@@ -4301,6 +4304,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "PROT",
+      "dato": "2027-01-28",
+      "type": "rapport"
+    },
+    {
       "ticker": "TEL",
       "dato": "2027-02-03",
       "type": "rapport"
@@ -4313,6 +4321,16 @@
     {
       "ticker": "SNI",
       "dato": "2027-02-04",
+      "type": "rapport"
+    },
+    {
+      "ticker": "NOD",
+      "dato": "2027-02-05",
+      "type": "rapport"
+    },
+    {
+      "ticker": "ATEA",
+      "dato": "2027-02-09",
       "type": "rapport"
     },
     {
@@ -4336,10 +4354,35 @@
       "type": "rapport"
     },
     {
+      "ticker": "KIT",
+      "dato": "2027-02-11",
+      "type": "rapport"
+    },
+    {
+      "ticker": "NSKOG",
+      "dato": "2027-02-11",
+      "type": "rapport"
+    },
+    {
+      "ticker": "TGS",
+      "dato": "2027-02-11",
+      "type": "rapport"
+    },
+    {
+      "ticker": "YAR",
+      "dato": "2027-02-12",
+      "type": "rapport"
+    },
+    {
       "ticker": "OTEC",
       "dato": "2027-02-17",
       "type": "rapport"
+    },
+    {
+      "ticker": "KOA",
+      "dato": "2027-02-25",
+      "type": "rapport"
     }
   ],
-  "sist_oppdatert": "2026-10-21"
+  "sist_oppdatert": "2026-10-22"
 }
