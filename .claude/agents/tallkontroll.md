@@ -137,6 +137,13 @@ leser, og slå opp i dataene når noe ser rart ut.
 - **Tilbakebetaling av innbetalt kapital er ikke utbytte** skattemessig (STST).
 - **Doble noteringer:** Yahoo og DNB skiller ikke mellom børser. Oslo Børs sin
   dato gjelder.
+- **Yahoo kan ta feil, og `tallkontroll.py` ser det ikke.** Skriptet
+  sammenligner med Yahoos egen serie, så en feil hos Yahoo går rett gjennom.
+  Equinor sto i tre år med foreløpige kronebeløp: 35,13 kr for 2023 mot de
+  37,85 kr selskapet meldte. Les derfor selskapets melding om kronebeløpet når
+  aksjen betaler i dollar eller euro. Den heter «Announcement of (cash)
+  dividend … in NOK», og en slik aksje står i ukens utvalg eller får et høyt
+  tall på siden. `utbytte_korrigert` viser hva pipelinen allerede har rettet.
 - **Kjente, dokumenterte avvik** står i `CLAUDE.md` (f.eks. GSF ~35,6 %, de fem
   aksjene Sjekk 10 i `valider_data.py` flagger). Nevn dem kort som kjente; ikke
   bruk tid på å gjenoppdage dem.

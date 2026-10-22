@@ -515,6 +515,14 @@ test('supplertFotnote: sier hvilke utbetalinger som kom fra børsmeldingen', () 
   assert.match(to, /^Utbetalingene med ex-dato 12\. nov.* og 10\. mar/);
 });
 
+test('supplertFotnote: nevner kronebeløp hentet fra selskapets melding (EQNR 2023)', () => {
+  const t = supplertFotnote({ utbytte_korrigert: [
+    { ex_dato: '2023-05-11', yahoo: 8.42, belop: 9.58 }, { ex_dato: '2023-01-09', yahoo: 8.42, belop: 9.02 }] });
+  assert.match(t, /^For utbetalingene med ex-dato 9\. jan.* og 11\. mai/);
+  assert.match(t, /Yahoo hadde et foreløpig beløp\.$/);
+  assert.doesNotMatch(t, /mangler i Yahoos/);
+});
+
 test('modalBetaltBoks: fotnoten står bare der noe er lagt til', () => {
   global.escHtml = s => String(s);
   try {

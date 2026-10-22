@@ -2040,6 +2040,58 @@ now says when the paid figure replaces it.
 Tests: `TestAnnetSelskap` (5), `TestBetaltSomArsrate` (+2),
 `TestForsideArtikler` (5).
 
+## Yahoo's provisional NOK amounts — `korriger_med_nok_omregning()` (2026-10-22)
+
+Equinor declares its dividend in dollars and fixes the NOK amount after the
+record date, from Norges Bank's average rate over seven trading days. The NOK
+figure comes in its own notice about a week after the ex-date («Announcement
+of (cash) dividend per share in NOK»). Yahoo enters a provisional amount on
+the ex-date and does not always update it:
+
+| Ex-date | Yahoo | Equinor's notice |
+|---|---|---|
+| 11.11.2021 | 1,6843 | 1,5572 (547180) |
+| 11.02.2022 | 1,6843 | 1,5944 (554247) |
+| 09.01.2023 | 8,4217 | 9,0159 (580174) |
+| 11.05.2023 | 8,4217 | 9,5753 (591103) |
+| 14.08.2023 | 8,4217 | 9,4091 (597337) |
+
+So 2023 read 35,13 kr against 37,85, and the error ran into the 5-year
+average, the growth figure, `vekst_fra_topp()` and the history table of the
+most widely held stock in Norway. The article agent found it while checking
+amounts against the notices for «Hva er direkteavkastning?».
+
+**Why the tallkontroll did not find it.** `tallkontroll.py` compares our
+numbers with Yahoo's raw series, which is the same source, so an error in
+Yahoo's series passes untouched. It reads NewsWeb only for the ex-date. Its
+agent file now says to read the NOK notice for dollar and euro payers.
+
+**The fix.** `nok_omregninger()` looks for such notices only when the
+issuer's recent list holds one, so other tickers cost nothing. It then looks
+up the last five years. `parse_nok_omregning()` requires an exchange-rate
+mention and one amount («is consequently NOK 9.0159 per share», before 2022
+without «per share»). `korriger_med_nok_omregning()` swaps Yahoo's amount for
+the company's when:
+
+- exactly one Yahoo payment falls in the 30 days before the notice;
+- the gap is at least 0,5 % and at most 25 %.
+
+`utbytte_korrigert` stores each swap, and `supplert_fotnote()` /
+`supplertFotnote()` say so in the «Faktisk betalt» box. `tallkontroll.py`
+applies the same swaps (`med_supplert()`).
+
+**Measured 22.10.2026, 2021–2026, whole catalog.** Only Equinor and Elopak
+publish NOK amounts this way. Elopak's agree with Yahoo. Höegh Autoliners
+did it once (2024, no readable amount) and Bakkafrost once (2021). Payers
+that announce only in dollars (Frontline, Hafnia, BW LPG) give no NOK figure
+to check against. Yahoo's conversion stands there, as before.
+
+**If NewsWeb fails,** Yahoo's series is used for that run, the same as for
+`suppler_utbytteserie()`.
+
+Tests: `TestNokOmregning` (5), `TestKorrigert` in `test_tallkontroll.py` (2),
+`ui.test.js` (1).
+
 ## App review of 2026-10-20
 
 Every tab, sub-tab and fourteen stock modals were opened with Playwright at

@@ -86,6 +86,19 @@ class TestSupplert(unittest.TestCase):
         self.assertNotIn("betalt_12m", [f["sjekk"] for f in funn])
 
 
+class TestKorrigert(unittest.TestCase):
+    """EQNR-formen: Yahoo har et foreløpig kronebeløp, pipelinen selskapets."""
+
+    def test_rettet_belop_erstatter_rådata(self):
+        utb = [("2023-01-09", 8.4217), ("2023-05-11", 8.4217)]
+        rad = {"utbytte_korrigert": [{"ex_dato": "2023-01-09", "yahoo": 8.4217, "belop": 9.0159}]}
+        self.assertEqual(tk.med_supplert(rad, utb), [("2023-01-09", 9.0159), ("2023-05-11", 8.4217)])
+
+    def test_uten_rettinger_uendret(self):
+        utb = [("2023-01-09", 8.4217)]
+        self.assertEqual(tk.med_supplert({"utbytte_korrigert": []}, utb), utb)
+
+
 class TestFrekvens(unittest.TestCase):
     # SATS-formen: tre utbetalinger i ett 12-månedersvindu, men ~180 dager mellom.
     HALVAAR = [("2025-03-04", 1), ("2025-09-01", 1), ("2026-03-04", 1), ("2026-08-24", 1)]

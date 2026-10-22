@@ -4375,13 +4375,25 @@ function modalBetaltBoks(a) {
 // Utbetalinger Yahoo mangler og fetch_stocks.py har hentet fra børsmeldingen
 // (suppler_utbytteserie()). Samme setning som supplert_fotnote() på aksjesiden.
 function supplertFotnote(a) {
-  const lagt = (a.utbytte_supplert || []).filter(s => s && s.ex_dato)
-    .sort((x, y) => x.ex_dato.localeCompare(y.ex_dato));
-  if (!lagt.length) return '';
-  const datoer = lagt.map(s => formaterDato(s.ex_dato));
-  const liste = datoer.length === 1 ? datoer[0]
-    : datoer.slice(0, -1).join(', ') + ' og ' + datoer[datoer.length - 1];
-  return `Utbetaling${datoer.length > 1 ? 'ene' : 'en'} med ex-dato ${liste} mangler i Yahoos utbytteserie og er hentet fra selskapets melding til Oslo Børs.`;
+  const liste = rader => {
+    const datoer = rader.filter(s => s && s.ex_dato)
+      .sort((x, y) => x.ex_dato.localeCompare(y.ex_dato))
+      .map(s => formaterDato(s.ex_dato));
+    if (!datoer.length) return null;
+    return {
+      tekst: datoer.length === 1 ? datoer[0]
+        : datoer.slice(0, -1).join(', ') + ' og ' + datoer[datoer.length - 1],
+      endelse: datoer.length > 1 ? 'ene' : 'en',
+    };
+  };
+  const setninger = [];
+  const lagt = liste(a.utbytte_supplert || []);
+  if (lagt) setninger.push(`Utbetaling${lagt.endelse} med ex-dato ${lagt.tekst} mangler i Yahoos utbytteserie og er hentet fra selskapets melding til Oslo Børs.`);
+  // Kronebeløpet selskapet selv fastsatte, der Yahoo hadde et foreløpig beløp
+  // (korriger_med_nok_omregning() i fetch_stocks.py, Equinor 2021–2023).
+  const rettet = liste(a.utbytte_korrigert || []);
+  if (rettet) setninger.push(`For utbetaling${rettet.endelse} med ex-dato ${rettet.tekst} brukes kronebeløpet selskapet meldte til Oslo Børs. Yahoo hadde et foreløpig beløp.`);
+  return setninger.join(' ');
 }
 
 /** Kobler velgeren i en rendret boks. Én lytter på beholderen — ingen inline onclick. */

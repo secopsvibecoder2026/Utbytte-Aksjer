@@ -1414,6 +1414,130 @@ def suppler_utbytteserie(dividends, funn, pris, i_dag, splitter=()):
     return pd.concat([dividends, tillegg]).sort_index(), nye
 
 
+# ── KRONEBELØPET SELSKAPET SELV FASTSETTER (2026-10-22) ──────────────────────
+#
+# Equinor vedtar utbyttet i dollar og fastsetter kronebeløpet etter
+# registreringsdatoen, fra snittet av Norges Banks dollarkurs i sju børsdager.
+# Kronebeløpet kommer i en egen melding om lag en uke etter ex-dato. Yahoo
+# legger inn et foreløpig beløp på ex-dagen og oppdaterer det ikke alltid:
+# tre av fire utbetalinger i 2023 sto med 8,42 kr, mens selskapet meldte 9,02,
+# 9,58 og 9,41 kr. Året ble 35,13 kr mot 37,85, og 2021 og 2022 hadde to
+# utbetalinger med samme feil. Det gikk inn i 5-årssnittet, veksten og
+# historikktabellen på Norges mest eide aksje. Artikkelagenten fant det da den
+# kontrollerte beløpene mot meldingene. Tallkontrollen kunne ikke finne det,
+# for den sammenligner med Yahoos egen serie.
+#
+# Målt 22.10.2026 over 2021–2026 for hele katalogen: Equinor og Elopak melder
+# kronebeløpet slik. Høegh Autoliners gjorde det én gang i 2024 uten et beløp
+# som lar seg lese, og Bakkafrost én gang i 2021.
+#
+# Vaktene:
+#   * Utstederen må ha en slik melding i den ferske lista. Da slås de fem siste
+#     årene opp, ellers koster det ingenting.
+#   * Meldingen må nevne valutakursen og ha ett entydig beløp per aksje.
+#   * Den må komme innen NOK_OMREGNING_DAGER etter ex-datoen, og bare én
+#     Yahoo-utbetaling kan ligge i det vinduet.
+#   * Avviket må være under NOK_OMREGNING_MAKS_AVVIK. Et større avvik er
+#     heller en annen utbetaling enn et foreløpig beløp.
+
+NOK_OMREGNING_AR_BAKOVER = 5
+NOK_OMREGNING_DAGER = 30
+NOK_OMREGNING_MIN_AVVIK = 0.005
+NOK_OMREGNING_MAKS_AVVIK = 0.25
+
+_NOK_OMREGNING_TITTEL = re.compile(
+    r"\b(?:announcement|annonsering|information\s+about|payment)\b.*"
+    r"\b(?:dividend|utbytte|kontantutbytte)\b.*\bNOK\b", re.I)
+_VALUTAKURS_RE = re.compile(
+    r"fixing\s+rate|exchange\s+rate|currency\s+rate|valutakurs|"
+    r"\b(?:USD|EUR|DKK|SEK|GBP)\s*/?\s*NOK\b|\bNOK\s*/\s*(?:USD|EUR|DKK|SEK|GBP)\b", re.I)
+# «… is consequently NOK 9.0159 per share», og før 2022 uten «per share»
+# («Second quarter 2021 dividend per share is consequently NOK 1.5572.»).
+_NOK_FASTSATT_RE = re.compile(
+    r"\b(?:accordingly|consequently|will\s+be|følgelig|dermed)\s+"
+    r"(?:NOK\s*(\d+[.,]\d+)|(\d+[.,]\d+)\s*NOK)(?![\d.,]*\s*(?:m\b|mn\b|mill|bn\b|billion|mrd))", re.I)
+
+
+def parse_nok_omregning(tekst):
+    """Kronebeløpet per aksje i en melding om omregnet utbytte, eller None.
+
+    Meldingen må nevne valutakursen, og beløpet må stå entydig
+    («… is consequently NOK 9.0159 per share»).
+    """
+    if not tekst or not _VALUTAKURS_RE.search(tekst):
+        return None
+    belop = {_tall(a or b) for a, b in _NOK_FASTSATT_RE.findall(tekst)}
+    if len(belop) != 1:
+        return None
+    b = belop.pop()
+    return b if b > 0 else None
+
+
+def nok_omregninger(ticker, i_dag, ar_bakover=NOK_OMREGNING_AR_BAKOVER):
+    """Kronebeløpene utstederen selv har meldt de siste årene.
+
+    Liste av {"publisert", "belop", "melding_id"}. Tom når utstederen ikke
+    melder kronebeløpet slik, eller når NewsWeb ikke svarer.
+    """
+    try:
+        if not any(_NOK_OMREGNING_TITTEL.search(m.get("title") or "")
+                   for m in _newsweb_meldinger(ticker)):
+            return []
+        ut, sett = [], set()
+        for y in range(i_dag.year - ar_bakover, i_dag.year + 1):
+            meldinger = _newsweb_meldinger_periode(
+                ticker, datetime.date(y, 1, 1), datetime.date(y, 12, 31))
+            for msg in meldinger:
+                tittel = msg.get("title") or ""
+                if not _NOK_OMREGNING_TITTEL.search(tittel) or _RETTELSE_RE.search(tittel):
+                    continue
+                pub = _oslo_dato(msg.get("publishedTime"))
+                # Samme melding på norsk og engelsk samme dag: én er nok.
+                if not pub or pub > i_dag or pub in sett:
+                    continue
+                belop = parse_nok_omregning(_newsweb_tekst(msg.get("messageId")))
+                if belop:
+                    sett.add(pub)
+                    ut.append({"publisert": pub.isoformat(), "belop": belop,
+                               "melding_id": str(msg.get("messageId"))})
+        return sorted(ut, key=lambda x: x["publisert"])
+    except Exception as e:
+        print(f"    Advarsel NewsWeb kronebeløp [{ticker}]: {e}")
+        return []
+
+
+def korriger_med_nok_omregning(dividends, omregninger):
+    """(serie, korrigert): Yahoos beløp byttet ut med kronebeløpet selskapet meldte.
+
+    Hver melding knyttes til Yahoo-utbetalingen med ex-dato inntil
+    NOK_OMREGNING_DAGER før publiseringen. Ligger det mer enn én der, er det
+    uklart hvilken meldingen gjelder, og ingenting endres. `korrigert` lagres i
+    `utbytte_korrigert`, så det synes i dataene hvor et tall kom fra.
+    """
+    if dividends is None or dividends.empty or not omregninger:
+        return dividends, []
+    serie = dividends.copy()
+    datoer = [d.date() if hasattr(d, "date") else d for d in serie.index]
+    korrigert = []
+    for o in omregninger:
+        pub = datetime.date.fromisoformat(o["publisert"])
+        i_vindu = [i for i, d in enumerate(datoer)
+                   if 0 <= (pub - d).days <= NOK_OMREGNING_DAGER]
+        if len(i_vindu) != 1:
+            continue
+        i = i_vindu[0]
+        yahoo = float(serie.iloc[i])
+        if yahoo <= 0:
+            continue
+        avvik = abs(yahoo / o["belop"] - 1)
+        if avvik < NOK_OMREGNING_MIN_AVVIK or avvik > NOK_OMREGNING_MAKS_AVVIK:
+            continue
+        serie.iloc[i] = o["belop"]
+        korrigert.append({"ex_dato": datoer[i].isoformat(), "yahoo": round(yahoo, 4),
+                          "belop": round(o["belop"], 4), "melding_id": o.get("melding_id")})
+    return serie, korrigert
+
+
 # ── TILBAKEBETALING AV INNBETALT KAPITAL ──────────────────────────────────────
 #
 # Noen selskaper betaler ikke utbytte i skattemessig forstand, men tilbake
@@ -1859,16 +1983,26 @@ def bor_hente_utbyttesplitt(a):
 def supplert_fotnote(a):
     """Sier hvilke utbetalinger som er hentet fra børsmeldingen, ikke fra Yahoo.
 
-    Står bare på sidene der suppler_utbytteserie() har lagt noe til.
+    Står bare på sidene der suppler_utbytteserie() har lagt noe til, eller der
+    korriger_med_nok_omregning() har byttet ut Yahoos beløp.
     """
+    def liste(rader):
+        datoer = [_fmt_dato(s["ex_dato"]) for s in sorted(rader, key=lambda s: s["ex_dato"])]
+        tekst = datoer[0] if len(datoer) == 1 else ", ".join(datoer[:-1]) + " og " + datoer[-1]
+        return tekst, "ene" if len(datoer) > 1 else "en"
+
+    setninger = []
     lagt = [s for s in a.get("utbytte_supplert") or [] if s.get("ex_dato")]
-    if not lagt:
-        return ""
-    datoer = [_fmt_dato(s["ex_dato"]) for s in sorted(lagt, key=lambda s: s["ex_dato"])]
-    liste = datoer[0] if len(datoer) == 1 else ", ".join(datoer[:-1]) + " og " + datoer[-1]
-    flertall = len(datoer) > 1
-    return (f"Utbetaling{'ene' if flertall else 'en'} med ex-dato {liste} mangler i Yahoos "
-            f"utbytteserie og er hentet fra selskapets melding til Oslo Børs.")
+    if lagt:
+        datoer, endelse = liste(lagt)
+        setninger.append(f"Utbetaling{endelse} med ex-dato {datoer} mangler i Yahoos "
+                         f"utbytteserie og er hentet fra selskapets melding til Oslo Børs.")
+    rettet = [s for s in a.get("utbytte_korrigert") or [] if s.get("ex_dato")]
+    if rettet:
+        datoer, endelse = liste(rettet)
+        setninger.append(f"For utbetaling{endelse} med ex-dato {datoer} brukes kronebeløpet "
+                         f"selskapet meldte til Oslo Børs. Yahoo hadde et foreløpig beløp.")
+    return " ".join(setninger)
 
 
 def lag_betalt_boks(a, nf):
@@ -2956,6 +3090,16 @@ def hent_aksje(meta):
                 print(f"    {ticker}: la til {s['belop']} kr med ex-dato {s['ex_dato']} "
                       f"fra NewsWeb (mangler hos Yahoo)")
 
+        # Kronebeløpet selskapet selv fastsatte, der Yahoo har et foreløpig
+        # beløp. Se kommentaren over NOK_OMREGNING_AR_BAKOVER.
+        utbytte_korrigert = []
+        if not dividends.empty:
+            dividends, utbytte_korrigert = korriger_med_nok_omregning(
+                dividends, nok_omregninger(ticker, today.date()))
+            for k in utbytte_korrigert:
+                print(f"    {ticker}: {k['ex_dato']} rettet fra {k['yahoo']} til {k['belop']} kr "
+                      f"(selskapets kronebeløp, NewsWeb {k['melding_id']})")
+
         if not dividends.empty:
             tz = dividends.index.tz
             y_start = datetime.datetime(last_complete_year, 1, 1, tzinfo=tz) if tz else datetime.datetime(last_complete_year, 1, 1)
@@ -3213,6 +3357,7 @@ def hent_aksje(meta):
             "utbytte_12m_antall": utbytte_12m_antall,
             "utbytte_12m_liste": utbytte_12m_liste,
             "utbytte_supplert": utbytte_supplert,
+            "utbytte_korrigert": utbytte_korrigert,
             "utbytte_per_ar": utbytte_per_ar,
             "utbytte_forste_ar": utbytte_forste_ar,
             "historiske_utbytter": historiske_utbytter,
