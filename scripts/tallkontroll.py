@@ -192,7 +192,16 @@ def med_supplert(rad, utbytter):
     tillagt betaling tas bare med når rådata ikke har en innen ti dager, så
     ingenting telles to ganger.
     """
-    ut = list(utbytter)
+    # Kronebeløpet selskapet selv meldte, der Yahoo har et foreløpig beløp
+    # (korriger_med_nok_omregning() i fetch_stocks.py). Uten dette ville
+    # kontrollen melde Equinors rettede utbetalinger som avvik hver uke.
+    rettet = {}
+    for k in rad.get("utbytte_korrigert") or []:
+        try:
+            rettet[str(k.get("ex_dato"))[:10]] = float(k.get("belop"))
+        except (TypeError, ValueError):
+            continue
+    ut = [(d, rettet.get(d, v)) for d, v in utbytter]
     for s_ in rad.get("utbytte_supplert") or []:
         try:
             d = datetime.date.fromisoformat(str(s_.get("ex_dato"))[:10])

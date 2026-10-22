@@ -3225,6 +3225,75 @@ class TestHullaar(unittest.TestCase):
                                                "2023-04-27T06:00:00Z"))
 
 
+class TestNokOmregning(unittest.TestCase):
+    """Kronebeløpet selskapet selv fastsetter, der Yahoo har et foreløpig beløp.
+
+    Equinor 2023: Yahoo hadde 8,42 kr for tre utbetalinger, selskapet meldte
+    9,02, 9,58 og 9,41 kr (NewsWeb 580174, 591103, 597337). Tekstene under er
+    forkortet fra meldingenes form, uten kontaktpersoner.
+    """
+
+    NY = ("The NOK cash dividend per share is based on average USDNOK fixing rate from "
+          "Norges Bank in the period plus/minus three business days from record date. "
+          "Total cash dividend for first quarter 2026 is consequently NOK 3.6882 per share.")
+    GAMMEL = ("The NOK dividend per share is based on average USDNOK fixing rate from Norges "
+              "Bank. Second quarter 2021 dividend per share is consequently NOK 1.5572.")
+    NORSK = ("Utbytte per aksje i NOK er basert på gjennomsnittlig USDNOK valutakurs fra "
+             "Norges Bank. Utbyttet er følgelig NOK 9,0159 per aksje.")
+
+    def serie(self, verdier):
+        import pandas as pd
+        idx = pd.DatetimeIndex([pd.Timestamp(d) for d in verdier]).tz_localize("Europe/Oslo")
+        return pd.Series(list(verdier.values()), index=idx, dtype="float64")
+
+    def test_parser_ny_gammel_og_norsk_form(self):
+        self.assertEqual(fs.parse_nok_omregning(self.NY), 3.6882)
+        self.assertEqual(fs.parse_nok_omregning(self.GAMMEL), 1.5572)
+        self.assertEqual(fs.parse_nok_omregning(self.NORSK), 9.0159)
+
+    def test_krever_valutakurs_og_ett_belop(self):
+        # Et selskap som vedtar i kroner, nevner ingen valutakurs.
+        self.assertIsNone(fs.parse_nok_omregning(
+            "The board resolved a dividend that will be NOK 3.00 per share."))
+        self.assertIsNone(fs.parse_nok_omregning(
+            self.NY + " The second installment is accordingly NOK 0.5000 per share."))
+        self.assertIsNone(fs.parse_nok_omregning("fixing rate. Proceeds will be NOK 2.5 billion."))
+        self.assertIsNone(fs.parse_nok_omregning(""))
+
+    def test_retter_forelopige_belop_for_equinor_2023(self):
+        s = self.serie({"2023-01-09": 8.4217, "2023-05-11": 8.4217,
+                        "2023-08-14": 8.4217, "2023-11-14": 9.8519})
+        meld = [{"publisert": "2023-01-16", "belop": 9.0159, "melding_id": "580174"},
+                {"publisert": "2023-05-22", "belop": 9.5753, "melding_id": "591103"},
+                {"publisert": "2023-08-21", "belop": 9.4091, "melding_id": "597337"},
+                {"publisert": "2023-11-21", "belop": 9.8519, "melding_id": "604509"}]
+        ny, rettet = fs.korriger_med_nok_omregning(s, meld)
+        self.assertAlmostEqual(float(ny.sum()), 37.8522, places=4)
+        self.assertEqual([r["ex_dato"] for r in rettet], ["2023-01-09", "2023-05-11", "2023-08-14"])
+        self.assertEqual(rettet[0]["yahoo"], 8.4217)
+        self.assertAlmostEqual(float(s.sum()), 35.1170, places=4)   # originalen er urørt
+
+    def test_uklart_eller_for_stort_avvik_endrer_ingenting(self):
+        # To utbetalinger i vinduet: uklart hvilken meldingen gjelder.
+        s = self.serie({"2025-10-10": 0.50, "2025-10-15": 0.60})
+        meld = [{"publisert": "2025-10-23", "belop": 0.55}]
+        self.assertEqual(fs.korriger_med_nok_omregning(s, meld)[1], [])
+        # Over 25 % avvik er heller en annen utbetaling enn et foreløpig beløp.
+        s = self.serie({"2025-10-15": 0.50})
+        self.assertEqual(fs.korriger_med_nok_omregning(s, [{"publisert": "2025-10-23", "belop": 1.00}])[1], [])
+        # Meldingen kom for lenge etter ex-datoen.
+        self.assertEqual(fs.korriger_med_nok_omregning(s, [{"publisert": "2025-12-23", "belop": 0.52}])[1], [])
+        # Under en halv prosent er avrunding, ikke et foreløpig beløp.
+        self.assertEqual(fs.korriger_med_nok_omregning(s, [{"publisert": "2025-10-23", "belop": 0.501}])[1], [])
+
+    def test_fotnote_nevner_rettede_utbetalinger(self):
+        a = {"utbytte_korrigert": [{"ex_dato": "2023-01-09", "yahoo": 8.42, "belop": 9.02}]}
+        tekst = fs.supplert_fotnote(a)
+        self.assertIn("kronebeløpet selskapet meldte til Oslo Børs", tekst)
+        self.assertIn("foreløpig beløp", tekst)
+        self.assertNotIn("mangler i Yahoos", tekst)
+
+
 class TestAnnetSelskap(unittest.TestCase):
     """En ex-melding om et annet selskap er ikke vår utbetaling (20.10.2026).
 
