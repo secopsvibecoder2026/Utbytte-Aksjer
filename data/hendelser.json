@@ -3651,22 +3651,26 @@
     {
       "ticker": "GJF",
       "dato": "2026-10-23",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/684673"
     },
     {
       "ticker": "MEDI",
       "dato": "2026-10-23",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/684683"
     },
     {
       "ticker": "TOM",
       "dato": "2026-10-23",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/684671"
     },
     {
       "ticker": "ZAL",
       "dato": "2026-10-23",
-      "type": "rapport"
+      "type": "rapport",
+      "url_forsok": 1
     },
     {
       "ticker": "ELO",
@@ -4304,6 +4308,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "GJF",
+      "dato": "2027-01-27",
+      "type": "rapport"
+    },
+    {
       "ticker": "PROT",
       "dato": "2027-01-28",
       "type": "rapport"
@@ -4369,6 +4378,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "TOM",
+      "dato": "2027-02-12",
+      "type": "rapport"
+    },
+    {
       "ticker": "YAR",
       "dato": "2027-02-12",
       "type": "rapport"
@@ -4384,5 +4398,5 @@
       "type": "rapport"
     }
   ],
-  "sist_oppdatert": "2026-10-22"
+  "sist_oppdatert": "2026-10-23"
 }
