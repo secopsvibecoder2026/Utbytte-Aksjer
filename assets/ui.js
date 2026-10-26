@@ -979,9 +979,51 @@ function stabileAr(a) {
 // 2026-10-19: «Stabil inntekt» og «Lav risiko» sto ved «kuttet før»).
 const KUTT_ANDEL = 0.85;
 
+// Særutbytte kontrollert mot børsmeldingen (saerutbytte i aksjer.json, fra
+// tickers.json). Speiler saerutbytte_per_ar(), ordinaer_per_ar() og
+// ordinaer_historikk() i fetch_stocks.py (tallkontrollen 2026-10-26: VEND).
+function saerutbyttePerAr(a) {
+  const ut = {};
+  for (const s of (a && a.saerutbytte) || []) {
+    const ar = Number(String(s.ex_dato || '').slice(0, 4));
+    if (ar && s.belop > 0) ut[ar] = (ut[ar] || 0) + s.belop;
+  }
+  return ut;
+}
+function ordinaerPerAr(a) {
+  const saer = saerutbyttePerAr(a);
+  const ut = {};
+  for (const [k, v] of Object.entries((a && a.utbytte_per_ar) || {})) {
+    ut[k] = Math.max((Number(v) || 0) - (saer[Number(k)] || 0), 0);
+  }
+  return ut;
+}
+function ordinaerHistorikk(a) {
+  const saer = saerutbyttePerAr(a);
+  return ((a && a.historiske_utbytter) || []).map(h => (saer[h.ar] && h.utbytte
+    ? { ...h, utbytte: Math.max(h.utbytte - saer[h.ar], 0) } : h));
+}
+// (år, kroner) for en årlig betaler som har betalt årets utbytte. Speiler
+// aarets_arsutbytte() (TINDE 9,00 → 4,90 i 2026).
+function aaretsArsutbytte(a, iDag) {
+  if (!a || a.frekvens !== 'Årlig') return null;
+  const dag = iDag || new Date();
+  const iaar = dag.getFullYear();
+  const ex = String(a.ex_dato || '');
+  if (ex.slice(0, 4) === String(iaar) && ex >= lokalIsoDato(dag)) return null;
+  const rad = ordinaerHistorikk(a).find(h => h.ar === iaar);
+  return rad && rad.utbytte > 0 ? [iaar, rad.utbytte] : null;
+}
+function aaretsNedgang(a, iDag, grense = 0.95) {
+  const aarets = aaretsArsutbytte(a, iDag);
+  if (!aarets) return null;
+  const fjor = Number(ordinaerPerAr(a)[String(aarets[0] - 1)]) || 0;
+  return fjor > 0 && aarets[1] < grense * fjor ? [aarets[0], aarets[1], aarets[0] - 1, fjor] : null;
+}
+
 function utbytteKutt(a, iDag) {
   const iaar = (iDag || new Date()).getFullYear();
-  const hele = (a.historiske_utbytter || [])
+  const hele = ordinaerHistorikk(a)
     .filter(h => h.ar && h.ar < iaar && h.utbytte)
     .sort((x, y) => x.ar - y.ar);
   const kutt = [];
@@ -1021,11 +1063,13 @@ const VEKST_TOPP_ANDEL = 0.9;
 // Over denne årlige veksten skrives ingen doblingstid (VEKST_FRAMSKRIV_MAKS i fetch_stocks.py).
 const VEKST_FRAMSKRIV_MAKS = 25;
 
-function vekstFraTopp(a) {
-  const ar = Object.entries(a.utbytte_per_ar || {})
+function vekstFraTopp(a, iDag) {
+  const ar = Object.entries(ordinaerPerAr(a))
     .map(([k, v]) => [Number(k), Number(v) || 0])
     .filter(([k]) => Number.isFinite(k))
     .sort((x, y) => x[0] - y[0]);
+  const aarets = aaretsArsutbytte(a, iDag);
+  if (aarets && ar.length && aarets[0] > ar[ar.length - 1][0]) ar.push(aarets);
   if (ar.length < 3) return null;
   const [sisteAr, siste] = ar[ar.length - 1];
   const [toppAr, topp] = ar.slice(1).reduce((m, x) => (x[1] > m[1] ? x : m));
@@ -1043,6 +1087,7 @@ const HENDELSE_TITTEL = {
   avvikling: 'Virksomheten skal avvikles',
   bytte_av_marked: 'Aksjen skal flytte til Euronext Growth',
   bytte_av_hjemland: 'Selskapet flytter til et annet land',
+  fusjon_overtar: 'Selskapet skal overta et annet ved fusjon',
 };
 const HENDELSE_UTEN_MAL = new Set(['oppkjop', 'fusjon', 'avvikling']);
 
@@ -1060,6 +1105,7 @@ const HENDELSE_KORT = {
   avvikling: 'avvikles',
   bytte_av_marked: 'flytter til Growth',
   bytte_av_hjemland: 'bytter hjemland',
+  fusjon_overtar: 'overtar ved fusjon',
 };
 function hendelseMerke(a) {
   const h = a && a.hendelse;
@@ -1086,7 +1132,7 @@ function beregnMal(a) {
   const mål = [];
   if (gyldigHendelse(a.hendelse) && HENDELSE_UTEN_MAL.has(a.hendelse.type)) return mål;
   if (_DEFENSIVE_SEKTORER.has(a.sektor) && stabileAr(a) >= 7 && (a.payout_ratio || 0) < 80 && (a.payout_ratio || 0) > 0
-      && !utbytteKutt(a).length) {
+      && !utbytteKutt(a).length && !aaretsNedgang(a, null, KUTT_ANDEL)) {
     mål.push('stabil');
   }
   if ((a.utbytte_vekst_5ar || 0) > 3 && !vekstFraTopp(a)) mål.push('vekst');
@@ -1133,7 +1179,16 @@ function forklarRisiko(a) {
   else                  punkter.push(`Lang utbyttehistorikk (${lengde} år på rad)`);
 
   const kutt = utbytteKutt(a);
-  if (kutt.length) punkter.push(`Utbyttet er satt ned før, sist i ${kutt[kutt.length - 1][1].ar}`);
+  if (kutt.length) {
+    // WEST: «satt ned før, sist i 2023» over 0,00 kr for 2024 og 2025.
+    const sistKutt = kutt[kutt.length - 1][1].ar;
+    const iaar = new Date().getFullYear();
+    const pauser = Object.entries(a.utbytte_per_ar || {})
+      .map(([k, v]) => [Number(k), Number(v) || 0])
+      .filter(([y, v]) => y > sistKutt && y < iaar && v <= 0).map(([y]) => y).sort();
+    const liste = pauser.length > 1 ? pauser.slice(0, -1).join(', ') + ' og ' + pauser[pauser.length - 1] : String(pauser[0] || '');
+    punkter.push(`Utbyttet er satt ned før, sist i ${sistKutt}` + (pauser.length ? `, og for ${liste} har vi ikke registrert noe utbytte` : ''));
+  }
 
   if (payout > 90)       punkter.push(`Svært høy payout ratio (${fmtPst(payout, 0)}) — lite buffer ved inntjeningsfall`);
   else if (payout > 75)  punkter.push(`Høy payout ratio (${fmtPst(payout, 0)}) — begrenset reinvesteringsevne`);
@@ -4377,12 +4432,24 @@ function modalBetaltBoks(a) {
         <span class="text-lg font-semibold betalt-yield">${v.yield}</span>
       </div>
       <p class="text-xs text-gray-500 dark:text-gray-400 mt-1 betalt-merknad">${v.merknad}</p>
-      <p class="text-xs text-gray-400 dark:text-gray-500 mt-2">Summert etter ex-dato, inkludert eventuelle ekstraordinære utbytter. Yield mot dagens kurs.${supplertFotnote(a) ? ' ' + escHtml(supplertFotnote(a)) : ''}</p>
+      <p class="text-xs text-gray-400 dark:text-gray-500 mt-2">Summert etter ex-dato, inkludert eventuelle ekstraordinære utbytter. Yield mot dagens kurs.${supplertFotnote(a) ? ' ' + escHtml(supplertFotnote(a)) : ''}${saerutbytteFotnote(a) ? ' ' + escHtml(saerutbytteFotnote(a)) : ''}</p>
     </div>`;
 }
 
 // Utbetalinger Yahoo mangler og fetch_stocks.py har hentet fra børsmeldingen
 // (suppler_utbytteserie()). Samme setning som supplert_fotnote() på aksjesiden.
+// Speiler saerutbytte_fotnote() i fetch_stocks.py.
+function saerutbytteFotnote(a, iDag) {
+  const iaar = (iDag || new Date()).getFullYear();
+  const saer = Object.entries(saerutbyttePerAr(a)).map(([y, v]) => [Number(y), v])
+    .filter(([y]) => y >= iaar - 5 && y < iaar).sort((x, y) => x[0] - y[0]);
+  if (!saer.length) return '';
+  const ledd = saer.map(([y, v]) => `${fmtTall(v, 2)} kr i ${y}`);
+  const liste = ledd.length === 1 ? ledd[0] : ledd.slice(0, -1).join(', ') + ' og ' + ledd[ledd.length - 1];
+  const navn = snittNavn(a);
+  return `Snittene her inkluderer særutbytte på ${liste}. ${navn.charAt(0).toUpperCase() + navn.slice(1)} i nøkkeltallene er regnet uten.`;
+}
+
 function supplertFotnote(a) {
   const liste = rader => {
     const datoer = rader.filter(s => s && s.ex_dato)
@@ -5886,4 +5953,4 @@ function _annBygTopp() {
 }
 
 // Node.js test export
-if (typeof module !== 'undefined') module.exports = { markedsplassTekst, hendelseMerke, nyMilepel, delLenkeData, pentAkse, fmtPst, fmtTall, dagerTil, dagerTilTekst, datoKort, aksjerTekst, snittNavn, utbytteKutt, modalHendelse, beregnRisiko, forklarRisiko, vekstFraTopp, beregnMal, forklarMal, bevegelserOverskrift, utbytteRekke, stabileAr, exForbeholdGjelder, utbyttePerioder, vistOverBetalt, modalBetaltBoks, supplertFotnote, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, fmt, formaterDato, yieldKlasse, payoutKlasse, vekstKlasse, beregnScore, beregnBaerekraft, beregnYtdInntekt, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote, kapitalAndel, modalKapitalNote, kapitalSkattTekst, aksjerMedExIMaaned, beregnHvisKjopt, hvisStartAar, beregnAskMotVanlig, fmtUtbytte, sisteUtbytteTekst, modalOmSelskapet, vekslOmSelskapet, dripGevinst, _simulerKalkulator, askStatus, askTekst, modalKontoer };
+if (typeof module !== 'undefined') module.exports = { saerutbytteFotnote, aaretsArsutbytte, aaretsNedgang, ordinaerPerAr, ordinaerHistorikk, markedsplassTekst, hendelseMerke, nyMilepel, delLenkeData, pentAkse, fmtPst, fmtTall, dagerTil, dagerTilTekst, datoKort, aksjerTekst, snittNavn, utbytteKutt, modalHendelse, beregnRisiko, forklarRisiko, vekstFraTopp, beregnMal, forklarMal, bevegelserOverskrift, utbytteRekke, stabileAr, exForbeholdGjelder, utbyttePerioder, vistOverBetalt, modalBetaltBoks, supplertFotnote, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, fmt, formaterDato, yieldKlasse, payoutKlasse, vekstKlasse, beregnScore, beregnBaerekraft, beregnYtdInntekt, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote, kapitalAndel, modalKapitalNote, kapitalSkattTekst, aksjerMedExIMaaned, beregnHvisKjopt, hvisStartAar, beregnAskMotVanlig, fmtUtbytte, sisteUtbytteTekst, modalOmSelskapet, vekslOmSelskapet, dripGevinst, _simulerKalkulator, askStatus, askTekst, modalKontoer };

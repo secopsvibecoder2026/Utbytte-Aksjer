@@ -3692,5 +3692,155 @@ class TestSitemapLastmod(unittest.TestCase):
         self.assertIn("<loc>https://exday.no/om/</loc>\n    <lastmod>2026-10-26</lastmod>", xml)
 
 
+class TestTallkontroll2610(unittest.TestCase):
+    """Funnene fra tallkontrollen 2026-10-26."""
+
+    D = datetime.date(2026, 10, 26)
+
+    def tinde(self, **kw):
+        a = {
+            "ticker": "TINDE", "navn": "Tinde Sparebank", "frekvens": "Årlig",
+            "sektor": "Finans", "payout_ratio": 75, "utbytte_yield": 4.0,
+            "historiske_utbytter": [
+                {"ar": 2022, "utbytte": 7.74}, {"ar": 2023, "utbytte": 8.37},
+                {"ar": 2024, "utbytte": 7.63}, {"ar": 2025, "utbytte": 9.00},
+                {"ar": 2026, "utbytte": 4.90, "maaneder": [3]},
+            ],
+            "utbytte_per_ar": {"2021": 7.0, "2022": 7.74, "2023": 8.37, "2024": 7.63, "2025": 9.0},
+            "utbytte_vekst_5ar": 29.0,
+        }
+        a.update(kw)
+        return a
+
+    def test_aarets_utbytte_for_aarlig_betaler(self):
+        self.assertEqual(fs.aarets_arsutbytte(self.tinde(), self.D), (2026, 4.9))
+        self.assertIsNone(fs.aarets_arsutbytte(self.tinde(frekvens="Kvartalsvis"), self.D))
+        # En meldt ex-dato senere i år: mer kan komme.
+        self.assertIsNone(fs.aarets_arsutbytte(self.tinde(ex_dato="2026-11-20"), self.D))
+        self.assertEqual(fs.aarets_nedgang(self.tinde(), self.D), (2026, 4.9, 2025, 9.0))
+
+    def test_tinde_mister_vekstmerket(self):
+        topp = fs.vekst_fra_topp(self.tinde(), self.D)
+        self.assertEqual(topp, (2025, 9.0, 2026, 4.9))
+
+    def test_nedtur_sier_ikke_ikke_kuttet(self):
+        # Relativt til i år: _lag_nedtur_test() bruker dagens dato.
+        i = datetime.date.today().year
+        a = self.tinde(
+            historiske_utbytter=[{"ar": i - 4, "utbytte": 7.74}, {"ar": i - 3, "utbytte": 8.37},
+                                 {"ar": i - 2, "utbytte": 8.37}, {"ar": i - 1, "utbytte": 9.00},
+                                 {"ar": i, "utbytte": 4.90}],
+            utbytte_per_ar={str(i - 1): 9.0})
+        side = fs._lag_nedtur_test(a)
+        self.assertNotIn("ikke kuttet", side)
+        self.assertIn(f"For {i} er det betalt 4,90 kroner per aksje, mot 9,00 kroner for {i - 1}", side)
+
+    def test_liten_nedgang_er_ikke_ikke_kuttet(self):
+        # 2023 → 2024 er −8,9 %: historikkteksten sier «satt ned én gang».
+        a = self.tinde(historiske_utbytter=self.tinde()["historiske_utbytter"][:-1])
+        self.assertIn("satt ned én gang", fs._lag_utbyttehistorikk_tekst(a))
+        side = fs._lag_nedtur_test(a)
+        self.assertNotIn("ikke kuttet", side)
+        self.assertIn("aldri med mer enn 15 %", side)
+
+    def test_aar_uten_utbytte_er_ikke_ikke_kuttet(self):
+        a = self.tinde(historiske_utbytter=[{"ar": 2021, "utbytte": 5.0}, {"ar": 2023, "utbytte": 5.0},
+                                            {"ar": 2024, "utbytte": 5.0}, {"ar": 2025, "utbytte": 5.0}])
+        side = fs._lag_nedtur_test(a)
+        self.assertNotIn("ikke kuttet", side)
+        self.assertIn("For 2022 har vi ikke registrert noe utbytte", side)
+
+    def test_historikkteksten_nevner_aarets_utbytte(self):
+        tekst = fs._lag_utbyttehistorikk_tekst(self.tinde(), 2026)
+        self.assertIn("For 2026 er det betalt 4,90 kroner per aksje, mot 9,00 kroner for 2025.", tekst)
+
+    def vend(self):
+        return {
+            "ticker": "VEND", "frekvens": "Årlig", "pris": 240.0, "utbytte_12m": 2.5,
+            "utbytte_forste_ar": 2015, "utbytte_vekst_5ar": 22.3,
+            "saerutbytte": [{"ex_dato": "2024-05-30", "belop": 77.10, "melding": "620125"},
+                            {"ex_dato": "2024-09-03", "belop": 8.56, "melding": "626907"},
+                            {"ex_dato": "2025-06-16", "belop": 2.22, "melding": "648900"}],
+            "utbytte_per_ar": {"2021": 2.0, "2022": 2.0, "2023": 2.0, "2024": 87.66, "2025": 4.47},
+            "historiske_utbytter": [{"ar": y, "utbytte": v} for y, v in
+                                    ((2021, 2.0), (2022, 2.0), (2023, 2.0), (2024, 87.66), (2025, 4.47))],
+        }
+
+    def test_saerutbytte_er_ikke_kutt(self):
+        a = self.vend()
+        self.assertEqual(fs.ordinaer_per_ar(a)["2024"], 2.0)
+        self.assertEqual(fs.ordinaer_per_ar(a)["2025"], 2.25)
+        self.assertEqual(fs.utbyttekutt(a, 2026), [])
+        self.assertNotIn("lite forutsigbar", fs._lag_utbyttehistorikk_tekst(a, 2026))
+        self.assertIn("Tallene er uten særutbytte, som var 85,66 kroner i 2024 og 2,22 kroner i 2025.",
+                      fs._lag_utbyttehistorikk_tekst(a, 2026))
+
+    def test_snitt_og_vekst_uten_saerutbytte(self):
+        a = self.vend()
+        fs.sett_snitt_felter(a)
+        self.assertAlmostEqual(a["snitt_yield_5ar"], round(2.05 / 240 * 100, 2))
+        fs.sett_saerutbytte(a, a["saerutbytte"], self.D)
+        self.assertEqual(a["utbytte_vekst_5ar"], 3.0)
+        self.assertIn("85,66 kr i 2024", fs.saerutbytte_fotnote(a, 2026))
+
+    def test_saerutbyttene_i_tickers_er_kontrollert(self):
+        with open(os.path.join(os.path.dirname(__file__), "..", "data", "tickers.json"),
+                  encoding="utf-8") as f:
+            alle = [t for t in json.load(f) if t.get("saerutbytte")]
+        self.assertTrue(alle)
+        for t in alle:
+            for s_ in t["saerutbytte"]:
+                with self.subTest(ticker=t["ticker"], ex=s_.get("ex_dato")):
+                    datetime.date.fromisoformat(s_["ex_dato"])
+                    self.assertGreater(s_["belop"], 0)
+                    self.assertRegex(s_["melding"], r"^\d+$")
+
+    def test_aarets_maaneder_naar_aaret_er_komplett(self):
+        var = {"frekvens": "Kvartalsvis", "ex_dato": "2026-11-17",
+               "historiske_utbytter": [{"ar": 2024, "maaneder": [2, 4, 7, 10]},
+                                       {"ar": 2025, "maaneder": [2, 4, 8, 11]},
+                                       {"ar": 2026, "maaneder": [2, 6, 8]}]}
+        self.assertEqual(fs.aarets_maaneder(var, self.D), [2, 6, 8, 11])
+        fs.sett_utbetalingsmaaneder(var, self.D)
+        self.assertEqual(var["utbetalingsmaaneder"], [2, 6, 8, 11])
+        # Uten den meldte novemberdatoen er året ikke komplett.
+        var.pop("ex_dato")
+        self.assertIsNone(fs.aarets_maaneder(var, self.D))
+        fs.sett_utbetalingsmaaneder(var, self.D)
+        self.assertEqual(var["utbetalingsmaaneder"], [2, 4, 8])
+        vistin = {"frekvens": "Årlig", "historiske_utbytter": [
+            {"ar": 2024, "maaneder": [6]}, {"ar": 2025, "maaneder": [6]}, {"ar": 2026, "maaneder": [5]}]}
+        self.assertEqual(fs.aarets_maaneder(vistin, self.D), [5])
+
+    def test_maanedsteksten_sier_hvor_maanedene_kommer_fra(self):
+        var = {"navn": "Vår Energi ASA", "frekvens": "Kvartalsvis", "ex_dato": "2026-11-17",
+               "utbetalingsmaaneder": [2, 6, 8, 11],
+               "historiske_utbytter": [{"ar": 2025, "maaneder": [2, 4, 8, 11]},
+                                       {"ar": 2026, "maaneder": [2, 6, 8]}]}
+        self.assertEqual(fs.maaneder_kilde(var, [2, 6, 8, 11], self.D), ("aar", 2026, 11))
+        west = {"frekvens": "Uregelmessig",
+                "historiske_utbytter": [{"ar": 2022, "maaneder": [3, 6, 9, 12]},
+                                        {"ar": 2023, "maaneder": [2]},
+                                        {"ar": 2026, "maaneder": [2, 10]}]}
+        self.assertEqual(fs.maaneder_kilde(west, [2, 10], self.D), ("aar", 2026, None))
+        stabil = {"frekvens": "Halvårlig",
+                  "historiske_utbytter": [{"ar": y, "maaneder": [5, 11]} for y in (2023, 2024, 2025)]}
+        self.assertEqual(fs.maaneder_kilde(stabil, [5, 11], self.D)[0], "monster")
+
+    def test_faq_nevner_alle_nullaar(self):
+        a = {"ticker": "WEST", "navn": "Western Bulk", "frekvens": "Uregelmessig",
+             "utbytte_forste_ar": 2021,
+             "utbytte_per_ar": {"2021": 1.0, "2022": 28.32, "2023": 3.0, "2024": 0.0, "2025": 0.0},
+             "historiske_utbytter": []}
+        _, ld = fs._lag_faq_seksjon(a, "2026-10-26")
+        self.assertIn("I 2024 og 2025 har vi ikke registrert noe utbytte", ld)
+
+    def test_kuttpunktet_nevner_aar_uten_utbytte_etterpaa(self):
+        a = {"utbytte_per_ar": {"2022": 28.32, "2023": 3.0, "2024": 0.0, "2025": 0.0}}
+        self.assertEqual(fs._pauser_etter_tekst(a, 2023),
+                         ", og for 2024 og 2025 har vi ikke registrert noe utbytte")
+        self.assertEqual(fs._pauser_etter_tekst(a, 2025), "")
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
