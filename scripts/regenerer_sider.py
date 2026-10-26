@@ -145,9 +145,6 @@ def main():
     generer_rapportkalender(aksjer, ROOT)
     print("Topplistesider regenerert")
 
-    generer_sitemap(aksjer, ROOT, today)
-    print("Sitemap oppdatert")
-
     oppdater_app_noscript_liste(aksjer, ROOT)
 
     # Tellingene i de håndskrevne sidene fylles fra samme datasett, så de
@@ -157,6 +154,10 @@ def main():
     oppdater_forside_uka(aksjer, ROOT)
     oppdater_forside_artikler(ROOT)
     oppdater_kalender_maaneder(aksjer, ROOT)
+
+    # Sist: lastmod hasher sidene, så markørene må være fylt først.
+    generer_sitemap(aksjer, ROOT, today)
+    print("Sitemap oppdatert")
 
     print("\nFerdig!")
 

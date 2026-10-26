@@ -108,7 +108,7 @@ jobs:
           git add -u -- '*.html'
           # Legges til enkeltvis: mangler én av dem (f.eks. fordi kontrollen
           # feilet), skal ikke hele datacommiten ryke på en `git add`-feil.
-          for f in data/hentelogg.json data/ticker_status.json data/ticker_varsler.json; do
+          for f in data/hentelogg.json data/ticker_status.json data/ticker_varsler.json data/sitemap_lastmod.json; do
             if [ -f "$f" ]; then git add "$f"; fi
           done
           if git diff --staged --quiet; then

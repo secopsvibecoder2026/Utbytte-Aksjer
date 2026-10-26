@@ -24,7 +24,7 @@ global.document = {
 // ui.js uses alleAksjer global — stub it
 global.alleAksjer = [];
 
-const { hendelseMerke, nyMilepel, delLenkeData, pentAkse, datoKort, aksjerTekst, fmtPst, fmtTall, dagerTil, dagerTilTekst, snittNavn, forklarRisiko, vekstFraTopp, beregnMal, forklarMal, utbytteKutt, beregnRisiko, modalHendelse,
+const { markedsplassTekst, hendelseMerke, nyMilepel, delLenkeData, pentAkse, datoKort, aksjerTekst, fmtPst, fmtTall, dagerTil, dagerTilTekst, snittNavn, forklarRisiko, vekstFraTopp, beregnMal, forklarMal, utbytteKutt, beregnRisiko, modalHendelse,
   fmt,
   formaterDato,
   yieldKlasse,
@@ -1042,8 +1042,16 @@ test('hendelseMerke: kort merke i lista, tomt uten gyldig hendelse', () => {
   global.escHtml = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   assert.match(hendelseMerke({ hendelse: { type: 'avvikling', tekst: 'Flåten selges.' } }), />avvikles</);
   assert.match(hendelseMerke({ hendelse: { type: 'oppkjop', tekst: 'Bud.' } }), />oppkjøp</);
+  assert.match(hendelseMerke({ hendelse: { type: 'bytte_av_hjemland', tekst: 'Til Storbritannia.' } }), />bytter hjemland</);
   assert.equal(hendelseMerke({ hendelse: { type: 'ukjent', tekst: 'x' } }), '');
   assert.equal(hendelseMerke({ hendelse: { type: 'fusjon', tekst: '  ' } }), '');
   assert.equal(hendelseMerke({}), '');
   delete global.escHtml;
+});
+
+test('markedsplassTekst: Growth nevnes når katalogen har Growth-aksjer', () => {
+  assert.equal(markedsplassTekst([{ bors: 'Oslo Børs' }]), 'Oslo Børs');
+  assert.equal(markedsplassTekst([{ bors: 'Oslo Børs' }, { bors: 'Euronext Growth Oslo' }]), 'Oslo Børs og Euronext Growth');
+  assert.equal(markedsplassTekst([]), 'Oslo Børs');
+  assert.equal(markedsplassTekst(null), 'Oslo Børs');
 });
