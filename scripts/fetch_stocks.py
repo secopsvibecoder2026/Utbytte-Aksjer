@@ -1704,6 +1704,9 @@ HENDELSE_TITTEL = {
     "mulig_fusjon": "Mulig sammenslåing",
     "avvikling": "Virksomheten skal avvikles",
     "bytte_av_marked": "Aksjen skal flytte til Euronext Growth",
+    # Cadeler (2026-10-21): morselskapet flyttes fra Danmark til Storbritannia
+    # gjennom et aksjebytte. Hjemlandet avgjør ASK, så leseren må få vite det.
+    "bytte_av_hjemland": "Selskapet flytter til et annet land",
 }
 # Ved disse sier ikke historikken noe om utbyttet framover, så sidene gir
 # ingen «Passer for deg»-mål.
@@ -6128,6 +6131,10 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
 
     kurshode_html = _lag_kurshode(a, valuta, upa_merknad, delaar_note)
     korttall_html = _lag_korttall(a, valuta)
+    # Undertittelen sa «Oslo Børs» også om de 14 aksjene på Euronext Growth
+    # (vedlikehold 2026-10-24). Markedet avgjør blant annet ASK.
+    import html as _html
+    markedsplass = _html.escape(a.get("bors") or "Oslo Børs")
 
     # Het tidligere «AI-oppsummering» og viste frosset prosa med tall støpt inn.
     # Teksten bygges nå fra levende tall ved hver kjøring, så navnet ville vært
@@ -6655,7 +6662,7 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
   </div>
 
   <h1>{ticker} – {navn}</h1>
-  <p class="sub">{sektor} · {frekvens} utbytte · Oslo Børs</p>
+  <p class="sub">{sektor} · {frekvens} utbytte · {markedsplass}</p>
 
   {kurshode_html}
 
@@ -8973,6 +8980,51 @@ def generer_rapportkalender(aksjer, root_dir, i_dag=None):
           f"over {len(per_maaned)} måneder")
 
 
+# ── lastmod i sitemap: datoen siden sist ble endret, ikke byggedatoen ──────
+# Alle URL-er fikk «i dag» ved hver kjøring, også FAQ, personvern og
+# artikler som ikke var rørt på uker (vedlikehold 2026-10-23). Google bruker
+# lastmod bare når den er «consistently and verifiably accurate», så en dato
+# som alltid er i dag, blir ignorert for hele nettstedet. Vi lagrer en
+# innholdshash per side og flytter datoen bare når innholdet faktisk endrer
+# seg. Aksjesidene endres ved hver datakjøring og får derfor dagens dato som
+# før; de håndskrevne sidene beholder datoen for siste endring.
+SITEMAP_LASTMOD_FIL = os.path.join("data", "sitemap_lastmod.json")
+
+
+def _sitemap_side(root_dir, loc):
+    sti = loc.replace("https://exday.no/", "", 1).strip("/")
+    return os.path.join(root_dir, sti, "index.html") if sti else os.path.join(root_dir, "index.html")
+
+
+def sitemap_lastmod(locs, root_dir, today, lagret):
+    """{loc: {"sha", "dato"}}: datoen flyttes til today bare når sidens innhold er endret.
+
+    En side som ikke finnes (eller ikke kan leses) får today, slik som før.
+    """
+    import hashlib
+    ut = {}
+    for loc in locs:
+        try:
+            with open(_sitemap_side(root_dir, loc), "rb") as f:
+                sha = hashlib.sha256(f.read()).hexdigest()[:16]
+        except OSError:
+            sha = None
+        gml = lagret.get(loc) if isinstance(lagret, dict) else None
+        if sha and isinstance(gml, dict) and gml.get("sha") == sha and gml.get("dato"):
+            ut[loc] = {"sha": sha, "dato": gml["dato"]}
+        else:
+            ut[loc] = {"sha": sha, "dato": today}
+    return ut
+
+
+def _sett_lastmod(urls_tekst, datoer):
+    """Bytter lastmod i hver <url> med datoen fra sitemap_lastmod()."""
+    def _bytt(m):
+        d = datoer.get(m.group(1))
+        return m.group(0) if not d else f"{m.group(1)}</loc>\n    <lastmod>{d['dato']}</lastmod>"
+    return re.sub(r"(https://exday\.no/[^<]*)</loc>\s*<lastmod>[^<]*</lastmod>", _bytt, urls_tekst)
+
+
 def generer_sitemap(aksjer, root_dir, today, alle_tickers=None):
     """Genererer sitemap.xml med alle sider inkludert individuelle aksjesider og sektorsider."""
     from collections import defaultdict
@@ -9235,9 +9287,26 @@ def generer_sitemap(aksjer, root_dir, today, alle_tickers=None):
     <priority>0.7</priority>
   </url>""")
 
+    urls_tekst = "\n".join(urls)
+    lastmod_sti = os.path.join(root_dir, SITEMAP_LASTMOD_FIL)
+    try:
+        with open(lastmod_sti, encoding="utf-8") as f:
+            lagret = json.load(f)
+    except (OSError, ValueError):
+        lagret = {}
+    locs = re.findall(r"<loc>(https://exday\.no/[^<]*)</loc>", urls_tekst)
+    datoer = sitemap_lastmod(locs, root_dir, today, lagret)
+    urls_tekst = _sett_lastmod(urls_tekst, datoer)
+    try:
+        with open(lastmod_sti, "w", encoding="utf-8") as f:
+            json.dump(dict(sorted(datoer.items())), f, ensure_ascii=False, indent=1)
+            f.write("\n")
+    except OSError as e:
+        print(f"  Advarsel: kunne ikke lagre {SITEMAP_LASTMOD_FIL}: {e}")
+
     sitemap_content = '<?xml version="1.0" encoding="UTF-8"?>\n'
     sitemap_content += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
-    sitemap_content += "\n".join(urls)
+    sitemap_content += urls_tekst
     sitemap_content += "\n</urlset>"
 
     sitemap_path = os.path.join(root_dir, "sitemap.xml")
@@ -9734,7 +9803,6 @@ def main():
     generer_topplistesider(resultater, root_dir)
     generer_rapportkalender(resultater, root_dir)
     today = datetime.datetime.utcnow().strftime("%Y-%m-%d")
-    generer_sitemap(resultater, root_dir, today, AKSJER)
     oppdater_index_html_meta(len(resultater), root_dir)
     oppdater_app_noscript_liste(resultater, root_dir)
     oppdater_antall_i_sider(resultater, root_dir)
@@ -9742,6 +9810,8 @@ def main():
     oppdater_forside_uka(resultater, root_dir)
     oppdater_forside_artikler(root_dir)
     oppdater_kalender_maaneder(resultater, root_dir)
+    # Sist: lastmod hasher sidene, så markørene må være fylt først.
+    generer_sitemap(resultater, root_dir, today, AKSJER)
 
 
 # ── Utbyttekalender for neste år (19.10.2026) ────────────────────────────────

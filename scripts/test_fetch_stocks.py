@@ -3179,6 +3179,37 @@ class TestHendelse(unittest.TestCase):
         fs.sett_hendelse(a, self.H)
         self.assertEqual(a["hendelse"]["melding"], "679057")
 
+    def test_undertittelen_viser_markedsplassen(self):
+        # Alle 155 sider sa «Oslo Børs», også de 14 på Euronext Growth.
+        sti = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "data", "aksjer.json")
+        if not os.path.exists(sti):
+            self.skipTest("aksjer.json finnes ikke")
+        with open(sti, encoding="utf-8") as f:
+            a = json.load(f)["aksjer"][0]
+        for bors in ("Euronext Growth Oslo", "Oslo Børs"):
+            with self.subTest(bors=bors):
+                side = fs._aksje_side_html(dict(a, kurs_historikk=[], bors=bors), "2026-10-26")
+                sub = re.search(r'<p class="sub">(.*?)</p>', side).group(1)
+                self.assertTrue(sub.endswith("· " + bors), sub)
+
+    def test_appen_kjenner_de_samme_typene(self):
+        # Cadeler fikk en ny type (2026-10-26). Mangler den i ui.js, viser
+        # appen ingen boks og intet merke, uten feilmelding.
+        with open(os.path.join(os.path.dirname(__file__), "..", "assets", "ui.js"),
+                  encoding="utf-8") as f:
+            js = f.read()
+        for konst in ("HENDELSE_TITTEL", "HENDELSE_KORT"):
+            with self.subTest(konst=konst):
+                blokk = re.search(r"const " + konst + r" = \{(.*?)\n\};", js, re.S).group(1)
+                self.assertEqual(set(re.findall(r"^\s+(\w+):", blokk, re.M)),
+                                 set(fs.HENDELSE_TITTEL))
+
+    def test_bytte_av_hjemland_beholder_maal(self):
+        a = {"sektor": "Energitjenester", "utbytte_yield": 7.0, "frekvens": "Kvartalsvis"}
+        h = dict(self.H, type="bytte_av_hjemland")
+        self.assertIn("flytter til et annet land", fs.lag_hendelse_boks({"hendelse": h}))
+        self.assertEqual(fs._beregn_mal_py(dict(a, hendelse=h)), fs._beregn_mal_py(a))
+
     def test_hendelsene_i_tickers_er_gyldige(self):
         with open(os.path.join(os.path.dirname(__file__), "..", "data", "tickers.json"),
                   encoding="utf-8") as f:
@@ -3605,6 +3636,60 @@ const ARTIKLER = [
         with open(os.path.join(self.ROT, "index.html"), encoding="utf-8") as f:
             blokk = re.search(r"(?s)<!--ARTIKLER:START-->(.*)<!--ARTIKLER:SLUTT-->", f.read()).group(1)
         self.assertEqual(re.findall(r'href="(/artikler/[^"]+)"', blokk), [a["slug"] for a in nyeste])
+
+
+class TestSitemapLastmod(unittest.TestCase):
+    """lastmod er datoen siden sist ble endret, ikke byggedatoen (vedlikehold 2026-10-23)."""
+
+    def setUp(self):
+        self.rot = tempfile.mkdtemp()
+        os.makedirs(os.path.join(self.rot, "faq"))
+        os.makedirs(os.path.join(self.rot, "data"))
+        self._skriv("faq/index.html", "<p>FAQ</p>")
+        self._skriv("index.html", "<p>Forside</p>")
+
+    def tearDown(self):
+        shutil.rmtree(self.rot)
+
+    def _skriv(self, sti, tekst):
+        with open(os.path.join(self.rot, sti), "w", encoding="utf-8") as f:
+            f.write(tekst)
+
+    LOCS = ["https://exday.no/", "https://exday.no/faq/"]
+
+    def test_uendret_side_beholder_datoen(self):
+        forste = fs.sitemap_lastmod(self.LOCS, self.rot, "2026-10-01", {})
+        andre = fs.sitemap_lastmod(self.LOCS, self.rot, "2026-10-26", forste)
+        self.assertEqual(andre["https://exday.no/faq/"]["dato"], "2026-10-01")
+        self.assertEqual(andre["https://exday.no/"]["dato"], "2026-10-01")
+
+    def test_endret_side_far_dagens_dato(self):
+        forste = fs.sitemap_lastmod(self.LOCS, self.rot, "2026-10-01", {})
+        self._skriv("faq/index.html", "<p>FAQ, rettet</p>")
+        andre = fs.sitemap_lastmod(self.LOCS, self.rot, "2026-10-26", forste)
+        self.assertEqual(andre["https://exday.no/faq/"]["dato"], "2026-10-26")
+        self.assertEqual(andre["https://exday.no/"]["dato"], "2026-10-01")
+
+    def test_manglende_side_og_tom_lagring_gir_dagens_dato(self):
+        ut = fs.sitemap_lastmod(["https://exday.no/finnes-ikke/"], self.rot, "2026-10-26", None)
+        self.assertEqual(ut["https://exday.no/finnes-ikke/"]["dato"], "2026-10-26")
+
+    def test_sett_lastmod_bytter_bare_kjente_urler(self):
+        tekst = ("  <url>\n    <loc>https://exday.no/faq/</loc>\n    <lastmod>2026-10-26</lastmod>\n  </url>\n"
+                 "  <url>\n    <loc>https://exday.no/om/</loc>\n    <lastmod>2026-10-26</lastmod>\n  </url>")
+        ut = fs._sett_lastmod(tekst, {"https://exday.no/faq/": {"dato": "2026-09-14"}})
+        self.assertIn("<loc>https://exday.no/faq/</loc>\n    <lastmod>2026-09-14</lastmod>", ut)
+        self.assertIn("<loc>https://exday.no/om/</loc>\n    <lastmod>2026-10-26</lastmod>", ut)
+
+    def test_sitemap_skrives_med_lagrede_datoer(self):
+        lagret = fs.sitemap_lastmod(["https://exday.no/faq/"], self.rot, "2026-09-14", {})
+        with open(os.path.join(self.rot, fs.SITEMAP_LASTMOD_FIL), "w", encoding="utf-8") as f:
+            json.dump(lagret, f)
+        fs.generer_sitemap([], self.rot, "2026-10-26")
+        with open(os.path.join(self.rot, "sitemap.xml"), encoding="utf-8") as f:
+            xml = f.read()
+        self.assertIn("<loc>https://exday.no/faq/</loc>\n    <lastmod>2026-09-14</lastmod>", xml)
+        self.assertIn("<loc>https://exday.no/om/</loc>\n    <lastmod>2026-10-26</lastmod>", xml)
 
 
 if __name__ == "__main__":

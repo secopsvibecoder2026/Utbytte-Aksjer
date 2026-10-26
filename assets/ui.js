@@ -1042,6 +1042,7 @@ const HENDELSE_TITTEL = {
   mulig_fusjon: 'Mulig sammenslåing',
   avvikling: 'Virksomheten skal avvikles',
   bytte_av_marked: 'Aksjen skal flytte til Euronext Growth',
+  bytte_av_hjemland: 'Selskapet flytter til et annet land',
 };
 const HENDELSE_UTEN_MAL = new Set(['oppkjop', 'fusjon', 'avvikling']);
 
@@ -1058,6 +1059,7 @@ const HENDELSE_KORT = {
   mulig_fusjon: 'mulig fusjon',
   avvikling: 'avvikles',
   bytte_av_marked: 'flytter til Growth',
+  bytte_av_hjemland: 'bytter hjemland',
 };
 function hendelseMerke(a) {
   const h = a && a.hendelse;
@@ -1362,6 +1364,13 @@ function oppdaterSpareMaalBar(pf) {
   wrapper.classList.remove('hidden');
 }
 
+// «Aksjer sporet 155 / Oslo Børs» stemte ikke for de 14 på Euronext Growth
+// (vedlikehold 2026-10-26). Teksten følger feltet bors i dataene.
+function markedsplassTekst(aksjer) {
+  const growth = (aksjer || []).some(a => /growth/i.test(String(a && a.bors || '')));
+  return growth ? 'Oslo Børs og Euronext Growth' : 'Oslo Børs';
+}
+
 function oppdaterGeneriskSammendrag() {
   document.getElementById('stat-card1-label').textContent = 'Aksjer sporet';
   document.getElementById('stat-card2-label').textContent = 'Høyeste yield';
@@ -1369,7 +1378,7 @@ function oppdaterGeneriskSammendrag() {
   document.getElementById('stat-card4-label').textContent = 'Neste ex-dato';
 
   document.getElementById('stat-antall').textContent = alleAksjer.length;
-  document.getElementById('stat-antall-sub').textContent = 'Oslo Børs';
+  document.getElementById('stat-antall-sub').textContent = markedsplassTekst(alleAksjer);
   document.getElementById('stat-snitt-sub').textContent = 'Aksjer med utbytte';
 
   const medYield = alleAksjer.filter(a => a.utbytte_yield > 0);
@@ -5877,4 +5886,4 @@ function _annBygTopp() {
 }
 
 // Node.js test export
-if (typeof module !== 'undefined') module.exports = { hendelseMerke, nyMilepel, delLenkeData, pentAkse, fmtPst, fmtTall, dagerTil, dagerTilTekst, datoKort, aksjerTekst, snittNavn, utbytteKutt, modalHendelse, beregnRisiko, forklarRisiko, vekstFraTopp, beregnMal, forklarMal, bevegelserOverskrift, utbytteRekke, stabileAr, exForbeholdGjelder, utbyttePerioder, vistOverBetalt, modalBetaltBoks, supplertFotnote, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, fmt, formaterDato, yieldKlasse, payoutKlasse, vekstKlasse, beregnScore, beregnBaerekraft, beregnYtdInntekt, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote, kapitalAndel, modalKapitalNote, kapitalSkattTekst, aksjerMedExIMaaned, beregnHvisKjopt, hvisStartAar, beregnAskMotVanlig, fmtUtbytte, sisteUtbytteTekst, modalOmSelskapet, vekslOmSelskapet, dripGevinst, _simulerKalkulator, askStatus, askTekst, modalKontoer };
+if (typeof module !== 'undefined') module.exports = { markedsplassTekst, hendelseMerke, nyMilepel, delLenkeData, pentAkse, fmtPst, fmtTall, dagerTil, dagerTilTekst, datoKort, aksjerTekst, snittNavn, utbytteKutt, modalHendelse, beregnRisiko, forklarRisiko, vekstFraTopp, beregnMal, forklarMal, bevegelserOverskrift, utbytteRekke, stabileAr, exForbeholdGjelder, utbyttePerioder, vistOverBetalt, modalBetaltBoks, supplertFotnote, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, fmt, formaterDato, yieldKlasse, payoutKlasse, vekstKlasse, beregnScore, beregnBaerekraft, beregnYtdInntekt, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote, kapitalAndel, modalKapitalNote, kapitalSkattTekst, aksjerMedExIMaaned, beregnHvisKjopt, hvisStartAar, beregnAskMotVanlig, fmtUtbytte, sisteUtbytteTekst, modalOmSelskapet, vekslOmSelskapet, dripGevinst, _simulerKalkulator, askStatus, askTekst, modalKontoer };

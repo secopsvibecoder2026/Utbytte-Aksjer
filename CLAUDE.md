@@ -1927,7 +1927,8 @@ buyout, merger or market move. A hand-written field now does:
 "hendelse": {"type": "oppkjop", "dato": "2026-10-02", "melding": "683486", "tekst": "…"}
 ```
 
-- **Types:** `oppkjop`, `fusjon`, `mulig_fusjon`, `avvikling`, `bytte_av_marked`.
+- **Types:** `oppkjop`, `fusjon`, `mulig_fusjon`, `avvikling`, `bytte_av_marked`,
+  `bytte_av_hjemland` (added 2026-10-26 for Cadeler).
   The first three drop the «Passer for deg» goals on the page and in the app,
   since the history no longer says anything about the dividend ahead.
 - **Display:** `lag_hendelse_boks()` and `modalHendelse()` render an amber box at
@@ -2127,6 +2128,61 @@ scanned for the same kinds of fault. Fixed:
 `skann.py`-style checks that found these: `\d%`, `None|nan|undefined`, a digit
 before «ganger», and a period decimal before «%» in the rendered text of every
 page. Tests: `TestFaqHistorikk` (3), `TestTallformat` (1).
+
+## From the maintenance report of 2026-10-26
+
+The daily report listed four findings that needed action, each confirmed
+against the source before it was fixed:
+
+- **ELMRA's event text was out of date.** Fortum completed settlement on 23
+  October (NewsWeb 684676) and holds 96,1 % excluding treasury shares
+  (91,9 % of all shares). Compulsory acquisition and delisting follow, with no
+  date yet. Do not move ELMRA to `/avnoteringer/` before a last trading day is
+  announced.
+- **Cadeler had no event.** Cadeler plc offers one new share per share to move
+  the parent company from Denmark to the United Kingdom; 89,5 % had been
+  tendered on 21 October against a condition of at least 90 %, the deadline is 28 October
+  and trading is expected around 5 November (684551, 684395). A new type,
+  `bytte_av_hjemland`, keeps the goals, since the history still applies. The
+  company says existing ASK holders may keep the new shares on the account,
+  but new purchases must be made on an ordinary account (683905). The
+  company text no longer says «fra slutten av oktober». **When Cadeler plc
+  starts trading**, the ticker, `ticker_yf`, `inkorporeringsland` and
+  `ask_egnet` must be changed by hand, and the event removed.
+- **The subtitle said «Oslo Børs» on all 155 stock pages**, also for the 14 on
+  Euronext Growth. It now reads `bors`. The app's «Aksjer sporet» says
+  «Oslo Børs og Euronext Growth» when the catalog holds both
+  (`markedsplassTekst()`).
+- **The payout lag on `/utbyttekalender/`** still said «under to uker» and
+  «noen dager til flere uker» in four places, and `/uke/` claimed foreign
+  companies take longer, which the measurement does not show. Both now say
+  one to two weeks, three to four for some. Two articles said «dagen før»
+  for the last buy day; it is «børsdagen før».
+
+Three open findings from earlier reports were settled the same day:
+
+- **`lastmod` in `sitemap.xml` was today for every URL.** Google uses lastmod
+  only when it is accurate, so a date that is always today is ignored for the
+  whole site. `sitemap_lastmod()` stores a content hash per page in
+  `data/sitemap_lastmod.json` and moves the date only when the page changes.
+  Stock pages change on every data run and still get today; the 28
+  hand-written pages keep the date of their last change (seeded from the
+  commit history). `generer_sitemap()` now runs last in both scripts, after
+  the markers are filled, or the hash would lag one run. The data job commits
+  the file.
+- **The sector table in «Slik bygger du en utbytteportefølje»** gave yields
+  «per mai 2026» under a sentence saying «nåværende data», listed aquaculture
+  as semi-annual or quarterly (four of six pay annually) and energy services
+  as semi-annual or annual (ten of fourteen pay quarterly), and the text said
+  the banks yield less than the cyclical sectors. Savings banks are at 6,2 %,
+  energy 6,5 % and aquaculture 2,6 % (medians, 23 October). The table now
+  carries those medians with the date and links to the sector pages.
+- **Long titles (14 pages)** are left as they are: none is wrong, and changing
+  titles during the AdSense review risks rankings. One did carry a year that
+  would have gone stale on 1 January (huslån-kalkulatoren, «Kalkulator 2026»);
+  that year is gone.
+
+Tests: `TestHendelse` (+3), `TestSitemapLastmod` (5) and `ui.test.js` (+2).
 
 ## App review of 2026-10-20
 
@@ -3410,7 +3466,7 @@ din».
 
 ## Common Pitfalls
 
-1. **Do not edit auto-generated files** — `data/aksjer.json`, `/aksjer/*/index.html`, `sitemap.xml` and the aksjeliste inside the `<noscript>` block in `app/index.html` (between the `AKSJELISTE:START`/`AKSJELISTE:SLUTT` markers) are all overwritten by `fetch_stocks.py` / `regenerer_sider.py`
+1. **Do not edit auto-generated files** — `data/aksjer.json`, `/aksjer/*/index.html`, `sitemap.xml`, `data/sitemap_lastmod.json` and the aksjeliste inside the `<noscript>` block in `app/index.html` (between the `AKSJELISTE:START`/`AKSJELISTE:SLUTT` markers) are all overwritten by `fetch_stocks.py` / `regenerer_sider.py`
 2. **CSS changes require rebuild** — run `npm run build:css` after changing `tw-input.css`
 3. **No JS bundler** — frontend files share global scope via `<script>` tags
 4. **Norwegian naming is mandatory** — all variables, functions, and UI text must be in Norwegian
