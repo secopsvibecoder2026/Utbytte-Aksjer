@@ -1928,7 +1928,8 @@ buyout, merger or market move. A hand-written field now does:
 ```
 
 - **Types:** `oppkjop`, `fusjon`, `mulig_fusjon`, `avvikling`, `bytte_av_marked`,
-  `bytte_av_hjemland` (added 2026-10-26 for Cadeler).
+  `bytte_av_hjemland` (added 2026-10-26 for Cadeler) and `fusjon_overtar` (the
+  surviving side of a merger, TRSB).
   The first three drop the «Passer for deg» goals on the page and in the app,
   since the history no longer says anything about the dividend ahead.
 - **Display:** `lag_hendelse_boks()` and `modalHendelse()` render an amber box at
@@ -2183,6 +2184,93 @@ Three open findings from earlier reports were settled the same day:
   that year is gone.
 
 Tests: `TestHendelse` (+3), `TestSitemapLastmod` (5) and `ui.test.js` (+2).
+
+## From the tallkontroll of 2026-10-26
+
+Six findings were confirmed against the notices, and five systematic ones
+came from reading pages. All are fixed in the template and, where the app has
+a copy, in `ui.js`.
+
+**Events.** Three new `hendelse` entries:
+
+- **BNOR** (`fusjon`, 680568): merges into Vår Energi for 9,7153 VAR shares
+  and 76,83 kr per share, and has said it declares no more dividends.
+- **ENH** (`mulig_fusjon`, 682083): letter of intent with Ventura Offshore;
+  ENH stays the listed parent.
+- **TRSB** (`fusjon_overtar`, 679762): takes over Ørland Sparebank and carries
+  on. The new type keeps the goals and the calendar months, since the
+  history still applies to the bank that continues.
+
+Related-stock lists leave out stocks with an event in `HENDELSE_UTEN_MAL`:
+BNOR stood at 28,5 % under «Andre energi-aksjer» on Vår Energi's page.
+
+**Special dividends: `saerutbytte` in `tickers.json`.** VEND paid 87,66 kr in
+2024, of which 85,66 was special (620125, 626907), and 2,22 of 2025's 4,47
+(648900). The page called 2024 → 2025 a cut, gave a 5-year average of 9,0 %
+and +22,3 % growth, and said «lite forutsigbar»; the ordinary dividend went
+2,00 → 2,25 → 2,50. POL's 2025 had 20,40 extraordinary (638519).
+
+- `ordinaer_per_ar()` / `ordinaer_historikk()` (and `ordinaerPerAr()` /
+  `ordinaerHistorikk()` in `ui.js`) subtract the listed amounts. They drive
+  cuts, the history text, the streak section, the peak test and
+  `snitt_yield_5ar`.
+- `sett_saerutbytte()` recomputes `utbytte_vekst_5ar` from the ordinary
+  series. VEND's average is now 0,94 % and its growth 3,0 %.
+- «Faktisk betalt» still shows everything that was paid, with a footnote
+  saying the key-figure average excludes the specials
+  (`saerutbytte_fotnote()`).
+- Add an entry only from the company's own notice. MGN's 2024 distribution
+  of 4,187 kr is not labelled special, so it is not listed.
+
+**This year's payment counts for annual payers.** TINDE paid 9,00 kr in 2025
+and 4,90 kr in 2026 (665685). The page said «ikke kuttet» and «Utbyttevekst
++29 %». `aarets_arsutbytte()` takes this year's amount once an annual payer
+has paid and no further ex-date is announced. Several places now use it:
+
+- `vekst_fra_topp()`: the badge and the goal go;
+- the «stabil» goal;
+- the history text and the downturn test: «For 2026 er det betalt 4,90
+  kroner per aksje, mot 9,00 kroner for 2025».
+
+The wording is deliberately not «kutt»: 21 stocks match, and some of their
+2025 amounts may hold special dividends we have not registered.
+
+**One threshold for «satt ned».** The downturn test now says «ikke kuttet»
+only when all of these hold:
+
+- no whole year fell more than 5 %, the same threshold the history text uses;
+- no year in the five-year window lacks a dividend;
+- this year's annual payment is not lower.
+
+The sentence also names the years («i 2022–2025»), since «med brudd» can lie
+further back. The streak section counts decreases at the same 5 % threshold.
+
+**Smaller fixes.**
+
+- The cut risk point names the years without a dividend that followed (WEST
+  2024 and 2025).
+- The history FAQ lists every year without a dividend, and notes the special
+  dividend in the highest year.
+
+**Ex-months from this year when the year is complete.** VAR went ex in
+February, June and August 2026 and announced 17 November. The page said
+«februar, april og august», because the pattern needs a month in two of three
+years.
+
+- `aarets_maaneder()` uses this year's paid months plus an announced ex-date
+  when their count matches the frequency.
+- `sett_utbetalingsmaaneder()` replaces the direct call in both scripts.
+  Fourteen stocks moved, VISTIN among them (May, not June).
+- `maaneder_kilde()` makes the text say where the months come from: this
+  year, one year, or a recurring pattern. A list shorter than the frequency
+  reads «blant annet».
+
+**Industry texts.** `bransje` `roro` for WAWI and HAUTO: both sell much of
+their capacity on multi-year contracts, so «fraktrater bestemmer nesten
+alene» did not fit. `markedsplass` for VEND: classifieds, not subscriptions.
+VISTIN's healthcare text and WEST's shipping text were left as they are.
+
+Tests: `TestTallkontroll2610` (13) and `ui.test.js` (+1).
 
 ## App review of 2026-10-20
 

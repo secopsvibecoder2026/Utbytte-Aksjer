@@ -500,6 +500,7 @@
     "navn": "Wallenius Wilhelmsen ASA",
     "sektor": "Shipping",
     "bors": "Oslo Børs",
+    "bransje": "roro",
     "beskrivelse": "Wallenius Wilhelmsen fikk dagens form i 2017. Da slo svenske Wallenius og norske Wilhelmsen sammen eierandelene de hadde hatt sammen i rederiene EUKOR og ARC og i logistikkselskapet Wallenius Wilhelmsen Logistics, et samarbeid som gikk tilbake til 1999. Wilh. Wilhelmsen Holding, som selv er børsnotert, er største eier. Wallenius Lines, eid av den svenske Soya-gruppen, er den andre store aksjonæren. Hovedkontoret ligger i Oslo.\n\nSkipene frakter biler, anleggsmaskiner og annen rullende last på faste linjer mellom kontinentene, og logistikkdelen overtar på land med terminaler, klargjøring og transport videre mot forhandler. Mye av volumet går på flerårige avtaler med bil- og maskinprodusenter, og fornyelsene meldes jevnlig til børsen. Ett kundeforhold er tettere enn de andre: Hyundai Motor Group eier en minoritetspost i det koreanske datterselskapet EUKOR og har en fraktavtale med det som løper ut 2029. Selskapet bygger nye skip som kan gå på LNG, og i oktober 2026 hentet det ny egenkapital for å utvide nybyggprogrammet. Wilhelmsen tegnet seg for sin andel, mens Wallenius sto over.\n\nUtbyttet kommer to ganger i året og fastsettes i dollar, men betales i kroner. For første halvår 2026 var det regnet som halvparten av det underliggende resultatet, med et ekstraordinært tillegg på toppen. Hvor mye som er igjen til aksjonærene avhenger dermed både av fraktmarkedet ut av Asia og av hvor mye kapital nybyggene binder i årene framover.",
     "navn_dnb": "Wallenius Wilhelmsen ASA",
     "beskrivelse_fakta": "Wallenius Wilhelmsen ASA driver logistikk- og transportvirksomhet globalt gjennom tre segmenter: Shippingtjenester, Logistikktjenester og Offentlige tjenester. Selskapet leverer skipsforvaltning med bemanning, teknisk drift og ledelse, forsikringsmegling, agenturtjenester, frakt- og linjetjenester samt maritime produkter til fartøy. Virksomheten omfatter også sjøtransport av rullende last, stykkgods og kjøretøy, i tillegg til anleggsmaskiner og annet tungt utstyr.",
@@ -571,6 +572,7 @@
     "navn": "Höegh Autoliners ASA",
     "sektor": "Shipping",
     "bors": "Oslo Børs",
+    "bransje": "roro",
     "beskrivelse": "Höegh Autoliners har røtter i rederiet Leif Höegh & Co, som Leif Høegh grunnla i 1927. Det begynte med oljetankskip og gikk inn i biltransport på 1960-tallet. Leif Höegh & Co er fortsatt hovedaksjonær. Selskapet kom på Euronext Growth i 2021 og ble flyttet til hovedlisten på Oslo Børs året etter. Hovedkontoret ligger i Oslo.\n\nRederiet frakter biler, tunge maskiner og stykkgods med rorofartøy på lange havruter, og leverer også logistikk for prosjektlast. Ifølge selskapet drives etterspørselen nå særlig av eksporten av biler og maskiner fra Kina. Drivstoff er den store kostnaden. Kundene betaler et drivstofftillegg, men det henger flere måneder etter prisen, så et kvartal med kraftig stigende drivstoffpris svekker resultatet før tillegget tar det igjen. Selskapet har flerårige fraktavtaler med bilprodusenter, blant annet en asiatisk produsent med avtale ut 2029. Flåten fornyes med Aurora-klassen, store skip som går på LNG og er forberedt for ammoniakk og metanol. Programmet ble utvidet i august 2026, finansiert med banklån og en rettet emisjon der Leif Höegh & Co på forhånd forpliktet seg til å tegne sin andel.\n\nUtbyttet kommer hvert kvartal og fastsettes i dollar. Politikken er å dele ut kontantstrømmen som overstiger en fastsatt minstebeholdning av kontanter, vurdert ved slutten av hvert kvartal. Andre kvartal 2026 viste hvordan det slår ut: dyrere drivstoff og last som måtte legges om, bandt opp arbeidskapital, og utbyttet ble langt lavere enn kvartalet før. Det er kontantene som avgjør, ikke regnskapsresultatet alene.",
     "navn_dnb": "Hoegh Autoliners ASA",
     "beskrivelse_fakta": "Höegh Autoliners ASA leverer sjøtransport av rullende last i deep sea- og short sea-markedene, gjennom segmentene Shippingtjenester og Logistikktjenester. Selskapet frakter biler, stykkgods, lastebiler, busser og tilhengere, jernbanevogner og trikker, gruveutstyr, landbruksmaskiner, anleggsmaskiner, kraftutstyr samt båter og yachter. Höegh tilbyr også utstyrshåndtering og logistikk for prosjektlast.",
@@ -1258,6 +1260,12 @@
     "beskrivelse_fakta": "BlueNord ASA er et olje- og gasselskap som produserer og utvikler ressurser som støtter energiomstillingen mot netto null. Virksomheten omfatter leting og olje- og gassinfrastruktur. Porteføljen består av knutepunktene Dan, Halfdan, Gorm og Tyra samt produserende felt på dansk sokkel. Selskapet het tidligere Norwegian Energy Company ASA og skiftet navn til BlueNord ASA i april 2023. Det ble grunnlagt i 2005 og har hovedkontor i Oslo.",
     "beskrivelse_fakta_kilde": "yahoo_finance",
     "beskrivelse_fakta_sprak": "en",
+    "hendelse": {
+      "type": "fusjon",
+      "dato": "2026-08-24",
+      "melding": "680568",
+      "tekst": "BlueNord skal fusjoneres inn i et datterselskap av Vår Energi, og generalforsamlingen godkjente fusjonsplanen 24. august 2026. For hver aksje i BlueNord får aksjonærene 9,7153 aksjer i Vår Energi og 76,83 kroner kontant. Selskapet har sagt at det ikke vil vedta flere utbytter før fusjonen er gjennomført, så utbyttet siste tolv måneder sier ikke noe om hva som kommer. Gjennomføringen avhenger fortsatt av vilkårene i fusjonsplanen."
+    },
     "ask_egnet": true,
     "inkorporeringsland": "Norge"
   },
@@ -1420,6 +1428,12 @@
     "beskrivelse_fakta": "SED Energy Holdings Plc samler inn og bearbeider marine seismiske data for olje- og gassnæringen i Europa, Afrika, Midtøsten, Nord- og Sør-Amerika og Asia-Stillehavsregionen. Selskapet tilbyr 2D-seismikk og kildefartøy for konvensjonell undershoot, 4D-gjentaksundersøkelser, wide azimuth og push reverse, samt langtidsbefraktning og skipsforvaltning, egen kildemodellering og miljøanalyse, og spotbefraktning. Selskapet eier og driver også tenderassisterte borerigger.",
     "beskrivelse_fakta_kilde": "yahoo_finance",
     "beskrivelse_fakta_sprak": "en",
+    "hendelse": {
+      "type": "mulig_fusjon",
+      "dato": "2026-09-11",
+      "melding": "682083",
+      "tekst": "SED Energy Holdings og Ventura Offshore har inngått en intensjonsavtale om å slå seg sammen gjennom et aksjebytte. SED Energy Holdings skal være det børsnoterte morselskapet etterpå. Det er ennå ingen endelig avtale."
+    },
     "ask_egnet": true,
     "inkorporeringsland": "Kypros"
   },
@@ -1641,6 +1655,13 @@
     "beskrivelse_fakta": "Polaris Media ASA er et mediehus- og trykkerikonsern med virksomhet i Norge og Sverige. Selskapet leverer digitale annonsetjenester, og driver trykkerivirksomhet for egne og eksterne aviser, herunder redaksjonelle bilag, annonsebilag, sivil trykking og øvrige magasiner og bilag. Konsernet distribuerer også aviser, pakker, post og andre varer. Polaris Media ble grunnlagt i 2008 og har hovedkontor i Trondheim.",
     "beskrivelse_fakta_kilde": "yahoo_finance",
     "beskrivelse_fakta_sprak": "en",
+    "saerutbytte": [
+      {
+        "ex_dato": "2025-05-14",
+        "belop": 20.4,
+        "melding": "638519"
+      }
+    ],
     "ask_egnet": true,
     "inkorporeringsland": "Norge"
   },
@@ -1707,6 +1728,12 @@
     "beskrivelse_fakta": "Trøndelag Sparebank leverer bankprodukter og -tjenester i Norge, gjennom tre segmenter: Personmarked, Bedriftsmarked og Øvrige tjenester. Banken tilbyr BankID, bankkort, kredittkort, bruks- og sparekonti, mobilbetaling, betalingsløsninger for utlandet samt mobil- og nettbank. Banken formidler også forsikring for bil og andre kjøretøy, hus og innbo, liv og helse samt dyr.",
     "beskrivelse_fakta_kilde": "yahoo_finance",
     "beskrivelse_fakta_sprak": "en",
+    "hendelse": {
+      "type": "fusjon_overtar",
+      "dato": "2026-08-13",
+      "melding": "679762",
+      "tekst": "Generalforsamlingene i Trøndelag Sparebank og Ørland Sparebank har godkjent at bankene slås sammen. Ørland Sparebank overføres til Trøndelag Sparebank, som fortsetter under sitt eget navn, og egenkapitalbeviseierne i Ørland Sparebank får nye egenkapitalbevis i Trøndelag Sparebank. Sammenslåingen krever godkjenning fra Finanstilsynet og er etter foreløpig plan ventet gjennomført rundt 1. april 2027."
+    },
     "ask_egnet": true,
     "inkorporeringsland": "Norge"
   },
@@ -2107,10 +2134,28 @@
     "navn": "Vend Marketplaces ASA",
     "sektor": "Kommunikasjonstjenester",
     "bors": "Oslo Børs",
+    "bransje": "markedsplass",
     "beskrivelse": "Vend Marketplaces er det børsnoterte selskapet som ble igjen da Schibsted delte seg. Mediehusene ble skilt ut i 2024, selskapet byttet navn fra Schibsted Marketplaces til Vend i 2025, og samme høst ble A- og B-aksjene slått sammen til én aksjeklasse med én stemme per aksje. Siden har aksjen handlet under tickeren VEND. Stiftelsen Tinius er fortsatt største aksjonær.\n\nDet som er igjen, er digitale markedsplasser i Norden, delt i mobilitet, eiendom, jobb og gjenbruk. De kjente merkene er FINN i Norge, Blocket i Sverige, DBA og Bilbasen i Danmark og Tori og Oikotie i Finland. I eiendom er FINN klar markedsleder i Norge. Det meste av inntekten er annonser fra bilforhandlere, eiendomsmeglere og arbeidsgivere, og den følger aktiviteten i bolig-, bil- og arbeidsmarkedet. En voksende del kommer fra transaksjoner, som når en privatperson selger bilen til en forhandler gjennom Nettbil eller leier ut boligen gjennom Qasa. Ved siden av driften eier Vend en minoritetspost i markedsplasskonsernet Adevinta.\n\nUtbyttepolitikken er et ordinært utbytte som skal øke gradvis over tid og vedtas én gang i året. Fri kontantstrøm etter utbytte og investeringer går i tillegg tilbake til aksjonærene som tilbakekjøp av aksjer eller ekstraordinært utbytte, og tilbakekjøp har vært en stor del av dette. Da Adevinta solgte den spanske virksomheten i 2026, sa Vend at selskapets andel av utdelingen skulle sendes videre til aksjonærene, først og fremst som tilbakekjøp. Utbyttet alene viser derfor bare en del av det selskapet gir tilbake.",
     "beskrivelse_fakta": "Vend Marketplaces ASA utvikler og driver markedsplasser i Sverige, Norge, Danmark, Finland og Polen, gjennom segmentene Mobilitet, Eiendom, Jobb og Gjenbruk. Virksomheten omfatter rubrikkannonser på nett gjennom FINN.no, blocket.se, tori.fi, oikotie.fi, bilbasen.dk og dba.dk. Markedsplassene leverer teknologibaserte tjenester som kobler kjøpere og selgere og legger til rette for handel med blant annet stillinger, eiendom, biler, reiser og forbruksvarer.",
     "beskrivelse_fakta_kilde": "yahoo_finance",
     "beskrivelse_fakta_sprak": "en",
+    "saerutbytte": [
+      {
+        "ex_dato": "2024-05-30",
+        "belop": 77.1,
+        "melding": "620125"
+      },
+      {
+        "ex_dato": "2024-09-03",
+        "belop": 8.56,
+        "melding": "626907"
+      },
+      {
+        "ex_dato": "2025-06-16",
+        "belop": 2.22,
+        "melding": "648900"
+      }
+    ],
     "ask_egnet": true,
     "inkorporeringsland": "Norge"
   },

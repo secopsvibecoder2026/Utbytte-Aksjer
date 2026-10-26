@@ -24,7 +24,7 @@ global.document = {
 // ui.js uses alleAksjer global — stub it
 global.alleAksjer = [];
 
-const { markedsplassTekst, hendelseMerke, nyMilepel, delLenkeData, pentAkse, datoKort, aksjerTekst, fmtPst, fmtTall, dagerTil, dagerTilTekst, snittNavn, forklarRisiko, vekstFraTopp, beregnMal, forklarMal, utbytteKutt, beregnRisiko, modalHendelse,
+const { aaretsArsutbytte, aaretsNedgang, ordinaerPerAr, ordinaerHistorikk, saerutbytteFotnote, markedsplassTekst, hendelseMerke, nyMilepel, delLenkeData, pentAkse, datoKort, aksjerTekst, fmtPst, fmtTall, dagerTil, dagerTilTekst, snittNavn, forklarRisiko, vekstFraTopp, beregnMal, forklarMal, utbytteKutt, beregnRisiko, modalHendelse,
   fmt,
   formaterDato,
   yieldKlasse,
@@ -1054,4 +1054,26 @@ test('markedsplassTekst: Growth nevnes når katalogen har Growth-aksjer', () => 
   assert.equal(markedsplassTekst([{ bors: 'Oslo Børs' }, { bors: 'Euronext Growth Oslo' }]), 'Oslo Børs og Euronext Growth');
   assert.equal(markedsplassTekst([]), 'Oslo Børs');
   assert.equal(markedsplassTekst(null), 'Oslo Børs');
+});
+
+test('tallkontroll 2026-10-26: årets utbytte, særutbytte og vekst fra topp', () => {
+  const dag = new Date(2026, 9, 26);
+  const tinde = {
+    frekvens: 'Årlig',
+    historiske_utbytter: [{ ar: 2024, utbytte: 7.63 }, { ar: 2025, utbytte: 9.0 }, { ar: 2026, utbytte: 4.9 }],
+    utbytte_per_ar: { 2023: 8.37, 2024: 7.63, 2025: 9.0 },
+  };
+  assert.deepEqual(aaretsArsutbytte(tinde, dag), [2026, 4.9]);
+  assert.equal(aaretsArsutbytte({ ...tinde, ex_dato: '2026-11-20' }, dag), null);
+  assert.deepEqual(aaretsNedgang(tinde, dag), [2026, 4.9, 2025, 9.0]);
+  assert.deepEqual(vekstFraTopp(tinde, dag), { toppAr: 2025, topp: 9.0, sisteAr: 2026, siste: 4.9 });
+
+  const vend = {
+    saerutbytte: [{ ex_dato: '2024-05-30', belop: 77.1 }, { ex_dato: '2024-09-03', belop: 8.56 }],
+    utbytte_per_ar: { 2023: 2.0, 2024: 87.66 },
+    historiske_utbytter: [{ ar: 2023, utbytte: 2.0 }, { ar: 2024, utbytte: 87.66 }, { ar: 2025, utbytte: 4.47 }],
+  };
+  assert.ok(Math.abs(ordinaerPerAr(vend)['2024'] - 2.0) < 1e-9);
+  assert.ok(Math.abs(ordinaerHistorikk(vend)[1].utbytte - 2.0) < 1e-9);
+  assert.match(saerutbytteFotnote(vend, dag), /85,66 kr i 2024/);
 });

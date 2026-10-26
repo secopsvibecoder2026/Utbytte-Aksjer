@@ -257,6 +257,13 @@ FREKVENS_OVERSTYRT   = {t["ticker"]: t["frekvens"] for t in _ticker_data if t.ge
 # bruk_lopende_utbytte_fra().
 LOPENDE_UTBYTTE_FRA  = {t["ticker"]: t["lopende_utbytte_fra"] for t in _ticker_data
                         if t.get("lopende_utbytte_fra")}
+# Særutbytte kontrollert mot børsmeldingen, per ticker. Vend Marketplaces
+# betalte 87,66 kr i 2024, hvorav 85,66 i særutbytte, og siden kalte det et
+# kutt da 2025 ga 4,47, regnet et 5-årssnitt på 9,0 % og sa «lite
+# forutsigbar», mens det ordinære utbyttet gikk 2,00 → 2,25 → 2,50
+# (tallkontrollen 2026-10-26). Se ordinaer_per_ar().
+SAERUTBYTTE          = {t["ticker"]: t["saerutbytte"] for t in _ticker_data
+                        if t.get("saerutbytte")}
 # Bransje innenfor sektoren, for selskaper som sektorteksten ikke passer på.
 # Alle 37 i Finans fikk banktekst om rentenetto og utlån, også forsikrings-
 # selskapene, og TGS fikk «dag-rater for rigger og fartøy» (tallkontrollen
@@ -1707,6 +1714,10 @@ HENDELSE_TITTEL = {
     # Cadeler (2026-10-21): morselskapet flyttes fra Danmark til Storbritannia
     # gjennom et aksjebytte. Hjemlandet avgjør ASK, så leseren må få vite det.
     "bytte_av_hjemland": "Selskapet flytter til et annet land",
+    # Trøndelag Sparebank (2026-10-26) overtar Ørland Sparebank og fortsetter
+    # under eget navn. «fusjon» ville tatt bort målene og månedsoversikten,
+    # som fortsatt gjelder for den som overtar.
+    "fusjon_overtar": "Selskapet skal overta et annet ved fusjon",
 }
 # Ved disse sier ikke historikken noe om utbyttet framover, så sidene gir
 # ingen «Passer for deg»-mål.
@@ -1983,6 +1994,19 @@ def bor_hente_utbyttesplitt(a):
         return False
 
 
+def saerutbytte_fotnote(a, i_dag_ar=None):
+    """Sier at tabellens år inneholder særutbytte, og at snittet i
+    nøkkeltallene er regnet uten. Tom når ingen av årene har særutbytte."""
+    iaar = i_dag_ar or datetime.date.today().year
+    saer = {y: v for y, v in saerutbytte_per_ar(a).items() if iaar - 5 <= y < iaar}
+    if not saer:
+        return ""
+    ledd = [f"{_nf(v, 2)} kr i {y}" for y, v in sorted(saer.items())]
+    liste = ledd[0] if len(ledd) == 1 else ", ".join(ledd[:-1]) + f" og {ledd[-1]}"
+    return (f"Snittene her inkluderer særutbytte på {liste}. "
+            f"{snitt_navn(a).capitalize()} i nøkkeltallene er regnet uten.")
+
+
 def supplert_fotnote(a):
     """Sier hvilke utbetalinger som er hentet fra børsmeldingen, ikke fra Yahoo.
 
@@ -2052,6 +2076,9 @@ def lag_betalt_boks(a, nf):
     supplert = supplert_fotnote(a)
     if supplert:
         fotnoter.append(supplert)
+    saer = saerutbytte_fotnote(a)
+    if saer:
+        fotnoter.append(saer)
     if over_kurs:
         fotnoter.append("— betyr at beløpet er over to ganger dagens kurs, som regel en "
                         "engangsutdeling; det vises ikke som yield.")
@@ -2290,8 +2317,103 @@ def betalinger_siste_12m(dividends, i_dag):
     return ut
 
 
-def utbytte_perioder(a):
+def saerutbytter(a):
+    """Gyldige særutbytter for aksjen: [{"ex_dato", "belop", "melding"}].
+
+    Fra raden når den har feltet (sett_saerutbytte()), ellers fra
+    tickers.json, slik at rekkefølgen kallene gjøres i ikke spiller noen rolle.
+    """
+    liste = (a.get("saerutbytte") if isinstance(a, dict) else None) \
+        or SAERUTBYTTE.get((a or {}).get("ticker"), [])
+    ut = []
+    for s_ in liste or []:
+        try:
+            dato = datetime.date.fromisoformat(str(s_.get("ex_dato")))
+            belop = float(s_.get("belop"))
+        except (TypeError, ValueError, AttributeError):
+            continue
+        if belop > 0:
+            ut.append({"ex_dato": dato.isoformat(), "belop": belop,
+                       "melding": str(s_.get("melding") or "")})
+    return sorted(ut, key=lambda x: x["ex_dato"])
+
+
+def saerutbytte_per_ar(a):
+    """{år: kroner i særutbytte} etter ex-dato."""
+    ut = {}
+    for s_ in saerutbytter(a):
+        ar = int(s_["ex_dato"][:4])
+        ut[ar] = round(ut.get(ar, 0) + s_["belop"], 4)
+    return ut
+
+
+def ordinaer_per_ar(a):
+    """`utbytte_per_ar` uten særutbytte. Nøklene beholdes som i feltet."""
+    per_ar = a.get("utbytte_per_ar") or {}
+    saer = saerutbytte_per_ar(a)
+    if not saer:
+        return per_ar
+    ut = {}
+    for k, v in per_ar.items():
+        try:
+            ut[k] = max(round(float(v or 0) - saer.get(int(k), 0), 4), 0.0)
+        except (TypeError, ValueError):
+            ut[k] = v
+    return ut
+
+
+def ordinaer_historikk(a):
+    """`historiske_utbytter` uten særutbytte, med yield skalert likt."""
+    hist = a.get("historiske_utbytter") or []
+    saer = saerutbytte_per_ar(a)
+    if not saer:
+        return hist
+    ut = []
+    for h in hist:
+        trekk = saer.get(h.get("ar"), 0)
+        if not trekk or not h.get("utbytte"):
+            ut.append(h)
+            continue
+        ny = dict(h)
+        ny["utbytte"] = max(round(h["utbytte"] - trekk, 4), 0.0)
+        if h.get("yield") is not None and h["utbytte"]:
+            ny["yield"] = round(h["yield"] * ny["utbytte"] / h["utbytte"], 2)
+        ut.append(ny)
+    return ut
+
+
+def sett_saerutbytte(a, liste=None, i_dag=None):
+    """Kopierer særutbyttene inn i raden og regner veksten på det ordinære.
+
+    `utbytte_vekst_5ar` regnes av beregn_utbytte_vekst() fra Yahoos serie,
+    som tar med særutbyttet. For VEND ga det +22,3 % per år fra 2,00 til
+    4,47; ordinært var det 2,00 til 2,25. Avledet, så både fetch_stocks og
+    regenerer_sider kaller den på hver kjøring.
+    """
+    if liste is None:
+        liste = SAERUTBYTTE.get(a.get("ticker"))
+    a.pop("saerutbytte", None)
+    gyldige = saerutbytter({"saerutbytte": liste}) if liste else []
+    if not gyldige:
+        return
+    a["saerutbytte"] = gyldige
+    iaar = (i_dag or datetime.date.today()).year
+    siste, forste = iaar - 1, iaar - 5
+    if not any(forste <= int(s_["ex_dato"][:4]) <= siste for s_ in gyldige):
+        return
+    per = ordinaer_per_ar(a)
+    start = float(per.get(str(forste)) or 0)
+    slutt = float(per.get(str(siste)) or 0)
+    a["utbytte_vekst_5ar"] = (round(((slutt / start) ** (1 / (siste - forste)) - 1) * 100, 1)
+                              if start > 0 and slutt > 0 else 0.0)
+
+
+def utbytte_perioder(a, ordinaer=False):
     """Snitt per år betalt, for siste 12 mnd og siste 1–5 hele kalenderår.
+
+    Med `ordinaer` regnes årene uten særutbytte (ordinaer_per_ar()); det
+    brukes til 5-årssnittet i nøkkeltallene. Tabellen «Faktisk betalt»
+    viser alt som ble betalt.
 
     Liste av dicter: {"periode", "belop", "yield", "fra", "til", "ar_brukt",
     "ar_onsket"}. `periode` er "12m" eller "1"–"5". `yield` er None når beløpet overstiger 2× kursen — samme
@@ -2313,7 +2435,7 @@ def utbytte_perioder(a):
                 "ar_brukt": len(vindu) if vindu else None, "ar_onsket": onsket}
 
     ut = [rad("12m", float(a["utbytte_12m"]))]
-    per_ar = a["utbytte_per_ar"]
+    per_ar = ordinaer_per_ar(a) if ordinaer else a["utbytte_per_ar"]
     forste = a.get("utbytte_forste_ar")
     ar = sorted((int(k) for k in per_ar), reverse=True)   # nyeste først
     for n in range(1, BETALT_ANTALL_AR + 1):
@@ -2345,7 +2467,9 @@ def sett_snitt_felter(a):
     lagrede tallet. Avledet, så både fetch_stocks og regenerer_sider kaller
     den på hver kjøring.
     """
-    perioder = utbytte_perioder(a)
+    # Uten særutbytte: VEND fikk «5-årssnittet er 9,0 %» av 85,66 kr i
+    # særutbytte i 2024 (tallkontrollen 2026-10-26).
+    perioder = utbytte_perioder(a, ordinaer=True)
     if not perioder:
         return
     lengst = perioder[-1]
@@ -3817,7 +3941,7 @@ def _lag_utbyttehistorikk_tekst(a, i_dag_ar=None):
     Inneværende år holdes utenfor mønsteranalysen. Raden er hittil-i-år og
     ville fått nesten hver eneste aksje til å se ut som den nettopp kuttet.
     """
-    hist = sorted((a.get("historiske_utbytter") or []), key=lambda h: h["ar"])
+    hist = sorted(ordinaer_historikk(a), key=lambda h: h["ar"])
     if i_dag_ar is None:
         i_dag_ar = datetime.date.today().year
     ferdige = [h for h in hist if h["ar"] < i_dag_ar and (h.get("utbytte") or 0) > 0]
@@ -3904,6 +4028,25 @@ def _lag_utbyttehistorikk_tekst(a, i_dag_ar=None):
             f"Høyeste år er {_nf(spenn, 1)} ganger det laveste — merkbare svingninger, "
             f"men innenfor et gjenkjennelig spenn."
         )
+
+    # 2b) Årets utbytte for en årlig betaler som har betalt (TINDE 9,00 →
+    #     4,90 i 2026). Bare tallene: noen av fjorårets beløp har særutbytte
+    #     vi ikke har registrert, og da er det ikke et kutt.
+    ned = aarets_nedgang(a, datetime.date(i_dag_ar, 12, 31)
+                         if i_dag_ar != datetime.date.today().year else None)
+    if ned and ned[0] == i_dag_ar:
+        deler.append(
+            f"For {ned[0]} er det betalt {_nf(ned[1], 2)} kroner per aksje, "
+            f"mot {_nf(ned[3], 2)} kroner for {ned[2]}."
+        )
+
+    # 2c) Tallene over er uten særutbytte; si det, og hvor mye det var.
+    saer = {y_: v for y_, v in saerutbytte_per_ar(a).items()
+            if forste["ar"] <= y_ < i_dag_ar}
+    if saer:
+        ledd = [f"{_nf(v, 2)} kroner i {y_}" for y_, v in sorted(saer.items())]
+        liste = ledd[0] if len(ledd) == 1 else ", ".join(ledd[:-1]) + f" og {ledd[-1]}"
+        deler.append(f"Tallene er uten særutbytte, som var {liste}.")
 
     # 3) Dagens yield mot aksjens eget snitt — «Vurdering» måler mot sektoren
     y  = a.get("utbytte_yield") or 0
@@ -4266,6 +4409,36 @@ def _selskapsrisikoer(a):
     return ut
 
 
+def _aar_liste(ar):
+    """«2024», «2024 og 2025», «2021, 2023 og 2025»."""
+    ar = [str(y) for y in ar]
+    return ar[0] if len(ar) == 1 else ", ".join(ar[:-1]) + f" og {ar[-1]}"
+
+
+def _pauser_etter(a, etter_ar, i_dag_ar=None):
+    """Hele år etter `etter_ar` uten registrert utbytte (fra utbytte_per_ar)."""
+    iaar = i_dag_ar or datetime.date.today().year
+    ut = []
+    for k, v in (a.get("utbytte_per_ar") or {}).items():
+        try:
+            y = int(k)
+            if etter_ar < y < iaar and float(v or 0) <= 0:
+                ut.append(y)
+        except (TypeError, ValueError):
+            continue
+    return sorted(ut)
+
+
+def _pauser_etter_tekst(a, etter_ar):
+    """«, og for 2024 og 2025 har vi ikke registrert noe utbytte» eller tomt.
+
+    WEST sto med «satt ned før, sist i 2023» over en tabell med 0,00 kr for
+    2024 og 2025 (tallkontrollen 2026-10-26).
+    """
+    p = _pauser_etter(a, etter_ar)
+    return f", og for {_aar_liste(p)} har vi ikke registrert noe utbytte" if p else ""
+
+
 # Et kutt er et helt år under 85 % av året før. Delt av risikopunktene,
 # nedtur-testen, «Stabil inntekt» og risikopoengene, så sidene ikke kan si
 # «kuttet før» og «uten store overraskelser» om samme aksje.
@@ -4281,8 +4454,9 @@ def utbyttekutt(a, i_dag_ar=None):
     eneste kutt» (tallkontrollen 2026-10-19). Speiles av utbytteKutt() i ui.js.
     """
     iaar = i_dag_ar or datetime.date.today().year
+    # Uten særutbytte: VEND fikk «kuttet før — fra 87,66 til 4,47» (2026-10-26).
     komplette = sorted(
-        [h for h in (a.get("historiske_utbytter") or [])
+        [h for h in ordinaer_historikk(a)
          if h.get("ar") and h["ar"] < iaar and h.get("utbytte")],
         key=lambda h: h["ar"],
     )
@@ -4295,8 +4469,46 @@ def utbyttekutt(a, i_dag_ar=None):
 
 def _hele_ar_med_utbytte(a, i_dag_ar=None):
     iaar = i_dag_ar or datetime.date.today().year
-    return [h for h in (a.get("historiske_utbytter") or [])
+    return [h for h in ordinaer_historikk(a)
             if h.get("ar") and h["ar"] < iaar and h.get("utbytte")]
+
+
+def aarets_arsutbytte(a, i_dag=None):
+    """(år, kroner) for en årlig betaler som har betalt årets utbytte, ellers None.
+
+    Vurderingene bruker bare hele år, og inneværende år er «hittil». For en
+    som betaler én gang i året, er årets utbytte likevel kjent så snart det er
+    betalt. TINDE gikk fra 9,00 kr i 2025 til 4,90 kr i 2026, og siden sa
+    «ikke kuttet» og «Utbyttevekst +29 %» (tallkontrollen 2026-10-26). Står
+    det en ex-dato igjen i år, kan mer komme, og da gir den None.
+    """
+    if a.get("frekvens") != "Årlig":
+        return None
+    i_dag = i_dag or datetime.date.today()
+    iaar = i_dag.year
+    ex = str(a.get("ex_dato") or "")
+    if ex[:4] == str(iaar) and ex >= i_dag.isoformat():
+        return None
+    rad = next((h for h in ordinaer_historikk(a) if h.get("ar") == iaar), None)
+    if not rad or not (rad.get("utbytte") or 0) > 0:
+        return None
+    return iaar, float(rad["utbytte"])
+
+
+def aarets_nedgang(a, i_dag=None, grense=0.95):
+    """(år, i år, fjor_år, fjor) når årets utbytte er under `grense` × fjorårets."""
+    aarets = aarets_arsutbytte(a, i_dag)
+    if not aarets:
+        return None
+    iaar, belop = aarets
+    per = ordinaer_per_ar(a)
+    try:
+        fjor = float(per.get(str(iaar - 1)) or 0)
+    except (TypeError, ValueError):
+        return None
+    if fjor > 0 and belop < grense * fjor:
+        return iaar, belop, iaar - 1, fjor
+    return None
 
 
 def _stabile_ar(a):
@@ -4376,17 +4588,25 @@ def _lag_utbytterekken(a):
         gjennom = f"Rekken går minst tilbake til {start}."
 
     # Har rekken vært jevn, eller har den svingt?
-    hist = [h for h in (a.get("historiske_utbytter") or [])
+    hist = [h for h in ordinaer_historikk(a)
             if h.get("ar") and h["ar"] < iaar and h.get("utbytte")]
     hist.sort(key=lambda h: h["ar"])
     jevnhet = ""
     if len(hist) >= 4:
         belop = [h["utbytte"] for h in hist]
-        nedganger = sum(1 for i in range(1, len(belop)) if belop[i] < belop[i - 1])
-        if nedganger == 0:
+        # Samme terskel som historikkteksten (5 %), ellers sto «satt ned to
+        # ganger» her og «én gang» der på samme side (tallkontrollen 2026-10-26).
+        nedganger = sum(1 for i in range(1, len(belop)) if belop[i] < belop[i - 1] * 0.95)
+        noen_ned = any(belop[i] < belop[i - 1] for i in range(1, len(belop)))
+        if nedganger == 0 and not noen_ned:
             jevnhet = (
                 " I de årene vi har tall for har utbyttet aldri gått ned fra "
                 "ett år til det neste."
+            )
+        elif nedganger == 0:
+            jevnhet = (
+                " I de årene vi har tall for har utbyttet aldri gått ned med "
+                "mer enn 5 % fra ett år til det neste."
             )
         elif nedganger == 1:
             jevnhet = (
@@ -4442,17 +4662,49 @@ def _lag_nedtur_test(a):
         )
 
     # Bare hele år: inneværende år er hittil i år og så ut som et kutt.
+    # «Ikke kuttet» krever samme terskel som historikkteksten (5 %), ingen år
+    # uten utbytte og ingen lavere årsutbetaling i år. TINDE sto med «satt ned
+    # én gang» over og «ikke kuttet» her, og WAWI med «ikke kuttet» og «med
+    # brudd» (tallkontrollen 2026-10-26).
     kontekst = ""
-    if len(_hele_ar_med_utbytte(a)) >= 3:
+    hele = _hele_ar_med_utbytte(a)
+    if len(hele) >= 3:
+        hele.sort(key=lambda h: h["ar"])
+        belop = [h["utbytte"] for h in hele]
+        smaa = any(belop[i] < belop[i - 1] * 0.95 for i in range(1, len(belop)))
+        betalt = {h["ar"] for h in hele}
+        pauser = {y for y in range(hele[0]["ar"], hele[-1]["ar"] + 1) if y not in betalt}
+        # Også år uten utbytte i femårsvinduet FAQ-en viser. WAWI sto med «ikke
+        # kuttet» her og «I 2021 har vi ikke registrert noe utbytte» der.
+        forste_ar = a.get("utbytte_forste_ar") or 0
+        iaar_ = datetime.date.today().year
+        for k, v in ordinaer_per_ar(a).items():
+            try:
+                if forste_ar <= int(k) < iaar_ and float(v or 0) <= 0:
+                    pauser.add(int(k))
+            except (TypeError, ValueError):
+                continue
+        pauser = sorted(pauser)
+        ned = aarets_nedgang(a)
         if utbyttekutt(a):
             kontekst = (
                 " Selskapet har satt ned utbyttet før, så terskelen for å "
                 "gjøre det igjen er neppe høy."
             )
+        elif ned:
+            kontekst = (f" For {ned[0]} er det betalt {_nf(ned[1], 2)} kroner per aksje, "
+                        f"mot {_nf(ned[3], 2)} kroner for {ned[2]}.")
+        elif pauser:
+            kontekst = f" For {_aar_liste(pauser)} har vi ikke registrert noe utbytte."
+        elif smaa:
+            kontekst = (" Utbyttet er satt ned før, men aldri med mer enn 15 % fra "
+                        "ett år til det neste.")
         else:
+            # Årene står i setningen: SB1NO, DNO og TEL har «med brudd» lenger
+            # tilbake, og «i perioden vi har tall for» leste som hele historikken.
             kontekst = (
-                " Selskapet har ikke kuttet utbyttet i perioden vi har tall "
-                "for, noe som taler for at nivået er villet og ikke tilfeldig."
+                f" Selskapet har ikke kuttet utbyttet i {hele[0]['ar']}–{hele[-1]['ar']}, "
+                "noe som taler for at nivået er villet og ikke tilfeldig."
             )
 
     return (
@@ -4504,16 +4756,27 @@ def _lag_utbetalingsaar(a):
             f"{navn} betaler ut {_ganger(len(mnd))} i året, med ex-dato i "
             f"{_maaneder_tekst(mnd)}.{per_gang}"
         )
-    else:
-        innledning = (
-            f"Ex-datoene til {navn} har de siste årene ligget i "
-            f"{_maaneder_tekst(mnd)}."
-        )
+    kilde, kilde_ar, meldt = maaneder_kilde(a, mnd)
+    if not stemmer:
+        # Kortere liste enn frekvensen: bare noen av månedene går igjen.
+        blant = " blant annet" if forventet and len(mnd) < forventet else ""
+        if kilde == "aar":
+            innledning = (f"I {kilde_ar} har ex-datoene til {navn}{blant} ligget i "
+                          f"{_maaneder_tekst(mnd)}.")
+        else:
+            innledning = (f"Ex-datoene til {navn} har de siste årene{blant} ligget i "
+                          f"{_maaneder_tekst(mnd)}.")
 
+    if kilde == "aar":
+        hvor = f"Månedene er ex-datoene i {kilde_ar}"
+        if meldt:
+            hvor += f", der {MAANEDSNAVN[meldt]} er meldt, men ikke passert ennå"
+        hvor += "."
+    else:
+        hvor = ("Månedene er ex-datoer utledet av hvilke måneder som går igjen "
+                "over flere år, ikke av en enkelt utbetaling.")
     tekst = (
-        f"{innledning} Månedene er ex-datoer utledet av "
-        f"hvilke måneder som går igjen over flere år, ikke av en enkelt "
-        f"utbetaling. Selve pengene kommer som regel én til to uker etter "
+        f"{innledning} {hvor} Selve pengene kommer som regel én til to uker etter "
         f"ex-datoen, så en ex-dato sent i måneden betales ut i den neste."
     )
 
@@ -4622,8 +4885,13 @@ def _driver_selskapsledd(a, sektor):
             f"Utbyttet går ex {frekvens}, i {_maaneder_tekst(mnd)}"
         )
     elif mnd and len(mnd) <= 4:
+        kilde, kilde_ar, _ = maaneder_kilde(a, mnd)
+        blant = (" blant annet" if _VENTET.get(frekvens) and len(mnd) < _VENTET[frekvens]
+                 else "")
         setninger.append(
-            f"Ex-datoene har de siste årene ligget i {_maaneder_tekst(mnd)}"
+            f"I {kilde_ar} har ex-datoene{blant} ligget i {_maaneder_tekst(mnd)}"
+            if kilde == "aar" else
+            f"Ex-datoene har de siste årene{blant} ligget i {_maaneder_tekst(mnd)}"
         )
     elif frekvens:
         setninger.append(f"Utbyttet utbetales {frekvens}")
@@ -4658,6 +4926,26 @@ def _lag_risikofaktorer(a):
 # Brukes foran sektorteksten når tickers.json gir aksjen en bransje. Ingen tall
 # som kan drive, samme regel som sektortekstene.
 _BRANSJE_DRIVER_UTDYPET = {
+    # Tallkontrollen 2026-10-26: WAWI og HAUTO fikk «Fraktrater bestemmer
+    # inntjeningen nesten alene», mens begge selger mye av kapasiteten på
+    # flerårige avtaler. VEND fikk tekst om abonnement og digitale medier.
+    "roro": (
+        "Rederiet frakter biler, anleggsmaskiner og annen rullende last med "
+        "rorofartøy på faste linjer mellom kontinentene. Mye av volumet går på "
+        "flerårige avtaler med bil- og maskinprodusenter, så nye rater slår inn "
+        "gradvis etter hvert som avtalene fornyes. Inntjeningen følger handelen "
+        "med biler og maskiner, og drivstoffet betales delvis tilbake gjennom et "
+        "tillegg som kommer med forsinkelse. Følg volumene, nye avtaler og "
+        "hvor mange nye skip som kommer i markedet."
+    ),
+    "markedsplass": (
+        "Inntektene kommer i hovedsak fra annonser på digitale markedsplasser "
+        "for bil, bolig, jobb og brukte varer, og fra transaksjoner der "
+        "markedsplassen tar en andel. Annonsevolumet følger aktiviteten i "
+        "bolig-, bil- og arbeidsmarkedet. En ledende markedsplass samler flest "
+        "kjøpere og selgere, og kostnadene øker lite når inntektene vokser. "
+        "Følg annonsevolum, pris per annonse og veksten i transaksjonsinntektene."
+    ),
     "forsikring": (
         "Resultatet har to kilder: forsikringsdriften, der premiene skal dekke "
         "erstatninger og kostnader, og avkastningen på pengene selskapet "
@@ -4706,6 +4994,16 @@ _BRANSJE_DRIVER_UTDYPET = {
 }
 
 BRANSJE_RISIKOER = {
+    "roro": [
+        "Lavere eksport av biler og maskiner gir færre laster",
+        "Avtalene fornyes til nye rater, som kan være lavere",
+        "Mange nye skip i markedet kan presse ratene",
+    ],
+    "markedsplass": [
+        "Færre bolig- og bilsalg gir lavere annonsevolum",
+        "Et svakere arbeidsmarked gir færre stillingsannonser",
+        "Konkurranse om annonsørene kan presse prisene",
+    ],
     "forsikring": [
         "Store skadeår med storm og flom kan presse forsikringsresultatet",
         "Svake finansmarkeder gir lavere avkastning på kundenes og selskapets midler",
@@ -4978,8 +5276,10 @@ def _lag_investor_vurdering(a, sektor_snitt):
         topp_ar, topp_belop, siste_ar, siste_belop = topp
         vurdering_deler.append(
             f"Målt fra første til siste hele år har utbyttet vokst med {_pst(vekst, 1)} per år, "
-            f"men toppen var {_nf(topp_belop, 2)} NOK i {topp_ar}, og {siste_ar} endte på "
-            f"{_nf(siste_belop, 2)} NOK."
+            f"men toppen var {_nf(topp_belop, 2)} NOK i {topp_ar}, og "
+            + (f"for {siste_ar} er det betalt {_nf(siste_belop, 2)} NOK."
+               if siste_ar >= datetime.date.today().year
+               else f"{siste_ar} endte på {_nf(siste_belop, 2)} NOK.")
         )
     elif vekst is not None and vekst > 3:
         vurdering_deler.append(
@@ -5091,7 +5391,7 @@ VEKST_FRAMSKRIV_MAKS = 25
 VEKST_TOPP_ANDEL = 0.9
 
 
-def vekst_fra_topp(a):
+def vekst_fra_topp(a, i_dag=None):
     """(topp_ar, topp, siste_ar, siste) når siste hele år ligger klart under toppen.
 
     `utbytte_vekst_5ar` måler fra første til siste hele år og ser ikke hva som
@@ -5104,11 +5404,16 @@ def vekst_fra_topp(a):
     for bankene i 2021 er det det utsatte utbyttet beregn_utbytte_vekst()
     hopper over. None når veksten ikke er brutt eller serien mangler.
     """
-    per_ar = a.get("utbytte_per_ar") or {}
+    # Ordinært, og med årets utbytte for årlige betalere som har betalt
+    # (aarets_arsutbytte(): TINDE 9,00 → 4,90 i 2026).
+    per_ar = ordinaer_per_ar(a)
     try:
         ar = sorted((int(k), float(v or 0)) for k, v in per_ar.items())
     except (TypeError, ValueError):
         return None
+    aarets = aarets_arsutbytte(a, i_dag)
+    if aarets and ar and aarets[0] > ar[-1][0]:
+        ar.append(aarets)
     if len(ar) < 3:
         return None
     siste_ar, siste = ar[-1]
@@ -5128,7 +5433,8 @@ def _beregn_mal_py(a):
     if (sektor in _DEFENSIVE_SEKTORER_PY
             and _stabile_ar(a) >= 7
             and 0 < (a.get('payout_ratio') or 0) < 80
-            and not utbyttekutt(a)):
+            and not utbyttekutt(a)
+            and not aarets_nedgang(a, grense=KUTT_ANDEL)):
         mal.append('stabil')
     if (a.get('utbytte_vekst_5ar') or 0) > 3 and not vekst_fra_topp(a):
         mal.append('vekst')
@@ -5188,7 +5494,8 @@ def _lag_investor_badges(a):
 
     kutt = utbyttekutt(a)
     if kutt:
-        risiko_punkter.append(f'Utbyttet er satt ned før, sist i {kutt[-1][1]["ar"]}')
+        risiko_punkter.append(f'Utbyttet er satt ned før, sist i {kutt[-1][1]["ar"]}'
+                              + _pauser_etter_tekst(a, kutt[-1][1]["ar"]))
 
     if payout > 90:
         risiko_punkter.append(f'Svært høy payout ratio ({_pst(payout, 0)}) — lite buffer ved inntjeningsfall')
@@ -5660,13 +5967,19 @@ def _lag_faq_seksjon(a, today):
         total = sum(v for _, v in hele)
         hoy = max(hele, key=lambda x: x[1])
         lav = min(hele, key=lambda x: x[1])
+        # Alle år uten utbytte, ikke bare det første: WEST har både 2024 og
+        # 2025 (tallkontrollen 2026-10-26).
+        null_ar = [y for y, v in hele if v <= 0]
+        saer_ar = saerutbytte_per_ar(a)
+        saer_hoy = (f", hvorav {_nf(saer_ar[hoy[0]], 2)} kroner i særutbytte"
+                    if saer_ar.get(hoy[0]) else "")
         if hoy[1] == lav[1]:
             spenn = f"Hvert av årene ga {_nf(hoy[1], 2)} kroner."
         elif lav[1] <= 0:
-            spenn = (f"Høyest var {hoy[0]} med {_nf(hoy[1], 2)} kroner. I {lav[0]} "
-                     f"har vi ikke registrert noe utbytte.")
+            spenn = (f"Høyest var {hoy[0]} med {_nf(hoy[1], 2)} kroner{saer_hoy}. "
+                     f"I {_aar_liste(null_ar)} har vi ikke registrert noe utbytte.")
         else:
-            spenn = (f"Høyest var {hoy[0]} med {_nf(hoy[1], 2)} kroner, lavest "
+            spenn = (f"Høyest var {hoy[0]} med {_nf(hoy[1], 2)} kroner{saer_hoy}, lavest "
                      f"{lav[0]} med {_nf(lav[1], 2)} kroner.")
         hittil = next((h.get("utbytte") or 0 for h in hist if h.get("ar") == i_aar), 0)
         hittil_tekst = (f" Hittil i {i_aar} er det betalt {_nf(hittil, 2)} kroner per aksje."
@@ -5759,6 +6072,63 @@ def _typiske_utbetalingsmaaneder(historiske, min_ar=2, vindu=3):
     if typiske:
         return typiske
     return sorted(ar_sortert[0]["maaneder"])
+
+
+def aarets_maaneder(a, i_dag=None):
+    """Månedene i år når året er komplett etter frekvensen, ellers None.
+
+    Betalte måneder i år pluss en meldt ex-dato senere i år. Vår Energi gikk
+    ex i februar, juni og august 2026 og har meldt 17. november, men siden sa
+    «februar, april og august» fordi mønsteret bare teller måneder som går
+    igjen i to av tre år (tallkontrollen 2026-10-26). Når årets måneder er
+    like mange som frekvensen sier, er året ikke ufullstendig lenger, og da
+    er det det nyeste mønsteret vi har. Vistin gikk ex i mai i år, ikke juni.
+    """
+    forventet = {"Årlig": 1, **UTBETALINGER_PR_AAR}.get(a.get("frekvens"))
+    if not forventet:
+        return None
+    i_dag = i_dag or datetime.date.today()
+    iaar = i_dag.year
+    rad = next((h for h in a.get("historiske_utbytter") or [] if h.get("ar") == iaar), None)
+    mnd = set((rad or {}).get("maaneder") or [])
+    ex = str(a.get("ex_dato") or "")
+    if ex[:4] == str(iaar) and ex >= i_dag.isoformat():
+        try:
+            mnd.add(int(ex[5:7]))
+        except ValueError:
+            pass
+    return sorted(mnd) if len(mnd) == forventet else None
+
+
+def maaneder_kilde(a, mnd, i_dag=None):
+    """Hvor `mnd` kommer fra: ("aar", år, meldt_mnd) eller ("monster", None, None).
+
+    Teksten sa «utledet av hvilke måneder som går igjen over flere år» også
+    når listen var årets ex-datoer (VAR) eller ett enkelt år fordi ingen måned
+    gikk igjen (WEST betalte ikke i 2024 og 2025). Tallkontrollen 2026-10-26.
+    """
+    i_dag = i_dag or datetime.date.today()
+    mnd = sorted(mnd or [])
+    if aarets_maaneder(a, i_dag) == mnd:
+        ex = str(a.get("ex_dato") or "")
+        meldt = (int(ex[5:7]) if ex[:4] == str(i_dag.year) and ex >= i_dag.isoformat()
+                 and ex[5:7].isdigit() else None)
+        return "aar", i_dag.year, meldt
+    rader = sorted((h for h in a.get("historiske_utbytter") or [] if h.get("maaneder")),
+                   key=lambda h: h["ar"], reverse=True)[:3]
+    if mnd and all(sum(m in r["maaneder"] for r in rader) >= 2 for m in mnd):
+        return "monster", None, None
+    for r in rader:
+        if sorted(r["maaneder"]) == mnd:
+            return "aar", r["ar"], None
+    return "monster", None, None
+
+
+def sett_utbetalingsmaaneder(a, i_dag=None):
+    """Bygger `utbetalingsmaaneder`: årets måneder når året er komplett,
+    ellers mønsteret fra de siste årene. Avledet; kalles på hver kjøring."""
+    a["utbetalingsmaaneder"] = (aarets_maaneder(a, i_dag)
+                                or _typiske_utbetalingsmaaneder(a.get("historiske_utbytter") or []))
 
 
 def _maaneder_tekst(maaneder):
@@ -6849,6 +7219,10 @@ def generer_aksjesider(aksjer, root_dir):
             r for r in sorted(sektor_map.get(sektor, []),
                                key=lambda x: x.get("utbytte_yield", 0), reverse=True)
             if r["ticker"] != ticker and (r.get("utbytte_yield") or 0) > 0
+            # BlueNord sto med 28,5 % under «Andre energi-aksjer» på Vår
+            # Energi-siden, etter at det var vedtatt at den fusjoneres inn i
+            # Vår Energi og ikke betaler mer utbytte (tallkontroll 2026-10-26).
+            and not hendelse_uten_mal(r)
         ][:4]
         html = _aksje_side_html(a, today, relaterte=relaterte, sektor_snitt=sektor_snitt)
         with open(os.path.join(ticker_dir, "index.html"), "w", encoding="utf-8") as f:
@@ -9648,6 +10022,9 @@ def main():
         sett_ask_felter(aksje, ASK_EGNET.get(aksje["ticker"], True),
                         INKORPORERINGSLAND.get(aksje["ticker"], "Norge"))
         sett_hendelse(aksje, HENDELSE.get(aksje["ticker"]))
+        sett_saerutbytte(aksje)
+        # Etter frekvens og ex-dato er satt: årets måneder når året er komplett.
+        sett_utbetalingsmaaneder(aksje)
         # Også reserveradene fra forrige kjøring, og kursen kan ha endret seg
         # etter hent_aksje(). Teksten bygges på nytt fordi den bruker snittet.
         sett_snitt_felter(aksje)
