@@ -3711,27 +3711,32 @@
     {
       "ticker": "AKSO",
       "dato": "2026-10-28",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/684957"
     },
     {
       "ticker": "BNOR",
       "dato": "2026-10-28",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/684964"
     },
     {
       "ticker": "BRG",
       "dato": "2026-10-28",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/684960"
     },
     {
       "ticker": "SPOG",
       "dato": "2026-10-28",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/684965"
     },
     {
       "ticker": "VVL",
       "dato": "2026-10-28",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/684963"
     },
     {
       "ticker": "ACR",
@@ -4000,11 +4005,6 @@
     },
     {
       "ticker": "NKR",
-      "dato": "2026-11-05",
-      "type": "rapport"
-    },
-    {
-      "ticker": "NRC",
       "dato": "2026-11-05",
       "type": "rapport"
     },
@@ -4319,6 +4319,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "BRG",
+      "dato": "2027-02-03",
+      "type": "rapport"
+    },
+    {
       "ticker": "TEL",
       "dato": "2027-02-03",
       "type": "rapport"
@@ -4364,6 +4369,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "SPOG",
+      "dato": "2027-02-10",
+      "type": "rapport"
+    },
+    {
       "ticker": "STB",
       "dato": "2027-02-10",
       "type": "rapport"
@@ -4404,6 +4414,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "BNOR",
+      "dato": "2027-02-17",
+      "type": "rapport"
+    },
+    {
       "ticker": "OTEC",
       "dato": "2027-02-17",
       "type": "rapport"
@@ -4419,5 +4434,5 @@
       "type": "rapport"
     }
   ],
-  "sist_oppdatert": "2026-10-27"
+  "sist_oppdatert": "2026-10-28"
 }
