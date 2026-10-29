@@ -3741,77 +3741,92 @@
     {
       "ticker": "ACR",
       "dato": "2026-10-29",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/685041"
     },
     {
       "ticker": "AKRBP",
       "dato": "2026-10-29",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/685038"
     },
     {
       "ticker": "AQUA",
       "dato": "2026-10-29",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/685036"
     },
     {
       "ticker": "BWE",
       "dato": "2026-10-29",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/685064"
     },
     {
       "ticker": "DNO",
       "dato": "2026-10-29",
-      "type": "rapport"
+      "type": "rapport",
+      "url_forsok": 1
     },
     {
       "ticker": "ELK",
       "dato": "2026-10-29",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/685070"
     },
     {
       "ticker": "EPR",
       "dato": "2026-10-29",
-      "type": "rapport"
+      "type": "rapport",
+      "url_forsok": 1
     },
     {
       "ticker": "HELG",
       "dato": "2026-10-29",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/685071"
     },
     {
       "ticker": "KOG",
       "dato": "2026-10-29",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/685054"
     },
     {
       "ticker": "MING",
       "dato": "2026-10-29",
-      "type": "rapport"
+      "type": "rapport",
+      "url_forsok": 1
     },
     {
       "ticker": "PARB",
       "dato": "2026-10-29",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/685046"
     },
     {
       "ticker": "SB1NO",
       "dato": "2026-10-29",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/685044"
     },
     {
       "ticker": "SBMO",
       "dato": "2026-10-29",
-      "type": "rapport"
+      "type": "rapport",
+      "url_forsok": 1
     },
     {
       "ticker": "SMOP",
       "dato": "2026-10-29",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/685039"
     },
     {
       "ticker": "VISTIN",
       "dato": "2026-10-29",
-      "type": "rapport"
+      "type": "rapport",
+      "url_forsok": 1
     },
     {
       "ticker": "BONHR",
@@ -4309,8 +4324,18 @@
       "type": "rapport"
     },
     {
+      "ticker": "EPR",
+      "dato": "2027-01-27",
+      "type": "rapport"
+    },
+    {
       "ticker": "GJF",
       "dato": "2027-01-27",
+      "type": "rapport"
+    },
+    {
+      "ticker": "PARB",
+      "dato": "2027-01-28",
       "type": "rapport"
     },
     {
@@ -4359,6 +4384,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "AKRBP",
+      "dato": "2027-02-10",
+      "type": "rapport"
+    },
+    {
       "ticker": "ENTR",
       "dato": "2027-02-10",
       "type": "rapport"
@@ -4384,7 +4414,22 @@
       "type": "rapport"
     },
     {
+      "ticker": "ELK",
+      "dato": "2027-02-11",
+      "type": "rapport"
+    },
+    {
       "ticker": "KIT",
+      "dato": "2027-02-11",
+      "type": "rapport"
+    },
+    {
+      "ticker": "KOG",
+      "dato": "2027-02-11",
+      "type": "rapport"
+    },
+    {
+      "ticker": "MING",
       "dato": "2027-02-11",
       "type": "rapport"
     },
@@ -4399,8 +4444,23 @@
       "type": "rapport"
     },
     {
+      "ticker": "SB1NO",
+      "dato": "2027-02-11",
+      "type": "rapport"
+    },
+    {
       "ticker": "TGS",
       "dato": "2027-02-11",
+      "type": "rapport"
+    },
+    {
+      "ticker": "HELG",
+      "dato": "2027-02-12",
+      "type": "rapport"
+    },
+    {
+      "ticker": "STRONG",
+      "dato": "2027-02-12",
       "type": "rapport"
     },
     {
@@ -4424,6 +4484,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "ACR",
+      "dato": "2027-02-18",
+      "type": "rapport"
+    },
+    {
       "ticker": "KCC",
       "dato": "2027-02-19",
       "type": "rapport"
@@ -4434,5 +4499,5 @@
       "type": "rapport"
     }
   ],
-  "sist_oppdatert": "2026-10-28"
+  "sist_oppdatert": "2026-10-29"
 }
