@@ -3842,5 +3842,165 @@ class TestTallkontroll2610(unittest.TestCase):
         self.assertEqual(fs._pauser_etter_tekst(a, 2025), "")
 
 
+
+class TestFrekvensartikkel(unittest.TestCase):
+    """Tallene i «Slik leser du utbyttekalenderen» fylles fra dataene (30.10.2026).
+
+    Tabellen summerte til 160 aksjer i en katalog på 155, teksten under sa 32
+    kvartalsvise mot tabellens 31, HSHP sto med 3,5 % mot 10,9 %, og «år på
+    rad» var regnet fra antall år med utbytte. Setninger som trekker en
+    slutning fra tallene, skal bare skrives når tallene bærer den.
+    """
+
+    I_DAG = datetime.date(2026, 10, 30)
+
+    @staticmethod
+    def _aksje(ticker, frekvens, sektor, yld, aar, navn=None):
+        return {"ticker": ticker, "navn": navn or f"{ticker} ASA", "frekvens": frekvens,
+                "sektor": sektor, "utbytte_yield": yld, "utbytteaar": aar,
+                "ar_med_utbytte": len(aar)}
+
+    def _katalog(self):
+        a = self._aksje
+        aar = lambda n: list(range(2026 - n + 1, 2027))
+        return [
+            a("HSHP", "Månedlig", "Shipping", 11.0, aar(3), "Himalaya Shipping Ltd."),
+            a("K1", "Kvartalsvis", "Shipping", 8.0, aar(3)),
+            a("K2", "Kvartalsvis", "Shipping", 9.0, aar(4)),
+            a("K3", "Kvartalsvis", "Energi", 7.0, aar(5)),
+            a("K4", "Kvartalsvis", "Industri", 4.0, aar(2)),
+            a("H1", "Halvårlig", "Industri", 4.0, aar(15)),
+            a("H2", "Halvårlig", "Shipping", 5.0, aar(13)),
+            a("A1", "Årlig", "Finans", 6.0, aar(9), "Alfa Sparebank"),
+            a("A2", "Årlig", "Finans", 5.0, aar(8), "SpareBank 1 Beta"),
+            a("A3", "Årlig", "Finans", 4.0, aar(10), "Gamma Forsikring ASA"),
+            a("A4", "Årlig", "Industri", 3.0, aar(7)),
+            a("U1", "Uregelmessig", "Industri", 0, [2019, 2022]),
+            a("U2", "Uregelmessig", "Energi", 0, []),
+            a("U3", "Uregelmessig", "Industri", 6.0, [2024, 2026]),
+        ]
+
+    def _blokker(self, katalog=None, dato="30. oktober 2026"):
+        g = fs.frekvensfordeling(katalog or self._katalog(), self.I_DAG)
+        return fs.lag_frekvens_blokker(g, dato)
+
+    def test_fordeling(self):
+        g = fs.frekvensfordeling(self._katalog(), self.I_DAG)
+        self.assertEqual(list(g), list(fs.FREKVENS_REKKEFOLGE))
+        self.assertEqual(sum(x["antall"] for x in g.values()), 14)
+        self.assertEqual(g["Kvartalsvis"]["sykliske"], 3)
+        self.assertEqual(g["Kvartalsvis"]["rekke"], 3.5)       # rekken, ikke antall år
+        self.assertEqual(g["Uregelmessig"]["rekke"], 0)        # U1 og U2 har ingen rekke nå
+        self.assertEqual(g["Uregelmessig"]["yield"], 0)        # median over alle
+        self.assertEqual(g["Uregelmessig"]["betaler"], 1)
+        self.assertEqual(g["Årlig"]["sparebanker"], 2)
+
+    def test_tabell_summerer_til_katalogen(self):
+        tabell = self._blokker()["tabell"]
+        antall = [int(x) for x in re.findall(r"</strong></td><td>(\d+)</td>", tabell)]
+        self.assertEqual(sum(antall), 14)
+        self.assertIn("<td>3,5</td>", tabell)
+        self.assertIn("Tallene er fra 30. oktober 2026.", tabell)
+        self.assertNotIn("Tallene er fra", self._blokker(dato="")["tabell"])
+
+    def test_analyse_folger_tallene(self):
+        b = self._blokker()
+        self.assertIn("75\u00a0% av de kvartalsvise", b["analyse"])
+        self.assertIn("mot 0\u00a0% av de årlige", b["analyse"])
+        self.assertIn("Av de 4 kvartalsvise er 2 shipping, 1 energi og 1 industri.", b["analyse"])
+        self.assertIn("3 av de 4 årlige betalerne finansselskaper, de fleste av dem sparebanker.",
+                      b["analyse"])
+        # Én av tre sparebanker: ingen påstand om «de fleste».
+        kat = self._katalog()
+        kat[8]["navn"] = "Beta Finans ASA"
+        self.assertNotIn("sparebanker", self._blokker(kat)["analyse"])
+
+    def test_slutningen_om_kort_historikk_krever_at_den_holder(self):
+        b = self._blokker()
+        self.assertIn("kortest historikk", b["rekke"])
+        kat = self._katalog()
+        for a in kat:
+            if a["frekvens"] == "Kvartalsvis":
+                a["utbytteaar"] = list(range(2000, 2027))
+        b = self._blokker(kat)
+        self.assertNotIn("kortest historikk", b["rekke"])
+        self.assertNotIn("samme historien", b["rekke"])
+
+    def test_uregelmessig(self):
+        b = self._blokker()["uregelmessig"]
+        self.assertIn("De 3 aksjene", b)
+        self.assertIn("Bare én av dem", b)
+        self.assertIn("ikke betalt i det hele tatt", b)        # U2 har aldri betalt
+        kat = [a for a in self._katalog() if a["ticker"] != "U3"]
+        self.assertIn("Ingen av dem", self._blokker(kat)["uregelmessig"])
+
+    def test_manedlig_navngir_det_som_finnes(self):
+        b = self._blokker()["manedlig"]
+        self.assertIn("bare én som betaler månedlig", b)
+        self.assertIn('<a href="/aksjer/HSHP/"', b)
+        self.assertIn("Himalaya Shipping (HSHP)", b)
+        self.assertIn("11,00 %", b)
+        kat = [a for a in self._katalog() if a["frekvens"] != "Månedlig"]
+        self.assertIn("ingen som betaler månedlig", self._blokker(kat)["manedlig"])
+        kat = self._katalog() + [self._aksje("M2", "Månedlig", "Eiendom", 6.0, [2025, 2026])]
+        self.assertIn("bare to som betaler månedlig", self._blokker(kat)["manedlig"])
+
+    def test_halvarlig(self):
+        b = self._blokker()["halvarlig"]
+        self.assertIn("interessant mellomsjikt", b)             # 50 % mot 75 %
+        self.assertIn("den lengste historikken", b)             # median 14
+        kat = self._katalog()
+        kat[5]["sektor"] = "Shipping"                            # 100 % sykliske
+        self.assertNotIn("mellomsjikt", self._blokker(kat)["halvarlig"])
+
+    def test_oppdaterer_markorene_og_er_idempotent(self):
+        rot = tempfile.mkdtemp()
+        self.addCleanup(shutil.rmtree, rot, ignore_errors=True)
+        sti = os.path.join(rot, fs.FREKVENS_ARTIKKEL)
+        os.makedirs(os.path.dirname(sti))
+        with open(sti, "w", encoding="utf-8") as f:
+            f.write("<p><!--FREKV:analyse-->gammelt 32<!--/FREKV--></p>\n"
+                    "<p><!--FREKV:ukjent-->står<!--/FREKV--></p>\n")
+        self.assertTrue(fs.oppdater_frekvensartikkel(self._katalog(), rot, self.I_DAG))
+        self.assertFalse(fs.oppdater_frekvensartikkel(self._katalog(), rot, self.I_DAG))
+        with open(sti, encoding="utf-8") as f:
+            h = f.read()
+        self.assertNotIn("gammelt", h)
+        self.assertIn("<!--FREKV:ukjent-->står<!--/FREKV-->", h)
+
+    def test_artikkelen_har_bare_blokker_generatoren_fyller(self):
+        sti = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+                           fs.FREKVENS_ARTIKKEL)
+        with open(sti, encoding="utf-8") as f:
+            navn = re.findall(r"<!--FREKV:(\w+)-->", f.read())
+        self.assertEqual(sorted(navn), sorted(self._blokker()))
+
+
+class TestMarkedsplassOgRapportmeta(unittest.TestCase):
+    """14 av 155 aksjer står på Euronext Growth (30.10.2026)."""
+
+    def test_markedsplass_tekst(self):
+        self.assertEqual(fs.markedsplass_tekst([{"bors": "Oslo Børs"}]), "Oslo Børs")
+        self.assertEqual(fs.markedsplass_tekst([{"bors": "Oslo Børs"},
+                                                {"bors": "Euronext Growth Oslo"}]),
+                         "Oslo Børs og Euronext Growth")
+        self.assertEqual(fs.markedsplass_tekst([]), "Oslo Børs")
+
+    def test_rapportkalender_meta_har_ikke_dagens_antall(self):
+        # «over 130» fulgte antallet rapportdatoer, som faller mot null før
+        # hver rapportsesong og gjorde beskrivelsen feil mot slutten av året.
+        rot = tempfile.mkdtemp()
+        self.addCleanup(shutil.rmtree, rot, ignore_errors=True)
+        aksjer = [{"ticker": f"T{i}", "navn": f"T{i} ASA", "sektor": "Finans",
+                   "bors": "Euronext Growth Oslo" if i == 0 else "Oslo Børs",
+                   "utbytte_yield": 5.0, "rapport_dato": "2026-11-05"} for i in range(25)]
+        fs.generer_rapportkalender(aksjer, rot, i_dag=datetime.date(2026, 10, 30))
+        with open(os.path.join(rot, "rapportkalender", "index.html"), encoding="utf-8") as f:
+            h = f.read()
+        desc = re.search(r'<meta name="description" content="([^"]*)"', h).group(1)
+        self.assertNotRegex(desc, r"\d")
+        self.assertIn("selskaper på Oslo Børs og Euronext Growth.", h)
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

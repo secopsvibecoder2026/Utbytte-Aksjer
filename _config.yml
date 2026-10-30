@@ -1,0 +1,19 @@
+# GitHub Pages bygger nettstedet med Jekyll når kilden i innstillingene er
+# «Deploy from a branch». Uten denne lista ble prosjektdokumentene
+# (CLAUDE.md, ROADMAP.md, SECURITY_ROADMAP.md …) gjort om til offentlige
+# sider på exday.no, og skriptene, testene og promomappen lå åpent.
+#
+# Deployen i GitHub Actions (update-og-deploy.yml og deploy-only.yml) leser
+# den samme lista gjennom scripts/nettstedfiler.py, så begge byggene holder
+# de samme filene utenfor. Legg nye interne filer og mapper til her.
+exclude:
+  - "*.md"
+  - scripts
+  - tests
+  - promo
+  - node_modules
+  - package.json
+  - package-lock.json
+  - playwright.config.js
+  - test-results
+  - playwright-report

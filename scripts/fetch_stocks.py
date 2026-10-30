@@ -8937,6 +8937,13 @@ def generer_topplistesider(aksjer, root_dir):
 # bekreftet ex-dato, så dette er en søkeflate vi kan fylle i dag, mens
 # utbyttekalenderen står nesten tom elleve måneder i året.
 
+def markedsplass_tekst(aksjer):
+    """«Oslo Børs og Euronext Growth» når utvalget har aksjer på begge, ellers
+    «Oslo Børs». Speiler markedsplassTekst() i assets/ui.js."""
+    growth = any("growth" in str(a.get("bors") or "").lower() for a in aksjer)
+    return "Oslo Børs og Euronext Growth" if growth else "Oslo Børs"
+
+
 def _rapportkalender_analyse(kommende, per_maaned, aksjer, i_dag):
     """Bygger analyseteksten fra denne kjøringens tall.
 
@@ -8948,6 +8955,8 @@ def _rapportkalender_analyse(kommende, per_maaned, aksjer, i_dag):
 
     ant = len(kommende)
     selskaper = len({h["ticker"] for h in kommende})
+    tickere = {h["ticker"] for h in kommende}
+    markedsplass = markedsplass_tekst([a for a in aksjer if a.get("ticker") in tickere])
     travleste_key = max(per_maaned, key=lambda k: len(per_maaned[k]))
     travleste_ant = len(per_maaned[travleste_key])
     travleste_navn = MAANEDSNAVN[travleste_key[1]]
@@ -8982,7 +8991,7 @@ def _rapportkalender_analyse(kommende, per_maaned, aksjer, i_dag):
     return f"""  <div class="liste-analyse">
     <h2>Rapportsesongen akkurat nå</h2>
     <p>
-      Vi kjenner {ant} rapportdatoer for {selskaper} selskaper på Oslo Børs.
+      Vi kjenner {ant} rapportdatoer for {selskaper} selskaper på {markedsplass}.
       {i_topp_to} av dem — {andel} % — faller i {topp_to_navn}, og {travleste_navn} alene
       har {travleste_ant}.{sektor_setning} Rapportsesongen på Oslo Børs er kort og
       tett: børsen går fra nesten ingen meldinger til over hundre på noen uker,
@@ -9149,8 +9158,8 @@ def generer_rapportkalender(aksjer, root_dir, i_dag=None):
     # klipper Google tittelen midt i domenenavnet.
     tittel = f"Rapportkalender {aar}: kvartalsrapporter Oslo Børs"
     desc = (f"Når legger selskapene på Oslo Børs fram kvartalstall? "
-            f"Rapportkalender for over {selskaper // 10 * 10} norske aksjer, "
-            f"måned for måned. Oppdateres daglig.")
+            f"Rapportkalender for norske utbytteaksjer, måned for måned. "
+            f"Oppdateres daglig.")
 
     json_ld = json.dumps({
         "@context": "https://schema.org",
@@ -10187,6 +10196,7 @@ def main():
     oppdater_forside_uka(resultater, root_dir)
     oppdater_forside_artikler(root_dir)
     oppdater_kalender_maaneder(resultater, root_dir)
+    oppdater_frekvensartikkel(resultater, root_dir)
     # Sist: lastmod hasher sidene, så markørene må være fylt først.
     generer_sitemap(resultater, root_dir, today, AKSJER)
 
@@ -10325,6 +10335,249 @@ def oppdater_kalender_maaneder(aksjer, root_dir: str, i_dag=None):
     blokk = lag_exmnd_blokk(aksjer, i_dag)
     nytt = _EXMND_MONSTER.sub(lambda m: "<!--EXMND:START-->\n" + blokk + "\n    <!--EXMND:SLUTT-->",
                               innhold, count=1)
+    if nytt == innhold:
+        return False
+    with open(sti, "w", encoding="utf-8") as f:
+        f.write(nytt)
+    return True
+
+
+# ── Frekvensfordelingen i «Slik leser du utbyttekalenderen» (30.10.2026) ─────
+# Tabellen og setningene rundt den ble skrevet for hånd i august. To måneder
+# senere summerte tabellen til 160 aksjer i en katalog på 155, teksten under
+# sa 32 kvartalsvise mot tabellens 31, og HSHP sto med 3,5 % mot 10,9 %.
+# «År på rad» var dessuten regnet fra antall år med utbytte, ikke rekken.
+# Alt med tall i den delen av artikkelen fylles derfor fra dataene, mellom
+# <!--FREKV:navn--> og <!--/FREKV-->, og setningene som trekker en slutning
+# fra tallene, skrives bare når tallene bærer den.
+FREKVENS_ARTIKKEL = os.path.join("artikler", "slik-leser-du-utbyttekalenderen", "index.html")
+FREKVENS_REKKEFOLGE = ("Månedlig", "Kvartalsvis", "Halvårlig", "Årlig", "Uregelmessig")
+SYKLISKE_SEKTORER = ("Shipping", "Energi", "Energitjenester", "Havbruk", "Materialer")
+_FREKV_MONSTER = re.compile(r"<!--FREKV:(\w+)-->.*?<!--/FREKV-->", re.S)
+_ANTALL_ORD = {1: "én", 2: "to", 3: "tre", 4: "fire", 5: "fem", 6: "seks",
+               7: "sju", 8: "åtte", 9: "ni", 10: "ti"}
+
+
+def _data_dato_lang():
+    """«30. oktober 2026» fra DATA_SIST_OPPDATERT, eller tom streng uten dato."""
+    try:
+        d = datetime.datetime.strptime(str(DATA_SIST_OPPDATERT or "")[:10], "%Y-%m-%d")
+    except (ValueError, TypeError):
+        return ""
+    return f"{d.day}. {MAANEDSNAVN[d.month]} {d.year}"
+
+
+def _antall_ord(n):
+    """«én», «to» … Tall under elleve skrives med ord."""
+    return _ANTALL_ORD.get(n, str(n))
+
+
+def _median_tekst(verdi):
+    """Median år på rad: «4», «8,5», eller «—» uten tall."""
+    if verdi is None:
+        return "—"
+    return str(int(verdi)) if float(verdi).is_integer() else _nf(verdi, 1)
+
+
+def frekvensfordeling(aksjer, i_dag=None):
+    """Antall, sykliske, median rekke og median yield per utbyttefrekvens.
+
+    Median yield regnes over alle aksjene i gruppen, også dem som ikke betaler
+    nå. Den gamle tabellen sa «blant aksjene med yield over null» og viste
+    likevel 0,00 % for de uregelmessige.
+    """
+    import statistics
+    grupper = {}
+    for frekvens in FREKVENS_REKKEFOLGE:
+        rader = [a for a in aksjer if a.get("frekvens") == frekvens]
+        if not rader:
+            continue
+        rekker = [r["rad"] for r in (utbytterekke(a, i_dag) for a in rader) if r]
+        yielder = [a.get("utbytte_yield") or 0 for a in rader]
+        sektorer = {}
+        for a in rader:
+            sektorer[a.get("sektor") or ""] = sektorer.get(a.get("sektor") or "", 0) + 1
+        grupper[frekvens] = {
+            "antall": len(rader),
+            "sykliske": sum(1 for a in rader if a.get("sektor") in SYKLISKE_SEKTORER),
+            "rekke": statistics.median(rekker) if rekker else None,
+            "yield": statistics.median(yielder),
+            "betaler": sum(1 for y in yielder if y > 0),
+            "aldri": sum(1 for a in rader if not a.get("ar_med_utbytte")),
+            "sparebanker": sum(1 for a in rader if a.get("sektor") == "Finans"
+                               and "sparebank" in (a.get("navn") or "").lower()),
+            "sektorer": sorted(sektorer.items(), key=lambda kv: (-kv[1], kv[0])),
+            "aksjer": sorted(rader, key=lambda a: a.get("ticker") or ""),
+        }
+    return grupper
+
+
+def _syklisk_andel(gruppe):
+    return 100 * gruppe["sykliske"] / gruppe["antall"]
+
+
+def lag_frekvens_blokker(grupper, dato=""):
+    """HTML til hver <!--FREKV:navn-->-blokk i artikkelen.
+
+    «tabell» er tabellen med fotnote. De andre er tekst inne i et <p>:
+    «analyse», «rekke», «uregelmessig», «manedlig» og «halvarlig».
+    """
+    import html as _html
+    blokker = {}
+
+    rader = []
+    for frekvens, g in grupper.items():
+        rader.append(
+            f'          <tr><td><strong>{frekvens}</strong></td><td>{g["antall"]}</td>'
+            f'<td>{_pst(_syklisk_andel(g), 0)}</td><td>{_median_tekst(g["rekke"])}</td>'
+            f'<td>{_pst(g["yield"])}</td></tr>')
+    sykliske = ", ".join(SYKLISKE_SEKTORER[:-1]) + " og " + SYKLISKE_SEKTORER[-1]
+    fra = f"Tallene er fra {dato}. " if dato else ""
+    blokker["tabell"] = "\n".join([
+        "",
+        "      <table>",
+        "        <thead>",
+        "          <tr>",
+        "            <th>Frekvens</th>",
+        "            <th>Antall</th>",
+        "            <th>Sykliske</th>",
+        "            <th>Median år på rad</th>",
+        "            <th>Median yield</th>",
+        "          </tr>",
+        "        </thead>",
+        "        <tbody>",
+        *rader,
+        "        </tbody>",
+        "      </table>",
+        "",
+        '      <p class="text-xs text-gray-400 dark:text-gray-600 -mt-2">',
+        f"        {fra}Sykliske sektorer er {sykliske}. «År på rad» er den sammenhengende "
+        "rekken av år med utbytte fram til i dag. Median yield er regnet over alle aksjene "
+        "i gruppen, også dem som ikke betaler nå.",
+        "      </p>",
+        "      "])
+
+    kv, ar = grupper.get("Kvartalsvis"), grupper.get("Årlig")
+    ha, ur, mnd = grupper.get("Halvårlig"), grupper.get("Uregelmessig"), grupper.get("Månedlig")
+
+    if kv and ar:
+        tekst = ("Legg merke til kolonnen for sykliske sektorer. "
+                 f"<strong>{_pst(_syklisk_andel(kv), 0)} av de kvartalsvise betalerne er "
+                 f"sykliske selskaper, mot {_pst(_syklisk_andel(ar), 0)} av de årlige.</strong>")
+        topp = [(s, n) for s, n in kv["sektorer"] if s][:3]
+        if len(topp) >= 2:
+            deler = [f"{n} {s.lower()}" for s, n in topp]
+            tekst += (f" Av de {kv['antall']} kvartalsvise er "
+                      + ", ".join(deler[:-1]) + " og " + deler[-1] + ".")
+        finans = dict(ar["sektorer"]).get("Finans", 0)
+        if finans:
+            tekst += (f" På den andre siden er {finans} av de {ar['antall']} årlige "
+                      "betalerne finansselskaper")
+            tekst += ", de fleste av dem sparebanker." if ar["sparebanker"] * 2 > finans else "."
+        blokker["analyse"] = tekst
+
+    if kv and ar and ha and None not in (kv["rekke"], ar["rekke"], ha["rekke"]):
+        k, a_, h = (_median_tekst(g["rekke"]) for g in (kv, ar, ha))
+        if kv["rekke"] < min(ar["rekke"], ha["rekke"]):
+            blokker["rekke"] = (
+                f"Median antall år på rad forteller den samme historien: {k} år for de "
+                f"kvartalsvise, mot {a_} for de årlige og {h} for de halvårlige. Med andre ord: "
+                "de aksjene som gir deg penger oftest, er også de som har kortest historikk på "
+                "å faktisk klare det.")
+        else:
+            blokker["rekke"] = (
+                f"Median antall år på rad er {k} for de kvartalsvise, {a_} for de årlige og "
+                f"{h} for de halvårlige.")
+
+    if ur:
+        n, k = ur["antall"], ur["betaler"]
+        tekst = (f"De {n} aksjene merket <strong>«Uregelmessig»</strong> har ingen fast rytme. "
+                 "Noen har betalt en gang iblant, ofte etter et enkeltstående godt år eller et salg")
+        tekst += (", og noen har ikke betalt i det hele tatt i årene vi har tall for."
+                  if ur["aldri"] else ".")
+        if k == 0:
+            tekst += " Ingen av dem har en løpende direkteavkastning i dag."
+        elif k * 2 <= n:
+            tekst += f" Bare {_antall_ord(k)} av dem har en løpende direkteavkastning i dag."
+        else:
+            tekst += f" {k} av dem har en løpende direkteavkastning i dag."
+        if k * 2 <= n:
+            tekst += (" Dette er i hovedsak ikke utbytteaksjer i praktisk forstand, og du bør "
+                      "ikke bygge kontantstrømplaner på dem.")
+        else:
+            tekst += " Utbetalingene kommer likevel uten fast rytme, så ikke bygg kontantstrømplaner på dem."
+        blokker["uregelmessig"] = tekst
+
+    slutt = (" Skal du ha noe som ligner en månedslønn, må du sette den sammen selv av "
+             "kvartalsvise og halvårlige betalere med forskjøvne utbetalingssykluser.")
+    if not mnd:
+        blokker["manedlig"] = ("Blant aksjene exday.no følger, er det nå "
+                               "<strong>ingen som betaler månedlig</strong>." + slutt)
+    else:
+        lenker = []
+        for a in mnd["aksjer"]:
+            ticker = _html.escape(a.get("ticker") or "")
+            navn = _html.escape(_kort_selskapsnavn(a.get("navn") or "") or ticker)
+            lenke = (f'<a href="/aksjer/{ticker}/" class="text-green-700 dark:text-green-400 '
+                     f'underline">{navn} ({ticker})</a>')
+            y = a.get("utbytte_yield") or 0
+            lenker.append(lenke + (f", med en direkteavkastning på {_pst(y)}" if y > 0 else ""))
+        if len(lenker) == 1:
+            blokker["manedlig"] = ("Blant aksjene exday.no følger, er det nå "
+                                   f"<strong>bare én som betaler månedlig</strong>: {lenker[0]}. "
+                                   "Én aksje er ikke en portefølje." + slutt)
+        else:
+            blokker["manedlig"] = (
+                "Blant aksjene exday.no følger, er det nå "
+                f"<strong>bare {_antall_ord(len(lenker))} som betaler månedlig</strong>: "
+                + "; ".join(lenker) + ". Så få aksjer er ikke en portefølje." + slutt)
+
+    if ha and kv:
+        andeler = (f"{_pst(_syklisk_andel(ha), 0)} av dem er sykliske, mot "
+                   f"{_pst(_syklisk_andel(kv), 0)} av de kvartalsvise")
+        if _syklisk_andel(ha) < _syklisk_andel(kv):
+            tekst = ("Vil du likevel sikte mot jevnere utbetalinger, er de "
+                     f"<strong>halvårlige</strong> betalerne et interessant mellomsjikt: {andeler}")
+        else:
+            tekst = f"Se også på de <strong>halvårlige</strong> betalerne: {andeler}"
+        lengst = max((g["rekke"] for g in grupper.values() if g["rekke"] is not None),
+                     default=None)
+        if ha["rekke"] is not None and ha["rekke"] == lengst:
+            tekst += (f", og gruppen har den lengste historikken av alle, med median "
+                      f"{_median_tekst(ha['rekke'])} år på rad.")
+        elif ha["rekke"] is not None:
+            tekst += f", og gruppen har median {_median_tekst(ha['rekke'])} år på rad."
+        else:
+            tekst += "."
+        blokker["halvarlig"] = tekst
+
+    return blokker
+
+
+def oppdater_frekvensartikkel(aksjer, root_dir: str, i_dag=None):
+    """Fyller tallene i «Slik leser du utbyttekalenderen». True når filen ble endret.
+
+    En blokk uten innhold denne kjøringen, eller et ukjent navn, står urørt og
+    meldes i loggen, slik oppdater_antall_i_sider() gjør med ukjente nøkler.
+    """
+    sti = os.path.join(root_dir, FREKVENS_ARTIKKEL)
+    try:
+        with open(sti, encoding="utf-8") as f:
+            innhold = f.read()
+    except OSError:
+        return False
+    if not _FREKV_MONSTER.search(innhold):
+        print("  Frekvensartikkelen mangler <!--FREKV:…-->-markører; tallene er ikke oppdatert.")
+        return False
+    blokker = lag_frekvens_blokker(frekvensfordeling(aksjer, i_dag), _data_dato_lang())
+
+    def bytt(m):
+        if m.group(1) not in blokker:
+            print(f"  Frekvensartikkelen: ingen tekst for «{m.group(1)}», blokken står urørt.")
+            return m.group(0)
+        return f"<!--FREKV:{m.group(1)}-->{blokker[m.group(1)]}<!--/FREKV-->"
+
+    nytt = _FREKV_MONSTER.sub(bytt, innhold)
     if nytt == innhold:
         return False
     with open(sti, "w", encoding="utf-8") as f:

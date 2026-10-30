@@ -228,10 +228,15 @@ jobs:
       - name: Konfigurer GitHub Pages
         uses: actions/configure-pages@v5
 
+      # Bare nettstedet, ikke prosjektdokumentene, skriptene og testene.
+      # Lista står i _config.yml (se scripts/nettstedfiler.py).
+      - name: Samle nettstedet uten interne filer
+        run: python3 scripts/nettstedfiler.py "$RUNNER_TEMP/nettsted"
+
       - name: Last opp artefakt
         uses: actions/upload-pages-artifact@v3
         with:
-          path: "."
+          path: ${{ runner.temp }}/nettsted
 
       - name: Deploy til GitHub Pages
         id: deployment
