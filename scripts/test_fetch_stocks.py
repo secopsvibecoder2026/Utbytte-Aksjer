@@ -1451,6 +1451,18 @@ class TestHentNewswebExDato(unittest.TestCase):
         self.assertEqual(r["ex_dato"], "2026-11-13")
         self.assertEqual(hentet, [1])
 
+    def test_naermeste_kommende_vinner_over_nyeste_melding(self):
+        # Equinor 30.10.2026: tredje kvartal (ex 15.02.2027) meldt 28.10,
+        # andre kvartal (ex 13.11.2026) meldt 22.07. Siden viste februar.
+        r, hentet = self._kjor([
+            self._m(33, "2026-10-28", "Ex-date Oslo Børs: 15 February 2027\nPayment date: 26 February 2027"),
+            self._m(32, "2026-07-22", "Ex-date Oslo Børs: 13 November 2026\nPayment date: 25 November 2026"),
+            self._m(31, "2026-04-29", "Ex-date Oslo Børs: 13 August 2026"),
+        ], i_dag="2026-10-30")
+        self.assertEqual(r["ex_dato"], "2026-11-13")
+        self.assertEqual(r["betaling_dato"], "2026-11-25")
+        self.assertEqual(hentet, [33, 32, 31], "stopper ved første melding der alt er passert")
+
     def test_nettverksfeil_gir_none(self):
         import fetch_stocks as fs
         gml = fs._newsweb_meldinger

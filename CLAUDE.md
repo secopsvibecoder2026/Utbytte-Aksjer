@@ -2351,6 +2351,25 @@ Growth.
 
 Tests: `TestFrekvensartikkel` (9), `TestMarkedsplassOgRapportmeta` (2).
 
+## Equinor showed the February ex-date, not November (2026-10-30)
+
+Found while taking screenshots for a promo reel. Equinor announces its
+dividend two quarters ahead. On 28 October it published the third-quarter
+notice (ex 15 February 2027), while the second-quarter dividend from the
+notice of 22 July (ex 13 November 2026) had not yet gone ex.
+`hent_newsweb_ex_dato()` returned the first upcoming date in the *newest*
+notice, so the site and the app said 15 February. Someone buying on 13
+November or later, expecting the dividend, would not have got it.
+
+The function now reads every notice in the window and keeps the nearest
+upcoming ex-date. It still stops at the first notice where every date has
+passed, because older notices are about older dividends. A dry run over the
+whole catalog moved only EQNR (15.02.2027 → 13.11.2026).
+Test: `TestHentNewswebExDato` (+1).
+
+**`/aksjer/` said «8 sektorer».** The hero counted the eight sector cards
+shown below it, not the sectors in the catalog (15). It now counts them all.
+
 ## App review of 2026-10-20
 
 Every tab, sub-tab and fourteen stock modals were opened with Playwright at
