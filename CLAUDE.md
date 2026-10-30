@@ -116,6 +116,7 @@ Utbytte-Aksjer/
 │   ├── sjekk_klasser.py       # Verifies every Tailwind class is compiled
 │   ├── sjekk_antall.py        # Finds hard-coded stock counts that should be markers
 │   ├── vedlikehold.py         # Daily maintenance: Actions runs, live site, stocks in/out from NewsWeb
+│   ├── nettstedfiler.py       # Copies the site without internal files for the Pages deploy
 │   ├── sjekk_sprak.py         # Counts dashes and AI phrasing in published text (SKRIVESTIL.md)
 │   ├── valider_innledning.py  # Gate for the company texts: --ko, --skriv, --ticker
 │   ├── test_sjekk_utdaterte.py # Tests for sjekk_utdaterte.py (stdlib unittest)
@@ -146,6 +147,7 @@ Utbytte-Aksjer/
 ├── sitemap.xml                # SEO sitemap (~200 URLs, generated)
 ├── robots.txt                 # Search engine directives
 ├── CNAME                      # Custom domain: exday.no
+├── _config.yml                # What Pages must NOT publish (*.md, scripts/, tests/, promo/ …)
 ├── SECURITY_ROADMAP.md        # Security review findings and fix status
 ├── package.json               # npm scripts: test, build:css, watch:css
 ├── README.md                  # Project overview and setup instructions
@@ -189,6 +191,7 @@ python scripts/test_sjekk_tema.py       # 10 Python tests (mørk modus på hver 
 python scripts/test_sjekk_klasser.py    # 10 Python tests (CSS-klasser finnes)
 python scripts/test_sjekk_antall.py     # 11 Python tests (aksjetellinger bruker markør)
 python scripts/test_vedlikehold.py      # 32 Python tests (inn/ut fra NewsWeb, ferskhet)
+python scripts/test_nettstedfiler.py    # 11 Python tests (interne filer holdes utenfor nettstedet)
 # npm test dekker også tests/app.test.js — ferskhetsindikator + escHtml
 ```
 
@@ -2271,6 +2274,82 @@ alene» did not fit. `markedsplass` for VEND: classifieds, not subscriptions.
 VISTIN's healthcare text and WEST's shipping text were left as they are.
 
 Tests: `TestTallkontroll2610` (13) and `ui.test.js` (+1).
+
+## Internal files were public on exday.no (fixed 2026-10-30)
+
+Checked before the third AdSense application: `exday.no/CLAUDE.html` answered
+200 with this file rendered as a page, titled «AI Assistant Guide», and so did
+ROADMAP, SECURITY_ROADMAP, STYLE, KODE_REVIEW and PROSJEKT_REVIEW.
+`scripts/`, `tests/`, `promo/` and `package.json` were served as well.
+
+**Two builds publish the site, and both leaked.**
+
+- **The branch build.** Pages is set to «Deploy from a branch», so GitHub runs
+  its own Jekyll build («pages build and deployment») on every push to `main`.
+  Jekyll turns every `.md` into an `.html` page. This is the build that is
+  live: the live `sw.js` reads `exday-v10`, the value in the repo, not the
+  `exday-v{SHA}` the Actions deploy writes.
+- **The Actions deploy** (`update-og-deploy.yml`, `deploy-only.yml`) uploaded
+  the whole repo with `path: "."`.
+
+**The fix covers both, from one list.** `exclude` in `_config.yml` keeps the
+files out of the Jekyll build. `scripts/nettstedfiler.py` reads the same list,
+copies the tracked files that remain to `$RUNNER_TEMP/nettsted`, and the
+deploy uploads that. A Jekyll 3.10 build with the GitHub Pages plugins was run
+before and after: only the leaked files disappear, and the Actions copy is
+identical to the Jekyll output.
+
+- **New internal file or folder:** add it to `exclude`.
+  `TestMotRepoet` fails if a `.md` file or a file in `scripts/`, `tests/`,
+  `promo/`, `.claude/` or `.github/` reaches the site.
+- **Pages that must stay public:** every page in `sitemap.xml`, the files in
+  the service worker's `PRECACHE` and `MAA_MED` are checked against the
+  selection. The script stops the deploy if `MAA_MED` is incomplete.
+- `promo/` is not needed on the site. The posting AI reads the plan and the
+  images from raw.githubusercontent.com.
+
+**For the owner:** set Settings → Pages → Source to «GitHub Actions». Then only
+the workflow deploys, the SW cache name is bumped as intended, and the two
+builds stop racing each other. Until then `_config.yml` keeps the branch build
+clean.
+
+Tests: `scripts/test_nettstedfiler.py` (11).
+
+## The frequency table in «Slik leser du utbyttekalenderen» (2026-10-30)
+
+The table and the sentences around it were written by hand in August. By
+October the table summed to 160 stocks in a catalog of 155, and the text
+under it said 32 quarterly payers against 31 in the table and 73 annual
+payers against 74. HSHP was quoted at 3,5 % yield against 10,9 %. «Median år
+på rad» had been computed from the count of years with a dividend, not from
+the streak.
+
+`oppdater_frekvensartikkel()` now fills everything with a number in that part
+of the article, between `<!--FREKV:navn-->` and `<!--/FREKV-->`. Both scripts
+call it. `frekvensfordeling()` computes the groups and `lag_frekvens_blokker()`
+writes the text.
+
+- **The streak comes from `utbytterekke()`.** Median yield is taken over every
+  stock in the group, including those that pay nothing now.
+- **A conclusion is written only when the numbers carry it.**
+  - «kortest historikk» needs the quarterly median streak to be the shortest.
+  - «mellomsjikt» needs the half-yearly payers to be less cyclical than the
+    quarterly ones.
+  - «de fleste av dem sparebanker» needs more than half of the annual Finans
+    payers to be savings banks.
+  - «Bare én av dem …» uses the actual count.
+- **`og:description` carries no figure.**
+- **The count of annual payers** in the paragraph above the table is an
+  `<!--N:arlig-->` marker.
+
+The `/rapportkalender/` meta description said «over {n // 10 * 10} norske
+aksjer» from the number of known report dates. That number falls towards zero
+before each reporting season. It now carries no count. Pages that describe the
+whole catalog say «Oslo Børs og Euronext Growth» (`markedsplass_tekst()`,
+mirroring `markedsplassTekst()` in `ui.js`), since 14 of 155 stocks are on
+Growth.
+
+Tests: `TestFrekvensartikkel` (9), `TestMarkedsplassOgRapportmeta` (2).
 
 ## App review of 2026-10-20
 

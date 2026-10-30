@@ -19,6 +19,10 @@ on:
       - 'package.json'
       - 'package-lock.json'
       - '.github/workflows/tester.yml'
+      # test_nettstedfiler.py leser lista og deploy-stegene.
+      - '_config.yml'
+      - '.github/workflows/update-og-deploy.yml'
+      - '.github/workflows/deploy-only.yml'
       - 'promo/*.py'
       # Håndskrevne sider: sjekk_tema-testen leser dem. aksjer/** er
       # generert fra malene i scripts/, som allerede står over.
@@ -34,6 +38,10 @@ on:
       - 'package.json'
       - 'package-lock.json'
       - '.github/workflows/tester.yml'
+      # test_nettstedfiler.py leser lista og deploy-stegene.
+      - '_config.yml'
+      - '.github/workflows/update-og-deploy.yml'
+      - '.github/workflows/deploy-only.yml'
       - 'promo/*.py'
       # Håndskrevne sider: sjekk_tema-testen leser dem. aksjer/** er
       # generert fra malene i scripts/, som allerede står over.
@@ -107,5 +115,6 @@ jobs:
           python scripts/test_tallkontroll_side.py
           python scripts/test_vedlikehold.py
           python scripts/test_klokke.py
+          python scripts/test_nettstedfiler.py
           python promo/test_promo_felles.py
           python promo/test_finn_kandidater.py
