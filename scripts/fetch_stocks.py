@@ -1110,12 +1110,20 @@ def neste_utbetaling(tekst, i_dag):
 def hent_newsweb_ex_dato(ticker, i_dag=None):
     """Neste ex-dato (og betalingsdato) for Oslo Børs, eller None.
 
-    Går gjennom de nyeste utbyttemeldingene og stopper ved den første med en
-    ex-dato som er passert — meldingene er nyest først, så alt eldre gjelder
+    Går gjennom de nyeste utbyttemeldingene og stopper ved den første der alle
+    ex-datoene er passert. Meldingene er nyest først, så alt eldre gjelder
     eldre utbytter. Feil svelges: en aksje skal aldri feile på dette.
+
+    Den nærmeste kommende ex-datoen vinner, ikke den nyeste meldingen.
+    Equinor melder utbyttet to kvartaler fram: 28.10.2026 kom meldingen om
+    tredje kvartal (ex 15. februar 2027), mens andre kvartal fra 22. juli
+    (ex 13. november 2026) ennå ikke var gått ex. Siden viste februar, og den
+    som kjøpte etter 12. november i tro om at utbyttet fulgte med, ville
+    ikke fått det.
     """
     i_dag = i_dag or datetime.date.today()
     grense = (i_dag - datetime.timedelta(days=NEWSWEB_EX_DAGER)).isoformat()
+    beste = None
     try:
         sett = 0
         for msg in _newsweb_meldinger(ticker):
@@ -1133,11 +1141,16 @@ def hent_newsweb_ex_dato(ticker, i_dag=None):
             if not _parse_utbetalinger(tekst):
                 continue
             # Meldingen har datoer. Er alle passert, gjelder eldre meldinger
-            # eldre utbytter, og vi stopper som før.
-            return neste_utbetaling(tekst, i_dag)
+            # eldre utbytter, og vi stopper.
+            neste = neste_utbetaling(tekst, i_dag)
+            if neste is None:
+                break
+            if beste is None or neste["ex_dato"] < beste["ex_dato"]:
+                beste = neste
     except Exception as e:
         print(f"    Advarsel NewsWeb ex-dato [{ticker}]: {e}")
-    return None
+        return None
+    return beste
 
 
 # ── UTBETALINGER YAHOO MANGLER ────────────────────────────────────────────────
@@ -7512,7 +7525,7 @@ def generer_aksjesider(aksjer, root_dir):
         <div class="hero-stat-lbl">Snitt-yield</div>
       </div>
       <div class="hero-stat">
-        <div class="hero-stat-num">{len(topp_sektorer)}</div>
+        <div class="hero-stat-num">{len(sektor_data2)}</div>
         <div class="hero-stat-lbl">Sektorer</div>
       </div>
     </div>
