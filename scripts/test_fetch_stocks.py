@@ -4015,6 +4015,64 @@ class TestMarkedsplassOgRapportmeta(unittest.TestCase):
 
 
 
+class TestTallUtdatert(unittest.TestCase):
+    """Gamle tall for én aksje (31.10.2026).
+
+    Datajobben gjenbruker forrige kjørings rad når Yahoo ikke svarer, og sida
+    så da like fersk ut som de andre. `hentet` følger raden, og regelen er den
+    samme som tallUtdatert() i assets/app.js.
+    """
+
+    DATA = "2026-11-02T10:41:00Z"   # mandag 2.11 kl. 11:41 i Oslo
+
+    def test_to_borsdager_bak_gir_datoen(self):
+        a = {"hentet": "2026-10-29T15:41:00Z"}   # torsdag 16:41
+        self.assertEqual(fs.tall_utdatert(a, self.DATA), datetime.date(2026, 10, 29))
+
+    def test_helg_og_morgenkjoring_er_ikke_gamle_tall(self):
+        fredag = {"hentet": "2026-10-30T16:41:00Z"}
+        self.assertIsNone(fs.tall_utdatert(fredag, "2026-11-02T07:41:00Z"))
+        self.assertIsNone(fs.tall_utdatert(fredag, self.DATA))
+        self.assertIsNone(fs.tall_utdatert({"hentet": self.DATA}, self.DATA))
+
+    def test_uten_hentet_sier_den_ingenting(self):
+        self.assertIsNone(fs.tall_utdatert({}, self.DATA))
+        self.assertIsNone(fs.tall_utdatert({"hentet": "tull"}, self.DATA))
+        self.assertIsNone(fs.tall_utdatert({"hentet": "2026-10-01T10:00:00Z"}, ""))
+        self.assertIsNone(fs.tall_utdatert(None, self.DATA))
+
+    def test_boks_og_datolinje_paa_aksjesiden(self):
+        gammel = {"ticker": "TST", "navn": "Test & Co ASA", "hentet": "2026-10-29T15:41:00Z"}
+        fersk = {"ticker": "NY", "navn": "Ny ASA", "hentet": self.DATA}
+        lagret = fs.DATA_SIST_OPPDATERT
+        fs.DATA_SIST_OPPDATERT = self.DATA
+        try:
+            boks = fs.lag_utdatert_boks(gammel)
+            self.assertIn("Tallene for denne aksjen er ikke oppdatert", boks)
+            self.assertIn("Test &amp; Co ASA siden 29. oktober 2026", boks)
+            self.assertEqual(fs.lag_utdatert_boks(fersk), "")
+            self.assertIn("Tallene for denne aksjen er hentet 29. oktober 2026",
+                          fs.sist_oppdatert_html(gammel))
+            self.assertIn("Tallene er hentet 2. november 2026", fs.sist_oppdatert_html(fersk))
+            self.assertIn("Tallene er hentet 2. november 2026", fs.sist_oppdatert_html())
+        finally:
+            fs.DATA_SIST_OPPDATERT = lagret
+
+    def test_hentet_fra_status(self):
+        import tempfile
+        with tempfile.TemporaryDirectory() as d:
+            sti = os.path.join(d, "ticker_status.json")
+            with open(sti, "w", encoding="utf-8") as f:
+                json.dump({"tickere": {"TST": {"sist_ok": "2026-10-29"}, "FEIL": {"sist_ok": "x"}}}, f)
+            self.assertEqual(fs.hentet_fra_status("TST", sti), "2026-10-29T12:00:00Z")
+            self.assertIsNone(fs.hentet_fra_status("FEIL", sti))
+            self.assertIsNone(fs.hentet_fra_status("MANGLER", sti))
+            self.assertIsNone(fs.hentet_fra_status("TST", os.path.join(d, "finnes_ikke.json")))
+        # Kursdagen for kl. 12 UTC er samme dag, så datoen blir riktig i regelen.
+        self.assertEqual(fs.tall_utdatert({"hentet": "2026-10-29T12:00:00Z"}, self.DATA),
+                         datetime.date(2026, 10, 29))
+
+
 class TestRangering(unittest.TestCase):
     """Topplistene tar ikke med aksjer under oppkjøp, fusjon eller avvikling (30.10.2026).
 

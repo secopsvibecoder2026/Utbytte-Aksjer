@@ -293,6 +293,19 @@ function borsdagerMellom(fra, til) {
   return n;
 }
 
+// Datoen (Oslo) tallene for én aksje sist ble hentet, når de ligger minst to
+// børsdager bak datasettet; ellers ''. Speiler tall_utdatert() i
+// fetch_stocks.py. Datajobben gjenbruker forrige kjørings rad når Yahoo ikke
+// svarer, og uten `hentet` så den raden like fersk ut som de andre.
+const UTDATERT_BORSDAGER = 2;
+function tallUtdatert(a, dataTid) {
+  if (!a || !a.hentet || !dataTid) return '';
+  const fra = kursdag(a.hentet);
+  const til = kursdag(dataTid);
+  if (!fra || !til) return '';
+  return borsdagerMellom(fra, til) >= UTDATERT_BORSDAGER ? osloDato(a.hentet) : '';
+}
+
 function _endringMot(pris, forrige) {
   if (!(pris > 0) || !(forrige > 0)) return { endringPct: undefined, endringKrs: undefined };
   return {
@@ -448,5 +461,5 @@ function sjekkStartsideForslag() {
 // Eksport for testene. Samme mønster som storage.js/ui.js/portefolje.js:
 // nettleseren ser ingen `module`, så dette er en no-op der.
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { escHtml, visDataFerskhet, osloDato, borsdag, forrigeBorsdag, kursdag, borsdagerMellom, slaaSammenKurs };
+  module.exports = { escHtml, visDataFerskhet, osloDato, borsdag, forrigeBorsdag, kursdag, borsdagerMellom, slaaSammenKurs, tallUtdatert };
 }

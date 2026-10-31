@@ -3954,6 +3954,93 @@ def forrige_borsdag(d):
     return d
 
 
+# ── Gamle tall for én aksje ──────────────────────────────────────────────────
+# Når Yahoo ikke svarer for en ticker, bruker datajobben forrige kjørings rad,
+# og siden så like fersk ut som de andre. Ni tickere sto slik med 16 dager
+# gamle tall i august 2026 uten at noe sa fra. `hentet` settes på hver rad
+# som hentes, og følger raden når den gjenbrukes, så siden kan si hvor gamle
+# tallene er. Regelen finnes også som tallUtdatert() i assets/app.js.
+UTDATERT_BORSDAGER = 2
+
+
+def _oslo_tidspunkt(tid):
+    """Tidsstempel («2026-10-31T08:52:58Z») som tidspunkt i Oslo, ellers None."""
+    if not tid:
+        return None
+    try:
+        from zoneinfo import ZoneInfo
+        t = datetime.datetime.fromisoformat(str(tid).replace("Z", "+00:00"))
+        if t.tzinfo is None:
+            t = t.replace(tzinfo=datetime.timezone.utc)
+        return t.astimezone(ZoneInfo("Europe/Oslo"))
+    except (ValueError, TypeError):
+        return None
+
+
+def _kursdag(tid):
+    """Børsdagen et tidsstempel gjelder, som kursdag() i app.js.
+
+    Før kl. 09 i Oslo gjelder tallene forrige dag, og en helg er fredagens.
+    """
+    t = _oslo_tidspunkt(tid)
+    if t is None:
+        return None
+    d = t.date() - datetime.timedelta(days=1) if t.hour < 9 else t.date()
+    while d.weekday() >= 5:
+        d -= datetime.timedelta(days=1)
+    return d
+
+
+def _hverdager_mellom(fra, til):
+    """Hverdager etter `fra`, til og med `til`, som borsdagerMellom() i app.js."""
+    n, d = 0, fra
+    while d < til:
+        d += datetime.timedelta(days=1)
+        if d.weekday() < 5:
+            n += 1
+    return n
+
+
+def tall_utdatert(a, data_tid=None):
+    """Datoen (Oslo) tallene for aksjen sist ble hentet, når de er gamle.
+
+    Gamle betyr at hentingen ligger minst UTDATERT_BORSDAGER børsdager bak
+    datasettet: én mislykket kjøring, eller en hel dag, sier lite når jobben
+    går fire ganger om dagen. Uten `hentet` på raden vet vi ingenting, og da
+    sier funksjonen ingenting.
+    """
+    if not isinstance(a, dict):
+        return None
+    ref = DATA_SIST_OPPDATERT if data_tid is None else data_tid
+    fra, til = _kursdag(a.get("hentet")), _kursdag(ref)
+    if fra is None or til is None:
+        return None
+    if _hverdager_mellom(fra, til) < UTDATERT_BORSDAGER:
+        return None
+    return _oslo_tidspunkt(a.get("hentet")).date()
+
+
+def _dato_lang(d):
+    return f"{d.day}. {MAANEDSNAVN[d.month]} {d.year}"
+
+
+def lag_utdatert_boks(a):
+    """Gul boks øverst på aksjesiden når tallene for akkurat denne aksjen er gamle."""
+    d = tall_utdatert(a)
+    if not d:
+        return ""
+    import html as _html
+    navn = _html.escape(str(a.get("navn") or a.get("ticker") or "aksjen"))
+    return (
+        '<div class="delaar-seksjon utdatert-seksjon">'
+        '<h2>Tallene for denne aksjen er ikke oppdatert</h2>'
+        f'<p>Vi har ikke fått hentet nye tall for {navn} siden {_dato_lang(d)}. '
+        'Kurs, direkteavkastning og nøkkeltall på denne siden er fra den dagen og kan '
+        'være utdatert. Sjekk kursen hos Oslo Børs eller megleren din før du bruker tallene.</p>'
+        '</div>'
+    )
+
+
 _GANGER_ORD = {1: "én gang", 2: "to ganger", 3: "tre ganger", 4: "fire ganger",
                5: "fem ganger", 6: "seks ganger", 7: "sju ganger", 8: "åtte ganger",
                9: "ni ganger", 10: "ti ganger"}
@@ -6446,7 +6533,7 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     # det likevel ville motsagt den nøytrale boksen lenger nede på siden.
     delaar        = yield_er_delaar(a) and not delaar_motbevist(a)
     delaar_note   = ' <span class="kcard-note">usikker</span>' if delaar else ""
-    delaar_varsel = lag_hendelse_boks(a) + lag_delaar_varsel(a, _nf)
+    delaar_varsel = lag_utdatert_boks(a) + lag_hendelse_boks(a) + lag_delaar_varsel(a, _nf)
     # Gjensidig utelukkende: noten returnerer tom streng når varselet gjelder.
     delaar_varsel += lag_ekstraordinaer_note(a, _nf)
     betalt_boks = lag_betalt_boks(a, _nf) + lag_kapital_note(a, _nf)
@@ -7149,7 +7236,7 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     <a href="https://exday.no/app/?aksje={ticker}">Åpne {ticker} i exday.no →</a>
   </div>
 
-{sist_oppdatert_html()}
+{sist_oppdatert_html(a)}
 {STANDARD_FOOTER}
 </div>
 
@@ -7763,7 +7850,7 @@ ADSENSE_HEAD = """  <!-- Google AdSense (håndterer også CMP for EØS/UK) -->
      crossorigin="anonymous"></script>"""
 
 
-def sist_oppdatert_html():
+def sist_oppdatert_html(a=None):
     """Den synlige datolinja nederst i innholdet.
 
     Sto tidligere som «Sist oppdatert: {today}» — altså datoen *sidene* ble
@@ -7776,7 +7863,13 @@ def sist_oppdatert_html():
     Derfor leses datoen fra dataene, ikke fra klokka.
 
     Uten dato utelates linja helt. En gjettet dato er verre enn ingen.
+
+    På en aksjeside (`a`) med gamle tall gjelder radens egen dato: sida sa
+    ellers «hentet 31. oktober» om tall fra 12. oktober.
     """
+    gammel = tall_utdatert(a) if a is not None else None
+    if gammel:
+        return f'  <p class="updated">Tallene for denne aksjen er hentet {_dato_lang(gammel)}</p>'
     if not DATA_SIST_OPPDATERT:
         return ""
     try:
@@ -9819,6 +9912,24 @@ def _last_kurshistorikk_fra_disk(ticker, kurs_dir):
     return []
 
 
+def hentet_fra_status(ticker, sti=None):
+    """Siste vellykkede henting for `ticker` fra data/ticker_status.json.
+
+    sjekk_utdaterte.py skriver `sist_ok` som en dato. Den gjøres om til kl. 12
+    UTC samme dag, som er etter børsåpning i Oslo, så kursdagen blir den dagen.
+    Ukjent gir None.
+    """
+    sti = sti or os.path.join(os.path.dirname(__file__), "..", "data", "ticker_status.json")
+    try:
+        with open(sti, encoding="utf-8") as f:
+            status = json.load(f)
+        dato = (status.get("tickere") or {}).get(ticker, {}).get("sist_ok")
+        datetime.date.fromisoformat(str(dato))
+    except (OSError, ValueError, TypeError, AttributeError, json.JSONDecodeError):
+        return None
+    return f"{dato}T12:00:00Z"
+
+
 def main():
     if yf is None:
         print("FEIL: yfinance er ikke installert eller kunne ikke importeres.")
@@ -9846,6 +9957,7 @@ def main():
     for meta in AKSJER:
         aksje = hent_aksje(meta)
         if aksje:
+            aksje["hentet"] = datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
             # Berik med Euronext-pris hvis Yahoo-pris mangler
             if aksje.get("pris", 0) == 0 and meta["ticker"] in euronext_priser:
                 aksje["pris"] = euronext_priser[meta["ticker"]]
@@ -9871,6 +9983,12 @@ def main():
             if not fb.get("kurs_historikk"):
                 fb["kurs_historikk"] = _last_kurshistorikk_fra_disk(
                     meta["ticker"], os.path.join(os.path.dirname(output_path), "kurs"))
+            # `hentet` følger raden. Mangler den (raden er eldre enn feltet),
+            # tas siste vellykkede dag fra sjekk_utdaterte.py sin tilstand.
+            if not fb.get("hentet"):
+                fra_status = hentet_fra_status(meta["ticker"])
+                if fra_status:
+                    fb["hentet"] = fra_status
             print(f"    Bruker fallback-data for {meta['ticker']}")
             resultater.append(fb)
             feil.append(meta["ticker"])

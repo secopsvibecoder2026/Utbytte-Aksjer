@@ -1129,6 +1129,30 @@ function hendelseMerke(a) {
   return `<span class="text-amber-700 dark:text-amber-400 font-medium whitespace-nowrap" title="${escHtml(HENDELSE_TITTEL[h.type])}">${HENDELSE_KORT[h.type]}</span>`;
 }
 
+// Gamle tall for én aksje (tallUtdatert() i app.js). Merket i lista og
+// boksen i modalen sier fra; uten dem så en rad datajobben ikke fikk hentet
+// like fersk ut som resten.
+function _utdatertDato(a) {
+  if (typeof tallUtdatert !== 'function') return '';
+  const ref = typeof aksjerSistOppdatert !== 'undefined' ? aksjerSistOppdatert : '';
+  return tallUtdatert(a, ref);
+}
+
+function utdatertMerke(a) {
+  const d = _utdatertDato(a);
+  if (!d) return '';
+  return `<span class="text-xs text-amber-700 dark:text-amber-400 font-medium whitespace-nowrap" title="Tallene er sist hentet ${escHtml(formaterDato(d))}">gamle tall</span>`;
+}
+
+function modalUtdatert(a) {
+  const d = _utdatertDato(a);
+  if (!d) return '';
+  return `<div class="rounded-lg border-l-4 border-amber-500 bg-amber-50 dark:bg-amber-950/30 px-4 py-3 mb-4">
+      <p class="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-1">Tallene for denne aksjen er ikke oppdatert</p>
+      <p class="text-xs text-gray-700 dark:text-gray-300 leading-relaxed">Vi har ikke fått hentet nye tall for ${escHtml(a.navn || a.ticker)} siden ${escHtml(formaterDato(d)).replace(/ /g, '\u00a0')}. Utbytte, direkteavkastning og nøkkeltall er fra den dagen og kan være utdatert. Kursen kan være nyere, fordi den hentes for seg.</p>
+    </div>`;
+}
+
 function modalHendelse(a) {
   const h = a && a.hendelse;
   if (!gyldigHendelse(h)) return '';
@@ -1650,7 +1674,7 @@ function visOversikt(bevarSide = false) {
       <td class="px-2 py-3 w-8">${stjerne(a.ticker)}</td>
       <td class="px-4 py-3 font-semibold text-gray-900 dark:text-gray-100 whitespace-nowrap">${escHtml(a.ticker)}</td>
       <td class="px-4 py-3 max-w-[9rem] lg:max-w-[12rem]">
-        <div class="font-medium leading-tight truncate" title="${escHtml(a.navn)}">${escHtml(a.navn)} ${a.data_kilde && a.data_kilde !== 'yahoo' ? '<span class="text-xs text-amber-600 dark:text-amber-400" title="Data kan være utdatert">begrenset data</span>' : ''}</div>
+        <div class="font-medium leading-tight truncate" title="${escHtml(a.navn)}">${escHtml(a.navn)} ${utdatertMerke(a) || (a.data_kilde && a.data_kilde !== 'yahoo' ? '<span class="text-xs text-amber-600 dark:text-amber-400" title="Data kan være utdatert">begrenset data</span>' : '')}</div>
         <div class="text-xs text-gray-400 dark:text-gray-500 flex items-center gap-1.5">
           ${escHtml(a.sektor)}
           ${hendelseMerke(a) ? '<span>· ' + hendelseMerke(a) + '</span>' : ''}
@@ -1763,9 +1787,9 @@ function visOversikt(bevarSide = false) {
     </div>`;
 
     // ── NORMALT MOBILKORT (full detalj) ────────────────────────────────
-    const kildeStr = a.data_kilde && a.data_kilde !== 'yahoo'
+    const kildeStr = utdatertMerke(a) || (a.data_kilde && a.data_kilde !== 'yahoo'
       ? `<span class="text-xs text-amber-500 dark:text-amber-400" title="Data kan være utdatert">⚠ begrenset data</span>`
-      : '';
+      : '');
     // Kortet på telefon (STYLE.md): ticker og tall i nøytral farge, yielden
     // som største tall øverst til høyre, og nøkkeltallene uten grå bokser.
     // Seks bokser, fargede piller og fem aksentfarger gjorde hvert kort til
@@ -3471,6 +3495,7 @@ function visModal(a) {
     </div>
 
     ${_kurshode}
+    ${modalUtdatert(a)}
     ${modalHendelse(a)}
 
     <div class="modal-tabs">
@@ -5974,4 +5999,4 @@ function _annBygTopp() {
 }
 
 // Node.js test export
-if (typeof module !== 'undefined') module.exports = { hendelseUtenMal, iRangering, hoyestYield, saerutbytteFotnote, aaretsArsutbytte, aaretsNedgang, ordinaerPerAr, ordinaerHistorikk, markedsplassTekst, hendelseMerke, nyMilepel, delLenkeData, pentAkse, fmtPst, fmtTall, dagerTil, dagerTilTekst, datoKort, aksjerTekst, snittNavn, utbytteKutt, modalHendelse, beregnRisiko, forklarRisiko, vekstFraTopp, beregnMal, forklarMal, bevegelserOverskrift, utbytteRekke, stabileAr, exForbeholdGjelder, utbyttePerioder, vistOverBetalt, modalBetaltBoks, supplertFotnote, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, fmt, formaterDato, yieldKlasse, payoutKlasse, vekstKlasse, beregnScore, beregnBaerekraft, beregnYtdInntekt, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote, kapitalAndel, modalKapitalNote, kapitalSkattTekst, aksjerMedExIMaaned, beregnHvisKjopt, hvisStartAar, beregnAskMotVanlig, fmtUtbytte, sisteUtbytteTekst, modalOmSelskapet, vekslOmSelskapet, dripGevinst, _simulerKalkulator, askStatus, askTekst, modalKontoer };
+if (typeof module !== 'undefined') module.exports = { utdatertMerke, modalUtdatert, hendelseUtenMal, iRangering, hoyestYield, saerutbytteFotnote, aaretsArsutbytte, aaretsNedgang, ordinaerPerAr, ordinaerHistorikk, markedsplassTekst, hendelseMerke, nyMilepel, delLenkeData, pentAkse, fmtPst, fmtTall, dagerTil, dagerTilTekst, datoKort, aksjerTekst, snittNavn, utbytteKutt, modalHendelse, beregnRisiko, forklarRisiko, vekstFraTopp, beregnMal, forklarMal, bevegelserOverskrift, utbytteRekke, stabileAr, exForbeholdGjelder, utbyttePerioder, vistOverBetalt, modalBetaltBoks, supplertFotnote, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, fmt, formaterDato, yieldKlasse, payoutKlasse, vekstKlasse, beregnScore, beregnBaerekraft, beregnYtdInntekt, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote, kapitalAndel, modalKapitalNote, kapitalSkattTekst, aksjerMedExIMaaned, beregnHvisKjopt, hvisStartAar, beregnAskMotVanlig, fmtUtbytte, sisteUtbytteTekst, modalOmSelskapet, vekslOmSelskapet, dripGevinst, _simulerKalkulator, askStatus, askTekst, modalKontoer };
