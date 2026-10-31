@@ -1817,7 +1817,7 @@ def lag_kapital_note(a, nf):
         hva = ("betaler selskapet ut <strong>tilbakebetaling av innbetalt "
                "kapital</strong>, ikke utbytte i skattemessig forstand")
     else:
-        hva = (f"var <strong>om lag {nf(andel * 100, 0)} % av siste utbetaling "
+        hva = (f"var <strong>om lag {nf(andel * 100, 0)} % av siste utbetaling "
                "tilbakebetaling av innbetalt kapital</strong>, og resten ordinært utbytte")
     return (
         '<div class="delaar-seksjon delaar-noytral">'
@@ -2101,7 +2101,7 @@ def lag_betalt_boks(a, nf):
             continue
         if r["yield"] is None:
             over_kurs = True
-        y = f"{nf(r['yield'], 2)} %" if r["yield"] is not None else "—"
+        y = f"{nf(r['yield'], 2)} %" if r["yield"] is not None else "—"
         html_rader.append(
             f"<tr><td>{periode_tekst(r)}</td><td>{nf(r['belop'], 2)} kr</td><td>{y}</td></tr>")
 
@@ -2123,12 +2123,12 @@ def lag_betalt_boks(a, nf):
     if ovb:
         vist, betalt = ovb
         if not a.get("utbytte_12m"):
-            forklaring = (f"<p>Direkteavkastningen over er {nf(vist, 2)} %, men "
+            forklaring = (f"<p>Direkteavkastningen over er {nf(vist, 2)} %, men "
                           "selskapet har ikke hatt noe utbytte med ex-dato de siste "
                           "12 månedene.</p>")
         else:
-            forklaring = (f"<p>Direkteavkastningen over er {nf(vist, 2)} %. Det som faktisk "
-                          f"er betalt de siste 12 månedene, tilsvarer {nf(betalt, 2)} % av "
+            forklaring = (f"<p>Direkteavkastningen over er {nf(vist, 2)} %. Det som faktisk "
+                          f"er betalt de siste 12 månedene, tilsvarer {nf(betalt, 2)} % av "
                           "dagens kurs.</p>")
 
     return (
@@ -2174,7 +2174,7 @@ def lag_ekstraordinaer_note(a, nf):
         # Utbyttet er erklært i en annen valuta enn vi lagrer. Vi regner ikke
         # om — forholdet mellom delene er valutauavhengig, og er det vi kan si.
         andel = round(ekstra / sum_ * 100)
-        hva = (f'<strong>om lag {nf(andel, 0)} % av siste utbetaling var '
+        hva = (f'<strong>om lag {nf(andel, 0)} % av siste utbetaling var '
                f'ekstraordinært utbytte</strong>')
     else:
         valuta = splitt.get("valuta") or a.get("valuta") or "NOK"
@@ -2184,10 +2184,10 @@ def lag_ekstraordinaer_note(a, nf):
     if a.get("arsrate_ekstra_trukket"):
         # Engangsutbyttet er alt trukket ut av årsraten (ekstra_i_kroner()).
         # Den gamle setningen ville sagt det motsatte om samme tall.
-        om_yield = (f'Direkteavkastningen på {nf(y, 2)} % bygger på det ordinære '
+        om_yield = (f'Direkteavkastningen på {nf(y, 2)} % bygger på det ordinære '
                     'utbyttet de siste 12 månedene, med engangsutbyttet holdt utenfor.')
     else:
-        om_yield = (f'Direkteavkastningen på {nf(y, 2)} % bygger på en periode som '
+        om_yield = (f'Direkteavkastningen på {nf(y, 2)} % bygger på en periode som '
                     'inneholder den, så den sier mindre om hva selskapet betaler til '
                     'vanlig enn tallet alene antyder.')
     return (
@@ -2248,7 +2248,7 @@ def lag_delaar_varsel(a, nf):
             '<p>Et ekstraordinært utbytte er en engangsutdeling og sier lite '
             'om hva selskapet betaler til vanlig, så den kan godt overstige et '
             'helt års ordinære utbytte. Den store enkeltutbetalingen er derfor '
-            f'ikke i seg selv et tegn på at direkteavkastningen på {nf(y, 2)} % '
+            f'ikke i seg selv et tegn på at direkteavkastningen på {nf(y, 2)} % '
             'er for lav.</p>'
             '</div>'
         )
@@ -2265,7 +2265,7 @@ def lag_delaar_varsel(a, nf):
             '<p>Det vi vet sikkert, er hva selskapet allerede har betalt: '
             f'<strong>{nf(fakta["belop"], 2)} {valuta} per aksje hittil i '
             f'{fakta["ar"]}</strong>{fordelt}. Målt mot dagens kurs er det '
-            f'{nf(fakta["yield"], 2)} %. Det er en måling av året så langt, '
+            f'{nf(fakta["yield"], 2)} %. Det er en måling av året så langt, '
             'ikke et anslag for hele året — vi viser ikke et korrigert '
             'årstall, fordi et delår ikke sier noe om hva resten av året '
             'bringer.</p>'
@@ -2287,7 +2287,7 @@ def lag_delaar_varsel(a, nf):
         '<p>Det skjer når et selskap nylig har startet eller trappet opp '
         'utbyttet: datakilden oppgir da fjorårets total, og for et år som '
         'ikke var fullt blir den for lav. Den reelle direkteavkastningen er '
-        f'derfor sannsynligvis høyere enn {nf(y, 2)} %.</p>'
+        f'derfor sannsynligvis høyere enn {nf(y, 2)} %.</p>'
         + sluttavsnitt +
         '</div>'
     )
@@ -4641,7 +4641,7 @@ def _lag_utbytterekken(a):
         elif nedganger == 0:
             jevnhet = (
                 " I de årene vi har tall for har utbyttet aldri gått ned med "
-                "mer enn 5 % fra ett år til det neste."
+                "mer enn 5 % fra ett år til det neste."
             )
         elif nedganger == 1:
             jevnhet = (
@@ -4732,7 +4732,7 @@ def _lag_nedtur_test(a):
         elif pauser:
             kontekst = f" For {_aar_liste(pauser)} har vi ikke registrert noe utbytte."
         elif smaa:
-            kontekst = (" Utbyttet er satt ned før, men aldri med mer enn 15 % fra "
+            kontekst = (" Utbyttet er satt ned før, men aldri med mer enn 15 % fra "
                         "ett år til det neste.")
         else:
             # Årene står i setningen: SB1NO, DNO og TEL har «med brudd» lenger
@@ -5965,7 +5965,7 @@ def _lag_faq_seksjon(a, today):
             if land not in ("Norge", "Bermuda", "Singapore", "Kypros") else ""
         )
         svar = (
-            f"Utbytte fra {navn} beskattes med 37,84 % av det som overstiger "
+            f"Utbytte fra {navn} beskattes med 37,84 % av det som overstiger "
             f"skjermingsfradraget, for personlige aksjonærer som eier aksjen på vanlig konto. "
             f"{delvis}"
             f"Med en yield på {_pst(yield_, 2)} gir det en nettoyield på ca. {_pst(netto, 2)} "
@@ -5978,15 +5978,15 @@ def _lag_faq_seksjon(a, today):
     # 5. Utbyttebærekraft — ikke når det ikke er noe løpende utbytte å bære.
     if payout > 0 and a.get("arsrate_kilde") != "ingen_lopende":
         if payout < 50:
-            vurd = (f"En payout ratio under 50 % betyr at mer enn halvparten av overskuddet beholdes i selskapet. "
+            vurd = (f"En payout ratio under 50 % betyr at mer enn halvparten av overskuddet beholdes i selskapet. "
                     f"Det gir {navn} god buffer til å opprettholde — eller øke — utbyttet selv om inntjeningen svinger.")
         elif payout < 80:
-            vurd = (f"En payout ratio mellom 50 og 80 % er vanlig for etablerte utbytteaksjer og anses bærekraftig "
+            vurd = (f"En payout ratio mellom 50 og 80 % er vanlig for etablerte utbytteaksjer og anses bærekraftig "
                     f"så lenge inntjeningen er stabil. Sjekk at EPS-trenden er positiv.")
         else:
             # Grensen er 80 %, ikke aksjens eget tall: «over 110 %» for en aksje
             # med 110 % (tallkontrollen 2026-10-12).
-            vurd = (f"En payout ratio over 80 % innebærer at {navn} deler ut en svært stor andel av inntjeningen. "
+            vurd = (f"En payout ratio over 80 % innebærer at {navn} deler ut en svært stor andel av inntjeningen. "
                     f"Det kan holdes oppe med sterk kontantstrøm, men er mer sårbart ved svakere kvartaler.")
         svar = f"Payout ratio for {navn} er {_pst(payout, 0)} — det vil si andelen av inntjeningen per aksje som utbetales som utbytte. {vurd}"
         qas.append((f"Er utbyttet fra {navn} bærekraftig?", svar))
@@ -8556,7 +8556,7 @@ def _toppliste_analyse(slug, topp, alle):
             f"{len(topp)} der utbetalingsgraden ikke bekrefter at utbyttet er "
             f"bærekraftig." if svake else
             f"Alle {len(topp)} aksjene på listen har kjent utbetalingsgrad under "
-            f"100 %, noe som er uvanlig for en høy-yield-liste.",
+            f"100 %, noe som er uvanlig for en høy-yield-liste.",
             f"Av dem har {lange} betalt utbytte i ti år eller mer. Kort "
             f"historikk er ikke i seg selv et faresignal, men det betyr at "
             f"selskapet ikke er sett gjennom en nedtur ennå.",
@@ -8585,8 +8585,8 @@ def _toppliste_analyse(slug, topp, alle):
             f"{_pst(median_bors, 2)} for børsen samlet — det er prisen for "
             f"veksten.",
             "For en langsiktig portefølje er det ofte vekstlisten som betyr "
-            "mest. En aksje som gir 3 % i dag og øker utbyttet 10 % i året, "
-            "passerer en aksje som gir 7 % og står stille — det tar bare tid.",
+            "mest. En aksje som gir 3 % i dag og øker utbyttet 10 % i året, "
+            "passerer en aksje som gir 7 % og står stille — det tar bare tid.",
         ]
     elif slug == "konsistente-utbytteaksjer":
         sektorer = {}
@@ -8625,11 +8625,11 @@ def _toppliste_analyse(slug, topp, alle):
             "utbetalingsgrad betyr at selskapet beholder mesteparten av "
             "overskuddet, og at det har rom til å opprettholde utbyttet selv om "
             "inntjeningen faller.",
-            "Et selskap som deler ut 30 % av overskuddet, kan halvere "
-            "inntjeningen og fortsatt betale det samme. Et som deler ut 95 %, "
+            "Et selskap som deler ut 30 % av overskuddet, kan halvere "
+            "inntjeningen og fortsatt betale det samme. Et som deler ut 95 %, "
             "har ingen slik buffer. Det er hele poenget med å se på tallet.",
             "Listen inneholder bare selskaper med kjent payout ratio mellom 0 "
-            "og 100 %. Selskaper der vi mangler inntjeningstall er holdt "
+            "og 100 %. Selskaper der vi mangler inntjeningstall er holdt "
             "utenfor med vilje — et blankt felt betyr ukjent, ikke lavt, og å "
             "presentere manglende data som en lav utbetalingsgrad ville vært "
             "direkte misvisende.",
@@ -9037,7 +9037,7 @@ def _rapportkalender_analyse(kommende, per_maaned, aksjer, i_dag):
     <h2>Rapportsesongen akkurat nå</h2>
     <p>
       Vi kjenner {ant} rapportdatoer for {selskaper} selskaper på {markedsplass}.
-      {i_topp_to} av dem — {andel} % — faller i {topp_to_navn}, og {travleste_navn} alene
+      {i_topp_to} av dem — {andel} % — faller i {topp_to_navn}, og {travleste_navn} alene
       har {travleste_ant}.{sektor_setning} Rapportsesongen på Oslo Børs er kort og
       tett: børsen går fra nesten ingen meldinger til over hundre på noen uker,
       og så stille igjen.
@@ -10141,7 +10141,7 @@ def main():
     if antall_null_pris > len(resultater) // 2:
         kritiske_feil.append(f"{antall_null_pris}/{len(resultater)} aksjer har pris = 0")
     if antall_hoy_yield > len(resultater) // 2:
-        kritiske_feil.append(f"{antall_hoy_yield}/{len(resultater)} aksjer har yield > 30 %")
+        kritiske_feil.append(f"{antall_hoy_yield}/{len(resultater)} aksjer har yield > 30\u00a0%")
     if antall_mangler_felt > len(resultater) // 2:
         kritiske_feil.append(f"{antall_mangler_felt}/{len(resultater)} aksjer mangler kritiske felt")
 

@@ -398,7 +398,7 @@ test('et forholdstall kan ikke motbevise delår', () => {
 
 test('noten rendres for høy yield med verifisert splitt', () => {
   const h = modalEkstraordinaerNote(wawi());
-  assert.match(h, /39 % av siste utbetaling/);
+  assert.match(h, /39\u00a0% av siste utbetaling/);
   assert.match(h, /13,46/);
 });
 
@@ -592,7 +592,7 @@ test('modalKapitalNote: bare for aksjer med feltet', () => {
   assert.equal(modalKapitalNote({ ticker: 'EQNR' }), '');
   const h = modalKapitalNote({ kapital_tilbake: { andel: 1, melding_dato: '2026-08-25' } });
   assert.match(h, /tilbakebetaling av innbetalt kapital/);
-  assert.match(modalKapitalNote({ kapital_tilbake: { andel: 0.862 } }), /om lag 86 %/);
+  assert.match(modalKapitalNote({ kapital_tilbake: { andel: 0.862 } }), /om lag 86\u00a0%/);
 });
 
 // ── aksjerMedExIMaaned — «Måneder uten ex-dato» (2026-10-03) ─────────────────
@@ -1101,6 +1101,20 @@ test('ingen UTC-dato som «i dag» i appen og innstillingene', () => {
   for (const fil of ['assets/ui.js', 'innstillinger/index.html']) {
     const kode = fs.readFileSync(path.join(rot, fil), 'utf8');
     assert.doesNotMatch(kode, /new Date\(\)\.toISOString\(\)\.(slice\(0, ?10\)|split\('T'\)\[0\])/, fil);
+  }
+});
+
+test('prosent i appens tekster har hardt mellomrom', () => {
+  // «${fmt(y)} %» med vanlig mellomrom lot «%» brytes alene ned på neste
+  // linje. Sto i elleve tekster i ui.js og én i portefolje.js (31.10.2026);
+  // fmtPst() og malene på aksjesidene hadde det allerede riktig.
+  const fs = require('node:fs');
+  const path = require('node:path');
+  const rot = path.join(__dirname, '..');
+  for (const fil of ['assets/ui.js', 'assets/portefolje.js', 'assets/app.js']) {
+    const kode = fs.readFileSync(path.join(rot, fil), 'utf8')
+      .split('\n').filter(l => !/^\s*(\/\/|\*)/.test(l)).join('\n');
+    assert.doesNotMatch(kode, /\} %|\+ ' %'|'[^'\n]*\d %[^'\n]*'/, fil);
   }
 });
 

@@ -2410,11 +2410,22 @@ No page threw an error. Fixed:
 
   They now use `lokalIsoDato()`. A test fails if `toISOString().slice(0, 10)`
   or `.split('T')[0]` comes back in `ui.js` or `/innstillinger/`.
-- **An ordinary space before «%» in the templates.** 44 places in
-  `fetch_stocks.py` and seven in `utvid_beskrivelser.py` wrote
-  `{_nf(x)} %`, so «3,48» and «%» could fall on separate lines. They now use
-  `_pst()`. On regeneration 160 pages changed, and the space was the only
-  change. `TestProsentformat` fails on the old pattern.
+- **An ordinary space before «%».** With an ordinary space, «3,48» and «%»
+  could fall on separate lines.
+  - The first round changed 44 places in `fetch_stocks.py` and seven in
+    `utvid_beskrivelser.py`, which wrote `{_nf(x)} %`, to `_pst()`. The test
+    looked for that one pattern only, and the live check the next morning
+    still found «14,55 kr · 3,25 %» on every stock page.
+  - The second round fixed 24 places in `fetch_stocks.py`: boxes that take
+    the formatter in as the parameter `nf`, and fixed text such as
+    «beskattes med 37,84 %». It also fixed eleven texts in `ui.js` and one in
+    `portefolje.js`. Two `ARTIKLER` strings got a literal NBSP, because
+    `les_artikler()` strips backslash escapes. 277 places in hand-written
+    pages, mostly articles, got the same NBSP outside `<script>` and
+    `<style>`.
+  - `TestProsentformat` now reads every string in the code through `ast`,
+    skipping docstrings and `print()`. `ui.test.js` checks the three JS
+    files. After regeneration no page has `\d %` left.
 - **The FIRE calculator was 20 px too wide at 390 px.** The cause was a
   formula in `<pre>`. `.prose pre` now wraps.
 - **The calendar export (.ics) gave the wrong amount.** It divided the
@@ -2430,7 +2441,7 @@ No page threw an error. Fixed:
 - Sjekk 10 reports AKRBP: three of four payments fall in the window. This is
   the window edge, not a fault, and it clears at the ex-date on 3 November.
 
-Tests: `TestRangering` (2), `TestProsentformat` (1) and `ui.test.js` (+3).
+Tests: `TestRangering` (2), `TestProsentformat` (2) and `ui.test.js` (+4).
 
 ## App review of 2026-10-20
 
