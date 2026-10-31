@@ -2370,6 +2370,68 @@ Test: `TestHentNewswebExDato` (+1).
 **`/aksjer/` said «8 sektorer».** The hero counted the eight sector cards
 shown below it, not the sectors in the catalog (15). It now counts them all.
 
+## Code audit of 2026-10-31
+
+The audit covered:
+
+- all 60 hand-written and sample generated pages, opened with Playwright at
+  390 and 1280 px in both themes;
+- every tab in the app, plus 18 modals;
+- a search of the JS and Python for known bug patterns.
+
+No page threw an error. Fixed:
+
+- **Rankings included stocks that are leaving.** BlueNord says it declares
+  no more dividends before the merger with Vår Energi. It still topped:
+  - the app's «Høyeste yield» card;
+  - the toplists;
+  - the Energi sector page, at 28,53 %.
+
+  STST (wind-down) was in the same position. `i_rangering()` in
+  `fetch_stocks.py` and `iRangering()` in `ui.js` now leave out any stock
+  whose `hendelse` is in `HENDELSE_UTEN_MAL`. That applies to:
+  - the toplist pages;
+  - the top lists on `/aksjer/`;
+  - the sector page's «Høyeste yield» figure and the yield spread in
+    `_sektor_analyse()`;
+  - the app's card and toplists (`hoyestYield()`).
+
+  Full lists keep these stocks. The sector table now marks them in amber
+  (`HENDELSE_KORT`). Energi went from 28,5 % to 9,3 %.
+- **XSS in the import preview on `/innstillinger/`.** The profile name was
+  read from the backup file and written with `innerHTML`, so a file with
+  `<img onerror=…>` in the name ran a script. The preview now uses
+  `textContent`.
+- **UTC dates in the app.** These dates came from `toISOString()`, which
+  gives yesterday between midnight and 01/02:
+  - backup file names;
+  - the Nordnet import date;
+  - the export date on `/innstillinger/`.
+
+  They now use `lokalIsoDato()`. A test fails if `toISOString().slice(0, 10)`
+  or `.split('T')[0]` comes back in `ui.js` or `/innstillinger/`.
+- **An ordinary space before «%» in the templates.** 44 places in
+  `fetch_stocks.py` and seven in `utvid_beskrivelser.py` wrote
+  `{_nf(x)} %`, so «3,48» and «%» could fall on separate lines. They now use
+  `_pst()`. On regeneration 160 pages changed, and the space was the only
+  change. `TestProsentformat` fails on the old pattern.
+- **The FIRE calculator was 20 px too wide at 390 px.** The cause was a
+  formula in `<pre>`. `.prose pre` now wraps.
+- **The calendar export (.ics) gave the wrong amount.** It divided the
+  annual rate by the frequency and ignored an announced amount. It now uses
+  `nesteUtbyttePerAksje()`, the same source as the stat card.
+
+**Open:**
+
+- The data job uses `date.today()` about thirty times, and that is the UTC
+  date on the runner. In winter a run between 00:00 and 01:00 Oslo time is
+  therefore dated the day before. The trading-day clock never runs then,
+  but `kodeendring.yml` can.
+- Sjekk 10 reports AKRBP: three of four payments fall in the window. This is
+  the window edge, not a fault, and it clears at the ex-date on 3 November.
+
+Tests: `TestRangering` (2), `TestProsentformat` (1) and `ui.test.js` (+3).
+
 ## App review of 2026-10-20
 
 Every tab, sub-tab and fourteen stock modals were opened with Playwright at
