@@ -268,3 +268,28 @@ test('uten dato i priser.json eller tidsstempel i aksjer.json: som før', () => 
   assert.equal(slaaSammenKurs(104.2, udatert, '2026-10-08T21:00:00Z', '2026-10-09T13:57:00Z').pris, 99);
   assert.equal(slaaSammenKurs(104.2, SCATC_0810, '2026-10-08T21:00:00Z', '').pris, 98.55);
 });
+
+// ── Gamle tall for én aksje (31.10.2026) ────────────────────────────────────
+// Datajobben gjenbruker forrige kjørings rad når Yahoo ikke svarer. `hentet`
+// følger raden, og tallUtdatert() sier fra når den ligger to børsdager bak.
+const { tallUtdatert } = require('../assets/app.js');
+
+test('tallUtdatert: to børsdager bak datasettet gir datoen', () => {
+  // Hentet torsdag 29.10 kl. 16:41, datasettet mandag 2.11 kl. 11:41: fredag og mandag.
+  assert.equal(tallUtdatert({ hentet: '2026-10-29T15:41:00Z' }, '2026-11-02T10:41:00Z'), '2026-10-29');
+});
+
+test('tallUtdatert: en helg og en morgenkjøring er ikke gamle tall', () => {
+  // Fredag 17:41 mot mandag 08:41: mandag før kl. 09 er fredagens tall.
+  assert.equal(tallUtdatert({ hentet: '2026-10-30T16:41:00Z' }, '2026-11-02T07:41:00Z'), '');
+  // Fredag mot mandag 11:41: én børsdag.
+  assert.equal(tallUtdatert({ hentet: '2026-10-30T16:41:00Z' }, '2026-11-02T10:41:00Z'), '');
+  assert.equal(tallUtdatert({ hentet: '2026-11-02T10:41:00Z' }, '2026-11-02T10:41:00Z'), '');
+});
+
+test('tallUtdatert: uten hentet eller datasettdato sier den ingenting', () => {
+  assert.equal(tallUtdatert({}, '2026-11-02T10:41:00Z'), '');
+  assert.equal(tallUtdatert({ hentet: '2026-10-01T10:00:00Z' }, ''), '');
+  assert.equal(tallUtdatert({ hentet: 'tull' }, '2026-11-02T10:41:00Z'), '');
+  assert.equal(tallUtdatert(null, '2026-11-02T10:41:00Z'), '');
+});

@@ -3568,6 +3568,39 @@ browser can say a fetch failed**.
 > `uten_utbyttebevis()` lesson: an aggregate that says «something is wrong
 > somewhere» is not evidence about the row you are looking at.
 
+### Per stock: `hentet` (2026-10-31)
+
+That per-stock signal now exists. When Yahoo does not answer for a ticker,
+the data job reuses the previous run's row, and until now that row looked as
+fresh as the rest.
+
+- **The field.** `hent_aksje()` rows get `hentet`, a UTC timestamp, in
+  `main()`. A reused row keeps its own value. A row older than the field
+  takes the last good day from `sist_ok` in `data/ticker_status.json`
+  (`hentet_fra_status()`), read as 12:00 UTC.
+- **The rule.** The numbers count as old when `hentet` lies at least
+  `UTDATERT_BORSDAGER` (2) trading days behind the dataset's `sist_oppdatert`.
+  Both sides are counted from their trading day, where before 09:00 in Oslo
+  means the previous day. Weekends are skipped, holidays are not, so the rule
+  matches `borsdagerMellom()`. One failed run, or a whole weekend, is not
+  enough. It is written twice, kept in step by the same test cases:
+  - `tall_utdatert()` in `fetch_stocks.py`;
+  - `tallUtdatert()` in `app.js`.
+- **Without `hentet` nothing is shown.** No date is better than a guessed
+  one.
+- **On the stock page,** `lag_utdatert_boks()` puts an amber box at the top.
+  `sist_oppdatert_html(a)` gives the row's own date: «Tallene for denne aksjen
+  er hentet 27. oktober 2026». Before this, the page claimed the run date.
+- **In the app,** `utdatertMerke()` shows «gamle tall» in the list. It takes
+  the place of «begrenset data». `modalUtdatert()` puts a box above the tabs,
+  and the box says the price may be newer, since the price job fetches it
+  separately.
+- **Nothing shows today.** All 155 fetched on 31 October. The box was checked
+  by setting EQNR's `hentet` to 27 October in a local copy, in both themes at
+  390 px.
+
+Tests: `TestTallUtdatert` (5), `app.test.js` (+3) and `ui.test.js` (+1).
+
 `visDataFerskhet()` in `app.js` reads `sist_oppdatert` and renders the age.
 Guard for absence: the fields only appear after the next full fetch, and a
 missing value must render nothing — not «Invalid Date».

@@ -1124,3 +1124,25 @@ test('importvisningen på /innstillinger/ setter ikke filens tekst inn som HTML'
   const kode = fs.readFileSync(path.join(__dirname, '..', 'innstillinger/index.html'), 'utf8');
   assert.doesNotMatch(kode, /importer-json-innhold'\)\.innerHTML/);
 });
+
+test('gamle tall: merke i lista og boks i modalen bare for raden som ikke er hentet', () => {
+  const { utdatertMerke, modalUtdatert } = require('../assets/ui.js');
+  global.tallUtdatert = require('../assets/app.js').tallUtdatert;
+  global.escHtml = require('../assets/app.js').escHtml;
+  global.aksjerSistOppdatert = '2026-11-02T10:41:00Z';
+  try {
+    const gammel = { ticker: 'TST', navn: 'Test ASA', hentet: '2026-10-29T15:41:00Z' };
+    const fersk = { ticker: 'NY', navn: 'Ny ASA', hentet: '2026-11-02T10:41:00Z' };
+    assert.match(utdatertMerke(gammel), /gamle tall/);
+    assert.match(modalUtdatert(gammel), /Tallene for denne aksjen er ikke oppdatert/);
+    assert.match(modalUtdatert(gammel), /Test ASA siden 29\.\u00a0okt\.\u00a02026/);
+    assert.equal(utdatertMerke(fersk), '');
+    assert.equal(modalUtdatert(fersk), '');
+    assert.equal(modalUtdatert({ ticker: 'X', navn: 'Uten felt' }), '');
+    assert.doesNotMatch(modalUtdatert({ ...gammel, navn: '<img src=x onerror=1>' }), /<img/);
+  } finally {
+    delete global.tallUtdatert;
+    delete global.escHtml;
+    delete global.aksjerSistOppdatert;
+  }
+});
