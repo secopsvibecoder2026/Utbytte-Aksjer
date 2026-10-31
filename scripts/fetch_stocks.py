@@ -1735,6 +1735,16 @@ HENDELSE_TITTEL = {
 # Ved disse sier ikke historikken noe om utbyttet framover, så sidene gir
 # ingen «Passer for deg»-mål.
 HENDELSE_UTEN_MAL = {"oppkjop", "fusjon", "avvikling"}
+# Kort merke i tabeller. Speiler HENDELSE_KORT i assets/ui.js.
+HENDELSE_KORT = {
+    "oppkjop": "oppkjøp",
+    "fusjon": "fusjon",
+    "mulig_fusjon": "mulig fusjon",
+    "avvikling": "avvikles",
+    "bytte_av_marked": "flytter til Growth",
+    "bytte_av_hjemland": "bytter hjemland",
+    "fusjon_overtar": "overtar ved fusjon",
+}
 
 
 def gyldig_hendelse(h):
@@ -1748,6 +1758,18 @@ def sett_hendelse(a, h):
         a["hendelse"] = {k: h[k] for k in ("type", "dato", "melding", "tekst") if h.get(k)}
     else:
         a.pop("hendelse", None)
+
+
+def i_rangering(a):
+    """Om aksjen kan stå i en rangering (topplister, «Høyeste yield»).
+
+    BlueNord toppet «Høyest utbytte» med 28,53 % etter å ha sagt at det ikke
+    vedtar flere utbytter før fusjonen med Vår Energi, og Stainless Tankers sto
+    på listen under avvikling (30.10.2026). Utbyttet bak tallet kommer ikke
+    igjen, så en rangering skal ikke løfte det fram. Aksjene står fortsatt i de
+    fullstendige listene, med hendelsen merket.
+    """
+    return not hendelse_uten_mal(a)
 
 
 def hendelse_uten_mal(a):
@@ -4076,18 +4098,18 @@ def _lag_utbyttehistorikk_tekst(a, i_dag_ar=None):
             # og OET fikk den med kursen nær 52-ukers toppen (2026-10-12).
             # Forklaringen står i FAQ-en på samme side; her bare målingen.
             deler.append(
-                f"Dagens yield på {_nf(y, 1)} % ligger over aksjens eget {navn_s} "
-                f"på {_nf(s5, 1)} %."
+                f"Dagens yield på {_pst(y, 1)} ligger over aksjens eget {navn_s} "
+                f"på {_pst(s5, 1)}."
             )
         elif avvik < -s5 * 0.2:
             deler.append(
-                f"Dagens yield på {_nf(y, 1)} % er lavere enn aksjens eget {navn_s} "
-                f"på {_nf(s5, 1)} %."
+                f"Dagens yield på {_pst(y, 1)} er lavere enn aksjens eget {navn_s} "
+                f"på {_pst(s5, 1)}."
             )
         else:
             deler.append(
-                f"Dagens yield på {_nf(y, 1)} % ligger nær aksjens eget {navn_s} "
-                f"på {_nf(s5, 1)} %."
+                f"Dagens yield på {_pst(y, 1)} ligger nær aksjens eget {navn_s} "
+                f"på {_pst(s5, 1)}."
             )
 
     return " ".join(deler)
@@ -4346,17 +4368,17 @@ def _selskapsrisikoer(a):
     # side sa «deler i dag ut mer enn selskapet tjener» (2026-10-19).
     if payout >= 100:
         ut.append(
-            f"Payout ratio på {_nf(payout, 0)} % betyr at selskapet deler ut mer "
+            f"Payout ratio på {_pst(payout, 0)} betyr at selskapet deler ut mer "
             f"enn det tjener. Det kan ikke vare uten at inntjeningen tar seg opp"
         )
     elif payout >= 90:
         ut.append(
-            f"Payout ratio på {_nf(payout, 0)} % betyr at nesten hele "
+            f"Payout ratio på {_pst(payout, 0)} betyr at nesten hele "
             f"inntjeningen deles ut — det gir lite å gå på om resultatet faller"
         )
     elif payout > 75:
         ut.append(
-            f"Payout ratio på {_nf(payout, 0)} % er i øvre sjikt, så utbyttet "
+            f"Payout ratio på {_pst(payout, 0)} er i øvre sjikt, så utbyttet "
             f"tåler mindre svikt i inntjeningen enn hos en lavere utdeler"
         )
 
@@ -4382,8 +4404,8 @@ def _selskapsrisikoer(a):
     # årsraten som er høy, ikke kursen som har falt (tallkontrollen 2026-10-12).
     if yield_ and snitt and yield_ > snitt * 1.8 and not kutt and not snitt_har_nullar(a):
         ut.append(
-            f"Yielden på {_nf(yield_, 1)} % er langt over aksjens eget "
-            f"{snitt_navn(a)} på {_nf(snitt, 1)} %, regnet mot samme kurs. Et "
+            f"Yielden på {_pst(yield_, 1)} er langt over aksjens eget "
+            f"{snitt_navn(a)} på {_pst(snitt, 1)}, regnet mot samme kurs. Et "
             f"utbytte så langt over det selskapet pleier å betale, er ikke sikkert "
             f"å holde"
         )
@@ -4414,8 +4436,8 @@ def _selskapsrisikoer(a):
         if y_hoy - y_lav >= 0.5:
             ut.append(
                 f"Yielden avhenger sterkt av inngangskursen: samme utbytte gir "
-                f"{_nf(y_lav, 1)} % på 12-månedershøyden "
-                f"({_nf(hoy, 2)} kr) og {_nf(y_hoy, 1)} % på bunnen "
+                f"{_pst(y_lav, 1)} på 12-månedershøyden "
+                f"({_nf(hoy, 2)} kr) og {_pst(y_hoy, 1)} på bunnen "
                 f"({_nf(lav, 2)} kr)"
             )
 
@@ -4661,15 +4683,15 @@ def _lag_nedtur_test(a):
     if payout >= 100:
         dom = (
             f"{navn} deler i dag ut mer enn selskapet tjener "
-            f"({_nf(payout, 0)} % av inntjeningen). Det kan finansieres en "
+            f"({_pst(payout, 0)} av inntjeningen). Det kan finansieres en "
             f"stund av oppsparte midler eller salg av eiendeler, men det er "
             f"ikke et nivå som kan holdes år etter år uten at inntjeningen "
             f"tar seg opp."
         )
     else:
         dom = (
-            f"Med en payout ratio på {_nf(payout, 0)} % kan inntjeningen falle "
-            f"rundt {_nf(slark, 0)} % før utbyttet spiser hele overskuddet. "
+            f"Med en payout ratio på {_pst(payout, 0)} kan inntjeningen falle "
+            f"rundt {_pst(slark, 0)} før utbyttet spiser hele overskuddet. "
             f"Faller den mer enn det, må selskapet enten tære på kassen, låne, "
             f"eller sette ned utbyttet."
         )
@@ -4862,15 +4884,15 @@ def _driver_selskapsledd(a, sektor):
     if vekst is not None and ar >= 5:
         if vekst >= 10:
             setninger.append(
-                f"Utbyttet har vokst {_nf(vekst, 1)} % i året de siste fem årene{topp_ledd}"
+                f"Utbyttet har vokst {_pst(vekst, 1)} i året de siste fem årene{topp_ledd}"
             )
         elif vekst > 0:
             setninger.append(
-                f"Veksten i utbyttet har ligget på {_nf(vekst, 1)} % i året over fem år{topp_ledd}"
+                f"Veksten i utbyttet har ligget på {_pst(vekst, 1)} i året over fem år{topp_ledd}"
             )
         elif vekst < 0:
             setninger.append(
-                f"Utbyttet er samlet sett {_nf(abs(vekst), 1)} % lavere i året enn "
+                f"Utbyttet er samlet sett {_pst(abs(vekst), 1)} lavere i året enn "
                 f"for fem år siden"
             )
 
@@ -4878,12 +4900,12 @@ def _driver_selskapsledd(a, sektor):
     if payout > 0:
         if payout < 40:
             setninger.append(
-                f"Payout ratio på {_nf(payout, 0)} % lar mesteparten av "
+                f"Payout ratio på {_pst(payout, 0)} lar mesteparten av "
                 f"inntjeningen bli igjen i selskapet, så det er rom for å øke"
             )
         elif payout <= 75:
             setninger.append(
-                f"Payout ratio på {_nf(payout, 0)} % er et nivå som pleier å "
+                f"Payout ratio på {_pst(payout, 0)} er et nivå som pleier å "
                 f"kunne holdes over tid"
             )
 
@@ -5919,7 +5941,7 @@ def _lag_faq_seksjon(a, today):
     elif yield_ > 0:
         netto = yield_ * (1 - 0.3784 * (1 - kap))
         delvis = (
-            f"Ifølge siste utbyttemelding var om lag {_nf(kap * 100, 0)} % av utbetalingen "
+            f"Ifølge siste utbyttemelding var om lag {_pst(kap * 100, 0)} av utbetalingen "
             f"tilbakebetaling av innbetalt kapital, som ikke beskattes ved utbetaling men "
             f"reduserer inngangsverdien. Resten beskattes som utbytte. "
         ) if kap else ""
@@ -5946,7 +5968,7 @@ def _lag_faq_seksjon(a, today):
             f"Utbytte fra {navn} beskattes med 37,84 % av det som overstiger "
             f"skjermingsfradraget, for personlige aksjonærer som eier aksjen på vanlig konto. "
             f"{delvis}"
-            f"Med en yield på {_nf(yield_, 2)} % gir det en nettoyield på ca. {_nf(netto, 2)} % "
+            f"Med en yield på {_pst(yield_, 2)} gir det en nettoyield på ca. {_pst(netto, 2)} "
             f"etter skatt, før skjermingsfradraget. "
             f"{kildeskatt}"
             f"{ask_faq}"
@@ -5966,7 +5988,7 @@ def _lag_faq_seksjon(a, today):
             # med 110 % (tallkontrollen 2026-10-12).
             vurd = (f"En payout ratio over 80 % innebærer at {navn} deler ut en svært stor andel av inntjeningen. "
                     f"Det kan holdes oppe med sterk kontantstrøm, men er mer sårbart ved svakere kvartaler.")
-        svar = f"Payout ratio for {navn} er {_nf(payout, 0)} % — det vil si andelen av inntjeningen per aksje som utbetales som utbytte. {vurd}"
+        svar = f"Payout ratio for {navn} er {_pst(payout, 0)} — det vil si andelen av inntjeningen per aksje som utbetales som utbytte. {vurd}"
         qas.append((f"Er utbyttet fra {navn} bærekraftig?", svar))
 
     # 6. Historikk: bare hele år, de samme som tabellen «Faktisk betalt».
@@ -6229,7 +6251,7 @@ def _lag_sidetittel(navn, ticker, yield_, ex, today):
     if dager is not None and 0 <= dager <= DAGER_EX_DATO_I_TITTEL:
         tillegg = f"ex-dato {_fmt_dato(ex)}"
     elif yield_ and yield_ > 0:
-        tillegg = f"yield {_nf(yield_, 1)} %"
+        tillegg = f"yield {_pst(yield_, 1)}"
     else:
         tillegg = ""
 
@@ -6259,7 +6281,7 @@ def _lag_meta_beskrivelse(navn, ticker, yield_, ex, upa, snitt5, valuta, today,
     kort = _kort_selskapsnavn(navn)
     deler = []
     if yield_ and yield_ > 0:
-        deler.append(f"{kort} ({ticker}) har {_nf(yield_, 1)} % direkteavkastning")
+        deler.append(f"{kort} ({ticker}) har {_pst(yield_, 1)} direkteavkastning")
     else:
         deler.append(f"{kort} ({ticker}) — utbytte, nøkkeltall og historikk")
 
@@ -6273,7 +6295,7 @@ def _lag_meta_beskrivelse(navn, ticker, yield_, ex, upa, snitt5, valuta, today,
         deler.append(f"årlig utbytte er {_nf(upa, 2)} {valuta} per aksje")
 
     if snitt5 and snitt5 > 0 and len(". ".join(deler)) < 105:
-        deler.append(f"{navn_snitt}et er {_nf(snitt5, 1)} %")
+        deler.append(f"{navn_snitt}et er {_pst(snitt5, 1)}")
 
     # Første setning står for seg; resten bindes med «og». Bindes alle tre med
     # komma, blir det komma mellom to hovedsetninger.
@@ -7245,22 +7267,26 @@ def generer_aksjesider(aksjer, root_dir):
     aksjer_med_utbytte = [a for a in aksjer if (a.get("utbytte_yield") or 0) > 0]
     snitt_yield = (sum(a.get("utbytte_yield", 0) for a in aksjer_med_utbytte) / len(aksjer_med_utbytte)) if aksjer_med_utbytte else 0
 
+    # Rangeringene tar ikke med aksjer under oppkjøp, fusjon eller avvikling
+    # (se i_rangering()). Tellingen og snittet over gjelder hele katalogen.
+    rangerbare = [a for a in aksjer_med_utbytte if i_rangering(a)]
+
     # Topp 6 etter yield (filtrerer urealistiske > 25%)
     topp_yield = sorted(
-        [a for a in aksjer_med_utbytte if (a.get("utbytte_yield") or 0) < 25],
+        [a for a in rangerbare if (a.get("utbytte_yield") or 0) < 25],
         key=lambda x: x.get("utbytte_yield", 0), reverse=True
     )[:6]
 
     # Topp 6 stabile (flest år med utbytte) med yield > 0
     stabile = sorted(
-        aksjer_med_utbytte,
+        rangerbare,
         key=lambda x: (_stabile_ar(x), x.get("utbytte_yield") or 0),
         reverse=True
     )[:6]
 
     # Månedlige og kvartalsvise utbetalere — skikkelig kontantstrøm
     hyppige = sorted(
-        [a for a in aksjer_med_utbytte if a.get("frekvens") in ("Månedlig", "Kvartalsvis")],
+        [a for a in rangerbare if a.get("frekvens") in ("Månedlig", "Kvartalsvis")],
         key=lambda x: x.get("utbytte_yield", 0), reverse=True
     )[:6]
 
@@ -7904,7 +7930,9 @@ def _sektor_analyse(sektor, i_sektor, alle):
     median_sektor = statistics.median(med_y)
     median_bors = statistics.median(alle_y)
     diff = median_sektor - median_bors
-    lavest, hoyest = min(med_y), max(med_y)
+    # Spennet følger rangeringsregelen: BlueNords 28,53 % kommer ikke igjen.
+    spenn_y = [yld(a) for a in i_sektor if yld(a) > 0 and i_rangering(a)] or med_y
+    lavest, hoyest = min(spenn_y), max(spenn_y)
 
     # payout_ratio == 0 betyr UKJENT, ikke lavt — se CLAUDE.md. Ukjente skal
     # aldri telle som «lav utbetalingsgrad».
@@ -7925,13 +7953,13 @@ def _sektor_analyse(sektor, i_sektor, alle):
     # ── Avsnitt 1: hvor sektoren ligger mot børsen ────────────────────────
     if abs(diff) < 0.5:
         plassering = (f"ligger omtrent på linje med resten av børsen, der "
-                      f"medianen er {_nf(median_bors, 2)} %")
+                      f"medianen er {_pst(median_bors, 2)}")
     elif diff > 0:
         plassering = (f"ligger {_nf(abs(diff), 1)} prosentpoeng over medianen for "
-                      f"hele Oslo Børs på {_nf(median_bors, 2)} %")
+                      f"hele Oslo Børs på {_pst(median_bors, 2)}")
     else:
         plassering = (f"ligger {_nf(abs(diff), 1)} prosentpoeng under medianen for "
-                      f"hele Oslo Børs på {_nf(median_bors, 2)} %")
+                      f"hele Oslo Børs på {_pst(median_bors, 2)}")
 
     # Én enkelt aksje er ikke en fordeling. «Medianen blant dem», «fra 7,10 %
     # til 7,10 %» og «blant de 1» er alle meningsløse da, så små sektorer får
@@ -7940,33 +7968,33 @@ def _sektor_analyse(sektor, i_sektor, alle):
     spenn = ""
     if not en and hoyest > 0 and lavest > 0:
         if hoyest / max(lavest, 0.01) >= 3:
-            spenn = (f" Spennet er stort: fra {_nf(lavest, 2)} % i bunn til "
-                     f"{_nf(hoyest, 2)} % på topp. Et snitt sier derfor lite om "
+            spenn = (f" Spennet er stort: fra {_pst(lavest, 2)} i bunn til "
+                     f"{_pst(hoyest, 2)} på topp. Et snitt sier derfor lite om "
                      f"den enkelte aksjen her — forskjellene innad i sektoren er "
                      f"større enn forskjellen mot børsen samlet.")
         else:
-            spenn = (f" Spredningen er moderat, fra {_nf(lavest, 2)} % til "
-                     f"{_nf(hoyest, 2)} %, så snittet er rimelig representativt.")
+            spenn = (f" Spredningen er moderat, fra {_pst(lavest, 2)} til "
+                     f"{_pst(hoyest, 2)}, så snittet er rimelig representativt.")
 
     if en:
         avsnitt1 = (f"exday.no følger én utbyttebetalende aksje i {sektor}: "
                     f"{i_sektor[0]['navn']}. Direkteavkastningen er "
-                    f"{_nf(median_sektor, 2)} % og {plassering}. Med bare ett "
+                    f"{_pst(median_sektor, 2)} og {plassering}. Med bare ett "
                     f"selskap er dette ingen sektorstatistikk — tallet beskriver "
                     f"denne aksjen, ikke en bransje.")
     else:
         avsnitt1 = (f"exday.no følger {len(i_sektor)} aksjer i {sektor} med "
-                    f"utbytte. Medianen blant dem er {_nf(median_sektor, 2)} % og "
+                    f"utbytte. Medianen blant dem er {_pst(median_sektor, 2)} og "
                     f"{plassering}.{spenn}")
 
     # ── Avsnitt 2: utbetalingsgrad ────────────────────────────────────────
     deler = []
     if kjente and en:
-        deler.append(f"Utbetalingsgraden er {_nf(kjente[0], 0)} % av "
+        deler.append(f"Utbetalingsgraden er {_pst(kjente[0], 0)} av "
                      f"inntjeningen")
     elif kjente:
         deler.append(f"Median utbetalingsgrad blant de {len(kjente)} aksjene med "
-                     f"kjent payout ratio er {_nf(statistics.median(kjente), 0)} %")
+                     f"kjent payout ratio er {_pst(statistics.median(kjente), 0)}")
         if over_100:
             deler.append(f"Av dem deler {_ordtall(over_100)} ut mer enn de tjener, noe som "
                          f"kan være holdbart en periode, men ikke varig uten at "
@@ -8069,10 +8097,14 @@ def generer_sektorsider(aksjer, root_dir):
         for a in aksjer_sortert:
             t  = a["ticker"]
             ex = _fmt_dato(a.get("ex_dato"))
+            # Merket forklarer hvorfor aksjen ikke teller i «Høyeste yield»
+            # og spennet over (i_rangering()).
+            merke = (f' <span class="text-xs text-amber-700 dark:text-amber-400 whitespace-nowrap">'
+                     f'{HENDELSE_KORT[a["hendelse"]["type"]]}</span>' if hendelse_uten_mal(a) else "")
             rader += f"""
         <tr>
           <td><a href="/aksjer/{t}/">{t}</a></td>
-          <td>{a["navn"]}</td>
+          <td>{a["navn"]}{merke}</td>
           <td>{_nf(a["pris"], 2) if a.get("pris") else "—"} {a.get("valuta","NOK")}</td>
           <td class="yield">{_pst(a.get("utbytte_yield", 0), 2)}</td>
           <td>{ex}</td>
@@ -8242,7 +8274,7 @@ def generer_sektorsider(aksjer, root_dir):
   <div class="stats">
     <div class="stat"><div class="stat-val">{len(aksjer_sortert)}</div><div class="stat-lbl">Aksjer</div></div>
     <div class="stat"><div class="stat-val">{_pst(snitt_yield, 1)}</div><div class="stat-lbl">Snitt yield</div></div>
-    <div class="stat"><div class="stat-val">{_pst(max(a.get("utbytte_yield",0) for a in aksjer_sortert), 1)}</div><div class="stat-lbl">Høyeste yield</div></div>
+    <div class="stat"><div class="stat-val">{_pst(max([a.get("utbytte_yield", 0) for a in aksjer_sortert if i_rangering(a)] or [0]), 1)}</div><div class="stat-lbl">Høyeste yield</div></div>
   </div>
 {analyse_html}
   <div class="tabell-ramme">
@@ -8516,7 +8548,7 @@ def _toppliste_analyse(slug, topp, alle):
             f"Direkteavkastning er utbytte delt på kurs. Tallet stiger derfor "
             f"like gjerne fordi kursen faller som fordi utbyttet øker, og en "
             f"aksje som skiller seg kraftig fra medianen på Oslo Børs "
-            f"({_nf(median_bors, 2)} %) er først og fremst et spørsmål: hva er "
+            f"({_pst(median_bors, 2)}) er først og fremst et spørsmål: hva er "
             f"det markedet priser inn som du ennå ikke har sett?",
             f"Av de {len(topp)} aksjene på denne listen deler {over100} ut mer "
             f"enn de tjener, og for {ukjent} mangler vi inntjeningstall — blankt "
@@ -8549,8 +8581,8 @@ def _toppliste_analyse(slug, topp, alle):
             f"Legg også merke til at høy vekst og høy yield sjelden opptrer "
             f"sammen. Et selskap som allerede deler ut det meste av "
             f"overskuddet, har lite igjen å øke med. Medianen i dagens yield på "
-            f"denne listen er {_nf(median_liste, 2)} %, mot "
-            f"{_nf(median_bors, 2)} % for børsen samlet — det er prisen for "
+            f"denne listen er {_pst(median_liste, 2)}, mot "
+            f"{_pst(median_bors, 2)} for børsen samlet — det er prisen for "
             f"veksten.",
             "For en langsiktig portefølje er det ofte vekstlisten som betyr "
             "mest. En aksje som gir 3 % i dag og øker utbyttet 10 % i året, "
@@ -8583,7 +8615,7 @@ def _toppliste_analyse(slug, topp, alle):
             f"portefølje ut fra denne listen alene, blir du derfor lite spredt.",
             f"Merk også at konsistens og høy yield er to forskjellige ting. "
             f"{under_median} av de {len(topp)} aksjene her gir under "
-            f"børsmedianen på {_nf(median_bors, 2)} % — du betaler for "
+            f"børsmedianen på {_pst(median_bors, 2)} — du betaler for "
             f"forutsigbarheten.",
         ]
     else:  # lavest-payout
@@ -8604,7 +8636,7 @@ def _toppliste_analyse(slug, topp, alle):
             f"Baksiden er at lav payout og høy yield sjelden følges ad. Skal du "
             f"bruke listen praktisk, se den sammen med dagens yield: en aksje "
             f"med lav utbetalingsgrad og yield nær børsmedianen på "
-            f"{_nf(median_bors, 2)} % er som regel et mer holdbart utgangspunkt "
+            f"{_pst(median_bors, 2)} er som regel et mer holdbart utgangspunkt "
             f"enn toppen av høy-yield-listen.",
         ]
 
@@ -8782,7 +8814,7 @@ def generer_topplistesider(aksjer, root_dir):
 
     for cfg in LISTER:
         topp = sorted(
-            [a for a in aksjer if cfg["filter"](a)],
+            [a for a in aksjer if cfg["filter"](a) and i_rangering(a)],
             key=cfg["sort_key"],
             reverse=cfg["reverse"]
         )[:20]

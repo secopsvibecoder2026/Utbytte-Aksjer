@@ -1077,3 +1077,36 @@ test('tallkontroll 2026-10-26: årets utbytte, særutbytte og vekst fra topp', (
   assert.ok(Math.abs(ordinaerHistorikk(vend)[1].utbytte - 2.0) < 1e-9);
   assert.match(saerutbytteFotnote(vend, dag), /85,66 kr i 2024/);
 });
+
+test('rangering: aksjer under oppkjøp, fusjon eller avvikling er ikke «Høyeste yield»', () => {
+  const { iRangering, hoyestYield, hendelseUtenMal } = require('../assets/ui.js');
+  const h = (type) => ({ type, dato: '2026-08-24', melding: '1', tekst: 'Meldt.' });
+  const bnor = { ticker: 'BNOR', utbytte_yield: 28.53, hendelse: h('fusjon') };
+  const stst = { ticker: 'STST', utbytte_yield: 12.25, hendelse: h('avvikling') };
+  const trsb = { ticker: 'TRSB', utbytte_yield: 9.1, hendelse: h('fusjon_overtar') };
+  const parb = { ticker: 'PARB', utbytte_yield: 17.06 };
+  assert.equal(hendelseUtenMal(bnor), true);
+  assert.equal(iRangering(stst), false);
+  assert.equal(iRangering(trsb), true);           // den som overtar, fortsetter
+  assert.equal(hoyestYield([bnor, stst, parb, trsb]).ticker, 'PARB');
+  assert.equal(hoyestYield([bnor]), null);
+});
+
+test('ingen UTC-dato som «i dag» i appen og innstillingene', () => {
+  // toISOString() gir UTC-datoen: mellom midnatt og kl. 01/02 ble kjøp fra
+  // Nordnet-importen og backupfilen datert i går (30.10.2026).
+  const fs = require('node:fs');
+  const path = require('node:path');
+  const rot = path.join(__dirname, '..');
+  for (const fil of ['assets/ui.js', 'innstillinger/index.html']) {
+    const kode = fs.readFileSync(path.join(rot, fil), 'utf8');
+    assert.doesNotMatch(kode, /new Date\(\)\.toISOString\(\)\.(slice\(0, ?10\)|split\('T'\)\[0\])/, fil);
+  }
+});
+
+test('importvisningen på /innstillinger/ setter ikke filens tekst inn som HTML', () => {
+  const fs = require('node:fs');
+  const path = require('node:path');
+  const kode = fs.readFileSync(path.join(__dirname, '..', 'innstillinger/index.html'), 'utf8');
+  assert.doesNotMatch(kode, /importer-json-innhold'\)\.innerHTML/);
+});

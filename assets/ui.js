@@ -1096,6 +1096,22 @@ function gyldigHendelse(h) {
     && typeof h.tekst === 'string' && h.tekst.trim());
 }
 
+function hendelseUtenMal(a) {
+  return !!(a && gyldigHendelse(a.hendelse) && HENDELSE_UTEN_MAL.has(a.hendelse.type));
+}
+
+// Speiler i_rangering() i fetch_stocks.py. BlueNord toppet «Høyeste yield»
+// med 28,53 % etter å ha sagt at det ikke vedtar flere utbytter før fusjonen
+// (30.10.2026). Aksjen står fortsatt i den fullstendige lista, med merke.
+function iRangering(a) {
+  return !hendelseUtenMal(a);
+}
+
+function hoyestYield(aksjer) {
+  return (aksjer || []).filter(a => a.utbytte_yield > 0 && iRangering(a))
+    .sort((a, b) => b.utbytte_yield - a.utbytte_yield)[0] || null;
+}
+
 // Kort merke i lista og tabellen. Uten det så leseren STST med 12,5 % yield
 // uten å vite at flåten skal selges, og ZAL uten å vite at aksjen avnoteres.
 const HENDELSE_KORT = {
@@ -1130,7 +1146,7 @@ function modalHendelse(a) {
 
 function beregnMal(a) {
   const mål = [];
-  if (gyldigHendelse(a.hendelse) && HENDELSE_UTEN_MAL.has(a.hendelse.type)) return mål;
+  if (hendelseUtenMal(a)) return mål;
   if (_DEFENSIVE_SEKTORER.has(a.sektor) && stabileAr(a) >= 7 && (a.payout_ratio || 0) < 80 && (a.payout_ratio || 0) > 0
       && !utbytteKutt(a).length && !aaretsNedgang(a, null, KUTT_ANDEL)) {
     mål.push('stabil');
@@ -1440,9 +1456,11 @@ function oppdaterGeneriskSammendrag() {
   if (medYield.length) {
     const snitt = medYield.reduce((s, a) => s + a.utbytte_yield, 0) / medYield.length;
     document.getElementById('stat-snitt-yield').textContent = fmtPst(snitt, 2);
-    const hoyest = [...medYield].sort((a, b) => b.utbytte_yield - a.utbytte_yield)[0];
-    document.getElementById('stat-hoyest-yield').textContent = fmtPst(hoyest.utbytte_yield, 2);
-    document.getElementById('stat-hoyest-navn').textContent = hoyest.ticker + ' · ' + hoyest.navn;
+    const hoyest = hoyestYield(medYield);
+    if (hoyest) {
+      document.getElementById('stat-hoyest-yield').textContent = fmtPst(hoyest.utbytte_yield, 2);
+      document.getElementById('stat-hoyest-navn').textContent = hoyest.ticker + ' · ' + hoyest.navn;
+    }
   }
 
   const idag = new Date(); idag.setHours(0,0,0,0);
@@ -1937,7 +1955,7 @@ function visTopplistor(liste = 'yield') {
   if (!cfg) return;
 
   const topp = alleAksjer
-    .filter(cfg.filter)
+    .filter(a => cfg.filter(a) && iRangering(a))
     .sort((a, b) => cfg.retning === 'desc' ? b[cfg.felt] - a[cfg.felt] : a[cfg.felt] - b[cfg.felt])
     .slice(0, 10);
 
@@ -2727,7 +2745,7 @@ function bekreftImport(data, erstatt, nyPortefoljeNavn) {
     erstatt = false;
   }
 
-  const idag = new Date().toISOString().split('T')[0];
+  const idag = lokalIsoDato(new Date());
   const pf = erstatt ? {} : hentPF();
   const tx = erstatt ? {} : hentTransaksjoner();
 
@@ -2804,7 +2822,7 @@ function eksporterJSON() {
   const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
   const url  = URL.createObjectURL(blob);
   const a    = document.createElement('a');
-  const dato = new Date().toISOString().slice(0, 10);
+  const dato = lokalIsoDato(new Date());
   a.href = url; a.download = `exday-backup-${dato}.json`; a.click();
   URL.revokeObjectURL(url);
 }
@@ -3084,7 +3102,7 @@ async function _skrivTilFil(handle, blob) {
 
 async function _velgOgLagreFil(blob) {
   try {
-    const dato   = new Date().toISOString().slice(0, 10);
+    const dato   = lokalIsoDato(new Date());
     const handle = await window.showSaveFilePicker({
       suggestedName: `exday-backup-${dato}.json`,
       types: [{ description: 'JSON backup', accept: { 'application/json': ['.json'] } }]
@@ -3096,7 +3114,7 @@ async function _velgOgLagreFil(blob) {
 }
 
 async function _autoNedlasting(blob) {
-  const dato = new Date().toISOString().slice(0, 10);
+  const dato = lokalIsoDato(new Date());
   const filnavn = `exday-backup-${dato}.json`;
   // Web Share API med filer: iOS 15+ åpner del-ark → "Lagre i Filer" / AirDrop / etc.
   try {
@@ -3225,8 +3243,11 @@ function eksporterEnkeltICS(a, type, dato) {
     summary     = `${a.ticker} Ex-dato`;
     description = `Ex-dato for ${a.navn}. Yield: ${fmtPst(a.utbytte_yield, 2)}. Siste utbytte: ${sisteUtbytteTekst(a)}.`;
   } else if (type === 'utbytte') {
-    const belop = pf[a.ticker]
-      ? `Estimert utbetaling: ${(pf[a.ticker] * (a.utbytte_per_aksje || 0) / (({Månedlig:12,Kvartalsvis:4,Halvårlig:2,Årlig:1}[a.frekvens]||1))).toLocaleString('nb-NO',{maximumFractionDigits:0})} kr. `
+    // Samme kilde som stat-kortet, Inntekt og kalenderen: det annonserte
+    // beløpet når det gjelder denne ex-datoen, ellers årsraten delt på frekvensen.
+    const neste = pf[a.ticker] && typeof nesteUtbyttePerAksje === 'function' ? nesteUtbyttePerAksje(a) : null;
+    const belop = neste
+      ? `${neste.annonsert ? 'Annonsert' : 'Estimert'} utbetaling: ${(pf[a.ticker] * neste.belop).toLocaleString('nb-NO', { maximumFractionDigits: 0 })} kr. `
       : '';
     summary     = `${a.ticker} Utbetaling`;
     description = `${belop}Utbyttebetaling fra ${a.navn}.`;
@@ -5953,4 +5974,4 @@ function _annBygTopp() {
 }
 
 // Node.js test export
-if (typeof module !== 'undefined') module.exports = { saerutbytteFotnote, aaretsArsutbytte, aaretsNedgang, ordinaerPerAr, ordinaerHistorikk, markedsplassTekst, hendelseMerke, nyMilepel, delLenkeData, pentAkse, fmtPst, fmtTall, dagerTil, dagerTilTekst, datoKort, aksjerTekst, snittNavn, utbytteKutt, modalHendelse, beregnRisiko, forklarRisiko, vekstFraTopp, beregnMal, forklarMal, bevegelserOverskrift, utbytteRekke, stabileAr, exForbeholdGjelder, utbyttePerioder, vistOverBetalt, modalBetaltBoks, supplertFotnote, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, fmt, formaterDato, yieldKlasse, payoutKlasse, vekstKlasse, beregnScore, beregnBaerekraft, beregnYtdInntekt, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote, kapitalAndel, modalKapitalNote, kapitalSkattTekst, aksjerMedExIMaaned, beregnHvisKjopt, hvisStartAar, beregnAskMotVanlig, fmtUtbytte, sisteUtbytteTekst, modalOmSelskapet, vekslOmSelskapet, dripGevinst, _simulerKalkulator, askStatus, askTekst, modalKontoer };
+if (typeof module !== 'undefined') module.exports = { hendelseUtenMal, iRangering, hoyestYield, saerutbytteFotnote, aaretsArsutbytte, aaretsNedgang, ordinaerPerAr, ordinaerHistorikk, markedsplassTekst, hendelseMerke, nyMilepel, delLenkeData, pentAkse, fmtPst, fmtTall, dagerTil, dagerTilTekst, datoKort, aksjerTekst, snittNavn, utbytteKutt, modalHendelse, beregnRisiko, forklarRisiko, vekstFraTopp, beregnMal, forklarMal, bevegelserOverskrift, utbytteRekke, stabileAr, exForbeholdGjelder, utbyttePerioder, vistOverBetalt, modalBetaltBoks, supplertFotnote, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, fmt, formaterDato, yieldKlasse, payoutKlasse, vekstKlasse, beregnScore, beregnBaerekraft, beregnYtdInntekt, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote, kapitalAndel, modalKapitalNote, kapitalSkattTekst, aksjerMedExIMaaned, beregnHvisKjopt, hvisStartAar, beregnAskMotVanlig, fmtUtbytte, sisteUtbytteTekst, modalOmSelskapet, vekslOmSelskapet, dripGevinst, _simulerKalkulator, askStatus, askTekst, modalKontoer };

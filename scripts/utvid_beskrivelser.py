@@ -67,6 +67,11 @@ _AUTO_TEGN = [
     "per år de siste fem årene",  # vekst-/fall-setningen i avsnitt 2
 ]
 
+
+def _pst(verdi, desimaler=2):
+    """Prosent med desimalkomma og hardt mellomrom: «3,48 %». Samme som i fetch_stocks.py."""
+    return f"{_nf(verdi, desimaler)}\u00a0%"
+
 def _manuell_del(beskrivelse: str, sektor_driver: str = "") -> str:
     """Returner bare de opprinnelige (manuelle) setningene — hopp over auto-genererte."""
     import re
@@ -221,33 +226,33 @@ def lag_beskrivelse(t: dict, a: dict) -> str:
         else:
             yield_karakter = "i det lavere sjiktet av"
         deler2.append(
-            f"Direkteavkastningen er {_nf(yield_)} %, og 5-årssnittet på {_nf(snitt5)} % "
+            f"Direkteavkastningen er {_pst(yield_, 1)}, og 5-årssnittet på {_pst(snitt5, 1)} "
             f"plasserer {ticker} {yield_karakter} aksjene i sin sektor."
         )
     elif yield_ > 0:
-        deler2.append(f"Direkteavkastningen er {_nf(yield_)} %.")
+        deler2.append(f"Direkteavkastningen er {_pst(yield_, 1)}.")
 
     if payout > 0:
         if payout < 50:
             deler2.append(
-                f"Utbetalingsgraden på {_nf(payout, 0)} % er lav og gir selskapet "
+                f"Utbetalingsgraden på {_pst(payout, 0)} er lav og gir selskapet "
                 f"solid buffer til å opprettholde utbyttet ved svakere kvartaler."
             )
         elif payout < 80:
             deler2.append(
-                f"Utbetalingsgraden er {_nf(payout, 0)} %, noe som er balansert "
+                f"Utbetalingsgraden er {_pst(payout, 0)}, noe som er balansert "
                 f"for en moden utbytteaksje."
             )
         else:
             deler2.append(
-                f"En utbetalingsgrad på {_nf(payout, 0)} % betyr at det meste av inntjeningen "
+                f"En utbetalingsgrad på {_pst(payout, 0)} betyr at det meste av inntjeningen "
                 f"deles ut — utbyttet er dermed sensitivt for resultatsvingninger."
             )
 
     if vekst is not None and abs(vekst) > 0.5:
         retning = "vokst" if vekst > 0 else "falt"
         deler2.append(
-            f"Utbyttet har {retning} med i snitt {_nf(abs(vekst))} % per år de siste fem årene."
+            f"Utbyttet har {retning} med i snitt {_pst(abs(vekst), 1)} per år de siste fem årene."
         )
 
     if deler2:

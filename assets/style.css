@@ -966,6 +966,9 @@ section[id] { scroll-margin-top: 100px; }
 .prose th { text-align: left; padding: 0.6rem 0.9rem; background: #f3f4f6; font-weight: 600; border: 1px solid #e5e7eb; }
 .prose td { padding: 0.6rem 0.9rem; border: 1px solid #e5e7eb; vertical-align: top; }
 .prose tr:nth-child(even) td { background: #f9fafb; }
+/* Formler i <pre> brytes heller enn å skyve siden ut: på 390 px gikk
+   FIRE-kalkulatoren 20 px utenfor skjermen (30.10.2026). */
+.prose pre { white-space: pre-wrap; overflow-wrap: anywhere; max-width: 100%; }
 .dark .prose th { background: #1f2937; border-color: #374151; }
 .dark .prose td { border-color: #374151; }
 .dark .prose tr:nth-child(even) td { background: #111827; }

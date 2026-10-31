@@ -4014,5 +4014,73 @@ class TestMarkedsplassOgRapportmeta(unittest.TestCase):
         self.assertIn("selskaper på Oslo Børs og Euronext Growth.", h)
 
 
+
+class TestRangering(unittest.TestCase):
+    """Topplistene tar ikke med aksjer under oppkjøp, fusjon eller avvikling (30.10.2026).
+
+    BlueNord toppet «Høyest utbytte» med 28,53 % etter å ha sagt at det ikke
+    vedtar flere utbytter før fusjonen, og Stainless Tankers sto der under
+    avvikling.
+    """
+
+    @staticmethod
+    def _h(type_):
+        return {"type": type_, "dato": "2026-08-24", "melding": "1", "tekst": "Meldt."}
+
+    def _aksjer(self):
+        return [
+            {"ticker": "BNOR", "navn": "BlueNord ASA", "sektor": "Energi", "utbytte_yield": 28.53,
+             "pris": 633.0, "frekvens": "Kvartalsvis", "ar_med_utbytte": 3, "utbytte_vekst_5ar": 40,
+             "payout_ratio": 60, "hendelse": self._h("fusjon")},
+            {"ticker": "STST", "navn": "Stainless Tankers ASA", "sektor": "Shipping", "utbytte_yield": 12.25,
+             "pris": 41.0, "frekvens": "Kvartalsvis", "ar_med_utbytte": 3, "utbytte_vekst_5ar": 5,
+             "payout_ratio": 30, "hendelse": self._h("avvikling")},
+            {"ticker": "TRSB", "navn": "Trøndelag Sparebank", "sektor": "Finans", "utbytte_yield": 9.0,
+             "pris": 150.0, "frekvens": "Årlig", "ar_med_utbytte": 10, "utbytte_vekst_5ar": 8,
+             "payout_ratio": 50, "hendelse": self._h("fusjon_overtar")},
+            {"ticker": "PARB", "navn": "Pareto Bank ASA", "sektor": "Finans", "utbytte_yield": 17.06,
+             "pris": 46.9, "frekvens": "Årlig", "ar_med_utbytte": 10, "utbytte_vekst_5ar": 12,
+             "payout_ratio": 89},
+        ]
+
+    def test_i_rangering(self):
+        a = {t["ticker"]: t for t in self._aksjer()}
+        self.assertFalse(fs.i_rangering(a["BNOR"]))
+        self.assertFalse(fs.i_rangering(a["STST"]))
+        self.assertTrue(fs.i_rangering(a["TRSB"]))     # den som overtar, fortsetter
+        self.assertTrue(fs.i_rangering(a["PARB"]))
+
+    def test_topplistene(self):
+        rot = tempfile.mkdtemp()
+        self.addCleanup(shutil.rmtree, rot, ignore_errors=True)
+        fs.generer_topplistesider(self._aksjer(), rot)
+        for slug in ("hoyest-utbytte", "utbyttevekst", "konsistente-utbytteaksjer", "lavest-payout"):
+            sti = os.path.join(rot, "aksjer", slug, "index.html")
+            if not os.path.exists(sti):
+                continue
+            with open(sti, encoding="utf-8") as f:
+                h = f.read()
+            self.assertNotIn("/aksjer/BNOR/", h, slug)
+            self.assertNotIn("/aksjer/STST/", h, slug)
+        with open(os.path.join(rot, "aksjer", "hoyest-utbytte", "index.html"), encoding="utf-8") as f:
+            h = f.read()
+        self.assertLess(h.index("/aksjer/PARB/"), h.index("/aksjer/TRSB/"))
+
+
+class TestProsentformat(unittest.TestCase):
+    """Prosent med hardt mellomrom i malene, via _pst() (30.10.2026).
+
+    49 steder skrev «{_nf(x)} %» med vanlig mellomrom, så tegnet kunne brytes
+    alene ned på neste linje.
+    """
+
+    def test_ingen_prosent_med_vanlig_mellomrom(self):
+        mappe = os.path.dirname(os.path.abspath(__file__))
+        for navn in ("fetch_stocks.py", "utvid_beskrivelser.py"):
+            with open(os.path.join(mappe, navn), encoding="utf-8") as f:
+                kode = f.read()
+            self.assertNotRegex(kode, r"\{_nf\([^{}]*\)\} ?%", navn)
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

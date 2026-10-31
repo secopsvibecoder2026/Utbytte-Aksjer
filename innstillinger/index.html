@@ -515,10 +515,17 @@
     window.location.href = '/';
   });
 
+  // Dagens dato i lokal tid. toISOString() gir UTC-datoen, og mellom midnatt
+  // og kl. 01/02 fikk backupfilen gårsdagens dato.
+  const lokalDato = () => {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  };
+
   // ── EKSPORT JSON ─────────────────────────────────────────────────────────────
   document.getElementById('eksport-json-btn').addEventListener('click', async () => {
     const p    = hentProfil();
-    const dato = new Date().toISOString().slice(0, 10);
+    const dato = lokalDato();
     const data = {
       versjon: 5,
       eksportert: new Date().toISOString(),
@@ -598,7 +605,13 @@
           `${Object.keys(pfl).length} portefølje(r) · ${antallPos} posisjoner`,
           `Eksportert: ${b.eksportert ? new Date(b.eksportert).toLocaleDateString('nb-NO') : 'ukjent'}`
         ];
-        document.getElementById('importer-json-innhold').innerHTML = linjer.map(l => `<p>• ${l}</p>`).join('');
+        // Tekst, ikke HTML: profilnavnet kommer fra filen, og en tilsendt
+        // «backup» med <img onerror=…> i navnet kjørte skript her (30.10.2026).
+        document.getElementById('importer-json-innhold').replaceChildren(...linjer.map(l => {
+          const el = document.createElement('p');
+          el.textContent = '• ' + l;
+          return el;
+        }));
         document.getElementById('importer-json-preview').classList.remove('hidden');
       } catch { alert('Kunne ikke lese filen.'); }
     };
@@ -789,7 +802,7 @@
 
       document.getElementById('ab-velg-fil')?.addEventListener('click', async () => {
         try {
-          const dato   = new Date().toISOString().slice(0, 10);
+          const dato   = lokalDato();
           const h = await window.showSaveFilePicker({
             suggestedName: `exday-backup-${dato}.json`,
             types: [{ description: 'JSON backup', accept: { 'application/json': ['.json'] } }]
