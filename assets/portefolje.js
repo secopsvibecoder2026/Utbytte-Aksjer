@@ -1942,7 +1942,7 @@ function visSkatteaar() {
   const rente = skjermingsrenteFor(aar);
   const r = beregnSkatteaar(txMap, aar, rente.sats, SKATTESATS);
   const kr = v => Math.round(v).toLocaleString('nb-NO') + ' kr';
-  const pstSats = v => (v * 100).toLocaleString('nb-NO', { maximumFractionDigits: 2 }) + ' %';
+  const pstSats = v => (v * 100).toLocaleString('nb-NO', { maximumFractionDigits: 2 }) + '\u00a0%';
   const pagaar = aar === iAar;
 
   const rader = r.rader.map(x => `

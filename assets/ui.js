@@ -502,7 +502,7 @@ function visAskMotVanlig() {
         </table>
       </div>
       <p class="text-[11px] text-gray-400 dark:text-gray-600 leading-relaxed">
-        Begge skattlegges med ${(SKATTESATS * 100).toLocaleString('nb-NO')} % over skjermingsfradraget. Forenklet: innskudd i begynnelsen av året, jevn yield og kursvekst, samme skjermingsrente alle år, utbyttet reinvestert og ingen kurtasje.
+        Begge skattlegges med ${(SKATTESATS * 100).toLocaleString('nb-NO')}\u00a0% over skjermingsfradraget. Forenklet: innskudd i begynnelsen av året, jevn yield og kursvekst, samme skjermingsrente alle år, utbyttet reinvestert og ingen kurtasje.
         Tar du ut utbyttet underveis, er uttak opp til innskuddet skattefritt på ASK.
         Bare aksjer i selskaper hjemmehørende i EØS og notert på et regulert marked kan ligge på ASK.${ikkeAsk ? ` ${ikkeAsk} av aksjene her kan ikke det, blant annet de som er registrert på Bermuda og de som handles på Euronext Growth.` : ''}
       </p>
@@ -634,7 +634,7 @@ const ARTIKLER = [
   {
     slug: '/artikler/slik-leser-du-utbyttekalenderen/',
     tittel: 'Slik leser du utbyttekalenderen — planlegg kontantstrømmen din',
-    ingress: '90 % av de kvartalsvise betalerne er sykliske, mot 20 % av de årlige. Jevn kontantstrøm har en pris de færreste regner på.',
+    ingress: '90 % av de kvartalsvise betalerne er sykliske, mot 20 % av de årlige. Jevn kontantstrøm har en pris de færreste regner på.',
     meta: '21. august 2026 · 11 min',
     tags: ['Guide', 'Kalender'],
     sektorer: ['Shipping', 'Energi', 'Energitjenester'],
@@ -689,7 +689,7 @@ const ARTIKLER = [
   },
   {
     slug: '/artikler/utbytte-og-skatt/',
-    tittel: 'Utbytte og skatt i Norge — 37,84 %, skjermingsfradrag og ASK',
+    tittel: 'Utbytte og skatt i Norge — 37,84 %, skjermingsfradrag og ASK',
     ingress: 'Effektiv skattesats, skjermingsfradraget, ASK vs. VPS og kildeskatt på utenlandske aksjer.',
     meta: '23. april 2026 · 13 min',
     tags: ['Skatt', 'Guide'],
@@ -2082,7 +2082,7 @@ function visUtbyttesesong() {
       </div>
       <div class="space-y-1.5">${rader}</div>
       <p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed pt-1 border-t border-gray-100 dark:border-gray-800">
-        <strong>${vaarAndel} %</strong> av utbetalingene skjer i mars, april og mai.
+        <strong>${vaarAndel}\u00a0%</strong> av utbetalingene skjer i mars, april og mai.
         ${escHtml(MND[travlest])} er travlest med ${aksjerTekst(maks)}.
         Norsk utbytte betales stort sett etter generalforsamlingen om våren, så
         en portefølje satt sammen uten tanke på tid får lett tomme måneder om høsten.
@@ -4328,7 +4328,7 @@ async function visHvisKjopt(nyAksje) {
 
 function _hvisHtml(a, r) {
   const kr = v => Math.round(v).toLocaleString('nb-NO') + ' kr';
-  const pst = v => (v >= 0 ? '+' : '−') + Math.abs(v).toLocaleString('nb-NO', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + ' %';
+  const pst = v => (v >= 0 ? '+' : '−') + Math.abs(v).toLocaleString('nb-NO', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + '\u00a0%';
   const farge = v => (v >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400');
   const navn = escHtml(a.navn || a.ticker);
   const rader = r.utbytte.map(u => `
@@ -4434,8 +4434,8 @@ function modalBetaltBoks(a) {
   const ovb = vistOverBetalt(a);
   const forklaring = !ovb ? ''
     : !a.utbytte_12m
-      ? `Direkteavkastningen over er ${fmt(ovb[0])} %, men selskapet har ikke hatt noe utbytte med ex-dato de siste 12 månedene.`
-      : `Direkteavkastningen over er ${fmt(ovb[0])} %. Det som faktisk er betalt de siste 12 månedene, tilsvarer ${fmt(ovb[1])} % av dagens kurs.`;
+      ? `Direkteavkastningen over er ${fmt(ovb[0])}\u00a0%, men selskapet har ikke hatt noe utbytte med ex-dato de siste 12 månedene.`
+      : `Direkteavkastningen over er ${fmt(ovb[0])}\u00a0%. Det som faktisk er betalt de siste 12 månedene, tilsvarer ${fmt(ovb[1])}\u00a0% av dagens kurs.`;
   const v = _betaltVisning(rader[0]);
   const knapper = rader.map((r, i) =>
     `<button type="button" data-betalt-periode="${r.periode}" aria-pressed="${i === 0}"
@@ -4536,7 +4536,7 @@ function modalKapitalNote(a) {
   if (!andel) return '';
   const hva = andel >= 0.999
     ? 'betaler selskapet ut <strong>tilbakebetaling av innbetalt kapital</strong>, ikke utbytte i skattemessig forstand'
-    : `var <strong>om lag ${Math.round(andel * 100)} % av siste utbetaling tilbakebetaling av innbetalt kapital</strong>, og resten ordinært utbytte`;
+    : `var <strong>om lag ${Math.round(andel * 100)}\u00a0% av siste utbetaling tilbakebetaling av innbetalt kapital</strong>, og resten ordinært utbytte`;
   // Bare en ISO-dato slipper gjennom, og formaterDato() gir da sifre og
   // månedsnavn — ingenting å escape, og aldri «Invalid Date».
   const md = String(a.kapital_tilbake.melding_dato || '');
@@ -4559,7 +4559,7 @@ function modalEkstraordinaerNote(a) {
   if (sum <= 0) return '';
   const y = Number(a.utbytte_yield) || 0;
   const hva = splitt.kunAndel
-    ? `<strong>om lag ${Math.round(splitt.ekstraordinaert / sum * 100)} % av siste utbetaling var ekstraordinært utbytte</strong>`
+    ? `<strong>om lag ${Math.round(splitt.ekstraordinaert / sum * 100)}\u00a0% av siste utbetaling var ekstraordinært utbytte</strong>`
     : `<strong>${fmt(splitt.ekstraordinaert)} ${escHtml(splitt.valuta)} av siste utbetaling var ekstraordinært utbytte</strong>,
        og ${fmt(splitt.ordinaert)} ${escHtml(splitt.valuta)} ordinært`;
   return `<div class="rounded-lg border-l-4 border-gray-400 dark:border-gray-600 bg-gray-50 dark:bg-gray-800/50 px-4 py-3 mb-4">
@@ -4567,8 +4567,8 @@ function modalEkstraordinaerNote(a) {
       <p class="text-xs text-gray-700 dark:text-gray-300 leading-relaxed">
         Ifølge selskapets børsmelding ${hva}. Et ekstraordinært utbytte er en engangsutdeling og
         gjentas ikke nødvendigvis. ${a.arsrate_ekstra_trukket
-          ? `Direkteavkastningen på ${fmt(y)} % bygger på det ordinære utbyttet de siste 12 månedene, med engangsutbyttet holdt utenfor.`
-          : `Direkteavkastningen på ${fmt(y)} % bygger på en periode som inneholder den.`}
+          ? `Direkteavkastningen på ${fmt(y)}\u00a0% bygger på det ordinære utbyttet de siste 12 månedene, med engangsutbyttet holdt utenfor.`
+          : `Direkteavkastningen på ${fmt(y)}\u00a0% bygger på en periode som inneholder den.`}
       </p>
     </div>`;
 }
@@ -4592,7 +4592,7 @@ function modalDelaarVarsel(a) {
         (${fmt(a.utbytte_per_aksje)} ${valuta}). Forklaringen står i selskapets børsmelding: ${hva}.
         Et ekstraordinært utbytte er en engangsutdeling og kan godt overstige et helt års ordinære
         utbytte. Den store enkeltutbetalingen er derfor ikke i seg selv et tegn på at
-        direkteavkastningen på ${fmt(y)} % er for lav.
+        direkteavkastningen på ${fmt(y)}\u00a0% er for lav.
       </p>
     </div>`;
   }
@@ -4604,7 +4604,7 @@ function modalDelaarVarsel(a) {
       : fakta.antall > 1 ? `, fordelt på ${fakta.antall} utbetalinger` : '';
     slutt = `Det vi vet sikkert, er hva selskapet allerede har betalt:
         <strong>${fmt(fakta.belop)} ${valuta} per aksje hittil i ${fakta.ar}</strong>${fordelt}.
-        Målt mot dagens kurs er det ${fmt(fakta.yield)} %.`;
+        Målt mot dagens kurs er det ${fmt(fakta.yield)}\u00a0%.`;
   }
   return `<div class="rounded-lg border-l-4 border-amber-500 bg-amber-50 dark:bg-amber-950/30 px-4 py-3 mb-4">
       <p class="text-sm font-semibold text-amber-900 dark:text-amber-200 mb-1">Direkteavkastningen kan være for lav</p>

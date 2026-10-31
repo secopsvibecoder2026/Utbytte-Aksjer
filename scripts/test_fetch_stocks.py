@@ -842,7 +842,7 @@ class TestLagDelaarVarsel(unittest.TestCase):
         html = lag_delaar_varsel(self._hafni(), self._nf)
         self.assertIn("8,96 NOK per aksje hittil i", html)
         self.assertIn("fordelt på 3 utbetalinger", html)
-        self.assertIn("10,10 %", html)
+        self.assertIn("10,10\u00a0%", html)
 
     def test_tom_for_aksjer_som_ikke_er_berort(self):
         from fetch_stocks import lag_delaar_varsel
@@ -1261,8 +1261,8 @@ class TestProsasplittOgAndel(unittest.TestCase):
         from fetch_stocks import lag_ekstraordinaer_note
         nf = lambda v, d=2: f"{v:.{d}f}".replace(".", ",")
         h = lag_ekstraordinaer_note(self._wawi(), nf)
-        self.assertIn("39 % av siste utbetaling", h)
-        self.assertIn("13,46 %", h)
+        self.assertIn("39\u00a0% av siste utbetaling", h)
+        self.assertIn("13,46\u00a0%", h)
 
     def test_ingen_note_naar_delaarsvarselet_gjelder(self):
         from fetch_stocks import lag_ekstraordinaer_note
@@ -2036,7 +2036,7 @@ class TestKapitalTilbake(unittest.TestCase):
         self.assertIn("tilbakebetaling av innbetalt", h)
         self.assertIn("25. aug 2026", h)
         delt = fs.lag_kapital_note({"kapital_tilbake": {"andel": 0.862}}, fs._nf)
-        self.assertIn("om lag 86 %", delt)
+        self.assertIn("om lag 86\u00a0%", delt)
 
     def test_faq_sier_ikke_37_prosent_om_tilbakebetaling(self):
         a = {"ticker": "STST", "navn": "Stainless Tankers ASA", "utbytte_yield": 12.9,
@@ -2254,7 +2254,7 @@ class TestTallkontroll1210(unittest.TestCase):
     # 1) Payout-grensen
     def test_payout_over_80_ikke_egen_verdi(self):
         html_ = " ".join(fs._lag_faq_seksjon(self.rad(payout_ratio=110), "2026-10-12"))
-        self.assertIn("payout ratio over 80 %", html_)
+        self.assertIn("payout ratio over 80\u00a0%", html_)
         self.assertNotIn("over 110 %", html_)
 
     # 3) «På linje med» er relativt, og kursen er aldri forklaringen
@@ -3753,7 +3753,7 @@ class TestTallkontroll2610(unittest.TestCase):
         self.assertIn("satt ned én gang", fs._lag_utbyttehistorikk_tekst(a))
         side = fs._lag_nedtur_test(a)
         self.assertNotIn("ikke kuttet", side)
-        self.assertIn("aldri med mer enn 15 %", side)
+        self.assertIn("aldri med mer enn 15\u00a0%", side)
 
     def test_aar_uten_utbytte_er_ikke_ikke_kuttet(self):
         a = self.tinde(historiske_utbytter=[{"ar": 2021, "utbytte": 5.0}, {"ar": 2023, "utbytte": 5.0},
@@ -4068,18 +4068,63 @@ class TestRangering(unittest.TestCase):
 
 
 class TestProsentformat(unittest.TestCase):
-    """Prosent med hardt mellomrom i malene, via _pst() (30.10.2026).
+    """Prosent med hardt mellomrom i malene (30.–31.10.2026).
 
-    49 steder skrev «{_nf(x)} %» med vanlig mellomrom, så tegnet kunne brytes
-    alene ned på neste linje.
+    «3,48 %» med vanlig mellomrom kan brytes slik at «%» står alene på neste
+    linje. Første runde så bare etter «{_nf(x)} %», og 24 steder slapp unna:
+    funksjoner som får formatereren inn som parameteren `nf`, og fast tekst
+    som «beskattes med 37,84 %». Testen leser derfor alle strenger i koden,
+    ikke én skrivemåte. Docstrings og print() er utelatt.
     """
+
+    @staticmethod
+    def _funn(sti):
+        import ast
+        with open(sti, encoding="utf-8") as f:
+            tre = ast.parse(f.read())
+        hopp = set()
+        for n in ast.walk(tre):
+            if isinstance(n, (ast.Module, ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)) and n.body:
+                d = n.body[0]
+                if isinstance(d, ast.Expr) and isinstance(d.value, ast.Constant):
+                    hopp.add(id(d.value))
+            if isinstance(n, ast.Call) and getattr(n.func, "id", None) == "print":
+                for barn in ast.walk(n):
+                    hopp.add(id(barn))
+        funn = []
+        for n in ast.walk(tre):
+            if id(n) in hopp:
+                continue
+            if isinstance(n, ast.JoinedStr):
+                for a, b in zip(n.values, n.values[1:]):
+                    if (isinstance(a, ast.FormattedValue) and isinstance(b, ast.Constant)
+                            and isinstance(b.value, str) and b.value.startswith(" %")):
+                        funn.append(n.lineno)
+            if isinstance(n, ast.Constant) and isinstance(n.value, str) and re.search(r"\d %", n.value):
+                funn.append(n.lineno)
+        return sorted(set(funn))
 
     def test_ingen_prosent_med_vanlig_mellomrom(self):
         mappe = os.path.dirname(os.path.abspath(__file__))
-        for navn in ("fetch_stocks.py", "utvid_beskrivelser.py"):
-            with open(os.path.join(mappe, navn), encoding="utf-8") as f:
-                kode = f.read()
-            self.assertNotRegex(kode, r"\{_nf\([^{}]*\)\} ?%", navn)
+        for navn in ("fetch_stocks.py", "utvid_beskrivelser.py", "sektortekster.py"):
+            self.assertEqual(self._funn(os.path.join(mappe, navn)), [], navn)
+
+    def test_fanger_parameter_og_fast_tekst(self):
+        import tempfile
+        kode = (
+            'def f(nf, y):\n'
+            '    """Docstring med 5 % er lov."""\n'
+            '    print(f"{y} % i loggen er lov")\n'
+            '    a = f"{nf(y, 2)} %"\n'
+            '    b = "beskattes med 37,84 % av"\n'
+            '    return a + b\n'
+        )
+        with tempfile.NamedTemporaryFile("w", suffix=".py", delete=False, encoding="utf-8") as f:
+            f.write(kode)
+        try:
+            self.assertEqual(self._funn(f.name), [4, 5])
+        finally:
+            os.unlink(f.name)
 
 
 if __name__ == "__main__":
