@@ -2398,6 +2398,18 @@ No page threw an error. Fixed:
 
   Full lists keep these stocks. The sector table now marks them in amber
   (`HENDELSE_KORT`). Energi went from 28,5 % to 9,3 %.
+
+  **Follow-up, 1 November.** The sector index and the app's sector cards had
+  been missed. They still showed BlueNord and Stainless Tankers as «Topp» and
+  «Høyest». The average also had two definitions:
+  - the sector page averaged over every stock, giving Energi 6,8 %;
+  - the index averaged over the payers only, giving 9,8 %.
+
+  `sektor_snitt_yield()` / `sektorSnittYield()` and `sektor_topp()` now drive
+  all three places. They count the payers only and skip stocks that are
+  leaving. Energi reads 6,6 % on both pages. The index also got a short
+  section on how the sectors pay, «1 aksje» in the singular, and «appen»
+  instead of «app-en». Tests: `TestSektorSnitt` (3) and `ui.test.js` (+1).
 - **XSS in the import preview on `/innstillinger/`.** The profile name was
   read from the backup file and written with `innerHTML`, so a file with
   `<img onerror=…>` in the name ran a script. The preview now uses

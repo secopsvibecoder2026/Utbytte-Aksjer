@@ -1107,6 +1107,13 @@ function iRangering(a) {
   return !hendelseUtenMal(a);
 }
 
+// Speiler sektor_snitt_yield() i fetch_stocks.py: snittet blant aksjene som
+// betaler utbytte, uten aksjer på vei ut. Sektorsiden og appen viste ulike tall.
+function sektorSnittYield(aksjer) {
+  const y = (aksjer || []).filter(a => a.utbytte_yield > 0 && iRangering(a)).map(a => a.utbytte_yield);
+  return y.length ? y.reduce((s, v) => s + v, 0) / y.length : 0;
+}
+
 function hoyestYield(aksjer) {
   return (aksjer || []).filter(a => a.utbytte_yield > 0 && iRangering(a))
     .sort((a, b) => b.utbytte_yield - a.utbytte_yield)[0] || null;
@@ -2020,10 +2027,10 @@ function visSektorer() {
   const kort = Object.entries(sektorMap)
     .sort((a, b) => a[0].localeCompare(b[0], 'no'))
     .map(([navn, aksjer]) => {
-      const yields = aksjer.map(a => a.utbytte_yield).filter(y => y > 0);
-      const snittYield = yields.length ? (yields.reduce((s, y) => s + y, 0) / yields.length) : 0;
-      const bestYield = yields.length ? Math.max(...yields) : 0;
-      const bestAksje = aksjer.find(a => a.utbytte_yield === bestYield);
+      // Samme regel som sektorsidene: aksjer på vei ut teller ikke (31.10.2026)
+      const snittYield = sektorSnittYield(aksjer);
+      const bestAksje = hoyestYield(aksjer);
+      const bestYield = bestAksje ? bestAksje.utbytte_yield : 0;
       const slug = navn.toLowerCase().replace(/\s+/g, '-').replace(/[æ]/g, 'ae').replace(/[ø]/g, 'o').replace(/[å]/g, 'a');
 
       // Strammere kort med nøytrale tall: hvert sektorkort var rundt 170 px
@@ -5999,4 +6006,4 @@ function _annBygTopp() {
 }
 
 // Node.js test export
-if (typeof module !== 'undefined') module.exports = { utdatertMerke, modalUtdatert, hendelseUtenMal, iRangering, hoyestYield, saerutbytteFotnote, aaretsArsutbytte, aaretsNedgang, ordinaerPerAr, ordinaerHistorikk, markedsplassTekst, hendelseMerke, nyMilepel, delLenkeData, pentAkse, fmtPst, fmtTall, dagerTil, dagerTilTekst, datoKort, aksjerTekst, snittNavn, utbytteKutt, modalHendelse, beregnRisiko, forklarRisiko, vekstFraTopp, beregnMal, forklarMal, bevegelserOverskrift, utbytteRekke, stabileAr, exForbeholdGjelder, utbyttePerioder, vistOverBetalt, modalBetaltBoks, supplertFotnote, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, fmt, formaterDato, yieldKlasse, payoutKlasse, vekstKlasse, beregnScore, beregnBaerekraft, beregnYtdInntekt, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote, kapitalAndel, modalKapitalNote, kapitalSkattTekst, aksjerMedExIMaaned, beregnHvisKjopt, hvisStartAar, beregnAskMotVanlig, fmtUtbytte, sisteUtbytteTekst, modalOmSelskapet, vekslOmSelskapet, dripGevinst, _simulerKalkulator, askStatus, askTekst, modalKontoer };
+if (typeof module !== 'undefined') module.exports = { sektorSnittYield, utdatertMerke, modalUtdatert, hendelseUtenMal, iRangering, hoyestYield, saerutbytteFotnote, aaretsArsutbytte, aaretsNedgang, ordinaerPerAr, ordinaerHistorikk, markedsplassTekst, hendelseMerke, nyMilepel, delLenkeData, pentAkse, fmtPst, fmtTall, dagerTil, dagerTilTekst, datoKort, aksjerTekst, snittNavn, utbytteKutt, modalHendelse, beregnRisiko, forklarRisiko, vekstFraTopp, beregnMal, forklarMal, bevegelserOverskrift, utbytteRekke, stabileAr, exForbeholdGjelder, utbyttePerioder, vistOverBetalt, modalBetaltBoks, supplertFotnote, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, fmt, formaterDato, yieldKlasse, payoutKlasse, vekstKlasse, beregnScore, beregnBaerekraft, beregnYtdInntekt, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote, kapitalAndel, modalKapitalNote, kapitalSkattTekst, aksjerMedExIMaaned, beregnHvisKjopt, hvisStartAar, beregnAskMotVanlig, fmtUtbytte, sisteUtbytteTekst, modalOmSelskapet, vekslOmSelskapet, dripGevinst, _simulerKalkulator, askStatus, askTekst, modalKontoer };
