@@ -4073,6 +4073,52 @@ class TestTallUtdatert(unittest.TestCase):
                          datetime.date(2026, 10, 29))
 
 
+class TestSektorSnitt(unittest.TestCase):
+    """Én definisjon av sektorsnittet (01.11.2026).
+
+    Energi sto med 6,8 % på sin egen side og 9,8 % i sektoroversikten, og
+    oversikten viste BlueNord og Stainless Tankers som «Topp» etter at de var
+    tatt ut av rangeringene.
+    """
+
+    BNOR = {"ticker": "BNOR", "utbytte_yield": 28.53,
+            "hendelse": {"type": "fusjon", "dato": "2026-10-20", "tekst": "Fusjon."}}
+    VAR = {"ticker": "VAR", "utbytte_yield": 9.26}
+    AKRBP = {"ticker": "AKRBP", "utbytte_yield": 6.27}
+    NULL = {"ticker": "NULL", "utbytte_yield": 0}
+
+    def test_snitt_bare_betalende_og_uten_aksjer_paa_vei_ut(self):
+        self.assertAlmostEqual(fs.sektor_snitt_yield([self.BNOR, self.VAR, self.AKRBP, self.NULL]),
+                               (9.26 + 6.27) / 2)
+        self.assertEqual(fs.sektor_snitt_yield([self.BNOR, self.NULL]), 0.0)
+        self.assertEqual(fs.sektor_snitt_yield([]), 0.0)
+
+    def test_topp_hopper_over_aksjer_paa_vei_ut(self):
+        self.assertEqual([a["ticker"] for a in fs.sektor_topp([self.BNOR, self.AKRBP, self.VAR, self.NULL])],
+                         ["VAR", "AKRBP"])
+
+    def test_sektorsider_og_oversikt_viser_samme_snitt(self):
+        import tempfile
+        aksjer = [dict(a, sektor="Energi", navn=a["ticker"], pris=100.0)
+                  for a in (self.BNOR, self.VAR, self.AKRBP, self.NULL)]
+        aksjer.append({"ticker": "TEL", "navn": "Telenor ASA", "sektor": "Telekommunikasjon",
+                       "utbytte_yield": 7.37, "pris": 131.7})
+        with tempfile.TemporaryDirectory() as d:
+            fs.generer_sektorsider(aksjer, d)
+            with open(os.path.join(d, "aksjer", "sektor", "energi", "index.html"), encoding="utf-8") as f:
+                side = f.read()
+            with open(os.path.join(d, "aksjer", "sektor", "index.html"), encoding="utf-8") as f:
+                oversikt = f.read()
+        snitt = fs._pst((9.26 + 6.27) / 2, 1)
+        self.assertIn(f'<div class="stat-val">{snitt}</div><div class="stat-lbl">Snitt yield', side)
+        self.assertIn(f"4 aksjer · snitt {snitt}", oversikt)
+        self.assertIn("Topp: VAR, AKRBP", oversikt)
+        self.assertNotIn("Topp: BNOR", oversikt)
+        self.assertIn("1 aksje · snitt", oversikt)
+        self.assertNotIn("1 aksjer", oversikt)
+        self.assertNotIn("app-en", oversikt)
+
+
 class TestRangering(unittest.TestCase):
     """Topplistene tar ikke med aksjer under oppkjøp, fusjon eller avvikling (30.10.2026).
 

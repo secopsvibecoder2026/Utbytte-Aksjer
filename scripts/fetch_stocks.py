@@ -1772,6 +1772,29 @@ def i_rangering(a):
     return not hendelse_uten_mal(a)
 
 
+def _betaler_og_rangeres(a):
+    return (a.get("utbytte_yield") or 0) > 0 and i_rangering(a)
+
+
+def sektor_snitt_yield(aksjer):
+    """Snittyielden i en sektor: aksjene som betaler utbytte, uten dem på vei ut.
+
+    Sektorsiden regnet snittet over alle aksjene (også dem uten utbytte), og
+    sektoroversikten bare over dem som betaler. Energi sto derfor med 6,8 % på
+    sin egen side og 9,8 % i oversikten, og begge tok med BlueNords 28,53 %
+    (31.10.2026). Én definisjon nå, den samme som «Gj.snitt yield, aksjer med
+    utbytte» i appen. sektorSnittYield() i assets/ui.js er kopien.
+    """
+    y = [a.get("utbytte_yield") or 0 for a in aksjer if _betaler_og_rangeres(a)]
+    return sum(y) / len(y) if y else 0.0
+
+
+def sektor_topp(aksjer, n=3):
+    """De `n` med høyest yield i sektoren, uten aksjer på vei ut."""
+    return sorted((a for a in aksjer if _betaler_og_rangeres(a)),
+                  key=lambda a: a.get("utbytte_yield") or 0, reverse=True)[:n]
+
+
 def hendelse_uten_mal(a):
     h = a.get("hendelse") if isinstance(a, dict) else None
     return gyldig_hendelse(h) and h["type"] in HENDELSE_UTEN_MAL
@@ -8183,7 +8206,7 @@ def generer_sektorsider(aksjer, root_dir):
     for sektor, aksjer_i_sektor in sorted(sektorer.items()):
         slug = _sektor_slug(sektor)
         aksjer_sortert = sorted(aksjer_i_sektor, key=lambda x: x.get("utbytte_yield", 0), reverse=True)
-        snitt_yield = sum(a.get("utbytte_yield", 0) for a in aksjer_sortert) / len(aksjer_sortert)
+        snitt_yield = sektor_snitt_yield(aksjer_sortert)
         analyse_html = _sektor_analyse(sektor, aksjer_sortert, aksjer)
 
         rader = ""
@@ -8203,8 +8226,11 @@ def generer_sektorsider(aksjer, root_dir):
           <td>{ex}</td>
         </tr>"""
 
-        meta_desc = (f"{len(aksjer_sortert)} norske {sektor.lower()}-aksjer på Oslo Børs med "
-                     f"gjennomsnittlig utbytteyield på {_pst(snitt_yield, 1)}. "
+        meta_desc = (f"{len(aksjer_sortert)} norske {sektor.lower()}-aksjer på Oslo Børs. "
+                     f"Snittyielden blant dem som betaler utbytte er {_pst(snitt_yield, 1)}. "
+                     f"Se yield, ex-dato og historikk på exday.no."
+                     if snitt_yield else
+                     f"{len(aksjer_sortert)} norske {sektor.lower()}-aksjer på Oslo Børs. "
                      f"Se yield, ex-dato og historikk på exday.no.")
 
         json_ld = json.dumps({
@@ -8366,7 +8392,7 @@ def generer_sektorsider(aksjer, root_dir):
   <p class="sub">{len(aksjer_sortert)} norske {sektor.lower()}-aksjer på Oslo Børs. Sortert etter direkteavkastning.</p>
   <div class="stats">
     <div class="stat"><div class="stat-val">{len(aksjer_sortert)}</div><div class="stat-lbl">Aksjer</div></div>
-    <div class="stat"><div class="stat-val">{_pst(snitt_yield, 1)}</div><div class="stat-lbl">Snitt yield</div></div>
+    <div class="stat"><div class="stat-val">{_pst(snitt_yield, 1) if snitt_yield else "—"}</div><div class="stat-lbl">Snitt yield</div></div>
     <div class="stat"><div class="stat-val">{_pst(max([a.get("utbytte_yield", 0) for a in aksjer_sortert if i_rangering(a)] or [0]), 1)}</div><div class="stat-lbl">Høyeste yield</div></div>
   </div>
 {analyse_html}
@@ -8414,11 +8440,10 @@ def generer_sektorsider(aksjer, root_dir):
     sektorkort = ""
     for slug, sektor, antall in generert_sortert:
         aksjer_i = sektorer[sektor]
-        med_utb = [a for a in aksjer_i if (a.get("utbytte_yield") or 0) > 0]
-        snitt = (sum(a.get("utbytte_yield", 0) for a in med_utb) / len(med_utb)) if med_utb else 0
-        # Topp 3 aksjer i sektoren etter yield
-        topp3 = sorted(med_utb, key=lambda x: x.get("utbytte_yield", 0), reverse=True)[:3]
-        topp_str = ", ".join(a["ticker"] for a in topp3) if topp3 else "—"
+        snitt = sektor_snitt_yield(aksjer_i)
+        topp_str = ", ".join(a["ticker"] for a in sektor_topp(aksjer_i))
+        antall_tekst = f"{antall} {'aksje' if antall == 1 else 'aksjer'}"
+        snitt_tekst = f" · snitt {_pst(snitt, 1)}" if snitt else ""
         ikon = _sektor_ikon(sektor, klasse="sk-ikon")
         sektorkort += f"""
     <a href="/aksjer/sektor/{slug}/" class="sektor-kort">
@@ -8426,11 +8451,11 @@ def generer_sektorsider(aksjer, root_dir):
         <span class="sk-ikon">{ikon}</span>
         <div class="sk-tekst">
           <div class="sk-navn">{sektor}</div>
-          <div class="sk-antall">{antall} aksjer · snitt {_pst(snitt, 1)}</div>
+          <div class="sk-antall">{antall_tekst}{snitt_tekst}</div>
         </div>
         <span class="sk-arrow">→</span>
       </div>
-      <div class="sk-topp">Topp: {topp_str}</div>
+      {f'<div class="sk-topp">Topp: {topp_str}</div>' if topp_str else ''}
     </a>"""
 
     sektor_oversikt = f"""<!DOCTYPE html>
@@ -8546,6 +8571,11 @@ def generer_sektorsider(aksjer, root_dir):
     .dark .sk-topp {{ border-color: #334155; }}
     .dark .info-bar {{ background: rgba(34,197,94,0.12); border-color: rgba(34,197,94,0.4); color: #4ade80; }}
     .dark .info-bar strong {{ color: #f1f5f9; }}
+    .sektor-om {{ margin: 2rem 0 0.5rem; }}
+    .sektor-om h2 {{ font-size: 1.1rem; font-weight: 700; color: #0f172a; margin: 0 0 0.6rem; }}
+    .sektor-om p {{ font-size: 0.92rem; line-height: 1.65; color: #334155; margin: 0 0 0.8rem; max-width: 46rem; }}
+    .dark .sektor-om h2 {{ color: #f1f5f9; }}
+    .dark .sektor-om p {{ color: #cbd5e1; }}
   </style>
 </head>
 <body>
@@ -8569,12 +8599,24 @@ def generer_sektorsider(aksjer, root_dir):
   <div class="info-bar">
     <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
     <div>
-      <strong>Tips:</strong> Diversifisering på tvers av sektorer reduserer risikoen i utbytteporteføljen. Bruk <a href="/app/" style="text-decoration:underline;">app-en</a> til å sette målvekter og se rebalanseringsforslag.
+      <strong>Tips:</strong> Diversifisering på tvers av sektorer reduserer risikoen i utbytteporteføljen. Under Verktøy → Rebalansering i <a href="/app/" style="text-decoration:underline;">appen</a> kan du sette mål per sektor og se hvor mye porteføljen avviker.
     </div>
   </div>
 
   <div class="grid">{sektorkort}
   </div>
+
+  <section class="sektor-om">
+    <h2>Sektorene betaler på ulike måter</h2>
+    <p>Bankene og forsikringsselskapene i Finans deler som regel ut én gang i året, etter
+    årsoppgjøret. Mange shipping- og energiselskaper betaler hvert kvartal og lar beløpet følge
+    resultatene, så utbyttet kan endre seg mye fra ett kvartal til det neste. I Havbruk og
+    Materialer følger utbyttet prisene på laks, aluminium og gjødsel.</p>
+    <p>Snittet på hvert kort gjelder aksjene som betaler utbytte i dag. Aksjer som skal fusjoneres,
+    kjøpes opp eller avvikles, er holdt utenfor snittet og toppen, fordi utbyttet bak tallet ikke
+    kommer igjen. Hver sektorside viser alle aksjene sortert etter direkteavkastning, kommende
+    ex-datoer der de er kjent, og hva som driver utbyttet i akkurat den sektoren.</p>
+  </section>
 {sist_oppdatert_html()}
 {STANDARD_FOOTER}
 </div>

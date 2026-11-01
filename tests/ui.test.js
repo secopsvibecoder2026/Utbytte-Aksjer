@@ -1146,3 +1146,14 @@ test('gamle tall: merke i lista og boks i modalen bare for raden som ikke er hen
     delete global.aksjerSistOppdatert;
   }
 });
+
+test('sektorsnittet: bare betalende, uten aksjer på vei ut (som sektorsidene)', () => {
+  const { sektorSnittYield, hoyestYield } = require('../assets/ui.js');
+  const bnor = { ticker: 'BNOR', utbytte_yield: 28.53, hendelse: { type: 'fusjon', dato: '2026-10-20', tekst: 'Fusjon.' } };
+  const VAR = { ticker: 'VAR', utbytte_yield: 9.26 };
+  const akrbp = { ticker: 'AKRBP', utbytte_yield: 6.27 };
+  const null0 = { ticker: 'NULL', utbytte_yield: 0 };
+  assert.ok(Math.abs(sektorSnittYield([bnor, VAR, akrbp, null0]) - (9.26 + 6.27) / 2) < 1e-9);
+  assert.equal(sektorSnittYield([bnor, null0]), 0);
+  assert.equal(hoyestYield([bnor, VAR, akrbp]).ticker, 'VAR');
+});
