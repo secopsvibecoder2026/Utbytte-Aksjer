@@ -3885,7 +3885,8 @@
     {
       "ticker": "BAKKA",
       "dato": "2026-11-02",
-      "type": "rapport"
+      "type": "rapport",
+      "url_forsok": 1
     },
     {
       "ticker": "HSPG",
@@ -4363,6 +4364,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "EQNR",
+      "dato": "2027-02-03",
+      "type": "rapport"
+    },
+    {
       "ticker": "TEL",
       "dato": "2027-02-03",
       "type": "rapport"
@@ -4503,6 +4509,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "BAKKA",
+      "dato": "2027-02-15",
+      "type": "rapport"
+    },
+    {
       "ticker": "BNOR",
       "dato": "2027-02-17",
       "type": "rapport"
@@ -4543,5 +4554,5 @@
       "type": "rapport"
     }
   ],
-  "sist_oppdatert": "2026-11-01"
+  "sist_oppdatert": "2026-11-02"
 }
