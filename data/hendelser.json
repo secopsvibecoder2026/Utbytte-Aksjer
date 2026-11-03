@@ -3891,42 +3891,50 @@
     {
       "ticker": "HSPG",
       "dato": "2026-11-03",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/685441"
     },
     {
       "ticker": "ISLAX",
       "dato": "2026-11-03",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/685422"
     },
     {
       "ticker": "MULTI",
       "dato": "2026-11-03",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/685440"
     },
     {
       "ticker": "NORCO",
       "dato": "2026-11-03",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/685412"
     },
     {
       "ticker": "ODL",
       "dato": "2026-11-03",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/685413"
     },
     {
       "ticker": "OKEA",
       "dato": "2026-11-03",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/685404"
     },
     {
       "ticker": "SALM",
       "dato": "2026-11-03",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/685406"
     },
     {
       "ticker": "SOAG",
       "dato": "2026-11-03",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/685418"
     },
     {
       "ticker": "AFISH",
@@ -4399,6 +4407,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "MULTI",
+      "dato": "2027-02-09",
+      "type": "rapport"
+    },
+    {
       "ticker": "SATS",
       "dato": "2027-02-09",
       "type": "rapport"
@@ -4464,6 +4477,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "NORCO",
+      "dato": "2027-02-11",
+      "type": "rapport"
+    },
+    {
       "ticker": "NSKOG",
       "dato": "2027-02-11",
       "type": "rapport"
@@ -4514,6 +4532,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "SALM",
+      "dato": "2027-02-16",
+      "type": "rapport"
+    },
+    {
       "ticker": "BNOR",
       "dato": "2027-02-17",
       "type": "rapport"
@@ -4554,5 +4577,5 @@
       "type": "rapport"
     }
   ],
-  "sist_oppdatert": "2026-11-02"
+  "sist_oppdatert": "2026-11-03"
 }
