@@ -3939,77 +3939,92 @@
     {
       "ticker": "AFISH",
       "dato": "2026-11-04",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/685525"
     },
     {
       "ticker": "AKER",
       "dato": "2026-11-04",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/685541"
     },
     {
       "ticker": "BEWI",
       "dato": "2026-11-04",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/685543"
     },
     {
       "ticker": "BOUV",
       "dato": "2026-11-04",
-      "type": "rapport"
+      "type": "rapport",
+      "url_forsok": 1
     },
     {
       "ticker": "ITERA",
       "dato": "2026-11-04",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/685573"
     },
     {
       "ticker": "MOWI",
       "dato": "2026-11-04",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/685530"
     },
     {
       "ticker": "ODF",
       "dato": "2026-11-04",
-      "type": "rapport"
+      "type": "rapport",
+      "url_forsok": 1
     },
     {
       "ticker": "ODFB",
       "dato": "2026-11-04",
-      "type": "rapport"
+      "type": "rapport",
+      "url_forsok": 1
     },
     {
       "ticker": "SKUE",
       "dato": "2026-11-04",
-      "type": "rapport"
+      "type": "rapport",
+      "url_forsok": 1
     },
     {
       "ticker": "SOFF",
       "dato": "2026-11-04",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/685540"
     },
     {
       "ticker": "SOMA",
       "dato": "2026-11-04",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/685542"
     },
     {
       "ticker": "SPOL",
       "dato": "2026-11-04",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/685280"
     },
     {
       "ticker": "WAWI",
       "dato": "2026-11-04",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/685571"
     },
     {
       "ticker": "WWI",
       "dato": "2026-11-04",
-      "type": "rapport"
+      "type": "rapport",
+      "url_forsok": 1
     },
     {
       "ticker": "WWIB",
       "dato": "2026-11-04",
-      "type": "rapport"
+      "type": "rapport",
+      "url_forsok": 1
     },
     {
       "ticker": "AASB",
@@ -4402,6 +4417,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "SKUE",
+      "dato": "2027-02-08",
+      "type": "rapport"
+    },
+    {
       "ticker": "ATEA",
       "dato": "2027-02-09",
       "type": "rapport"
@@ -4432,6 +4452,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "MOWI",
+      "dato": "2027-02-10",
+      "type": "rapport"
+    },
+    {
       "ticker": "NONG",
       "dato": "2027-02-10",
       "type": "rapport"
@@ -4454,6 +4479,11 @@
     {
       "ticker": "VEND",
       "dato": "2027-02-10",
+      "type": "rapport"
+    },
+    {
+      "ticker": "BEWI",
+      "dato": "2027-02-11",
       "type": "rapport"
     },
     {
@@ -4497,12 +4527,37 @@
       "type": "rapport"
     },
     {
+      "ticker": "SOFF",
+      "dato": "2027-02-11",
+      "type": "rapport"
+    },
+    {
+      "ticker": "SOMA",
+      "dato": "2027-02-11",
+      "type": "rapport"
+    },
+    {
       "ticker": "TGS",
       "dato": "2027-02-11",
       "type": "rapport"
     },
     {
+      "ticker": "BOUV",
+      "dato": "2027-02-12",
+      "type": "rapport"
+    },
+    {
       "ticker": "HELG",
+      "dato": "2027-02-12",
+      "type": "rapport"
+    },
+    {
+      "ticker": "ITERA",
+      "dato": "2027-02-12",
+      "type": "rapport"
+    },
+    {
+      "ticker": "SPOL",
       "dato": "2027-02-12",
       "type": "rapport"
     },
@@ -4532,6 +4587,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "AKER",
+      "dato": "2027-02-16",
+      "type": "rapport"
+    },
+    {
       "ticker": "ISLAX",
       "dato": "2027-02-16",
       "type": "rapport"
@@ -4553,6 +4613,16 @@
     },
     {
       "ticker": "ACR",
+      "dato": "2027-02-18",
+      "type": "rapport"
+    },
+    {
+      "ticker": "WWI",
+      "dato": "2027-02-18",
+      "type": "rapport"
+    },
+    {
+      "ticker": "WWIB",
       "dato": "2027-02-18",
       "type": "rapport"
     },
@@ -4582,5 +4652,5 @@
       "type": "rapport"
     }
   ],
-  "sist_oppdatert": "2026-11-03"
+  "sist_oppdatert": "2026-11-04"
 }
