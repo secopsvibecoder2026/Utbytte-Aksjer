@@ -4029,57 +4029,68 @@
     {
       "ticker": "AASB",
       "dato": "2026-11-05",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/685802"
     },
     {
       "ticker": "B2I",
       "dato": "2026-11-05",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/685667"
     },
     {
       "ticker": "JAREN",
       "dato": "2026-11-05",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/685685"
     },
     {
       "ticker": "KID",
       "dato": "2026-11-05",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/685690"
     },
     {
       "ticker": "MORLD",
       "dato": "2026-11-05",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/685669"
     },
     {
       "ticker": "NKR",
       "dato": "2026-11-05",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/685671"
     },
     {
       "ticker": "PEXIP",
       "dato": "2026-11-05",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/685650"
     },
     {
       "ticker": "POL",
       "dato": "2026-11-05",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/685673"
     },
     {
       "ticker": "ROGS",
       "dato": "2026-11-05",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/685696"
     },
     {
       "ticker": "ROMER",
       "dato": "2026-11-05",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/685707"
     },
     {
       "ticker": "SBO",
       "dato": "2026-11-05",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/685678"
     },
     {
       "ticker": "AKVA",
@@ -4133,6 +4144,11 @@
     },
     {
       "ticker": "BIEN",
+      "dato": "2026-11-11",
+      "type": "rapport"
+    },
+    {
+      "ticker": "GRONG",
       "dato": "2026-11-11",
       "type": "rapport"
     },
@@ -4227,6 +4243,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "ROMER",
+      "dato": "2026-11-13",
+      "type": "rapport"
+    },
+    {
       "ticker": "SB68",
       "dato": "2026-11-13",
       "type": "rapport"
@@ -4263,11 +4284,6 @@
     },
     {
       "ticker": "BORR",
-      "dato": "2026-11-18",
-      "type": "rapport"
-    },
-    {
-      "ticker": "GRONG",
       "dato": "2026-11-18",
       "type": "rapport"
     },
@@ -4354,6 +4370,11 @@
     {
       "ticker": "JIN",
       "dato": "2026-11-30",
+      "type": "rapport"
+    },
+    {
+      "ticker": "KID",
+      "dato": "2027-01-11",
       "type": "rapport"
     },
     {
@@ -4482,12 +4503,22 @@
       "type": "rapport"
     },
     {
+      "ticker": "B2I",
+      "dato": "2027-02-11",
+      "type": "rapport"
+    },
+    {
       "ticker": "BEWI",
       "dato": "2027-02-11",
       "type": "rapport"
     },
     {
       "ticker": "ELK",
+      "dato": "2027-02-11",
+      "type": "rapport"
+    },
+    {
+      "ticker": "JAREN",
       "dato": "2027-02-11",
       "type": "rapport"
     },
@@ -4507,6 +4538,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "MORLD",
+      "dato": "2027-02-11",
+      "type": "rapport"
+    },
+    {
       "ticker": "NORCO",
       "dato": "2027-02-11",
       "type": "rapport"
@@ -4517,12 +4553,32 @@
       "type": "rapport"
     },
     {
+      "ticker": "PEXIP",
+      "dato": "2027-02-11",
+      "type": "rapport"
+    },
+    {
+      "ticker": "POL",
+      "dato": "2027-02-11",
+      "type": "rapport"
+    },
+    {
       "ticker": "PUBLI",
       "dato": "2027-02-11",
       "type": "rapport"
     },
     {
+      "ticker": "ROGS",
+      "dato": "2027-02-11",
+      "type": "rapport"
+    },
+    {
       "ticker": "SB1NO",
+      "dato": "2027-02-11",
+      "type": "rapport"
+    },
+    {
+      "ticker": "SBO",
       "dato": "2027-02-11",
       "type": "rapport"
     },
@@ -4652,5 +4708,5 @@
       "type": "rapport"
     }
   ],
-  "sist_oppdatert": "2026-11-04"
+  "sist_oppdatert": "2026-11-05"
 }
