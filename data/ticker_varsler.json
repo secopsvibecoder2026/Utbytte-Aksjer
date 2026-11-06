@@ -1,8 +1,15 @@
 {
-  "generert": "2026-11-05T22:24:58Z",
-  "antall": 1,
+  "generert": "2026-11-06T14:16:19Z",
+  "antall": 2,
   "antall_kritiske": 0,
   "varsler": [
+    {
+      "ticker": "CADLR",
+      "type": "feil_selskapsform",
+      "alvorlighet": "advarsel",
+      "melding": "Vårt navn «Cadeler A/S» ender på A/S, Yahoo har «Cadeler plc» (PLC).",
+      "forslag": "Kontroller i Brønnøysundregistrene (norske selskaper) eller mot selskapets egne meldinger, og rett navn i data/tickers.json. Sett navn_dnb til det gamle navnet hvis feltet mangler, for DNB-oppslaget krever eksakt navn."
+    },
     {
       "ticker": "BAKKA",
       "type": "navnavvik",
