@@ -34,7 +34,7 @@
   <link rel="canonical" href="https://exday.no/utbyttekalender/" />
   <link rel="icon" type="image/svg+xml" href="/logo/exday_icon_primary.svg">
   <link rel="manifest" href="/manifest.json" />
-  <meta name="theme-color" content="#16a34a" />
+  <meta name="theme-color" content="#2f7352" />
 
   <!-- Open Graph -->
   <meta property="og:title" content="Utbyttekalender 2026 og 2027 – Norske aksjer på Oslo Børs" />
@@ -551,10 +551,10 @@
       white-space: nowrap;
     }
     .dark .filter-btn { background: #111827; border-color: #374151; color: #9ca3af; }
-    .filter-btn:hover { border-color: #16a34a; color: #16a34a; }
-    .dark .filter-btn:hover { border-color: #4ade80; color: #4ade80; }
-    .filter-btn.aktiv-filter { border-color: #16a34a; color: #16a34a; background: #f0fdf4; }
-    .dark .filter-btn.aktiv-filter { border-color: #4ade80; color: #4ade80; background: #052e16; }
+    .filter-btn:hover { border-color: #2f7352; color: #2f7352; }
+    .dark .filter-btn:hover { border-color: #6fa98a; color: #6fa98a; }
+    .filter-btn.aktiv-filter { border-color: #2f7352; color: #2f7352; background: #f3f7f5; }
+    .dark .filter-btn.aktiv-filter { border-color: #6fa98a; color: #6fa98a; background: #0f251b; }
   </style>
   <script>
     'use strict';
@@ -585,8 +585,8 @@
 
     const HENDELSE_TYPER = {
       ex:      { label: 'Ex-dato',    bg: 'bg-green-100 dark:bg-green-900/40',   tekst: 'text-green-700 dark:text-green-300' },
-      utbytte: { label: 'Utbetaling', bg: 'bg-blue-100 dark:bg-blue-900/40',     tekst: 'text-blue-700 dark:text-blue-300' },
-      rapport: { label: 'Rapport',    bg: 'bg-orange-100 dark:bg-orange-900/40', tekst: 'text-orange-700 dark:text-orange-300' },
+      utbytte: { label: 'Utbetaling', bg: 'bg-slate-100 dark:bg-slate-900/40',     tekst: 'text-slate-700 dark:text-slate-300' },
+      rapport: { label: 'Rapport',    bg: 'bg-amber-100 dark:bg-amber-900/40', tekst: 'text-amber-700 dark:text-amber-300' },
     };
 
     // ── State ────────────────────────────────────────────────────────────────
@@ -632,8 +632,8 @@
     }
 
     function yieldKlasse(y) {
-      if (y >= 8) return 'bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300';
-      if (y >= 5) return 'bg-teal-100 dark:bg-teal-900/40 text-teal-700 dark:text-teal-300';
+      if (y >= 8) return 'bg-slate-100 dark:bg-slate-900/40 text-slate-700 dark:text-slate-300';
+      if (y >= 5) return 'bg-slate-100 dark:bg-slate-900/40 text-slate-700 dark:text-slate-300';
       if (y >= 3) return 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300';
       return 'bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400';
     }
@@ -679,7 +679,7 @@
           <div class="flex-1 min-w-0">
             <div class="flex items-center gap-2 flex-wrap">
               <span class="text-xs font-semibold px-1.5 py-0.5 rounded ${cfg.bg} ${cfg.tekst}">${cfg.label}</span>
-              <a href="/aksjer/${a.ticker}/" class="font-mono font-bold text-brand-700 dark:text-brand-400 hover:underline text-sm">${a.ticker}</a>
+              <a href="/aksjer/${a.ticker}/" class="font-semibold text-gray-900 dark:text-gray-100 hover:underline text-sm">${a.ticker}</a>
               <span class="text-gray-600 dark:text-gray-400 text-sm truncate">${esc(a.navn)}</span>
             </div>
             ${detalj ? `<div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">${detalj}</div>` : ''}
@@ -823,7 +823,7 @@
     <a href="/om/" class="underline hover:text-gray-400 dark:hover:text-gray-400 transition-colors">Om exday.no</a>
     </p>
     <p class="mt-3">
-      <a href="https://www.facebook.com/share/17rMp8o9yF/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-gray-400 hover:text-blue-500 dark:hover:text-blue-400 transition-colors">
+      <a href="https://www.facebook.com/share/17rMp8o9yF/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-gray-400 hover:text-slate-500 dark:hover:text-slate-400 transition-colors">
         <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/></svg>
         Følg exday.no på Facebook
       </a>

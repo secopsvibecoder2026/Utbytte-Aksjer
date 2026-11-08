@@ -20,7 +20,7 @@
   <link rel="icon" type="image/png" sizes="512x512" href="/favicon.png">
   <link rel="icon" type="image/svg+xml" href="/logo/exday_icon_primary.svg">
   <link rel="manifest" href="/manifest.json" />
-  <meta name="theme-color" content="#16a34a" />
+  <meta name="theme-color" content="#2f7352" />
 
   <meta property="og:title" content="Sektorrebalansering – kalkulator for porteføljebalanse | exday.no" />
   <meta property="og:description" content="Beregn nøyaktig hva du bør kjøpe eller selge i hver sektor for å nå ønsket fordeling. Gratis verktøy for norske utbytteinvestorer på Oslo Børs." />
@@ -132,8 +132,8 @@
 
     <header class="mb-8">
       <div class="flex items-center gap-3 mb-4">
-        <div class="w-10 h-10 rounded-xl bg-purple-50 dark:bg-purple-900/20 flex items-center justify-center shrink-0">
-          <svg class="w-5 h-5 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="w-10 h-10 rounded-xl bg-slate-50 dark:bg-slate-900/20 flex items-center justify-center shrink-0">
+          <svg class="w-5 h-5 text-slate-600 dark:text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"/>
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"/>
           </svg>
@@ -156,7 +156,7 @@
         </div>
         <div class="text-right">
           <p class="text-xs text-gray-500 dark:text-gray-400 mb-0.5">Sum mål&nbsp;%</p>
-          <p id="sb-total-maal" class="text-2xl font-semibold tabular-nums text-orange-500">100,0&nbsp;%</p>
+          <p id="sb-total-maal" class="text-2xl font-semibold tabular-nums text-amber-500">100,0&nbsp;%</p>
         </div>
       </div>
 
@@ -182,7 +182,7 @@
 
       <!-- Handlingsknapper -->
       <div class="flex items-center gap-3 mt-4 flex-wrap">
-        <select id="sb-legg-til-select" class="text-sm border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-1.5 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-400">
+        <select id="sb-legg-til-select" class="text-sm border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-1.5 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-slate-400">
           <option value="">+ Legg til sektor...</option>
         </select>
         <button id="sb-tilbakestill" class="text-xs px-3 py-1.5 rounded-lg border border-gray-300 dark:border-gray-600 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
@@ -192,10 +192,10 @@
 
       <!-- Oppsummeringskort -->
       <div id="sb-oppsummering" class="hidden mt-5 grid grid-cols-1 sm:grid-cols-2 gap-3">
-        <div class="rounded-xl bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-800 p-4">
-          <p class="text-xs font-semibold text-orange-700 dark:text-orange-400 uppercase tracking-wide mb-1">Størst overvekt</p>
+        <div class="rounded-xl bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 p-4">
+          <p class="text-xs font-semibold text-amber-700 dark:text-amber-400 uppercase tracking-wide mb-1">Størst overvekt</p>
           <p id="sb-overvekt-navn" class="text-sm font-bold text-gray-800 dark:text-gray-200">–</p>
-          <p id="sb-overvekt-kr" class="text-xs text-orange-600 dark:text-orange-400 mt-0.5">–</p>
+          <p id="sb-overvekt-kr" class="text-xs text-amber-600 dark:text-amber-400 mt-0.5">–</p>
         </div>
         <div class="rounded-xl bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 p-4">
           <p class="text-xs font-semibold text-green-700 dark:text-green-400 uppercase tracking-wide mb-1">Størst undervekt</p>
@@ -391,7 +391,7 @@
       <a href="/faq/" class="underline hover:text-gray-400 dark:hover:text-gray-400 transition-colors">Vanlige spørsmål (FAQ)</a>
     </p>
     <p class="mt-3">
-      <a href="https://www.facebook.com/share/17rMp8o9yF/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-gray-400 hover:text-blue-500 dark:hover:text-blue-400 transition-colors">
+      <a href="https://www.facebook.com/share/17rMp8o9yF/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-gray-400 hover:text-slate-500 dark:hover:text-slate-400 transition-colors">
         <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/></svg>
         Følg exday.no på Facebook
       </a>
@@ -494,7 +494,7 @@
         maalEl.textContent = pst(totalMaal, 1);
         maalEl.className = Math.abs(totalMaal - 100) <= 1
           ? 'text-2xl font-semibold tabular-nums text-green-600 dark:text-green-400'
-          : 'text-2xl font-semibold tabular-nums text-orange-500';
+          : 'text-2xl font-semibold tabular-nums text-amber-500';
 
         var storsteOvervektDiff = 0, storsteOvervektNavn = '', storsteOvervektKr = 0;
         var storsteUndervektDiff = 0, storsteUndervektNavn = '', storsteUndervektKr = 0;
@@ -513,7 +513,7 @@
 
           var diffEl = rad.querySelector('.sb-diff');
           diffEl.textContent = (diff >= 0 ? '+' : '') + pst(diff, 1);
-          diffEl.className = 'sb-diff text-sm font-medium ' + (Math.abs(diff) < 1 ? 'text-gray-400' : diff > 0 ? 'text-orange-500' : 'text-green-600');
+          diffEl.className = 'sb-diff text-sm font-medium ' + (Math.abs(diff) < 1 ? 'text-gray-400' : diff > 0 ? 'text-amber-500' : 'text-green-600');
 
           var krEl = rad.querySelector('.sb-kr');
           if (total === 0 || m === 0) {
@@ -521,7 +521,7 @@
             krEl.className = 'sb-kr text-sm text-gray-400';
           } else if (diff > 1) {
             krEl.textContent = 'Selg ' + Math.abs(Math.round(kr)).toLocaleString('nb') + ' kr';
-            krEl.className = 'sb-kr text-sm font-medium text-orange-600 dark:text-orange-400';
+            krEl.className = 'sb-kr text-sm font-medium text-amber-600 dark:text-amber-400';
           } else if (diff < -1) {
             krEl.textContent = 'Kjøp ' + Math.abs(Math.round(kr)).toLocaleString('nb') + ' kr';
             krEl.className = 'sb-kr text-sm font-medium text-green-600 dark:text-green-400';

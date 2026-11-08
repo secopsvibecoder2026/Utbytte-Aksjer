@@ -1789,6 +1789,22 @@ def sektor_snitt_yield(aksjer):
     return sum(y) / len(y) if y else 0.0
 
 
+def sektorsnitt_per_sektor(sektor_map):
+    """{sektor: snittyield} for aksjesidene, med samme regel som sektorsidene.
+
+    Aksjesidene hadde sin egen utregning, som tok med aksjer på vei ut. EQNR
+    sto derfor med «under snittet for Energi-sektoren (10,4 %)» mens
+    sektorsiden viste 6,6 %: BlueNords 33 % trakk snittet opp (08.11.2026).
+    Sektorer uten noen som betaler og rangeres, er utelatt.
+    """
+    ut = {}
+    for s, liste in sektor_map.items():
+        y = sektor_snitt_yield(liste)
+        if y > 0:
+            ut[s] = y
+    return ut
+
+
 def sektor_topp(aksjer, n=3):
     """De `n` med høyest yield i sektoren, uten aksjer på vei ut."""
     return sorted((a for a in aksjer if _betaler_og_rangeres(a)),
@@ -3721,8 +3737,8 @@ def _generer_kurs_chart_svg(kurs_historikk, valuta="NOK"):
     )
 
     er_opp = priser[-1] >= priser[0]
-    farge = "#22c55e" if er_opp else "#ef4444"
-    farge_lys = "rgba(34,197,94,0.15)" if er_opp else "rgba(239,68,68,0.12)"
+    farge = "#3f8a63" if er_opp else "#bd534a"
+    farge_lys = "rgba(63,138,99,0.15)" if er_opp else "rgba(189,83,74,0.12)"
 
     # Y-akse etiketter
     y_labels = ""
@@ -3805,7 +3821,7 @@ def _generer_hist_chart(hist, valuta="NOK"):
         by = pad_t + chart_h - bh
         bars.append(
             f'<rect class="hbar" x="{x - bar_w/2:.1f}" y="{by:.1f}" '
-            f'width="{bar_w}" height="{bh:.1f}" rx="3" fill="#16a34a" opacity="0.85"/>'
+            f'width="{bar_w}" height="{bh:.1f}" rx="3" fill="#2f7352" opacity="0.85"/>'
         )
         labels.append(
             f'<text x="{x:.1f}" y="{H - 6}" text-anchor="middle" '
@@ -6740,7 +6756,7 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
       var PERIODER = {{'1ar':'Siste år','ytd':'Hittil i år','2ar':'Siste 2 år','3ar':'Siste 3 år','5ar':'Siste 5 år'}};
       var pr = data.map(function(x){{return x.k;}}), da = data.map(function(x){{return x.d;}}), n=pr.length;
       var mn=Math.min.apply(null,pr), mx=Math.max.apply(null,pr), rng=mx-mn||1;
-      var opp=pr[n-1]>=pr[0], fg=opp?'#22c55e':'#ef4444';
+      var opp=pr[n-1]>=pr[0], fg=opp?'#3f8a63':'#bd534a';
       var end=((pr[n-1]-pr[0])/pr[0]*100).toLocaleString('nb-NO',{{minimumFractionDigits:1,maximumFractionDigits:1}});
       var hdr=document.getElementById('kurs-header-{ticker}');
       var dkHdr=document.documentElement.classList.contains('dark');
@@ -6760,7 +6776,7 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
       ctx.fillStyle=dk?'#6b7280':'#9ca3af'; ctx.font='11px Inter, system-ui, sans-serif'; ctx.textAlign='right';
       [[mn,sy(mn)],[(mn+mx)/2,sy((mn+mx)/2)],[mx,sy(mx)]].forEach(function(pair){{ctx.fillText(pair[0].toLocaleString('nb-NO',{{maximumFractionDigits:0}}),pL-4,pair[1]+4);}});
       var grad=ctx.createLinearGradient(0,pT,0,CH-pB);
-      grad.addColorStop(0,opp?'rgba(34,197,94,0.12)':'rgba(239,68,68,0.1)'); grad.addColorStop(1,'rgba(0,0,0,0)');
+      grad.addColorStop(0,opp?'rgba(63,138,99,0.12)':'rgba(189,83,74,0.1)'); grad.addColorStop(1,'rgba(0,0,0,0)');
       ctx.beginPath(); ctx.moveTo(sx(0),CH-pB);
       pr.forEach(function(p,i){{ctx.lineTo(sx(i),sy(p));}});
       ctx.lineTo(sx(n-1),CH-pB); ctx.closePath(); ctx.fillStyle=grad; ctx.fill();
@@ -6866,7 +6882,7 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
   <title>{sidetittel}</title>
   <meta name="description" content="{meta_desc}"/>{robots_meta}
   <link rel="canonical" href="https://exday.no/aksjer/{ticker}/"/>
-  <meta name="theme-color" content="#16a34a"/>
+  <meta name="theme-color" content="#2f7352"/>
   <link rel="icon" type="image/png" sizes="512x512" href="/favicon.png"/>
   <link rel="icon" type="image/png" sizes="180x180" href="/logo/apple_touch_icon_180.png"/>
   <link rel="icon" type="image/svg+xml" href="/logo/exday_icon_primary.svg"/>
@@ -6903,7 +6919,7 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     body {{ font-family: "Inter", system-ui, -apple-system, sans-serif; line-height: 1.6; }}
     /* Lenker og knapper i green-700: roligere enn green-600, og grønt er
        ellers forbeholdt retning (kursgrafen) og aksenter (STYLE.md). */
-    a {{ color: #15803d; text-decoration: none; }}
+    a {{ color: #275f45; text-decoration: none; }}
     a:hover {{ text-decoration: underline; }}
     .wrap {{ max-width: 760px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }}
     .breadcrumb {{ font-size: 0.85rem; color: #6b7280; margin-bottom: 1.5rem; }}
@@ -6959,18 +6975,18 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     th {{ padding: 0.6rem 1rem; text-align: left; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; }}
     td {{ padding: 0.6rem 1rem; border-top: 1px solid; }}
     .cta {{ text-align: center; margin-top: 2rem; padding: 1.5rem; border-radius: 0.75rem; border: 1px solid; }}
-    .cta a {{ display: inline-block; background: #15803d; color: #fff !important; font-weight: 600; padding: 0.65rem 1.5rem; border-radius: 0.5rem; text-decoration: none; }}
-    .cta a:hover {{ background: #166534; }}
+    .cta a {{ display: inline-block; background: #275f45; color: #fff !important; font-weight: 600; padding: 0.65rem 1.5rem; border-radius: 0.5rem; text-decoration: none; }}
+    .cta a:hover {{ background: #214d39; }}
     .updated {{ font-size: 0.78rem; text-align: right; margin-top: 1rem; }}
     .mini-nav {{ display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.5rem; font-size: 0.85rem; }}
     .utbytte-sep {{ display: flex; align-items: center; gap: 0.75rem; margin: 1.75rem 0 1.25rem; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #9ca3af; }}
     .utbytte-sep::before, .utbytte-sep::after {{ content: ''; flex: 1; height: 1px; background: #e5e7eb; }}
     .dark .utbytte-sep {{ color: #6b7280; }}
     .dark .utbytte-sep::before, .dark .utbytte-sep::after {{ background: #1f2937; }}
-    .mini-nav a {{ color: #15803d; }}
-    .til-toppen {{ position: fixed; bottom: 1.5rem; right: 1.25rem; z-index: 40; background: #15803d; color: #fff; border: none; border-radius: 9999px; width: 2.5rem; height: 2.5rem; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.18); opacity: 0; pointer-events: none; transition: opacity 0.2s; }}
+    .mini-nav a {{ color: #275f45; }}
+    .til-toppen {{ position: fixed; bottom: 1.5rem; right: 1.25rem; z-index: 40; background: #275f45; color: #fff; border: none; border-radius: 9999px; width: 2.5rem; height: 2.5rem; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.18); opacity: 0; pointer-events: none; transition: opacity 0.2s; }}
     .til-toppen.synlig {{ opacity: 1; pointer-events: auto; }}
-    .til-toppen:hover {{ background: #166534; }}
+    .til-toppen:hover {{ background: #214d39; }}
     .profil-seksjon {{ margin: 1.5rem 0; }}
     .profil-badges {{ display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem; }}
     .profil-badge {{ font-size: 0.75rem; font-weight: 600; padding: 0.25rem 0.75rem; border-radius: 9999px; }}
@@ -6992,12 +7008,12 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     .rekke-seksjon p:last-child, .nedtur-seksjon p:last-child, .utbetalingsaar-seksjon p:last-child, .delaar-seksjon p:last-child {{ margin-bottom: 0; }}
     .dark .rekke-seksjon, .dark .nedtur-seksjon, .dark .utbetalingsaar-seksjon, .dark .delaar-seksjon, .dark .betalt-seksjon {{ background: #0f172a; border-color: #1e293b; }}
     .dark .rekke-seksjon p, .dark .nedtur-seksjon p, .dark .utbetalingsaar-seksjon p, .dark .delaar-seksjon p, .dark .betalt-seksjon p {{ color: #cbd5e1; }}
-    .rekke-seksjon {{ border-left: 3px solid #22c55e; }}
-    .nedtur-seksjon {{ border-left: 3px solid #f59e0b; }}
-    .delaar-seksjon {{ border-left: 3px solid #f59e0b; }}
+    .rekke-seksjon {{ border-left: 3px solid #3f8a63; }}
+    .nedtur-seksjon {{ border-left: 3px solid #b98a3a; }}
+    .delaar-seksjon {{ border-left: 3px solid #b98a3a; }}
     /* Den mørke regelen over setter border-color på alle sider og tok med seg
        den gule kanten; varselet så ut som en vanlig boks (2026-10-19). */
-    .dark .delaar-seksjon {{ border-left-color: #f59e0b; }}
+    .dark .delaar-seksjon {{ border-left-color: #b98a3a; }}
     .betalt-seksjon .betalt-tabell {{ display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; font-size: 0.875rem; margin: 0.25rem 0 0.5rem; }}
     .betalt-seksjon .betalt-tabell th, .betalt-seksjon .betalt-tabell td {{ text-align: left; padding: 0.45rem 0.75rem; }}
     .betalt-seksjon .betalt-tabell td:not(:first-child), .betalt-seksjon .betalt-tabell th:not(:first-child) {{ white-space: nowrap; text-align: right; }}
@@ -7014,9 +7030,9 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     .dark .hendelse-seksjon p.hendelse-kilde {{ color: #9ca3af; }}
     .mnd-strip {{ display: grid; grid-template-columns: repeat(12, 1fr); gap: 2px; margin-bottom: 0.85rem; }}
     .mnd-celle {{ text-align: center; padding: 0.4rem 0.1rem; font-size: 0.62rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.02em; color: #9ca3af; background: #f1f5f9; border-radius: 0.25rem; }}
-    .mnd-celle.mnd-ja {{ background: #15803d; color: #fff; }}
+    .mnd-celle.mnd-ja {{ background: #275f45; color: #fff; }}
     .dark .mnd-celle {{ background: #1e293b; color: #64748b; }}
-    .dark .mnd-celle.mnd-ja {{ background: #15803d; color: #fff; }}
+    .dark .mnd-celle.mnd-ja {{ background: #275f45; color: #fff; }}
     @media (max-width: 480px) {{ .mnd-strip {{ grid-template-columns: repeat(6, 1fr); }} }}
     .driver-seksjon {{ margin: 1.5rem 0; }}
     .driver-seksjon h2 {{ font-size: 1rem; font-weight: 700; margin-bottom: 0.6rem; }}
@@ -7025,26 +7041,26 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     .passer-seksjon {{ margin: 1.5rem 0; }}
     .passer-seksjon h2 {{ font-size: 1rem; font-weight: 700; margin-bottom: 0.6rem; }}
     .passer-liste {{ list-style: none; padding: 0; margin: 0; }}
-    .passer-liste li {{ font-size: 0.875rem; padding: 0.45rem 0.75rem; border-left: 3px solid #86efac; margin-bottom: 0.4rem; line-height: 1.5; color: #374151; }}
-    .dark .passer-liste li {{ color: #d1d5db; border-left-color: #166534; }}
+    .passer-liste li {{ font-size: 0.875rem; padding: 0.45rem 0.75rem; border-left: 3px solid #9cc2ad; margin-bottom: 0.4rem; line-height: 1.5; color: #374151; }}
+    .dark .passer-liste li {{ color: #d1d5db; border-left-color: #214d39; }}
     .risiko-seksjon {{ margin: 1.5rem 0; }}
     .risiko-liste {{ list-style: none; padding: 0; margin: 0; }}
-    .risiko-liste li {{ font-size: 0.875rem; padding: 0.5rem 0.75rem; border-left: 3px solid #fca5a5; margin-bottom: 0.5rem; line-height: 1.5; }}
+    .risiko-liste li {{ font-size: 0.875rem; padding: 0.5rem 0.75rem; border-left: 3px solid #dca19b; margin-bottom: 0.5rem; line-height: 1.5; }}
     .kontoer-seksjon {{ margin: 1.5rem 0; }}
     .kontoer-seksjon h2 {{ font-size: 1rem; font-weight: 700; margin-bottom: 0.75rem; }}
-    .konto-rad {{ display: flex; gap: 0.85rem; align-items: flex-start; padding: 0.85rem 1rem; border: 1px solid #d1fae5; border-radius: 0.65rem; margin-bottom: 0.5rem; background: #f0fdf4; }}
-    .konto-rad.konto-ikke {{ border-color: #fca5a5; background: #fff1f2; }}
+    .konto-rad {{ display: flex; gap: 0.85rem; align-items: flex-start; padding: 0.85rem 1rem; border: 1px solid #e3eee8; border-radius: 0.65rem; margin-bottom: 0.5rem; background: #f3f7f5; }}
+    .konto-rad.konto-ikke {{ border-color: #dca19b; background: #fbf4f3; }}
     .konto-rad strong {{ font-size: 0.875rem; }}
     .konto-rad p {{ font-size: 0.8rem; color: #4b5563; margin: 0.2rem 0 0; line-height: 1.5; }}
-    .konto-ok {{ font-size: 1rem; color: #16a34a; flex-shrink: 0; margin-top: 0.1rem; }}
-    .konto-nei {{ font-size: 1rem; color: #dc2626; flex-shrink: 0; margin-top: 0.1rem; }}
-    .dark .konto-rad {{ background: #052e16; border-color: #166534; }}
+    .konto-ok {{ font-size: 1rem; color: #2f7352; flex-shrink: 0; margin-top: 0.1rem; }}
+    .konto-nei {{ font-size: 1rem; color: #a8433b; flex-shrink: 0; margin-top: 0.1rem; }}
+    .dark .konto-rad {{ background: #0f251b; border-color: #214d39; }}
     .dark .konto-rad p {{ color: #9ca3af; }}
-    .dark .konto-rad.konto-ikke {{ background: #2d0a0a; border-color: #7f1d1d; }}
-    .konto-rad.konto-uavklart {{ border-color: #fde68a; background: #fffbeb; }}
-    .konto-usikker {{ font-size: 1rem; font-weight: 700; color: #b45309; flex-shrink: 0; margin-top: 0.1rem; }}
-    .dark .konto-rad.konto-uavklart {{ background: #2a1f05; border-color: #78350f; }}
-    .dark .konto-usikker {{ color: #fbbf24; }}
+    .dark .konto-rad.konto-ikke {{ background: #2d0a0a; border-color: #602a26; }}
+    .konto-rad.konto-uavklart {{ border-color: #ead9b0; background: #fbf8f0; }}
+    .konto-usikker {{ font-size: 1rem; font-weight: 700; color: #805a22; flex-shrink: 0; margin-top: 0.1rem; }}
+    .dark .konto-rad.konto-uavklart {{ background: #2a1f05; border-color: #573d1b; }}
+    .dark .konto-usikker {{ color: #cfa65a; }}
     .investor-profil-seksjon {{ margin: 1rem 0; }}
     .investor-badges-rad {{ display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.75rem; }}
     .investor-forklaring {{ border-radius: 0.6rem; padding: 0.75rem 1rem; margin-bottom: 0.6rem; border: 1px solid; }}
@@ -7065,19 +7081,19 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     .investor-mal-tekst {{ font-size: 0.8rem; color: #4b5563; line-height: 1.45; margin-top: 0.15rem; }}
     .dark .investor-mal-tekst {{ color: #9ca3af; }}
     .investor-badge {{ display: inline-flex; align-items: center; padding: 0.2rem 0.7rem; border-radius: 9999px; font-size: 0.73rem; font-weight: 600; border: 1px solid; }}
-    .investor-risiko-lav {{ background: #dcfce7; color: #15803d; border-color: #86efac; }}
-    .investor-risiko-moderat {{ background: #fef3c7; color: #92400e; border-color: #fcd34d; }}
-    .investor-risiko-hoy {{ background: #fee2e2; color: #991b1b; border-color: #fca5a5; }}
+    .investor-risiko-lav {{ background: #e3eee8; color: #275f45; border-color: #9cc2ad; }}
+    .investor-risiko-moderat {{ background: #f5edd8; color: #69491e; border-color: #dcc183; }}
+    .investor-risiko-hoy {{ background: #f6e4e2; color: #74302b; border-color: #dca19b; }}
     .investor-mal {{ background: #f3f4f6; color: #374151; border-color: #e5e7eb; }}
-    .dark .investor-risiko-lav {{ background: #052e16; color: #86efac; border-color: #166534; }}
-    .dark .investor-risiko-moderat {{ background: #451a03; color: #fcd34d; border-color: #92400e; }}
-    .dark .investor-risiko-hoy {{ background: #2d0a0a; color: #fca5a5; border-color: #7f1d1d; }}
+    .dark .investor-risiko-lav {{ background: #0f251b; color: #9cc2ad; border-color: #214d39; }}
+    .dark .investor-risiko-moderat {{ background: #30210f; color: #dcc183; border-color: #69491e; }}
+    .dark .investor-risiko-hoy {{ background: #2d0a0a; color: #dca19b; border-color: #602a26; }}
     .dark .investor-mal {{ background: #1f2937; color: #d1d5db; border-color: #374151; }}
     .relaterte {{ margin: 1.5rem 0; }}
     .relaterte h2 {{ margin-bottom: 0.75rem; }}
     .rel-grid {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 0.75rem; }}
     .rel-kort {{ border-radius: 0.75rem; padding: 0.75rem 1rem; border: 1px solid; display: flex; flex-direction: column; gap: 0.2rem; text-decoration: none; transition: border-color 0.15s; }}
-    .rel-kort:hover {{ border-color: #16a34a; text-decoration: none; }}
+    .rel-kort:hover {{ border-color: #2f7352; text-decoration: none; }}
     .rel-ticker {{ font-weight: 700; font-size: 1rem; color: #111827; }}
     .rel-navn {{ font-size: 0.75rem; }}
     .rel-yield {{ font-size: 0.8rem; font-weight: 600; color: #374151; font-variant-numeric: tabular-nums; }}
@@ -7109,7 +7125,7 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     .faq-svar {{ padding: 0.75rem 1.25rem 1rem; font-size: 0.85rem; color: #4b5563; line-height: 1.65; border-top: 1px solid #f3f4f6; }}
     .rel-kort {{ background: #fff; border-color: #e5e7eb; }}
     .rel-navn {{ color: #6b7280; }}
-    .badge {{ background: #dcfce7; color: #15803d; }}
+    .badge {{ background: #e3eee8; color: #275f45; }}
     .kurs-lenker {{ margin: 1.5rem 0; }}
     .kurs-lenker h2 {{ margin-bottom: 0.75rem; }}
     .kp-btn {{ font-size: 0.72rem; font-weight: 500; padding: 0.2rem 0.55rem; border-radius: 6px; border: none; cursor: pointer; background: transparent; color: #6b7280; transition: background 0.12s, color 0.12s; }}
@@ -7141,15 +7157,15 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     .dark .breadcrumb {{ color: #9ca3af; }}
     .dark .breadcrumb a {{ color: #9ca3af; }}
     .dark .sub {{ color: #9ca3af; }}
-    .dark .badge {{ background: #14532d; color: #86efac; }}
-    .dark a {{ color: #4ade80; }}
-    .dark .cta a {{ background: #15803d; color: #fff !important; }}
+    .dark .badge {{ background: #1b3f2f; color: #9cc2ad; }}
+    .dark a {{ color: #6fa98a; }}
+    .dark .cta a {{ background: #275f45; color: #fff !important; }}
     .dark .ytick {{ stroke: #1f2937; }}
-    .dark .hbar {{ fill: #22c55e; }}
+    .dark .hbar {{ fill: #3f8a63; }}
     .dark .profil-badge {{ background: #1f2937; color: #d1d5db; border-color: #374151; }}
     .dark .profil-tekst {{ color: #9ca3af; }}
     .dark .historikk-prosa p {{ color: #9ca3af; }}
-    .dark .risiko-liste li {{ border-left-color: #7f1d1d; color: #9ca3af; }}
+    .dark .risiko-liste li {{ border-left-color: #602a26; color: #9ca3af; }}
     .dark .rel-kort {{ background: #111827; border-color: #1f2937; }}
     .dark .rel-navn {{ color: #9ca3af; }}
     .dark .faq h2 {{ color: #d1d5db; }}
@@ -7345,14 +7361,10 @@ def generer_aksjesider(aksjer, root_dir):
 
     # Bygg sektor-indeks for relaterte aksjer og sektorsnitt
     sektor_map  = {}
-    sektor_data = {}
     for a in aksjer:
         s = a.get("sektor") or "Annet"
         sektor_map.setdefault(s, []).append(a)
-        y = a.get("utbytte_yield") or 0
-        if y > 0:
-            sektor_data.setdefault(s, []).append(y)
-    sektor_snitt = {s: sum(v) / len(v) for s, v in sektor_data.items() if v}
+    sektor_snitt = sektorsnitt_per_sektor(sektor_map)
 
     for a in aksjer:
         ticker = a["ticker"]
@@ -7504,11 +7516,12 @@ def generer_aksjesider(aksjer, root_dir):
   <style>
     *, *::before, *::after {{ box-sizing: border-box; margin: 0; padding: 0; }}
     body {{ font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; background: #f8fafc; color: #0f172a; line-height: 1.6; }}
-    a {{ color: #16a34a; text-decoration: none; }}
+    a {{ color: #2f7352; text-decoration: none; }}
     a:hover {{ text-decoration: underline; }}
     .wrap {{ max-width: 1100px; margin: 0 auto; padding: 1rem 1rem 2rem; }}
     .hero {{
-      background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #15803d 100%);
+      background: #1c2631;
+      border: 1px solid #2a3542;
       color: #fff;
       border-radius: 1rem;
       padding: 2rem 1.5rem;
@@ -7529,7 +7542,7 @@ def generer_aksjesider(aksjer, root_dir):
     .seksjon {{ margin: 2.5rem 0; }}
     .seksjon-tittel {{ display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 1rem; }}
     .seksjon-tittel h2 {{ font-size: 1.25rem; font-weight: 700; color: #0f172a; }}
-    .seksjon-tittel .se-alle {{ font-size: 0.85rem; color: #22c55e; font-weight: 600; }}
+    .seksjon-tittel .se-alle {{ font-size: 0.85rem; color: #3f8a63; font-weight: 600; }}
     .ak-grid {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 0.75rem; }}
     .ak-kort {{
       display: block;
@@ -7541,10 +7554,10 @@ def generer_aksjesider(aksjer, root_dir):
       text-decoration: none !important;
       color: inherit;
     }}
-    .ak-kort:hover {{ border-color: #22c55e; box-shadow: 0 4px 12px rgba(34,197,94,0.1); transform: translateY(-1px); }}
+    .ak-kort:hover {{ border-color: #3f8a63; box-shadow: 0 4px 12px rgba(63,138,99,0.1); transform: translateY(-1px); }}
     .ak-kort-topp {{ display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.4rem; }}
-    .ak-kort-tk {{ font-family: ui-monospace, monospace; font-size: 0.95rem; font-weight: 700; color: #16a34a; }}
-    .ak-kort-yield {{ font-size: 0.95rem; font-weight: 700; color: #15803d; background: #dcfce7; padding: 0.15rem 0.5rem; border-radius: 0.4rem; }}
+    .ak-kort-tk {{ font-size: 0.95rem; font-weight: 600; color: #0f172a; }}
+    .ak-kort-yield {{ font-size: 0.95rem; font-weight: 600; color: #0f172a; font-variant-numeric: tabular-nums; }}
     .ak-kort-navn {{ font-size: 0.85rem; font-weight: 500; color: #334155; line-height: 1.3; margin-bottom: 0.3rem; }}
     .ak-kort-meta {{ font-size: 0.7rem; color: #94a3b8; }}
     .topplister {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.75rem; }}
@@ -7554,7 +7567,7 @@ def generer_aksjesider(aksjer, root_dir):
       padding: 1rem; text-decoration: none !important; color: inherit;
       transition: all 0.15s;
     }}
-    .topp-kort:hover {{ border-color: #22c55e; box-shadow: 0 4px 12px rgba(34,197,94,0.1); }}
+    .topp-kort:hover {{ border-color: #3f8a63; box-shadow: 0 4px 12px rgba(63,138,99,0.1); }}
     .topp-ikon {{
       width: 44px; height: 44px;
       border-radius: 0.6rem;
@@ -7563,10 +7576,8 @@ def generer_aksjesider(aksjer, root_dir):
     }}
     /* SVG, ikke emoji — arver fargen fra .topp-ikon-N under. */
     .topp-ikon svg {{ width: 22px; height: 22px; }}
-    .topp-ikon-1 {{ background: #fef3c7; color: #b45309; }}
-    .topp-ikon-2 {{ background: #dbeafe; color: #1d4ed8; }}
-    .topp-ikon-3 {{ background: #dcfce7; color: #15803d; }}
-    .topp-ikon-4 {{ background: #fce7f3; color: #be185d; }}
+    .topp-ikon-1, .topp-ikon-2, .topp-ikon-3, .topp-ikon-4 {{ background: #f1f5f9; color: #475569; }}
+    .dark .topp-ikon-1, .dark .topp-ikon-2, .dark .topp-ikon-3, .dark .topp-ikon-4 {{ background: #273241; color: #cbd5e1; }}
     .topp-tittel {{ font-weight: 600; font-size: 0.95rem; color: #0f172a; margin-bottom: 0.15rem; }}
     .topp-beskr {{ font-size: 0.75rem; color: #64748b; }}
     .sek-grid {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 0.5rem; }}
@@ -7576,11 +7587,11 @@ def generer_aksjesider(aksjer, root_dir):
       padding: 0.65rem 0.85rem; text-decoration: none !important; color: inherit;
       transition: all 0.15s;
     }}
-    .sek-kort:hover {{ border-color: #22c55e; }}
+    .sek-kort:hover {{ border-color: #3f8a63; }}
     /* SVG, ikke emoji — font-size gjør ingenting her. Grønnfargen er
        merkevarens; currentColor ville gitt tekstfarge og blitt for tung. */
-    .sek-ikon {{ width: 1.35rem; height: 1.35rem; flex-shrink: 0; color: #16a34a; }}
-    .dark .sek-ikon {{ color: #4ade80; }}
+    .sek-ikon {{ width: 1.35rem; height: 1.35rem; flex-shrink: 0; color: #2f7352; }}
+    .dark .sek-ikon {{ color: #6fa98a; }}
     .sek-info {{ display: flex; flex-direction: column; min-width: 0; }}
     .sek-navn {{ font-weight: 600; font-size: 0.85rem; color: #0f172a; }}
     .sek-antall {{ font-size: 0.7rem; color: #94a3b8; }}
@@ -7593,10 +7604,11 @@ def generer_aksjesider(aksjer, root_dir):
     td {{ padding: 0.7rem 1.25rem; border-bottom: 1px solid #f1f5f9; }}
     tr:last-child td {{ border-bottom: none; }}
     tr:hover td {{ background: #f8fafc; }}
-    td a {{ color: #16a34a; font-family: ui-monospace, monospace; font-weight: 600; }}
-    .yield-cell {{ color: #15803d; font-weight: 600; }}
+    td a {{ color: #0f172a; font-weight: 600; }}
+    .yield-cell {{ color: #0f172a; font-weight: 600; font-variant-numeric: tabular-nums; }}
     .verktoy-bar {{
-      background: linear-gradient(135deg, #fef3c7 0%, #fed7aa 100%);
+      background: #fff;
+      border: 1px solid #e2e8f0;
       border-radius: 1rem;
       padding: 1.5rem;
       margin: 2rem 0;
@@ -7605,10 +7617,10 @@ def generer_aksjesider(aksjer, root_dir):
       align-items: center;
       gap: 1rem;
     }}
-    .verktoy-bar h3 {{ font-size: 1.1rem; font-weight: 700; color: #78350f; margin-bottom: 0.25rem; }}
-    .verktoy-bar p {{ font-size: 0.88rem; color: #92400e; }}
+    .verktoy-bar h3 {{ font-size: 1.1rem; font-weight: 700; color: #0f172a; margin-bottom: 0.25rem; }}
+    .verktoy-bar p {{ font-size: 0.88rem; color: #475569; }}
     .verktoy-bar a {{
-      background: #fff; color: #b45309 !important; padding: 0.6rem 1.25rem;
+      background: #275f45; color: #fff !important; padding: 0.6rem 1.25rem;
       border-radius: 0.5rem; font-weight: 600; text-decoration: none !important;
       white-space: nowrap; box-shadow: 0 1px 3px rgba(0,0,0,0.08);
     }}
@@ -7618,25 +7630,25 @@ def generer_aksjesider(aksjer, root_dir):
     .updated {{ font-size: 0.78rem; color: #94a3b8; text-align: right; margin-top: 1rem; }}
     /* Mørk modus */
     .dark body {{ background: #0f172a; color: #f1f5f9; }}
-    .dark a {{ color: #4ade80; }}
+    .dark a {{ color: #6fa98a; }}
     .dark .seksjon-tittel h2 {{ color: #f1f5f9; }}
-    .dark .seksjon-tittel .se-alle {{ color: #4ade80; }}
+    .dark .seksjon-tittel .se-alle {{ color: #6fa98a; }}
     .dark .ak-kort, .dark .topp-kort, .dark .sek-kort, .dark .alle-aksjer {{ background: #1e293b; border-color: #334155; }}
-    .dark .ak-kort:hover, .dark .topp-kort:hover, .dark .sek-kort:hover {{ border-color: #22c55e; }}
-    .dark .ak-kort-tk {{ color: #4ade80; }}
+    .dark .ak-kort:hover, .dark .topp-kort:hover, .dark .sek-kort:hover {{ border-color: #3f8a63; }}
+    .dark .ak-kort-tk {{ color: #f1f5f9; }}
     .dark .ak-kort-navn {{ color: #cbd5e1; }}
-    .dark .ak-kort-yield {{ background: rgba(34,197,94,0.2); color: #4ade80; }}
+    .dark .ak-kort-yield {{ color: #f1f5f9; }}
     .dark .topp-tittel, .dark .sek-navn {{ color: #f1f5f9; }}
     .dark .alle-aksjer-header {{ border-color: #334155; }}
     .dark th {{ background: #0f172a; border-color: #334155; color: #94a3b8; }}
     .dark td {{ border-color: #1e293b; }}
     .dark tr:hover td {{ background: #0f172a; }}
-    .dark td a {{ color: #4ade80; }}
-    .dark .yield-cell {{ color: #4ade80; }}
-    .dark .verktoy-bar {{ background: linear-gradient(135deg, rgba(146,64,14,0.3) 0%, rgba(154,52,18,0.2) 100%); }}
-    .dark .verktoy-bar h3 {{ color: #fde68a; }}
-    .dark .verktoy-bar p {{ color: #fcd34d; }}
-    .dark .verktoy-bar a {{ background: #1e293b; color: #fde68a !important; }}
+    .dark td a {{ color: #f1f5f9; }}
+    .dark .yield-cell {{ color: #f1f5f9; }}
+    .dark .verktoy-bar {{ background: #1e293b; border-color: #334155; }}
+    .dark .verktoy-bar h3 {{ color: #f1f5f9; }}
+    .dark .verktoy-bar p {{ color: #cbd5e1; }}
+    .dark .verktoy-bar a {{ background: #2f7352; color: #fff !important; }}
   </style>
 </head>
 <body>
@@ -8283,7 +8295,7 @@ def generer_sektorsider(aksjer, root_dir):
   <title>{sektor}-aksjer med utbytte | Oslo Børs | exday.no</title>
   <meta name="description" content="{meta_desc}"/>
   <link rel="canonical" href="https://exday.no/aksjer/sektor/{slug}/"/>
-  <meta name="theme-color" content="#16a34a"/>
+  <meta name="theme-color" content="#2f7352"/>
   <link rel="icon" type="image/png" sizes="512x512" href="/favicon.png"/>
   <link rel="icon" type="image/png" sizes="180x180" href="/logo/apple_touch_icon_180.png"/>
   <link rel="icon" type="image/svg+xml" href="/logo/exday_icon_primary.svg"/>
@@ -8316,7 +8328,7 @@ def generer_sektorsider(aksjer, root_dir):
   <style>
     *, *::before, *::after {{ box-sizing: border-box; margin: 0; padding: 0; }}
     body {{ font-family: system-ui, -apple-system, sans-serif; line-height: 1.6; }}
-    a {{ color: #16a34a; text-decoration: none; }}
+    a {{ color: #2f7352; text-decoration: none; }}
     a:hover {{ text-decoration: underline; }}
     .wrap {{ max-width: 900px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }}
     .breadcrumb {{ font-size: 0.85rem; color: #6b7280; margin-bottom: 1.5rem; }}
@@ -8326,12 +8338,12 @@ def generer_sektorsider(aksjer, root_dir):
     /* Ikonet i overskriften er dekorativt (aria-hidden) og skal stå på samme
        linje som teksten uten å dra opp linjehøyden. */
     .h1-ikon {{ width: 1.5rem; height: 1.5rem; vertical-align: -0.18em;
-                margin-right: 0.5rem; color: #16a34a; }}
-    .dark .h1-ikon {{ color: #4ade80; }}
+                margin-right: 0.5rem; color: #2f7352; }}
+    .dark .h1-ikon {{ color: #6fa98a; }}
     .sub {{ margin-bottom: 1.5rem; font-size: 0.95rem; }}
     .stats {{ display: flex; gap: 1.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }}
     .stat {{ border-radius: 0.5rem; padding: 0.75rem 1.25rem; border: 1px solid; }}
-    .stat-val {{ font-size: 1.4rem; font-weight: 700; color: #16a34a; }}
+    .stat-val {{ font-size: 1.4rem; font-weight: 700; color: #111827; }}
     .stat-lbl {{ font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em; }}
     .sektor-analyse {{ margin: 0 0 2rem; }}
     .sektor-analyse h2 {{ font-size: 1.15rem; font-weight: 700; margin: 1.75rem 0 0.6rem; }}
@@ -8343,10 +8355,10 @@ def generer_sektorsider(aksjer, root_dir):
     table {{ width: 100%; min-width: 30rem; border-collapse: collapse; border-radius: 0.75rem; overflow: hidden; font-size: 0.9rem; border: 1px solid; }}
     th {{ padding: 0.6rem 1rem; text-align: left; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; white-space: nowrap; }}
     td {{ padding: 0.65rem 1rem; border-top: 1px solid; white-space: nowrap; }}
-    .yield {{ font-weight: 600; color: #16a34a; }}
+    .yield {{ font-weight: 600; color: #111827; }}
     .cta {{ margin-top: 1.5rem; text-align: center; }}
-    .cta a {{ display: inline-block; background: #16a34a; color: #fff !important; font-weight: 600; padding: 0.65rem 1.5rem; border-radius: 0.5rem; text-decoration: none; }}
-    .cta a:hover {{ background: #15803d; }}
+    .cta a {{ display: inline-block; background: #2f7352; color: #fff !important; font-weight: 600; padding: 0.65rem 1.5rem; border-radius: 0.5rem; text-decoration: none; }}
+    .cta a:hover {{ background: #275f45; }}
     .updated {{ font-size: 0.78rem; text-align: right; margin-top: 1rem; }}
 
     body {{ background: #f9fafb; color: #111827; }}
@@ -8368,12 +8380,12 @@ def generer_sektorsider(aksjer, root_dir):
     .dark tr:hover td {{ background: #1f2937; }}
     .dark .sub {{ color: #9ca3af; }}
     .dark .updated {{ color: #6b7280; }}
-    .dark a {{ color: #4ade80; }}
+    .dark a {{ color: #6fa98a; }}
     .dark .breadcrumb {{ color: #9ca3af; }}
     .dark .breadcrumb a {{ color: #9ca3af; }}
-    .dark .stat-val {{ color: #4ade80; }}
-    .dark .yield {{ color: #4ade80; }}
-    .dark .cta a {{ background: #16a34a; color: #fff !important; }}
+    .dark .stat-val {{ color: #f3f4f6; }}
+    .dark .yield {{ color: #f3f4f6; }}
+    .dark .cta a {{ background: #2f7352; color: #fff !important; }}
   </style>
 </head>
 <body>
@@ -8483,7 +8495,7 @@ def generer_sektorsider(aksjer, root_dir):
   <title>Norske utbytteaksjer etter sektor | exday.no</title>
   <meta name="description" content="Finn norske utbytteaksjer på Oslo Børs sortert etter sektor — energi, finans, shipping, havbruk og mer."/>
   <link rel="canonical" href="https://exday.no/aksjer/sektor/"/>
-  <meta name="theme-color" content="#16a34a"/>
+  <meta name="theme-color" content="#2f7352"/>
   <link rel="icon" type="image/png" sizes="512x512" href="/favicon.png"/>
   <link rel="icon" type="image/png" sizes="180x180" href="/logo/apple_touch_icon_180.png"/>
   <link rel="icon" type="image/svg+xml" href="/logo/exday_icon_primary.svg"/>
@@ -8502,11 +8514,12 @@ def generer_sektorsider(aksjer, root_dir):
   <style>
     *, *::before, *::after {{ box-sizing: border-box; margin: 0; padding: 0; }}
     body {{ font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; line-height: 1.6; background: #f8fafc; color: #0f172a; }}
-    a {{ color: #16a34a; text-decoration: none; }}
+    a {{ color: #2f7352; text-decoration: none; }}
     a:hover {{ text-decoration: underline; }}
     .wrap {{ max-width: 1100px; margin: 0 auto; padding: 1rem 1rem 2rem; }}
     .hero {{
-      background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #15803d 100%);
+      background: #1c2631;
+      border: 1px solid #2a3542;
       color: #fff;
       border-radius: 1rem;
       padding: 2rem 1.5rem;
@@ -8533,43 +8546,43 @@ def generer_sektorsider(aksjer, root_dir):
       color: inherit;
     }}
     .sektor-kort:hover {{
-      border-color: #22c55e;
-      box-shadow: 0 4px 14px rgba(34,197,94,0.1);
+      border-color: #3f8a63;
+      box-shadow: 0 4px 14px rgba(63,138,99,0.1);
       transform: translateY(-2px);
     }}
     .sk-header {{ display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; }}
-    .sk-ikon {{ width: 1.5rem; height: 1.5rem; flex-shrink: 0; color: #16a34a; }}
-    .dark .sk-ikon {{ color: #4ade80; }}
+    .sk-ikon {{ width: 1.5rem; height: 1.5rem; flex-shrink: 0; color: #2f7352; }}
+    .dark .sk-ikon {{ color: #6fa98a; }}
     .sk-tekst {{ flex: 1; min-width: 0; }}
     .sk-navn {{ font-weight: 700; font-size: 1rem; color: #0f172a; }}
     .sk-antall {{ font-size: 0.78rem; color: #64748b; margin-top: 0.1rem; }}
     .sk-arrow {{ color: #94a3b8; font-size: 1.1rem; flex-shrink: 0; }}
-    .sektor-kort:hover .sk-arrow {{ color: #22c55e; transform: translateX(2px); transition: all 0.15s; }}
+    .sektor-kort:hover .sk-arrow {{ color: #3f8a63; transform: translateX(2px); transition: all 0.15s; }}
     .sk-topp {{ font-size: 0.72rem; color: #94a3b8; padding-top: 0.4rem; border-top: 1px solid #f1f5f9; font-family: ui-monospace, monospace; }}
     .info-bar {{
       display: flex; align-items: flex-start; gap: 0.75rem;
       background: #f0fafb;
       border: 1px solid #ccebec;
-      border-left: 4px solid #22c55e;
+      border-left: 4px solid #3f8a63;
       border-radius: 0.6rem;
       padding: 0.85rem 1rem;
       margin-bottom: 2rem;
       font-size: 0.85rem;
-      color: #134e4a;
+      color: #0f172a;
       line-height: 1.5;
     }}
     .info-bar svg {{ flex-shrink: 0; margin-top: 2px; }}
     .info-bar strong {{ color: #0f172a; }}
     /* Dark mode */
     .dark body {{ background: #0f172a; color: #f1f5f9; }}
-    .dark a {{ color: #4ade80; }}
+    .dark a {{ color: #6fa98a; }}
     .dark .breadcrumb, .dark .breadcrumb a {{ color: #94a3b8; }}
     .dark .sektor-kort {{ background: #1e293b; border-color: #334155; }}
-    .dark .sektor-kort:hover {{ border-color: #22c55e; }}
+    .dark .sektor-kort:hover {{ border-color: #3f8a63; }}
     .dark .sk-navn {{ color: #f1f5f9; }}
     .dark .sk-antall, .dark .sk-topp {{ color: #94a3b8; }}
     .dark .sk-topp {{ border-color: #334155; }}
-    .dark .info-bar {{ background: rgba(34,197,94,0.12); border-color: rgba(34,197,94,0.4); color: #4ade80; }}
+    .dark .info-bar {{ background: rgba(63,138,99,0.12); border-color: rgba(63,138,99,0.4); color: #6fa98a; }}
     .dark .info-bar strong {{ color: #f1f5f9; }}
     .sektor-om {{ margin: 2rem 0 0.5rem; }}
     .sektor-om h2 {{ font-size: 1.1rem; font-weight: 700; color: #0f172a; margin: 0 0 0.6rem; }}
@@ -8874,7 +8887,7 @@ def generer_topplistesider(aksjer, root_dir):
     CSS = """
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: system-ui, -apple-system, sans-serif; line-height: 1.6; }
-    a { color: #16a34a; text-decoration: none; }
+    a { color: #2f7352; text-decoration: none; }
     a:hover { text-decoration: underline; }
     .wrap { max-width: 900px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
     .breadcrumb { font-size: 0.85rem; margin-bottom: 1.5rem; }
@@ -8884,7 +8897,7 @@ def generer_topplistesider(aksjer, root_dir):
     .sub { margin-bottom: 1.5rem; font-size: 0.95rem; }
     .stats { display: flex; gap: 1.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
     .stat { border-radius: 0.5rem; padding: 0.75rem 1.25rem; border: 1px solid; }
-    .stat-val { font-size: 1.4rem; font-weight: 700; color: #16a34a; }
+    .stat-val { font-size: 1.4rem; font-weight: 700; color: #111827; }
     .stat-lbl { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em; }
     .tabell-ramme { overflow-x: auto; -webkit-overflow-scrolling: touch; }
     table { width: 100%; min-width: 34rem; border-collapse: collapse; border-radius: 0.75rem; overflow: hidden; font-size: 0.9rem; border: 1px solid; }
@@ -8894,11 +8907,11 @@ def generer_topplistesider(aksjer, root_dir):
     .liste-analyse h2 { font-size: 1.15rem; font-weight: 700; margin: 1.75rem 0 0.6rem; }
     .liste-analyse p { margin: 0 0 0.9rem; line-height: 1.75; font-size: 0.95rem; }
     .rang { font-size: 0.8rem; font-weight: 700; width: 2rem; }
-    .ticker a { color: #16a34a; font-family: monospace; font-weight: 700; font-size: 0.95rem; }
-    .metric { color: #16a34a; font-weight: 700; }
+    .ticker a { color: #111827; font-weight: 600; font-size: 0.95rem; }
+    .metric { color: #111827; font-weight: 700; }
     .cta { margin-top: 2rem; border-radius: 0.75rem; padding: 1.25rem; text-align: center; border: 1px solid; }
-    .cta a { display: inline-block; background: #16a34a; color: #fff !important; font-weight: 600; padding: 0.65rem 1.5rem; border-radius: 0.5rem; margin-top: 0.5rem; text-decoration: none; }
-    .cta a:hover { background: #15803d; }
+    .cta a { display: inline-block; background: #2f7352; color: #fff !important; font-weight: 600; padding: 0.65rem 1.5rem; border-radius: 0.5rem; margin-top: 0.5rem; text-decoration: none; }
+    .cta a:hover { background: #275f45; }
     .relatert { margin-top: 2rem; }
     .relatert h2 { font-size: 1rem; font-weight: 600; margin-bottom: 0.75rem; }
     .relatert ul { list-style: none; display: flex; flex-wrap: wrap; gap: 0.5rem; }
@@ -8916,32 +8929,32 @@ def generer_topplistesider(aksjer, root_dir):
     th { background: #f3f4f6; color: #6b7280; }
     td { border-color: #f3f4f6; }
     tr:hover td { background: #f9fafb; }
-    .cta { background: #f0fdf4; border-color: #bbf7d0; }
+    .cta { background: #f3f7f5; border-color: #c6dccf; }
     .relatert h2 { color: #374151; }
     .relatert li a { background: #fff; border-color: #e5e7eb; color: #374151; }
-    .relatert li a:hover { border-color: #16a34a; color: #15803d; }
+    .relatert li a:hover { border-color: #2f7352; color: #275f45; }
     .updated { color: #9ca3af; }
 
     .dark body { background: #030712; color: #f3f4f6; }
     .dark .stat { background: #111827; border-color: #1f2937; }
     .dark .stat-lbl { color: #9ca3af; }
-    .dark .stat-val { color: #4ade80; }
+    .dark .stat-val { color: #f3f4f6; }
     .dark .sub { color: #9ca3af; }
     .dark .breadcrumb { color: #9ca3af; }
     .dark .breadcrumb a { color: #9ca3af; }
     .dark .rang { color: #6b7280; }
-    .dark a { color: #4ade80; }
-    .dark .ticker a { color: #4ade80; }
-    .dark .metric { color: #4ade80; }
+    .dark a { color: #6fa98a; }
+    .dark .ticker a { color: #f3f4f6; }
+    .dark .metric { color: #f3f4f6; }
     .dark table { background: #111827; border-color: #1f2937; }
     .dark th { background: #1f2937; color: #9ca3af; }
     .dark td { border-color: #1f2937; }
     .dark tr:hover td { background: #1f2937; }
-    .dark .cta { background: #052e16; border-color: #166534; }
-    .dark .cta a { background: #16a34a; }
+    .dark .cta { background: #0f251b; border-color: #214d39; }
+    .dark .cta a { background: #2f7352; }
     .dark .relatert h2 { color: #d1d5db; }
     .dark .relatert li a { background: #111827; border-color: #1f2937; color: #d1d5db; }
-    .dark .relatert li a:hover { border-color: #4ade80; color: #4ade80; }
+    .dark .relatert li a:hover { border-color: #6fa98a; color: #6fa98a; }
     .dark .updated { color: #6b7280; }
 """
 
@@ -9011,7 +9024,7 @@ def generer_topplistesider(aksjer, root_dir):
   <title>{cfg['tittel']} | exday.no</title>
   <meta name="description" content="{desc}"/>
   <link rel="canonical" href="https://exday.no/aksjer/{cfg['slug']}/"/>
-  <meta name="theme-color" content="#16a34a"/>
+  <meta name="theme-color" content="#2f7352"/>
   <link rel="icon" type="image/png" sizes="512x512" href="/favicon.png"/>
   <link rel="icon" type="image/png" sizes="180x180" href="/logo/apple_touch_icon_180.png"/>
   <link rel="icon" type="image/svg+xml" href="/logo/exday_icon_primary.svg"/>
@@ -9370,11 +9383,11 @@ def generer_rapportkalender(aksjer, root_dir, i_dag=None):
     .sub { color:#6b7280; font-size:0.92rem; margin:0 0 1.25rem; }
     .stats { display:flex; flex-wrap:wrap; gap:0.6rem; margin-bottom:1.5rem; }
     .stat { flex:1 1 8rem; border:1px solid #e5e7eb; background:#fff; border-radius:0.6rem; padding:0.75rem; text-align:center; }
-    .stat-val { font-size:1.35rem; font-weight:700; color:#16a34a; }
+    .stat-val { font-size:1.35rem; font-weight:700; color:#111827; }
     .stat-lbl { font-size:0.72rem; color:#6b7280; text-transform:uppercase; letter-spacing:0.03em; }
     .hopp { display:flex; flex-wrap:wrap; gap:0.4rem; margin-bottom:1.75rem; }
     .hopp a { font-size:0.8rem; border:1px solid #e5e7eb; background:#fff; border-radius:9999px; padding:0.25rem 0.75rem; text-decoration:none; color:#374151; }
-    .hopp a:hover { border-color:#16a34a; color:#15803d; }
+    .hopp a:hover { border-color:#2f7352; color:#275f45; }
     .liste-analyse h2 { font-size:1.15rem; font-weight:700; margin:1.75rem 0 0.6rem; }
     .liste-analyse p { margin:0 0 0.9rem; line-height:1.75; font-size:0.95rem; }
     section h2 { font-size:1.15rem; margin:2rem 0 0.6rem; }
@@ -9385,16 +9398,16 @@ def generer_rapportkalender(aksjer, root_dir, i_dag=None):
     td { padding:0.55rem 0.75rem; border-top:1px solid #f3f4f6; white-space:nowrap; }
     tr:hover td { background:#f9fafb; }
     .dag { font-weight:600; }
-    .ticker a { color:#16a34a; font-family:monospace; font-weight:700; }
-    .metric { color:#16a34a; font-weight:600; }
+    .ticker a { color:#111827; font-weight:600; }
+    .metric { color:#111827; font-weight:600; }
     details { border:1px solid #e5e7eb; background:#fff; border-radius:0.6rem; padding:0.85rem 1rem; margin-bottom:0.6rem; }
     summary { font-weight:600; cursor:pointer; }
     details p { margin:0.6rem 0 0; font-size:0.92rem; color:#4b5563; }
-    .cta { margin-top:2rem; border-radius:0.75rem; padding:1.25rem; text-align:center; border:1px solid #bbf7d0; background:#f0fdf4; }
-    .cta a { display:inline-block; background:#16a34a; color:#fff !important; font-weight:600; padding:0.65rem 1.5rem; border-radius:0.5rem; margin-top:0.5rem; text-decoration:none; }
-    .cta a:hover { background:#15803d; }
+    .cta { margin-top:2rem; border-radius:0.75rem; padding:1.25rem; text-align:center; border:1px solid #c6dccf; background:#f3f7f5; }
+    .cta a { display:inline-block; background:#2f7352; color:#fff !important; font-weight:600; padding:0.65rem 1.5rem; border-radius:0.5rem; margin-top:0.5rem; text-decoration:none; }
+    .cta a:hover { background:#275f45; }
     .updated { font-size:0.78rem; text-align:right; margin-top:1rem; color:#9ca3af; }
-    a { color:#16a34a; }
+    a { color:#2f7352; }
     /* På smal skjerm må yield-kolonnen få plass uten at leseren må dra
        tabellen sidelengs — selskapsnavnet kappes i stedet. */
     @media (max-width: 34rem) {
@@ -9406,9 +9419,10 @@ def generer_rapportkalender(aksjer, root_dir, i_dag=None):
     .dark body { background:#030712; color:#f3f4f6; }
     .dark .breadcrumb, .dark .breadcrumb a, .dark .sub, .dark .stat-lbl { color:#9ca3af; }
     .dark .stat { background:#111827; border-color:#1f2937; }
-    .dark .stat-val, .dark .metric, .dark .ticker a, .dark a { color:#4ade80; }
+    .dark .stat-val, .dark .metric, .dark .ticker a { color:#f3f4f6; }
+    .dark a { color:#6fa98a; }
     .dark .hopp a { background:#111827; border-color:#1f2937; color:#d1d5db; }
-    .dark .hopp a:hover { border-color:#4ade80; color:#4ade80; }
+    .dark .hopp a:hover { border-color:#6fa98a; color:#6fa98a; }
     .dark table { background:#111827; border-color:#1f2937; }
     .dark th { background:#1f2937; color:#9ca3af; }
     .dark td { border-color:#1f2937; }
@@ -9416,8 +9430,8 @@ def generer_rapportkalender(aksjer, root_dir, i_dag=None):
     .dark .antall, .dark .updated { color:#6b7280; }
     .dark details { background:#111827; border-color:#1f2937; }
     .dark details p { color:#9ca3af; }
-    .dark .cta { background:#052e16; border-color:#166534; }
-    .dark .cta a { background:#16a34a; }
+    .dark .cta { background:#0f251b; border-color:#214d39; }
+    .dark .cta a { background:#2f7352; }
 """
 
     html_ut = f"""<!DOCTYPE html>
@@ -9447,7 +9461,7 @@ def generer_rapportkalender(aksjer, root_dir, i_dag=None):
   <title>{tittel} | exday.no</title>
   <meta name="description" content="{html.escape(desc, quote=True)}"/>
   <link rel="canonical" href="https://exday.no/rapportkalender/"/>
-  <meta name="theme-color" content="#16a34a"/>
+  <meta name="theme-color" content="#2f7352"/>
   <link rel="icon" type="image/png" sizes="512x512" href="/favicon.png"/>
   <link rel="icon" type="image/png" sizes="180x180" href="/logo/apple_touch_icon_180.png"/>
   <link rel="icon" type="image/svg+xml" href="/logo/exday_icon_primary.svg"/>
@@ -10950,7 +10964,7 @@ def _uka_kort(tittel, forklaring, rader, linje, tom, mer_lenke):
         for r in rader[:UKA_MAKS_RADER]:
             deler.append(
                 '          <li>'
-                f'<a href="/aksjer/{r["ticker"]}/" class="font-semibold text-green-700 dark:text-green-400 hover:underline">{r["ticker"]}</a> '
+                f'<a href="/aksjer/{r["ticker"]}/" class="font-semibold text-gray-900 dark:text-gray-100 hover:underline">{r["ticker"]}</a> '
                 f'<span class="text-gray-700 dark:text-gray-300">{_html.escape(r["navn"])}</span><br>'
                 f'<span class="text-xs text-gray-500 dark:text-gray-400">{linje(r)}</span></li>')
         deler.append('        </ul>')
@@ -11007,7 +11021,7 @@ def lag_uka_blokk(hendelser, i_dag, hentet=None):
         '  <section class="max-w-5xl mx-auto px-4 sm:px-6 pt-10" aria-labelledby="uka-tittel">',
         '    <div class="flex items-center justify-between mb-2">',
         '      <h2 id="uka-tittel" class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100">Denne uka på Oslo Børs</h2>',
-        '      <a href="/uke/" class="text-sm hover:underline font-medium" style="color:#16a34a;">Hele uka →</a>',
+        '      <a href="/uke/" class="text-sm hover:underline font-medium" style="color:#2f7352;">Hele uka →</a>',
         '    </div>',
         f'    <p class="text-sm text-gray-500 dark:text-gray-400 mb-6">De neste sju dagene fra {_kort_dato(i_dag)}.{hentet_tekst}</p>',
         '    <div class="grid gap-4 sm:grid-cols-3">',

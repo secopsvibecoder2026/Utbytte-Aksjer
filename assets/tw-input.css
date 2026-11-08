@@ -15,22 +15,64 @@
 @source "../**/*.html";
 @source "../assets/*.js";
 
-/* Hele green-skalaen, ikke bare de seks trinnene som først ble definert:
-   brand-200/300/400/800/950 var i bruk 71 steder uten å finnes, så
-   «text-brand-600 dark:text-brand-400» ga grønn lenke i lys modus og
-   arvet grå i mørk. Verdiene er Tailwinds green-skala, som i CLAUDE.md. */
+/* Dempet palett (08.11.2026). Tailwinds standard-grønn (#22c55e/#16a34a),
+   -oker og -rød var sterke forbrukerfarger og ga sidene et
+   «generert»-preg. Skalaene under erstatter dem i hele nettstedet, så
+   eksisterende klasser som text-green-700 og bg-amber-50 får de nye
+   verdiene uten at markupen endres. Grønn er en dempet skogsgrønn
+   (kulør ca. 150°), oker varsler, murstein betyr nedgang. Logoen har egne
+   farger i style.css (.site-logo-x, .site-logo-dot) og SVG-filene, og
+   følger ikke denne skalaen. Se «Project Color Palette» i CLAUDE.md.
+   brand-* er samme skala som green-*. Hele skalaen må være definert:
+   brand-200/300/400/800/950 var en gang i bruk 71 steder uten å finnes. */
 @theme {
-  --color-brand-50: #f0fdf4;
-  --color-brand-100: #dcfce7;
-  --color-brand-200: #bbf7d0;
-  --color-brand-300: #86efac;
-  --color-brand-400: #4ade80;
-  --color-brand-500: #22c55e;
-  --color-brand-600: #16a34a;
-  --color-brand-700: #15803d;
-  --color-brand-800: #166534;
-  --color-brand-900: #14532d;
-  --color-brand-950: #052e16;
+  --color-green-50: #f3f7f5;
+  --color-green-100: #e3eee8;
+  --color-green-200: #c6dccf;
+  --color-green-300: #9cc2ad;
+  --color-green-400: #6fa98a;
+  --color-green-500: #3f8a63;
+  --color-green-600: #2f7352;
+  --color-green-700: #275f45;
+  --color-green-800: #214d39;
+  --color-green-900: #1b3f2f;
+  --color-green-950: #0f251b;
+
+  --color-amber-50: #fbf8f0;
+  --color-amber-100: #f5edd8;
+  --color-amber-200: #ead9b0;
+  --color-amber-300: #dcc183;
+  --color-amber-400: #cfa65a;
+  --color-amber-500: #b98a3a;
+  --color-amber-600: #9c7029;
+  --color-amber-700: #805a22;
+  --color-amber-800: #69491e;
+  --color-amber-900: #573d1b;
+  --color-amber-950: #30210f;
+
+  --color-red-50: #fbf4f3;
+  --color-red-100: #f6e4e2;
+  --color-red-200: #ebc7c3;
+  --color-red-300: #dca19b;
+  --color-red-400: #cf7a72;
+  --color-red-500: #bd534a;
+  --color-red-600: #a8433b;
+  --color-red-700: #8e3831;
+  --color-red-800: #74302b;
+  --color-red-900: #602a26;
+  --color-red-950: #351513;
+
+  --color-brand-50: #f3f7f5;
+  --color-brand-100: #e3eee8;
+  --color-brand-200: #c6dccf;
+  --color-brand-300: #9cc2ad;
+  --color-brand-400: #6fa98a;
+  --color-brand-500: #3f8a63;
+  --color-brand-600: #2f7352;
+  --color-brand-700: #275f45;
+  --color-brand-800: #214d39;
+  --color-brand-900: #1b3f2f;
+  --color-brand-950: #0f251b;
 
   /* Inter fra vår egen server, ikke Google Fonts: en forespørsel dit sender
      den besøkendes IP-adresse til Google før noe samtykke er gitt. Uten egen

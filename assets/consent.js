@@ -41,7 +41,7 @@
       'right:0',
       'z-index:9999',
       'background:#fff',
-      'border-top:1px solid #d1fae5',
+      'border-top:1px solid #e3eee8',
       'padding:1rem 1.25rem',
       'box-shadow:0 -4px 12px rgba(0,0,0,0.08)',
       'font-family:system-ui,sans-serif',
@@ -56,7 +56,7 @@
     banner.innerHTML =
       '<p style="margin:0;flex:1;min-width:200px">' +
         'Vi bruker informasjonskapsler for å forstå hvordan nettsiden brukes. ' +
-        'Les mer i vår <a href="/personvern/" style="color:#16a34a;text-decoration:underline">personvernerklæring</a>.' +
+        'Les mer i vår <a href="/personvern/" style="color:#2f7352;text-decoration:underline">personvernerklæring</a>.' +
       '</p>' +
       '<div style="display:flex;gap:0.5rem;flex-shrink:0">' +
         '<button id="cookie-decline" style="' +
@@ -65,7 +65,7 @@
         '">Kun nødvendige</button>' +
         '<button id="cookie-accept" style="' +
           'padding:0.4rem 0.85rem;border:none;border-radius:0.375rem;' +
-          'background:#16a34a;color:#fff;cursor:pointer;font-size:0.8rem;font-weight:600' +
+          'background:#2f7352;color:#fff;cursor:pointer;font-size:0.8rem;font-weight:600' +
         '">Godta alle</button>' +
       '</div>';
 
@@ -86,7 +86,7 @@
     function oppdaterTema() {
       var mork = document.documentElement.classList.contains('dark');
       banner.style.background     = mork ? '#1f2937' : '#fff';
-      banner.style.borderTopColor = mork ? '#374151' : '#d1fae5';
+      banner.style.borderTopColor = mork ? '#374151' : '#e3eee8';
       banner.style.color          = mork ? '#d1d5db' : '#374151';
       var avslaaBtn = document.getElementById('cookie-decline');
       if (avslaaBtn) {

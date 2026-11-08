@@ -9,6 +9,7 @@ suiten fortsatt kan kjøres uten tredjepartspakker.
 
 import datetime
 import html
+import inspect
 import json
 import os
 import re
@@ -4117,6 +4118,18 @@ class TestSektorSnitt(unittest.TestCase):
         self.assertIn("1 aksje · snitt", oversikt)
         self.assertNotIn("1 aksjer", oversikt)
         self.assertNotIn("app-en", oversikt)
+
+    def test_aksjesidene_bruker_samme_snitt(self):
+        # EQNR sto med «under snittet for Energi-sektoren (10,4 %)» mens
+        # sektorsiden viste 6,6 %: aksjesidene tok med BlueNord (08.11.2026).
+        kart = {"Energi": [self.BNOR, self.VAR, self.AKRBP, self.NULL],
+                "Tom": [self.BNOR, self.NULL]}
+        snitt = fs.sektorsnitt_per_sektor(kart)
+        self.assertAlmostEqual(snitt["Energi"], fs.sektor_snitt_yield(kart["Energi"]))
+        self.assertAlmostEqual(snitt["Energi"], (9.26 + 6.27) / 2)
+        self.assertNotIn("Tom", snitt)
+        kilde = inspect.getsource(fs.generer_aksjesider)
+        self.assertIn("sektorsnitt_per_sektor(", kilde)
 
 
 class TestRangering(unittest.TestCase):

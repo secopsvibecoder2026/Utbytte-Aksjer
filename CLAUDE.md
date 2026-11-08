@@ -34,18 +34,53 @@ This is a Progressive Web App (PWA) for tracking Norwegian dividend-paying stock
 > was added on 2026-10-14: the «Alle sektorer» card on the front page carried
 > the Arctic teal as `rgba(46,123,123,0.07)`, which the hex-only grep never saw.
 
+**Muted palette (2026-11-08).** Tailwind's own green, amber and red were
+bright consumer colours and made the site look generated. `@theme` in
+`assets/tw-input.css` now redefines `green-*`, `amber-*` and `red-*`, so every
+existing class (`bg-green-700`, `text-amber-800`, `text-red-600` …) takes the
+muted value without touching the markup. `brand-*` is the same scale as
+`green-*`. Hand-written CSS, inline styles and the templates in
+`fetch_stocks.py` use the same hex values.
+
+| Step | green / brand | amber (warns) | red (down) |
+|---|---|---|---|
+| 50 | `#f3f7f5` | `#fbf8f0` | `#fbf4f3` |
+| 100 | `#e3eee8` | `#f5edd8` | `#f6e4e2` |
+| 200 | `#c6dccf` | `#ead9b0` | `#ebc7c3` |
+| 300 | `#9cc2ad` | `#dcc183` | `#dca19b` |
+| 400 | `#6fa98a` | `#cfa65a` | `#cf7a72` |
+| 500 | `#3f8a63` | `#b98a3a` | `#bd534a` |
+| 600 | `#2f7352` | `#9c7029` | `#a8433b` |
+| 700 | `#275f45` | `#805a22` | `#8e3831` |
+| 800 | `#214d39` | `#69491e` | `#74302b` |
+| 900 | `#1b3f2f` | `#573d1b` | `#602a26` |
+| 950 | `#0f251b` | `#30210f` | `#351513` |
+
+The green is a forest green at a hue of about 150°, well away from teal.
+
 | Role | Light mode | Dark mode | Tailwind class |
 |------|-----------|-----------|----------------|
-| Primary action / CTA | `#22c55e` (green-500) | `#22c55e` | `bg-green-500` |
-| Primary hover | `#16a34a` (green-600) | `#16a34a` | `bg-green-600` |
-| Dark emphasis | `#15803d` (green-700) | `#15803d` | `text-green-700` |
-| Hero accent / stats | `#86efac` (green-300) | `#86efac` | `text-green-300` |
-| Active tab/link | `#15803d` / `#16a34a` | `#4ade80` | `text-green-700` |
-| Link text | `#16a34a` (green-600) | `#4ade80` (green-400) | `text-green-600 dark:text-green-400` |
-| Background tint | `#f0fdf4` (green-50) | `rgba(20,83,45,0.2)` | `bg-green-50` |
-| Border accent | `#bbf7d0` (green-200) | `#166534` (green-800) | `border-green-200` |
-| Hero gradient | `linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #15803d 100%)` | — | — |
-| PWA theme-color | `#16a34a` | — | — |
+| Primary action / CTA | `#2f7352` (green-600) | `#2f7352` | `bg-green-600` |
+| Primary hover | `#275f45` (green-700) | `#275f45` | `bg-green-700` |
+| Link text | `#275f45` / `#2f7352` | `#6fa98a` (green-400) | `text-green-700 dark:text-green-400` |
+| Background tint | `#f3f7f5` (green-50) | `rgba(27,63,47,0.2)` | `bg-green-50` |
+| Border accent | `#c6dccf` (green-200) | `#214d39` (green-800) | `border-green-200` |
+| Hero (`/aksjer/`, `/aksjer/sektor/`) | flat `#1c2631`, border `#2a3542`; no gradient | — | — |
+| Icon tiles | `#f1f5f9` on `#475569`, one colour for all | `#273241` / `#cbd5e1` | `bg-slate-100 text-slate-600` |
+| PWA theme-color | `#2f7352` | — | — |
+
+**No decorative colours.** Blue, sky, indigo, violet, purple, fuchsia, pink,
+teal and cyan classes were converted to `slate-*`, orange and yellow to
+`amber-*`, rose to `red-*`, emerald to `green-*`. Do not bring them back for
+decoration; a new colour has to mean something.
+
+**Chart categories** keep distinct, muted colours: `SEKTOR_FARGE` and
+`CHART_FARGER` in `assets/ui.js`, `farger` in `visMiniSektorChart()` in
+`assets/portefolje.js`.
+
+**The logo keeps its own colours.** `.site-logo-x` and `.site-logo-dot` in
+`assets/style.css` stay `#16a34a` / `#4ade80`, as do the SVG files in `logo/`
+and the favicon. They are not part of the palette above; do not «fix» them.
 
 Gray scale (UI chrome, text, borders) uses standard Tailwind gray: `gray-50`→`gray-950`.
 
@@ -54,8 +89,8 @@ Gray scale (UI chrome, text, borders) uses standard Tailwind gray: `gray-50`→`
 buttons use `green-700`. Boxes are coloured only when the colour means something:
 amber warns, grey explains. Tickers are semibold `gray-900` / `gray-100`, not
 green monospace. Only the score keeps a pill. The stock page template and the
-app (`/app/`, since 2026-10-20) follow these rules; the hand-written pages still
-use the table above until they are converted. Chart series that need telling
+app (`/app/`, since 2026-10-20) follow these rules, and since 2026-11-08 the
+overview, sector and toplist templates and the calendar do too. Chart series that need telling
 apart (sector donut, OSEBX line) keep their palette.
 
 **Font: Inter, self-hosted** in `assets/fonts/` (variable, latin subset, SIL
