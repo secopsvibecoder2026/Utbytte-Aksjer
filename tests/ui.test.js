@@ -1157,3 +1157,15 @@ test('sektorsnittet: bare betalende, uten aksjer på vei ut (som sektorsidene)',
   assert.equal(sektorSnittYield([bnor, null0]), 0);
   assert.equal(hoyestYield([bnor, VAR, akrbp]).ticker, 'VAR');
 });
+
+test('appens «Gj.snitt yield» bruker samme regel som sektorsidene', () => {
+  // Kortet regnet snittet over alle som betaler, også BlueNord på vei ut
+  // (vedlikeholdsrapporten 05.11.2026).
+  const fsMod = require('fs');
+  const path = require('path');
+  const kode = fsMod.readFileSync(path.join(__dirname, '..', 'assets', 'ui.js'), 'utf8');
+  const start = kode.indexOf('function oppdaterGeneriskSammendrag(');
+  const kropp = kode.slice(start, kode.indexOf('\n}\n', start));
+  assert.match(kropp, /stat-snitt-yield[\s\S]*sektorSnittYield\(|sektorSnittYield\([\s\S]*stat-snitt-yield/);
+  assert.doesNotMatch(kropp, /medYield\.reduce\(/);
+});

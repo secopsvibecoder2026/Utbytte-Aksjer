@@ -3705,6 +3705,84 @@ class TestSitemapLastmod(unittest.TestCase):
         self.assertIn("<loc>https://exday.no/om/</loc>\n    <lastmod>2026-10-26</lastmod>", xml)
 
 
+class TestTallkontroll0211(unittest.TestCase):
+    """Funnene fra tallkontrollen 2026-11-02 (S1–S4) og vedlikeholdsrapporten 08.11."""
+
+    def wwi(self, **kw):
+        i = datetime.date.today().year
+        a = {
+            "ticker": "WWI", "navn": "Wilh. Wilhelmsen Holding", "sektor": "Industri",
+            "frekvens": "Halvårlig", "bors": "Oslo Børs", "pris": 860.0,
+            "utbytte_per_aksje": 28.0, "utbytte_yield": 3.24, "utbytte_12m": 28.0,
+            "snitt_yield_5ar": 1.18, "snitt_yield_ar": 5, "payout_ratio": 22,
+            "utbytte_vekst_5ar": 60.7, "ar_med_utbytte": 30,
+            "historiske_utbytter": [{"ar": i - 5 + k, "utbytte": v} for k, v in
+                                    enumerate([4.0, 6.0, 8.0, 12.0, 20.0, 28.0])],
+            "utbytte_per_ar": {str(i - 5 + k): v for k, v in enumerate([4.0, 6.0, 8.0, 12.0, 20.0])},
+            "kurs_historikk": [],
+        }
+        a.update(kw)
+        return a
+
+    def yar(self, **kw):
+        i = datetime.date.today().year
+        a = {
+            "ticker": "YAR", "navn": "Yara International ASA", "sektor": "Materialer",
+            "frekvens": "Årlig", "bors": "Oslo Børs", "pris": 400.0,
+            "utbytte_per_aksje": 22.0, "utbytte_yield": 5.5, "utbytte_12m": 22.0,
+            "payout_ratio": 60, "utbytte_vekst_5ar": -50.0, "ar_med_utbytte": 30,
+            "historiske_utbytter": [{"ar": i - 4, "utbytte": 40.0}, {"ar": i - 3, "utbytte": 15.0},
+                                    {"ar": i - 2, "utbytte": 10.0}, {"ar": i - 1, "utbytte": 5.0},
+                                    {"ar": i, "utbytte": 22.0}],
+            "utbytte_per_ar": {str(i - 4): 40.0, str(i - 3): 15.0, str(i - 2): 10.0, str(i - 1): 5.0},
+            "kurs_historikk": [],
+        }
+        a.update(kw)
+        return a
+
+    def test_s1_hoy_vekst_kalles_ikke_attraktiv(self):
+        side = fs._aksje_side_html(self.wwi(), datetime.date.today().isoformat())
+        self.assertNotIn("attraktivt for langsiktige reinvesteringsstrategier", side)
+        self.assertIn("regnet fra et lavt utgangspunkt", side)
+        moderat = fs._aksje_side_html(self.wwi(utbytte_vekst_5ar=12.0), datetime.date.today().isoformat())
+        self.assertIn("attraktivt for langsiktige reinvesteringsstrategier", moderat)
+
+    def test_s2_hevet_og_betalt_er_ikke_usikkert(self):
+        a = self.wwi()
+        self.assertTrue(fs.utbytte_hevet_og_betalt(a))
+        self.assertNotIn("ikke sikkert", " ".join(fs._selskapsrisikoer(a)))
+        # Høy payout, eller en rate som ikke er betalt, beholder advarselen.
+        for b in (self.wwi(payout_ratio=94), self.wwi(utbytte_12m=10.0)):
+            self.assertFalse(fs.utbytte_hevet_og_betalt(b))
+            self.assertIn("ikke sikkert", " ".join(fs._selskapsrisikoer(b)))
+
+    def test_s3_holdingselskaper_har_egen_bransje(self):
+        for t in ("WWI", "WWIB", "AKER"):
+            self.assertEqual(fs.BRANSJE.get(t), "holding")
+        self.assertIn("holding", fs._BRANSJE_DRIVER_UTDYPET)
+        self.assertIn("holding", fs.BRANSJE_RISIKOER)
+        side = fs._aksje_side_html(self.wwi(), datetime.date.today().isoformat())
+        self.assertIn("utbyttene det selv mottar", side)
+        self.assertNotIn("book-to-bill", side)
+
+    def test_s4_aarets_hoyere_utbytte_nevnes(self):
+        a = self.yar()
+        i = datetime.date.today().year
+        self.assertEqual(fs.aarets_oppgang(a), (i, 22.0, i - 1, 5.0))
+        tekst = fs._lag_utbyttehistorikk_tekst(a)
+        self.assertNotIn("lavere nå", tekst)
+        self.assertIn(f"For {i} er det betalt 22,00 kroner per aksje, mot 5,00 kroner for {i - 1}.", tekst)
+        side = fs._aksje_side_html(a, datetime.date.today().isoformat())
+        self.assertNotIn("setter seg inn i hva som har drevet nedgangen", side)
+        self.assertIn(f"men for {i} er det betalt 22,00 NOK, mot 5,00 NOK for {i - 1}", side)
+
+    def test_snitt_yield_paa_aksjer_teller_ikke_aksjer_paa_vei_ut(self):
+        self.assertIn("sektor_snitt_yield(aksjer)", inspect.getsource(fs.generer_aksjesider))
+
+    def test_ingen_med_andre_ord(self):
+        self.assertNotIn("Med andre ord", inspect.getsource(fs))
+
+
 class TestTallkontroll2610(unittest.TestCase):
     """Funnene fra tallkontrollen 2026-10-26."""
 

@@ -2496,6 +2496,41 @@ No page threw an error. Fixed:
 
 Tests: `TestRangering` (2), `TestProsentformat` (2) and `ui.test.js` (+4).
 
+## From the tallkontroll of 2026-11-02
+
+Four sentence patterns that contradicted the page they stood on, all fixed in
+the template with a test that failed before (`TestTallkontroll0211`, 6):
+
+- **S1. «Attraktivt for langsiktige reinvesteringsstrategier» above
+  `VEKST_FRAMSKRIV_MAKS`** (10 stocks). WWI had +60,7 % a year, and «Passer
+  for» on the same page said the rate cannot be projected. Above 25 % the
+  assessment now says the growth is measured from a low starting point.
+- **S2. «Et utbytte så langt over det selskapet pleier å betale, er ikke
+  sikkert å holde» after a raise that was paid** (WWI, WWIB, BWO, NORBT,
+  SBNOR). `utbytte_hevet_og_betalt()` stops the risk point when the last whole
+  year is above the first with no cut, the last 12 months paid at least 80 %
+  of the rate, and payout is known and at most 80 %. SUBC, PARB, MEDI, PROT
+  and SOGN keep it.
+- **S3. Industry text about order intake on holding companies.** `bransje`
+  `holding` for WWI, WWIB and AKER: the dividend follows what the largest
+  holdings pay. `investeringsselskap` (AKAST) is for companies whose
+  dividend comes from sales.
+- **S4. «Utbyttet er lavere nå» and «har falt med 50 % per år» on YAR, which
+  paid 22,00 kr in 2026 against 5,00 for 2025** (also AFK, GYL).
+  `aarets_oppgang()` mirrors `aarets_nedgang()`. The history text says «gikk
+  ned fra … i 2022 til … i 2025» and adds «For 2026 er det betalt …», and the
+  assessment names this year's payment. 37 annual payers now get that
+  sentence when this year is more than 5 % above last year. The key figure
+  «Utbyttevekst 5 år» is unchanged, since it is defined on whole years.
+
+Also: the app's «Gj.snitt yield» and the hero on `/aksjer/` use
+`sektorSnittYield()` / `sektor_snitt_yield()`, so stocks that are leaving no
+longer count (BlueNord). «Med andre ord» is gone from the frequency article.
+
+**Left open:** WWI shows 28 kr and WWIB 20 kr «annualisert» for the same
+payments, because the «additional» notice is classified on one issuer only.
+Whether 20 or 28 is the annual rate is a reading of the company's policy.
+
 ## App review of 2026-10-20
 
 Every tab, sub-tab and fourteen stock modals were opened with Playwright at
