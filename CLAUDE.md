@@ -1126,7 +1126,7 @@ dividends in shipping.
 ### `uten_utbyttebevis()` — which pages stay out of the index
 
 Six pages carry no yield, no history and no year count: ACR, AFISH, BWE,
-CADLR, ISLAX, KMAR. They get `noindex,follow` and drop out of the sitemap.
+CDLR (Cadeler, CADLR until 5.11.2026), ISLAX, KMAR. They get `noindex,follow` and drop out of the sitemap.
 (It was seven until the `ticker_yf` fix below; DOF returned on the first
 successful fetch — 134,40 kr, 10,31 % yield — and is indexed again.)
 Not deleted — they remain for direct visits and the app, and `follow` keeps the
@@ -2176,8 +2176,12 @@ against the source before it was fixed:
 - **ELMRA's event text was out of date.** Fortum completed settlement on 23
   October (NewsWeb 684676) and holds 96,1 % excluding treasury shares
   (91,9 % of all shares). Compulsory acquisition and delisting follow, with no
-  date yet. Do not move ELMRA to `/avnoteringer/` before a last trading day is
-  announced.
+  date yet. **Settled 2026-11-08:** Oslo Børs struck the shares from 9
+  November, last trading day 6 November (685721). ELMRA is out of the catalog
+  and on `/avnoteringer/`. It was the only stock in Forsyning, so
+  `/aksjer/sektor/forsyning/` is now a hand-written redirect to
+  `/aksjer/sektor/`, and the card on `/utforsk/` and the sector in
+  `/verktoy/sektorrebalansering/` are gone.
 - **Cadeler had no event.** Cadeler plc offers one new share per share to move
   the parent company from Denmark to the United Kingdom; 89,5 % had been
   tendered on 21 October against a condition of at least 90 %, the deadline is 28 October
@@ -2185,9 +2189,11 @@ against the source before it was fixed:
   `bytte_av_hjemland`, keeps the goals, since the history still applies. The
   company says existing ASK holders may keep the new shares on the account,
   but new purchases must be made on an ordinary account (683905). The
-  company text no longer says «fra slutten av oktober». **When Cadeler plc
-  starts trading**, the ticker, `ticker_yf`, `inkorporeringsland` and
-  `ask_egnet` must be changed by hand, and the event removed.
+  company text no longer says «fra slutten av oktober». **Done 2026-11-08:**
+  Cadeler plc has traded as `CDLR` (ISIN GB00BN49H029) since 5 November
+  (685658). The row is now `CDLR`/`CDLR.OL`, «Cadeler plc», Storbritannia,
+  `ask_egnet: false`, without the event. `/aksjer/CADLR/` is a hand-written
+  redirect to `/aksjer/CDLR/`, and the change is on `/avnoteringer/`.
 - **The subtitle said «Oslo Børs» on all 155 stock pages**, also for the 14 on
   Euronext Growth. It now reads `bors`. The app's «Aksjer sporet» says
   «Oslo Børs og Euronext Growth» when the catalog holds both
