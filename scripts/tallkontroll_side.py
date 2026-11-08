@@ -12,7 +12,7 @@ lik ut uansett hvilken økt som skriver den.
     python scripts/tallkontroll_side.py rapport.md --dato 2026-10-05 > side.html
     python scripts/tallkontroll_side.py rapport.md --type vedlikehold --dato 2026-10-11 > side.html
 
-Den daglige vedlikeholdsrunden (`.claude/agents/vedlikehold.md`) bruker samme
+Den ukentlige vedlikeholdsrunden (`.claude/agents/vedlikehold.md`) bruker samme
 side med `--type vedlikehold`: samme utseende og samme escaping, egen tittel.
 
 Markdown-støtten er bevisst liten: overskrifter, avsnitt, punktlister,
@@ -196,14 +196,15 @@ RAPPORTTYPER = {
     },
     "vedlikehold": {
         "tittel": "Vedlikehold",
-        "merke": "exday.no · daglig vedlikehold",
-        "ingress": "Gårsdagens kjøringer, aksjer på vei inn og ut av Oslo Børs, feil "
-                   "funnet på siden og i appen, og ett forslag til forbedring.",
+        "merke": "exday.no · ukentlig vedlikehold",
+        "ingress": "Ukens kjøringer, aksjer på vei inn og ut av Oslo Børs, feil "
+                   "funnet på siden og i appen, åpne funn fra tallkontrollen og "
+                   "ett forslag til forbedring.",
         "neste": "Neste runde",
-        "tom": "Ingen rapport ennå. Den første fra den daglige runden kommer hit så "
+        "tom": "Ingen rapport ennå. Den første fra den ukentlige runden kommer hit så "
                "snart den er kjørt.",
         "bunn": "Skrevet av vedlikeholdsagenten (<code>.claude/agents/vedlikehold.md</code>). "
-                "Siden erstattes hver dag. Agenten leser og foreslår, men endrer ingenting; "
+                "Siden erstattes hver uke. Agenten leser og foreslår, men endrer ingenting; "
                 "rettingene gjøres i en egen økt.",
     },
 }

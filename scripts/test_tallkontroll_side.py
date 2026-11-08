@@ -81,7 +81,8 @@ class TestSide(unittest.TestCase):
         self.assertTrue(s.startswith("<title>Vedlikehold exday.no</title>"))
         self.assertIn("Vedlikehold 11. oktober 2026", s)
         self.assertIn("Neste runde: 12. oktober 2026.", s)
-        self.assertIn("daglig vedlikehold", s)
+        self.assertIn("ukentlig vedlikehold", s)
+        self.assertIn("erstattes hver uke", s)
         self.assertNotIn("Tallkontroll", s)
 
     def test_standard_er_fortsatt_tallkontroll(self):
