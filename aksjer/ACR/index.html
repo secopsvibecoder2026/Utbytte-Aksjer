@@ -26,7 +26,7 @@
   <meta name="description" content="Axactor (ACR) — utbytte, nøkkeltall og historikk. Oppdatert daglig."/>
   <meta name="robots" content="noindex,follow"/>
   <link rel="canonical" href="https://exday.no/aksjer/ACR/"/>
-  <meta name="theme-color" content="#16a34a"/>
+  <meta name="theme-color" content="#2f7352"/>
   <link rel="icon" type="image/png" sizes="512x512" href="/favicon.png"/>
   <link rel="icon" type="image/png" sizes="180x180" href="/logo/apple_touch_icon_180.png"/>
   <link rel="icon" type="image/svg+xml" href="/logo/exday_icon_primary.svg"/>
@@ -101,7 +101,7 @@
     body { font-family: "Inter", system-ui, -apple-system, sans-serif; line-height: 1.6; }
     /* Lenker og knapper i green-700: roligere enn green-600, og grønt er
        ellers forbeholdt retning (kursgrafen) og aksenter (STYLE.md). */
-    a { color: #15803d; text-decoration: none; }
+    a { color: #275f45; text-decoration: none; }
     a:hover { text-decoration: underline; }
     .wrap { max-width: 760px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
     .breadcrumb { font-size: 0.85rem; color: #6b7280; margin-bottom: 1.5rem; }
@@ -157,18 +157,18 @@
     th { padding: 0.6rem 1rem; text-align: left; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; }
     td { padding: 0.6rem 1rem; border-top: 1px solid; }
     .cta { text-align: center; margin-top: 2rem; padding: 1.5rem; border-radius: 0.75rem; border: 1px solid; }
-    .cta a { display: inline-block; background: #15803d; color: #fff !important; font-weight: 600; padding: 0.65rem 1.5rem; border-radius: 0.5rem; text-decoration: none; }
-    .cta a:hover { background: #166534; }
+    .cta a { display: inline-block; background: #275f45; color: #fff !important; font-weight: 600; padding: 0.65rem 1.5rem; border-radius: 0.5rem; text-decoration: none; }
+    .cta a:hover { background: #214d39; }
     .updated { font-size: 0.78rem; text-align: right; margin-top: 1rem; }
     .mini-nav { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.5rem; font-size: 0.85rem; }
     .utbytte-sep { display: flex; align-items: center; gap: 0.75rem; margin: 1.75rem 0 1.25rem; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #9ca3af; }
     .utbytte-sep::before, .utbytte-sep::after { content: ''; flex: 1; height: 1px; background: #e5e7eb; }
     .dark .utbytte-sep { color: #6b7280; }
     .dark .utbytte-sep::before, .dark .utbytte-sep::after { background: #1f2937; }
-    .mini-nav a { color: #15803d; }
-    .til-toppen { position: fixed; bottom: 1.5rem; right: 1.25rem; z-index: 40; background: #15803d; color: #fff; border: none; border-radius: 9999px; width: 2.5rem; height: 2.5rem; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.18); opacity: 0; pointer-events: none; transition: opacity 0.2s; }
+    .mini-nav a { color: #275f45; }
+    .til-toppen { position: fixed; bottom: 1.5rem; right: 1.25rem; z-index: 40; background: #275f45; color: #fff; border: none; border-radius: 9999px; width: 2.5rem; height: 2.5rem; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.18); opacity: 0; pointer-events: none; transition: opacity 0.2s; }
     .til-toppen.synlig { opacity: 1; pointer-events: auto; }
-    .til-toppen:hover { background: #166534; }
+    .til-toppen:hover { background: #214d39; }
     .profil-seksjon { margin: 1.5rem 0; }
     .profil-badges { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem; }
     .profil-badge { font-size: 0.75rem; font-weight: 600; padding: 0.25rem 0.75rem; border-radius: 9999px; }
@@ -190,12 +190,12 @@
     .rekke-seksjon p:last-child, .nedtur-seksjon p:last-child, .utbetalingsaar-seksjon p:last-child, .delaar-seksjon p:last-child { margin-bottom: 0; }
     .dark .rekke-seksjon, .dark .nedtur-seksjon, .dark .utbetalingsaar-seksjon, .dark .delaar-seksjon, .dark .betalt-seksjon { background: #0f172a; border-color: #1e293b; }
     .dark .rekke-seksjon p, .dark .nedtur-seksjon p, .dark .utbetalingsaar-seksjon p, .dark .delaar-seksjon p, .dark .betalt-seksjon p { color: #cbd5e1; }
-    .rekke-seksjon { border-left: 3px solid #22c55e; }
-    .nedtur-seksjon { border-left: 3px solid #f59e0b; }
-    .delaar-seksjon { border-left: 3px solid #f59e0b; }
+    .rekke-seksjon { border-left: 3px solid #3f8a63; }
+    .nedtur-seksjon { border-left: 3px solid #b98a3a; }
+    .delaar-seksjon { border-left: 3px solid #b98a3a; }
     /* Den mørke regelen over setter border-color på alle sider og tok med seg
        den gule kanten; varselet så ut som en vanlig boks (2026-10-19). */
-    .dark .delaar-seksjon { border-left-color: #f59e0b; }
+    .dark .delaar-seksjon { border-left-color: #b98a3a; }
     .betalt-seksjon .betalt-tabell { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; font-size: 0.875rem; margin: 0.25rem 0 0.5rem; }
     .betalt-seksjon .betalt-tabell th, .betalt-seksjon .betalt-tabell td { text-align: left; padding: 0.45rem 0.75rem; }
     .betalt-seksjon .betalt-tabell td:not(:first-child), .betalt-seksjon .betalt-tabell th:not(:first-child) { white-space: nowrap; text-align: right; }
@@ -212,9 +212,9 @@
     .dark .hendelse-seksjon p.hendelse-kilde { color: #9ca3af; }
     .mnd-strip { display: grid; grid-template-columns: repeat(12, 1fr); gap: 2px; margin-bottom: 0.85rem; }
     .mnd-celle { text-align: center; padding: 0.4rem 0.1rem; font-size: 0.62rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.02em; color: #9ca3af; background: #f1f5f9; border-radius: 0.25rem; }
-    .mnd-celle.mnd-ja { background: #15803d; color: #fff; }
+    .mnd-celle.mnd-ja { background: #275f45; color: #fff; }
     .dark .mnd-celle { background: #1e293b; color: #64748b; }
-    .dark .mnd-celle.mnd-ja { background: #15803d; color: #fff; }
+    .dark .mnd-celle.mnd-ja { background: #275f45; color: #fff; }
     @media (max-width: 480px) { .mnd-strip { grid-template-columns: repeat(6, 1fr); } }
     .driver-seksjon { margin: 1.5rem 0; }
     .driver-seksjon h2 { font-size: 1rem; font-weight: 700; margin-bottom: 0.6rem; }
@@ -223,26 +223,26 @@
     .passer-seksjon { margin: 1.5rem 0; }
     .passer-seksjon h2 { font-size: 1rem; font-weight: 700; margin-bottom: 0.6rem; }
     .passer-liste { list-style: none; padding: 0; margin: 0; }
-    .passer-liste li { font-size: 0.875rem; padding: 0.45rem 0.75rem; border-left: 3px solid #86efac; margin-bottom: 0.4rem; line-height: 1.5; color: #374151; }
-    .dark .passer-liste li { color: #d1d5db; border-left-color: #166534; }
+    .passer-liste li { font-size: 0.875rem; padding: 0.45rem 0.75rem; border-left: 3px solid #9cc2ad; margin-bottom: 0.4rem; line-height: 1.5; color: #374151; }
+    .dark .passer-liste li { color: #d1d5db; border-left-color: #214d39; }
     .risiko-seksjon { margin: 1.5rem 0; }
     .risiko-liste { list-style: none; padding: 0; margin: 0; }
-    .risiko-liste li { font-size: 0.875rem; padding: 0.5rem 0.75rem; border-left: 3px solid #fca5a5; margin-bottom: 0.5rem; line-height: 1.5; }
+    .risiko-liste li { font-size: 0.875rem; padding: 0.5rem 0.75rem; border-left: 3px solid #dca19b; margin-bottom: 0.5rem; line-height: 1.5; }
     .kontoer-seksjon { margin: 1.5rem 0; }
     .kontoer-seksjon h2 { font-size: 1rem; font-weight: 700; margin-bottom: 0.75rem; }
-    .konto-rad { display: flex; gap: 0.85rem; align-items: flex-start; padding: 0.85rem 1rem; border: 1px solid #d1fae5; border-radius: 0.65rem; margin-bottom: 0.5rem; background: #f0fdf4; }
-    .konto-rad.konto-ikke { border-color: #fca5a5; background: #fff1f2; }
+    .konto-rad { display: flex; gap: 0.85rem; align-items: flex-start; padding: 0.85rem 1rem; border: 1px solid #e3eee8; border-radius: 0.65rem; margin-bottom: 0.5rem; background: #f3f7f5; }
+    .konto-rad.konto-ikke { border-color: #dca19b; background: #fbf4f3; }
     .konto-rad strong { font-size: 0.875rem; }
     .konto-rad p { font-size: 0.8rem; color: #4b5563; margin: 0.2rem 0 0; line-height: 1.5; }
-    .konto-ok { font-size: 1rem; color: #16a34a; flex-shrink: 0; margin-top: 0.1rem; }
-    .konto-nei { font-size: 1rem; color: #dc2626; flex-shrink: 0; margin-top: 0.1rem; }
-    .dark .konto-rad { background: #052e16; border-color: #166534; }
+    .konto-ok { font-size: 1rem; color: #2f7352; flex-shrink: 0; margin-top: 0.1rem; }
+    .konto-nei { font-size: 1rem; color: #a8433b; flex-shrink: 0; margin-top: 0.1rem; }
+    .dark .konto-rad { background: #0f251b; border-color: #214d39; }
     .dark .konto-rad p { color: #9ca3af; }
-    .dark .konto-rad.konto-ikke { background: #2d0a0a; border-color: #7f1d1d; }
-    .konto-rad.konto-uavklart { border-color: #fde68a; background: #fffbeb; }
-    .konto-usikker { font-size: 1rem; font-weight: 700; color: #b45309; flex-shrink: 0; margin-top: 0.1rem; }
-    .dark .konto-rad.konto-uavklart { background: #2a1f05; border-color: #78350f; }
-    .dark .konto-usikker { color: #fbbf24; }
+    .dark .konto-rad.konto-ikke { background: #2d0a0a; border-color: #602a26; }
+    .konto-rad.konto-uavklart { border-color: #ead9b0; background: #fbf8f0; }
+    .konto-usikker { font-size: 1rem; font-weight: 700; color: #805a22; flex-shrink: 0; margin-top: 0.1rem; }
+    .dark .konto-rad.konto-uavklart { background: #2a1f05; border-color: #573d1b; }
+    .dark .konto-usikker { color: #cfa65a; }
     .investor-profil-seksjon { margin: 1rem 0; }
     .investor-badges-rad { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.75rem; }
     .investor-forklaring { border-radius: 0.6rem; padding: 0.75rem 1rem; margin-bottom: 0.6rem; border: 1px solid; }
@@ -263,19 +263,19 @@
     .investor-mal-tekst { font-size: 0.8rem; color: #4b5563; line-height: 1.45; margin-top: 0.15rem; }
     .dark .investor-mal-tekst { color: #9ca3af; }
     .investor-badge { display: inline-flex; align-items: center; padding: 0.2rem 0.7rem; border-radius: 9999px; font-size: 0.73rem; font-weight: 600; border: 1px solid; }
-    .investor-risiko-lav { background: #dcfce7; color: #15803d; border-color: #86efac; }
-    .investor-risiko-moderat { background: #fef3c7; color: #92400e; border-color: #fcd34d; }
-    .investor-risiko-hoy { background: #fee2e2; color: #991b1b; border-color: #fca5a5; }
+    .investor-risiko-lav { background: #e3eee8; color: #275f45; border-color: #9cc2ad; }
+    .investor-risiko-moderat { background: #f5edd8; color: #69491e; border-color: #dcc183; }
+    .investor-risiko-hoy { background: #f6e4e2; color: #74302b; border-color: #dca19b; }
     .investor-mal { background: #f3f4f6; color: #374151; border-color: #e5e7eb; }
-    .dark .investor-risiko-lav { background: #052e16; color: #86efac; border-color: #166534; }
-    .dark .investor-risiko-moderat { background: #451a03; color: #fcd34d; border-color: #92400e; }
-    .dark .investor-risiko-hoy { background: #2d0a0a; color: #fca5a5; border-color: #7f1d1d; }
+    .dark .investor-risiko-lav { background: #0f251b; color: #9cc2ad; border-color: #214d39; }
+    .dark .investor-risiko-moderat { background: #30210f; color: #dcc183; border-color: #69491e; }
+    .dark .investor-risiko-hoy { background: #2d0a0a; color: #dca19b; border-color: #602a26; }
     .dark .investor-mal { background: #1f2937; color: #d1d5db; border-color: #374151; }
     .relaterte { margin: 1.5rem 0; }
     .relaterte h2 { margin-bottom: 0.75rem; }
     .rel-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 0.75rem; }
     .rel-kort { border-radius: 0.75rem; padding: 0.75rem 1rem; border: 1px solid; display: flex; flex-direction: column; gap: 0.2rem; text-decoration: none; transition: border-color 0.15s; }
-    .rel-kort:hover { border-color: #16a34a; text-decoration: none; }
+    .rel-kort:hover { border-color: #2f7352; text-decoration: none; }
     .rel-ticker { font-weight: 700; font-size: 1rem; color: #111827; }
     .rel-navn { font-size: 0.75rem; }
     .rel-yield { font-size: 0.8rem; font-weight: 600; color: #374151; font-variant-numeric: tabular-nums; }
@@ -307,7 +307,7 @@
     .faq-svar { padding: 0.75rem 1.25rem 1rem; font-size: 0.85rem; color: #4b5563; line-height: 1.65; border-top: 1px solid #f3f4f6; }
     .rel-kort { background: #fff; border-color: #e5e7eb; }
     .rel-navn { color: #6b7280; }
-    .badge { background: #dcfce7; color: #15803d; }
+    .badge { background: #e3eee8; color: #275f45; }
     .kurs-lenker { margin: 1.5rem 0; }
     .kurs-lenker h2 { margin-bottom: 0.75rem; }
     .kp-btn { font-size: 0.72rem; font-weight: 500; padding: 0.2rem 0.55rem; border-radius: 6px; border: none; cursor: pointer; background: transparent; color: #6b7280; transition: background 0.12s, color 0.12s; }
@@ -339,15 +339,15 @@
     .dark .breadcrumb { color: #9ca3af; }
     .dark .breadcrumb a { color: #9ca3af; }
     .dark .sub { color: #9ca3af; }
-    .dark .badge { background: #14532d; color: #86efac; }
-    .dark a { color: #4ade80; }
-    .dark .cta a { background: #15803d; color: #fff !important; }
+    .dark .badge { background: #1b3f2f; color: #9cc2ad; }
+    .dark a { color: #6fa98a; }
+    .dark .cta a { background: #275f45; color: #fff !important; }
     .dark .ytick { stroke: #1f2937; }
-    .dark .hbar { fill: #22c55e; }
+    .dark .hbar { fill: #3f8a63; }
     .dark .profil-badge { background: #1f2937; color: #d1d5db; border-color: #374151; }
     .dark .profil-tekst { color: #9ca3af; }
     .dark .historikk-prosa p { color: #9ca3af; }
-    .dark .risiko-liste li { border-left-color: #7f1d1d; color: #9ca3af; }
+    .dark .risiko-liste li { border-left-color: #602a26; color: #9ca3af; }
     .dark .rel-kort { background: #111827; border-color: #1f2937; }
     .dark .rel-navn { color: #9ca3af; }
     .dark .faq h2 { color: #d1d5db; }
@@ -435,7 +435,7 @@
   <h1>ACR – Axactor ASA</h1>
   <p class="sub">Finans · Uregelmessig utbytte · Oslo Børs</p>
 
-  <div class="kurshode"><div class="kh-topp"><div><div class="kh-pris">4,26<span class="kh-valuta">NOK</span></div><div class="kh-meta">Kurs 6. nov 2026</div></div><div class="kh-spenn" aria-label="52 ukers spenn fra 3,90 til 8,60"><span class="kh-spenn-tekst">52 uker</span><span class="kh-spenn-tall">3,90</span><span class="kh-spenn-linje"><span class="kh-spenn-punkt" style="left:7.7%"></span></span><span class="kh-spenn-tall">8,60</span></div></div><dl class="kh-tall"><div><dt>Yield</dt><dd>—</dd></div><div><dt>Utbytte/aksje</dt><dd>0,00 NOK</dd></div><div><dt>Ex-dato</dt><dd><span class="kh-ukjent">Ikke kjent</span></dd></div></dl></div>
+  <div class="kurshode"><div class="kh-topp"><div><div class="kh-pris">4,26<span class="kh-valuta">NOK</span></div><div class="kh-meta">Kurs 8. nov 2026</div></div><div class="kh-spenn" aria-label="52 ukers spenn fra 3,90 til 8,60"><span class="kh-spenn-tekst">52 uker</span><span class="kh-spenn-tall">3,90</span><span class="kh-spenn-linje"><span class="kh-spenn-punkt" style="left:7.7%"></span></span><span class="kh-spenn-tall">8,60</span></div></div><dl class="kh-tall"><div><dt>Yield</dt><dd>—</dd></div><div><dt>Utbytte/aksje</dt><dd>0,00 NOK</dd></div><div><dt>Ex-dato</dt><dd><span class="kh-ukjent">Ikke kjent</span></dd></div></dl></div>
 
   <nav class="ak-tabnav" id="ak-tabnav" aria-label="Sideseksjoner">
     <a href="#oversikt" class="ak-tab aktiv">Oversikt</a>
@@ -478,7 +478,7 @@
       var PERIODER = {'1ar':'Siste år','ytd':'Hittil i år','2ar':'Siste 2 år','3ar':'Siste 3 år','5ar':'Siste 5 år'};
       var pr = data.map(function(x){return x.k;}), da = data.map(function(x){return x.d;}), n=pr.length;
       var mn=Math.min.apply(null,pr), mx=Math.max.apply(null,pr), rng=mx-mn||1;
-      var opp=pr[n-1]>=pr[0], fg=opp?'#22c55e':'#ef4444';
+      var opp=pr[n-1]>=pr[0], fg=opp?'#3f8a63':'#bd534a';
       var end=((pr[n-1]-pr[0])/pr[0]*100).toLocaleString('nb-NO',{minimumFractionDigits:1,maximumFractionDigits:1});
       var hdr=document.getElementById('kurs-header-ACR');
       var dkHdr=document.documentElement.classList.contains('dark');
@@ -498,7 +498,7 @@
       ctx.fillStyle=dk?'#6b7280':'#9ca3af'; ctx.font='11px Inter, system-ui, sans-serif'; ctx.textAlign='right';
       [[mn,sy(mn)],[(mn+mx)/2,sy((mn+mx)/2)],[mx,sy(mx)]].forEach(function(pair){ctx.fillText(pair[0].toLocaleString('nb-NO',{maximumFractionDigits:0}),pL-4,pair[1]+4);});
       var grad=ctx.createLinearGradient(0,pT,0,CH-pB);
-      grad.addColorStop(0,opp?'rgba(34,197,94,0.12)':'rgba(239,68,68,0.1)'); grad.addColorStop(1,'rgba(0,0,0,0)');
+      grad.addColorStop(0,opp?'rgba(63,138,99,0.12)':'rgba(189,83,74,0.1)'); grad.addColorStop(1,'rgba(0,0,0,0)');
       ctx.beginPath(); ctx.moveTo(sx(0),CH-pB);
       pr.forEach(function(p,i){ctx.lineTo(sx(i),sy(p));});
       ctx.lineTo(sx(n-1),CH-pB); ctx.closePath(); ctx.fillStyle=grad; ctx.fill();
@@ -591,7 +591,7 @@
     <a href="https://exday.no/app/?aksje=ACR">Åpne ACR i exday.no →</a>
   </div>
 
-  <p class="updated">Tallene er hentet 6. november 2026</p>
+  <p class="updated">Tallene er hentet 8. november 2026</p>
   <footer style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid #e5e7eb;font-size:0.78rem;text-align:center;color:#9ca3af;line-height:1.6;" class="std-footer">
     <p>Kurs og utbyttedata hentes fra Yahoo Finance og Euronext. Oppdateres daglig på børsdager.</p>
     <p style="max-width:36rem;margin:0.4rem auto;">

@@ -25,7 +25,7 @@
   <title>Norske utbytteaksjer etter sektor | exday.no</title>
   <meta name="description" content="Finn norske utbytteaksjer på Oslo Børs sortert etter sektor — energi, finans, shipping, havbruk og mer."/>
   <link rel="canonical" href="https://exday.no/aksjer/sektor/"/>
-  <meta name="theme-color" content="#16a34a"/>
+  <meta name="theme-color" content="#2f7352"/>
   <link rel="icon" type="image/png" sizes="512x512" href="/favicon.png"/>
   <link rel="icon" type="image/png" sizes="180x180" href="/logo/apple_touch_icon_180.png"/>
   <link rel="icon" type="image/svg+xml" href="/logo/exday_icon_primary.svg"/>
@@ -44,11 +44,12 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; line-height: 1.6; background: #f8fafc; color: #0f172a; }
-    a { color: #16a34a; text-decoration: none; }
+    a { color: #2f7352; text-decoration: none; }
     a:hover { text-decoration: underline; }
     .wrap { max-width: 1100px; margin: 0 auto; padding: 1rem 1rem 2rem; }
     .hero {
-      background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #15803d 100%);
+      background: #1c2631;
+      border: 1px solid #2a3542;
       color: #fff;
       border-radius: 1rem;
       padding: 2rem 1.5rem;
@@ -75,43 +76,43 @@
       color: inherit;
     }
     .sektor-kort:hover {
-      border-color: #22c55e;
-      box-shadow: 0 4px 14px rgba(34,197,94,0.1);
+      border-color: #3f8a63;
+      box-shadow: 0 4px 14px rgba(63,138,99,0.1);
       transform: translateY(-2px);
     }
     .sk-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; }
-    .sk-ikon { width: 1.5rem; height: 1.5rem; flex-shrink: 0; color: #16a34a; }
-    .dark .sk-ikon { color: #4ade80; }
+    .sk-ikon { width: 1.5rem; height: 1.5rem; flex-shrink: 0; color: #2f7352; }
+    .dark .sk-ikon { color: #6fa98a; }
     .sk-tekst { flex: 1; min-width: 0; }
     .sk-navn { font-weight: 700; font-size: 1rem; color: #0f172a; }
     .sk-antall { font-size: 0.78rem; color: #64748b; margin-top: 0.1rem; }
     .sk-arrow { color: #94a3b8; font-size: 1.1rem; flex-shrink: 0; }
-    .sektor-kort:hover .sk-arrow { color: #22c55e; transform: translateX(2px); transition: all 0.15s; }
+    .sektor-kort:hover .sk-arrow { color: #3f8a63; transform: translateX(2px); transition: all 0.15s; }
     .sk-topp { font-size: 0.72rem; color: #94a3b8; padding-top: 0.4rem; border-top: 1px solid #f1f5f9; font-family: ui-monospace, monospace; }
     .info-bar {
       display: flex; align-items: flex-start; gap: 0.75rem;
       background: #f0fafb;
       border: 1px solid #ccebec;
-      border-left: 4px solid #22c55e;
+      border-left: 4px solid #3f8a63;
       border-radius: 0.6rem;
       padding: 0.85rem 1rem;
       margin-bottom: 2rem;
       font-size: 0.85rem;
-      color: #134e4a;
+      color: #0f172a;
       line-height: 1.5;
     }
     .info-bar svg { flex-shrink: 0; margin-top: 2px; }
     .info-bar strong { color: #0f172a; }
     /* Dark mode */
     .dark body { background: #0f172a; color: #f1f5f9; }
-    .dark a { color: #4ade80; }
+    .dark a { color: #6fa98a; }
     .dark .breadcrumb, .dark .breadcrumb a { color: #94a3b8; }
     .dark .sektor-kort { background: #1e293b; border-color: #334155; }
-    .dark .sektor-kort:hover { border-color: #22c55e; }
+    .dark .sektor-kort:hover { border-color: #3f8a63; }
     .dark .sk-navn { color: #f1f5f9; }
     .dark .sk-antall, .dark .sk-topp { color: #94a3b8; }
     .dark .sk-topp { border-color: #334155; }
-    .dark .info-bar { background: rgba(34,197,94,0.12); border-color: rgba(34,197,94,0.4); color: #4ade80; }
+    .dark .info-bar { background: rgba(63,138,99,0.12); border-color: rgba(63,138,99,0.4); color: #6fa98a; }
     .dark .info-bar strong { color: #f1f5f9; }
     .sektor-om { margin: 2rem 0 0.5rem; }
     .sektor-om h2 { font-size: 1.1rem; font-weight: 700; color: #0f172a; margin: 0 0 0.6rem; }
@@ -235,18 +236,18 @@
         </div>
         <span class="sk-arrow">→</span>
       </div>
-      <div class="sk-topp">Topp: HAFNI, HSHP, BWLPG</div>
+      <div class="sk-topp">Topp: HSHP, HAFNI, BWLPG</div>
     </a>
     <a href="/aksjer/sektor/energitjenester/" class="sektor-kort">
       <div class="sk-header">
         <span class="sk-ikon"><svg class="sk-ikon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3a5 5 0 00-4.6 7L3 17.4 5.6 20l7.4-7.4A5 5 0 1015 3z"/></svg></span>
         <div class="sk-tekst">
           <div class="sk-navn">Energitjenester</div>
-          <div class="sk-antall">18 aksjer · snitt 8,4 %</div>
+          <div class="sk-antall">18 aksjer · snitt 8,6 %</div>
         </div>
         <span class="sk-arrow">→</span>
       </div>
-      <div class="sk-topp">Topp: PLSV, DOF, ARCH</div>
+      <div class="sk-topp">Topp: PLSV, SOMA, DOF</div>
     </a>
     <a href="/aksjer/sektor/informasjonsteknologi/" class="sektor-kort">
       <div class="sk-header">
@@ -382,7 +383,7 @@
     kommer igjen. Hver sektorside viser alle aksjene sortert etter direkteavkastning, kommende
     ex-datoer der de er kjent, og hva som driver utbyttet i akkurat den sektoren.</p>
   </section>
-  <p class="updated">Tallene er hentet 6. november 2026</p>
+  <p class="updated">Tallene er hentet 8. november 2026</p>
   <footer style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid #e5e7eb;font-size:0.78rem;text-align:center;color:#9ca3af;line-height:1.6;" class="std-footer">
     <p>Kurs og utbyttedata hentes fra Yahoo Finance og Euronext. Oppdateres daglig på børsdager.</p>
     <p style="max-width:36rem;margin:0.4rem auto;">

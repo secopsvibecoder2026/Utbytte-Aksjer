@@ -25,7 +25,7 @@
   <title>Aksjer med høyest utbytte på Oslo Børs | exday.no</title>
   <meta name="description" content="De 20 norske aksjene med høyest utbytteyield på Oslo Børs akkurat nå. Oppdatert daglig."/>
   <link rel="canonical" href="https://exday.no/aksjer/hoyest-utbytte/"/>
-  <meta name="theme-color" content="#16a34a"/>
+  <meta name="theme-color" content="#2f7352"/>
   <link rel="icon" type="image/png" sizes="512x512" href="/favicon.png"/>
   <link rel="icon" type="image/png" sizes="180x180" href="/logo/apple_touch_icon_180.png"/>
   <link rel="icon" type="image/svg+xml" href="/logo/exday_icon_primary.svg"/>
@@ -58,7 +58,7 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: system-ui, -apple-system, sans-serif; line-height: 1.6; }
-    a { color: #16a34a; text-decoration: none; }
+    a { color: #2f7352; text-decoration: none; }
     a:hover { text-decoration: underline; }
     .wrap { max-width: 900px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
     .breadcrumb { font-size: 0.85rem; margin-bottom: 1.5rem; }
@@ -68,7 +68,7 @@
     .sub { margin-bottom: 1.5rem; font-size: 0.95rem; }
     .stats { display: flex; gap: 1.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
     .stat { border-radius: 0.5rem; padding: 0.75rem 1.25rem; border: 1px solid; }
-    .stat-val { font-size: 1.4rem; font-weight: 700; color: #16a34a; }
+    .stat-val { font-size: 1.4rem; font-weight: 700; color: #111827; }
     .stat-lbl { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em; }
     .tabell-ramme { overflow-x: auto; -webkit-overflow-scrolling: touch; }
     table { width: 100%; min-width: 34rem; border-collapse: collapse; border-radius: 0.75rem; overflow: hidden; font-size: 0.9rem; border: 1px solid; }
@@ -78,11 +78,11 @@
     .liste-analyse h2 { font-size: 1.15rem; font-weight: 700; margin: 1.75rem 0 0.6rem; }
     .liste-analyse p { margin: 0 0 0.9rem; line-height: 1.75; font-size: 0.95rem; }
     .rang { font-size: 0.8rem; font-weight: 700; width: 2rem; }
-    .ticker a { color: #16a34a; font-family: monospace; font-weight: 700; font-size: 0.95rem; }
-    .metric { color: #16a34a; font-weight: 700; }
+    .ticker a { color: #111827; font-weight: 600; font-size: 0.95rem; }
+    .metric { color: #111827; font-weight: 700; }
     .cta { margin-top: 2rem; border-radius: 0.75rem; padding: 1.25rem; text-align: center; border: 1px solid; }
-    .cta a { display: inline-block; background: #16a34a; color: #fff !important; font-weight: 600; padding: 0.65rem 1.5rem; border-radius: 0.5rem; margin-top: 0.5rem; text-decoration: none; }
-    .cta a:hover { background: #15803d; }
+    .cta a { display: inline-block; background: #2f7352; color: #fff !important; font-weight: 600; padding: 0.65rem 1.5rem; border-radius: 0.5rem; margin-top: 0.5rem; text-decoration: none; }
+    .cta a:hover { background: #275f45; }
     .relatert { margin-top: 2rem; }
     .relatert h2 { font-size: 1rem; font-weight: 600; margin-bottom: 0.75rem; }
     .relatert ul { list-style: none; display: flex; flex-wrap: wrap; gap: 0.5rem; }
@@ -100,32 +100,32 @@
     th { background: #f3f4f6; color: #6b7280; }
     td { border-color: #f3f4f6; }
     tr:hover td { background: #f9fafb; }
-    .cta { background: #f0fdf4; border-color: #bbf7d0; }
+    .cta { background: #f3f7f5; border-color: #c6dccf; }
     .relatert h2 { color: #374151; }
     .relatert li a { background: #fff; border-color: #e5e7eb; color: #374151; }
-    .relatert li a:hover { border-color: #16a34a; color: #15803d; }
+    .relatert li a:hover { border-color: #2f7352; color: #275f45; }
     .updated { color: #9ca3af; }
 
     .dark body { background: #030712; color: #f3f4f6; }
     .dark .stat { background: #111827; border-color: #1f2937; }
     .dark .stat-lbl { color: #9ca3af; }
-    .dark .stat-val { color: #4ade80; }
+    .dark .stat-val { color: #f3f4f6; }
     .dark .sub { color: #9ca3af; }
     .dark .breadcrumb { color: #9ca3af; }
     .dark .breadcrumb a { color: #9ca3af; }
     .dark .rang { color: #6b7280; }
-    .dark a { color: #4ade80; }
-    .dark .ticker a { color: #4ade80; }
-    .dark .metric { color: #4ade80; }
+    .dark a { color: #6fa98a; }
+    .dark .ticker a { color: #f3f4f6; }
+    .dark .metric { color: #f3f4f6; }
     .dark table { background: #111827; border-color: #1f2937; }
     .dark th { background: #1f2937; color: #9ca3af; }
     .dark td { border-color: #1f2937; }
     .dark tr:hover td { background: #1f2937; }
-    .dark .cta { background: #052e16; border-color: #166534; }
-    .dark .cta a { background: #16a34a; }
+    .dark .cta { background: #0f251b; border-color: #214d39; }
+    .dark .cta a { background: #2f7352; }
     .dark .relatert h2 { color: #d1d5db; }
     .dark .relatert li a { background: #111827; border-color: #1f2937; color: #d1d5db; }
-    .dark .relatert li a:hover { border-color: #4ade80; color: #4ade80; }
+    .dark .relatert li a:hover { border-color: #6fa98a; color: #6fa98a; }
     .dark .updated { color: #6b7280; }
 </style>
 </head>
@@ -201,14 +201,14 @@
   <p class="sub">Sortert etter direkteavkastning (utbytteyield) — høyest først.</p>
   <div class="stats">
     <div class="stat"><div class="stat-val">20</div><div class="stat-lbl">Aksjer</div></div>
-    <div class="stat"><div class="stat-val">11,3 %</div><div class="stat-lbl">Snitt yield</div></div>
+    <div class="stat"><div class="stat-val">11,4 %</div><div class="stat-lbl">Snitt yield</div></div>
     <div class="stat"><div class="stat-val">17,71 %</div><div class="stat-lbl">Høyeste yield</div></div>
   </div>
 
   <div class="liste-analyse">
   <h2>Hva en høy yield faktisk betyr</h2>
   <p>Direkteavkastning er utbytte delt på kurs. Tallet stiger derfor like gjerne fordi kursen faller som fordi utbyttet øker, og en aksje som skiller seg kraftig fra medianen på Oslo Børs (5,57 %) er først og fremst et spørsmål: hva er det markedet priser inn som du ennå ikke har sett?</p>
-  <p>Av de 20 aksjene på denne listen deler 7 ut mer enn de tjener, og for 2 mangler vi inntjeningstall — blankt felt betyr ukjent, ikke lavt. Til sammen er det 9 av 20 der utbetalingsgraden ikke bekrefter at utbyttet er bærekraftig.</p>
+  <p>Av de 20 aksjene på denne listen deler 6 ut mer enn de tjener, og for 2 mangler vi inntjeningstall — blankt felt betyr ukjent, ikke lavt. Til sammen er det 8 av 20 der utbetalingsgraden ikke bekrefter at utbyttet er bærekraftig.</p>
   <p>Av dem har 5 betalt utbytte i ti år eller mer. Kort historikk er ikke i seg selv et faresignal, men det betyr at selskapet ikke er sett gjennom en nedtur ennå.</p>
   <p>Vær særlig oppmerksom på engangsutbetalinger. Et selskap som selger virksomheten sin og deler ut pengene, får en yield som ser spektakulær ut i tolv måneder og deretter forsvinner. Kjennetegnet er at ett år stikker kraftig opp i utbyttehistorikken mens de andre ligger flatt.</p>
   </div>
@@ -237,105 +237,105 @@
         </tr>
         <tr>
           <td class="rang">4</td>
-          <td class="ticker"><a href="/aksjer/HAFNI/">HAFNI</a></td>
-          <td>Hafnia Limited</td>
-          <td class="metric">12,03 %</td><td>87,45 NOK</td><td>57 % </td><td>—</td>
+          <td class="ticker"><a href="/aksjer/HSHP/">HSHP</a></td>
+          <td>Himalaya Shipping Ltd.</td>
+          <td class="metric">12,02 %</td><td>143,20 NOK</td><td>101 % </td><td>—</td>
         </tr>
         <tr>
           <td class="rang">5</td>
-          <td class="ticker"><a href="/aksjer/HSHP/">HSHP</a></td>
-          <td>Himalaya Shipping Ltd.</td>
-          <td class="metric">12,03 %</td><td>143,20 NOK</td><td>101 % </td><td>—</td>
+          <td class="ticker"><a href="/aksjer/HAFNI/">HAFNI</a></td>
+          <td>Hafnia Limited</td>
+          <td class="metric">12,01 %</td><td>87,45 NOK</td><td>57 % </td><td>—</td>
         </tr>
         <tr>
           <td class="rang">6</td>
           <td class="ticker"><a href="/aksjer/BWLPG/">BWLPG</a></td>
           <td>BW LPG Limited</td>
-          <td class="metric">11,99 %</td><td>203,60 NOK</td><td>63 % </td><td>—</td>
+          <td class="metric">11,98 %</td><td>203,60 NOK</td><td>63 % </td><td>—</td>
         </tr>
         <tr>
           <td class="rang">7</td>
           <td class="ticker"><a href="/aksjer/FRO/">FRO</a></td>
           <td>Frontline PLC</td>
-          <td class="metric">11,99 %</td><td>424,70 NOK</td><td>47 % </td><td>—</td>
+          <td class="metric">11,98 %</td><td>424,70 NOK</td><td>47 % </td><td>—</td>
         </tr>
         <tr>
           <td class="rang">8</td>
           <td class="ticker"><a href="/aksjer/OET/">OET</a></td>
           <td>Okeanis Eco Tankers Corp.</td>
-          <td class="metric">11,73 %</td><td>771,00 NOK</td><td>46 % </td><td>—</td>
+          <td class="metric">11,71 %</td><td>771,00 NOK</td><td>46 % </td><td>—</td>
         </tr>
         <tr>
           <td class="rang">9</td>
+          <td class="ticker"><a href="/aksjer/SOMA/">SOMA</a></td>
+          <td>Solstad Maritime ASA</td>
+          <td class="metric">11,69 %</td><td>27,20 NOK</td><td>38 % </td><td>—</td>
+        </tr>
+        <tr>
+          <td class="rang">10</td>
           <td class="ticker"><a href="/aksjer/DOF/">DOF</a></td>
           <td>DOF Group ASA</td>
           <td class="metric">11,35 %</td><td>122,10 NOK</td><td>71 % </td><td>—</td>
         </tr>
         <tr>
-          <td class="rang">10</td>
+          <td class="rang">11</td>
           <td class="ticker"><a href="/aksjer/VAR/">VAR</a></td>
           <td>Vår Energi ASA</td>
           <td class="metric">11,04 %</td><td>49,53 NOK</td><td>86 % </td><td>17. nov 2026</td>
         </tr>
         <tr>
-          <td class="rang">11</td>
+          <td class="rang">12</td>
           <td class="ticker"><a href="/aksjer/ARCH/">ARCH</a></td>
           <td>Archer Limited</td>
           <td class="metric">11,01 %</td><td>16,90 NOK</td><td>—</td><td>—</td>
         </tr>
         <tr>
-          <td class="rang">12</td>
+          <td class="rang">13</td>
           <td class="ticker"><a href="/aksjer/AQUA/">AQUA</a></td>
           <td>Aqualis ASA</td>
           <td class="metric">10,44 %</td><td>8,62 NOK</td><td>71 % </td><td>—</td>
         </tr>
         <tr>
-          <td class="rang">13</td>
+          <td class="rang">14</td>
           <td class="ticker"><a href="/aksjer/WEST/">WEST</a></td>
           <td>Western Bulk Chartering AS</td>
           <td class="metric">10,40 %</td><td>25,00 NOK</td><td>—</td><td>—</td>
         </tr>
         <tr>
-          <td class="rang">14</td>
+          <td class="rang">15</td>
           <td class="ticker"><a href="/aksjer/AKSO/">AKSO</a></td>
           <td>Aker Solutions ASA</td>
           <td class="metric">10,00 %</td><td>36,00 NOK</td><td>54 % </td><td>—</td>
         </tr>
         <tr>
-          <td class="rang">15</td>
+          <td class="rang">16</td>
           <td class="ticker"><a href="/aksjer/SPOG/">SPOG</a></td>
           <td>Sparebanken Øst</td>
           <td class="metric">9,65 %</td><td>71,49 NOK</td><td>139 % </td><td>—</td>
         </tr>
         <tr>
-          <td class="rang">16</td>
+          <td class="rang">17</td>
           <td class="ticker"><a href="/aksjer/BWO/">BWO</a></td>
           <td>BW Offshore Limited</td>
           <td class="metric">9,31 %</td><td>38,35 NOK</td><td>44 % </td><td>—</td>
         </tr>
         <tr>
-          <td class="rang">17</td>
+          <td class="rang">18</td>
           <td class="ticker"><a href="/aksjer/ENH/">ENH</a></td>
           <td>SED Energy Holdings PLC</td>
           <td class="metric">9,24 %</td><td>6,60 NOK</td><td>106 % </td><td>9. nov 2026</td>
         </tr>
         <tr>
-          <td class="rang">18</td>
+          <td class="rang">19</td>
           <td class="ticker"><a href="/aksjer/KCC/">KCC</a></td>
           <td>Klaveness Combination Carriers ASA</td>
-          <td class="metric">9,01 %</td><td>103,20 NOK</td><td>62 % </td><td>—</td>
-        </tr>
-        <tr>
-          <td class="rang">19</td>
-          <td class="ticker"><a href="/aksjer/CMBTO/">CMBTO</a></td>
-          <td>CMB.TECH NV</td>
-          <td class="metric">8,95 %</td><td>156,80 NOK</td><td>30 % </td><td>—</td>
+          <td class="metric">9,00 %</td><td>103,20 NOK</td><td>62 % </td><td>—</td>
         </tr>
         <tr>
           <td class="rang">20</td>
-          <td class="ticker"><a href="/aksjer/ODL/">ODL</a></td>
-          <td>Odfjell Drilling Ltd</td>
-          <td class="metric">8,93 %</td><td>99,50 NOK</td><td>101 % </td><td>12. nov 2026</td>
+          <td class="ticker"><a href="/aksjer/CMBTO/">CMBTO</a></td>
+          <td>CMB.TECH NV</td>
+          <td class="metric">8,95 %</td><td>156,80 NOK</td><td>30 % </td><td>—</td>
         </tr>
     </tbody>
   </table>
@@ -348,7 +348,7 @@
     <h2>Andre topplistor</h2>
     <ul><li><a href="/aksjer/utbyttevekst/">Aksjer med best utbyttevekst</a></li><li><a href="/aksjer/konsistente-utbytteaksjer/">Mest konsistente utbytteaksjer</a></li><li><a href="/aksjer/lavest-payout/">Aksjer med lavest payout ratio</a></li></ul>
   </div>
-  <p class="updated">Tallene er hentet 6. november 2026</p>
+  <p class="updated">Tallene er hentet 8. november 2026</p>
   <footer style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid #e5e7eb;font-size:0.78rem;text-align:center;color:#9ca3af;line-height:1.6;" class="std-footer">
     <p>Kurs og utbyttedata hentes fra Yahoo Finance og Euronext. Oppdateres daglig på børsdager.</p>
     <p style="max-width:36rem;margin:0.4rem auto;">

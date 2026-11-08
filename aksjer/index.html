@@ -50,11 +50,12 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; background: #f8fafc; color: #0f172a; line-height: 1.6; }
-    a { color: #16a34a; text-decoration: none; }
+    a { color: #2f7352; text-decoration: none; }
     a:hover { text-decoration: underline; }
     .wrap { max-width: 1100px; margin: 0 auto; padding: 1rem 1rem 2rem; }
     .hero {
-      background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #15803d 100%);
+      background: #1c2631;
+      border: 1px solid #2a3542;
       color: #fff;
       border-radius: 1rem;
       padding: 2rem 1.5rem;
@@ -75,7 +76,7 @@
     .seksjon { margin: 2.5rem 0; }
     .seksjon-tittel { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 1rem; }
     .seksjon-tittel h2 { font-size: 1.25rem; font-weight: 700; color: #0f172a; }
-    .seksjon-tittel .se-alle { font-size: 0.85rem; color: #22c55e; font-weight: 600; }
+    .seksjon-tittel .se-alle { font-size: 0.85rem; color: #3f8a63; font-weight: 600; }
     .ak-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 0.75rem; }
     .ak-kort {
       display: block;
@@ -87,10 +88,10 @@
       text-decoration: none !important;
       color: inherit;
     }
-    .ak-kort:hover { border-color: #22c55e; box-shadow: 0 4px 12px rgba(34,197,94,0.1); transform: translateY(-1px); }
+    .ak-kort:hover { border-color: #3f8a63; box-shadow: 0 4px 12px rgba(63,138,99,0.1); transform: translateY(-1px); }
     .ak-kort-topp { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.4rem; }
-    .ak-kort-tk { font-family: ui-monospace, monospace; font-size: 0.95rem; font-weight: 700; color: #16a34a; }
-    .ak-kort-yield { font-size: 0.95rem; font-weight: 700; color: #15803d; background: #dcfce7; padding: 0.15rem 0.5rem; border-radius: 0.4rem; }
+    .ak-kort-tk { font-size: 0.95rem; font-weight: 600; color: #0f172a; }
+    .ak-kort-yield { font-size: 0.95rem; font-weight: 600; color: #0f172a; font-variant-numeric: tabular-nums; }
     .ak-kort-navn { font-size: 0.85rem; font-weight: 500; color: #334155; line-height: 1.3; margin-bottom: 0.3rem; }
     .ak-kort-meta { font-size: 0.7rem; color: #94a3b8; }
     .topplister { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.75rem; }
@@ -100,7 +101,7 @@
       padding: 1rem; text-decoration: none !important; color: inherit;
       transition: all 0.15s;
     }
-    .topp-kort:hover { border-color: #22c55e; box-shadow: 0 4px 12px rgba(34,197,94,0.1); }
+    .topp-kort:hover { border-color: #3f8a63; box-shadow: 0 4px 12px rgba(63,138,99,0.1); }
     .topp-ikon {
       width: 44px; height: 44px;
       border-radius: 0.6rem;
@@ -109,10 +110,8 @@
     }
     /* SVG, ikke emoji — arver fargen fra .topp-ikon-N under. */
     .topp-ikon svg { width: 22px; height: 22px; }
-    .topp-ikon-1 { background: #fef3c7; color: #b45309; }
-    .topp-ikon-2 { background: #dbeafe; color: #1d4ed8; }
-    .topp-ikon-3 { background: #dcfce7; color: #15803d; }
-    .topp-ikon-4 { background: #fce7f3; color: #be185d; }
+    .topp-ikon-1, .topp-ikon-2, .topp-ikon-3, .topp-ikon-4 { background: #f1f5f9; color: #475569; }
+    .dark .topp-ikon-1, .dark .topp-ikon-2, .dark .topp-ikon-3, .dark .topp-ikon-4 { background: #273241; color: #cbd5e1; }
     .topp-tittel { font-weight: 600; font-size: 0.95rem; color: #0f172a; margin-bottom: 0.15rem; }
     .topp-beskr { font-size: 0.75rem; color: #64748b; }
     .sek-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 0.5rem; }
@@ -122,11 +121,11 @@
       padding: 0.65rem 0.85rem; text-decoration: none !important; color: inherit;
       transition: all 0.15s;
     }
-    .sek-kort:hover { border-color: #22c55e; }
+    .sek-kort:hover { border-color: #3f8a63; }
     /* SVG, ikke emoji — font-size gjør ingenting her. Grønnfargen er
        merkevarens; currentColor ville gitt tekstfarge og blitt for tung. */
-    .sek-ikon { width: 1.35rem; height: 1.35rem; flex-shrink: 0; color: #16a34a; }
-    .dark .sek-ikon { color: #4ade80; }
+    .sek-ikon { width: 1.35rem; height: 1.35rem; flex-shrink: 0; color: #2f7352; }
+    .dark .sek-ikon { color: #6fa98a; }
     .sek-info { display: flex; flex-direction: column; min-width: 0; }
     .sek-navn { font-weight: 600; font-size: 0.85rem; color: #0f172a; }
     .sek-antall { font-size: 0.7rem; color: #94a3b8; }
@@ -139,10 +138,11 @@
     td { padding: 0.7rem 1.25rem; border-bottom: 1px solid #f1f5f9; }
     tr:last-child td { border-bottom: none; }
     tr:hover td { background: #f8fafc; }
-    td a { color: #16a34a; font-family: ui-monospace, monospace; font-weight: 600; }
-    .yield-cell { color: #15803d; font-weight: 600; }
+    td a { color: #0f172a; font-weight: 600; }
+    .yield-cell { color: #0f172a; font-weight: 600; font-variant-numeric: tabular-nums; }
     .verktoy-bar {
-      background: linear-gradient(135deg, #fef3c7 0%, #fed7aa 100%);
+      background: #fff;
+      border: 1px solid #e2e8f0;
       border-radius: 1rem;
       padding: 1.5rem;
       margin: 2rem 0;
@@ -151,10 +151,10 @@
       align-items: center;
       gap: 1rem;
     }
-    .verktoy-bar h3 { font-size: 1.1rem; font-weight: 700; color: #78350f; margin-bottom: 0.25rem; }
-    .verktoy-bar p { font-size: 0.88rem; color: #92400e; }
+    .verktoy-bar h3 { font-size: 1.1rem; font-weight: 700; color: #0f172a; margin-bottom: 0.25rem; }
+    .verktoy-bar p { font-size: 0.88rem; color: #475569; }
     .verktoy-bar a {
-      background: #fff; color: #b45309 !important; padding: 0.6rem 1.25rem;
+      background: #275f45; color: #fff !important; padding: 0.6rem 1.25rem;
       border-radius: 0.5rem; font-weight: 600; text-decoration: none !important;
       white-space: nowrap; box-shadow: 0 1px 3px rgba(0,0,0,0.08);
     }
@@ -164,25 +164,25 @@
     .updated { font-size: 0.78rem; color: #94a3b8; text-align: right; margin-top: 1rem; }
     /* Mørk modus */
     .dark body { background: #0f172a; color: #f1f5f9; }
-    .dark a { color: #4ade80; }
+    .dark a { color: #6fa98a; }
     .dark .seksjon-tittel h2 { color: #f1f5f9; }
-    .dark .seksjon-tittel .se-alle { color: #4ade80; }
+    .dark .seksjon-tittel .se-alle { color: #6fa98a; }
     .dark .ak-kort, .dark .topp-kort, .dark .sek-kort, .dark .alle-aksjer { background: #1e293b; border-color: #334155; }
-    .dark .ak-kort:hover, .dark .topp-kort:hover, .dark .sek-kort:hover { border-color: #22c55e; }
-    .dark .ak-kort-tk { color: #4ade80; }
+    .dark .ak-kort:hover, .dark .topp-kort:hover, .dark .sek-kort:hover { border-color: #3f8a63; }
+    .dark .ak-kort-tk { color: #f1f5f9; }
     .dark .ak-kort-navn { color: #cbd5e1; }
-    .dark .ak-kort-yield { background: rgba(34,197,94,0.2); color: #4ade80; }
+    .dark .ak-kort-yield { color: #f1f5f9; }
     .dark .topp-tittel, .dark .sek-navn { color: #f1f5f9; }
     .dark .alle-aksjer-header { border-color: #334155; }
     .dark th { background: #0f172a; border-color: #334155; color: #94a3b8; }
     .dark td { border-color: #1e293b; }
     .dark tr:hover td { background: #0f172a; }
-    .dark td a { color: #4ade80; }
-    .dark .yield-cell { color: #4ade80; }
-    .dark .verktoy-bar { background: linear-gradient(135deg, rgba(146,64,14,0.3) 0%, rgba(154,52,18,0.2) 100%); }
-    .dark .verktoy-bar h3 { color: #fde68a; }
-    .dark .verktoy-bar p { color: #fcd34d; }
-    .dark .verktoy-bar a { background: #1e293b; color: #fde68a !important; }
+    .dark td a { color: #f1f5f9; }
+    .dark .yield-cell { color: #f1f5f9; }
+    .dark .verktoy-bar { background: #1e293b; border-color: #334155; }
+    .dark .verktoy-bar h3 { color: #f1f5f9; }
+    .dark .verktoy-bar p { color: #cbd5e1; }
+    .dark .verktoy-bar a { background: #2f7352; color: #fff !important; }
   </style>
 </head>
 <body>
@@ -261,7 +261,7 @@
         <div class="hero-stat-lbl">Med utbytte</div>
       </div>
       <div class="hero-stat">
-        <div class="hero-stat-num">6,0 %</div>
+        <div class="hero-stat-num">6,2 %</div>
         <div class="hero-stat-lbl">Snitt-yield</div>
       </div>
       <div class="hero-stat">
@@ -337,26 +337,26 @@
         <div class="ak-kort-navn">Webstep ASA</div>
         <div class="ak-kort-meta">Informasjonsteknologi · Årlig · 9 år på rad</div>
       </a>
-      <a href="/aksjer/HAFNI/" class="ak-kort">
-        <div class="ak-kort-topp">
-          <span class="ak-kort-tk">HAFNI</span>
-          <span class="ak-kort-yield">12,03 %</span>
-        </div>
-        <div class="ak-kort-navn">Hafnia Limited</div>
-        <div class="ak-kort-meta">Shipping · Kvartalsvis · 5 år på rad</div>
-      </a>
       <a href="/aksjer/HSHP/" class="ak-kort">
         <div class="ak-kort-topp">
           <span class="ak-kort-tk">HSHP</span>
-          <span class="ak-kort-yield">12,03 %</span>
+          <span class="ak-kort-yield">12,02 %</span>
         </div>
         <div class="ak-kort-navn">Himalaya Shipping Ltd.</div>
         <div class="ak-kort-meta">Shipping · Månedlig · 3 år på rad</div>
       </a>
+      <a href="/aksjer/HAFNI/" class="ak-kort">
+        <div class="ak-kort-topp">
+          <span class="ak-kort-tk">HAFNI</span>
+          <span class="ak-kort-yield">12,01 %</span>
+        </div>
+        <div class="ak-kort-navn">Hafnia Limited</div>
+        <div class="ak-kort-meta">Shipping · Kvartalsvis · 5 år på rad</div>
+      </a>
       <a href="/aksjer/BWLPG/" class="ak-kort">
         <div class="ak-kort-topp">
           <span class="ak-kort-tk">BWLPG</span>
-          <span class="ak-kort-yield">11,99 %</span>
+          <span class="ak-kort-yield">11,98 %</span>
         </div>
         <div class="ak-kort-navn">BW LPG Limited</div>
         <div class="ak-kort-meta">Shipping · Kvartalsvis · 8 år på rad</div>
@@ -443,26 +443,26 @@
         <div class="ak-kort-navn">Paratus Energy Services Ltd.</div>
         <div class="ak-kort-meta">Energitjenester · Kvartalsvis · 3 år på rad</div>
       </a>
-      <a href="/aksjer/HAFNI/" class="ak-kort">
-        <div class="ak-kort-topp">
-          <span class="ak-kort-tk">HAFNI</span>
-          <span class="ak-kort-yield">12,03 %</span>
-        </div>
-        <div class="ak-kort-navn">Hafnia Limited</div>
-        <div class="ak-kort-meta">Shipping · Kvartalsvis · 5 år på rad</div>
-      </a>
       <a href="/aksjer/HSHP/" class="ak-kort">
         <div class="ak-kort-topp">
           <span class="ak-kort-tk">HSHP</span>
-          <span class="ak-kort-yield">12,03 %</span>
+          <span class="ak-kort-yield">12,02 %</span>
         </div>
         <div class="ak-kort-navn">Himalaya Shipping Ltd.</div>
         <div class="ak-kort-meta">Shipping · Månedlig · 3 år på rad</div>
       </a>
+      <a href="/aksjer/HAFNI/" class="ak-kort">
+        <div class="ak-kort-topp">
+          <span class="ak-kort-tk">HAFNI</span>
+          <span class="ak-kort-yield">12,01 %</span>
+        </div>
+        <div class="ak-kort-navn">Hafnia Limited</div>
+        <div class="ak-kort-meta">Shipping · Kvartalsvis · 5 år på rad</div>
+      </a>
       <a href="/aksjer/BWLPG/" class="ak-kort">
         <div class="ak-kort-topp">
           <span class="ak-kort-tk">BWLPG</span>
-          <span class="ak-kort-yield">11,99 %</span>
+          <span class="ak-kort-yield">11,98 %</span>
         </div>
         <div class="ak-kort-navn">BW LPG Limited</div>
         <div class="ak-kort-meta">Shipping · Kvartalsvis · 8 år på rad</div>
@@ -470,7 +470,7 @@
       <a href="/aksjer/FRO/" class="ak-kort">
         <div class="ak-kort-topp">
           <span class="ak-kort-tk">FRO</span>
-          <span class="ak-kort-yield">11,99 %</span>
+          <span class="ak-kort-yield">11,98 %</span>
         </div>
         <div class="ak-kort-navn">Frontline PLC</div>
         <div class="ak-kort-meta">Shipping · Kvartalsvis · 5 år på rad</div>
@@ -478,7 +478,7 @@
       <a href="/aksjer/OET/" class="ak-kort">
         <div class="ak-kort-topp">
           <span class="ak-kort-tk">OET</span>
-          <span class="ak-kort-yield">11,73 %</span>
+          <span class="ak-kort-yield">11,71 %</span>
         </div>
         <div class="ak-kort-navn">Okeanis Eco Tankers Corp.</div>
         <div class="ak-kort-meta">Shipping · Kvartalsvis · 7 år på rad</div>
@@ -538,6 +538,14 @@
           <td>—</td>
         </tr>
         <tr>
+          <td><a href="/aksjer/STST/">STST</a></td>
+          <td>Stainless Tankers ASA</td>
+          <td>Shipping</td>
+          <td>41,90 NOK</td>
+          <td>30,43 %</td>
+          <td>—</td>
+        </tr>
+        <tr>
           <td><a href="/aksjer/PLSV/">PLSV</a></td>
           <td>Paratus Energy Services Ltd.</td>
           <td>Energitjenester</td>
@@ -562,11 +570,11 @@
           <td>—</td>
         </tr>
         <tr>
-          <td><a href="/aksjer/STST/">STST</a></td>
-          <td>Stainless Tankers ASA</td>
+          <td><a href="/aksjer/HSHP/">HSHP</a></td>
+          <td>Himalaya Shipping Ltd.</td>
           <td>Shipping</td>
-          <td>41,90 NOK</td>
-          <td>12,34 %</td>
+          <td>143,20 NOK</td>
+          <td>12,02 %</td>
           <td>—</td>
         </tr>
         <tr>
@@ -574,15 +582,7 @@
           <td>Hafnia Limited</td>
           <td>Shipping</td>
           <td>87,45 NOK</td>
-          <td>12,03 %</td>
-          <td>—</td>
-        </tr>
-        <tr>
-          <td><a href="/aksjer/HSHP/">HSHP</a></td>
-          <td>Himalaya Shipping Ltd.</td>
-          <td>Shipping</td>
-          <td>143,20 NOK</td>
-          <td>12,03 %</td>
+          <td>12,01 %</td>
           <td>—</td>
         </tr>
         <tr>
@@ -590,7 +590,7 @@
           <td>BW LPG Limited</td>
           <td>Shipping</td>
           <td>203,60 NOK</td>
-          <td>11,99 %</td>
+          <td>11,98 %</td>
           <td>—</td>
         </tr>
         <tr>
@@ -598,7 +598,7 @@
           <td>Frontline PLC</td>
           <td>Shipping</td>
           <td>424,70 NOK</td>
-          <td>11,99 %</td>
+          <td>11,98 %</td>
           <td>—</td>
         </tr>
         <tr>
@@ -606,7 +606,15 @@
           <td>Okeanis Eco Tankers Corp.</td>
           <td>Shipping</td>
           <td>771,00 NOK</td>
-          <td>11,73 %</td>
+          <td>11,71 %</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td><a href="/aksjer/SOMA/">SOMA</a></td>
+          <td>Solstad Maritime ASA</td>
+          <td>Energitjenester</td>
+          <td>27,20 NOK</td>
+          <td>11,69 %</td>
           <td>—</td>
         </tr>
         <tr>
@@ -686,7 +694,7 @@
           <td>Klaveness Combination Carriers ASA</td>
           <td>Shipping</td>
           <td>103,20 NOK</td>
-          <td>9,01 %</td>
+          <td>9,00 %</td>
           <td>—</td>
         </tr>
         <tr>
@@ -704,14 +712,6 @@
           <td>99,50 NOK</td>
           <td>8,93 %</td>
           <td>12. nov 2026</td>
-        </tr>
-        <tr>
-          <td><a href="/aksjer/SOMA/">SOMA</a></td>
-          <td>Solstad Maritime ASA</td>
-          <td>Energitjenester</td>
-          <td>27,20 NOK</td>
-          <td>8,79 %</td>
-          <td>6. nov 2026</td>
         </tr>
         <tr>
           <td><a href="/aksjer/ODFB/">ODFB</a></td>
@@ -798,8 +798,8 @@
           <td>DNO ASA</td>
           <td>Energi</td>
           <td>20,28 NOK</td>
-          <td>7,50 %</td>
-          <td>6. nov 2026</td>
+          <td>7,40 %</td>
+          <td>—</td>
         </tr>
         <tr>
           <td><a href="/aksjer/MELG/">MELG</a></td>
@@ -943,7 +943,7 @@
           <td>Informasjonsteknologi</td>
           <td>49,00 NOK</td>
           <td>6,12 %</td>
-          <td>6. nov 2026</td>
+          <td>—</td>
         </tr>
         <tr>
           <td><a href="/aksjer/PEXIP/">PEXIP</a></td>
@@ -1055,14 +1055,14 @@
           <td>Industri</td>
           <td>1074,00 NOK</td>
           <td>5,40 %</td>
-          <td>6. nov 2026</td>
+          <td>—</td>
         </tr>
         <tr>
           <td><a href="/aksjer/WAWI/">WAWI</a></td>
           <td>Wallenius Wilhelmsen ASA</td>
           <td>Shipping</td>
           <td>160,10 NOK</td>
-          <td>5,38 %</td>
+          <td>5,37 %</td>
           <td>—</td>
         </tr>
         <tr>
@@ -1270,7 +1270,7 @@
           <td>Equinor ASA</td>
           <td>Energi</td>
           <td>394,90 NOK</td>
-          <td>3,67 %</td>
+          <td>3,68 %</td>
           <td>13. nov 2026</td>
         </tr>
         <tr>
@@ -1535,7 +1535,7 @@
           <td>Energitjenester</td>
           <td>68,30 NOK</td>
           <td>0,75 %</td>
-          <td>6. nov 2026</td>
+          <td>—</td>
         </tr>
         <tr>
           <td><a href="/aksjer/ENDUR/">ENDUR</a></td>
@@ -1774,7 +1774,7 @@
     </div>
   </section>
 
-  <p class="updated">Tallene er hentet 6. november 2026</p>
+  <p class="updated">Tallene er hentet 8. november 2026</p>
   <footer style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid #e5e7eb;font-size:0.78rem;text-align:center;color:#9ca3af;line-height:1.6;" class="std-footer">
     <p>Kurs og utbyttedata hentes fra Yahoo Finance og Euronext. Oppdateres daglig på børsdager.</p>
     <p style="max-width:36rem;margin:0.4rem auto;">
