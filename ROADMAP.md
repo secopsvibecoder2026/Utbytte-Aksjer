@@ -122,7 +122,7 @@ Punktet listet 15 aksjer med `upa=0`, `yield=0`, `hist=0` og foreslo å fjerne d
 
 Da listen ble kontrollert falt de i to grupper:
 
-- **Sju er tomme skall** — ACR, AFISH, BWE, CADLR, DOF, ISLAX, KMAR. De har verken
+- **Sju er tomme skall** — ACR, AFISH, BWE, CDLR (tidligere CADLR), DOF, ISLAX, KMAR. De har verken
   yield, historikk eller år med utbytte, og har fått `noindex,follow` og er ute av
   sitemap. Ikke slettet: sidene brukes av appen og ved direktebesøk.
 - **Resten har ekte utbyttehistorikk** og har bare sluttet å betale — NKR, NOD, KOA,
