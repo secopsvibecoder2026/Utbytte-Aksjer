@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """
-vedlikehold.py — den maskinelle delen av den daglige vedlikeholdsrunden.
+vedlikehold.py — den maskinelle delen av den ukentlige vedlikeholdsrunden.
 
 Brukes av agenten `.claude/agents/vedlikehold.md`, men kan kjøres for hånd:
 
-    python scripts/vedlikehold.py                  # siste 3 dager, som tekst
+    python scripts/vedlikehold.py                  # siste 8 dager, som tekst
     python scripts/vedlikehold.py --dager 35       # bredere søk etter nye utbyttebetalere
     python scripts/vedlikehold.py --json           # maskinlesbart
     python scripts/vedlikehold.py --uten-nett      # bare filene i repoet
@@ -641,8 +641,9 @@ def som_tekst(r):
 
 def main():
     p = argparse.ArgumentParser(description=__doc__.split("\n")[1])
-    p.add_argument("--dager", type=int, default=3,
-                   help="hvor mange dager med børsmeldinger (standard 3)")
+    p.add_argument("--dager", type=int, default=8,
+                   help="hvor mange dager med børsmeldinger (standard 8: én uke "
+                        "pluss én dags overlapp, siden runden går ukentlig)")
     p.add_argument("--json", action="store_true")
     p.add_argument("--uten-nett", action="store_true",
                    help="bare filene i repoet: dataferskhet og varsler")

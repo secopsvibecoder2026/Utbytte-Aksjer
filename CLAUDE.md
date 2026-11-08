@@ -2653,11 +2653,11 @@ publishes to the same `url`. Markdown support is deliberately small and
 everything is escaped before formatting, since the report quotes stock-exchange
 notices. Tests: `scripts/test_tallkontroll_side.py` (13).
 
-## The daily maintenance agent (2026-10-10)
+## The weekly maintenance agent (2026-10-10, weekly since 2026-11-08)
 
-`.claude/agents/vedlikehold.md` runs every morning from the routine «Daglig
+`.claude/agents/vedlikehold.md` runs every Tuesday from the routine «Ukentlig
 vedlikehold» (06:47 Europe/Oslo) and publishes to one private page that is
-replaced each day: https://claude.ai/artifact/5q8jTVvPxkuQRjUJTWXQcV. Same
+replaced each week: https://claude.ai/artifact/5q8jTVvPxkuQRjUJTWXQcV. Same
 setup as the weekly tallkontroll: the routine clones the public repo, has no
 GitHub write access, and **only reports**. To let it open pull requests, the
 repository must be attached in the routine's settings on claude.ai; a session
@@ -2699,11 +2699,21 @@ Pioneer Property Group's dividend notices are for its **preference shares**,
 which are not on Euronext's equity list, so a dividend title from an issuer
 outside the catalog is a lead, never a candidate until the message is read.
 
-Each weekday has one deep dive: Monday the app in a browser, Tuesday the
-hand-written pages, Wednesday one article, Thursday the week's code changes,
-Friday SEO and AdSense, Saturday open findings, Sunday a broad in/out scan and
-one roadmap item. The weekly tallkontroll keeps the numbers; this agent does
-not redo that work. Tests: `scripts/test_vedlikehold.py` (32).
+**Weekly, not daily (2026-11-08).** The owner is not in every day, and seven
+reports a week went unread. The routine runs on Tuesday so it can pick up the
+tallkontroll from Monday evening, and its «Åpne funn» carries the findings of
+both: one page to look at. Every run covers:
+
+- NewsWeb for the last eight days (`--dager 8` is now the default);
+- the week's code changes;
+- every open finding from the last report and the tallkontroll.
+
+A date that falls before the next run (a last trading day, an offer deadline,
+a new ticker) goes under «Krever handling», since the next report is a week
+away. The deep dive rotates by ISO week modulo 5: the app in a browser, the
+hand-written pages, one article, SEO and AdSense, and a broad in/out scan
+(`--dager 35`) with one roadmap item. The tallkontroll keeps the numbers; this
+agent does not redo that work. Tests: `scripts/test_vedlikehold.py` (32).
 
 **Mergers (2026-10-14).** Multiconsult announced a cross-border merger into
 Rejlers on 7 September («… through a merger of equals»), and Skue and Romerike
