@@ -1,6 +1,6 @@
 {
-  "sist_oppdatert": "2026-11-08T10:21:01Z",
-  "antall_ok": 155,
+  "sist_oppdatert": "2026-11-08T12:30:14Z",
+  "antall_ok": 154,
   "antall_feil": 0,
   "tickere": {
     "EQNR": {
@@ -98,7 +98,7 @@
       "ok": true,
       "vart_navn": "Frontline PLC",
       "yahoo_navn": "Frontline plc",
-      "markedsverdi": 94547943675.86,
+      "markedsverdi": 94547943424.0,
       "siste_handelsdato": "2026-11-06"
     },
     "NONG": {
@@ -210,7 +210,7 @@
       "ok": true,
       "vart_navn": "Gjensidige Forsikring ASA",
       "yahoo_navn": "Gjensidige Forsikring ASA",
-      "markedsverdi": 136690189817.06,
+      "markedsverdi": 136690188288.0,
       "siste_handelsdato": "2026-11-06"
     },
     "STB": {
@@ -360,13 +360,6 @@
       "markedsverdi": 2965420800.0,
       "siste_handelsdato": "2026-11-06"
     },
-    "ELMRA": {
-      "ok": true,
-      "vart_navn": "Elmera Group ASA",
-      "yahoo_navn": "Elmera Group ASA",
-      "markedsverdi": 5111938048.0,
-      "siste_handelsdato": "2026-11-06"
-    },
     "PARB": {
       "ok": true,
       "vart_navn": "Pareto Bank ASA",
@@ -448,7 +441,7 @@
       "ok": true,
       "vart_navn": "Stolt-Nielsen Limited",
       "yahoo_navn": "Stolt-Nielsen Limited",
-      "markedsverdi": 20982714420.0,
+      "markedsverdi": 20982714368.0,
       "siste_handelsdato": "2026-11-06"
     },
     "MEDI": {
@@ -773,12 +766,12 @@
       "markedsverdi": 1148913664.0,
       "siste_handelsdato": "2026-11-06"
     },
-    "CADLR": {
+    "CDLR": {
       "ok": true,
-      "vart_navn": "Cadeler A/S",
+      "vart_navn": "Cadeler plc",
       "yahoo_navn": "Cadeler plc",
-      "markedsverdi": 22400608256.0,
-      "siste_handelsdato": "2026-11-05"
+      "markedsverdi": 22834759680.0,
+      "siste_handelsdato": "2026-11-06"
     },
     "BINT": {
       "ok": true,
@@ -910,7 +903,7 @@
       "ok": true,
       "vart_navn": "Jinhui Shipping and Transportation Limited",
       "yahoo_navn": "Jinhui Shipping and Transportation Limited",
-      "markedsverdi": 745153381.1,
+      "markedsverdi": 725479360.0,
       "siste_handelsdato": "2026-11-06"
     },
     "SOMA": {
@@ -987,7 +980,7 @@
       "ok": true,
       "vart_navn": "Hexagon Composites ASA",
       "yahoo_navn": "Hexagon Composites ASA",
-      "markedsverdi": 3922514877.74,
+      "markedsverdi": 3922514944.0,
       "siste_handelsdato": "2026-11-06"
     },
     "BMA": {
