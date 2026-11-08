@@ -4154,9 +4154,11 @@ def _lag_utbyttehistorikk_tekst(a, i_dag_ar=None):
             f"{_ganger(kutt)} underveis."
         )
     elif siste["utbytte"] < forste["utbytte"] * 0.95:
+        # Ikke «lavere nå»: for en årlig betaler kan årets utbytte, som står
+        # under, være høyere igjen (YAR, tallkontrollen 2026-11-02).
         deler.append(
-            f"Utbyttet er lavere nå enn i {forste['ar']} — ned fra "
-            f"{_nf(forste['utbytte'], 2)} til {_nf(siste['utbytte'], 2)} kroner per aksje, "
+            f"Utbyttet gikk ned fra {_nf(forste['utbytte'], 2)} kroner per aksje i "
+            f"{forste['ar']} til {_nf(siste['utbytte'], 2)} i {siste['ar']}, "
             f"og det er satt ned {_ganger(kutt)} i perioden."
         )
     else:
@@ -4193,8 +4195,9 @@ def _lag_utbyttehistorikk_tekst(a, i_dag_ar=None):
     # 2b) Årets utbytte for en årlig betaler som har betalt (TINDE 9,00 →
     #     4,90 i 2026). Bare tallene: noen av fjorårets beløp har særutbytte
     #     vi ikke har registrert, og da er det ikke et kutt.
-    ned = aarets_nedgang(a, datetime.date(i_dag_ar, 12, 31)
-                         if i_dag_ar != datetime.date.today().year else None)
+    _dag = (datetime.date(i_dag_ar, 12, 31)
+            if i_dag_ar != datetime.date.today().year else None)
+    ned = aarets_nedgang(a, _dag) or aarets_oppgang(a, _dag)
     if ned and ned[0] == i_dag_ar:
         deler.append(
             f"For {ned[0]} er det betalt {_nf(ned[1], 2)} kroner per aksje, "
@@ -4528,7 +4531,8 @@ def _selskapsrisikoer(a):
 
     # Yield langt over eget snitt. Begge er regnet mot dagens kurs, så det er
     # årsraten som er høy, ikke kursen som har falt (tallkontrollen 2026-10-12).
-    if yield_ and snitt and yield_ > snitt * 1.8 and not kutt and not snitt_har_nullar(a):
+    if (yield_ and snitt and yield_ > snitt * 1.8 and not kutt and not snitt_har_nullar(a)
+            and not utbytte_hevet_og_betalt(a)):
         ut.append(
             f"Yielden på {_pst(yield_, 1)} er langt over aksjens eget "
             f"{snitt_navn(a)} på {_pst(snitt, 1)}, regnet mot samme kurs. Et "
@@ -4668,6 +4672,53 @@ def aarets_nedgang(a, i_dag=None, grense=0.95):
     except (TypeError, ValueError):
         return None
     if fjor > 0 and belop < grense * fjor:
+        return iaar, belop, iaar - 1, fjor
+    return None
+
+
+def utbytte_hevet_og_betalt(a, i_dag_ar=None):
+    """Er årsraten høy fordi utbyttet faktisk er hevet og betalt?
+
+    Risikopunktet «Et utbytte så langt over det selskapet pleier å betale, er
+    ikke sikkert å holde» sto på WWI og WWIB, som hadde gått fra 4,00 til
+    20,00 kr uten et eneste kutt og betalt 28,00 kr de siste tolv månedene,
+    med payout 22 % (tallkontrollen 2026-11-02). Snittet er da et gammelt,
+    lavt utbytte, og raten er ikke et anslag. Krever:
+
+    - siste hele år minst 5 % over det første, uten noe kutt mellom;
+    - betalt siste 12 mnd minst 80 % av årsraten;
+    - kjent payout som dekkes av inntjeningen (0 < payout <= 80).
+    """
+    iaar = i_dag_ar or datetime.date.today().year
+    hele = [h for h in sorted(ordinaer_historikk(a), key=lambda h: h["ar"])
+            if h["ar"] < iaar and (h.get("utbytte") or 0) > 0]
+    if len(hele) < 2 or utbyttekutt(a, iaar):
+        return False
+    if hele[-1]["utbytte"] <= hele[0]["utbytte"] * 1.05:
+        return False
+    rate = a.get("utbytte_per_aksje") or 0
+    betalt = a.get("utbytte_12m") or 0
+    payout = a.get("payout_ratio") or 0
+    return rate > 0 and betalt >= rate * 0.8 and 0 < payout <= 80
+
+
+def aarets_oppgang(a, i_dag=None, grense=1.05):
+    """(år, i år, fjor_år, fjor) når årets utbytte er over `grense` × fjorårets.
+
+    Speilet av aarets_nedgang(). YAR betalte 5,00 kr for 2024 og 22,00 kr i
+    2026, og siden sa «Utbyttet er lavere nå enn i 2022» og «har falt med
+    50 % per år» (tallkontrollen 2026-11-02). Gjelder også AFK og GYL.
+    """
+    aarets = aarets_arsutbytte(a, i_dag)
+    if not aarets:
+        return None
+    iaar, belop = aarets
+    per = ordinaer_per_ar(a)
+    try:
+        fjor = float(per.get(str(iaar - 1)) or 0)
+    except (TypeError, ValueError):
+        return None
+    if fjor > 0 and belop > grense * fjor:
         return iaar, belop, iaar - 1, fjor
     return None
 
@@ -5152,6 +5203,12 @@ _BRANSJE_DRIVER_UTDYPET = {
         "ikke et driftsselskap. Utbyttet kommer når en eierpost selges eller selv "
         "deler ut, og derfor ujevnt. Følg verdien av eierpostene og salg av dem."
     ),
+    "holding": (
+        "Selskapet eier store poster i andre selskaper, børsnoterte og unoterte, "
+        "og mye av pengene det deler ut, kommer fra utbyttene det selv mottar fra "
+        "dem. Utbyttet følger derfor hva de største eierpostene betaler og hvordan "
+        "de går. Følg utbyttene og resultatene i de største postene."
+    ),
 }
 
 BRANSJE_RISIKOER = {
@@ -5193,6 +5250,10 @@ BRANSJE_RISIKOER = {
     "investeringsselskap": [
         "Utbyttet avhenger av salg av eierposter og kommer ujevnt",
         "Verdien av eierpostene følger markedene de er i",
+    ],
+    "holding": [
+        "Utbyttet avhenger av hva de største eierpostene deler ut",
+        "Verdien av eierpostene følger markedene og bransjene de er i",
     ],
 }
 
@@ -5442,10 +5503,25 @@ def _lag_investor_vurdering(a, sektor_snitt):
                if siste_ar >= datetime.date.today().year
                else f"{siste_ar} endte på {_nf(siste_belop, 2)} NOK.")
         )
+    elif vekst is not None and vekst > VEKST_FRAMSKRIV_MAKS:
+        # «Attraktivt for langsiktige reinvesteringsstrategier» sto på ti sider
+        # der «Passer for» sier at takten ikke kan regnes fram (WWI med
+        # 60,7 %, tallkontrollen 2026-11-02).
+        vurdering_deler.append(
+            f"Utbyttet har vokst med {_pst(vekst, 1)} per år de siste fem årene, "
+            f"regnet fra et lavt utgangspunkt. Det sier lite om takten framover."
+        )
     elif vekst is not None and vekst > 3:
         vurdering_deler.append(
             f"Utbyttet har vokst med {_pst(vekst, 1)} per år de siste fem årene, "
             f"noe som gjør det attraktivt for langsiktige reinvesteringsstrategier."
+        )
+    elif vekst is not None and vekst < -5 and aarets_oppgang(a):
+        opp_ar, opp_belop, fjor_ar, fjor_belop = aarets_oppgang(a)
+        vurdering_deler.append(
+            f"Målt fra første til siste hele år har utbyttet falt med "
+            f"{_pst(abs(vekst), 1)} per år, men for {opp_ar} er det betalt "
+            f"{_nf(opp_belop, 2)} NOK, mot {_nf(fjor_belop, 2)} NOK for {fjor_ar}."
         )
     elif vekst is not None and vekst < -5:
         vurdering_deler.append(
@@ -7387,7 +7463,9 @@ def generer_aksjesider(aksjer, root_dir):
 
     # Oversiktsside — bygger en skikkelig landingsside, ikke bare tabell
     aksjer_med_utbytte = [a for a in aksjer if (a.get("utbytte_yield") or 0) > 0]
-    snitt_yield = (sum(a.get("utbytte_yield", 0) for a in aksjer_med_utbytte) / len(aksjer_med_utbytte)) if aksjer_med_utbytte else 0
+    # Samme regel som sektorsidene og appens «Gj.snitt yield»: aksjer på vei
+    # ut telles ikke (BlueNord trakk snittet opp med 33 %).
+    snitt_yield = sektor_snitt_yield(aksjer)
 
     # Rangeringene tar ikke med aksjer under oppkjøp, fusjon eller avvikling
     # (se i_rangering()). Tellingen og snittet over gjelder hele katalogen.
@@ -10700,9 +10778,8 @@ def lag_frekvens_blokker(grupper, dato=""):
         if kv["rekke"] < min(ar["rekke"], ha["rekke"]):
             blokker["rekke"] = (
                 f"Median antall år på rad forteller den samme historien: {k} år for de "
-                f"kvartalsvise, mot {a_} for de årlige og {h} for de halvårlige. Med andre ord: "
-                "de aksjene som gir deg penger oftest, er også de som har kortest historikk på "
-                "å faktisk klare det.")
+                f"kvartalsvise, mot {a_} for de årlige og {h} for de halvårlige. De aksjene som "
+                "betaler oftest, har altså kortest historikk på å klare det.")
         else:
             blokker["rekke"] = (
                 f"Median antall år på rad er {k} for de kvartalsvise, {a_} for de årlige og "

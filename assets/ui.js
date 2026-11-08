@@ -1487,7 +1487,9 @@ function oppdaterGeneriskSammendrag() {
 
   const medYield = alleAksjer.filter(a => a.utbytte_yield > 0);
   if (medYield.length) {
-    const snitt = medYield.reduce((s, a) => s + a.utbytte_yield, 0) / medYield.length;
+    // Samme regel som sektorsidene og /aksjer/: aksjer på vei ut telles ikke.
+    // BlueNords 33 % trakk ellers snittet opp (vedlikeholdsrapporten 05.11).
+    const snitt = sektorSnittYield(alleAksjer);
     document.getElementById('stat-snitt-yield').textContent = fmtPst(snitt, 2);
     const hoyest = hoyestYield(medYield);
     if (hoyest) {
