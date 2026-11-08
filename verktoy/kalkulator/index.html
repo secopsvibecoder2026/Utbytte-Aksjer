@@ -25,7 +25,7 @@
   <link rel="icon" type="image/png" sizes="512x512" href="/favicon.png">
   <link rel="icon" type="image/svg+xml" href="/logo/exday_icon_primary.svg">
   <link rel="manifest" href="/manifest.json" />
-  <meta name="theme-color" content="#16a34a" />
+  <meta name="theme-color" content="#2f7352" />
 
   <meta property="og:title" content="Utbyttekalkulator – Beregn utbytteinntekt og DRIP | exday.no" />
   <meta property="og:description" content="Gratis kalkulator for utbytteinntekt fra norske aksjer med DRIP, skatt og inflasjonsjustering." />
@@ -191,7 +191,7 @@
           <p class="text-xs text-gray-400 dark:text-gray-500">Effektiv utbytteskatt i Norge er 37,84 % (aksjonærmodellen inkl. oppjusteringsfaktor).</p>
           <div class="flex items-center gap-3">
             <label class="flex items-center gap-2 cursor-pointer">
-              <input id="k-infl-aktiv" type="checkbox" class="w-4 h-4 accent-blue-500 rounded" />
+              <input id="k-infl-aktiv" type="checkbox" class="w-4 h-4 accent-green-700 rounded" />
               <span class="text-sm font-medium">Inflasjonsjustering</span>
             </label>
             <div class="flex items-center gap-1">
@@ -219,7 +219,7 @@
         </div>
         <div class="stat-card">
           <div class="stat-label">Årlig utbytte</div>
-          <div class="stat-value text-blue-600 dark:text-blue-400" id="k-utbytte">–</div>
+          <div class="stat-value text-slate-600 dark:text-slate-400" id="k-utbytte">–</div>
           <div class="text-xs text-gray-400 mt-0.5" id="k-utbytte-netto"></div>
         </div>
         <div class="stat-card">
@@ -228,7 +228,7 @@
         </div>
         <div class="stat-card">
           <div class="stat-label">DRIP-gevinst</div>
-          <div class="stat-value text-purple-600 dark:text-purple-400" id="k-drip-gevinst">–</div>
+          <div class="stat-value text-slate-600 dark:text-slate-400" id="k-drip-gevinst">–</div>
         </div>
       </div>
 
@@ -247,7 +247,7 @@
         <div class="flex items-center justify-between mb-3">
           <h3 class="text-sm font-semibold">Porteføljeutvikling</h3>
           <div class="flex items-center gap-3 text-xs text-gray-500">
-            <span class="flex items-center gap-1"><span class="inline-block w-5 h-0.5 bg-blue-500"></span>Med DRIP</span>
+            <span class="flex items-center gap-1"><span class="inline-block w-5 h-0.5 bg-slate-500"></span>Med DRIP</span>
             <span class="flex items-center gap-1"><span class="inline-block w-5" style="border-top:2px dashed #9ca3af;"></span>Uten DRIP</span>
           </div>
         </div>
@@ -293,15 +293,15 @@
       <p class="text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500">Les også</p>
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
         <a href="/verktoy/huslan-vs-investering/" class="flex items-center gap-2 p-3 rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 hover:border-green-300 dark:hover:border-green-700 transition-colors text-sm font-medium">
-          <svg class="w-4 h-4 text-blue-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+          <svg class="w-4 h-4 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
           Huslån vs. Investering
         </a>
         <a href="/verktoy/fire-kalkulator/" class="flex items-center gap-2 p-3 rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 hover:border-green-300 dark:hover:border-green-700 transition-colors text-sm font-medium">
-          <svg class="w-4 h-4 text-orange-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+          <svg class="w-4 h-4 text-amber-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
           FIRE-kalkulator
         </a>
         <a href="/verktoy/sektorrebalansering/" class="flex items-center gap-2 p-3 rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 hover:border-green-300 dark:hover:border-green-700 transition-colors text-sm font-medium">
-          <svg class="w-4 h-4 text-purple-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"/></svg>
+          <svg class="w-4 h-4 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"/></svg>
           Sektorrebalansering
         </a>
       </div>
@@ -435,7 +435,7 @@
       <a href="/faq/" class="underline hover:text-gray-400 dark:hover:text-gray-400 transition-colors">Vanlige spørsmål (FAQ)</a>
     </p>
     <p class="mt-3">
-      <a href="https://www.facebook.com/share/17rMp8o9yF/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-gray-400 hover:text-blue-500 dark:hover:text-blue-400 transition-colors">
+      <a href="https://www.facebook.com/share/17rMp8o9yF/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-gray-400 hover:text-slate-500 dark:hover:text-slate-400 transition-colors">
         <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/></svg>
         Følg exday.no på Facebook
       </a>
@@ -534,7 +534,7 @@
             '<td class="px-4 py-2 font-medium">' + row.a + '</td>' +
             '<td class="px-4 py-2 text-right text-green-700 dark:text-green-400">' + fmt(row.v) + (inflAktiv ? '<br><span class="text-xs text-gray-400">' + fmt(row.vR) + '</span>' : '') + '</td>' +
             '<td class="px-4 py-2 text-right k-kol-etter-skatt' + (skattAktiv?'':' hidden') + '">' + fmt(row.v) + '</td>' +
-            '<td class="px-4 py-2 text-right text-blue-700 dark:text-blue-400">' + fmt(row.u) + '</td>' +
+            '<td class="px-4 py-2 text-right text-slate-700 dark:text-slate-400">' + fmt(row.u) + '</td>' +
             '<td class="px-4 py-2 text-right k-kol-netto' + (skattAktiv?'':' hidden') + '">' + fmt(row.net) + '</td>';
           tbody.appendChild(tr);
         });
@@ -551,7 +551,7 @@
 
         document.getElementById('k-chart').innerHTML =
           '<path d="' + pathNoDRIP + '" fill="none" stroke="' + (isDark?'#6b7280':'#9ca3af') + '" stroke-width="2" stroke-dasharray="6,4"/>' +
-          '<path d="' + pathDRIP   + '" fill="none" stroke="' + (isDark?'#60a5fa':'#3b82f6') + '" stroke-width="2.5"/>';
+          '<path d="' + pathDRIP   + '" fill="none" stroke="' + (isDark?'#94a3b8':'#64748b') + '" stroke-width="2.5"/>';
 
         document.getElementById('k-resultat').classList.remove('hidden');
       }

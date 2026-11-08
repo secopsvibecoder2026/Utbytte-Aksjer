@@ -39,7 +39,7 @@
 
   <!-- PWA -->
   <link rel="manifest" href="/manifest.json" />
-  <meta name="theme-color" content="#16a34a" />
+  <meta name="theme-color" content="#2f7352" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="apple-mobile-web-app-title" content="exday.no" />
@@ -151,7 +151,7 @@
 
   <style>
     .hero-gradient {
-      background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #15803d 100%);
+      background: #1c2631;
     }
     .stat-card {
       background: rgba(255,255,255,0.08);
@@ -162,7 +162,7 @@
       display: inline-flex; align-items: center; gap: 0.35rem;
       font-size: 0.78rem; color: rgba(255,255,255,0.65);
     }
-    .trust-badge svg { color: #86efac; }
+    .trust-badge svg { color: #9cc2ad; }
     .feature-kort {
       transition: transform 0.15s ease, box-shadow 0.15s ease;
     }
@@ -180,38 +180,17 @@
       transform: translateY(-2px);
       box-shadow: 0 8px 24px rgba(0,0,0,0.12);
     }
+    /* Ikonflatene er ensfargede (STYLE.md): én nøytral flate for alle
+       sektorer og verktøy, i stedet for én farge per kort. */
     :root {
-      --ib-orange: #fed7aa; --ib-orange-c: #c2410c;
-      --ib-blue:   #bfdbfe; --ib-blue-c:   #1d4ed8;
-      --ib-cyan:   #a5f3fc; --ib-cyan-c:   #0e7490;
-      --ib-teal:   #99f6e4; --ib-teal-c:   #0f766e;
-      --ib-yellow: #fde68a; --ib-yellow-c: #a16207;
-      --ib-gray:   #e2e8f0; --ib-gray-c:   #4b5563;
-      --ib-violet: #ddd6fe; --ib-violet-c: #7c3aed;
-      --ib-green:  #bbf7d0; --ib-green-c:  #15803d;
-      --card-green-bg: #f0fdf4; --card-green-border: #bbf7d0;
-      --vk-green: #f0fdf4; --vk-green-c: #16a34a;
-      --vk-blue:  #eff6ff; --vk-blue-c:  #2563eb;
-      --vk-purp:  #faf5ff; --vk-purp-c:  #9333ea;
-      --vk-orng:  #fff7ed; --vk-orng-c:  #ea580c;
-      --lp-green: #16a34a;
-      --lp-green-dark: #15803d;
-      
+      --ib: #f1f5f9; --ib-c: #475569;
+      --card-green-bg: #f3f7f5; --card-green-border: #c6dccf;
+      --lp-green: #2f7352;
+      --lp-green-dark: #275f45;
     }
     html.dark {
-      --ib-orange: rgba(154,52,18,0.5);  --ib-orange-c: #fb923c;
-      --ib-blue:   rgba(30,58,138,0.5);  --ib-blue-c:   #60a5fa;
-      --ib-cyan:   rgba(21,94,117,0.5);  --ib-cyan-c:   #22d3ee;
-      --ib-teal:   rgba(19,78,74,0.5);   --ib-teal-c:   #2dd4bf;
-      --ib-yellow: rgba(113,63,18,0.5);  --ib-yellow-c: #facc15;
-      --ib-gray:   #374151;              --ib-gray-c:   #9ca3af;
-      --ib-violet: rgba(76,29,149,0.5);  --ib-violet-c: #a78bfa;
-      --ib-green:  rgba(20,83,45,0.5);   --ib-green-c:  #4ade80;
-      --card-green-bg: rgba(5,46,22,0.4); --card-green-border: #166534;
-      --vk-green: rgba(20,83,45,0.35);  --vk-green-c: #4ade80;
-      --vk-blue:  rgba(30,58,138,0.35); --vk-blue-c:  #60a5fa;
-      --vk-purp:  rgba(88,28,135,0.35); --vk-purp-c:  #c084fc;
-      --vk-orng:  rgba(154,52,18,0.35); --vk-orng-c:  #fb923c;
+      --ib: #273241; --ib-c: #cbd5e1;
+      --card-green-bg: rgba(15,37,27,0.4); --card-green-border: #214d39;
     }
 
     /* Mørk modus */
@@ -260,23 +239,23 @@
     .dark .text-gray-600 { color: #9ca3af; }
     .dark .text-gray-500 { color: #6b7280; }
     .dark .text-gray-400 { color: #9ca3af; }
-    .dark .text-green-600 { color: #4ade80; }
-    .dark .text-green-700 { color: #86efac; }
+    .dark .text-green-600 { color: #6fa98a; }
+    .dark .text-green-700 { color: #9cc2ad; }
     .dark .border-gray-200 { border-color: #1f2937; }
     .dark .border-gray-700 { border-color: #374151; }
     .dark .border-gray-800 { border-color: #1f2937; }
-    .dark .bg-green-100 { background: rgba(20,83,45,0.4); }
+    .dark .bg-green-100 { background: rgba(27,63,47,0.4); }
     .dark footer { border-top-color: #1f2937; color: #4b5563; }
-    .lp-cta { background: #f0fdf4; border-top: 1px solid #bbf7d0; border-bottom: 1px solid #bbf7d0; }
-    .dark .lp-cta { background: rgba(20,83,45,0.2); border-top-color: #166534; border-bottom-color: #166534; }
+    .lp-cta { background: #f3f7f5; border-top: 1px solid #c6dccf; border-bottom: 1px solid #c6dccf; }
+    .dark .lp-cta { background: rgba(27,63,47,0.2); border-top-color: #214d39; border-bottom-color: #214d39; }
     .dark .lp-cta h2 { color: #f3f4f6; }
     .dark .lp-cta p { color: #d1d5db; }
 
     .hero-cta-primary {
-      background: #22c55e;
+      background: #3f8a63;
       color: #fff;
     }
-    .hero-cta-primary:hover { background: #16a34a; }
+    .hero-cta-primary:hover { background: #2f7352; }
   </style>
 </head>
 <body class="bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 min-h-screen">
@@ -429,12 +408,12 @@
   <section class="max-w-5xl mx-auto px-4 sm:px-6 py-10 sm:py-14">
     <div class="flex items-center justify-between mb-6">
       <h2 class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100">Utforsk etter sektor</h2>
-      <a href="/aksjer/sektor/" class="text-sm hover:underline font-medium" style="color:#16a34a;">Se alle sektorer →</a>
+      <a href="/aksjer/sektor/" class="text-sm hover:underline font-medium" style="color:#2f7352;">Se alle sektorer →</a>
     </div>
     <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
 
       <a href="/aksjer/sektor/energi/" class="sektor-kort bg-white dark:bg-gray-900 rounded-xl p-4 border border-gray-200 dark:border-gray-800 flex flex-col gap-2 no-underline">
-        <div style="background:var(--ib-orange);color:var(--ib-orange-c);align-self:flex-start;flex-shrink:0;width:2.25rem;height:2.25rem;min-width:2.25rem;border-radius:0.5rem;display:flex;align-items:center;justify-content:center;">
+        <div style="background:var(--ib);color:var(--ib-c);align-self:flex-start;flex-shrink:0;width:2.25rem;height:2.25rem;min-width:2.25rem;border-radius:0.5rem;display:flex;align-items:center;justify-content:center;">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
         </div>
         <div>
@@ -444,7 +423,7 @@
       </a>
 
       <a href="/aksjer/sektor/finans/" class="sektor-kort bg-white dark:bg-gray-900 rounded-xl p-4 border border-gray-200 dark:border-gray-800 flex flex-col gap-2 no-underline">
-        <div style="background:var(--ib-blue);color:var(--ib-blue-c);align-self:flex-start;flex-shrink:0;width:2.25rem;height:2.25rem;min-width:2.25rem;border-radius:0.5rem;display:flex;align-items:center;justify-content:center;">
+        <div style="background:var(--ib);color:var(--ib-c);align-self:flex-start;flex-shrink:0;width:2.25rem;height:2.25rem;min-width:2.25rem;border-radius:0.5rem;display:flex;align-items:center;justify-content:center;">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 3H8a2 2 0 00-2 2v2h12V5a2 2 0 00-2-2z"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="8" y1="14" x2="16" y2="14"/></svg>
         </div>
         <div>
@@ -454,7 +433,7 @@
       </a>
 
       <a href="/aksjer/sektor/shipping/" class="sektor-kort bg-white dark:bg-gray-900 rounded-xl p-4 border border-gray-200 dark:border-gray-800 flex flex-col gap-2 no-underline">
-        <div style="background:var(--ib-cyan);color:var(--ib-cyan-c);align-self:flex-start;flex-shrink:0;width:2.25rem;height:2.25rem;min-width:2.25rem;border-radius:0.5rem;display:flex;align-items:center;justify-content:center;">
+        <div style="background:var(--ib);color:var(--ib-c);align-self:flex-start;flex-shrink:0;width:2.25rem;height:2.25rem;min-width:2.25rem;border-radius:0.5rem;display:flex;align-items:center;justify-content:center;">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 20h20M5 20V10l7-7 7 7v10M9 20v-5h6v5"/></svg>
         </div>
         <div>
@@ -464,7 +443,7 @@
       </a>
 
       <a href="/aksjer/sektor/havbruk/" class="sektor-kort bg-white dark:bg-gray-900 rounded-xl p-4 border border-gray-200 dark:border-gray-800 flex flex-col gap-2 no-underline">
-        <div style="background:var(--ib-teal);color:var(--ib-teal-c);align-self:flex-start;flex-shrink:0;width:2.25rem;height:2.25rem;min-width:2.25rem;border-radius:0.5rem;display:flex;align-items:center;justify-content:center;">
+        <div style="background:var(--ib);color:var(--ib-c);align-self:flex-start;flex-shrink:0;width:2.25rem;height:2.25rem;min-width:2.25rem;border-radius:0.5rem;display:flex;align-items:center;justify-content:center;">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 12c.94-3.46 4.94-6 10.5-6 0 5.56-2.54 9.56-6 10.5"/><path d="M18 11c0 4.97-4.03 9-9 9a9 9 0 010-18c4.97 0 9 4.03 9 9z"/></svg>
         </div>
         <div>
@@ -474,7 +453,7 @@
       </a>
 
       <a href="/aksjer/sektor/eiendom/" class="sektor-kort bg-white dark:bg-gray-900 rounded-xl p-4 border border-gray-200 dark:border-gray-800 flex flex-col gap-2 no-underline">
-        <div style="background:var(--ib-yellow);color:var(--ib-yellow-c);align-self:flex-start;flex-shrink:0;width:2.25rem;height:2.25rem;min-width:2.25rem;border-radius:0.5rem;display:flex;align-items:center;justify-content:center;">
+        <div style="background:var(--ib);color:var(--ib-c);align-self:flex-start;flex-shrink:0;width:2.25rem;height:2.25rem;min-width:2.25rem;border-radius:0.5rem;display:flex;align-items:center;justify-content:center;">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
         </div>
         <div>
@@ -484,7 +463,7 @@
       </a>
 
       <a href="/aksjer/sektor/industri/" class="sektor-kort bg-white dark:bg-gray-900 rounded-xl p-4 border border-gray-200 dark:border-gray-800 flex flex-col gap-2 no-underline">
-        <div style="background:var(--ib-gray);color:var(--ib-gray-c);align-self:flex-start;flex-shrink:0;width:2.25rem;height:2.25rem;min-width:2.25rem;border-radius:0.5rem;display:flex;align-items:center;justify-content:center;">
+        <div style="background:var(--ib);color:var(--ib-c);align-self:flex-start;flex-shrink:0;width:2.25rem;height:2.25rem;min-width:2.25rem;border-radius:0.5rem;display:flex;align-items:center;justify-content:center;">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="7" width="20" height="15" rx="1"/><path d="M16 7V5a2 2 0 00-4 0v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="8" y1="14" x2="16" y2="14"/></svg>
         </div>
         <div>
@@ -494,7 +473,7 @@
       </a>
 
       <a href="/aksjer/sektor/telekommunikasjon/" class="sektor-kort bg-white dark:bg-gray-900 rounded-xl p-4 border border-gray-200 dark:border-gray-800 flex flex-col gap-2 no-underline">
-        <div style="background:var(--ib-violet);color:var(--ib-violet-c);align-self:flex-start;flex-shrink:0;width:2.25rem;height:2.25rem;min-width:2.25rem;border-radius:0.5rem;display:flex;align-items:center;justify-content:center;">
+        <div style="background:var(--ib);color:var(--ib-c);align-self:flex-start;flex-shrink:0;width:2.25rem;height:2.25rem;min-width:2.25rem;border-radius:0.5rem;display:flex;align-items:center;justify-content:center;">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.07 1.18 2 2 0 012.03 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92v2z"/></svg>
         </div>
         <div>
@@ -504,7 +483,7 @@
       </a>
 
       <a href="/aksjer/sektor/" class="sektor-kort bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-xl p-4 flex flex-col gap-2 no-underline">
-        <div style="background:rgba(21,128,61,0.15);color:#16a34a;align-self:flex-start;flex-shrink:0;width:2.25rem;height:2.25rem;min-width:2.25rem;border-radius:0.5rem;display:flex;align-items:center;justify-content:center;">
+        <div style="background:rgba(39,95,69,0.15);color:#2f7352;align-self:flex-start;flex-shrink:0;width:2.25rem;height:2.25rem;min-width:2.25rem;border-radius:0.5rem;display:flex;align-items:center;justify-content:center;">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
         </div>
         <div>
@@ -521,12 +500,12 @@
     <div class="max-w-5xl mx-auto px-4 sm:px-6 py-10 sm:py-12">
       <div class="flex items-center justify-between mb-6">
         <h2 class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100">Verktøy</h2>
-        <a href="/verktoy/" class="text-sm hover:underline font-medium" style="color:#16a34a;">Se alle →</a>
+        <a href="/verktoy/" class="text-sm hover:underline font-medium" style="color:#2f7352;">Se alle →</a>
       </div>
       <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
 
         <a href="/verktoy/kalkulator/" class="group flex flex-col gap-3 p-4 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-green-400 transition-colors no-underline">
-          <div style="align-self:flex-start;flex-shrink:0;width:2.5rem;height:2.5rem;border-radius:0.75rem;display:flex;align-items:center;justify-content:center;background:var(--vk-blue);color:var(--vk-blue-c);">
+          <div style="align-self:flex-start;flex-shrink:0;width:2.5rem;height:2.5rem;border-radius:0.75rem;display:flex;align-items:center;justify-content:center;background:var(--ib);color:var(--ib-c);">
             <svg style="width:1.25rem;height:1.25rem;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="12" y2="14"/></svg>
           </div>
           <div>
@@ -536,7 +515,7 @@
         </a>
 
         <a href="/verktoy/fire-kalkulator/" class="group flex flex-col gap-3 p-4 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-green-400 transition-colors no-underline">
-          <div style="align-self:flex-start;flex-shrink:0;width:2.5rem;height:2.5rem;border-radius:0.75rem;display:flex;align-items:center;justify-content:center;background:var(--vk-orng);color:var(--vk-orng-c);">
+          <div style="align-self:flex-start;flex-shrink:0;width:2.5rem;height:2.5rem;border-radius:0.75rem;display:flex;align-items:center;justify-content:center;background:var(--ib);color:var(--ib-c);">
             <svg style="width:1.25rem;height:1.25rem;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"/><path d="M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z"/></svg>
           </div>
           <div>
@@ -546,7 +525,7 @@
         </a>
 
         <a href="/verktoy/sektorrebalansering/" class="group flex flex-col gap-3 p-4 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-green-400 transition-colors no-underline">
-          <div style="align-self:flex-start;flex-shrink:0;width:2.5rem;height:2.5rem;border-radius:0.75rem;display:flex;align-items:center;justify-content:center;background:var(--vk-purp);color:var(--vk-purp-c);">
+          <div style="align-self:flex-start;flex-shrink:0;width:2.5rem;height:2.5rem;border-radius:0.75rem;display:flex;align-items:center;justify-content:center;background:var(--ib);color:var(--ib-c);">
             <svg style="width:1.25rem;height:1.25rem;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
           </div>
           <div>
@@ -556,7 +535,7 @@
         </a>
 
         <a href="/verktoy/huslan-vs-investering/" class="group flex flex-col gap-3 p-4 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-green-400 transition-colors no-underline">
-          <div style="align-self:flex-start;flex-shrink:0;width:2.5rem;height:2.5rem;border-radius:0.75rem;display:flex;align-items:center;justify-content:center;background:rgba(21,128,61,0.1);color:#16a34a;">
+          <div style="align-self:flex-start;flex-shrink:0;width:2.5rem;height:2.5rem;border-radius:0.75rem;display:flex;align-items:center;justify-content:center;background:var(--ib);color:var(--ib-c);">
             <svg style="width:1.25rem;height:1.25rem;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
           </div>
           <div>
@@ -573,7 +552,7 @@
   <section class="max-w-5xl mx-auto px-4 sm:px-6 py-10 sm:py-14">
     <div class="flex items-center justify-between mb-6">
       <h2 class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100">Siste artikler</h2>
-      <a href="/artikler/" class="text-sm hover:underline font-medium" style="color:#16a34a;">Se alle →</a>
+      <a href="/artikler/" class="text-sm hover:underline font-medium" style="color:#2f7352;">Se alle →</a>
     </div>
     <div class="grid sm:grid-cols-2 gap-4">
       <!--ARTIKLER:START-->
@@ -624,7 +603,7 @@
     </div>
 
     <div class="mt-6 text-center">
-      <a href="/artikler/" class="inline-flex items-center gap-2 text-sm font-medium hover:underline" style="color:#16a34a;">
+      <a href="/artikler/" class="inline-flex items-center gap-2 text-sm font-medium hover:underline" style="color:#2f7352;">
         Se alle artikler og guider →
       </a>
     </div>
@@ -645,7 +624,7 @@
             Ex-dato er den første handelsdagen der en aksje handles <em>uten</em> rett til kommende utbytte.
             Du må ha kjøpt aksjen senest <strong>børsdagen før</strong> ex-dato for å motta utbyttet. Er ex-datoen en mandag, er det fredagen før.
             Kjøper du på selve ex-datoen eller senere, går utbyttet til selgeren.
-            <a href="/artikler/hva-er-ex-dato/" class="hover:underline ml-1" style="color:#16a34a;">Les mer om ex-dato →</a>
+            <a href="/artikler/hva-er-ex-dato/" class="hover:underline ml-1" style="color:#2f7352;">Les mer om ex-dato →</a>
           </div>
         </details>
 
@@ -702,7 +681,7 @@
 
       </div>
       <p class="mt-6 text-sm text-gray-500 dark:text-gray-400">
-        Flere spørsmål? Se vår <a href="/faq/" class="hover:underline" style="color:#16a34a;">fullstendige FAQ</a>.
+        Flere spørsmål? Se vår <a href="/faq/" class="hover:underline" style="color:#2f7352;">fullstendige FAQ</a>.
       </p>
     </div>
   </section>
@@ -726,7 +705,7 @@
       <a href="/om/" class="underline hover:text-gray-400 dark:hover:text-gray-400 transition-colors">Om exday.no</a>
     </p>
     <p class="mt-3">
-      <a href="https://www.facebook.com/share/17rMp8o9yF/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-gray-400 hover:text-blue-500 dark:hover:text-blue-400 transition-colors">
+      <a href="https://www.facebook.com/share/17rMp8o9yF/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-gray-400 hover:text-slate-500 dark:hover:text-slate-400 transition-colors">
         <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/></svg>
         Følg exday.no på Facebook
       </a>

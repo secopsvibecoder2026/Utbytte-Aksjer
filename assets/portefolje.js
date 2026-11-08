@@ -875,15 +875,15 @@ function visHistorikkKurve() {
   const endring    = pfNorm[pfNorm.length - 1] - 100;
   const endringPct = fmtPst(endring, 1);
   const positiv    = endring >= 0;
-  const farge      = positiv ? '#16a34a' : '#dc2626';
-  const fargeLys   = positiv ? '#dcfce7' : '#fee2e2';
+  const farge      = positiv ? '#2f7352' : '#a8433b';
+  const fargeLys   = positiv ? '#e3eee8' : '#f6e4e2';
 
-  // TWR SVG-linje (blå) — vises kun hvis den avviker fra porteføljelinjen
+  // TWR SVG-linje (skifergrå) — vises kun hvis den avviker fra porteføljelinjen
   let twrSvg = '';
   if (twrAvviker) {
     const twrPts = twrSerie.map((v, i) => toSvg(i, v));
     twrSvg = `<polyline points="${twrPts.map(p => p.join(',')).join(' ')}"
-      fill="none" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="3 2"
+      fill="none" stroke="#64748b" stroke-width="1.5" stroke-dasharray="3 2"
       stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"/>`;
   }
 
@@ -926,7 +926,7 @@ function visHistorikkKurve() {
       ? `<span class="flex items-center gap-1"><span class="inline-block w-5 border-t-2 border-dashed border-gray-400"></span> OSEBX</span>`
       : '';
     const twrLegend = twrAvviker
-      ? `<span class="flex items-center gap-1"><span class="inline-block w-5 border-t-2 border-dashed border-blue-400"></span> TWR</span>`
+      ? `<span class="flex items-center gap-1"><span class="inline-block w-5 border-t-2 border-dashed border-slate-400"></span> TWR</span>`
       : '';
     legendEl.innerHTML = [twrLegend, osebxLegend].filter(Boolean).join('');
   }
@@ -954,7 +954,7 @@ function visMiniSektorChart(beholdning) {
   if (totVerdi === 0) return;
 
   const sortert = Object.entries(sektorMap).sort((a, b) => b[1] - a[1]);
-  const farger = ['#2563eb', '#14b8a6', '#6366f1', '#0891b2', '#3b82f6', '#0d9488', '#4f46e5', '#60a5fa', '#10b981', '#f59e0b', '#f97316', '#ec4899'];
+  const farger = ['#3f8a63', '#56708c', '#b98a3a', '#8a6a8f', '#64748b', '#b0705a', '#7d8f4e', '#94a3b8', '#4b5d73', '#c2a878', '#7b6a9b', '#9a8478'];
 
   container.innerHTML = sortert.map(([sektor, verdi], i) => {
     const pct = (verdi / totVerdi * 100);
@@ -1400,7 +1400,7 @@ function visPortefolje() {
       </td>
     </tr>
     <tr class="pf-detail-rad${isOpen ? '' : ' hidden'}" data-for="${escHtml(a.ticker)}">
-      <td colspan="10" class="px-4 pb-4 bg-gray-50 dark:bg-gray-900/30 border-b border-gray-100 dark:border-gray-800" style="border-left:3px solid #d97706">
+      <td colspan="10" class="px-4 pb-4 bg-gray-50 dark:bg-gray-900/30 border-b border-gray-100 dark:border-gray-800" style="border-left:3px solid #9c7029">
         ${byggDetailHtml(a.ticker, kb, 0)}
       </td>
     </tr>`;
@@ -1466,7 +1466,7 @@ function visPortefolje() {
           </div>
           <svg class="w-4 h-4 text-gray-400 shrink-0 mt-0.5 transition-transform${isOpen ? ' rotate-180' : ''}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
         </div>
-        <div class="pf-kort-detalj pf-detail-rad${isOpen ? '' : ' hidden'} border-t border-amber-100 dark:border-amber-900/30 px-3 pb-3" style="border-left:3px solid #d97706" data-for="${escHtml(a.ticker)}">
+        <div class="pf-kort-detalj pf-detail-rad${isOpen ? '' : ' hidden'} border-t border-amber-100 dark:border-amber-900/30 px-3 pb-3" style="border-left:3px solid #9c7029" data-for="${escHtml(a.ticker)}">
           ${byggDetailHtml(a.ticker, kb, 0)}
         </div>
       </div>`;
@@ -2266,9 +2266,9 @@ function visHHI(beholdning) {
   }, 0);
 
   function hhiInfo(hhi) {
-    if (hhi < 1000)  return { farge: '#16a34a', tekst: 'Godt diversifisert' };
-    if (hhi < 2500)  return { farge: '#d97706', tekst: 'Moderat konsentrasjon' };
-    return               { farge: '#dc2626', tekst: 'Høy konsentrasjon' };
+    if (hhi < 1000)  return { farge: '#2f7352', tekst: 'Godt diversifisert' };
+    if (hhi < 2500)  return { farge: '#9c7029', tekst: 'Moderat konsentrasjon' };
+    return               { farge: '#a8433b', tekst: 'Høy konsentrasjon' };
   }
 
   const ia = hhiInfo(hhiAksje), is_ = hhiInfo(hhiSektor);
@@ -2869,7 +2869,7 @@ function visAnalyse() {
   // ── Totalscore og helseetikett ────────────────────────────────────────
   const total = d1 + d2 + d3 + d4 + d5;
   const helseLabel = total >= 80 ? 'Utmerket' : total >= 65 ? 'God' : total >= 50 ? 'Middels' : 'Svak';
-  const ringFarge  = total >= 75 ? '#16a34a' : total >= 50 ? '#9ca3af' : '#d97706';
+  const ringFarge  = total >= 75 ? '#2f7352' : total >= 50 ? '#9ca3af' : '#9c7029';
   const trackFarge = isDark ? '#1f2937' : '#e5e7eb';
   const innerBg    = isDark ? '#111827' : '#ffffff';
   const conicDeg   = (total / 100 * 360).toFixed(1); // CSS: punktum, aldri komma
@@ -2886,7 +2886,7 @@ function visAnalyse() {
   // ── Hjelpefunksjoner for HTML ─────────────────────────────────────────
   function dimFarge(score, max) {
     const r = score / max;
-    return r >= 0.75 ? '#15803d' : r >= 0.5 ? '#6b7280' : '#b45309';
+    return r >= 0.75 ? '#275f45' : r >= 0.5 ? '#6b7280' : '#805a22';
   }
   function dimBar(score, max) {
     const pct = (score / max * 100).toFixed(0);
@@ -3008,7 +3008,7 @@ function visAnalyse() {
       }).join('');
 
   const tipsHtml = tips.length > 0
-    ? `<div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-4 shadow-sm" style="border-left:3px solid #d97706;">
+    ? `<div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-4 shadow-sm" style="border-left:3px solid #9c7029;">
         <p class="text-xs font-semibold uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-2.5">Forbedringspunkter</p>
         <ul class="space-y-2">${tips.map(t =>
           `<li class="flex gap-2 text-xs text-gray-600 dark:text-gray-400 leading-relaxed"><span class="text-gray-400 dark:text-gray-500 shrink-0 mt-0.5">→</span><span>${t}</span></li>`

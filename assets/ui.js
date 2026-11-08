@@ -82,7 +82,7 @@ function _tegnModalKursGraf(body, a, periode, kursData) {
   if (n < 4) return;
 
   const erOpp = priser[n - 1] >= priser[0];
-  const farge = erOpp ? '#16a34a' : '#dc2626';
+  const farge = erOpp ? '#2f7352' : '#a8433b';
   const endring = fmtPst(Math.abs((priser[n - 1] - priser[0]) / priser[0] * 100), 1);
 
   // Kursen står i kurshodet øverst. Her stod siste ukeskurs (432,60) like
@@ -125,7 +125,7 @@ function _tegnModalKursGraf(body, a, periode, kursData) {
   // Svakt fyll og tynnere linje: grafen var det sterkeste fargeinntrykket
   // i vinduet.
   const grad = ctx.createLinearGradient(0, padT, 0, CH - padB);
-  grad.addColorStop(0, erOpp ? 'rgba(22,163,74,0.14)' : 'rgba(220,38,38,0.12)');
+  grad.addColorStop(0, erOpp ? 'rgba(47,115,82,0.14)' : 'rgba(168,67,59,0.12)');
   grad.addColorStop(1, 'rgba(0,0,0,0)');
   ctx.beginPath();
   ctx.moveTo(sx(0), CH - padB);
@@ -162,33 +162,35 @@ const KAL_TYPER = {
 };
 
 
+// Dempet kategoripalett (08.11.2026): sektorene må kunne skilles i
+// smultringen, men uten de mettede blå- og turkistonene fra før.
 const SEKTOR_FARGE = {
-  'Energi':                  '#64748b',
-  'Finans':                  '#2563eb',
-  'Shipping':                '#3b82f6',
-  'Havbruk':                 '#14b8a6',
-  'Industri':                '#6366f1',
-  'Materialer':              '#0891b2',
-  'Fornybar energi':         '#0d9488',
-  'Telekommunikasjon':       '#818cf8',
-  'Forbruksvarer':           '#94a3b8',
-  'Energitjenester':         '#475569',
-  'Konsulent':               '#334155',
-  'Informasjonsteknologi':   '#1d4ed8',
-  'Helsevern':               '#2dd4bf',
-  'Kommunikasjonstjenester': '#4f46e5',
+  'Energi':                  '#56708c',
+  'Finans':                  '#3f8a63',
+  'Shipping':                '#4b5d73',
+  'Havbruk':                 '#5e7f6b',
+  'Industri':                '#9a8478',
+  'Materialer':              '#b0705a',
+  'Fornybar energi':         '#7d8f4e',
+  'Telekommunikasjon':       '#7b6a9b',
+  'Forbruksvarer':           '#c2a878',
+  'Energitjenester':         '#64748b',
+  'Konsulent':               '#8a6a8f',
+  'Informasjonsteknologi':   '#334155',
+  'Helsevern':               '#b98a3a',
+  'Kommunikasjonstjenester': '#94a3b8',
 };
 const FARGE_FALLBACK = '#94a3b8';
-// Sekvensiell palett for individuelle aksjer i donut/bar-charts
+// Palett for enkeltaksjer i smultring- og søylediagrammer
 const CHART_FARGER = [
-  '#2563eb',
-  '#14b8a6',
-  '#6366f1',
-  '#0891b2',
-  '#3b82f6',
-  '#0d9488',
-  '#4f46e5',
-  '#60a5fa',
+  '#3f8a63',
+  '#56708c',
+  '#b98a3a',
+  '#8a6a8f',
+  '#64748b',
+  '#b0705a',
+  '#7d8f4e',
+  '#94a3b8',
 ];
 
 
@@ -902,10 +904,10 @@ function oppdaterFavBtn() {
   if (!btn) return;
   const antall = hentFav().size;
   // Samme strek-SVG som stjernene i listen, ikke ☆ og ★ fra skrifttypen.
-  const ikon = fylt => `<svg class="w-4 h-4 shrink-0 ${fylt ? 'text-yellow-500' : ''}" aria-hidden="true" fill="${fylt ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>`;
+  const ikon = fylt => `<svg class="w-4 h-4 shrink-0 ${fylt ? 'text-amber-500' : ''}" aria-hidden="true" fill="${fylt ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>`;
   btn.setAttribute('aria-pressed', visKunFavoritter ? 'true' : 'false');
   if (visKunFavoritter) {
-    btn.className = 'filter-input text-sm font-medium inline-flex items-center justify-center gap-1.5 bg-yellow-50 dark:bg-yellow-900/30 text-gray-900 dark:text-gray-100 border-yellow-300 dark:border-yellow-700';
+    btn.className = 'filter-input text-sm font-medium inline-flex items-center justify-center gap-1.5 bg-amber-50 dark:bg-amber-900/30 text-gray-900 dark:text-gray-100 border-amber-300 dark:border-amber-700';
     btn.innerHTML = `${ikon(true)}<span>Favoritter (${antall})</span>`;
   } else {
     btn.className = 'filter-input text-sm inline-flex items-center justify-center gap-1.5 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors';
@@ -2432,7 +2434,7 @@ function visMineUtbetalinger() {
 function stjerne(ticker, ekstraKlasse = '') {
   const er = erFavoritt(ticker);
   return `<button class="fav-btn ${ekstraKlasse} transition-colors" data-ticker="${escHtml(ticker)}" title="${er ? 'Fjern favoritt' : 'Legg til favoritt'}" aria-label="${er ? 'Fjern fra favoritter' : 'Legg til i favoritter'}">
-    <svg class="w-4 h-4 pointer-events-none ${er ? 'text-yellow-400' : 'text-gray-300 dark:text-gray-600'}" aria-hidden="true" fill="${er ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
+    <svg class="w-4 h-4 pointer-events-none ${er ? 'text-amber-400' : 'text-gray-300 dark:text-gray-600'}" aria-hidden="true" fill="${er ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
   </button>`;
 }
 
@@ -5056,7 +5058,7 @@ function beregnHuslaan() {
   const diff = Math.abs(totalA - totalB);
   if (totalA >= totalB) {
     vEl.className = 'rounded-xl p-4 text-center space-y-1 border hl-verdict-laan';
-    vEl.innerHTML = `<p class="text-sm font-bold text-blue-700 dark:text-blue-400">Nedbetaling av lån lønner seg best</p>
+    vEl.innerHTML = `<p class="text-sm font-bold text-slate-700 dark:text-slate-400">Nedbetaling av lån lønner seg best</p>
       <p class="text-xs text-gray-500 dark:text-gray-400">Du er <strong>${fmtKr(diff)}</strong> bedre stilt enn ved investering over ${berAr} år</p>`;
   } else {
     vEl.className = 'rounded-xl p-4 text-center space-y-1 border hl-verdict-invest';
@@ -5184,9 +5186,9 @@ function tegneKalkulatorGraf(raderMed, raderUten) {
     <svg viewBox="0 0 ${W} ${H}" class="w-full" style="max-height:190px">
       ${gridLines}
       <polyline points="${pts(raderUten)}" fill="none" stroke="#94a3b8" stroke-width="2" stroke-dasharray="6,3"/>
-      <polyline points="${pts(raderMed)}"  fill="none" stroke="#2563eb" stroke-width="2.5"/>
+      <polyline points="${pts(raderMed)}"  fill="none" stroke="#2f7352" stroke-width="2.5"/>
       ${xLabels}
-      <line x1="${PAD.left}" y1="${H-6}" x2="${PAD.left+18}" y2="${H-6}" stroke="#2563eb" stroke-width="2.5"/>
+      <line x1="${PAD.left}" y1="${H-6}" x2="${PAD.left+18}" y2="${H-6}" stroke="#2f7352" stroke-width="2.5"/>
       <text x="${PAD.left+22}" y="${H-3}" font-size="9" fill="currentColor" opacity="0.65">Med DRIP</text>
       <line x1="${PAD.left+80}" y1="${H-6}" x2="${PAD.left+98}" y2="${H-6}" stroke="#94a3b8" stroke-width="2" stroke-dasharray="6,3"/>
       <text x="${PAD.left+102}" y="${H-3}" font-size="9" fill="currentColor" opacity="0.65">Uten DRIP</text>

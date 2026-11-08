@@ -36,14 +36,14 @@
 *, *::before, *::after { box-sizing: border-box; }
 
 /* ── HUSLÅN VS. INVESTERING – dark mode cards ────────────────────────── */
-.hl-card-laan   { background: #eff6ff; border-color: #bfdbfe; }
-.hl-card-invest { background: #f0fdf4; border-color: #bbf7d0; }
-.hl-verdict-laan   { background: #eff6ff; border-color: #bfdbfe; }
-.hl-verdict-invest { background: #f0fdf4; border-color: #bbf7d0; }
-.dark .hl-card-laan      { background: rgba(23,37,84,0.2);  border-color: rgba(30,58,138,0.35); }
-.dark .hl-card-invest    { background: rgba(5,46,22,0.2);   border-color: rgba(20,83,45,0.35);  }
-.dark .hl-verdict-laan   { background: rgba(23,37,84,0.2);  border-color: rgba(30,58,138,0.35); }
-.dark .hl-verdict-invest { background: rgba(5,46,22,0.2);   border-color: rgba(20,83,45,0.35);  }
+.hl-card-laan   { background: #f8fafc; border-color: #e2e8f0; }
+.hl-card-invest { background: #f3f7f5; border-color: #c6dccf; }
+.hl-verdict-laan   { background: #f8fafc; border-color: #e2e8f0; }
+.hl-verdict-invest { background: #f3f7f5; border-color: #c6dccf; }
+.dark .hl-card-laan      { background: rgba(2,6,23,0.2);  border-color: rgba(15,23,42,0.35); }
+.dark .hl-card-invest    { background: rgba(15,37,27,0.2);   border-color: rgba(27,63,47,0.35);  }
+.dark .hl-verdict-laan   { background: rgba(2,6,23,0.2);  border-color: rgba(15,23,42,0.35); }
+.dark .hl-verdict-invest { background: rgba(15,37,27,0.2);   border-color: rgba(27,63,47,0.35);  }
 
 /* ── STAT CARDS ──────────────────────────────────────────────────────── */
 .stat-card {
@@ -89,8 +89,8 @@
 .dark .tab-btn { color: #9ca3af; }
 .tab-btn:hover { color: #1f2937; border-color: #d1d5db; }
 .dark .tab-btn:hover { color: #e5e7eb; border-color: #4b5563; }
-.tab-btn.active { color: #15803d; border-color: #16a34a; }
-.dark .tab-btn.active { color: #4ade80; border-color: #22c55e; }
+.tab-btn.active { color: #275f45; border-color: #2f7352; }
+.dark .tab-btn.active { color: #6fa98a; border-color: #3f8a63; }
 
 /* ── OVERSIKT SUB-TABS ────────────────────────────────────────────────── */
 .sub-tab-btn {
@@ -110,8 +110,8 @@
 .dark .sub-tab-btn { color: #9ca3af; }
 .sub-tab-btn:hover { color: #1f2937; border-color: #d1d5db; }
 .dark .sub-tab-btn:hover { color: #e5e7eb; border-color: #4b5563; }
-.sub-tab-btn.active { color: #15803d; border-color: #16a34a; }
-.dark .sub-tab-btn.active { color: #4ade80; border-color: #22c55e; }
+.sub-tab-btn.active { color: #275f45; border-color: #2f7352; }
+.dark .sub-tab-btn.active { color: #6fa98a; border-color: #3f8a63; }
 
 /* ── TOPPLISTOR ───────────────────────────────────────────────────────────── */
 .toppliste-pill {
@@ -127,10 +127,10 @@
   white-space: nowrap;
 }
 .dark .toppliste-pill { background: #111827; border-color: #374151; color: #9ca3af; }
-.toppliste-pill:hover { border-color: #22c55e; color: #15803d; }
-.dark .toppliste-pill:hover { border-color: #22c55e; color: #4ade80; }
-.toppliste-pill.active { background: #f0fdf4; border-color: #16a34a; color: #15803d; font-weight: 600; }
-.dark .toppliste-pill.active { background: rgb(20 83 45 / 0.2); border-color: #22c55e; color: #4ade80; }
+.toppliste-pill:hover { border-color: #3f8a63; color: #275f45; }
+.dark .toppliste-pill:hover { border-color: #3f8a63; color: #6fa98a; }
+.toppliste-pill.active { background: #f3f7f5; border-color: #2f7352; color: #275f45; font-weight: 600; }
+.dark .toppliste-pill.active { background: rgb(20 83 45 / 0.2); border-color: #3f8a63; color: #6fa98a; }
 
 .toppliste-rad {
   display: flex;
@@ -182,7 +182,7 @@
   color: #e5e7eb;
 }
 .filter-input:focus {
-  border-color: #22c55e;
+  border-color: #3f8a63;
   box-shadow: 0 0 0 3px rgb(34 197 94 / 0.15);
 }
 
@@ -280,16 +280,16 @@ th.sort-desc::after { content: ' ↓'; color: #6b7280; }
   font-size: 0.75rem;
   font-weight: 600;
   border-radius: 9999px;
-  border: 1.5px solid #16a34a;
-  color: #16a34a;
+  border: 1.5px solid #2f7352;
+  color: #2f7352;
   background: transparent;
   cursor: pointer;
   transition: background 0.15s, color 0.15s;
   white-space: nowrap;
 }
-.dark .view-toggle-btn { border-color: #4ade80; color: #4ade80; }
-.view-toggle-btn:hover { background: #16a34a; color: #fff; }
-.dark .view-toggle-btn:hover { background: #4ade80; color: #111827; }
+.dark .view-toggle-btn { border-color: #6fa98a; color: #6fa98a; }
+.view-toggle-btn:hover { background: #2f7352; color: #fff; }
+.dark .view-toggle-btn:hover { background: #6fa98a; color: #111827; }
 
 /* ── KOMPAKT MODUS ────────────────────────────────────────────────────── */
 /* Skjul detaljkolonner i tabellen */
@@ -314,7 +314,7 @@ th.sort-desc::after { content: ' ↓'; color: #6b7280; }
   transition: background 0.1s;
 }
 .dark .aksje-kort-kompakt { background: #111827; border-color: #1f2937; }
-.aksje-kort-kompakt:active { background: #f0fdf4; }
+.aksje-kort-kompakt:active { background: #f3f7f5; }
 .dark .aksje-kort-kompakt:active { background: #14532d20; }
 .aksje-kort-kompakt.snart-ex { }
 
@@ -329,7 +329,7 @@ th.sort-desc::after { content: ' ↓'; color: #6b7280; }
   transition: box-shadow 0.15s, border-color 0.15s;
 }
 .dark .aksje-kort { background: #111827; border-color: #1f2937; }
-.aksje-kort:active { box-shadow: 0 0 0 2px #22c55e; border-color: #22c55e; }
+.aksje-kort:active { box-shadow: 0 0 0 2px #3f8a63; border-color: #3f8a63; }
 .aksje-kort.snart-ex { }
 
 /* ── KALENDER ─────────────────────────────────────────────────────────── */
@@ -419,12 +419,12 @@ th.sort-desc::after { content: ' ↓'; color: #6b7280; }
 .score-av10 { font-size: 0.65rem; font-weight: 500; margin-left: 1px; opacity: 0.75; }
 /* Én aksentfarge pluss grå: høy score grønn, middels grå, lav amber. Blått
    hadde ingen fast betydning, og rødt er forbeholdt kursfall. */
-.score-høy     { background: #dcfce7; color: #15803d; }
+.score-høy     { background: #e3eee8; color: #275f45; }
 .score-middels { background: #f3f4f6; color: #374151; }
-.score-lav     { background: #fef3c7; color: #92400e; }
-.dark .score-høy     { background: rgb(20 83 45 / 0.4); color: #86efac; }
+.score-lav     { background: #f5edd8; color: #69491e; }
+.dark .score-høy     { background: rgb(20 83 45 / 0.4); color: #9cc2ad; }
 .dark .score-middels { background: #1f2937; color: #d1d5db; }
-.dark .score-lav     { background: rgb(120 53 15 / 0.35); color: #fcd34d; }
+.dark .score-lav     { background: rgb(120 53 15 / 0.35); color: #dcc183; }
 
 /* ── SKELETON LOADER ─────────────────────────────────────────────────── */
 .skeleton {
@@ -473,16 +473,16 @@ th.sort-desc::after { content: ' ↓'; color: #6b7280; }
   transition: opacity 0.15s;
 }
 .dag-pill:hover { opacity: 0.85; }
-.dag-pill-utbetaling { background: #dcfce7; color: #166534; }
-.dag-pill-ex         { background: #fed7aa; color: #9a3412; }
-.dag-pill-siste      { background: #fef3c7; color: #92400e; }
-.dag-pill-uke        { background: #e0e7ff; color: #3730a3; }
-.dark .dag-pill-utbetaling { background: rgb(20 83 45 / 0.35); color: #86efac; }
-.dark .dag-pill-ex         { background: rgb(154 52 18 / 0.35); color: #fdba74; }
-.dark .dag-pill-siste      { background: rgb(146 64 14 / 0.35); color: #fcd34d; }
-.dark .dag-pill-uke        { background: rgb(55 48 163 / 0.35); color: #a5b4fc; }
-.dag-pill-malpris { background: #dbeafe; color: #1e40af; }
-.dark .dag-pill-malpris { background: rgb(30 64 175 / 0.35); color: #93c5fd; }
+.dag-pill-utbetaling { background: #e3eee8; color: #214d39; }
+.dag-pill-ex         { background: #ead9b0; color: #69491e; }
+.dag-pill-siste      { background: #f5edd8; color: #69491e; }
+.dag-pill-uke        { background: #f1f5f9; color: #1e293b; }
+.dark .dag-pill-utbetaling { background: rgb(20 83 45 / 0.35); color: #9cc2ad; }
+.dark .dag-pill-ex         { background: rgb(154 52 18 / 0.35); color: #dcc183; }
+.dark .dag-pill-siste      { background: rgb(146 64 14 / 0.35); color: #dcc183; }
+.dark .dag-pill-uke        { background: rgb(55 48 163 / 0.35); color: #cbd5e1; }
+.dag-pill-malpris { background: #f1f5f9; color: #1e293b; }
+.dark .dag-pill-malpris { background: rgb(30 64 175 / 0.35); color: #cbd5e1; }
 
 /* ── SITEWIDE NAVBAR ────────────────────────────────────────────────── */
 .site-nav {
@@ -539,22 +539,22 @@ th.sort-desc::after { content: ' ↓'; color: #6b7280; }
   text-decoration: none;
 }
 .site-nav-menu a.active {
-  color: #15803d;
-  background: #f0fdf4;
+  color: #275f45;
+  background: #f3f7f5;
   font-weight: 600;
 }
 .dark .site-nav-menu a { color: #9ca3af; }
 .dark .site-nav-menu a:hover { background: #1f2937; color: #f3f4f6; }
-.dark .site-nav-menu a.active { color: #4ade80; background: rgba(21,128,61,0.15); }
+.dark .site-nav-menu a.active { color: #6fa98a; background: rgba(39,95,69,0.15); }
 .site-nav-actions { display: flex; align-items: center; gap: 0.4rem; }
 .site-app-btn {
   font-size: 0.78rem; font-weight: 600;
   padding: 0.4rem 0.8rem; border-radius: 0.45rem;
-  background: #16a34a; color: #fff !important;
+  background: #2f7352; color: #fff !important;
   text-decoration: none; white-space: nowrap;
   transition: background 0.15s;
 }
-.site-app-btn:hover { background: #15803d; text-decoration: none; }
+.site-app-btn:hover { background: #275f45; text-decoration: none; }
 .site-dark-btn {
   padding: 0.4rem; border-radius: 0.4rem;
   border: none; cursor: pointer;
@@ -635,12 +635,12 @@ th.sort-desc::after { content: ' ↓'; color: #6b7280; }
 .dark .ak-cur, .dark .ak-title { color: #f3f4f6; }
 .ak-app-btn {
   font-size: 0.75rem; font-weight: 600; padding: 0.35rem 0.75rem; border-radius: 0.5rem;
-  background: #16a34a; color: #fff !important; text-decoration: none; white-space: nowrap;
+  background: #2f7352; color: #fff !important; text-decoration: none; white-space: nowrap;
   transition: background 0.15s;
 }
-.ak-app-btn:hover { background: #15803d; text-decoration: none; }
-.dark .ak-app-btn { background: #166534; }
-.dark .ak-app-btn:hover { background: #14532d; }
+.ak-app-btn:hover { background: #275f45; text-decoration: none; }
+.dark .ak-app-btn { background: #214d39; }
+.dark .ak-app-btn:hover { background: #1b3f2f; }
 
 .ak-toggle {
   padding: 0.4rem; border-radius: 0.5rem;
@@ -742,11 +742,11 @@ th.sort-desc::after { content: ' ↓'; color: #6b7280; }
   transition: color 0.15s, border-color 0.15s;
 }
 .modal-tab:hover { color: #111827; }
-.modal-tab.aktiv { color: #16a34a; border-bottom-color: #16a34a; font-weight: 600; }
+.modal-tab.aktiv { color: #2f7352; border-bottom-color: #2f7352; font-weight: 600; }
 .dark .modal-tabs { border-bottom-color: #1f2937; }
 .dark .modal-tab { color: #9ca3af; }
 .dark .modal-tab:hover { color: #f3f4f6; }
-.dark .modal-tab.aktiv { color: #4ade80; border-bottom-color: #4ade80; }
+.dark .modal-tab.aktiv { color: #6fa98a; border-bottom-color: #6fa98a; }
 
 /* På telefon deler fanene bredden. Med fast polstring var hovedmenyen 6 px
    for bred på 390 px, og «Kalkulator» i aksjevinduet ble kuttet (20.10.2026). */
@@ -786,11 +786,11 @@ th.sort-desc::after { content: ' ↓'; color: #6b7280; }
   transition: color 0.15s, border-color 0.15s;
 }
 .ak-tabnav a:hover { color: #111827; }
-.ak-tabnav a.aktiv { color: #16a34a; border-bottom-color: #16a34a; font-weight: 600; }
+.ak-tabnav a.aktiv { color: #2f7352; border-bottom-color: #2f7352; font-weight: 600; }
 .dark .ak-tabnav { background: #030712; border-bottom-color: #1f2937; }
 .dark .ak-tabnav a { color: #9ca3af; }
 .dark .ak-tabnav a:hover { color: #f3f4f6; }
-.dark .ak-tabnav a.aktiv { color: #4ade80; border-bottom-color: #4ade80; }
+.dark .ak-tabnav a.aktiv { color: #6fa98a; border-bottom-color: #6fa98a; }
 section[id] { scroll-margin-top: 100px; }
 
 /* ── KONTOER (Kan handles på) ─────────────────────────────────────────── */
@@ -823,14 +823,14 @@ section[id] { scroll-margin-top: 100px; }
   font-size: 0.95rem;
   flex-shrink: 0;
   margin-top: 0.1rem;
-  color: #15803d;
+  color: #275f45;
 }
-.dark .modal-konto-ikon { color: #4ade80; }
-.modal-konto-rad.ikke .modal-konto-ikon { color: #dc2626; }
+.dark .modal-konto-ikon { color: #6fa98a; }
+.modal-konto-rad.ikke .modal-konto-ikon { color: #a8433b; }
 /* Hjemstedet er ikke avklart (OET, CAPT) — se askTekst() i ui.js */
-.dark .modal-konto-rad.ikke .modal-konto-ikon { color: #f87171; }
-.modal-konto-rad.uavklart .modal-konto-ikon { color: #b45309; font-weight: 700; }
-.dark .modal-konto-rad.uavklart .modal-konto-ikon { color: #fbbf24; }
+.dark .modal-konto-rad.ikke .modal-konto-ikon { color: #cf7a72; }
+.modal-konto-rad.uavklart .modal-konto-ikon { color: #805a22; font-weight: 700; }
+.dark .modal-konto-rad.uavklart .modal-konto-ikon { color: #cfa65a; }
 .modal-konto-rad strong { font-size: 0.82rem; }
 .modal-konto-rad p {
   font-size: 0.78rem;
@@ -861,8 +861,8 @@ section[id] { scroll-margin-top: 100px; }
   border-color: #9ca3af;
 }
 .chip.chip-aktiv {
-  background: #16a34a;
-  border-color: #16a34a;
+  background: #2f7352;
+  border-color: #2f7352;
   color: #fff;
 }
 .dark .chip {
@@ -874,8 +874,8 @@ section[id] { scroll-margin-top: 100px; }
   border-color: #6b7280;
 }
 .dark .chip.chip-aktiv {
-  background: #15803d;
-  border-color: #15803d;
+  background: #275f45;
+  border-color: #275f45;
   color: #fff;
 }
 
@@ -883,11 +883,11 @@ section[id] { scroll-margin-top: 100px; }
 /* Risiko-boks i modal. Lav risiko er en forklaring (grå); moderat og høy
    advarer (amber, sterkere kant for høy). Rødt er forbeholdt kursfall. */
 .risiko-boks-lav     { color: #374151; background: #f9fafb; border-color: #e5e7eb; }
-.risiko-boks-moderat { color: #92400e; background: #fffbeb; border-color: #fde68a; }
-.risiko-boks-hoy     { color: #92400e; background: #fffbeb; border-color: #f59e0b; border-left-width: 3px; }
+.risiko-boks-moderat { color: #69491e; background: #fbf8f0; border-color: #ead9b0; }
+.risiko-boks-hoy     { color: #69491e; background: #fbf8f0; border-color: #b98a3a; border-left-width: 3px; }
 .dark .risiko-boks-lav     { color: #d1d5db; background: #111827; border-color: #1f2937; }
-.dark .risiko-boks-moderat { color: #fbbf24; background: rgba(92,45,5,0.35);  border-color: #92400e; }
-.dark .risiko-boks-hoy     { color: #fbbf24; background: rgba(92,45,5,0.35);  border-color: #f59e0b; border-left-width: 3px; }
+.dark .risiko-boks-moderat { color: #cfa65a; background: rgba(87,61,27,0.35);  border-color: #69491e; }
+.dark .risiko-boks-hoy     { color: #cfa65a; background: rgba(87,61,27,0.35);  border-color: #b98a3a; border-left-width: 3px; }
 
 /* Inneværende år i «Historiske utbytter»: lysere og skravert, for det er
    bare betalt hittil i år (STYLE.md, tiltak 6). */
@@ -926,13 +926,13 @@ section[id] { scroll-margin-top: 100px; }
   padding: 0.25rem 0;
   font-size: 0.85rem;
   font-weight: 600;
-  color: #16a34a;
+  color: #2f7352;
   background: none;
   border: 0;
   cursor: pointer;
 }
 .om-selskap-vis-mer:hover { text-decoration: underline; }
-.dark .om-selskap-vis-mer { color: #4ade80; }
+.dark .om-selskap-vis-mer { color: #6fa98a; }
 @media (min-width: 640px) {
   .om-selskap-lukket .om-selskap-mer { display: block; }
   .om-selskap-lukket > .om-selskap-tekst { display: block; -webkit-line-clamp: unset; overflow: visible; }

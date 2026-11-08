@@ -442,7 +442,7 @@ function sjekkStartsideForslag() {
     toast.innerHTML = '<div style="font-size:0.875rem;font-weight:600;">Vil du åpne appen direkte?</div>'
       + '<div style="font-size:0.8rem;color:#9ca3af;line-height:1.4;">Hopp over landingssiden og gå rett hit når du besøker exday.no</div>'
       + '<div style="display:flex;gap:0.5rem;">'
-      + '<button id="startside-forslag-ja" style="flex:1;background:#16a34a;color:#fff;border:none;border-radius:0.5rem;padding:0.5rem;font-size:0.8rem;font-weight:600;cursor:pointer;">Ja, aktiver</button>'
+      + '<button id="startside-forslag-ja" style="flex:1;background:#2f7352;color:#fff;border:none;border-radius:0.5rem;padding:0.5rem;font-size:0.8rem;font-weight:600;cursor:pointer;">Ja, aktiver</button>'
       + '<button id="startside-forslag-nei" style="flex:1;background:#374151;color:#d1d5db;border:none;border-radius:0.5rem;padding:0.5rem;font-size:0.8rem;cursor:pointer;">Nei takk</button>'
       + '</div>';
     document.body.appendChild(toast);

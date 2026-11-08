@@ -176,9 +176,15 @@ godkjenning:
 tickere, kurshode i aksjemodalen, banner i stedet for velkomstvindu, strammere
 tabell og runde akser. Se «App review of 2026-10-20» i `CLAUDE.md`.
 
+**Dempet palett 08.11.2026.** Tailwinds sterke grønn, oker og rød er byttet
+mot dempede skalaer i `@theme` (se «Project Color Palette» i `CLAUDE.md`).
+Pyntefargene (blå, lilla, turkis, oransje, rosa) er borte, ikonflatene har én
+nøytral farge, heltene på `/aksjer/` og sektorsidene er flate i stedet for
+gradient, og tall og tickere i malene for oversikt, sektor og topplister er
+nøytrale. Logoen har beholdt sine farger.
+
 Gjenstår:
 - samme tallformat i resten av malen
-- fargerollene på de håndskrevne sidene
 
 ## Rekkefølge
 
