@@ -32,7 +32,7 @@ const { aaretsArsutbytte, aaretsNedgang, ordinaerPerAr, ordinaerHistorikk, saeru
   vekstKlasse,
   beregnScore,
   beregnYtdInntekt
-, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, utbyttePerioder, vistOverBetalt, arsrateMerke, modalBetaltBoks, supplertFotnote, utbytteRekke, stabileAr, exForbeholdGjelder, kapitalAndel, modalKapitalNote, kapitalSkattTekst, aksjerMedExIMaaned, beregnHvisKjopt, hvisStartAar, beregnAskMotVanlig, fmtUtbytte, sisteUtbytteTekst, modalOmSelskapet, vekslOmSelskapet, dripGevinst, _simulerKalkulator, askStatus, askTekst, modalKontoer , bevegelserOverskrift } = require('../assets/ui.js');
+, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, utbyttePerioder, vistOverBetalt, arsrateMerke, oyeblikksbilde, finnEndringer, nyttSidenSistHtml, modalBetaltBoks, supplertFotnote, utbytteRekke, stabileAr, exForbeholdGjelder, kapitalAndel, modalKapitalNote, kapitalSkattTekst, aksjerMedExIMaaned, beregnHvisKjopt, hvisStartAar, beregnAskMotVanlig, fmtUtbytte, sisteUtbytteTekst, modalOmSelskapet, vekslOmSelskapet, dripGevinst, _simulerKalkulator, askStatus, askTekst, modalKontoer , bevegelserOverskrift } = require('../assets/ui.js');
 
 // ── fmt ────────────────────────────────────────────────────────────────────
 test('fmt returnerer — for null', () => {
@@ -1195,4 +1195,74 @@ test('appens «Gj.snitt yield» bruker samme regel som sektorsidene', () => {
   const kropp = kode.slice(start, kode.indexOf('\n}\n', start));
   assert.match(kropp, /stat-snitt-yield[\s\S]*sektorSnittYield\(|sektorSnittYield\([\s\S]*stat-snitt-yield/);
   assert.doesNotMatch(kropp, /medYield\.reduce\(/);
+});
+
+// ── Nytt siden sist (2026-11-10) ───────────────────────────────────────────
+const NSS_FOR = [
+  { ticker: 'SOFF', navn: 'Solstad Offshore ASA', utbytte_per_aksje: 0.51, siste_utbytte: 1.4592, siste_utbytte_dato: '2026-07-17' },
+  { ticker: 'STST', navn: 'Stainless Tankers ASA', utbytte_per_aksje: 12.74, siste_utbytte_dato: '2026-08-07' },
+  { ticker: 'OKEA', navn: 'OKEA ASA', utbytte_per_aksje: 0, siste_utbytte_dato: '2023-12-01' },
+  { ticker: 'DNB', navn: 'DNB Bank ASA', utbytte_per_aksje: 16.75, siste_utbytte_dato: '2026-04-24' },
+  { ticker: 'ZAL', navn: 'Zalaris ASA', utbytte_per_aksje: 0.9, siste_utbytte_dato: '2025-05-20' },
+];
+const NSS_NAA = [
+  { ...NSS_FOR[0], utbytte_per_aksje: 5.63, siste_utbytte: 2.7683, siste_utbytte_dato: '2026-11-06' },
+  { ...NSS_FOR[1], utbytte_per_aksje: 5.17, hendelse: { type: 'avvikling', dato: '2026-08-05', tekst: 'x', melding: '1' } },
+  { ...NSS_FOR[2], utbytte_per_aksje: 2.0, ex_dato: '2026-12-02', annonsert_utbytte: 2.0, annonsert_ex: '2026-12-02' },
+  { ...NSS_FOR[3], utbytte_per_aksje: 16.9 },                      // 0,9 % opp: ikke verdt en linje
+  { ...NSS_FOR[4], utbytte_per_aksje: 0 },
+];
+
+test('finnEndringer: utbetaling, ny ex-dato, årsrate og hendelse for mine aksjer', () => {
+  const forrige = oyeblikksbilde(NSS_FOR);
+  const alle = new Set(['SOFF', 'STST', 'OKEA', 'DNB', 'ZAL']);
+  const e = finnEndringer(forrige, NSS_NAA, alle, '2026-11-09', '2026-11-02');
+  assert.deepEqual(e.map(x => [x.ticker, x.type]), [
+    ['STST', 'hendelse'], ['SOFF', 'utbetalt'], ['OKEA', 'exdato'],
+    ['OKEA', 'rate'], ['SOFF', 'rate'], ['STST', 'rate'], ['ZAL', 'rate'],
+  ]);
+  const tekst = t => e.find(x => x.ticker === t[0] && x.type === t[1]).tekst;
+  assert.equal(tekst(['SOFF', 'utbetalt']), 'Gikk ex-utbytte 6. nov. med 2,7683 kr per aksje');
+  assert.equal(tekst(['SOFF', 'rate']), 'Utbytte per aksje (årsrate) opp fra 0,51 til 5,63 kr');
+  assert.equal(tekst(['STST', 'rate']), 'Utbytte per aksje (årsrate) ned fra 12,74 til 5,17 kr');
+  assert.equal(tekst(['OKEA', 'exdato']), 'Ny ex-dato 2. des.: 2,00 kr per aksje');
+  assert.equal(tekst(['OKEA', 'rate']), 'Årsrate 2,00 kr per aksje. Før viste vi ingen');
+  assert.equal(tekst(['ZAL', 'rate']), 'Ingen årsrate lenger. Den var 0,90 kr per aksje');
+  assert.equal(tekst(['STST', 'hendelse']), 'Virksomheten skal avvikles');
+});
+
+test('finnEndringer: bare mine aksjer, og ingenting uten noe å måle mot', () => {
+  const forrige = oyeblikksbilde(NSS_FOR);
+  assert.deepEqual(finnEndringer(forrige, NSS_NAA, new Set(['DNB']), '2026-11-09', '2026-11-02'), []);
+  assert.deepEqual(finnEndringer(forrige, NSS_NAA, new Set(), '2026-11-09', '2026-11-02'), []);
+  // En aksje som ikke var med i bildet, har ingen endring.
+  assert.deepEqual(finnEndringer({}, NSS_NAA, new Set(['SOFF']), '2026-11-09', '2026-11-02'), []);
+  // Uendret datasett gir ingenting.
+  assert.deepEqual(finnEndringer(forrige, NSS_FOR, new Set(['SOFF', 'STST', 'OKEA']), '2026-11-09', '2026-11-02'), []);
+});
+
+test('finnEndringer: en passert ex-dato er ikke «ny», og et forslag sier at det er et forslag', () => {
+  const forrige = oyeblikksbilde([{ ticker: 'GOD', utbytte_per_aksje: 0.5 }]);
+  const passert = [{ ticker: 'GOD', utbytte_per_aksje: 0.5, ex_dato: '2026-10-16' }];
+  assert.deepEqual(finnEndringer(forrige, passert, new Set(['GOD']), '2026-11-09', '2026-11-02'), []);
+  const foreslaatt = [{ ticker: 'GOD', utbytte_per_aksje: 0.5, ex_dato: '2026-12-10', ex_forbehold: '2026-12-09' }];
+  assert.equal(finnEndringer(forrige, foreslaatt, new Set(['GOD']), '2026-11-09', '2026-11-02')[0].tekst,
+    'Ny ex-dato 10. des. (foreslått, ikke vedtatt)');
+  // Første utbetaling noensinne teller bare når den kom etter at bildet ble tatt.
+  const forste = [{ ticker: 'GOD', utbytte_per_aksje: 0.5, siste_utbytte: 0.5, siste_utbytte_dato: '2026-10-16' }];
+  assert.deepEqual(finnEndringer(forrige, forste, new Set(['GOD']), '2026-11-09', '2026-11-02'), []);
+  assert.equal(finnEndringer(forrige, forste, new Set(['GOD']), '2026-11-09', '2026-10-10').length, 1);
+});
+
+test('nyttSidenSistHtml: seks rader, resten bak «Vis flere», og teksten er escapet', () => {
+  global.escHtml = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  try {
+    const e = Array.from({ length: 8 }, (_, i) => ({ ticker: 'T' + i, navn: 'N<b>', type: 'rate', tekst: 'a<b' }));
+    const html = nyttSidenSistHtml(e, '2026-11-02', new Date('2026-11-09T12:00:00'));
+    assert.match(html, /siden 2\. nov\./);
+    assert.match(html, /Vis 2 til/);
+    assert.match(html, /Merk som sett/);
+    assert.doesNotMatch(html, /a<b/);
+    assert.doesNotMatch(nyttSidenSistHtml(e.slice(0, 6), '2026-11-02'), /<details/);
+  } finally { delete global.escHtml; }
 });

@@ -176,5 +176,31 @@ function lagreAksjeData(ticker, data) {
   localStorage.setItem('aksje_data', JSON.stringify(all));
 }
 
+// ── NYTT SIDEN SIST ────────────────────────────────────────────────────────
+// Øyeblikksbildet «Nytt siden sist» sammenligner mot: { tid, aksjer: {TICKER: {…}} }.
+// Null når det ikke finnes eller ikke lar seg lese; da lages et nytt.
+function hentSistSett() {
+  try {
+    const v = JSON.parse(localStorage.getItem('sist_sett') || 'null');
+    return v && typeof v === 'object' && v.aksjer && typeof v.aksjer === 'object' && !Array.isArray(v.aksjer) ? v : null;
+  } catch { return null; }
+}
+function lagreSistSett(v) {
+  try { localStorage.setItem('sist_sett', JSON.stringify(v)); } catch { /* full lagring: kortet vises igjen neste gang */ }
+}
+
+// ── UTBYTTEFORSLAG ─────────────────────────────────────────────────────────
+// Utbetalinger brukeren har valgt å hoppe over, per portefølje:
+// { pfId: ['SOFF|2026-11-06', …] }.
+function hentUtbytteAvvist() {
+  try {
+    const v = JSON.parse(localStorage.getItem('pf_utbytte_avvist') || '{}');
+    return v && typeof v === 'object' && !Array.isArray(v) ? v : {};
+  } catch { return {}; }
+}
+function lagreUtbytteAvvist(v) {
+  try { localStorage.setItem('pf_utbytte_avvist', JSON.stringify(v)); } catch { /* forslaget kommer igjen */ }
+}
+
 // Node.js test export
-if (typeof module !== 'undefined') module.exports = { hentFav, lagreFav, erFavoritt, toggleFav, hentPortefoljer, hentAktivPF, lagrePF, skjermingsrenteFor, SKJERMINGSRENTER };
+if (typeof module !== 'undefined') module.exports = { hentFav, lagreFav, erFavoritt, toggleFav, hentPortefoljer, hentAktivPF, lagrePF, skjermingsrenteFor, SKJERMINGSRENTER, hentSistSett, lagreSistSett, hentUtbytteAvvist, lagreUtbytteAvvist };
