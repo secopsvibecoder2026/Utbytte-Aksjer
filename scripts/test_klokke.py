@@ -228,5 +228,45 @@ class TestKjede(unittest.TestCase):
         self.assertFalse(ok)
 
 
+class TestVekk(unittest.TestCase):
+    """--vekk starter klokka bare når ingen går. GitHub kalles aldri."""
+
+    class _Svar:
+        def __init__(self, kode, ut):
+            self.returncode, self.stdout, self.stderr = kode, ut, "feil"
+
+    def _med(self, svar, fn):
+        startet = []
+        orig = k._gh, k.start
+        k._gh = lambda *a: svar
+        k.start = lambda repo, wf: startet.append(wf) or True
+        try:
+            return fn(), startet
+        finally:
+            k._gh, k.start = orig
+
+    def test_gaar_allerede(self):
+        svar = self._Svar(0, '{"workflow_runs": [{"status": "completed"}, {"status": "in_progress"}]}')
+        ok, startet = self._med(svar, lambda: k.vekk("x/y"))
+        self.assertTrue(ok)
+        self.assertEqual(startet, [])
+
+    def test_i_ko_teller_som_at_den_gaar(self):
+        for status in ("queued", "pending", "waiting", "requested"):
+            svar = self._Svar(0, '{"workflow_runs": [{"status": "%s"}]}' % status)
+            self.assertTrue(self._med(svar, lambda: k.klokke_gaar("x/y"))[0], status)
+
+    def test_ingen_gaar_starter_en(self):
+        svar = self._Svar(0, '{"workflow_runs": [{"status": "completed"}]}')
+        ok, startet = self._med(svar, lambda: k.vekk("x/y"))
+        self.assertTrue(ok)
+        self.assertEqual(startet, [k.KLOKKE])
+
+    def test_ukjent_svar_starter_en(self):
+        for svar in (self._Svar(1, ""), self._Svar(0, "ikke json")):
+            self.assertIsNone(self._med(svar, lambda: k.klokke_gaar("x/y"))[0])
+            self.assertEqual(self._med(svar, lambda: k.vekk("x/y"))[1], [k.KLOKKE])
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

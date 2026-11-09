@@ -3544,8 +3544,8 @@ function visModal(a) {
       <div class="grid grid-cols-2 gap-3 mb-4">
         ${modalKort('Utbytteyield' + ((yieldErDelaar(a) && !delaarMotbevist(a)) ? ' <span class="font-normal normal-case opacity-70">usikker</span>' : ''), '<span class="' + yieldKlasse(a.utbytte_yield) + '">' + fmtPst(a.utbytte_yield, 2) + '</span>')}
         ${modalKort(a.snitt_yield_5ar > 0 ? snittNavn(a) : 'Snitt yield', a.snitt_yield_5ar > 0 ? '<span class="' + yieldKlasse(a.snitt_yield_5ar) + '">' + fmtPst(a.snitt_yield_5ar, 2) + '</span>' : '—')}
-        ${modalKort('Utbytte/aksje' + (a.arsrate_kilde === 'betalt_12m'
-            ? ' <span class="font-normal normal-case opacity-70">siste 12 mnd' + (a.arsrate_ekstra_trukket ? ', uten engangsutbytte' : '') + '</span>'
+        ${modalKort('Utbytte/aksje' + (arsrateMerke(a)
+            ? ' <span class="font-normal normal-case opacity-70">' + arsrateMerke(a) + '</span>'
             : (yieldErDelaar(a) && !delaarMotbevist(a))
             ? ' <span class="font-normal normal-case opacity-70">usikker</span>'
             : ['Kvartalsvis','Halvårlig','Månedlig'].includes(a.frekvens)
@@ -4431,6 +4431,29 @@ function hvisStartAar(kurs, iDag) {
   return ut;
 }
 
+const ANTALL_ORD = { 1: 'én', 2: 'to', 3: 'tre', 4: 'fire', 5: 'fem', 6: 'seks', 7: 'sju', 8: 'åtte', 9: 'ni', 10: 'ti' };
+
+/**
+ * Merkelappen ved «Utbytte/aksje» når årsraten er det selskapet har betalt.
+ * «siste 12 mnd» når runden er lik 12-månedersvinduet, «siste fire
+ * utbetalinger» når den ikke er det (SOFF hadde fem utbetalinger i vinduet og
+ * fire i runden, 09.11.2026). Tom streng ellers. Samme regel som
+ * arsrate_merke() i fetch_stocks.py.
+ */
+function arsrateMerke(a) {
+  if (!a) return '';
+  let merke;
+  if (a.arsrate_kilde === 'betalt_12m') {
+    merke = 'siste 12 mnd';
+  } else if (a.arsrate_kilde === 'siste_utbetalinger') {
+    const n = Number(a.arsrate_antall) || 0;
+    merke = n > 1 ? `siste ${ANTALL_ORD[n] || n} utbetalinger` : 'siste utbetaling';
+  } else {
+    return '';
+  }
+  return merke + (a.arsrate_ekstra_trukket ? ', uten engangsutbytte' : '');
+}
+
 /** [vist, betalt] når vist yield ligger vesentlig over det som er betalt. */
 function vistOverBetalt(a) {
   if (!a || a.utbytte_12m == null) return null;
@@ -4471,6 +4494,8 @@ function modalBetaltBoks(a) {
   const forklaring = !ovb ? ''
     : !a.utbytte_12m
       ? `Direkteavkastningen over er ${fmt(ovb[0])}\u00a0%, men selskapet har ikke hatt noe utbytte med ex-dato de siste 12 månedene.`
+      : a.arsrate_kilde === 'siste_utbetalinger'
+      ? `Direkteavkastningen over er ${fmt(ovb[0])}\u00a0% og bygger på ${(Number(a.arsrate_antall) || 0) > 1 ? `de ${ANTALL_ORD[a.arsrate_antall] || a.arsrate_antall} siste utbetalingene` : 'den siste utbetalingen'}. Den eldste av dem har ex-dato rett før tolvmånedersvinduet, så det som er betalt de siste 12 månedene, er lavere: ${fmt(ovb[1])}\u00a0% av dagens kurs.`
       : `Direkteavkastningen over er ${fmt(ovb[0])}\u00a0%. Det som faktisk er betalt de siste 12 månedene, tilsvarer ${fmt(ovb[1])}\u00a0% av dagens kurs.`;
   const v = _betaltVisning(rader[0]);
   const knapper = rader.map((r, i) =>
@@ -6010,4 +6035,4 @@ function _annBygTopp() {
 }
 
 // Node.js test export
-if (typeof module !== 'undefined') module.exports = { sektorSnittYield, utdatertMerke, modalUtdatert, hendelseUtenMal, iRangering, hoyestYield, saerutbytteFotnote, aaretsArsutbytte, aaretsNedgang, ordinaerPerAr, ordinaerHistorikk, markedsplassTekst, hendelseMerke, nyMilepel, delLenkeData, pentAkse, fmtPst, fmtTall, dagerTil, dagerTilTekst, datoKort, aksjerTekst, snittNavn, utbytteKutt, modalHendelse, beregnRisiko, forklarRisiko, vekstFraTopp, beregnMal, forklarMal, bevegelserOverskrift, utbytteRekke, stabileAr, exForbeholdGjelder, utbyttePerioder, vistOverBetalt, modalBetaltBoks, supplertFotnote, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, fmt, formaterDato, yieldKlasse, payoutKlasse, vekstKlasse, beregnScore, beregnBaerekraft, beregnYtdInntekt, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote, kapitalAndel, modalKapitalNote, kapitalSkattTekst, aksjerMedExIMaaned, beregnHvisKjopt, hvisStartAar, beregnAskMotVanlig, fmtUtbytte, sisteUtbytteTekst, modalOmSelskapet, vekslOmSelskapet, dripGevinst, _simulerKalkulator, askStatus, askTekst, modalKontoer };
+if (typeof module !== 'undefined') module.exports = { sektorSnittYield, utdatertMerke, modalUtdatert, hendelseUtenMal, iRangering, hoyestYield, saerutbytteFotnote, aaretsArsutbytte, aaretsNedgang, ordinaerPerAr, ordinaerHistorikk, markedsplassTekst, hendelseMerke, nyMilepel, delLenkeData, pentAkse, fmtPst, fmtTall, dagerTil, dagerTilTekst, datoKort, aksjerTekst, snittNavn, utbytteKutt, modalHendelse, beregnRisiko, forklarRisiko, vekstFraTopp, beregnMal, forklarMal, bevegelserOverskrift, utbytteRekke, stabileAr, exForbeholdGjelder, utbyttePerioder, vistOverBetalt, arsrateMerke, modalBetaltBoks, supplertFotnote, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, fmt, formaterDato, yieldKlasse, payoutKlasse, vekstKlasse, beregnScore, beregnBaerekraft, beregnYtdInntekt, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote, kapitalAndel, modalKapitalNote, kapitalSkattTekst, aksjerMedExIMaaned, beregnHvisKjopt, hvisStartAar, beregnAskMotVanlig, fmtUtbytte, sisteUtbytteTekst, modalOmSelskapet, vekslOmSelskapet, dripGevinst, _simulerKalkulator, askStatus, askTekst, modalKontoer };

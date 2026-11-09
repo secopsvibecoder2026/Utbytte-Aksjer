@@ -118,6 +118,7 @@ Utbytte-Aksjer/
 │   ├── deploy-only.yml        # Lightweight Pages deploy (workflow_dispatch)
 │   ├── kodeendring.yml        # Starts the data job when the code behind the numbers changes
 │   ├── klokke.yml             # Chain of runs, Sunday evening to Friday: starts the price and data jobs itself
+│   ├── vekk-klokka.yml        # Starts the clock on a push to main when none is running
 │   └── tester.yml             # Runs the JS + Python test suites on push/PR
 ├── assets/                    # All frontend JS and CSS
 │   ├── app.js                 # Bootstrap, data loading, cache management, escHtml()
@@ -353,7 +354,15 @@ the chain until then. A failed hand-over makes the run red.
   subtract as wall-clock time in Python, which is an hour off on the night
   the clocks change.
 
-Tests: `scripts/test_klokke.py` (24). `TestKjede` runs the real loop with a
+**A push to main wakes the clock** (`vekk-klokka.yml`, `klokke.py --vekk`).
+A broken chain otherwise waits for GitHub's cron, hours late. The job starts
+a clock only when none is running or queued (`klokke_gaar()`); an unknown
+answer starts one, since a second clock just queues behind the first. The
+bot's own commits start no workflows, so this runs only when a person or a
+pull request changes `main`. A session cannot start `klokke.yml` itself:
+`workflow_dispatch` through the GitHub integration answers 403.
+
+Tests: `scripts/test_klokke.py` (28). `TestKjede` runs the real loop with a
 fake clock for a whole week: every slot starts once, and no run hands over
 before it has lived `GRENSE`.
 
@@ -2533,10 +2542,10 @@ No page threw an error. Fixed:
 
 **Open:**
 
-- The data job uses `date.today()` about thirty times, and that is the UTC
-  date on the runner. In winter a run between 00:00 and 01:00 Oslo time is
-  therefore dated the day before. The trading-day clock never runs then,
-  but `kodeendring.yml` can.
+- ~~The data job uses `date.today()` about thirty times, and that is the UTC
+  date on the runner.~~ Fixed 2026-11-09: the data job runs with
+  `TZ: Europe/Oslo`, so `date.today()` is the Oslo date. Timestamps written
+  with `Z` use `utcnow()` and are unchanged.
 - Sjekk 10 reports AKRBP: three of four payments fall in the window. This is
   the window edge, not a fault, and it clears at the ex-date on 3 November.
 
@@ -2576,6 +2585,87 @@ longer count (BlueNord). «Med andre ord» is gone from the frequency article.
 **Left open:** WWI shows 28 kr and WWIB 20 kr «annualisert» for the same
 payments, because the «additional» notice is classified on one issuer only.
 Whether 20 or 28 is the annual rate is a reading of the company's policy.
+
+## The payment round — the 12-month window when ex-dates move (2026-11-09)
+
+A window of exactly 365 days counts wrong in the days around the anniversary
+of a payment, because an ex-date rarely falls on the same date two years
+running. On 9 November 2026 that gave three faults on one day:
+
+| Stock | What the window held | Shown | Should be |
+|---|---|---|---|
+| SOFF | Five quarterly payments (ex 25.11.2025 and 06.11.2026) | 0,75 % | 8,31 % |
+| STST | Three (ex 07.11.2025, this year's Q3 dividend not yet announced) | 30,33 % | 12,31 % |
+| ARCH | Three, same cause | 10,94 % | 14,59 % |
+| BOUV | Three for a May and November payer | «Kvartalsvis» | «Halvårlig» |
+
+Every rule that counts payments read the strict window. The paid-12m rule
+needs exactly as many payments as the frequency, so with five or three it
+stood down, and the page fell back to last year's calendar total. Bouvet is
+the SATS trap again: `frekvens_label()` turns three payments into
+«Kvartalsvis», and that label is written in six places on the page.
+
+`utbetalingsrunde()` gives the payments that make up the last year when one
+may come up to `RUNDE_SLINGRING_DAGER` (45) before or after its anniversary:
+
+- **Early this year:** the oldest and newest payment in the window lie almost
+  a year apart. They are the same payment two years running, and the oldest
+  leaves.
+- **Late this year:** the payment that has just left the window has no
+  successor yet. It stays until the successor arrives or the slack is used
+  up. After that it is a missed payment, not a late one.
+- **The slack is at most 40 % of the usual gap between payments.** For a
+  monthly payer 45 days is a payment and a half.
+- HUNT keeps five: its oldest and newest lie 302 days apart, so the extra
+  payment is an extra payment.
+
+What uses the round, and what does not:
+
+- **The round:** the frequency label, `velg_arsrate()` and the paid-12m rule
+  (`med_runde()` gives the rule a view of the row with the round in place of
+  the window).
+- **The strict window:** `utbytte_12m`, `utbytte_12m_antall` and
+  `utbytte_12m_liste`. They are shown as «betalt siste 12 mnd» and must be
+  exactly that. `utbytte_runde` is stored only when it differs.
+- **The label follows the number.** When the rate is the round and the round
+  is not the window, `arsrate_kilde` is `siste_utbetalinger` and the card
+  reads «siste fire utbetalinger» (`arsrate_merke()` / `arsrateMerke()`).
+  «Siste 12 mnd» beside a table saying something else was the contradiction
+  to avoid. `merk_rate_lik_runden()` sets the same label when the guard has
+  already chosen the round's sum (STST), without changing the number.
+- **The «Faktisk betalt» box explains the gap** on those pages only: the rate
+  builds on the last four payments, and the oldest has its ex-date just
+  before the twelve-month window.
+
+**A cut with one payment missing** (`KUTT_MED_EN_MANGLENDE`). When the slack
+is used up and the round holds one payment fewer than the frequency,
+`velg_arsrate()` used to return last year's total. STST would have gone back
+to 30 % in December and stayed there until `utbytte_stoppet()` fires fifteen
+months after the last payment. It now takes what was paid when that is below
+90 % of last year even after scaling up for the missing payment. A stable
+payer is not touched: one of two half-year payments scaled up equals last
+year.
+
+Simulated against the real series for the thirteen stocks whose window count
+differs from the frequency, with their NewsWeb notices: STST, SOFF and ARCH
+move as in the table, BOUV changes label, and DNO, SOMA, MORLD, AKAST, IWS,
+HUNT, NORBT, SOAG and GOD keep their numbers. AKAST is held by its notice
+text, as it was before its October payment left the window.
+
+Found in the same pass:
+
+- **A notification opened the front page.** `sw.js` now opens `/app/`, and
+  focuses an open app window before any other.
+- **OKEA shows 4,44 % with nothing paid in 12 months.** That is the approved
+  NOK 2,00 with ex-date 2 December (NewsWeb 685403), so Sjekk 10 is right to
+  report it and the number is right to stand.
+- **BOR** shows last year's 0,80 kr beside a «delår» warning. Both payments
+  in the window are one-offs: 0,50 «additional» in March and 1,50
+  «extraordinary» in November (685169). The «Key information» notice does not
+  use the word, so the split is not picked up. Left for the owner, as before.
+
+Tests: `TestUtbetalingsrunde` (15), `TestKuttMedEnManglende` (4) and
+`ui.test.js` (+2).
 
 ## App review of 2026-10-20
 

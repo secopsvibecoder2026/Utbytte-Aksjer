@@ -26,6 +26,9 @@ slo til, eller klokka nettopp ble byttet ut), startes den ikke på nytt.
 
 Kjør manuelt (viser planen, starter ingenting):
     python3 scripts/klokke.py --plan
+
+Start klokka hvis ingen går (brukes av vekk-klokka.yml):
+    python3 scripts/klokke.py --vekk
 """
 
 import datetime
@@ -195,6 +198,34 @@ def start(repo, wf):
     return False
 
 
+def klokke_gaar(repo):
+    """Går det en klokke, eller står en i kø? None når GitHub ikke svarer."""
+    r = _gh("api", f"repos/{repo}/actions/workflows/{KLOKKE}/runs?per_page=10")
+    if r.returncode != 0:
+        print(f"  Kunne ikke lese kjøringene til {KLOKKE}: {r.stderr.strip()}", flush=True)
+        return None
+    try:
+        runs = json.loads(r.stdout).get("workflow_runs") or []
+    except ValueError as e:
+        print(f"  Uventet svar for {KLOKKE}: {e}", flush=True)
+        return None
+    return any(k.get("status") != "completed" for k in runs)
+
+
+def vekk(repo):
+    """Starter klokka når ingen går. Kalles av vekk-klokka.yml ved push til main.
+
+    Kjeden holder seg selv i gang, men ryker den, starter GitHubs timeplan den
+    først flere timer senere. En push til main er en hendelse GitHub kjører
+    med en gang. Vet vi ikke om en klokke går, startes en: den stiller seg i
+    kø bak den som går, og gjør ingen skade.
+    """
+    if klokke_gaar(repo):
+        print("Klokka går allerede.", flush=True)
+        return True
+    return start(repo, KLOKKE)
+
+
 def _naa():
     return datetime.datetime.now(OSLO)
 
@@ -248,6 +279,8 @@ def main(argv=None):
     if not repo:
         print("GITHUB_REPOSITORY mangler.", file=sys.stderr)
         return 1
+    if "--vekk" in argv:
+        return 0 if vekk(repo) else 1
     return 0 if kjor(repo) else 1
 
 
