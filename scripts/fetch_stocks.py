@@ -2165,6 +2165,13 @@ def lag_betalt_boks(a, nf):
             forklaring = (f"<p>Direkteavkastningen over er {nf(vist, 2)} %, men "
                           "selskapet har ikke hatt noe utbytte med ex-dato de siste "
                           "12 månedene.</p>")
+        elif a.get("arsrate_kilde") == "siste_utbetalinger":
+            # Raten er de siste utbetalingene, og den eldste ligger like utenfor
+            # vinduet. Uten forklaringen ser de to tallene ut til å motsi hverandre.
+            forklaring = (f"<p>Direkteavkastningen over er {nf(vist, 2)} % og bygger på "
+                          f"{_siste_utbetalinger_ledd(a)}. Den eldste av dem har ex-dato "
+                          "rett før tolvmånedersvinduet, så det som er betalt de siste "
+                          f"12 månedene, er lavere: {nf(betalt, 2)} % av dagens kurs.</p>")
         else:
             forklaring = (f"<p>Direkteavkastningen over er {nf(vist, 2)} %. Det som faktisk "
                           f"er betalt de siste 12 månedene, tilsvarer {nf(betalt, 2)} % av "
@@ -2391,6 +2398,84 @@ def betalinger_siste_12m(dividends, i_dag):
     return ut
 
 
+# ── Utbetalingsrunden: 12-månedersvinduet når ex-datoene flytter seg ─────────
+# Et vindu på nøyaktig 365 dager teller feil i dagene rundt årsdagen for en
+# utbetaling, fordi ex-datoen sjelden faller på samme dato to år på rad.
+# 9. november 2026 ga det tre feil samme dag:
+#
+#   SOFF  gikk ex 25.11.2025 og 06.11.2026. Vinduet hadde fem kvartals-
+#         utbetalinger, regelen for «betalt siste 12 mnd» krever nøyaktig
+#         fire, og siden falt tilbake til fjorårets sum: 0,75 % mot 8,3 %.
+#   STST  gikk ex 07.11.2025, og årets tredjekvartalsutbytte var ikke
+#         kunngjort ennå. Vinduet hadde tre, og siden viste fjorårets sum:
+#         30,33 % mot 12,3 % for de fire siste utbetalingene.
+#   BOUV  betaler i mai og november. Med november 2025 og november 2026 i
+#         samme vindu ble frekvensen «Kvartalsvis» (samme felle som SATS).
+#
+# Runden er de utbetalingene som utgjør det siste året når en utbetaling
+# får komme inntil RUNDE_SLINGRING_DAGER før eller etter årsdagen:
+#
+#   - For tidlig i år: eldste og nyeste i vinduet ligger nesten et år fra
+#     hverandre. De er samme utbetaling to år på rad, og den eldste går ut.
+#   - For sent i år: utbetalingen som nettopp gikk ut av vinduet, har ikke
+#     fått sin etterfølger. Den blir med til etterfølgeren kommer, eller til
+#     slingringen er brukt opp. Da er det en uteblitt utbetaling, ikke en sen.
+#
+# `utbytte_12m`, `utbytte_12m_antall` og `utbytte_12m_liste` er fortsatt det
+# strenge vinduet. De vises som «betalt siste 12 mnd» og skal være nøyaktig det.
+RUNDE_SLINGRING_DAGER = 45
+
+
+def utbetalingsrunde(betalinger, i_dag, slingring=RUNDE_SLINGRING_DAGER):
+    """Utbetalingene i siste runde: [(dato, beløp)], eldste først.
+
+    `betalinger` er hele serien som (dato, beløp), eldste først. Slingringen
+    er høyst 40 % av den vanlige avstanden mellom to utbetalinger: for en
+    månedlig betaler er 45 dager halvannen utbetaling.
+    """
+    betalinger = sorted(betalinger)
+    grense = i_dag - datetime.timedelta(days=365)
+    strengt = [b for b in betalinger if b[0] > grense]
+    foer = [b for b in betalinger if b[0] <= grense]
+    siste = betalinger[-9:]
+    avstander = sorted((b[0] - a[0]).days for a, b in zip(siste, siste[1:]))
+    if avstander:
+        slingring = min(slingring, int(avstander[len(avstander) // 2] * 0.4))
+    if len(strengt) >= 2 and (strengt[-1][0] - strengt[0][0]).days >= 365 - slingring:
+        return strengt[1:]
+    if foer:
+        f = foer[-1]
+        ute_dager = (grense - f[0]).days
+        etterfolger = f[0] + datetime.timedelta(days=365 - slingring)
+        if ute_dager < slingring and not any(b[0] >= etterfolger for b in strengt):
+            return [f] + strengt
+    return strengt
+
+
+def runde_fra_serie(dividends, i_dag):
+    """utbetalingsrunde() for en Yahoo-serie, som [{"ex_dato", "belop"}]."""
+    if dividends is None or dividends.empty:
+        return []
+    betalinger = [((d.date() if hasattr(d, "date") else d), float(v))
+                  for d, v in zip(dividends.index, dividends.values)]
+    return [{"ex_dato": d.isoformat(), "belop": round(v, 4)}
+            for d, v in utbetalingsrunde(betalinger, i_dag)]
+
+
+def med_runde(a):
+    """Raden slik regelen for betalt årsrate skal se den.
+
+    Har raden `utbytte_runde`, er det den som teller: sum, antall og liste
+    byttes ut. Ellers er runden lik det strenge vinduet, og raden returneres
+    som den er.
+    """
+    runde = a.get("utbytte_runde")
+    if not runde:
+        return a
+    return dict(a, utbytte_12m=round(sum(b["belop"] for b in runde), 4),
+                utbytte_12m_antall=len(runde), utbytte_12m_liste=runde)
+
+
 def saerutbytter(a):
     """Gyldige særutbytter for aksjen: [{"ex_dato", "belop", "melding"}].
 
@@ -2611,6 +2696,9 @@ def vist_over_betalt(a):
     return None
 
 
+KUTT_MED_EN_MANGLENDE = 0.9
+
+
 def velg_arsrate(fjor_sum, trailing_sum, trailing_antall, frekvens):
     """Årsraten vakten skal bruke når Yahoos rate avviker ≥ 50 % fra fjoråret.
 
@@ -2647,6 +2735,16 @@ def velg_arsrate(fjor_sum, trailing_sum, trailing_antall, frekvens):
         return trailing_sum
     forventet = {"Årlig": 1, **UTBETALINGER_PR_AAR}.get(frekvens)
     if forventet and trailing_antall >= forventet and 0 < trailing_sum < fjor_sum:
+        return trailing_sum
+    # Én utbetaling mangler, og det er ikke vinduskanten: en utbetaling som
+    # bare er sen, er med i runden (utbetalingsrunde()). Er det betalte lavere
+    # enn fjoråret også når det regnes opp for den som mangler, er det et
+    # kutt. STST ville ellers gått tilbake til 30 % når slingringen var brukt
+    # opp, og blitt stående der til utbyttet regnes som stoppet etter 15
+    # måneder. En stabil betaler rammes ikke: to av to halvårsutbetalinger
+    # regnet opp fra én er lik fjoråret, ikke under.
+    if (forventet and forventet >= 2 and trailing_antall == forventet - 1
+            and 0 < trailing_sum * forventet / (forventet - 1) < KUTT_MED_EN_MANGLENDE * fjor_sum):
         return trailing_sum
     return fjor_sum
 
@@ -2945,14 +3043,91 @@ def bruk_betalt_som_arsrate(a, ekstra=0.0):
     `ekstra` er engangsutbytte i vinduet, i kroner (ekstra_i_kroner()). Det
     trekkes fra, og `arsrate_ekstra_trukket` sier at det er gjort.
     """
-    belop = a["utbytte_12m"] - ekstra
+    # Avviker runden fra det strenge vinduet, er tallet summen av de siste
+    # utbetalingene, ikke «siste 12 mnd», og merkelappen må si det. SOFF hadde
+    # fem utbetalinger i vinduet og fire i runden: 5,63 kr ved siden av en
+    # tabell som sier 6,14 kr betalt siste 12 måneder.
+    r = med_runde(a)
+    belop = r["utbytte_12m"] - ekstra
     a["utbytte_per_aksje"] = round(belop, 2)
     a["utbytte_yield"] = round(belop / a["pris"] * 100, 2)
-    a["arsrate_kilde"] = "betalt_12m"
+    if r is a:
+        a["arsrate_kilde"] = "betalt_12m"
+        a.pop("arsrate_antall", None)
+    else:
+        a["arsrate_kilde"] = "siste_utbetalinger"
+        a["arsrate_antall"] = r["utbytte_12m_antall"]
     if ekstra:
         a["arsrate_ekstra_trukket"] = round(ekstra, 2)
     else:
         a.pop("arsrate_ekstra_trukket", None)
+
+
+def merk_rate_lik_runden(a, toleranse=0.01):
+    """Setter merkelappen når den viste raten alt er summen av runden. Muterer `a`.
+
+    Tallet endres ikke. STST viste 5,17 kr, som er de fire siste
+    utbetalingene, valgt av vakten i velg_arsrate(). Regelen for betalt
+    årsrate slår da ikke inn (avviket er null), og kortet sa «annualisert»
+    ved siden av en tabell med 3,78 kr betalt siste 12 måneder.
+
+    Bare når runden avviker fra vinduet; ellers er «annualisert» og «betalt
+    siste 12 mnd» samme tall, og merkelappen står som før.
+    """
+    r = med_runde(a)
+    if r is a:
+        return False
+    forventet = {"Årlig": 1, **UTBETALINGER_PR_AAR}.get(a.get("frekvens"))
+    vist, summen = a.get("utbytte_per_aksje") or 0, r["utbytte_12m"]
+    if not forventet or r["utbytte_12m_antall"] != forventet or summen <= 0 or vist <= 0:
+        return False
+    if abs(vist - summen) / summen > toleranse:
+        return False
+    a["arsrate_kilde"] = "siste_utbetalinger"
+    a["arsrate_antall"] = r["utbytte_12m_antall"]
+    return True
+
+
+def arsrate_er_betalt(a):
+    """Er årsraten det selskapet har betalt, ikke en annualisert rate?"""
+    return a.get("arsrate_kilde") in ("betalt_12m", "siste_utbetalinger")
+
+
+def _siste_utbetalinger_ledd(a):
+    """«de fire siste utbetalingene», eller «den siste utbetalingen»."""
+    n = a.get("arsrate_antall") or 0
+    return f"de {_antall_ord(n)} siste utbetalingene" if n > 1 else "den siste utbetalingen"
+
+
+def arsrate_merke(a):
+    """Merkelappen ved «Utbytte/aksje» når raten er det som er betalt. Ellers «».
+
+    «siste 12 mnd» når runden er lik 12-månedersvinduet, «siste fire
+    utbetalinger» når den ikke er det. Samme regel som arsrateMerke() i ui.js.
+    """
+    kilde = a.get("arsrate_kilde")
+    if kilde == "betalt_12m":
+        merke = "siste 12 mnd"
+    elif kilde == "siste_utbetalinger":
+        n = a.get("arsrate_antall") or 0
+        merke = f"siste {_antall_ord(n)} utbetalinger" if n > 1 else "siste utbetaling"
+    else:
+        return ""
+    return merke + (", uten engangsutbytte" if a.get("arsrate_ekstra_trukket") else "")
+
+
+def _faq_arsrate_ledd(a):
+    """«utbytte utbetalt de siste 12 månedene» og variantene, til FAQ-svaret."""
+    kilde = a.get("arsrate_kilde")
+    if kilde == "betalt_12m":
+        ledd = "utbetalt de siste 12 månedene"
+    elif kilde == "siste_utbetalinger":
+        ledd = "fra " + _siste_utbetalinger_ledd(a)
+    else:
+        return "annualisert utbytte"
+    if a.get("arsrate_ekstra_trukket"):
+        return f"ordinært utbytte {ledd}, uten engangsutbytte,"
+    return f"utbytte {ledd}"
 
 
 # Siste utbetaling for mer enn 15 måneder siden: utbyttet har stoppet. Femten,
@@ -3324,6 +3499,12 @@ def hent_aksje(meta):
         utbytte_12m, utbytte_12m_antall, utbytte_per_ar, utbytte_forste_ar = (
             betalt_fra_serie(dividends, today.date()))
         utbytte_12m_liste = betalinger_siste_12m(dividends, today.date())
+        # Runden er vinduet uten kanteffekten rundt årsdagen for en utbetaling
+        # (se utbetalingsrunde()). Den teller for frekvensen og for reglene som
+        # velger årsrate; det strenge vinduet over er det som vises som betalt.
+        runde = runde_fra_serie(dividends, today.date())
+        runde_sum = round(sum(b["belop"] for b in runde), 4)
+        utbytte_runde = runde if runde != utbytte_12m_liste else []
 
         # Var fjoråret selskapets første år med utbytte, er det et delår og
         # ingen fasit. CMB.TECH gikk på Oslo Børs i august 2025 og hadde én
@@ -3345,9 +3526,9 @@ def hent_aksje(meta):
             # tall ligger, jo mindre hjelp fikk leseren.
             if avvik >= 0.5:
                 # Ved et kutt er fjoråret det gale tallet — se velg_arsrate().
-                antall_12m = len(trailing_12m) if not dividends.empty else 0
+                antall_12m = len(runde)
                 frekv_nå = FREKVENS_OVERSTYRT.get(ticker) or frekvens_label(antall_12m)
-                valgt = velg_arsrate(last_year_total, trailing_annual, antall_12m, frekv_nå)
+                valgt = velg_arsrate(last_year_total, runde_sum, antall_12m, frekv_nå)
                 kilde = f"{last_complete_year}-total" if valgt == last_year_total else "trailing 12 mnd (kutt)"
                 print(f"    Advarsel: Yahoo dividendRate={raw_div_rate:.2f} avviker {avvik*100:.0f}% fra ref={ref:.2f}. Bruker {valgt:.2f} ({kilde}).")
                 raw_div_rate = valgt
@@ -3386,12 +3567,9 @@ def hent_aksje(meta):
             siste_utbytte = round(_siste, 4) if math.isfinite(_siste) else 0.0
             siste_utbytte_dato = dividends.index[-1].date().isoformat()
 
-        # Antall utbytter siste 12 mnd
-        one_year_ago = datetime.datetime.today() - datetime.timedelta(days=365)
-        if dividends.index.tz:
-            one_year_ago = one_year_ago.astimezone(dividends.index.tz)
-        recent_divs = dividends[dividends.index >= one_year_ago]
-        div_count = len(recent_divs)
+        # Antall utbetalinger i siste runde. Det strenge 12-månedersvinduet
+        # ga Bouvet tre (november, mai, november) og dermed «Kvartalsvis».
+        div_count = len(runde)
         frekvens = FREKVENS_OVERSTYRT.get(ticker) or frekvens_label(div_count)
 
         # Utbyttevekst 5 år CAGR
@@ -3557,6 +3735,8 @@ def hent_aksje(meta):
             "utbytte_12m": utbytte_12m,
             "utbytte_12m_antall": utbytte_12m_antall,
             "utbytte_12m_liste": utbytte_12m_liste,
+            # Bare når runden avviker fra vinduet; tom liste ellers.
+            "utbytte_runde": utbytte_runde,
             "utbytte_supplert": utbytte_supplert,
             "utbytte_korrigert": utbytte_korrigert,
             "utbytte_per_ar": utbytte_per_ar,
@@ -6117,7 +6297,7 @@ def _lag_faq_seksjon(a, today):
         svar = (
             f"Direkteavkastningen (yield) for {ticker} er {_pst(yield_, 2)}, beregnet som "
             f"{_nf(upa, 2)} {valuta} i "
-            f"{('ordinært utbytte utbetalt de siste 12 månedene, uten engangsutbytte,' if a.get('arsrate_ekstra_trukket') else 'utbytte utbetalt de siste 12 månedene') if a.get('arsrate_kilde') == 'betalt_12m' else 'annualisert utbytte'}"
+            f"{_faq_arsrate_ledd(a)}"
             f" per aksje delt på aksjekursen. "
             f"{snitt_k} "
             f"Yield endres daglig fordi den er koblet til kursen: stiger kursen, faller yielden."
@@ -6660,10 +6840,8 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     # «annualisert» feil ord: ingenting er ganget opp.
     # Med et engangsutbytte trukket fra står det, så tallet ikke ser ut til å
     # motsi «betalt siste 12 mnd» i tabellen lenger ned (FRO, WAWI).
-    upa_merknad  = (' <span class="kcard-note">siste 12 mnd, uten engangsutbytte</span>'
-                    if a.get("arsrate_kilde") == "betalt_12m" and a.get("arsrate_ekstra_trukket") else
-                    ' <span class="kcard-note">siste 12 mnd</span>'
-                    if a.get("arsrate_kilde") == "betalt_12m" else
+    upa_merknad  = (f' <span class="kcard-note">{arsrate_merke(a)}</span>'
+                    if arsrate_er_betalt(a) else
                     "" if delaar else
                     ' <span class="kcard-note">annualisert</span>'
                     if frekvens in ("Kvartalsvis", "Halvårlig", "Månedlig") else "")
@@ -10256,11 +10434,15 @@ def main():
     for aksje in resultater:
         aksje.pop("arsrate_kilde", None)
         aksje.pop("arsrate_ekstra_trukket", None)
+        aksje.pop("arsrate_antall", None)
+        # Regelen ser runden, ikke det strenge vinduet (se utbetalingsrunde()).
+        kandidat = med_runde(aksje)
+        merk_rate_lik_runden(aksje)
         # NewsWeb spørres når summen alene oppfyller vilkårene, og når yielden
         # er så høy at et engangsutbytte kan ligge i den. WAWI viste 8,97 %
         # med to ekstraordinære deler inne; summen var lik den viste raten, så
         # vilkåret om 30 % avvik slapp den aldri til.
-        if not (betalt_kan_bli_arsrate(aksje)
+        if not (betalt_kan_bli_arsrate(kandidat)
                 or (aksje.get("utbytte_yield") or 0) >= HOY_YIELD_FOR_SPLITT):
             continue
         funn = ekstraordinaere_i_vindu(aksje["ticker"])
@@ -10271,20 +10453,20 @@ def main():
         if funn:
             # Et engangsutbytte med kjent beløp trekkes fra; ellers står regelen
             # over.
-            ekstra = ekstra_i_kroner(aksje, funn)
+            ekstra = ekstra_i_kroner(kandidat, funn)
             if ekstra is None:
                 print(f"    {aksje['ticker']}: beholder {aksje.get('utbytte_yield')} % "
                       f"(ekstraordinær utbetaling i vinduet)")
                 continue
-        uten = dict(aksje, utbytte_12m=aksje["utbytte_12m"] - ekstra,
-                    utbytte_12m_antall=(aksje.get("utbytte_12m_antall") or 0)
+        uten = dict(kandidat, utbytte_12m=kandidat["utbytte_12m"] - ekstra,
+                    utbytte_12m_antall=(kandidat.get("utbytte_12m_antall") or 0)
                     - (hele_engangsutbetalinger(funn) if ekstra else 0))
         if not betalt_kan_bli_arsrate(uten):
             continue
         for_ = aksje.get("utbytte_yield")
         bruk_betalt_som_arsrate(aksje, ekstra)
         merk = f", {_nf(ekstra, 2)} kr engangsutbytte trukket fra" if ekstra else ""
-        print(f"    {aksje['ticker']}: {for_} % → {aksje['utbytte_yield']} % (betalt siste 12 mnd{merk})")
+        print(f"    {aksje['ticker']}: {for_} % → {aksje['utbytte_yield']} % ({arsrate_merke(aksje)}{merk})")
 
     # Ny virksomhet bak tickeren: ingen løpende rate før den har betalt noe.
     for aksje in resultater:

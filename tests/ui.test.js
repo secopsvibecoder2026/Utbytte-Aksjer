@@ -32,7 +32,7 @@ const { aaretsArsutbytte, aaretsNedgang, ordinaerPerAr, ordinaerHistorikk, saeru
   vekstKlasse,
   beregnScore,
   beregnYtdInntekt
-, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, utbyttePerioder, vistOverBetalt, modalBetaltBoks, supplertFotnote, utbytteRekke, stabileAr, exForbeholdGjelder, kapitalAndel, modalKapitalNote, kapitalSkattTekst, aksjerMedExIMaaned, beregnHvisKjopt, hvisStartAar, beregnAskMotVanlig, fmtUtbytte, sisteUtbytteTekst, modalOmSelskapet, vekslOmSelskapet, dripGevinst, _simulerKalkulator, askStatus, askTekst, modalKontoer , bevegelserOverskrift } = require('../assets/ui.js');
+, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, utbyttePerioder, vistOverBetalt, arsrateMerke, modalBetaltBoks, supplertFotnote, utbytteRekke, stabileAr, exForbeholdGjelder, kapitalAndel, modalKapitalNote, kapitalSkattTekst, aksjerMedExIMaaned, beregnHvisKjopt, hvisStartAar, beregnAskMotVanlig, fmtUtbytte, sisteUtbytteTekst, modalOmSelskapet, vekslOmSelskapet, dripGevinst, _simulerKalkulator, askStatus, askTekst, modalKontoer , bevegelserOverskrift } = require('../assets/ui.js');
 
 // ── fmt ────────────────────────────────────────────────────────────────────
 test('fmt returnerer — for null', () => {
@@ -521,6 +521,33 @@ test('supplertFotnote: nevner kronebeløp hentet fra selskapets melding (EQNR 20
   assert.match(t, /^For utbetalingene med ex-dato 9\. jan.* og 11\. mai/);
   assert.match(t, /Yahoo hadde et foreløpig beløp\.$/);
   assert.doesNotMatch(t, /mangler i Yahoos/);
+});
+
+// Samme tilfeller som TestUtbetalingsrunde i scripts/test_fetch_stocks.py.
+test('arsrateMerke: 12 mnd når runden er vinduet, ellers antall utbetalinger', () => {
+  assert.equal(arsrateMerke({ arsrate_kilde: 'betalt_12m' }), 'siste 12 mnd');
+  assert.equal(arsrateMerke({ arsrate_kilde: 'betalt_12m', arsrate_ekstra_trukket: 0.8 }),
+    'siste 12 mnd, uten engangsutbytte');
+  // SOFF 09.11.2026: fem utbetalinger i vinduet, fire i runden.
+  assert.equal(arsrateMerke({ arsrate_kilde: 'siste_utbetalinger', arsrate_antall: 4 }),
+    'siste fire utbetalinger');
+  assert.equal(arsrateMerke({ arsrate_kilde: 'siste_utbetalinger', arsrate_antall: 12 }),
+    'siste 12 utbetalinger');
+  assert.equal(arsrateMerke({ arsrate_kilde: 'siste_utbetalinger', arsrate_antall: 1 }),
+    'siste utbetaling');
+  assert.equal(arsrateMerke({ arsrate_kilde: 'stoppet' }), '');
+  assert.equal(arsrateMerke({}), '');
+  assert.equal(arsrateMerke(null), '');
+});
+
+test('modalBetaltBoks: forklarer at raten er de siste utbetalingene', () => {
+  // STST: raten er de fire siste, den eldste ligger like utenfor vinduet.
+  const stst = { pris: 42.0, utbytte_yield: 12.31, utbytte_12m: 3.7847, utbytte_12m_antall: 3,
+    arsrate_kilde: 'siste_utbetalinger', arsrate_antall: 4,
+    utbytte_per_ar: { 2021: 0, 2022: 0, 2023: 0, 2024: 10.9835, 2025: 12.7382 }, utbytte_forste_ar: 2024 };
+  assert.match(modalBetaltBoks(stst), /bygger på de fire siste utbetalingene/);
+  assert.match(modalBetaltBoks(stst), /rett før tolvmånedersvinduet/);
+  assert.doesNotMatch(modalBetaltBoks({ ...stst, arsrate_kilde: 'betalt_12m' }), /bygger på/);
 });
 
 test('modalBetaltBoks: fotnoten står bare der noe er lagt til', () => {

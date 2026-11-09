@@ -4322,5 +4322,195 @@ class TestProsentformat(unittest.TestCase):
             os.unlink(f.name)
 
 
+class TestUtbetalingsrunde(unittest.TestCase):
+    """Vinduet på 365 dager teller feil rundt årsdagen for en utbetaling.
+
+    9. november 2026 ga det tre feil samme dag: SOFF 0,75 % mot 8,3 %, STST
+    30,33 % mot 12,3 %, og Bouvet som «Kvartalsvis». Seriene er de ekte.
+    """
+
+    I_DAG = datetime.date(2026, 11, 9)
+    D = datetime.date
+    SOFF = [(D(2025, 11, 25), 0.5119), (D(2026, 3, 10), 0.4832), (D(2026, 5, 20), 0.9169),
+            (D(2026, 7, 17), 1.4592), (D(2026, 11, 6), 2.7683)]
+    STST = [(D(2025, 5, 9), 3.3), (D(2025, 8, 8), 3.2), (D(2025, 11, 7), 1.3858),
+            (D(2026, 2, 6), 1.2843), (D(2026, 5, 8), 1.2461), (D(2026, 8, 7), 1.2544)]
+    BOUV = [(D(2024, 11, 14), 0.7), (D(2025, 5, 16), 3.0), (D(2025, 11, 13), 0.7),
+            (D(2026, 5, 15), 3.0), (D(2026, 11, 6), 0.7)]
+    HUNT = [(D(2025, 12, 1), 0.3), (D(2026, 3, 2), 0.4), (D(2026, 3, 26), 0.58),
+            (D(2026, 6, 30), 1.25), (D(2026, 9, 29), 1.5)]
+
+    def _strengt(self, serie, i_dag=None):
+        grense = (i_dag or self.I_DAG) - datetime.timedelta(days=365)
+        return [b for b in serie if b[0] > grense]
+
+    def test_soff_for_tidlig_i_aar_gir_fire(self):
+        self.assertEqual(len(self._strengt(self.SOFF)), 5)
+        runde = fs.utbetalingsrunde(self.SOFF, self.I_DAG)
+        self.assertEqual([d for d, _ in runde], [d for d, _ in self.SOFF[1:]])
+        self.assertAlmostEqual(sum(v for _, v in runde), 5.6276, places=4)
+
+    def test_stst_for_sent_i_aar_gir_fire(self):
+        self.assertEqual(len(self._strengt(self.STST)), 3)
+        runde = fs.utbetalingsrunde(self.STST, self.I_DAG)
+        self.assertEqual(len(runde), 4)
+        self.assertEqual(runde[0][0], datetime.date(2025, 11, 7))
+        self.assertAlmostEqual(sum(v for _, v in runde), 5.1706, places=4)
+
+    def test_uteblitt_utbetaling_er_ikke_sen_for_alltid(self):
+        # Kommer ingen etterfølger før slingringen er brukt opp, mangler den.
+        runde = fs.utbetalingsrunde(self.STST, datetime.date(2026, 12, 20))
+        self.assertEqual(len(runde), 3)
+
+    def test_etterfolgeren_tar_plassen(self):
+        # Årets utbetaling er kommet: fjorårets blir ikke med i tillegg.
+        serie = self.STST + [(datetime.date(2026, 11, 13), 1.25)]
+        runde = fs.utbetalingsrunde(serie, datetime.date(2026, 11, 14))
+        self.assertEqual([d for d, _ in runde], [d for d, _ in serie[-4:]])
+
+    def test_bouvet_er_halvaarlig(self):
+        self.assertEqual(fs.frekvens_label(len(self._strengt(self.BOUV))), "Kvartalsvis")
+        runde = fs.utbetalingsrunde(self.BOUV, self.I_DAG)
+        self.assertEqual(len(runde), 2)
+        self.assertEqual(fs.frekvens_label(len(runde)), "Halvårlig")
+
+    def test_hunt_har_en_ekstra_utbetaling_ikke_en_tidlig(self):
+        # Eldste og nyeste ligger 302 dager fra hverandre: ikke samme
+        # utbetaling to år på rad.
+        self.assertEqual(len(fs.utbetalingsrunde(self.HUNT, self.I_DAG)), 5)
+
+    def test_vanlig_kvartalsbetaler_er_uendret(self):
+        serie = [(datetime.date(2025, 8, 20), 1.0), (datetime.date(2025, 11, 20), 1.0),
+                 (datetime.date(2026, 2, 20), 1.0), (datetime.date(2026, 5, 20), 1.0),
+                 (datetime.date(2026, 8, 20), 1.0)]
+        runde = fs.utbetalingsrunde(serie, self.I_DAG)
+        self.assertEqual(runde, self._strengt(serie))
+        self.assertEqual(len(runde), 4)
+
+    def test_aarlig_betaler_som_er_ti_dager_sen(self):
+        serie = [(datetime.date(2024, 5, 8), 4.0), (datetime.date(2025, 5, 10), 5.0)]
+        self.assertEqual(self._strengt(serie, datetime.date(2026, 5, 20)), [])
+        self.assertEqual(fs.utbetalingsrunde(serie, datetime.date(2026, 5, 20)), [serie[-1]])
+        # Etter 45 dager er den ikke sen lenger.
+        self.assertEqual(fs.utbetalingsrunde(serie, datetime.date(2026, 6, 30)), [])
+
+    def test_maanedlig_betaler_faar_ikke_45_dager(self):
+        # Tretten utbetalinger i vinduet blir tolv, og en som mangler, blir
+        # ikke dekket av den som gikk ut for en måned siden.
+        start = datetime.date(2025, 10, 20)
+        serie = [(start + datetime.timedelta(days=30 * i), 1.0) for i in range(14)]
+        i_dag = serie[-1][0] + datetime.timedelta(days=2)
+        strengt = self._strengt(serie, i_dag)
+        self.assertEqual(len(strengt), 13)
+        self.assertEqual(len(fs.utbetalingsrunde(serie, i_dag)), 12)
+        # Sen: de to siste månedene mangler. En utbetaling som gikk ut for 20
+        # dager siden, dekker ikke hullet; slingringen er 12 dager her.
+        sen = serie[:-2]
+        i_dag = sen[1][0] + datetime.timedelta(days=365 + 20)
+        self.assertEqual(len(self._strengt(sen, i_dag)), 10)
+        self.assertEqual(len(fs.utbetalingsrunde(sen, i_dag)), 10)
+        # Gikk den ut for fem dager siden, er den bare sen.
+        i_dag = sen[1][0] + datetime.timedelta(days=365 + 5)
+        self.assertEqual(len(fs.utbetalingsrunde(sen, i_dag)), 11)
+
+    def test_tom_serie(self):
+        self.assertEqual(fs.utbetalingsrunde([], self.I_DAG), [])
+
+    # ── Regelen for betalt årsrate ser runden ────────────────────────────
+    def _soff_rad(self):
+        strengt = [{"ex_dato": d.isoformat(), "belop": v} for d, v in self.SOFF]
+        return {"ticker": "SOFF", "pris": 67.7, "frekvens": "Kvartalsvis",
+                "utbytte_per_aksje": 0.51, "utbytte_yield": 0.75,
+                "utbytte_12m": 6.1395, "utbytte_12m_antall": 5, "utbytte_12m_liste": strengt,
+                "utbytte_runde": strengt[1:],
+                "utbytte_per_ar": {"2021": 0.0, "2022": 0.0, "2023": 0.0, "2024": 0.0, "2025": 0.5119}}
+
+    def test_soff_er_kandidat_med_runden(self):
+        a = self._soff_rad()
+        self.assertFalse(fs.betalt_kan_bli_arsrate(a, self.I_DAG))
+        self.assertTrue(fs.betalt_kan_bli_arsrate(fs.med_runde(a), self.I_DAG))
+
+    def test_soff_faar_de_fire_siste_og_riktig_merkelapp(self):
+        a = self._soff_rad()
+        fs.bruk_betalt_som_arsrate(a)
+        self.assertEqual(a["utbytte_per_aksje"], 5.63)
+        self.assertEqual(a["utbytte_yield"], 8.31)
+        self.assertEqual((a["arsrate_kilde"], a["arsrate_antall"]), ("siste_utbetalinger", 4))
+        self.assertEqual(fs.arsrate_merke(a), "siste fire utbetalinger")
+        self.assertIn("fra de fire siste utbetalingene", fs._faq_arsrate_ledd(a))
+        # Det strenge vinduet er urørt: det er det som vises som betalt.
+        self.assertEqual((a["utbytte_12m"], a["utbytte_12m_antall"]), (6.1395, 5))
+
+    def test_uten_runde_er_alt_som_for(self):
+        a = self._soff_rad()
+        del a["utbytte_runde"]
+        a.update(utbytte_12m_antall=4)
+        self.assertIs(fs.med_runde(a), a)
+        fs.bruk_betalt_som_arsrate(a)
+        self.assertEqual(a["arsrate_kilde"], "betalt_12m")
+        self.assertNotIn("arsrate_antall", a)
+        self.assertEqual(fs.arsrate_merke(a), "siste 12 mnd")
+        a["arsrate_ekstra_trukket"] = 0.8
+        self.assertEqual(fs.arsrate_merke(a), "siste 12 mnd, uten engangsutbytte")
+        self.assertEqual(fs.arsrate_merke({"arsrate_kilde": "stoppet"}), "")
+
+    def test_rate_lik_runden_faar_merkelappen_uten_at_tallet_endres(self):
+        # STST: vakten har alt valgt de fire siste (5,17). Avviket er null,
+        # så regelen for betalt årsrate slår ikke inn, men merkelappen skal
+        # ikke si «annualisert» ved siden av 3,78 kr betalt siste 12 måneder.
+        runde = [{"ex_dato": d.isoformat(), "belop": v} for d, v in self.STST[-4:]]
+        a = {"ticker": "STST", "pris": 42.0, "frekvens": "Kvartalsvis", "utbytte_per_aksje": 5.17,
+             "utbytte_yield": 12.31, "utbytte_12m": 3.7848, "utbytte_12m_antall": 3,
+             "utbytte_12m_liste": runde[1:], "utbytte_runde": runde}
+        self.assertFalse(fs.betalt_kan_bli_arsrate(fs.med_runde(a), self.I_DAG))
+        self.assertTrue(fs.merk_rate_lik_runden(a))
+        self.assertEqual((a["utbytte_per_aksje"], a["utbytte_yield"]), (5.17, 12.31))
+        self.assertEqual(fs.arsrate_merke(a), "siste fire utbetalinger")
+        # Avviker raten fra runden, eller er runden lik vinduet, røres ingenting.
+        b = dict(a, utbytte_per_aksje=7.15)
+        b.pop("arsrate_kilde"), b.pop("arsrate_antall")
+        self.assertFalse(fs.merk_rate_lik_runden(b))
+        self.assertNotIn("arsrate_kilde", b)
+        c = {"pris": 10.0, "frekvens": "Kvartalsvis", "utbytte_per_aksje": 1.5,
+             "utbytte_12m": 1.5, "utbytte_12m_antall": 4}
+        self.assertFalse(fs.merk_rate_lik_runden(c))
+        self.assertNotIn("arsrate_kilde", c)
+
+    def test_boksen_forklarer_avviket(self):
+        # STST: raten er de fire siste, den eldste ligger utenfor vinduet.
+        a = {"ticker": "STST", "pris": 42.0, "utbytte_yield": 12.31, "utbytte_per_aksje": 5.17,
+             "utbytte_12m": 3.7847, "utbytte_12m_antall": 3, "frekvens": "Kvartalsvis",
+             "arsrate_kilde": "siste_utbetalinger", "arsrate_antall": 4,
+             "utbytte_per_ar": {"2021": 0.0, "2022": 0.0, "2023": 0.0, "2024": 10.9835, "2025": 12.7382},
+             "utbytte_forste_ar": 2024}
+        html = fs.lag_betalt_boks(a, fs._nf)
+        self.assertIn("bygger på de fire siste utbetalingene", html)
+        self.assertIn("rett før tolvmånedersvinduet", html)
+        a["arsrate_kilde"] = "betalt_12m"
+        self.assertNotIn("bygger på", fs.lag_betalt_boks(a, fs._nf))
+
+
+class TestKuttMedEnManglende(unittest.TestCase):
+    """velg_arsrate() når én utbetaling mangler og det ikke er vinduskanten."""
+
+    def test_stst_etter_slingringen(self):
+        # Tre av fire i runden, 3,78 kr mot 12,74 i fjor. Regnet opp for den
+        # som mangler er det 5,05: et kutt, ikke et halvt år.
+        self.assertAlmostEqual(fs.velg_arsrate(12.7382, 3.7847, 3, "Kvartalsvis"), 3.7847)
+
+    def test_stabil_betaler_er_ikke_et_kutt(self):
+        self.assertEqual(fs.velg_arsrate(8.0, 6.0, 3, "Kvartalsvis"), 8.0)
+        self.assertEqual(fs.velg_arsrate(10.0, 5.0, 1, "Halvårlig"), 10.0)
+        # Litt lavere er heller ikke nok: 6,5 regnet opp er 8,67 av 9,0.
+        self.assertEqual(fs.velg_arsrate(9.0, 6.5, 3, "Kvartalsvis"), 9.0)
+
+    def test_aarlig_og_to_manglende_roeres_ikke(self):
+        self.assertEqual(fs.velg_arsrate(6.0, 0.0, 0, "Årlig"), 6.0)
+        self.assertEqual(fs.velg_arsrate(12.0, 2.0, 2, "Kvartalsvis"), 12.0)
+
+    def test_kan_aldri_heve(self):
+        self.assertEqual(fs.velg_arsrate(4.0, 30.0, 3, "Kvartalsvis"), 4.0)
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

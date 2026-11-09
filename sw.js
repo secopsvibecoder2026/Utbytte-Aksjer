@@ -123,9 +123,12 @@ self.addEventListener('periodicsync', event => {
 self.addEventListener('notificationclick', event => {
   event.notification.close();
   event.waitUntil(
+    // Varslene kommer fra appen, så et klikk åpner appen. Før åpnet det
+    // forsiden, som bare sender videre når appen er valgt som startside.
     clients.matchAll({ type: 'window', includeUncontrolled: true }).then(list => {
-      if (list.length > 0) return list[0].focus();
-      return clients.openWindow('/');
+      const app = list.find(c => new URL(c.url).pathname.startsWith('/app'));
+      if (app) return app.focus();
+      return clients.openWindow('/app/');
     })
   );
 });
@@ -189,7 +192,7 @@ async function sjekkExDatoer() {
       badge: '/assets/icon.svg',
       tag: key,
       renotify: false,
-      data: { url: '/' },
+      data: { url: '/app/' },
     });
 
     nyVist[key] = idag.toISOString();

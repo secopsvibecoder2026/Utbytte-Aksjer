@@ -34,6 +34,12 @@ jobs:
     concurrency:
       group: "aksjedata-fetch"
       cancel-in-progress: true
+    # Datajobben spør etter dagens dato rundt tretti steder (date.today()),
+    # og uten dette er det UTC-datoen. Om vinteren ga en kjøring mellom 00.00
+    # og 01.00 norsk tid gårsdagens dato: ex-datoer, «i dag» og årsskifter ble
+    # en dag feil. Tidsstempler som skrives med Z, bruker utcnow() og er urørt.
+    env:
+      TZ: Europe/Oslo
     steps:
       - name: Sjekk ut kode
         uses: actions/checkout@v4

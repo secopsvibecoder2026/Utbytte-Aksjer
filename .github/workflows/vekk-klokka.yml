@@ -1,0 +1,35 @@
+name: Vekk klokka
+
+# Klokka (klokke.yml) er en kjede av kjøringer som holder seg selv i gang fra
+# søndag kveld til fredag kveld. Ryker kjeden, starter GitHubs timeplan den
+# igjen, men i november 2026 kom planlagte kjøringer fem til ti timer for
+# sent. En push til main kjøres med en gang, så hver gang noe flettes, sjekker
+# denne at en klokke går, og starter en hvis ikke.
+#
+# Botens egne commits (kurser og data) starter ingen workflower, så dette
+# kjører bare når et menneske eller en pull request endrer main.
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  actions: write    # starte klokke.yml
+  contents: read
+
+jobs:
+  vekk:
+    name: Start klokka hvis ingen går
+    runs-on: ubuntu-latest
+    if: github.actor != 'github-actions[bot]'
+    steps:
+      - name: Sjekk ut klokka
+        uses: actions/checkout@v4
+        with:
+          sparse-checkout: scripts/klokke.py
+          sparse-checkout-cone-mode: false
+
+      - name: Start klokka hvis ingen går
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 scripts/klokke.py --vekk
