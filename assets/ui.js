@@ -4446,6 +4446,13 @@ function hvisStartAar(kurs, iDag) {
 // Årsraten må flytte seg minst så mye før det er verdt en linje.
 const NYTT_MIN_RATEENDRING = 0.05;
 const NYTT_VIS_ANTALL = 6;
+// Første gang appen åpnes, finnes det ikke noe bilde å måle mot. Kortet
+// viser da utbetalinger fra så mange dager tilbake, og alle kommende
+// ex-datoer. Før (frem til 10.11.2026) viste det ingenting, og brukeren
+// kunne ikke se at funksjonen fantes før noe endret seg.
+const NYTT_FORSTE_DAGER = 14;
+// Bilder fra før denne versjonen ble tatt uten tilbakeblikk, og byttes.
+const NYTT_BILDE_VERSJON = 2;
 
 /** {TICKER: {r, ex, su, h}}: årsrate, ex-dato, siste utbetaling og hendelse. */
 function oyeblikksbilde(aksjer) {
@@ -4460,6 +4467,20 @@ function oyeblikksbilde(aksjer) {
     };
   });
   return ut;
+}
+
+/**
+ * Bildet første gang: årsrate og hendelse som nå, men uten ex-dato og siste
+ * utbetaling, og datert NYTT_FORSTE_DAGER tilbake. finnEndringer() melder da
+ * utbetalinger i den perioden og alle kommende ex-datoer, men ingen
+ * årsrateendring, siden vi ikke vet hva raten var.
+ */
+function forsteBilde(aksjer, idagIso) {
+  const aksjerBilde = oyeblikksbilde(aksjer);
+  Object.values(aksjerBilde).forEach(b => { b.ex = ''; b.su = ''; });
+  const d = new Date(idagIso + 'T12:00:00');
+  d.setDate(d.getDate() - NYTT_FORSTE_DAGER);
+  return { v: NYTT_BILDE_VERSJON, tid: lokalIsoDato(d), aksjer: aksjerBilde };
 }
 
 /** Tickerne brukeren eier (alle porteføljer), har som favoritt eller i en liste. */
@@ -4566,13 +4587,15 @@ function visNyttSidenSist() {
   const naa = oyeblikksbilde(alleAksjer);
   if (!Object.keys(naa).length) return;
   const idagIso = lokalIsoDato(new Date());
-  const lagret = hentSistSett();
   const mine = mineTickere();
   const skjul = () => { el.classList.add('hidden'); el.innerHTML = ''; };
-  // Første besøk, eller ingen aksjer å følge: ta et nytt bilde og vis ingenting.
-  if (!lagret || !mine.size) {
-    lagreSistSett({ tid: idagIso, aksjer: naa });
-    return skjul();
+  // Ingen aksjer å følge: ingenting å vise, og ingen grunn til å ta et bilde.
+  // Kommer det aksjer senere, får de tilbakeblikket som et første besøk.
+  if (!mine.size) return skjul();
+  let lagret = hentSistSett();
+  if (!lagret || lagret.v !== NYTT_BILDE_VERSJON) {
+    lagret = forsteBilde(alleAksjer, idagIso);
+    lagreSistSett(lagret);
   }
   // Aksjer som er kommet til i katalogen siden bildet, legges inn som de står nå.
   let utvidet = false;
@@ -4585,7 +4608,7 @@ function visNyttSidenSist() {
   el.classList.remove('hidden');
   el.onclick = e => {
     if (e.target.closest('#nss-sett')) {
-      lagreSistSett({ tid: idagIso, aksjer: oyeblikksbilde(alleAksjer) });
+      lagreSistSett({ v: NYTT_BILDE_VERSJON, tid: idagIso, aksjer: oyeblikksbilde(alleAksjer) });
       return skjul();
     }
     const rad = e.target.closest('[data-ticker]');
@@ -6198,4 +6221,4 @@ function _annBygTopp() {
 }
 
 // Node.js test export
-if (typeof module !== 'undefined') module.exports = { sektorSnittYield, utdatertMerke, modalUtdatert, hendelseUtenMal, iRangering, hoyestYield, saerutbytteFotnote, aaretsArsutbytte, aaretsNedgang, ordinaerPerAr, ordinaerHistorikk, markedsplassTekst, hendelseMerke, nyMilepel, delLenkeData, pentAkse, fmtPst, fmtTall, dagerTil, dagerTilTekst, datoKort, aksjerTekst, snittNavn, utbytteKutt, modalHendelse, beregnRisiko, forklarRisiko, vekstFraTopp, beregnMal, forklarMal, bevegelserOverskrift, utbytteRekke, stabileAr, exForbeholdGjelder, utbyttePerioder, vistOverBetalt, arsrateMerke, oyeblikksbilde, finnEndringer, nyttSidenSistHtml, modalBetaltBoks, supplertFotnote, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, fmt, formaterDato, yieldKlasse, payoutKlasse, vekstKlasse, beregnScore, beregnBaerekraft, beregnYtdInntekt, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote, kapitalAndel, modalKapitalNote, kapitalSkattTekst, aksjerMedExIMaaned, beregnHvisKjopt, hvisStartAar, beregnAskMotVanlig, fmtUtbytte, sisteUtbytteTekst, modalOmSelskapet, vekslOmSelskapet, dripGevinst, _simulerKalkulator, askStatus, askTekst, modalKontoer };
+if (typeof module !== 'undefined') module.exports = { sektorSnittYield, utdatertMerke, modalUtdatert, hendelseUtenMal, iRangering, hoyestYield, saerutbytteFotnote, aaretsArsutbytte, aaretsNedgang, ordinaerPerAr, ordinaerHistorikk, markedsplassTekst, hendelseMerke, nyMilepel, delLenkeData, pentAkse, fmtPst, fmtTall, dagerTil, dagerTilTekst, datoKort, aksjerTekst, snittNavn, utbytteKutt, modalHendelse, beregnRisiko, forklarRisiko, vekstFraTopp, beregnMal, forklarMal, bevegelserOverskrift, utbytteRekke, stabileAr, exForbeholdGjelder, utbyttePerioder, vistOverBetalt, arsrateMerke, oyeblikksbilde, forsteBilde, finnEndringer, nyttSidenSistHtml, modalBetaltBoks, supplertFotnote, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, fmt, formaterDato, yieldKlasse, payoutKlasse, vekstKlasse, beregnScore, beregnBaerekraft, beregnYtdInntekt, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote, kapitalAndel, modalKapitalNote, kapitalSkattTekst, aksjerMedExIMaaned, beregnHvisKjopt, hvisStartAar, beregnAskMotVanlig, fmtUtbytte, sisteUtbytteTekst, modalOmSelskapet, vekslOmSelskapet, dripGevinst, _simulerKalkulator, askStatus, askTekst, modalKontoer };

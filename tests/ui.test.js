@@ -32,7 +32,7 @@ const { aaretsArsutbytte, aaretsNedgang, ordinaerPerAr, ordinaerHistorikk, saeru
   vekstKlasse,
   beregnScore,
   beregnYtdInntekt
-, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, utbyttePerioder, vistOverBetalt, arsrateMerke, oyeblikksbilde, finnEndringer, nyttSidenSistHtml, modalBetaltBoks, supplertFotnote, utbytteRekke, stabileAr, exForbeholdGjelder, kapitalAndel, modalKapitalNote, kapitalSkattTekst, aksjerMedExIMaaned, beregnHvisKjopt, hvisStartAar, beregnAskMotVanlig, fmtUtbytte, sisteUtbytteTekst, modalOmSelskapet, vekslOmSelskapet, dripGevinst, _simulerKalkulator, askStatus, askTekst, modalKontoer , bevegelserOverskrift } = require('../assets/ui.js');
+, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, utbyttePerioder, vistOverBetalt, arsrateMerke, oyeblikksbilde, forsteBilde, finnEndringer, nyttSidenSistHtml, modalBetaltBoks, supplertFotnote, utbytteRekke, stabileAr, exForbeholdGjelder, kapitalAndel, modalKapitalNote, kapitalSkattTekst, aksjerMedExIMaaned, beregnHvisKjopt, hvisStartAar, beregnAskMotVanlig, fmtUtbytte, sisteUtbytteTekst, modalOmSelskapet, vekslOmSelskapet, dripGevinst, _simulerKalkulator, askStatus, askTekst, modalKontoer , bevegelserOverskrift } = require('../assets/ui.js');
 
 // ── fmt ────────────────────────────────────────────────────────────────────
 test('fmt returnerer — for null', () => {
@@ -1265,4 +1265,15 @@ test('nyttSidenSistHtml: seks rader, resten bak «Vis flere», og teksten er esc
     assert.doesNotMatch(html, /a<b/);
     assert.doesNotMatch(nyttSidenSistHtml(e.slice(0, 6), '2026-11-02'), /<details/);
   } finally { delete global.escHtml; }
+});
+
+test('forsteBilde: første besøk viser utbetalinger siste 14 dager og kommende ex-datoer, ikke årsrater', () => {
+  const b = forsteBilde(NSS_NAA, '2026-11-10');
+  assert.equal(b.tid, '2026-10-27');
+  assert.equal(b.v, 2);
+  const e = finnEndringer(b.aksjer, NSS_NAA, new Set(['SOFF', 'STST', 'OKEA', 'DNB', 'ZAL']), '2026-11-10', b.tid);
+  assert.deepEqual(e.map(x => [x.ticker, x.type]), [['SOFF', 'utbetalt'], ['OKEA', 'exdato']]);
+  // Eldre enn 14 dager er ikke med.
+  const eldre = finnEndringer(forsteBilde(NSS_NAA, '2026-11-25').aksjer, NSS_NAA, new Set(['SOFF']), '2026-11-25', '2026-11-11');
+  assert.deepEqual(eldre, []);
 });

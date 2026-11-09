@@ -2699,8 +2699,15 @@ It compares against a snapshot in the browser (`sist_sett`,
 - **It is replaced only when the user presses «Merk som sett».** Until then
   the card shows the net change since the snapshot, so nothing is lost by
   not opening the app for a month.
-- **No snapshot, or no stocks to follow, shows nothing** and takes a fresh
-  one. A stock with no row in the snapshot gives no line.
+- **The first visit looks back** (`forsteBilde()`, changed the day after
+  release). The first version took a snapshot and showed nothing, so the
+  owner opened the app, saw no card and reported the feature missing. The
+  first snapshot now has no ex-dates or payments and is dated
+  `NYTT_FORSTE_DAGER` (14) back: the card shows payments from the last two
+  weeks and every coming ex-date, but no rate changes, since we do not know
+  what the rate was. Snapshots without `v: 2` are replaced the same way.
+- **No stocks to follow shows nothing and saves nothing.** A stock with no
+  row in the snapshot gives no line.
 
 The rate line says «årsrate» and gives both numbers. It does not say the
 company raised or cut: the number can also move because a rule in the data
@@ -2743,7 +2750,7 @@ register, skip, «Registrer alle» and «Merk som sett» all hold after a
 reload. The first layout put the selector and the two buttons on three lines
 on a phone; they now share one.
 
-Tests: `portefolje.test.js` (+9) and `ui.test.js` (+4).
+Tests: `portefolje.test.js` (+9) and `ui.test.js` (+5).
 
 ## App review of 2026-10-20
 
