@@ -4119,27 +4119,32 @@
     {
       "ticker": "AFK",
       "dato": "2026-11-10",
-      "type": "rapport"
+      "type": "rapport",
+      "url_forsok": 1
     },
     {
       "ticker": "AUSS",
       "dato": "2026-11-10",
-      "type": "rapport"
+      "type": "rapport",
+      "url_forsok": 1
     },
     {
       "ticker": "LSG",
       "dato": "2026-11-10",
-      "type": "rapport"
+      "type": "rapport",
+      "url_forsok": 1
     },
     {
       "ticker": "SNOR",
       "dato": "2026-11-10",
-      "type": "rapport"
+      "type": "rapport",
+      "url_forsok": 1
     },
     {
       "ticker": "SNTIA",
       "dato": "2026-11-10",
-      "type": "rapport"
+      "type": "rapport",
+      "url_forsok": 1
     },
     {
       "ticker": "AKAST",
@@ -4487,6 +4492,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "SNOR",
+      "dato": "2027-02-10",
+      "type": "rapport"
+    },
+    {
       "ticker": "SPOG",
       "dato": "2027-02-10",
       "type": "rapport"
@@ -4622,6 +4632,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "SNTIA",
+      "dato": "2027-02-12",
+      "type": "rapport"
+    },
+    {
       "ticker": "SPOL",
       "dato": "2027-02-12",
       "type": "rapport"
@@ -4649,6 +4664,11 @@
     {
       "ticker": "BAKKA",
       "dato": "2027-02-15",
+      "type": "rapport"
+    },
+    {
+      "ticker": "AFK",
+      "dato": "2027-02-16",
       "type": "rapport"
     },
     {
@@ -4692,12 +4712,22 @@
       "type": "rapport"
     },
     {
+      "ticker": "AUSS",
+      "dato": "2027-02-19",
+      "type": "rapport"
+    },
+    {
       "ticker": "GOD",
       "dato": "2027-02-19",
       "type": "rapport"
     },
     {
       "ticker": "KCC",
+      "dato": "2027-02-19",
+      "type": "rapport"
+    },
+    {
+      "ticker": "LSG",
       "dato": "2027-02-19",
       "type": "rapport"
     },
@@ -4727,5 +4757,5 @@
       "type": "rapport"
     }
   ],
-  "sist_oppdatert": "2026-11-09"
+  "sist_oppdatert": "2026-11-10"
 }
