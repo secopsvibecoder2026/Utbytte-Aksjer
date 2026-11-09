@@ -117,7 +117,7 @@ Utbytte-Aksjer/
 │   ├── oppdater-priser.yml    # Price updates every 15 min on weekdays
 │   ├── deploy-only.yml        # Lightweight Pages deploy (workflow_dispatch)
 │   ├── kodeendring.yml        # Starts the data job when the code behind the numbers changes
-│   ├── klokke.yml             # Runs the trading day: starts the price and data jobs itself
+│   ├── klokke.yml             # Chain of runs, Sunday evening to Friday: starts the price and data jobs itself
 │   └── tester.yml             # Runs the JS + Python test suites on push/PR
 ├── assets/                    # All frontend JS and CSS
 │   ├── app.js                 # Bootstrap, data loading, cache management, escHtml()
@@ -290,26 +290,72 @@ is skipped for `github-actions[bot]` in any case. A run on a weekend is fine:
 
 GitHub's scheduler kept failing even after the minutes were moved off the hour:
 in October 2026 the price job ran about three of 37 times a day and the data job
-started three to five hours late. `klokke.yml` therefore runs the whole trading
-day as one job and starts the work itself with `workflow_dispatch`, which GitHub
-runs at once:
+started three to five hours late. `klokke.yml` therefore runs as a chain of
+runs and starts the work itself with `workflow_dispatch`, which GitHub runs at
+once:
 
 - **The plan is in Oslo time** (`plan()`): prices at :07/:22/:37/:52 from 09:07
   to 16:52 plus 17:07 and 17:37, data at 08:41, 11:41, 14:41 and 17:41. Unlike
   the UTC crons it does not shift an hour with daylight saving.
-- **It only has to start once.** Its own cron tries every half hour 06–15 UTC;
-  with `cancel-in-progress: false` the next attempt waits in the queue, starts
-  when the running clock ends, sees the day is over and exits.
 - **Before each start it asks GitHub when the job last started** (`skal_startes()`).
   If that was after the planned time, because the cron did fire or a previous
   clock just started it, it does nothing. Several missed slots give one start,
   not one per slot. An unknown answer starts the job: an extra run costs little.
-- **A run lasts at most six hours.** At 5½ hours (`GRENSE`) the clock starts a
-  new clock and exits; a full day needs two.
+- **A run lasts at most six hours.** When it has lived for 5½ hours (`GRENSE`)
+  it starts a new clock and exits.
 - Holidays are not in the plan. A price run on a closed exchange commits nothing.
 
 The old crons in `oppdater-priser.yml` and `update-og-deploy.yml` stay as a
-fallback; `vedlikehold.py` still reads them. Tests: `scripts/test_klokke.py` (11).
+fallback; `vedlikehold.py` still reads them.
+
+#### The chain runs through the night (2026-11-09)
+
+The first version stopped after the last slot and waited for its own cron to
+start it the next morning. Two faults came out of that:
+
+- **The cron came five to ten hours late, every day.** From 19 October to
+  9 November the first clock of the day started between 13:01 and 17:04 Oslo
+  time, so the site had no price updates for the first half of every trading
+  day. On 9 November it started after the close, and the whole day went
+  without one. The data job's own cron shows the same delay (four slots, each
+  five to eight hours late).
+- **A clock that started after midnight looped.** On 3 November a delayed cron
+  run started at 00:12. The next slot (08:41) was more than `GRENSE` away, and
+  the rule was «hand over now» to a new run, which saw the same thing. About
+  1 000 runs in three hours, one every ten seconds, until 03:11.
+
+`neste_steg()` now decides, and it is pure and tested:
+
+- **VENT:** the next slot is reached before this run's deadline. Sleep until it.
+- **OVERLEVER:** it is not. Sleep until the deadline, then start a new clock.
+  The run waits first, so it has always lived `GRENSE` before it hands over.
+  `MIN_LEVETID` (30 minutes) refuses a hand-over from a younger run, in case
+  the rule above is broken by a later change.
+- **FERDIG:** the next slot is more than `MAKS_VENT` (20 hours) away. That is
+  the weekend: the chain ends on Friday evening.
+
+`neste_i_planen()` looks past midnight, so on a weekday evening the next slot
+is tomorrow's 08:41 and the chain carries on through the night. The cron is
+now only the restart: it tries every half hour around the clock on weekdays
+and from Sunday afternoon, and any run that starts before Monday 08:41 holds
+the chain until then. A failed hand-over makes the run red.
+
+- **Cost:** one runner sleeps from Sunday evening to Friday evening. The
+  repository is public, so the minutes are free, but it is a machine held for
+  waiting. Two ways to avoid it, both for the owner: an external scheduler
+  that sends one `workflow_dispatch` to `klokke.yml` each weekday morning
+  (needs a token stored outside GitHub), or a job that waits in an
+  environment with a wait timer, which uses no runner (needs the environment
+  created under Settings → Environments).
+- **A «cancelled» clock run is normal.** A cron run that is queued behind the
+  running clock is replaced when the clock starts its own successor.
+- Durations are measured with `sekunder()`. Two datetimes in the same zone
+  subtract as wall-clock time in Python, which is an hour off on the night
+  the clocks change.
+
+Tests: `scripts/test_klokke.py` (24). `TestKjede` runs the real loop with a
+fake clock for a whole week: every slot starts once, and no run hands over
+before it has lived `GRENSE`.
 
 ### Real-Time Price Updates (`oppdater-priser.yml`)
 

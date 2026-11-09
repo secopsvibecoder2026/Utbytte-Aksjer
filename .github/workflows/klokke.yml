@@ -2,15 +2,23 @@ name: Klokke for børsdagen
 
 # GitHub starter planlagte kjøringer for sent eller ikke i det hele tatt. I
 # oktober 2026 gikk prisjobben rundt tre av 37 ganger per børsdag, og
-# datajobben startet tre til fem timer for sent. Denne workflowen går hele
-# børsdagen i én kjøring og starter oppdater-priser.yml hvert kvarter og
+# datajobben startet tre til fem timer for sent. Denne workflowen går som en
+# kjede av kjøringer og starter oppdater-priser.yml hvert kvarter og
 # update-og-deploy.yml fire ganger med workflow_dispatch, som kjøres med en
 # gang. Planen og reglene står i scripts/klokke.py.
 #
-# Den trenger bare å komme i gang én gang. Timeplanen under prøver hver halve
-# time; mens en kjøring går, står neste i kø (cancel-in-progress: false) og
-# starter når den første er ferdig, ser at dagen er over, og avslutter. Før
-# sekstimersgrensen starter klokka en ny kjøring av seg selv.
+# Kjeden holder seg selv i gang fra mandag morgen til fredag kveld: før
+# sekstimersgrensen starter hver kjøring en ny og avslutter, også gjennom
+# natten. Timeplanen under trengs bare for å starte kjeden etter helgen og
+# hvis den ryker. Den prøver hver halve time hele døgnet, fordi GitHub i
+# november 2026 startet planlagte kjøringer fem til ti timer for sent: en
+# klokke som først skulle startes om morgenen, kom i gang mellom 13.01 og
+# 17.04 norsk tid. Søndag prøver den fra ettermiddagen, slik at kjeden er i
+# gang til mandag morgen.
+#
+# Mens en kjøring går, står neste i kø (cancel-in-progress: false). En
+# planlagt kjøring som står i kø når klokka starter sin egen etterfølger, blir
+# avbrutt av GitHub og vises som «cancelled». Det er ikke en feil.
 #
 # Timeplanene i oppdater-priser.yml og update-og-deploy.yml står som før, som
 # reserve. Starter begge samme jobb samtidig, avbryter jobbens egen
@@ -18,7 +26,8 @@ name: Klokke for børsdagen
 
 on:
   schedule:
-    - cron: "13,43 6-15 * * 1-5"
+    - cron: "13,43 * * * 1-5"
+    - cron: "13,43 14-23 * * 0"
   workflow_dispatch:
 
 permissions:
