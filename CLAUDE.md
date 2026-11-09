@@ -579,7 +579,6 @@ listen i generatoren.
 | `profil_navn` / `profil_sparemaal` / `profil_mal_mnd` | User profile / goals |
 | `notif_aksjer` | Tickers with ex-date push notifications enabled |
 | `sist_sett` | Snapshot «Nytt siden sist» compares against: `{tid, aksjer: {TICKER: {r, ex, su, h}}}` |
-| `pf_utbytte_avvist` | Dividend suggestions the user skipped, per portfolio: `{pfId: ['SOFF\|2026-11-06']}` |
 | `sortering` | Sort preference |
 | `paginering-per-side` | Stocks per page (25/50/75/100/0=all) |
 | `tema` | Dark/light theme |
@@ -2669,9 +2668,9 @@ Found in the same pass:
 Tests: `TestUtbetalingsrunde` (15), `TestKuttMedEnManglende` (4) and
 `ui.test.js` (+2).
 
-## «Nytt siden sist» and dividend suggestions in the app (2026-11-10)
+## «Nytt siden sist» and dividends the app works out itself (2026-11-10)
 
-Two things the app knew and did not say. On 9 November Solstad Offshore
+Two things the app knew and did not use. On 9 November Solstad Offshore
 quadrupled its dividend and Stainless Tankers' rate was halved, and nothing
 told the person who owned them. And every payment had to be typed in by hand
 (date, shares, amount per share) before the Skatt tab was right, although
@@ -2715,42 +2714,47 @@ job changed, as it did for three stocks on 9 November.
 
 Several lines about one stock share a row. Tapping a row opens the modal.
 
-### Dividend suggestions (`portefolje.js`)
+### Dividends worked out by the app (`portefolje.js`)
 
-Portefølje → Beholdning shows «Utbytte du kan registrere» when a payment in
-`utbytte_12m_liste` has gone ex and is not registered. `utbytteForslag()` is
-pure and tested. Each row has the type, «Registrer» and «Hopp over», and
-«Registrer alle» covers the lot. Nothing is registered without a tap.
+The first version showed a card, «Utbytte du kan registrere», with a
+«Registrer» button per payment. The owner asked what the point was, and the
+honest answer was little: the broker reports dividends to Skatteetaten, and
+asking the user to confirm what the app already knows is the wrong way round.
+The card was removed the same day.
 
-- **Shares are the holding on the day before the ex-date**, from the user's
-  own buys and sells (`beregnKostbasis()` with a cut-off). A buy on the
-  ex-date does not count, and no shares then means no suggestion.
-- **Without a registered buy we do not know when the stock was bought.** Only
-  payments from the last 45 days are then suggested
-  (`FORSLAG_UTEN_KJOP_DAGER`), with today's holding, and the row says «hvis du
-  eide aksjene da».
-- **Already registered** means a dividend or capital transaction dated from
-  five days before the ex-date to 45 days after, and never past the next
-  payment's window. One registration covers one payment, also for a monthly
-  payer, and it may be dated the payment day.
-- **«Tilbakebetalt kapital» is the default only for the payment the notice is
-  about:** the newest one, with `kapital_tilbake.melding_dato` from 60 days
-  before to 30 days after its ex-date. Borgestad's March payment is not
-  reclassified by the October notice. The user can change the type per row.
-- **The transaction is dated the ex-date** and carries Yahoo's kroner amount
-  per share, before any withholding tax. The card says so, and says to
-  replace the row if the broker shows another amount.
-- Skipped rows are stored per portfolio in `pf_utbytte_avvist`.
+The app now works out what each holding received and uses it everywhere a
+registered dividend was used: cost basis, «Utbytte mottatt», IRR, «Faktisk
+avkastning» and the tax year. `beregnedeUtbytter()` is pure and tested.
 
-The rows use `data-utbytteforslag`. `data-forslag` is taken: the popups in
-`ui.js` check for it so that two of them do not stack.
+- **The data.** `utbetalinger` in `aksjer.json` holds every payment for the
+  last `UTBETALINGER_AR` (6) years as `[ex-date, amount]` pairs
+  (`utbetalinger_med_dato()` in `fetch_stocks.py`), from the same series as
+  the rest of the row, after the NewsWeb fill-ins and NOK corrections. About
+  1 200 payments, 30–70 kB on a 1 MB file. Before the first data run with the
+  field, `utbytte_12m_liste` is used.
+- **Only stocks with a registered buy or sale.** Shares are the holding on the
+  day before the ex-date. Without a buy date we do not know what the user
+  owned, and nothing is worked out.
+- **A registration of the user's own wins.** A dividend or capital
+  transaction dated from five days before the ex-date to 45 days after
+  covers the payment, never past the next one. That is how an amount after
+  withholding tax is corrected.
+- **Capital** is set only on the payment the company's newest notice is about.
+  Older payments count as dividend, and the tax card names the stocks where
+  that may be wrong (`_kapitalUsikker()`).
+- **Never stored.** `medBeregnetUtbytte()` / `hentTransaksjonerMedUtbytte()`
+  add the rows at read time, marked `beregnet: true`. `beregnKostbasis()`
+  without a `txMap` adds them for its ticker. Everything that writes still
+  reads `hentTransaksjoner()`, so the rows cannot reach `pf_portefoljer`.
+- **In the history** the rows read «beregnet», have no delete button, and a
+  line under the list says how to correct one.
 
-Checked in a browser at 390 px in both themes with a test portfolio:
-register, skip, «Registrer alle» and «Merk som sett» all hold after a
-reload. The first layout put the selector and the two buttons on three lines
-on a phone; they now share one.
+Checked in a browser at 390 px in both themes: a buy of 200 Solstad shares in
+2024 and 100 more in June 2026 gives six payments with the right share count
+for each, the tax year for 2026 includes them, and nothing reaches storage.
 
-Tests: `portefolje.test.js` (+9) and `ui.test.js` (+5).
+Tests: `portefolje.test.js` (+8), `ui.test.js` (+5) and
+`TestUtbetalingerMedDato` (3).
 
 ## App review of 2026-10-20
 

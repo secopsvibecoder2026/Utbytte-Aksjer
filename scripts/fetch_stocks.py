@@ -2380,6 +2380,32 @@ def betalt_fra_serie(dividends, i_dag):
     return round(sum(siste), 4), len(siste), per_ar, min(d.year for d in datoer)
 
 
+# Så langt tilbake appen får utbetalingene med dato. Den regner mottatt
+# utbytte selv ut fra brukerens kjøp (beregnedeUtbytter() i portefolje.js), og
+# et kjøp i 2021 trenger alt som er betalt siden.
+UTBETALINGER_AR = 6
+
+
+def utbetalinger_med_dato(dividends, i_dag, ar=UTBETALINGER_AR):
+    """[[ex-dato, beløp]] for de siste `ar` årene, eldste først.
+
+    Par, ikke objekter: 155 aksjer med opptil 72 utbetalinger hver, og feltet
+    lastes med aksjer.json på hver sidevisning i appen. Beløpene er i kroner
+    per aksje, fra samme serie som resten av raden, altså etter supplering fra
+    NewsWeb og retting av foreløpige kronebeløp.
+    """
+    if dividends is None or dividends.empty:
+        return []
+    grense = i_dag - datetime.timedelta(days=365 * ar)
+    ut = []
+    for d, v in zip(dividends.index, dividends.values):
+        dato = d.date() if hasattr(d, "date") else d
+        belop = float(v)
+        if dato > grense and dato <= i_dag and math.isfinite(belop) and belop > 0:
+            ut.append([dato.isoformat(), round(belop, 4)])
+    return sorted(ut)
+
+
 def betalinger_siste_12m(dividends, i_dag):
     """[{"ex_dato", "belop"}] for utbetalingene i 12-månedersvinduet, i kroner.
 
@@ -3499,6 +3525,7 @@ def hent_aksje(meta):
         utbytte_12m, utbytte_12m_antall, utbytte_per_ar, utbytte_forste_ar = (
             betalt_fra_serie(dividends, today.date()))
         utbytte_12m_liste = betalinger_siste_12m(dividends, today.date())
+        utbetalinger = utbetalinger_med_dato(dividends, today.date())
         # Runden er vinduet uten kanteffekten rundt årsdagen for en utbetaling
         # (se utbetalingsrunde()). Den teller for frekvensen og for reglene som
         # velger årsrate; det strenge vinduet over er det som vises som betalt.
@@ -3735,6 +3762,7 @@ def hent_aksje(meta):
             "utbytte_12m": utbytte_12m,
             "utbytte_12m_antall": utbytte_12m_antall,
             "utbytte_12m_liste": utbytte_12m_liste,
+            "utbetalinger": utbetalinger,
             # Bare når runden avviker fra vinduet; tom liste ellers.
             "utbytte_runde": utbytte_runde,
             "utbytte_supplert": utbytte_supplert,

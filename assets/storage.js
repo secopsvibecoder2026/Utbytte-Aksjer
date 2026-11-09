@@ -189,18 +189,5 @@ function lagreSistSett(v) {
   try { localStorage.setItem('sist_sett', JSON.stringify(v)); } catch { /* full lagring: kortet vises igjen neste gang */ }
 }
 
-// ── UTBYTTEFORSLAG ─────────────────────────────────────────────────────────
-// Utbetalinger brukeren har valgt å hoppe over, per portefølje:
-// { pfId: ['SOFF|2026-11-06', …] }.
-function hentUtbytteAvvist() {
-  try {
-    const v = JSON.parse(localStorage.getItem('pf_utbytte_avvist') || '{}');
-    return v && typeof v === 'object' && !Array.isArray(v) ? v : {};
-  } catch { return {}; }
-}
-function lagreUtbytteAvvist(v) {
-  try { localStorage.setItem('pf_utbytte_avvist', JSON.stringify(v)); } catch { /* forslaget kommer igjen */ }
-}
-
 // Node.js test export
-if (typeof module !== 'undefined') module.exports = { hentFav, lagreFav, erFavoritt, toggleFav, hentPortefoljer, hentAktivPF, lagrePF, skjermingsrenteFor, SKJERMINGSRENTER, hentSistSett, lagreSistSett, hentUtbytteAvvist, lagreUtbytteAvvist };
+if (typeof module !== 'undefined') module.exports = { hentFav, lagreFav, erFavoritt, toggleFav, hentPortefoljer, hentAktivPF, lagrePF, skjermingsrenteFor, SKJERMINGSRENTER, hentSistSett, lagreSistSett };
