@@ -4431,6 +4431,169 @@ function hvisStartAar(kurs, iDag) {
   return ut;
 }
 
+// ── NYTT SIDEN SIST ─────────────────────────────────────────────────────────
+// Et kort øverst i appen som sier hva som har endret seg for aksjene
+// brukeren eier eller følger siden sist: en utbetaling som har gått ex, en ny
+// ex-dato, en årsrate som er hevet eller satt ned, eller en selskapshendelse.
+// 9. november 2026 firedoblet Solstad Offshore utbyttet og Stainless Tankers
+// halverte det, og ingenting i appen sa fra til den som eide dem.
+//
+// Sammenligningen går mot et øyeblikksbilde i nettleseren (sist_sett). Det
+// holder alle aksjene i katalogen, ikke bare brukerens, så en aksje som
+// kjøpes senere, har noe å bli målt mot. Bildet byttes når brukeren trykker
+// «Merk som sett»; til da viser kortet nettoendringen siden bildet ble tatt.
+
+// Årsraten må flytte seg minst så mye før det er verdt en linje.
+const NYTT_MIN_RATEENDRING = 0.05;
+const NYTT_VIS_ANTALL = 6;
+
+/** {TICKER: {r, ex, su, h}}: årsrate, ex-dato, siste utbetaling og hendelse. */
+function oyeblikksbilde(aksjer) {
+  const ut = {};
+  (aksjer || []).forEach(a => {
+    if (!a || !a.ticker) return;
+    ut[a.ticker] = {
+      r: Number(a.utbytte_per_aksje) || 0,
+      ex: a.ex_dato || '',
+      su: a.siste_utbytte_dato || '',
+      h: gyldigHendelse(a.hendelse) ? a.hendelse.type : '',
+    };
+  });
+  return ut;
+}
+
+/** Tickerne brukeren eier (alle porteføljer), har som favoritt eller i en liste. */
+function mineTickere() {
+  const mine = new Set();
+  try {
+    Object.values(hentPortefoljer()).forEach(pf => {
+      Object.entries((pf && pf.beholdning) || {}).forEach(([t, n]) => {
+        if (!t.startsWith('_') && Number(n) > 0) mine.add(t);
+      });
+    });
+    hentFav().forEach(t => mine.add(t));
+    (hentWatchlister() || []).forEach(w => (w && Array.isArray(w.tickers) ? w.tickers : []).forEach(t => mine.add(t)));
+  } catch { /* uleselig lagring: ingen aksjer er «mine» */ }
+  return mine;
+}
+
+/**
+ * Endringene siden øyeblikksbildet, for tickerne i `mine`.
+ *
+ * `forrige` er {TICKER: {r, ex, su, h}} fra oyeblikksbilde(), `idagIso` og
+ * `sidenIso` er lokale datoer. Returnerer [{ticker, navn, type, tekst}],
+ * hendelser først. En aksje uten rad i `forrige` gir ingenting: det finnes
+ * ikke noe å måle mot.
+ */
+function finnEndringer(forrige, aksjer, mine, idagIso, sidenIso) {
+  const ut = [];
+  const idag = new Date(idagIso + 'T00:00:00');
+  (aksjer || []).forEach(a => {
+    if (!a || !mine.has(a.ticker)) return;
+    const f = (forrige || {})[a.ticker];
+    if (!f) return;
+    const n = oyeblikksbilde([a])[a.ticker];
+    const legg = (type, tekst) => ut.push({ ticker: a.ticker, navn: a.navn || a.ticker, type, tekst });
+
+    if (n.h && n.h !== (f.h || '')) legg('hendelse', HENDELSE_TITTEL[n.h]);
+
+    // Har gått ex siden sist. Uten en tidligere dato å måle mot teller bare
+    // utbetalinger etter at bildet ble tatt.
+    const nyUtbetaling = n.su && n.su <= idagIso
+      && (f.su ? n.su > f.su : !!sidenIso && n.su >= sidenIso);
+    if (nyUtbetaling) {
+      const belop = Number(a.siste_utbytte) > 0 ? ` med ${fmtUtbytte(a.siste_utbytte)} kr per aksje` : '';
+      legg('utbetalt', `Gikk ex-utbytte ${datoKort(n.su, idag)}${belop}`);
+    }
+
+    if (n.ex && n.ex >= idagIso && n.ex !== (f.ex || '')) {
+      const belop = Number(a.annonsert_utbytte) > 0 && a.annonsert_ex === a.ex_dato
+        ? `: ${fmtUtbytte(a.annonsert_utbytte)} kr per aksje` : '';
+      const forbehold = exForbeholdGjelder(a, idag) ? ' (foreslått, ikke vedtatt)' : '';
+      legg('exdato', `Ny ex-dato ${datoKort(n.ex, idag)}${belop}${forbehold}`);
+    }
+
+    const gml = Number(f.r) || 0;
+    if (gml > 0 && n.r > 0) {
+      if (Math.abs(n.r - gml) / gml >= NYTT_MIN_RATEENDRING) {
+        legg('rate', `Utbytte per aksje (årsrate) ${n.r > gml ? 'opp' : 'ned'} fra ${fmtUtbytte(gml)} til ${fmtUtbytte(n.r)} kr`);
+      }
+    } else if (gml > 0) {
+      legg('rate', `Ingen årsrate lenger. Den var ${fmtUtbytte(gml)} kr per aksje`);
+    } else if (n.r > 0) {
+      legg('rate', `Årsrate ${fmtUtbytte(n.r)} kr per aksje. Før viste vi ingen`);
+    }
+  });
+  const orden = { hendelse: 0, utbetalt: 1, exdato: 2, rate: 3 };
+  return ut.sort((x, y) => orden[x.type] - orden[y.type] || x.ticker.localeCompare(y.ticker, 'nb'));
+}
+
+function nyttSidenSistHtml(endringer, sidenIso, idag = new Date()) {
+  // Én rad per aksje: Solstad gikk ex og fikk ny årsrate samme uke, og to
+  // rader med samme ticker leste som to aksjer.
+  const grupper = [];
+  endringer.forEach(e => {
+    const g = grupper.find(x => x.ticker === e.ticker);
+    if (g) g.linjer.push(e); else grupper.push({ ticker: e.ticker, navn: e.navn, linjer: [e] });
+  });
+  const rad = g => `<li><button type="button" data-ticker="${escHtml(g.ticker)}" title="${escHtml(g.navn)}"
+      class="w-full text-left py-2 flex items-baseline gap-3 hover:bg-gray-50 dark:hover:bg-gray-800/50 rounded transition-colors">
+      <span class="w-14 shrink-0 text-sm font-semibold text-gray-900 dark:text-gray-100">${escHtml(g.ticker)}</span>
+      <span class="min-w-0 space-y-0.5">${g.linjer.map(e =>
+        `<span class="block text-sm ${e.type === 'hendelse' ? 'text-amber-700 dark:text-amber-400' : 'text-gray-700 dark:text-gray-300'}">${escHtml(e.tekst)}</span>`).join('')}</span>
+    </button></li>`;
+  const forst = grupper.slice(0, NYTT_VIS_ANTALL);
+  const resten = grupper.slice(NYTT_VIS_ANTALL);
+  return `<div class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 px-4 py-3 shadow-sm">
+    <div class="flex items-start justify-between gap-3">
+      <div class="min-w-0">
+        <p class="text-sm font-semibold text-gray-900 dark:text-gray-100">Nytt siden sist</p>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">For aksjene du eier eller følger, siden ${escHtml(datoKort(sidenIso, idag))}</p>
+      </div>
+      <button type="button" id="nss-sett" class="shrink-0 text-sm font-medium text-green-700 dark:text-green-400 hover:underline whitespace-nowrap">Merk som sett</button>
+    </div>
+    <ul class="mt-2 divide-y divide-gray-100 dark:divide-gray-800">${forst.map(rad).join('')}</ul>
+    ${resten.length ? `<details class="border-t border-gray-100 dark:border-gray-800">
+      <summary class="py-2 text-sm text-green-700 dark:text-green-400 cursor-pointer">Vis ${resten.length} til</summary>
+      <ul class="divide-y divide-gray-100 dark:divide-gray-800">${resten.map(rad).join('')}</ul>
+    </details>` : ''}
+  </div>`;
+}
+
+function visNyttSidenSist() {
+  const el = document.getElementById('nytt-siden-sist');
+  if (!el || typeof hentSistSett !== 'function') return;
+  const naa = oyeblikksbilde(alleAksjer);
+  if (!Object.keys(naa).length) return;
+  const idagIso = lokalIsoDato(new Date());
+  const lagret = hentSistSett();
+  const mine = mineTickere();
+  const skjul = () => { el.classList.add('hidden'); el.innerHTML = ''; };
+  // Første besøk, eller ingen aksjer å følge: ta et nytt bilde og vis ingenting.
+  if (!lagret || !mine.size) {
+    lagreSistSett({ tid: idagIso, aksjer: naa });
+    return skjul();
+  }
+  // Aksjer som er kommet til i katalogen siden bildet, legges inn som de står nå.
+  let utvidet = false;
+  Object.keys(naa).forEach(t => { if (!lagret.aksjer[t]) { lagret.aksjer[t] = naa[t]; utvidet = true; } });
+  if (utvidet) lagreSistSett(lagret);
+
+  const endringer = finnEndringer(lagret.aksjer, alleAksjer, mine, idagIso, lagret.tid);
+  if (!endringer.length) return skjul();
+  el.innerHTML = nyttSidenSistHtml(endringer, lagret.tid || idagIso);
+  el.classList.remove('hidden');
+  el.onclick = e => {
+    if (e.target.closest('#nss-sett')) {
+      lagreSistSett({ tid: idagIso, aksjer: oyeblikksbilde(alleAksjer) });
+      return skjul();
+    }
+    const rad = e.target.closest('[data-ticker]');
+    const aksje = rad && alleAksjer.find(a => a.ticker === rad.dataset.ticker);
+    if (aksje) visModal(aksje);
+  };
+}
+
 const ANTALL_ORD = { 1: 'én', 2: 'to', 3: 'tre', 4: 'fire', 5: 'fem', 6: 'seks', 7: 'sju', 8: 'åtte', 9: 'ni', 10: 'ti' };
 
 /**
@@ -6035,4 +6198,4 @@ function _annBygTopp() {
 }
 
 // Node.js test export
-if (typeof module !== 'undefined') module.exports = { sektorSnittYield, utdatertMerke, modalUtdatert, hendelseUtenMal, iRangering, hoyestYield, saerutbytteFotnote, aaretsArsutbytte, aaretsNedgang, ordinaerPerAr, ordinaerHistorikk, markedsplassTekst, hendelseMerke, nyMilepel, delLenkeData, pentAkse, fmtPst, fmtTall, dagerTil, dagerTilTekst, datoKort, aksjerTekst, snittNavn, utbytteKutt, modalHendelse, beregnRisiko, forklarRisiko, vekstFraTopp, beregnMal, forklarMal, bevegelserOverskrift, utbytteRekke, stabileAr, exForbeholdGjelder, utbyttePerioder, vistOverBetalt, arsrateMerke, modalBetaltBoks, supplertFotnote, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, fmt, formaterDato, yieldKlasse, payoutKlasse, vekstKlasse, beregnScore, beregnBaerekraft, beregnYtdInntekt, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote, kapitalAndel, modalKapitalNote, kapitalSkattTekst, aksjerMedExIMaaned, beregnHvisKjopt, hvisStartAar, beregnAskMotVanlig, fmtUtbytte, sisteUtbytteTekst, modalOmSelskapet, vekslOmSelskapet, dripGevinst, _simulerKalkulator, askStatus, askTekst, modalKontoer };
+if (typeof module !== 'undefined') module.exports = { sektorSnittYield, utdatertMerke, modalUtdatert, hendelseUtenMal, iRangering, hoyestYield, saerutbytteFotnote, aaretsArsutbytte, aaretsNedgang, ordinaerPerAr, ordinaerHistorikk, markedsplassTekst, hendelseMerke, nyMilepel, delLenkeData, pentAkse, fmtPst, fmtTall, dagerTil, dagerTilTekst, datoKort, aksjerTekst, snittNavn, utbytteKutt, modalHendelse, beregnRisiko, forklarRisiko, vekstFraTopp, beregnMal, forklarMal, bevegelserOverskrift, utbytteRekke, stabileAr, exForbeholdGjelder, utbyttePerioder, vistOverBetalt, arsrateMerke, oyeblikksbilde, finnEndringer, nyttSidenSistHtml, modalBetaltBoks, supplertFotnote, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, fmt, formaterDato, yieldKlasse, payoutKlasse, vekstKlasse, beregnScore, beregnBaerekraft, beregnYtdInntekt, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote, kapitalAndel, modalKapitalNote, kapitalSkattTekst, aksjerMedExIMaaned, beregnHvisKjopt, hvisStartAar, beregnAskMotVanlig, fmtUtbytte, sisteUtbytteTekst, modalOmSelskapet, vekslOmSelskapet, dripGevinst, _simulerKalkulator, askStatus, askTekst, modalKontoer };

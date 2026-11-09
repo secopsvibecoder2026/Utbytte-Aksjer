@@ -578,6 +578,8 @@ listen i generatoren.
 | `pf_rebalansering` | Sector target weights (%) |
 | `profil_navn` / `profil_sparemaal` / `profil_mal_mnd` | User profile / goals |
 | `notif_aksjer` | Tickers with ex-date push notifications enabled |
+| `sist_sett` | Snapshot «Nytt siden sist» compares against: `{tid, aksjer: {TICKER: {r, ex, su, h}}}` |
+| `pf_utbytte_avvist` | Dividend suggestions the user skipped, per portfolio: `{pfId: ['SOFF\|2026-11-06']}` |
 | `sortering` | Sort preference |
 | `paginering-per-side` | Stocks per page (25/50/75/100/0=all) |
 | `tema` | Dark/light theme |
@@ -2666,6 +2668,82 @@ Found in the same pass:
 
 Tests: `TestUtbetalingsrunde` (15), `TestKuttMedEnManglende` (4) and
 `ui.test.js` (+2).
+
+## «Nytt siden sist» and dividend suggestions in the app (2026-11-10)
+
+Two things the app knew and did not say. On 9 November Solstad Offshore
+quadrupled its dividend and Stainless Tankers' rate was halved, and nothing
+told the person who owned them. And every payment had to be typed in by hand
+(date, shares, amount per share) before the Skatt tab was right, although
+the data already holds all three.
+
+### «Nytt siden sist» (`ui.js`)
+
+A card at the top of the app for the stocks the user owns, has starred or has
+in a list (`mineTickere()`, all portfolios). `finnEndringer()` is pure and
+tested, and reports four things:
+
+- **a payment that has gone ex** since last time, with the amount;
+- **a new ex-date**, with the announced amount when `annonsert_ex` matches,
+  and «foreslått, ikke vedtatt» when `exForbeholdGjelder()`;
+- **the annual rate moved** at least 5 % (`NYTT_MIN_RATEENDRING`), or went to
+  or from zero;
+- **a corporate event** that was not there before.
+
+It compares against a snapshot in the browser (`sist_sett`,
+`oyeblikksbilde()`), and three rules decide what that snapshot is:
+
+- **It holds the whole catalog**, not only the user's stocks, so a stock
+  bought next week has something to be measured against. A stock that joins
+  the catalog later is added as it stands.
+- **It is replaced only when the user presses «Merk som sett».** Until then
+  the card shows the net change since the snapshot, so nothing is lost by
+  not opening the app for a month.
+- **No snapshot, or no stocks to follow, shows nothing** and takes a fresh
+  one. A stock with no row in the snapshot gives no line.
+
+The rate line says «årsrate» and gives both numbers. It does not say the
+company raised or cut: the number can also move because a rule in the data
+job changed, as it did for three stocks on 9 November.
+
+Several lines about one stock share a row. Tapping a row opens the modal.
+
+### Dividend suggestions (`portefolje.js`)
+
+Portefølje → Beholdning shows «Utbytte du kan registrere» when a payment in
+`utbytte_12m_liste` has gone ex and is not registered. `utbytteForslag()` is
+pure and tested. Each row has the type, «Registrer» and «Hopp over», and
+«Registrer alle» covers the lot. Nothing is registered without a tap.
+
+- **Shares are the holding on the day before the ex-date**, from the user's
+  own buys and sells (`beregnKostbasis()` with a cut-off). A buy on the
+  ex-date does not count, and no shares then means no suggestion.
+- **Without a registered buy we do not know when the stock was bought.** Only
+  payments from the last 45 days are then suggested
+  (`FORSLAG_UTEN_KJOP_DAGER`), with today's holding, and the row says «hvis du
+  eide aksjene da».
+- **Already registered** means a dividend or capital transaction dated from
+  five days before the ex-date to 45 days after, and never past the next
+  payment's window. One registration covers one payment, also for a monthly
+  payer, and it may be dated the payment day.
+- **«Tilbakebetalt kapital» is the default only for the payment the notice is
+  about:** the newest one, with `kapital_tilbake.melding_dato` from 60 days
+  before to 30 days after its ex-date. Borgestad's March payment is not
+  reclassified by the October notice. The user can change the type per row.
+- **The transaction is dated the ex-date** and carries Yahoo's kroner amount
+  per share, before any withholding tax. The card says so, and says to
+  replace the row if the broker shows another amount.
+- Skipped rows are stored per portfolio in `pf_utbytte_avvist`.
+
+The rows use `data-utbytteforslag`. `data-forslag` is taken: the popups in
+`ui.js` check for it so that two of them do not stack.
+
+Checked in a browser at 390 px in both themes with a test portfolio:
+register, skip, «Registrer alle» and «Merk som sett» all hold after a
+reload. The first layout put the selector and the two buttons on three lines
+on a phone; they now share one.
+
+Tests: `portefolje.test.js` (+9) and `ui.test.js` (+4).
 
 ## App review of 2026-10-20
 

@@ -35,7 +35,7 @@ global.visModal = () => {};
 global.SEKTOR_FARGE = {};
 global.FARGE_FALLBACK = '#9ca3af';
 
-const { _kvartalSummer, beregnKostbasis, beregnIRR, beregnTWRSerie, beregnUtbyttePrognose, _leggTilMnd, beregnUtbytteskatt, beregnSkatteaar, nesteUtbyttePerAksje } = require('../assets/portefolje.js');
+const { utbytteForslag, alleUtbytteForslag, utbytteForslagHtml, _kvartalSummer, beregnKostbasis, beregnIRR, beregnTWRSerie, beregnUtbyttePrognose, _leggTilMnd, beregnUtbytteskatt, beregnSkatteaar, nesteUtbyttePerAksje } = require('../assets/portefolje.js');
 
 // ── beregnKostbasis ─────────────────────────────────────────────────────────
 
@@ -621,4 +621,106 @@ test('_kvartalSummer: samme kvartal som månedsgrafen (DNB med ex i april havnet
   assert.deepEqual(k.map(v => Math.round(v)), [100, 3700, 100, 100]);
   // Summen av kvartalene er hele årsbeløpet
   assert.equal(Math.round(k.reduce((s, v) => s + v, 0)), 4000);
+});
+
+// ── Utbytteforslag (2026-11-10) ────────────────────────────────────────────
+// Solstad Offshore slik raden sto 09.11.2026.
+const SOFF_RAD = {
+  ticker: 'SOFF', navn: 'Solstad Offshore ASA', siste_utbytte_dato: '2026-11-06',
+  utbytte_12m_liste: [
+    { ex_dato: '2025-11-25', belop: 0.5119 }, { ex_dato: '2026-03-10', belop: 0.4832 },
+    { ex_dato: '2026-05-20', belop: 0.9169 }, { ex_dato: '2026-07-17', belop: 1.4592 },
+    { ex_dato: '2026-11-06', belop: 2.7683 },
+  ],
+};
+const kjop = (dato, antall) => ({ id: dato, type: 'kjøp', dato, antall, kurs: 40 });
+
+test('utbytteForslag: antallet er beholdningen dagen før ex-datoen', () => {
+  // Kjøpt 200 i januar og 100 til i juni: mars og mai ga utbytte på 200, juli og november på 300.
+  const tx = [kjop('2026-01-15', 200), kjop('2026-06-02', 100)];
+  const f = utbytteForslag(SOFF_RAD, tx, 300, new Set(), '2026-11-09');
+  assert.deepEqual(f.map(x => [x.ex_dato, x.antall, x.belop]), [
+    ['2026-03-10', 200, 0.4832], ['2026-05-20', 200, 0.9169],
+    ['2026-07-17', 300, 1.4592], ['2026-11-06', 300, 2.7683],
+  ]);
+  assert.ok(f.every(x => x.type === 'utbytte' && !x.antatt));
+});
+
+test('utbytteForslag: kjøp på ex-datoen gir ikke utbytte, og et salg før gjør det heller ikke', () => {
+  assert.deepEqual(utbytteForslag(SOFF_RAD, [kjop('2026-11-06', 100)], 100, new Set(), '2026-11-09'), []);
+  const solgt = [kjop('2026-01-15', 200), { id: 's', type: 'salg', dato: '2026-07-01', antall: 200, kurs: 60 }];
+  assert.deepEqual(utbytteForslag(SOFF_RAD, solgt, 0, new Set(), '2026-11-09').map(x => x.ex_dato),
+    ['2026-03-10', '2026-05-20']);
+});
+
+test('utbytteForslag: registrert utbetaling foreslås ikke igjen, heller ikke datert betalingsdagen', () => {
+  const tx = [kjop('2026-01-15', 200),
+    { id: 'u1', type: 'utbytte', dato: '2026-03-24', antall: 200, kurs: 0.48 },   // to uker etter ex
+    { id: 'u2', type: 'kapital', dato: '2026-11-06', antall: 200, kurs: 2.7683 }];
+  assert.deepEqual(utbytteForslag(SOFF_RAD, tx, 200, new Set(), '2026-11-09').map(x => x.ex_dato),
+    ['2026-05-20', '2026-07-17']);
+});
+
+test('utbytteForslag: én registrering dekker én utbetaling hos en månedlig betaler', () => {
+  const mnd = { ticker: 'HSHP', utbytte_12m_liste: [
+    { ex_dato: '2026-08-14', belop: 2.1 }, { ex_dato: '2026-09-15', belop: 2.3 }, { ex_dato: '2026-10-15', belop: 2.6 }] };
+  const tx = [kjop('2026-01-15', 50), { id: 'u', type: 'utbytte', dato: '2026-08-28', antall: 50, kurs: 2.1 }];
+  assert.deepEqual(utbytteForslag(mnd, tx, 50, new Set(), '2026-11-09').map(x => x.ex_dato),
+    ['2026-09-15', '2026-10-15']);
+});
+
+test('utbytteForslag: uten kjøp foreslås bare de siste 45 dagene, og eierskapet er antatt', () => {
+  const f = utbytteForslag(SOFF_RAD, [], 200, new Set(), '2026-11-09');
+  assert.deepEqual(f.map(x => [x.ex_dato, x.antall, x.antatt]), [['2026-11-06', 200, true]]);
+  assert.deepEqual(utbytteForslag(SOFF_RAD, undefined, 0, new Set(), '2026-11-09'), []);
+});
+
+test('utbytteForslag: hoppet over, framtidig ex-dato og tom liste gir ingenting', () => {
+  const tx = [kjop('2026-10-01', 100)];
+  assert.deepEqual(utbytteForslag(SOFF_RAD, tx, 100, new Set(['SOFF|2026-11-06']), '2026-11-09'), []);
+  assert.deepEqual(utbytteForslag(SOFF_RAD, tx, 100, new Set(), '2026-11-05'), []);
+  assert.deepEqual(utbytteForslag({ ticker: 'X' }, tx, 100, new Set(), '2026-11-09'), []);
+  assert.deepEqual(utbytteForslag(null, tx, 100, new Set(), '2026-11-09'), []);
+});
+
+test('utbytteForslag: tilbakebetalt kapital er forvalg bare for utbetalingen meldingen gjelder', () => {
+  global.kapitalAndel = a => (a.kapital_tilbake ? a.kapital_tilbake.andel : 0);
+  try {
+    // Borgestad: melding 30.10.2026 om utbetalingen med ex 03.11. Marsutbetalingen er ikke klassifisert.
+    const bor = { ticker: 'BOR', kapital_tilbake: { andel: 1, melding_dato: '2026-10-30' },
+      utbytte_12m_liste: [{ ex_dato: '2026-03-02', belop: 0.5 }, { ex_dato: '2026-11-03', belop: 1.5 }] };
+    const f = utbytteForslag(bor, [kjop('2026-01-15', 100)], 100, new Set(), '2026-11-09');
+    assert.deepEqual(f.map(x => [x.ex_dato, x.type]), [['2026-03-02', 'utbytte'], ['2026-11-03', 'kapital']]);
+    // En gammel melding sier ingenting om en ny utbetaling.
+    const gammel = { ...bor, kapital_tilbake: { andel: 1, melding_dato: '2026-02-20' } };
+    assert.equal(utbytteForslag(gammel, [kjop('2026-01-15', 100)], 100, new Set(), '2026-11-09')[1].type, 'utbytte');
+    // Delvis: forvalget er utbytte, og raden sier fra.
+    const delvis = { ...bor, kapital_tilbake: { andel: 0.86, melding_dato: '2026-10-30' } };
+    const d = utbytteForslag(delvis, [kjop('2026-01-15', 100)], 100, new Set(), '2026-11-09')[1];
+    assert.deepEqual([d.type, d.delvisKapital], ['utbytte', true]);
+  } finally { delete global.kapitalAndel; }
+});
+
+test('alleUtbytteForslag: hele porteføljen, nyeste først, uten liksomtickere', () => {
+  const dno = { ticker: 'DNO', utbytte_12m_liste: [{ ex_dato: '2026-08-21', belop: 0.375 }, { ex_dato: '2026-11-06', belop: 0.375 }] };
+  const f = alleUtbytteForslag([SOFF_RAD, dno], { SOFF: 200, DNO: 1000, _ukjent: 5, FINNESIKKE: 3 },
+    { DNO: [kjop('2026-06-01', 1000)] }, ['DNO|2026-08-21'], '2026-11-09');
+  assert.deepEqual(f.map(x => [x.ticker, x.ex_dato]), [['DNO', '2026-11-06'], ['SOFF', '2026-11-06']]);
+});
+
+test('utbytteForslagHtml: beløp, sum og forbehold står i raden', () => {
+  const hadde = global.escHtml;
+  global.escHtml = s => String(s).replace(/</g, '&lt;');
+  const html = utbytteForslagHtml([
+    { ticker: 'SOFF', navn: 'Solstad', ex_dato: '2026-11-06', belop: 2.7683, antall: 200, type: 'utbytte', antatt: true },
+    { ticker: 'BOR', navn: 'Borgestad', ex_dato: '2026-11-03', belop: 1.5, antall: 100, type: 'kapital', antatt: false },
+  ], new Date('2026-11-09T12:00:00'));
+  assert.match(html, /2,7683 kr = <span[^>]*>554 kr/);
+  assert.match(html, /hvis du eide aksjene da/);
+  assert.match(html, /value="kapital" selected/);
+  assert.match(html, /Registrer alle/);
+  assert.match(html, /2 utbetalinger har gått ex/);
+  assert.equal(utbytteForslagHtml([]), '');
+  assert.doesNotMatch(utbytteForslagHtml([{ ticker: 'A', ex_dato: '2026-11-03', belop: 1, antall: 1, type: 'utbytte' }]), /Registrer alle/);
+  global.escHtml = hadde;
 });

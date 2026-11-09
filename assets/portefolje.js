@@ -204,6 +204,192 @@ function _skatteposter(beholdning, bruttoPerTicker) {
 
 
 
+// ── UTBYTTEFORSLAG ──────────────────────────────────────────────────────────
+// Skatt-fanen og «Utbytte mottatt» bygger på utbetalingene brukeren selv har
+// registrert, og det måtte gjøres for hånd: dato, antall og beløp per aksje
+// for hver utbetaling. Dataene har alt det (utbytte_12m_liste), og
+// transaksjonene sier hvor mange aksjer brukeren eide dagen før ex-datoen.
+// Forslagene fyller skjemaet; brukeren bekrefter eller hopper over.
+//
+// Ingenting registreres av seg selv, og ingenting gjettes om eierskap:
+// - Med kjøp eller salg registrert er antallet beholdningen dagen før
+//   ex-datoen. Null aksjer da gir ikke noe forslag.
+// - Uten kjøp vet vi ikke når aksjen ble kjøpt. Da foreslås bare utbetalinger
+//   fra de siste FORSLAG_UTEN_KJOP_DAGER dagene, med dagens beholdning, og
+//   raden sier at eierskapet er antatt.
+
+const FORSLAG_UTEN_KJOP_DAGER = 45;
+// En registrert utbetaling regnes som samme utbetaling når den er datert fra
+// noen dager før ex-datoen til pengene senest er kommet.
+const FORSLAG_FOR_EX_DAGER = 5;
+const FORSLAG_ETTER_EX_DAGER = 45;
+const FORSLAG_VIS_ANTALL = 5;
+
+/**
+ * Utbetalinger som har gått ex og ikke er registrert, for én aksje.
+ *
+ * `txListe` er aksjens transaksjoner, `beholdning` antallet i porteføljen nå,
+ * `avvist` et Set med «TICKER|ex-dato» brukeren har hoppet over.
+ * Returnerer [{ticker, navn, ex_dato, belop, antall, type, antatt, delvisKapital}].
+ */
+function utbytteForslag(aksje, txListe, beholdning, avvist, idagIso) {
+  if (!aksje || !aksje.ticker) return [];
+  const ticker = aksje.ticker;
+  const betalt = (aksje.utbytte_12m_liste || [])
+    .filter(b => b && b.ex_dato && Number(b.belop) > 0 && b.ex_dato <= idagIso)
+    .slice().sort((x, y) => x.ex_dato.localeCompare(y.ex_dato));
+  if (!betalt.length) return [];
+  const tx = txListe || [];
+  const harEierskap = tx.some(t => t.type === 'kjøp' || t.type === 'salg');
+  const registrert = tx.filter(t => t.type === 'utbytte' || t.type === 'kapital')
+    .map(t => t.dato || '').sort();
+  const brukt = new Set();
+  const tidligst = _leggTilDager(idagIso, -FORSLAG_UTEN_KJOP_DAGER);
+  const andelFn = typeof kapitalAndel === 'function' ? kapitalAndel : () => 0;
+  const ut = [];
+  betalt.forEach((b, i) => {
+    // Vinduet for «alt registrert» stopper før neste utbetaling, så en
+    // månedlig betaler ikke får én registrering til å dekke to utbetalinger.
+    const fra = _leggTilDager(b.ex_dato, -FORSLAG_FOR_EX_DAGER);
+    let til = _leggTilDager(b.ex_dato, FORSLAG_ETTER_EX_DAGER);
+    if (betalt[i + 1]) {
+      const forNeste = _leggTilDager(betalt[i + 1].ex_dato, -FORSLAG_FOR_EX_DAGER);
+      if (forNeste < til) til = forNeste;
+    }
+    const treff = registrert.findIndex((d, j) => !brukt.has(j) && d >= fra && d < til);
+    if (treff >= 0) { brukt.add(treff); return; }
+    if (avvist && avvist.has(`${ticker}|${b.ex_dato}`)) return;
+
+    let antall, antatt = false;
+    if (harEierskap) {
+      antall = beregnKostbasis(ticker, { [ticker]: tx }, _leggTilDager(b.ex_dato, -1)).antall;
+    } else {
+      if (b.ex_dato < tidligst) return;
+      antall = Number(beholdning) || 0;
+      antatt = true;
+    }
+    if (!(antall > 0)) return;
+
+    // Selskapets siste melding klassifiserer bare den utbetalingen den
+    // gjelder (BOR og HUNT har vekslet), så bare den nyeste utbetalingen kan
+    // få «tilbakebetalt kapital» som forvalg, og bare når meldingen er fra
+    // rundt den ex-datoen.
+    let andel = 0;
+    const melding = aksje.kapital_tilbake && aksje.kapital_tilbake.melding_dato;
+    if (i === betalt.length - 1 && melding
+        && melding >= _leggTilDager(b.ex_dato, -60) && melding <= _leggTilDager(b.ex_dato, 30)) {
+      andel = andelFn(aksje);
+    }
+    ut.push({
+      ticker, navn: aksje.navn || ticker, ex_dato: b.ex_dato, belop: Number(b.belop), antall,
+      type: andel >= 0.99 ? 'kapital' : 'utbytte', antatt,
+      delvisKapital: andel > 0 && andel < 0.99,
+    });
+  });
+  return ut;
+}
+
+/** Forslagene for hele porteføljen, nyeste ex-dato først. */
+function alleUtbytteForslag(aksjer, pf, txMap, avvistListe, idagIso) {
+  const avvist = new Set(avvistListe || []);
+  const ut = [];
+  Object.entries(pf || {}).forEach(([ticker, antall]) => {
+    if (ticker.startsWith('_')) return;
+    const aksje = (aksjer || []).find(a => a.ticker === ticker);
+    if (!aksje) return;
+    ut.push(...utbytteForslag(aksje, (txMap || {})[ticker], antall, avvist, idagIso));
+  });
+  return ut.sort((x, y) => y.ex_dato.localeCompare(x.ex_dato) || x.ticker.localeCompare(y.ticker, 'nb'));
+}
+
+function utbytteForslagHtml(forslag, idag = new Date()) {
+  if (!forslag.length) return '';
+  const kr = v => v.toLocaleString('nb-NO', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) + ' kr';
+  const belop = v => v.toLocaleString('nb-NO', { minimumFractionDigits: 2, maximumFractionDigits: 4 });
+  const dato = iso => new Date(iso + 'T00:00:00').toLocaleDateString('nb-NO',
+    new Date(iso + 'T00:00:00').getFullYear() === idag.getFullYear()
+      ? { day: 'numeric', month: 'short' } : { day: 'numeric', month: 'short', year: 'numeric' });
+  // Én linje med hva det gjelder, én med valgene. På en telefon brøt velgeren
+  // og de to knappene over tre linjer da alt sto i samme rad.
+  const rad = f => `<li class="py-2.5 sm:flex sm:items-center sm:gap-4" data-utbytteforslag="${escHtml(f.ticker)}|${escHtml(f.ex_dato)}">
+      <div class="sm:flex-1 min-w-0">
+        <p class="text-sm"><span class="font-semibold text-gray-900 dark:text-gray-100">${escHtml(f.ticker)}</span>
+          <span class="text-gray-500 dark:text-gray-400">gikk ex ${escHtml(dato(f.ex_dato))}</span></p>
+        <p class="text-xs text-gray-600 dark:text-gray-400">${f.antall} × ${belop(f.belop)} kr = <span class="font-medium text-gray-900 dark:text-gray-100">${kr(f.antall * f.belop)}</span>${f.antatt ? ' · hvis du eide aksjene da' : ''}${f.type === 'kapital' ? ' · selskapet kaller det tilbakebetalt kapital' : f.delvisKapital ? ' · delvis tilbakebetalt kapital ifølge selskapet' : ''}</p>
+      </div>
+      <div class="flex items-center gap-2 mt-2 sm:mt-0">
+        <select class="pf-forslag-type filter-input text-xs py-1.5 flex-1 sm:flex-none min-w-0" aria-label="Type utbetaling for ${escHtml(f.ticker)}">
+          <option value="utbytte"${f.type === 'utbytte' ? ' selected' : ''}>Utbytte</option>
+          <option value="kapital"${f.type === 'kapital' ? ' selected' : ''}>Tilbakebetalt kapital</option>
+        </select>
+        <button type="button" class="pf-forslag-reg shrink-0 bg-brand-600 hover:bg-brand-700 text-white text-xs font-medium px-3 py-1.5 rounded-lg transition-colors">Registrer</button>
+        <button type="button" class="pf-forslag-hopp shrink-0 text-xs text-gray-500 dark:text-gray-400 hover:underline whitespace-nowrap">Hopp over</button>
+      </div>
+    </li>`;
+  const forst = forslag.slice(0, FORSLAG_VIS_ANTALL);
+  const resten = forslag.slice(FORSLAG_VIS_ANTALL);
+  return `<div class="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4 shadow-sm">
+    <div class="flex items-start justify-between gap-3">
+      <div class="min-w-0">
+        <h3 class="font-semibold text-sm">Utbytte du kan registrere</h3>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">${forslag.length === 1 ? 'Én utbetaling har' : `${forslag.length} utbetalinger har`} gått ex mens aksjen sto i porteføljen, og er ikke registrert.</p>
+      </div>
+      ${forslag.length > 1 ? '<button type="button" id="pf-forslag-alle" class="shrink-0 text-sm font-medium text-green-700 dark:text-green-400 hover:underline whitespace-nowrap">Registrer alle</button>' : ''}
+    </div>
+    <ul class="mt-2 divide-y divide-gray-100 dark:divide-gray-800">${forst.map(rad).join('')}</ul>
+    ${resten.length ? `<details class="border-t border-gray-100 dark:border-gray-800">
+      <summary class="py-2 text-sm text-green-700 dark:text-green-400 cursor-pointer">Vis ${resten.length} til</summary>
+      <ul class="divide-y divide-gray-100 dark:divide-gray-800">${resten.map(rad).join('')}</ul>
+    </details>` : ''}
+    <p class="text-xs text-gray-500 dark:text-gray-400 mt-2 leading-relaxed">Registreres med ex-datoen som dato. Pengene kommer vanligvis én til to uker senere. Beløpet er per aksje i kroner før eventuell kildeskatt. Viser megleren et annet beløp, sletter du raden i historikken og legger inn det riktige.</p>
+  </div>`;
+}
+
+function visUtbytteForslag() {
+  const el = document.getElementById('pf-utbytteforslag');
+  if (!el || typeof hentUtbytteAvvist !== 'function') return;
+  const pfId = hentAktivPFId();
+  const forslag = alleUtbytteForslag(window.alleAksjer || [], hentPF(), hentTransaksjoner(),
+    hentUtbytteAvvist()[pfId], _idagIso());
+  el.innerHTML = utbytteForslagHtml(forslag);
+  el.classList.toggle('hidden', !forslag.length);
+  if (!forslag.length) return;
+
+  const registrer = (f, type) => {
+    const txData = hentTransaksjoner();
+    if (!txData[f.ticker]) txData[f.ticker] = [];
+    // «Registrer alle» lager flere i samme millisekund; id-en må være unik.
+    const id = `${Date.now()}-${f.ticker}-${f.ex_dato}`;
+    txData[f.ticker].push({ id, dato: f.ex_dato, antall: f.antall, kurs: f.belop, type });
+    txData[f.ticker].sort((a, b) => a.dato.localeCompare(b.dato));
+    lagreTransaksjoner(txData);
+  };
+  el.onclick = e => {
+    if (e.target.closest('#pf-forslag-alle')) {
+      forslag.forEach(f => {
+        const li = [...el.querySelectorAll('[data-utbytteforslag]')].find(x => x.dataset.utbytteforslag === `${f.ticker}|${f.ex_dato}`);
+        registrer(f, (li && li.querySelector('.pf-forslag-type').value) || f.type);
+      });
+      return visPortefolje();
+    }
+    const li = e.target.closest('[data-utbytteforslag]');
+    if (!li) return;
+    const f = forslag.find(x => `${x.ticker}|${x.ex_dato}` === li.dataset.utbytteforslag);
+    if (!f) return;
+    if (e.target.closest('.pf-forslag-reg')) {
+      registrer(f, li.querySelector('.pf-forslag-type').value);
+      return visPortefolje();
+    }
+    if (e.target.closest('.pf-forslag-hopp')) {
+      const avvist = hentUtbytteAvvist();
+      avvist[pfId] = [...new Set([...(avvist[pfId] || []), li.dataset.utbytteforslag])];
+      lagreUtbytteAvvist(avvist);
+      return visPortefolje();
+    }
+  };
+}
+
+
 // Leser "Ny transaksjon"-skjemaet i en detail-rad og registrerer transaksjonen.
 // Delt av kortvisning (mobil) og tabellvisning (desktop) sine onclick-handlere.
 function _registrerTransaksjonFraRad(leggTilBtn, rad) {
@@ -1044,6 +1230,7 @@ function visPortefolje() {
   document.getElementById('pf-inntekt-wrapper').classList.toggle('hidden', !harBeholdning);
   document.getElementById('pf-statistikk-tom').classList.toggle('hidden', harBeholdning);
   document.getElementById('pf-top-strip')?.classList.toggle('hidden', !harBeholdning);
+  visUtbytteForslag();
   document.getElementById('pf-mini-sektor-wrapper')?.classList.toggle('hidden', !harBeholdning);
   // Vis/skjul stats-sub-tabs og sett standard til oversikt ved første lasting
   STATS_TABS.forEach(t => {
@@ -3059,4 +3246,4 @@ function visAnalyse() {
 }
 
 // Node.js test export
-if (typeof module !== 'undefined') module.exports = { _kvartalSummer, beregnKostbasis, beregnIRR, beregnTWRSerie, beregnUtbyttePrognose, _leggTilMnd, beregnUtbytteskatt, beregnSkatteaar, nesteUtbyttePerAksje };
+if (typeof module !== 'undefined') module.exports = { utbytteForslag, alleUtbytteForslag, utbytteForslagHtml, _kvartalSummer, beregnKostbasis, beregnIRR, beregnTWRSerie, beregnUtbyttePrognose, _leggTilMnd, beregnUtbytteskatt, beregnSkatteaar, nesteUtbyttePerAksje };

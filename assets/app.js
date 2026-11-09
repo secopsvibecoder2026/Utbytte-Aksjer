@@ -181,6 +181,7 @@ function lastInnData(json) {
   byggListeFilter();
   oppdaterSammendrag();
   visOversikt();
+  if (typeof visNyttSidenSist === 'function') visNyttSidenSist();
   visKalender();
   mergPriser();
   sjekkExDatoerDirekte();
