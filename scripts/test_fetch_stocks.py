@@ -1692,6 +1692,30 @@ STST_BETALT = {"pris": 41.1, "utbytte_yield": 17.4, "utbytte_12m": 5.1705, "utby
                "utbytte_forste_ar": 2024}
 
 
+class TestUtbetalingerMedDato(unittest.TestCase):
+    """Utbetalingene appen regner mottatt utbytte fra (2026-11-10)."""
+
+    def _s(self, par):
+        import pandas as pd
+        return pd.Series([v for _, v in par], index=pd.to_datetime([d for d, _ in par]))
+
+    def test_seks_aar_eldste_forst_og_bare_gyldige_belop(self):
+        s = self._s([("2026-11-06", 2.7683), ("2020-05-10", 1.0), ("2020-12-01", 0.5),
+                     ("2026-05-20", 0.9169), ("2025-11-25", float("nan")), ("2025-08-01", 0.0)])
+        self.assertEqual(fs.utbetalinger_med_dato(s, datetime.date(2026, 11, 10)),
+                         [["2020-12-01", 0.5], ["2026-05-20", 0.9169], ["2026-11-06", 2.7683]])
+
+    def test_framtidig_dato_og_tom_serie(self):
+        s = self._s([("2026-12-02", 2.0)])
+        self.assertEqual(fs.utbetalinger_med_dato(s, datetime.date(2026, 11, 10)), [])
+        self.assertEqual(fs.utbetalinger_med_dato(None, datetime.date(2026, 11, 10)), [])
+
+    def test_hent_aksje_skriver_feltet(self):
+        import inspect
+        kilde = inspect.getsource(fs.hent_aksje)
+        self.assertIn('"utbetalinger": utbetalinger', kilde)
+
+
 class TestBetaltFraSerie(unittest.TestCase):
     def _s(self, par):
         import pandas as pd
