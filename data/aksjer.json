@@ -1,5 +1,5 @@
 {
-  "sist_oppdatert": "2026-11-10T00:33:17Z",
+  "sist_oppdatert": "2026-11-10T07:50:14Z",
   "kilde": "Yahoo Finance (yfinance)",
   "antall_ok": 154,
   "antall_feil": 0,
@@ -13,11 +13,11 @@
       "52u_hoy": 454.6,
       "52u_lav": 226.4,
       "markedsverdi_mrd": 910.5,
-      "utbytte_per_aksje": 14.52,
-      "utbytte_yield": 3.77,
+      "utbytte_per_aksje": 14.76,
+      "utbytte_yield": 3.84,
       "utbytte_vekst_5ar": 41.3,
       "payout_ratio": 31.0,
-      "pe_ratio": 8.23,
+      "pe_ratio": 8.02,
       "pb_ratio": 2.17,
       "ex_dato": "2026-11-13",
       "betaling_dato": "2026-11-25",
@@ -176,31 +176,31 @@
       "utbytte_korrigert": [
         {
           "ex_dato": "2021-11-11",
-          "yahoo": 1.6925,
+          "yahoo": 1.6932,
           "belop": 1.5572,
           "melding_id": "547180"
         },
         {
           "ex_dato": "2022-02-11",
-          "yahoo": 1.6925,
+          "yahoo": 1.6932,
           "belop": 1.5944,
           "melding_id": "554248"
         },
         {
           "ex_dato": "2023-01-09",
-          "yahoo": 8.4627,
+          "yahoo": 8.4662,
           "belop": 9.0159,
           "melding_id": "580175"
         },
         {
           "ex_dato": "2023-05-11",
-          "yahoo": 8.4627,
+          "yahoo": 8.4662,
           "belop": 9.5753,
           "melding_id": "591103"
         },
         {
           "ex_dato": "2023-08-14",
-          "yahoo": 8.4627,
+          "yahoo": 8.4662,
           "belop": 9.4091,
           "melding_id": "597338"
         }
@@ -285,7 +285,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet har gått opp fra 16,43 til 19,16 kroner per aksje i 2022–2025, men det er satt ned to ganger underveis. Høyeste år er 2,3 ganger det laveste — merkbare svingninger, men innenfor et gjenkjennelig spenn. Dagens yield på 3,8 % er lavere enn aksjens eget 5-årssnitt på 5,7 %.",
-      "hentet": "2026-11-10T00:25:53Z",
+      "hentet": "2026-11-10T07:41:44Z",
       "ask_status": "ja"
     },
     {
@@ -301,7 +301,7 @@
       "utbytte_yield": 5.52,
       "utbytte_vekst_5ar": 19.8,
       "payout_ratio": 66.0,
-      "pe_ratio": 12.01,
+      "pe_ratio": 12.16,
       "pb_ratio": 1.79,
       "ex_dato": null,
       "betaling_dato": null,
@@ -437,7 +437,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet har steget uten et eneste kutt fra 2022–2025, fra 9,75 til 16,75 kroner per aksje. Samlet er utbetalingen 1,7-doblet i perioden. For 2026 er det betalt 18,00 kroner per aksje, mot 16,75 kroner for 2025. Dagens yield på 5,5 % ligger over aksjens eget 5-årssnitt på 4,4 %.",
-      "hentet": "2026-11-10T00:25:55Z",
+      "hentet": "2026-11-10T07:41:46Z",
       "ask_status": "ja"
     },
     {
@@ -453,7 +453,7 @@
       "utbytte_yield": 7.2,
       "utbytte_vekst_5ar": 1.6,
       "payout_ratio": 57.0,
-      "pe_ratio": 7.97,
+      "pe_ratio": 7.99,
       "pb_ratio": 2.57,
       "ex_dato": null,
       "betaling_dato": null,
@@ -623,7 +623,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet har vært stabilt eller stigende gjennom hele 2022–2025, uten kutt. Nivået har holdt seg jevnt fra år til år. Dagens yield på 7,2 % ligger nær aksjens eget 5-årssnitt på 6,9 %.",
-      "hentet": "2026-11-10T00:25:56Z",
+      "hentet": "2026-11-10T07:41:48Z",
       "ask_status": "ja"
     },
     {
@@ -639,7 +639,7 @@
       "utbytte_yield": 5.74,
       "utbytte_vekst_5ar": 38.1,
       "payout_ratio": 61.0,
-      "pe_ratio": 16.05,
+      "pe_ratio": 16.35,
       "pb_ratio": 2.41,
       "ex_dato": null,
       "betaling_dato": null,
@@ -777,7 +777,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet har steget uten et eneste kutt fra 2022–2025, fra 3,00 til 10,00 kroner per aksje. Veksten er kraftig: siste år er 3,3 ganger det første. Så bratte løft holder sjelden samme takt over tid. For 2026 er det betalt 6,00 kroner per aksje, mot 10,00 kroner for 2025. Dagens yield på 5,7 % ligger over aksjens eget 5-årssnitt på 4,7 %.",
-      "hentet": "2026-11-10T00:25:58Z",
+      "hentet": "2026-11-10T07:41:49Z",
       "ask_status": "ja"
     },
     {
@@ -793,7 +793,7 @@
       "utbytte_yield": 4.15,
       "utbytte_vekst_5ar": 10.6,
       "payout_ratio": 49.0,
-      "pe_ratio": 14.5,
+      "pe_ratio": 14.75,
       "pb_ratio": 2.53,
       "ex_dato": "2026-11-13",
       "betaling_dato": "2026-11-23",
@@ -1014,7 +1014,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet gikk ned fra 7,35 kroner per aksje i 2022 til 6,65 i 2025, og det er satt ned én gang i perioden. Dagens yield på 4,2 % ligger over aksjens eget 5-årssnitt på 2,9 %.",
-      "hentet": "2026-11-10T00:25:59Z",
+      "hentet": "2026-11-10T07:41:51Z",
       "annonsert_utbytte": 2.3,
       "annonsert_ex": "2026-11-13",
       "ask_status": "ja"
@@ -1032,7 +1032,7 @@
       "utbytte_yield": 7.86,
       "utbytte_vekst_5ar": 22.9,
       "payout_ratio": 77.0,
-      "pe_ratio": 9.6,
+      "pe_ratio": 9.49,
       "pb_ratio": 1.73,
       "ex_dato": null,
       "betaling_dato": null,
@@ -1256,7 +1256,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet har steget uten et eneste kutt fra 2022–2025, fra 19,30 til 26,28 kroner per aksje. Nivået har holdt seg jevnt fra år til år. Dagens yield på 7,9 % ligger nær aksjens eget 5-årssnitt på 6,8 %.",
-      "hentet": "2026-11-10T00:26:01Z",
+      "hentet": "2026-11-10T07:41:53Z",
       "ask_status": "ja"
     },
     {
@@ -1418,7 +1418,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet gikk ned fra 6,85 kroner per aksje i 2022 til 2,25 i 2025, og det er satt ned tre ganger i perioden. Spennet er stort: høyeste år er 3,0 ganger det laveste, så størrelsen på utbetalingen er lite forutsigbar fra år til år. For 2026 er det betalt 3,00 kroner per aksje, mot 2,25 kroner for 2025. Dagens yield på 4,3 % ligger nær aksjens eget 5-årssnitt på 5,3 %.",
-      "hentet": "2026-11-10T00:26:03Z",
+      "hentet": "2026-11-10T07:41:55Z",
       "ask_status": "ja"
     },
     {
@@ -1434,7 +1434,7 @@
       "utbytte_yield": 5.34,
       "utbytte_vekst_5ar": -50.0,
       "payout_ratio": 40.0,
-      "pe_ratio": 7.67,
+      "pe_ratio": 7.87,
       "pb_ratio": 1.2,
       "ex_dato": null,
       "betaling_dato": null,
@@ -1580,7 +1580,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet gikk ned fra 40,00 kroner per aksje i 2022 til 5,00 i 2025, og det er satt ned én gang i perioden. Spennet er stort: høyeste år er 11,0 ganger det laveste, så størrelsen på utbetalingen er lite forutsigbar fra år til år. For 2026 er det betalt 22,00 kroner per aksje, mot 5,00 kroner for 2025. Dagens yield på 5,3 % er lavere enn aksjens eget 5-årssnitt på 7,0 %.",
-      "hentet": "2026-11-10T00:26:04Z",
+      "hentet": "2026-11-10T07:41:57Z",
       "arsrate_kilde": "betalt_12m",
       "ask_status": "ja"
     },
@@ -1729,7 +1729,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet har gått opp fra 20,00 til 22,00 kroner per aksje i 2022–2025, men det er satt ned én gang underveis. For 2026 er det betalt 10,00 kroner per aksje, mot 22,00 kroner for 2025. Dagens yield på 1,7 % er lavere enn aksjens eget 5-årssnitt på 4,0 %.",
-      "hentet": "2026-11-10T00:26:06Z",
+      "hentet": "2026-11-10T07:41:58Z",
       "ask_status": "ja"
     },
     {
@@ -1745,7 +1745,7 @@
       "utbytte_yield": 6.18,
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 40.0,
-      "pe_ratio": 5.28,
+      "pe_ratio": 5.4,
       "pb_ratio": 1.16,
       "ex_dato": null,
       "betaling_dato": null,
@@ -1796,7 +1796,7 @@
         ],
         [
           "2022-09-22",
-          1.7866
+          1.7868
         ],
         [
           "2022-12-20",
@@ -1872,7 +1872,7 @@
       "utbytte_korrigert": [],
       "utbytte_per_ar": {
         "2021": 0.0,
-        "2022": 9.2028,
+        "2022": 9.203,
         "2023": 7.0301,
         "2024": 4.9193,
         "2025": 2.7522
@@ -1882,7 +1882,7 @@
         {
           "ar": 2022,
           "utbytte": 9.2,
-          "yield": 37.65,
+          "yield": 37.66,
           "maaneder": [
             2,
             3,
@@ -1952,7 +1952,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet gikk ned fra 9,20 kroner per aksje i 2022 til 2,75 i 2025, og det er satt ned tre ganger i perioden. Spennet er stort: høyeste år er 3,3 ganger det laveste, så størrelsen på utbetalingen er lite forutsigbar fra år til år. Dagens yield på 6,2 % er lavere enn aksjens eget 4-årssnitt på 24,4 %.",
-      "hentet": "2026-11-10T00:26:07Z",
+      "hentet": "2026-11-10T07:42:00Z",
       "ask_status": "ja"
     },
     {
@@ -1968,7 +1968,7 @@
       "utbytte_yield": 11.56,
       "utbytte_vekst_5ar": 16.4,
       "payout_ratio": 63.0,
-      "pe_ratio": 7.27,
+      "pe_ratio": 7.51,
       "pb_ratio": 1.78,
       "ex_dato": null,
       "betaling_dato": null,
@@ -1990,20 +1990,20 @@
       ],
       "siste_utbytte": 8.8914,
       "siste_utbytte_dato": "2026-09-07",
-      "utbytte_12m": 24.3126,
+      "utbytte_12m": 24.3131,
       "utbytte_12m_antall": 4,
       "utbytte_12m_liste": [
         {
           "ex_dato": "2025-12-11",
-          "belop": 3.7613
+          "belop": 3.7614
         },
         {
           "ex_dato": "2026-03-12",
-          "belop": 5.3598
+          "belop": 5.36
         },
         {
           "ex_dato": "2026-06-11",
-          "belop": 6.3001
+          "belop": 6.3003
         },
         {
           "ex_dato": "2026-09-07",
@@ -2017,7 +2017,7 @@
         ],
         [
           "2021-03-04",
-          3.1971
+          3.1972
         ],
         [
           "2021-05-26",
@@ -2037,71 +2037,71 @@
         ],
         [
           "2022-05-24",
-          2.915
+          2.9151
         ],
         [
           "2022-09-01",
-          1.8806
+          1.8807
         ],
         [
           "2022-11-21",
-          2.3508
+          2.3509
         ],
         [
           "2023-03-03",
-          4.8896
+          4.8898
         ],
         [
           "2023-05-26",
-          8.933
+          8.9333
         ],
         [
           "2023-09-01",
-          7.6166
+          7.6168
         ],
         [
           "2023-11-17",
-          7.5225
+          7.5228
         ],
         [
           "2024-03-05",
-          8.4628
+          8.4631
         ],
         [
           "2024-06-07",
-          9.4032
+          9.4035
         ],
         [
           "2024-09-09",
-          5.4538
+          5.454
         ],
         [
           "2024-12-11",
-          3.9493
+          3.9495
         ],
         [
           "2025-03-07",
-          3.9493
+          3.9495
         ],
         [
           "2025-05-28",
-          2.6329
+          2.633
         ],
         [
           "2025-09-04",
-          2.0687
+          2.0688
         ],
         [
           "2025-12-11",
-          3.7613
+          3.7614
         ],
         [
           "2026-03-12",
-          5.3598
+          5.36
         ],
         [
           "2026-06-11",
-          6.3001
+          6.3003
         ],
         [
           "2026-09-07",
@@ -2112,11 +2112,11 @@
       "utbytte_supplert": [],
       "utbytte_korrigert": [],
       "utbytte_per_ar": {
-        "2021": 6.7703,
-        "2022": 8.839,
-        "2023": 28.9617,
-        "2024": 27.2691,
-        "2025": 12.4122
+        "2021": 6.7705,
+        "2022": 8.8393,
+        "2023": 28.9627,
+        "2024": 27.2701,
+        "2025": 12.4126
       },
       "utbytte_forste_ar": 2014,
       "historiske_utbytter": [
@@ -2191,7 +2191,7 @@
       "inkorporeringsland": "Singapore",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet har gått opp fra 8,84 til 12,41 kroner per aksje i 2022–2025, men det er satt ned to ganger underveis. Spennet er stort: høyeste år er 3,3 ganger det laveste, så størrelsen på utbetalingen er lite forutsigbar fra år til år. Dagens yield på 11,6 % ligger over aksjens eget 5-årssnitt på 8,0 %.",
-      "hentet": "2026-11-10T00:26:09Z",
+      "hentet": "2026-11-10T07:42:02Z",
       "arsrate_kilde": "betalt_12m",
       "ask_status": "utenfor_eos"
     },
@@ -2208,7 +2208,7 @@
       "utbytte_yield": 1.26,
       "utbytte_vekst_5ar": 28.8,
       "payout_ratio": 33.0,
-      "pe_ratio": 53.21,
+      "pe_ratio": 55.49,
       "pb_ratio": 23.12,
       "ex_dato": null,
       "betaling_dato": null,
@@ -2370,7 +2370,7 @@
         "valuta": "NOK",
         "melding_dato": "2026-02-06"
       },
-      "hentet": "2026-11-10T00:26:11Z",
+      "hentet": "2026-11-10T07:42:04Z",
       "ask_status": "ja"
     },
     {
@@ -2386,7 +2386,7 @@
       "utbytte_yield": 0.0,
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 0.0,
-      "pe_ratio": 20.74,
+      "pe_ratio": 21.34,
       "pb_ratio": 5.9,
       "ex_dato": null,
       "betaling_dato": null,
@@ -2417,7 +2417,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "",
-      "hentet": "2026-11-10T00:26:12Z",
+      "hentet": "2026-11-10T07:42:06Z",
       "ask_status": "ja"
     },
     {
@@ -2433,7 +2433,7 @@
       "utbytte_yield": 11.69,
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 47.0,
-      "pe_ratio": 6.59,
+      "pe_ratio": 6.71,
       "pb_ratio": 3.26,
       "ex_dato": null,
       "betaling_dato": null,
@@ -2463,26 +2463,26 @@
         2025,
         2026
       ],
-      "siste_utbytte": 32.0647,
+      "siste_utbytte": 32.0662,
       "siste_utbytte_dato": "2026-09-17",
-      "utbytte_12m": 58.1115,
+      "utbytte_12m": 58.1141,
       "utbytte_12m_antall": 4,
       "utbytte_12m_liste": [
         {
           "ex_dato": "2025-12-11",
-          "belop": 1.7866
+          "belop": 1.7867
         },
         {
           "ex_dato": "2026-03-11",
-          "belop": 9.6852
+          "belop": 9.6857
         },
         {
           "ex_dato": "2026-06-11",
-          "belop": 14.5749
+          "belop": 14.5755
         },
         {
           "ex_dato": "2026-09-17",
-          "belop": 32.0647
+          "belop": 32.0662
         }
       ],
       "utbetalinger": [
@@ -2492,39 +2492,39 @@
         ],
         [
           "2023-03-15",
-          10.0614
+          10.0618
         ],
         [
           "2023-06-15",
-          6.5822
+          6.5825
         ],
         [
           "2023-09-14",
-          7.5225
+          7.5229
         ],
         [
           "2023-12-14",
-          2.8209
+          2.8211
         ],
         [
           "2024-03-14",
-          3.4792
+          3.4793
         ],
         [
           "2024-06-13",
-          5.83
+          5.8302
         ],
         [
           "2024-09-12",
-          5.83
+          5.8302
         ],
         [
           "2024-12-10",
-          3.1971
+          3.1972
         ],
         [
           "2025-03-13",
-          1.8806
+          1.8807
         ],
         [
           "2025-06-11",
@@ -2532,23 +2532,23 @@
         ],
         [
           "2025-09-11",
-          3.3851
+          3.3853
         ],
         [
           "2025-12-11",
-          1.7866
+          1.7867
         ],
         [
           "2026-03-11",
-          9.6852
+          9.6857
         ],
         [
           "2026-06-11",
-          14.5749
+          14.5755
         ],
         [
           "2026-09-17",
-          32.0647
+          32.0662
         ]
       ],
       "utbytte_runde": [],
@@ -2557,9 +2557,9 @@
       "utbytte_per_ar": {
         "2021": 0.0,
         "2022": 1.4105,
-        "2023": 26.987,
-        "2024": 18.3361,
-        "2025": 8.7449
+        "2023": 26.9882,
+        "2024": 18.337,
+        "2025": 8.7453
       },
       "utbytte_forste_ar": 2001,
       "historiske_utbytter": [
@@ -2595,7 +2595,7 @@
         },
         {
           "ar": 2025,
-          "utbytte": 8.74,
+          "utbytte": 8.75,
           "yield": 2.02,
           "maaneder": [
             3,
@@ -2606,7 +2606,7 @@
         },
         {
           "ar": 2026,
-          "utbytte": 56.32,
+          "utbytte": 56.33,
           "yield": 13.02,
           "maaneder": [
             3,
@@ -2623,15 +2623,15 @@
       ],
       "snitt_yield_5ar": 2.56,
       "snitt_yield_ar": 5,
-      "beskrivelse": "Frontline eier tankskip for råolje og oljeprodukter i tre størrelser, fra de svære VLCC-ene ned til LR2/Aframax. Selskapet er registrert på Kypros, men den daglige driften ledes fra Oslo av Frontline Management AS. Juridisk hjemsted ble flyttet fra Bermuda til Kypros i desember 2022. Aksjen handles både i Oslo og i New York, og største aksjonær er Hemen Holding, som eies gjennom truster John Fredriksen har opprettet for familien sin.\n\nDet meste av flåten går i spotmarkedet, der inntekten følger dagraten tur for tur. I perioder med høye rater låser Frontline inn en del av inntekten ved å leie ut skip på tidscerteparti. Det gjorde selskapet med ettårige avtaler for flere VLCC-er i januar 2026, og med to- og treårige avtaler sommeren etter. Samtidig fornyes flåten. Tidlig i 2026 solgte Frontline flere av sine eldste VLCC-er og kjøpte nybyggkontrakter for moderne skip med scrubber fra et selskap tilknyttet Hemen. Kjøpet finansieres med kontanter og nye lån, og gevinsten fra salget av gamle skip er en engangspost.\n\nMålet er et kvartalsvis utbytte lik eller nær det justerte resultatet per aksje. Dermed speiler utbyttet fraktmarkedet nesten direkte og kan svinge kraftig fra ett kvartal til det neste. Salgsgevinster kan også gå rett tilbake til aksjonærene: etter salget av to VLCC-er høsten 2026 kom et engangsutbytte på toppen av kvartalsutbyttet. Utbyttet fastsettes i dollar. Lån finansierer en stor del av flåten, og renter og avdrag kommer før utdelingen. I 2026 forhandlet selskapet ned rentemarginen på flere av lånene. Aksjen er notert på Oslo Børs med en markedsverdi på rundt 96 milliarder kroner.\n\nUtbyttet utbetales kvartalsvis — fire utbetalinger i året, og selskapet har holdt dette gående i 5 år på rad. Direkteavkastningen er 2,0 %, og 5-årssnittet på 2,6 % plasserer FRO i det lavere sjiktet av aksjene i sin sektor. Utbetalingsgraden på 47 % er lav og gir selskapet solid buffer til å opprettholde utbyttet ved svakere kvartaler.\n\nFraktrater varierer kraftig med globalt handelsmønster og flåtekapasitet, og utbyttet svinger tilsvarende. Historikken viser klare svingninger: høyest utbytte var 56,32 NOK per aksje i 2026, lavest 1,41 NOK i 2022.",
+      "beskrivelse": "Frontline eier tankskip for råolje og oljeprodukter i tre størrelser, fra de svære VLCC-ene ned til LR2/Aframax. Selskapet er registrert på Kypros, men den daglige driften ledes fra Oslo av Frontline Management AS. Juridisk hjemsted ble flyttet fra Bermuda til Kypros i desember 2022. Aksjen handles både i Oslo og i New York, og største aksjonær er Hemen Holding, som eies gjennom truster John Fredriksen har opprettet for familien sin.\n\nDet meste av flåten går i spotmarkedet, der inntekten følger dagraten tur for tur. I perioder med høye rater låser Frontline inn en del av inntekten ved å leie ut skip på tidscerteparti. Det gjorde selskapet med ettårige avtaler for flere VLCC-er i januar 2026, og med to- og treårige avtaler sommeren etter. Samtidig fornyes flåten. Tidlig i 2026 solgte Frontline flere av sine eldste VLCC-er og kjøpte nybyggkontrakter for moderne skip med scrubber fra et selskap tilknyttet Hemen. Kjøpet finansieres med kontanter og nye lån, og gevinsten fra salget av gamle skip er en engangspost.\n\nMålet er et kvartalsvis utbytte lik eller nær det justerte resultatet per aksje. Dermed speiler utbyttet fraktmarkedet nesten direkte og kan svinge kraftig fra ett kvartal til det neste. Salgsgevinster kan også gå rett tilbake til aksjonærene: etter salget av to VLCC-er høsten 2026 kom et engangsutbytte på toppen av kvartalsutbyttet. Utbyttet fastsettes i dollar. Lån finansierer en stor del av flåten, og renter og avdrag kommer før utdelingen. I 2026 forhandlet selskapet ned rentemarginen på flere av lånene. Aksjen er notert på Oslo Børs med en markedsverdi på rundt 96 milliarder kroner.\n\nUtbyttet utbetales kvartalsvis — fire utbetalinger i året, og selskapet har holdt dette gående i 5 år på rad. Direkteavkastningen er 2,0 %, og 5-årssnittet på 2,6 % plasserer FRO i det lavere sjiktet av aksjene i sin sektor. Utbetalingsgraden på 47 % er lav og gir selskapet solid buffer til å opprettholde utbyttet ved svakere kvartaler.\n\nFraktrater varierer kraftig med globalt handelsmønster og flåtekapasitet, og utbyttet svinger tilsvarende. Historikken viser klare svingninger: høyest utbytte var 56,33 NOK per aksje i 2026, lavest 1,41 NOK i 2022.",
       "beskrivelse_intro": "Frontline eier tankskip for råolje og oljeprodukter i tre størrelser, fra de svære VLCC-ene ned til LR2/Aframax. Selskapet er registrert på Kypros, men den daglige driften ledes fra Oslo av Frontline Management AS. Juridisk hjemsted ble flyttet fra Bermuda til Kypros i desember 2022. Aksjen handles både i Oslo og i New York, og største aksjonær er Hemen Holding, som eies gjennom truster John Fredriksen har opprettet for familien sin.\n\nDet meste av flåten går i spotmarkedet, der inntekten følger dagraten tur for tur. I perioder med høye rater låser Frontline inn en del av inntekten ved å leie ut skip på tidscerteparti. Det gjorde selskapet med ettårige avtaler for flere VLCC-er i januar 2026, og med to- og treårige avtaler sommeren etter. Samtidig fornyes flåten. Tidlig i 2026 solgte Frontline flere av sine eldste VLCC-er og kjøpte nybyggkontrakter for moderne skip med scrubber fra et selskap tilknyttet Hemen. Kjøpet finansieres med kontanter og nye lån, og gevinsten fra salget av gamle skip er en engangspost.\n\nMålet er et kvartalsvis utbytte lik eller nær det justerte resultatet per aksje. Dermed speiler utbyttet fraktmarkedet nesten direkte og kan svinge kraftig fra ett kvartal til det neste. Salgsgevinster kan også gå rett tilbake til aksjonærene: etter salget av to VLCC-er høsten 2026 kom et engangsutbytte på toppen av kvartalsutbyttet. Utbyttet fastsettes i dollar. Lån finansierer en stor del av flåten, og renter og avdrag kommer før utdelingen. I 2026 forhandlet selskapet ned rentemarginen på flere av lånene.",
       "beskrivelse_fakta": "Frontline plc er et rederi som eier og driver råolje- og produkttankere globalt, herunder svært store råoljetankere (VLCC), Suezmax-tankere og LR2/Aframax-tankere. Per 31. desember 2025 opererte selskapet 80 fartøy, fordelt på 41 VLCC-er, 21 Suezmax-tankere og 18 LR2/Aframax-tankere. Frontline driver også befraktning samt kjøp og salg av fartøy. Selskapet ble stiftet i 1985 og har base i Limassol på Kypros.",
       "valuta": "NOK",
       "ask_egnet": true,
       "inkorporeringsland": "Kypros",
       "data_kilde": "yahoo",
-      "utbyttehistorikk_tekst": "Utbyttet har gått opp fra 1,41 til 8,74 kroner per aksje i 2022–2025, men det er satt ned to ganger underveis. Spennet er stort: høyeste år er 19,1 ganger det laveste, så størrelsen på utbetalingen er lite forutsigbar fra år til år. Dagens yield på 11,7 % ligger over aksjens eget 5-årssnitt på 2,6 %.",
-      "hentet": "2026-11-10T00:26:16Z",
+      "utbyttehistorikk_tekst": "Utbyttet har gått opp fra 1,41 til 8,75 kroner per aksje i 2022–2025, men det er satt ned to ganger underveis. Spennet er stort: høyeste år er 19,1 ganger det laveste, så størrelsen på utbetalingen er lite forutsigbar fra år til år. Dagens yield på 11,7 % ligger over aksjens eget 5-årssnitt på 2,6 %.",
+      "hentet": "2026-11-10T07:42:10Z",
       "arsrate_kilde": "betalt_12m",
       "arsrate_ekstra_trukket": 7.52,
       "ask_status": "ja"
@@ -2649,7 +2649,7 @@
       "utbytte_yield": 4.66,
       "utbytte_vekst_5ar": -5.6,
       "payout_ratio": 61.0,
-      "pe_ratio": 13.07,
+      "pe_ratio": 13.18,
       "pb_ratio": 0.94,
       "ex_dato": null,
       "betaling_dato": null,
@@ -2793,7 +2793,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet gikk ned fra 10,40 kroner per aksje i 2022 til 8,75 i 2025, og det er satt ned to ganger i perioden. Dagens yield på 4,7 % ligger nær aksjens eget 5-årssnitt på 4,2 %.",
-      "hentet": "2026-11-10T00:26:18Z",
+      "hentet": "2026-11-10T07:42:12Z",
       "ask_status": "ja"
     },
     {
@@ -2809,7 +2809,7 @@
       "utbytte_yield": 4.09,
       "utbytte_vekst_5ar": 59.7,
       "payout_ratio": 94.0,
-      "pe_ratio": 15.67,
+      "pe_ratio": 16.34,
       "pb_ratio": 2.31,
       "ex_dato": null,
       "betaling_dato": null,
@@ -2955,7 +2955,7 @@
       "inkorporeringsland": "Luxembourg",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet har steget uten et eneste kutt fra 2022–2025, fra 1,00 til 13,00 kroner per aksje. Veksten er kraftig: siste år er 13,0 ganger det første. Så bratte løft holder sjelden samme takt over tid. Dagens yield på 4,1 % ligger over aksjens eget 5-årssnitt på 1,6 %.",
-      "hentet": "2026-11-10T00:26:19Z",
+      "hentet": "2026-11-10T07:42:13Z",
       "ask_status": "ja",
       "hendelse": {
         "type": "fusjon",
@@ -2977,7 +2977,7 @@
       "utbytte_yield": 3.19,
       "utbytte_vekst_5ar": 60.7,
       "payout_ratio": 22.0,
-      "pe_ratio": 7.03,
+      "pe_ratio": 7.15,
       "pb_ratio": 1.21,
       "ex_dato": "2026-11-11",
       "betaling_dato": "2026-11-19",
@@ -3136,7 +3136,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet har steget uten et eneste kutt fra 2022–2025, fra 4,00 til 20,00 kroner per aksje. Veksten er kraftig: siste år er 5,0 ganger det første. Så bratte løft holder sjelden samme takt over tid. Dagens yield på 3,2 % ligger over aksjens eget 5-årssnitt på 1,2 %.",
-      "hentet": "2026-11-10T00:26:21Z",
+      "hentet": "2026-11-10T07:42:15Z",
       "annonsert_utbytte": 8.5,
       "annonsert_ex": "2026-11-11",
       "ask_status": "ja"
@@ -3233,7 +3233,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "",
-      "hentet": "2026-11-10T00:26:23Z",
+      "hentet": "2026-11-10T07:42:17Z",
       "ask_status": "ja"
     },
     {
@@ -3249,7 +3249,7 @@
       "utbytte_yield": 7.84,
       "utbytte_vekst_5ar": 16.7,
       "payout_ratio": 175.0,
-      "pe_ratio": 22.41,
+      "pe_ratio": 22.59,
       "pb_ratio": 1.12,
       "ex_dato": null,
       "betaling_dato": null,
@@ -3378,7 +3378,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet har gått opp fra 4,50 til 6,50 kroner per aksje i 2022–2025, men det er satt ned én gang underveis. Dagens yield på 7,8 % ligger over aksjens eget 5-årssnitt på 5,9 %.",
-      "hentet": "2026-11-10T00:26:24Z",
+      "hentet": "2026-11-10T07:42:19Z",
       "ask_status": "ja"
     },
     {
@@ -3394,7 +3394,7 @@
       "utbytte_yield": 5.79,
       "utbytte_vekst_5ar": 5.7,
       "payout_ratio": 210.0,
-      "pe_ratio": 36.29,
+      "pe_ratio": 36.59,
       "pb_ratio": 1.48,
       "ex_dato": null,
       "betaling_dato": null,
@@ -3529,7 +3529,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet har vært stabilt eller stigende gjennom hele 2022–2025, uten kutt. Nivået har holdt seg jevnt fra år til år. Dagens yield på 5,8 % ligger nær aksjens eget 5-årssnitt på 5,6 %.",
-      "hentet": "2026-11-10T00:26:25Z",
+      "hentet": "2026-11-10T07:42:20Z",
       "ask_status": "ja"
     },
     {
@@ -3545,7 +3545,7 @@
       "utbytte_yield": 1.16,
       "utbytte_vekst_5ar": 28.1,
       "payout_ratio": 21.0,
-      "pe_ratio": 18.44,
+      "pe_ratio": 18.51,
       "pb_ratio": 1.64,
       "ex_dato": null,
       "betaling_dato": null,
@@ -3671,7 +3671,7 @@
       "inkorporeringsland": "Færøyene",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet har gått opp fra 6,70 til 13,37 kroner per aksje i 2022–2025, men det er satt ned én gang underveis. Høyeste år er 2,3 ganger det laveste — merkbare svingninger, men innenfor et gjenkjennelig spenn. For 2026 er det betalt 5,06 kroner per aksje, mot 13,37 kroner for 2025. Dagens yield på 1,2 % er lavere enn aksjens eget 5-årssnitt på 2,5 %.",
-      "hentet": "2026-11-10T00:26:27Z",
+      "hentet": "2026-11-10T07:42:22Z",
       "ask_status": "utenfor_eos"
     },
     {
@@ -3687,7 +3687,7 @@
       "utbytte_yield": 11.87,
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 57.0,
-      "pe_ratio": 6.93,
+      "pe_ratio": 6.97,
       "pb_ratio": 1.77,
       "ex_dato": null,
       "betaling_dato": null,
@@ -3702,26 +3702,26 @@
         2025,
         2026
       ],
-      "siste_utbytte": 4.7044,
+      "siste_utbytte": 4.7049,
       "siste_utbytte_dato": "2026-09-07",
-      "utbytte_12m": 10.4488,
+      "utbytte_12m": 10.4499,
       "utbytte_12m_antall": 4,
       "utbytte_12m_liste": [
         {
           "ex_dato": "2025-12-08",
-          "belop": 1.3823
+          "belop": 1.3824
         },
         {
           "ex_dato": "2026-03-05",
-          "belop": 1.6568
+          "belop": 1.657
         },
         {
           "ex_dato": "2026-06-03",
-          "belop": 2.7053
+          "belop": 2.7056
         },
         {
           "ex_dato": "2026-09-07",
-          "belop": 4.7044
+          "belop": 4.7049
         }
       ],
       "utbetalinger": [
@@ -3731,43 +3731,43 @@
         ],
         [
           "2022-09-01",
-          1.7509
+          1.7511
         ],
         [
           "2022-11-25",
-          2.6338
+          2.6341
         ],
         [
           "2023-03-03",
-          2.9686
+          2.9689
         ],
         [
           "2023-05-25",
-          2.8623
+          2.8626
         ],
         [
           "2023-08-31",
-          2.3771
+          2.3774
         ],
         [
           "2023-11-23",
-          1.9107
+          1.9109
         ],
         [
           "2024-03-11",
-          2.2859
+          2.2862
         ],
         [
           "2024-05-22",
-          3.2375
+          3.2379
         ],
         [
           "2024-09-02",
-          3.8073
+          3.8078
         ],
         [
           "2024-12-05",
-          3.5638
+          3.5642
         ],
         [
           "2025-03-06",
@@ -3775,27 +3775,27 @@
         ],
         [
           "2025-05-22",
-          0.9544
+          0.9545
         ],
         [
           "2025-09-03",
-          1.1378
+          1.1379
         ],
         [
           "2025-12-08",
-          1.3823
+          1.3824
         ],
         [
           "2026-03-05",
-          1.6568
+          1.657
         ],
         [
           "2026-06-03",
-          2.7053
+          2.7056
         ],
         [
           "2026-09-07",
-          4.7044
+          4.7049
         ]
       ],
       "utbytte_runde": [],
@@ -3803,10 +3803,10 @@
       "utbytte_korrigert": [],
       "utbytte_per_ar": {
         "2021": 0.0,
-        "2022": 4.5822,
-        "2023": 10.1187,
-        "2024": 12.8945,
-        "2025": 3.7509
+        "2022": 4.5827,
+        "2023": 10.1199,
+        "2024": 12.896,
+        "2025": 3.7513
       },
       "utbytte_forste_ar": 2020,
       "historiske_utbytter": [
@@ -3833,7 +3833,7 @@
         },
         {
           "ar": 2024,
-          "utbytte": 12.89,
+          "utbytte": 12.9,
           "yield": 14.65,
           "maaneder": [
             3,
@@ -3872,7 +3872,7 @@
       ],
       "snitt_yield_5ar": 7.12,
       "snitt_yield_ar": 5,
-      "beskrivelse": "Hafnia eier og driver produkttankskip som frakter bensin, diesel, flydrivstoff og andre raffinerte oljeprodukter, i tillegg til vegetabilske oljer og enkle kjemikalier. Selskapet fikk dagens form i 2019, da Hafnia Tankers og BW Tankers ble slått sammen. Aksjen kom på Oslo Axess samme høst, ble flyttet til Oslo Børs i 2020 og handles i dag også i New York. Hovedkontoret ligger i Singapore, og i 2024 flyttet selskapet også sitt juridiske hjemsted dit fra Bermuda. Største eier er BW Group, som kontrolleres av familien Sohmen.\n\nEn stor del av flåten går i spotmarkedet eller i pooler som Hafnia selv driver, der også skip eid av andre rederier seiler. Det gir honorarer for poolforvaltning og drivstoffinnkjøp ved siden av fraktinntektene, men resultatet følger likevel dagens rater tett. Fra slutten av 2025 har Hafnia også bygget opp en stor minoritetspost i TORM, et annet produkttankrederi, og selskapet har sagt at det ser logikken i konsolidering i bransjen.\n\nUtbyttet kommer hvert kvartal og er en fast andel av nettoresultatet, justert for ekstraordinære poster. Hvor stor andelen er, avhenger av gjelden. Jo lavere netto belåning målt mot verdien av skipene og TORM-aksjene, jo mer av overskuddet deles ut, fra halvparten når gjelden er høy til ni tideler når den er lav. Utbyttet svinger dermed både med fraktratene og med skipsverdiene. Fra 2027 regnes også forpliktelser til nybygg inn i belåningen. Utbyttet fastsettes i dollar, så beløpet i kroner beveger seg med valutakursen, og låneavtalene kan stanse utdelinger hvis vilkårene i dem brytes. Aksjen er notert på Oslo Børs med en markedsverdi på rundt 47 milliarder kroner.\n\nUtbyttet utbetales kvartalsvis — fire utbetalinger i året, og selskapet har holdt dette gående i 5 år på rad. Direkteavkastningen er 4,3 %, og 5-årssnittet på 7,1 % plasserer HAFNI blant de solid-yielding aksjene i sin sektor. Utbetalingsgraden er 57 %, noe som er balansert for en moden utbytteaksje.\n\nFraktrater varierer kraftig med globalt handelsmønster og flåtekapasitet, og utbyttet svinger tilsvarende. Historikken viser klare svingninger: høyest utbytte var 12,89 NOK per aksje i 2024, lavest 3,75 NOK i 2025.",
+      "beskrivelse": "Hafnia eier og driver produkttankskip som frakter bensin, diesel, flydrivstoff og andre raffinerte oljeprodukter, i tillegg til vegetabilske oljer og enkle kjemikalier. Selskapet fikk dagens form i 2019, da Hafnia Tankers og BW Tankers ble slått sammen. Aksjen kom på Oslo Axess samme høst, ble flyttet til Oslo Børs i 2020 og handles i dag også i New York. Hovedkontoret ligger i Singapore, og i 2024 flyttet selskapet også sitt juridiske hjemsted dit fra Bermuda. Største eier er BW Group, som kontrolleres av familien Sohmen.\n\nEn stor del av flåten går i spotmarkedet eller i pooler som Hafnia selv driver, der også skip eid av andre rederier seiler. Det gir honorarer for poolforvaltning og drivstoffinnkjøp ved siden av fraktinntektene, men resultatet følger likevel dagens rater tett. Fra slutten av 2025 har Hafnia også bygget opp en stor minoritetspost i TORM, et annet produkttankrederi, og selskapet har sagt at det ser logikken i konsolidering i bransjen.\n\nUtbyttet kommer hvert kvartal og er en fast andel av nettoresultatet, justert for ekstraordinære poster. Hvor stor andelen er, avhenger av gjelden. Jo lavere netto belåning målt mot verdien av skipene og TORM-aksjene, jo mer av overskuddet deles ut, fra halvparten når gjelden er høy til ni tideler når den er lav. Utbyttet svinger dermed både med fraktratene og med skipsverdiene. Fra 2027 regnes også forpliktelser til nybygg inn i belåningen. Utbyttet fastsettes i dollar, så beløpet i kroner beveger seg med valutakursen, og låneavtalene kan stanse utdelinger hvis vilkårene i dem brytes. Aksjen er notert på Oslo Børs med en markedsverdi på rundt 47 milliarder kroner.\n\nUtbyttet utbetales kvartalsvis — fire utbetalinger i året, og selskapet har holdt dette gående i 5 år på rad. Direkteavkastningen er 4,3 %, og 5-årssnittet på 7,1 % plasserer HAFNI blant de solid-yielding aksjene i sin sektor. Utbetalingsgraden er 57 %, noe som er balansert for en moden utbytteaksje.\n\nFraktrater varierer kraftig med globalt handelsmønster og flåtekapasitet, og utbyttet svinger tilsvarende. Historikken viser klare svingninger: høyest utbytte var 12,90 NOK per aksje i 2024, lavest 3,75 NOK i 2025.",
       "beskrivelse_intro": "Hafnia eier og driver produkttankskip som frakter bensin, diesel, flydrivstoff og andre raffinerte oljeprodukter, i tillegg til vegetabilske oljer og enkle kjemikalier. Selskapet fikk dagens form i 2019, da Hafnia Tankers og BW Tankers ble slått sammen. Aksjen kom på Oslo Axess samme høst, ble flyttet til Oslo Børs i 2020 og handles i dag også i New York. Hovedkontoret ligger i Singapore, og i 2024 flyttet selskapet også sitt juridiske hjemsted dit fra Bermuda. Største eier er BW Group, som kontrolleres av familien Sohmen.\n\nEn stor del av flåten går i spotmarkedet eller i pooler som Hafnia selv driver, der også skip eid av andre rederier seiler. Det gir honorarer for poolforvaltning og drivstoffinnkjøp ved siden av fraktinntektene, men resultatet følger likevel dagens rater tett. Fra slutten av 2025 har Hafnia også bygget opp en stor minoritetspost i TORM, et annet produkttankrederi, og selskapet har sagt at det ser logikken i konsolidering i bransjen.\n\nUtbyttet kommer hvert kvartal og er en fast andel av nettoresultatet, justert for ekstraordinære poster. Hvor stor andelen er, avhenger av gjelden. Jo lavere netto belåning målt mot verdien av skipene og TORM-aksjene, jo mer av overskuddet deles ut, fra halvparten når gjelden er høy til ni tideler når den er lav. Utbyttet svinger dermed både med fraktratene og med skipsverdiene. Fra 2027 regnes også forpliktelser til nybygg inn i belåningen. Utbyttet fastsettes i dollar, så beløpet i kroner beveger seg med valutakursen, og låneavtalene kan stanse utdelinger hvis vilkårene i dem brytes.",
       "beskrivelse_fakta": "Hafnia Limited eier og driver produkttankere for oljeprodukter, med base på Bermuda. Virksomheten er delt i segmentene Long Range II, Long Range I, Medium Range, Handy size og Spesialiserte fartøy. Selskapet frakter rene og urene raffinerte oljeprodukter, vegetabilsk olje og enkle kjemikalier for nasjonale og internasjonale oljeselskaper, kjemikalieselskaper samt handels- og forsyningsselskaper, og opererer 207 fartøy. Hafnia leverer også skipseie, skipsforvaltning, investerings- og forvaltningstjenester, selskapsstøtte, agenturtjenester og befraktning.",
       "valuta": "NOK",
@@ -3880,7 +3880,7 @@
       "inkorporeringsland": "Singapore",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet gikk ned fra 4,58 kroner per aksje i 2022 til 3,75 i 2025, og det er satt ned én gang i perioden. Spennet er stort: høyeste år er 3,4 ganger det laveste, så størrelsen på utbetalingen er lite forutsigbar fra år til år. Dagens yield på 11,9 % ligger over aksjens eget 5-årssnitt på 7,1 %.",
-      "hentet": "2026-11-10T00:26:30Z",
+      "hentet": "2026-11-10T07:42:26Z",
       "arsrate_kilde": "betalt_12m",
       "ask_status": "utenfor_eos"
     },
@@ -4039,7 +4039,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet har gått opp fra 7,50 til 12,50 kroner per aksje i 2022–2025, men det er satt ned én gang underveis. Høyeste år er 1,9 ganger det laveste — merkbare svingninger, men innenfor et gjenkjennelig spenn. For 2026 er det betalt 13,50 kroner per aksje, mot 12,50 kroner for 2025. Dagens yield på 6,1 % ligger over aksjens eget 5-årssnitt på 3,9 %.",
-      "hentet": "2026-11-10T00:26:31Z",
+      "hentet": "2026-11-10T07:42:28Z",
       "ask_status": "ja"
     },
     {
@@ -4179,7 +4179,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet har steget uten et eneste kutt fra 2022–2025, fra 6,00 til 10,30 kroner per aksje. Samlet er utbetalingen 1,7-doblet i perioden. For 2026 er det betalt 12,70 kroner per aksje, mot 10,30 kroner for 2025. Dagens yield på 6,1 % ligger over aksjens eget 5-årssnitt på 3,4 %.",
-      "hentet": "2026-11-10T00:26:33Z",
+      "hentet": "2026-11-10T07:42:29Z",
       "ask_status": "ja"
     },
     {
@@ -4195,7 +4195,7 @@
       "utbytte_yield": 3.27,
       "utbytte_vekst_5ar": -3.8,
       "payout_ratio": 59.0,
-      "pe_ratio": 18.04,
+      "pe_ratio": 18.25,
       "pb_ratio": 7.29,
       "ex_dato": null,
       "betaling_dato": null,
@@ -4355,7 +4355,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet gikk ned fra 10,50 kroner per aksje i 2022 til 9,00 i 2025, og det er satt ned to ganger i perioden. Spennet er stort: høyeste år er 3,0 ganger det laveste, så størrelsen på utbetalingen er lite forutsigbar fra år til år. Dagens yield på 3,3 % ligger nær aksjens eget 5-årssnitt på 4,0 %.",
-      "hentet": "2026-11-10T00:26:35Z",
+      "hentet": "2026-11-10T07:42:31Z",
       "ask_status": "ja"
     },
     {
@@ -4371,7 +4371,7 @@
       "utbytte_yield": 8.7,
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 101.0,
-      "pe_ratio": 11.21,
+      "pe_ratio": 11.51,
       "pb_ratio": 1.82,
       "ex_dato": "2026-11-12",
       "betaling_dato": "2026-11-25",
@@ -4410,11 +4410,11 @@
       "utbetalinger": [
         [
           "2023-09-01",
-          0.5642
+          0.5643
         ],
         [
           "2023-11-10",
-          0.5642
+          0.5643
         ],
         [
           "2024-03-01",
@@ -4467,7 +4467,7 @@
       "utbytte_per_ar": {
         "2021": 0.0,
         "2022": 0.0,
-        "2023": 1.1284,
+        "2023": 1.1286,
         "2024": 2.5732,
         "2025": 6.828
       },
@@ -4531,7 +4531,7 @@
       "inkorporeringsland": "Bermuda",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet har steget uten et eneste kutt fra 2023–2025, fra 1,13 til 6,83 kroner per aksje. Veksten er kraftig: siste år er 6,0 ganger det første. Så bratte løft holder sjelden samme takt over tid. Dagens yield på 8,7 % ligger over aksjens eget 5-årssnitt på 2,1 %.",
-      "hentet": "2026-11-10T00:26:39Z",
+      "hentet": "2026-11-10T07:42:40Z",
       "ask_status": "utenfor_eos"
     },
     {
@@ -4547,7 +4547,7 @@
       "utbytte_yield": 5.11,
       "utbytte_vekst_5ar": 11.9,
       "payout_ratio": 90.0,
-      "pe_ratio": 17.68,
+      "pe_ratio": 18.11,
       "pb_ratio": 11.53,
       "ex_dato": null,
       "betaling_dato": null,
@@ -4689,7 +4689,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet har steget uten et eneste kutt fra 2022–2025, fra 7,00 til 9,00 kroner per aksje. Nivået har holdt seg jevnt fra år til år. For 2026 er det betalt 11,25 kroner per aksje, mot 9,00 kroner for 2025. Dagens yield på 5,1 % ligger over aksjens eget 5-årssnitt på 3,4 %.",
-      "hentet": "2026-11-10T00:26:41Z",
+      "hentet": "2026-11-10T07:42:42Z",
       "ask_status": "ja"
     },
     {
@@ -4867,7 +4867,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet har gått opp fra 29,00 til 53,00 kroner per aksje i 2022–2025, men det er satt ned én gang underveis. Spennet er stort: høyeste år er 3,4 ganger det laveste, så størrelsen på utbetalingen er lite forutsigbar fra år til år. Dagens yield på 5,3 % ligger over aksjens eget 5-årssnitt på 2,8 %.",
-      "hentet": "2026-11-10T00:26:43Z",
+      "hentet": "2026-11-10T07:42:43Z",
       "ask_status": "ja"
     },
     {
@@ -4904,135 +4904,135 @@
         2025,
         2026
       ],
-      "siste_utbytte": 0.5877,
+      "siste_utbytte": 0.5878,
       "siste_utbytte_dato": "2026-08-27",
-      "utbytte_12m": 3.4838,
+      "utbytte_12m": 3.4846,
       "utbytte_12m_antall": 4,
       "utbytte_12m_liste": [
         {
           "ex_dato": "2025-11-19",
-          "belop": 0.5877
+          "belop": 0.5878
         },
         {
           "ex_dato": "2026-03-04",
-          "belop": 1.7208
+          "belop": 1.7211
         },
         {
           "ex_dato": "2026-05-21",
-          "belop": 0.5877
+          "belop": 0.5878
         },
         {
           "ex_dato": "2026-08-27",
-          "belop": 0.5877
+          "belop": 0.5878
         }
       ],
       "utbetalinger": [
         [
           "2020-11-25",
-          0.3291
+          0.3292
         ],
         [
           "2021-02-25",
-          0.3291
+          0.3292
         ],
         [
           "2021-06-01",
-          0.3291
+          0.3292
         ],
         [
           "2021-08-31",
-          0.3291
+          0.3292
         ],
         [
           "2021-11-26",
-          0.3291
+          0.3292
         ],
         [
           "2022-03-08",
-          0.3291
+          0.3292
         ],
         [
           "2022-06-08",
-          0.3291
+          0.3292
         ],
         [
           "2022-08-31",
-          0.3291
+          0.3292
         ],
         [
           "2022-11-22",
-          0.3291
+          0.3292
         ],
         [
           "2023-03-02",
-          0.3291
+          0.3292
         ],
         [
           "2023-05-26",
-          0.3291
+          0.3292
         ],
         [
           "2023-08-30",
-          0.3291
+          0.3292
         ],
         [
           "2023-11-20",
-          0.3291
+          0.3292
         ],
         [
           "2024-03-04",
-          0.8275
+          0.8276
         ],
         [
           "2024-05-28",
-          0.5877
+          0.5878
         ],
         [
           "2024-09-03",
-          0.5877
+          0.5878
         ],
         [
           "2024-11-19",
-          0.5877
+          0.5878
         ],
         [
           "2025-03-03",
-          1.3164
+          1.3167
         ],
         [
           "2025-06-04",
-          0.5877
+          0.5878
         ],
         [
           "2025-09-02",
-          0.5877
+          0.5878
         ],
         [
           "2025-11-19",
-          0.5877
+          0.5878
         ],
         [
           "2026-03-04",
-          1.7208
+          1.7211
         ],
         [
           "2026-05-21",
-          0.5877
+          0.5878
         ],
         [
           "2026-08-27",
-          0.5877
+          0.5878
         ]
       ],
       "utbytte_runde": [],
       "utbytte_supplert": [],
       "utbytte_korrigert": [],
       "utbytte_per_ar": {
-        "2021": 1.3164,
-        "2022": 1.3164,
-        "2023": 1.3164,
-        "2024": 2.5906,
-        "2025": 3.0795
+        "2021": 1.3167,
+        "2022": 1.3167,
+        "2023": 1.3167,
+        "2024": 2.5911,
+        "2025": 3.0802
       },
       "utbytte_forste_ar": 2011,
       "historiske_utbytter": [
@@ -5107,7 +5107,7 @@
       "inkorporeringsland": "Bermuda",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet har steget uten et eneste kutt fra 2022–2025, fra 1,32 til 3,08 kroner per aksje. Samlet er utbetalingen 2,3-doblet i perioden. Dagens yield på 9,2 % ligger over aksjens eget 5-årssnitt på 5,0 %.",
-      "hentet": "2026-11-10T00:26:44Z",
+      "hentet": "2026-11-10T07:42:45Z",
       "ask_status": "utenfor_eos"
     },
     {
@@ -5123,7 +5123,7 @@
       "utbytte_yield": 3.64,
       "utbytte_vekst_5ar": 9.1,
       "payout_ratio": 72.0,
-      "pe_ratio": 19.86,
+      "pe_ratio": 19.94,
       "pb_ratio": 6.06,
       "ex_dato": null,
       "betaling_dato": null,
@@ -5258,7 +5258,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet har steget uten et eneste kutt fra 2022–2025, fra 7,70 til 10,00 kroner per aksje. Nivået har holdt seg jevnt fra år til år. For 2026 er det betalt 14,50 kroner per aksje, mot 10,00 kroner for 2025. Dagens yield på 3,6 % ligger nær aksjens eget 5-årssnitt på 3,5 %.",
-      "hentet": "2026-11-10T00:26:46Z",
+      "hentet": "2026-11-10T07:42:47Z",
       "ask_status": "ja"
     },
     {
@@ -5402,7 +5402,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet har steget uten et eneste kutt fra 2022–2025, fra 3,50 til 4,70 kroner per aksje. Nivået har holdt seg jevnt fra år til år. For 2026 er det betalt 5,40 kroner per aksje, mot 4,70 kroner for 2025. Dagens yield på 2,6 % ligger over aksjens eget 5-årssnitt på 1,9 %.",
-      "hentet": "2026-11-10T00:26:47Z",
+      "hentet": "2026-11-10T07:42:49Z",
       "ask_status": "ja"
     },
     {
@@ -5418,7 +5418,7 @@
       "utbytte_yield": 9.85,
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 54.0,
-      "pe_ratio": 5.47,
+      "pe_ratio": 5.56,
       "pb_ratio": 1.91,
       "ex_dato": null,
       "betaling_dato": null,
@@ -5531,7 +5531,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet har steget uten et eneste kutt fra 2022–2025, fra 0,20 til 3,30 kroner per aksje. Veksten er kraftig: siste år er 16,5 ganger det første. Så bratte løft holder sjelden samme takt over tid. For 2026 er det betalt 8,60 kroner per aksje, mot 3,30 kroner for 2025. Dagens yield på 9,8 % ligger over aksjens eget 5-årssnitt på 3,6 %.",
-      "hentet": "2026-11-10T00:26:50Z",
+      "hentet": "2026-11-10T07:42:51Z",
       "ask_status": "ja"
     },
     {
@@ -5547,7 +5547,7 @@
       "utbytte_yield": 4.44,
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 0.0,
-      "pe_ratio": 7.73,
+      "pe_ratio": 7.59,
       "pb_ratio": 3.58,
       "ex_dato": "2026-12-02",
       "betaling_dato": "2026-12-15",
@@ -5642,7 +5642,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "",
-      "hentet": "2026-11-10T00:26:52Z",
+      "hentet": "2026-11-10T07:42:54Z",
       "annonsert_utbytte": 2.0,
       "annonsert_ex": "2026-12-02",
       "ask_status": "ja"
@@ -5720,7 +5720,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "",
-      "hentet": "2026-11-10T00:26:53Z",
+      "hentet": "2026-11-10T07:42:55Z",
       "annonsert_utbytte": 1.15,
       "annonsert_ex": "2026-12-02",
       "ex_forbehold": "2026-12-01",
@@ -5739,7 +5739,7 @@
       "utbytte_yield": 2.74,
       "utbytte_vekst_5ar": 14.0,
       "payout_ratio": 30.0,
-      "pe_ratio": 10.77,
+      "pe_ratio": 10.93,
       "pb_ratio": 1.22,
       "ex_dato": null,
       "betaling_dato": null,
@@ -5877,7 +5877,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet har steget uten et eneste kutt fra 2022–2025, fra 4,30 til 6,75 kroner per aksje. Samlet er utbetalingen 1,6-doblet i perioden. For 2026 er det betalt 7,30 kroner per aksje, mot 6,75 kroner for 2025. Dagens yield på 2,7 % ligger over aksjens eget 5-årssnitt på 2,0 %.",
-      "hentet": "2026-11-10T00:26:55Z",
+      "hentet": "2026-11-10T07:42:57Z",
       "ask_status": "ja"
     },
     {
@@ -5913,18 +5913,18 @@
         2025,
         2026
       ],
-      "siste_utbytte": 5.7359,
+      "siste_utbytte": 5.7373,
       "siste_utbytte_dato": "2026-08-26",
-      "utbytte_12m": 15.2329,
+      "utbytte_12m": 15.2367,
       "utbytte_12m_antall": 2,
       "utbytte_12m_liste": [
         {
           "ex_dato": "2026-03-10",
-          "belop": 9.4971
+          "belop": 9.4994
         },
         {
           "ex_dato": "2026-08-26",
-          "belop": 5.7359
+          "belop": 5.7373
         }
       ],
       "utbetalinger": [
@@ -5938,7 +5938,7 @@
         ],
         [
           "2023-04-27",
-          4.7956
+          4.7967
         ],
         [
           "2023-11-09",
@@ -5962,11 +5962,11 @@
         ],
         [
           "2026-03-10",
-          9.4971
+          9.4994
         ],
         [
           "2026-08-26",
-          5.7359
+          5.7373
         ]
       ],
       "utbytte_runde": [],
@@ -5975,7 +5975,7 @@
       "utbytte_per_ar": {
         "2021": 0.0,
         "2022": 1.4409,
-        "2023": 8.5908,
+        "2023": 8.592,
         "2024": 18.6493,
         "2025": 24.2599
       },
@@ -6019,7 +6019,7 @@
         },
         {
           "ar": 2026,
-          "utbytte": 15.23,
+          "utbytte": 15.24,
           "yield": 9.36,
           "maaneder": [
             3,
@@ -6047,7 +6047,7 @@
         "valuta": "USD",
         "melding_dato": "2026-08-11"
       },
-      "hentet": "2026-11-10T00:26:58Z",
+      "hentet": "2026-11-10T07:43:00Z",
       "arsrate_kilde": "betalt_12m",
       "arsrate_ekstra_trukket": 6.68,
       "ask_status": "ja"
@@ -6065,7 +6065,7 @@
       "utbytte_yield": 4.97,
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 95.0,
-      "pe_ratio": 19.08,
+      "pe_ratio": 19.39,
       "pb_ratio": 3.74,
       "ex_dato": null,
       "betaling_dato": null,
@@ -6151,7 +6151,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "",
-      "hentet": "2026-11-10T00:26:59Z",
+      "hentet": "2026-11-10T07:43:02Z",
       "ask_status": "ja"
     },
     {
@@ -6167,7 +6167,7 @@
       "utbytte_yield": 7.85,
       "utbytte_vekst_5ar": 77.8,
       "payout_ratio": 91.0,
-      "pe_ratio": 13.08,
+      "pe_ratio": 11.8,
       "pb_ratio": 1.74,
       "ex_dato": null,
       "betaling_dato": null,
@@ -6292,7 +6292,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet har gått opp fra 0,42 til 1,50 kroner per aksje i 2022–2025, men det er satt ned én gang underveis. Spennet er stort: høyeste år er 7,5 ganger det laveste, så størrelsen på utbetalingen er lite forutsigbar fra år til år. For 2026 er det betalt 1,90 kroner per aksje, mot 1,50 kroner for 2025. Dagens yield på 7,8 % ligger over aksjens eget 5-årssnitt på 3,0 %.",
-      "hentet": "2026-11-10T00:27:01Z",
+      "hentet": "2026-11-10T07:43:03Z",
       "ask_status": "ja"
     },
     {
@@ -6500,7 +6500,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet har vært stabilt eller stigende gjennom hele 2022–2025, uten kutt. Samlet er utbetalingen 1,6-doblet i perioden. Dagens yield på 11,0 % ligger over aksjens eget 4-årssnitt på 8,7 %.",
-      "hentet": "2026-11-10T00:27:05Z",
+      "hentet": "2026-11-10T07:43:08Z",
       "annonsert_utbytte": 1.368,
       "annonsert_ex": "2026-11-17",
       "ex_forbehold": "2026-11-11",
@@ -6519,7 +6519,7 @@
       "utbytte_yield": 7.28,
       "utbytte_vekst_5ar": 61.9,
       "payout_ratio": 96.0,
-      "pe_ratio": 13.29,
+      "pe_ratio": 13.46,
       "pb_ratio": 2.1,
       "ex_dato": null,
       "betaling_dato": null,
@@ -6747,7 +6747,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet har steget uten et eneste kutt fra 2022–2025, fra 0,70 til 1,38 kroner per aksje. Samlet er utbetalingen 2,0-doblet i perioden. Dagens yield på 7,3 % ligger over aksjens eget 5-årssnitt på 4,3 %.",
-      "hentet": "2026-11-10T00:27:08Z",
+      "hentet": "2026-11-10T07:43:11Z",
       "arsrate_kilde": "siste_utbetalinger",
       "arsrate_antall": 4,
       "ask_status": "ja"
@@ -6765,7 +6765,7 @@
       "utbytte_yield": 6.89,
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 83.0,
-      "pe_ratio": 7.85,
+      "pe_ratio": 7.98,
       "pb_ratio": 2.76,
       "ex_dato": null,
       "betaling_dato": null,
@@ -6964,7 +6964,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet har gått opp fra 1,84 til 22,82 kroner per aksje i 2022–2025, men det er satt ned én gang underveis. Spennet er stort: høyeste år er 25,9 ganger det laveste, så størrelsen på utbetalingen er lite forutsigbar fra år til år. Dagens yield på 6,9 % er lavere enn aksjens eget 4-årssnitt på 12,4 %.",
-      "hentet": "2026-11-10T00:27:09Z",
+      "hentet": "2026-11-10T07:43:12Z",
       "arsrate_kilde": "siste_utbetalinger",
       "arsrate_antall": 4,
       "ask_status": "ja"
@@ -6982,7 +6982,7 @@
       "utbytte_yield": 2.99,
       "utbytte_vekst_5ar": 14.2,
       "payout_ratio": 176.0,
-      "pe_ratio": 59.11,
+      "pe_ratio": 60.23,
       "pb_ratio": 2.61,
       "ex_dato": null,
       "betaling_dato": null,
@@ -7107,7 +7107,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet gikk ned fra 5,00 kroner per aksje i 2022 til 4,25 i 2025, og det er satt ned én gang i perioden. For 2026 er det betalt 4,75 kroner per aksje, mot 4,25 kroner for 2025. Dagens yield på 3,0 % ligger over aksjens eget 5-årssnitt på 2,4 %.",
-      "hentet": "2026-11-10T00:27:10Z",
+      "hentet": "2026-11-10T07:43:14Z",
       "ask_status": "ja"
     },
     {
@@ -7245,7 +7245,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet gikk ned fra 4,00 kroner per aksje i 2022 til 3,50 i 2025, og det er satt ned to ganger i perioden. For 2026 er det betalt 3,75 kroner per aksje, mot 3,50 kroner for 2025. Dagens yield på 4,5 % ligger nær aksjens eget 5-årssnitt på 4,2 %.",
-      "hentet": "2026-11-10T00:27:12Z",
+      "hentet": "2026-11-10T07:43:15Z",
       "ask_status": "ja"
     },
     {
@@ -7367,7 +7367,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet gikk ned fra 3,00 kroner per aksje i 2022 til 1,75 i 2024, og det er satt ned én gang i perioden. Høyeste år er 2,6 ganger det laveste — merkbare svingninger, men innenfor et gjenkjennelig spenn.",
-      "hentet": "2026-11-10T00:27:15Z",
+      "hentet": "2026-11-10T07:43:20Z",
       "arsrate_kilde": "ingen_lopende",
       "ask_status": "ja"
     },
@@ -7384,7 +7384,7 @@
       "utbytte_yield": 8.85,
       "utbytte_vekst_5ar": 32.5,
       "payout_ratio": 62.0,
-      "pe_ratio": 9.16,
+      "pe_ratio": 9.3,
       "pb_ratio": 1.71,
       "ex_dato": null,
       "betaling_dato": null,
@@ -7401,9 +7401,9 @@
         2025,
         2026
       ],
-      "siste_utbytte": 3.3852,
+      "siste_utbytte": 3.3866,
       "siste_utbytte_dato": "2026-11-02",
-      "utbytte_12m": 9.2702,
+      "utbytte_12m": 9.2716,
       "utbytte_12m_antall": 4,
       "utbytte_12m_liste": [
         {
@@ -7420,7 +7420,7 @@
         },
         {
           "ex_dato": "2026-11-02",
-          "belop": 3.3852
+          "belop": 3.3866
         }
       ],
       "utbetalinger": [
@@ -7490,7 +7490,7 @@
         ],
         [
           "2024-11-05",
-          2.821
+          2.8221
         ],
         [
           "2025-02-19",
@@ -7522,7 +7522,7 @@
         ],
         [
           "2026-11-02",
-          3.3852
+          3.3866
         ]
       ],
       "utbytte_runde": [],
@@ -7532,7 +7532,7 @@
         "2021": 1.276,
         "2022": 8.033,
         "2023": 12.787,
-        "2024": 13.479,
+        "2024": 13.4801,
         "2025": 3.9338
       },
       "utbytte_forste_ar": 2019,
@@ -7609,7 +7609,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet gikk ned fra 8,03 kroner per aksje i 2022 til 3,93 i 2025, og det er satt ned én gang i perioden. Spennet er stort: høyeste år er 3,4 ganger det laveste, så størrelsen på utbetalingen er lite forutsigbar fra år til år. Dagens yield på 8,8 % ligger nær aksjens eget 5-årssnitt på 7,5 %.",
-      "hentet": "2026-11-10T00:27:17Z",
+      "hentet": "2026-11-10T07:43:22Z",
       "arsrate_kilde": "betalt_12m",
       "ask_status": "ja"
     },
@@ -7622,9 +7622,9 @@
       "52u_hoy": 966.0,
       "52u_lav": 321.0,
       "markedsverdi_mrd": 31.4,
-      "utbytte_per_aksje": 89.8,
+      "utbytte_per_aksje": 89.84,
       "utbytte_yield": 11.17,
-      "utbytte_vekst_5ar": 18.9,
+      "utbytte_vekst_5ar": 19.0,
       "payout_ratio": 46.0,
       "pe_ratio": 7.56,
       "pb_ratio": 3.82,
@@ -7642,26 +7642,26 @@
         2025,
         2026
       ],
-      "siste_utbytte": 49.3681,
+      "siste_utbytte": 49.3898,
       "siste_utbytte_dato": "2026-08-13",
-      "utbytte_12m": 89.8029,
+      "utbytte_12m": 89.8425,
       "utbytte_12m_antall": 4,
       "utbytte_12m_liste": [
         {
           "ex_dato": "2025-12-01",
-          "belop": 7.0526
+          "belop": 7.0557
         },
         {
           "ex_dato": "2026-03-02",
-          "belop": 14.5753
+          "belop": 14.5818
         },
         {
           "ex_dato": "2026-05-27",
-          "belop": 18.8069
+          "belop": 18.8152
         },
         {
           "ex_dato": "2026-08-13",
-          "belop": 49.3681
+          "belop": 49.3898
         }
       ],
       "utbetalinger": [
@@ -7711,43 +7711,43 @@
         ],
         [
           "2024-06-04",
-          10.3438
+          10.3483
         ],
         [
           "2024-08-20",
-          10.3438
+          10.3483
         ],
         [
           "2024-11-15",
-          4.2316
+          4.2334
         ],
         [
           "2025-02-28",
-          3.2912
+          3.2927
         ],
         [
           "2025-06-02",
-          3.0091
+          3.0104
         ],
         [
           "2025-08-21",
-          6.5824
+          6.5853
         ],
         [
           "2025-12-01",
-          7.0526
+          7.0557
         ],
         [
           "2026-03-02",
-          14.5753
+          14.5818
         ],
         [
           "2026-05-27",
-          18.8069
+          18.8152
         ],
         [
           "2026-08-13",
-          49.3681
+          49.3898
         ]
       ],
       "utbytte_runde": [],
@@ -7757,8 +7757,8 @@
         "2021": 9.96,
         "2022": 6.1,
         "2023": 53.4,
-        "2024": 32.1891,
-        "2025": 19.9353
+        "2024": 32.2001,
+        "2025": 19.9441
       },
       "utbytte_forste_ar": 2020,
       "historiske_utbytter": [
@@ -7784,7 +7784,7 @@
         },
         {
           "ar": 2024,
-          "utbytte": 32.19,
+          "utbytte": 32.2,
           "yield": 4.0,
           "maaneder": [
             3,
@@ -7806,8 +7806,8 @@
         },
         {
           "ar": 2026,
-          "utbytte": 82.75,
-          "yield": 10.29,
+          "utbytte": 82.79,
+          "yield": 10.3,
           "maaneder": [
             3,
             5,
@@ -7822,7 +7822,7 @@
       ],
       "snitt_yield_5ar": 3.02,
       "snitt_yield_ar": 5,
-      "beskrivelse": "Okeanis Eco Tankers er et gresk rederi med hovedkontor i Athen-området og juridisk hjemsted på Marshalløyene. Selskapet ble stiftet i 2018, og familien Alafouzos står bak som sponsor og største eier. Aksjen handles både i Oslo og i New York, der den har tickeren ECO.\n\nFlåten består av VLCC- og Suezmax-tankere bygget med drivstoffbesparende design, og alle skipene har scrubber, et renseanlegg som lar dem bruke billigere tungolje og likevel holde svovelkravene. Okeanis sier selv at det velger spotmarkedet for å få hele gevinsten av dette. På en spottur er det rederiet som betaler drivstoffet, og et skip som bruker mindre olje gir derfor mer igjen per døgn. Baksiden er at resultatet følger dagratene tett. Flåten har vokst ved kjøp av nye Suezmax-skip fra et koreansk verft i 2025 og 2026, delvis finansiert med nye aksjer. Det gir flere skip å tjene penger på, men også flere aksjer å fordele utbyttet på.\n\nStyret fastsetter utbyttet hvert kvartal, uten at meldingene oppgir en fast andel av resultatet. Utbyttet vedtas i dollar, mens aksjonærer i den norske verdipapirsentralen får det i kroner. To praktiske detaljer følger av den doble noteringen. Ex-datoen i Oslo er én dag før ex-datoen i New York, fordi handler i Oslo gjøres opp en dag senere. Pengene kommer også noen dager senere til norske aksjonærer enn til dem i USA. Aksjen er notert på Oslo Børs med en markedsverdi på rundt 31 milliarder kroner.\n\nUtbyttet utbetales kvartalsvis — fire utbetalinger i året, og selskapet har holdt dette gående i 7 år på rad. Direkteavkastningen er 2,5 %, og 5-årssnittet på 3,0 % plasserer OET i det lavere sjiktet av aksjene i sin sektor. Utbetalingsgraden på 46 % er lav og gir selskapet solid buffer til å opprettholde utbyttet ved svakere kvartaler. Utbyttet har vokst med i snitt 18,9 % per år de siste fem årene.\n\nFraktrater varierer kraftig med globalt handelsmønster og flåtekapasitet, og utbyttet svinger tilsvarende. Historikken viser klare svingninger: høyest utbytte var 82,75 NOK per aksje i 2026, lavest 6,10 NOK i 2022.",
+      "beskrivelse": "Okeanis Eco Tankers er et gresk rederi med hovedkontor i Athen-området og juridisk hjemsted på Marshalløyene. Selskapet ble stiftet i 2018, og familien Alafouzos står bak som sponsor og største eier. Aksjen handles både i Oslo og i New York, der den har tickeren ECO.\n\nFlåten består av VLCC- og Suezmax-tankere bygget med drivstoffbesparende design, og alle skipene har scrubber, et renseanlegg som lar dem bruke billigere tungolje og likevel holde svovelkravene. Okeanis sier selv at det velger spotmarkedet for å få hele gevinsten av dette. På en spottur er det rederiet som betaler drivstoffet, og et skip som bruker mindre olje gir derfor mer igjen per døgn. Baksiden er at resultatet følger dagratene tett. Flåten har vokst ved kjøp av nye Suezmax-skip fra et koreansk verft i 2025 og 2026, delvis finansiert med nye aksjer. Det gir flere skip å tjene penger på, men også flere aksjer å fordele utbyttet på.\n\nStyret fastsetter utbyttet hvert kvartal, uten at meldingene oppgir en fast andel av resultatet. Utbyttet vedtas i dollar, mens aksjonærer i den norske verdipapirsentralen får det i kroner. To praktiske detaljer følger av den doble noteringen. Ex-datoen i Oslo er én dag før ex-datoen i New York, fordi handler i Oslo gjøres opp en dag senere. Pengene kommer også noen dager senere til norske aksjonærer enn til dem i USA. Aksjen er notert på Oslo Børs med en markedsverdi på rundt 31 milliarder kroner.\n\nUtbyttet utbetales kvartalsvis — fire utbetalinger i året, og selskapet har holdt dette gående i 7 år på rad. Direkteavkastningen er 2,5 %, og 5-årssnittet på 3,0 % plasserer OET i det lavere sjiktet av aksjene i sin sektor. Utbetalingsgraden på 46 % er lav og gir selskapet solid buffer til å opprettholde utbyttet ved svakere kvartaler. Utbyttet har vokst med i snitt 19,0 % per år de siste fem årene.\n\nFraktrater varierer kraftig med globalt handelsmønster og flåtekapasitet, og utbyttet svinger tilsvarende. Historikken viser klare svingninger: høyest utbytte var 82,79 NOK per aksje i 2026, lavest 6,10 NOK i 2022.",
       "beskrivelse_intro": "Okeanis Eco Tankers er et gresk rederi med hovedkontor i Athen-området og juridisk hjemsted på Marshalløyene. Selskapet ble stiftet i 2018, og familien Alafouzos står bak som sponsor og største eier. Aksjen handles både i Oslo og i New York, der den har tickeren ECO.\n\nFlåten består av VLCC- og Suezmax-tankere bygget med drivstoffbesparende design, og alle skipene har scrubber, et renseanlegg som lar dem bruke billigere tungolje og likevel holde svovelkravene. Okeanis sier selv at det velger spotmarkedet for å få hele gevinsten av dette. På en spottur er det rederiet som betaler drivstoffet, og et skip som bruker mindre olje gir derfor mer igjen per døgn. Baksiden er at resultatet følger dagratene tett. Flåten har vokst ved kjøp av nye Suezmax-skip fra et koreansk verft i 2025 og 2026, delvis finansiert med nye aksjer. Det gir flere skip å tjene penger på, men også flere aksjer å fordele utbyttet på.\n\nStyret fastsetter utbyttet hvert kvartal, uten at meldingene oppgir en fast andel av resultatet. Utbyttet vedtas i dollar, mens aksjonærer i den norske verdipapirsentralen får det i kroner. To praktiske detaljer følger av den doble noteringen. Ex-datoen i Oslo er én dag før ex-datoen i New York, fordi handler i Oslo gjøres opp en dag senere. Pengene kommer også noen dager senere til norske aksjonærer enn til dem i USA.",
       "beskrivelse_fakta": "Okeanis Eco Tankers Corp. er et rederi som eier og driver tankskip globalt. Flåten består av 16 tankskip, fordelt på åtte moderne Suezmax-tankere og åtte moderne VLCC-tankere, med hovedvekt på transport av råolje. Selskapet ble stiftet i 2018 og har base i Neo Faliro i Hellas.",
       "valuta": "NOK",
@@ -7830,7 +7830,7 @@
       "inkorporeringsland": "Marshalløyene",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet har gått opp fra 6,10 til 19,94 kroner per aksje i 2022–2025, men det er satt ned to ganger underveis. Spennet er stort: høyeste år er 8,8 ganger det laveste, så størrelsen på utbetalingen er lite forutsigbar fra år til år. Dagens yield på 11,2 % ligger over aksjens eget 5-årssnitt på 3,0 %.",
-      "hentet": "2026-11-10T00:27:19Z",
+      "hentet": "2026-11-10T07:43:25Z",
       "arsrate_kilde": "betalt_12m",
       "ask_status": "uavklart"
     },
@@ -7847,7 +7847,7 @@
       "utbytte_yield": 6.21,
       "utbytte_vekst_5ar": 25.0,
       "payout_ratio": 36.0,
-      "pe_ratio": 11.58,
+      "pe_ratio": 11.59,
       "pb_ratio": 0.65,
       "ex_dato": null,
       "betaling_dato": null,
@@ -7989,7 +7989,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet har gått opp fra 3,20 til 6,25 kroner per aksje i 2022–2025, men det er satt ned én gang underveis. Høyeste år er 2,3 ganger det laveste — merkbare svingninger, men innenfor et gjenkjennelig spenn. For 2026 er det betalt 7,00 kroner per aksje, mot 6,25 kroner for 2025. Dagens yield på 6,2 % ligger over aksjens eget 5-årssnitt på 4,2 %.",
-      "hentet": "2026-11-10T00:27:21Z",
+      "hentet": "2026-11-10T07:43:27Z",
       "ask_status": "ja"
     },
     {
@@ -8005,7 +8005,7 @@
       "utbytte_yield": 3.16,
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 49.0,
-      "pe_ratio": 16.19,
+      "pe_ratio": 16.31,
       "pb_ratio": 6.45,
       "ex_dato": null,
       "betaling_dato": null,
@@ -8088,7 +8088,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "",
-      "hentet": "2026-11-10T00:27:23Z",
+      "hentet": "2026-11-10T07:43:28Z",
       "kapital_tilbake": {
         "andel": 1.0,
         "melding_dato": "2026-08-14",
@@ -8109,7 +8109,7 @@
       "utbytte_yield": 0.77,
       "utbytte_vekst_5ar": 11.9,
       "payout_ratio": 17.0,
-      "pe_ratio": 23.07,
+      "pe_ratio": 24.37,
       "pb_ratio": 4.98,
       "ex_dato": null,
       "betaling_dato": null,
@@ -8240,7 +8240,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet har gått opp fra 0,25 til 0,35 kroner per aksje i 2022–2025, men det er satt ned én gang underveis. Spennet er stort: høyeste år er 3,0 ganger det laveste, så størrelsen på utbetalingen er lite forutsigbar fra år til år. For 2026 er det betalt 0,70 kroner per aksje, mot 0,35 kroner for 2025. Dagens yield på 0,8 % ligger over aksjens eget 5-årssnitt på 0,6 %.",
-      "hentet": "2026-11-10T00:27:24Z",
+      "hentet": "2026-11-10T07:43:30Z",
       "arsrate_kilde": "betalt_12m",
       "ask_status": "ja"
     },
@@ -8393,7 +8393,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet gikk ned fra 1,00 kroner per aksje i 2022 til 0,50 i 2025, og det er satt ned én gang i perioden. Høyeste år er 2,0 ganger det laveste — merkbare svingninger, men innenfor et gjenkjennelig spenn. For 2026 er det betalt 0,55 kroner per aksje, mot 0,50 kroner for 2025. Dagens yield på 7,8 % ligger nær aksjens eget 5-årssnitt på 9,4 %.",
-      "hentet": "2026-11-10T00:27:26Z",
+      "hentet": "2026-11-10T07:43:32Z",
       "ask_status": "ja"
     },
     {
@@ -8409,7 +8409,7 @@
       "utbytte_yield": 3.13,
       "utbytte_vekst_5ar": -29.3,
       "payout_ratio": 37.0,
-      "pe_ratio": 13.46,
+      "pe_ratio": 11.81,
       "pb_ratio": 1.23,
       "ex_dato": null,
       "betaling_dato": null,
@@ -8547,7 +8547,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet gikk ned fra 5,00 kroner per aksje i 2022 til 1,25 i 2025, og det er satt ned to ganger i perioden. Spennet er stort: høyeste år er 5,0 ganger det laveste, så størrelsen på utbetalingen er lite forutsigbar fra år til år. For 2026 er det betalt 1,00 kroner per aksje, mot 1,25 kroner for 2025. Dagens yield på 3,1 % er lavere enn aksjens eget 5-årssnitt på 9,6 %.",
-      "hentet": "2026-11-10T00:27:27Z",
+      "hentet": "2026-11-10T07:43:33Z",
       "ask_status": "ja"
     },
     {
@@ -8684,7 +8684,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet har steget uten et eneste kutt fra 2022–2025, fra 3,50 til 4,15 kroner per aksje. Nivået har holdt seg jevnt fra år til år. For 2026 er det betalt 8,00 kroner per aksje, mot 4,15 kroner for 2025. Dagens yield på 16,0 % ligger over aksjens eget 5-årssnitt på 7,4 %.",
-      "hentet": "2026-11-10T00:27:28Z",
+      "hentet": "2026-11-10T07:43:35Z",
       "arsrate_kilde": "betalt_12m",
       "ask_status": "ja"
     },
@@ -8829,7 +8829,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet er ned fra 5,20 til 1,10 kroner per aksje i 2022–2025, men for 2024 har vi ikke registrert noe utbytte. Spennet er stort: høyeste år er 4,7 ganger det laveste, så størrelsen på utbetalingen er lite forutsigbar fra år til år. Dagens yield på 2,2 % er lavere enn aksjens eget 5-årssnitt på 2,7 %.",
-      "hentet": "2026-11-10T00:27:30Z",
+      "hentet": "2026-11-10T07:43:38Z",
       "arsrate_kilde": "siste_utbetalinger",
       "arsrate_antall": 2,
       "ask_status": "ja"
@@ -8847,7 +8847,7 @@
       "utbytte_yield": 2.12,
       "utbytte_vekst_5ar": 9.4,
       "payout_ratio": 60.0,
-      "pe_ratio": 29.36,
+      "pe_ratio": 29.97,
       "pb_ratio": 4.71,
       "ex_dato": null,
       "betaling_dato": null,
@@ -8985,7 +8985,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet gikk ned fra 3,00 kroner per aksje i 2022 til 2,15 i 2025, og det er satt ned én gang i perioden. Dagens yield på 2,1 % ligger nær aksjens eget 5-årssnitt på 2,0 %.",
-      "hentet": "2026-11-10T00:27:32Z",
+      "hentet": "2026-11-10T07:43:39Z",
       "ask_status": "ja"
     },
     {
@@ -9002,7 +9002,7 @@
       "utbytte_vekst_5ar": 5.7,
       "payout_ratio": 63.0,
       "pe_ratio": 16.43,
-      "pb_ratio": 3.0,
+      "pb_ratio": 3.04,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2027-02-09",
@@ -9127,7 +9127,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet har gått opp fra 6,00 til 10,00 kroner per aksje i 2022–2025, men det er satt ned én gang underveis. For 2026 er det betalt 5,00 kroner per aksje, mot 10,00 kroner for 2025. Dagens yield på 3,8 % er lavere enn aksjens eget 5-årssnitt på 6,3 %.",
-      "hentet": "2026-11-10T00:27:33Z",
+      "hentet": "2026-11-10T07:43:41Z",
       "ask_status": "ja",
       "hendelse": {
         "type": "fusjon",
@@ -9166,318 +9166,318 @@
         2025,
         2026
       ],
-      "siste_utbytte": 129.7676,
+      "siste_utbytte": 129.8456,
       "siste_utbytte_dato": "2026-04-29",
-      "utbytte_12m": 138.0426,
+      "utbytte_12m": 138.1256,
       "utbytte_12m_antall": 6,
       "utbytte_12m_liste": [
         {
           "ex_dato": "2025-11-20",
-          "belop": 1.7867
+          "belop": 1.7877
         },
         {
           "ex_dato": "2025-12-18",
-          "belop": 1.9747
+          "belop": 1.9759
         },
         {
           "ex_dato": "2026-01-15",
-          "belop": 2.1628
+          "belop": 2.1641
         },
         {
           "ex_dato": "2026-02-18",
-          "belop": 1.4105
+          "belop": 1.4114
         },
         {
           "ex_dato": "2026-03-17",
-          "belop": 0.9403
+          "belop": 0.9409
         },
         {
           "ex_dato": "2026-04-29",
-          "belop": 129.7676
+          "belop": 129.8456
         }
       ],
       "utbetalinger": [
         [
           "2020-11-16",
-          0.6582
+          0.6586
         ],
         [
           "2020-12-17",
-          0.3761
+          0.3764
         ],
         [
           "2021-01-21",
-          0.5642
+          0.5645
         ],
         [
           "2021-02-19",
-          1.2224
+          1.2232
         ],
         [
           "2021-03-23",
-          0.2821
+          0.2823
         ],
         [
           "2021-04-21",
-          0.9403
+          0.9409
         ],
         [
           "2021-05-20",
-          1.9747
+          1.9759
         ],
         [
           "2021-06-17",
-          2.821
+          2.8227
         ],
         [
           "2021-07-19",
-          2.2568
+          2.2582
         ],
         [
           "2021-08-20",
-          2.4449
+          2.4464
         ],
         [
           "2021-09-17",
-          3.0091
+          3.0109
         ],
         [
           "2021-10-19",
-          3.6673
+          3.6695
         ],
         [
           "2021-11-19",
-          4.6077
+          4.6105
         ],
         [
           "2021-12-16",
-          3.2912
+          3.2932
         ],
         [
           "2022-01-20",
-          3.3852
+          3.3873
         ],
         [
           "2022-02-17",
-          0.5642
+          0.5645
         ],
         [
           "2022-03-18",
-          0.7523
+          0.7527
         ],
         [
           "2022-04-20",
-          1.1284
+          1.1291
         ],
         [
           "2022-05-19",
-          0.7523
+          0.7527
         ],
         [
           "2022-06-21",
-          2.4449
+          2.4464
         ],
         [
           "2022-07-21",
-          1.6926
+          1.6936
         ],
         [
           "2022-08-19",
-          1.6926
+          1.6936
         ],
         [
           "2022-09-20",
-          0.5642
+          0.5645
         ],
         [
           "2022-10-20",
-          0.5642
+          0.5645
         ],
         [
           "2022-11-21",
-          0.9403
+          0.9409
         ],
         [
           "2022-12-20",
-          0.7523
+          0.7527
         ],
         [
           "2023-01-20",
-          0.8463
+          0.8468
         ],
         [
           "2023-02-20",
-          0.094
+          0.0941
         ],
         [
           "2023-03-21",
-          0.094
+          0.0941
         ],
         [
           "2023-04-20",
-          0.1881
+          0.1882
         ],
         [
           "2023-05-23",
-          0.6582
+          0.6586
         ],
         [
           "2023-06-22",
-          0.7523
+          0.7527
         ],
         [
           "2023-07-21",
-          0.3761
+          0.3764
         ],
         [
           "2023-08-22",
-          0.3761
+          0.3764
         ],
         [
           "2023-09-20",
-          0.2821
+          0.2823
         ],
         [
           "2023-10-24",
-          0.4702
+          0.4705
         ],
         [
           "2023-11-21",
-          1.8807
+          1.8818
         ],
         [
           "2023-12-21",
-          1.6926
+          1.6936
         ],
         [
           "2024-01-23",
-          1.9747
+          1.9759
         ],
         [
           "2024-02-21",
-          0.9403
+          0.9409
         ],
         [
           "2024-03-19",
-          0.9403
+          0.9409
         ],
         [
           "2024-04-16",
-          16.8322
+          16.8423
         ],
         [
           "2024-05-15",
-          1.3165
+          1.3173
         ],
         [
           "2024-06-18",
-          1.6926
+          1.6936
         ],
         [
           "2024-07-16",
-          1.8807
+          1.8818
         ],
         [
           "2024-08-20",
-          1.8807
+          1.8818
         ],
         [
           "2024-09-17",
-          1.5986
+          1.5995
         ],
         [
           "2024-10-17",
-          1.8807
+          1.8818
         ],
         [
           "2024-11-19",
-          1.4105
+          1.4114
         ],
         [
           "2024-12-12",
-          1.3165
+          1.3173
         ],
         [
           "2025-01-16",
-          0.4702
+          0.4705
         ],
         [
           "2025-02-18",
-          0.2821
+          0.2823
         ],
         [
           "2025-03-20",
-          0.094
+          0.0941
         ],
         [
           "2025-04-15",
-          0.5642
+          0.5645
         ],
         [
           "2025-05-15",
-          0.9403
+          0.9409
         ],
         [
           "2025-06-17",
-          1.0344
+          1.035
         ],
         [
           "2025-07-15",
-          1.5046
+          1.5055
         ],
         [
           "2025-08-21",
-          1.4105
+          1.4114
         ],
         [
           "2025-09-16",
-          1.8807
+          1.8818
         ],
         [
           "2025-10-16",
-          1.7867
+          1.7877
         ],
         [
           "2025-11-20",
-          1.7867
+          1.7877
         ],
         [
           "2025-12-18",
-          1.9747
+          1.9759
         ],
         [
           "2026-01-15",
-          2.1628
+          2.1641
         ],
         [
           "2026-02-18",
-          1.4105
+          1.4114
         ],
         [
           "2026-03-17",
-          0.9403
+          0.9409
         ],
         [
           "2026-04-29",
-          129.7676
+          129.8456
         ]
       ],
       "utbytte_runde": [],
       "utbytte_supplert": [],
       "utbytte_korrigert": [],
       "utbytte_per_ar": {
-        "2021": 27.0819,
-        "2022": 15.2336,
-        "2023": 7.7108,
-        "2024": 33.6643,
-        "2025": 13.729
+        "2021": 27.0982,
+        "2022": 15.2427,
+        "2023": 7.7155,
+        "2024": 33.6846,
+        "2025": 13.7373
       },
       "utbytte_forste_ar": 2019,
       "historiske_utbytter": [
         {
           "ar": 2022,
-          "utbytte": 15.23,
-          "yield": 19.24,
+          "utbytte": 15.24,
+          "yield": 19.25,
           "maaneder": [
             1,
             2,
@@ -9496,8 +9496,8 @@
         },
         {
           "ar": 2023,
-          "utbytte": 7.71,
-          "yield": 91.25,
+          "utbytte": 7.72,
+          "yield": 91.31,
           "maaneder": [
             1,
             2,
@@ -9515,8 +9515,8 @@
         },
         {
           "ar": 2024,
-          "utbytte": 33.66,
-          "yield": 30.76,
+          "utbytte": 33.68,
+          "yield": 30.78,
           "maaneder": [
             1,
             2,
@@ -9535,8 +9535,8 @@
         },
         {
           "ar": 2025,
-          "utbytte": 13.73,
-          "yield": 10.62,
+          "utbytte": 13.74,
+          "yield": 10.63,
           "maaneder": [
             1,
             2,
@@ -9555,7 +9555,7 @@
         },
         {
           "ar": 2026,
-          "utbytte": 134.28,
+          "utbytte": 134.36,
           "yield": null,
           "maaneder": [
             1,
@@ -9588,8 +9588,8 @@
       "ask_egnet": false,
       "inkorporeringsland": "Bermuda",
       "data_kilde": "yahoo",
-      "utbyttehistorikk_tekst": "Utbyttet gikk ned fra 15,23 kroner per aksje i 2022 til 13,73 i 2025, og det er satt ned to ganger i perioden. Spennet er stort: høyeste år er 4,4 ganger det laveste, så størrelsen på utbetalingen er lite forutsigbar fra år til år.",
-      "hentet": "2026-11-10T00:27:34Z",
+      "utbyttehistorikk_tekst": "Utbyttet gikk ned fra 15,24 kroner per aksje i 2022 til 13,74 i 2025, og det er satt ned to ganger i perioden. Spennet er stort: høyeste år er 4,4 ganger det laveste, så størrelsen på utbetalingen er lite forutsigbar fra år til år.",
+      "hentet": "2026-11-10T07:43:42Z",
       "arsrate_kilde": "ingen_lopende",
       "ask_status": "utenfor_eos"
     },
@@ -9606,7 +9606,7 @@
       "utbytte_yield": 11.11,
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 71.0,
-      "pe_ratio": 6.66,
+      "pe_ratio": 6.81,
       "pb_ratio": 1.57,
       "ex_dato": null,
       "betaling_dato": null,
@@ -9712,7 +9712,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "",
-      "hentet": "2026-11-10T00:27:37Z",
+      "hentet": "2026-11-10T07:43:45Z",
       "ask_status": "ja"
     },
     {
@@ -9862,7 +9862,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet har gått opp fra 16,20 til 30,00 kroner per aksje i 2022–2025, men det er satt ned én gang underveis. Høyeste år er 2,3 ganger det laveste — merkbare svingninger, men innenfor et gjenkjennelig spenn. For 2026 er det betalt 44,00 kroner per aksje, mot 30,00 kroner for 2025. Dagens yield på 5,9 % ligger over aksjens eget 5-årssnitt på 4,1 %.",
-      "hentet": "2026-11-10T00:27:38Z",
+      "hentet": "2026-11-10T07:43:47Z",
       "ask_status": "ja"
     },
     {
@@ -10014,7 +10014,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet har gått opp fra 3,19 til 8,43 kroner per aksje i 2022–2025, men det er satt ned én gang underveis. Spennet er stort: høyeste år er 3,4 ganger det laveste, så størrelsen på utbetalingen er lite forutsigbar fra år til år. For 2026 er det betalt 7,67 kroner per aksje, mot 8,43 kroner for 2025. Dagens yield på 4,3 % ligger nær aksjens eget 5-årssnitt på 4,0 %.",
-      "hentet": "2026-11-10T00:27:41Z",
+      "hentet": "2026-11-10T07:43:50Z",
       "ask_status": "ja"
     },
     {
@@ -10177,7 +10177,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet har steget uten et eneste kutt fra 2022–2025, fra 3,85 til 6,40 kroner per aksje. Samlet er utbetalingen 1,7-doblet i perioden. For 2026 er det betalt 6,90 kroner per aksje, mot 6,40 kroner for 2025. Dagens yield på 9,7 % ligger over aksjens eget 5-årssnitt på 6,7 %.",
-      "hentet": "2026-11-10T00:27:43Z",
+      "hentet": "2026-11-10T07:43:53Z",
       "ask_status": "ja"
     },
     {
@@ -10361,7 +10361,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet har steget uten et eneste kutt fra 2023–2025, fra 1,21 til 2,78 kroner per aksje. Samlet er utbetalingen 2,3-doblet i perioden. Dagens yield på 6,5 % ligger nær aksjens eget 3-årssnitt på 6,5 %.",
-      "hentet": "2026-11-10T00:27:45Z",
+      "hentet": "2026-11-10T07:43:55Z",
       "kapital_tilbake": {
         "andel": 1.0,
         "melding_dato": "2026-08-20",
@@ -10382,7 +10382,7 @@
       "utbytte_yield": 1.26,
       "utbytte_vekst_5ar": 18.9,
       "payout_ratio": 33.0,
-      "pe_ratio": 27.09,
+      "pe_ratio": 27.89,
       "pb_ratio": 4.2,
       "ex_dato": null,
       "betaling_dato": null,
@@ -10496,7 +10496,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "",
-      "hentet": "2026-11-10T00:27:47Z",
+      "hentet": "2026-11-10T07:43:58Z",
       "ask_status": "ja",
       "hendelse": {
         "type": "oppkjop",
@@ -10518,7 +10518,7 @@
       "utbytte_yield": 5.67,
       "utbytte_vekst_5ar": 31.6,
       "payout_ratio": 44.0,
-      "pe_ratio": 7.33,
+      "pe_ratio": 7.58,
       "pb_ratio": 0.71,
       "ex_dato": null,
       "betaling_dato": null,
@@ -10549,79 +10549,79 @@
         2025,
         2026
       ],
-      "siste_utbytte": 9.4034,
+      "siste_utbytte": 9.4091,
       "siste_utbytte_dato": "2026-04-21",
-      "utbytte_12m": 18.8069,
+      "utbytte_12m": 18.8182,
       "utbytte_12m_antall": 2,
       "utbytte_12m_liste": [
         {
           "ex_dato": "2025-11-19",
-          "belop": 9.4034
+          "belop": 9.4091
         },
         {
           "ex_dato": "2026-04-21",
-          "belop": 9.4034
+          "belop": 9.4091
         }
       ],
       "utbetalinger": [
         [
           "2020-11-25",
-          2.3509
+          2.3523
         ],
         [
           "2021-04-21",
-          2.3509
+          2.3523
         ],
         [
           "2021-11-09",
-          4.7017
+          4.7046
         ],
         [
           "2022-04-26",
-          4.7017
+          4.7046
         ],
         [
           "2022-11-23",
-          9.4034
+          9.4091
         ],
         [
           "2023-04-25",
-          11.7543
+          11.7614
         ],
         [
           "2023-11-22",
-          9.4034
+          9.4091
         ],
         [
           "2024-04-24",
-          14.1052
+          14.1137
         ],
         [
           "2024-11-21",
-          11.7543
+          11.7614
         ],
         [
           "2025-04-23",
-          11.7543
+          11.7614
         ],
         [
           "2025-11-19",
-          9.4034
+          9.4091
         ],
         [
           "2026-04-21",
-          9.4034
+          9.4091
         ]
       ],
       "utbytte_runde": [],
       "utbytte_supplert": [],
       "utbytte_korrigert": [],
       "utbytte_per_ar": {
-        "2021": 7.0526,
-        "2022": 14.1052,
-        "2023": 21.1578,
-        "2024": 25.8595,
-        "2025": 21.1578
+        "2021": 7.0568,
+        "2022": 14.1137,
+        "2023": 21.1705,
+        "2024": 25.8751,
+        "2025": 21.1705
       },
       "utbytte_forste_ar": 2005,
       "historiske_utbytter": [
@@ -10636,7 +10636,7 @@
         },
         {
           "ar": 2023,
-          "utbytte": 21.16,
+          "utbytte": 21.17,
           "yield": 6.48,
           "maaneder": [
             4,
@@ -10645,7 +10645,7 @@
         },
         {
           "ar": 2024,
-          "utbytte": 25.86,
+          "utbytte": 25.88,
           "yield": 7.92,
           "maaneder": [
             4,
@@ -10654,7 +10654,7 @@
         },
         {
           "ar": 2025,
-          "utbytte": 21.16,
+          "utbytte": 21.17,
           "yield": 6.48,
           "maaneder": [
             4,
@@ -10663,7 +10663,7 @@
         },
         {
           "ar": 2026,
-          "utbytte": 9.4,
+          "utbytte": 9.41,
           "yield": 2.88,
           "maaneder": [
             4
@@ -10674,17 +10674,17 @@
         4,
         11
       ],
-      "snitt_yield_5ar": 5.47,
+      "snitt_yield_5ar": 5.48,
       "snitt_yield_ar": 5,
-      "beskrivelse": "Stolt-Nielsen ble grunnlagt i 1959 av Jacob Stolt-Nielsen, og familien er fortsatt største eier. Selskapet er registrert på Bermuda, men ledes fra London og omtaler seg som en langsiktig eier av virksomheter innen logistikk, distribusjon og oppdrett. Aksjen handles på Oslo Børs, og selskapet låner også penger i det norske obligasjonsmarkedet.\n\nKjernen er transport og lagring av kjemikalier og andre flytende spesialprodukter, fordelt på tre virksomheter som rapporteres hver for seg. Stolt Tankers driver kjemikalietankskip, og resultatet der følger fraktratene, volumene og drivstoffprisen. Stolthaven Terminals eier tankanlegg i havner og leier ut lagerplass. Stolt Tank Containers frakter væsker i tankcontainere på skip, tog og bil, og ble større da selskapet kjøpte det britiske Suttons i 2025. Ved siden av dette driver Stolt Sea Farm oppdrett av piggvar og tunge, og gjennom Stolt-Nielsen Gas er LNG-selskapet Avenir LNG nå eid sammen med japanske NYK, etter at halvparten ble solgt dit i 2026. Bredden gjør at et svakt år for skipene kan dempes av terminalene, men den gjør også selskapet tyngre å sammenligne med rene rederier.\n\nRegnskapsåret slutter 30. november, så kvartalene ligger forskjøvet i forhold til kalenderen. Utbyttet fastsettes i dollar og kommer to ganger i året: et interimutbytte om høsten og et sluttutbytte som styret anbefaler etter årsregnskapet og generalforsamlingen på Bermuda vedtar i april. Utdelingen konkurrerer med oppkjøp og investeringer i terminaler og skip, og konsernet finansierer seg både med banklån og obligasjoner. Aksjen er notert på Oslo Børs med en markedsverdi på rundt 22 milliarder kroner.\n\nUtbyttet utbetales halvårlig — to utbetalinger i året, og selskapet har holdt dette gående i 22 år på rad. Direkteavkastningen er 5,7 %, og 5-årssnittet på 5,5 % plasserer SNI blant de solid-yielding aksjene i sin sektor. Utbetalingsgraden på 44 % er lav og gir selskapet solid buffer til å opprettholde utbyttet ved svakere kvartaler. Utbyttet har vokst med i snitt 31,6 % per år de siste fem årene.\n\nFraktrater varierer kraftig med globalt handelsmønster og flåtekapasitet, og utbyttet svinger tilsvarende. Historikken viser klare svingninger: høyest utbytte var 25,86 NOK per aksje i 2024, lavest 9,40 NOK i 2026.",
+      "beskrivelse": "Stolt-Nielsen ble grunnlagt i 1959 av Jacob Stolt-Nielsen, og familien er fortsatt største eier. Selskapet er registrert på Bermuda, men ledes fra London og omtaler seg som en langsiktig eier av virksomheter innen logistikk, distribusjon og oppdrett. Aksjen handles på Oslo Børs, og selskapet låner også penger i det norske obligasjonsmarkedet.\n\nKjernen er transport og lagring av kjemikalier og andre flytende spesialprodukter, fordelt på tre virksomheter som rapporteres hver for seg. Stolt Tankers driver kjemikalietankskip, og resultatet der følger fraktratene, volumene og drivstoffprisen. Stolthaven Terminals eier tankanlegg i havner og leier ut lagerplass. Stolt Tank Containers frakter væsker i tankcontainere på skip, tog og bil, og ble større da selskapet kjøpte det britiske Suttons i 2025. Ved siden av dette driver Stolt Sea Farm oppdrett av piggvar og tunge, og gjennom Stolt-Nielsen Gas er LNG-selskapet Avenir LNG nå eid sammen med japanske NYK, etter at halvparten ble solgt dit i 2026. Bredden gjør at et svakt år for skipene kan dempes av terminalene, men den gjør også selskapet tyngre å sammenligne med rene rederier.\n\nRegnskapsåret slutter 30. november, så kvartalene ligger forskjøvet i forhold til kalenderen. Utbyttet fastsettes i dollar og kommer to ganger i året: et interimutbytte om høsten og et sluttutbytte som styret anbefaler etter årsregnskapet og generalforsamlingen på Bermuda vedtar i april. Utdelingen konkurrerer med oppkjøp og investeringer i terminaler og skip, og konsernet finansierer seg både med banklån og obligasjoner. Aksjen er notert på Oslo Børs med en markedsverdi på rundt 22 milliarder kroner.\n\nUtbyttet utbetales halvårlig — to utbetalinger i året, og selskapet har holdt dette gående i 22 år på rad. Direkteavkastningen er 5,7 %, og 5-årssnittet på 5,5 % plasserer SNI blant de solid-yielding aksjene i sin sektor. Utbetalingsgraden på 44 % er lav og gir selskapet solid buffer til å opprettholde utbyttet ved svakere kvartaler. Utbyttet har vokst med i snitt 31,6 % per år de siste fem årene.\n\nFraktrater varierer kraftig med globalt handelsmønster og flåtekapasitet, og utbyttet svinger tilsvarende. Historikken viser klare svingninger: høyest utbytte var 25,88 NOK per aksje i 2024, lavest 9,41 NOK i 2026.",
       "beskrivelse_intro": "Stolt-Nielsen ble grunnlagt i 1959 av Jacob Stolt-Nielsen, og familien er fortsatt største eier. Selskapet er registrert på Bermuda, men ledes fra London og omtaler seg som en langsiktig eier av virksomheter innen logistikk, distribusjon og oppdrett. Aksjen handles på Oslo Børs, og selskapet låner også penger i det norske obligasjonsmarkedet.\n\nKjernen er transport og lagring av kjemikalier og andre flytende spesialprodukter, fordelt på tre virksomheter som rapporteres hver for seg. Stolt Tankers driver kjemikalietankskip, og resultatet der følger fraktratene, volumene og drivstoffprisen. Stolthaven Terminals eier tankanlegg i havner og leier ut lagerplass. Stolt Tank Containers frakter væsker i tankcontainere på skip, tog og bil, og ble større da selskapet kjøpte det britiske Suttons i 2025. Ved siden av dette driver Stolt Sea Farm oppdrett av piggvar og tunge, og gjennom Stolt-Nielsen Gas er LNG-selskapet Avenir LNG nå eid sammen med japanske NYK, etter at halvparten ble solgt dit i 2026. Bredden gjør at et svakt år for skipene kan dempes av terminalene, men den gjør også selskapet tyngre å sammenligne med rene rederier.\n\nRegnskapsåret slutter 30. november, så kvartalene ligger forskjøvet i forhold til kalenderen. Utbyttet fastsettes i dollar og kommer to ganger i året: et interimutbytte om høsten og et sluttutbytte som styret anbefaler etter årsregnskapet og generalforsamlingen på Bermuda vedtar i april. Utdelingen konkurrerer med oppkjøp og investeringer i terminaler og skip, og konsernet finansierer seg både med banklån og obligasjoner.",
       "beskrivelse_fakta": "Stolt-Nielsen Limited leverer transport-, lagrings- og distribusjonsløsninger for flytende bulkkjemikalier, spiselige oljer, syrer og andre spesialvæsker globalt, gjennom fem segmenter: Tankskip, Terminaler, Tankcontainere, Stolt Sea Farm og Stolt-Nielsen Gas. Selskapet produserer, bearbeider og markedsfører også sjømat som piggvar og tunge, og lagrer og håndterer kjemikalier, rene petroleumsprodukter, LPG, vegetabilske oljer og biodrivstoff, samt alternative drivstoff og råstoffer.",
       "valuta": "NOK",
       "ask_egnet": false,
       "inkorporeringsland": "Bermuda",
       "data_kilde": "yahoo",
-      "utbyttehistorikk_tekst": "Utbyttet har gått opp fra 14,11 til 21,16 kroner per aksje i 2022–2025, men det er satt ned én gang underveis. Høyeste år er 1,8 ganger det laveste — merkbare svingninger, men innenfor et gjenkjennelig spenn. Dagens yield på 5,7 % ligger nær aksjens eget 5-årssnitt på 5,5 %.",
-      "hentet": "2026-11-10T00:27:49Z",
+      "utbyttehistorikk_tekst": "Utbyttet har gått opp fra 14,11 til 21,17 kroner per aksje i 2022–2025, men det er satt ned én gang underveis. Høyeste år er 1,8 ganger det laveste — merkbare svingninger, men innenfor et gjenkjennelig spenn. Dagens yield på 5,7 % ligger nær aksjens eget 5-årssnitt på 5,5 %.",
+      "hentet": "2026-11-10T07:43:59Z",
       "ask_status": "utenfor_eos"
     },
     {
@@ -10700,7 +10700,7 @@
       "utbytte_yield": 3.29,
       "utbytte_vekst_5ar": 18.9,
       "payout_ratio": 82.0,
-      "pe_ratio": 32.72,
+      "pe_ratio": 34.12,
       "pb_ratio": 12.82,
       "ex_dato": null,
       "betaling_dato": null,
@@ -10843,7 +10843,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet har steget uten et eneste kutt fra 2022–2025, fra 3,75 til 6,00 kroner per aksje. Samlet er utbetalingen 1,6-doblet i perioden. Dagens yield på 3,3 % ligger over aksjens eget 5-årssnitt på 1,4 %.",
-      "hentet": "2026-11-10T00:27:52Z",
+      "hentet": "2026-11-10T07:44:03Z",
       "arsrate_kilde": "betalt_12m",
       "ask_status": "ja"
     },
@@ -11018,7 +11018,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet har steget uten et eneste kutt fra 2022–2025, fra 5,50 til 7,00 kroner per aksje. Nivået har holdt seg jevnt fra år til år. Dagens yield på 4,5 % ligger over aksjens eget 5-årssnitt på 3,7 %.",
-      "hentet": "2026-11-10T00:27:54Z",
+      "hentet": "2026-11-10T07:44:05Z",
       "annonsert_utbytte": 3.75,
       "annonsert_ex": "2026-11-18",
       "kapital_tilbake": {
@@ -11041,7 +11041,7 @@
       "utbytte_yield": 6.11,
       "utbytte_vekst_5ar": 8.2,
       "payout_ratio": 96.0,
-      "pe_ratio": 15.84,
+      "pe_ratio": 15.89,
       "pb_ratio": 15.03,
       "ex_dato": null,
       "betaling_dato": null,
@@ -11218,7 +11218,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet har steget uten et eneste kutt fra 2022–2025, fra 2,31 til 3,70 kroner per aksje. Samlet er utbetalingen 1,6-doblet i perioden. Dagens yield på 6,1 % ligger nær aksjens eget 5-årssnitt på 6,3 %.",
-      "hentet": "2026-11-10T00:27:55Z",
+      "hentet": "2026-11-10T07:44:06Z",
       "ask_status": "ja"
     },
     {
@@ -11234,7 +11234,7 @@
       "utbytte_yield": 4.41,
       "utbytte_vekst_5ar": 8.0,
       "payout_ratio": 170.0,
-      "pe_ratio": 37.99,
+      "pe_ratio": 39.12,
       "pb_ratio": 1.41,
       "ex_dato": null,
       "betaling_dato": null,
@@ -11464,7 +11464,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet har steget uten et eneste kutt fra 2022–2025, fra 5,47 til 6,46 kroner per aksje. Nivået har holdt seg jevnt fra år til år. Dagens yield på 4,4 % ligger nær aksjens eget 5-årssnitt på 4,3 %.",
-      "hentet": "2026-11-10T00:27:57Z",
+      "hentet": "2026-11-10T07:44:08Z",
       "ask_status": "ja"
     },
     {
@@ -11480,7 +11480,7 @@
       "utbytte_yield": 0.0,
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 0.0,
-      "pe_ratio": 35.94,
+      "pe_ratio": 36.3,
       "pb_ratio": 0.53,
       "ex_dato": null,
       "betaling_dato": null,
@@ -11536,7 +11536,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "",
-      "hentet": "2026-11-10T00:27:59Z",
+      "hentet": "2026-11-10T07:44:11Z",
       "ask_status": "ja"
     },
     {
@@ -11552,7 +11552,7 @@
       "utbytte_yield": 8.31,
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 8.0,
-      "pe_ratio": 3.88,
+      "pe_ratio": 3.85,
       "pb_ratio": 1.42,
       "ex_dato": null,
       "betaling_dato": null,
@@ -11697,7 +11697,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "",
-      "hentet": "2026-11-10T00:28:05Z",
+      "hentet": "2026-11-10T07:44:18Z",
       "arsrate_kilde": "siste_utbetalinger",
       "arsrate_antall": 4,
       "ask_status": "ja"
@@ -11715,7 +11715,7 @@
       "utbytte_yield": 5.24,
       "utbytte_vekst_5ar": -3.8,
       "payout_ratio": 103.0,
-      "pe_ratio": 19.72,
+      "pe_ratio": 20.43,
       "pb_ratio": 11.28,
       "ex_dato": null,
       "betaling_dato": null,
@@ -11875,7 +11875,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet gikk ned fra 0,50 kroner per aksje i 2022 til 0,30 i 2025, og det er satt ned to ganger i perioden. Høyeste år er 2,3 ganger det laveste — merkbare svingninger, men innenfor et gjenkjennelig spenn. Dagens yield på 5,2 % er lavere enn aksjens eget 5-årssnitt på 7,9 %.",
-      "hentet": "2026-11-10T00:28:07Z",
+      "hentet": "2026-11-10T07:44:19Z",
       "arsrate_kilde": "siste_utbetalinger",
       "arsrate_antall": 2,
       "ask_status": "ja"
@@ -11893,7 +11893,7 @@
       "utbytte_yield": 1.81,
       "utbytte_vekst_5ar": -77.6,
       "payout_ratio": 15.0,
-      "pe_ratio": 2.06,
+      "pe_ratio": 2.16,
       "pb_ratio": 2.66,
       "ex_dato": null,
       "betaling_dato": null,
@@ -12043,7 +12043,7 @@
         "valuta": "NOK",
         "melding_dato": "2026-09-02"
       },
-      "hentet": "2026-11-10T00:28:09Z",
+      "hentet": "2026-11-10T07:44:22Z",
       "ask_status": "ja"
     },
     {
@@ -12154,7 +12154,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "",
-      "hentet": "2026-11-10T00:28:10Z",
+      "hentet": "2026-11-10T07:44:23Z",
       "ask_status": "ja"
     },
     {
@@ -12274,7 +12274,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "",
-      "hentet": "2026-11-10T00:28:13Z",
+      "hentet": "2026-11-10T07:44:26Z",
       "annonsert_utbytte": 0.5,
       "annonsert_ex": "2026-11-24",
       "ask_status": "ja"
@@ -12374,7 +12374,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "",
-      "hentet": "2026-11-10T00:28:14Z",
+      "hentet": "2026-11-10T07:44:28Z",
       "ask_status": "ja"
     },
     {
@@ -12390,7 +12390,7 @@
       "utbytte_yield": 0.0,
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 0.0,
-      "pe_ratio": 114.38,
+      "pe_ratio": 39.78,
       "pb_ratio": 0.89,
       "ex_dato": null,
       "betaling_dato": null,
@@ -12432,7 +12432,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "",
-      "hentet": "2026-11-10T00:28:16Z",
+      "hentet": "2026-11-10T07:44:30Z",
       "ask_status": "ja"
     },
     {
@@ -12448,7 +12448,7 @@
       "utbytte_yield": 5.99,
       "utbytte_vekst_5ar": 27.8,
       "payout_ratio": 69.0,
-      "pe_ratio": 11.4,
+      "pe_ratio": 11.74,
       "pb_ratio": 1.16,
       "ex_dato": null,
       "betaling_dato": null,
@@ -12575,7 +12575,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet har steget uten et eneste kutt fra 2022–2025, fra 11,00 til 20,00 kroner per aksje. Samlet er utbetalingen 1,8-doblet i perioden. Dagens yield på 6,0 % ligger over aksjens eget 5-årssnitt på 4,0 %.",
-      "hentet": "2026-11-10T00:28:18Z",
+      "hentet": "2026-11-10T07:44:32Z",
       "ask_status": "ja"
     },
     {
@@ -12591,7 +12591,7 @@
       "utbytte_yield": 2.98,
       "utbytte_vekst_5ar": 111.5,
       "payout_ratio": 71.0,
-      "pe_ratio": 23.81,
+      "pe_ratio": 24.72,
       "pb_ratio": 9.19,
       "ex_dato": null,
       "betaling_dato": null,
@@ -12718,7 +12718,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet har steget uten et eneste kutt fra 2022–2025, fra 0,30 til 6,00 kroner per aksje. Veksten er kraftig: siste år er 20,0 ganger det første. Så bratte løft holder sjelden samme takt over tid. For 2026 er det betalt 5,00 kroner per aksje, mot 6,00 kroner for 2025. Dagens yield på 3,0 % ligger over aksjens eget 5-årssnitt på 1,2 %.",
-      "hentet": "2026-11-10T00:28:19Z",
+      "hentet": "2026-11-10T07:44:33Z",
       "ask_status": "ja"
     },
     {
@@ -12885,7 +12885,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet har gått opp fra 6,50 til 7,50 kroner per aksje i 2022–2025, men det er satt ned én gang underveis. Dagens yield på 3,7 % er lavere enn aksjens eget 5-årssnitt på 4,7 %.",
-      "hentet": "2026-11-10T00:28:20Z",
+      "hentet": "2026-11-10T07:44:35Z",
       "annonsert_utbytte": 2.75,
       "annonsert_ex": "2026-11-17",
       "ask_status": "ja"
@@ -13058,7 +13058,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet har gått opp fra 3,20 til 13,67 kroner per aksje i 2022–2025, men det er satt ned én gang underveis. Spennet er stort: høyeste år er 5,4 ganger det laveste, så størrelsen på utbetalingen er lite forutsigbar fra år til år. Dagens yield på 8,2 % ligger nær aksjens eget 5-årssnitt på 7,8 %.",
-      "hentet": "2026-11-10T00:28:24Z",
+      "hentet": "2026-11-10T07:44:39Z",
       "ask_status": "ja"
     },
     {
@@ -13229,7 +13229,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet har gått opp fra 3,20 til 13,67 kroner per aksje i 2022–2025, men det er satt ned én gang underveis. Spennet er stort: høyeste år er 5,4 ganger det laveste, så størrelsen på utbetalingen er lite forutsigbar fra år til år. Dagens yield på 8,2 % ligger nær aksjens eget 5-årssnitt på 7,9 %.",
-      "hentet": "2026-11-10T00:28:26Z",
+      "hentet": "2026-11-10T07:44:42Z",
       "ask_status": "ja"
     },
     {
@@ -13245,7 +13245,7 @@
       "utbytte_yield": 6.29,
       "utbytte_vekst_5ar": 52.6,
       "payout_ratio": 103.0,
-      "pe_ratio": 14.0,
+      "pe_ratio": 13.97,
       "pb_ratio": 1.17,
       "ex_dato": null,
       "betaling_dato": null,
@@ -13387,7 +13387,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet har steget uten et eneste kutt fra 2022–2025, fra 11,00 til 32,52 kroner per aksje. Samlet er utbetalingen 3,0-doblet i perioden. For 2026 er det betalt 22,27 kroner per aksje, mot 32,52 kroner for 2025. Dagens yield på 6,3 % ligger over aksjens eget 5-årssnitt på 4,5 %.",
-      "hentet": "2026-11-10T00:28:29Z",
+      "hentet": "2026-11-10T07:44:45Z",
       "ask_status": "ja",
       "hendelse": {
         "type": "fusjon_overtar",
@@ -13409,7 +13409,7 @@
       "utbytte_yield": 6.6,
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 134.0,
-      "pe_ratio": 7.49,
+      "pe_ratio": 7.24,
       "pb_ratio": 0.31,
       "ex_dato": null,
       "betaling_dato": null,
@@ -13482,7 +13482,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "",
-      "hentet": "2026-11-10T00:28:30Z",
+      "hentet": "2026-11-10T07:44:46Z",
       "ask_status": "ja"
     },
     {
@@ -13498,7 +13498,7 @@
       "utbytte_yield": 5.86,
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 134.0,
-      "pe_ratio": 21.61,
+      "pe_ratio": 22.47,
       "pb_ratio": 4.63,
       "ex_dato": null,
       "betaling_dato": null,
@@ -13584,7 +13584,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "",
-      "hentet": "2026-11-10T00:28:31Z",
+      "hentet": "2026-11-10T07:44:48Z",
       "arsrate_kilde": "betalt_12m",
       "ask_status": "ja"
     },
@@ -13696,7 +13696,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "",
-      "hentet": "2026-11-10T00:28:34Z",
+      "hentet": "2026-11-10T07:44:51Z",
       "ask_status": "ja"
     },
     {
@@ -13856,7 +13856,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet har steget uten et eneste kutt fra 2022–2025, fra 10,05 til 16,50 kroner per aksje. Samlet er utbetalingen 1,6-doblet i perioden. For 2026 er det betalt 18,75 kroner per aksje, mot 16,50 kroner for 2025. Dagens yield på 4,4 % ligger over aksjens eget 5-årssnitt på 2,9 %.",
-      "hentet": "2026-11-10T00:28:36Z",
+      "hentet": "2026-11-10T07:44:54Z",
       "ask_status": "ja"
     },
     {
@@ -13872,7 +13872,7 @@
       "utbytte_yield": 3.99,
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 75.0,
-      "pe_ratio": 18.34,
+      "pe_ratio": 17.98,
       "pb_ratio": 1.13,
       "ex_dato": null,
       "betaling_dato": null,
@@ -13958,7 +13958,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "",
-      "hentet": "2026-11-10T00:28:38Z",
+      "hentet": "2026-11-10T07:44:55Z",
       "ask_status": "ja"
     },
     {
@@ -14074,7 +14074,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "",
-      "hentet": "2026-11-10T00:28:40Z",
+      "hentet": "2026-11-10T07:44:59Z",
       "ask_status": "ja",
       "hendelse": {
         "type": "fusjon",
@@ -14096,7 +14096,7 @@
       "utbytte_yield": 6.51,
       "utbytte_vekst_5ar": 19.2,
       "payout_ratio": 31.0,
-      "pe_ratio": 14.05,
+      "pe_ratio": 13.9,
       "pb_ratio": 0.51,
       "ex_dato": null,
       "betaling_dato": null,
@@ -14230,7 +14230,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet har steget uten et eneste kutt fra 2022–2025, fra 8,87 til 15,00 kroner per aksje. Samlet er utbetalingen 1,7-doblet i perioden. For 2026 er det betalt 17,00 kroner per aksje, mot 15,00 kroner for 2025. Dagens yield på 6,5 % ligger over aksjens eget 5-årssnitt på 4,3 %.",
-      "hentet": "2026-11-10T00:28:42Z",
+      "hentet": "2026-11-10T07:45:00Z",
       "ask_status": "ja"
     },
     {
@@ -14246,7 +14246,7 @@
       "utbytte_yield": 5.81,
       "utbytte_vekst_5ar": 23.6,
       "payout_ratio": 76.0,
-      "pe_ratio": 9.56,
+      "pe_ratio": 9.77,
       "pb_ratio": 0.73,
       "ex_dato": null,
       "betaling_dato": null,
@@ -14393,7 +14393,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet har gått opp fra 4,50 til 8,50 kroner per aksje i 2022–2025, men det er satt ned én gang underveis. Høyeste år er 1,9 ganger det laveste — merkbare svingninger, men innenfor et gjenkjennelig spenn. For 2026 er det betalt 12,00 kroner per aksje, mot 8,50 kroner for 2025. Dagens yield på 5,8 % ligger over aksjens eget 5-årssnitt på 3,2 %.",
-      "hentet": "2026-11-10T00:28:44Z",
+      "hentet": "2026-11-10T07:45:03Z",
       "ask_status": "ja"
     },
     {
@@ -14409,7 +14409,7 @@
       "utbytte_yield": 5.05,
       "utbytte_vekst_5ar": 12.3,
       "payout_ratio": 71.0,
-      "pe_ratio": 14.0,
+      "pe_ratio": 14.29,
       "pb_ratio": 1.73,
       "ex_dato": null,
       "betaling_dato": null,
@@ -14539,7 +14539,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet har steget uten et eneste kutt fra 2022–2025, fra 6,00 til 8,50 kroner per aksje. Nivået har holdt seg jevnt fra år til år. For 2026 er det betalt 12,00 kroner per aksje, mot 8,50 kroner for 2025. Dagens yield på 5,0 % ligger over aksjens eget 5-årssnitt på 3,2 %.",
-      "hentet": "2026-11-10T00:28:45Z",
+      "hentet": "2026-11-10T07:45:05Z",
       "ask_status": "ja"
     },
     {
@@ -14555,7 +14555,7 @@
       "utbytte_yield": 5.91,
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 61.0,
-      "pe_ratio": 10.18,
+      "pe_ratio": 9.98,
       "pb_ratio": 0.39,
       "ex_dato": null,
       "betaling_dato": null,
@@ -14676,7 +14676,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet har gått opp fra 5,00 til 8,50 kroner per aksje i 2022–2025, men det er satt ned én gang underveis. For 2026 er det betalt 11,00 kroner per aksje, mot 8,50 kroner for 2025. Dagens yield på 5,9 % ligger over aksjens eget 5-årssnitt på 3,1 %.",
-      "hentet": "2026-11-10T00:28:48Z",
+      "hentet": "2026-11-10T07:45:08Z",
       "ask_status": "ja"
     },
     {
@@ -14688,11 +14688,11 @@
       "52u_hoy": 183.8,
       "52u_lav": 78.4,
       "markedsverdi_mrd": 7.0,
-      "utbytte_per_aksje": 17.11,
+      "utbytte_per_aksje": 17.13,
       "utbytte_yield": 11.49,
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 101.0,
-      "pe_ratio": 13.39,
+      "pe_ratio": 13.94,
       "pb_ratio": 4.61,
       "ex_dato": null,
       "betaling_dato": null,
@@ -14704,192 +14704,192 @@
         2025,
         2026
       ],
-      "siste_utbytte": 2.633,
+      "siste_utbytte": 2.635,
       "siste_utbytte_dato": "2026-10-16",
-      "utbytte_12m": 17.1143,
+      "utbytte_12m": 17.1274,
       "utbytte_12m_antall": 12,
       "utbytte_12m_liste": [
         {
           "ex_dato": "2025-11-14",
-          "belop": 0.6582
+          "belop": 0.6587
         },
         {
           "ex_dato": "2025-12-12",
-          "belop": 0.9403
+          "belop": 0.9411
         },
         {
           "ex_dato": "2026-01-19",
-          "belop": 1.2224
+          "belop": 1.2234
         },
         {
           "ex_dato": "2026-02-19",
-          "belop": 0.5642
+          "belop": 0.5646
         },
         {
           "ex_dato": "2026-03-16",
-          "belop": 0.5642
+          "belop": 0.5646
         },
         {
           "ex_dato": "2026-04-17",
-          "belop": 0.5642
+          "belop": 0.5646
         },
         {
           "ex_dato": "2026-05-18",
-          "belop": 1.4105
+          "belop": 1.4116
         },
         {
           "ex_dato": "2026-06-19",
-          "belop": 2.0688
+          "belop": 2.0703
         },
         {
           "ex_dato": "2026-07-17",
-          "belop": 2.0688
+          "belop": 2.0703
         },
         {
           "ex_dato": "2026-08-20",
-          "belop": 2.0688
+          "belop": 2.0703
         },
         {
           "ex_dato": "2026-09-17",
-          "belop": 2.3509
+          "belop": 2.3527
         },
         {
           "ex_dato": "2026-10-16",
-          "belop": 2.633
+          "belop": 2.635
         }
       ],
       "utbetalinger": [
         [
           "2024-02-21",
-          0.094
+          0.0941
         ],
         [
           "2024-03-18",
-          0.2821
+          0.2823
         ],
         [
           "2024-04-18",
-          0.2821
+          0.2823
         ],
         [
           "2024-05-22",
-          0.3761
+          0.3764
         ],
         [
           "2024-06-14",
-          0.3761
+          0.3764
         ],
         [
           "2024-07-18",
-          0.4702
+          0.4705
         ],
         [
           "2024-08-16",
-          0.5642
+          0.5646
         ],
         [
           "2024-09-16",
-          0.6582
+          0.6587
         ],
         [
           "2024-10-17",
-          0.9403
+          0.9411
         ],
         [
           "2024-11-15",
-          0.3761
+          0.3764
         ],
         [
           "2024-12-13",
-          0.094
+          0.0941
         ],
         [
           "2025-01-20",
-          0.047
+          0.0471
         ],
         [
           "2025-02-20",
-          0.047
+          0.0471
         ],
         [
           "2025-03-18",
-          0.047
+          0.0471
         ],
         [
           "2025-04-14",
-          0.3761
+          0.3764
         ],
         [
           "2025-05-19",
-          0.2351
+          0.2353
         ],
         [
           "2025-06-17",
-          0.2821
+          0.2823
         ],
         [
           "2025-07-18",
-          0.4702
+          0.4705
         ],
         [
           "2025-08-18",
-          0.3761
+          0.3764
         ],
         [
           "2025-09-15",
-          0.9403
+          0.9411
         ],
         [
           "2025-10-17",
-          0.9403
+          0.9411
         ],
         [
           "2025-11-14",
-          0.6582
+          0.6587
         ],
         [
           "2025-12-12",
-          0.9403
+          0.9411
         ],
         [
           "2026-01-19",
-          1.2224
+          1.2234
         ],
         [
           "2026-02-19",
-          0.5642
+          0.5646
         ],
         [
           "2026-03-16",
-          0.5642
+          0.5646
         ],
         [
           "2026-04-17",
-          0.5642
+          0.5646
         ],
         [
           "2026-05-18",
-          1.4105
+          1.4116
         ],
         [
           "2026-06-19",
-          2.0688
+          2.0703
         ],
         [
           "2026-07-17",
-          2.0688
+          2.0703
         ],
         [
           "2026-08-20",
-          2.0688
+          2.0703
         ],
         [
           "2026-09-17",
-          2.3509
+          2.3527
         ],
         [
           "2026-10-16",
-          2.633
+          2.635
         ]
       ],
       "utbytte_runde": [],
@@ -14899,14 +14899,14 @@
         "2021": 0.0,
         "2022": 0.0,
         "2023": 0.0,
-        "2024": 4.5137,
-        "2025": 5.36
+        "2024": 4.5171,
+        "2025": 5.3641
       },
       "utbytte_forste_ar": 2024,
       "historiske_utbytter": [
         {
           "ar": 2024,
-          "utbytte": 4.51,
+          "utbytte": 4.52,
           "yield": 3.03,
           "maaneder": [
             2,
@@ -14943,8 +14943,8 @@
         },
         {
           "ar": 2026,
-          "utbytte": 15.52,
-          "yield": 10.41,
+          "utbytte": 15.53,
+          "yield": 10.42,
           "maaneder": [
             1,
             2,
@@ -14975,7 +14975,7 @@
       ],
       "snitt_yield_5ar": 0,
       "snitt_yield_ar": 2,
-      "beskrivelse": "Himalaya Shipping ble stiftet på Bermuda i 2021 med ett formål: å eie nye Newcastlemax-skip, store tørrbulkskip for capesize-markedet. Alle skipene ble bygget ved New Times-verftet i Kina, kan gå på LNG i tillegg til vanlig drivstoff og har scrubber. Største aksjonær er Drew Holdings, som eies av en trust opprettet for Tor Olav Trøim og familien hans. Ledelsen er ikke ansatt i selskapet. Konsernsjef, finansdirektør og den daglige driften leies inn fra 2020 Bulkers Management, der Himalaya etter avtale skulle bli majoritetseier fra april 2026.\n\nAksjen kom først på Euronext Growth Oslo, ble flyttet til Euronext Expand i 2022, fikk notering i New York i 2023 og gikk over til Oslo Børs i juni 2025. Skipene er leid ut på tidscerteparti der dagraten følger Baltic-indeksen for capesize pluss et tillegg, så inntekten går opp og ned med markedet uten at skipene må befraktes på nytt. Etter avtale med befrakteren kan raten låses til en fast sats for en periode, og det har selskapet gjort for flere skip i 2026. Skipene er finansiert ved salg og tilbakeleie med kinesiske leasingselskaper.\n\nHimalaya deler ut penger hver måned, så lenge skipene tjener nok til det. Beløpet fastsettes i dollar og kommer i kroner til aksjonærer i den norske verdipapirsentralen. Utdelingene tas fra kontoen for innskutt overskudd (contributed surplus), og i august 2026 vedtok aksjonærene å flytte mer kapital over til den. Leieavtalene krever at hvert skipseiende datterselskap holder igjen en kontantbuffer, og leien går foran utdelingene. Derfor varierer beløpet fra måned til måned med capesizeratene.\n\nUtbyttet utbetales månedlig — tolv ganger per år, og selskapet har betalt utbytte de siste 3 årene. Direkteavkastningen er 3,6 %. En utbetalingsgrad på 101 % betyr at det meste av inntjeningen deles ut — utbyttet er dermed sensitivt for resultatsvingninger.\n\nFraktrater varierer kraftig med globalt handelsmønster og flåtekapasitet, og utbyttet svinger tilsvarende. Historikken viser klare svingninger: høyest utbytte var 15,52 NOK per aksje i 2026, lavest 4,51 NOK i 2024.",
+      "beskrivelse": "Himalaya Shipping ble stiftet på Bermuda i 2021 med ett formål: å eie nye Newcastlemax-skip, store tørrbulkskip for capesize-markedet. Alle skipene ble bygget ved New Times-verftet i Kina, kan gå på LNG i tillegg til vanlig drivstoff og har scrubber. Største aksjonær er Drew Holdings, som eies av en trust opprettet for Tor Olav Trøim og familien hans. Ledelsen er ikke ansatt i selskapet. Konsernsjef, finansdirektør og den daglige driften leies inn fra 2020 Bulkers Management, der Himalaya etter avtale skulle bli majoritetseier fra april 2026.\n\nAksjen kom først på Euronext Growth Oslo, ble flyttet til Euronext Expand i 2022, fikk notering i New York i 2023 og gikk over til Oslo Børs i juni 2025. Skipene er leid ut på tidscerteparti der dagraten følger Baltic-indeksen for capesize pluss et tillegg, så inntekten går opp og ned med markedet uten at skipene må befraktes på nytt. Etter avtale med befrakteren kan raten låses til en fast sats for en periode, og det har selskapet gjort for flere skip i 2026. Skipene er finansiert ved salg og tilbakeleie med kinesiske leasingselskaper.\n\nHimalaya deler ut penger hver måned, så lenge skipene tjener nok til det. Beløpet fastsettes i dollar og kommer i kroner til aksjonærer i den norske verdipapirsentralen. Utdelingene tas fra kontoen for innskutt overskudd (contributed surplus), og i august 2026 vedtok aksjonærene å flytte mer kapital over til den. Leieavtalene krever at hvert skipseiende datterselskap holder igjen en kontantbuffer, og leien går foran utdelingene. Derfor varierer beløpet fra måned til måned med capesizeratene.\n\nUtbyttet utbetales månedlig — tolv ganger per år, og selskapet har betalt utbytte de siste 3 årene. Direkteavkastningen er 3,6 %. En utbetalingsgrad på 101 % betyr at det meste av inntjeningen deles ut — utbyttet er dermed sensitivt for resultatsvingninger.\n\nFraktrater varierer kraftig med globalt handelsmønster og flåtekapasitet, og utbyttet svinger tilsvarende. Historikken viser klare svingninger: høyest utbytte var 15,53 NOK per aksje i 2026, lavest 4,52 NOK i 2024.",
       "beskrivelse_intro": "Himalaya Shipping ble stiftet på Bermuda i 2021 med ett formål: å eie nye Newcastlemax-skip, store tørrbulkskip for capesize-markedet. Alle skipene ble bygget ved New Times-verftet i Kina, kan gå på LNG i tillegg til vanlig drivstoff og har scrubber. Største aksjonær er Drew Holdings, som eies av en trust opprettet for Tor Olav Trøim og familien hans. Ledelsen er ikke ansatt i selskapet. Konsernsjef, finansdirektør og den daglige driften leies inn fra 2020 Bulkers Management, der Himalaya etter avtale skulle bli majoritetseier fra april 2026.\n\nAksjen kom først på Euronext Growth Oslo, ble flyttet til Euronext Expand i 2022, fikk notering i New York i 2023 og gikk over til Oslo Børs i juni 2025. Skipene er leid ut på tidscerteparti der dagraten følger Baltic-indeksen for capesize pluss et tillegg, så inntekten går opp og ned med markedet uten at skipene må befraktes på nytt. Etter avtale med befrakteren kan raten låses til en fast sats for en periode, og det har selskapet gjort for flere skip i 2026. Skipene er finansiert ved salg og tilbakeleie med kinesiske leasingselskaper.\n\nHimalaya deler ut penger hver måned, så lenge skipene tjener nok til det. Beløpet fastsettes i dollar og kommer i kroner til aksjonærer i den norske verdipapirsentralen. Utdelingene tas fra kontoen for innskutt overskudd (contributed surplus), og i august 2026 vedtok aksjonærene å flytte mer kapital over til den. Leieavtalene krever at hvert skipseiende datterselskap holder igjen en kontantbuffer, og leien går foran utdelingene. Derfor varierer beløpet fra måned til måned med capesizeratene.",
       "beskrivelse_fakta": "Himalaya Shipping Ltd. leverer tørrbulktransport globalt, og betjener store råvarehandelsselskaper, aktører innen råvarer og energiomstilling samt multimodale transportselskaper. Per 31. desember 2024 eide og drev selskapet en flåte på 12 Newcastlemax tørrbulkskip, hvert med kapasitet på rundt 210 000 dødvekttonn. Selskapet ble stiftet i 2021 og har base i Hamilton på Bermuda.",
       "valuta": "NOK",
@@ -14983,7 +14983,7 @@
       "inkorporeringsland": "Bermuda",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "",
-      "hentet": "2026-11-10T00:28:50Z",
+      "hentet": "2026-11-10T07:45:10Z",
       "arsrate_kilde": "betalt_12m",
       "ask_status": "utenfor_eos"
     },
@@ -15000,7 +15000,7 @@
       "utbytte_yield": 3.33,
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 40.0,
-      "pe_ratio": 12.1,
+      "pe_ratio": 12.2,
       "pb_ratio": 1.54,
       "ex_dato": null,
       "betaling_dato": null,
@@ -15074,7 +15074,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "",
-      "hentet": "2026-11-10T00:28:54Z",
+      "hentet": "2026-11-10T07:45:15Z",
       "arsrate_kilde": "betalt_12m",
       "arsrate_ekstra_trukket": 2.0,
       "ask_status": "ja"
@@ -15092,7 +15092,7 @@
       "utbytte_yield": 0.0,
       "utbytte_vekst_5ar": -2.6,
       "payout_ratio": 0.0,
-      "pe_ratio": 102.04,
+      "pe_ratio": 98.04,
       "pb_ratio": 10.67,
       "ex_dato": null,
       "betaling_dato": null,
@@ -15169,7 +15169,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "",
-      "hentet": "2026-11-10T00:28:58Z",
+      "hentet": "2026-11-10T07:45:19Z",
       "arsrate_kilde": "stoppet",
       "ask_status": "ja",
       "hendelse": {
@@ -15191,8 +15191,8 @@
       "utbytte_per_aksje": 0.75,
       "utbytte_yield": 6.82,
       "utbytte_vekst_5ar": 0.0,
-      "payout_ratio": 150.0,
-      "pe_ratio": 22.0,
+      "payout_ratio": 153.1,
+      "pe_ratio": 22.45,
       "pb_ratio": 0.63,
       "ex_dato": null,
       "betaling_dato": null,
@@ -15308,7 +15308,7 @@
       ],
       "snitt_yield_5ar": 1.36,
       "snitt_yield_ar": 5,
-      "beskrivelse": "Akastor ble skilt ut fra Aker Solutions i 2014 og er et investeringsselskap i oljeservice, ikke et driftsselskap. Aker ASA er største eier. Porteføljen domineres av noen få selskaper. HMH lager boreutstyr og ble dannet i 2021 da Akastors MHWirth ble slått sammen med Baker Hughes' virksomhet for boresystemer til havs. HMH kom på Nasdaq i New York i april 2026, og Akastor er fortsatt en stor eier. Ved siden av eier Akastor det meste av AKOFS Offshore, som driver skip for brønnarbeid, og mindre poster i blant andre bemanningsselskapet NES Fircroft, Føn Energy Services innen havvind og IKM Løfteteknikk. DDW Offshore solgte sitt siste skip i oktober 2026.\n\nSelskapet beskriver selv at det har gått fra å bygge verdier til å realisere dem. Pengene kommer derfor først og fremst når en eierpost selges, børsnoteres eller refinansieres, ikke jevnt fra drift. Børsnoteringen av HMH ga Akastor kontanter som i mai 2026 gikk videre til aksjonærene som et eget utbytte, og selskapet venter også penger fra en refinansiering i NES Fircroft. Etter hvert salg blir porteføljen mindre, så det som kan deles ut i årene framover, avhenger av hva som er igjen å selge og hvilken pris markedet gir.\n\nSiden 2025 har Akastor delt ut penger hvert kvartal. Utbetalingene fra og med høsten 2025 er klassifisert som tilbakebetaling av innbetalt kapital, ikke som vanlig utbytte. For en personlig aksjonær i Norge betyr det at beløpet ikke skattlegges når det mottas, men trekkes fra inngangsverdien på aksjen, slik at skatten i stedet kommer som en større gevinst når aksjen selges.\n\nUtbyttet utbetales kvartalsvis — fire utbetalinger i året, og selskapet har betalt utbytte de siste 2 årene. Direkteavkastningen er 6,8 %, og 5-årssnittet på 1,4 % plasserer AKAST blant de solid-yielding aksjene i sin sektor. En utbetalingsgrad på 150 % betyr at det meste av inntjeningen deles ut — utbyttet er dermed sensitivt for resultatsvingninger.",
+      "beskrivelse": "Akastor ble skilt ut fra Aker Solutions i 2014 og er et investeringsselskap i oljeservice, ikke et driftsselskap. Aker ASA er største eier. Porteføljen domineres av noen få selskaper. HMH lager boreutstyr og ble dannet i 2021 da Akastors MHWirth ble slått sammen med Baker Hughes' virksomhet for boresystemer til havs. HMH kom på Nasdaq i New York i april 2026, og Akastor er fortsatt en stor eier. Ved siden av eier Akastor det meste av AKOFS Offshore, som driver skip for brønnarbeid, og mindre poster i blant andre bemanningsselskapet NES Fircroft, Føn Energy Services innen havvind og IKM Løfteteknikk. DDW Offshore solgte sitt siste skip i oktober 2026.\n\nSelskapet beskriver selv at det har gått fra å bygge verdier til å realisere dem. Pengene kommer derfor først og fremst når en eierpost selges, børsnoteres eller refinansieres, ikke jevnt fra drift. Børsnoteringen av HMH ga Akastor kontanter som i mai 2026 gikk videre til aksjonærene som et eget utbytte, og selskapet venter også penger fra en refinansiering i NES Fircroft. Etter hvert salg blir porteføljen mindre, så det som kan deles ut i årene framover, avhenger av hva som er igjen å selge og hvilken pris markedet gir.\n\nSiden 2025 har Akastor delt ut penger hvert kvartal. Utbetalingene fra og med høsten 2025 er klassifisert som tilbakebetaling av innbetalt kapital, ikke som vanlig utbytte. For en personlig aksjonær i Norge betyr det at beløpet ikke skattlegges når det mottas, men trekkes fra inngangsverdien på aksjen, slik at skatten i stedet kommer som en større gevinst når aksjen selges.\n\nUtbyttet utbetales kvartalsvis — fire utbetalinger i året, og selskapet har betalt utbytte de siste 2 årene. Direkteavkastningen er 6,8 %, og 5-årssnittet på 1,4 % plasserer AKAST blant de solid-yielding aksjene i sin sektor. En utbetalingsgrad på 153 % betyr at det meste av inntjeningen deles ut — utbyttet er dermed sensitivt for resultatsvingninger.",
       "beskrivelse_intro": "Akastor ble skilt ut fra Aker Solutions i 2014 og er et investeringsselskap i oljeservice, ikke et driftsselskap. Aker ASA er største eier. Porteføljen domineres av noen få selskaper. HMH lager boreutstyr og ble dannet i 2021 da Akastors MHWirth ble slått sammen med Baker Hughes' virksomhet for boresystemer til havs. HMH kom på Nasdaq i New York i april 2026, og Akastor er fortsatt en stor eier. Ved siden av eier Akastor det meste av AKOFS Offshore, som driver skip for brønnarbeid, og mindre poster i blant andre bemanningsselskapet NES Fircroft, Føn Energy Services innen havvind og IKM Løfteteknikk. DDW Offshore solgte sitt siste skip i oktober 2026.\n\nSelskapet beskriver selv at det har gått fra å bygge verdier til å realisere dem. Pengene kommer derfor først og fremst når en eierpost selges, børsnoteres eller refinansieres, ikke jevnt fra drift. Børsnoteringen av HMH ga Akastor kontanter som i mai 2026 gikk videre til aksjonærene som et eget utbytte, og selskapet venter også penger fra en refinansiering i NES Fircroft. Etter hvert salg blir porteføljen mindre, så det som kan deles ut i årene framover, avhenger av hva som er igjen å selge og hvilken pris markedet gir.\n\nSiden 2025 har Akastor delt ut penger hvert kvartal. Utbetalingene fra og med høsten 2025 er klassifisert som tilbakebetaling av innbetalt kapital, ikke som vanlig utbytte. For en personlig aksjonær i Norge betyr det at beløpet ikke skattlegges når det mottas, men trekkes fra inngangsverdien på aksjen, slik at skatten i stedet kommer som en større gevinst når aksjen selges.",
       "beskrivelse_fakta": "Akastor ASA er et investeringsselskap innen oljeservice med virksomhet i Norge og internasjonalt, gjennom segmentene HMH, AKOFS Offshore, DDW Offshore og Øvrige eierandeler. HMH leverer boreutstyr og komplette pakker til offshore boring i stor skala, med kapital og bransjeerfaring i ryggen. AKOFS Offshore leverer fartøysbaserte tjenester for brønnkonstruksjon, installasjon og intervensjon til olje- og gassnæringen, gjennom alle faser fra utbygging til prosjektgjennomføring og offshoreoperasjoner.",
       "valuta": "NOK",
@@ -15316,7 +15316,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "",
-      "hentet": "2026-11-10T00:29:02Z",
+      "hentet": "2026-11-10T07:45:23Z",
       "ask_status": "ja"
     },
     {
@@ -15405,7 +15405,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "",
-      "hentet": "2026-11-10T00:29:04Z",
+      "hentet": "2026-11-10T07:45:25Z",
       "ask_status": "ja"
     },
     {
@@ -15421,7 +15421,7 @@
       "utbytte_yield": 1.59,
       "utbytte_vekst_5ar": -50.1,
       "payout_ratio": 34.0,
-      "pe_ratio": 21.55,
+      "pe_ratio": 21.72,
       "pb_ratio": 2.25,
       "ex_dato": null,
       "betaling_dato": null,
@@ -15623,7 +15623,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet gikk ned fra 3,75 kroner per aksje i 2022 til 2,00 i 2025, og det er satt ned én gang i perioden. Høyeste år er 2,0 ganger det laveste — merkbare svingninger, men innenfor et gjenkjennelig spenn. For 2026 er det betalt 3,00 kroner per aksje, mot 2,00 kroner for 2025. Dagens yield på 1,6 % er lavere enn aksjens eget 5-årssnitt på 4,9 %.",
-      "hentet": "2026-11-10T00:29:05Z",
+      "hentet": "2026-11-10T07:45:27Z",
       "arsrate_kilde": "betalt_12m",
       "ask_status": "ja"
     },
@@ -15640,7 +15640,7 @@
       "utbytte_yield": 1.79,
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 106.0,
-      "pe_ratio": 7.52,
+      "pe_ratio": 7.69,
       "pb_ratio": 1.56,
       "ex_dato": "2026-12-07",
       "betaling_dato": "2026-12-11",
@@ -15755,7 +15755,7 @@
       ],
       "snitt_yield_5ar": 0,
       "snitt_yield_ar": 2,
-      "beskrivelse": "SED Energy Holdings er et holdingselskap med to virksomheter som begge selger tjenester til olje- og gasselskaper. Selskapet produserer verken olje eller gass selv. Det oppsto i mai 2025, da seismikkselskapet SeaBird Exploration slo seg sammen med Energy Drilling og tok det nye navnet. Regnskapsmessig er det Energy Drilling som regnes som kjøperen. Selskapet er registrert på Kypros, og i tillegg til de vanlige aksjene finnes det B-aksjer uten stemmerett.\n\nEnergy Drilling ble grunnlagt i 2012, har hovedkontor i Singapore og leier ut rigger for tenderassistert boring, mest i Sørøst-Asia. Riggene brukes til produksjonsboring og nye brønner på felt som allerede er bygget ut, så oppdragene henger tettere sammen med produksjonen enn med letingen. SeaBird Exploration har to fartøy som arbeider med havbunnsseismikk, der målingene gjøres med noder plassert på havbunnen. Slike undersøkelser brukes mye rundt felt i drift og til å øke utvinningen. Begge virksomhetene har inntekter fra kontrakter med dagrate, så kontraktsporteføljen sier mye om de neste årene.\n\nSelskapets mål er å dele ut den likviditeten driften ikke trenger, hvert kvartal. Utdelingene vedtas i dollar som et samlet beløp, betales i kroner til aksjonærene i det norske verdipapirregisteret og må godkjennes av aksjonærene først. Fra og med utdelingen for tredje kvartal 2025 er de betalt som tilbakebetaling av innbetalt kapital, og da regnes de ikke som utbytte ved norsk skatt. Det kan gå flere måneder fra en utdeling foreslås til ex-datoen. I september 2026 inngikk selskapet en intensjonsavtale om å slå seg sammen med boreriggselskapet Ventura Offshore mot betaling i nye aksjer. Blir den gjennomført, kommer det inntekter fra flere rigger, men utdelingene skal også fordeles på flere aksjer.\n\nUtbyttet utbetales kvartalsvis — fire utbetalinger i året, og selskapet har betalt utbytte de siste 3 årene. Direkteavkastningen er 9,1 %. En utbetalingsgrad på 106 % betyr at det meste av inntjeningen deles ut — utbyttet er dermed sensitivt for resultatsvingninger.\n\nInntjeningen er tett koblet til olje- og gasspriser, noe som gjør utbyttet mer syklisk enn i defensive sektorer. Historikken viser klare svingninger: høyest utbytte var 1,19 NOK per aksje i 2026, lavest 0,50 NOK i 2024.",
+      "beskrivelse": "SED Energy Holdings er et holdingselskap med to virksomheter som begge selger tjenester til olje- og gasselskaper. Selskapet produserer verken olje eller gass selv. Det oppsto i mai 2025, da seismikkselskapet SeaBird Exploration slo seg sammen med Energy Drilling og tok det nye navnet. Regnskapsmessig er det Energy Drilling som regnes som kjøperen. Selskapet er registrert på Kypros, og i tillegg til de vanlige aksjene finnes det B-aksjer uten stemmerett.\n\nEnergy Drilling ble grunnlagt i 2012, har hovedkontor i Singapore og leier ut rigger for tenderassistert boring, mest i Sørøst-Asia. Riggene brukes til produksjonsboring og nye brønner på felt som allerede er bygget ut, så oppdragene henger tettere sammen med produksjonen enn med letingen. SeaBird Exploration har to fartøy som arbeider med havbunnsseismikk, der målingene gjøres med noder plassert på havbunnen. Slike undersøkelser brukes mye rundt felt i drift og til å øke utvinningen. Begge virksomhetene har inntekter fra kontrakter med dagrate, så kontraktsporteføljen sier mye om de neste årene.\n\nSelskapets mål er å dele ut den likviditeten driften ikke trenger, hvert kvartal. Utdelingene vedtas i dollar som et samlet beløp, betales i kroner til aksjonærene i det norske verdipapirregisteret og må godkjennes av aksjonærene først. Fra og med utdelingen for tredje kvartal 2025 er de betalt som tilbakebetaling av innbetalt kapital, og da regnes de ikke som utbytte ved norsk skatt. Det kan gå flere måneder fra en utdeling foreslås til ex-datoen. I september 2026 inngikk selskapet en intensjonsavtale om å slå seg sammen med boreriggselskapet Ventura Offshore mot betaling i nye aksjer. Blir den gjennomført, kommer det inntekter fra flere rigger, men utdelingene skal også fordeles på flere aksjer.\n\nUtbyttet utbetales kvartalsvis — fire utbetalinger i året, og selskapet har betalt utbytte de siste 3 årene. Direkteavkastningen er 17,8 %. En utbetalingsgrad på 106 % betyr at det meste av inntjeningen deles ut — utbyttet er dermed sensitivt for resultatsvingninger.\n\nInntjeningen er tett koblet til olje- og gasspriser, noe som gjør utbyttet mer syklisk enn i defensive sektorer. Historikken viser klare svingninger: høyest utbytte var 1,19 NOK per aksje i 2026, lavest 0,50 NOK i 2024.",
       "beskrivelse_intro": "SED Energy Holdings er et holdingselskap med to virksomheter som begge selger tjenester til olje- og gasselskaper. Selskapet produserer verken olje eller gass selv. Det oppsto i mai 2025, da seismikkselskapet SeaBird Exploration slo seg sammen med Energy Drilling og tok det nye navnet. Regnskapsmessig er det Energy Drilling som regnes som kjøperen. Selskapet er registrert på Kypros, og i tillegg til de vanlige aksjene finnes det B-aksjer uten stemmerett.\n\nEnergy Drilling ble grunnlagt i 2012, har hovedkontor i Singapore og leier ut rigger for tenderassistert boring, mest i Sørøst-Asia. Riggene brukes til produksjonsboring og nye brønner på felt som allerede er bygget ut, så oppdragene henger tettere sammen med produksjonen enn med letingen. SeaBird Exploration har to fartøy som arbeider med havbunnsseismikk, der målingene gjøres med noder plassert på havbunnen. Slike undersøkelser brukes mye rundt felt i drift og til å øke utvinningen. Begge virksomhetene har inntekter fra kontrakter med dagrate, så kontraktsporteføljen sier mye om de neste årene.\n\nSelskapets mål er å dele ut den likviditeten driften ikke trenger, hvert kvartal. Utdelingene vedtas i dollar som et samlet beløp, betales i kroner til aksjonærene i det norske verdipapirregisteret og må godkjennes av aksjonærene først. Fra og med utdelingen for tredje kvartal 2025 er de betalt som tilbakebetaling av innbetalt kapital, og da regnes de ikke som utbytte ved norsk skatt. Det kan gå flere måneder fra en utdeling foreslås til ex-datoen. I september 2026 inngikk selskapet en intensjonsavtale om å slå seg sammen med boreriggselskapet Ventura Offshore mot betaling i nye aksjer. Blir den gjennomført, kommer det inntekter fra flere rigger, men utdelingene skal også fordeles på flere aksjer.",
       "beskrivelse_fakta": "SED Energy Holdings Plc samler inn og bearbeider marine seismiske data for olje- og gassnæringen i Europa, Afrika, Midtøsten, Nord- og Sør-Amerika og Asia-Stillehavsregionen. Selskapet tilbyr 2D-seismikk og kildefartøy for konvensjonell undershoot, 4D-gjentaksundersøkelser, wide azimuth og push reverse, samt langtidsbefraktning og skipsforvaltning, egen kildemodellering og miljøanalyse, og spotbefraktning. Selskapet eier og driver også tenderassisterte borerigger.",
       "valuta": "NOK",
@@ -15763,7 +15763,7 @@
       "inkorporeringsland": "Kypros",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "",
-      "hentet": "2026-11-10T00:29:06Z",
+      "hentet": "2026-11-10T07:45:28Z",
       "annonsert_utbytte": 0.03,
       "annonsert_ex": "2026-12-07",
       "kapital_tilbake": {
@@ -15792,7 +15792,7 @@
       "utbytte_yield": 4.58,
       "utbytte_vekst_5ar": 1.4,
       "payout_ratio": 68.0,
-      "pe_ratio": 16.28,
+      "pe_ratio": 16.56,
       "pb_ratio": 5.43,
       "ex_dato": null,
       "betaling_dato": null,
@@ -16004,7 +16004,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet ligger omtrent på samme nivå som i 2022, men har svingt underveis og er satt ned to ganger. Dagens yield på 4,6 % ligger over aksjens eget 5-årssnitt på 2,1 %.",
-      "hentet": "2026-11-10T00:29:08Z",
+      "hentet": "2026-11-10T07:45:30Z",
       "arsrate_kilde": "betalt_12m",
       "ask_status": "ja"
     },
@@ -16021,7 +16021,7 @@
       "utbytte_yield": 0.0,
       "utbytte_vekst_5ar": 18.9,
       "payout_ratio": 0.0,
-      "pe_ratio": 23.44,
+      "pe_ratio": 23.98,
       "pb_ratio": 0.87,
       "ex_dato": null,
       "betaling_dato": null,
@@ -16109,7 +16109,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet er ned fra 2,99 til 0,30 kroner per aksje i 2022–2025, men for 2024 har vi ikke registrert noe utbytte. Spennet er stort: høyeste år er 19,9 ganger det laveste, så størrelsen på utbetalingen er lite forutsigbar fra år til år.",
-      "hentet": "2026-11-10T00:29:10Z",
+      "hentet": "2026-11-10T07:45:32Z",
       "arsrate_kilde": "stoppet",
       "ask_status": "ja"
     },
@@ -16126,7 +16126,7 @@
       "utbytte_yield": 3.93,
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 65.0,
-      "pe_ratio": 11.55,
+      "pe_ratio": 11.66,
       "pb_ratio": 2.43,
       "ex_dato": null,
       "betaling_dato": null,
@@ -16253,7 +16253,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet har steget uten et eneste kutt fra 2022–2025, fra 0,75 til 1,86 kroner per aksje. Samlet er utbetalingen 2,5-doblet i perioden. Dagens yield på 3,9 % ligger nær aksjens eget 4-årssnitt på 3,5 %.",
-      "hentet": "2026-11-10T00:29:16Z",
+      "hentet": "2026-11-10T07:45:39Z",
       "ask_status": "ja"
     },
     {
@@ -16269,7 +16269,7 @@
       "utbytte_yield": 0.62,
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 20.0,
-      "pe_ratio": 32.72,
+      "pe_ratio": 33.23,
       "pb_ratio": 2.69,
       "ex_dato": null,
       "betaling_dato": null,
@@ -16329,7 +16329,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "",
-      "hentet": "2026-11-10T00:29:18Z",
+      "hentet": "2026-11-10T07:45:40Z",
       "ask_status": "ja"
     },
     {
@@ -16345,7 +16345,7 @@
       "utbytte_yield": 7.42,
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 115.0,
-      "pe_ratio": 16.84,
+      "pe_ratio": 17.17,
       "pb_ratio": 6.61,
       "ex_dato": null,
       "betaling_dato": null,
@@ -16479,7 +16479,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "",
-      "hentet": "2026-11-10T00:29:20Z",
+      "hentet": "2026-11-10T07:45:42Z",
       "kapital_tilbake": {
         "andel": 1.0,
         "melding_dato": "2026-11-05",
@@ -16543,7 +16543,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "",
-      "hentet": "2026-11-10T00:29:22Z",
+      "hentet": "2026-11-10T07:45:44Z",
       "ask_status": "ja"
     },
     {
@@ -16559,7 +16559,7 @@
       "utbytte_yield": 12.37,
       "utbytte_vekst_5ar": 9.5,
       "payout_ratio": 125.0,
-      "pe_ratio": 10.13,
+      "pe_ratio": 10.3,
       "pb_ratio": 1.05,
       "ex_dato": null,
       "betaling_dato": null,
@@ -16679,7 +16679,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet har gått opp fra 1,70 til 2,30 kroner per aksje i 2022–2025, men det er satt ned én gang underveis. Høyeste år er 2,3 ganger det laveste — merkbare svingninger, men innenfor et gjenkjennelig spenn. For 2026 er det betalt 1,49 kroner per aksje, mot 2,30 kroner for 2025. Dagens yield på 12,4 % ligger nær aksjens eget 5-årssnitt på 13,8 %.",
-      "hentet": "2026-11-10T00:29:23Z",
+      "hentet": "2026-11-10T07:45:46Z",
       "ask_status": "ja"
     },
     {
@@ -16695,7 +16695,7 @@
       "utbytte_yield": 0.0,
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 0.0,
-      "pe_ratio": 15.91,
+      "pe_ratio": 15.75,
       "pb_ratio": 1.2,
       "ex_dato": null,
       "betaling_dato": null,
@@ -16726,7 +16726,7 @@
       "inkorporeringsland": "Bermuda",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "",
-      "hentet": "2026-11-10T00:29:25Z",
+      "hentet": "2026-11-10T07:45:47Z",
       "ask_status": "utenfor_eos"
     },
     {
@@ -16854,7 +16854,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet har gått opp fra 0,37 til 0,56 kroner per aksje i 2023–2025, men det er satt ned én gang underveis. Spennet er stort: høyeste år er 12,3 ganger det laveste, så størrelsen på utbetalingen er lite forutsigbar fra år til år.",
-      "hentet": "2026-11-10T00:29:27Z",
+      "hentet": "2026-11-10T07:45:50Z",
       "arsrate_kilde": "stoppet",
       "ask_status": "ja"
     },
@@ -16871,7 +16871,7 @@
       "utbytte_yield": 14.59,
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 0.0,
-      "pe_ratio": 13.28,
+      "pe_ratio": 13.39,
       "pb_ratio": 1.04,
       "ex_dato": null,
       "betaling_dato": null,
@@ -16990,7 +16990,7 @@
       "inkorporeringsland": "Bermuda",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "",
-      "hentet": "2026-11-10T00:29:29Z",
+      "hentet": "2026-11-10T07:45:52Z",
       "arsrate_kilde": "siste_utbetalinger",
       "arsrate_antall": 4,
       "ask_status": "utenfor_eos"
@@ -17161,7 +17161,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet har steget uten et eneste kutt fra 2022–2025, fra 0,60 til 0,90 kroner per aksje. Samlet er utbetalingen 1,5-doblet i perioden. Dagens yield på 10,5 % ligger over aksjens eget 5-årssnitt på 8,1 %.",
-      "hentet": "2026-11-10T00:29:31Z",
+      "hentet": "2026-11-10T07:45:55Z",
       "kapital_tilbake": {
         "andel": 1.0,
         "melding_dato": "2026-10-29",
@@ -17188,7 +17188,7 @@
       "utbytte_yield": 0.0,
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 0.0,
-      "pe_ratio": 10.56,
+      "pe_ratio": 10.75,
       "pb_ratio": 1.35,
       "ex_dato": null,
       "betaling_dato": null,
@@ -17219,7 +17219,7 @@
       "inkorporeringsland": "Storbritannia",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "",
-      "hentet": "2026-11-10T00:29:32Z",
+      "hentet": "2026-11-10T07:45:56Z",
       "ask_status": "utenfor_eos"
     },
     {
@@ -17278,7 +17278,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "",
-      "hentet": "2026-11-10T00:29:33Z",
+      "hentet": "2026-11-10T07:45:58Z",
       "ask_status": "ja"
     },
     {
@@ -17305,9 +17305,9 @@
         2025,
         2026
       ],
-      "siste_utbytte": 0.2397,
+      "siste_utbytte": 0.2404,
       "siste_utbytte_dato": "2026-09-29",
-      "utbytte_12m": 0.7794,
+      "utbytte_12m": 0.7809,
       "utbytte_12m_antall": 4,
       "utbytte_12m_liste": [
         {
@@ -17320,11 +17320,11 @@
         },
         {
           "ex_dato": "2026-06-29",
-          "belop": 0.2397
+          "belop": 0.2404
         },
         {
           "ex_dato": "2026-09-29",
-          "belop": 0.2397
+          "belop": 0.2404
         }
       ],
       "utbetalinger": [
@@ -17346,11 +17346,11 @@
         ],
         [
           "2026-06-29",
-          0.2397
+          0.2404
         ],
         [
           "2026-09-29",
-          0.2397
+          0.2404
         ]
       ],
       "utbytte_runde": [],
@@ -17402,7 +17402,7 @@
       "inkorporeringsland": "Sverige",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "",
-      "hentet": "2026-11-10T00:29:35Z",
+      "hentet": "2026-11-10T07:45:59Z",
       "ask_status": "ja"
     },
     {
@@ -17418,7 +17418,7 @@
       "utbytte_yield": 2.36,
       "utbytte_vekst_5ar": 60.7,
       "payout_ratio": 22.0,
-      "pe_ratio": 6.79,
+      "pe_ratio": 6.91,
       "pb_ratio": 1.17,
       "ex_dato": "2026-11-11",
       "betaling_dato": "2026-11-19",
@@ -17577,7 +17577,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet har steget uten et eneste kutt fra 2022–2025, fra 4,00 til 20,00 kroner per aksje. Veksten er kraftig: siste år er 5,0 ganger det første. Så bratte løft holder sjelden samme takt over tid. Dagens yield på 2,4 % ligger over aksjens eget 5-årssnitt på 1,2 %.",
-      "hentet": "2026-11-10T00:29:36Z",
+      "hentet": "2026-11-10T07:46:00Z",
       "annonsert_utbytte": 8.5,
       "annonsert_ex": "2026-11-11",
       "ask_status": "ja"
@@ -17595,7 +17595,7 @@
       "utbytte_yield": 5.67,
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 243.0,
-      "pe_ratio": 264.55,
+      "pe_ratio": 42.79,
       "pb_ratio": 1.73,
       "ex_dato": null,
       "betaling_dato": null,
@@ -17718,7 +17718,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet gikk ned fra 3,00 kroner per aksje i 2022 til 2,00 i 2025, og det er satt ned to ganger i perioden. Spennet er stort: høyeste år er 3,0 ganger det laveste, så størrelsen på utbetalingen er lite forutsigbar fra år til år. For 2026 er det betalt 3,30 kroner per aksje, mot 2,00 kroner for 2025. Tallene er uten særutbytte, som var 20,40 kroner i 2025. Dagens yield på 5,7 % ligger over aksjens eget 5-årssnitt på 2,6 %.",
-      "hentet": "2026-11-10T00:29:38Z",
+      "hentet": "2026-11-10T07:46:03Z",
       "ask_status": "ja",
       "saerutbytte": [
         {
@@ -17865,7 +17865,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet er ned fra 10,00 til 3,50 kroner per aksje i 2022–2025, men for 2024 har vi ikke registrert noe utbytte. Høyeste år er 2,9 ganger det laveste — merkbare svingninger, men innenfor et gjenkjennelig spenn. For 2026 er det betalt 8,00 kroner per aksje, mot 3,50 kroner for 2025. Dagens yield på 1,9 % ligger over aksjens eget 5-årssnitt på 1,5 %.",
-      "hentet": "2026-11-10T00:29:40Z",
+      "hentet": "2026-11-10T07:46:05Z",
       "arsrate_kilde": "betalt_12m",
       "ask_status": "ja"
     },
@@ -18025,7 +18025,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet har steget uten et eneste kutt fra 2022–2025, fra 16,20 til 30,10 kroner per aksje. Samlet er utbetalingen 1,9-doblet i perioden. For 2026 er det betalt 24,50 kroner per aksje, mot 30,10 kroner for 2025. Dagens yield på 5,4 % ligger over aksjens eget 5-årssnitt på 4,1 %.",
-      "hentet": "2026-11-10T00:29:42Z",
+      "hentet": "2026-11-10T07:46:07Z",
       "ask_status": "ja"
     },
     {
@@ -18041,7 +18041,7 @@
       "utbytte_yield": 7.7,
       "utbytte_vekst_5ar": 12.4,
       "payout_ratio": 93.0,
-      "pe_ratio": 11.34,
+      "pe_ratio": 12.0,
       "pb_ratio": 0.8,
       "ex_dato": null,
       "betaling_dato": null,
@@ -18173,7 +18173,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet har steget uten et eneste kutt fra 2022–2025, fra 5,35 til 9,50 kroner per aksje. Samlet er utbetalingen 1,8-doblet i perioden. For 2026 er det betalt 11,70 kroner per aksje, mot 9,50 kroner for 2025. Dagens yield på 7,7 % ligger over aksjens eget 5-årssnitt på 4,5 %.",
-      "hentet": "2026-11-10T00:29:45Z",
+      "hentet": "2026-11-10T07:46:10Z",
       "ask_status": "ja"
     },
     {
@@ -18333,7 +18333,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet har steget uten et eneste kutt fra 2022–2025, fra 10,50 til 13,50 kroner per aksje. Nivået har holdt seg jevnt fra år til år. Dagens yield på 7,4 % ligger over aksjens eget 5-årssnitt på 6,0 %.",
-      "hentet": "2026-11-10T00:29:48Z",
+      "hentet": "2026-11-10T07:46:14Z",
       "ask_status": "ja"
     },
     {
@@ -18422,7 +18422,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "",
-      "hentet": "2026-11-10T00:29:49Z",
+      "hentet": "2026-11-10T07:46:16Z",
       "ask_status": "ja",
       "hendelse": {
         "type": "fusjon_overtar",
@@ -18577,7 +18577,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet har vært stabilt eller stigende gjennom hele 2022–2025, uten kutt. Nivået har holdt seg jevnt fra år til år. For 2026 er det betalt 5,00 kroner per aksje, mot 9,00 kroner for 2025. Dagens yield på 4,2 % ligger nær aksjens eget 5-årssnitt på 5,0 %.",
-      "hentet": "2026-11-10T00:29:53Z",
+      "hentet": "2026-11-10T07:46:20Z",
       "ask_status": "ja"
     },
     {
@@ -18721,7 +18721,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet har steget uten et eneste kutt fra 2022–2025, fra 5,50 til 20,00 kroner per aksje. Veksten er kraftig: siste år er 3,6 ganger det første. Så bratte løft holder sjelden samme takt over tid. For 2026 er det betalt 22,00 kroner per aksje, mot 20,00 kroner for 2025. Dagens yield på 7,4 % ligger over aksjens eget 5-årssnitt på 3,9 %.",
-      "hentet": "2026-11-10T00:29:54Z",
+      "hentet": "2026-11-10T07:46:21Z",
       "ask_status": "ja"
     },
     {
@@ -18857,7 +18857,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet har steget uten et eneste kutt fra 2022–2025, fra 7,84 til 10,50 kroner per aksje. Nivået har holdt seg jevnt fra år til år. Dagens yield på 6,5 % ligger over aksjens eget 5-årssnitt på 5,0 %.",
-      "hentet": "2026-11-10T00:29:56Z",
+      "hentet": "2026-11-10T07:46:23Z",
       "ask_status": "growth"
     },
     {
@@ -18990,7 +18990,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet har gått opp fra 7,74 til 9,00 kroner per aksje i 2022–2025, men det er satt ned én gang underveis. For 2026 er det betalt 4,90 kroner per aksje, mot 9,00 kroner for 2025. Dagens yield på 4,4 % er lavere enn aksjens eget 5-årssnitt på 6,4 %.",
-      "hentet": "2026-11-10T00:29:57Z",
+      "hentet": "2026-11-10T07:46:25Z",
       "ask_status": "growth"
     },
     {
@@ -19126,7 +19126,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet har gått opp fra 8,40 til 10,50 kroner per aksje i 2022–2025, men det er satt ned én gang underveis. Dagens yield på 6,8 % ligger over aksjens eget 5-årssnitt på 5,4 %.",
-      "hentet": "2026-11-10T00:29:59Z",
+      "hentet": "2026-11-10T07:46:27Z",
       "ask_status": "growth",
       "hendelse": {
         "type": "fusjon",
@@ -19285,7 +19285,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet har steget uten et eneste kutt fra 2022–2025, fra 8,00 til 15,00 kroner per aksje. Samlet er utbetalingen 1,9-doblet i perioden. For 2026 er det betalt 13,50 kroner per aksje, mot 15,00 kroner for 2025. Dagens yield på 6,5 % ligger over aksjens eget 5-årssnitt på 4,5 %.",
-      "hentet": "2026-11-10T00:30:01Z",
+      "hentet": "2026-11-10T07:46:29Z",
       "ask_status": "growth"
     },
     {
@@ -19301,7 +19301,7 @@
       "utbytte_yield": 5.69,
       "utbytte_vekst_5ar": 0.1,
       "payout_ratio": 112.0,
-      "pe_ratio": 19.61,
+      "pe_ratio": 19.39,
       "pb_ratio": 0.2,
       "ex_dato": null,
       "betaling_dato": null,
@@ -19423,7 +19423,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet ligger omtrent på samme nivå som i 2022, men har svingt underveis og er satt ned én gang. Dagens yield på 5,7 % er lavere enn aksjens eget 5-årssnitt på 7,3 %.",
-      "hentet": "2026-11-10T00:30:03Z",
+      "hentet": "2026-11-10T07:46:31Z",
       "ask_status": "growth"
     },
     {
@@ -19567,7 +19567,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet har vært stabilt eller stigende gjennom hele 2022–2025, uten kutt. Nivået har holdt seg jevnt fra år til år. For 2026 er det betalt 10,00 kroner per aksje, mot 9,00 kroner for 2025. Dagens yield på 7,1 % ligger over aksjens eget 5-årssnitt på 5,3 %.",
-      "hentet": "2026-11-10T00:30:05Z",
+      "hentet": "2026-11-10T07:46:34Z",
       "ask_status": "growth"
     },
     {
@@ -19583,7 +19583,7 @@
       "utbytte_yield": 8.8,
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 30.0,
-      "pe_ratio": 5.47,
+      "pe_ratio": 5.56,
       "pb_ratio": 1.58,
       "ex_dato": null,
       "betaling_dato": null,
@@ -19594,48 +19594,48 @@
         2025,
         2026
       ],
-      "siste_utbytte": 6.0182,
+      "siste_utbytte": 6.0231,
       "siste_utbytte_dato": "2026-10-15",
-      "utbytte_12m": 14.0111,
+      "utbytte_12m": 14.0226,
       "utbytte_12m_antall": 4,
       "utbytte_12m_liste": [
         {
           "ex_dato": "2026-01-06",
-          "belop": 0.4702
+          "belop": 0.4706
         },
         {
           "ex_dato": "2026-04-14",
-          "belop": 1.5046
+          "belop": 1.5058
         },
         {
           "ex_dato": "2026-06-02",
-          "belop": 6.0182
+          "belop": 6.0231
         },
         {
           "ex_dato": "2026-10-15",
-          "belop": 6.0182
+          "belop": 6.0231
         }
       ],
       "utbetalinger": [
         [
           "2025-10-01",
-          0.4702
+          0.4706
         ],
         [
           "2026-01-06",
-          0.4702
+          0.4706
         ],
         [
           "2026-04-14",
-          1.5046
+          1.5058
         ],
         [
           "2026-06-02",
-          6.0182
+          6.0231
         ],
         [
           "2026-10-15",
-          6.0182
+          6.0231
         ]
       ],
       "utbytte_runde": [],
@@ -19646,22 +19646,22 @@
         "2022": 0.0,
         "2023": 0.0,
         "2024": 0.0,
-        "2025": 0.4702
+        "2025": 0.4706
       },
       "utbytte_forste_ar": 2025,
       "historiske_utbytter": [
         {
           "ar": 2025,
           "utbytte": 0.47,
-          "yield": 0.29,
+          "yield": 0.3,
           "maaneder": [
             10
           ]
         },
         {
           "ar": 2026,
-          "utbytte": 14.01,
-          "yield": 8.79,
+          "utbytte": 14.02,
+          "yield": 8.8,
           "maaneder": [
             1,
             4,
@@ -19686,7 +19686,7 @@
       "inkorporeringsland": "Belgia",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "",
-      "hentet": "2026-11-10T00:30:07Z",
+      "hentet": "2026-11-10T07:46:36Z",
       "ask_status": "ja"
     },
     {
@@ -19697,7 +19697,7 @@
       "pris": 6.74,
       "52u_hoy": 7.5,
       "52u_lav": 5.22,
-      "markedsverdi_mrd": 0.8,
+      "markedsverdi_mrd": 0.7,
       "utbytte_per_aksje": 0.17,
       "utbytte_yield": 2.52,
       "utbytte_vekst_5ar": 0.0,
@@ -19721,58 +19721,58 @@
         2025,
         2026
       ],
-      "siste_utbytte": 0.1693,
+      "siste_utbytte": 0.1694,
       "siste_utbytte_dato": "2026-05-28",
-      "utbytte_12m": 0.1693,
+      "utbytte_12m": 0.1694,
       "utbytte_12m_antall": 1,
       "utbytte_12m_liste": [
         {
           "ex_dato": "2026-05-28",
-          "belop": 0.1693
+          "belop": 0.1694
         }
       ],
       "utbetalinger": [
         [
           "2021-08-30",
-          0.2821
+          0.2823
         ],
         [
           "2022-05-23",
-          0.6582
+          0.6588
         ],
         [
           "2022-08-30",
-          0.2821
+          0.2823
         ],
         [
           "2023-05-25",
-          0.3761
+          0.3764
         ],
         [
           "2025-05-30",
-          0.2821
+          0.2823
         ],
         [
           "2026-05-28",
-          0.1693
+          0.1694
         ]
       ],
       "utbytte_runde": [],
       "utbytte_supplert": [],
       "utbytte_korrigert": [],
       "utbytte_per_ar": {
-        "2021": 0.2821,
-        "2022": 0.9403,
-        "2023": 0.3761,
+        "2021": 0.2823,
+        "2022": 0.9411,
+        "2023": 0.3764,
         "2024": 0.0,
-        "2025": 0.2821
+        "2025": 0.2823
       },
       "utbytte_forste_ar": 2005,
       "historiske_utbytter": [
         {
           "ar": 2022,
           "utbytte": 0.94,
-          "yield": 13.95,
+          "yield": 13.96,
           "maaneder": [
             5,
             8
@@ -19781,7 +19781,7 @@
         {
           "ar": 2023,
           "utbytte": 0.38,
-          "yield": 5.58,
+          "yield": 5.59,
           "maaneder": [
             5
           ]
@@ -19816,7 +19816,7 @@
       "inkorporeringsland": "Bermuda",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet er ned fra 0,94 til 0,28 kroner per aksje i 2022–2025, men for 2024 har vi ikke registrert noe utbytte. Spennet er stort: høyeste år er 3,4 ganger det laveste, så størrelsen på utbetalingen er lite forutsigbar fra år til år. For 2026 er det betalt 0,17 kroner per aksje, mot 0,28 kroner for 2025. Dagens yield på 2,5 % er lavere enn aksjens eget 5-årssnitt på 5,6 %.",
-      "hentet": "2026-11-10T00:30:09Z",
+      "hentet": "2026-11-10T07:46:38Z",
       "ask_status": "utenfor_eos"
     },
     {
@@ -19945,7 +19945,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "",
-      "hentet": "2026-11-10T00:30:12Z",
+      "hentet": "2026-11-10T07:46:41Z",
       "ask_status": "ja"
     },
     {
@@ -19971,7 +19971,7 @@
       "utbytteaar": [
         2024
       ],
-      "siste_utbytte": 0.1881,
+      "siste_utbytte": 0.1882,
       "siste_utbytte_dato": "2024-11-28",
       "utbytte_12m": 0,
       "utbytte_12m_antall": 0,
@@ -19983,19 +19983,19 @@
         ],
         [
           "2024-03-01",
-          0.4702
+          0.4706
         ],
         [
           "2024-05-31",
-          0.9403
+          0.9411
         ],
         [
           "2024-08-21",
-          0.9403
+          0.9411
         ],
         [
           "2024-11-28",
-          0.1881
+          0.1882
         ]
       ],
       "utbytte_runde": [],
@@ -20005,14 +20005,14 @@
         "2021": 0.0,
         "2022": 0.0,
         "2023": 0.0,
-        "2024": 3.0629,
+        "2024": 3.065,
         "2025": 0.0
       },
       "utbytte_forste_ar": 2024,
       "historiske_utbytter": [
         {
           "ar": 2024,
-          "utbytte": 3.06,
+          "utbytte": 3.07,
           "yield": 9.99,
           "maaneder": [
             1,
@@ -20040,7 +20040,7 @@
       "inkorporeringsland": "Bermuda",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "",
-      "hentet": "2026-11-10T00:30:13Z",
+      "hentet": "2026-11-10T07:46:43Z",
       "ask_status": "utenfor_eos"
     },
     {
@@ -20056,7 +20056,7 @@
       "utbytte_yield": 10.7,
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 0,
-      "pe_ratio": 121.5,
+      "pe_ratio": 115.71,
       "pb_ratio": 1.72,
       "ex_dato": null,
       "betaling_dato": null,
@@ -20168,7 +20168,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "",
-      "hentet": "2026-11-10T00:30:16Z",
+      "hentet": "2026-11-10T07:46:46Z",
       "arsrate_kilde": "betalt_12m",
       "ask_status": "growth"
     },
@@ -20185,7 +20185,7 @@
       "utbytte_yield": 1.92,
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 0.0,
-      "pe_ratio": 150.63,
+      "pe_ratio": 154.46,
       "pb_ratio": 1.26,
       "ex_dato": null,
       "betaling_dato": null,
@@ -20255,7 +20255,7 @@
       "inkorporeringsland": "Marshalløyene",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "",
-      "hentet": "2026-11-10T00:30:18Z",
+      "hentet": "2026-11-10T07:46:47Z",
       "ask_status": "growth"
     },
     {
@@ -20352,7 +20352,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet gikk ned fra 1,00 kroner per aksje i 2022 til 0,50 i 2024, og det er satt ned én gang i perioden. Høyeste år er 2,0 ganger det laveste — merkbare svingninger, men innenfor et gjenkjennelig spenn.",
-      "hentet": "2026-11-10T00:30:19Z",
+      "hentet": "2026-11-10T07:46:49Z",
       "ask_status": "growth"
     },
     {
@@ -20399,7 +20399,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "",
-      "hentet": "2026-11-10T00:30:20Z",
+      "hentet": "2026-11-10T07:46:50Z",
       "ask_status": "growth"
     },
     {
@@ -20446,7 +20446,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "",
-      "hentet": "2026-11-10T00:30:22Z",
+      "hentet": "2026-11-10T07:46:53Z",
       "ask_status": "growth"
     },
     {
@@ -20561,7 +20561,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet har vært stabilt eller stigende gjennom hele 2023–2025, uten kutt. Dagens yield på 1,2 % ligger nær aksjens eget 3-årssnitt på 1,0 %.",
-      "hentet": "2026-11-10T00:30:24Z",
+      "hentet": "2026-11-10T07:46:54Z",
       "ask_status": "ja"
     },
     {
@@ -20577,7 +20577,7 @@
       "utbytte_yield": 6.27,
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 90.0,
-      "pe_ratio": 14.42,
+      "pe_ratio": 14.89,
       "pb_ratio": 6.22,
       "ex_dato": null,
       "betaling_dato": null,
@@ -20637,7 +20637,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "",
-      "hentet": "2026-11-10T00:30:26Z",
+      "hentet": "2026-11-10T07:46:56Z",
       "ask_status": "ja"
     },
     {
@@ -20653,7 +20653,7 @@
       "utbytte_yield": 1.75,
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 83.0,
-      "pe_ratio": 45.47,
+      "pe_ratio": 45.68,
       "pb_ratio": 1.94,
       "ex_dato": null,
       "betaling_dato": null,
@@ -20663,20 +20663,20 @@
       "utbytteaar": [
         2026
       ],
-      "siste_utbytte": 1.7204,
+      "siste_utbytte": 1.7258,
       "siste_utbytte_dato": "2026-05-27",
-      "utbytte_12m": 1.7204,
+      "utbytte_12m": 1.7258,
       "utbytte_12m_antall": 1,
       "utbytte_12m_liste": [
         {
           "ex_dato": "2026-05-27",
-          "belop": 1.7204
+          "belop": 1.7258
         }
       ],
       "utbetalinger": [
         [
           "2026-05-27",
-          1.7204
+          1.7258
         ]
       ],
       "utbytte_runde": [],
@@ -20693,7 +20693,7 @@
       "historiske_utbytter": [
         {
           "ar": 2026,
-          "utbytte": 1.72,
+          "utbytte": 1.73,
           "yield": 1.7,
           "maaneder": [
             5
@@ -20713,7 +20713,7 @@
       "inkorporeringsland": "Sveits",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "",
-      "hentet": "2026-11-10T00:30:27Z",
+      "hentet": "2026-11-10T07:46:57Z",
       "ask_status": "utenfor_eos"
     },
     {
@@ -20729,8 +20729,8 @@
       "utbytte_yield": 0.0,
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 0.0,
-      "pe_ratio": 22.5,
-      "pb_ratio": 1.47,
+      "pe_ratio": 52.72,
+      "pb_ratio": 1.23,
       "ex_dato": null,
       "betaling_dato": null,
       "rapport_dato": "2027-02-11",
@@ -20773,7 +20773,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "",
-      "hentet": "2026-11-10T00:30:29Z",
+      "hentet": "2026-11-10T07:46:59Z",
       "ask_status": "ja"
     },
     {
@@ -20789,7 +20789,7 @@
       "utbytte_yield": 0.0,
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 0.0,
-      "pe_ratio": 24.52,
+      "pe_ratio": 31.67,
       "pb_ratio": 1.56,
       "ex_dato": null,
       "betaling_dato": null,
@@ -20870,7 +20870,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "",
-      "hentet": "2026-11-10T00:30:30Z",
+      "hentet": "2026-11-10T07:47:01Z",
       "ask_status": "growth"
     },
     {
@@ -20943,7 +20943,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "",
-      "hentet": "2026-11-10T00:30:34Z",
+      "hentet": "2026-11-10T07:47:05Z",
       "ask_status": "ja"
     },
     {
@@ -21052,7 +21052,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "",
-      "hentet": "2026-11-10T00:30:38Z",
+      "hentet": "2026-11-10T07:47:10Z",
       "kapital_tilbake": {
         "andel": 1.0,
         "melding_dato": "2026-10-30",
@@ -21174,7 +21174,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet har steget uten et eneste kutt fra 2022–2025, fra 0,18 til 0,42 kroner per aksje. Samlet er utbetalingen 2,3-doblet i perioden.",
-      "hentet": "2026-11-10T00:30:39Z",
+      "hentet": "2026-11-10T07:47:12Z",
       "arsrate_kilde": "stoppet",
       "ask_status": "ja"
     },
@@ -21191,7 +21191,7 @@
       "utbytte_yield": 17.02,
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 149.0,
-      "pe_ratio": 8.81,
+      "pe_ratio": 9.15,
       "pb_ratio": 9.05,
       "ex_dato": null,
       "betaling_dato": null,
@@ -21205,12 +21205,12 @@
       ],
       "siste_utbytte": 2.05,
       "siste_utbytte_dato": "2026-09-03",
-      "utbytte_12m": 8.2487,
+      "utbytte_12m": 8.2508,
       "utbytte_12m_antall": 4,
       "utbytte_12m_liste": [
         {
           "ex_dato": "2025-12-02",
-          "belop": 2.0687
+          "belop": 2.0708
         },
         {
           "ex_dato": "2026-03-05",
@@ -21228,27 +21228,27 @@
       "utbetalinger": [
         [
           "2024-09-12",
-          2.0687
+          2.0708
         ],
         [
           "2024-12-03",
-          2.0687
+          2.0708
         ],
         [
           "2025-03-11",
-          2.0687
+          2.0708
         ],
         [
           "2025-06-03",
-          2.0687
+          2.0708
         ],
         [
           "2025-09-02",
-          2.0687
+          2.0708
         ],
         [
           "2025-12-02",
-          2.0687
+          2.0708
         ],
         [
           "2026-03-05",
@@ -21270,8 +21270,8 @@
         "2021": 0.0,
         "2022": 0.0,
         "2023": 0.0,
-        "2024": 4.1375,
-        "2025": 8.275
+        "2024": 4.1416,
+        "2025": 8.2831
       },
       "utbytte_forste_ar": 2024,
       "historiske_utbytter": [
@@ -21286,8 +21286,8 @@
         },
         {
           "ar": 2025,
-          "utbytte": 8.27,
-          "yield": 16.75,
+          "utbytte": 8.28,
+          "yield": 16.77,
           "maaneder": [
             3,
             6,
@@ -21322,7 +21322,7 @@
       "inkorporeringsland": "Bermuda",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "",
-      "hentet": "2026-11-10T00:30:42Z",
+      "hentet": "2026-11-10T07:47:14Z",
       "ask_status": "utenfor_eos"
     },
     {
@@ -21369,7 +21369,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "",
-      "hentet": "2026-11-10T00:30:43Z",
+      "hentet": "2026-11-10T07:47:16Z",
       "ask_status": "ja"
     },
     {
@@ -21385,7 +21385,7 @@
       "utbytte_yield": 5.71,
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 8.0,
-      "pe_ratio": 1.35,
+      "pe_ratio": 1.31,
       "pb_ratio": 0.12,
       "ex_dato": null,
       "betaling_dato": null,
@@ -21458,7 +21458,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "",
-      "hentet": "2026-11-10T00:30:45Z",
+      "hentet": "2026-11-10T07:47:18Z",
       "ask_status": "growth"
     },
     {
@@ -21474,7 +21474,7 @@
       "utbytte_yield": 0.0,
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 0.0,
-      "pe_ratio": 25.04,
+      "pe_ratio": 24.69,
       "pb_ratio": 0.96,
       "ex_dato": null,
       "betaling_dato": null,
@@ -21537,7 +21537,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "",
-      "hentet": "2026-11-10T00:30:47Z",
+      "hentet": "2026-11-10T07:47:20Z",
       "ask_status": "ja"
     },
     {
@@ -21689,7 +21689,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "Utbyttet har vært stabilt eller stigende gjennom hele 2022–2025, uten kutt. Nivået har holdt seg jevnt fra år til år. For 2026 er det betalt 2,50 kroner per aksje, mot 2,25 kroner for 2025. Tallene er uten særutbytte, som var 85,66 kroner i 2024 og 2,22 kroner i 2025. Dagens yield på 1,1 % ligger over aksjens eget 5-årssnitt på 0,9 %.",
-      "hentet": "2026-11-10T00:30:48Z",
+      "hentet": "2026-11-10T07:47:22Z",
       "ask_status": "ja",
       "saerutbytte": [
         {
@@ -21722,7 +21722,7 @@
       "utbytte_yield": 0.0,
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 0.0,
-      "pe_ratio": 63.0,
+      "pe_ratio": 65.58,
       "pb_ratio": 5.08,
       "ex_dato": null,
       "betaling_dato": null,
@@ -21763,7 +21763,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "",
-      "hentet": "2026-11-10T00:30:50Z",
+      "hentet": "2026-11-10T07:47:24Z",
       "ask_status": "ja"
     },
     {
@@ -21819,7 +21819,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "",
-      "hentet": "2026-11-10T00:30:51Z",
+      "hentet": "2026-11-10T07:47:25Z",
       "ask_status": "ja"
     },
     {
@@ -21835,7 +21835,7 @@
       "utbytte_yield": 3.22,
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 46.0,
-      "pe_ratio": 13.62,
+      "pe_ratio": 13.94,
       "pb_ratio": 2.01,
       "ex_dato": null,
       "betaling_dato": null,
@@ -21895,7 +21895,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "",
-      "hentet": "2026-11-10T00:30:52Z",
+      "hentet": "2026-11-10T07:47:27Z",
       "ask_status": "ja"
     },
     {
@@ -21910,8 +21910,8 @@
       "utbytte_per_aksje": 5.17,
       "utbytte_yield": 12.31,
       "utbytte_vekst_5ar": 0.0,
-      "payout_ratio": 284.1,
-      "pe_ratio": 23.08,
+      "payout_ratio": 285.6,
+      "pe_ratio": 23.2,
       "pb_ratio": 0.0,
       "ex_dato": null,
       "betaling_dato": null,
@@ -21964,7 +21964,7 @@
         ],
         [
           "2025-05-12",
-          2.1158
+          2.1178
         ],
         [
           "2025-08-08",
@@ -22016,7 +22016,7 @@
         "2022": 0.0,
         "2023": 0.0,
         "2024": 10.9835,
-        "2025": 12.7367
+        "2025": 12.7387
       },
       "utbytte_forste_ar": 2024,
       "historiske_utbytter": [
@@ -22062,7 +22062,7 @@
       ],
       "snitt_yield_5ar": 0,
       "snitt_yield_ar": 2,
-      "beskrivelse": "Stainless Tankers ble stiftet i Norge i desember 2022 for å gi investorer en ren eksponering mot kjemikalietankskip med lasttanker i rustfritt stål. Skipene er japanskbygde og mellomstore, og eies gjennom datterselskaper på Isle of Man. Selskapet har ingen egen administrasjon. Daglig ledelse, også konsernsjef og finansdirektør, kommer fra forvalteren Tufton Management. Alle skipene seiler i Womar Stainless Tanker Pool, så inntekten følger spotratene i poolen. Womar og Klaveness Finans var de største aksjonærene ved utgangen av 2025, og aksjen handles på Euronext Growth Oslo.\n\nRustfrie tanker tåler mer aggressive laster og kan vaskes grundigere enn belagte tanker, slik at skipet kan bytte last oftere. Det gir tilgang til laster andre skip ikke kan ta. Modellen var fra starten å kjøpe brukte skip, dele ut kontantstrømmen og selge flåten innen fem år. Tre skip ble solgt i 2025, og i august 2026 vedtok styret å selge resten i ordnede former innen atten måneder, før hvert skip trenger nye store verkstedopphold.\n\nStyret vedtar en utdeling i dollar hvert kvartal, og aksjonærene i Oslo får beløpet omregnet til kroner. Politikken er å dele ut all fri kontantstrøm som tilbakebetaling av innbetalt kapital, og de siste utdelingene er gitt på den måten, ikke som utbytte. For en norsk personlig aksjonær skattlegges ikke slike utbetalinger når de kommer. De trekkes fra inngangsverdien, og skatten kommer som en større gevinst når aksjen realiseres. Etter skipssalgene i 2025 kom det en ekstra utdeling, og når hele flåten er solgt, er det ingen fraktinntekter igjen å dele ut av.\n\nUtbyttet utbetales kvartalsvis — fire utbetalinger i året, og selskapet har betalt utbytte de siste 3 årene. Direkteavkastningen er 12,3 %. En utbetalingsgrad på 284 % betyr at det meste av inntjeningen deles ut — utbyttet er dermed sensitivt for resultatsvingninger.\n\nFraktrater varierer kraftig med globalt handelsmønster og flåtekapasitet, og utbyttet svinger tilsvarende. Historikken viser klare svingninger: høyest utbytte var 12,74 NOK per aksje i 2025, lavest 3,78 NOK i 2026.",
+      "beskrivelse": "Stainless Tankers ble stiftet i Norge i desember 2022 for å gi investorer en ren eksponering mot kjemikalietankskip med lasttanker i rustfritt stål. Skipene er japanskbygde og mellomstore, og eies gjennom datterselskaper på Isle of Man. Selskapet har ingen egen administrasjon. Daglig ledelse, også konsernsjef og finansdirektør, kommer fra forvalteren Tufton Management. Alle skipene seiler i Womar Stainless Tanker Pool, så inntekten følger spotratene i poolen. Womar og Klaveness Finans var de største aksjonærene ved utgangen av 2025, og aksjen handles på Euronext Growth Oslo.\n\nRustfrie tanker tåler mer aggressive laster og kan vaskes grundigere enn belagte tanker, slik at skipet kan bytte last oftere. Det gir tilgang til laster andre skip ikke kan ta. Modellen var fra starten å kjøpe brukte skip, dele ut kontantstrømmen og selge flåten innen fem år. Tre skip ble solgt i 2025, og i august 2026 vedtok styret å selge resten i ordnede former innen atten måneder, før hvert skip trenger nye store verkstedopphold.\n\nStyret vedtar en utdeling i dollar hvert kvartal, og aksjonærene i Oslo får beløpet omregnet til kroner. Politikken er å dele ut all fri kontantstrøm som tilbakebetaling av innbetalt kapital, og de siste utdelingene er gitt på den måten, ikke som utbytte. For en norsk personlig aksjonær skattlegges ikke slike utbetalinger når de kommer. De trekkes fra inngangsverdien, og skatten kommer som en større gevinst når aksjen realiseres. Etter skipssalgene i 2025 kom det en ekstra utdeling, og når hele flåten er solgt, er det ingen fraktinntekter igjen å dele ut av.\n\nUtbyttet utbetales kvartalsvis — fire utbetalinger i året, og selskapet har betalt utbytte de siste 3 årene. Direkteavkastningen er 12,3 %. En utbetalingsgrad på 286 % betyr at det meste av inntjeningen deles ut — utbyttet er dermed sensitivt for resultatsvingninger.\n\nFraktrater varierer kraftig med globalt handelsmønster og flåtekapasitet, og utbyttet svinger tilsvarende. Historikken viser klare svingninger: høyest utbytte var 12,74 NOK per aksje i 2025, lavest 3,78 NOK i 2026.",
       "beskrivelse_intro": "Stainless Tankers ble stiftet i Norge i desember 2022 for å gi investorer en ren eksponering mot kjemikalietankskip med lasttanker i rustfritt stål. Skipene er japanskbygde og mellomstore, og eies gjennom datterselskaper på Isle of Man. Selskapet har ingen egen administrasjon. Daglig ledelse, også konsernsjef og finansdirektør, kommer fra forvalteren Tufton Management. Alle skipene seiler i Womar Stainless Tanker Pool, så inntekten følger spotratene i poolen. Womar og Klaveness Finans var de største aksjonærene ved utgangen av 2025, og aksjen handles på Euronext Growth Oslo.\n\nRustfrie tanker tåler mer aggressive laster og kan vaskes grundigere enn belagte tanker, slik at skipet kan bytte last oftere. Det gir tilgang til laster andre skip ikke kan ta. Modellen var fra starten å kjøpe brukte skip, dele ut kontantstrømmen og selge flåten innen fem år. Tre skip ble solgt i 2025, og i august 2026 vedtok styret å selge resten i ordnede former innen atten måneder, før hvert skip trenger nye store verkstedopphold.\n\nStyret vedtar en utdeling i dollar hvert kvartal, og aksjonærene i Oslo får beløpet omregnet til kroner. Politikken er å dele ut all fri kontantstrøm som tilbakebetaling av innbetalt kapital, og de siste utdelingene er gitt på den måten, ikke som utbytte. For en norsk personlig aksjonær skattlegges ikke slike utbetalinger når de kommer. De trekkes fra inngangsverdien, og skatten kommer som en større gevinst når aksjen realiseres. Etter skipssalgene i 2025 kom det en ekstra utdeling, og når hele flåten er solgt, er det ingen fraktinntekter igjen å dele ut av.",
       "beskrivelse_fakta": "Stainless Tankers ASA driver sjøtransport med base i Norge. Selskapet ble stiftet i 2022 og har base i Oslo.",
       "valuta": "NOK",
@@ -22070,7 +22070,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "",
-      "hentet": "2026-11-10T00:30:56Z",
+      "hentet": "2026-11-10T07:47:31Z",
       "arsrate_kilde": "siste_utbetalinger",
       "arsrate_antall": 4,
       "kapital_tilbake": {
@@ -22099,7 +22099,7 @@
       "utbytte_yield": 8.17,
       "utbytte_vekst_5ar": 0.0,
       "payout_ratio": 66.0,
-      "pe_ratio": 10.25,
+      "pe_ratio": 10.12,
       "pb_ratio": 1.4,
       "ex_dato": null,
       "betaling_dato": null,
@@ -22179,7 +22179,7 @@
       "inkorporeringsland": "Norge",
       "data_kilde": "yahoo",
       "utbyttehistorikk_tekst": "",
-      "hentet": "2026-11-10T00:30:58Z",
+      "hentet": "2026-11-10T07:47:34Z",
       "kapital_tilbake": {
         "andel": 1.0,
         "melding_dato": "2026-08-27",
@@ -22189,9 +22189,6 @@
     }
   ],
   "osebx_historikk": {
-    "2024-11-05": 1432.66,
-    "2024-11-06": 1414.43,
-    "2024-11-07": 1421.23,
     "2024-11-08": 1416.42,
     "2024-11-11": 1419.61,
     "2024-11-12": 1411.19,
@@ -22689,6 +22686,7 @@
     "2026-11-03": 2103.14,
     "2026-11-04": 2102.15,
     "2026-11-05": 2080.59,
-    "2026-11-06": 2053.36
+    "2026-11-06": 2053.36,
+    "2026-11-09": 2079.52
   }
 }
