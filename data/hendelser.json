@@ -4149,27 +4149,32 @@
     {
       "ticker": "AKAST",
       "dato": "2026-11-11",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/686168"
     },
     {
       "ticker": "BIEN",
       "dato": "2026-11-11",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/686191"
     },
     {
       "ticker": "GRONG",
       "dato": "2026-11-11",
-      "type": "rapport"
+      "type": "rapport",
+      "url_forsok": 1
     },
     {
       "ticker": "OET",
       "dato": "2026-11-11",
-      "type": "rapport"
+      "type": "rapport",
+      "url_forsok": 1
     },
     {
       "ticker": "SWON",
       "dato": "2026-11-11",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/686170"
     },
     {
       "ticker": "ARCH",
@@ -4692,6 +4697,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "GRONG",
+      "dato": "2027-02-17",
+      "type": "rapport"
+    },
+    {
       "ticker": "OTEC",
       "dato": "2027-02-17",
       "type": "rapport"
@@ -4757,10 +4767,15 @@
       "type": "rapport"
     },
     {
+      "ticker": "SWON",
+      "dato": "2027-03-17",
+      "type": "rapport"
+    },
+    {
       "ticker": "MGN",
       "dato": "2027-03-18",
       "type": "rapport"
     }
   ],
-  "sist_oppdatert": "2026-11-10"
+  "sist_oppdatert": "2026-11-11"
 }
