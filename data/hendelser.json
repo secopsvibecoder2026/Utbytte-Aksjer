@@ -4179,62 +4179,74 @@
     {
       "ticker": "ARCH",
       "dato": "2026-11-12",
-      "type": "rapport"
+      "type": "rapport",
+      "url_forsok": 1
     },
     {
       "ticker": "DOF",
       "dato": "2026-11-12",
-      "type": "rapport"
+      "type": "rapport",
+      "url_forsok": 1
     },
     {
       "ticker": "EIOF",
       "dato": "2026-11-12",
-      "type": "rapport"
+      "type": "rapport",
+      "url_forsok": 1
     },
     {
       "ticker": "ENDUR",
       "dato": "2026-11-12",
-      "type": "rapport"
+      "type": "rapport",
+      "url_forsok": 1
     },
     {
       "ticker": "EQVA",
       "dato": "2026-11-12",
-      "type": "rapport"
+      "type": "rapport",
+      "url_forsok": 1
     },
     {
       "ticker": "GSF",
       "dato": "2026-11-12",
-      "type": "rapport"
+      "type": "rapport",
+      "url_forsok": 1
     },
     {
       "ticker": "MELG",
       "dato": "2026-11-12",
-      "type": "rapport"
+      "type": "rapport",
+      "url_forsok": 1
     },
     {
       "ticker": "NISB",
       "dato": "2026-11-12",
-      "type": "rapport"
+      "type": "rapport",
+      "url_forsok": 1
     },
     {
       "ticker": "NORBT",
       "dato": "2026-11-12",
-      "type": "rapport"
+      "type": "rapport",
+      "url_forsok": 1
     },
     {
       "ticker": "STST",
       "dato": "2026-11-12",
-      "type": "rapport"
+      "type": "rapport",
+      "url_forsok": 1
     },
     {
       "ticker": "TINDE",
       "dato": "2026-11-12",
-      "type": "rapport"
+      "type": "rapport",
+      "url_forsok": 1
     },
     {
       "ticker": "VEI",
       "dato": "2026-11-12",
-      "type": "rapport"
+      "type": "rapport",
+      "url_forsok": 1
     },
     {
       "ticker": "AFG",
@@ -4562,12 +4574,22 @@
       "type": "rapport"
     },
     {
+      "ticker": "MELG",
+      "dato": "2027-02-11",
+      "type": "rapport"
+    },
+    {
       "ticker": "MING",
       "dato": "2027-02-11",
       "type": "rapport"
     },
     {
       "ticker": "MORLD",
+      "dato": "2027-02-11",
+      "type": "rapport"
+    },
+    {
+      "ticker": "NORBT",
       "dato": "2027-02-11",
       "type": "rapport"
     },
@@ -4623,6 +4645,11 @@
     },
     {
       "ticker": "TGS",
+      "dato": "2027-02-11",
+      "type": "rapport"
+    },
+    {
+      "ticker": "VEI",
       "dato": "2027-02-11",
       "type": "rapport"
     },
@@ -4722,6 +4749,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "DOF",
+      "dato": "2027-02-18",
+      "type": "rapport"
+    },
+    {
       "ticker": "WWI",
       "dato": "2027-02-18",
       "type": "rapport"
@@ -4762,6 +4794,16 @@
       "type": "rapport"
     },
     {
+      "ticker": "ENDUR",
+      "dato": "2027-02-25",
+      "type": "rapport"
+    },
+    {
+      "ticker": "EQVA",
+      "dato": "2027-02-25",
+      "type": "rapport"
+    },
+    {
       "ticker": "KOA",
       "dato": "2027-02-25",
       "type": "rapport"
@@ -4782,5 +4824,5 @@
       "type": "rapport"
     }
   ],
-  "sist_oppdatert": "2026-11-11"
+  "sist_oppdatert": "2026-11-12"
 }
