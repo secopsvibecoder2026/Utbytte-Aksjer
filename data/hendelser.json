@@ -4186,7 +4186,7 @@
       "ticker": "DOF",
       "dato": "2026-11-12",
       "type": "rapport",
-      "url_forsok": 2
+      "url_forsok": 3
     },
     {
       "ticker": "EIOF",
@@ -4216,13 +4216,13 @@
       "ticker": "MELG",
       "dato": "2026-11-12",
       "type": "rapport",
-      "url_forsok": 2
+      "url_forsok": 3
     },
     {
       "ticker": "NISB",
       "dato": "2026-11-12",
       "type": "rapport",
-      "url_forsok": 2
+      "url_forsok": 3
     },
     {
       "ticker": "NORBT",
@@ -4240,7 +4240,7 @@
       "ticker": "TINDE",
       "dato": "2026-11-12",
       "type": "rapport",
-      "url_forsok": 2
+      "url_forsok": 3
     },
     {
       "ticker": "VEI",
@@ -4485,6 +4485,11 @@
     },
     {
       "ticker": "AKRBP",
+      "dato": "2027-02-10",
+      "type": "rapport"
+    },
+    {
+      "ticker": "BIEN",
       "dato": "2027-02-10",
       "type": "rapport"
     },
