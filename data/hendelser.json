@@ -4251,32 +4251,38 @@
     {
       "ticker": "AFG",
       "dato": "2026-11-13",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/686430"
     },
     {
       "ticker": "HGSB",
       "dato": "2026-11-13",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/686443"
     },
     {
       "ticker": "ROMER",
       "dato": "2026-11-13",
-      "type": "rapport"
+      "type": "rapport",
+      "url_forsok": 1
     },
     {
       "ticker": "SB68",
       "dato": "2026-11-13",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/686439"
     },
     {
       "ticker": "SOGN",
       "dato": "2026-11-13",
-      "type": "rapport"
+      "type": "rapport",
+      "url_forsok": 1
     },
     {
       "ticker": "TRSB",
       "dato": "2026-11-13",
-      "type": "rapport"
+      "type": "rapport",
+      "url": "https://newsweb.oslobors.no/message/686428"
     },
     {
       "ticker": "MAS",
@@ -4664,6 +4670,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "AFG",
+      "dato": "2027-02-12",
+      "type": "rapport"
+    },
+    {
       "ticker": "BOUV",
       "dato": "2027-02-12",
       "type": "rapport"
@@ -4680,6 +4691,11 @@
     },
     {
       "ticker": "SNTIA",
+      "dato": "2027-02-12",
+      "type": "rapport"
+    },
+    {
+      "ticker": "SOGN",
       "dato": "2027-02-12",
       "type": "rapport"
     },
@@ -4839,5 +4855,5 @@
       "type": "rapport"
     }
   ],
-  "sist_oppdatert": "2026-11-12"
+  "sist_oppdatert": "2026-11-13"
 }
