@@ -4264,7 +4264,7 @@
       "ticker": "ROMER",
       "dato": "2026-11-13",
       "type": "rapport",
-      "url_forsok": 1
+      "url_forsok": 2
     },
     {
       "ticker": "SB68",
@@ -4276,7 +4276,7 @@
       "ticker": "SOGN",
       "dato": "2026-11-13",
       "type": "rapport",
-      "url_forsok": 1
+      "url_forsok": 2
     },
     {
       "ticker": "TRSB",
@@ -4335,6 +4335,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "FRO",
+      "dato": "2026-11-20",
+      "type": "rapport"
+    },
+    {
       "ticker": "CDLR",
       "dato": "2026-11-23",
       "type": "rapport"
@@ -4381,11 +4386,6 @@
     },
     {
       "ticker": "CAPT",
-      "dato": "2026-11-30",
-      "type": "rapport"
-    },
-    {
-      "ticker": "FRO",
       "dato": "2026-11-30",
       "type": "rapport"
     },
