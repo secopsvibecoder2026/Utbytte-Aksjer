@@ -995,6 +995,7 @@ when the figures behind it are right.
 | **2026-09-12** | **Fase 1–3 live on exday.no** (PR #28) — template broken, sector pages written, seven empty pages deindexed |
 | 2026-09-26 | Checkpoint: verify in Search Console that the changed pages have been re-crawled |
 | **2026-10-06** | **Target date for the third application** |
+| **2026-11-14** | **Third application sent.** Checked the same day: internal files answer 404, the AdSense script is on every page type, `ads.txt` is in place |
 
 **Do not apply before the checkpoint passes.** A reviewer sees what Google has
 indexed, not what is on disk. Applying while the old version is still cached
@@ -2755,6 +2756,35 @@ for each, the tax year for 2026 includes them, and nothing reaches storage.
 
 Tests: `portefolje.test.js` (+8), `ui.test.js` (+5) and
 `TestUtbetalingerMedDato` (3).
+
+## Catalog changes of 2026-11-14
+
+From a 35-day scan by the maintenance agent, each item read in the notice:
+
+- **ZAL out.** Last trading day 10 November, struck from 11 November
+  (NewsWeb 682158). Yahoo still answered with a price of 100,0 on 12
+  November, so the fetch would not have failed by itself, and the page would
+  have stayed up. Kona BidCo held about 88 %, under the 90 % needed for
+  compulsory acquisition, and none is announced. `/avnoteringer/` says that
+  holders who did not sell still own unlisted shares.
+- **NISB** gets `fusjon_overtar` (686188): Nidaros takes over Stadsbygd
+  Sparebank, plan to be approved 15 December, completion planned 2 August
+  2027. Today's holders end up with about 22 % of the ownership capital,
+  because the grunnfond is converted into ECCs for a new foundation.
+- **AKVA:** 92 % acceptance, minimum acceptance met, offer ends 20 November
+  (685959). **SUBC:** Brazil's CADE approved (685620), and the sale of the
+  heavy transport business triggers a EUR 105 million special dividend
+  (685736). Register it in `saerutbytte` when it is paid.
+- **NORAM in** (NorAm Drilling AS, Euronext Growth, Norway, monthly since
+  2022) and **OTL in** (Odfjell Technology Ltd, Oslo Børs, Bermuda,
+  `ask_egnet: false`). OTL has `frekvens: Kvartalsvis`: it skipped Q1 and Q2
+  2026 to fund an acquisition and resumed with 1,52 kr for Q3 (685416), so
+  the 12-month window holds three payments and the derived label would
+  drift. NORAM's payments come from contributed surplus;
+  `hent_kapitaltilbake()` decides from the notice whether that is paid-in
+  capital.
+
+Pages for NORAM and OTL appear with the next data run.
 
 ## App review of 2026-10-20
 
