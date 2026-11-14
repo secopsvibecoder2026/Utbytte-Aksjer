@@ -2779,8 +2779,8 @@ From a 35-day scan by the maintenance agent, each item read in the notice:
   2022) and **OTL in** (Odfjell Technology Ltd, Oslo Børs, Bermuda,
   `ask_egnet: false`). OTL has `frekvens: Kvartalsvis`: it skipped Q1 and Q2
   2026 to fund an acquisition and resumed with 1,52 kr for Q3 (685416), so
-  the 12-month window holds three payments and the derived label would
-  drift. NORAM's payments come from contributed surplus;
+  the 12-month window holds two payments until March 2027 and the derived
+  label would read «Halvårlig». NORAM's payments come from contributed surplus;
   `hent_kapitaltilbake()` decides from the notice whether that is paid-in
   capital.
 
