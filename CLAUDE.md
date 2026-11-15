@@ -125,7 +125,7 @@ Utbytte-Aksjer/
 │   ├── storage.js             # localStorage abstraction layer
 │   ├── ui.js                  # All UI rendering and DOM manipulation
 │   ├── portefolje.js          # Portfolio math (FIFO, IRR, TWR, tax) + rebalancing
-│   ├── consent.js             # Cookie consent + Google Analytics Consent Mode v2
+│   ├── consent.js             # Reopens Google's consent message; the banner is gone (2026-11-15)
 │   ├── qrcode.min.js          # QR code library (vendored, no CDN dependency)
 │   ├── style.css              # Custom CSS layered on Tailwind
 │   ├── tailwind.css           # Generated/minified Tailwind v4 output
@@ -582,7 +582,7 @@ listen i generatoren.
 | `sortering` | Sort preference |
 | `paginering-per-side` | Stocks per page (25/50/75/100/0=all) |
 | `tema` | Dark/light theme |
-| `cookie_consent` | Cookie consent choice |
+| `cookie_consent` | Removed 2026-11-15; `consent.js` deletes it. Consent lives in Google's `FCCDCF` cookie |
 
 ---
 
@@ -996,6 +996,7 @@ when the figures behind it are right.
 | 2026-09-26 | Checkpoint: verify in Search Console that the changed pages have been re-crawled |
 | **2026-10-06** | **Target date for the third application** |
 | **2026-11-14** | **Third application sent.** Checked the same day: internal files answer 404, the AdSense script is on every page type, `ads.txt` is in place |
+| **2026-11-15** | **Approved.** Auto ads and Auto optimise are on. Identity verification is in progress; a PIN letter follows at about USD 10 |
 
 **Do not apply before the checkpoint passes.** A reviewer sees what Google has
 indexed, not what is on disk. Applying while the old version is still cached
@@ -1036,9 +1037,22 @@ template — and more prose does not change that. Two faults were fixed:
   `fetch_stocks.py` now goes into every template; `/uke/` and `/bevegelser/`
   got it by hand. `/personvern/` and `/vilkaar/` are left without on purpose.
 
-**After approval:** Google requires a certified CMP for ads in the EEA. Set up
-the GDPR message under «Privacy & messaging» in AdSense, and decide whether
-`consent.js` goes — two consent banners on one page is worse than either.
+**After approval (done 2026-11-15).** Google requires a certified CMP for ads
+in the EEA. The GDPR message under «Privacy & messaging» was published for
+exday.no on 29 March 2026 and loads with the AdSense script, so visitors would
+have seen two consent banners. `consent.js` no longer shows its own:
+
+- **Google's CMP is the only banner.** It sends the choice to Consent Mode v2,
+  and the `default: denied` block in every `<head>` stays as it is.
+- **`consent.js` is kept**, because every page and template loads it. It
+  deletes the old `cookie_consent` key and opens Google's message again from
+  any element with `data-samtykke-endre` (`googlefc.showRevocationMessage()`).
+- **`/personvern/` carries no AdSense script by design**, so it loads Google's
+  consent tag alone (`fundingchoicesmessages.google.com/i/pub-…`) for the
+  «Endre samtykke» button in section 6. The old buttons there wrote `all` /
+  `necessary`, values `consent.js` never read, so they had never changed
+  anything.
+- An existing visitor who accepted our banner is asked once more, by Google.
 
 **Queued behind approval:** automatic publishing to Facebook and Instagram — see
 «Automatisk publisering til Facebook og Instagram» in `ROADMAP.md`. Two checks there

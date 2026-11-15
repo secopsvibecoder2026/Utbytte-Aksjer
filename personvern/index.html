@@ -37,6 +37,8 @@
     })();
   </script>
   <script src="/assets/consent.js" defer></script>
+  <!-- Googles samtykkeverktøy uten annonser, så knappen i seksjon 6 virker her -->
+  <script async src="https://fundingchoicesmessages.google.com/i/pub-3981936786393038?ers=1"></script>
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
     .section-heading {
@@ -122,7 +124,7 @@
   <div class="max-w-2xl mx-auto px-6 pt-10 pb-20">
     <!-- TITTEL -->
     <h1 class="text-3xl font-bold mb-2">Personvern</h1>
-    <p class="text-sm text-gray-500 dark:text-gray-500 mb-12">Sist oppdatert: november 2026 · v3</p>
+    <p class="text-sm text-gray-500 dark:text-gray-500 mb-12">Sist oppdatert: november 2026 · v4</p>
 
     <!-- 1. OM SIDEN -->
     <section class="mb-10">
@@ -139,16 +141,15 @@
     <section class="mb-10">
       <h2 class="section-heading">2. Informasjonskapsler</h2>
       <p class="text-gray-700 dark:text-gray-300 leading-relaxed mb-6">
-        Vi bruker kun sporings-informasjonskapsler dersom du aktivt samtykker til det ved første besøk. Du kan trekke tilbake samtykket ditt når som helst i seksjon 5 nedenfor.
+        Vi bruker kun informasjonskapsler for statistikk og annonser dersom du aktivt samtykker til det. Samtykket samles inn av Googles samtykkeverktøy, som vises første gang du besøker siden fra Norge, EU, Storbritannia eller Sveits. Verktøyet er sertifisert etter IAB Europes rammeverk for samtykke (TCF). Du kan endre eller trekke tilbake samtykket når som helst i seksjon 6 nedenfor.
       </p>
 
       <div class="space-y-5">
         <div>
           <p class="font-medium mb-1">Nødvendige (alltid aktive)</p>
           <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-            <code class="bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded text-xs">cookie_consent</code> — lagrer ditt samtykkevalg.
-            <code class="bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded text-xs">tema</code> — mørkt eller lyst utseende.
-            Ingen av disse sendes til eksterne servere.
+            <code class="bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded text-xs">FCCDCF</code>, <code class="bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded text-xs">FCNEC</code>: settes av Googles samtykkeverktøy og lagrer samtykkevalget ditt.
+            <code class="bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded text-xs">tema</code>: mørkt eller lyst utseende, lagret i nettleseren og aldri sendt noe sted.
           </p>
         </div>
         <div>
@@ -294,12 +295,12 @@
     <section class="mb-10">
       <h2 class="section-heading">6. Administrer samtykke</h2>
       <p class="text-gray-700 dark:text-gray-300 leading-relaxed mb-5">
-        Du kan når som helst endre eller trekke tilbake samtykket ditt her. Endringen trer i kraft ved neste sideinnlasting.
+        Du kan når som helst endre eller trekke tilbake samtykket ditt. Knappen åpner Googles samtykkeverktøy, der du kan velge hvert formål for seg.
       </p>
-      <div id="consent-ui" class="space-y-4">
-        <p id="consent-status" class="text-sm text-gray-500 dark:text-gray-400"></p>
-        <div class="flex flex-wrap gap-3" id="consent-buttons"></div>
-      </div>
+      <button type="button" data-samtykke-endre class="px-5 py-2.5 text-sm rounded-lg bg-green-700 text-white hover:bg-green-800 font-medium transition-colors">Endre samtykke</button>
+      <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed mt-4">
+        Verktøyet vises bare for besøkende fra Norge, EU, Storbritannia og Sveits. Skjer det ingenting når du trykker, kan en annonseblokker ha stoppet det. Du kan også slette informasjonskapslene for exday.no i nettleseren, så får du spørsmålet på nytt ved neste besøk.
+      </p>
     </section>
 
     <!-- FOOTER -->
@@ -311,48 +312,6 @@
 
   
 
-  <script>
-    (function () {
-      var KEY = 'cookie_consent';
-
-      function render() {
-        var val = localStorage.getItem(KEY);
-        var statusEl = document.getElementById('consent-status');
-        var btnsEl = document.getElementById('consent-buttons');
-
-        var labels = {
-          'all': 'Du har godtatt alle informasjonskapsler.',
-          'necessary': 'Du har valgt kun nødvendige informasjonskapsler.',
-          '': 'Du har ikke gjort et valg ennå.'
-        };
-        statusEl.textContent = labels[val || ''];
-
-        btnsEl.innerHTML = '';
-
-        var decline = document.createElement('button');
-        decline.textContent = 'Kun nødvendige';
-        decline.className = 'px-5 py-2.5 text-sm rounded-lg border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors' + (val === 'necessary' ? ' font-semibold ring-2 ring-gray-300 dark:ring-gray-600' : '');
-        decline.onclick = function () {
-          localStorage.setItem(KEY, 'necessary');
-          render();
-        };
-
-        var accept = document.createElement('button');
-        accept.textContent = 'Godta alle';
-        accept.className = 'px-5 py-2.5 text-sm rounded-lg bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 hover:bg-gray-700 dark:hover:bg-gray-300 font-medium transition-colors' + (val === 'all' ? ' ring-2 ring-offset-2 ring-gray-900 dark:ring-gray-100' : '');
-        accept.onclick = function () {
-          localStorage.setItem(KEY, 'all');
-          if (window.cookieConsent) window.cookieConsent.accept();
-          render();
-        };
-
-        btnsEl.appendChild(decline);
-        btnsEl.appendChild(accept);
-      }
-
-      render();
-    })();
-  </script>
 
   <footer class="mt-8 sm:mt-12 border-t border-gray-200 dark:border-gray-800 py-6 text-center text-xs text-gray-400 dark:text-gray-600 space-y-1 px-4">
     <p>Kurs og utbyttedata hentes fra Yahoo Finance og Euronext. Oppdateres daglig på børsdager.</p>
