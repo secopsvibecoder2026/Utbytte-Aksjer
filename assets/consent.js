@@ -1,112 +1,41 @@
-/* Cookie Consent – exday.no
-   Consent Mode v2: oppdaterer GA når bruker godtar.
-   Lagrer valg i localStorage('cookie_consent'). */
+/* Samtykke – exday.no
+   Samtykket samles inn av Googles samtykkeverktøy (Personvern og meldinger i
+   AdSense), som lastes sammen med AdSense-skriptet og sender valget videre til
+   Consent Mode v2. Standardverdien «denied» settes i <head> på hver side.
+
+   Fram til 15.11.2026 viste denne filen et eget banner. Med Googles melding i
+   tillegg fikk besøkende to, så banneret er fjernet. Filen er beholdt fordi
+   alle sidene og malene laster den.
+
+   Det som er igjen:
+   - den gamle nøkkelen «cookie_consent» slettes, siden den ikke styrer noe;
+   - et element med data-samtykke-endre åpner Googles melding på nytt, slik
+     at besøkende kan endre eller trekke tilbake samtykket. */
 (function () {
   'use strict';
 
-  var STORAGE_KEY = 'cookie_consent';
+  try {
+    localStorage.removeItem('cookie_consent');
+  } catch (e) {
+    // localStorage kan være sperret; da er det heller ingenting å rydde.
+  }
 
-  function updateConsent(value) {
-    if (typeof gtag !== 'function') return;
-    gtag('consent', 'update', {
-      analytics_storage: value,
-      ad_storage: value,
-      ad_user_data: value,
-      ad_personalization: value,
+  function aapneSamtykke() {
+    window.googlefc = window.googlefc || {};
+    window.googlefc.callbackQueue = window.googlefc.callbackQueue || [];
+    window.googlefc.callbackQueue.push({
+      CONSENT_API_READY: function () {
+        window.googlefc.showRevocationMessage();
+      },
     });
   }
 
-  // Sjekk lagret valg og oppdater GA umiddelbart
-  var stored = localStorage.getItem(STORAGE_KEY);
-  if (stored === 'granted') {
-    updateConsent('granted');
-    return; // Ingen banner nødvendig
-  }
-  if (stored === 'denied') {
-    return; // Allerede avslått, ikke vis banner
-  }
+  document.addEventListener('click', function (e) {
+    var el = e.target && e.target.closest && e.target.closest('[data-samtykke-endre]');
+    if (!el) return;
+    e.preventDefault();
+    aapneSamtykke();
+  });
 
-  // Vis banner etter at DOM er klar
-  function visBanner() {
-    if (localStorage.getItem(STORAGE_KEY)) return; // Allerede valgt
-
-    var banner = document.createElement('div');
-    banner.id = 'cookie-banner';
-    banner.setAttribute('role', 'dialog');
-    banner.setAttribute('aria-label', 'Informasjonskapsler');
-    banner.style.cssText = [
-      'position:fixed',
-      'bottom:0',
-      'left:0',
-      'right:0',
-      'z-index:9999',
-      'background:#fff',
-      'border-top:1px solid #e3eee8',
-      'padding:1rem 1.25rem',
-      'box-shadow:0 -4px 12px rgba(0,0,0,0.08)',
-      'font-family:system-ui,sans-serif',
-      'font-size:0.875rem',
-      'color:#374151',
-      'display:flex',
-      'align-items:center',
-      'gap:1rem',
-      'flex-wrap:wrap',
-    ].join(';');
-
-    banner.innerHTML =
-      '<p style="margin:0;flex:1;min-width:200px">' +
-        'Vi bruker informasjonskapsler for å forstå hvordan nettsiden brukes. ' +
-        'Les mer i vår <a href="/personvern/" style="color:#2f7352;text-decoration:underline">personvernerklæring</a>.' +
-      '</p>' +
-      '<div style="display:flex;gap:0.5rem;flex-shrink:0">' +
-        '<button id="cookie-decline" style="' +
-          'padding:0.4rem 0.85rem;border:1px solid #d1d5db;border-radius:0.375rem;' +
-          'background:#fff;color:#374151;cursor:pointer;font-size:0.8rem' +
-        '">Kun nødvendige</button>' +
-        '<button id="cookie-accept" style="' +
-          'padding:0.4rem 0.85rem;border:none;border-radius:0.375rem;' +
-          'background:#2f7352;color:#fff;cursor:pointer;font-size:0.8rem;font-weight:600' +
-        '">Godta alle</button>' +
-      '</div>';
-
-    document.body.appendChild(banner);
-
-    document.getElementById('cookie-accept').addEventListener('click', function () {
-      localStorage.setItem(STORAGE_KEY, 'granted');
-      updateConsent('granted');
-      banner.remove();
-    });
-
-    document.getElementById('cookie-decline').addEventListener('click', function () {
-      localStorage.setItem(STORAGE_KEY, 'denied');
-      banner.remove();
-    });
-
-    // Mørk modus – sett ved oppstart og lytt på tema-endringer
-    function oppdaterTema() {
-      var mork = document.documentElement.classList.contains('dark');
-      banner.style.background     = mork ? '#1f2937' : '#fff';
-      banner.style.borderTopColor = mork ? '#374151' : '#e3eee8';
-      banner.style.color          = mork ? '#d1d5db' : '#374151';
-      var avslaaBtn = document.getElementById('cookie-decline');
-      if (avslaaBtn) {
-        avslaaBtn.style.background = mork ? '#374151' : '#fff';
-        avslaaBtn.style.color      = mork ? '#d1d5db' : '#374151';
-        avslaaBtn.style.borderColor = mork ? '#4b5563' : '#d1d5db';
-      }
-    }
-    oppdaterTema();
-
-    // Observer som fanger opp mørk/lys-bytte
-    new MutationObserver(oppdaterTema).observe(
-      document.documentElement,
-      { attributes: true, attributeFilter: ['class'] }
-    );
-  }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', visBanner);
-  } else {
-    visBanner();
-  }
+  window.aapneSamtykke = aapneSamtykke;
 })();
