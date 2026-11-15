@@ -969,7 +969,8 @@ _ANDRE_BORSER = ("new york", "nyse", "nasdaq", "london", "stockholm", "copenhage
 # million», som er totalen, ikke per aksje. `[\d.,]*` foran gjør at regexen
 # ikke kan backtracke til «25» eller «2» og slippe gjennom likevel.
 _BLOKK_BELOP_RE = re.compile(
-    r"(?:dividend|distribution)\s+amount\s*:\s*(?:(NOK|USD|EUR|SEK|DKK|\$)\s*)?"
+    # «Dividend amount (per share): NOK 0.50» (Vistin) har en parentes foran kolon.
+    r"(?:dividend|distribution)\s+amount\s*(?:\(per\s+share\)\s*)?:\s*(?:(NOK|USD|EUR|SEK|DKK|\$)\s*)?"
     r"(\d+(?:[.,]\d+)?)(?![\d.,]*\s*(?:m\b|mn\b|mill|bn\b|billion|mrd))", re.I)
 
 # Hvor langt tilbake en melding kan ligge og fortsatt gjelde et kommende
@@ -1105,6 +1106,40 @@ def neste_utbetaling(tekst, i_dag):
                 "ex_forbehold": (g or "ukjent") if uvedtatt else None,
                 "belop": u.get("belop"), "valuta": u.get("valuta")}
     return None
+
+
+def bruk_newsweb_belop(aksje, nw):
+    """Lar selskapets egen melding avgjøre beløpet for neste utbetaling.
+
+    DNB-kalenderen skiller ikke alltid valutaene. 15.11.2026 sto DOF der med
+    «0,40 NOK» og ENH med «0,03 NOK», mens meldingene til Oslo Børs sier
+    USD 0,40 og USD 0,0342 (NOK 0,32). DNB-steget tok beløpet som kroner,
+    ganget det med frekvensen og ga DOF 1,26 % yield mot rundt 11 % betalt,
+    og kalenderen viste «0,40 kr». NewsWeb-steget leste USD riktig, men
+    overskrev bare når meldingen oppga kroner, så DNB-tallet ble stående.
+
+    Regelen: oppgir meldingen beløpet i kroner, brukes det. Finnes det en
+    melding for samme ex-dato uten kronebeløp, er DNBs beløp ikke bekreftet,
+    og det fjernes sammen med årsraten DNB-steget satte. Gir True når
+    DNB-beløpet ble tatt bort.
+    """
+    if not nw:
+        return False
+    if nw.get("belop") and nw.get("valuta") == "NOK":
+        aksje["annonsert_utbytte"] = nw["belop"]
+        aksje["annonsert_ex"] = nw["ex_dato"]
+        return False
+    if aksje.get("annonsert_utbytte") and aksje.get("annonsert_ex") == nw.get("ex_dato"):
+        aksje.pop("annonsert_utbytte", None)
+        aksje.pop("annonsert_ex", None)
+        for_dnb = aksje.get("_for_dnb")
+        if for_dnb:
+            aksje["utbytte_per_aksje"] = for_dnb["utbytte_per_aksje"]
+            aksje["utbytte_yield"] = for_dnb["utbytte_yield"]
+            # Står forslaget under også, skal ikke DNB-tallene legges tilbake to ganger.
+            aksje.pop("_for_dnb", None)
+        return True
+    return False
 
 
 def hent_newsweb_ex_dato(ticker, i_dag=None):
@@ -10431,10 +10466,12 @@ def main():
         # Beløpet for *denne* utbetalingen, når meldingen oppgir det i NOK.
         # Appen regnet neste utbetaling som antall × `siste_utbytte` — for
         # Telenor 5,00 i mai, mens oktoberutbyttet er 4,70 (2026-10-06).
-        # Et beløp i USD/EUR kan ikke ganges med en NOK-kurs, så det hoppes over.
-        if nw.get("belop") and nw.get("valuta") == "NOK":
-            aksje["annonsert_utbytte"] = nw["belop"]
-            aksje["annonsert_ex"] = nw["ex_dato"]
+        # Et beløp i USD/EUR kan ikke ganges med en NOK-kurs. Står DNBs beløp
+        # for samme ex-dato uten at meldingen bekrefter det i kroner, tas det
+        # bort (DOF 15.11.2026, se bruk_newsweb_belop()).
+        if bruk_newsweb_belop(aksje, nw):
+            print(f"    {aksje['ticker']}: DNB-beløpet er ikke bekreftet i kroner av "
+                  f"børsmeldingen ({nw.get('belop')} {nw.get('valuta') or 'uten valuta'}), fjernet")
         # Generalforsamlingsdatoen når utbyttet ennå ikke er vedtatt, ellers
         # fjernes feltet — det skal aldri henge igjen fra en tidligere kjøring.
         if nw.get("ex_forbehold"):
