@@ -1897,6 +1897,54 @@ class TestNfKurs(unittest.TestCase):
         self.assertEqual(_nf_kurs(None), "—")
 
 
+class TestNewswebBelopOverDnb(unittest.TestCase):
+    """DNB merket DOFs USD 0,40 som kroner, og børsmeldingen rettet det ikke (2026-11-15)."""
+
+    def _dof(self):
+        # Slik raden så ut etter DNB-steget: 0,40 × 4 = 1,60 kr, 1,26 %.
+        return {"ticker": "DOF", "pris": 127.1, "utbytte_per_aksje": 1.6, "utbytte_yield": 1.26,
+                "annonsert_utbytte": 0.4, "annonsert_ex": "2026-11-20",
+                "_for_dnb": {"utbytte_per_aksje": 13.86, "utbytte_yield": 10.9}}
+
+    def test_usd_i_meldingen_fjerner_dnb_belopet(self):
+        from fetch_stocks import bruk_newsweb_belop
+        a = self._dof()
+        nw = {"ex_dato": "2026-11-20", "belop": 0.4, "valuta": "USD"}
+        self.assertTrue(bruk_newsweb_belop(a, nw))
+        self.assertNotIn("annonsert_utbytte", a)
+        self.assertNotIn("annonsert_ex", a)
+        self.assertEqual((a["utbytte_per_aksje"], a["utbytte_yield"]), (13.86, 10.9))
+        self.assertNotIn("_for_dnb", a)
+
+    def test_melding_uten_belop_bekrefter_ikke_dnb(self):
+        # ENH: «USD 25.0 million (USD 0.0342 / NOK 0.32 per share)» gir ikke noe beløp.
+        from fetch_stocks import bruk_newsweb_belop
+        a = self._dof()
+        self.assertTrue(bruk_newsweb_belop(a, {"ex_dato": "2026-11-20", "belop": None, "valuta": None}))
+        self.assertNotIn("annonsert_utbytte", a)
+
+    def test_kroner_i_meldingen_brukes(self):
+        from fetch_stocks import bruk_newsweb_belop
+        a = {"annonsert_utbytte": 1.37, "annonsert_ex": "2026-11-17"}
+        self.assertFalse(bruk_newsweb_belop(a, {"ex_dato": "2026-11-17", "belop": 1.368, "valuta": "NOK"}))
+        self.assertEqual(a["annonsert_utbytte"], 1.368)
+
+    def test_annen_ex_dato_lar_dnb_vaere(self):
+        # Meldingen gjelder en senere utbetaling; DNB-beløpet hører til en annen dato.
+        from fetch_stocks import bruk_newsweb_belop
+        a = self._dof()
+        self.assertFalse(bruk_newsweb_belop(a, {"ex_dato": "2027-02-20", "belop": 0.4, "valuta": "USD"}))
+        self.assertEqual(a["annonsert_utbytte"], 0.4)
+
+    def test_vistin_per_share_i_parentes(self):
+        from fetch_stocks import neste_utbetaling
+        tekst = ("Dividend amount (per share): NOK 0.50\nDeclared currency: NOK\n"
+                 "Ex-date: 24 November 2026\nRecord date: 25 November 2026\n"
+                 "Payment date: 3 December 2026\n")
+        u = neste_utbetaling(tekst, datetime.date(2026, 11, 15))
+        self.assertEqual((u["belop"], u["valuta"]), (0.5, "NOK"))
+
+
 class TestUtbetalingerIMelding(unittest.TestCase):
     """Flere utbetalinger i én melding, og forbehold om godkjenning (2026-09-26).
 

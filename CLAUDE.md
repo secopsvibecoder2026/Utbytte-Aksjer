@@ -2800,6 +2800,39 @@ From a 35-day scan by the maintenance agent, each item read in the notice:
 
 Pages for NORAM and OTL appear with the next data run.
 
+## DNB's currency is not trusted without the notice (2026-11-15)
+
+A reader wrote on Facebook that DOF's dividend with ex-date 20 November is
+USD 0,40, not the «0,40 kr» on `/utbyttekalender/`. Correct, and the error
+reached further than the calendar:
+
+- **DNB's calendar labels DOF's 0,40 as NOK**, and ENH's 0,03 as NOK too. The
+  notices to Oslo Børs say USD 0,40 (686267) and USD 0,0342, about NOK 0,32
+  (685738). The DNB step took the amounts as kroner and multiplied by the
+  frequency. DOF showed 1,26 % against 10,9 % paid in the last 12 months,
+  ENH 1,8 % against 17,9 %, from the data run of 12 November.
+- **The NewsWeb step read USD correctly and changed nothing.** It overwrote
+  the announced amount only when the notice gave kroner, so DNB's figure
+  stood. A stated currency other than NOK never overruled it.
+- **The paid-12m rule stood down** because an announced dividend was still to
+  come (rule 5), so the rate stayed at DNB's figure.
+- **`valider_data.py` reported both** from the first run (Sjekk 7: the annual
+  rate is below one payment). It is a warning, and no one read the log. Same
+  lesson as AFG and DOF's ticker: the alert worked, the follow-up did not.
+
+`bruk_newsweb_belop()` now decides. A NOK amount in the notice is used. A
+notice for the same ex-date without a NOK amount means DNB's amount is
+unconfirmed: it is removed with the rate the DNB step set, and the paid-12m
+rule can run. `_BLOKK_BELOP_RE` also reads «Dividend amount (per share):
+NOK 0.50» (Vistin), which it missed, so Vistin keeps its correct figure.
+
+Checked against DNB's 17 rows the same day: DOF and ENH lose DNB's amount;
+KID, VAR, ATEA, OKEA and VISTIN are confirmed in kroner; ITERA has no notice
+and keeps DNB's figure. DNB rows for STST, NORBT, NORAM, HSHP, BEWI and PUBLI
+match no ticker in `DNB_NAVN` and are unused.
+
+Tests: `TestNewswebBelopOverDnb` (5).
+
 ## App review of 2026-10-20
 
 Every tab, sub-tab and fourteen stock modals were opened with Playwright at
