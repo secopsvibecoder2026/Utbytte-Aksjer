@@ -21,6 +21,7 @@ from fetch_stocks import (generer_aksjesider, generer_sektorsider, generer_toppl
                           oppdater_aarstall_i_sider, oppdater_forside_uka,
                           oppdater_forside_artikler,
                           oppdater_kalender_maaneder, oppdater_frekvensartikkel,
+                          oppdater_utbyttekalender,
                           _typiske_utbetalingsmaaneder,
                           lag_beskrivelse, _manuell_del, SEKTOR_DRIVER,
                           _lag_utbyttehistorikk_tekst)
@@ -155,6 +156,7 @@ def main():
     oppdater_forside_uka(aksjer, ROOT)
     oppdater_forside_artikler(ROOT)
     oppdater_kalender_maaneder(aksjer, ROOT)
+    oppdater_utbyttekalender(aksjer, ROOT)
     oppdater_frekvensartikkel(aksjer, ROOT)
 
     # Sist: lastmod hasher sidene, så markørene må være fylt først.

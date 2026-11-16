@@ -746,7 +746,7 @@ even if the generator has not run. That span sat there unused until
 
 Generated pages (`/aksjer/**`) compute their own numbers and are skipped.
 
-#### Next year from November (2026-10-19)
+#### Next year from November (2026-10-19), from December since 2026-11-16
 
 The year used to switch only on 1 January, so the page advertised the
 current year through the weeks when people start searching for next year's
@@ -2832,6 +2832,56 @@ and keeps DNB's figure. DNB rows for STST, NORBT, NORAM, HSHP, BEWI and PUBLI
 match no ticker in `DNB_NAVN` and are unused.
 
 Tests: `TestNewswebBelopOverDnb` (5).
+
+## `/utbyttekalender/` is a finished HTML table (2026-11-16)
+
+Search Console, three months: «utbyttekalender 2026», «utbytte kalender 2026»
+and «utbyttekalender» had about 3 050 impressions and 21 clicks. The page was
+drawn by JavaScript from `aksjer.json`, so the HTML Google read said «Laster
+kalender…» above an empty `<div>`.
+
+**The data job writes the whole calendar.** `oppdater_utbyttekalender()`
+fills two marker pairs in both `fetch_stocks.py` and `regenerer_sider.py`:
+
+- `<!--KAL-HODE:START-->` in `<head>`: title, meta description, og/twitter
+  and JSON-LD (WebPage and BreadcrumbList). The FAQPage block beside it is
+  hand-written and must match the visible FAQ word for word.
+- `<!--KAL:START-->` in `<main>`: the H1, one sentence on the ex-date, the
+  ex-dates of the next seven days, and the table.
+
+The page no longer carries `<!--AAR-SYNK-->`; the generator owns the year.
+
+**What the table holds** (`kalender_rader()`, pure and tested):
+
+- every payment in `utbetalinger` with an ex-date in the current year, and
+  every coming `ex_dato`;
+- upcoming rows first, earliest first, then passed rows, newest first. That
+  is the order without JavaScript;
+- the amount in the currency the company announced. A non-NOK amount is
+  shown as it is («0,40 USD») from `annonsert_utland`, which
+  `bruk_newsweb_belop()` now stores. It is never converted;
+- status: «foreslått» while `ex_forbehold_gjelder()`, «betalt» once the
+  payment date has passed, or when the ex-date is more than
+  `KAL_BETALT_ETTER_DAGER` (31) days old with no payment date; otherwise
+  «vedtatt»;
+- every value as a `data-*` attribute on the row, for the script that sorts
+  and filters.
+
+**Title, meta and year.** `kalender_tittel()` drops «| exday.no» when the
+title would pass 60 characters. `kalender_meta()` leads with the answer and
+the count of ex-dates in the next 30 days, and stays within 155 characters.
+`KALENDER_NESTE_AAR_FRA_MND` is now 12: «Utbyttekalender 2026 og 2027» from
+1 December. The month overview keeps November (`EXMND_NESTE_AAR_FRA_MND`).
+
+**Links.** Every stock page ends its dates section with «utbyttekalender
+{år}», and the front page links with the same text. `index.html` carries
+`<!--AAR-SYNK-->` so the year in that link follows.
+
+Measured on 16.11.2026: 262 ex-dates in the data, 262 `<tr>` in the HTML,
+all visible with JavaScript off at 390 and 1280 px.
+
+Tests: `TestUtbyttekalenderTabell` (6) and `TestAarstallISider` (15 Nov,
+5 Dec and 2 Jan).
 
 ## App review of 2026-10-20
 
