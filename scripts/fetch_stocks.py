@@ -1125,6 +1125,12 @@ def bruk_newsweb_belop(aksje, nw):
     """
     if not nw:
         return False
+    # Utbyttekalenderen viser et beløp i en annen valuta som det er, «0,40 USD»,
+    # aldri omregnet. Det lagres for seg, så ingen kroneregning kan bruke det.
+    if nw.get("belop") and nw.get("valuta") and nw.get("valuta") != "NOK":
+        aksje["annonsert_utland"] = {"belop": nw["belop"], "valuta": nw["valuta"], "ex": nw["ex_dato"]}
+    else:
+        aksje.pop("annonsert_utland", None)
     if nw.get("belop") and nw.get("valuta") == "NOK":
         aksje["annonsert_utbytte"] = nw["belop"]
         aksje["annonsert_ex"] = nw["ex_dato"]
@@ -7010,6 +7016,11 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
         f'<div class="analyse"><h2>{analyse_tittel}</h2><p>{analyse_tekst}</p></div>'
         if analyse_tekst else ""
     )
+    # Alle aksjesider lenker til kalenderen med søkeordet som lenketekst.
+    analyse_seksjon += (
+        '<p class="kalender-lenke">Alle ex-datoene på Oslo Børs står samlet i '
+        f'<a href="/utbyttekalender/">utbyttekalender {kalenderaar_tekst(datetime.date.today())}</a>.</p>'
+    )
 
     nokkeltal_seksjon = (
         "<h2>Nøkkeltall</h2>"
@@ -10740,22 +10751,25 @@ def main():
     oppdater_forside_uka(resultater, root_dir)
     oppdater_forside_artikler(root_dir)
     oppdater_kalender_maaneder(resultater, root_dir)
+    oppdater_utbyttekalender(resultater, root_dir)
     oppdater_frekvensartikkel(resultater, root_dir)
     # Sist: lastmod hasher sidene, så markørene må være fylt først.
     generer_sitemap(resultater, root_dir, today, AKSJER)
 
 
-# ── Utbyttekalender for neste år (19.10.2026) ────────────────────────────────
+# ── Utbyttekalender for neste år (19.10.2026, desember fra 16.11.2026) ──────
 # «Utbyttekalender 2026» er det sterkeste søket nettstedet har, og årstallet i
-# tittelen byttet først 1. januar. Søkene etter neste års kalender kommer i
-# november og desember, og DNB viser alt neste år da. Fra november står derfor
-# begge årene i tittelen, og månedsoversikten under handler om neste år.
-KALENDER_NESTE_AAR_FRA_MND = 11
+# tittelen byttet først 1. januar. Søkene etter neste års kalender kommer mot
+# slutten av året. Fra 1. desember står derfor begge årene i tittelen og i
+# lenketekstene. Månedsoversikten under svarer på «når går aksjene ex neste
+# år» allerede fra november, så den har sin egen grense.
+KALENDER_NESTE_AAR_FRA_MND = 12
+EXMND_NESTE_AAR_FRA_MND = 11
 EXMND_VIS = 8   # selskaper per måned før «Vis alle»
 
 
 def kalenderaar_tekst(i_dag):
-    """«2026», eller «2026 og 2027» fra november. Speilet i utbyttekalenderens skript."""
+    """«2026», eller «2026 og 2027» i desember."""
     if i_dag.month >= KALENDER_NESTE_AAR_FRA_MND:
         return f"{i_dag.year} og {i_dag.year + 1}"
     return str(i_dag.year)
@@ -10799,7 +10813,7 @@ def lag_exmnd_blokk(aksjer, i_dag):
     # Årstallet i overskriften følger søket: neste år fra november, inneværende
     # år fram til sommeren. Fra juli er det meste av året passert, og da er
     # spørsmålet «når i året», ikke «når i år».
-    if i_dag.month >= KALENDER_NESTE_AAR_FRA_MND:
+    if i_dag.month >= EXMND_NESTE_AAR_FRA_MND:
         tittel = f"Når går aksjene ex-utbytte i {i_dag.year + 1}?"
         intro = (f"Selskapene har ikke annonsert ex-datoene for {i_dag.year + 1} ennå. "
                  "Oversikten viser i hvilke måneder hver aksje har gått ex de siste årene, "
@@ -10879,6 +10893,311 @@ def oppdater_kalender_maaneder(aksjer, root_dir: str, i_dag=None):
     blokk = lag_exmnd_blokk(aksjer, i_dag)
     nytt = _EXMND_MONSTER.sub(lambda m: "<!--EXMND:START-->\n" + blokk + "\n    <!--EXMND:SLUTT-->",
                               innhold, count=1)
+    if nytt == innhold:
+        return False
+    with open(sti, "w", encoding="utf-8") as f:
+        f.write(nytt)
+    return True
+
+
+# ── Utbyttekalenderen som ferdig HTML (16.11.2026) ───────────────────────────
+# «Utbyttekalender 2026» og «utbytte kalender 2026» ga 2 300 visninger på tre
+# måneder og under 1 % klikk. Kalenderen ble tegnet av JavaScript fra
+# aksjer.json, så HTML-en Google leste sa «Laster kalender…». Nå skriver
+# datajobben hele tabellen: hver ex-dato i året, passerte og kommende, med
+# selskap, beløp, kjøp senest og status. JavaScript legger søk, sortering og
+# filtre oppå radene som finnes, og bygger aldri tabellen selv.
+#
+# Kildene er de samme som ellers på siden: `utbetalinger` (Yahoo-serien etter
+# NewsWeb-utfyllingen) for passerte ex-datoer, og `ex_dato` med det annonserte
+# beløpet for kommende. Et beløp i en annen valuta vises i den valutaen, og
+# aldri regnet om.
+
+KAL_BETALT_ETTER_DAGER = 31   # uten kjent betalingsdato: betalt når ex-datoen er så gammel
+KAL_META_DAGER = 30
+KAL_NESTE_DAGER = 7
+_KAL_STATUS_TEKST = {"foreslatt": "Foreslått", "vedtatt": "Vedtatt", "betalt": "Betalt"}
+_KAL_KOLONNER = [("selskap", "Selskap"), ("ticker", "Ticker"), ("sektor", "Sektor"),
+                 ("utbytte", "Utbytte per aksje"), ("yield", "Yield"), ("ex", "Ex-dato"),
+                 ("kjop", "Kjøp senest"), ("betaling", "Betaling"), ("frekvens", "Frekvens"),
+                 ("status", "Status")]
+
+
+def kalender_rader(aksjer, i_dag):
+    """Alle ex-datoer for kalenderen: årets passerte og alle kommende. Ren funksjon.
+
+    Rekkefølgen er den siden viser uten JavaScript: kommende ex-datoer først,
+    tidligste først, deretter passerte, nyeste først. En ex-dato i dag er
+    kommende, siden den står i dagens kalender, men fristen for å kjøpe er ute.
+    """
+    rader = {}
+    for a in aksjer:
+        ticker = a.get("ticker") or ""
+        if not _TICKER_RE.match(ticker):
+            continue
+        felles = {"ticker": ticker, "navn": _kort_selskapsnavn(a.get("navn") or ticker),
+                  "sektor": a.get("sektor") or "", "frekvens": a.get("frekvens") or "",
+                  "yield": a.get("utbytte_yield") or 0, "mv": a.get("markedsverdi_mrd") or 0}
+        utbetalinger = a.get("utbetalinger")
+        if utbetalinger is None:
+            utbetalinger = [[u.get("ex_dato"), u.get("belop")]
+                            for u in (a.get("utbytte_12m_liste") or [])]
+        for par in utbetalinger:
+            ex = _iso_dato(par[0] if par else None)
+            if not ex or ex.year != i_dag.year:
+                continue
+            belop = par[1] if len(par) > 1 else None
+            rader[(ticker, ex)] = dict(felles, ex=ex, belop=belop or None,
+                                       valuta="NOK" if belop else None)
+        ex_d = _iso_dato(a.get("ex_dato"))
+        if ex_d and (ex_d >= i_dag or ex_d.year == i_dag.year):
+            rad = rader.get((ticker, ex_d)) or dict(felles, ex=ex_d, belop=None, valuta=None)
+            if not rad["belop"]:
+                utland = a.get("annonsert_utland") or {}
+                if a.get("annonsert_utbytte") and a.get("annonsert_ex") == a.get("ex_dato"):
+                    rad["belop"], rad["valuta"] = a["annonsert_utbytte"], "NOK"
+                elif utland.get("belop") and utland.get("ex") == a.get("ex_dato"):
+                    rad["belop"], rad["valuta"] = utland["belop"], utland.get("valuta")
+            rad["betaling"] = _iso_dato(a.get("betaling_dato"))
+            rad["forslag"] = bool(ex_forbehold_gjelder(a, i_dag))
+            rader[(ticker, ex_d)] = rad
+
+    ut = []
+    for rad in rader.values():
+        rad.setdefault("betaling", None)
+        rad.setdefault("forslag", False)
+        rad["kjop"] = forrige_borsdag(rad["ex"])
+        rad["kommende"] = rad["ex"] >= i_dag
+        if rad["forslag"]:
+            rad["status"] = "foreslatt"
+        elif rad["betaling"]:
+            rad["status"] = "betalt" if rad["betaling"] <= i_dag else "vedtatt"
+        elif rad["ex"] <= i_dag - datetime.timedelta(days=KAL_BETALT_ETTER_DAGER):
+            rad["status"] = "betalt"
+        else:
+            rad["status"] = "vedtatt"
+        ut.append(rad)
+    kommende = sorted((r for r in ut if r["kommende"]), key=lambda r: (r["ex"], -r["mv"], r["ticker"]))
+    passerte = sorted((r for r in ut if not r["kommende"]),
+                      key=lambda r: (-r["ex"].toordinal(), -r["mv"], r["ticker"]))
+    return kommende + passerte
+
+
+def _kal_belop(belop, valuta):
+    """«3,55 NOK», «0,0342 USD». Små beløp får flere desimaler, så 0,0342 ikke blir 0,03."""
+    if not belop:
+        return "—"
+    desimaler = 2
+    while desimaler < 4 and round(belop, desimaler) != round(belop, 4):
+        desimaler += 1
+    return f"{_nf(belop, desimaler)} {valuta or ''}".rstrip(" ")
+
+
+def _kal_dato(d):
+    return f"{d.day:02d}.{d.month:02d}.{d.year}" if d else "—"
+
+
+def kalender_tittel(i_dag):
+    """«Utbyttekalender 2026 – alle ex-datoer på Oslo Børs», med «| exday.no» når det er plass."""
+    tittel = f"Utbyttekalender {kalenderaar_tekst(i_dag)} – alle ex-datoer på Oslo Børs"
+    med = tittel + " | exday.no"
+    return med if len(med) <= 60 else tittel
+
+
+def kalender_meta(rader, i_dag):
+    """Beskrivelsen, med svaret først. Høyst 155 tegn."""
+    aar = kalenderaar_tekst(i_dag)
+    slutt = i_dag + datetime.timedelta(days=KAL_META_DAGER)
+    snart = [r for r in rader if i_dag <= r["ex"] <= slutt]
+    neste = next((r for r in rader if r["ex"] >= i_dag), None)
+    deler = [f"Alle ex-datoer og utbytter på Oslo Børs i {aar}."]
+    if snart:
+        ord_ = "ex-dato" if len(snart) == 1 else "ex-datoer"
+        deler.append(f"{len(snart)} {ord_} de neste {KAL_META_DAGER} dagene")
+    if neste:
+        neste_tekst = f"neste: {neste['navn']} {neste['ex'].day}. {_MND_KORT[neste['ex'].month - 1]}"
+        deler[-1] = (deler[-1] + " – " + neste_tekst + ".") if snart else (
+            deler[-1] + " " + neste_tekst[0].upper() + neste_tekst[1:] + ".")
+    elif snart:
+        deler[-1] += "."
+    tekst = " ".join(deler)
+    if len(tekst + " Oppdateres daglig.") <= 155:
+        tekst += " Oppdateres daglig."
+    return tekst if len(tekst) <= 155 else tekst[:152].rstrip() + "…"
+
+
+def lag_kalender_hode(rader, i_dag):
+    """<title>, beskrivelser og JSON-LD mellom KAL-HODE-markørene. Ren funksjon."""
+    import html as _html
+    tittel = kalender_tittel(i_dag)
+    meta = kalender_meta(rader, i_dag)
+    url = "https://exday.no/utbyttekalender/"
+    ld = {
+        "@context": "https://schema.org",
+        "@graph": [
+            {"@type": "WebPage", "name": tittel, "description": meta, "url": url,
+             "inLanguage": "nb-NO",
+             "publisher": {"@type": "Organization", "name": "exday.no", "url": "https://exday.no"}},
+            {"@type": "BreadcrumbList", "itemListElement": [
+                {"@type": "ListItem", "position": 1, "name": "exday.no", "item": "https://exday.no/"},
+                {"@type": "ListItem", "position": 2, "name": f"Utbyttekalender {kalenderaar_tekst(i_dag)}",
+                 "item": url}]},
+        ],
+    }
+    t, m = _html.escape(tittel), _html.escape(meta)
+    return "\n".join([
+        f"  <title>{t}</title>",
+        f'  <meta name="description" content="{m}" />',
+        f'  <meta property="og:title" content="{t}" />',
+        f'  <meta property="og:description" content="{m}" />',
+        f'  <meta name="twitter:title" content="{t}" />',
+        f'  <meta name="twitter:description" content="{m}" />',
+        '  <script type="application/ld+json">',
+        json.dumps(ld, ensure_ascii=False, indent=2).replace("</", "<\\/"),
+        "  </script>",
+    ])
+
+
+def _kal_rad_html(r):
+    import html as _html
+    navn = _html.escape(r["navn"])
+    status = r["status"]
+    attr = (f'data-ticker="{r["ticker"]}" data-navn="{navn}" data-sektor="{_html.escape(r["sektor"])}" '
+            f'data-frekvens="{_html.escape(r["frekvens"])}" data-ex="{r["ex"].isoformat()}" '
+            f'data-kjop="{r["kjop"].isoformat()}" '
+            f'data-betaling="{r["betaling"].isoformat() if r["betaling"] else ""}" '
+            f'data-belop="{r["belop"] or ""}" data-valuta="{r["valuta"] or ""}" '
+            f'data-yield="{round(r["yield"], 2) if r["yield"] else 0}" data-status="{status}"')
+    yield_ = _pst(r["yield"], 2) if r["yield"] else "—"
+    bet = (f'<time datetime="{r["betaling"].isoformat()}">{_kal_dato(r["betaling"])}</time>'
+           if r["betaling"] else "—")
+    return (f"<tr {attr}>"
+            f'<td class="kal-selskap"><a href="/aksjer/{r["ticker"]}/">{navn}</a></td>'
+            f'<td class="kal-ticker">{r["ticker"]}</td>'
+            f'<td class="kal-sektor">{_html.escape(r["sektor"]) or "—"}</td>'
+            f'<td class="kal-tall">{_kal_belop(r["belop"], r["valuta"])}</td>'
+            f'<td class="kal-tall">{yield_}</td>'
+            f'<td><time datetime="{r["ex"].isoformat()}">{_kal_dato(r["ex"])}</time></td>'
+            f'<td><time datetime="{r["kjop"].isoformat()}">{_kal_dato(r["kjop"])}</time></td>'
+            f"<td>{bet}</td>"
+            f'<td>{_html.escape(r["frekvens"]) or "—"}</td>'
+            f'<td class="kal-status kal-status-{status}">{_KAL_STATUS_TEKST[status]}</td>'
+            "</tr>")
+
+
+def lag_kalender_kropp(rader, i_dag, hentet=None):
+    """Overskrift, forklaring, neste ukes ex-datoer og hele tabellen. Ren funksjon."""
+    import html as _html
+    aar = kalenderaar_tekst(i_dag)
+    slutt = i_dag + datetime.timedelta(days=KAL_NESTE_DAGER)
+    uka = [r for r in rader if i_dag < r["ex"] <= slutt]
+    kommende = [r for r in rader if r["kommende"]]
+    passerte = len(rader) - len(kommende)
+
+    if uka:
+        linjer = []
+        for r in uka:
+            belop = (f'{_kal_belop(r["belop"], r["valuta"])} per aksje' if r["belop"]
+                     else "beløpet er ikke meldt i kroner ennå")
+            forslag = " · foreslått, ikke vedtatt" if r["status"] == "foreslatt" else ""
+            linjer.append(
+                '        <li class="kal-uke-rad">'
+                f'<a href="/aksjer/{r["ticker"]}/" class="font-semibold text-gray-900 dark:text-gray-100 hover:underline">'
+                f'{_html.escape(r["navn"])}</a> <span class="text-gray-500 dark:text-gray-400">{r["ticker"]}</span>'
+                f'<br><span class="text-xs text-gray-600 dark:text-gray-400">{belop} · '
+                f'ex {_kort_dato(r["ex"])} · kjøp senest {_kort_dato(r["kjop"])}{forslag}</span></li>')
+        uke_innhold = ('      <ul class="grid gap-3 sm:grid-cols-2 text-sm">\n'
+                       + "\n".join(linjer) + "\n      </ul>")
+    else:
+        neste = next((r for r in rader if r["ex"] > slutt), None)
+        uke_innhold = ('      <p class="text-sm text-gray-600 dark:text-gray-400">Ingen ex-datoer de neste '
+                       'sju dagene.' + (
+                           f' Neste er <a href="/aksjer/{neste["ticker"]}/" class="text-green-700 '
+                           f'dark:text-green-400 hover:underline">{_html.escape(neste["navn"])}</a> '
+                           f'{_kort_dato(neste["ex"])}.' if neste else "") + "</p>")
+
+    hentet_tekst = ""
+    if hentet:
+        try:
+            from zoneinfo import ZoneInfo
+            t = datetime.datetime.fromisoformat(str(hentet).replace("Z", "+00:00"))
+            if t.tzinfo is None:
+                t = t.replace(tzinfo=datetime.timezone.utc)
+            t = t.astimezone(ZoneInfo("Europe/Oslo"))
+            hentet_tekst = f" Tallene er hentet {_kort_dato(t.date())} kl. {t:%H.%M}."
+        except (ValueError, TypeError, ImportError):
+            hentet_tekst = ""
+
+    hode = "".join(
+        f'<th scope="col" data-kol="{k}"'
+        + (' aria-sort="ascending"' if k == "ex" else "") + f">{tekst}</th>"
+        for k, tekst in _KAL_KOLONNER)
+    rader_html = "\n".join("        " + _kal_rad_html(r) for r in rader)
+    return "\n".join([
+        '    <div class="space-y-3 max-w-3xl">',
+        f'      <h1 class="text-2xl sm:text-3xl font-bold tracking-tight leading-tight">Utbyttekalender {aar}</h1>',
+        '      <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400 leading-relaxed">'
+        'Du må eie aksjen før ex-datoen for å få utbyttet, så siste dag å kjøpe er børsdagen før. '
+        'Her er alle ex-datoene på Oslo Børs og Euronext Growth i år, med beløp, kjøpsfrist og '
+        'betalingsdato.</p>',
+        '    </div>',
+        '    <section class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-5 space-y-3" aria-labelledby="kal-uke-tittel">',
+        '      <h2 id="kal-uke-tittel" class="text-lg font-bold text-gray-900 dark:text-gray-100">Ex-datoer de neste sju dagene</h2>',
+        uke_innhold,
+        '      <p class="text-xs text-gray-500 dark:text-gray-400">Se også <a href="/uke/" '
+        'class="text-green-700 dark:text-green-400 hover:underline">denne uka på Oslo Børs</a> med '
+        'utbetalinger og rapporter.</p>',
+        '    </section>',
+        '    <section class="space-y-3" aria-labelledby="kal-tittel">',
+        f'      <h2 id="kal-tittel" class="text-lg font-bold text-gray-900 dark:text-gray-100">Alle ex-datoer {aar}</h2>',
+        f'      <p class="text-sm text-gray-600 dark:text-gray-400" id="kal-oppsummering">{len(rader)} ex-datoer: '
+        f'{len(kommende)} kommende, tidligste først, og {passerte} passerte, nyeste først.{hentet_tekst}</p>',
+        '      <div class="kal-ramme">',
+        '      <table class="kal-tabell" id="kal-tabell">',
+        f'        <caption class="sr-only">Ex-datoer på Oslo Børs {aar}</caption>',
+        f"        <thead><tr>{hode}</tr></thead>",
+        '        <tbody id="kal-rader">',
+        rader_html,
+        "        </tbody>",
+        "      </table>",
+        "      </div>",
+        '      <p class="text-xs text-gray-500 dark:text-gray-400">Beløpet er per aksje og står i '
+        'valutaen selskapet har meldt. Passerte beløp er i kroner, slik de ble utbetalt. Yield er '
+        'aksjens direkteavkastning på dagens kurs, ikke for den enkelte utbetalingen. «Betalt» '
+        f'uten kjent betalingsdato betyr at ex-datoen er mer enn {KAL_BETALT_ETTER_DAGER} dager gammel.</p>',
+        "    </section>",
+    ])
+
+
+_KAL_HODE_MONSTER = re.compile(r"<!--KAL-HODE:START-->.*?<!--KAL-HODE:SLUTT-->", re.S)
+_KAL_MONSTER = re.compile(r"<!--KAL:START-->.*?<!--KAL:SLUTT-->", re.S)
+
+
+def oppdater_utbyttekalender(aksjer, root_dir: str, i_dag=None, hentet=None):
+    """Skriver hode og tabell i /utbyttekalender/. True når filen ble endret."""
+    if i_dag is None:
+        try:
+            from zoneinfo import ZoneInfo
+            i_dag = datetime.datetime.now(ZoneInfo("Europe/Oslo")).date()
+        except ImportError:
+            i_dag = datetime.date.today()
+    sti = os.path.join(root_dir, "utbyttekalender", "index.html")
+    try:
+        with open(sti, encoding="utf-8") as f:
+            innhold = f.read()
+    except OSError:
+        return False
+    if not (_KAL_HODE_MONSTER.search(innhold) and _KAL_MONSTER.search(innhold)):
+        print("  Utbyttekalenderen mangler KAL-markørene; tabellen er ikke oppdatert.")
+        return False
+    rader = kalender_rader(aksjer, i_dag)
+    hode = lag_kalender_hode(rader, i_dag)
+    kropp = lag_kalender_kropp(rader, i_dag, hentet if hentet is not None else DATA_SIST_OPPDATERT)
+    nytt = _KAL_HODE_MONSTER.sub(lambda m: "<!--KAL-HODE:START-->\n" + hode + "\n  <!--KAL-HODE:SLUTT-->",
+                                 innhold, count=1)
+    nytt = _KAL_MONSTER.sub(lambda m: "<!--KAL:START-->\n" + kropp + "\n    <!--KAL:SLUTT-->",
+                            nytt, count=1)
+    print(f"  Utbyttekalender: {len(rader)} ex-datoer skrevet")
     if nytt == innhold:
         return False
     with open(sti, "w", encoding="utf-8") as f:

@@ -277,29 +277,107 @@ class TestAarstallISider(unittest.TestCase):
         fs.oppdater_aarstall_i_sider(self.rot, i_dag=datetime.date(2027, 6, 1))
         self.assertEqual(forste, self._les(sti))
 
-    # Neste år fra november (2026-10-19): «utbyttekalender 2027» søkes før nyttår.
+    # Neste år fra desember (2026-11-16, var november fra 2026-10-19).
     def test_kalenderaar_tekst(self):
         D = datetime.date
-        self.assertEqual(fs.kalenderaar_tekst(D(2026, 10, 31)), "2026")
-        self.assertEqual(fs.kalenderaar_tekst(D(2026, 11, 1)), "2026 og 2027")
-        self.assertEqual(fs.kalenderaar_tekst(D(2026, 12, 31)), "2026 og 2027")
-        self.assertEqual(fs.kalenderaar_tekst(D(2027, 1, 1)), "2027")
+        self.assertEqual(fs.kalenderaar_tekst(D(2026, 11, 15)), "2026")
+        self.assertEqual(fs.kalenderaar_tekst(D(2026, 11, 30)), "2026")
+        self.assertEqual(fs.kalenderaar_tekst(D(2026, 12, 1)), "2026 og 2027")
+        self.assertEqual(fs.kalenderaar_tekst(D(2026, 12, 5)), "2026 og 2027")
+        self.assertEqual(fs.kalenderaar_tekst(D(2027, 1, 2)), "2027")
 
-    def test_begge_ar_fra_november_og_tilbake_i_januar(self):
+    def test_begge_ar_i_desember_og_tilbake_i_januar(self):
         sti = self._skriv("utbyttekalender/index.html",
                           "<!--AAR-SYNK--><title>Utbyttekalender 2026 – Oslo Børs</title>"
                           '<h1>Utbyttekalender <span id="aar">2026</span></h1>')
-        fs.oppdater_aarstall_i_sider(self.rot, i_dag=datetime.date(2026, 11, 2))
+        fs.oppdater_aarstall_i_sider(self.rot, i_dag=datetime.date(2026, 11, 15))
+        self.assertIn("<title>Utbyttekalender 2026 – Oslo Børs</title>", self._les(sti))
+        fs.oppdater_aarstall_i_sider(self.rot, i_dag=datetime.date(2026, 12, 5))
         t = self._les(sti)
         self.assertIn("<title>Utbyttekalender 2026 og 2027 – Oslo Børs</title>", t)
         self.assertIn('<span id="aar">2026 og 2027</span>', t)
-        fs.oppdater_aarstall_i_sider(self.rot, i_dag=datetime.date(2026, 11, 3))
+        fs.oppdater_aarstall_i_sider(self.rot, i_dag=datetime.date(2026, 12, 6))
         self.assertEqual(t, self._les(sti))
-        fs.oppdater_aarstall_i_sider(self.rot, i_dag=datetime.date(2027, 1, 4))
+        fs.oppdater_aarstall_i_sider(self.rot, i_dag=datetime.date(2027, 1, 2))
         t = self._les(sti)
         self.assertIn("<title>Utbyttekalender 2027 – Oslo Børs</title>", t)
         self.assertIn('<span id="aar">2027</span>', t)
         self.assertNotIn(" og ", t)
+
+
+class TestUtbyttekalenderTabell(unittest.TestCase):
+    """Hele kalendertabellen som ferdig HTML (2026-11-16)."""
+
+    I_DAG = datetime.date(2026, 11, 16)
+
+    def _aksjer(self):
+        return [
+            {"ticker": "DOF", "navn": "DOF Group ASA", "sektor": "Energitjenester",
+             "frekvens": "Kvartalsvis", "utbytte_yield": 10.9, "markedsverdi_mrd": 30,
+             "utbetalinger": [["2025-11-19", 3.5], ["2026-02-25", 3.3], ["2026-08-27", 3.5]],
+             "ex_dato": "2026-11-20", "betaling_dato": "2026-11-30",
+             "annonsert_utland": {"belop": 0.4, "valuta": "USD", "ex": "2026-11-20"}},
+            {"ticker": "GOD", "navn": "Goodtech ASA", "sektor": "Industri", "frekvens": "Årlig",
+             "utbytte_yield": 3.3, "markedsverdi_mrd": 1, "utbetalinger": [["2026-11-10", 0.5]],
+             "ex_dato": "2026-12-03", "annonsert_utbytte": 2.0, "annonsert_ex": "2026-12-03",
+             "ex_forbehold": "2026-12-02"},
+            {"ticker": "x<y", "navn": "Ugyldig", "utbetalinger": [["2026-05-01", 1.0]]},
+        ]
+
+    def test_rader_rekkefolge_og_status(self):
+        rader = fs.kalender_rader(self._aksjer(), self.I_DAG)
+        self.assertEqual([(r["ticker"], r["ex"].isoformat()) for r in rader], [
+            ("DOF", "2026-11-20"), ("GOD", "2026-12-03"),          # kommende, tidligste først
+            ("GOD", "2026-11-10"), ("DOF", "2026-08-27"), ("DOF", "2026-02-25")])  # passerte, nyeste først
+        status = {(r["ticker"], r["ex"].isoformat()): r["status"] for r in rader}
+        self.assertEqual(status[("GOD", "2026-12-03")], "foreslatt")
+        self.assertEqual(status[("DOF", "2026-11-20")], "vedtatt")
+        self.assertEqual(status[("DOF", "2026-08-27")], "betalt")
+        self.assertEqual(status[("GOD", "2026-11-10")], "vedtatt")   # under 31 dager, ingen betalingsdato
+        dof = rader[0]
+        self.assertEqual((dof["belop"], dof["valuta"], dof["kjop"].isoformat()), (0.4, "USD", "2026-11-19"))
+
+    def test_fjoraret_er_ikke_med(self):
+        rader = fs.kalender_rader(self._aksjer(), self.I_DAG)
+        self.assertNotIn("2025-11-19", [r["ex"].isoformat() for r in rader])
+
+    def test_alle_rader_i_html_og_valuta_vises(self):
+        rader = fs.kalender_rader(self._aksjer(), self.I_DAG)
+        html = fs.lag_kalender_kropp(rader, self.I_DAG)
+        self.assertEqual(html.count("<tr data-ticker="), len(rader))
+        self.assertIn("0,40\u00a0USD", html)
+        self.assertIn('<h1 class="text-2xl sm:text-3xl font-bold tracking-tight leading-tight">Utbyttekalender 2026</h1>', html)
+        self.assertIn("kjøp senest tor. 19. nov", html)
+        self.assertIn("Foreslått", html)
+
+    def test_tittel_og_meta(self):
+        rader = fs.kalender_rader(self._aksjer(), self.I_DAG)
+        self.assertEqual(fs.kalender_tittel(self.I_DAG), "Utbyttekalender 2026 – alle ex-datoer på Oslo Børs")
+        self.assertLessEqual(len(fs.kalender_tittel(datetime.date(2026, 12, 5))), 70)
+        meta = fs.kalender_meta(rader, self.I_DAG)
+        self.assertTrue(meta.startswith("Alle ex-datoer og utbytter på Oslo Børs i 2026."), meta)
+        self.assertIn("2 ex-datoer de neste 30 dagene – neste: DOF 20. nov.", meta)
+        self.assertLessEqual(len(meta), 155)
+
+    def test_smaa_belop_mister_ikke_sifre(self):
+        self.assertEqual(fs._kal_belop(0.0342, "USD"), "0,0342\u00a0USD")
+        self.assertEqual(fs._kal_belop(4.5, "NOK"), "4,50\u00a0NOK")
+        self.assertEqual(fs._kal_belop(None, None), "—")
+
+    def test_markorene_fylles(self):
+        import tempfile, os
+        with tempfile.TemporaryDirectory() as rot:
+            os.makedirs(os.path.join(rot, "utbyttekalender"))
+            sti = os.path.join(rot, "utbyttekalender", "index.html")
+            with open(sti, "w", encoding="utf-8") as f:
+                f.write("<head><!--KAL-HODE:START--><!--KAL-HODE:SLUTT--></head>"
+                        "<main><!--KAL:START--><!--KAL:SLUTT--></main>")
+            self.assertTrue(fs.oppdater_utbyttekalender(self._aksjer(), rot, i_dag=self.I_DAG, hentet=""))
+            t = open(sti, encoding="utf-8").read()
+            self.assertIn("<title>Utbyttekalender 2026", t)
+            self.assertIn('"BreadcrumbList"', t)
+            self.assertEqual(t.count("<tr data-ticker="), 5)
+            self.assertFalse(fs.oppdater_utbyttekalender(self._aksjer(), rot, i_dag=self.I_DAG, hentet=""))
 
 
 class TestKalenderMaaneder(unittest.TestCase):
@@ -367,7 +445,9 @@ class TestKalenderMaaneder(unittest.TestCase):
         with open(os.path.join(rot, "utbyttekalender", "index.html"), encoding="utf-8") as f:
             t = f.read()
         self.assertRegex(t, r"(?s)<!--EXMND:START-->.*<!--EXMND:SLUTT-->")
-        self.assertIn("<!--AAR-SYNK-->", t)
+        # Tittel og årstall skrives nå av oppdater_utbyttekalender(), ikke AAR-SYNK.
+        self.assertRegex(t, r"(?s)<!--KAL-HODE:START-->.*<!--KAL-HODE:SLUTT-->")
+        self.assertRegex(t, r"(?s)<!--KAL:START-->.*<!--KAL:SLUTT-->")
 
 
 class TestSidetittelOgMeta(unittest.TestCase):

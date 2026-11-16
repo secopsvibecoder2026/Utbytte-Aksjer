@@ -972,3 +972,28 @@ section[id] { scroll-margin-top: 100px; }
 .dark .prose th { background: #1f2937; border-color: #374151; }
 .dark .prose td { border-color: #374151; }
 .dark .prose tr:nth-child(even) td { background: #111827; }
+
+/* ── Utbyttekalenderen (/utbyttekalender/), 16.11.2026 ──────────────────────
+   Tabellen skrives ferdig av datajobben. Stilene ligger her og ikke som
+   Tailwind-klasser på hver celle, så de 250–400 radene holder HTML-en liten. */
+.kal-ramme { overflow-x: auto; -webkit-overflow-scrolling: touch; border: 1px solid #e5e7eb; border-radius: 0.75rem; background: #fff; }
+.dark .kal-ramme { border-color: #1f2937; background: #111827; }
+.kal-tabell { width: 100%; border-collapse: collapse; font-size: 0.8125rem; font-variant-numeric: tabular-nums; }
+.kal-tabell th { text-align: left; font-weight: 600; color: #4b5563; background: #f9fafb; padding: 0.55rem 0.6rem; white-space: nowrap; border-bottom: 1px solid #e5e7eb; position: sticky; top: 0; }
+.dark .kal-tabell th { color: #9ca3af; background: #1f2937; border-color: #374151; }
+.kal-tabell td { padding: 0.5rem 0.6rem; border-bottom: 1px solid #f3f4f6; color: #111827; white-space: nowrap; vertical-align: top; }
+.dark .kal-tabell td { border-color: #1f2937; color: #f3f4f6; }
+.kal-tabell tbody tr:last-child td { border-bottom: 0; }
+.kal-tabell .kal-selskap { white-space: normal; min-width: 9rem; }
+.kal-tabell .kal-selskap a { color: #275f45; font-weight: 600; text-decoration: none; }
+.kal-tabell .kal-selskap a:hover { text-decoration: underline; }
+.dark .kal-tabell .kal-selskap a { color: #6fa98a; }
+.kal-tabell .kal-ticker { font-weight: 600; }
+.kal-tabell .kal-sektor { white-space: normal; color: #4b5563; }
+.dark .kal-tabell .kal-sektor { color: #9ca3af; }
+.kal-tabell .kal-tall { text-align: right; }
+.kal-tabell th[data-kol="utbytte"], .kal-tabell th[data-kol="yield"] { text-align: right; }
+.kal-tabell .kal-status-foreslatt { color: #805a22; font-weight: 600; }
+.dark .kal-tabell .kal-status-foreslatt { color: #cfa65a; }
+.kal-tabell .kal-status-betalt { color: #6b7280; }
+.kalender-lenke { margin-top: 0.75rem; }
