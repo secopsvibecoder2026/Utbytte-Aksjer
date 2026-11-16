@@ -378,6 +378,23 @@ class TestUtbyttekalenderTabell(unittest.TestCase):
             self.assertIn('"BreadcrumbList"', t)
             self.assertEqual(t.count("<tr data-ticker="), 5)
             self.assertFalse(fs.oppdater_utbyttekalender(self._aksjer(), rot, i_dag=self.I_DAG, hentet=""))
+            ics = open(os.path.join(rot, "utbyttekalender", "exday.ics"), encoding="utf-8", newline="").read()
+            self.assertEqual(ics.count("BEGIN:VEVENT"), 5)
+
+    def test_ics(self):
+        rader = fs.kalender_rader(self._aksjer(), self.I_DAG)
+        ics = fs.lag_kalender_ics(rader, self.I_DAG)
+        self.assertTrue(ics.startswith("BEGIN:VCALENDAR\r\n") and ics.endswith("END:VCALENDAR\r\n"))
+        self.assertEqual(ics.count("BEGIN:VEVENT"), len(rader))
+        self.assertIn("UID:DOF-20261120@exday.no", ics)
+        self.assertIn("DTSTART;VALUE=DATE:20261120\r\nDTEND;VALUE=DATE:20261121", ics)
+        self.assertIn("TRIGGER:-PT39H", ics)        # kl. 09 dagen før siste kjøpsdag 19.11
+        self.assertIn("0\\,40 USD", ics)            # aldri omregnet til kroner
+        self.assertIn("foreslått\\, ikke vedtatt", ics.replace("\r\n ", ""))
+        for linje in ics.split("\r\n"):
+            self.assertLessEqual(len(linje.encode("utf-8")), 75, linje)
+        lang = fs._ics_brett("DESCRIPTION:" + "æ" * 100)
+        self.assertEqual(lang.replace("\r\n ", ""), "DESCRIPTION:" + "æ" * 100)
 
 
 class TestKalenderMaaneder(unittest.TestCase):

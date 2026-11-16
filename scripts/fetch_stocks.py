@@ -11152,6 +11152,7 @@ def lag_kalender_kropp(rader, i_dag, hentet=None):
         f'      <h2 id="kal-tittel" class="text-lg font-bold text-gray-900 dark:text-gray-100">Alle ex-datoer {aar}</h2>',
         f'      <p class="text-sm text-gray-600 dark:text-gray-400" id="kal-oppsummering">{len(rader)} ex-datoer: '
         f'{len(kommende)} kommende, tidligste først, og {passerte} passerte, nyeste først.{hentet_tekst}</p>',
+        '      <div id="kal-kontroller" class="kal-kontroller" hidden></div>',
         '      <div class="kal-ramme">',
         '      <table class="kal-tabell" id="kal-tabell">',
         f'        <caption class="sr-only">Ex-datoer på Oslo Børs {aar}</caption>',
@@ -11167,6 +11168,62 @@ def lag_kalender_kropp(rader, i_dag, hentet=None):
         f'uten kjent betalingsdato betyr at ex-datoen er mer enn {KAL_BETALT_ETTER_DAGER} dager gammel.</p>',
         "    </section>",
     ])
+
+
+def _ics_tekst(s):
+    return (str(s).replace("\\", "\\\\").replace(";", "\\;").replace(",", "\\,")
+            .replace("\n", "\\n"))
+
+
+def _ics_brett(linje):
+    """Bretter en linje til høyst 75 byte, som RFC 5545 krever."""
+    deler, del_, lengde = [], "", 0
+    for tegn in linje:
+        n = len(tegn.encode("utf-8"))
+        if lengde + n > (75 if not deler else 74):
+            deler.append(del_)
+            del_, lengde = "", 0
+        del_ += tegn
+        lengde += n
+    deler.append(del_)
+    return "\r\n ".join(deler)
+
+
+def lag_kalender_ics(rader, i_dag):
+    """Abonnerbar kalender (/utbyttekalender/exday.ics). Ren funksjon.
+
+    Én heldagshendelse per ex-dato med påminnelse kl. 09 dagen før siste
+    kjøpsdag, samme form som knappene i assets/utbyttekalender.js lager.
+    UID er ticker og ex-dato, så en kalender som abonnerer, oppdaterer
+    hendelsen i stedet for å lage en ny. DTSTAMP er dagens dato, så filen
+    bare endres når innholdet eller dagen gjør det.
+    """
+    stempel = f"{i_dag:%Y%m%d}T000000Z"
+    linjer = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//exday.no//Utbyttekalender//NO",
+              "CALSCALE:GREGORIAN", "METHOD:PUBLISH", "X-WR-CALNAME:Utbyttekalender exday.no",
+              "X-PUBLISHED-TTL:PT12H"]
+    for r in sorted(rader, key=lambda r: (r["ex"], r["ticker"])):
+        ex = r["ex"]
+        dager_for = (ex - r["kjop"]).days + 1
+        belop = _kal_belop(r["belop"], r["valuta"]).replace(" ", " ") if r["belop"] else ""
+        beskr = "\n".join(x for x in [
+            f"Siste dag å kjøpe med rett på utbyttet: {_kal_dato(r['kjop'])}.",
+            f"Utbytte: {belop} per aksje." if belop else "",
+            "Utbyttet er foreslått, ikke vedtatt." if r.get("status") == "foreslatt" else "",
+            f"Betaling: {_kal_dato(r['betaling'])}." if r.get("betaling") else "",
+            f"https://exday.no/aksjer/{r['ticker']}/"] if x)
+        tittel = f"Ex-dato {r['navn']} ({r['ticker']})" + (f" {belop}" if belop else "")
+        linjer += [
+            "BEGIN:VEVENT", f"UID:{r['ticker']}-{ex:%Y%m%d}@exday.no", f"DTSTAMP:{stempel}",
+            f"DTSTART;VALUE=DATE:{ex:%Y%m%d}",
+            f"DTEND;VALUE=DATE:{ex + datetime.timedelta(days=1):%Y%m%d}",
+            f"SUMMARY:{_ics_tekst(tittel)}", f"DESCRIPTION:{_ics_tekst(beskr)}",
+            f"URL:https://exday.no/aksjer/{r['ticker']}/",
+            "BEGIN:VALARM", "ACTION:DISPLAY",
+            "DESCRIPTION:" + _ics_tekst(f"Kjøp {r['ticker']} senest i morgen for å få utbyttet"),
+            f"TRIGGER:-PT{dager_for * 24 - 9}H", "END:VALARM", "END:VEVENT"]
+    linjer.append("END:VCALENDAR")
+    return "\r\n".join(_ics_brett(l) for l in linjer) + "\r\n"
 
 
 _KAL_HODE_MONSTER = re.compile(r"<!--KAL-HODE:START-->.*?<!--KAL-HODE:SLUTT-->", re.S)
@@ -11198,6 +11255,17 @@ def oppdater_utbyttekalender(aksjer, root_dir: str, i_dag=None, hentet=None):
     nytt = _KAL_MONSTER.sub(lambda m: "<!--KAL:START-->\n" + kropp + "\n    <!--KAL:SLUTT-->",
                             nytt, count=1)
     print(f"  Utbyttekalender: {len(rader)} ex-datoer skrevet")
+    # Abonnerbar kalender ved siden av siden. Skrives bare når den endres.
+    ics_sti = os.path.join(root_dir, "utbyttekalender", "exday.ics")
+    ics = lag_kalender_ics(rader, i_dag)
+    try:
+        with open(ics_sti, encoding="utf-8", newline="") as f:
+            gammel_ics = f.read()
+    except OSError:
+        gammel_ics = None
+    if ics != gammel_ics:
+        with open(ics_sti, "w", encoding="utf-8", newline="") as f:
+            f.write(ics)
     if nytt == innhold:
         return False
     with open(sti, "w", encoding="utf-8") as f:

@@ -997,3 +997,89 @@ section[id] { scroll-margin-top: 100px; }
 .dark .kal-tabell .kal-status-foreslatt { color: #cfa65a; }
 .kal-tabell .kal-status-betalt { color: #6b7280; }
 .kalender-lenke { margin-top: 0.75rem; }
+
+/* Kontrollene finnes bare med JavaScript (assets/utbyttekalender.js). */
+.kal-kontroller { display: flex; flex-direction: column; gap: 0.75rem; }
+.kal-sokrad { display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center; }
+.kal-felt { border: 1px solid #d1d5db; border-radius: 0.5rem; background: #fff; color: #111827; padding: 0.45rem 0.6rem; font-size: 0.875rem; }
+.dark .kal-felt { background: #111827; border-color: #374151; color: #f3f4f6; }
+.kal-felt:focus-visible, .kal-knapp:focus-visible, .kal-sortknapp:focus-visible, .kal-ikon:focus-visible, .kal-dag:focus-visible { outline: 2px solid #2f7352; outline-offset: 2px; }
+.kal-sokfelt { flex: 1 1 16rem; min-width: 0; }
+.kal-visning { display: inline-flex; gap: 0.25rem; }
+.kal-knapp { display: inline-flex; align-items: center; gap: 0.35rem; border: 1px solid #d1d5db; border-radius: 0.5rem; background: #fff; color: #374151; padding: 0.4rem 0.75rem; font-size: 0.8125rem; font-weight: 600; cursor: pointer; text-decoration: none; }
+.kal-knapp:hover { border-color: #2f7352; color: #275f45; }
+.kal-knapp[aria-pressed="true"] { border-color: #2f7352; background: #f3f7f5; color: #275f45; }
+.kal-knapp:disabled { opacity: 0.5; cursor: default; }
+.dark .kal-knapp { background: #111827; border-color: #374151; color: #d1d5db; }
+.dark .kal-knapp:hover, .dark .kal-knapp[aria-pressed="true"] { border-color: #6fa98a; color: #6fa98a; background: #0f251b; }
+.kal-filtre > summary { list-style: none; width: max-content; }
+.kal-filtre > summary::-webkit-details-marker { display: none; }
+.kal-filtergrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr)); gap: 0.75rem; margin-top: 0.75rem; font-size: 0.8125rem; color: #4b5563; }
+.dark .kal-filtergrid { color: #9ca3af; }
+.kal-filtergrid > label { display: flex; flex-direction: column; gap: 0.25rem; }
+.kal-sektorer { grid-column: 1 / -1; border: 1px solid #e5e7eb; border-radius: 0.5rem; padding: 0.5rem 0.75rem; display: flex; flex-wrap: wrap; gap: 0.25rem 1rem; }
+.dark .kal-sektorer { border-color: #374151; }
+.kal-sektorer legend { padding: 0 0.25rem; font-weight: 600; }
+.kal-avkrysning { display: inline-flex !important; flex-direction: row !important; align-items: center; gap: 0.35rem; }
+.kal-mine { grid-column: 1 / -1; }
+.kal-hint { color: #6b7280; font-size: 0.75rem; }
+.kal-statuslinje { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem; font-size: 0.8125rem; color: #4b5563; }
+.dark .kal-statuslinje { color: #9ca3af; }
+.kal-handlinger { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.kal-ingen { padding: 1.5rem; text-align: center; color: #4b5563; font-size: 0.875rem; }
+.kal-lenkeknapp { color: #275f45; text-decoration: underline; background: none; border: 0; cursor: pointer; font: inherit; }
+.dark .kal-lenkeknapp { color: #6fa98a; }
+.kal-sortknapp { all: unset; cursor: pointer; display: inline-flex; gap: 0.25rem; align-items: center; }
+.kal-pil { font-size: 0.65rem; color: #2f7352; min-width: 0.6rem; }
+.kal-radknapper { display: inline-flex; gap: 0.1rem; margin-right: 0.35rem; vertical-align: middle; }
+.kal-ikon { background: none; border: 0; padding: 0.15rem; color: #9ca3af; cursor: pointer; line-height: 0; border-radius: 0.25rem; }
+.kal-ikon:hover { color: #275f45; }
+.kal-stjerne svg path { fill: none; }
+.kal-stjerne-paa { color: #b98a3a; }
+.kal-stjerne-paa svg path { fill: currentColor; }
+.kal-tabell tr[hidden] { display: none; }
+
+/* Månedsvisningen bygges av de synlige radene. */
+.kal-maaned { border: 1px solid #e5e7eb; border-radius: 0.75rem; background: #fff; padding: 1rem; }
+.dark .kal-maaned { border-color: #1f2937; background: #111827; }
+.kal-maanedhode { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem; }
+.kal-maanedhode h3 { font-weight: 700; }
+.kal-ukedager, .kal-rutenett { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 0.25rem; }
+.kal-ukedager span { text-align: center; font-size: 0.7rem; color: #6b7280; }
+.kal-dag { min-height: 4.25rem; border: 1px solid #f3f4f6; border-radius: 0.5rem; padding: 0.25rem; text-align: left; background: none; font: inherit; color: inherit; display: flex; flex-direction: column; gap: 0.15rem; overflow: hidden; }
+.dark .kal-dag { border-color: #1f2937; }
+button.kal-dag { cursor: pointer; border-color: #c6dccf; }
+button.kal-dag:hover, .kal-dag-valgt { background: #f3f7f5; }
+.dark button.kal-dag { border-color: #214d39; }
+.dark button.kal-dag:hover, .dark .kal-dag-valgt { background: rgba(27,63,47,0.3); }
+.kal-dag-tom { border: 0; }
+.kal-dag-idag .kal-dagnr { color: #275f45; font-weight: 700; }
+.kal-dagnr { font-size: 0.75rem; color: #6b7280; }
+.kal-merke { font-size: 0.65rem; font-weight: 600; background: #e3eee8; color: #214d39; border-radius: 0.25rem; padding: 0 0.2rem; white-space: nowrap; }
+.dark .kal-merke { background: #214d39; color: #e3eee8; }
+.kal-merke-flere { background: none; color: #6b7280; }
+.kal-dagliste { margin-top: 0.75rem; font-size: 0.875rem; display: grid; gap: 0.35rem; }
+.kal-dagliste a { color: #275f45; font-weight: 600; }
+.dark .kal-dagliste a { color: #6fa98a; }
+
+/* Mobil: hver rad blir et kort. Samme tabell, bare CSS, så det virker også uten JavaScript. */
+@media (max-width: 639px) {
+  .kal-ramme { border: 0; background: none; overflow: visible; }
+  .kal-tabell, .kal-tabell tbody, .kal-tabell tr, .kal-tabell td { display: block; }
+  .kal-tabell thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .kal-tabell tr { border: 1px solid #e5e7eb; border-radius: 0.75rem; background: #fff; padding: 0.6rem 0.75rem; margin-bottom: 0.6rem; display: grid; grid-template-columns: 1fr 1fr; column-gap: 0.75rem; }
+  .dark .kal-tabell tr { border-color: #1f2937; background: #111827; }
+  .kal-tabell td { border: 0; padding: 0.15rem 0; white-space: normal; text-align: left !important; }
+  .kal-tabell td::before { display: block; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.03em; color: #6b7280; }
+  .kal-tabell td:nth-child(1) { grid-column: 1 / -1; font-size: 0.9375rem; }
+  .kal-tabell td:nth-child(2), .kal-tabell td:nth-child(3), .kal-tabell td:nth-child(9) { display: none; }
+  .kal-tabell td:nth-child(4)::before { content: "Utbytte"; }
+  .kal-tabell td:nth-child(5)::before { content: "Yield"; }
+  .kal-tabell td:nth-child(6)::before { content: "Ex-dato"; }
+  .kal-tabell td:nth-child(7)::before { content: "Kjøp senest"; }
+  .kal-tabell td:nth-child(8)::before { content: "Betaling"; }
+  .kal-tabell td:nth-child(10)::before { content: "Status"; }
+  .kal-tabell td:nth-child(6), .kal-tabell td:nth-child(7) { font-weight: 600; }
+  .kal-dag { min-height: 3rem; }
+  .kal-merke:nth-of-type(n+2) { display: none; }
+}

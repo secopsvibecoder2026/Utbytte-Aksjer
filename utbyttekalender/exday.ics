@@ -1,0 +1,3948 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//exday.no//Utbyttekalender//NO
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Utbyttekalender exday.no
+X-PUBLISHED-TTL:PT12H
+BEGIN:VEVENT
+UID:PUBLI-20260102@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260102
+DTEND;VALUE=DATE:20260103
+SUMMARY:Ex-dato PPI Public Property Invest (PUBLI) 0\,15 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 30.12.2025.\nUtbytte
+ : 0\,15 NOK per aksje.\nhttps://exday.no/aksjer/PUBLI/
+URL:https://exday.no/aksjer/PUBLI/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp PUBLI senest i morgen for å få utbyttet
+TRIGGER:-PT87H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:CMBTO-20260106@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260106
+DTEND;VALUE=DATE:20260107
+SUMMARY:Ex-dato CMB.TECH (CMBTO) 0\,4798 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 05.01.2026.\nUtbytte
+ : 0\,4798 NOK per aksje.\nhttps://exday.no/aksjer/CMBTO/
+URL:https://exday.no/aksjer/CMBTO/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp CMBTO senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:2020-20260115@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260115
+DTEND;VALUE=DATE:20260116
+SUMMARY:Ex-dato 2020 Bulkers (2020) 2\,2066 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 14.01.2026.\nUtbytte
+ : 2\,2066 NOK per aksje.\nhttps://exday.no/aksjer/2020/
+URL:https://exday.no/aksjer/2020/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp 2020 senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:NORAM-20260116@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260116
+DTEND;VALUE=DATE:20260117
+SUMMARY:Ex-dato NorAm Drilling (NORAM) 0\,303 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 15.01.2026.\nUtbytte
+ : 0\,303 NOK per aksje.\nhttps://exday.no/aksjer/NORAM/
+URL:https://exday.no/aksjer/NORAM/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp NORAM senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:HSHP-20260119@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260119
+DTEND;VALUE=DATE:20260120
+SUMMARY:Ex-dato Himalaya Shipping (HSHP) 1\,2473 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 16.01.2026.\nUtbytte
+ : 1\,2473 NOK per aksje.\nhttps://exday.no/aksjer/HSHP/
+URL:https://exday.no/aksjer/HSHP/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp HSHP senest i morgen for å få utbyttet
+TRIGGER:-PT87H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:PROT-20260203@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260203
+DTEND;VALUE=DATE:20260204
+SUMMARY:Ex-dato Protector Forsikring (PROT) 6\,00 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 02.02.2026.\nUtbytte
+ : 6\,00 NOK per aksje.\nhttps://exday.no/aksjer/PROT/
+URL:https://exday.no/aksjer/PROT/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp PROT senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:VAR-20260203@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260203
+DTEND;VALUE=DATE:20260204
+SUMMARY:Ex-dato Vår Energi (VAR) 1\,209 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 02.02.2026.\nUtbytte
+ : 1\,209 NOK per aksje.\nhttps://exday.no/aksjer/VAR/
+URL:https://exday.no/aksjer/VAR/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp VAR senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:ARCH-20260204@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260204
+DTEND;VALUE=DATE:20260205
+SUMMARY:Ex-dato Archer (ARCH) 0\,62 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 03.02.2026.\nUtbytte
+ : 0\,62 NOK per aksje.\nhttps://exday.no/aksjer/ARCH/
+URL:https://exday.no/aksjer/ARCH/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp ARCH senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:STST-20260206@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260206
+DTEND;VALUE=DATE:20260207
+SUMMARY:Ex-dato Stainless Tankers (STST) 1\,2843 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 05.02.2026.\nUtbytte
+ : 1\,2843 NOK per aksje.\nhttps://exday.no/aksjer/STST/
+URL:https://exday.no/aksjer/STST/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp STST senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:DNO-20260213@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260213
+DTEND;VALUE=DATE:20260214
+SUMMARY:Ex-dato DNO (DNO) 0\,375 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 12.02.2026.\nUtbytte
+ : 0\,375 NOK per aksje.\nhttps://exday.no/aksjer/DNO/
+URL:https://exday.no/aksjer/DNO/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp DNO senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:AKAST-20260216@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260216
+DTEND;VALUE=DATE:20260217
+SUMMARY:Ex-dato Akastor (AKAST) 0\,40 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 13.02.2026.\nUtbytte
+ : 0\,40 NOK per aksje.\nhttps://exday.no/aksjer/AKAST/
+URL:https://exday.no/aksjer/AKAST/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp AKAST senest i morgen for å få utbyttet
+TRIGGER:-PT87H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:AKRBP-20260216@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260216
+DTEND;VALUE=DATE:20260217
+SUMMARY:Ex-dato Aker BP (AKRBP) 6\,2942 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 13.02.2026.\nUtbytte
+ : 6\,2942 NOK per aksje.\nhttps://exday.no/aksjer/AKRBP/
+URL:https://exday.no/aksjer/AKRBP/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp AKRBP senest i morgen for å få utbyttet
+TRIGGER:-PT87H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:EQNR-20260216@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260216
+DTEND;VALUE=DATE:20260217
+SUMMARY:Ex-dato Equinor (EQNR) 3\,5249 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 13.02.2026.\nUtbytte
+ : 3\,5249 NOK per aksje.\nhttps://exday.no/aksjer/EQNR/
+URL:https://exday.no/aksjer/EQNR/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp EQNR senest i morgen for å få utbyttet
+TRIGGER:-PT87H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:MORLD-20260216@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260216
+DTEND;VALUE=DATE:20260217
+SUMMARY:Ex-dato Moreld (MORLD) 0\,42 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 13.02.2026.\nUtbytte
+ : 0\,42 NOK per aksje.\nhttps://exday.no/aksjer/MORLD/
+URL:https://exday.no/aksjer/MORLD/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp MORLD senest i morgen for å få utbyttet
+TRIGGER:-PT87H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:ODF-20260216@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260216
+DTEND;VALUE=DATE:20260217
+SUMMARY:Ex-dato Odfjell A (ODF) 4\,74 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 13.02.2026.\nUtbytte
+ : 4\,74 NOK per aksje.\nhttps://exday.no/aksjer/ODF/
+URL:https://exday.no/aksjer/ODF/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp ODF senest i morgen for å få utbyttet
+TRIGGER:-PT87H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:ODFB-20260216@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260216
+DTEND;VALUE=DATE:20260217
+SUMMARY:Ex-dato Odfjell B (ODFB) 4\,74 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 13.02.2026.\nUtbytte
+ : 4\,74 NOK per aksje.\nhttps://exday.no/aksjer/ODFB/
+URL:https://exday.no/aksjer/ODFB/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp ODFB senest i morgen for å få utbyttet
+TRIGGER:-PT87H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:WEST-20260216@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260216
+DTEND;VALUE=DATE:20260217
+SUMMARY:Ex-dato Western Bulk Chartering (WEST) 1\,21 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 13.02.2026.\nUtbytte
+ : 1\,21 NOK per aksje.\nhttps://exday.no/aksjer/WEST/
+URL:https://exday.no/aksjer/WEST/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp WEST senest i morgen for å få utbyttet
+TRIGGER:-PT87H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:NORAM-20260217@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260217
+DTEND;VALUE=DATE:20260218
+SUMMARY:Ex-dato NorAm Drilling (NORAM) 0\,285 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 16.02.2026.\nUtbytte
+ : 0\,285 NOK per aksje.\nhttps://exday.no/aksjer/NORAM/
+URL:https://exday.no/aksjer/NORAM/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp NORAM senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:2020-20260218@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260218
+DTEND;VALUE=DATE:20260219
+SUMMARY:Ex-dato 2020 Bulkers (2020) 1\,4391 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 17.02.2026.\nUtbytte
+ : 1\,4391 NOK per aksje.\nhttps://exday.no/aksjer/2020/
+URL:https://exday.no/aksjer/2020/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp 2020 senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:ENH-20260218@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260218
+DTEND;VALUE=DATE:20260219
+SUMMARY:Ex-dato SED Energy (ENH) 0\,2631 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 17.02.2026.\nUtbytte
+ : 0\,2631 NOK per aksje.\nhttps://exday.no/aksjer/ENH/
+URL:https://exday.no/aksjer/ENH/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp ENH senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:KCC-20260218@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260218
+DTEND;VALUE=DATE:20260219
+SUMMARY:Ex-dato Klaveness Combination Carriers (KCC) 0\,763 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 17.02.2026.\nUtbytte
+ : 0\,763 NOK per aksje.\nhttps://exday.no/aksjer/KCC/
+URL:https://exday.no/aksjer/KCC/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp KCC senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:HSHP-20260219@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260219
+DTEND;VALUE=DATE:20260220
+SUMMARY:Ex-dato Himalaya Shipping (HSHP) 0\,5757 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 18.02.2026.\nUtbytte
+ : 0\,5757 NOK per aksje.\nhttps://exday.no/aksjer/HSHP/
+URL:https://exday.no/aksjer/HSHP/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp HSHP senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:TGS-20260219@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260219
+DTEND;VALUE=DATE:20260220
+SUMMARY:Ex-dato TGS (TGS) 1\,47 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 18.02.2026.\nUtbytte
+ : 1\,47 NOK per aksje.\nhttps://exday.no/aksjer/TGS/
+URL:https://exday.no/aksjer/TGS/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp TGS senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:MOWI-20260220@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260220
+DTEND;VALUE=DATE:20260221
+SUMMARY:Ex-dato Mowi (MOWI) 1\,50 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 19.02.2026.\nUtbytte
+ : 1\,50 NOK per aksje.\nhttps://exday.no/aksjer/MOWI/
+URL:https://exday.no/aksjer/MOWI/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp MOWI senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:SOMA-20260223@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260223
+DTEND;VALUE=DATE:20260224
+SUMMARY:Ex-dato Solstad Maritime (SOMA) 0\,3064 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 20.02.2026.\nUtbytte
+ : 0\,3064 NOK per aksje.\nhttps://exday.no/aksjer/SOMA/
+URL:https://exday.no/aksjer/SOMA/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp SOMA senest i morgen for å få utbyttet
+TRIGGER:-PT87H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:DOF-20260225@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260225
+DTEND;VALUE=DATE:20260226
+SUMMARY:Ex-dato DOF (DOF) 3\,3446 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 24.02.2026.\nUtbytte
+ : 3\,3446 NOK per aksje.\nhttps://exday.no/aksjer/DOF/
+URL:https://exday.no/aksjer/DOF/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp DOF senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:PEN-20260227@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260227
+DTEND;VALUE=DATE:20260228
+SUMMARY:Ex-dato Panoro Energy (PEN) 0\,44 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 26.02.2026.\nUtbytte
+ : 0\,44 NOK per aksje.\nhttps://exday.no/aksjer/PEN/
+URL:https://exday.no/aksjer/PEN/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp PEN senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:BOR-20260302@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260302
+DTEND;VALUE=DATE:20260303
+SUMMARY:Ex-dato Borgestad (BOR) 0\,50 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 27.02.2026.\nUtbytte
+ : 0\,50 NOK per aksje.\nhttps://exday.no/aksjer/BOR/
+URL:https://exday.no/aksjer/BOR/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp BOR senest i morgen for å få utbyttet
+TRIGGER:-PT87H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:HAUTO-20260302@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260302
+DTEND;VALUE=DATE:20260303
+SUMMARY:Ex-dato Höegh Autoliners (HAUTO) 4\,9606 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 27.02.2026.\nUtbytte
+ : 4\,9606 NOK per aksje.\nhttps://exday.no/aksjer/HAUTO/
+URL:https://exday.no/aksjer/HAUTO/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp HAUTO senest i morgen for å få utbyttet
+TRIGGER:-PT87H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:HUNT-20260302@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260302
+DTEND;VALUE=DATE:20260303
+SUMMARY:Ex-dato Hunter (HUNT) 0\,40 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 27.02.2026.\nUtbytte
+ : 0\,40 NOK per aksje.\nhttps://exday.no/aksjer/HUNT/
+URL:https://exday.no/aksjer/HUNT/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp HUNT senest i morgen for å få utbyttet
+TRIGGER:-PT87H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:IWS-20260302@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260302
+DTEND;VALUE=DATE:20260303
+SUMMARY:Ex-dato Integrated Wind Solutions (IWS) 3\,00 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 27.02.2026.\nUtbytte
+ : 3\,00 NOK per aksje.\nhttps://exday.no/aksjer/IWS/
+URL:https://exday.no/aksjer/IWS/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp IWS senest i morgen for å få utbyttet
+TRIGGER:-PT87H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:OET-20260302@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260302
+DTEND;VALUE=DATE:20260303
+SUMMARY:Ex-dato Okeanis Eco Tankers (OET) 14\,8719 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 27.02.2026.\nUtbytte
+ : 14\,8719 NOK per aksje.\nhttps://exday.no/aksjer/OET/
+URL:https://exday.no/aksjer/OET/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp OET senest i morgen for å få utbyttet
+TRIGGER:-PT87H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:BWO-20260304@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260304
+DTEND;VALUE=DATE:20260305
+SUMMARY:Ex-dato BW Offshore (BWO) 1\,7558 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 03.03.2026.\nUtbytte
+ : 1\,7558 NOK per aksje.\nhttps://exday.no/aksjer/BWO/
+URL:https://exday.no/aksjer/BWO/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp BWO senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:ODL-20260304@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260304
+DTEND;VALUE=DATE:20260305
+SUMMARY:Ex-dato Odfjell Drilling (ODL) 2\,2292 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 03.03.2026.\nUtbytte
+ : 2\,2292 NOK per aksje.\nhttps://exday.no/aksjer/ODL/
+URL:https://exday.no/aksjer/ODL/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp ODL senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:SATS-20260304@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260304
+DTEND;VALUE=DATE:20260305
+SUMMARY:Ex-dato SATS (SATS) 0\,67 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 03.03.2026.\nUtbytte
+ : 0\,67 NOK per aksje.\nhttps://exday.no/aksjer/SATS/
+URL:https://exday.no/aksjer/SATS/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp SATS senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:HAFNI-20260305@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260305
+DTEND;VALUE=DATE:20260306
+SUMMARY:Ex-dato Hafnia (HAFNI) 1\,6906 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 04.03.2026.\nUtbytte
+ : 1\,6906 NOK per aksje.\nhttps://exday.no/aksjer/HAFNI/
+URL:https://exday.no/aksjer/HAFNI/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp HAFNI senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:PLSV-20260305@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260305
+DTEND;VALUE=DATE:20260306
+SUMMARY:Ex-dato Paratus Energy Services (PLSV) 2\,10 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 04.03.2026.\nUtbytte
+ : 2\,10 NOK per aksje.\nhttps://exday.no/aksjer/PLSV/
+URL:https://exday.no/aksjer/PLSV/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp PLSV senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:OTL-20260310@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260310
+DTEND;VALUE=DATE:20260311
+SUMMARY:Ex-dato Odfjell Technology (OTL) 1\,52 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 09.03.2026.\nUtbytte
+ : 1\,52 NOK per aksje.\nhttps://exday.no/aksjer/OTL/
+URL:https://exday.no/aksjer/OTL/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp OTL senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:SOFF-20260310@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260310
+DTEND;VALUE=DATE:20260311
+SUMMARY:Ex-dato Solstad Offshore (SOFF) 0\,4832 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 09.03.2026.\nUtbytte
+ : 0\,4832 NOK per aksje.\nhttps://exday.no/aksjer/SOFF/
+URL:https://exday.no/aksjer/SOFF/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp SOFF senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:WAWI-20260310@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260310
+DTEND;VALUE=DATE:20260311
+SUMMARY:Ex-dato Wallenius Wilhelmsen (WAWI) 9\,6908 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 09.03.2026.\nUtbytte
+ : 9\,6908 NOK per aksje.\nhttps://exday.no/aksjer/WAWI/
+URL:https://exday.no/aksjer/WAWI/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp WAWI senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:FRO-20260311@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260311
+DTEND;VALUE=DATE:20260312
+SUMMARY:Ex-dato Frontline (FRO) 9\,8827 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 10.03.2026.\nUtbytte
+ : 9\,8827 NOK per aksje.\nhttps://exday.no/aksjer/FRO/
+URL:https://exday.no/aksjer/FRO/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp FRO senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:BWLPG-20260312@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260312
+DTEND;VALUE=DATE:20260313
+SUMMARY:Ex-dato BW LPG (BWLPG) 5\,4691 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 11.03.2026.\nUtbytte
+ : 5\,4691 NOK per aksje.\nhttps://exday.no/aksjer/BWLPG/
+URL:https://exday.no/aksjer/BWLPG/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp BWLPG senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:DELIA-20260316@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260316
+DTEND;VALUE=DATE:20260317
+SUMMARY:Ex-dato Dellia (DELIA) 0\,575 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 13.03.2026.\nUtbytte
+ : 0\,575 NOK per aksje.\nhttps://exday.no/aksjer/DELIA/
+URL:https://exday.no/aksjer/DELIA/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp DELIA senest i morgen for å få utbyttet
+TRIGGER:-PT87H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:HSHP-20260316@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260316
+DTEND;VALUE=DATE:20260317
+SUMMARY:Ex-dato Himalaya Shipping (HSHP) 0\,5757 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 13.03.2026.\nUtbytte
+ : 0\,5757 NOK per aksje.\nhttps://exday.no/aksjer/HSHP/
+URL:https://exday.no/aksjer/HSHP/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp HSHP senest i morgen for å få utbyttet
+TRIGGER:-PT87H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:2020-20260317@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260317
+DTEND;VALUE=DATE:20260318
+SUMMARY:Ex-dato 2020 Bulkers (2020) 0\,9594 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 16.03.2026.\nUtbytte
+ : 0\,9594 NOK per aksje.\nhttps://exday.no/aksjer/2020/
+URL:https://exday.no/aksjer/2020/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp 2020 senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:NORAM-20260317@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260317
+DTEND;VALUE=DATE:20260318
+SUMMARY:Ex-dato NorAm Drilling (NORAM) 0\,291 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 16.03.2026.\nUtbytte
+ : 0\,291 NOK per aksje.\nhttps://exday.no/aksjer/NORAM/
+URL:https://exday.no/aksjer/NORAM/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp NORAM senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:AASB-20260320@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260320
+DTEND;VALUE=DATE:20260321
+SUMMARY:Ex-dato Aasen Sparebank (AASB) 10\,00 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 19.03.2026.\nUtbytte
+ : 10\,00 NOK per aksje.\nhttps://exday.no/aksjer/AASB/
+URL:https://exday.no/aksjer/AASB/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp AASB senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:HSPG-20260320@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260320
+DTEND;VALUE=DATE:20260321
+SUMMARY:Ex-dato Høland og Setskog Sparebank (HSPG) 5\,00 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 19.03.2026.\nUtbytte
+ : 5\,00 NOK per aksje.\nhttps://exday.no/aksjer/HSPG/
+URL:https://exday.no/aksjer/HSPG/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp HSPG senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:MELG-20260320@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260320
+DTEND;VALUE=DATE:20260321
+SUMMARY:Ex-dato Melhus Sparebank (MELG) 13\,50 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 19.03.2026.\nUtbytte
+ : 13\,50 NOK per aksje.\nhttps://exday.no/aksjer/MELG/
+URL:https://exday.no/aksjer/MELG/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp MELG senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:MPCC-20260320@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260320
+DTEND;VALUE=DATE:20260321
+SUMMARY:Ex-dato MPC Container Ships (MPCC) 0\,4788 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 19.03.2026.\nUtbytte
+ : 0\,4788 NOK per aksje.\nhttps://exday.no/aksjer/MPCC/
+URL:https://exday.no/aksjer/MPCC/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp MPCC senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:NISB-20260320@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260320
+DTEND;VALUE=DATE:20260321
+SUMMARY:Ex-dato Nidaros Sparebank (NISB) 5\,75 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 19.03.2026.\nUtbytte
+ : 5\,75 NOK per aksje.\nhttps://exday.no/aksjer/NISB/
+URL:https://exday.no/aksjer/NISB/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp NISB senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:BNOR-20260324@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260324
+DTEND;VALUE=DATE:20260325
+SUMMARY:Ex-dato BlueNord (BNOR) 42\,84 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 23.03.2026.\nUtbytte
+ : 42\,84 NOK per aksje.\nhttps://exday.no/aksjer/BNOR/
+URL:https://exday.no/aksjer/BNOR/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp BNOR senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:HELG-20260325@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260325
+DTEND;VALUE=DATE:20260326
+SUMMARY:Ex-dato SpareBank 1 Helgeland (HELG) 7\,67 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 24.03.2026.\nUtbytte
+ : 7\,67 NOK per aksje.\nhttps://exday.no/aksjer/HELG/
+URL:https://exday.no/aksjer/HELG/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp HELG senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:AURG-20260326@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260326
+DTEND;VALUE=DATE:20260327
+SUMMARY:Ex-dato Aurskog Sparebank (AURG) 17\,00 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 25.03.2026.\nUtbytte
+ : 17\,00 NOK per aksje.\nhttps://exday.no/aksjer/AURG/
+URL:https://exday.no/aksjer/AURG/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp AURG senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:HUNT-20260326@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260326
+DTEND;VALUE=DATE:20260327
+SUMMARY:Ex-dato Hunter (HUNT) 0\,58 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 25.03.2026.\nUtbytte
+ : 0\,58 NOK per aksje.\nhttps://exday.no/aksjer/HUNT/
+URL:https://exday.no/aksjer/HUNT/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp HUNT senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:ROGS-20260326@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260326
+DTEND;VALUE=DATE:20260327
+SUMMARY:Ex-dato Rogaland Sparebank (ROGS) 11\,70 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 25.03.2026.\nUtbytte
+ : 11\,70 NOK per aksje.\nhttps://exday.no/aksjer/ROGS/
+URL:https://exday.no/aksjer/ROGS/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp ROGS senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:SKUE-20260326@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260326
+DTEND;VALUE=DATE:20260327
+SUMMARY:Ex-dato Skue Sparebank (SKUE) 22\,27 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 25.03.2026.\nUtbytte
+ : 22\,27 NOK per aksje.\nhttps://exday.no/aksjer/SKUE/
+URL:https://exday.no/aksjer/SKUE/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp SKUE senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:SOAG-20260326@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260326
+DTEND;VALUE=DATE:20260327
+SUMMARY:Ex-dato SpareBank 1 Østfold Akershus (SOAG) 24\,50 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 25.03.2026.\nUtbytte
+ : 24\,50 NOK per aksje.\nhttps://exday.no/aksjer/SOAG/
+URL:https://exday.no/aksjer/SOAG/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp SOAG senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:FFSB-20260327@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260327
+DTEND;VALUE=DATE:20260328
+SUMMARY:Ex-dato Flekkefjord Sparebank (FFSB) 6\,40 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 26.03.2026.\nUtbytte
+ : 6\,40 NOK per aksje.\nhttps://exday.no/aksjer/FFSB/
+URL:https://exday.no/aksjer/FFSB/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp FFSB senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:GJF-20260327@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260327
+DTEND;VALUE=DATE:20260328
+SUMMARY:Ex-dato Gjensidige Forsikring (GJF) 14\,50 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 26.03.2026.\nUtbytte
+ : 14\,50 NOK per aksje.\nhttps://exday.no/aksjer/GJF/
+URL:https://exday.no/aksjer/GJF/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp GJF senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:JAREN-20260327@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260327
+DTEND;VALUE=DATE:20260328
+SUMMARY:Ex-dato Jæren Sparebank (JAREN) 20\,00 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 26.03.2026.\nUtbytte
+ : 20\,00 NOK per aksje.\nhttps://exday.no/aksjer/JAREN/
+URL:https://exday.no/aksjer/JAREN/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp JAREN senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:MING-20260327@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260327
+DTEND;VALUE=DATE:20260328
+SUMMARY:Ex-dato SpareBank 1 SMN (MING) 13\,50 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 26.03.2026.\nUtbytte
+ : 13\,50 NOK per aksje.\nhttps://exday.no/aksjer/MING/
+URL:https://exday.no/aksjer/MING/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp MING senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:NONG-20260327@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260327
+DTEND;VALUE=DATE:20260328
+SUMMARY:Ex-dato SpareBank 1 Nord-Norge (NONG) 8\,50 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 26.03.2026.\nUtbytte
+ : 8\,50 NOK per aksje.\nhttps://exday.no/aksjer/NONG/
+URL:https://exday.no/aksjer/NONG/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp NONG senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:ROMER-20260327@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260327
+DTEND;VALUE=DATE:20260328
+SUMMARY:Ex-dato Romerike Sparebank (ROMER) 10\,50 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 26.03.2026.\nUtbytte
+ : 10\,50 NOK per aksje.\nhttps://exday.no/aksjer/ROMER/
+URL:https://exday.no/aksjer/ROMER/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp ROMER senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:SB68-20260327@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260327
+DTEND;VALUE=DATE:20260328
+SUMMARY:Ex-dato SpareBank 68° Nord (SB68) 13\,50 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 26.03.2026.\nUtbytte
+ : 13\,50 NOK per aksje.\nhttps://exday.no/aksjer/SB68/
+URL:https://exday.no/aksjer/SB68/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp SB68 senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:SBNOR-20260327@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260327
+DTEND;VALUE=DATE:20260328
+SUMMARY:Ex-dato Sparebanken Norge (SBNOR) 12\,00 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 26.03.2026.\nUtbytte
+ : 12\,00 NOK per aksje.\nhttps://exday.no/aksjer/SBNOR/
+URL:https://exday.no/aksjer/SBNOR/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp SBNOR senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:SPOG-20260327@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260327
+DTEND;VALUE=DATE:20260328
+SUMMARY:Ex-dato Sparebanken Øst (SPOG) 6\,90 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 26.03.2026.\nUtbytte
+ : 6\,90 NOK per aksje.\nhttps://exday.no/aksjer/SPOG/
+URL:https://exday.no/aksjer/SPOG/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp SPOG senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:SPOL-20260327@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260327
+DTEND;VALUE=DATE:20260328
+SUMMARY:Ex-dato SpareBank 1 Østlandet (SPOL) 12\,70 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 26.03.2026.\nUtbytte
+ : 12\,70 NOK per aksje.\nhttps://exday.no/aksjer/SPOL/
+URL:https://exday.no/aksjer/SPOL/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp SPOL senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:SRHA-20260327@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260327
+DTEND;VALUE=DATE:20260328
+SUMMARY:Ex-dato SpareBank 1 Ringerike Hadeland (SRHA) 44\,00 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 26.03.2026.\nUtbytte
+ : 44\,00 NOK per aksje.\nhttps://exday.no/aksjer/SRHA/
+URL:https://exday.no/aksjer/SRHA/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp SRHA senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:TINDE-20260327@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260327
+DTEND;VALUE=DATE:20260328
+SUMMARY:Ex-dato Tinde Sparebank (TINDE) 4\,90 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 26.03.2026.\nUtbytte
+ : 4\,90 NOK per aksje.\nhttps://exday.no/aksjer/TINDE/
+URL:https://exday.no/aksjer/TINDE/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp TINDE senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:TRSB-20260327@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260327
+DTEND;VALUE=DATE:20260328
+SUMMARY:Ex-dato Trøndelag Sparebank (TRSB) 5\,00 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 26.03.2026.\nUtbytte
+ : 5\,00 NOK per aksje.\nhttps://exday.no/aksjer/TRSB/
+URL:https://exday.no/aksjer/TRSB/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp TRSB senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:PUBLI-20260401@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260401
+DTEND;VALUE=DATE:20260402
+SUMMARY:Ex-dato PPI Public Property Invest (PUBLI) 0\,15 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 31.03.2026.\nUtbytte
+ : 0\,15 NOK per aksje.\nhttps://exday.no/aksjer/PUBLI/
+URL:https://exday.no/aksjer/PUBLI/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp PUBLI senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:BIEN-20260409@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260409
+DTEND;VALUE=DATE:20260410
+SUMMARY:Ex-dato Bien Sparebank (BIEN) 5\,738 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 08.04.2026.\nUtbytte
+ : 5\,738 NOK per aksje.\nhttps://exday.no/aksjer/BIEN/
+URL:https://exday.no/aksjer/BIEN/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp BIEN senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:GRONG-20260409@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260409
+DTEND;VALUE=DATE:20260410
+SUMMARY:Ex-dato Grong Sparebank (GRONG) 11\,00 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 08.04.2026.\nUtbytte
+ : 11\,00 NOK per aksje.\nhttps://exday.no/aksjer/GRONG/
+URL:https://exday.no/aksjer/GRONG/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp GRONG senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:SBMO-20260409@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260409
+DTEND;VALUE=DATE:20260410
+SUMMARY:Ex-dato Sparebanken Møre (SBMO) 7\,00 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 08.04.2026.\nUtbytte
+ : 7\,00 NOK per aksje.\nhttps://exday.no/aksjer/SBMO/
+URL:https://exday.no/aksjer/SBMO/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp SBMO senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:PARB-20260410@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260410
+DTEND;VALUE=DATE:20260411
+SUMMARY:Ex-dato Pareto Bank (PARB) 8\,00 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 09.04.2026.\nUtbytte
+ : 8\,00 NOK per aksje.\nhttps://exday.no/aksjer/PARB/
+URL:https://exday.no/aksjer/PARB/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp PARB senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:STB-20260410@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260410
+DTEND;VALUE=DATE:20260411
+SUMMARY:Ex-dato Storebrand (STB) 5\,40 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 09.04.2026.\nUtbytte
+ : 5\,40 NOK per aksje.\nhttps://exday.no/aksjer/STB/
+URL:https://exday.no/aksjer/STB/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp STB senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:AKVA-20260414@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260414
+DTEND;VALUE=DATE:20260415
+SUMMARY:Ex-dato AKVA (AKVA) 1\,00 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 13.04.2026.\nUtbytte
+ : 1\,00 NOK per aksje.\nhttps://exday.no/aksjer/AKVA/
+URL:https://exday.no/aksjer/AKVA/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp AKVA senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:CMBTO-20260414@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260414
+DTEND;VALUE=DATE:20260415
+SUMMARY:Ex-dato CMB.TECH (CMBTO) 1\,5355 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 13.04.2026.\nUtbytte
+ : 1\,5355 NOK per aksje.\nhttps://exday.no/aksjer/CMBTO/
+URL:https://exday.no/aksjer/CMBTO/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp CMBTO senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:KOG-20260414@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260414
+DTEND;VALUE=DATE:20260415
+SUMMARY:Ex-dato Kongsberg Gruppen (KOG) 5\,70 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 13.04.2026.\nUtbytte
+ : 5\,70 NOK per aksje.\nhttps://exday.no/aksjer/KOG/
+URL:https://exday.no/aksjer/KOG/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp KOG senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:NORAM-20260414@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260414
+DTEND;VALUE=DATE:20260415
+SUMMARY:Ex-dato NorAm Drilling (NORAM) 0\,332 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 13.04.2026.\nUtbytte
+ : 0\,332 NOK per aksje.\nhttps://exday.no/aksjer/NORAM/
+URL:https://exday.no/aksjer/NORAM/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp NORAM senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:SNOR-20260416@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260416
+DTEND;VALUE=DATE:20260417
+SUMMARY:Ex-dato SpareBank 1 Nordmøre (SNOR) 11\,00 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 15.04.2026.\nUtbytte
+ : 11\,00 NOK per aksje.\nhttps://exday.no/aksjer/SNOR/
+URL:https://exday.no/aksjer/SNOR/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp SNOR senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:SOGN-20260416@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260416
+DTEND;VALUE=DATE:20260417
+SUMMARY:Ex-dato Sogn Sparebank (SOGN) 22\,00 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 15.04.2026.\nUtbytte
+ : 22\,00 NOK per aksje.\nhttps://exday.no/aksjer/SOGN/
+URL:https://exday.no/aksjer/SOGN/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp SOGN senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:ABG-20260417@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260417
+DTEND;VALUE=DATE:20260418
+SUMMARY:Ex-dato ABG Sundal Collier (ABG) 0\,55 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 16.04.2026.\nUtbytte
+ : 0\,55 NOK per aksje.\nhttps://exday.no/aksjer/ABG/
+URL:https://exday.no/aksjer/ABG/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp ABG senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:AKSO-20260417@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260417
+DTEND;VALUE=DATE:20260418
+SUMMARY:Ex-dato Aker Solutions (AKSO) 8\,60 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 16.04.2026.\nUtbytte
+ : 8\,60 NOK per aksje.\nhttps://exday.no/aksjer/AKSO/
+URL:https://exday.no/aksjer/AKSO/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp AKSO senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:BRG-20260417@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260417
+DTEND;VALUE=DATE:20260418
+SUMMARY:Ex-dato Borregaard (BRG) 4\,75 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 16.04.2026.\nUtbytte
+ : 4\,75 NOK per aksje.\nhttps://exday.no/aksjer/BRG/
+URL:https://exday.no/aksjer/BRG/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp BRG senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:HSHP-20260417@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260417
+DTEND;VALUE=DATE:20260418
+SUMMARY:Ex-dato Himalaya Shipping (HSHP) 0\,5757 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 16.04.2026.\nUtbytte
+ : 0\,5757 NOK per aksje.\nhttps://exday.no/aksjer/HSHP/
+URL:https://exday.no/aksjer/HSHP/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp HSHP senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:MULTI-20260417@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260417
+DTEND;VALUE=DATE:20260418
+SUMMARY:Ex-dato Multiconsult (MULTI) 5\,00 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 16.04.2026.\nUtbytte
+ : 5\,00 NOK per aksje.\nhttps://exday.no/aksjer/MULTI/
+URL:https://exday.no/aksjer/MULTI/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp MULTI senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:GSF-20260420@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260420
+DTEND;VALUE=DATE:20260421
+SUMMARY:Ex-dato Grieg Seafood (GSF) 35\,6371 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 17.04.2026.\nUtbytte
+ : 35\,6371 NOK per aksje.\nhttps://exday.no/aksjer/GSF/
+URL:https://exday.no/aksjer/GSF/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp GSF senest i morgen for å få utbyttet
+TRIGGER:-PT87H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:PEXIP-20260420@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260420
+DTEND;VALUE=DATE:20260421
+SUMMARY:Ex-dato Pexip (PEXIP) 4\,00 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 17.04.2026.\nUtbytte
+ : 4\,00 NOK per aksje.\nhttps://exday.no/aksjer/PEXIP/
+URL:https://exday.no/aksjer/PEXIP/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp PEXIP senest i morgen for å få utbyttet
+TRIGGER:-PT87H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:SNI-20260421@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260421
+DTEND;VALUE=DATE:20260422
+SUMMARY:Ex-dato Stolt-Nielsen (SNI) 9\,5941 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 20.04.2026.\nUtbytte
+ : 9\,5941 NOK per aksje.\nhttps://exday.no/aksjer/SNI/
+URL:https://exday.no/aksjer/SNI/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp SNI senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:DNB-20260422@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260422
+DTEND;VALUE=DATE:20260423
+SUMMARY:Ex-dato DNB Bank (DNB) 18\,00 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 21.04.2026.\nUtbytte
+ : 18\,00 NOK per aksje.\nhttps://exday.no/aksjer/DNB/
+URL:https://exday.no/aksjer/DNB/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp DNB senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:ENTR-20260422@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260422
+DTEND;VALUE=DATE:20260423
+SUMMARY:Ex-dato Entra (ENTR) 1\,10 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 21.04.2026.\nUtbytte
+ : 1\,10 NOK per aksje.\nhttps://exday.no/aksjer/ENTR/
+URL:https://exday.no/aksjer/ENTR/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp ENTR senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:AKER-20260423@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260423
+DTEND;VALUE=DATE:20260424
+SUMMARY:Ex-dato Aker (AKER) 29\,00 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 22.04.2026.\nUtbytte
+ : 29\,00 NOK per aksje.\nhttps://exday.no/aksjer/AKER/
+URL:https://exday.no/aksjer/AKER/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp AKER senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:HGSB-20260423@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260423
+DTEND;VALUE=DATE:20260424
+SUMMARY:Ex-dato Haugesund Sparebank (HGSB) 10\,10 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 22.04.2026.\nUtbytte
+ : 10\,10 NOK per aksje.\nhttps://exday.no/aksjer/HGSB/
+URL:https://exday.no/aksjer/HGSB/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp HGSB senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:EIOF-20260424@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260424
+DTEND;VALUE=DATE:20260425
+SUMMARY:Ex-dato Eidesvik Offshore (EIOF) 0\,20 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 23.04.2026.\nUtbytte
+ : 0\,20 NOK per aksje.\nhttps://exday.no/aksjer/EIOF/
+URL:https://exday.no/aksjer/EIOF/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp EIOF senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:ORK-20260424@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260424
+DTEND;VALUE=DATE:20260425
+SUMMARY:Ex-dato Orkla (ORK) 6\,00 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 23.04.2026.\nUtbytte
+ : 6\,00 NOK per aksje.\nhttps://exday.no/aksjer/ORK/
+URL:https://exday.no/aksjer/ORK/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp ORK senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:SB1NO-20260424@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260424
+DTEND;VALUE=DATE:20260425
+SUMMARY:Ex-dato SpareBank 1 Sør-Norge (SB1NO) 12\,00 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 23.04.2026.\nUtbytte
+ : 12\,00 NOK per aksje.\nhttps://exday.no/aksjer/SB1NO/
+URL:https://exday.no/aksjer/SB1NO/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp SB1NO senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:TOM-20260424@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260424
+DTEND;VALUE=DATE:20260425
+SUMMARY:Ex-dato TOMRA Systems (TOM) 2\,15 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 23.04.2026.\nUtbytte
+ : 2\,15 NOK per aksje.\nhttps://exday.no/aksjer/TOM/
+URL:https://exday.no/aksjer/TOM/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp TOM senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:KIT-20260427@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260427
+DTEND;VALUE=DATE:20260428
+SUMMARY:Ex-dato Kitron (KIT) 0\,70 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 24.04.2026.\nUtbytte
+ : 0\,70 NOK per aksje.\nhttps://exday.no/aksjer/KIT/
+URL:https://exday.no/aksjer/KIT/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp KIT senest i morgen for å få utbyttet
+TRIGGER:-PT87H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:PROT-20260428@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260428
+DTEND;VALUE=DATE:20260429
+SUMMARY:Ex-dato Protector Forsikring (PROT) 8\,00 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 27.04.2026.\nUtbytte
+ : 8\,00 NOK per aksje.\nhttps://exday.no/aksjer/PROT/
+URL:https://exday.no/aksjer/PROT/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp PROT senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:2020-20260429@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260429
+DTEND;VALUE=DATE:20260430
+SUMMARY:Ex-dato 2020 Bulkers (2020) 132\,3938 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 28.04.2026.\nUtbytte
+ : 132\,3938 NOK per aksje.\nhttps://exday.no/aksjer/2020/
+URL:https://exday.no/aksjer/2020/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp 2020 senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:EPR-20260430@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260430
+DTEND;VALUE=DATE:20260501
+SUMMARY:Ex-dato Europris (EPR) 3\,75 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 29.04.2026.\nUtbytte
+ : 3\,75 NOK per aksje.\nhttps://exday.no/aksjer/EPR/
+URL:https://exday.no/aksjer/EPR/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp EPR senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:VVL-20260430@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260430
+DTEND;VALUE=DATE:20260501
+SUMMARY:Ex-dato Voss Veksel- og Landmandsbank (VVL) 18\,75 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 29.04.2026.\nUtbytte
+ : 18\,75 NOK per aksje.\nhttps://exday.no/aksjer/VVL/
+URL:https://exday.no/aksjer/VVL/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp VVL senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:BAKKA-20260504@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260504
+DTEND;VALUE=DATE:20260505
+SUMMARY:Ex-dato Bakkafrost (BAKKA) 5\,0564 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 30.04.2026.\nUtbytte
+ : 5\,0564 NOK per aksje.\nhttps://exday.no/aksjer/BAKKA/
+URL:https://exday.no/aksjer/BAKKA/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp BAKKA senest i morgen for å få utbyttet
+TRIGGER:-PT111H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:GOD-20260504@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260504
+DTEND;VALUE=DATE:20260505
+SUMMARY:Ex-dato Goodtech (GOD) 0\,50 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 30.04.2026.\nUtbytte
+ : 0\,50 NOK per aksje.\nhttps://exday.no/aksjer/GOD/
+URL:https://exday.no/aksjer/GOD/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp GOD senest i morgen for å få utbyttet
+TRIGGER:-PT111H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:SBO-20260504@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260504
+DTEND;VALUE=DATE:20260505
+SUMMARY:Ex-dato Selvaag Bolig (SBO) 1\,00 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 30.04.2026.\nUtbytte
+ : 1\,00 NOK per aksje.\nhttps://exday.no/aksjer/SBO/
+URL:https://exday.no/aksjer/SBO/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp SBO senest i morgen for å få utbyttet
+TRIGGER:-PT111H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:VEND-20260504@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260504
+DTEND;VALUE=DATE:20260505
+SUMMARY:Ex-dato Vend Marketplaces (VEND) 2\,50 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 30.04.2026.\nUtbytte
+ : 2\,50 NOK per aksje.\nhttps://exday.no/aksjer/VEND/
+URL:https://exday.no/aksjer/VEND/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp VEND senest i morgen for å få utbyttet
+TRIGGER:-PT111H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:WWI-20260504@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260504
+DTEND;VALUE=DATE:20260505
+SUMMARY:Ex-dato Wilh. Wilhelmsen (WWI) 20\,00 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 30.04.2026.\nUtbytte
+ : 20\,00 NOK per aksje.\nhttps://exday.no/aksjer/WWI/
+URL:https://exday.no/aksjer/WWI/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp WWI senest i morgen for å få utbyttet
+TRIGGER:-PT111H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:WWIB-20260504@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260504
+DTEND;VALUE=DATE:20260505
+SUMMARY:Ex-dato Wilh. Wilhelmsen B (WWIB) 20\,00 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 30.04.2026.\nUtbytte
+ : 20\,00 NOK per aksje.\nhttps://exday.no/aksjer/WWIB/
+URL:https://exday.no/aksjer/WWIB/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp WWIB senest i morgen for å få utbyttet
+TRIGGER:-PT111H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:NORCO-20260505@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260505
+DTEND;VALUE=DATE:20260506
+SUMMARY:Ex-dato Norconsult (NORCO) 1\,80 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 04.05.2026.\nUtbytte
+ : 1\,80 NOK per aksje.\nhttps://exday.no/aksjer/NORCO/
+URL:https://exday.no/aksjer/NORCO/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp NORCO senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:GENT-20260506@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260506
+DTEND;VALUE=DATE:20260507
+SUMMARY:Ex-dato Gentian Diagnostics (GENT) 0\,60 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 05.05.2026.\nUtbytte
+ : 0\,60 NOK per aksje.\nhttps://exday.no/aksjer/GENT/
+URL:https://exday.no/aksjer/GENT/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp GENT senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:KCC-20260507@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260507
+DTEND;VALUE=DATE:20260508
+SUMMARY:Ex-dato Klaveness Combination Carriers (KCC) 2\,328 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 06.05.2026.\nUtbytte
+ : 2\,328 NOK per aksje.\nhttps://exday.no/aksjer/KCC/
+URL:https://exday.no/aksjer/KCC/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp KCC senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:MEDI-20260507@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260507
+DTEND;VALUE=DATE:20260508
+SUMMARY:Ex-dato Medistim (MEDI) 8\,00 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 06.05.2026.\nUtbytte
+ : 8\,00 NOK per aksje.\nhttps://exday.no/aksjer/MEDI/
+URL:https://exday.no/aksjer/MEDI/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp MEDI senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:VEI-20260507@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260507
+DTEND;VALUE=DATE:20260508
+SUMMARY:Ex-dato Veidekke (VEI) 11\,25 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 06.05.2026.\nUtbytte
+ : 11\,25 NOK per aksje.\nhttps://exday.no/aksjer/VEI/
+URL:https://exday.no/aksjer/VEI/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp VEI senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:NHY-20260508@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260508
+DTEND;VALUE=DATE:20260509
+SUMMARY:Ex-dato Norsk Hydro (NHY) 3\,00 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 07.05.2026.\nUtbytte
+ : 3\,00 NOK per aksje.\nhttps://exday.no/aksjer/NHY/
+URL:https://exday.no/aksjer/NHY/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp NHY senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:SMOP-20260508@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260508
+DTEND;VALUE=DATE:20260509
+SUMMARY:Ex-dato Smartoptics (SMOP) 0\,60 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 07.05.2026.\nUtbytte
+ : 0\,60 NOK per aksje.\nhttps://exday.no/aksjer/SMOP/
+URL:https://exday.no/aksjer/SMOP/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp SMOP senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:STST-20260508@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260508
+DTEND;VALUE=DATE:20260509
+SUMMARY:Ex-dato Stainless Tankers (STST) 1\,2461 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 07.05.2026.\nUtbytte
+ : 1\,2461 NOK per aksje.\nhttps://exday.no/aksjer/STST/
+URL:https://exday.no/aksjer/STST/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp STST senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:TGS-20260508@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260508
+DTEND;VALUE=DATE:20260509
+SUMMARY:Ex-dato TGS (TGS) 1\,44 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 07.05.2026.\nUtbytte
+ : 1\,44 NOK per aksje.\nhttps://exday.no/aksjer/TGS/
+URL:https://exday.no/aksjer/TGS/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp TGS senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:MORLD-20260511@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260511
+DTEND;VALUE=DATE:20260512
+SUMMARY:Ex-dato Moreld (MORLD) 0\,50 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 08.05.2026.\nUtbytte
+ : 0\,50 NOK per aksje.\nhttps://exday.no/aksjer/MORLD/
+URL:https://exday.no/aksjer/MORLD/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp MORLD senest i morgen for å få utbyttet
+TRIGGER:-PT87H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:AKRBP-20260512@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260512
+DTEND;VALUE=DATE:20260513
+SUMMARY:Ex-dato Aker BP (AKRBP) 6\,1285 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 11.05.2026.\nUtbytte
+ : 6\,1285 NOK per aksje.\nhttps://exday.no/aksjer/AKRBP/
+URL:https://exday.no/aksjer/AKRBP/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp AKRBP senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:KID-20260512@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260512
+DTEND;VALUE=DATE:20260513
+SUMMARY:Ex-dato Kid (KID) 2\,50 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 11.05.2026.\nUtbytte
+ : 2\,50 NOK per aksje.\nhttps://exday.no/aksjer/KID/
+URL:https://exday.no/aksjer/KID/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp KID senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:POL-20260512@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260512
+DTEND;VALUE=DATE:20260513
+SUMMARY:Ex-dato Polaris Media (POL) 3\,30 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 11.05.2026.\nUtbytte
+ : 3\,30 NOK per aksje.\nhttps://exday.no/aksjer/POL/
+URL:https://exday.no/aksjer/POL/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp POL senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:AFK-20260513@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260513
+DTEND;VALUE=DATE:20260514
+SUMMARY:Ex-dato Arendals Fossekompani B (AFK) 3\,00 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 12.05.2026.\nUtbytte
+ : 3\,00 NOK per aksje.\nhttps://exday.no/aksjer/AFK/
+URL:https://exday.no/aksjer/AFK/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp AFK senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:EQNR-20260513@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260513
+DTEND;VALUE=DATE:20260514
+SUMMARY:Ex-dato Equinor (EQNR) 3\,6041 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 12.05.2026.\nUtbytte
+ : 3\,6041 NOK per aksje.\nhttps://exday.no/aksjer/EQNR/
+URL:https://exday.no/aksjer/EQNR/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp EQNR senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:SNTIA-20260513@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260513
+DTEND;VALUE=DATE:20260514
+SUMMARY:Ex-dato Sentia (SNTIA) 5\,50 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 12.05.2026.\nUtbytte
+ : 5\,50 NOK per aksje.\nhttps://exday.no/aksjer/SNTIA/
+URL:https://exday.no/aksjer/SNTIA/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp SNTIA senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:YAR-20260513@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260513
+DTEND;VALUE=DATE:20260514
+SUMMARY:Ex-dato Yara International (YAR) 22\,00 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 12.05.2026.\nUtbytte
+ : 22\,00 NOK per aksje.\nhttps://exday.no/aksjer/YAR/
+URL:https://exday.no/aksjer/YAR/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp YAR senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:AFG-20260515@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260515
+DTEND;VALUE=DATE:20260516
+SUMMARY:Ex-dato AF Gruppen (AFG) 6\,50 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 13.05.2026.\nUtbytte
+ : 6\,50 NOK per aksje.\nhttps://exday.no/aksjer/AFG/
+URL:https://exday.no/aksjer/AFG/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp AFG senest i morgen for å få utbyttet
+TRIGGER:-PT63H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:BOUV-20260515@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260515
+DTEND;VALUE=DATE:20260516
+SUMMARY:Ex-dato Bouvet (BOUV) 3\,00 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 13.05.2026.\nUtbytte
+ : 3\,00 NOK per aksje.\nhttps://exday.no/aksjer/BOUV/
+URL:https://exday.no/aksjer/BOUV/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp BOUV senest i morgen for å få utbyttet
+TRIGGER:-PT63H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:DNO-20260515@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260515
+DTEND;VALUE=DATE:20260516
+SUMMARY:Ex-dato DNO (DNO) 0\,375 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 13.05.2026.\nUtbytte
+ : 0\,375 NOK per aksje.\nhttps://exday.no/aksjer/DNO/
+URL:https://exday.no/aksjer/DNO/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp DNO senest i morgen for å få utbyttet
+TRIGGER:-PT63H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:ELO-20260515@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260515
+DTEND;VALUE=DATE:20260516
+SUMMARY:Ex-dato Elopak (ELO) 1\,0986 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 13.05.2026.\nUtbytte
+ : 1\,0986 NOK per aksje.\nhttps://exday.no/aksjer/ELO/
+URL:https://exday.no/aksjer/ELO/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp ELO senest i morgen for å få utbyttet
+TRIGGER:-PT63H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:NORAM-20260515@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260515
+DTEND;VALUE=DATE:20260516
+SUMMARY:Ex-dato NorAm Drilling (NORAM) 0\,367 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 13.05.2026.\nUtbytte
+ : 0\,367 NOK per aksje.\nhttps://exday.no/aksjer/NORAM/
+URL:https://exday.no/aksjer/NORAM/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp NORAM senest i morgen for å få utbyttet
+TRIGGER:-PT63H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:AKAST-20260518@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260518
+DTEND;VALUE=DATE:20260519
+SUMMARY:Ex-dato Akastor (AKAST) 1\,50 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 15.05.2026.\nUtbytte
+ : 1\,50 NOK per aksje.\nhttps://exday.no/aksjer/AKAST/
+URL:https://exday.no/aksjer/AKAST/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp AKAST senest i morgen for å få utbyttet
+TRIGGER:-PT87H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:ENH-20260518@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260518
+DTEND;VALUE=DATE:20260519
+SUMMARY:Ex-dato SED Energy (ENH) 0\,2858 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 15.05.2026.\nUtbytte
+ : 0\,2858 NOK per aksje.\nhttps://exday.no/aksjer/ENH/
+URL:https://exday.no/aksjer/ENH/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp ENH senest i morgen for å få utbyttet
+TRIGGER:-PT87H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:HAUTO-20260518@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260518
+DTEND;VALUE=DATE:20260519
+SUMMARY:Ex-dato Höegh Autoliners (HAUTO) 4\,5496 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 15.05.2026.\nUtbytte
+ : 4\,5496 NOK per aksje.\nhttps://exday.no/aksjer/HAUTO/
+URL:https://exday.no/aksjer/HAUTO/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp HAUTO senest i morgen for å få utbyttet
+TRIGGER:-PT87H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:HSHP-20260518@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260518
+DTEND;VALUE=DATE:20260519
+SUMMARY:Ex-dato Himalaya Shipping (HSHP) 1\,4392 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 15.05.2026.\nUtbytte
+ : 1\,4392 NOK per aksje.\nhttps://exday.no/aksjer/HSHP/
+URL:https://exday.no/aksjer/HSHP/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp HSHP senest i morgen for å få utbyttet
+TRIGGER:-PT87H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:SOMA-20260518@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260518
+DTEND;VALUE=DATE:20260519
+SUMMARY:Ex-dato Solstad Maritime (SOMA) 0\,7885 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 15.05.2026.\nUtbytte
+ : 0\,7885 NOK per aksje.\nhttps://exday.no/aksjer/SOMA/
+URL:https://exday.no/aksjer/SOMA/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp SOMA senest i morgen for å få utbyttet
+TRIGGER:-PT87H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:ARCH-20260520@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260520
+DTEND;VALUE=DATE:20260521
+SUMMARY:Ex-dato Archer (ARCH) 0\,62 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 19.05.2026.\nUtbytte
+ : 0\,62 NOK per aksje.\nhttps://exday.no/aksjer/ARCH/
+URL:https://exday.no/aksjer/ARCH/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp ARCH senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:ATEA-20260520@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260520
+DTEND;VALUE=DATE:20260521
+SUMMARY:Ex-dato Atea (ATEA) 3\,75 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 19.05.2026.\nUtbytte
+ : 3\,75 NOK per aksje.\nhttps://exday.no/aksjer/ATEA/
+URL:https://exday.no/aksjer/ATEA/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp ATEA senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:SOFF-20260520@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260520
+DTEND;VALUE=DATE:20260521
+SUMMARY:Ex-dato Solstad Offshore (SOFF) 0\,9169 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 19.05.2026.\nUtbytte
+ : 0\,9169 NOK per aksje.\nhttps://exday.no/aksjer/SOFF/
+URL:https://exday.no/aksjer/SOFF/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp SOFF senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:SUBC-20260520@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260520
+DTEND;VALUE=DATE:20260521
+SUMMARY:Ex-dato Subsea 7 (SUBC) 13\,00 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 19.05.2026.\nUtbytte
+ : 13\,00 NOK per aksje.\nhttps://exday.no/aksjer/SUBC/
+URL:https://exday.no/aksjer/SUBC/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp SUBC senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:TEL-20260520@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260520
+DTEND;VALUE=DATE:20260521
+SUMMARY:Ex-dato Telenor (TEL) 5\,00 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 19.05.2026.\nUtbytte
+ : 5\,00 NOK per aksje.\nhttps://exday.no/aksjer/TEL/
+URL:https://exday.no/aksjer/TEL/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp TEL senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:WSTEP-20260520@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260520
+DTEND;VALUE=DATE:20260521
+SUMMARY:Ex-dato Webstep (WSTEP) 1\,49 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 19.05.2026.\nUtbytte
+ : 1\,49 NOK per aksje.\nhttps://exday.no/aksjer/WSTEP/
+URL:https://exday.no/aksjer/WSTEP/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp WSTEP senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:BWO-20260521@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260521
+DTEND;VALUE=DATE:20260522
+SUMMARY:Ex-dato BW Offshore (BWO) 0\,5997 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 20.05.2026.\nUtbytte
+ : 0\,5997 NOK per aksje.\nhttps://exday.no/aksjer/BWO/
+URL:https://exday.no/aksjer/BWO/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp BWO senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:ENDUR-20260521@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260521
+DTEND;VALUE=DATE:20260522
+SUMMARY:Ex-dato Endúr (ENDUR) 0\,80 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 20.05.2026.\nUtbytte
+ : 0\,80 NOK per aksje.\nhttps://exday.no/aksjer/ENDUR/
+URL:https://exday.no/aksjer/ENDUR/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp ENDUR senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:NORBT-20260521@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260521
+DTEND;VALUE=DATE:20260522
+SUMMARY:Ex-dato NORBIT (NORBT) 5\,00 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 20.05.2026.\nUtbytte
+ : 5\,00 NOK per aksje.\nhttps://exday.no/aksjer/NORBT/
+URL:https://exday.no/aksjer/NORBT/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp NORBT senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:BNOR-20260522@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260522
+DTEND;VALUE=DATE:20260523
+SUMMARY:Ex-dato BlueNord (BNOR) 36\,17 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 21.05.2026.\nUtbytte
+ : 36\,17 NOK per aksje.\nhttps://exday.no/aksjer/BNOR/
+URL:https://exday.no/aksjer/BNOR/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp BNOR senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:MOWI-20260522@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260522
+DTEND;VALUE=DATE:20260523
+SUMMARY:Ex-dato Mowi (MOWI) 2\,30 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 21.05.2026.\nUtbytte
+ : 2\,30 NOK per aksje.\nhttps://exday.no/aksjer/MOWI/
+URL:https://exday.no/aksjer/MOWI/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp MOWI senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:VISTIN-20260522@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260522
+DTEND;VALUE=DATE:20260523
+SUMMARY:Ex-dato Vistin Pharma (VISTIN) 1\,00 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 21.05.2026.\nUtbytte
+ : 1\,00 NOK per aksje.\nhttps://exday.no/aksjer/VISTIN/
+URL:https://exday.no/aksjer/VISTIN/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp VISTIN senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:B2I-20260526@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260526
+DTEND;VALUE=DATE:20260527
+SUMMARY:Ex-dato B2 Impact (B2I) 1\,90 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 22.05.2026.\nUtbytte
+ : 1\,90 NOK per aksje.\nhttps://exday.no/aksjer/B2I/
+URL:https://exday.no/aksjer/B2I/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp B2I senest i morgen for å få utbyttet
+TRIGGER:-PT111H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:ODL-20260527@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260527
+DTEND;VALUE=DATE:20260528
+SUMMARY:Ex-dato Odfjell Drilling (ODL) 2\,3148 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 26.05.2026.\nUtbytte
+ : 2\,3148 NOK per aksje.\nhttps://exday.no/aksjer/ODL/
+URL:https://exday.no/aksjer/ODL/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp ODL senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:OET-20260527@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260527
+DTEND;VALUE=DATE:20260528
+SUMMARY:Ex-dato Okeanis Eco Tankers (OET) 19\,1896 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 26.05.2026.\nUtbytte
+ : 19\,1896 NOK per aksje.\nhttps://exday.no/aksjer/OET/
+URL:https://exday.no/aksjer/OET/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp OET senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:SWON-20260527@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260527
+DTEND;VALUE=DATE:20260528
+SUMMARY:Ex-dato SoftwareOne (SWON) 1\,7132 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 26.05.2026.\nUtbytte
+ : 1\,7132 NOK per aksje.\nhttps://exday.no/aksjer/SWON/
+URL:https://exday.no/aksjer/SWON/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp SWON senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:AQUA-20260528@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260528
+DTEND;VALUE=DATE:20260529
+SUMMARY:Ex-dato Aqualis (AQUA) 0\,45 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 27.05.2026.\nUtbytte
+ : 0\,45 NOK per aksje.\nhttps://exday.no/aksjer/AQUA/
+URL:https://exday.no/aksjer/AQUA/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp AQUA senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:BONHR-20260528@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260528
+DTEND;VALUE=DATE:20260529
+SUMMARY:Ex-dato Bonheur (BONHR) 7\,30 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 27.05.2026.\nUtbytte
+ : 7\,30 NOK per aksje.\nhttps://exday.no/aksjer/BONHR/
+URL:https://exday.no/aksjer/BONHR/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp BONHR senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:DOF-20260528@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260528
+DTEND;VALUE=DATE:20260529
+SUMMARY:Ex-dato DOF (DOF) 3\,4314 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 27.05.2026.\nUtbytte
+ : 3\,4314 NOK per aksje.\nhttps://exday.no/aksjer/DOF/
+URL:https://exday.no/aksjer/DOF/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp DOF senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:ITERA-20260528@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260528
+DTEND;VALUE=DATE:20260529
+SUMMARY:Ex-dato Itera (ITERA) 0\,20 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 27.05.2026.\nUtbytte
+ : 0\,20 NOK per aksje.\nhttps://exday.no/aksjer/ITERA/
+URL:https://exday.no/aksjer/ITERA/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp ITERA senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:JIN-20260528@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260528
+DTEND;VALUE=DATE:20260529
+SUMMARY:Ex-dato Jinhui Shipping and Transportation (JIN) 0\,1727 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 27.05.2026.\nUtbytte
+ : 0\,1727 NOK per aksje.\nhttps://exday.no/aksjer/JIN/
+URL:https://exday.no/aksjer/JIN/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp JIN senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:LSG-20260528@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260528
+DTEND;VALUE=DATE:20260529
+SUMMARY:Ex-dato Lerøy Seafood (LSG) 2\,50 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 27.05.2026.\nUtbytte
+ : 2\,50 NOK per aksje.\nhttps://exday.no/aksjer/LSG/
+URL:https://exday.no/aksjer/LSG/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp LSG senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:AUSS-20260529@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260529
+DTEND;VALUE=DATE:20260530
+SUMMARY:Ex-dato Austevoll Seafood (AUSS) 6\,50 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 28.05.2026.\nUtbytte
+ : 6\,50 NOK per aksje.\nhttps://exday.no/aksjer/AUSS/
+URL:https://exday.no/aksjer/AUSS/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp AUSS senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:IWS-20260601@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260601
+DTEND;VALUE=DATE:20260602
+SUMMARY:Ex-dato Integrated Wind Solutions (IWS) 1\,00 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 29.05.2026.\nUtbytte
+ : 1\,00 NOK per aksje.\nhttps://exday.no/aksjer/IWS/
+URL:https://exday.no/aksjer/IWS/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp IWS senest i morgen for å få utbyttet
+TRIGGER:-PT87H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:PEN-20260601@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260601
+DTEND;VALUE=DATE:20260602
+SUMMARY:Ex-dato Panoro Energy (PEN) 0\,374 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 29.05.2026.\nUtbytte
+ : 0\,374 NOK per aksje.\nhttps://exday.no/aksjer/PEN/
+URL:https://exday.no/aksjer/PEN/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp PEN senest i morgen for å få utbyttet
+TRIGGER:-PT87H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:CMBTO-20260602@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260602
+DTEND;VALUE=DATE:20260603
+SUMMARY:Ex-dato CMB.TECH (CMBTO) 6\,1419 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 01.06.2026.\nUtbytte
+ : 6\,1419 NOK per aksje.\nhttps://exday.no/aksjer/CMBTO/
+URL:https://exday.no/aksjer/CMBTO/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp CMBTO senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:HAFNI-20260603@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260603
+DTEND;VALUE=DATE:20260604
+SUMMARY:Ex-dato Hafnia (HAFNI) 2\,7604 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 02.06.2026.\nUtbytte
+ : 2\,7604 NOK per aksje.\nhttps://exday.no/aksjer/HAFNI/
+URL:https://exday.no/aksjer/HAFNI/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp HAFNI senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:VAR-20260603@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260603
+DTEND;VALUE=DATE:20260604
+SUMMARY:Ex-dato Vår Energi (VAR) 1\,11 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 02.06.2026.\nUtbytte
+ : 1\,11 NOK per aksje.\nhttps://exday.no/aksjer/VAR/
+URL:https://exday.no/aksjer/VAR/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp VAR senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:CAPT-20260604@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260604
+DTEND;VALUE=DATE:20260605
+SUMMARY:Ex-dato Capital Tankers (CAPT) 0\,50 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 03.06.2026.\nUtbytte
+ : 0\,50 NOK per aksje.\nhttps://exday.no/aksjer/CAPT/
+URL:https://exday.no/aksjer/CAPT/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp CAPT senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:PLSV-20260604@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260604
+DTEND;VALUE=DATE:20260605
+SUMMARY:Ex-dato Paratus Energy Services (PLSV) 2\,03 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 03.06.2026.\nUtbytte
+ : 2\,03 NOK per aksje.\nhttps://exday.no/aksjer/PLSV/
+URL:https://exday.no/aksjer/PLSV/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp PLSV senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:BWLPG-20260611@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260611
+DTEND;VALUE=DATE:20260612
+SUMMARY:Ex-dato BW LPG (BWLPG) 6\,4285 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 10.06.2026.\nUtbytte
+ : 6\,4285 NOK per aksje.\nhttps://exday.no/aksjer/BWLPG/
+URL:https://exday.no/aksjer/BWLPG/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp BWLPG senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:FRO-20260611@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260611
+DTEND;VALUE=DATE:20260612
+SUMMARY:Ex-dato Frontline (FRO) 14\,872 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 10.06.2026.\nUtbytte
+ : 14\,872 NOK per aksje.\nhttps://exday.no/aksjer/FRO/
+URL:https://exday.no/aksjer/FRO/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp FRO senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:NORAM-20260616@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260616
+DTEND;VALUE=DATE:20260617
+SUMMARY:Ex-dato NorAm Drilling (NORAM) 0\,381 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 15.06.2026.\nUtbytte
+ : 0\,381 NOK per aksje.\nhttps://exday.no/aksjer/NORAM/
+URL:https://exday.no/aksjer/NORAM/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp NORAM senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:GYL-20260619@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260619
+DTEND;VALUE=DATE:20260620
+SUMMARY:Ex-dato Gyldendal (GYL) 8\,00 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 18.06.2026.\nUtbytte
+ : 8\,00 NOK per aksje.\nhttps://exday.no/aksjer/GYL/
+URL:https://exday.no/aksjer/GYL/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp GYL senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:HSHP-20260619@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260619
+DTEND;VALUE=DATE:20260620
+SUMMARY:Ex-dato Himalaya Shipping (HSHP) 2\,1108 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 18.06.2026.\nUtbytte
+ : 2\,1108 NOK per aksje.\nhttps://exday.no/aksjer/HSHP/
+URL:https://exday.no/aksjer/HSHP/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp HSHP senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:MPCC-20260619@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260619
+DTEND;VALUE=DATE:20260620
+SUMMARY:Ex-dato MPC Container Ships (MPCC) 0\,3862 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 18.06.2026.\nUtbytte
+ : 0\,3862 NOK per aksje.\nhttps://exday.no/aksjer/MPCC/
+URL:https://exday.no/aksjer/MPCC/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp MPCC senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:SALM-20260623@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260623
+DTEND;VALUE=DATE:20260624
+SUMMARY:Ex-dato SalMar (SALM) 10\,00 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 22.06.2026.\nUtbytte
+ : 10\,00 NOK per aksje.\nhttps://exday.no/aksjer/SALM/
+URL:https://exday.no/aksjer/SALM/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp SALM senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:PUBLI-20260629@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260629
+DTEND;VALUE=DATE:20260630
+SUMMARY:Ex-dato PPI Public Property Invest (PUBLI) 0\,2379 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 26.06.2026.\nUtbytte
+ : 0\,2379 NOK per aksje.\nhttps://exday.no/aksjer/PUBLI/
+URL:https://exday.no/aksjer/PUBLI/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp PUBLI senest i morgen for å få utbyttet
+TRIGGER:-PT87H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:HUNT-20260630@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260630
+DTEND;VALUE=DATE:20260701
+SUMMARY:Ex-dato Hunter (HUNT) 1\,25 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 29.06.2026.\nUtbytte
+ : 1\,25 NOK per aksje.\nhttps://exday.no/aksjer/HUNT/
+URL:https://exday.no/aksjer/HUNT/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp HUNT senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:PROT-20260714@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260714
+DTEND;VALUE=DATE:20260715
+SUMMARY:Ex-dato Protector Forsikring (PROT) 3\,00 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 13.07.2026.\nUtbytte
+ : 3\,00 NOK per aksje.\nhttps://exday.no/aksjer/PROT/
+URL:https://exday.no/aksjer/PROT/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp PROT senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:NORAM-20260715@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260715
+DTEND;VALUE=DATE:20260716
+SUMMARY:Ex-dato NorAm Drilling (NORAM) 0\,436 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 14.07.2026.\nUtbytte
+ : 0\,436 NOK per aksje.\nhttps://exday.no/aksjer/NORAM/
+URL:https://exday.no/aksjer/NORAM/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp NORAM senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:BNOR-20260717@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260717
+DTEND;VALUE=DATE:20260718
+SUMMARY:Ex-dato BlueNord (BNOR) 66\,82 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 16.07.2026.\nUtbytte
+ : 66\,82 NOK per aksje.\nhttps://exday.no/aksjer/BNOR/
+URL:https://exday.no/aksjer/BNOR/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp BNOR senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:HSHP-20260717@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260717
+DTEND;VALUE=DATE:20260718
+SUMMARY:Ex-dato Himalaya Shipping (HSHP) 2\,1108 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 16.07.2026.\nUtbytte
+ : 2\,1108 NOK per aksje.\nhttps://exday.no/aksjer/HSHP/
+URL:https://exday.no/aksjer/HSHP/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp HSHP senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:SOFF-20260717@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260717
+DTEND;VALUE=DATE:20260718
+SUMMARY:Ex-dato Solstad Offshore (SOFF) 1\,4592 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 16.07.2026.\nUtbytte
+ : 1\,4592 NOK per aksje.\nhttps://exday.no/aksjer/SOFF/
+URL:https://exday.no/aksjer/SOFF/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp SOFF senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:SOMA-20260717@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260717
+DTEND;VALUE=DATE:20260718
+SUMMARY:Ex-dato Solstad Maritime (SOMA) 0\,9728 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 16.07.2026.\nUtbytte
+ : 0\,9728 NOK per aksje.\nhttps://exday.no/aksjer/SOMA/
+URL:https://exday.no/aksjer/SOMA/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp SOMA senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:AKRBP-20260720@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260720
+DTEND;VALUE=DATE:20260721
+SUMMARY:Ex-dato Aker BP (AKRBP) 6\,4259 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 17.07.2026.\nUtbytte
+ : 6\,4259 NOK per aksje.\nhttps://exday.no/aksjer/AKRBP/
+URL:https://exday.no/aksjer/AKRBP/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp AKRBP senest i morgen for å få utbyttet
+TRIGGER:-PT87H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:TGS-20260730@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260730
+DTEND;VALUE=DATE:20260731
+SUMMARY:Ex-dato TGS (TGS) 1\,49 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 29.07.2026.\nUtbytte
+ : 1\,49 NOK per aksje.\nhttps://exday.no/aksjer/TGS/
+URL:https://exday.no/aksjer/TGS/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp TGS senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:STST-20260807@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260807
+DTEND;VALUE=DATE:20260808
+SUMMARY:Ex-dato Stainless Tankers (STST) 1\,2544 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 06.08.2026.\nUtbytte
+ : 1\,2544 NOK per aksje.\nhttps://exday.no/aksjer/STST/
+URL:https://exday.no/aksjer/STST/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp STST senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:EQNR-20260813@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260813
+DTEND;VALUE=DATE:20260814
+SUMMARY:Ex-dato Equinor (EQNR) 3\,6882 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 12.08.2026.\nUtbytte
+ : 3\,6882 NOK per aksje.\nhttps://exday.no/aksjer/EQNR/
+URL:https://exday.no/aksjer/EQNR/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp EQNR senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:OET-20260813@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260813
+DTEND;VALUE=DATE:20260814
+SUMMARY:Ex-dato Okeanis Eco Tankers (OET) 50\,3727 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 12.08.2026.\nUtbytte
+ : 50\,3727 NOK per aksje.\nhttps://exday.no/aksjer/OET/
+URL:https://exday.no/aksjer/OET/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp OET senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:ENH-20260817@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260817
+DTEND;VALUE=DATE:20260818
+SUMMARY:Ex-dato SED Energy (ENH) 0\,3231 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 14.08.2026.\nUtbytte
+ : 0\,3231 NOK per aksje.\nhttps://exday.no/aksjer/ENH/
+URL:https://exday.no/aksjer/ENH/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp ENH senest i morgen for å få utbyttet
+TRIGGER:-PT87H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:MORLD-20260817@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260817
+DTEND;VALUE=DATE:20260818
+SUMMARY:Ex-dato Moreld (MORLD) 0\,50 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 14.08.2026.\nUtbytte
+ : 0\,50 NOK per aksje.\nhttps://exday.no/aksjer/MORLD/
+URL:https://exday.no/aksjer/MORLD/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp MORLD senest i morgen for å få utbyttet
+TRIGGER:-PT87H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:ARCH-20260818@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260818
+DTEND;VALUE=DATE:20260819
+SUMMARY:Ex-dato Archer (ARCH) 0\,62 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 17.08.2026.\nUtbytte
+ : 0\,62 NOK per aksje.\nhttps://exday.no/aksjer/ARCH/
+URL:https://exday.no/aksjer/ARCH/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp ARCH senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:NORAM-20260818@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260818
+DTEND;VALUE=DATE:20260819
+SUMMARY:Ex-dato NorAm Drilling (NORAM) 0\,424 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 17.08.2026.\nUtbytte
+ : 0\,424 NOK per aksje.\nhttps://exday.no/aksjer/NORAM/
+URL:https://exday.no/aksjer/NORAM/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp NORAM senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:HSHP-20260820@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260820
+DTEND;VALUE=DATE:20260821
+SUMMARY:Ex-dato Himalaya Shipping (HSHP) 2\,1108 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 19.08.2026.\nUtbytte
+ : 2\,1108 NOK per aksje.\nhttps://exday.no/aksjer/HSHP/
+URL:https://exday.no/aksjer/HSHP/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp HSHP senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:DNO-20260821@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260821
+DTEND;VALUE=DATE:20260822
+SUMMARY:Ex-dato DNO (DNO) 0\,375 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 20.08.2026.\nUtbytte
+ : 0\,375 NOK per aksje.\nhttps://exday.no/aksjer/DNO/
+URL:https://exday.no/aksjer/DNO/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp DNO senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:VAR-20260821@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260821
+DTEND;VALUE=DATE:20260822
+SUMMARY:Ex-dato Vår Energi (VAR) 1\,355 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 20.08.2026.\nUtbytte
+ : 1\,355 NOK per aksje.\nhttps://exday.no/aksjer/VAR/
+URL:https://exday.no/aksjer/VAR/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp VAR senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:HAUTO-20260824@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260824
+DTEND;VALUE=DATE:20260825
+SUMMARY:Ex-dato Höegh Autoliners (HAUTO) 0\,7885 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 21.08.2026.\nUtbytte
+ : 0\,7885 NOK per aksje.\nhttps://exday.no/aksjer/HAUTO/
+URL:https://exday.no/aksjer/HAUTO/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp HAUTO senest i morgen for å få utbyttet
+TRIGGER:-PT87H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:SATS-20260824@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260824
+DTEND;VALUE=DATE:20260825
+SUMMARY:Ex-dato SATS (SATS) 0\,72 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 21.08.2026.\nUtbytte
+ : 0\,72 NOK per aksje.\nhttps://exday.no/aksjer/SATS/
+URL:https://exday.no/aksjer/SATS/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp SATS senest i morgen for å få utbyttet
+TRIGGER:-PT87H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:AKAST-20260825@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260825
+DTEND;VALUE=DATE:20260826
+SUMMARY:Ex-dato Akastor (AKAST) 0\,50 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 24.08.2026.\nUtbytte
+ : 0\,50 NOK per aksje.\nhttps://exday.no/aksjer/AKAST/
+URL:https://exday.no/aksjer/AKAST/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp AKAST senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:ODF-20260826@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260826
+DTEND;VALUE=DATE:20260827
+SUMMARY:Ex-dato Odfjell A (ODF) 4\,87 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 25.08.2026.\nUtbytte
+ : 4\,87 NOK per aksje.\nhttps://exday.no/aksjer/ODF/
+URL:https://exday.no/aksjer/ODF/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp ODF senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:ODFB-20260826@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260826
+DTEND;VALUE=DATE:20260827
+SUMMARY:Ex-dato Odfjell B (ODFB) 4\,87 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 25.08.2026.\nUtbytte
+ : 4\,87 NOK per aksje.\nhttps://exday.no/aksjer/ODFB/
+URL:https://exday.no/aksjer/ODFB/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp ODFB senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:WAWI-20260826@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260826
+DTEND;VALUE=DATE:20260827
+SUMMARY:Ex-dato Wallenius Wilhelmsen (WAWI) 5\,8529 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 25.08.2026.\nUtbytte
+ : 5\,8529 NOK per aksje.\nhttps://exday.no/aksjer/WAWI/
+URL:https://exday.no/aksjer/WAWI/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp WAWI senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:BWO-20260827@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260827
+DTEND;VALUE=DATE:20260828
+SUMMARY:Ex-dato BW Offshore (BWO) 0\,5997 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 26.08.2026.\nUtbytte
+ : 0\,5997 NOK per aksje.\nhttps://exday.no/aksjer/BWO/
+URL:https://exday.no/aksjer/BWO/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp BWO senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:DOF-20260827@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260827
+DTEND;VALUE=DATE:20260828
+SUMMARY:Ex-dato DOF (DOF) 3\,5478 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 26.08.2026.\nUtbytte
+ : 3\,5478 NOK per aksje.\nhttps://exday.no/aksjer/DOF/
+URL:https://exday.no/aksjer/DOF/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp DOF senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:MOWI-20260828@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260828
+DTEND;VALUE=DATE:20260829
+SUMMARY:Ex-dato Mowi (MOWI) 2\,30 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 27.08.2026.\nUtbytte
+ : 2\,30 NOK per aksje.\nhttps://exday.no/aksjer/MOWI/
+URL:https://exday.no/aksjer/MOWI/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp MOWI senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:KCC-20260901@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260901
+DTEND;VALUE=DATE:20260902
+SUMMARY:Ex-dato Klaveness Combination Carriers (KCC) 2\,794 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 31.08.2026.\nUtbytte
+ : 2\,794 NOK per aksje.\nhttps://exday.no/aksjer/KCC/
+URL:https://exday.no/aksjer/KCC/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp KCC senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:PEN-20260902@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260902
+DTEND;VALUE=DATE:20260903
+SUMMARY:Ex-dato Panoro Energy (PEN) 0\,374 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 01.09.2026.\nUtbytte
+ : 0\,374 NOK per aksje.\nhttps://exday.no/aksjer/PEN/
+URL:https://exday.no/aksjer/PEN/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp PEN senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:ODL-20260903@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260903
+DTEND;VALUE=DATE:20260904
+SUMMARY:Ex-dato Odfjell Drilling (ODL) 2\,334 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 02.09.2026.\nUtbytte
+ : 2\,334 NOK per aksje.\nhttps://exday.no/aksjer/ODL/
+URL:https://exday.no/aksjer/ODL/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp ODL senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:PLSV-20260903@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260903
+DTEND;VALUE=DATE:20260904
+SUMMARY:Ex-dato Paratus Energy Services (PLSV) 2\,05 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 02.09.2026.\nUtbytte
+ : 2\,05 NOK per aksje.\nhttps://exday.no/aksjer/PLSV/
+URL:https://exday.no/aksjer/PLSV/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp PLSV senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:BWLPG-20260907@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260907
+DTEND;VALUE=DATE:20260908
+SUMMARY:Ex-dato BW LPG (BWLPG) 8\,8914 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 04.09.2026.\nUtbytte
+ : 8\,8914 NOK per aksje.\nhttps://exday.no/aksjer/BWLPG/
+URL:https://exday.no/aksjer/BWLPG/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp BWLPG senest i morgen for å få utbyttet
+TRIGGER:-PT87H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:HAFNI-20260907@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260907
+DTEND;VALUE=DATE:20260908
+SUMMARY:Ex-dato Hafnia (HAFNI) 4\,8003 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 04.09.2026.\nUtbytte
+ : 4\,8003 NOK per aksje.\nhttps://exday.no/aksjer/HAFNI/
+URL:https://exday.no/aksjer/HAFNI/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp HAFNI senest i morgen for å få utbyttet
+TRIGGER:-PT87H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:IWS-20260907@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260907
+DTEND;VALUE=DATE:20260908
+SUMMARY:Ex-dato Integrated Wind Solutions (IWS) 1\,00 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 04.09.2026.\nUtbytte
+ : 1\,00 NOK per aksje.\nhttps://exday.no/aksjer/IWS/
+URL:https://exday.no/aksjer/IWS/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp IWS senest i morgen for å få utbyttet
+TRIGGER:-PT87H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:CAPT-20260910@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260910
+DTEND;VALUE=DATE:20260911
+SUMMARY:Ex-dato Capital Tankers (CAPT) 3\,00 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 09.09.2026.\nUtbytte
+ : 3\,00 NOK per aksje.\nhttps://exday.no/aksjer/CAPT/
+URL:https://exday.no/aksjer/CAPT/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp CAPT senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:AKVA-20260915@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260915
+DTEND;VALUE=DATE:20260916
+SUMMARY:Ex-dato AKVA (AKVA) 1\,00 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 14.09.2026.\nUtbytte
+ : 1\,00 NOK per aksje.\nhttps://exday.no/aksjer/AKVA/
+URL:https://exday.no/aksjer/AKVA/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp AKVA senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:FRO-20260917@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260917
+DTEND;VALUE=DATE:20260918
+SUMMARY:Ex-dato Frontline (FRO) 32\,7184 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 16.09.2026.\nUtbytte
+ : 32\,7184 NOK per aksje.\nhttps://exday.no/aksjer/FRO/
+URL:https://exday.no/aksjer/FRO/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp FRO senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:HSHP-20260917@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260917
+DTEND;VALUE=DATE:20260918
+SUMMARY:Ex-dato Himalaya Shipping (HSHP) 2\,3987 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 16.09.2026.\nUtbytte
+ : 2\,3987 NOK per aksje.\nhttps://exday.no/aksjer/HSHP/
+URL:https://exday.no/aksjer/HSHP/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp HSHP senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:NORAM-20260918@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260918
+DTEND;VALUE=DATE:20260919
+SUMMARY:Ex-dato NorAm Drilling (NORAM) 0\,424 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 17.09.2026.\nUtbytte
+ : 0\,424 NOK per aksje.\nhttps://exday.no/aksjer/NORAM/
+URL:https://exday.no/aksjer/NORAM/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp NORAM senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:MPCC-20260921@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260921
+DTEND;VALUE=DATE:20260922
+SUMMARY:Ex-dato MPC Container Ships (MPCC) 0\,3768 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 18.09.2026.\nUtbytte
+ : 0\,3768 NOK per aksje.\nhttps://exday.no/aksjer/MPCC/
+URL:https://exday.no/aksjer/MPCC/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp MPCC senest i morgen for å få utbyttet
+TRIGGER:-PT87H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:HUNT-20260929@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260929
+DTEND;VALUE=DATE:20260930
+SUMMARY:Ex-dato Hunter (HUNT) 1\,50 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 28.09.2026.\nUtbytte
+ : 1\,50 NOK per aksje.\nhttps://exday.no/aksjer/HUNT/
+URL:https://exday.no/aksjer/HUNT/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp HUNT senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:PUBLI-20260929@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20260929
+DTEND;VALUE=DATE:20260930
+SUMMARY:Ex-dato PPI Public Property Invest (PUBLI) 0\,2379 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 28.09.2026.\nUtbytte
+ : 0\,2379 NOK per aksje.\nhttps://exday.no/aksjer/PUBLI/
+URL:https://exday.no/aksjer/PUBLI/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp PUBLI senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:CMBTO-20261015@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20261015
+DTEND;VALUE=DATE:20261016
+SUMMARY:Ex-dato CMB.TECH (CMBTO) 6\,1419 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 14.10.2026.\nUtbytte
+ : 6\,1419 NOK per aksje.\nhttps://exday.no/aksjer/CMBTO/
+URL:https://exday.no/aksjer/CMBTO/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp CMBTO senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:ELO-20261015@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20261015
+DTEND;VALUE=DATE:20261016
+SUMMARY:Ex-dato Elopak (ELO) 0\,6884 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 14.10.2026.\nUtbytte
+ : 0\,6884 NOK per aksje.\nhttps://exday.no/aksjer/ELO/
+URL:https://exday.no/aksjer/ELO/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp ELO senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:TEL-20261015@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20261015
+DTEND;VALUE=DATE:20261016
+SUMMARY:Ex-dato Telenor (TEL) 4\,70 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 14.10.2026.\nUtbytte
+ : 4\,70 NOK per aksje.\nhttps://exday.no/aksjer/TEL/
+URL:https://exday.no/aksjer/TEL/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp TEL senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:WEST-20261015@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20261015
+DTEND;VALUE=DATE:20261016
+SUMMARY:Ex-dato Western Bulk Chartering (WEST) 1\,39 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 14.10.2026.\nUtbytte
+ : 1\,39 NOK per aksje.\nhttps://exday.no/aksjer/WEST/
+URL:https://exday.no/aksjer/WEST/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp WEST senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:GOD-20261016@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20261016
+DTEND;VALUE=DATE:20261017
+SUMMARY:Ex-dato Goodtech (GOD) 2\,00 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 15.10.2026.\nUtbytte
+ : 2\,00 NOK per aksje.\nhttps://exday.no/aksjer/GOD/
+URL:https://exday.no/aksjer/GOD/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp GOD senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:HSHP-20261016@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20261016
+DTEND;VALUE=DATE:20261017
+SUMMARY:Ex-dato Himalaya Shipping (HSHP) 2\,6865 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 15.10.2026.\nUtbytte
+ : 2\,6865 NOK per aksje.\nhttps://exday.no/aksjer/HSHP/
+URL:https://exday.no/aksjer/HSHP/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp HSHP senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:NORAM-20261016@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20261016
+DTEND;VALUE=DATE:20261017
+SUMMARY:Ex-dato NorAm Drilling (NORAM) 0\,426 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 15.10.2026.\nUtbytte
+ : 0\,426 NOK per aksje.\nhttps://exday.no/aksjer/NORAM/
+URL:https://exday.no/aksjer/NORAM/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp NORAM senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:MEDI-20261027@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20261027
+DTEND;VALUE=DATE:20261028
+SUMMARY:Ex-dato Medistim (MEDI) 2\,50 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 26.10.2026.\nUtbytte
+ : 2\,50 NOK per aksje.\nhttps://exday.no/aksjer/MEDI/
+URL:https://exday.no/aksjer/MEDI/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp MEDI senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:PROT-20261027@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20261027
+DTEND;VALUE=DATE:20261028
+SUMMARY:Ex-dato Protector Forsikring (PROT) 5\,00 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 26.10.2026.\nUtbytte
+ : 5\,00 NOK per aksje.\nhttps://exday.no/aksjer/PROT/
+URL:https://exday.no/aksjer/PROT/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp PROT senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:TGS-20261029@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20261029
+DTEND;VALUE=DATE:20261030
+SUMMARY:Ex-dato TGS (TGS) 1\,45 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 28.10.2026.\nUtbytte
+ : 1\,45 NOK per aksje.\nhttps://exday.no/aksjer/TGS/
+URL:https://exday.no/aksjer/TGS/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp TGS senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:AQUA-20261102@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20261102
+DTEND;VALUE=DATE:20261103
+SUMMARY:Ex-dato Aqualis (AQUA) 0\,45 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 30.10.2026.\nUtbytte
+ : 0\,45 NOK per aksje.\nhttps://exday.no/aksjer/AQUA/
+URL:https://exday.no/aksjer/AQUA/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp AQUA senest i morgen for å få utbyttet
+TRIGGER:-PT87H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:KCC-20261102@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20261102
+DTEND;VALUE=DATE:20261103
+SUMMARY:Ex-dato Klaveness Combination Carriers (KCC) 3\,4539 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 30.10.2026.\nUtbytte
+ : 3\,4539 NOK per aksje.\nhttps://exday.no/aksjer/KCC/
+URL:https://exday.no/aksjer/KCC/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp KCC senest i morgen for å få utbyttet
+TRIGGER:-PT87H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:AKRBP-20261103@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20261103
+DTEND;VALUE=DATE:20261104
+SUMMARY:Ex-dato Aker BP (AKRBP) 6\,1464 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 02.11.2026.\nUtbytte
+ : 6\,1464 NOK per aksje.\nhttps://exday.no/aksjer/AKRBP/
+URL:https://exday.no/aksjer/AKRBP/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp AKRBP senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:BOR-20261103@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20261103
+DTEND;VALUE=DATE:20261104
+SUMMARY:Ex-dato Borgestad (BOR) 1\,50 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 02.11.2026.\nUtbytte
+ : 1\,50 NOK per aksje.\nhttps://exday.no/aksjer/BOR/
+URL:https://exday.no/aksjer/BOR/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp BOR senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:AKER-20261106@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20261106
+DTEND;VALUE=DATE:20261107
+SUMMARY:Ex-dato Aker (AKER) 29\,00 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 05.11.2026.\nUtbytte
+ : 29\,00 NOK per aksje.\nhttps://exday.no/aksjer/AKER/
+URL:https://exday.no/aksjer/AKER/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp AKER senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:BOUV-20261106@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20261106
+DTEND;VALUE=DATE:20261107
+SUMMARY:Ex-dato Bouvet (BOUV) 0\,70 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 05.11.2026.\nUtbytte
+ : 0\,70 NOK per aksje.\nhttps://exday.no/aksjer/BOUV/
+URL:https://exday.no/aksjer/BOUV/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp BOUV senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:DNO-20261106@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20261106
+DTEND;VALUE=DATE:20261107
+SUMMARY:Ex-dato DNO (DNO) 0\,375 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 05.11.2026.\nUtbytte
+ : 0\,375 NOK per aksje.\nhttps://exday.no/aksjer/DNO/
+URL:https://exday.no/aksjer/DNO/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp DNO senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:SOFF-20261106@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20261106
+DTEND;VALUE=DATE:20261107
+SUMMARY:Ex-dato Solstad Offshore (SOFF) 2\,7683 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 05.11.2026.\nUtbytte
+ : 2\,7683 NOK per aksje.\nhttps://exday.no/aksjer/SOFF/
+URL:https://exday.no/aksjer/SOFF/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp SOFF senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:SOMA-20261106@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20261106
+DTEND;VALUE=DATE:20261107
+SUMMARY:Ex-dato Solstad Maritime (SOMA) 1\,1073 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 05.11.2026.\nUtbytte
+ : 1\,1073 NOK per aksje.\nhttps://exday.no/aksjer/SOMA/
+URL:https://exday.no/aksjer/SOMA/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp SOMA senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:ENH-20261109@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20261109
+DTEND;VALUE=DATE:20261110
+SUMMARY:Ex-dato SED Energy (ENH) 0\,32 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 06.11.2026.\nUtbytte
+ : 0\,32 NOK per aksje.\nhttps://exday.no/aksjer/ENH/
+URL:https://exday.no/aksjer/ENH/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp ENH senest i morgen for å få utbyttet
+TRIGGER:-PT87H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:MORLD-20261109@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20261109
+DTEND;VALUE=DATE:20261110
+SUMMARY:Ex-dato Moreld (MORLD) 0\,50 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 06.11.2026.\nUtbytte
+ : 0\,50 NOK per aksje.\nhttps://exday.no/aksjer/MORLD/
+URL:https://exday.no/aksjer/MORLD/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp MORLD senest i morgen for å få utbyttet
+TRIGGER:-PT87H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:OTL-20261110@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20261110
+DTEND;VALUE=DATE:20261111
+SUMMARY:Ex-dato Odfjell Technology (OTL) 1\,52 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 09.11.2026.\nUtbytte
+ : 1\,52 NOK per aksje.\nhttps://exday.no/aksjer/OTL/
+URL:https://exday.no/aksjer/OTL/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp OTL senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:WWI-20261111@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20261111
+DTEND;VALUE=DATE:20261112
+SUMMARY:Ex-dato Wilh. Wilhelmsen (WWI) 8\,50 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 10.11.2026.\nUtbytte
+ : 8\,50 NOK per aksje.\nhttps://exday.no/aksjer/WWI/
+URL:https://exday.no/aksjer/WWI/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp WWI senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:WWIB-20261111@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20261111
+DTEND;VALUE=DATE:20261112
+SUMMARY:Ex-dato Wilh. Wilhelmsen B (WWIB) 8\,50 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 10.11.2026.\nUtbytte
+ : 8\,50 NOK per aksje.\nhttps://exday.no/aksjer/WWIB/
+URL:https://exday.no/aksjer/WWIB/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp WWIB senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:ODL-20261112@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20261112
+DTEND;VALUE=DATE:20261113
+SUMMARY:Ex-dato Odfjell Drilling (ODL) 2\,5756 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 11.11.2026.\nUtbytte
+ : 2\,5756 NOK per aksje.\nhttps://exday.no/aksjer/ODL/
+URL:https://exday.no/aksjer/ODL/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp ODL senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:AKAST-20261113@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20261113
+DTEND;VALUE=DATE:20261114
+SUMMARY:Ex-dato Akastor (AKAST) 2\,50 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 12.11.2026.\nUtbytte
+ : 2\,50 NOK per aksje.\nhttps://exday.no/aksjer/AKAST/
+URL:https://exday.no/aksjer/AKAST/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp AKAST senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:EQNR-20261113@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20261113
+DTEND;VALUE=DATE:20261114
+SUMMARY:Ex-dato Equinor (EQNR) 3\,7416 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 12.11.2026.\nUtbytte
+ : 3\,7416 NOK per aksje.\nhttps://exday.no/aksjer/EQNR/
+URL:https://exday.no/aksjer/EQNR/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp EQNR senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:MOWI-20261113@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20261113
+DTEND;VALUE=DATE:20261114
+SUMMARY:Ex-dato Mowi (MOWI) 2\,30 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 12.11.2026.\nUtbytte
+ : 2\,30 NOK per aksje.\nhttps://exday.no/aksjer/MOWI/
+URL:https://exday.no/aksjer/MOWI/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp MOWI senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:STST-20261116@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20261116
+DTEND;VALUE=DATE:20261117
+SUMMARY:Ex-dato Stainless Tankers (STST) 1\,2957 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 13.11.2026.\nUtbytte
+ : 1\,2957 NOK per aksje.\nBetaling: 01.12.2026.\nhttps://exday.no/aksjer/S
+ TST/
+URL:https://exday.no/aksjer/STST/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp STST senest i morgen for å få utbyttet
+TRIGGER:-PT87H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:AFG-20261117@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20261117
+DTEND;VALUE=DATE:20261118
+SUMMARY:Ex-dato AF Gruppen (AFG) 4\,50 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 16.11.2026.\nUtbytte
+ : 4\,50 NOK per aksje.\nBetaling: 24.11.2026.\nhttps://exday.no/aksjer/AFG
+ /
+URL:https://exday.no/aksjer/AFG/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp AFG senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:KID-20261117@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20261117
+DTEND;VALUE=DATE:20261118
+SUMMARY:Ex-dato Kid (KID) 2\,75 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 16.11.2026.\nUtbytte
+ : 2\,75 NOK per aksje.\nBetaling: 27.11.2026.\nhttps://exday.no/aksjer/KID
+ /
+URL:https://exday.no/aksjer/KID/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp KID senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:NORBT-20261117@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20261117
+DTEND;VALUE=DATE:20261118
+SUMMARY:Ex-dato NORBIT (NORBT) 2\,00 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 16.11.2026.\nUtbytte
+ : 2\,00 NOK per aksje.\nBetaling: 25.11.2026.\nhttps://exday.no/aksjer/NOR
+ BT/
+URL:https://exday.no/aksjer/NORBT/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp NORBT senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:VAR-20261117@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20261117
+DTEND;VALUE=DATE:20261118
+SUMMARY:Ex-dato Vår Energi (VAR) 1\,368 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 16.11.2026.\nUtbytte
+ : 1\,368 NOK per aksje.\nBetaling: 25.11.2026.\nhttps://exday.no/aksjer/VA
+ R/
+URL:https://exday.no/aksjer/VAR/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp VAR senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:ATEA-20261118@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20261118
+DTEND;VALUE=DATE:20261119
+SUMMARY:Ex-dato Atea (ATEA) 3\,75 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 17.11.2026.\nUtbytte
+ : 3\,75 NOK per aksje.\nBetaling: 23.11.2026.\nhttps://exday.no/aksjer/ATE
+ A/
+URL:https://exday.no/aksjer/ATEA/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp ATEA senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:DOF-20261120@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20261120
+DTEND;VALUE=DATE:20261121
+SUMMARY:Ex-dato DOF (DOF)
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 19.11.2026.\nBetalin
+ g: 30.11.2026.\nhttps://exday.no/aksjer/DOF/
+URL:https://exday.no/aksjer/DOF/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp DOF senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:HSHP-20261120@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20261120
+DTEND;VALUE=DATE:20261121
+SUMMARY:Ex-dato Himalaya Shipping (HSHP)
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 19.11.2026.\nBetalin
+ g: 27.11.2026.\nhttps://exday.no/aksjer/HSHP/
+URL:https://exday.no/aksjer/HSHP/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp HSHP senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:OET-20261120@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20261120
+DTEND;VALUE=DATE:20261121
+SUMMARY:Ex-dato Okeanis Eco Tankers (OET)
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 19.11.2026.\nBetalin
+ g: 01.12.2026.\nhttps://exday.no/aksjer/OET/
+URL:https://exday.no/aksjer/OET/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp OET senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:VISTIN-20261124@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20261124
+DTEND;VALUE=DATE:20261125
+SUMMARY:Ex-dato Vistin Pharma (VISTIN) 0\,50 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 23.11.2026.\nUtbytte
+ : 0\,50 NOK per aksje.\nBetaling: 27.11.2026.\nhttps://exday.no/aksjer/VIS
+ TIN/
+URL:https://exday.no/aksjer/VISTIN/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp VISTIN senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:ITERA-20261130@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20261130
+DTEND;VALUE=DATE:20261201
+SUMMARY:Ex-dato Itera (ITERA) 0\,10 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 27.11.2026.\nUtbytte
+ : 0\,10 NOK per aksje.\nBetaling: 09.12.2026.\nhttps://exday.no/aksjer/ITE
+ RA/
+URL:https://exday.no/aksjer/ITERA/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp ITERA senest i morgen for å få utbyttet
+TRIGGER:-PT87H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:BEWI-20261202@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20261202
+DTEND;VALUE=DATE:20261203
+SUMMARY:Ex-dato BEWI (BEWI) 1\,15 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 01.12.2026.\nUtbytte
+ : 1\,15 NOK per aksje.\nUtbyttet er foreslått\, ikke vedtatt.\nBetaling: 
+ 07.12.2026.\nhttps://exday.no/aksjer/BEWI/
+URL:https://exday.no/aksjer/BEWI/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp BEWI senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:OKEA-20261202@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20261202
+DTEND;VALUE=DATE:20261203
+SUMMARY:Ex-dato OKEA (OKEA) 2\,00 NOK
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 01.12.2026.\nUtbytte
+ : 2\,00 NOK per aksje.\nBetaling: 15.12.2026.\nhttps://exday.no/aksjer/OKE
+ A/
+URL:https://exday.no/aksjer/OKEA/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp OKEA senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:ENH-20261207@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20261207
+DTEND;VALUE=DATE:20261208
+SUMMARY:Ex-dato SED Energy (ENH)
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 04.12.2026.\nBetalin
+ g: 11.12.2026.\nhttps://exday.no/aksjer/ENH/
+URL:https://exday.no/aksjer/ENH/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp ENH senest i morgen for å få utbyttet
+TRIGGER:-PT87H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:PUBLI-20261229@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20261229
+DTEND;VALUE=DATE:20261230
+SUMMARY:Ex-dato PPI Public Property Invest (PUBLI)
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 28.12.2026.\nBetalin
+ g: 07.01.2027.\nhttps://exday.no/aksjer/PUBLI/
+URL:https://exday.no/aksjer/PUBLI/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp PUBLI senest i morgen for å få utbyttet
+TRIGGER:-PT39H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:EQNR-20270215@exday.no
+DTSTAMP:20261116T000000Z
+DTSTART;VALUE=DATE:20270215
+DTEND;VALUE=DATE:20270216
+SUMMARY:Ex-dato Equinor (EQNR)
+DESCRIPTION:Siste dag å kjøpe med rett på utbyttet: 12.02.2027.\nBetalin
+ g: 26.02.2027.\nhttps://exday.no/aksjer/EQNR/
+URL:https://exday.no/aksjer/EQNR/
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Kjøp EQNR senest i morgen for å få utbyttet
+TRIGGER:-PT87H
+END:VALARM
+END:VEVENT
+END:VCALENDAR
