@@ -4370,6 +4370,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "JIN",
+      "dato": "2026-11-26",
+      "type": "rapport"
+    },
+    {
       "ticker": "DELIA",
       "dato": "2026-11-27",
       "type": "rapport"
@@ -4391,11 +4396,6 @@
     },
     {
       "ticker": "CAPT",
-      "dato": "2026-11-30",
-      "type": "rapport"
-    },
-    {
-      "ticker": "JIN",
       "dato": "2026-11-30",
       "type": "rapport"
     },
@@ -4860,5 +4860,5 @@
       "type": "rapport"
     }
   ],
-  "sist_oppdatert": "2026-11-15"
+  "sist_oppdatert": "2026-11-16"
 }
