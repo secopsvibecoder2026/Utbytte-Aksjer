@@ -2880,8 +2880,45 @@ the count of ex-dates in the next 30 days, and stays within 155 characters.
 Measured on 16.11.2026: 262 ex-dates in the data, 262 `<tr>` in the HTML,
 all visible with JavaScript off at 390 and 1280 px.
 
-Tests: `TestUtbyttekalenderTabell` (6) and `TestAarstallISider` (15 Nov,
+Tests: `TestUtbyttekalenderTabell` (7) and `TestAarstallISider` (15 Nov,
 5 Dec and 2 Jan).
+
+### Search, sort and filters on top of the table (2026-11-16)
+
+`assets/utbyttekalender.js` adds the controls to the table that is already
+in the HTML. **It never builds, fetches or hides rows for Google.** With
+JavaScript off, every row stays visible in the server order.
+
+- **Controls.** The script fills `<div id="kal-kontroller" hidden>`, which
+  the generator writes. It adds:
+  - search that tolerates a missing æøå and small typos: «var energi»
+    finds Vår Energi, «equnor» finds Equinor;
+  - sorting from the column headers, with `aria-sort`;
+  - period, upcoming or passed, sector, minimum yield, frequency and status;
+  - «Bare mine aksjer», which reads `fav_aksjer`, the same key as the app;
+  - the count «Viser X av Y».
+- **Default view.** It shows upcoming ex-dates, earliest first. Rows with
+  the same date keep the server order, which is largest market cap first.
+- **Shareable filters.** They are written to the URL with `replaceState`,
+  and the canonical stays the same.
+- **Export.** Each row gets a .ics button. There is also .ics and CSV for
+  the filtered view, with semicolons and a decimal comma.
+- **Month view** is a grid built from the visible rows.
+- **Phones.** Under 640 px the rows become cards in CSS, labelled through
+  `td:nth-child(n)::before`, and the filter panel starts closed.
+- **`/utbyttekalender/exday.ics`** is a calendar people can subscribe to.
+  `lag_kalender_ics()` writes it in the same run as the table.
+  - The UID is the ticker plus the ex-date, so a calendar updates the
+    event when it changes.
+  - A reminder fires at 09:00 the day before the last day to buy.
+  - Lines are folded at 75 bytes.
+  - The data job commits the file.
+  - The JS copy (`kalIcs()`) and the feed must keep the same form.
+- An amount in another currency stays in that currency in every export.
+  A dividend that has not been approved says so.
+
+Tests: `tests/utbyttekalender.test.js` (8) and
+`TestUtbyttekalenderTabell.test_ics`.
 
 ## App review of 2026-10-20
 
