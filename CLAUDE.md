@@ -1092,6 +1092,13 @@ delivers a complete text-plus-images post.
 > report a video as delivered until `ffmpeg_tilgjengelig()` returns `True`
 > *and* the resulting file has actually been checked (size, and ideally
 > played back) in whatever environment the agent runs in next.
+>
+> **First real run, 2026-11-17.** `ffmpeg_tilgjengelig()` returned `True` in
+> the session that made `vedtas-2026-11`, and `kod_video()` produced a valid
+> h264 file (1200×628, 120 frames, 5,0 s, 581 kB). `test_koder_en_gyldig_mp4`
+> ran and passed. The first and last frames were checked by eye. The video
+> was left out of the plan: a five-second zoom on a link card adds little on
+> Facebook and replaces the link image.
 
 `promo/publiseringsprompt.md` already understands an optional `"video"` field
 per channel in the plan — the posting AI uploads it instead of the image when
