@@ -4305,22 +4305,26 @@
     {
       "ticker": "ALNG",
       "dato": "2026-11-18",
-      "type": "rapport"
+      "type": "rapport",
+      "url_forsok": 1
     },
     {
       "ticker": "BORR",
       "dato": "2026-11-18",
-      "type": "rapport"
+      "type": "rapport",
+      "url_forsok": 1
     },
     {
       "ticker": "HAFNI",
       "dato": "2026-11-18",
-      "type": "rapport"
+      "type": "rapport",
+      "url_forsok": 1
     },
     {
       "ticker": "PEN",
       "dato": "2026-11-18",
-      "type": "rapport"
+      "type": "rapport",
+      "url_forsok": 1
     },
     {
       "ticker": "BINT",
@@ -4863,6 +4867,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "HAFNI",
+      "dato": "2027-02-25",
+      "type": "rapport"
+    },
+    {
       "ticker": "KOA",
       "dato": "2027-02-25",
       "type": "rapport"
@@ -4881,7 +4890,12 @@
       "ticker": "MGN",
       "dato": "2027-03-18",
       "type": "rapport"
+    },
+    {
+      "ticker": "BORR",
+      "dato": "2027-03-24",
+      "type": "rapport"
     }
   ],
-  "sist_oppdatert": "2026-11-17"
+  "sist_oppdatert": "2026-11-18"
 }
