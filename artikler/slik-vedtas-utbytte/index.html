@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3981936786393038"
+     crossorigin="anonymous"></script>
+
+  <!-- Google Analytics med Consent Mode v2 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-X6C9PERKMB"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', {
+      analytics_storage: 'denied',
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      wait_for_update: 500
+    });
+    gtag('js', new Date());
+    gtag('config', 'G-X6C9PERKMB');
+  </script>
+  <script src="/assets/consent.js" defer></script>
+
+  <link rel="icon" type="image/png" href="/favicon.png" sizes="512x512" />
+  <link rel="apple-touch-icon" href="/logo/apple_touch_icon_180.png" />
+  <link rel="icon" type="image/svg+xml" href="/logo/exday_icon_primary.svg" />
+
+
+  <title>Utbytte i 2027: når selskapene foreslår, vedtar og betaler | exday.no</title>
+  <meta name="description" content="I desember er neste års utbyttekalender nesten tom. Slik går et utbytte fra styrets forslag til vedtak, ex-dato og penger på konto, og dette betyr «foreslått»." />
+  <link rel="canonical" href="https://exday.no/artikler/slik-vedtas-utbytte/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://exday.no/artikler/slik-vedtas-utbytte/" />
+  <meta property="og:title" content="Utbytte i 2027: når selskapene foreslår, vedtar og betaler" />
+  <meta property="og:description" content="Datoene for neste års utbytte kommer i bølger fra februar. Slik går et utbytte fra forslag til vedtak og utbetaling, med Equinor, BEWI og DNB som eksempler." />
+  <meta property="og:site_name" content="exday.no" />
+
+  <script>(function(){if(localStorage.getItem('tema')==='dark')document.documentElement.classList.add('dark');})()</script>
+
+  <link rel="stylesheet" href="/assets/tailwind.css" />
+  <link rel="stylesheet" href="/assets/style.css" />
+
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+    .prose h2 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      margin-top: 2.5rem;
+      margin-bottom: 0.75rem;
+      color: inherit;
+    }
+    .prose h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-top: 1.75rem;
+      margin-bottom: 0.5rem;
+      color: inherit;
+    }
+    .prose p { margin-bottom: 1rem; line-height: 1.75; }
+    .prose a { color: #2f7352; }
+    .dark .prose a { color: #6fa98a; }
+    .prose a:hover { text-decoration: underline; }
+    .prose ul { margin: 0.75rem 0 1rem 1.5rem; list-style: disc; }
+    .prose ol { margin: 0.75rem 0 1rem 1.5rem; list-style: decimal; }
+    .prose li { margin-bottom: 0.4rem; line-height: 1.7; }
+    .prose table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.9rem; display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .prose th { text-align: left; padding: 0.6rem 0.9rem; background: #f3f4f6; font-weight: 600; border: 1px solid #e5e7eb; }
+    .dark .prose th { background: #1f2937; border-color: #374151; }
+    .prose td { padding: 0.6rem 0.9rem; border: 1px solid #e5e7eb; vertical-align: top; }
+    .dark .prose td { border-color: #374151; }
+    .prose tr:nth-child(even) td { background: #f9fafb; }
+    .dark .prose tr:nth-child(even) td { background: #111827; }
+    .prose td.tall, .prose th.tall { text-align: right; font-variant-numeric: tabular-nums; }
+    .prose td.tall { white-space: nowrap; }
+    .prose td.dato { white-space: nowrap; }
+    .prose caption { caption-side: top; text-align: left; font-size: 0.8rem; color: #6b7280; padding-bottom: 0.4rem; }
+    .dark .prose caption { color: #9ca3af; }
+    @media (max-width: 480px) {
+      .prose table { font-size: 0.8rem; }
+      .prose th, .prose td { padding: 0.45rem 0.5rem; }
+      .formula-box { font-size: 0.8rem; padding: 0.75rem 0.9rem; }
+    }
+    .callout {
+      border-left: 4px solid #6b7280;
+      background: #f9fafb;
+      padding: 1rem 1.25rem;
+      border-radius: 0 0.5rem 0.5rem 0;
+      margin: 1.5rem 0;
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+    .callout p { margin-bottom: 0.5rem; }
+    .callout p:last-child { margin-bottom: 0; }
+    .dark .callout { background: #111827; border-color: #4b5563; }
+    .formula-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 0.5rem;
+      padding: 1rem 1.25rem;
+      margin: 1.25rem 0;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9rem;
+      line-height: 1.8;
+    }
+    .dark .formula-box { background: #0f172a; border-color: #334155; }
+    .toc a { color: #2f7352; text-decoration: none; }
+    .toc a:hover { text-decoration: underline; }
+    .dark .toc a { color: #6fa98a; }
+    .guide-badge {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      padding: 0.15rem 0.55rem;
+      border-radius: 9999px;
+      background: #e3eee8;
+      color: #275f45;
+    }
+    .dark .guide-badge { background: #0f251b; color: #6fa98a; }
+    .les-ogsa-lenke {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+  </style>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Utbytte i 2027: når selskapene foreslår, vedtar og betaler",
+    "description": "I desember er neste års utbyttekalender nesten tom, fordi utbyttet først blir foreslått sammen med rapportene i februar. Artikkelen forklarer hvordan styret foreslår og generalforsamlingen vedtar, hvordan fullmakt gjør kvartalsutbytte mulig, hva «foreslått», «vedtatt» og «betalt» betyr i utbyttekalenderen, og hvordan et forslag kan endres, med eksempler fra Equinor, BEWI og DNB.",
+    "url": "https://exday.no/artikler/slik-vedtas-utbytte/",
+    "datePublished": "2026-11-17",
+    "dateModified": "2026-11-17",
+    "author": { "@type": "Organization", "name": "exday.no", "url": "https://exday.no" },
+    "publisher": { "@type": "Organization", "name": "exday.no", "url": "https://exday.no" },
+    "mainEntityOfPage": { "@type": "WebPage", "@id": "https://exday.no/artikler/slik-vedtas-utbytte/" }
+  }
+  </script>
+</head>
+<body class="bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 min-h-screen">
+
+  <nav class="site-nav" aria-label="Hovedmeny">
+    <div class="site-nav-inner">
+      <a href="/" class="site-logo" aria-label="exday.no - hjem">
+        <img src="/logo/exday_icon_primary.svg" class="site-logo-icon site-logo-icon-light" alt="" width="28" height="28" loading="eager"><img src="/logo/exday_icon_inverse.svg" class="site-logo-icon site-logo-icon-dark" alt="" width="28" height="28" loading="eager">
+        <span>e<span class="site-logo-x">x</span>day<span class="site-logo-dot">.no</span></span>
+      </a>
+      <ul class="site-nav-menu">
+        <li class="has-dropdown">
+          <a href="/aksjer/">Aksjer</a>
+          <ul class="nav-dropdown">
+            <li><a href="/aksjer/">Alle aksjer</a></li>
+            <li><a href="/avnoteringer/">Avnoterte aksjer</a></li>
+          </ul>
+        </li>
+        <li><a href="/aksjer/sektor/">Sektorer</a></li>
+        <li class="has-dropdown">
+          <a href="/utbyttekalender/" class="">Kalender</a>
+          <ul class="nav-dropdown">
+            <li><a href="/utbyttekalender/">Utbyttekalender</a></li>
+            <li><a href="/rapportkalender/">Rapportkalender</a></li>
+          </ul>
+        </li>
+        <li class="has-dropdown">
+          <a href="/verktoy/">Verktøy</a>
+          <ul class="nav-dropdown">
+            <li><a href="/verktoy/kalkulator/">Kalkulator</a></li>
+            <li><a href="/verktoy/huslan-vs-investering/">Huslån vs. Investering</a></li>
+            <li><a href="/verktoy/fire-kalkulator/">FIRE-kalkulator</a></li>
+            <li><a href="/verktoy/sektorrebalansering/">Sektorrebalansering</a></li>
+          </ul>
+        </li>
+        <li><a href="/artikler/" class="active">Artikler</a></li>
+        <li><a href="/faq/">FAQ</a></li>
+        <li><a href="/om/">Om</a></li>
+      </ul>
+      <div class="site-nav-actions">
+        <a href="/app/" class="site-app-btn">Åpne app</a>
+        <button id="site-dark-toggle" class="site-dark-btn" aria-label="Bytt fargemodus">
+          <svg class="sun-icon" width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+          <svg class="moon-icon" width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display:none;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+        </button>
+      </div>
+      <button class="site-nav-burger" aria-label="Vis meny" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+  <script>
+    (function() {
+      var nav = document.querySelector('.site-nav');
+      var burger = nav && nav.querySelector('.site-nav-burger');
+      if (burger) {
+        burger.addEventListener('click', function() {
+          nav.classList.toggle('open');
+          burger.setAttribute('aria-expanded', nav.classList.contains('open'));
+        });
+      }
+      var darkToggle = document.getElementById('site-dark-toggle');
+      if (darkToggle) {
+        darkToggle.addEventListener('click', function() {
+          var html = document.documentElement;
+          var isDark = html.classList.toggle('dark');
+          localStorage.setItem('tema', isDark ? 'dark' : 'light');
+        });
+      }
+    })();
+  </script>
+
+  <div class="max-w-2xl mx-auto px-4 sm:px-6 pt-8 pb-20">
+
+
+    <!-- Brødsmulesti -->
+    <nav class="text-xs text-gray-400 dark:text-gray-600 mb-6" aria-label="Brødsmulesti">
+      <a href="/" class="hover:text-gray-600 dark:hover:text-gray-400 transition-colors">exday.no</a>
+      <span class="mx-1.5">›</span>
+      <a href="/artikler/" class="hover:text-gray-600 dark:hover:text-gray-400 transition-colors">Artikler</a>
+      <span class="mx-1.5">›</span>
+      <span class="text-gray-600 dark:text-gray-400">Utbytte i 2027</span>
+    </nav>
+
+    <!-- Topp -->
+    <header class="mb-8">
+      <div class="flex flex-wrap gap-2 mb-3">
+        <span class="guide-badge">Guide</span>
+        <span class="guide-badge">Kalender</span>
+      </div>
+      <h1 class="text-2xl sm:text-3xl font-bold leading-tight mb-3">
+        Utbytte i 2027: når selskapene foreslår, vedtar og betaler
+      </h1>
+      <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed mb-4">
+        I desember står neste års utbyttekalender nesten tom. Datoene kommer i bølger fra februar, når styrene legger fram forslagene sammen med årsrapportene. Her er veien fra forslag til vedtak og penger på konto, og hva «foreslått» betyr i kalenderen.
+      </p>
+      <p class="text-xs text-gray-400 dark:text-gray-600">17. november 2026 · 10 min lesing</p>
+    </header>
+
+    <!-- Innholdsfortegnelse -->
+    <nav class="toc bg-gray-50 dark:bg-gray-900 rounded-xl p-4 sm:p-5 mb-8 text-sm" aria-label="Innholdsfortegnelse">
+      <p class="font-semibold text-gray-700 dark:text-gray-300 mb-2">Innhold</p>
+      <ol class="space-y-1 list-decimal list-inside text-gray-600 dark:text-gray-400">
+        <li><a href="#tom-kalender">Hvorfor 2027-kalenderen er tom i desember</a></li>
+        <li><a href="#forslag-og-vedtak">Styret foreslår, generalforsamlingen vedtar</a></li>
+        <li><a href="#fullmakt">Kvartalsutbytte og fullmakt fra generalforsamlingen</a></li>
+        <li><a href="#til-konto">Fra vedtak til ex-dato og konto</a></li>
+        <li><a href="#status">«Foreslått», «vedtatt» og «betalt» i kalenderen</a></li>
+        <li><a href="#forslag-endres">Når et forslag ikke blir utbyttet</a></li>
+        <li><a href="#dollar">Utbytte meldt i dollar</a></li>
+        <li><a href="#folg-sesongen">Slik følger du 2027-sesongen</a></li>
+      </ol>
+    </nav>
+
+    <article class="prose text-gray-700 dark:text-gray-300">
+
+      <!-- 1 -->
+      <h2 id="tom-kalender">Hvorfor 2027-kalenderen er tom i desember</h2>
+
+      <p>
+        Leter du etter utbyttedatoene for 2027 i desember, finner du nesten ingenting, og det gjelder ikke bare exday.no. Datoene finnes ikke ennå. De fleste selskapene har ikke bestemt hva de skal betale for 2026, og før det er bestemt, finnes det ingen ex-dato å vise.
+      </p>
+
+      <p>
+        Tallene hos oss 16. november 2026 viser hvor skjevt det er. Av 155 aksjer betalte 128 utbytte. Femten av dem hadde en kjent ex-dato fram i tid, og bare én av datoene lå i 2027: Equinors 15. februar. Samtidig hadde 84 selskaper en kjent rapportdato i februar 2027, og 47 av dem skal legge fram rapporten i løpet av de tre dagene fra 10. til 12. februar.
+      </p>
+
+      <p>
+        Det er disse rapportene som fyller kalenderen. Forslaget til utbytte for regnskapsåret kommer som regel sammen med rapporten for fjerde kvartal eller årsrapporten. Av de 71 aksjene vi hadde registrert som årlige betalere 16. november, hadde 43 rapportdato i februar 2027. Og 70 av de 71 har de siste årene gått ex i mars, april, mai eller juni.
+      </p>
+
+      <p>
+        <a href="/utbyttekalender/#exmnd-tittel">Månedsoversikten nederst på utbyttekalenderen</a> viser hvilke måneder aksjene pleier å gå ex i. Det er et anslag ut fra historikken, ikke datoer selskapene har meldt. De virkelige datoene kommer i den rekkefølgen resten av artikkelen beskriver.
+      </p>
+
+      <!-- 2 -->
+      <h2 id="forslag-og-vedtak">Styret foreslår, generalforsamlingen vedtar</h2>
+
+      <p>
+        Selskapene i eksemplene her er allmennaksjeselskaper (ASA), og for dem står reglene om utbytte i allmennaksjeloven kapittel 8. Utbyttet vedtas av generalforsamlingen, men først etter at styret har lagt fram et forslag. Generalforsamlingen kan ikke vedta et høyere utbytte enn styret har foreslått eller godtar (§ 8-2). Den kan stemme for et lavere beløp, eller la være å vedta noe.
+      </p>
+
+      <p>
+        Hvor mye selskapet kan dele ut, regnes fra det siste godkjente årsregnskapet (§ 8-1). Derfor følger utbyttet regnskapsåret så tett. Årsregnskapet godkjennes på den ordinære generalforsamlingen, og den skal holdes innen seks måneder etter at regnskapsåret er slutt (§ 5-6). Bruker selskapet kalenderåret som regnskapsår, betyr det innen 30. juni. Det er hovedgrunnen til at kalenderen er tettest om våren.
+      </p>
+
+      <p>
+        Når aksjene er notert på et regulert marked som Oslo Børs, skal innkallingen sendes minst 21 dager før møtet, om ikke vedtektene krever mer (§ 5-11 b). Innkallingen inneholder styrets forslag, så beløpet er kjent i god tid. Både Equinor og DNB i eksemplene under meldte beløpet til børsen allerede i februar.
+      </p>
+
+      <h3>Equinors utbytte for fjerde kvartal 2025, steg for steg</h3>
+
+      <p>
+        <a href="/aksjer/EQNR/">Equinor</a> betaler hvert kvartal, men utbyttet for fjerde kvartal må gjennom generalforsamlingen sammen med årsregnskapet. Det gjør det til et godt eksempel på hele veien:
+      </p>
+
+      <table>
+        <caption>Equinor, utbytte for fjerde kvartal 2025. Kilde: selskapets meldinger på NewsWeb</caption>
+        <thead>
+          <tr><th>Dato</th><th>Hva skjedde</th><th>Melding</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="dato">4. feb. 2026</td><td>Styret foreslår 0,39 dollar per aksje. Meldingen sier at utbyttet krever godkjenning på generalforsamlingen 12. mai.</td><td><a href="https://newsweb.oslobors.no/message/664786" target="_blank" rel="noopener noreferrer">664786</a></td></tr>
+          <tr><td class="dato">20. apr. 2026</td><td>Innkalling til ordinær generalforsamling.</td><td><a href="https://newsweb.oslobors.no/message/670954" target="_blank" rel="noopener noreferrer">670954</a></td></tr>
+          <tr><td class="dato">12. mai 2026</td><td>Generalforsamlingen godkjenner utbyttet. Dette er også siste dag du kan kjøpe aksjen med rett til utbyttet.</td><td><a href="https://newsweb.oslobors.no/message/673262" target="_blank" rel="noopener noreferrer">673262</a></td></tr>
+          <tr><td class="dato">13. mai 2026</td><td>Ex-dato på Oslo Børs.</td><td><a href="https://newsweb.oslobors.no/message/664786" target="_blank" rel="noopener noreferrer">664786</a></td></tr>
+          <tr><td class="dato">15. mai 2026</td><td>Eierregisterdato (record date).</td><td><a href="https://newsweb.oslobors.no/message/664786" target="_blank" rel="noopener noreferrer">664786</a></td></tr>
+          <tr><td class="dato">21. mai 2026</td><td>Kronebeløpet fastsettes til 3,6041 kr per aksje.</td><td><a href="https://newsweb.oslobors.no/message/674076" target="_blank" rel="noopener noreferrer">674076</a></td></tr>
+          <tr><td class="dato">27. mai 2026</td><td>Utbetaling.</td><td><a href="https://newsweb.oslobors.no/message/664786" target="_blank" rel="noopener noreferrer">664786</a></td></tr>
+        </tbody>
+      </table>
+
+      <p>
+        Legg merke til at siste dag med rett var selve møtedagen. Den som kjøpte aksjen for å få dette utbyttet, måtte kjøpe senest samme dag som aksjonærene stemte. Det gikk som styret foreslo, men fram til møtet var det et forslag. Den forskjellen er hele poenget med statusen «foreslått» i kalenderen.
+      </p>
+
+      <h3>Sparebankene og egenkapitalbevis</h3>
+
+      <p>
+        Sparebanker er ikke aksjeselskaper, og reglene for dem står i finansforetaksloven kapittel 10. Også der er det generalforsamlingen som vedtar utbyttet, etter forslag fra styret. Det særegne er hvordan overskuddet deles. Etter § 10-17 fordeles årets overskudd mellom eierne av egenkapitalbevisene og banken selv, etter forholdet mellom eierandelskapitalen og grunnfondskapitalen. Den delen som hører til grunnfondet, legges til det, eller kan etter vedtektene gå til gaver til allmennyttige formål. Hvordan dette slår ut for utbyttet, står i artikkelen om <a href="/artikler/sparebanker-oslo-bors/#egenkapitalbevis">sparebanker på Oslo Børs</a>.
+      </p>
+
+      <!-- 3 -->
+      <h2 id="fullmakt">Kvartalsutbytte og fullmakt fra generalforsamlingen</h2>
+
+      <p>
+        Måtte generalforsamlingen vedta hvert eneste utbytte, ville et kvartalsutbytte kreve fire møter i året. I stedet kan generalforsamlingen gi styret fullmakt til å vedta utbytte ut fra det siste godkjente årsregnskapet. Fullmakten kan ikke gjelde lenger enn til neste ordinære generalforsamling, og den må være registrert i Foretaksregisteret før styret kan bruke den (§ 8-2 andre ledd).
+      </p>
+
+      <p>
+        Equinors generalforsamling 12. mai 2026 ga styret en slik fullmakt, basert på årsregnskapet for 2025. Ifølge meldingen fra møtet gjelder den til neste ordinære generalforsamling, men ikke lenger enn til 30. juni 2027. Da selskapet meldte utbyttet for tredje kvartal 28. oktober, het det at styret hadde besluttet utbyttet, og vedtaksdatoen var 27. oktober. Det er fullmakten som gjør at styret kan gjøre det uten å samle aksjonærene.
+      </p>
+
+      <p>
+        For deg som aksjonær betyr det at et utbytte vedtatt med fullmakt er vedtatt i det øyeblikket det blir meldt. Det er ingen generalforsamling igjen som skal stemme over det. Derfor står slike utbytter som «vedtatt» i kalenderen fra første dag.
+      </p>
+
+      <h3>Når utbyttet meldes to kvartaler fram</h3>
+
+      <p>
+        Hos Equinor ligger ex-datoen langt fram fra vedtaket. Utbyttet for andre kvartal 2026 ble meldt 22. juli og gikk ex 13. november. Utbyttet for tredje kvartal ble meldt 28. oktober, samme dag som kvartalsrapporten, med ex-dato på Oslo Børs 15. februar 2027 og utbetaling 26. februar. Fra 28. oktober til 13. november var det altså to vedtatte utbytter som ennå ikke hadde gått ex. Det er grunnen til at Equinor hadde den eneste 2027-datoen i kalenderen vår i midten av november.
+      </p>
+
+      <p>
+        Meldingen oppgir også en ex-dato for New York Stock Exchange, 16. februar. Den gjelder ikke for aksjer kjøpt på Oslo Børs. Når meldingen skiller mellom børsene, viser kalenderen hos oss datoen for Oslo Børs.
+      </p>
+
+      <!-- 4 -->
+      <h2 id="til-konto">Fra vedtak til ex-dato og konto</h2>
+
+      <p>
+        Når et utbytte er foreslått eller vedtatt, sender selskapet en melding med nøkkelinformasjon til Oslo Børs. Den heter gjerne «Key information relating to the cash dividend» og har de samme feltene hver gang: beløp per aksje, valuta, siste dag med rett, ex-dato, eierregisterdato, betalingsdato og vedtaksdato («Date of approval»). Datoene henger sammen slik:
+      </p>
+
+      <ul>
+        <li><strong>Siste dag med rett</strong> («Last day including right») er den siste børsdagen du kan kjøpe aksjen og få utbyttet.</li>
+        <li><strong>Ex-dato</strong> er den første børsdagen aksjen handles uten retten til utbyttet.</li>
+        <li><strong>Eierregisterdato</strong> («Record date») er dagen selskapet ser i aksjeeierregisteret hvem som har rett til utbyttet. Den ligger normalt én børsdag etter ex-datoen, fordi en handel gjøres opp to børsdager etter at den er inngått.</li>
+        <li><strong>Betalingsdato</strong> er dagen pengene sendes ut.</li>
+      </ul>
+
+      <p>
+        I Equinor-eksemplet lå eierregisterdatoen to dager etter ex-datoen, fordi 14. mai 2026 var Kristi himmelfartsdag. Fra ex-dato til utbetaling gikk det fjorten dager. For de fleste selskapene kommer pengene én til to uker etter ex-datoen. Oppgjøret, kursfallet på ex-dagen og hva som skjer om ex-datoen er en mandag, står i <a href="/artikler/hva-er-ex-dato/#t-pluss-to">guiden om ex-dato</a>.
+      </p>
+
+      <!-- 5 -->
+      <h2 id="status">«Foreslått», «vedtatt» og «betalt» i kalenderen</h2>
+
+      <p>
+        <a href="/utbyttekalender/">Utbyttekalenderen</a> på exday.no har en statuskolonne. Den bygger på meldingen til Oslo Børs:
+      </p>
+
+      <ul>
+        <li><strong>Foreslått</strong> betyr at meldingen sier utbyttet krever godkjenning, og at vedtaksdatoen ikke er passert.</li>
+        <li><strong>Vedtatt</strong> betyr at vedtaksdatoen er passert, eller at styret har vedtatt utbyttet med fullmakt.</li>
+        <li><strong>Betalt</strong> betyr at betalingsdatoen er passert. Har selskapet ikke oppgitt noen betalingsdato, regner vi utbyttet som betalt når ex-datoen er mer enn en måned gammel.</li>
+      </ul>
+
+      <p>
+        Statusen skifter fra «foreslått» til «vedtatt» når datoen for generalforsamlingen er passert. Vi leser ikke protokollen fra møtet, så det er datoen som styrer skiftet. Blir forslaget stemt ned eller endret, er det selskapets neste melding som retter kalenderen. Et foreslått beløp blir heller ikke ganget opp til en årsrate i direkteavkastningen på aksjesiden.
+      </p>
+
+      <p>
+        Da denne artikkelen ble skrevet, sto <a href="/aksjer/BEWI/">BEWI</a> i kalenderen som foreslått. Styret foreslo 4. november 2026 et ekstraordinært utbytte på 1,15 kr per aksje, basert på det godkjente årsregnskapet for 2025, og kalte inn til ekstraordinær generalforsamling 1. desember for å stemme over det. Siste dag med rett er også 1. desember, ex-datoen er 2. desember og eierregisterdatoen 3. desember. Betalingen var først oppgitt til rundt 7. desember og ble flyttet til 10. desember i en oppdatert melding 16. november.
+      </p>
+
+      <p>
+        BEWI viser også at utbytte ikke bare vedtas om våren. Et selskap kan kalle inn til ekstraordinær generalforsamling senere i året og vedta utbytte ut fra fjorårets godkjente regnskap. BEWIs utbytte kom inn i kalenderen fire uker før ex-datoen.
+      </p>
+
+      <!-- 6 -->
+      <h2 id="forslag-endres">Når et forslag ikke blir utbyttet</h2>
+
+      <p>
+        Som regel blir det foreslåtte beløpet vedtatt. Men et forslag kan endres helt fram til møtet, og <a href="/aksjer/DNB/">DNB</a> i 2020 viser hvor langt fra planen det kan ende:
+      </p>
+
+      <table>
+        <caption>DNB, utbytte for regnskapsåret 2019. Kilde: selskapets meldinger på NewsWeb</caption>
+        <thead>
+          <tr><th>Dato</th><th>Hva skjedde</th><th>Melding</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="dato">6. feb. 2020</td><td>DNB melder 9,00 kr per aksje, med vedtak på generalforsamlingen 28. april og ex-dato 29. april.</td><td><a href="https://newsweb.oslobors.no/message/494636" target="_blank" rel="noopener noreferrer">494636</a></td></tr>
+          <tr><td class="dato">2. apr. 2020</td><td>Generalforsamlingen utsettes. Utbyttet skal ikke behandles på den ordinære generalforsamlingen, men på en ekstraordinær senest i desember.</td><td><a href="https://newsweb.oslobors.no/message/500256" target="_blank" rel="noopener noreferrer">500256</a></td></tr>
+          <tr><td class="dato">22. okt. 2020</td><td>Styret foreslår at en ekstraordinær generalforsamling gir det fullmakt til å dele ut inntil 9 kr per aksje for 2019.</td><td><a href="https://newsweb.oslobors.no/message/516065" target="_blank" rel="noopener noreferrer">516065</a></td></tr>
+          <tr><td class="dato">30. nov. 2020</td><td>Den ekstraordinære generalforsamlingen gir fullmakten.</td><td><a href="https://newsweb.oslobors.no/message/519354" target="_blank" rel="noopener noreferrer">519354</a></td></tr>
+          <tr><td class="dato">9. feb. 2021</td><td>Styret vedtar 8,40 kr per aksje. Siste dag med rett 23. februar, ex-dato 24. februar, utbetaling fra 4. mars.</td><td><a href="https://newsweb.oslobors.no/message/524258" target="_blank" rel="noopener noreferrer">524258</a></td></tr>
+        </tbody>
+      </table>
+
+      <p>
+        I meldingen fra april skrev DNB at norske myndigheter hadde uttalt en forventning om at finansforetak venter med å dele ut utbytte til den store usikkerheten var redusert. Banken viste også til at Den europeiske sentralbanken hadde anbefalt banker å ikke betale utbytte før tidligst 1. oktober 2020.
+      </p>
+
+      <p>
+        Resultatet var at utbyttet ble 60 øre lavere og kom ti måneder senere enn planlagt. Retten til det gikk til dem som eide aksjen 23. februar 2021, ikke til dem som eide den i april 2020. Den som kjøpte i mars 2020 for å få 9 kroner i slutten av april og solgte om sommeren, fikk ingenting.
+      </p>
+
+      <p>
+        Et foreslått utbytte er altså en plan. Styret kan trekke det, generalforsamlingen kan sette det ned, og ytre forhold kan utsette det. Først når vedtaksdatoen er passert, vet du at den som har kjøpt aksjen senest siste dag med rett, får beløpet.
+      </p>
+
+      <!-- 7 -->
+      <h2 id="dollar">Utbytte meldt i dollar</h2>
+
+      <p>
+        Flere selskaper på Oslo Børs vedtar utbyttet i dollar, og noen i andre valutaer. Kalenderen viser beløpet i valutaen selskapet har meldt, for eksempel 0,39 USD for Equinors ex-dato 15. februar 2027, og regner det ikke om. Kronebeløpet er ikke kjent før etter eierregisterdatoen.
+      </p>
+
+      <p>
+        Hvordan kronebeløpet fastsettes, står i selskapets melding. Equinor bruker snittet av Norges Banks dollarkurs i sju børsdager, fra tre børsdager før til tre børsdager etter eierregisterdatoen. For første kvartal 2026 var snittet 9,4568, og 0,39 dollar ble 3,6882 kr per aksje (<a href="https://newsweb.oslobors.no/message/680267" target="_blank" rel="noopener noreferrer">melding 680267</a>). For tredje kvartal skal kronebeløpet meldes 22. februar 2027. Andre selskaper gjør det på andre måter, så les meldingen for aksjen du eier. Hvordan valutaen påvirker direkteavkastningen, står i artikkelen om <a href="/artikler/hva-er-direkteavkastning/">direkteavkastning</a>.
+      </p>
+
+      <!-- 8 -->
+      <h2 id="folg-sesongen">Slik følger du 2027-sesongen</h2>
+
+      <p>
+        Siden datoene kommer i bølger, er det lettere å følge med der de blir meldt enn å vente på at kalenderen fyller seg:
+      </p>
+
+      <ul>
+        <li><strong><a href="/rapportkalender/">Rapportkalenderen</a></strong> viser når hvert selskap legger fram neste rapport. Det er der de fleste utbytteforslagene for 2026 kommer, og i februar 2027 kommer de tett.</li>
+        <li><strong>I <a href="/utbyttekalender/">utbyttekalenderen</a></strong> kan du filtrere på kommende ex-datoer, sektor og status. «Bare mine aksjer» viser aksjene du har stjernemerket i appen.</li>
+        <li><strong>Abonnerer du på <a href="/utbyttekalender/exday.ics">kalenderfila</a></strong> i kalenderprogrammet ditt, kommer nye ex-datoer inn av seg selv, med en påminnelse klokka ni dagen før siste kjøpsdag.</li>
+        <li><strong>I <a href="/app/">appen</a></strong> viser kortet «Nytt siden sist» nye ex-datoer for aksjer du eier, har stjernemerket eller har i en liste, og merker utbytter som bare er foreslått.</li>
+        <li><strong>På <a href="https://newsweb.oslobors.no/" target="_blank" rel="noopener noreferrer">NewsWeb</a></strong> ligger meldingene selv. Søk opp selskapet og se etter «Key information» i tittelen. Feltet «Date of approval» forteller om utbyttet er vedtatt eller fortsatt venter på generalforsamlingen.</li>
+      </ul>
+
+      <!-- Kilder -->
+      <h2 id="kilder">Kilder</h2>
+
+      <ul>
+        <li>Allmennaksjeloven <a href="https://lovdata.no/dokument/NL/lov/1997-06-13-45/KAPITTEL_8" target="_blank" rel="noopener noreferrer">kapittel 8</a> (§ 8-1 og § 8-2) og <a href="https://lovdata.no/dokument/NL/lov/1997-06-13-45/KAPITTEL_5" target="_blank" rel="noopener noreferrer">kapittel 5</a> (§ 5-6 og § 5-11 b), Lovdata.</li>
+        <li>Finansforetaksloven <a href="https://lovdata.no/dokument/NL/lov/2015-04-10-17/KAPITTEL_10" target="_blank" rel="noopener noreferrer">kapittel 10</a> (§ 10-17), Lovdata.</li>
+        <li>Equinor på NewsWeb: meldingene 664786, 670954, 673262, 674076, 678527, 680267, 684944, 684947 og 686467.</li>
+        <li>BEWI på NewsWeb: meldingene 685533, 685546, 686036 og 686605.</li>
+        <li>DNB på NewsWeb: meldingene 494636, 500256, 516065, 519354 og 524258.</li>
+        <li>Antall aksjer, ex-datoer, rapportdatoer og ex-måneder: datagrunnlaget til exday.no, hentet 16. november 2026.</li>
+      </ul>
+
+      <!-- Les også -->
+      <h2>Les også</h2>
+      <ul class="list-none" style="margin-left:0;">
+        <li>
+          <a href="/artikler/slik-leser-du-utbyttekalenderen/" class="les-ogsa-lenke text-green-600 dark:text-green-400 hover:underline">
+            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+            <span>Slik leser du utbyttekalenderen</span>
+          </a>
+        </li>
+        <li>
+          <a href="/artikler/hva-er-ex-dato/" class="les-ogsa-lenke text-green-600 dark:text-green-400 hover:underline">
+            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <span>Hva er ex-dato? Komplett guide for norske investorer</span>
+          </a>
+        </li>
+        <li>
+          <a href="/artikler/hva-er-direkteavkastning/" class="les-ogsa-lenke text-green-600 dark:text-green-400 hover:underline">
+            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"/></svg>
+            <span>Hva er direkteavkastning? Slik regnes tallet, og hvorfor sidene viser ulike svar</span>
+          </a>
+        </li>
+        <li>
+          <a href="/artikler/sparebanker-oslo-bors/" class="les-ogsa-lenke text-green-600 dark:text-green-400 hover:underline">
+            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11m16-11v11M8 14v3m4-3v3m4-3v3"/></svg>
+            <span>Sparebanker på Oslo Børs</span>
+          </a>
+        </li>
+      </ul>
+
+    </article>
+  </div>
+
+<footer class="mt-8 sm:mt-12 border-t border-gray-200 dark:border-gray-800 py-6 text-center text-xs text-gray-400 dark:text-gray-600 space-y-1 px-4">
+  <p>Kurs og utbyttedata hentes fra Yahoo Finance og Euronext. Oppdateres daglig på børsdager.</p>
+  <p class="max-w-xl mx-auto leading-relaxed">
+    exday.no er ikke et verdipapirforetak og tilbyr ikke finansiell rådgivning.
+    Data kan inneholde feil eller forsinkelser — verifiser alltid mot Oslo Børs eller selskapets egne rapporter.
+    Historisk utbytte er ingen garanti for fremtidig utbytte.
+    Gjør alltid din egen analyse før du tar investeringsbeslutninger.
+  </p>
+  <p class="mt-2">
+    <a href="/personvern/" class="underline hover:text-gray-400 dark:hover:text-gray-400 transition-colors">Personvern og informasjonskapsler</a>
+    <span class="mx-2">·</span>
+    <a href="/faq/" class="underline hover:text-gray-400 dark:hover:text-gray-400 transition-colors">Vanlige spørsmål (FAQ)</a>
+  </p>
+  <p class="mt-3">
+    <a href="https://www.facebook.com/share/17rMp8o9yF/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-gray-400 hover:text-slate-500 dark:hover:text-slate-400 transition-colors">
+      <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/></svg>
+      Følg exday.no på Facebook
+    </a>
+  </p>
+</footer>
+
+</body>
+</html>

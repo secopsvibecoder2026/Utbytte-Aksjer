@@ -610,6 +610,14 @@ function initFire() {
 // modalen for alle aksjer i de sektorene.
 const ARTIKLER = [
   {
+    slug: '/artikler/slik-vedtas-utbytte/',
+    tittel: 'Utbytte i 2027: når selskapene foreslår, vedtar og betaler',
+    ingress: 'I desember står neste års utbyttekalender nesten tom. Datoene kommer i bølger fra februar, når styrene legger fram forslagene sammen med årsrapportene. Her er veien fra forslag til vedtak og penger på konto, og hva «foreslått» betyr i kalenderen.',
+    meta: '17. november 2026 · 10 min',
+    tags: ['Guide', 'Kalender'],
+    sektorer: [],
+  },
+  {
     slug: '/artikler/hva-er-direkteavkastning/',
     tittel: 'Hva er direkteavkastning? Slik regnes tallet, og hvorfor sidene viser ulike svar',
     ingress: 'Samme aksje kan ha tre ulike direkteavkastninger samme dag, avhengig av om tallet bygger på siste utbetaling, siste tolv måneder eller fjoråret. Slik regnes de, og slik ser du hvilket du ser på.',
