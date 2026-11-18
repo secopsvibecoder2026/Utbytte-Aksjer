@@ -159,6 +159,8 @@
     .cta a { display: inline-block; background: #275f45; color: #fff !important; font-weight: 600; padding: 0.65rem 1.5rem; border-radius: 0.5rem; text-decoration: none; }
     .cta a:hover { background: #214d39; }
     .updated { font-size: 0.78rem; text-align: right; margin-top: 1rem; }
+    .kurs-varsel { font-size: 0.8rem; line-height: 1.5; color: #805a22; margin: 0.25rem 0 1rem; }
+    .dark .kurs-varsel { color: #cfa65a; }
     .mini-nav { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.5rem; font-size: 0.85rem; }
     .utbytte-sep { display: flex; align-items: center; gap: 0.75rem; margin: 1.75rem 0 1.25rem; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #9ca3af; }
     .utbytte-sep::before, .utbytte-sep::after { content: ''; flex: 1; height: 1px; background: #e5e7eb; }
@@ -435,6 +437,7 @@
   <p class="sub">Finans · Årlig utbytte · Euronext Growth Oslo</p>
 
   <div class="kurshode"><div class="kh-topp"><div><div class="kh-pris">206,00<span class="kh-valuta">NOK</span></div><div class="kh-meta">Kurs 18. nov 2026</div></div><div class="kh-spenn" aria-label="52 ukers spenn fra 186,02 til 232,75"><span class="kh-spenn-tekst">52 uker</span><span class="kh-spenn-tall">186,02</span><span class="kh-spenn-linje"><span class="kh-spenn-punkt" style="left:42.8%"></span></span><span class="kh-spenn-tall">232,75</span></div></div><dl class="kh-tall"><div><dt>Yield</dt><dd>6,55 %</dd></div><div><dt>Utbytte/aksje</dt><dd>13,50 NOK</dd></div><div><dt>Ex-dato</dt><dd><span class="kh-ukjent">Ikke kjent</span></dd></div></dl></div>
+  <p class="kurs-varsel" id="kurs-varsel" data-kursdag="2026-11-18" data-fridager="2026-12-24,2026-12-25,2026-12-26,2026-12-31,2027-01-01,2027-03-25,2027-03-26,2027-03-29,2027-05-01,2027-05-06,2027-05-17,2027-12-24,2027-12-25,2027-12-26,2027-12-31" role="status" hidden></p><script src="/assets/kursferskhet.js" defer></script>
 
   <nav class="ak-tabnav" id="ak-tabnav" aria-label="Sideseksjoner">
     <a href="#oversikt" class="ak-tab aktiv">Oversikt</a>
@@ -603,10 +606,10 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
 </div>
   </section>
 
-  <div class="relaterte"><h2>Andre finans-aksjer med utbytte</h2><div class="rel-grid"><a href="/aksjer/PARB/" class="rel-kort"><span class="rel-ticker">PARB</span><span class="rel-navn">Pareto Bank ASA</span><span class="rel-yield">16,1 %</span></a>
+  <div class="relaterte"><h2>Andre finans-aksjer med utbytte</h2><div class="rel-grid"><a href="/aksjer/PARB/" class="rel-kort"><span class="rel-ticker">PARB</span><span class="rel-navn">Pareto Bank ASA</span><span class="rel-yield">16,2 %</span></a>
 <a href="/aksjer/SPOG/" class="rel-kort"><span class="rel-ticker">SPOG</span><span class="rel-navn">Sparebanken Øst</span><span class="rel-yield">9,7 %</span></a>
-<a href="/aksjer/ROGS/" class="rel-kort"><span class="rel-ticker">ROGS</span><span class="rel-navn">Rogaland Sparebank</span><span class="rel-yield">7,8 %</span></a>
-<a href="/aksjer/B2I/" class="rel-kort"><span class="rel-ticker">B2I</span><span class="rel-navn">B2 Impact ASA</span><span class="rel-yield">7,8 %</span></a></div></div>
+<a href="/aksjer/B2I/" class="rel-kort"><span class="rel-ticker">B2I</span><span class="rel-navn">B2 Impact ASA</span><span class="rel-yield">7,8 %</span></a>
+<a href="/aksjer/ROGS/" class="rel-kort"><span class="rel-ticker">ROGS</span><span class="rel-navn">Rogaland Sparebank</span><span class="rel-yield">7,8 %</span></a></div></div>
 
   <div class="mini-nav">
     <a href="/aksjer/sektor/finans/">← Alle Finans-aksjer</a>
@@ -633,13 +636,15 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
       Gj&#248;r alltid din egen analyse f&#248;r du tar investeringsbeslutninger.
     </p>
     <p style="margin-top:0.5rem;">
-      <a href="/personvern/" style="color:#9ca3af;text-decoration:underline;">Personvern og informasjonskapsler</a>
+      <a href="/om/" style="color:#9ca3af;text-decoration:underline;">Om exday.no</a>
       <span style="margin:0 0.4rem;">&#183;</span>
-      <a href="/faq/" style="color:#9ca3af;text-decoration:underline;">Vanlige sp&#248;rsm&#229;l (FAQ)</a>
+      <a href="/metode/" style="color:#9ca3af;text-decoration:underline;">Metode og datakilder</a>
+      <span style="margin:0 0.4rem;">&#183;</span>
+      <a href="/personvern/" style="color:#9ca3af;text-decoration:underline;">Personvern og informasjonskapsler</a>
       <span style="margin:0 0.4rem;">&#183;</span>
       <a href="/vilkaar/" style="color:#9ca3af;text-decoration:underline;">Vilk&#229;r for bruk</a>
       <span style="margin:0 0.4rem;">&#183;</span>
-      <a href="/om/" style="color:#9ca3af;text-decoration:underline;">Om exday.no</a>
+      <a href="/faq/" style="color:#9ca3af;text-decoration:underline;">Vanlige sp&#248;rsm&#229;l (FAQ)</a>
     </p>
     <p style="margin-top:0.75rem;">
       <a href="https://www.facebook.com/share/17rMp8o9yF/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:0.375rem;color:#9ca3af;">
