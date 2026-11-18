@@ -2953,14 +2953,15 @@ and nothing explained the method. Six changes:
   and the label each one gives), what each source is used for, update times,
   the checks after each run and every week, how texts are made, known limits
   and the advice disclaimer. Keep it in step when a rule changes.
-- **`/om/`** has a «Hvem står bak» block with `[NAVN]`, `[BAKGRUNN]` and
-  `[KONTAKT-E-POST]` for the owner to fill in. `sjekk_plassholdere.py
-  --streng` runs in CI and stays red while any `[STORE-BOKSTAVER]` remain in a
-  published page, so the page is not merged with placeholders. AI is
+- **`/om/`** says the site is made by one private person. The owner chose
+  not to publish a name or an e-mail address yet. Contact goes through
+  Facebook and GitHub. To add a name later, put it in «Hvem står bak» and add
+  a `Person` as `founder` of the `Organization` in the page's JSON-LD.
+  `sjekk_plassholdere.py --streng` runs in CI and fails while any
+  `[STORE-BOKSTAVER]` placeholder remains in a published page. AI is
   described as a tool, with the checks, and the page links to /metode/.
 - **Structured data.** `Organization` with `@id https://exday.no/#organisasjon`
-  on the front page, and the same id plus `Person` (founder) on /om/.
-  `publishingPrinciples` points at /metode/.
+  on the front page and /om/. `publishingPrinciples` points at /metode/.
 - **Articles** carry a line at the bottom of `<header>`: «Fakta sist
   kontrollert {dato}» for the six rewritten under the facts-first brief, «Sist
   oppdatert {dato}» for the rest. The date is `dateModified`, and
