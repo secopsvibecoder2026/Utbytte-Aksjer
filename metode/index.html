@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Google AdSense (håndterer også CMP for EØS/UK) -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3981936786393038"
+     crossorigin="anonymous"></script>
+
+  <!-- Google Analytics med Consent Mode v2 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-X6C9PERKMB"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', {
+      analytics_storage: 'denied',
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      wait_for_update: 500
+    });
+    gtag('js', new Date());
+    gtag('config', 'G-X6C9PERKMB');
+  </script>
+  <script src="/assets/consent.js" defer></script>
+
+  <link rel="icon" type="image/png" href="/favicon.png" sizes="512x512" />
+  <link rel="apple-touch-icon" href="/logo/apple_touch_icon_180.png" />
+  <link rel="icon" type="image/svg+xml" href="/logo/exday_icon_primary.svg" />
+
+  <title>Metode og datakilder | exday.no</title>
+  <meta name="description" content="Slik regner exday.no ut direkteavkastning, hvilke kilder tallene kommer fra, hvor ofte de oppdateres og hvordan de kontrolleres." />
+  <link rel="canonical" href="https://exday.no/metode/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://exday.no/metode/" />
+  <meta property="og:title" content="Metode og datakilder | exday.no" />
+  <meta property="og:description" content="Slik regner exday.no ut direkteavkastning, hvilke kilder tallene kommer fra og hvordan de kontrolleres." />
+  <meta property="og:site_name" content="exday.no" />
+
+  <link rel="stylesheet" href="/assets/tailwind.css" />
+  <link rel="stylesheet" href="/assets/style.css" />
+
+  <script>
+    (function() {
+      var t = localStorage.getItem('tema');
+      if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
+      }
+    })();
+  </script>
+
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+    .prose h2 { font-size: 1.35rem; font-weight: 700; margin-top: 2.5rem; margin-bottom: 0.75rem; color: inherit; }
+    .prose p { margin-bottom: 1rem; line-height: 1.75; }
+    .prose ul { margin: 0.75rem 0 1rem 1.5rem; list-style: disc; }
+    .prose ol { margin: 0.75rem 0 1rem 1.5rem; list-style: decimal; }
+    .prose li { margin-bottom: 0.5rem; line-height: 1.7; }
+    .prose a { color: #275f45; text-decoration: underline; }
+    .dark .prose a { color: #6fa98a; }
+    .kildetabell { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; border-collapse: collapse; margin: 1rem 0 1.5rem; font-size: 0.92rem; }
+    .kildetabell th, .kildetabell td { text-align: left; vertical-align: top; padding: 0.55rem 0.75rem; border-top: 1px solid #e5e7eb; }
+    .kildetabell th { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.03em; color: #6b7280; border-top: none; }
+    .kildetabell td:first-child { font-weight: 600; width: 7.5rem; color: #111827; }
+    .dark .kildetabell th, .dark .kildetabell td { border-color: #1f2937; }
+    .dark .kildetabell td:first-child { color: #f3f4f6; }
+  </style>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Metode og datakilder",
+    "description": "Slik regner exday.no ut direkteavkastning, hvilke kilder tallene kommer fra, hvor ofte de oppdateres og hvordan de kontrolleres.",
+    "url": "https://exday.no/metode/",
+    "inLanguage": "nb-NO",
+    "dateModified": "2026-11-18",
+    "isPartOf": {"@type": "WebSite", "name": "exday.no", "url": "https://exday.no/"},
+    "publisher": {"@id": "https://exday.no/#organisasjon"},
+    "breadcrumb": {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {"@type": "ListItem", "position": 1, "name": "exday.no", "item": "https://exday.no/"},
+        {"@type": "ListItem", "position": 2, "name": "Metode og datakilder", "item": "https://exday.no/metode/"}
+      ]
+    }
+  }
+  </script>
+</head>
+<body class="bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 min-h-screen">
+  <nav class="site-nav" aria-label="Hovedmeny">
+    <div class="site-nav-inner">
+      <a href="/" class="site-logo" aria-label="exday.no - hjem">
+        <img src="/logo/exday_icon_primary.svg" class="site-logo-icon site-logo-icon-light" alt="" width="28" height="28" loading="eager"><img src="/logo/exday_icon_inverse.svg" class="site-logo-icon site-logo-icon-dark" alt="" width="28" height="28" loading="eager">
+        <span>e<span class="site-logo-x">x</span>day<span class="site-logo-dot">.no</span></span>
+      </a>
+      <ul class="site-nav-menu">
+        <li class="has-dropdown">
+          <a href="/aksjer/" class="">Aksjer</a>
+          <ul class="nav-dropdown">
+            <li><a href="/aksjer/">Alle aksjer</a></li>
+            <li><a href="/avnoteringer/">Avnoterte aksjer</a></li>
+          </ul>
+        </li>
+        <li><a href="/aksjer/sektor/" class="">Sektorer</a></li>
+        <li class="has-dropdown">
+          <a href="/utbyttekalender/" class="">Kalender</a>
+          <ul class="nav-dropdown">
+            <li><a href="/utbyttekalender/">Utbyttekalender</a></li>
+            <li><a href="/rapportkalender/">Rapportkalender</a></li>
+          </ul>
+        </li>
+        <li class="has-dropdown">
+          <a href="/verktoy/">Verktøy</a>
+          <ul class="nav-dropdown">
+            <li><a href="/verktoy/kalkulator/">Kalkulator</a></li>
+            <li><a href="/verktoy/huslan-vs-investering/">Huslån vs. Investering</a></li>
+            <li><a href="/verktoy/fire-kalkulator/">FIRE-kalkulator</a></li>
+            <li><a href="/verktoy/sektorrebalansering/">Sektorrebalansering</a></li>
+          </ul>
+        </li>
+        <li><a href="/artikler/" class="">Artikler</a></li>
+        <li><a href="/faq/" class="">FAQ</a></li>
+        <li><a href="/om/" class="">Om</a></li>
+      </ul>
+      <div class="site-nav-actions">
+        <a href="/app/" class="site-app-btn">Åpne app</a>
+        <button id="site-dark-toggle" class="site-dark-btn" aria-label="Bytt fargemodus">
+          <svg class="sun-icon" width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+          <svg class="moon-icon" width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display:none;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+        </button>
+      </div>
+      <button class="site-nav-burger" aria-label="Vis meny" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+  <script>
+    (function() {
+      var nav = document.querySelector('.site-nav');
+      var burger = nav && nav.querySelector('.site-nav-burger');
+      if (burger) {
+        burger.addEventListener('click', function() {
+          nav.classList.toggle('open');
+          burger.setAttribute('aria-expanded', nav.classList.contains('open'));
+        });
+      }
+      var darkToggle = document.getElementById('site-dark-toggle');
+      if (darkToggle) {
+        darkToggle.addEventListener('click', function() {
+          var html = document.documentElement;
+          var isDark = html.classList.toggle('dark');
+          localStorage.setItem('tema', isDark ? 'dark' : 'light');
+        });
+      }
+    })();
+  </script>
+
+<div class="max-w-2xl mx-auto px-6 pt-10 pb-20">
+  <nav class="text-xs text-gray-400 dark:text-gray-600 mb-6" aria-label="Brødsmulesti">
+    <span><a href="/" class="hover:underline">exday.no</a></span>
+    <span class="mx-1.5">›</span>
+    <span class="text-gray-600 dark:text-gray-400">Metode og datakilder</span>
+  </nav>
+
+  <header class="mb-8">
+    <h1 class="text-3xl font-extrabold leading-tight mb-3">Metode og datakilder</h1>
+    <p class="text-gray-500 dark:text-gray-400 text-sm">Hvor tallene kommer fra, hvordan de regnes ut og kontrolleres, og hva de ikke kan brukes til.</p>
+    <p class="text-xs text-gray-400 dark:text-gray-600 mt-3">Sist oppdatert <time datetime="2026-11-18">18. november 2026</time></p>
+  </header>
+
+  <nav class="toc mb-8 text-sm" aria-label="Innhold">
+    <p class="font-semibold mb-2">Innhold</p>
+    <ol class="list-decimal ml-5 space-y-1 text-green-700 dark:text-green-400">
+      <li><a href="#aksjene" class="hover:underline">Hvilke aksjer vi følger</a></li>
+      <li><a href="#direkteavkastning" class="hover:underline">Slik regnes direkteavkastningen</a></li>
+      <li><a href="#kilder" class="hover:underline">Datakildene og hva de brukes til</a></li>
+      <li><a href="#oppdatering" class="hover:underline">Hvor ofte tallene oppdateres</a></li>
+      <li><a href="#kontroll" class="hover:underline">Hvordan tallene kontrolleres</a></li>
+      <li><a href="#tekst" class="hover:underline">Hvordan tekstene lages</a></li>
+      <li><a href="#begrensninger" class="hover:underline">Kjente begrensninger</a></li>
+      <li><a href="#ikke-rad" class="hover:underline">Ikke investeringsrådgivning</a></li>
+    </ol>
+  </nav>
+
+  <div class="prose text-gray-700 dark:text-gray-300">
+
+    <h2 id="aksjene">Hvilke aksjer vi følger</h2>
+
+    <p>exday.no følger <!--N:aksjer-->155<!--/N--> aksjer på Oslo Børs og Euronext Growth. Lista føres for hånd. Før en aksje legges inn, sjekkes ticker, navn, hjemland og markedsplass mot Euronext og selskapets egne meldinger. <!--N:utbytte-->128<!--/N--> av aksjene har en direkteavkastning over null i dag. Resten har stoppet utbyttet eller ikke betalt ennå.</p>
+
+    <p>Ved hver datahenting sjekkes lista mot Euronexts egen oversikt over noterte aksjer. Forsvinner en aksje derfra, får vi et varsel. Når et selskap blir kjøpt opp, slått sammen eller tatt av børs, fjernes det, og hva som skjedde, står på siden om <a href="/avnoteringer/">avnoterte aksjer</a>.</p>
+
+    <h2 id="direkteavkastning">Slik regnes direkteavkastningen</h2>
+
+    <p>Direkteavkastning (yield) er årlig utbytte per aksje delt på dagens kurs, ganget med 100. Kursen er den siste vi har hentet. Det vanskelige er telleren: hvilket årlig utbytte skal vi bruke? Vi bruker ikke ett fast tall, men velger etter disse reglene, i denne rekkefølgen:</p>
+
+    <ol>
+      <li><strong>Utgangspunktet er Yahoo Finance sin årsrate.</strong> Den er som regel siste utbetaling ganget med antall utbetalinger i året. For en aksje som betaler hvert kvartal, står den merket «annualisert».</li>
+      <li><strong>Årsraten sammenlignes med fjorårets utbytte.</strong> Avviker den med 50 prosent eller mer fra det selskapet betalte i siste hele kalenderår, bruker vi fjorårets sum. Har selskapet kuttet utbyttet, bruker vi det som er betalt de siste tolv månedene, så et kutt ikke skjules.</li>
+      <li><strong>Betalt siste tolv måneder tar over når avviket er stort.</strong> Avviker årsraten med minst 30 prosent fra det som faktisk er betalt de siste tolv månedene, og perioden har like mange utbetalinger som selskapet pleier, bruker vi det betalte. Tallet merkes da «siste 12 mnd». Utbytter selskapet selv kaller ekstraordinære, trekkes fra når beløpet står i meldingen, og da står det «uten engangsutbytte».</li>
+      <li><strong>Et vedtatt, kunngjort utbytte kan endre raten.</strong> Når selskapet har meldt et nytt utbytte i kroner til Oslo Børs, og det er vedtatt, brukes beløpet ganget med antall utbetalinger i året. Et utbytte selskapet kaller ekstraordinært, ganges ikke opp, og et utbytte som bare er foreslått og venter på generalforsamlingen, brukes ikke.</li>
+      <li><strong>Et utbytte som har stoppet, settes til null.</strong> Har selskapet ikke betalt på 15 måneder og ikke meldt noen ny ex-dato, viser vi 0.</li>
+    </ol>
+
+    <p>Hvilken regel som er brukt, står ved tallet på hver aksjeside. Under nøkkeltallene står også en tabell over hva selskapet faktisk har betalt: de siste tolv månedene og snittet per år for de siste ett til fem hele årene. Den tabellen er fasit når du er i tvil om årsraten.</p>
+
+    <p>Tre ting er verdt å vite:</p>
+    <ul>
+      <li><strong>Alt måles mot dagens kurs.</strong> Også direkteavkastningen for tidligere år regnes mot kursen i dag, så tallene kan sammenlignes. Den er derfor ikke det en investor fikk det året.</li>
+      <li><strong>Snittet bygger på hele år.</strong> «3-årssnitt» eller «5-årssnitt» bruker bare avsluttede kalenderår. Med færre enn tre hele år viser vi ikke noe snitt.</li>
+      <li><strong>Særutbytte holdes utenfor snitt og vekst</strong> når selskapets egen melding kaller det særutbytte. Tabellen over betalt utbytte viser fortsatt alt som ble utbetalt.</li>
+    </ul>
+
+    <h2 id="kilder">Datakildene og hva de brukes til</h2>
+
+    <table class="kildetabell">
+      <thead><tr><th>Kilde</th><th>Hva vi henter</th></tr></thead>
+      <tbody>
+        <tr><td>Yahoo Finance</td><td>Kurs, kurshistorikk, utbyttehistorikk (beløp og ex-dato for hver utbetaling), årsrate, markedsverdi, P/E og utdelingsgrad (payout ratio).</td></tr>
+        <tr><td>Euronext</td><td>Lista over noterte aksjer med ISIN og markedsplass. Brukes til å oppdage avnoteringer, kontrollere hjemland og børs, og som reserve for kursen når Yahoo ikke svarer.</td></tr>
+        <tr><td>NewsWeb (Oslo Børs)</td><td>Selskapenes egne meldinger: ex-dato, betalingsdato, beløp og valuta, om utbyttet er foreslått eller vedtatt, om det er ekstraordinært eller tilbakebetaling av innbetalt kapital, og datoen for neste kvartalsrapport. Utbetalinger Yahoo mangler, fylles inn herfra når beløpet står i kroner.</td></tr>
+        <tr><td>DNB Markets</td><td>Utbyttekalenderen deres er en ekstra kilde til kommende ex-datoer. Beløpet brukes bare når meldingen til Oslo Børs bekrefter det i kroner.</td></tr>
+        <tr><td>Skatteetaten</td><td>Skattesatsen på utbytte, skjermingsrenten for hvert år og reglene for aksjesparekonto og tilbakebetalt kapital. Disse legges inn for hånd når Skatteetaten publiserer dem, og brukes i skatteberegningen i appen.</td></tr>
+      </tbody>
+    </table>
+
+    <p>Når kildene er uenige, vinner selskapets egen melding til Oslo Børs. Et eksempel: Yahoo og DNB skiller ikke mellom børsene for selskaper som også er notert i utlandet, og Equinor sto en periode med ex-datoen fra New York. Nå leses ex-datoen for Oslo Børs fra Equinors egen melding.</p>
+
+    <h2 id="oppdatering">Hvor ofte tallene oppdateres</h2>
+
+    <ul>
+      <li><strong>Utbyttedata og aksjesidene</strong> hentes og bygges på nytt fire ganger hver børsdag, kl. 08.41, 11.41, 14.41 og 17.41. Datoen nederst på hver aksjeside sier når tallene for den aksjen sist ble hentet.</li>
+      <li><strong>Kursene i appen</strong> oppdateres omtrent hvert kvarter mens børsen er åpen, fra 09.07 til 17.37. Kursene kan være forsinket med opptil 15 minutter.</li>
+      <li><strong>Kursen på en aksjeside</strong> er fra siste datahenting. Er den eldre enn én børsdag, viser siden et varsel, og da bør du sjekke kursen hos megleren din.</li>
+    </ul>
+
+    <p>Jobbene kjøres av GitHub Actions. GitHub starter dem av og til senere enn planlagt. Derfor viser hver aksjeside og appen hvor gamle tallene er, i stedet for å anta at de er ferske.</p>
+
+    <h2 id="kontroll">Hvordan tallene kontrolleres</h2>
+
+    <p>Etter hver datahenting kjøres disse kontrollene automatisk:</p>
+    <ul>
+      <li><strong>Datakvalitet.</strong> Stemmer direkteavkastningen med beløp og kurs? Er den urimelig høy? Er årsraten lavere enn én enkelt utbetaling? Er en utbetaling større enn hele aksjekursen? Ligger direkteavkastningen mer enn 30 prosent over det som faktisk er betalt?</li>
+      <li><strong>Katalogen.</strong> Er hver aksje fortsatt notert hos Euronext? Stemmer navnet med Yahoo, og hjemlandet og markedsplassen med Euronext? Har en aksje ikke latt seg hente på flere dager?</li>
+      <li><strong>Sidene.</strong> Interne lenker, mørk modus og at antallet aksjer ikke står skrevet for hånd noe sted.</li>
+      <li><strong>Kursene.</strong> Er prisene ikke oppdatert, blir datajobben markert som feilet, så vi ser det.</li>
+    </ul>
+
+    <p>Funn som tyder på at et selskap har gått av børs, havner i en egen sak hos oss. Advarslene stopper ikke publiseringen, for et omdøpt selskap skal ikke hindre at kursene oppdateres.</p>
+
+    <p>Hver uke går to AI-agenter i tillegg gjennom tallene mot primærkildene og rapporterer det de finner: kursene og utbyttene mot Yahoos ujusterte rådata, ex-datoer og beløp mot selskapenes meldinger, og ti hele aksjesider leses fra start til slutt for å finne setninger som motsier tallene. Den ene sorterer også alle meldinger på NewsWeb fra uka for å fange opp oppkjøp, fusjoner og bytte av markedsplass. Et funn bekreftes mot kilden før noe endres. Feilen rettes så i koden, og det skrives en test som hindrer at samme feil kommer tilbake.</p>
+
+    <h2 id="tekst">Hvordan tekstene lages</h2>
+
+    <p>exday.no er laget av én person, med kunstig intelligens (AI) som verktøy til koden, tekstene og kontrollene. Slik brukes den:</p>
+    <ul>
+      <li><strong>Tallene og setningene på aksjesidene</strong> bygges av koden ved hver kjøring, fra tallene i den kjøringen. De skrives ikke av AI og lagres ikke, så en setning kan ikke bli stående med et gammelt tall.</li>
+      <li><strong>Selskapsbeskrivelsene</strong> er skrevet med hjelp av AI ut fra selskapets egne nettsider og meldinger. Påstandene sjekkes mot de samme kildene, og før en tekst lagres, sjekkes den av et skript som stopper tall som kan bli utdaterte.</li>
+      <li><strong>Artiklene</strong> er skrevet med hjelp av AI. Hvert regnestykke regnes på nytt, skatteregler sjekkes mot Skatteetaten, og tall om selskaper sjekkes mot dataene våre eller selskapets egen melding. Kildene står nederst. Artikler som er gått gjennom slik, er merket «Fakta sist kontrollert» med dato øverst, og de eldre artiklene skrives om etter samme metode etter tur.</li>
+    </ul>
+
+    <h2 id="begrensninger">Kjente begrensninger</h2>
+    <ul>
+      <li><strong>Yahoo Finance har feil.</strong> Årsraten kan være satt sammen av utbetalinger fra ulike perioder, og kronebeløp for utbytte vedtatt i dollar kan være foreløpige. Reglene over fanger mye, men ikke alt.</li>
+      <li><strong>Engangsutbytter er ikke alltid merket.</strong> Kaller ikke selskapet selv et utbytte ekstraordinært i meldingen, kan det telles med i årsraten.</li>
+      <li><strong>Valuta.</strong> Mange selskaper vedtar utbyttet i dollar. Kronebeløpet fastsettes først etter eierregisterdatoen, og kalenderen viser beløpet i valutaen selskapet har meldt.</li>
+      <li><strong>Historikken er kort for nye selskaper,</strong> og NewsWeb sitt arkiv går bare et drøyt år tilbake for de fleste meldinger.</li>
+      <li><strong>Tallene kan være forsinket</strong> når en kilde ikke svarer. Siden sier fra når tallene for en aksje er gamle.</li>
+    </ul>
+
+    <p>Ser du en feil, vil vi gjerne vite det. Kontaktinformasjonen står på <a href="/om/">om-siden</a>.</p>
+
+    <h2 id="ikke-rad">Ikke investeringsrådgivning</h2>
+
+    <p>exday.no er ikke et verdipapirforetak og gir ikke investeringsråd. Innholdet er generell informasjon om aksjer og utbytte, ikke en anbefaling om å kjøpe eller selge. Historisk utbytte er ingen garanti for fremtidig utbytte, og selskaper kan sette ned eller stanse utbyttet. Sjekk alltid tallene mot Oslo Børs, selskapets egne rapporter eller megleren din før du tar en beslutning.</p>
+
+  </div>
+</div>
+
+
+<footer class="mt-8 sm:mt-12 border-t border-gray-200 dark:border-gray-800 py-6 text-center text-xs text-gray-400 dark:text-gray-600 space-y-1 px-4">
+  <p>Kurs og utbyttedata hentes fra Yahoo Finance og Euronext. Oppdateres daglig på børsdager.</p>
+  <p class="max-w-xl mx-auto leading-relaxed">
+    exday.no er ikke et verdipapirforetak og tilbyr ikke finansiell rådgivning.
+    Data kan inneholde feil eller forsinkelser — verifiser alltid mot Oslo Børs eller selskapets egne rapporter.
+    Historisk utbytte er ingen garanti for fremtidig utbytte.
+    Gjør alltid din egen analyse før du tar investeringsbeslutninger.
+  </p>
+  <p class="mt-2">
+    <a href="/om/" class="underline hover:text-gray-400 dark:hover:text-gray-400 transition-colors">Om exday.no</a>
+    <span class="mx-2">·</span>
+    <a href="/metode/" class="underline hover:text-gray-400 dark:hover:text-gray-400 transition-colors">Metode og datakilder</a>
+    <span class="mx-2">·</span>
+    <a href="/personvern/" class="underline hover:text-gray-400 dark:hover:text-gray-400 transition-colors">Personvern og informasjonskapsler</a>
+    <span class="mx-2">·</span>
+    <a href="/vilkaar/" class="underline hover:text-gray-400 dark:hover:text-gray-400 transition-colors">Vilkår for bruk</a>
+    <span class="mx-2">·</span>
+    <a href="/faq/" class="underline hover:text-gray-400 dark:hover:text-gray-400 transition-colors">Vanlige spørsmål (FAQ)</a>
+  </p>
+  <p class="mt-3">
+    <a href="https://www.facebook.com/share/17rMp8o9yF/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-gray-400 hover:text-slate-500 dark:hover:text-slate-400 transition-colors">
+      <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/></svg>
+      Følg exday.no på Facebook
+    </a>
+  </p>
+</footer>
+
+
+</body>
+</html>

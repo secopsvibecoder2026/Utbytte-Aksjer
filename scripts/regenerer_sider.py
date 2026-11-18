@@ -13,7 +13,7 @@ AKSJER_F  = os.path.join(ROOT, "data", "aksjer.json")
 
 # Importer genererings-funksjonene fra fetch_stocks
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from fetch_stocks import (generer_aksjesider, generer_sektorsider, generer_topplistesider,
+from fetch_stocks import (oppdater_rundet_antall_i_sider, generer_aksjesider, generer_sektorsider, generer_topplistesider,
                           generer_sitemap, _last_kurshistorikk_fra_disk,
                           generer_rapportkalender, sett_ask_felter, sett_hendelse, sett_snitt_felter,
                           sett_saerutbytte, sett_utbetalingsmaaneder,
@@ -152,6 +152,7 @@ def main():
     # Tellingene i de håndskrevne sidene fylles fra samme datasett, så de
     # ikke må rettes for hånd hver gang en ticker går ut.
     oppdater_antall_i_sider(aksjer, ROOT)
+    oppdater_rundet_antall_i_sider(aksjer, ROOT)
     oppdater_aarstall_i_sider(ROOT)
     oppdater_forside_uka(aksjer, ROOT)
     oppdater_forside_artikler(ROOT)

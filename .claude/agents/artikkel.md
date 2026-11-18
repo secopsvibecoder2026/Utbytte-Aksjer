@@ -46,6 +46,11 @@ gå rett til steg 2.
 - **Tabeller** får `display: block; overflow-x: auto;` så de scroller på
   mobil.
 - **Les også-lenker** skrives med `.les-ogsa-lenke` slik `CLAUDE.md` viser.
+- **Datolinja «Fakta sist kontrollert»** står nederst i `<header>`:
+  `<p class="sist-kontrollert …">Fakta sist kontrollert <time datetime="ÅÅÅÅ-MM-DD">…</time> · <a href="/metode/">Slik kontrolleres tallene</a></p>`.
+  Datoen er den samme som `dateModified` i JSON-LD, og `TestArtikkelKontrollert`
+  feiler når de er ulike. Skriv «Fakta sist kontrollert» bare når fakta faktisk
+  er kontrollert etter steg 1; ellers «Sist oppdatert».
 
 Om innholdet:
 
@@ -103,7 +108,8 @@ en ny:
 
 - Behold fakta, tall, struktur, ankere og lenker. Endre språket.
 - Kjør `sjekk_sprak.py` før og etter, og ta med begge tallene i rapporten.
-- Oppdater `dateModified` i JSON-LD.
+- Oppdater `dateModified` i JSON-LD og datoen i linja med `sist-kontrollert`.
+  Er fakta kontrollert i samme runde, skal linja si «Fakta sist kontrollert».
 
 ## Commit, PR og rapport
 

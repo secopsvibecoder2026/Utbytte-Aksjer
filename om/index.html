@@ -29,13 +29,13 @@
   <link rel="apple-touch-icon" href="/logo/apple_touch_icon_180.png" />
   <link rel="icon" type="image/svg+xml" href="/logo/exday_icon_primary.svg" />
 
-  <title>Om exday.no – Hobbyprosjektet bak utbyttekalenderen | exday.no</title>
-  <meta name="description" content="exday.no er et gratis hobbyprosjekt laget for norske utbytteinvestorer. Lær om bakgrunnen, teknologien og menneskene bak tjenesten." />
+  <title>Om exday.no – hvem står bak og hvordan tallene lages | exday.no</title>
+  <meta name="description" content="Hvem som lager exday.no, hvordan tallene hentes og kontrolleres, hvordan AI brukes som verktøy, og hvordan du tar kontakt." />
   <link rel="canonical" href="https://exday.no/om/" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://exday.no/om/" />
-  <meta property="og:title" content="Om exday.no – Hobbyprosjektet bak utbyttekalenderen" />
-  <meta property="og:description" content="exday.no er et gratis hobbyprosjekt laget for norske utbytteinvestorer. Les om bakgrunnen, teknologien og dataene bak tjenesten." />
+  <meta property="og:title" content="Om exday.no – hvem står bak og hvordan tallene lages" />
+  <meta property="og:description" content="Hvem som lager exday.no, hvordan tallene hentes og kontrolleres, hvordan AI brukes som verktøy, og hvordan du tar kontakt." />
   <meta property="og:site_name" content="exday.no" />
 
   <link rel="stylesheet" href="/assets/tailwind.css" />
@@ -72,7 +72,7 @@
     .prose li { margin-bottom: 0.4rem; line-height: 1.7; }
     .callout {
       border-left: 4px solid #3f8a63;
-      background: #f0fafb;
+      background: #f3f7f5;
       padding: 1rem 1.25rem;
       border-radius: 0 0.5rem 0.5rem 0;
       margin: 1.5rem 0;
@@ -98,31 +98,32 @@
     .stat-num { font-size: 1.6rem; font-weight: 800; color: #3f8a63; line-height: 1.1; }
     .stat-lbl { font-size: 0.72rem; color: #64748b; margin-top: 0.25rem; }
     .dark .stat-lbl { color: #94a3b8; }
-    .tech-pill {
-      display: inline-block;
-      background: #e0f2f1;
-      color: #2f7352;
-      border-radius: 9999px;
-      padding: 0.2rem 0.75rem;
-      font-size: 0.78rem;
-      font-weight: 600;
-      margin: 0.2rem;
-    }
-    .dark .tech-pill { background: rgba(63,138,99,0.25); color: #6fa98a; }
   </style>
 
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "AboutPage",
-    "name": "Om exday.no",
-    "description": "exday.no er et gratis hobbyprosjekt for norske utbytteinvestorer som gir oversikt over utbytteaksjer på Oslo Børs.",
-    "url": "https://exday.no/om/",
-    "publisher": {
-      "@type": "Organization",
-      "name": "exday.no",
-      "url": "https://exday.no"
-    }
+    "@graph": [
+      {
+        "@type": "AboutPage",
+        "name": "Om exday.no",
+        "description": "Hvem som lager exday.no, hvordan tallene hentes og kontrolleres, og hvordan du tar kontakt.",
+        "url": "https://exday.no/om/",
+        "inLanguage": "nb-NO",
+        "dateModified": "2026-11-18",
+        "about": {"@id": "https://exday.no/#organisasjon"},
+        "mainEntity": {"@id": "https://exday.no/#organisasjon"}
+      },
+      {
+        "@type": "Organization",
+        "@id": "https://exday.no/#organisasjon",
+        "name": "exday.no",
+        "url": "https://exday.no/",
+        "logo": "https://exday.no/favicon.png",
+        "sameAs": ["https://www.facebook.com/share/17rMp8o9yF/?mibextid=wwXIfr"],
+        "publishingPrinciples": "https://exday.no/metode/"
+      }
+    ]
   }
   </script>
 </head>
@@ -196,171 +197,118 @@
   </script>
 
 <div class="max-w-2xl mx-auto px-6 pt-10 pb-20">
-  <!-- BREADCRUMB -->
   <nav class="text-xs text-gray-400 dark:text-gray-600 mb-6" aria-label="Brødsmulesti">
     <span><a href="/" class="hover:underline">exday.no</a></span>
     <span class="mx-1.5">›</span>
     <span class="text-gray-600 dark:text-gray-400">Om exday.no</span>
   </nav>
 
-  <!-- HEADER -->
   <header class="mb-8">
     <h1 class="text-3xl font-extrabold leading-tight mb-3">Om exday.no</h1>
-    <p class="text-gray-500 dark:text-gray-400 text-sm">Et hobbyprosjekt for norske utbytteinvestorer</p>
+    <p class="text-gray-500 dark:text-gray-400 text-sm">Gratis oversikt over utbytteaksjer på Oslo Børs, laget og drevet av én privatperson.</p>
   </header>
 
-  <!-- STATS -->
   <div class="stat-grid">
     <div class="stat-box">
       <div class="stat-num"><!--N:aksjer-->155<!--/N--></div>
       <div class="stat-lbl">Aksjer fulgt</div>
     </div>
     <div class="stat-box">
-      <div class="stat-num">Daglig</div>
-      <div class="stat-lbl">Data-oppdatering</div>
+      <div class="stat-num">4 ganger</div>
+      <div class="stat-lbl">Nye tall hver børsdag</div>
     </div>
     <div class="stat-box">
       <div class="stat-num">Gratis</div>
-      <div class="stat-lbl">Alltid og for alle</div>
+      <div class="stat-lbl">Uten innlogging</div>
     </div>
     <div class="stat-box">
-      <div class="stat-num">100&nbsp;%</div>
-      <div class="stat-lbl">Ingen innlogging</div>
+      <div class="stat-num">Ukentlig</div>
+      <div class="stat-lbl">Kontroll mot kildene</div>
     </div>
   </div>
 
   <div class="prose text-gray-700 dark:text-gray-300">
 
-    <h2 id="bakgrunn">Bakgrunn og formål</h2>
+    <h2 id="hvem">Hvem står bak</h2>
 
-    <p>exday.no startet som et privat verktøy for å holde oversikt over ex-datoer og utbyttebetalinger fra norske aksjer. Som utbytteinvestor på Oslo Børs er det tidkrevende å holde styr på hvilke selskaper som betaler utbytte, når ex-datoen er, og hva den faktiske direkteavkastningen er til enhver tid. Det fantes gode verktøy internasjonalt, men lite skreddersydd for norske investorer på Oslo Børs.</p>
+    <p>exday.no lages og drives av én privatperson på fritiden, en utbytteinvestor som laget verktøyet for eget bruk først. Siden har ingen eiere eller samarbeidspartnere utenom dette, og ingen selskaper betaler for å bli omtalt eller for plass i listene. Personen bak kan eie aksjer i selskaper som omtales her. Det påvirker ikke tallene, som hentes og regnes ut på samme måte for alle aksjene.</p>
 
-    <p>Over tid vokste prosjektet til en fullverdig PWA (Progressive Web App) med porteføljesporing, utbyttekalkulator, sektoranalyse og personlig IRR-beregning. Siden drives som et hobbyprosjekt på fritiden og er tilgjengelig gratis for alle.</p>
+    <h2 id="bakgrunn">Hvorfor exday.no finnes</h2>
 
-    <div class="callout">
-      <strong>Ingen innlogging, ingen abonnement.</strong> Alle data lagres lokalt i nettleseren din. exday.no sender ikke personlig investorinformasjon til noen server.
-    </div>
+    <p>exday.no startet som et privat verktøy for å holde oversikt over ex-datoer og utbytte fra norske aksjer. Som utbytteinvestor på Oslo Børs er det tidkrevende å holde styr på hvilke selskaper som betaler, når ex-datoen er, og hva direkteavkastningen faktisk er. Det fantes gode verktøy for utenlandske aksjer, men lite laget for Oslo Børs.</p>
 
-    <h2 id="ai-drevet">Et AI-drevet hobbyprosjekt</h2>
+    <p>Etter hvert kom porteføljeoppfølging, utbyttekalender, kalkulatorer og en side for hver aksje. Alt er gratis og krever ingen innlogging.</p>
 
-    <p>exday.no er bygget med betydelig hjelp fra kunstig intelligens. Fra kodebase til innholdsproduksjon benyttes moderne AI-verktøy gjennom hele utviklingsprosessen. Det gjør det mulig for én person å bygge og vedlikeholde et prosjekt av denne skalaen på fritiden.</p>
+    <h2 id="tallene">Slik lages tallene</h2>
 
-    <p>AI brukes konkret til å:</p>
-    <ul>
-      <li><strong>Generere beskrivelser</strong> for <!--N:aksjer-->155<!--/N--> aksjer — basert på faktiske nøkkeltall og selskapsinformasjon, ikke generiske maler</li>
-      <li><strong>Skrive og forbedre kode</strong> — JavaScript, Python og HTML/CSS for front-end og datapipeline</li>
-      <li><strong>Analysere datakvalitet</strong> — oppdage anomalier i Yahoo Finance-data, som feil annualisering eller dobbeltbokføring av utbytter</li>
-      <li><strong>Produsere artikler og forklaringer</strong> — innhold som hjelper investorer å forstå begreper som ex-dato, skatt og yield</li>
-    </ul>
+    <p>Tallene hentes automatisk fra Yahoo Finance, Euronext og selskapenes egne meldinger til Oslo Børs, fire ganger hver børsdag. Kursene i appen oppdateres omtrent hvert kvarter mens børsen er åpen. Etter hver henting kontrolleres dataene automatisk, og hver uke sammenlignes tallene med primærkildene. Hver aksjeside sier når tallene for den aksjen sist ble hentet.</p>
 
-    <p>Prosjektet er åpent om at AI er en sentral del av produksjonen. Alle tall, datoer og finansielle data er hentet fra offentlige kilder og valideres automatisk — AI brukes til struktur og språk, ikke til å finne opp fakta.</p>
+    <p>Hvordan direkteavkastningen regnes, hvilke kilder som brukes til hva, og hvilke svakheter tallene har, står på siden om <a href="/metode/" class="text-green-700 dark:text-green-400 underline hover:no-underline">metode og datakilder</a>.</p>
 
-    <h2 id="teknologi">Teknologi og infrastruktur</h2>
+    <h2 id="ai">Slik brukes AI</h2>
 
-    <p>Hele tjenesten kjører som statiske filer på GitHub Pages uten noen server-side kjøretid. Det betyr ingen driftsutgifter, høy oppetid og rask lastetid. Alle beregninger skjer i nettleseren din.</p>
-
-    <p><strong>Teknologistakk:</strong></p>
-
-    <div style="margin: 1rem 0;">
-      <span class="tech-pill">GitHub Pages</span>
-      <span class="tech-pill">Vanilla JavaScript</span>
-      <span class="tech-pill">Tailwind CSS v4</span>
-      <span class="tech-pill">Python 3.12</span>
-      <span class="tech-pill">GitHub Actions</span>
-      <span class="tech-pill">Yahoo Finance API</span>
-      <span class="tech-pill">Euronext CSV</span>
-      <span class="tech-pill">Service Worker PWA</span>
-    </div>
-
-    <p>Kildekoden er åpen og tilgjengelig på GitHub. Det brukes ingen tredjeparts JavaScript-rammeverk — alt er skrevet i ren («vanilla») JavaScript for å holde lastetiden lav og avhengighetene minimale.</p>
-
-    <h3 id="automatisering">Automatiserte oppdateringer</h3>
-
-    <p>Data hentes og oppdateres automatisk via to GitHub Actions-jobber:</p>
-    <ul>
-      <li><strong>Utbyttedata fire ganger hver børsdag, fra morgen til ettermiddag:</strong> henter utbytteinformasjon, historiske utbytter og nøkkeltall for alle <!--N:aksjer-->155<!--/N--> aksjer fra Yahoo Finance, og ex-datoer, rapportdatoer og utbyttemeldinger fra selskapenes egne meldinger til Oslo Børs. Deretter bygges sidene for hver aksje på nytt.</li>
-      <li><strong>Kurser omtrent hvert kvarter mens børsen er åpen:</strong> henter siste kurs fra Euronext og Oslo Børs, slik at direkteavkastningen regnes mot en oppdatert kurs.</li>
-    </ul>
-
-    <p>Automatiseringen gjør at siden holder seg oppdatert uten manuelt arbeid, selv om ingen er innom siden på dager. Jobbene har faste tider, men GitHub starter dem først når det er ledig kapasitet, og de kan komme flere timer for sent. Hver aksjeside og appen sier derfor når tallene sist ble hentet.</p>
-
-    <h2 id="data">Datakilder og nøyaktighet</h2>
-
-    <p>Finansielle data hentes primært fra Yahoo Finance og Euronext, og ex-datoer og utbyttebeløp fra selskapenes egne meldinger til Oslo Børs (NewsWeb). Kildene er gratis og offentlig tilgjengelige, men de har begrensninger som er viktige å kjenne til:</p>
+    <p>Kunstig intelligens (AI) er et verktøy i arbeidet, ikke en kilde til tall. Den brukes til å skrive og rette kode, til å utforme selskapsbeskrivelser og artikler, og til å lete etter feil i dataene. Det gjør det mulig for én person å drive en side med over hundre aksjer.</p>
 
     <ul>
-      <li><strong>Forsinkelse:</strong> Kurspriser kan ha inntil 15 minutters forsinkelse i børsåpningstiden.</li>
-      <li><strong>Annualisering:</strong> Yahoo Finance annualiserer utbyttet ut fra siste betaling ganger antall betalinger i året. Når utbyttet varierer, gir det misvisende høy eller lav yield. Avviker tallet mye fra det selskapet har betalt de siste tolv månedene, bruker vi det betalte i stedet, uten engangsutbytter selskapet selv har kalt ekstraordinære, og merker tallet «siste 12 mnd».</li>
-      <li><strong>Valuta:</strong> Aksjer på Oslo Børs handles i NOK, men noen selskaper rapporterer i USD. Historiske utbytteverdier kan vise avvik sammenlignet med andre kilder på grunn av valutakursendringer.</li>
-      <li><strong>Manglende data:</strong> Noen selskaper har ufullstendig historikk i Yahoo Finance, særlig nynoterte selskaper eller selskaper med liten internasjonal dekning.</li>
+      <li><strong>Tallene</strong> kommer fra kildene over og regnes ut av koden. AI finner ikke opp tall.</li>
+      <li><strong>Setningene på aksjesidene</strong> som inneholder tall, bygges av koden ved hver henting, så de alltid følger tallene.</li>
+      <li><strong>Artikler og selskapsbeskrivelser</strong> sjekkes mot primærkildene før de publiseres: regnestykker regnes på nytt, skatteregler sjekkes mot Skatteetaten, og selskapsfakta mot selskapenes egne meldinger.</li>
+      <li><strong>Kontrollen hver uke</strong> gjøres av AI-agenter som sammenligner tallene med kildene og rapporterer avvik. Hvert funn bekreftes mot kilden før noe endres.</li>
     </ul>
 
-    <div class="callout">
-      All data på exday.no bør brukes som et utgangspunkt for videre research — ikke som eneste kilde for investeringsbeslutninger. Verifiser alltid mot Oslo Børs, selskapets årsrapport eller megler.
-    </div>
-
-    <p>exday.no kjører automatisk datakvalitetskontroll etter hver henting. Selskaper med avvikende yield-beregninger, suspekte historiske verdier eller inkonsistente nøkkeltall flagges internt og kan vises med advarsel.</p>
-
-    <h2 id="funksjoner">Hva kan du bruke exday.no til?</h2>
-
-    <p>Tjenesten dekker hele livssyklusen til en utbytteinvestor på Oslo Børs:</p>
+    <h2 id="funksjoner">Hva du kan bruke exday.no til</h2>
 
     <ul>
-      <li><strong>Utbyttekalender</strong> — se hvilke aksjer som har ex-dato de neste ukene og månedene, sortert etter dato.</li>
-      <li><strong>Aksjesøk og filtrering</strong> — finn aksjer etter sektor, yield, frekvens (månedlig, kvartalsvis, halvårlig, årlig), utbyttevekst og konsistens.</li>
-      <li><strong>Porteføljeoppfølging</strong> — legg inn kjøp og salg med dato og kurs. Beregn kostbasis (FIFO), realisert og urealisert gevinst, internrente (IRR) og tidsvektet avkastning (TWR).</li>
-      <li><strong>Skatteberegning</strong> — estimat på utbytteskatt etter skjermingsfradrag med gjeldende effektiv skattesats.</li>
-      <li><strong>Sektorrebalansering</strong> — sett ønsket sektorvekting og se hvor mye du bør kjøpe eller selge for å nå målvektene.</li>
-      <li><strong>Utbyttekalkulator</strong> — simuler fremtidig utbyttestrøm med reinvestering og forventet vekst.</li>
-      <li><strong>Dividendscore</strong> — et sammensatt poengsystem som veier yield, konsistens, vekst og bæreevne for rask sammenligning.</li>
+      <li><strong>Utbyttekalender:</strong> alle ex-datoer på Oslo Børs med siste kjøpsdag, beløp og status.</li>
+      <li><strong>Aksjesøk og filtrering:</strong> finn aksjer etter sektor, direkteavkastning, frekvens og utbyttehistorikk.</li>
+      <li><strong>Porteføljeoppfølging:</strong> registrer kjøp og salg og se kostpris (FIFO), gevinst, internrente og mottatt utbytte.</li>
+      <li><strong>Skatt:</strong> anslag på utbytteskatt etter skjermingsfradrag, som en kontroll mot skattemeldingen.</li>
+      <li><strong>Kalkulatorer:</strong> utbytte over tid med reinvestering, FIRE og aksjesparekonto mot vanlig konto.</li>
     </ul>
 
-    <p>Alt lagres lokalt i nettleseren din. Du kan eksportere porteføljen som CSV eller JSON, og importere den igjen på en annen enhet via QR-kode eller fil.</p>
+    <p>Porteføljen din lagres bare i nettleseren på din enhet. Du kan eksportere den som fil og importere den på en annen enhet.</p>
 
-    <h2 id="personvern">Personvern og cookies</h2>
+    <h2 id="inntekter">Inntekter og uavhengighet</h2>
 
-    <p>exday.no respekterer personvernet ditt. Siden bruker Google Analytics for å forstå hvilke sider og funksjoner som er mest nyttige, men dette krever ditt samtykke. Første gang du besøker siden, blir du spurt om du aksepterer analytiske informasjonskapsler.</p>
+    <p>Siden finansieres av annonser fra Google AdSense. Annonsene velges av Google, og annonsørene har ingen innflytelse på innholdet. Ingen selskaper betaler for omtale eller plassering.</p>
 
-    <p>Din porteføljedata, favoritter, watchlister og innstillinger lagres <em>utelukkende</em> i nettleserens localStorage — de sendes aldri til en server og er kun tilgjengelig på din enhet. exday.no har ingen brukerdatabase og lagrer ingen personopplysninger.</p>
+    <h2 id="personvern">Personvern</h2>
 
-    <p>Les mer i <a href="/personvern/" class="text-brand-600 dark:text-brand-400 hover:underline">personvernerklæringen</a>.</p>
+    <p>Google Analytics og annonser brukes bare etter samtykke, som du gir eller nekter i Googles samtykkemelding. Porteføljedata, favoritter og innstillinger lagres bare i nettleseren din og sendes aldri til en server. Les mer i <a href="/personvern/" class="text-green-700 dark:text-green-400 underline hover:no-underline">personvernerklæringen</a>.</p>
 
-    <h2 id="kontakt">Kontakt og tilbakemelding</h2>
+    <h2 id="kontakt">Kontakt</h2>
 
-    <p>exday.no er et hobbyprosjekt og drives uten kommersiell støtte. Feil, forslag og tilbakemeldinger mottas med takk. Du kan ta kontakt via:</p>
+    <p>Feil, forslag og spørsmål tas imot med takk:</p>
 
     <ul>
-      <li><strong>GitHub:</strong> Rapporter feil eller foreslå funksjoner via <a href="https://github.com/secopsvibecoder2026/utbytte-aksjer/issues" target="_blank" rel="noopener noreferrer" class="text-brand-600 dark:text-brand-400 hover:underline">GitHub Issues</a></li>
-      <li><strong>Facebook:</strong> Følg og skriv til oss på <a href="https://www.facebook.com/share/17rMp8o9yF/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" class="text-brand-600 dark:text-brand-400 hover:underline">Facebook-siden vår</a></li>
+      <li><strong>GitHub:</strong> meld feil eller foreslå funksjoner via <a href="https://github.com/secopsvibecoder2026/utbytte-aksjer/issues" target="_blank" rel="noopener noreferrer" class="text-green-700 dark:text-green-400 underline hover:no-underline">GitHub Issues</a></li>
+      <li><strong>Facebook:</strong> skriv til oss på <a href="https://www.facebook.com/share/17rMp8o9yF/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" class="text-green-700 dark:text-green-400 underline hover:no-underline">Facebook-siden</a></li>
     </ul>
 
-    <p>Vi svarer etter beste evne, men som hobbyprosjekt er responstiden variabel.</p>
+    <p>Melder du en feil i et tall, er det til stor hjelp om du nevner aksjen og hvor du så det riktige tallet.</p>
 
-    <h2 id="ansvarsfrasivelse">Ansvarsfraskrivelse</h2>
+    <h2 id="ansvarsfraskrivelse">Ansvarsfraskrivelse</h2>
 
-    <p>exday.no er ikke et verdipapirforetak og tilbyr ikke finansiell rådgivning. Innholdet på siden er kun til informasjonsformål og skal ikke tolkes som råd om kjøp eller salg av verdipapirer.</p>
+    <p>exday.no er ikke et verdipapirforetak og gir ikke investeringsråd. Innholdet er generell informasjon og skal ikke leses som råd om å kjøpe eller selge verdipapirer.</p>
 
-    <p>Historisk utbyttedata er ingen garanti for fremtidig utbytte. Selskaper kan redusere, utsette eller stanse utbyttet uten forvarsel. Alle investeringsbeslutninger bør baseres på grundig egen analyse og eventuelt rådgivning fra en autorisert finansrådgiver.</p>
-
-    <p>Data kan inneholde feil eller forsinkelser. exday.no tar ikke ansvar for tap som oppstår som følge av informasjon hentet fra denne siden.</p>
+    <p>Historisk utbytte er ingen garanti for fremtidig utbytte, og selskaper kan sette ned eller stanse utbyttet uten forvarsel. Tallene kan inneholde feil eller være forsinket. Sjekk dem mot Oslo Børs, selskapets egne rapporter eller megleren din før du tar en beslutning.</p>
 
   </div>
 
-  <!-- LES OGSÅ -->
   <div class="mt-10 pt-8 border-t border-gray-200 dark:border-gray-800">
     <h2 class="text-base font-bold mb-4 text-gray-700 dark:text-gray-300">Les også</h2>
     <div class="flex flex-col gap-3">
-      <a href="/faq/" class="flex items-center gap-2 text-sm text-brand-600 dark:text-brand-400 hover:underline">
-        <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-        Vanlige spørsmål (FAQ)
+      <a href="/metode/" class="les-ogsa-lenke text-sm text-green-700 dark:text-green-400 hover:underline">
+        <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+        <span>Metode og datakilder</span>
       </a>
-      <a href="/artikler/hva-er-ex-dato/" class="flex items-center gap-2 text-sm text-brand-600 dark:text-brand-400 hover:underline">
-        <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-        Hva er ex-dato? Komplett guide
+      <a href="/faq/" class="les-ogsa-lenke text-sm text-green-700 dark:text-green-400 hover:underline">
+        <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        <span>Vanlige spørsmål (FAQ)</span>
       </a>
-      <a href="/artikler/utbytte-og-skatt/" class="flex items-center gap-2 text-sm text-brand-600 dark:text-brand-400 hover:underline">
-        <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2z"/></svg>
-        Utbytte og skatt – slik beskattes du
+      <a href="/artikler/hva-er-direkteavkastning/" class="les-ogsa-lenke text-sm text-green-700 dark:text-green-400 hover:underline">
+        <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+        <span>Hva er direkteavkastning?</span>
       </a>
     </div>
   </div>
@@ -376,13 +324,15 @@
     Gjør alltid din egen analyse før du tar investeringsbeslutninger.
   </p>
   <p class="mt-2">
+    <a href="/om/" class="underline hover:text-gray-400 dark:hover:text-gray-400 transition-colors">Om exday.no</a>
+    <span class="mx-2">·</span>
+    <a href="/metode/" class="underline hover:text-gray-400 dark:hover:text-gray-400 transition-colors">Metode og datakilder</a>
+    <span class="mx-2">·</span>
     <a href="/personvern/" class="underline hover:text-gray-400 dark:hover:text-gray-400 transition-colors">Personvern og informasjonskapsler</a>
     <span class="mx-2">·</span>
-    <a href="/faq/" class="underline hover:text-gray-400 dark:hover:text-gray-400 transition-colors">Vanlige spørsmål (FAQ)</a>
-      <span class="mx-2">·</span>
-      <a href="/vilkaar/" class="underline hover:text-gray-400 dark:hover:text-gray-400 transition-colors">Vilkår for bruk</a>
+    <a href="/vilkaar/" class="underline hover:text-gray-400 dark:hover:text-gray-400 transition-colors">Vilkår for bruk</a>
     <span class="mx-2">·</span>
-    <a href="/om/" class="underline hover:text-gray-400 dark:hover:text-gray-400 transition-colors">Om exday.no</a>
+    <a href="/faq/" class="underline hover:text-gray-400 dark:hover:text-gray-400 transition-colors">Vanlige spørsmål (FAQ)</a>
   </p>
   <p class="mt-3">
     <a href="https://www.facebook.com/share/17rMp8o9yF/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-gray-400 hover:text-slate-500 dark:hover:text-slate-400 transition-colors">

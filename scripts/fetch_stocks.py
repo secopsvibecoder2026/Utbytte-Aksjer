@@ -4329,6 +4329,25 @@ def lag_utdatert_boks(a):
     )
 
 
+def lag_kursvarsel(a):
+    """Skjult avsnitt som assets/kursferskhet.js viser når sidas kurs er gammel.
+
+    Aksjesidene er statiske. Stopper datajobben, står kursen fra siste
+    kjøring, og ingenting på siden sier fra. Generatoren kan ikke vite når
+    siden leses, så den skriver børsdagen kursen gjelder og børsens fridager,
+    og skriptet sammenligner med klokka hos leseren. Uten dato ingen varsel.
+    """
+    kursdag = _kursdag((a or {}).get("hentet") or DATA_SIST_OPPDATERT)
+    if kursdag is None:
+        return ""
+    fridager = sorted(d for aar in (kursdag.year, kursdag.year + 1)
+                      for d in borsfridager(aar) if d >= kursdag)
+    fri = ",".join(d.isoformat() for d in fridager)
+    return (f'<p class="kurs-varsel" id="kurs-varsel" data-kursdag="{kursdag.isoformat()}" '
+            f'data-fridager="{fri}" role="status" hidden></p>'
+            '<script src="/assets/kursferskhet.js" defer></script>')
+
+
 _GANGER_ORD = {1: "én gang", 2: "to ganger", 3: "tre ganger", 4: "fire ganger",
                5: "fem ganger", 6: "seks ganger", 7: "sju ganger", 8: "åtte ganger",
                9: "ni ganger", 10: "ti ganger"}
@@ -6797,7 +6816,11 @@ def _lag_kurshode(a, valuta, upa_merknad="", delaar_note=""):
     hoy52  = a.get("52u_hoy") or 0
     lav52  = a.get("52u_lav") or 0
 
-    dato = _data_dato_kort()
+    # Børsdagen kursen gjelder, fra radens egen hentetid: en rad gjenbrukt fra
+    # en eldre kjøring har den gamle kursen, og sto med kjøringens dato. Samme
+    # kilde som kursvarselet (lag_kursvarsel()), så de to ikke kan være uenige.
+    kursdag = _kursdag(a.get("hentet") or DATA_SIST_OPPDATERT)
+    dato = _fmt_dato(kursdag.isoformat()) if kursdag else _data_dato_kort()
     meta = f"Kurs {dato}" if dato else "Kurs"
 
     # Spennet vises bare når kursen ligger innenfor det, og toppen ikke er
@@ -7306,6 +7329,8 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     .cta a {{ display: inline-block; background: #275f45; color: #fff !important; font-weight: 600; padding: 0.65rem 1.5rem; border-radius: 0.5rem; text-decoration: none; }}
     .cta a:hover {{ background: #214d39; }}
     .updated {{ font-size: 0.78rem; text-align: right; margin-top: 1rem; }}
+    .kurs-varsel {{ font-size: 0.8rem; line-height: 1.5; color: #805a22; margin: 0.25rem 0 1rem; }}
+    .dark .kurs-varsel {{ color: #cfa65a; }}
     .mini-nav {{ display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.5rem; font-size: 0.85rem; }}
     .utbytte-sep {{ display: flex; align-items: center; gap: 0.75rem; margin: 1.75rem 0 1.25rem; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #9ca3af; }}
     .utbytte-sep::before, .utbytte-sep::after {{ content: ''; flex: 1; height: 1px; background: #e5e7eb; }}
@@ -7524,6 +7549,7 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
   <p class="sub">{sektor} · {frekvens} utbytte · {markedsplass}</p>
 
   {kurshode_html}
+  {lag_kursvarsel(a)}
 
   <nav class="ak-tabnav" id="ak-tabnav" aria-label="Sideseksjoner">
     <a href="#oversikt" class="ak-tab aktiv">Oversikt</a>
@@ -7826,10 +7852,10 @@ def generer_aksjesider(aksjer, root_dir):
   </script>
   <script src="/assets/consent.js" defer></script>
   <title>Norske utbytteaksjer – oversikt | exday.no</title>
-  <meta name="description" content="Oversikt over {len(aksjer)} norske utbytteaksjer på Oslo Børs med yield, ex-dato og utbyttehistorikk. Oppdateres daglig."/>
+  <meta name="description" content="Oversikt over {antall_i_katalog(aksjer)} norske utbytteaksjer på Oslo Børs med yield, ex-dato og utbyttehistorikk. Oppdateres daglig."/>
   <link rel="canonical" href="https://exday.no/aksjer/"/>
   <meta property="og:title" content="Norske utbytteaksjer – oversikt | exday.no"/>
-  <meta property="og:description" content="Oversikt over {len(aksjer)} norske utbytteaksjer på Oslo Børs med yield, ex-dato og utbyttehistorikk. Oppdateres daglig."/>
+  <meta property="og:description" content="Oversikt over {antall_i_katalog(aksjer)} norske utbytteaksjer på Oslo Børs med yield, ex-dato og utbyttehistorikk. Oppdateres daglig."/>
   <meta property="og:url" content="https://exday.no/aksjer/"/>
   <meta property="og:type" content="website"/>
   <meta property="og:image" content="https://exday.no/assets/og-image.png"/>
@@ -7839,7 +7865,7 @@ def generer_aksjesider(aksjer, root_dir):
   <meta property="og:site_name" content="exday.no"/>
   <meta name="twitter:card" content="summary_large_image"/>
   <meta name="twitter:title" content="Norske utbytteaksjer – oversikt | exday.no"/>
-  <meta name="twitter:description" content="Oversikt over {len(aksjer)} norske utbytteaksjer på Oslo Børs med yield, ex-dato og utbyttehistorikk. Oppdateres daglig."/>
+  <meta name="twitter:description" content="Oversikt over {antall_i_katalog(aksjer)} norske utbytteaksjer på Oslo Børs med yield, ex-dato og utbyttehistorikk. Oppdateres daglig."/>
   <meta name="twitter:image" content="https://exday.no/assets/og-image.png"/>
   <script type="application/ld+json">{json.dumps({"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Hjem","item":"https://exday.no/"},{"@type":"ListItem","position":2,"name":"Aksjer","item":"https://exday.no/aksjer/"}]}, ensure_ascii=False)}</script>
   <link rel="stylesheet" href="/assets/style.css"/>
@@ -7991,7 +8017,7 @@ def generer_aksjesider(aksjer, root_dir):
     <p>Komplett oversikt over alle utbyttebetalere på Oslo Børs. Yield, ex-datoer, historikk og analyser — oppdateres daglig på børsdager.</p>
     <div class="hero-stats">
       <div class="hero-stat">
-        <div class="hero-stat-num">{len(aksjer)}</div>
+        <div class="hero-stat-num">{antall_i_katalog(aksjer)}</div>
         <div class="hero-stat-lbl">Aksjer</div>
       </div>
       <div class="hero-stat">
@@ -8092,7 +8118,7 @@ def generer_aksjesider(aksjer, root_dir):
   <section class="seksjon">
     <div class="alle-aksjer">
       <div class="alle-aksjer-header">
-        <h2>Alle {len(aksjer)} aksjer</h2>
+        <h2>Alle {antall_i_katalog(aksjer)} aksjer</h2>
         <span class="filter-info">Sortert etter yield</span>
       </div>
       <div style="overflow-x:auto;">
@@ -8258,13 +8284,15 @@ STANDARD_FOOTER = """  <footer style="margin-top:2rem;padding-top:1.5rem;border-
       Gj&#248;r alltid din egen analyse f&#248;r du tar investeringsbeslutninger.
     </p>
     <p style="margin-top:0.5rem;">
-      <a href="/personvern/" style="color:#9ca3af;text-decoration:underline;">Personvern og informasjonskapsler</a>
+      <a href="/om/" style="color:#9ca3af;text-decoration:underline;">Om exday.no</a>
       <span style="margin:0 0.4rem;">&#183;</span>
-      <a href="/faq/" style="color:#9ca3af;text-decoration:underline;">Vanlige sp&#248;rsm&#229;l (FAQ)</a>
+      <a href="/metode/" style="color:#9ca3af;text-decoration:underline;">Metode og datakilder</a>
+      <span style="margin:0 0.4rem;">&#183;</span>
+      <a href="/personvern/" style="color:#9ca3af;text-decoration:underline;">Personvern og informasjonskapsler</a>
       <span style="margin:0 0.4rem;">&#183;</span>
       <a href="/vilkaar/" style="color:#9ca3af;text-decoration:underline;">Vilk&#229;r for bruk</a>
       <span style="margin:0 0.4rem;">&#183;</span>
-      <a href="/om/" style="color:#9ca3af;text-decoration:underline;">Om exday.no</a>
+      <a href="/faq/" style="color:#9ca3af;text-decoration:underline;">Vanlige sp&#248;rsm&#229;l (FAQ)</a>
     </p>
     <p style="margin-top:0.75rem;">
       <a href="https://www.facebook.com/share/17rMp8o9yF/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:0.375rem;color:#9ca3af;">
@@ -10046,6 +10074,12 @@ def generer_sitemap(aksjer, root_dir, today, alle_tickers=None):
     <priority>0.3</priority>
   </url>""",
         f"""  <url>
+    <loc>https://exday.no/metode/</loc>
+    <lastmod>{today}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>""",
+        f"""  <url>
     <loc>https://exday.no/om/</loc>
     <lastmod>{today}</lastmod>
     <changefreq>monthly</changefreq>
@@ -10750,9 +10784,9 @@ def main():
     generer_topplistesider(resultater, root_dir)
     generer_rapportkalender(resultater, root_dir)
     today = datetime.datetime.utcnow().strftime("%Y-%m-%d")
-    oppdater_index_html_meta(len(resultater), root_dir)
     oppdater_app_noscript_liste(resultater, root_dir)
     oppdater_antall_i_sider(resultater, root_dir)
+    oppdater_rundet_antall_i_sider(resultater, root_dir)
     oppdater_aarstall_i_sider(root_dir)
     oppdater_forside_uka(resultater, root_dir)
     oppdater_forside_artikler(root_dir)
@@ -11569,27 +11603,6 @@ def oppdater_aarstall_i_sider(root_dir: str, i_dag=None):
         print(f"  Årstall satt til {aar} i: {', '.join(sorted(endret))}")
 
 
-def oppdater_index_html_meta(antall_aksjer: int, root_dir: str):
-    """Oppdaterer hardkodet antall aksjer i meta-tagger og JSON-LD i index.html."""
-    path = os.path.join(root_dir, "index.html")
-    if not os.path.exists(path):
-        print("  Advarsel: index.html ikke funnet, hopper over meta-oppdatering")
-        return
-    with open(path, "r", encoding="utf-8") as f:
-        html = f.read()
-    oppdatert = re.sub(
-        r'((?:Oversikt|Daglig oppdatert oversikt) over )\d+( norske utbytteaksjer)',
-        rf'\g<1>{antall_aksjer}\g<2>',
-        html
-    )
-    if oppdatert == html:
-        print(f"  index.html: ingen endring (allerede {antall_aksjer} aksjer)")
-        return
-    with open(path, "w", encoding="utf-8") as f:
-        f.write(oppdatert)
-    print(f"  index.html meta-beskrivelse oppdatert → {antall_aksjer} aksjer")
-
-
 # ── «Denne uka på Oslo Børs» på forsiden (19.10.2026) ────────────────────────
 # Forsiden hadde ingen ferske tall: hver seksjon var den samme hver dag, og
 # ingenting ga en grunn til å komme tilbake. Blokken viser ex-datoer med siste
@@ -11871,6 +11884,60 @@ def oppdater_forside_artikler(root_dir: str):
     return True
 
 
+def antall_i_katalog(aksjer):
+    """Antall aksjer exday.no følger. Den ene kilden for katalogstørrelsen.
+
+    Markørene (`<!--N:aksjer-->`), /aksjer/-siden og de rundede tallene i
+    meta-taggene leser alle herfra, så de kan ikke vise ulike tall.
+    """
+    return len(aksjer or [])
+
+
+def rundet_antall(n):
+    """Tierne under `n`, slik at «over N» er sant: 155 gir 150, 150 gir 140."""
+    return max(0, (int(n) - 1) // 10 * 10)
+
+
+# «over 150 norske utbytteaksjer» i <title>, <meta> og JSON-LD, der en
+# HTML-kommentar ikke kan stå. Tallet ble skrevet for hånd og ville stått
+# igjen hvis katalogen falt under 150. Bare tall i katalogintervallet røres.
+_RUNDET_MONSTER = re.compile(
+    r"(\b(?:over|mer enn)\s+)(\d{3})(\s+(?:norske\s+)?(?:utbytte)?aksjer\b)", re.I)
+
+
+def oppdater_rundet_antall_i_sider(aksjer, root_dir: str):
+    """Setter det rundede antallet («over 150 …») i de håndskrevne sidene.
+
+    Genererte sider (`aksjer/**`) og artikler hoppes over. En artikkel kan
+    si «over 100 aksjer» om noe annet enn katalogen.
+    """
+    n = rundet_antall(antall_i_katalog(aksjer))
+    if n < 100:
+        return []
+    endret = []
+    for mappe, undermapper, filnavn in os.walk(root_dir):
+        undermapper[:] = [d for d in undermapper
+                          if d not in (".git", "node_modules", "aksjer", "artikler", "promo")]
+        for navn in filnavn:
+            if not navn.endswith(".html"):
+                continue
+            sti = os.path.join(mappe, navn)
+            with open(sti, encoding="utf-8") as f:
+                innhold = f.read()
+
+            def _bytt(m):
+                return m.group(1) + str(n) + m.group(3) if 100 <= int(m.group(2)) <= 400 else m.group(0)
+
+            nytt = _RUNDET_MONSTER.sub(_bytt, innhold)
+            if nytt != innhold:
+                with open(sti, "w", encoding="utf-8") as f:
+                    f.write(nytt)
+                endret.append(os.path.relpath(sti, root_dir))
+    if endret:
+        print(f"  Rundet antall («over {n}») oppdatert i {len(endret)} side(r)")
+    return endret
+
+
 def oppdater_antall_i_sider(aksjer, root_dir: str):
     """Oppdaterer aksjetellingene som står i de håndskrevne sidene.
 
@@ -11901,7 +11968,7 @@ def oppdater_antall_i_sider(aksjer, root_dir: str):
         return sum(1 for a in aksjer if a.get("frekvens") == etikett)
 
     verdier = {
-        "aksjer":    len(aksjer),
+        "aksjer":    antall_i_katalog(aksjer),
         "utbytte":   sum(1 for a in aksjer if _tall(a, "utbytte_yield") > 0),
         "historikk": sum(1 for a in aksjer if _tall(a, "ar_med_utbytte") > 0),
         "exdato":    sum(1 for a in aksjer if a.get("ex_dato")),
