@@ -4329,17 +4329,20 @@
     {
       "ticker": "BINT",
       "dato": "2026-11-19",
-      "type": "rapport"
+      "type": "rapport",
+      "url_forsok": 1
     },
     {
       "ticker": "HAUTO",
       "dato": "2026-11-19",
-      "type": "rapport"
+      "type": "rapport",
+      "url_forsok": 1
     },
     {
       "ticker": "SUBC",
       "dato": "2026-11-19",
-      "type": "rapport"
+      "type": "rapport",
+      "url_forsok": 1
     },
     {
       "ticker": "FRO",
@@ -4857,6 +4860,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "BINT",
+      "dato": "2027-02-25",
+      "type": "rapport"
+    },
+    {
       "ticker": "ENDUR",
       "dato": "2027-02-25",
       "type": "rapport"
@@ -4897,5 +4905,5 @@
       "type": "rapport"
     }
   ],
-  "sist_oppdatert": "2026-11-18"
+  "sist_oppdatert": "2026-11-19"
 }
