@@ -86,6 +86,72 @@ class TestSynligTekst(unittest.TestCase):
         self.assertEqual(_synlig_tekst(html), "hei")
 
 
+class TestMetaOgMaler(unittest.TestCase):
+    """Meta-taggene og malene i Python (2026-11-18).
+
+    /aksjer/ hadde 162 i meta-beskrivelsen mens forsiden sa 155. Sjekken så
+    bare synlig tekst, og Google viser meta-beskrivelsen i søkeresultatet.
+    """
+
+    def test_bart_tall_i_meta_fanges(self):
+        from sjekk_antall import _attributt_tekst, _treff
+        html = '<meta name="description" content="Oversikt over 162 norske utbytteaksjer.">'
+        # «Oversikt over 162» har «over» foran og regnes som rundet; et bart tall gjør ikke det.
+        self.assertEqual(_treff(_attributt_tekst(html)), [])
+        html = '<meta property="og:description" content="Se 162 norske utbytteaksjer.">'
+        self.assertEqual(len(_treff(_attributt_tekst(html))), 1)
+
+    def test_json_ld_fanges(self):
+        from sjekk_antall import _attributt_tekst, _treff
+        html = '<script type="application/ld+json">{"description": "Alle 155 aksjer"}</script>'
+        self.assertEqual(len(_treff(_attributt_tekst(html))), 1)
+
+    def test_tall_i_f_streng_fanges_men_ikke_docstring(self):
+        import tempfile
+        from sjekk_antall import _mal_strenger, _treff
+        kode = (
+            'def mal(aksjer):\n'
+            '    """Bygger 155 aksjer."""\n'
+            '    print("155 aksjer OK")\n'
+            '    return f"<h2>Alle 155 aksjer</h2><p>{len(aksjer)} aksjer</p>"\n'
+        )
+        with tempfile.NamedTemporaryFile("w", suffix=".py", delete=False) as f:
+            f.write(kode)
+        try:
+            treff = [t for _, s in _mal_strenger(f.name) for t in _treff(s)]
+        finally:
+            os.unlink(f.name)
+        self.assertEqual([t[0] for t in treff], ["155 aksjer"])
+
+
+class TestRundetAntall(unittest.TestCase):
+    def test_rundet_er_sant(self):
+        from fetch_stocks import rundet_antall
+        self.assertEqual(rundet_antall(155), 150)
+        self.assertEqual(rundet_antall(150), 140)
+        self.assertEqual(rundet_antall(151), 150)
+
+    def test_synk_er_idempotent_og_hopper_over_artikler(self):
+        import tempfile
+        from fetch_stocks import oppdater_rundet_antall_i_sider
+        with tempfile.TemporaryDirectory() as rot:
+            os.makedirs(os.path.join(rot, "artikler", "a"))
+            side = os.path.join(rot, "index.html")
+            artikkel = os.path.join(rot, "artikler", "a", "index.html")
+            with open(side, "w") as f:
+                f.write('<meta content="for over 160 aksjer"><p>mer enn 160 norske utbytteaksjer</p><p>over 5 aksjer</p>')
+            with open(artikkel, "w") as f:
+                f.write('<p>over 120 aksjer har betalt</p>')
+            aksjer = [{}] * 147
+            self.assertEqual(oppdater_rundet_antall_i_sider(aksjer, rot), ["index.html"])
+            self.assertEqual(oppdater_rundet_antall_i_sider(aksjer, rot), [])
+            t = open(side).read()
+            self.assertIn("for over 140 aksjer", t)
+            self.assertIn("mer enn 140 norske utbytteaksjer", t)
+            self.assertIn("over 5 aksjer", t)
+            self.assertIn("over 120 aksjer", open(artikkel).read())
+
+
 class TestVirkeligeSider(unittest.TestCase):
     def test_ingen_hardkodede_tellinger_i_repoet(self):
         from sjekk_antall import finn_hardkodede

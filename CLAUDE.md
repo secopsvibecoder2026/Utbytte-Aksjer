@@ -474,7 +474,13 @@ Artikler ligger i `artikler/{slug}/index.html`. Indekssiden er `artikler/index.h
     Gjør alltid din egen analyse før du tar investeringsbeslutninger.
   </p>
   <p class="mt-2">
+    <a href="/om/" class="underline hover:text-gray-400 dark:hover:text-gray-400 transition-colors">Om exday.no</a>
+    <span class="mx-2">·</span>
+    <a href="/metode/" class="underline hover:text-gray-400 dark:hover:text-gray-400 transition-colors">Metode og datakilder</a>
+    <span class="mx-2">·</span>
     <a href="/personvern/" class="underline hover:text-gray-400 dark:hover:text-gray-400 transition-colors">Personvern og informasjonskapsler</a>
+    <span class="mx-2">·</span>
+    <a href="/vilkaar/" class="underline hover:text-gray-400 dark:hover:text-gray-400 transition-colors">Vilkår for bruk</a>
     <span class="mx-2">·</span>
     <a href="/faq/" class="underline hover:text-gray-400 dark:hover:text-gray-400 transition-colors">Vanlige spørsmål (FAQ)</a>
   </p>
@@ -2926,6 +2932,58 @@ JavaScript off, every row stays visible in the server order.
 
 Tests: `tests/utbyttekalender.test.js` (8) and
 `TestUtbyttekalenderTabell.test_ics`.
+
+## Trust and consistency: one count, /metode/, /om/ and freshness (2026-11-18)
+
+Google treats finance pages as YMYL. Search Console had indexed different
+stock counts on different pages (155 on the front page, 162 on /aksjer/, 191
+on /utforsk/ and /om/), /om/ called the site an «AI-drevet hobbyprosjekt»,
+and nothing explained the method. Six changes:
+
+- **One count.** `antall_i_katalog()` is the only source. The markers
+  (`<!--N:aksjer-->`) and the /aksjer/ template read it. Where a marker cannot
+  go (`<title>`, `<meta>`, JSON-LD), `oppdater_rundet_antall_i_sider()` sets
+  «over N» / «mer enn N» to `rundet_antall()` (155 → 150, 150 → 140), in both
+  scripts. `artikler/**` and `aksjer/**` are skipped. The old
+  `oppdater_index_html_meta()` wrote an exact count into the same phrase on
+  the front page and is gone. `sjekk_antall.py --streng` now also reads
+  meta content, JSON-LD and the string constants in the Python templates,
+  and runs in `tester.yml`, so a hand-typed count fails the build.
+- **`/metode/`.** How the yield is chosen (the five rules in `hent_aksje()`
+  and the label each one gives), what each source is used for, update times,
+  the checks after each run and every week, how texts are made, known limits
+  and the advice disclaimer. Keep it in step when a rule changes.
+- **`/om/`** has a «Hvem står bak» block with `[NAVN]`, `[BAKGRUNN]` and
+  `[KONTAKT-E-POST]` for the owner to fill in. `sjekk_plassholdere.py
+  --streng` runs in CI and stays red while any `[STORE-BOKSTAVER]` remain in a
+  published page, so the page is not merged with placeholders. AI is
+  described as a tool, with the checks, and the page links to /metode/.
+- **Structured data.** `Organization` with `@id https://exday.no/#organisasjon`
+  on the front page, and the same id plus `Person` (founder) on /om/.
+  `publishingPrinciples` points at /metode/.
+- **Articles** carry a line at the bottom of `<header>`: «Fakta sist
+  kontrollert {dato}» for the six rewritten under the facts-first brief, «Sist
+  oppdatert {dato}» for the rest. The date is `dateModified`, and
+  `TestArtikkelKontrollert` fails when they differ.
+- **Freshness.**
+  - Stock pages carry a hidden `#kurs-varsel` with the trading day of the
+    price (`lag_kursvarsel()`, from `hentet`) and the exchange holidays.
+    `assets/kursferskhet.js` shows it when the price is more than one
+    trading day behind the reader's clock.
+  - The price header «Kurs {dato}» now uses the same trading day. It showed
+    the run date also for a reused row.
+  - `scripts/sjekk_kursferskhet.py` runs as its own job (`kursferskhet`) in
+    `update-og-deploy.yml`. It fails, red and with an `::error::`
+    annotation, when `data/priser.json` is behind the current trading day.
+    The one exception is the same day before 10.30. Holidays come from
+    `borsfridager()`. Publishing does not wait for it.
+- **Footer.** Om, Metode og datakilder, Personvern, Vilkår and FAQ on every
+  page: the standard footer above, `STANDARD_FOOTER`, and 32 hand-written
+  pages. `TestBunntekst` requires the first four.
+
+Tests: `TestBunntekst` (3), `TestArtikkelKontrollert` (1), `TestKursvarsel`
+(3), `test_sjekk_antall.py` (+5), `test_sjekk_kursferskhet.py` (8) and
+`tests/kursferskhet.test.js` (4).
 
 ## App review of 2026-10-20
 

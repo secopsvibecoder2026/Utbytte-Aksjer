@@ -202,6 +202,38 @@ jobs:
       - name: Kjør tallkontroll
         run: python scripts/tallkontroll.py --markdown >> "$GITHUB_STEP_SUMMARY"
 
+  kursferskhet:
+    name: Kursene er oppdatert
+    # Stopper kursjobben, feiler ingenting: en jobb som ikke kjører, blir
+    # ikke rød. Denne jobben går hver gang datajobben går, og feiler når
+    # data/priser.json ligger bak gjeldende børsdag (scripts/sjekk_kursferskhet.py).
+    # Egen jobb uten continue-on-error, så kjøringen blir rød, men
+    # publiseringen i deploy-pages venter ikke på den.
+    needs: [oppdater-data]
+    if: needs.oppdater-data.result == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      TZ: Europe/Oslo
+    steps:
+      - name: Sjekk ut kode
+        uses: actions/checkout@v4
+        with:
+          ref: main   # siste priser.json, ikke den datajobben startet med
+
+      - name: Sett opp Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+          cache-dependency-path: scripts/requirements.txt
+
+      - name: Installer avhengigheter
+        run: pip install -r scripts/requirements.txt
+
+      - name: Sjekk at kursene er oppdatert
+        run: python scripts/sjekk_kursferskhet.py
+
   deploy-pages:
     name: Deploy til GitHub Pages
     # Ved push: kjør direkte. Ved schedule/dispatch: kjør etter data-oppdatering

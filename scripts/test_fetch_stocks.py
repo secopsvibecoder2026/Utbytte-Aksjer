@@ -4681,5 +4681,101 @@ class TestKuttMedEnManglende(unittest.TestCase):
         self.assertEqual(fs.velg_arsrate(4.0, 30.0, 3, "Kvartalsvis"), 4.0)
 
 
+
+_REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+_BUNNLENKER = ("/om/", "/metode/", "/personvern/", "/vilkaar/")
+
+
+def _haandskrevne_sider():
+    """Håndskrevne sider med bunntekst: alt utenom aksjer/** og videresendinger."""
+    import re as _re
+    for mappe, under, filer in os.walk(_REPO):
+        under[:] = [d for d in under if d not in (".git", "node_modules", "test-results", "promo", "aksjer")]
+        for navn in filer:
+            if navn.endswith(".html"):
+                sti = os.path.join(mappe, navn)
+                tekst = open(sti, encoding="utf-8").read()
+                fot = _re.search(r"<footer.*?</footer>", tekst, _re.S)
+                # std-footer er STANDARD_FOOTER fra en generert side (rapportkalenderen),
+                # som test_standard_bunntekst dekker og datajobben skriver på nytt.
+                if fot and "std-footer" not in fot.group(0):
+                    yield os.path.relpath(sti, _REPO), tekst, fot.group(0)
+
+
+class TestBunntekst(unittest.TestCase):
+    """Om, metode, personvern og vilkår fra alle sider (2026-11-18).
+
+    17 sider manglet /om/ og /vilkaar/ i bunnteksten, og ingen hadde en
+    metodeside å lenke til. Google ser etter avsender og metode på
+    finanssider, og leseren skal finne dem fra hvor som helst.
+    """
+
+    def test_haandskrevne_sider(self):
+        sider = list(_haandskrevne_sider())
+        self.assertGreater(len(sider), 30)
+        for rel, _, fot in sider:
+            for lenke in _BUNNLENKER:
+                self.assertIn(f'href="{lenke}"', fot, f"{rel} mangler {lenke} i bunnteksten")
+
+    def test_standard_bunntekst(self):
+        for lenke in _BUNNLENKER:
+            self.assertIn(f'href="{lenke}"', fs.STANDARD_FOOTER)
+
+    def test_metodesiden_er_i_sitemap_og_finnes(self):
+        self.assertTrue(os.path.exists(os.path.join(_REPO, "metode", "index.html")))
+        import inspect
+        self.assertIn("https://exday.no/metode/", inspect.getsource(fs.generer_sitemap))
+
+
+class TestArtikkelKontrollert(unittest.TestCase):
+    """«Sist kontrollert» på artiklene må være samme dato som dateModified."""
+
+    def test_synlig_dato_er_date_modified(self):
+        import re as _re
+        mappe = os.path.join(_REPO, "artikler")
+        sjekket = 0
+        for slug in sorted(os.listdir(mappe)):
+            sti = os.path.join(mappe, slug, "index.html")
+            if not os.path.isfile(sti):
+                continue
+            t = open(sti, encoding="utf-8").read()
+            dm = _re.search(r'"dateModified":\s*"(\d{4}-\d\d-\d\d)"', t)
+            self.assertIsNotNone(dm, f"{slug} mangler dateModified")
+            linje = _re.search(r'class="sist-kontrollert[^"]*">.*?<time datetime="([\d-]+)"', t, _re.S)
+            self.assertIsNotNone(linje, f"{slug} mangler «sist kontrollert»-linja")
+            self.assertEqual(linje.group(1), dm.group(1), f"{slug}: synlig dato og dateModified er ulike")
+            sjekket += 1
+        self.assertGreater(sjekket, 10)
+
+
+class TestKursvarsel(unittest.TestCase):
+    """Skjult varsel på aksjesiden som assets/kursferskhet.js viser."""
+
+    def test_kursdag_fra_raden(self):
+        gml = fs.DATA_SIST_OPPDATERT
+        try:
+            fs.DATA_SIST_OPPDATERT = "2026-11-18T16:45:00Z"
+            html = fs.lag_kursvarsel({"hentet": "2026-11-16T07:10:00Z"})
+            # 08.10 i Oslo mandag gjelder fredagens kurs.
+            self.assertIn('data-kursdag="2026-11-13"', html)
+            self.assertIn("hidden", html)
+            self.assertIn("/assets/kursferskhet.js", html)
+            self.assertIn('data-kursdag="2026-11-18"', fs.lag_kursvarsel({}))
+            self.assertIn("2026-12-24", fs.lag_kursvarsel({}))
+        finally:
+            fs.DATA_SIST_OPPDATERT = gml
+
+    def test_uten_dato_ingen_varsel(self):
+        gml = fs.DATA_SIST_OPPDATERT
+        try:
+            fs.DATA_SIST_OPPDATERT = ""
+            self.assertEqual(fs.lag_kursvarsel({}), "")
+        finally:
+            fs.DATA_SIST_OPPDATERT = gml
+
+    def test_ett_antall(self):
+        self.assertEqual(fs.antall_i_katalog([{}] * 155), 155)
+        self.assertEqual(fs.antall_i_katalog(None), 0)
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

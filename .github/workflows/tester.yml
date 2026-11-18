@@ -111,6 +111,7 @@ jobs:
           python scripts/test_sjekk_tema.py
           python scripts/test_sjekk_klasser.py
           python scripts/test_sjekk_antall.py
+          python scripts/test_sjekk_kursferskhet.py
           python scripts/test_tallkontroll.py
           python scripts/test_tallkontroll_side.py
           python scripts/test_vedlikehold.py
@@ -118,3 +119,16 @@ jobs:
           python scripts/test_nettstedfiler.py
           python promo/test_promo_felles.py
           python promo/test_finn_kandidater.py
+
+      - name: Sjekk hardkodede aksjetellinger
+        # Antallet aksjer sto ulikt på forsiden, /aksjer/, /utforsk/ og /om/.
+        # Tellingene settes nå av generatoren fra én funksjon
+        # (antall_i_katalog()). Et tall skrevet for hånd i en side, en
+        # meta-tag, JSON-LD eller en mal i scripts/ feiler bygget her.
+        run: python scripts/sjekk_antall.py --streng
+
+      - name: Sjekk plassholdere
+        # /om/ har [NAVN] og [KONTAKT-E-POST] som eieren fyller inn. En side
+        # med plassholdere skal ikke publiseres, så bygget er rødt til de er
+        # byttet ut.
+        run: python scripts/sjekk_plassholdere.py --streng

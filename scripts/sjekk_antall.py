@@ -70,6 +70,58 @@ def _synlig_tekst(html):
     return " ".join(t.replace("\xa0", " ").split())
 
 
+def _attributt_tekst(html):
+    """Tekst leseren ikke ser på siden, men som Google viser: meta-taggenes
+    `content`, og JSON-LD. `<title>` er med i _synlig_tekst() allerede.
+
+    /aksjer/ hadde 162 i meta-beskrivelsen mens forsiden sa 155 (2026-11-18).
+    En markør kan ikke stå i et attributt, så her må tallet være rundet
+    («over 150») og settes av oppdater_rundet_antall_i_sider().
+    """
+    deler = re.findall(r'<meta\b[^>]*\bcontent="([^"]*)"', html, flags=re.I)
+    deler += re.findall(r'<script[^>]*application/ld\+json[^>]*>(.*?)</script>', html, flags=re.S | re.I)
+    return " ".join(" ".join(deler).replace("\xa0", " ").split())
+
+
+def _mal_strenger(sti):
+    """Strengene i en Python-mal, uten docstringer og print().
+
+    Malene i fetch_stocks.py bygger /aksjer/, sektorsidene og topplistene. Et
+    tall skrevet rett inn i en f-streng der havner på sidene ved neste kjøring.
+    """
+    import ast
+    with open(sti, encoding="utf-8") as f:
+        tre = ast.parse(f.read())
+    hopp = set()
+    for node in ast.walk(tre):
+        if isinstance(node, (ast.Module, ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
+            if node.body and isinstance(node.body[0], ast.Expr) and isinstance(
+                    getattr(node.body[0], "value", None), ast.Constant):
+                hopp.add(id(node.body[0].value))
+        if isinstance(node, ast.Call) and getattr(node.func, "id", "") == "print":
+            for barn in ast.walk(node):
+                hopp.add(id(barn))
+    for node in ast.walk(tre):
+        if isinstance(node, ast.Constant) and isinstance(node.value, str) and id(node) not in hopp:
+            yield node.lineno, node.value
+
+
+MALFILER = ("scripts/fetch_stocks.py", "scripts/regenerer_sider.py", "scripts/utvid_beskrivelser.py")
+
+
+def _treff(tekst):
+    """[(treff, kontekst)] for tellinger i katalogintervallet uten forbehold."""
+    ut = []
+    for m in _TELLING.finditer(tekst):
+        n = int(m.group(1))
+        if not (MIN_ANTALL <= n <= MAKS_ANTALL):
+            continue
+        if _FORBEHOLD.search(tekst[max(0, m.start() - 20):m.start()]):
+            continue
+        ut.append((m.group(0), tekst[max(0, m.start() - 55):m.end() + 25]))
+    return ut
+
+
 def finn_hardkodede(rot="."):
     """Returnerer [(fil, tall, kontekst)] for tellinger uten markør."""
     funn = []
@@ -96,6 +148,17 @@ def finn_hardkodede(rot="."):
                     continue
                 kontekst = tekst[max(0, m.start() - 55):m.end() + 25]
                 funn.append((os.path.relpath(sti, rot), m.group(0), kontekst))
+            with open(sti, encoding="utf-8", errors="ignore") as f:
+                attr = _attributt_tekst(f.read())
+            for treff, kontekst in _treff(attr):
+                funn.append((os.path.relpath(sti, rot) + " (meta/JSON-LD)", treff, kontekst))
+    for rel in MALFILER:
+        sti = os.path.join(rot, rel)
+        if not os.path.exists(sti):
+            continue
+        for linje, streng in _mal_strenger(sti):
+            for treff, kontekst in _treff(" ".join(streng.split())):
+                funn.append((f"{rel}:{linje}", treff, kontekst))
     return funn
 
 
