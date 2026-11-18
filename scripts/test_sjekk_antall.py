@@ -15,7 +15,7 @@ import unittest
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from sjekk_antall import _TELLING, _FORBEHOLD, _SEKTORER, _synlig_tekst, MIN_ANTALL, MAKS_ANTALL  # noqa: E402
+from sjekk_antall import _deltellinger, _TELLING, _FORBEHOLD, _SEKTORER, _synlig_tekst, MIN_ANTALL, MAKS_ANTALL  # noqa: E402
 
 
 def treffer(tekst):
@@ -50,6 +50,27 @@ class TestFangerEkteFeil(unittest.TestCase):
             "<div><!--N:sektorer-->15<!--/N--> sektorer totalt</div>")))
         # Et råd med spenn er ikke en telling.
         self.assertIsNone(_SEKTORER.search("er 4–7 sektorer et godt utgangspunkt"))
+
+
+class TestDeltelling(unittest.TestCase):
+    """/utbyttekalender/ sa «Over 130 av selskapene … og over 150 har betalt
+    utbytte» da tallene var 128 og 149 (2026-11-18)."""
+
+    def test_rundet_deltelling_fanges(self):
+        t = ("Over 130 av selskapene i oversikten har positiv direkteavkastning nå, "
+             "og over 150 har betalt utbytte minst ett år tidligere.")
+        self.assertEqual([x for x, _ in _deltellinger(t)],
+                         ["130 av selskapene", "150 har betalt"])
+
+    def test_markor_fanges_ikke(self):
+        html = ("<p><!--N:utbytte-->128<!--/N--> av de <!--N:aksjer-->155<!--/N--> "
+                "selskapene har positiv direkteavkastning, og <!--N:historikk-->149"
+                "<!--/N--> har betalt utbytte minst ett år.</p>")
+        self.assertEqual(_deltellinger(_synlig_tekst(html)), [])
+
+    def test_smaa_tall_og_raad_er_fri(self):
+        self.assertEqual(_deltellinger("3 av selskapene i porteføljen"), [])
+        self.assertEqual(_deltellinger("Over 30 aksjer: begynner å ligne en indeks"), [])
 
 
 class TestLarStaIFred(unittest.TestCase):

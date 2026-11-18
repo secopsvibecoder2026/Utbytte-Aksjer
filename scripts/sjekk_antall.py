@@ -58,6 +58,25 @@ _TELLING = re.compile(
     re.I,
 )
 
+# En del av katalogen: «128 av selskapene har positiv direkteavkastning»,
+# «149 har betalt utbytte». Forbeholdet hjelper ikke her. /utbyttekalender/
+# sa «over 150 har betalt utbytte» mens tallet var 149 (2026-11-18): en
+# rundet form er bare sann så lenge tallet ikke krysser grensen, og synlig
+# tekst kan alltid bruke markørene `utbytte`, `historikk`, `exdato` osv.
+_DELTELLING = re.compile(
+    r"(?<![\d.,])(\d{2,3})(?![\d.,])\s+(?:av\s+(?:de\s+)?(?:selskapene|aksjene)|har\s+(?:betalt|positiv|utbytte))\b",
+    re.I,
+)
+MIN_DELTELLING = 50
+
+
+def _deltellinger(tekst):
+    """[(treff, kontekst)] for tellinger av en del av katalogen, med eller
+    uten forbehold."""
+    return [(m.group(0), tekst[max(0, m.start() - 55):m.end() + 25])
+            for m in _DELTELLING.finditer(tekst)
+            if MIN_DELTELLING <= int(m.group(1)) <= MAKS_ANTALL]
+
 
 def _synlig_tekst(html):
     """HTML strippet til det leseren ser, med markørinnhold nøytralisert."""
@@ -141,6 +160,8 @@ def finn_hardkodede(rot="."):
                     continue
                 kontekst = tekst[max(0, m.start() - 55):m.end() + 25]
                 funn.append((os.path.relpath(sti, rot), m.group(0), kontekst))
+            for treff, kontekst in _deltellinger(tekst):
+                funn.append((os.path.relpath(sti, rot), treff, kontekst))
             for m in _SEKTORER.finditer(tekst):
                 if not (MIN_SEKTORER <= int(m.group(1)) <= MAKS_SEKTORER):
                     continue
