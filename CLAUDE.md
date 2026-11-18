@@ -151,6 +151,7 @@ Utbytte-Aksjer/
 │   ├── sjekk_tema.py          # Verifies dark mode init on every page
 │   ├── sjekk_klasser.py       # Verifies every Tailwind class is compiled
 │   ├── sjekk_antall.py        # Finds hard-coded stock counts that should be markers
+│   ├── sjekk_titler.py        # Lists stock-page titles over 60 chars or without an amount
 │   ├── vedlikehold.py         # Daily maintenance: Actions runs, live site, stocks in/out from NewsWeb
 │   ├── nettstedfiler.py       # Copies the site without internal files for the Pages deploy
 │   ├── sjekk_sprak.py         # Counts dashes and AI phrasing in published text (SKRIVESTIL.md)
@@ -2985,6 +2986,43 @@ and nothing explained the method. Six changes:
 Tests: `TestBunntekst` (3), `TestArtikkelKontrollert` (1), `TestKursvarsel`
 (3), `test_sjekk_antall.py` (+5), `test_sjekk_kursferskhet.py` (8) and
 `tests/kursferskhet.test.js` (4).
+
+## Amount per share in the title, meta and H1 (2026-11-18)
+
+Search Console: searches with a concrete amount click far better («paratus
+energy utbytte» 12 %, «vår energi utbytte per aksje» 10 %) than «frontline
+utbytte» at 1,1 % against «Frontline utbytte 2026 – yield 11,6 %».
+`lag_aksje_tittel()`, `lag_aksje_meta()`, `lag_aksje_h1()` and
+`lag_aksje_ingress()` in `fetch_stocks.py` now lead with the amount.
+`utbytte_i_tittel()` decides which amount:
+
+- **Ex-date known:** the amount announced for exactly that ex-date, from
+  `annonsert_utbytte` (NOK) or `annonsert_utland` in the company's currency
+  («0,40 USD per aksje», DOF). Title: «OKEA utbytte 2026: 2,00 kr per aksje –
+  ex-dato 2. des».
+- **No ex-date:** the annual rate, the figure the yield is built from, so the
+  two cannot disagree. Never `siste_utbytte` (FRO: 33,13 against 52,27).
+  «i året» is added for quarterly, half-yearly and monthly payers
+  (`_flere_i_aaret()`), or «5,47 kr per aksje» reads as one payment.
+- **None, so the old title:** an ex-date without an announced amount, a
+  `hendelse` in `HENDELSE_UTEN_MAL`, a part-year annual rate, or no rate.
+  37 of 155 on the first run.
+- **Proposed dividends say «foreslått»** in the title, meta and lead.
+
+**Length.** «| exday.no» goes first. A yield tail goes at 60 characters
+(`TITTEL_MAKS`), an ex-date only at 70 (`TITTEL_TAK`), since Google cuts
+from the end and the ticker is the least useful part. The amount is never
+dropped, so long company names stay over 60: 29 of 155.
+`python scripts/sjekk_titler.py` lists those and every stock without an
+amount, with the reason.
+
+The H1 was «{ticker} – {navn}». It is now the title's claim, and the full
+name and ticker moved into the line under it. The lead paragraph states the
+last day to buy (`forrige_borsdag()`), the payment date, the currency and,
+for a payer more often than yearly, the annual rate beside the per-payment
+amount. URLs and canonical are unchanged.
+
+Tests: `TestBelopITittel` (11).
 
 ## App review of 2026-10-20
 

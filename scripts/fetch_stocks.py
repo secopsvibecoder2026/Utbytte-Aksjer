@@ -6785,6 +6785,242 @@ def _lag_meta_beskrivelse(navn, ticker, yield_, ex, upa, snitt5, valuta, today,
     return tekst
 
 
+# ── Beløp per aksje i tittel, meta og H1 (2026-11-18) ───────────────────────
+# Search Console: søk med et konkret beløp har høy klikkrate («paratus energy
+# utbytte» 12 %, «vår energi utbytte per aksje» 10 %), mens «frontline
+# utbytte» hadde 1,1 % mot tittelen «Frontline utbytte 2026 – yield 11,6 %».
+# Folk vil vite hvor mye de får per aksje og når de må eie den.
+TITTEL_MAKS = 60
+# Tittelen med ex-dato får gå hit før datoen ryker. Google klipper bakfra,
+# så det er tickeren som går først, ikke ex-datoen. Yielden får ikke samme
+# rom: den står i kurshodet, og med den ble 71 av 155 titler over 60 tegn.
+TITTEL_TAK = 70
+_MND_KORT = ["jan", "feb", "mar", "apr", "mai", "jun", "jul", "aug", "sep", "okt", "nov", "des"]
+
+
+def _belop_tekst(belop, valuta="NOK"):
+    """«2,15 kr», «0,40 USD», «0,0342 USD».
+
+    To desimaler, men flere for små beløp der to ville rundet bort mer enn
+    en halv prosent (ENH: USD 0,0342 ble ellers «0,03»).
+    """
+    enhet = "kr" if (valuta or "NOK") == "NOK" else valuta
+    des = 2
+    while des < 4 and belop and abs(round(belop, des) - belop) > abs(belop) * 0.005:
+        des += 1
+    return f"{_nf(belop, des)} {enhet}"
+
+
+def _dato_kort(iso, today):
+    """«17. nov», med år når datoen ligger i et annet år enn i dag."""
+    try:
+        d = datetime.date.fromisoformat(str(iso)[:10])
+    except (ValueError, TypeError):
+        return ""
+    s = f"{d.day}. {_MND_KORT[d.month - 1]}"
+    return s if str(today or "")[:4] == str(d.year) else f"{s} {d.year}"
+
+
+def utbytte_i_tittel(a, today):
+    """Beløpet en aksjeside kan sette i tittelen, eller None.
+
+    Returnerer {"belop", "valuta", "ex", "art", "forbehold"}:
+
+    - art «neste»: ex-datoen er kjent og har et kunngjort beløp, i kroner fra
+      `annonsert_utbytte` eller i selskapets valuta fra `annonsert_utland`
+      (DOF og OET kunngjør i USD, PUBLI i SEK). Beløpet hører til akkurat den
+      ex-datoen.
+    - art «arsrate»: ingen kommende ex-dato. Da er beløpet årsraten
+      (`utbytte_per_aksje`), som er det yielden regnes fra, så de to tallene
+      i samme tittel ikke kan motsi hverandre. `siste_utbytte` er ikke brukt:
+      FRO hadde 33,13 der mot 52,27 i årsrate.
+
+    None når beløpet ikke er kjent (en ex-dato uten kunngjort beløp), og når
+    tallet ikke bør stå som et svar: en hendelse som stopper målene (oppkjøp,
+    fusjon, avvikling), en årsrate som er et delår, eller et beløp over kursen.
+    Da brukes dagens tittel.
+    """
+    if hendelse_uten_mal(a):
+        return None
+    pris = a.get("pris") or 0
+    ex = a.get("ex_dato") or ""
+    if ex and ex[:10] >= str(today)[:10]:
+        forbehold = ex_forbehold_gjelder(a, datetime.date.fromisoformat(str(today)[:10]))
+        utland = a.get("annonsert_utland") or {}
+        if a.get("annonsert_ex") == ex and (a.get("annonsert_utbytte") or 0) > 0:
+            belop, valuta = a["annonsert_utbytte"], "NOK"
+            if pris and belop > pris:
+                return None
+        elif utland.get("ex") == ex and (utland.get("belop") or 0) > 0 and utland.get("valuta"):
+            belop, valuta = utland["belop"], utland["valuta"]
+        else:
+            return None
+        return {"belop": belop, "valuta": valuta, "ex": ex, "art": "neste",
+                "forbehold": forbehold}
+    if yield_er_delaar(a) and not delaar_motbevist(a):
+        return None
+    upa = a.get("utbytte_per_aksje") or 0
+    if upa <= 0 or (pris and upa > pris):
+        return None
+    return {"belop": upa, "valuta": "NOK", "ex": "", "art": "arsrate", "forbehold": False}
+
+
+def _arsrate_ledd(a):
+    """« (siste 12 mnd)», « (annualisert)» eller «» etter årsraten."""
+    merke = arsrate_merke(a) if arsrate_er_betalt(a) else (
+        "annualisert" if a.get("frekvens") in ("Kvartalsvis", "Halvårlig", "Månedlig") else "")
+    return f" ({merke})" if merke else ""
+
+
+def _flere_i_aaret(a, t):
+    """Er beløpet en årsrate for et selskap som betaler flere ganger i året?
+    Da må det stå «i året», ellers leses det som én utbetaling. For en årlig
+    betaler er de to det samme, og leddet ville bare gjort tittelen lang."""
+    return t["art"] == "arsrate" and a.get("frekvens") in ("Kvartalsvis", "Halvårlig", "Månedlig")
+
+
+def lag_aksje_tittel(a, today):
+    """<title> for en aksjeside, med beløp per aksje når det er kjent.
+
+    «Vår Energi utbytte 2026: 1,37 kr per aksje – ex-dato 17. nov | VAR», eller
+    med yield når ingen ex-dato er kjent. «| exday.no» ryker først når
+    tittelen blir lang; tickeren blir stående. Yielden ryker over
+    TITTEL_MAKS, ex-datoen først over TITTEL_TAK, men aldri beløpet eller et
+    forbehold om at utbyttet ikke er vedtatt. Uten beløp: _lag_sidetittel().
+    """
+    navn, ticker = a["navn"], a["ticker"]
+    yield_ = a.get("utbytte_yield") or 0
+    t = utbytte_i_tittel(a, today)
+    if not t:
+        return _lag_sidetittel(navn, ticker, yield_, a.get("ex_dato") or "", today)
+    kort = _kort_selskapsnavn(navn)
+    base = f"{kort} utbytte {str(today)[:4]}"
+    belop = _belop_tekst(t["belop"], t["valuta"])
+    ledd = f"foreslått {belop} per aksje" if t["forbehold"] else f"{belop} per aksje"
+    # Uten ex-dato er beløpet årsraten. «5,47 kr per aksje» for et selskap
+    # som betaler kvartalsvis leses ellers som én utbetaling (1,37 kr for VAR).
+    if _flere_i_aaret(a, t):
+        ledd += " i året"
+    if t["ex"]:
+        tillegg = f"ex-dato {_dato_kort(t['ex'], today)}"
+    elif yield_ > 0:
+        tillegg = f"yield {_pst(yield_, 1)}"
+    else:
+        tillegg = ""
+    hale = f" | {ticker}" if kort.lower() != (ticker or "").lower() else ""
+    med = f"{base}: {ledd} – {tillegg}" if tillegg else f"{base}: {ledd}"
+    if len(f"{med}{hale} | exday.no") <= TITTEL_MAKS:
+        return f"{med}{hale} | exday.no"
+    if len(f"{med}{hale}") <= (TITTEL_TAK if t["ex"] else TITTEL_MAKS):
+        return f"{med}{hale}"
+    if len(f"{base}: {ledd}{hale}") <= TITTEL_MAKS:
+        return f"{base}: {ledd}{hale}"
+    # Selv uten tillegg for lang (lange navn, foreslått beløp): beløpet er
+    # det søkeren kjenner treffet igjen på, så det beholdes over grensen.
+    return f"{base}: {ledd}{hale}"
+
+
+def _kjop_setning(ex, today):
+    """«Du må eie aksjen ved børsslutt 16. nov for å få utbyttet.»"""
+    try:
+        kjop = forrige_borsdag(datetime.date.fromisoformat(ex[:10]))
+    except (ValueError, TypeError):
+        return ""
+    if kjop.isoformat() < str(today)[:10]:
+        return f"Siste dag med rett til utbyttet var {_dato_kort(kjop.isoformat(), today)}."
+    return f"Du må eie aksjen ved børsslutt {_dato_kort(kjop.isoformat(), today)} for å få utbyttet."
+
+
+def lag_aksje_meta(a, today):
+    """Meta-beskrivelse som starter med svaret: beløp per aksje og ex-dato.
+
+    Maks 155 tegn. Uten beløp: _lag_meta_beskrivelse().
+    """
+    navn, ticker = a["navn"], a["ticker"]
+    yield_ = a.get("utbytte_yield") or 0
+    t = utbytte_i_tittel(a, today)
+    if not t:
+        return _lag_meta_beskrivelse(navn, ticker, yield_, a.get("ex_dato") or "",
+                                     a.get("utbytte_per_aksje") or 0,
+                                     a.get("snitt_yield_5ar") or 0, a.get("valuta") or "NOK",
+                                     today, snitt_navn(a))
+    kort = _kort_selskapsnavn(navn)
+    belop = _belop_tekst(t["belop"], t["valuta"])
+    ytekst = f"Yield {_pst(yield_, 1)}, historikk og neste betaling." if yield_ > 0 else \
+        "Historikk og neste betaling."
+    if t["art"] == "neste":
+        verb = "har foreslått" if t["forbehold"] else "betaler"
+        setninger = [f"{kort} {verb} {belop} per aksje med ex-dato {_fmt_dato(t['ex'])}.",
+                     _kjop_setning(t["ex"], today), ytekst]
+    else:
+        setninger = [f"{kort} betaler {belop} per aksje i året{_arsrate_ledd(a)}.",
+                     "Neste ex-dato er ikke kjent ennå.", ytekst]
+    for n in (3, 2, 1):
+        tekst = " ".join(s for s in setninger[:n] if s)
+        if len(tekst) <= 155:
+            return tekst
+    return setninger[0][:155]
+
+
+def lag_aksje_h1(a, today):
+    """H1 som matcher tittelen: «Vår Energi utbytte 2026: 1,37 kr per aksje»."""
+    kort = _kort_selskapsnavn(a["navn"])
+    t = utbytte_i_tittel(a, today)
+    h1 = f"{kort} utbytte {str(today)[:4]}"
+    if t:
+        belop = _belop_tekst(t["belop"], t["valuta"])
+        h1 += f": {'foreslått ' if t['forbehold'] else ''}{belop} per aksje"
+        if _flere_i_aaret(a, t):
+            h1 += " i året"
+    return h1
+
+
+def lag_aksje_ingress(a, today):
+    """Første avsnitt: beløp per aksje, ex-dato og siste kjøpsdag.
+
+    Står rett under H1 og sier med ord det tittelen lover. Tom når vi ikke
+    har noe sikkert å si (hendelse, delår, ingen utbytte); da forklarer
+    boksene lenger ned hvorfor.
+    """
+    t = utbytte_i_tittel(a, today)
+    ex = a.get("ex_dato") or ""
+    kommende_ex = ex if ex and ex[:10] >= str(today)[:10] else ""
+    if hendelse_uten_mal(a):
+        return ""
+    kort = _kort_selskapsnavn(a["navn"])
+    upa = a.get("utbytte_per_aksje") or 0
+    yield_ = a.get("utbytte_yield") or 0
+    arsrate_ok = upa > 0 and not (yield_er_delaar(a) and not delaar_motbevist(a))
+    deler = []
+    if t and t["art"] == "neste":
+        belop = _belop_tekst(t["belop"], t["valuta"])
+        if t["forbehold"]:
+            deler.append(f"{kort} har foreslått {belop} per aksje med ex-dato {_fmt_dato(ex)}. "
+                         "Utbyttet er ikke vedtatt ennå.")
+        else:
+            deler.append(f"{kort} betaler {belop} per aksje med ex-dato {_fmt_dato(ex)}.")
+        deler.append(_kjop_setning(ex, today))
+        bet = a.get("betaling_dato") or ""
+        if bet and bet >= ex:
+            deler.append(f"Pengene utbetales {_fmt_dato(bet)}.")
+        if t["valuta"] != "NOK":
+            deler.append(f"Beløpet er kunngjort i {t['valuta']} og regnes om til kroner ved utbetaling.")
+        if arsrate_ok and a.get("frekvens") in ("Kvartalsvis", "Halvårlig", "Månedlig"):
+            deler.append(f"Årlig utbytte er {_belop_tekst(upa)} per aksje{_arsrate_ledd(a)}.")
+    elif kommende_ex:
+        deler.append(f"Neste ex-dato er {_fmt_dato(ex)}, og beløpet er ikke kunngjort ennå.")
+        deler.append(_kjop_setning(ex, today))
+        if arsrate_ok:
+            deler.append(f"Årlig utbytte er {_belop_tekst(upa)} per aksje{_arsrate_ledd(a)}.")
+    elif t:
+        y = f", en direkteavkastning på {_pst(yield_, 2)} med dagens kurs" if yield_ > 0 else ""
+        deler.append(f"{kort} betaler {_belop_tekst(upa)} per aksje i året{_arsrate_ledd(a)}{y}.")
+        deler.append("Neste ex-dato er ikke kjent ennå.")
+    else:
+        return ""
+    return f'<p class="ingress">{" ".join(d for d in deler if d)}</p>'
+
+
 def _pst(verdi, desimaler=2):
     """Prosent med desimalkomma og hardt mellomrom: «3,48 %» (STYLE.md).
 
@@ -6945,9 +7181,10 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     hoy52   = a.get("52u_hoy") or 0
     lav52   = a.get("52u_lav") or 0
 
-    sidetittel = _lag_sidetittel(navn, ticker, yield_, ex, today)
-    meta_desc = _lag_meta_beskrivelse(navn, ticker, yield_, ex, upa, snitt5, valuta, today,
-                                      snitt_navn(a))
+    sidetittel = lag_aksje_tittel(a, today)
+    meta_desc = lag_aksje_meta(a, today)
+    h1_tekst = lag_aksje_h1(a, today)
+    ingress_html = lag_aksje_ingress(a, today)
 
     # Inneværende år er ikke ferdig. Uten merking sto «2026 — 3,75 NOK» rett
     # under stat-kortet «Utbytte/aksje 7,50 NOK» og så ut som en motsigelse:
@@ -7278,6 +7515,7 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     .breadcrumb span {{ margin: 0 0.35rem; }}
     h1 {{ font-size: 1.75rem; font-weight: 700; margin-bottom: 0.25rem; }}
     .sub {{ font-size: 0.95rem; margin-bottom: 1.5rem; }}
+    .ingress {{ font-size: 1rem; line-height: 1.6; margin: -0.75rem 0 1.25rem; color: #374151; max-width: 46rem; }}
     .badge {{ display: inline-block; font-size: 0.75rem; font-weight: 600; padding: 0.2rem 0.6rem;
               border-radius: 9999px; margin-bottom: 1.25rem; }}
     /* Kurshodet: kurs, 52-ukers spenn og tre nøkkeltall, nøytrale farger. */
@@ -7510,6 +7748,7 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     .dark .breadcrumb {{ color: #9ca3af; }}
     .dark .breadcrumb a {{ color: #9ca3af; }}
     .dark .sub {{ color: #9ca3af; }}
+    .dark .ingress {{ color: #d1d5db; }}
     .dark .badge {{ background: #1b3f2f; color: #9cc2ad; }}
     .dark a {{ color: #6fa98a; }}
     .dark .cta a {{ background: #275f45; color: #fff !important; }}
@@ -7545,8 +7784,9 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     {ticker}
   </div>
 
-  <h1>{ticker} – {navn}</h1>
-  <p class="sub">{sektor} · {frekvens} utbytte · {markedsplass}</p>
+  <h1>{h1_tekst}</h1>
+  <p class="sub">{navn} ({ticker}) · {sektor} · {frekvens} utbytte · {markedsplass}</p>
+  {ingress_html}
 
   {kurshode_html}
   {lag_kursvarsel(a)}

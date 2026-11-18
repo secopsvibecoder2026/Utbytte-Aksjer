@@ -546,6 +546,117 @@ class TestSidetittelOgMeta(unittest.TestCase):
         self.assertNotIn("0,0 %", m)
 
 
+class TestBelopITittel(unittest.TestCase):
+    """Beløp per aksje og ex-dato i tittel, meta, H1 og ingress (2026-11-18).
+
+    Søk med et konkret beløp hadde 10–12 % klikkrate i Search Console, mens
+    «frontline utbytte» hadde 1,1 % mot en tittel med bare yield.
+    """
+
+    I_DAG = "2026-11-18"
+
+    def rad(self, **kw):
+        a = {"ticker": "OKEA", "navn": "OKEA ASA", "pris": 45.85, "utbytte_yield": 4.36,
+             "utbytte_per_aksje": 2.0, "frekvens": "Årlig", "ex_dato": None}
+        a.update(kw)
+        return a
+
+    def test_kunngjort_belop_med_ex_dato(self):
+        a = self.rad(ex_dato="2026-12-02", annonsert_ex="2026-12-02", annonsert_utbytte=2.0)
+        t = fs.lag_aksje_tittel(a, self.I_DAG)
+        self.assertEqual(t, "OKEA utbytte 2026: 2,00 kr per aksje – ex-dato 2. des")
+        m = fs.lag_aksje_meta(a, self.I_DAG)
+        self.assertTrue(m.startswith("OKEA betaler 2,00 kr per aksje med ex-dato 2. des 2026."), m)
+        self.assertIn("børsslutt 1. des", m)
+        self.assertLessEqual(len(m), 155)
+        self.assertEqual(fs.lag_aksje_h1(a, self.I_DAG), "OKEA utbytte 2026: 2,00 kr per aksje")
+
+    def test_utenlandsk_valuta_vises_som_kunngjort(self):
+        a = self.rad(ticker="DOF", navn="DOF Group ASA", frekvens="Kvartalsvis",
+                     utbytte_per_aksje=13.86, ex_dato="2026-11-20",
+                     annonsert_utland={"belop": 0.4, "valuta": "USD", "ex": "2026-11-20"})
+        self.assertIn("0,40 USD per aksje – ex-dato 20. nov", fs.lag_aksje_tittel(a, self.I_DAG))
+        ing = fs.lag_aksje_ingress(a, self.I_DAG)
+        self.assertIn("kunngjort i USD", ing)
+        # Kvartalsvis: årsraten står ved siden av, så kurshodets «13,86» ikke
+        # ser ut til å motsi 0,40 USD.
+        self.assertIn("Årlig utbytte er 13,86 kr", ing)
+
+    def test_uten_ex_dato_brukes_arsraten_som_yielden_bygger_paa(self):
+        a = self.rad(ticker="DNB", navn="DNB Bank ASA", pris=325.7, utbytte_yield=5.53,
+                     utbytte_per_aksje=18.0, siste_utbytte=99.0)
+        t = fs.lag_aksje_tittel(a, self.I_DAG)
+        self.assertIn("18,00 kr per aksje", t)
+        self.assertNotIn("99", t)
+        self.assertNotIn("i året", t)  # årlig betaler: per utbetaling og per år er det samme
+        k = self.rad(ticker="VAR", navn="Vår Energi ASA", frekvens="Kvartalsvis",
+                     utbytte_per_aksje=5.47, pris=47.68)
+        self.assertIn("5,47 kr per aksje i året", fs.lag_aksje_tittel(k, self.I_DAG))
+        self.assertTrue(fs.lag_aksje_h1(k, self.I_DAG).endswith("i året"))
+        self.assertIn("i året", fs.lag_aksje_meta(a, self.I_DAG))
+
+    def test_ex_dato_uten_belop_gir_dagens_tittel(self):
+        a = self.rad(ex_dato="2026-11-20", annonsert_ex=None, annonsert_utbytte=None)
+        t = fs.lag_aksje_tittel(a, self.I_DAG)
+        self.assertNotIn("per aksje", t)
+        self.assertIn("ex-dato", t)
+        self.assertIn("beløpet er ikke kunngjort", fs.lag_aksje_ingress(a, self.I_DAG))
+
+    def test_passert_ex_dato_brukes_ikke(self):
+        a = self.rad(ex_dato="2026-11-17", annonsert_ex="2026-11-17", annonsert_utbytte=1.37)
+        t = fs.lag_aksje_tittel(a, self.I_DAG)
+        self.assertNotIn("ex-dato", t)
+        self.assertIn("2,00 kr per aksje", t)
+
+    def test_hendelse_gir_ingen_belop(self):
+        a = self.rad(hendelse={"type": "avvikling", "dato": "2026-08-05", "melding": "679057",
+                               "tekst": "Styret har vedtatt å selge flåten."})
+        self.assertIsNone(fs.utbytte_i_tittel(a, self.I_DAG))
+        self.assertNotIn("per aksje", fs.lag_aksje_tittel(a, self.I_DAG))
+        self.assertEqual(fs.lag_aksje_ingress(a, self.I_DAG), "")
+
+    def test_foreslatt_utbytte_sier_det(self):
+        a = self.rad(ex_dato="2026-12-02", annonsert_ex="2026-12-02", annonsert_utbytte=1.15,
+                     ex_forbehold="2026-11-25")
+        self.assertIn("foreslått 1,15 kr", fs.lag_aksje_tittel(a, self.I_DAG))
+        self.assertIn("har foreslått", fs.lag_aksje_meta(a, self.I_DAG))
+        self.assertIn("ikke vedtatt", fs.lag_aksje_ingress(a, self.I_DAG))
+
+    def test_smaa_belop_mister_ikke_sifre(self):
+        self.assertEqual(fs._belop_tekst(0.0342, "USD"), "0,0342 USD")
+        self.assertEqual(fs._belop_tekst(0.375), "0,375 kr")
+        self.assertEqual(fs._belop_tekst(3.7889), "3,79 kr")
+
+    def test_kjopsdag_er_forrige_borsdag(self):
+        # Ex-dato mandag 23. nov: siste dag med rett er fredag 20. nov.
+        a = self.rad(ex_dato="2026-11-23", annonsert_ex="2026-11-23", annonsert_utbytte=2.0)
+        self.assertIn("børsslutt 20. nov", fs.lag_aksje_meta(a, self.I_DAG))
+
+    def test_yield_ryker_foran_lengden_men_ex_dato_blir(self):
+        lang = "Paratus Energy Services Ltd"
+        y = fs.lag_aksje_tittel(self.rad(ticker="PLSV", navn=lang), self.I_DAG)
+        self.assertNotIn("yield", y)
+        self.assertLessEqual(len(y), fs.TITTEL_MAKS + 5)
+        e = fs.lag_aksje_tittel(self.rad(ticker="EQNR", navn="Equinor ASA", ex_dato="2027-02-15",
+                                         annonsert_utland={"belop": 0.39, "valuta": "USD",
+                                                           "ex": "2027-02-15"}), self.I_DAG)
+        self.assertIn("ex-dato 15. feb 2027 | EQNR", e)
+        self.assertLessEqual(len(e), fs.TITTEL_TAK)
+
+    def test_hele_katalogen(self):
+        """Ingen tittel over taket, ingen meta over 155, og beløpet i titlen
+        er det samme som i H1."""
+        rot = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        with open(os.path.join(rot, "data", "aksjer.json"), encoding="utf-8") as f:
+            aksjer = json.load(f)["aksjer"]
+        for a in aksjer:
+            t = fs.lag_aksje_tittel(a, self.I_DAG)
+            self.assertLessEqual(len(fs.lag_aksje_meta(a, self.I_DAG)), 155, a["ticker"])
+            if fs.utbytte_i_tittel(a, self.I_DAG):
+                h1 = fs.lag_aksje_h1(a, self.I_DAG)
+                self.assertIn(h1.split(": ", 1)[1], t, a["ticker"])
+
+
 class TestUtbetalingsmaaneder(unittest.TestCase):
     """Månedsmønsteret som gjør en utbyttekalender mulig.
 
