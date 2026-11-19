@@ -4347,7 +4347,8 @@
     {
       "ticker": "FRO",
       "dato": "2026-11-20",
-      "type": "rapport"
+      "type": "rapport",
+      "url_forsok": 1
     },
     {
       "ticker": "CDLR",
@@ -4895,6 +4896,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "FRO",
+      "dato": "2027-02-26",
+      "type": "rapport"
+    },
+    {
       "ticker": "OTL",
       "dato": "2027-02-26",
       "type": "rapport"
@@ -4915,5 +4921,5 @@
       "type": "rapport"
     }
   ],
-  "sist_oppdatert": "2026-11-19"
+  "sist_oppdatert": "2026-11-20"
 }
