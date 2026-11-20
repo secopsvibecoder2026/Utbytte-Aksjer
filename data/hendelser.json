@@ -4348,7 +4348,7 @@
       "ticker": "FRO",
       "dato": "2026-11-20",
       "type": "rapport",
-      "url_forsok": 1
+      "url": "https://newsweb.oslobors.no/message/687036"
     },
     {
       "ticker": "CDLR",
@@ -4363,11 +4363,6 @@
     {
       "ticker": "NORAM",
       "dato": "2026-11-24",
-      "type": "rapport"
-    },
-    {
-      "ticker": "BWO",
-      "dato": "2026-11-25",
       "type": "rapport"
     },
     {
@@ -4617,11 +4612,6 @@
     },
     {
       "ticker": "MORLD",
-      "dato": "2027-02-11",
-      "type": "rapport"
-    },
-    {
-      "ticker": "NORBT",
       "dato": "2027-02-11",
       "type": "rapport"
     },
