@@ -250,6 +250,16 @@ INKORPORERINGSLAND   = {t["ticker"]: t.get("inkorporeringsland", "Norge") for t 
 # eller forstyrret av en selskapshendelse — 2020 Bulkers betaler månedlig,
 # men ble talt til kvartalsvis etter kapitalutdelingen i mai 2026.
 FREKVENS_OVERSTYRT   = {t["ticker"]: t["frekvens"] for t in _ticker_data if t.get("frekvens")}
+# Selskaper der politikken selv deler årsutbyttet i to, og den andre delen
+# kalles «additional» eller «tilleggsutbytte» og vedtas etter fullmakt.
+# Ordet gjør det ikke til et engangsutbytte. Wilh. Wilhelmsen viste 12,00 kr
+# (1,3 %) mot 28,50 betalt siste 12 mnd, AF Gruppen 6,50 mot 11,00: meldingene
+# om tillegget fikk betalt-12m-regelen til å stå over. Se ekstraordinaere_i_vindu().
+TILLEGG_ER_ORDINAERT = {t["ticker"] for t in _ticker_data if t.get("tillegg_er_ordinaert")}
+# Utbetalinger Yahoo mangler og NewsWeb-lista ikke lenger når, lest av for hånd
+# fra selskapets ex-melding. Se kommentaren over SUPPLER_DAGER.
+UTBETALINGER_FRA_MELDING = {t["ticker"]: t["utbetalinger_fra_melding"]
+                            for t in _ticker_data if t.get("utbetalinger_fra_melding")}
 # Når selskapet bak tickeren har skiftet virksomhet, hører utbyttehistorikken
 # til et annet selskap. 2020 Bulkers solgte alle skipene i april 2026, betalte
 # ut salgssummen og kjøpte offshorefartøy i september. Historikken står, men
@@ -1232,6 +1242,12 @@ def hent_newsweb_ex_dato(ticker, i_dag=None):
 # rundt fem meldinger per kjøring. Lista hentes uansett for rapportdatoen.
 # Feiler NewsWeb, brukes Yahoos serie som den er.
 
+# Det som er lagt til før, følger med til neste kjøring (FORRIGE_SUPPLERT).
+# Lista per utsteder er begrenset i antall meldinger, ikke i tid: for Wilh.
+# Wilhelmsen nådde den 28.11.2025 tilbake, så tillegget 12.11.2025 forsvant fra
+# serien i en kjøring etter at det hadde stått der i et år, og 2025 viste 12 kr
+# mot 20. En utbetaling som er tapt slik, registreres for hånd i tickers.json
+# (`utbetalinger_fra_melding`) og går gjennom de samme vaktene.
 SUPPLER_DAGER = 365
 SUPPLER_TOLERANSE_DAGER = 10
 SUPPLER_MAKS_FAKTOR = 5
@@ -1321,6 +1337,8 @@ def hullaar(kjente_datoer, i_dag, ar_bakover=HULL_AR_BAKOVER):
     return [y for y in range(i_dag.year - ar_bakover, i_dag.year)
             if y not in ar_med and min(ar_med) < y < max(ar_med)]
 
+
+FORRIGE_SUPPLERT = {}   # ticker → utbytte_supplert fra forrige kjøring, settes i main()
 
 _NEWSWEB_PERIODE = {}   # (utsteder, fra, til) → meldinger, én gang per kjøring
 
@@ -2866,6 +2884,22 @@ def _har_ekstraordinaer(tekst):
                for m in _EKSTRA_RE.finditer(tekst))
 
 
+_TILLEGG_RE = re.compile(
+    r"\b(?:additional|supplement(?:al|ary)|tilleggs?)\s*(?:cash\s+)?"
+    r"(?:dividends?|distributions?|utbytte|utdeling\w*)", re.I)
+
+
+def _uten_tillegg(tekst, ticker):
+    """Teksten uten «additional dividend» for selskaper der tillegget er ordinært.
+
+    Se TILLEGG_ER_ORDINAERT. «Special» og «extraordinary» står igjen, så et
+    ekte engangsutbytte fra de samme selskapene blir fortsatt funnet.
+    """
+    if ticker in TILLEGG_ER_ORDINAERT and tekst:
+        return _TILLEGG_RE.sub(" ", tekst)
+    return tekst
+
+
 def ekstraordinaere_i_vindu(ticker, i_dag=None):
     """Utbetalingene i perioden som en utbyttemelding kaller ekstraordinære.
 
@@ -2911,8 +2945,8 @@ def ekstraordinaere_i_vindu(ticker, i_dag=None):
                 for u in utb:
                     if u["belop"]:
                         belop_per_ex.setdefault((u["ex_dato"], u["valuta"]), set()).add(u["belop"])
-            i_tittel = _har_ekstraordinaer(tittel)
-            if not (i_tittel or _har_ekstraordinaer(tekst)):
+            i_tittel = _har_ekstraordinaer(_uten_tillegg(tittel, ticker))
+            if not (i_tittel or _har_ekstraordinaer(_uten_tillegg(tekst, ticker))):
                 continue
             ex = utb[0]["ex_dato"] if len(utb) == 1 else None
             splitt = _parse_utbyttesplitt(tekst)
@@ -3552,6 +3586,11 @@ def hent_aksje(meta):
                 splitter = []
             funn = newsweb_ex_meldinger(
                 ticker, today.date(), [d.date() for d in dividends.index])
+            # Det som ble lagt til før, prøves igjen med de samme vaktene. Har
+            # Yahoo fått utbetalingen siden, faller den bort på datoen.
+            for f in FORRIGE_SUPPLERT.get(ticker, []) + UTBETALINGER_FRA_MELDING.get(ticker, []):
+                if f["ex_dato"] not in {g["ex_dato"] for g in funn}:
+                    funn.append(f)
             dividends, utbytte_supplert = suppler_utbytteserie(
                 dividends, funn, pris, today.date(), splitter)
             for s in utbytte_supplert:
@@ -11184,6 +11223,8 @@ def main():
             existing = json.load(f)
             existing_aksjer = existing if isinstance(existing, list) else existing.get("aksjer", [])
             fallback = {a["ticker"]: a for a in existing_aksjer}
+    FORRIGE_SUPPLERT.update({t: a["utbytte_supplert"] for t, a in fallback.items()
+                             if a.get("utbytte_supplert")})
 
     resultater = []
     feil = []          # Henting feilet, brukte fallback

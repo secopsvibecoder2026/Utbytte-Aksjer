@@ -2872,6 +2872,44 @@ class TestEngangsutbytteTrukketFra(unittest.TestCase):
         self.assertIn("inneholder den", fs.lag_ekstraordinaer_note(a, fs._nf))
 
 
+class TestTilleggErOrdinaert(unittest.TestCase):
+    """WWI viste 12,00 kr mot 28,50 betalt, AFG 6,50 mot 11,00 (2026-11-21).
+
+    Politikken deler årsutbyttet i to, og den andre delen heter «additional»
+    eller «tilleggsutbytte». Det ordet skal ikke stoppe betalt-12m-regelen.
+    """
+
+    def test_tillegget_teller_ikke_for_merkede_selskaper(self):
+        tekst = "the Board resolved an additional dividend of NOK 8.50 per share"
+        self.assertTrue(fs._har_ekstraordinaer(tekst))
+        self.assertIn("WWI", fs.TILLEGG_ER_ORDINAERT)
+        self.assertFalse(fs._har_ekstraordinaer(fs._uten_tillegg(tekst, "WWI")))
+        norsk = "styret har besluttet at selskapet utbetaler et tilleggsutbytte på NOK 4,50"
+        self.assertFalse(fs._har_ekstraordinaer(fs._uten_tillegg(norsk, "AFG")))
+
+    def test_ekte_engangsutbytte_finnes_fortsatt(self):
+        tekst = "an additional dividend of NOK 8.50 and a special dividend of NOK 10.00"
+        self.assertTrue(fs._har_ekstraordinaer(fs._uten_tillegg(tekst, "WWI")))
+
+    def test_andre_selskaper_er_uendret(self):
+        tekst = "an additional dividend of NOK 2.00"
+        self.assertNotIn("GOD", fs.TILLEGG_ER_ORDINAERT)
+        self.assertEqual(fs._uten_tillegg(tekst, "GOD"), tekst)
+
+    def test_haandregistrerte_utbetalinger_har_kilde(self):
+        for t, liste in fs.UTBETALINGER_FRA_MELDING.items():
+            for f in liste:
+                datetime.date.fromisoformat(f["ex_dato"])
+                self.assertGreater(f["belop"], 0, t)
+                self.assertTrue(str(f["melding_id"]).isdigit(), t)
+
+    def test_forrige_supplert_kommer_med(self):
+        """Det som er lagt til før, følger med inn i neste kjørings funn."""
+        kilde = inspect.getsource(fs.hent_aksje)
+        self.assertIn("FORRIGE_SUPPLERT.get(ticker", kilde)
+        self.assertIn("FORRIGE_SUPPLERT.update", inspect.getsource(fs.main))
+
+
 class TestGoodtechTillegg(unittest.TestCase):
     """Goodtech: 0,50 ordinært og 2,00 som tillegg. Siden viste 26,32 % (16.10.2026).
 
