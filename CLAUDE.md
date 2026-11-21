@@ -152,6 +152,7 @@ Utbytte-Aksjer/
 │   ├── sjekk_klasser.py       # Verifies every Tailwind class is compiled
 │   ├── sjekk_antall.py        # Finds hard-coded stock counts that should be markers
 │   ├── sjekk_titler.py        # Lists stock-page titles over 60 chars or without an amount
+│   ├── kvartalsrapport.py     # Report summaries: source text, the gate, the queue
 │   ├── vedlikehold.py         # Daily maintenance: Actions runs, live site, stocks in/out from NewsWeb
 │   ├── nettstedfiler.py       # Copies the site without internal files for the Pages deploy
 │   ├── sjekk_sprak.py         # Counts dashes and AI phrasing in published text (SKRIVESTIL.md)
@@ -3023,6 +3024,77 @@ for a payer more often than yearly, the annual rate beside the per-payment
 amount. URLs and canonical are unchanged.
 
 Tests: `TestBelopITittel` (11).
+
+## Quarterly report summaries (2026-11-21)
+
+Readers want four things from a quarterly report: is it going well, what is
+the dividend, when does it come, and what is the dividend plan. The rapport
+agent (`.claude/agents/rapport.md`) writes that summary from the company's
+own notice on NewsWeb, and the data job turns it into pages.
+
+**Files and pages.**
+
+- `data/rapporter/{TICKER}.json` holds the summaries, newest first. Written
+  only through the gate, never by hand. B-shares have none; they show the
+  A-share's (`rapporter_for()`).
+- `/aksjer/{TICKER}/rapporter/` (`generer_rapportsider()`) has every summary
+  for the company. **One page per company, not per report**: hundreds of
+  thin pages is the pattern under «Breaking the template». Each report has an
+  anchor (`#2026-q3`) for sharing.
+- The stock page gets a «Siste kvartalsrapport» box (`lag_rapport_boks()`)
+  only when a summary exists, and `/rapportkalender/` lists the newest under
+  «Nylig framlagt» (`lag_nylig_framlagt()`). That section was removed in
+  September because its links came from the polluted `hendelser.json`; these
+  come from summaries of reports that were actually published.
+- The tiles at the top of the report page show only figures that change
+  rarely: next ex-date, announced amount, annual rate. Yield and price are left
+  out so the sitemap lastmod moves when something happens.
+- A summary is fixed text about a dated report. It never carries yield or
+  price, and always names its period and date. That is how it stays within
+  «Never freeze live numbers into stored prose».
+
+**The gate, `scripts/kvartalsrapport.py`.**
+
+- `--kilde TICKER` writes the notice and the first 15 pages of the PDF report
+  (`pdftotext -layout`) to one text file. The header names the message ids.
+- `--skriv TICKER fil.json kilde.txt` saves only when every number in the
+  text and the table is in that file. Years, dates and «3. kvartal» are
+  exempt. Rounding is accepted; millions written as billions only with «mrd.»
+  after the number, and the reverse with «mill.».
+- **A percentage must be on a line about percent.** Otherwise «6,50 %» found
+  DNB's earnings per share.
+- **Both numbers in a table row must be in the same row of the source**,
+  either on one line or directly above each other in the same column (Vår
+  Energi's key-figure tiles). This catches a value taken from the wrong row.
+- **Three digits after a separator is a thousands separator** («9,844»,
+  «1.125 millioner»), except after a leading 0 or on a per-share line.
+  Reading it both ways made every thousand in an English table a small
+  decimal too, and «10,7» without a unit matched «10,684».
+- Language: SKRIVESTIL.md with no dash at all; advice words stop the save;
+  evaluative words («sterk», «svak», «rekord») give a warning to attribute.
+
+**What the gate does not catch.** It checks that a number is in the source,
+not that it is the right number. Measured on the three Q3 sources: a random
+one-decimal number is found somewhere in 11–24 % of tries, and a copy error
+one step off (9,9 for 9,8) in 30–50 %. Two-decimal numbers and table pairs
+are much safer. So the agent reads every number against the source once more,
+and the PR is not merged by the agent.
+
+**The queue.** `kvartalsrapport.py --ko` asks NewsWeb per issuer.
+`vedlikehold.py` lists reports from the week's exchange-wide messages
+without a summary («Kvartalsrapporter uten oppsummering»), and the weekly
+report puts them under «Krever handling». The owner says «go» in a session.
+A report title is recognised by a period word and a result word
+(`er_rapporttittel()`), with notices of upcoming reports, trading updates and
+invitations excluded. DNB («Solid results across operations in the Nordics»)
+and Vår Energi have no period in the title, so the report-date links in
+`hendelser.json` are used as well.
+
+`kodeendring.yml` starts the data job when `data/rapporter/` changes, so a
+merged summary is live within the hour. `tester.yml` runs
+`kvartalsrapport.py --sjekk --streng` (form and language, no network).
+
+Tests: `scripts/test_kvartalsrapport.py`.
 
 ## App review of 2026-10-20
 
