@@ -1,6 +1,6 @@
 {
  "https://exday.no/": {
-  "sha": "d5b0265371d48214",
+  "sha": "c39852dc730392f4",
   "dato": "2026-11-21"
  },
  "https://exday.no/aksjer/": {
@@ -124,7 +124,11 @@
   "dato": "2026-11-21"
  },
  "https://exday.no/aksjer/BWLPG/": {
-  "sha": "d2b811e700401d2b",
+  "sha": "f1f123b02281eeab",
+  "dato": "2026-11-21"
+ },
+ "https://exday.no/aksjer/BWLPG/rapporter/": {
+  "sha": "2a9ca8cbba35effd",
   "dato": "2026-11-21"
  },
  "https://exday.no/aksjer/BWO/": {
@@ -348,7 +352,11 @@
   "dato": "2026-11-21"
  },
  "https://exday.no/aksjer/MPCC/": {
-  "sha": "c3b3a8d933ed6cfe",
+  "sha": "19a1f7adb7d071d6",
+  "dato": "2026-11-21"
+ },
+ "https://exday.no/aksjer/MPCC/rapporter/": {
+  "sha": "922c9ac1fb9c1c80",
   "dato": "2026-11-21"
  },
  "https://exday.no/aksjer/MULTI/": {
@@ -820,7 +828,7 @@
   "dato": "2026-11-18"
  },
  "https://exday.no/utbyttekalender/": {
-  "sha": "dc00bf0648d5f718",
+  "sha": "fd0e353be8216b54",
   "dato": "2026-11-21"
  },
  "https://exday.no/utbyttekalkulator/": {
