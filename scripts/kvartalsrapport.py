@@ -547,12 +547,64 @@ _IKKE_RAPPORT = re.compile(
     # BW LPG i november 2026), og et annet selskaps rapport i et
     # tilbudsdokument (Telenor om Bahnhof).
     r"publication date|release date|notice of|upcoming|will (?:be )?(?:publish|release|present)|"
-    r"presentation on|earnings presentation|supplement|tilbudsdokument|offer document", re.I)
+    r"presentation on|earnings presentation|supplement|tilbudsdokument|offer document|"
+    # «… ANNOUNCES Q3 2026 RESULTS ON 26/11/2026» (CMB.TECH) og «resultatpresentasjon
+    # tredje kvartal 2026 – fredag 30. oktober» (Sparebanken Norge) varsler rapporten.
+    r"results? on \d|resultatpresentasjon|to (?:publish|release|present)\b", re.I)
+
+# Gjelder også meldinger som kommer inn via rapportdatoen i hendelser.json. Den
+# lenken peker iblant på en melding samme dag som ikke er rapporten: Mowis og
+# TGS' «Quarterly dividend», Sparebanken Norges invitasjon, en påminnelse.
+_ALDRI_RAPPORT = re.compile(
+    r"reminder|påminnelse|trading update|invitation|invitasjon|key information|"
+    r"nøkkelinformasjon|ex[ .-]?dividend|ex[ .-]?utbytte|results? on \d|resultatpresentasjon|"
+    r"publication date|notice of|upcoming|(?:to|will(?: be)?) (?:publish|release|present)\b",
+    re.I)
+_UTBYTTE_ORD = re.compile(r"dividend|utbytte|distribution", re.I)
+# Prefikset før «:» eller « - » når det er et selskapsnavn, ikke «Q3 2026» eller
+# «PRESS RELEASE».
+_GENERISK_PREFIKS = re.compile(r"\d|press release|pressemelding|børsmelding|"
+                               r"quarter|kvartal|result|report|rapport|"
+                               r"correction|korreksjon|korrigering|rettelse", re.I)
 
 
 def er_rapporttittel(tittel):
     t = tittel or ""
     return bool(_PERIODE_ORD.search(t) and _RESULTAT_ORD.search(t) and not _IKKE_RAPPORT.search(t))
+
+
+def aldri_rapport(tittel):
+    """Tittelen kan ikke være rapporten, uansett hvor id-en kommer fra.
+
+    En ren utbyttemelding («Quarterly dividend») har ikke et eneste resultatord.
+    """
+    t = tittel or ""
+    return bool(_ALDRI_RAPPORT.search(t)
+                or (_UTBYTTE_ORD.search(t) and not _RESULTAT_ORD.search(t)))
+
+
+def annet_selskaps_rapport(tittel, ticker, navn):
+    """«Grameenphone - results for the third quarter 2026» under Telenor.
+
+    Bare et prefiks som ser ut som et selskapsnavn sammenlignes, så «Q3 2026:
+    KONGSBERG …» og «PRESS RELEASE: …» aldri teller som et annet selskap.
+    """
+    # «Fremtind Holding-konsernets resultater …» under MING og NONG: Fremtind er
+    # et forsikringsselskap bankene eier sammen, ikke banken selv.
+    m = (re.match(r"\s*([^:]{2,80}?)\s*(?::|\s[-–]\s)", tittel or "")
+         or re.match(r"\s*([^:\d]{2,80}?)-konsern", tittel or "", re.I))
+    if not m or _GENERISK_PREFIKS.search(m.group(1)) or not navn:
+        return False
+    # «ABGSC - Q3 2026 Interim Report»: en forkortelse som begynner med tickeren.
+    forkortelse = m.group(1).strip().upper()
+    if ticker and (forkortelse.startswith(ticker.upper()) or ticker.upper().startswith(forkortelse)):
+        return False
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    import fetch_stocks as fs
+    prefiks = m.group(1).split("(")[0].strip()
+    if fs._kort_selskapsnavn(prefiks).strip().lower() == (ticker or "").lower():
+        return False
+    return fs.melding_gjelder_annet_selskap(prefiks + ":", "", ticker, navn)
 
 
 def hendelse_ider(hendelser, ticker):
@@ -571,7 +623,7 @@ def hendelse_ider(hendelser, ticker):
     return ut
 
 
-def rapportmeldinger(meldinger, ider=()):
+def rapportmeldinger(meldinger, ider=(), ticker="", navn=""):
     """[{dato, ider, titler}] for rapportene i meldingslista, nyeste først.
 
     En rapport kommer ofte i to meldinger samme dag (norsk og engelsk, som
@@ -582,6 +634,8 @@ def rapportmeldinger(meldinger, ider=()):
         mid = str(m.get("messageId") or m.get("id") or "")
         tittel = (m.get("title") or "").strip()
         if not mid or not (er_rapporttittel(tittel) or mid in ider):
+            continue
+        if aldri_rapport(tittel) or annet_selskaps_rapport(tittel, ticker, navn):
             continue
         dato = (m.get("publishedTime") or "")[:10]
         g = per_dato.setdefault(dato, {"dato": dato, "ider": [], "titler": []})
@@ -634,6 +688,11 @@ def ko(tickere=None, dager=KO_DAGER):
         hendelser = []
     lagret = les_rapporter()
     b = _b_aksjer()
+    try:
+        with open(TICKERS_FIL, encoding="utf-8") as f:
+            navn = {t["ticker"]: t.get("navn", "") for t in json.load(f)}
+    except (OSError, ValueError):
+        navn = {}
     if not tickere:
         # Største selskaper først: de får flest søk.
         try:
@@ -653,7 +712,8 @@ def ko(tickere=None, dager=KO_DAGER):
         except Exception as e:
             feilet.append((t, str(e)))
             continue
-        r = venter(lagret.get(t), rapportmeldinger(meldinger, hendelse_ider(hendelser, t)),
+        r = venter(lagret.get(t), rapportmeldinger(meldinger, hendelse_ider(hendelser, t),
+                                                   t, navn.get(t, "")),
                    dager=dager)
         if r:
             ut.append((t, r))

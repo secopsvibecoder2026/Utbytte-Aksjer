@@ -235,6 +235,36 @@ class TestRapportmeldinger(unittest.TestCase):
         for t in nei:
             self.assertFalse(kr.er_rapporttittel(t), t)
 
+    def test_feil_meldinger_via_rapportdatoen(self):
+        """Lenken i hendelser.json pekte på utbyttemeldinger, påminnelser og
+        datterselskaper (køen 21.11.2026). De skal ikke inn, heller ikke via id."""
+        def m(mid, tittel):
+            return {"messageId": mid, "publishedTime": "2026-11-04T07:00", "title": tittel}
+        meldinger = [m(1, "Mowi ASA (OSE: MOWI): Quarterly dividend"),
+                     m(2, "Reminder: Presentation of 3rd quarter 2026 accounts"),
+                     m(3, "Grameenphone - results for the third quarter 2026"),
+                     m(4, "Fremtind Holding-konsernets resultater for tredje kvartal 2026"),
+                     m(5, "Sparebanken Norge - resultatpresentasjon tredje kvartal 2026 - fredag 30. oktober"),
+                     m(6, "PRESS RELEASE: CMB.TECH ANNOUNCES Q3 2026 RESULTS ON 26/11/2026"),
+                     m(7, "ABGSC to publish Q3 2026 Interim Report on 13 October")]
+        alle = {str(i) for i in range(1, 8)}
+        for ticker, navn in (("MOWI", "Mowi ASA"), ("TEL", "Telenor ASA"),
+                             ("MING", "SpareBank 1 SMN"), ("ABG", "ABG Sundal Collier Holding ASA")):
+            self.assertEqual(kr.rapportmeldinger(meldinger, alle, ticker, navn), [], ticker)
+
+    def test_egne_rapporter_beholdes(self):
+        def m(mid, tittel):
+            return {"messageId": mid, "publishedTime": "2026-11-04T07:00", "title": tittel}
+        for ticker, navn, tittel in (
+                ("ABG", "ABG Sundal Collier Holding ASA", "ABGSC - Q3 2026 Interim Report"),
+                ("KOG", "Kongsberg Gruppen ASA", "Q3 2026: KONGSBERG delivers a strong third quarter"),
+                ("HAUTO", "Höegh Autoliners ASA",
+                 "Höegh Autoliners ASA: Third quarter results and distribution of dividends"),
+                ("CMBTO", "CMB.TECH NV", "PRESS RELEASE: CMB.TECH ANNOUNCES Q3 2026 RESULTS"),
+                ("POL", "Polaris Media ASA", "3. kvartal 2026: Fortsatt resultatvekst for Polaris Media"),
+                ("ITERA", "Itera ASA", "Korreksjon: Delårsrapport 3. kvartal 2026")):
+            self.assertEqual(len(kr.rapportmeldinger([m(1, tittel)], {"1"}, ticker, navn)), 1, tittel)
+
     def test_dnb_via_rapportdatoen(self):
         """DNBs tittel sier ikke hvilket kvartal; lenken i hendelser.json gjør det."""
         meldinger = [{"messageId": 684467, "publishedTime": "2026-10-21T05:30",
