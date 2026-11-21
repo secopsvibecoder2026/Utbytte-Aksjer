@@ -3046,6 +3046,10 @@ own notice on NewsWeb, and the data job turns it into pages.
   «Nylig framlagt» (`lag_nylig_framlagt()`). That section was removed in
   September because its links came from the polluted `hendelser.json`; these
   come from summaries of reports that were actually published.
+- **«Rapporter» is a tab in the stock page menu** (`lag_aksje_faner()`),
+  shown only when a summary exists. The report page carries the same menu,
+  with the other tabs linking back to `/aksjer/{TICKER}/#…`. Five tabs fit
+  from 360 px because `.ak-tabnav a` is tighter under 30rem.
 - The tiles at the top of the report page show only figures that change
   rarely: next ex-date, announced amount, annual rate. Yield and price are left
   out so the sitemap lastmod moves when something happens.

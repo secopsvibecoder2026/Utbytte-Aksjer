@@ -7244,6 +7244,8 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None, rapporter=None
     om_seksjon = f'<div class="desc"><h2>Om selskapet</h2>{om_avsnitt}</div>' if om_avsnitt else ""
     # Siste kvartalsrapport, når rapport-agenten har oppsummert den.
     rapport_boks = lag_rapport_boks(a, rapporter) if rapporter else ""
+    fanemeny = lag_aksje_faner(
+        a["ticker"], _rapport_side_ticker(a["ticker"], rapporter) if rapporter else None)
 
     kurshode_html = _lag_kurshode(a, valuta, upa_merknad, delaar_note)
     korttall_html = _lag_korttall(a, valuta)
@@ -7812,12 +7814,7 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None, rapporter=None
   {kurshode_html}
   {lag_kursvarsel(a)}
 
-  <nav class="ak-tabnav" id="ak-tabnav" aria-label="Sideseksjoner">
-    <a href="#oversikt" class="ak-tab aktiv">Oversikt</a>
-    <a href="#utbytte" class="ak-tab">Utbytte</a>
-    <a href="#nokkeltall" class="ak-tab">Nøkkeltall</a>
-    <a href="#faq" class="ak-tab">FAQ</a>
-  </nav>
+  {fanemeny}
 
   <!-- ── OVERSIKT ── -->
   <!-- Tallene først, så grafen, så teksten (STYLE.md, tiltak 3). Kurshodet
@@ -10228,6 +10225,33 @@ def _rapport_side_ticker(ticker, alle):
     return a if a and alle.get(a) else None
 
 
+AKSJE_FANER = (("oversikt", "Oversikt"), ("utbytte", "Utbytte"),
+                ("nokkeltall", "Nøkkeltall"), ("faq", "FAQ"))
+
+
+def lag_aksje_faner(ticker, rapportside=None, aktiv="oversikt"):
+    """Fanemenyen på aksjesiden og på rapportsiden, så de to henger sammen.
+
+    På aksjesiden (aktiv="oversikt") er fanene ankere på siden, og
+    «Rapporter» lenker til /aksjer/{rapportside}/rapporter/ når selskapet har
+    en oppsummering. På rapportsiden (aktiv="rapporter") går fanene tilbake
+    til aksjesiden, og «Rapporter» er siden man står på.
+    """
+    paa_rapport = aktiv == "rapporter"
+    lenker = []
+    for sid, navn in AKSJE_FANER:
+        href = f"/aksjer/{ticker}/#{sid}" if paa_rapport else f"#{sid}"
+        kl = "ak-tab aktiv" if sid == aktiv else "ak-tab"
+        lenker.append(f'<a href="{href}" class="{kl}">{navn}</a>')
+    if rapportside:
+        if paa_rapport:
+            lenker.append('<a href="./" class="ak-tab aktiv" aria-current="page">Rapporter</a>')
+        else:
+            lenker.append(f'<a href="/aksjer/{rapportside}/rapporter/" class="ak-side">Rapporter</a>')
+    return ('<nav class="ak-tabnav" id="ak-tabnav" aria-label="Sideseksjoner">\n    '
+            + "\n    ".join(lenker) + "\n  </nav>")
+
+
 _TUSEN_MELLOMROM = re.compile(r"\b(\d{1,3})((?: \d{3})+)\b")
 _ENHET_MELLOMROM = re.compile(
     r"(?<=\d) (?=%|(?:mill|mrd)\.|(?:millioner|milliarder|kroner|kr|USD|NOK|EUR|SEK|DKK|"
@@ -10566,6 +10590,7 @@ def _rapportside_html(a, rapporter, today):
   <p class="sub">Det viktigste fra rapportene {html.escape(a["navn"])} ({ticker}) har lagt fram:
     resultatet, utbyttet og utbytteplanen, rapport for rapport. Skrevet ut fra
     selskapets egne meldinger til Oslo Børs.</p>
+  {lag_aksje_faner(ticker, ticker, aktiv="rapporter")}
   <div class="ruter">{_rapport_utbytte_naa(a, today)}</div>
   {f'<nav class="hopp" aria-label="Hopp til rapport">{hopp}</nav>' if hopp else ''}
 {artikler}
