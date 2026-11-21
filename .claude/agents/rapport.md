@@ -60,6 +60,9 @@ og hvilket vedlegg som er med, og datoen rapporten ble lagt fram
 
 - **Sjekk at det er riktig melding.** Hodet sier tittelen og datoen. En
   «trading update» eller en invitasjon til presentasjonen er ikke rapporten.
+- **Utbyttemeldingene kommer med av seg selv.** Skriptet tar med
+  «Key information»-meldingen om utbyttet fra samme dag som rapporten, og den
+  forrige utbyttemeldingen, så du har beløpet per aksje og kan sammenligne.
 - **Har selskapet en norsk og en engelsk melding** (Equinor), ta begge:
   `--melding 684944 684945`. Den norske gir ofte bedre ord å skrive fra.
 - **Sammenlign med samme kvartal i fjor.** Noen rapporter sammenligner med
@@ -130,9 +133,19 @@ kildens tabell. Kontrollen sjekker det. Hold radnavnene korte, to til fire
 ord («Resultat etter skatt», «Produksjon per dag»). På mobil stables raden
 med navnet over tallene, så et langt navn tar mye plass.
 
-**Utbyttet.** Beløp per aksje og valuta, og om det er vedtatt av styret eller
-foreslått for generalforsamlingen. Ex-dato og utbetalingsdato bare når de
-står i kilden. Tilbakekjøp av aksjer kan nevnes i én setning. Betaler
+**Utbyttet.** Begynn med beløpet per aksje og valutaen, og sammenlign med
+forrige utbytte per aksje. Det er det eieren får. Si om det er vedtatt av
+styret eller foreslått for generalforsamlingen. Ex-dato og utbetalingsdato
+bare når de står i kilden.
+
+- **Et totalbeløp står aldri alene som «økt utbytte».** Vår Energi skrev
+  «USD 400 million» for tredje kvartal 2026, mot 350 millioner før. Per aksje
+  var det 1,368 kroner mot 1,355, fordi totalen også skulle deles på aksjene
+  til BlueNords eiere. Nevn totalen etter beløpet per aksje, og si hvorfor den
+  endret seg når kilden sier det.
+- **Spriker rapporten og utbyttemeldingen**, gjelder utbyttemeldingen. Vår
+  Energis rapport sa utbetaling «i desember», utbyttemeldingen og
+  ex-meldingen sa 25. november. Tilbakekjøp av aksjer kan nevnes i én setning. Betaler
 selskapet én gang i året og kvartalsrapporten sier ingenting nytt, skriv det
 rett ut: «DNB betaler utbytte én gang i året. Rapporten for tredje kvartal
 sier ikke noe om utbyttet for 2026.» Skriv aldri yield.

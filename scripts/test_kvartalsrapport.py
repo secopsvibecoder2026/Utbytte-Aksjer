@@ -279,6 +279,29 @@ class TestRapportmeldinger(unittest.TestCase):
                                             "2026-10-01", "2026-11-21", {"ODFB": "ODF"})
         self.assertNotIn("DNB", [x["ticker"] for x in ut])
 
+    def test_utbyttemeldinger_hører_til_rapporten(self):
+        """Vår Energi: rapporten 21.10 sa «USD 400 million»; beløpet per aksje
+        (1,368 kr) stod i utbyttemeldingen samme dag, og forrige (1,355 kr) i
+        meldingen fra juli."""
+        meldinger = [
+            {"messageId": 686644, "publishedTime": "2026-11-17T06:00", "title": "Vår Energi ASA: Ex dividend Q3 2026"},
+            {"messageId": 684458, "publishedTime": "2026-10-21T05:01", "title": "Vår Energi reports strong financial results"},
+            {"messageId": 684450, "publishedTime": "2026-10-21T05:00",
+             "title": "Key information relating to cash dividend to be paid by Vår Energi ASA"},
+            {"messageId": 678463, "publishedTime": "2026-07-21T05:00",
+             "title": "Key information relating to cash dividend to be paid by Vår Energi ASA"},
+            {"messageId": 672910, "publishedTime": "2026-05-08T05:00",
+             "title": "Key information relating to cash dividend to be paid by Vår Energi ASA"},
+        ]
+        self.assertEqual(kr.utbyttemeldinger(meldinger, "2026-10-21"), ["684450", "678463"])
+        # Equinor melder på norsk og engelsk samme dag: én av dem holder.
+        eq = [{"messageId": 684947, "publishedTime": "2026-10-28T05:46",
+               "title": "Equinor ASA: Key information relating to cash dividend for third quarter 2026."},
+              {"messageId": 684946, "publishedTime": "2026-10-28T05:46",
+               "title": "Equinor ASA: Nøkkelinformasjon angående kontantutbytte for tredje kvartal 2026."}]
+        self.assertEqual(kr.utbyttemeldinger(eq, "2026-10-28"), ["684947"])
+        self.assertEqual(kr.utbyttemeldinger(eq, ""), [])
+
     def test_hovedvedlegg(self):
         dnb = [{"name": "Presentation_3Q26.pdf", "id": 1}, {"name": "Factbook_3Q26.pdf", "id": 2},
                {"name": "Quarterly_Report_DNB_Group_3Q26.pdf", "id": 3}]

@@ -3073,6 +3073,15 @@ own notice on NewsWeb, and the data job turns it into pages.
 - Language: SKRIVESTIL.md with no dash at all; advice words stop the save;
   evaluative words («sterk», «svak», «rekord») give a warning to attribute.
 
+**The dividend per share comes first.** Vår Energi's Q3 2026 report gave
+only «USD 400 million», and the first summary said «øker utbyttet til 400
+millioner dollar». Per share it was 1,368 kr against 1,355: the total rose
+because it also covers the shares going to BlueNord's owners. `--kilde` now
+adds the «Key information» dividend notice from the report day and the one
+before it (`utbyttemeldinger()`), and the agent leads with the amount per
+share. Where the report and the notice differ (the report said payment «in
+December», the notice 25 November), the notice wins.
+
 **What the gate does not catch.** It checks that a number is in the source,
 not that it is the right number. Measured on the three Q3 sources: a random
 one-decimal number is found somewhere in 11–24 % of tries, and a copy error

@@ -704,8 +704,48 @@ def _hent_pdf_tekst(api, melding_id, vedlegg_id, sider):
         return res.stdout, None
 
 
-def hent_kilde(ticker, melding_ider=None, sider=KILDE_SIDER):
-    """(tekst, ider). Meldingene og hovedvedlegget til den første, som én tekst."""
+_UTBYTTEMELDING = re.compile(
+    r"(?:key information|nøkkelinformasjon).{0,60}(?:dividend|utbytte|distribution|utdeling)", re.I)
+
+
+def utbyttemeldinger(meldinger, dato, dager_etter=3):
+    """Id-ene til utbyttemeldingene («Key information …») som hører til rapporten.
+
+    Rapporten oppgir ofte bare totalbeløpet. Vår Energi skrev «USD 400
+    million» for tredje kvartal 2026, og agenten skrev «øker utbyttet til 400
+    millioner dollar». Per aksje var det 1,368 kroner mot 1,355 i andre
+    kvartal: totalen steg fordi utbyttet også skulle deles på aksjene til
+    BlueNords eiere. Beløpet per aksje står i utbyttemeldingen samme dag.
+
+    Gir én melding per dag fra dagen før rapporten til `dager_etter` etter,
+    pluss den nyeste før det, så beløpet kan sammenlignes med forrige utbytte.
+    """
+    try:
+        d0 = datetime.date.fromisoformat(dato[:10])
+    except (TypeError, ValueError):
+        return []
+    fra, til = (d0 - datetime.timedelta(days=1)).isoformat(), (d0 + datetime.timedelta(days=dager_etter)).isoformat()
+    i_vinduet, forrige, sett_dager = [], None, set()
+    for m in meldinger or []:   # NewsWeb gir nyeste først
+        if not _UTBYTTEMELDING.search(m.get("title") or ""):
+            continue
+        dag = (m.get("publishedTime") or "")[:10]
+        mid = str(m.get("messageId") or m.get("id") or "")
+        if fra <= dag <= til:
+            if dag not in sett_dager:
+                sett_dager.add(dag)
+                i_vinduet.append(mid)
+        elif dag < fra and forrige is None:
+            forrige = mid
+    return i_vinduet + ([forrige] if forrige else [])
+
+
+def hent_kilde(ticker, melding_ider=None, sider=KILDE_SIDER, med_utbytte=True):
+    """(tekst, ider). Meldingene og hovedvedlegget til den første, som én tekst.
+
+    Utbyttemeldingene som hører til rapporten tas med (utbyttemeldinger()),
+    med mindre `med_utbytte` er False.
+    """
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
     import fetch_stocks as fs
     api = fs._newsweb_api_base()
@@ -719,6 +759,15 @@ def hent_kilde(ticker, melding_ider=None, sider=KILDE_SIDER):
         if not rapporter:
             raise SystemExit(f"Fant ingen rapportmelding for {ticker}. Oppgi --melding ID.")
         melding_ider = rapporter[0]["ider"]
+    melding_ider = [str(m) for m in melding_ider]
+    if med_utbytte:
+        try:
+            liste = fs._newsweb_meldinger(ticker)
+            dato = next(((m.get("publishedTime") or "")[:10] for m in liste
+                         if str(m.get("messageId")) == melding_ider[0]), "")
+            melding_ider += [m for m in utbyttemeldinger(liste, dato) if m not in melding_ider]
+        except Exception as e:
+            print(f"  Utbyttemeldingene kunne ikke hentes: {e}", file=sys.stderr)
     deler, ider, pdf_tatt, publisert = [], [], False, ""
     hode = [f"# exday kilde", f"# ticker: {ticker}"]
     for mid in melding_ider:
@@ -803,6 +852,8 @@ def main(argv=None):
     p.add_argument("--melding", nargs="+", metavar="ID", help="meldings-id-er (med --kilde)")
     p.add_argument("--sider", type=int, default=KILDE_SIDER, help="sider av PDF-rapporten")
     p.add_argument("--ut", help="fil kilden skrives til (med --kilde)")
+    p.add_argument("--uten-utbytte", action="store_true",
+                   help="ikke ta med utbyttemeldingene (med --kilde)")
     p.add_argument("--streng", action="store_true", help="exit 1 ved feil (med --sjekk)")
     a = p.parse_args(argv)
 
@@ -811,7 +862,7 @@ def main(argv=None):
     if a.skriv:
         return _skriv(a.skriv[0].upper(), a.skriv[1], a.skriv[2])
     if a.kilde:
-        tekst, ider = hent_kilde(a.kilde.upper(), a.melding, a.sider)
+        tekst, ider = hent_kilde(a.kilde.upper(), a.melding, a.sider, not a.uten_utbytte)
         ut = a.ut or os.path.join(tempfile.gettempdir(), f"kilde_{a.kilde.upper()}_{ider[0]}.txt")
         with open(ut, "w", encoding="utf-8") as f:
             f.write(tekst)
