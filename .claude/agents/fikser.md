@@ -147,3 +147,27 @@ Svar til slutt med de samme tre delene og lenken til PR-en.
   siden lages. Se «Never freeze live numbers into stored prose».
 - **`_nf()` aldri på SVG-koordinater**, og `toISOString()` gir UTC-dato.
 - **Skriv etter `SKRIVESTIL.md`** når du endrer tekst leseren ser.
+- **En årlig betaler med tillegg ser halvårlig ut.** Kongsberg betalte i mai
+  og oktober to år på rad, og høstbetalingen i 2025 var et tilleggsutbytte
+  (652620). Les meldingen for hver utbetaling før du setter `frekvens`. Er
+  den eldre enn listen per utsteder rekker (om lag 16 måneder), spør NewsWeb
+  med `fromDate`/`toDate`.
+- **`frekvens` alene flytter ikke alltid tallet.** To ting kan holde igjen
+  årsraten etter rettingen, og begge slo til på KOG 21.11.2026:
+  - betalingsrunden holder en utbetaling i 45 dager etter årsdagen
+    (`RUNDE_SLINGRING_DAGER`), så en årlig betaler kan ha to i runden;
+  - NewsWeb spørres bare når avviket er minst 30 %, eller når én utbetaling er
+    minst 1,25 ganger en vanlig (`stor_enkeltutbetaling()`).
+
+  Kjør derfor `med_runde()`, `betalt_kan_bli_arsrate()` og
+  `ekstraordinaere_i_vindu()` mot raden lokalt før du lover et tall. Slår
+  rettingen først inn om noen dager, si når, og sett opp en sjekk med
+  `send_later` når økten har den.
+- **Registrer ikke særutbytte for bare noen av årene.** Vet du ikke om et
+  tidligere år også hadde særutbytte, ser det ordinære utbyttet ut til å
+  falle. Kongsbergs særutbytter for 2025 og 2026 er bekreftet, men 2024 er
+  ikke avklart, så ingen av dem står i `saerutbytte`.
+- **En regel som spør NewsWeb for flere aksjer, koster tid hver kjøring.** Mål
+  antall meldinger og sekunder før du utvider en port. Å spørre alle 80
+  kandidatene uten avvikskravet kostet 170 sekunder per kjøring. Den smale
+  regelen kostet 40.

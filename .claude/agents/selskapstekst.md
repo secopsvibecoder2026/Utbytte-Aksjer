@@ -137,6 +137,10 @@ Harde krav. `valider_innledning.py` fanger de fleste, men ikke alle:
   «utbetales», «direkteavkastning» og «noe som gjør».
 - **Ingen investeringsråd** og ingen spådommer. Forklar hvordan selskapet
   tjener penger, ikke om aksjen er billig.
+- **Utbyttepolitikken med selskapets egne avgrensninger.** «Minst
+  halvparten», «rundt halvparten» og «inntil halvparten» er tre ulike
+  påstander. Skriv det ordet kilden bruker. SpareBank 1 Sør-Norges tekst sa
+  «minst», rapporten sier «approximately 50%» (685044).
 - **Ingen superlativer du ikke har kilde på.** «Norges største bank» er greit
   for DNB. «Ledende» uten kilde er det ikke.
 - **Navngi ikke** GOD, KID, BOR, REACH eller MGN som eksempler på god

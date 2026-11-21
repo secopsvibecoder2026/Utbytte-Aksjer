@@ -332,6 +332,25 @@ class TestRapportmeldinger(unittest.TestCase):
         self.assertEqual(kr.utbyttemeldinger(eq, "2026-10-28"), ["684947"])
         self.assertEqual(kr.utbyttemeldinger(eq, ""), [])
 
+    def test_utbyttemeldinger_flere_samme_dag_og_engangs_foer(self):
+        def m(mid, dag, tittel):
+            return {"messageId": mid, "publishedTime": dag + "T07:00", "title": tittel}
+        # Gjensidige: ordinært og særutbytte samme dag, begge på engelsk.
+        gjf = [m(2, "2026-01-27", "Key information relating to the ordinary cash dividend"),
+               m(1, "2026-01-27", "Key information relating to the special cash dividend")]
+        self.assertEqual(kr.utbyttemeldinger(gjf, "2026-01-27"), ["2", "1"])
+        # Mowi: «Quarterly dividend».
+        mowi = [m(685530, "2026-11-04", "Mowi ASA (OSE: MOWI): Quarterly dividend"),
+                m(680022, "2026-08-18", "Mowi ASA (OSE: MOWI): Quarterly dividend")]
+        self.assertEqual(kr.utbyttemeldinger(mowi, "2026-11-04"), ["685530", "680022"])
+        # Frontline: forrige melding var engangsutbyttet, så den ordinære før
+        # den tas med også.
+        fro = [m(687050, "2026-11-20", "Key information relating to the dividend to be paid by Frontline plc"),
+               m(682181, "2026-09-11", "Key information relating to the special one-time dividend"),
+               m(681123, "2026-08-28", "Key information relating to the dividend to be paid by Frontline plc"),
+               m(678000, "2026-05-28", "Key information relating to the dividend to be paid by Frontline plc")]
+        self.assertEqual(kr.utbyttemeldinger(fro, "2026-11-20"), ["687050", "682181", "681123"])
+
     def test_hovedvedlegg(self):
         dnb = [{"name": "Presentation_3Q26.pdf", "id": 1}, {"name": "Factbook_3Q26.pdf", "id": 2},
                {"name": "Quarterly_Report_DNB_Group_3Q26.pdf", "id": 3}]

@@ -134,6 +134,10 @@ leser, og slå opp i dataene når noe ser rart ut.
   siste 12 mnd, er det nesten alltid et engangsutbytte i vinduet.
 - **Frekvens måles i intervaller, ikke antall.** Et vindu på 12 måneder kan fange
   tre halvårlige utbetalinger.
+- **To utbetalinger i året er ikke alltid halvårlig.** Kongsberg betalte i mai
+  og oktober, men høstbetalingen var et tilleggsutbytte (652620), og utbyttet
+  for 2025 kom i én omgang (665028). Les hva meldingen kaller utbetalingen før
+  du godtar eller rapporterer en frekvens.
 - **Tilbakebetaling av innbetalt kapital er ikke utbytte** skattemessig (STST).
 - **Doble noteringer:** Yahoo og DNB skiller ikke mellom børser. Oslo Børs sin
   dato gjelder.
