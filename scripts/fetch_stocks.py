@@ -1718,6 +1718,16 @@ def _newsweb_tekst(msg_id):
 UKJENT = object()   # Hentingen feilet — behold det vi hadde fra forrige kjøring
 
 
+# «Key information relating to the cash dividend» er den vanlige tittelen.
+# Pexip sendte aldri en slik: utbyttet for 2025 kom i «Information relating to
+# the proposed dividend for 2025» (665466), «structured as a repayment of
+# paid-in capital», og siden regnet det som skattepliktig utbytte (2026-11-21).
+_KAPITAL_TITTEL = re.compile(
+    r"key information\b.*\b(?:dividend|distribution)"
+    r"|\binformation relating to the (?:proposed |cash )?(?:dividend|distribution)",
+    re.I)
+
+
 def hent_kapitaltilbake(ticker, i_dag=None):
     """Klassifiseringen i aksjens nyeste utbyttemelding.
 
@@ -1733,8 +1743,7 @@ def hent_kapitaltilbake(ticker, i_dag=None):
     grense = (i_dag - datetime.timedelta(days=KAPITAL_MAKS_DAGER)).isoformat()
     try:
         for msg in _newsweb_meldinger(ticker):
-            tittel = (msg.get("title") or "").lower()
-            if not ("dividend" in tittel or "distribution" in tittel) or "key information" not in tittel:
+            if not _KAPITAL_TITTEL.search(msg.get("title") or ""):
                 continue
             dato = (msg.get("publishedTime") or "")[:10]
             if dato < grense:

@@ -1400,6 +1400,11 @@ roadmap said «measure first».
   The *payment* is classified, not the company: BOR paid ordinary dividends in
   2025 and capital in 2026; HUNT split one payment 0,50 capital + 0,08 ordinary,
   then paid an extraordinary *dividend* in September — so HUNT is unmarked now.
+- **The title filter is `_KAPITAL_TITTEL`.** Pexip never sent a «Key
+  information» notice: its 2025 dividend, all paid-in capital, came in
+  «Information relating to the proposed dividend for 2025» (665466), and the
+  page taxed it as a dividend until 2026-11-21. A dry run over the catalog
+  moved only PEXIP.
 - **A network failure returns `UKJENT`, not `None`**, and the previous run's
   value is kept from `fallback`. A failed fetch is evidence of nothing.
 - A partial classification without a parseable total gives no answer rather
