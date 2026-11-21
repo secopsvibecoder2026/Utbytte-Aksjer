@@ -3482,6 +3482,14 @@ Found by the `tallkontroll` agent on its first run:
   the special out and gives the ordinary 2,20. The specials are not in
   `saerutbytte`: the 2024 notices do not say whether any of the 14 kr
   (pre-split) was special, and listing only the later ones would read as a cut.
+  The first data run still showed 4,40, for two reasons. The payment round
+  kept October 2025 for its 45 days of slack (until 23 November), so an
+  annual payer had two payments. And the 5,70 paid was 29,5 % above 4,40,
+  under the 30 % that decides whether NewsWeb is asked at all: the special
+  hid the cut. `stor_enkeltutbetaling()` now also asks when one payment is at
+  least `ENKELT_STOR` (1,25) times an ordinary one. Simulated on 21.11: seven
+  more stocks asked (about 40 s), none moved; asking all 80 without the
+  deviation test cost 170 s a run.
 
 Tests: `TestUtbetalingerIMelding` (7) and `ui.test.js`.
 

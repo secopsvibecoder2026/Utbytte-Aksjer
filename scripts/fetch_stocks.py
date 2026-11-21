@@ -3051,8 +3051,11 @@ def _i_vinduet(a, ex_dato, toleranse_dager=3):
 ENGANGS_ANDEL = 0.5
 
 
-def betalt_kan_bli_arsrate(a, i_dag=None):
-    """Vilkår 1 og 3 over, uten nettverk. Avgjør om NewsWeb skal spørres."""
+def betalt_kan_bli_arsrate(a, i_dag=None, min_avvik=BETALT_MIN_AVVIK):
+    """Vilkår 1 og 3 over, uten nettverk. Avgjør om NewsWeb skal spørres.
+
+    `min_avvik=0` sjekker alt unntatt avviket (se stor_enkeltutbetaling()).
+    """
     i_dag = i_dag or datetime.date.today()
     pris = a.get("pris") or 0
     betalt = a.get("utbytte_12m") or 0
@@ -3101,7 +3104,29 @@ def betalt_kan_bli_arsrate(a, i_dag=None):
     # begge veier. Før 18.10.2026 ble det delt på det viste: en heving på 30 %
     # slo inn, men et vist tall 38 % over det betalte (STST, 7,15 mot 5,17)
     # ble 27,7 % og sto.
-    return vist <= 0 or max(betalt, vist) / min(betalt, vist) - 1 >= BETALT_MIN_AVVIK
+    return vist <= 0 or max(betalt, vist) / min(betalt, vist) - 1 >= min_avvik
+
+
+# Én utbetaling som er minst så mye større enn en vanlig (årsraten delt på
+# antallet), kan være et engangsutbytte som skjuler et kutt.
+ENKELT_STOR = 1.25
+
+
+def stor_enkeltutbetaling(a):
+    """Har vinduet en utbetaling som er klart større enn én vanlig? Ren funksjon.
+
+    Et engangsutbytte i summen kan skjule at det ordinære er lavere enn det
+    som vises. Kongsberg betalte 5,70 kr i april 2026, 2,20 ordinært og 3,50
+    særutbytte (665028), mot en vist rate på 4,40. Summen avviker 29,5 % og
+    slapp aldri forbi 30 %-vilkåret, så NewsWeb ble ikke spurt. Uten
+    særutbyttet er det 2,20, halvparten. Målt 21.11.2026 slipper dette sju
+    aksjer til i tillegg (40 s), og ingen av dem flytter seg; å spørre for alle
+    80 uten avvikskravet kostet 170 s per kjøring.
+    """
+    forventet = {"Årlig": 1, **UTBETALINGER_PR_AAR}.get(a.get("frekvens")) or 1
+    vist = a.get("utbytte_per_aksje") or 0
+    storst = max((x.get("belop") or 0 for x in a.get("utbytte_12m_liste") or []), default=0)
+    return vist > 0 and storst >= ENKELT_STOR * vist / forventet
 
 
 def bruk_betalt_som_arsrate(a, ekstra=0.0):
@@ -11345,8 +11370,12 @@ def main():
         # er så høy at et engangsutbytte kan ligge i den. WAWI viste 8,97 %
         # med to ekstraordinære deler inne; summen var lik den viste raten, så
         # vilkåret om 30 % avvik slapp den aldri til.
+        # Og når én utbetaling er så stor at den kan være et engangsutbytte
+        # som skjuler et kutt (KOG, se stor_enkeltutbetaling()).
         if not (betalt_kan_bli_arsrate(kandidat)
-                or (aksje.get("utbytte_yield") or 0) >= HOY_YIELD_FOR_SPLITT):
+                or (aksje.get("utbytte_yield") or 0) >= HOY_YIELD_FOR_SPLITT
+                or (betalt_kan_bli_arsrate(kandidat, min_avvik=0)
+                    and stor_enkeltutbetaling(kandidat))):
             continue
         funn = ekstraordinaere_i_vindu(aksje["ticker"])
         if funn is UKJENT:
