@@ -83,7 +83,7 @@
     }
   ]
 }</script>
-  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Betaler BlueNord ASA utbytte hvert år, og hvor ofte?", "acceptedAnswer": {"@type": "Answer", "text": "BlueNord ASA betaler utbytte fire ganger i året (kvartalsvis). Selskapet har betalt utbytte de siste 2 årene."}}, {"@type": "Question", "name": "Hva er direkteavkastningen (yield) til BNOR?", "acceptedAnswer": {"@type": "Answer", "text": "Direkteavkastningen (yield) for BNOR er 34,66 %, beregnet som 180,58 NOK i annualisert utbytte per aksje delt på aksjekursen.  Yield endres daglig fordi den er koblet til kursen: stiger kursen, faller yielden."}}, {"@type": "Question", "name": "Hva er skatten på utbytte fra BNOR?", "acceptedAnswer": {"@type": "Answer", "text": "Utbytte fra BlueNord ASA beskattes med 37,84 % av det som overstiger skjermingsfradraget, for personlige aksjonærer som eier aksjen på vanlig konto. Med en yield på 34,66 % gir det en nettoyield på ca. 21,54 % etter skatt, før skjermingsfradraget. Eier du aksjen via aksjesparekonto (ASK), utsettes skatten til du tar ut midler, og utbyttet kan reinvesteres innen kontoen uten skatt underveis."}}]}</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Betaler BlueNord ASA utbytte hvert år, og hvor ofte?", "acceptedAnswer": {"@type": "Answer", "text": "BlueNord ASA betaler utbytte fire ganger i året (kvartalsvis). Selskapet har betalt utbytte de siste 2 årene."}}, {"@type": "Question", "name": "Hva er direkteavkastningen (yield) til BNOR?", "acceptedAnswer": {"@type": "Answer", "text": "Direkteavkastningen (yield) for BNOR er 34,66 %, beregnet som 180,58 NOK i utbytte fra de fire siste utbetalingene per aksje delt på aksjekursen.  Yield endres daglig fordi den er koblet til kursen: stiger kursen, faller yielden."}}, {"@type": "Question", "name": "Hva er skatten på utbytte fra BNOR?", "acceptedAnswer": {"@type": "Answer", "text": "Utbytte fra BlueNord ASA beskattes med 37,84 % av det som overstiger skjermingsfradraget, for personlige aksjonærer som eier aksjen på vanlig konto. Med en yield på 34,66 % gir det en nettoyield på ca. 21,54 % etter skatt, før skjermingsfradraget. Eier du aksjen via aksjesparekonto (ASK), utsettes skatten til du tar ut midler, og utbyttet kan reinvesteres innen kontoen uten skatt underveis."}}]}</script>
   <link rel="preload" href="/assets/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin/>
   <link rel="stylesheet" href="/assets/tailwind.css"/>
   <link rel="stylesheet" href="/assets/style.css"/>
@@ -108,6 +108,7 @@
     .breadcrumb span { margin: 0 0.35rem; }
     h1 { font-size: 1.75rem; font-weight: 700; margin-bottom: 0.25rem; }
     .sub { font-size: 0.95rem; margin-bottom: 1.5rem; }
+    .ingress { font-size: 1rem; line-height: 1.6; margin: -0.75rem 0 1.25rem; color: #374151; max-width: 46rem; }
     .badge { display: inline-block; font-size: 0.75rem; font-weight: 600; padding: 0.2rem 0.6rem;
               border-radius: 9999px; margin-bottom: 1.25rem; }
     /* Kurshodet: kurs, 52-ukers spenn og tre nøkkeltall, nøytrale farger. */
@@ -185,12 +186,31 @@
     .dark .vurdering-seksjon { background: #0f172a; border-color: #1e293b; }
     .dark .vurdering-tekst { color: #cbd5e1; }
     /* Betingede seksjoner — vises bare på sider der de har noe å si. */
-    .rekke-seksjon, .nedtur-seksjon, .utbetalingsaar-seksjon, .delaar-seksjon, .betalt-seksjon { margin: 1.5rem 0; padding: 1.1rem 1.25rem; background: #f8fafc; border-radius: 0.75rem; border: 1px solid #e2e8f0; }
-    .rekke-seksjon h2, .nedtur-seksjon h2, .utbetalingsaar-seksjon h2, .delaar-seksjon h2, .betalt-seksjon h2 { font-size: 1rem; font-weight: 700; margin-bottom: 0.6rem; }
-    .rekke-seksjon p, .nedtur-seksjon p, .utbetalingsaar-seksjon p, .delaar-seksjon p, .betalt-seksjon p { font-size: 0.9rem; line-height: 1.75; color: #374151; margin: 0 0 0.6rem; }
+    .rekke-seksjon, .nedtur-seksjon, .utbetalingsaar-seksjon, .delaar-seksjon, .betalt-seksjon, .rapport-seksjon { margin: 1.5rem 0; padding: 1.1rem 1.25rem; background: #f8fafc; border-radius: 0.75rem; border: 1px solid #e2e8f0; }
+    .rekke-seksjon h2, .nedtur-seksjon h2, .utbetalingsaar-seksjon h2, .delaar-seksjon h2, .betalt-seksjon h2, .rapport-seksjon h2 { font-size: 1rem; font-weight: 700; margin-bottom: 0.6rem; }
+    .rekke-seksjon p, .nedtur-seksjon p, .utbetalingsaar-seksjon p, .delaar-seksjon p, .betalt-seksjon p, .rapport-seksjon p { font-size: 0.9rem; line-height: 1.75; color: #374151; margin: 0 0 0.6rem; }
     .rekke-seksjon p:last-child, .nedtur-seksjon p:last-child, .utbetalingsaar-seksjon p:last-child, .delaar-seksjon p:last-child { margin-bottom: 0; }
-    .dark .rekke-seksjon, .dark .nedtur-seksjon, .dark .utbetalingsaar-seksjon, .dark .delaar-seksjon, .dark .betalt-seksjon { background: #0f172a; border-color: #1e293b; }
-    .dark .rekke-seksjon p, .dark .nedtur-seksjon p, .dark .utbetalingsaar-seksjon p, .dark .delaar-seksjon p, .dark .betalt-seksjon p { color: #cbd5e1; }
+    .dark .rekke-seksjon, .dark .nedtur-seksjon, .dark .utbetalingsaar-seksjon, .dark .delaar-seksjon, .dark .betalt-seksjon, .dark .rapport-seksjon { background: #0f172a; border-color: #1e293b; }
+    .dark .rekke-seksjon p, .dark .nedtur-seksjon p, .dark .utbetalingsaar-seksjon p, .dark .delaar-seksjon p, .dark .betalt-seksjon p, .dark .rapport-seksjon p { color: #cbd5e1; }
+    .rapport-seksjon .rapport-meta { font-size: 0.78rem; color: #6b7280; margin-top: -0.4rem; }
+    .rapport-seksjon .tabell-ramme { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 0.25rem 0 0.75rem; }
+    .rapport-seksjon table.rapport-tall { display: table; margin: 0; font-size: 0.85rem; border: 0; background: transparent; }
+    .rapport-tall th { background: transparent !important; text-align: right; padding: 0.35rem 0.6rem; white-space: nowrap; }
+    .rapport-tall td { text-align: right; padding: 0.4rem 0.6rem; white-space: nowrap; font-variant-numeric: tabular-nums; }
+    .rapport-tall td:first-child, .rapport-tall th:first-child { text-align: left; white-space: normal; padding-left: 0; }
+    .rapport-seksjon .rapport-lenke { margin-bottom: 0; font-weight: 600; }
+    @media (max-width: 30rem) {
+      .rapport-seksjon table.rapport-tall, .rapport-seksjon .rapport-tall tbody { display: block; }
+      .rapport-seksjon .rapport-tall thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
+      .rapport-seksjon .rapport-tall tr { display: grid; grid-template-columns: 1fr 1fr; column-gap: 0.75rem; padding: 0.45rem 0; border-bottom: 1px solid #e2e8f0; }
+      .rapport-seksjon .rapport-tall td { display: block; border: 0; padding: 0; text-align: left; white-space: normal; background: transparent; }
+      .rapport-seksjon .rapport-tall td:first-child { grid-column: 1 / -1; font-weight: 600; font-size: 0.82rem; }
+      .rapport-seksjon .rapport-tall td[data-p]::before { content: attr(data-p); display: block; font-size: 0.66rem; color: #6b7280; text-transform: uppercase; letter-spacing: 0.03em; }
+      .dark .rapport-seksjon .rapport-tall tr { border-color: #1e293b; }
+      .dark .rapport-seksjon .rapport-tall td[data-p]::before { color: #94a3b8; }
+    }
+    .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
+    .dark .rapport-seksjon .rapport-meta { color: #94a3b8; }
     .rekke-seksjon { border-left: 3px solid #3f8a63; }
     .nedtur-seksjon { border-left: 3px solid #b98a3a; }
     .delaar-seksjon { border-left: 3px solid #b98a3a; }
@@ -340,6 +360,7 @@
     .dark .breadcrumb { color: #9ca3af; }
     .dark .breadcrumb a { color: #9ca3af; }
     .dark .sub { color: #9ca3af; }
+    .dark .ingress { color: #d1d5db; }
     .dark .badge { background: #1b3f2f; color: #9cc2ad; }
     .dark a { color: #6fa98a; }
     .dark .cta a { background: #275f45; color: #fff !important; }
@@ -433,10 +454,11 @@
     BNOR
   </div>
 
-  <h1>BNOR – BlueNord ASA</h1>
-  <p class="sub">Energi · Kvartalsvis utbytte · Oslo Børs</p>
+  <h1>BlueNord utbytte 2026</h1>
+  <p class="sub">BlueNord ASA (BNOR) · Energi · Kvartalsvis utbytte · Oslo Børs</p>
+  
 
-  <div class="kurshode"><div class="kh-topp"><div><div class="kh-pris">521,00<span class="kh-valuta">NOK</span></div><div class="kh-meta">Kurs 20. nov 2026</div></div><div class="kh-spenn" aria-label="52 ukers spenn fra 399,50 til 638,00"><span class="kh-spenn-tekst">52 uker</span><span class="kh-spenn-tall">399,50</span><span class="kh-spenn-linje"><span class="kh-spenn-punkt" style="left:50.9%"></span></span><span class="kh-spenn-tall">638,00</span></div></div><dl class="kh-tall"><div><dt>Yield</dt><dd>34,66 %</dd></div><div><dt>Utbytte/aksje</dt><dd>180,58 NOK</dd><span class="kh-note"><span class="kcard-note">annualisert</span></span></div><div><dt>Ex-dato</dt><dd><span class="kh-ukjent">Ikke kjent</span></dd></div></dl></div>
+  <div class="kurshode"><div class="kh-topp"><div><div class="kh-pris">521,00<span class="kh-valuta">NOK</span></div><div class="kh-meta">Kurs 20. nov 2026</div></div><div class="kh-spenn" aria-label="52 ukers spenn fra 399,50 til 638,00"><span class="kh-spenn-tekst">52 uker</span><span class="kh-spenn-tall">399,50</span><span class="kh-spenn-linje"><span class="kh-spenn-punkt" style="left:50.9%"></span></span><span class="kh-spenn-tall">638,00</span></div></div><dl class="kh-tall"><div><dt>Yield</dt><dd>34,66 %</dd></div><div><dt>Utbytte/aksje</dt><dd>180,58 NOK</dd><span class="kh-note"><span class="kcard-note">siste fire utbetalinger</span></span></div><div><dt>Ex-dato</dt><dd><span class="kh-ukjent">Ikke kjent</span></dd></div></dl></div>
   <p class="kurs-varsel" id="kurs-varsel" data-kursdag="2026-11-20" data-fridager="2026-12-24,2026-12-25,2026-12-26,2026-12-31,2027-01-01,2027-03-25,2027-03-26,2027-03-29,2027-05-01,2027-05-06,2027-05-17,2027-12-24,2027-12-25,2027-12-26,2027-12-31" role="status" hidden></p><script src="/assets/kursferskhet.js" defer></script>
 
   <nav class="ak-tabnav" id="ak-tabnav" aria-label="Sideseksjoner">
@@ -527,9 +549,11 @@
 
   <div class="delaar-seksjon hendelse-seksjon"><h2>Selskapet skal slås sammen med et annet</h2><p>BlueNord skal fusjoneres inn i et datterselskap av Vår Energi, og generalforsamlingen godkjente fusjonsplanen 24. august 2026. For hver aksje i BlueNord får aksjonærene 9,7153 aksjer i Vår Energi og 76,83 kroner kontant. Selskapet har sagt at det ikke vil vedta flere utbytter før fusjonen er gjennomført, så utbyttet siste tolv måneder sier ikke noe om hva som kommer. Gjennomføringen avhenger fortsatt av vilkårene i fusjonsplanen.</p><p class="hendelse-kilde">Kilde: meldt 24. aug 2026, <a href="https://newsweb.oslobors.no/message/680568" target="_blank" rel="noopener">børsmeldingen</a>.</p></div>
 
-  <div class="betalt-seksjon"><h2>Faktisk betalt utbytte</h2><table class="betalt-tabell"><thead><tr><th>Periode</th><th>Per aksje/år</th><th>Yield</th></tr></thead><tbody><tr><td>Siste 12 mnd</td><td>180,58 kr</td><td>34,66 %</td></tr><tr><td>2025</td><td>54,24 kr</td><td>10,41 %</td></tr></tbody></table><p class="betalt-fotnote">Summert etter ex-dato, inkludert eventuelle ekstraordinære utbytter. Yield regnet mot dagens kurs. Utbytte i vår historikk fra 2025.</p></div>
+  <div class="betalt-seksjon"><h2>Faktisk betalt utbytte</h2><table class="betalt-tabell"><thead><tr><th>Periode</th><th>Per aksje/år</th><th>Yield</th></tr></thead><tbody><tr><td>Siste 12 mnd</td><td>145,83 kr</td><td>27,99 %</td></tr><tr><td>2025</td><td>54,24 kr</td><td>10,41 %</td></tr></tbody></table><p class="betalt-fotnote">Summert etter ex-dato, inkludert eventuelle ekstraordinære utbytter. Yield regnet mot dagens kurs. Utbytte i vår historikk fra 2025.</p></div>
 
   <div class="desc"><h2>Om selskapet</h2><p>BlueNord het Norwegian Energy Company, eller Noreco, fram til 2023. Selskapet ble det det er i dag i 2019, da det kjøpte Shells danske olje- og gasselskap. Med det fulgte en andel i Dansk Undergrunds Consortium, som produserer fra knutepunktene Tyra, Halfdan, Dan og Gorm i den danske delen av Nordsjøen. TotalEnergies er operatør, så BlueNord har ingen egen drift på feltene. Selskapet er en finansiell partner som tar sin del av inntekter og kostnader.</p><p>Det som har styrt utbyttet, er Tyra. Gassanlegget der ble bygget om i et prosjekt som gikk over flere år, og mens det pågikk, gikk investeringene foran utdelingene. I mars 2024 gikk gassen fra den nye Tyra-plattformen igjen i land på Nybro i Danmark. Først da ble det rom for å dele ut penger, og BlueNord la en utdelingsplan for 2024–2026 der en andel av kontantstrømmen fra driften, innenfor et fastsatt spenn, skulle gå til aksjonærene hvert kvartal. Utbyttet ble vedtatt i dollar. Med Tyra i drift igjen er en stor del av produksjonen gass, så europeiske gasspriser betyr mye for inntektene.</p><p>I juli 2026 ble BlueNord og Vår Energi enige om å slå selskapene sammen, og en ekstraordinær generalforsamling godkjente fusjonsplanen i august. Aksjonærene i BlueNord får nye aksjer i Vår Energi pluss et kontantbeløp for hver aksje. BlueNord har sagt at det ikke vedtar flere utbytter før fusjonen er gjennomført, og selskapene regnet med å fullføre rundt årsskiftet 2026/2027, etter at myndigheter og lisenspartnere har godkjent. Etter det er det Vår Energis utbyttepolitikk som gjelder for de tidligere BlueNord-aksjonærene.</p></div>
+
+  
 
   <div class="investor-profil-seksjon"><div class="investor-badges-rad"><span class="investor-badge investor-risiko-hoy">Høy risiko</span></div><div class="investor-forklaring risiko-hoy"><div class="investor-forklaring-tittel"><span class="investor-badge investor-risiko-hoy">Høy risiko</span></div><ul class="investor-forklaring-liste"><li>Syklisk sektor (Energi) — utbytte svinger med konjunkturer</li><li>Kort utbyttehistorikk (2 år) — begrenset dokumentasjon</li><li>Svært høy yield (34,7 %) — kan indikere markedsskepsis til bærekraft</li></ul></div></div>
 
@@ -584,7 +608,7 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
   <!-- ── FAQ ── -->
   <section id="faq">
   <div class="faq"><h2>Vanlige spørsmål om BNOR</h2><div class="faq-item"><details><summary class="faq-q">Betaler BlueNord ASA utbytte hvert år, og hvor ofte?</summary><div class="faq-svar">BlueNord ASA betaler utbytte fire ganger i året (kvartalsvis). Selskapet har betalt utbytte de siste 2 årene.</div></details></div>
-<div class="faq-item"><details><summary class="faq-q">Hva er direkteavkastningen (yield) til BNOR?</summary><div class="faq-svar">Direkteavkastningen (yield) for BNOR er 34,66 %, beregnet som 180,58 NOK i annualisert utbytte per aksje delt på aksjekursen.  Yield endres daglig fordi den er koblet til kursen: stiger kursen, faller yielden.</div></details></div>
+<div class="faq-item"><details><summary class="faq-q">Hva er direkteavkastningen (yield) til BNOR?</summary><div class="faq-svar">Direkteavkastningen (yield) for BNOR er 34,66 %, beregnet som 180,58 NOK i utbytte fra de fire siste utbetalingene per aksje delt på aksjekursen.  Yield endres daglig fordi den er koblet til kursen: stiger kursen, faller yielden.</div></details></div>
 <div class="faq-item"><details><summary class="faq-q">Hva er skatten på utbytte fra BNOR?</summary><div class="faq-svar">Utbytte fra BlueNord ASA beskattes med 37,84 % av det som overstiger skjermingsfradraget, for personlige aksjonærer som eier aksjen på vanlig konto. Med en yield på 34,66 % gir det en nettoyield på ca. 21,54 % etter skatt, før skjermingsfradraget. Eier du aksjen via aksjesparekonto (ASK), utsettes skatten til du tar ut midler, og utbyttet kan reinvesteres innen kontoen uten skatt underveis.</div></details></div>
 </div>
   </section>
@@ -609,7 +633,7 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
     <a href="https://exday.no/app/?aksje=BNOR">Åpne BNOR i exday.no →</a>
   </div>
 
-  <p class="updated">Tallene er hentet 20. november 2026</p>
+  <p class="updated">Tallene er hentet 21. november 2026</p>
   <footer style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid #e5e7eb;font-size:0.78rem;text-align:center;color:#9ca3af;line-height:1.6;" class="std-footer">
     <p>Kurs og utbyttedata hentes fra Yahoo Finance og Euronext. Oppdateres daglig på børsdager.</p>
     <p style="max-width:36rem;margin:0.4rem auto;">

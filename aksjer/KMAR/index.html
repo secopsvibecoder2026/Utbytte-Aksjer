@@ -109,6 +109,7 @@
     .breadcrumb span { margin: 0 0.35rem; }
     h1 { font-size: 1.75rem; font-weight: 700; margin-bottom: 0.25rem; }
     .sub { font-size: 0.95rem; margin-bottom: 1.5rem; }
+    .ingress { font-size: 1rem; line-height: 1.6; margin: -0.75rem 0 1.25rem; color: #374151; max-width: 46rem; }
     .badge { display: inline-block; font-size: 0.75rem; font-weight: 600; padding: 0.2rem 0.6rem;
               border-radius: 9999px; margin-bottom: 1.25rem; }
     /* Kurshodet: kurs, 52-ukers spenn og tre nøkkeltall, nøytrale farger. */
@@ -186,12 +187,31 @@
     .dark .vurdering-seksjon { background: #0f172a; border-color: #1e293b; }
     .dark .vurdering-tekst { color: #cbd5e1; }
     /* Betingede seksjoner — vises bare på sider der de har noe å si. */
-    .rekke-seksjon, .nedtur-seksjon, .utbetalingsaar-seksjon, .delaar-seksjon, .betalt-seksjon { margin: 1.5rem 0; padding: 1.1rem 1.25rem; background: #f8fafc; border-radius: 0.75rem; border: 1px solid #e2e8f0; }
-    .rekke-seksjon h2, .nedtur-seksjon h2, .utbetalingsaar-seksjon h2, .delaar-seksjon h2, .betalt-seksjon h2 { font-size: 1rem; font-weight: 700; margin-bottom: 0.6rem; }
-    .rekke-seksjon p, .nedtur-seksjon p, .utbetalingsaar-seksjon p, .delaar-seksjon p, .betalt-seksjon p { font-size: 0.9rem; line-height: 1.75; color: #374151; margin: 0 0 0.6rem; }
+    .rekke-seksjon, .nedtur-seksjon, .utbetalingsaar-seksjon, .delaar-seksjon, .betalt-seksjon, .rapport-seksjon { margin: 1.5rem 0; padding: 1.1rem 1.25rem; background: #f8fafc; border-radius: 0.75rem; border: 1px solid #e2e8f0; }
+    .rekke-seksjon h2, .nedtur-seksjon h2, .utbetalingsaar-seksjon h2, .delaar-seksjon h2, .betalt-seksjon h2, .rapport-seksjon h2 { font-size: 1rem; font-weight: 700; margin-bottom: 0.6rem; }
+    .rekke-seksjon p, .nedtur-seksjon p, .utbetalingsaar-seksjon p, .delaar-seksjon p, .betalt-seksjon p, .rapport-seksjon p { font-size: 0.9rem; line-height: 1.75; color: #374151; margin: 0 0 0.6rem; }
     .rekke-seksjon p:last-child, .nedtur-seksjon p:last-child, .utbetalingsaar-seksjon p:last-child, .delaar-seksjon p:last-child { margin-bottom: 0; }
-    .dark .rekke-seksjon, .dark .nedtur-seksjon, .dark .utbetalingsaar-seksjon, .dark .delaar-seksjon, .dark .betalt-seksjon { background: #0f172a; border-color: #1e293b; }
-    .dark .rekke-seksjon p, .dark .nedtur-seksjon p, .dark .utbetalingsaar-seksjon p, .dark .delaar-seksjon p, .dark .betalt-seksjon p { color: #cbd5e1; }
+    .dark .rekke-seksjon, .dark .nedtur-seksjon, .dark .utbetalingsaar-seksjon, .dark .delaar-seksjon, .dark .betalt-seksjon, .dark .rapport-seksjon { background: #0f172a; border-color: #1e293b; }
+    .dark .rekke-seksjon p, .dark .nedtur-seksjon p, .dark .utbetalingsaar-seksjon p, .dark .delaar-seksjon p, .dark .betalt-seksjon p, .dark .rapport-seksjon p { color: #cbd5e1; }
+    .rapport-seksjon .rapport-meta { font-size: 0.78rem; color: #6b7280; margin-top: -0.4rem; }
+    .rapport-seksjon .tabell-ramme { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 0.25rem 0 0.75rem; }
+    .rapport-seksjon table.rapport-tall { display: table; margin: 0; font-size: 0.85rem; border: 0; background: transparent; }
+    .rapport-tall th { background: transparent !important; text-align: right; padding: 0.35rem 0.6rem; white-space: nowrap; }
+    .rapport-tall td { text-align: right; padding: 0.4rem 0.6rem; white-space: nowrap; font-variant-numeric: tabular-nums; }
+    .rapport-tall td:first-child, .rapport-tall th:first-child { text-align: left; white-space: normal; padding-left: 0; }
+    .rapport-seksjon .rapport-lenke { margin-bottom: 0; font-weight: 600; }
+    @media (max-width: 30rem) {
+      .rapport-seksjon table.rapport-tall, .rapport-seksjon .rapport-tall tbody { display: block; }
+      .rapport-seksjon .rapport-tall thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
+      .rapport-seksjon .rapport-tall tr { display: grid; grid-template-columns: 1fr 1fr; column-gap: 0.75rem; padding: 0.45rem 0; border-bottom: 1px solid #e2e8f0; }
+      .rapport-seksjon .rapport-tall td { display: block; border: 0; padding: 0; text-align: left; white-space: normal; background: transparent; }
+      .rapport-seksjon .rapport-tall td:first-child { grid-column: 1 / -1; font-weight: 600; font-size: 0.82rem; }
+      .rapport-seksjon .rapport-tall td[data-p]::before { content: attr(data-p); display: block; font-size: 0.66rem; color: #6b7280; text-transform: uppercase; letter-spacing: 0.03em; }
+      .dark .rapport-seksjon .rapport-tall tr { border-color: #1e293b; }
+      .dark .rapport-seksjon .rapport-tall td[data-p]::before { color: #94a3b8; }
+    }
+    .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
+    .dark .rapport-seksjon .rapport-meta { color: #94a3b8; }
     .rekke-seksjon { border-left: 3px solid #3f8a63; }
     .nedtur-seksjon { border-left: 3px solid #b98a3a; }
     .delaar-seksjon { border-left: 3px solid #b98a3a; }
@@ -341,6 +361,7 @@
     .dark .breadcrumb { color: #9ca3af; }
     .dark .breadcrumb a { color: #9ca3af; }
     .dark .sub { color: #9ca3af; }
+    .dark .ingress { color: #d1d5db; }
     .dark .badge { background: #1b3f2f; color: #9cc2ad; }
     .dark a { color: #6fa98a; }
     .dark .cta a { background: #275f45; color: #fff !important; }
@@ -434,8 +455,9 @@
     KMAR
   </div>
 
-  <h1>KMAR – Kongsberg Maritime ASA</h1>
-  <p class="sub">Industri · Uregelmessig utbytte · Oslo Børs</p>
+  <h1>Kongsberg Maritime utbytte 2026</h1>
+  <p class="sub">Kongsberg Maritime ASA (KMAR) · Industri · Uregelmessig utbytte · Oslo Børs</p>
+  
 
   <div class="kurshode"><div class="kh-topp"><div><div class="kh-pris">55,44<span class="kh-valuta">NOK</span></div><div class="kh-meta">Kurs 20. nov 2026</div></div><div class="kh-spenn" aria-label="52 ukers spenn fra 48,40 til 70,18"><span class="kh-spenn-tekst">52 uker</span><span class="kh-spenn-tall">48,40</span><span class="kh-spenn-linje"><span class="kh-spenn-punkt" style="left:32.3%"></span></span><span class="kh-spenn-tall">70,18</span></div></div><dl class="kh-tall"><div><dt>Yield</dt><dd>—</dd></div><div><dt>Utbytte/aksje</dt><dd>0,00 NOK</dd></div><div><dt>Ex-dato</dt><dd><span class="kh-ukjent">Ikke kjent</span></dd></div></dl></div>
   <p class="kurs-varsel" id="kurs-varsel" data-kursdag="2026-11-20" data-fridager="2026-12-24,2026-12-25,2026-12-26,2026-12-31,2027-01-01,2027-03-25,2027-03-26,2027-03-29,2027-05-01,2027-05-06,2027-05-17,2027-12-24,2027-12-25,2027-12-26,2027-12-31" role="status" hidden></p><script src="/assets/kursferskhet.js" defer></script>
@@ -532,6 +554,8 @@
 
   <div class="desc"><h2>Om selskapet</h2><p>Dynamisk posisjonering, systemet som holder et skip på samme punkt uten anker, er ett av mange produkter fra Kongsberg Maritime. Selskapet lager teknologi som går om bord i skip, og er delt i to forretningsområder. Energy & Control leverer elektriske kraftsystemer, automasjon, navigasjon og manøvrering, og tegner også hele fartøy. Propulsion & Handling lager thrustere, propeller, vannjetter, vinsjer og annet dekksutstyr. Kundene er verft og rederier innen offshore energi, gasskip, lasteskip, slepebåter, passasjerskip og marinefartøy. I oktober 2026 overtok selskapet svenske Berg Propulsion, som står sterkt på framdrift for stykkgodsskip og produkttankere.</p><p>Inntektene kommer fra to kilder som oppfører seg ulikt. Leveranser til nybygg følger kontraheringen ved verftene, og det meste av ordrereserven er knyttet til skip som ennå ikke er levert. Ettermarkedet, altså service, reservedeler og oppgraderinger på utstyr som allerede seiler, henger på en installert base i titusenvis av skip og svinger mindre. Større oppgraderinger kan likevel bli utsatt når rederiene holder igjen.</p><p>Kongsberg Maritime var et forretningsområde i Kongsberg Gruppen til det ble skilt ut og tatt opp til handel 23. april 2026. Aksjonærene fikk én aksje i det nye selskapet for hver aksje de hadde i morselskapet, så eierlisten startet lik, med staten som største eier. Utbyttepolitikken er et årlig utbytte målt som en andel av resultatet etter skatt, der tilleggsutbytte eller tilbakekjøp kan komme i gode år. Pengene skal også dekke oppkjøp, og selskapet har som mål å beholde en kredittvurdering i investment grade. Utbytter fra før utskillelsen gikk til aksjonærene i Kongsberg Gruppen, så historikken som eget selskap begynner i 2026.</p></div>
 
+  
+
   <div class="investor-profil-seksjon"><div class="investor-badges-rad"><span class="investor-badge investor-risiko-hoy">Høy risiko</span></div><div class="investor-forklaring risiko-hoy"><div class="investor-forklaring-tittel"><span class="investor-badge investor-risiko-hoy">Høy risiko</span></div><ul class="investor-forklaring-liste"><li>Syklisk sektor (Industri) — utbytte svinger med konjunkturer</li><li>Ingen registrert utbyttehistorikk</li></ul></div></div>
 
   
@@ -594,7 +618,7 @@
     <a href="https://exday.no/app/?aksje=KMAR">Åpne KMAR i exday.no →</a>
   </div>
 
-  <p class="updated">Tallene er hentet 20. november 2026</p>
+  <p class="updated">Tallene er hentet 21. november 2026</p>
   <footer style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid #e5e7eb;font-size:0.78rem;text-align:center;color:#9ca3af;line-height:1.6;" class="std-footer">
     <p>Kurs og utbyttedata hentes fra Yahoo Finance og Euronext. Oppdateres daglig på børsdager.</p>
     <p style="max-width:36rem;margin:0.4rem auto;">

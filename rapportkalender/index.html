@@ -92,6 +92,10 @@
     .cta a { display:inline-block; background:#2f7352; color:#fff !important; font-weight:600; padding:0.65rem 1.5rem; border-radius:0.5rem; margin-top:0.5rem; text-decoration:none; }
     .cta a:hover { background:#275f45; }
     .updated { font-size:0.78rem; text-align:right; margin-top:1rem; color:#9ca3af; }
+    .nylig { list-style:none; padding:0; margin:0 0 1rem; border:1px solid #e5e7eb; background:#fff; border-radius:0.6rem; }
+    .nylig li { padding:0.5rem 0.75rem; border-top:1px solid #f3f4f6; font-size:0.9rem; }
+    .nylig li:first-child { border-top:0; }
+    .nylig .dag { display:inline-block; min-width:6.5rem; color:#6b7280; font-size:0.82rem; }
     a { color:#2f7352; }
     /* På smal skjerm må yield-kolonnen få plass uten at leseren må dra
        tabellen sidelengs — selskapsnavnet kappes i stedet. */
@@ -117,6 +121,9 @@
     .dark details p { color:#9ca3af; }
     .dark .cta { background:#0f251b; border-color:#214d39; }
     .dark .cta a { background:#2f7352; }
+    .dark .nylig { background:#111827; border-color:#1f2937; }
+    .dark .nylig li { border-color:#1f2937; }
+    .dark .nylig .dag { color:#9ca3af; }
 </style>
 </head>
 <body>
@@ -216,7 +223,7 @@
     </p>
     <p>
       Forskjellen i dekning viser det tydelig: 128 selskaper i
-      oversikten betaler utbytte, men bare 14 har en bekreftet
+      oversikten betaler utbytte, men bare 11 har en bekreftet
       ex-dato akkurat nå. Resten venter på nettopp rapporten under. Vil du vite
       når neste utbytte sannsynligvis blir kjent, er det denne siden du skal
       følge — ikke <a href="/utbyttekalender/">utbyttekalenderen</a>.
@@ -232,6 +239,7 @@
       er det raskeste målet på hvor nær den grensen et selskap ligger.
     </p>
   </div>
+<section id="nylig-framlagt"><h2>Nylig framlagt, med oppsummering</h2><p class="sub">Resultatet, nøkkeltallene og utbyttet fra rapporten, skrevet ut fra selskapets egen børsmelding.</p><ul class="nylig"><li><span class="dag">28. okt 2026</span> <a href="/aksjer/EQNR/rapporter/#2026-q3">Equinor: 3. kvartal 2026</a></li><li><span class="dag">21. okt 2026</span> <a href="/aksjer/DNB/rapporter/#2026-q3">DNB Bank: 3. kvartal 2026</a></li><li><span class="dag">21. okt 2026</span> <a href="/aksjer/VAR/rapporter/#2026-q3">Vår Energi: 3. kvartal 2026</a></li></ul></section>
 
   <section id="mnd-2026-11">
     <h2>November 2026 <span class="antall">11 rapporter</span></h2>
@@ -252,7 +260,7 @@
           <td class="ticker"><a href="/aksjer/BWLPG/">BWLPG</a></td>
           <td class="selskap">BW LPG Limited</td>
           <td class="skjul-smal">Shipping</td>
-          <td class="metric">11,72 %</td>
+          <td class="metric">11,71 %</td>
           <td class="skjul-smal">—</td>
         </tr>
         <tr>
@@ -416,7 +424,7 @@
           <td class="ticker"><a href="/aksjer/EQNR/">EQNR</a></td>
           <td class="selskap">Equinor ASA</td>
           <td class="skjul-smal">Energi</td>
-          <td class="metric">3,95 %</td>
+          <td class="metric">3,98 %</td>
           <td class="skjul-smal">15. feb 2027</td>
         </tr>
         <tr>
@@ -448,7 +456,7 @@
           <td class="ticker"><a href="/aksjer/SNI/">SNI</a></td>
           <td class="selskap">Stolt-Nielsen Limited</td>
           <td class="skjul-smal">Shipping</td>
-          <td class="metric">5,71 %</td>
+          <td class="metric">6,03 %</td>
           <td class="skjul-smal">—</td>
         </tr>
         <tr>
@@ -552,8 +560,8 @@
           <td class="ticker"><a href="/aksjer/HSHP/">HSHP</a></td>
           <td class="selskap">Himalaya Shipping Ltd.</td>
           <td class="skjul-smal">Shipping</td>
-          <td class="metric">13,25 %</td>
-          <td class="skjul-smal">20. nov 2026</td>
+          <td class="metric">13,24 %</td>
+          <td class="skjul-smal">—</td>
         </tr>
         <tr>
           <td class="dag">10. feb</td>
@@ -992,8 +1000,8 @@
           <td class="ticker"><a href="/aksjer/DOF/">DOF</a></td>
           <td class="selskap">DOF Group ASA</td>
           <td class="skjul-smal">Energitjenester</td>
-          <td class="metric">11,47 %</td>
-          <td class="skjul-smal">20. nov 2026</td>
+          <td class="metric">11,45 %</td>
+          <td class="skjul-smal">—</td>
         </tr>
         <tr>
           <td class="dag">18. feb</td>
@@ -1040,7 +1048,7 @@
           <td class="ticker"><a href="/aksjer/KCC/">KCC</a></td>
           <td class="selskap">Klaveness Combination Carriers ASA</td>
           <td class="skjul-smal">Shipping</td>
-          <td class="metric">8,92 %</td>
+          <td class="metric">8,91 %</td>
           <td class="skjul-smal">—</td>
         </tr>
         <tr>
@@ -1136,7 +1144,7 @@
           <td class="ticker"><a href="/aksjer/FRO/">FRO</a></td>
           <td class="selskap">Frontline PLC</td>
           <td class="skjul-smal">Shipping</td>
-          <td class="metric">11,86 %</td>
+          <td class="metric">11,85 %</td>
           <td class="skjul-smal">8. des 2026</td>
         </tr>
         <tr>
@@ -1224,7 +1232,7 @@
     <p>Se yield, utbyttehistorikk og nøkkeltall for hver aksje</p>
     <a href="https://exday.no/">Åpne exday.no →</a>
   </div>
-  <p class="updated">Tallene er hentet 20. november 2026</p>
+  <p class="updated">Tallene er hentet 21. november 2026</p>
   <footer style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid #e5e7eb;font-size:0.78rem;text-align:center;color:#9ca3af;line-height:1.6;" class="std-footer">
     <p>Kurs og utbyttedata hentes fra Yahoo Finance og Euronext. Oppdateres daglig på børsdager.</p>
     <p style="max-width:36rem;margin:0.4rem auto;">
