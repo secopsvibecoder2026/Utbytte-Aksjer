@@ -1717,6 +1717,31 @@ class TestBetaltSomArsrate(unittest.TestCase):
         a = self._yara(frekvens="Uregelmessig", utbytte_12m=0.0, utbytte_12m_antall=0)
         self.assertFalse(fs.betalt_kan_bli_arsrate(a, self.I_DAG))
 
+    def test_engangsutbytte_som_skjuler_kutt(self):
+        # KOG etter 23.11.2026: én utbetaling på 5,70 (2,20 ordinært + 3,50
+        # særutbytte, 665028) mot vist 4,40. Summen avviker 29,5 %, så den
+        # gamle porten spurte aldri NewsWeb.
+        kog = self._yara(ticker="KOG", pris=326.7, utbytte_per_aksje=4.4, utbytte_yield=1.35,
+                         utbytte_12m=5.7, utbytte_12m_antall=1,
+                         utbytte_12m_liste=[{"ex_dato": "2026-04-14", "belop": 5.7}],
+                         utbytte_per_ar={"2023": 2.4, "2024": 2.8, "2025": 4.4})
+        i_dag = datetime.date(2026, 11, 24)
+        self.assertFalse(fs.betalt_kan_bli_arsrate(kog, i_dag))
+        self.assertTrue(fs.betalt_kan_bli_arsrate(kog, i_dag, min_avvik=0))
+        self.assertTrue(fs.stor_enkeltutbetaling(kog))
+        # Uten særutbyttet slår regelen inn.
+        uten = dict(kog, utbytte_12m=2.2)
+        self.assertTrue(fs.betalt_kan_bli_arsrate(uten, i_dag))
+
+    def test_jevne_utbetalinger_er_ikke_store(self):
+        # Fire like kvartaler, og en årlig betaler som betalte omtrent raten.
+        kv = {"frekvens": "Kvartalsvis", "utbytte_per_aksje": 4.0,
+              "utbytte_12m_liste": [{"belop": 1.0}] * 3 + [{"belop": 1.2}]}
+        self.assertFalse(fs.stor_enkeltutbetaling(kv))
+        self.assertFalse(fs.stor_enkeltutbetaling(
+            {"frekvens": "Årlig", "utbytte_per_aksje": 5.0, "utbytte_12m_liste": [{"belop": 6.0}]}))
+        self.assertFalse(fs.stor_enkeltutbetaling({"frekvens": "Årlig", "utbytte_per_aksje": 0}))
+
     def test_lite_avvik_beholder_tallet(self):
         self.assertFalse(fs.betalt_kan_bli_arsrate(self._yara(utbytte_per_aksje=20.0), self.I_DAG))
 
