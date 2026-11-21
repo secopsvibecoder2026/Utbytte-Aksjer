@@ -719,7 +719,7 @@ def hent_kilde(ticker, melding_ider=None, sider=KILDE_SIDER):
         if not rapporter:
             raise SystemExit(f"Fant ingen rapportmelding for {ticker}. Oppgi --melding ID.")
         melding_ider = rapporter[0]["ider"]
-    deler, ider, pdf_tatt = [], [], False
+    deler, ider, pdf_tatt, publisert = [], [], False, ""
     hode = [f"# exday kilde", f"# ticker: {ticker}"]
     for mid in melding_ider:
         full = fs._newsweb_get(f"{api}/v1/newsreader/message?messageId={urllib.parse.quote(str(mid))}")
@@ -728,6 +728,7 @@ def hent_kilde(ticker, melding_ider=None, sider=KILDE_SIDER):
             raise SystemExit(f"Melding {mid} er fra {m.get('issuerSign')}, ikke {ticker}.")
         ider.append(str(mid))
         dato = (m.get("publishedTime") or "")[:10]
+        publisert = publisert or dato
         deler.append(f"=== MELDING {mid}: {m.get('title', '').strip()} ({dato}) ===\n\n"
                      f"{_html_til_tekst(m.get('body'))}")
         v = hovedvedlegg(m.get("attachments"))
@@ -740,6 +741,8 @@ def hent_kilde(ticker, melding_ider=None, sider=KILDE_SIDER):
             else:
                 hode.append(f"# vedlegg: {v.get('name')} kunne ikke leses: {feil}")
     hode.insert(2, f"# meldinger: {' '.join(ider)}")
+    if publisert:
+        hode.insert(3, f"# publisert: {publisert}")
     hode.append(f"# hentet: {datetime.date.today().isoformat()}")
     return "\n".join(hode) + "\n\n" + "\n\n".join(deler) + "\n", ider
 

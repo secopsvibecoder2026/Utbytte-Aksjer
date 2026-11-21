@@ -55,15 +55,19 @@ python scripts/kvartalsrapport.py --kilde DNB --ut "$SCRATCH/kilde_DNB.txt"
 `$SCRATCH` er scratchpad-katalogen din. Skriptet finner den nyeste
 rapportmeldingen, henter meldingsteksten og de første 15 sidene av
 PDF-rapporten, og skriver alt til én fil. Hodet i fila viser hvilke meldinger
-og hvilket vedlegg som er med.
+og hvilket vedlegg som er med, og datoen rapporten ble lagt fram
+(`# publisert:`).
 
 - **Sjekk at det er riktig melding.** Hodet sier tittelen og datoen. En
   «trading update» eller en invitasjon til presentasjonen er ikke rapporten.
 - **Har selskapet en norsk og en engelsk melding** (Equinor), ta begge:
   `--melding 684944 684945`. Den norske gir ofte bedre ord å skrive fra.
-- **Står ikke tallene for samme kvartal i fjor på de første sidene**, hent
-  flere: `--sider 25`. Vår Energi har nøkkeltallene for forrige kvartal
-  fremst og tallene for samme kvartal i fjor lenger bak.
+- **Sammenlign med samme kvartal i fjor.** Noen rapporter sammenligner med
+  forrige kvartal først (Vår Energis nøkkeltallsruter på side 3), og har
+  tallene for samme kvartal i fjor i tabellen like bak. Står de ikke på de
+  første 15 sidene, hent flere: `--sider 25`. Lagre likevel med den korteste
+  kildefila som har alle tallene du bruker: jo færre tall i kilden, jo
+  strengere er kontrollen.
 
 Les meldingen først. Den sier hva selskapet selv mener er viktigst. Les så
 nøkkeltallstabellen i rapporten.
@@ -100,7 +104,7 @@ Feltene:
 | Felt | Hva |
 |---|---|
 | `periode` | `ÅÅÅÅ-Q1` til `Q4`, `ÅÅÅÅ-H1`/`H2` for halvårsrapporter, `ÅÅÅÅ-AR` for en ren årsrapport. Fjerde kvartal, lagt fram i februar, er `ÅÅÅÅ-Q4` for året før |
-| `dato` | Dagen rapporten ble lagt fram, fra hodet i kildefila |
+| `dato` | Dagen rapporten ble lagt fram, fra linjen `# publisert:` i hodet |
 | `melding` | Id-en til meldingen du skrev fra (den første i hodet) |
 | `tittel` | Meldingens tittel, som den står |
 | `resultat` | 25–110 ord. Går det bra? Se under |
@@ -122,7 +126,9 @@ driften etter skatt»), ikke bruk forkortelsen alene.
 **Nøkkeltallene.** Ta de som betyr noe for den som eier aksjen for utbyttet.
 Skriv tallene slik kilden har dem, med enhet i cellen: «9 844 mill. kr»,
 «12,35 mrd. USD», «14,5 %». Begge tallene i en rad må komme fra samme rad i
-kildens tabell. Kontrollen sjekker det.
+kildens tabell. Kontrollen sjekker det. Hold radnavnene korte, to til fire
+ord («Resultat etter skatt», «Produksjon per dag»). På mobil stables raden
+med navnet over tallene, så et langt navn tar mye plass.
 
 **Utbyttet.** Beløp per aksje og valuta, og om det er vedtatt av styret eller
 foreslått for generalforsamlingen. Ex-dato og utbetalingsdato bare når de
@@ -148,7 +154,8 @@ utropstegn, ingen «Les mer her!». Lenken legger brukeren til selv.
 ### 4. Tall og språk
 
 - **Norsk tallformat:** komma som desimaltegn, mellomrom som tusenskille:
-  «9,8», «1 849». Aldri «9.8».
+  «9,8», «1 849». Aldri «9.8». Skriv vanlige mellomrom. Siden setter inn
+  harde mellomrom selv, så «3,0» og «%» aldri havner på hver sin linje.
 - **Enheter:** «mill.» og «mrd.» i tabellen, «millioner» og «milliarder» i
   teksten. Du kan runde av millioner til milliarder («9 844 mill.» blir
   «9,8 milliarder»), ellers ingen omregning.
@@ -181,8 +188,11 @@ kilden. Ikke skriv tallet om til noe som tilfeldigvis står der.
 «sterk» og «svak». Sjekk at det er selskapets ord, og at teksten sier det.
 
 **Porten fanger ikke alt.** Et tall som er feil avskrevet, kan likevel stå et
-annet sted i kilden og slippe gjennom. Les derfor hvert tall i oppsummeringen
-mot kilden én gang til før du går videre.
+annet sted i kilden og slippe gjennom. Små heltall («1 %», «3 milliarder»)
+står på dusinvis av linjer i en rapport, så for dem beskytter porten nesten
+ikke. Rapporter i to spalter gir dessuten linjer der to ulike tabeller står
+side om side. Les derfor hvert tall i oppsummeringen mot kilden én gang til
+før du går videre, og noter linjen det står på.
 
 Rediger aldri `data/rapporter/*.json` for hånd. Da går du rundt porten.
 

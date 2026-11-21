@@ -7608,6 +7608,16 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None, rapporter=None
     .rapport-tall td {{ text-align: right; padding: 0.4rem 0.6rem; white-space: nowrap; font-variant-numeric: tabular-nums; }}
     .rapport-tall td:first-child, .rapport-tall th:first-child {{ text-align: left; white-space: normal; padding-left: 0; }}
     .rapport-seksjon .rapport-lenke {{ margin-bottom: 0; font-weight: 600; }}
+    @media (max-width: 30rem) {{
+      .rapport-seksjon table.rapport-tall, .rapport-seksjon .rapport-tall tbody {{ display: block; }}
+      .rapport-seksjon .rapport-tall thead {{ position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }}
+      .rapport-seksjon .rapport-tall tr {{ display: grid; grid-template-columns: 1fr 1fr; column-gap: 0.75rem; padding: 0.45rem 0; border-bottom: 1px solid #e2e8f0; }}
+      .rapport-seksjon .rapport-tall td {{ display: block; border: 0; padding: 0; text-align: left; white-space: normal; background: transparent; }}
+      .rapport-seksjon .rapport-tall td:first-child {{ grid-column: 1 / -1; font-weight: 600; font-size: 0.82rem; }}
+      .rapport-seksjon .rapport-tall td[data-p]::before {{ content: attr(data-p); display: block; font-size: 0.66rem; color: #6b7280; text-transform: uppercase; letter-spacing: 0.03em; }}
+      .dark .rapport-seksjon .rapport-tall tr {{ border-color: #1e293b; }}
+      .dark .rapport-seksjon .rapport-tall td[data-p]::before {{ color: #94a3b8; }}
+    }}
     .sr-only {{ position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }}
     .dark .rapport-seksjon .rapport-meta {{ color: #94a3b8; }}
     .rekke-seksjon {{ border-left: 3px solid #3f8a63; }}
@@ -10218,8 +10228,35 @@ def _rapport_side_ticker(ticker, alle):
     return a if a and alle.get(a) else None
 
 
+_TUSEN_MELLOMROM = re.compile(r"\b(\d{1,3})((?: \d{3})+)\b")
+_ENHET_MELLOMROM = re.compile(
+    r"(?<=\d) (?=%|(?:mill|mrd)\.|(?:millioner|milliarder|kroner|kr|USD|NOK|EUR|SEK|DKK|"
+    r"dollar|euro|tusen|prosent|prosentpoeng)\b)")
+
+
+def _hardt_mellomrom(tekst):
+    """«2 166 tusen» og «3,0 %» med hardt mellomrom, så tall og enhet ikke deles
+    på to linjer. Agenten skriver vanlige mellomrom; siden ordner resten.
+
+    Bare grupper som begynner med ett til tre sifre blir tusenskille, så
+    «2026 120 millioner» (årstall foran et tall) står urørt.
+    """
+    t = _TUSEN_MELLOMROM.sub(lambda m: m.group(1) + m.group(2).replace(" ", "\u00a0"), tekst or "")
+    return _ENHET_MELLOMROM.sub("\u00a0", t)
+
+
+def _rt(tekst):
+    """Tekst fra en oppsummering, klar for HTML: harde mellomrom, så escaping."""
+    return html.escape(_hardt_mellomrom(tekst))
+
+
 def _rapport_tall_tabell(r, maks_rader=None):
-    """Nøkkeltallene som tabell: navn, denne perioden og perioden den sammenlignes med."""
+    """Nøkkeltallene som tabell: navn, denne perioden og perioden den sammenlignes med.
+
+    På en smal skjerm stables raden: navnet over, de to tallene side om side
+    med perioden over hvert (data-p). To kolonner med «11,95 mrd. USD» fikk
+    ikke plass ved 390 px.
+    """
     import kvartalsrapport as kr
     rader = [x for x in (r.get("nokkeltall") or []) if isinstance(x, dict) and x.get("navn")]
     if maks_rader:
@@ -10231,8 +10268,8 @@ def _rapport_tall_tabell(r, maks_rader=None):
     har_forrige = any(x.get("forrige") for x in rader)
     hode = f"<th>{html.escape(naa)}</th>" + (f"<th>{html.escape(forrige)}</th>" if har_forrige else "")
     kropp = "".join(
-        f"<tr><td>{html.escape(x['navn'])}</td><td>{html.escape(x.get('naa') or '')}</td>"
-        + (f"<td>{html.escape(x.get('forrige') or '—')}</td>" if har_forrige else "")
+        f"<tr><td>{_rt(x['navn'])}</td><td data-p=\"{html.escape(naa)}\">{_rt(x.get('naa') or '')}</td>"
+        + (f"<td data-p=\"{html.escape(forrige)}\">{_rt(x.get('forrige') or '—')}</td>" if har_forrige else "")
         + "</tr>"
         for x in rader)
     return (f'<div class="tabell-ramme"><table class="rapport-tall">'
@@ -10254,17 +10291,17 @@ def _rapport_artikkel(r, ticker):
         f'<h2><a class="rapport-anker" href="#{html.escape(a_id)}">{html.escape(pt[:1].upper() + pt[1:])}</a></h2>',
         f'<p class="rapport-meta">Lagt fram {_fmt_dato(r.get("dato"))}{kilde}</p>',
         "<h3>Resultatet</h3>",
-        f"<p>{html.escape(r.get('resultat') or '')}</p>",
+        f"<p>{_rt(r.get('resultat'))}</p>",
         _rapport_tall_tabell(r),
         "<h3>Utbyttet</h3>",
-        f"<p>{html.escape(r.get('utbytte') or '')}</p>",
+        f"<p>{_rt(r.get('utbytte'))}</p>",
     ]
     if r.get("plan"):
-        deler += ["<h3>Utbytteplanen</h3>", f"<p>{html.escape(r['plan'])}</p>"]
+        deler += ["<h3>Utbytteplanen</h3>", f"<p>{_rt(r['plan'])}</p>"]
     ellers = [x for x in (r.get("ellers") or []) if x]
     if ellers:
         deler += ["<h3>Ellers i rapporten</h3>",
-                  "<ul>" + "".join(f"<li>{html.escape(x)}</li>" for x in ellers) + "</ul>"]
+                  "<ul>" + "".join(f"<li>{_rt(x)}</li>" for x in ellers) + "</ul>"]
     deler.append("</article>")
     return "\n".join(d for d in deler if d)
 
@@ -10290,7 +10327,7 @@ def lag_rapport_boks(a, alle):
         f'<div class="rapport-seksjon" id="kvartalsrapport">'
         f'<h2>Siste {_rapport_ord(p)}: {html.escape(kr.periode_tekst(p))}</h2>'
         f'<p class="rapport-meta">Lagt fram {_fmt_dato(r.get("dato"))}</p>'
-        f'<p>{html.escape(r.get("resultat") or "")}</p>'
+        f'<p>{_rt(r.get("resultat"))}</p>'
         f'{_rapport_tall_tabell(r, maks_rader=3)}'
         f'<p class="rapport-lenke"><a href="/aksjer/{html.escape(side)}/rapporter/#{html.escape(kr.anker(p))}">'
         f'{lenketekst}</a></p>'
@@ -10351,7 +10388,9 @@ def _rapport_utbytte_naa(a, today):
         kjop = forrige_borsdag(datetime.date.fromisoformat(ex[:10]))
         ruter.append(("Neste ex-dato", _fmt_dato(ex), f"Kjøp senest {_fmt_dato(kjop.isoformat())}"))
     else:
-        ruter.append(("Neste ex-dato", "Ikke kunngjort", "Kommer normalt med rapporten"))
+        # Ingen forklaring: for en årlig betaler som DNB kommer ex-datoen med
+        # årsresultatet, ikke med kvartalsrapporten (agenttesten 21.11.2026).
+        ruter.append(("Neste ex-dato", "Ikke kunngjort", ""))
     if t and t["art"] == "neste":
         ruter.append(("Kunngjort utbytte", f"{_belop_tekst(t['belop'], t['valuta'])} per aksje",
                       "foreslått, ikke vedtatt" if t["forbehold"] else "for neste ex-dato"))
@@ -10431,6 +10470,16 @@ def _rapportside_html(a, rapporter, today):
     .rapport-tall td { padding:0.45rem 0.6rem; border-bottom:1px solid #f3f4f6; text-align:right; white-space:nowrap; font-variant-numeric: tabular-nums; }
     .rapport-tall td:first-child, .rapport-tall th:first-child { text-align:left; white-space:normal; }
     .sr-only { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0); }
+    @media (max-width: 30rem) {
+      table.rapport-tall, .rapport-tall tbody { display:block; }
+      .rapport-tall thead { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0); }
+      .rapport-tall tr { display:grid; grid-template-columns:1fr 1fr; column-gap:0.75rem; padding:0.5rem 0; border-bottom:1px solid #f3f4f6; }
+      .rapport-tall td { display:block; border:0; padding:0; text-align:left !important; white-space:normal; }
+      .rapport-tall td:first-child { grid-column:1 / -1; font-weight:600; font-size:0.85rem; margin-bottom:0.15rem; }
+      .rapport-tall td[data-p]::before { content:attr(data-p); display:block; font-size:0.68rem; color:#6b7280; text-transform:uppercase; letter-spacing:0.03em; }
+      .dark .rapport-tall tr { border-color:#1f2937; }
+      .dark .rapport-tall td[data-p]::before { color:#9ca3af; }
+    }
     .om-oppsummeringene { border-left:3px solid #d1d5db; background:#f3f4f6; border-radius:0.4rem; padding:0.8rem 1rem; font-size:0.85rem; color:#4b5563; margin:1.5rem 0; }
     .om-oppsummeringene p { margin:0 0 0.4rem; }
     .cta { margin-top:1.5rem; border-radius:0.75rem; padding:1.1rem; text-align:center; border:1px solid #c6dccf; background:#f3f7f5; }
