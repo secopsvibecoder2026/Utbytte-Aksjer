@@ -357,6 +357,26 @@ class TestSider(unittest.TestCase):
         boks = fs.lag_rapport_boks(self.rad["WWIB"], {"WWI": [_rapport()]})
         self.assertIn('href="/aksjer/WWI/rapporter/', boks)
 
+    def test_fanemeny_henger_sammen(self):
+        # Uten oppsummering: ingen «Rapporter»-fane.
+        uten = fs.lag_aksje_faner("DNB")
+        self.assertNotIn("Rapporter", uten)
+        self.assertIn('href="#utbytte"', uten)
+        # Aksjesiden lenker til rapportsiden, B-aksjen til A-aksjens.
+        self.assertIn('href="/aksjer/DNB/rapporter/"', fs.lag_aksje_faner("DNB", "DNB"))
+        self.assertIn('href="/aksjer/WWI/rapporter/"', fs.lag_aksje_faner("WWIB", "WWI"))
+        # Rapportsiden: fanene går tilbake til aksjesiden, Rapporter er aktiv.
+        side = fs._rapportside_html(self.rad["DNB"], [_rapport()], "2026-11-21")
+        self.assertIn('href="/aksjer/DNB/#utbytte"', side)
+        self.assertIn('aria-current="page">Rapporter</a>', side)
+
+    def test_aksjesiden_har_rapportfanen(self):
+        side = fs._aksje_side_html(self.rad["DNB"], "2026-11-21", rapporter={"DNB": [_rapport()]})
+        meny = side.split('id="ak-tabnav"')[1].split("</nav>")[0]
+        self.assertIn('href="/aksjer/DNB/rapporter/" class="ak-side">Rapporter', meny)
+        uten = fs._aksje_side_html(self.rad["DNB"], "2026-11-21")
+        self.assertNotIn(">Rapporter<", uten.split('id="ak-tabnav"')[1].split("</nav>")[0])
+
     def test_tekst_escapes(self):
         side = fs._rapportside_html(self.rad["DNB"], [_rapport(resultat="<script>alert(1)</script>")],
                                     "2026-11-21")

@@ -787,6 +787,12 @@ th.sort-desc::after { content: ' ↓'; color: #6b7280; }
 }
 .ak-tabnav a:hover { color: #111827; }
 .ak-tabnav a.aktiv { color: #2f7352; border-bottom-color: #2f7352; font-weight: 600; }
+/* Fem faner med «Rapporter» må få plass på en 360–390 px mobil uten å
+   skjule den siste fanen i rulleområdet. */
+@media (max-width: 30rem) {
+  .ak-tabnav { justify-content: space-between; }
+  .ak-tabnav a { padding: 0.6rem 0.45rem; font-size: 0.8125rem; }
+}
 .dark .ak-tabnav { background: #030712; border-bottom-color: #1f2937; }
 .dark .ak-tabnav a { color: #9ca3af; }
 .dark .ak-tabnav a:hover { color: #f3f4f6; }
