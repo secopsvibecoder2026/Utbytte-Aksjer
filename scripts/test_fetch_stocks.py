@@ -2872,6 +2872,21 @@ class TestEngangsutbytteTrukketFra(unittest.TestCase):
         self.assertIn("inneholder den", fs.lag_ekstraordinaer_note(a, fs._nf))
 
 
+class TestKapitalTittel(unittest.TestCase):
+    """Pexip meldte utbyttet uten «Key information» i tittelen (665466)."""
+
+    def test_titler(self):
+        ja = ["Key information relating to the cash dividend to be paid by X ASA",
+              "Key information relating to cash distribution",
+              "Information relating to the proposed dividend for 2025"]
+        nei = ["Ex. dividend NOK 4.0 today", "Share capital increase registered",
+               "Key information relating to share capital increase"]
+        for t in ja:
+            self.assertTrue(fs._KAPITAL_TITTEL.search(t), t)
+        for t in nei:
+            self.assertFalse(fs._KAPITAL_TITTEL.search(t), t)
+
+
 class TestTilleggErOrdinaert(unittest.TestCase):
     """WWI viste 12,00 kr mot 28,50 betalt, AFG 6,50 mot 11,00 (2026-11-21).
 
