@@ -765,7 +765,15 @@ def _hent_pdf_tekst(api, melding_id, vedlegg_id, sider):
 
 
 _UTBYTTEMELDING = re.compile(
-    r"(?:key information|nøkkelinformasjon).{0,60}(?:dividend|utbytte|distribution|utdeling)", re.I)
+    r"(?:key information|nøkkelinformasjon).{0,60}(?:dividend|utbytte|distribution|utdeling)"
+    # Mowi kaller utbyttemeldingen «Quarterly dividend» (680022, 685530).
+    r"|(?:quarterly|interim|kvartalsvis)\s+(?:dividend|utbytte)\s*$", re.I)
+_NORSK_TITTEL = re.compile(r"nøkkelinformasjon|utbytte", re.I)
+# Et engangsutbytte er ikke noe å sammenligne det ordinære med. Frontlines
+# melding før Q3-rapporten gjaldt særutbyttet etter salget av to VLCC-er
+# (682181), og den ordinære for andre kvartal lå bak den (681123).
+_ENGANGS_TITTEL = re.compile(r"special|one[- ]time|extraordinary|additional|"
+                             r"ekstraordinær|særutbytte|tilleggsutbytte", re.I)
 
 
 def utbyttemeldinger(meldinger, dato, dager_etter=3):
@@ -785,19 +793,25 @@ def utbyttemeldinger(meldinger, dato, dager_etter=3):
     except (TypeError, ValueError):
         return []
     fra, til = (d0 - datetime.timedelta(days=1)).isoformat(), (d0 + datetime.timedelta(days=dager_etter)).isoformat()
-    i_vinduet, forrige, sett_dager = [], None, set()
-    for m in meldinger or []:   # NewsWeb gir nyeste først
-        if not _UTBYTTEMELDING.search(m.get("title") or ""):
-            continue
+    treff = [m for m in meldinger or [] if _UTBYTTEMELDING.search(m.get("title") or "")]
+    # Én dag kan ha flere utbytter (Gjensidige: ordinært og særutbytte), men
+    # også samme melding på norsk og engelsk (Equinor). Den norske tas bare
+    # med når dagen ikke har en engelsk.
+    engelsk_dager = {(m.get("publishedTime") or "")[:10] for m in treff
+                     if not _NORSK_TITTEL.search(m.get("title") or "")}
+    i_vinduet, forrige, forrige_engangs = [], [], False
+    for m in treff:   # NewsWeb gir nyeste først
+        tittel = m.get("title") or ""
         dag = (m.get("publishedTime") or "")[:10]
         mid = str(m.get("messageId") or m.get("id") or "")
+        if dag in engelsk_dager and _NORSK_TITTEL.search(tittel):
+            continue
         if fra <= dag <= til:
-            if dag not in sett_dager:
-                sett_dager.add(dag)
-                i_vinduet.append(mid)
-        elif dag < fra and forrige is None:
-            forrige = mid
-    return i_vinduet + ([forrige] if forrige else [])
+            i_vinduet.append(mid)
+        elif dag < fra and (not forrige or (len(forrige) == 1 and forrige_engangs)):
+            forrige.append(mid)
+            forrige_engangs = bool(_ENGANGS_TITTEL.search(tittel))
+    return i_vinduet + forrige
 
 
 def hent_kilde(ticker, melding_ider=None, sider=KILDE_SIDER, med_utbytte=True):

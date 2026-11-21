@@ -60,9 +60,25 @@ og hvilket vedlegg som er med, og datoen rapporten ble lagt fram
 
 - **Sjekk at det er riktig melding.** Hodet sier tittelen og datoen. En
   «trading update» eller en invitasjon til presentasjonen er ikke rapporten.
-- **Utbyttemeldingene kommer med av seg selv.** Skriptet tar med
-  «Key information»-meldingen om utbyttet fra samme dag som rapporten, og den
-  forrige utbyttemeldingen, så du har beløpet per aksje og kan sammenligne.
+  Køen har pekt på feil melding før, og skriptet holder nå ute det vi har
+  sett, men les tittelen likevel:
+  - **et datterselskaps eller deleid selskaps rapport:** Grameenphone under
+    Telenor, Fremtind under SpareBank 1-bankene;
+  - **en ren utbyttemelding:** Mowis og TGS' «Quarterly dividend»;
+  - **en påminnelse eller et varsel** om at rapporten kommer.
+- **Noen rapporter har ingen periode i tittelen**, og da finner køen dem ikke.
+  Telenor heter «Målrettet gjennomføring gir resultater», Mowi «Record-high
+  profits, revenues and volumes». Står selskapet i rapportkalenderen med en
+  dato som har passert, men ikke i køen, finn meldingen fra den dagen på
+  NewsWeb og bruk `--kilde TICKER --melding ID`.
+- **Utbyttemeldingene kommer med av seg selv.** Skriptet tar med alle
+  utbyttemeldingene fra dagen før rapporten til tre dager etter, også et
+  særutbytte samme dag og Mowis «Quarterly dividend». Fra tiden før tar det med
+  den forrige, og var den et engangsutbytte, også den ordinære før den, så du
+  har noe å sammenligne med. **Kontroller likevel hodet:** står det et utbytte
+  i rapporten som ingen av meldingene i kilden dekker, legg meldingen til med
+  `--melding`. Gjensidiges særutbytte og Frontlines utbytte for andre kvartal
+  måtte legges til for hånd 21.11.2026.
 - **Har selskapet en norsk og en engelsk melding** (Equinor), ta begge:
   `--melding 684944 684945`. Den norske gir ofte bedre ord å skrive fra.
 - **Sammenlign med samme kvartal i fjor.** Noen rapporter sammenligner med
@@ -234,6 +250,10 @@ git status --short          # bare data/rapporter/ skal stå igjen
 
 ## Commit, PR og rapport
 
+**Kjører flere rapportagenter samtidig**, får hver sin worktree. Da committer
+du bare `data/rapporter/` på worktree-grenen og pusher ikke. Økten som startet
+deg samler bunkene i én PR.
+
 Branch `claude/github-jobs-failing-mqrzng`. Commit bare `data/rapporter/` med
 en melding som navngir selskapene og periodene. Push og åpne en PR. **Ikke
 flett den selv.** Brukeren leser oppsummeringene og gir beskjed.
@@ -247,6 +267,18 @@ Avslutt med:
 4. **Tall du er usikker på**, med linjen i kilden de kom fra.
 5. **Funn underveis:** noe i rapporten som motsier aksjesiden vår (et annet
    utbytte, en ny ex-dato, en endret utbyttepolitikk). Oppgi meldingens id.
-   Ikke rett det selv.
+   Ikke rett det selv. Sammenlign særlig disse tre med aksjesiden, for her
+   har rapportrunden funnet feil før:
+   - **Frekvensen.** Står siden på «Halvårlig» eller «Kvartalsvis», men
+     selskapet betaler ett ordinært utbytte i året og et tillegg innimellom,
+     er frekvensen feil. Kongsberg sto som halvårlig fordi tilleggsutbyttet
+     kom om høsten (652620). Si hvilke meldinger som kaller utbetalingene
+     ordinære og hvilke som kaller dem tillegg eller særutbytte.
+   - **Utbyttepolitikken i selskapsteksten.** Ordene som avgrenser betyr noe:
+     «minst», «rundt», «inntil» og «approximately» er ulike påstander.
+     SpareBank 1 Sør-Norges tekst sa «minst halvparten», rapporten sier
+     «approximately 50%».
+   - **Beløpet per aksje** mot det siden viser som annonsert utbytte, og
+     valutaen. Et beløp i dollar er aldri kroner.
 6. PR-lenken, og hvor mange rapporter som fortsatt venter
    (`python scripts/kvartalsrapport.py --ko`).

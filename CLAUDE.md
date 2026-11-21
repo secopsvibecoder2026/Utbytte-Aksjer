@@ -3086,6 +3086,18 @@ before it (`utbyttemeldinger()`), and the agent leads with the amount per
 share. Where the report and the notice differ (the report said payment «in
 December», the notice 25 November), the notice wins.
 
+`utbyttemeldinger()` was widened after the batch of 21.11.2026, where three
+notices had to be added by hand. It now takes every dividend notice in the
+window, not one per day, so Gjensidige's special dividend on the same day as
+the ordinary one comes along, and it drops a Norwegian copy only when the day
+has an English one (Equinor). It reads Mowi's «Quarterly dividend». And when
+the previous notice was a one-off, it also takes the ordinary one before it
+(Frontline's Q2 dividend behind the special after the VLCC sale). The lessons
+from that batch are written into the agents: the rapport agent compares
+frequency, policy wording and amount per share with the stock page; the
+fikser knows the KOG traps; the company-text agent keeps the company's own
+qualifier («minst», «rundt», «approximately»).
+
 **What the gate does not catch.** It checks that a number is in the source,
 not that it is the right number. Measured on the three Q3 sources: a random
 one-decimal number is found somewhere in 11–24 % of tries, and a copy error
