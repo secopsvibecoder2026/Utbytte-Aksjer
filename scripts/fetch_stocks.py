@@ -10462,7 +10462,7 @@ def _rapportside_html(a, rapporter, today):
     .rapport h2 a { color:inherit; text-decoration:none; }
     .rapport h3 { font-size:0.95rem; margin:1.1rem 0 0.35rem; color:#374151; }
     .rapport p, .rapport li { font-size:0.95rem; line-height:1.7; margin:0 0 0.5rem; }
-    .rapport ul { padding-left:1.2rem; margin:0; }
+    .rapport ul { list-style:disc; padding-left:1.2rem; margin:0; }
     .rapport-meta { font-size:0.8rem !important; color:#6b7280; margin:0 0 0.5rem !important; }
     .tabell-ramme { overflow-x:auto; -webkit-overflow-scrolling:touch; margin:0.75rem 0 0.25rem; }
     table.rapport-tall { width:100%; border-collapse:collapse; font-size:0.88rem; }
