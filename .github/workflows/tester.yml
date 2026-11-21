@@ -28,6 +28,8 @@ on:
       # generert fra malene i scripts/, som allerede står over.
       - '**.html'
       - '!aksjer/**'
+      # Oppsummeringene av kvartalsrapporter: form og språk sjekkes uten nett.
+      - 'data/rapporter/**'
       - 'assets/*.css'
   pull_request:
     branches: [main]
@@ -47,6 +49,8 @@ on:
       # generert fra malene i scripts/, som allerede står over.
       - '**.html'
       - '!aksjer/**'
+      # Oppsummeringene av kvartalsrapporter: form og språk sjekkes uten nett.
+      - 'data/rapporter/**'
       - 'assets/*.css'
   workflow_dispatch:
 
@@ -117,8 +121,14 @@ jobs:
           python scripts/test_vedlikehold.py
           python scripts/test_klokke.py
           python scripts/test_nettstedfiler.py
+          python scripts/test_kvartalsrapport.py
           python promo/test_promo_felles.py
           python promo/test_finn_kandidater.py
+
+      - name: Sjekk oppsummeringene av kvartalsrapporter
+        # Tallene ble sjekket mot kilden da agenten lagret dem. Her sjekkes
+        # form og språk, så en håndredigert fil ikke slipper gjennom.
+        run: python scripts/kvartalsrapport.py --sjekk --streng
 
       - name: Sjekk hardkodede aksjetellinger
         # Antallet aksjer sto ulikt på forsiden, /aksjer/, /utforsk/ og /om/.
