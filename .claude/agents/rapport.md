@@ -274,6 +274,10 @@ Avslutt med:
      er frekvensen feil. Kongsberg sto som halvårlig fordi tilleggsutbyttet
      kom om høsten (652620). Si hvilke meldinger som kaller utbetalingene
      ordinære og hvilke som kaller dem tillegg eller særutbytte.
+     Les selskapsteksten først. Sier selskapets egen politikk at utbyttet
+     deles i to utbetalinger i året, er «Halvårlig» riktig selv om den andre
+     kalles «additional» og vedtas etter fullmakt (AFG, WWI, AKER). Da er det
+     ikke et funn.
    - **Utbyttepolitikken i selskapsteksten.** Ordene som avgrenser betyr noe:
      «minst», «rundt», «inntil» og «approximately» er ulike påstander.
      SpareBank 1 Sør-Norges tekst sa «minst halvparten», rapporten sier
