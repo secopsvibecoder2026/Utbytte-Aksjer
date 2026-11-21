@@ -3474,6 +3474,14 @@ Found by the `tallkontroll` agent on its first run:
 - Frequency overrides in `tickers.json`: NORBT, SB68 and SOAG are annual payers
   whose one extra dividend in autumn 2025 made them «Halvårlig»; AKVA is
   semi-annual, not quarterly.
+- **KOG is «Årlig» (2026-11-21).** The dividend for 2023 was paid in two
+  halves (May and October 2024). The autumn 2025 payment of 2,40 kr was an
+  «additional dividend» (652620), and the dividend for 2025 came in one go in
+  April 2026: 2,20 kr ordinary plus 3,50 kr special (665028). As «Halvårlig»
+  the page showed last year's 4,40 kr. With «Årlig» the paid-12m rule takes
+  the special out and gives the ordinary 2,20. The specials are not in
+  `saerutbytte`: the 2024 notices do not say whether any of the 14 kr
+  (pre-split) was special, and listing only the later ones would read as a cut.
 
 Tests: `TestUtbetalingerIMelding` (7) and `ui.test.js`.
 
