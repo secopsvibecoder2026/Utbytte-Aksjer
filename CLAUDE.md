@@ -3103,6 +3103,16 @@ invitations excluded. DNB («Solid results across operations in the Nordics»)
 and Vår Energi have no period in the title, so the report-date links in
 `hendelser.json` are used as well.
 
+**Those links can point at the wrong message from the same day** (queue of
+21.11.2026): Mowi's and TGS' «Quarterly dividend», a reminder, an invitation,
+Grameenphone's report under Telenor and Fremtind's under MING and NONG.
+`aldri_rapport()` applies to them as well, and `annet_selskaps_rapport()`
+drops a title whose prefix names another company (a prefix with a digit, a
+period word or «PRESS RELEASE» is never read as a name). The queue went from
+121 to 113, and only the eight wrong rows left. A company whose report title
+has neither period nor result word (Telenor, Mowi) then drops out of the
+queue: run `--kilde TICKER --melding ID` for it.
+
 `kodeendring.yml` starts the data job when `data/rapporter/` changes, so a
 merged summary is live within the hour. `tester.yml` runs
 `kvartalsrapport.py --sjekk --streng` (form and language, no network).
