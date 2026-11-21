@@ -2613,9 +2613,7 @@ Also: the app's «Gj.snitt yield» and the hero on `/aksjer/` use
 `sektorSnittYield()` / `sektor_snitt_yield()`, so stocks that are leaving no
 longer count (BlueNord). «Med andre ord» is gone from the frequency article.
 
-**Left open:** WWI shows 28 kr and WWIB 20 kr «annualisert» for the same
-payments, because the «additional» notice is classified on one issuer only.
-Whether 20 or 28 is the annual rate is a reading of the company's policy.
+**Settled 2026-11-21:** see «An additional dividend that is policy».
 
 ## The payment round — the 12-month window when ex-dates move (2026-11-09)
 
@@ -3024,6 +3022,39 @@ for a payer more often than yearly, the annual rate beside the per-payment
 amount. URLs and canonical are unchanged.
 
 Tests: `TestBelopITittel` (11).
+
+## An additional dividend that is policy — `tillegg_er_ordinaert` (2026-11-21)
+
+WWI and WWIB showed 12,00 kr (1,3 %) against 28,50 paid in the last 12
+months, and AFG 6,50 against 11,00. Their dividend policy splits the year's
+dividend into a spring payment and an «additional dividend»
+(«tilleggsutbytte») in the autumn, decided by the board under an AGM
+authorisation. `_EKSTRA_RE` read the word as a one-off without an amount, so
+the paid-12m rule stood down and the page fell back to last year's total.
+
+- `tillegg_er_ordinaert: true` in `tickers.json` (WWI, WWIB, AFG, AKER).
+  `_uten_tillegg()` strips «additional / supplemental / tillegg(s) dividend»
+  before `ekstraordinaere_i_vindu()` looks. «Special» and «extraordinary»
+  still count. Set it only when the company's own policy describes two
+  payments; KOG is the opposite case.
+- **Simulated:** WWI and WWIB 28,50 kr (3,1 %), AFG 11,00 kr (5,6 %), all
+  «siste 12 mnd». AKER is unchanged at 58,00.
+
+**A filled payment could fall out again.** Yahoo lacks Wilhelmsen's 8,00 kr
+from 12.11.2025 (NewsWeb 659390). It was filled for a year, then lost: the
+issuer list is capped by count, not time, and for WWI reached back to
+28.11.2025. 2025 read 12 kr against 20, and the 5-year average fell with it.
+
+- `FORRIGE_SUPPLERT`: `main()` loads `utbytte_supplert` from the previous
+  `aksjer.json`, and `hent_aksje()` offers those payments again with the same
+  guards. If Yahoo gains the payment, the date tolerance drops it.
+- `utbetalinger_fra_melding` in `tickers.json` registers a payment that was
+  already lost, with ex-date, NOK amount and the notice id. WWI and WWIB carry
+  659390. Add one only from the ex-day notice.
+- Looking up every year with fewer payments than the frequency was measured
+  (29 period queries for 14 stocks, 62 without a frequency) and not built.
+
+Tests: `TestTilleggErOrdinaert` (5).
 
 ## Quarterly report summaries (2026-11-21)
 

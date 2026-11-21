@@ -239,7 +239,15 @@
     "beskrivelse_fakta_kilde": "yahoo_finance",
     "beskrivelse_fakta_sprak": "en",
     "ask_egnet": true,
-    "inkorporeringsland": "Norge"
+    "inkorporeringsland": "Norge",
+    "tillegg_er_ordinaert": true,
+    "utbetalinger_fra_melding": [
+      {
+        "ex_dato": "2025-11-12",
+        "belop": 8.0,
+        "melding_id": "659390"
+      }
+    ]
   },
   {
     "ticker": "SCATC",
@@ -351,7 +359,8 @@
     "beskrivelse_fakta_kilde": "yahoo_finance",
     "beskrivelse_fakta_sprak": "en",
     "ask_egnet": true,
-    "inkorporeringsland": "Norge"
+    "inkorporeringsland": "Norge",
+    "tillegg_er_ordinaert": true
   },
   {
     "ticker": "ODL",
@@ -394,7 +403,8 @@
     "beskrivelse_fakta_kilde": "yahoo_finance",
     "beskrivelse_fakta_sprak": "en",
     "ask_egnet": true,
-    "inkorporeringsland": "Norge"
+    "inkorporeringsland": "Norge",
+    "tillegg_er_ordinaert": true
   },
   {
     "ticker": "BWO",
@@ -1601,7 +1611,15 @@
     "beskrivelse_fakta_kilde": "yahoo_finance",
     "beskrivelse_fakta_sprak": "en",
     "ask_egnet": true,
-    "inkorporeringsland": "Norge"
+    "inkorporeringsland": "Norge",
+    "tillegg_er_ordinaert": true,
+    "utbetalinger_fra_melding": [
+      {
+        "ex_dato": "2025-11-12",
+        "belop": 8.0,
+        "melding_id": "659390"
+      }
+    ]
   },
   {
     "ticker": "POL",
