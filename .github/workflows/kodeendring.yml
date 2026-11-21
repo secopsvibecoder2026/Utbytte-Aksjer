@@ -23,7 +23,11 @@ on:
       - "scripts/utvid_beskrivelser.py"
       - "scripts/sektortekster.py"
       - "scripts/oppdater_hendelser.py"
+      - "scripts/kvartalsrapport.py"
       - "data/tickers.json"
+      # En flettet oppsummering av en kvartalsrapport skal ut med en gang,
+      # mens rapporten er ny og folk søker etter den.
+      - "data/rapporter/**"
 
 permissions:
   actions: write   # for å starte update-og-deploy.yml

@@ -170,8 +170,10 @@ def klassifiser(meldinger, katalog, euronext_symboler=None):
     euronext_symboler  utstedere Euronext lister som aksjer, eller None når
                        lista ikke kunne hentes
     """
+    from kvartalsrapport import er_rapporttittel
     ut = {"ut_vedtatt": [], "ut_mulig": [], "marked": [], "hjemland": [], "navn": [],
-          "handelsstans": [], "nye_noteringer": [], "utbytte_utenfor_katalogen": []}
+          "handelsstans": [], "nye_noteringer": [], "utbytte_utenfor_katalogen": [],
+          "rapporter": []}
     kandidater = {}
     for m in meldinger:
         f = _forenklet(m)
@@ -191,6 +193,8 @@ def klassifiser(meldinger, katalog, euronext_symboler=None):
                 ut["navn"].append(f)
             if HANDELSSTANS_KATEGORI in kat or HANDELSSTANS.search(tittel):
                 ut["handelsstans"].append(f)
+            if er_rapporttittel(tittel):
+                ut["rapporter"].append(f)
             continue
         if RENTE_KATEGORI in kat or IKKE_AKSJE.search(tittel):
             continue
@@ -209,7 +213,7 @@ def klassifiser(meldinger, katalog, euronext_symboler=None):
     ut["utbytte_utenfor_katalogen"] = sorted(
         kandidater.values(), key=lambda k: (-k["antall"], k["utsteder"]))
     for nokkel in ("ut_vedtatt", "ut_mulig", "marked", "hjemland", "navn", "handelsstans",
-                   "nye_noteringer"):
+                   "nye_noteringer", "rapporter"):
         ut[nokkel].sort(key=lambda x: x["dato"], reverse=True)
     return ut
 
@@ -494,6 +498,52 @@ def hent_nettsted():
 
 # ── Samlet ───────────────────────────────────────────────────────────────────
 
+def rapporter_uten_oppsummering(rapportmeldinger, hendelser, lagret, fra, til, b_aksjer=None,
+                                titler=None):
+    """[{ticker, dato, ider, tittel}] for rapporter i perioden uten oppsummering. Ren funksjon.
+
+    rapportmeldinger  meldinger klassifiser() la i «rapporter» (tittelen sier rapport)
+    hendelser         data/hendelser.json: rapportdatoer med lenke til meldingen. DNB
+                      kaller rapporten «Solid results across operations in the Nordics»,
+                      så tittelen alene finner den ikke.
+    lagret            {ticker: [oppsummering]} fra data/rapporter/
+    titler            {meldings-id: tittel} for alle meldinger i perioden
+    """
+    b_aksjer = b_aksjer or {}
+    titler = titler or {}
+    per_ticker = {}
+
+    def _legg_til(ticker, dato, mid, tittel):
+        if not ticker or ticker in b_aksjer or not (fra <= dato <= til):
+            return
+        g = per_ticker.setdefault(ticker, {})
+        r = g.setdefault(dato, {"ticker": ticker, "dato": dato, "ider": [], "tittel": tittel})
+        if mid and mid not in r["ider"]:
+            r["ider"].append(mid)
+        if tittel and not r["tittel"]:
+            r["tittel"] = tittel
+
+    for f in rapportmeldinger or []:
+        tickere = [t for t in f.get("tickere") or [] if t not in b_aksjer]
+        _legg_til(tickere[0] if tickere else None, f.get("dato") or "", str(f.get("id") or ""),
+                  f.get("tittel") or "")
+    for h in hendelser or []:
+        if h.get("type") != "rapport" or not h.get("url"):
+            continue
+        m = re.search(r"/message/(\d+)", h["url"])
+        mid = m.group(1) if m else ""
+        _legg_til(h.get("ticker"), h.get("dato") or "", mid, titler.get(mid, ""))
+
+    ut = []
+    for ticker, per_dato in per_ticker.items():
+        nyeste = per_dato[max(per_dato)]
+        dekket = any(str(r.get("melding")) in nyeste["ider"] or (r.get("dato") or "") >= nyeste["dato"]
+                     for r in lagret.get(ticker) or [])
+        if not dekket:
+            ut.append(nyeste)
+    return sorted(ut, key=lambda r: (r["dato"], r["ticker"]), reverse=True)
+
+
 def kjor(dager, uten_nett=False, naa=None):
     naa = naa or datetime.datetime.now(datetime.timezone.utc)
     til = naa.date()
@@ -541,6 +591,17 @@ def kjor(dager, uten_nett=False, naa=None):
         rapport["newsweb"] = {"meldinger": len(meldinger),
                               **klassifiser(meldinger, utsteder_til_ticker(tickere),
                                             euronext_symboler)}
+        try:
+            from kvartalsrapport import les_rapporter, _b_aksjer
+            hendelser = _les_json(os.path.join(ROT, "data", "hendelser.json"), {}).get("hendelser", [])
+            rapport["rapporter_venter"] = rapporter_uten_oppsummering(
+                rapport["newsweb"]["rapporter"], hendelser, les_rapporter(),
+                fra.isoformat(), til.isoformat(), _b_aksjer(),
+                {str(m.get("messageId") or m.get("id")): (m.get("title") or "").strip()
+                 for m in meldinger})
+        except Exception as e:
+            print(f"  Rapportkø: {e}", file=sys.stderr)
+            rapport["rapporter_venter"] = None
 
     live = hent_nettsted()
     rapport["nettsted"] = {
@@ -626,6 +687,16 @@ def som_tekst(r):
                       None: "Euronext ukjent"}[k["pa_euronext"]]
                 ut.append(f"  {k['utsteder']:<8} {k['navn']} ({k['antall']}, {pa})")
                 ut.extend("  " + _linje(f) for f in k["meldinger"][:3])
+
+    if "rapporter_venter" in r:
+        rv = r["rapporter_venter"]
+        ut.append("\n== Kvartalsrapporter uten oppsummering (rapport-agenten skriver dem på «go»)")
+        if rv is None:
+            ut.append("  kunne ikke avgjøres")
+        elif not rv:
+            ut.append("  ingen i perioden")
+        for x in rv or []:
+            ut.append(f"  {x['dato']}  {x['ticker']:<8} {' '.join(x['ider'])}  {x['tittel'][:80]}")
 
     if "euronext" in r:
         eu = r["euronext"]

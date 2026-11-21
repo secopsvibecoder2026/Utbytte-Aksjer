@@ -6785,6 +6785,242 @@ def _lag_meta_beskrivelse(navn, ticker, yield_, ex, upa, snitt5, valuta, today,
     return tekst
 
 
+# ── Beløp per aksje i tittel, meta og H1 (2026-11-18) ───────────────────────
+# Search Console: søk med et konkret beløp har høy klikkrate («paratus energy
+# utbytte» 12 %, «vår energi utbytte per aksje» 10 %), mens «frontline
+# utbytte» hadde 1,1 % mot tittelen «Frontline utbytte 2026 – yield 11,6 %».
+# Folk vil vite hvor mye de får per aksje og når de må eie den.
+TITTEL_MAKS = 60
+# Tittelen med ex-dato får gå hit før datoen ryker. Google klipper bakfra,
+# så det er tickeren som går først, ikke ex-datoen. Yielden får ikke samme
+# rom: den står i kurshodet, og med den ble 71 av 155 titler over 60 tegn.
+TITTEL_TAK = 70
+_MND_KORT = ["jan", "feb", "mar", "apr", "mai", "jun", "jul", "aug", "sep", "okt", "nov", "des"]
+
+
+def _belop_tekst(belop, valuta="NOK"):
+    """«2,15 kr», «0,40 USD», «0,0342 USD».
+
+    To desimaler, men flere for små beløp der to ville rundet bort mer enn
+    en halv prosent (ENH: USD 0,0342 ble ellers «0,03»).
+    """
+    enhet = "kr" if (valuta or "NOK") == "NOK" else valuta
+    des = 2
+    while des < 4 and belop and abs(round(belop, des) - belop) > abs(belop) * 0.005:
+        des += 1
+    return f"{_nf(belop, des)} {enhet}"
+
+
+def _dato_kort(iso, today):
+    """«17. nov», med år når datoen ligger i et annet år enn i dag."""
+    try:
+        d = datetime.date.fromisoformat(str(iso)[:10])
+    except (ValueError, TypeError):
+        return ""
+    s = f"{d.day}. {_MND_KORT[d.month - 1]}"
+    return s if str(today or "")[:4] == str(d.year) else f"{s} {d.year}"
+
+
+def utbytte_i_tittel(a, today):
+    """Beløpet en aksjeside kan sette i tittelen, eller None.
+
+    Returnerer {"belop", "valuta", "ex", "art", "forbehold"}:
+
+    - art «neste»: ex-datoen er kjent og har et kunngjort beløp, i kroner fra
+      `annonsert_utbytte` eller i selskapets valuta fra `annonsert_utland`
+      (DOF og OET kunngjør i USD, PUBLI i SEK). Beløpet hører til akkurat den
+      ex-datoen.
+    - art «arsrate»: ingen kommende ex-dato. Da er beløpet årsraten
+      (`utbytte_per_aksje`), som er det yielden regnes fra, så de to tallene
+      i samme tittel ikke kan motsi hverandre. `siste_utbytte` er ikke brukt:
+      FRO hadde 33,13 der mot 52,27 i årsrate.
+
+    None når beløpet ikke er kjent (en ex-dato uten kunngjort beløp), og når
+    tallet ikke bør stå som et svar: en hendelse som stopper målene (oppkjøp,
+    fusjon, avvikling), en årsrate som er et delår, eller et beløp over kursen.
+    Da brukes dagens tittel.
+    """
+    if hendelse_uten_mal(a):
+        return None
+    pris = a.get("pris") or 0
+    ex = a.get("ex_dato") or ""
+    if ex and ex[:10] >= str(today)[:10]:
+        forbehold = ex_forbehold_gjelder(a, datetime.date.fromisoformat(str(today)[:10]))
+        utland = a.get("annonsert_utland") or {}
+        if a.get("annonsert_ex") == ex and (a.get("annonsert_utbytte") or 0) > 0:
+            belop, valuta = a["annonsert_utbytte"], "NOK"
+            if pris and belop > pris:
+                return None
+        elif utland.get("ex") == ex and (utland.get("belop") or 0) > 0 and utland.get("valuta"):
+            belop, valuta = utland["belop"], utland["valuta"]
+        else:
+            return None
+        return {"belop": belop, "valuta": valuta, "ex": ex, "art": "neste",
+                "forbehold": forbehold}
+    if yield_er_delaar(a) and not delaar_motbevist(a):
+        return None
+    upa = a.get("utbytte_per_aksje") or 0
+    if upa <= 0 or (pris and upa > pris):
+        return None
+    return {"belop": upa, "valuta": "NOK", "ex": "", "art": "arsrate", "forbehold": False}
+
+
+def _arsrate_ledd(a):
+    """« (siste 12 mnd)», « (annualisert)» eller «» etter årsraten."""
+    merke = arsrate_merke(a) if arsrate_er_betalt(a) else (
+        "annualisert" if a.get("frekvens") in ("Kvartalsvis", "Halvårlig", "Månedlig") else "")
+    return f" ({merke})" if merke else ""
+
+
+def _flere_i_aaret(a, t):
+    """Er beløpet en årsrate for et selskap som betaler flere ganger i året?
+    Da må det stå «i året», ellers leses det som én utbetaling. For en årlig
+    betaler er de to det samme, og leddet ville bare gjort tittelen lang."""
+    return t["art"] == "arsrate" and a.get("frekvens") in ("Kvartalsvis", "Halvårlig", "Månedlig")
+
+
+def lag_aksje_tittel(a, today):
+    """<title> for en aksjeside, med beløp per aksje når det er kjent.
+
+    «Vår Energi utbytte 2026: 1,37 kr per aksje – ex-dato 17. nov | VAR», eller
+    med yield når ingen ex-dato er kjent. «| exday.no» ryker først når
+    tittelen blir lang; tickeren blir stående. Yielden ryker over
+    TITTEL_MAKS, ex-datoen først over TITTEL_TAK, men aldri beløpet eller et
+    forbehold om at utbyttet ikke er vedtatt. Uten beløp: _lag_sidetittel().
+    """
+    navn, ticker = a["navn"], a["ticker"]
+    yield_ = a.get("utbytte_yield") or 0
+    t = utbytte_i_tittel(a, today)
+    if not t:
+        return _lag_sidetittel(navn, ticker, yield_, a.get("ex_dato") or "", today)
+    kort = _kort_selskapsnavn(navn)
+    base = f"{kort} utbytte {str(today)[:4]}"
+    belop = _belop_tekst(t["belop"], t["valuta"])
+    ledd = f"foreslått {belop} per aksje" if t["forbehold"] else f"{belop} per aksje"
+    # Uten ex-dato er beløpet årsraten. «5,47 kr per aksje» for et selskap
+    # som betaler kvartalsvis leses ellers som én utbetaling (1,37 kr for VAR).
+    if _flere_i_aaret(a, t):
+        ledd += " i året"
+    if t["ex"]:
+        tillegg = f"ex-dato {_dato_kort(t['ex'], today)}"
+    elif yield_ > 0:
+        tillegg = f"yield {_pst(yield_, 1)}"
+    else:
+        tillegg = ""
+    hale = f" | {ticker}" if kort.lower() != (ticker or "").lower() else ""
+    med = f"{base}: {ledd} – {tillegg}" if tillegg else f"{base}: {ledd}"
+    if len(f"{med}{hale} | exday.no") <= TITTEL_MAKS:
+        return f"{med}{hale} | exday.no"
+    if len(f"{med}{hale}") <= (TITTEL_TAK if t["ex"] else TITTEL_MAKS):
+        return f"{med}{hale}"
+    if len(f"{base}: {ledd}{hale}") <= TITTEL_MAKS:
+        return f"{base}: {ledd}{hale}"
+    # Selv uten tillegg for lang (lange navn, foreslått beløp): beløpet er
+    # det søkeren kjenner treffet igjen på, så det beholdes over grensen.
+    return f"{base}: {ledd}{hale}"
+
+
+def _kjop_setning(ex, today):
+    """«Du må eie aksjen ved børsslutt 16. nov for å få utbyttet.»"""
+    try:
+        kjop = forrige_borsdag(datetime.date.fromisoformat(ex[:10]))
+    except (ValueError, TypeError):
+        return ""
+    if kjop.isoformat() < str(today)[:10]:
+        return f"Siste dag med rett til utbyttet var {_dato_kort(kjop.isoformat(), today)}."
+    return f"Du må eie aksjen ved børsslutt {_dato_kort(kjop.isoformat(), today)} for å få utbyttet."
+
+
+def lag_aksje_meta(a, today):
+    """Meta-beskrivelse som starter med svaret: beløp per aksje og ex-dato.
+
+    Maks 155 tegn. Uten beløp: _lag_meta_beskrivelse().
+    """
+    navn, ticker = a["navn"], a["ticker"]
+    yield_ = a.get("utbytte_yield") or 0
+    t = utbytte_i_tittel(a, today)
+    if not t:
+        return _lag_meta_beskrivelse(navn, ticker, yield_, a.get("ex_dato") or "",
+                                     a.get("utbytte_per_aksje") or 0,
+                                     a.get("snitt_yield_5ar") or 0, a.get("valuta") or "NOK",
+                                     today, snitt_navn(a))
+    kort = _kort_selskapsnavn(navn)
+    belop = _belop_tekst(t["belop"], t["valuta"])
+    ytekst = f"Yield {_pst(yield_, 1)}, historikk og neste betaling." if yield_ > 0 else \
+        "Historikk og neste betaling."
+    if t["art"] == "neste":
+        verb = "har foreslått" if t["forbehold"] else "betaler"
+        setninger = [f"{kort} {verb} {belop} per aksje med ex-dato {_fmt_dato(t['ex'])}.",
+                     _kjop_setning(t["ex"], today), ytekst]
+    else:
+        setninger = [f"{kort} betaler {belop} per aksje i året{_arsrate_ledd(a)}.",
+                     "Neste ex-dato er ikke kjent ennå.", ytekst]
+    for n in (3, 2, 1):
+        tekst = " ".join(s for s in setninger[:n] if s)
+        if len(tekst) <= 155:
+            return tekst
+    return setninger[0][:155]
+
+
+def lag_aksje_h1(a, today):
+    """H1 som matcher tittelen: «Vår Energi utbytte 2026: 1,37 kr per aksje»."""
+    kort = _kort_selskapsnavn(a["navn"])
+    t = utbytte_i_tittel(a, today)
+    h1 = f"{kort} utbytte {str(today)[:4]}"
+    if t:
+        belop = _belop_tekst(t["belop"], t["valuta"])
+        h1 += f": {'foreslått ' if t['forbehold'] else ''}{belop} per aksje"
+        if _flere_i_aaret(a, t):
+            h1 += " i året"
+    return h1
+
+
+def lag_aksje_ingress(a, today):
+    """Første avsnitt: beløp per aksje, ex-dato og siste kjøpsdag.
+
+    Står rett under H1 og sier med ord det tittelen lover. Tom når vi ikke
+    har noe sikkert å si (hendelse, delår, ingen utbytte); da forklarer
+    boksene lenger ned hvorfor.
+    """
+    t = utbytte_i_tittel(a, today)
+    ex = a.get("ex_dato") or ""
+    kommende_ex = ex if ex and ex[:10] >= str(today)[:10] else ""
+    if hendelse_uten_mal(a):
+        return ""
+    kort = _kort_selskapsnavn(a["navn"])
+    upa = a.get("utbytte_per_aksje") or 0
+    yield_ = a.get("utbytte_yield") or 0
+    arsrate_ok = upa > 0 and not (yield_er_delaar(a) and not delaar_motbevist(a))
+    deler = []
+    if t and t["art"] == "neste":
+        belop = _belop_tekst(t["belop"], t["valuta"])
+        if t["forbehold"]:
+            deler.append(f"{kort} har foreslått {belop} per aksje med ex-dato {_fmt_dato(ex)}. "
+                         "Utbyttet er ikke vedtatt ennå.")
+        else:
+            deler.append(f"{kort} betaler {belop} per aksje med ex-dato {_fmt_dato(ex)}.")
+        deler.append(_kjop_setning(ex, today))
+        bet = a.get("betaling_dato") or ""
+        if bet and bet >= ex:
+            deler.append(f"Pengene utbetales {_fmt_dato(bet)}.")
+        if t["valuta"] != "NOK":
+            deler.append(f"Beløpet er kunngjort i {t['valuta']} og regnes om til kroner ved utbetaling.")
+        if arsrate_ok and a.get("frekvens") in ("Kvartalsvis", "Halvårlig", "Månedlig"):
+            deler.append(f"Årlig utbytte er {_belop_tekst(upa)} per aksje{_arsrate_ledd(a)}.")
+    elif kommende_ex:
+        deler.append(f"Neste ex-dato er {_fmt_dato(ex)}, og beløpet er ikke kunngjort ennå.")
+        deler.append(_kjop_setning(ex, today))
+        if arsrate_ok:
+            deler.append(f"Årlig utbytte er {_belop_tekst(upa)} per aksje{_arsrate_ledd(a)}.")
+    elif t:
+        y = f", en direkteavkastning på {_pst(yield_, 2)} med dagens kurs" if yield_ > 0 else ""
+        deler.append(f"{kort} betaler {_belop_tekst(upa)} per aksje i året{_arsrate_ledd(a)}{y}.")
+        deler.append("Neste ex-dato er ikke kjent ennå.")
+    else:
+        return ""
+    return f'<p class="ingress">{" ".join(d for d in deler if d)}</p>'
+
+
 def _pst(verdi, desimaler=2):
     """Prosent med desimalkomma og hardt mellomrom: «3,48 %» (STYLE.md).
 
@@ -6896,7 +7132,7 @@ def _lag_korttall(a, valuta):
     return f'<dl class="korttall">{celler}</dl>'
 
 
-def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
+def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None, rapporter=None):
     ticker  = a["ticker"]
     navn    = a["navn"]
     sektor  = a.get("sektor") or "—"
@@ -6945,9 +7181,10 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     hoy52   = a.get("52u_hoy") or 0
     lav52   = a.get("52u_lav") or 0
 
-    sidetittel = _lag_sidetittel(navn, ticker, yield_, ex, today)
-    meta_desc = _lag_meta_beskrivelse(navn, ticker, yield_, ex, upa, snitt5, valuta, today,
-                                      snitt_navn(a))
+    sidetittel = lag_aksje_tittel(a, today)
+    meta_desc = lag_aksje_meta(a, today)
+    h1_tekst = lag_aksje_h1(a, today)
+    ingress_html = lag_aksje_ingress(a, today)
 
     # Inneværende år er ikke ferdig. Uten merking sto «2026 — 3,75 NOK» rett
     # under stat-kortet «Utbytte/aksje 7,50 NOK» og så ut som en motsigelse:
@@ -7005,6 +7242,8 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     elif besk:
         om_avsnitt += f'<p class="desc-fakta">{besk}</p>'
     om_seksjon = f'<div class="desc"><h2>Om selskapet</h2>{om_avsnitt}</div>' if om_avsnitt else ""
+    # Siste kvartalsrapport, når rapport-agenten har oppsummert den.
+    rapport_boks = lag_rapport_boks(a, rapporter) if rapporter else ""
 
     kurshode_html = _lag_kurshode(a, valuta, upa_merknad, delaar_note)
     korttall_html = _lag_korttall(a, valuta)
@@ -7278,6 +7517,7 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     .breadcrumb span {{ margin: 0 0.35rem; }}
     h1 {{ font-size: 1.75rem; font-weight: 700; margin-bottom: 0.25rem; }}
     .sub {{ font-size: 0.95rem; margin-bottom: 1.5rem; }}
+    .ingress {{ font-size: 1rem; line-height: 1.6; margin: -0.75rem 0 1.25rem; color: #374151; max-width: 46rem; }}
     .badge {{ display: inline-block; font-size: 0.75rem; font-weight: 600; padding: 0.2rem 0.6rem;
               border-radius: 9999px; margin-bottom: 1.25rem; }}
     /* Kurshodet: kurs, 52-ukers spenn og tre nøkkeltall, nøytrale farger. */
@@ -7355,12 +7595,31 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     .dark .vurdering-seksjon {{ background: #0f172a; border-color: #1e293b; }}
     .dark .vurdering-tekst {{ color: #cbd5e1; }}
     /* Betingede seksjoner — vises bare på sider der de har noe å si. */
-    .rekke-seksjon, .nedtur-seksjon, .utbetalingsaar-seksjon, .delaar-seksjon, .betalt-seksjon {{ margin: 1.5rem 0; padding: 1.1rem 1.25rem; background: #f8fafc; border-radius: 0.75rem; border: 1px solid #e2e8f0; }}
-    .rekke-seksjon h2, .nedtur-seksjon h2, .utbetalingsaar-seksjon h2, .delaar-seksjon h2, .betalt-seksjon h2 {{ font-size: 1rem; font-weight: 700; margin-bottom: 0.6rem; }}
-    .rekke-seksjon p, .nedtur-seksjon p, .utbetalingsaar-seksjon p, .delaar-seksjon p, .betalt-seksjon p {{ font-size: 0.9rem; line-height: 1.75; color: #374151; margin: 0 0 0.6rem; }}
+    .rekke-seksjon, .nedtur-seksjon, .utbetalingsaar-seksjon, .delaar-seksjon, .betalt-seksjon, .rapport-seksjon {{ margin: 1.5rem 0; padding: 1.1rem 1.25rem; background: #f8fafc; border-radius: 0.75rem; border: 1px solid #e2e8f0; }}
+    .rekke-seksjon h2, .nedtur-seksjon h2, .utbetalingsaar-seksjon h2, .delaar-seksjon h2, .betalt-seksjon h2, .rapport-seksjon h2 {{ font-size: 1rem; font-weight: 700; margin-bottom: 0.6rem; }}
+    .rekke-seksjon p, .nedtur-seksjon p, .utbetalingsaar-seksjon p, .delaar-seksjon p, .betalt-seksjon p, .rapport-seksjon p {{ font-size: 0.9rem; line-height: 1.75; color: #374151; margin: 0 0 0.6rem; }}
     .rekke-seksjon p:last-child, .nedtur-seksjon p:last-child, .utbetalingsaar-seksjon p:last-child, .delaar-seksjon p:last-child {{ margin-bottom: 0; }}
-    .dark .rekke-seksjon, .dark .nedtur-seksjon, .dark .utbetalingsaar-seksjon, .dark .delaar-seksjon, .dark .betalt-seksjon {{ background: #0f172a; border-color: #1e293b; }}
-    .dark .rekke-seksjon p, .dark .nedtur-seksjon p, .dark .utbetalingsaar-seksjon p, .dark .delaar-seksjon p, .dark .betalt-seksjon p {{ color: #cbd5e1; }}
+    .dark .rekke-seksjon, .dark .nedtur-seksjon, .dark .utbetalingsaar-seksjon, .dark .delaar-seksjon, .dark .betalt-seksjon, .dark .rapport-seksjon {{ background: #0f172a; border-color: #1e293b; }}
+    .dark .rekke-seksjon p, .dark .nedtur-seksjon p, .dark .utbetalingsaar-seksjon p, .dark .delaar-seksjon p, .dark .betalt-seksjon p, .dark .rapport-seksjon p {{ color: #cbd5e1; }}
+    .rapport-seksjon .rapport-meta {{ font-size: 0.78rem; color: #6b7280; margin-top: -0.4rem; }}
+    .rapport-seksjon .tabell-ramme {{ overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 0.25rem 0 0.75rem; }}
+    .rapport-seksjon table.rapport-tall {{ display: table; margin: 0; font-size: 0.85rem; border: 0; background: transparent; }}
+    .rapport-tall th {{ background: transparent !important; text-align: right; padding: 0.35rem 0.6rem; white-space: nowrap; }}
+    .rapport-tall td {{ text-align: right; padding: 0.4rem 0.6rem; white-space: nowrap; font-variant-numeric: tabular-nums; }}
+    .rapport-tall td:first-child, .rapport-tall th:first-child {{ text-align: left; white-space: normal; padding-left: 0; }}
+    .rapport-seksjon .rapport-lenke {{ margin-bottom: 0; font-weight: 600; }}
+    @media (max-width: 30rem) {{
+      .rapport-seksjon table.rapport-tall, .rapport-seksjon .rapport-tall tbody {{ display: block; }}
+      .rapport-seksjon .rapport-tall thead {{ position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }}
+      .rapport-seksjon .rapport-tall tr {{ display: grid; grid-template-columns: 1fr 1fr; column-gap: 0.75rem; padding: 0.45rem 0; border-bottom: 1px solid #e2e8f0; }}
+      .rapport-seksjon .rapport-tall td {{ display: block; border: 0; padding: 0; text-align: left; white-space: normal; background: transparent; }}
+      .rapport-seksjon .rapport-tall td:first-child {{ grid-column: 1 / -1; font-weight: 600; font-size: 0.82rem; }}
+      .rapport-seksjon .rapport-tall td[data-p]::before {{ content: attr(data-p); display: block; font-size: 0.66rem; color: #6b7280; text-transform: uppercase; letter-spacing: 0.03em; }}
+      .dark .rapport-seksjon .rapport-tall tr {{ border-color: #1e293b; }}
+      .dark .rapport-seksjon .rapport-tall td[data-p]::before {{ color: #94a3b8; }}
+    }}
+    .sr-only {{ position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }}
+    .dark .rapport-seksjon .rapport-meta {{ color: #94a3b8; }}
     .rekke-seksjon {{ border-left: 3px solid #3f8a63; }}
     .nedtur-seksjon {{ border-left: 3px solid #b98a3a; }}
     .delaar-seksjon {{ border-left: 3px solid #b98a3a; }}
@@ -7510,6 +7769,7 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     .dark .breadcrumb {{ color: #9ca3af; }}
     .dark .breadcrumb a {{ color: #9ca3af; }}
     .dark .sub {{ color: #9ca3af; }}
+    .dark .ingress {{ color: #d1d5db; }}
     .dark .badge {{ background: #1b3f2f; color: #9cc2ad; }}
     .dark a {{ color: #6fa98a; }}
     .dark .cta a {{ background: #275f45; color: #fff !important; }}
@@ -7545,8 +7805,9 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
     {ticker}
   </div>
 
-  <h1>{ticker} – {navn}</h1>
-  <p class="sub">{sektor} · {frekvens} utbytte · {markedsplass}</p>
+  <h1>{h1_tekst}</h1>
+  <p class="sub">{navn} ({ticker}) · {sektor} · {frekvens} utbytte · {markedsplass}</p>
+  {ingress_html}
 
   {kurshode_html}
   {lag_kursvarsel(a)}
@@ -7572,6 +7833,8 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None):
   {betalt_boks}
 
   {om_seksjon}
+
+  {rapport_boks}
 
   {investor_badges_html}
 
@@ -7719,6 +7982,8 @@ def generer_aksjesider(aksjer, root_dir):
         s = a.get("sektor") or "Annet"
         sektor_map.setdefault(s, []).append(a)
     sektor_snitt = sektorsnitt_per_sektor(sektor_map)
+    import kvartalsrapport as kr
+    rapporter = kr.les_rapporter(root_dir)
 
     for a in aksjer:
         ticker = a["ticker"]
@@ -7735,7 +8000,8 @@ def generer_aksjesider(aksjer, root_dir):
             # Vår Energi og ikke betaler mer utbytte (tallkontroll 2026-10-26).
             and not hendelse_uten_mal(r)
         ][:4]
-        html = _aksje_side_html(a, today, relaterte=relaterte, sektor_snitt=sektor_snitt)
+        html = _aksje_side_html(a, today, relaterte=relaterte, sektor_snitt=sektor_snitt,
+                                rapporter=rapporter)
         with open(os.path.join(ticker_dir, "index.html"), "w", encoding="utf-8") as f:
             f.write(html)
 
@@ -9658,6 +9924,8 @@ def generer_rapportkalender(aksjer, root_dir, i_dag=None):
         per_maaned.setdefault((d.year, d.month), []).append(h)
 
     analyse = _rapportkalender_analyse(kommende, per_maaned, aksjer, i_dag)
+    import kvartalsrapport as kr
+    nylig = lag_nylig_framlagt(kr.les_rapporter(root_dir), aksjer)
     faq = _rapport_faq()
     aar = i_dag.year
     selskaper = len({h["ticker"] for h in kommende})
@@ -9765,6 +10033,10 @@ def generer_rapportkalender(aksjer, root_dir, i_dag=None):
     .cta a { display:inline-block; background:#2f7352; color:#fff !important; font-weight:600; padding:0.65rem 1.5rem; border-radius:0.5rem; margin-top:0.5rem; text-decoration:none; }
     .cta a:hover { background:#275f45; }
     .updated { font-size:0.78rem; text-align:right; margin-top:1rem; color:#9ca3af; }
+    .nylig { list-style:none; padding:0; margin:0 0 1rem; border:1px solid #e5e7eb; background:#fff; border-radius:0.6rem; }
+    .nylig li { padding:0.5rem 0.75rem; border-top:1px solid #f3f4f6; font-size:0.9rem; }
+    .nylig li:first-child { border-top:0; }
+    .nylig .dag { display:inline-block; min-width:6.5rem; color:#6b7280; font-size:0.82rem; }
     a { color:#2f7352; }
     /* På smal skjerm må yield-kolonnen få plass uten at leseren må dra
        tabellen sidelengs — selskapsnavnet kappes i stedet. */
@@ -9790,6 +10062,9 @@ def generer_rapportkalender(aksjer, root_dir, i_dag=None):
     .dark details p { color:#9ca3af; }
     .dark .cta { background:#0f251b; border-color:#214d39; }
     .dark .cta a { background:#2f7352; }
+    .dark .nylig { background:#111827; border-color:#1f2937; }
+    .dark .nylig li { border-color:#1f2937; }
+    .dark .nylig .dag { color:#9ca3af; }
 """
 
     html_ut = f"""<!DOCTYPE html>
@@ -9873,6 +10148,7 @@ def generer_rapportkalender(aksjer, root_dir, i_dag=None):
   </div>
   <nav class="hopp" aria-label="Hopp til måned">{hurtighopp}</nav>
 {analyse}
+{nylig}
 {seksjoner}
   <section id="faq">
     <h2>Vanlige spørsmål om rapportkalenderen</h2>{faq_html}
@@ -9913,6 +10189,481 @@ def generer_rapportkalender(aksjer, root_dir, i_dag=None):
         f.write(html_ut)
     print(f"Genererte rapportkalender: {len(kommende)} datoer for {selskaper} selskaper "
           f"over {len(per_maaned)} måneder")
+
+
+# ── Kvartalsrapporter (2026-11-21) ──────────────────────────────────────────
+# Rapport-agenten skriver en oppsummering av hver kvartalsrapport ut fra
+# selskapets egen børsmelding, og `scripts/kvartalsrapport.py --skriv` lagrer
+# den i data/rapporter/{TICKER}.json bare når hvert tall står i kilden. Her
+# bygges sidene av dem:
+#
+# - /aksjer/{TICKER}/rapporter/ med alle oppsummerte rapporter for selskapet,
+#   nyeste først. Én side per selskap, ikke per rapport: en side per rapport
+#   ville vært tynne sider i hundrevis, mønsteret CLAUDE.md advarer mot under
+#   «Breaking the template».
+# - Boksen «Siste kvartalsrapport» på aksjesiden (lag_rapport_boks()).
+# - «Nylig framlagt» på /rapportkalender/.
+#
+# Oppsummeringen er fast tekst om en rapport med dato. Den oppdateres ikke, og
+# sier derfor alltid hvilken periode og hvilken dato den gjelder. Tallene på
+# siden som endrer seg (neste ex-dato, kunngjort utbytte) hentes fra
+# aksjer.json ved hver kjøring.
+
+def _rapport_ord(periode):
+    """«kvartalsrapport», «halvårsrapport» eller «årsrapport»."""
+    p = periode or ""
+    return "halvårsrapport" if "-H" in p else "årsrapport" if p.endswith("-AR") else "kvartalsrapport"
+
+
+def rapporter_for(ticker, alle):
+    """Oppsummeringene for tickeren, eller A-aksjens for en B-aksje (WWIB → WWI)."""
+    return alle.get(ticker) or alle.get(_NEWSWEB_UTSTEDER_EKSTRA.get(ticker, "")) or []
+
+
+def _rapport_side_ticker(ticker, alle):
+    """Tickeren rapportsiden ligger under: A-aksjen for en B-aksje."""
+    if alle.get(ticker):
+        return ticker
+    a = _NEWSWEB_UTSTEDER_EKSTRA.get(ticker)
+    return a if a and alle.get(a) else None
+
+
+_TUSEN_MELLOMROM = re.compile(r"\b(\d{1,3})((?: \d{3})+)\b")
+_ENHET_MELLOMROM = re.compile(
+    r"(?<=\d) (?=%|(?:mill|mrd)\.|(?:millioner|milliarder|kroner|kr|USD|NOK|EUR|SEK|DKK|"
+    r"dollar|euro|tusen|prosent|prosentpoeng)\b)")
+
+
+def _hardt_mellomrom(tekst):
+    """«2 166 tusen» og «3,0 %» med hardt mellomrom, så tall og enhet ikke deles
+    på to linjer. Agenten skriver vanlige mellomrom; siden ordner resten.
+
+    Bare grupper som begynner med ett til tre sifre blir tusenskille, så
+    «2026 120 millioner» (årstall foran et tall) står urørt.
+    """
+    t = _TUSEN_MELLOMROM.sub(lambda m: m.group(1) + m.group(2).replace(" ", "\u00a0"), tekst or "")
+    return _ENHET_MELLOMROM.sub("\u00a0", t)
+
+
+def _rt(tekst):
+    """Tekst fra en oppsummering, klar for HTML: harde mellomrom, så escaping."""
+    return html.escape(_hardt_mellomrom(tekst))
+
+
+def _rapport_tall_tabell(r, maks_rader=None):
+    """Nøkkeltallene som tabell: navn, denne perioden og perioden den sammenlignes med.
+
+    På en smal skjerm stables raden: navnet over, de to tallene side om side
+    med perioden over hvert (data-p). To kolonner med «11,95 mrd. USD» fikk
+    ikke plass ved 390 px.
+    """
+    import kvartalsrapport as kr
+    rader = [x for x in (r.get("nokkeltall") or []) if isinstance(x, dict) and x.get("navn")]
+    if maks_rader:
+        rader = rader[:maks_rader]
+    if not rader:
+        return ""
+    naa = kr.periode_kort(r.get("periode"))
+    forrige = kr.periode_kort(r.get("forrige_periode") or kr.forrige_periode(r.get("periode")))
+    har_forrige = any(x.get("forrige") for x in rader)
+    hode = f"<th>{html.escape(naa)}</th>" + (f"<th>{html.escape(forrige)}</th>" if har_forrige else "")
+    kropp = "".join(
+        f"<tr><td>{_rt(x['navn'])}</td><td data-p=\"{html.escape(naa)}\">{_rt(x.get('naa') or '')}</td>"
+        + (f"<td data-p=\"{html.escape(forrige)}\">{_rt(x.get('forrige') or '—')}</td>" if har_forrige else "")
+        + "</tr>"
+        for x in rader)
+    return (f'<div class="tabell-ramme"><table class="rapport-tall">'
+            f'<thead><tr><th><span class="sr-only">Nøkkeltall</span></th>{hode}</tr></thead>'
+            f'<tbody>{kropp}</tbody></table></div>')
+
+
+def _rapport_artikkel(r, ticker):
+    """Én oppsummert rapport på rapportsiden."""
+    import kvartalsrapport as kr
+    p = r.get("periode") or ""
+    pt = kr.periode_tekst(p)
+    a_id = kr.anker(p)
+    melding = str(r.get("melding") or "")
+    kilde = (f' · <a href="https://newsweb.oslobors.no/message/{html.escape(melding)}" '
+             f'rel="noopener">Børsmeldingen på NewsWeb</a>') if melding.isdigit() else ""
+    deler = [
+        f'<article class="rapport" id="{html.escape(a_id)}">',
+        f'<h2><a class="rapport-anker" href="#{html.escape(a_id)}">{html.escape(pt[:1].upper() + pt[1:])}</a></h2>',
+        f'<p class="rapport-meta">Lagt fram {_fmt_dato(r.get("dato"))}{kilde}</p>',
+        "<h3>Resultatet</h3>",
+        f"<p>{_rt(r.get('resultat'))}</p>",
+        _rapport_tall_tabell(r),
+        "<h3>Utbyttet</h3>",
+        f"<p>{_rt(r.get('utbytte'))}</p>",
+    ]
+    if r.get("plan"):
+        deler += ["<h3>Utbytteplanen</h3>", f"<p>{_rt(r['plan'])}</p>"]
+    ellers = [x for x in (r.get("ellers") or []) if x]
+    if ellers:
+        deler += ["<h3>Ellers i rapporten</h3>",
+                  "<ul>" + "".join(f"<li>{_rt(x)}</li>" for x in ellers) + "</ul>"]
+    deler.append("</article>")
+    return "\n".join(d for d in deler if d)
+
+
+def lag_rapport_boks(a, alle):
+    """«Siste kvartalsrapport» på aksjesiden, eller "" uten oppsummering.
+
+    Boksen står bare på sider der det finnes en oppsummering, så den gjør
+    sidene ulike i form, ikke bare i tall (se «Breaking the template»).
+    """
+    import kvartalsrapport as kr
+    rapporter = rapporter_for(a["ticker"], alle)
+    side = _rapport_side_ticker(a["ticker"], alle)
+    if not rapporter or not side:
+        return ""
+    r = rapporter[0]
+    p = r.get("periode") or ""
+    tidligere = len(rapporter) - 1
+    lenketekst = "Hele oppsummeringen" + (
+        f" og {'én tidligere rapport' if tidligere == 1 else f'{_antall_ord(tidligere)} tidligere rapporter'}"
+        if tidligere else "")
+    return (
+        f'<div class="rapport-seksjon" id="kvartalsrapport">'
+        f'<h2>Siste {_rapport_ord(p)}: {html.escape(kr.periode_tekst(p))}</h2>'
+        f'<p class="rapport-meta">Lagt fram {_fmt_dato(r.get("dato"))}</p>'
+        f'<p>{_rt(r.get("resultat"))}</p>'
+        f'{_rapport_tall_tabell(r, maks_rader=3)}'
+        f'<p class="rapport-lenke"><a href="/aksjer/{html.escape(side)}/rapporter/#{html.escape(kr.anker(p))}">'
+        f'{lenketekst}</a></p>'
+        f'</div>')
+
+
+def _periode_kode(periode):
+    """«2026-Q3» → «Q3 2026», «2026-H1» → «H1 2026», «2026-AR» → «2026». Slik folk søker."""
+    p = periode or ""
+    if len(p) >= 7 and p[5] in "QH":
+        return f"{p[5:]} {p[:4]}"
+    return p[:4]
+
+
+def rapportside_tittel(a, r):
+    """<title> for rapportsiden, bygget på den nyeste rapporten.
+
+    «DNB Bank Q3 2026: kvartalsrapport, resultat og utbytte». Kvartalskoden er
+    det folk skriver («equinor q3»), og ordet «kvartalsrapport» det de ellers
+    søker på. Halen ryker først når navnet er langt.
+    """
+    kort = _kort_selskapsnavn(a["navn"])
+    kode = _periode_kode(r.get("periode"))
+    ord_ = _rapport_ord(r.get("periode"))
+    for kandidat in (f"{kort} {kode}: {ord_}, resultat og utbytte",
+                     f"{kort} {kode}: {ord_} og utbytte",
+                     f"{kort} {kode}: {ord_}"):
+        if len(kandidat) <= 60:
+            return kandidat
+    return f"{kort} {kode}: {ord_}"
+
+
+def rapportside_meta(a, r):
+    """Meta-beskrivelse under 155 tegn som sier hva leseren finner."""
+    import kvartalsrapport as kr
+    kort = _kort_selskapsnavn(a["navn"])
+    start = (f"{kort} la fram {_rapport_ord(r.get('periode'))}en for "
+             f"{kr.periode_tekst(r.get('periode'))} den {_fmt_dato(r.get('dato'))}.")
+    for hale in (" Resultatet, nøkkeltallene, utbyttet og utbytteplanen, skrevet ut fra "
+                 "selskapets egen børsmelding.",
+                 " Resultat, nøkkeltall og utbytte fra selskapets egen børsmelding.",
+                 ""):
+        if len(start + hale) <= 155:
+            return start + hale
+    return start[:155]
+
+
+def _rapport_utbytte_naa(a, today):
+    """Rutene øverst på rapportsiden: det som gjelder utbyttet i dag.
+
+    Bare tall som endrer seg sjelden (ex-dato, kunngjort beløp, årsrate), ikke
+    yield og kurs. Da flytter sitemapens lastmod seg når noe faktisk skjer.
+    """
+    ex = a.get("ex_dato") or ""
+    t = utbytte_i_tittel(a, today)
+    ruter = []
+    if ex and ex >= today:
+        kjop = forrige_borsdag(datetime.date.fromisoformat(ex[:10]))
+        ruter.append(("Neste ex-dato", _fmt_dato(ex), f"Kjøp senest {_fmt_dato(kjop.isoformat())}"))
+    else:
+        # Ingen forklaring: for en årlig betaler som DNB kommer ex-datoen med
+        # årsresultatet, ikke med kvartalsrapporten (agenttesten 21.11.2026).
+        ruter.append(("Neste ex-dato", "Ikke kunngjort", ""))
+    if t and t["art"] == "neste":
+        ruter.append(("Kunngjort utbytte", f"{_belop_tekst(t['belop'], t['valuta'])} per aksje",
+                      "foreslått, ikke vedtatt" if t["forbehold"] else "for neste ex-dato"))
+    upa = a.get("utbytte_per_aksje") or 0
+    if upa > 0 and not hendelse_uten_mal(a):
+        merke = arsrate_merke(a) if arsrate_er_betalt(a) else (
+            "annualisert" if a.get("frekvens") in ("Kvartalsvis", "Halvårlig", "Månedlig") else "")
+        ruter.append(("Årlig utbytte", f"{_belop_tekst(upa)} per aksje", merke))
+    if a.get("frekvens") and a["frekvens"] != "—":
+        ruter.append(("Utbetales", a["frekvens"].lower(), ""))
+    return "".join(
+        f'<div class="rute"><div class="rute-lbl">{html.escape(n)}</div>'
+        f'<div class="rute-val">{html.escape(v)}</div>'
+        + (f'<div class="rute-note">{html.escape(note)}</div>' if note else "")
+        + "</div>"
+        for n, v, note in ruter)
+
+
+def _rapportside_html(a, rapporter, today):
+    import kvartalsrapport as kr
+    ticker = a["ticker"]
+    kort = _kort_selskapsnavn(a["navn"])
+    nyeste = rapporter[0]
+    url = f"https://exday.no/aksjer/{ticker}/rapporter/"
+    tittel = rapportside_tittel(a, nyeste)
+    desc = rapportside_meta(a, nyeste)
+    sektor = a.get("sektor") or "—"
+    artikler = "\n".join(_rapport_artikkel(r, ticker) for r in rapporter)
+    hopp = "".join(
+        f'<a href="#{html.escape(kr.anker(r.get("periode")))}">{html.escape(kr.periode_kort(r.get("periode")))}</a>'
+        for r in rapporter) if len(rapporter) > 1 else ""
+    sist_skrevet = max((r.get("skrevet") or r.get("dato") or "") for r in rapporter)
+
+    json_ld = json.dumps({
+        "@context": "https://schema.org",
+        "@graph": [
+            {"@type": "WebPage", "name": tittel, "description": desc, "url": url,
+             "inLanguage": "nb-NO", "dateModified": sist_skrevet,
+             "about": {"@type": "Corporation", "name": a["navn"], "tickerSymbol": ticker},
+             "publisher": {"@id": "https://exday.no/#organisasjon"}},
+            {"@type": "BreadcrumbList", "itemListElement": [
+                {"@type": "ListItem", "position": 1, "name": "exday.no", "item": "https://exday.no/"},
+                {"@type": "ListItem", "position": 2, "name": "Utforsk", "item": "https://exday.no/utforsk/"},
+                {"@type": "ListItem", "position": 3, "name": sektor,
+                 "item": f"https://exday.no/aksjer/sektor/{_sektor_slug(sektor)}/"},
+                {"@type": "ListItem", "position": 4, "name": ticker, "item": f"https://exday.no/aksjer/{ticker}/"},
+                {"@type": "ListItem", "position": 5, "name": "Kvartalsrapporter", "item": url},
+            ]},
+        ],
+    }, ensure_ascii=False)
+
+    CSS = """
+    *,*::before,*::after { box-sizing: border-box; }
+    body { margin:0; font-family: "Inter", system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; line-height:1.6; background:#f9fafb; color:#111827; }
+    .wrap { max-width: 46rem; margin: 0 auto; padding: 1.25rem 1rem 2rem; }
+    .breadcrumb { font-size:0.8rem; color:#6b7280; margin-bottom:0.75rem; }
+    .breadcrumb a { color:#6b7280; text-decoration:none; }
+    h1 { font-size:1.6rem; line-height:1.25; margin:0 0 0.5rem; }
+    .sub { color:#4b5563; font-size:0.95rem; margin:0 0 1.25rem; }
+    .ruter { display:grid; grid-template-columns: repeat(auto-fit, minmax(9.5rem, 1fr)); gap:0.6rem; margin-bottom:1.5rem; }
+    .rute { border:1px solid #e5e7eb; background:#fff; border-radius:0.6rem; padding:0.7rem 0.8rem; }
+    .rute-lbl { font-size:0.7rem; color:#6b7280; text-transform:uppercase; letter-spacing:0.03em; }
+    .rute-val { font-size:1.05rem; font-weight:700; color:#111827; }
+    .rute-note { font-size:0.75rem; color:#6b7280; }
+    .hopp { display:flex; flex-wrap:wrap; gap:0.4rem; margin:0 0 1.25rem; }
+    .hopp a { font-size:0.8rem; border:1px solid #e5e7eb; background:#fff; border-radius:9999px; padding:0.25rem 0.75rem; text-decoration:none; color:#374151; }
+    .rapport { background:#fff; border:1px solid #e5e7eb; border-radius:0.75rem; padding:1.1rem 1.25rem; margin-bottom:1.25rem; }
+    .rapport h2 { font-size:1.25rem; margin:0 0 0.15rem; }
+    .rapport h2 a { color:inherit; text-decoration:none; }
+    .rapport h3 { font-size:0.95rem; margin:1.1rem 0 0.35rem; color:#374151; }
+    .rapport p, .rapport li { font-size:0.95rem; line-height:1.7; margin:0 0 0.5rem; }
+    .rapport ul { list-style:disc; padding-left:1.2rem; margin:0; }
+    .rapport-meta { font-size:0.8rem !important; color:#6b7280; margin:0 0 0.5rem !important; }
+    .tabell-ramme { overflow-x:auto; -webkit-overflow-scrolling:touch; margin:0.75rem 0 0.25rem; }
+    table.rapport-tall { width:100%; border-collapse:collapse; font-size:0.88rem; }
+    .rapport-tall th { text-align:right; font-size:0.72rem; color:#6b7280; font-weight:600; text-transform:uppercase; letter-spacing:0.03em; padding:0.4rem 0.6rem; border-bottom:1px solid #e5e7eb; white-space:nowrap; }
+    .rapport-tall td { padding:0.45rem 0.6rem; border-bottom:1px solid #f3f4f6; text-align:right; white-space:nowrap; font-variant-numeric: tabular-nums; }
+    .rapport-tall td:first-child, .rapport-tall th:first-child { text-align:left; white-space:normal; }
+    .sr-only { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0); }
+    @media (max-width: 30rem) {
+      table.rapport-tall, .rapport-tall tbody { display:block; }
+      .rapport-tall thead { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0); }
+      .rapport-tall tr { display:grid; grid-template-columns:1fr 1fr; column-gap:0.75rem; padding:0.5rem 0; border-bottom:1px solid #f3f4f6; }
+      .rapport-tall td { display:block; border:0; padding:0; text-align:left !important; white-space:normal; }
+      .rapport-tall td:first-child { grid-column:1 / -1; font-weight:600; font-size:0.85rem; margin-bottom:0.15rem; }
+      .rapport-tall td[data-p]::before { content:attr(data-p); display:block; font-size:0.68rem; color:#6b7280; text-transform:uppercase; letter-spacing:0.03em; }
+      .dark .rapport-tall tr { border-color:#1f2937; }
+      .dark .rapport-tall td[data-p]::before { color:#9ca3af; }
+    }
+    .om-oppsummeringene { border-left:3px solid #d1d5db; background:#f3f4f6; border-radius:0.4rem; padding:0.8rem 1rem; font-size:0.85rem; color:#4b5563; margin:1.5rem 0; }
+    .om-oppsummeringene p { margin:0 0 0.4rem; }
+    .cta { margin-top:1.5rem; border-radius:0.75rem; padding:1.1rem; text-align:center; border:1px solid #c6dccf; background:#f3f7f5; }
+    .cta a { display:inline-block; background:#2f7352; color:#fff !important; font-weight:600; padding:0.6rem 1.3rem; border-radius:0.5rem; margin-top:0.4rem; text-decoration:none; }
+    .cta a:hover { background:#275f45; }
+    a { color:#275f45; }
+
+    .dark body { background:#030712; color:#f3f4f6; }
+    .dark .breadcrumb, .dark .breadcrumb a, .dark .rute-lbl, .dark .rute-note, .dark .rapport-meta { color:#9ca3af; }
+    .dark .sub, .dark .rapport h3 { color:#d1d5db; }
+    .dark .rute, .dark .rapport, .dark .hopp a { background:#111827; border-color:#1f2937; }
+    .dark .rute-val { color:#f3f4f6; }
+    .dark .hopp a { color:#d1d5db; }
+    .dark .rapport-tall th { color:#9ca3af; border-color:#1f2937; }
+    .dark .rapport-tall td { border-color:#1f2937; }
+    .dark .om-oppsummeringene { background:#111827; border-color:#374151; color:#9ca3af; }
+    .dark .cta { background:#0f251b; border-color:#214d39; }
+    .dark a { color:#6fa98a; }
+"""
+
+    return f"""<!DOCTYPE html>
+<html lang="nb">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <script>(function(){{if(localStorage.getItem('tema')==='dark')document.documentElement.classList.add('dark');}})()</script>
+
+{ADSENSE_HEAD}
+
+  <!-- Google Analytics med Consent Mode v2 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-X6C9PERKMB"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){{dataLayer.push(arguments);}}
+    gtag('consent', 'default', {{
+      analytics_storage: 'denied',
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      wait_for_update: 500
+    }});
+    gtag('js', new Date());
+    gtag('config', 'G-X6C9PERKMB');
+  </script>
+  <script src="/assets/consent.js" defer></script>
+  <title>{html.escape(tittel)}</title>
+  <meta name="description" content="{html.escape(desc, quote=True)}"/>
+  <link rel="canonical" href="{url}"/>
+  <meta name="theme-color" content="#2f7352"/>
+  <link rel="icon" type="image/png" sizes="512x512" href="/favicon.png"/>
+  <link rel="icon" type="image/png" sizes="180x180" href="/logo/apple_touch_icon_180.png"/>
+  <link rel="icon" type="image/svg+xml" href="/logo/exday_icon_primary.svg"/>
+  <link rel="shortcut icon" href="/favicon.png"/>
+  <link rel="apple-touch-icon" href="/logo/apple_touch_icon_180.png"/>
+  <meta property="og:title" content="{html.escape(tittel, quote=True)}"/>
+  <meta property="og:description" content="{html.escape(desc, quote=True)}"/>
+  <meta property="og:url" content="{url}"/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:image" content="https://exday.no/assets/og-image.png"/>
+  <meta property="og:image:width" content="1200"/>
+  <meta property="og:image:height" content="630"/>
+  <meta property="og:locale" content="nb_NO"/>
+  <meta property="og:site_name" content="exday.no"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="{html.escape(tittel, quote=True)}"/>
+  <meta name="twitter:description" content="{html.escape(desc, quote=True)}"/>
+  <meta name="twitter:image" content="https://exday.no/assets/og-image.png"/>
+  <script type="application/ld+json">{json_ld}</script>
+  <link rel="stylesheet" href="/assets/tailwind.css"/>
+  <link rel="stylesheet" href="/assets/style.css"/>
+  <style>{CSS}</style>
+</head>
+<body>
+{_site_nav_html('aksjer')}
+<div class="wrap">
+  <div class="breadcrumb">
+    <a href="https://exday.no/">exday.no</a> <span>›</span>
+    <a href="https://exday.no/utforsk/">Utforsk</a> <span>›</span>
+    <a href="https://exday.no/aksjer/sektor/{_sektor_slug(sektor)}/">{html.escape(sektor)}</a> <span>›</span>
+    <a href="https://exday.no/aksjer/{ticker}/">{ticker}</a> <span>›</span>
+    Kvartalsrapporter
+  </div>
+  <h1>{html.escape(kort)}: kvartalsrapporter og utbytte</h1>
+  <p class="sub">Det viktigste fra rapportene {html.escape(a["navn"])} ({ticker}) har lagt fram:
+    resultatet, utbyttet og utbytteplanen, rapport for rapport. Skrevet ut fra
+    selskapets egne meldinger til Oslo Børs.</p>
+  <div class="ruter">{_rapport_utbytte_naa(a, today)}</div>
+  {f'<nav class="hopp" aria-label="Hopp til rapport">{hopp}</nav>' if hopp else ''}
+{artikler}
+  <div class="om-oppsummeringene">
+    <p><strong>Slik lager vi oppsummeringene.</strong> Teksten er skrevet ut fra
+    børsmeldingen og rapporten selskapet la fram, med hjelp av en språkmodell.
+    Hvert tall er kontrollert mot kilden før publisering. Oppsummeringen
+    oppdateres ikke etter at den er skrevet, så les børsmeldingen for hele
+    bildet. Dette er ikke investeringsråd.</p>
+    <p><a href="/metode/">Les mer om metoden</a></p>
+  </div>
+  <div class="cta">
+    <p>Utbyttehistorikk, nøkkeltall og ex-datoer for {html.escape(kort)}</p>
+    <a href="/aksjer/{ticker}/">Gå til aksjesiden for {ticker}</a>
+  </div>
+{STANDARD_FOOTER}
+</div>
+<script>
+  (function() {{
+    var btn = document.getElementById('dark-toggle');
+    if (!btn) return;
+    var root = document.documentElement;
+    var sun = btn.querySelector('.sun-icon');
+    var moon = btn.querySelector('.moon-icon');
+    function syncIcons() {{
+      var dark = root.classList.contains('dark');
+      if (sun) sun.style.display = dark ? 'none' : '';
+      if (moon) moon.style.display = dark ? '' : 'none';
+    }}
+    syncIcons();
+    btn.addEventListener('click', function() {{
+      var isDark = root.classList.toggle('dark');
+      localStorage.setItem('tema', isDark ? 'dark' : 'light');
+      syncIcons();
+    }});
+  }})();
+</script>
+</body>
+</html>"""
+
+
+def generer_rapportsider(aksjer, root_dir, alle=None, today=None):
+    """Skriver /aksjer/{TICKER}/rapporter/ for hvert selskap med oppsummeringer.
+
+    Et selskap uten oppsummering får ingen side, og en side som ikke lenger
+    har noen oppsummering bak seg, fjernes, så sitemapen aldri peker på en
+    tom side.
+    """
+    import kvartalsrapport as kr
+    alle = kr.les_rapporter(root_dir) if alle is None else alle
+    today = today or datetime.date.today().isoformat()
+    per_ticker = {a["ticker"]: a for a in aksjer}
+    skrevet = []
+    for ticker, rapporter in sorted(alle.items()):
+        a = per_ticker.get(ticker)
+        if not a or not rapporter:
+            continue
+        mappe = os.path.join(root_dir, "aksjer", ticker, "rapporter")
+        os.makedirs(mappe, exist_ok=True)
+        with open(os.path.join(mappe, "index.html"), "w", encoding="utf-8") as f:
+            f.write(_rapportside_html(a, rapporter, today))
+        skrevet.append(ticker)
+    aksjer_dir = os.path.join(root_dir, "aksjer")
+    for ticker in os.listdir(aksjer_dir) if os.path.isdir(aksjer_dir) else []:
+        side = os.path.join(aksjer_dir, ticker, "rapporter", "index.html")
+        if ticker not in skrevet and os.path.isfile(side):
+            os.remove(side)
+            try:
+                os.rmdir(os.path.dirname(side))
+            except OSError:
+                pass
+    if skrevet:
+        print(f"Rapportsider: {len(skrevet)} ({', '.join(skrevet)})")
+    return skrevet
+
+
+def lag_nylig_framlagt(alle, aksjer, maks=8):
+    """«Nylig framlagt» på /rapportkalender/: de nyeste oppsummeringene.
+
+    Den gamle seksjonen med samme navn ble fjernet fordi lenkene kom fra
+    hendelser.json, som samlet opp utdaterte datoer. Disse kommer fra
+    data/rapporter/, der hver oppføring er en rapport som faktisk er lagt fram.
+    """
+    import kvartalsrapport as kr
+    navn = {a["ticker"]: a["navn"] for a in aksjer}
+    rader = sorted(
+        ((r.get("dato") or "", t, r) for t, liste in alle.items() for r in liste if t in navn),
+        key=lambda x: x[0], reverse=True)[:maks]
+    if not rader:
+        return ""
+    li = "".join(
+        f'<li><span class="dag">{_fmt_dato(d)}</span> '
+        f'<a href="/aksjer/{html.escape(t)}/rapporter/#{html.escape(kr.anker(r.get("periode")))}">'
+        f'{html.escape(_kort_selskapsnavn(navn[t]))}: {html.escape(kr.periode_tekst(r.get("periode")))}</a></li>'
+        for d, t, r in rader)
+    return (f'<section id="nylig-framlagt"><h2>Nylig framlagt, med oppsummering</h2>'
+            f'<p class="sub">Resultatet, nøkkeltallene og utbyttet fra rapporten, skrevet ut fra '
+            f'selskapets egen børsmelding.</p><ul class="nylig">{li}</ul></section>')
 
 
 # ── lastmod i sitemap: datoen siden sist ble endret, ikke byggedatoen ──────
@@ -10231,6 +10982,17 @@ def generer_sitemap(aksjer, root_dir, today, alle_tickers=None):
     <loc>https://exday.no/aksjer/{a["ticker"]}/</loc>
     <lastmod>{today}</lastmod>
     <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>""")
+    # Rapportsidene finnes bare for selskaper med en oppsummering, og bare
+    # siden på disk teller (generer_rapportsider() fjerner en tom).
+    aksjer_dir = os.path.join(root_dir, "aksjer")
+    for t in sorted(os.listdir(aksjer_dir)) if os.path.isdir(aksjer_dir) else []:
+        if os.path.isfile(os.path.join(aksjer_dir, t, "rapporter", "index.html")):
+            urls.append(f"""  <url>
+    <loc>https://exday.no/aksjer/{t}/rapporter/</loc>
+    <lastmod>{today}</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>""")
 
@@ -10780,6 +11542,7 @@ def main():
     DATA_SIST_OPPDATERT = output["sist_oppdatert"]
 
     generer_aksjesider(resultater, root_dir)
+    generer_rapportsider(resultater, root_dir)
     generer_sektorsider(resultater, root_dir)
     generer_topplistesider(resultater, root_dir)
     generer_rapportkalender(resultater, root_dir)

@@ -151,6 +151,8 @@ Utbytte-Aksjer/
 │   ├── sjekk_tema.py          # Verifies dark mode init on every page
 │   ├── sjekk_klasser.py       # Verifies every Tailwind class is compiled
 │   ├── sjekk_antall.py        # Finds hard-coded stock counts that should be markers
+│   ├── sjekk_titler.py        # Lists stock-page titles over 60 chars or without an amount
+│   ├── kvartalsrapport.py     # Report summaries: source text, the gate, the queue
 │   ├── vedlikehold.py         # Daily maintenance: Actions runs, live site, stocks in/out from NewsWeb
 │   ├── nettstedfiler.py       # Copies the site without internal files for the Pages deploy
 │   ├── sjekk_sprak.py         # Counts dashes and AI phrasing in published text (SKRIVESTIL.md)
@@ -2985,6 +2987,123 @@ and nothing explained the method. Six changes:
 Tests: `TestBunntekst` (3), `TestArtikkelKontrollert` (1), `TestKursvarsel`
 (3), `test_sjekk_antall.py` (+5), `test_sjekk_kursferskhet.py` (8) and
 `tests/kursferskhet.test.js` (4).
+
+## Amount per share in the title, meta and H1 (2026-11-18)
+
+Search Console: searches with a concrete amount click far better («paratus
+energy utbytte» 12 %, «vår energi utbytte per aksje» 10 %) than «frontline
+utbytte» at 1,1 % against «Frontline utbytte 2026 – yield 11,6 %».
+`lag_aksje_tittel()`, `lag_aksje_meta()`, `lag_aksje_h1()` and
+`lag_aksje_ingress()` in `fetch_stocks.py` now lead with the amount.
+`utbytte_i_tittel()` decides which amount:
+
+- **Ex-date known:** the amount announced for exactly that ex-date, from
+  `annonsert_utbytte` (NOK) or `annonsert_utland` in the company's currency
+  («0,40 USD per aksje», DOF). Title: «OKEA utbytte 2026: 2,00 kr per aksje –
+  ex-dato 2. des».
+- **No ex-date:** the annual rate, the figure the yield is built from, so the
+  two cannot disagree. Never `siste_utbytte` (FRO: 33,13 against 52,27).
+  «i året» is added for quarterly, half-yearly and monthly payers
+  (`_flere_i_aaret()`), or «5,47 kr per aksje» reads as one payment.
+- **None, so the old title:** an ex-date without an announced amount, a
+  `hendelse` in `HENDELSE_UTEN_MAL`, a part-year annual rate, or no rate.
+  37 of 155 on the first run.
+- **Proposed dividends say «foreslått»** in the title, meta and lead.
+
+**Length.** «| exday.no» goes first. A yield tail goes at 60 characters
+(`TITTEL_MAKS`), an ex-date only at 70 (`TITTEL_TAK`), since Google cuts
+from the end and the ticker is the least useful part. The amount is never
+dropped, so long company names stay over 60: 29 of 155.
+`python scripts/sjekk_titler.py` lists those and every stock without an
+amount, with the reason.
+
+The H1 was «{ticker} – {navn}». It is now the title's claim, and the full
+name and ticker moved into the line under it. The lead paragraph states the
+last day to buy (`forrige_borsdag()`), the payment date, the currency and,
+for a payer more often than yearly, the annual rate beside the per-payment
+amount. URLs and canonical are unchanged.
+
+Tests: `TestBelopITittel` (11).
+
+## Quarterly report summaries (2026-11-21)
+
+Readers want four things from a quarterly report: is it going well, what is
+the dividend, when does it come, and what is the dividend plan. The rapport
+agent (`.claude/agents/rapport.md`) writes that summary from the company's
+own notice on NewsWeb, and the data job turns it into pages.
+
+**Files and pages.**
+
+- `data/rapporter/{TICKER}.json` holds the summaries, newest first. Written
+  only through the gate, never by hand. B-shares have none; they show the
+  A-share's (`rapporter_for()`).
+- `/aksjer/{TICKER}/rapporter/` (`generer_rapportsider()`) has every summary
+  for the company. **One page per company, not per report**: hundreds of
+  thin pages is the pattern under «Breaking the template». Each report has an
+  anchor (`#2026-q3`) for sharing.
+- The stock page gets a «Siste kvartalsrapport» box (`lag_rapport_boks()`)
+  only when a summary exists, and `/rapportkalender/` lists the newest under
+  «Nylig framlagt» (`lag_nylig_framlagt()`). That section was removed in
+  September because its links came from the polluted `hendelser.json`; these
+  come from summaries of reports that were actually published.
+- The tiles at the top of the report page show only figures that change
+  rarely: next ex-date, announced amount, annual rate. Yield and price are left
+  out so the sitemap lastmod moves when something happens.
+- A summary is fixed text about a dated report. It never carries yield or
+  price, and always names its period and date. That is how it stays within
+  «Never freeze live numbers into stored prose».
+
+**The gate, `scripts/kvartalsrapport.py`.**
+
+- `--kilde TICKER` writes the notice and the first 15 pages of the PDF report
+  (`pdftotext -layout`) to one text file. The header names the message ids.
+- `--skriv TICKER fil.json kilde.txt` saves only when every number in the
+  text and the table is in that file. Years, dates and «3. kvartal» are
+  exempt. Rounding is accepted; millions written as billions only with «mrd.»
+  after the number, and the reverse with «mill.».
+- **A percentage must be on a line about percent.** Otherwise «6,50 %» found
+  DNB's earnings per share.
+- **Both numbers in a table row must be in the same row of the source**,
+  either on one line or directly above each other in the same column (Vår
+  Energi's key-figure tiles). This catches a value taken from the wrong row.
+- **Three digits after a separator is a thousands separator** («9,844»,
+  «1.125 millioner»), except after a leading 0 or on a per-share line.
+  Reading it both ways made every thousand in an English table a small
+  decimal too, and «10,7» without a unit matched «10,684».
+- Language: SKRIVESTIL.md with no dash at all; advice words stop the save;
+  evaluative words («sterk», «svak», «rekord») give a warning to attribute.
+
+**The dividend per share comes first.** Vår Energi's Q3 2026 report gave
+only «USD 400 million», and the first summary said «øker utbyttet til 400
+millioner dollar». Per share it was 1,368 kr against 1,355: the total rose
+because it also covers the shares going to BlueNord's owners. `--kilde` now
+adds the «Key information» dividend notice from the report day and the one
+before it (`utbyttemeldinger()`), and the agent leads with the amount per
+share. Where the report and the notice differ (the report said payment «in
+December», the notice 25 November), the notice wins.
+
+**What the gate does not catch.** It checks that a number is in the source,
+not that it is the right number. Measured on the three Q3 sources: a random
+one-decimal number is found somewhere in 11–24 % of tries, and a copy error
+one step off (9,9 for 9,8) in 30–50 %. Two-decimal numbers and table pairs
+are much safer. So the agent reads every number against the source once more,
+and the PR is not merged by the agent.
+
+**The queue.** `kvartalsrapport.py --ko` asks NewsWeb per issuer.
+`vedlikehold.py` lists reports from the week's exchange-wide messages
+without a summary («Kvartalsrapporter uten oppsummering»), and the weekly
+report puts them under «Krever handling». The owner says «go» in a session.
+A report title is recognised by a period word and a result word
+(`er_rapporttittel()`), with notices of upcoming reports, trading updates and
+invitations excluded. DNB («Solid results across operations in the Nordics»)
+and Vår Energi have no period in the title, so the report-date links in
+`hendelser.json` are used as well.
+
+`kodeendring.yml` starts the data job when `data/rapporter/` changes, so a
+merged summary is live within the hour. `tester.yml` runs
+`kvartalsrapport.py --sjekk --streng` (form and language, no network).
+
+Tests: `scripts/test_kvartalsrapport.py`.
 
 ## App review of 2026-10-20
 

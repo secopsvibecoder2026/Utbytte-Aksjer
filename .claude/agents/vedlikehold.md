@@ -72,6 +72,8 @@ svarte. Det betyr at vi ikke vet, ikke at alt er i orden.
   markedsplass, bytter hjemland eller ISIN, nytt navn, handelsstans, nye
   noteringer og utbyttemeldinger fra selskaper utenfor katalogen.
 - **Euronext:** hvor mange som er notert og hvilke av våre som ikke er det.
+- **Kvartalsrapporter uten oppsummering:** rapportene selskapene i katalogen
+  har lagt fram i perioden, og som rapport-agenten ennå ikke har skrevet om.
 
 Treffene i NewsWeb er titler. Les meldingen før du sier noe om den:
 
@@ -99,6 +101,13 @@ hjemland (ISIN-koden i Euronext-lista begynner med landet), og hva har den betal
 `python scripts/tallkontroll.py --meldinger TICKER` gir utbyttemeldingene for et
 hvilket som helst selskap. En kandidat er et forslag med kilde, ikke en anbefaling
 om å kjøpe noe.
+
+**Kvartalsrapporter.** Står det rapporter under «Kvartalsrapporter uten
+oppsummering», før dem opp under «Krever handling» i én rad: hvor mange, de
+største selskapene ved navn, og forslaget «Si go, så kjører rapport-agenten»
+(`.claude/agents/rapport.md`). Du skriver ikke oppsummeringene selv. Ser en
+tittel ut som et varsel om en rapport som kommer, og ikke rapporten, nevn det
+som et funn, så mønsteret i `scripts/kvartalsrapport.py` kan rettes.
 
 **Datoer som faller før neste runde.** Neste rapport kommer om sju dager. En
 siste handelsdag, en tilbudsfrist eller et nytt ticker som trer i kraft før det,
