@@ -1321,3 +1321,20 @@ test('arsrateMerke: én kunngjort utbetaling er ikke annualisert (OKEA)', () => 
   assert.equal(arsrateMerke({ arsrate_kilde: 'kunngjort' }), 'kunngjort utbetaling');
   assert.equal(arsrateMerke({ arsrate_kilde: 'kunngjort', arsrate_ekstra_trukket: 1 }), 'kunngjort utbetaling');
 });
+
+test('Fikser 22.11.2026: Borgestad, bare engangsutbytte siste 12 mnd', () => {
+  const { arsrateMerke } = require('../assets/ui.js');
+  // Alt betalt siste 12 mnd var tilleggs- eller ekstraordinært utbytte (666876, 685169).
+  assert.equal(arsrateMerke({ arsrate_kilde: 'kun_engangs' }), 'bare engangsutbytte siste 12 mnd');
+});
+
+test('Fikser 22.11.2026: Akastor står utenfor rangeringene', () => {
+  const { iRangering, hoyestYield, sektorSnittYield } = require('../assets/ui.js');
+  // Akastor betaler ut salgsproveny (686167). Tallet står, men ikke i rangeringene.
+  const akast = { ticker: 'AKAST', utbytte_yield: 48.86, utenfor_rangering: 'salgsproveny' };
+  const akso = { ticker: 'AKSO', utbytte_yield: 5.0 };
+  assert.equal(iRangering(akast), false);
+  assert.equal(iRangering(akso), true);
+  assert.equal(hoyestYield([akast, akso]).ticker, 'AKSO');
+  assert.equal(sektorSnittYield([akast, akso]), 5.0);
+});

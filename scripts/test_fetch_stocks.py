@@ -5339,5 +5339,234 @@ class TestRapportbunken2211Del2(unittest.TestCase):
         self.assertFalse(fs.merk_betalt_og_kunngjort(dict(a, arsrate_kilde=None), datetime.date(2026, 11, 25)))
 
 
+class TestFikser2211(unittest.TestCase):
+    """Fem funn fra kvartalsrapportene, 22.11.2026: BOR, BEWI, HUNT, AKAST, HSPG.
+
+    Hver test feilet før rettingen. Meldingstekstene er forkortet, uten
+    kontaktpersoner.
+    """
+
+    BOR_MELDINGER = [
+        {"publishedTime": "2026-11-03T06:00", "messageId": 685408,
+         "title": "BOR - EX. DIVIDEND NOK 1.50 TODAY"},
+        {"publishedTime": "2026-10-30T07:01", "messageId": 685182,
+         "title": "Borgestad ASA: Key information relating to the cash dividend to be paid by Borgestad ASA"},
+        {"publishedTime": "2026-10-30T07:00", "messageId": 685169,
+         "title": "Borgestad ASA: Interim financial report for third quarter 2026 and NOK 1.50 dividend distribution"},
+        {"publishedTime": "2026-03-02T06:00", "messageId": 667200,
+         "title": "BOR \u2013 EX. DIVIDEND NOK 0.50 TODAY"},
+        {"publishedTime": "2026-02-26T07:01", "messageId": 666876,
+         "title": "Borgestad ASA: Key information relating to the cash dividend to be paid by Borgestad ASA"},
+        {"publishedTime": "2026-02-26T07:00", "messageId": 666846,
+         "title": "Borgestad ASA: Interim financial report for fourth quarter 2025 and NOK 0.5 additional dividend distribution"},
+    ]
+    BOR_TEKSTER = {
+        685408: "Issuer: Borgestad ASA\nEx. date: 3 November 2026\nDividend amount: NOK 1.50 per share\n",
+        685182: ("The board of directors has resolved to distribute a dividend of NOK 1.50 per share "
+                 "based on the annual accounts for 2025.\nDividend amount: NOK 1.50 per share\n"
+                 "Announced currency: Norwegian kroner (NOK)\nEx-date: 3 November 2026\n"
+                 "Payment date: 6 November 2026\nDate of approval: 30 October 2026\n"),
+        685169: ("Borgestad ASA will distribute an extraordinary dividend of NOK 1.50 per share, "
+                 "payable on or about November 6, 2026. For Norwegian tax purposes, the distribution "
+                 "shall be in the form of repayment of paid-in equity."),
+        667200: "Issuer: Borgestad ASA\nEx. date: 2 March 2026\nDividend amount: NOK 0.50 per share\n",
+        666876: ("The board of directors has resolved to distribute an additional dividend of NOK 0.50 "
+                 "per share based on the annual accounts for 2024.\nDividend amount: NOK 0.50 per share\n"
+                 "Announced currency:  Norwegian kroner (NOK)\nEx-date: 2 March 2026\n"
+                 "Payment date: 6 March 2026\nDate of approval: 26 February 2026\n"),
+        666846: ("Borgestad ASA will distribute a dividend of NOK 0.50 per share, payable March 6, 2026. "
+                 "The board has resolved to distribute an additional dividend of NOK 0.50 per share "
+                 "based on the annual accounts for 2024."),
+    }
+    BOR_RAD = {"ticker": "BOR", "frekvens": "Halvårlig", "pris": 15.05,
+               "utbytte_per_aksje": 0.8, "utbytte_yield": 5.32,
+               "utbytte_12m": 2.0, "utbytte_12m_antall": 2,
+               "utbytte_12m_liste": [{"ex_dato": "2026-03-02", "belop": 0.5},
+                                     {"ex_dato": "2026-11-03", "belop": 1.5}],
+               "utbytte_per_ar": {"2021": 0.0, "2022": 0.0, "2023": 0.0, "2024": 0.0, "2025": 0.8}}
+
+    BEWI_MELDINGER = [
+        {"publishedTime": "2026-11-16T07:00", "messageId": 686605,
+         "title": "BEWI ASA - Updated key information related to dividend"},
+        {"publishedTime": "2026-11-04T17:31", "messageId": 685546,
+         "title": "BEWI ASA - Key information related to dividend"},
+        {"publishedTime": "2026-11-04T17:30", "messageId": 685533,
+         "title": "BEWI ASA - Proposed extraordinary dividend of NOK 1.15 per share"},
+    ]
+    _BEWI_NOKKEL = ("Dividend amount: NOK 1.15 per share\nDeclared currency: NOK\n"
+                    "Last day including right: 1 December 2026\nEx-date: 2 December 2026\n"
+                    "Record date: 3 December 2026\nPayment date: 10 December 2026\n"
+                    "Date of approval: 1 December 2026\nThe dividend is subject to approval by "
+                    "the extraordinary general meeting to be held on 1 December 2026.\n")
+    BEWI_TEKSTER = {
+        686605: _BEWI_NOKKEL,
+        685546: _BEWI_NOKKEL,
+        685533: ("The board of directors of BEWI ASA has resolved to propose an extraordinary cash "
+                 "dividend of NOK 1.15 per share, based on the company's approved annual accounts for 2025."),
+    }
+
+    HUNT_MELDINGER = [
+        {"publishedTime": "2026-09-02T07:00", "messageId": 681427,
+         "title": "Hunter Group ASA - Key information relating to proposed cash dividend"},
+        {"publishedTime": "2026-08-27T07:00", "messageId": 680928,
+         "title": "Hunter Group ASA - NOK 1.50 dividend proposal"},
+    ]
+    HUNT_TEKSTER = {
+        681427: ("Dividend amount: NOK 1.50 per share\nDeclared currency: NOK\n"
+                 "Dividend classification: NOK 1.50 as extraordinary dividend\n"
+                 "Ex-date: 29 September 2026\nRecord date: 30 September 2026\n"
+                 "Date of approval: Expected on 28 September 2026\n"),
+        680928: ("In line with its focus on shareholder returns, the board has proposed a dividend "
+                 "of NOK 1.50 per share, subject to EGM approval"),
+    }
+
+    def _funn(self, ticker, meldinger, tekster, i_dag):
+        gml = fs._newsweb_meldinger, fs._newsweb_tekst
+        fs._newsweb_meldinger = lambda t: meldinger
+        fs._newsweb_tekst = lambda mid: tekster.get(mid, "")
+        try:
+            return fs.ekstraordinaere_i_vindu(ticker, i_dag)
+        finally:
+            fs._newsweb_meldinger, fs._newsweb_tekst = gml
+
+    # ── BOR ──────────────────────────────────────────────────────────────
+    def test_bor_begge_engangsutbetalinger_faar_belop(self):
+        funn = self._funn("BOR", self.BOR_MELDINGER, self.BOR_TEKSTER, datetime.date(2026, 11, 22))
+        self.assertEqual(sorted((f["ex_dato"], f["ekstra"], f["total"]) for f in funn),
+                         [("2026-03-02", 0.5, 0.5), ("2026-11-03", 1.5, 1.5)])
+
+    def test_bor_bare_engangsutbytte_gir_null_med_merkelapp(self):
+        funn = self._funn("BOR", self.BOR_MELDINGER, self.BOR_TEKSTER, datetime.date(2026, 11, 22))
+        a = dict(self.BOR_RAD)
+        ekstra = fs.ekstra_i_kroner(a, funn)
+        self.assertEqual(ekstra, 2.0)
+        self.assertTrue(fs.bare_engangsutbytte(a, funn, ekstra, datetime.date(2026, 11, 22)))
+        fs.bruk_bare_engangsutbytte(a)
+        self.assertEqual((a["utbytte_per_aksje"], a["utbytte_yield"]), (0.0, 0.0))
+        self.assertEqual(fs.arsrate_merke(a), "bare engangsutbytte siste 12 mnd")
+        self.assertFalse(fs.yield_er_delaar(a))
+
+    def test_bare_engangsutbytte_krever_at_alt_er_engangs(self):
+        i_dag = datetime.date(2026, 11, 22)
+        a = dict(self.BOR_RAD)
+        en = [{"ex_dato": "2026-11-03", "ekstra": 1.5, "total": 1.5}]
+        self.assertFalse(fs.bare_engangsutbytte(a, en, 1.5, i_dag))
+        # Frontline-formen: engangsdelen ligger i en utbetaling med ordinært utbytte.
+        delvis = [{"ex_dato": "2026-03-02", "ekstra": 0.5, "total": 0.5},
+                  {"ex_dato": "2026-11-03", "ekstra": 1.0, "total": 1.5}]
+        self.assertFalse(fs.bare_engangsutbytte(a, delvis, 1.5, i_dag))
+        # Et ordinært utbytte er kunngjort og kommer: da er det en løpende rate.
+        alt = [{"ex_dato": "2026-03-02", "ekstra": 0.5, "total": 0.5},
+               {"ex_dato": "2026-11-03", "ekstra": 1.5, "total": 1.5}]
+        self.assertTrue(fs.bare_engangsutbytte(a, alt, 2.0, i_dag))
+        self.assertFalse(fs.bare_engangsutbytte(
+            dict(a, annonsert_utbytte=0.8, annonsert_ex="2027-05-28"), alt, 2.0, i_dag))
+
+    def test_bor_faq_og_payout(self):
+        a = dict(self.BOR_RAD, navn="Borgestad ASA", sektor="Materialer", arsrate_kilde="kun_engangs",
+                 utbytte_per_aksje=0.0, utbytte_yield=0.0, payout_ratio=40.0,
+                 ar_med_utbytte=2, utbytteaar=[2025, 2026], historiske_utbytter=[])
+        tekst = "".join(fs._lag_faq_seksjon(a, "2026-11-22"))
+        self.assertIn("har ikke betalt ordinært utbytte de siste 12 månedene", tekst)
+        self.assertNotIn("payout ratio", tekst.lower())
+
+    def test_prosabelop_leses_bare_med_per_share_og_ikke_nektet(self):
+        self.assertEqual(fs._ekstra_belop_i_prosa(
+            "will distribute an extraordinary dividend of NOK 1.50 per share"), {("NOK", 1.5)})
+        self.assertEqual(fs._ekstra_belop_i_prosa(
+            "an extraordinary cash dividend of NOK 1.15 per share"), {("NOK", 1.15)})
+        self.assertEqual(fs._ekstra_belop_i_prosa("a special dividend of USD 200 million"), set())
+        self.assertEqual(fs._ekstra_belop_i_prosa(
+            "The board will not propose an extraordinary dividend of NOK 2.00 per share"), set())
+        self.assertEqual(fs._ekstra_belop_i_prosa("a dividend of NOK 2.00 per share"), set())
+
+    def test_pressemelding_uten_annen_nokkelinfo_faar_ikke_belop(self):
+        # Ingen «Key information» med samme beløp: funnet står uten beløp, som før.
+        meldinger = [m for m in self.BOR_MELDINGER if m["messageId"] in (685169, 685408)]
+        funn = self._funn("BOR", meldinger, self.BOR_TEKSTER, datetime.date(2026, 11, 22))
+        self.assertEqual([(f["ex_dato"], f["ekstra"]) for f in funn], [(None, None)])
+
+    # ── BEWI ─────────────────────────────────────────────────────────────
+    def test_bewi_foreslaatt_ekstraordinaert_er_engangs(self):
+        funn = self._funn("BEWI", self.BEWI_MELDINGER, self.BEWI_TEKSTER, datetime.date(2026, 11, 22))
+        self.assertEqual([(f["ex_dato"], f["ekstra"], f["total"]) for f in funn],
+                         [("2026-12-02", 1.15, 1.15)])
+
+    def test_bewi_etter_ex_er_raten_null(self):
+        i_dag = datetime.date(2026, 12, 3)
+        a = {"ticker": "BEWI", "frekvens": "Uregelmessig", "pris": 18.02,
+             "utbytte_per_aksje": 1.15, "utbytte_12m": 1.15, "utbytte_12m_antall": 1,
+             "utbytte_12m_liste": [{"ex_dato": "2026-12-02", "belop": 1.15}],
+             "utbytte_per_ar": {"2021": 0.42, "2022": 1.1, "2023": 0.0, "2024": 0.0, "2025": 0.0}}
+        # Avviket er null, så bare porten for uregelmessige betalere slipper den til.
+        self.assertFalse(fs.betalt_kan_bli_arsrate(a, i_dag))
+        self.assertTrue(fs.betalt_kan_bli_arsrate(a, i_dag, min_avvik=0))
+        funn = self._funn("BEWI", self.BEWI_MELDINGER, self.BEWI_TEKSTER, i_dag)
+        ekstra = fs.ekstra_i_kroner(a, funn)
+        self.assertTrue(fs.bare_engangsutbytte(a, funn, ekstra, i_dag))
+
+    # ── HUNT ─────────────────────────────────────────────────────────────
+    def test_hunt_flagg_og_frekvens_i_tickers(self):
+        self.assertIn("HUNT", fs.EKSTRAORDINAERT_ER_ORDINAERT)
+        self.assertEqual(fs.FREKVENS_OVERSTYRT.get("HUNT"), "Uregelmessig")
+
+    def test_hunt_ekstraordinaert_er_ikke_engangs(self):
+        funn = self._funn("HUNT", self.HUNT_MELDINGER, self.HUNT_TEKSTER, datetime.date(2026, 11, 22))
+        self.assertEqual(funn, [])
+        # Uten flagget er det et engangsutbytte, som før.
+        andre = self._funn("XHUNT", self.HUNT_MELDINGER, self.HUNT_TEKSTER, datetime.date(2026, 11, 22))
+        self.assertEqual([(f["ex_dato"], f["ekstra"]) for f in andre], [("2026-09-29", 1.5)])
+        # «Special» står igjen også for flaggede selskaper.
+        self.assertTrue(fs._har_ekstraordinaer(fs._uten_tillegg("a special dividend", "HUNT")))
+
+    def test_hunt_betalt_blir_arsrate(self):
+        a = {"ticker": "HUNT", "frekvens": "Uregelmessig", "pris": 16.26,
+             "utbytte_per_aksje": 0.3, "utbytte_yield": 1.85,
+             "utbytte_12m": 4.03, "utbytte_12m_antall": 5,
+             "utbytte_12m_liste": [{"ex_dato": "2025-12-01", "belop": 0.3},
+                                   {"ex_dato": "2026-03-02", "belop": 0.4},
+                                   {"ex_dato": "2026-03-26", "belop": 0.58},
+                                   {"ex_dato": "2026-06-30", "belop": 1.25},
+                                   {"ex_dato": "2026-09-29", "belop": 1.5}],
+             "utbytte_per_ar": {"2021": 26.5247, "2022": 26.5247, "2023": 40.8481,
+                                "2024": 0.0, "2025": 0.3}}
+        self.assertTrue(fs.betalt_kan_bli_arsrate(a, datetime.date(2026, 11, 22)))
+        fs.bruk_betalt_som_arsrate(a)
+        self.assertEqual((a["utbytte_per_aksje"], a["utbytte_yield"]), (4.03, 24.78))
+        self.assertEqual(fs.arsrate_merke(a), "siste 12 mnd")
+        # Ingen boks om «ekstraordinært utbytte i yielden».
+        self.assertFalse(fs.bor_hente_utbyttesplitt(a))
+
+    # ── AKAST ────────────────────────────────────────────────────────────
+    def test_akast_utenfor_rangering(self):
+        self.assertEqual(fs.UTENFOR_RANGERING.get("AKAST", {}).get("grunn"), "salgsproveny")
+        a = {"ticker": "AKAST", "utbytte_yield": 48.86}
+        fs.sett_utenfor_rangering(a, fs.UTENFOR_RANGERING["AKAST"])
+        self.assertEqual(a["utenfor_rangering"], "salgsproveny")
+        self.assertFalse(fs.i_rangering(a))
+        self.assertEqual(fs.rangering_merke(a), "utdeling fra salg")
+        b = {"ticker": "AKSO", "utbytte_yield": 5.0}
+        self.assertEqual([x["ticker"] for x in fs.sektor_topp([a, b])], ["AKSO"])
+        self.assertEqual(fs.sektor_snitt_yield([a, b]), 5.0)
+        # Feltet faller bort når det tas ut av tickers.json.
+        fs.sett_utenfor_rangering(a, None)
+        self.assertNotIn("utenfor_rangering", a)
+        self.assertTrue(fs.i_rangering(a))
+
+    # ── HSPG ─────────────────────────────────────────────────────────────
+    def test_hspg_pause(self):
+        h = fs.HENDELSE.get("HSPG")
+        self.assertEqual((h["type"], h["melding"], h["dato"]), ("utbytte_pause", "685441", "2026-11-03"))
+        a = {"ticker": "HSPG", "frekvens": "Årlig", "pris": 125.0,
+             "utbytte_per_aksje": 5.0, "utbytte_yield": 4.0,
+             "utbytte_12m_liste": [{"ex_dato": "2026-03-20", "belop": 5.0}],
+             "utbetalinger": [["2026-03-20", 5.0]]}
+        self.assertTrue(fs.bruk_utbytte_pause(a, h, datetime.date(2026, 11, 22)))
+        self.assertEqual((a["utbytte_per_aksje"], a["utbytte_yield"]), (0.0, 0.0))
+        self.assertEqual(fs.arsrate_merke(a), "utdelinger på pause")
+        fs.sett_hendelse(a, h, datetime.date(2026, 11, 22))
+        self.assertFalse(fs.i_rangering(a))
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

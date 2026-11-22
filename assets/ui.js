@@ -1114,8 +1114,10 @@ function hendelseUtenMal(a) {
 // Speiler i_rangering() i fetch_stocks.py. BlueNord toppet «Høyeste yield»
 // med 28,53 % etter å ha sagt at det ikke vedtar flere utbytter før fusjonen
 // (30.10.2026). Aksjen står fortsatt i den fullstendige lista, med merke.
+// Også en aksje med `utenfor_rangering`: utdelingene er salgsproveny (Akastor,
+// 48,86 %, 22.11.2026). Tallet står på aksjesiden, men ikke i en toppliste.
 function iRangering(a) {
-  return !hendelseUtenMal(a);
+  return !hendelseUtenMal(a) && !(a && a.utenfor_rangering);
 }
 
 // Speiler sektor_snitt_yield() i fetch_stocks.py: snittet blant aksjene som
@@ -4658,6 +4660,9 @@ function arsrateMerke(a) {
   } else if (a.arsrate_kilde === 'pause') {
     // Uten merket sto «annualisert» ved siden av 0 for en kvartalsvis betaler (Archer).
     return 'utdelinger på pause';
+  } else if (a.arsrate_kilde === 'kun_engangs') {
+    // Alt betalt siste 12 mnd var engangsutbytte (Borgestad, 22.11.2026).
+    return 'bare engangsutbytte siste 12 mnd';
   } else {
     return '';
   }

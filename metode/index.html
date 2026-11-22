@@ -75,7 +75,7 @@
     "description": "Slik regner exday.no ut direkteavkastning, hvilke kilder tallene kommer fra, hvor ofte de oppdateres og hvordan de kontrolleres.",
     "url": "https://exday.no/metode/",
     "inLanguage": "nb-NO",
-    "dateModified": "2026-11-18",
+    "dateModified": "2026-11-22",
     "isPartOf": {"@type": "WebSite", "name": "exday.no", "url": "https://exday.no/"},
     "publisher": {"@id": "https://exday.no/#organisasjon"},
     "breadcrumb": {
@@ -167,7 +167,7 @@
   <header class="mb-8">
     <h1 class="text-3xl font-extrabold leading-tight mb-3">Metode og datakilder</h1>
     <p class="text-gray-500 dark:text-gray-400 text-sm">Hvor tallene kommer fra, hvordan de regnes ut og kontrolleres, og hva de ikke kan brukes til.</p>
-    <p class="text-xs text-gray-400 dark:text-gray-600 mt-3">Sist oppdatert <time datetime="2026-11-18">18. november 2026</time></p>
+    <p class="text-xs text-gray-400 dark:text-gray-600 mt-3">Sist oppdatert <time datetime="2026-11-22">22. november 2026</time></p>
   </header>
 
   <nav class="toc mb-8 text-sm" aria-label="Innhold">
@@ -199,7 +199,7 @@
     <ol>
       <li><strong>Utgangspunktet er Yahoo Finance sin årsrate.</strong> Den er som regel siste utbetaling ganget med antall utbetalinger i året. For en aksje som betaler hvert kvartal, står den merket «annualisert».</li>
       <li><strong>Årsraten sammenlignes med fjorårets utbytte.</strong> Avviker den med 50 prosent eller mer fra det selskapet betalte i siste hele kalenderår, bruker vi fjorårets sum. Har selskapet kuttet utbyttet, bruker vi det som er betalt de siste tolv månedene, så et kutt ikke skjules.</li>
-      <li><strong>Betalt siste tolv måneder tar over når avviket er stort.</strong> Avviker årsraten med minst 30 prosent fra det som faktisk er betalt de siste tolv månedene, og perioden har like mange utbetalinger som selskapet pleier, bruker vi det betalte. Tallet merkes da «siste 12 mnd». Utbytter selskapet selv kaller ekstraordinære, trekkes fra når beløpet står i meldingen eller i selskapets egen presentasjon, og da står det «uten engangsutbytte».</li>
+      <li><strong>Betalt siste tolv måneder tar over når avviket er stort.</strong> Avviker årsraten med minst 30 prosent fra det som faktisk er betalt de siste tolv månedene, og perioden har like mange utbetalinger som selskapet pleier, bruker vi det betalte. Tallet merkes da «siste 12 mnd». Utbytter selskapet selv kaller ekstraordinære, trekkes fra når beløpet står i meldingen eller i selskapets egen presentasjon, og da står det «uten engangsutbytte». Er alt som er betalt i perioden engangsutbytte, er raten 0, merket «bare engangsutbytte siste 12 mnd». Bruker et selskap ordet ekstraordinært om sitt vanlige utbytte fordi det vedtas av en ekstraordinær generalforsamling hvert kvartal, og sier selv at utbyttet er den løpende utdelingen, regner vi det som ordinært.</li>
       <li><strong>Et vedtatt, kunngjort utbytte kan endre raten.</strong> Når selskapet har meldt et nytt utbytte i kroner til Oslo Børs, og det er vedtatt, brukes beløpet ganget med antall utbetalinger i året. Et utbytte selskapet kaller ekstraordinært, ganges ikke opp, og et utbytte som bare er foreslått og venter på generalforsamlingen, brukes ikke. Har selskapet ikke betalt noe de siste tolv månedene, ganges beløpet heller ikke opp, og tallet merkes «kunngjort utbetaling». Deler en årlig betaler utbyttet i to, med en utbetaling tidligere i året og en kunngjort nå, er raten summen av de to, merket «betalt og kunngjort».</li>
       <li><strong>Et selskap som går over til å betale oftere, måles etter den nye rytmen.</strong> Utbetalingene etter skiftet ganges opp til et år, merket «annualisert», til de gamle utbetalingene er ute av de siste tolv månedene. Datoen for skiftet tar vi fra selskapets egen melding.</li>
       <li><strong>Et utbytte som har stoppet, settes til null.</strong> Har selskapet ikke betalt på 15 måneder og ikke meldt noen ny ex-dato, viser vi 0. Det samme gjelder når selskapet selv har meldt at utdelingene settes på pause, og merket sier «utdelinger på pause». Raten er 0 til en ny utdeling er kunngjort.</li>
@@ -207,10 +207,11 @@
 
     <p>Hvilken regel som er brukt, står ved tallet på hver aksjeside. Under nøkkeltallene står også en tabell over hva selskapet faktisk har betalt: de siste tolv månedene og snittet per år for de siste ett til fem hele årene. Den tabellen er fasit når du er i tvil om årsraten.</p>
 
-    <p>Tre ting er verdt å vite:</p>
+    <p>Fire ting er verdt å vite:</p>
     <ul>
       <li><strong>Alt måles mot dagens kurs.</strong> Også direkteavkastningen for tidligere år regnes mot kursen i dag, så tallene kan sammenlignes. Den er derfor ikke det en investor fikk det året.</li>
       <li><strong>Snittet bygger på hele år.</strong> «3-årssnitt» eller «5-årssnitt» bruker bare avsluttede kalenderår. Med færre enn tre hele år viser vi ikke noe snitt, og heller ikke når ett av årene er over to ganger dagens kurs. Da er beløpet som regel fra før en spleis eller et salg av virksomheten.</li>
+      <li><strong>Noen aksjer står utenfor topplistene.</strong> Det gjelder aksjer der selskapet er på vei ut av børsen, har satt utdelingene på pause, eller betaler ut penger fra salg av eiendeler. Tallet står fortsatt på aksjesiden og i de fullstendige listene, men det sier ikke hva aksjen gir i et vanlig år.</li>
       <li><strong>Særutbytte holdes utenfor snitt og vekst</strong> når selskapets egen melding kaller det særutbytte. Tabellen over betalt utbytte viser fortsatt alt som ble utbetalt.</li>
     </ul>
 
