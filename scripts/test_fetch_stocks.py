@@ -4969,6 +4969,68 @@ class TestKursvarsel(unittest.TestCase):
 class TestRapportbunken2211(unittest.TestCase):
     """Seks funn fra rapportagentene i bunken for 3. kvartal (22.11.2026)."""
 
+    # ── AKAST: kapital, uregelmessig og det ekstraordinære i februar ──────
+    AKAST_FEB = ("Extraordinary cash dividend: 0.4 per share\nDeclared currency: NOK\n"
+                 "Ex-date: 16 February 2026\nThe distribution will be classified as a "
+                 "repayment of paid-in capital.")
+    AKAST = {"ticker": "AKAST", "frekvens": "Uregelmessig", "pris": 9.21,
+             "utbytte_per_aksje": 0.75, "utbytte_yield": 8.14,
+             "utbytte_12m": 4.9, "utbytte_12m_antall": 4,
+             "utbytte_12m_liste": [{"ex_dato": "2026-02-16", "belop": 0.4},
+                                   {"ex_dato": "2026-05-18", "belop": 1.5},
+                                   {"ex_dato": "2026-08-25", "belop": 0.5},
+                                   {"ex_dato": "2026-11-13", "belop": 2.5}],
+             "utbytte_per_ar": {"2021": 0.0, "2022": 0.0, "2023": 0.0,
+                                "2024": 0.0, "2025": 0.75}}
+
+    def test_akast_tittel_leses_for_kapital(self):
+        for t in ("Akastor ASA: Declaration of cash dividend",
+                  "Akastor ASA: Declaration of extraordinary cash dividend"):
+            self.assertTrue(fs._KAPITAL_TITTEL.search(t), t)
+        gml_liste, gml_tekst = fs._newsweb_meldinger, fs._newsweb_tekst
+        fs._newsweb_meldinger = lambda _t: [
+            {"title": "Akastor ASA: Declaration of cash dividend", "messageId": 686159,
+             "publishedTime": "2026-11-11T07:00"}]
+        fs._newsweb_tekst = lambda _m: ("decided to pay a cash dividend of NOK 2.50 per share. "
+                                        "The distribution will be classified as a repayment "
+                                        "of paid-in capital.")
+        try:
+            kt = fs.hent_kapitaltilbake("AKAST", i_dag=datetime.date(2026, 11, 22))
+        finally:
+            fs._newsweb_meldinger, fs._newsweb_tekst = gml_liste, gml_tekst
+        self.assertEqual(kt["andel"], 1.0)
+
+    def test_akast_ekstraordinaert_belop_leses(self):
+        u = fs._parse_utbetalinger(self.AKAST_FEB)
+        self.assertEqual([(x["ex_dato"], x["belop"], x["valuta"]) for x in u],
+                         [("2026-02-16", 0.4, "NOK")])
+
+    def test_akast_hel_engangsutbetaling_trekkes_fra(self):
+        funn = [{"ex_dato": "2026-02-16", "ekstra": 0.4, "total": None, "valuta": "NOK",
+                 "melding_dato": "2026-02-12"}]
+        self.assertIsNone(fs.ekstra_i_kroner(self.AKAST, [dict(f) for f in funn]))
+        fs.fyll_total_fra_serie(self.AKAST, funn)
+        self.assertEqual(funn[0]["total"], 0.4)
+        ekstra = fs.ekstra_i_kroner(self.AKAST, funn)
+        self.assertEqual(ekstra, 0.4)
+        self.assertEqual(fs.hele_engangsutbetalinger(funn), 1)
+        uten = dict(self.AKAST, utbytte_12m=4.9 - ekstra, utbytte_12m_antall=3)
+        self.assertTrue(fs.betalt_kan_bli_arsrate(uten))
+        a = dict(self.AKAST)
+        fs.bruk_betalt_som_arsrate(a, ekstra)
+        self.assertEqual((a["utbytte_per_aksje"], a["utbytte_yield"]), (4.5, 48.86))
+        self.assertEqual(fs.arsrate_merke(a), "siste 12 mnd, uten engangsutbytte")
+
+    def test_bare_hele_kronebelop_faar_total(self):
+        # En dollar, eller en del av utbetalingen, gir fortsatt ingen total.
+        for f in ({"ex_dato": "2026-02-16", "ekstra": 0.4, "total": None, "valuta": "USD"},
+                  {"ex_dato": "2026-05-18", "ekstra": 0.5, "total": None, "valuta": "NOK"}):
+            fs.fyll_total_fra_serie(self.AKAST, [f])
+            self.assertIsNone(f["total"])
+
+    def test_akast_i_tickers(self):
+        self.assertEqual(fs.FREKVENS_OVERSTYRT.get("AKAST"), "Uregelmessig")
+
     # ── HUNT: 5-årssnitt 115,86 % ─────────────────────────────────────────
     HUNT = {"ticker": "HUNT", "pris": 16.26, "utbytte_12m": 4.03,
             "utbytte_per_ar": {"2021": 26.5247, "2022": 26.5247, "2023": 40.8481,

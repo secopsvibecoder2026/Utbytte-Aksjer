@@ -980,7 +980,11 @@ _ANDRE_BORSER = ("new york", "nyse", "nasdaq", "london", "stockholm", "copenhage
 # ikke kan backtracke til «25» eller «2» og slippe gjennom likevel.
 _BLOKK_BELOP_RE = re.compile(
     # «Dividend amount (per share): NOK 0.50» (Vistin) har en parentes foran kolon.
-    r"(?:dividend|distribution)\s+amount\s*(?:\(per\s+share\)\s*)?:\s*(?:(NOK|USD|EUR|SEK|DKK|\$)\s*)?"
+    # «Extraordinary cash dividend: 0.4 per share» (Akastor 665497) har ikke
+    # ordet «amount», og beløpet ble aldri lest (22.11.2026).
+    r"(?:(?:dividend|distribution)\s+amount\s*(?:\(per\s+share\)\s*)?"
+    r"|(?:extra[\s-]?ordinary|special)\s+(?:cash\s+)?dividend\s*)"
+    r":\s*(?:(NOK|USD|EUR|SEK|DKK|\$)\s*)?"
     r"(\d+(?:[.,]\d+)?)(?![\d.,]*\s*(?:m\b|mn\b|mill|bn\b|billion|mrd))", re.I)
 
 # Hvor langt tilbake en melding kan ligge og fortsatt gjelde et kommende
@@ -1722,9 +1726,15 @@ UKJENT = object()   # Hentingen feilet — behold det vi hadde fra forrige kjør
 # Pexip sendte aldri en slik: utbyttet for 2025 kom i «Information relating to
 # the proposed dividend for 2025» (665466), «structured as a repayment of
 # paid-in capital», og siden regnet det som skattepliktig utbytte (2026-11-21).
+#
+# Akastor kaller sine «Declaration of cash dividend» (686159, 680434), og hver av
+# dem sier «The distribution will be classified as a repayment of paid-in
+# capital». Ingen ble lest, og AKAST sto uten merket (rapportbunken 22.11.2026).
 _KAPITAL_TITTEL = re.compile(
     r"key information\b.*\b(?:dividend|distribution)"
-    r"|\binformation relating to the (?:proposed |cash )?(?:dividend|distribution)",
+    r"|\binformation relating to the (?:proposed |cash )?(?:dividend|distribution)"
+    r"|\bdeclaration of (?:(?:extraordinary|special|interim)\s+)?(?:cash\s+)?"
+    r"(?:dividend|distribution)",
     re.I)
 
 
@@ -3079,6 +3089,29 @@ def ekstra_i_kroner(a, funn, toleranse_dager=3):
             return None
         trekk += treff[0]["belop"] * andel
     return round(trekk, 4)
+
+
+def fyll_total_fra_serie(a, funn, toleranse_dager=3):
+    """Gir et engangsutbytte uten total den hele utbetalingen, når beløpene er like.
+
+    Akastor meldte 0,40 kr som «Extraordinary cash dividend» (665497) i en
+    egen melding uten «Key information» i tittelen, så totalen for ex-datoen
+    ble aldri funnet, og regelen sto over (22.11.2026). Er meldingens beløp
+    i kroner og lik Yahoos utbetaling med samme ex-dato (innen 1 %), er hele
+    utbetalingen engangsutbyttet. Et beløp i en annen valuta, eller et beløp
+    som bare er en del av utbetalingen, får ingen total, som før. Muterer
+    `funn`.
+    """
+    liste = a.get("utbytte_12m_liste") or []
+    for f in funn or []:
+        if f.get("total") or not f.get("ekstra") or f.get("valuta") != "NOK" or not f.get("ex_dato"):
+            continue
+        ex = datetime.date.fromisoformat(f["ex_dato"])
+        treff = [b for b in liste
+                 if abs((datetime.date.fromisoformat(b["ex_dato"]) - ex).days) <= toleranse_dager]
+        if len(treff) == 1 and abs(treff[0]["belop"] - f["ekstra"]) <= 0.01 * treff[0]["belop"]:
+            f["total"] = f["ekstra"]
+    return funn
 
 
 def _i_vinduet(a, ex_dato, toleranse_dager=3):
@@ -11440,6 +11473,7 @@ def main():
         if funn is UKJENT:
             print(f"    {aksje['ticker']}: beholder {aksje.get('utbytte_yield')} % (meldingene kunne ikke leses)")
             continue
+        fyll_total_fra_serie(kandidat, funn)
         ekstra = 0.0
         if funn:
             # Et engangsutbytte med kjent beløp trekkes fra; ellers står regelen

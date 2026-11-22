@@ -3173,6 +3173,24 @@ The rapport agents reported six findings on stock pages while summarising
 the third quarter. Each was checked against the notices first. Five were
 faults; HSHP was not.
 
+**AKAST.** Three faults on one page:
+
+- **The rate.** It showed 0,75 kr (2025) against 4,90 paid. Akastor
+  returns capital as it sells holdings (Q3 report 686167), so `frekvens` is
+  «Uregelmessig», and an irregular payer's rate is what it paid.
+- **The February payment.** «Extraordinary cash dividend: 0.4 per share»
+  (665497) has no «amount» label, so `_BLOKK_BELOP_RE` missed it. The rule
+  then stood down on an unquantified one-off. The regex now reads that
+  label too. `fyll_total_fra_serie()` treats a NOK one-off equal to Yahoo's
+  payment on that ex-date as the whole payment. A dollar amount, or a part
+  of a payment, still gets no total.
+- **Paid-in capital.** «Declaration of cash dividend» matched no title in
+  `_KAPITAL_TITTEL`, so the notices saying «repayment of paid-in capital»
+  were never read.
+
+AKAST now shows 4,50 kr, 48,86 %, «siste 12 mnd, uten engangsutbytte», and
+`kapital_tilbake` 1.0.
+
 **HUNT's 5-year average was 115,86 %.** 2021–2023 hold 26,52, 26,52 and
 40,85 kr after the 1:20 reverse split in 2023, against a price of 16,26.
 Hunter sold its VLCCs in 2021 and 2022 and paid out capital in those years.
