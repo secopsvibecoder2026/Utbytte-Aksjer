@@ -2222,8 +2222,9 @@ def lag_betalt_boks(a, nf):
     if saer:
         fotnoter.append(saer)
     if over_kurs:
-        fotnoter.append("— betyr at beløpet er over to ganger dagens kurs, som regel en "
-                        "engangsutdeling; det vises ikke som yield.")
+        fotnoter.append("— betyr at beløpet, eller ett av årene i snittet, er over to "
+                        "ganger dagens kurs. Det er som regel en engangsutdeling eller "
+                        "et beløp fra før en spleis, og vises ikke som yield.")
 
     forklaring = ""
     ovb = vist_over_betalt(a)
@@ -2683,12 +2684,20 @@ def utbytte_perioder(a, ordinaer=False):
 
     def rad(periode, belop, vindu=None, onsket=None):
         y = round(belop / pris * 100, 2) if pris > 0 and belop <= 2 * pris else None
+        # Ett år over 2× kursen gjør snittet til et tall på en annen aksjebase,
+        # selv når snittet selv er under grensen. HUNT hadde 26,52, 26,52 og
+        # 40,85 kr for 2021–2023 (utdelinger etter skipssalg, justert for
+        # spleisen i 2023) mot en kurs på 16,26, og 5-årssnittet ble 115,86 %
+        # (rapportbunken 22.11.2026). Samme grense som Sjekk 6 i valider_data.py.
+        if y is not None and vindu and any(
+                float(per_ar.get(str(v)) or 0) > 2 * pris for v in vindu):
+            y = None
         return {"periode": periode, "belop": round(belop, 2), "yield": y,
                 "fra": min(vindu) if vindu else None, "til": max(vindu) if vindu else None,
                 "ar_brukt": len(vindu) if vindu else None, "ar_onsket": onsket}
 
-    ut = [rad("12m", float(a["utbytte_12m"]))]
     per_ar = ordinaer_per_ar(a) if ordinaer else a["utbytte_per_ar"]
+    ut = [rad("12m", float(a["utbytte_12m"]))]
     forste = a.get("utbytte_forste_ar")
     ar = sorted((int(k) for k in per_ar), reverse=True)   # nyeste først
     for n in range(1, BETALT_ANTALL_AR + 1):

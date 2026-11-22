@@ -1277,3 +1277,12 @@ test('forsteBilde: første besøk viser utbetalinger siste 14 dager og kommende 
   const eldre = finnEndringer(forsteBilde(NSS_NAA, '2026-11-25').aksjer, NSS_NAA, new Set(['SOFF']), '2026-11-25', '2026-11-11');
   assert.deepEqual(eldre, []);
 });
+
+// ── Rapportbunken 22.11.2026 ────────────────────────────────────────────────
+test('utbyttePerioder: ett år over 2× kursen gir ingen snitt-yield (HUNT 115,86 %)', () => {
+  const hunt = { pris: 16.26, utbytte_12m: 4.03, utbytte_forste_ar: 2021,
+    utbytte_per_ar: { 2021: 26.5247, 2022: 26.5247, 2023: 40.8481, 2024: 0, 2025: 0.3 } };
+  const r = Object.fromEntries(utbyttePerioder(hunt).map(x => [x.periode, x]));
+  assert.notEqual(r['2'].yield, null);
+  for (const p of ['3', '4', '5']) assert.equal(r[p].yield, null, p);
+});

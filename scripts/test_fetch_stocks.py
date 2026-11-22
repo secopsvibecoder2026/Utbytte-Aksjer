@@ -4966,5 +4966,30 @@ class TestKursvarsel(unittest.TestCase):
         self.assertEqual(fs.antall_i_katalog([{}] * 155), 155)
         self.assertEqual(fs.antall_i_katalog(None), 0)
 
+class TestRapportbunken2211(unittest.TestCase):
+    """Seks funn fra rapportagentene i bunken for 3. kvartal (22.11.2026)."""
+
+    # ── HUNT: 5-årssnitt 115,86 % ─────────────────────────────────────────
+    HUNT = {"ticker": "HUNT", "pris": 16.26, "utbytte_12m": 4.03,
+            "utbytte_per_ar": {"2021": 26.5247, "2022": 26.5247, "2023": 40.8481,
+                               "2024": 0.0, "2025": 0.3},
+            "utbytte_forste_ar": 2021, "snitt_yield_5ar": 115.86}
+
+    def test_hunt_snitt_vises_ikke(self):
+        r = {x["periode"]: x for x in fs.utbytte_perioder(self.HUNT)}
+        self.assertIsNotNone(r["2"]["yield"])          # 2024–2025
+        for p in ("3", "4", "5"):
+            self.assertIsNone(r[p]["yield"], p)
+        a = dict(self.HUNT)
+        fs.sett_snitt_felter(a)
+        self.assertEqual(a["snitt_yield_5ar"], 0)
+
+    def test_vanlig_snitt_uendret(self):
+        a = {"pris": 100.0, "utbytte_12m": 5.0, "utbytte_forste_ar": 2010,
+             "utbytte_per_ar": {"2021": 4.0, "2022": 4.5, "2023": 5.0, "2024": 5.0, "2025": 5.5}}
+        fs.sett_snitt_felter(a)
+        self.assertEqual(a["snitt_yield_5ar"], 4.8)
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

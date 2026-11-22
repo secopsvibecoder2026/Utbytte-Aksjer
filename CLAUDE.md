@@ -3167,6 +3167,30 @@ merged summary is live within the hour. `tester.yml` runs
 
 Tests: `scripts/test_kvartalsrapport.py`.
 
+## From the report summaries of 2026-11-22
+
+The rapport agents reported six findings on stock pages while summarising
+the third quarter. Each was checked against the notices first. Five were
+faults; HSHP was not.
+
+**HUNT's 5-year average was 115,86 %.** 2021–2023 hold 26,52, 26,52 and
+40,85 kr after the 1:20 reverse split in 2023, against a price of 16,26.
+Hunter sold its VLCCs in 2021 and 2022 and paid out capital in those years.
+
+- **Why `saerutbytte` does not fit.** The notices call them share premium
+  reductions (2021), excess capital from the vessel sales (2022, 569215) and
+  paid-in capital. Only one is an «extraordinary dividend» (2023), and that
+  word is the legal form for a dividend approved at an EGM. The same 1,80
+  was first published as «ordinary» (580369, amended in 580428).
+  Registering it alone would make the other years look ordinary.
+- **The fix.** `utbytte_perioder()` / `utbyttePerioder()` give no yield for
+  an average when one of its years is above 2× today's price, the share-base
+  limit of Sjekk 6. HUNT and 2020 Bulkers now show «—».
+- **Left open.** HUNT's rate, 0,30 kr against 4,03 paid, is the owner's
+  call. Its 2026 dividends are «extraordinary» in the same legal sense, from
+  quarterly free cash flow and approved by an EGM. The Q4 2025 dividend was
+  paid in two parts, so the window holds five payments.
+
 ## App review of 2026-10-20
 
 Every tab, sub-tab and fourteen stock modals were opened with Playwright at
