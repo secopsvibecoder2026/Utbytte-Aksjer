@@ -3183,6 +3183,18 @@ notice) makes `bruk_frekvens_fra()` take the payments since that date,
 scaled to a year, while the window still holds older ones. It stops by
 itself after that. MEDI: 10,00 kr (3,13 %) «annualisert».
 
+**OKEA resumes quarterly dividends:** NOK 2,00 ex 2 December, and «at least
+NOK 1.00 per share» each quarter through 2027 (685403, 685404). As
+«Kvartalsvis» the DNB step would have shown 2,00 × 4 = 8,00 kr, 17,4 %. The
+DNB step no longer multiplies when the stock has paid nothing in the last
+12 months, since there is no rhythm to multiply by. The rate stays 2,00 kr
+(4,34 %), labelled «kunngjort utbetaling» (`merk_kunngjort_rate()`,
+`arsrateMerke()`), and «siste 12 mnd» after the ex-date
+(`merk_rate_lik_betalt()`: a sub-annual rate equal to a part-year window).
+That second label also corrects IWS, whose 5,00 kr is three payments, not
+an annualised figure. The company text no longer says no dividend was
+proposed for 2026.
+
 **AKAST.** Three faults on one page:
 
 - **The rate.** It showed 0,75 kr (2025) against 4,90 paid. Akastor
@@ -3228,6 +3240,24 @@ Hunter sold its VLCCs in 2021 and 2022 and paid out capital in those years.
   call. Its 2026 dividends are «extraordinary» in the same legal sense, from
   quarterly free cash flow and approved by an EGM. The Q4 2025 dividend was
   paid in two parts, so the window holds five payments.
+
+**HSHP is unchanged.** The September notice (683670) pays «from the
+Company's Contributed Surplus account», a Bermuda accounting term. It does
+not say repayment of paid-in capital.
+
+Dry runs:
+
+- The paid-12m step over all rows moves MEDI, OKEA (label), AKAST and IWS
+  (label).
+- The full pipeline for the six moves MEDI, AKAST and SOFF as above.
+- The title change moves only AKAST's `kapital_tilbake`.
+- The amount regex reads one more of 849 dividend notices since August 2025
+  (AKAST 665497) and moves no ex-date or announced amount.
+- The DNB change touches only OKEA. It is the only stock DNB's calendar
+  matched on 22.11 with no payment in the last 12 months.
+- The average rule moves only HUNT and 2020 Bulkers.
+
+Tests: `TestRapportbunken2211` (18) and `ui.test.js` (+2).
 
 ## App review of 2026-10-20
 

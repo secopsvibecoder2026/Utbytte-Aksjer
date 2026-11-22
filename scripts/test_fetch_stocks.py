@@ -4998,6 +4998,39 @@ class TestRapportbunken2211(unittest.TestCase):
             datetime.date.fromisoformat(ff["dato"])
             self.assertTrue(str(ff["melding"]).isdigit(), t)
 
+    # ── OKEA: kvartalsvis igjen, 2,00 kr ex 2.12.2026 (685403) ────────────
+    OKEA = {"ticker": "OKEA", "frekvens": "Kvartalsvis", "pris": 46.05,
+            "utbytte_per_aksje": 2.0, "utbytte_yield": 4.34, "utbytte_12m": 0,
+            "utbytte_12m_antall": 0, "utbytte_12m_liste": [],
+            "annonsert_utbytte": 2.0, "annonsert_ex": "2026-12-02"}
+
+    def test_okea_kunngjort_ikke_annualisert(self):
+        a = dict(self.OKEA)
+        self.assertTrue(fs.merk_kunngjort_rate(a, datetime.date(2026, 11, 22)))
+        self.assertEqual(fs.arsrate_merke(a), "kunngjort utbetaling")
+        self.assertEqual(fs._arsrate_ledd(a), " (kunngjort utbetaling)")
+        self.assertEqual(a["utbytte_per_aksje"], 2.0)
+        # Etter ex-datoen er det ikke kunngjort lenger.
+        self.assertFalse(fs.merk_kunngjort_rate(dict(self.OKEA), datetime.date(2026, 12, 3)))
+
+    def test_okea_etter_ex_dato_er_siste_12_mnd(self):
+        a = dict(self.OKEA, utbytte_12m=2.0, utbytte_12m_antall=1,
+                 utbytte_12m_liste=[{"ex_dato": "2026-12-02", "belop": 2.0}])
+        self.assertTrue(fs.merk_rate_lik_betalt(a))
+        self.assertEqual(fs.arsrate_merke(a), "siste 12 mnd")
+        # Et helt vindu, eller en rate som er ganget opp, merkes ikke.
+        self.assertFalse(fs.merk_rate_lik_betalt(dict(a, utbytte_per_aksje=8.0)))
+        self.assertFalse(fs.merk_rate_lik_betalt(dict(a, utbytte_12m_antall=4)))
+
+    def test_dnb_ganger_ikke_opp_uten_utbetalinger(self):
+        kilde = inspect.getsource(fs.main)
+        self.assertIn('if not (aksje.get("utbytte_12m_antall") or 0):', kilde)
+        self.assertIn("merk_kunngjort_rate(aksje) or merk_rate_lik_betalt(aksje)", kilde)
+
+    def test_okea_i_tickers(self):
+        self.assertEqual(fs.FREKVENS_OVERSTYRT.get("OKEA"), "Kvartalsvis")
+        self.assertNotIn("ikke foreslått noe utbytte for 2026", fs.BESKRIVELSER["OKEA"])
+
     # ── AKAST: kapital, uregelmessig og det ekstraordinære i februar ──────
     AKAST_FEB = ("Extraordinary cash dividend: 0.4 per share\nDeclared currency: NOK\n"
                  "Ex-date: 16 February 2026\nThe distribution will be classified as a "
@@ -5121,6 +5154,13 @@ class TestRapportbunken2211(unittest.TestCase):
              "utbytte_per_ar": {"2021": 4.0, "2022": 4.5, "2023": 5.0, "2024": 5.0, "2025": 5.5}}
         fs.sett_snitt_felter(a)
         self.assertEqual(a["snitt_yield_5ar"], 4.8)
+
+    # ── HSHP: «Contributed Surplus» er ikke innbetalt kapital (683670) ────
+    def test_hshp_contributed_surplus_er_ikke_kapital(self):
+        tekst = ("The Board has approved a cash distribution of US$0.28 per share for "
+                 "September 2026. The distribution will be made from the Company's "
+                 "Contributed Surplus account.")
+        self.assertIsNone(fs._parse_kapitaltilbake(tekst))
 
 
 if __name__ == "__main__":

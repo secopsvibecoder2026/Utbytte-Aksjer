@@ -1286,3 +1286,8 @@ test('utbyttePerioder: ett år over 2× kursen gir ingen snitt-yield (HUNT 115,8
   assert.notEqual(r['2'].yield, null);
   for (const p of ['3', '4', '5']) assert.equal(r[p].yield, null, p);
 });
+
+test('arsrateMerke: én kunngjort utbetaling er ikke annualisert (OKEA)', () => {
+  assert.equal(arsrateMerke({ arsrate_kilde: 'kunngjort' }), 'kunngjort utbetaling');
+  assert.equal(arsrateMerke({ arsrate_kilde: 'kunngjort', arsrate_ekstra_trukket: 1 }), 'kunngjort utbetaling');
+});

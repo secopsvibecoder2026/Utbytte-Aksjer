@@ -4647,6 +4647,9 @@ function arsrateMerke(a) {
   } else if (a.arsrate_kilde === 'siste_utbetalinger') {
     const n = Number(a.arsrate_antall) || 0;
     merke = n > 1 ? `siste ${ANTALL_ORD[n] || n} utbetalinger` : 'siste utbetaling';
+  } else if (a.arsrate_kilde === 'kunngjort') {
+    // Én kunngjort utbetaling, ikke ganget opp (OKEA, 22.11.2026).
+    return 'kunngjort utbetaling';
   } else {
     return '';
   }
