@@ -4966,5 +4966,202 @@ class TestKursvarsel(unittest.TestCase):
         self.assertEqual(fs.antall_i_katalog([{}] * 155), 155)
         self.assertEqual(fs.antall_i_katalog(None), 0)
 
+class TestRapportbunken2211(unittest.TestCase):
+    """Seks funn fra rapportagentene i bunken for 3. kvartal (22.11.2026)."""
+
+    # ── MEDI: kvartalsvis fra 27.10.2026 (684699) ──────────────────────────
+    MEDI = {"ticker": "MEDI", "frekvens": "Kvartalsvis", "pris": 319.0,
+            "utbytte_per_aksje": 6.0, "utbytte_yield": 1.88,
+            "utbytte_12m": 10.5, "utbytte_12m_antall": 2,
+            "utbytte_12m_liste": [{"ex_dato": "2026-05-07", "belop": 8.0},
+                                  {"ex_dato": "2026-10-27", "belop": 2.5}]}
+
+    def test_medi_kvartalsvis_annualiserer_det_nye(self):
+        a = dict(self.MEDI, arsrate_kilde="betalt_12m")
+        self.assertTrue(fs.bruk_frekvens_fra(a, "2026-10-27"))
+        self.assertEqual(a["utbytte_per_aksje"], 10.0)
+        self.assertEqual(a["utbytte_yield"], 3.13)
+        self.assertNotIn("arsrate_kilde", a)   # kortet sier «annualisert»
+
+    def test_frekvens_fra_slutter_av_seg_selv(self):
+        # Ingen ny utbetaling ennå: ingenting gjøres.
+        a = dict(self.MEDI, utbytte_12m_liste=self.MEDI["utbytte_12m_liste"][:1])
+        self.assertFalse(fs.bruk_frekvens_fra(a, "2026-10-27"))
+        # Bare nye utbetalinger i vinduet: de vanlige reglene gjelder.
+        a = dict(self.MEDI, utbytte_12m_liste=self.MEDI["utbytte_12m_liste"][1:])
+        self.assertFalse(fs.bruk_frekvens_fra(a, "2026-10-27"))
+
+    def test_medi_i_tickers(self):
+        self.assertEqual(fs.FREKVENS_OVERSTYRT.get("MEDI"), "Kvartalsvis")
+        self.assertEqual(fs.FREKVENS_FRA["MEDI"], {"dato": "2026-10-27", "melding": "684699"})
+        for t, ff in fs.FREKVENS_FRA.items():
+            datetime.date.fromisoformat(ff["dato"])
+            self.assertTrue(str(ff["melding"]).isdigit(), t)
+
+    # ── OKEA: kvartalsvis igjen, 2,00 kr ex 2.12.2026 (685403) ────────────
+    OKEA = {"ticker": "OKEA", "frekvens": "Kvartalsvis", "pris": 46.05,
+            "utbytte_per_aksje": 2.0, "utbytte_yield": 4.34, "utbytte_12m": 0,
+            "utbytte_12m_antall": 0, "utbytte_12m_liste": [],
+            "annonsert_utbytte": 2.0, "annonsert_ex": "2026-12-02"}
+
+    def test_okea_kunngjort_ikke_annualisert(self):
+        a = dict(self.OKEA)
+        self.assertTrue(fs.merk_kunngjort_rate(a, datetime.date(2026, 11, 22)))
+        self.assertEqual(fs.arsrate_merke(a), "kunngjort utbetaling")
+        self.assertEqual(fs._arsrate_ledd(a), " (kunngjort utbetaling)")
+        self.assertEqual(a["utbytte_per_aksje"], 2.0)
+        # Etter ex-datoen er det ikke kunngjort lenger.
+        self.assertFalse(fs.merk_kunngjort_rate(dict(self.OKEA), datetime.date(2026, 12, 3)))
+
+    def test_okea_etter_ex_dato_er_siste_12_mnd(self):
+        a = dict(self.OKEA, utbytte_12m=2.0, utbytte_12m_antall=1,
+                 utbytte_12m_liste=[{"ex_dato": "2026-12-02", "belop": 2.0}])
+        self.assertTrue(fs.merk_rate_lik_betalt(a))
+        self.assertEqual(fs.arsrate_merke(a), "siste 12 mnd")
+        # Et helt vindu, eller en rate som er ganget opp, merkes ikke.
+        self.assertFalse(fs.merk_rate_lik_betalt(dict(a, utbytte_per_aksje=8.0)))
+        self.assertFalse(fs.merk_rate_lik_betalt(dict(a, utbytte_12m_antall=4)))
+
+    def test_dnb_ganger_ikke_opp_uten_utbetalinger(self):
+        kilde = inspect.getsource(fs.main)
+        self.assertIn('if not (aksje.get("utbytte_12m_antall") or 0):', kilde)
+        self.assertIn("merk_kunngjort_rate(aksje) or merk_rate_lik_betalt(aksje)", kilde)
+
+    def test_okea_i_tickers(self):
+        self.assertEqual(fs.FREKVENS_OVERSTYRT.get("OKEA"), "Kvartalsvis")
+        self.assertNotIn("ikke foreslått noe utbytte for 2026", fs.BESKRIVELSER["OKEA"])
+
+    # ── AKAST: kapital, uregelmessig og det ekstraordinære i februar ──────
+    AKAST_FEB = ("Extraordinary cash dividend: 0.4 per share\nDeclared currency: NOK\n"
+                 "Ex-date: 16 February 2026\nThe distribution will be classified as a "
+                 "repayment of paid-in capital.")
+    AKAST = {"ticker": "AKAST", "frekvens": "Uregelmessig", "pris": 9.21,
+             "utbytte_per_aksje": 0.75, "utbytte_yield": 8.14,
+             "utbytte_12m": 4.9, "utbytte_12m_antall": 4,
+             "utbytte_12m_liste": [{"ex_dato": "2026-02-16", "belop": 0.4},
+                                   {"ex_dato": "2026-05-18", "belop": 1.5},
+                                   {"ex_dato": "2026-08-25", "belop": 0.5},
+                                   {"ex_dato": "2026-11-13", "belop": 2.5}],
+             "utbytte_per_ar": {"2021": 0.0, "2022": 0.0, "2023": 0.0,
+                                "2024": 0.0, "2025": 0.75}}
+
+    def test_akast_tittel_leses_for_kapital(self):
+        for t in ("Akastor ASA: Declaration of cash dividend",
+                  "Akastor ASA: Declaration of extraordinary cash dividend"):
+            self.assertTrue(fs._KAPITAL_TITTEL.search(t), t)
+        gml_liste, gml_tekst = fs._newsweb_meldinger, fs._newsweb_tekst
+        fs._newsweb_meldinger = lambda _t: [
+            {"title": "Akastor ASA: Declaration of cash dividend", "messageId": 686159,
+             "publishedTime": "2026-11-11T07:00"}]
+        fs._newsweb_tekst = lambda _m: ("decided to pay a cash dividend of NOK 2.50 per share. "
+                                        "The distribution will be classified as a repayment "
+                                        "of paid-in capital.")
+        try:
+            kt = fs.hent_kapitaltilbake("AKAST", i_dag=datetime.date(2026, 11, 22))
+        finally:
+            fs._newsweb_meldinger, fs._newsweb_tekst = gml_liste, gml_tekst
+        self.assertEqual(kt["andel"], 1.0)
+
+    def test_akast_ekstraordinaert_belop_leses(self):
+        u = fs._parse_utbetalinger(self.AKAST_FEB)
+        self.assertEqual([(x["ex_dato"], x["belop"], x["valuta"]) for x in u],
+                         [("2026-02-16", 0.4, "NOK")])
+
+    def test_akast_hel_engangsutbetaling_trekkes_fra(self):
+        funn = [{"ex_dato": "2026-02-16", "ekstra": 0.4, "total": None, "valuta": "NOK",
+                 "melding_dato": "2026-02-12"}]
+        self.assertIsNone(fs.ekstra_i_kroner(self.AKAST, [dict(f) for f in funn]))
+        fs.fyll_total_fra_serie(self.AKAST, funn)
+        self.assertEqual(funn[0]["total"], 0.4)
+        ekstra = fs.ekstra_i_kroner(self.AKAST, funn)
+        self.assertEqual(ekstra, 0.4)
+        self.assertEqual(fs.hele_engangsutbetalinger(funn), 1)
+        uten = dict(self.AKAST, utbytte_12m=4.9 - ekstra, utbytte_12m_antall=3)
+        self.assertTrue(fs.betalt_kan_bli_arsrate(uten))
+        a = dict(self.AKAST)
+        fs.bruk_betalt_som_arsrate(a, ekstra)
+        self.assertEqual((a["utbytte_per_aksje"], a["utbytte_yield"]), (4.5, 48.86))
+        self.assertEqual(fs.arsrate_merke(a), "siste 12 mnd, uten engangsutbytte")
+
+    def test_bare_hele_kronebelop_faar_total(self):
+        # En dollar, eller en del av utbetalingen, gir fortsatt ingen total.
+        for f in ({"ex_dato": "2026-02-16", "ekstra": 0.4, "total": None, "valuta": "USD"},
+                  {"ex_dato": "2026-05-18", "ekstra": 0.5, "total": None, "valuta": "NOK"}):
+            fs.fyll_total_fra_serie(self.AKAST, [f])
+            self.assertIsNone(f["total"])
+
+    def test_akast_i_tickers(self):
+        self.assertEqual(fs.FREKVENS_OVERSTYRT.get("AKAST"), "Uregelmessig")
+
+    # ── SOFF: 0,12 av 0,30 USD ekstraordinært (presentasjonen, 685540) ────
+    SOFF = {"ticker": "SOFF", "frekvens": "Kvartalsvis", "pris": 65.0,
+            "utbytte_per_aksje": 5.63, "utbytte_yield": 8.66,
+            "utbytte_12m": 6.1396, "utbytte_12m_antall": 5,
+            "utbytte_12m_liste": [{"ex_dato": "2025-11-25", "belop": 0.5119},
+                                  {"ex_dato": "2026-03-10", "belop": 0.4832},
+                                  {"ex_dato": "2026-05-20", "belop": 0.9169},
+                                  {"ex_dato": "2026-07-17", "belop": 1.4592},
+                                  {"ex_dato": "2026-11-06", "belop": 2.7683}],
+            "utbytte_runde": [{"ex_dato": "2026-03-10", "belop": 0.4832},
+                              {"ex_dato": "2026-05-20", "belop": 0.9169},
+                              {"ex_dato": "2026-07-17", "belop": 1.4592},
+                              {"ex_dato": "2026-11-06", "belop": 2.7683}]}
+
+    def test_soff_saerutbytte_i_tickers(self):
+        s = fs.SAERUTBYTTE["SOFF"]
+        self.assertEqual(s, [{"ex_dato": "2026-11-06", "belop": 1.1073, "melding": "685540"}])
+        # 0,12 av 0,30 dollar, regnet om med selskapets kronebeløp 2,76834 (685858).
+        self.assertAlmostEqual(0.12 / 0.30 * 2.76834, s[0]["belop"], places=4)
+
+    def test_soff_engangsdelen_trekkes_fra(self):
+        kandidat = fs.med_runde(self.SOFF)
+        saer = fs.saerutbytte_i_vindu(kandidat)
+        self.assertEqual(len(saer), 1)
+        self.assertEqual((saer[0]["ekstra"], saer[0]["total"]), (1.1073, 2.7683))
+        funn = fs.med_saerutbytte([], saer)
+        ekstra = fs.ekstra_i_kroner(kandidat, funn)
+        self.assertAlmostEqual(ekstra, 1.1073, places=4)
+        self.assertEqual(fs.hele_engangsutbetalinger(funn), 0)
+        a = dict(self.SOFF)
+        fs.bruk_betalt_som_arsrate(a, ekstra)
+        self.assertEqual((a["utbytte_per_aksje"], a["utbytte_yield"]), (4.52, 6.95))
+        self.assertEqual(fs.arsrate_merke(a), "siste fire utbetalinger, uten engangsutbytte")
+
+    def test_saerutbytte_erstatter_newsweb_funn_for_samme_ex(self):
+        saer = [{"ex_dato": "2026-11-06", "ekstra": 1.1073, "total": 2.7683, "valuta": "NOK"}]
+        nw = [{"ex_dato": "2026-11-05", "ekstra": None, "total": None, "valuta": None},
+              {"ex_dato": "2026-03-10", "ekstra": None, "total": None, "valuta": None}]
+        ut = fs.med_saerutbytte(nw, saer)
+        self.assertEqual([f["ex_dato"] for f in ut], ["2026-03-10", "2026-11-06"])
+
+    # ── HUNT: 5-årssnitt 115,86 % ─────────────────────────────────────────
+    HUNT = {"ticker": "HUNT", "pris": 16.26, "utbytte_12m": 4.03,
+            "utbytte_per_ar": {"2021": 26.5247, "2022": 26.5247, "2023": 40.8481,
+                               "2024": 0.0, "2025": 0.3},
+            "utbytte_forste_ar": 2021, "snitt_yield_5ar": 115.86}
+
+    def test_hunt_snitt_vises_ikke(self):
+        r = {x["periode"]: x for x in fs.utbytte_perioder(self.HUNT)}
+        self.assertIsNotNone(r["2"]["yield"])          # 2024–2025
+        for p in ("3", "4", "5"):
+            self.assertIsNone(r[p]["yield"], p)
+        a = dict(self.HUNT)
+        fs.sett_snitt_felter(a)
+        self.assertEqual(a["snitt_yield_5ar"], 0)
+
+    def test_vanlig_snitt_uendret(self):
+        a = {"pris": 100.0, "utbytte_12m": 5.0, "utbytte_forste_ar": 2010,
+             "utbytte_per_ar": {"2021": 4.0, "2022": 4.5, "2023": 5.0, "2024": 5.0, "2025": 5.5}}
+        fs.sett_snitt_felter(a)
+        self.assertEqual(a["snitt_yield_5ar"], 4.8)
+
+    # ── HSHP: «Contributed Surplus» er ikke innbetalt kapital (683670) ────
+    def test_hshp_contributed_surplus_er_ikke_kapital(self):
+        tekst = ("The Board has approved a cash distribution of US$0.28 per share for "
+                 "September 2026. The distribution will be made from the Company's "
+                 "Contributed Surplus account.")
+        self.assertIsNone(fs._parse_kapitaltilbake(tekst))
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

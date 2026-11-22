@@ -4195,7 +4195,12 @@ function utbyttePerioder(a) {
     belop: Math.round(belop * 100) / 100,
     // Over 2× kursen er nesten alltid en engangsutdeling — samme grense som
     // utbetaltHittil() og Sjekk 9.
-    yield: pris > 0 && belop <= 2 * pris ? Math.round(belop / pris * 10000) / 100 : null,
+    // Ett år i snittet over 2× kursen gir også null: HUNTs 5-årssnitt ble
+    // 115,86 % av utdelinger fra før spleisen i 2023 (22.11.2026). Samme regel
+    // som utbytte_perioder() i fetch_stocks.py.
+    yield: pris > 0 && belop <= 2 * pris
+      && !(vindu || []).some(y => (Number(perAr[String(y)]) || 0) > 2 * pris)
+      ? Math.round(belop / pris * 10000) / 100 : null,
     fra: vindu ? Math.min(...vindu) : null,
     til: vindu ? Math.max(...vindu) : null,
     arBrukt: vindu ? vindu.length : null,
@@ -4642,6 +4647,9 @@ function arsrateMerke(a) {
   } else if (a.arsrate_kilde === 'siste_utbetalinger') {
     const n = Number(a.arsrate_antall) || 0;
     merke = n > 1 ? `siste ${ANTALL_ORD[n] || n} utbetalinger` : 'siste utbetaling';
+  } else if (a.arsrate_kilde === 'kunngjort') {
+    // Én kunngjort utbetaling, ikke ganget opp (OKEA, 22.11.2026).
+    return 'kunngjort utbetaling';
   } else {
     return '';
   }
@@ -4669,7 +4677,7 @@ function _betaltVisning(r) {
     : `Snitt per år ${r.fra}–${r.til}`;
   const merknad = r.arBrukt != null && r.arBrukt < r.arOnsket
     ? `Utbytte i historikken bare fra ${r.fra}, så snittet dekker ${r.arBrukt} år.`
-    : r.yield == null ? 'Over to ganger dagens kurs — som regel en engangsutdeling, vises ikke som yield.' : '';
+    : r.yield == null ? 'Beløpet, eller ett av årene i snittet, er over to ganger dagens kurs. Det er som regel en engangsutdeling eller et beløp fra før en spleis, og vises ikke som yield.' : '';
   return {
     periode,
     // Ikke fmt(): den skriver «—» for 0, og her er 0 et faktum — REACH har

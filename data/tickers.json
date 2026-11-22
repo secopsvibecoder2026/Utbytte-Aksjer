@@ -471,13 +471,14 @@
     "navn": "OKEA ASA",
     "sektor": "Energi",
     "bors": "Oslo Børs",
-    "beskrivelse": "OKEA ble etablert i Trondheim i 2015 for å kjøpe andeler i felt som de store selskapene ville selge seg ut av, og har hovedkontor der fortsatt. Det første store kjøpet var Draugen og Gjøa fra Shell i 2018. Thailandske Bangchak gikk inn som eier samme år, og egenkapitalen derfra var det som gjorde kjøpet mulig. Bangchak er fortsatt største eier og har styreleder. Senere kom Brage, Ivar Aasen og Nova i 2022, og en andel i Statfjord-området fra Equinor i 2023. OKEA er operatør for Draugen og Brage og partner i de andre feltene.\n\nDen vanlige innvendingen mot å kjøpe gamle felt er at regningen for å plugge brønnene og fjerne innretningene følger med. Hos OKEA er mye av den regningen avtalt bort. Shell skal dekke det meste av OKEAs andel av kostnaden for Draugen og Gjøa og Harbour Energy det meste for Brage, begge opp til et avtalt tak. Equinor tar hele OKEAs andel for Statfjord A. Det som gjenstår, er risikoen ved å drive felt med fallende produksjon: et planlagt vedlikehold eller en forsinket brønn gir raskt store utslag i kvartalstallene.\n\nOKEA delte ut kvartalsvis utbytte i 2022 og 2023, men ingenting i 2024 og 2025. Ifølge årsrapporten for 2025 skal en stor del av overskuddslikviditeten gå til prosjekter og til å betjene gjelden, og styret hadde ikke foreslått noe utbytte for 2026. Selskapet er finansiert med obligasjonslån og hadde lav egenkapital ved utgangen av 2025. Nye utdelinger forutsetter fullmakt fra generalforsamlingen.",
+    "beskrivelse": "OKEA ble etablert i Trondheim i 2015 for å kjøpe andeler i felt som de store selskapene ville selge seg ut av, og har hovedkontor der fortsatt. Det første store kjøpet var Draugen og Gjøa fra Shell i 2018. Thailandske Bangchak gikk inn som eier samme år, og egenkapitalen derfra var det som gjorde kjøpet mulig. Bangchak er fortsatt største eier og har styreleder. Senere kom Brage, Ivar Aasen og Nova i 2022, og en andel i Statfjord-området fra Equinor i 2023. OKEA er operatør for Draugen og Brage og partner i de andre feltene.\n\nDen vanlige innvendingen mot å kjøpe gamle felt er at regningen for å plugge brønnene og fjerne innretningene følger med. Hos OKEA er mye av den regningen avtalt bort. Shell skal dekke det meste av OKEAs andel av kostnaden for Draugen og Gjøa og Harbour Energy det meste for Brage, begge opp til et avtalt tak. Equinor tar hele OKEAs andel for Statfjord A. Det som gjenstår, er risikoen ved å drive felt med fallende produksjon: et planlagt vedlikehold eller en forsinket brønn gir raskt store utslag i kvartalstallene.\n\nOKEA delte ut kvartalsvis utbytte i 2022 og 2023, men ingenting i 2024 og 2025. Sammen med tallene for tredje kvartal 2026 meldte selskapet at det tar opp igjen kvartalsutbyttet, med første utbetaling i desember, og at det har til hensikt å dele ut minst et fast beløp per aksje hvert kvartal gjennom 2027. Selskapet viste til at Bestla skal komme i produksjon og at investeringene er på vei ned. Utdelingene vedtas av styret etter fullmakt fra generalforsamlingen, og selskapet er finansiert med obligasjonslån.",
     "navn_dnb": "OKEA ASA",
     "beskrivelse_fakta": "OKEA ASA er et olje- og gasselskap som driver utbygging og produksjon på norsk sokkel. Selskapet ble stiftet i 2015 og har hovedkontor i Trondheim.",
     "beskrivelse_fakta_kilde": "yahoo_finance",
     "beskrivelse_fakta_sprak": "en",
     "ask_egnet": true,
-    "inkorporeringsland": "Norge"
+    "inkorporeringsland": "Norge",
+    "frekvens": "Kvartalsvis"
   },
   {
     "ticker": "BEWI",
@@ -929,7 +930,12 @@
     "beskrivelse_fakta_kilde": "yahoo_finance",
     "beskrivelse_fakta_sprak": "en",
     "ask_egnet": true,
-    "inkorporeringsland": "Norge"
+    "inkorporeringsland": "Norge",
+    "frekvens": "Kvartalsvis",
+    "frekvens_fra": {
+      "dato": "2026-10-27",
+      "melding": "684699"
+    }
   },
   {
     "ticker": "ATEA",
@@ -1000,7 +1006,14 @@
     "beskrivelse_fakta_kilde": "yahoo_finance",
     "beskrivelse_fakta_sprak": "en",
     "ask_egnet": true,
-    "inkorporeringsland": "Norge"
+    "inkorporeringsland": "Norge",
+    "saerutbytte": [
+      {
+        "ex_dato": "2026-11-06",
+        "belop": 1.1073,
+        "melding": "685540"
+      }
+    ]
   },
   {
     "ticker": "ITERA",
@@ -1360,7 +1373,8 @@
     "beskrivelse_fakta_kilde": "yahoo_finance",
     "beskrivelse_fakta_sprak": "en",
     "ask_egnet": true,
-    "inkorporeringsland": "Norge"
+    "inkorporeringsland": "Norge",
+    "frekvens": "Uregelmessig"
   },
   {
     "ticker": "GENT",

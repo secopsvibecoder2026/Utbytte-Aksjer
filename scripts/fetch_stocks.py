@@ -250,6 +250,10 @@ INKORPORERINGSLAND   = {t["ticker"]: t.get("inkorporeringsland", "Norge") for t 
 # eller forstyrret av en selskapshendelse — 2020 Bulkers betaler månedlig,
 # men ble talt til kvartalsvis etter kapitalutdelingen i mai 2026.
 FREKVENS_OVERSTYRT   = {t["ticker"]: t["frekvens"] for t in _ticker_data if t.get("frekvens")}
+# Når selskapet har gått over til en ny frekvens: ex-datoen for den første
+# utbetalingen med den nye, og meldingen som sier det. Se bruk_frekvens_fra().
+FREKVENS_FRA         = {t["ticker"]: t["frekvens_fra"] for t in _ticker_data
+                        if t.get("frekvens_fra") and t.get("frekvens")}
 # Selskaper der politikken selv deler årsutbyttet i to, og den andre delen
 # kalles «additional» eller «tilleggsutbytte» og vedtas etter fullmakt.
 # Ordet gjør det ikke til et engangsutbytte. Wilh. Wilhelmsen viste 12,00 kr
@@ -980,7 +984,11 @@ _ANDRE_BORSER = ("new york", "nyse", "nasdaq", "london", "stockholm", "copenhage
 # ikke kan backtracke til «25» eller «2» og slippe gjennom likevel.
 _BLOKK_BELOP_RE = re.compile(
     # «Dividend amount (per share): NOK 0.50» (Vistin) har en parentes foran kolon.
-    r"(?:dividend|distribution)\s+amount\s*(?:\(per\s+share\)\s*)?:\s*(?:(NOK|USD|EUR|SEK|DKK|\$)\s*)?"
+    # «Extraordinary cash dividend: 0.4 per share» (Akastor 665497) har ikke
+    # ordet «amount», og beløpet ble aldri lest (22.11.2026).
+    r"(?:(?:dividend|distribution)\s+amount\s*(?:\(per\s+share\)\s*)?"
+    r"|(?:extra[\s-]?ordinary|special)\s+(?:cash\s+)?dividend\s*)"
+    r":\s*(?:(NOK|USD|EUR|SEK|DKK|\$)\s*)?"
     r"(\d+(?:[.,]\d+)?)(?![\d.,]*\s*(?:m\b|mn\b|mill|bn\b|billion|mrd))", re.I)
 
 # Hvor langt tilbake en melding kan ligge og fortsatt gjelde et kommende
@@ -1722,9 +1730,15 @@ UKJENT = object()   # Hentingen feilet — behold det vi hadde fra forrige kjør
 # Pexip sendte aldri en slik: utbyttet for 2025 kom i «Information relating to
 # the proposed dividend for 2025» (665466), «structured as a repayment of
 # paid-in capital», og siden regnet det som skattepliktig utbytte (2026-11-21).
+#
+# Akastor kaller sine «Declaration of cash dividend» (686159, 680434), og hver av
+# dem sier «The distribution will be classified as a repayment of paid-in
+# capital». Ingen ble lest, og AKAST sto uten merket (rapportbunken 22.11.2026).
 _KAPITAL_TITTEL = re.compile(
     r"key information\b.*\b(?:dividend|distribution)"
-    r"|\binformation relating to the (?:proposed |cash )?(?:dividend|distribution)",
+    r"|\binformation relating to the (?:proposed |cash )?(?:dividend|distribution)"
+    r"|\bdeclaration of (?:(?:extraordinary|special|interim)\s+)?(?:cash\s+)?"
+    r"(?:dividend|distribution)",
     re.I)
 
 
@@ -2222,8 +2236,9 @@ def lag_betalt_boks(a, nf):
     if saer:
         fotnoter.append(saer)
     if over_kurs:
-        fotnoter.append("— betyr at beløpet er over to ganger dagens kurs, som regel en "
-                        "engangsutdeling; det vises ikke som yield.")
+        fotnoter.append("— betyr at beløpet, eller ett av årene i snittet, er over to "
+                        "ganger dagens kurs. Det er som regel en engangsutdeling eller "
+                        "et beløp fra før en spleis, og vises ikke som yield.")
 
     forklaring = ""
     ovb = vist_over_betalt(a)
@@ -2683,12 +2698,20 @@ def utbytte_perioder(a, ordinaer=False):
 
     def rad(periode, belop, vindu=None, onsket=None):
         y = round(belop / pris * 100, 2) if pris > 0 and belop <= 2 * pris else None
+        # Ett år over 2× kursen gjør snittet til et tall på en annen aksjebase,
+        # selv når snittet selv er under grensen. HUNT hadde 26,52, 26,52 og
+        # 40,85 kr for 2021–2023 (utdelinger etter skipssalg, justert for
+        # spleisen i 2023) mot en kurs på 16,26, og 5-årssnittet ble 115,86 %
+        # (rapportbunken 22.11.2026). Samme grense som Sjekk 6 i valider_data.py.
+        if y is not None and vindu and any(
+                float(per_ar.get(str(v)) or 0) > 2 * pris for v in vindu):
+            y = None
         return {"periode": periode, "belop": round(belop, 2), "yield": y,
                 "fra": min(vindu) if vindu else None, "til": max(vindu) if vindu else None,
                 "ar_brukt": len(vindu) if vindu else None, "ar_onsket": onsket}
 
-    ut = [rad("12m", float(a["utbytte_12m"]))]
     per_ar = ordinaer_per_ar(a) if ordinaer else a["utbytte_per_ar"]
+    ut = [rad("12m", float(a["utbytte_12m"]))]
     forste = a.get("utbytte_forste_ar")
     ar = sorted((int(k) for k in per_ar), reverse=True)   # nyeste først
     for n in range(1, BETALT_ANTALL_AR + 1):
@@ -3072,6 +3095,77 @@ def ekstra_i_kroner(a, funn, toleranse_dager=3):
     return round(trekk, 4)
 
 
+def saerutbytte_i_vindu(a, toleranse_dager=3):
+    """Særutbytte fra tickers.json i vinduet, i samme form som ekstraordinaere_i_vindu().
+
+    Solstad Offshore betalte 0,30 dollar med ex-dato 6. november 2026, og
+    0,12 av dem var et ekstraordinært utbytte etter salget av Normand Tonjer.
+    Det står i presentasjonen (vedlegg til 685540, side 6 og 9), ikke i
+    utbyttemeldingen (685547), så NewsWeb-oppslaget fant det aldri, og
+    årsraten tok med hele utbetalingen (rapportbunken 22.11.2026). Et
+    særutbytte som er kontrollert for hånd og står i `saerutbytte`, er et
+    tallfestet engangsutbytte. `total` er utbetalingen i vinduet med samme
+    ex-dato, så andelen blir kronene i særutbyttet delt på kronene i
+    utbetalingen.
+    """
+    liste = a.get("utbytte_12m_liste") or []
+    ut = []
+    for s_ in saerutbytter(a):
+        ex = datetime.date.fromisoformat(s_["ex_dato"])
+        treff = [b for b in liste
+                 if abs((datetime.date.fromisoformat(b["ex_dato"]) - ex).days) <= toleranse_dager]
+        if len(treff) != 1 or s_["belop"] > treff[0]["belop"] * 1.001:
+            continue
+        ut.append({"ex_dato": s_["ex_dato"], "ekstra": s_["belop"],
+                   "total": treff[0]["belop"], "valuta": "NOK",
+                   "melding_dato": s_["ex_dato"], "kilde": "saerutbytte"})
+    return ut
+
+
+def med_saerutbytte(funn, saer, toleranse_dager=3):
+    """`funn` fra NewsWeb med særutbyttene fra tickers.json i stedet for sine egne.
+
+    Et særutbytte i tickers.json er lest i selskapets kilde og tallfestet for
+    hånd. Har NewsWeb et funn for samme ex-dato, byttes det ut, så samme
+    utbetaling ikke trekkes fra to ganger og et funn uten beløp ikke stopper
+    regelen.
+    """
+    if not saer:
+        return funn
+
+    def naer(f):
+        if not f.get("ex_dato"):
+            return False
+        d = datetime.date.fromisoformat(f["ex_dato"])
+        return any(abs((datetime.date.fromisoformat(s_["ex_dato"]) - d).days) <= toleranse_dager
+                   for s_ in saer)
+
+    return [f for f in funn if not naer(f)] + list(saer)
+
+
+def fyll_total_fra_serie(a, funn, toleranse_dager=3):
+    """Gir et engangsutbytte uten total den hele utbetalingen, når beløpene er like.
+
+    Akastor meldte 0,40 kr som «Extraordinary cash dividend» (665497) i en
+    egen melding uten «Key information» i tittelen, så totalen for ex-datoen
+    ble aldri funnet, og regelen sto over (22.11.2026). Er meldingens beløp
+    i kroner og lik Yahoos utbetaling med samme ex-dato (innen 1 %), er hele
+    utbetalingen engangsutbyttet. Et beløp i en annen valuta, eller et beløp
+    som bare er en del av utbetalingen, får ingen total, som før. Muterer
+    `funn`.
+    """
+    liste = a.get("utbytte_12m_liste") or []
+    for f in funn or []:
+        if f.get("total") or not f.get("ekstra") or f.get("valuta") != "NOK" or not f.get("ex_dato"):
+            continue
+        ex = datetime.date.fromisoformat(f["ex_dato"])
+        treff = [b for b in liste
+                 if abs((datetime.date.fromisoformat(b["ex_dato"]) - ex).days) <= toleranse_dager]
+        if len(treff) == 1 and abs(treff[0]["belop"] - f["ekstra"]) <= 0.01 * treff[0]["belop"]:
+            f["total"] = f["ekstra"]
+    return funn
+
+
 def _i_vinduet(a, ex_dato, toleranse_dager=3):
     """Har `utbytte_12m_liste` en utbetaling med denne ex-datoen (± noen dager)?"""
     if not ex_dato:
@@ -3246,6 +3340,8 @@ def arsrate_merke(a):
     elif kilde == "siste_utbetalinger":
         n = a.get("arsrate_antall") or 0
         merke = f"siste {_antall_ord(n)} utbetalinger" if n > 1 else "siste utbetaling"
+    elif kilde == "kunngjort":
+        return "kunngjort utbetaling"
     else:
         return ""
     return merke + (", uten engangsutbytte" if a.get("arsrate_ekstra_trukket") else "")
@@ -3258,6 +3354,8 @@ def _faq_arsrate_ledd(a):
         ledd = "utbetalt de siste 12 månedene"
     elif kilde == "siste_utbetalinger":
         ledd = "fra " + _siste_utbetalinger_ledd(a)
+    elif kilde == "kunngjort":
+        return "den kunngjorte utbetalingen"
     else:
         return "annualisert utbytte"
     if a.get("arsrate_ekstra_trukket"):
@@ -3310,6 +3408,78 @@ def bruk_lopende_utbytte_fra(a, fra):
     a["utbytte_yield"] = 0.0
     a["arsrate_kilde"] = "ingen_lopende"
     a.pop("arsrate_ekstra_trukket", None)
+    return True
+
+
+def bruk_frekvens_fra(a, fra, i_dag=None):
+    """Årsraten etter at selskapet har gått over til en ny frekvens. Muterer `a`.
+
+    Medistim betalte årlig til og med mai 2026. En ekstraordinær
+    generalforsamling 5. oktober ga styret fullmakt til kvartalsutbytte, og
+    2,50 kr gikk ex 27. oktober (684699). Som «Halvårlig» viste siden 10,50 kr
+    «siste 12 mnd», det årlige utbyttet for 2025 pluss det første kvartalet.
+    Som «Kvartalsvis» valgte vakten i hent_aksje() fjorårets 6,00 kr (1,88 %),
+    for vinduet har to utbetalinger og regelen for betalt årsrate krever fire.
+
+    `fra` er ex-datoen for den første utbetalingen med ny frekvens, fra
+    selskapets egen melding. Så lenge 12-månedersvinduet har en utbetaling fra
+    før den datoen, er årsraten utbetalingene etter den, ganget opp til et år
+    (det kortet kaller «annualisert»). Når den siste gamle utbetalingen er ute
+    av vinduet, slutter dette å virke av seg selv. Det gjør ingenting før den
+    første nye utbetalingen er gjort. Returnerer True når raten ble satt.
+    """
+    i_dag = i_dag or datetime.date.today()
+    forventet = UTBETALINGER_PR_AAR.get(a.get("frekvens"))
+    liste = a.get("utbytte_12m_liste") or []
+    nye = [b for b in liste if (b.get("ex_dato") or "") >= fra]
+    if not forventet or not nye or len(nye) == len(liste) or not a.get("pris"):
+        return False
+    belop = round(sum(b["belop"] for b in nye) / len(nye) * forventet, 2)
+    a["utbytte_per_aksje"] = belop
+    a["utbytte_yield"] = round(belop / a["pris"] * 100, 2)
+    for k in ("arsrate_kilde", "arsrate_antall", "arsrate_ekstra_trukket"):
+        a.pop(k, None)
+    return True
+
+
+def merk_kunngjort_rate(a, i_dag=None):
+    """Merker en årsrate som er én kunngjort utbetaling. Muterer `a`.
+
+    OKEA tar opp igjen kvartalsutbyttet med 2,00 kr og ex-dato 2. desember
+    2026 (685403), etter ingen utbetaling i 2024 og 2025. Raten er det ene
+    kunngjorte beløpet, ikke ganget opp (se DNB-steget i main()), og
+    «annualisert» ved siden av ville sagt at 2,00 er et helt år. Tallet
+    endres ikke.
+    """
+    i_dag = i_dag or datetime.date.today()
+    if a.get("frekvens") not in UTBETALINGER_PR_AAR or a.get("arsrate_kilde"):
+        return False
+    if (a.get("utbytte_12m_antall") or 0) != 0:
+        return False
+    ann, upa = a.get("annonsert_utbytte") or 0, a.get("utbytte_per_aksje") or 0
+    if ann <= 0 or abs(upa - ann) > 0.005 or (a.get("annonsert_ex") or "") < i_dag.isoformat():
+        return False
+    a["arsrate_kilde"] = "kunngjort"
+    return True
+
+
+def merk_rate_lik_betalt(a, toleranse=0.01):
+    """Merker en årsrate som er lik det som er betalt, når vinduet er et delår.
+
+    Tallet endres ikke. En kvartalsvis betaler med én eller tre utbetalinger i
+    vinduet kan ha en årsrate som er nøyaktig summen av dem: OKEA etter
+    2. desember 2026, IWS med tre utbetalinger. «Annualisert» sier da at
+    tallet er ganget opp til et år, og det er det ikke. «Siste 12 mnd» er det
+    som er sant. Muterer `a`.
+    """
+    forventet = UTBETALINGER_PR_AAR.get(a.get("frekvens"))
+    if not forventet or a.get("arsrate_kilde") or a.get("utbytte_runde"):
+        return False
+    n = a.get("utbytte_12m_antall") or 0
+    betalt, upa = a.get("utbytte_12m") or 0, a.get("utbytte_per_aksje") or 0
+    if not 0 < n < forventet or betalt <= 0 or abs(upa - betalt) / betalt > toleranse:
+        return False
+    a["arsrate_kilde"] = "betalt_12m"
     return True
 
 
@@ -6940,7 +7110,7 @@ def utbytte_i_tittel(a, today):
 
 def _arsrate_ledd(a):
     """« (siste 12 mnd)», « (annualisert)» eller «» etter årsraten."""
-    merke = arsrate_merke(a) if arsrate_er_betalt(a) else (
+    merke = arsrate_merke(a) or (
         "annualisert" if a.get("frekvens") in ("Kvartalsvis", "Halvårlig", "Månedlig") else "")
     return f" ({merke})" if merke else ""
 
@@ -7078,7 +7248,11 @@ def lag_aksje_ingress(a, today):
             deler.append(f"Pengene utbetales {_fmt_dato(bet)}.")
         if t["valuta"] != "NOK":
             deler.append(f"Beløpet er kunngjort i {t['valuta']} og regnes om til kroner ved utbetaling.")
-        if arsrate_ok and a.get("frekvens") in ("Kvartalsvis", "Halvårlig", "Månedlig"):
+        # Er årsraten selve det kunngjorte beløpet (OKEA, merk_kunngjort_rate()),
+        # står det alt i setningen over. «Årlig utbytte er 2,00 kr (kunngjort
+        # utbetaling)» ville kalt én utbetaling et år.
+        if (arsrate_ok and a.get("frekvens") in ("Kvartalsvis", "Halvårlig", "Månedlig")
+                and a.get("arsrate_kilde") != "kunngjort"):
             deler.append(f"Årlig utbytte er {_belop_tekst(upa)} per aksje{_arsrate_ledd(a)}.")
     elif kommende_ex:
         deler.append(f"Neste ex-dato er {_fmt_dato(ex)}, og beløpet er ikke kunngjort ennå.")
@@ -7242,7 +7416,7 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None, rapporter=None
     # Med et engangsutbytte trukket fra står det, så tallet ikke ser ut til å
     # motsi «betalt siste 12 mnd» i tabellen lenger ned (FRO, WAWI).
     upa_merknad  = (f' <span class="kcard-note">{arsrate_merke(a)}</span>'
-                    if arsrate_er_betalt(a) else
+                    if arsrate_merke(a) else
                     "" if delaar else
                     ' <span class="kcard-note">annualisert</span>'
                     if frekvens in ("Kvartalsvis", "Halvårlig", "Månedlig") else "")
@@ -10492,8 +10666,9 @@ def _rapport_utbytte_naa(a, today):
         ruter.append(("Kunngjort utbytte", f"{_belop_tekst(t['belop'], t['valuta'])} per aksje",
                       "foreslått, ikke vedtatt" if t["forbehold"] else "for neste ex-dato"))
     upa = a.get("utbytte_per_aksje") or 0
-    if upa > 0 and not hendelse_uten_mal(a):
-        merke = arsrate_merke(a) if arsrate_er_betalt(a) else (
+    if upa > 0 and not hendelse_uten_mal(a) and not (
+            t and t["art"] == "neste" and a.get("arsrate_kilde") == "kunngjort"):
+        merke = arsrate_merke(a) or (
             "annualisert" if a.get("frekvens") in ("Kvartalsvis", "Halvårlig", "Månedlig") else "")
         ruter.append(("Årlig utbytte", f"{_belop_tekst(upa)} per aksje", merke))
     if a.get("frekvens") and a["frekvens"] != "—":
@@ -11344,6 +11519,14 @@ def main():
                         "Halvårlig": 2, "Årlig": 1, "Uregelmessig": 1,
                     }
                     per_ar = frekvens_map.get(aksje.get("frekvens", ""), 1)
+                    # Uten en eneste utbetaling siste 12 mnd finnes ingen rytme
+                    # å gange opp etter. OKEA tar opp igjen kvartalsutbyttet med
+                    # 2,00 kr i desember 2026 og sier «minst 1,00 kr per kvartal»
+                    # for 2027 (685403, 685404). Som «Kvartalsvis» ble det 8,00 kr
+                    # og 17,4 %. Beløpet står som det er, merket «kunngjort
+                    # utbetaling» (merk_kunngjort_rate()).
+                    if not (aksje.get("utbytte_12m_antall") or 0):
+                        per_ar = 1
                     dnb_annual = round(dnb_belop * per_ar, 4)
                     # Et engangsutbytte er ikke en rate. Goodtech meldte 2,00 kr
                     # i tillegg til det ordinære utbyttet, og som «Halvårlig»
@@ -11422,15 +11605,20 @@ def main():
         # vilkåret om 30 % avvik slapp den aldri til.
         # Og når én utbetaling er så stor at den kan være et engangsutbytte
         # som skjuler et kutt (KOG, se stor_enkeltutbetaling()).
+        # Og når et særutbytte fra tickers.json ligger i vinduet (SOFF, se
+        # saerutbytte_i_vindu()).
+        saer = saerutbytte_i_vindu(kandidat)
         if not (betalt_kan_bli_arsrate(kandidat)
                 or (aksje.get("utbytte_yield") or 0) >= HOY_YIELD_FOR_SPLITT
                 or (betalt_kan_bli_arsrate(kandidat, min_avvik=0)
-                    and stor_enkeltutbetaling(kandidat))):
+                    and (stor_enkeltutbetaling(kandidat) or saer))):
             continue
         funn = ekstraordinaere_i_vindu(aksje["ticker"])
         if funn is UKJENT:
             print(f"    {aksje['ticker']}: beholder {aksje.get('utbytte_yield')} % (meldingene kunne ikke leses)")
             continue
+        funn = med_saerutbytte(funn, saer)
+        fyll_total_fra_serie(kandidat, funn)
         ekstra = 0.0
         if funn:
             # Et engangsutbytte med kjent beløp trekkes fra; ellers står regelen
@@ -11450,6 +11638,14 @@ def main():
         merk = f", {_nf(ekstra, 2)} kr engangsutbytte trukket fra" if ekstra else ""
         print(f"    {aksje['ticker']}: {for_} % → {aksje['utbytte_yield']} % ({arsrate_merke(aksje)}{merk})")
 
+    # Ny frekvens: utbetalingene etter skiftet, ganget opp til et år, så lenge
+    # vinduet har utbetalinger fra før. Se bruk_frekvens_fra().
+    for aksje in resultater:
+        ff = FREKVENS_FRA.get(aksje["ticker"])
+        if ff and bruk_frekvens_fra(aksje, ff["dato"]):
+            print(f"    {aksje['ticker']}: {aksje['frekvens'].lower()} fra {ff['dato']} — "
+                  f"årsrate {aksje['utbytte_per_aksje']} ({aksje['utbytte_yield']} %)")
+
     # Ny virksomhet bak tickeren: ingen løpende rate før den har betalt noe.
     for aksje in resultater:
         fra = LOPENDE_UTBYTTE_FRA.get(aksje["ticker"])
@@ -11463,6 +11659,10 @@ def main():
             aksje["utbytte_per_aksje"] = 0.0
             aksje["utbytte_yield"] = 0.0
             aksje["arsrate_kilde"] = "stoppet"
+
+    # Merkelappen skal si hva tallet er. Tallet endres ikke.
+    for aksje in resultater:
+        merk_kunngjort_rate(aksje) or merk_rate_lik_betalt(aksje)
 
     # ── Tilbakebetaling av innbetalt kapital ──────────────────────────────────
     # Leser den samme nyeste meldingen som ex-dato-steget (mellomlagret), så

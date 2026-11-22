@@ -3167,6 +3167,98 @@ merged summary is live within the hour. `tester.yml` runs
 
 Tests: `scripts/test_kvartalsrapport.py`.
 
+## From the report summaries of 2026-11-22
+
+The rapport agents reported six findings on stock pages while summarising
+the third quarter. Each was checked against the notices first. Five were
+faults; HSHP was not.
+
+**MEDI went from annual to quarterly.** An EGM on 5 October authorised
+quarterly dividends, and NOK 2,50 went ex on 27 October (684699). The page
+said «Halvårlig» and 10,50 kr «siste 12 mnd», last year's annual 8,00 plus the
+first quarter. `frekvens: Kvartalsvis` alone gave 6,00 kr (1,88 %): the 50 %
+guard picks last year's total, and the paid-12m rule needs four payments.
+`frekvens_fra` in `tickers.json` (`{"dato", "melding"}`, from the company's
+notice) makes `bruk_frekvens_fra()` take the payments since that date,
+scaled to a year, while the window still holds older ones. It stops by
+itself after that. MEDI: 10,00 kr (3,13 %) «annualisert».
+
+**OKEA resumes quarterly dividends:** NOK 2,00 ex 2 December, and «at least
+NOK 1.00 per share» each quarter through 2027 (685403, 685404). As
+«Kvartalsvis» the DNB step would have shown 2,00 × 4 = 8,00 kr, 17,4 %. The
+DNB step no longer multiplies when the stock has paid nothing in the last
+12 months, since there is no rhythm to multiply by. The rate stays 2,00 kr
+(4,34 %), labelled «kunngjort utbetaling» (`merk_kunngjort_rate()`,
+`arsrateMerke()`), and «siste 12 mnd» after the ex-date
+(`merk_rate_lik_betalt()`: a sub-annual rate equal to a part-year window).
+That second label also corrects IWS, whose 5,00 kr is three payments, not
+an annualised figure. The company text no longer says no dividend was
+proposed for 2026.
+
+**AKAST.** Three faults on one page:
+
+- **The rate.** It showed 0,75 kr (2025) against 4,90 paid. Akastor
+  returns capital as it sells holdings (Q3 report 686167), so `frekvens` is
+  «Uregelmessig», and an irregular payer's rate is what it paid.
+- **The February payment.** «Extraordinary cash dividend: 0.4 per share»
+  (665497) has no «amount» label, so `_BLOKK_BELOP_RE` missed it. The rule
+  then stood down on an unquantified one-off. The regex now reads that
+  label too. `fyll_total_fra_serie()` treats a NOK one-off equal to Yahoo's
+  payment on that ex-date as the whole payment. A dollar amount, or a part
+  of a payment, still gets no total.
+- **Paid-in capital.** «Declaration of cash dividend» matched no title in
+  `_KAPITAL_TITTEL`, so the notices saying «repayment of paid-in capital»
+  were never read.
+
+AKAST now shows 4,50 kr, 48,86 %, «siste 12 mnd, uten engangsutbytte», and
+`kapital_tilbake` 1.0.
+
+**SOFF's special dividend was only in the presentation.** Of USD 0,30 ex
+6 November, 0,12 was extraordinary after the sale of Normand Tonjer (slides 6
+and 9 attached to 685540). The dividend notice (685547) does not say so.
+`saerutbytte` in `tickers.json` now counts as a quantified one-off in the
+paid-12m step (`saerutbytte_i_vindu()`, `med_saerutbytte()`), and it replaces
+any NewsWeb finding for the same ex-date. The SOFF entry is 1,1073 kr: 0,12
+of 0,30 times the company's own NOK amount, 2,76834 (685858). The step also
+asks NewsWeb when such an entry is in the window. SOFF went from 5,63 kr
+(8,66 %) to 4,52 kr (6,95 %).
+
+**HUNT's 5-year average was 115,86 %.** 2021–2023 hold 26,52, 26,52 and
+40,85 kr after the 1:20 reverse split in 2023, against a price of 16,26.
+Hunter sold its VLCCs in 2021 and 2022 and paid out capital in those years.
+
+- **Why `saerutbytte` does not fit.** The notices call them share premium
+  reductions (2021), excess capital from the vessel sales (2022, 569215) and
+  paid-in capital. Only one is an «extraordinary dividend» (2023), and that
+  word is the legal form for a dividend approved at an EGM. The same 1,80
+  was first published as «ordinary» (580369, amended in 580428).
+  Registering it alone would make the other years look ordinary.
+- **The fix.** `utbytte_perioder()` / `utbyttePerioder()` give no yield for
+  an average when one of its years is above 2× today's price, the share-base
+  limit of Sjekk 6. HUNT and 2020 Bulkers now show «—».
+- **Left open.** HUNT's rate, 0,30 kr against 4,03 paid, is the owner's
+  call. Its 2026 dividends are «extraordinary» in the same legal sense, from
+  quarterly free cash flow and approved by an EGM. The Q4 2025 dividend was
+  paid in two parts, so the window holds five payments.
+
+**HSHP is unchanged.** The September notice (683670) pays «from the
+Company's Contributed Surplus account», a Bermuda accounting term. It does
+not say repayment of paid-in capital.
+
+Dry runs:
+
+- The paid-12m step over all rows moves MEDI, OKEA (label), AKAST and IWS
+  (label).
+- The full pipeline for the six moves MEDI, AKAST and SOFF as above.
+- The title change moves only AKAST's `kapital_tilbake`.
+- The amount regex reads one more of 849 dividend notices since August 2025
+  (AKAST 665497) and moves no ex-date or announced amount.
+- The DNB change touches only OKEA. It is the only stock DNB's calendar
+  matched on 22.11 with no payment in the last 12 months.
+- The average rule moves only HUNT and 2020 Bulkers.
+
+Tests: `TestRapportbunken2211` (18) and `ui.test.js` (+2).
+
 ## App review of 2026-10-20
 
 Every tab, sub-tab and fourteen stock modals were opened with Playwright at
