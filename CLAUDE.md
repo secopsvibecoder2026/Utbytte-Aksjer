@@ -3512,6 +3512,31 @@ before (KMCP/BINT), so `HJEMLAND` now catches redomiciliation, share exchange of
 new ISINs and reverse splits for our issuers. On 25 days of messages it matched exactly
 that one.
 
+## The design agent (`.claude/agents/design.md`, 2026-11-22)
+
+`STYLE.md` was one review on 11 October. Nobody owned the question after it,
+so the site was left to drift between the generated templates, the app and
+the hand-written pages. `design` measures the site, compares it with modern
+finance sites and keeps the profile in one piece.
+
+- **Analysis is the default.** It opens the key pages in Playwright at 320,
+  360, 390, 768 and 1280 px in both themes and measures horizontal overflow,
+  tap targets under 44 px, inputs under 16 px (iPhone zoom), contrast,
+  layout shift and line length. It then looks at three to five reference sites
+  per question (not per brand) and writes a report: short verdict, what was
+  measured, what the references do, up to eight prioritised proposals with
+  file, effort and risk, and where the profile differs between templates.
+- **Build starts only on approval**, except for plain mobile faults:
+  overflow, clipped text, small tap targets, fixed elements under a notch.
+  Colour, font, hierarchy and what stands first are proposals. At most five
+  per round, one pull request, before and after screenshots, never merged by
+  the agent.
+- **What it must not do:** use Arctic colours, load fonts from Google, give
+  colour a decorative job, edit generated files, cut or hide text (the AdSense
+  rejections were about thin content, and JS-only content is invisible to
+  Google), touch ads, consent or the logo, or copy another site.
+- Run it in a session with «kjør design-agenten».
+
 ## The fixer agent (`.claude/agents/fikser.md`, 2026-10-18)
 
 The maintenance and tallkontroll agents only report, and their findings waited
