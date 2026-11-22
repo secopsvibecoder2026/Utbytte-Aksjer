@@ -2312,6 +2312,13 @@ def lag_betalt_boks(a, nf):
             forklaring = (f"<p>Direkteavkastningen over er {nf(vist, 2)} %, men "
                           "selskapet har ikke hatt noe utbytte med ex-dato de siste "
                           "12 månedene.</p>")
+        elif a.get("arsrate_kilde") == "betalt_og_kunngjort":
+            # Raten er det som er betalt siden pluss den kunngjorte utbetalingen
+            # som ennå ikke har gått ex (Vistin, se delt_arsutbytte()).
+            forklaring = (f"<p>Direkteavkastningen over er {nf(vist, 2)} %. Den teller med "
+                          "utbetalingen som er kunngjort, men ennå ikke har gått ex. Det som "
+                          f"er betalt de siste 12 månedene, tilsvarer {nf(betalt, 2)} % av "
+                          "dagens kurs.</p>")
         elif a.get("arsrate_kilde") == "siste_utbetalinger":
             # Raten er de siste utbetalingene, og den eldste ligger like utenfor
             # vinduet. Uten forklaringen ser de to tallene ut til å motsi hverandre.
@@ -3230,6 +3237,49 @@ def fyll_total_fra_serie(a, funn, toleranse_dager=3):
     return funn
 
 
+def delt_arsutbytte(a, belop, ex_dato, slingring=RUNDE_SLINGRING_DAGER):
+    """Årsraten når en årlig betaler deler utbyttet i to, ellers None.
+
+    Vistin Pharma betalte 1,00 kr i mai 2026 og meldte 0,50 kr, «additional
+    ordinary», med ex-dato 24. november (685078). Februarmeldingen (665600)
+    planla «up to NOK 1.50» for 2025, «partly with NOK 1 in May and up to NOK
+    0.50 in November». DNB-steget ganget det kunngjorte beløpet med
+    frekvensen, én for en årlig betaler, så siden viste 0,50 kr og 2,63 %
+    mot 1,00 kr betalt og 1,50 kr for året.
+
+    For en årlig betaler er det kunngjorte beløpet hele årsraten bare når
+    forrige utbetaling ligger et år bak. Ligger en utbetaling i vinduet
+    mindre enn et år minus slingringen (320 dager, som i utbetalingsrunden)
+    før den kunngjorte ex-datoen, er det andre del av samme år, og raten er
+    summen: det som er betalt siden og det som er kunngjort. Det er det
+    tolvmånedersvinduet vil vise på ex-dagen.
+
+    Bare for en årlig betaler med utledet frekvens og minst én slik utbetaling;
+    ellers None, og beløpet behandles som før. En `frekvens` satt for hånd i
+    tickers.json (KOG, NORBT, SB68, SOAG) er et valg om hva et tillegg er, og
+    da regnes tillegget ikke som del av årsraten. `belop` er det kunngjorte
+    beløpet i kroner.
+    """
+    if (a.get("frekvens") != "Årlig" or a.get("ticker") in FREKVENS_OVERSTYRT
+            or not belop or belop <= 0 or not ex_dato):
+        return None
+    try:
+        ex = datetime.date.fromisoformat(ex_dato)
+    except ValueError:
+        return None
+    sum_for = 0.0
+    antall = 0
+    for b in a.get("utbytte_12m_liste") or []:
+        try:
+            dager = (ex - datetime.date.fromisoformat(b["ex_dato"])).days
+        except (KeyError, ValueError, TypeError):
+            continue
+        if 0 < dager < 365 - slingring and (b.get("belop") or 0) > 0:
+            sum_for += b["belop"]
+            antall += 1
+    return round(sum_for + belop, 4) if antall else None
+
+
 def _i_vinduet(a, ex_dato, toleranse_dager=3):
     """Har `utbytte_12m_liste` en utbetaling med denne ex-datoen (± noen dager)?"""
     if not ex_dato:
@@ -3406,6 +3456,8 @@ def arsrate_merke(a):
         merke = f"siste {_antall_ord(n)} utbetalinger" if n > 1 else "siste utbetaling"
     elif kilde == "kunngjort":
         return "kunngjort utbetaling"
+    elif kilde == "betalt_og_kunngjort":
+        return "betalt og kunngjort"
     elif kilde == "pause":
         # Uten merket sto «annualisert» ved siden av 0,00 NOK for en kvartalsvis betaler.
         return "utdelinger på pause"
@@ -3423,6 +3475,8 @@ def _faq_arsrate_ledd(a):
         ledd = "fra " + _siste_utbetalinger_ledd(a)
     elif kilde == "kunngjort":
         return "den kunngjorte utbetalingen"
+    elif kilde == "betalt_og_kunngjort":
+        return "utbytte betalt siste 12 måneder pluss den kunngjorte utbetalingen"
     else:
         return "annualisert utbytte"
     if a.get("arsrate_ekstra_trukket"):
@@ -3527,6 +3581,49 @@ def merk_kunngjort_rate(a, i_dag=None):
     if ann <= 0 or abs(upa - ann) > 0.005 or (a.get("annonsert_ex") or "") < i_dag.isoformat():
         return False
     a["arsrate_kilde"] = "kunngjort"
+    return True
+
+
+def dnb_arsrate(aksje, dnb_belop, dnb_ex):
+    """Årsraten av et beløp DNB har kunngjort: beløpet ganget med frekvensen.
+
+    En årlig betaler som deler utbyttet i to får summen av det som er betalt
+    siden og det kunngjorte (Vistin, se delt_arsutbytte()).
+    """
+    frekvens_map = {
+        "Månedlig": 12, "Kvartalsvis": 4,
+        "Halvårlig": 2, "Årlig": 1, "Uregelmessig": 1,
+    }
+    per_ar = frekvens_map.get(aksje.get("frekvens", ""), 1)
+    # Uten en eneste utbetaling siste 12 mnd finnes ingen rytme
+    # å gange opp etter. OKEA tar opp igjen kvartalsutbyttet med
+    # 2,00 kr i desember 2026 og sier «minst 1,00 kr per kvartal»
+    # for 2027 (685403, 685404). Som «Kvartalsvis» ble det 8,00 kr
+    # og 17,4 %. Beløpet står som det er, merket «kunngjort
+    # utbetaling» (merk_kunngjort_rate()).
+    if not (aksje.get("utbytte_12m_antall") or 0):
+        per_ar = 1
+    return delt_arsutbytte(aksje, dnb_belop, dnb_ex) or round(dnb_belop * per_ar, 4)
+
+
+def merk_betalt_og_kunngjort(a, i_dag=None):
+    """Merker en årsrate som er betalt siden og kunngjort, for en delt årsutbetaling.
+
+    Tallet endres ikke (se delt_arsutbytte()). Uten merkelappen sto Vistins
+    1,50 kr uforklart ved siden av «betalt siste 12 mnd» på 1,00 kr. Utleder
+    alt fra raden, så en rate som er tilbakeført eller erstattet av et senere
+    steg ikke får merket. Muterer `a`.
+    """
+    i_dag = i_dag or datetime.date.today()
+    if a.get("arsrate_kilde") or a.get("ex_forbehold"):
+        return False
+    ann, ex = a.get("annonsert_utbytte") or 0, a.get("annonsert_ex") or ""
+    if ann <= 0 or ex < i_dag.isoformat():
+        return False
+    delt = delt_arsutbytte(a, ann, ex)
+    if not delt or abs((a.get("utbytte_per_aksje") or 0) - delt) > 0.005:
+        return False
+    a["arsrate_kilde"] = "betalt_og_kunngjort"
     return True
 
 
@@ -11588,20 +11685,7 @@ def main():
                     # tilbake om utbyttet viser seg å ikke være vedtatt.
                     aksje["_for_dnb"] = {"utbytte_per_aksje": aksje.get("utbytte_per_aksje"),
                                          "utbytte_yield": aksje.get("utbytte_yield")}
-                    frekvens_map = {
-                        "Månedlig": 12, "Kvartalsvis": 4,
-                        "Halvårlig": 2, "Årlig": 1, "Uregelmessig": 1,
-                    }
-                    per_ar = frekvens_map.get(aksje.get("frekvens", ""), 1)
-                    # Uten en eneste utbetaling siste 12 mnd finnes ingen rytme
-                    # å gange opp etter. OKEA tar opp igjen kvartalsutbyttet med
-                    # 2,00 kr i desember 2026 og sier «minst 1,00 kr per kvartal»
-                    # for 2027 (685403, 685404). Som «Kvartalsvis» ble det 8,00 kr
-                    # og 17,4 %. Beløpet står som det er, merket «kunngjort
-                    # utbetaling» (merk_kunngjort_rate()).
-                    if not (aksje.get("utbytte_12m_antall") or 0):
-                        per_ar = 1
-                    dnb_annual = round(dnb_belop * per_ar, 4)
+                    dnb_annual = dnb_arsrate(aksje, dnb_belop, dnb.get("ex_dato"))
                     # Et engangsutbytte er ikke en rate. Goodtech meldte 2,00 kr
                     # i tillegg til det ordinære utbyttet, og som «Halvårlig»
                     # ble det 4,00 kr og 26,32 % (16.10.2026). Kaller børsmeldingen
@@ -11741,7 +11825,7 @@ def main():
 
     # Merkelappen skal si hva tallet er. Tallet endres ikke.
     for aksje in resultater:
-        merk_kunngjort_rate(aksje) or merk_rate_lik_betalt(aksje)
+        merk_kunngjort_rate(aksje) or merk_betalt_og_kunngjort(aksje) or merk_rate_lik_betalt(aksje)
 
     # ── Tilbakebetaling av innbetalt kapital ──────────────────────────────────
     # Leser den samme nyeste meldingen som ex-dato-steget (mellomlagret), så

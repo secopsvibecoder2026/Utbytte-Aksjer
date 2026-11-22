@@ -641,8 +641,15 @@ test('modalKapitalNote: «betaler ut» sies ikke om utdelinger på pause', () =>
   assert.doesNotMatch(pause, /betaler selskapet ut/);
 });
 
-test('arsrateMerke: «utdelinger på pause» i stedet for «annualisert» ved 0', () => {
+test('arsrateMerke: «betalt og kunngjort» for en delt årsutbetaling (VISTIN)', () => {
+  assert.equal(arsrateMerke({ arsrate_kilde: 'betalt_og_kunngjort' }), 'betalt og kunngjort');
   assert.equal(arsrateMerke({ arsrate_kilde: 'pause' }), 'utdelinger på pause');
+  const v = { pris: 19.0, utbytte_yield: 7.89, utbytte_per_aksje: 1.5, utbytte_12m: 1.0,
+              arsrate_kilde: 'betalt_og_kunngjort', utbytte_12m_antall: 1,
+              utbytte_per_ar: { 2025: 1.25 }, utbytte_forste_ar: 2016 };
+  const boks = modalBetaltBoks(v);
+  assert.match(boks, /kunngjort, men ennå ikke har gått ex/);
+  assert.match(boks, /5,26\u00a0%/);
 });
 
 // ── aksjerMedExIMaaned — «Måneder uten ex-dato» (2026-10-03) ─────────────────

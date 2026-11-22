@@ -3294,6 +3294,32 @@ anniversary (Nov 2025 stayed until 21 December), and `utbytte_stoppet()` waits
   kvartal». **When the pause ends, remove the `hendelse` and update the
   text.** The rate rule releases by itself on the first new ex-date.
 
+**VISTIN showed 0,50 kr and 2,63 % when 1,00 kr was paid and 1,50 kr is the
+year.** The February notice (665600) planned «up to NOK 1.50» for 2025, «partly
+with NOK 1 in May and up to NOK 0.50 in November», and the October notice
+(685078) announces the 0,50 as an «additional ordinary cash dividend», ex 24
+November. The DNB step multiplies the announced amount by the frequency, one for
+an annual payer, so the second part of the year became the whole rate.
+`delt_arsutbytte()` (called from `dnb_arsrate()`) now adds what was paid
+less than 320 days before the announced ex-date (`365 - RUNDE_SLINGRING_DAGER`,
+the same slack as the payment round) to the announced amount: 1,00 + 0,50 =
+1,50 kr (7,89 %), labelled «betalt og kunngjort» (`merk_betalt_og_kunngjort()`,
+`arsrateMerke()`). It is exactly what the twelve-month window will hold on the
+ex-date, after which the paid-12m rule takes over.
+
+- **Narrow on purpose.** Only a derived «Årlig»; a `frekvens` set by hand
+  (KOG, NORBT, SB68, SOAG, whose autumn payment is a supplement) is left alone,
+  and an announcement the company calls extraordinary is still not used.
+  Across the 6 rows with an announced dividend today only VISTIN moves.
+- **«Additional ordinary» is not a one-off.** `_EKSTRA_RE` does not match it
+  (a word sits between «additional» and «dividend»), so VISTIN needs no
+  `tillegg_er_ordinaert`, and `ekstraordinaere_i_vindu()` returns nothing on the
+  live notices. After 24 November the window holds two payments, the derived
+  label turns «Halvårlig» and the paid-12m rule gives 1,50 kr.
+- **Left to the owner:** `frekvens`. The history is three payments in 2024, one
+  in 2025 and two in 2026, so neither «Årlig» (the page says «én gang i året»
+  while two are paid) nor «Halvårlig» is more right than the other.
+
 ## App review of 2026-10-20
 
 Every tab, sub-tab and fourteen stock modals were opened with Playwright at

@@ -5023,9 +5023,13 @@ class TestRapportbunken2211(unittest.TestCase):
         self.assertFalse(fs.merk_rate_lik_betalt(dict(a, utbytte_12m_antall=4)))
 
     def test_dnb_ganger_ikke_opp_uten_utbetalinger(self):
+        # Regelen bor i dnb_arsrate() siden 22.11.2026 (Vistin), og main() kaller den.
+        self.assertEqual(fs.dnb_arsrate(dict(self.OKEA, utbytte_12m_antall=0), 2.0, "2026-12-02"), 2.0)
+        self.assertEqual(fs.dnb_arsrate(dict(self.OKEA, utbytte_12m_antall=4), 2.0, "2026-12-02"), 8.0)
         kilde = inspect.getsource(fs.main)
-        self.assertIn('if not (aksje.get("utbytte_12m_antall") or 0):', kilde)
-        self.assertIn("merk_kunngjort_rate(aksje) or merk_rate_lik_betalt(aksje)", kilde)
+        self.assertIn("dnb_arsrate(aksje, dnb_belop", kilde)
+        self.assertIn("merk_kunngjort_rate(aksje) or merk_betalt_og_kunngjort(aksje) "
+                      "or merk_rate_lik_betalt(aksje)", kilde)
 
     def test_okea_i_tickers(self):
         self.assertEqual(fs.FREKVENS_OVERSTYRT.get("OKEA"), "Kvartalsvis")
@@ -5279,6 +5283,60 @@ class TestRapportbunken2211Del2(unittest.TestCase):
         self.assertTrue(fs.gyldig_hendelse(h))
         # Ingen tall som kan endre seg i teksten; datoer og kroner står som fakta.
         self.assertNotRegex(h["tekst"], r"\d+(?:[.,]\d+)?\s*(?:%|prosent|kr\b|NOK)")
+
+    # ── VISTIN: «additional ordinary» etter 1,00 kr i mai (685078, 665600) ──
+    VISTIN = {"ticker": "VISTIN", "frekvens": "Årlig", "pris": 19.0,
+              "utbytte_per_aksje": 0.5, "utbytte_12m": 1.0, "utbytte_12m_antall": 1,
+              "utbytte_12m_liste": [{"ex_dato": "2026-05-22", "belop": 1.0}]}
+
+    def test_vistin_ann_er_andre_del_av_aaret(self):
+        self.assertEqual(fs.delt_arsutbytte(self.VISTIN, 0.5, "2026-11-24"), 1.5)
+        # Før rettingen ble det kunngjorte beløpet ganget med 1 og sto som årsrate.
+        self.assertEqual(fs.dnb_arsrate(self.VISTIN, 0.5, "2026-11-24"), 1.5)
+
+    def test_arlig_betaler_paa_skjema_er_uberort(self):
+        a = dict(self.VISTIN, utbytte_12m_liste=[{"ex_dato": "2025-11-10", "belop": 1.0}])
+        self.assertIsNone(fs.delt_arsutbytte(a, 1.1, "2026-11-09"))     # 364 dager
+        self.assertEqual(fs.dnb_arsrate(a, 1.1, "2026-11-09"), 1.1)
+        # Opptil 45 dager tidligere enn årsdagen er fortsatt samme utbetaling.
+        a = dict(self.VISTIN, utbytte_12m_liste=[{"ex_dato": "2025-12-20", "belop": 1.0}])
+        self.assertIsNone(fs.delt_arsutbytte(a, 1.1, "2026-11-09"))     # 324 dager
+        a = dict(self.VISTIN, utbytte_12m_liste=[{"ex_dato": "2026-01-10", "belop": 1.0}])
+        self.assertEqual(fs.delt_arsutbytte(a, 1.1, "2026-11-09"), 2.1)  # 303 dager
+
+    def test_bare_arlige_betalere_og_bare_kroner(self):
+        for frekvens in ("Halvårlig", "Kvartalsvis", "Uregelmessig"):
+            a = dict(self.VISTIN, frekvens=frekvens)
+            self.assertIsNone(fs.delt_arsutbytte(a, 0.5, "2026-11-24"), frekvens)
+        self.assertEqual(fs.dnb_arsrate(dict(self.VISTIN, frekvens="Halvårlig",
+                                             utbytte_12m_antall=2), 0.5, "2026-11-24"), 1.0)
+        self.assertIsNone(fs.delt_arsutbytte(self.VISTIN, 0, "2026-11-24"))
+        self.assertIsNone(fs.delt_arsutbytte(dict(self.VISTIN, utbytte_12m_liste=[]), 0.5, "2026-11-24"))
+
+    def test_frekvens_satt_for_hand_er_uberort(self):
+        # NORBT, SB68, SOAG og KOG er «Årlig» i tickers.json fordi høstbetalingen er et tillegg.
+        a = dict(self.VISTIN, ticker="NORBT")
+        self.assertIn("NORBT", fs.FREKVENS_OVERSTYRT)
+        self.assertIsNone(fs.delt_arsutbytte(a, 0.5, "2026-11-24"))
+        self.assertEqual(fs.dnb_arsrate(a, 0.5, "2026-11-24"), 0.5)
+
+    def test_paa_ex_dagen_telles_utbetalingen_ikke_to_ganger(self):
+        a = dict(self.VISTIN, utbytte_12m_antall=2,
+                 utbytte_12m_liste=[{"ex_dato": "2026-05-22", "belop": 1.0},
+                                    {"ex_dato": "2026-11-24", "belop": 0.5}])
+        self.assertEqual(fs.delt_arsutbytte(a, 0.5, "2026-11-24"), 1.5)
+
+    def test_vistin_merkelapp(self):
+        a = dict(self.VISTIN, utbytte_per_aksje=1.5, annonsert_utbytte=0.5,
+                 annonsert_ex="2026-11-24")
+        i_dag = datetime.date(2026, 11, 22)
+        self.assertTrue(fs.merk_betalt_og_kunngjort(a, i_dag))
+        self.assertEqual(fs.arsrate_merke(a), "betalt og kunngjort")
+        self.assertIn("pluss den kunngjorte utbetalingen", fs._faq_arsrate_ledd(a))
+        # Et forslag generalforsamlingen ikke har vedtatt, eller en rate et senere steg har satt, merkes ikke.
+        self.assertFalse(fs.merk_betalt_og_kunngjort(dict(a, arsrate_kilde=None, ex_forbehold="2026-12-01"), i_dag))
+        self.assertFalse(fs.merk_betalt_og_kunngjort(dict(a, arsrate_kilde=None, utbytte_per_aksje=0.5), i_dag))
+        self.assertFalse(fs.merk_betalt_og_kunngjort(dict(a, arsrate_kilde=None), datetime.date(2026, 11, 25)))
 
 
 if __name__ == "__main__":
