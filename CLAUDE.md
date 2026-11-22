@@ -2696,7 +2696,8 @@ Found in the same pass:
 - **BOR** shows last year's 0,80 kr beside a «delår» warning. Both payments
   in the window are one-offs: 0,50 «additional» in March and 1,50
   «extraordinary» in November (685169). The «Key information» notice does not
-  use the word, so the split is not picked up. Left for the owner, as before.
+  use the word, so the split is not picked up. Settled 2026-11-22: see «From
+  the report summaries of 2026-11-22, third batch».
 
 Tests: `TestUtbetalingsrunde` (15), `TestKuttMedEnManglende` (4) and
 `ui.test.js` (+2).
@@ -3239,7 +3240,8 @@ Hunter sold its VLCCs in 2021 and 2022 and paid out capital in those years.
 - **Left open.** HUNT's rate, 0,30 kr against 4,03 paid, is the owner's
   call. Its 2026 dividends are «extraordinary» in the same legal sense, from
   quarterly free cash flow and approved by an EGM. The Q4 2025 dividend was
-  paid in two parts, so the window holds five payments.
+  paid in two parts, so the window holds five payments. Settled the same day,
+  see «From the report summaries of 2026-11-22, third batch».
 
 **HSHP is unchanged.** The September notice (683670) pays «from the
 Company's Contributed Surplus account», a Bermuda accounting term. It does
@@ -3331,6 +3333,84 @@ tideler og hele».
 Tests: `TestRapportbunken2211Del2` (17), `ui.test.js` (+3). The tests for
 `_KAPITAL_TITTEL` and the DNB step in `TestRapportbunken2211` read
 `dnb_arsrate()` now, since the multiplication moved out of `main()`.
+
+## From the report summaries of 2026-11-22, third batch
+
+Five findings, each checked against the notices first. The paid-12m step
+was simulated against all rows with the same NewsWeb messages, old rule
+against new. Four stocks moved: BOR, HUNT, HSPG and AKAST (ranking only).
+
+**BOR showed 0,80 kr (5,32 %) as its running rate.** That was the ordinary
+dividend for 2024, paid in May 2025. The window holds 0,50 kr in March 2026,
+an «additional dividend» for 2024 (666876), and 1,50 kr in November 2026,
+which the Q3 report calls an «extraordinary dividend» (685169). The general
+meeting voted no ordinary dividend for 2025.
+
+- **Amounts in prose.** `_ekstra_belop_i_prosa()` reads «an extraordinary
+  dividend of NOK 1.50 per share». A notice with one amount block now counts
+  as wholly one-off when its text names that amount. A report or press
+  release without an ex-date takes the ex-date of a «Key information» notice
+  within `EKSTRA_PROSA_DAGER` (7) that has the same amount. Duplicates are
+  counted once.
+- **Nothing but one-offs.** When every payment in the round is a quantified
+  one-off and no other payment is announced, `bare_engangsutbytte()` sets the
+  rate to 0. `arsrate_kilde` is `kun_engangs` and the card reads «bare
+  engangsutbytte siste 12 mnd» (`arsrateMerke()` in `ui.js`). The FAQ says
+  the company paid no ordinary dividend, and the payout answer is left out.
+- The other reading is that 1,50 kr is the dividend for 2025, paid late.
+  The company's own word is «extraordinary», so the site follows it.
+
+**BEWI's 0 is right, and was about to go wrong.** The 1,15 kr with ex-date
+2 December is a *proposed extraordinary* dividend, subject to an EGM on
+1 December (685533, 685546). Until then the restore step for unapproved
+dividends holds the rate. After approval, the DNB step would have shown
+1,15 kr (6,4 %) as the annual rate: the only notice that says
+«extraordinary» is the press release, and it has no ex-date. With the
+prose rule it does, so `annonsert_er_ekstraordinaer()` stops the DNB step.
+After the ex-date the rate is 0 with the label above. The paid-12m step now
+asks NewsWeb for every irregular payer with payments in the window (one more
+stock today, HUNT). The page already showed «foreslått 1,15 kr per aksje» in
+the title, H1, lead and dates.
+
+**HUNT showed 0,30 kr (1,85 %) against 4,03 kr paid.** The 2026 dividends
+are «extraordinary» in the legal sense: each is proposed after a quarterly
+report and approved by an EGM (674687, 680928). The board says all excess
+cash goes back to shareholders (666896), so these are the running
+distribution.
+
+- `ekstraordinaert_er_ordinaert: true` in `tickers.json`, the same idea as
+  `tillegg_er_ordinaert`. `_uten_tillegg()` strips «extraordinary dividend»
+  for those tickers, and «special» still counts.
+- `frekvens: Uregelmessig`. The board decides each payment on its own, the
+  Q4 2025 dividend came in two parts, and nothing was paid in 2024. An
+  irregular payer's rate is what it paid, so the five payments in the window
+  need no new counting rule.
+- `bor_hente_utbyttesplitt()` skips these tickers, so the page carries no box
+  saying the yield holds a one-off.
+- New rate: 4,03 kr, 24,78 %, «siste 12 mnd». HUNT now tops Shipping.
+
+**AKAST topped the rankings at 48,86 %.** Akastor pays out as it sells
+holdings (Q3 report 686167: «supported by cash proceeds … from NES Fircroft
+and the sale of Skandi Peregrino»). `utenfor_rangering` in `tickers.json`
+(`{"grunn": "salgsproveny", "melding": "686167"}`) takes a stock out of
+`i_rangering()` / `iRangering()`. That covers the toplists, «Høyeste yield»,
+the sector average and `sektor_topp()`. The page and the full lists keep the
+number, and the sector table marks it «utdeling fra salg»
+(`rangering_merke()`). `sett_utenfor_rangering()` runs in both scripts.
+Energitjenester's highest yield goes from 48,9 % to 17,8 %.
+
+**HSPG showed 5,00 kr (4,0 %).** The Q3 report (685441, 3 November) says
+«Det forventes et svakt resultat for året som helhet, og ingen utbetaling av
+utbytte», as the Q2 report did. A `hendelse` of type `utbytte_pause` sets the
+rate to 0. The company text already said the bank did not expect a dividend
+for 2026, so it is unchanged.
+
+**NORBT's funn changed and its rate did not.** Its «additional cash dividend
+of NOK 2.00» (686282) now has an amount, but the stock is a hand-set
+«Årlig» with two payments, so the step's gate does not open. It stays at
+5,00 kr.
+
+Tests: `TestFikser2211` (13) and `ui.test.js` (+1).
 
 ## App review of 2026-10-20
 
