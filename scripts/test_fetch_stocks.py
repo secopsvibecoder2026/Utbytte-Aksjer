@@ -5553,6 +5553,19 @@ class TestFikser2211(unittest.TestCase):
         self.assertNotIn("utenfor_rangering", a)
         self.assertTrue(fs.i_rangering(a))
 
+    # ── HSPG ─────────────────────────────────────────────────────────────
+    def test_hspg_pause(self):
+        h = fs.HENDELSE.get("HSPG")
+        self.assertEqual((h["type"], h["melding"], h["dato"]), ("utbytte_pause", "685441", "2026-11-03"))
+        a = {"ticker": "HSPG", "frekvens": "Årlig", "pris": 125.0,
+             "utbytte_per_aksje": 5.0, "utbytte_yield": 4.0,
+             "utbytte_12m_liste": [{"ex_dato": "2026-03-20", "belop": 5.0}],
+             "utbetalinger": [["2026-03-20", 5.0]]}
+        self.assertTrue(fs.bruk_utbytte_pause(a, h, datetime.date(2026, 11, 22)))
+        self.assertEqual((a["utbytte_per_aksje"], a["utbytte_yield"]), (0.0, 0.0))
+        self.assertEqual(fs.arsrate_merke(a), "utdelinger på pause")
+        fs.sett_hendelse(a, h, datetime.date(2026, 11, 22))
+        self.assertFalse(fs.i_rangering(a))
 
 
 if __name__ == "__main__":

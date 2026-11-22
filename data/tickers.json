@@ -1750,7 +1750,13 @@
     "beskrivelse_fakta_kilde": "yahoo_finance",
     "beskrivelse_fakta_sprak": "en",
     "ask_egnet": true,
-    "inkorporeringsland": "Norge"
+    "inkorporeringsland": "Norge",
+    "hendelse": {
+      "type": "utbytte_pause",
+      "dato": "2026-11-03",
+      "melding": "685441",
+      "tekst": "Høland og Setskog Sparebank skrev i rapporten for tredje kvartal 2026 at banken venter et svakt resultat for året som helhet og ingen utbetaling av utbytte. Det samme sto i rapporten for andre kvartal. Bakgrunnen er store tap på utlån til boligutvikling. Det siste utbyttet gikk ex i mars 2026."
+    }
   },
   {
     "ticker": "SOGN",
