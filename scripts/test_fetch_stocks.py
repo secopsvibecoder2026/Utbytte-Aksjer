@@ -4969,6 +4969,35 @@ class TestKursvarsel(unittest.TestCase):
 class TestRapportbunken2211(unittest.TestCase):
     """Seks funn fra rapportagentene i bunken for 3. kvartal (22.11.2026)."""
 
+    # ── MEDI: kvartalsvis fra 27.10.2026 (684699) ──────────────────────────
+    MEDI = {"ticker": "MEDI", "frekvens": "Kvartalsvis", "pris": 319.0,
+            "utbytte_per_aksje": 6.0, "utbytte_yield": 1.88,
+            "utbytte_12m": 10.5, "utbytte_12m_antall": 2,
+            "utbytte_12m_liste": [{"ex_dato": "2026-05-07", "belop": 8.0},
+                                  {"ex_dato": "2026-10-27", "belop": 2.5}]}
+
+    def test_medi_kvartalsvis_annualiserer_det_nye(self):
+        a = dict(self.MEDI, arsrate_kilde="betalt_12m")
+        self.assertTrue(fs.bruk_frekvens_fra(a, "2026-10-27"))
+        self.assertEqual(a["utbytte_per_aksje"], 10.0)
+        self.assertEqual(a["utbytte_yield"], 3.13)
+        self.assertNotIn("arsrate_kilde", a)   # kortet sier «annualisert»
+
+    def test_frekvens_fra_slutter_av_seg_selv(self):
+        # Ingen ny utbetaling ennå: ingenting gjøres.
+        a = dict(self.MEDI, utbytte_12m_liste=self.MEDI["utbytte_12m_liste"][:1])
+        self.assertFalse(fs.bruk_frekvens_fra(a, "2026-10-27"))
+        # Bare nye utbetalinger i vinduet: de vanlige reglene gjelder.
+        a = dict(self.MEDI, utbytte_12m_liste=self.MEDI["utbytte_12m_liste"][1:])
+        self.assertFalse(fs.bruk_frekvens_fra(a, "2026-10-27"))
+
+    def test_medi_i_tickers(self):
+        self.assertEqual(fs.FREKVENS_OVERSTYRT.get("MEDI"), "Kvartalsvis")
+        self.assertEqual(fs.FREKVENS_FRA["MEDI"], {"dato": "2026-10-27", "melding": "684699"})
+        for t, ff in fs.FREKVENS_FRA.items():
+            datetime.date.fromisoformat(ff["dato"])
+            self.assertTrue(str(ff["melding"]).isdigit(), t)
+
     # ── AKAST: kapital, uregelmessig og det ekstraordinære i februar ──────
     AKAST_FEB = ("Extraordinary cash dividend: 0.4 per share\nDeclared currency: NOK\n"
                  "Ex-date: 16 February 2026\nThe distribution will be classified as a "

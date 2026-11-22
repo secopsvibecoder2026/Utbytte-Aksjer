@@ -3173,6 +3173,16 @@ The rapport agents reported six findings on stock pages while summarising
 the third quarter. Each was checked against the notices first. Five were
 faults; HSHP was not.
 
+**MEDI went from annual to quarterly.** An EGM on 5 October authorised
+quarterly dividends, and NOK 2,50 went ex on 27 October (684699). The page
+said «Halvårlig» and 10,50 kr «siste 12 mnd», last year's annual 8,00 plus the
+first quarter. `frekvens: Kvartalsvis` alone gave 6,00 kr (1,88 %): the 50 %
+guard picks last year's total, and the paid-12m rule needs four payments.
+`frekvens_fra` in `tickers.json` (`{"dato", "melding"}`, from the company's
+notice) makes `bruk_frekvens_fra()` take the payments since that date,
+scaled to a year, while the window still holds older ones. It stops by
+itself after that. MEDI: 10,00 kr (3,13 %) «annualisert».
+
 **AKAST.** Three faults on one page:
 
 - **The rate.** It showed 0,75 kr (2025) against 4,90 paid. Akastor

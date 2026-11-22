@@ -929,7 +929,12 @@
     "beskrivelse_fakta_kilde": "yahoo_finance",
     "beskrivelse_fakta_sprak": "en",
     "ask_egnet": true,
-    "inkorporeringsland": "Norge"
+    "inkorporeringsland": "Norge",
+    "frekvens": "Kvartalsvis",
+    "frekvens_fra": {
+      "dato": "2026-10-27",
+      "melding": "684699"
+    }
   },
   {
     "ticker": "ATEA",

@@ -250,6 +250,10 @@ INKORPORERINGSLAND   = {t["ticker"]: t.get("inkorporeringsland", "Norge") for t 
 # eller forstyrret av en selskapshendelse — 2020 Bulkers betaler månedlig,
 # men ble talt til kvartalsvis etter kapitalutdelingen i mai 2026.
 FREKVENS_OVERSTYRT   = {t["ticker"]: t["frekvens"] for t in _ticker_data if t.get("frekvens")}
+# Når selskapet har gått over til en ny frekvens: ex-datoen for den første
+# utbetalingen med den nye, og meldingen som sier det. Se bruk_frekvens_fra().
+FREKVENS_FRA         = {t["ticker"]: t["frekvens_fra"] for t in _ticker_data
+                        if t.get("frekvens_fra") and t.get("frekvens")}
 # Selskaper der politikken selv deler årsutbyttet i to, og den andre delen
 # kalles «additional» eller «tilleggsutbytte» og vedtas etter fullmakt.
 # Ordet gjør det ikke til et engangsutbytte. Wilh. Wilhelmsen viste 12,00 kr
@@ -3400,6 +3404,37 @@ def bruk_lopende_utbytte_fra(a, fra):
     a["utbytte_yield"] = 0.0
     a["arsrate_kilde"] = "ingen_lopende"
     a.pop("arsrate_ekstra_trukket", None)
+    return True
+
+
+def bruk_frekvens_fra(a, fra, i_dag=None):
+    """Årsraten etter at selskapet har gått over til en ny frekvens. Muterer `a`.
+
+    Medistim betalte årlig til og med mai 2026. En ekstraordinær
+    generalforsamling 5. oktober ga styret fullmakt til kvartalsutbytte, og
+    2,50 kr gikk ex 27. oktober (684699). Som «Halvårlig» viste siden 10,50 kr
+    «siste 12 mnd», det årlige utbyttet for 2025 pluss det første kvartalet.
+    Som «Kvartalsvis» valgte vakten i hent_aksje() fjorårets 6,00 kr (1,88 %),
+    for vinduet har to utbetalinger og regelen for betalt årsrate krever fire.
+
+    `fra` er ex-datoen for den første utbetalingen med ny frekvens, fra
+    selskapets egen melding. Så lenge 12-månedersvinduet har en utbetaling fra
+    før den datoen, er årsraten utbetalingene etter den, ganget opp til et år
+    (det kortet kaller «annualisert»). Når den siste gamle utbetalingen er ute
+    av vinduet, slutter dette å virke av seg selv. Det gjør ingenting før den
+    første nye utbetalingen er gjort. Returnerer True når raten ble satt.
+    """
+    i_dag = i_dag or datetime.date.today()
+    forventet = UTBETALINGER_PR_AAR.get(a.get("frekvens"))
+    liste = a.get("utbytte_12m_liste") or []
+    nye = [b for b in liste if (b.get("ex_dato") or "") >= fra]
+    if not forventet or not nye or len(nye) == len(liste) or not a.get("pris"):
+        return False
+    belop = round(sum(b["belop"] for b in nye) / len(nye) * forventet, 2)
+    a["utbytte_per_aksje"] = belop
+    a["utbytte_yield"] = round(belop / a["pris"] * 100, 2)
+    for k in ("arsrate_kilde", "arsrate_antall", "arsrate_ekstra_trukket"):
+        a.pop(k, None)
     return True
 
 
@@ -11544,6 +11579,14 @@ def main():
         bruk_betalt_som_arsrate(aksje, ekstra)
         merk = f", {_nf(ekstra, 2)} kr engangsutbytte trukket fra" if ekstra else ""
         print(f"    {aksje['ticker']}: {for_} % → {aksje['utbytte_yield']} % ({arsrate_merke(aksje)}{merk})")
+
+    # Ny frekvens: utbetalingene etter skiftet, ganget opp til et år, så lenge
+    # vinduet har utbetalinger fra før. Se bruk_frekvens_fra().
+    for aksje in resultater:
+        ff = FREKVENS_FRA.get(aksje["ticker"])
+        if ff and bruk_frekvens_fra(aksje, ff["dato"]):
+            print(f"    {aksje['ticker']}: {aksje['frekvens'].lower()} fra {ff['dato']} — "
+                  f"årsrate {aksje['utbytte_per_aksje']} ({aksje['utbytte_yield']} %)")
 
     # Ny virksomhet bak tickeren: ingen løpende rate før den har betalt noe.
     for aksje in resultater:
