@@ -1,6 +1,6 @@
 {
  "https://exday.no/": {
-  "sha": "eb3f2349091d0a5c",
+  "sha": "bae687790bbb7c0e",
   "dato": "2026-11-22"
  },
  "https://exday.no/aksjer/": {
@@ -12,7 +12,11 @@
   "dato": "2026-11-22"
  },
  "https://exday.no/aksjer/AASB/": {
-  "sha": "127c83488119076a",
+  "sha": "f4697f13a97dbf3f",
+  "dato": "2026-11-22"
+ },
+ "https://exday.no/aksjer/AASB/rapporter/": {
+  "sha": "ae8f2e8881b3e5fe",
   "dato": "2026-11-22"
  },
  "https://exday.no/aksjer/ABG/": {
@@ -80,15 +84,23 @@
   "dato": "2026-11-22"
  },
  "https://exday.no/aksjer/AQUA/": {
-  "sha": "7f9487157d983702",
+  "sha": "465eef3a79a4063f",
+  "dato": "2026-11-22"
+ },
+ "https://exday.no/aksjer/AQUA/rapporter/": {
+  "sha": "e77241ce039a5042",
   "dato": "2026-11-22"
  },
  "https://exday.no/aksjer/ARCH/": {
-  "sha": "9958a119b49c518a",
+  "sha": "df69cde8f1c434ca",
+  "dato": "2026-11-22"
+ },
+ "https://exday.no/aksjer/ARCH/rapporter/": {
+  "sha": "c283c9a9b438b2c2",
   "dato": "2026-11-22"
  },
  "https://exday.no/aksjer/ATEA/": {
-  "sha": "b598a7b2c4727297",
+  "sha": "594b6f2004ea888e",
   "dato": "2026-11-22"
  },
  "https://exday.no/aksjer/ATEA/rapporter/": {
@@ -124,7 +136,11 @@
   "dato": "2026-11-22"
  },
  "https://exday.no/aksjer/BIEN/": {
-  "sha": "0b4614f127633a9f",
+  "sha": "a50f1b352abf1fb8",
+  "dato": "2026-11-22"
+ },
+ "https://exday.no/aksjer/BIEN/rapporter/": {
+  "sha": "5c8ee7653d7a2020",
   "dato": "2026-11-22"
  },
  "https://exday.no/aksjer/BINT/": {
@@ -148,7 +164,11 @@
   "dato": "2026-11-21"
  },
  "https://exday.no/aksjer/BOR/": {
-  "sha": "2194916281f52b38",
+  "sha": "34596402d5d99e88",
+  "dato": "2026-11-22"
+ },
+ "https://exday.no/aksjer/BOR/rapporter/": {
+  "sha": "bfc1f752bf261542",
   "dato": "2026-11-22"
  },
  "https://exday.no/aksjer/BORR/": {
@@ -212,7 +232,11 @@
   "dato": "2026-11-21"
  },
  "https://exday.no/aksjer/EIOF/": {
-  "sha": "b715d515fcc2964c",
+  "sha": "af5aaff5d0fa7395",
+  "dato": "2026-11-22"
+ },
+ "https://exday.no/aksjer/EIOF/rapporter/": {
+  "sha": "9c8f67adce2470fd",
   "dato": "2026-11-22"
  },
  "https://exday.no/aksjer/ELK/": {
@@ -260,7 +284,11 @@
   "dato": "2026-11-22"
  },
  "https://exday.no/aksjer/FFSB/": {
-  "sha": "3d8b2e01141ad140",
+  "sha": "2d7bde22cb1a675d",
+  "dato": "2026-11-22"
+ },
+ "https://exday.no/aksjer/FFSB/rapporter/": {
+  "sha": "4b9a1271e286bb2a",
   "dato": "2026-11-22"
  },
  "https://exday.no/aksjer/FRO/": {
@@ -272,7 +300,11 @@
   "dato": "2026-11-21"
  },
  "https://exday.no/aksjer/GENT/": {
-  "sha": "72ac35798836e00f",
+  "sha": "37e2857c079ce5e6",
+  "dato": "2026-11-22"
+ },
+ "https://exday.no/aksjer/GENT/rapporter/": {
+  "sha": "113f0865d0fb8f36",
   "dato": "2026-11-22"
  },
  "https://exday.no/aksjer/GJF/": {
@@ -284,11 +316,19 @@
   "dato": "2026-11-21"
  },
  "https://exday.no/aksjer/GOD/": {
-  "sha": "13d421e9538f9a4f",
+  "sha": "1d4e74aa4c6cfb70",
+  "dato": "2026-11-22"
+ },
+ "https://exday.no/aksjer/GOD/rapporter/": {
+  "sha": "7c18bbd24c60307a",
   "dato": "2026-11-22"
  },
  "https://exday.no/aksjer/GRONG/": {
-  "sha": "1c2b1c8c8c254597",
+  "sha": "bde420f302531613",
+  "dato": "2026-11-22"
+ },
+ "https://exday.no/aksjer/GRONG/rapporter/": {
+  "sha": "f261d2405dd75255",
   "dato": "2026-11-22"
  },
  "https://exday.no/aksjer/GSF/": {
@@ -328,7 +368,11 @@
   "dato": "2026-11-22"
  },
  "https://exday.no/aksjer/HGSB/": {
-  "sha": "0db3cde730a6ecaf",
+  "sha": "ac072c40d48a0f06",
+  "dato": "2026-11-22"
+ },
+ "https://exday.no/aksjer/HGSB/rapporter/": {
+  "sha": "1f36bd071158805a",
   "dato": "2026-11-22"
  },
  "https://exday.no/aksjer/HSHP/": {
@@ -340,11 +384,15 @@
   "dato": "2026-11-22"
  },
  "https://exday.no/aksjer/HSPG/": {
-  "sha": "42f2f6e505fa2ef1",
+  "sha": "28c7dbe85680a6a7",
+  "dato": "2026-11-22"
+ },
+ "https://exday.no/aksjer/HSPG/rapporter/": {
+  "sha": "9243aa4f688ff4f3",
   "dato": "2026-11-22"
  },
  "https://exday.no/aksjer/HUNT/": {
-  "sha": "0aa75ca0bcb171a2",
+  "sha": "21d6b501533b8d8e",
   "dato": "2026-11-22"
  },
  "https://exday.no/aksjer/HUNT/rapporter/": {
@@ -352,7 +400,11 @@
   "dato": "2026-11-22"
  },
  "https://exday.no/aksjer/ITERA/": {
-  "sha": "32fa16eabd0102e7",
+  "sha": "0d3da9285e568f72",
+  "dato": "2026-11-22"
+ },
+ "https://exday.no/aksjer/ITERA/rapporter/": {
+  "sha": "56aacc8b43660cb0",
   "dato": "2026-11-22"
  },
  "https://exday.no/aksjer/IWS/": {
@@ -424,7 +476,11 @@
   "dato": "2026-11-22"
  },
  "https://exday.no/aksjer/MELG/": {
-  "sha": "275403c101e5d385",
+  "sha": "fecb2f1d5726f7f4",
+  "dato": "2026-11-22"
+ },
+ "https://exday.no/aksjer/MELG/rapporter/": {
+  "sha": "940e388ce61e22a5",
   "dato": "2026-11-22"
  },
  "https://exday.no/aksjer/MGN/": {
@@ -468,7 +524,11 @@
   "dato": "2026-11-22"
  },
  "https://exday.no/aksjer/NISB/": {
-  "sha": "6430f38b6d8cf7f2",
+  "sha": "ac1c3bf32fa3e30f",
+  "dato": "2026-11-22"
+ },
+ "https://exday.no/aksjer/NISB/rapporter/": {
+  "sha": "447678df764ed4a2",
   "dato": "2026-11-22"
  },
  "https://exday.no/aksjer/NKR/": {
@@ -484,7 +544,7 @@
   "dato": "2026-11-22"
  },
  "https://exday.no/aksjer/NORAM/": {
-  "sha": "3fa268c2e712ec88",
+  "sha": "a721daf5d344aa32",
   "dato": "2026-11-22"
  },
  "https://exday.no/aksjer/NORBT/": {
@@ -652,7 +712,11 @@
   "dato": "2026-11-21"
  },
  "https://exday.no/aksjer/SB68/": {
-  "sha": "396e6999bf86c162",
+  "sha": "a8f1b14ebb4e83f9",
+  "dato": "2026-11-22"
+ },
+ "https://exday.no/aksjer/SB68/rapporter/": {
+  "sha": "3034cee2aaf87947",
   "dato": "2026-11-22"
  },
  "https://exday.no/aksjer/SBMO/": {
@@ -728,7 +792,11 @@
   "dato": "2026-11-22"
  },
  "https://exday.no/aksjer/SOGN/": {
-  "sha": "aa4d38c7f526e63d",
+  "sha": "6c472ed699c56a2c",
+  "dato": "2026-11-22"
+ },
+ "https://exday.no/aksjer/SOGN/rapporter/": {
+  "sha": "d63c328caf456b5b",
   "dato": "2026-11-22"
  },
  "https://exday.no/aksjer/SOMA/": {
@@ -740,7 +808,11 @@
   "dato": "2026-11-21"
  },
  "https://exday.no/aksjer/SPOG/": {
-  "sha": "703d931d11fd58f0",
+  "sha": "a7ca7b0fd9b815cf",
+  "dato": "2026-11-22"
+ },
+ "https://exday.no/aksjer/SPOG/rapporter/": {
+  "sha": "412f59119d8135b2",
   "dato": "2026-11-22"
  },
  "https://exday.no/aksjer/SPOL/": {
@@ -748,7 +820,7 @@
   "dato": "2026-11-22"
  },
  "https://exday.no/aksjer/SRHA/": {
-  "sha": "d0c45794f22ad11b",
+  "sha": "327c3a4b607d0f1a",
   "dato": "2026-11-22"
  },
  "https://exday.no/aksjer/STB/": {
@@ -800,7 +872,11 @@
   "dato": "2026-11-21"
  },
  "https://exday.no/aksjer/TINDE/": {
-  "sha": "ae696dc31855c81f",
+  "sha": "41cd7f86e53d2690",
+  "dato": "2026-11-22"
+ },
+ "https://exday.no/aksjer/TINDE/rapporter/": {
+  "sha": "240f827a8cbcb102",
   "dato": "2026-11-22"
  },
  "https://exday.no/aksjer/TOM/": {
@@ -812,7 +888,11 @@
   "dato": "2026-11-21"
  },
  "https://exday.no/aksjer/TRSB/": {
-  "sha": "823454e4763b84b5",
+  "sha": "da6dd557a352fc49",
+  "dato": "2026-11-22"
+ },
+ "https://exday.no/aksjer/TRSB/rapporter/": {
+  "sha": "6ddd31ea0f868e23",
   "dato": "2026-11-22"
  },
  "https://exday.no/aksjer/VAR/": {
@@ -840,11 +920,19 @@
   "dato": "2026-11-21"
  },
  "https://exday.no/aksjer/VISTIN/": {
-  "sha": "4a6d1af6a6fc6a43",
+  "sha": "cb3b1e20a5d8e898",
+  "dato": "2026-11-22"
+ },
+ "https://exday.no/aksjer/VISTIN/rapporter/": {
+  "sha": "879d74363551ca8e",
   "dato": "2026-11-22"
  },
  "https://exday.no/aksjer/VVL/": {
-  "sha": "373e166810e35f79",
+  "sha": "c920fd6c734f7892",
+  "dato": "2026-11-22"
+ },
+ "https://exday.no/aksjer/VVL/rapporter/": {
+  "sha": "04d7becc7bb8c0fb",
   "dato": "2026-11-22"
  },
  "https://exday.no/aksjer/WAWI/": {
@@ -860,7 +948,11 @@
   "dato": "2026-11-22"
  },
  "https://exday.no/aksjer/WSTEP/": {
-  "sha": "3cddf01ccca62f51",
+  "sha": "bbef5f5b89bf8cbb",
+  "dato": "2026-11-22"
+ },
+ "https://exday.no/aksjer/WSTEP/rapporter/": {
+  "sha": "a2a051dd6f0c2265",
   "dato": "2026-11-22"
  },
  "https://exday.no/aksjer/WWI/": {
@@ -892,7 +984,7 @@
   "dato": "2026-11-22"
  },
  "https://exday.no/aksjer/lavest-payout/": {
-  "sha": "dbab371fed69da2c",
+  "sha": "0627e80abec9813c",
   "dato": "2026-11-22"
  },
  "https://exday.no/aksjer/sektor/": {
@@ -1040,7 +1132,7 @@
   "dato": "2026-11-18"
  },
  "https://exday.no/rapportkalender/": {
-  "sha": "984cd2ed50c164dc",
+  "sha": "a6a01990a972e1ea",
   "dato": "2026-11-22"
  },
  "https://exday.no/uke/": {
@@ -1048,7 +1140,7 @@
   "dato": "2026-11-18"
  },
  "https://exday.no/utbyttekalender/": {
-  "sha": "ebee1b09cc3b40ce",
+  "sha": "83c88435fca347f5",
   "dato": "2026-11-22"
  },
  "https://exday.no/utbyttekalkulator/": {
