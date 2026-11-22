@@ -3320,6 +3320,18 @@ ex-date, after which the paid-12m rule takes over.
   in 2025 and two in 2026, so neither «Årlig» (the page says «én gang i året»
   while two are paid) nor «Halvårlig» is more right than the other.
 
+**TINDE's company text said «minst sju tideler».** The Q3 report (686398) says
+the bank targets a cash dividend «mellom 70-100 prosent av
+egenkapitalbeviseiernes andel av nettoresultatet» and that the board reviews
+the policy against capital targets, risk profile and growth ambition. The
+sentence was replaced and the rest of the text kept. `valider_innledning.py`
+rejects «100 prosent» as a drifting number, so the range is written «mellom sju
+tideler og hele».
+
+Tests: `TestRapportbunken2211Del2` (17), `ui.test.js` (+3). The tests for
+`_KAPITAL_TITTEL` and the DNB step in `TestRapportbunken2211` read
+`dnb_arsrate()` now, since the multiplication moved out of `main()`.
+
 ## App review of 2026-10-20
 
 Every tab, sub-tab and fourteen stock modals were opened with Playwright at
