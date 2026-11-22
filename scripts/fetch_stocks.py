@@ -3003,6 +3003,38 @@ def _uten_tillegg(tekst, ticker):
     return tekst
 
 
+# Et engangsutbytte med beløpet rett etter, i løpende tekst: «an extraordinary
+# dividend of NOK 1.50 per share» (Borgestad 685169), «an additional dividend of
+# NOK 0.50 per share» (666876), «an extraordinary cash dividend of NOK 1.15 per
+# share» (BEWI 685533). «per share» kreves, så en totalsum aldri leses som et
+# beløp per aksje.
+_EKSTRA_PROSA_BELOP_RE = re.compile(
+    r"\b(?:extra[\s-]?ordinary|special|additional|supplement(?:al|ary)|one[\s-]?off|"
+    r"one[\s-]?time|non[\s-]?recurring)\s+(?:cash\s+)?(?:dividends?|distributions?)\s+"
+    r"(?:of\s+)?(NOK|USD|EUR|SEK|DKK|\$)\s*(\d+(?:[.,]\d+)?)\s+per\s+share", re.I)
+
+
+def _ekstra_belop_i_prosa(tekst):
+    """{(valuta, beløp)} for engangsutbytte nevnt med beløp per aksje i løpende tekst.
+
+    Nektende form («will not pay an extraordinary dividend of …») teller ikke.
+    """
+    ut = set()
+    for m in _EKSTRA_PROSA_BELOP_RE.finditer(tekst or ""):
+        if _NEKTET_RE.search(tekst[max(0, m.start() - 60):m.start()]):
+            continue
+        kode = m.group(1).upper()
+        belop = _tall(m.group(2))
+        if belop and belop > 0:
+            ut.add(("USD" if kode == "$" else kode, belop))
+    return ut
+
+
+# En pressemelding eller rapport uten ex-dato gjelder samme utbetaling som en
+# «Key information»-melding med samme beløp innen så mange dager.
+EKSTRA_PROSA_DAGER = 7
+
+
 def ekstraordinaere_i_vindu(ticker, i_dag=None):
     """Utbetalingene i perioden som en utbyttemelding kaller ekstraordinære.
 
@@ -3033,6 +3065,9 @@ def ekstraordinaere_i_vindu(ticker, i_dag=None):
     lest = 0
     flagget = []
     belop_per_ex = {}
+    # (meldingsdato, ex-dato, beløp, valuta) fra «Key information»-meldingene,
+    # til å finne ex-datoen for en pressemelding som ikke har den selv.
+    nokkelinfo = []
     try:
         for msg in _newsweb_meldinger(ticker):
             dato = (msg.get("publishedTime") or "")[:10]
@@ -3048,30 +3083,66 @@ def ekstraordinaere_i_vindu(ticker, i_dag=None):
                 for u in utb:
                     if u["belop"]:
                         belop_per_ex.setdefault((u["ex_dato"], u["valuta"]), set()).add(u["belop"])
+                        nokkelinfo.append((dato, u["ex_dato"], u["belop"], u["valuta"]))
             i_tittel = _har_ekstraordinaer(_uten_tillegg(tittel, ticker))
             if not (i_tittel or _har_ekstraordinaer(_uten_tillegg(tekst, ticker))):
                 continue
             ex = utb[0]["ex_dato"] if len(utb) == 1 else None
             splitt = _parse_utbyttesplitt(tekst)
+            prosa = _ekstra_belop_i_prosa(_uten_tillegg(tekst, ticker))
             if ex and splitt and splitt["ekstraordinaert"] > 0:
                 flagget.append({"ex_dato": ex, "ekstra": splitt["ekstraordinaert"],
                                 "total": splitt["ordinaert"] + splitt["ekstraordinaert"],
                                 "valuta": splitt["valuta"], "melding_dato": dato})
-            elif (ex and i_tittel and utb[0]["belop"]
-                  and len(_BLOKK_BELOP_RE.findall(tekst)) == 1):
+            elif (ex and utb[0]["belop"] and len(_BLOKK_BELOP_RE.findall(tekst)) == 1
+                  and (i_tittel or (utb[0]["valuta"], utb[0]["belop"]) in prosa)):
+                # Hele meldingen gjelder engangsutbyttet: tittelen sier det,
+                # eller teksten nevner det med nøyaktig meldingens beløp
+                # («an additional dividend of NOK 0.50 per share», Borgestad 666876).
                 flagget.append({"ex_dato": ex, "ekstra": utb[0]["belop"], "total": None,
                                 "valuta": utb[0]["valuta"], "melding_dato": dato})
             else:
                 flagget.append({"ex_dato": ex, "ekstra": None, "total": None, "valuta": None,
-                                "melding_dato": dato})
+                                "melding_dato": dato, "_prosa": prosa if not utb else set()})
     except Exception as e:
         print(f"    Advarsel NewsWeb ekstraordinært utbytte [{ticker}]: {e}")
         return UKJENT
     if not lest:
         return UKJENT
+    # En pressemelding eller rapport har ingen ex-dato, men nevner ofte
+    # engangsutbyttet med beløp: «an extraordinary dividend of NOK 1.50 per
+    # share» (Borgestad 685169), «Proposed extraordinary dividend of NOK 1.15
+    # per share» (BEWI 685533). Har én «Key information»-melding fra de samme
+    # dagene én ex-dato med nøyaktig det beløpet, gjelder de samme utbetaling.
+    # Før 22.11.2026 sto slike funn uten beløp og stoppet regelen, og DNB-steget
+    # så ikke at BEWIs kunngjorte 1,15 kr var et engangsutbytte.
+    for f in flagget:
+        prosa = f.pop("_prosa", set())
+        if f["ekstra"] is not None or f["ex_dato"] or len(prosa) != 1:
+            continue
+        valuta, belop = next(iter(prosa))
+        dm = datetime.date.fromisoformat(f["melding_dato"])
+        treff = {(ex, v) for d, ex, b, v in nokkelinfo
+                 if v == valuta and abs(b - belop) < 1e-6
+                 and abs((datetime.date.fromisoformat(d) - dm).days) <= EKSTRA_PROSA_DAGER}
+        if len(treff) == 1:
+            f["ex_dato"], f["valuta"] = next(iter(treff))
+            f["ekstra"] = belop
     for f in flagget:
         if f["ekstra"] is not None and f["total"] is None:
             f["total"] = round(sum(belop_per_ex.get((f["ex_dato"], f["valuta"]), ())), 4) or None
+    # Rapporten, pressemeldingen og «Key information» om samme engangsutbytte
+    # gir nå samme funn, og skal trekkes fra én gang.
+    sett_ = set()
+    unike = []
+    for f in flagget:
+        if f["ekstra"] is not None:
+            nokkel = (f["ex_dato"], f["ekstra"], f["valuta"])
+            if nokkel in sett_:
+                continue
+            sett_.add(nokkel)
+        unike.append(f)
+    flagget = unike
     # Et engangsutbytte omtales i flere meldinger enn den som tallfester det:
     # rapporten som varsler det, styrets pressemelding, godkjenningen og
     # ex-dagsmeldingen. Goodtech (2026): rapport 17.07, pressemelding 17.09,
@@ -3127,6 +3198,51 @@ def hele_engangsutbetalinger(funn):
     """
     return sum(1 for f in funn or []
                if f.get("ekstra") and f.get("total") and f["ekstra"] >= f["total"] * 0.999)
+
+
+def bare_engangsutbytte(a, funn, ekstra, i_dag=None):
+    """Er alt som er betalt i runden engangsutbytte, etter selskapets egne meldinger?
+
+    Borgestad betalte 0,50 kr i mars 2026, et «additional dividend» for 2024
+    (666876), og 1,50 kr i november, et «extraordinary dividend» (685169).
+    Det ordinære utbyttet for 2024 var 0,80 kr i mai 2025, og for 2025 vedtok
+    generalforsamlingen ikke noe. Når begge engangsbeløpene trekkes fra, er
+    ingenting igjen, og regelen for betalt årsrate sto over. Siden viste da
+    fjorårets 0,80 kr (5,32 %) som løpende rate, et utbytte som ikke er betalt
+    på 18 måneder (22.11.2026).
+
+    True bare når hvert beløp er tallfestet (`ekstra` fra ekstra_i_kroner()),
+    hver utbetaling i runden er engangsutbytte i sin helhet, og ingen annen
+    utbetaling er kunngjort. Ren funksjon.
+    """
+    i_dag = i_dag or datetime.date.today()
+    betalt = a.get("utbytte_12m") or 0
+    n = a.get("utbytte_12m_antall") or 0
+    if betalt <= 0 or n <= 0 or not ekstra or ekstra < betalt * 0.999:
+        return False
+    if hele_engangsutbetalinger(funn) < n:
+        return False
+    ann_ex = a.get("annonsert_ex") or ""
+    if a.get("annonsert_utbytte") and ann_ex >= i_dag.isoformat():
+        d = datetime.date.fromisoformat(ann_ex)
+        if not any(f.get("ex_dato")
+                   and abs((datetime.date.fromisoformat(f["ex_dato"]) - d).days) <= 3
+                   for f in funn):
+            return False
+    return True
+
+
+def bruk_bare_engangsutbytte(a):
+    """Årsraten er 0 når alt som er betalt, er engangsutbytte. Muterer `a`.
+
+    «Betalt siste 12 mnd» og historikken står. Merkelappen sier hvorfor
+    (arsrate_merke()).
+    """
+    a["utbytte_per_aksje"] = 0.0
+    a["utbytte_yield"] = 0.0
+    a["arsrate_kilde"] = "kun_engangs"
+    a.pop("arsrate_ekstra_trukket", None)
+    a.pop("arsrate_antall", None)
 
 
 def ekstraordinaer_i_vindu(ticker, i_dag=None):
@@ -3461,6 +3577,9 @@ def arsrate_merke(a):
     elif kilde == "pause":
         # Uten merket sto «annualisert» ved siden av 0,00 NOK for en kvartalsvis betaler.
         return "utdelinger på pause"
+    elif kilde == "kun_engangs":
+        # Borgestad (22.11.2026): alt betalt siste 12 mnd var engangsutbytte.
+        return "bare engangsutbytte siste 12 mnd"
     else:
         return ""
     return merke + (", uten engangsutbytte" if a.get("arsrate_ekstra_trukket") else "")
@@ -6767,6 +6886,12 @@ def _lag_faq_seksjon(a, today):
             svar = (f"{navn} har ikke betalt utbytte etter {_fmt_dato(fra) if fra else 'omleggingen'}. "
                     f"Selskapet hadde da solgt hele eller deler av virksomheten, og utbetalingene "
                     f"før det sier lite om hva det betaler framover.")
+        if a.get("arsrate_kilde") == "kun_engangs":
+            # Borgestad (22.11.2026): alt som er betalt siste 12 mnd, kaller
+            # selskapet selv tilleggs- eller ekstraordinært utbytte.
+            svar = (f"{navn} har ikke betalt ordinært utbytte de siste 12 månedene. Det som er "
+                    f"betalt i perioden, kaller selskapet selv tilleggsutbytte eller ekstraordinært "
+                    f"utbytte, så det er ikke regnet som en årlig rate.")
         if a.get("arsrate_kilde") == "pause":
             # Selskapet har meldt at utdelingene settes på pause (Archer,
             # 22.11.2026). «Betaler utbytte fire ganger i året» sier at det pågår.
@@ -6860,7 +6985,7 @@ def _lag_faq_seksjon(a, today):
         qas.append((f"Hva er skatten på utbytte fra {ticker}?", svar))
 
     # 5. Utbyttebærekraft — ikke når det ikke er noe løpende utbytte å bære.
-    if payout > 0 and a.get("arsrate_kilde") != "ingen_lopende":
+    if payout > 0 and a.get("arsrate_kilde") not in ("ingen_lopende", "kun_engangs"):
         if payout < 50:
             vurd = (f"En payout ratio under 50 % betyr at mer enn halvparten av overskuddet beholdes i selskapet. "
                     f"Det gir {navn} god buffer til å opprettholde — eller øke — utbyttet selv om inntjeningen svinger.")
@@ -11765,11 +11890,15 @@ def main():
         # som skjuler et kutt (KOG, se stor_enkeltutbetaling()).
         # Og når et særutbytte fra tickers.json ligger i vinduet (SOFF, se
         # saerutbytte_i_vindu()).
+        # Og for en uregelmessig betaler med utbetalinger i vinduet: der kan
+        # hver utbetaling være et engangsutbytte, og avviket sier ingenting
+        # (BEWI fra 2. desember 2026, se bare_engangsutbytte()).
         saer = saerutbytte_i_vindu(kandidat)
         if not (betalt_kan_bli_arsrate(kandidat)
                 or (aksje.get("utbytte_yield") or 0) >= HOY_YIELD_FOR_SPLITT
                 or (betalt_kan_bli_arsrate(kandidat, min_avvik=0)
-                    and (stor_enkeltutbetaling(kandidat) or saer))):
+                    and (stor_enkeltutbetaling(kandidat) or saer
+                         or kandidat.get("frekvens") == "Uregelmessig"))):
             continue
         funn = ekstraordinaere_i_vindu(aksje["ticker"])
         if funn is UKJENT:
@@ -11786,6 +11915,11 @@ def main():
                 print(f"    {aksje['ticker']}: beholder {aksje.get('utbytte_yield')} % "
                       f"(ekstraordinær utbetaling i vinduet)")
                 continue
+        if bare_engangsutbytte(kandidat, funn, ekstra):
+            print(f"    {aksje['ticker']}: {aksje.get('utbytte_yield')} % → 0 "
+                  f"(bare engangsutbytte i vinduet, {_nf(ekstra, 2)} kr)")
+            bruk_bare_engangsutbytte(aksje)
+            continue
         uten = dict(kandidat, utbytte_12m=kandidat["utbytte_12m"] - ekstra,
                     utbytte_12m_antall=(kandidat.get("utbytte_12m_antall") or 0)
                     - (hele_engangsutbetalinger(funn) if ekstra else 0))

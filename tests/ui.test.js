@@ -1321,3 +1321,10 @@ test('arsrateMerke: én kunngjort utbetaling er ikke annualisert (OKEA)', () => 
   assert.equal(arsrateMerke({ arsrate_kilde: 'kunngjort' }), 'kunngjort utbetaling');
   assert.equal(arsrateMerke({ arsrate_kilde: 'kunngjort', arsrate_ekstra_trukket: 1 }), 'kunngjort utbetaling');
 });
+
+test('Fikser 22.11.2026: Borgestad, bare engangsutbytte siste 12 mnd', () => {
+  const { arsrateMerke } = require('../assets/ui.js');
+  // Alt betalt siste 12 mnd var tilleggs- eller ekstraordinært utbytte (666876, 685169).
+  assert.equal(arsrateMerke({ arsrate_kilde: 'kun_engangs' }), 'bare engangsutbytte siste 12 mnd');
+});
+

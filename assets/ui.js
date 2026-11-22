@@ -4658,6 +4658,9 @@ function arsrateMerke(a) {
   } else if (a.arsrate_kilde === 'pause') {
     // Uten merket sto «annualisert» ved siden av 0 for en kvartalsvis betaler (Archer).
     return 'utdelinger på pause';
+  } else if (a.arsrate_kilde === 'kun_engangs') {
+    // Alt betalt siste 12 mnd var engangsutbytte (Borgestad, 22.11.2026).
+    return 'bare engangsutbytte siste 12 mnd';
   } else {
     return '';
   }
