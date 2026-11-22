@@ -622,6 +622,36 @@ test('modalKapitalNote: bare for aksjer med feltet', () => {
   assert.match(modalKapitalNote({ kapital_tilbake: { andel: 0.862 } }), /om lag 86\u00a0%/);
 });
 
+// ── Rapportbunken 22.11.2026: ARCH (pause) og VISTIN (delt årsutbetaling) ────
+test('utbytte_pause: hendelsen tar bort målene og rangeringen, og har eget merke', () => {
+  global.escHtml = x => String(x).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  const { hendelseUtenMal, iRangering } = require('../assets/ui.js');
+  const arch = { ticker: 'ARCH', utbytte_yield: 0, hendelse: { type: 'utbytte_pause', tekst: 'Utdelingene er satt på pause.' } };
+  assert.equal(hendelseUtenMal(arch), true);
+  assert.equal(iRangering(arch), false);
+  assert.match(hendelseMerke(arch), />utdeling på pause</);
+  assert.match(modalHendelse(arch), /Selskapet har satt utdelingene på pause/);
+});
+
+test('modalKapitalNote: «betaler ut» sies ikke om utdelinger på pause', () => {
+  const k = { andel: 1, melding_dato: '2026-08-13' };
+  assert.match(modalKapitalNote({ kapital_tilbake: k }), /betaler selskapet ut/);
+  const pause = modalKapitalNote({ kapital_tilbake: k, arsrate_kilde: 'pause' });
+  assert.match(pause, /var den siste utbetalingen/);
+  assert.doesNotMatch(pause, /betaler selskapet ut/);
+});
+
+test('arsrateMerke: «betalt og kunngjort» for en delt årsutbetaling (VISTIN)', () => {
+  assert.equal(arsrateMerke({ arsrate_kilde: 'betalt_og_kunngjort' }), 'betalt og kunngjort');
+  assert.equal(arsrateMerke({ arsrate_kilde: 'pause' }), 'utdelinger på pause');
+  const v = { pris: 19.0, utbytte_yield: 7.89, utbytte_per_aksje: 1.5, utbytte_12m: 1.0,
+              arsrate_kilde: 'betalt_og_kunngjort', utbytte_12m_antall: 1,
+              utbytte_per_ar: { 2025: 1.25 }, utbytte_forste_ar: 2016 };
+  const boks = modalBetaltBoks(v);
+  assert.match(boks, /kunngjort, men ennå ikke har gått ex/);
+  assert.match(boks, /5,26\u00a0%/);
+});
+
 // ── aksjerMedExIMaaned — «Måneder uten ex-dato» (2026-10-03) ─────────────────
 test('aksjerMedExIMaaned: bare aksjer med måneden i mønsteret og betaling siste 12 mnd', () => {
   const iAar = new Date().getFullYear();

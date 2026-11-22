@@ -1098,8 +1098,9 @@ const HENDELSE_TITTEL = {
   bytte_av_marked: 'Aksjen skal flytte til Euronext Growth',
   bytte_av_hjemland: 'Selskapet flytter til et annet land',
   fusjon_overtar: 'Selskapet skal overta et annet ved fusjon',
+  utbytte_pause: 'Selskapet har satt utdelingene på pause',
 };
-const HENDELSE_UTEN_MAL = new Set(['oppkjop', 'fusjon', 'avvikling']);
+const HENDELSE_UTEN_MAL = new Set(['oppkjop', 'fusjon', 'avvikling', 'utbytte_pause']);
 
 function gyldigHendelse(h) {
   return !!(h && typeof h === 'object' && HENDELSE_TITTEL[h.type]
@@ -1139,6 +1140,7 @@ const HENDELSE_KORT = {
   bytte_av_marked: 'flytter til Growth',
   bytte_av_hjemland: 'bytter hjemland',
   fusjon_overtar: 'overtar ved fusjon',
+  utbytte_pause: 'utdeling på pause',
 };
 function hendelseMerke(a) {
   const h = a && a.hendelse;
@@ -4650,6 +4652,12 @@ function arsrateMerke(a) {
   } else if (a.arsrate_kilde === 'kunngjort') {
     // Én kunngjort utbetaling, ikke ganget opp (OKEA, 22.11.2026).
     return 'kunngjort utbetaling';
+  } else if (a.arsrate_kilde === 'betalt_og_kunngjort') {
+    // Betalt siden og kunngjort, for en delt årsutbetaling (Vistin, 22.11.2026).
+    return 'betalt og kunngjort';
+  } else if (a.arsrate_kilde === 'pause') {
+    // Uten merket sto «annualisert» ved siden av 0 for en kvartalsvis betaler (Archer).
+    return 'utdelinger på pause';
   } else {
     return '';
   }
@@ -4696,6 +4704,8 @@ function modalBetaltBoks(a) {
   const forklaring = !ovb ? ''
     : !a.utbytte_12m
       ? `Direkteavkastningen over er ${fmt(ovb[0])}\u00a0%, men selskapet har ikke hatt noe utbytte med ex-dato de siste 12 månedene.`
+      : a.arsrate_kilde === 'betalt_og_kunngjort'
+      ? `Direkteavkastningen over er ${fmt(ovb[0])}\u00a0%. Den teller med utbetalingen som er kunngjort, men ennå ikke har gått ex. Det som er betalt de siste 12 månedene, tilsvarer ${fmt(ovb[1])}\u00a0% av dagens kurs.`
       : a.arsrate_kilde === 'siste_utbetalinger'
       ? `Direkteavkastningen over er ${fmt(ovb[0])}\u00a0% og bygger på ${(Number(a.arsrate_antall) || 0) > 1 ? `de ${ANTALL_ORD[a.arsrate_antall] || a.arsrate_antall} siste utbetalingene` : 'den siste utbetalingen'}. Den eldste av dem har ex-dato rett før tolvmånedersvinduet, så det som er betalt de siste 12 månedene, er lavere: ${fmt(ovb[1])}\u00a0% av dagens kurs.`
       : `Direkteavkastningen over er ${fmt(ovb[0])}\u00a0%. Det som faktisk er betalt de siste 12 månedene, tilsvarer ${fmt(ovb[1])}\u00a0% av dagens kurs.`;
@@ -4797,7 +4807,10 @@ function kapitalAndel(a) {
 function modalKapitalNote(a) {
   const andel = kapitalAndel(a);
   if (!andel) return '';
-  const hva = andel >= 0.999
+  // Er utdelingene satt på pause, er «betaler ut» feil tid (Archer, 22.11.2026).
+  const hva = andel >= 0.999 && a.arsrate_kilde === 'pause'
+    ? 'var den siste utbetalingen <strong>tilbakebetaling av innbetalt kapital</strong>, ikke utbytte i skattemessig forstand'
+    : andel >= 0.999
     ? 'betaler selskapet ut <strong>tilbakebetaling av innbetalt kapital</strong>, ikke utbytte i skattemessig forstand'
     : `var <strong>om lag ${Math.round(andel * 100)}\u00a0% av siste utbetaling tilbakebetaling av innbetalt kapital</strong>, og resten ordinært utbytte`;
   // Bare en ISO-dato slipper gjennom, og formaterDato() gir da sifre og
