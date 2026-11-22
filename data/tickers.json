@@ -1041,7 +1041,9 @@
     "beskrivelse_fakta_kilde": "yahoo_finance",
     "beskrivelse_fakta_sprak": "en",
     "ask_egnet": true,
-    "inkorporeringsland": "Norge"
+    "inkorporeringsland": "Norge",
+    "frekvens": "Uregelmessig",
+    "ekstraordinaert_er_ordinaert": true
   },
   {
     "ticker": "ALNG",

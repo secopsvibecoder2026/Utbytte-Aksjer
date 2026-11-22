@@ -5505,6 +5505,38 @@ class TestFikser2211(unittest.TestCase):
         ekstra = fs.ekstra_i_kroner(a, funn)
         self.assertTrue(fs.bare_engangsutbytte(a, funn, ekstra, i_dag))
 
+    # ── HUNT ─────────────────────────────────────────────────────────────
+    def test_hunt_flagg_og_frekvens_i_tickers(self):
+        self.assertIn("HUNT", fs.EKSTRAORDINAERT_ER_ORDINAERT)
+        self.assertEqual(fs.FREKVENS_OVERSTYRT.get("HUNT"), "Uregelmessig")
+
+    def test_hunt_ekstraordinaert_er_ikke_engangs(self):
+        funn = self._funn("HUNT", self.HUNT_MELDINGER, self.HUNT_TEKSTER, datetime.date(2026, 11, 22))
+        self.assertEqual(funn, [])
+        # Uten flagget er det et engangsutbytte, som før.
+        andre = self._funn("XHUNT", self.HUNT_MELDINGER, self.HUNT_TEKSTER, datetime.date(2026, 11, 22))
+        self.assertEqual([(f["ex_dato"], f["ekstra"]) for f in andre], [("2026-09-29", 1.5)])
+        # «Special» står igjen også for flaggede selskaper.
+        self.assertTrue(fs._har_ekstraordinaer(fs._uten_tillegg("a special dividend", "HUNT")))
+
+    def test_hunt_betalt_blir_arsrate(self):
+        a = {"ticker": "HUNT", "frekvens": "Uregelmessig", "pris": 16.26,
+             "utbytte_per_aksje": 0.3, "utbytte_yield": 1.85,
+             "utbytte_12m": 4.03, "utbytte_12m_antall": 5,
+             "utbytte_12m_liste": [{"ex_dato": "2025-12-01", "belop": 0.3},
+                                   {"ex_dato": "2026-03-02", "belop": 0.4},
+                                   {"ex_dato": "2026-03-26", "belop": 0.58},
+                                   {"ex_dato": "2026-06-30", "belop": 1.25},
+                                   {"ex_dato": "2026-09-29", "belop": 1.5}],
+             "utbytte_per_ar": {"2021": 26.5247, "2022": 26.5247, "2023": 40.8481,
+                                "2024": 0.0, "2025": 0.3}}
+        self.assertTrue(fs.betalt_kan_bli_arsrate(a, datetime.date(2026, 11, 22)))
+        fs.bruk_betalt_som_arsrate(a)
+        self.assertEqual((a["utbytte_per_aksje"], a["utbytte_yield"]), (4.03, 24.78))
+        self.assertEqual(fs.arsrate_merke(a), "siste 12 mnd")
+        # Ingen boks om «ekstraordinært utbytte i yielden».
+        self.assertFalse(fs.bor_hente_utbyttesplitt(a))
+
 
 
 if __name__ == "__main__":

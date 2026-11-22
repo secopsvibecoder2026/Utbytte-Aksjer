@@ -260,6 +260,14 @@ FREKVENS_FRA         = {t["ticker"]: t["frekvens_fra"] for t in _ticker_data
 # (1,3 %) mot 28,50 betalt siste 12 mnd, AF Gruppen 6,50 mot 11,00: meldingene
 # om tillegget fikk betalt-12m-regelen til å stå over. Se ekstraordinaere_i_vindu().
 TILLEGG_ER_ORDINAERT = {t["ticker"] for t in _ticker_data if t.get("tillegg_er_ordinaert")}
+# Selskaper der «extraordinary dividend» er den løpende utdelingen, ikke en
+# engangsutbetaling. Ordet er juridisk: utbyttet vedtas av en ekstraordinær
+# generalforsamling etter hver kvartalsrapport. Hunter Group sier at all
+# overskuddslikviditet skal tilbake til aksjonærene (666896) og foreslår et
+# utbytte etter hver rapport (674687, 680928). Siden viste 0,30 kr (1,85 %)
+# mot 4,03 kr betalt siste 12 mnd (22.11.2026). Se ekstraordinaere_i_vindu().
+EKSTRAORDINAERT_ER_ORDINAERT = {t["ticker"] for t in _ticker_data
+                                if t.get("ekstraordinaert_er_ordinaert")}
 # Utbetalinger Yahoo mangler og NewsWeb-lista ikke lenger når, lest av for hånd
 # fra selskapets ex-melding. Se kommentaren over SUPPLER_DAGER.
 UTBETALINGER_FRA_MELDING = {t["ticker"]: t["utbetalinger_fra_melding"]
@@ -2205,7 +2213,13 @@ def bor_hente_utbyttesplitt(a):
     er sammensatt før vi spør. Derfor spør vi de høyeste, og sumvakten i
     `utbyttesplitt_stemmer()` forkaster svaret om det ikke passer utbetalingen
     vi faktisk viser.
+
+    Ikke for EKSTRAORDINAERT_ER_ORDINAERT: der er «extraordinary» den løpende
+    utdelingen, og boksen ville sagt at yielden inneholder et engangsutbytte
+    (Hunter Group, 22.11.2026).
     """
+    if a.get("ticker") in EKSTRAORDINAERT_ER_ORDINAERT:
+        return False
     if yield_er_delaar(a):
         return True
     try:
@@ -2992,14 +3006,24 @@ _TILLEGG_RE = re.compile(
     r"(?:dividends?|distributions?|utbytte|utdeling\w*)", re.I)
 
 
-def _uten_tillegg(tekst, ticker):
-    """Teksten uten «additional dividend» for selskaper der tillegget er ordinært.
+_EKSTRAORDINAERT_ORD_RE = re.compile(
+    r"\b(?:extra[\s-]?ordinary|ekstraordin\w*)\s+(?:cash\s+)?(?:dividends?|utbytte)", re.I)
 
-    Se TILLEGG_ER_ORDINAERT. «Special» og «extraordinary» står igjen, så et
-    ekte engangsutbytte fra de samme selskapene blir fortsatt funnet.
+
+def _uten_tillegg(tekst, ticker):
+    """Teksten uten ordene som er selskapets vanlige utdeling, ikke et engangsutbytte.
+
+    Se TILLEGG_ER_ORDINAERT: «additional dividend» tas bort, og «special» og
+    «extraordinary» står igjen, så et ekte engangsutbytte fra de samme
+    selskapene blir fortsatt funnet. Se EKSTRAORDINAERT_ER_ORDINAERT:
+    «extraordinary dividend» tas bort, og «special» står igjen.
     """
-    if ticker in TILLEGG_ER_ORDINAERT and tekst:
-        return _TILLEGG_RE.sub(" ", tekst)
+    if not tekst:
+        return tekst
+    if ticker in TILLEGG_ER_ORDINAERT:
+        tekst = _TILLEGG_RE.sub(" ", tekst)
+    if ticker in EKSTRAORDINAERT_ER_ORDINAERT:
+        tekst = _EKSTRAORDINAERT_ORD_RE.sub(" ", tekst)
     return tekst
 
 
