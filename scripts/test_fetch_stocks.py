@@ -5031,6 +5031,47 @@ class TestRapportbunken2211(unittest.TestCase):
     def test_akast_i_tickers(self):
         self.assertEqual(fs.FREKVENS_OVERSTYRT.get("AKAST"), "Uregelmessig")
 
+    # ── SOFF: 0,12 av 0,30 USD ekstraordinært (presentasjonen, 685540) ────
+    SOFF = {"ticker": "SOFF", "frekvens": "Kvartalsvis", "pris": 65.0,
+            "utbytte_per_aksje": 5.63, "utbytte_yield": 8.66,
+            "utbytte_12m": 6.1396, "utbytte_12m_antall": 5,
+            "utbytte_12m_liste": [{"ex_dato": "2025-11-25", "belop": 0.5119},
+                                  {"ex_dato": "2026-03-10", "belop": 0.4832},
+                                  {"ex_dato": "2026-05-20", "belop": 0.9169},
+                                  {"ex_dato": "2026-07-17", "belop": 1.4592},
+                                  {"ex_dato": "2026-11-06", "belop": 2.7683}],
+            "utbytte_runde": [{"ex_dato": "2026-03-10", "belop": 0.4832},
+                              {"ex_dato": "2026-05-20", "belop": 0.9169},
+                              {"ex_dato": "2026-07-17", "belop": 1.4592},
+                              {"ex_dato": "2026-11-06", "belop": 2.7683}]}
+
+    def test_soff_saerutbytte_i_tickers(self):
+        s = fs.SAERUTBYTTE["SOFF"]
+        self.assertEqual(s, [{"ex_dato": "2026-11-06", "belop": 1.1073, "melding": "685540"}])
+        # 0,12 av 0,30 dollar, regnet om med selskapets kronebeløp 2,76834 (685858).
+        self.assertAlmostEqual(0.12 / 0.30 * 2.76834, s[0]["belop"], places=4)
+
+    def test_soff_engangsdelen_trekkes_fra(self):
+        kandidat = fs.med_runde(self.SOFF)
+        saer = fs.saerutbytte_i_vindu(kandidat)
+        self.assertEqual(len(saer), 1)
+        self.assertEqual((saer[0]["ekstra"], saer[0]["total"]), (1.1073, 2.7683))
+        funn = fs.med_saerutbytte([], saer)
+        ekstra = fs.ekstra_i_kroner(kandidat, funn)
+        self.assertAlmostEqual(ekstra, 1.1073, places=4)
+        self.assertEqual(fs.hele_engangsutbetalinger(funn), 0)
+        a = dict(self.SOFF)
+        fs.bruk_betalt_som_arsrate(a, ekstra)
+        self.assertEqual((a["utbytte_per_aksje"], a["utbytte_yield"]), (4.52, 6.95))
+        self.assertEqual(fs.arsrate_merke(a), "siste fire utbetalinger, uten engangsutbytte")
+
+    def test_saerutbytte_erstatter_newsweb_funn_for_samme_ex(self):
+        saer = [{"ex_dato": "2026-11-06", "ekstra": 1.1073, "total": 2.7683, "valuta": "NOK"}]
+        nw = [{"ex_dato": "2026-11-05", "ekstra": None, "total": None, "valuta": None},
+              {"ex_dato": "2026-03-10", "ekstra": None, "total": None, "valuta": None}]
+        ut = fs.med_saerutbytte(nw, saer)
+        self.assertEqual([f["ex_dato"] for f in ut], ["2026-03-10", "2026-11-06"])
+
     # ── HUNT: 5-årssnitt 115,86 % ─────────────────────────────────────────
     HUNT = {"ticker": "HUNT", "pris": 16.26, "utbytte_12m": 4.03,
             "utbytte_per_ar": {"2021": 26.5247, "2022": 26.5247, "2023": 40.8481,

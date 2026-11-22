@@ -3191,6 +3191,16 @@ faults; HSHP was not.
 AKAST now shows 4,50 kr, 48,86 %, «siste 12 mnd, uten engangsutbytte», and
 `kapital_tilbake` 1.0.
 
+**SOFF's special dividend was only in the presentation.** Of USD 0,30 ex
+6 November, 0,12 was extraordinary after the sale of Normand Tonjer (slides 6
+and 9 attached to 685540). The dividend notice (685547) does not say so.
+`saerutbytte` in `tickers.json` now counts as a quantified one-off in the
+paid-12m step (`saerutbytte_i_vindu()`, `med_saerutbytte()`), and it replaces
+any NewsWeb finding for the same ex-date. The SOFF entry is 1,1073 kr: 0,12
+of 0,30 times the company's own NOK amount, 2,76834 (685858). The step also
+asks NewsWeb when such an entry is in the window. SOFF went from 5,63 kr
+(8,66 %) to 4,52 kr (6,95 %).
+
 **HUNT's 5-year average was 115,86 %.** 2021–2023 hold 26,52, 26,52 and
 40,85 kr after the 1:20 reverse split in 2023, against a price of 16,26.
 Hunter sold its VLCCs in 2021 and 2022 and paid out capital in those years.

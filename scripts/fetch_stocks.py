@@ -3091,6 +3091,54 @@ def ekstra_i_kroner(a, funn, toleranse_dager=3):
     return round(trekk, 4)
 
 
+def saerutbytte_i_vindu(a, toleranse_dager=3):
+    """Særutbytte fra tickers.json i vinduet, i samme form som ekstraordinaere_i_vindu().
+
+    Solstad Offshore betalte 0,30 dollar med ex-dato 6. november 2026, og
+    0,12 av dem var et ekstraordinært utbytte etter salget av Normand Tonjer.
+    Det står i presentasjonen (vedlegg til 685540, side 6 og 9), ikke i
+    utbyttemeldingen (685547), så NewsWeb-oppslaget fant det aldri, og
+    årsraten tok med hele utbetalingen (rapportbunken 22.11.2026). Et
+    særutbytte som er kontrollert for hånd og står i `saerutbytte`, er et
+    tallfestet engangsutbytte. `total` er utbetalingen i vinduet med samme
+    ex-dato, så andelen blir kronene i særutbyttet delt på kronene i
+    utbetalingen.
+    """
+    liste = a.get("utbytte_12m_liste") or []
+    ut = []
+    for s_ in saerutbytter(a):
+        ex = datetime.date.fromisoformat(s_["ex_dato"])
+        treff = [b for b in liste
+                 if abs((datetime.date.fromisoformat(b["ex_dato"]) - ex).days) <= toleranse_dager]
+        if len(treff) != 1 or s_["belop"] > treff[0]["belop"] * 1.001:
+            continue
+        ut.append({"ex_dato": s_["ex_dato"], "ekstra": s_["belop"],
+                   "total": treff[0]["belop"], "valuta": "NOK",
+                   "melding_dato": s_["ex_dato"], "kilde": "saerutbytte"})
+    return ut
+
+
+def med_saerutbytte(funn, saer, toleranse_dager=3):
+    """`funn` fra NewsWeb med særutbyttene fra tickers.json i stedet for sine egne.
+
+    Et særutbytte i tickers.json er lest i selskapets kilde og tallfestet for
+    hånd. Har NewsWeb et funn for samme ex-dato, byttes det ut, så samme
+    utbetaling ikke trekkes fra to ganger og et funn uten beløp ikke stopper
+    regelen.
+    """
+    if not saer:
+        return funn
+
+    def naer(f):
+        if not f.get("ex_dato"):
+            return False
+        d = datetime.date.fromisoformat(f["ex_dato"])
+        return any(abs((datetime.date.fromisoformat(s_["ex_dato"]) - d).days) <= toleranse_dager
+                   for s_ in saer)
+
+    return [f for f in funn if not naer(f)] + list(saer)
+
+
 def fyll_total_fra_serie(a, funn, toleranse_dager=3):
     """Gir et engangsutbytte uten total den hele utbetalingen, når beløpene er like.
 
@@ -11464,15 +11512,19 @@ def main():
         # vilkåret om 30 % avvik slapp den aldri til.
         # Og når én utbetaling er så stor at den kan være et engangsutbytte
         # som skjuler et kutt (KOG, se stor_enkeltutbetaling()).
+        # Og når et særutbytte fra tickers.json ligger i vinduet (SOFF, se
+        # saerutbytte_i_vindu()).
+        saer = saerutbytte_i_vindu(kandidat)
         if not (betalt_kan_bli_arsrate(kandidat)
                 or (aksje.get("utbytte_yield") or 0) >= HOY_YIELD_FOR_SPLITT
                 or (betalt_kan_bli_arsrate(kandidat, min_avvik=0)
-                    and stor_enkeltutbetaling(kandidat))):
+                    and (stor_enkeltutbetaling(kandidat) or saer))):
             continue
         funn = ekstraordinaere_i_vindu(aksje["ticker"])
         if funn is UKJENT:
             print(f"    {aksje['ticker']}: beholder {aksje.get('utbytte_yield')} % (meldingene kunne ikke leses)")
             continue
+        funn = med_saerutbytte(funn, saer)
         fyll_total_fra_serie(kandidat, funn)
         ekstra = 0.0
         if funn:
