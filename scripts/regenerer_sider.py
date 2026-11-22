@@ -16,6 +16,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from fetch_stocks import (oppdater_rundet_antall_i_sider, generer_aksjesider, generer_sektorsider, generer_topplistesider,
                           generer_sitemap, _last_kurshistorikk_fra_disk,
                           generer_rapportkalender, generer_rapportsider, sett_ask_felter, sett_hendelse, sett_snitt_felter,
+                          sett_utenfor_rangering,
                           sett_saerutbytte, sett_utbetalingsmaaneder,
                           oppdater_app_noscript_liste, oppdater_antall_i_sider,
                           oppdater_aarstall_i_sider, oppdater_forside_uka,
@@ -37,6 +38,7 @@ def main():
         sektor_map        = {t["ticker"]: t.get("sektor", "") for t in ticker_data}
         frekvens_map      = {t["ticker"]: t["frekvens"] for t in ticker_data if t.get("frekvens")}
         hendelse_map      = {t["ticker"]: t.get("hendelse") for t in ticker_data}
+        rangering_map     = {t["ticker"]: t.get("utenfor_rangering") for t in ticker_data}
 
     with open(AKSJER_F, encoding="utf-8") as f:
         data = json.load(f)
@@ -101,6 +103,7 @@ def main():
         sett_ask_felter(a, ask_egnet_map.get(a["ticker"], True),
                         inkorp_map.get(a["ticker"], "Norge"))
         sett_hendelse(a, hendelse_map.get(a["ticker"]))
+        sett_utenfor_rangering(a, rangering_map.get(a["ticker"]))
         sett_saerutbytte(a)
         # Bygges på nytt fra tallene, som beskrivelsen over — appen leser feltet
         # fra aksjer.json og ville ellers vist en frosset tekst.

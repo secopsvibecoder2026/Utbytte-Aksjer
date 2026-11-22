@@ -1376,7 +1376,11 @@
     "beskrivelse_fakta_sprak": "en",
     "ask_egnet": true,
     "inkorporeringsland": "Norge",
-    "frekvens": "Uregelmessig"
+    "frekvens": "Uregelmessig",
+    "utenfor_rangering": {
+      "grunn": "salgsproveny",
+      "melding": "686167"
+    }
   },
   {
     "ticker": "GENT",

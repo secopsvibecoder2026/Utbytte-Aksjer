@@ -268,6 +268,12 @@ TILLEGG_ER_ORDINAERT = {t["ticker"] for t in _ticker_data if t.get("tillegg_er_o
 # mot 4,03 kr betalt siste 12 mnd (22.11.2026). Se ekstraordinaere_i_vindu().
 EKSTRAORDINAERT_ER_ORDINAERT = {t["ticker"] for t in _ticker_data
                                 if t.get("ekstraordinaert_er_ordinaert")}
+# Aksjer som står i de fullstendige listene, men ikke i rangeringene, fordi
+# utdelingene er salgsproveny og ikke et utbytte driften bærer. Akastor betaler
+# ut etter hvert som eierposter selges (686167) og toppet «Høyest utbytte» med
+# 48,86 % (22.11.2026). `{"grunn": "salgsproveny", "melding": "…"}`. Se i_rangering().
+UTENFOR_RANGERING = {t["ticker"]: t["utenfor_rangering"] for t in _ticker_data
+                     if isinstance(t.get("utenfor_rangering"), dict)}
 # Utbetalinger Yahoo mangler og NewsWeb-lista ikke lenger når, lest av for hånd
 # fra selskapets ex-melding. Se kommentaren over SUPPLER_DAGER.
 UTBETALINGER_FRA_MELDING = {t["ticker"]: t["utbetalinger_fra_melding"]
@@ -1918,8 +1924,33 @@ def i_rangering(a):
     på listen under avvikling (30.10.2026). Utbyttet bak tallet kommer ikke
     igjen, så en rangering skal ikke løfte det fram. Aksjene står fortsatt i de
     fullstendige listene, med hendelsen merket.
+
+    Det samme gjelder en aksje med `utenfor_rangering` (Akastor, 22.11.2026):
+    utdelingene er salgsproveny, så tallet er riktig på aksjesiden, men sier
+    ikke hva aksjen gir i året. iRangering() i assets/ui.js er kopien.
     """
-    return not hendelse_uten_mal(a)
+    return not hendelse_uten_mal(a) and not (isinstance(a, dict) and a.get("utenfor_rangering"))
+
+
+# Kort merke i sektortabellen for aksjer utenfor rangeringene. Speiler
+# RANGERING_KORT i assets/ui.js.
+RANGERING_KORT = {"salgsproveny": "utdeling fra salg"}
+
+
+def sett_utenfor_rangering(a, verdi):
+    """Kopierer grunnen fra tickers.json inn i raden, eller fjerner feltet."""
+    grunn = verdi.get("grunn") if isinstance(verdi, dict) else None
+    if grunn in RANGERING_KORT:
+        a["utenfor_rangering"] = grunn
+    else:
+        a.pop("utenfor_rangering", None)
+
+
+def rangering_merke(a):
+    """Teksten i sektortabellen som forklarer hvorfor aksjen ikke rangeres, eller «»."""
+    if hendelse_uten_mal(a):
+        return HENDELSE_KORT[a["hendelse"]["type"]]
+    return RANGERING_KORT.get(a.get("utenfor_rangering") or "", "")
 
 
 def _betaler_og_rangeres(a):
@@ -9415,8 +9446,9 @@ def generer_sektorsider(aksjer, root_dir):
             ex = _fmt_dato(a.get("ex_dato"))
             # Merket forklarer hvorfor aksjen ikke teller i «Høyeste yield»
             # og spennet over (i_rangering()).
+            kort = rangering_merke(a)
             merke = (f' <span class="text-xs text-amber-700 dark:text-amber-400 whitespace-nowrap">'
-                     f'{HENDELSE_KORT[a["hendelse"]["type"]]}</span>' if hendelse_uten_mal(a) else "")
+                     f'{kort}</span>' if kort else "")
             rader += f"""
         <tr>
           <td><a href="/aksjer/{t}/">{t}</a></td>
@@ -12013,6 +12045,7 @@ def main():
         sett_ask_felter(aksje, ASK_EGNET.get(aksje["ticker"], True),
                         INKORPORERINGSLAND.get(aksje["ticker"], "Norge"))
         sett_hendelse(aksje, HENDELSE.get(aksje["ticker"]))
+        sett_utenfor_rangering(aksje, UTENFOR_RANGERING.get(aksje["ticker"]))
         sett_saerutbytte(aksje)
         # Etter frekvens og ex-dato er satt: årets måneder når året er komplett.
         sett_utbetalingsmaaneder(aksje)

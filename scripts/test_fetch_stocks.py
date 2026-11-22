@@ -5537,6 +5537,22 @@ class TestFikser2211(unittest.TestCase):
         # Ingen boks om «ekstraordinært utbytte i yielden».
         self.assertFalse(fs.bor_hente_utbyttesplitt(a))
 
+    # ── AKAST ────────────────────────────────────────────────────────────
+    def test_akast_utenfor_rangering(self):
+        self.assertEqual(fs.UTENFOR_RANGERING.get("AKAST", {}).get("grunn"), "salgsproveny")
+        a = {"ticker": "AKAST", "utbytte_yield": 48.86}
+        fs.sett_utenfor_rangering(a, fs.UTENFOR_RANGERING["AKAST"])
+        self.assertEqual(a["utenfor_rangering"], "salgsproveny")
+        self.assertFalse(fs.i_rangering(a))
+        self.assertEqual(fs.rangering_merke(a), "utdeling fra salg")
+        b = {"ticker": "AKSO", "utbytte_yield": 5.0}
+        self.assertEqual([x["ticker"] for x in fs.sektor_topp([a, b])], ["AKSO"])
+        self.assertEqual(fs.sektor_snitt_yield([a, b]), 5.0)
+        # Feltet faller bort når det tas ut av tickers.json.
+        fs.sett_utenfor_rangering(a, None)
+        self.assertNotIn("utenfor_rangering", a)
+        self.assertTrue(fs.i_rangering(a))
+
 
 
 if __name__ == "__main__":
