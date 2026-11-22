@@ -5163,5 +5163,123 @@ class TestRapportbunken2211(unittest.TestCase):
         self.assertIsNone(fs._parse_kapitaltilbake(tekst))
 
 
+class TestRapportbunken2211Del2(unittest.TestCase):
+    """ARCH (utdelinger på pause) og VISTIN (delt årsutbetaling), 22.11.2026."""
+
+    # ── ARCH: pause meldt 21.10.2026 (684465) ──────────────────────────────
+    ARCH_TITTEL = "Archer Limited: Archer distribution of shareholder return - NOK 0.62 per share"
+    ARCH_TEKST = ("Archer Limited announces that the Board of Directors has approved a cash "
+                  "distribution to shareholders as specified below. The distribution will be in "
+                  "the form of return of capital and will be made from the Company's Contributed "
+                  "Surplus account which consists of previously paid in share premium transferred "
+                  "from the Company's Share Premium account.\n"
+                  "Return of capital: NOK 0.62 per share\nDeclared currency: NOK\n"
+                  "Ex-date: August 18, 2026\n")
+    PAUSE = {"type": "utbytte_pause", "dato": "2026-10-21", "melding": "684465",
+             "tekst": "Archer har satt utdelingene på pause."}
+    ARCH = {"ticker": "ARCH", "frekvens": "Kvartalsvis", "pris": 16.7,
+            "utbytte_per_aksje": 2.48, "utbytte_yield": 14.85, "ex_dato": None,
+            "arsrate_kilde": "siste_utbetalinger", "arsrate_antall": 4,
+            "utbytte_12m": 1.86, "utbytte_12m_antall": 3,
+            "utbytte_12m_liste": [{"ex_dato": "2026-02-04", "belop": 0.62},
+                                  {"ex_dato": "2026-05-20", "belop": 0.62},
+                                  {"ex_dato": "2026-08-18", "belop": 0.62}],
+            "utbetalinger": [["2025-11-06", 0.62], ["2026-02-04", 0.62],
+                             ["2026-05-20", 0.62], ["2026-08-18", 0.62]]}
+
+    def test_arch_tittel_og_tekst_gir_kapital(self):
+        self.assertTrue(fs._KAPITAL_TITTEL.search(self.ARCH_TITTEL))
+        # Pauseraporten og ex-dagsmeldingen er ikke utbyttemeldinger om neste utbetaling.
+        for t in ("Archer Limited: Q3 2026 trading and shareholder distribution update",
+                  "Archer Limited - Ex cash distribution NOK 0.62 today"):
+            self.assertFalse(fs._KAPITAL_TITTEL.search(t), t)
+        self.assertEqual(fs._parse_kapitaltilbake(self.ARCH_TEKST), 1.0)
+
+    def test_return_of_capital_gjelder_ikke_nektet_eller_contributed_surplus_alene(self):
+        # HSHP-fella: «Contributed Surplus» alene er ikke innbetalt kapital (683670).
+        self.assertIsNone(fs._parse_kapitaltilbake(
+            "The distribution will be made from the Company's Contributed Surplus account."))
+        self.assertIsNone(fs._parse_kapitaltilbake(
+            "The distribution will not be a return of capital."))
+
+    def test_arch_henter_kapital_fra_nyeste_utbyttemelding(self):
+        gml_liste, gml_tekst = fs._newsweb_meldinger, fs._newsweb_tekst
+        fs._newsweb_meldinger = lambda _t: [
+            {"title": "Archer Limited: Q3 2026 trading and shareholder distribution update",
+             "messageId": 684465, "publishedTime": "2026-10-21T06:00"},
+            {"title": self.ARCH_TITTEL, "messageId": 679579, "publishedTime": "2026-08-13T15:00"}]
+        fs._newsweb_tekst = lambda _m: self.ARCH_TEKST
+        try:
+            kt = fs.hent_kapitaltilbake("ARCH", i_dag=datetime.date(2026, 11, 22))
+        finally:
+            fs._newsweb_meldinger, fs._newsweb_tekst = gml_liste, gml_tekst
+        self.assertEqual((kt["andel"], kt["melding_id"]), (1.0, 679579))
+
+    def test_pause_nuller_arsraten(self):
+        a = dict(self.ARCH)
+        self.assertTrue(fs.bruk_utbytte_pause(a, self.PAUSE, datetime.date(2026, 11, 22)))
+        self.assertEqual((a["utbytte_per_aksje"], a["utbytte_yield"], a["arsrate_kilde"]),
+                         (0.0, 0.0, "pause"))
+        self.assertNotIn("arsrate_antall", a)
+        self.assertEqual(a["utbytte_12m"], 1.86)       # det som er betalt, står
+        self.assertEqual(fs.arsrate_merke(a), "utdelinger på pause")
+
+    def test_pause_oppheves_av_ny_utbetaling_eller_ny_ex_dato(self):
+        i_dag = datetime.date(2026, 11, 22)
+        ny = dict(self.ARCH, utbetalinger=self.ARCH["utbetalinger"] + [["2027-02-10", 0.30]])
+        self.assertFalse(fs.bruk_utbytte_pause(ny, self.PAUSE, i_dag))
+        self.assertEqual(ny["utbytte_yield"], 14.85)
+        kunngjort = dict(self.ARCH, ex_dato="2027-02-10")
+        self.assertFalse(fs.bruk_utbytte_pause(kunngjort, self.PAUSE, i_dag))
+        # En passert ex-dato fra før meldingen er ikke en ny utdeling.
+        gammel = dict(self.ARCH, ex_dato="2026-08-18")
+        self.assertTrue(fs.bruk_utbytte_pause(gammel, self.PAUSE, i_dag))
+
+    def test_pause_gjelder_bare_hendelsestypen(self):
+        a = dict(self.ARCH)
+        self.assertFalse(fs.bruk_utbytte_pause(a, dict(self.PAUSE, type="fusjon"), datetime.date(2026, 11, 22)))
+        self.assertFalse(fs.bruk_utbytte_pause(a, None))
+        self.assertEqual(a["utbytte_yield"], 14.85)
+
+    def test_hendelsen_faller_bort_nar_pausen_er_over(self):
+        a = dict(self.ARCH)
+        fs.sett_hendelse(a, self.PAUSE, datetime.date(2026, 11, 22))
+        self.assertEqual(a["hendelse"]["melding"], "684465")
+        a["utbetalinger"] = a["utbetalinger"] + [["2027-02-10", 0.30]]
+        fs.sett_hendelse(a, self.PAUSE, datetime.date(2027, 2, 11))
+        self.assertNotIn("hendelse", a)
+
+    def test_pause_tar_aksjen_ut_av_rangering_og_malene(self):
+        a = dict(self.ARCH, sektor="Energitjenester", hendelse=self.PAUSE)
+        self.assertFalse(fs.i_rangering(a))
+        self.assertEqual(fs._beregn_mal_py(dict(a, utbytte_yield=7.0)), [])
+        self.assertIn("utdelingene på pause", fs.HENDELSE_TITTEL["utbytte_pause"].replace("satt ", ""))
+        self.assertEqual(fs.HENDELSE_KORT["utbytte_pause"], "utdeling på pause")
+
+    def test_kapitalnotatet_bruker_fortid_ved_pause(self):
+        a = dict(self.ARCH, kapital_tilbake={"andel": 1.0, "melding_dato": "2026-08-13"})
+        assert "betaler selskapet ut" in fs.lag_kapital_note(a, fs._nf)
+        a["arsrate_kilde"] = "pause"
+        note = fs.lag_kapital_note(a, fs._nf)
+        self.assertIn("var den siste utbetalingen", note)
+        self.assertNotIn("betaler selskapet ut", note)
+
+    def test_faq_sier_ikke_at_selskapet_betaler(self):
+        a = dict(self.ARCH, navn="Archer Limited", ar_med_utbytte=2, utbytteaar=[2025, 2026],
+                 payout_ratio=0, hendelse=self.PAUSE)
+        a = dict(a, utbytte_per_aksje=0.0, utbytte_yield=0.0, arsrate_kilde="pause")
+        tekst = json.dumps(fs._lag_faq_seksjon(a, datetime.date(2026, 11, 22)), ensure_ascii=False)
+        self.assertIn("har satt utdelingene til aksjonærene på pause (21. okt 2026)", tekst)
+        self.assertIn("Før pausen betalte selskapet ut fire ganger i året", tekst)
+        self.assertNotIn("betaler utbytte fire ganger", tekst)
+
+    def test_arch_i_tickers_json(self):
+        h = fs.HENDELSE["ARCH"]
+        self.assertEqual((h["type"], h["melding"], h["dato"]), ("utbytte_pause", "684465", "2026-10-21"))
+        self.assertTrue(fs.gyldig_hendelse(h))
+        # Ingen tall som kan endre seg i teksten; datoer og kroner står som fakta.
+        self.assertNotRegex(h["tekst"], r"\d+(?:[.,]\d+)?\s*(?:%|prosent|kr\b|NOK)")
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

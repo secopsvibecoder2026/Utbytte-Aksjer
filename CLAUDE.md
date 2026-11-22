@@ -3259,6 +3259,41 @@ Dry runs:
 
 Tests: `TestRapportbunken2211` (18) and `ui.test.js` (+2).
 
+## From the report summaries of 2026-11-22, second batch
+
+Three more findings from the rapport agents, checked against the notices
+first. All three were faults.
+
+**ARCH showed 2,48 kr a year (14,85 %) after the company paused its
+distributions.** Archer's Q3 report of 21 October says it «will temporarily
+pause its shareholder distributions» and that the board revisits the program
+early 2027 (684465). The page still read «Kvartalsvis», 2,48 kr «siste fire
+utbetalinger» and a «Passer for» goal about four payments a year. The rate
+came from the payment round, which keeps a payment for 45 days after its
+anniversary (Nov 2025 stayed until 21 December), and `utbytte_stoppet()` waits
+456 days. A rule built on dates cannot see a pause that is announced.
+
+- **A new `hendelse` type, `utbytte_pause`**, in `tickers.json` for ARCH
+  (684465, 21.10.2026). `bruk_utbytte_pause()` sets the rate to 0
+  (`arsrate_kilde: "pause"`, card label «utdelinger på pause») while no
+  payment has an ex-date after the notice and no future ex-date is announced
+  (`pause_opphevet()`). The type is in `HENDELSE_UTEN_MAL`: no goals, out of the
+  rankings. `sett_hendelse()` drops the entry by itself once the pause is over,
+  so a company that resumes is not left with a box saying otherwise. «Betalt
+  siste 12 mnd» and the history table stay as they are, because they are facts.
+- **The tax box was missing too.** The three notices are titled «distribution
+  of shareholder return» and say «in the form of return of capital … from the
+  Contributed Surplus account which consists of previously paid in share
+  premium». Neither `_KAPITAL_TITTEL` nor `_KAPITAL_RE` matched, so the FAQ
+  taxed it as a dividend. Both are widened (`return of capital` alone counts;
+  `Contributed Surplus` alone still does not, see HSHP). Dry run over all 155
+  issuers against NewsWeb: only ARCH moves (11 → 12 with `kapital_tilbake`).
+  While paused the note says «var den siste utbetalingen», not «betaler ut».
+- The FAQ answer on frequency says the payments are paused. The company text
+  was written for the pause and no longer says «utdelingene kommer hvert
+  kvartal». **When the pause ends, remove the `hendelse` and update the
+  text.** The rate rule releases by itself on the first new ex-date.
+
 ## App review of 2026-10-20
 
 Every tab, sub-tab and fourteen stock modals were opened with Playwright at

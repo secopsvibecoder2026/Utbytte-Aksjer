@@ -622,6 +622,29 @@ test('modalKapitalNote: bare for aksjer med feltet', () => {
   assert.match(modalKapitalNote({ kapital_tilbake: { andel: 0.862 } }), /om lag 86\u00a0%/);
 });
 
+// ── Rapportbunken 22.11.2026: ARCH (pause) og VISTIN (delt årsutbetaling) ────
+test('utbytte_pause: hendelsen tar bort målene og rangeringen, og har eget merke', () => {
+  global.escHtml = x => String(x).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  const { hendelseUtenMal, iRangering } = require('../assets/ui.js');
+  const arch = { ticker: 'ARCH', utbytte_yield: 0, hendelse: { type: 'utbytte_pause', tekst: 'Utdelingene er satt på pause.' } };
+  assert.equal(hendelseUtenMal(arch), true);
+  assert.equal(iRangering(arch), false);
+  assert.match(hendelseMerke(arch), />utdeling på pause</);
+  assert.match(modalHendelse(arch), /Selskapet har satt utdelingene på pause/);
+});
+
+test('modalKapitalNote: «betaler ut» sies ikke om utdelinger på pause', () => {
+  const k = { andel: 1, melding_dato: '2026-08-13' };
+  assert.match(modalKapitalNote({ kapital_tilbake: k }), /betaler selskapet ut/);
+  const pause = modalKapitalNote({ kapital_tilbake: k, arsrate_kilde: 'pause' });
+  assert.match(pause, /var den siste utbetalingen/);
+  assert.doesNotMatch(pause, /betaler selskapet ut/);
+});
+
+test('arsrateMerke: «utdelinger på pause» i stedet for «annualisert» ved 0', () => {
+  assert.equal(arsrateMerke({ arsrate_kilde: 'pause' }), 'utdelinger på pause');
+});
+
 // ── aksjerMedExIMaaned — «Måneder uten ex-dato» (2026-10-03) ─────────────────
 test('aksjerMedExIMaaned: bare aksjer med måneden i mønsteret og betaling siste 12 mnd', () => {
   const iAar = new Date().getFullYear();

@@ -1098,8 +1098,9 @@ const HENDELSE_TITTEL = {
   bytte_av_marked: 'Aksjen skal flytte til Euronext Growth',
   bytte_av_hjemland: 'Selskapet flytter til et annet land',
   fusjon_overtar: 'Selskapet skal overta et annet ved fusjon',
+  utbytte_pause: 'Selskapet har satt utdelingene på pause',
 };
-const HENDELSE_UTEN_MAL = new Set(['oppkjop', 'fusjon', 'avvikling']);
+const HENDELSE_UTEN_MAL = new Set(['oppkjop', 'fusjon', 'avvikling', 'utbytte_pause']);
 
 function gyldigHendelse(h) {
   return !!(h && typeof h === 'object' && HENDELSE_TITTEL[h.type]
@@ -1139,6 +1140,7 @@ const HENDELSE_KORT = {
   bytte_av_marked: 'flytter til Growth',
   bytte_av_hjemland: 'bytter hjemland',
   fusjon_overtar: 'overtar ved fusjon',
+  utbytte_pause: 'utdeling på pause',
 };
 function hendelseMerke(a) {
   const h = a && a.hendelse;
@@ -4650,6 +4652,9 @@ function arsrateMerke(a) {
   } else if (a.arsrate_kilde === 'kunngjort') {
     // Én kunngjort utbetaling, ikke ganget opp (OKEA, 22.11.2026).
     return 'kunngjort utbetaling';
+  } else if (a.arsrate_kilde === 'pause') {
+    // Uten merket sto «annualisert» ved siden av 0 for en kvartalsvis betaler (Archer).
+    return 'utdelinger på pause';
   } else {
     return '';
   }
@@ -4797,7 +4802,10 @@ function kapitalAndel(a) {
 function modalKapitalNote(a) {
   const andel = kapitalAndel(a);
   if (!andel) return '';
-  const hva = andel >= 0.999
+  // Er utdelingene satt på pause, er «betaler ut» feil tid (Archer, 22.11.2026).
+  const hva = andel >= 0.999 && a.arsrate_kilde === 'pause'
+    ? 'var den siste utbetalingen <strong>tilbakebetaling av innbetalt kapital</strong>, ikke utbytte i skattemessig forstand'
+    : andel >= 0.999
     ? 'betaler selskapet ut <strong>tilbakebetaling av innbetalt kapital</strong>, ikke utbytte i skattemessig forstand'
     : `var <strong>om lag ${Math.round(andel * 100)}\u00a0% av siste utbetaling tilbakebetaling av innbetalt kapital</strong>, og resten ordinært utbytte`;
   // Bare en ISO-dato slipper gjennom, og formaterDato() gir da sifre og

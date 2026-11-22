@@ -1643,9 +1643,14 @@ def korriger_med_nok_omregning(dividends, omregninger):
 # utbetaling i 0,50 tilbakebetaling og 0,08 ordinært. Derfor leses bare den
 # *nyeste* meldingen, og feltet skrives på nytt hver kjøring.
 
+# Archer sier «in the form of return of capital … from the Company's
+# Contributed Surplus account which consists of previously paid in share
+# premium» (679579). «Paid-in» står ikke ved siden av «return of capital», så
+# det eldre mønsteret fant den aldri (rapportbunken 22.11.2026).
 _KAPITAL_RE = re.compile(
     r"(?:repayment|return)\s+of\s+(?:the\s+)?(?:company'?s\s+)?"
     r"(?:other\s+)?paid[\s-]?in\s+(?:capital|equity)"
+    r"|\breturn\s+of\s+capital\b"
     r"|tilbakebetaling\s+av\s+innbetalt\s+(?:kapital|egenkapital)",
     re.I)
 # «NOK 0.50 as repayment of paid-in capital and NOK 0.08 as ordinary dividend»
@@ -1738,7 +1743,8 @@ _KAPITAL_TITTEL = re.compile(
     r"key information\b.*\b(?:dividend|distribution)"
     r"|\binformation relating to the (?:proposed |cash )?(?:dividend|distribution)"
     r"|\bdeclaration of (?:(?:extraordinary|special|interim)\s+)?(?:cash\s+)?"
-    r"(?:dividend|distribution)",
+    r"(?:dividend|distribution)"
+    r"|\bdistribution of shareholder return\b",
     re.I)
 
 
@@ -1813,10 +1819,13 @@ HENDELSE_TITTEL = {
     # under eget navn. «fusjon» ville tatt bort målene og månedsoversikten,
     # som fortsatt gjelder for den som overtar.
     "fusjon_overtar": "Selskapet skal overta et annet ved fusjon",
+    # Archer (21.10.2026): utdelingene settes midlertidig på pause. Typen setter
+    # også årsraten til 0 til en ny utdeling er kunngjort, se bruk_utbytte_pause().
+    "utbytte_pause": "Selskapet har satt utdelingene på pause",
 }
 # Ved disse sier ikke historikken noe om utbyttet framover, så sidene gir
 # ingen «Passer for deg»-mål.
-HENDELSE_UTEN_MAL = {"oppkjop", "fusjon", "avvikling"}
+HENDELSE_UTEN_MAL = {"oppkjop", "fusjon", "avvikling", "utbytte_pause"}
 # Kort merke i tabeller. Speiler HENDELSE_KORT i assets/ui.js.
 HENDELSE_KORT = {
     "oppkjop": "oppkjøp",
@@ -1826,6 +1835,7 @@ HENDELSE_KORT = {
     "bytte_av_marked": "flytter til Growth",
     "bytte_av_hjemland": "bytter hjemland",
     "fusjon_overtar": "overtar ved fusjon",
+    "utbytte_pause": "utdeling på pause",
 }
 
 
@@ -1834,12 +1844,62 @@ def gyldig_hendelse(h):
             and isinstance(h.get("tekst"), str) and h["tekst"].strip() != "")
 
 
-def sett_hendelse(a, h):
-    """Kopierer hendelsen fra tickers.json inn i raden, eller fjerner den."""
-    if gyldig_hendelse(h):
+def sett_hendelse(a, h, i_dag=None):
+    """Kopierer hendelsen fra tickers.json inn i raden, eller fjerner den.
+
+    En pause i utdelingene faller bort av seg selv når selskapet har gått ex
+    etter meldingen eller kunngjort en ny ex-dato (se pause_opphevet()). Ellers
+    ville siden sagt «på pause» om et selskap som har tatt opp igjen.
+    """
+    if gyldig_hendelse(h) and not (h.get("type") == "utbytte_pause"
+                                   and pause_opphevet(a, h, i_dag)):
         a["hendelse"] = {k: h[k] for k in ("type", "dato", "melding", "tekst") if h.get(k)}
     else:
         a.pop("hendelse", None)
+
+
+def pause_opphevet(a, h, i_dag=None):
+    """Har selskapet betalt eller kunngjort en utdeling etter at pausen ble meldt?
+
+    Pausen gjelder fra meldingens dato (`h["dato"]`). En utbetaling med ex-dato
+    etter den, i serien vi har, eller en kunngjort ex-dato som ikke er passert
+    (`ex_dato` kan være siste, passerte dato) betyr at utdelingene er tatt opp
+    igjen. Uten dato i hendelsen kan vi ikke si det, og pausen står.
+    """
+    i_dag = i_dag or datetime.date.today()
+    fra = (h or {}).get("dato") or ""
+    if not fra:
+        return False
+    ex = a.get("ex_dato") or ""
+    if ex and ex > fra and ex >= i_dag.isoformat():
+        return True
+    if any((b.get("ex_dato") or "") > fra for b in a.get("utbytte_12m_liste") or []):
+        return True
+    return any((u[0] or "") > fra for u in a.get("utbetalinger") or []
+               if isinstance(u, (list, tuple)) and u)
+
+
+def bruk_utbytte_pause(a, h, i_dag=None):
+    """Nuller årsraten mens en meldt pause i utdelingene varer. Muterer `a`.
+
+    Archer meldte 21. oktober 2026 (684465) at utdelingene settes på pause, og
+    at styret tar saken opp igjen tidlig i 2027. Siden viste likevel 2,48 kr i
+    året og 14,85 %: betalingsrunden holder en utbetaling i 45 dager etter
+    årsdagen, så Archers fire siste utbetalinger sto igjen som årsrate, og
+    `utbytte_stoppet()` venter 456 dager. Det som er sagt er at det ikke kommer
+    flere nå, så årsraten er 0 til en ny utdeling er kunngjort. Historikken og
+    «betalt siste 12 mnd» står som de er. Returnerer True når raten ble nullet.
+    """
+    if not isinstance(h, dict) or h.get("type") != "utbytte_pause":
+        return False
+    if pause_opphevet(a, h, i_dag):
+        return False
+    a["utbytte_per_aksje"] = 0.0
+    a["utbytte_yield"] = 0.0
+    a["arsrate_kilde"] = "pause"
+    a.pop("arsrate_ekstra_trukket", None)
+    a.pop("arsrate_antall", None)
+    return True
 
 
 def i_rangering(a):
@@ -1934,7 +1994,11 @@ def lag_kapital_note(a, nf):
     k = a["kapital_tilbake"]
     dato = _fmt_dato(k.get("melding_dato")) if k.get("melding_dato") else ""
     kilde = f" ({dato})" if dato else ""
-    if andel >= 0.999:
+    if andel >= 0.999 and a.get("arsrate_kilde") == "pause":
+        # Utdelingene er satt på pause, så «betaler ut» sier at det pågår.
+        hva = ("var den siste utbetalingen <strong>tilbakebetaling av innbetalt "
+               "kapital</strong>, ikke utbytte i skattemessig forstand")
+    elif andel >= 0.999:
         hva = ("betaler selskapet ut <strong>tilbakebetaling av innbetalt "
                "kapital</strong>, ikke utbytte i skattemessig forstand")
     else:
@@ -3342,6 +3406,9 @@ def arsrate_merke(a):
         merke = f"siste {_antall_ord(n)} utbetalinger" if n > 1 else "siste utbetaling"
     elif kilde == "kunngjort":
         return "kunngjort utbetaling"
+    elif kilde == "pause":
+        # Uten merket sto «annualisert» ved siden av 0,00 NOK for en kvartalsvis betaler.
+        return "utdelinger på pause"
     else:
         return ""
     return merke + (", uten engangsutbytte" if a.get("arsrate_ekstra_trukket") else "")
@@ -6603,6 +6670,13 @@ def _lag_faq_seksjon(a, today):
             svar = (f"{navn} har ikke betalt utbytte etter {_fmt_dato(fra) if fra else 'omleggingen'}. "
                     f"Selskapet hadde da solgt hele eller deler av virksomheten, og utbetalingene "
                     f"før det sier lite om hva det betaler framover.")
+        if a.get("arsrate_kilde") == "pause":
+            # Selskapet har meldt at utdelingene settes på pause (Archer,
+            # 22.11.2026). «Betaler utbytte fire ganger i året» sier at det pågår.
+            dato = (a.get("hendelse") or {}).get("dato")
+            meldt = f" ({_fmt_dato(dato)})" if dato else ""
+            svar = (f"{navn} har satt utdelingene til aksjonærene på pause{meldt}, og det er "
+                    f"ikke kunngjort noen ny. Før pausen betalte selskapet ut {freq_tekst}.")
         qas.append((f"Betaler {navn} utbytte hvert år, og hvor ofte?", svar))
 
     # 3. Direkteavkastning i kontekst
@@ -11651,6 +11725,11 @@ def main():
         fra = LOPENDE_UTBYTTE_FRA.get(aksje["ticker"])
         if fra and bruk_lopende_utbytte_fra(aksje, fra):
             print(f"    {aksje['ticker']}: ingen utbetaling siden {fra} — årsrate 0")
+
+    # En meldt pause i utdelingene: ingen løpende rate. Se bruk_utbytte_pause().
+    for aksje in resultater:
+        if bruk_utbytte_pause(aksje, HENDELSE.get(aksje["ticker"])):
+            print(f"    {aksje['ticker']}: utdelingene er satt på pause — årsrate 0")
 
     # Et utbytte som har stoppet, er ikke en årsrate. Se utbytte_stoppet().
     for aksje in resultater:
