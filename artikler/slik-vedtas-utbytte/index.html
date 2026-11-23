@@ -72,7 +72,7 @@
     .dark .prose th { background: #1f2937; border-color: #374151; }
     .prose td { padding: 0.6rem 0.9rem; border: 1px solid #e5e7eb; vertical-align: top; }
     .dark .prose td { border-color: #374151; }
-    .prose tr:nth-child(even) td { background: #f9fafb; }
+    .prose tr:nth-child(even) td { background: #fff; }
     .dark .prose tr:nth-child(even) td { background: #111827; }
     .prose td.tall, .prose th.tall { text-align: right; font-variant-numeric: tabular-nums; }
     .prose td.tall { white-space: nowrap; }
@@ -86,7 +86,7 @@
     }
     .callout {
       border-left: 4px solid #6b7280;
-      background: #f9fafb;
+      background: #fff;
       padding: 1rem 1.25rem;
       border-radius: 0 0.5rem 0.5rem 0;
       margin: 1.5rem 0;
@@ -97,7 +97,7 @@
     .callout p:last-child { margin-bottom: 0; }
     .dark .callout { background: #111827; border-color: #4b5563; }
     .formula-box {
-      background: #f8fafc;
+      background: #fff;
       border: 1px solid #e2e8f0;
       border-radius: 0.5rem;
       padding: 1rem 1.25rem;
@@ -143,8 +143,9 @@
     "mainEntityOfPage": { "@type": "WebPage", "@id": "https://exday.no/artikler/slik-vedtas-utbytte/" }
   }
   </script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "exday.no", "item": "https://exday.no/"}, {"@type": "ListItem", "position": 2, "name": "Artikler", "item": "https://exday.no/artikler/"}, {"@type": "ListItem", "position": 3, "name": "Utbytte i 2027", "item": "https://exday.no/artikler/slik-vedtas-utbytte/"}]}</script>
 </head>
-<body class="bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 min-h-screen">
+<body class="bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 min-h-screen">
 
   <nav class="site-nav" aria-label="Hovedmeny">
     <div class="site-nav-inner">
@@ -218,13 +219,7 @@
 
 
     <!-- Brødsmulesti -->
-    <nav class="text-xs text-gray-400 dark:text-gray-600 mb-6" aria-label="Brødsmulesti">
-      <a href="/" class="hover:text-gray-600 dark:hover:text-gray-400 transition-colors">exday.no</a>
-      <span class="mx-1.5">›</span>
-      <a href="/artikler/" class="hover:text-gray-600 dark:hover:text-gray-400 transition-colors">Artikler</a>
-      <span class="mx-1.5">›</span>
-      <span class="text-gray-600 dark:text-gray-400">Utbytte i 2027</span>
-    </nav>
+    <nav class="brodsmule" aria-label="Brødsmulesti"><a href="/">exday.no</a> <span class="brodsmule-skille" aria-hidden="true">›</span> <a href="/artikler/">Artikler</a> <span class="brodsmule-skille" aria-hidden="true">›</span> <span aria-current="page">Utbytte i 2027</span></nav>
 
     <!-- Topp -->
     <header class="mb-8">
@@ -232,7 +227,7 @@
         <span class="guide-badge">Guide</span>
         <span class="guide-badge">Kalender</span>
       </div>
-      <h1 class="text-2xl sm:text-3xl font-bold leading-tight mb-3">
+      <h1 class="side-h1 mb-3">
         Utbytte i 2027: når selskapene foreslår, vedtar og betaler
       </h1>
       <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed mb-4">
@@ -243,7 +238,7 @@
   </header>
 
     <!-- Innholdsfortegnelse -->
-    <nav class="toc bg-gray-50 dark:bg-gray-900 rounded-xl p-4 sm:p-5 mb-8 text-sm" aria-label="Innholdsfortegnelse">
+    <nav class="toc bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-4 sm:p-5 mb-8 text-sm" aria-label="Innholdsfortegnelse">
       <p class="font-semibold text-gray-700 dark:text-gray-300 mb-2">Innhold</p>
       <ol class="space-y-1 list-decimal list-inside text-gray-600 dark:text-gray-400">
         <li><a href="#tom-kalender">Hvorfor 2027-kalenderen er tom i desember</a></li>

@@ -80,24 +80,6 @@
       line-height: 1.7;
     }
     .dark .callout { background: rgba(63,138,99,0.15); border-color: #3f8a63; }
-    .stat-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 0.75rem;
-      margin: 1.5rem 0;
-    }
-    @media (min-width: 480px) { .stat-grid { grid-template-columns: repeat(4, 1fr); } }
-    .stat-box {
-      background: #f8fafc;
-      border: 1px solid #e2e8f0;
-      border-radius: 0.75rem;
-      padding: 1rem 0.75rem;
-      text-align: center;
-    }
-    .dark .stat-box { background: #1e293b; border-color: #334155; }
-    .stat-num { font-size: 1.6rem; font-weight: 800; color: #3f8a63; line-height: 1.1; }
-    .stat-lbl { font-size: 0.72rem; color: #64748b; margin-top: 0.25rem; }
-    .dark .stat-lbl { color: #94a3b8; }
   </style>
 
   <script type="application/ld+json">
@@ -126,8 +108,9 @@
     ]
   }
   </script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "exday.no", "item": "https://exday.no/"}, {"@type": "ListItem", "position": 2, "name": "Om", "item": "https://exday.no/om/"}]}</script>
 </head>
-<body class="bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 min-h-screen">
+<body class="bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 min-h-screen">
   <nav class="site-nav" aria-label="Hovedmeny">
     <div class="site-nav-inner">
       <a href="/" class="site-logo" aria-label="exday.no - hjem">
@@ -197,35 +180,14 @@
   </script>
 
 <div class="max-w-2xl mx-auto px-6 pt-10 pb-20">
-  <nav class="text-xs text-gray-400 dark:text-gray-600 mb-6" aria-label="Brødsmulesti">
-    <span><a href="/" class="hover:underline">exday.no</a></span>
-    <span class="mx-1.5">›</span>
-    <span class="text-gray-600 dark:text-gray-400">Om exday.no</span>
-  </nav>
+  <nav class="brodsmule" aria-label="Brødsmulesti"><a href="/">exday.no</a> <span class="brodsmule-skille" aria-hidden="true">›</span> <span aria-current="page">Om</span></nav>
 
   <header class="mb-8">
-    <h1 class="text-3xl font-extrabold leading-tight mb-3">Om exday.no</h1>
+    <h1 class="side-h1 mb-3">Om exday.no</h1>
     <p class="text-gray-500 dark:text-gray-400 text-sm">Gratis oversikt over utbytteaksjer på Oslo Børs, laget og drevet av én privatperson.</p>
   </header>
 
-  <div class="stat-grid">
-    <div class="stat-box">
-      <div class="stat-num"><!--N:aksjer-->155<!--/N--></div>
-      <div class="stat-lbl">Aksjer fulgt</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-num">4 ganger</div>
-      <div class="stat-lbl">Nye tall hver børsdag</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-num">Gratis</div>
-      <div class="stat-lbl">Uten innlogging</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-num">Ukentlig</div>
-      <div class="stat-lbl">Kontroll mot kildene</div>
-    </div>
-  </div>
+  <dl class="tallruter tallruter-n4" aria-label="Om exday.no i korte trekk"><div class="tallrute"><dt>Aksjer fulgt</dt><dd><!--N:aksjer-->155<!--/N--></dd></div><div class="tallrute"><dt>Nye tall hver børsdag</dt><dd>4 ganger</dd></div><div class="tallrute"><dt>Uten innlogging</dt><dd>Gratis</dd></div><div class="tallrute"><dt>Kontroll mot kildene</dt><dd>Ukentlig</dd></div></dl>
 
   <div class="prose text-gray-700 dark:text-gray-300">
 
