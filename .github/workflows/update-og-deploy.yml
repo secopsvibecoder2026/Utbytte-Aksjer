@@ -124,7 +124,14 @@ jobs:
             # Sikkerhetsnett: skulle noe likevel ligge igjen usporet, skal ikke
             # hele kjøringen ryke på rebase. Vi eier uansett alt i arbeidstreet.
             git stash --include-untracked --quiet || true
-            git pull --rebase origin main
+            # -X theirs: ved rebase er «theirs» commiten vi selv har laget, så
+            # denne kjøringens filer vinner når en annen datakjøring har
+            # rukket å pushe det samme. 23.11.2026 pushet en kjøring med gammel
+            # kode 4 sekunder før en ny kjøring (startet av en merget endring)
+            # ble avbrutt, og den nye kjøringen feilet etter ti minutter på 326
+            # genererte filer i konflikt. Alt datajobben committer er generert,
+            # og den som kjører sist har nyeste kode og tall.
+            git pull --rebase -X theirs origin main
             git stash pop --quiet 2>/dev/null || true
             git push
           fi

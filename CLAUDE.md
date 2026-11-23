@@ -291,6 +291,17 @@ afternoon. The data job's own commits touch none of these files, and the job
 is skipped for `github-actions[bot]` in any case. A run on a weekend is fine:
 `kursdag()` in `app.js` dates it to Friday.
 
+**Two data runs can race (2026-11-23).** The 16:41 UTC run, still on the old
+code, pushed its commit at 16:50:46. Four seconds earlier PR #169 had merged
+and `kodeendring.yml` had started a new run, which cancelled the old one
+(`cancel-in-progress`) but not its push. The new run fetched for ten minutes
+and then failed on `git pull --rebase` with conflicts in 326 generated files,
+so the new page top stayed off every generated page until the next slot.
+The commit step now uses `git pull --rebase -X theirs`: the run's own files
+win, since everything the data job commits is generated and the last run has
+the newest code and numbers. `kodeendring.yml` also watches
+`update-og-deploy.yml`, so a fix to the data job itself is run at once.
+
 ### The trading-day clock (`klokke.yml` + `scripts/klokke.py`, 2026-10-18)
 
 GitHub's scheduler kept failing even after the minutes were moved off the hour:
