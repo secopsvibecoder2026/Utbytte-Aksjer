@@ -3468,6 +3468,33 @@ function modalSektorArtikler(a) {
 }
 
 
+// Dagens endring i modalens kurshode: «−5,90 (−1,52 %) 20. nov.». Grønt og
+// rødt bare for retning, og børsdagen står alltid ved siden av. Uten dato
+// eller endring vises ingenting, fordi en endring uten dag ikke sier hvilken
+// dag den gjelder (designrunden 22.11.2026).
+function modalEndring(a) {
+  if (!a || !a.kurs_dato) return '';
+  const krs = Number(a.endring_krs), pct = Number(a.endring_pct);
+  if (a.endring_krs == null || a.endring_pct == null || !Number.isFinite(krs) || !Number.isFinite(pct)) return '';
+  const r = Math.round(krs * 100) / 100;
+  const tegn = r > 0 ? '+' : r < 0 ? '\u2212' : '';
+  const farge = r > 0 ? 'text-green-700 dark:text-green-400'
+    : r < 0 ? 'text-red-700 dark:text-red-400' : 'text-gray-600 dark:text-gray-300';
+  const tall = tegn + fmtTall(Math.abs(r), 2) + ' (' + tegn + fmtPst(Math.abs(pct), 2) + ')';
+  return `<span class="text-sm font-semibold whitespace-nowrap ${farge}">${tall}</span>` +
+    `<span class="text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap">${escHtml(datoKort(a.kurs_dato))}</span>`;
+}
+
+// Kalles fra mergPriser() i app.js når prisene kommer etter at modalen åpnet.
+function oppdaterModalEndring() {
+  if (typeof document === 'undefined' || !document.getElementById) return;
+  const el = document.getElementById('modal-endring');
+  if (!el || !Array.isArray(window.alleAksjer)) return;
+  const a = window.alleAksjer.find(x => x.ticker === el.dataset.ticker);
+  if (a) el.innerHTML = modalEndring(a);
+}
+
+
 function visModal(a) {
   const overlay = document.getElementById('modal-overlay');
   const body = document.getElementById('modal-body');
@@ -3482,12 +3509,10 @@ function visModal(a) {
   // Kurshode (STYLE.md, tiltak 3): kurs, dagens endring, yield og neste
   // ex-dato på én linje øverst, over alle fanene. Før måtte leseren gå til
   // «Utbytte» for å se yielden, og kursen sto bare i et kort under grafen.
-  const _endring = a.endring_pct !== undefined && a.endring_pct !== 0
-    ? `<span class="text-sm font-semibold ${a.endring_pct > 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}">${a.endring_pct > 0 ? '+' : ''}${fmtPst(a.endring_pct, 2)}</span>`
-    : '';
+  const _endring = `<span id="modal-endring" data-ticker="${escHtml(a.ticker)}" class="inline-flex flex-wrap items-baseline gap-x-1.5">${modalEndring(a)}</span>`;
   const _kurshode = `
     <div class="flex flex-wrap items-baseline gap-x-5 gap-y-1 mb-3 tabular-nums">
-      <div class="flex items-baseline gap-1.5">
+      <div class="flex flex-wrap items-baseline gap-x-1.5">
         <span class="text-2xl font-bold text-gray-900 dark:text-gray-100">${fmt(a.pris)}</span>
         <span class="text-sm text-gray-500 dark:text-gray-400">${escHtml(a.valuta || 'NOK')}</span>
         ${_endring}
@@ -6255,4 +6280,4 @@ function _annBygTopp() {
 }
 
 // Node.js test export
-if (typeof module !== 'undefined') module.exports = { sektorSnittYield, utdatertMerke, modalUtdatert, hendelseUtenMal, iRangering, hoyestYield, saerutbytteFotnote, aaretsArsutbytte, aaretsNedgang, ordinaerPerAr, ordinaerHistorikk, markedsplassTekst, hendelseMerke, nyMilepel, delLenkeData, pentAkse, fmtPst, fmtTall, dagerTil, dagerTilTekst, datoKort, aksjerTekst, snittNavn, utbytteKutt, modalHendelse, beregnRisiko, forklarRisiko, vekstFraTopp, beregnMal, forklarMal, bevegelserOverskrift, utbytteRekke, stabileAr, exForbeholdGjelder, utbyttePerioder, vistOverBetalt, arsrateMerke, oyeblikksbilde, forsteBilde, finnEndringer, nyttSidenSistHtml, modalBetaltBoks, supplertFotnote, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, fmt, formaterDato, yieldKlasse, payoutKlasse, vekstKlasse, beregnScore, beregnBaerekraft, beregnYtdInntekt, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote, kapitalAndel, modalKapitalNote, kapitalSkattTekst, aksjerMedExIMaaned, beregnHvisKjopt, hvisStartAar, beregnAskMotVanlig, fmtUtbytte, sisteUtbytteTekst, modalOmSelskapet, vekslOmSelskapet, dripGevinst, _simulerKalkulator, askStatus, askTekst, modalKontoer };
+if (typeof module !== 'undefined') module.exports = { modalEndring, sektorSnittYield, utdatertMerke, modalUtdatert, hendelseUtenMal, iRangering, hoyestYield, saerutbytteFotnote, aaretsArsutbytte, aaretsNedgang, ordinaerPerAr, ordinaerHistorikk, markedsplassTekst, hendelseMerke, nyMilepel, delLenkeData, pentAkse, fmtPst, fmtTall, dagerTil, dagerTilTekst, datoKort, aksjerTekst, snittNavn, utbytteKutt, modalHendelse, beregnRisiko, forklarRisiko, vekstFraTopp, beregnMal, forklarMal, bevegelserOverskrift, utbytteRekke, stabileAr, exForbeholdGjelder, utbyttePerioder, vistOverBetalt, arsrateMerke, oyeblikksbilde, forsteBilde, finnEndringer, nyttSidenSistHtml, modalBetaltBoks, supplertFotnote, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, fmt, formaterDato, yieldKlasse, payoutKlasse, vekstKlasse, beregnScore, beregnBaerekraft, beregnYtdInntekt, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote, kapitalAndel, modalKapitalNote, kapitalSkattTekst, aksjerMedExIMaaned, beregnHvisKjopt, hvisStartAar, beregnAskMotVanlig, fmtUtbytte, sisteUtbytteTekst, modalOmSelskapet, vekslOmSelskapet, dripGevinst, _simulerKalkulator, askStatus, askTekst, modalKontoer };

@@ -7636,12 +7636,68 @@ def _data_dato_kort():
         return ""
 
 
-def _lag_kurshode(a, valuta, upa_merknad="", delaar_note=""):
+_PRISER_CACHE = None
+
+
+def _priser_fra_disk():
+    """`aksjer` fra data/priser.json, lest én gang per kjøring. Tom ved feil."""
+    global _PRISER_CACHE
+    if _PRISER_CACHE is None:
+        sti = os.path.join(os.path.dirname(__file__), "..", "data", "priser.json")
+        try:
+            with open(sti, encoding="utf-8") as f:
+                _PRISER_CACHE = (json.load(f) or {}).get("aksjer") or {}
+        except (OSError, ValueError):
+            _PRISER_CACHE = {}
+    return _PRISER_CACHE
+
+
+def dagsendring(pris, kursdag, p):
+    """Dagens endring for kursen siden viser, eller None når den ikke er kjent.
+
+    Samme regel som slaaSammenKurs() i app.js. `p` er raden i priser.json.
+    - Samme børsdag og samme kurs: endringen priser.json har regnet ut.
+    - Samme børsdag, annen kurs (datajobben hentet senere): mot `forrige_kurs`.
+    - priser.json gjelder børsdagen før: kursen der er gårsdagens sluttkurs.
+    Alt annet gir None. En endring vi ikke kan regne for kursen som vises, er
+    verre enn ingen (CLAUDE.md, Common Pitfalls 7).
+    """
+    if not p or not kursdag or not (pris and pris > 0):
+        return None
+    dato = str(p.get("dato") or "")
+    mot = None
+    if dato == kursdag.isoformat():
+        ppris = p.get("pris") or 0
+        if abs(ppris - pris) < 0.005 and p.get("endring_krs") is not None and p.get("endring_pct") is not None:
+            return {"krs": float(p["endring_krs"]), "pct": float(p["endring_pct"])}
+        mot = p.get("forrige_kurs")
+    elif dato and dato == forrige_borsdag(kursdag).isoformat():
+        mot = p.get("pris")
+    if not mot or mot <= 0:
+        return None
+    return {"krs": pris - mot, "pct": (pris - mot) / mot * 100}
+
+
+def _endring_html(e):
+    """«−5,90 (−1,52 %)» med ekte minus. Grønt opp, rødt ned, grått uendret."""
+    krs, pct = round(e["krs"], 2), round(e["pct"], 2)
+    if krs > 0:
+        tegn, klasse, ord_ = "+", "opp", "opp"
+    elif krs < 0:
+        tegn, klasse, ord_ = "−", "ned", "ned"
+    else:
+        tegn, klasse, ord_ = "", "flat", "uendret"
+    tekst = f"{tegn}{_nf(abs(krs), 2)} ({tegn}{_pst(abs(pct), 2)})"
+    return f'<span class="kh-endring kh-{klasse}" title="Endring fra forrige sluttkurs, {ord_}">{tekst}</span>'
+
+
+def _lag_kurshode(a, valuta, upa_merknad="", delaar_note="", priser=None):
     """Kurshodet øverst på aksjesiden: kurs, 52-ukers spenn og tre nøkkeltall.
 
     Erstatter de ni kortene som sto under selskapsteksten (STYLE.md, tiltak 3).
-    Tallene er nøytrale. Grønt og rødt er forbeholdt retning, og kurshodet har
-    ingen dagsendring: aksjer.json har bare kursen fra datajobben.
+    Tallene er nøytrale. Grønt og rødt er forbeholdt retning: dagens endring,
+    regnet fra priser.json for samme børsdag (dagsendring()), med datoen ved
+    siden av (designrunden 22.11.2026).
     """
     pris   = a.get("pris") or 0
     yield_ = a.get("utbytte_yield") or 0
@@ -7656,6 +7712,11 @@ def _lag_kurshode(a, valuta, upa_merknad="", delaar_note=""):
     kursdag = _kursdag(a.get("hentet") or DATA_SIST_OPPDATERT)
     dato = _fmt_dato(kursdag.isoformat()) if kursdag else _data_dato_kort()
     meta = f"Kurs {dato}" if dato else "Kurs"
+    if priser is None:
+        priser = _priser_fra_disk()
+    endring = dagsendring(pris, kursdag, priser.get(a.get("ticker") or ""))
+    if endring and dato:
+        meta = f"{_endring_html(endring)} <span class=\"kh-meta-dato\">{meta}</span>"
 
     # Spennet vises bare når kursen ligger innenfor det, og toppen ikke er
     # mer enn 3× kursen. 2020 Bulkers hadde 52-ukers høy 152,00 på en kurs
@@ -8127,6 +8188,8 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None, rapporter=None
     .kh-pris {{ font-size: 2.25rem; font-weight: 700; line-height: 1.1; letter-spacing: -0.02em; color: #111827; }}
     .kh-valuta {{ font-size: 1rem; font-weight: 500; letter-spacing: 0; color: #6b7280; margin-left: 0.35rem; }}
     .kh-meta {{ font-size: 0.8rem; color: #6b7280; margin-top: 0.25rem; }}
+    .kh-endring {{ font-weight: 600; font-variant-numeric: tabular-nums; margin-right: 0.4rem; white-space: nowrap; }}
+    .kh-opp {{ color: #2f7352; }} .kh-ned {{ color: #a8433b; }} .kh-flat {{ color: #4b5563; }}
     .kh-spenn {{ display: flex; align-items: center; gap: 0.5rem; font-size: 0.78rem; color: #6b7280; flex: 0 1 300px; min-width: 240px; }}
     .kh-spenn-tekst {{ font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; white-space: nowrap; }}
     .kh-spenn-linje {{ position: relative; flex: 1; height: 4px; min-width: 70px; border-radius: 2px; background: #e5e7eb; }}
@@ -8349,6 +8412,7 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None, rapporter=None
     .dark body {{ background: #030712; color: #f3f4f6; }}
     .dark .kh-pris, .dark .kh-tall dd, .dark .korttall dd {{ color: #f3f4f6; }}
     .dark .kh-valuta, .dark .kh-meta, .dark .kh-spenn, .dark .kh-tall dt, .dark .kh-note, .dark .korttall dt {{ color: #9ca3af; }}
+    .dark .kh-opp {{ color: #6fa98a; }} .dark .kh-ned {{ color: #cf7a72; }} .dark .kh-flat {{ color: #d1d5db; }}
     .dark .kh-tall {{ background: #111827; border-color: #1f2937; }}
     .dark .kh-tall > div + div, .dark .korttall > div {{ border-color: #1f2937; }}
     .dark .kh-spenn-linje {{ background: #374151; }}
