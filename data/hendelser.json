@@ -4353,7 +4353,8 @@
     {
       "ticker": "CDLR",
       "dato": "2026-11-23",
-      "type": "rapport"
+      "type": "rapport",
+      "url_forsok": 1
     },
     {
       "ticker": "BWLPG",
@@ -4926,5 +4927,5 @@
       "type": "rapport"
     }
   ],
-  "sist_oppdatert": "2026-11-22"
+  "sist_oppdatert": "2026-11-23"
 }

@@ -60,7 +60,7 @@
   </script>
   <style>
     *,*::before,*::after { box-sizing: border-box; }
-    body { margin:0; font-family: system-ui,-apple-system,'Segoe UI',Roboto,sans-serif; line-height:1.6; background:#f9fafb; color:#111827; }
+    body { margin:0; font-family: "Inter", system-ui,-apple-system,'Segoe UI',Roboto,sans-serif; line-height:1.6; background:#f9fafb; color:#111827; }
     .wrap { max-width: 56rem; margin: 0 auto; padding: 1.25rem 1rem 2rem; }
     .breadcrumb { font-size:0.8rem; color:#6b7280; margin-bottom:0.75rem; }
     .breadcrumb a { color:#6b7280; }
@@ -76,7 +76,7 @@
     .liste-analyse h2 { font-size:1.15rem; font-weight:700; margin:1.75rem 0 0.6rem; }
     .liste-analyse p { margin:0 0 0.9rem; line-height:1.75; font-size:0.95rem; }
     section h2 { font-size:1.15rem; margin:2rem 0 0.6rem; }
-    .antall { font-size:0.78rem; font-weight:500; color:#9ca3af; margin-left:0.4rem; }
+    .antall { font-size:0.78rem; font-weight:500; color:#6b7280; margin-left:0.4rem; }
     .tabell-ramme { overflow-x:auto; -webkit-overflow-scrolling:touch; border-radius:0.6rem; }
     table { width:100%; min-width:22rem; border-collapse:collapse; font-size:0.88rem; background:#fff; border:1px solid #e5e7eb; border-radius:0.6rem; }
     th { background:#f3f4f6; color:#6b7280; font-size:0.72rem; text-transform:uppercase; letter-spacing:0.03em; text-align:left; padding:0.5rem 0.75rem; white-space:nowrap; }
@@ -91,7 +91,7 @@
     .cta { margin-top:2rem; border-radius:0.75rem; padding:1.25rem; text-align:center; border:1px solid #c6dccf; background:#f3f7f5; }
     .cta a { display:inline-block; background:#2f7352; color:#fff !important; font-weight:600; padding:0.65rem 1.5rem; border-radius:0.5rem; margin-top:0.5rem; text-decoration:none; }
     .cta a:hover { background:#275f45; }
-    .updated { font-size:0.78rem; text-align:right; margin-top:1rem; color:#9ca3af; }
+    .updated { font-size:0.78rem; text-align:right; margin-top:1rem; color:#6b7280; }
     .nylig { list-style:none; padding:0; margin:0 0 1rem; border:1px solid #e5e7eb; background:#fff; border-radius:0.6rem; }
     .nylig li { padding:0.5rem 0.75rem; border-top:1px solid #f3f4f6; font-size:0.9rem; }
     .nylig li:first-child { border-top:0; }
@@ -112,11 +112,16 @@
     .dark a { color:#6fa98a; }
     .dark .hopp a { background:#111827; border-color:#1f2937; color:#d1d5db; }
     .dark .hopp a:hover { border-color:#6fa98a; color:#6fa98a; }
+    .hopp a { display:inline-flex; align-items:center; min-height:44px; border-width:7px 0; border-color:transparent; background-clip:padding-box; box-shadow:inset 0 0 0 1px #e5e7eb; }
+    .hopp a:hover { border-color:transparent; box-shadow:inset 0 0 0 1px #2f7352; }
+    .dark .hopp a { border-color:transparent; background-clip:padding-box; box-shadow:inset 0 0 0 1px #1f2937; }
+    .dark .hopp a:hover { border-color:transparent; box-shadow:inset 0 0 0 1px #6fa98a; }
+    details > summary { margin:-0.85rem -1rem; padding:0.85rem 1rem; }
     .dark table { background:#111827; border-color:#1f2937; }
     .dark th { background:#1f2937; color:#9ca3af; }
     .dark td { border-color:#1f2937; }
     .dark tr:hover td { background:#1f2937; }
-    .dark .antall, .dark .updated { color:#6b7280; }
+    .dark .antall, .dark .updated { color:#9ca3af; }
     .dark details { background:#111827; border-color:#1f2937; }
     .dark details p { color:#9ca3af; }
     .dark .cta { background:#0f251b; border-color:#214d39; }
@@ -199,16 +204,16 @@
     Oppdateres daglig på børsdager.
   </p>
   <div class="stats">
-    <div class="stat"><div class="stat-val">115</div><div class="stat-lbl">Kommende rapporter</div></div>
-    <div class="stat"><div class="stat-val">115</div><div class="stat-lbl">Selskaper</div></div>
+    <div class="stat"><div class="stat-val">114</div><div class="stat-lbl">Kommende rapporter</div></div>
+    <div class="stat"><div class="stat-val">114</div><div class="stat-lbl">Selskaper</div></div>
     <div class="stat"><div class="stat-val">4</div><div class="stat-lbl">Måneder</div></div>
   </div>
   <nav class="hopp" aria-label="Hopp til måned"><a href="#mnd-2026-11">nov 2026</a><a href="#mnd-2027-01">jan 2027</a><a href="#mnd-2027-02">feb 2027</a><a href="#mnd-2027-03">mar 2027</a></nav>
   <div class="liste-analyse">
     <h2>Rapportsesongen akkurat nå</h2>
     <p>
-      Vi kjenner 115 rapportdatoer for 115 selskaper på Oslo Børs og Euronext Growth.
-      105 av dem — 91 % — faller i november og februar, og februar alene
+      Vi kjenner 114 rapportdatoer for 114 selskaper på Oslo Børs og Euronext Growth.
+      104 av dem — 91 % — faller i november og februar, og februar alene
       har 94. Den største enkeltgruppen den måneden er Finans med 24 rapporter. Rapportsesongen på Oslo Børs er kort og
       tett: børsen går fra nesten ingen meldinger til over hundre på noen uker,
       og så stille igjen.
@@ -242,25 +247,17 @@
 <section id="nylig-framlagt"><h2>Nylig framlagt, med oppsummering</h2><p class="sub">Resultatet, nøkkeltallene og utbyttet fra rapporten, skrevet ut fra selskapets egen børsmelding.</p><ul class="nylig"><li><span class="dag">20. nov 2026</span> <a href="/aksjer/FRO/rapporter/#2026-q3">Frontline: 3. kvartal 2026</a></li><li><span class="dag">20. nov 2026</span> <a href="/aksjer/HUNT/rapporter/#2026-q3">Hunter: 3. kvartal 2026</a></li><li><span class="dag">19. nov 2026</span> <a href="/aksjer/HAUTO/rapporter/#2026-q3">Höegh Autoliners: 3. kvartal 2026</a></li><li><span class="dag">19. nov 2026</span> <a href="/aksjer/SUBC/rapporter/#2026-q3">Subsea 7: 3. kvartal 2026</a></li><li><span class="dag">18. nov 2026</span> <a href="/aksjer/HAFNI/rapporter/#2026-q3">Hafnia: 3. kvartal 2026</a></li><li><span class="dag">17. nov 2026</span> <a href="/aksjer/WSTEP/rapporter/#2026-q3">Webstep: 3. kvartal 2026</a></li><li><span class="dag">13. nov 2026</span> <a href="/aksjer/AFG/rapporter/#2026-q3">AF Gruppen: 3. kvartal 2026</a></li><li><span class="dag">13. nov 2026</span> <a href="/aksjer/HGSB/rapporter/#2026-q3">Haugesund Sparebank: 3. kvartal 2026</a></li></ul></section>
 
   <section id="mnd-2026-11">
-    <h2>November 2026 <span class="antall">11 rapporter</span></h2>
+    <h2>November 2026 <span class="antall">10 rapporter</span></h2>
     <div class="tabell-ramme">
     <table>
       <thead><tr><th>Dato</th><th>Ticker</th><th class="selskap">Selskap</th><th class="skjul-smal">Sektor</th><th>Yield</th><th class="skjul-smal">Ex-dato</th></tr></thead>
       <tbody>
         <tr>
-          <td class="dag">23. nov</td>
-          <td class="ticker"><a href="/aksjer/CDLR/">CDLR</a></td>
-          <td class="selskap">Cadeler plc</td>
-          <td class="skjul-smal">Energitjenester</td>
-          <td class="metric">—</td>
-          <td class="skjul-smal">—</td>
-        </tr>
-        <tr>
           <td class="dag">24. nov</td>
           <td class="ticker"><a href="/aksjer/BWLPG/">BWLPG</a></td>
           <td class="selskap">BW LPG Limited</td>
           <td class="skjul-smal">Shipping</td>
-          <td class="metric">11,71 %</td>
+          <td class="metric">11,70 %</td>
           <td class="skjul-smal">—</td>
         </tr>
         <tr>
@@ -560,7 +557,7 @@
           <td class="ticker"><a href="/aksjer/HSHP/">HSHP</a></td>
           <td class="selskap">Himalaya Shipping Ltd.</td>
           <td class="skjul-smal">Shipping</td>
-          <td class="metric">13,24 %</td>
+          <td class="metric">13,21 %</td>
           <td class="skjul-smal">—</td>
         </tr>
         <tr>
@@ -680,7 +677,7 @@
           <td class="ticker"><a href="/aksjer/KOG/">KOG</a></td>
           <td class="selskap">Kongsberg Gruppen ASA</td>
           <td class="skjul-smal">Industri</td>
-          <td class="metric">1,35 %</td>
+          <td class="metric">0,67 %</td>
           <td class="skjul-smal">—</td>
         </tr>
         <tr>
@@ -1112,7 +1109,7 @@
           <td class="ticker"><a href="/aksjer/HAFNI/">HAFNI</a></td>
           <td class="selskap">Hafnia Limited</td>
           <td class="skjul-smal">Shipping</td>
-          <td class="metric">4,49 %</td>
+          <td class="metric">4,48 %</td>
           <td class="skjul-smal">—</td>
         </tr>
         <tr>
@@ -1144,7 +1141,7 @@
           <td class="ticker"><a href="/aksjer/FRO/">FRO</a></td>
           <td class="selskap">Frontline PLC</td>
           <td class="skjul-smal">Shipping</td>
-          <td class="metric">11,85 %</td>
+          <td class="metric">11,83 %</td>
           <td class="skjul-smal">8. des 2026</td>
         </tr>
         <tr>
@@ -1232,8 +1229,8 @@
     <p>Se yield, utbyttehistorikk og nøkkeltall for hver aksje</p>
     <a href="https://exday.no/">Åpne exday.no →</a>
   </div>
-  <p class="updated">Tallene er hentet 22. november 2026</p>
-  <footer style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid #e5e7eb;font-size:0.78rem;text-align:center;color:#9ca3af;line-height:1.6;" class="std-footer">
+  <p class="updated">Tallene er hentet 23. november 2026</p>
+  <footer style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid #e5e7eb;font-size:0.78rem;text-align:center;color:#6b7280;line-height:1.6;" class="std-footer">
     <p>Kurs og utbyttedata hentes fra Yahoo Finance og Euronext. Oppdateres daglig på børsdager.</p>
     <p style="max-width:36rem;margin:0.4rem auto;">
       exday.no er ikke et verdipapirforetak og tilbyr ikke finansiell rådgivning.
@@ -1242,24 +1239,24 @@
       Gj&#248;r alltid din egen analyse f&#248;r du tar investeringsbeslutninger.
     </p>
     <p style="margin-top:0.5rem;">
-      <a href="/om/" style="color:#9ca3af;text-decoration:underline;">Om exday.no</a>
+      <a href="/om/" style="color:#6b7280;text-decoration:underline;">Om exday.no</a>
       <span style="margin:0 0.4rem;">&#183;</span>
-      <a href="/metode/" style="color:#9ca3af;text-decoration:underline;">Metode og datakilder</a>
+      <a href="/metode/" style="color:#6b7280;text-decoration:underline;">Metode og datakilder</a>
       <span style="margin:0 0.4rem;">&#183;</span>
-      <a href="/personvern/" style="color:#9ca3af;text-decoration:underline;">Personvern og informasjonskapsler</a>
+      <a href="/personvern/" style="color:#6b7280;text-decoration:underline;">Personvern og informasjonskapsler</a>
       <span style="margin:0 0.4rem;">&#183;</span>
-      <a href="/vilkaar/" style="color:#9ca3af;text-decoration:underline;">Vilk&#229;r for bruk</a>
+      <a href="/vilkaar/" style="color:#6b7280;text-decoration:underline;">Vilk&#229;r for bruk</a>
       <span style="margin:0 0.4rem;">&#183;</span>
-      <a href="/faq/" style="color:#9ca3af;text-decoration:underline;">Vanlige sp&#248;rsm&#229;l (FAQ)</a>
+      <a href="/faq/" style="color:#6b7280;text-decoration:underline;">Vanlige sp&#248;rsm&#229;l (FAQ)</a>
     </p>
     <p style="margin-top:0.75rem;">
-      <a href="https://www.facebook.com/share/17rMp8o9yF/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:0.375rem;color:#9ca3af;">
+      <a href="https://www.facebook.com/share/17rMp8o9yF/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:0.375rem;min-height:44px;color:#6b7280;">
         <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/></svg>
         F&#248;lg exday.no p&#229; Facebook
       </a>
     </p>
   </footer>
-  <style>.dark .std-footer { color:#6b7280 !important; border-color:#1f2937 !important; } .dark .std-footer a { color:#6b7280 !important; }</style>
+  <style>.dark .std-footer { color:#9ca3af !important; border-color:#1f2937 !important; } .dark .std-footer a { color:#9ca3af !important; }</style>
 </div>
 <script>
   (function() {
