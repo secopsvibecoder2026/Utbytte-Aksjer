@@ -1,14 +1,6 @@
 {
-  "generert": "2026-11-23T06:02:17Z",
-  "antall": 1,
+  "generert": "2026-11-23T06:32:59Z",
+  "antall": 0,
   "antall_kritiske": 0,
-  "varsler": [
-    {
-      "ticker": "BAKKA",
-      "type": "navnavvik",
-      "alvorlighet": "info",
-      "melding": "Navnet avviker litt fra Yahoo: «P/F Bakkafrost» vs «Bakkafrost P/F» (likhet 71%).",
-      "forslag": "Sannsynligvis bare ulik skrivemåte. Juster gjerne navnet i data/tickers.json for konsistens."
-    }
-  ]
+  "varsler": []
 }

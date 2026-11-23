@@ -1,1092 +1,937 @@
 {
-  "sist_oppdatert": "2026-11-23T06:02:13Z",
-  "antall_ok": 155,
-  "antall_feil": 0,
+  "sist_oppdatert": "2026-11-23T06:32:56Z",
+  "antall_ok": 0,
+  "antall_feil": 155,
   "tickere": {
     "EQNR": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Equinor ASA",
-      "yahoo_navn": "Equinor ASA",
-      "markedsverdi": 906648027136.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "DNB": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "DNB Bank ASA",
-      "yahoo_navn": "DNB Bank ASA",
-      "markedsverdi": 458086940672.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "TEL": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Telenor ASA",
-      "yahoo_navn": "Telenor ASA",
-      "markedsverdi": 179776143360.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "ORK": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Orkla ASA",
-      "yahoo_navn": "Orkla ASA",
-      "markedsverdi": 97487339520.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "MOWI": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Mowi ASA",
-      "yahoo_navn": "Mowi ASA",
-      "markedsverdi": 118956761088.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "AKRBP": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Aker BP ASA",
-      "yahoo_navn": "Aker BP ASA",
-      "markedsverdi": 194564571136.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "NHY": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Norsk Hydro ASA",
-      "yahoo_navn": "Norsk Hydro ASA",
-      "markedsverdi": 126328086528.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "YAR": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Yara International ASA",
-      "yahoo_navn": "Yara International ASA",
-      "markedsverdi": 97766440960.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "SALM": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "SalMar ASA",
-      "yahoo_navn": "SalMar ASA",
-      "markedsverdi": 79569920000.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "MPCC": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "MPC Container Ships ASA",
-      "yahoo_navn": "MPC Container Ships ASA",
-      "markedsverdi": 11991886848.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "BWLPG": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "BW LPG Limited",
-      "yahoo_navn": "BW LPG Limited",
-      "markedsverdi": 32245422080.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "KOG": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Kongsberg Gruppen ASA",
-      "yahoo_navn": "Kongsberg Gruppen ASA",
-      "markedsverdi": 287368347648.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "KMAR": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Kongsberg Maritime ASA",
-      "yahoo_navn": "Kongsberg Maritime ASA",
-      "markedsverdi": 0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "FRO": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Frontline PLC",
-      "yahoo_navn": "Frontline plc",
-      "markedsverdi": 98532892030.18,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "NONG": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "SpareBank 1 Nord-Norge",
-      "yahoo_navn": "SpareBank 1 Nord-Norge",
-      "markedsverdi": 18326652928.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "SUBC": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Subsea 7 SA",
-      "yahoo_navn": "Subsea 7 S.A.",
-      "markedsverdi": 94860754944.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "WWI": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Wilh. Wilhelmsen Holding",
-      "yahoo_navn": "Wilh. Wilhelmsen Holding ASA",
-      "markedsverdi": 38052655104.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "SCATC": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Scatec ASA",
-      "yahoo_navn": "Scatec ASA",
-      "markedsverdi": 13169759232.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "AUSS": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Austevoll Seafood ASA",
-      "yahoo_navn": "Austevoll Seafood ASA",
-      "markedsverdi": 17720154112.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "LSG": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Lerøy Seafood Group ASA",
-      "yahoo_navn": "Lerøy Seafood Group ASA",
-      "markedsverdi": 26296215552.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "BAKKA": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Bakkafrost P/F",
-      "yahoo_navn": "P/F Bakkafrost",
-      "markedsverdi": 25276262400.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "HAFNI": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Hafnia Limited",
-      "yahoo_navn": "Hafnia Limited",
-      "markedsverdi": 46413209600.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "MING": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "SpareBank 1 SMN",
-      "yahoo_navn": "SpareBank 1 SMN",
-      "markedsverdi": 31943464960.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "SPOL": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "SpareBank 1 Østlandet",
-      "yahoo_navn": "SpareBank 1 Østlandet",
-      "markedsverdi": 28588853248.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "AFG": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "AF Gruppen ASA",
-      "yahoo_navn": "AF Gruppen ASA",
-      "markedsverdi": 22436777984.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "ODL": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Odfjell Drilling Ltd",
-      "yahoo_navn": "Odfjell Drilling Ltd.",
-      "markedsverdi": 23716921344.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "VEI": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Veidekke ASA",
-      "yahoo_navn": "Veidekke ASA",
-      "markedsverdi": 31309854720.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "AKER": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Aker ASA",
-      "yahoo_navn": "Aker ASA",
-      "markedsverdi": 76230901760.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "BWO": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "BW Offshore Limited",
-      "yahoo_navn": "BW Offshore Limited",
-      "markedsverdi": 7248629248.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "GJF": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Gjensidige Forsikring ASA",
-      "yahoo_navn": "Gjensidige Forsikring ASA",
-      "markedsverdi": 137790117003.94,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "STB": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Storebrand ASA",
-      "yahoo_navn": "Storebrand ASA",
-      "markedsverdi": 83125018624.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "AKSO": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Aker Solutions ASA",
-      "yahoo_navn": "Aker Solutions ASA",
-      "markedsverdi": 17542062080.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "OKEA": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "OKEA ASA",
-      "yahoo_navn": "OKEA ASA",
-      "markedsverdi": 4785071616.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "BEWI": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "BEWI ASA",
-      "yahoo_navn": "BEWI ASA",
-      "markedsverdi": 4262131712.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "BONHR": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Bonheur ASA",
-      "yahoo_navn": "Bonheur ASA",
-      "markedsverdi": 12100323328.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "WAWI": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Wallenius Wilhelmsen ASA",
-      "yahoo_navn": "Wallenius Wilhelmsen ASA",
-      "markedsverdi": 72118640640.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "NORCO": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Norconsult ASA",
-      "yahoo_navn": "Norconsult ASA",
-      "markedsverdi": 11054583808.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "B2I": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "B2 Impact ASA",
-      "yahoo_navn": "B2 Impact ASA",
-      "markedsverdi": 8845261824.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "VAR": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Vår Energi ASA",
-      "yahoo_navn": "Vår Energi ASA",
-      "markedsverdi": 115351707648.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "DNO": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "DNO ASA",
-      "yahoo_navn": "DNO ASA",
-      "markedsverdi": 20260501504.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "HAUTO": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Höegh Autoliners ASA",
-      "yahoo_navn": "Höegh Autoliners ASA",
-      "markedsverdi": 33776142336.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "BRG": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Borregaard ASA",
-      "yahoo_navn": "Borregaard ASA",
-      "markedsverdi": 15006476288.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "EPR": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Europris ASA",
-      "yahoo_navn": "Europris ASA",
-      "markedsverdi": 13518276608.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "GSF": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Grieg Seafood ASA",
-      "yahoo_navn": "Grieg Seafood ASA",
-      "markedsverdi": 2453619712.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "KCC": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Klaveness Combination Carriers ASA",
-      "yahoo_navn": "Klaveness Combination Carriers ASA",
-      "markedsverdi": 6252104192.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "OET": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Okeanis Eco Tankers Corp.",
-      "yahoo_navn": "Okeanis Eco Tankers Corp.",
-      "markedsverdi": 29752027136.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "SBMO": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Sparebanken Møre",
-      "yahoo_navn": "Sparebanken Møre",
-      "markedsverdi": 5557851136.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "SATS": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "SATS ASA",
-      "yahoo_navn": "Sats ASA",
-      "markedsverdi": 8806695936.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "KIT": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Kitron ASA",
-      "yahoo_navn": "Kitron ASA",
-      "markedsverdi": 18809702400.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "ABG": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "ABG Sundal Collier Holding ASA",
-      "yahoo_navn": "ABG Sundal Collier Holding ASA",
-      "markedsverdi": 3655098368.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "SBO": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Selvaag Bolig ASA",
-      "yahoo_navn": "Selvaag Bolig ASA",
-      "markedsverdi": 2923258624.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "PARB": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Pareto Bank ASA",
-      "yahoo_navn": "Pareto Bank ASA",
-      "markedsverdi": 3647165184.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "ENTR": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Entra ASA",
-      "yahoo_navn": "Entra ASA",
-      "markedsverdi": 17353396224.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "TOM": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "TOMRA Systems ASA",
-      "yahoo_navn": "Tomra Systems ASA",
-      "markedsverdi": 25474588672.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "MULTI": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Multiconsult ASA",
-      "yahoo_navn": "Multiconsult ASA",
-      "markedsverdi": 3539282176.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "2020": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "2020 Bulkers Ltd",
-      "yahoo_navn": "2020 Bulkers Ltd.",
-      "markedsverdi": 20366860288.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "DOF": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "DOF Group ASA",
-      "yahoo_navn": "DOF Group ASA",
-      "markedsverdi": 30538553344.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "SRHA": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "SpareBank 1 Ringerike Hadeland",
-      "yahoo_navn": "SpareBank 1 Ringerike Hadeland",
-      "markedsverdi": 6994445312.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "HELG": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "SpareBank 1 Helgeland",
-      "yahoo_navn": "SpareBank 1 Helgeland",
-      "markedsverdi": 4907424768.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "SPOG": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Sparebanken Øst",
-      "yahoo_navn": "Sparebanken Øst",
-      "markedsverdi": 1482694272.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "PEN": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Panoro Energy ASA",
-      "yahoo_navn": "Panoro Energy ASA",
-      "markedsverdi": 3883635712.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "AKVA": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "AKVA Group ASA",
-      "yahoo_navn": "AKVA group ASA",
-      "markedsverdi": 5800656384.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "SNI": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Stolt-Nielsen Limited",
-      "yahoo_navn": "Stolt-Nielsen Limited",
-      "markedsverdi": 21513922380.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "MEDI": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Medistim ASA",
-      "yahoo_navn": "Medistim ASA",
-      "markedsverdi": 5832228352.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "ATEA": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Atea ASA",
-      "yahoo_navn": "Atea ASA",
-      "markedsverdi": 18487844864.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "BOUV": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Bouvet ASA",
-      "yahoo_navn": "Bouvet ASA",
-      "markedsverdi": 5159098368.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "TGS": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "TGS ASA",
-      "yahoo_navn": "TGS ASA",
-      "markedsverdi": 24692881408.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "NSKOG": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Norske Skog ASA",
-      "yahoo_navn": "Norske Skog ASA",
-      "markedsverdi": 2969338112.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "SOFF": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Solstad Offshore ASA",
-      "yahoo_navn": "Solstad Offshore ASA",
-      "markedsverdi": 5352533504.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "ITERA": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Itera ASA",
-      "yahoo_navn": "Itera ASA",
-      "markedsverdi": 470894176.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "HUNT": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Hunter Group ASA",
-      "yahoo_navn": "Hunter Group ASA",
-      "markedsverdi": 2191942400.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "ALNG": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "ALNG ASA",
-      "yahoo_navn": "ALNG ASA",
-      "markedsverdi": 781667776.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "VISTIN": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Vistin Pharma ASA",
-      "yahoo_navn": "Vistin Pharma ASA",
-      "markedsverdi": 842547264.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "STRONG": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Strongpoint ASA",
-      "yahoo_navn": "StrongPoint ASA",
-      "markedsverdi": 470898464.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "NRC": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "NRC Group ASA",
-      "yahoo_navn": "NRC Group ASA",
-      "markedsverdi": 1479158400.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "JAREN": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Jæren Sparebank",
-      "yahoo_navn": "Jæren Sparebank",
-      "markedsverdi": 1869265408.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "NORBT": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "NORBIT ASA",
-      "yahoo_navn": "Norbit ASA",
-      "markedsverdi": 10204993536.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "KID": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Kid ASA",
-      "yahoo_navn": "Kid ASA",
-      "markedsverdi": 5893548032.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "ODF": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Odfjell SE (A-aksje)",
-      "yahoo_navn": "Odfjell SE",
-      "markedsverdi": 9265424384.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "ODFB": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Odfjell SE (B-aksje)",
-      "yahoo_navn": "Odfjell SE",
-      "markedsverdi": 9091203072.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "SKUE": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Skue Sparebank",
-      "yahoo_navn": "Skue Sparebank",
-      "markedsverdi": 1993658112.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "HGSB": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Haugesund Sparebank",
-      "yahoo_navn": "Haugesund Sparebank",
-      "markedsverdi": 821617024.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "PEXIP": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Pexip Holding ASA",
-      "yahoo_navn": "Pexip Holding ASA",
-      "markedsverdi": 7412517888.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "EIOF": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Eidesvik Offshore ASA",
-      "yahoo_navn": "Eidesvik Offshore ASA",
-      "markedsverdi": 1262611712.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "VVL": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Voss Veksel- og Landmandsbank ASA",
-      "yahoo_navn": "Voss Veksel- og Landmandsbank ASA",
-      "markedsverdi": 956412736.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "BIEN": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Bien Sparebank ASA",
-      "yahoo_navn": "Bien Sparebank ASA",
-      "markedsverdi": 823628736.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "BNOR": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "BlueNord ASA",
-      "yahoo_navn": "BlueNord ASA",
-      "markedsverdi": 13320512512.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "AURG": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Aurskog Sparebank",
-      "yahoo_navn": "Aurskog Sparebank",
-      "markedsverdi": 1215744000.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "SBNOR": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Sparebanken Norge",
-      "yahoo_navn": "Sparebanken Norge",
-      "markedsverdi": 35386564608.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "SB1NO": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "SpareBank 1 Sør-Norge ASA",
-      "yahoo_navn": "SpareBank 1 Sør-Norge ASA",
-      "markedsverdi": 85020770304.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "SNOR": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "SpareBank 1 Nordmøre",
-      "yahoo_navn": "SpareBank 1 Nordmøre",
-      "markedsverdi": 1676435072.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "HSHP": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Himalaya Shipping Ltd.",
-      "yahoo_navn": "Himalaya Shipping Ltd.",
-      "markedsverdi": 6773612032.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "GOD": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Goodtech ASA",
-      "yahoo_navn": "Goodtech ASA",
-      "markedsverdi": 409696672.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "AKAST": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Akastor ASA",
-      "yahoo_navn": "Akastor ASA",
-      "markedsverdi": 2512584960.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "GENT": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Gentian Diagnostics ASA",
-      "yahoo_navn": "Gentian Diagnostics ASA",
-      "markedsverdi": 612161472.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "AFK": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Arendals Fossekompani ASA (B-aksje)",
-      "yahoo_navn": "Arendals Fossekompani ASA",
-      "markedsverdi": 10474159104.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "ENH": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "SED Energy Holdings PLC",
-      "yahoo_navn": "SED Energy Holdings Plc",
-      "markedsverdi": 4526455808.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "PROT": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Protector Forsikring ASA",
-      "yahoo_navn": "Protector Forsikring ASA",
-      "markedsverdi": 38358708224.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "ELK": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Elkem ASA",
-      "yahoo_navn": "Elkem ASA",
-      "markedsverdi": 10992443392.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "ELO": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Elopak ASA",
-      "yahoo_navn": "Elopak ASA",
-      "markedsverdi": 9962441728.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "ENDUR": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Endúr ASA",
-      "yahoo_navn": "Endúr ASA",
-      "markedsverdi": 7297560064.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "MORLD": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Moreld ASA",
-      "yahoo_navn": "Moreld ASA",
-      "markedsverdi": 4606766080.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "NKR": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Nekkar ASA",
-      "yahoo_navn": "Nekkar ASA",
-      "markedsverdi": 2019517184.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "WSTEP": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Webstep ASA",
-      "yahoo_navn": "Webstep ASA",
-      "markedsverdi": 305715712.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "BWE": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "BW Energy Limited",
-      "yahoo_navn": "BW Energy Limited",
-      "markedsverdi": 12093789184.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "MGN": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Magnora ASA",
-      "yahoo_navn": "Magnora ASA",
-      "markedsverdi": 1316244224.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "ARCH": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Archer Limited",
-      "yahoo_navn": "Archer Limited",
-      "markedsverdi": 1663428736.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "AQUA": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Aqualis ASA",
-      "yahoo_navn": "Aqualis ASA",
-      "markedsverdi": 1138251008.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "CDLR": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Cadeler plc",
-      "yahoo_navn": "Cadeler plc",
-      "markedsverdi": 21427357696.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "BINT": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Bevest ASA",
-      "yahoo_navn": "Bevest ASA",
-      "markedsverdi": 2167411200.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "PUBLI": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "PPI Public Property Invest AB",
-      "yahoo_navn": "PPI Public Property Invest AB (publ)",
-      "markedsverdi": 16651740160.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "WWIB": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Wilh. Wilhelmsen Holding B",
-      "yahoo_navn": "Wilh. Wilhelmsen Holding ASA",
-      "markedsverdi": 36724752384.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "POL": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Polaris Media ASA",
-      "yahoo_navn": "Polaris Media ASA",
-      "markedsverdi": 2949309696.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "GYL": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Gyldendal ASA",
-      "yahoo_navn": "Gyldendal ASA",
-      "markedsverdi": 922852416.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "SOAG": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "SpareBank 1 Østfold Akershus",
-      "yahoo_navn": "SpareBank 1 Østfold Akershus",
-      "markedsverdi": 5822551040.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "ROGS": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Rogaland Sparebank",
-      "yahoo_navn": "Rogaland Sparebank",
-      "markedsverdi": 3438690560.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "MELG": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Melhus Sparebank",
-      "yahoo_navn": "Melhus Sparebank",
-      "markedsverdi": 518316704.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "TRSB": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Trøndelag Sparebank",
-      "yahoo_navn": "Trøndelag Sparebank",
-      "markedsverdi": 506134112.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "HSPG": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Høland og Setskog Sparebank",
-      "yahoo_navn": "Høland og Setskog Sparebank",
-      "markedsverdi": 85987504.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "SOGN": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Sogn Sparebank",
-      "yahoo_navn": "Sogn Sparebank",
-      "markedsverdi": 188516624.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "GRONG": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Grong Sparebank",
-      "yahoo_navn": "Grong Sparebank",
-      "markedsverdi": 715045504.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "TINDE": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Tinde Sparebank",
-      "yahoo_navn": "Tinde Sparebank",
-      "markedsverdi": 626861376.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "ROMER": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Romerike Sparebank",
-      "yahoo_navn": "Romerike Sparebank",
-      "markedsverdi": 1219102208.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "SB68": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "SpareBank 68° Nord",
-      "yahoo_navn": "Sparebank 68° Nord",
-      "markedsverdi": 616877568.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "NISB": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Nidaros Sparebank",
-      "yahoo_navn": "Nidaros Sparebank",
-      "markedsverdi": 119402816.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "AASB": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Aasen Sparebank",
-      "yahoo_navn": "Aasen Sparebank",
-      "markedsverdi": 233518144.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "CMBTO": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "CMB.TECH NV",
-      "yahoo_navn": "Cmb.Tech NV",
-      "markedsverdi": 45962887168.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "JIN": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Jinhui Shipping and Transportation Limited",
-      "yahoo_navn": "Jinhui Shipping and Transportation Limited",
-      "markedsverdi": 740664509.5,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "SOMA": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Solstad Maritime ASA",
-      "yahoo_navn": "Solstad Maritime ASA",
-      "markedsverdi": 12378537984.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "BORR": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Borr Drilling Limited",
-      "yahoo_navn": "Borr Drilling Limited",
-      "markedsverdi": 10609678336.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "WEST": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Western Bulk Chartering AS",
-      "yahoo_navn": "Western Bulk Chartering AS",
-      "markedsverdi": 814880000.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "CAPT": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Capital Tankers Corp.",
-      "yahoo_navn": "Capital Tankers Corp.",
-      "markedsverdi": 22042705920.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "MAS": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Måsøval AS",
-      "yahoo_navn": "Måsøval AS",
-      "markedsverdi": 4765579264.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "ISLAX": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Icelandic Salmon AS",
-      "yahoo_navn": "Icelandic Salmon AS",
-      "markedsverdi": 1594536192.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "AFISH": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Arctic Fish Holding AS",
-      "yahoo_navn": "Arctic Fish Holding AS",
-      "markedsverdi": 900099072.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "SMOP": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Smartoptics Group ASA",
-      "yahoo_navn": "Smartoptics Group ASA",
-      "markedsverdi": 5235631104.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "SNTIA": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Sentia ASA",
-      "yahoo_navn": "Sentia ASA",
-      "markedsverdi": 9312154624.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "SWON": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "SoftwareOne Holding AG",
-      "yahoo_navn": "SoftwareOne Holding AG",
-      "markedsverdi": 20683149312.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "HEX": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Hexagon Composites ASA",
-      "yahoo_navn": "Hexagon Composites ASA",
-      "markedsverdi": 3809301321.96,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "BMA": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Byggma ASA",
-      "yahoo_navn": "Byggma ASA",
-      "markedsverdi": 1605843584.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "EQVA": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "EQVA ASA",
-      "yahoo_navn": "Eqva ASA",
-      "markedsverdi": 199337616.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "BOR": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Borgestad ASA",
-      "yahoo_navn": "Borgestad ASA",
-      "markedsverdi": 524975200.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "REACH": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Reach Subsea ASA",
-      "yahoo_navn": "Reach Subsea ASA",
-      "markedsverdi": 1419002112.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "PLSV": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Paratus Energy Services Ltd.",
-      "yahoo_navn": "Paratus Energy Services Ltd.",
-      "markedsverdi": 7689231360.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "ACR": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Axactor ASA",
-      "yahoo_navn": "Axactor ASA",
-      "markedsverdi": 3206583808.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "FFSB": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Flekkefjord Sparebank",
-      "yahoo_navn": "Flekkefjord Sparebank",
-      "markedsverdi": 165448864.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "OTEC": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Otello Corporation ASA",
-      "yahoo_navn": "Otello Corporation ASA",
-      "markedsverdi": 1132109824.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "VEND": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Vend Marketplaces ASA",
-      "yahoo_navn": "Vend Marketplaces ASA",
-      "markedsverdi": 42178211840.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "NOD": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Nordic Semiconductor ASA",
-      "yahoo_navn": "Nordic Semiconductor ASA",
-      "markedsverdi": 33130690560.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "KOA": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Kongsberg Automotive Holding ASA",
-      "yahoo_navn": "Kongsberg Automotive ASA",
-      "markedsverdi": 1845865344.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "DELIA": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Dellia Group ASA",
-      "yahoo_navn": "Dellia Group ASA",
-      "markedsverdi": 796750464.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "STST": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Stainless Tankers ASA",
-      "yahoo_navn": "Stainless Tankers ASA",
-      "markedsverdi": 569700032.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "IWS": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Integrated Wind Solutions ASA",
-      "yahoo_navn": "Integrated Wind Solutions ASA",
-      "markedsverdi": 2429267456.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "NORAM": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "NorAm Drilling AS",
-      "yahoo_navn": "NorAm Drilling AS",
-      "markedsverdi": 1712639232.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     },
     "OTL": {
-      "ok": true,
+      "ok": false,
       "vart_navn": "Odfjell Technology Ltd",
-      "yahoo_navn": "Odfjell Technology Ltd.",
-      "markedsverdi": 2320475392.0,
-      "siste_handelsdato": "2026-11-20"
+      "yahoo_navn": "",
+      "feilmelding": "Too Many Requests. Rate limited. Try after a while."
     }
   }
 }

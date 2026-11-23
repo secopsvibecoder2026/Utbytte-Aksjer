@@ -501,11 +501,37 @@
       var s = d.toISOString().slice(0,10);
       return ALLE.filter(function(x) { return x.d >= s; });
     }
+    // Samme funksjon som pentAkse() i assets/ui.js (TestEnGrafstil).
+    function pentAkse(min, maks, maksTikk = 6) {
+      if (!Number.isFinite(min) || !Number.isFinite(maks)) return null;
+      if (maks <= min) { const d = Math.abs(min) * 0.05 || 1; min -= d; maks += d; }
+      const span = maks - min;
+      const tier0 = Math.pow(10, Math.floor(Math.log10(span)) - 1);
+      let best = null;
+      // Prøv steg 1–2–2,5–5 over to tierpotenser og velg den tetteste aksen
+      // med 3 til maksTikk verdier, så kurven fyller mest mulig av høyden.
+      for (const t of [tier0, tier0 * 10]) {
+        for (const f of [1, 2, 2.5, 5]) {
+          const steg = f * t;
+          const fra = Math.floor(min / steg + 1e-9) * steg;
+          const til = Math.ceil(maks / steg - 1e-9) * steg;
+          const antall = Math.round((til - fra) / steg) + 1;
+          if (antall < 3 || antall > maksTikk) continue;
+          if (!best || til - fra < best.til - best.fra - 1e-12) best = { fra, til, steg, f };
+        }
+      }
+      if (!best) best = { fra: min, til: maks, steg: span / 4, f: 1 };
+      const desimaler = Math.max(0, -Math.floor(Math.log10(best.steg) + 1e-9) + (best.f === 2.5 ? 1 : 0));
+      const verdier = [];
+      for (let v = best.fra; v <= best.til + best.steg / 2; v += best.steg) verdier.push(+v.toFixed(desimaler));
+      return { fra: +best.fra.toFixed(desimaler), til: +best.til.toFixed(desimaler), steg: best.steg, verdier, desimaler };
+    }
     function tegn(periode) {
       var data = filtrer(periode), hele = false; if (data.length<4) { data=ALLE; hele = true; } if (data.length<4) return;
       var PERIODER = {'1ar':'Siste år','ytd':'Hittil i år','2ar':'Siste 2 år','3ar':'Siste 3 år','5ar':'Siste 5 år'};
       var pr = data.map(function(x){return x.k;}), da = data.map(function(x){return x.d;}), n=pr.length;
-      var mn=Math.min.apply(null,pr), mx=Math.max.apply(null,pr), rng=mx-mn||1;
+      var akse=pentAkse(Math.min.apply(null,pr), Math.max.apply(null,pr));
+      var mn=akse.fra, mx=akse.til, rng=mx-mn||1;
       var opp=pr[n-1]>=pr[0], fg=opp?'#3f8a63':'#bd534a';
       var end=((pr[n-1]-pr[0])/pr[0]*100).toLocaleString('nb-NO',{minimumFractionDigits:1,maximumFractionDigits:1});
       var hdr=document.getElementById('kurs-header-ISLAX');
@@ -521,10 +547,10 @@
       var sy=function(p){return pT+(1-(p-mn)/rng)*(CH-pT-pB);};
       ctx.fillStyle=dk?'#111827':'#f9fafb'; ctx.fillRect(0,0,CW,CH);
       ctx.strokeStyle=dk?'#1f2937':'#e5e7eb'; ctx.lineWidth=1; ctx.setLineDash([4,4]);
-      [mn,(mn+mx)/2,mx].forEach(function(v){ctx.beginPath();ctx.moveTo(pL,sy(v));ctx.lineTo(CW-pR,sy(v));ctx.stroke();});
+      akse.verdier.forEach(function(v){ctx.beginPath();ctx.moveTo(pL,sy(v));ctx.lineTo(CW-pR,sy(v));ctx.stroke();});
       ctx.setLineDash([]);
       ctx.fillStyle=dk?'#6b7280':'#9ca3af'; ctx.font='11px Inter, system-ui, sans-serif'; ctx.textAlign='right';
-      [[mn,sy(mn)],[(mn+mx)/2,sy((mn+mx)/2)],[mx,sy(mx)]].forEach(function(pair){ctx.fillText(pair[0].toLocaleString('nb-NO',{maximumFractionDigits:0}),pL-4,pair[1]+4);});
+      akse.verdier.forEach(function(v){ctx.fillText(v.toLocaleString('nb-NO',{minimumFractionDigits:akse.desimaler,maximumFractionDigits:akse.desimaler}),pL-4,sy(v)+4);});
       var grad=ctx.createLinearGradient(0,pT,0,CH-pB);
       grad.addColorStop(0,opp?'rgba(63,138,99,0.12)':'rgba(189,83,74,0.1)'); grad.addColorStop(1,'rgba(0,0,0,0)');
       ctx.beginPath(); ctx.moveTo(sx(0),CH-pB);
