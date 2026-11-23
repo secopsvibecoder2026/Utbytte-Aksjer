@@ -8239,8 +8239,8 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None, rapporter=None
     .utbytte-sep::before, .utbytte-sep::after {{ content: ''; flex: 1; height: 1px; background: #e5e7eb; }}
     .dark .utbytte-sep {{ color: #6b7280; }}
     .dark .utbytte-sep::before, .dark .utbytte-sep::after {{ background: #1f2937; }}
-    .mini-nav a {{ color: #275f45; }}
-    .til-toppen {{ position: fixed; bottom: 1.5rem; right: 1.25rem; z-index: 40; background: #275f45; color: #fff; border: none; border-radius: 9999px; width: 2.5rem; height: 2.5rem; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.18); opacity: 0; pointer-events: none; transition: opacity 0.2s; }}
+    .mini-nav a {{ color: #275f45; display: inline-flex; align-items: center; min-height: 44px; }}
+    .til-toppen {{ position: fixed; bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px)); right: calc(1.25rem + env(safe-area-inset-right, 0px)); z-index: 40; background: #275f45; color: #fff; border: none; border-radius: 9999px; width: 2.75rem; height: 2.75rem; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.18); opacity: 0; pointer-events: none; transition: opacity 0.2s; }}
     .til-toppen.synlig {{ opacity: 1; pointer-events: auto; }}
     .til-toppen:hover {{ background: #214d39; }}
     .profil-seksjon {{ margin: 1.5rem 0; }}
@@ -8403,7 +8403,7 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None, rapporter=None
     .badge {{ background: #e3eee8; color: #275f45; }}
     .kurs-lenker {{ margin: 1.5rem 0; }}
     .kurs-lenker h2 {{ margin-bottom: 0.75rem; }}
-    .kp-btn {{ font-size: 0.72rem; font-weight: 500; padding: 0.2rem 0.55rem; border-radius: 6px; border: none; cursor: pointer; background: transparent; color: #6b7280; transition: background 0.12s, color 0.12s; }}
+    .kp-btn {{ font-size: 0.72rem; font-weight: 500; padding: 0.2rem 0.55rem; min-width: 44px; min-height: 44px; border: 9px solid transparent; border-left-width: 0; border-right-width: 0; border-radius: 6px / 15px; background-clip: padding-box; cursor: pointer; background-color: transparent; color: #6b7280; transition: background 0.12s, color 0.12s; }}
     .kp-btn:hover, .kp-aktiv {{ background: #f3f4f6; color: #111827; font-weight: 600; }}
     .dark .kp-btn {{ color: #9ca3af; }}
     .dark .kp-btn:hover, .dark .kp-aktiv {{ background: #1f2937; color: #f3f4f6; }}
@@ -8823,7 +8823,7 @@ def generer_aksjesider(aksjer, root_dir):
     .seksjon {{ margin: 2.5rem 0; }}
     .seksjon-tittel {{ display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 1rem; }}
     .seksjon-tittel h2 {{ font-size: 1.25rem; font-weight: 700; color: #0f172a; }}
-    .seksjon-tittel .se-alle {{ font-size: 0.85rem; color: #3f8a63; font-weight: 600; }}
+    .seksjon-tittel .se-alle {{ font-size: 0.85rem; color: #2f7352; font-weight: 600; display: inline-flex; align-items: center; min-height: 44px; }}
     .ak-grid {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 0.75rem; }}
     .ak-kort {{
       display: block;
@@ -9221,7 +9221,7 @@ STANDARD_FOOTER = """  <footer style="margin-top:2rem;padding-top:1.5rem;border-
       <a href="/faq/" style="color:#6b7280;text-decoration:underline;">Vanlige sp&#248;rsm&#229;l (FAQ)</a>
     </p>
     <p style="margin-top:0.75rem;">
-      <a href="https://www.facebook.com/share/17rMp8o9yF/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:0.375rem;color:#9ca3af;">
+      <a href="https://www.facebook.com/share/17rMp8o9yF/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:0.375rem;min-height:44px;color:#6b7280;">
         <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/></svg>
         F&#248;lg exday.no p&#229; Facebook
       </a>
@@ -10714,6 +10714,11 @@ def generer_rapportkalender(aksjer, root_dir, i_dag=None):
     .dark a { color:#6fa98a; }
     .dark .hopp a { background:#111827; border-color:#1f2937; color:#d1d5db; }
     .dark .hopp a:hover { border-color:#6fa98a; color:#6fa98a; }
+    .hopp a { display:inline-flex; align-items:center; min-height:44px; border-width:7px 0; border-color:transparent; background-clip:padding-box; box-shadow:inset 0 0 0 1px #e5e7eb; }
+    .hopp a:hover { border-color:transparent; box-shadow:inset 0 0 0 1px #2f7352; }
+    .dark .hopp a { border-color:transparent; box-shadow:inset 0 0 0 1px #1f2937; }
+    .dark .hopp a:hover { border-color:transparent; box-shadow:inset 0 0 0 1px #6fa98a; }
+    details > summary { margin:-0.85rem -1rem; padding:0.85rem 1rem; }
     .dark table { background:#111827; border-color:#1f2937; }
     .dark th { background:#1f2937; color:#9ca3af; }
     .dark td { border-color:#1f2937; }
@@ -11182,6 +11187,10 @@ def _rapportside_html(a, rapporter, today):
     .dark .rute, .dark .rapport, .dark .hopp a { background:#111827; border-color:#1f2937; }
     .dark .rute-val { color:#f3f4f6; }
     .dark .hopp a { color:#d1d5db; }
+    .hopp a { display:inline-flex; align-items:center; min-height:44px; border-width:7px 0; border-color:transparent; background-clip:padding-box; box-shadow:inset 0 0 0 1px #e5e7eb; }
+    .hopp a:hover { border-color:transparent; box-shadow:inset 0 0 0 1px #2f7352; }
+    .dark .hopp a { border-color:transparent; box-shadow:inset 0 0 0 1px #1f2937; }
+    .dark .hopp a:hover { border-color:transparent; box-shadow:inset 0 0 0 1px #6fa98a; }
     .dark .rapport-tall th { color:#9ca3af; border-color:#1f2937; }
     .dark .rapport-tall td { border-color:#1f2937; }
     .dark .om-oppsummeringene { background:#111827; border-color:#374151; color:#9ca3af; }
@@ -12377,7 +12386,7 @@ def lag_exmnd_blokk(aksjer, i_dag):
             if n > EXMND_VIS:
                 kropp += (
                     '\n        <details class="text-sm mt-2">'
-                    f'<summary class="cursor-pointer text-green-700 dark:text-green-400">Vis alle {n}</summary>'
+                    f'<summary class="cursor-pointer py-3 text-green-700 dark:text-green-400">Vis alle {n}</summary>'
                     f'<p class="mt-1 leading-relaxed">{", ".join(_lenke(a) for a in rader[EXMND_VIS:])}</p>'
                     '</details>')
         kort.append('      <div class="rounded-xl border border-gray-200 dark:border-gray-800 '
@@ -13237,7 +13246,7 @@ def lag_uka_blokk(hendelser, i_dag, hentet=None):
         '  <section class="max-w-5xl mx-auto px-4 sm:px-6 pt-10" aria-labelledby="uka-tittel">',
         '    <div class="flex items-center justify-between mb-2">',
         '      <h2 id="uka-tittel" class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100">Denne uka på Oslo Børs</h2>',
-        '      <a href="/uke/" class="text-sm hover:underline font-medium" style="color:#2f7352;">Hele uka →</a>',
+        '      <a href="/uke/" class="inline-flex items-center min-h-11 text-sm hover:underline font-medium text-green-700 dark:text-green-400">Hele uka →</a>',
         '    </div>',
         f'    <p class="text-sm text-gray-500 dark:text-gray-400 mb-6">De neste sju dagene fra {_kort_dato(i_dag)}.{hentet_tekst}</p>',
         '    <div class="grid gap-4 sm:grid-cols-3">',

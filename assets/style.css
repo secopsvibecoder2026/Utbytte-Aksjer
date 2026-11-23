@@ -84,6 +84,7 @@
   font-weight: 700;
   margin-top: 0.25rem;
   line-height: 1;
+  min-height: 1.5rem; /* samme høyde som skjelettet (h-6), så kortene ikke hopper */
   color: #111827;
 }
 .dark .stat-value { color: #f3f4f6; }
@@ -1103,3 +1104,74 @@ button.kal-dag:hover, .kal-dag-valgt { background: #f3f7f5; }
   .kal-dag { min-height: 3rem; }
   .kal-merke:nth-of-type(n+2) { display: none; }
 }
+
+/* ── TRYKKFLATER (designrunden 22.11.2026) ────────────────────────────────
+   Alt som kan trykkes på, er minst 44 × 44 px. Målt med Playwright på
+   320 til 768 px: temaknappen var 31 px, hamburgeren 36, periodeknappene på
+   kursgrafen 25, stjernen i lista 16 og kalenderens avkrysning 13 px.
+   Der knappen har en synlig ramme eller bakgrunn som skal se ut som før,
+   ligger den ekstra høyden i en gjennomsiktig ramme (background-clip og
+   en innvendig skygge som ny kant), så knappen ser lik ut, men treffer
+   større. Stjernen i lista får negativ marg, så raden ikke blir høyere. */
+.site-dark-btn { min-width: 44px; min-height: 44px; }
+.site-nav-burger { width: 44px; height: 44px; align-items: center; }
+@media (max-width: 860px) {
+  .site-nav-inner { padding-top: 0.3rem; padding-bottom: 0.3rem; }
+  .site-app-btn { display: inline-flex; align-items: center; min-height: 44px; }
+}
+
+.fav-btn { display: inline-flex; align-items: center; justify-content: center; min-width: 44px; min-height: 44px; margin: -14px; }
+.ikon-knapp { display: inline-flex; align-items: center; justify-content: center; min-width: 44px; min-height: 44px; }
+.fav-btn.ikon-knapp { margin: 0; }
+#velk-lukk { display: inline-flex; align-items: center; justify-content: center; min-width: 44px; min-height: 44px; margin: -10px; }
+#velk-nordnet, #velk-importer, #kal-bruk-pf { min-height: 44px; }
+.velk-lukket #velkommen-banner { display: none; }
+#dark-toggle, .kal-ics-btn { min-width: 44px; min-height: 44px; }
+#profil-btn { display: inline-flex; align-items: center; justify-content: center; min-width: 44px; min-height: 44px; }
+.tab-btn, .sub-tab-btn, .modal-tab, .filter-input, .sammenlign-btn { min-height: 44px; }
+[data-per-side], button[data-side] { min-width: 44px; min-height: 44px; }
+.om-selskap-vis-mer, [data-betalt-periode], .kal-sub-btn, .pf-sub-btn, .stats-sub-btn, .toppliste-pill,
+#pf-legg-til, #tx-legg-til, #wl-legg-til, #kal-beregn, #hl-beregn, #k-beregn, #pf-del-btn,
+#pf-kjop-toggle, #pf-importer-csv-tom, #kal-avansert-toggle, #avansert-toggle { min-height: 44px; }
+/* En avkrysningsboks treffes gjennom etiketten rundt den. */
+label:has(> input[type="checkbox"]) { min-height: 44px; }
+
+.kurs-periode-knapp {
+  min-width: 44px; min-height: 44px;
+  border: 9px solid transparent; border-left-width: 0; border-right-width: 0;
+  border-radius: 6px / 15px; background-clip: padding-box;
+}
+.view-toggle-btn {
+  min-height: 44px; border-width: 7px 0; border-color: transparent;
+  background-clip: padding-box; box-shadow: inset 0 0 0 1.5px #2f7352;
+}
+.dark .view-toggle-btn { border-color: transparent; box-shadow: inset 0 0 0 1.5px #6fa98a; }
+.chip {
+  min-height: 44px; border-width: 8px 0; border-color: transparent;
+  background-clip: padding-box; box-shadow: inset 0 0 0 1px #d1d5db;
+}
+.chip:hover { border-color: transparent; box-shadow: inset 0 0 0 1px #9ca3af; }
+.chip.chip-aktiv { border-color: transparent; box-shadow: inset 0 0 0 1px #2f7352; }
+.dark .chip { border-color: transparent; box-shadow: inset 0 0 0 1px #374151; }
+.dark .chip:hover { border-color: transparent; box-shadow: inset 0 0 0 1px #6b7280; }
+.dark .chip.chip-aktiv { border-color: transparent; box-shadow: inset 0 0 0 1px #275f45; }
+
+/* Utbyttekalenderen: 16 px skrift, ellers zoomer iPhone inn ved fokus. */
+.kal-felt { font-size: 1rem; min-height: 44px; }
+.kal-knapp, .kal-avkrysning { min-height: 44px; }
+.kal-avkrysning input[type="checkbox"] { width: 1.25rem; height: 1.25rem; font-size: 1rem; flex-shrink: 0; }
+.kal-sortknapp { min-height: 44px; }
+/* [hidden] er display: none !important i Tailwinds grunnlag, så plassen
+   holdes av med marg på tabellen under. */
+.kal-js #kal-kontroller[hidden] + .kal-ramme { margin-top: 280px; }
+@media (min-width: 640px) { .kal-js #kal-kontroller[hidden] + .kal-ramme { margin-top: 560px; } }
+@media (min-width: 1024px) { .kal-js #kal-kontroller[hidden] + .kal-ramme { margin-top: 420px; } }
+.kal-ikon { display: inline-flex; align-items: center; justify-content: center; min-width: 44px; min-height: 44px; }
+
+.ak-tabnav a { min-width: 44px; min-height: 44px; display: inline-flex; align-items: center; justify-content: center; }
+.les-ogsa-lenke { min-height: 44px; }
+/* «Til toppen» på de håndskrevne sidene: 44 px, og over systemlinja på iPhone. */
+#tilbake-topp { min-width: 44px; min-height: 44px; bottom: calc(1.25rem + env(safe-area-inset-bottom, 0px)); right: calc(1rem + env(safe-area-inset-right, 0px)); }
+#sammenlign-skuff { padding-bottom: calc(0.75rem + env(safe-area-inset-bottom, 0px)); }
+.chip, .sammenlign-btn, [data-betalt-periode] { min-width: 44px; }
+#score-info-btn { display: inline-flex; align-items: center; justify-content: center; min-width: 44px; min-height: 44px; margin: -14px -12px; }
