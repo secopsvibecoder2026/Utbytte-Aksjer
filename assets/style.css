@@ -986,7 +986,7 @@ section[id] { scroll-margin-top: 100px; }
 .prose table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.9rem; display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
 .prose th { text-align: left; padding: 0.6rem 0.9rem; background: #f3f4f6; font-weight: 600; border: 1px solid #e5e7eb; }
 .prose td { padding: 0.6rem 0.9rem; border: 1px solid #e5e7eb; vertical-align: top; }
-.prose tr:nth-child(even) td { background: #f9fafb; }
+.prose tr:nth-child(even) td { background: #fff; }
 /* Formler i <pre> brytes heller enn å skyve siden ut: på 390 px gikk
    FIRE-kalkulatoren 20 px utenfor skjermen (30.10.2026). */
 .prose pre { white-space: pre-wrap; overflow-wrap: anywhere; max-width: 100%; }
@@ -1180,3 +1180,51 @@ label:has(> input[type="checkbox"]) { min-height: 44px; }
 .kurs-periode-knapp:hover, .kurs-periode-knapp.aktiv, .dark .kurs-periode-knapp:hover, .dark .kurs-periode-knapp.aktiv,
 .view-toggle-btn:hover, .dark .view-toggle-btn:hover,
 .chip:hover, .chip.chip-aktiv, .dark .chip, .dark .chip:hover, .dark .chip.chip-aktiv { background-clip: padding-box; }
+
+/* ── SIDETOPP (designrunde 2, 23.11.2026) ─────────────────────────────────
+   Samme overskrift, brødsmule og tallruter i de genererte malene, de
+   håndskrevne sidene og artiklene. Referansen er aksjesiden (STYLE.md).
+   Reglene ligger utenfor @layer og slår dermed Tailwinds text-3xl og
+   malenes egne h1-regler. TestSidetopp i scripts/test_fetch_stocks.py
+   vokter bruken. */
+
+/* Overskrift: 700 og samme skala overalt. Marg og farge bestemmer hver side. */
+.side-h1 { font-size: 1.4rem; font-weight: 700; line-height: 1.3; }
+@media (min-width: 481px) { .side-h1 { font-size: 1.75rem; } }
+
+/* Brødsmule: «›» mellom leddene, siste ledd er siden selv. Lenkene er vanlig
+   tekst i løpende linje (ingen flex), så de brytes som tekst på 320 px. */
+.brodsmule { font-size: 0.85rem; line-height: 1.6; color: #6b7280; margin: 0 0 1.25rem; }
+.brodsmule a, .dark .brodsmule a { color: inherit; text-decoration: none; }
+.brodsmule a:hover { color: #111827; text-decoration: underline; }
+.brodsmule .brodsmule-skille { margin: 0 0.4rem; }
+.dark .brodsmule { color: #9ca3af; }
+.dark .brodsmule a:hover { color: #f3f4f6; }
+
+/* Tallruter: etiketten over tallet. Antall kolonner følger antall ruter, så
+   raden alltid fylles: 1 rute gir 1 kolonne, 2 og 4 gir to på telefon (fire
+   fra 640 px), 3 og 6 gir tre, og andre antall gir én kolonne. Aldri en
+   enslig tredje rute ved to kolonner. */
+.tallruter { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.5rem; margin: 0 0 1.5rem; }
+.tallruter-n2, .tallruter-n4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.tallruter-n3, .tallruter-n6 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+@media (min-width: 640px) { .tallruter-n4 { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.tallrute { min-width: 0; padding: 0.65rem 0.8rem; border: 1px solid #e5e7eb; border-radius: 0.6rem; background: #fff; }
+.tallrute dt { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #6b7280; overflow-wrap: anywhere; }
+.tallrute dd { margin: 0.15rem 0 0; font-size: 1.15rem; font-weight: 600; color: #111827; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.tallrute-note { display: block; margin-top: 0.1rem; font-size: 0.72rem; font-weight: 400; color: #6b7280; }
+@media (max-width: 480px) {
+  .tallruter-n3 .tallrute, .tallruter-n6 .tallrute { padding: 0.6rem 0.65rem; }
+  .tallruter-n3 .tallrute dd, .tallruter-n6 .tallrute dd { font-size: 0.98rem; }
+  /* Tre kolonner er smalt: en etikett som «Høyeste yield» brytes til to linjer.
+     Plass til to linjer er satt av fra start, ellers flytter siden seg når
+     Inter er lastet og linjebruddet kommer et annet sted. */
+  .tallruter-n3 .tallrute dt, .tallruter-n6 .tallrute dt { min-height: 3.2em; }
+}
+.dark .tallrute { background: #111827; border-color: #1f2937; }
+.dark .tallrute dt, .dark .tallrute-note { color: #9ca3af; }
+.dark .tallrute dd { color: #f3f4f6; }
+/* Heroen er flat og mørk i begge temaer, så rutene der har sine egne verdier. */
+.hero .tallrute, .dark .hero .tallrute { background: rgba(255, 255, 255, 0.08); border-color: rgba(255, 255, 255, 0.2); }
+.hero .tallrute dt, .dark .hero .tallrute dt { color: rgba(255, 255, 255, 0.8); }
+.hero .tallrute dd, .dark .hero .tallrute dd { color: #fff; }
