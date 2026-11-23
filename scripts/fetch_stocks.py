@@ -8404,9 +8404,9 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None, rapporter=None
     .kurs-lenker {{ margin: 1.5rem 0; }}
     .kurs-lenker h2 {{ margin-bottom: 0.75rem; }}
     .kp-btn {{ font-size: 0.72rem; font-weight: 500; padding: 0.2rem 0.55rem; min-width: 44px; min-height: 44px; border: 9px solid transparent; border-left-width: 0; border-right-width: 0; border-radius: 6px / 15px; background-clip: padding-box; cursor: pointer; background-color: transparent; color: #6b7280; transition: background 0.12s, color 0.12s; }}
-    .kp-btn:hover, .kp-aktiv {{ background: #f3f4f6; color: #111827; font-weight: 600; }}
+    .kp-btn:hover, .kp-aktiv {{ background-color: #f3f4f6; color: #111827; font-weight: 600; }}
     .dark .kp-btn {{ color: #9ca3af; }}
-    .dark .kp-btn:hover, .dark .kp-aktiv {{ background: #1f2937; color: #f3f4f6; }}
+    .dark .kp-btn:hover, .dark .kp-aktiv {{ background-color: #1f2937; color: #f3f4f6; }}
 
     /* Dark mode */
     .dark body {{ background: #030712; color: #f3f4f6; }}
@@ -10716,7 +10716,7 @@ def generer_rapportkalender(aksjer, root_dir, i_dag=None):
     .dark .hopp a:hover { border-color:#6fa98a; color:#6fa98a; }
     .hopp a { display:inline-flex; align-items:center; min-height:44px; border-width:7px 0; border-color:transparent; background-clip:padding-box; box-shadow:inset 0 0 0 1px #e5e7eb; }
     .hopp a:hover { border-color:transparent; box-shadow:inset 0 0 0 1px #2f7352; }
-    .dark .hopp a { border-color:transparent; box-shadow:inset 0 0 0 1px #1f2937; }
+    .dark .hopp a { border-color:transparent; background-clip:padding-box; box-shadow:inset 0 0 0 1px #1f2937; }
     .dark .hopp a:hover { border-color:transparent; box-shadow:inset 0 0 0 1px #6fa98a; }
     details > summary { margin:-0.85rem -1rem; padding:0.85rem 1rem; }
     .dark table { background:#111827; border-color:#1f2937; }
@@ -11189,7 +11189,7 @@ def _rapportside_html(a, rapporter, today):
     .dark .hopp a { color:#d1d5db; }
     .hopp a { display:inline-flex; align-items:center; min-height:44px; border-width:7px 0; border-color:transparent; background-clip:padding-box; box-shadow:inset 0 0 0 1px #e5e7eb; }
     .hopp a:hover { border-color:transparent; box-shadow:inset 0 0 0 1px #2f7352; }
-    .dark .hopp a { border-color:transparent; box-shadow:inset 0 0 0 1px #1f2937; }
+    .dark .hopp a { border-color:transparent; background-clip:padding-box; box-shadow:inset 0 0 0 1px #1f2937; }
     .dark .hopp a:hover { border-color:transparent; box-shadow:inset 0 0 0 1px #6fa98a; }
     .dark .rapport-tall th { color:#9ca3af; border-color:#1f2937; }
     .dark .rapport-tall td { border-color:#1f2937; }

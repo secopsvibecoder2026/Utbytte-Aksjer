@@ -1175,3 +1175,8 @@ label:has(> input[type="checkbox"]) { min-height: 44px; }
 #sammenlign-skuff { padding-bottom: calc(0.75rem + env(safe-area-inset-bottom, 0px)); }
 .chip, .sammenlign-btn, [data-betalt-periode] { min-width: 44px; }
 #score-info-btn { display: inline-flex; align-items: center; justify-content: center; min-width: 44px; min-height: 44px; margin: -14px -12px; }
+/* background: i hover- og aktiv-reglene over nullstiller background-clip, og
+   da fylte flaten hele 44 px-boksen. */
+.kurs-periode-knapp:hover, .kurs-periode-knapp.aktiv, .dark .kurs-periode-knapp:hover, .dark .kurs-periode-knapp.aktiv,
+.view-toggle-btn:hover, .dark .view-toggle-btn:hover,
+.chip:hover, .chip.chip-aktiv, .dark .chip, .dark .chip:hover, .dark .chip.chip-aktiv { background-clip: padding-box; }
