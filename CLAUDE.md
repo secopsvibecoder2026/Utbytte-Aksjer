@@ -3806,6 +3806,85 @@ the templates' own `h1` rules.
   that is not the path of the page above plus one, tile count against class,
   and the label standing under the number.
 
+## Design round 3: reading width (2026-11-23)
+
+The owner approved proposal 6, «Kortere linjer på desktop». Median characters
+per line in running text, measured at 1280 px (light theme): stock page 82,
+front page 86, sector page 103, `/utbyttekalender/` 103, `/rapportkalender/` 105,
+`/verktoy/` 109; at 768 px 82 to 103. The articles, `/om/` and `/metode/` were
+already at 70 to 72, because their container is 624 px. At 390 px it is 38 to
+52, and that was left alone.
+
+- **`68ch` is not 68 characters.** `ch` is the width of the digit 0, which in
+  Inter is 10,09 px at 16 px, about 20 % wider than the average letter. A cap of
+  68ch is 686 px, exactly what the stock page paragraphs already had, and still
+  gives 82 characters. Nine pages were measured with the cap at 52 to 58ch:
+  54ch gives 63 to 71 in median on all nine, 56ch gives 76 on `/verktoy/`.
+  `--lese-bredde` is 54ch. `ch` follows the font size of the paragraph, so
+  14 px text gets as many characters per line as 16 px text.
+- **One class.** `.les` and `--lese-bredde` sit at the end of `assets/style.css`
+  («LESEBREDDE», outside `@layer`, so it beats Tailwind's `max-w-*`). The rule is
+  `.les p, .les li, p.les, li.les { max-width: var(--lese-bredde); }`: it
+  selects only `p` and `li`, never a table, tile, graph, card, hero or calendar
+  control. Put `.les` on a wrapper that holds headings, paragraphs and lists, on
+  a box (the box keeps its width, only its paragraphs get narrower), or on one
+  paragraph. The FAQ answer is a `div` with a border over it that must run the
+  full width, so `.faq-svar.les` narrows the text with `padding-right` instead
+  (the percentage is the width of the `details` it sits in). Nothing needs a
+  media query: under 54ch the rule does nothing.
+- **Where it is set.** Stock page: the ingress, `#oversikt`, `#utbytte`, FAQ
+  answers. Sector and toplist pages: `.sektor-analyse`, `.liste-analyse`.
+  `/aksjer/sektor/`: `.sektor-om`. Report calendar: the lede, `.liste-analyse`,
+  the FAQ section. Report page: the lede, each `article.rapport` (the card keeps
+  its width and the table inside it too) and «Slik lager vi oppsummeringene».
+  Calendar (generated blocks in `fetch_stocks.py`): the lede, the summary line,
+  the note under the table, and the intro and note of the month overview, not
+  the twelve month cards. Hand-written: `index.html` (lede, text block, FAQ),
+  `utbyttekalender/index.html` (explanation box, the two text sections, FAQ),
+  `/verktoy/` and the four tool pages (lede and `article.prose`). The old
+  `max-width: 46rem` on `.ingress` and `.sektor-om p` is gone, so the width is
+  set in one place. On `.sektor-om p` it had the same specificity as `.les p`
+  and came later in the page, so it would have won.
+- **Measured after** (1280 px, light, median per line, `.les` at 54ch): stock
+  page 68, front page 68, sector page 66, `/utbyttekalender/` 67,
+  `/rapportkalender/` 63, `/verktoy/` 71. The report page went 90 to 68, the
+  toplist 94 to 70, `/verktoy/fire-kalkulator/` 83 to 64. Every non-footer text
+  block on those pages is at 76 or lower, except four blocks inside cards and
+  bars left alone on purpose (see below). 768 px: 63 to 71 on the nine pages that
+  changed (`/aksjer/` stays at 82, which is its footer). 390 px: 18 of 20 screenshots are pixel
+  identical, the other two differ by a chart animation and one nav pixel.
+- **Nothing else moved.** 80 page loads (10 pages, 320, 390, 768, 1280, both
+  themes): horizontal overflow 0 before and after, tap targets under 44 px
+  unchanged, inputs under 16 px unchanged, contrast faults unchanged, no
+  script errors, and CLS identical in every load (0 on the stock page at
+  320 px, 0,0245 on `/aksjer/hoyest-utbytte/` at 320 px, as after round 2). A diff of left edge and width
+  for every element on 15 pages at 1280, 768 and 390 px found no table, tile,
+  graph or card that changed width. The only non-text block that narrows is the
+  inner `div` of a `.konto-rad` on the stock page, which shrinks to its paragraph.
+  The ingress is one line longer at 768 and up, so the key figures sit 25 px
+  lower (bottom edge 479 to 504 px at 1280 px, still above the fold at 800 px).
+- **Left at full width, and why.** `/aksjer/`: the hero paragraph already has
+  `max-width: 36rem`, so nothing was set there. The tip bar on `/aksjer/sektor/`
+  (`info-bar`), the three explanation boxes on `/verktoy/kalkulator/`, the CTA and
+  footnote cards on two tool pages and the twelve month cards in the calendar
+  are cards, not text columns. The footer is unchanged by order. No template
+  looks better at full width. On the sector, toplist and report calendar pages
+  (wrap of 864 to 900 px) the text column leaves 230 to 350 px empty to the
+  right of the text, next to tiles and tables that run the full width. It reads
+  as a text column, and narrowing `.wrap` would be a bigger change.
+- **Not in this round.** `/faq/` (84), `/utforsk/` (95), `/avnoteringer/` (98),
+  `/vilkaar/` (84), `/uke/` (84), `/bevegelser/` (96) and `/innstillinger/` (96)
+  are over 75 and take the same class. `/app/` is not a reading page.
+- **Test.** `TestLinjelengde` (9) renders the templates (small fixtures plus EQNR
+  and ISLAX from `data/aksjer.json`) and reads the hand-written pages without
+  the generated blocks. It fails on the old code (22 failures in 7 of 9 tests)
+  for: a cap that is not 50 to 58ch (68ch gives 82 characters), `ch` used
+  anywhere else, a rule that reaches beyond `p` and `li`, a long paragraph or
+  FAQ answer without `.les` (cards, footers and the hero are exempt), a
+  leftover `max-width` on the ingress, and `.les` on or around a table, tile,
+  graph, calendar control or `ul.nylig` (its `li` carry the borders). A new long
+  paragraph outside `.les` now fails the build.
+
 ## The fixer agent (`.claude/agents/fikser.md`, 2026-10-18)
 
 The maintenance and tallkontroll agents only report, and their findings waited

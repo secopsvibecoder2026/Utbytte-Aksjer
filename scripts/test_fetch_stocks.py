@@ -9,6 +9,7 @@ suiten fortsatt kan kjøres uten tredjepartspakker.
 
 import datetime
 import html
+from html.parser import HTMLParser
 import inspect
 import json
 import os
@@ -6097,6 +6098,231 @@ class TestSidetopp(unittest.TestCase):
         for rel, side in self._haandskrevne().items():
             for gammelt in ("stat-box", "stat-grid", "stat-num"):
                 self.assertNotIn(gammelt, side, f"{rel}: {gammelt}")
+
+
+class TestLinjelengde(unittest.TestCase):
+    """Lesebredde (designrunde 3, 23.11.2026).
+
+    Median tegn per linje i løpende tekst var 82 på aksjesiden, 86 på forsiden,
+    103 på sektorsiden og utbyttekalenderen, 105 på rapportkalenderen og 109 på
+    /verktoy/ ved 1280 px. Artiklene lå på 70 til 72. Avsnitt, ingresser,
+    FAQ-svar, selskapstekst og analysetekst har fått `.les` (54ch), og tabeller,
+    tallruter, grafer, kort og kalenderkontroller har full bredde.
+
+    En enhet i `ch` er bredden av sifferet 0, og i Inter er den ca. 20 % bredere
+    enn en vanlig bokstav. Et direkte 68ch gir derfor fortsatt 82 tegn, og
+    testen under krever en verdi rundt 54ch.
+
+    Malene leses ved å lage sidene (små fixtures, pluss EQNR og ISLAX fra
+    data/aksjer.json). De håndskrevne sidene leses fra repoet, uten de
+    genererte blokkene, som boten lager på nytt.
+    """
+
+    AKSJER = TestSidetopp.AKSJER
+    I_DAG = TestSidetopp.I_DAG
+    UNNTATT = TestSidetopp.UNNTATT
+    _lag_malene = TestSidetopp._lag_malene
+    _eksempel = None
+
+    LANG = 160   # tegn. Kortere avsnitt går ikke over mange linjer.
+    # Klasser som gjør et avsnitt til tekst i et kort eller en kontrollflate. Der
+    # følger bredden kortet, og tabeller og kort beholder full bredde.
+    KORT = {"rounded-xl", "artikel-kort", "info-bar", "cta", "std-footer", "konto-rad", "hero", "kal-uke"}
+    # Siden som skal ha lesebredden: de håndskrevne i omfanget.
+    SIDER = ["index.html", "utbyttekalender/index.html", "verktoy/index.html",
+             "verktoy/fire-kalkulator/index.html", "verktoy/huslan-vs-investering/index.html",
+             "verktoy/sektorrebalansering/index.html", "verktoy/kalkulator/index.html"]
+    # Elementer med full bredde: `.les` hverken står på dem eller omslutter dem.
+    FULL_BREDDE = {"tallruter", "kh-tall", "kurshode", "kal-ramme", "kal-kontroller", "nylig", "tabell-ramme",
+                   "ak-grid", "sek-grid", "rel-grid", "topplister", "hero"}
+
+    @staticmethod
+    def _css():
+        css = open(os.path.join(_REPO, "assets", "style.css"), encoding="utf-8").read()
+        return css, re.sub(r"/\*.*?\*/", "", css, flags=re.S)
+
+    class _Blokker(HTMLParser):
+        """Samler p, li og FAQ-svar med teksten og stien opp til roten."""
+        TOMME = {"br", "img", "input", "meta", "link", "hr", "source", "area", "base", "col", "wbr"}
+
+        def __init__(self):
+            super().__init__(convert_charrefs=True)
+            self.stabel = []
+            self.blokker = []
+            self.apne = []
+            self.skjult = 0
+            self.elementer = []   # (tag, klasser, sti) for hvert element
+
+        def handle_starttag(self, tag, attrs):
+            if tag in self.TOMME:
+                return
+            kl = set((dict(attrs).get("class") or "").split())
+            self.elementer.append((tag, kl, list(self.stabel)))
+            if tag in ("script", "style"):
+                self.skjult += 1
+            self.stabel.append((tag, kl))
+            if tag in ("p", "li") or (tag == "div" and "faq-svar" in kl):
+                self.blokker.append({"tag": tag, "kl": kl, "sti": list(self.stabel), "tekst": ""})
+                self.apne.append((len(self.stabel), len(self.blokker) - 1))
+
+        def handle_startendtag(self, tag, attrs):
+            pass
+
+        def handle_endtag(self, tag):
+            for i in range(len(self.stabel) - 1, -1, -1):
+                if self.stabel[i][0] == tag:
+                    del self.stabel[i:]
+                    break
+            self.apne = [(d, i) for d, i in self.apne if d <= len(self.stabel)]
+            if tag in ("script", "style"):
+                self.skjult = max(0, self.skjult - 1)
+
+        def handle_data(self, data):
+            if self.skjult:
+                return
+            for _, i in self.apne:
+                self.blokker[i]["tekst"] += data
+
+    def _les(self, side):
+        p = self._Blokker()
+        p.feed(side)
+        return p
+
+    @staticmethod
+    def _dekket(b):
+        return any("les" in kl for _, kl in b["sti"])
+
+    def _unntatt(self, b):
+        return any(t == "footer" or (self.KORT & kl) for t, kl in b["sti"])
+
+    def _lange_uten_les(self, side):
+        p = self._les(side)
+        lange = [b for b in p.blokker
+                 if len(" ".join(b["tekst"].split())) >= self.LANG and not self._unntatt(b)]
+        return lange, [" ".join(b["tekst"].split())[:50] for b in lange if not self._dekket(b)]
+
+    def _side(self, rel):
+        """En håndskrevet side uten blokkene datajobben skriver."""
+        side = open(os.path.join(_REPO, *rel.split("/")), encoding="utf-8").read()
+        for navn in ("KAL", "KAL-HODE", "EXMND", "UKA", "ARTIKLER"):
+            side = re.sub(rf"<!--{navn}:START-->.*?<!--{navn}:SLUTT-->", "", side, flags=re.S)
+        return side
+
+    def _eksempelsider(self):
+        if TestLinjelengde._eksempel is not None:
+            return TestLinjelengde._eksempel
+        sider = self._lag_malene()
+        sti = os.path.join(_REPO, "data", "aksjer.json")
+        if os.path.exists(sti):
+            rader = {r["ticker"]: r for r in json.load(open(sti, encoding="utf-8"))["aksjer"]}
+            for t in ("EQNR", "ISLAX"):
+                if t in rader:
+                    sider["aksje-" + t] = fs._aksje_side_html(dict(rader[t]), str(self.I_DAG))
+        sider["månedsoversikt"] = fs.lag_exmnd_blokk(self.AKSJER, self.I_DAG)
+        TestLinjelengde._eksempel = sider
+        return sider
+
+    # ── stilarket ─────────────────────────────────────────────────────────
+
+    def test_stilarket_har_en_regel_utenfor_layer(self):
+        css, rent = self._css()
+        m = re.search(r":root \{ --lese-bredde: (\d+(?:\.\d+)?)ch; \}", rent)
+        self.assertIsNotNone(m, "--lese-bredde mangler")
+        # 68ch gir 82 tegn i Inter. 50 til 58ch gir 60 til 75 tegn i median.
+        self.assertTrue(50 <= float(m.group(1)) <= 58, f"{m.group(1)}ch gir ikke 60 til 75 tegn per linje")
+        regel = ".les p, .les li, p.les, li.les { max-width: var(--lese-bredde); }"
+        self.assertIn(regel, rent)
+        # Utenfor @layer, slik at den slår Tailwinds max-w-*: klammedybde 0 ved regelen.
+        foran = rent[:rent.index(regel)]
+        self.assertEqual(foran.count("{"), foran.count("}"), "regelen ligger inne i en blokk eller @layer")
+
+    def test_ch_brukes_ikke_til_annet(self):
+        _, rent = self._css()
+        funn = re.findall(r"[\d.]+ch\b", rent)
+        self.assertEqual(len(funn), 1, f"ch skal bare stå i --lese-bredde: {funn}")
+
+    def test_regelen_treffer_bare_tekst(self):
+        """Selektorene som nevner .les treffer p, li og FAQ-svaret, aldri tabeller, tallruter, grafer eller kort."""
+        _, rent = self._css()
+        valgte = []
+        for velger, _ in re.findall(r"([^{}]+)\{([^{}]*)\}", rent):
+            for del_ in velger.split(","):
+                if re.search(r"\.les\b(?!-)", del_):
+                    valgte.append(" ".join(del_.split()))
+        self.assertEqual(sorted(valgte), sorted([".les p", ".les li", "p.les", "li.les", ".faq-svar.les"]))
+        for v in valgte:
+            self.assertNotRegex(v, r"table|td\b|th\b|dd\b|dt\b|svg|tallrute|kh-tall|hero|kal-|grid|\*")
+
+    # ── malene og sidene ──────────────────────────────────────────────────
+
+    def test_lang_tekst_i_malene_har_lesebredde(self):
+        minst = {"aksje-EQNR": 8, "sektor": 4, "toppliste": 2, "rapportkalender": 4, "rapportside": 1,
+                 "utbyttekalender": 2, "månedsoversikt": 1}
+        sett = {}
+        for navn, side in self._eksempelsider().items():
+            with self.subTest(side=navn):
+                lange, mangler = self._lange_uten_les(side)
+                sett[navn] = len(lange)
+                self.assertEqual(mangler, [], f"{navn}: lang tekst uten .les")
+        for navn, n in minst.items():
+            if navn in sett:
+                self.assertGreaterEqual(sett[navn], n, f"{navn}: testen fant bare {sett[navn]} lange blokker")
+
+    def test_lang_tekst_paa_haandskrevne_sider_har_lesebredde(self):
+        sett = 0
+        for rel in self.SIDER:
+            with self.subTest(side=rel):
+                lange, mangler = self._lange_uten_les(self._side(rel))
+                sett += len(lange)
+                self.assertEqual(mangler, [], f"{rel}: lang tekst uten .les")
+        self.assertGreater(sett, 40)
+
+    def test_alle_faq_svar_har_lesebredde(self):
+        sider = {"index.html": self._side("index.html")}
+        sider.update({n: s for n, s in self._eksempelsider().items() if n.startswith("aksje-")})
+        sett = 0
+        for navn, side in sider.items():
+            for b in self._les(side).blokker:
+                if b["tag"] == "div" and "faq-svar" in b["kl"]:
+                    sett += 1
+                    self.assertIn("les", b["kl"], f"{navn}: FAQ-svar uten .les")
+        self.assertGreaterEqual(sett, 5)
+
+    def test_full_bredde_beholdes(self):
+        """`.les` står aldri på, eller rundt, tallruter, grafer, tabellrammer, kalenderkontroller og kortrutenett."""
+        sider = {n: s for n, s in self._eksempelsider().items()}
+        sider.update({"/" + rel: self._side(rel) for rel in self.SIDER})
+        sett = 0
+        for navn, side in sider.items():
+            for tag, kl, sti in self._les(side).elementer:
+                if tag in ("table", "svg", "dl", "canvas", "button", "input", "select"):
+                    self.assertNotIn("les", kl, f"{navn}: .les på <{tag}>")
+                if self.FULL_BREDDE & kl:
+                    sett += 1
+                    self.assertNotIn("les", kl, f"{navn}: .les på {sorted(kl)}")
+                    omsluttende = [k for _, k in sti if "les" in k]
+                    self.assertEqual(omsluttende, [], f"{navn}: {sorted(kl)} ligger inne i en .les")
+        self.assertGreaterEqual(sett, 8)
+
+    def test_malene_setter_ikke_egen_bredde_paa_tekst(self):
+        """Bredden settes ett sted. 46rem på sektorteksten hadde samme spesifisitet som .les og kom senere i siden."""
+        kilde = open(os.path.join(_REPO, "scripts", "fetch_stocks.py"), encoding="utf-8").read()
+        self.assertNotRegex(kilde, r"\.ingress \{\{[^}]*max-width")
+        self.assertNotRegex(kilde, r"\.sektor-om p \{\{[^}]*max-width")
+        self.assertIn('<p class="ingress les">', kilde)
+
+    def test_ingen_tekst_er_senteret_eller_hoyrejustert_i_en_les(self):
+        """Tekstkolonnen ligger mot venstrekanten: ingen .les-blokk bruker mx-auto, text-center eller text-right."""
+        sider = {n: s for n, s in self._eksempelsider().items()}
+        sider.update({"/" + rel: self._side(rel) for rel in self.SIDER})
+        for navn, side in sider.items():
+            for b in self._les(side).blokker:
+                if self._dekket(b) and not self._unntatt(b):
+                    alle = set(b["kl"])
+                    for _, kl in b["sti"]:
+                        if "les" in kl:
+                            alle |= kl
+                    self.assertFalse({"mx-auto", "text-center", "text-right"} & alle, f"{navn}: {sorted(alle)}")
 
 
 if __name__ == "__main__":
