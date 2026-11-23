@@ -183,6 +183,13 @@ nøytral farge, heltene på `/aksjer/` og sektorsidene er flate i stedet for
 gradient, og tall og tickere i malene for oversikt, sektor og topplister er
 nøytrale. Logoen har beholdt sine farger.
 
+**Sidetopp 23.11.2026** (designrunde 2, forslag 5): samme overskrift (700,
+1,4 rem / 1,75 rem), samme bakgrunn (gray-50 og gray-950) og samme brødsmule
+(«›», stien til siden over pluss ett ledd, lik JSON-LD) i malene og på de
+håndskrevne sidene, og tallruter med etiketten over tallet i et rutenett som
+fyller raden. Se «Design round 2» i `CLAUDE.md`. Den ekstra linjen under menyen
+på `/utbyttekalender/` står fortsatt.
+
 Gjenstår:
 - samme tallformat i resten av malen
 

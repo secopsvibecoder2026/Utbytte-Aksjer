@@ -75,11 +75,11 @@
     .dark .prose th { background: #1f2937; border-color: #374151; }
     .prose td { padding: 0.6rem 0.9rem; border: 1px solid #e5e7eb; vertical-align: top; }
     .dark .prose td { border-color: #374151; }
-    .prose tr:nth-child(even) td { background: #f9fafb; }
+    .prose tr:nth-child(even) td { background: #fff; }
     .dark .prose tr:nth-child(even) td { background: #111827; }
     .callout {
       border-left: 4px solid #475569;
-      background: #f8fafc;
+      background: #fff;
       padding: 1rem 1.25rem;
       border-radius: 0 0.5rem 0.5rem 0;
       margin: 1.5rem 0;
@@ -101,7 +101,7 @@
     .toc a:hover { text-decoration: underline; }
     .dark .toc a { color: #94a3b8; }
     .formula-box {
-      background: #f8fafc;
+      background: #fff;
       border: 1px solid #e2e8f0;
       border-radius: 0.5rem;
       padding: 1rem 1.25rem;
@@ -184,8 +184,9 @@
     "mainEntityOfPage": { "@type": "WebPage", "@id": "https://exday.no/artikler/utbytteportefolje-sektorvekting/" }
   }
   </script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "exday.no", "item": "https://exday.no/"}, {"@type": "ListItem", "position": 2, "name": "Artikler", "item": "https://exday.no/artikler/"}, {"@type": "ListItem", "position": 3, "name": "Slik bygger du en utbytteportefølje", "item": "https://exday.no/artikler/utbytteportefolje-sektorvekting/"}]}</script>
 </head>
-<body class="bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 min-h-screen">
+<body class="bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 min-h-screen">
 
   <nav class="site-nav" aria-label="Hovedmeny">
     <div class="site-nav-inner">
@@ -257,13 +258,7 @@
 <div class="max-w-2xl mx-auto px-6 pt-10 pb-20">
 
   <!-- BREADCRUMB -->
-  <nav class="text-xs text-gray-400 dark:text-gray-600 mb-6" aria-label="Brødsmulesti">
-    <a href="/" class="hover:text-gray-600 dark:hover:text-gray-400">exday.no</a>
-    <span class="mx-1.5">›</span>
-    <a href="/artikler/" class="hover:text-gray-600 dark:hover:text-gray-400">Artikler</a>
-    <span class="mx-1.5">›</span>
-    <span class="text-gray-600 dark:text-gray-400">Slik bygger du en utbytteportefølje</span>
-  </nav>
+  <nav class="brodsmule" aria-label="Brødsmulesti"><a href="/">exday.no</a> <span class="brodsmule-skille" aria-hidden="true">›</span> <a href="/artikler/">Artikler</a> <span class="brodsmule-skille" aria-hidden="true">›</span> <span aria-current="page">Slik bygger du en utbytteportefølje</span></nav>
 
   <!-- HEADER -->
   <header class="mb-8">
@@ -271,7 +266,7 @@
       <span style="display:inline-block;font-size:0.7rem;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;padding:0.2rem 0.6rem;border-radius:9999px;background:#f1f5f9;color:#475569;">Strategi</span>
       <span style="display:inline-block;font-size:0.7rem;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;padding:0.2rem 0.6rem;border-radius:9999px;background:#f1f5f9;color:#334155;">Guide</span>
     </div>
-    <h1 class="text-3xl font-bold leading-tight mb-4">Slik bygger du en utbytteportefølje — sektorvekting og rebalansering</h1>
+    <h1 class="side-h1 mb-4">Slik bygger du en utbytteportefølje — sektorvekting og rebalansering</h1>
     <p class="text-gray-600 dark:text-gray-400 leading-relaxed text-lg">
       En god utbytteportefølje handler ikke bare om å plukke aksjer med høy yield. Det handler om å spre risiko på tvers av sektorer, sette realistiske målvekter og disiplinert rebalansere over tid. Denne guiden viser deg hvordan du gjør det — steg for steg, tilpasset Oslo Børs.
     </p>
@@ -280,7 +275,7 @@
   </header>
 
   <!-- INNHOLDSFORTEGNELSE -->
-  <nav class="toc bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-5 mb-10" aria-label="Innholdsfortegnelse">
+  <nav class="toc bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-5 mb-10" aria-label="Innholdsfortegnelse">
     <p class="text-xs font-semibold uppercase tracking-widest text-gray-500 dark:text-gray-500 mb-3">Innhold</p>
     <ol style="margin:0;padding-left:1.25rem;list-style:decimal;">
       <li style="margin-bottom:0.4rem;"><a href="#hva-er-utbytteportefolje">Hva skiller en utbytteportefølje fra en vanlig aksjeportefølje?</a></li>
@@ -420,7 +415,7 @@
 
     <p>Her er ett eksempel på en rimelig sektorfordeling for en norsk utbytteinvestor med middels risikotoleranse. Dette er ikke en anbefaling — det er et utgangspunkt for din egen vurdering:</p>
 
-    <div style="margin:1.5rem 0;padding:1.25rem;background:#f9fafb;border:1px solid #e5e7eb;border-radius:0.75rem;">
+    <div style="margin:1.5rem 0;padding:1.25rem;background:#fff;border:1px solid #e5e7eb;border-radius:0.75rem;">
       <p style="font-size:0.8rem;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#6b7280;margin-bottom:1rem;">Eksempel — målvekter per sektor</p>
 
       <div class="sektor-bar">

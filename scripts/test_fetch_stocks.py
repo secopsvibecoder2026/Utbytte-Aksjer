@@ -346,7 +346,7 @@ class TestUtbyttekalenderTabell(unittest.TestCase):
         html = fs.lag_kalender_kropp(rader, self.I_DAG)
         self.assertEqual(html.count("<tr data-ticker="), len(rader))
         self.assertIn("0,40\u00a0USD", html)
-        self.assertIn('<h1 class="text-2xl sm:text-3xl font-bold tracking-tight leading-tight">Utbyttekalender 2026</h1>', html)
+        self.assertIn('<h1 class="side-h1">Utbyttekalender 2026</h1>', html)
         self.assertIn("kjøp senest tor. 19. nov", html)
         self.assertIn("Foreslått", html)
 
@@ -4547,7 +4547,7 @@ class TestSektorSnitt(unittest.TestCase):
             with open(os.path.join(d, "aksjer", "sektor", "index.html"), encoding="utf-8") as f:
                 oversikt = f.read()
         snitt = fs._pst((9.26 + 6.27) / 2, 1)
-        self.assertIn(f'<div class="stat-val">{snitt}</div><div class="stat-lbl">Snitt yield', side)
+        self.assertIn(f'<dt>Snitt yield</dt><dd>{snitt}</dd>', side)
         self.assertIn(f"4 aksjer · snitt {snitt}", oversikt)
         self.assertIn("Topp: VAR, AKRBP", oversikt)
         self.assertNotIn("Topp: BNOR", oversikt)
@@ -5770,6 +5770,333 @@ class TestEnGrafstil(unittest.TestCase):
         app = _re.findall(r"\['([^']+)','(\w+)'\]", _re.search(r"const perioder = \[(.*?)\];", ui).group(1))
         self.assertEqual([(p, l) for p, l in mal], [(p, l) for l, p in app])
         self.assertEqual([l for _, l in mal], ["1 år", "YTD", "2 år", "3 år", "5 år"])
+
+
+class TestSidetopp(unittest.TestCase):
+    """Én sidetopp (designrunde 2, 23.11.2026).
+
+    Overskriften var 400, 700 eller 800 i vekt og 22 til 30 px, bakgrunnen
+    var hvit, gray-50 eller slate-50, brødsmulen skilte med «›» eller «/» og
+    la samme sektor under «Utforsk» på aksjesiden og under «Aksjer › Sektorer»
+    på sektorsiden, og tallrutene hadde etiketten under tallet og en enslig
+    tredje rute ved to kolonner. JSON-LD sa «Hjem › Utforsk › EQNR» mens
+    siden viste en annen sti.
+
+    Malene leses ved å lage sidene i en midlertidig mappe. De håndskrevne
+    sidene leses fra repoet, uten de genererte blokkene (utbyttekalenderens
+    tabell) og uten de genererte filene, som boten lager på nytt etter flett.
+    """
+
+    AKSJER = [
+        {"ticker": "AAA", "navn": "Alfa ASA", "sektor": "Finans", "bors": "Oslo Børs", "pris": 100.0,
+         "utbytte_yield": 5.5, "utbytte_per_aksje": 5.5, "frekvens": "Årlig", "ar_med_utbytte": 6,
+         "rapport_dato": "2026-12-15", "ex_dato": "2027-04-01", "kurs_historikk": []},
+        {"ticker": "BBB", "navn": "Beta ASA", "sektor": "Finans", "bors": "Oslo Børs", "pris": 50.0,
+         "utbytte_yield": 7.0, "utbytte_per_aksje": 3.5, "frekvens": "Kvartalsvis", "ar_med_utbytte": 9,
+         "rapport_dato": "2027-02-03", "kurs_historikk": []},
+        {"ticker": "CCC", "navn": "Gamma ASA", "sektor": "Shipping", "bors": "Oslo Børs", "pris": 20.0,
+         "utbytte_yield": 9.0, "utbytte_per_aksje": 1.8, "frekvens": "Halvårlig", "ar_med_utbytte": 4,
+         "rapport_dato": "2027-02-10", "kurs_historikk": []},
+    ]
+    I_DAG = datetime.date(2026, 11, 23)
+
+    # Håndskrevne sider som er bygd som app-flater med en liten tittelrad, og
+    # sider uten egen overskrift. De hører ikke til malen for sidetopp.
+    UNNTATT = {"app", "bevegelser", "uke", "innstillinger", "kalkulator", "sektor", "promo", "aksjer",
+               "rapportkalender", "node_modules", "test-results", ".claude", ".git"}
+
+    # Sider som skal ha brødsmule, og stien de skal ha. Resten av stien til
+    # artiklene leses fra siden selv; her låses bare begynnelsen.
+    MED_BRODSMULE = {
+        "faq/index.html": ["FAQ"],
+        "om/index.html": ["Om"],
+        "metode/index.html": ["Metode og datakilder"],
+        "personvern/index.html": ["Personvern"],
+        "vilkaar/index.html": ["Vilkår for bruk"],
+        "utforsk/index.html": ["Utforsk"],
+        "avnoteringer/index.html": ["Aksjer", "Avnoterte aksjer"],
+        "utbyttekalkulator/index.html": ["Utbyttekalkulator"],
+        "artikler/index.html": ["Artikler"],
+        "verktoy/index.html": ["Verktøy"],
+        "verktoy/kalkulator/index.html": ["Verktøy", "Kalkulator"],
+        "verktoy/huslan-vs-investering/index.html": ["Verktøy", "Huslån vs. Investering"],
+        "verktoy/fire-kalkulator/index.html": ["Verktøy", "FIRE-kalkulator"],
+        "verktoy/sektorrebalansering/index.html": ["Verktøy", "Sektorrebalansering"],
+    }
+
+    # ── lesing ────────────────────────────────────────────────────────────
+
+    @staticmethod
+    def _brodsmule_synlig(side):
+        m = re.search(r'<nav class="brodsmule"[^>]*>(.*?)</nav>', side, re.S)
+        if not m:
+            return None
+        deler = re.sub(r'<span class="brodsmule-skille"[^>]*>(.*?)</span>', r'|\1|', m.group(1))
+        navn = [html.unescape(re.sub(r"<[^>]+>", "", t)).strip() for t in re.split(r"\|[^|]*\|", deler)]
+        skilletegn = set(re.findall(r'<span class="brodsmule-skille"[^>]*>(.*?)</span>', m.group(1)))
+        lenker = re.findall(r'<a href="([^"]*)">', m.group(1))
+        return {"navn": navn, "skille": skilletegn, "lenker": lenker, "html": m.group(1)}
+
+    @staticmethod
+    def _brodsmule_ld(side):
+        """BreadcrumbList som egen blokk, i @graph eller som `breadcrumb` i en WebPage."""
+        funn = []
+
+        def let(x):
+            if isinstance(x, dict):
+                if x.get("@type") == "BreadcrumbList":
+                    funn.append([i["name"] for i in x["itemListElement"]])
+                for v in x.values():
+                    let(v)
+            elif isinstance(x, list):
+                for v in x:
+                    let(v)
+        for blokk in re.findall(r'<script type="application/ld\+json">(.*?)</script>', side, re.S):
+            let(json.loads(blokk))
+        return funn
+
+    def _lag_malene(self):
+        """{navn: html} for hver mal, laget av små, ekte data."""
+        rot = tempfile.mkdtemp()
+        self.addCleanup(shutil.rmtree, rot, ignore_errors=True)
+        sider = {}
+        a = dict(self.AKSJER[0])
+        sider["aksje"] = fs._aksje_side_html(a, str(self.I_DAG))
+        fs.generer_aksjesider(self.AKSJER, rot)
+        fs.generer_sektorsider(self.AKSJER, rot)
+        fs.generer_topplistesider(self.AKSJER, rot)
+        fs.generer_rapportkalender(self.AKSJER, rot, i_dag=self.I_DAG)
+        rapport = {"periode": "2026-Q3", "dato": "2026-10-21", "melding": "1", "tittel": "Q3",
+                   "resultat": "Resultatet var 1,0 milliard kroner.", "nokkeltall": [],
+                   "utbytte": "Ingen endring.", "plan": "", "ellers": [], "skrevet": "2026-11-21"}
+        sider["rapportside"] = fs._rapportside_html(a, [rapport], str(self.I_DAG))
+        for sti, navn in [(("aksjer", "index.html"), "oversikt"),
+                          (("aksjer", "sektor", "index.html"), "sektorindeks"),
+                          (("aksjer", "sektor", "finans", "index.html"), "sektor"),
+                          (("aksjer", "hoyest-utbytte", "index.html"), "toppliste"),
+                          (("rapportkalender", "index.html"), "rapportkalender")]:
+            with open(os.path.join(rot, *sti), encoding="utf-8") as f:
+                sider[navn] = f.read()
+        kropp = fs.lag_kalender_kropp(fs.kalender_rader(self.AKSJER, self.I_DAG), self.I_DAG)
+        hode = fs.lag_kalender_hode(fs.kalender_rader(self.AKSJER, self.I_DAG), self.I_DAG)
+        sider["utbyttekalender"] = hode + "\n" + kropp
+        return sider
+
+    def _haandskrevne(self):
+        """{relativ sti: html uten genererte blokker}."""
+        ut = {}
+        for mappe, under, filer in os.walk(_REPO):
+            under[:] = [d for d in under if d not in self.UNNTATT]
+            for navn in filer:
+                if navn != "index.html" and navn != "404.html" or mappe == _REPO and navn != "index.html":
+                    continue
+                sti = os.path.join(mappe, navn)
+                rel = os.path.relpath(sti, _REPO)
+                tekst = open(sti, encoding="utf-8").read()
+                tekst = re.sub(r"<!--KAL:START-->.*?<!--KAL:SLUTT-->", "", tekst, flags=re.S)
+                tekst = re.sub(r"<!--KAL-HODE:START-->.*?<!--KAL-HODE:SLUTT-->", "", tekst, flags=re.S)
+                ut[rel] = tekst
+        return ut
+
+    # ── brødsmulen ────────────────────────────────────────────────────────
+
+    def test_brodsmule_og_ld_bygges_av_samme_sti(self):
+        sti = fs.sti_aksje("Energi", "EQNR") + [("Rapporter", "/aksjer/EQNR/rapporter/")]
+        nav, ld = fs.brodsmule(sti)
+        syn = self._brodsmule_synlig(nav)
+        navn_ld = [i["name"] for i in ld["itemListElement"]]
+        self.assertEqual(syn["navn"], navn_ld)
+        self.assertEqual(navn_ld, ["exday.no", "Aksjer", "Sektorer", "Energi", "EQNR", "Rapporter"])
+        self.assertEqual(syn["skille"], {fs.BRODSMULE_SKILLETEGN})
+        self.assertEqual(fs.BRODSMULE_SKILLETEGN, "›")
+        self.assertEqual([i["position"] for i in ld["itemListElement"]], [1, 2, 3, 4, 5, 6])
+        # siste ledd er siden selv: ingen lenke, men aria-current
+        self.assertEqual(len(syn["lenker"]), 5)
+        self.assertIn('<span aria-current="page">Rapporter</span>', nav)
+        self.assertTrue(all(h.startswith("/") for h in syn["lenker"]))
+
+    def test_stien_til_en_side_er_stien_over_pluss_ett_ledd(self):
+        sektor = [n for n, _ in fs.sti_sektor("Energi")]
+        self.assertEqual([n for n, _ in fs.sti_aksjer()], ["Aksjer"])
+        self.assertEqual([n for n, _ in fs.sti_sektorer()], ["Aksjer", "Sektorer"])
+        self.assertEqual(sektor, ["Aksjer", "Sektorer", "Energi"])
+        self.assertEqual([n for n, _ in fs.sti_aksje("Energi", "EQNR")], sektor + ["EQNR"])
+        self.assertEqual(fs.sti_sektor("Fornybar energi")[-1], ("Fornybar energi", "/aksjer/sektor/fornybar-energi/"))
+
+    def test_malene_viser_samme_sti_i_siden_og_i_json_ld(self):
+        sider = self._lag_malene()
+        self.assertEqual(set(sider), {"aksje", "rapportside", "oversikt", "sektorindeks", "sektor",
+                                      "toppliste", "rapportkalender", "utbyttekalender"})
+        forventet = {
+            "aksje": ["exday.no", "Aksjer", "Sektorer", "Finans", "AAA"],
+            "rapportside": ["exday.no", "Aksjer", "Sektorer", "Finans", "AAA", "Rapporter"],
+            "oversikt": ["exday.no", "Aksjer"],
+            "sektorindeks": ["exday.no", "Aksjer", "Sektorer"],
+            "sektor": ["exday.no", "Aksjer", "Sektorer", "Finans"],
+            "toppliste": ["exday.no", "Aksjer", "Aksjer med høyest utbytte"],
+            "rapportkalender": ["exday.no", "Rapportkalender"],
+            "utbyttekalender": ["exday.no", "Utbyttekalender"],
+        }
+        for navn, side in sider.items():
+            with self.subTest(side=navn):
+                syn = self._brodsmule_synlig(side)
+                self.assertIsNotNone(syn, f"{navn} mangler brødsmule")
+                self.assertEqual(syn["navn"], forventet[navn])
+                self.assertEqual(syn["skille"], {"›"})
+                self.assertEqual(self._brodsmule_ld(side), [forventet[navn]])
+                self.assertNotIn("Utforsk", syn["navn"])
+                self.assertNotIn('<span>/</span>', side)
+                self.assertNotIn('class="breadcrumb"', side)
+
+    # ── overskriften ──────────────────────────────────────────────────────
+
+    def test_stilarket_har_en_overskrift(self):
+        css = open(os.path.join(_REPO, "assets", "style.css"), encoding="utf-8").read()
+        regel = re.search(r"\.side-h1 \{([^}]*)\}", css).group(1)
+        self.assertIn("font-weight: 700", regel)
+        self.assertIn("font-size: 1.4rem", regel)
+        self.assertRegex(css, r"@media \(min-width: 481px\) \{ \.side-h1 \{ font-size: 1\.75rem; \} \}")
+
+    def test_malene_bruker_overskriften_og_setter_ikke_egen_storrelse(self):
+        for navn, side in self._lag_malene().items():
+            with self.subTest(side=navn):
+                h1 = re.findall(r"<h1([^>]*)>", side)
+                self.assertEqual(len(h1), 1, navn)
+                self.assertIn("side-h1", h1[0])
+                stil = "\n".join(re.findall(r"<style>(.*?)</style>", side, re.S))
+                for regel in re.findall(r"(?<![\w.-])h1\s*\{([^}]*)\}", stil):
+                    self.assertNotIn("font-size", regel, f"{navn}: h1 setter egen størrelse")
+                    self.assertNotIn("font-weight", regel, f"{navn}: h1 setter egen vekt")
+
+    def test_haandskrevne_sider_bruker_overskriften(self):
+        sett = 0
+        for rel, side in self._haandskrevne().items():
+            for attr in re.findall(r"<h1([^>]*)>", side):
+                if "sr-only" in attr:
+                    continue
+                sett += 1
+                self.assertIn("side-h1", attr, f"{rel}: h1 uten side-h1")
+                self.assertNotRegex(attr, r"text-(?:2xl|3xl|4xl)|font-(?:bold|extrabold|semibold)",
+                                    f"{rel}: h1 har egen størrelse eller vekt")
+        self.assertGreater(sett, 20)
+
+    # ── bakgrunnen ────────────────────────────────────────────────────────
+
+    def test_malene_har_gray_50_og_gray_950(self):
+        for navn, side in self._lag_malene().items():
+            if navn == "utbyttekalender":
+                continue   # kroppen ligger i en håndskrevet side, som testes under
+            with self.subTest(side=navn):
+                stil = "\n".join(re.findall(r"<style>(.*?)</style>", side, re.S))
+                lys = re.findall(r"(?m)^\s*body\s*\{[^}]*?background:\s*([^;}]+)", stil)
+                mork = re.findall(r"(?m)^\s*\.dark body\s*\{[^}]*?background:\s*([^;}]+)", stil)
+                self.assertEqual([b.strip() for b in lys], ["#f9fafb"], navn)
+                self.assertEqual([b.strip() for b in mork], ["#030712"], navn)
+
+    def test_haandskrevne_sider_har_gray_50_og_gray_950(self):
+        sett = 0
+        for rel, side in self._haandskrevne().items():
+            m = re.search(r'<body class="([^"]*)"', side)
+            if not m or "dark:" not in side:
+                continue
+            sett += 1
+            klasser = m.group(1).split()
+            self.assertIn("bg-gray-50", klasser, f"{rel}: bakgrunnen er ikke gray-50")
+            self.assertIn("dark:bg-gray-950", klasser, f"{rel}: mørk bakgrunn er ikke gray-950")
+            self.assertNotIn("bg-white", klasser, rel)
+        self.assertGreater(sett, 25)
+
+    # ── brødsmulen på de håndskrevne sidene ───────────────────────────────
+
+    def test_haandskrevne_sider_har_brodsmule_som_stemmer_med_json_ld(self):
+        sider = self._haandskrevne()
+        stier = {}
+        for rel, side in sider.items():
+            gammel = re.search(r'<nav[^>]*aria-label="Brødsmul[^"]*"[^>]*>', side)
+            if gammel:
+                self.assertIn('class="brodsmule"', gammel.group(0), f"{rel}: gammel brødsmule")
+            syn = self._brodsmule_synlig(side)
+            if rel in self.MED_BRODSMULE or rel.startswith("artikler/"):
+                self.assertIsNotNone(syn, f"{rel} mangler brødsmule")
+            if syn is None:
+                continue
+            self.assertEqual(syn["skille"], {"›"}, rel)
+            self.assertEqual(syn["navn"][0], "exday.no", rel)
+            ld = self._brodsmule_ld(side)
+            self.assertEqual(ld, [syn["navn"]], f"{rel}: synlig sti og JSON-LD er ulike")
+            if rel in self.MED_BRODSMULE:
+                self.assertEqual(syn["navn"][1:], self.MED_BRODSMULE[rel], rel)
+            if rel.startswith("artikler/") and rel != "artikler/index.html":
+                self.assertEqual(syn["navn"][1], "Artikler", rel)
+                self.assertEqual(len(syn["navn"]), 3, rel)
+            # hvert ledd unntatt det siste lenker til en side som finnes
+            for href in syn["lenker"]:
+                self.assertTrue(os.path.exists(os.path.join(_REPO, href.strip("/"), "index.html")) or href == "/",
+                                f"{rel}: lenken {href} finnes ikke")
+            stier[rel] = syn["navn"]
+        self.assertGreater(len(stier), 24)
+
+    def test_stien_over_er_prefikset_ogsaa_mellom_mal_og_haandskrevne_sider(self):
+        """Hver side lenker til siden over, og den siden har stien minus ett ledd."""
+        stier = {}
+        malene = self._lag_malene()
+        for navn, url in [("aksje", "/aksjer/AAA/"), ("rapportside", "/aksjer/AAA/rapporter/"),
+                          ("oversikt", "/aksjer/"), ("sektorindeks", "/aksjer/sektor/"),
+                          ("sektor", "/aksjer/sektor/finans/"), ("toppliste", "/aksjer/hoyest-utbytte/"),
+                          ("rapportkalender", "/rapportkalender/"), ("utbyttekalender", "/utbyttekalender/")]:
+            stier[url] = self._brodsmule_synlig(malene[navn])
+        for rel, side in self._haandskrevne().items():
+            syn = self._brodsmule_synlig(side)
+            if syn:
+                stier["/" + rel[:-len("index.html")]] = syn
+        sjekket = 0
+        for url, syn in stier.items():
+            if len(syn["navn"]) < 3:
+                continue
+            over = syn["lenker"][-1]   # leddet rett over er siste lenke
+            if over in stier:
+                sjekket += 1
+                self.assertEqual(stier[over]["navn"], syn["navn"][:-1],
+                                 f"{url} ligger under {over}, men stiene passer ikke")
+        self.assertGreater(sjekket, 12)
+
+    # ── tallrutene ────────────────────────────────────────────────────────
+
+    def test_kolonner_etter_antall_ruter(self):
+        css = open(os.path.join(_REPO, "assets", "style.css"), encoding="utf-8").read()
+        for n, kol in [(1, 1), (2, 2), (3, 3), (4, 2), (6, 3)]:
+            self.assertIn(f"tallruter-n{n}", fs.tallruter_html([("e", "1")] * n))
+        # 2 og 4 gir to kolonner på telefon, 3 og 6 gir tre. Alle andre antall
+        # (1, 5, 7 …) får grunnregelen med én kolonne, aldri en enslig rute.
+        for n, kol in [(2, 2), (4, 2), (3, 3), (6, 3)]:
+            self.assertRegex(css, rf"\.tallruter-n{n}[^{{]*\{{ grid-template-columns: repeat\({kol}, minmax\(0, 1fr\)\); \}}")
+        self.assertRegex(css, r"\.tallruter \{[^}]*grid-template-columns: minmax\(0, 1fr\);")
+        self.assertNotRegex(css, r"tallruter-n5|tallruter-n7")
+        # 4 ruter fyller raden også bredt: fire kolonner fra 640 px
+        self.assertRegex(css, r"min-width: 640px\) \{ \.tallruter-n4 \{ grid-template-columns: repeat\(4,")
+        self.assertIn("tallruter-tekst", fs.tallruter_html([("e", "1")] * 3, tekst=True))
+
+    def test_etiketten_staar_over_tallet_og_antallet_stemmer(self):
+        sider = self._lag_malene()
+        sider.update({"/" + rel: s for rel, s in self._haandskrevne().items()})
+        sett = 0
+        for navn, side in sider.items():
+            for klasse, rute_html in re.findall(r'<dl class="(tallruter[^"]*)"[^>]*>(.*?)</dl>', side, re.S):
+                sett += 1
+                n = int(re.search(r"tallruter-n(\d+)", klasse).group(1))
+                self.assertEqual(rute_html.count('class="tallrute"'), n, f"{navn}: klassen sier {n} ruter")
+                for celle in re.findall(r'<div class="tallrute">(.*?)</div>(?=<div class="tallrute">|$)', rute_html, re.S):
+                    self.assertLess(celle.index("<dt>"), celle.index("<dd>"), f"{navn}: etiketten må stå først")
+        self.assertGreaterEqual(sett, 6)   # oversikt, sektor, toppliste, rapportkalender, rapportside, /om/
+
+    def test_ingen_gamle_tallruter(self):
+        """Etiketten under tallet og fire slags rutenett er borte fra malene og sidene."""
+        kilde = open(os.path.join(_REPO, "scripts", "fetch_stocks.py"), encoding="utf-8").read()
+        for gammelt in ('class="stat"', 'class="stats"', "stat-val", "hero-stat", 'class="rute"', 'class="ruter"'):
+            self.assertNotIn(gammelt, kilde, f"malen har fortsatt {gammelt}")
+        for rel, side in self._haandskrevne().items():
+            for gammelt in ("stat-box", "stat-grid", "stat-num"):
+                self.assertNotIn(gammelt, side, f"{rel}: {gammelt}")
 
 
 if __name__ == "__main__":

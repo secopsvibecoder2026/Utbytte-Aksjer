@@ -51,6 +51,7 @@
   <link rel="stylesheet" href="/assets/tailwind.css" />
   <link rel="stylesheet" href="/assets/style.css" />
   <script>(function(){if(localStorage.getItem('tema')==='dark')document.documentElement.classList.add('dark');})()</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "exday.no", "item": "https://exday.no/"}, {"@type": "ListItem", "position": 2, "name": "Verktøy", "item": "https://exday.no/verktoy/"}, {"@type": "ListItem", "position": 3, "name": "Sektorrebalansering", "item": "https://exday.no/verktoy/sektorrebalansering/"}]}</script>
 </head>
 <body class="bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 min-h-screen transition-colors duration-200">
 
@@ -120,15 +121,7 @@
 
   <main class="max-w-3xl mx-auto px-4 py-8 sm:py-12">
 
-    <nav aria-label="Brødsmulesti" class="text-xs text-gray-400 dark:text-gray-500 mb-6">
-      <ol class="flex items-center gap-1.5 flex-wrap">
-        <li><a href="/" class="hover:text-green-600 dark:hover:text-green-400 transition-colors">exday.no</a></li>
-        <li aria-hidden="true">›</li>
-        <li><a href="/verktoy/" class="hover:text-green-600 dark:hover:text-green-400 transition-colors">Verktøy</a></li>
-        <li aria-hidden="true">›</li>
-        <li class="text-gray-600 dark:text-gray-300 font-medium">Sektorrebalansering</li>
-      </ol>
-    </nav>
+    <nav class="brodsmule" aria-label="Brødsmulesti"><a href="/">exday.no</a> <span class="brodsmule-skille" aria-hidden="true">›</span> <a href="/verktoy/">Verktøy</a> <span class="brodsmule-skille" aria-hidden="true">›</span> <span aria-current="page">Sektorrebalansering</span></nav>
 
     <header class="mb-8">
       <div class="flex items-center gap-3 mb-4">
@@ -138,7 +131,7 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"/>
           </svg>
         </div>
-        <h1 class="text-2xl sm:text-3xl font-bold">Sektorrebalansering</h1>
+        <h1 class="side-h1">Sektorrebalansering</h1>
       </div>
       <p class="text-gray-600 dark:text-gray-400 leading-relaxed">
         Legg inn nåværende verdi for hver sektor i porteføljen din og sett ønsket målfordeling. Kalkulatoren beregner nøyaktig hva du bør kjøpe eller selge for å nå ønsket vekting — uten at du trenger å selge deg ut av hele porteføljen.
