@@ -117,7 +117,7 @@
     .wrap { max-width: 760px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
     h1 { margin-bottom: 0.25rem; }
     .sub { font-size: 0.95rem; margin-bottom: 1.5rem; }
-    .ingress { font-size: 1rem; line-height: 1.6; margin: -0.75rem 0 1.25rem; color: #374151; max-width: 46rem; }
+    .ingress { font-size: 1rem; line-height: 1.6; margin: -0.75rem 0 1.25rem; color: #374151; }
     .badge { display: inline-block; font-size: 0.75rem; font-weight: 600; padding: 0.2rem 0.6rem;
               border-radius: 9999px; margin-bottom: 1.25rem; }
     /* Kurshodet: kurs, 52-ukers spenn og tre nøkkeltall, nøytrale farger. */
@@ -458,7 +458,7 @@
   <p class="sub">AKVA Group ASA (AKVA) · Havbruk · Halvårlig utbytte · Oslo Børs</p>
   
 
-  <div class="kurshode"><div class="kh-topp"><div><div class="kh-pris">160,00<span class="kh-valuta">NOK</span></div><div class="kh-meta"><span class="kh-endring kh-opp" title="Endring fra forrige sluttkurs, opp">+1,00 (+0,63 %)</span> <span class="kh-meta-dato">Kurs 23. nov 2026</span></div></div><div class="kh-spenn" aria-label="52 ukers spenn fra 80,00 til 161,00"><span class="kh-spenn-tekst">52 uker</span><span class="kh-spenn-tall">80,00</span><span class="kh-spenn-linje"><span class="kh-spenn-punkt" style="left:98.8%"></span></span><span class="kh-spenn-tall">161,00</span></div></div><dl class="kh-tall"><div><dt>Yield</dt><dd>1,25 %</dd></div><div><dt>Utbytte/aksje</dt><dd>2,00 NOK</dd><span class="kh-note"><span class="kcard-note">annualisert</span></span></div><div><dt>Ex-dato</dt><dd><span class="kh-ukjent">Ikke kjent</span></dd></div></dl></div>
+  <div class="kurshode"><div class="kh-topp"><div><div class="kh-pris">160,00<span class="kh-valuta">NOK</span></div><div class="kh-meta"><span class="kh-endring kh-opp" title="Endring fra forrige sluttkurs, opp">+1,00 (+0,63 %)</span> <span class="kh-meta-dato">Kurs 23. nov 2026</span></div></div><div class="kh-spenn" aria-label="52 ukers spenn fra 80,00 til 160,00"><span class="kh-spenn-tekst">52 uker</span><span class="kh-spenn-tall">80,00</span><span class="kh-spenn-linje"><span class="kh-spenn-punkt" style="left:100.0%"></span></span><span class="kh-spenn-tall">160,00</span></div></div><dl class="kh-tall"><div><dt>Yield</dt><dd>1,25 %</dd></div><div><dt>Utbytte/aksje</dt><dd>2,00 NOK</dd><span class="kh-note"><span class="kcard-note">annualisert</span></span></div><div><dt>Ex-dato</dt><dd><span class="kh-ukjent">Ikke kjent</span></dd></div></dl></div>
   <p class="kurs-varsel" id="kurs-varsel" data-kursdag="2026-11-23" data-fridager="2026-12-24,2026-12-25,2026-12-26,2026-12-31,2027-01-01,2027-03-25,2027-03-26,2027-03-29,2027-05-01,2027-05-06,2027-05-17,2027-12-24,2027-12-25,2027-12-26,2027-12-31" role="status" hidden></p><script src="/assets/kursferskhet.js" defer></script>
 
   <nav class="ak-tabnav" id="ak-tabnav" aria-label="Sideseksjoner">
@@ -471,7 +471,7 @@
   <!-- ── OVERSIKT ── -->
   <!-- Tallene først, så grafen, så teksten (STYLE.md, tiltak 3). Kurshodet
        over fanene erstatter de ni nøkkelkortene. -->
-  <section id="oversikt">
+  <section id="oversikt" class="les">
 
   
 <div class="kurs-lenker">
@@ -588,7 +588,7 @@
   </section>
 
   <!-- ── UTBYTTE ── -->
-  <section id="utbytte">
+  <section id="utbytte" class="les">
 
   <div class="analyse"><h2>Yield mot sektoren</h2><p>Yielden på 1,2 % er 2,6 prosentpoeng under snittet for Havbruk-sektoren (3,9 %).</p></div><p class="kalender-lenke">Alle ex-datoene på Oslo Børs står samlet i <a href="/utbyttekalender/">utbyttekalender 2026</a>.</p>
 
@@ -620,7 +620,7 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
 
   
 
-  <div class="risiko-seksjon"><h2>Risiko for utbyttet</h2><ul class="risiko-liste"><li>Yielden avhenger sterkt av inngangskursen: samme utbytte gir 1,2 % på 12-månedershøyden (161,00 kr) og 2,5 % på bunnen (80,00 kr)</li>
+  <div class="risiko-seksjon"><h2>Risiko for utbyttet</h2><ul class="risiko-liste"><li>Yielden avhenger sterkt av inngangskursen: samme utbytte gir 1,2 % på 12-månedershøyden (160,00 kr) og 2,5 % på bunnen (80,00 kr)</li>
 <li>Laksepris varierer med globalt tilbud og etterspørsel</li>
 <li>Biologisk risiko (lakselus, sykdom) kan redusere produksjonsvolum</li>
 <li>Eksportrestriksjoner og politisk risiko i nøkkelmarkeder</li></ul></div>
@@ -632,17 +632,17 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
   <!-- ── NØKKELTALL ── -->
   <section id="nokkeltall">
 
-  <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Havbruk</td></tr><tr><td>Frekvens</td><td>Halvårlig</td></tr><tr><td>Utbytte per aksje</td><td>2,00 NOK</td></tr><tr><td>Direkteavkastning</td><td>1,25 %</td></tr><tr><td>5-årssnitt yield</td><td>0,50 %</td></tr><tr><td>År med utbytte</td><td>12</td></tr><tr><td>P/E</td><td>27,9</td></tr><tr><td>Payout ratio</td><td>51 %</td></tr><tr><td>Utbyttevekst 5 år</td><td>+18,9 % p.a.</td></tr><tr><td>Markedsverdi</td><td>5,8 mrd NOK</td></tr><tr><td>52-ukers kurs</td><td>80,00 – 161,00 NOK</td></tr></tbody></table>
+  <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Havbruk</td></tr><tr><td>Frekvens</td><td>Halvårlig</td></tr><tr><td>Utbytte per aksje</td><td>2,00 NOK</td></tr><tr><td>Direkteavkastning</td><td>1,25 %</td></tr><tr><td>5-årssnitt yield</td><td>0,50 %</td></tr><tr><td>År med utbytte</td><td>12</td></tr><tr><td>P/E</td><td>27,9</td></tr><tr><td>Payout ratio</td><td>51 %</td></tr><tr><td>Utbyttevekst 5 år</td><td>+18,9 % p.a.</td></tr><tr><td>Markedsverdi</td><td>5,8 mrd NOK</td></tr><tr><td>52-ukers kurs</td><td>80,00 – 160,00 NOK</td></tr></tbody></table>
 
   </section>
 
   <!-- ── FAQ ── -->
   <section id="faq">
-  <div class="faq"><h2>Vanlige spørsmål om AKVA</h2><div class="faq-item"><details><summary class="faq-q">Betaler AKVA Group ASA utbytte hvert år, og hvor ofte?</summary><div class="faq-svar">AKVA Group ASA betaler utbytte to ganger i året (halvårlig). Selskapet har betalt utbytte i 12 år, men ikke sammenhengende — nåværende rekke går tilbake til 2025.</div></details></div>
-<div class="faq-item"><details><summary class="faq-q">Hva er direkteavkastningen (yield) til AKVA?</summary><div class="faq-svar">Direkteavkastningen (yield) for AKVA er 1,25 %, beregnet som 2,00 NOK i annualisert utbytte per aksje delt på aksjekursen. Det er 0,8 prosentpoeng over 5-årssnittet på 0,5 %. Begge er regnet mot dagens kurs, så forskjellen betyr at årsraten nå er høyere enn det selskapet i snitt har betalt per år. Yield endres daglig fordi den er koblet til kursen: stiger kursen, faller yielden.</div></details></div>
-<div class="faq-item"><details><summary class="faq-q">Hva er skatten på utbytte fra AKVA?</summary><div class="faq-svar">Utbytte fra AKVA Group ASA beskattes med 37,84 % av det som overstiger skjermingsfradraget, for personlige aksjonærer som eier aksjen på vanlig konto. Med en yield på 1,25 % gir det en nettoyield på ca. 0,78 % etter skatt, før skjermingsfradraget. Eier du aksjen via aksjesparekonto (ASK), utsettes skatten til du tar ut midler, og utbyttet kan reinvesteres innen kontoen uten skatt underveis.</div></details></div>
-<div class="faq-item"><details><summary class="faq-q">Er utbyttet fra AKVA Group ASA bærekraftig?</summary><div class="faq-svar">Payout ratio for AKVA Group ASA er 51 % — det vil si andelen av inntjeningen per aksje som utbetales som utbytte. En payout ratio mellom 50 og 80 % er vanlig for etablerte utbytteaksjer og anses bærekraftig så lenge inntjeningen er stabil. Sjekk at EPS-trenden er positiv.</div></details></div>
-<div class="faq-item"><details><summary class="faq-q">Hva er utbyttehistorikken til AKVA de siste årene?</summary><div class="faq-svar">I de hele årene 2021–2025 betalte AKVA Group ASA til sammen 4,00 kroner per aksje, regnet etter ex-dato. Høyest var 2025 med 2,00 kroner. I 2023 og 2024 har vi ikke registrert noe utbytte. Hittil i 2026 er det betalt 2,00 kroner per aksje.</div></details></div>
+  <div class="faq"><h2>Vanlige spørsmål om AKVA</h2><div class="faq-item"><details><summary class="faq-q">Betaler AKVA Group ASA utbytte hvert år, og hvor ofte?</summary><div class="faq-svar les">AKVA Group ASA betaler utbytte to ganger i året (halvårlig). Selskapet har betalt utbytte i 12 år, men ikke sammenhengende — nåværende rekke går tilbake til 2025.</div></details></div>
+<div class="faq-item"><details><summary class="faq-q">Hva er direkteavkastningen (yield) til AKVA?</summary><div class="faq-svar les">Direkteavkastningen (yield) for AKVA er 1,25 %, beregnet som 2,00 NOK i annualisert utbytte per aksje delt på aksjekursen. Det er 0,8 prosentpoeng over 5-årssnittet på 0,5 %. Begge er regnet mot dagens kurs, så forskjellen betyr at årsraten nå er høyere enn det selskapet i snitt har betalt per år. Yield endres daglig fordi den er koblet til kursen: stiger kursen, faller yielden.</div></details></div>
+<div class="faq-item"><details><summary class="faq-q">Hva er skatten på utbytte fra AKVA?</summary><div class="faq-svar les">Utbytte fra AKVA Group ASA beskattes med 37,84 % av det som overstiger skjermingsfradraget, for personlige aksjonærer som eier aksjen på vanlig konto. Med en yield på 1,25 % gir det en nettoyield på ca. 0,78 % etter skatt, før skjermingsfradraget. Eier du aksjen via aksjesparekonto (ASK), utsettes skatten til du tar ut midler, og utbyttet kan reinvesteres innen kontoen uten skatt underveis.</div></details></div>
+<div class="faq-item"><details><summary class="faq-q">Er utbyttet fra AKVA Group ASA bærekraftig?</summary><div class="faq-svar les">Payout ratio for AKVA Group ASA er 51 % — det vil si andelen av inntjeningen per aksje som utbetales som utbytte. En payout ratio mellom 50 og 80 % er vanlig for etablerte utbytteaksjer og anses bærekraftig så lenge inntjeningen er stabil. Sjekk at EPS-trenden er positiv.</div></details></div>
+<div class="faq-item"><details><summary class="faq-q">Hva er utbyttehistorikken til AKVA de siste årene?</summary><div class="faq-svar les">I de hele årene 2021–2025 betalte AKVA Group ASA til sammen 4,00 kroner per aksje, regnet etter ex-dato. Høyest var 2025 med 2,00 kroner. I 2023 og 2024 har vi ikke registrert noe utbytte. Hittil i 2026 er det betalt 2,00 kroner per aksje.</div></details></div>
 </div>
   </section>
 

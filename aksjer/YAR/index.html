@@ -117,7 +117,7 @@
     .wrap { max-width: 760px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
     h1 { margin-bottom: 0.25rem; }
     .sub { font-size: 0.95rem; margin-bottom: 1.5rem; }
-    .ingress { font-size: 1rem; line-height: 1.6; margin: -0.75rem 0 1.25rem; color: #374151; max-width: 46rem; }
+    .ingress { font-size: 1rem; line-height: 1.6; margin: -0.75rem 0 1.25rem; color: #374151; }
     .badge { display: inline-block; font-size: 0.75rem; font-weight: 600; padding: 0.2rem 0.6rem;
               border-radius: 9999px; margin-bottom: 1.25rem; }
     /* Kurshodet: kurs, 52-ukers spenn og tre nøkkeltall, nøytrale farger. */
@@ -456,7 +456,7 @@
 
   <h1 class="side-h1">Yara International utbytte 2026: 22,00 kr per aksje</h1>
   <p class="sub">Yara International ASA (YAR) · Materialer · Årlig utbytte · Oslo Børs</p>
-  <p class="ingress">Yara International betaler 22,00 kr per aksje i året (siste 12 mnd), en direkteavkastning på 5,85 % med dagens kurs. Neste ex-dato er ikke kjent ennå.</p>
+  <p class="ingress les">Yara International betaler 22,00 kr per aksje i året (siste 12 mnd), en direkteavkastning på 5,85 % med dagens kurs. Neste ex-dato er ikke kjent ennå.</p>
 
   <div class="kurshode"><div class="kh-topp"><div><div class="kh-pris">376,20<span class="kh-valuta">NOK</span></div><div class="kh-meta"><span class="kh-endring kh-ned" title="Endring fra forrige sluttkurs, ned">−7,70 (−2,01 %)</span> <span class="kh-meta-dato">Kurs 23. nov 2026</span></div></div><div class="kh-spenn" aria-label="52 ukers spenn fra 356,90 til 599,40"><span class="kh-spenn-tekst">52 uker</span><span class="kh-spenn-tall">356,90</span><span class="kh-spenn-linje"><span class="kh-spenn-punkt" style="left:8.0%"></span></span><span class="kh-spenn-tall">599,40</span></div></div><dl class="kh-tall"><div><dt>Yield</dt><dd>5,85 %</dd></div><div><dt>Utbytte/aksje</dt><dd>22,00 NOK</dd><span class="kh-note"><span class="kcard-note">siste 12 mnd</span></span></div><div><dt>Ex-dato</dt><dd><span class="kh-ukjent">Ikke kjent</span></dd></div></dl></div>
   <p class="kurs-varsel" id="kurs-varsel" data-kursdag="2026-11-23" data-fridager="2026-12-24,2026-12-25,2026-12-26,2026-12-31,2027-01-01,2027-03-25,2027-03-26,2027-03-29,2027-05-01,2027-05-06,2027-05-17,2027-12-24,2027-12-25,2027-12-26,2027-12-31" role="status" hidden></p><script src="/assets/kursferskhet.js" defer></script>
@@ -472,7 +472,7 @@
   <!-- ── OVERSIKT ── -->
   <!-- Tallene først, så grafen, så teksten (STYLE.md, tiltak 3). Kurshodet
        over fanene erstatter de ni nøkkelkortene. -->
-  <section id="oversikt">
+  <section id="oversikt" class="les">
 
   
 <div class="kurs-lenker">
@@ -589,7 +589,7 @@
   </section>
 
   <!-- ── UTBYTTE ── -->
-  <section id="utbytte">
+  <section id="utbytte" class="les">
 
   <div class="analyse"><h2>Yield mot sektoren</h2><p>Yielden på 5,8 % er 1,3 prosentpoeng over snittet for Materialer-sektoren (4,5 %).</p></div><p class="kalender-lenke">Alle ex-datoene på Oslo Børs står samlet i <a href="/utbyttekalender/">utbyttekalender 2026</a>.</p>
 
@@ -649,11 +649,11 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
 
   <!-- ── FAQ ── -->
   <section id="faq">
-  <div class="faq"><h2>Vanlige spørsmål om YAR</h2><div class="faq-item"><details><summary class="faq-q">Betaler Yara International ASA utbytte hvert år, og hvor ofte?</summary><div class="faq-svar">Yara International ASA betaler utbytte én gang i året. Med 22 år på rad har YAR en av de lengste sammenhengende utbytterekkene på Oslo Børs.</div></details></div>
-<div class="faq-item"><details><summary class="faq-q">Hva er direkteavkastningen (yield) til YAR?</summary><div class="faq-svar">Direkteavkastningen (yield) for YAR er 5,85 %, beregnet som 22,00 NOK i utbytte utbetalt de siste 12 månedene per aksje delt på aksjekursen. Det er 1,9 prosentpoeng under 5-årssnittet på 7,7 %. Begge er regnet mot dagens kurs, så årsraten nå er lavere enn det selskapet i snitt har betalt per år. Yield endres daglig fordi den er koblet til kursen: stiger kursen, faller yielden.</div></details></div>
-<div class="faq-item"><details><summary class="faq-q">Hva er skatten på utbytte fra YAR?</summary><div class="faq-svar">Utbytte fra Yara International ASA beskattes med 37,84 % av det som overstiger skjermingsfradraget, for personlige aksjonærer som eier aksjen på vanlig konto. Med en yield på 5,85 % gir det en nettoyield på ca. 3,64 % etter skatt, før skjermingsfradraget. Eier du aksjen via aksjesparekonto (ASK), utsettes skatten til du tar ut midler, og utbyttet kan reinvesteres innen kontoen uten skatt underveis.</div></details></div>
-<div class="faq-item"><details><summary class="faq-q">Er utbyttet fra Yara International ASA bærekraftig?</summary><div class="faq-svar">Payout ratio for Yara International ASA er 40 % — det vil si andelen av inntjeningen per aksje som utbetales som utbytte. En payout ratio under 50 % betyr at mer enn halvparten av overskuddet beholdes i selskapet. Det gir Yara International ASA god buffer til å opprettholde — eller øke — utbyttet selv om inntjeningen svinger.</div></details></div>
-<div class="faq-item"><details><summary class="faq-q">Hva er utbyttehistorikken til YAR de siste årene?</summary><div class="faq-svar">I de hele årene 2021–2025 betalte Yara International ASA til sammen 145,00 kroner per aksje, regnet etter ex-dato. Høyest var 2023 med 55,00 kroner, lavest 2024 med 5,00 kroner. Hittil i 2026 er det betalt 22,00 kroner per aksje.</div></details></div>
+  <div class="faq"><h2>Vanlige spørsmål om YAR</h2><div class="faq-item"><details><summary class="faq-q">Betaler Yara International ASA utbytte hvert år, og hvor ofte?</summary><div class="faq-svar les">Yara International ASA betaler utbytte én gang i året. Med 22 år på rad har YAR en av de lengste sammenhengende utbytterekkene på Oslo Børs.</div></details></div>
+<div class="faq-item"><details><summary class="faq-q">Hva er direkteavkastningen (yield) til YAR?</summary><div class="faq-svar les">Direkteavkastningen (yield) for YAR er 5,85 %, beregnet som 22,00 NOK i utbytte utbetalt de siste 12 månedene per aksje delt på aksjekursen. Det er 1,9 prosentpoeng under 5-årssnittet på 7,7 %. Begge er regnet mot dagens kurs, så årsraten nå er lavere enn det selskapet i snitt har betalt per år. Yield endres daglig fordi den er koblet til kursen: stiger kursen, faller yielden.</div></details></div>
+<div class="faq-item"><details><summary class="faq-q">Hva er skatten på utbytte fra YAR?</summary><div class="faq-svar les">Utbytte fra Yara International ASA beskattes med 37,84 % av det som overstiger skjermingsfradraget, for personlige aksjonærer som eier aksjen på vanlig konto. Med en yield på 5,85 % gir det en nettoyield på ca. 3,64 % etter skatt, før skjermingsfradraget. Eier du aksjen via aksjesparekonto (ASK), utsettes skatten til du tar ut midler, og utbyttet kan reinvesteres innen kontoen uten skatt underveis.</div></details></div>
+<div class="faq-item"><details><summary class="faq-q">Er utbyttet fra Yara International ASA bærekraftig?</summary><div class="faq-svar les">Payout ratio for Yara International ASA er 40 % — det vil si andelen av inntjeningen per aksje som utbetales som utbytte. En payout ratio under 50 % betyr at mer enn halvparten av overskuddet beholdes i selskapet. Det gir Yara International ASA god buffer til å opprettholde — eller øke — utbyttet selv om inntjeningen svinger.</div></details></div>
+<div class="faq-item"><details><summary class="faq-q">Hva er utbyttehistorikken til YAR de siste årene?</summary><div class="faq-svar les">I de hele årene 2021–2025 betalte Yara International ASA til sammen 145,00 kroner per aksje, regnet etter ex-dato. Høyest var 2023 med 55,00 kroner, lavest 2024 med 5,00 kroner. Hittil i 2026 er det betalt 22,00 kroner per aksje.</div></details></div>
 </div>
   </section>
 

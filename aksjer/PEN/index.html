@@ -117,7 +117,7 @@
     .wrap { max-width: 760px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
     h1 { margin-bottom: 0.25rem; }
     .sub { font-size: 0.95rem; margin-bottom: 1.5rem; }
-    .ingress { font-size: 1rem; line-height: 1.6; margin: -0.75rem 0 1.25rem; color: #374151; max-width: 46rem; }
+    .ingress { font-size: 1rem; line-height: 1.6; margin: -0.75rem 0 1.25rem; color: #374151; }
     .badge { display: inline-block; font-size: 0.75rem; font-weight: 600; padding: 0.2rem 0.6rem;
               border-radius: 9999px; margin-bottom: 1.25rem; }
     /* Kurshodet: kurs, 52-ukers spenn og tre nøkkeltall, nøytrale farger. */
@@ -456,7 +456,7 @@
 
   <h1 class="side-h1">Panoro Energy utbytte 2026: 0,36 kr per aksje</h1>
   <p class="sub">Panoro Energy ASA (PEN) · Energi · Kvartalsvis utbytte · Oslo Børs</p>
-  <p class="ingress">Panoro Energy betaler 0,36 kr per aksje med ex-dato 1. des 2026. Du må eie aksjen ved børsslutt 30. nov for å få utbyttet. Pengene utbetales 21. des 2026. Årlig utbytte er 1,44 kr per aksje (annualisert).</p>
+  <p class="ingress les">Panoro Energy betaler 0,36 kr per aksje med ex-dato 1. des 2026. Du må eie aksjen ved børsslutt 30. nov for å få utbyttet. Pengene utbetales 21. des 2026. Årlig utbytte er 1,44 kr per aksje (annualisert).</p>
 
   <div class="kurshode"><div class="kh-topp"><div><div class="kh-pris">27,25<span class="kh-valuta">NOK</span></div><div class="kh-meta"><span class="kh-endring kh-ned" title="Endring fra forrige sluttkurs, ned">−0,50 (−1,80 %)</span> <span class="kh-meta-dato">Kurs 23. nov 2026</span></div></div><div class="kh-spenn" aria-label="52 ukers spenn fra 18,72 til 36,70"><span class="kh-spenn-tekst">52 uker</span><span class="kh-spenn-tall">18,72</span><span class="kh-spenn-linje"><span class="kh-spenn-punkt" style="left:47.4%"></span></span><span class="kh-spenn-tall">36,70</span></div></div><dl class="kh-tall"><div><dt>Yield</dt><dd>5,28 %</dd></div><div><dt>Utbytte/aksje</dt><dd>1,44 NOK</dd><span class="kh-note"><span class="kcard-note">annualisert</span></span></div><div><dt>Ex-dato</dt><dd>1. des 2026</dd></div></dl></div>
   <p class="kurs-varsel" id="kurs-varsel" data-kursdag="2026-11-23" data-fridager="2026-12-24,2026-12-25,2026-12-26,2026-12-31,2027-01-01,2027-03-25,2027-03-26,2027-03-29,2027-05-01,2027-05-06,2027-05-17,2027-12-24,2027-12-25,2027-12-26,2027-12-31" role="status" hidden></p><script src="/assets/kursferskhet.js" defer></script>
@@ -471,7 +471,7 @@
   <!-- ── OVERSIKT ── -->
   <!-- Tallene først, så grafen, så teksten (STYLE.md, tiltak 3). Kurshodet
        over fanene erstatter de ni nøkkelkortene. -->
-  <section id="oversikt">
+  <section id="oversikt" class="les">
 
   
 <div class="kurs-lenker">
@@ -588,7 +588,7 @@
   </section>
 
   <!-- ── UTBYTTE ── -->
-  <section id="utbytte">
+  <section id="utbytte" class="les">
 
   <div class="analyse"><h2>Utbyttedatoer</h2><p>Neste ex-dato er 1. des 2026 — kjøp innen 30. nov for å motta utbyttet på 0,36 NOK. Utbetalingsdato er satt til 21. des 2026. Yielden på 5,3 % er 2,0 prosentpoeng under snittet for Energi-sektoren (7,3 %).</p></div><p class="kalender-lenke">Alle ex-datoene på Oslo Børs står samlet i <a href="/utbyttekalender/">utbyttekalender 2026</a>.</p>
 
@@ -643,12 +643,12 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
 
   <!-- ── FAQ ── -->
   <section id="faq">
-  <div class="faq"><h2>Vanlige spørsmål om PEN</h2><div class="faq-item"><details><summary class="faq-q">Hva er ex-datoen for Panoro Energy ASA (PEN)?</summary><div class="faq-svar">Neste ex-dato for Panoro Energy ASA er 1. desember 2026. For å ha rett på utbyttet må du kjøpe aksjen senest 30. november, børsdagen før ex-datoen. Kjøper du på ex-datoen eller senere, går utbyttet til den som solgte.</div></details></div>
-<div class="faq-item"><details><summary class="faq-q">Betaler Panoro Energy ASA utbytte hvert år, og hvor ofte?</summary><div class="faq-svar">Panoro Energy ASA betaler utbytte fire ganger i året (kvartalsvis). Selskapet har betalt utbytte de siste 4 årene.</div></details></div>
-<div class="faq-item"><details><summary class="faq-q">Hva er direkteavkastningen (yield) til PEN?</summary><div class="faq-svar">Direkteavkastningen (yield) for PEN er 5,28 %, beregnet som 1,44 NOK i annualisert utbytte per aksje delt på aksjekursen. Det er 1,7 prosentpoeng under 3-årssnittet på 7,0 %. Begge er regnet mot dagens kurs, så årsraten nå er lavere enn det selskapet i snitt har betalt per år. Yield endres daglig fordi den er koblet til kursen: stiger kursen, faller yielden.</div></details></div>
-<div class="faq-item"><details><summary class="faq-q">Hva er skatten på utbytte fra PEN?</summary><div class="faq-svar">Ifølge siste utbyttemelding fra Panoro Energy ASA til Oslo Børs er utbetalingen tilbakebetaling av innbetalt kapital, ikke utbytte i skattemessig forstand. For personlige aksjonærer er den ikke skattepliktig når den utbetales; den reduserer i stedet inngangsverdien, slik at gevinsten — og skatten — blir tilsvarende høyere når du selger. Det gjelder også om tilbakebetalingen overstiger inngangsverdien, som da blir negativ. Klassifiseringen gjelder hver utbetaling for seg og står i hver utbyttemelding.</div></details></div>
-<div class="faq-item"><details><summary class="faq-q">Er utbyttet fra Panoro Energy ASA bærekraftig?</summary><div class="faq-svar">Payout ratio for Panoro Energy ASA er 87 % — det vil si andelen av inntjeningen per aksje som utbetales som utbytte. En payout ratio over 80 % innebærer at Panoro Energy ASA deler ut en svært stor andel av inntjeningen. Det kan holdes oppe med sterk kontantstrøm, men er mer sårbart ved svakere kvartaler.</div></details></div>
-<div class="faq-item"><details><summary class="faq-q">Hva er utbyttehistorikken til PEN de siste årene?</summary><div class="faq-svar">I de hele årene 2023–2025 betalte Panoro Energy ASA til sammen 5,70 kroner per aksje, regnet etter ex-dato. Høyest var 2025 med 2,78 kroner, lavest 2023 med 1,21 kroner. Hittil i 2026 er det betalt 1,19 kroner per aksje.</div></details></div>
+  <div class="faq"><h2>Vanlige spørsmål om PEN</h2><div class="faq-item"><details><summary class="faq-q">Hva er ex-datoen for Panoro Energy ASA (PEN)?</summary><div class="faq-svar les">Neste ex-dato for Panoro Energy ASA er 1. desember 2026. For å ha rett på utbyttet må du kjøpe aksjen senest 30. november, børsdagen før ex-datoen. Kjøper du på ex-datoen eller senere, går utbyttet til den som solgte.</div></details></div>
+<div class="faq-item"><details><summary class="faq-q">Betaler Panoro Energy ASA utbytte hvert år, og hvor ofte?</summary><div class="faq-svar les">Panoro Energy ASA betaler utbytte fire ganger i året (kvartalsvis). Selskapet har betalt utbytte de siste 4 årene.</div></details></div>
+<div class="faq-item"><details><summary class="faq-q">Hva er direkteavkastningen (yield) til PEN?</summary><div class="faq-svar les">Direkteavkastningen (yield) for PEN er 5,28 %, beregnet som 1,44 NOK i annualisert utbytte per aksje delt på aksjekursen. Det er 1,7 prosentpoeng under 3-årssnittet på 7,0 %. Begge er regnet mot dagens kurs, så årsraten nå er lavere enn det selskapet i snitt har betalt per år. Yield endres daglig fordi den er koblet til kursen: stiger kursen, faller yielden.</div></details></div>
+<div class="faq-item"><details><summary class="faq-q">Hva er skatten på utbytte fra PEN?</summary><div class="faq-svar les">Ifølge siste utbyttemelding fra Panoro Energy ASA til Oslo Børs er utbetalingen tilbakebetaling av innbetalt kapital, ikke utbytte i skattemessig forstand. For personlige aksjonærer er den ikke skattepliktig når den utbetales; den reduserer i stedet inngangsverdien, slik at gevinsten — og skatten — blir tilsvarende høyere når du selger. Det gjelder også om tilbakebetalingen overstiger inngangsverdien, som da blir negativ. Klassifiseringen gjelder hver utbetaling for seg og står i hver utbyttemelding.</div></details></div>
+<div class="faq-item"><details><summary class="faq-q">Er utbyttet fra Panoro Energy ASA bærekraftig?</summary><div class="faq-svar les">Payout ratio for Panoro Energy ASA er 87 % — det vil si andelen av inntjeningen per aksje som utbetales som utbytte. En payout ratio over 80 % innebærer at Panoro Energy ASA deler ut en svært stor andel av inntjeningen. Det kan holdes oppe med sterk kontantstrøm, men er mer sårbart ved svakere kvartaler.</div></details></div>
+<div class="faq-item"><details><summary class="faq-q">Hva er utbyttehistorikken til PEN de siste årene?</summary><div class="faq-svar les">I de hele årene 2023–2025 betalte Panoro Energy ASA til sammen 5,70 kroner per aksje, regnet etter ex-dato. Høyest var 2025 med 2,78 kroner, lavest 2023 med 1,21 kroner. Hittil i 2026 er det betalt 1,19 kroner per aksje.</div></details></div>
 </div>
   </section>
 

@@ -117,7 +117,7 @@
     .wrap { max-width: 760px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
     h1 { margin-bottom: 0.25rem; }
     .sub { font-size: 0.95rem; margin-bottom: 1.5rem; }
-    .ingress { font-size: 1rem; line-height: 1.6; margin: -0.75rem 0 1.25rem; color: #374151; max-width: 46rem; }
+    .ingress { font-size: 1rem; line-height: 1.6; margin: -0.75rem 0 1.25rem; color: #374151; }
     .badge { display: inline-block; font-size: 0.75rem; font-weight: 600; padding: 0.2rem 0.6rem;
               border-radius: 9999px; margin-bottom: 1.25rem; }
     /* Kurshodet: kurs, 52-ukers spenn og tre nøkkeltall, nøytrale farger. */
@@ -456,7 +456,7 @@
 
   <h1 class="side-h1">OKEA utbytte 2026: 2,00 kr per aksje</h1>
   <p class="sub">OKEA ASA (OKEA) · Energi · Kvartalsvis utbytte · Oslo Børs</p>
-  <p class="ingress">OKEA betaler 2,00 kr per aksje med ex-dato 2. des 2026. Du må eie aksjen ved børsslutt 1. des for å få utbyttet. Pengene utbetales 15. des 2026.</p>
+  <p class="ingress les">OKEA betaler 2,00 kr per aksje med ex-dato 2. des 2026. Du må eie aksjen ved børsslutt 1. des for å få utbyttet. Pengene utbetales 15. des 2026.</p>
 
   <div class="kurshode"><div class="kh-topp"><div><div class="kh-pris">45,80<span class="kh-valuta">NOK</span></div><div class="kh-meta"><span class="kh-endring kh-ned" title="Endring fra forrige sluttkurs, ned">−0,25 (−0,54 %)</span> <span class="kh-meta-dato">Kurs 23. nov 2026</span></div></div><div class="kh-spenn" aria-label="52 ukers spenn fra 19,58 til 50,70"><span class="kh-spenn-tekst">52 uker</span><span class="kh-spenn-tall">19,58</span><span class="kh-spenn-linje"><span class="kh-spenn-punkt" style="left:84.3%"></span></span><span class="kh-spenn-tall">50,70</span></div></div><dl class="kh-tall"><div><dt>Yield</dt><dd>4,37 %</dd></div><div><dt>Utbytte/aksje</dt><dd>2,00 NOK</dd><span class="kh-note"><span class="kcard-note">kunngjort utbetaling</span></span></div><div><dt>Ex-dato</dt><dd>2. des 2026</dd></div></dl></div>
   <p class="kurs-varsel" id="kurs-varsel" data-kursdag="2026-11-23" data-fridager="2026-12-24,2026-12-25,2026-12-26,2026-12-31,2027-01-01,2027-03-25,2027-03-26,2027-03-29,2027-05-01,2027-05-06,2027-05-17,2027-12-24,2027-12-25,2027-12-26,2027-12-31" role="status" hidden></p><script src="/assets/kursferskhet.js" defer></script>
@@ -472,7 +472,7 @@
   <!-- ── OVERSIKT ── -->
   <!-- Tallene først, så grafen, så teksten (STYLE.md, tiltak 3). Kurshodet
        over fanene erstatter de ni nøkkelkortene. -->
-  <section id="oversikt">
+  <section id="oversikt" class="les">
 
   
 <div class="kurs-lenker">
@@ -589,7 +589,7 @@
   </section>
 
   <!-- ── UTBYTTE ── -->
-  <section id="utbytte">
+  <section id="utbytte" class="les">
 
   <div class="analyse"><h2>Utbyttedatoer</h2><p>Neste ex-dato er 2. des 2026 — kjøp innen 1. des for å motta utbyttet på 2,00 NOK. Utbetalingsdato er satt til 15. des 2026. Yielden på 4,4 % er 2,9 prosentpoeng under snittet for Energi-sektoren (7,3 %).</p></div><p class="kalender-lenke">Alle ex-datoene på Oslo Børs står samlet i <a href="/utbyttekalender/">utbyttekalender 2026</a>.</p>
 
@@ -634,11 +634,11 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
 
   <!-- ── FAQ ── -->
   <section id="faq">
-  <div class="faq"><h2>Vanlige spørsmål om OKEA</h2><div class="faq-item"><details><summary class="faq-q">Hva er ex-datoen for OKEA ASA (OKEA)?</summary><div class="faq-svar">Neste ex-dato for OKEA ASA er 2. desember 2026. For å ha rett på utbyttet må du kjøpe aksjen senest 1. desember, børsdagen før ex-datoen. Kjøper du på ex-datoen eller senere, går utbyttet til den som solgte.</div></details></div>
-<div class="faq-item"><details><summary class="faq-q">Betaler OKEA ASA utbytte hvert år, og hvor ofte?</summary><div class="faq-svar">OKEA ASA betaler utbytte fire ganger i året (kvartalsvis). Selskapet har betalt utbytte i 2 år, men ikke siden 2023.</div></details></div>
-<div class="faq-item"><details><summary class="faq-q">Hva er direkteavkastningen (yield) til OKEA?</summary><div class="faq-svar">Direkteavkastningen (yield) for OKEA er 4,37 %, beregnet som 2,00 NOK i den kunngjorte utbetalingen per aksje delt på aksjekursen. Det er på linje med 4-årssnittet på 3,8 %. Yield endres daglig fordi den er koblet til kursen: stiger kursen, faller yielden.</div></details></div>
-<div class="faq-item"><details><summary class="faq-q">Hva er skatten på utbytte fra OKEA?</summary><div class="faq-svar">Utbytte fra OKEA ASA beskattes med 37,84 % av det som overstiger skjermingsfradraget, for personlige aksjonærer som eier aksjen på vanlig konto. Med en yield på 4,37 % gir det en nettoyield på ca. 2,72 % etter skatt, før skjermingsfradraget. Eier du aksjen via aksjesparekonto (ASK), utsettes skatten til du tar ut midler, og utbyttet kan reinvesteres innen kontoen uten skatt underveis.</div></details></div>
-<div class="faq-item"><details><summary class="faq-q">Hva er utbyttehistorikken til OKEA de siste årene?</summary><div class="faq-svar">I de hele årene 2022–2025 betalte OKEA ASA til sammen 6,90 kroner per aksje, regnet etter ex-dato. Høyest var 2023 med 4,00 kroner. I 2024 og 2025 har vi ikke registrert noe utbytte.</div></details></div>
+  <div class="faq"><h2>Vanlige spørsmål om OKEA</h2><div class="faq-item"><details><summary class="faq-q">Hva er ex-datoen for OKEA ASA (OKEA)?</summary><div class="faq-svar les">Neste ex-dato for OKEA ASA er 2. desember 2026. For å ha rett på utbyttet må du kjøpe aksjen senest 1. desember, børsdagen før ex-datoen. Kjøper du på ex-datoen eller senere, går utbyttet til den som solgte.</div></details></div>
+<div class="faq-item"><details><summary class="faq-q">Betaler OKEA ASA utbytte hvert år, og hvor ofte?</summary><div class="faq-svar les">OKEA ASA betaler utbytte fire ganger i året (kvartalsvis). Selskapet har betalt utbytte i 2 år, men ikke siden 2023.</div></details></div>
+<div class="faq-item"><details><summary class="faq-q">Hva er direkteavkastningen (yield) til OKEA?</summary><div class="faq-svar les">Direkteavkastningen (yield) for OKEA er 4,37 %, beregnet som 2,00 NOK i den kunngjorte utbetalingen per aksje delt på aksjekursen. Det er på linje med 4-årssnittet på 3,8 %. Yield endres daglig fordi den er koblet til kursen: stiger kursen, faller yielden.</div></details></div>
+<div class="faq-item"><details><summary class="faq-q">Hva er skatten på utbytte fra OKEA?</summary><div class="faq-svar les">Utbytte fra OKEA ASA beskattes med 37,84 % av det som overstiger skjermingsfradraget, for personlige aksjonærer som eier aksjen på vanlig konto. Med en yield på 4,37 % gir det en nettoyield på ca. 2,72 % etter skatt, før skjermingsfradraget. Eier du aksjen via aksjesparekonto (ASK), utsettes skatten til du tar ut midler, og utbyttet kan reinvesteres innen kontoen uten skatt underveis.</div></details></div>
+<div class="faq-item"><details><summary class="faq-q">Hva er utbyttehistorikken til OKEA de siste årene?</summary><div class="faq-svar les">I de hele årene 2022–2025 betalte OKEA ASA til sammen 6,90 kroner per aksje, regnet etter ex-dato. Høyest var 2023 med 4,00 kroner. I 2024 og 2025 har vi ikke registrert noe utbytte.</div></details></div>
 </div>
   </section>
 

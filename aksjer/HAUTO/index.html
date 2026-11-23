@@ -117,7 +117,7 @@
     .wrap { max-width: 760px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
     h1 { margin-bottom: 0.25rem; }
     .sub { font-size: 0.95rem; margin-bottom: 1.5rem; }
-    .ingress { font-size: 1rem; line-height: 1.6; margin: -0.75rem 0 1.25rem; color: #374151; max-width: 46rem; }
+    .ingress { font-size: 1rem; line-height: 1.6; margin: -0.75rem 0 1.25rem; color: #374151; }
     .badge { display: inline-block; font-size: 0.75rem; font-weight: 600; padding: 0.2rem 0.6rem;
               border-radius: 9999px; margin-bottom: 1.25rem; }
     /* Kurshodet: kurs, 52-ukers spenn og tre nøkkeltall, nøytrale farger. */
@@ -456,7 +456,7 @@
 
   <h1 class="side-h1">Höegh Autoliners utbytte 2026: 0,52 USD per aksje</h1>
   <p class="sub">Höegh Autoliners ASA (HAUTO) · Shipping · Kvartalsvis utbytte · Oslo Børs</p>
-  <p class="ingress">Höegh Autoliners betaler 0,52 USD per aksje med ex-dato 23. nov 2026. Siste dag med rett til utbyttet var 20. nov. Pengene utbetales 30. nov 2026. Beløpet er kunngjort i USD og regnes om til kroner ved utbetaling. Årlig utbytte er 11,87 kr per aksje (annualisert).</p>
+  <p class="ingress les">Höegh Autoliners betaler 0,52 USD per aksje med ex-dato 23. nov 2026. Siste dag med rett til utbyttet var 20. nov. Pengene utbetales 30. nov 2026. Beløpet er kunngjort i USD og regnes om til kroner ved utbetaling. Årlig utbytte er 11,87 kr per aksje (annualisert).</p>
 
   <div class="kurshode"><div class="kh-topp"><div><div class="kh-pris">165,10<span class="kh-valuta">NOK</span></div><div class="kh-meta"><span class="kh-endring kh-opp" title="Endring fra forrige sluttkurs, opp">+0,65 (+0,39 %)</span> <span class="kh-meta-dato">Kurs 23. nov 2026</span></div></div><div class="kh-spenn" aria-label="52 ukers spenn fra 85,10 til 195,90"><span class="kh-spenn-tekst">52 uker</span><span class="kh-spenn-tall">85,10</span><span class="kh-spenn-linje"><span class="kh-spenn-punkt" style="left:72.2%"></span></span><span class="kh-spenn-tall">195,90</span></div></div><dl class="kh-tall"><div><dt>Yield</dt><dd>7,19 %</dd></div><div><dt>Utbytte/aksje</dt><dd>11,87 NOK</dd><span class="kh-note"><span class="kcard-note">annualisert</span></span></div><div><dt>Ex-dato</dt><dd>23. nov 2026</dd></div></dl></div>
   <p class="kurs-varsel" id="kurs-varsel" data-kursdag="2026-11-23" data-fridager="2026-12-24,2026-12-25,2026-12-26,2026-12-31,2027-01-01,2027-03-25,2027-03-26,2027-03-29,2027-05-01,2027-05-06,2027-05-17,2027-12-24,2027-12-25,2027-12-26,2027-12-31" role="status" hidden></p><script src="/assets/kursferskhet.js" defer></script>
@@ -472,7 +472,7 @@
   <!-- ── OVERSIKT ── -->
   <!-- Tallene først, så grafen, så teksten (STYLE.md, tiltak 3). Kurshodet
        over fanene erstatter de ni nøkkelkortene. -->
-  <section id="oversikt">
+  <section id="oversikt" class="les">
 
   
 <div class="kurs-lenker">
@@ -589,7 +589,7 @@
   </section>
 
   <!-- ── UTBYTTE ── -->
-  <section id="utbytte">
+  <section id="utbytte" class="les">
 
   <div class="analyse"><h2>Utbyttedatoer</h2><p>Ex-datoen er 23. nov 2026. Aksjen handles uten utbytte fra den dagen, og utbyttet går til dem som eide den ved børsslutt 20. nov. Utbetalingsdato er satt til 30. nov 2026. Yielden på 7,2 % er 1,9 prosentpoeng under snittet for Shipping-sektoren (9,1 %).</p></div><p class="kalender-lenke">Alle ex-datoene på Oslo Børs står samlet i <a href="/utbyttekalender/">utbyttekalender 2026</a>.</p>
 
@@ -649,12 +649,12 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
 
   <!-- ── FAQ ── -->
   <section id="faq">
-  <div class="faq"><h2>Vanlige spørsmål om HAUTO</h2><div class="faq-item"><details><summary class="faq-q">Hva er ex-datoen for Höegh Autoliners ASA (HAUTO)?</summary><div class="faq-svar">Ex-dato for Höegh Autoliners ASA er i dag, 23. november 2026. Aksjen handles fra i dag uten rett til utbyttet — du måtte ha kjøpt senest 20. november for å motta det. Selger du i dag, beholder du likevel utbyttet, fordi retten ble låst ved forrige børsdags slutt.</div></details></div>
-<div class="faq-item"><details><summary class="faq-q">Betaler Höegh Autoliners ASA utbytte hvert år, og hvor ofte?</summary><div class="faq-svar">Höegh Autoliners ASA betaler utbytte fire ganger i året (kvartalsvis). Selskapet har betalt utbytte de siste 5 årene.</div></details></div>
-<div class="faq-item"><details><summary class="faq-q">Hva er direkteavkastningen (yield) til HAUTO?</summary><div class="faq-svar">Direkteavkastningen (yield) for HAUTO er 7,19 %, beregnet som 11,87 NOK i annualisert utbytte per aksje delt på aksjekursen. Det er 5,8 prosentpoeng under 4-årssnittet på 13,0 %. Begge er regnet mot dagens kurs, så årsraten nå er lavere enn det selskapet i snitt har betalt per år. Yield endres daglig fordi den er koblet til kursen: stiger kursen, faller yielden.</div></details></div>
-<div class="faq-item"><details><summary class="faq-q">Hva er skatten på utbytte fra HAUTO?</summary><div class="faq-svar">Utbytte fra Höegh Autoliners ASA beskattes med 37,84 % av det som overstiger skjermingsfradraget, for personlige aksjonærer som eier aksjen på vanlig konto. Med en yield på 7,19 % gir det en nettoyield på ca. 4,47 % etter skatt, før skjermingsfradraget. Eier du aksjen via aksjesparekonto (ASK), utsettes skatten til du tar ut midler, og utbyttet kan reinvesteres innen kontoen uten skatt underveis.</div></details></div>
-<div class="faq-item"><details><summary class="faq-q">Er utbyttet fra Höegh Autoliners ASA bærekraftig?</summary><div class="faq-svar">Payout ratio for Höegh Autoliners ASA er 64 % — det vil si andelen av inntjeningen per aksje som utbetales som utbytte. En payout ratio mellom 50 og 80 % er vanlig for etablerte utbytteaksjer og anses bærekraftig så lenge inntjeningen er stabil. Sjekk at EPS-trenden er positiv.</div></details></div>
-<div class="faq-item"><details><summary class="faq-q">Hva er utbyttehistorikken til HAUTO de siste årene?</summary><div class="faq-svar">I de hele årene 2022–2025 betalte Höegh Autoliners ASA til sammen 85,86 kroner per aksje, regnet etter ex-dato. Høyest var 2024 med 47,65 kroner, lavest 2022 med 1,84 kroner. Hittil i 2026 er det betalt 15,34 kroner per aksje.</div></details></div>
+  <div class="faq"><h2>Vanlige spørsmål om HAUTO</h2><div class="faq-item"><details><summary class="faq-q">Hva er ex-datoen for Höegh Autoliners ASA (HAUTO)?</summary><div class="faq-svar les">Ex-dato for Höegh Autoliners ASA er i dag, 23. november 2026. Aksjen handles fra i dag uten rett til utbyttet — du måtte ha kjøpt senest 20. november for å motta det. Selger du i dag, beholder du likevel utbyttet, fordi retten ble låst ved forrige børsdags slutt.</div></details></div>
+<div class="faq-item"><details><summary class="faq-q">Betaler Höegh Autoliners ASA utbytte hvert år, og hvor ofte?</summary><div class="faq-svar les">Höegh Autoliners ASA betaler utbytte fire ganger i året (kvartalsvis). Selskapet har betalt utbytte de siste 5 årene.</div></details></div>
+<div class="faq-item"><details><summary class="faq-q">Hva er direkteavkastningen (yield) til HAUTO?</summary><div class="faq-svar les">Direkteavkastningen (yield) for HAUTO er 7,19 %, beregnet som 11,87 NOK i annualisert utbytte per aksje delt på aksjekursen. Det er 5,8 prosentpoeng under 4-årssnittet på 13,0 %. Begge er regnet mot dagens kurs, så årsraten nå er lavere enn det selskapet i snitt har betalt per år. Yield endres daglig fordi den er koblet til kursen: stiger kursen, faller yielden.</div></details></div>
+<div class="faq-item"><details><summary class="faq-q">Hva er skatten på utbytte fra HAUTO?</summary><div class="faq-svar les">Utbytte fra Höegh Autoliners ASA beskattes med 37,84 % av det som overstiger skjermingsfradraget, for personlige aksjonærer som eier aksjen på vanlig konto. Med en yield på 7,19 % gir det en nettoyield på ca. 4,47 % etter skatt, før skjermingsfradraget. Eier du aksjen via aksjesparekonto (ASK), utsettes skatten til du tar ut midler, og utbyttet kan reinvesteres innen kontoen uten skatt underveis.</div></details></div>
+<div class="faq-item"><details><summary class="faq-q">Er utbyttet fra Höegh Autoliners ASA bærekraftig?</summary><div class="faq-svar les">Payout ratio for Höegh Autoliners ASA er 64 % — det vil si andelen av inntjeningen per aksje som utbetales som utbytte. En payout ratio mellom 50 og 80 % er vanlig for etablerte utbytteaksjer og anses bærekraftig så lenge inntjeningen er stabil. Sjekk at EPS-trenden er positiv.</div></details></div>
+<div class="faq-item"><details><summary class="faq-q">Hva er utbyttehistorikken til HAUTO de siste årene?</summary><div class="faq-svar les">I de hele årene 2022–2025 betalte Höegh Autoliners ASA til sammen 85,86 kroner per aksje, regnet etter ex-dato. Høyest var 2024 med 47,65 kroner, lavest 2022 med 1,84 kroner. Hittil i 2026 er det betalt 15,34 kroner per aksje.</div></details></div>
 </div>
   </section>
 

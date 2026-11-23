@@ -117,7 +117,7 @@
     .wrap { max-width: 760px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
     h1 { margin-bottom: 0.25rem; }
     .sub { font-size: 0.95rem; margin-bottom: 1.5rem; }
-    .ingress { font-size: 1rem; line-height: 1.6; margin: -0.75rem 0 1.25rem; color: #374151; max-width: 46rem; }
+    .ingress { font-size: 1rem; line-height: 1.6; margin: -0.75rem 0 1.25rem; color: #374151; }
     .badge { display: inline-block; font-size: 0.75rem; font-weight: 600; padding: 0.2rem 0.6rem;
               border-radius: 9999px; margin-bottom: 1.25rem; }
     /* Kurshodet: kurs, 52-ukers spenn og tre nøkkeltall, nøytrale farger. */
@@ -456,7 +456,7 @@
 
   <h1 class="side-h1">SED Energy utbytte 2026</h1>
   <p class="sub">SED Energy Holdings PLC (ENH) · Energi · Kvartalsvis utbytte · Oslo Børs</p>
-  <p class="ingress">Neste ex-dato er 7. des 2026, og beløpet er ikke kunngjort ennå. Du må eie aksjen ved børsslutt 4. des for å få utbyttet. Årlig utbytte er 0,61 kr per aksje (annualisert).</p>
+  <p class="ingress les">Neste ex-dato er 7. des 2026, og beløpet er ikke kunngjort ennå. Du må eie aksjen ved børsslutt 4. des for å få utbyttet. Årlig utbytte er 0,61 kr per aksje (annualisert).</p>
 
   <div class="kurshode"><div class="kh-topp"><div><div class="kh-pris">6,18<span class="kh-valuta">NOK</span></div><div class="kh-meta"><span class="kh-endring kh-ned" title="Endring fra forrige sluttkurs, ned">−0,01 (−0,16 %)</span> <span class="kh-meta-dato">Kurs 23. nov 2026</span></div></div><div class="kh-spenn" aria-label="52 ukers spenn fra 6,11 til 10,25"><span class="kh-spenn-tekst">52 uker</span><span class="kh-spenn-tall">6,11</span><span class="kh-spenn-linje"><span class="kh-spenn-punkt" style="left:1.7%"></span></span><span class="kh-spenn-tall">10,25</span></div></div><dl class="kh-tall"><div><dt>Yield</dt><dd>9,87 %</dd></div><div><dt>Utbytte/aksje</dt><dd>0,61 NOK</dd><span class="kh-note"><span class="kcard-note">annualisert</span></span></div><div><dt>Ex-dato</dt><dd>7. des 2026</dd></div></dl></div>
   <p class="kurs-varsel" id="kurs-varsel" data-kursdag="2026-11-23" data-fridager="2026-12-24,2026-12-25,2026-12-26,2026-12-31,2027-01-01,2027-03-25,2027-03-26,2027-03-29,2027-05-01,2027-05-06,2027-05-17,2027-12-24,2027-12-25,2027-12-26,2027-12-31" role="status" hidden></p><script src="/assets/kursferskhet.js" defer></script>
@@ -471,7 +471,7 @@
   <!-- ── OVERSIKT ── -->
   <!-- Tallene først, så grafen, så teksten (STYLE.md, tiltak 3). Kurshodet
        over fanene erstatter de ni nøkkelkortene. -->
-  <section id="oversikt">
+  <section id="oversikt" class="les">
 
   
 <div class="kurs-lenker">
@@ -588,7 +588,7 @@
   </section>
 
   <!-- ── UTBYTTE ── -->
-  <section id="utbytte">
+  <section id="utbytte" class="les">
 
   <div class="analyse"><h2>Utbyttedatoer</h2><p>Neste ex-dato er 7. des 2026 — kjøp innen 4. des for å motta utbytte. Utbetalingsdato er satt til 11. des 2026. Yielden på 9,9 % er 2,6 prosentpoeng over snittet for Energi-sektoren (7,3 %).</p></div><p class="kalender-lenke">Alle ex-datoene på Oslo Børs står samlet i <a href="/utbyttekalender/">utbyttekalender 2026</a>.</p>
 
@@ -638,11 +638,11 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
 
   <!-- ── FAQ ── -->
   <section id="faq">
-  <div class="faq"><h2>Vanlige spørsmål om ENH</h2><div class="faq-item"><details><summary class="faq-q">Hva er ex-datoen for SED Energy Holdings PLC (ENH)?</summary><div class="faq-svar">Neste ex-dato for SED Energy Holdings PLC er 7. desember 2026. For å ha rett på utbyttet må du kjøpe aksjen senest 4. desember, børsdagen før ex-datoen. Kjøper du på ex-datoen eller senere, går utbyttet til den som solgte.</div></details></div>
-<div class="faq-item"><details><summary class="faq-q">Betaler SED Energy Holdings PLC utbytte hvert år, og hvor ofte?</summary><div class="faq-svar">SED Energy Holdings PLC betaler utbytte fire ganger i året (kvartalsvis). Selskapet har betalt utbytte de siste 3 årene.</div></details></div>
-<div class="faq-item"><details><summary class="faq-q">Hva er direkteavkastningen (yield) til ENH?</summary><div class="faq-svar">Direkteavkastningen (yield) for ENH er 9,87 %, beregnet som 0,61 NOK i annualisert utbytte per aksje delt på aksjekursen.  Yield endres daglig fordi den er koblet til kursen: stiger kursen, faller yielden.</div></details></div>
-<div class="faq-item"><details><summary class="faq-q">Hva er skatten på utbytte fra ENH?</summary><div class="faq-svar">Ifølge siste utbyttemelding fra SED Energy Holdings PLC til Oslo Børs er utbetalingen tilbakebetaling av innbetalt kapital, ikke utbytte i skattemessig forstand. For personlige aksjonærer er den ikke skattepliktig når den utbetales; den reduserer i stedet inngangsverdien, slik at gevinsten — og skatten — blir tilsvarende høyere når du selger. Det gjelder også om tilbakebetalingen overstiger inngangsverdien, som da blir negativ. Klassifiseringen gjelder hver utbetaling for seg og står i hver utbyttemelding.</div></details></div>
-<div class="faq-item"><details><summary class="faq-q">Er utbyttet fra SED Energy Holdings PLC bærekraftig?</summary><div class="faq-svar">Payout ratio for SED Energy Holdings PLC er 106 % — det vil si andelen av inntjeningen per aksje som utbetales som utbytte. En payout ratio over 80 % innebærer at SED Energy Holdings PLC deler ut en svært stor andel av inntjeningen. Det kan holdes oppe med sterk kontantstrøm, men er mer sårbart ved svakere kvartaler.</div></details></div>
+  <div class="faq"><h2>Vanlige spørsmål om ENH</h2><div class="faq-item"><details><summary class="faq-q">Hva er ex-datoen for SED Energy Holdings PLC (ENH)?</summary><div class="faq-svar les">Neste ex-dato for SED Energy Holdings PLC er 7. desember 2026. For å ha rett på utbyttet må du kjøpe aksjen senest 4. desember, børsdagen før ex-datoen. Kjøper du på ex-datoen eller senere, går utbyttet til den som solgte.</div></details></div>
+<div class="faq-item"><details><summary class="faq-q">Betaler SED Energy Holdings PLC utbytte hvert år, og hvor ofte?</summary><div class="faq-svar les">SED Energy Holdings PLC betaler utbytte fire ganger i året (kvartalsvis). Selskapet har betalt utbytte de siste 3 årene.</div></details></div>
+<div class="faq-item"><details><summary class="faq-q">Hva er direkteavkastningen (yield) til ENH?</summary><div class="faq-svar les">Direkteavkastningen (yield) for ENH er 9,87 %, beregnet som 0,61 NOK i annualisert utbytte per aksje delt på aksjekursen.  Yield endres daglig fordi den er koblet til kursen: stiger kursen, faller yielden.</div></details></div>
+<div class="faq-item"><details><summary class="faq-q">Hva er skatten på utbytte fra ENH?</summary><div class="faq-svar les">Ifølge siste utbyttemelding fra SED Energy Holdings PLC til Oslo Børs er utbetalingen tilbakebetaling av innbetalt kapital, ikke utbytte i skattemessig forstand. For personlige aksjonærer er den ikke skattepliktig når den utbetales; den reduserer i stedet inngangsverdien, slik at gevinsten — og skatten — blir tilsvarende høyere når du selger. Det gjelder også om tilbakebetalingen overstiger inngangsverdien, som da blir negativ. Klassifiseringen gjelder hver utbetaling for seg og står i hver utbyttemelding.</div></details></div>
+<div class="faq-item"><details><summary class="faq-q">Er utbyttet fra SED Energy Holdings PLC bærekraftig?</summary><div class="faq-svar les">Payout ratio for SED Energy Holdings PLC er 106 % — det vil si andelen av inntjeningen per aksje som utbetales som utbytte. En payout ratio over 80 % innebærer at SED Energy Holdings PLC deler ut en svært stor andel av inntjeningen. Det kan holdes oppe med sterk kontantstrøm, men er mer sårbart ved svakere kvartaler.</div></details></div>
 </div>
   </section>
 

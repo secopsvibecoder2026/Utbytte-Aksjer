@@ -117,7 +117,7 @@
     .wrap { max-width: 760px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
     h1 { margin-bottom: 0.25rem; }
     .sub { font-size: 0.95rem; margin-bottom: 1.5rem; }
-    .ingress { font-size: 1rem; line-height: 1.6; margin: -0.75rem 0 1.25rem; color: #374151; max-width: 46rem; }
+    .ingress { font-size: 1rem; line-height: 1.6; margin: -0.75rem 0 1.25rem; color: #374151; }
     .badge { display: inline-block; font-size: 0.75rem; font-weight: 600; padding: 0.2rem 0.6rem;
               border-radius: 9999px; margin-bottom: 1.25rem; }
     /* Kurshodet: kurs, 52-ukers spenn og tre nøkkeltall, nøytrale farger. */
@@ -472,7 +472,7 @@
   <!-- ── OVERSIKT ── -->
   <!-- Tallene først, så grafen, så teksten (STYLE.md, tiltak 3). Kurshodet
        over fanene erstatter de ni nøkkelkortene. -->
-  <section id="oversikt">
+  <section id="oversikt" class="les">
 
   
 <div class="kurs-lenker">
@@ -572,7 +572,7 @@
   </script>
 </div>
 
-  <dl class="korttall"><div><dt>Neste kvartalsrapport</dt><dd>25. feb 2027</dd></div><div><dt>5-årssnitt yield</dt><dd>7,58 %</dd></div><div><dt>År med utbytte</dt><dd>6</dd></div><div><dt>P/E</dt><dd>6,1</dd></div><div><dt>Payout ratio</dt><dd>77 %</dd></div><div><dt>Markedsverdi</dt><dd>46,3 mrd NOK</dd></div></dl>
+  <dl class="korttall"><div><dt>Neste kvartalsrapport</dt><dd>25. feb 2027</dd></div><div><dt>5-årssnitt yield</dt><dd>7,58 %</dd></div><div><dt>År med utbytte</dt><dd>6</dd></div><div><dt>P/E</dt><dd>6,2</dd></div><div><dt>Payout ratio</dt><dd>77 %</dd></div><div><dt>Markedsverdi</dt><dd>46,3 mrd NOK</dd></div></dl>
 
   <div class="delaar-seksjon"><h2>Direkteavkastningen kan være for lav</h2><p>Siste enkeltutbetaling var <strong>4,92 NOK</strong> — mer enn hele årsraten vi viser (3,93 NOK). For en kvartalsvis betaler er det ikke mulig, så tallet er trolig en delsum av et år.</p><p>Det skjer når et selskap nylig har startet eller trappet opp utbyttet: datakilden oppgir da fjorårets total, og for et år som ikke var fullt blir den for lav. Den reelle direkteavkastningen er derfor sannsynligvis høyere enn 4,54 %.</p><p>Det vi vet sikkert, er hva selskapet allerede har betalt: <strong>9,49 NOK per aksje hittil i 2026</strong>, fordelt på 3 utbetalinger. Målt mot dagens kurs er det 10,96 %. Det er en måling av året så langt, ikke et anslag for hele året — vi viser ikke et korrigert årstall, fordi et delår ikke sier noe om hva resten av året bringer.</p></div>
 
@@ -589,7 +589,7 @@
   </section>
 
   <!-- ── UTBYTTE ── -->
-  <section id="utbytte">
+  <section id="utbytte" class="les">
 
   <div class="analyse"><h2>Yield mot sektoren</h2><p>Yielden på 4,5 % er 4,6 prosentpoeng under snittet for Shipping-sektoren (9,1 %).</p></div><p class="kalender-lenke">Alle ex-datoene på Oslo Børs står samlet i <a href="/utbyttekalender/">utbyttekalender 2026</a>.</p>
 
@@ -643,17 +643,17 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
   <!-- ── NØKKELTALL ── -->
   <section id="nokkeltall">
 
-  <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Shipping</td></tr><tr><td>Frekvens</td><td>Kvartalsvis</td></tr><tr><td>Utbytte per aksje</td><td>3,93 NOK</td></tr><tr><td>Direkteavkastning</td><td>4,54 %</td></tr><tr><td>5-årssnitt yield</td><td>7,58 %</td></tr><tr><td>År med utbytte</td><td>6</td></tr><tr><td>P/E</td><td>6,1</td></tr><tr><td>Payout ratio</td><td>77 %</td></tr><tr><td>Markedsverdi</td><td>46,3 mrd NOK</td></tr><tr><td>52-ukers kurs</td><td>51,70 – 106,00 NOK</td></tr></tbody></table>
+  <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Shipping</td></tr><tr><td>Frekvens</td><td>Kvartalsvis</td></tr><tr><td>Utbytte per aksje</td><td>3,93 NOK</td></tr><tr><td>Direkteavkastning</td><td>4,54 %</td></tr><tr><td>5-årssnitt yield</td><td>7,58 %</td></tr><tr><td>År med utbytte</td><td>6</td></tr><tr><td>P/E</td><td>6,2</td></tr><tr><td>Payout ratio</td><td>77 %</td></tr><tr><td>Markedsverdi</td><td>46,3 mrd NOK</td></tr><tr><td>52-ukers kurs</td><td>51,70 – 106,00 NOK</td></tr></tbody></table>
 
   </section>
 
   <!-- ── FAQ ── -->
   <section id="faq">
-  <div class="faq"><h2>Vanlige spørsmål om HAFNI</h2><div class="faq-item"><details><summary class="faq-q">Betaler Hafnia Limited utbytte hvert år, og hvor ofte?</summary><div class="faq-svar">Hafnia Limited betaler utbytte fire ganger i året (kvartalsvis). Selskapet har betalt utbytte i 6 år, men ikke sammenhengende — nåværende rekke går tilbake til 2022.</div></details></div>
-<div class="faq-item"><details><summary class="faq-q">Hva er direkteavkastningen (yield) til HAFNI?</summary><div class="faq-svar">Direkteavkastningen (yield) for HAFNI er 4,54 %, beregnet som 3,93 NOK i annualisert utbytte per aksje delt på aksjekursen. Det er 3,0 prosentpoeng under 5-årssnittet på 7,6 %. Begge er regnet mot dagens kurs, så årsraten nå er lavere enn det selskapet i snitt har betalt per år. Yield endres daglig fordi den er koblet til kursen: stiger kursen, faller yielden.</div></details></div>
-<div class="faq-item"><details><summary class="faq-q">Hva er skatten på utbytte fra HAFNI?</summary><div class="faq-svar">Utbytte fra Hafnia Limited beskattes med 37,84 % av det som overstiger skjermingsfradraget, for personlige aksjonærer som eier aksjen på vanlig konto. Med en yield på 4,54 % gir det en nettoyield på ca. 2,82 % etter skatt, før skjermingsfradraget. Selskapet er registrert i Singapore, utenfor EØS, og aksjen kan ikke holdes i ASK.</div></details></div>
-<div class="faq-item"><details><summary class="faq-q">Er utbyttet fra Hafnia Limited bærekraftig?</summary><div class="faq-svar">Payout ratio for Hafnia Limited er 77 % — det vil si andelen av inntjeningen per aksje som utbetales som utbytte. En payout ratio mellom 50 og 80 % er vanlig for etablerte utbytteaksjer og anses bærekraftig så lenge inntjeningen er stabil. Sjekk at EPS-trenden er positiv.</div></details></div>
-<div class="faq-item"><details><summary class="faq-q">Hva er utbyttehistorikken til HAFNI de siste årene?</summary><div class="faq-svar">I de hele årene 2021–2025 betalte Hafnia Limited til sammen 32,81 kroner per aksje, regnet etter ex-dato. Høyest var 2024 med 13,50 kroner. I 2021 har vi ikke registrert noe utbytte. Hittil i 2026 er det betalt 9,49 kroner per aksje.</div></details></div>
+  <div class="faq"><h2>Vanlige spørsmål om HAFNI</h2><div class="faq-item"><details><summary class="faq-q">Betaler Hafnia Limited utbytte hvert år, og hvor ofte?</summary><div class="faq-svar les">Hafnia Limited betaler utbytte fire ganger i året (kvartalsvis). Selskapet har betalt utbytte i 6 år, men ikke sammenhengende — nåværende rekke går tilbake til 2022.</div></details></div>
+<div class="faq-item"><details><summary class="faq-q">Hva er direkteavkastningen (yield) til HAFNI?</summary><div class="faq-svar les">Direkteavkastningen (yield) for HAFNI er 4,54 %, beregnet som 3,93 NOK i annualisert utbytte per aksje delt på aksjekursen. Det er 3,0 prosentpoeng under 5-årssnittet på 7,6 %. Begge er regnet mot dagens kurs, så årsraten nå er lavere enn det selskapet i snitt har betalt per år. Yield endres daglig fordi den er koblet til kursen: stiger kursen, faller yielden.</div></details></div>
+<div class="faq-item"><details><summary class="faq-q">Hva er skatten på utbytte fra HAFNI?</summary><div class="faq-svar les">Utbytte fra Hafnia Limited beskattes med 37,84 % av det som overstiger skjermingsfradraget, for personlige aksjonærer som eier aksjen på vanlig konto. Med en yield på 4,54 % gir det en nettoyield på ca. 2,82 % etter skatt, før skjermingsfradraget. Selskapet er registrert i Singapore, utenfor EØS, og aksjen kan ikke holdes i ASK.</div></details></div>
+<div class="faq-item"><details><summary class="faq-q">Er utbyttet fra Hafnia Limited bærekraftig?</summary><div class="faq-svar les">Payout ratio for Hafnia Limited er 77 % — det vil si andelen av inntjeningen per aksje som utbetales som utbytte. En payout ratio mellom 50 og 80 % er vanlig for etablerte utbytteaksjer og anses bærekraftig så lenge inntjeningen er stabil. Sjekk at EPS-trenden er positiv.</div></details></div>
+<div class="faq-item"><details><summary class="faq-q">Hva er utbyttehistorikken til HAFNI de siste årene?</summary><div class="faq-svar les">I de hele årene 2021–2025 betalte Hafnia Limited til sammen 32,81 kroner per aksje, regnet etter ex-dato. Høyest var 2024 med 13,50 kroner. I 2021 har vi ikke registrert noe utbytte. Hittil i 2026 er det betalt 9,49 kroner per aksje.</div></details></div>
 </div>
   </section>
 

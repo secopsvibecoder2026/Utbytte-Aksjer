@@ -117,7 +117,7 @@
     .wrap { max-width: 760px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
     h1 { margin-bottom: 0.25rem; }
     .sub { font-size: 0.95rem; margin-bottom: 1.5rem; }
-    .ingress { font-size: 1rem; line-height: 1.6; margin: -0.75rem 0 1.25rem; color: #374151; max-width: 46rem; }
+    .ingress { font-size: 1rem; line-height: 1.6; margin: -0.75rem 0 1.25rem; color: #374151; }
     .badge { display: inline-block; font-size: 0.75rem; font-weight: 600; padding: 0.2rem 0.6rem;
               border-radius: 9999px; margin-bottom: 1.25rem; }
     /* Kurshodet: kurs, 52-ukers spenn og tre nøkkeltall, nøytrale farger. */
@@ -456,7 +456,7 @@
 
   <h1 class="side-h1">Bien Sparebank utbytte 2026: 5,74 kr per aksje</h1>
   <p class="sub">Bien Sparebank ASA (BIEN) · Finans · Årlig utbytte · Oslo Børs</p>
-  <p class="ingress">Bien Sparebank betaler 5,74 kr per aksje i året, en direkteavkastning på 3,93 % med dagens kurs. Neste ex-dato er ikke kjent ennå.</p>
+  <p class="ingress les">Bien Sparebank betaler 5,74 kr per aksje i året, en direkteavkastning på 3,93 % med dagens kurs. Neste ex-dato er ikke kjent ennå.</p>
 
   <div class="kurshode"><div class="kh-topp"><div><div class="kh-pris">146,00<span class="kh-valuta">NOK</span></div><div class="kh-meta"><span class="kh-endring kh-opp" title="Endring fra forrige sluttkurs, opp">+1,00 (+0,69 %)</span> <span class="kh-meta-dato">Kurs 23. nov 2026</span></div></div><div class="kh-spenn" aria-label="52 ukers spenn fra 140,00 til 165,00"><span class="kh-spenn-tekst">52 uker</span><span class="kh-spenn-tall">140,00</span><span class="kh-spenn-linje"><span class="kh-spenn-punkt" style="left:24.0%"></span></span><span class="kh-spenn-tall">165,00</span></div></div><dl class="kh-tall"><div><dt>Yield</dt><dd>3,93 %</dd></div><div><dt>Utbytte/aksje</dt><dd>5,74 NOK</dd></div><div><dt>Ex-dato</dt><dd><span class="kh-ukjent">Ikke kjent</span></dd></div></dl></div>
   <p class="kurs-varsel" id="kurs-varsel" data-kursdag="2026-11-23" data-fridager="2026-12-24,2026-12-25,2026-12-26,2026-12-31,2027-01-01,2027-03-25,2027-03-26,2027-03-29,2027-05-01,2027-05-06,2027-05-17,2027-12-24,2027-12-25,2027-12-26,2027-12-31" role="status" hidden></p><script src="/assets/kursferskhet.js" defer></script>
@@ -472,7 +472,7 @@
   <!-- ── OVERSIKT ── -->
   <!-- Tallene først, så grafen, så teksten (STYLE.md, tiltak 3). Kurshodet
        over fanene erstatter de ni nøkkelkortene. -->
-  <section id="oversikt">
+  <section id="oversikt" class="les">
 
   
 <div class="kurs-lenker">
@@ -589,7 +589,7 @@
   </section>
 
   <!-- ── UTBYTTE ── -->
-  <section id="utbytte">
+  <section id="utbytte" class="les">
 
   <div class="analyse"><h2>Yield mot sektoren</h2><p>Yielden på 3,9 % er 2,3 prosentpoeng under snittet for Finans-sektoren (6,2 %).</p></div><p class="kalender-lenke">Alle ex-datoene på Oslo Børs står samlet i <a href="/utbyttekalender/">utbyttekalender 2026</a>.</p>
 
@@ -638,10 +638,10 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
 
   <!-- ── FAQ ── -->
   <section id="faq">
-  <div class="faq"><h2>Vanlige spørsmål om BIEN</h2><div class="faq-item"><details><summary class="faq-q">Betaler Bien Sparebank ASA utbytte hvert år, og hvor ofte?</summary><div class="faq-svar">Bien Sparebank ASA betaler utbytte én gang i året. Selskapet har betalt utbytte de siste 3 årene.</div></details></div>
-<div class="faq-item"><details><summary class="faq-q">Hva er direkteavkastningen (yield) til BIEN?</summary><div class="faq-svar">Direkteavkastningen (yield) for BIEN er 3,93 %, beregnet som 5,74 NOK i annualisert utbytte per aksje delt på aksjekursen.  Yield endres daglig fordi den er koblet til kursen: stiger kursen, faller yielden.</div></details></div>
-<div class="faq-item"><details><summary class="faq-q">Hva er skatten på utbytte fra BIEN?</summary><div class="faq-svar">Utbytte fra Bien Sparebank ASA beskattes med 37,84 % av det som overstiger skjermingsfradraget, for personlige aksjonærer som eier aksjen på vanlig konto. Med en yield på 3,93 % gir det en nettoyield på ca. 2,44 % etter skatt, før skjermingsfradraget. Eier du aksjen via aksjesparekonto (ASK), utsettes skatten til du tar ut midler, og utbyttet kan reinvesteres innen kontoen uten skatt underveis.</div></details></div>
-<div class="faq-item"><details><summary class="faq-q">Er utbyttet fra Bien Sparebank ASA bærekraftig?</summary><div class="faq-svar">Payout ratio for Bien Sparebank ASA er 63 % — det vil si andelen av inntjeningen per aksje som utbetales som utbytte. En payout ratio mellom 50 og 80 % er vanlig for etablerte utbytteaksjer og anses bærekraftig så lenge inntjeningen er stabil. Sjekk at EPS-trenden er positiv.</div></details></div>
+  <div class="faq"><h2>Vanlige spørsmål om BIEN</h2><div class="faq-item"><details><summary class="faq-q">Betaler Bien Sparebank ASA utbytte hvert år, og hvor ofte?</summary><div class="faq-svar les">Bien Sparebank ASA betaler utbytte én gang i året. Selskapet har betalt utbytte de siste 3 årene.</div></details></div>
+<div class="faq-item"><details><summary class="faq-q">Hva er direkteavkastningen (yield) til BIEN?</summary><div class="faq-svar les">Direkteavkastningen (yield) for BIEN er 3,93 %, beregnet som 5,74 NOK i annualisert utbytte per aksje delt på aksjekursen.  Yield endres daglig fordi den er koblet til kursen: stiger kursen, faller yielden.</div></details></div>
+<div class="faq-item"><details><summary class="faq-q">Hva er skatten på utbytte fra BIEN?</summary><div class="faq-svar les">Utbytte fra Bien Sparebank ASA beskattes med 37,84 % av det som overstiger skjermingsfradraget, for personlige aksjonærer som eier aksjen på vanlig konto. Med en yield på 3,93 % gir det en nettoyield på ca. 2,44 % etter skatt, før skjermingsfradraget. Eier du aksjen via aksjesparekonto (ASK), utsettes skatten til du tar ut midler, og utbyttet kan reinvesteres innen kontoen uten skatt underveis.</div></details></div>
+<div class="faq-item"><details><summary class="faq-q">Er utbyttet fra Bien Sparebank ASA bærekraftig?</summary><div class="faq-svar les">Payout ratio for Bien Sparebank ASA er 63 % — det vil si andelen av inntjeningen per aksje som utbetales som utbytte. En payout ratio mellom 50 og 80 % er vanlig for etablerte utbytteaksjer og anses bærekraftig så lenge inntjeningen er stabil. Sjekk at EPS-trenden er positiv.</div></details></div>
 </div>
   </section>
 

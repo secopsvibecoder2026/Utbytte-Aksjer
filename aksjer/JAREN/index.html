@@ -117,7 +117,7 @@
     .wrap { max-width: 760px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
     h1 { margin-bottom: 0.25rem; }
     .sub { font-size: 0.95rem; margin-bottom: 1.5rem; }
-    .ingress { font-size: 1rem; line-height: 1.6; margin: -0.75rem 0 1.25rem; color: #374151; max-width: 46rem; }
+    .ingress { font-size: 1rem; line-height: 1.6; margin: -0.75rem 0 1.25rem; color: #374151; }
     .badge { display: inline-block; font-size: 0.75rem; font-weight: 600; padding: 0.2rem 0.6rem;
               border-radius: 9999px; margin-bottom: 1.25rem; }
     /* Kurshodet: kurs, 52-ukers spenn og tre nøkkeltall, nøytrale farger. */
@@ -456,7 +456,7 @@
 
   <h1 class="side-h1">Jæren Sparebank utbytte 2026: 20,00 kr per aksje</h1>
   <p class="sub">Jæren Sparebank (JAREN) · Finans · Årlig utbytte · Oslo Børs</p>
-  <p class="ingress">Jæren Sparebank betaler 20,00 kr per aksje i året, en direkteavkastning på 6,06 % med dagens kurs. Neste ex-dato er ikke kjent ennå.</p>
+  <p class="ingress les">Jæren Sparebank betaler 20,00 kr per aksje i året, en direkteavkastning på 6,06 % med dagens kurs. Neste ex-dato er ikke kjent ennå.</p>
 
   <div class="kurshode"><div class="kh-topp"><div><div class="kh-pris">329,95<span class="kh-valuta">NOK</span></div><div class="kh-meta"><span class="kh-endring kh-opp" title="Endring fra forrige sluttkurs, opp">+4,95 (+1,52 %)</span> <span class="kh-meta-dato">Kurs 23. nov 2026</span></div></div><div class="kh-spenn" aria-label="52 ukers spenn fra 316,00 til 388,95"><span class="kh-spenn-tekst">52 uker</span><span class="kh-spenn-tall">316,00</span><span class="kh-spenn-linje"><span class="kh-spenn-punkt" style="left:19.1%"></span></span><span class="kh-spenn-tall">388,95</span></div></div><dl class="kh-tall"><div><dt>Yield</dt><dd>6,06 %</dd></div><div><dt>Utbytte/aksje</dt><dd>20,00 NOK</dd></div><div><dt>Ex-dato</dt><dd><span class="kh-ukjent">Ikke kjent</span></dd></div></dl></div>
   <p class="kurs-varsel" id="kurs-varsel" data-kursdag="2026-11-23" data-fridager="2026-12-24,2026-12-25,2026-12-26,2026-12-31,2027-01-01,2027-03-25,2027-03-26,2027-03-29,2027-05-01,2027-05-06,2027-05-17,2027-12-24,2027-12-25,2027-12-26,2027-12-31" role="status" hidden></p><script src="/assets/kursferskhet.js" defer></script>
@@ -472,7 +472,7 @@
   <!-- ── OVERSIKT ── -->
   <!-- Tallene først, så grafen, så teksten (STYLE.md, tiltak 3). Kurshodet
        over fanene erstatter de ni nøkkelkortene. -->
-  <section id="oversikt">
+  <section id="oversikt" class="les">
 
   
 <div class="kurs-lenker">
@@ -589,7 +589,7 @@
   </section>
 
   <!-- ── UTBYTTE ── -->
-  <section id="utbytte">
+  <section id="utbytte" class="les">
 
   <div class="analyse"><h2>Yield mot sektoren</h2><p>Yielden på 6,1 % er på linje med snittet for Finans-sektoren (6,2 %).</p></div><p class="kalender-lenke">Alle ex-datoene på Oslo Børs står samlet i <a href="/utbyttekalender/">utbyttekalender 2026</a>.</p>
 
@@ -649,11 +649,11 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
 
   <!-- ── FAQ ── -->
   <section id="faq">
-  <div class="faq"><h2>Vanlige spørsmål om JAREN</h2><div class="faq-item"><details><summary class="faq-q">Betaler Jæren Sparebank utbytte hvert år, og hvor ofte?</summary><div class="faq-svar">Jæren Sparebank betaler utbytte én gang i året. Selskapet har utbetalt utbytte i 14 år på rad.</div></details></div>
-<div class="faq-item"><details><summary class="faq-q">Hva er direkteavkastningen (yield) til JAREN?</summary><div class="faq-svar">Direkteavkastningen (yield) for JAREN er 6,06 %, beregnet som 20,00 NOK i annualisert utbytte per aksje delt på aksjekursen. Det er 2,0 prosentpoeng over 5-årssnittet på 4,1 %. Begge er regnet mot dagens kurs, så forskjellen betyr at årsraten nå er høyere enn det selskapet i snitt har betalt per år. Yield endres daglig fordi den er koblet til kursen: stiger kursen, faller yielden.</div></details></div>
-<div class="faq-item"><details><summary class="faq-q">Hva er skatten på utbytte fra JAREN?</summary><div class="faq-svar">Utbytte fra Jæren Sparebank beskattes med 37,84 % av det som overstiger skjermingsfradraget, for personlige aksjonærer som eier aksjen på vanlig konto. Med en yield på 6,06 % gir det en nettoyield på ca. 3,77 % etter skatt, før skjermingsfradraget. Eier du aksjen via aksjesparekonto (ASK), utsettes skatten til du tar ut midler, og utbyttet kan reinvesteres innen kontoen uten skatt underveis.</div></details></div>
-<div class="faq-item"><details><summary class="faq-q">Er utbyttet fra Jæren Sparebank bærekraftig?</summary><div class="faq-svar">Payout ratio for Jæren Sparebank er 69 % — det vil si andelen av inntjeningen per aksje som utbetales som utbytte. En payout ratio mellom 50 og 80 % er vanlig for etablerte utbytteaksjer og anses bærekraftig så lenge inntjeningen er stabil. Sjekk at EPS-trenden er positiv.</div></details></div>
-<div class="faq-item"><details><summary class="faq-q">Hva er utbyttehistorikken til JAREN de siste årene?</summary><div class="faq-svar">I de hele årene 2021–2025 betalte Jæren Sparebank til sammen 67,00 kroner per aksje, regnet etter ex-dato. Høyest var 2025 med 20,00 kroner, lavest 2021 med 7,50 kroner. Hittil i 2026 er det betalt 20,00 kroner per aksje.</div></details></div>
+  <div class="faq"><h2>Vanlige spørsmål om JAREN</h2><div class="faq-item"><details><summary class="faq-q">Betaler Jæren Sparebank utbytte hvert år, og hvor ofte?</summary><div class="faq-svar les">Jæren Sparebank betaler utbytte én gang i året. Selskapet har utbetalt utbytte i 14 år på rad.</div></details></div>
+<div class="faq-item"><details><summary class="faq-q">Hva er direkteavkastningen (yield) til JAREN?</summary><div class="faq-svar les">Direkteavkastningen (yield) for JAREN er 6,06 %, beregnet som 20,00 NOK i annualisert utbytte per aksje delt på aksjekursen. Det er 2,0 prosentpoeng over 5-årssnittet på 4,1 %. Begge er regnet mot dagens kurs, så forskjellen betyr at årsraten nå er høyere enn det selskapet i snitt har betalt per år. Yield endres daglig fordi den er koblet til kursen: stiger kursen, faller yielden.</div></details></div>
+<div class="faq-item"><details><summary class="faq-q">Hva er skatten på utbytte fra JAREN?</summary><div class="faq-svar les">Utbytte fra Jæren Sparebank beskattes med 37,84 % av det som overstiger skjermingsfradraget, for personlige aksjonærer som eier aksjen på vanlig konto. Med en yield på 6,06 % gir det en nettoyield på ca. 3,77 % etter skatt, før skjermingsfradraget. Eier du aksjen via aksjesparekonto (ASK), utsettes skatten til du tar ut midler, og utbyttet kan reinvesteres innen kontoen uten skatt underveis.</div></details></div>
+<div class="faq-item"><details><summary class="faq-q">Er utbyttet fra Jæren Sparebank bærekraftig?</summary><div class="faq-svar les">Payout ratio for Jæren Sparebank er 69 % — det vil si andelen av inntjeningen per aksje som utbetales som utbytte. En payout ratio mellom 50 og 80 % er vanlig for etablerte utbytteaksjer og anses bærekraftig så lenge inntjeningen er stabil. Sjekk at EPS-trenden er positiv.</div></details></div>
+<div class="faq-item"><details><summary class="faq-q">Hva er utbyttehistorikken til JAREN de siste årene?</summary><div class="faq-svar les">I de hele årene 2021–2025 betalte Jæren Sparebank til sammen 67,00 kroner per aksje, regnet etter ex-dato. Høyest var 2025 med 20,00 kroner, lavest 2021 med 7,50 kroner. Hittil i 2026 er det betalt 20,00 kroner per aksje.</div></details></div>
 </div>
   </section>
 
