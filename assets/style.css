@@ -1228,3 +1228,28 @@ label:has(> input[type="checkbox"]) { min-height: 44px; }
 .hero .tallrute, .dark .hero .tallrute { background: rgba(255, 255, 255, 0.08); border-color: rgba(255, 255, 255, 0.2); }
 .hero .tallrute dt, .dark .hero .tallrute dt { color: rgba(255, 255, 255, 0.8); }
 .hero .tallrute dd, .dark .hero .tallrute dd { color: #fff; }
+
+/* ── LESEBREDDE (designrunde 3, 23.11.2026) ───────────────────────────────
+   Løpende tekst brytes etter 65 til 70 tegn per linje. På 1280 px var
+   linjene 82 til 109 tegn (aksjesiden, forsiden, sektorsiden, kalenderne og
+   /verktoy/), på 768 px 82 til 103. `ch` er bredden av sifferet 0. I Inter
+   er den omtrent 20 % bredere enn en vanlig bokstav, så en grense på 68ch
+   gir fortsatt 82 tegn og endrer ingenting. Målt på ni sider ved 1280 px:
+   54ch gir 63 til 71 tegn i median, 56ch opptil 76. Enheten følger
+   skriftstørrelsen til avsnittet, så liten tekst får like mange tegn per
+   linje som stor.
+
+   `.les` settes på en wrapper som bare har overskrifter, avsnitt og lister,
+   eller på en boks, eller direkte på ett avsnitt. Regelen treffer bare p og
+   li. Tabeller, tallruter, grafer, kort, bokser, heroer og kalenderkontroller
+   beholder full bredde, og blokken ligger mot samme venstrekant som resten.
+   Under 54ch gjør regelen ingenting, så telefonen er som før. Reglene ligger
+   utenfor @layer og slår dermed Tailwinds max-w-*. `ch` brukes ikke til noe
+   annet i stilarket. TestLinjelengde i scripts/test_fetch_stocks.py vokter
+   bruken. */
+:root { --lese-bredde: 54ch; }
+.les p, .les li, p.les, li.les { max-width: var(--lese-bredde); }
+/* FAQ-svaret er en div med en kant over seg som skal gå hele bredden, så
+   teksten smalnes av med polstring til høyre i stedet for med bredde.
+   Prosenten er bredden til boksen svaret ligger i. */
+.faq-svar.les { padding-right: max(1.25rem, calc(100% - 1.25rem - var(--lese-bredde))); }

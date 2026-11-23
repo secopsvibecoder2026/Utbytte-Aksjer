@@ -7139,7 +7139,7 @@ def _lag_faq_seksjon(a, today):
         items_html += (
             f'<div class="faq-item">'
             f'<details><summary class="faq-q">{sp}</summary>'
-            f'<div class="faq-svar">{sv}</div>'
+            f'<div class="faq-svar les">{sv}</div>'
             f'</details></div>\n'
         )
     faq_html = f'<div class="faq"><h2>Vanlige spørsmål om {ticker}</h2>{items_html}</div>'
@@ -7657,7 +7657,7 @@ def lag_aksje_ingress(a, today):
         deler.append("Neste ex-dato er ikke kjent ennå.")
     else:
         return ""
-    return f'<p class="ingress">{" ".join(d for d in deler if d)}</p>'
+    return f'<p class="ingress les">{" ".join(d for d in deler if d)}</p>'
 
 
 def _pst(verdi, desimaler=2):
@@ -8237,7 +8237,7 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None, rapporter=None
     .wrap {{ max-width: 760px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }}
     h1 {{ margin-bottom: 0.25rem; }}
     .sub {{ font-size: 0.95rem; margin-bottom: 1.5rem; }}
-    .ingress {{ font-size: 1rem; line-height: 1.6; margin: -0.75rem 0 1.25rem; color: #374151; max-width: 46rem; }}
+    .ingress {{ font-size: 1rem; line-height: 1.6; margin: -0.75rem 0 1.25rem; color: #374151; }}
     .badge {{ display: inline-block; font-size: 0.75rem; font-weight: 600; padding: 0.2rem 0.6rem;
               border-radius: 9999px; margin-bottom: 1.25rem; }}
     /* Kurshodet: kurs, 52-ukers spenn og tre nøkkeltall, nøytrale farger. */
@@ -8528,7 +8528,7 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None, rapporter=None
   <!-- ── OVERSIKT ── -->
   <!-- Tallene først, så grafen, så teksten (STYLE.md, tiltak 3). Kurshodet
        over fanene erstatter de ni nøkkelkortene. -->
-  <section id="oversikt">
+  <section id="oversikt" class="les">
 
   {tv_chart_seksjon}
 
@@ -8549,7 +8549,7 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None, rapporter=None
   </section>
 
   <!-- ── UTBYTTE ── -->
-  <section id="utbytte">
+  <section id="utbytte" class="les">
 
   {analyse_seksjon}
 
@@ -9590,7 +9590,7 @@ def _sektor_analyse(sektor, i_sektor, alle):
     ) if redaksjonell else ""
 
     return f"""
-  <div class="sektor-analyse">
+  <div class="sektor-analyse les">
   <h2>{sektor} som utbyttesektor</h2>
   <p>{avsnitt1}</p>
   {f'<p>{avsnitt2}</p>' if avsnitt2 else ''}
@@ -9961,7 +9961,7 @@ def generer_sektorsider(aksjer, root_dir):
     .dark .info-bar strong {{ color: #f3f4f6; }}
     .sektor-om {{ margin: 2rem 0 0.5rem; }}
     .sektor-om h2 {{ font-size: 1.1rem; font-weight: 700; color: #111827; margin: 0 0 0.6rem; }}
-    .sektor-om p {{ font-size: 0.92rem; line-height: 1.65; color: #374151; margin: 0 0 0.8rem; max-width: 46rem; }}
+    .sektor-om p {{ font-size: 0.92rem; line-height: 1.65; color: #374151; margin: 0 0 0.8rem; }}
     .dark .sektor-om h2 {{ color: #f3f4f6; }}
     .dark .sektor-om p {{ color: #d1d5db; }}
   </style>
@@ -9988,7 +9988,7 @@ def generer_sektorsider(aksjer, root_dir):
   <div class="grid">{sektorkort}
   </div>
 
-  <section class="sektor-om">
+  <section class="sektor-om les">
     <h2>Sektorene betaler på ulike måter</h2>
     <p>Bankene og forsikringsselskapene i Finans deler som regel ut én gang i året, etter
     årsoppgjøret. Mange shipping- og energiselskaper betaler hvert kvartal og lar beløpet følge
@@ -10159,7 +10159,7 @@ def _toppliste_analyse(slug, topp, alle):
 
     avsnitt_html = "\n  ".join(f"<p>{t}</p>" for t in avsnitt if t)
     return f"""
-  <div class="liste-analyse">
+  <div class="liste-analyse les">
   <h2>{tittel}</h2>
   {avsnitt_html}
   </div>
@@ -10530,7 +10530,7 @@ def _rapportkalender_analyse(kommende, per_maaned, aksjer, i_dag):
     med_exdato = sum(1 for a in aksjer if a.get("ex_dato"))
     med_utbytte = sum(1 for a in aksjer if (a.get("utbytte_yield") or 0) > 0)
 
-    return f"""  <div class="liste-analyse">
+    return f"""  <div class="liste-analyse les">
     <h2>Rapportsesongen akkurat nå</h2>
     <p>
       Vi kjenner {ant} rapportdatoer for {selskaper} selskaper på {markedsplass}.
@@ -10857,7 +10857,7 @@ def generer_rapportkalender(aksjer, root_dir, i_dag=None):
 <div class="wrap">
   {brod_html}
   <h1 class="side-h1">Rapportkalender {aar} — kvartalsrapporter på Oslo Børs</h1>
-  <p class="sub">
+  <p class="sub les">
     Når legger selskapene fram tall? Alle kjente rapportdatoer for norske
     aksjer, måned for måned, med direkteavkastning og ex-dato ved siden av.
     Oppdateres daglig på børsdager.
@@ -10871,7 +10871,7 @@ def generer_rapportkalender(aksjer, root_dir, i_dag=None):
 {analyse}
 {nylig}
 {seksjoner}
-  <section id="faq">
+  <section id="faq" class="les">
     <h2>Vanlige spørsmål om rapportkalenderen</h2>{faq_html}
   </section>
   <div class="cta">
@@ -11035,7 +11035,7 @@ def _rapport_artikkel(r, ticker):
     kilde = (f' · <a href="https://newsweb.oslobors.no/message/{html.escape(melding)}" '
              f'rel="noopener">Børsmeldingen på NewsWeb</a>') if melding.isdigit() else ""
     deler = [
-        f'<article class="rapport" id="{html.escape(a_id)}">',
+        f'<article class="rapport les" id="{html.escape(a_id)}">',
         f'<h2><a class="rapport-anker" href="#{html.escape(a_id)}">{html.escape(pt[:1].upper() + pt[1:])}</a></h2>',
         f'<p class="rapport-meta">Lagt fram {_fmt_dato(r.get("dato"))}{kilde}</p>',
         "<h3>Resultatet</h3>",
@@ -11293,14 +11293,14 @@ def _rapportside_html(a, rapporter, today):
 <div class="wrap">
   {brod_html}
   <h1 class="side-h1">{html.escape(kort)}: kvartalsrapporter og utbytte</h1>
-  <p class="sub">Det viktigste fra rapportene {html.escape(a["navn"])} ({ticker}) har lagt fram:
+  <p class="sub les">Det viktigste fra rapportene {html.escape(a["navn"])} ({ticker}) har lagt fram:
     resultatet, utbyttet og utbytteplanen, rapport for rapport. Skrevet ut fra
     selskapets egne meldinger til Oslo Børs.</p>
   {lag_aksje_faner(ticker, ticker, aktiv="rapporter")}
   {_rapport_utbytte_naa(a, today)}
   {f'<nav class="hopp" aria-label="Hopp til rapport">{hopp}</nav>' if hopp else ''}
 {artikler}
-  <div class="om-oppsummeringene">
+  <div class="om-oppsummeringene les">
     <p><strong>Slik lager vi oppsummeringene.</strong> Teksten er skrevet ut fra
     børsmeldingen og rapporten selskapet la fram, med hjelp av en språkmodell.
     Hvert tall er kontrollert mot kilden før publisering. Oppsummeringen
@@ -12426,11 +12426,11 @@ def lag_exmnd_blokk(aksjer, i_dag):
     return "\n".join([
         '    <section class="space-y-4" aria-labelledby="exmnd-tittel">',
         f'      <h2 id="exmnd-tittel" class="text-lg font-bold text-gray-900 dark:text-gray-100">{tittel}</h2>',
-        f'      <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">{intro}</p>',
+        f'      <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed les">{intro}</p>',
         '      <div class="grid gap-3 sm:grid-cols-2">',
         *kort,
         '      </div>',
-        '      <p class="text-xs text-gray-500 dark:text-gray-400">Selskaper der et oppkjøp, en '
+        '      <p class="text-xs text-gray-500 dark:text-gray-400 les">Selskaper der et oppkjøp, en '
         'fusjon eller en avvikling er meldt, er ikke med. Anslaget bygger på historikken og '
         'er ingen garanti for at selskapet betaler.</p>',
         '    </section>',
@@ -12706,7 +12706,7 @@ def lag_kalender_kropp(rader, i_dag, hentet=None):
         '    <div class="space-y-3 max-w-3xl">',
         '      ' + brodsmule(KALENDER_STI)[0],
         f'      <h1 class="side-h1">Utbyttekalender {aar}</h1>',
-        '      <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400 leading-relaxed">'
+        '      <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400 leading-relaxed les">'
         'Du må eie aksjen før ex-datoen for å få utbyttet, så siste dag å kjøpe er børsdagen før. '
         'Her er alle ex-datoene på Oslo Børs og Euronext Growth i år, med beløp, kjøpsfrist og '
         'betalingsdato.</p>',
@@ -12720,7 +12720,7 @@ def lag_kalender_kropp(rader, i_dag, hentet=None):
         '    </section>',
         '    <section class="space-y-3" aria-labelledby="kal-tittel">',
         f'      <h2 id="kal-tittel" class="text-lg font-bold text-gray-900 dark:text-gray-100">Alle ex-datoer {aar}</h2>',
-        f'      <p class="text-sm text-gray-600 dark:text-gray-400" id="kal-oppsummering">{len(rader)} ex-datoer: '
+        f'      <p class="text-sm text-gray-600 dark:text-gray-400 les" id="kal-oppsummering">{len(rader)} ex-datoer: '
         f'{len(kommende)} kommende, tidligste først, og {passerte} passerte, nyeste først.{hentet_tekst}</p>',
         '      <div id="kal-kontroller" class="kal-kontroller" hidden></div>',
         '      <div class="kal-ramme">',
@@ -12732,7 +12732,7 @@ def lag_kalender_kropp(rader, i_dag, hentet=None):
         "        </tbody>",
         "      </table>",
         "      </div>",
-        '      <p class="text-xs text-gray-500 dark:text-gray-400">Beløpet er per aksje og står i '
+        '      <p class="text-xs text-gray-500 dark:text-gray-400 les">Beløpet er per aksje og står i '
         'valutaen selskapet har meldt. Passerte beløp er i kroner, slik de ble utbetalt. Yield er '
         'aksjens direkteavkastning på dagens kurs, ikke for den enkelte utbetalingen. «Betalt» '
         f'uten kjent betalingsdato betyr at ex-datoen er mer enn {KAL_BETALT_ETTER_DAGER} dager gammel.</p>',

@@ -190,6 +190,13 @@ håndskrevne sidene, og tallruter med etiketten over tallet i et rutenett som
 fyller raden. Se «Design round 2» i `CLAUDE.md`. Den ekstra linjen under menyen
 på `/utbyttekalender/` står fortsatt.
 
+**Lesebredde 23.11.2026** (designrunde 3, forslag 6): løpende tekst har `.les`
+(`--lese-bredde: 54ch`, ca. 65 til 70 tegn per linje) i malene og på de
+håndskrevne sidene i omfanget. Median tegn per linje ved 1280 px gikk fra 82
+til 109 til 63 til 71. Tabeller, tallruter, grafer, kort og kalenderkontroller
+har full bredde, og 390 px er uendret. Et direkte `68ch` gir 82 tegn, fordi `ch`
+er bredden av sifferet 0. Se «Design round 3» i `CLAUDE.md`.
+
 Gjenstår:
 - samme tallformat i resten av malen
 
