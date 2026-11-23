@@ -293,3 +293,10 @@ test('tallUtdatert: uten hentet eller datasettdato sier den ingenting', () => {
   assert.equal(tallUtdatert({ hentet: 'tull' }, '2026-11-02T10:41:00Z'), '');
   assert.equal(tallUtdatert(null, '2026-11-02T10:41:00Z'), '');
 });
+
+// Designrunden 22.11.2026: modalen viser børsdagen ved endringen.
+test('slaaSammenKurs gir børsdagen kursen gjelder', () => {
+  const ny = { ...SCATC_0810, pris: 105, dato: '2026-10-09', forrige_kurs: 98.55 };
+  assert.equal(slaaSammenKurs(104.2, ny, '2026-10-09T15:03:00Z', '2026-10-09T13:57:00Z').kursDato, '2026-10-09');
+  assert.equal(slaaSammenKurs(104.2, SCATC_0810, '2026-10-08T21:42:00Z', '2026-10-09T13:57:00Z').kursDato, '2026-10-09');
+});

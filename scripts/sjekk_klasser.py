@@ -35,7 +35,7 @@ import os
 import re
 import sys
 
-HOPP_OVER = {".git", "node_modules", "data", "logo", "promo", "test-results"}
+HOPP_OVER = {".git", ".claude", "node_modules", "data", "logo", "promo", "test-results"}
 
 # Klassenavn i en CSS-selektor. Tailwind escaper : / . [ ] % med backslash,
 # så `\\.` må stå først i alternasjonen — ellers spiser tegnklassen

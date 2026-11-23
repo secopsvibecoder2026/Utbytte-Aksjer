@@ -1338,3 +1338,23 @@ test('Fikser 22.11.2026: Akastor står utenfor rangeringene', () => {
   assert.equal(hoyestYield([akast, akso]).ticker, 'AKSO');
   assert.equal(sektorSnittYield([akast, akso]), 5.0);
 });
+
+// Designrunden 22.11.2026: dagens endring i modalens kurshode, med dato.
+test('modalEndring viser endring med dato, grønt opp og rødt ned', () => {
+  const { modalEndring } = require('../assets/ui.js');
+  global.escHtml = s => String(s);
+  try {
+    const ned = modalEndring({ endring_krs: -5.9, endring_pct: -1.5159, kurs_dato: '2026-11-20' });
+    assert.match(ned, /−5,90 \(−1,52 %\)/);
+    assert.match(ned, /text-red-700/);
+    assert.match(ned, /20\. nov/);
+    const opp = modalEndring({ endring_krs: 2, endring_pct: 0.5, kurs_dato: '2026-11-20' });
+    assert.match(opp, /\+2,00 \(\+0,50 %\)/);
+    assert.match(opp, /text-green-700/);
+    // Uten dato eller endring: ingenting. En endring uten dag sier ikke hvilken dag.
+    assert.equal(modalEndring({ endring_krs: -5.9, endring_pct: -1.5 }), '');
+    assert.equal(modalEndring({ kurs_dato: '2026-11-20' }), '');
+  } finally {
+    delete global.escHtml;
+  }
+});
