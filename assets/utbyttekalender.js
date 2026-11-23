@@ -334,7 +334,6 @@ function kalStart() {
         <button type="button" id="kal-nullstill" class="kal-knapp">Nullstill filtre</button>
         <button type="button" id="kal-ics-alle" class="kal-knapp">Legg visningen i kalenderen (.ics)</button>
         <button type="button" id="kal-csv" class="kal-knapp">Last ned CSV</button>
-        <a href="/utbyttekalender/exday.ics" class="kal-knapp">Abonner på kalenderen</a>
       </div>
     </div>`;
   kontroller.hidden = false;
