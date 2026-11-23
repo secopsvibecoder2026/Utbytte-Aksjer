@@ -4623,6 +4623,45 @@ def _generer_kurs_chart_svg(kurs_historikk, valuta="NOK"):
 </div>"""
 
 
+def pent_akse(min_, maks, maks_tikk=6):
+    """Runde akseverdier, samme regel som pentAkse() i assets/ui.js.
+
+    Steg 1, 2, 2,5 eller 5 ganger en tierpotens, den tetteste aksen med 3 til
+    maks_tikk verdier. Kursgrafen på aksjesiden viste 226 / 340 / 454 og
+    søylene 11,88 / 23,76 / 35,64, mens appen viste 200 / 300 / 400 / 500
+    (designrunden 22.11.2026). Gir {fra, til, steg, verdier, desimaler}.
+    """
+    if not (math.isfinite(min_) and math.isfinite(maks)):
+        return None
+    if maks <= min_:
+        d = abs(min_) * 0.05 or 1
+        min_, maks = min_ - d, maks + d
+    span = maks - min_
+    tier0 = 10 ** (math.floor(math.log10(span)) - 1)
+    best = None
+    for t in (tier0, tier0 * 10):
+        for f in (1, 2, 2.5, 5):
+            steg = f * t
+            fra = math.floor(min_ / steg + 1e-9) * steg
+            til = math.ceil(maks / steg - 1e-9) * steg
+            antall = round((til - fra) / steg) + 1
+            if antall < 3 or antall > maks_tikk:
+                continue
+            if best is None or til - fra < best[1] - best[0] - 1e-12:
+                best = (fra, til, steg, f)
+    if best is None:
+        best = (min_, maks, span / 4, 1)
+    fra, til, steg, f = best
+    desimaler = max(0, -math.floor(math.log10(steg) + 1e-9) + (1 if f == 2.5 else 0))
+    verdier = []
+    v = fra
+    while v <= til + steg / 2:
+        verdier.append(round(v, desimaler))
+        v += steg
+    return {"fra": round(fra, desimaler), "til": round(til, desimaler), "steg": steg,
+            "verdier": verdier, "desimaler": desimaler}
+
+
 def _generer_hist_chart(hist, valuta="NOK"):
     """Lager et inline SVG søylediagram med Y-akse og hover-tooltip for historiske utbytter."""
     if not hist or len(hist) < 2:
@@ -4639,8 +4678,10 @@ def _generer_hist_chart(hist, valuta="NOK"):
     bar_w = max(8, min(36, int(chart_w / n) - 4))
     spacing = chart_w / n
 
-    # Y-akse ticks (4 nivåer)
-    ticks = [round(maks * i / 3, 2) for i in range(4)]
+    # Runde akseverdier fra 0, som i appen. Søylene skaleres mot aksens topp.
+    akse = pent_akse(0, maks, 5)
+    ticks = akse["verdier"]
+    maks = akse["til"] or maks
 
     bars = []
     labels = []
@@ -4677,7 +4718,7 @@ def _generer_hist_chart(hist, valuta="NOK"):
             f'<line x1="{pad_l}" y1="{y:.1f}" x2="{W - pad_r}" y2="{y:.1f}" '
             f'stroke="#e5e7eb" stroke-width="1" class="ytick"/>'
             f'<text x="{pad_l - 4}" y="{y + 4:.1f}" text-anchor="end" '
-            f'font-size="10" fill="#9ca3af">{_nf(t, 2) if isinstance(t, float) else t}</text>'
+            f'font-size="10" fill="#9ca3af">{_nf(t, akse["desimaler"])}</text>'
         )
 
     svg = (
@@ -8002,11 +8043,37 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None, rapporter=None
       var s = d.toISOString().slice(0,10);
       return ALLE.filter(function(x) {{ return x.d >= s; }});
     }}
+    // Samme funksjon som pentAkse() i assets/ui.js (TestEnGrafstil).
+    function pentAkse(min, maks, maksTikk = 6) {{
+      if (!Number.isFinite(min) || !Number.isFinite(maks)) return null;
+      if (maks <= min) {{ const d = Math.abs(min) * 0.05 || 1; min -= d; maks += d; }}
+      const span = maks - min;
+      const tier0 = Math.pow(10, Math.floor(Math.log10(span)) - 1);
+      let best = null;
+      // Prøv steg 1–2–2,5–5 over to tierpotenser og velg den tetteste aksen
+      // med 3 til maksTikk verdier, så kurven fyller mest mulig av høyden.
+      for (const t of [tier0, tier0 * 10]) {{
+        for (const f of [1, 2, 2.5, 5]) {{
+          const steg = f * t;
+          const fra = Math.floor(min / steg + 1e-9) * steg;
+          const til = Math.ceil(maks / steg - 1e-9) * steg;
+          const antall = Math.round((til - fra) / steg) + 1;
+          if (antall < 3 || antall > maksTikk) continue;
+          if (!best || til - fra < best.til - best.fra - 1e-12) best = {{ fra, til, steg, f }};
+        }}
+      }}
+      if (!best) best = {{ fra: min, til: maks, steg: span / 4, f: 1 }};
+      const desimaler = Math.max(0, -Math.floor(Math.log10(best.steg) + 1e-9) + (best.f === 2.5 ? 1 : 0));
+      const verdier = [];
+      for (let v = best.fra; v <= best.til + best.steg / 2; v += best.steg) verdier.push(+v.toFixed(desimaler));
+      return {{ fra: +best.fra.toFixed(desimaler), til: +best.til.toFixed(desimaler), steg: best.steg, verdier, desimaler }};
+    }}
     function tegn(periode) {{
       var data = filtrer(periode), hele = false; if (data.length<4) {{ data=ALLE; hele = true; }} if (data.length<4) return;
       var PERIODER = {{'1ar':'Siste år','ytd':'Hittil i år','2ar':'Siste 2 år','3ar':'Siste 3 år','5ar':'Siste 5 år'}};
       var pr = data.map(function(x){{return x.k;}}), da = data.map(function(x){{return x.d;}}), n=pr.length;
-      var mn=Math.min.apply(null,pr), mx=Math.max.apply(null,pr), rng=mx-mn||1;
+      var akse=pentAkse(Math.min.apply(null,pr), Math.max.apply(null,pr));
+      var mn=akse.fra, mx=akse.til, rng=mx-mn||1;
       var opp=pr[n-1]>=pr[0], fg=opp?'#3f8a63':'#bd534a';
       var end=((pr[n-1]-pr[0])/pr[0]*100).toLocaleString('nb-NO',{{minimumFractionDigits:1,maximumFractionDigits:1}});
       var hdr=document.getElementById('kurs-header-{ticker}');
@@ -8022,10 +8089,10 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None, rapporter=None
       var sy=function(p){{return pT+(1-(p-mn)/rng)*(CH-pT-pB);}};
       ctx.fillStyle=dk?'#111827':'#f9fafb'; ctx.fillRect(0,0,CW,CH);
       ctx.strokeStyle=dk?'#1f2937':'#e5e7eb'; ctx.lineWidth=1; ctx.setLineDash([4,4]);
-      [mn,(mn+mx)/2,mx].forEach(function(v){{ctx.beginPath();ctx.moveTo(pL,sy(v));ctx.lineTo(CW-pR,sy(v));ctx.stroke();}});
+      akse.verdier.forEach(function(v){{ctx.beginPath();ctx.moveTo(pL,sy(v));ctx.lineTo(CW-pR,sy(v));ctx.stroke();}});
       ctx.setLineDash([]);
       ctx.fillStyle=dk?'#6b7280':'#9ca3af'; ctx.font='11px Inter, system-ui, sans-serif'; ctx.textAlign='right';
-      [[mn,sy(mn)],[(mn+mx)/2,sy((mn+mx)/2)],[mx,sy(mx)]].forEach(function(pair){{ctx.fillText(pair[0].toLocaleString('nb-NO',{{maximumFractionDigits:0}}),pL-4,pair[1]+4);}});
+      akse.verdier.forEach(function(v){{ctx.fillText(v.toLocaleString('nb-NO',{{minimumFractionDigits:akse.desimaler,maximumFractionDigits:akse.desimaler}}),pL-4,sy(v)+4);}});
       var grad=ctx.createLinearGradient(0,pT,0,CH-pB);
       grad.addColorStop(0,opp?'rgba(63,138,99,0.12)':'rgba(189,83,74,0.1)'); grad.addColorStop(1,'rgba(0,0,0,0)');
       ctx.beginPath(); ctx.moveTo(sx(0),CH-pB);

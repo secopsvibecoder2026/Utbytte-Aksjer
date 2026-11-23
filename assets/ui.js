@@ -3697,7 +3697,8 @@ function visModal(a) {
       if (!Array.isArray(kursData) || kursData.length < 4) return;
       _kursData = kursData;
 
-      const perioder = [['YTD','ytd'],['1å','1ar'],['2å','2ar'],['3å','3ar'],['5å','5ar']];
+      // Samme navn og rekkefølge som periodeknappene på aksjesiden (TestEnGrafstil).
+      const perioder = [['1 år','1ar'],['YTD','ytd'],['2 år','2ar'],['3 år','3ar'],['5 år','5ar']];
       grafEl.innerHTML =
         '<div class="flex gap-1 mb-2">' +
         perioder.map(([l,p]) => '<button data-kgp="' + p + '" class="kurs-periode-knapp' + (p==='1ar' ? ' aktiv' : '') + '">' + l + '</button>').join('') +

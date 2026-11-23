@@ -5716,5 +5716,61 @@ class TestTrykkflater(unittest.TestCase):
         self.assertIn("min-width: 44px", regel)
 
 
+class TestEnGrafstil(unittest.TestCase):
+    """Runde akser og samme periodeknapper på aksjesiden og i appen.
+
+    Kursgrafen på aksjesiden viste 226 / 340 / 454 og søylene 11,88 / 23,76 /
+    35,64, mens appen viste 200 / 300 / 400 / 500. Knappene het «1 år, YTD …»
+    på siden og «YTD, 1å …» i appen (designrunden 22.11.2026, forslag 4).
+    """
+
+    def _pen(self, akse):
+        import math as _m
+        steg = akse["steg"]
+        tier = 10 ** _m.floor(_m.log10(steg) + 1e-9)
+        self.assertTrue(any(abs(steg - f * tier) < 1e-9 * tier for f in (1, 2, 2.5, 5)), steg)
+        for v in akse["verdier"]:
+            self.assertAlmostEqual(v / steg, round(v / steg), places=6)
+
+    def test_pent_akse(self):
+        a = fs.pent_akse(226.4, 454.6)
+        self.assertEqual(a["verdier"], [200, 300, 400, 500])
+        for lo, hi in [(226.4, 454.6), (0, 35.64), (0.12, 0.98), (48.0, 85.5), (0, 3.81), (5, 5)]:
+            a = fs.pent_akse(lo, hi)
+            self._pen(a)
+            self.assertLessEqual(a["fra"], lo)
+            self.assertGreaterEqual(a["til"], hi)
+
+    def test_utbyttesoylene(self):
+        hist = [{"ar": 2022, "utbytte": 11.88, "yield": 3.1}, {"ar": 2023, "utbytte": 35.64, "yield": 9.3},
+                {"ar": 2024, "utbytte": 23.76, "yield": 6.2}]
+        svg = fs._generer_hist_chart(hist)
+        import re as _re
+        etiketter = _re.findall(r'text-anchor="end" font-size="10" fill="#9ca3af">([^<]+)</text>', svg)
+        self.assertEqual(etiketter, ["0", "10", "20", "30", "40"])
+        # Koordinatene har punktum, aldri komma.
+        self.assertNotRegex(svg, r'(?:x|y|y1|y2|height)="[0-9]+,[0-9]')
+
+    def test_samme_pentakse_i_malen_og_appen(self):
+        import re as _re
+        ui = open(os.path.join(_REPO, "assets", "ui.js"), encoding="utf-8").read()
+        kilde = open(os.path.join(_REPO, "scripts", "fetch_stocks.py"), encoding="utf-8").read()
+        app = _re.search(r"^function pentAkse\(.*?^\}", ui, _re.S | _re.M).group(0)
+        mal = _re.search(r"^    function pentAkse\(.*?^    \}\}$", kilde, _re.S | _re.M).group(0)
+        norm = lambda t: [l.strip() for l in t.replace("{{", "{").replace("}}", "}").split("\n") if l.strip()]
+        self.assertEqual(norm(mal), norm(app))
+        self.assertIn("akse.verdier.forEach", kilde)
+        self.assertNotIn("[mn,(mn+mx)/2,mx]", kilde)
+
+    def test_like_periodeknapper(self):
+        import re as _re
+        ui = open(os.path.join(_REPO, "assets", "ui.js"), encoding="utf-8").read()
+        kilde = open(os.path.join(_REPO, "scripts", "fetch_stocks.py"), encoding="utf-8").read()
+        mal = _re.findall(r'class="kp-btn[^"]*" data-p="(\w+)">([^<]+)</button>', kilde)
+        app = _re.findall(r"\['([^']+)','(\w+)'\]", _re.search(r"const perioder = \[(.*?)\];", ui).group(1))
+        self.assertEqual([(p, l) for p, l in mal], [(p, l) for l, p in app])
+        self.assertEqual([l for _, l in mal], ["1 år", "YTD", "2 år", "3 år", "5 år"])
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
