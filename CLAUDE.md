@@ -98,7 +98,9 @@ OFL). It is set as `--font-sans` in `tw-input.css`. Never load it from Google
 Fonts: that request sends the visitor's IP address to Google before consent.
 `table` gets `tabular-nums` globally. Percentages read `3,48 %`, with a
 non-breaking space; `_pst()` in `fetch_stocks.py` writes them that way. Never
-use it for SVG or CSS values.
+use it for SVG or CSS values. `@font-face` also sits at the top of
+`assets/style.css`, since the overview and toplists load only that sheet, and
+no page may set another font on `body` (`TestInterOveralt`).
 
 **Core capabilities:**
 - Real-time and historical dividend data for 163 Norwegian stocks
@@ -467,7 +469,7 @@ Artikler ligger i `artikler/{slug}/index.html`. Indekssiden er `artikler/index.h
 ### Standard bunntekst — bruk alltid denne eksakt
 
 ```html
-<footer class="mt-8 sm:mt-12 border-t border-gray-200 dark:border-gray-800 py-6 text-center text-xs text-gray-400 dark:text-gray-600 space-y-1 px-4">
+<footer class="mt-8 sm:mt-12 border-t border-gray-200 dark:border-gray-800 py-6 text-center text-xs text-gray-500 dark:text-gray-400 space-y-1 px-4">
   <p>Kurs og utbyttedata hentes fra Yahoo Finance og Euronext. Oppdateres daglig på børsdager.</p>
   <p class="max-w-xl mx-auto leading-relaxed">
     exday.no er ikke et verdipapirforetak og tilbyr ikke finansiell rådgivning.
@@ -476,18 +478,18 @@ Artikler ligger i `artikler/{slug}/index.html`. Indekssiden er `artikler/index.h
     Gjør alltid din egen analyse før du tar investeringsbeslutninger.
   </p>
   <p class="mt-2">
-    <a href="/om/" class="underline hover:text-gray-400 dark:hover:text-gray-400 transition-colors">Om exday.no</a>
+    <a href="/om/" class="underline hover:text-gray-700 dark:hover:text-gray-200 transition-colors">Om exday.no</a>
     <span class="mx-2">·</span>
-    <a href="/metode/" class="underline hover:text-gray-400 dark:hover:text-gray-400 transition-colors">Metode og datakilder</a>
+    <a href="/metode/" class="underline hover:text-gray-700 dark:hover:text-gray-200 transition-colors">Metode og datakilder</a>
     <span class="mx-2">·</span>
-    <a href="/personvern/" class="underline hover:text-gray-400 dark:hover:text-gray-400 transition-colors">Personvern og informasjonskapsler</a>
+    <a href="/personvern/" class="underline hover:text-gray-700 dark:hover:text-gray-200 transition-colors">Personvern og informasjonskapsler</a>
     <span class="mx-2">·</span>
-    <a href="/vilkaar/" class="underline hover:text-gray-400 dark:hover:text-gray-400 transition-colors">Vilkår for bruk</a>
+    <a href="/vilkaar/" class="underline hover:text-gray-700 dark:hover:text-gray-200 transition-colors">Vilkår for bruk</a>
     <span class="mx-2">·</span>
-    <a href="/faq/" class="underline hover:text-gray-400 dark:hover:text-gray-400 transition-colors">Vanlige spørsmål (FAQ)</a>
+    <a href="/faq/" class="underline hover:text-gray-700 dark:hover:text-gray-200 transition-colors">Vanlige spørsmål (FAQ)</a>
   </p>
   <p class="mt-3">
-    <a href="https://www.facebook.com/share/17rMp8o9yF/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-gray-400 hover:text-blue-500 dark:hover:text-blue-400 transition-colors">
+    <a href="https://www.facebook.com/share/17rMp8o9yF/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 min-h-11 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors">
       <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/></svg>
       Følg exday.no på Facebook
     </a>
@@ -3689,6 +3691,46 @@ finance sites and keeps the profile in one piece.
   rejections were about thin content, and JS-only content is invisible to
   Google), touch ads, consent or the logo, or copy another site.
 - Run it in a session with «kjør design-agenten».
+
+## Design round 1 (2026-11-22)
+
+The design agent's first report measured 15 pages at 320 to 1280 px in both
+themes. The owner chose the six plain mobile faults and proposals 1 to 3.
+
+- **Tap targets.** 308 controls under 44 px on the measured pages at 390 px,
+  546 in the app's views. The rules sit at the end of `assets/style.css`
+  («TRYKKFLATER»). Where a button has a visible pill or ring, the extra
+  height is a transparent border with `background-clip: padding-box` and an
+  inset shadow as the new edge, so it looks as before. The list star keeps its
+  place with a negative margin. A checkbox is hit through its label
+  (`label:has(> input[type=checkbox])`). The logo link (28 px) is left alone.
+- **Overflow.** The app was 343 px wide at 320 and 933 at 768 (sort row,
+  filter row, «Bruk min portefølje»). Now none.
+- **iPhone zoom.** `.kal-felt` was 14 px on `/utbyttekalender/`. Now 1rem.
+- **Layout shift.** Making the welcome banner taller pushed the app's CLS from
+  0,19 to 0,23. The banner is now in the HTML from the start and hidden in
+  `<head>` (`velk-lukket`) for returning visitors, stat-card skeletons have
+  the height of the figures, and the calendar holds the space for its
+  controls (`kal-js`). App 0,19 → 0, calendar at 768 px 0,16 → 0.
+- **Inter everywhere** (proposal 1): 44 pages set `system-ui` or
+  `-apple-system` on `body`. Tests: `TestInterOveralt`.
+- **Readable source, date and disclaimer** (proposal 2): the footer, `.updated`
+  and «Ikke kjent» were 2,4:1 to 2,7:1. They are gray-500 in light and gray-400
+  in dark mode, in the standard footer above, `STANDARD_FOOTER` and 33
+  hand-written pages. The front page had its own `.dark .text-gray-500` and
+  `.dark footer` that kept grey text at 3,7:1. Test: `TestBunntekst.test_lesbar_farge`.
+- **Today's change in the price header** (proposal 3). On the stock page,
+  `dagsendring()` takes it from `data/priser.json` with the rule from
+  `slaaSammenKurs()`: the same trading day, or the day before. The page
+  shows «−5,90 (−1,52 %) Kurs 20. nov 2026». In the app modal it comes from
+  `modalEndring()`, with the trading day from `kursDato`. There is no change
+  without a date. Tests: `TestDagsendring` and `app.test.js`/`ui.test.js`.
+- `sjekk_klasser.py` and `sjekk_tema.py` skip `.claude/`, where other
+  sessions keep worktrees.
+
+Measured on a regenerated copy (light, 390 px, 15 pages): tap targets under
+44 px 308 → 30, of which 14 are the logo link and 16 checkboxes inside 44 px
+labels; contrast faults 95 → 48 light and 71 → 28 dark.
 
 ## The fixer agent (`.claude/agents/fikser.md`, 2026-10-18)
 

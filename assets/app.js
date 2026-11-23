@@ -327,7 +327,9 @@ function _endringMot(pris, forrige) {
  * Gårsdagens endring ved siden av dagens kurs ville vært feil på en ny måte.
  */
 function slaaSammenKurs(aksjePris, p, priserOppdatert, aksjerOppdatert) {
-  const fraPriser = { pris: p.pris, endringPct: p.endring_pct, endringKrs: p.endring_krs };
+  // kursDato er børsdagen kursen gjelder. Modalen viser den ved endringen,
+  // så leseren ser hvilken dag «−1,52 %» er fra (designrunden 22.11.2026).
+  const fraPriser = { pris: p.pris, endringPct: p.endring_pct, endringKrs: p.endring_krs, kursDato: p.dato };
   const dag = kursdag(aksjerOppdatert);
   // Mangler en av datoene, vet vi ikke hvem som er nyest. Da som før.
   if (!p.dato || !dag || !(aksjePris > 0) || p.dato > dag) return fraPriser;
@@ -335,12 +337,12 @@ function slaaSammenKurs(aksjePris, p, priserOppdatert, aksjerOppdatert) {
     // Samme børsdag: den som ble hentet sist, har kursen. Endringen regnes
     // mot gårsdagens sluttkurs uansett, så den passer til kursen som vises.
     if (Date.parse(priserOppdatert) >= Date.parse(aksjerOppdatert)) return fraPriser;
-    return { pris: aksjePris, ..._endringMot(aksjePris, p.forrige_kurs) };
+    return { pris: aksjePris, ..._endringMot(aksjePris, p.forrige_kurs), kursDato: dag };
   }
   // priser.json gjelder en tidligere børsdag. Er det dagen før, er kursen der
   // gårsdagens sluttkurs, og endringen kan regnes. Ellers er den ukjent.
   const iGaar = p.dato === forrigeBorsdag(dag) ? p.pris : undefined;
-  return { pris: aksjePris, ..._endringMot(aksjePris, iGaar) };
+  return { pris: aksjePris, ..._endringMot(aksjePris, iGaar), kursDato: dag };
 }
 
 async function mergPriser() {
@@ -361,8 +363,13 @@ async function mergPriser() {
     }
     a.endring_pct = k.endringPct;
     a.endring_krs = k.endringKrs;
+    a.kurs_dato = k.kursDato;
     changed = true;
   });
+
+  // En modal åpnet fra ?aksje= vises før prisene er flettet inn. Da får
+  // kurshodet endringen når den kommer.
+  if (changed && typeof oppdaterModalEndring === 'function') oppdaterModalEndring();
 
   // Re-render kun om brukeren faktisk ser oversikten
   if (changed && aktivTab === 'oversikt') visOversikt();

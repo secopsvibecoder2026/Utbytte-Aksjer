@@ -3468,6 +3468,33 @@ function modalSektorArtikler(a) {
 }
 
 
+// Dagens endring i modalens kurshode: «−5,90 (−1,52 %) 20. nov.». Grønt og
+// rødt bare for retning, og børsdagen står alltid ved siden av. Uten dato
+// eller endring vises ingenting, fordi en endring uten dag ikke sier hvilken
+// dag den gjelder (designrunden 22.11.2026).
+function modalEndring(a) {
+  if (!a || !a.kurs_dato) return '';
+  const krs = Number(a.endring_krs), pct = Number(a.endring_pct);
+  if (a.endring_krs == null || a.endring_pct == null || !Number.isFinite(krs) || !Number.isFinite(pct)) return '';
+  const r = Math.round(krs * 100) / 100;
+  const tegn = r > 0 ? '+' : r < 0 ? '\u2212' : '';
+  const farge = r > 0 ? 'text-green-700 dark:text-green-400'
+    : r < 0 ? 'text-red-700 dark:text-red-400' : 'text-gray-600 dark:text-gray-300';
+  const tall = tegn + fmtTall(Math.abs(r), 2) + ' (' + tegn + fmtPst(Math.abs(pct), 2) + ')';
+  return `<span class="text-sm font-semibold whitespace-nowrap ${farge}">${tall}</span>` +
+    `<span class="text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap">${escHtml(datoKort(a.kurs_dato))}</span>`;
+}
+
+// Kalles fra mergPriser() i app.js når prisene kommer etter at modalen åpnet.
+function oppdaterModalEndring() {
+  if (typeof document === 'undefined' || !document.getElementById) return;
+  const el = document.getElementById('modal-endring');
+  if (!el || !Array.isArray(window.alleAksjer)) return;
+  const a = window.alleAksjer.find(x => x.ticker === el.dataset.ticker);
+  if (a) el.innerHTML = modalEndring(a);
+}
+
+
 function visModal(a) {
   const overlay = document.getElementById('modal-overlay');
   const body = document.getElementById('modal-body');
@@ -3482,12 +3509,10 @@ function visModal(a) {
   // Kurshode (STYLE.md, tiltak 3): kurs, dagens endring, yield og neste
   // ex-dato på én linje øverst, over alle fanene. Før måtte leseren gå til
   // «Utbytte» for å se yielden, og kursen sto bare i et kort under grafen.
-  const _endring = a.endring_pct !== undefined && a.endring_pct !== 0
-    ? `<span class="text-sm font-semibold ${a.endring_pct > 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}">${a.endring_pct > 0 ? '+' : ''}${fmtPst(a.endring_pct, 2)}</span>`
-    : '';
+  const _endring = `<span id="modal-endring" data-ticker="${escHtml(a.ticker)}" class="inline-flex flex-wrap items-baseline gap-x-1.5">${modalEndring(a)}</span>`;
   const _kurshode = `
     <div class="flex flex-wrap items-baseline gap-x-5 gap-y-1 mb-3 tabular-nums">
-      <div class="flex items-baseline gap-1.5">
+      <div class="flex flex-wrap items-baseline gap-x-1.5">
         <span class="text-2xl font-bold text-gray-900 dark:text-gray-100">${fmt(a.pris)}</span>
         <span class="text-sm text-gray-500 dark:text-gray-400">${escHtml(a.valuta || 'NOK')}</span>
         ${_endring}
@@ -3503,15 +3528,15 @@ function visModal(a) {
         <p class="text-gray-600 dark:text-gray-400">${escHtml(a.navn)}</p>
         <p class="text-xs text-gray-400 mt-0.5">${escHtml(a.sektor)} · ${escHtml(a.bors)}</p>
       </div>
-      <div class="flex items-center gap-1">
-        ${stjerne(a.ticker, 'p-1 hover:scale-110')}
-        <a href="/aksjer/${escHtml(a.ticker)}/" target="_blank" rel="noopener" class="text-gray-400 hover:text-brand-600 dark:hover:text-brand-400 p-1 transition-colors" aria-label="Åpne full aksjesiden" title="Se full aksjesiden">
+      <div class="flex items-center shrink-0">
+        ${stjerne(a.ticker, 'ikon-knapp hover:scale-110')}
+        <a href="/aksjer/${escHtml(a.ticker)}/" target="_blank" rel="noopener" class="ikon-knapp text-gray-400 hover:text-brand-600 dark:hover:text-brand-400 transition-colors" aria-label="Åpne full aksjesiden" title="Se full aksjesiden">
           <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
         </a>
-        <button id="modal-del" class="text-gray-400 hover:text-brand-600 dark:hover:text-brand-400 p-1 transition-colors" aria-label="Del lenke" title="Kopier lenke">
+        <button id="modal-del" class="ikon-knapp text-gray-400 hover:text-brand-600 dark:hover:text-brand-400 transition-colors" aria-label="Del lenke" title="Kopier lenke">
           <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg>
         </button>
-        <button id="modal-close" class="text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 p-1" aria-label="Lukk">
+        <button id="modal-close" class="ikon-knapp text-gray-400 hover:text-gray-700 dark:hover:text-gray-200" aria-label="Lukk">
           <svg class="w-6 h-6" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
         </button>
       </div>
@@ -5070,7 +5095,7 @@ function visScoreInfoModal() {
   body.innerHTML = `
     <div class="flex items-start justify-between mb-4">
       <h2 class="text-lg font-bold">Utbytte-score — slik beregnes den</h2>
-      <button id="modal-close" class="text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 p-1" aria-label="Lukk">
+      <button id="modal-close" class="ikon-knapp text-gray-400 hover:text-gray-700 dark:hover:text-gray-200" aria-label="Lukk">
         <svg class="w-6 h-6" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
       </button>
     </div>
@@ -6255,4 +6280,4 @@ function _annBygTopp() {
 }
 
 // Node.js test export
-if (typeof module !== 'undefined') module.exports = { sektorSnittYield, utdatertMerke, modalUtdatert, hendelseUtenMal, iRangering, hoyestYield, saerutbytteFotnote, aaretsArsutbytte, aaretsNedgang, ordinaerPerAr, ordinaerHistorikk, markedsplassTekst, hendelseMerke, nyMilepel, delLenkeData, pentAkse, fmtPst, fmtTall, dagerTil, dagerTilTekst, datoKort, aksjerTekst, snittNavn, utbytteKutt, modalHendelse, beregnRisiko, forklarRisiko, vekstFraTopp, beregnMal, forklarMal, bevegelserOverskrift, utbytteRekke, stabileAr, exForbeholdGjelder, utbyttePerioder, vistOverBetalt, arsrateMerke, oyeblikksbilde, forsteBilde, finnEndringer, nyttSidenSistHtml, modalBetaltBoks, supplertFotnote, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, fmt, formaterDato, yieldKlasse, payoutKlasse, vekstKlasse, beregnScore, beregnBaerekraft, beregnYtdInntekt, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote, kapitalAndel, modalKapitalNote, kapitalSkattTekst, aksjerMedExIMaaned, beregnHvisKjopt, hvisStartAar, beregnAskMotVanlig, fmtUtbytte, sisteUtbytteTekst, modalOmSelskapet, vekslOmSelskapet, dripGevinst, _simulerKalkulator, askStatus, askTekst, modalKontoer };
+if (typeof module !== 'undefined') module.exports = { modalEndring, sektorSnittYield, utdatertMerke, modalUtdatert, hendelseUtenMal, iRangering, hoyestYield, saerutbytteFotnote, aaretsArsutbytte, aaretsNedgang, ordinaerPerAr, ordinaerHistorikk, markedsplassTekst, hendelseMerke, nyMilepel, delLenkeData, pentAkse, fmtPst, fmtTall, dagerTil, dagerTilTekst, datoKort, aksjerTekst, snittNavn, utbytteKutt, modalHendelse, beregnRisiko, forklarRisiko, vekstFraTopp, beregnMal, forklarMal, bevegelserOverskrift, utbytteRekke, stabileAr, exForbeholdGjelder, utbyttePerioder, vistOverBetalt, arsrateMerke, oyeblikksbilde, forsteBilde, finnEndringer, nyttSidenSistHtml, modalBetaltBoks, supplertFotnote, csvFelt, delCSVLinje, parseCSV, lokalIsoDato, fmt, formaterDato, yieldKlasse, payoutKlasse, vekstKlasse, beregnScore, beregnBaerekraft, beregnYtdInntekt, yieldErDelaar, utbetaltHittil, utbyttesplittStemmer, delaarMotbevist, maanederTekst, modalEkstraordinaerNote, kapitalAndel, modalKapitalNote, kapitalSkattTekst, aksjerMedExIMaaned, beregnHvisKjopt, hvisStartAar, beregnAskMotVanlig, fmtUtbytte, sisteUtbytteTekst, modalOmSelskapet, vekslOmSelskapet, dripGevinst, _simulerKalkulator, askStatus, askTekst, modalKontoer };

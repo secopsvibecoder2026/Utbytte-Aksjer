@@ -31,7 +31,7 @@ import os
 import re
 import sys
 
-HOPP_OVER = {".git", "node_modules", "data", "logo", "promo", "assets"}
+HOPP_OVER = {".git", ".claude", "node_modules", "data", "logo", "promo", "assets"}
 
 # Den engelske nøkkelen. Hele nettstedet bruker 'tema'.
 FEIL_NOKKEL = re.compile(r"getItem\(\s*['\"]theme['\"]\s*\)")

@@ -4879,7 +4879,7 @@ def _haandskrevne_sider():
     """Håndskrevne sider med bunntekst: alt utenom aksjer/** og videresendinger."""
     import re as _re
     for mappe, under, filer in os.walk(_REPO):
-        under[:] = [d for d in under if d not in (".git", "node_modules", "test-results", "promo", "aksjer")]
+        under[:] = [d for d in under if d not in (".git", ".claude", "node_modules", "test-results", "promo", "aksjer")]
         for navn in filer:
             if navn.endswith(".html"):
                 sti = os.path.join(mappe, navn)
@@ -4909,6 +4909,18 @@ class TestBunntekst(unittest.TestCase):
     def test_standard_bunntekst(self):
         for lenke in _BUNNLENKER:
             self.assertIn(f'href="{lenke}"', fs.STANDARD_FOOTER)
+
+    def test_lesbar_farge(self):
+        """Kilden og ansvarsfraskrivelsen hadde 2,49:1 i lyst og 2,66:1 i mørkt
+        tema (gray-400 på gray-50, gray-600 på gray-950). Kravet er 4,5:1.
+        Designrunden 22.11.2026 ga gray-500 / gray-400."""
+        for rel, _, fot in _haandskrevne_sider():
+            self.assertNotIn("text-gray-400 dark:text-gray-600", fot, rel)
+            self.assertIn("text-gray-500 dark:text-gray-400", fot, rel)
+        f = fs.STANDARD_FOOTER
+        self.assertNotIn("color:#9ca3af;line-height", f)
+        self.assertIn("color:#6b7280;line-height", f)
+        self.assertIn(".dark .std-footer { color:#9ca3af", f)
 
     def test_metodesiden_er_i_sitemap_og_finnes(self):
         self.assertTrue(os.path.exists(os.path.join(_REPO, "metode", "index.html")))
@@ -5566,6 +5578,142 @@ class TestFikser2211(unittest.TestCase):
         self.assertEqual(fs.arsrate_merke(a), "utdelinger på pause")
         fs.sett_hendelse(a, h, datetime.date(2026, 11, 22))
         self.assertFalse(fs.i_rangering(a))
+
+
+class TestInterOveralt(unittest.TestCase):
+    """Inter på alle sider (designrunden 22.11.2026).
+
+    44 sider satte `body { font-family: system-ui … }` eller `-apple-system`
+    i sin egen <style> og viste systemfonten: alle artiklene, /aksjer/,
+    sektorsidene, topplistene, rapportkalenderen og ni håndskrevne sider. En
+    leser som gikk fra en aksjeside til en artikkel, byttet font.
+    """
+
+    _BODY = r"body\s*\{\{?[^}]*?font-family:\s*([^;}]+)"
+
+    def _forste(self, stabel):
+        return stabel.strip().split(",")[0].strip().strip("'\"")
+
+    def test_haandskrevne_sider(self):
+        import re as _re
+        sett = 0
+        generert = {os.path.join("rapportkalender", "index.html")}
+        for mappe, under, filer in os.walk(_REPO):
+            under[:] = [d for d in under if d not in (".git", ".claude", "node_modules", "test-results", "promo", "aksjer")]
+            for navn in filer:
+                if not navn.endswith(".html"):
+                    continue
+                sti = os.path.join(mappe, navn)
+                rel = os.path.relpath(sti, _REPO)
+                if rel in generert:
+                    continue
+                for stabel in _re.findall(self._BODY, open(sti, encoding="utf-8").read()):
+                    sett += 1
+                    self.assertEqual(self._forste(stabel), "Inter", f"{rel}: body bruker {stabel.strip()}")
+        self.assertGreater(sett, 15)
+
+    def test_malene(self):
+        import re as _re
+        kilde = open(os.path.join(_REPO, "scripts", "fetch_stocks.py"), encoding="utf-8").read()
+        stabler = _re.findall(self._BODY, kilde)
+        self.assertGreaterEqual(len(stabler), 5)
+        for stabel in stabler:
+            self.assertEqual(self._forste(stabel), "Inter", f"mal: body bruker {stabel.strip()}")
+
+    def test_stilarket_har_fonten(self):
+        """Oversikten og topplistene laster bare style.css, så @font-face må stå der."""
+        css = open(os.path.join(_REPO, "assets", "style.css"), encoding="utf-8").read()
+        self.assertIn('font-family: "Inter"', css)
+        self.assertIn("fonts/inter-latin-wght-normal.woff2", css)
+        self.assertTrue(os.path.exists(os.path.join(_REPO, "assets", "fonts", "inter-latin-wght-normal.woff2")))
+
+    def test_aldri_google_fonts(self):
+        """Nettstedet og malene. tallkontroll_side.py lager en privat
+        Artifact-side på claude.ai, ikke en side på exday.no."""
+        stier = [os.path.join(_REPO, "scripts", "fetch_stocks.py")]
+        for mappe, under, filer in os.walk(_REPO):
+            under[:] = [d for d in under if d not in (".git", ".claude", ".github", "node_modules",
+                                                      "test-results", "scripts", "tests", "promo")]
+            stier += [os.path.join(mappe, n) for n in filer if n.endswith((".html", ".css", ".js"))]
+        for sti in stier:
+            tekst = open(sti, encoding="utf-8", errors="ignore").read()
+            self.assertNotIn("fonts.googleapis.com", tekst, sti)
+
+
+class TestDagsendring(unittest.TestCase):
+    """Dagens endring i kurshodet på aksjesiden (designrunden 22.11.2026).
+
+    Samme regel som slaaSammenKurs() i app.js: endringen vises bare når den
+    kan regnes for kursen siden viser, og datoen står alltid ved siden av.
+    """
+
+    FRE = datetime.date(2026, 11, 20)
+
+    def test_samme_dag_samme_kurs(self):
+        p = {"pris": 383.3, "forrige_kurs": 389.2, "endring_krs": -5.9, "endring_pct": -1.5159,
+             "dato": "2026-11-20", "forrige_dato": "2026-11-19"}
+        e = fs.dagsendring(383.3, self.FRE, p)
+        self.assertAlmostEqual(e["krs"], -5.9)
+        self.assertAlmostEqual(e["pct"], -1.5159)
+
+    def test_samme_dag_annen_kurs_regnes_mot_forrige(self):
+        p = {"pris": 380.0, "forrige_kurs": 389.2, "endring_krs": -9.2, "endring_pct": -2.36, "dato": "2026-11-20"}
+        e = fs.dagsendring(383.3, self.FRE, p)
+        self.assertAlmostEqual(e["krs"], -5.9)
+
+    def test_priser_fra_dagen_foer(self):
+        p = {"pris": 389.2, "dato": "2026-11-19"}
+        e = fs.dagsendring(383.3, self.FRE, p)
+        self.assertAlmostEqual(e["krs"], -5.9)
+        mandag = datetime.date(2026, 11, 23)
+        e = fs.dagsendring(390.0, mandag, {"pris": 383.3, "dato": "2026-11-20"})
+        self.assertAlmostEqual(e["krs"], 6.7)
+
+    def test_ukjent_gir_ingenting(self):
+        self.assertIsNone(fs.dagsendring(383.3, self.FRE, None))
+        self.assertIsNone(fs.dagsendring(383.3, None, {"pris": 1, "dato": "2026-11-20"}))
+        self.assertIsNone(fs.dagsendring(383.3, self.FRE, {"pris": 380, "dato": "2026-11-17"}))
+        self.assertIsNone(fs.dagsendring(0, self.FRE, {"pris": 380, "dato": "2026-11-20", "endring_krs": 1, "endring_pct": 1}))
+
+    def test_format(self):
+        ned = fs._endring_html({"krs": -5.9, "pct": -1.5159})
+        self.assertIn("\u22125,90 (\u22121,52\u00a0%)", ned)
+        self.assertIn("kh-ned", ned)
+        opp = fs._endring_html({"krs": 2.0, "pct": 0.5})
+        self.assertIn("+2,00 (+0,50\u00a0%)", opp)
+        self.assertIn("kh-opp", opp)
+        self.assertIn("kh-flat", fs._endring_html({"krs": 0.0, "pct": 0.0}))
+
+    def test_kurshodet_viser_endring_og_dato(self):
+        a = {"ticker": "EQNR", "pris": 383.3, "hentet": "2026-11-20T16:45:00Z", "utbytte_yield": 3.98,
+             "utbytte_per_aksje": 15.25}
+        p = {"EQNR": {"pris": 383.3, "forrige_kurs": 389.2, "endring_krs": -5.9, "endring_pct": -1.5159,
+                      "dato": "2026-11-20"}}
+        h = fs._lag_kurshode(a, "NOK", priser=p)
+        self.assertIn("kh-endring", h)
+        self.assertIn("Kurs 20. nov", h)
+        self.assertNotIn("kh-endring", fs._lag_kurshode(a, "NOK", priser={}))
+
+
+class TestTrykkflater(unittest.TestCase):
+    """Trykkflater på minst 44 px og 16 px skrift i felt (designrunden 22.11.2026)."""
+
+    def setUp(self):
+        self.css = open(os.path.join(_REPO, "assets", "style.css"), encoding="utf-8").read()
+
+    def test_menyknappene(self):
+        self.assertIn(".site-dark-btn { min-width: 44px; min-height: 44px; }", self.css)
+        self.assertIn(".site-nav-burger { width: 44px; height: 44px;", self.css)
+
+    def test_kalenderen_zoomer_ikke(self):
+        self.assertIn(".kal-felt { font-size: 1rem; min-height: 44px; }", self.css)
+
+    def test_periodeknappene_paa_aksjesiden(self):
+        import re as _re
+        kilde = open(os.path.join(_REPO, "scripts", "fetch_stocks.py"), encoding="utf-8").read()
+        regel = _re.search(r"\.kp-btn \{\{([^}]*)\}\}", kilde).group(1)
+        self.assertIn("min-height: 44px", regel)
+        self.assertIn("min-width: 44px", regel)
 
 
 if __name__ == "__main__":

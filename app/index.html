@@ -119,6 +119,10 @@
   <link rel="stylesheet" href="/assets/style.css" />
   <!-- Consent manager – loads GA + AdSense only after user accepts -->
   <script>(function(){if(localStorage.getItem('tema')==='dark')document.documentElement.classList.add('dark');})()</script>
+  <!-- Velkomstbanneret står i HTML-en fra start og skjules her for den som har
+       sett det. Tegnet av JavaScript etter første maling dyttet det hele
+       oversikten 164 px ned (layoutforskyvning 0,18, designrunden 22.11.2026). -->
+  <script>(function(){try{if(localStorage.getItem('velkommen_vist'))document.documentElement.classList.add('velk-lukket');}catch(e){}})()</script>
 </head>
 <body class="bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 min-h-screen transition-colors duration-200">
 
@@ -178,7 +182,7 @@
     <!-- VELKOMST (første besøk). Var et vindu over dataene med spørsmål om
          navn; nå en stripe som kan lukkes, så tallene vises først (STYLE.md,
          tiltak 4). Navnet settes i Innstillinger. -->
-    <div id="velkommen-banner" class="hidden rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 px-4 py-3 shadow-sm">
+    <div id="velkommen-banner" class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 px-4 py-3 shadow-sm">
       <div class="flex items-start gap-3">
         <div class="flex-1 min-w-0">
           <p class="text-sm font-semibold text-gray-900 dark:text-gray-100">Velkommen til exday</p>
@@ -204,23 +208,23 @@
     <section class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
       <div class="stat-card">
         <p id="stat-card1-label" class="stat-label">Aksjer sporet</p>
-        <p id="stat-antall" class="stat-value"><span class="skeleton block h-8 rounded" style="width:2.5rem"></span></p>
-        <p id="stat-antall-sub" class="text-xs text-gray-500 dark:text-gray-400 mt-0.5 truncate"></p>
+        <p id="stat-antall" class="stat-value"><span class="skeleton block h-6 rounded" style="width:2.5rem"></span></p>
+        <p id="stat-antall-sub" class="text-xs text-gray-500 dark:text-gray-400 mt-0.5 truncate min-h-4"></p>
       </div>
       <div class="stat-card">
         <p id="stat-card2-label" class="stat-label">Høyeste yield</p>
-        <p id="stat-hoyest-yield" class="stat-value"><span class="skeleton block h-8 rounded" style="width:4rem"></span></p>
-        <p id="stat-hoyest-navn" class="text-xs text-gray-500 dark:text-gray-400 mt-0.5 truncate"></p>
+        <p id="stat-hoyest-yield" class="stat-value"><span class="skeleton block h-6 rounded" style="width:4rem"></span></p>
+        <p id="stat-hoyest-navn" class="text-xs text-gray-500 dark:text-gray-400 mt-0.5 truncate min-h-4"></p>
       </div>
       <div class="stat-card">
         <p id="stat-card3-label" class="stat-label">Gj.snitt yield</p>
-        <p id="stat-snitt-yield" class="stat-value"><span class="skeleton block h-8 rounded" style="width:4rem"></span></p>
-        <p id="stat-snitt-sub" class="text-xs text-gray-500 dark:text-gray-400 mt-0.5 truncate"></p>
+        <p id="stat-snitt-yield" class="stat-value"><span class="skeleton block h-6 rounded" style="width:4rem"></span></p>
+        <p id="stat-snitt-sub" class="text-xs text-gray-500 dark:text-gray-400 mt-0.5 truncate min-h-4"></p>
       </div>
       <div class="stat-card">
         <p id="stat-card4-label" class="stat-label">Neste ex-dato</p>
-        <p id="stat-neste-ex" class="stat-value text-xl sm:text-2xl"><span class="skeleton block h-7 rounded" style="width:5rem"></span></p>
-        <p id="stat-neste-ex-navn" class="text-xs text-gray-500 dark:text-gray-400 mt-0.5 truncate"></p>
+        <p id="stat-neste-ex" class="stat-value text-xl sm:text-2xl"><span class="skeleton block h-6 rounded" style="width:5rem"></span></p>
+        <p id="stat-neste-ex-navn" class="text-xs text-gray-500 dark:text-gray-400 mt-0.5 truncate min-h-4"></p>
       </div>
     </section>
 
@@ -278,7 +282,7 @@
             <span id="filter-antall" class="hidden min-w-5 h-5 px-1 rounded-full bg-green-700 text-white text-xs font-semibold leading-5 text-center"></span>
           </button>
         </div>
-        <div class="grid grid-cols-2 sm:flex gap-2 sm:gap-3" id="filter-ekstra">
+        <div class="grid grid-cols-2 sm:flex sm:flex-wrap gap-2 sm:gap-3" id="filter-ekstra">
           <select id="filter-sektor" class="filter-input w-full sm:w-auto">
             <option value="">Alle sektorer</option>
           </select>
@@ -333,7 +337,7 @@
       <!-- SORT-VELGER + VIEW-TOGGLE (mobil) -->
       <div id="mobil-sort-rad" class="flex gap-2 items-center mb-3">
         <label class="text-xs text-gray-500 dark:text-gray-400 shrink-0">Sorter:</label>
-        <select id="mobil-sort" class="filter-input flex-1 text-sm">
+        <select id="mobil-sort" class="filter-input flex-1 min-w-0 text-sm">
           <option value="utbytte_score_desc">Høyest score</option>
           <option value="utbytte_yield_desc">Høyest yield</option>
           <option value="utbytte_yield_asc">Lavest yield</option>
@@ -489,7 +493,7 @@
       <!-- Porteføljevalg -->
       <div class="flex items-center gap-2">
         <select id="pf-portefolje-velg" class="filter-input flex-1 min-w-0 max-w-xs text-sm"></select>
-        <a href="/innstillinger/" class="text-xs text-gray-400 dark:text-gray-500 hover:text-brand-600 dark:hover:text-brand-400 hover:underline font-medium whitespace-nowrap transition-colors">Administrer →</a>
+        <a href="/innstillinger/" class="inline-flex items-center min-h-11 text-xs text-gray-500 dark:text-gray-400 hover:text-brand-600 dark:hover:text-brand-400 hover:underline font-medium whitespace-nowrap transition-colors">Administrer →</a>
       </div>
 
       <!-- Sub-tab nav -->
@@ -1088,8 +1092,8 @@
 
       <div id="kalk-tab-utbytte" class="space-y-6">
       <div class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-5 shadow-sm space-y-4">
-        <div class="flex items-start justify-between gap-3">
-          <div>
+        <div class="flex flex-wrap items-start justify-between gap-3">
+          <div class="min-w-0">
             <h2 class="font-semibold text-base">Utbyttekalkulator — yield over tid</h2>
             <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Se hvordan utbytte og reinvestering vokser over år.</p>
           </div>
@@ -1624,7 +1628,7 @@
   </noscript>
 
   <!-- FOOTER -->
-  <footer class="mt-8 sm:mt-12 border-t border-gray-200 dark:border-gray-800 py-6 text-center text-xs text-gray-400 dark:text-gray-600 space-y-1 px-4">
+  <footer class="mt-8 sm:mt-12 border-t border-gray-200 dark:border-gray-800 py-6 text-center text-xs text-gray-500 dark:text-gray-400 space-y-1 px-4">
     <p>Kurs og utbyttedata hentes fra Yahoo Finance og Euronext. Oppdateres daglig på børsdager.</p>
     <p class="max-w-xl mx-auto leading-relaxed">
       exday.no er ikke et verdipapirforetak og tilbyr ikke finansiell rådgivning.
@@ -1633,18 +1637,18 @@
       Gjør alltid din egen analyse før du tar investeringsbeslutninger.
     </p>
     <p class="mt-2">
-    <a href="/om/" class="underline hover:text-gray-400 dark:hover:text-gray-400 transition-colors">Om exday.no</a>
+    <a href="/om/" class="underline hover:text-gray-700 dark:hover:text-gray-200 transition-colors">Om exday.no</a>
     <span class="mx-2">·</span>
-    <a href="/metode/" class="underline hover:text-gray-400 dark:hover:text-gray-400 transition-colors">Metode og datakilder</a>
+    <a href="/metode/" class="underline hover:text-gray-700 dark:hover:text-gray-200 transition-colors">Metode og datakilder</a>
     <span class="mx-2">·</span>
-    <a href="/personvern/" class="underline hover:text-gray-400 dark:hover:text-gray-400 transition-colors">Personvern og informasjonskapsler</a>
+    <a href="/personvern/" class="underline hover:text-gray-700 dark:hover:text-gray-200 transition-colors">Personvern og informasjonskapsler</a>
     <span class="mx-2">·</span>
-    <a href="/vilkaar/" class="underline hover:text-gray-400 dark:hover:text-gray-400 transition-colors">Vilkår for bruk</a>
+    <a href="/vilkaar/" class="underline hover:text-gray-700 dark:hover:text-gray-200 transition-colors">Vilkår for bruk</a>
     <span class="mx-2">·</span>
-    <a href="/faq/" class="underline hover:text-gray-400 dark:hover:text-gray-400 transition-colors">Vanlige spørsmål (FAQ)</a>
+    <a href="/faq/" class="underline hover:text-gray-700 dark:hover:text-gray-200 transition-colors">Vanlige spørsmål (FAQ)</a>
   </p>
     <p class="mt-3">
-      <a href="https://www.facebook.com/share/17rMp8o9yF/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-gray-400 hover:text-slate-500 dark:hover:text-slate-400 transition-colors">
+      <a href="https://www.facebook.com/share/17rMp8o9yF/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 min-h-11 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors">
         <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/></svg>
         Følg exday.no på Facebook
       </a>

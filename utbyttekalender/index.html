@@ -119,6 +119,9 @@
   <link rel="stylesheet" href="/assets/tailwind.css" />
   <link rel="stylesheet" href="/assets/style.css" />
   <script>(function(){if(localStorage.getItem('tema')==='dark')document.documentElement.classList.add('dark');})()</script>
+  <!-- Med JavaScript holdes plassen til søk og filtre av før skriptet tegner
+       dem, så tabellen ikke hopper ned (designrunden 22.11.2026). -->
+  <script>document.documentElement.classList.add('kal-js')</script>
 </head>
 <body class="bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 min-h-screen transition-colors duration-200">
   <nav class="site-nav" aria-label="Hovedmeny">
@@ -194,7 +197,7 @@
   <header class="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 sticky top-0 z-40 shadow-sm">
     <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
       <div class="flex items-center gap-3">
-        <a href="/" class="flex items-center gap-1.5 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors" aria-label="Tilbake til forsiden">
+        <a href="/" class="flex items-center gap-1.5 min-h-11 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors" aria-label="Tilbake til forsiden">
           <svg class="w-4 h-4" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
           <span class="text-sm font-medium">exday.no</span>
         </a>
@@ -719,47 +722,47 @@
       <div class="space-y-3 text-sm leading-relaxed">
 
         <details class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-4" open>
-          <summary class="font-semibold text-gray-900 dark:text-gray-100 cursor-pointer">Hva er en utbyttekalender?</summary>
+          <summary class="font-semibold text-gray-900 dark:text-gray-100 cursor-pointer py-3">Hva er en utbyttekalender?</summary>
           <p class="mt-2 text-gray-600 dark:text-gray-400">En utbyttekalender samler ex-datoene, beløpene og betalingsdatoene for utbyttene på børsen, så du ser når hver aksje går ex og hvor mye den betaler. Kalenderen på exday.no viser både kommende og passerte ex-datoer for inneværende år og oppdateres hver børsdag.</p>
         </details>
 
         <details class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-4" open>
-          <summary class="font-semibold text-gray-900 dark:text-gray-100 cursor-pointer">Hva er ex-dato?</summary>
+          <summary class="font-semibold text-gray-900 dark:text-gray-100 cursor-pointer py-3">Hva er ex-dato?</summary>
           <p class="mt-2 text-gray-600 dark:text-gray-400">Ex-dato er den første handelsdagen der aksjen omsettes uten rett til det kommende utbyttet. Kjøper du aksjen på eller etter ex-dato, går utbyttet til den forrige eieren.</p>
         </details>
 
         <details class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-4" open>
-          <summary class="font-semibold text-gray-900 dark:text-gray-100 cursor-pointer">Når må jeg kjøpe aksjen for å få utbytte?</summary>
+          <summary class="font-semibold text-gray-900 dark:text-gray-100 cursor-pointer py-3">Når må jeg kjøpe aksjen for å få utbytte?</summary>
           <p class="mt-2 text-gray-600 dark:text-gray-400">Senest børsdagen før ex-datoen. Oslo Børs gjør opp handler to børsdager etter avtaletidspunktet, og ex-datoen er satt slik at et kjøp børsdagen før rekker fristen. Selger du på selve ex-datoen eller senere, beholder du likevel utbyttet. Kolonnen «Kjøp senest» i kalenderen viser datoen for hver aksje.</p>
         </details>
 
         <details class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-4">
-          <summary class="font-semibold text-gray-900 dark:text-gray-100 cursor-pointer">Når kommer utbyttet inn på kontoen?</summary>
+          <summary class="font-semibold text-gray-900 dark:text-gray-100 cursor-pointer py-3">Når kommer utbyttet inn på kontoen?</summary>
           <p class="mt-2 text-gray-600 dark:text-gray-400">Som regel én til to uker etter ex-datoen. Enkelte selskaper bruker tre til fire uker. Den nøyaktige datoen står i selskapets melding om utbyttet til Oslo Børs.</p>
         </details>
 
         <details class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-4">
-          <summary class="font-semibold text-gray-900 dark:text-gray-100 cursor-pointer">Hvorfor faller kursen på ex-dato?</summary>
+          <summary class="font-semibold text-gray-900 dark:text-gray-100 cursor-pointer py-3">Hvorfor faller kursen på ex-dato?</summary>
           <p class="mt-2 text-gray-600 dark:text-gray-400">Fordi verdiene forlater selskapet. Kursen faller typisk med omtrent utbyttebeløpet den morgenen aksjen begynner å handles uten utbytterett. Å kjøpe rett før ex-dato gir derfor ingen gratis gevinst — du bytter kursverdi mot en utbetaling du i tillegg betaler skatt av.</p>
         </details>
 
         <details class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-4">
-          <summary class="font-semibold text-gray-900 dark:text-gray-100 cursor-pointer">Når er utbyttesesongen på Oslo Børs?</summary>
+          <summary class="font-semibold text-gray-900 dark:text-gray-100 cursor-pointer py-3">Når er utbyttesesongen på Oslo Børs?</summary>
           <p class="mt-2 text-gray-600 dark:text-gray-400">Tyngdepunktet ligger i mars, april og mai. De fleste norske selskaper holder generalforsamling om våren og vedtar utbyttet for foregående år der. Sparebankene, som er den største enkeltgruppen på børsen, betaler nesten alle én gang i året i denne perioden.</p>
         </details>
 
         <details class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-4">
-          <summary class="font-semibold text-gray-900 dark:text-gray-100 cursor-pointer">Hvor mange norske aksjer betaler utbytte?</summary>
+          <summary class="font-semibold text-gray-900 dark:text-gray-100 cursor-pointer py-3">Hvor mange norske aksjer betaler utbytte?</summary>
           <p class="mt-2 text-gray-600 dark:text-gray-400"><!--N:utbytte-->125<!--/N--> av de <!--N:aksjer-->155<!--/N--> selskapene i oversikten har positiv direkteavkastning nå, og <!--N:historikk-->149<!--/N--> har betalt utbytte minst ett år. Antallet endrer seg når selskaper starter, kutter eller gjenopptar utbyttet.</p>
         </details>
 
         <details class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-4">
-          <summary class="font-semibold text-gray-900 dark:text-gray-100 cursor-pointer">Hvorfor mangler ex-dato for de fleste aksjene?</summary>
+          <summary class="font-semibold text-gray-900 dark:text-gray-100 cursor-pointer py-3">Hvorfor mangler ex-dato for de fleste aksjene?</summary>
           <p class="mt-2 text-gray-600 dark:text-gray-400">Kalenderen viser bare datoer selskapene faktisk har annonsert, og de aller fleste annonserer først i forbindelse med kvartals- eller årsrapporten. På et gitt tidspunkt har derfor bare et fåtall av selskapene en bekreftet ex-dato. Estimerte datoer som ikke kan skilles fra bekreftede, er verre enn ingen datoer.</p>
         </details>
 
         <details class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-4">
-          <summary class="font-semibold text-gray-900 dark:text-gray-100 cursor-pointer">Hvor mye skatt betaler jeg av utbytte?</summary>
+          <summary class="font-semibold text-gray-900 dark:text-gray-100 cursor-pointer py-3">Hvor mye skatt betaler jeg av utbytte?</summary>
           <p class="mt-2 text-gray-600 dark:text-gray-400">For personlige aksjonærer bosatt i Norge oppjusteres utbyttet med en faktor før det skattlegges som alminnelig inntekt, noe som gir en effektiv sats på 37,84 prosent. Skjermingsfradraget trekkes fra før skatten beregnes. Holder du aksjene på aksjesparekonto, utsettes skatten til du tar penger ut av kontoen.</p>
         </details>
 
@@ -769,12 +772,12 @@
     <!-- CTA -->
     <div class="max-w-3xl rounded-xl border border-brand-100 dark:border-brand-900/40 bg-brand-50 dark:bg-gray-900 p-5 text-center space-y-3">
       <p class="text-sm font-medium text-gray-800 dark:text-gray-200">Vil du se yield, score og nøkkeltall for hver aksje?</p>
-      <a href="/" class="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors">
+      <a href="/" class="inline-flex items-center min-h-11 gap-2 bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors">
         Åpne exday.no
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
       </a>
       <p class="text-xs text-brand-600 dark:text-brand-400">Gratis · Ingen innlogging · Oppdateres daglig</p>
-      <a href="https://www.facebook.com/share/17rMp8o9yF/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors">
+      <a href="https://www.facebook.com/share/17rMp8o9yF/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" class="inline-flex items-center min-h-11 gap-1.5 text-xs text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors">
         <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/></svg>
         Følg oss på Facebook
       </a>
@@ -791,7 +794,7 @@
     });
   </script>
 
-  <footer class="mt-8 sm:mt-12 border-t border-gray-200 dark:border-gray-800 py-6 text-center text-xs text-gray-400 dark:text-gray-600 space-y-1 px-4">
+  <footer class="mt-8 sm:mt-12 border-t border-gray-200 dark:border-gray-800 py-6 text-center text-xs text-gray-500 dark:text-gray-400 space-y-1 px-4">
     <p>Kurs og utbyttedata hentes fra Yahoo Finance og Euronext. Oppdateres daglig på børsdager.</p>
     <p class="max-w-xl mx-auto leading-relaxed">
       exday.no er ikke et verdipapirforetak og tilbyr ikke finansiell rådgivning.
@@ -800,18 +803,18 @@
       Gjør alltid din egen analyse før du tar investeringsbeslutninger.
     </p>
     <p class="mt-2">
-    <a href="/om/" class="underline hover:text-gray-400 dark:hover:text-gray-400 transition-colors">Om exday.no</a>
+    <a href="/om/" class="underline hover:text-gray-700 dark:hover:text-gray-200 transition-colors">Om exday.no</a>
     <span class="mx-2">·</span>
-    <a href="/metode/" class="underline hover:text-gray-400 dark:hover:text-gray-400 transition-colors">Metode og datakilder</a>
+    <a href="/metode/" class="underline hover:text-gray-700 dark:hover:text-gray-200 transition-colors">Metode og datakilder</a>
     <span class="mx-2">·</span>
-    <a href="/personvern/" class="underline hover:text-gray-400 dark:hover:text-gray-400 transition-colors">Personvern og informasjonskapsler</a>
+    <a href="/personvern/" class="underline hover:text-gray-700 dark:hover:text-gray-200 transition-colors">Personvern og informasjonskapsler</a>
     <span class="mx-2">·</span>
-    <a href="/vilkaar/" class="underline hover:text-gray-400 dark:hover:text-gray-400 transition-colors">Vilkår for bruk</a>
+    <a href="/vilkaar/" class="underline hover:text-gray-700 dark:hover:text-gray-200 transition-colors">Vilkår for bruk</a>
     <span class="mx-2">·</span>
-    <a href="/faq/" class="underline hover:text-gray-400 dark:hover:text-gray-400 transition-colors">Vanlige spørsmål (FAQ)</a>
+    <a href="/faq/" class="underline hover:text-gray-700 dark:hover:text-gray-200 transition-colors">Vanlige spørsmål (FAQ)</a>
   </p>
     <p class="mt-3">
-      <a href="https://www.facebook.com/share/17rMp8o9yF/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-gray-400 hover:text-slate-500 dark:hover:text-slate-400 transition-colors">
+      <a href="https://www.facebook.com/share/17rMp8o9yF/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 min-h-11 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors">
         <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/></svg>
         Følg exday.no på Facebook
       </a>
