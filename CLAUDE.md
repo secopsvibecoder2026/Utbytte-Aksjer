@@ -3732,6 +3732,69 @@ Measured on a regenerated copy (light, 390 px, 15 pages): tap targets under
 44 px 308 → 30, of which 14 are the logo link and 16 checkboxes inside 44 px
 labels; contrast faults 95 → 48 light and 71 → 28 dark.
 
+## Design round 2: one page top (2026-11-23)
+
+The owner approved proposal 5, «Én sidetopp». Measured on 21 pages at 390 px
+in the light theme: eight different H1 combinations (22,4 px/700, 23,2 and
+24,8 px/800, 24 px/700, 25,6 px/400, 28 px/700, 30 px/700 and 800), four page
+backgrounds (white, slate-50, gray-50, and slate-900 in dark mode on `/aksjer/`
+and `/aksjer/sektor/`), «/» and «›» as breadcrumb separators, «Utforsk» above
+the stock pages but «Aksjer › Sektorer» above the sector pages, no breadcrumb
+on eight pages, and a visible path that differed from `BreadcrumbList` on the
+stock pages and the sector pages (JSON-LD said «Hjem › Utforsk › EQNR»). After:
+one H1 (22,4 px/700), one background (gray-50, gray-950 in dark), one separator,
+and every visible path equal to its JSON-LD. The shared rules sit at the end of
+`assets/style.css` («SIDETOPP»), outside `@layer`, so they beat `text-3xl` and
+the templates' own `h1` rules.
+
+- **H1.** `.side-h1`: 1,4 rem, 1,75 rem from 481 px, weight 700, line-height 1,3
+  (the stock page used 1,6). Every template and every hand-written page with a
+  title uses it, and no template `h1` rule sets size or weight. The flat heroes
+  on `/aksjer/` and `/aksjer/sektor/` keep `#1c2631` / `#2a3542`; only size and
+  weight changed. `/app/`, `/uke/`, `/bevegelser/` and `/innstillinger/` have a
+  small app-bar title and are left alone.
+- **Background.** gray-50 and gray-950 everywhere except the heroes. The
+  overview and sector index templates swapped their slate surfaces and borders
+  for the gray equivalents (cards `#111827`, borders `#1f2937` in dark). On the
+  articles, callouts, formula boxes, the table of contents and zebra rows
+  became white, since gray-50 on gray-50 vanishes.
+- **Breadcrumb.** `brodsmule(sti)` in `fetch_stocks.py` returns the visible
+  `<nav class="brodsmule">` and the `BreadcrumbList` from one list, so the two
+  cannot differ. The rule: `exday.no › the menu item the page belongs under › …
+  › the page itself`, where the path of a page is the path of the page above
+  plus one step: `sti_aksje()` gives `Aksjer › Sektorer › Energi › EQNR`. The
+  last step has no link (`aria-current`) and a short name, never a year the
+  generator updates. The separator is «›» (`BRODSMULE_SKILLETEGN`), «exday.no»
+  is the first step in JSON-LD too (it was «Hjem»), and links are root-relative.
+  Added to `/aksjer/`, `/faq/`, `/artikler/`, `/utforsk/`, `/personvern/` and
+  `/utbyttekalender/`; BreadcrumbList added to the pages that lacked it.
+  Unchanged: URLs, canonicals, titles and meta. `/utbyttekalender/` and
+  `/rapportkalender/` have no «Kalender» step, because the menu item points at
+  the dividend calendar itself.
+- **Number tiles.** `tallruter_html()` and `.tallruter`: label above the number,
+  and the column count follows the tile count (`tallruter-n2` to `n6`): 1 gives
+  one column, 2 and 4 two on a phone (four from 640 px), 3 and 6 three, anything
+  else one, so no tile stands alone in the last row. `tekst=True` is for tiles
+  with text instead of numbers (the report page): three tiles then take one
+  column under 640 px. Used on `/aksjer/`, the sector, toplist and report
+  calendar pages, the report page and `/om/`. The stock page's `.kh-tall` was
+  already the reference and is unchanged. The numbers on `/om/` lost their green:
+  numbers are neutral.
+- **Measured after** (390 px, 21 pages, light and dark): H1 combinations 8 → 1,
+  backgrounds 4 → 1, pages without a breadcrumb 8 → 0, visible path ≠ JSON-LD
+  2 → 0. No horizontal scroll or overflow at 320, 390, 768 or 1280 px, tap
+  targets under 44 px unchanged (96 at 390 px, none of them new). CLS 0 as
+  before, except 0,025 on `/aksjer/hoyest-utbytte/` at 320 px (and 0,010 on
+  `/aksjer/utbyttevekst/` at 360 px in a second run): the H1 is now one line in Inter and two in
+  the fallback font, so it moves when the font arrives. Preloading Inter or a
+  size-adjusted fallback would fix it for every page; it is not done.
+- **Test.** `TestSidetopp` (13) renders the templates and reads the hand-written
+  pages (without the generated calendar blocks). It fails on the old code
+  (23 failures, 5 errors) for: missing `side-h1`, slate or white backgrounds,
+  a visible path unlike JSON-LD, «/» as separator, a missing breadcrumb, a path
+  that is not the path of the page above plus one, tile count against class,
+  and the label standing under the number.
+
 ## The fixer agent (`.claude/agents/fikser.md`, 2026-10-18)
 
 The maintenance and tallkontroll agents only report, and their findings waited
