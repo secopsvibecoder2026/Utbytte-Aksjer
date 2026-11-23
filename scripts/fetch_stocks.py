@@ -8155,15 +8155,10 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None, rapporter=None
             f'<div class="rel-grid">{kort}</div></div>'
         )
 
+    # Brødsmulen og BreadcrumbList bygges av samme sti (se brodsmule()).
+    brod_html, brod_ld = brodsmule(sti_aksje(sektor, ticker))
     ld_graph = [
-        {
-            "@type": "BreadcrumbList",
-            "itemListElement": [
-                {"@type": "ListItem", "position": 1, "name": "Hjem",    "item": "https://exday.no/"},
-                {"@type": "ListItem", "position": 2, "name": "Utforsk", "item": "https://exday.no/utforsk/"},
-                {"@type": "ListItem", "position": 3, "name": ticker,    "item": f"https://exday.no/aksjer/{ticker}/"},
-            ]
-        },
+        brod_ld,
         {
             "@type": "FinancialProduct",
             "name": f"{navn} ({ticker})",
@@ -8240,10 +8235,7 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None, rapporter=None
     a {{ color: #275f45; text-decoration: none; }}
     a:hover {{ text-decoration: underline; }}
     .wrap {{ max-width: 760px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }}
-    .breadcrumb {{ font-size: 0.85rem; color: #6b7280; margin-bottom: 1.5rem; }}
-    .breadcrumb a {{ color: #6b7280; }}
-    .breadcrumb span {{ margin: 0 0.35rem; }}
-    h1 {{ font-size: 1.75rem; font-weight: 700; margin-bottom: 0.25rem; }}
+    h1 {{ margin-bottom: 0.25rem; }}
     .sub {{ font-size: 0.95rem; margin-bottom: 1.5rem; }}
     .ingress {{ font-size: 1rem; line-height: 1.6; margin: -0.75rem 0 1.25rem; color: #374151; max-width: 46rem; }}
     .badge {{ display: inline-block; font-size: 0.75rem; font-weight: 600; padding: 0.2rem 0.6rem;
@@ -8439,7 +8431,6 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None, rapporter=None
     .rel-ticker {{ font-weight: 700; font-size: 1rem; color: #111827; }}
     .rel-navn {{ font-size: 0.75rem; }}
     .rel-yield {{ font-size: 0.8rem; font-weight: 600; color: #374151; font-variant-numeric: tabular-nums; }}
-    @media (max-width: 480px) {{ h1 {{ font-size: 1.4rem; }} }}
 
     /* Light mode */
     body {{ background: #f9fafb; color: #111827; }}
@@ -8453,7 +8444,6 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None, rapporter=None
     .cta {{ background: #fff; border-color: #e5e7eb; }}
     .cta p {{ color: #374151; }}
     .updated {{ color: #6b7280; }}
-    .breadcrumb {{ color: #6b7280; }}
     .sub {{ color: #6b7280; }}
     .faq {{ margin: 2rem 0; }}
     .faq h2 {{ font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem; color: #374151; }}
@@ -8497,8 +8487,6 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None, rapporter=None
     .dark .cta {{ background: #111827; border-color: #1f2937; }}
     .dark .cta p {{ color: #d1d5db; }}
     .dark .updated {{ color: #9ca3af; }}
-    .dark .breadcrumb {{ color: #9ca3af; }}
-    .dark .breadcrumb a {{ color: #9ca3af; }}
     .dark .sub {{ color: #9ca3af; }}
     .dark .ingress {{ color: #d1d5db; }}
     .dark .badge {{ background: #1b3f2f; color: #9cc2ad; }}
@@ -8526,17 +8514,9 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None, rapporter=None
 
 <div class="wrap">
 
-  <div class="breadcrumb">
-    <a href="https://exday.no/">exday.no</a>
-    <span>›</span>
-    <a href="https://exday.no/utforsk/">Utforsk</a>
-    <span>›</span>
-    <a href="https://exday.no/aksjer/sektor/{_sektor_slug(sektor)}/">{sektor}</a>
-    <span>›</span>
-    {ticker}
-  </div>
+  {brod_html}
 
-  <h1>{h1_tekst}</h1>
+  <h1 class="side-h1">{h1_tekst}</h1>
   <p class="sub">{navn} ({ticker}) · {sektor} · {frekvens} utbytte · {markedsplass}</p>
   {ingress_html}
 
@@ -8814,6 +8794,7 @@ def generer_aksjesider(aksjer, root_dir):
           <td>{ex}</td>
         </tr>"""
 
+    brod_html, brod_ld = brodsmule(sti_aksjer())
     oversikt_html = f"""<!DOCTYPE html>
 <html lang="nb">
 <head>
@@ -8859,11 +8840,11 @@ def generer_aksjesider(aksjer, root_dir):
   <meta name="twitter:title" content="Norske utbytteaksjer – oversikt | exday.no"/>
   <meta name="twitter:description" content="Oversikt over {antall_i_katalog(aksjer)} norske utbytteaksjer på Oslo Børs med yield, ex-dato og utbyttehistorikk. Oppdateres daglig."/>
   <meta name="twitter:image" content="https://exday.no/assets/og-image.png"/>
-  <script type="application/ld+json">{json.dumps({"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Hjem","item":"https://exday.no/"},{"@type":"ListItem","position":2,"name":"Aksjer","item":"https://exday.no/aksjer/"}]}, ensure_ascii=False)}</script>
+  {brodsmule_ld_script(brod_ld)}
   <link rel="stylesheet" href="/assets/style.css"/>
   <style>
     *, *::before, *::after {{ box-sizing: border-box; margin: 0; padding: 0; }}
-    body {{ font-family: "Inter", system-ui, -apple-system, 'Segoe UI', sans-serif; background: #f8fafc; color: #0f172a; line-height: 1.6; }}
+    body {{ font-family: "Inter", system-ui, -apple-system, 'Segoe UI', sans-serif; background: #f9fafb; color: #111827; line-height: 1.6; }}
     a {{ color: #2f7352; text-decoration: none; }}
     a:hover {{ text-decoration: underline; }}
     .wrap {{ max-width: 1100px; margin: 0 auto; padding: 1rem 1rem 2rem; }}
@@ -8875,27 +8856,22 @@ def generer_aksjesider(aksjer, root_dir):
       padding: 2rem 1.5rem;
       margin-bottom: 2rem;
     }}
-    .hero h1 {{ font-size: 2rem; font-weight: 800; margin-bottom: 0.5rem; letter-spacing: -0.02em; }}
+    .hero h1 {{ margin-bottom: 0.5rem; }}
     .hero p {{ color: rgba(255,255,255,0.85); font-size: 1.05rem; max-width: 36rem; }}
-    .hero-stats {{ display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; margin-top: 1.5rem; }}
-    .hero-stat {{ background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 0.6rem; padding: 0.75rem 0.5rem; text-align: center; }}
-    .hero-stat-num {{ font-size: 1.4rem; font-weight: 800; }}
-    .hero-stat-lbl {{ font-size: 0.7rem; opacity: 0.8; text-transform: uppercase; letter-spacing: 0.05em; }}
+    .hero .tallruter {{ margin: 1.5rem 0 0; }}
     @media (max-width: 540px) {{
       .hero {{ padding: 1.5rem 1.1rem; }}
-      .hero h1 {{ font-size: 1.55rem; }}
       .hero p {{ font-size: 0.95rem; }}
-      .hero-stats {{ grid-template-columns: repeat(2, 1fr); }}
     }}
     .seksjon {{ margin: 2.5rem 0; }}
     .seksjon-tittel {{ display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 1rem; }}
-    .seksjon-tittel h2 {{ font-size: 1.25rem; font-weight: 700; color: #0f172a; }}
+    .seksjon-tittel h2 {{ font-size: 1.25rem; font-weight: 700; color: #111827; }}
     .seksjon-tittel .se-alle {{ font-size: 0.85rem; color: #2f7352; font-weight: 600; display: inline-flex; align-items: center; min-height: 44px; }}
     .ak-grid {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 0.75rem; }}
     .ak-kort {{
       display: block;
       background: #fff;
-      border: 1px solid #e2e8f0;
+      border: 1px solid #e5e7eb;
       border-radius: 0.75rem;
       padding: 1rem;
       transition: all 0.15s;
@@ -8904,14 +8880,14 @@ def generer_aksjesider(aksjer, root_dir):
     }}
     .ak-kort:hover {{ border-color: #3f8a63; box-shadow: 0 4px 12px rgba(63,138,99,0.1); transform: translateY(-1px); }}
     .ak-kort-topp {{ display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.4rem; }}
-    .ak-kort-tk {{ font-size: 0.95rem; font-weight: 600; color: #0f172a; }}
-    .ak-kort-yield {{ font-size: 0.95rem; font-weight: 600; color: #0f172a; font-variant-numeric: tabular-nums; }}
-    .ak-kort-navn {{ font-size: 0.85rem; font-weight: 500; color: #334155; line-height: 1.3; margin-bottom: 0.3rem; }}
-    .ak-kort-meta {{ font-size: 0.7rem; color: #94a3b8; }}
+    .ak-kort-tk {{ font-size: 0.95rem; font-weight: 600; color: #111827; }}
+    .ak-kort-yield {{ font-size: 0.95rem; font-weight: 600; color: #111827; font-variant-numeric: tabular-nums; }}
+    .ak-kort-navn {{ font-size: 0.85rem; font-weight: 500; color: #374151; line-height: 1.3; margin-bottom: 0.3rem; }}
+    .ak-kort-meta {{ font-size: 0.7rem; color: #9ca3af; }}
     .topplister {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.75rem; }}
     .topp-kort {{
       display: flex; align-items: center; gap: 0.85rem;
-      background: #fff; border: 1px solid #e2e8f0; border-radius: 0.75rem;
+      background: #fff; border: 1px solid #e5e7eb; border-radius: 0.75rem;
       padding: 1rem; text-decoration: none !important; color: inherit;
       transition: all 0.15s;
     }}
@@ -8924,14 +8900,14 @@ def generer_aksjesider(aksjer, root_dir):
     }}
     /* SVG, ikke emoji — arver fargen fra .topp-ikon-N under. */
     .topp-ikon svg {{ width: 22px; height: 22px; }}
-    .topp-ikon-1, .topp-ikon-2, .topp-ikon-3, .topp-ikon-4 {{ background: #f1f5f9; color: #475569; }}
-    .dark .topp-ikon-1, .dark .topp-ikon-2, .dark .topp-ikon-3, .dark .topp-ikon-4 {{ background: #273241; color: #cbd5e1; }}
-    .topp-tittel {{ font-weight: 600; font-size: 0.95rem; color: #0f172a; margin-bottom: 0.15rem; }}
-    .topp-beskr {{ font-size: 0.75rem; color: #64748b; }}
+    .topp-ikon-1, .topp-ikon-2, .topp-ikon-3, .topp-ikon-4 {{ background: #f3f4f6; color: #4b5563; }}
+    .dark .topp-ikon-1, .dark .topp-ikon-2, .dark .topp-ikon-3, .dark .topp-ikon-4 {{ background: #273241; color: #d1d5db; }}
+    .topp-tittel {{ font-weight: 600; font-size: 0.95rem; color: #111827; margin-bottom: 0.15rem; }}
+    .topp-beskr {{ font-size: 0.75rem; color: #6b7280; }}
     .sek-grid {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 0.5rem; }}
     .sek-kort {{
       display: flex; align-items: center; gap: 0.6rem;
-      background: #fff; border: 1px solid #e2e8f0; border-radius: 0.6rem;
+      background: #fff; border: 1px solid #e5e7eb; border-radius: 0.6rem;
       padding: 0.65rem 0.85rem; text-decoration: none !important; color: inherit;
       transition: all 0.15s;
     }}
@@ -8941,22 +8917,22 @@ def generer_aksjesider(aksjer, root_dir):
     .sek-ikon {{ width: 1.35rem; height: 1.35rem; flex-shrink: 0; color: #2f7352; }}
     .dark .sek-ikon {{ color: #6fa98a; }}
     .sek-info {{ display: flex; flex-direction: column; min-width: 0; }}
-    .sek-navn {{ font-weight: 600; font-size: 0.85rem; color: #0f172a; }}
-    .sek-antall {{ font-size: 0.7rem; color: #94a3b8; }}
-    .alle-aksjer {{ background: #fff; border: 1px solid #e2e8f0; border-radius: 0.75rem; overflow: hidden; }}
-    .alle-aksjer-header {{ padding: 1rem 1.25rem; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; }}
+    .sek-navn {{ font-weight: 600; font-size: 0.85rem; color: #111827; }}
+    .sek-antall {{ font-size: 0.7rem; color: #9ca3af; }}
+    .alle-aksjer {{ background: #fff; border: 1px solid #e5e7eb; border-radius: 0.75rem; overflow: hidden; }}
+    .alle-aksjer-header {{ padding: 1rem 1.25rem; border-bottom: 1px solid #e5e7eb; display: flex; justify-content: space-between; align-items: center; }}
     .alle-aksjer-header h2 {{ font-size: 1.1rem; font-weight: 700; }}
-    .alle-aksjer-header .filter-info {{ font-size: 0.78rem; color: #64748b; }}
+    .alle-aksjer-header .filter-info {{ font-size: 0.78rem; color: #6b7280; }}
     table {{ width: 100%; border-collapse: collapse; font-size: 0.88rem; }}
-    th {{ background: #f8fafc; padding: 0.65rem 1.25rem; text-align: left; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #64748b; border-bottom: 1px solid #e2e8f0; }}
-    td {{ padding: 0.7rem 1.25rem; border-bottom: 1px solid #f1f5f9; }}
+    th {{ background: #f9fafb; padding: 0.65rem 1.25rem; text-align: left; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #6b7280; border-bottom: 1px solid #e5e7eb; }}
+    td {{ padding: 0.7rem 1.25rem; border-bottom: 1px solid #f3f4f6; }}
     tr:last-child td {{ border-bottom: none; }}
-    tr:hover td {{ background: #f8fafc; }}
-    td a {{ color: #0f172a; font-weight: 600; }}
-    .yield-cell {{ color: #0f172a; font-weight: 600; font-variant-numeric: tabular-nums; }}
+    tr:hover td {{ background: #f9fafb; }}
+    td a {{ color: #111827; font-weight: 600; }}
+    .yield-cell {{ color: #111827; font-weight: 600; font-variant-numeric: tabular-nums; }}
     .verktoy-bar {{
       background: #fff;
-      border: 1px solid #e2e8f0;
+      border: 1px solid #e5e7eb;
       border-radius: 1rem;
       padding: 1.5rem;
       margin: 2rem 0;
@@ -8965,8 +8941,8 @@ def generer_aksjesider(aksjer, root_dir):
       align-items: center;
       gap: 1rem;
     }}
-    .verktoy-bar h3 {{ font-size: 1.1rem; font-weight: 700; color: #0f172a; margin-bottom: 0.25rem; }}
-    .verktoy-bar p {{ font-size: 0.88rem; color: #475569; }}
+    .verktoy-bar h3 {{ font-size: 1.1rem; font-weight: 700; color: #111827; margin-bottom: 0.25rem; }}
+    .verktoy-bar p {{ font-size: 0.88rem; color: #4b5563; }}
     .verktoy-bar a {{
       background: #275f45; color: #fff !important; padding: 0.6rem 1.25rem;
       border-radius: 0.5rem; font-weight: 600; text-decoration: none !important;
@@ -8975,28 +8951,28 @@ def generer_aksjesider(aksjer, root_dir):
     @media (max-width: 540px) {{
       .verktoy-bar {{ grid-template-columns: 1fr; text-align: center; }}
     }}
-    .updated {{ font-size: 0.78rem; color: #64748b; text-align: right; margin-top: 1rem; }}
-    .dark .updated {{ color: #94a3b8; }}
+    .updated {{ font-size: 0.78rem; color: #6b7280; text-align: right; margin-top: 1rem; }}
+    .dark .updated {{ color: #9ca3af; }}
     /* Mørk modus */
-    .dark body {{ background: #0f172a; color: #f1f5f9; }}
+    .dark body {{ background: #030712; color: #f3f4f6; }}
     .dark a {{ color: #6fa98a; }}
-    .dark .seksjon-tittel h2 {{ color: #f1f5f9; }}
+    .dark .seksjon-tittel h2 {{ color: #f3f4f6; }}
     .dark .seksjon-tittel .se-alle {{ color: #6fa98a; }}
-    .dark .ak-kort, .dark .topp-kort, .dark .sek-kort, .dark .alle-aksjer {{ background: #1e293b; border-color: #334155; }}
+    .dark .ak-kort, .dark .topp-kort, .dark .sek-kort, .dark .alle-aksjer {{ background: #111827; border-color: #1f2937; }}
     .dark .ak-kort:hover, .dark .topp-kort:hover, .dark .sek-kort:hover {{ border-color: #3f8a63; }}
-    .dark .ak-kort-tk {{ color: #f1f5f9; }}
-    .dark .ak-kort-navn {{ color: #cbd5e1; }}
-    .dark .ak-kort-yield {{ color: #f1f5f9; }}
-    .dark .topp-tittel, .dark .sek-navn {{ color: #f1f5f9; }}
-    .dark .alle-aksjer-header {{ border-color: #334155; }}
-    .dark th {{ background: #0f172a; border-color: #334155; color: #94a3b8; }}
-    .dark td {{ border-color: #1e293b; }}
-    .dark tr:hover td {{ background: #0f172a; }}
-    .dark td a {{ color: #f1f5f9; }}
-    .dark .yield-cell {{ color: #f1f5f9; }}
-    .dark .verktoy-bar {{ background: #1e293b; border-color: #334155; }}
-    .dark .verktoy-bar h3 {{ color: #f1f5f9; }}
-    .dark .verktoy-bar p {{ color: #cbd5e1; }}
+    .dark .ak-kort-tk {{ color: #f3f4f6; }}
+    .dark .ak-kort-navn {{ color: #d1d5db; }}
+    .dark .ak-kort-yield {{ color: #f3f4f6; }}
+    .dark .topp-tittel, .dark .sek-navn {{ color: #f3f4f6; }}
+    .dark .alle-aksjer-header {{ border-color: #1f2937; }}
+    .dark th {{ background: #1f2937; border-color: #1f2937; color: #9ca3af; }}
+    .dark td {{ border-color: #1f2937; }}
+    .dark tr:hover td {{ background: #1f2937; }}
+    .dark td a {{ color: #f3f4f6; }}
+    .dark .yield-cell {{ color: #f3f4f6; }}
+    .dark .verktoy-bar {{ background: #111827; border-color: #1f2937; }}
+    .dark .verktoy-bar h3 {{ color: #f3f4f6; }}
+    .dark .verktoy-bar p {{ color: #d1d5db; }}
     .dark .verktoy-bar a {{ background: #2f7352; color: #fff !important; }}
   </style>
 </head>
@@ -9004,28 +8980,18 @@ def generer_aksjesider(aksjer, root_dir):
 {_site_nav_html('aksjer')}
 <div class="wrap">
 
+  {brod_html}
+
   <!-- HERO -->
   <section class="hero">
-    <h1>Norske utbytteaksjer</h1>
+    <h1 class="side-h1">Norske utbytteaksjer</h1>
     <p>Komplett oversikt over alle utbyttebetalere på Oslo Børs. Yield, ex-datoer, historikk og analyser — oppdateres daglig på børsdager.</p>
-    <div class="hero-stats">
-      <div class="hero-stat">
-        <div class="hero-stat-num">{antall_i_katalog(aksjer)}</div>
-        <div class="hero-stat-lbl">Aksjer</div>
-      </div>
-      <div class="hero-stat">
-        <div class="hero-stat-num">{len(aksjer_med_utbytte)}</div>
-        <div class="hero-stat-lbl">Med utbytte</div>
-      </div>
-      <div class="hero-stat">
-        <div class="hero-stat-num">{_pst(snitt_yield, 1)}</div>
-        <div class="hero-stat-lbl">Snitt-yield</div>
-      </div>
-      <div class="hero-stat">
-        <div class="hero-stat-num">{len(sektor_data2)}</div>
-        <div class="hero-stat-lbl">Sektorer</div>
-      </div>
-    </div>
+    {tallruter_html([
+        ("Aksjer", str(antall_i_katalog(aksjer))),
+        ("Med utbytte", str(len(aksjer_med_utbytte))),
+        ("Snitt-yield", _pst(snitt_yield, 1)),
+        ("Sektorer", str(len(sektor_data2))),
+    ], "Oversikten i tall")}
   </section>
 
   <!-- TOPPLISTER -->
@@ -9380,6 +9346,94 @@ def _sektor_slug(sektor):
             .replace(' ', '-'))
 
 
+# ── Sidetopp: brødsmule og tallruter (designrunde 2, 23.11.2026) ──────────
+#
+# Brødsmulen og BreadcrumbList i JSON-LD bygges av samme liste, så de kan ikke
+# vise ulike stier. Regelen for stien:
+#
+#   exday.no › menyvalget siden hører under › … › siden selv
+#
+# «Aksjer» er menyvalget for aksjesidene, sektorene, topplistene og
+# avnoteringene. Stien til en side er alltid stien til siden over pluss ett
+# ledd: sektorsiden er «Aksjer › Sektorer › Energi», aksjesiden «Aksjer ›
+# Sektorer › Energi › EQNR». Siste ledd er siden selv, uten lenke, med kort
+# navn (menyens navn, tickeren eller artikkeltittelen), aldri med årstall.
+# Lenkene er rotrelative, og «exday.no» er alltid første ledd.
+BRODSMULE_SKILLETEGN = "›"
+BRODSMULE_ROT = "exday.no"
+
+
+def sti_aksjer():
+    return [("Aksjer", "/aksjer/")]
+
+
+def sti_sektorer():
+    return sti_aksjer() + [("Sektorer", "/aksjer/sektor/")]
+
+
+def sti_sektor(sektor):
+    return sti_sektorer() + [(sektor, f"/aksjer/sektor/{_sektor_slug(sektor)}/")]
+
+
+def sti_aksje(sektor, ticker):
+    return sti_sektor(sektor) + [(ticker, f"/aksjer/{ticker}/")]
+
+
+def brodsmule(sti):
+    """(html, ld) for en sti. `sti` er en liste (navn, url) uten «exday.no»;
+    siste ledd er siden selv og vises uten lenke. `ld` er BreadcrumbList som
+    dict, med nøyaktig de samme navnene som den synlige brødsmulen."""
+    ledd = [(BRODSMULE_ROT, "/")] + list(sti)
+    skille = f' <span class="brodsmule-skille" aria-hidden="true">{BRODSMULE_SKILLETEGN}</span> '
+    deler = []
+    for i, (navn, url) in enumerate(ledd):
+        n = html.escape(navn)
+        if i == len(ledd) - 1:
+            deler.append(f'<span aria-current="page">{n}</span>')
+        else:
+            deler.append(f'<a href="{url}">{n}</a>')
+    nav = ('<nav class="brodsmule" aria-label="Brødsmulesti">'
+           + skille.join(deler) + '</nav>')
+    ld = {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {"@type": "ListItem", "position": i + 1, "name": navn, "item": f"https://exday.no{url}"}
+            for i, (navn, url) in enumerate(ledd)
+        ],
+    }
+    return nav, ld
+
+
+def brodsmule_ld_script(ld):
+    """BreadcrumbList som eget <script>, for sider som har sin øvrige JSON-LD
+    som ett enkelt objekt (topplister, rapportkalender)."""
+    data = {"@context": "https://schema.org", **ld}
+    return '<script type="application/ld+json">' + json.dumps(data, ensure_ascii=False) + '</script>'
+
+
+def tallruter_klasse(antall, tekst=False):
+    """CSS-klassen som velger kolonner etter antall ruter (se .tallruter i
+    assets/style.css): 2 og 4 gir to kolonner på telefon, 3 og 6 gir tre, og
+    ellers én. Dermed står det aldri en enslig rute alene i siste rad.
+    `tekst` er for ruter med lang tekst i stedet for tall: tre og seks ruter
+    får da én kolonne under 640 px, siden tre kolonner er for smalt til
+    «0,40 USD per aksje»."""
+    return f"tallruter tallruter-n{antall}" + (" tallruter-tekst" if tekst else "")
+
+
+def tallruter_html(ruter, merkelapp="Nøkkeltall", tekst=False):
+    """Tallruter med etiketten over tallet. `ruter` er en liste (etikett,
+    verdi) eller (etikett, verdi, merknad); verdi og merknad er ferdig HTML,
+    etikett vanlig tekst."""
+    celler = []
+    for rute in ruter:
+        etikett, verdi = rute[0], rute[1]
+        merknad = f'<span class="tallrute-note">{rute[2]}</span>' if len(rute) > 2 and rute[2] else ""
+        celler.append(f'<div class="tallrute"><dt>{html.escape(etikett)}</dt><dd>{verdi}{merknad}</dd></div>')
+    return (f'<dl class="{tallruter_klasse(len(celler), tekst)}" aria-label="{html.escape(merkelapp)}">'
+            + "".join(celler) + '</dl>')
+
+
 def _ordtall(n):
     """Ett-tallet skrives med bokstav i løpende tekst, resten med siffer."""
     return "én" if n == 1 else str(n)
@@ -9597,17 +9651,11 @@ def generer_sektorsider(aksjer, root_dir):
                      f"{len(aksjer_sortert)} norske {sektor.lower()}-aksjer på Oslo Børs. "
                      f"Se yield, ex-dato og historikk på exday.no.")
 
+        brod_html, brod_ld = brodsmule(sti_sektor(sektor))
         json_ld = json.dumps({
             "@context": "https://schema.org",
             "@graph": [
-                {
-                    "@type": "BreadcrumbList",
-                    "itemListElement": [
-                        {"@type": "ListItem", "position": 1, "name": "Hjem",    "item": "https://exday.no/"},
-                        {"@type": "ListItem", "position": 2, "name": "Utforsk", "item": "https://exday.no/utforsk/"},
-                        {"@type": "ListItem", "position": 3, "name": sektor,    "item": f"https://exday.no/aksjer/sektor/{slug}/"},
-                    ]
-                },
+                brod_ld,
                 {
                     "@type": "ItemList",
                     "name": f"{sektor}-aksjer med utbytte på Oslo Børs",
@@ -9683,20 +9731,13 @@ def generer_sektorsider(aksjer, root_dir):
     a {{ color: #2f7352; text-decoration: none; }}
     a:hover {{ text-decoration: underline; }}
     .wrap {{ max-width: 900px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }}
-    .breadcrumb {{ font-size: 0.85rem; color: #6b7280; margin-bottom: 1.5rem; }}
-    .breadcrumb a {{ color: #6b7280; }}
-    .breadcrumb span {{ margin: 0 0.35rem; }}
-    h1 {{ font-size: 1.75rem; font-weight: 700; margin-bottom: 0.5rem; }}
+    h1 {{ margin-bottom: 0.5rem; }}
     /* Ikonet i overskriften er dekorativt (aria-hidden) og skal stå på samme
        linje som teksten uten å dra opp linjehøyden. */
     .h1-ikon {{ width: 1.5rem; height: 1.5rem; vertical-align: -0.18em;
                 margin-right: 0.5rem; color: #2f7352; }}
     .dark .h1-ikon {{ color: #6fa98a; }}
     .sub {{ margin-bottom: 1.5rem; font-size: 0.95rem; }}
-    .stats {{ display: flex; gap: 1.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }}
-    .stat {{ border-radius: 0.5rem; padding: 0.75rem 1.25rem; border: 1px solid; }}
-    .stat-val {{ font-size: 1.4rem; font-weight: 700; color: #111827; }}
-    .stat-lbl {{ font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em; }}
     .sektor-analyse {{ margin: 0 0 2rem; }}
     .sektor-analyse h2 {{ font-size: 1.15rem; font-weight: 700; margin: 1.75rem 0 0.6rem; }}
     .sektor-analyse p {{ margin: 0 0 0.9rem; line-height: 1.75; font-size: 0.95rem; }}
@@ -9714,8 +9755,6 @@ def generer_sektorsider(aksjer, root_dir):
     .updated {{ font-size: 0.78rem; text-align: right; margin-top: 1rem; }}
 
     body {{ background: #f9fafb; color: #111827; }}
-    .stat {{ background: #fff; border-color: #e5e7eb; }}
-    .stat-lbl {{ color: #6b7280; }}
     table {{ background: #fff; border-color: #e5e7eb; }}
     th {{ background: #f3f4f6; color: #6b7280; }}
     td {{ border-color: #f3f4f6; }}
@@ -9724,8 +9763,6 @@ def generer_sektorsider(aksjer, root_dir):
     .updated {{ color: #6b7280; }}
 
     .dark body {{ background: #030712; color: #f3f4f6; }}
-    .dark .stat {{ background: #111827; border-color: #1f2937; }}
-    .dark .stat-lbl {{ color: #9ca3af; }}
     .dark table {{ background: #111827; border-color: #1f2937; }}
     .dark th {{ background: #1f2937; color: #9ca3af; }}
     .dark td {{ border-color: #1f2937; }}
@@ -9733,9 +9770,6 @@ def generer_sektorsider(aksjer, root_dir):
     .dark .sub {{ color: #9ca3af; }}
     .dark .updated {{ color: #9ca3af; }}
     .dark a {{ color: #6fa98a; }}
-    .dark .breadcrumb {{ color: #9ca3af; }}
-    .dark .breadcrumb a {{ color: #9ca3af; }}
-    .dark .stat-val {{ color: #f3f4f6; }}
     .dark .yield {{ color: #f3f4f6; }}
     .dark .cta a {{ background: #2f7352; color: #fff !important; }}
   </style>
@@ -9743,22 +9777,14 @@ def generer_sektorsider(aksjer, root_dir):
 <body>
 {_site_nav_html('sektor')}
 <div class="wrap">
-  <div class="breadcrumb">
-    <a href="https://exday.no/">exday.no</a>
-    <span>›</span>
-    <a href="/aksjer/">Aksjer</a>
-    <span>›</span>
-    <a href="/aksjer/sektor/">Sektorer</a>
-    <span>›</span>
-    {sektor}
-  </div>
-  <h1>{_sektor_ikon(sektor, klasse="h1-ikon")}{sektor}-aksjer med utbytte</h1>
+  {brod_html}
+  <h1 class="side-h1">{_sektor_ikon(sektor, klasse="h1-ikon")}{sektor}-aksjer med utbytte</h1>
   <p class="sub">{len(aksjer_sortert)} norske {sektor.lower()}-aksjer på Oslo Børs. Sortert etter direkteavkastning.</p>
-  <div class="stats">
-    <div class="stat"><div class="stat-val">{len(aksjer_sortert)}</div><div class="stat-lbl">Aksjer</div></div>
-    <div class="stat"><div class="stat-val">{_pst(snitt_yield, 1) if snitt_yield else "—"}</div><div class="stat-lbl">Snitt yield</div></div>
-    <div class="stat"><div class="stat-val">{_pst(max([a.get("utbytte_yield", 0) for a in aksjer_sortert if i_rangering(a)] or [0]), 1)}</div><div class="stat-lbl">Høyeste yield</div></div>
-  </div>
+  {tallruter_html([
+      ("Aksjer", str(len(aksjer_sortert))),
+      ("Snitt yield", _pst(snitt_yield, 1) if snitt_yield else "—"),
+      ("Høyeste yield", _pst(max([a.get("utbytte_yield", 0) for a in aksjer_sortert if i_rangering(a)] or [0]), 1)),
+  ], "Sektoren i tall")}
 {analyse_html}
   <div class="tabell-ramme">
   <table>
@@ -9822,6 +9848,7 @@ def generer_sektorsider(aksjer, root_dir):
       {f'<div class="sk-topp">Topp: {topp_str}</div>' if topp_str else ''}
     </a>"""
 
+    brod_html, brod_ld = brodsmule(sti_sektorer())
     sektor_oversikt = f"""<!DOCTYPE html>
 <html lang="nb">
 <head>
@@ -9847,6 +9874,7 @@ def generer_sektorsider(aksjer, root_dir):
   <title>Norske utbytteaksjer etter sektor | exday.no</title>
   <meta name="description" content="Finn norske utbytteaksjer på Oslo Børs sortert etter sektor — energi, finans, shipping, havbruk og mer."/>
   <link rel="canonical" href="https://exday.no/aksjer/sektor/"/>
+  {brodsmule_ld_script(brod_ld)}
   <meta name="theme-color" content="#2f7352"/>
   <link rel="icon" type="image/png" sizes="512x512" href="/favicon.png"/>
   <link rel="icon" type="image/png" sizes="180x180" href="/logo/apple_touch_icon_180.png"/>
@@ -9865,7 +9893,7 @@ def generer_sektorsider(aksjer, root_dir):
   </script>
   <style>
     *, *::before, *::after {{ box-sizing: border-box; margin: 0; padding: 0; }}
-    body {{ font-family: "Inter", system-ui, -apple-system, 'Segoe UI', sans-serif; line-height: 1.6; background: #f8fafc; color: #0f172a; }}
+    body {{ font-family: "Inter", system-ui, -apple-system, 'Segoe UI', sans-serif; line-height: 1.6; background: #f9fafb; color: #111827; }}
     a {{ color: #2f7352; text-decoration: none; }}
     a:hover {{ text-decoration: underline; }}
     .wrap {{ max-width: 1100px; margin: 0 auto; padding: 1rem 1rem 2rem; }}
@@ -9877,20 +9905,16 @@ def generer_sektorsider(aksjer, root_dir):
       padding: 2rem 1.5rem;
       margin-bottom: 2rem;
     }}
-    .hero h1 {{ font-size: 1.85rem; font-weight: 800; margin-bottom: 0.5rem; letter-spacing: -0.02em; }}
+    .hero h1 {{ margin-bottom: 0.5rem; }}
     .hero p {{ color: rgba(255,255,255,0.85); font-size: 1rem; max-width: 36rem; }}
     @media (max-width: 540px) {{
       .hero {{ padding: 1.5rem 1.1rem; }}
-      .hero h1 {{ font-size: 1.45rem; }}
     }}
-    .breadcrumb {{ font-size: 0.78rem; color: #64748b; margin-bottom: 1rem; }}
-    .breadcrumb a {{ color: #64748b; }}
-    .breadcrumb span {{ margin: 0 0.35rem; }}
     .grid {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 0.85rem; }}
     .sektor-kort {{
       display: block;
       background: #fff;
-      border: 1px solid #e2e8f0;
+      border: 1px solid #e5e7eb;
       border-radius: 0.85rem;
       padding: 1rem 1.15rem;
       transition: all 0.15s;
@@ -9906,11 +9930,11 @@ def generer_sektorsider(aksjer, root_dir):
     .sk-ikon {{ width: 1.5rem; height: 1.5rem; flex-shrink: 0; color: #2f7352; }}
     .dark .sk-ikon {{ color: #6fa98a; }}
     .sk-tekst {{ flex: 1; min-width: 0; }}
-    .sk-navn {{ font-weight: 700; font-size: 1rem; color: #0f172a; }}
-    .sk-antall {{ font-size: 0.78rem; color: #64748b; margin-top: 0.1rem; }}
-    .sk-arrow {{ color: #94a3b8; font-size: 1.1rem; flex-shrink: 0; }}
+    .sk-navn {{ font-weight: 700; font-size: 1rem; color: #111827; }}
+    .sk-antall {{ font-size: 0.78rem; color: #6b7280; margin-top: 0.1rem; }}
+    .sk-arrow {{ color: #9ca3af; font-size: 1.1rem; flex-shrink: 0; }}
     .sektor-kort:hover .sk-arrow {{ color: #3f8a63; transform: translateX(2px); transition: all 0.15s; }}
-    .sk-topp {{ font-size: 0.72rem; color: #94a3b8; padding-top: 0.4rem; border-top: 1px solid #f1f5f9; font-family: ui-monospace, monospace; }}
+    .sk-topp {{ font-size: 0.72rem; color: #9ca3af; padding-top: 0.4rem; border-top: 1px solid #f3f4f6; font-family: ui-monospace, monospace; }}
     .info-bar {{
       display: flex; align-items: flex-start; gap: 0.75rem;
       background: #f0fafb;
@@ -9920,27 +9944,26 @@ def generer_sektorsider(aksjer, root_dir):
       padding: 0.85rem 1rem;
       margin-bottom: 2rem;
       font-size: 0.85rem;
-      color: #0f172a;
+      color: #111827;
       line-height: 1.5;
     }}
     .info-bar svg {{ flex-shrink: 0; margin-top: 2px; }}
-    .info-bar strong {{ color: #0f172a; }}
+    .info-bar strong {{ color: #111827; }}
     /* Dark mode */
-    .dark body {{ background: #0f172a; color: #f1f5f9; }}
+    .dark body {{ background: #030712; color: #f3f4f6; }}
     .dark a {{ color: #6fa98a; }}
-    .dark .breadcrumb, .dark .breadcrumb a {{ color: #94a3b8; }}
-    .dark .sektor-kort {{ background: #1e293b; border-color: #334155; }}
+    .dark .sektor-kort {{ background: #111827; border-color: #1f2937; }}
     .dark .sektor-kort:hover {{ border-color: #3f8a63; }}
-    .dark .sk-navn {{ color: #f1f5f9; }}
-    .dark .sk-antall, .dark .sk-topp {{ color: #94a3b8; }}
-    .dark .sk-topp {{ border-color: #334155; }}
+    .dark .sk-navn {{ color: #f3f4f6; }}
+    .dark .sk-antall, .dark .sk-topp {{ color: #9ca3af; }}
+    .dark .sk-topp {{ border-color: #1f2937; }}
     .dark .info-bar {{ background: rgba(63,138,99,0.12); border-color: rgba(63,138,99,0.4); color: #6fa98a; }}
-    .dark .info-bar strong {{ color: #f1f5f9; }}
+    .dark .info-bar strong {{ color: #f3f4f6; }}
     .sektor-om {{ margin: 2rem 0 0.5rem; }}
-    .sektor-om h2 {{ font-size: 1.1rem; font-weight: 700; color: #0f172a; margin: 0 0 0.6rem; }}
-    .sektor-om p {{ font-size: 0.92rem; line-height: 1.65; color: #334155; margin: 0 0 0.8rem; max-width: 46rem; }}
-    .dark .sektor-om h2 {{ color: #f1f5f9; }}
-    .dark .sektor-om p {{ color: #cbd5e1; }}
+    .sektor-om h2 {{ font-size: 1.1rem; font-weight: 700; color: #111827; margin: 0 0 0.6rem; }}
+    .sektor-om p {{ font-size: 0.92rem; line-height: 1.65; color: #374151; margin: 0 0 0.8rem; max-width: 46rem; }}
+    .dark .sektor-om h2 {{ color: #f3f4f6; }}
+    .dark .sektor-om p {{ color: #d1d5db; }}
   </style>
 </head>
 <body>
@@ -9948,16 +9971,10 @@ def generer_sektorsider(aksjer, root_dir):
 {_site_nav_html('sektor')}
 
 <div class="wrap">
-  <nav class="breadcrumb" aria-label="Brødsmulesti">
-    <a href="https://exday.no/">exday.no</a>
-    <span>›</span>
-    <a href="/aksjer/">Aksjer</a>
-    <span>›</span>
-    Sektorer
-  </nav>
+  {brod_html}
 
   <section class="hero">
-    <h1>Utforsk etter sektor</h1>
+    <h1 class="side-h1">Utforsk etter sektor</h1>
     <p>Norske utbytteaksjer på Oslo Børs delt inn i {len(generert_sortert)} sektorer. Sammenlign yield, finn favorittene og bygg en diversifisert portefølje.</p>
   </section>
 
@@ -10242,15 +10259,8 @@ def generer_topplistesider(aksjer, root_dir):
     a { color: #2f7352; text-decoration: none; }
     a:hover { text-decoration: underline; }
     .wrap { max-width: 900px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
-    .breadcrumb { font-size: 0.85rem; margin-bottom: 1.5rem; }
-    .breadcrumb a { text-decoration: none; }
-    .breadcrumb span { margin: 0 0.35rem; }
-    h1 { font-size: 1.75rem; font-weight: 700; margin-bottom: 0.5rem; }
+    h1 { margin-bottom: 0.5rem; }
     .sub { margin-bottom: 1.5rem; font-size: 0.95rem; }
-    .stats { display: flex; gap: 1.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
-    .stat { border-radius: 0.5rem; padding: 0.75rem 1.25rem; border: 1px solid; }
-    .stat-val { font-size: 1.4rem; font-weight: 700; color: #111827; }
-    .stat-lbl { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em; }
     .tabell-ramme { overflow-x: auto; -webkit-overflow-scrolling: touch; }
     table { width: 100%; min-width: 34rem; border-collapse: collapse; border-radius: 0.75rem; overflow: hidden; font-size: 0.9rem; border: 1px solid; }
     th { padding: 0.6rem 1rem; text-align: left; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; white-space: nowrap; }
@@ -10271,11 +10281,7 @@ def generer_topplistesider(aksjer, root_dir):
     .updated { font-size: 0.78rem; text-align: right; margin-top: 1rem; }
 
     body { background: #f9fafb; color: #111827; }
-    .stat { background: #fff; border-color: #e5e7eb; }
-    .stat-lbl { color: #6b7280; }
     .sub { color: #6b7280; }
-    .breadcrumb { color: #6b7280; }
-    .breadcrumb a { color: #6b7280; }
     .rang { color: #9ca3af; }
     table { background: #fff; border-color: #e5e7eb; }
     th { background: #f3f4f6; color: #6b7280; }
@@ -10288,12 +10294,7 @@ def generer_topplistesider(aksjer, root_dir):
     .updated { color: #6b7280; }
 
     .dark body { background: #030712; color: #f3f4f6; }
-    .dark .stat { background: #111827; border-color: #1f2937; }
-    .dark .stat-lbl { color: #9ca3af; }
-    .dark .stat-val { color: #f3f4f6; }
     .dark .sub { color: #9ca3af; }
-    .dark .breadcrumb { color: #9ca3af; }
-    .dark .breadcrumb a { color: #9ca3af; }
     .dark .rang { color: #6b7280; }
     .dark a { color: #6fa98a; }
     .dark .ticker a { color: #f3f4f6; }
@@ -10342,6 +10343,7 @@ def generer_topplistesider(aksjer, root_dir):
             for s, h in alle_slugs if s != cfg["slug"]
         )
 
+        brod_html, brod_ld = brodsmule(sti_aksjer() + [(cfg["h1"], f"/aksjer/{cfg['slug']}/")])
         json_ld = json.dumps({
             "@context": "https://schema.org",
             "@type": "ItemList",
@@ -10396,6 +10398,7 @@ def generer_topplistesider(aksjer, root_dir):
   <meta name="twitter:description" content="{desc}"/>
   <meta name="twitter:image" content="https://exday.no/assets/og-image.png"/>
   <script type="application/ld+json">{json_ld}</script>
+  {brodsmule_ld_script(brod_ld)}
   <link rel="stylesheet" href="/assets/tailwind.css"/>
   <link rel="stylesheet" href="/assets/style.css"/>
   <script>
@@ -10411,20 +10414,14 @@ def generer_topplistesider(aksjer, root_dir):
 <body>
 {_site_nav_html('aksjer')}
 <div class="wrap">
-  <div class="breadcrumb">
-    <a href="https://exday.no/">exday.no</a>
-    <span>/</span>
-    <a href="/aksjer/">Aksjer</a>
-    <span>/</span>
-    {cfg['h1']}
-  </div>
-  <h1>{cfg['h1']}</h1>
+  {brod_html}
+  <h1 class="side-h1">{cfg['h1']}</h1>
   <p class="sub">{cfg['sub']}</p>
-  <div class="stats">
-    <div class="stat"><div class="stat-val">{n}</div><div class="stat-lbl">Aksjer</div></div>
-    <div class="stat"><div class="stat-val">{cfg['stat_fn'](topp)}</div><div class="stat-lbl">{cfg['stat_lbl']}</div></div>
-    <div class="stat"><div class="stat-val">{cfg['stat2_fn'](topp)}</div><div class="stat-lbl">{cfg['stat2_lbl']}</div></div>
-  </div>
+  {tallruter_html([
+      ("Aksjer", str(n)),
+      (cfg["stat_lbl"], cfg["stat_fn"](topp)),
+      (cfg["stat2_lbl"], cfg["stat2_fn"](topp)),
+  ], "Listen i tall")}
 {analyse_html}
   <div class="tabell-ramme">
   <table>
@@ -10708,6 +10705,7 @@ def generer_rapportkalender(aksjer, root_dir, i_dag=None):
             f"Rapportkalender for norske utbytteaksjer, måned for måned. "
             f"Oppdateres daglig.")
 
+    brod_html, brod_ld = brodsmule([("Rapportkalender", "/rapportkalender/")])
     json_ld = json.dumps({
         "@context": "https://schema.org",
         "@type": "WebPage",
@@ -10731,14 +10729,8 @@ def generer_rapportkalender(aksjer, root_dir, i_dag=None):
     *,*::before,*::after { box-sizing: border-box; }
     body { margin:0; font-family: "Inter", system-ui,-apple-system,'Segoe UI',Roboto,sans-serif; line-height:1.6; background:#f9fafb; color:#111827; }
     .wrap { max-width: 56rem; margin: 0 auto; padding: 1.25rem 1rem 2rem; }
-    .breadcrumb { font-size:0.8rem; color:#6b7280; margin-bottom:0.75rem; }
-    .breadcrumb a { color:#6b7280; }
-    h1 { font-size:1.6rem; line-height:1.25; margin:0 0 0.5rem; }
+    h1 { margin:0 0 0.5rem; }
     .sub { color:#6b7280; font-size:0.92rem; margin:0 0 1.25rem; }
-    .stats { display:flex; flex-wrap:wrap; gap:0.6rem; margin-bottom:1.5rem; }
-    .stat { flex:1 1 8rem; border:1px solid #e5e7eb; background:#fff; border-radius:0.6rem; padding:0.75rem; text-align:center; }
-    .stat-val { font-size:1.35rem; font-weight:700; color:#111827; }
-    .stat-lbl { font-size:0.72rem; color:#6b7280; text-transform:uppercase; letter-spacing:0.03em; }
     .hopp { display:flex; flex-wrap:wrap; gap:0.4rem; margin-bottom:1.75rem; }
     .hopp a { font-size:0.8rem; border:1px solid #e5e7eb; background:#fff; border-radius:9999px; padding:0.25rem 0.75rem; text-decoration:none; color:#374151; }
     .hopp a:hover { border-color:#2f7352; color:#275f45; }
@@ -10775,9 +10767,8 @@ def generer_rapportkalender(aksjer, root_dir, i_dag=None):
     }
 
     .dark body { background:#030712; color:#f3f4f6; }
-    .dark .breadcrumb, .dark .breadcrumb a, .dark .sub, .dark .stat-lbl { color:#9ca3af; }
-    .dark .stat { background:#111827; border-color:#1f2937; }
-    .dark .stat-val, .dark .metric, .dark .ticker a { color:#f3f4f6; }
+    .dark .sub { color:#9ca3af; }
+    .dark .metric, .dark .ticker a { color:#f3f4f6; }
     .dark a { color:#6fa98a; }
     .dark .hopp a { background:#111827; border-color:#1f2937; color:#d1d5db; }
     .dark .hopp a:hover { border-color:#6fa98a; color:#6fa98a; }
@@ -10848,6 +10839,7 @@ def generer_rapportkalender(aksjer, root_dir, i_dag=None):
   <meta name="twitter:image" content="https://exday.no/assets/og-image.png"/>
   <script type="application/ld+json">{json_ld}</script>
   <script type="application/ld+json">{faq_ld}</script>
+  {brodsmule_ld_script(brod_ld)}
   <link rel="stylesheet" href="/assets/tailwind.css"/>
   <link rel="stylesheet" href="/assets/style.css"/>
   <script>
@@ -10863,22 +10855,18 @@ def generer_rapportkalender(aksjer, root_dir, i_dag=None):
 <body>
 {_site_nav_html('kalender')}
 <div class="wrap">
-  <div class="breadcrumb">
-    <a href="https://exday.no/">exday.no</a>
-    <span>/</span>
-    Rapportkalender
-  </div>
-  <h1>Rapportkalender {aar} — kvartalsrapporter på Oslo Børs</h1>
+  {brod_html}
+  <h1 class="side-h1">Rapportkalender {aar} — kvartalsrapporter på Oslo Børs</h1>
   <p class="sub">
     Når legger selskapene fram tall? Alle kjente rapportdatoer for norske
     aksjer, måned for måned, med direkteavkastning og ex-dato ved siden av.
     Oppdateres daglig på børsdager.
   </p>
-  <div class="stats">
-    <div class="stat"><div class="stat-val">{len(kommende)}</div><div class="stat-lbl">Kommende rapporter</div></div>
-    <div class="stat"><div class="stat-val">{selskaper}</div><div class="stat-lbl">Selskaper</div></div>
-    <div class="stat"><div class="stat-val">{len(per_maaned)}</div><div class="stat-lbl">Måneder</div></div>
-  </div>
+  {tallruter_html([
+      ("Kommende rapporter", str(len(kommende))),
+      ("Selskaper", str(selskaper)),
+      ("Måneder", str(len(per_maaned))),
+  ], "Rapportkalenderen i tall")}
   <nav class="hopp" aria-label="Hopp til måned">{hurtighopp}</nav>
 {analyse}
 {nylig}
@@ -11162,12 +11150,9 @@ def _rapport_utbytte_naa(a, today):
         ruter.append(("Årlig utbytte", f"{_belop_tekst(upa)} per aksje", merke))
     if a.get("frekvens") and a["frekvens"] != "—":
         ruter.append(("Utbetales", a["frekvens"].lower(), ""))
-    return "".join(
-        f'<div class="rute"><div class="rute-lbl">{html.escape(n)}</div>'
-        f'<div class="rute-val">{html.escape(v)}</div>'
-        + (f'<div class="rute-note">{html.escape(note)}</div>' if note else "")
-        + "</div>"
-        for n, v, note in ruter)
+    return tallruter_html(
+        [(n, html.escape(v), html.escape(note)) for n, v, note in ruter],
+        "Utbyttet nå", tekst=True)
 
 
 def _rapportside_html(a, rapporter, today):
@@ -11184,6 +11169,7 @@ def _rapportside_html(a, rapporter, today):
         f'<a href="#{html.escape(kr.anker(r.get("periode")))}">{html.escape(kr.periode_kort(r.get("periode")))}</a>'
         for r in rapporter) if len(rapporter) > 1 else ""
     sist_skrevet = max((r.get("skrevet") or r.get("dato") or "") for r in rapporter)
+    brod_html, brod_ld = brodsmule(sti_aksje(sektor, ticker) + [("Rapporter", f"/aksjer/{ticker}/rapporter/")])
 
     json_ld = json.dumps({
         "@context": "https://schema.org",
@@ -11192,14 +11178,7 @@ def _rapportside_html(a, rapporter, today):
              "inLanguage": "nb-NO", "dateModified": sist_skrevet,
              "about": {"@type": "Corporation", "name": a["navn"], "tickerSymbol": ticker},
              "publisher": {"@id": "https://exday.no/#organisasjon"}},
-            {"@type": "BreadcrumbList", "itemListElement": [
-                {"@type": "ListItem", "position": 1, "name": "exday.no", "item": "https://exday.no/"},
-                {"@type": "ListItem", "position": 2, "name": "Utforsk", "item": "https://exday.no/utforsk/"},
-                {"@type": "ListItem", "position": 3, "name": sektor,
-                 "item": f"https://exday.no/aksjer/sektor/{_sektor_slug(sektor)}/"},
-                {"@type": "ListItem", "position": 4, "name": ticker, "item": f"https://exday.no/aksjer/{ticker}/"},
-                {"@type": "ListItem", "position": 5, "name": "Kvartalsrapporter", "item": url},
-            ]},
+            brod_ld,
         ],
     }, ensure_ascii=False)
 
@@ -11207,15 +11186,8 @@ def _rapportside_html(a, rapporter, today):
     *,*::before,*::after { box-sizing: border-box; }
     body { margin:0; font-family: "Inter", system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; line-height:1.6; background:#f9fafb; color:#111827; }
     .wrap { max-width: 46rem; margin: 0 auto; padding: 1.25rem 1rem 2rem; }
-    .breadcrumb { font-size:0.8rem; color:#6b7280; margin-bottom:0.75rem; }
-    .breadcrumb a { color:#6b7280; text-decoration:none; }
-    h1 { font-size:1.6rem; line-height:1.25; margin:0 0 0.5rem; }
+    h1 { margin:0 0 0.5rem; }
     .sub { color:#4b5563; font-size:0.95rem; margin:0 0 1.25rem; }
-    .ruter { display:grid; grid-template-columns: repeat(auto-fit, minmax(9.5rem, 1fr)); gap:0.6rem; margin-bottom:1.5rem; }
-    .rute { border:1px solid #e5e7eb; background:#fff; border-radius:0.6rem; padding:0.7rem 0.8rem; }
-    .rute-lbl { font-size:0.7rem; color:#6b7280; text-transform:uppercase; letter-spacing:0.03em; }
-    .rute-val { font-size:1.05rem; font-weight:700; color:#111827; }
-    .rute-note { font-size:0.75rem; color:#6b7280; }
     .hopp { display:flex; flex-wrap:wrap; gap:0.4rem; margin:0 0 1.25rem; }
     .hopp a { font-size:0.8rem; border:1px solid #e5e7eb; background:#fff; border-radius:9999px; padding:0.25rem 0.75rem; text-decoration:none; color:#374151; }
     .rapport { background:#fff; border:1px solid #e5e7eb; border-radius:0.75rem; padding:1.1rem 1.25rem; margin-bottom:1.25rem; }
@@ -11249,10 +11221,9 @@ def _rapportside_html(a, rapporter, today):
     a { color:#275f45; }
 
     .dark body { background:#030712; color:#f3f4f6; }
-    .dark .breadcrumb, .dark .breadcrumb a, .dark .rute-lbl, .dark .rute-note, .dark .rapport-meta { color:#9ca3af; }
+    .dark .rapport-meta { color:#9ca3af; }
     .dark .sub, .dark .rapport h3 { color:#d1d5db; }
-    .dark .rute, .dark .rapport, .dark .hopp a { background:#111827; border-color:#1f2937; }
-    .dark .rute-val { color:#f3f4f6; }
+    .dark .rapport, .dark .hopp a { background:#111827; border-color:#1f2937; }
     .dark .hopp a { color:#d1d5db; }
     .hopp a { display:inline-flex; align-items:center; min-height:44px; border-width:7px 0; border-color:transparent; background-clip:padding-box; box-shadow:inset 0 0 0 1px #e5e7eb; }
     .hopp a:hover { border-color:transparent; box-shadow:inset 0 0 0 1px #2f7352; }
@@ -11320,19 +11291,13 @@ def _rapportside_html(a, rapporter, today):
 <body>
 {_site_nav_html('aksjer')}
 <div class="wrap">
-  <div class="breadcrumb">
-    <a href="https://exday.no/">exday.no</a> <span>›</span>
-    <a href="https://exday.no/utforsk/">Utforsk</a> <span>›</span>
-    <a href="https://exday.no/aksjer/sektor/{_sektor_slug(sektor)}/">{html.escape(sektor)}</a> <span>›</span>
-    <a href="https://exday.no/aksjer/{ticker}/">{ticker}</a> <span>›</span>
-    Kvartalsrapporter
-  </div>
-  <h1>{html.escape(kort)}: kvartalsrapporter og utbytte</h1>
+  {brod_html}
+  <h1 class="side-h1">{html.escape(kort)}: kvartalsrapporter og utbytte</h1>
   <p class="sub">Det viktigste fra rapportene {html.escape(a["navn"])} ({ticker}) har lagt fram:
     resultatet, utbyttet og utbytteplanen, rapport for rapport. Skrevet ut fra
     selskapets egne meldinger til Oslo Børs.</p>
   {lag_aksje_faner(ticker, ticker, aktiv="rapporter")}
-  <div class="ruter">{_rapport_utbytte_naa(a, today)}</div>
+  {_rapport_utbytte_naa(a, today)}
   {f'<nav class="hopp" aria-label="Hopp til rapport">{hopp}</nav>' if hopp else ''}
 {artikler}
   <div class="om-oppsummeringene">
@@ -12628,22 +12593,24 @@ def kalender_meta(rader, i_dag):
     return tekst if len(tekst) <= 155 else tekst[:152].rstrip() + "…"
 
 
+KALENDER_STI = [("Utbyttekalender", "/utbyttekalender/")]
+
+
 def lag_kalender_hode(rader, i_dag):
     """<title>, beskrivelser og JSON-LD mellom KAL-HODE-markørene. Ren funksjon."""
     import html as _html
     tittel = kalender_tittel(i_dag)
     meta = kalender_meta(rader, i_dag)
     url = "https://exday.no/utbyttekalender/"
+    # Samme sti som den synlige brødsmulen i lag_kalender_kropp(), uten årstall.
+    _, brod_ld = brodsmule(KALENDER_STI)
     ld = {
         "@context": "https://schema.org",
         "@graph": [
             {"@type": "WebPage", "name": tittel, "description": meta, "url": url,
              "inLanguage": "nb-NO",
              "publisher": {"@type": "Organization", "name": "exday.no", "url": "https://exday.no"}},
-            {"@type": "BreadcrumbList", "itemListElement": [
-                {"@type": "ListItem", "position": 1, "name": "exday.no", "item": "https://exday.no/"},
-                {"@type": "ListItem", "position": 2, "name": f"Utbyttekalender {kalenderaar_tekst(i_dag)}",
-                 "item": url}]},
+            brod_ld,
         ],
     }
     t, m = _html.escape(tittel), _html.escape(meta)
@@ -12737,7 +12704,8 @@ def lag_kalender_kropp(rader, i_dag, hentet=None):
     rader_html = "\n".join("        " + _kal_rad_html(r) for r in rader)
     return "\n".join([
         '    <div class="space-y-3 max-w-3xl">',
-        f'      <h1 class="text-2xl sm:text-3xl font-bold tracking-tight leading-tight">Utbyttekalender {aar}</h1>',
+        '      ' + brodsmule(KALENDER_STI)[0],
+        f'      <h1 class="side-h1">Utbyttekalender {aar}</h1>',
         '      <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400 leading-relaxed">'
         'Du må eie aksjen før ex-datoen for å få utbyttet, så siste dag å kjøpe er børsdagen før. '
         'Her er alle ex-datoene på Oslo Børs og Euronext Growth i år, med beløp, kjøpsfrist og '
