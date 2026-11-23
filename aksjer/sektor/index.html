@@ -25,6 +25,7 @@
   <title>Norske utbytteaksjer etter sektor | exday.no</title>
   <meta name="description" content="Finn norske utbytteaksjer på Oslo Børs sortert etter sektor — energi, finans, shipping, havbruk og mer."/>
   <link rel="canonical" href="https://exday.no/aksjer/sektor/"/>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "exday.no", "item": "https://exday.no/"}, {"@type": "ListItem", "position": 2, "name": "Aksjer", "item": "https://exday.no/aksjer/"}, {"@type": "ListItem", "position": 3, "name": "Sektorer", "item": "https://exday.no/aksjer/sektor/"}]}</script>
   <meta name="theme-color" content="#2f7352"/>
   <link rel="icon" type="image/png" sizes="512x512" href="/favicon.png"/>
   <link rel="icon" type="image/png" sizes="180x180" href="/logo/apple_touch_icon_180.png"/>
@@ -43,7 +44,7 @@
   </script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: "Inter", system-ui, -apple-system, 'Segoe UI', sans-serif; line-height: 1.6; background: #f8fafc; color: #0f172a; }
+    body { font-family: "Inter", system-ui, -apple-system, 'Segoe UI', sans-serif; line-height: 1.6; background: #f9fafb; color: #111827; }
     a { color: #2f7352; text-decoration: none; }
     a:hover { text-decoration: underline; }
     .wrap { max-width: 1100px; margin: 0 auto; padding: 1rem 1rem 2rem; }
@@ -55,20 +56,16 @@
       padding: 2rem 1.5rem;
       margin-bottom: 2rem;
     }
-    .hero h1 { font-size: 1.85rem; font-weight: 800; margin-bottom: 0.5rem; letter-spacing: -0.02em; }
+    .hero h1 { margin-bottom: 0.5rem; }
     .hero p { color: rgba(255,255,255,0.85); font-size: 1rem; max-width: 36rem; }
     @media (max-width: 540px) {
       .hero { padding: 1.5rem 1.1rem; }
-      .hero h1 { font-size: 1.45rem; }
     }
-    .breadcrumb { font-size: 0.78rem; color: #64748b; margin-bottom: 1rem; }
-    .breadcrumb a { color: #64748b; }
-    .breadcrumb span { margin: 0 0.35rem; }
     .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 0.85rem; }
     .sektor-kort {
       display: block;
       background: #fff;
-      border: 1px solid #e2e8f0;
+      border: 1px solid #e5e7eb;
       border-radius: 0.85rem;
       padding: 1rem 1.15rem;
       transition: all 0.15s;
@@ -84,11 +81,11 @@
     .sk-ikon { width: 1.5rem; height: 1.5rem; flex-shrink: 0; color: #2f7352; }
     .dark .sk-ikon { color: #6fa98a; }
     .sk-tekst { flex: 1; min-width: 0; }
-    .sk-navn { font-weight: 700; font-size: 1rem; color: #0f172a; }
-    .sk-antall { font-size: 0.78rem; color: #64748b; margin-top: 0.1rem; }
-    .sk-arrow { color: #94a3b8; font-size: 1.1rem; flex-shrink: 0; }
+    .sk-navn { font-weight: 700; font-size: 1rem; color: #111827; }
+    .sk-antall { font-size: 0.78rem; color: #6b7280; margin-top: 0.1rem; }
+    .sk-arrow { color: #9ca3af; font-size: 1.1rem; flex-shrink: 0; }
     .sektor-kort:hover .sk-arrow { color: #3f8a63; transform: translateX(2px); transition: all 0.15s; }
-    .sk-topp { font-size: 0.72rem; color: #94a3b8; padding-top: 0.4rem; border-top: 1px solid #f1f5f9; font-family: ui-monospace, monospace; }
+    .sk-topp { font-size: 0.72rem; color: #9ca3af; padding-top: 0.4rem; border-top: 1px solid #f3f4f6; font-family: ui-monospace, monospace; }
     .info-bar {
       display: flex; align-items: flex-start; gap: 0.75rem;
       background: #f0fafb;
@@ -98,27 +95,26 @@
       padding: 0.85rem 1rem;
       margin-bottom: 2rem;
       font-size: 0.85rem;
-      color: #0f172a;
+      color: #111827;
       line-height: 1.5;
     }
     .info-bar svg { flex-shrink: 0; margin-top: 2px; }
-    .info-bar strong { color: #0f172a; }
+    .info-bar strong { color: #111827; }
     /* Dark mode */
-    .dark body { background: #0f172a; color: #f1f5f9; }
+    .dark body { background: #030712; color: #f3f4f6; }
     .dark a { color: #6fa98a; }
-    .dark .breadcrumb, .dark .breadcrumb a { color: #94a3b8; }
-    .dark .sektor-kort { background: #1e293b; border-color: #334155; }
+    .dark .sektor-kort { background: #111827; border-color: #1f2937; }
     .dark .sektor-kort:hover { border-color: #3f8a63; }
-    .dark .sk-navn { color: #f1f5f9; }
-    .dark .sk-antall, .dark .sk-topp { color: #94a3b8; }
-    .dark .sk-topp { border-color: #334155; }
+    .dark .sk-navn { color: #f3f4f6; }
+    .dark .sk-antall, .dark .sk-topp { color: #9ca3af; }
+    .dark .sk-topp { border-color: #1f2937; }
     .dark .info-bar { background: rgba(63,138,99,0.12); border-color: rgba(63,138,99,0.4); color: #6fa98a; }
-    .dark .info-bar strong { color: #f1f5f9; }
+    .dark .info-bar strong { color: #f3f4f6; }
     .sektor-om { margin: 2rem 0 0.5rem; }
-    .sektor-om h2 { font-size: 1.1rem; font-weight: 700; color: #0f172a; margin: 0 0 0.6rem; }
-    .sektor-om p { font-size: 0.92rem; line-height: 1.65; color: #334155; margin: 0 0 0.8rem; max-width: 46rem; }
-    .dark .sektor-om h2 { color: #f1f5f9; }
-    .dark .sektor-om p { color: #cbd5e1; }
+    .sektor-om h2 { font-size: 1.1rem; font-weight: 700; color: #111827; margin: 0 0 0.6rem; }
+    .sektor-om p { font-size: 0.92rem; line-height: 1.65; color: #374151; margin: 0 0 0.8rem; max-width: 46rem; }
+    .dark .sektor-om h2 { color: #f3f4f6; }
+    .dark .sektor-om p { color: #d1d5db; }
   </style>
 </head>
 <body>
@@ -184,16 +180,10 @@
   </script>
 
 <div class="wrap">
-  <nav class="breadcrumb" aria-label="Brødsmulesti">
-    <a href="https://exday.no/">exday.no</a>
-    <span>›</span>
-    <a href="/aksjer/">Aksjer</a>
-    <span>›</span>
-    Sektorer
-  </nav>
+  <nav class="brodsmule" aria-label="Brødsmulesti"><a href="/">exday.no</a> <span class="brodsmule-skille" aria-hidden="true">›</span> <a href="/aksjer/">Aksjer</a> <span class="brodsmule-skille" aria-hidden="true">›</span> <span aria-current="page">Sektorer</span></nav>
 
   <section class="hero">
-    <h1>Utforsk etter sektor</h1>
+    <h1 class="side-h1">Utforsk etter sektor</h1>
     <p>Norske utbytteaksjer på Oslo Børs delt inn i 14 sektorer. Sammenlign yield, finn favorittene og bygg en diversifisert portefølje.</p>
   </section>
 

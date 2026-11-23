@@ -48,6 +48,7 @@
   <meta name="twitter:image" content="https://exday.no/assets/og-image.png"/>
   <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebPage", "name": "Rapportkalender 2026: kvartalsrapporter Oslo Børs", "description": "Når legger selskapene på Oslo Børs fram kvartalstall? Rapportkalender for norske utbytteaksjer, måned for måned. Oppdateres daglig.", "url": "https://exday.no/rapportkalender/", "publisher": {"@type": "Organization", "name": "exday.no", "url": "https://exday.no"}}</script>
   <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Hva er en rapportkalender?", "acceptedAnswer": {"@type": "Answer", "text": "En rapportkalender viser når selskapene på Oslo Børs legger fram kvartals- og årsresultater. Datoene kommer fra selskapenes egne finanskalendere, som meldes til børsen i forkant."}}, {"@type": "Question", "name": "Når kommer kvartalsrapportene på Oslo Børs?", "acceptedAnswer": {"@type": "Answer", "text": "Rapportsesongen er kort og tett. Fjerdekvartals- og årsresultatene kommer i februar, førstekvartal i april og mai, andrekvartal i juli og august, og tredjekvartal i oktober og november. Utenfor disse periodene er det svært få rapporter."}}, {"@type": "Question", "name": "Hvorfor er rapportdatoen viktig for utbytte?", "acceptedAnswer": {"@type": "Answer", "text": "Fordi utbyttet som regel annonseres i samme melding som resultatet. Beløp, ex-dato og utbetalingsdato blir kjent der. Rapportdatoen forteller deg derfor når neste utbytte sannsynligvis blir bestemt, mens ex-datoen bare bekrefter noe som allerede er vedtatt."}}, {"@type": "Question", "name": "Er datoene bekreftet?", "acceptedAnswer": {"@type": "Answer", "text": "Datoene er hentet fra selskapenes annonserte finanskalendere og er de samme som meldes til Oslo Børs. Selskapene kan likevel flytte en dato, og gjør det av og til. Er datoen kritisk for deg, bekreft mot selskapets egen investorside."}}, {"@type": "Question", "name": "Betyr en svak kvartalsrapport at utbyttet kuttes?", "acceptedAnswer": {"@type": "Answer", "text": "Ikke nødvendigvis. Mange norske selskaper betaler utbytte gjennom svake år, og et enkelt kvartal sier lite alene. Det som avgjør er om selskapet over tid betaler mer enn det tjener, og hva det selv sier om utbyttepolitikken."}}, {"@type": "Question", "name": "Hvor ofte oppdateres rapportkalenderen?", "acceptedAnswer": {"@type": "Answer", "text": "Siden bygges på nytt hver gang datasettet oppdateres, fire ganger daglig på børsdager. Nye rapportdatoer kommer inn så snart selskapet har meldt dem."}}]}</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "exday.no", "item": "https://exday.no/"}, {"@type": "ListItem", "position": 2, "name": "Rapportkalender", "item": "https://exday.no/rapportkalender/"}]}</script>
   <link rel="stylesheet" href="/assets/tailwind.css"/>
   <link rel="stylesheet" href="/assets/style.css"/>
   <script>
@@ -62,14 +63,8 @@
     *,*::before,*::after { box-sizing: border-box; }
     body { margin:0; font-family: "Inter", system-ui,-apple-system,'Segoe UI',Roboto,sans-serif; line-height:1.6; background:#f9fafb; color:#111827; }
     .wrap { max-width: 56rem; margin: 0 auto; padding: 1.25rem 1rem 2rem; }
-    .breadcrumb { font-size:0.8rem; color:#6b7280; margin-bottom:0.75rem; }
-    .breadcrumb a { color:#6b7280; }
-    h1 { font-size:1.6rem; line-height:1.25; margin:0 0 0.5rem; }
+    h1 { margin:0 0 0.5rem; }
     .sub { color:#6b7280; font-size:0.92rem; margin:0 0 1.25rem; }
-    .stats { display:flex; flex-wrap:wrap; gap:0.6rem; margin-bottom:1.5rem; }
-    .stat { flex:1 1 8rem; border:1px solid #e5e7eb; background:#fff; border-radius:0.6rem; padding:0.75rem; text-align:center; }
-    .stat-val { font-size:1.35rem; font-weight:700; color:#111827; }
-    .stat-lbl { font-size:0.72rem; color:#6b7280; text-transform:uppercase; letter-spacing:0.03em; }
     .hopp { display:flex; flex-wrap:wrap; gap:0.4rem; margin-bottom:1.75rem; }
     .hopp a { font-size:0.8rem; border:1px solid #e5e7eb; background:#fff; border-radius:9999px; padding:0.25rem 0.75rem; text-decoration:none; color:#374151; }
     .hopp a:hover { border-color:#2f7352; color:#275f45; }
@@ -106,9 +101,8 @@
     }
 
     .dark body { background:#030712; color:#f3f4f6; }
-    .dark .breadcrumb, .dark .breadcrumb a, .dark .sub, .dark .stat-lbl { color:#9ca3af; }
-    .dark .stat { background:#111827; border-color:#1f2937; }
-    .dark .stat-val, .dark .metric, .dark .ticker a { color:#f3f4f6; }
+    .dark .sub { color:#9ca3af; }
+    .dark .metric, .dark .ticker a { color:#f3f4f6; }
     .dark a { color:#6fa98a; }
     .dark .hopp a { background:#111827; border-color:#1f2937; color:#d1d5db; }
     .dark .hopp a:hover { border-color:#6fa98a; color:#6fa98a; }
@@ -192,22 +186,14 @@
     })();
   </script>
 <div class="wrap">
-  <div class="breadcrumb">
-    <a href="https://exday.no/">exday.no</a>
-    <span>/</span>
-    Rapportkalender
-  </div>
-  <h1>Rapportkalender 2026 — kvartalsrapporter på Oslo Børs</h1>
+  <nav class="brodsmule" aria-label="Brødsmulesti"><a href="/">exday.no</a> <span class="brodsmule-skille" aria-hidden="true">›</span> <span aria-current="page">Rapportkalender</span></nav>
+  <h1 class="side-h1">Rapportkalender 2026 — kvartalsrapporter på Oslo Børs</h1>
   <p class="sub">
     Når legger selskapene fram tall? Alle kjente rapportdatoer for norske
     aksjer, måned for måned, med direkteavkastning og ex-dato ved siden av.
     Oppdateres daglig på børsdager.
   </p>
-  <div class="stats">
-    <div class="stat"><div class="stat-val">114</div><div class="stat-lbl">Kommende rapporter</div></div>
-    <div class="stat"><div class="stat-val">114</div><div class="stat-lbl">Selskaper</div></div>
-    <div class="stat"><div class="stat-val">4</div><div class="stat-lbl">Måneder</div></div>
-  </div>
+  <dl class="tallruter tallruter-n3" aria-label="Rapportkalenderen i tall"><div class="tallrute"><dt>Kommende rapporter</dt><dd>114</dd></div><div class="tallrute"><dt>Selskaper</dt><dd>114</dd></div><div class="tallrute"><dt>Måneder</dt><dd>4</dd></div></dl>
   <nav class="hopp" aria-label="Hopp til måned"><a href="#mnd-2026-11">nov 2026</a><a href="#mnd-2027-01">jan 2027</a><a href="#mnd-2027-02">feb 2027</a><a href="#mnd-2027-03">mar 2027</a></nav>
   <div class="liste-analyse">
     <h2>Rapportsesongen akkurat nå</h2>
@@ -257,7 +243,7 @@
           <td class="ticker"><a href="/aksjer/BWLPG/">BWLPG</a></td>
           <td class="selskap">BW LPG Limited</td>
           <td class="skjul-smal">Shipping</td>
-          <td class="metric">11,54 %</td>
+          <td class="metric">11,53 %</td>
           <td class="skjul-smal">—</td>
         </tr>
         <tr>
@@ -557,7 +543,7 @@
           <td class="ticker"><a href="/aksjer/HSHP/">HSHP</a></td>
           <td class="selskap">Himalaya Shipping Ltd.</td>
           <td class="skjul-smal">Shipping</td>
-          <td class="metric">12,91 %</td>
+          <td class="metric">12,90 %</td>
           <td class="skjul-smal">—</td>
         </tr>
         <tr>
@@ -1045,7 +1031,7 @@
           <td class="ticker"><a href="/aksjer/KCC/">KCC</a></td>
           <td class="selskap">Klaveness Combination Carriers ASA</td>
           <td class="skjul-smal">Shipping</td>
-          <td class="metric">8,74 %</td>
+          <td class="metric">8,73 %</td>
           <td class="skjul-smal">—</td>
         </tr>
         <tr>
@@ -1141,7 +1127,7 @@
           <td class="ticker"><a href="/aksjer/FRO/">FRO</a></td>
           <td class="selskap">Frontline PLC</td>
           <td class="skjul-smal">Shipping</td>
-          <td class="metric">11,52 %</td>
+          <td class="metric">11,51 %</td>
           <td class="skjul-smal">8. des 2026</td>
         </tr>
         <tr>

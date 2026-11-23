@@ -45,11 +45,11 @@
   <meta name="twitter:title" content="Norske utbytteaksjer – oversikt | exday.no"/>
   <meta name="twitter:description" content="Oversikt over 155 norske utbytteaksjer på Oslo Børs med yield, ex-dato og utbyttehistorikk. Oppdateres daglig."/>
   <meta name="twitter:image" content="https://exday.no/assets/og-image.png"/>
-  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Hjem", "item": "https://exday.no/"}, {"@type": "ListItem", "position": 2, "name": "Aksjer", "item": "https://exday.no/aksjer/"}]}</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "exday.no", "item": "https://exday.no/"}, {"@type": "ListItem", "position": 2, "name": "Aksjer", "item": "https://exday.no/aksjer/"}]}</script>
   <link rel="stylesheet" href="/assets/style.css"/>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: "Inter", system-ui, -apple-system, 'Segoe UI', sans-serif; background: #f8fafc; color: #0f172a; line-height: 1.6; }
+    body { font-family: "Inter", system-ui, -apple-system, 'Segoe UI', sans-serif; background: #f9fafb; color: #111827; line-height: 1.6; }
     a { color: #2f7352; text-decoration: none; }
     a:hover { text-decoration: underline; }
     .wrap { max-width: 1100px; margin: 0 auto; padding: 1rem 1rem 2rem; }
@@ -61,27 +61,22 @@
       padding: 2rem 1.5rem;
       margin-bottom: 2rem;
     }
-    .hero h1 { font-size: 2rem; font-weight: 800; margin-bottom: 0.5rem; letter-spacing: -0.02em; }
+    .hero h1 { margin-bottom: 0.5rem; }
     .hero p { color: rgba(255,255,255,0.85); font-size: 1.05rem; max-width: 36rem; }
-    .hero-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; margin-top: 1.5rem; }
-    .hero-stat { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 0.6rem; padding: 0.75rem 0.5rem; text-align: center; }
-    .hero-stat-num { font-size: 1.4rem; font-weight: 800; }
-    .hero-stat-lbl { font-size: 0.7rem; opacity: 0.8; text-transform: uppercase; letter-spacing: 0.05em; }
+    .hero .tallruter { margin: 1.5rem 0 0; }
     @media (max-width: 540px) {
       .hero { padding: 1.5rem 1.1rem; }
-      .hero h1 { font-size: 1.55rem; }
       .hero p { font-size: 0.95rem; }
-      .hero-stats { grid-template-columns: repeat(2, 1fr); }
     }
     .seksjon { margin: 2.5rem 0; }
     .seksjon-tittel { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 1rem; }
-    .seksjon-tittel h2 { font-size: 1.25rem; font-weight: 700; color: #0f172a; }
+    .seksjon-tittel h2 { font-size: 1.25rem; font-weight: 700; color: #111827; }
     .seksjon-tittel .se-alle { font-size: 0.85rem; color: #2f7352; font-weight: 600; display: inline-flex; align-items: center; min-height: 44px; }
     .ak-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 0.75rem; }
     .ak-kort {
       display: block;
       background: #fff;
-      border: 1px solid #e2e8f0;
+      border: 1px solid #e5e7eb;
       border-radius: 0.75rem;
       padding: 1rem;
       transition: all 0.15s;
@@ -90,14 +85,14 @@
     }
     .ak-kort:hover { border-color: #3f8a63; box-shadow: 0 4px 12px rgba(63,138,99,0.1); transform: translateY(-1px); }
     .ak-kort-topp { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.4rem; }
-    .ak-kort-tk { font-size: 0.95rem; font-weight: 600; color: #0f172a; }
-    .ak-kort-yield { font-size: 0.95rem; font-weight: 600; color: #0f172a; font-variant-numeric: tabular-nums; }
-    .ak-kort-navn { font-size: 0.85rem; font-weight: 500; color: #334155; line-height: 1.3; margin-bottom: 0.3rem; }
-    .ak-kort-meta { font-size: 0.7rem; color: #94a3b8; }
+    .ak-kort-tk { font-size: 0.95rem; font-weight: 600; color: #111827; }
+    .ak-kort-yield { font-size: 0.95rem; font-weight: 600; color: #111827; font-variant-numeric: tabular-nums; }
+    .ak-kort-navn { font-size: 0.85rem; font-weight: 500; color: #374151; line-height: 1.3; margin-bottom: 0.3rem; }
+    .ak-kort-meta { font-size: 0.7rem; color: #9ca3af; }
     .topplister { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.75rem; }
     .topp-kort {
       display: flex; align-items: center; gap: 0.85rem;
-      background: #fff; border: 1px solid #e2e8f0; border-radius: 0.75rem;
+      background: #fff; border: 1px solid #e5e7eb; border-radius: 0.75rem;
       padding: 1rem; text-decoration: none !important; color: inherit;
       transition: all 0.15s;
     }
@@ -110,14 +105,14 @@
     }
     /* SVG, ikke emoji — arver fargen fra .topp-ikon-N under. */
     .topp-ikon svg { width: 22px; height: 22px; }
-    .topp-ikon-1, .topp-ikon-2, .topp-ikon-3, .topp-ikon-4 { background: #f1f5f9; color: #475569; }
-    .dark .topp-ikon-1, .dark .topp-ikon-2, .dark .topp-ikon-3, .dark .topp-ikon-4 { background: #273241; color: #cbd5e1; }
-    .topp-tittel { font-weight: 600; font-size: 0.95rem; color: #0f172a; margin-bottom: 0.15rem; }
-    .topp-beskr { font-size: 0.75rem; color: #64748b; }
+    .topp-ikon-1, .topp-ikon-2, .topp-ikon-3, .topp-ikon-4 { background: #f3f4f6; color: #4b5563; }
+    .dark .topp-ikon-1, .dark .topp-ikon-2, .dark .topp-ikon-3, .dark .topp-ikon-4 { background: #273241; color: #d1d5db; }
+    .topp-tittel { font-weight: 600; font-size: 0.95rem; color: #111827; margin-bottom: 0.15rem; }
+    .topp-beskr { font-size: 0.75rem; color: #6b7280; }
     .sek-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 0.5rem; }
     .sek-kort {
       display: flex; align-items: center; gap: 0.6rem;
-      background: #fff; border: 1px solid #e2e8f0; border-radius: 0.6rem;
+      background: #fff; border: 1px solid #e5e7eb; border-radius: 0.6rem;
       padding: 0.65rem 0.85rem; text-decoration: none !important; color: inherit;
       transition: all 0.15s;
     }
@@ -127,22 +122,22 @@
     .sek-ikon { width: 1.35rem; height: 1.35rem; flex-shrink: 0; color: #2f7352; }
     .dark .sek-ikon { color: #6fa98a; }
     .sek-info { display: flex; flex-direction: column; min-width: 0; }
-    .sek-navn { font-weight: 600; font-size: 0.85rem; color: #0f172a; }
-    .sek-antall { font-size: 0.7rem; color: #94a3b8; }
-    .alle-aksjer { background: #fff; border: 1px solid #e2e8f0; border-radius: 0.75rem; overflow: hidden; }
-    .alle-aksjer-header { padding: 1rem 1.25rem; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; }
+    .sek-navn { font-weight: 600; font-size: 0.85rem; color: #111827; }
+    .sek-antall { font-size: 0.7rem; color: #9ca3af; }
+    .alle-aksjer { background: #fff; border: 1px solid #e5e7eb; border-radius: 0.75rem; overflow: hidden; }
+    .alle-aksjer-header { padding: 1rem 1.25rem; border-bottom: 1px solid #e5e7eb; display: flex; justify-content: space-between; align-items: center; }
     .alle-aksjer-header h2 { font-size: 1.1rem; font-weight: 700; }
-    .alle-aksjer-header .filter-info { font-size: 0.78rem; color: #64748b; }
+    .alle-aksjer-header .filter-info { font-size: 0.78rem; color: #6b7280; }
     table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
-    th { background: #f8fafc; padding: 0.65rem 1.25rem; text-align: left; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #64748b; border-bottom: 1px solid #e2e8f0; }
-    td { padding: 0.7rem 1.25rem; border-bottom: 1px solid #f1f5f9; }
+    th { background: #f9fafb; padding: 0.65rem 1.25rem; text-align: left; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #6b7280; border-bottom: 1px solid #e5e7eb; }
+    td { padding: 0.7rem 1.25rem; border-bottom: 1px solid #f3f4f6; }
     tr:last-child td { border-bottom: none; }
-    tr:hover td { background: #f8fafc; }
-    td a { color: #0f172a; font-weight: 600; }
-    .yield-cell { color: #0f172a; font-weight: 600; font-variant-numeric: tabular-nums; }
+    tr:hover td { background: #f9fafb; }
+    td a { color: #111827; font-weight: 600; }
+    .yield-cell { color: #111827; font-weight: 600; font-variant-numeric: tabular-nums; }
     .verktoy-bar {
       background: #fff;
-      border: 1px solid #e2e8f0;
+      border: 1px solid #e5e7eb;
       border-radius: 1rem;
       padding: 1.5rem;
       margin: 2rem 0;
@@ -151,8 +146,8 @@
       align-items: center;
       gap: 1rem;
     }
-    .verktoy-bar h3 { font-size: 1.1rem; font-weight: 700; color: #0f172a; margin-bottom: 0.25rem; }
-    .verktoy-bar p { font-size: 0.88rem; color: #475569; }
+    .verktoy-bar h3 { font-size: 1.1rem; font-weight: 700; color: #111827; margin-bottom: 0.25rem; }
+    .verktoy-bar p { font-size: 0.88rem; color: #4b5563; }
     .verktoy-bar a {
       background: #275f45; color: #fff !important; padding: 0.6rem 1.25rem;
       border-radius: 0.5rem; font-weight: 600; text-decoration: none !important;
@@ -161,28 +156,28 @@
     @media (max-width: 540px) {
       .verktoy-bar { grid-template-columns: 1fr; text-align: center; }
     }
-    .updated { font-size: 0.78rem; color: #64748b; text-align: right; margin-top: 1rem; }
-    .dark .updated { color: #94a3b8; }
+    .updated { font-size: 0.78rem; color: #6b7280; text-align: right; margin-top: 1rem; }
+    .dark .updated { color: #9ca3af; }
     /* Mørk modus */
-    .dark body { background: #0f172a; color: #f1f5f9; }
+    .dark body { background: #030712; color: #f3f4f6; }
     .dark a { color: #6fa98a; }
-    .dark .seksjon-tittel h2 { color: #f1f5f9; }
+    .dark .seksjon-tittel h2 { color: #f3f4f6; }
     .dark .seksjon-tittel .se-alle { color: #6fa98a; }
-    .dark .ak-kort, .dark .topp-kort, .dark .sek-kort, .dark .alle-aksjer { background: #1e293b; border-color: #334155; }
+    .dark .ak-kort, .dark .topp-kort, .dark .sek-kort, .dark .alle-aksjer { background: #111827; border-color: #1f2937; }
     .dark .ak-kort:hover, .dark .topp-kort:hover, .dark .sek-kort:hover { border-color: #3f8a63; }
-    .dark .ak-kort-tk { color: #f1f5f9; }
-    .dark .ak-kort-navn { color: #cbd5e1; }
-    .dark .ak-kort-yield { color: #f1f5f9; }
-    .dark .topp-tittel, .dark .sek-navn { color: #f1f5f9; }
-    .dark .alle-aksjer-header { border-color: #334155; }
-    .dark th { background: #0f172a; border-color: #334155; color: #94a3b8; }
-    .dark td { border-color: #1e293b; }
-    .dark tr:hover td { background: #0f172a; }
-    .dark td a { color: #f1f5f9; }
-    .dark .yield-cell { color: #f1f5f9; }
-    .dark .verktoy-bar { background: #1e293b; border-color: #334155; }
-    .dark .verktoy-bar h3 { color: #f1f5f9; }
-    .dark .verktoy-bar p { color: #cbd5e1; }
+    .dark .ak-kort-tk { color: #f3f4f6; }
+    .dark .ak-kort-navn { color: #d1d5db; }
+    .dark .ak-kort-yield { color: #f3f4f6; }
+    .dark .topp-tittel, .dark .sek-navn { color: #f3f4f6; }
+    .dark .alle-aksjer-header { border-color: #1f2937; }
+    .dark th { background: #1f2937; border-color: #1f2937; color: #9ca3af; }
+    .dark td { border-color: #1f2937; }
+    .dark tr:hover td { background: #1f2937; }
+    .dark td a { color: #f3f4f6; }
+    .dark .yield-cell { color: #f3f4f6; }
+    .dark .verktoy-bar { background: #111827; border-color: #1f2937; }
+    .dark .verktoy-bar h3 { color: #f3f4f6; }
+    .dark .verktoy-bar p { color: #d1d5db; }
     .dark .verktoy-bar a { background: #2f7352; color: #fff !important; }
   </style>
 </head>
@@ -248,28 +243,13 @@
   </script>
 <div class="wrap">
 
+  <nav class="brodsmule" aria-label="Brødsmulesti"><a href="/">exday.no</a> <span class="brodsmule-skille" aria-hidden="true">›</span> <span aria-current="page">Aksjer</span></nav>
+
   <!-- HERO -->
   <section class="hero">
-    <h1>Norske utbytteaksjer</h1>
+    <h1 class="side-h1">Norske utbytteaksjer</h1>
     <p>Komplett oversikt over alle utbyttebetalere på Oslo Børs. Yield, ex-datoer, historikk og analyser — oppdateres daglig på børsdager.</p>
-    <div class="hero-stats">
-      <div class="hero-stat">
-        <div class="hero-stat-num">155</div>
-        <div class="hero-stat-lbl">Aksjer</div>
-      </div>
-      <div class="hero-stat">
-        <div class="hero-stat-num">125</div>
-        <div class="hero-stat-lbl">Med utbytte</div>
-      </div>
-      <div class="hero-stat">
-        <div class="hero-stat-num">6,2 %</div>
-        <div class="hero-stat-lbl">Snitt-yield</div>
-      </div>
-      <div class="hero-stat">
-        <div class="hero-stat-num">14</div>
-        <div class="hero-stat-lbl">Sektorer</div>
-      </div>
-    </div>
+    <dl class="tallruter tallruter-n4" aria-label="Oversikten i tall"><div class="tallrute"><dt>Aksjer</dt><dd>155</dd></div><div class="tallrute"><dt>Med utbytte</dt><dd>125</dd></div><div class="tallrute"><dt>Snitt-yield</dt><dd>6,2 %</dd></div><div class="tallrute"><dt>Sektorer</dt><dd>14</dd></div></dl>
   </section>
 
   <!-- TOPPLISTER -->
@@ -325,7 +305,7 @@
       <a href="/aksjer/OET/" class="ak-kort">
         <div class="ak-kort-topp">
           <span class="ak-kort-tk">OET</span>
-          <span class="ak-kort-yield">19,88 %</span>
+          <span class="ak-kort-yield">19,86 %</span>
         </div>
         <div class="ak-kort-navn">Okeanis Eco Tankers Corp.</div>
         <div class="ak-kort-meta">Shipping · Kvartalsvis · 7 år på rad</div>
@@ -357,7 +337,7 @@
       <a href="/aksjer/HSHP/" class="ak-kort">
         <div class="ak-kort-topp">
           <span class="ak-kort-tk">HSHP</span>
-          <span class="ak-kort-yield">12,91 %</span>
+          <span class="ak-kort-yield">12,90 %</span>
         </div>
         <div class="ak-kort-navn">Himalaya Shipping Ltd.</div>
         <div class="ak-kort-meta">Shipping · Månedlig · 3 år på rad</div>
@@ -439,7 +419,7 @@
       <a href="/aksjer/OET/" class="ak-kort">
         <div class="ak-kort-topp">
           <span class="ak-kort-tk">OET</span>
-          <span class="ak-kort-yield">19,88 %</span>
+          <span class="ak-kort-yield">19,86 %</span>
         </div>
         <div class="ak-kort-navn">Okeanis Eco Tankers Corp.</div>
         <div class="ak-kort-meta">Shipping · Kvartalsvis · 7 år på rad</div>
@@ -455,7 +435,7 @@
       <a href="/aksjer/HSHP/" class="ak-kort">
         <div class="ak-kort-topp">
           <span class="ak-kort-tk">HSHP</span>
-          <span class="ak-kort-yield">12,91 %</span>
+          <span class="ak-kort-yield">12,90 %</span>
         </div>
         <div class="ak-kort-navn">Himalaya Shipping Ltd.</div>
         <div class="ak-kort-meta">Shipping · Månedlig · 3 år på rad</div>
@@ -559,7 +539,7 @@
           <td>Okeanis Eco Tankers Corp.</td>
           <td>Shipping</td>
           <td>784,00 NOK</td>
-          <td>19,88 %</td>
+          <td>19,86 %</td>
           <td>—</td>
         </tr>
         <tr>
@@ -591,7 +571,7 @@
           <td>Himalaya Shipping Ltd.</td>
           <td>Shipping</td>
           <td>149,00 NOK</td>
-          <td>12,91 %</td>
+          <td>12,90 %</td>
           <td>—</td>
         </tr>
         <tr>
@@ -631,7 +611,7 @@
           <td>BW LPG Limited</td>
           <td>Shipping</td>
           <td>217,20 NOK</td>
-          <td>11,54 %</td>
+          <td>11,53 %</td>
           <td>—</td>
         </tr>
         <tr>
@@ -639,7 +619,7 @@
           <td>Frontline PLC</td>
           <td>Shipping</td>
           <td>460,60 NOK</td>
-          <td>11,52 %</td>
+          <td>11,51 %</td>
           <td>8. des 2026</td>
         </tr>
         <tr>
@@ -719,7 +699,7 @@
           <td>Klaveness Combination Carriers ASA</td>
           <td>Shipping</td>
           <td>108,00 NOK</td>
-          <td>8,74 %</td>
+          <td>8,73 %</td>
           <td>—</td>
         </tr>
         <tr>
@@ -1079,7 +1059,7 @@
           <td>Wallenius Wilhelmsen ASA</td>
           <td>Shipping</td>
           <td>165,00 NOK</td>
-          <td>5,44 %</td>
+          <td>5,43 %</td>
           <td>—</td>
         </tr>
         <tr>

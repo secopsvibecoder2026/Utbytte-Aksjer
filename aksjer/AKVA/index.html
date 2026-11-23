@@ -53,18 +53,30 @@
         {
           "@type": "ListItem",
           "position": 1,
-          "name": "Hjem",
+          "name": "exday.no",
           "item": "https://exday.no/"
         },
         {
           "@type": "ListItem",
           "position": 2,
-          "name": "Utforsk",
-          "item": "https://exday.no/utforsk/"
+          "name": "Aksjer",
+          "item": "https://exday.no/aksjer/"
         },
         {
           "@type": "ListItem",
           "position": 3,
+          "name": "Sektorer",
+          "item": "https://exday.no/aksjer/sektor/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 4,
+          "name": "Havbruk",
+          "item": "https://exday.no/aksjer/sektor/havbruk/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 5,
           "name": "AKVA",
           "item": "https://exday.no/aksjer/AKVA/"
         }
@@ -103,10 +115,7 @@
     a { color: #275f45; text-decoration: none; }
     a:hover { text-decoration: underline; }
     .wrap { max-width: 760px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
-    .breadcrumb { font-size: 0.85rem; color: #6b7280; margin-bottom: 1.5rem; }
-    .breadcrumb a { color: #6b7280; }
-    .breadcrumb span { margin: 0 0.35rem; }
-    h1 { font-size: 1.75rem; font-weight: 700; margin-bottom: 0.25rem; }
+    h1 { margin-bottom: 0.25rem; }
     .sub { font-size: 0.95rem; margin-bottom: 1.5rem; }
     .ingress { font-size: 1rem; line-height: 1.6; margin: -0.75rem 0 1.25rem; color: #374151; max-width: 46rem; }
     .badge { display: inline-block; font-size: 0.75rem; font-weight: 600; padding: 0.2rem 0.6rem;
@@ -302,7 +311,6 @@
     .rel-ticker { font-weight: 700; font-size: 1rem; color: #111827; }
     .rel-navn { font-size: 0.75rem; }
     .rel-yield { font-size: 0.8rem; font-weight: 600; color: #374151; font-variant-numeric: tabular-nums; }
-    @media (max-width: 480px) { h1 { font-size: 1.4rem; } }
 
     /* Light mode */
     body { background: #f9fafb; color: #111827; }
@@ -316,7 +324,6 @@
     .cta { background: #fff; border-color: #e5e7eb; }
     .cta p { color: #374151; }
     .updated { color: #6b7280; }
-    .breadcrumb { color: #6b7280; }
     .sub { color: #6b7280; }
     .faq { margin: 2rem 0; }
     .faq h2 { font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem; color: #374151; }
@@ -360,8 +367,6 @@
     .dark .cta { background: #111827; border-color: #1f2937; }
     .dark .cta p { color: #d1d5db; }
     .dark .updated { color: #9ca3af; }
-    .dark .breadcrumb { color: #9ca3af; }
-    .dark .breadcrumb a { color: #9ca3af; }
     .dark .sub { color: #9ca3af; }
     .dark .ingress { color: #d1d5db; }
     .dark .badge { background: #1b3f2f; color: #9cc2ad; }
@@ -447,21 +452,13 @@
 
 <div class="wrap">
 
-  <div class="breadcrumb">
-    <a href="https://exday.no/">exday.no</a>
-    <span>›</span>
-    <a href="https://exday.no/utforsk/">Utforsk</a>
-    <span>›</span>
-    <a href="https://exday.no/aksjer/sektor/havbruk/">Havbruk</a>
-    <span>›</span>
-    AKVA
-  </div>
+  <nav class="brodsmule" aria-label="Brødsmulesti"><a href="/">exday.no</a> <span class="brodsmule-skille" aria-hidden="true">›</span> <a href="/aksjer/">Aksjer</a> <span class="brodsmule-skille" aria-hidden="true">›</span> <a href="/aksjer/sektor/">Sektorer</a> <span class="brodsmule-skille" aria-hidden="true">›</span> <a href="/aksjer/sektor/havbruk/">Havbruk</a> <span class="brodsmule-skille" aria-hidden="true">›</span> <span aria-current="page">AKVA</span></nav>
 
-  <h1>AKVA utbytte 2026</h1>
+  <h1 class="side-h1">AKVA utbytte 2026</h1>
   <p class="sub">AKVA Group ASA (AKVA) · Havbruk · Halvårlig utbytte · Oslo Børs</p>
   
 
-  <div class="kurshode"><div class="kh-topp"><div><div class="kh-pris">160,00<span class="kh-valuta">NOK</span></div><div class="kh-meta"><span class="kh-endring kh-opp" title="Endring fra forrige sluttkurs, opp">+1,00 (+0,63 %)</span> <span class="kh-meta-dato">Kurs 23. nov 2026</span></div></div><div class="kh-spenn" aria-label="52 ukers spenn fra 80,00 til 160,00"><span class="kh-spenn-tekst">52 uker</span><span class="kh-spenn-tall">80,00</span><span class="kh-spenn-linje"><span class="kh-spenn-punkt" style="left:100.0%"></span></span><span class="kh-spenn-tall">160,00</span></div></div><dl class="kh-tall"><div><dt>Yield</dt><dd>1,25 %</dd></div><div><dt>Utbytte/aksje</dt><dd>2,00 NOK</dd><span class="kh-note"><span class="kcard-note">annualisert</span></span></div><div><dt>Ex-dato</dt><dd><span class="kh-ukjent">Ikke kjent</span></dd></div></dl></div>
+  <div class="kurshode"><div class="kh-topp"><div><div class="kh-pris">160,00<span class="kh-valuta">NOK</span></div><div class="kh-meta"><span class="kh-endring kh-opp" title="Endring fra forrige sluttkurs, opp">+1,00 (+0,63 %)</span> <span class="kh-meta-dato">Kurs 23. nov 2026</span></div></div><div class="kh-spenn" aria-label="52 ukers spenn fra 80,00 til 161,00"><span class="kh-spenn-tekst">52 uker</span><span class="kh-spenn-tall">80,00</span><span class="kh-spenn-linje"><span class="kh-spenn-punkt" style="left:98.8%"></span></span><span class="kh-spenn-tall">161,00</span></div></div><dl class="kh-tall"><div><dt>Yield</dt><dd>1,25 %</dd></div><div><dt>Utbytte/aksje</dt><dd>2,00 NOK</dd><span class="kh-note"><span class="kcard-note">annualisert</span></span></div><div><dt>Ex-dato</dt><dd><span class="kh-ukjent">Ikke kjent</span></dd></div></dl></div>
   <p class="kurs-varsel" id="kurs-varsel" data-kursdag="2026-11-23" data-fridager="2026-12-24,2026-12-25,2026-12-26,2026-12-31,2027-01-01,2027-03-25,2027-03-26,2027-03-29,2027-05-01,2027-05-06,2027-05-17,2027-12-24,2027-12-25,2027-12-26,2027-12-31" role="status" hidden></p><script src="/assets/kursferskhet.js" defer></script>
 
   <nav class="ak-tabnav" id="ak-tabnav" aria-label="Sideseksjoner">
@@ -623,7 +620,7 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
 
   
 
-  <div class="risiko-seksjon"><h2>Risiko for utbyttet</h2><ul class="risiko-liste"><li>Yielden avhenger sterkt av inngangskursen: samme utbytte gir 1,2 % på 12-månedershøyden (160,00 kr) og 2,5 % på bunnen (80,00 kr)</li>
+  <div class="risiko-seksjon"><h2>Risiko for utbyttet</h2><ul class="risiko-liste"><li>Yielden avhenger sterkt av inngangskursen: samme utbytte gir 1,2 % på 12-månedershøyden (161,00 kr) og 2,5 % på bunnen (80,00 kr)</li>
 <li>Laksepris varierer med globalt tilbud og etterspørsel</li>
 <li>Biologisk risiko (lakselus, sykdom) kan redusere produksjonsvolum</li>
 <li>Eksportrestriksjoner og politisk risiko i nøkkelmarkeder</li></ul></div>
@@ -635,7 +632,7 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
   <!-- ── NØKKELTALL ── -->
   <section id="nokkeltall">
 
-  <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Havbruk</td></tr><tr><td>Frekvens</td><td>Halvårlig</td></tr><tr><td>Utbytte per aksje</td><td>2,00 NOK</td></tr><tr><td>Direkteavkastning</td><td>1,25 %</td></tr><tr><td>5-årssnitt yield</td><td>0,50 %</td></tr><tr><td>År med utbytte</td><td>12</td></tr><tr><td>P/E</td><td>27,9</td></tr><tr><td>Payout ratio</td><td>51 %</td></tr><tr><td>Utbyttevekst 5 år</td><td>+18,9 % p.a.</td></tr><tr><td>Markedsverdi</td><td>5,8 mrd NOK</td></tr><tr><td>52-ukers kurs</td><td>80,00 – 160,00 NOK</td></tr></tbody></table>
+  <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Havbruk</td></tr><tr><td>Frekvens</td><td>Halvårlig</td></tr><tr><td>Utbytte per aksje</td><td>2,00 NOK</td></tr><tr><td>Direkteavkastning</td><td>1,25 %</td></tr><tr><td>5-årssnitt yield</td><td>0,50 %</td></tr><tr><td>År med utbytte</td><td>12</td></tr><tr><td>P/E</td><td>27,9</td></tr><tr><td>Payout ratio</td><td>51 %</td></tr><tr><td>Utbyttevekst 5 år</td><td>+18,9 % p.a.</td></tr><tr><td>Markedsverdi</td><td>5,8 mrd NOK</td></tr><tr><td>52-ukers kurs</td><td>80,00 – 161,00 NOK</td></tr></tbody></table>
 
   </section>
 

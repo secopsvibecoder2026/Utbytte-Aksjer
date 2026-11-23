@@ -53,18 +53,30 @@
         {
           "@type": "ListItem",
           "position": 1,
-          "name": "Hjem",
+          "name": "exday.no",
           "item": "https://exday.no/"
         },
         {
           "@type": "ListItem",
           "position": 2,
-          "name": "Utforsk",
-          "item": "https://exday.no/utforsk/"
+          "name": "Aksjer",
+          "item": "https://exday.no/aksjer/"
         },
         {
           "@type": "ListItem",
           "position": 3,
+          "name": "Sektorer",
+          "item": "https://exday.no/aksjer/sektor/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 4,
+          "name": "Energitjenester",
+          "item": "https://exday.no/aksjer/sektor/energitjenester/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 5,
           "name": "SOFF",
           "item": "https://exday.no/aksjer/SOFF/"
         }
@@ -103,10 +115,7 @@
     a { color: #275f45; text-decoration: none; }
     a:hover { text-decoration: underline; }
     .wrap { max-width: 760px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
-    .breadcrumb { font-size: 0.85rem; color: #6b7280; margin-bottom: 1.5rem; }
-    .breadcrumb a { color: #6b7280; }
-    .breadcrumb span { margin: 0 0.35rem; }
-    h1 { font-size: 1.75rem; font-weight: 700; margin-bottom: 0.25rem; }
+    h1 { margin-bottom: 0.25rem; }
     .sub { font-size: 0.95rem; margin-bottom: 1.5rem; }
     .ingress { font-size: 1rem; line-height: 1.6; margin: -0.75rem 0 1.25rem; color: #374151; max-width: 46rem; }
     .badge { display: inline-block; font-size: 0.75rem; font-weight: 600; padding: 0.2rem 0.6rem;
@@ -302,7 +311,6 @@
     .rel-ticker { font-weight: 700; font-size: 1rem; color: #111827; }
     .rel-navn { font-size: 0.75rem; }
     .rel-yield { font-size: 0.8rem; font-weight: 600; color: #374151; font-variant-numeric: tabular-nums; }
-    @media (max-width: 480px) { h1 { font-size: 1.4rem; } }
 
     /* Light mode */
     body { background: #f9fafb; color: #111827; }
@@ -316,7 +324,6 @@
     .cta { background: #fff; border-color: #e5e7eb; }
     .cta p { color: #374151; }
     .updated { color: #6b7280; }
-    .breadcrumb { color: #6b7280; }
     .sub { color: #6b7280; }
     .faq { margin: 2rem 0; }
     .faq h2 { font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem; color: #374151; }
@@ -360,8 +367,6 @@
     .dark .cta { background: #111827; border-color: #1f2937; }
     .dark .cta p { color: #d1d5db; }
     .dark .updated { color: #9ca3af; }
-    .dark .breadcrumb { color: #9ca3af; }
-    .dark .breadcrumb a { color: #9ca3af; }
     .dark .sub { color: #9ca3af; }
     .dark .ingress { color: #d1d5db; }
     .dark .badge { background: #1b3f2f; color: #9cc2ad; }
@@ -447,17 +452,9 @@
 
 <div class="wrap">
 
-  <div class="breadcrumb">
-    <a href="https://exday.no/">exday.no</a>
-    <span>›</span>
-    <a href="https://exday.no/utforsk/">Utforsk</a>
-    <span>›</span>
-    <a href="https://exday.no/aksjer/sektor/energitjenester/">Energitjenester</a>
-    <span>›</span>
-    SOFF
-  </div>
+  <nav class="brodsmule" aria-label="Brødsmulesti"><a href="/">exday.no</a> <span class="brodsmule-skille" aria-hidden="true">›</span> <a href="/aksjer/">Aksjer</a> <span class="brodsmule-skille" aria-hidden="true">›</span> <a href="/aksjer/sektor/">Sektorer</a> <span class="brodsmule-skille" aria-hidden="true">›</span> <a href="/aksjer/sektor/energitjenester/">Energitjenester</a> <span class="brodsmule-skille" aria-hidden="true">›</span> <span aria-current="page">SOFF</span></nav>
 
-  <h1>Solstad Offshore utbytte 2026: 4,52 kr per aksje i året</h1>
+  <h1 class="side-h1">Solstad Offshore utbytte 2026: 4,52 kr per aksje i året</h1>
   <p class="sub">Solstad Offshore ASA (SOFF) · Energitjenester · Kvartalsvis utbytte · Oslo Børs</p>
   <p class="ingress">Solstad Offshore betaler 4,52 kr per aksje i året (siste fire utbetalinger, uten engangsutbytte), en direkteavkastning på 7,04 % med dagens kurs. Neste ex-dato er ikke kjent ennå.</p>
 

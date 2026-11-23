@@ -45,6 +45,7 @@
   <meta name="twitter:description" content="De 20 norske aksjene med sterkest utbyttevekst siste 5 år på Oslo Børs. CAGR beregnet fra historiske utbyttedata."/>
   <meta name="twitter:image" content="https://exday.no/assets/og-image.png"/>
   <script type="application/ld+json">{"@context": "https://schema.org", "@type": "ItemList", "name": "Norske aksjer med best utbyttevekst siste 5 år", "description": "De 20 norske aksjene med sterkest utbyttevekst siste 5 år på Oslo Børs. CAGR beregnet fra historiske utbyttedata.", "url": "https://exday.no/aksjer/utbyttevekst/", "numberOfItems": 20}</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "exday.no", "item": "https://exday.no/"}, {"@type": "ListItem", "position": 2, "name": "Aksjer", "item": "https://exday.no/aksjer/"}, {"@type": "ListItem", "position": 3, "name": "Aksjer med best utbyttevekst", "item": "https://exday.no/aksjer/utbyttevekst/"}]}</script>
   <link rel="stylesheet" href="/assets/tailwind.css"/>
   <link rel="stylesheet" href="/assets/style.css"/>
   <script>
@@ -61,15 +62,8 @@
     a { color: #2f7352; text-decoration: none; }
     a:hover { text-decoration: underline; }
     .wrap { max-width: 900px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
-    .breadcrumb { font-size: 0.85rem; margin-bottom: 1.5rem; }
-    .breadcrumb a { text-decoration: none; }
-    .breadcrumb span { margin: 0 0.35rem; }
-    h1 { font-size: 1.75rem; font-weight: 700; margin-bottom: 0.5rem; }
+    h1 { margin-bottom: 0.5rem; }
     .sub { margin-bottom: 1.5rem; font-size: 0.95rem; }
-    .stats { display: flex; gap: 1.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
-    .stat { border-radius: 0.5rem; padding: 0.75rem 1.25rem; border: 1px solid; }
-    .stat-val { font-size: 1.4rem; font-weight: 700; color: #111827; }
-    .stat-lbl { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em; }
     .tabell-ramme { overflow-x: auto; -webkit-overflow-scrolling: touch; }
     table { width: 100%; min-width: 34rem; border-collapse: collapse; border-radius: 0.75rem; overflow: hidden; font-size: 0.9rem; border: 1px solid; }
     th { padding: 0.6rem 1rem; text-align: left; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; white-space: nowrap; }
@@ -90,11 +84,7 @@
     .updated { font-size: 0.78rem; text-align: right; margin-top: 1rem; }
 
     body { background: #f9fafb; color: #111827; }
-    .stat { background: #fff; border-color: #e5e7eb; }
-    .stat-lbl { color: #6b7280; }
     .sub { color: #6b7280; }
-    .breadcrumb { color: #6b7280; }
-    .breadcrumb a { color: #6b7280; }
     .rang { color: #9ca3af; }
     table { background: #fff; border-color: #e5e7eb; }
     th { background: #f3f4f6; color: #6b7280; }
@@ -107,12 +97,7 @@
     .updated { color: #6b7280; }
 
     .dark body { background: #030712; color: #f3f4f6; }
-    .dark .stat { background: #111827; border-color: #1f2937; }
-    .dark .stat-lbl { color: #9ca3af; }
-    .dark .stat-val { color: #f3f4f6; }
     .dark .sub { color: #9ca3af; }
-    .dark .breadcrumb { color: #9ca3af; }
-    .dark .breadcrumb a { color: #9ca3af; }
     .dark .rang { color: #6b7280; }
     .dark a { color: #6fa98a; }
     .dark .ticker a { color: #f3f4f6; }
@@ -190,20 +175,10 @@
     })();
   </script>
 <div class="wrap">
-  <div class="breadcrumb">
-    <a href="https://exday.no/">exday.no</a>
-    <span>/</span>
-    <a href="/aksjer/">Aksjer</a>
-    <span>/</span>
-    Aksjer med best utbyttevekst
-  </div>
-  <h1>Aksjer med best utbyttevekst</h1>
+  <nav class="brodsmule" aria-label="Brødsmulesti"><a href="/">exday.no</a> <span class="brodsmule-skille" aria-hidden="true">›</span> <a href="/aksjer/">Aksjer</a> <span class="brodsmule-skille" aria-hidden="true">›</span> <span aria-current="page">Aksjer med best utbyttevekst</span></nav>
+  <h1 class="side-h1">Aksjer med best utbyttevekst</h1>
   <p class="sub">Sortert etter gjennomsnittlig årlig utbyttevekst siste 5 år (CAGR).</p>
-  <div class="stats">
-    <div class="stat"><div class="stat-val">20</div><div class="stat-lbl">Aksjer</div></div>
-    <div class="stat"><div class="stat-val">+44,0 %/år</div><div class="stat-lbl">Snitt vekst</div></div>
-    <div class="stat"><div class="stat-val">+111,5 %/år</div><div class="stat-lbl">Høyeste vekst</div></div>
-  </div>
+  <dl class="tallruter tallruter-n3" aria-label="Listen i tall"><div class="tallrute"><dt>Aksjer</dt><dd>20</dd></div><div class="tallrute"><dt>Snitt vekst</dt><dd>+44,0 %/år</dd></div><div class="tallrute"><dt>Høyeste vekst</dt><dd>+111,5 %/år</dd></div></dl>
 
   <div class="liste-analyse">
   <h2>Slik leser du utbyttevekst</h2>
@@ -275,7 +250,7 @@
           <td class="rang">10</td>
           <td class="ticker"><a href="/aksjer/KCC/">KCC</a></td>
           <td>Klaveness Combination Carriers ASA</td>
-          <td class="metric">+32,5 %/år</td><td>8,74 %</td><td>108,00 NOK</td><td>—</td>
+          <td class="metric">+32,5 %/år</td><td>8,73 %</td><td>108,00 NOK</td><td>—</td>
         </tr>
         <tr>
           <td class="rang">11</td>

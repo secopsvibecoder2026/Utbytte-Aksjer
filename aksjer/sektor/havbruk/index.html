@@ -44,7 +44,7 @@
   <meta name="twitter:title" content="Havbruk-aksjer med utbytte – exday.no"/>
   <meta name="twitter:description" content="10 norske havbruk-aksjer på Oslo Børs. Snittyielden blant dem som betaler utbytte er 3,9 %. Se yield, ex-dato og historikk på exday.no."/>
   <meta name="twitter:image" content="https://exday.no/assets/og-image.png"/>
-  <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Hjem", "item": "https://exday.no/"}, {"@type": "ListItem", "position": 2, "name": "Utforsk", "item": "https://exday.no/utforsk/"}, {"@type": "ListItem", "position": 3, "name": "Havbruk", "item": "https://exday.no/aksjer/sektor/havbruk/"}]}, {"@type": "ItemList", "name": "Havbruk-aksjer med utbytte på Oslo Børs", "description": "10 norske havbruk-aksjer på Oslo Børs. Snittyielden blant dem som betaler utbytte er 3,9 %. Se yield, ex-dato og historikk på exday.no.", "url": "https://exday.no/aksjer/sektor/havbruk/", "numberOfItems": 10, "itemListElement": [{"@type": "ListItem", "position": 1, "url": "https://exday.no/aksjer/AUSS/"}, {"@type": "ListItem", "position": 2, "url": "https://exday.no/aksjer/LSG/"}, {"@type": "ListItem", "position": 3, "url": "https://exday.no/aksjer/MOWI/"}, {"@type": "ListItem", "position": 4, "url": "https://exday.no/aksjer/SALM/"}, {"@type": "ListItem", "position": 5, "url": "https://exday.no/aksjer/AKVA/"}, {"@type": "ListItem", "position": 6, "url": "https://exday.no/aksjer/BAKKA/"}, {"@type": "ListItem", "position": 7, "url": "https://exday.no/aksjer/GSF/"}, {"@type": "ListItem", "position": 8, "url": "https://exday.no/aksjer/MAS/"}, {"@type": "ListItem", "position": 9, "url": "https://exday.no/aksjer/ISLAX/"}, {"@type": "ListItem", "position": 10, "url": "https://exday.no/aksjer/AFISH/"}]}]}</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "exday.no", "item": "https://exday.no/"}, {"@type": "ListItem", "position": 2, "name": "Aksjer", "item": "https://exday.no/aksjer/"}, {"@type": "ListItem", "position": 3, "name": "Sektorer", "item": "https://exday.no/aksjer/sektor/"}, {"@type": "ListItem", "position": 4, "name": "Havbruk", "item": "https://exday.no/aksjer/sektor/havbruk/"}]}, {"@type": "ItemList", "name": "Havbruk-aksjer med utbytte på Oslo Børs", "description": "10 norske havbruk-aksjer på Oslo Børs. Snittyielden blant dem som betaler utbytte er 3,9 %. Se yield, ex-dato og historikk på exday.no.", "url": "https://exday.no/aksjer/sektor/havbruk/", "numberOfItems": 10, "itemListElement": [{"@type": "ListItem", "position": 1, "url": "https://exday.no/aksjer/AUSS/"}, {"@type": "ListItem", "position": 2, "url": "https://exday.no/aksjer/LSG/"}, {"@type": "ListItem", "position": 3, "url": "https://exday.no/aksjer/MOWI/"}, {"@type": "ListItem", "position": 4, "url": "https://exday.no/aksjer/SALM/"}, {"@type": "ListItem", "position": 5, "url": "https://exday.no/aksjer/AKVA/"}, {"@type": "ListItem", "position": 6, "url": "https://exday.no/aksjer/BAKKA/"}, {"@type": "ListItem", "position": 7, "url": "https://exday.no/aksjer/GSF/"}, {"@type": "ListItem", "position": 8, "url": "https://exday.no/aksjer/MAS/"}, {"@type": "ListItem", "position": 9, "url": "https://exday.no/aksjer/ISLAX/"}, {"@type": "ListItem", "position": 10, "url": "https://exday.no/aksjer/AFISH/"}]}]}</script>
   <link rel="stylesheet" href="/assets/tailwind.css"/>
   <link rel="stylesheet" href="/assets/style.css"/>
   <script>
@@ -61,20 +61,13 @@
     a { color: #2f7352; text-decoration: none; }
     a:hover { text-decoration: underline; }
     .wrap { max-width: 900px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
-    .breadcrumb { font-size: 0.85rem; color: #6b7280; margin-bottom: 1.5rem; }
-    .breadcrumb a { color: #6b7280; }
-    .breadcrumb span { margin: 0 0.35rem; }
-    h1 { font-size: 1.75rem; font-weight: 700; margin-bottom: 0.5rem; }
+    h1 { margin-bottom: 0.5rem; }
     /* Ikonet i overskriften er dekorativt (aria-hidden) og skal stå på samme
        linje som teksten uten å dra opp linjehøyden. */
     .h1-ikon { width: 1.5rem; height: 1.5rem; vertical-align: -0.18em;
                 margin-right: 0.5rem; color: #2f7352; }
     .dark .h1-ikon { color: #6fa98a; }
     .sub { margin-bottom: 1.5rem; font-size: 0.95rem; }
-    .stats { display: flex; gap: 1.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
-    .stat { border-radius: 0.5rem; padding: 0.75rem 1.25rem; border: 1px solid; }
-    .stat-val { font-size: 1.4rem; font-weight: 700; color: #111827; }
-    .stat-lbl { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em; }
     .sektor-analyse { margin: 0 0 2rem; }
     .sektor-analyse h2 { font-size: 1.15rem; font-weight: 700; margin: 1.75rem 0 0.6rem; }
     .sektor-analyse p { margin: 0 0 0.9rem; line-height: 1.75; font-size: 0.95rem; }
@@ -92,8 +85,6 @@
     .updated { font-size: 0.78rem; text-align: right; margin-top: 1rem; }
 
     body { background: #f9fafb; color: #111827; }
-    .stat { background: #fff; border-color: #e5e7eb; }
-    .stat-lbl { color: #6b7280; }
     table { background: #fff; border-color: #e5e7eb; }
     th { background: #f3f4f6; color: #6b7280; }
     td { border-color: #f3f4f6; }
@@ -102,8 +93,6 @@
     .updated { color: #6b7280; }
 
     .dark body { background: #030712; color: #f3f4f6; }
-    .dark .stat { background: #111827; border-color: #1f2937; }
-    .dark .stat-lbl { color: #9ca3af; }
     .dark table { background: #111827; border-color: #1f2937; }
     .dark th { background: #1f2937; color: #9ca3af; }
     .dark td { border-color: #1f2937; }
@@ -111,9 +100,6 @@
     .dark .sub { color: #9ca3af; }
     .dark .updated { color: #9ca3af; }
     .dark a { color: #6fa98a; }
-    .dark .breadcrumb { color: #9ca3af; }
-    .dark .breadcrumb a { color: #9ca3af; }
-    .dark .stat-val { color: #f3f4f6; }
     .dark .yield { color: #f3f4f6; }
     .dark .cta a { background: #2f7352; color: #fff !important; }
   </style>
@@ -179,22 +165,10 @@
     })();
   </script>
 <div class="wrap">
-  <div class="breadcrumb">
-    <a href="https://exday.no/">exday.no</a>
-    <span>›</span>
-    <a href="/aksjer/">Aksjer</a>
-    <span>›</span>
-    <a href="/aksjer/sektor/">Sektorer</a>
-    <span>›</span>
-    Havbruk
-  </div>
-  <h1><svg class="h1-ikon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 12c0-3 3.6-5.5 8-5.5 3 0 5.6 1.6 7 5.5-1.4 3.9-4 5.5-7 5.5-4.4 0-8-2.5-8-5.5zM7 12L2.5 8.5v7L7 12zM17 11h.01"/></svg>Havbruk-aksjer med utbytte</h1>
+  <nav class="brodsmule" aria-label="Brødsmulesti"><a href="/">exday.no</a> <span class="brodsmule-skille" aria-hidden="true">›</span> <a href="/aksjer/">Aksjer</a> <span class="brodsmule-skille" aria-hidden="true">›</span> <a href="/aksjer/sektor/">Sektorer</a> <span class="brodsmule-skille" aria-hidden="true">›</span> <span aria-current="page">Havbruk</span></nav>
+  <h1 class="side-h1"><svg class="h1-ikon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 12c0-3 3.6-5.5 8-5.5 3 0 5.6 1.6 7 5.5-1.4 3.9-4 5.5-7 5.5-4.4 0-8-2.5-8-5.5zM7 12L2.5 8.5v7L7 12zM17 11h.01"/></svg>Havbruk-aksjer med utbytte</h1>
   <p class="sub">10 norske havbruk-aksjer på Oslo Børs. Sortert etter direkteavkastning.</p>
-  <div class="stats">
-    <div class="stat"><div class="stat-val">10</div><div class="stat-lbl">Aksjer</div></div>
-    <div class="stat"><div class="stat-val">3,9 %</div><div class="stat-lbl">Snitt yield</div></div>
-    <div class="stat"><div class="stat-val">7,4 %</div><div class="stat-lbl">Høyeste yield</div></div>
-  </div>
+  <dl class="tallruter tallruter-n3" aria-label="Sektoren i tall"><div class="tallrute"><dt>Aksjer</dt><dd>10</dd></div><div class="tallrute"><dt>Snitt yield</dt><dd>3,9 %</dd></div><div class="tallrute"><dt>Høyeste yield</dt><dd>7,4 %</dd></div></dl>
 
   <div class="sektor-analyse">
   <h2>Havbruk som utbyttesektor</h2>

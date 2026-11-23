@@ -54,18 +54,30 @@
         {
           "@type": "ListItem",
           "position": 1,
-          "name": "Hjem",
+          "name": "exday.no",
           "item": "https://exday.no/"
         },
         {
           "@type": "ListItem",
           "position": 2,
-          "name": "Utforsk",
-          "item": "https://exday.no/utforsk/"
+          "name": "Aksjer",
+          "item": "https://exday.no/aksjer/"
         },
         {
           "@type": "ListItem",
           "position": 3,
+          "name": "Sektorer",
+          "item": "https://exday.no/aksjer/sektor/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 4,
+          "name": "Energitjenester",
+          "item": "https://exday.no/aksjer/sektor/energitjenester/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 5,
           "name": "CDLR",
           "item": "https://exday.no/aksjer/CDLR/"
         }
@@ -104,10 +116,7 @@
     a { color: #275f45; text-decoration: none; }
     a:hover { text-decoration: underline; }
     .wrap { max-width: 760px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
-    .breadcrumb { font-size: 0.85rem; color: #6b7280; margin-bottom: 1.5rem; }
-    .breadcrumb a { color: #6b7280; }
-    .breadcrumb span { margin: 0 0.35rem; }
-    h1 { font-size: 1.75rem; font-weight: 700; margin-bottom: 0.25rem; }
+    h1 { margin-bottom: 0.25rem; }
     .sub { font-size: 0.95rem; margin-bottom: 1.5rem; }
     .ingress { font-size: 1rem; line-height: 1.6; margin: -0.75rem 0 1.25rem; color: #374151; max-width: 46rem; }
     .badge { display: inline-block; font-size: 0.75rem; font-weight: 600; padding: 0.2rem 0.6rem;
@@ -303,7 +312,6 @@
     .rel-ticker { font-weight: 700; font-size: 1rem; color: #111827; }
     .rel-navn { font-size: 0.75rem; }
     .rel-yield { font-size: 0.8rem; font-weight: 600; color: #374151; font-variant-numeric: tabular-nums; }
-    @media (max-width: 480px) { h1 { font-size: 1.4rem; } }
 
     /* Light mode */
     body { background: #f9fafb; color: #111827; }
@@ -317,7 +325,6 @@
     .cta { background: #fff; border-color: #e5e7eb; }
     .cta p { color: #374151; }
     .updated { color: #6b7280; }
-    .breadcrumb { color: #6b7280; }
     .sub { color: #6b7280; }
     .faq { margin: 2rem 0; }
     .faq h2 { font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem; color: #374151; }
@@ -361,8 +368,6 @@
     .dark .cta { background: #111827; border-color: #1f2937; }
     .dark .cta p { color: #d1d5db; }
     .dark .updated { color: #9ca3af; }
-    .dark .breadcrumb { color: #9ca3af; }
-    .dark .breadcrumb a { color: #9ca3af; }
     .dark .sub { color: #9ca3af; }
     .dark .ingress { color: #d1d5db; }
     .dark .badge { background: #1b3f2f; color: #9cc2ad; }
@@ -448,21 +453,13 @@
 
 <div class="wrap">
 
-  <div class="breadcrumb">
-    <a href="https://exday.no/">exday.no</a>
-    <span>›</span>
-    <a href="https://exday.no/utforsk/">Utforsk</a>
-    <span>›</span>
-    <a href="https://exday.no/aksjer/sektor/energitjenester/">Energitjenester</a>
-    <span>›</span>
-    CDLR
-  </div>
+  <nav class="brodsmule" aria-label="Brødsmulesti"><a href="/">exday.no</a> <span class="brodsmule-skille" aria-hidden="true">›</span> <a href="/aksjer/">Aksjer</a> <span class="brodsmule-skille" aria-hidden="true">›</span> <a href="/aksjer/sektor/">Sektorer</a> <span class="brodsmule-skille" aria-hidden="true">›</span> <a href="/aksjer/sektor/energitjenester/">Energitjenester</a> <span class="brodsmule-skille" aria-hidden="true">›</span> <span aria-current="page">CDLR</span></nav>
 
-  <h1>Cadeler utbytte 2026</h1>
+  <h1 class="side-h1">Cadeler utbytte 2026</h1>
   <p class="sub">Cadeler plc (CDLR) · Energitjenester · Uregelmessig utbytte · Oslo Børs</p>
   
 
-  <div class="kurshode"><div class="kh-topp"><div><div class="kh-pris">58,20<span class="kh-valuta">NOK</span></div><div class="kh-meta"><span class="kh-endring kh-ned" title="Endring fra forrige sluttkurs, ned">−2,09 (−3,47 %)</span> <span class="kh-meta-dato">Kurs 23. nov 2026</span></div></div><div class="kh-spenn" aria-label="52 ukers spenn fra 58,11 til 66,00"><span class="kh-spenn-tekst">52 uker</span><span class="kh-spenn-tall">58,11</span><span class="kh-spenn-linje"><span class="kh-spenn-punkt" style="left:1.1%"></span></span><span class="kh-spenn-tall">66,00</span></div></div><dl class="kh-tall"><div><dt>Yield</dt><dd>—</dd></div><div><dt>Utbytte/aksje</dt><dd>0,00 NOK</dd></div><div><dt>Ex-dato</dt><dd><span class="kh-ukjent">Ikke kjent</span></dd></div></dl></div>
+  <div class="kurshode"><div class="kh-topp"><div><div class="kh-pris">58,20<span class="kh-valuta">NOK</span></div><div class="kh-meta"><span class="kh-endring kh-ned" title="Endring fra forrige sluttkurs, ned">−2,09 (−3,47 %)</span> <span class="kh-meta-dato">Kurs 23. nov 2026</span></div></div><div class="kh-spenn" aria-label="52 ukers spenn fra 58,00 til 66,00"><span class="kh-spenn-tekst">52 uker</span><span class="kh-spenn-tall">58,00</span><span class="kh-spenn-linje"><span class="kh-spenn-punkt" style="left:2.5%"></span></span><span class="kh-spenn-tall">66,00</span></div></div><dl class="kh-tall"><div><dt>Yield</dt><dd>—</dd></div><div><dt>Utbytte/aksje</dt><dd>0,00 NOK</dd></div><div><dt>Ex-dato</dt><dd><span class="kh-ukjent">Ikke kjent</span></dd></div></dl></div>
   <p class="kurs-varsel" id="kurs-varsel" data-kursdag="2026-11-23" data-fridager="2026-12-24,2026-12-25,2026-12-26,2026-12-31,2027-01-01,2027-03-25,2027-03-26,2027-03-29,2027-05-01,2027-05-06,2027-05-17,2027-12-24,2027-12-25,2027-12-26,2027-12-31" role="status" hidden></p><script src="/assets/kursferskhet.js" defer></script>
 
   <nav class="ak-tabnav" id="ak-tabnav" aria-label="Sideseksjoner">
@@ -491,7 +488,7 @@
   <canvas id="kurs-canvas-CDLR" style="display:block;border-radius:10px;width:100%;"></canvas>
   <script>
   (function() {
-    var ALLE = [{"d": "2026-11-06", "k": 64.25}, {"d": "2026-11-13", "k": 63.0}, {"d": "2026-11-20", "k": 60.29}, {"d": "2026-11-23", "k": 58.2}];
+    var ALLE = [{"d": "2026-11-23", "k": 58.2}];
     var VAL = 'NOK';
     function filtrer(p) {
       var now = new Date(), ar = now.getFullYear();
@@ -618,7 +615,7 @@
   <!-- ── NØKKELTALL ── -->
   <section id="nokkeltall">
 
-  <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Energitjenester</td></tr><tr><td>Frekvens</td><td>Uregelmessig</td></tr><tr><td>Utbytte per aksje</td><td>0,00 NOK</td></tr><tr><td>Direkteavkastning</td><td>—</td></tr><tr><td>5-årssnitt yield</td><td>—</td></tr><tr><td>År med utbytte</td><td>0</td></tr><tr><td>P/E</td><td>9,4</td></tr><tr><td>Markedsverdi</td><td>20,7 mrd NOK</td></tr><tr><td>52-ukers kurs</td><td>58,11 – 66,00 NOK</td></tr></tbody></table>
+  <h2>Nøkkeltall</h2><table><thead><tr><th>Nøkkeltall</th><th>Verdi</th></tr></thead><tbody><tr><td>Sektor</td><td>Energitjenester</td></tr><tr><td>Frekvens</td><td>Uregelmessig</td></tr><tr><td>Utbytte per aksje</td><td>0,00 NOK</td></tr><tr><td>Direkteavkastning</td><td>—</td></tr><tr><td>5-årssnitt yield</td><td>—</td></tr><tr><td>År med utbytte</td><td>0</td></tr><tr><td>P/E</td><td>9,4</td></tr><tr><td>Markedsverdi</td><td>20,7 mrd NOK</td></tr><tr><td>52-ukers kurs</td><td>58,00 – 66,00 NOK</td></tr></tbody></table>
 
   </section>
 
