@@ -8732,7 +8732,7 @@ def generer_aksjesider(aksjer, root_dir):
   <link rel="stylesheet" href="/assets/style.css"/>
   <style>
     *, *::before, *::after {{ box-sizing: border-box; margin: 0; padding: 0; }}
-    body {{ font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; background: #f8fafc; color: #0f172a; line-height: 1.6; }}
+    body {{ font-family: "Inter", system-ui, -apple-system, 'Segoe UI', sans-serif; background: #f8fafc; color: #0f172a; line-height: 1.6; }}
     a {{ color: #2f7352; text-decoration: none; }}
     a:hover {{ text-decoration: underline; }}
     .wrap {{ max-width: 1100px; margin: 0 auto; padding: 1rem 1rem 2rem; }}
@@ -9547,7 +9547,7 @@ def generer_sektorsider(aksjer, root_dir):
   </script>
   <style>
     *, *::before, *::after {{ box-sizing: border-box; margin: 0; padding: 0; }}
-    body {{ font-family: system-ui, -apple-system, sans-serif; line-height: 1.6; }}
+    body {{ font-family: "Inter", system-ui, -apple-system, sans-serif; line-height: 1.6; }}
     a {{ color: #2f7352; text-decoration: none; }}
     a:hover {{ text-decoration: underline; }}
     .wrap {{ max-width: 900px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }}
@@ -9733,7 +9733,7 @@ def generer_sektorsider(aksjer, root_dir):
   </script>
   <style>
     *, *::before, *::after {{ box-sizing: border-box; margin: 0; padding: 0; }}
-    body {{ font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; line-height: 1.6; background: #f8fafc; color: #0f172a; }}
+    body {{ font-family: "Inter", system-ui, -apple-system, 'Segoe UI', sans-serif; line-height: 1.6; background: #f8fafc; color: #0f172a; }}
     a {{ color: #2f7352; text-decoration: none; }}
     a:hover {{ text-decoration: underline; }}
     .wrap {{ max-width: 1100px; margin: 0 auto; padding: 1rem 1rem 2rem; }}
@@ -10106,7 +10106,7 @@ def generer_topplistesider(aksjer, root_dir):
 
     CSS = """
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: system-ui, -apple-system, sans-serif; line-height: 1.6; }
+    body { font-family: "Inter", system-ui, -apple-system, sans-serif; line-height: 1.6; }
     a { color: #2f7352; text-decoration: none; }
     a:hover { text-decoration: underline; }
     .wrap { max-width: 900px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
@@ -10597,7 +10597,7 @@ def generer_rapportkalender(aksjer, root_dir, i_dag=None):
 
     CSS = """
     *,*::before,*::after { box-sizing: border-box; }
-    body { margin:0; font-family: system-ui,-apple-system,'Segoe UI',Roboto,sans-serif; line-height:1.6; background:#f9fafb; color:#111827; }
+    body { margin:0; font-family: "Inter", system-ui,-apple-system,'Segoe UI',Roboto,sans-serif; line-height:1.6; background:#f9fafb; color:#111827; }
     .wrap { max-width: 56rem; margin: 0 auto; padding: 1.25rem 1rem 2rem; }
     .breadcrumb { font-size:0.8rem; color:#6b7280; margin-bottom:0.75rem; }
     .breadcrumb a { color:#6b7280; }

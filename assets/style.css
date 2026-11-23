@@ -1,3 +1,17 @@
+/* ── FONT ─────────────────────────────────────────────────────────────────
+   Inter, lagt på vår egen server (aldri Google Fonts). Samme regel står i
+   tailwind.css, men oversikten og topplistene laster bare dette stilarket,
+   og viste systemfonten (designrunden 22.11.2026). TestInterOveralt passer
+   på at ingen side setter en annen font på body. */
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url("fonts/inter-latin-wght-normal.woff2") format("woff2-variations"),
+       url("fonts/inter-latin-wght-normal.woff2") format("woff2");
+}
+
 /* ── NAV DROPDOWN ──────────────────────────────────────────────────────── */
 .site-nav-menu .has-dropdown { position: relative; }
 .site-nav-menu .nav-dropdown {
