@@ -258,7 +258,8 @@ jobs:
       cancel-in-progress: false
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+      # Adressen kommer fra det forsøket som lyktes (se deploy-stegene).
+      url: ${{ steps.deployment3.outputs.page_url || steps.deployment2.outputs.page_url || steps.deployment.outputs.page_url }}
     steps:
       - name: Sjekk ut kode
         uses: actions/checkout@v4
@@ -283,6 +284,33 @@ jobs:
         with:
           path: ${{ runner.temp }}/nettsted
 
+      # deploy-pages spør GitHub om artefaktlisten for kjøringen rundt 0,3
+      # sekunder etter opplastingen, og listen er av og til ikke oppdatert
+      # ennå: «No artifacts named "github-pages" were found». 6 av 14 deployer
+      # 23. og 24. november feilet slik, og artefakten var lastet opp i alle
+      # feilene som er lest i loggen. Feilen kommer før noe er opprettet, så
+      # et nytt forsøk er trygt. De to første forsøkene feller ikke jobben
+      # (continue-on-error), det tredje gjør det. Samme trinn i deploy-only.yml.
       - name: Deploy til GitHub Pages
         id: deployment
+        uses: actions/deploy-pages@v4
+        continue-on-error: true
+
+      - name: Vent før forsøk 2
+        if: steps.deployment.outcome == 'failure'
+        run: sleep 20
+
+      - name: Deploy til GitHub Pages (forsøk 2)
+        id: deployment2
+        if: steps.deployment.outcome == 'failure'
+        uses: actions/deploy-pages@v4
+        continue-on-error: true
+
+      - name: Vent før forsøk 3
+        if: steps.deployment.outcome == 'failure' && steps.deployment2.outcome == 'failure'
+        run: sleep 60
+
+      - name: Deploy til GitHub Pages (forsøk 3)
+        id: deployment3
+        if: steps.deployment.outcome == 'failure' && steps.deployment2.outcome == 'failure'
         uses: actions/deploy-pages@v4

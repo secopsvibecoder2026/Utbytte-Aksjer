@@ -118,6 +118,34 @@ class TestDeploySteg(unittest.TestCase):
             self.assertIn("scripts/nettstedfiler.py", yml, navn)
             self.assertNotRegex(yml, r'path:\s*"\."', navn)
 
+    def test_deploy_pages_har_tre_forsok(self):
+        """24.11.2026: 6 av 14 deployer feilet med «No artifacts named
+        "github-pages"» 0,3 sekunder etter at artefakten var lastet opp, fordi
+        GitHubs artefaktliste av og til henger etter. De to første forsøkene
+        feller ikke jobben, det tredje gjør det, og hvert nytt forsøk kjører
+        bare etter feil."""
+        for navn in ("update-og-deploy.yml", "deploy-only.yml"):
+            yml = (ROT / ".github" / "workflows" / navn).read_text(encoding="utf-8")
+            trinn = re.split(r"\n      - name: ", yml)
+            deploy = [t for t in trinn if "uses: actions/deploy-pages@v4" in t]
+            self.assertEqual(len(deploy), 3, navn)
+            for t, id_ in zip(deploy, ("deployment", "deployment2", "deployment3")):
+                self.assertIn(f"id: {id_}\n", t, navn)
+            self.assertIn("continue-on-error: true", deploy[0], navn)
+            self.assertIn("continue-on-error: true", deploy[1], navn)
+            self.assertNotIn("continue-on-error", deploy[2], navn)
+            self.assertIn("steps.deployment.outcome == 'failure'", deploy[1], navn)
+            self.assertIn("steps.deployment.outcome == 'failure'", deploy[2], navn)
+            self.assertIn("steps.deployment2.outcome == 'failure'", deploy[2], navn)
+            # Ventetid mellom forsøkene, og adressen følger forsøket som lyktes.
+            self.assertEqual(len(re.findall(r"run: sleep \d+", yml)), 2, navn)
+            self.assertRegex(
+                yml,
+                r"url:.*deployment3\.outputs\.page_url.*"
+                r"deployment2\.outputs\.page_url.*deployment\.outputs\.page_url",
+                navn,
+            )
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
