@@ -963,7 +963,11 @@ _DATO_DM = r"(?P<d1>\d{1,2})\.?\s+(?P<m1>[A-Za-z]+)\.?,?\s+(?P<a1>\d{4})"
 _DATO_MD = r"(?P<m2>[A-Za-z]+)\.?\s+(?P<d2>\d{1,2})(?:st|nd|rd|th)?,?\s+(?P<a2>\d{4})"
 # Og numerisk: «Ex-date: 23.06.2026» (SalMar). Uten dette ga SalMars melding
 # ingen dato i det hele tatt — funnet dagen etter at parseren gikk i drift.
-_DATO_NUM = r"(?P<d3>\d{1,2})[./](?P<m3>\d{1,2})[./](?P<a3>\d{4})"
+# MPC Container Ships skriver året med to sifre: «Ex-date: 21.09.26». Det ble
+# aldri lest, så ex-dato, siste kjøpsdag, betalingsdato og beløp manglet fra
+# børsmeldingen (funnet 24.11.2026, dagen før kvartalsrapporten). Fire sifre
+# prøves først, og `(?!\d)` hindrer at «21.09.202» leses som 2020.
+_DATO_NUM = r"(?P<d3>\d{1,2})[./](?P<m3>\d{1,2})[./](?P<a3>\d{4}|\d{2})(?!\d)"
 _DATO_ENTEN = f"(?:{_DATO_NUM}|{_DATO_DM}|{_DATO_MD})"
 
 # «o/a», «from», «on or about», «about» foran datoen. STST skriver «Payment
@@ -1092,6 +1096,8 @@ def _dato_fra_treff(m):
     """
     if m.group("d3"):
         dag, nr, ar = m.group("d3"), int(m.group("m3")), m.group("a3")
+        if len(ar) == 2:
+            ar = "20" + ar
     else:
         dag = m.group("d1") or m.group("d2")
         mnd = (m.group("m1") or m.group("m2") or "").lower().rstrip(".")
