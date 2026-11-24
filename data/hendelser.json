@@ -4359,12 +4359,14 @@
     {
       "ticker": "BWLPG",
       "dato": "2026-11-24",
-      "type": "rapport"
+      "type": "rapport",
+      "url_forsok": 1
     },
     {
       "ticker": "NORAM",
       "dato": "2026-11-24",
-      "type": "rapport"
+      "type": "rapport",
+      "url_forsok": 1
     },
     {
       "ticker": "MPCC",
@@ -4902,6 +4904,11 @@
       "type": "rapport"
     },
     {
+      "ticker": "NORAM",
+      "dato": "2027-02-26",
+      "type": "rapport"
+    },
+    {
       "ticker": "OTL",
       "dato": "2027-02-26",
       "type": "rapport"
@@ -4927,5 +4934,5 @@
       "type": "rapport"
     }
   ],
-  "sist_oppdatert": "2026-11-23"
+  "sist_oppdatert": "2026-11-24"
 }
