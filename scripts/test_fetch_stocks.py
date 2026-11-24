@@ -352,13 +352,24 @@ class TestUtbyttekalenderTabell(unittest.TestCase):
         self.assertIn("Foreslått", html)
 
     def test_tittel_og_meta(self):
-        rader = fs.kalender_rader(self._aksjer(), self.I_DAG)
-        self.assertEqual(fs.kalender_tittel(self.I_DAG), "Utbyttekalender 2026 – alle ex-datoer på Oslo Børs")
+        self.assertEqual(fs.kalender_tittel(self.I_DAG),
+                         "Utbyttekalender 2026: ex-datoer, beløp og siste kjøpsdag")
         self.assertLessEqual(len(fs.kalender_tittel(datetime.date(2026, 12, 5))), 70)
-        meta = fs.kalender_meta(rader, self.I_DAG)
-        self.assertTrue(meta.startswith("Alle ex-datoer og utbytter på Oslo Børs i 2026."), meta)
-        self.assertIn("2 ex-datoer de neste 30 dagene – neste: DOF 20. nov.", meta)
+        meta = fs.kalender_meta(self.I_DAG)
+        self.assertTrue(meta.startswith("Alle ex-datoer på Oslo Børs i 2026 med beløp per aksje"), meta)
         self.assertLessEqual(len(meta), 155)
+
+    def test_meta_har_ingen_tall_som_flytter_seg(self):
+        """24.11.2026: Google viste «9 ex-datoer de neste 30 dagene – neste:
+        Höegh Autoliners 23. nov.» dagen etter at datoen var passert. En
+        beskrivelse leses dager etter at den ble skrevet, så den bærer bare
+        årstallet."""
+        self.assertEqual(fs.kalender_meta(datetime.date(2026, 11, 20)),
+                         fs.kalender_meta(datetime.date(2026, 11, 25)))
+        self.assertEqual(re.findall(r"\d+", fs.kalender_meta(self.I_DAG)), ["2026"])
+        desember = fs.kalender_meta(datetime.date(2026, 12, 5))
+        self.assertEqual(re.findall(r"\d+", desember), ["2026", "2027"])
+        self.assertLessEqual(len(desember), 155)
 
     def test_smaa_belop_mister_ikke_sifre(self):
         self.assertEqual(fs._kal_belop(0.0342, "USD"), "0,0342\u00a0USD")
