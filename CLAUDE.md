@@ -3509,6 +3509,34 @@ amount, so the title, lead and `/utbyttekalender/` lacked it.
 
 Tests: `TestBwlpgProsabelop` (22).
 
+## MPCC writes the year with two digits (2026-11-24)
+
+Found the evening before MPC Container Ships' third-quarter report, when
+checking that its dividend notice would be read. The notices say
+«Ex-date: 21.09.26», «Last day including right: 18.09.26» and «Payment date:
+28.09.26 (on or about)». `_DATO_NUM` accepted only four digits for the year, so
+`_parse_ex_dato()` and `_parse_utbetalinger()` returned nothing for all MPCC
+notices: no ex-date, no last day to buy, no payment date and no announced amount
+from NewsWeb. The page, the calendar and «Denne uka» would have lacked all four
+on the day the dividend was declared.
+
+- `_DATO_NUM` now takes `\d{4}` first, then `\d{2}`, and `(?!\d)` stops «21.09.202»
+  from being read as 2020. `_dato_fra_treff()` makes «26» into 2026. The same
+  pattern serves the ex-date, payment date, date of approval and the
+  «ex dividend today» notice.
+- **Simulated against the whole catalog:** 155 issuers, 702 dividend and
+  distribution notices, old code against new. Two notices change, both MPCC
+  (680785 and 674531, ex 21.09 and 19.06). No other stock moves.
+- MPCC declares in dollars and pays in kroner, so the notice carries no NOK
+  amount. `bruk_newsweb_belop()` handles that as it does for DOF and ENH: the
+  dollar amount goes to `annonsert_utland` and is never converted.
+
+The lesson is the same as for «Parser traps» under the ex-dates section: a notice
+format nobody has seen gives an empty answer, not an error. A stock whose
+`ex_dato` stays empty beside notices in the list is worth a look.
+
+Tests: `TestToSifferAar` (6, three of them fail on the old code).
+
 ## Search Console, 3 months, and the SERP (2026-11-24)
 
 The owner exported Search Console (24 August to 22 November) and sent

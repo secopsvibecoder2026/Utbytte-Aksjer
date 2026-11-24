@@ -1539,6 +1539,61 @@ class TestUtbetalingsaar(unittest.TestCase):
 
 
 
+class TestToSifferAar(unittest.TestCase):
+    """MPC Container Ships skriver «Ex-date: 21.09.26», året med to sifre.
+
+    Parseren leste bare fire sifre, så ex-dato, siste kjøpsdag, betalingsdato og
+    beløp manglet fra børsmeldingen for MPCC (funnet 24.11.2026, dagen før
+    kvartalsrapporten). Meldingen under er meldingen 680785 fra 26.08.2026.
+    """
+
+    MPCC = ("Oslo, Norway, 26 August 2026 - Reference is made to the declaration of\n"
+            "dividends in the quarterly results for Q2 2026 published by MPC Container\n"
+            "Ships ASA at 07:00 CET on 26 August 2026.\n\n"
+            "Dividend amount: USD 0.04 per share.\n\n"
+            "Declared currency: USD. The distribution will be made in NOK.\n\n"
+            "Last day including right: 18.09.26\n"
+            "Ex-date: 21.09.26\n"
+            "Record date: 22.09.26\n"
+            "Payment date: 28.09.26 (on or about)\n"
+            "Date of board resolution: 25.08.26\n")
+
+    def test_mpcc_melding_gir_ex_dato_og_betaling(self):
+        from fetch_stocks import _parse_ex_dato
+        self.assertEqual(_parse_ex_dato(self.MPCC), ("2026-09-21", "2026-09-28"))
+
+    def test_mpcc_melding_gir_utbetaling_med_belop(self):
+        from fetch_stocks import _parse_utbetalinger
+        ut = _parse_utbetalinger(self.MPCC)
+        self.assertEqual(len(ut), 1)
+        self.assertEqual(ut[0]["ex_dato"], "2026-09-21")
+        self.assertEqual(ut[0]["betaling_dato"], "2026-09-28")
+        self.assertEqual((ut[0]["belop"], ut[0]["valuta"]), (0.04, "USD"))
+
+    def test_godkjenningsdato_med_to_sifre(self):
+        from fetch_stocks import _parse_utbetalinger
+        tekst = ("Dividend amount: NOK 2.00\nDate of approval: 05.12.26\n"
+                 "Ex-date: 15.12.26\nPayment date: 22.12.26\n")
+        ut = _parse_utbetalinger(tekst)
+        self.assertEqual(ut[0]["godkjenning_dato"], "2026-12-05")
+        self.assertEqual(ut[0]["ex_dato"], "2026-12-15")
+
+    def test_fire_siffer_er_uendret(self):
+        from fetch_stocks import _parse_ex_dato
+        self.assertEqual(_parse_ex_dato("Ex-date: 23.06.2026\nPayment date: 30.06.2026"),
+                         ("2026-06-23", "2026-06-30"))
+        self.assertEqual(_parse_ex_dato("Ex-date: 23/06/2026\nPayment date: 30/06/2026"),
+                         ("2026-06-23", "2026-06-30"))
+
+    def test_tre_siffer_leses_ikke_som_to(self):
+        from fetch_stocks import _parse_ex_dato
+        self.assertEqual(_parse_ex_dato("Ex-date: 21.09.202\n"), (None, None))
+
+    def test_ugyldig_dato_med_to_siffer_gir_ingenting(self):
+        from fetch_stocks import _parse_ex_dato
+        self.assertEqual(_parse_ex_dato("Ex-date: 31.02.26\n"), (None, None))
+
+
 class TestParseExDato(unittest.TestCase):
     """Ex-dato for Oslo Børs fra «Key information relating to the cash dividend».
 
