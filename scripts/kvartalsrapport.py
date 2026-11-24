@@ -1103,7 +1103,10 @@ def _hent_pdf_tekst(api, melding_id, vedlegg_id, sider):
 _UTBYTTEMELDING = re.compile(
     r"(?:key information|nøkkelinformasjon).{0,60}(?:dividend|utbytte|distribution|utdeling)"
     # Mowi kaller utbyttemeldingen «Quarterly dividend» (680022, 685530).
-    r"|(?:quarterly|interim|kvartalsvis)\s+(?:dividend|utbytte)\s*$", re.I)
+    r"|(?:quarterly|interim|kvartalsvis)\s+(?:dividend|utbytte)\s*$"
+    # NorAm Drilling: «Monthly rig update and key information for November 2026»
+    # (686141) bærer månedens utdeling uten at tittelen sier det.
+    r"|monthly\s+rig\s+update\s+and\s+key\s+information", re.I)
 _NORSK_TITTEL = re.compile(r"nøkkelinformasjon|utbytte", re.I)
 # Et engangsutbytte er ikke noe å sammenligne det ordinære med. Frontlines
 # melding før Q3-rapporten gjaldt særutbyttet etter salget av to VLCC-er

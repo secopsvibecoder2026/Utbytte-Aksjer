@@ -1380,7 +1380,16 @@ _EX_I_DAG_TITTEL = re.compile(
     r"\be(?:x|ks)[\s.-]*(?:dividend|distribution|utbytte)\b|\bquoted\s+ex[\s-]*dividend\b", re.I)
 _I_DAG_RE = re.compile(r"\btoday\b|\bi\s+dag\b", re.I)
 _RETTELSE_RE = re.compile(r"correct|korrig|rettelse|clarification", re.I)
-_UTBYTTE_TITTEL_RE = re.compile(r"dividend|distribution|utbytte|utdeling", re.I)
+# NorAm Drilling kunngjør den månedlige utdelingen i «Monthly rig update and key
+# information for November 2026» (686141): beløp, ex-dato og betalingsdato står i
+# en blokk «Key information», åtte dager før ex-dagen. Tittelen har verken
+# «dividend» eller «distribution», så bare ex-dagsmeldingen («Ex cash
+# distribution USD 0.045 today») ble lest, og siden hadde ingen kunngjort ex-dato
+# for NorAm før dagen selv (24.11.2026). De eldre månedsmeldingene hadde
+# «relating to the cash distribution» i tittelen og ble lest.
+_UTBYTTE_TITTEL_RE = re.compile(
+    r"dividend|distribution|utbytte|utdeling"
+    r"|monthly\s+rig\s+update\s+and\s+key\s+information", re.I)
 # «Ex. Date: 10 March 2026» — punktumet gjør at _EX_DATO_RE ikke treffer.
 # Kolonet må følge rett etter, så «Ex-date New York Stock Exchange:» aldri gjør det.
 _EX_PUNKT_DATO_RE = re.compile(
@@ -2003,8 +2012,18 @@ def bruk_utbytte_pause(a, h, i_dag=None):
     `utbytte_stoppet()` venter 456 dager. Det som er sagt er at det ikke kommer
     flere nå, så årsraten er 0 til en ny utdeling er kunngjort. Historikken og
     «betalt siste 12 mnd» står som de er. Returnerer True når raten ble nullet.
+
+    En hendelse av en annen type kan bære samme beskjed med `ingen_utbytte:
+    true`, når selskapet har sagt at det ikke vedtar flere utbytter og hendelsen
+    ellers er noe annet. BlueNord er fusjonen med Vår Energi: rapporten for tredje
+    kvartal (684964) sier «may not declare and distribute any further dividends
+    prior to the Effective Date», og siden viste 180,58 kr i året (35,62 %) fra
+    de fire siste utbetalingene. Én aksje har bare én hendelse, så en egen
+    pausehendelse hadde tatt fusjonsboksen bort. Pausen oppheves på samme måte,
+    av en utbetaling eller en kunngjort ex-dato etter hendelsens dato.
     """
-    if not isinstance(h, dict) or h.get("type") != "utbytte_pause":
+    if not isinstance(h, dict) or not (h.get("type") == "utbytte_pause"
+                                       or h.get("ingen_utbytte") is True):
         return False
     if pause_opphevet(a, h, i_dag):
         return False
@@ -7107,6 +7126,12 @@ def _lag_faq_seksjon(a, today):
             meldt = f" ({_fmt_dato(dato)})" if dato else ""
             svar = (f"{navn} har satt utdelingene til aksjonærene på pause{meldt}, og det er "
                     f"ikke kunngjort noen ny. Før pausen betalte selskapet ut {freq_tekst}.")
+            if (a.get("hendelse") or {}).get("type") == "fusjon":
+                # BlueNord (24.11.2026): datoen er fusjonsvedtaket, ikke en pause.
+                # Selskapet har sagt at det ikke vedtar flere utbytter før
+                # fusjonen er gjennomført (`ingen_utbytte` i tickers.json).
+                svar = (f"{navn} har sagt at selskapet ikke vedtar flere utbytter før fusjonen er "
+                        f"gjennomført. Til nå har selskapet betalt ut {freq_tekst}.")
         qas.append((f"Betaler {navn} utbytte hvert år, og hvor ofte?", svar))
 
     # 3. Direkteavkastning i kontekst
