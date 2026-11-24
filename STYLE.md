@@ -197,6 +197,13 @@ til 109 til 63 til 71. Tabeller, tallruter, grafer, kort og kalenderkontroller
 har full bredde, og 390 px er uendret. Et direkte `68ch` gir 82 tegn, fordi `ch`
 er bredden av sifferet 0. Se «Design round 3» i `CLAUDE.md`.
 
+**Tabell først og fast ticker 24.11.2026** (designrunde 4, forslag 7): på
+sektorsidene står tabellen rett under tallrutene og teksten etter, med en lenke
+til teksten ved tabellen, og første rad gikk fra y 3 438 til 437 ved 390 px på
+Finans. Tickerkolonnen er festet (`.tabell-fast`) i sektortabellene og i
+oversikten på `/aksjer/`, i lyst og mørkt tema. Topplistene har ikke fått det
+(rangkolonne foran tickeren). Se «Design round 4» i `CLAUDE.md`.
+
 Gjenstår:
 - samme tallformat i resten av malen
 

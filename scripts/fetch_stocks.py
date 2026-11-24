@@ -8925,6 +8925,8 @@ def generer_aksjesider(aksjer, root_dir):
     .alle-aksjer-header .filter-info {{ font-size: 0.78rem; color: #6b7280; }}
     table {{ width: 100%; border-collapse: collapse; font-size: 0.88rem; }}
     th {{ background: #f9fafb; padding: 0.65rem 1.25rem; text-align: left; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #6b7280; border-bottom: 1px solid #e5e7eb; }}
+    /* Tickerkolonnen er festet (.tabell-fast i style.css). Hodet her er gray-50, ikke gray-100. */
+    .tabell-fast {{ --fast-bg-hode: #f9fafb; }}
     td {{ padding: 0.7rem 1.25rem; border-bottom: 1px solid #f3f4f6; }}
     tr:last-child td {{ border-bottom: none; }}
     tr:hover td {{ background: #f9fafb; }}
@@ -9081,7 +9083,7 @@ def generer_aksjesider(aksjer, root_dir):
         <span class="filter-info">Sortert etter yield</span>
       </div>
       <div style="overflow-x:auto;">
-      <table>
+      <table class="tabell-fast">
         <thead><tr><th>Ticker</th><th>Navn</th><th>Sektor</th><th>Kurs</th><th>Yield</th><th>Ex-dato</th></tr></thead>
         <tbody>{rader}</tbody>
       </table>
@@ -9439,6 +9441,22 @@ def _ordtall(n):
     return "én" if n == 1 else str(n)
 
 
+# Ankeret til sektorteksten. Tabellen står først på sektorsiden (designrunde 4),
+# og lenken ved tabellen hopper hit.
+SEKTOR_ANALYSE_ID = "sektoranalyse"
+
+
+def sektor_hopp_lenke(sektor, analyse_html):
+    """Lenken ved tabellen som hopper til sektorteksten. Tom når siden ikke har
+    noen tekst å hoppe til, så lenken aldri peker på et anker som mangler."""
+    if f'id="{SEKTOR_ANALYSE_ID}"' not in analyse_html:
+        return ""
+    return (f'<p class="sektor-hopp"><a href="#{SEKTOR_ANALYSE_ID}">Les om hva som driver utbyttet i {sektor}'
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" '
+            'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>'
+            '</a></p>')
+
+
 def _sektor_analyse(sektor, i_sektor, alle):
     """Bygger analyseteksten på en sektorside fra denne kjøringens tall.
 
@@ -9590,12 +9608,12 @@ def _sektor_analyse(sektor, i_sektor, alle):
     ) if redaksjonell else ""
 
     return f"""
-  <div class="sektor-analyse les">
+  <div class="sektor-analyse les" id="{SEKTOR_ANALYSE_ID}">
   <h2>{sektor} som utbyttesektor</h2>
   <p>{avsnitt1}</p>
   {f'<p>{avsnitt2}</p>' if avsnitt2 else ''}
   <p>{avsnitt3}</p>
-{redaksjonell_blokk}{driver_blokk}  <h2>Slik bruker du tabellen under</h2>
+{redaksjonell_blokk}{driver_blokk}  <h2>Slik bruker du tabellen</h2>
   <p>Aksjene er sortert etter direkteavkastning, høyeste først. Husk at
   yield er utbytte delt på kurs — tallet stiger like gjerne fordi kursen
   faller som fordi utbyttet øker. En aksje som skiller seg kraftig fra
@@ -9743,9 +9761,11 @@ def generer_sektorsider(aksjer, root_dir):
     .sektor-analyse p {{ margin: 0 0 0.9rem; line-height: 1.75; font-size: 0.95rem; }}
     /* Tabellen er bredere enn en mobilskjerm (473 px mot 390 px), så den må
        scrolle i sin egen ramme. Uten wrapperen dyttet den hele siden ut i
-       horisontal scroll på alle 16 sektorsidene. */
+       horisontal scroll på alle 16 sektorsidene. Ingen overflow på selve
+       tabellen: da blir den, ikke rammen, forelderen den faste tickerkolonnen
+       (.tabell-fast i style.css) fester seg mot. */
     .tabell-ramme {{ overflow-x: auto; -webkit-overflow-scrolling: touch; margin-bottom: 1.5rem; }}
-    table {{ width: 100%; min-width: 30rem; border-collapse: collapse; border-radius: 0.75rem; overflow: hidden; font-size: 0.9rem; border: 1px solid; }}
+    table {{ width: 100%; min-width: 30rem; border-collapse: collapse; font-size: 0.9rem; border: 1px solid; }}
     th {{ padding: 0.6rem 1rem; text-align: left; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; white-space: nowrap; }}
     td {{ padding: 0.65rem 1rem; border-top: 1px solid; white-space: nowrap; }}
     .yield {{ font-weight: 600; color: #111827; }}
@@ -9785,13 +9805,14 @@ def generer_sektorsider(aksjer, root_dir):
       ("Snitt yield", _pst(snitt_yield, 1) if snitt_yield else "—"),
       ("Høyeste yield", _pst(max([a.get("utbytte_yield", 0) for a in aksjer_sortert if i_rangering(a)] or [0]), 1)),
   ], "Sektoren i tall")}
-{analyse_html}
+  {sektor_hopp_lenke(sektor, analyse_html)}
   <div class="tabell-ramme">
-  <table>
+  <table class="tabell-fast">
     <thead><tr><th>Ticker</th><th>Navn</th><th>Kurs</th><th>Yield</th><th>Ex-dato</th></tr></thead>
     <tbody>{rader}</tbody>
   </table>
   </div>
+{analyse_html}
   <div class="cta"><a href="/app/">Åpne full app med filtrering og porteføljekalkulator →</a></div>
 {sist_oppdatert_html()}
 {STANDARD_FOOTER}
