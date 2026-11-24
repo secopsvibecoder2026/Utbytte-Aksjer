@@ -73,9 +73,11 @@
     .sektor-analyse p { margin: 0 0 0.9rem; line-height: 1.75; font-size: 0.95rem; }
     /* Tabellen er bredere enn en mobilskjerm (473 px mot 390 px), så den må
        scrolle i sin egen ramme. Uten wrapperen dyttet den hele siden ut i
-       horisontal scroll på alle 16 sektorsidene. */
+       horisontal scroll på alle 16 sektorsidene. Ingen overflow på selve
+       tabellen: da blir den, ikke rammen, forelderen den faste tickerkolonnen
+       (.tabell-fast i style.css) fester seg mot. */
     .tabell-ramme { overflow-x: auto; -webkit-overflow-scrolling: touch; margin-bottom: 1.5rem; }
-    table { width: 100%; min-width: 30rem; border-collapse: collapse; border-radius: 0.75rem; overflow: hidden; font-size: 0.9rem; border: 1px solid; }
+    table { width: 100%; min-width: 30rem; border-collapse: collapse; font-size: 0.9rem; border: 1px solid; }
     th { padding: 0.6rem 1rem; text-align: left; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; white-space: nowrap; }
     td { padding: 0.65rem 1rem; border-top: 1px solid; white-space: nowrap; }
     .yield { font-weight: 600; color: #111827; }
@@ -169,71 +171,9 @@
   <h1 class="side-h1"><svg class="h1-ikon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21h18M3 21V11l6 3.5V11l6 3.5V8l6 3.5V21M7 17.5h.01M13 17.5h.01M19 17.5h.01"/></svg>Industri-aksjer med utbytte</h1>
   <p class="sub">24 norske industri-aksjer på Oslo Børs. Sortert etter direkteavkastning.</p>
   <dl class="tallruter tallruter-n3" aria-label="Sektoren i tall"><div class="tallrute"><dt>Aksjer</dt><dd>24</dd></div><div class="tallrute"><dt>Snitt yield</dt><dd>3,7 %</dd></div><div class="tallrute"><dt>Høyeste yield</dt><dd>7,5 %</dd></div></dl>
-
-  <div class="sektor-analyse les">
-  <h2>Industri som utbyttesektor</h2>
-  <p>exday.no følger 24 aksjer i Industri med utbytte. Medianen blant dem er 3,75 % og ligger 1,9 prosentpoeng under medianen for hele Oslo Børs på 5,65 %. Spennet er stort: fra 0,56 % i bunn til 7,53 % på topp. Et snitt sier derfor lite om den enkelte aksjen her — forskjellene innad i sektoren er større enn forskjellen mot børsen samlet.</p>
-  <p>Median utbetalingsgrad blant de 15 aksjene med kjent payout ratio er 54 %. Av dem deler én ut mer enn de tjener, noe som kan være holdbart en periode, men ikke varig uten at inntjeningen tar seg opp. For 9 av aksjene mangler vi inntjeningstall, og blankt felt betyr ukjent — ikke lavt.</p>
-  <p>Av de 24 aksjene betaler 6 flere ganger i året; resten utbetaler én gang årlig. Av dem har 10 betalt utbytte i ti år eller mer, og lengst historikk har AF Gruppen ASA med 27 år.</p>
-  <h2>Slik fungerer utbytte i industri</h2>
-<p>Industri er den bredeste sektoren i katalogen, og det gjør den vanskelig å
-oppsummere. Her ligger alt fra entreprenører som bygger vei og bolig, via
-verkstedindustri og forsvarsleverandører, til rene teknologiselskaper som er
-klassifisert som industri fordi de leverer utstyr. Utbytteprofilene spriker
-tilsvarende.</p>
-
-<p>Fellesnevneren er likevel <strong>ordreboken</strong>. Et industriselskap
-selger sjelden fra hylla; det vinner kontrakter som leveres over måneder
-eller år. Det gir en helt annen synlighet enn i råvaresektorene: når
-ordreinngangen faller, vet ledelsen det lenge før det slår ut i resultatet,
-og de kan tilpasse utbyttet i tide. Motsatt betyr det at et svakt kvartal
-sjelden er nok til å true utbyttet, så lenge ordrereserven står.</p>
-
-<p>Derfor er ordreinngang og ordrereserve de tallene som forteller mest om
-utbyttet framover — mer enn kvartalets omsetning. En ordrereserve som dekker
-mer enn et år med produksjon gir et helt annet utgangspunkt enn en som dekker
-et kvartal.</p>
-
-<p>Marginene er det andre nøkkelpunktet, og de er strammere enn mange antar.
-Entreprenørvirksomhet drives på noen få prosents margin, og et
-fastpriskontrakt som går galt kan spise fortjenesten fra flere som gikk bra.
-Dette er en sektor der enkeltprosjekter kan velte et årsresultat. Selskaper
-med mange små kontrakter har derfor jevnere utbytte enn selskaper med få
-store, uavhengig av hvor lønnsomme de er i gjennomsnitt.</p>
-
-<p>Kostnadssiden domineres av lønn, stål og energi. Norske industribedrifter
-konkurrerer med lavkostland på pris og med resten av Norden på kompetanse,
-og en svak krone hjelper dem som eksporterer mens den straffer dem som kjøper
-innsatsvarer i utlandet. Det er verdt å sjekke hvilken av de to en bedrift
-faktisk er, for kronekursen trekker i motsatt retning for de to gruppene.</p>
-
-<p>Konjunkturfølsomheten varierer mer enn sektornavnet antyder. Selskaper som
-leverer til offentlig sektor — samferdsel, forsvar, infrastruktur — har
-etterspørsel som følger statsbudsjetter mer enn konjunkturer, og de har
-holdt utbyttet gjennom nedturer der byggenæringen har kuttet. Selskaper som
-leverer til boligmarkedet eller til privat næringsinvestering svinger langt
-mer. To industriaksjer kan derfor ha helt ulik utbytterisiko selv om de står
-i samme tabell.</p>
-
-<p>For utbytteinvestoren betyr bredden at sektorsnittet er lite å styre
-etter. En yield som ligger over snittet betyr ingenting før du vet om
-selskapet er en entreprenør i et syklisk marked eller en leverandør på
-langsiktige offentlige kontrakter. Her er det mer å hente på å lese det
-enkelte selskapet enn på å sammenligne innad i sektoren.</p>
-  <h2>Hva driver utbyttet i Industri?</h2>
-  <p>Ordreinngangen gir 6–18 måneders forutsikt på inntjening. Backlog-størrelse og book-to-bill-ratio er de viktigste ledende indikatorene. Konjunktursensitivitet varierer — selskaper med langsiktige forsvars- eller infrastrukturkontrakter er mer defensive enn de som lever av korte industrioppdrag.</p>
-  <h2>Slik bruker du tabellen under</h2>
-  <p>Aksjene er sortert etter direkteavkastning, høyeste først. Husk at
-  yield er utbytte delt på kurs — tallet stiger like gjerne fordi kursen
-  faller som fordi utbyttet øker. En aksje som skiller seg kraftig fra
-  resten av Industri er derfor et spørsmål verdt å undersøke, ikke
-  automatisk et kupp. Klikk deg inn på den enkelte aksjen for å se hele
-  utbyttehistorikken, utbetalingsgraden og hvor mange år selskapet har
-  betalt sammenhengende.</p>
-  </div>
-
+  <p class="sektor-hopp"><a href="#sektoranalyse">Les om hva som driver utbyttet i Industri<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></a></p>
   <div class="tabell-ramme">
-  <table>
+  <table class="tabell-fast">
     <thead><tr><th>Ticker</th><th>Navn</th><th>Kurs</th><th>Yield</th><th>Ex-dato</th></tr></thead>
     <tbody>
         <tr>
@@ -406,6 +346,69 @@ enkelte selskapet enn på å sammenligne innad i sektoren.</p>
         </tr></tbody>
   </table>
   </div>
+
+  <div class="sektor-analyse les" id="sektoranalyse">
+  <h2>Industri som utbyttesektor</h2>
+  <p>exday.no følger 24 aksjer i Industri med utbytte. Medianen blant dem er 3,75 % og ligger 1,9 prosentpoeng under medianen for hele Oslo Børs på 5,65 %. Spennet er stort: fra 0,56 % i bunn til 7,53 % på topp. Et snitt sier derfor lite om den enkelte aksjen her — forskjellene innad i sektoren er større enn forskjellen mot børsen samlet.</p>
+  <p>Median utbetalingsgrad blant de 15 aksjene med kjent payout ratio er 54 %. Av dem deler én ut mer enn de tjener, noe som kan være holdbart en periode, men ikke varig uten at inntjeningen tar seg opp. For 9 av aksjene mangler vi inntjeningstall, og blankt felt betyr ukjent — ikke lavt.</p>
+  <p>Av de 24 aksjene betaler 6 flere ganger i året; resten utbetaler én gang årlig. Av dem har 10 betalt utbytte i ti år eller mer, og lengst historikk har AF Gruppen ASA med 27 år.</p>
+  <h2>Slik fungerer utbytte i industri</h2>
+<p>Industri er den bredeste sektoren i katalogen, og det gjør den vanskelig å
+oppsummere. Her ligger alt fra entreprenører som bygger vei og bolig, via
+verkstedindustri og forsvarsleverandører, til rene teknologiselskaper som er
+klassifisert som industri fordi de leverer utstyr. Utbytteprofilene spriker
+tilsvarende.</p>
+
+<p>Fellesnevneren er likevel <strong>ordreboken</strong>. Et industriselskap
+selger sjelden fra hylla; det vinner kontrakter som leveres over måneder
+eller år. Det gir en helt annen synlighet enn i råvaresektorene: når
+ordreinngangen faller, vet ledelsen det lenge før det slår ut i resultatet,
+og de kan tilpasse utbyttet i tide. Motsatt betyr det at et svakt kvartal
+sjelden er nok til å true utbyttet, så lenge ordrereserven står.</p>
+
+<p>Derfor er ordreinngang og ordrereserve de tallene som forteller mest om
+utbyttet framover — mer enn kvartalets omsetning. En ordrereserve som dekker
+mer enn et år med produksjon gir et helt annet utgangspunkt enn en som dekker
+et kvartal.</p>
+
+<p>Marginene er det andre nøkkelpunktet, og de er strammere enn mange antar.
+Entreprenørvirksomhet drives på noen få prosents margin, og et
+fastpriskontrakt som går galt kan spise fortjenesten fra flere som gikk bra.
+Dette er en sektor der enkeltprosjekter kan velte et årsresultat. Selskaper
+med mange små kontrakter har derfor jevnere utbytte enn selskaper med få
+store, uavhengig av hvor lønnsomme de er i gjennomsnitt.</p>
+
+<p>Kostnadssiden domineres av lønn, stål og energi. Norske industribedrifter
+konkurrerer med lavkostland på pris og med resten av Norden på kompetanse,
+og en svak krone hjelper dem som eksporterer mens den straffer dem som kjøper
+innsatsvarer i utlandet. Det er verdt å sjekke hvilken av de to en bedrift
+faktisk er, for kronekursen trekker i motsatt retning for de to gruppene.</p>
+
+<p>Konjunkturfølsomheten varierer mer enn sektornavnet antyder. Selskaper som
+leverer til offentlig sektor — samferdsel, forsvar, infrastruktur — har
+etterspørsel som følger statsbudsjetter mer enn konjunkturer, og de har
+holdt utbyttet gjennom nedturer der byggenæringen har kuttet. Selskaper som
+leverer til boligmarkedet eller til privat næringsinvestering svinger langt
+mer. To industriaksjer kan derfor ha helt ulik utbytterisiko selv om de står
+i samme tabell.</p>
+
+<p>For utbytteinvestoren betyr bredden at sektorsnittet er lite å styre
+etter. En yield som ligger over snittet betyr ingenting før du vet om
+selskapet er en entreprenør i et syklisk marked eller en leverandør på
+langsiktige offentlige kontrakter. Her er det mer å hente på å lese det
+enkelte selskapet enn på å sammenligne innad i sektoren.</p>
+  <h2>Hva driver utbyttet i Industri?</h2>
+  <p>Ordreinngangen gir 6–18 måneders forutsikt på inntjening. Backlog-størrelse og book-to-bill-ratio er de viktigste ledende indikatorene. Konjunktursensitivitet varierer — selskaper med langsiktige forsvars- eller infrastrukturkontrakter er mer defensive enn de som lever av korte industrioppdrag.</p>
+  <h2>Slik bruker du tabellen</h2>
+  <p>Aksjene er sortert etter direkteavkastning, høyeste først. Husk at
+  yield er utbytte delt på kurs — tallet stiger like gjerne fordi kursen
+  faller som fordi utbyttet øker. En aksje som skiller seg kraftig fra
+  resten av Industri er derfor et spørsmål verdt å undersøke, ikke
+  automatisk et kupp. Klikk deg inn på den enkelte aksjen for å se hele
+  utbyttehistorikken, utbetalingsgraden og hvor mange år selskapet har
+  betalt sammenhengende.</p>
+  </div>
+
   <div class="cta"><a href="/app/">Åpne full app med filtrering og porteføljekalkulator →</a></div>
   <p class="updated">Tallene er hentet 24. november 2026</p>
   <footer style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid #e5e7eb;font-size:0.78rem;text-align:center;color:#6b7280;line-height:1.6;" class="std-footer">

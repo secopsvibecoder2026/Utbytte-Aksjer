@@ -73,9 +73,11 @@
     .sektor-analyse p { margin: 0 0 0.9rem; line-height: 1.75; font-size: 0.95rem; }
     /* Tabellen er bredere enn en mobilskjerm (473 px mot 390 px), så den må
        scrolle i sin egen ramme. Uten wrapperen dyttet den hele siden ut i
-       horisontal scroll på alle 16 sektorsidene. */
+       horisontal scroll på alle 16 sektorsidene. Ingen overflow på selve
+       tabellen: da blir den, ikke rammen, forelderen den faste tickerkolonnen
+       (.tabell-fast i style.css) fester seg mot. */
     .tabell-ramme { overflow-x: auto; -webkit-overflow-scrolling: touch; margin-bottom: 1.5rem; }
-    table { width: 100%; min-width: 30rem; border-collapse: collapse; border-radius: 0.75rem; overflow: hidden; font-size: 0.9rem; border: 1px solid; }
+    table { width: 100%; min-width: 30rem; border-collapse: collapse; font-size: 0.9rem; border: 1px solid; }
     th { padding: 0.6rem 1rem; text-align: left; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; white-space: nowrap; }
     td { padding: 0.65rem 1rem; border-top: 1px solid; white-space: nowrap; }
     .yield { font-weight: 600; color: #111827; }
@@ -169,8 +171,57 @@
   <h1 class="side-h1"><svg class="h1-ikon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>Materialer-aksjer med utbytte</h1>
   <p class="sub">6 norske materialer-aksjer på Oslo Børs. Sortert etter direkteavkastning.</p>
   <dl class="tallruter tallruter-n3" aria-label="Sektoren i tall"><div class="tallrute"><dt>Aksjer</dt><dd>6</dd></div><div class="tallrute"><dt>Snitt yield</dt><dd>4,5 %</dd></div><div class="tallrute"><dt>Høyeste yield</dt><dd>5,8 %</dd></div></dl>
+  <p class="sektor-hopp"><a href="#sektoranalyse">Les om hva som driver utbyttet i Materialer<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></a></p>
+  <div class="tabell-ramme">
+  <table class="tabell-fast">
+    <thead><tr><th>Ticker</th><th>Navn</th><th>Kurs</th><th>Yield</th><th>Ex-dato</th></tr></thead>
+    <tbody>
+        <tr>
+          <td><a href="/aksjer/YAR/">YAR</a></td>
+          <td>Yara International ASA</td>
+          <td>376,20 NOK</td>
+          <td class="yield">5,85 %</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td><a href="/aksjer/NHY/">NHY</a></td>
+          <td>Norsk Hydro ASA</td>
+          <td>65,06 NOK</td>
+          <td class="yield">4,61 %</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td><a href="/aksjer/BRG/">BRG</a></td>
+          <td>Borregaard ASA</td>
+          <td>152,60 NOK</td>
+          <td class="yield">3,11 %</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td><a href="/aksjer/NSKOG/">NSKOG</a></td>
+          <td>Norske Skog ASA</td>
+          <td>35,15 NOK</td>
+          <td class="yield">0,00 %</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td><a href="/aksjer/ELK/">ELK</a></td>
+          <td>Elkem ASA</td>
+          <td>30,98 NOK</td>
+          <td class="yield">0,00 %</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td><a href="/aksjer/BOR/">BOR</a></td>
+          <td>Borgestad ASA</td>
+          <td>15,60 NOK</td>
+          <td class="yield">0,00 %</td>
+          <td>—</td>
+        </tr></tbody>
+  </table>
+  </div>
 
-  <div class="sektor-analyse les">
+  <div class="sektor-analyse les" id="sektoranalyse">
   <h2>Materialer som utbyttesektor</h2>
   <p>exday.no følger 6 aksjer i Materialer med utbytte. Medianen blant dem er 4,61 % og ligger 1,0 prosentpoeng under medianen for hele Oslo Børs på 5,65 %. Spredningen er moderat, fra 3,11 % til 5,85 %, så snittet er rimelig representativt.</p>
   <p>Median utbetalingsgrad blant de 4 aksjene med kjent payout ratio er 50 %. Av dem deler én ut mer enn de tjener, noe som kan være holdbart en periode, men ikke varig uten at inntjeningen tar seg opp. For 2 av aksjene mangler vi inntjeningstall, og blankt felt betyr ukjent — ikke lavt.</p>
@@ -220,7 +271,7 @@ tilsvarende produsert på kull, og det kan gi en prispremie. For utbyttet er
 nettoeffekten på kort sikt likevel at kapital bindes opp.</p>
   <h2>Hva driver utbyttet i Materialer?</h2>
   <p>Råvarepriser (aluminium, gjødsel, trevirke m.m.) og valutakurser driver marginen. Sektoren er sensitiv for globale makrotrend og Kinas etterspørsel. Kapasitetsutnyttelse og energikostnader er operasjonelle nøkkeltall.</p>
-  <h2>Slik bruker du tabellen under</h2>
+  <h2>Slik bruker du tabellen</h2>
   <p>Aksjene er sortert etter direkteavkastning, høyeste først. Husk at
   yield er utbytte delt på kurs — tallet stiger like gjerne fordi kursen
   faller som fordi utbyttet øker. En aksje som skiller seg kraftig fra
@@ -230,54 +281,6 @@ nettoeffekten på kort sikt likevel at kapital bindes opp.</p>
   betalt sammenhengende.</p>
   </div>
 
-  <div class="tabell-ramme">
-  <table>
-    <thead><tr><th>Ticker</th><th>Navn</th><th>Kurs</th><th>Yield</th><th>Ex-dato</th></tr></thead>
-    <tbody>
-        <tr>
-          <td><a href="/aksjer/YAR/">YAR</a></td>
-          <td>Yara International ASA</td>
-          <td>376,20 NOK</td>
-          <td class="yield">5,85 %</td>
-          <td>—</td>
-        </tr>
-        <tr>
-          <td><a href="/aksjer/NHY/">NHY</a></td>
-          <td>Norsk Hydro ASA</td>
-          <td>65,06 NOK</td>
-          <td class="yield">4,61 %</td>
-          <td>—</td>
-        </tr>
-        <tr>
-          <td><a href="/aksjer/BRG/">BRG</a></td>
-          <td>Borregaard ASA</td>
-          <td>152,60 NOK</td>
-          <td class="yield">3,11 %</td>
-          <td>—</td>
-        </tr>
-        <tr>
-          <td><a href="/aksjer/NSKOG/">NSKOG</a></td>
-          <td>Norske Skog ASA</td>
-          <td>35,15 NOK</td>
-          <td class="yield">0,00 %</td>
-          <td>—</td>
-        </tr>
-        <tr>
-          <td><a href="/aksjer/ELK/">ELK</a></td>
-          <td>Elkem ASA</td>
-          <td>30,98 NOK</td>
-          <td class="yield">0,00 %</td>
-          <td>—</td>
-        </tr>
-        <tr>
-          <td><a href="/aksjer/BOR/">BOR</a></td>
-          <td>Borgestad ASA</td>
-          <td>15,60 NOK</td>
-          <td class="yield">0,00 %</td>
-          <td>—</td>
-        </tr></tbody>
-  </table>
-  </div>
   <div class="cta"><a href="/app/">Åpne full app med filtrering og porteføljekalkulator →</a></div>
   <p class="updated">Tallene er hentet 24. november 2026</p>
   <footer style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid #e5e7eb;font-size:0.78rem;text-align:center;color:#6b7280;line-height:1.6;" class="std-footer">

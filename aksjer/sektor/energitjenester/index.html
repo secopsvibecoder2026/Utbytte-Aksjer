@@ -73,9 +73,11 @@
     .sektor-analyse p { margin: 0 0 0.9rem; line-height: 1.75; font-size: 0.95rem; }
     /* Tabellen er bredere enn en mobilskjerm (473 px mot 390 px), så den må
        scrolle i sin egen ramme. Uten wrapperen dyttet den hele siden ut i
-       horisontal scroll på alle 16 sektorsidene. */
+       horisontal scroll på alle 16 sektorsidene. Ingen overflow på selve
+       tabellen: da blir den, ikke rammen, forelderen den faste tickerkolonnen
+       (.tabell-fast i style.css) fester seg mot. */
     .tabell-ramme { overflow-x: auto; -webkit-overflow-scrolling: touch; margin-bottom: 1.5rem; }
-    table { width: 100%; min-width: 30rem; border-collapse: collapse; border-radius: 0.75rem; overflow: hidden; font-size: 0.9rem; border: 1px solid; }
+    table { width: 100%; min-width: 30rem; border-collapse: collapse; font-size: 0.9rem; border: 1px solid; }
     th { padding: 0.6rem 1rem; text-align: left; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; white-space: nowrap; }
     td { padding: 0.65rem 1rem; border-top: 1px solid; white-space: nowrap; }
     .yield { font-weight: 600; color: #111827; }
@@ -169,70 +171,9 @@
   <h1 class="side-h1"><svg class="h1-ikon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3a5 5 0 00-4.6 7L3 17.4 5.6 20l7.4-7.4A5 5 0 1015 3z"/></svg>Energitjenester-aksjer med utbytte</h1>
   <p class="sub">20 norske energitjenester-aksjer på Oslo Børs. Sortert etter direkteavkastning.</p>
   <dl class="tallruter tallruter-n3" aria-label="Sektoren i tall"><div class="tallrute"><dt>Aksjer</dt><dd>20</dd></div><div class="tallrute"><dt>Snitt yield</dt><dd>9,6 %</dd></div><div class="tallrute"><dt>Høyeste yield</dt><dd>17,8 %</dd></div></dl>
-
-  <div class="sektor-analyse les">
-  <h2>Energitjenester som utbyttesektor</h2>
-  <p>exday.no følger 20 aksjer i Energitjenester med utbytte. Medianen blant dem er 10,07 % og ligger 4,4 prosentpoeng over medianen for hele Oslo Børs på 5,65 %. Spennet er stort: fra 1,17 % i bunn til 17,80 % på topp. Et snitt sier derfor lite om den enkelte aksjen her — forskjellene innad i sektoren er større enn forskjellen mot børsen samlet.</p>
-  <p>Median utbetalingsgrad blant de 17 aksjene med kjent payout ratio er 71 %. Av dem deler 6 ut mer enn de tjener, noe som kan være holdbart en periode, men ikke varig uten at inntjeningen tar seg opp. For 3 av aksjene mangler vi inntjeningstall, og blankt felt betyr ukjent — ikke lavt.</p>
-  <p>Av de 20 aksjene betaler 12 flere ganger i året; resten utbetaler én gang årlig. Av dem har 6 betalt utbytte i ti år eller mer, og lengst historikk har Solstad Offshore ASA med 17 år.</p>
-  <h2>Slik fungerer utbytte i energitjenester</h2>
-<p>Energitjenester er selskapene som lever av at oljeselskapene investerer —
-seismikk, boring, subsea-installasjon, vedlikehold, fartøy og bemanning. De
-selger ikke olje, de selger arbeidet med å finne og hente den. Det gjør
-utbyttet deres avhengig av noe annet enn oljeprisen: <strong>oljeselskapenes
-investeringsbudsjetter</strong>.</p>
-
-<p>Forskjellen er viktig og ofte oversett. En oljepris som stiger gir ikke
-umiddelbart høyere inntekter i denne sektoren. Den gir høyere inntekter når
-oljeselskapene bestemmer seg for å bruke mer penger — og den beslutningen
-tas etter at prisen har holdt seg oppe en stund, ofte et år eller to.
-Motsatt fortsetter igangsatte prosjekter en god stund etter at prisen har
-falt. Sektoren henger altså etter oljeprisen i begge retninger, og det gjør
-at et godt oljeår og et godt år for leverandørene ikke er samme år.</p>
-
-<p>Nedturen etter 2014 er den formative erfaringen i sektoren. Oljeprisen
-falt fra over hundre dollar til under femti, oljeselskapene kuttet
-investeringene hardt, og leverandørindustrien fikk flere år med
-overkapasitet, ratekrig og gjeldsrestrukturering. En rekke selskaper kuttet
-utbyttet helt. Det er derfor mange av selskapene i denne sektoren har
-kortere sammenhengende utbyttehistorikk enn alderen deres skulle tilsi — de
-finansielle sporene av den perioden ligger fortsatt i tallene.</p>
-
-<p>Dagratene er sektorens svar på fraktrater. En borerigg eller et
-konstruksjonsfartøy leies ut per dag, og forskjellen mellom en rate som
-dekker kapitalkostnaden og en som bare dekker driften avgjør om selskapet
-tjener penger. Som i shipping er tilbudet tregt: en rigg tar år å bygge, og
-den kan ikke settes inn i et annet marked hvis dette svikter. Utnyttelsesgrad
-og kontraktsdekning forteller derfor mer om utbyttekapasiteten enn
-omsetningen gjør.</p>
-
-<p>Kontraktslengde skiller selskapene fra hverandre. En leverandør med
-flerårige rammeavtaler på vedlikehold har en inntektsstrøm som ligner et
-abonnement, mens en som selger enkeltoppdrag i et prosjektmarked kan ha et
-fantastisk og et forferdelig år på rad. Begge står i samme sektortabell.</p>
-
-<p>Den lange linjen er energiomstillingen. Deler av kompetansen i sektoren —
-maritime operasjoner, fundamentering, kabellegging, undervannsarbeid — er
-direkte overførbar til havvind, og flere selskaper har bygget opp
-fornybarvirksomhet ved siden av oljetjenestene. For utbyttet betyr det to
-ting samtidig: en ny etterspørselskilde som ikke følger oljeprisen, og et
-investeringsbehov som konkurrerer med utbyttet om de samme kronene. Selskaper
-midt i en slik omstilling har ofte lavere utdelingsgrad enn regnskapet alene
-skulle tilsi.</p>
-  <h2>Hva driver utbyttet i Energitjenester?</h2>
-  <p>Aktivitetsnivået på norsk sokkel og internasjonalt offshore er den primære driveren. Oljepris påvirker kundenes vilje til å sette i gang nye prosjekter. Kontraktsdekning og dag-rater for rigger og fartøy gir direkte innsikt i inntjeningsutsiktene.</p>
-  <h2>Slik bruker du tabellen under</h2>
-  <p>Aksjene er sortert etter direkteavkastning, høyeste først. Husk at
-  yield er utbytte delt på kurs — tallet stiger like gjerne fordi kursen
-  faller som fordi utbyttet øker. En aksje som skiller seg kraftig fra
-  resten av Energitjenester er derfor et spørsmål verdt å undersøke, ikke
-  automatisk et kupp. Klikk deg inn på den enkelte aksjen for å se hele
-  utbyttehistorikken, utbetalingsgraden og hvor mange år selskapet har
-  betalt sammenhengende.</p>
-  </div>
-
+  <p class="sektor-hopp"><a href="#sektoranalyse">Les om hva som driver utbyttet i Energitjenester<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></a></p>
   <div class="tabell-ramme">
-  <table>
+  <table class="tabell-fast">
     <thead><tr><th>Ticker</th><th>Navn</th><th>Kurs</th><th>Yield</th><th>Ex-dato</th></tr></thead>
     <tbody>
         <tr>
@@ -377,6 +318,68 @@ skulle tilsi.</p>
         </tr></tbody>
   </table>
   </div>
+
+  <div class="sektor-analyse les" id="sektoranalyse">
+  <h2>Energitjenester som utbyttesektor</h2>
+  <p>exday.no følger 20 aksjer i Energitjenester med utbytte. Medianen blant dem er 10,07 % og ligger 4,4 prosentpoeng over medianen for hele Oslo Børs på 5,65 %. Spennet er stort: fra 1,17 % i bunn til 17,80 % på topp. Et snitt sier derfor lite om den enkelte aksjen her — forskjellene innad i sektoren er større enn forskjellen mot børsen samlet.</p>
+  <p>Median utbetalingsgrad blant de 17 aksjene med kjent payout ratio er 71 %. Av dem deler 6 ut mer enn de tjener, noe som kan være holdbart en periode, men ikke varig uten at inntjeningen tar seg opp. For 3 av aksjene mangler vi inntjeningstall, og blankt felt betyr ukjent — ikke lavt.</p>
+  <p>Av de 20 aksjene betaler 12 flere ganger i året; resten utbetaler én gang årlig. Av dem har 6 betalt utbytte i ti år eller mer, og lengst historikk har Solstad Offshore ASA med 17 år.</p>
+  <h2>Slik fungerer utbytte i energitjenester</h2>
+<p>Energitjenester er selskapene som lever av at oljeselskapene investerer —
+seismikk, boring, subsea-installasjon, vedlikehold, fartøy og bemanning. De
+selger ikke olje, de selger arbeidet med å finne og hente den. Det gjør
+utbyttet deres avhengig av noe annet enn oljeprisen: <strong>oljeselskapenes
+investeringsbudsjetter</strong>.</p>
+
+<p>Forskjellen er viktig og ofte oversett. En oljepris som stiger gir ikke
+umiddelbart høyere inntekter i denne sektoren. Den gir høyere inntekter når
+oljeselskapene bestemmer seg for å bruke mer penger — og den beslutningen
+tas etter at prisen har holdt seg oppe en stund, ofte et år eller to.
+Motsatt fortsetter igangsatte prosjekter en god stund etter at prisen har
+falt. Sektoren henger altså etter oljeprisen i begge retninger, og det gjør
+at et godt oljeår og et godt år for leverandørene ikke er samme år.</p>
+
+<p>Nedturen etter 2014 er den formative erfaringen i sektoren. Oljeprisen
+falt fra over hundre dollar til under femti, oljeselskapene kuttet
+investeringene hardt, og leverandørindustrien fikk flere år med
+overkapasitet, ratekrig og gjeldsrestrukturering. En rekke selskaper kuttet
+utbyttet helt. Det er derfor mange av selskapene i denne sektoren har
+kortere sammenhengende utbyttehistorikk enn alderen deres skulle tilsi — de
+finansielle sporene av den perioden ligger fortsatt i tallene.</p>
+
+<p>Dagratene er sektorens svar på fraktrater. En borerigg eller et
+konstruksjonsfartøy leies ut per dag, og forskjellen mellom en rate som
+dekker kapitalkostnaden og en som bare dekker driften avgjør om selskapet
+tjener penger. Som i shipping er tilbudet tregt: en rigg tar år å bygge, og
+den kan ikke settes inn i et annet marked hvis dette svikter. Utnyttelsesgrad
+og kontraktsdekning forteller derfor mer om utbyttekapasiteten enn
+omsetningen gjør.</p>
+
+<p>Kontraktslengde skiller selskapene fra hverandre. En leverandør med
+flerårige rammeavtaler på vedlikehold har en inntektsstrøm som ligner et
+abonnement, mens en som selger enkeltoppdrag i et prosjektmarked kan ha et
+fantastisk og et forferdelig år på rad. Begge står i samme sektortabell.</p>
+
+<p>Den lange linjen er energiomstillingen. Deler av kompetansen i sektoren —
+maritime operasjoner, fundamentering, kabellegging, undervannsarbeid — er
+direkte overførbar til havvind, og flere selskaper har bygget opp
+fornybarvirksomhet ved siden av oljetjenestene. For utbyttet betyr det to
+ting samtidig: en ny etterspørselskilde som ikke følger oljeprisen, og et
+investeringsbehov som konkurrerer med utbyttet om de samme kronene. Selskaper
+midt i en slik omstilling har ofte lavere utdelingsgrad enn regnskapet alene
+skulle tilsi.</p>
+  <h2>Hva driver utbyttet i Energitjenester?</h2>
+  <p>Aktivitetsnivået på norsk sokkel og internasjonalt offshore er den primære driveren. Oljepris påvirker kundenes vilje til å sette i gang nye prosjekter. Kontraktsdekning og dag-rater for rigger og fartøy gir direkte innsikt i inntjeningsutsiktene.</p>
+  <h2>Slik bruker du tabellen</h2>
+  <p>Aksjene er sortert etter direkteavkastning, høyeste først. Husk at
+  yield er utbytte delt på kurs — tallet stiger like gjerne fordi kursen
+  faller som fordi utbyttet øker. En aksje som skiller seg kraftig fra
+  resten av Energitjenester er derfor et spørsmål verdt å undersøke, ikke
+  automatisk et kupp. Klikk deg inn på den enkelte aksjen for å se hele
+  utbyttehistorikken, utbetalingsgraden og hvor mange år selskapet har
+  betalt sammenhengende.</p>
+  </div>
+
   <div class="cta"><a href="/app/">Åpne full app med filtrering og porteføljekalkulator →</a></div>
   <p class="updated">Tallene er hentet 24. november 2026</p>
   <footer style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid #e5e7eb;font-size:0.78rem;text-align:center;color:#6b7280;line-height:1.6;" class="std-footer">

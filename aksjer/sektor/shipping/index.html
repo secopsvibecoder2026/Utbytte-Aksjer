@@ -73,9 +73,11 @@
     .sektor-analyse p { margin: 0 0 0.9rem; line-height: 1.75; font-size: 0.95rem; }
     /* Tabellen er bredere enn en mobilskjerm (473 px mot 390 px), så den må
        scrolle i sin egen ramme. Uten wrapperen dyttet den hele siden ut i
-       horisontal scroll på alle 16 sektorsidene. */
+       horisontal scroll på alle 16 sektorsidene. Ingen overflow på selve
+       tabellen: da blir den, ikke rammen, forelderen den faste tickerkolonnen
+       (.tabell-fast i style.css) fester seg mot. */
     .tabell-ramme { overflow-x: auto; -webkit-overflow-scrolling: touch; margin-bottom: 1.5rem; }
-    table { width: 100%; min-width: 30rem; border-collapse: collapse; border-radius: 0.75rem; overflow: hidden; font-size: 0.9rem; border: 1px solid; }
+    table { width: 100%; min-width: 30rem; border-collapse: collapse; font-size: 0.9rem; border: 1px solid; }
     th { padding: 0.6rem 1rem; text-align: left; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; white-space: nowrap; }
     td { padding: 0.65rem 1rem; border-top: 1px solid; white-space: nowrap; }
     .yield { font-weight: 600; color: #111827; }
@@ -169,8 +171,148 @@
   <h1 class="side-h1"><svg class="h1-ikon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 18c1.5 1.4 3 1.4 4.5 0s3-1.4 4.5 0 3 1.4 4.5 0 3-1.4 4.5 0M5 9h14l-2 6H7L5 9zM12 9V3.5"/></svg>Shipping-aksjer med utbytte</h1>
   <p class="sub">19 norske shipping-aksjer på Oslo Børs. Sortert etter direkteavkastning.</p>
   <dl class="tallruter tallruter-n3" aria-label="Sektoren i tall"><div class="tallrute"><dt>Aksjer</dt><dd>19</dd></div><div class="tallrute"><dt>Snitt yield</dt><dd>9,2 %</dd></div><div class="tallrute"><dt>Høyeste yield</dt><dd>21,1 %</dd></div></dl>
+  <p class="sektor-hopp"><a href="#sektoranalyse">Les om hva som driver utbyttet i Shipping<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></a></p>
+  <div class="tabell-ramme">
+  <table class="tabell-fast">
+    <thead><tr><th>Ticker</th><th>Navn</th><th>Kurs</th><th>Yield</th><th>Ex-dato</th></tr></thead>
+    <tbody>
+        <tr>
+          <td><a href="/aksjer/HUNT/">HUNT</a></td>
+          <td>Hunter Group ASA</td>
+          <td>19,10 NOK</td>
+          <td class="yield">21,10 %</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td><a href="/aksjer/OET/">OET</a></td>
+          <td>Okeanis Eco Tankers Corp.</td>
+          <td>784,00 NOK</td>
+          <td class="yield">19,80 %</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td><a href="/aksjer/HSHP/">HSHP</a></td>
+          <td>Himalaya Shipping Ltd.</td>
+          <td>149,00 NOK</td>
+          <td class="yield">12,85 %</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td><a href="/aksjer/STST/">STST</a></td>
+          <td>Stainless Tankers ASA <span class="text-xs text-amber-700 dark:text-amber-400 whitespace-nowrap">avvikles</span></td>
+          <td>41,30 NOK</td>
+          <td class="yield">12,37 %</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td><a href="/aksjer/BWLPG/">BWLPG</a></td>
+          <td>BW LPG Limited</td>
+          <td>217,20 NOK</td>
+          <td class="yield">11,51 %</td>
+          <td>3. des 2026</td>
+        </tr>
+        <tr>
+          <td><a href="/aksjer/FRO/">FRO</a></td>
+          <td>Frontline PLC</td>
+          <td>460,60 NOK</td>
+          <td class="yield">11,48 %</td>
+          <td>8. des 2026</td>
+        </tr>
+        <tr>
+          <td><a href="/aksjer/WEST/">WEST</a></td>
+          <td>Western Bulk Chartering AS</td>
+          <td>25,00 NOK</td>
+          <td class="yield">10,40 %</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td><a href="/aksjer/HAUTO/">HAUTO</a></td>
+          <td>Höegh Autoliners ASA</td>
+          <td>165,10 NOK</td>
+          <td class="yield">9,29 %</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td><a href="/aksjer/KCC/">KCC</a></td>
+          <td>Klaveness Combination Carriers ASA</td>
+          <td>108,00 NOK</td>
+          <td class="yield">8,72 %</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td><a href="/aksjer/CMBTO/">CMBTO</a></td>
+          <td>CMB.TECH NV</td>
+          <td>166,40 NOK</td>
+          <td class="yield">8,43 %</td>
+          <td>8. des 2026</td>
+        </tr>
+        <tr>
+          <td><a href="/aksjer/ODFB/">ODFB</a></td>
+          <td>Odfjell SE (B-aksje)</td>
+          <td>116,20 NOK</td>
+          <td class="yield">8,38 %</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td><a href="/aksjer/ODF/">ODF</a></td>
+          <td>Odfjell SE (A-aksje)</td>
+          <td>119,00 NOK</td>
+          <td class="yield">8,18 %</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td><a href="/aksjer/MPCC/">MPCC</a></td>
+          <td>MPC Container Ships ASA</td>
+          <td>24,80 NOK</td>
+          <td class="yield">6,09 %</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td><a href="/aksjer/SNI/">SNI</a></td>
+          <td>Stolt-Nielsen Limited</td>
+          <td>332,00 NOK</td>
+          <td class="yield">5,89 %</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td><a href="/aksjer/WAWI/">WAWI</a></td>
+          <td>Wallenius Wilhelmsen ASA</td>
+          <td>165,00 NOK</td>
+          <td class="yield">5,42 %</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td><a href="/aksjer/HAFNI/">HAFNI</a></td>
+          <td>Hafnia Limited</td>
+          <td>86,55 NOK</td>
+          <td class="yield">4,53 %</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td><a href="/aksjer/JIN/">JIN</a></td>
+          <td>Jinhui Shipping and Transportation Limited</td>
+          <td>6,70 NOK</td>
+          <td class="yield">2,54 %</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td><a href="/aksjer/CAPT/">CAPT</a></td>
+          <td>Capital Tankers Corp.</td>
+          <td>171,50 NOK</td>
+          <td class="yield">2,04 %</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td><a href="/aksjer/ALNG/">ALNG</a></td>
+          <td>ALNG ASA</td>
+          <td>3,59 NOK</td>
+          <td class="yield">0,00 %</td>
+          <td>—</td>
+        </tr></tbody>
+  </table>
+  </div>
 
-  <div class="sektor-analyse les">
+  <div class="sektor-analyse les" id="sektoranalyse">
   <h2>Shipping som utbyttesektor</h2>
   <p>exday.no følger 19 aksjer i Shipping med utbytte. Medianen blant dem er 8,57 % og ligger 2,9 prosentpoeng over medianen for hele Oslo Børs på 5,65 %. Spennet er stort: fra 2,04 % i bunn til 21,10 % på topp. Et snitt sier derfor lite om den enkelte aksjen her — forskjellene innad i sektoren er større enn forskjellen mot børsen samlet.</p>
   <p>Median utbetalingsgrad blant de 17 aksjene med kjent payout ratio er 57 %. Av dem deler 3 ut mer enn de tjener, noe som kan være holdbart en periode, men ikke varig uten at inntjeningen tar seg opp. For 2 av aksjene mangler vi inntjeningstall, og blankt felt betyr ukjent — ikke lavt.</p>
@@ -246,7 +388,7 @@ ikke. Sjekk alltid om et påfallende høyt utbytte kommer fra drift eller fra
 et salg.</p>
   <h2>Hva driver utbyttet i Shipping?</h2>
   <p>Fraktrater bestemmer inntjeningen nesten alene. Ratene svinger kraftig med balansen mellom tilbud av tonnasje og etterspørsel fra global handel. Ny tonnasje fra ordreboken, skraping av eldre skip og geopolitikk (Rødehavet, Suezkanalen) er viktige drivere. Mange shippingselskaper deler ut det meste av overskuddet — hyppig utbytte er vanlig, men høy yield kan forsvinne like fort som den kom.</p>
-  <h2>Slik bruker du tabellen under</h2>
+  <h2>Slik bruker du tabellen</h2>
   <p>Aksjene er sortert etter direkteavkastning, høyeste først. Husk at
   yield er utbytte delt på kurs — tallet stiger like gjerne fordi kursen
   faller som fordi utbyttet øker. En aksje som skiller seg kraftig fra
@@ -256,145 +398,6 @@ et salg.</p>
   betalt sammenhengende.</p>
   </div>
 
-  <div class="tabell-ramme">
-  <table>
-    <thead><tr><th>Ticker</th><th>Navn</th><th>Kurs</th><th>Yield</th><th>Ex-dato</th></tr></thead>
-    <tbody>
-        <tr>
-          <td><a href="/aksjer/HUNT/">HUNT</a></td>
-          <td>Hunter Group ASA</td>
-          <td>19,10 NOK</td>
-          <td class="yield">21,10 %</td>
-          <td>—</td>
-        </tr>
-        <tr>
-          <td><a href="/aksjer/OET/">OET</a></td>
-          <td>Okeanis Eco Tankers Corp.</td>
-          <td>784,00 NOK</td>
-          <td class="yield">19,79 %</td>
-          <td>—</td>
-        </tr>
-        <tr>
-          <td><a href="/aksjer/HSHP/">HSHP</a></td>
-          <td>Himalaya Shipping Ltd.</td>
-          <td>149,00 NOK</td>
-          <td class="yield">12,86 %</td>
-          <td>—</td>
-        </tr>
-        <tr>
-          <td><a href="/aksjer/STST/">STST</a></td>
-          <td>Stainless Tankers ASA <span class="text-xs text-amber-700 dark:text-amber-400 whitespace-nowrap">avvikles</span></td>
-          <td>41,30 NOK</td>
-          <td class="yield">12,37 %</td>
-          <td>—</td>
-        </tr>
-        <tr>
-          <td><a href="/aksjer/BWLPG/">BWLPG</a></td>
-          <td>BW LPG Limited</td>
-          <td>217,20 NOK</td>
-          <td class="yield">11,51 %</td>
-          <td>—</td>
-        </tr>
-        <tr>
-          <td><a href="/aksjer/FRO/">FRO</a></td>
-          <td>Frontline PLC</td>
-          <td>460,60 NOK</td>
-          <td class="yield">11,47 %</td>
-          <td>8. des 2026</td>
-        </tr>
-        <tr>
-          <td><a href="/aksjer/WEST/">WEST</a></td>
-          <td>Western Bulk Chartering AS</td>
-          <td>25,00 NOK</td>
-          <td class="yield">10,40 %</td>
-          <td>—</td>
-        </tr>
-        <tr>
-          <td><a href="/aksjer/HAUTO/">HAUTO</a></td>
-          <td>Höegh Autoliners ASA</td>
-          <td>165,10 NOK</td>
-          <td class="yield">9,29 %</td>
-          <td>—</td>
-        </tr>
-        <tr>
-          <td><a href="/aksjer/KCC/">KCC</a></td>
-          <td>Klaveness Combination Carriers ASA</td>
-          <td>108,00 NOK</td>
-          <td class="yield">8,72 %</td>
-          <td>—</td>
-        </tr>
-        <tr>
-          <td><a href="/aksjer/CMBTO/">CMBTO</a></td>
-          <td>CMB.TECH NV</td>
-          <td>166,40 NOK</td>
-          <td class="yield">8,43 %</td>
-          <td>—</td>
-        </tr>
-        <tr>
-          <td><a href="/aksjer/ODFB/">ODFB</a></td>
-          <td>Odfjell SE (B-aksje)</td>
-          <td>116,20 NOK</td>
-          <td class="yield">8,38 %</td>
-          <td>—</td>
-        </tr>
-        <tr>
-          <td><a href="/aksjer/ODF/">ODF</a></td>
-          <td>Odfjell SE (A-aksje)</td>
-          <td>119,00 NOK</td>
-          <td class="yield">8,18 %</td>
-          <td>—</td>
-        </tr>
-        <tr>
-          <td><a href="/aksjer/MPCC/">MPCC</a></td>
-          <td>MPC Container Ships ASA</td>
-          <td>24,80 NOK</td>
-          <td class="yield">6,09 %</td>
-          <td>—</td>
-        </tr>
-        <tr>
-          <td><a href="/aksjer/SNI/">SNI</a></td>
-          <td>Stolt-Nielsen Limited</td>
-          <td>332,00 NOK</td>
-          <td class="yield">5,89 %</td>
-          <td>—</td>
-        </tr>
-        <tr>
-          <td><a href="/aksjer/WAWI/">WAWI</a></td>
-          <td>Wallenius Wilhelmsen ASA</td>
-          <td>165,00 NOK</td>
-          <td class="yield">5,42 %</td>
-          <td>—</td>
-        </tr>
-        <tr>
-          <td><a href="/aksjer/HAFNI/">HAFNI</a></td>
-          <td>Hafnia Limited</td>
-          <td>86,55 NOK</td>
-          <td class="yield">4,53 %</td>
-          <td>—</td>
-        </tr>
-        <tr>
-          <td><a href="/aksjer/JIN/">JIN</a></td>
-          <td>Jinhui Shipping and Transportation Limited</td>
-          <td>6,70 NOK</td>
-          <td class="yield">2,54 %</td>
-          <td>—</td>
-        </tr>
-        <tr>
-          <td><a href="/aksjer/CAPT/">CAPT</a></td>
-          <td>Capital Tankers Corp.</td>
-          <td>171,50 NOK</td>
-          <td class="yield">2,04 %</td>
-          <td>—</td>
-        </tr>
-        <tr>
-          <td><a href="/aksjer/ALNG/">ALNG</a></td>
-          <td>ALNG ASA</td>
-          <td>3,59 NOK</td>
-          <td class="yield">0,00 %</td>
-          <td>—</td>
-        </tr></tbody>
-  </table>
-  </div>
   <div class="cta"><a href="/app/">Åpne full app med filtrering og porteføljekalkulator →</a></div>
   <p class="updated">Tallene er hentet 24. november 2026</p>
   <footer style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid #e5e7eb;font-size:0.78rem;text-align:center;color:#6b7280;line-height:1.6;" class="std-footer">

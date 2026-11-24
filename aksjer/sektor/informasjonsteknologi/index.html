@@ -73,9 +73,11 @@
     .sektor-analyse p { margin: 0 0 0.9rem; line-height: 1.75; font-size: 0.95rem; }
     /* Tabellen er bredere enn en mobilskjerm (473 px mot 390 px), så den må
        scrolle i sin egen ramme. Uten wrapperen dyttet den hele siden ut i
-       horisontal scroll på alle 16 sektorsidene. */
+       horisontal scroll på alle 16 sektorsidene. Ingen overflow på selve
+       tabellen: da blir den, ikke rammen, forelderen den faste tickerkolonnen
+       (.tabell-fast i style.css) fester seg mot. */
     .tabell-ramme { overflow-x: auto; -webkit-overflow-scrolling: touch; margin-bottom: 1.5rem; }
-    table { width: 100%; min-width: 30rem; border-collapse: collapse; border-radius: 0.75rem; overflow: hidden; font-size: 0.9rem; border: 1px solid; }
+    table { width: 100%; min-width: 30rem; border-collapse: collapse; font-size: 0.9rem; border: 1px solid; }
     th { padding: 0.6rem 1rem; text-align: left; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; white-space: nowrap; }
     td { padding: 0.65rem 1rem; border-top: 1px solid; white-space: nowrap; }
     .yield { font-weight: 600; color: #111827; }
@@ -169,72 +171,9 @@
   <h1 class="side-h1"><svg class="h1-ikon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5h18v11H3zM8 20h8M12 16v4M9.5 8.5L8 10.5l1.5 2M14.5 8.5l1.5 2-1.5 2"/></svg>Informasjonsteknologi-aksjer med utbytte</h1>
   <p class="sub">10 norske informasjonsteknologi-aksjer på Oslo Børs. Sortert etter direkteavkastning.</p>
   <dl class="tallruter tallruter-n3" aria-label="Sektoren i tall"><div class="tallrute"><dt>Aksjer</dt><dd>10</dd></div><div class="tallrute"><dt>Snitt yield</dt><dd>4,8 %</dd></div><div class="tallrute"><dt>Høyeste yield</dt><dd>13,4 %</dd></div></dl>
-
-  <div class="sektor-analyse les">
-  <h2>Informasjonsteknologi som utbyttesektor</h2>
-  <p>exday.no følger 10 aksjer i Informasjonsteknologi med utbytte. Medianen blant dem er 3,98 % og ligger 1,7 prosentpoeng under medianen for hele Oslo Børs på 5,65 %. Spennet er stort: fra 1,06 % i bunn til 13,36 % på topp. Et snitt sier derfor lite om den enkelte aksjen her — forskjellene innad i sektoren er større enn forskjellen mot børsen samlet.</p>
-  <p>Median utbetalingsgrad blant de 8 aksjene med kjent payout ratio er 90 %. Av dem deler 3 ut mer enn de tjener, noe som kan være holdbart en periode, men ikke varig uten at inntjeningen tar seg opp. For 2 av aksjene mangler vi inntjeningstall, og blankt felt betyr ukjent — ikke lavt.</p>
-  <p>Av de 10 aksjene betaler 3 flere ganger i året; resten utbetaler én gang årlig. Av dem har 4 betalt utbytte i ti år eller mer, og lengst historikk har Itera ASA med 21 år.</p>
-  <h2>Slik fungerer utbytte i informasjonsteknologi</h2>
-<p>IT-sektoren på Oslo Børs ligner lite på den amerikanske. Her finnes ikke
-plattformselskapene med enorme marginer; det som er notert er i hovedsak
-<strong>konsulenthus, systemintegratorer og nisjeleverandører av
-programvare</strong>. Det gir en utbytteprofil som er langt mer stabil, og
-langt mindre spektakulær, enn sektornavnet antyder.</p>
-
-<p>Konsulentmodellen er enkel å forstå og forklarer det meste. Inntekten er
-antall konsulenter ganget med hvor stor andel av tiden deres som faktureres,
-ganget med timeprisen. Det er en virksomhet med lite bundet kapital: det
-trengs ingen fabrikk, ingen flåte og ingen lager. Overskuddet blir dermed i
-stor grad fri kontantstrøm, og fordi det er lite å investere i, kan mye av
-det deles ut. Det er hovedgrunnen til at flere av selskapene i sektoren har
-lange, jevne utbytterekker.</p>
-
-<p>Nøkkeltallet er <strong>faktureringsgraden</strong>. Kostnadene — i
-praksis lønn — løper uansett om konsulentene har oppdrag eller ikke, så noen
-få prosentpoengs fall i utnyttelsen slår hardt inn på marginen. Det er også
-her nedturen kommer først: bedrifter som skal kutte, kutter gjerne
-konsulentbruk før de sier opp egne ansatte. Sektoren er altså mindre syklisk
-enn energi og shipping, men den er ikke ufølsom, og den merker en nedtur
-tidlig.</p>
-
-<p>Kampen om folk er en varig kostnadsdriver. Konsulentselskapenes eneste
-reelle ressurs er ansatte som kan gå til en konkurrent, og i perioder med
-knapphet på utviklere presses lønningene opp raskere enn timeprisene lar seg
-justere. Marginen kan da falle i et år der omsetningen vokser fint.</p>
-
-<p>Offentlig sektor er en usedvanlig viktig kunde i Norge — stat, kommune og
-helseforetak kjøper IT-tjenester i stort omfang, og de gjør det gjennom
-langvarige rammeavtaler. En leverandør med tung offentlig portefølje har
-derfor mer forutsigbare inntekter enn en som selger til privat næringsliv,
-og det har vist seg i utbyttestabiliteten gjennom flere nedturer.</p>
-
-<p>Programvareselskapene i sektoren følger en annen logikk. Overgangen fra
-å selge lisenser til å selge abonnement gir jevnere inntekter på sikt, men
-den koster penger i overgangen: inntekten fordeles over abonnementsperioden
-i stedet for å bokføres ved salg. Et selskap midt i en slik omlegging kan se
-svakere ut enn det er, og et utbytte som holdes flatt gjennom en slik fase
-er ofte et bedre tegn enn det ser ut som.</p>
-
-<p>Det som skal følges over tid er teknologiskiftene. En systemintegrator
-lever av kompleksitet hos kundene, og verktøy som reduserer den kompleksiteten
-er både en mulighet og en trussel. Sektoren har lav syklisk risiko og høyere
-strukturell risiko enn snittet — utbyttet trues sjelden av konjunkturer, men
-oftere av at forretningsmodellen endrer seg under selskapet.</p>
-  <h2>Hva driver utbyttet i Informasjonsteknologi?</h2>
-  <p>Omsetningsvekst og marginer drives av kontrakter, konsulentkapasitet og produktlisenser. IT-sektoren er generelt mindre syklisk enn energi og shipping, men utbyttet er sjelden høyt — selskaper foretrekker å reinvestere i vekst.</p>
-  <h2>Slik bruker du tabellen under</h2>
-  <p>Aksjene er sortert etter direkteavkastning, høyeste først. Husk at
-  yield er utbytte delt på kurs — tallet stiger like gjerne fordi kursen
-  faller som fordi utbyttet øker. En aksje som skiller seg kraftig fra
-  resten av Informasjonsteknologi er derfor et spørsmål verdt å undersøke, ikke
-  automatisk et kupp. Klikk deg inn på den enkelte aksjen for å se hele
-  utbyttehistorikken, utbetalingsgraden og hvor mange år selskapet har
-  betalt sammenhengende.</p>
-  </div>
-
+  <p class="sektor-hopp"><a href="#sektoranalyse">Les om hva som driver utbyttet i Informasjonsteknologi<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></a></p>
   <div class="tabell-ramme">
-  <table>
+  <table class="tabell-fast">
     <thead><tr><th>Ticker</th><th>Navn</th><th>Kurs</th><th>Yield</th><th>Ex-dato</th></tr></thead>
     <tbody>
         <tr>
@@ -309,6 +248,70 @@ oftere av at forretningsmodellen endrer seg under selskapet.</p>
         </tr></tbody>
   </table>
   </div>
+
+  <div class="sektor-analyse les" id="sektoranalyse">
+  <h2>Informasjonsteknologi som utbyttesektor</h2>
+  <p>exday.no følger 10 aksjer i Informasjonsteknologi med utbytte. Medianen blant dem er 3,98 % og ligger 1,7 prosentpoeng under medianen for hele Oslo Børs på 5,65 %. Spennet er stort: fra 1,06 % i bunn til 13,36 % på topp. Et snitt sier derfor lite om den enkelte aksjen her — forskjellene innad i sektoren er større enn forskjellen mot børsen samlet.</p>
+  <p>Median utbetalingsgrad blant de 8 aksjene med kjent payout ratio er 90 %. Av dem deler 3 ut mer enn de tjener, noe som kan være holdbart en periode, men ikke varig uten at inntjeningen tar seg opp. For 2 av aksjene mangler vi inntjeningstall, og blankt felt betyr ukjent — ikke lavt.</p>
+  <p>Av de 10 aksjene betaler 3 flere ganger i året; resten utbetaler én gang årlig. Av dem har 4 betalt utbytte i ti år eller mer, og lengst historikk har Itera ASA med 21 år.</p>
+  <h2>Slik fungerer utbytte i informasjonsteknologi</h2>
+<p>IT-sektoren på Oslo Børs ligner lite på den amerikanske. Her finnes ikke
+plattformselskapene med enorme marginer; det som er notert er i hovedsak
+<strong>konsulenthus, systemintegratorer og nisjeleverandører av
+programvare</strong>. Det gir en utbytteprofil som er langt mer stabil, og
+langt mindre spektakulær, enn sektornavnet antyder.</p>
+
+<p>Konsulentmodellen er enkel å forstå og forklarer det meste. Inntekten er
+antall konsulenter ganget med hvor stor andel av tiden deres som faktureres,
+ganget med timeprisen. Det er en virksomhet med lite bundet kapital: det
+trengs ingen fabrikk, ingen flåte og ingen lager. Overskuddet blir dermed i
+stor grad fri kontantstrøm, og fordi det er lite å investere i, kan mye av
+det deles ut. Det er hovedgrunnen til at flere av selskapene i sektoren har
+lange, jevne utbytterekker.</p>
+
+<p>Nøkkeltallet er <strong>faktureringsgraden</strong>. Kostnadene — i
+praksis lønn — løper uansett om konsulentene har oppdrag eller ikke, så noen
+få prosentpoengs fall i utnyttelsen slår hardt inn på marginen. Det er også
+her nedturen kommer først: bedrifter som skal kutte, kutter gjerne
+konsulentbruk før de sier opp egne ansatte. Sektoren er altså mindre syklisk
+enn energi og shipping, men den er ikke ufølsom, og den merker en nedtur
+tidlig.</p>
+
+<p>Kampen om folk er en varig kostnadsdriver. Konsulentselskapenes eneste
+reelle ressurs er ansatte som kan gå til en konkurrent, og i perioder med
+knapphet på utviklere presses lønningene opp raskere enn timeprisene lar seg
+justere. Marginen kan da falle i et år der omsetningen vokser fint.</p>
+
+<p>Offentlig sektor er en usedvanlig viktig kunde i Norge — stat, kommune og
+helseforetak kjøper IT-tjenester i stort omfang, og de gjør det gjennom
+langvarige rammeavtaler. En leverandør med tung offentlig portefølje har
+derfor mer forutsigbare inntekter enn en som selger til privat næringsliv,
+og det har vist seg i utbyttestabiliteten gjennom flere nedturer.</p>
+
+<p>Programvareselskapene i sektoren følger en annen logikk. Overgangen fra
+å selge lisenser til å selge abonnement gir jevnere inntekter på sikt, men
+den koster penger i overgangen: inntekten fordeles over abonnementsperioden
+i stedet for å bokføres ved salg. Et selskap midt i en slik omlegging kan se
+svakere ut enn det er, og et utbytte som holdes flatt gjennom en slik fase
+er ofte et bedre tegn enn det ser ut som.</p>
+
+<p>Det som skal følges over tid er teknologiskiftene. En systemintegrator
+lever av kompleksitet hos kundene, og verktøy som reduserer den kompleksiteten
+er både en mulighet og en trussel. Sektoren har lav syklisk risiko og høyere
+strukturell risiko enn snittet — utbyttet trues sjelden av konjunkturer, men
+oftere av at forretningsmodellen endrer seg under selskapet.</p>
+  <h2>Hva driver utbyttet i Informasjonsteknologi?</h2>
+  <p>Omsetningsvekst og marginer drives av kontrakter, konsulentkapasitet og produktlisenser. IT-sektoren er generelt mindre syklisk enn energi og shipping, men utbyttet er sjelden høyt — selskaper foretrekker å reinvestere i vekst.</p>
+  <h2>Slik bruker du tabellen</h2>
+  <p>Aksjene er sortert etter direkteavkastning, høyeste først. Husk at
+  yield er utbytte delt på kurs — tallet stiger like gjerne fordi kursen
+  faller som fordi utbyttet øker. En aksje som skiller seg kraftig fra
+  resten av Informasjonsteknologi er derfor et spørsmål verdt å undersøke, ikke
+  automatisk et kupp. Klikk deg inn på den enkelte aksjen for å se hele
+  utbyttehistorikken, utbetalingsgraden og hvor mange år selskapet har
+  betalt sammenhengende.</p>
+  </div>
+
   <div class="cta"><a href="/app/">Åpne full app med filtrering og porteføljekalkulator →</a></div>
   <p class="updated">Tallene er hentet 24. november 2026</p>
   <footer style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid #e5e7eb;font-size:0.78rem;text-align:center;color:#6b7280;line-height:1.6;" class="std-footer">

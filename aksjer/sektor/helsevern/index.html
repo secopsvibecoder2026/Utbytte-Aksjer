@@ -73,9 +73,11 @@
     .sektor-analyse p { margin: 0 0 0.9rem; line-height: 1.75; font-size: 0.95rem; }
     /* Tabellen er bredere enn en mobilskjerm (473 px mot 390 px), så den må
        scrolle i sin egen ramme. Uten wrapperen dyttet den hele siden ut i
-       horisontal scroll på alle 16 sektorsidene. */
+       horisontal scroll på alle 16 sektorsidene. Ingen overflow på selve
+       tabellen: da blir den, ikke rammen, forelderen den faste tickerkolonnen
+       (.tabell-fast i style.css) fester seg mot. */
     .tabell-ramme { overflow-x: auto; -webkit-overflow-scrolling: touch; margin-bottom: 1.5rem; }
-    table { width: 100%; min-width: 30rem; border-collapse: collapse; border-radius: 0.75rem; overflow: hidden; font-size: 0.9rem; border: 1px solid; }
+    table { width: 100%; min-width: 30rem; border-collapse: collapse; font-size: 0.9rem; border: 1px solid; }
     th { padding: 0.6rem 1rem; text-align: left; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; white-space: nowrap; }
     td { padding: 0.65rem 1rem; border-top: 1px solid; white-space: nowrap; }
     .yield { font-weight: 600; color: #111827; }
@@ -169,12 +171,40 @@
   <h1 class="side-h1"><svg class="h1-ikon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20.8l-1.6-1.5C4.8 14.2 1.5 11.2 1.5 7.5A5.4 5.4 0 016.9 2c1.8 0 3.5.9 4.6 2.3l.5.6.5-.6A5.9 5.9 0 0117.1 2a5.4 5.4 0 015.4 5.5c0 3.7-3.3 6.7-8.9 11.8l-1.6 1.5z"/></svg>Helsevern-aksjer med utbytte</h1>
   <p class="sub">3 norske helsevern-aksjer på Oslo Børs. Sortert etter direkteavkastning.</p>
   <dl class="tallruter tallruter-n3" aria-label="Sektoren i tall"><div class="tallrute"><dt>Aksjer</dt><dd>3</dd></div><div class="tallrute"><dt>Snitt yield</dt><dd>4,2 %</dd></div><div class="tallrute"><dt>Høyeste yield</dt><dd>8,0 %</dd></div></dl>
+  <p class="sektor-hopp"><a href="#sektoranalyse">Les om hva som driver utbyttet i Helsevern<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></a></p>
+  <div class="tabell-ramme">
+  <table class="tabell-fast">
+    <thead><tr><th>Ticker</th><th>Navn</th><th>Kurs</th><th>Yield</th><th>Ex-dato</th></tr></thead>
+    <tbody>
+        <tr>
+          <td><a href="/aksjer/VISTIN/">VISTIN</a></td>
+          <td>Vistin Pharma ASA</td>
+          <td>18,75 NOK</td>
+          <td class="yield">8,00 %</td>
+          <td>24. nov 2026</td>
+        </tr>
+        <tr>
+          <td><a href="/aksjer/MEDI/">MEDI</a></td>
+          <td>Medistim ASA</td>
+          <td>323,00 NOK</td>
+          <td class="yield">3,10 %</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td><a href="/aksjer/GENT/">GENT</a></td>
+          <td>Gentian Diagnostics ASA</td>
+          <td>39,20 NOK</td>
+          <td class="yield">1,53 %</td>
+          <td>—</td>
+        </tr></tbody>
+  </table>
+  </div>
 
-  <div class="sektor-analyse les">
+  <div class="sektor-analyse les" id="sektoranalyse">
   <h2>Helsevern som utbyttesektor</h2>
   <p>exday.no følger 3 aksjer i Helsevern med utbytte. Medianen blant dem er 3,10 % og ligger 2,6 prosentpoeng under medianen for hele Oslo Børs på 5,65 %. Spennet er stort: fra 1,53 % i bunn til 8,00 % på topp. Et snitt sier derfor lite om den enkelte aksjen her — forskjellene innad i sektoren er større enn forskjellen mot børsen samlet.</p>
   <p>Median utbetalingsgrad blant de 3 aksjene med kjent payout ratio er 70 %.</p>
-  <p>Av de 3 aksjene betaler én flere ganger i året; resten utbetaler én gang årlig. Av dem har én betalt utbytte i ti år eller mer, og lengst historikk har Medistim ASA med 22 år.</p>
+  <p>Av de 3 aksjene betaler 2 flere ganger i året; resten utbetaler én gang årlig. Av dem har én betalt utbytte i ti år eller mer, og lengst historikk har Medistim ASA med 22 år.</p>
   <h2>Slik fungerer utbytte i helsevern</h2>
 <p>Helsevern er en liten sektor på Oslo Børs, og den er tydelig todelt:
 selskaper med produkter i markedet som tjener penger, og selskaper som
@@ -220,7 +250,7 @@ omsetning sier derfor noe om utbyttets holdbarhet: et påfallende lavt nivå
 kan være et tegn på at utbyttet finansieres av framtiden.</p>
   <h2>Hva driver utbyttet i Helsevern?</h2>
   <p>Produktgodkjenninger, patentstatus og refusjonsbeslutninger fra helsemyndigheter er de viktigste hendelsene. Marginen er relativt stabil, men ett negativt regulatorisk vedtak kan endre bildet raskt. Utbyttet er typisk lavere og mer stabilt enn i sykliske sektorer.</p>
-  <h2>Slik bruker du tabellen under</h2>
+  <h2>Slik bruker du tabellen</h2>
   <p>Aksjene er sortert etter direkteavkastning, høyeste først. Husk at
   yield er utbytte delt på kurs — tallet stiger like gjerne fordi kursen
   faller som fordi utbyttet øker. En aksje som skiller seg kraftig fra
@@ -230,33 +260,6 @@ kan være et tegn på at utbyttet finansieres av framtiden.</p>
   betalt sammenhengende.</p>
   </div>
 
-  <div class="tabell-ramme">
-  <table>
-    <thead><tr><th>Ticker</th><th>Navn</th><th>Kurs</th><th>Yield</th><th>Ex-dato</th></tr></thead>
-    <tbody>
-        <tr>
-          <td><a href="/aksjer/VISTIN/">VISTIN</a></td>
-          <td>Vistin Pharma ASA</td>
-          <td>18,75 NOK</td>
-          <td class="yield">8,00 %</td>
-          <td>24. nov 2026</td>
-        </tr>
-        <tr>
-          <td><a href="/aksjer/MEDI/">MEDI</a></td>
-          <td>Medistim ASA</td>
-          <td>323,00 NOK</td>
-          <td class="yield">3,10 %</td>
-          <td>—</td>
-        </tr>
-        <tr>
-          <td><a href="/aksjer/GENT/">GENT</a></td>
-          <td>Gentian Diagnostics ASA</td>
-          <td>39,20 NOK</td>
-          <td class="yield">1,53 %</td>
-          <td>—</td>
-        </tr></tbody>
-  </table>
-  </div>
   <div class="cta"><a href="/app/">Åpne full app med filtrering og porteføljekalkulator →</a></div>
   <p class="updated">Tallene er hentet 24. november 2026</p>
   <footer style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid #e5e7eb;font-size:0.78rem;text-align:center;color:#6b7280;line-height:1.6;" class="std-footer">

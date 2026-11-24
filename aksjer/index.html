@@ -130,6 +130,8 @@
     .alle-aksjer-header .filter-info { font-size: 0.78rem; color: #6b7280; }
     table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
     th { background: #f9fafb; padding: 0.65rem 1.25rem; text-align: left; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #6b7280; border-bottom: 1px solid #e5e7eb; }
+    /* Tickerkolonnen er festet (.tabell-fast i style.css). Hodet her er gray-50, ikke gray-100. */
+    .tabell-fast { --fast-bg-hode: #f9fafb; }
     td { padding: 0.7rem 1.25rem; border-bottom: 1px solid #f3f4f6; }
     tr:last-child td { border-bottom: none; }
     tr:hover td { background: #f9fafb; }
@@ -305,7 +307,7 @@
       <a href="/aksjer/OET/" class="ak-kort">
         <div class="ak-kort-topp">
           <span class="ak-kort-tk">OET</span>
-          <span class="ak-kort-yield">19,79 %</span>
+          <span class="ak-kort-yield">19,80 %</span>
         </div>
         <div class="ak-kort-navn">Okeanis Eco Tankers Corp.</div>
         <div class="ak-kort-meta">Shipping · Kvartalsvis · 7 år på rad</div>
@@ -337,7 +339,7 @@
       <a href="/aksjer/HSHP/" class="ak-kort">
         <div class="ak-kort-topp">
           <span class="ak-kort-tk">HSHP</span>
-          <span class="ak-kort-yield">12,86 %</span>
+          <span class="ak-kort-yield">12,85 %</span>
         </div>
         <div class="ak-kort-navn">Himalaya Shipping Ltd.</div>
         <div class="ak-kort-meta">Shipping · Månedlig · 3 år på rad</div>
@@ -419,7 +421,7 @@
       <a href="/aksjer/OET/" class="ak-kort">
         <div class="ak-kort-topp">
           <span class="ak-kort-tk">OET</span>
-          <span class="ak-kort-yield">19,79 %</span>
+          <span class="ak-kort-yield">19,80 %</span>
         </div>
         <div class="ak-kort-navn">Okeanis Eco Tankers Corp.</div>
         <div class="ak-kort-meta">Shipping · Kvartalsvis · 7 år på rad</div>
@@ -435,7 +437,7 @@
       <a href="/aksjer/HSHP/" class="ak-kort">
         <div class="ak-kort-topp">
           <span class="ak-kort-tk">HSHP</span>
-          <span class="ak-kort-yield">12,86 %</span>
+          <span class="ak-kort-yield">12,85 %</span>
         </div>
         <div class="ak-kort-navn">Himalaya Shipping Ltd.</div>
         <div class="ak-kort-meta">Shipping · Månedlig · 3 år på rad</div>
@@ -507,7 +509,7 @@
         <span class="filter-info">Sortert etter yield</span>
       </div>
       <div style="overflow-x:auto;">
-      <table>
+      <table class="tabell-fast">
         <thead><tr><th>Ticker</th><th>Navn</th><th>Sektor</th><th>Kurs</th><th>Yield</th><th>Ex-dato</th></tr></thead>
         <tbody>
         <tr>
@@ -539,7 +541,7 @@
           <td>Okeanis Eco Tankers Corp.</td>
           <td>Shipping</td>
           <td>784,00 NOK</td>
-          <td>19,79 %</td>
+          <td>19,80 %</td>
           <td>—</td>
         </tr>
         <tr>
@@ -571,7 +573,7 @@
           <td>Himalaya Shipping Ltd.</td>
           <td>Shipping</td>
           <td>149,00 NOK</td>
-          <td>12,86 %</td>
+          <td>12,85 %</td>
           <td>—</td>
         </tr>
         <tr>
@@ -612,7 +614,7 @@
           <td>Shipping</td>
           <td>217,20 NOK</td>
           <td>11,51 %</td>
-          <td>—</td>
+          <td>3. des 2026</td>
         </tr>
         <tr>
           <td><a href="/aksjer/DOF/">DOF</a></td>
@@ -627,7 +629,7 @@
           <td>Frontline PLC</td>
           <td>Shipping</td>
           <td>460,60 NOK</td>
-          <td>11,47 %</td>
+          <td>11,48 %</td>
           <td>8. des 2026</td>
         </tr>
         <tr>
@@ -716,7 +718,7 @@
           <td>Shipping</td>
           <td>166,40 NOK</td>
           <td>8,43 %</td>
-          <td>—</td>
+          <td>8. des 2026</td>
         </tr>
         <tr>
           <td><a href="/aksjer/ODFB/">ODFB</a></td>

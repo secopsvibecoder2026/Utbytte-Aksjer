@@ -73,9 +73,11 @@
     .sektor-analyse p { margin: 0 0 0.9rem; line-height: 1.75; font-size: 0.95rem; }
     /* Tabellen er bredere enn en mobilskjerm (473 px mot 390 px), så den må
        scrolle i sin egen ramme. Uten wrapperen dyttet den hele siden ut i
-       horisontal scroll på alle 16 sektorsidene. */
+       horisontal scroll på alle 16 sektorsidene. Ingen overflow på selve
+       tabellen: da blir den, ikke rammen, forelderen den faste tickerkolonnen
+       (.tabell-fast i style.css) fester seg mot. */
     .tabell-ramme { overflow-x: auto; -webkit-overflow-scrolling: touch; margin-bottom: 1.5rem; }
-    table { width: 100%; min-width: 30rem; border-collapse: collapse; border-radius: 0.75rem; overflow: hidden; font-size: 0.9rem; border: 1px solid; }
+    table { width: 100%; min-width: 30rem; border-collapse: collapse; font-size: 0.9rem; border: 1px solid; }
     th { padding: 0.6rem 1rem; text-align: left; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; white-space: nowrap; }
     td { padding: 0.65rem 1rem; border-top: 1px solid; white-space: nowrap; }
     .yield { font-weight: 600; color: #111827; }
@@ -169,8 +171,36 @@
   <h1 class="side-h1"><svg class="h1-ikon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 10h.01M9 14h.01M15 10h.01M15 14h.01"/></svg>Eiendom-aksjer med utbytte</h1>
   <p class="sub">3 norske eiendom-aksjer på Oslo Børs. Sortert etter direkteavkastning.</p>
   <dl class="tallruter tallruter-n3" aria-label="Sektoren i tall"><div class="tallrute"><dt>Aksjer</dt><dd>3</dd></div><div class="tallrute"><dt>Snitt yield</dt><dd>3,4 %</dd></div><div class="tallrute"><dt>Høyeste yield</dt><dd>4,6 %</dd></div></dl>
+  <p class="sektor-hopp"><a href="#sektoranalyse">Les om hva som driver utbyttet i Eiendom<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></a></p>
+  <div class="tabell-ramme">
+  <table class="tabell-fast">
+    <thead><tr><th>Ticker</th><th>Navn</th><th>Kurs</th><th>Yield</th><th>Ex-dato</th></tr></thead>
+    <tbody>
+        <tr>
+          <td><a href="/aksjer/PUBLI/">PUBLI</a></td>
+          <td>PPI Public Property Invest AB</td>
+          <td>17,22 NOK</td>
+          <td class="yield">4,59 %</td>
+          <td>29. des 2026</td>
+        </tr>
+        <tr>
+          <td><a href="/aksjer/SBO/">SBO</a></td>
+          <td>Selvaag Bolig ASA</td>
+          <td>30,40 NOK</td>
+          <td class="yield">3,29 %</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td><a href="/aksjer/ENTR/">ENTR</a></td>
+          <td>Entra ASA</td>
+          <td>97,00 NOK</td>
+          <td class="yield">2,27 %</td>
+          <td>—</td>
+        </tr></tbody>
+  </table>
+  </div>
 
-  <div class="sektor-analyse les">
+  <div class="sektor-analyse les" id="sektoranalyse">
   <h2>Eiendom som utbyttesektor</h2>
   <p>exday.no følger 3 aksjer i Eiendom med utbytte. Medianen blant dem er 3,29 % og ligger 2,4 prosentpoeng under medianen for hele Oslo Børs på 5,65 %. Spredningen er moderat, fra 2,27 % til 4,59 %, så snittet er rimelig representativt.</p>
   <p>Median utbetalingsgrad blant de 3 aksjene med kjent payout ratio er 37 %. Av dem deler én ut mer enn de tjener, noe som kan være holdbart en periode, men ikke varig uten at inntjeningen tar seg opp.</p>
@@ -220,7 +250,7 @@ det første som ryker. Et eiendomsselskap med moderat belåning tåler et
 verdifall som tvinger et høyt belånt selskap til å kutte.</p>
   <h2>Hva driver utbyttet i Eiendom?</h2>
   <p>Leieinntekter fra kontrakter gir forutsigbar kontantstrøm, men refinansieringsrisiko og eiendomsverdi påvirkes sterkt av rentenivået. Ledighet og kontraktsfornyelse i porteføljen er nøkkeltall å følge. I perioder med høye renter stiger finansieringskostnadene og kan presse utbyttet selv om leieinntektene er stabile.</p>
-  <h2>Slik bruker du tabellen under</h2>
+  <h2>Slik bruker du tabellen</h2>
   <p>Aksjene er sortert etter direkteavkastning, høyeste først. Husk at
   yield er utbytte delt på kurs — tallet stiger like gjerne fordi kursen
   faller som fordi utbyttet øker. En aksje som skiller seg kraftig fra
@@ -230,33 +260,6 @@ verdifall som tvinger et høyt belånt selskap til å kutte.</p>
   betalt sammenhengende.</p>
   </div>
 
-  <div class="tabell-ramme">
-  <table>
-    <thead><tr><th>Ticker</th><th>Navn</th><th>Kurs</th><th>Yield</th><th>Ex-dato</th></tr></thead>
-    <tbody>
-        <tr>
-          <td><a href="/aksjer/PUBLI/">PUBLI</a></td>
-          <td>PPI Public Property Invest AB</td>
-          <td>17,22 NOK</td>
-          <td class="yield">4,59 %</td>
-          <td>29. des 2026</td>
-        </tr>
-        <tr>
-          <td><a href="/aksjer/SBO/">SBO</a></td>
-          <td>Selvaag Bolig ASA</td>
-          <td>30,40 NOK</td>
-          <td class="yield">3,29 %</td>
-          <td>—</td>
-        </tr>
-        <tr>
-          <td><a href="/aksjer/ENTR/">ENTR</a></td>
-          <td>Entra ASA</td>
-          <td>97,00 NOK</td>
-          <td class="yield">2,27 %</td>
-          <td>—</td>
-        </tr></tbody>
-  </table>
-  </div>
   <div class="cta"><a href="/app/">Åpne full app med filtrering og porteføljekalkulator →</a></div>
   <p class="updated">Tallene er hentet 24. november 2026</p>
   <footer style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid #e5e7eb;font-size:0.78rem;text-align:center;color:#6b7280;line-height:1.6;" class="std-footer">
