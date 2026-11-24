@@ -28,7 +28,8 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+      # Adressen kommer fra det forsøket som lyktes (se deploy-stegene).
+      url: ${{ steps.deployment3.outputs.page_url || steps.deployment2.outputs.page_url || steps.deployment.outputs.page_url }}
     steps:
       - name: Sjekk ut kode
         uses: actions/checkout@v4
@@ -48,6 +49,28 @@ jobs:
         with:
           path: ${{ runner.temp }}/nettsted
 
+      # Tre forsøk, fordi deploy-pages av og til ikke finner artefakten rett
+      # etter opplasting (se forklaringen i update-og-deploy.yml).
       - name: Deploy til GitHub Pages
         id: deployment
+        uses: actions/deploy-pages@v4
+        continue-on-error: true
+
+      - name: Vent før forsøk 2
+        if: steps.deployment.outcome == 'failure'
+        run: sleep 20
+
+      - name: Deploy til GitHub Pages (forsøk 2)
+        id: deployment2
+        if: steps.deployment.outcome == 'failure'
+        uses: actions/deploy-pages@v4
+        continue-on-error: true
+
+      - name: Vent før forsøk 3
+        if: steps.deployment.outcome == 'failure' && steps.deployment2.outcome == 'failure'
+        run: sleep 60
+
+      - name: Deploy til GitHub Pages (forsøk 3)
+        id: deployment3
+        if: steps.deployment.outcome == 'failure' && steps.deployment2.outcome == 'failure'
         uses: actions/deploy-pages@v4

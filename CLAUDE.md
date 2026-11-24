@@ -302,6 +302,32 @@ win, since everything the data job commits is generated and the last run has
 the newest code and numbers. `kodeendring.yml` also watches
 `update-og-deploy.yml`, so a fix to the data job itself is run at once.
 
+**`deploy-pages` can miss its own artifact (2026-11-24).** 6 of the 14 Actions
+deploys between 23 November 16:08 and 24 November 03:14 UTC failed with
+`Fetching artifact metadata failed … No artifacts named "github-pages" were
+found for this workflow run`. In the four logs that were read, the artifact
+had been uploaded and had an ID; `deploy-pages` asked for the run's artifact
+list 0,3 to 0,6 seconds later and got an empty answer. The runs that went
+through took about 0,4 seconds on the same step, so this is a lag in GitHub's
+artifact list, not a fault in our files. It fails before a deployment is
+created, so a second attempt is safe.
+
+- Both `update-og-deploy.yml` and `deploy-only.yml` now try `deploy-pages`
+  three times, with 20 and 60 seconds of waiting before the second and third.
+  The first two attempts use `continue-on-error`, the third does not, and the
+  environment URL comes from the attempt that succeeded.
+  `TestDeploySteg.test_deploy_pages_har_tre_forsok` fails if that goes.
+- **What readers see does not depend on this job.** While Pages is set to
+  «Deploy from a branch», the live `sw.js` still read `exday-v10` on 24
+  November, also after an Actions deploy had gone green, so the site comes from
+  GitHub's own branch build. The failed deploys cost red runs and notices, not
+  stale pages. The SW cache name is only bumped when Settings → Pages → Source
+  is «GitHub Actions», which is the owner's to set (see «Internal files were
+  public»).
+- **The retry path has not run in production yet.** A session cannot start the
+  workflow (403), so the first test is the data run that merging this change
+  starts through `kodeendring.yml`.
+
 ### The trading-day clock (`klokke.yml` + `scripts/klokke.py`, 2026-10-18)
 
 GitHub's scheduler kept failing even after the minutes were moved off the hour:
