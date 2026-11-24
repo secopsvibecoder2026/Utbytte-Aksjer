@@ -91,6 +91,28 @@ og hvilket vedlegg som er med, og datoen rapporten ble lagt fram
 Les meldingen først. Den sier hva selskapet selv mener er viktigst. Les så
 nøkkeltallstabellen i rapporten.
 
+**Les selskapets forrige oppsummering, før du skriver.** Den ligger i
+`data/rapporter/{TICKER}.json`, nyeste først. Rapportsiden setter tallene fra
+flere rapporter side om side («Forrige rapport» og «Utvikling over tid»), og
+det virker bare når samme tall har samme navn og samme enhet hver gang:
+
+- Bruk **nøyaktig samme `navn`** som forrige oppsummering for et tall som står
+  i begge. Siden slår bare sammen navn som er identiske (store og små
+  bokstaver og mellomrom i endene teller ikke). «Utbytte per aksje» og
+  «Utbytte pr. aksje» er to ulike rader, og da mangler tallet i serien.
+- Bruk **samme enhet**: samme valuta («USD», ikke «kr») og samme skala
+  («mill.» eller «mrd.»). Skriver forrige oppsummering «9 844 mill. kr», skriver
+  du «9 912 mill. kr», ikke «9,9 mrd. kr». Er kildens tabell i en annen enhet
+  enn sist, skriv tallet slik kilden har det og la porten varsle.
+- **Nye rader er greit.** Har rapporten et tall forrige oppsummering ikke
+  hadde, skriv det med et nytt navn. Du trenger ikke dekke de samme radene hver
+  gang, men rader som skal kunne sammenlignes bør ha de samme navnene.
+- Står et tall under et annet navn i kilden denne gangen («Resultat til
+  aksjonærene» der det het «Resultat etter skatt» sist), er det kanskje et
+  annet tall. Behold kildens navn, og ikke omdøp for å få en serie.
+- Du regner fortsatt ikke selv. Siden regner ut endringen fra forrige rapport
+  når enhetene er like, og sier at det er vi som har regnet.
+
 ### 3. Skriv oppsummeringen
 
 Skriv den som JSON til en fil i scratchpad-katalogen. Eksempelet er laget
@@ -147,7 +169,9 @@ Skriv tallene slik kilden har dem, med enhet i cellen: «9 844 mill. kr»,
 «12,35 mrd. USD», «14,5 %». Begge tallene i en rad må komme fra samme rad i
 kildens tabell. Kontrollen sjekker det. Hold radnavnene korte, to til fire
 ord («Resultat etter skatt», «Produksjon per dag»). På mobil stables raden
-med navnet over tallene, så et langt navn tar mye plass.
+med navnet over tallene, så et langt navn tar mye plass. Navn og enhet skal
+være de samme som i selskapets forrige oppsummering (se «Les selskapets
+forrige oppsummering» over).
 
 **Utbyttet.** Begynn med beløpet per aksje og valutaen, og sammenlign med
 forrige utbytte per aksje. Det er det eieren får. Si om det er vedtatt av
@@ -215,6 +239,13 @@ kilden. Ikke skriv tallet om til noe som tilfeldigvis står der.
 
 `varsel`-linjene stopper ikke lagringen. De peker på vurderende ord som
 «sterk» og «svak». Sjekk at det er selskapets ord, og at teksten sier det.
+
+Porten sammenligner også nøkkeltallene med selskapets forrige lagrede
+oppsummering, og varsler når en rad har samme navn men annen enhet (valuta
+eller mill. mot mrd.), eller når et navn ligner på et forrige navn uten å være
+identisk (ett ord forskjellig). Da henger ikke serien sammen på rapportsiden.
+Er det samme tall, rett navnet eller enheten og kjør porten på nytt. Er det to
+ulike tall, la det stå, og si det i sluttrapporten.
 
 **Porten fanger ikke alt.** Et tall som er feil avskrevet, kan likevel stå et
 annet sted i kilden og slippe gjennom. Små heltall («1 %», «3 milliarder»)

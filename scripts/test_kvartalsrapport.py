@@ -84,6 +84,16 @@ class TestPerioder(unittest.TestCase):
         self.assertEqual(kr.forrige_periode("2026-Q3"), "2025-Q3")
         self.assertEqual(kr.anker("2026-Q3"), "2026-q3")
 
+    def test_perioden_rett_for(self):
+        """«Forrige rapport» er perioden rett før, ikke samme periode i fjor (det er forrige_periode)."""
+        self.assertEqual(kr.foregaaende_periode("2026-Q3"), "2026-Q2")
+        self.assertEqual(kr.foregaaende_periode("2026-Q1"), "2025-Q4")
+        self.assertEqual(kr.foregaaende_periode("2026-H2"), "2026-H1")
+        self.assertEqual(kr.foregaaende_periode("2026-H1"), "2025-H2")
+        self.assertEqual(kr.foregaaende_periode("2026-AR"), "2025-AR")
+        self.assertEqual(kr.foregaaende_periode("2026-X9"), "")
+        self.assertEqual(kr.foregaaende_periode(None), "")
+
     def test_kode_i_tittelen(self):
         self.assertEqual(fs._periode_kode("2026-Q3"), "Q3 2026")
         self.assertEqual(fs._periode_kode("2026-H1"), "H1 2026")
@@ -455,6 +465,283 @@ class TestSider(unittest.TestCase):
             self.assertEqual(skrevet, ["DNB"])
             self.assertTrue(os.path.isfile(os.path.join(d, "aksjer", "DNB", "rapporter", "index.html")))
             self.assertFalse(os.path.exists(os.path.join(d, "aksjer", "EQNR", "rapporter")))
+        finally:
+            shutil.rmtree(d)
+
+
+def _tall(verdi, enhet="usd"):
+    """Det en tolket verdi skal være: (tall som Decimal, normalisert enhet)."""
+    from decimal import Decimal
+    return Decimal(str(verdi)), enhet
+
+
+class TestTolkVerdi(unittest.TestCase):
+    """Verdiene i `nokkeltall` er tekst skrevet av agenten. Bare det som er ett tall
+    med enhet blir tolket, og alt annet gir None, så ingen endring regnes av gjetting."""
+
+    def _les(self, tekst):
+        v = kr.tolk_verdi(tekst)
+        self.assertIsNotNone(v, tekst)
+        return v.verdi, v.enhet
+
+    def test_millioner_og_valuta(self):
+        self.assertEqual(self._les("358,9 mill. USD"), _tall(358_900_000))
+        self.assertEqual(self._les("2,05 USD"), _tall("2.05"))
+
+    def test_tusenskille_med_vanlig_hardt_og_smalt_mellomrom(self):
+        for tekst in ("1 204 mill. kr", "1\u00a0204 mill. kr", "1\u202f204 mill. kr"):
+            self.assertEqual(self._les(tekst), _tall(1_204_000_000, "nok"), repr(tekst))
+        self.assertEqual(self._les("84 100 USD per dag"), _tall(84100, "usd per dag"))
+
+    def test_milliarder_og_millioner_er_samme_beloep(self):
+        self.assertEqual(self._les("5,6 mrd. kr"), self._les("5 600 mill. kr"))
+        self.assertEqual(self._les("20 tusen kr"), _tall(20000, "nok"))
+
+    def test_valutaene_skrives_likt(self):
+        self.assertEqual(self._les("1,30 kr")[1], self._les("1,30 NOK")[1])
+        self.assertEqual(self._les("1,30 kroner")[1], "nok")
+        self.assertEqual(self._les("1,30 dollar")[1], "usd")
+        self.assertNotEqual(self._les("1,30 USD")[1], self._les("1,30 EUR")[1])
+
+    def test_prosent(self):
+        v = kr.tolk_verdi("12,5 %")
+        self.assertTrue(v.prosent)
+        self.assertEqual(self._les("12,5 prosent"), self._les("12,5 %"))
+
+    def test_negative_tall_og_underskudd(self):
+        self.assertEqual(self._les("\u22125,2 mill. USD"), _tall(-5_200_000))
+        self.assertEqual(self._les("-5,2 %"), _tall("-5.2", "%"))
+        self.assertEqual(self._les("+5,2 %"), _tall("5.2", "%"))
+        self.assertEqual(self._les("underskudd på 29,5 mill. USD"), _tall(-29_500_000))
+        self.assertEqual(self._les("29,5 mill. USD underskudd"), _tall(-29_500_000))
+        # Underskudd og minus er ikke to minus.
+        self.assertEqual(self._les("underskudd \u22125 mill. kr"), _tall(-5_000_000, "nok"))
+
+    def test_det_som_ikke_er_ett_tall_gir_none(self):
+        for tekst in ("underskudd", "ca. 12 mrd.", "rundt 12 %", "12 til 14 %", "n/a", "", None,
+                      "USD/foe", "5 6000 kr", "mill. USD"):
+            self.assertIsNone(kr.tolk_verdi(tekst), repr(tekst))
+
+
+class TestEndring(unittest.TestCase):
+    def test_prosent_endring(self):
+        e = kr.endring("358,9 mill. USD", "137,9 mill. USD")
+        self.assertEqual((e["type"], str(e["verdi"])), ("prosent", "160.3"))
+        e = kr.endring("2,05 USD", "0,79 USD")
+        self.assertEqual(str(e["verdi"]), "159.5")
+
+    def test_prosentpoeng_for_tall_i_prosent(self):
+        e = kr.endring("14,5 %", "15,8 %")
+        self.assertEqual((e["type"], str(e["verdi"]), e["desimaler"]), ("pp", "-1.3", 1))
+        # Desimalene følger tallene: to desimaler inn, to ut.
+        e = kr.endring("12,35 %", "12,10 %")
+        self.assertEqual((str(e["verdi"]), e["desimaler"]), ("0.25", 2))
+        # Også fra et negativt grunnlag: forskjellen i poeng trenger ikke positivt tall.
+        self.assertEqual(str(kr.endring("2,0 %", "-1,5 %")["verdi"]), "3.5")
+
+    def test_mrd_mot_mill_er_samme_beloep(self):
+        self.assertEqual(str(kr.endring("5,6 mrd. kr", "5 600 mill. kr")["verdi"]), "0.0")
+        self.assertEqual(str(kr.endring("6,6 mrd. kr", "5 600 mill. kr")["verdi"]), "17.9")
+
+    def test_ulike_enheter_gir_ingen_endring(self):
+        self.assertIsNone(kr.endring("1,30 USD", "1,30 NOK"))
+        self.assertIsNone(kr.endring("12,5 %", "12,5 mill. kr"))
+        # Samme valuta, men et resultat mot et beløp per aksje er ikke samme størrelse.
+        self.assertIsNone(kr.endring("5 mill. kr", "5 kr"))
+        self.assertIsNone(kr.endring("84 100 USD per dag", "84 100 USD"))
+
+    def test_kan_ikke_tolkes_gir_ingen_endring(self):
+        self.assertIsNone(kr.endring("ca. 12 mrd. kr", "10 mrd. kr"))
+        self.assertIsNone(kr.endring("12 mrd. kr", ""))
+        self.assertIsNone(kr.endring(None, "12 mrd. kr"))
+
+    def test_grunnlaget_maa_vaere_positivt(self):
+        """En endring fra underskudd er ikke en prosent, og null har ingen prosent."""
+        self.assertIsNone(kr.endring("10 mill. kr", "underskudd på 5 mill. kr"))
+        self.assertIsNone(kr.endring("10 mill. kr", "0 mill. kr"))
+        self.assertIsNone(kr.endring("underskudd 3 mill. kr", "4 mill. kr"))   # til underskudd
+        self.assertIsNone(kr.endring("-3 mill. kr", "-4 mill. kr"))
+        self.assertEqual(str(kr.endring("0 mill. kr", "4 mill. kr")["verdi"]), "-100.0")
+
+    def test_avrunding_gaar_opp_ved_halvt(self):
+        """1,25 blir 1,3, ikke 1,2 som round() gir."""
+        self.assertEqual(str(kr.endring("101,25 mill. kr", "100 mill. kr")["verdi"]), "1.3")
+
+
+def _r(periode, rader, dato=None):
+    """En rapport med bare det serien trenger. rader er (navn, nå)."""
+    return {"periode": periode, "dato": dato or f"{periode[:4]}-{int(periode[-1]) * 3:02d}-20",
+            "nokkeltall": [{"navn": n, "naa": v, "forrige": "1"} for n, v in rader]}
+
+
+class TestSerie(unittest.TestCase):
+    def test_bare_identiske_navn_i_minst_to_rapporter(self):
+        liste = [_r("2026-Q3", [("Resultat etter skatt", "10 mill. kr"), ("Bare her", "1 kr")]),
+                 _r("2026-Q2", [("Resultat etter skatt", "8 mill. kr"), ("Bare i den", "2 kr")])]
+        s = kr.serie(liste)
+        self.assertEqual([r["navn"] for r in s["rader"]], ["Resultat etter skatt"])
+        self.assertEqual([k["periode"] for k in s["kolonner"]], ["2026-Q3", "2026-Q2"])
+
+    def test_ingen_uklar_matching(self):
+        liste = [_r("2026-Q3", [("Resultat etter skatt", "10 mill. kr")]),
+                 _r("2026-Q2", [("Resultat til aksjonærene", "8 mill. kr")])]
+        self.assertIsNone(kr.serie(liste))
+
+    def test_trim_og_casefold_men_ingenting_mer(self):
+        liste = [_r("2026-Q3", [("Resultat per aksje", "2 kr")]),
+                 _r("2026-Q2", [("  resultat PER aksje ", "1 kr")])]
+        s = kr.serie(liste)
+        self.assertEqual(s["rader"][0]["navn"], "Resultat per aksje")   # navnet fra den nyeste
+        self.assertEqual([c["tekst"] for c in s["rader"][0]["celler"]], ["2 kr", "1 kr"])
+        # Et annet ord, en ekstra bokstav eller et annet skilletegn er ikke samme tall.
+        for annet in ("Resultat pr. aksje", "Resultat per aksjer", "Resultat-per-aksje"):
+            self.assertIsNone(kr.serie([_r("2026-Q3", [("Resultat per aksje", "2 kr")]),
+                                        _r("2026-Q2", [(annet, "1 kr")])]), annet)
+
+    def test_ingen_serie_uten_to_rapporter(self):
+        self.assertIsNone(kr.serie([_r("2026-Q3", [("A", "1 kr")])]))
+        self.assertIsNone(kr.serie([]))
+        self.assertIsNone(kr.serie(None))
+
+    def test_opptil_seks_kolonner_nyeste_foerst(self):
+        perioder = ["2026-Q3", "2026-Q2", "2026-Q1", "2025-Q4", "2025-Q3", "2025-Q2", "2025-Q1"]
+        liste = [_r(p, [("A", f"{i + 1} mill. kr")]) for i, p in enumerate(perioder)]
+        s = kr.serie(liste)
+        self.assertEqual([k["periode"] for k in s["kolonner"]], perioder[:6])
+        self.assertEqual(len(s["rader"][0]["celler"]), 6)
+
+    def test_raden_telles_blant_de_viste_kolonnene(self):
+        """Et navn som står i den nyeste og i den sjuende, men ikke i noen av de fem mellom, gir ingen rad:
+        tabellen ville vist ett tall på en rad som skal vise en serie."""
+        liste = [_r("2026-Q3", [("A", "1 kr")])] + [_r(p, [("B", "1 kr")]) for p in
+                                                   ("2026-Q2", "2026-Q1", "2025-Q4", "2025-Q3")]
+        liste += [_r("2025-Q2", [("C", "1 kr")]), _r("2025-Q1", [("A", "1 kr")])]
+        s = kr.serie(liste)
+        self.assertEqual([r["navn"] for r in s["rader"]], ["B"])
+
+    def test_manglende_tall_er_none_og_gir_ingen_endring_over_hullet(self):
+        liste = [_r("2026-Q3", [("A", "30 mill. kr")]),
+                 _r("2026-Q2", [("B", "1 kr")]),
+                 _r("2026-Q1", [("A", "20 mill. kr")]),
+                 _r("2025-Q4", [("A", "10 mill. kr")])]
+        a = next(r for r in kr.serie(liste)["rader"] if r["navn"] == "A")
+        self.assertEqual([c["tekst"] for c in a["celler"]], ["30 mill. kr", None, "20 mill. kr", "10 mill. kr"])
+        self.assertIsNone(a["celler"][0]["endring"])        # Q2 mangler: ingenting å regne mot
+        self.assertIsNone(a["celler"][1]["endring"])
+        self.assertEqual(str(a["celler"][2]["endring"]["verdi"]), "100.0")   # Q1 mot Q4
+
+    def test_endring_bare_mot_perioden_rett_foer(self):
+        # 2026-Q3 og 2026-Q1: et kvartal mangler, så Q3 har ingen «forrige rapport».
+        liste = [_r("2026-Q3", [("A", "30 mill. kr")]), _r("2026-Q1", [("A", "20 mill. kr")])]
+        celler = kr.serie(liste)["rader"][0]["celler"]
+        self.assertEqual([c["tekst"] for c in celler], ["30 mill. kr", "20 mill. kr"])
+        self.assertIsNone(celler[0]["endring"])
+        # Kvartalsskiftet over nyttår er rett før: 2026-Q1 mot 2025-Q4.
+        celler = kr.serie([_r("2026-Q1", [("A", "30 mill. kr")]), _r("2025-Q4", [("A", "20 mill. kr")])])["rader"][0]["celler"]
+        self.assertEqual(str(celler[0]["endring"]["verdi"]), "50.0")
+
+    def test_tom_celle_er_ikke_et_tall(self):
+        liste = [_r("2026-Q3", [("A", "")]), _r("2026-Q2", [("A", "1 kr")])]
+        self.assertIsNone(kr.serie(liste))   # bare ett tall, så ingen serie
+
+    def test_forrige_rapport_er_bare_perioden_rett_foer(self):
+        q3, q2, q1 = _r("2026-Q3", []), _r("2026-Q2", []), _r("2026-Q1", [])
+        self.assertIs(kr.forrige_rapport([q3, q2, q1], q3), q2)
+        self.assertIsNone(kr.forrige_rapport([q3, q1], q3))
+        self.assertIsNone(kr.forrige_rapport([q3], q3))
+        self.assertIsNone(kr.forrige_rapport([_r("2026-H2", []), _r("2026-Q2", [])], _r("2026-H2", [])))
+
+    def test_mot_forrige_tar_bare_identiske_navn(self):
+        ny = _r("2026-Q3", [("A", "30 mill. kr"), ("B", "5 mill. kr"), ("C", "7 USD")])
+        gammel = _r("2026-Q2", [("a", "20 mill. kr"), ("B ekstra", "1 mill. kr"), ("C", "7 NOK")])
+        m = kr.mot_forrige(ny, gammel)
+        self.assertEqual(sorted(m), ["a", "c"])
+        self.assertEqual(str(m["a"]["endring"]["verdi"]), "50.0")
+        self.assertIsNone(m["c"]["endring"])        # USD mot NOK
+        self.assertEqual(kr.mot_forrige(ny, None), {})
+
+
+class TestSerievarsel(unittest.TestCase):
+    """`--skriv` varsler (stopper ikke) når en rad ikke lar seg lese som en serie."""
+
+    def test_samme_navn_annen_valuta(self):
+        v = kr.serie_varsler(_r("2026-Q3", [("Resultat per aksje", "2,05 USD")]),
+                             _r("2026-Q2", [("Resultat per aksje", "0,79 NOK")]))
+        self.assertEqual(len(v), 1)
+        self.assertIn("«Resultat per aksje»", v[0])
+        self.assertIn("2. kv. 2026", v[0])
+        self.assertIn("kan ikke endringen regnes ut", v[0])
+        self.assertIn("henger ikke sammen", v[0])
+
+    def test_samme_navn_annen_skala_regnes_om_men_varsles(self):
+        v = kr.serie_varsler(_r("2026-Q3", [("Inntekter", "1,2 mrd. USD")]),
+                             _r("2026-Q2", [("Inntekter", "980 mill. USD")]))
+        self.assertEqual(len(v), 1)
+        self.assertIn("regnes om", v[0])
+        self.assertNotIn("kan ikke", v[0])
+
+    def test_beloep_mot_resultat_kan_ikke_regnes(self):
+        v = kr.serie_varsler(_r("2026-Q3", [("Utbytte", "1,30 kr")]), _r("2026-Q2", [("Utbytte", "95 mill. kr")]))
+        self.assertEqual(len(v), 1)
+        self.assertIn("kan ikke endringen regnes ut", v[0])
+
+    def test_samme_enhet_gir_ingen_varsler(self):
+        self.assertEqual(kr.serie_varsler(_r("2026-Q3", [("Inntekter", "1,2 mrd. kr")]),
+                                          _r("2026-Q2", [("Inntekter", "1,1 mrd. NOK")])), [])
+        self.assertEqual(kr.serie_varsler(_r("2026-Q3", [("A", "10 mill. kr")]),
+                                          _r("2026-Q2", [("A", "underskudd på 5 mill. kr")])), [])
+
+    def test_navn_som_ligner_varsles_som_spoersmaal(self):
+        v = kr.serie_varsler(_r("2026-Q3", [("Utbytte per aksje", "1,30 USD")]),
+                             _r("2026-Q2", [("Utbytte pr. aksje", "0,95 USD")]))
+        self.assertEqual(len(v), 1)
+        self.assertIn("ligner på «Utbytte pr. aksje»", v[0])
+        self.assertIn("nøyaktig samme navn", v[0])
+        # Et ord lagt til eller tatt bort ligner også.
+        self.assertEqual(len(kr.serie_varsler(_r("2026-Q3", [("Inntekter skipsfart", "1 kr")]),
+                                              _r("2026-Q2", [("Inntekter skipsfart (TCE)", "1 kr")]))), 1)
+
+    def test_identisk_navn_og_to_ulike_tall_gir_ingen_varsel(self):
+        """«Resultat før skatt» og «Resultat etter skatt» står i begge rapportene: to tall, ikke ett med to navn."""
+        rader = [("Resultat før skatt", "9 mill. kr"), ("Resultat etter skatt", "7 mill. kr")]
+        self.assertEqual(kr.serie_varsler(_r("2026-Q3", rader), _r("2026-Q2", rader)), [])
+
+    def test_navn_som_ikke_ligner_gir_ingen_varsel(self):
+        self.assertEqual(kr.serie_varsler(_r("2026-Q3", [("Inntekter", "1 kr")]),
+                                          _r("2026-Q2", [("Resultat", "1 kr")])), [])
+        self.assertEqual(kr.serie_varsler(_r("2026-Q3", [("Resultat etter skatt", "1 kr")]),
+                                          _r("2026-Q2", [("Kontantstrøm fra driften", "1 kr")])), [])
+
+    def test_ny_rad_er_greit(self):
+        self.assertEqual(kr.serie_varsler(_r("2026-Q3", [("A", "1 kr"), ("Helt ny rad", "2 kr")]),
+                                          _r("2026-Q2", [("A", "1 kr")])), [])
+
+    def test_ingen_forrige_rapport_gir_ingen_varsler(self):
+        self.assertEqual(kr.serie_varsler(_r("2026-Q3", [("A", "1 kr")]), None), [])
+
+    def test_varslene_stopper_ikke_lagringen(self):
+        """vurder_oppsummering gir dem i `varsler`, aldri i `feil`."""
+        rapport = _rapport(nokkeltall=[
+            {"navn": "Resultat etter skatt", "naa": "9,8 mrd. kr", "forrige": "10 684 mill. kr"},
+            {"navn": "Egenkapitalavkastning", "naa": "14,5 %", "forrige": "15,8 %"}])
+        forrige = _r("2026-Q2", [("Resultat etter skatt", "9 000 mill. kr")])
+        feil0, varsler0 = kr.vurder_oppsummering("DNB", rapport)
+        feil, varsler = kr.vurder_oppsummering("DNB", rapport, forrige=forrige)
+        self.assertEqual(feil, feil0)
+        self.assertEqual(len(varsler), len(varsler0) + 1)
+        self.assertTrue(any("regnes om" in v for v in varsler))
+
+    def test_forrige_lagrede_er_den_nyeste_eldre_og_aldri_samme_periode(self):
+        d = tempfile.mkdtemp()
+        try:
+            kr.lagre("DNB", _rapport(periode="2026-Q1", dato="2026-04-20"), d)
+            kr.lagre("DNB", _rapport(periode="2026-Q2", dato="2026-07-14"), d)
+            kr.lagre("DNB", _rapport(periode="2026-Q3", dato="2026-10-21"), d)
+            ny = _rapport(periode="2026-Q3", dato="2026-10-21")
+            self.assertEqual(kr.forrige_lagrede("DNB", ny, d)["periode"], "2026-Q2")
+            eldst = _rapport(periode="2026-Q1", dato="2026-04-20")
+            self.assertIsNone(kr.forrige_lagrede("DNB", eldst, d))
+            self.assertIsNone(kr.forrige_lagrede("EQNR", ny, d))
         finally:
             shutil.rmtree(d)
 

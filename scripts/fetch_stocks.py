@@ -11125,12 +11125,87 @@ def _rt(tekst):
     return html.escape(_hardt_mellomrom(tekst))
 
 
-def _rapport_tall_tabell(r, maks_rader=None):
+# Forklaringslinjen under overskriften på rapportsiden. Står bare på sider som
+# viser «Forrige rapport» eller «Utvikling over tid», så sider med én rapport er
+# uendret. Ingen tall, ingen yield, ingen kurs: teksten kan ikke gå ut på dato.
+RAPPORT_FORKLARING = (
+    "Tallene i tabellene er hentet fra selskapets egne rapporter. «Forrige rapport» er "
+    "rapporten for perioden rett før, for eksempel forrige kvartal. Endringen er regnet ut "
+    "av oss når tallene har samme enhet, og for prosent står den i prosentpoeng (pp).")
+
+# Stilen til kolonnene «Forrige rapport» og «Endring» og til «Utvikling over tid».
+# Legges til sidens stilark bare når siden bruker dem. Alt er nøytralt: tall og
+# endring står i tekstfarge, ingen grønn eller rød. `.tabell-fast` (style.css)
+# fester første kolonne. Fargene den fester med settes til kortets farge, og
+# `border-collapse: collapse` fra `table.rapport-tall` slås av, siden festet
+# kolonne ikke dekker kanten når tabellen eier kantene.
+RAPPORT_SAMMENLIGNING_CSS = """
+    .sub-forklaring { margin-top:-0.75rem; font-size:0.88rem; }
+    .utvikling { scroll-margin-top:7rem; }
+    .kol-rolle { display:block; }
+    .kol-periode { display:block; font-weight:400; text-transform:none; letter-spacing:0; }
+    /* position:relative er ikke pynt: `.sr-only` i endringen er position:absolute, og uten en plassert
+       forelder i rammen står den ved den første plasserte forelderen utenfor, og siden får
+       sideveis rulling når tabellen har flere kolonner enn skjermen (målt: 795 px ved 390). */
+    .endring { display:block; position:relative; font-size:0.75rem; color:#4b5563; }
+    .rapport-flere .endring { font-size:inherit; }
+    .endring abbr { text-decoration:none; }
+    .rapport-flere th { white-space:normal; }
+    table.rapport-flere { border-collapse:separate; border-spacing:0; }
+    table.rapport-serie { width:100%; font-size:0.88rem; }
+    .rapport-serie th { text-align:right; font-size:0.72rem; color:#6b7280; font-weight:600; text-transform:uppercase; letter-spacing:0.03em; padding:0.4rem 0.6rem; border-bottom:1px solid #e5e7eb; white-space:nowrap; }
+    .rapport-serie td { padding:0.45rem 0.6rem; border-bottom:1px solid #f3f4f6; text-align:right; white-space:nowrap; font-variant-numeric:tabular-nums; vertical-align:top; }
+    .rapport-serie td:first-child, .rapport-serie th:first-child { text-align:left; white-space:normal; min-width:7.5rem; max-width:9rem; hyphens:auto; -webkit-hyphens:auto; overflow-wrap:break-word; }
+    .rapport-flere.tabell-fast, .rapport-serie.tabell-fast { --fast-bg:#fff; --fast-bg-hode:#fff; --fast-bg-hover:#fff; }
+    @media (max-width: 30rem) {
+      .rapport-flere td[data-p]::before { white-space:pre-line; text-transform:none; letter-spacing:0; font-size:0.72rem; line-height:1.3; margin-bottom:0.1rem; }
+      .rapport-flere tr { row-gap:0.45rem; }
+      .rapport-flere td:first-child, .rapport-flere th:first-child { position:static; box-shadow:none; }
+      .rapport-flere td:first-child::after, .rapport-flere th:first-child::after { display:none; }
+    }
+    .dark .endring { color:#9ca3af; }
+    .dark .rapport-serie th { color:#9ca3af; border-color:#1f2937; }
+    .dark .rapport-serie td { border-color:#1f2937; }
+    .dark .rapport-flere.tabell-fast, .dark .rapport-serie.tabell-fast { --fast-bg:#111827; --fast-bg-hode:#111827; --fast-bg-hover:#111827; --fast-kant:#374151; --fast-skygge:rgba(0,0,0,0.5); }
+"""
+
+
+def _rapport_endring_tekst(e):
+    """«+30,2 %» eller «−1,6 pp» fra kr.endring(), eller "" uten endring.
+
+    Norsk format: komma, tusenskille og pluss eller minus (U+2212) foran, og
+    hardt mellomrom før enheten. 0 står uten fortegn. Aldri til SVG eller CSS.
+    """
+    if not e:
+        return ""
+    v = e["verdi"]
+    tegn = "+" if v > 0 else "\u2212" if v < 0 else ""
+    return f"{tegn}{_nf_tusen(abs(float(v)), e['desimaler'])}\u00a0" + ("pp" if e["type"] == "pp" else "%")
+
+
+def _rapport_endring_html(e):
+    """Endringen som liten linje under tallet, i nøytral farge: høyere kostnader
+    er ikke «bra», så grønt og rødt (retning på kursen) brukes ikke her."""
+    t = _rapport_endring_tekst(e)
+    if not t:
+        return ""
+    if e["type"] == "pp":
+        t = t[:-2] + '<abbr title="prosentpoeng">pp</abbr>'
+    return f'<span class="endring"><span class="sr-only">Endring fra forrige rapport: </span>{t}</span>'
+
+
+def _rapport_tall_tabell(r, maks_rader=None, forrige=None):
     """Nøkkeltallene som tabell: navn, denne perioden og perioden den sammenlignes med.
 
-    På en smal skjerm stables raden: navnet over, de to tallene side om side
+    På en smal skjerm stables raden: navnet over, tallene side om side
     med perioden over hvert (data-p). To kolonner med «11,95 mrd. USD» fikk
     ikke plass ved 390 px.
+
+    Med `forrige` (rapporten for perioden rett før, se kr.forrige_rapport())
+    kommer det en kolonne «Forrige rapport» for radene som har et navn
+    identisk med en rad i den, og en kolonne «Endring» når minst én endring
+    lar seg regne. Kolonnen «Samme periode i fjor» får da en etikett. Uten
+    `forrige`, eller uten rader med identisk navn, er tabellen som før.
     """
     import kvartalsrapport as kr
     rader = [x for x in (r.get("nokkeltall") or []) if isinstance(x, dict) and x.get("navn")]
@@ -11139,12 +11214,16 @@ def _rapport_tall_tabell(r, maks_rader=None):
     if not rader:
         return ""
     naa = kr.periode_kort(r.get("periode"))
-    forrige = kr.periode_kort(r.get("forrige_periode") or kr.forrige_periode(r.get("periode")))
+    i_fjor = kr.periode_kort(r.get("forrige_periode") or kr.forrige_periode(r.get("periode")))
     har_forrige = any(x.get("forrige") for x in rader)
-    hode = f"<th>{html.escape(naa)}</th>" + (f"<th>{html.escape(forrige)}</th>" if har_forrige else "")
+    mot = kr.mot_forrige(r, forrige)
+    if mot:
+        return _rapport_tall_tabell_flere(rader, mot, naa, kr.periode_kort(forrige.get("periode")),
+                                          i_fjor, har_forrige)
+    hode = f"<th>{html.escape(naa)}</th>" + (f"<th>{html.escape(i_fjor)}</th>" if har_forrige else "")
     kropp = "".join(
         f"<tr><td>{_rt(x['navn'])}</td><td data-p=\"{html.escape(naa)}\">{_rt(x.get('naa') or '')}</td>"
-        + (f"<td data-p=\"{html.escape(forrige)}\">{_rt(x.get('forrige') or '—')}</td>" if har_forrige else "")
+        + (f"<td data-p=\"{html.escape(i_fjor)}\">{_rt(x.get('forrige') or '—')}</td>" if har_forrige else "")
         + "</tr>"
         for x in rader)
     return (f'<div class="tabell-ramme"><table class="rapport-tall">'
@@ -11152,8 +11231,83 @@ def _rapport_tall_tabell(r, maks_rader=None):
             f'<tbody>{kropp}</tbody></table></div>')
 
 
-def _rapport_artikkel(r, ticker):
-    """Én oppsummert rapport på rapportsiden."""
+def _rapport_tall_tabell_flere(rader, mot, naa, forrige_rapport, i_fjor, har_i_fjor):
+    """Tabellen med «Forrige rapport» og, når noe kan regnes, «Endring».
+
+    Kolonnene: Nå, Forrige rapport, Endring, Samme periode i fjor. Hver kolonne
+    har en etikett over perioden, så to kolonner med tall fra to ulike
+    perioder aldri står uten å si hva de er. Første kolonne står stille når
+    tabellen ruller (`.tabell-fast`), og under 30rem stables raden som før,
+    med etikett og periode over hvert tall (`data-p`, to linjer).
+    """
+    har_endring = any(m["endring"] for m in mot.values())
+    kolonner = [("Nå", naa), ("Forrige rapport", forrige_rapport)]
+    if har_endring:
+        kolonner.append(("Endring", "fra forrige rapport"))
+    if har_i_fjor:
+        kolonner.append(("Samme periode i fjor", i_fjor))
+
+    def _p(rolle, periode):
+        return f'data-p="{html.escape(rolle)}&#10;{html.escape(periode)}"'
+
+    hode = "".join(
+        f'<th><span class="kol-rolle">{html.escape(rolle)}</span>'
+        f'<span class="kol-periode">{html.escape(periode)}</span></th>'
+        for rolle, periode in kolonner)
+    import kvartalsrapport as kr
+    kropp = []
+    for x in rader:
+        m = mot.get(kr.normaliser_navn(x["navn"]))
+        forrige_tekst = _rt(m["tekst"]) if m else "—"
+        endring_html = (_rapport_endring_html(m["endring"]) if m else "") or "—"
+        celler = [f"<td {_p(*kolonner[0])}>{_rt(x.get('naa') or '')}</td>",
+                  f"<td {_p(*kolonner[1])}>{forrige_tekst}</td>"]
+        if har_endring:
+            celler.append(f"<td {_p(*kolonner[2])}>{endring_html}</td>")
+        if har_i_fjor:
+            celler.append(f"<td {_p(*kolonner[-1])}>{_rt(x.get('forrige') or '—')}</td>")
+        kropp.append(f"<tr><td>{_rt(x['navn'])}</td>{''.join(celler)}</tr>")
+    return (f'<div class="tabell-ramme"><table class="rapport-tall rapport-flere tabell-fast">'
+            f'<thead><tr><th><span class="sr-only">Nøkkeltall</span></th>{hode}</tr></thead>'
+            f'<tbody>{"".join(kropp)}</tbody></table></div>')
+
+
+def _rapport_serie_html(rapporter):
+    """«Utvikling over tid»: nøkkeltallene som står med identisk navn i minst to
+    av de seks nyeste rapportene, nyeste til venstre. "" når ingen gjør det.
+
+    Seksjonen mangler da helt, ikke tom: sider uten en slik rad skal ikke ha
+    en overskrift uten innhold, og seksjoner som finnes på noen sider og ikke
+    andre er det som bryter malen (se «Breaking the template»). Tabellen er
+    ekte HTML, så Google ser den uten JavaScript. Tall uten verdi i en rapport
+    står som «—». Endringen under et tall er endringen fra rapporten til
+    høyre, regnet ut ved bygging og aldri lagret.
+    """
+    import kvartalsrapport as kr
+    s = kr.serie(rapporter)
+    if not s:
+        return ""
+    hode = "".join(f'<th scope="col">{html.escape(kr.periode_kort(k["periode"]))}</th>' for k in s["kolonner"])
+    kropp = []
+    for rad in s["rader"]:
+        celler = "".join(
+            f"<td>{_rt(c['tekst'])}{_rapport_endring_html(c['endring'])}</td>" if c["tekst"] else "<td>—</td>"
+            for c in rad["celler"])
+        kropp.append(f"<tr><td>{_rt(rad['navn'])}</td>{celler}</tr>")
+    return (
+        '<section class="rapport utvikling" id="utvikling" aria-labelledby="utvikling-overskrift">\n'
+        '<h2 id="utvikling-overskrift">Utvikling over tid</h2>\n'
+        '<p class="les">Nøkkeltall som står med samme navn i flere rapporter, den nyeste til venstre. '
+        'Under et tall står endringen fra rapporten til høyre, når den er for perioden rett før.</p>\n'
+        '<div class="tabell-ramme"><table class="rapport-serie tabell-fast" aria-label="Nøkkeltall rapport for rapport">'
+        f'<thead><tr><th scope="col"><span class="sr-only">Nøkkeltall</span></th>{hode}</tr></thead>'
+        f'<tbody>{"".join(kropp)}</tbody></table></div>\n'
+        '</section>')
+
+
+def _rapport_artikkel(r, ticker, forrige=None):
+    """Én oppsummert rapport på rapportsiden. `forrige` er rapporten for perioden
+    rett før, og gis bare til den nyeste (se `_rapport_tall_tabell()`)."""
     import kvartalsrapport as kr
     p = r.get("periode") or ""
     pt = kr.periode_tekst(p)
@@ -11167,7 +11321,7 @@ def _rapport_artikkel(r, ticker):
         f'<p class="rapport-meta">Lagt fram {_fmt_dato(r.get("dato"))}{kilde}</p>',
         "<h3>Resultatet</h3>",
         f"<p>{_rt(r.get('resultat'))}</p>",
-        _rapport_tall_tabell(r),
+        _rapport_tall_tabell(r, forrige=forrige),
         "<h3>Utbyttet</h3>",
         f"<p>{_rt(r.get('utbytte'))}</p>",
     ]
@@ -11291,10 +11445,23 @@ def _rapportside_html(a, rapporter, today):
     tittel = rapportside_tittel(a, nyeste)
     desc = rapportside_meta(a, nyeste)
     sektor = a.get("sektor") or "—"
-    artikler = "\n".join(_rapport_artikkel(r, ticker) for r in rapporter)
-    hopp = "".join(
-        f'<a href="#{html.escape(kr.anker(r.get("periode")))}">{html.escape(kr.periode_kort(r.get("periode")))}</a>'
-        for r in rapporter) if len(rapporter) > 1 else ""
+    # Siste rapport øverst, med forrige rapports tall ved siden av når en rad
+    # har identisk navn i den. «Utvikling over tid» står rett etter den siste
+    # rapporten og finnes bare når en rad står i minst to rapporter. Uten
+    # noen av delene er siden som før, byte for byte (også stilarket).
+    forrige = kr.forrige_rapport(rapporter, nyeste)
+    serie_html = _rapport_serie_html(rapporter)
+    bruker_sammenligning = bool(kr.mot_forrige(nyeste, forrige)) or bool(serie_html)
+    deler = [_rapport_artikkel(r, ticker, forrige if i == 0 else None) for i, r in enumerate(rapporter)]
+    if serie_html:
+        deler.insert(1, serie_html)
+    artikler = "\n".join(deler)
+    pils = [f'<a href="#{html.escape(kr.anker(r.get("periode")))}">{html.escape(kr.periode_kort(r.get("periode")))}</a>'
+            for r in rapporter]
+    if serie_html:
+        pils.insert(1, '<a href="#utvikling">Utvikling over tid</a>')
+    hopp = "".join(pils) if len(rapporter) > 1 else ""
+    forklaring = (f'\n  <p class="sub sub-forklaring les">{RAPPORT_FORKLARING}</p>' if bruker_sammenligning else "")
     sist_skrevet = max((r.get("skrevet") or r.get("dato") or "") for r in rapporter)
     brod_html, brod_ld = brodsmule(sti_aksje(sektor, ticker) + [("Rapporter", f"/aksjer/{ticker}/rapporter/")])
 
@@ -11362,6 +11529,8 @@ def _rapportside_html(a, rapporter, today):
     .dark .cta { background:#0f251b; border-color:#214d39; }
     .dark a { color:#6fa98a; }
 """
+    if bruker_sammenligning:
+        CSS += RAPPORT_SAMMENLIGNING_CSS
 
     return f"""<!DOCTYPE html>
 <html lang="nb">
@@ -11422,7 +11591,7 @@ def _rapportside_html(a, rapporter, today):
   <h1 class="side-h1">{html.escape(kort)}: kvartalsrapporter og utbytte</h1>
   <p class="sub les">Det viktigste fra rapportene {html.escape(a["navn"])} ({ticker}) har lagt fram:
     resultatet, utbyttet og utbytteplanen, rapport for rapport. Skrevet ut fra
-    selskapets egne meldinger til Oslo Børs.</p>
+    selskapets egne meldinger til Oslo Børs.</p>{forklaring}
   {lag_aksje_faner(ticker, ticker, aktiv="rapporter")}
   {_rapport_utbytte_naa(a, today)}
   {f'<nav class="hopp" aria-label="Hopp til rapport">{hopp}</nav>' if hopp else ''}

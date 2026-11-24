@@ -38,6 +38,7 @@ import sys
 import tempfile
 import urllib.parse
 import urllib.request
+from decimal import Decimal, InvalidOperation, ROUND_HALF_UP
 
 ROT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 RAPPORT_DIR = os.path.join(ROT, "data", "rapporter")
@@ -105,6 +106,26 @@ def forrige_periode(periode):
     return f"{int(m.group(1)) - 1}-{m.group(2)}"
 
 
+def foregaaende_periode(periode):
+    """Perioden rett før, av samme slag: «2026-Q3» → «2026-Q2», «2026-Q1» → «2025-Q4».
+
+    Halvår går til forrige halvår («2026-H1» → «2025-H2») og et år til året før.
+    Et kvartal og et halvår er ikke etterfølgere av hverandre, så en
+    kvartalsrapport har aldri en halvårsrapport som «forrige rapport».
+    Ikke det samme som `forrige_periode()`, som er samme periode i fjor.
+    """
+    m = PERIODE_RE.match(periode or "")
+    if not m:
+        return ""
+    aar, del_ = int(m.group(1)), m.group(2)
+    if del_ == "AR":
+        return f"{aar - 1}-AR"
+    n = int(del_[1])
+    if del_[0] == "Q":
+        return f"{aar}-Q{n - 1}" if n > 1 else f"{aar - 1}-Q4"
+    return f"{aar}-H{n - 1}" if n > 1 else f"{aar - 1}-H2"
+
+
 def anker(periode):
     """Id-en på siden: «2026-Q3» → «2026-q3», så en lenke kan peke rett på rapporten."""
     return (periode or "").lower()
@@ -154,6 +175,316 @@ def lagre(ticker, rapport, rot=ROT):
         json.dump(_sorter(liste), f, ensure_ascii=False, indent=1)
         f.write("\n")
     return sti
+
+
+# ── Serier: samme nøkkeltall rapport for rapport ─────────────────────────────
+#
+# Rapportsiden viser forrige rapports tall ved siden av de nye, og en tabell
+# over tid («Utvikling over tid»). Verdiene i `nokkeltall` er tekst skrevet av
+# agenten («358,9 mill. USD»), og `navn` er fritekst. To regler holder det
+# ærlig:
+#
+# - **Navnet må være identisk** (etter trim og casefold) for at to rader skal
+#   regnes som samme tall. Ingen uklar matching: «Resultat etter skatt» og
+#   «Resultat til aksjonærene» er ulike tall, og en tabell som slår dem sammen
+#   er verre enn en som lar dem stå hver for seg. Portene i `--skriv` varsler
+#   når navn nesten er like (`serie_varsler()`), så agenten retter det i kilden.
+# - **Endringen regnes ut ved bygging og lagres aldri.** Den vises bare når
+#   begge verdiene lar seg tolke til samme enhet, og grunnlaget er positivt.
+#   Oppsummeringen sier selv at agenten ikke regner (se rapport.md), så
+#   endringstallene er vårt, og siden sier det.
+
+SERIE_MAKS = 6   # kolonner i «Utvikling over tid»
+
+_ENHETSNAVN = ((re.compile(r"\b(?:kr|kroner|nok)\b"), "nok"),
+               (re.compile(r"\b(?:usd|dollar)\b"), "usd"),
+               (re.compile(r"\b(?:eur|euro)\b"), "eur"),
+               (re.compile(r"\bprosent\b"), "%"),
+               (re.compile(r"\b(?:millioner|mill)\b\.?"), "mill."),
+               (re.compile(r"\b(?:milliarder|mrd)\b\.?"), "mrd."))
+
+# Skalaord foran enheten: «mill. USD» er en million dollar.
+_SKALA = {"tusen": 3, "millioner": 6, "mill": 6, "milliarder": 9, "mrd": 9}
+
+_MELLOM = "[ \u00a0\u202f]"
+_VERDI_RE = re.compile(
+    r"^(?:(?P<u1>underskudd|tap)(?:\s+på)?\s+)?"
+    r"(?P<fortegn>[-\u2212\u2013+])?\s*"
+    rf"(?P<tall>\d{{1,3}}(?:{_MELLOM}\d{{3}})+(?:,\d+)?|\d+(?:,\d+)?)"
+    rf"(?:{_MELLOM}*(?P<skala>tusen|millioner|milliarder|mill\.?|mrd\.?)(?![\wæøå]))?"
+    rf"(?:{_MELLOM}*(?P<enhet>(?!\d)[^\s].*?))?"
+    r"(?:\s+(?P<u2>underskudd|tap))?\s*$", re.I)
+
+
+def normaliser_navn(navn):
+    """Nøkkelen to rader må dele for å være samme tall: trimmet og casefold, ingenting mer."""
+    return (navn or "").strip().casefold()
+
+
+def normaliser_enhet(tekst):
+    """Enheten som tekst, med valutaene og skalaordene skrevet likt («kroner» → «nok»)."""
+    t = " ".join((tekst or "").casefold().split())
+    for monster, bytt in _ENHETSNAVN:
+        t = monster.sub(bytt, t)
+    return t
+
+
+class Verdi:
+    """Et nøkkeltall tolket: `verdi` (Decimal, med fortegn, i enhetens grunnmål),
+    `enhet` (normalisert tekst uten skalaord), `desimaler` slik det sto skrevet
+    og `skalert` (stod det «tusen», «mill.» eller «mrd.» foran enheten?)."""
+    __slots__ = ("verdi", "enhet", "desimaler", "skalert")
+
+    def __init__(self, verdi, enhet, desimaler, skalert=False):
+        self.verdi, self.enhet, self.desimaler, self.skalert = verdi, enhet, desimaler, skalert
+
+    def kan_sammenlignes_med(self, annen):
+        """Samme enhet, og begge skrevet med skalaord eller ingen av dem. «5 kr» mot
+        «5 mill. kr» er ikke samme størrelse (beløp per aksje mot et resultat),
+        selv om begge er kroner."""
+        return self.enhet == annen.enhet and self.skalert == annen.skalert
+
+    @property
+    def prosent(self):
+        return self.enhet == "%"
+
+    def __repr__(self):
+        return f"Verdi({self.verdi}, {self.enhet!r})"
+
+
+def tolk_verdi(tekst):
+    """«358,9 mill. USD» → Verdi(358900000, «usd»), eller None når teksten ikke er
+    ett tall med enhet.
+
+    Godtar komma som desimaltegn, mellomrom (også hardt) som tusenskille,
+    fortegn («−5,2», «-5,2», «+5,2»), skalaordene «tusen», «mill.» og «mrd.»
+    foran enheten, og «underskudd» foran eller etter («underskudd på 29,5 mill.
+    USD» er −29,5 millioner). Alt annet gir None: «ca. 12 mrd.», «12 til 14 %»,
+    «n/a» og en tom celle har ingen verdi vi kan regne med.
+    """
+    m = _VERDI_RE.match(tekst or "")
+    if not m:
+        return None
+    try:
+        tall = Decimal(re.sub(rf"{_MELLOM}", "", m.group("tall")).replace(",", "."))
+    except InvalidOperation:
+        return None
+    if re.search(r"\d", m.group("enhet") or ""):
+        return None   # «12 til 14 %»: to tall, ikke ett tall med enhet
+    desimaler = len(m.group("tall").split(",")[1]) if "," in m.group("tall") else 0
+    skala = (m.group("skala") or "").lower().rstrip(".")
+    if skala:
+        tall *= Decimal(10) ** _SKALA[skala]
+    if m.group("fortegn") in ("-", "\u2212", "\u2013") or m.group("u1") or m.group("u2"):
+        tall = -tall   # «underskudd −5» er ett underskudd, ikke to minus
+    return Verdi(tall, normaliser_enhet(m.group("enhet") or ""), desimaler, bool(skala))
+
+
+def endring(ny_tekst, gammel_tekst):
+    """Endringen fra `gammel` til `ny`, eller None når den ikke lar seg regne.
+
+    - `{"type": "pp", "verdi": Decimal, "desimaler": n}` for tall i prosent:
+      forskjellen i prosentpoeng, ikke en prosent av en prosent.
+    - `{"type": "prosent", "verdi": Decimal, "desimaler": 1}` ellers: prosent
+      endring fra grunnlaget.
+
+    None når en av verdiene ikke lar seg tolke, enhetene er ulike (USD mot NOK,
+    kroner mot en prosent, «5 mill. kr» mot «5 kr»), eller grunnlaget er null
+    eller negativt. En endring
+    fra underskudd er ikke en prosent, og det er heller ikke en endring til
+    underskudd fra et positivt tall: tallet skifter fortegn, og «−152 %» sier
+    ikke det en leser trenger å vite.
+
+    «5,6 mrd. kr» mot «5 600 mill. kr» er samme beløp og gir 0, siden skalaordene
+    regnes om. Beregningen bruker Decimal, så avrunding er den leseren venter.
+    """
+    ny, gammel = tolk_verdi(ny_tekst), tolk_verdi(gammel_tekst)
+    if ny is None or gammel is None or not ny.kan_sammenlignes_med(gammel):
+        return None
+    if ny.prosent:
+        des = min(2, max(ny.desimaler, gammel.desimaler))
+        return {"type": "pp", "verdi": _rund(ny.verdi - gammel.verdi, des), "desimaler": des}
+    if gammel.verdi <= 0 or ny.verdi < 0:
+        return None
+    return {"type": "prosent", "verdi": _rund((ny.verdi - gammel.verdi) / gammel.verdi * 100, 1),
+            "desimaler": 1}
+
+
+def _rund(verdi, desimaler):
+    """Rund av, og 0,5 går opp (ikke til nærmeste partall, som `round()`)."""
+    return verdi.quantize(Decimal(1).scaleb(-desimaler), rounding=ROUND_HALF_UP)
+
+
+def forrige_rapport(liste, rapport):
+    """Rapporten for perioden rett før `rapport` i `liste`, eller None.
+
+    Bare den som kommer rett før (`foregaaende_periode()`): «forrige rapport»
+    skal være forrige kvartal, ikke «den eldste vi har». Mangler et kvartal
+    mellom to lagrede rapporter, er det ingen forrige rapport å regne endring
+    mot, og siden sier ingenting om det.
+    """
+    onsket = foregaaende_periode((rapport or {}).get("periode"))
+    if not onsket:
+        return None
+    return next((r for r in liste or [] if r.get("periode") == onsket), None)
+
+
+def _rader_per_navn(rapport):
+    """{nøkkel: rad} for nøkkeltallene med navn og verdi. Første rad vinner ved likt navn."""
+    ut = {}
+    for x in (rapport or {}).get("nokkeltall") or []:
+        if isinstance(x, dict) and (x.get("navn") or "").strip() and (x.get("naa") or "").strip():
+            ut.setdefault(normaliser_navn(x["navn"]), x)
+    return ut
+
+
+def mot_forrige(rapport, forrige):
+    """{nøkkel: {"tekst", "endring"}} for radene i `rapport` som har en rad med
+    identisk navn i `forrige`. Tom uten forrige rapport eller uten treff.
+
+    `endring` er None når den ikke lar seg regne (se `endring()`).
+    """
+    if not forrige:
+        return {}
+    gamle = _rader_per_navn(forrige)
+    ut = {}
+    for nokkel, x in _rader_per_navn(rapport).items():
+        g = gamle.get(nokkel)
+        if g:
+            ut[nokkel] = {"tekst": g["naa"], "endring": endring(x["naa"], g["naa"])}
+    return ut
+
+
+def serie(liste, maks=SERIE_MAKS):
+    """Nøkkeltallene som står med identisk navn i minst to av de `maks` nyeste
+    rapportene, eller None når ingen gjør det.
+
+    `liste` er nyeste først. Svaret:
+
+        {"kolonner": [{"periode": "2026-Q3"}, …],          # nyeste til venstre
+         "rader": [{"navn": "Resultat etter skatt",
+                    "celler": [{"tekst": "358,9 mill. USD" | None,
+                                "endring": {…} | None}, …]}]}
+
+    Radene står i rekkefølgen de har i den nyeste rapporten de finnes i. En
+    celle uten tall er None. `endring` på en celle er endringen fra cellen til
+    høyre, og bare når den er forrige periode og begge har et tall: et hull
+    mellom to rapporter blir ikke hoppet over.
+    """
+    kol = [r for r in (liste or [])[:maks]]
+    if len(kol) < 2:
+        return None
+    per_kol = [_rader_per_navn(r) for r in kol]
+    rekkefolge = {}
+    for rader in per_kol:
+        for nokkel, x in rader.items():
+            rekkefolge.setdefault(nokkel, x["navn"].strip())
+    ut = []
+    for nokkel, navn in rekkefolge.items():
+        tekster = [(rader.get(nokkel) or {}).get("naa") for rader in per_kol]
+        if sum(1 for t in tekster if t) < 2:
+            continue
+        celler = []
+        for j, t in enumerate(tekster):
+            e = None
+            if (t and j + 1 < len(kol) and tekster[j + 1]
+                    and foregaaende_periode(kol[j].get("periode")) == kol[j + 1].get("periode")):
+                e = endring(t, tekster[j + 1])
+            celler.append({"tekst": t, "endring": e})
+        ut.append({"navn": navn, "celler": celler})
+    if not ut:
+        return None
+    return {"kolonner": [{"periode": r.get("periode")} for r in kol], "rader": ut}
+
+
+def _ett_ord_forskjell(a, b):
+    """Navn som ligner uten å være like: ett ord skiftet ut, lagt til eller tatt bort.
+
+    Et navn med ett ord har ingenting å dele, så to enkeltord («Inntekter» og
+    «Resultat») ligner ikke. «Resultat før skatt» og «Resultat etter skatt»
+    gjør det, og det er riktig at de varsles: et varsel er et spørsmål, og
+    svaret kan være at de er to ulike tall.
+    """
+    ta, tb = a.split(), b.split()
+    if len(ta) == len(tb):
+        return len(ta) >= 2 and sum(x != y for x, y in zip(ta, tb)) == 1
+    if abs(len(ta) - len(tb)) == 1:
+        kort, lang = sorted((ta, tb), key=len)
+        return any(lang[:i] + lang[i + 1:] == kort for i in range(len(lang)))
+    return False
+
+
+_ENHET_ETTER_TALL = re.compile(
+    r"^\s*(?:(?:underskudd|tap)(?:\s+på)?\s+)?[-\u2212\u2013+]?\s*\d[\d \u00a0\u202f]*(?:,\d+)?\s*(.*?)\s*$", re.I)
+
+
+def _enhet_tekst(tekst):
+    """Det som står etter tallet, normalisert. Virker også for en verdi `tolk_verdi()` ikke leser."""
+    m = _ENHET_ETTER_TALL.match(tekst or "")
+    return normaliser_enhet(m.group(1)) if m else ""
+
+
+def serie_varsler(rapport, forrige):
+    """Varsler om at serien på rapportsiden ikke vil henge sammen. Stopper ikke lagringen.
+
+    To funn, begge mot den forrige lagrede rapporten:
+
+    - **Samme navn, annen enhet.** «Inntekter» i mill. USD forrige gang og mrd.
+      USD nå, eller dollar mot kroner. Ulik valuta gir ingen endring. Ulik
+      skala (mill. mot mrd.) regnes om, men to tall i samme rad med ulik skala
+      leses dårlig.
+    - **Nesten samme navn.** Ett ord forskjellig, uten at navnet er identisk
+      med noe i forrige rapport. Radene havner da på hver sin linje i
+      «Utvikling over tid», og tallet mangler i radens øvrige kolonner.
+    """
+    if not forrige:
+        return []
+    varsler = []
+    ny = _rader_per_navn(rapport)
+    gammel = _rader_per_navn(forrige)
+    fp = periode_kort(forrige.get("periode"))
+    for nokkel, x in ny.items():
+        g = gammel.get(nokkel)
+        if not g:
+            continue
+        e_ny, e_gml = _enhet_tekst(x["naa"]), _enhet_tekst(g["naa"])
+        if e_ny == e_gml:
+            continue
+        a, b = tolk_verdi(x["naa"]), tolk_verdi(g["naa"])
+        navn = x["navn"].strip()
+        if a is not None and b is not None and a.kan_sammenlignes_med(b):
+            varsler.append(
+                f"«{navn}»: enheten er «{e_ny or 'ingen'}», og i forrige rapport ({fp}) var den «{e_gml or 'ingen'}». "
+                f"Endringen regnes om, men tallene i samme rad leses best i samme enhet. Bruk samme enhet.")
+        else:
+            varsler.append(
+                f"«{navn}»: enheten er «{e_ny or 'ingen'}», og i forrige rapport ({fp}) var den «{e_gml or 'ingen'}». "
+                f"Da kan ikke endringen regnes ut, og serien henger ikke sammen på rapportsiden. Bruk samme enhet og valuta.")
+    nye = {k: x for k, x in ny.items() if k not in gammel}
+    gamle = {k: x for k, x in gammel.items() if k not in ny}
+    for nk, x in nye.items():
+        for gk, g in gamle.items():
+            if _ett_ord_forskjell(nk, gk):
+                varsler.append(
+                    f"«{x['navn'].strip()}» ligner på «{g['navn'].strip()}» i forrige rapport ({fp}), men er ikke identisk. "
+                    f"Er det samme tall, bruk nøyaktig samme navn, ellers henger ikke serien sammen på rapportsiden. "
+                    f"Er det to ulike tall, er det i orden.")
+                break
+    return varsler
+
+
+def forrige_lagrede(ticker, rapport, rot=None):
+    """Den nyeste lagrede rapporten som er eldre enn `rapport`, eller None.
+
+    En lagring av samme periode bytter ut den gamle, så den sammenlignes ikke
+    med seg selv.
+    """
+    liste = les_rapporter(rot or ROT).get(ticker) or []
+    nokkel = ((rapport.get("dato") or ""), (rapport.get("periode") or ""))
+    eldre = [r for r in liste
+             if r.get("periode") != rapport.get("periode")
+             and ((r.get("dato") or ""), (r.get("periode") or "")) < nokkel]
+    return max(eldre, key=lambda r: ((r.get("dato") or ""), (r.get("periode") or "")), default=None)
 
 
 # ── Tall: hva står i oppsummeringen, og står det i kilden? ───────────────────
@@ -506,12 +837,17 @@ def _kortnavn(navn):
                   r"Corporation|AG|SA|P/F|Holding|Group)\b.*$", "", navn or "").strip()
 
 
-def vurder_oppsummering(ticker, rapport, kildetekst=None, meldinger_i_kilde=None, i_dag=None):
+def vurder_oppsummering(ticker, rapport, kildetekst=None, meldinger_i_kilde=None, i_dag=None,
+                        forrige=None):
     """(feil, varsler) for én oppsummering. Ren funksjon, ingen nett.
 
     Uten `kildetekst` sjekkes bare form og språk; det er det CI kan gjøre.
+    Med `forrige` (selskapets forrige lagrede rapport) varsles det også om en
+    rad som ikke lar seg lese som en serie sammen med den forrige
+    (`serie_varsler()`). Varslene stopper ikke lagringen.
     """
     feil, varsler = sjekk_felt(rapport, i_dag)
+    varsler += serie_varsler(rapport, forrige)
     feil += sjekk_sprak(rapport)
     t = _navn(ticker)
     if t is None:
@@ -884,7 +1220,8 @@ def _skriv(ticker, json_sti, kilde_sti):
         kilde = f.read()
     rapport.setdefault("skrevet", datetime.date.today().isoformat())
     rapport["melding"] = str(rapport.get("melding") or "")
-    feil, varsler = vurder_oppsummering(ticker, rapport, kilde, meldinger_i_kilde(kilde))
+    feil, varsler = vurder_oppsummering(ticker, rapport, kilde, meldinger_i_kilde(kilde),
+                                        forrige=forrige_lagrede(ticker, rapport))
     for v in varsler:
         print(f"  varsel: {v}")
     if feil:
