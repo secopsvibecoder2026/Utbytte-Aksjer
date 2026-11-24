@@ -12777,7 +12777,6 @@ def oppdater_kalender_maaneder(aksjer, root_dir: str, i_dag=None):
 # aldri regnet om.
 
 KAL_BETALT_ETTER_DAGER = 31   # uten kjent betalingsdato: betalt når ex-datoen er så gammel
-KAL_META_DAGER = 30
 KAL_NESTE_DAGER = 7
 _KAL_STATUS_TEKST = {"foreslatt": "Foreslått", "vedtatt": "Vedtatt", "betalt": "Betalt"}
 _KAL_KOLONNER = [("selskap", "Selskap"), ("ticker", "Ticker"), ("sektor", "Sektor"),
@@ -12861,29 +12860,22 @@ def _kal_dato(d):
 
 
 def kalender_tittel(i_dag):
-    """«Utbyttekalender 2026 – alle ex-datoer på Oslo Børs», med «| exday.no» når det er plass."""
-    tittel = f"Utbyttekalender {kalenderaar_tekst(i_dag)} – alle ex-datoer på Oslo Børs"
-    med = tittel + " | exday.no"
-    return med if len(med) <= 60 else tittel
+    """«Utbyttekalender 2026: ex-datoer, beløp og siste kjøpsdag».
+
+    Uten «| exday.no»: med den passerer tittelen 60 tegn, og Google viser
+    nettstedsnavnet ved siden av adressen likevel."""
+    return f"Utbyttekalender {kalenderaar_tekst(i_dag)}: ex-datoer, beløp og siste kjøpsdag"
 
 
-def kalender_meta(rader, i_dag):
-    """Beskrivelsen, med svaret først. Høyst 155 tegn."""
+def kalender_meta(i_dag):
+    """Beskrivelsen: hva siden har, uten tall som flytter seg. Høyst 155 tegn.
+
+    24.11.2026 viste Google «9 ex-datoer de neste 30 dagene – neste: Höegh
+    Autoliners 23. nov.» da datoen var passert. En beskrivelse leses dager
+    etter at den ble skrevet, så den bærer bare det som gjelder hele året."""
     aar = kalenderaar_tekst(i_dag)
-    slutt = i_dag + datetime.timedelta(days=KAL_META_DAGER)
-    snart = [r for r in rader if i_dag <= r["ex"] <= slutt]
-    neste = next((r for r in rader if r["ex"] >= i_dag), None)
-    deler = [f"Alle ex-datoer og utbytter på Oslo Børs i {aar}."]
-    if snart:
-        ord_ = "ex-dato" if len(snart) == 1 else "ex-datoer"
-        deler.append(f"{len(snart)} {ord_} de neste {KAL_META_DAGER} dagene")
-    if neste:
-        neste_tekst = f"neste: {neste['navn']} {neste['ex'].day}. {_MND_KORT[neste['ex'].month - 1]}"
-        deler[-1] = (deler[-1] + " – " + neste_tekst + ".") if snart else (
-            deler[-1] + " " + neste_tekst[0].upper() + neste_tekst[1:] + ".")
-    elif snart:
-        deler[-1] += "."
-    tekst = " ".join(deler)
+    tekst = (f"Alle ex-datoer på Oslo Børs i {aar} med beløp per aksje, siste kjøpsdag "
+             "og utbetalingsdato. Kontrollert mot børsmeldingene.")
     if len(tekst + " Oppdateres daglig.") <= 155:
         tekst += " Oppdateres daglig."
     return tekst if len(tekst) <= 155 else tekst[:152].rstrip() + "…"
@@ -12896,7 +12888,7 @@ def lag_kalender_hode(rader, i_dag):
     """<title>, beskrivelser og JSON-LD mellom KAL-HODE-markørene. Ren funksjon."""
     import html as _html
     tittel = kalender_tittel(i_dag)
-    meta = kalender_meta(rader, i_dag)
+    meta = kalender_meta(i_dag)
     url = "https://exday.no/utbyttekalender/"
     # Samme sti som den synlige brødsmulen i lag_kalender_kropp(), uten årstall.
     _, brod_ld = brodsmule(KALENDER_STI)

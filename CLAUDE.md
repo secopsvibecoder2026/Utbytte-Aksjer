@@ -2925,10 +2925,10 @@ The page no longer carries `<!--AAR-SYNK-->`; the generator owns the year.
 - every value as a `data-*` attribute on the row, for the script that sorts
   and filters.
 
-**Title, meta and year.** `kalender_tittel()` drops «| exday.no» when the
-title would pass 60 characters. `kalender_meta()` leads with the answer and
-the count of ex-dates in the next 30 days, and stays within 155 characters.
-`KALENDER_NESTE_AAR_FRA_MND` is now 12: «Utbyttekalender 2026 og 2027» from
+**Title, meta and year.** `kalender_tittel()` is «Utbyttekalender 2026: ex-datoer,
+beløp og siste kjøpsdag» (changed 2026-11-24, see «Search Console, 3 months»).
+`kalender_meta()` carries no number that moves, only the year, and stays within
+155 characters. `KALENDER_NESTE_AAR_FRA_MND` is now 12: «Utbyttekalender 2026 og 2027» from
 1 December. The month overview keeps November (`EXMND_NESTE_AAR_FRA_MND`).
 
 **Links.** Every stock page ends its dates section with «utbyttekalender
@@ -3508,6 +3508,55 @@ amount, so the title, lead and `/utbyttekalender/` lacked it.
   share»: DNB, VEI, GENT, TOM) and TGS's «NOK equivalent of USD 0.155».
 
 Tests: `TestBwlpgProsabelop` (22).
+
+## Search Console, 3 months, and the SERP (2026-11-24)
+
+The owner exported Search Console (24 August to 22 November) and sent
+screenshots of the mobile results for «utbyttekalender 2026» and «telenor
+utbytte». The first reading, from the eight biggest queries alone, was wrong
+(0,5 % click rate, «page 2»). The whole picture:
+
+- **Totals:** 1 363 clicks, 88 380 impressions, 1,54 % click rate, average
+  position 9,6 (Norway, 1 291 of the clicks). Last 28 days against the 28
+  before: clicks +23 %, impressions +44 %, click rate 1,63 → 1,39 %. Weekly
+  impressions went from 4 862 (week of 7 September) to 12 124 (16 November).
+- **Stock pages carry the site:** 161 pages, 1 030 of 1 365 clicks (75 %), average
+  position 7,5. The export lists 1 000 queries covering 398 clicks; the rest is
+  a tail of queries too rare to show.
+- **Weak spots:** the calendar (85 clicks, 5 897 impressions, position 12,6), the
+  front page (111 clicks, 9 278 impressions, position 13,0), the toplist
+  `/aksjer/hoyest-utbytte/` (position 49), `/aksjer/` (35,7), articles (29 URLs,
+  41 clicks, position 22,5) and the report pages (3 impressions; 93 are in the
+  sitemap, Google has hardly seen them).
+- **Do not move «norske utbytteaksjer» to `/aksjer/`.** The front page ranks
+  13,0 on those queries and `/aksjer/` 35,7. A swap puts the weaker page first.
+
+**What the mobile results show.** On «utbyttekalender 2026» exday.no is the sixth
+or seventh organic result, below DNB (twice), utbyttekalender.no, Nordnet, a
+block of sponsored searches and Finrange. On «telenor utbytte» it is about the
+tenth item: an AI overview, Telenor's own page, «Mer å spørre om», DNB, a finance
+widget, E24, «Andre har søkt etter», Nordnet, NewsWeb and TradeDesk come first.
+Google's «position 7» is the item count, and on a phone that is several screens
+down, which explains a click rate near 1 %.
+
+**Two findings, one acted on.**
+
+- **The calendar snippet had a date that had passed.** The description read
+  «9 ex-datoer de neste 30 dagene – neste: Höegh Autoliners 23. nov.» on
+  24 November. Google refreshes snippets slowly, so a moving fact is wrong for
+  days. The description is now stable, and `test_meta_har_ingen_tall_som_flytter_seg`
+  fails if a number other than the year comes back. Same rule as the
+  `/rapportkalender/` meta. Measure on that one URL: Search Console, Pages,
+  `/utbyttekalender/`, 28 days against the 28 before.
+- **Held until 16 December: the stock title shows the annual rate where
+  searchers see the last payment.** Telenor's title says «9,70 kr per aksje i
+  året» (paid in the last 12 months), while NewsWeb, DNB, TradeDesk and the AI
+  overview all say 4,70 (the last payment, ex 15 October). Adding «siste
+  4,70 kr» when no ex-date is announced is a template change on 155 pages, and
+  it would confound the measurement of the 18 November title change. Decide
+  after the Pages export of 16 December.
+
+Tests: `TestUtbyttekalenderTabell` (+1, one rewritten).
 
 ## App review of 2026-10-20
 
