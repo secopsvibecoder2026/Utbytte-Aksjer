@@ -1,5 +1,48 @@
 [
  {
+  "periode": "2026-Q3",
+  "dato": "2026-11-24",
+  "melding": "687251",
+  "tittel": "BW LPG Limited: Financial Results for Q3 2026",
+  "resultat": "BW LPG fikk et resultat etter skatt på 358,9 millioner dollar i tredje kvartal, mot 56,8 millioner i samme kvartal i fjor. Av det tilhørte 311,5 millioner aksjonærene (57,1 i fjor), og resultatet per aksje ble 2,05 dollar mot 0,38. Selskapet forklarer økningen med høyere inntekter fra skipsfarten, et bedre resultat i handelsdelen Product Services og en engangsgevinst fra salg av skip. Skipene tjente 84 100 dollar per tilgjengelige dag etter reisekostnader, og i spotmarkedet 115 300 dollar per dag mot 51 400 i fjor. Product Services hadde 117,8 millioner dollar i resultat etter skatt, mot et underskudd på 29,5 millioner i fjor. Egenkapitalavkastningen var 66 % på årsbasis.",
+  "nokkeltall": [
+   {
+    "navn": "Resultat etter skatt",
+    "naa": "358,9 mill. USD",
+    "forrige": "56,8 mill. USD"
+   },
+   {
+    "navn": "Resultat per aksje",
+    "naa": "2,05 USD",
+    "forrige": "0,38 USD"
+   },
+   {
+    "navn": "Inntekter skipsfart (TCE)",
+    "naa": "312,0 mill. USD",
+    "forrige": "201,8 mill. USD"
+   },
+   {
+    "navn": "Kontantstrøm fra driften",
+    "naa": "327,8 mill. USD",
+    "forrige": "128,8 mill. USD"
+   },
+   {
+    "navn": "Utbytte per aksje",
+    "naa": "1,30 USD",
+    "forrige": "0,40 USD"
+   }
+  ],
+  "utbytte": "Styret vedtok 23. november et utbytte på 1,30 dollar per aksje for tredje kvartal, mot 0,95 dollar for andre kvartal og 0,40 dollar i samme kvartal i fjor. For aksjer i Euronext VPS er det 12,7189 kroner per aksje, mot 8,8914 kroner for andre kvartal. Aksjen handles uten utbytte på Oslo Børs fra 3. desember, og utbetalingen skjer rundt 14. desember. Utbyttet tilsvarer 92 % av resultatet etter skatt i skipsfartsdelen og 63 % av resultatet til aksjonærene.",
+  "plan": "",
+  "ellers": [
+   "For fjerde kvartal har selskapet sikret 92 % av de tilgjengelige skipsdagene til rundt 102 000 dollar per dag.",
+   "I september utstedte selskapet en konvertibel obligasjon på 300 millioner dollar med fem års løpetid og 2,25 % rente. Den kan byttes til nye aksjer og skal delvis finansiere åtte nye gasstankskip av Panamax-størrelse.",
+   "Resultatet inneholder en engangsgevinst på 36,5 millioner dollar fra salg av skip. BW Mistral er solgt etter kvartalsslutt. Selskapet venter en bokført gevinst på rundt 37 millioner dollar og netto kontanter på rundt 104 millioner."
+  ],
+  "deletekst": "BW LPG betaler 1,30 dollar per aksje for tredje kvartal, mot 0,95 for andre og 0,40 i samme kvartal i fjor. Resultatet etter skatt ble 358,9 millioner dollar, mot 56,8 millioner. Det viktigste fra rapporten:",
+  "skrevet": "2026-11-24"
+ },
+ {
   "periode": "2026-Q2",
   "dato": "2026-08-28",
   "melding": "681096",
