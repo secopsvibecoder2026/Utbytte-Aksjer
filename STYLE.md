@@ -204,6 +204,14 @@ Finans. Tickerkolonnen er festet (`.tabell-fast`) i sektortabellene og i
 oversikten på `/aksjer/`, i lyst og mørkt tema. Topplistene har ikke fått det
 (rangkolonne foran tickeren). Se «Design round 4» i `CLAUDE.md`.
 
+**Rapportsiden over tid 24.11.2026** (designrunde 5): `/aksjer/{TICKER}/rapporter/`
+har kolonnen «Forrige rapport» (og «Endring») i den siste rapportens tabell, og
+seksjonen «Utvikling over tid» med nøkkeltall rapport for rapport. Endringen er
+regnet ut ved bygging, bare for tall med samme enhet, og er nøytral i farge
+(tall er nøytrale, og høyere kostnader er ikke «bra»). Tabellen med flere kolonner
+bruker `.tabell-fast`. I dag viser bare BWLPG det nye, siden bare den har to
+lagrede rapporter. Se «Design round 5» i `CLAUDE.md`.
+
 Gjenstår:
 - samme tallformat i resten av malen
 

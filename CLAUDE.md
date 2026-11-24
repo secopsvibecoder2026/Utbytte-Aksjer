@@ -4056,6 +4056,92 @@ points «under», `overflow` on the table, no sticky rule, no matching colours. 
 reads all 14 sector pages from `data/aksjer.json` and requires the table before
 the text, every row present and an anchor that exists.
 
+## Design round 5: reports over time (2026-11-24)
+
+The owner asked for «siste rapport og en sammenligning av tall fra sist
+rapport» on the report page, so that value builds up over time. The page
+(`/aksjer/{TICKER}/rapporter/`) showed every report on its own, with «samme
+periode i fjor» as the only comparison. Measured 24.11.2026: 94 summaries for
+93 companies, and only BWLPG has two (2026-Q3 and 2026-Q2). So **only BWLPG
+shows the new parts today**, and that is right: they fill in as more quarters
+are saved. No new URL (hundreds of thin pages is the pattern under «Breaking
+the template»), so the sitemap and `sitemap_lastmod()` need no change.
+
+- **«Forrige rapport» and «Endring» in the newest report's table.** `kr.forrige_rapport()`
+  gives the report for the period **right before** (`foregaaende_periode()`:
+  Q3 → Q2, Q1 → last year's Q4, H2 → H1, AR → last year), not «the oldest we
+  have». With a quarter missing between two saved reports there is no previous
+  report, and the page says nothing about it. A column exists only when at
+  least one row has a name **identical** to a row in that report (trim and
+  casefold, nothing fuzzy). «Samme periode i fjor» stays and gets a label
+  (`Nå`, `Forrige rapport`, `Samme periode i fjor`, each over its period, like
+  «2. kv. 2026»). `_rapport_tall_tabell(r, forrige=…)` does it, and the stock
+  page box (`maks_rader=3`) is unchanged.
+- **«Utvikling over tid»** (`#utvikling`, `_rapport_serie_html()`, `kr.serie()`):
+  rows are key figures whose name is identical in at least two of the six
+  newest reports, columns are those reports (newest left), «—» where a number is
+  missing. A name counts among the **displayed** columns, so a row never shows a
+  single number. The section sits right after the newest report, has a pill in
+  `.hopp`, and is **absent** when no row qualifies. The rows are real HTML.
+- **The change is computed at build time and never stored** (`kr.endring()`),
+  and only when both values read as the same unit and the base is positive.
+  `kr.tolk_verdi()` reads «358,9 mill. USD», «1 204 mill. kr» (space, hard or
+  narrow space as thousands separator), «5,6 mrd. kr» (equal to «5 600 mill.
+  kr»), «12,5 %», «2,05 USD», minus signs and «underskudd». Everything else
+  (`ca. 12 mrd.`, `12 til 14 %`, an empty cell) has no value. kr, kroner and NOK
+  are one unit, as are USD and dollar. Percent gives **percentage points**
+  («−1,3 pp»), anything else percent change («+160,3 %»), rounded half up with
+  `Decimal`. No change from a zero or negative base, to a negative number, between
+  USD and NOK, or between «5 mill. kr» and «5 kr» (a result against an amount
+  per share). In the series a change stands under a number only against the
+  cell to its right and only when that is the period right before, so a gap is
+  not jumped over.
+- **Colour.** Numbers and changes are neutral: text colour, gray for what we
+  computed, no green or red (higher costs are not «good»), `TestRapportUtvikling`
+  allows only grays in the new CSS. Contrast 7,56:1 (change) and 4,83:1 (period
+  label) in light mode, 6,99:1 in dark.
+- **Phones.** The series table is `.tabell-fast` in a `.tabell-ramme` and scrolls
+  sideways with the key-figure name fixed; the first cell stays at the frame's
+  left edge and is the touch target at 0, 50 and 100 % scroll at 320 to 1280 px
+  in both themes. The table with «Forrige rapport» stacks under 30rem as before
+  (rows of label, period and number, two per line) and is a `.tabell-fast` table
+  from there up. Its fixed-column shadow is switched off in the stacked view.
+  Two traps, both found by measuring: `table.rapport-tall` has
+  `border-collapse: collapse`, which beats `.tabell-fast` (lower specificity), so
+  the new tables set `separate`; and a `.sr-only` span (position: absolute) in a
+  cell with no positioned parent stands at the first positioned ancestor
+  outside the frame, so a six-column table made the **whole page** 795 px wide
+  at 390 px. The change span is `position: relative`, and the series table
+  carries its label as `aria-label`, not as a `.sr-only` caption.
+- **A page with nothing to compare is as before, byte for byte, also the
+  stylesheet.** The new CSS (`RAPPORT_SAMMENLIGNING_CSS`) and the explanation
+  line (`RAPPORT_FORKLARING`, no numbers, no yield, no price) are added only when
+  the page uses «Forrige rapport» or «Utvikling over tid». Checked by generating
+  all 93 report pages and all 93 stock pages with the old and the new code:
+  of 186 files one differs, `BWLPG/rapporter/index.html`, so the lastmod hash of
+  the other pages does not move.
+- **The rapport agent and the gate.** `.claude/agents/rapport.md` says to read the
+  company's previous summary first and use the same `navn` and unit (mill. or
+  mrd., currency) for numbers that exist in both; new rows are fine.
+  `kr.serie_varsler()` makes `--skriv` **warn, not stop**, when a row has the
+  same name as one in the previous saved report but another unit (currency, or
+  mill. against mrd.), and when a name differs by one word from a previous one
+  without being identical (`Utbytte per aksje` / `Utbytte pr. aksje`) while both
+  lack an identical partner (two different rows with fixed names, like «Resultat
+  før skatt» and «Resultat etter skatt», give no warning). No file in
+  `data/rapporter/` was touched.
+- **Measured** (BWLPG, 320, 360, 390, 768, 1280 px, both themes, and a made-up
+  company with six reports): horizontal overflow 0, tap targets under 44 px
+  unchanged (the logo link at 320 to 768 px, nav links at 1280 px; the new pill
+  is 44 px), CLS 0 before and after. BWLPG's page text goes from 864 to 1 074
+  words, none removed; the other pages have the same text and markup.
+
+Tests: `TestRapportUtvikling` (27) in `scripts/test_fetch_stocks.py`, and
+`TestTolkVerdi`, `TestEndring`, `TestSerie`, `TestSerievarsel` (+37 tests in all)
+in `scripts/test_kvartalsrapport.py`. On the old code all 37 new report tests error
+out and 21 of the 27 page tests fail or error (the other six guard what must not
+change).
+
 ## The fixer agent (`.claude/agents/fikser.md`, 2026-10-18)
 
 The maintenance and tallkontroll agents only report, and their findings waited
