@@ -5581,6 +5581,249 @@ class TestFikser2211(unittest.TestCase):
         self.assertFalse(fs.i_rangering(a))
 
 
+class TestBwlpgProsabelop(unittest.TestCase):
+    """BW LPG skriver beløpet i løpende tekst, ikke som «Dividend amount:» (24.11.2026).
+
+    Aksjesiden hadde riktig ex-dato og betalingsdato, men ingen kunngjort sum, så
+    beløpet manglet i tittel, ingress og utbyttekalender. Meldingstekstene er de
+    relevante avsnittene fra 687253 (tredje kvartal) og 681100 (andre kvartal),
+    uten kontaktpersonen.
+    """
+
+    I_DAG = datetime.date(2026, 11, 24)
+    Q3 = (
+        "Singapore, 24 November 2026\n\n"
+        "BW LPG Limited (\"BW LPG\" or the \"Company\", OSE ticker code: \"BWLPG.OL\", NYSE\n"
+        "ticker code \"BWLP\") provides the following key information relating to the\n"
+        "Company's cash dividend for Q3 2026:\n\n"
+        "The Board has approved a dividend of US$1.30 per share on 23 November 2026.\n"
+        "For shares registered with Euronext VPS, dividend per share is NOK12.7189.\n\n"
+        "Record date: 4 December 2026\n\n"
+        "Shares registered with Euronext VPS - Oslo Stock Exchange\n"
+        "=============================================================\n"
+        "Last trading day including the right to receive this dividend: 2 December 2026\n"
+        "Ex-date: 3 December 2026\n"
+        "Dividend payment date: On or about 14 December 2026\n\n"
+        "Shares registered with Depository Trust Company -- New York Stock Exchange\n"
+        "=============================================================\n"
+        "Last trading day including the right to receive this dividend: 3 December 2026\n"
+        "Ex-date: 4 December 2026\n"
+        "Dividend payment date: On or about 14 December 2026\n")
+    # Andre kvartal: setningene brytes midt i, og «NOK8.8914» står uten mellomrom.
+    Q2 = (
+        "Singapore, 28 August 2026\n\n"
+        "The Board has approved a dividend of US$0.95 per share on 27 August 2026. For\n"
+        "shares registered with Euronext VPS, dividend per share is NOK8.8914.\n\n"
+        "Record date: 8 September 2026\n\n"
+        "Shares registered with Euronext VPS - Oslo Stock Exchange\n"
+        "=============================================================\n"
+        "Last trading day including the right to receive this dividend: 4 September\n"
+        "2026\n"
+        "Ex-date: 7 September 2026\n"
+        "Dividend payment date: On or about 16 September 2026\n\n"
+        "Shares registered with Depository Trust Company -- New York Stock Exchange\n"
+        "=============================================================\n"
+        "Ex-date: 8 September 2026\n"
+        "Dividend payment date: On or about 16 September 2026\n")
+
+    # Raden slik BWLPG så ut 24.11.2026, med tallene fra aksjer.json.
+    BWLPG = {
+        "ticker": "BWLPG", "navn": "BW LPG Limited", "bors": "Oslo Børs", "sektor": "Shipping",
+        "pris": 218.8, "frekvens": "Kvartalsvis", "valuta": "NOK",
+        "ex_dato": "2026-12-03", "betaling_dato": "2026-12-14",
+        "utbytte_per_aksje": 24.99, "utbytte_yield": 11.42, "arsrate_kilde": "betalt_12m",
+        "utbytte_12m": 24.992, "utbytte_12m_antall": 4,
+        "utbytte_12m_liste": [{"ex_dato": "2025-12-11", "belop": 3.927},
+                              {"ex_dato": "2026-03-12", "belop": 5.596},
+                              {"ex_dato": "2026-06-11", "belop": 6.5777},
+                              {"ex_dato": "2026-09-07", "belop": 8.8914}],
+        "utbetalinger": [["2025-12-11", 3.927], ["2026-03-12", 5.596],
+                         ["2026-06-11", 6.5777], ["2026-09-07", 8.8914]],
+    }
+    ANNONSERT = {"annonsert_utbytte": 12.7189, "annonsert_ex": "2026-12-03",
+                 "annonsert_utland": {"belop": 1.3, "valuta": "USD", "ex": "2026-12-03"}}
+
+    def test_tredje_kvartal_gir_kroner_og_dollar(self):
+        u = fs._parse_utbetalinger(self.Q3)
+        self.assertEqual(len(u), 1)
+        self.assertEqual((u[0]["ex_dato"], u[0]["betaling_dato"]), ("2026-12-03", "2026-12-14"))
+        self.assertEqual((u[0]["belop"], u[0]["valuta"]), (12.7189, "NOK"))
+        self.assertEqual((u[0]["belop_utland"], u[0]["valuta_utland"]), (1.3, "USD"))
+        self.assertFalse(u[0]["forbehold"])
+
+    def test_andre_kvartal_med_linjeskift_og_nok_uten_mellomrom(self):
+        u = fs._parse_utbetalinger(self.Q2)
+        self.assertEqual(len(u), 1)
+        self.assertEqual(u[0]["ex_dato"], "2026-09-07")
+        self.assertEqual((u[0]["belop"], u[0]["valuta"]), (8.8914, "NOK"))
+        self.assertEqual((u[0]["belop_utland"], u[0]["valuta_utland"]), (0.95, "USD"))
+
+    def test_neste_utbetaling_gir_begge_belop_til_ex_datoen_som_vises(self):
+        n = fs.neste_utbetaling(self.Q3, self.I_DAG)
+        self.assertEqual(n["ex_dato"], "2026-12-03")
+        self.assertEqual((n["belop"], n["valuta"]), (12.7189, "NOK"))
+        self.assertEqual((n["belop_utland"], n["valuta_utland"]), (1.3, "USD"))
+        self.assertIsNone(n["ex_forbehold"])
+
+    def test_nok_uten_mellomrom_dollartegn_og_tegnsetting(self):
+        f = fs._prosa_belop
+        self.assertEqual(f("The Board has approved a dividend of US$1.30 per share on 23 November."),
+                         {"belop": 1.3, "valuta": "USD", "belop_utland": None, "valuta_utland": None})
+        self.assertEqual(f("dividend per share is NOK12.7189.")["belop"], 12.7189)
+        self.assertEqual(f("dividend per share is NOK 12.7189")["belop"], 12.7189)
+        self.assertEqual(f("The Board has declared a cash dividend of $0.24 per share,")["valuta"], "USD")
+        # Kommaet etter tallet er tegnsetting, ikke en del av det («USD 0.24,»).
+        self.assertEqual(f("dividend per share is USD 0.24, payable in December")["belop"], 0.24)
+
+    def test_tall_trunkeres_aldri(self):
+        # «1,300.50» må ikke bli 1,30 eller 1,3.
+        self.assertIsNone(fs._prosa_belop("dividend per share is NOK 1,300.50"))
+        self.assertIsNone(fs._prosa_belop("approved a dividend of NOK 1,300.50 per share"))
+
+    def test_storrelsessuffiks_er_totalen_ikke_per_aksje(self):
+        f = fs._prosa_belop
+        self.assertIsNone(f("dividend per share is USD 100m"))
+        self.assertIsNone(f("dividend per share is USD 100 million"))
+        self.assertIsNone(f("dividend per share is NOK 2.4 billion"))
+        self.assertIsNone(f("The Board has approved a dividend of USD 100m per share"))
+        self.assertIsNone(f("The Board has approved a dividend of NOK 2.4 billion in total"))
+
+    def test_to_ulike_belop_i_samme_valuta_er_tvetydig(self):
+        f = fs._prosa_belop
+        self.assertIsNone(f("approved a dividend of NOK 1.00 per share. Dividend per share is NOK 2.00."))
+        self.assertIsNone(f("approved a dividend of US$0.50 per share and declared a dividend of US$0.60 per share"))
+        # Samme beløp to ganger er ikke tvetydig.
+        self.assertEqual(f("approved a dividend of NOK 1.00 per share. Dividend per share is NOK1.00.")["belop"], 1.0)
+
+    def test_engangsutbytte_i_meldingen_gir_ingen_prosabelop(self):
+        # Frontlines melding om et special one-time dividend nevner det forrige utbyttet
+        # («previously declared dividend of $2.61 per share», 682180). Beløpet hører ikke
+        # til ex-datoen som står i en slik melding.
+        tekst = ("The Board has declared a special one-time dividend of $0.80 per share, in addition "
+                 "to the previously declared dividend of $2.61 per share for the second quarter.\n"
+                 "Ex-date: 24 September 2026\nPayment date: 8 October 2026\n")
+        self.assertIsNone(fs._prosa_belop(tekst))
+        u = fs._parse_utbetalinger(tekst)
+        self.assertEqual(u[0]["ex_dato"], "2026-09-24")
+        self.assertIsNone(u[0]["belop"])
+
+    def test_nektende_form_teller_ikke(self):
+        self.assertIsNone(fs._prosa_belop("The Board has not approved a dividend of NOK 5.00 per share."))
+
+    def test_ekstraordinaert_ord_foran_beloepet_er_ikke_ordinaert(self):
+        f = fs._prosa_belop
+        self.assertIsNone(f("The Board has approved an extraordinary dividend of NOK 5.00 per share."))
+        self.assertIsNone(f("The Board has approved an additional dividend of NOK 0.50 per share."))
+        self.assertIsNone(f("The Board has approved a total dividend of USD 0.61 per share."))
+        self.assertIsNone(f("The Board proposes a dividend of NOK 2.15 per share."))
+
+    def test_melding_uten_belop_gir_fortsatt_none(self):
+        tekst = ("Key information relating to the cash dividend:\n"
+                 "Record date: 4 December 2026\nEx-date: 3 December 2026\n"
+                 "Dividend payment date: On or about 14 December 2026\n")
+        u = fs._parse_utbetalinger(tekst)
+        self.assertEqual(u[0]["ex_dato"], "2026-12-03")
+        self.assertIsNone(u[0]["belop"])
+        self.assertIsNone(u[0]["valuta"])
+        self.assertIsNone(u[0]["belop_utland"])
+        self.assertIsNone(fs._prosa_belop(tekst))
+
+    def test_flere_utbetalinger_i_en_melding_faar_ikke_prosabelop(self):
+        # To ex-datoer, og et beløp i teksten som ikke kan knyttes til noen av dem.
+        tekst = ("Tranche 1:\nEx-date: 29 June 2026.\n"
+                 "Tranche 2:\nEx-date: 29 September 2026.\n"
+                 "The Board has approved a dividend of NOK 1.00 per share.\n")
+        u = fs._parse_utbetalinger(tekst)
+        self.assertEqual([x["ex_dato"] for x in u], ["2026-06-29", "2026-09-29"])
+        self.assertEqual([x["belop"] for x in u], [None, None])
+
+    def test_linjen_dividend_amount_gaar_foran_teksten(self):
+        tekst = ("The Board has approved a dividend of US$0.40 per share. For shares registered with "
+                 "Euronext VPS, dividend per share is NOK 4.00.\n"
+                 "Dividend amount: USD 0.40 per share\nEx-date: 20 November 2026\n")
+        u = fs._parse_utbetalinger(tekst)
+        self.assertEqual((u[0]["belop"], u[0]["valuta"]), (0.4, "USD"))
+        self.assertIsNone(u[0]["belop_utland"])
+
+    def test_forslag_gir_forbehold_som_for(self):
+        tekst = ("The Board has approved a dividend of NOK 5.00 per share, subject to approval by the "
+                 "general meeting.\nDate of approval: 12 May 2026\nEx-date: 15 May 2026\n"
+                 "Payment date: 27 May 2026\n")
+        n = fs.neste_utbetaling(tekst, datetime.date(2026, 4, 30))
+        self.assertEqual((n["belop"], n["valuta"]), (5.0, "NOK"))
+        self.assertEqual(n["ex_forbehold"], "2026-05-12")
+        # Etter generalforsamlingen er det vedtatt.
+        self.assertIsNone(fs.neste_utbetaling(tekst, datetime.date(2026, 5, 14))["ex_forbehold"])
+
+    def test_bruk_newsweb_belop_setter_kroner_og_dollar(self):
+        a = {}
+        nw = fs.neste_utbetaling(self.Q3, self.I_DAG)
+        self.assertFalse(fs.bruk_newsweb_belop(a, nw))
+        self.assertEqual(a["annonsert_utbytte"], 12.7189)
+        self.assertEqual(a["annonsert_ex"], "2026-12-03")
+        self.assertEqual(a["annonsert_utland"], {"belop": 1.3, "valuta": "USD", "ex": "2026-12-03"})
+
+    def test_bruk_newsweb_belop_lar_ingen_gammel_utland_henge(self):
+        a = {"annonsert_utland": {"belop": 0.95, "valuta": "USD", "ex": "2026-09-07"}}
+        fs.bruk_newsweb_belop(a, {"ex_dato": "2026-12-03", "belop": 5.0, "valuta": "NOK"})
+        self.assertNotIn("annonsert_utland", a)
+
+    def test_regel_5_staar_ikke_ned_for_et_dollarerklart_utbytte(self):
+        # Uten dette sto «betalt siste 12 mnd» ned så snart kronebeløpet var lest, og
+        # årsraten falt tilbake til Yahoos anslag (12,00 kr, 5,48 %) i stedet for 24,99.
+        a = dict(self.BWLPG, utbytte_per_aksje=12.0, utbytte_yield=5.48, **self.ANNONSERT)
+        self.assertTrue(fs.betalt_kan_bli_arsrate(fs.med_runde(a), self.I_DAG))
+
+    def test_regel_5_staar_fortsatt_ned_for_et_kroneutbytte(self):
+        # Uendret: et kunngjort NOK-utbytte uten dollarbeløp er ferskere enn vinduet.
+        a = dict(self.BWLPG, utbytte_per_aksje=12.0, utbytte_yield=5.48,
+                 annonsert_utbytte=12.7189, annonsert_ex="2026-12-03")
+        self.assertFalse(fs.betalt_kan_bli_arsrate(fs.med_runde(a), self.I_DAG))
+        # Et dollarbeløp for en annen ex-dato endrer ikke det.
+        a["annonsert_utland"] = {"belop": 0.95, "valuta": "USD", "ex": "2026-09-07"}
+        self.assertFalse(fs.betalt_kan_bli_arsrate(fs.med_runde(a), self.I_DAG))
+
+    def test_arsraten_er_uendret_gjennom_steget(self):
+        # Raden slik NewsWeb-steget i main() lar den, med Yahoos anslag som rate.
+        a = dict(self.BWLPG, utbytte_per_aksje=12.0, utbytte_yield=5.48)
+        a.pop("arsrate_kilde")
+        fs.bruk_newsweb_belop(a, fs.neste_utbetaling(self.Q3, self.I_DAG))
+        self.assertTrue(fs.betalt_kan_bli_arsrate(fs.med_runde(a), self.I_DAG))
+        fs.bruk_betalt_som_arsrate(a, 0.0)
+        self.assertEqual((a["utbytte_per_aksje"], a["utbytte_yield"], a["arsrate_kilde"]),
+                         (24.99, 11.42, "betalt_12m"))
+
+    def test_dnb_med_dollarbelop_merket_som_kroner_rettes_av_betalt_siste_12_mnd(self):
+        # Hvis DNB senere lister BW LPG med «1.30» uten valuta, tar DNB-steget det som kroner og
+        # ganger med fire. Meldingens kronebeløp erstatter beløpet, og regel 5 holder ikke
+        # den feil utledede raten fast.
+        a = dict(self.BWLPG, utbytte_per_aksje=5.2, utbytte_yield=2.38,
+                 annonsert_utbytte=1.3, annonsert_ex="2026-12-03")
+        a.pop("arsrate_kilde")
+        self.assertFalse(fs.bruk_newsweb_belop(a, fs.neste_utbetaling(self.Q3, self.I_DAG)))
+        self.assertEqual(a["annonsert_utbytte"], 12.7189)
+        self.assertTrue(fs.betalt_kan_bli_arsrate(fs.med_runde(a), self.I_DAG))
+
+    def test_tittel_ingress_og_kalender_viser_belopet(self):
+        a = dict(self.BWLPG, **self.ANNONSERT)
+        t = fs.utbytte_i_tittel(a, "2026-11-24")
+        self.assertEqual((t["belop"], t["valuta"], t["ex"], t["art"]), (12.7189, "NOK", "2026-12-03", "neste"))
+        tittel = fs.lag_aksje_tittel(a, "2026-11-24")
+        self.assertIn("12,72\u00a0kr per aksje", tittel)
+        self.assertIn("ex-dato 3. des", tittel)
+        self.assertLessEqual(len(tittel), fs.TITTEL_TAK)
+        ingress = fs.lag_aksje_ingress(a, "2026-11-24")
+        self.assertIn("betaler 12,72\u00a0kr per aksje med ex-dato", ingress)
+        rader = [r for r in fs.kalender_rader([a], self.I_DAG) if r["ex"] == datetime.date(2026, 12, 3)]
+        self.assertEqual(len(rader), 1)
+        self.assertEqual((rader[0]["belop"], rader[0]["valuta"]), (12.7189, "NOK"))
+
+    def test_uten_belop_er_tittelen_som_for(self):
+        a = dict(self.BWLPG)
+        self.assertIsNone(fs.utbytte_i_tittel(a, "2026-11-24"))
+        self.assertNotIn("per aksje", fs.lag_aksje_tittel(a, "2026-11-24"))
+
+
 class TestInterOveralt(unittest.TestCase):
     """Inter på alle sider (designrunden 22.11.2026).
 

@@ -3451,6 +3451,64 @@ of NOK 2.00» (686282) now has an amount, but the stock is a hand-set
 
 Tests: `TestFikser2211` (13) and `ui.test.js` (+1).
 
+## From the BWLPG report of 2026-11-24
+
+BW LPG announced its third-quarter dividend on 24 November (NewsWeb 687253):
+US$1.30 per share, NOK 12,7189 for shares registered with Euronext VPS, ex-date
+3 December. The page had the right ex-date and payment date but no announced
+amount, so the title, lead and `/utbyttekalender/` lacked it.
+
+- **Cause.** The notice has no «Dividend amount:» line. It says «The Board has
+  approved a dividend of US$1.30 per share» and «dividend per share is
+  NOK12.7189», and `_parse_utbetalinger()` gave the dates with `belop: None`.
+  All five BW LPG notices since December 2025 (661022, 667317, 675125, 681100,
+  687253) have that shape.
+- **The parser.** `_prosa_belop()` reads two forms and nothing else:
+  «approved|declared [a|an] [cash|quarterly|interim|ordinary] dividend of CUR N
+  per share» and «dividend per share is|will be CUR N». The currency may be
+  glued to the number («NOK12.7189») or written «US$». The number is never cut
+  («1,300.50» is refused, not read as 1,30), a trailing comma is punctuation,
+  and a size suffix (`USD 100m`) is the total, not per share. It returns None
+  when the notice is ambiguous: two different amounts in one currency, two
+  foreign currencies, a negated phrase, a notice with more than one payment
+  block, one that has a «Dividend amount:» line (that line wins), or one that
+  itself mentions an extraordinary, special or one-off dividend. The last
+  guard is for Frontline 682180, whose special dividend of $0.80 sits beside
+  «the previously declared dividend of $2.61 per share». A proposal («proposes»,
+  «recommend») is not read.
+- **Two amounts.** The kroner amount is the main one, since VPS is Oslo Børs.
+  The other currency goes in `belop_utland` / `valuta_utland`, and
+  `bruk_newsweb_belop()` stores it as `annonsert_utland` beside
+  `annonsert_utbytte`. Dollars are never converted. `utbytte_i_tittel()` and
+  `kalender_rader()` already take kroner first, so the title and H1 read «BW LPG
+  utbytte 2026: 12,72 kr per aksje» (the title adds the ex-date and the
+  ticker) and the calendar «12,7189 NOK». The dollar amount is in the data
+  and shown nowhere.
+- **Rule 5 would have moved the rate.** Once `annonsert_utbytte` was set,
+  `betalt_kan_bli_arsrate()` stood down («an announced, approved dividend is
+  fresher than the window») and BW LPG fell back to Yahoo's estimate: in an
+  emulation of the step, 12,00 kr (5,48 %) instead of 24,99 kr (11,42 %,
+  «siste 12 mnd»). The rule assumes the DNB step has turned the announcement
+  into a rate, and it does that only for an amount declared in NOK. It now
+  stands down only when `annonsert_utland` does not carry the same ex-date as
+  `annonsert_ex`. No row had both before, so no other stock is covered by the
+  exception. It also corrects a DNB row that labelled USD 1,30 as kroner: the
+  notice's kroner amount replaces it, and the paid sum replaces the rate.
+- **Simulated 24.11.2026** with old and new code on 850 dividend and
+  distribution notices from all 155 issuers since 1 August 2025. Five notices
+  change, all BW LPG (the NOK/USD ratios are 9,25 to 10,12). Per stock on the
+  day and weekly back to September 2025, only BWLPG moves, in the days before
+  each of its five ex-dates. `ekstraordinaere_i_vindu()`,
+  `annonsert_er_ekstraordinaer()` and rule 5 give the same answer for all 155
+  rows. In a regenerated copy only the BWLPG pages, the report page, the
+  calendar and the `.ics` feed differ.
+- **Not read, on purpose.** «Dividend amount: US$0.20 per share» (HSHP, the
+  `US$` form of the labelled line), «Dividend amount per share: NOK 5.00»
+  (AKSO), the amount in proposals («proposes a dividend of NOK 2.15 per
+  share»: DNB, VEI, GENT, TOM) and TGS's «NOK equivalent of USD 0.155».
+
+Tests: `TestBwlpgProsabelop` (22).
+
 ## App review of 2026-10-20
 
 Every tab, sub-tab and fourteen stock modals were opened with Playwright at

@@ -1005,6 +1005,79 @@ _BLOKK_BELOP_RE = re.compile(
     r":\s*(?:(NOK|USD|EUR|SEK|DKK|\$)\s*)?"
     r"(\d+(?:[.,]\d+)?)(?![\d.,]*\s*(?:m\b|mn\b|mill|bn\b|billion|mrd))", re.I)
 
+# Beløpet i løpende tekst, for meldinger uten linjen «Dividend amount:». BW LPG
+# skriver «The Board has approved a dividend of US$1.30 per share on 23 November
+# 2026. For shares registered with Euronext VPS, dividend per share is
+# NOK12.7189.» (687253), og parseren ga ex-dato og betalingsdato, men aldri et
+# beløp. Aksjesiden manglet derfor beløpet i tittel, ingress og kalender.
+#
+# Bare to former, begge forankret i ordlyd som sier at det er vedtatt og hva det
+# er per aksje:
+#   * «approved|declared [a|an] [cash|quarterly|interim|ordinary] dividend of
+#     CUR N per share». «Extraordinary», «special», «additional», «total»,
+#     «final» og «proposed» står ikke i listen, så et engangsutbytte eller et
+#     delbeløp leses aldri som utbetalingens beløp. «per share» rett etter
+#     tallet avviser «USD 100m».
+#   * «dividend per share is|will be CUR N».
+# Valutaen kan stå uten mellomrom («NOK12.7189») og som «US$». Tallet kan ikke
+# trunkeres: lookaheadene hindrer at «1,300.50» blir «1,30» og at «USD 0.24,»
+# tar med kommaet.
+_PROSA_VALUTA = r"(NOK|USD|EUR|SEK|DKK|US\$|\$)"
+_PROSA_TALL = r"(\d+(?:[.,]\d+)?)(?!\d)(?![.,]\d)"
+_PROSA_VEDTATT_RE = re.compile(
+    r"\b(?:approved|declared)\s+(?:an?\s+)?(?:(?:cash|quarterly|interim|ordinary)\s+)*"
+    r"dividend\s+of\s+" + _PROSA_VALUTA + r"\s*" + _PROSA_TALL + r"\s+per\s+share\b", re.I)
+_PROSA_PER_AKSJE_RE = re.compile(
+    r"\bdividend\s+per\s+share\s+(?:is|will\s+be)\s+" + _PROSA_VALUTA + r"\s*" + _PROSA_TALL
+    + r"(?!\s*(?:m\b|mn\b|mill|bn\b|billion|mrd))", re.I)
+
+
+def _prosa_belop(tekst):
+    """Beløpet per aksje når en melding oppgir det i løpende tekst, ellers None.
+
+    Gir ``{"belop", "valuta", "belop_utland", "valuta_utland"}``. Oppgir
+    meldingen et kronebeløp, er det hovedbeløpet (det som gjelder for aksjene i
+    Euronext VPS, altså Oslo Børs), og beløpet i en annen valuta står som
+    ``belop_utland``. Oppgir den bare ett fremmed beløp, er det hovedbeløpet,
+    som for linjen «Dividend amount: USD 0.40». Dollar regnes aldri om.
+
+    None når meldingen er tvetydig, så et beløp aldri hentes fra en annen
+    utbetaling enn den ex-datoen hører til:
+    * to ulike beløp i samme valuta (to utbetalinger, eller et tidligere utbytte
+      nevnt ved siden av det nye),
+    * to ulike fremmede valutaer,
+    * en nektende formulering rett foran («has not approved a dividend of …»),
+    * en melding som selv nevner et ekstraordinært, særskilt eller
+      engangsutbytte. Den kan handle om flere utbetalinger, og et beløp kan
+      tilhøre en annen enn den ex-datoen står for. Frontlines melding om et
+      «special one-time dividend of $0.80» nevner «the previously declared
+      dividend of $2.61 per share» (682180). Engangsutbytter har egne regler.
+    """
+    if not tekst or _har_ekstraordinaer(tekst):
+        return None
+    per_valuta = {}
+    for rx in (_PROSA_VEDTATT_RE, _PROSA_PER_AKSJE_RE):
+        for m in rx.finditer(tekst):
+            if _NEKTET_RE.search(tekst[max(0, m.start() - 60):m.start()]):
+                continue
+            kode = m.group(1).upper()
+            valuta = "USD" if kode in ("US$", "$") else kode
+            belop = round(_tall(m.group(2)), 6)
+            if belop > 0:
+                per_valuta.setdefault(valuta, set()).add(belop)
+    if not per_valuta or any(len(b) > 1 for b in per_valuta.values()):
+        return None
+    utenlandske = [v for v in per_valuta if v != "NOK"]
+    if len(utenlandske) > 1:
+        return None
+    nok = next(iter(per_valuta["NOK"])) if "NOK" in per_valuta else None
+    ut = next(iter(per_valuta[utenlandske[0]])) if utenlandske else None
+    if nok is not None:
+        return {"belop": nok, "valuta": "NOK",
+                "belop_utland": ut, "valuta_utland": utenlandske[0] if utenlandske else None}
+    return {"belop": ut, "valuta": utenlandske[0], "belop_utland": None, "valuta_utland": None}
+
+
 # Hvor langt tilbake en melding kan ligge og fortsatt gjelde et kommende
 # utbytte. EQNRs melding kom 22. juli for en ex-dato 13. november.
 NEWSWEB_EX_DAGER = 270
@@ -1093,6 +1166,9 @@ def _parse_utbetalinger(tekst):
     forbehold_i_teksten = bool(_FORBEHOLD_RE.search(tekst))
     v = _SPLITT_VALUTA.search(tekst)
     valuta_i_teksten = v.group(1).upper() if v else None
+    # Beløp i løpende tekst gjelder bare en melding med én utbetaling: da hører
+    # det til den ene ex-datoen. Med flere blokker kan det ikke knyttes til noen.
+    prosa = _prosa_belop(tekst) if len(blokker) == 1 else None
     ut = []
     sett = set()
     for blokk in blokker:
@@ -1109,6 +1185,13 @@ def _parse_utbetalinger(tekst):
         # «Dividend amount: $0.80 per share» — Frontline skriver dollartegnet.
         kode = (b.group(1) or "").upper() if b else ""
         valuta = (("USD" if kode == "$" else kode) or valuta_i_teksten) if b else None
+        belop_utland = valuta_utland = None
+        # Finnes ingen «Dividend amount»-linje, leses beløpet i teksten (BW LPG).
+        # En linje uten valuta (DNB) går ikke den veien: den har et beløp vi ikke
+        # kan sette en valuta på, og teksten kan gjelde noe annet.
+        if not b and prosa:
+            belop, valuta = prosa["belop"], prosa["valuta"]
+            belop_utland, valuta_utland = prosa["belop_utland"], prosa["valuta_utland"]
         ut.append({
             "ex_dato": ex,
             "betaling_dato": bet,
@@ -1116,6 +1199,10 @@ def _parse_utbetalinger(tekst):
             "forbehold": forbehold_i_teksten,
             "belop": belop if belop and belop > 0 and valuta else None,
             "valuta": valuta if belop else None,
+            # Det andre beløpet i en melding som oppgir både kroner og selskapets
+            # valuta (BW LPG: USD 1,30 og NOK 12,7189 for aksjer i VPS).
+            "belop_utland": belop_utland,
+            "valuta_utland": valuta_utland,
         })
     return sorted(ut, key=lambda u: u["ex_dato"])
 
@@ -1136,7 +1223,8 @@ def neste_utbetaling(tekst, i_dag):
         uvedtatt = u["forbehold"] and (g is None or g >= i_dag_iso)
         return {"ex_dato": u["ex_dato"], "betaling_dato": u["betaling_dato"],
                 "ex_forbehold": (g or "ukjent") if uvedtatt else None,
-                "belop": u.get("belop"), "valuta": u.get("valuta")}
+                "belop": u.get("belop"), "valuta": u.get("valuta"),
+                "belop_utland": u.get("belop_utland"), "valuta_utland": u.get("valuta_utland")}
     return None
 
 
@@ -1159,8 +1247,14 @@ def bruk_newsweb_belop(aksje, nw):
         return False
     # Utbyttekalenderen viser et beløp i en annen valuta som det er, «0,40 USD»,
     # aldri omregnet. Det lagres for seg, så ingen kroneregning kan bruke det.
+    # Oppgir meldingen både kroner og selskapets valuta (BW LPG: USD 1,30 og
+    # NOK 12,7189 for aksjer i VPS), står kronebeløpet som `annonsert_utbytte`
+    # under, og selskapets beløp her.
     if nw.get("belop") and nw.get("valuta") and nw.get("valuta") != "NOK":
         aksje["annonsert_utland"] = {"belop": nw["belop"], "valuta": nw["valuta"], "ex": nw["ex_dato"]}
+    elif nw.get("belop_utland") and nw.get("valuta_utland"):
+        aksje["annonsert_utland"] = {"belop": nw["belop_utland"], "valuta": nw["valuta_utland"],
+                                     "ex": nw["ex_dato"]}
     else:
         aksje.pop("annonsert_utland", None)
     if nw.get("belop") and nw.get("valuta") == "NOK":
@@ -3518,9 +3612,21 @@ def betalt_kan_bli_arsrate(a, i_dag=None, min_avvik=BETALT_MIN_AVVIK):
     # Et kunngjort, vedtatt utbytte som kommer, er ferskere enn vinduet. Står
     # det alt i vinduet, er det ikke kommende lenger: på ex-dagen har Yahoo
     # utbetalingen, og GOD ble stående med 26 % til dagen etter (16.10.2026).
+    #
+    # Unntak: selskapet erklærer utbyttet i en annen valuta, og kronebeløpet er
+    # selskapets omregning for aksjene i VPS (BW LPG: USD 1,30, NOK 12,7189).
+    # DNB-steget gjør bare et NOK-deklarert beløp om til en rate og lar Yahoos
+    # NOK-tall stå for dollarutbytter (se main()), så ingen fersk rate står her
+    # til å beskyttes. Sto regelen ned, ble Yahoos anslag værende i stedet for
+    # det som er betalt. `annonsert_utland` med samme ex-dato er tegnet på det.
+    # Før børsmeldingens prosabeløp ble lest (24.11.2026) fantes aldri begge
+    # beløpene for samme ex-dato, så ingen annen aksje berøres.
+    utland = a.get("annonsert_utland") or {}
+    erklart_utenlands = bool(utland.get("belop")) and utland.get("ex") == a.get("annonsert_ex")
     if (a.get("annonsert_utbytte") and (a.get("annonsert_ex") or "") >= i_dag.isoformat()
             and not a.get("ex_forbehold")
-            and not _i_vinduet(a, a.get("annonsert_ex"))):
+            and not _i_vinduet(a, a.get("annonsert_ex"))
+            and not erklart_utenlands):
         return False
     # Avviket måles mot det minste av de to tallene, så 30 % betyr det samme
     # begge veier. Før 18.10.2026 ble det delt på det viste: en heving på 30 %
