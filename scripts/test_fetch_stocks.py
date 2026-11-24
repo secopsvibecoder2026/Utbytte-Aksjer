@@ -1539,6 +1539,67 @@ class TestUtbetalingsaar(unittest.TestCase):
 
 
 
+class TestNoramMaanedsmelding(unittest.TestCase):
+    """NorAm kunngjør utdelingen i «Monthly rig update and key information for …».
+
+    Tittelen har verken «dividend» eller «distribution», så månedsmeldingen ble
+    aldri lest, og siden hadde ingen kunngjort ex-dato for NorAm før ex-dagen
+    (24.11.2026). Meldingen under er 686141.
+    """
+
+    TITTEL = "NorAm Drilling AS - Monthly rig update and key information for November 2026"
+    TEKST = ("Oslo, Norway, November 10, 2026\n\nCommercial update:\n\n"
+             "In October 2026, the Company had 11 out of 11 rigs employed.\n\n"
+             "Cash distribution:\n\nThe Board of Directors today approved a monthly cash distribution "
+             "of approximately USD 2.0 million based on free cash flow for October 2026. The distribution "
+             "will be made from the Company's Contributed Surplus account which consists of previously "
+             "paid in share premium.\n\nKey information:\n\nDistribution amount: USD 0.045 per share\n\n"
+             "Declared currency: USD. Payment to shares registered with Euronext VPS will be distributed in NOK\n\n"
+             "Date of approval: November 10, 2026\n\nLast day including right: November 17, 2026\n\n"
+             "Ex-date: November 18, 2026\n\nRecord date: November 19, 2026\n\n"
+             "Payment date: On or about November 27, 2026\n")
+
+    def test_tittelen_treffer_filteret(self):
+        from fetch_stocks import _UTBYTTE_TITTEL_RE
+        for t in (self.TITTEL, self.TITTEL.replace(" - ", " – ").replace("November", "September")):
+            self.assertTrue(_UTBYTTE_TITTEL_RE.search(t), t)
+
+    def test_filteret_tar_ikke_med_andre_manedsmeldinger(self):
+        from fetch_stocks import _UTBYTTE_TITTEL_RE
+        for t in ("NorAm Drilling AS - Monthly rig update for November 2026",
+                  "Monthly update on production",
+                  "Key information relating to the share capital increase"):
+            self.assertFalse(_UTBYTTE_TITTEL_RE.search(t), t)
+
+    def test_meldingen_gir_ex_dato_betaling_og_dollarbelop(self):
+        from fetch_stocks import _parse_utbetalinger
+        ut = _parse_utbetalinger(self.TEKST)
+        self.assertEqual(len(ut), 1)
+        self.assertEqual((ut[0]["ex_dato"], ut[0]["betaling_dato"]), ("2026-11-18", "2026-11-27"))
+        self.assertEqual((ut[0]["belop"], ut[0]["valuta"]), (0.045, "USD"))
+
+    def test_rapportkoen_kjenner_tittelen(self):
+        import kvartalsrapport as kr
+        self.assertTrue(kr._UTBYTTEMELDING.search(self.TITTEL))
+        self.assertFalse(kr._UTBYTTEMELDING.search("NorAm Drilling AS - Monthly rig update for November 2026"))
+
+
+class TestAkvaHendelse(unittest.TestCase):
+    """AKVA-teksten sto på 92 % og «akseptperioden løper til 20. november» etter at
+    perioden var over. Meldingen 687133 (23.11.2026) sier 98,82 %, godkjenning fra
+    Konkurransetilsynet 13. november, og at bare godkjenning i Storbritannia mangler."""
+
+    def test_teksten_folger_meldingen(self):
+        h = fs.HENDELSE["AKVA"]
+        self.assertEqual((h["type"], h["melding"]), ("oppkjop", "687133"))
+        for ledd in ("98,82 prosent", "Akseptperioden gikk ut 20. november 2026",
+                     "Konkurransetilsynet godkjente 13. november", "britiske myndigheter"):
+            self.assertIn(ledd, h["tekst"])
+        for gammelt in ("92 prosent", "løper til"):
+            self.assertNotIn(gammelt, h["tekst"])
+        self.assertTrue(fs.gyldig_hendelse(h))
+
+
 class TestToSifferAar(unittest.TestCase):
     """MPC Container Ships skriver «Ex-date: 21.09.26», året med to sifre.
 
@@ -5355,6 +5416,60 @@ class TestRapportbunken2211Del2(unittest.TestCase):
         self.assertIn("har satt utdelingene til aksjonærene på pause (21. okt 2026)", tekst)
         self.assertIn("Før pausen betalte selskapet ut fire ganger i året", tekst)
         self.assertNotIn("betaler utbytte fire ganger", tekst)
+
+    # BlueNord (24.11.2026): en fusjon der selskapet har sagt at det ikke vedtar
+    # flere utbytter før fusjonen er gjennomført. Rapporten for tredje kvartal
+    # (684964): «may not declare and distribute any further dividends prior to
+    # the Effective Date». Siden viste 180,58 kr i året (35,62 %).
+    FUSJON = {"type": "fusjon", "dato": "2026-08-24", "melding": "680568",
+              "ingen_utbytte": True, "tekst": "BlueNord skal fusjoneres inn i Vår Energi."}
+    BNOR = {"ticker": "BNOR", "utbytte_per_aksje": 180.58, "utbytte_yield": 35.62,
+            "arsrate_kilde": "siste_utbetalinger", "arsrate_antall": 4, "frekvens": "Kvartalsvis",
+            "utbytte_12m": 180.58,
+            "ex_dato": None,
+            "utbetalinger": [["2025-11-20", 36.17], ["2026-02-20", 36.17],
+                             ["2026-05-22", 36.17], ["2026-07-17", 66.82]]}
+
+    def test_fusjon_med_ingen_utbytte_nuller_raten(self):
+        a = dict(self.BNOR)
+        self.assertTrue(fs.bruk_utbytte_pause(a, self.FUSJON, datetime.date(2026, 11, 24)))
+        self.assertEqual((a["utbytte_per_aksje"], a["utbytte_yield"], a["arsrate_kilde"]),
+                         (0.0, 0.0, "pause"))
+        self.assertEqual(a["utbytte_12m"], 180.58)     # det som er betalt, står
+        self.assertEqual(fs.arsrate_merke(a), "utdelinger på pause")
+
+    def test_fusjon_uten_flagg_nulles_ikke(self):
+        a = dict(self.BNOR)
+        h = {k: v for k, v in self.FUSJON.items() if k != "ingen_utbytte"}
+        self.assertFalse(fs.bruk_utbytte_pause(a, h, datetime.date(2026, 11, 24)))
+        self.assertFalse(fs.bruk_utbytte_pause(a, dict(self.FUSJON, ingen_utbytte="ja"),
+                                               datetime.date(2026, 11, 24)))
+        self.assertEqual(a["utbytte_yield"], 35.62)
+
+    def test_fusjon_pausen_oppheves_av_ny_utbetaling_eller_ex_dato(self):
+        i_dag = datetime.date(2026, 11, 24)
+        ny = dict(self.BNOR, utbetalinger=self.BNOR["utbetalinger"] + [["2026-12-10", 5.0]])
+        self.assertFalse(fs.bruk_utbytte_pause(ny, self.FUSJON, i_dag))
+        kunngjort = dict(self.BNOR, ex_dato="2026-12-10")
+        self.assertFalse(fs.bruk_utbytte_pause(kunngjort, self.FUSJON, i_dag))
+        self.assertEqual(kunngjort["utbytte_yield"], 35.62)
+
+    def test_fusjon_beholder_hendelsen_og_faq_sier_ikke_pause(self):
+        a = dict(self.BNOR, navn="BlueNord ASA", ar_med_utbytte=2, utbytteaar=[2025, 2026], payout_ratio=0)
+        fs.sett_hendelse(a, self.FUSJON, datetime.date(2026, 11, 24))
+        self.assertEqual(a["hendelse"]["type"], "fusjon")          # fusjonsboksen står
+        fs.bruk_utbytte_pause(a, self.FUSJON, datetime.date(2026, 11, 24))
+        tekst = json.dumps(fs._lag_faq_seksjon(a, datetime.date(2026, 11, 24)), ensure_ascii=False)
+        self.assertIn("har sagt at selskapet ikke vedtar flere utbytter før fusjonen er gjennomført", tekst)
+        self.assertNotIn("på pause (24. aug", tekst)
+        self.assertNotIn("betaler utbytte fire ganger", tekst)
+
+    def test_bare_bnor_har_flagget_i_tickers_json(self):
+        med = [t for t, h in fs.HENDELSE.items() if h.get("ingen_utbytte")]
+        self.assertEqual(med, ["BNOR"])
+        h = fs.HENDELSE["BNOR"]
+        self.assertEqual((h["type"], h["melding"], h["dato"]), ("fusjon", "680568", "2026-08-24"))
+        self.assertTrue(fs.gyldig_hendelse(h))
 
     def test_arch_i_tickers_json(self):
         h = fs.HENDELSE["ARCH"]

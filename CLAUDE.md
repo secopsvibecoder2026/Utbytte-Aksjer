@@ -3537,6 +3537,51 @@ format nobody has seen gives an empty answer, not an error. A stock whose
 
 Tests: `TestToSifferAar` (6, three of them fail on the old code).
 
+## Three findings from the report batches (2026-11-24)
+
+The rapport agents flagged these while summarising the third quarter. Each was
+checked against the notice first, and each rule change was simulated against the
+whole catalog.
+
+- **BlueNord kept a 35,62 % rate.** The Q3 report (684964) says «BlueNord may not
+  declare and distribute any further dividends prior to the Effective Date», and
+  the page still showed 180,58 kr a year from the last four payments. A stock has
+  one `hendelse`, and a separate pause event would have removed the merger box.
+  `bruk_utbytte_pause()` therefore also takes a hendelse of another type with
+  `"ingen_utbytte": true` in `tickers.json` (BNOR, type `fusjon`, dated 24.08).
+  The rate is 0 with `arsrate_kilde: "pause"` until a payment or an announced
+  ex-date after that date lifts it, as for ARCH and HSPG. The FAQ says the
+  company «har sagt at selskapet ikke vedtar flere utbytter før fusjonen er
+  gjennomført», not «satt på pause (24. aug)», since the date is the merger
+  vote. Simulated over all rows: only BNOR moves (180,58 → 0).
+- **AKVA's event text was out of date.** It said 92 % and that the acceptance
+  period ran to 20 November. Notice 687133 (23.11) says about 98,82 %, the period
+  expired 20 November, Norwegian clearance came 13 November, and only the British
+  foreign investment clearance is outstanding. Settlement follows within ten
+  business days of the settlement notice. The text, date and notice id were
+  replaced; the type stays `oppkjop`.
+- **NorAm's monthly notice was never read.** The distribution is announced in
+  «Monthly rig update and key information for November 2026» (686141), with
+  amount, ex-date and payment date in a «Key information» block eight days before
+  the ex-date. The title has neither «dividend» nor «distribution», so only the
+  ex-day notice («Ex cash distribution USD 0.045 today», no NOK amount) was read,
+  and the page had no announced ex-date until the day itself. `_UTBYTTE_TITTEL_RE`
+  and the report queue's `_UTBYTTEMELDING` now take that title shape. Over 10 785
+  titles from all 155 issuers, only three are new hits, all NorAm's.
+  `kapital_tilbake` stays null: «previously paid in share premium» from the
+  Contributed Surplus account is not «repayment of paid-in capital» in the
+  notice's own words (the HSPG rule). Whether it is that for tax is the owner's
+  call.
+
+Open from the same batch, not changed: CMB.TECH's 0,44 of 0,65 USD from the
+share premium account and its «Kvartalsvis» label (ex-dates 97, 98, 49, 135 and
+54 days apart), STST's NOK amount (1,30896 in notice 687176 against Yahoo's
+1,3216), and BEWI's «uregelmessig» breaking mid-word at 390 px on the report
+page.
+
+Tests: `TestRapportbunken2211Del2` (+5), `TestNoramMaanedsmelding` (4) and
+`TestAkvaHendelse` (1).
+
 ## Search Console, 3 months, and the SERP (2026-11-24)
 
 The owner exported Search Console (24 August to 22 November) and sent
