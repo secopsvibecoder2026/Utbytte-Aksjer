@@ -6325,5 +6325,259 @@ class TestLinjelengde(unittest.TestCase):
                     self.assertFalse({"mx-auto", "text-center", "text-right"} & alle, f"{navn}: {sorted(alle)}")
 
 
+class TestTabellForst(unittest.TestCase):
+    """Tabellen først og fast tickerkolonne (designrunde 4, 24.11.2026).
+
+    På Finans lå første tabellrad 3 438 px nedover siden ved 390 px, fordi
+    sektorteksten sto over tabellen. Og når leseren rullet tabellen sideveis,
+    rullet tickeren ut av bildet, så raden bare var tall uten navn. Sektormalen
+    har nå tallrutene, en lenke til teksten og hele tabellen først, og teksten
+    etter. Tickerkolonnen er `position: sticky` i tabellene på sektorsidene og
+    i oversikten på /aksjer/.
+
+    Sticky virker mot nærmeste forelder som ruller, og `overflow: hidden` på
+    selve `<table>` gjorde tabellen til den forelderen. Cellen sto da 371 px til
+    venstre for rammen ved full rulling (målt i Chromium). Testene leser både
+    malene og stilarket, siden begge deler må stemme.
+    """
+
+    AKSJER = TestSidetopp.AKSJER
+    I_DAG = TestSidetopp.I_DAG
+    _lag_malene = TestSidetopp._lag_malene
+
+    @staticmethod
+    def _css():
+        css = open(os.path.join(_REPO, "assets", "style.css"), encoding="utf-8").read()
+        return re.sub(r"/\*.*?\*/", "", css, flags=re.S)
+
+    @staticmethod
+    def _stil(side):
+        """All CSS i <style>-blokkene på en side, uten kommentarer."""
+        deler = re.findall(r"<style[^>]*>(.*?)</style>", side, flags=re.S)
+        return re.sub(r"/\*.*?\*/", "", "\n".join(deler), flags=re.S)
+
+    @staticmethod
+    def _regler(css):
+        """[(velgere, {egenskap: verdi})] for hver enkel regel. Regler inni @media
+        leses som vanlige regler (den ytre blokken har klammer og faller utenfor)."""
+        ut = []
+        for velger, deklarasjoner in re.findall(r"([^{}]+)\{([^{}]*)\}", css):
+            ds = {}
+            for d in deklarasjoner.split(";"):
+                if ":" in d:
+                    k, v = d.split(":", 1)
+                    ds[k.strip()] = " ".join(v.split())
+            ut.append(([" ".join(v.split()) for v in velger.split(",")], ds))
+        return ut
+
+    def _verdi(self, css, velger, egenskap):
+        """Egenskapen i siste regel som har nøyaktig denne velgeren."""
+        funn = [ds[egenskap] for velgere, ds in self._regler(css) if velger in velgere and egenskap in ds]
+        self.assertTrue(funn, f"fant ingen regel for «{velger}» med {egenskap}")
+        return funn[-1]
+
+    def _sektorside(self):
+        return self._lag_malene()["sektor"]
+
+    def _alle_sektorsider(self):
+        """{sektor: (html, antall aksjer i sektoren)} for hele katalogen, hvis den finnes."""
+        sti = os.path.join(_REPO, "data", "aksjer.json")
+        if not os.path.exists(sti):
+            self.skipTest("data/aksjer.json finnes ikke")
+        with open(sti, encoding="utf-8") as f:
+            rader = json.load(f)["aksjer"]
+        rot = tempfile.mkdtemp()
+        self.addCleanup(shutil.rmtree, rot, ignore_errors=True)
+        fs.generer_sektorsider(rader, rot)
+        ut = {}
+        for sektor in sorted({r["sektor"] for r in rader if r.get("sektor")}):
+            side = open(os.path.join(rot, "aksjer", "sektor", fs._sektor_slug(sektor), "index.html"), encoding="utf-8").read()
+            ut[sektor] = (side, sum(1 for r in rader if r.get("sektor") == sektor))
+        return ut
+
+    @staticmethod
+    def _tbody_rader(side):
+        tbody = re.search(r"<tbody>(.*?)</tbody>", side, re.S).group(1)
+        return re.findall(r"<tr>", tbody)
+
+    # ── rekkefølgen på sektorsiden ────────────────────────────────────────
+
+    def test_tabellen_kommer_for_sektorteksten(self):
+        side = self._sektorside()
+        tall = side.index('class="tallruter')
+        tabell = side.index("<table")
+        tekst = side.index('class="sektor-analyse')
+        self.assertLess(tall, tabell, "tabellen skal stå under tallrutene")
+        self.assertLess(tabell, tekst, "sektorteksten skal stå etter tabellen")
+        self.assertLess(tekst, side.index('class="cta"'))
+
+    def test_hver_sektorside_har_tabellen_for_teksten(self):
+        sider = self._alle_sektorsider()
+        self.assertGreaterEqual(len(sider), 10)
+        for sektor, (side, antall) in sider.items():
+            with self.subTest(sektor=sektor):
+                self.assertLess(side.index("<table"), side.index('class="sektor-analyse'))
+                self.assertEqual(len(self._tbody_rader(side)), antall, "alle rader skal være med, ingen skjult")
+
+    def test_ingen_rader_er_skjult_eller_kuttet(self):
+        side = self._sektorside()
+        self.assertNotIn("<details", side)
+        self.assertEqual(len(self._tbody_rader(side)), sum(1 for a in self.AKSJER if a["sektor"] == "Finans"))
+        self.assertEqual(side.count("<table"), 1, "en kopi av tabellen er en avkortet variant")
+        # Ingen skjuling av rader eller tekst i malens stil.
+        self.assertNotRegex(self._stil(side), r"(tr|td|\.sektor-analyse)[^{}]*\{[^}]*display:\s*none")
+
+    def test_all_tekst_er_med(self):
+        """Hele analyseteksten ligger i HTML-en, uendret, og det eneste som er
+        endret i den er overskriften som pekte «under»."""
+        sorterte = sorted([a for a in self.AKSJER if a["sektor"] == "Finans"],
+                          key=lambda a: a.get("utbytte_yield", 0), reverse=True)
+        analyse = fs._sektor_analyse("Finans", sorterte, self.AKSJER)
+        self.assertIn("Finans som utbyttesektor", analyse)
+        self.assertIn("Hva driver utbyttet i Finans?", analyse)
+        self.assertIn("Slik fungerer utbytte i finans", analyse)
+        side = self._sektorside()
+        self.assertIn(analyse, side, "analyseblokken skal stå i siden som den er laget")
+        ord_i_blokken = len(re.sub(r"<[^>]+>", " ", analyse).split())
+        self.assertGreater(ord_i_blokken, 300)
+
+    def test_overskriften_peker_ikke_under(self):
+        side = self._sektorside()
+        self.assertNotRegex(side, r"tabellen under")
+        self.assertIn("<h2>Slik bruker du tabellen</h2>", side)
+        # Resten av avsnittet står som før.
+        self.assertIn("Aksjene er sortert etter direkteavkastning, høyeste først.", side)
+
+    # ── lenken til teksten ────────────────────────────────────────────────
+
+    def test_ankerlenken_peker_paa_et_id_som_finnes(self):
+        for sektor, (side, _) in self._alle_sektorsider().items():
+            with self.subTest(sektor=sektor):
+                m = re.search(r'<p class="sektor-hopp"><a href="#([^"]+)">(.*?)</a></p>', side, re.S)
+                self.assertIsNotNone(m, "lenken ved tabellen mangler")
+                mal = m.group(1)
+                self.assertEqual(side.count(f'id="{mal}"'), 1, f"#{mal} skal finnes én gang")
+                self.assertRegex(side, rf'class="sektor-analyse les" id="{mal}"')
+                tekst = " ".join(re.sub(r"<[^>]+>", " ", m.group(2)).split())
+                self.assertEqual(tekst, f"Les om hva som driver utbyttet i {sektor}")
+                # Lenken står mellom tallrutene og tabellen, og teksten etter tabellen.
+                self.assertLess(side.index('class="tallruter'), side.index('class="sektor-hopp"'))
+                self.assertLess(side.index('class="sektor-hopp"'), side.index("<table"))
+                self.assertLess(side.index("<table"), side.index(f'id="{mal}"'))
+
+    def test_lenken_er_et_strek_svg_uten_skjult_tekst(self):
+        side = self._sektorside()
+        lenke = re.search(r'<p class="sektor-hopp">.*?</p>', side, re.S).group(0)
+        self.assertIn('stroke="currentColor"', lenke)
+        self.assertIn('viewBox="0 0 24 24"', lenke)
+        self.assertIn('aria-hidden="true"', lenke)
+
+    def test_ingen_lenke_uten_tekst_aa_hoppe_til(self):
+        self.assertEqual(fs.sektor_hopp_lenke("Finans", ""), "")
+        self.assertEqual(fs.sektor_hopp_lenke("Finans", "<div>uten anker</div>"), "")
+        self.assertIn('href="#sektoranalyse"', fs.sektor_hopp_lenke("Finans", '<div id="sektoranalyse"></div>'))
+
+    # ── fast tickerkolonne i malene ───────────────────────────────────────
+
+    def test_tabellene_har_klassen_og_en_ramme_som_ruller(self):
+        sider = self._lag_malene()
+        self.assertRegex(sider["sektor"], r'<div class="tabell-ramme">\s*<table class="tabell-fast">')
+        self.assertRegex(sider["oversikt"], r'<div style="overflow-x:auto;">\s*<table class="tabell-fast">')
+        self.assertRegex(self._stil(sider["sektor"]), r"\.tabell-ramme\s*\{[^}]*overflow-x:\s*auto")
+
+    def test_ingen_overflow_paa_selve_tabellen(self):
+        """`overflow` på `<table>` gjør tabellen til forelderen sticky festes mot."""
+        sider = self._lag_malene()
+        for navn in ("sektor", "oversikt"):
+            with self.subTest(side=navn):
+                for velgere, ds in self._regler(self._stil(sider[navn])):
+                    if "table" in velgere or ".tabell-fast" in velgere:
+                        self.assertFalse([k for k in ds if k.startswith("overflow")],
+                                         f"{navn}: overflow på table: {ds}")
+        for velgere, ds in self._regler(self._css()):
+            if any(".tabell-fast" in v and "td" not in v and "th" not in v for v in velgere):
+                self.assertFalse([k for k in ds if k.startswith("overflow")], f"style.css: {ds}")
+
+    def test_tickerkolonnen_har_sticky_med_bakgrunn(self):
+        css = self._css()
+        for velger, z in ((".tabell-fast td:first-child", "1"), (".tabell-fast th:first-child", "2")):
+            with self.subTest(velger=velger):
+                self.assertEqual(self._verdi(css, velger, "position"), "sticky")
+                self.assertEqual(self._verdi(css, velger, "left"), "0")
+                self.assertEqual(self._verdi(css, velger, "z-index"), z)
+                self.assertRegex(self._verdi(css, velger, "background-color"), r"^var\(--fast-bg(-hode)?\)$")
+        self.assertEqual(self._verdi(css, ".tabell-fast tbody tr:hover td:first-child", "background-color"),
+                         "var(--fast-bg-hover)")
+
+    def test_stilen_ligger_utenfor_layer(self):
+        css = self._css()
+        regel = ".tabell-fast td:first-child { position: sticky;"
+        foran = css[:css.index(regel)]
+        self.assertEqual(foran.count("{"), foran.count("}"), "regelen ligger inne i en blokk eller @layer")
+
+    def test_kanten_vises_der_tabellen_kan_rulle(self):
+        css = self._css()
+        m = re.search(r"@media \(max-width: ([\d.]+)rem\) \{(.*?)\n\}", css[css.index(".tabell-fast td:first-child {"):], re.S)
+        self.assertIsNotNone(m)
+        self.assertLessEqual(float(m.group(1)), 48)
+        self.assertIn("box-shadow: inset -1px 0 0 var(--fast-kant)", m.group(2))
+        self.assertIn("::after", m.group(2))
+        self.assertIn("--fast-skygge", m.group(2))
+
+    def test_bakgrunnene_matcher_raden_i_begge_temaer(self):
+        """Den festede cellen har samme farge som resten av raden, i lyst og mørkt
+        tema og ved hover, ellers står det en stripe i kolonnen."""
+        sider = self._lag_malene()
+        css = self._css()
+        lys = {"--fast-bg": self._verdi(css, ".tabell-fast", "--fast-bg"),
+               "--fast-bg-hode": self._verdi(css, ".tabell-fast", "--fast-bg-hode"),
+               "--fast-bg-hover": self._verdi(css, ".tabell-fast", "--fast-bg-hover")}
+        mork = {k: self._verdi(css, ".dark .tabell-fast", k) for k in lys}
+        # Sektormalen: tabellen, hodet og hover.
+        st = self._stil(sider["sektor"])
+        self.assertEqual(lys["--fast-bg"], self._verdi(st, "table", "background"))
+        self.assertEqual(lys["--fast-bg-hode"], self._verdi(st, "th", "background"))
+        self.assertEqual(lys["--fast-bg-hover"], self._verdi(st, "tr:hover td", "background"))
+        self.assertEqual(mork["--fast-bg"], self._verdi(st, ".dark table", "background"))
+        self.assertEqual(mork["--fast-bg-hode"], self._verdi(st, ".dark th", "background"))
+        self.assertEqual(mork["--fast-bg-hover"], self._verdi(st, ".dark tr:hover td", "background"))
+        # Oversikten: kortet rundt tabellen er bakgrunnen, og hodet er gray-50 i lyst tema.
+        ov = self._stil(sider["oversikt"])
+        self.assertEqual(lys["--fast-bg"], self._verdi(ov, ".alle-aksjer", "background"))
+        self.assertEqual(self._verdi(ov, ".tabell-fast", "--fast-bg-hode"), self._verdi(ov, "th", "background"))
+        self.assertEqual(lys["--fast-bg-hover"], self._verdi(ov, "tr:hover td", "background"))
+        self.assertEqual(mork["--fast-bg"], self._verdi(ov, ".dark .alle-aksjer", "background"))
+        self.assertEqual(mork["--fast-bg-hode"], self._verdi(ov, ".dark th", "background"))
+        self.assertEqual(mork["--fast-bg-hover"], self._verdi(ov, ".dark tr:hover td", "background"))
+
+    def test_ingen_sebra_som_cellen_maa_matche(self):
+        """Ingen av de to malene har radvis bakgrunn. Kommer sebra inn, må den festede
+        cellen få samme regel, og da må denne testen oppdateres."""
+        sider = self._lag_malene()
+        for navn in ("sektor", "oversikt"):
+            self.assertNotRegex(self._stil(sider[navn]), r"nth-child\((even|odd|2n)", f"{navn} har sebra")
+
+    def test_trykkflater_og_tallformat_er_uendret(self):
+        """Den festede kolonnen setter ikke størrelse, padding eller skrift på cellene."""
+        css = self._css()
+        for velgere, ds in self._regler(css):
+            if any(v.startswith(".tabell-fast") for v in velgere):
+                tillatt = {"position", "left", "z-index", "background-color", "box-shadow", "content", "top", "bottom",
+                           "width", "pointer-events", "background", "border-collapse", "border-spacing", "border-radius"}
+                ukjent = [k for k in ds if k not in tillatt and not k.startswith("--")]
+                self.assertEqual(ukjent, [], f"{velgere}: {ukjent}")
+        # tabular-nums gjelder fortsatt alle tabeller globalt (tw-input.css, bygd inn i tailwind.css).
+        with open(os.path.join(_REPO, "assets", "tailwind.css"), encoding="utf-8") as f:
+            tw = f.read()
+        self.assertIn("table{font-variant-numeric:tabular-nums}", tw)
+
+    def test_topplistene_er_ikke_rort(self):
+        """Toppliste-tabellen har en rangkolonne foran tickeren, så den trenger to festede
+        kolonner med egen forskyvning. Den er utenfor runden, og skal ikke få klassen halvveis."""
+        sider = self._lag_malene()
+        self.assertNotIn("tabell-fast", sider["toppliste"])
+        self.assertNotIn("tabell-fast", sider["sektorindeks"])
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

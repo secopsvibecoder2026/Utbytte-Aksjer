@@ -3911,6 +3911,93 @@ already at 70 to 72, because their container is 624 px. At 390 px it is 38 to
   graph, calendar control or `ul.nylig` (its `li` carry the borders). A new long
   paragraph outside `.les` now fails the build.
 
+## Design round 4: the table first and a sticky ticker (2026-11-24)
+
+The owner approved proposal 7, «Tabellen tidligere på sektorsiden, og fast
+tickerkolonne». Measured on a regenerated copy of origin/main (Chromium 153,
+390 px, light theme): the first table row stood at y 3 438 of 5 604 on
+`/aksjer/sektor/finans/`, 3 281 of 4 685 on Energitjenester and 3 119 on
+Eiendom (three stocks), because the sector text stood above the table. The
+tables are wider than a phone (sector tables 488 to 730 px, the overview 726 px,
+against a frame of 288 to 358 px at 320 to 390 px), and scrolled to the end the
+ticker was out of view on every sector page, on `/aksjer/` and on the toplists:
+the row was numbers with no name.
+
+- **Order on the sector page.** Number tiles, a link, the whole table, then the
+  text. `generer_sektorsider()` writes it; `_sektor_analyse()` is unchanged
+  except that the block carries `id="sektoranalyse"` (`SEKTOR_ANALYSE_ID`) and the
+  heading «Slik bruker du tabellen under» is «Slik bruker du tabellen». Nothing
+  is cut, hidden or copied: no `<details>`, no script, one table with every row.
+  The text was moved, so Google reads the same words.
+- **The link.** `sektor_hopp_lenke()` gives «Les om hva som driver utbyttet i
+  {sektor}» with a stroke chevron, 44 px high, between the tiles and the table.
+  It is empty when the page has no text to jump to, so it never points at a
+  missing anchor. `#sektoranalyse` has `scroll-margin-top` for the sticky menu
+  (measured: the heading lands 80 px from the top, the menu ends at 55 to 64 px).
+- **Sticky ticker.** `.tabell-fast` on `<table>` in `assets/style.css`
+  («TABELL FØRST OG FAST TICKER», outside `@layer`). It is used by the sector
+  tables and the overview table on `/aksjer/`. Colours are variables
+  (`--fast-bg`, `--fast-bg-hode`, `--fast-bg-hover`, dark values under
+  `.dark .tabell-fast`); the overview overrides only the header colour, which is
+  gray-50 there and gray-100 on the sector pages. Under 48rem the cell has a 1 px
+  edge and a soft shadow; from 768 px both tables fit and the column stands still
+  without an edge.
+- **Three traps, all found by measuring.**
+  1. `overflow: hidden` on `<table>` makes the table the scrollport sticky
+     attaches to. The sector template had it, and the cell stood 371 px left of
+     the frame at full scroll. The templates set no overflow on a table now
+     (`TestTabellForst.test_ingen_overflow_paa_selve_tabellen`).
+  2. With `border-collapse: collapse` the sticky cell did not cover its first two
+     pixels, and the next column's text showed in that strip. `.tabell-fast` uses
+     `border-collapse: separate; border-spacing: 0` and `border-radius: 0`.
+     The row lines are the cells' own borders, so they move with the cell. The
+     radius never applied with `collapse`, but would with `separate`.
+  3. The templates' `tr:hover td` has lower specificity than the cell's own
+     background would, so a hovered row would have a stripe in the first cell.
+     `.tabell-fast tbody tr:hover td:first-child` is more specific. Computed
+     backgrounds of cell 1 and 2 are equal at rest and on hover in both themes, in
+     both templates.
+- **Measured after** (same method, regenerated working tree).
+  - First table row at 390 px: Finans 3 438 to 437, Energitjenester 3 281 to 466,
+    Eiendom 3 119 to 437. At 320 px: 440, 515, 469. At 1280 px: 418.
+  - Ticker visible and hittable at full and half sideways scroll, light and dark,
+    at 320, 360 and 390 px, for the header, first, middle and last row: 0 of 4
+    before, 4 of 4 after on every sector page measured (Finans, Energitjenester,
+    Eiendom, Telekommunikasjon) and on `/aksjer/`.
+  - No horizontal overflow of the page at 320, 360, 390, 768 and 1280 px. No
+    script errors in 60 loads (six pages, five widths, two themes). Tap targets
+    under 44 px are the same on every page (the logo link; the new link is 291 by
+    44 px). CLS at 320 px, four runs per page and theme: sector pages 0 before and
+    after, `/aksjer/` 0, `/aksjer/hoyest-utbytte/` 0,0295 before and after (round 3
+    reported 0,0245 for that page; this round does not touch it).
+  - Words in `.wrap`: Finans 1 187 to 1 194, and the same shift on the other sector
+    pages. The multiset differs by one «under» and the eight words of the link.
+    `/aksjer/` and the toplist are identical.
+  - The table at rest looks the same: `/aksjer/` at 768 and 1280 px differs in 17
+    to 20 anti-aliased pixels at the card corner, at 390 px only in the edge of
+    the ticker column. The sector table is 1 px taller (Eiendom 175 to 176 px); the
+    likely cause is that the frame is now two borders instead of one shared.
+- **How far the text moved down** (390 px, viewport 844 px). The text started at
+  y 366 to 395 on every sector page. After: Finans y 2 125 (1 759 px down, 0,4 to
+  2,5 screens), Industri 1 542 (1 176 px), Energitjenester 1 392 (997 px, 0,5 to
+  1,6 screens), Shipping 1 318, Havbruk 914, Eiendom 600 (234 px). At 1280 px the
+  same distances. For the owner's choice: with only the five largest rows above
+  the text, the text would start at about y 712 (0,8 screens) on Finans and 741 on
+  Energitjenester. That is an estimate from header and row heights, not a built
+  page, and it would need a second element for «resten» that is not in the HTML
+  now. The default (the whole table first) is what was built.
+- **Left out.** The toplist pages (`/aksjer/hoyest-utbytte/` and the three others)
+  have a rank column in front of the ticker, so they need two sticky columns with
+  an offset, and their table has `overflow: hidden` too. They need their own
+  logic and still lose the ticker at 390 px (0 of 4). `/app/`, the sector index
+  and the redirect pages are untouched.
+
+Tests: `TestTabellForst` (17) in `scripts/test_fetch_stocks.py`. On the old code
+it gives 36 failures and 4 errors: table after text, no anchor, a heading that
+points «under», `overflow` on the table, no sticky rule, no matching colours. It
+reads all 14 sector pages from `data/aksjer.json` and requires the table before
+the text, every row present and an anchor that exists.
+
 ## The fixer agent (`.claude/agents/fikser.md`, 2026-10-18)
 
 The maintenance and tallkontroll agents only report, and their findings waited

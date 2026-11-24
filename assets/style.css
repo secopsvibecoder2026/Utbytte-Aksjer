@@ -1253,3 +1253,62 @@ label:has(> input[type="checkbox"]) { min-height: 44px; }
    teksten smalnes av med polstring til høyre i stedet for med bredde.
    Prosenten er bredden til boksen svaret ligger i. */
 .faq-svar.les { padding-right: max(1.25rem, calc(100% - 1.25rem - var(--lese-bredde))); }
+
+/* ── TABELL FØRST OG FAST TICKER (designrunde 4, 24.11.2026) ──────────────
+   Tabellene på sektorsidene og i oversikten på /aksjer/ er bredere enn en
+   telefon (sektorsidene 488 til 730 px, oversikten 726 px mot 358 px
+   rammebredde ved 390 px). Når leseren rullet sideveis, rullet tickeren ut av
+   bildet, og raden var bare tall uten navn. `.tabell-fast` på `<table>` fester
+   første kolonne (tickeren) mot venstre kant av rammen som ruller.
+
+   Sticky virker mot nærmeste forelder som ruller. Et `overflow: hidden` på
+   selve `<table>` gjør tabellen til den forelderen, og da fester ikke kolonnen
+   seg mot rammen: målt i Chromium 153, cellen sto 371 px til venstre for
+   rammen ved full rulling. Malene setter derfor ikke overflow på tabellen.
+
+   Tabellen bruker `border-collapse: separate` med `border-spacing: 0`. Med
+   `collapse` eier tabellen kantene, og cellen har bare halve kanter. Målt ved
+   390 px: den festede cellen dekket ikke de to første pikslene ved rammens
+   kant, og tekst fra neste kolonne sto synlig i den stripen. Linjene mellom
+   radene er cellenes egne kanter (`td { border-top }`), så de flytter seg med
+   cellen og står uendret. Kantene er bare linjer i begge malene, så utseendet
+   er det samme. `border-radius: 0` beholder de rette hjørnene: radius gjaldt
+   aldri med `collapse`, men gjør det med `separate`, og hodecellen ville
+   stukket ut av en rundet ramme.
+
+   Cellen trenger egen bakgrunn, ellers ruller innholdet synlig under den.
+   Fargene følger raden i begge temaer og er variabler, så en mal med en annen
+   hodefarge overstyrer bare `--fast-bg-hode`. Radene i begge malene har
+   hover, men ikke sebra. Hover-regelen under har høyere spesifisitet enn
+   malenes `tr:hover td`, ellers ville tickercellen stå igjen i hvilefargen
+   mens resten av raden lyser opp.
+
+   Kanten (1 px og en myk skygge) vises under 48rem, der tabellen kan rulle.
+   Fra 768 px rommer begge tabellene seg, og kolonnen står stille uten kant. */
+.tabell-fast {
+  --fast-bg: #fff; --fast-bg-hode: #f3f4f6; --fast-bg-hover: #f9fafb;
+  --fast-kant: #d1d5db; --fast-skygge: rgba(17, 24, 39, 0.1);
+}
+.dark .tabell-fast {
+  --fast-bg: #111827; --fast-bg-hode: #1f2937; --fast-bg-hover: #1f2937;
+  --fast-kant: #374151; --fast-skygge: rgba(0, 0, 0, 0.5);
+}
+.tabell-fast { border-collapse: separate; border-spacing: 0; border-radius: 0; }
+.tabell-fast td:first-child { position: sticky; left: 0; z-index: 1; background-color: var(--fast-bg); }
+.tabell-fast th:first-child { position: sticky; left: 0; z-index: 2; background-color: var(--fast-bg-hode); }
+.tabell-fast tbody tr:hover td:first-child { background-color: var(--fast-bg-hover); }
+@media (max-width: 47.9375rem) {
+  .tabell-fast td:first-child, .tabell-fast th:first-child { box-shadow: inset -1px 0 0 var(--fast-kant); }
+  .tabell-fast td:first-child::after, .tabell-fast th:first-child::after {
+    content: ""; position: absolute; top: -1px; bottom: -1px; left: 100%; width: 0.5rem;
+    pointer-events: none; background: linear-gradient(to right, var(--fast-skygge), transparent);
+  }
+}
+
+/* Sektorsiden: tabellen står rett under tallrutene, teksten etter. Lenken
+   hopper til teksten, som er lang for de store sektorene (Finans har 37 rader).
+   Raden er 44 px høy, og målet ligger under den faste menyen. */
+.sektor-hopp { margin: -0.5rem 0 0; }
+.sektor-hopp a { display: inline-flex; align-items: center; gap: 0.35rem; min-height: 44px; font-size: 0.9rem; font-weight: 500; }
+.sektor-hopp svg { width: 1rem; height: 1rem; flex-shrink: 0; }
+#sektoranalyse { scroll-margin-top: 5rem; }
