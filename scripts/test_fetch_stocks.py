@@ -1767,6 +1767,24 @@ class TestHentNewswebExDato(unittest.TestCase):
         r, _ = self._kjor([self._m(1, "2026-07-22", "Ex-date Oslo Børs: 13 November 2026")])
         self.assertEqual(r["ex_dato"], "2026-11-13")
 
+    def test_dividend_information_leses_som_utbyttemelding(self):
+        # BW Offshore kaller meldingen «Dividend information» (687343, 25.11.2026).
+        # Uten «key information» i tittelen ble den aldri lest.
+        body = ("Cash dividend amount: USD 0.0625 per share\nDeclared currency: USD\n"
+                "Date of approval: 24 November 2026\nLast day inclusive: 27 November 2026\n"
+                "Ex-date: 30 November 2026\nRecord date: 1 December 2026\n"
+                "Dividend payment date: On or about 9 December 2026\n")
+        r, _ = self._kjor([self._m(687343, "2026-11-25", body, tittel="BW Offshore: Dividend information")],
+                          i_dag="2026-11-25")
+        self.assertEqual((r["ex_dato"], r["betaling_dato"]), ("2026-11-30", "2026-12-09"))
+        self.assertEqual((r["belop"], r["valuta"]), (0.0625, "USD"))
+
+    def test_andre_dividend_titler_leses_fortsatt_ikke(self):
+        r, hentet = self._kjor([self._m(5, "2026-11-25", "Ex-date: 30 November 2026",
+                                        tittel="Ex dividend today")], i_dag="2026-11-25")
+        self.assertIsNone(r)
+        self.assertEqual(hentet, [])
+
     def test_passert_ex_dato_gir_ingenting_og_stopper(self):
         r, hentet = self._kjor([
             self._m(2, "2026-08-11", "Ex-date: August 26, 2026"),

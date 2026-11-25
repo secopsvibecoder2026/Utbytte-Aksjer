@@ -3582,6 +3582,28 @@ page.
 Tests: `TestRapportbunken2211Del2` (+5), `TestNoramMaanedsmelding` (4) and
 `TestAkvaHendelse` (1).
 
+## BW Offshore's «Dividend information» was never read (2026-11-25)
+
+Found the day after the MPCC fix, when BW Offshore's third-quarter notice
+(687343, 25.11) did not reach the page. `hent_newsweb_ex_dato()` opened only
+notices with «key information» in the title, and BW Offshore calls its notice
+«BW Offshore: Dividend information». `_parse_utbetalinger()` reads the notice
+fine (ex 30 November, payment about 9 December, USD 0,0625), so the parser was
+never the fault: the title filter kept the notice from reaching it. The page
+showed the annual rate in its title and no announced ex-date.
+
+- `_EX_DATO_MELDING_RE` (`key information|dividend information`) replaces the
+  literal test. «Ex dividend today» and other titles are still skipped here,
+  since they carry no «Ex-date:» block.
+- **Simulated** over all 155 issuers, old lookup against new, with today's date
+  fixed: only BWO moves (no date → 30.11.2026).
+- Not widened: `_KAPITAL_TITTEL` and the report queue's `_UTBYTTEMELDING` still
+  need «key information». BW Offshore pays an ordinary dividend, so no
+  paid-in-capital note is lost. A shape that stays unread is found by the same
+  signal as MPCC: a stock with notices in the list and an empty `ex_dato`.
+
+Tests: `TestHentNewswebExDato` (+2).
+
 ## Search Console, 3 months, and the SERP (2026-11-24)
 
 The owner exported Search Console (24 August to 22 November) and sent

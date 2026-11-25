@@ -1280,6 +1280,13 @@ def bruk_newsweb_belop(aksje, nw):
     return False
 
 
+# Meldingen som kunngjør utbyttet og dens datoer. De fleste kaller den «Key
+# information relating to the cash dividend». BW Offshore kaller sin «Dividend
+# information» (687343, 25.11.2026), og den ble aldri lest: aksjesiden hadde
+# verken ex-dato 30. november eller beløpet, selv om parseren leser meldingen.
+_EX_DATO_MELDING_RE = re.compile(r"key information|dividend information", re.I)
+
+
 def hent_newsweb_ex_dato(ticker, i_dag=None):
     """Neste ex-dato (og betalingsdato) for Oslo Børs, eller None.
 
@@ -1303,7 +1310,7 @@ def hent_newsweb_ex_dato(ticker, i_dag=None):
             tittel = (msg.get("title") or "").lower()
             # «distribution»: ENH erklærer utdelingene sine som tilbakebetaling
             # av innbetalt kapital, og titlene sier aldri «dividend».
-            if not ("dividend" in tittel or "distribution" in tittel) or "key information" not in tittel:
+            if not ("dividend" in tittel or "distribution" in tittel) or not _EX_DATO_MELDING_RE.search(tittel):
                 continue
             if (msg.get("publishedTime") or "")[:10] < grense or sett >= MAKS_EX_MELDINGER:
                 break
