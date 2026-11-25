@@ -1,8 +1,15 @@
 {
-  "generert": "2026-11-25T06:20:03Z",
-  "antall": 1,
-  "antall_kritiske": 0,
+  "generert": "2026-11-25T07:47:16Z",
+  "antall": 2,
+  "antall_kritiske": 1,
   "varsler": [
+    {
+      "ticker": "CAPT",
+      "type": "feil_bors",
+      "alvorlighet": "kritisk",
+      "melding": "tickers.json sier «Euronext Growth Oslo», men Euronext oppgir markedet «Oslo Børs». Aksjesiden sier dermed feil om ASK.",
+      "forslag": "Sett bors til «Oslo Børs» i data/tickers.json."
+    },
     {
       "ticker": "BAKKA",
       "type": "navnavvik",
