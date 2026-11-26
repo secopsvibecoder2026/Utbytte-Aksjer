@@ -155,6 +155,7 @@ Utbytte-Aksjer/
 │   ├── sjekk_antall.py        # Finds hard-coded stock counts that should be markers
 │   ├── sjekk_titler.py        # Lists stock-page titles over 60 chars or without an amount
 │   ├── kvartalsrapport.py     # Report summaries: source text, the gate, the queue
+│   ├── seo.py                 # Search Console export (uploaded by the owner) and page checks
 │   ├── vedlikehold.py         # Daily maintenance: Actions runs, live site, stocks in/out from NewsWeb
 │   ├── nettstedfiler.py       # Copies the site without internal files for the Pages deploy
 │   ├── sjekk_sprak.py         # Counts dashes and AI phrasing in published text (SKRIVESTIL.md)
@@ -232,6 +233,7 @@ python scripts/test_sjekk_klasser.py    # 10 Python tests (CSS-klasser finnes)
 python scripts/test_sjekk_antall.py     # 11 Python tests (aksjetellinger bruker markør)
 python scripts/test_vedlikehold.py      # 32 Python tests (inn/ut fra NewsWeb, ferskhet)
 python scripts/test_nettstedfiler.py    # 11 Python tests (interne filer holdes utenfor nettstedet)
+python scripts/test_seo.py              # 14 Python tests (Search Console-eksport og sidesjekk)
 # npm test dekker også tests/app.test.js — ferskhetsindikator + escHtml
 ```
 
@@ -4352,6 +4354,46 @@ center), and fixed slots between the report cards need slot IDs from the owner.
 Tests: `TestRapportsideDesign2511` (+2, one rewritten).
 
 Tests: `TestRapportsideDesign2511` (9) and updates in `TestRapportUtvikling`.
+
+## The SEO agent (`.claude/agents/seo.md`, 2026-11-26)
+
+SEO had no owner. The maintenance agent looks at it every fifth week and only
+reports, and the Search Console reading of 24 November was done by hand. `seo`
+reads the data, proposes changes with a target and a way to measure them, and
+follows up the next time.
+
+- **Two sources.** A Search Console export the owner uploads in a session
+  (Resultater, Eksporter, CSV), and the HTML in the repo, every time. Without an
+  export the report says so at the top and gives no clicks, impressions or
+  positions. An API feed was considered and left out: the repo is public, a
+  scheduled job would put queries and positions where anyone can read them, and
+  a session cannot hold a Google service-account key.
+- **`scripts/seo.py --eksport FIL.zip [--mot FORRIGE.zip]`** reads the zip or a
+  folder (English or Norwegian headers) and prints totals, figures per page type
+  (`sidegruppe()`), rows with a low click rate for their position measured
+  against the site's own median in the same position band (`lav_ctr()`), rows
+  on positions 8 to 20 (`nesten_forsteside()`), and per-page change against an
+  earlier export. It writes no file.
+- **`scripts/seo.py --sider [--streng]`** reads every `index.html` the site
+  publishes and reports titles over 60 characters, descriptions under 70 or over
+  155, duplicate titles and descriptions, a missing or foreign canonical,
+  noindex or redirect pages in the sitemap, sitemap entries with no page,
+  indexable pages missing from the sitemap, JSON-LD that does not parse, pages
+  without exactly one h1, and pages no other page links to. First run on
+  26.11.2026: 60 titles over 60 characters (most of them stock pages, already
+  known from `sjekk_titler.py`), five short descriptions, `/app/` with a
+  canonical to the front page and outside the sitemap, and every report page
+  with at least one link in.
+- **Search Console data never goes into the repo.** Not in a commit, a PR
+  description or this file beyond the aggregates already here. The report goes
+  to the owner in the chat or a private Artifact page.
+- **Analysis by default, building only on approval**, at most five changes per
+  round, thought of as template changes in `fetch_stocks.py`. The stock-page
+  titles stay as they are until the measurement of 16 December.
+- Run it with «kjør SEO-agenten», and upload the export in the same message
+  when there is one.
+
+Tests: `scripts/test_seo.py` (14), in CI.
 
 ## The fixer agent (`.claude/agents/fikser.md`, 2026-10-18)
 
