@@ -7460,5 +7460,83 @@ class TestRapportsideDesign2511(unittest.TestCase):
         self.assertIn("engangsposter", tekst)
 
 
+class TestSeoRunde2611(unittest.TestCase):
+    """SEO-analysen 26.11.2026: FAQPage, rapportlenker, ex-dato-artikkelen og småfeil."""
+
+    @staticmethod
+    def _norm(t):
+        return re.sub(r" ([.,:;!?])", r"\1", re.sub(r"\s+", " ", t).strip())
+
+    def _synlig(self, s):
+        t = re.sub(r"<script.*?</script>|<style.*?</style>|<!--.*?-->", " ", s, flags=re.S)
+        return self._norm(html.unescape(re.sub(r"<[^>]+>", " ", t)))
+
+    def test_faqpage_staar_ordrett_paa_siden(self):
+        """Google krever at FAQPage-teksten er synlig på siden. Forsiden og /faq/ hadde egne svar i JSON-LD."""
+        sett = 0
+        for mappe, under, filer in os.walk(_REPO):
+            under[:] = [d for d in under if d not in (".git", ".claude", "node_modules", "test-results", "promo", "aksjer")]
+            for navn in filer:
+                if not navn.endswith(".html"):
+                    continue
+                sti = os.path.join(mappe, navn)
+                s = open(sti, encoding="utf-8").read()
+                if '"FAQPage"' not in s:
+                    continue
+                synlig = self._synlig(s)
+                for m in re.finditer(r'<script type="application/ld\+json">(.*?)</script>', s, re.S):
+                    try:
+                        d = json.loads(m.group(1))
+                    except ValueError:
+                        continue
+                    for x in d if isinstance(d, list) else [d]:
+                        if x.get("@type") != "FAQPage":
+                            continue
+                        for q in x["mainEntity"]:
+                            sett += 1
+                            rel = os.path.relpath(sti, _REPO)
+                            self.assertIn(self._norm(q["name"]), synlig, f"{rel}: spørsmål «{q['name']}»")
+                            self.assertIn(self._norm(q["acceptedAnswer"]["text"]), synlig,
+                                          f"{rel}: svaret på «{q['name']}» står ikke på siden")
+        self.assertGreaterEqual(sett, 20)
+
+    def test_rapportkalenderen_lenker_til_alle_rapportsidene(self):
+        aksjer = [{"ticker": f"T{i}", "navn": f"Selskap {i} ASA"} for i in range(12)]
+        alle = {f"T{i}": [{"periode": "2026-Q3", "dato": f"2026-11-{i + 1:02d}"},
+                          {"periode": "2026-Q2", "dato": f"2026-08-{i + 1:02d}"}] for i in range(12)}
+        alle["UKJENT"] = [{"periode": "2026-Q3", "dato": "2026-11-20"}]
+        h = fs.lag_nylig_framlagt(alle, aksjer)
+        self.assertEqual(h.count('<li><span class="dag">'), 8)
+        self.assertIn("Alle 12 selskaper med oppsummert rapport", h)
+        alle_del = h[h.index('<details class="alle-rapporter">'):]
+        for i in range(12):
+            self.assertIn(f'href="/aksjer/T{i}/rapporter/#2026-q3"', alle_del)
+        self.assertNotIn("UKJENT", h)
+        self.assertNotIn("#2026-q2", alle_del)
+        self.assertNotIn("<details", fs.lag_nylig_framlagt({"T1": alle["T1"]}, aksjer))
+
+    def test_topplister_stavet_riktig(self):
+        kilde = open(os.path.join(_REPO, "scripts", "fetch_stocks.py"), encoding="utf-8").read()
+        self.assertNotIn("Andre topplistor", kilde)
+
+    def test_ex_dato_artikkelen(self):
+        s = open(os.path.join(_REPO, "artikler", "hva-er-ex-dato", "index.html"), encoding="utf-8").read()
+        tittel = re.search(r"<title>(.*?)</title>", s).group(1)
+        meta = re.search(r'<meta name="description" content="(.*?)"', s).group(1)
+        self.assertLessEqual(len(tittel), 60)
+        self.assertLessEqual(len(meta), 155)
+        self.assertIn("ex-dag", tittel)
+        self.assertIn("børsdagen før", meta)
+        self.assertNotIn("Komplett guide", s)
+
+    def test_ingen_artikkelbeskrivelse_over_155_tegn(self):
+        for mappe, _, filer in os.walk(os.path.join(_REPO, "artikler")):
+            if "index.html" in filer:
+                s = open(os.path.join(mappe, "index.html"), encoding="utf-8").read()
+                m = re.search(r'<meta name="description" content="(.*?)"', s)
+                if m:
+                    self.assertLessEqual(len(html.unescape(m.group(1))), 155, mappe)
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

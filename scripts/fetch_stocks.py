@@ -10600,7 +10600,7 @@ def generer_topplistesider(aksjer, root_dir):
     <a href="https://exday.no/">Åpne exday.no →</a>
   </div>
   <div class="relatert">
-    <h2>Andre topplistor</h2>
+    <h2>Andre topplister</h2>
     <ul>{relatert_lenker}</ul>
   </div>
 {sist_oppdatert_html()}
@@ -10922,6 +10922,9 @@ def generer_rapportkalender(aksjer, root_dir, i_dag=None):
     .nylig li { padding:0.5rem 0.75rem; border-top:1px solid #f3f4f6; font-size:0.9rem; }
     .nylig li:first-child { border-top:0; }
     .nylig .dag { display:inline-block; min-width:6.5rem; color:#6b7280; font-size:0.82rem; }
+    .alle-liste { list-style:none; padding:0; margin:0.75rem 0 0; columns:2 14rem; column-gap:1.5rem; font-size:0.9rem; }
+    .alle-liste li { break-inside:avoid; }
+    .alle-liste a { display:inline-flex; align-items:center; min-height:44px; }
     a { color:#2f7352; }
     /* På smal skjerm må yield-kolonnen få plass uten at leseren må dra
        tabellen sidelengs — selskapsnavnet kappes i stedet. */
@@ -11757,27 +11760,45 @@ def generer_rapportsider(aksjer, root_dir, alle=None, today=None):
 
 
 def lag_nylig_framlagt(alle, aksjer, maks=8):
-    """«Nylig framlagt» på /rapportkalender/: de nyeste oppsummeringene.
+    """«Nylig framlagt» på /rapportkalender/: de nyeste oppsummeringene, og lenke til alle.
 
     Den gamle seksjonen med samme navn ble fjernet fordi lenkene kom fra
     hendelser.json, som samlet opp utdaterte datoer. Disse kommer fra
     data/rapporter/, der hver oppføring er en rapport som faktisk er lagt fram.
+
+    De `maks` nyeste rapportene står synlig. Under dem lenker en <details> til
+    rapportsiden for hvert selskap som har en oppsummering, med den nyeste
+    perioden (SEO 26.11.2026: rapportsidene hadde i median én lenke inn, fra
+    aksjesiden, og kalenderen lenket bare til de åtte nyeste). Innholdet i en
+    <details> står i HTML-en og leses av søkemotorer uten JavaScript.
     """
     import kvartalsrapport as kr
     navn = {a["ticker"]: a["navn"] for a in aksjer}
-    rader = sorted(
+    alle_rader = sorted(
         ((r.get("dato") or "", t, r) for t, liste in alle.items() for r in liste if t in navn),
-        key=lambda x: x[0], reverse=True)[:maks]
-    if not rader:
+        key=lambda x: x[0], reverse=True)
+    if not alle_rader:
         return ""
-    li = "".join(
-        f'<li><span class="dag">{_fmt_dato(d)}</span> '
-        f'<a href="/aksjer/{html.escape(t)}/rapporter/#{html.escape(kr.anker(r.get("periode")))}">'
-        f'{html.escape(_kort_selskapsnavn(navn[t]))}: {html.escape(kr.periode_tekst(r.get("periode")))}</a></li>'
-        for d, t, r in rader)
+
+    def _lenke(t, r):
+        return (f'<a href="/aksjer/{html.escape(t)}/rapporter/#{html.escape(kr.anker(r.get("periode")))}">'
+                f'{html.escape(_kort_selskapsnavn(navn[t]))}: {html.escape(kr.periode_tekst(r.get("periode")))}</a>')
+
+    li = "".join(f'<li><span class="dag">{_fmt_dato(d)}</span> {_lenke(t, r)}</li>'
+                 for d, t, r in alle_rader[:maks])
+
+    nyeste = {}
+    for d, t, r in alle_rader:
+        nyeste.setdefault(t, r)
+    resten = sorted((t for t in nyeste), key=lambda t: _kort_selskapsnavn(navn[t]).casefold())
+    alle_html = ""
+    if len(nyeste) > maks:
+        alle_li = "".join(f"<li>{_lenke(t, nyeste[t])}</li>" for t in resten)
+        alle_html = (f'<details class="alle-rapporter"><summary>Alle {len(nyeste)} selskaper med '
+                     f'oppsummert rapport</summary><ul class="alle-liste">{alle_li}</ul></details>')
     return (f'<section id="nylig-framlagt"><h2>Nylig framlagt, med oppsummering</h2>'
             f'<p class="sub">Resultatet, nøkkeltallene og utbyttet fra rapporten, skrevet ut fra '
-            f'selskapets egen børsmelding.</p><ul class="nylig">{li}</ul></section>')
+            f'selskapets egen børsmelding.</p><ul class="nylig">{li}</ul>{alle_html}</section>')
 
 
 # ── lastmod i sitemap: datoen siden sist ble endret, ikke byggedatoen ──────

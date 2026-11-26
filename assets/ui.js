@@ -707,7 +707,7 @@ const ARTIKLER = [
   },
   {
     slug: '/artikler/hva-er-ex-dato/',
-    tittel: 'Hva er ex-dato? Komplett guide for norske investorer',
+    tittel: 'Hva er ex-dato? Siste kjøpsdag, kursfall og T+2',
     ingress: 'Hva ex-dato betyr, T+2 oppgjør på Oslo Børs, kursfallet på ex-dag, skatteregler og vanlige feil.',
     meta: '19. april 2026 · 8 min',
     tags: ['Guide', 'Grunnleggende'],
