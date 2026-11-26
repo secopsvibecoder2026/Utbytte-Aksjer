@@ -19,7 +19,7 @@ from fetch_stocks import (oppdater_rundet_antall_i_sider, generer_aksjesider, ge
                           sett_utenfor_rangering,
                           sett_saerutbytte, sett_utbetalingsmaaneder,
                           oppdater_app_noscript_liste, oppdater_antall_i_sider,
-                          oppdater_aarstall_i_sider, oppdater_forside_uka,
+                          oppdater_aarstall_i_sider, oppdater_forside_uka, oppdater_forside_liste,
                           oppdater_forside_artikler,
                           oppdater_kalender_maaneder, oppdater_frekvensartikkel,
                           oppdater_utbyttekalender,
@@ -159,6 +159,7 @@ def main():
     oppdater_rundet_antall_i_sider(aksjer, ROOT)
     oppdater_aarstall_i_sider(ROOT)
     oppdater_forside_uka(aksjer, ROOT)
+    oppdater_forside_liste(aksjer, ROOT)
     oppdater_forside_artikler(ROOT)
     oppdater_kalender_maaneder(aksjer, ROOT)
     oppdater_utbyttekalender(aksjer, ROOT)

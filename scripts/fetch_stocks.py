@@ -12720,6 +12720,7 @@ def main():
     oppdater_rundet_antall_i_sider(resultater, root_dir)
     oppdater_aarstall_i_sider(root_dir)
     oppdater_forside_uka(resultater, root_dir)
+    oppdater_forside_liste(resultater, root_dir)
     oppdater_forside_artikler(root_dir)
     oppdater_kalender_maaneder(resultater, root_dir)
     oppdater_utbyttekalender(resultater, root_dir)
@@ -13710,6 +13711,152 @@ def oppdater_forside_uka(aksjer, root_dir: str, i_dag=None, hentet=None):
     blokk = lag_uka_blokk(uka_hendelser(aksjer, i_dag), i_dag,
                           hentet if hentet is not None else DATA_SIST_OPPDATERT)
     nytt = _UKA_MONSTER.sub(lambda m: "<!--UKA:START-->\n" + blokk + "\n  <!--UKA:SLUTT-->", innhold, count=1)
+    if nytt == innhold:
+        return False
+    with open(sti, "w", encoding="utf-8") as f:
+        f.write(nytt)
+    return True
+
+
+# ── Utbytteaksjene på forsiden (SEO 26.11.2026) ──────────────────────────────
+# Forsiden står på plass 13 for «utbytteaksjer» og beslektede søk, men hadde
+# ingen liste over aksjer; listen sto på /aksjer/, som står langt lavere. Den
+# som søker «utbytteaksjer», leter etter en liste. Utvalget er fast i den
+# forstand at det følger regler, ikke besøk: de største selskapene endrer seg
+# sjelden, og det er ingen besøkstall i repoet (det er offentlig).
+
+FORSIDE_LISTE_STORST = 10
+FORSIDE_LISTE_YIELD = 10
+
+
+def _arsrate_til_liste(a):
+    """Årsraten i kroner når den kan stå som et svar, ellers None.
+
+    Samme vakter som tittelen: ingen hendelse som stopper målene, ingen
+    årsrate som er et delår, og ikke over kursen.
+    """
+    upa = a.get("utbytte_per_aksje") or 0
+    pris = a.get("pris") or 0
+    if upa <= 0 or (pris and upa > pris):
+        return None
+    if yield_er_delaar(a) and not delaar_motbevist(a):
+        return None
+    return upa
+
+
+def forside_utvalg(aksjer, storst=FORSIDE_LISTE_STORST, hoyest=FORSIDE_LISTE_YIELD):
+    """De `storst` største utbyttebetalerne og de `hoyest` med høyest yield blant resten.
+
+    Bare aksjer som kan stå i en rangering (`i_rangering`), med utbyttebevis og
+    en årsrate som kan vises. En B-aksje tas ikke med når A-aksjen er med.
+    Rekkefølgen i svaret er høyest yield først.
+    """
+    kandidater = [a for a in aksjer
+                  if _TICKER_RE.match(a.get("ticker") or "") and i_rangering(a)
+                  and not uten_utbyttebevis(a) and (a.get("utbytte_yield") or 0) > 0
+                  and _arsrate_til_liste(a)]
+    valgt, navn = [], set()
+
+    def _ta(a):
+        n = re.sub(r"\s+B$", "", a.get("navn") or "")
+        if a["ticker"] in {v["ticker"] for v in valgt} or n in navn:
+            return False
+        valgt.append(a)
+        navn.add(n)
+        return True
+
+    for a in sorted(kandidater, key=lambda a: (-(a.get("markedsverdi_mrd") or 0), a["ticker"])):
+        if len(valgt) >= storst:
+            break
+        _ta(a)
+    n_storst = len(valgt)
+    for a in sorted(kandidater, key=lambda a: (-(a.get("utbytte_yield") or 0), a["ticker"])):
+        if len(valgt) >= n_storst + hoyest:
+            break
+        _ta(a)
+    return sorted(valgt, key=lambda a: (-(a.get("utbytte_yield") or 0), a["ticker"]))
+
+
+def _forside_ex_celle(a, i_dag):
+    ex = _iso_dato(a.get("ex_dato"))
+    if ex and ex >= i_dag:
+        tekst = _dato_kort(ex.isoformat(), i_dag.isoformat())
+        if ex_forbehold_gjelder(a, i_dag):
+            tekst += ' <span class="forside-liste-merk">foreslått</span>'
+        return tekst
+    mnd = [m for m in (a.get("utbetalingsmaaneder") or []) if 1 <= m <= 12]
+    if len(set(mnd)) == 12:
+        return "hver måned"
+    if mnd:
+        return ('<span class="forside-liste-merk">vanligvis</span> '
+                + ", ".join(_MND_KORT[m - 1] for m in mnd))
+    return "—"
+
+
+def lag_forside_liste(aksjer, i_dag):
+    """HTML-en mellom <!--LISTE:START--> og <!--LISTE:SLUTT-->. Ren funksjon."""
+    import html as _html
+    utvalg = forside_utvalg(aksjer)
+    if not utvalg:
+        return ""
+    rader = []
+    for a in utvalg:
+        t = a["ticker"]
+        flere = a.get("frekvens") in ("Kvartalsvis", "Halvårlig", "Månedlig")
+        belop = _belop_tekst(_arsrate_til_liste(a))
+        rader.append(
+            "        <tr>"
+            f'<td><a href="/aksjer/{t}/"><span class="forside-liste-ticker">{t}</span><span class="forside-liste-navn">'
+            f"{_html.escape(_kort_selskapsnavn(a.get('navn') or t))}</span></a></td>"
+            f"<td>{belop}" + (f'<span class="forside-liste-merk">{_html.escape(a["frekvens"].lower())}</span>' if flere else "")
+            + f"</td><td>{_pst(a.get('utbytte_yield') or 0, 2)}</td>"
+            f"<td>{_forside_ex_celle(a, i_dag)}</td></tr>")
+    return "\n".join([
+        '  <section class="forside-liste max-w-5xl mx-auto px-4 sm:px-6 pt-10" aria-labelledby="liste-tittel">',
+        '    <h2 id="liste-tittel" class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">Utbytteaksjer på Oslo Børs</h2>',
+        f'    <p class="text-sm text-gray-500 dark:text-gray-400 mb-4 les">De {_ganger(FORSIDE_LISTE_STORST).split()[0]} største selskapene som betaler utbytte, '
+        f"og de {_ganger(FORSIDE_LISTE_YIELD).split()[0]} med høyest direkteavkastning blant resten. Utbyttet er årsraten, og yielden er målt mot dagens kurs. "
+        "Aksjer som er på vei ut av børsen eller har stanset utbyttet, er ikke med.</p>",
+        '    <div class="tabell-ramme">',
+        '      <table class="forside-tabell tabell-fast">',
+        '        <thead><tr><th scope="col">Aksje</th><th scope="col">Utbytte i året</th>'
+        '<th scope="col">Yield</th><th scope="col">Neste ex-dato</th></tr></thead>',
+        "        <tbody>",
+        *rader,
+        "        </tbody>",
+        "      </table>",
+        "    </div>",
+        '    <p class="forside-liste-videre text-sm"><a href="/aksjer/" class="text-green-700 dark:text-green-400 hover:underline font-medium">Alle aksjene</a>'
+        '<a href="/aksjer/hoyest-utbytte/" class="text-green-700 dark:text-green-400 hover:underline font-medium">Høyest utbytte</a>'
+        '<a href="/utbyttekalender/" class="text-green-700 dark:text-green-400 hover:underline font-medium">Utbyttekalender</a></p>',
+        "  </section>",
+    ])
+
+
+_LISTE_MONSTER = re.compile(r"<!--LISTE:START-->.*?<!--LISTE:SLUTT-->", re.S)
+
+
+def oppdater_forside_liste(aksjer, root_dir: str, i_dag=None):
+    """Fyller listen på forsiden. True når filen ble endret."""
+    if i_dag is None:
+        try:
+            from zoneinfo import ZoneInfo
+            i_dag = datetime.datetime.now(ZoneInfo("Europe/Oslo")).date()
+        except ImportError:
+            i_dag = datetime.date.today()
+    sti = os.path.join(root_dir, "index.html")
+    try:
+        with open(sti, encoding="utf-8") as f:
+            innhold = f.read()
+    except OSError:
+        return False
+    if not _LISTE_MONSTER.search(innhold):
+        print("  Forsiden mangler <!--LISTE:START-->-markøren; listen er ikke oppdatert.")
+        return False
+    blokk = lag_forside_liste(aksjer, i_dag)
+    if not blokk:
+        return False
+    nytt = _LISTE_MONSTER.sub(lambda m: "<!--LISTE:START-->\n" + blokk + "\n  <!--LISTE:SLUTT-->", innhold, count=1)
     if nytt == innhold:
         return False
     with open(sti, "w", encoding="utf-8") as f:
