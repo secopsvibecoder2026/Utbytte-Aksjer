@@ -7100,8 +7100,8 @@ class TestRapportUtvikling(unittest.TestCase):
         side = self._side([self._q3(), self._q2()])
         hode = side.split('<table class="rapport-tall rapport-flere tabell-fast">')[1].split("</thead>")[0]
         self.assertEqual(re.findall(r'<span class="kol-rolle">([^<]*)</span><span class="kol-periode">([^<]*)</span>', hode),
-                         [("Nå", "3. kv. 2026"), ("Forrige rapport", "2. kv. 2026"),
-                          ("Endring", "fra forrige rapport"), ("Samme periode i fjor", "3. kv. 2025")])
+                         [("Nå", "3. kv. 2026"), ("Endring", "fra forrige rapport"),
+                          ("Forrige rapport", "2. kv. 2026"), ("Samme periode i fjor", "3. kv. 2025")])
         kropp = side.split('<table class="rapport-tall rapport-flere tabell-fast">')[1].split("<tbody>")[1]
         self.assertIn("137,9\u00a0mill. USD", kropp)      # forrige rapports tall
         self.assertIn("+160,3\u00a0%", kropp)                # endringen
@@ -7318,7 +7318,6 @@ class TestRapportUtvikling(unittest.TestCase):
         self.assertEqual((funn["streker"], funn["vendinger"]), (0, []))
         self.assertIn("«Forrige rapport» er rapporten for perioden rett før", fs.RAPPORT_FORKLARING)
         self.assertIn("regnet ut av oss", fs.RAPPORT_FORKLARING)
-        self.assertIn("egne rapporter", fs.RAPPORT_FORKLARING)
 
     def test_forklaringen_staar_bare_naar_siden_har_noe_aa_forklare(self):
         self.assertIn(fs.RAPPORT_FORKLARING, self._side([self._q3(), self._q2()]))
@@ -7385,13 +7384,32 @@ class TestRapportsideDesign2511(unittest.TestCase):
         self.assertIsNotNone(regel)
         self.assertRegex(regel.group(1), r"scroll-margin-top:\s*7rem")
 
-    def test_forklaringen_staar_rett_over_tabellen_og_ikke_under_overskriften(self):
+    def test_forklaringen_er_en_kort_fotnote_rett_under_tabellen(self):
+        """Over tabellen var den 254 px grå tekst før første tall ved 390 px (designsjekk 26.11.2026)."""
         side = self._side([self._q3(), self._q2()])
         self.assertEqual(side.count(fs.RAPPORT_FORKLARING), 1)
-        self.assertLess(side.index("<h3>Resultatet</h3>"), side.index(fs.RAPPORT_FORKLARING))
-        self.assertLess(side.index(fs.RAPPORT_FORKLARING), side.index('<table class="rapport-tall rapport-flere'))
-        # Ikke lenger mellom innledningen og tallrutene.
-        self.assertGreater(side.index(fs.RAPPORT_FORKLARING), side.index('class="tallruter'))
+        tabell_slutt = side.index("</table></div>", side.index('<table class="rapport-tall rapport-flere'))
+        self.assertLess(tabell_slutt, side.index(fs.RAPPORT_FORKLARING))
+        self.assertLess(side.index(fs.RAPPORT_FORKLARING), side.index("<h3>Utbyttet</h3>"))
+        self.assertLessEqual(len(fs.RAPPORT_FORKLARING.split()), 40)
+
+    def test_endring_staar_rett_etter_naa(self):
+        """390 px viser to tallkolonner, og endringen er det leseren vil se."""
+        side = self._side([self._q3(), self._q2()])
+        hode = side.split('<table class="rapport-tall rapport-flere tabell-fast">')[1].split("</thead>")[0]
+        roller = re.findall(r'<span class="kol-rolle">([^<]*)</span>', hode)
+        self.assertEqual(roller[:2], ["Nå", "Endring"])
+        rad = side.split('<table class="rapport-tall rapport-flere tabell-fast">')[1].split("<tbody>")[1].split("</tr>")[0]
+        celler = re.findall(r"<td[^>]*>(.*?)</td>", rad)
+        self.assertIn("358,9", celler[1])
+        self.assertIn("+160,3", celler[2])
+        self.assertIn("137,9", celler[3])
+
+    def test_ingen_automatisk_orddeling_i_navnekolonnen(self):
+        """«Justert re-sultat» og «Driftsinn-tekter» ved 390 px."""
+        css = fs.RAPPORT_SAMMENLIGNING_CSS
+        self.assertNotIn("hyphens:auto", css)
+        self.assertNotIn("overflow-wrap:break-word", css)
 
     def test_forklaringen_nevner_engangsposter_og_strek_og_er_uten_tall(self):
         self.assertIn("engangsposter", fs.RAPPORT_FORKLARING)

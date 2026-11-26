@@ -4330,6 +4330,27 @@ Not done from the report: the 15 to 17 px inline links in running text (the
 breadcrumb, «Les mer om metoden») and the menu links at 1280 px (36 px, the same
 on every page).
 
+**Follow-up the same day, after the owner saw it on a phone.** Three of the
+changes read worse than intended:
+
+- **Hyphenation.** The fixed name column was 104 px with `hyphens: auto`, so
+  «Justert re-sultat» and «Driftsinn-tekter» were split. Both report tables now
+  use `hyphens: manual` and break only at spaces.
+- **The explanation was 254 px of grey text before the first number.** It is
+  now two sentences (37 words) as a footnote straight under the table.
+- **«Endring» was off screen.** The column order is Nå, Endring, Forrige
+  rapport, Samme periode i fjor, the header text wraps on a phone and cells have
+  less padding. At 390 px the name, «Nå» and «Endring» are all visible; at 320 px
+  «Endring» needs a scroll.
+
+**Ads inside the report card are Google's.** Auto ads put a full-width unit
+between «3. kvartal 2026» and «Lagt fram», and between «Utbyttet» and its
+text, and the creative was a misleading «Last ned» download ad. That cannot be
+steered from the page; it is reported and blocked in AdSense (Ad review
+center), and fixed slots between the report cards need slot IDs from the owner.
+
+Tests: `TestRapportsideDesign2511` (+2, one rewritten).
+
 Tests: `TestRapportsideDesign2511` (9) and updates in `TestRapportUtvikling`.
 
 ## The fixer agent (`.claude/agents/fikser.md`, 2026-10-18)
