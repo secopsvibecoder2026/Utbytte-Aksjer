@@ -122,6 +122,7 @@ jobs:
           python scripts/test_klokke.py
           python scripts/test_nettstedfiler.py
           python scripts/test_kvartalsrapport.py
+          python scripts/test_seo.py
           python promo/test_promo_felles.py
           python promo/test_finn_kandidater.py
 
