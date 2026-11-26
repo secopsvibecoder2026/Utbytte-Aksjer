@@ -4395,6 +4395,31 @@ follows up the next time.
 
 Tests: `scripts/test_seo.py` (14), in CI.
 
+## SEO round 1 (2026-11-26)
+
+From the SEO agent's first analysis (proposals 3 and 5, and the clean faults).
+Search Console detail stays out of the repo; the report is a private page.
+
+- **«Hva er ex-dato?»** `<title>` is «Ex-dato (ex-dag): siste kjøpsdag, kursfall
+  og T+2 | exday.no» and the description says the last day to buy. H1, headline,
+  og:title, `ARTIKLER` and the «Les også» links read «Hva er ex-dato? Siste
+  kjøpsdag, kursfall og T+2». The URL is unchanged. The article still breaks
+  the dash rule (18); that is the article agent's job. Measure this URL on its
+  own, 28 days against 28, from late December.
+- **`/rapportkalender/` links to every report page.** `lag_nylig_framlagt()`
+  keeps the eight newest visible and adds a `<details>` «Alle N selskaper med
+  oppsummert rapport» with one link per company to its newest period. Report
+  pages had one internal link in, from the stock page.
+- **FAQPage on the front page and `/faq/`** now carries the visible text word
+  for word (six answers and one question differed). The front-page yield answer
+  no longer carries a count marker, since JSON-LD cannot hold one.
+  `TestSeoRunde2611.test_faqpage_staar_ordrett_paa_siden` checks every
+  hand-written page.
+- «Andre topplistor» is «Andre topplister»; the description of
+  `/artikler/slik-vedtas-utbytte/` is under 155 characters.
+
+Tests: `TestSeoRunde2611` (5).
+
 ## The fixer agent (`.claude/agents/fikser.md`, 2026-10-18)
 
 The maintenance and tallkontroll agents only report, and their findings waited
