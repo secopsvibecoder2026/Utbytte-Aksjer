@@ -58,13 +58,16 @@
     .sub { color:#4b5563; font-size:0.95rem; margin:0 0 1.25rem; }
     .hopp { display:flex; flex-wrap:wrap; gap:0.4rem; margin:0 0 1.25rem; }
     .hopp a { font-size:0.8rem; border:1px solid #e5e7eb; background:#fff; border-radius:9999px; padding:0.25rem 0.75rem; text-decoration:none; color:#374151; }
-    .rapport { background:#fff; border:1px solid #e5e7eb; border-radius:0.75rem; padding:1.1rem 1.25rem; margin-bottom:1.25rem; }
+    .rapport { background:#fff; border:1px solid #e5e7eb; border-radius:0.75rem; padding:1.1rem 1.25rem; margin-bottom:1.25rem; scroll-margin-top:7rem; }
     .rapport h2 { font-size:1.25rem; margin:0 0 0.15rem; }
     .rapport h2 a { color:inherit; text-decoration:none; }
     .rapport h3 { font-size:0.95rem; margin:1.1rem 0 0.35rem; color:#374151; }
     .rapport p, .rapport li { font-size:0.95rem; line-height:1.7; margin:0 0 0.5rem; }
     .rapport ul { list-style:disc; padding-left:1.2rem; margin:0; }
     .rapport-meta { font-size:0.8rem !important; color:#6b7280; margin:0 0 0.5rem !important; }
+    .rapport-kilde { margin:-0.3rem 0 0.3rem !important; }
+    .rapport-kilde a { display:inline-flex; align-items:center; min-height:44px; }
+    .tallruter-kilde { font-size:0.8rem; color:#6b7280; margin:0.6rem 0 1.25rem; }
     .tabell-ramme { overflow-x:auto; -webkit-overflow-scrolling:touch; margin:0.75rem 0 0.25rem; }
     table.rapport-tall { width:100%; border-collapse:collapse; font-size:0.88rem; }
     .rapport-tall th { text-align:right; font-size:0.72rem; color:#6b7280; font-weight:600; text-transform:uppercase; letter-spacing:0.03em; padding:0.4rem 0.6rem; border-bottom:1px solid #e5e7eb; white-space:nowrap; }
@@ -89,7 +92,7 @@
     a { color:#275f45; }
 
     .dark body { background:#030712; color:#f3f4f6; }
-    .dark .rapport-meta { color:#9ca3af; }
+    .dark .rapport-meta, .dark .tallruter-kilde { color:#9ca3af; }
     .dark .sub, .dark .rapport h3 { color:#d1d5db; }
     .dark .rapport, .dark .hopp a { background:#111827; border-color:#1f2937; }
     .dark .hopp a { color:#d1d5db; }
@@ -103,8 +106,7 @@
     .dark .cta { background:#0f251b; border-color:#214d39; }
     .dark a { color:#6fa98a; }
 
-    .sub-forklaring { margin-top:-0.75rem; font-size:0.88rem; }
-    .utvikling { scroll-margin-top:7rem; }
+    .tabell-forklaring { font-size:0.85rem !important; color:#4b5563; margin:0.5rem 0 0 !important; }
     .kol-rolle { display:block; }
     .kol-periode { display:block; font-weight:400; text-transform:none; letter-spacing:0; }
     /* position:relative er ikke pynt: `.sr-only` i endringen er position:absolute, og uten en plassert
@@ -120,13 +122,26 @@
     .rapport-serie td { padding:0.45rem 0.6rem; border-bottom:1px solid #f3f4f6; text-align:right; white-space:nowrap; font-variant-numeric:tabular-nums; vertical-align:top; }
     .rapport-serie td:first-child, .rapport-serie th:first-child { text-align:left; white-space:normal; min-width:7.5rem; max-width:9rem; hyphens:auto; -webkit-hyphens:auto; overflow-wrap:break-word; }
     .rapport-flere.tabell-fast, .rapport-serie.tabell-fast { --fast-bg:#fff; --fast-bg-hode:#fff; --fast-bg-hover:#fff; }
+    /* Under 30rem stables `.rapport-tall` til rader med to tall på linjen. Det ga 982 px for seks
+       rader ved 390 px, og «Endring» sto ved siden av «Samme periode i fjor» selv om den er regnet
+       mot «Forrige rapport». Her er det en vanlig tabell som ruller sideveis med fast første kolonne,
+       som «Utvikling over tid», og kolonneoverskriftene sier hva hver kolonne er. */
+    .rapport-flere td[data-p]::before { display:none; }
     @media (max-width: 30rem) {
-      .rapport-flere td[data-p]::before { white-space:pre-line; text-transform:none; letter-spacing:0; font-size:0.72rem; line-height:1.3; margin-bottom:0.1rem; }
-      .rapport-flere tr { row-gap:0.45rem; }
-      .rapport-flere td:first-child, .rapport-flere th:first-child { position:static; box-shadow:none; }
-      .rapport-flere td:first-child::after, .rapport-flere th:first-child::after { display:none; }
+      table.rapport-flere { display:table; width:100%; }
+      .rapport-flere tbody { display:table-row-group; }
+      .rapport-flere thead { position:static; width:auto; height:auto; overflow:visible; clip:auto; display:table-header-group; }
+      .rapport-flere tr { display:table-row; padding:0; border:0; }
+      .rapport-flere th, .rapport-flere td { display:table-cell; padding:0.45rem 0.6rem; border:0; border-bottom:1px solid #f3f4f6; text-align:right !important; white-space:nowrap; vertical-align:top; }
+      .rapport-flere th { border-bottom-color:#e5e7eb; }
+      .rapport-flere td:first-child, .rapport-flere th:first-child { text-align:left !important; white-space:normal; min-width:6.5rem; max-width:7.5rem; font-weight:600; font-size:0.85rem; hyphens:auto; -webkit-hyphens:auto; overflow-wrap:break-word; }
+      .rapport-flere th:first-child { font-weight:600; }
     }
     .dark .endring { color:#9ca3af; }
+    .dark .tabell-forklaring { color:#9ca3af; }
+    @media (max-width: 30rem) {
+      .dark .rapport-flere th, .dark .rapport-flere td { border-bottom-color:#1f2937; }
+    }
     .dark .rapport-serie th { color:#9ca3af; border-color:#1f2937; }
     .dark .rapport-serie td { border-color:#1f2937; }
     .dark .rapport-flere.tabell-fast, .dark .rapport-serie.tabell-fast { --fast-bg:#111827; --fast-bg-hode:#111827; --fast-bg-hover:#111827; --fast-kant:#374151; --fast-skygge:rgba(0,0,0,0.5); }
@@ -198,7 +213,6 @@
   <p class="sub les">Det viktigste fra rapportene MPC Container Ships ASA (MPCC) har lagt fram:
     resultatet, utbyttet og utbytteplanen, rapport for rapport. Skrevet ut fra
     selskapets egne meldinger til Oslo Børs.</p>
-  <p class="sub sub-forklaring les">Tallene i tabellene er hentet fra selskapets egne rapporter. «Forrige rapport» er rapporten for perioden rett før, for eksempel forrige kvartal. Endringen er regnet ut av oss når tallene har samme enhet, og for prosent står den i prosentpoeng (pp).</p>
   <nav class="ak-tabnav" id="ak-tabnav" aria-label="Sideseksjoner">
     <a href="/aksjer/MPCC/#oversikt" class="ak-tab">Oversikt</a>
     <a href="/aksjer/MPCC/#utbytte" class="ak-tab">Utbytte</a>
@@ -206,13 +220,16 @@
     <a href="/aksjer/MPCC/#faq" class="ak-tab">FAQ</a>
     <a href="./" class="ak-tab aktiv" aria-current="page">Rapporter</a>
   </nav>
-  <dl class="tallruter tallruter-n4 tallruter-tekst" aria-label="Utbyttet nå"><div class="tallrute"><dt>Neste ex-dato</dt><dd>10. des 2026<span class="tallrute-note">Kjøp senest 9. des 2026</span></dd></div><div class="tallrute"><dt>Kunngjort utbytte</dt><dd>0,04 USD per aksje<span class="tallrute-note">for neste ex-dato</span></dd></div><div class="tallrute"><dt>Årlig utbytte</dt><dd>1,51 kr per aksje<span class="tallrute-note">annualisert</span></dd></div><div class="tallrute"><dt>Utbetales</dt><dd>kvartalsvis</dd></div></dl>
-  <nav class="hopp" aria-label="Hopp til rapport"><a href="#2026-q3">3. kv. 2026</a><a href="#utvikling">Utvikling over tid</a><a href="#2026-q2">2. kv. 2026</a></nav>
+  <dl class="tallruter tallruter-n4 tallruter-tekst" aria-label="Utbyttet nå"><div class="tallrute"><dt>Neste ex-dato</dt><dd>10. des 2026<span class="tallrute-note">Kjøp senest 9. des 2026</span></dd></div><div class="tallrute"><dt>Kunngjort utbytte</dt><dd>0,04 USD<span class="tallrute-note">per aksje, for neste ex-dato</span></dd></div><div class="tallrute"><dt>Årlig utbytte</dt><dd>1,51 kr<span class="tallrute-note">per aksje, annualisert</span></dd></div><div class="tallrute"><dt>Utbetales</dt><dd>17. des 2026<span class="tallrute-note">rundt, kvartalsvis</span></dd></div></dl>
+  <p class="tallruter-kilde les">Tallene i rutene kommer fra børsmeldinger til Oslo Børs og fra Yahoo Finance, og er beskrevet under <a href="/metode/">Metode og datakilder</a>. <a href="/aksjer/MPCC/">Aksjesiden</a> viser når de sist ble hentet.</p>
+  <nav class="hopp" aria-label="Hopp til rapport"><a href="#2026-q3">3. kv. 2026</a><a href="#2026-q2">2. kv. 2026</a></nav>
 <article class="rapport les" id="2026-q3">
 <h2><a class="rapport-anker" href="#2026-q3">3. kvartal 2026</a></h2>
-<p class="rapport-meta">Lagt fram 25. nov 2026 · <a href="https://newsweb.oslobors.no/message/687333" rel="noopener">Børsmeldingen på NewsWeb</a></p>
+<p class="rapport-meta">Lagt fram 25. nov 2026</p>
+<p class="rapport-meta rapport-kilde"><a href="https://newsweb.oslobors.no/message/687333" rel="noopener">Kilde: børsmeldingen på NewsWeb</a></p>
 <h3>Resultatet</h3>
 <p>MPC Container Ships fikk et resultat på 45,2 millioner dollar i tredje kvartal, mot 53,6 millioner i samme kvartal i fjor. Resultatet inkluderer en gevinst på 8,8 millioner dollar fra salget av skipet AS Angelina. Justert for engangsposter var resultatet 36,1 millioner dollar, mot 45,0 millioner. Driftsinntektene var 113,1 millioner dollar, mot 125,9 millioner, og skipene hadde 4 423 eierdager, mot 4 836. Snittraten var 25 333 dollar per dag, mot 26 523. Flåten var i bruk 97,8 % av tiden. Selskapet kaller resultatene solide.</p>
+<p class="tabell-forklaring">Tallene i tabellene er hentet fra selskapets egne rapporter. «Forrige rapport» er rapporten for perioden rett før, for eksempel forrige kvartal. Endringen er regnet ut av oss når tallene har samme enhet, og for prosent står den i prosentpoeng (pp). Endringen tar ikke hensyn til engangsposter, for eksempel salg av skip, så les teksten over tabellen og se etter justert resultat når selskapet oppgir det. En strek i en celle betyr at tallet ikke står i oppsummeringen av den rapporten.</p>
 <div class="tabell-ramme"><table class="rapport-tall rapport-flere tabell-fast"><thead><tr><th><span class="sr-only">Nøkkeltall</span></th><th><span class="kol-rolle">Nå</span><span class="kol-periode">3. kv. 2026</span></th><th><span class="kol-rolle">Forrige rapport</span><span class="kol-periode">2. kv. 2026</span></th><th><span class="kol-rolle">Endring</span><span class="kol-periode">fra forrige rapport</span></th><th><span class="kol-rolle">Samme periode i fjor</span><span class="kol-periode">3. kv. 2025</span></th></tr></thead><tbody><tr><td>Resultat</td><td data-p="Nå&#10;3. kv. 2026">45,2 mill. USD</td><td data-p="Forrige rapport&#10;2. kv. 2026">69,4 mill. USD</td><td data-p="Endring&#10;fra forrige rapport"><span class="endring"><span class="sr-only">Endring fra forrige rapport: </span>−34,9 %</span></td><td data-p="Samme periode i fjor&#10;3. kv. 2025">53,6 mill. USD</td></tr><tr><td>Justert resultat</td><td data-p="Nå&#10;3. kv. 2026">36,1 mill. USD</td><td data-p="Forrige rapport&#10;2. kv. 2026">39,0 mill. USD</td><td data-p="Endring&#10;fra forrige rapport"><span class="endring"><span class="sr-only">Endring fra forrige rapport: </span>−7,4 %</span></td><td data-p="Samme periode i fjor&#10;3. kv. 2025">45,0 mill. USD</td></tr><tr><td>Driftsinntekter</td><td data-p="Nå&#10;3. kv. 2026">113,1 mill. USD</td><td data-p="Forrige rapport&#10;2. kv. 2026">116,9 mill. USD</td><td data-p="Endring&#10;fra forrige rapport"><span class="endring"><span class="sr-only">Endring fra forrige rapport: </span>−3,3 %</span></td><td data-p="Samme periode i fjor&#10;3. kv. 2025">125,9 mill. USD</td></tr><tr><td>Resultat per aksje</td><td data-p="Nå&#10;3. kv. 2026">0,09 USD</td><td data-p="Forrige rapport&#10;2. kv. 2026">0,16 USD</td><td data-p="Endring&#10;fra forrige rapport"><span class="endring"><span class="sr-only">Endring fra forrige rapport: </span>−43,8 %</span></td><td data-p="Samme periode i fjor&#10;3. kv. 2025">0,12 USD</td></tr><tr><td>Snittrate per dag</td><td data-p="Nå&#10;3. kv. 2026">25 333 USD</td><td data-p="Forrige rapport&#10;2. kv. 2026">24 951 USD</td><td data-p="Endring&#10;fra forrige rapport"><span class="endring"><span class="sr-only">Endring fra forrige rapport: </span>+1,5 %</span></td><td data-p="Samme periode i fjor&#10;3. kv. 2025">26 523 USD</td></tr><tr><td>Utnyttelse av flåten</td><td data-p="Nå&#10;3. kv. 2026">97,8 %</td><td data-p="Forrige rapport&#10;2. kv. 2026">—</td><td data-p="Endring&#10;fra forrige rapport">—</td><td data-p="Samme periode i fjor&#10;3. kv. 2025">97,6 %</td></tr></tbody></table></div>
 <h3>Utbyttet</h3>
 <p>Styret vedtok 24. november et løpende utbytte på 0,04 dollar per aksje for tredje kvartal, det samme som for andre kvartal. I samme kvartal i fjor var utbyttet 0,05 dollar. Utbyttet er fastsatt i dollar og utbetales i kroner. Siste dag for å kjøpe med rett til utbytte er 9. desember, aksjen handles uten utbytte fra 10. desember, og pengene utbetales rundt 17. desember. Til sammen utgjør utbyttet rundt 19,5 millioner dollar, avhengig av valutakursen.</p>
@@ -221,14 +238,10 @@
 <h3>Ellers i rapporten</h3>
 <ul><li>Selskapet holder fast ved forventningen for hele 2026: driftsinntekter på 460 til 470 millioner dollar og et driftsresultat før avskrivninger (EBITDA) på 280 til 300 millioner dollar.</li><li>Kontraktsreserven var 2,2 milliarder dollar. Selskapet har kontrakter for 100 % av dagene i 2026, 90 % i 2027, 66 % i 2028 og 42 % i 2029.</li><li>Ledelsen sier at fjerde kvartal så langt har vært svært sterkt, men peker også på risiko fra mange nye skip i bestilling og flere leveranser i 2027 og 2028.</li></ul>
 </article>
-<section class="rapport utvikling" id="utvikling" aria-labelledby="utvikling-overskrift">
-<h2 id="utvikling-overskrift">Utvikling over tid</h2>
-<p class="les">Nøkkeltall som står med samme navn i flere rapporter, den nyeste til venstre. Under et tall står endringen fra rapporten til høyre, når den er for perioden rett før.</p>
-<div class="tabell-ramme"><table class="rapport-serie tabell-fast" aria-label="Nøkkeltall rapport for rapport"><thead><tr><th scope="col"><span class="sr-only">Nøkkeltall</span></th><th scope="col">3. kv. 2026</th><th scope="col">2. kv. 2026</th></tr></thead><tbody><tr><td>Resultat</td><td>45,2 mill. USD<span class="endring"><span class="sr-only">Endring fra forrige rapport: </span>−34,9 %</span></td><td>69,4 mill. USD</td></tr><tr><td>Justert resultat</td><td>36,1 mill. USD<span class="endring"><span class="sr-only">Endring fra forrige rapport: </span>−7,4 %</span></td><td>39,0 mill. USD</td></tr><tr><td>Driftsinntekter</td><td>113,1 mill. USD<span class="endring"><span class="sr-only">Endring fra forrige rapport: </span>−3,3 %</span></td><td>116,9 mill. USD</td></tr><tr><td>Resultat per aksje</td><td>0,09 USD<span class="endring"><span class="sr-only">Endring fra forrige rapport: </span>−43,8 %</span></td><td>0,16 USD</td></tr><tr><td>Snittrate per dag</td><td>25 333 USD<span class="endring"><span class="sr-only">Endring fra forrige rapport: </span>+1,5 %</span></td><td>24 951 USD</td></tr></tbody></table></div>
-</section>
 <article class="rapport les" id="2026-q2">
 <h2><a class="rapport-anker" href="#2026-q2">2. kvartal 2026</a></h2>
-<p class="rapport-meta">Lagt fram 26. aug 2026 · <a href="https://newsweb.oslobors.no/message/680778" rel="noopener">Børsmeldingen på NewsWeb</a></p>
+<p class="rapport-meta">Lagt fram 26. aug 2026</p>
+<p class="rapport-meta rapport-kilde"><a href="https://newsweb.oslobors.no/message/680778" rel="noopener">Kilde: børsmeldingen på NewsWeb</a></p>
 <h3>Resultatet</h3>
 <p>MPC Container Ships fikk et resultat på 69,4 millioner dollar i andre kvartal, mot 78,1 millioner i samme kvartal i fjor. Resultatet inkluderer en gevinst på 30,4 millioner dollar fra salget av tre skip. Justert for slike poster var resultatet 39,0 millioner dollar, mot 48,6 millioner. Driftsinntektene var 116,9 millioner dollar, mot 137,9 millioner, og skipene hadde 4 596 eierdager, mot 5 307. Snittraten var 24 951 dollar per dag, mot 26 247. Selskapet kaller kvartalet nok et kvartal med jevne resultater, og viser til at 99 % av dagene i 2026 er dekket av kontrakter.</p>
 <div class="tabell-ramme"><table class="rapport-tall"><thead><tr><th><span class="sr-only">Nøkkeltall</span></th><th>2. kv. 2026</th><th>2. kv. 2025</th></tr></thead><tbody><tr><td>Resultat</td><td data-p="2. kv. 2026">69,4 mill. USD</td><td data-p="2. kv. 2025">78,1 mill. USD</td></tr><tr><td>Justert resultat</td><td data-p="2. kv. 2026">39,0 mill. USD</td><td data-p="2. kv. 2025">48,6 mill. USD</td></tr><tr><td>Driftsinntekter</td><td data-p="2. kv. 2026">116,9 mill. USD</td><td data-p="2. kv. 2025">137,9 mill. USD</td></tr><tr><td>Kontantstrøm fra driften</td><td data-p="2. kv. 2026">71,7 mill. USD</td><td data-p="2. kv. 2025">75,3 mill. USD</td></tr><tr><td>Resultat per aksje</td><td data-p="2. kv. 2026">0,16 USD</td><td data-p="2. kv. 2025">0,18 USD</td></tr><tr><td>Snittrate per dag</td><td data-p="2. kv. 2026">24 951 USD</td><td data-p="2. kv. 2025">26 247 USD</td></tr></tbody></table></div>

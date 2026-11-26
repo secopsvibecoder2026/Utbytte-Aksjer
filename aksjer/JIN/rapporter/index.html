@@ -58,13 +58,16 @@
     .sub { color:#4b5563; font-size:0.95rem; margin:0 0 1.25rem; }
     .hopp { display:flex; flex-wrap:wrap; gap:0.4rem; margin:0 0 1.25rem; }
     .hopp a { font-size:0.8rem; border:1px solid #e5e7eb; background:#fff; border-radius:9999px; padding:0.25rem 0.75rem; text-decoration:none; color:#374151; }
-    .rapport { background:#fff; border:1px solid #e5e7eb; border-radius:0.75rem; padding:1.1rem 1.25rem; margin-bottom:1.25rem; }
+    .rapport { background:#fff; border:1px solid #e5e7eb; border-radius:0.75rem; padding:1.1rem 1.25rem; margin-bottom:1.25rem; scroll-margin-top:7rem; }
     .rapport h2 { font-size:1.25rem; margin:0 0 0.15rem; }
     .rapport h2 a { color:inherit; text-decoration:none; }
     .rapport h3 { font-size:0.95rem; margin:1.1rem 0 0.35rem; color:#374151; }
     .rapport p, .rapport li { font-size:0.95rem; line-height:1.7; margin:0 0 0.5rem; }
     .rapport ul { list-style:disc; padding-left:1.2rem; margin:0; }
     .rapport-meta { font-size:0.8rem !important; color:#6b7280; margin:0 0 0.5rem !important; }
+    .rapport-kilde { margin:-0.3rem 0 0.3rem !important; }
+    .rapport-kilde a { display:inline-flex; align-items:center; min-height:44px; }
+    .tallruter-kilde { font-size:0.8rem; color:#6b7280; margin:0.6rem 0 1.25rem; }
     .tabell-ramme { overflow-x:auto; -webkit-overflow-scrolling:touch; margin:0.75rem 0 0.25rem; }
     table.rapport-tall { width:100%; border-collapse:collapse; font-size:0.88rem; }
     .rapport-tall th { text-align:right; font-size:0.72rem; color:#6b7280; font-weight:600; text-transform:uppercase; letter-spacing:0.03em; padding:0.4rem 0.6rem; border-bottom:1px solid #e5e7eb; white-space:nowrap; }
@@ -89,7 +92,7 @@
     a { color:#275f45; }
 
     .dark body { background:#030712; color:#f3f4f6; }
-    .dark .rapport-meta { color:#9ca3af; }
+    .dark .rapport-meta, .dark .tallruter-kilde { color:#9ca3af; }
     .dark .sub, .dark .rapport h3 { color:#d1d5db; }
     .dark .rapport, .dark .hopp a { background:#111827; border-color:#1f2937; }
     .dark .hopp a { color:#d1d5db; }
@@ -177,11 +180,13 @@
     <a href="/aksjer/JIN/#faq" class="ak-tab">FAQ</a>
     <a href="./" class="ak-tab aktiv" aria-current="page">Rapporter</a>
   </nav>
-  <dl class="tallruter tallruter-n3 tallruter-tekst" aria-label="Utbyttet nå"><div class="tallrute"><dt>Neste ex-dato</dt><dd>Ikke kunngjort</dd></div><div class="tallrute"><dt>Årlig utbytte</dt><dd>0,17 kr per aksje</dd></div><div class="tallrute"><dt>Utbetales</dt><dd>årlig</dd></div></dl>
+  <dl class="tallruter tallruter-n3 tallruter-tekst" aria-label="Utbyttet nå"><div class="tallrute"><dt>Neste ex-dato</dt><dd>Ikke kunngjort</dd></div><div class="tallrute"><dt>Årlig utbytte</dt><dd>0,17 kr<span class="tallrute-note">per aksje</span></dd></div><div class="tallrute"><dt>Utbetales</dt><dd>årlig</dd></div></dl>
+  <p class="tallruter-kilde les">Tallene i rutene kommer fra børsmeldinger til Oslo Børs og fra Yahoo Finance, og er beskrevet under <a href="/metode/">Metode og datakilder</a>. <a href="/aksjer/JIN/">Aksjesiden</a> viser når de sist ble hentet.</p>
   
 <article class="rapport les" id="2026-q2">
 <h2><a class="rapport-anker" href="#2026-q2">2. kvartal 2026</a></h2>
-<p class="rapport-meta">Lagt fram 27. aug 2026 · <a href="https://newsweb.oslobors.no/message/680924" rel="noopener">Børsmeldingen på NewsWeb</a></p>
+<p class="rapport-meta">Lagt fram 27. aug 2026</p>
+<p class="rapport-meta rapport-kilde"><a href="https://newsweb.oslobors.no/message/680924" rel="noopener">Kilde: børsmeldingen på NewsWeb</a></p>
 <h3>Resultatet</h3>
 <p>Jinhui fikk et resultat etter skatt på 5 269 000 dollar i andre kvartal, mot et underskudd på 1 925 000 dollar i samme kvartal i fjor. Omsetningen falt 9 % til 36 460 000 dollar, fra 40 242 000 dollar. Selskapet forklarer nedgangen med færre skip i drift etter salget av åtte supramax-skip i fjor, mens høyere fraktrater for tørrbulk veide opp. Gjennomsnittlig daglig inntjening for flåten (time charter equivalent) var 18 015 dollar, mot 13 860 dollar.</p>
 <div class="tabell-ramme"><table class="rapport-tall"><thead><tr><th><span class="sr-only">Nøkkeltall</span></th><th>2. kv. 2026</th><th>2. kv. 2025</th></tr></thead><tbody><tr><td>Omsetning</td><td data-p="2. kv. 2026">36 460 000 USD</td><td data-p="2. kv. 2025">40 242 000 USD</td></tr><tr><td>Resultat etter skatt</td><td data-p="2. kv. 2026">5 269 000 USD</td><td data-p="2. kv. 2025">underskudd 1 925 000 USD</td></tr><tr><td>Resultat per aksje</td><td data-p="2. kv. 2026">0,048 USD</td><td data-p="2. kv. 2025">underskudd 0,018 USD</td></tr><tr><td>Inntjening per dag</td><td data-p="2. kv. 2026">18 015 USD</td><td data-p="2. kv. 2025">13 860 USD</td></tr></tbody></table></div>
