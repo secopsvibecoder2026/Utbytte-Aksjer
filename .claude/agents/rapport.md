@@ -112,6 +112,18 @@ det virker bare når samme tall har samme navn og samme enhet hver gang:
   annet tall. Behold kildens navn, og ikke omdøp for å få en serie.
 - Du regner fortsatt ikke selv. Siden regner ut endringen fra forrige rapport
   når enhetene er like, og sier at det er vi som har regnet.
+- **Hold radsettet likt fra kvartal til kvartal.** Samme rader i samme
+  rekkefølge, så hver rad kan sammenlignes. MPCCs Q2 hadde «Kontantstrøm fra
+  driften» og Q3 «Utnyttelse av flåten», så kontantstrømmen kunne ikke
+  sammenlignes noe sted. Står en rad i forrige oppsummering og i kilden nå,
+  skal den med.
+- **Engangsposter.** Siden regner ut endringen fra tallene i tabellen, og den
+  tar ikke hensyn til salg av skip, nedskrivninger eller gevinster. MPCC
+  hadde 30,4 millioner dollar fra skipssalg i Q2 og 8,8 i Q3, så «Resultat»
+  falt 34,9 %, mens «Justert resultat» falt 7,4 %. Oppgir selskapet et
+  justert tall, skriv det som egen rad rett etter det ujusterte («Justert
+  resultat» etter «Resultat»), og nevn engangsposten i `resultat` med
+  selskapets egne ord og beløp.
 
 ### 3. Skriv oppsummeringen
 
@@ -168,8 +180,8 @@ driften etter skatt»), ikke bruk forkortelsen alene.
 Skriv tallene slik kilden har dem, med enhet i cellen: «9 844 mill. kr»,
 «12,35 mrd. USD», «14,5 %». Begge tallene i en rad må komme fra samme rad i
 kildens tabell. Kontrollen sjekker det. Hold radnavnene korte, to til fire
-ord («Resultat etter skatt», «Produksjon per dag»). På mobil stables raden
-med navnet over tallene, så et langt navn tar mye plass. Navn og enhet skal
+ord («Resultat etter skatt», «Produksjon per dag»). På mobil står navnet i
+en fast kolonne som er smal, så et langt navn brytes over flere linjer. Navn og enhet skal
 være de samme som i selskapets forrige oppsummering (se «Les selskapets
 forrige oppsummering» over).
 

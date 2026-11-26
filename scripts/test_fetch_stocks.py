@@ -7052,6 +7052,14 @@ class TestRapportUtvikling(unittest.TestCase):
         return self._r("2026-Q2", [("Resultat etter skatt", "137,9 mill. USD", "43,4 mill. USD"),
                                    ("Egenkapitalavkastning", "27,0 %", "9,1 %")], dato="2026-08-28")
 
+    def _q1(self):
+        return self._r("2026-Q1", [("Resultat etter skatt", "10,0 mill. USD", "9,0 mill. USD"),
+                                   ("Egenkapitalavkastning", "5,0 %", "4,0 %")], dato="2026-05-20")
+
+    def _tre(self):
+        """Tre rapporter: «Utvikling over tid» vises først fra `SERIE_MIN_RAPPORTER`."""
+        return [self._q3(), self._q2(), self._q1()]
+
     def _side(self, rapporter):
         return fs._rapportside_html(dict(self.A), rapporter, "2026-11-24")
 
@@ -7064,7 +7072,7 @@ class TestRapportUtvikling(unittest.TestCase):
     def test_en_rapport_gir_siden_som_foer(self):
         side = self._side([self._q3()])
         for ikke in ('id="utvikling"', "Utvikling over tid", "kol-rolle", "rapport-serie", "rapport-flere",
-                     "sub-forklaring", fs.RAPPORT_FORKLARING, fs.RAPPORT_SAMMENLIGNING_CSS, "tabell-fast"):
+                     "tabell-forklaring", fs.RAPPORT_FORKLARING, fs.RAPPORT_SAMMENLIGNING_CSS, "tabell-fast"):
             self.assertNotIn(ikke, side)
         self.assertNotIn("Forrige rapport", side)
 
@@ -7072,7 +7080,7 @@ class TestRapportUtvikling(unittest.TestCase):
         q2 = self._r("2026-Q2", [("Resultat til aksjonærene", "137,9 mill. USD", "43,4 mill. USD"),
                                  ("Egenkapitalavkastning før skatt", "27,0 %", "9,1 %")], dato="2026-08-28")
         side = self._side([self._q3(), q2])
-        for ikke in ('id="utvikling"', "kol-rolle", "rapport-serie", "sub-forklaring", "tabell-fast",
+        for ikke in ('id="utvikling"', "kol-rolle", "rapport-serie", "tabell-forklaring", "tabell-fast",
                      fs.RAPPORT_SAMMENLIGNING_CSS):
             self.assertNotIn(ikke, side)
         self.assertNotIn("Forrige rapport", side)
@@ -7114,9 +7122,10 @@ class TestRapportUtvikling(unittest.TestCase):
     def test_manglende_kvartal_gir_ingen_forrige_rapport(self):
         """Q3 og Q1 lagret, Q2 mangler: «forrige rapport» er forrige kvartal, og det har vi ikke."""
         q1 = self._r("2026-Q1", [("Resultat etter skatt", "10 mill. USD", "9 mill. USD")], dato="2026-05-20")
-        side = self._side([self._q3(), q1])
+        q3_25 = self._r("2025-Q3", [("Resultat etter skatt", "8 mill. USD", "7 mill. USD")], dato="2025-10-20")
+        side = self._side([self._q3(), q1, q3_25])
         self.assertNotIn('<span class="kol-rolle">Forrige rapport</span>', side)
-        # Men serien finnes, med begge kolonnene og uten endringstall over hullet.
+        # Men serien finnes, med alle kolonnene og uten endringstall over hullene.
         self.assertIn('id="utvikling"', side)
         serie = side.split('id="utvikling"')[1].split("</section>")[0]
         self.assertIn("1. kv. 2026", serie)
@@ -7143,11 +7152,21 @@ class TestRapportUtvikling(unittest.TestCase):
     # ── «Utvikling over tid» ─────────────────────────────────────────────
 
     def test_utvikling_staar_etter_den_siste_rapporten_med_hopplenke(self):
-        side = self._side([self._q3(), self._q2()])
+        side = self._side(self._tre())
         self.assertLess(side.index('id="2026-q3"'), side.index('id="utvikling"'))
         self.assertLess(side.index('id="utvikling"'), side.index('id="2026-q2"'))
         hopp = side.split('aria-label="Hopp til rapport">')[1].split("</nav>")[0]
-        self.assertEqual(re.findall(r'href="#([^"]+)"', hopp), ["2026-q3", "utvikling", "2026-q2"])
+        self.assertEqual(re.findall(r'href="#([^"]+)"', hopp), ["2026-q3", "utvikling", "2026-q2", "2026-q1"])
+
+    def test_utvikling_vises_ikke_med_to_rapporter(self):
+        """Med to rapporter står de samme tallene i «Forrige rapport»-kolonnen, og serien gjentok dem
+        (Q2-tallene sto tre ganger på MPCC, designrapporten 25.11.2026)."""
+        side = self._side([self._q3(), self._q2()])
+        self.assertNotIn('id="utvikling"', side)
+        self.assertNotIn("utvikling-overskrift", side)
+        self.assertNotIn('href="#utvikling"', side)
+        self.assertIn("rapport-flere", side)       # kolonnen «Forrige rapport» er der som før
+        self.assertEqual(fs.SERIE_MIN_RAPPORTER, 3)
 
     def test_utvikling_har_seks_kolonner_nyeste_til_venstre_og_strek_for_hull(self):
         perioder = ["2026-Q3", "2026-Q2", "2026-Q1", "2025-Q4", "2025-Q3", "2025-Q2", "2025-Q1"]
@@ -7169,24 +7188,27 @@ class TestRapportUtvikling(unittest.TestCase):
         self.assertEqual(serie.count("<tr>"), 3)   # hode, A og B
 
     def test_utvikling_viser_endring_under_tallet(self):
-        side = self._side([self._q3(), self._q2()])
+        side = self._side(self._tre())
         serie = side.split('id="utvikling"')[1].split("</section>")[0]
         self.assertIn("358,9\u00a0mill. USD<span class=\"endring\">", serie)
         self.assertIn("+160,3\u00a0%", serie)
         # Den eldste kolonnen har ingenting å regne mot.
         rad = [r for r in serie.split("<tr>") if r.startswith("<td>Resultat etter skatt</td>")][0]
-        self.assertEqual(rad.count('class="endring"'), 1)
+        self.assertEqual(rad.count('class="endring"'), 2)          # Q3 mot Q2 og Q2 mot Q1
+        self.assertNotIn('class="endring"', re.findall(r"<td>(.*?)</td>", rad)[-1])
 
     def test_utvikling_slaar_ikke_sammen_navn_som_ligner(self):
         q2 = self._r("2026-Q2", [("Resultat etter skatt (justert)", "137,9 mill. USD", "1")], dato="2026-08-28")
         q3 = self._r("2026-Q3", [("Resultat etter skatt", "358,9 mill. USD", "1")])
-        self.assertNotIn('id="utvikling"', self._side([q3, q2]))
+        q1 = self._r("2026-Q1", [("Annen rad", "1 mill. kr", "1 mill. kr")], dato="2026-05-20")
+        self.assertNotIn('id="utvikling"', self._side([q3, q2, q1]))
 
     def test_navn_i_serien_escapes(self):
         navn = "<img src=x onerror=1>"
         q3 = self._r("2026-Q3", [(navn, "1 mill. kr", "1 mill. kr")])
         q2 = self._r("2026-Q2", [(navn, "2 mill. kr", "1 mill. kr")], dato="2026-08-28")
-        side = self._side([q3, q2])
+        q1 = self._r("2026-Q1", [(navn, "3 mill. kr", "1 mill. kr")], dato="2026-05-20")
+        side = self._side([q3, q2, q1])
         self.assertNotIn(navn, side)
         self.assertIn("&lt;img src=x onerror=1&gt;", side)
 
@@ -7228,7 +7250,7 @@ class TestRapportUtvikling(unittest.TestCase):
         self.assertIn("--fast-bg:#111827", css)
 
     def test_tabellene_ruller_i_egen_ramme_og_har_fast_forste_kolonne(self):
-        side = self._side([self._q3(), self._q2()])
+        side = self._side(self._tre())
         for tabell in ('<table class="rapport-tall rapport-flere tabell-fast">',
                        '<table class="rapport-serie tabell-fast" aria-label="Nøkkeltall rapport for rapport">'):
             ramme = side.split(tabell)[0].rsplit("<", 1)[1]
@@ -7250,7 +7272,7 @@ class TestRapportUtvikling(unittest.TestCase):
         regel = re.search(r"\.endring \{([^{}]*)\}", css)
         self.assertIsNotNone(regel)
         self.assertIn("position:relative", regel.group(1))
-        side = self._side([self._q3(), self._q2()])
+        side = self._side(self._tre())
         self.assertNotIn("<caption", side)
         self.assertIn('<table class="rapport-serie tabell-fast" aria-label="Nøkkeltall rapport for rapport">', side)
 
@@ -7260,15 +7282,21 @@ class TestRapportUtvikling(unittest.TestCase):
         self.assertIn("table.rapport-flere { border-collapse:separate; border-spacing:0; }", css)
         self.assertNotIn("border-collapse:collapse", css)
 
-    def test_stablet_visning_slaar_av_festet_kolonne(self):
-        """Under 30rem stables raden, og da skal navnet ikke ha kant og skygge som en festet kolonne."""
+    def test_smal_skjerm_stabler_ikke_tabellen_med_forrige_rapport(self):
+        """Stablet ble seks rader 982 px ved 390 px, og «Endring» sto ved siden av «Samme periode i
+        fjor» selv om den er regnet mot «Forrige rapport» (designrapporten 25.11.2026). Under 30rem er
+        den en vanlig tabell som ruller sideveis med fast første kolonne, som «Utvikling over tid»."""
         css = fs.RAPPORT_SAMMENLIGNING_CSS
         media = css.split("@media (max-width: 30rem) {")[1].split("\n    }")[0]
-        self.assertIn(".rapport-flere td:first-child, .rapport-flere th:first-child { position:static; box-shadow:none; }", media)
-        self.assertIn("::after { display:none; }", media)
+        self.assertIn("table.rapport-flere { display:table;", media)
+        self.assertIn(".rapport-flere tr { display:table-row;", media)
+        self.assertIn(".rapport-flere td[data-p]::before { display:none; }", css)
+        # Den festede første kolonnen skal ikke slås av.
+        self.assertNotRegex(media, r"first-child[^{}]*\{[^{}]*position:static")
+        self.assertNotIn("::after { display:none; }", media)
 
     def test_lesbare_etiketter(self):
-        side = self._side([self._q3(), self._q2()])
+        side = self._side(self._tre())
         self.assertIn('<span class="sr-only">Endring fra forrige rapport: </span>', side)
         self.assertIn('aria-labelledby="utvikling-overskrift"', side)
         # Den stablede visningen får rolle og periode på to linjer fra data-p.
@@ -7278,7 +7306,7 @@ class TestRapportUtvikling(unittest.TestCase):
 
     def test_teksten_kan_ikke_gaa_ut_paa_dato(self):
         """Ingen tall, ingen yield og ingen kurs i forklaringen, og ingen tankestrek (SKRIVESTIL.md)."""
-        side = self._side([self._q3(), self._q2()])
+        side = self._side(self._tre())
         intro = re.search(r'<section class="rapport utvikling".*?<p class="les">(.*?)</p>', side, re.S).group(1)
         for tekst in (fs.RAPPORT_FORKLARING, intro):
             self.assertIsNone(re.search(r"\d", tekst), tekst)
@@ -7325,12 +7353,93 @@ class TestRapportUtvikling(unittest.TestCase):
                 continue
             sett += 1
             side = fs._rapportside_html(dict(rad[ticker]), liste, "2026-11-24")
-            self.assertEqual('id="utvikling"' in side, kr.serie(liste) is not None, ticker)
+            serie = kr.serie(liste)
+            self.assertEqual('id="utvikling"' in side,
+                             serie is not None and len(serie["kolonner"]) >= fs.SERIE_MIN_RAPPORTER, ticker)
             self.assertEqual("rapport-flere" in side,
                              bool(kr.mot_forrige(liste[0], kr.forrige_rapport(liste, liste[0]))), ticker)
-            self.assertEqual(fs.RAPPORT_FORKLARING in side,
-                             kr.serie(liste) is not None or "rapport-flere" in side, ticker)
+            # Forklaringen står rett over tabellen den handler om, ikke øverst på siden.
+            self.assertEqual(fs.RAPPORT_FORKLARING in side, "rapport-flere" in side, ticker)
         self.assertGreater(sett, 50)
+
+
+class TestRapportsideDesign2511(unittest.TestCase):
+    """Designgjennomgangen av rapportsiden, 25.11.2026 (MPCC, to rapporter).
+
+    Seks funn: overskriften havnet under menyen ved hopp, tabellen «Forrige rapport» ble 982 px
+    stablet, serien gjentok de samme tallene, forklaringen sto over tallrutene, «Utbetales» viste
+    frekvensen i stedet for datoen, og kilden manglet. Hjelpemetodene er de samme som i
+    `TestRapportUtvikling`.
+    """
+
+    A = TestRapportUtvikling.A
+    _r = staticmethod(TestRapportUtvikling._r)
+    _q3 = TestRapportUtvikling._q3
+    _q2 = TestRapportUtvikling._q2
+    _side = TestRapportUtvikling._side
+    _css = staticmethod(TestRapportUtvikling._css)
+
+    def test_hopp_til_rapport_havner_under_menyen(self):
+        css = self._css(self._side([self._q3()]))
+        regel = re.search(r"\n    \.rapport \{([^{}]*)\}", css)
+        self.assertIsNotNone(regel)
+        self.assertRegex(regel.group(1), r"scroll-margin-top:\s*7rem")
+
+    def test_forklaringen_staar_rett_over_tabellen_og_ikke_under_overskriften(self):
+        side = self._side([self._q3(), self._q2()])
+        self.assertEqual(side.count(fs.RAPPORT_FORKLARING), 1)
+        self.assertLess(side.index("<h3>Resultatet</h3>"), side.index(fs.RAPPORT_FORKLARING))
+        self.assertLess(side.index(fs.RAPPORT_FORKLARING), side.index('<table class="rapport-tall rapport-flere'))
+        # Ikke lenger mellom innledningen og tallrutene.
+        self.assertGreater(side.index(fs.RAPPORT_FORKLARING), side.index('class="tallruter'))
+
+    def test_forklaringen_nevner_engangsposter_og_strek_og_er_uten_tall(self):
+        self.assertIn("engangsposter", fs.RAPPORT_FORKLARING)
+        self.assertIn("En strek i en celle", fs.RAPPORT_FORKLARING)
+
+    def test_newsweb_lenken_har_egen_linje_og_trykkflate(self):
+        side = self._side([self._q3()])
+        self.assertIn('<p class="rapport-meta rapport-kilde"><a href="https://newsweb.oslobors.no/message/1" '
+                      'rel="noopener">Kilde: børsmeldingen på NewsWeb</a></p>', side)
+        self.assertNotIn(" · <a href=\"https://newsweb", side)
+        self.assertRegex(self._css(side), r"\.rapport-kilde a \{[^}]*min-height:44px")
+
+    def test_rutene_har_kilde_uten_tall_og_dato(self):
+        side = self._side([self._q3()])
+        linje = re.search(r'<p class="tallruter-kilde les">(.*?)</p>', side, re.S).group(1)
+        self.assertIsNone(re.search(r"\d", linje.replace('href="/aksjer/AAA/"', "")), linje)
+        self.assertIn('href="/metode/"', linje)
+        self.assertIn('href="/aksjer/AAA/"', linje)
+        self.assertLess(side.index('class="tallruter'), side.index('class="tallruter-kilde'))
+
+    def _tile(self, **felt):
+        a = dict(self.A, ex_dato="2026-12-10", betaling_dato="2026-12-17", frekvens="Kvartalsvis")
+        a.update(felt)
+        return fs._rapport_utbytte_naa(a, "2026-11-26")
+
+    def test_utbetales_viser_datoen_naar_den_er_kjent(self):
+        rute = self._tile()
+        self.assertIn("<dt>Utbetales</dt><dd>17. des 2026", rute)
+        self.assertIn("rundt, kvartalsvis", rute)
+
+    def test_utbetales_viser_frekvensen_uten_kommende_betaling(self):
+        for felt in ({"betaling_dato": ""}, {"betaling_dato": "2026-11-20"}, {"ex_dato": ""}):
+            rute = self._tile(**felt)
+            self.assertIn("<dt>Utbetales</dt><dd>kvartalsvis", rute, felt)
+            self.assertNotIn("rundt", rute)
+
+    def test_per_aksje_staar_i_merknaden_ikke_i_verdien(self):
+        """«0,04 USD per aksje» ble brutt over to linjer ved 390 px og gjorde rutene ujevne."""
+        a = dict(self.A, annonsert_utbytte=0.04, annonsert_ex="2026-12-10", ex_dato="2026-12-10")
+        rute = fs._rapport_utbytte_naa(a, "2026-11-26")
+        for dd in re.findall(r"<dd>(.*?)</dd>", rute):
+            verdi = dd.split('<span class="tallrute-note">')[0]
+            self.assertNotIn("per aksje", verdi)
+
+    def test_rapport_agenten_vet_om_engangsposter_og_faste_rader(self):
+        tekst = open(os.path.join(_REPO, ".claude", "agents", "rapport.md"), encoding="utf-8").read()
+        self.assertIn("Justert resultat", tekst)
+        self.assertIn("engangsposter", tekst)
 
 
 if __name__ == "__main__":

@@ -11169,7 +11169,23 @@ def _rt(tekst):
 RAPPORT_FORKLARING = (
     "Tallene i tabellene er hentet fra selskapets egne rapporter. «Forrige rapport» er "
     "rapporten for perioden rett før, for eksempel forrige kvartal. Endringen er regnet ut "
-    "av oss når tallene har samme enhet, og for prosent står den i prosentpoeng (pp).")
+    "av oss når tallene har samme enhet, og for prosent står den i prosentpoeng (pp). "
+    "Endringen tar ikke hensyn til engangsposter, for eksempel salg av skip, så les "
+    "teksten over tabellen og se etter justert resultat når selskapet oppgir det. "
+    "En strek i en celle betyr at tallet ikke står i oppsummeringen av den rapporten.")
+
+# «Utvikling over tid» vises først når den har minst så mange rapporter. Med to
+# rapporter står de samme tallene i «Forrige rapport»-kolonnen, og tabellen ville
+# bare gjentatt dem (Q2-tallene sto tre ganger på MPCC, 25.11.2026).
+SERIE_MIN_RAPPORTER = 3
+
+# Kilden under rutene øverst på rapportsiden. Ingen tall, ingen dato: det er
+# aksjesiden som sier når tallene sist ble hentet, og en dato her ville flyttet
+# lastmod på alle rapportsidene ved hver datakjøring.
+RAPPORT_RUTE_KILDE = (
+    'Tallene i rutene kommer fra børsmeldinger til Oslo Børs og fra Yahoo Finance, '
+    'og er beskrevet under <a href="/metode/">Metode og datakilder</a>. '
+    '<a href="/aksjer/{ticker}/">Aksjesiden</a> viser når de sist ble hentet.')
 
 # Stilen til kolonnene «Forrige rapport» og «Endring» og til «Utvikling over tid».
 # Legges til sidens stilark bare når siden bruker dem. Alt er nøytralt: tall og
@@ -11178,8 +11194,7 @@ RAPPORT_FORKLARING = (
 # `border-collapse: collapse` fra `table.rapport-tall` slås av, siden festet
 # kolonne ikke dekker kanten når tabellen eier kantene.
 RAPPORT_SAMMENLIGNING_CSS = """
-    .sub-forklaring { margin-top:-0.75rem; font-size:0.88rem; }
-    .utvikling { scroll-margin-top:7rem; }
+    .tabell-forklaring { font-size:0.85rem !important; color:#4b5563; margin:0.5rem 0 0 !important; }
     .kol-rolle { display:block; }
     .kol-periode { display:block; font-weight:400; text-transform:none; letter-spacing:0; }
     /* position:relative er ikke pynt: `.sr-only` i endringen er position:absolute, og uten en plassert
@@ -11195,13 +11210,26 @@ RAPPORT_SAMMENLIGNING_CSS = """
     .rapport-serie td { padding:0.45rem 0.6rem; border-bottom:1px solid #f3f4f6; text-align:right; white-space:nowrap; font-variant-numeric:tabular-nums; vertical-align:top; }
     .rapport-serie td:first-child, .rapport-serie th:first-child { text-align:left; white-space:normal; min-width:7.5rem; max-width:9rem; hyphens:auto; -webkit-hyphens:auto; overflow-wrap:break-word; }
     .rapport-flere.tabell-fast, .rapport-serie.tabell-fast { --fast-bg:#fff; --fast-bg-hode:#fff; --fast-bg-hover:#fff; }
+    /* Under 30rem stables `.rapport-tall` til rader med to tall på linjen. Det ga 982 px for seks
+       rader ved 390 px, og «Endring» sto ved siden av «Samme periode i fjor» selv om den er regnet
+       mot «Forrige rapport». Her er det en vanlig tabell som ruller sideveis med fast første kolonne,
+       som «Utvikling over tid», og kolonneoverskriftene sier hva hver kolonne er. */
+    .rapport-flere td[data-p]::before { display:none; }
     @media (max-width: 30rem) {
-      .rapport-flere td[data-p]::before { white-space:pre-line; text-transform:none; letter-spacing:0; font-size:0.72rem; line-height:1.3; margin-bottom:0.1rem; }
-      .rapport-flere tr { row-gap:0.45rem; }
-      .rapport-flere td:first-child, .rapport-flere th:first-child { position:static; box-shadow:none; }
-      .rapport-flere td:first-child::after, .rapport-flere th:first-child::after { display:none; }
+      table.rapport-flere { display:table; width:100%; }
+      .rapport-flere tbody { display:table-row-group; }
+      .rapport-flere thead { position:static; width:auto; height:auto; overflow:visible; clip:auto; display:table-header-group; }
+      .rapport-flere tr { display:table-row; padding:0; border:0; }
+      .rapport-flere th, .rapport-flere td { display:table-cell; padding:0.45rem 0.6rem; border:0; border-bottom:1px solid #f3f4f6; text-align:right !important; white-space:nowrap; vertical-align:top; }
+      .rapport-flere th { border-bottom-color:#e5e7eb; }
+      .rapport-flere td:first-child, .rapport-flere th:first-child { text-align:left !important; white-space:normal; min-width:6.5rem; max-width:7.5rem; font-weight:600; font-size:0.85rem; hyphens:auto; -webkit-hyphens:auto; overflow-wrap:break-word; }
+      .rapport-flere th:first-child { font-weight:600; }
     }
     .dark .endring { color:#9ca3af; }
+    .dark .tabell-forklaring { color:#9ca3af; }
+    @media (max-width: 30rem) {
+      .dark .rapport-flere th, .dark .rapport-flere td { border-bottom-color:#1f2937; }
+    }
     .dark .rapport-serie th { color:#9ca3af; border-color:#1f2937; }
     .dark .rapport-serie td { border-color:#1f2937; }
     .dark .rapport-flere.tabell-fast, .dark .rapport-serie.tabell-fast { --fast-bg:#111827; --fast-bg-hode:#111827; --fast-bg-hover:#111827; --fast-kant:#374151; --fast-skygge:rgba(0,0,0,0.5); }
@@ -11275,8 +11303,10 @@ def _rapport_tall_tabell_flere(rader, mot, naa, forrige_rapport, i_fjor, har_i_f
     Kolonnene: Nå, Forrige rapport, Endring, Samme periode i fjor. Hver kolonne
     har en etikett over perioden, så to kolonner med tall fra to ulike
     perioder aldri står uten å si hva de er. Første kolonne står stille når
-    tabellen ruller (`.tabell-fast`), og under 30rem stables raden som før,
-    med etikett og periode over hvert tall (`data-p`, to linjer).
+    tabellen ruller (`.tabell-fast`). Under 30rem er den fortsatt en tabell som
+    ruller sideveis (designrapporten 25.11.2026: stablet ble seks rader 982 px,
+    og «Endring» sto ved siden av «Samme periode i fjor»). `data-p` er beholdt
+    for dem som leser raden uten overskriften.
     """
     har_endring = any(m["endring"] for m in mot.values())
     kolonner = [("Nå", naa), ("Forrige rapport", forrige_rapport)]
@@ -11312,7 +11342,9 @@ def _rapport_tall_tabell_flere(rader, mot, naa, forrige_rapport, i_fjor, har_i_f
 
 def _rapport_serie_html(rapporter):
     """«Utvikling over tid»: nøkkeltallene som står med identisk navn i minst to
-    av de seks nyeste rapportene, nyeste til venstre. "" når ingen gjør det.
+    av de seks nyeste rapportene, nyeste til venstre. "" når ingen gjør det, og
+    når tabellen får færre enn `SERIE_MIN_RAPPORTER` kolonner (med to rapporter
+    gjentar den bare «Forrige rapport»-kolonnen).
 
     Seksjonen mangler da helt, ikke tom: sider uten en slik rad skal ikke ha
     en overskrift uten innhold, og seksjoner som finnes på noen sider og ikke
@@ -11323,7 +11355,7 @@ def _rapport_serie_html(rapporter):
     """
     import kvartalsrapport as kr
     s = kr.serie(rapporter)
-    if not s:
+    if not s or len(s["kolonner"]) < SERIE_MIN_RAPPORTER:
         return ""
     hode = "".join(f'<th scope="col">{html.escape(kr.periode_kort(k["periode"]))}</th>' for k in s["kolonner"])
     kropp = []
@@ -11351,14 +11383,21 @@ def _rapport_artikkel(r, ticker, forrige=None):
     pt = kr.periode_tekst(p)
     a_id = kr.anker(p)
     melding = str(r.get("melding") or "")
-    kilde = (f' · <a href="https://newsweb.oslobors.no/message/{html.escape(melding)}" '
-             f'rel="noopener">Børsmeldingen på NewsWeb</a>') if melding.isdigit() else ""
+    # Egen linje: ved 390 px ble «Børsmeldingen på NewsWeb» brutt over to linjer og var 15 px høy.
+    kilde = (f'<p class="rapport-meta rapport-kilde"><a href="https://newsweb.oslobors.no/message/'
+             f'{html.escape(melding)}" rel="noopener">Kilde: børsmeldingen på NewsWeb</a></p>'
+             ) if melding.isdigit() else ""
+    # Forklaringen står rett over tabellen den handler om, ikke øverst på siden.
+    forklaring = (f'<p class="tabell-forklaring">{RAPPORT_FORKLARING}</p>'
+                  if forrige is not None and kr.mot_forrige(r, forrige) else "")
     deler = [
         f'<article class="rapport les" id="{html.escape(a_id)}">',
         f'<h2><a class="rapport-anker" href="#{html.escape(a_id)}">{html.escape(pt[:1].upper() + pt[1:])}</a></h2>',
-        f'<p class="rapport-meta">Lagt fram {_fmt_dato(r.get("dato"))}{kilde}</p>',
+        f'<p class="rapport-meta">Lagt fram {_fmt_dato(r.get("dato"))}</p>',
+        kilde,
         "<h3>Resultatet</h3>",
         f"<p>{_rt(r.get('resultat'))}</p>",
+        forklaring,
         _rapport_tall_tabell(r, forrige=forrige),
         "<h3>Utbyttet</h3>",
         f"<p>{_rt(r.get('utbytte'))}</p>",
@@ -11459,19 +11498,25 @@ def _rapport_utbytte_naa(a, today):
         # årsresultatet, ikke med kvartalsrapporten (agenttesten 21.11.2026).
         ruter.append(("Neste ex-dato", "Ikke kunngjort", ""))
     if t and t["art"] == "neste":
-        ruter.append(("Kunngjort utbytte", f"{_belop_tekst(t['belop'], t['valuta'])} per aksje",
-                      "foreslått, ikke vedtatt" if t["forbehold"] else "for neste ex-dato"))
+        ruter.append(("Kunngjort utbytte", _belop_tekst(t['belop'], t['valuta']),
+                      "per aksje, foreslått, ikke vedtatt" if t["forbehold"] else "per aksje, for neste ex-dato"))
     upa = a.get("utbytte_per_aksje") or 0
     if upa > 0 and not hendelse_uten_mal(a) and not (
             t and t["art"] == "neste" and a.get("arsrate_kilde") == "kunngjort"):
         merke = arsrate_merke(a) or (
             "annualisert" if a.get("frekvens") in ("Kvartalsvis", "Halvårlig", "Månedlig") else "")
-        ruter.append(("Årlig utbytte", f"{_belop_tekst(upa)} per aksje", merke))
-    if a.get("frekvens") and a["frekvens"] != "—":
-        ruter.append(("Utbetales", a["frekvens"].lower(), ""))
-    return tallruter_html(
+        ruter.append(("Årlig utbytte", _belop_tekst(upa), f"per aksje, {merke}" if merke else "per aksje"))
+    frek = a["frekvens"].lower() if a.get("frekvens") and a["frekvens"] != "—" else ""
+    bet = a.get("betaling_dato") or ""
+    if bet and bet >= today and ex and ex >= today:
+        # Datoen leseren leter etter. «Rundt»: selskapene oppgir den som omtrentlig.
+        ruter.append(("Utbetales", _fmt_dato(bet), f"rundt, {frek}" if frek else "rundt"))
+    elif frek:
+        ruter.append(("Utbetales", frek, ""))
+    return (tallruter_html(
         [(n, html.escape(v), html.escape(note)) for n, v, note in ruter],
         "Utbyttet nå", tekst=True)
+        + f'\n  <p class="tallruter-kilde les">{RAPPORT_RUTE_KILDE.format(ticker=a["ticker"])}</p>')
 
 
 def _rapportside_html(a, rapporter, today):
@@ -11499,7 +11544,6 @@ def _rapportside_html(a, rapporter, today):
     if serie_html:
         pils.insert(1, '<a href="#utvikling">Utvikling over tid</a>')
     hopp = "".join(pils) if len(rapporter) > 1 else ""
-    forklaring = (f'\n  <p class="sub sub-forklaring les">{RAPPORT_FORKLARING}</p>' if bruker_sammenligning else "")
     sist_skrevet = max((r.get("skrevet") or r.get("dato") or "") for r in rapporter)
     brod_html, brod_ld = brodsmule(sti_aksje(sektor, ticker) + [("Rapporter", f"/aksjer/{ticker}/rapporter/")])
 
@@ -11522,13 +11566,16 @@ def _rapportside_html(a, rapporter, today):
     .sub { color:#4b5563; font-size:0.95rem; margin:0 0 1.25rem; }
     .hopp { display:flex; flex-wrap:wrap; gap:0.4rem; margin:0 0 1.25rem; }
     .hopp a { font-size:0.8rem; border:1px solid #e5e7eb; background:#fff; border-radius:9999px; padding:0.25rem 0.75rem; text-decoration:none; color:#374151; }
-    .rapport { background:#fff; border:1px solid #e5e7eb; border-radius:0.75rem; padding:1.1rem 1.25rem; margin-bottom:1.25rem; }
+    .rapport { background:#fff; border:1px solid #e5e7eb; border-radius:0.75rem; padding:1.1rem 1.25rem; margin-bottom:1.25rem; scroll-margin-top:7rem; }
     .rapport h2 { font-size:1.25rem; margin:0 0 0.15rem; }
     .rapport h2 a { color:inherit; text-decoration:none; }
     .rapport h3 { font-size:0.95rem; margin:1.1rem 0 0.35rem; color:#374151; }
     .rapport p, .rapport li { font-size:0.95rem; line-height:1.7; margin:0 0 0.5rem; }
     .rapport ul { list-style:disc; padding-left:1.2rem; margin:0; }
     .rapport-meta { font-size:0.8rem !important; color:#6b7280; margin:0 0 0.5rem !important; }
+    .rapport-kilde { margin:-0.3rem 0 0.3rem !important; }
+    .rapport-kilde a { display:inline-flex; align-items:center; min-height:44px; }
+    .tallruter-kilde { font-size:0.8rem; color:#6b7280; margin:0.6rem 0 1.25rem; }
     .tabell-ramme { overflow-x:auto; -webkit-overflow-scrolling:touch; margin:0.75rem 0 0.25rem; }
     table.rapport-tall { width:100%; border-collapse:collapse; font-size:0.88rem; }
     .rapport-tall th { text-align:right; font-size:0.72rem; color:#6b7280; font-weight:600; text-transform:uppercase; letter-spacing:0.03em; padding:0.4rem 0.6rem; border-bottom:1px solid #e5e7eb; white-space:nowrap; }
@@ -11553,7 +11600,7 @@ def _rapportside_html(a, rapporter, today):
     a { color:#275f45; }
 
     .dark body { background:#030712; color:#f3f4f6; }
-    .dark .rapport-meta { color:#9ca3af; }
+    .dark .rapport-meta, .dark .tallruter-kilde { color:#9ca3af; }
     .dark .sub, .dark .rapport h3 { color:#d1d5db; }
     .dark .rapport, .dark .hopp a { background:#111827; border-color:#1f2937; }
     .dark .hopp a { color:#d1d5db; }
@@ -11629,7 +11676,7 @@ def _rapportside_html(a, rapporter, today):
   <h1 class="side-h1">{html.escape(kort)}: kvartalsrapporter og utbytte</h1>
   <p class="sub les">Det viktigste fra rapportene {html.escape(a["navn"])} ({ticker}) har lagt fram:
     resultatet, utbyttet og utbytteplanen, rapport for rapport. Skrevet ut fra
-    selskapets egne meldinger til Oslo Børs.</p>{forklaring}
+    selskapets egne meldinger til Oslo Børs.</p>
   {lag_aksje_faner(ticker, ticker, aktiv="rapporter")}
   {_rapport_utbytte_naa(a, today)}
   {f'<nav class="hopp" aria-label="Hopp til rapport">{hopp}</nav>' if hopp else ''}
