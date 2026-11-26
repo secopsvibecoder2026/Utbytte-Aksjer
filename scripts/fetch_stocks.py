@@ -11167,12 +11167,9 @@ def _rt(tekst):
 # viser «Forrige rapport» eller «Utvikling over tid», så sider med én rapport er
 # uendret. Ingen tall, ingen yield, ingen kurs: teksten kan ikke gå ut på dato.
 RAPPORT_FORKLARING = (
-    "Tallene i tabellene er hentet fra selskapets egne rapporter. «Forrige rapport» er "
-    "rapporten for perioden rett før, for eksempel forrige kvartal. Endringen er regnet ut "
-    "av oss når tallene har samme enhet, og for prosent står den i prosentpoeng (pp). "
-    "Endringen tar ikke hensyn til engangsposter, for eksempel salg av skip, så les "
-    "teksten over tabellen og se etter justert resultat når selskapet oppgir det. "
-    "En strek i en celle betyr at tallet ikke står i oppsummeringen av den rapporten.")
+    "«Forrige rapport» er rapporten for perioden rett før. Endringen er regnet ut av oss, "
+    "i prosentpoeng (pp) for prosent, og tar ikke hensyn til engangsposter. En strek i en "
+    "celle betyr at tallet ikke står i oppsummeringen.")
 
 # «Utvikling over tid» vises først når den har minst så mange rapporter. Med to
 # rapporter står de samme tallene i «Forrige rapport»-kolonnen, og tabellen ville
@@ -11194,7 +11191,7 @@ RAPPORT_RUTE_KILDE = (
 # `border-collapse: collapse` fra `table.rapport-tall` slås av, siden festet
 # kolonne ikke dekker kanten når tabellen eier kantene.
 RAPPORT_SAMMENLIGNING_CSS = """
-    .tabell-forklaring { font-size:0.85rem !important; color:#4b5563; margin:0.5rem 0 0 !important; }
+    .tabell-forklaring { font-size:0.8rem !important; line-height:1.5 !important; color:#4b5563; margin:0.4rem 0 0.75rem !important; }
     .kol-rolle { display:block; }
     .kol-periode { display:block; font-weight:400; text-transform:none; letter-spacing:0; }
     /* position:relative er ikke pynt: `.sr-only` i endringen er position:absolute, og uten en plassert
@@ -11208,7 +11205,7 @@ RAPPORT_SAMMENLIGNING_CSS = """
     table.rapport-serie { width:100%; font-size:0.88rem; }
     .rapport-serie th { text-align:right; font-size:0.72rem; color:#6b7280; font-weight:600; text-transform:uppercase; letter-spacing:0.03em; padding:0.4rem 0.6rem; border-bottom:1px solid #e5e7eb; white-space:nowrap; }
     .rapport-serie td { padding:0.45rem 0.6rem; border-bottom:1px solid #f3f4f6; text-align:right; white-space:nowrap; font-variant-numeric:tabular-nums; vertical-align:top; }
-    .rapport-serie td:first-child, .rapport-serie th:first-child { text-align:left; white-space:normal; min-width:7.5rem; max-width:9rem; hyphens:auto; -webkit-hyphens:auto; overflow-wrap:break-word; }
+    .rapport-serie td:first-child, .rapport-serie th:first-child { text-align:left; white-space:normal; min-width:8.5rem; max-width:9.5rem; hyphens:manual; -webkit-hyphens:manual; overflow-wrap:normal; }
     .rapport-flere.tabell-fast, .rapport-serie.tabell-fast { --fast-bg:#fff; --fast-bg-hode:#fff; --fast-bg-hover:#fff; }
     /* Under 30rem stables `.rapport-tall` til rader med to tall på linjen. Det ga 982 px for seks
        rader ved 390 px, og «Endring» sto ved siden av «Samme periode i fjor» selv om den er regnet
@@ -11220,9 +11217,9 @@ RAPPORT_SAMMENLIGNING_CSS = """
       .rapport-flere tbody { display:table-row-group; }
       .rapport-flere thead { position:static; width:auto; height:auto; overflow:visible; clip:auto; display:table-header-group; }
       .rapport-flere tr { display:table-row; padding:0; border:0; }
-      .rapport-flere th, .rapport-flere td { display:table-cell; padding:0.45rem 0.6rem; border:0; border-bottom:1px solid #f3f4f6; text-align:right !important; white-space:nowrap; vertical-align:top; }
-      .rapport-flere th { border-bottom-color:#e5e7eb; }
-      .rapport-flere td:first-child, .rapport-flere th:first-child { text-align:left !important; white-space:normal; min-width:6.5rem; max-width:7.5rem; font-weight:600; font-size:0.85rem; hyphens:auto; -webkit-hyphens:auto; overflow-wrap:break-word; }
+      .rapport-flere th, .rapport-flere td { display:table-cell; padding:0.45rem 0.4rem; border:0; border-bottom:1px solid #f3f4f6; text-align:right !important; white-space:nowrap; vertical-align:top; }
+      .rapport-flere th { border-bottom-color:#e5e7eb; white-space:normal; }
+      .rapport-flere td:first-child, .rapport-flere th:first-child { text-align:left !important; white-space:normal; min-width:6.5rem; max-width:8rem; font-weight:600; font-size:0.85rem; hyphens:manual; -webkit-hyphens:manual; overflow-wrap:normal; }
       .rapport-flere th:first-child { font-weight:600; }
     }
     .dark .endring { color:#9ca3af; }
@@ -11300,7 +11297,7 @@ def _rapport_tall_tabell(r, maks_rader=None, forrige=None):
 def _rapport_tall_tabell_flere(rader, mot, naa, forrige_rapport, i_fjor, har_i_fjor):
     """Tabellen med «Forrige rapport» og, når noe kan regnes, «Endring».
 
-    Kolonnene: Nå, Forrige rapport, Endring, Samme periode i fjor. Hver kolonne
+    Kolonnene: Nå, Endring, Forrige rapport, Samme periode i fjor. Hver kolonne
     har en etikett over perioden, så to kolonner med tall fra to ulike
     perioder aldri står uten å si hva de er. Første kolonne står stille når
     tabellen ruller (`.tabell-fast`). Under 30rem er den fortsatt en tabell som
@@ -11309,9 +11306,12 @@ def _rapport_tall_tabell_flere(rader, mot, naa, forrige_rapport, i_fjor, har_i_f
     for dem som leser raden uten overskriften.
     """
     har_endring = any(m["endring"] for m in mot.values())
-    kolonner = [("Nå", naa), ("Forrige rapport", forrige_rapport)]
+    # Endring står rett etter Nå, så den er synlig uten å rulle på en telefon (390 px viser to
+    # tallkolonner). Overskriften sier hva den er regnet mot.
+    kolonner = [("Nå", naa)]
     if har_endring:
         kolonner.append(("Endring", "fra forrige rapport"))
+    kolonner.append(("Forrige rapport", forrige_rapport))
     if har_i_fjor:
         kolonner.append(("Samme periode i fjor", i_fjor))
 
@@ -11328,10 +11328,11 @@ def _rapport_tall_tabell_flere(rader, mot, naa, forrige_rapport, i_fjor, har_i_f
         m = mot.get(kr.normaliser_navn(x["navn"]))
         forrige_tekst = _rt(m["tekst"]) if m else "—"
         endring_html = (_rapport_endring_html(m["endring"]) if m else "") or "—"
-        celler = [f"<td {_p(*kolonner[0])}>{_rt(x.get('naa') or '')}</td>",
-                  f"<td {_p(*kolonner[1])}>{forrige_tekst}</td>"]
+        k = dict(kolonner)
+        celler = [f"<td {_p('Nå', k['Nå'])}>{_rt(x.get('naa') or '')}</td>"]
         if har_endring:
-            celler.append(f"<td {_p(*kolonner[2])}>{endring_html}</td>")
+            celler.append(f"<td {_p('Endring', k['Endring'])}>{endring_html}</td>")
+        celler.append(f"<td {_p('Forrige rapport', k['Forrige rapport'])}>{forrige_tekst}</td>")
         if har_i_fjor:
             celler.append(f"<td {_p(*kolonner[-1])}>{_rt(x.get('forrige') or '—')}</td>")
         kropp.append(f"<tr><td>{_rt(x['navn'])}</td>{''.join(celler)}</tr>")
@@ -11387,7 +11388,8 @@ def _rapport_artikkel(r, ticker, forrige=None):
     kilde = (f'<p class="rapport-meta rapport-kilde"><a href="https://newsweb.oslobors.no/message/'
              f'{html.escape(melding)}" rel="noopener">Kilde: børsmeldingen på NewsWeb</a></p>'
              ) if melding.isdigit() else ""
-    # Forklaringen står rett over tabellen den handler om, ikke øverst på siden.
+    # Forklaringen står som fotnote rett under tabellen den handler om (designsjekk 26.11.2026:
+    # over tabellen var den 254 px grå tekst før første tall).
     forklaring = (f'<p class="tabell-forklaring">{RAPPORT_FORKLARING}</p>'
                   if forrige is not None and kr.mot_forrige(r, forrige) else "")
     deler = [
@@ -11397,8 +11399,8 @@ def _rapport_artikkel(r, ticker, forrige=None):
         kilde,
         "<h3>Resultatet</h3>",
         f"<p>{_rt(r.get('resultat'))}</p>",
-        forklaring,
         _rapport_tall_tabell(r, forrige=forrige),
+        forklaring,
         "<h3>Utbyttet</h3>",
         f"<p>{_rt(r.get('utbytte'))}</p>",
     ]
