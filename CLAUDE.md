@@ -4286,6 +4286,52 @@ in `scripts/test_kvartalsrapport.py`. On the old code all 37 new report tests er
 out and 21 of the 27 page tests fail or error (the other six guard what must not
 change).
 
+## Design round 6: the report page (2026-11-26)
+
+The design agent read `/aksjer/MPCC/rapporter/` (two reports) on 25 November and
+found six faults. The owner said «fiks», so all six are built. Measured on a
+regenerated copy at 320 to 1280 px in both themes (MPCC, CMBTO, BWLPG): no
+horizontal overflow, CLS 0, tap targets as before.
+
+- **Anchor jump.** `.rapport` has `scroll-margin-top: 7rem`. A jump to `#2026-q2`
+  put the heading at y 19 under a menu that ends at y 92; it now lands at y 130.
+  It sits in the page's main CSS, so all report pages get it.
+- **«Forrige rapport» table on a phone.** It was stacked under 30rem: six rows
+  were 982 px at 390 px, and «Endring» stood beside «Samme periode i fjor» though
+  it is computed against «Forrige rapport». It is now an ordinary table in a
+  `.tabell-ramme` with a fixed first column, like «Utvikling over tid». At 390 px
+  it is 384 px high, and the column headings say what each column is. `data-p`
+  stays in the cells but its `::before` is hidden.
+- **«Utvikling over tid» needs three reports** (`SERIE_MIN_RAPPORTER`). With two
+  it repeated the «Forrige rapport» column, and the Q2 figures stood three
+  times. Pages with two reports lose the section and its jump pill. The data is
+  unchanged.
+- **The explanation stands right above the table** (`.tabell-forklaring`, in the
+  newest report only, and only when the table has «Forrige rapport»), not under
+  the intro. The tiles moved up 120 px: 390 px on MPCC, the same as CMBTO.
+  `RAPPORT_FORKLARING` also says the change ignores one-offs such as ship sales
+  (read the text above, look for adjusted profit) and that a dash in a cell means
+  the figure is not in that report's summary.
+- **Tiles.** «Utbetales» shows the payment date («17. des 2026», note «rundt,
+  kvartalsvis») when `betaling_dato` and the ex-date are both ahead, otherwise
+  the frequency as before. «per aksje» moved from the value to the note, so
+  «0,04 USD» does not break over two lines.
+- **Source.** The NewsWeb link is its own line («Kilde: børsmeldingen på
+  NewsWeb», 44 px high), and a line under the tiles (`RAPPORT_RUTE_KILDE`) names
+  the sources and links to `/metode/` and the stock page. It carries no number and
+  no date: a date would move `lastmod` on every report page at each data run.
+- **The rapport agent** (`.claude/agents/rapport.md`) keeps the same rows from
+  quarter to quarter and writes an adjusted figure straight after the unadjusted
+  one when the company gives it. MPCC's «Resultat» fell 34,9 % because Q2
+  included 30,4 million dollars from ship sales, while «Justert resultat» fell
+  7,4 %. The existing summaries are untouched (the gate is the only writer).
+
+Not done from the report: the 15 to 17 px inline links in running text (the
+breadcrumb, «Les mer om metoden») and the menu links at 1280 px (36 px, the same
+on every page).
+
+Tests: `TestRapportsideDesign2511` (9) and updates in `TestRapportUtvikling`.
+
 ## The fixer agent (`.claude/agents/fikser.md`, 2026-10-18)
 
 The maintenance and tallkontroll agents only report, and their findings waited
