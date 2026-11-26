@@ -7538,5 +7538,74 @@ class TestSeoRunde2611(unittest.TestCase):
                     self.assertLessEqual(len(html.unescape(m.group(1))), 155, mappe)
 
 
+class TestForsideListe(unittest.TestCase):
+    """Utbytteaksjene på forsiden (SEO 26.11.2026): fast utvalg etter regler, generert HTML."""
+
+    I_DAG = datetime.date(2026, 11, 26)
+
+    @staticmethod
+    def _a(t, mv, y, **kw):
+        a = {"ticker": t, "navn": f"{t} ASA", "markedsverdi_mrd": mv, "utbytte_yield": y,
+             "utbytte_per_aksje": y, "pris": 100.0, "ar_med_utbytte": 5, "frekvens": "Årlig",
+             "historiske_utbytter": [{"ar": 2025, "utbytte": y}]}
+        a.update(kw)
+        return a
+
+    def _katalog(self):
+        stor = [self._a(f"S{i:02d}", 1000 - i, 2.0 + i / 10) for i in range(14)]
+        hoy = [self._a(f"H{i:02d}", 1 + i / 10, 20.0 - i) for i in range(14)]
+        return stor + hoy
+
+    def test_ti_storst_og_ti_hoyest_yield(self):
+        u = fs.forside_utvalg(self._katalog())
+        tick = {a["ticker"] for a in u}
+        self.assertEqual(len(u), 20)
+        self.assertEqual(tick, {f"S{i:02d}" for i in range(10)} | {f"H{i:02d}" for i in range(10)})
+        self.assertEqual([a["utbytte_yield"] for a in u], sorted((a["utbytte_yield"] for a in u), reverse=True))
+
+    def test_vakter(self):
+        k = self._katalog()
+        k[14]["hendelse"] = {"type": "fusjon"}                 # H00: på vei ut
+        k[15]["utenfor_rangering"] = {"grunn": "salgsproveny"}  # H01
+        k[16]["utbytte_yield"] = 0                             # H02: stanset
+        k[17]["utbytte_per_aksje"] = 500.0                     # H03: over kursen
+        k.append(self._a("H00B", 0.5, 30.0, navn="H00 ASA B"))
+        k.append(self._a("S00B", 0.5, 30.0, navn="S00 ASA B"))  # B-aksje til en valgt A-aksje
+        tick = {a["ticker"] for a in fs.forside_utvalg(k)}
+        for t in ("H00", "H01", "H02", "H03", "S00B"):
+            self.assertNotIn(t, tick)
+        self.assertIn("H00B", tick)
+        self.assertEqual(len(tick), 20)
+
+    def test_html(self):
+        k = self._katalog()
+        k[0].update(frekvens="Kvartalsvis", ex_dato="2026-12-08")
+        k[1].update(utbetalingsmaaneder=list(range(1, 13)), frekvens="Månedlig")
+        k[2].update(utbetalingsmaaneder=[5, 11])
+        h = fs.lag_forside_liste(k, self.I_DAG)
+        self.assertEqual(h.count("<tr><td>"), 20)
+        self.assertIn('<a href="/aksjer/S00/"><span class="forside-liste-ticker">S00</span>', h)
+        self.assertIn("8. des", h)
+        self.assertIn("hver måned", h)
+        self.assertIn("vanligvis</span> mai, nov", h)
+        self.assertIn("De ti største", h)
+        self.assertIn("tabell-fast", h)
+        self.assertNotRegex(h, r"\d %")
+        self.assertEqual(fs.lag_forside_liste([], self.I_DAG), "")
+
+    def test_fyller_markorene_og_er_idempotent(self):
+        d = tempfile.mkdtemp()
+        with open(os.path.join(d, "index.html"), "w", encoding="utf-8") as f:
+            f.write("<main>\n  <!--LISTE:START-->\n  <!--LISTE:SLUTT-->\n</main>")
+        self.assertTrue(fs.oppdater_forside_liste(self._katalog(), d, self.I_DAG))
+        self.assertFalse(fs.oppdater_forside_liste(self._katalog(), d, self.I_DAG))
+        self.assertIn("Utbytteaksjer på Oslo Børs", open(os.path.join(d, "index.html"), encoding="utf-8").read())
+
+    def test_forsiden_har_markorene_og_begge_skriptene_kaller(self):
+        self.assertIn("<!--LISTE:START-->", open(os.path.join(_REPO, "index.html"), encoding="utf-8").read())
+        for f in ("fetch_stocks.py", "regenerer_sider.py"):
+            self.assertIn("oppdater_forside_liste(", open(os.path.join(_REPO, "scripts", f), encoding="utf-8").read(), f)
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

@@ -4420,6 +4420,32 @@ Search Console detail stays out of the repo; the report is a private page.
 
 Tests: `TestSeoRunde2611` (5).
 
+**The front page lists 20 dividend stocks** (proposal 1, same day). The front
+page ranks around 13 for «utbytteaksjer» and had no list of stocks.
+`oppdater_forside_liste()` fills `<!--LISTE:START-->` / `<!--LISTE:SLUTT-->`
+in `index.html`, above «Denne uka», from both `fetch_stocks.py` and
+`regenerer_sider.py`.
+
+- **The selection follows rules, not visits.** The repo is public, so there
+  are no visit figures in it. `forside_utvalg()` takes the ten largest dividend
+  payers by market cap, then the ten with the highest yield among the rest.
+  Only stocks that pass `i_rangering()`, have dividend evidence and an annual
+  rate that can be shown (`_arsrate_til_liste()`, the title's guards). A
+  B-share is left out when the A-share is in. Sorted by yield.
+- **It does not rotate on purpose.** A front-page link that comes and goes is a
+  weaker signal than a fixed one; «Denne uka» is the part that changes.
+- Columns: the stock (ticker and short name, one link), the annual rate with
+  the frequency, yield, and the next ex-date or the usual ex-months
+  («vanligvis mai», «hver måned»). The table is `.tabell-fast` and scrolls
+  under 48rem with the stock fixed; from 768 px name and notes are inline.
+  CSS at the end of `assets/style.css` («UTBYTTEAKSJENE PÅ FORSIDEN»).
+- Measured in a regenerated copy: no page overflow at 320 to 1280 px, no tap
+  target under 44 px, the section is 1 486 px tall at 390 px and 1 060 px from
+  768 px. Measure the front page for «utbytteaksjer» 28 days against 28 from
+  late December, separately from the ex-date title.
+
+Tests: `TestForsideListe` (5).
+
 ## The fixer agent (`.claude/agents/fikser.md`, 2026-10-18)
 
 The maintenance and tallkontroll agents only report, and their findings waited
