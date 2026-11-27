@@ -8366,7 +8366,7 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None, rapporter=None
   <script>
     (function(){{
       var t = localStorage.getItem('tema');
-      if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) {{
+      if (t !== 'light') {{
         document.documentElement.classList.add('dark');
       }}
     }})();
@@ -8946,7 +8946,7 @@ def generer_aksjesider(aksjer, root_dir):
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
 {ADSENSE_HEAD}
   <!-- Mørk modus init (før rendering for å unngå flimring) -->
-  <script>(function(){{var t=localStorage.getItem('tema');if(t==='dark'||(!t&&window.matchMedia('(prefers-color-scheme: dark)').matches)){{document.documentElement.classList.add('dark');}}}})();</script>
+  <script>(function(){{var t=localStorage.getItem('tema');if(t!=='light'){{document.documentElement.classList.add('dark');}}}})();</script>
   <!-- Favicon -->
   <link rel="icon" type="image/png" sizes="512x512" href="/favicon.png">
   <link rel="icon" type="image/png" sizes="180x180" href="/logo/apple_touch_icon_180.png">
@@ -9882,7 +9882,7 @@ def generer_sektorsider(aksjer, root_dir):
   <script>
     (function(){{
       var t = localStorage.getItem('tema');
-      if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) {{
+      if (t !== 'light') {{
         document.documentElement.classList.add('dark');
       }}
     }})();
@@ -10051,7 +10051,7 @@ def generer_sektorsider(aksjer, root_dir):
   <script>
     (function(){{
       var t = localStorage.getItem('tema');
-      if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) {{
+      if (t !== 'light') {{
         document.documentElement.classList.add('dark');
       }}
     }})();
@@ -10569,7 +10569,7 @@ def generer_topplistesider(aksjer, root_dir):
   <script>
     (function(){{
       var t = localStorage.getItem('tema');
-      if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) {{
+      if (t !== 'light') {{
         document.documentElement.classList.add('dark');
       }}
     }})();
@@ -11013,7 +11013,7 @@ def generer_rapportkalender(aksjer, root_dir, i_dag=None):
   <script>
     (function(){{
       var t = localStorage.getItem('tema');
-      if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) {{
+      if (t !== 'light') {{
         document.documentElement.classList.add('dark');
       }}
     }})();
@@ -11627,7 +11627,7 @@ def _rapportside_html(a, rapporter, today):
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <script>(function(){{if(localStorage.getItem('tema')==='dark')document.documentElement.classList.add('dark');}})()</script>
+  <script>(function(){{if(localStorage.getItem('tema')!=='light')document.documentElement.classList.add('dark');}})()</script>
 
 {ADSENSE_HEAD}
 

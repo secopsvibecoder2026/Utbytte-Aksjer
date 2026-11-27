@@ -26,7 +26,7 @@
   <meta name="theme-color" content="#2f7352" />
   <link rel="stylesheet" href="/assets/tailwind.css" />
   <link rel="stylesheet" href="/assets/style.css" />
-  <script>(function(){if(localStorage.getItem('tema')==='dark')document.documentElement.classList.add('dark');})()</script>
+  <script>(function(){if(localStorage.getItem('tema')!=='light')document.documentElement.classList.add('dark');})()</script>
 </head>
 <body class="bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 min-h-screen transition-colors duration-200">
   <nav class="site-nav" aria-label="Hovedmeny">
@@ -318,7 +318,7 @@
   // ── DARK MODE ────────────────────────────────────────────────────────────────
   (function() {
     const pref = localStorage.getItem('tema');
-    if (pref === 'dark' || (!pref && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    if (pref !== 'light') {
       document.documentElement.classList.add('dark');
     }
   })();

@@ -118,7 +118,7 @@
   <link rel="stylesheet" href="/assets/tailwind.css" />
   <link rel="stylesheet" href="/assets/style.css" />
   <!-- Consent manager – loads GA + AdSense only after user accepts -->
-  <script>(function(){if(localStorage.getItem('tema')==='dark')document.documentElement.classList.add('dark');})()</script>
+  <script>(function(){if(localStorage.getItem('tema')!=='light')document.documentElement.classList.add('dark');})()</script>
   <!-- Velkomstbanneret står i HTML-en fra start og skjules her for den som har
        sett det. Tegnet av JavaScript etter første maling dyttet det hele
        oversikten 164 px ned (layoutforskyvning 0,18, designrunden 22.11.2026). -->
