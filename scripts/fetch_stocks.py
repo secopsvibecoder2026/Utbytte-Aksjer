@@ -13818,9 +13818,9 @@ def lag_forside_liste(aksjer, i_dag):
         f"og de {_ganger(FORSIDE_LISTE_YIELD).split()[0]} med høyest direkteavkastning blant resten. Utbyttet er årsraten, og yielden er målt mot dagens kurs. "
         "Aksjer som er på vei ut av børsen eller har stanset utbyttet, er ikke med.</p>",
         '    <div class="tabell-ramme">',
-        '      <table class="forside-tabell tabell-fast">',
+        '      <table class="forside-tabell">',
         '        <thead><tr><th scope="col">Aksje</th><th scope="col">Utbytte i året</th>'
-        '<th scope="col">Yield</th><th scope="col">Neste ex-dato</th></tr></thead>',
+        '<th scope="col">Yield</th><th scope="col">Ex-dato</th></tr></thead>',
         "        <tbody>",
         *rader,
         "        </tbody>",

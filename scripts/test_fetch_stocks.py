@@ -7590,7 +7590,7 @@ class TestForsideListe(unittest.TestCase):
         self.assertIn('2,00\xa0kr <span class="forside-liste-merk">kvartalsvis</span>', h)
         self.assertIn("forside-liste-for\">vanligvis</span> mai, nov", h)
         self.assertIn("De ti største", h)
-        self.assertIn("tabell-fast", h)
+        self.assertIn("forside-tabell", h)
         self.assertNotRegex(h, r"\d %")
         self.assertEqual(fs.lag_forside_liste([], self.I_DAG), "")
 
