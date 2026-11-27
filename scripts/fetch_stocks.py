@@ -13956,8 +13956,8 @@ def lag_artikkel_kort(artikler):
     import html as _html
     kort = []
     for a in artikler:
-        tag = (f'<span class="text-xs font-medium bg-green-100 dark:bg-green-900/40 '
-               f'text-green-700 dark:text-green-300 px-2 py-0.5 rounded-full">{_html.escape(a["tags"][0])}</span>\n'
+        tag = (f'<span class="text-xs font-medium bg-gray-100 dark:bg-gray-800 '
+               f'text-gray-600 dark:text-gray-300 px-2 py-0.5 rounded-full">{_html.escape(a["tags"][0])}</span>\n'
                if a.get("tags") else "")
         kort.append(
             f'      <a href="{_html.escape(a["slug"])}" class="artikel-kort group flex flex-col gap-3 p-5 bg-white '
