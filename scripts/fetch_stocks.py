@@ -13744,12 +13744,13 @@ def _arsrate_til_liste(a):
     return upa
 
 
-def forside_utvalg(aksjer, storst=FORSIDE_LISTE_STORST, hoyest=FORSIDE_LISTE_YIELD):
-    """De `storst` største utbyttebetalerne og de `hoyest` med høyest yield blant resten.
+def forside_grupper(aksjer, storst=FORSIDE_LISTE_STORST, hoyest=FORSIDE_LISTE_YIELD):
+    """{"storst": …, "hoyest": …}: de `storst` største utbyttebetalerne etter
+    markedsverdi, og de `hoyest` med høyest yield blant resten.
 
     Bare aksjer som kan stå i en rangering (`i_rangering`), med utbyttebevis og
     en årsrate som kan vises. En B-aksje tas ikke med når A-aksjen er med.
-    Rekkefølgen i svaret er høyest yield først.
+    Hver gruppe står i sin egen rekkefølge: største først, høyest yield først.
     """
     kandidater = [a for a in aksjer
                   if _TICKER_RE.match(a.get("ticker") or "") and i_rangering(a)
@@ -13774,7 +13775,13 @@ def forside_utvalg(aksjer, storst=FORSIDE_LISTE_STORST, hoyest=FORSIDE_LISTE_YIE
         if len(valgt) >= n_storst + hoyest:
             break
         _ta(a)
-    return sorted(valgt, key=lambda a: (-(a.get("utbytte_yield") or 0), a["ticker"]))
+    return {"storst": valgt[:n_storst], "hoyest": valgt[n_storst:]}
+
+
+def forside_utvalg(aksjer, storst=FORSIDE_LISTE_STORST, hoyest=FORSIDE_LISTE_YIELD):
+    """Alle aksjene i de to listene, høyest yield først."""
+    g = forside_grupper(aksjer, storst, hoyest)
+    return sorted(g["storst"] + g["hoyest"], key=lambda a: (-(a.get("utbytte_yield") or 0), a["ticker"]))
 
 
 def _forside_ex_celle(a, i_dag):
@@ -13793,38 +13800,66 @@ def _forside_ex_celle(a, i_dag):
     return "—"
 
 
-def lag_forside_liste(aksjer, i_dag):
-    """HTML-en mellom <!--LISTE:START--> og <!--LISTE:SLUTT-->. Ren funksjon."""
+FORSIDE_LISTE_SYNLIG = 5
+
+
+def _forside_rad(a, i_dag):
     import html as _html
-    utvalg = forside_utvalg(aksjer)
-    if not utvalg:
-        return ""
-    rader = []
-    for a in utvalg:
-        t = a["ticker"]
-        flere = a.get("frekvens") in ("Kvartalsvis", "Halvårlig", "Månedlig")
-        belop = _belop_tekst(_arsrate_til_liste(a))
-        rader.append(
-            "        <tr>"
+    t = a["ticker"]
+    flere = a.get("frekvens") in ("Kvartalsvis", "Halvårlig", "Månedlig")
+    belop = _belop_tekst(_arsrate_til_liste(a))
+    return ("        <tr>"
             f'<td><a href="/aksjer/{t}/"><span class="forside-liste-ticker">{t}</span><span class="forside-liste-navn">'
             f"{_html.escape(_kort_selskapsnavn(a.get('navn') or t))}</span></a></td>"
             f"<td>{belop}" + (f' <span class="forside-liste-merk">{_html.escape(a["frekvens"].lower())}</span>' if flere else "")
             + f"</td><td>{_pst(a.get('utbytte_yield') or 0, 2)}</td>"
             f"<td>{_forside_ex_celle(a, i_dag)}</td></tr>")
+
+
+def _forside_tabell(rader, etikett):
+    return "\n".join([
+        f'      <div class="tabell-ramme"><table class="forside-tabell" aria-label="{etikett}">',
+        '        <thead><tr><th scope="col">Aksje</th><th scope="col">Utbytte i året</th>'
+        '<th scope="col">Yield</th><th scope="col">Ex-dato</th></tr></thead>',
+        "        <tbody>", *rader, "        </tbody>",
+        "      </table></div>"])
+
+
+def _forside_gruppe(tittel, aksjer, i_dag):
+    """Én liste: de første FORSIDE_LISTE_SYNLIG radene synlig, resten i <details>.
+
+    Innholdet i en <details> står i HTML-en og leses uten JavaScript.
+    """
+    rader = [_forside_rad(a, i_dag) for a in aksjer]
+    deler = ['    <div class="forside-gruppe">',
+             f'      <h3 class="forside-gruppe-tittel">{tittel}</h3>',
+             _forside_tabell(rader[:FORSIDE_LISTE_SYNLIG], tittel)]
+    if len(rader) > FORSIDE_LISTE_SYNLIG:
+        deler += [f'      <details class="forside-flere"><summary>Vis {_ganger(len(rader) - FORSIDE_LISTE_SYNLIG).split()[0]} til</summary>',
+                  _forside_tabell(rader[FORSIDE_LISTE_SYNLIG:], f"{tittel}, resten"),
+                  "      </details>"]
+    deler.append("    </div>")
+    return "\n".join(deler)
+
+
+def lag_forside_liste(aksjer, i_dag):
+    """HTML-en mellom <!--LISTE:START--> og <!--LISTE:SLUTT-->. Ren funksjon."""
+    g = forside_grupper(aksjer)
+    if not g["storst"] and not g["hoyest"]:
+        return ""
+    grupper = []
+    if g["storst"]:
+        grupper.append(_forside_gruppe("Største selskaper", g["storst"], i_dag))
+    if g["hoyest"]:
+        grupper.append(_forside_gruppe("Høyest yield blant resten", g["hoyest"], i_dag))
     return "\n".join([
         '  <section class="forside-liste max-w-5xl mx-auto px-4 sm:px-6 pt-10" aria-labelledby="liste-tittel">',
         '    <h2 id="liste-tittel" class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">Utbytteaksjer på Oslo Børs</h2>',
-        f'    <p class="text-sm text-gray-500 dark:text-gray-400 mb-4 les">De {_ganger(FORSIDE_LISTE_STORST).split()[0]} største selskapene som betaler utbytte, '
-        f"og de {_ganger(FORSIDE_LISTE_YIELD).split()[0]} med høyest direkteavkastning blant resten. Utbyttet er årsraten, og yielden er målt mot dagens kurs. "
+        '    <p class="text-sm text-gray-500 dark:text-gray-400 mb-4 les">De største selskapene som betaler utbytte, '
+        "og de med høyest direkteavkastning blant resten. Utbyttet er årsraten, og yielden er målt mot dagens kurs. "
         "Aksjer som er på vei ut av børsen eller har stanset utbyttet, er ikke med.</p>",
-        '    <div class="tabell-ramme">',
-        '      <table class="forside-tabell">',
-        '        <thead><tr><th scope="col">Aksje</th><th scope="col">Utbytte i året</th>'
-        '<th scope="col">Yield</th><th scope="col">Ex-dato</th></tr></thead>',
-        "        <tbody>",
-        *rader,
-        "        </tbody>",
-        "      </table>",
+        '    <div class="forside-grupper">',
+        *grupper,
         "    </div>",
         '    <p class="forside-liste-videre text-sm"><a href="/aksjer/" class="text-green-700 dark:text-green-400 hover:underline font-medium">Alle aksjene</a>'
         '<a href="/aksjer/hoyest-utbytte/" class="text-green-700 dark:text-green-400 hover:underline font-medium">Høyest utbytte</a>'

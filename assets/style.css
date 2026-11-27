@@ -1330,6 +1330,18 @@ label:has(> input[type="checkbox"]) { min-height: 44px; }
 .forside-liste-merk { font-size: 0.72rem; color: #6b7280; margin-left: 0.4rem; }
 .forside-liste-merk.forside-liste-for { margin-left: 0; margin-right: 0.25rem; }
 .forside-liste .tabell-ramme { border-radius: 0.6rem; overflow: hidden; }
+.forside-grupper { display: grid; gap: 1.5rem; }
+@media (min-width: 64rem) {
+  .forside-grupper { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .forside-grupper .forside-tabell td { white-space: normal; }
+  .forside-grupper .forside-tabell td:nth-child(2), .forside-grupper .forside-tabell td:nth-child(3) { white-space: nowrap; }
+}
+.forside-gruppe-tittel { font-size: 1rem; font-weight: 600; color: #111827; margin: 0 0 0.5rem; }
+.dark .forside-gruppe-tittel { color: #f3f4f6; }
+.forside-flere { margin-top: 0.5rem; }
+.forside-flere > summary { display: inline-flex; align-items: center; min-height: 44px; cursor: pointer; font-size: 0.875rem; font-weight: 500; color: #275f45; }
+.dark .forside-flere > summary { color: #6fa98a; }
+.forside-flere[open] > summary { margin-bottom: 0.25rem; }
 .forside-liste-videre { display: flex; flex-wrap: wrap; gap: 0 1.25rem; margin-top: 0.5rem; }
 .forside-liste-videre a { display: inline-flex; align-items: center; min-height: 44px; }
 .dark .forside-tabell { background: #111827; border-color: #1f2937; }
