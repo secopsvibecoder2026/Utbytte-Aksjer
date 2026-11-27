@@ -7600,6 +7600,10 @@ class TestForsideListe(unittest.TestCase):
         self.assertIn("forside-tabell", h)
         self.assertNotRegex(h, r"\d %")
         self.assertEqual(fs.lag_forside_liste([], self.I_DAG), "")
+        self.assertIn('href="/metode/"', h)
+        self.assertNotIn("Tallene er hentet", h)
+        h2 = fs.lag_forside_liste(k, self.I_DAG, "2026-11-26T19:57:00Z")
+        self.assertIn("Tallene er hentet tor. 26. nov kl. 20.57.", h2)
 
     def test_fyller_markorene_og_er_idempotent(self):
         d = tempfile.mkdtemp()

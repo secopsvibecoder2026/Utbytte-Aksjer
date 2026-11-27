@@ -1342,6 +1342,10 @@ label:has(> input[type="checkbox"]) { min-height: 44px; }
 .forside-flere > summary { display: inline-flex; align-items: center; min-height: 44px; cursor: pointer; font-size: 0.875rem; font-weight: 500; color: #275f45; }
 .dark .forside-flere > summary { color: #6fa98a; }
 .forside-flere[open] > summary { margin-bottom: 0.25rem; }
+.forside-liste-kilde { font-size: 0.8rem; color: #6b7280; margin: 0.75rem 0 0; }
+.forside-liste-kilde a { color: #275f45; text-decoration: underline; }
+.dark .forside-liste-kilde { color: #9ca3af; }
+.dark .forside-liste-kilde a { color: #6fa98a; }
 .forside-liste-videre { display: flex; flex-wrap: wrap; gap: 0 1.25rem; margin-top: 0.5rem; }
 .forside-liste-videre a { display: inline-flex; align-items: center; min-height: 44px; }
 .dark .forside-tabell { background: #111827; border-color: #1f2937; }

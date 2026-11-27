@@ -13634,6 +13634,21 @@ def _uka_kort(tittel, forklaring, rader, linje, tom, mer_lenke):
     return "\n".join(deler)
 
 
+def _hentet_oslo(hentet):
+    """«tor. 26. nov kl. 20.57» i Oslo-tid, eller "" uten gyldig tidspunkt."""
+    if not hentet:
+        return ""
+    try:
+        from zoneinfo import ZoneInfo
+        t = datetime.datetime.fromisoformat(str(hentet).replace("Z", "+00:00"))
+        if t.tzinfo is None:
+            t = t.replace(tzinfo=datetime.timezone.utc)
+        t = t.astimezone(ZoneInfo("Europe/Oslo"))
+        return f"{_kort_dato(t.date())} kl. {t:%H.%M}"
+    except (ValueError, TypeError, ImportError):
+        return ""
+
+
 def lag_uka_blokk(hendelser, i_dag, hentet=None):
     """HTML-en mellom markørene. Ren funksjon; `hentet` er når tallene ble hentet."""
     import html as _html
@@ -13842,7 +13857,7 @@ def _forside_gruppe(tittel, aksjer, i_dag):
     return "\n".join(deler)
 
 
-def lag_forside_liste(aksjer, i_dag):
+def lag_forside_liste(aksjer, i_dag, hentet=None):
     """HTML-en mellom <!--LISTE:START--> og <!--LISTE:SLUTT-->. Ren funksjon."""
     g = forside_grupper(aksjer)
     if not g["storst"] and not g["hoyest"]:
@@ -13861,6 +13876,8 @@ def lag_forside_liste(aksjer, i_dag):
         '    <div class="forside-grupper">',
         *grupper,
         "    </div>",
+        f'    <p class="forside-liste-kilde">{("Tallene er hentet " + _hentet_oslo(hentet) + ". ") if _hentet_oslo(hentet) else ""}'
+        'Slik velger og regner vi: <a href="/metode/">Metode og datakilder</a>.</p>',
         '    <p class="forside-liste-videre text-sm"><a href="/aksjer/" class="text-green-700 dark:text-green-400 hover:underline font-medium">Alle aksjene</a>'
         '<a href="/aksjer/hoyest-utbytte/" class="text-green-700 dark:text-green-400 hover:underline font-medium">Høyest utbytte</a>'
         '<a href="/utbyttekalender/" class="text-green-700 dark:text-green-400 hover:underline font-medium">Utbyttekalender</a></p>',
@@ -13888,7 +13905,7 @@ def oppdater_forside_liste(aksjer, root_dir: str, i_dag=None):
     if not _LISTE_MONSTER.search(innhold):
         print("  Forsiden mangler <!--LISTE:START-->-markøren; listen er ikke oppdatert.")
         return False
-    blokk = lag_forside_liste(aksjer, i_dag)
+    blokk = lag_forside_liste(aksjer, i_dag, DATA_SIST_OPPDATERT)
     if not blokk:
         return False
     nytt = _LISTE_MONSTER.sub(lambda m: "<!--LISTE:START-->\n" + blokk + "\n  <!--LISTE:SLUTT-->", innhold, count=1)
