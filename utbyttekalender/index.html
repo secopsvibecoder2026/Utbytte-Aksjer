@@ -118,7 +118,7 @@
 
   <link rel="stylesheet" href="/assets/tailwind.css" />
   <link rel="stylesheet" href="/assets/style.css" />
-  <script>(function(){if(localStorage.getItem('tema')==='dark')document.documentElement.classList.add('dark');})()</script>
+  <script>(function(){if(localStorage.getItem('tema')!=='light')document.documentElement.classList.add('dark');})()</script>
   <!-- Med JavaScript holdes plassen til søk og filtre av før skriptet tegner
        dem, så tabellen ikke hopper ned (designrunden 22.11.2026). -->
   <script>document.documentElement.classList.add('kal-js')</script>

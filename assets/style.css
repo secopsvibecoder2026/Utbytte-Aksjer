@@ -1313,21 +1313,39 @@ label:has(> input[type="checkbox"]) { min-height: 44px; }
 .sektor-hopp svg { width: 1rem; height: 1rem; flex-shrink: 0; }
 #sektoranalyse { scroll-margin-top: 5rem; }
 
-/* ── UTBYTTEAKSJENE PÅ FORSIDEN (SEO 26.11.2026) ─────────────────────────
-   Tabellen fylles av oppdater_forside_liste() i fetch_stocks.py. Fire kolonner:
-   tickeren med kort navn under, årsraten, yield og neste ex-dato. Under 48rem
-   ruller den sideveis med tickeren fast (.tabell-fast). Tall er nøytrale. */
-.forside-tabell { width: 100%; min-width: 30rem; font-size: 0.875rem; background: #fff; border: 1px solid #e5e7eb; }
+/* ── UTBYTTEAKSJENE PÅ FORSIDEN (SEO 26.11.2026, design 27.11.2026) ──────
+   Tabellen fylles av oppdater_forside_liste() i fetch_stocks.py. Fra 48rem en
+   vanlig tabell. Under 48rem blir hver rad et kort: aksjen øverst, og årsrate,
+   yield og ex-dato side om side med etikett over, så ingen kolonne kuttes og
+   ingenting må rulles sideveis. Etikettene kommer fra CSS (::before), og
+   tabellhodet står igjen for skjermlesere. Tall er nøytrale. */
+.forside-tabell { width: 100%; font-size: 0.875rem; background: #fff; border: 1px solid #e5e7eb; }
 .forside-tabell th { background: #f3f4f6; color: #4b5563; font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.03em; text-align: left; padding: 0.5rem 0.6rem; white-space: nowrap; }
-.forside-tabell td { padding: 0.45rem 0.6rem; border-top: 1px solid #f3f4f6; color: #111827; vertical-align: top; white-space: nowrap; }
-.forside-tabell td:first-child { white-space: normal; min-width: 7rem; max-width: 9rem; }
-.forside-tabell td:first-child a { display: block; min-height: 44px; color: inherit; text-decoration: none; }
+.forside-tabell td { padding: 0 0.6rem; border-top: 1px solid #f3f4f6; color: #111827; vertical-align: middle; white-space: nowrap; }
+.forside-tabell td:first-child a { display: inline-flex; align-items: center; flex-wrap: wrap; gap: 0 0.5rem; min-height: 44px; color: inherit; text-decoration: none; }
 .forside-tabell td:first-child a:hover .forside-liste-ticker { text-decoration: underline; }
-.forside-liste-ticker { display: block; font-weight: 600; color: #111827; }
+.forside-liste-ticker { font-weight: 600; color: #111827; }
 .forside-tabell tbody tr:hover td { background: #f9fafb; }
-.forside-liste-navn { display: block; font-size: 0.78rem; line-height: 1.3; color: #6b7280; }
-.forside-liste-merk { display: block; font-size: 0.72rem; color: #6b7280; }
-.forside-liste .tabell-ramme { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 0.6rem; }
+.forside-liste-navn { font-size: 0.78rem; line-height: 1.3; color: #6b7280; }
+.forside-liste-merk { font-size: 0.72rem; color: #6b7280; margin-left: 0.4rem; }
+.forside-liste-merk.forside-liste-for { margin-left: 0; margin-right: 0.25rem; }
+.forside-liste .tabell-ramme { border-radius: 0.6rem; overflow: hidden; }
+.forside-grupper { display: grid; gap: 1.5rem; }
+@media (min-width: 64rem) {
+  .forside-grupper { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .forside-grupper .forside-tabell td { white-space: normal; }
+  .forside-grupper .forside-tabell td:nth-child(2), .forside-grupper .forside-tabell td:nth-child(3) { white-space: nowrap; }
+}
+.forside-gruppe-tittel { font-size: 1rem; font-weight: 600; color: #111827; margin: 0 0 0.5rem; }
+.dark .forside-gruppe-tittel { color: #f3f4f6; }
+.forside-flere { margin-top: 0.5rem; }
+.forside-flere > summary { display: inline-flex; align-items: center; min-height: 44px; cursor: pointer; font-size: 0.875rem; font-weight: 500; color: #275f45; }
+.dark .forside-flere > summary { color: #6fa98a; }
+.forside-flere[open] > summary { margin-bottom: 0.25rem; }
+.forside-liste-kilde { font-size: 0.8rem; color: #6b7280; margin: 0.75rem 0 0; }
+.forside-liste-kilde a { color: #275f45; text-decoration: underline; }
+.dark .forside-liste-kilde { color: #9ca3af; }
+.dark .forside-liste-kilde a { color: #6fa98a; }
 .forside-liste-videre { display: flex; flex-wrap: wrap; gap: 0 1.25rem; margin-top: 0.5rem; }
 .forside-liste-videre a { display: inline-flex; align-items: center; min-height: 44px; }
 .dark .forside-tabell { background: #111827; border-color: #1f2937; }
@@ -1336,12 +1354,25 @@ label:has(> input[type="checkbox"]) { min-height: 44px; }
 .dark .forside-liste-ticker { color: #f3f4f6; }
 .dark .forside-tabell tbody tr:hover td { background: #1f2937; }
 .dark .forside-liste-navn, .dark .forside-liste-merk { color: #9ca3af; }
-@media (min-width: 48rem) {
-  .forside-tabell td { vertical-align: middle; padding-top: 0.55rem; padding-bottom: 0.55rem; }
-  .forside-tabell td:first-child { max-width: none; }
-  .forside-tabell td:first-child a { min-height: 0; }
-  .forside-liste-ticker, .forside-liste-navn { display: inline; }
-  .forside-liste-navn { margin-left: 0.5rem; }
-  .forside-liste-merk { display: inline; margin-left: 0.4rem; }
-  td > .forside-liste-merk:first-child { margin-left: 0; margin-right: 0.25rem; }
+@media (max-width: 47.9375rem) {
+  .forside-liste .tabell-ramme { overflow: visible; border-radius: 0; }
+  .forside-tabell, .forside-tabell tbody { display: block; }
+  .forside-tabell { background: transparent; border: 0; }
+  .forside-tabell thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .forside-tabell tbody { background: #fff; border: 1px solid #e5e7eb; border-radius: 0.6rem; }
+  .forside-tabell tr { display: grid; grid-template-columns: 1fr 0.8fr 1.2fr; gap: 0 0.75rem; padding: 0 0.75rem 0.55rem; border-top: 1px solid #f3f4f6; }
+  .forside-tabell tr:first-child { border-top: 0; }
+  .forside-tabell td { display: block; padding: 0; border: 0; white-space: normal; }
+  .forside-tabell td:first-child { grid-column: 1 / -1; position: static; background: transparent; box-shadow: none; }
+  .forside-tabell td:first-child::after { display: none; }
+  .forside-tabell td:nth-child(n+2)::before { display: block; font-size: 0.68rem; color: #6b7280; text-transform: uppercase; letter-spacing: 0.03em; }
+  .forside-tabell td:nth-child(2)::before { content: "Utbytte i året"; }
+  .forside-tabell td:nth-child(3)::before { content: "Yield"; }
+  .forside-tabell td:nth-child(4)::before { content: "Ex-dato"; }
+  .forside-liste-merk { display: block; margin-left: 0; }
+  .forside-liste-merk.forside-liste-for { display: inline; }
+  .forside-tabell tbody tr:hover td { background: transparent; }
+  .dark .forside-tabell tbody { background: #111827; border-color: #1f2937; }
+  .dark .forside-tabell tr { border-color: #1f2937; }
+  .dark .forside-tabell td:nth-child(n+2)::before { color: #9ca3af; }
 }

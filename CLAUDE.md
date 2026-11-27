@@ -4446,6 +4446,33 @@ in `index.html`, above «Denne uka», from both `fetch_stocks.py` and
 
 Tests: `TestForsideListe` (5).
 
+## Design round 7: the front page (2026-11-27)
+
+The owner found the front page messy after the list of 20 went in. The design
+agent measured eight sections, five card surfaces, three left edges at 1280 px
+and a list 1 486 px tall at 390 px with its last column cut on every row. All
+eight proposals were built, one commit each:
+
+- **Fixes:** a space before the frequency note («154,17 kr kvartalsvis»),
+  44 px stock links from 768 px, and the article date in gray-500.
+- **The list** is two groups from `forside_grupper()`: «Største selskaper» and
+  «Høyest yield blant resten», `FORSIDE_LISTE_SYNLIG` (5) rows visible and the
+  rest in a `<details>` («Vis fem til»), so all 20 links stay in the HTML. Side
+  by side from 64rem. Under 48rem each row is a card with labels from CSS
+  (`::before`), and the table head is kept for screen readers. The column is
+  «Ex-dato», since most rows show the usual months. A line under the lists says
+  when the numbers were fetched (`_hentet_oslo()`) and links to `/metode/`.
+  Height at 390 px: 1 486 → 1 470 px, with every value visible; 572 px at 1280.
+- **One width** (`max-w-5xl`) and `py-8 sm:py-10` on every section, the
+  generated ones included. **One card** (`sektor-kort` classes) for sectors,
+  tools and FAQ items; the white bands, the green «Alle sektorer» card and the
+  green tag pills are gone, and so is the second link to `/aksjer/sektor/`.
+- **Order:** hero, list, Denne uka, sectors, tools, articles, then the
+  explanatory text and FAQ. The text was moved, not changed.
+- **Dark theme by default on every page** (see «Dark mode» above).
+
+Tests: `TestForsideListe` (+5 assertions).
+
 ## The fixer agent (`.claude/agents/fikser.md`, 2026-10-18)
 
 The maintenance and tallkontroll agents only report, and their findings waited
@@ -4989,8 +5016,12 @@ painted in light mode, so the reader saw a white flash on every load.
 before any stylesheet:**
 
 ```html
-<script>(function(){if(localStorage.getItem('tema')==='dark')document.documentElement.classList.add('dark');})()</script>
+<script>(function(){if(localStorage.getItem('tema')!=='light')document.documentElement.classList.add('dark');})()</script>
 ```
+
+**Dark is the default (2026-11-27).** A visitor who has not chosen a theme
+gets dark mode on every page, as the front page already did. Only a saved
+`tema = 'light'` gives light. The app (`ui.js`) uses the same default.
 
 Keep the rest of the theme code where it is — the toggle and burger menu need
 the DOM. Only the class-setting has to be early, and running it twice is

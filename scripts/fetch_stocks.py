@@ -8366,7 +8366,7 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None, rapporter=None
   <script>
     (function(){{
       var t = localStorage.getItem('tema');
-      if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) {{
+      if (t !== 'light') {{
         document.documentElement.classList.add('dark');
       }}
     }})();
@@ -8946,7 +8946,7 @@ def generer_aksjesider(aksjer, root_dir):
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
 {ADSENSE_HEAD}
   <!-- Mørk modus init (før rendering for å unngå flimring) -->
-  <script>(function(){{var t=localStorage.getItem('tema');if(t==='dark'||(!t&&window.matchMedia('(prefers-color-scheme: dark)').matches)){{document.documentElement.classList.add('dark');}}}})();</script>
+  <script>(function(){{var t=localStorage.getItem('tema');if(t!=='light'){{document.documentElement.classList.add('dark');}}}})();</script>
   <!-- Favicon -->
   <link rel="icon" type="image/png" sizes="512x512" href="/favicon.png">
   <link rel="icon" type="image/png" sizes="180x180" href="/logo/apple_touch_icon_180.png">
@@ -9882,7 +9882,7 @@ def generer_sektorsider(aksjer, root_dir):
   <script>
     (function(){{
       var t = localStorage.getItem('tema');
-      if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) {{
+      if (t !== 'light') {{
         document.documentElement.classList.add('dark');
       }}
     }})();
@@ -10051,7 +10051,7 @@ def generer_sektorsider(aksjer, root_dir):
   <script>
     (function(){{
       var t = localStorage.getItem('tema');
-      if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) {{
+      if (t !== 'light') {{
         document.documentElement.classList.add('dark');
       }}
     }})();
@@ -10569,7 +10569,7 @@ def generer_topplistesider(aksjer, root_dir):
   <script>
     (function(){{
       var t = localStorage.getItem('tema');
-      if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) {{
+      if (t !== 'light') {{
         document.documentElement.classList.add('dark');
       }}
     }})();
@@ -11013,7 +11013,7 @@ def generer_rapportkalender(aksjer, root_dir, i_dag=None):
   <script>
     (function(){{
       var t = localStorage.getItem('tema');
-      if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) {{
+      if (t !== 'light') {{
         document.documentElement.classList.add('dark');
       }}
     }})();
@@ -11627,7 +11627,7 @@ def _rapportside_html(a, rapporter, today):
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <script>(function(){{if(localStorage.getItem('tema')==='dark')document.documentElement.classList.add('dark');}})()</script>
+  <script>(function(){{if(localStorage.getItem('tema')!=='light')document.documentElement.classList.add('dark');}})()</script>
 
 {ADSENSE_HEAD}
 
@@ -13634,6 +13634,21 @@ def _uka_kort(tittel, forklaring, rader, linje, tom, mer_lenke):
     return "\n".join(deler)
 
 
+def _hentet_oslo(hentet):
+    """«tor. 26. nov kl. 20.57» i Oslo-tid, eller "" uten gyldig tidspunkt."""
+    if not hentet:
+        return ""
+    try:
+        from zoneinfo import ZoneInfo
+        t = datetime.datetime.fromisoformat(str(hentet).replace("Z", "+00:00"))
+        if t.tzinfo is None:
+            t = t.replace(tzinfo=datetime.timezone.utc)
+        t = t.astimezone(ZoneInfo("Europe/Oslo"))
+        return f"{_kort_dato(t.date())} kl. {t:%H.%M}"
+    except (ValueError, TypeError, ImportError):
+        return ""
+
+
 def lag_uka_blokk(hendelser, i_dag, hentet=None):
     """HTML-en mellom markørene. Ren funksjon; `hentet` er når tallene ble hentet."""
     import html as _html
@@ -13675,7 +13690,7 @@ def lag_uka_blokk(hendelser, i_dag, hentet=None):
         except (ValueError, TypeError, ImportError):
             hentet_tekst = ""
     return "\n".join([
-        '  <section class="max-w-5xl mx-auto px-4 sm:px-6 pt-10" aria-labelledby="uka-tittel">',
+        '  <section class="max-w-5xl mx-auto px-4 sm:px-6 py-8 sm:py-10" aria-labelledby="uka-tittel">',
         '    <div class="flex items-center justify-between mb-2">',
         '      <h2 id="uka-tittel" class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100">Denne uka på Oslo Børs</h2>',
         '      <a href="/uke/" class="inline-flex items-center min-h-11 text-sm hover:underline font-medium text-green-700 dark:text-green-400">Hele uka →</a>',
@@ -13744,12 +13759,13 @@ def _arsrate_til_liste(a):
     return upa
 
 
-def forside_utvalg(aksjer, storst=FORSIDE_LISTE_STORST, hoyest=FORSIDE_LISTE_YIELD):
-    """De `storst` største utbyttebetalerne og de `hoyest` med høyest yield blant resten.
+def forside_grupper(aksjer, storst=FORSIDE_LISTE_STORST, hoyest=FORSIDE_LISTE_YIELD):
+    """{"storst": …, "hoyest": …}: de `storst` største utbyttebetalerne etter
+    markedsverdi, og de `hoyest` med høyest yield blant resten.
 
     Bare aksjer som kan stå i en rangering (`i_rangering`), med utbyttebevis og
     en årsrate som kan vises. En B-aksje tas ikke med når A-aksjen er med.
-    Rekkefølgen i svaret er høyest yield først.
+    Hver gruppe står i sin egen rekkefølge: største først, høyest yield først.
     """
     kandidater = [a for a in aksjer
                   if _TICKER_RE.match(a.get("ticker") or "") and i_rangering(a)
@@ -13774,7 +13790,13 @@ def forside_utvalg(aksjer, storst=FORSIDE_LISTE_STORST, hoyest=FORSIDE_LISTE_YIE
         if len(valgt) >= n_storst + hoyest:
             break
         _ta(a)
-    return sorted(valgt, key=lambda a: (-(a.get("utbytte_yield") or 0), a["ticker"]))
+    return {"storst": valgt[:n_storst], "hoyest": valgt[n_storst:]}
+
+
+def forside_utvalg(aksjer, storst=FORSIDE_LISTE_STORST, hoyest=FORSIDE_LISTE_YIELD):
+    """Alle aksjene i de to listene, høyest yield først."""
+    g = forside_grupper(aksjer, storst, hoyest)
+    return sorted(g["storst"] + g["hoyest"], key=lambda a: (-(a.get("utbytte_yield") or 0), a["ticker"]))
 
 
 def _forside_ex_celle(a, i_dag):
@@ -13788,44 +13810,74 @@ def _forside_ex_celle(a, i_dag):
     if len(set(mnd)) == 12:
         return "hver måned"
     if mnd:
-        return ('<span class="forside-liste-merk">vanligvis</span> '
+        return ('<span class="forside-liste-merk forside-liste-for">vanligvis</span> '
                 + ", ".join(_MND_KORT[m - 1] for m in mnd))
     return "—"
 
 
-def lag_forside_liste(aksjer, i_dag):
-    """HTML-en mellom <!--LISTE:START--> og <!--LISTE:SLUTT-->. Ren funksjon."""
+FORSIDE_LISTE_SYNLIG = 5
+
+
+def _forside_rad(a, i_dag):
     import html as _html
-    utvalg = forside_utvalg(aksjer)
-    if not utvalg:
-        return ""
-    rader = []
-    for a in utvalg:
-        t = a["ticker"]
-        flere = a.get("frekvens") in ("Kvartalsvis", "Halvårlig", "Månedlig")
-        belop = _belop_tekst(_arsrate_til_liste(a))
-        rader.append(
-            "        <tr>"
+    t = a["ticker"]
+    flere = a.get("frekvens") in ("Kvartalsvis", "Halvårlig", "Månedlig")
+    belop = _belop_tekst(_arsrate_til_liste(a))
+    return ("        <tr>"
             f'<td><a href="/aksjer/{t}/"><span class="forside-liste-ticker">{t}</span><span class="forside-liste-navn">'
             f"{_html.escape(_kort_selskapsnavn(a.get('navn') or t))}</span></a></td>"
-            f"<td>{belop}" + (f'<span class="forside-liste-merk">{_html.escape(a["frekvens"].lower())}</span>' if flere else "")
+            f"<td>{belop}" + (f' <span class="forside-liste-merk">{_html.escape(a["frekvens"].lower())}</span>' if flere else "")
             + f"</td><td>{_pst(a.get('utbytte_yield') or 0, 2)}</td>"
             f"<td>{_forside_ex_celle(a, i_dag)}</td></tr>")
+
+
+def _forside_tabell(rader, etikett):
     return "\n".join([
-        '  <section class="forside-liste max-w-5xl mx-auto px-4 sm:px-6 pt-10" aria-labelledby="liste-tittel">',
-        '    <h2 id="liste-tittel" class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">Utbytteaksjer på Oslo Børs</h2>',
-        f'    <p class="text-sm text-gray-500 dark:text-gray-400 mb-4 les">De {_ganger(FORSIDE_LISTE_STORST).split()[0]} største selskapene som betaler utbytte, '
-        f"og de {_ganger(FORSIDE_LISTE_YIELD).split()[0]} med høyest direkteavkastning blant resten. Utbyttet er årsraten, og yielden er målt mot dagens kurs. "
-        "Aksjer som er på vei ut av børsen eller har stanset utbyttet, er ikke med.</p>",
-        '    <div class="tabell-ramme">',
-        '      <table class="forside-tabell tabell-fast">',
+        f'      <div class="tabell-ramme"><table class="forside-tabell" aria-label="{etikett}">',
         '        <thead><tr><th scope="col">Aksje</th><th scope="col">Utbytte i året</th>'
-        '<th scope="col">Yield</th><th scope="col">Neste ex-dato</th></tr></thead>',
-        "        <tbody>",
-        *rader,
-        "        </tbody>",
-        "      </table>",
+        '<th scope="col">Yield</th><th scope="col">Ex-dato</th></tr></thead>',
+        "        <tbody>", *rader, "        </tbody>",
+        "      </table></div>"])
+
+
+def _forside_gruppe(tittel, aksjer, i_dag):
+    """Én liste: de første FORSIDE_LISTE_SYNLIG radene synlig, resten i <details>.
+
+    Innholdet i en <details> står i HTML-en og leses uten JavaScript.
+    """
+    rader = [_forside_rad(a, i_dag) for a in aksjer]
+    deler = ['    <div class="forside-gruppe">',
+             f'      <h3 class="forside-gruppe-tittel">{tittel}</h3>',
+             _forside_tabell(rader[:FORSIDE_LISTE_SYNLIG], tittel)]
+    if len(rader) > FORSIDE_LISTE_SYNLIG:
+        deler += [f'      <details class="forside-flere"><summary>Vis {_ganger(len(rader) - FORSIDE_LISTE_SYNLIG).split()[0]} til</summary>',
+                  _forside_tabell(rader[FORSIDE_LISTE_SYNLIG:], f"{tittel}, resten"),
+                  "      </details>"]
+    deler.append("    </div>")
+    return "\n".join(deler)
+
+
+def lag_forside_liste(aksjer, i_dag, hentet=None):
+    """HTML-en mellom <!--LISTE:START--> og <!--LISTE:SLUTT-->. Ren funksjon."""
+    g = forside_grupper(aksjer)
+    if not g["storst"] and not g["hoyest"]:
+        return ""
+    grupper = []
+    if g["storst"]:
+        grupper.append(_forside_gruppe("Største selskaper", g["storst"], i_dag))
+    if g["hoyest"]:
+        grupper.append(_forside_gruppe("Høyest yield blant resten", g["hoyest"], i_dag))
+    return "\n".join([
+        '  <section class="forside-liste max-w-5xl mx-auto px-4 sm:px-6 py-8 sm:py-10" aria-labelledby="liste-tittel">',
+        '    <h2 id="liste-tittel" class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">Utbytteaksjer på Oslo Børs</h2>',
+        '    <p class="text-sm text-gray-500 dark:text-gray-400 mb-4 les">De største selskapene som betaler utbytte, '
+        "og de med høyest direkteavkastning blant resten. Utbyttet er årsraten, og yielden er målt mot dagens kurs. "
+        "Aksjer som er på vei ut av børsen eller har stanset utbyttet, er ikke med.</p>",
+        '    <div class="forside-grupper">',
+        *grupper,
         "    </div>",
+        f'    <p class="forside-liste-kilde">{("Tallene er hentet " + _hentet_oslo(hentet) + ". ") if _hentet_oslo(hentet) else ""}'
+        'Slik velger og regner vi: <a href="/metode/">Metode og datakilder</a>.</p>',
         '    <p class="forside-liste-videre text-sm"><a href="/aksjer/" class="text-green-700 dark:text-green-400 hover:underline font-medium">Alle aksjene</a>'
         '<a href="/aksjer/hoyest-utbytte/" class="text-green-700 dark:text-green-400 hover:underline font-medium">Høyest utbytte</a>'
         '<a href="/utbyttekalender/" class="text-green-700 dark:text-green-400 hover:underline font-medium">Utbyttekalender</a></p>',
@@ -13853,7 +13905,7 @@ def oppdater_forside_liste(aksjer, root_dir: str, i_dag=None):
     if not _LISTE_MONSTER.search(innhold):
         print("  Forsiden mangler <!--LISTE:START-->-markøren; listen er ikke oppdatert.")
         return False
-    blokk = lag_forside_liste(aksjer, i_dag)
+    blokk = lag_forside_liste(aksjer, i_dag, DATA_SIST_OPPDATERT)
     if not blokk:
         return False
     nytt = _LISTE_MONSTER.sub(lambda m: "<!--LISTE:START-->\n" + blokk + "\n  <!--LISTE:SLUTT-->", innhold, count=1)
@@ -13904,15 +13956,15 @@ def lag_artikkel_kort(artikler):
     import html as _html
     kort = []
     for a in artikler:
-        tag = (f'<span class="text-xs font-medium bg-green-100 dark:bg-green-900/40 '
-               f'text-green-700 dark:text-green-300 px-2 py-0.5 rounded-full">{_html.escape(a["tags"][0])}</span>\n'
+        tag = (f'<span class="text-xs font-medium bg-gray-100 dark:bg-gray-800 '
+               f'text-gray-600 dark:text-gray-300 px-2 py-0.5 rounded-full">{_html.escape(a["tags"][0])}</span>\n'
                if a.get("tags") else "")
         kort.append(
             f'      <a href="{_html.escape(a["slug"])}" class="artikel-kort group flex flex-col gap-3 p-5 bg-white '
             'rounded-xl border border-gray-200 hover:border-green-400 transition-colors no-underline">\n'
             '        <div class="flex items-center gap-2">\n'
             f'          {tag}'
-            f'          <span class="text-xs text-gray-400">{_html.escape(a["meta"])}</span>\n'
+            f'          <span class="text-xs text-gray-500 dark:text-gray-400">{_html.escape(a["meta"])}</span>\n'
             '        </div>\n'
             '        <div>\n'
             '          <h3 class="font-semibold text-gray-900 dark:text-gray-100 group-hover:text-green-700 '

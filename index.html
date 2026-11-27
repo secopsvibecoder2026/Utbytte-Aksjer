@@ -238,10 +238,8 @@
 
     .dark .sektor-kort { background: #111827; border-color: #1f2937; }
     .dark .feature-kort { background: #111827 !important; border-color: #1f2937 !important; }
-    .dark .vkt-seksjon { background: #111827; border-top-color: #1f2937; border-bottom-color: #1f2937; }
     .dark .feature-seksjon { background: #0f172a; border-top-color: #1f2937; border-bottom-color: #1f2937; }
-    .dark .faq-seksjon { background: #111827; border-top-color: #1f2937; border-bottom-color: #1f2937; }
-    .dark .faq-item { border-color: #374151; }
+    .dark .faq-item { border-color: #1f2937; background: #111827; }
     .dark .faq-item summary:hover { background: #1f2937; }
     .dark .faq-svar { color: #9ca3af; }
     .dark .artikel-kort { background: #111827; border-color: #1f2937; }
@@ -323,7 +321,7 @@
 
   <!-- ── HEADER ───────────────────────────────────────────────────── -->
   <section class="border-b border-gray-100 dark:border-gray-900 bg-white dark:bg-gray-950">
-    <div class="max-w-3xl mx-auto px-4 sm:px-6 py-10 sm:py-14">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 py-8 sm:py-10">
       <p class="text-xs font-semibold uppercase tracking-widest text-green-600 dark:text-green-500 mb-3">Oslo Børs og Euronext Growth · <!--N:aksjer-->155<!--/N--> aksjer · oppdateres daglig</p>
       <h1 class="side-h1 text-gray-900 dark:text-gray-100 mb-3">
         Norske utbytteaksjer — yield, ex-dato og historikk
@@ -339,36 +337,62 @@
   <!-- ── UTBYTTEAKSJENE ────────────────────────────────────────────── -->
   <!-- Fylles av oppdater_forside_liste() i scripts/fetch_stocks.py ved hver datakjøring. Ikke rediger for hånd. -->
   <!--LISTE:START-->
-  <section class="forside-liste max-w-5xl mx-auto px-4 sm:px-6 pt-10" aria-labelledby="liste-tittel">
+  <section class="forside-liste max-w-5xl mx-auto px-4 sm:px-6 py-8 sm:py-10" aria-labelledby="liste-tittel">
     <h2 id="liste-tittel" class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">Utbytteaksjer på Oslo Børs</h2>
-    <p class="text-sm text-gray-500 dark:text-gray-400 mb-4 les">De ti største selskapene som betaler utbytte, og de ti med høyest direkteavkastning blant resten. Utbyttet er årsraten, og yielden er målt mot dagens kurs. Aksjer som er på vei ut av børsen eller har stanset utbyttet, er ikke med.</p>
-    <div class="tabell-ramme">
-      <table class="forside-tabell tabell-fast">
-        <thead><tr><th scope="col">Aksje</th><th scope="col">Utbytte i året</th><th scope="col">Yield</th><th scope="col">Neste ex-dato</th></tr></thead>
+    <p class="text-sm text-gray-500 dark:text-gray-400 mb-4 les">De største selskapene som betaler utbytte, og de med høyest direkteavkastning blant resten. Utbyttet er årsraten, og yielden er målt mot dagens kurs. Aksjer som er på vei ut av børsen eller har stanset utbyttet, er ikke med.</p>
+    <div class="forside-grupper">
+    <div class="forside-gruppe">
+      <h3 class="forside-gruppe-tittel">Største selskaper</h3>
+      <div class="tabell-ramme"><table class="forside-tabell" aria-label="Største selskaper">
+        <thead><tr><th scope="col">Aksje</th><th scope="col">Utbytte i året</th><th scope="col">Yield</th><th scope="col">Ex-dato</th></tr></thead>
         <tbody>
-        <tr><td><a href="/aksjer/HUNT/"><span class="forside-liste-ticker">HUNT</span><span class="forside-liste-navn">Hunter</span></a></td><td>4,03 kr</td><td>19,75 %</td><td><span class="forside-liste-merk">vanligvis</span> mar, jun, sep</td></tr>
-        <tr><td><a href="/aksjer/OET/"><span class="forside-liste-ticker">OET</span><span class="forside-liste-navn">Okeanis Eco Tankers</span></a></td><td>154,31 kr<span class="forside-liste-merk">kvartalsvis</span></td><td>19,46 %</td><td><span class="forside-liste-merk">vanligvis</span> mar, mai, aug, nov</td></tr>
-        <tr><td><a href="/aksjer/PLSV/"><span class="forside-liste-ticker">PLSV</span><span class="forside-liste-navn">Paratus Energy Services</span></a></td><td>8,41 kr<span class="forside-liste-merk">kvartalsvis</span></td><td>16,97 %</td><td><span class="forside-liste-merk">vanligvis</span> mar, jun, sep, des</td></tr>
-        <tr><td><a href="/aksjer/PARB/"><span class="forside-liste-ticker">PARB</span><span class="forside-liste-navn">Pareto Bank</span></a></td><td>8,00 kr</td><td>16,60 %</td><td><span class="forside-liste-merk">vanligvis</span> apr</td></tr>
-        <tr><td><a href="/aksjer/WSTEP/"><span class="forside-liste-ticker">WSTEP</span><span class="forside-liste-navn">Webstep</span></a></td><td>1,49 kr</td><td>13,42 %</td><td><span class="forside-liste-merk">vanligvis</span> mai</td></tr>
-        <tr><td><a href="/aksjer/VAR/"><span class="forside-liste-ticker">VAR</span><span class="forside-liste-navn">Vår Energi</span></a></td><td>5,47 kr<span class="forside-liste-merk">kvartalsvis</span></td><td>12,56 %</td><td><span class="forside-liste-merk">vanligvis</span> feb, jun, aug, nov</td></tr>
-        <tr><td><a href="/aksjer/HSHP/"><span class="forside-liste-ticker">HSHP</span><span class="forside-liste-navn">Himalaya Shipping</span></a></td><td>19,04 kr<span class="forside-liste-merk">månedlig</span></td><td>12,43 %</td><td>hver måned</td></tr>
-        <tr><td><a href="/aksjer/NORAM/"><span class="forside-liste-ticker">NORAM</span><span class="forside-liste-navn">NorAm Drilling</span></a></td><td>5,20 kr<span class="forside-liste-merk">månedlig</span></td><td>12,41 %</td><td>hver måned</td></tr>
-        <tr><td><a href="/aksjer/SOMA/"><span class="forside-liste-ticker">SOMA</span><span class="forside-liste-navn">Solstad Maritime</span></a></td><td>3,18 kr<span class="forside-liste-merk">kvartalsvis</span></td><td>11,76 %</td><td><span class="forside-liste-merk">vanligvis</span> feb, mai, jul, nov</td></tr>
-        <tr><td><a href="/aksjer/FRO/"><span class="forside-liste-ticker">FRO</span><span class="forside-liste-navn">Frontline</span></a></td><td>52,54 kr<span class="forside-liste-merk">kvartalsvis</span></td><td>11,23 %</td><td>8. des</td></tr>
-        <tr><td><a href="/aksjer/BWLPG/"><span class="forside-liste-ticker">BWLPG</span><span class="forside-liste-navn">BW LPG</span></a></td><td>24,91 kr<span class="forside-liste-merk">kvartalsvis</span></td><td>11,19 %</td><td>3. des</td></tr>
-        <tr><td><a href="/aksjer/WEST/"><span class="forside-liste-ticker">WEST</span><span class="forside-liste-navn">Western Bulk Chartering</span></a></td><td>2,60 kr</td><td>10,61 %</td><td><span class="forside-liste-merk">vanligvis</span> feb, okt</td></tr>
-        <tr><td><a href="/aksjer/AKRBP/"><span class="forside-liste-ticker">AKRBP</span><span class="forside-liste-navn">Aker BP</span></a></td><td>24,59 kr<span class="forside-liste-merk">kvartalsvis</span></td><td>8,00 %</td><td><span class="forside-liste-merk">vanligvis</span> feb, mai, jul, nov</td></tr>
-        <tr><td><a href="/aksjer/TEL/"><span class="forside-liste-ticker">TEL</span><span class="forside-liste-navn">Telenor</span></a></td><td>9,70 kr<span class="forside-liste-merk">halvårlig</span></td><td>7,20 %</td><td><span class="forside-liste-merk">vanligvis</span> mai, okt</td></tr>
-        <tr><td><a href="/aksjer/DNB/"><span class="forside-liste-ticker">DNB</span><span class="forside-liste-navn">DNB Bank</span></a></td><td>18,00 kr</td><td>5,53 %</td><td><span class="forside-liste-merk">vanligvis</span> apr</td></tr>
-        <tr><td><a href="/aksjer/NHY/"><span class="forside-liste-ticker">NHY</span><span class="forside-liste-navn">Norsk Hydro</span></a></td><td>3,00 kr</td><td>4,60 %</td><td><span class="forside-liste-merk">vanligvis</span> mai</td></tr>
-        <tr><td><a href="/aksjer/EQNR/"><span class="forside-liste-ticker">EQNR</span><span class="forside-liste-navn">Equinor</span></a></td><td>15,30 kr<span class="forside-liste-merk">kvartalsvis</span></td><td>3,99 %</td><td>15. feb 2027</td></tr>
-        <tr><td><a href="/aksjer/MOWI/"><span class="forside-liste-ticker">MOWI</span><span class="forside-liste-navn">Mowi</span></a></td><td>8,40 kr<span class="forside-liste-merk">kvartalsvis</span></td><td>3,65 %</td><td><span class="forside-liste-merk">vanligvis</span> feb, mai, aug, nov</td></tr>
-        <tr><td><a href="/aksjer/GJF/"><span class="forside-liste-ticker">GJF</span><span class="forside-liste-navn">Gjensidige Forsikring</span></a></td><td>10,00 kr</td><td>3,51 %</td><td><span class="forside-liste-merk">vanligvis</span> mar</td></tr>
-        <tr><td><a href="/aksjer/KOG/"><span class="forside-liste-ticker">KOG</span><span class="forside-liste-navn">Kongsberg Gruppen</span></a></td><td>2,20 kr</td><td>0,65 %</td><td><span class="forside-liste-merk">vanligvis</span> apr</td></tr>
+        <tr><td><a href="/aksjer/EQNR/"><span class="forside-liste-ticker">EQNR</span><span class="forside-liste-navn">Equinor</span></a></td><td>15,30 kr <span class="forside-liste-merk">kvartalsvis</span></td><td>3,99 %</td><td>15. feb 2027</td></tr>
+        <tr><td><a href="/aksjer/DNB/"><span class="forside-liste-ticker">DNB</span><span class="forside-liste-navn">DNB Bank</span></a></td><td>18,00 kr</td><td>5,53 %</td><td><span class="forside-liste-merk forside-liste-for">vanligvis</span> apr</td></tr>
+        <tr><td><a href="/aksjer/KOG/"><span class="forside-liste-ticker">KOG</span><span class="forside-liste-navn">Kongsberg Gruppen</span></a></td><td>2,20 kr</td><td>0,65 %</td><td><span class="forside-liste-merk forside-liste-for">vanligvis</span> apr</td></tr>
+        <tr><td><a href="/aksjer/AKRBP/"><span class="forside-liste-ticker">AKRBP</span><span class="forside-liste-navn">Aker BP</span></a></td><td>24,59 kr <span class="forside-liste-merk">kvartalsvis</span></td><td>8,00 %</td><td><span class="forside-liste-merk forside-liste-for">vanligvis</span> feb, mai, jul, nov</td></tr>
+        <tr><td><a href="/aksjer/TEL/"><span class="forside-liste-ticker">TEL</span><span class="forside-liste-navn">Telenor</span></a></td><td>9,70 kr <span class="forside-liste-merk">halvårlig</span></td><td>7,20 %</td><td><span class="forside-liste-merk forside-liste-for">vanligvis</span> mai, okt</td></tr>
         </tbody>
-      </table>
+      </table></div>
+      <details class="forside-flere"><summary>Vis fem til</summary>
+      <div class="tabell-ramme"><table class="forside-tabell" aria-label="Største selskaper, resten">
+        <thead><tr><th scope="col">Aksje</th><th scope="col">Utbytte i året</th><th scope="col">Yield</th><th scope="col">Ex-dato</th></tr></thead>
+        <tbody>
+        <tr><td><a href="/aksjer/GJF/"><span class="forside-liste-ticker">GJF</span><span class="forside-liste-navn">Gjensidige Forsikring</span></a></td><td>10,00 kr</td><td>3,51 %</td><td><span class="forside-liste-merk forside-liste-for">vanligvis</span> mar</td></tr>
+        <tr><td><a href="/aksjer/NHY/"><span class="forside-liste-ticker">NHY</span><span class="forside-liste-navn">Norsk Hydro</span></a></td><td>3,00 kr</td><td>4,60 %</td><td><span class="forside-liste-merk forside-liste-for">vanligvis</span> mai</td></tr>
+        <tr><td><a href="/aksjer/MOWI/"><span class="forside-liste-ticker">MOWI</span><span class="forside-liste-navn">Mowi</span></a></td><td>8,40 kr <span class="forside-liste-merk">kvartalsvis</span></td><td>3,65 %</td><td><span class="forside-liste-merk forside-liste-for">vanligvis</span> feb, mai, aug, nov</td></tr>
+        <tr><td><a href="/aksjer/VAR/"><span class="forside-liste-ticker">VAR</span><span class="forside-liste-navn">Vår Energi</span></a></td><td>5,47 kr <span class="forside-liste-merk">kvartalsvis</span></td><td>12,56 %</td><td><span class="forside-liste-merk forside-liste-for">vanligvis</span> feb, jun, aug, nov</td></tr>
+        <tr><td><a href="/aksjer/FRO/"><span class="forside-liste-ticker">FRO</span><span class="forside-liste-navn">Frontline</span></a></td><td>52,54 kr <span class="forside-liste-merk">kvartalsvis</span></td><td>11,23 %</td><td>8. des</td></tr>
+        </tbody>
+      </table></div>
+      </details>
     </div>
+    <div class="forside-gruppe">
+      <h3 class="forside-gruppe-tittel">Høyest yield blant resten</h3>
+      <div class="tabell-ramme"><table class="forside-tabell" aria-label="Høyest yield blant resten">
+        <thead><tr><th scope="col">Aksje</th><th scope="col">Utbytte i året</th><th scope="col">Yield</th><th scope="col">Ex-dato</th></tr></thead>
+        <tbody>
+        <tr><td><a href="/aksjer/HUNT/"><span class="forside-liste-ticker">HUNT</span><span class="forside-liste-navn">Hunter</span></a></td><td>4,03 kr</td><td>19,75 %</td><td><span class="forside-liste-merk forside-liste-for">vanligvis</span> mar, jun, sep</td></tr>
+        <tr><td><a href="/aksjer/OET/"><span class="forside-liste-ticker">OET</span><span class="forside-liste-navn">Okeanis Eco Tankers</span></a></td><td>154,31 kr <span class="forside-liste-merk">kvartalsvis</span></td><td>19,46 %</td><td><span class="forside-liste-merk forside-liste-for">vanligvis</span> mar, mai, aug, nov</td></tr>
+        <tr><td><a href="/aksjer/PLSV/"><span class="forside-liste-ticker">PLSV</span><span class="forside-liste-navn">Paratus Energy Services</span></a></td><td>8,41 kr <span class="forside-liste-merk">kvartalsvis</span></td><td>16,97 %</td><td><span class="forside-liste-merk forside-liste-for">vanligvis</span> mar, jun, sep, des</td></tr>
+        <tr><td><a href="/aksjer/PARB/"><span class="forside-liste-ticker">PARB</span><span class="forside-liste-navn">Pareto Bank</span></a></td><td>8,00 kr</td><td>16,60 %</td><td><span class="forside-liste-merk forside-liste-for">vanligvis</span> apr</td></tr>
+        <tr><td><a href="/aksjer/WSTEP/"><span class="forside-liste-ticker">WSTEP</span><span class="forside-liste-navn">Webstep</span></a></td><td>1,49 kr</td><td>13,42 %</td><td><span class="forside-liste-merk forside-liste-for">vanligvis</span> mai</td></tr>
+        </tbody>
+      </table></div>
+      <details class="forside-flere"><summary>Vis fem til</summary>
+      <div class="tabell-ramme"><table class="forside-tabell" aria-label="Høyest yield blant resten, resten">
+        <thead><tr><th scope="col">Aksje</th><th scope="col">Utbytte i året</th><th scope="col">Yield</th><th scope="col">Ex-dato</th></tr></thead>
+        <tbody>
+        <tr><td><a href="/aksjer/HSHP/"><span class="forside-liste-ticker">HSHP</span><span class="forside-liste-navn">Himalaya Shipping</span></a></td><td>19,04 kr <span class="forside-liste-merk">månedlig</span></td><td>12,43 %</td><td>hver måned</td></tr>
+        <tr><td><a href="/aksjer/NORAM/"><span class="forside-liste-ticker">NORAM</span><span class="forside-liste-navn">NorAm Drilling</span></a></td><td>5,20 kr <span class="forside-liste-merk">månedlig</span></td><td>12,41 %</td><td>hver måned</td></tr>
+        <tr><td><a href="/aksjer/SOMA/"><span class="forside-liste-ticker">SOMA</span><span class="forside-liste-navn">Solstad Maritime</span></a></td><td>3,18 kr <span class="forside-liste-merk">kvartalsvis</span></td><td>11,76 %</td><td><span class="forside-liste-merk forside-liste-for">vanligvis</span> feb, mai, jul, nov</td></tr>
+        <tr><td><a href="/aksjer/BWLPG/"><span class="forside-liste-ticker">BWLPG</span><span class="forside-liste-navn">BW LPG</span></a></td><td>24,91 kr <span class="forside-liste-merk">kvartalsvis</span></td><td>11,19 %</td><td>3. des</td></tr>
+        <tr><td><a href="/aksjer/WEST/"><span class="forside-liste-ticker">WEST</span><span class="forside-liste-navn">Western Bulk Chartering</span></a></td><td>2,60 kr</td><td>10,61 %</td><td><span class="forside-liste-merk forside-liste-for">vanligvis</span> feb, okt</td></tr>
+        </tbody>
+      </table></div>
+      </details>
+    </div>
+    </div>
+    <p class="forside-liste-kilde">Tallene er hentet fre. 27. nov kl. 01.58. Slik velger og regner vi: <a href="/metode/">Metode og datakilder</a>.</p>
     <p class="forside-liste-videre text-sm"><a href="/aksjer/" class="text-green-700 dark:text-green-400 hover:underline font-medium">Alle aksjene</a><a href="/aksjer/hoyest-utbytte/" class="text-green-700 dark:text-green-400 hover:underline font-medium">Høyest utbytte</a><a href="/utbyttekalender/" class="text-green-700 dark:text-green-400 hover:underline font-medium">Utbyttekalender</a></p>
   </section>
   <!--LISTE:SLUTT-->
@@ -376,7 +400,7 @@
   <!-- ── DENNE UKA ─────────────────────────────────────────────────── -->
   <!-- Fylles av oppdater_forside_uka() i scripts/fetch_stocks.py ved hver datakjøring. Ikke rediger for hånd. -->
   <!--UKA:START-->
-  <section class="max-w-5xl mx-auto px-4 sm:px-6 pt-10" aria-labelledby="uka-tittel">
+  <section class="max-w-5xl mx-auto px-4 sm:px-6 py-8 sm:py-10" aria-labelledby="uka-tittel">
     <div class="flex items-center justify-between mb-2">
       <h2 id="uka-tittel" class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100">Denne uka på Oslo Børs</h2>
       <a href="/uke/" class="inline-flex items-center min-h-11 text-sm hover:underline font-medium text-green-700 dark:text-green-400">Hele uka →</a>
@@ -411,44 +435,10 @@
   </section>
   <!--UKA:SLUTT-->
 
-  <!-- ── INTRO ─────────────────────────────────────────────────────── -->
-  <section class="max-w-3xl mx-auto px-4 sm:px-6 py-10 sm:py-14">
-    <h2 class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100 mb-5">Norske utbytteaksjer — hva, hvorfor og hvordan</h2>
-    <div class="prose max-w-none space-y-4 text-gray-700 dark:text-gray-300 leading-relaxed text-sm sm:text-base les">
-      <p>
-        Oslo Børs er hjemsted for mange av Nordens mest utbyttebetalende selskaper. Equinor, DNB, Aker BP,
-        Gjensidige og en rekke sparebanker deler hvert år ut milliarder i utbytte til sine aksjonærer.
-        For en langsiktig investor kan utbytteaksjer gi en stabil kontantstrøm som reinvesteres og skaper
-        rentes-rente-effekt over tid.
-      </p>
-      <p>
-        <strong class="text-gray-900 dark:text-gray-100">Utbytteyield</strong> er det nøkkeltallet som viser
-        hvor mye en aksje betaler i utbytte i prosent av aksjekursen. En yield på 5&nbsp;% betyr at du
-        mottar 5 kroner i utbytte for hver 100 kroner investert. exday.no viser oppdatert yield, historisk
-        utbyttehistorikk og en utbyttescore som veier frekvens, stabilitet og bærekraft.
-      </p>
-      <p>
-        <strong class="text-gray-900 dark:text-gray-100">Ex-dato</strong> er den viktigste datoen for
-        utbytteinvestorer. Du må eie aksjen <em>før</em> ex-dato for å ha rett på utbyttet — kjøper du
-        på selve ex-datoen, går utbyttet til forrige eier. På Oslo Børs gjelder T+2-regelen: handel
-        avregnes to børsdager etter avtaledato, og registreringsdatoen er børsdagen etter ex-dato. Et kjøp
-        gjort <em>senest børsdagen før</em> ex-dato er derfor oppgjort i tide. Er ex-datoen en mandag,
-        er det fredagen før.
-        exday.no samler alle kommende ex-datoer i én oversiktlig <a href="/utbyttekalender/" class="text-green-600 dark:text-green-400 hover:underline">utbyttekalender 2026</a>.
-      </p>
-      <p>
-        Tjenesten er gratis og krever ingen registrering. Data hentes daglig fra Yahoo Finance og Euronext
-        og dekker <!--N:aksjer-->155<!--/N--> aksjer fordelt på <!--N:sektorer-->14<!--/N--> sektorer — fra energi og finans til sjømat og shipping.
-        Porteføljeverktøyet lagrer alt lokalt i nettleseren din, uten at noe sendes til en server.
-      </p>
-    </div>
-  </section>
-
   <!-- ── SEKTORKORT ──────────────────────────────────────────────────── -->
-  <section class="max-w-5xl mx-auto px-4 sm:px-6 py-10 sm:py-14">
+  <section class="max-w-5xl mx-auto px-4 sm:px-6 py-8 sm:py-10">
     <div class="flex items-center justify-between mb-6">
       <h2 class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100">Utforsk etter sektor</h2>
-      <a href="/aksjer/sektor/" class="inline-flex items-center min-h-11 text-sm hover:underline font-medium text-green-700 dark:text-green-400">Se alle sektorer →</a>
     </div>
     <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
 
@@ -522,13 +512,13 @@
         </div>
       </a>
 
-      <a href="/aksjer/sektor/" class="sektor-kort bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-xl p-4 flex flex-col gap-2 no-underline">
-        <div style="background:rgba(39,95,69,0.15);color:#2f7352;align-self:flex-start;flex-shrink:0;width:2.25rem;height:2.25rem;min-width:2.25rem;border-radius:0.5rem;display:flex;align-items:center;justify-content:center;">
+      <a href="/aksjer/sektor/" class="sektor-kort bg-white dark:bg-gray-900 rounded-xl p-4 border border-gray-200 dark:border-gray-800 flex flex-col gap-2 no-underline">
+        <div style="background:var(--ib);color:var(--ib-c);align-self:flex-start;flex-shrink:0;width:2.25rem;height:2.25rem;min-width:2.25rem;border-radius:0.5rem;display:flex;align-items:center;justify-content:center;">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
         </div>
         <div>
-          <div class="font-semibold text-sm text-green-700 dark:text-green-400">Alle sektorer</div>
-          <div class="text-xs text-green-700 dark:text-green-400" style="opacity:0.8;"><!--N:sektorer-->14<!--/N--> sektorer totalt</div>
+          <div class="font-semibold text-sm text-gray-900 dark:text-gray-100">Alle sektorer</div>
+          <div class="text-xs text-gray-500 dark:text-gray-400"><!--N:sektorer-->14<!--/N--> sektorer totalt</div>
         </div>
       </a>
 
@@ -536,17 +526,17 @@
   </section>
 
   <!-- ── VERKTØY ─────────────────────────────────────────────────────── -->
-  <section class="vkt-seksjon bg-white border-t border-b border-gray-200">
-    <div class="max-w-5xl mx-auto px-4 sm:px-6 py-10 sm:py-12">
+  <section class="vkt-seksjon">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 py-8 sm:py-10">
       <div class="flex items-center justify-between mb-6">
         <h2 class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100">Verktøy</h2>
         <a href="/verktoy/" class="inline-flex items-center min-h-11 text-sm hover:underline font-medium text-green-700 dark:text-green-400">Se alle →</a>
       </div>
       <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
 
-        <a href="/verktoy/kalkulator/" class="group flex flex-col gap-3 p-4 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-green-400 transition-colors no-underline">
-          <div style="align-self:flex-start;flex-shrink:0;width:2.5rem;height:2.5rem;border-radius:0.75rem;display:flex;align-items:center;justify-content:center;background:var(--ib);color:var(--ib-c);">
-            <svg style="width:1.25rem;height:1.25rem;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="12" y2="14"/></svg>
+        <a href="/verktoy/kalkulator/" class="sektor-kort bg-white dark:bg-gray-900 rounded-xl p-4 border border-gray-200 dark:border-gray-800 flex flex-col gap-2 no-underline">
+          <div style="background:var(--ib);color:var(--ib-c);align-self:flex-start;flex-shrink:0;width:2.25rem;height:2.25rem;min-width:2.25rem;border-radius:0.5rem;display:flex;align-items:center;justify-content:center;">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="12" y2="14"/></svg>
           </div>
           <div>
             <div class="font-semibold text-sm text-gray-900 dark:text-gray-100">Utbyttekalkulator</div>
@@ -554,9 +544,9 @@
           </div>
         </a>
 
-        <a href="/verktoy/fire-kalkulator/" class="group flex flex-col gap-3 p-4 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-green-400 transition-colors no-underline">
-          <div style="align-self:flex-start;flex-shrink:0;width:2.5rem;height:2.5rem;border-radius:0.75rem;display:flex;align-items:center;justify-content:center;background:var(--ib);color:var(--ib-c);">
-            <svg style="width:1.25rem;height:1.25rem;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"/><path d="M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z"/></svg>
+        <a href="/verktoy/fire-kalkulator/" class="sektor-kort bg-white dark:bg-gray-900 rounded-xl p-4 border border-gray-200 dark:border-gray-800 flex flex-col gap-2 no-underline">
+          <div style="background:var(--ib);color:var(--ib-c);align-self:flex-start;flex-shrink:0;width:2.25rem;height:2.25rem;min-width:2.25rem;border-radius:0.5rem;display:flex;align-items:center;justify-content:center;">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"/><path d="M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z"/></svg>
           </div>
           <div>
             <div class="font-semibold text-sm text-gray-900 dark:text-gray-100">FIRE-kalkulator</div>
@@ -564,9 +554,9 @@
           </div>
         </a>
 
-        <a href="/verktoy/sektorrebalansering/" class="group flex flex-col gap-3 p-4 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-green-400 transition-colors no-underline">
-          <div style="align-self:flex-start;flex-shrink:0;width:2.5rem;height:2.5rem;border-radius:0.75rem;display:flex;align-items:center;justify-content:center;background:var(--ib);color:var(--ib-c);">
-            <svg style="width:1.25rem;height:1.25rem;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+        <a href="/verktoy/sektorrebalansering/" class="sektor-kort bg-white dark:bg-gray-900 rounded-xl p-4 border border-gray-200 dark:border-gray-800 flex flex-col gap-2 no-underline">
+          <div style="background:var(--ib);color:var(--ib-c);align-self:flex-start;flex-shrink:0;width:2.25rem;height:2.25rem;min-width:2.25rem;border-radius:0.5rem;display:flex;align-items:center;justify-content:center;">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
           </div>
           <div>
             <div class="font-semibold text-sm text-gray-900 dark:text-gray-100">Sektorrebalansering</div>
@@ -574,9 +564,9 @@
           </div>
         </a>
 
-        <a href="/verktoy/huslan-vs-investering/" class="group flex flex-col gap-3 p-4 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-green-400 transition-colors no-underline">
-          <div style="align-self:flex-start;flex-shrink:0;width:2.5rem;height:2.5rem;border-radius:0.75rem;display:flex;align-items:center;justify-content:center;background:var(--ib);color:var(--ib-c);">
-            <svg style="width:1.25rem;height:1.25rem;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <a href="/verktoy/huslan-vs-investering/" class="sektor-kort bg-white dark:bg-gray-900 rounded-xl p-4 border border-gray-200 dark:border-gray-800 flex flex-col gap-2 no-underline">
+          <div style="background:var(--ib);color:var(--ib-c);align-self:flex-start;flex-shrink:0;width:2.25rem;height:2.25rem;min-width:2.25rem;border-radius:0.5rem;display:flex;align-items:center;justify-content:center;">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
           </div>
           <div>
             <div class="font-semibold text-sm text-gray-900 dark:text-gray-100">Huslån vs. investering</div>
@@ -589,7 +579,7 @@
   </section>
 
   <!-- ── ARTIKLER ────────────────────────────────────────────────────── -->
-  <section class="max-w-5xl mx-auto px-4 sm:px-6 py-10 sm:py-14">
+  <section class="max-w-5xl mx-auto px-4 sm:px-6 py-8 sm:py-10">
     <div class="flex items-center justify-between mb-6">
       <h2 class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100">Siste artikler</h2>
       <a href="/artikler/" class="inline-flex items-center min-h-11 text-sm hover:underline font-medium text-green-700 dark:text-green-400">Se alle →</a>
@@ -598,8 +588,8 @@
       <!--ARTIKLER:START-->
       <a href="/artikler/slik-vedtas-utbytte/" class="artikel-kort group flex flex-col gap-3 p-5 bg-white rounded-xl border border-gray-200 hover:border-green-400 transition-colors no-underline">
         <div class="flex items-center gap-2">
-          <span class="text-xs font-medium bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300 px-2 py-0.5 rounded-full">Guide</span>
-          <span class="text-xs text-gray-400">17. november 2026 · 10 min</span>
+          <span class="text-xs font-medium bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 px-2 py-0.5 rounded-full">Guide</span>
+          <span class="text-xs text-gray-500 dark:text-gray-400">17. november 2026 · 10 min</span>
         </div>
         <div>
           <h3 class="font-semibold text-gray-900 dark:text-gray-100 group-hover:text-green-700 dark:group-hover:text-green-400 transition-colors mb-1">Utbytte i 2027: når selskapene foreslår, vedtar og betaler</h3>
@@ -609,8 +599,8 @@
 
       <a href="/artikler/hva-er-direkteavkastning/" class="artikel-kort group flex flex-col gap-3 p-5 bg-white rounded-xl border border-gray-200 hover:border-green-400 transition-colors no-underline">
         <div class="flex items-center gap-2">
-          <span class="text-xs font-medium bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300 px-2 py-0.5 rounded-full">Guide</span>
-          <span class="text-xs text-gray-400">21. oktober 2026 · 11 min</span>
+          <span class="text-xs font-medium bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 px-2 py-0.5 rounded-full">Guide</span>
+          <span class="text-xs text-gray-500 dark:text-gray-400">21. oktober 2026 · 11 min</span>
         </div>
         <div>
           <h3 class="font-semibold text-gray-900 dark:text-gray-100 group-hover:text-green-700 dark:group-hover:text-green-400 transition-colors mb-1">Hva er direkteavkastning? Slik regnes tallet, og hvorfor sidene viser ulike svar</h3>
@@ -620,8 +610,8 @@
 
       <a href="/artikler/nedbetale-boliglan-eller-investere/" class="artikel-kort group flex flex-col gap-3 p-5 bg-white rounded-xl border border-gray-200 hover:border-green-400 transition-colors no-underline">
         <div class="flex items-center gap-2">
-          <span class="text-xs font-medium bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300 px-2 py-0.5 rounded-full">Guide</span>
-          <span class="text-xs text-gray-400">12. september 2026 · 12 min</span>
+          <span class="text-xs font-medium bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 px-2 py-0.5 rounded-full">Guide</span>
+          <span class="text-xs text-gray-500 dark:text-gray-400">12. september 2026 · 12 min</span>
         </div>
         <div>
           <h3 class="font-semibold text-gray-900 dark:text-gray-100 group-hover:text-green-700 dark:group-hover:text-green-400 transition-colors mb-1">Nedbetale boliglånet eller investere? Slik regner du riktig</h3>
@@ -631,8 +621,8 @@
 
       <a href="/artikler/beste-utbytteaksjer-2026/" class="artikel-kort group flex flex-col gap-3 p-5 bg-white rounded-xl border border-gray-200 hover:border-green-400 transition-colors no-underline">
         <div class="flex items-center gap-2">
-          <span class="text-xs font-medium bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300 px-2 py-0.5 rounded-full">Guide</span>
-          <span class="text-xs text-gray-400">30. august 2026 · 13 min</span>
+          <span class="text-xs font-medium bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 px-2 py-0.5 rounded-full">Guide</span>
+          <span class="text-xs text-gray-500 dark:text-gray-400">30. august 2026 · 13 min</span>
         </div>
         <div>
           <h3 class="font-semibold text-gray-900 dark:text-gray-100 group-hover:text-green-700 dark:group-hover:text-green-400 transition-colors mb-1">Beste utbytteaksjer 2026 — en gjennomgang av Oslo Børs</h3>
@@ -649,13 +639,46 @@
     </div>
   </section>
 
+  <!-- ── INTRO ─────────────────────────────────────────────────────── -->
+  <section class="max-w-5xl mx-auto px-4 sm:px-6 py-8 sm:py-10">
+    <h2 class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100 mb-5">Norske utbytteaksjer — hva, hvorfor og hvordan</h2>
+    <div class="prose max-w-none space-y-4 text-gray-700 dark:text-gray-300 leading-relaxed text-sm sm:text-base les">
+      <p>
+        Oslo Børs er hjemsted for mange av Nordens mest utbyttebetalende selskaper. Equinor, DNB, Aker BP,
+        Gjensidige og en rekke sparebanker deler hvert år ut milliarder i utbytte til sine aksjonærer.
+        For en langsiktig investor kan utbytteaksjer gi en stabil kontantstrøm som reinvesteres og skaper
+        rentes-rente-effekt over tid.
+      </p>
+      <p>
+        <strong class="text-gray-900 dark:text-gray-100">Utbytteyield</strong> er det nøkkeltallet som viser
+        hvor mye en aksje betaler i utbytte i prosent av aksjekursen. En yield på 5&nbsp;% betyr at du
+        mottar 5 kroner i utbytte for hver 100 kroner investert. exday.no viser oppdatert yield, historisk
+        utbyttehistorikk og en utbyttescore som veier frekvens, stabilitet og bærekraft.
+      </p>
+      <p>
+        <strong class="text-gray-900 dark:text-gray-100">Ex-dato</strong> er den viktigste datoen for
+        utbytteinvestorer. Du må eie aksjen <em>før</em> ex-dato for å ha rett på utbyttet — kjøper du
+        på selve ex-datoen, går utbyttet til forrige eier. På Oslo Børs gjelder T+2-regelen: handel
+        avregnes to børsdager etter avtaledato, og registreringsdatoen er børsdagen etter ex-dato. Et kjøp
+        gjort <em>senest børsdagen før</em> ex-dato er derfor oppgjort i tide. Er ex-datoen en mandag,
+        er det fredagen før.
+        exday.no samler alle kommende ex-datoer i én oversiktlig <a href="/utbyttekalender/" class="text-green-600 dark:text-green-400 hover:underline">utbyttekalender 2026</a>.
+      </p>
+      <p>
+        Tjenesten er gratis og krever ingen registrering. Data hentes daglig fra Yahoo Finance og Euronext
+        og dekker <!--N:aksjer-->155<!--/N--> aksjer fordelt på <!--N:sektorer-->14<!--/N--> sektorer — fra energi og finans til sjømat og shipping.
+        Porteføljeverktøyet lagrer alt lokalt i nettleseren din, uten at noe sendes til en server.
+      </p>
+    </div>
+  </section>
+
   <!-- ── FAQ ───────────────────────────────────────────────────────── -->
-  <section class="faq-seksjon bg-white border-t border-b border-gray-200">
-    <div class="max-w-3xl mx-auto px-4 sm:px-6 py-10 sm:py-14">
+  <section class="faq-seksjon">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 py-8 sm:py-10">
       <h2 class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">Vanlige spørsmål</h2>
       <div class="space-y-2">
 
-        <details class="faq-item group border border-gray-200 rounded-xl overflow-hidden">
+        <details class="faq-item group bg-white border border-gray-200 rounded-xl overflow-hidden">
           <summary class="flex items-center justify-between gap-3 px-5 py-4 cursor-pointer font-medium text-gray-900 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors list-none">
             Hva er ex-dato?
             <svg class="w-4 h-4 text-gray-400 flex-shrink-0 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
@@ -668,7 +691,7 @@
           </div>
         </details>
 
-        <details class="faq-item group border border-gray-200 rounded-xl overflow-hidden">
+        <details class="faq-item group bg-white border border-gray-200 rounded-xl overflow-hidden">
           <summary class="flex items-center justify-between gap-3 px-5 py-4 cursor-pointer font-medium text-gray-900 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors list-none">
             Hva er utbytteyield?
             <svg class="w-4 h-4 text-gray-400 flex-shrink-0 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
@@ -681,7 +704,7 @@
           </div>
         </details>
 
-        <details class="faq-item group border border-gray-200 rounded-xl overflow-hidden">
+        <details class="faq-item group bg-white border border-gray-200 rounded-xl overflow-hidden">
           <summary class="flex items-center justify-between gap-3 px-5 py-4 cursor-pointer font-medium text-gray-900 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors list-none">
             Er exday.no gratis?
             <svg class="w-4 h-4 text-gray-400 flex-shrink-0 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
@@ -693,7 +716,7 @@
           </div>
         </details>
 
-        <details class="faq-item group border border-gray-200 rounded-xl overflow-hidden">
+        <details class="faq-item group bg-white border border-gray-200 rounded-xl overflow-hidden">
           <summary class="flex items-center justify-between gap-3 px-5 py-4 cursor-pointer font-medium text-gray-900 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors list-none">
             Hva er T+2-regelen på Oslo Børs?
             <svg class="w-4 h-4 text-gray-400 flex-shrink-0 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
@@ -706,7 +729,7 @@
           </div>
         </details>
 
-        <details class="faq-item group border border-gray-200 rounded-xl overflow-hidden">
+        <details class="faq-item group bg-white border border-gray-200 rounded-xl overflow-hidden">
           <summary class="flex items-center justify-between gap-3 px-5 py-4 cursor-pointer font-medium text-gray-900 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors list-none">
             Hvordan beskattes utbytte i Norge?
             <svg class="w-4 h-4 text-gray-400 flex-shrink-0 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>

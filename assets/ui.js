@@ -248,8 +248,7 @@ function initDarkMode() {
   const moon = document.getElementById('icon-moon');
   const sun = document.getElementById('icon-sun');
 
-  const pref = localStorage.getItem('tema') ||
-    (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  const pref = localStorage.getItem('tema') || 'dark';
   settTema(pref);
 
   btn.addEventListener('click', () => {
