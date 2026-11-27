@@ -1337,11 +1337,11 @@ label:has(> input[type="checkbox"]) { min-height: 44px; }
 .dark .forside-tabell tbody tr:hover td { background: #1f2937; }
 .dark .forside-liste-navn, .dark .forside-liste-merk { color: #9ca3af; }
 @media (min-width: 48rem) {
-  .forside-tabell td { vertical-align: middle; padding-top: 0.55rem; padding-bottom: 0.55rem; }
+  .forside-tabell td { vertical-align: middle; padding-top: 0; padding-bottom: 0; }
   .forside-tabell td:first-child { max-width: none; }
-  .forside-tabell td:first-child a { min-height: 0; }
+  .forside-tabell td:first-child a { display: inline-flex; align-items: center; min-height: 44px; }
   .forside-liste-ticker, .forside-liste-navn { display: inline; }
   .forside-liste-navn { margin-left: 0.5rem; }
   .forside-liste-merk { display: inline; margin-left: 0.4rem; }
-  td > .forside-liste-merk:first-child { margin-left: 0; margin-right: 0.25rem; }
+  .forside-liste-merk.forside-liste-for { margin-left: 0; margin-right: 0.25rem; }
 }

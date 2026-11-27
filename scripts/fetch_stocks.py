@@ -13788,7 +13788,7 @@ def _forside_ex_celle(a, i_dag):
     if len(set(mnd)) == 12:
         return "hver måned"
     if mnd:
-        return ('<span class="forside-liste-merk">vanligvis</span> '
+        return ('<span class="forside-liste-merk forside-liste-for">vanligvis</span> '
                 + ", ".join(_MND_KORT[m - 1] for m in mnd))
     return "—"
 
@@ -13808,7 +13808,7 @@ def lag_forside_liste(aksjer, i_dag):
             "        <tr>"
             f'<td><a href="/aksjer/{t}/"><span class="forside-liste-ticker">{t}</span><span class="forside-liste-navn">'
             f"{_html.escape(_kort_selskapsnavn(a.get('navn') or t))}</span></a></td>"
-            f"<td>{belop}" + (f'<span class="forside-liste-merk">{_html.escape(a["frekvens"].lower())}</span>' if flere else "")
+            f"<td>{belop}" + (f' <span class="forside-liste-merk">{_html.escape(a["frekvens"].lower())}</span>' if flere else "")
             + f"</td><td>{_pst(a.get('utbytte_yield') or 0, 2)}</td>"
             f"<td>{_forside_ex_celle(a, i_dag)}</td></tr>")
     return "\n".join([
@@ -13912,7 +13912,7 @@ def lag_artikkel_kort(artikler):
             'rounded-xl border border-gray-200 hover:border-green-400 transition-colors no-underline">\n'
             '        <div class="flex items-center gap-2">\n'
             f'          {tag}'
-            f'          <span class="text-xs text-gray-400">{_html.escape(a["meta"])}</span>\n'
+            f'          <span class="text-xs text-gray-500 dark:text-gray-400">{_html.escape(a["meta"])}</span>\n'
             '        </div>\n'
             '        <div>\n'
             '          <h3 class="font-semibold text-gray-900 dark:text-gray-100 group-hover:text-green-700 '
