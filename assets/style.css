@@ -1325,7 +1325,6 @@ label:has(> input[type="checkbox"]) { min-height: 44px; }
 .forside-tabell td:first-child a { display: inline-flex; align-items: center; flex-wrap: wrap; gap: 0 0.5rem; min-height: 44px; color: inherit; text-decoration: none; }
 .forside-tabell td:first-child a:hover .forside-liste-ticker { text-decoration: underline; }
 .forside-liste-ticker { font-weight: 600; color: #111827; }
-.forside-tabell tbody tr:hover td { background: #f9fafb; }
 .forside-liste-navn { font-size: 0.78rem; line-height: 1.3; color: #6b7280; }
 .forside-liste-merk { font-size: 0.72rem; color: #6b7280; margin-left: 0.4rem; }
 .forside-liste-merk.forside-liste-for { margin-left: 0; margin-right: 0.25rem; }
@@ -1352,8 +1351,13 @@ label:has(> input[type="checkbox"]) { min-height: 44px; }
 .dark .forside-tabell th { background: #1f2937; color: #9ca3af; }
 .dark .forside-tabell td { border-color: #1f2937; color: #f3f4f6; }
 .dark .forside-liste-ticker { color: #f3f4f6; }
-.dark .forside-tabell tbody tr:hover td { background: #1f2937; }
 .dark .forside-liste-navn, .dark .forside-liste-merk { color: #9ca3af; }
+/* Hover bare med mus og bare som tabell. På en telefon blir et trykk
+   liggende som hover, og cellene i kortet ble grå flekker (27.11.2026). */
+@media (hover: hover) and (min-width: 48rem) {
+  .forside-tabell tbody tr:hover td { background: #f9fafb; }
+  .dark .forside-tabell tbody tr:hover td { background: #1f2937; }
+}
 @media (max-width: 47.9375rem) {
   .forside-liste .tabell-ramme { overflow: visible; border-radius: 0; }
   .forside-tabell, .forside-tabell tbody { display: block; }
@@ -1371,7 +1375,6 @@ label:has(> input[type="checkbox"]) { min-height: 44px; }
   .forside-tabell td:nth-child(4)::before { content: "Ex-dato"; }
   .forside-liste-merk { display: block; margin-left: 0; }
   .forside-liste-merk.forside-liste-for { display: inline; }
-  .forside-tabell tbody tr:hover td { background: transparent; }
   .dark .forside-tabell tbody { background: #111827; border-color: #1f2937; }
   .dark .forside-tabell tr { border-color: #1f2937; }
   .dark .forside-tabell td:nth-child(n+2)::before { color: #9ca3af; }
