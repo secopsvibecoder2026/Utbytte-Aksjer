@@ -4395,17 +4395,20 @@
     {
       "ticker": "DELIA",
       "dato": "2026-11-27",
-      "type": "rapport"
+      "type": "rapport",
+      "url_forsok": 1
     },
     {
       "ticker": "ENH",
       "dato": "2026-11-27",
-      "type": "rapport"
+      "type": "rapport",
+      "url_forsok": 1
     },
     {
       "ticker": "PLSV",
       "dato": "2026-11-27",
-      "type": "rapport"
+      "type": "rapport",
+      "url_forsok": 1
     },
     {
       "ticker": "CAPT",
@@ -4653,11 +4656,6 @@
       "type": "rapport"
     },
     {
-      "ticker": "POL",
-      "dato": "2027-02-11",
-      "type": "rapport"
-    },
-    {
       "ticker": "PUBLI",
       "dato": "2027-02-11",
       "type": "rapport"
@@ -4794,6 +4792,11 @@
     },
     {
       "ticker": "BNOR",
+      "dato": "2027-02-17",
+      "type": "rapport"
+    },
+    {
+      "ticker": "ENH",
       "dato": "2027-02-17",
       "type": "rapport"
     },
@@ -4958,5 +4961,5 @@
       "type": "rapport"
     }
   ],
-  "sist_oppdatert": "2026-11-26"
+  "sist_oppdatert": "2026-11-27"
 }
