@@ -4396,19 +4396,19 @@
       "ticker": "DELIA",
       "dato": "2026-11-27",
       "type": "rapport",
-      "url_forsok": 1
+      "url": "https://newsweb.oslobors.no/message/687606"
     },
     {
       "ticker": "ENH",
       "dato": "2026-11-27",
       "type": "rapport",
-      "url_forsok": 1
+      "url": "https://newsweb.oslobors.no/message/687604"
     },
     {
       "ticker": "PLSV",
       "dato": "2026-11-27",
       "type": "rapport",
-      "url_forsok": 1
+      "url": "https://newsweb.oslobors.no/message/687610"
     },
     {
       "ticker": "CAPT",
@@ -4542,6 +4542,11 @@
     },
     {
       "ticker": "ENTR",
+      "dato": "2027-02-10",
+      "type": "rapport"
+    },
+    {
+      "ticker": "HAUTO",
       "dato": "2027-02-10",
       "type": "rapport"
     },

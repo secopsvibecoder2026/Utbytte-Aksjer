@@ -102,7 +102,7 @@
   <script>
     (function(){
       var t = localStorage.getItem('tema');
-      if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      if (t !== 'light') {
         document.documentElement.classList.add('dark');
       }
     })();
@@ -646,7 +646,7 @@ function hideTip(el){var i=el.dataset.i,s=el.closest('svg'),bg=s.querySelectorAl
   </section>
 
   <div class="relaterte"><h2>Andre shipping-aksjer med utbytte</h2><div class="rel-grid"><a href="/aksjer/HUNT/" class="rel-kort"><span class="rel-ticker">HUNT</span><span class="rel-navn">Hunter Group ASA</span><span class="rel-yield">19,8 %</span></a>
-<a href="/aksjer/OET/" class="rel-kort"><span class="rel-ticker">OET</span><span class="rel-navn">Okeanis Eco Tankers Corp.</span><span class="rel-yield">19,5 %</span></a>
+<a href="/aksjer/OET/" class="rel-kort"><span class="rel-ticker">OET</span><span class="rel-navn">Okeanis Eco Tankers Corp.</span><span class="rel-yield">19,4 %</span></a>
 <a href="/aksjer/HSHP/" class="rel-kort"><span class="rel-ticker">HSHP</span><span class="rel-navn">Himalaya Shipping Ltd.</span><span class="rel-yield">12,4 %</span></a>
 <a href="/aksjer/FRO/" class="rel-kort"><span class="rel-ticker">FRO</span><span class="rel-navn">Frontline PLC</span><span class="rel-yield">11,2 %</span></a></div></div>
 
