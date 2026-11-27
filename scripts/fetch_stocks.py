@@ -13690,7 +13690,7 @@ def lag_uka_blokk(hendelser, i_dag, hentet=None):
         except (ValueError, TypeError, ImportError):
             hentet_tekst = ""
     return "\n".join([
-        '  <section class="max-w-5xl mx-auto px-4 sm:px-6 pt-10" aria-labelledby="uka-tittel">',
+        '  <section class="max-w-5xl mx-auto px-4 sm:px-6 py-8 sm:py-10" aria-labelledby="uka-tittel">',
         '    <div class="flex items-center justify-between mb-2">',
         '      <h2 id="uka-tittel" class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100">Denne uka på Oslo Børs</h2>',
         '      <a href="/uke/" class="inline-flex items-center min-h-11 text-sm hover:underline font-medium text-green-700 dark:text-green-400">Hele uka →</a>',
@@ -13868,7 +13868,7 @@ def lag_forside_liste(aksjer, i_dag, hentet=None):
     if g["hoyest"]:
         grupper.append(_forside_gruppe("Høyest yield blant resten", g["hoyest"], i_dag))
     return "\n".join([
-        '  <section class="forside-liste max-w-5xl mx-auto px-4 sm:px-6 pt-10" aria-labelledby="liste-tittel">',
+        '  <section class="forside-liste max-w-5xl mx-auto px-4 sm:px-6 py-8 sm:py-10" aria-labelledby="liste-tittel">',
         '    <h2 id="liste-tittel" class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">Utbytteaksjer på Oslo Børs</h2>',
         '    <p class="text-sm text-gray-500 dark:text-gray-400 mb-4 les">De største selskapene som betaler utbytte, '
         "og de med høyest direkteavkastning blant resten. Utbyttet er årsraten, og yielden er målt mot dagens kurs. "
