@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <script>(function(){if(localStorage.getItem('tema')!=='light')document.documentElement.classList.add('dark');})()</script>
+  <!-- Google AdSense (håndterer også CMP for EØS/UK) -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3981936786393038"
+     crossorigin="anonymous"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-X6C9PERKMB"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', {
+      analytics_storage: 'denied',
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      wait_for_update: 500
+    });
+    gtag('js', new Date());
+    gtag('config', 'G-X6C9PERKMB');
+  </script>
+  <script src="/assets/consent.js" defer></script>
+  <title>Norwegian dividend stocks: yields and ex-dates | exday.no</title>
+  <meta name="description" content="Dividend per share, yield and ex-dividend dates for the largest dividend-paying companies on Oslo Børs, with notes on tax for investors outside Norway."/>
+  <link rel="canonical" href="https://exday.no/en/stocks/"/>
+  <link rel="alternate" hreflang="nb" href="https://exday.no/aksjer/"/>
+  <link rel="alternate" hreflang="en" href="https://exday.no/en/stocks/"/>
+  <link rel="alternate" hreflang="x-default" href="https://exday.no/aksjer/"/>
+  <meta name="theme-color" content="#2f7352"/>
+  <link rel="icon" type="image/png" sizes="512x512" href="/favicon.png"/>
+  <link rel="icon" type="image/svg+xml" href="/logo/exday_icon_primary.svg"/>
+  <link rel="apple-touch-icon" href="/logo/apple_touch_icon_180.png"/>
+  <meta property="og:title" content="Norwegian dividend stocks: yields and ex-dates | exday.no"/>
+  <meta property="og:description" content="Dividend per share, yield and ex-dividend dates for the largest dividend-paying companies on Oslo Børs, with notes on tax for investors outside Norway."/>
+  <meta property="og:url" content="https://exday.no/en/stocks/"/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:image" content="https://exday.no/assets/og-image.png"/>
+  <meta property="og:locale" content="en_GB"/>
+  <meta property="og:locale:alternate" content="nb_NO"/>
+  <meta property="og:site_name" content="exday.no"/>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "WebPage", "@id": "https://exday.no/en/stocks/", "url": "https://exday.no/en/stocks/", "name": "Norwegian dividend stocks: yields and ex-dates | exday.no", "description": "Dividend per share, yield and ex-dividend dates for the largest dividend-paying companies on Oslo Børs, with notes on tax for investors outside Norway.", "inLanguage": "en"}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "exday.no", "item": "https://exday.no/"}, {"@type": "ListItem", "position": 2, "name": "Stocks", "item": "https://exday.no/en/stocks/"}]}]}</script>
+  <link rel="stylesheet" href="/assets/tailwind.css"/>
+  <link rel="stylesheet" href="/assets/style.css"/>
+  <style>
+    body { margin: 0; background: #f9fafb; color: #111827; }
+    .dark body { background: #030712; color: #f3f4f6; }
+    .en-tabell td, .norsk-boks p { color: inherit; }
+    .wrap { max-width: 56rem; margin: 0 auto; padding: 1rem 1rem 2rem; }
+    .sub { color: #4b5563; font-size: 0.9rem; margin: 0.25rem 0 1rem; }
+    .dark .sub { color: #9ca3af; }
+    .ingress { font-size: 1.02rem; line-height: 1.6; margin: 0 0 1.25rem; }
+    h2 { font-size: 1.15rem; font-weight: 700; margin: 2rem 0 0.75rem; }
+    p { line-height: 1.6; }
+    a { color: #275f45; } .dark a { color: #6fa98a; }
+    .tabell-ramme { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    table.en-tabell { width: 100%; border-collapse: collapse; font-size: 0.92rem; background: #fff;
+      border: 1px solid #e5e7eb; border-radius: 0.75rem; overflow: hidden; }
+    .dark table.en-tabell { background: #111827; border-color: #1f2937; }
+    .en-tabell th, .en-tabell td { padding: 0.55rem 0.8rem; border-bottom: 1px solid #e5e7eb; text-align: left; }
+    .dark .en-tabell th, .dark .en-tabell td { border-color: #1f2937; }
+    .en-tabell tr:last-child td { border-bottom: 0; }
+    .en-tabell th { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; color: #6b7280; font-weight: 600; }
+    .en-tabell .tall { text-align: right; white-space: nowrap; }
+    .note { font-size: 0.8rem; color: #6b7280; } .dark .note { color: #9ca3af; }
+    .varsel { border-left: 4px solid #b98a3a; background: #fbf8f0; padding: 0.75rem 1rem; border-radius: 0.5rem; margin: 0 0 1.25rem; }
+    .dark .varsel { background: rgba(87,61,27,0.25); }
+    .varsel p { margin: 0; }
+    .om p { margin: 0 0 1rem; }
+    .en-nav-lenke { display: inline-flex; align-items: center; min-height: 44px; padding: 0 0.5rem; font-weight: 600; font-size: 0.9rem; color: #374151; text-decoration: none; }
+    .dark .en-nav-lenke { color: #d1d5db; }
+    .en-oversikt td { vertical-align: top; }
+    .en-ex { white-space: nowrap; }
+    /* Telefon: selskap, utbytte og yield på én linje, ex-datoen under. */
+    @media (max-width: 40rem) {
+      .en-sektor { display: none; }
+      .en-oversikt thead .en-ex { display: none; }
+      .en-oversikt tr { display: grid; grid-template-columns: 1fr auto auto; border-bottom: 1px solid #e5e7eb; }
+      .dark .en-oversikt tr { border-color: #1f2937; }
+      .en-oversikt td { border-bottom: 0; }
+      .en-oversikt td.en-ex { grid-column: 1 / -1; padding-top: 0; font-size: 0.85rem; color: #4b5563; }
+      .dark .en-oversikt td.en-ex { color: #9ca3af; }
+      .en-oversikt td.en-ex::before { content: "Ex-dividend: "; }
+      .en-oversikt thead tr { border-bottom: 1px solid #e5e7eb; }
+    }
+    .sprak-lenke { display: inline-flex; align-items: center; min-height: 44px; }
+    .norsk-boks { background: #fff; border: 1px solid #e5e7eb; border-radius: 0.75rem; padding: 0.25rem 1rem; margin-top: 2rem; }
+    .dark .norsk-boks { background: #111827; border-color: #1f2937; }
+  </style>
+</head>
+<body>
+  <nav class="site-nav" aria-label="Main menu">
+    <div class="site-nav-inner">
+      <a href="/" class="site-logo" aria-label="exday.no home">
+        <img src="/logo/exday_icon_primary.svg" class="site-logo-icon site-logo-icon-light" alt="" width="28" height="28"><img src="/logo/exday_icon_inverse.svg" class="site-logo-icon site-logo-icon-dark" alt="" width="28" height="28">
+        <span>e<span class="site-logo-x">x</span>day<span class="site-logo-dot">.no</span></span>
+      </a>
+      <div class="site-nav-actions">
+        <a href="/en/stocks/" class="en-nav-lenke">Stocks</a>
+        <a href="/aksjer/" class="site-app-btn" hreflang="nb" lang="nb">Norsk</a>
+        <button id="dark-toggle" class="site-dark-btn" aria-label="Switch colour mode"><svg class="sun-icon" width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg><svg class="moon-icon" width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display:none;" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg></button>
+      </div>
+    </div>
+  </nav>
+<div class="wrap">
+  <nav class="brodsmule" aria-label="Breadcrumb"><a href="/">exday.no</a> <span class="brodsmule-skille" aria-hidden="true">›</span> <span aria-current="page">Stocks</span></nav>
+  <h1 class="side-h1">Norwegian dividend stocks on Oslo Børs</h1>
+  <p class="ingress les">Dividend figures for some of the largest companies on Oslo Børs: the annual
+  dividend per share, the yield at today's price and when the shares usually go ex-dividend. The
+  figures come from the same data as the Norwegian pages and are updated every trading day. Each
+  company page explains the withholding tax that applies if you live outside Norway.</p>
+  <div class="tabell-ramme"><table class="en-tabell en-oversikt"><thead><tr><th>Company</th>
+  <th class="en-sektor">Sector</th><th class="tall">Dividend a year</th><th class="tall">Yield</th>
+  <th class="en-ex">Ex-dividend</th></tr></thead><tbody>
+  <tr><td><a href="/en/stocks/EQNR/">Equinor</a> <span class="note">EQNR</span></td><td class="en-sektor">Energy</td><td class="tall">NOK 15.24</td><td class="tall">4.01%</td><td class="en-ex">15 Feb 2027</td></tr><tr><td><a href="/en/stocks/DNB/">DNB Bank</a> <span class="note">DNB</span></td><td class="en-sektor">Financials</td><td class="tall">NOK 18.00</td><td class="tall">5.51%</td><td class="en-ex"><span class="note">usually</span> Apr</td></tr><tr><td><a href="/en/stocks/KOG/">Kongsberg Gruppen</a> <span class="note">KOG</span></td><td class="en-sektor">Industrials</td><td class="tall">NOK 2.20</td><td class="tall">0.62%</td><td class="en-ex"><span class="note">usually</span> Apr</td></tr><tr><td><a href="/en/stocks/AKRBP/">Aker BP</a> <span class="note">AKRBP</span></td><td class="en-sektor">Energy</td><td class="tall">NOK 24.59</td><td class="tall">7.92%</td><td class="en-ex"><span class="note">usually</span> Feb, May, Jul, Nov</td></tr><tr><td><a href="/en/stocks/TEL/">Telenor</a> <span class="note">TEL</span></td><td class="en-sektor">Telecommunications</td><td class="tall">NOK 9.70</td><td class="tall">7.23%</td><td class="en-ex"><span class="note">usually</span> May, Oct</td></tr><tr><td><a href="/en/stocks/GJF/">Gjensidige Forsikring</a> <span class="note">GJF</span></td><td class="en-sektor">Financials</td><td class="tall">NOK 10.00</td><td class="tall">3.50%</td><td class="en-ex"><span class="note">usually</span> Mar</td></tr><tr><td><a href="/en/stocks/NHY/">Norsk Hydro</a> <span class="note">NHY</span></td><td class="en-sektor">Materials</td><td class="tall">NOK 3.00</td><td class="tall">4.50%</td><td class="en-ex"><span class="note">usually</span> May</td></tr><tr><td><a href="/en/stocks/MOWI/">Mowi</a> <span class="note">MOWI</span></td><td class="en-sektor">Seafood</td><td class="tall">NOK 8.40</td><td class="tall">3.68%</td><td class="en-ex"><span class="note">usually</span> Feb, May, Aug, Nov</td></tr><tr><td><a href="/en/stocks/VAR/">Vår Energi</a> <span class="note">VAR</span></td><td class="en-sektor">Energy</td><td class="tall">NOK 5.47</td><td class="tall">12.43%</td><td class="en-ex"><span class="note">usually</span> Feb, Jun, Aug, Nov</td></tr><tr><td><a href="/en/stocks/FRO/">Frontline</a> <span class="note">FRO</span></td><td class="en-sektor">Shipping</td><td class="tall">NOK 52.77</td><td class="tall">11.25%</td><td class="en-ex">8 Dec 2026</td></tr><tr><td><a href="/en/stocks/ORK/">Orkla</a> <span class="note">ORK</span></td><td class="en-sektor">Consumer goods</td><td class="tall">NOK 6.00</td><td class="tall">5.69%</td><td class="en-ex"><span class="note">usually</span> Apr</td></tr><tr><td><a href="/en/stocks/YAR/">Yara International</a> <span class="note">YAR</span></td><td class="en-sektor">Materials</td><td class="tall">NOK 22.00</td><td class="tall">5.70%</td><td class="en-ex"><span class="note">usually</span> May</td></tr><tr><td><a href="/en/stocks/SB1NO/">SpareBank 1 Sør-Norge</a> <span class="note">SB1NO</span></td><td class="en-sektor">Financials</td><td class="tall">NOK 12.00</td><td class="tall">5.15%</td><td class="en-ex"><span class="note">usually</span> Apr</td></tr><tr><td><a href="/en/stocks/STB/">Storebrand</a> <span class="note">STB</span></td><td class="en-sektor">Financials</td><td class="tall">NOK 5.40</td><td class="tall">2.69%</td><td class="en-ex"><span class="note">usually</span> Apr</td></tr><tr><td><a href="/en/stocks/SALM/">SalMar</a> <span class="note">SALM</span></td><td class="en-sektor">Seafood</td><td class="tall">NOK 10.00</td><td class="tall">1.73%</td><td class="en-ex"><span class="note">usually</span> Jun</td></tr><tr><td><a href="/en/stocks/AKER/">Aker</a> <span class="note">AKER</span></td><td class="en-sektor">Industrials</td><td class="tall">NOK 58.00</td><td class="tall">5.52%</td><td class="en-ex"><span class="note">usually</span> Apr, Nov</td></tr><tr><td><a href="/en/stocks/WAWI/">Wallenius Wilhelmsen</a> <span class="note">WAWI</span></td><td class="en-sektor">Shipping</td><td class="tall">NOK 8.93</td><td class="tall">5.59%</td><td class="en-ex"><span class="note">usually</span> Mar, Aug</td></tr><tr><td><a href="/en/stocks/CMBTO/">CMB.TECH</a> <span class="note">CMBTO</span></td><td class="en-sektor">Shipping</td><td class="tall">NOK 14.03</td><td class="tall">8.08%</td><td class="en-ex">8 Dec 2026</td></tr><tr><td><a href="/en/stocks/HAFNI/">Hafnia</a> <span class="note">HAFNI</span></td><td class="en-sektor">Shipping</td><td class="tall">NOK 3.91</td><td class="tall">4.44%</td><td class="en-ex"><span class="note">usually</span> Mar, May, Sep, Dec</td></tr><tr><td><a href="/en/stocks/VEND/">Vend Marketplaces</a> <span class="note">VEND</span></td><td class="en-sektor">Communication services</td><td class="tall">NOK 2.50</td><td class="tall">1.10%</td><td class="en-ex"><span class="note">usually</span> May</td></tr><tr><td><a href="/en/stocks/PROT/">Protector Forsikring</a> <span class="note">PROT</span></td><td class="en-sektor">Financials</td><td class="tall">NOK 22.00</td><td class="tall">4.54%</td><td class="en-ex"><span class="note">usually</span> Feb, Apr, Jul, Oct</td></tr><tr><td><a href="/en/stocks/WWI/">Wilh. Wilhelmsen</a> <span class="note">WWI</span></td><td class="en-sektor">Industrials</td><td class="tall">NOK 28.50</td><td class="tall">3.17%</td><td class="en-ex"><span class="note">usually</span> May, Nov</td></tr><tr><td><a href="/en/stocks/SBNOR/">Sparebanken Norge</a> <span class="note">SBNOR</span></td><td class="en-sektor">Financials</td><td class="tall">NOK 12.00</td><td class="tall">5.88%</td><td class="en-ex"><span class="note">usually</span> Mar</td></tr><tr><td><a href="/en/stocks/BWLPG/">BW LPG</a> <span class="note">BWLPG</span></td><td class="en-sektor">Shipping</td><td class="tall">NOK 24.98</td><td class="tall">11.14%</td><td class="en-ex">3 Dec 2026</td></tr><tr><td><a href="/en/stocks/DOF/">DOF</a> <span class="note">DOF</span></td><td class="en-sektor">Energy services</td><td class="tall">NOK 14.20</td><td class="tall">10.30%</td><td class="en-ex"><span class="note">usually</span> Feb, May, Aug, Nov</td></tr><tr><td><a href="/en/stocks/MING/">SpareBank 1 SMN</a> <span class="note">MING</span></td><td class="en-sektor">Financials</td><td class="tall">NOK 13.50</td><td class="tall">6.11%</td><td class="en-ex"><span class="note">usually</span> Mar</td></tr><tr><td><a href="/en/stocks/VEI/">Veidekke</a> <span class="note">VEI</span></td><td class="en-sektor">Industrials</td><td class="tall">NOK 11.25</td><td class="tall">4.83%</td><td class="en-ex"><span class="note">usually</span> May</td></tr><tr><td><a href="/en/stocks/HAUTO/">Höegh Autoliners</a> <span class="note">HAUTO</span></td><td class="en-sektor">Shipping</td><td class="tall">NOK 15.34</td><td class="tall">9.85%</td><td class="en-ex"><span class="note">usually</span> Mar, May, Aug, Nov</td></tr><tr><td><a href="/en/stocks/OET/">Okeanis Eco Tankers</a> <span class="note">OET</span></td><td class="en-sektor">Shipping</td><td class="tall">NOK 154.98</td><td class="tall">19.52%</td><td class="en-ex"><span class="note">usually</span> Mar, May, Aug, Nov</td></tr><tr><td><a href="/en/stocks/SPOL/">SpareBank 1 Østlandet</a> <span class="note">SPOL</span></td><td class="en-sektor">Financials</td><td class="tall">NOK 12.70</td><td class="tall">6.14%</td><td class="en-ex"><span class="note">usually</span> Mar</td></tr>
+  </tbody></table></div>
+  <p class="note les">Dividend a year is per share in Norwegian kroner. The yield is measured against
+  today's share price. The <a href="/aksjer/" hreflang="nb">Norwegian site</a> covers every dividend
+  stock on Oslo Børs and Euronext Growth.</p>
+  <footer class="std-footer" style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid #e5e7eb;font-size:0.78rem;text-align:center;color:#6b7280;line-height:1.6;">
+    <p>Prices and dividend data come from Yahoo Finance, Euronext and the companies' notices to Oslo B&#248;rs. Updated on trading days.</p>
+    <p style="max-width:36rem;margin:0.4rem auto;">
+      exday.no is not an investment firm and does not give financial advice.
+      The data may contain errors or delays, so check against Oslo B&#248;rs or the company's own reports.
+      Past dividends are no guarantee of future dividends.
+    </p>
+    <p style="margin-top:0.5rem;">
+      <a href="/om/" lang="nb" style="color:#6b7280;text-decoration:underline;">About exday.no (Norwegian)</a>
+      <span style="margin:0 0.4rem;">&#183;</span>
+      <a href="/metode/" lang="nb" style="color:#6b7280;text-decoration:underline;">Method and data sources (Norwegian)</a>
+      <span style="margin:0 0.4rem;">&#183;</span>
+      <a href="/personvern/" lang="nb" style="color:#6b7280;text-decoration:underline;">Privacy (Norwegian)</a>
+      <span style="margin:0 0.4rem;">&#183;</span>
+      <a href="/vilkaar/" lang="nb" style="color:#6b7280;text-decoration:underline;">Terms of use (Norwegian)</a>
+    </p>
+  </footer>
+  <style>.dark .std-footer { color:#9ca3af !important; border-color:#1f2937 !important; } .dark .std-footer a { color:#9ca3af !important; }</style>
+</div>
+<script>
+  (function() {
+    var btn = document.getElementById('dark-toggle');
+    if (!btn) return;
+    var root = document.documentElement;
+    var sun = btn.querySelector('.sun-icon'), moon = btn.querySelector('.moon-icon');
+    function sync() { var d = root.classList.contains('dark'); sun.style.display = d ? 'none' : ''; moon.style.display = d ? '' : 'none'; }
+    sync();
+    btn.addEventListener('click', function() {
+      var d = root.classList.toggle('dark');
+      localStorage.setItem('tema', d ? 'dark' : 'light');
+      sync();
+    });
+  })();
+</script>
+</body>
+</html>
