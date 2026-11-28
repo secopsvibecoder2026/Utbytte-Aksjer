@@ -429,6 +429,7 @@ CSS = """
       .en-oversikt td { border-bottom: 0; }
       .en-oversikt td.en-ex { grid-column: 1 / -1; padding-top: 0; font-size: 0.85rem; color: #4b5563; }
       .dark .en-oversikt td.en-ex { color: #9ca3af; }
+      .en-oversikt td.en-ex::before { content: "Ex-dividend: "; }
       .en-oversikt thead tr { border-bottom: 1px solid #e5e7eb; }
     }
     .sprak-lenke { display: inline-flex; align-items: center; min-height: 44px; }
