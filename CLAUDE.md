@@ -122,6 +122,7 @@ Utbytte-Aksjer/
 │   ├── klokke.yml             # Chain of runs, Sunday evening to Friday: starts the price and data jobs itself
 │   ├── vekk-klokka.yml        # Starts the clock on a push to main when none is running
 │   └── tester.yml             # Runs the JS + Python test suites on push/PR
+├── en/stocks/                 # English stock pages, generated (see «English pages»)
 ├── assets/                    # All frontend JS and CSS
 │   ├── app.js                 # Bootstrap, data loading, cache management, escHtml()
 │   ├── storage.js             # localStorage abstraction layer
@@ -4472,6 +4473,59 @@ eight proposals were built, one commit each:
 - **Dark theme by default on every page** (see «Dark mode» above).
 
 Tests: `TestForsideListe` (+5 assertions).
+
+## English pages, limited launch (`/en/stocks/`, 2026-11-28)
+
+Google Trends showed little English search for Norwegian dividend stocks, so
+the English version starts small and is measured before it grows: 30 stock
+pages and an overview, indexed, with hreflang both ways. Decide after six to
+eight weeks of Search Console data whether to extend to the whole catalogue
+and the sector pages.
+
+- **Which stocks:** `EN_TICKERE` in `fetch_stocks.py`, the largest dividend
+  payers by market cap. No B-shares, no company that pays nothing (NOD) or is
+  leaving the exchange (SUBC), and not 2020 Bulkers.
+  `TestLansering.test_bare_utbyttebetalere_som_blir_paa_bors` fails when one
+  stops paying or gets an event in `HENDELSE_UTEN_MAL`. Replace it with the
+  next payer by market cap and translate its text.
+- **How they are built:** `scripts/engelsk.py` reuses the Norwegian rule
+  functions (`utbytte_i_tittel()`, `utbytte_perioder()`, `forrige_borsdag()`,
+  `arsrate_merke()` in English as `arsrate_merke_en()`). Only words are new,
+  and every translated value (sector, country, frequency, event type) is in a
+  dictionary at the top, so a missing one fails a test instead of putting
+  Norwegian on an English page. `generer_engelske_sider()` runs in both
+  `fetch_stocks.py` and `regenerer_sider.py` before the sitemap, and removes
+  pages for tickers that left the list. The data job commits `en/`.
+- **Norwegian pages** carry hreflang and an «In English» line under the
+  subtitle when the ticker is on the list. `/aksjer/` and `/en/stocks/` point
+  at each other.
+- **Tax for investors abroad** was checked on 2026-11-28 against
+  Skatteetaten's pages on withholding tax and PwC for Bermuda, Cyprus and
+  Singapore. No treaty rate is named, since Skatteetaten does not give a
+  typical one.
+
+### Translations: `scripts/oversett.py` and the `oversetter` agent
+
+Only hand-written text is translated: the sector texts and the company texts.
+Everything with a number is built in English from the data.
+
+- `data/tekster_en.json` stores each translation with a checksum of the
+  Norwegian source. When the Norwegian text changes, the English one is
+  treated as stale and is not shown until it has been translated again
+  (`oversett.py --ko` puts stale texts first).
+- `--skriv` saves only when: the length is 0,85–1,6 times the source, there is
+  no number or year that is not in the source, the HTML tags match (sector
+  texts), the glossary (`data/ordliste_en.json`) is followed, and there are no
+  words from `unngaa`, no Norwegian function words and no dashes.
+- **Norwegian proper names** («Det norske oljeselskap», «Møre og Romsdal») go
+  in `egennavn` in the glossary. The first batch removed a former company name
+  to get past the gate. A name is a fact, so it must never be dropped.
+- `oversett.py --sjekk --streng` runs in CI.
+- Translating found real faults in the Norwegian texts. The Finans sector text
+  said the reverse of how savings banks work (fixed in #198). Read the
+  agent's report on the sources, not only its list of saved texts.
+
+Tests: `scripts/test_engelsk.py` (16).
 
 ## The fixer agent (`.claude/agents/fikser.md`, 2026-10-18)
 

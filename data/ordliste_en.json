@@ -1,0 +1,202 @@
+{
+  "_om": "Fast ordliste for engelske tekster på exday.no. Nøkkelen er et norsk ordstamme (regulært uttrykk, uten skille på store og små bokstaver, ordstart påkrevd). Står stammen i den norske kilden, må minst én av de engelske formene stå i oversettelsen. scripts/oversett.py håndhever den. «unngaa» er engelske ord som aldri skal brukes. «egennavn» er norske navn som skal stå uendret på engelsk; porten regner dem ikke som norske ord. «tall_unntak» er faguttrykk med siffer som ikke regnes som tall.",
+  "termer": {
+    "egenkapitalbevis": [
+      "equity certificate"
+    ],
+    "grunnfond": [
+      "primary capital",
+      "ownerless capital"
+    ],
+    "sparebankstiftelse": [
+      "savings bank foundation"
+    ],
+    "sparebank": [
+      "savings bank"
+    ],
+    "forstanderskap": [
+      "board of trustees"
+    ],
+    "utdelingsgrad|utbyttegrad": [
+      "payout ratio"
+    ],
+    "direkteavkastning": [
+      "dividend yield",
+      "yield"
+    ],
+    "ex-dato|ex-dag": [
+      "ex-dividend date",
+      "ex-date"
+    ],
+    "tilbakebetal\\w* (av )?innbetalt kapital": [
+      "return of paid-in capital",
+      "returns of paid-in capital",
+      "repayment of paid-in capital"
+    ],
+    "grunnrenteskatt": [
+      "resource rent tax"
+    ],
+    "særskatt": [
+      "special tax"
+    ],
+    "sokkel": [
+      "continental shelf"
+    ],
+    "aksjesparekonto": [
+      "share savings account"
+    ],
+    "skjermingsfradrag": [
+      "shielding deduction"
+    ],
+    "skjermingsrente": [
+      "risk-free rate",
+      "shielding rate"
+    ],
+    "havbruk|oppdrett": [
+      "aquaculture",
+      "fish farming",
+      "salmon farming",
+      "farmed"
+    ],
+    "konsesjon": [
+      "licence",
+      "license",
+      "concession",
+      "permit"
+    ],
+    "spotmarked|spotrate": [
+      "spot"
+    ],
+    "dagrate": [
+      "day rate"
+    ],
+    "fraktrate": [
+      "freight rate",
+      "rate"
+    ],
+    "generalforsamling": [
+      "general meeting"
+    ],
+    "børsmelding": [
+      "stock exchange notice",
+      "notice to Oslo Børs",
+      "notice"
+    ],
+    "kvartalsrapport": [
+      "quarterly report"
+    ],
+    "Folketrygdfondet": [
+      "Folketrygdfondet"
+    ],
+    "Finanstilsynet": [
+      "Financial Supervisory Authority",
+      "Finanstilsynet"
+    ],
+    "Norges Bank": [
+      "Norges Bank"
+    ],
+    "tidscerteparti": [
+      "time charter"
+    ],
+    "tilbakekjøp": [
+      "buyback"
+    ],
+    "Nærings- og fiskeridepartementet": [
+      "Ministry of Trade, Industry and Fisheries"
+    ],
+    "kundeutbytte": [
+      "customer dividend"
+    ],
+    "kapitalmarkedsdag": [
+      "capital markets day"
+    ],
+    "skadeforsikring": [
+      "non-life insur",
+      "property and casualty insur",
+      "general insur"
+    ],
+    "særutbytte|ekstraordinær\\w* utbytte|tilleggsutbytte|særskilt\\w* utbytte|ekstrautbytte": [
+      "special dividend",
+      "extraordinary dividend",
+      "additional dividend",
+      "one-off dividend",
+      "extra dividend"
+    ],
+    "rentenetto": [
+      "net interest"
+    ],
+    "ren kjernekapital": [
+      "CET1",
+      "common equity tier"
+    ],
+    "tapsavsetning": [
+      "loan loss provision",
+      "loss provision"
+    ],
+    "belåningsgrad": [
+      "loan-to-value"
+    ],
+    "ordrereserve": [
+      "order backlog",
+      "backlog"
+    ],
+    "kraftsalgsavtale": [
+      "power purchase agreement"
+    ],
+    "lakselus": [
+      "sea lice"
+    ],
+    "obligasjoner med fortrinnsrett": [
+      "covered bond"
+    ],
+    "overkursfond": [
+      "share premium"
+    ],
+    "kildeskatt": [
+      "withholding tax"
+    ],
+    "verdijustert egenkapital": [
+      "value-adjusted equity"
+    ],
+    "rettet emisjon": [
+      "private placement"
+    ],
+    "samfunnsutbytte": [
+      "community dividend"
+    ],
+    "eierbrøk": [
+      "ownership fraction",
+      "ownership ratio"
+    ]
+  },
+  "unngaa": [
+    "primary capital certificate",
+    "ex date ",
+    "record day",
+    "delve",
+    "landscape",
+    "it's worth noting",
+    "it is worth noting",
+    "in summary",
+    "in conclusion",
+    "plays a crucial role",
+    "plays a key role",
+    "navigate",
+    "robust",
+    "testament to",
+    "boasts",
+    "seamless",
+    "tapestry",
+    "not only",
+    "in today's"
+  ],
+  "egennavn": [
+    "Det norske oljeselskap",
+    "Møre og Romsdal",
+    "Nord Vei og Asfalt",
+    "Stiftelsen Veidekkeansattes Aksjekjøp"
+  ],
+  "tall_unntak": [
+    "CET1"
+  ]
+}

@@ -3529,7 +3529,7 @@ class TestSidemeny(unittest.TestCase):
             rel = os.path.relpath(mappe, self.ROT).replace(os.sep, "/")
             undermapper[:] = [d for d in undermapper
                               if not d.startswith(".") and d != "node_modules"
-                              and not (rel == "." and d in ("aksjer", "rapportkalender"))]
+                              and not (rel == "." and d in ("aksjer", "rapportkalender", "en"))]
             for f in filer:
                 if f.endswith(".html"):
                     sti = os.path.join(mappe, f)

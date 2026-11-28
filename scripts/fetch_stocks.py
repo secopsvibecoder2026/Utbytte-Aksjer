@@ -7976,6 +7976,26 @@ def _lag_korttall(a, valuta):
     return f'<dl class="korttall">{celler}</dl>'
 
 
+# Aksjene som har en engelsk side under /en/stocks/ (begrenset lansering
+# 2026-11-28): de største utbyttebetalerne etter markedsverdi. Utelatt: B-aksjer,
+# selskaper som ikke betaler utbytte (NOD), selskaper på vei ut av børsen
+# (SUBC, fusjon med Saipem) og 2020 Bulkers, hvis historikk er fra en
+# virksomhet som er solgt. Bygges av scripts/engelsk.py. En ticker som
+# forsvinner fra katalogen, mister siden.
+EN_TICKERE = (
+    "EQNR", "DNB", "KOG", "AKRBP", "TEL", "GJF", "NHY", "MOWI", "VAR", "FRO",
+    "ORK", "YAR", "SB1NO", "STB", "SALM", "AKER", "WAWI", "CMBTO", "HAFNI", "VEND",
+    "PROT", "WWI", "SBNOR", "BWLPG", "DOF", "MING", "VEI", "HAUTO", "OET", "SPOL",
+)
+
+
+def engelsk_hreflang(norsk_sti, engelsk_sti):
+    """hreflang nb/en/x-default for en side som finnes på begge språk."""
+    return (f'\n  <link rel="alternate" hreflang="nb" href="https://exday.no{norsk_sti}"/>'
+            f'\n  <link rel="alternate" hreflang="en" href="https://exday.no{engelsk_sti}"/>'
+            f'\n  <link rel="alternate" hreflang="x-default" href="https://exday.no{norsk_sti}"/>')
+
+
 def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None, rapporter=None):
     ticker  = a["ticker"]
     navn    = a["navn"]
@@ -8338,7 +8358,7 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None, rapporter=None
   <script src="/assets/consent.js" defer></script>
   <title>{sidetittel}</title>
   <meta name="description" content="{meta_desc}"/>{robots_meta}
-  <link rel="canonical" href="https://exday.no/aksjer/{ticker}/"/>
+  <link rel="canonical" href="https://exday.no/aksjer/{ticker}/"/>{engelsk_hreflang(f"/aksjer/{ticker}/", f"/en/stocks/{ticker}/") if ticker in EN_TICKERE else ""}
   <meta name="theme-color" content="#2f7352"/>
   <link rel="icon" type="image/png" sizes="512x512" href="/favicon.png"/>
   <link rel="icon" type="image/png" sizes="180x180" href="/logo/apple_touch_icon_180.png"/>
@@ -8661,7 +8681,7 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None, rapporter=None
   {brod_html}
 
   <h1 class="side-h1">{h1_tekst}</h1>
-  <p class="sub">{navn} ({ticker}) · {sektor} · {frekvens} utbytte · {markedsplass}</p>
+  <p class="sub">{navn} ({ticker}) · {sektor} · {frekvens} utbytte · {markedsplass}</p>{f'<p style="margin:-0.5rem 0 0.75rem;font-size:0.85rem;"><a href="/en/stocks/{ticker}/" hreflang="en" lang="en">In English</a></p>' if ticker in EN_TICKERE else ""}
   {ingress_html}
 
   {kurshode_html}
@@ -8970,7 +8990,7 @@ def generer_aksjesider(aksjer, root_dir):
   <script src="/assets/consent.js" defer></script>
   <title>Norske utbytteaksjer – oversikt | exday.no</title>
   <meta name="description" content="Oversikt over {antall_i_katalog(aksjer)} norske utbytteaksjer på Oslo Børs med yield, ex-dato og utbyttehistorikk. Oppdateres daglig."/>
-  <link rel="canonical" href="https://exday.no/aksjer/"/>
+  <link rel="canonical" href="https://exday.no/aksjer/"/>{engelsk_hreflang("/aksjer/", "/en/stocks/")}
   <meta property="og:title" content="Norske utbytteaksjer – oversikt | exday.no"/>
   <meta property="og:description" content="Oversikt over {antall_i_katalog(aksjer)} norske utbytteaksjer på Oslo Børs med yield, ex-dato og utbyttehistorikk. Oppdateres daglig."/>
   <meta property="og:url" content="https://exday.no/aksjer/"/>
@@ -12131,6 +12151,20 @@ def generer_sitemap(aksjer, root_dir, today, alle_tickers=None):
     <priority>0.7</priority>
   </url>""")
 
+    # Engelske sider: bare de som finnes på disk (engelsk.py fjerner de som
+    # har gått ut av EN_TICKERE).
+    en_dir = os.path.join(root_dir, "en", "stocks")
+    if os.path.isfile(os.path.join(en_dir, "index.html")):
+        en_sider = ["/en/stocks/"] + [f"/en/stocks/{t}/" for t in sorted(os.listdir(en_dir))
+                                      if os.path.isfile(os.path.join(en_dir, t, "index.html"))]
+        for sti in en_sider:
+            urls.append(f"""  <url>
+    <loc>https://exday.no{sti}</loc>
+    <lastmod>{today}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>""")
+
     urls_tekst = "\n".join(urls)
     lastmod_sti = os.path.join(root_dir, SITEMAP_LASTMOD_FIL)
     try:
@@ -12725,6 +12759,8 @@ def main():
     oppdater_kalender_maaneder(resultater, root_dir)
     oppdater_utbyttekalender(resultater, root_dir)
     oppdater_frekvensartikkel(resultater, root_dir)
+    import engelsk
+    engelsk.generer_engelske_sider(resultater, root_dir, today)
     # Sist: lastmod hasher sidene, så markørene må være fylt først.
     generer_sitemap(resultater, root_dir, today, AKSJER)
 
