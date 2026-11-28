@@ -67,7 +67,8 @@ class TestSide(unittest.TestCase):
             tekst = _synlig_tekst(side).replace("Oslo Børs", "")
             # Selskapsnavn er egennavn («Høland og Setskog Sparebank»).
             import oversett
-            for navn in (en.navn_en(a), en.kort_navn(a), *oversett.ordliste().get("egennavn", [])):
+            navn_liste = [en.navn_en(a), en.kort_navn(a), *oversett.ordliste().get("egennavn", [])]
+            for navn in sorted(navn_liste, key=len, reverse=True):
                 tekst = tekst.replace(navn, "")
             treff = norsk.findall(tekst)
             self.assertEqual(treff, [], f"{a['ticker']}: {treff[:5]}")
@@ -76,7 +77,7 @@ class TestSide(unittest.TestCase):
         a = next(x for x in _data() if x["ticker"] == "EQNR")
         side = en.aksje_side_en(a, DAG)
         self.assertIn('<html lang="en">', side)
-        self.assertIn('content="noindex,follow"', side)
+        self.assertNotIn("noindex", side)
         self.assertIn('href="https://exday.no/en/stocks/EQNR/"', side)
         self.assertIn('hreflang="nb" href="https://exday.no/aksjer/EQNR/"', side)
         self.assertIn("localStorage.getItem('tema')!=='light'", side)
@@ -92,6 +93,45 @@ class TestSide(unittest.TestCase):
         # Ingen avtalesats som Skatteetaten ikke oppgir.
         self.assertNotIn("15%", en.skatt({"navn": "X ASA"}))
 
+
+
+class TestLansering(unittest.TestCase):
+    def test_tickerne_finnes_og_er_unike(self):
+        katalog = {a["ticker"] for a in _data()}
+        self.assertEqual(len(fs.EN_TICKERE), len(set(fs.EN_TICKERE)))
+        self.assertEqual([t for t in fs.EN_TICKERE if t not in katalog], [])
+
+    def test_bare_utbyttebetalere_som_blir_paa_bors(self):
+        # Feiler når et selskap på listen slutter å betale eller får en hendelse
+        # som oppkjøp eller fusjon: da skal det byttes ut med den neste.
+        rader = {a["ticker"]: a for a in _data()}
+        feil = [t for t in fs.EN_TICKERE
+                if not (rader[t].get("utbytte_per_aksje") or 0) > 0 or not fs.i_rangering(rader[t])]
+        self.assertEqual(feil, [])
+
+    def test_generering_rydder_og_lager_oversikt(self):
+        import tempfile
+        rot = tempfile.mkdtemp()
+        gammel = os.path.join(rot, "en", "stocks", "UTGAATT")
+        os.makedirs(gammel)
+        data = [a for a in _data() if a["ticker"] in ("EQNR", "DNB", "ZZZ")]
+        laget = en.generer_engelske_sider(data, rot, DAG)
+        self.assertEqual(laget, ["EQNR", "DNB"])
+        self.assertFalse(os.path.exists(gammel))
+        with open(os.path.join(rot, "en", "stocks", "index.html"), encoding="utf-8") as f:
+            oversikt = f.read()
+        self.assertIn('href="/en/stocks/EQNR/"', oversikt)
+        self.assertIn('hreflang="nb" href="https://exday.no/aksjer/"', oversikt)
+        tekst = _synlig_tekst(oversikt)
+        self.assertEqual(re.findall(r"\b(utbytte|aksje\w*|og|siste)\b", tekst.replace("Oslo Børs", "")), [])
+
+    def test_norsk_side_peker_til_engelsk(self):
+        a = next(x for x in _data() if x["ticker"] == "EQNR")
+        side = fs._aksje_side_html(a, DAG.isoformat())
+        self.assertIn('hreflang="en" href="https://exday.no/en/stocks/EQNR/"', side)
+        self.assertIn('href="/en/stocks/EQNR/" hreflang="en" lang="en">In English</a></p>', side)
+        b = next(x for x in _data() if x["ticker"] not in fs.EN_TICKERE)
+        self.assertNotIn("/en/stocks/", fs._aksje_side_html(b, DAG.isoformat()))
 
 
 class TestOversettPort(unittest.TestCase):

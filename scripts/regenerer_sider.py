@@ -164,6 +164,8 @@ def main():
     oppdater_kalender_maaneder(aksjer, ROOT)
     oppdater_utbyttekalender(aksjer, ROOT)
     oppdater_frekvensartikkel(aksjer, ROOT)
+    import engelsk
+    engelsk.generer_engelske_sider(aksjer, ROOT, today)
 
     # Sist: lastmod hasher sidene, så markørene må være fylt først.
     generer_sitemap(aksjer, ROOT, today)

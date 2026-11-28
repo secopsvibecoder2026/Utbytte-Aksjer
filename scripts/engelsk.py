@@ -6,11 +6,12 @@ og hendelse_uten_mal() fra fetch_stocks.py. Bare ordene er nye. Det som er
 oversatt, står i ordlistene øverst, så en sektor eller en merkelapp som
 mangler gir en feil i testene, ikke norsk tekst på en engelsk side.
 
-Sidene har noindex til eieren har godkjent dem. Selskapsteksten, FAQ og
-rapportoppsummeringene er ikke med ennå (steg 2 og 3); siden lenker til den
-norske siden for dem.
+Begrenset lansering (2026-11-28): bare tickerne i EN_TICKERE i fetch_stocks.py
+får side, og /en/stocks/ lister dem. fetch_stocks og regenerer_sider kaller
+generer_engelske_sider() før sitemapen. FAQ og rapportoppsummeringene er ikke
+oversatt; siden lenker til den norske siden for dem.
 
-    python scripts/engelsk.py EQNR DNB FRO --ut KATALOG
+    python scripts/engelsk.py --ut KATALOG
 """
 
 import argparse
@@ -196,6 +197,9 @@ def tittel_og_h1(a, today):
         ledd += " a year"
     h1 = f"{navn} dividend {aar}: {ledd}"
     tittel = h1 + (f" – ex-date {dato(t['ex'])}" if t["ex"] else "")
+    # Samme tak som den norske tittelen: ex-datoen ryker over TITTEL_TAK.
+    if len(f"{tittel} | {ticker}") > fs.TITTEL_TAK:
+        tittel = h1
     return f"{tittel} | {ticker}", h1
 
 
@@ -412,6 +416,21 @@ CSS = """
     .dark .varsel { background: rgba(87,61,27,0.25); }
     .varsel p { margin: 0; }
     .om p { margin: 0 0 1rem; }
+    .en-nav-lenke { display: inline-flex; align-items: center; min-height: 44px; padding: 0 0.5rem; font-weight: 600; font-size: 0.9rem; color: #374151; text-decoration: none; }
+    .dark .en-nav-lenke { color: #d1d5db; }
+    .en-oversikt td { vertical-align: top; }
+    .en-ex { white-space: nowrap; }
+    /* Telefon: selskap, utbytte og yield på én linje, ex-datoen under. */
+    @media (max-width: 40rem) {
+      .en-sektor { display: none; }
+      .en-oversikt thead .en-ex { display: none; }
+      .en-oversikt tr { display: grid; grid-template-columns: 1fr auto auto; border-bottom: 1px solid #e5e7eb; }
+      .dark .en-oversikt tr { border-color: #1f2937; }
+      .en-oversikt td { border-bottom: 0; }
+      .en-oversikt td.en-ex { grid-column: 1 / -1; padding-top: 0; font-size: 0.85rem; color: #4b5563; }
+      .dark .en-oversikt td.en-ex { color: #9ca3af; }
+      .en-oversikt thead tr { border-bottom: 1px solid #e5e7eb; }
+    }
     .sprak-lenke { display: inline-flex; align-items: center; min-height: 44px; }
     .norsk-boks { background: #fff; border: 1px solid #e5e7eb; border-radius: 0.75rem; padding: 0.25rem 1rem; margin-top: 2rem; }
     .dark .norsk-boks { background: #111827; border-color: #1f2937; }
@@ -446,6 +465,8 @@ FOOTER = """  <footer class="std-footer" style="margin-top:2rem;padding-top:1.5r
       <a href="/metode/" lang="nb" style="color:#6b7280;text-decoration:underline;">Method and data sources (Norwegian)</a>
       <span style="margin:0 0.4rem;">&#183;</span>
       <a href="/personvern/" lang="nb" style="color:#6b7280;text-decoration:underline;">Privacy (Norwegian)</a>
+      <span style="margin:0 0.4rem;">&#183;</span>
+      <a href="/vilkaar/" lang="nb" style="color:#6b7280;text-decoration:underline;">Terms of use (Norwegian)</a>
     </p>
   </footer>
   <style>.dark .std-footer { color:#9ca3af !important; border-color:#1f2937 !important; } .dark .std-footer a { color:#9ca3af !important; }</style>"""
@@ -476,32 +497,24 @@ def meta_beskrivelse(a, today):
     return tekst[:155]
 
 
-def aksje_side_en(a, today):
-    """Hele den engelske aksjesiden som HTML."""
-    today = datetime.date.fromisoformat(str(today)[:10])
-    ticker = a["ticker"]
-    tittel, h1 = tittel_og_h1(a, today)
-    beskr = meta_beskrivelse(a, today)
-    kanonisk = f"https://exday.no{url_en(ticker)}"
-    sub = " · ".join(x for x in [
-        f"{html.escape(navn_en(a))} ({ticker})",
-        SEKTOR_EN.get(a.get("sektor"), ""),
-        (FREKVENS_EN[a["frekvens"]] + (" dividends" if a["frekvens"] == "Uregelmessig" else " dividend"))
-        if a.get("frekvens") in FREKVENS_EN else "",
-        html.escape(a.get("bors") or "Oslo Børs"),
-    ] if x)
+def _smule(ledd):
+    """(html, ld) for en engelsk brødsmule. `ledd` er (navn, url), siste uten lenke."""
+    alle = [(fs.BRODSMULE_ROT, "/")] + list(ledd)
+    skille = f' <span class="brodsmule-skille" aria-hidden="true">{fs.BRODSMULE_SKILLETEGN}</span> '
+    deler = [f'<a href="{u}">{html.escape(n)}</a>' for n, u in alle[:-1]]
+    deler.append(f'<span aria-current="page">{html.escape(alle[-1][0])}</span>')
+    ld = {"@type": "BreadcrumbList", "itemListElement": [
+        {"@type": "ListItem", "position": i + 1, "name": n, "item": f"https://exday.no{u}"}
+        for i, (n, u) in enumerate(alle)]}
+    return '<nav class="brodsmule" aria-label="Breadcrumb">' + skille.join(deler) + '</nav>', ld
+
+
+def _dokument(tittel, beskr, sti_en, sti_nb, ld_smule, innhold):
+    """Hele den engelske siden rundt `innhold` (det som står i .wrap etter brødsmulen)."""
+    kanonisk = f"https://exday.no{sti_en}"
     ld = {"@context": "https://schema.org", "@graph": [
         {"@type": "WebPage", "@id": kanonisk, "url": kanonisk, "name": tittel,
-         "description": beskr, "inLanguage": "en"},
-        {"@type": "BreadcrumbList", "itemListElement": [
-            {"@type": "ListItem", "position": 1, "name": fs.BRODSMULE_ROT, "item": "https://exday.no/"},
-            {"@type": "ListItem", "position": 2, "name": ticker, "item": kanonisk}]},
-    ]}
-    skille = f' <span class="brodsmule-skille" aria-hidden="true">{fs.BRODSMULE_SKILLETEGN}</span> '
-    smule = (f'<nav class="brodsmule" aria-label="Breadcrumb"><a href="/">{fs.BRODSMULE_ROT}</a>'
-             f'{skille}<span aria-current="page">{ticker}</span></nav>')
-    hentet = hentet_dato(a.get("hentet"))
-    hentet_linje = f'<p class="note">Figures fetched {hentet}.</p>' if hentet else ""
+         "description": beskr, "inLanguage": "en"}, ld_smule]}
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -512,11 +525,7 @@ def aksje_side_en(a, today):
 {GA_HEAD}
   <title>{html.escape(tittel)}</title>
   <meta name="description" content="{html.escape(beskr)}"/>
-  <meta name="robots" content="noindex,follow"/>
-  <link rel="canonical" href="{kanonisk}"/>
-  <link rel="alternate" hreflang="nb" href="https://exday.no{url_nb(ticker)}"/>
-  <link rel="alternate" hreflang="en" href="{kanonisk}"/>
-  <link rel="alternate" hreflang="x-default" href="https://exday.no{url_nb(ticker)}"/>
+  <link rel="canonical" href="{kanonisk}"/>{fs.engelsk_hreflang(sti_nb, sti_en)}
   <meta name="theme-color" content="#2f7352"/>
   <link rel="icon" type="image/png" sizes="512x512" href="/favicon.png"/>
   <link rel="icon" type="image/svg+xml" href="/logo/exday_icon_primary.svg"/>
@@ -525,6 +534,7 @@ def aksje_side_en(a, today):
   <meta property="og:description" content="{html.escape(beskr)}"/>
   <meta property="og:url" content="{kanonisk}"/>
   <meta property="og:type" content="website"/>
+  <meta property="og:image" content="https://exday.no/assets/og-image.png"/>
   <meta property="og:locale" content="en_GB"/>
   <meta property="og:locale:alternate" content="nb_NO"/>
   <meta property="og:site_name" content="exday.no"/>
@@ -541,27 +551,14 @@ def aksje_side_en(a, today):
         <span>e<span class="site-logo-x">x</span>day<span class="site-logo-dot">.no</span></span>
       </a>
       <div class="site-nav-actions">
-        <a href="{url_nb(ticker)}" class="site-app-btn" hreflang="nb" lang="nb">Norsk</a>
+        <a href="/en/stocks/" class="en-nav-lenke">Stocks</a>
+        <a href="{sti_nb}" class="site-app-btn" hreflang="nb" lang="nb">Norsk</a>
         <button id="dark-toggle" class="site-dark-btn" aria-label="Switch colour mode">{SOL}{MAANE}</button>
       </div>
     </div>
   </nav>
 <div class="wrap">
-  {smule}
-  <h1 class="side-h1">{html.escape(h1)}</h1>
-  <p class="sub">{sub}</p>
-  {hendelse_boks(a)}
-  <p class="ingress les">{html.escape(ingress(a, today))}</p>
-  {nokkeltall(a, today)}
-  {hentet_linje}
-  {om_selskapet(a)}
-  {betalt_tabell(a)}
-  {historikk(a, today)}
-  {skatt(a)}
-  <div class="norsk-boks les">
-    <p>{"Frequently asked questions" if om_selskapet(a) else "The company description, frequently asked questions"}, quarterly report summaries and the price chart
-    are on the <a href="{url_nb(ticker)}" hreflang="nb">Norwegian page for {ticker}</a>.</p>
-  </div>
+{innhold}
 {FOOTER}
 </div>
 {TEMA_SKRIPT}
@@ -570,26 +567,121 @@ def aksje_side_en(a, today):
 """
 
 
+def aksje_side_en(a, today):
+    """Hele den engelske aksjesiden som HTML."""
+    today = datetime.date.fromisoformat(str(today)[:10])
+    ticker = a["ticker"]
+    tittel, h1 = tittel_og_h1(a, today)
+    beskr = meta_beskrivelse(a, today)
+    sub = " · ".join(x for x in [
+        f"{html.escape(navn_en(a))} ({ticker})",
+        SEKTOR_EN.get(a.get("sektor"), ""),
+        (FREKVENS_EN[a["frekvens"]] + (" dividends" if a["frekvens"] == "Uregelmessig" else " dividend"))
+        if a.get("frekvens") in FREKVENS_EN else "",
+        html.escape(a.get("bors") or "Oslo Børs"),
+    ] if x)
+    smule, ld = _smule([("Stocks", "/en/stocks/"), (ticker, url_en(ticker))])
+    hentet = hentet_dato(a.get("hentet"))
+    hentet_linje = f'<p class="note">Figures fetched {hentet}.</p>' if hentet else ""
+    om = om_selskapet(a)
+    innhold = f"""  {smule}
+  <h1 class="side-h1">{html.escape(h1)}</h1>
+  <p class="sub">{sub}</p>
+  {hendelse_boks(a)}
+  <p class="ingress les">{html.escape(ingress(a, today))}</p>
+  {nokkeltall(a, today)}
+  {hentet_linje}
+  {om}
+  {betalt_tabell(a)}
+  {historikk(a, today)}
+  {skatt(a)}
+  <div class="norsk-boks les">
+    <p>{"Frequently asked questions" if om else "The company description, frequently asked questions"}, quarterly report summaries and the price chart
+    are on the <a href="{url_nb(ticker)}" hreflang="nb">Norwegian page for {ticker}</a>.</p>
+  </div>"""
+    return _dokument(tittel, beskr, url_en(ticker), url_nb(ticker), ld, innhold)
+
+
+OVERSIKT_TITTEL = "Norwegian dividend stocks: yields and ex-dates | exday.no"
+OVERSIKT_BESKR = ("Dividend per share, yield and ex-dividend dates for the largest dividend-paying "
+                  "companies on Oslo Børs, with notes on tax for investors outside Norway.")
+
+
+def _ex_celle(a, today):
+    ex = a.get("ex_dato") or ""
+    if ex and ex >= str(today)[:10]:
+        return dato(ex)
+    mnd = a.get("utbetalingsmaaneder") or []
+    if len(mnd) == 12:
+        return "Every month"
+    if mnd:
+        return '<span class="note">usually</span> ' + ", ".join(MND_EN[m - 1] for m in mnd)
+    return "—"
+
+
+def oversikt_side_en(aksjer, today):
+    """/en/stocks/: tabell over aksjene med engelsk side, største først."""
+    today = datetime.date.fromisoformat(str(today)[:10])
+    rader = []
+    for a in sorted(aksjer, key=lambda x: -(x.get("markedsverdi_mrd") or 0)):
+        upa = a.get("utbytte_per_aksje") or 0
+        rader.append(
+            f'<tr><td><a href="{url_en(a["ticker"])}">{html.escape(kort_navn(a))}</a>'
+            f' <span class="note">{a["ticker"]}</span></td>'
+            f'<td class="en-sektor">{SEKTOR_EN.get(a.get("sektor"), "")}</td>'
+            f'<td class="tall">{html.escape(belop(upa)) if upa > 0 else "—"}</td>'
+            f'<td class="tall">{pst(a.get("utbytte_yield")) if upa > 0 else "—"}</td>'
+            f'<td class="en-ex">{_ex_celle(a, today)}</td></tr>')
+    smule, ld = _smule([("Stocks", "/en/stocks/")])
+    innhold = f"""  {smule}
+  <h1 class="side-h1">Norwegian dividend stocks on Oslo Børs</h1>
+  <p class="ingress les">Dividend figures for some of the largest companies on Oslo Børs: the annual
+  dividend per share, the yield at today's price and when the shares usually go ex-dividend. The
+  figures come from the same data as the Norwegian pages and are updated every trading day. Each
+  company page explains the withholding tax that applies if you live outside Norway.</p>
+  <div class="tabell-ramme"><table class="en-tabell en-oversikt"><thead><tr><th>Company</th>
+  <th class="en-sektor">Sector</th><th class="tall">Dividend a year</th><th class="tall">Yield</th>
+  <th class="en-ex">Ex-dividend</th></tr></thead><tbody>
+  {"".join(rader)}
+  </tbody></table></div>
+  <p class="note les">Dividend a year is per share in Norwegian kroner. The yield is measured against
+  today's share price. The <a href="/aksjer/" hreflang="nb">Norwegian site</a> covers every dividend
+  stock on Oslo Børs and Euronext Growth.</p>"""
+    return _dokument(OVERSIKT_TITTEL, OVERSIKT_BESKR, "/en/stocks/", "/aksjer/", ld, innhold)
+
+
+def generer_engelske_sider(aksjer, root_dir, today):
+    """Skriver /en/stocks/ og én side per ticker i EN_TICKERE som finnes i
+    dataene, og fjerner sider for tickere som ikke lenger er med."""
+    import shutil
+    rader = {a["ticker"]: a for a in aksjer}
+    med = [rader[t] for t in fs.EN_TICKERE if t in rader]
+    ut = os.path.join(root_dir, "en", "stocks")
+    os.makedirs(ut, exist_ok=True)
+    for a in med:
+        mappe = os.path.join(ut, a["ticker"])
+        os.makedirs(mappe, exist_ok=True)
+        with open(os.path.join(mappe, "index.html"), "w", encoding="utf-8") as f:
+            f.write(aksje_side_en(a, today))
+    with open(os.path.join(ut, "index.html"), "w", encoding="utf-8") as f:
+        f.write(oversikt_side_en(med, today))
+    beholdes = {a["ticker"] for a in med}
+    for navn in os.listdir(ut):
+        sti = os.path.join(ut, navn)
+        if os.path.isdir(sti) and navn not in beholdes:
+            shutil.rmtree(sti)
+    print(f"Engelske sider: {len(med)} aksjer + oversikt")
+    return [a["ticker"] for a in med]
+
+
 def main():
     p = argparse.ArgumentParser(description=__doc__)
-    p.add_argument("tickere", nargs="+")
     p.add_argument("--ut", required=True, help="Rotkatalogen sidene skrives under (en/stocks/…)")
     p.add_argument("--dato", default=None, help="Dagens dato, ÅÅÅÅ-MM-DD (for tester)")
     args = p.parse_args()
     with open(os.path.join(ROT, "data", "aksjer.json"), encoding="utf-8") as f:
         data = json.load(f)
-    rader = {a["ticker"]: a for a in data["aksjer"]}
-    today = args.dato or datetime.date.today().isoformat()
-    for t in args.tickere:
-        a = rader.get(t)
-        if not a:
-            print(f"Ukjent ticker: {t}", file=sys.stderr)
-            continue
-        mappe = os.path.join(args.ut, "en", "stocks", t)
-        os.makedirs(mappe, exist_ok=True)
-        with open(os.path.join(mappe, "index.html"), "w", encoding="utf-8") as f:
-            f.write(aksje_side_en(a, today))
-        print(f"Skrev {mappe}/index.html")
+    generer_engelske_sider(data["aksjer"], args.ut, args.dato or datetime.date.today().isoformat())
 
 
 if __name__ == "__main__":
