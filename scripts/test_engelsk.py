@@ -124,6 +124,11 @@ class TestOversettPort(unittest.TestCase):
             self.assertIn(ord_, feil)
         self.assertIn("årstall", " ".join(self.ov.valider("selskap", "X", self.GOD.replace("1994", "long"), self.NORSK)))
 
+    def test_linjeskift_og_faguttrykk_med_siffer(self):
+        no = "Banken har ren kjernekapital langt over kravet, og den er en sparebank."
+        en_ = "The bank has CET1 capital well above the requirement, and it is a savings\nbank."
+        self.assertEqual(self.ov.valider("selskap", "X", en_, no), [])
+
     def test_html_taggene_maa_vaere_like(self):
         no, en_ = "<p>Banken er <strong>stor</strong>.</p>", "<p>The bank is big.</p>"
         self.assertTrue(any("HTML" in f for f in self.ov.valider("sektor", "X", en_, no)))

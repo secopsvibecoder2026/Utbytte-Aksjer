@@ -1,5 +1,5 @@
 {
-  "_om": "Fast ordliste for engelske tekster på exday.no. Nøkkelen er et norsk ordstamme (regulært uttrykk, uten skille på store og små bokstaver, ordstart påkrevd). Står stammen i den norske kilden, må minst én av de engelske formene stå i oversettelsen. scripts/oversett.py håndhever den. «unngaa» er engelske ord som aldri skal brukes. «egennavn» er norske navn som skal stå uendret på engelsk; porten regner dem ikke som norske ord.",
+  "_om": "Fast ordliste for engelske tekster på exday.no. Nøkkelen er et norsk ordstamme (regulært uttrykk, uten skille på store og små bokstaver, ordstart påkrevd). Står stammen i den norske kilden, må minst én av de engelske formene stå i oversettelsen. scripts/oversett.py håndhever den. «unngaa» er engelske ord som aldri skal brukes. «egennavn» er norske navn som skal stå uendret på engelsk; porten regner dem ikke som norske ord. «tall_unntak» er faguttrykk med siffer som ikke regnes som tall.",
   "termer": {
     "egenkapitalbevis": [
       "equity certificate"
@@ -95,12 +95,6 @@
     "Norges Bank": [
       "Norges Bank"
     ],
-    "særutbytte|ekstraordinært utbytte|tilleggsutbytte|særskilt utbytte": [
-      "special dividend",
-      "extraordinary dividend",
-      "additional dividend",
-      "one-off dividend"
-    ],
     "tidscerteparti": [
       "time charter"
     ],
@@ -120,6 +114,37 @@
       "non-life insur",
       "property and casualty insur",
       "general insur"
+    ],
+    "særutbytte|ekstraordinær\\w* utbytte|tilleggsutbytte|særskilt\\w* utbytte|ekstrautbytte": [
+      "special dividend",
+      "extraordinary dividend",
+      "additional dividend",
+      "one-off dividend",
+      "extra dividend"
+    ],
+    "rentenetto": [
+      "net interest"
+    ],
+    "ren kjernekapital": [
+      "CET1",
+      "common equity tier"
+    ],
+    "tapsavsetning": [
+      "loan loss provision",
+      "loss provision"
+    ],
+    "belåningsgrad": [
+      "loan-to-value"
+    ],
+    "ordrereserve": [
+      "order backlog",
+      "backlog"
+    ],
+    "kraftsalgsavtale": [
+      "power purchase agreement"
+    ],
+    "lakselus": [
+      "sea lice"
     ]
   },
   "unngaa": [
@@ -145,5 +170,8 @@
   ],
   "egennavn": [
     "Det norske oljeselskap"
+  ],
+  "tall_unntak": [
+    "CET1"
   ]
 }

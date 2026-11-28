@@ -92,7 +92,7 @@ def ordlistetreff(norsk, liste=None):
     liste = liste or ordliste()
     treff = []
     for stamme, former in liste["termer"].items():
-        if re.search(r"(?<!\w)(" + stamme + ")", norsk, re.I):
+        if re.search(r"(?<!\w)(" + stamme + ")", re.sub(r"\s+", " ", norsk), re.I):
             treff.append((stamme, former))
     return treff
 
@@ -106,7 +106,10 @@ def valider(art, nokkel, engelsk, norsk, navn=""):
     n_no, n_en = len(_ord(norsk)), len(_ord(engelsk))
     if n_no and not (ORD_FORHOLD[0] <= n_en / n_no <= ORD_FORHOLD[1]):
         feil.append(f"lengde: {n_en} ord mot {n_no} i kilden (forhold {n_en / n_no:.2f})")
-    ekstra = _tall(engelsk) - _tall(norsk)
+    uten_unntak = engelsk
+    for unntak in liste.get("tall_unntak", []):
+        uten_unntak = uten_unntak.replace(unntak, " ")
+    ekstra = _tall(uten_unntak) - _tall(norsk)
     if ekstra:
         feil.append(f"tall som ikke står i kilden: {sorted(ekstra)}")
     mangler = {t for t in _tall(norsk) if len(t) == 4 and t.startswith(("19", "20"))} - _tall(engelsk)
@@ -114,7 +117,7 @@ def valider(art, nokkel, engelsk, norsk, navn=""):
         feil.append(f"årstall i kilden som mangler: {sorted(mangler)}")
     if art == "sektor" and _tagger(engelsk) != _tagger(norsk):
         feil.append("HTML-taggene er ikke de samme som i kilden, i samme rekkefølge")
-    lav = engelsk.lower()
+    lav = re.sub(r"\s+", " ", engelsk.lower())
     for stamme, former in ordlistetreff(norsk, liste):
         if not any(f.lower() in lav for f in former):
             feil.append(f"ordliste: «{stamme}» skal bli {' / '.join(former)}")

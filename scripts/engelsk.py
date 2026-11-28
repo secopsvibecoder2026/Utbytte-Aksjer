@@ -311,7 +311,7 @@ def om_selskapet(a):
     if not tekst:
         return ""
     avsnitt = [html.escape(re.sub(r"\s+", " ", x).strip()) for x in re.split(r"\n\s*\n", tekst) if x.strip()]
-    return ('<h2 id="about">About the company</h2><div class="les">'
+    return ('<h2 id="about">About the company</h2><div class="om les">'
             + "".join(f"<p>{x}</p>" for x in avsnitt) + '</div>')
 
 
@@ -411,6 +411,7 @@ CSS = """
     .varsel { border-left: 4px solid #b98a3a; background: #fbf8f0; padding: 0.75rem 1rem; border-radius: 0.5rem; margin: 0 0 1.25rem; }
     .dark .varsel { background: rgba(87,61,27,0.25); }
     .varsel p { margin: 0; }
+    .om p { margin: 0 0 1rem; }
     .sprak-lenke { display: inline-flex; align-items: center; min-height: 44px; }
     .norsk-boks { background: #fff; border: 1px solid #e5e7eb; border-radius: 0.75rem; padding: 0.25rem 1rem; margin-top: 2rem; }
     .dark .norsk-boks { background: #111827; border-color: #1f2937; }
