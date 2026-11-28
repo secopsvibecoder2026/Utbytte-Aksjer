@@ -8369,7 +8369,7 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None, rapporter=None
   <meta property="og:description" content="{meta_desc}"/>
   <meta property="og:url" content="https://exday.no/aksjer/{ticker}/"/>
   <meta property="og:type" content="website"/>
-  <meta property="og:image" content="https://exday.no/assets/og-image.png"/>
+  <meta property="og:image" content="https://exday.no/assets/og-bilde.png"/>
   <meta property="og:image:width" content="1200"/>
   <meta property="og:image:height" content="630"/>
   <meta property="og:locale" content="nb_NO"/>
@@ -8377,7 +8377,7 @@ def _aksje_side_html(a, today, relaterte=None, sektor_snitt=None, rapporter=None
   <meta name="twitter:card" content="summary_large_image"/>
   <meta name="twitter:title" content="{sidetittel}"/>
   <meta name="twitter:description" content="{meta_desc}"/>
-  <meta name="twitter:image" content="https://exday.no/assets/og-image.png"/>
+  <meta name="twitter:image" content="https://exday.no/assets/og-bilde.png"/>
   <script type="application/ld+json">{json_ld}</script>
   {faq_jsonld}
   <link rel="preload" href="/assets/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin/>
@@ -8995,7 +8995,7 @@ def generer_aksjesider(aksjer, root_dir):
   <meta property="og:description" content="Oversikt over {antall_i_katalog(aksjer)} norske utbytteaksjer på Oslo Børs med yield, ex-dato og utbyttehistorikk. Oppdateres daglig."/>
   <meta property="og:url" content="https://exday.no/aksjer/"/>
   <meta property="og:type" content="website"/>
-  <meta property="og:image" content="https://exday.no/assets/og-image.png"/>
+  <meta property="og:image" content="https://exday.no/assets/og-bilde.png"/>
   <meta property="og:image:width" content="1200"/>
   <meta property="og:image:height" content="630"/>
   <meta property="og:locale" content="nb_NO"/>
@@ -9003,7 +9003,7 @@ def generer_aksjesider(aksjer, root_dir):
   <meta name="twitter:card" content="summary_large_image"/>
   <meta name="twitter:title" content="Norske utbytteaksjer – oversikt | exday.no"/>
   <meta name="twitter:description" content="Oversikt over {antall_i_katalog(aksjer)} norske utbytteaksjer på Oslo Børs med yield, ex-dato og utbyttehistorikk. Oppdateres daglig."/>
-  <meta name="twitter:image" content="https://exday.no/assets/og-image.png"/>
+  <meta name="twitter:image" content="https://exday.no/assets/og-bilde.png"/>
   {brodsmule_ld_script(brod_ld)}
   <link rel="stylesheet" href="/assets/style.css"/>
   <style>
@@ -9887,7 +9887,7 @@ def generer_sektorsider(aksjer, root_dir):
   <meta property="og:description" content="{meta_desc}"/>
   <meta property="og:url" content="https://exday.no/aksjer/sektor/{slug}/"/>
   <meta property="og:type" content="website"/>
-  <meta property="og:image" content="https://exday.no/assets/og-image.png"/>
+  <meta property="og:image" content="https://exday.no/assets/og-bilde.png"/>
   <meta property="og:image:width" content="1200"/>
   <meta property="og:image:height" content="630"/>
   <meta property="og:locale" content="nb_NO"/>
@@ -9895,7 +9895,7 @@ def generer_sektorsider(aksjer, root_dir):
   <meta name="twitter:card" content="summary_large_image"/>
   <meta name="twitter:title" content="{sektor}-aksjer med utbytte – exday.no"/>
   <meta name="twitter:description" content="{meta_desc}"/>
-  <meta name="twitter:image" content="https://exday.no/assets/og-image.png"/>
+  <meta name="twitter:image" content="https://exday.no/assets/og-bilde.png"/>
   <script type="application/ld+json">{json_ld}</script>
   <link rel="stylesheet" href="/assets/tailwind.css"/>
   <link rel="stylesheet" href="/assets/style.css"/>
@@ -10573,7 +10573,7 @@ def generer_topplistesider(aksjer, root_dir):
   <meta property="og:description" content="{desc}"/>
   <meta property="og:url" content="https://exday.no/aksjer/{cfg['slug']}/"/>
   <meta property="og:type" content="website"/>
-  <meta property="og:image" content="https://exday.no/assets/og-image.png"/>
+  <meta property="og:image" content="https://exday.no/assets/og-bilde.png"/>
   <meta property="og:image:width" content="1200"/>
   <meta property="og:image:height" content="630"/>
   <meta property="og:locale" content="nb_NO"/>
@@ -10581,7 +10581,7 @@ def generer_topplistesider(aksjer, root_dir):
   <meta name="twitter:card" content="summary_large_image"/>
   <meta name="twitter:title" content="{cfg['tittel']} | exday.no"/>
   <meta name="twitter:description" content="{desc}"/>
-  <meta name="twitter:image" content="https://exday.no/assets/og-image.png"/>
+  <meta name="twitter:image" content="https://exday.no/assets/og-bilde.png"/>
   <script type="application/ld+json">{json_ld}</script>
   {brodsmule_ld_script(brod_ld)}
   <link rel="stylesheet" href="/assets/tailwind.css"/>
@@ -11016,7 +11016,7 @@ def generer_rapportkalender(aksjer, root_dir, i_dag=None):
   <meta property="og:description" content="{html.escape(desc, quote=True)}"/>
   <meta property="og:url" content="https://exday.no/rapportkalender/"/>
   <meta property="og:type" content="website"/>
-  <meta property="og:image" content="https://exday.no/assets/og-image.png"/>
+  <meta property="og:image" content="https://exday.no/assets/og-bilde.png"/>
   <meta property="og:image:width" content="1200"/>
   <meta property="og:image:height" content="630"/>
   <meta property="og:locale" content="nb_NO"/>
@@ -11024,7 +11024,7 @@ def generer_rapportkalender(aksjer, root_dir, i_dag=None):
   <meta name="twitter:card" content="summary_large_image"/>
   <meta name="twitter:title" content="{tittel} | exday.no"/>
   <meta name="twitter:description" content="{html.escape(desc, quote=True)}"/>
-  <meta name="twitter:image" content="https://exday.no/assets/og-image.png"/>
+  <meta name="twitter:image" content="https://exday.no/assets/og-bilde.png"/>
   <script type="application/ld+json">{json_ld}</script>
   <script type="application/ld+json">{faq_ld}</script>
   {brodsmule_ld_script(brod_ld)}
@@ -11680,7 +11680,7 @@ def _rapportside_html(a, rapporter, today):
   <meta property="og:description" content="{html.escape(desc, quote=True)}"/>
   <meta property="og:url" content="{url}"/>
   <meta property="og:type" content="article"/>
-  <meta property="og:image" content="https://exday.no/assets/og-image.png"/>
+  <meta property="og:image" content="https://exday.no/assets/og-bilde.png"/>
   <meta property="og:image:width" content="1200"/>
   <meta property="og:image:height" content="630"/>
   <meta property="og:locale" content="nb_NO"/>
@@ -11688,7 +11688,7 @@ def _rapportside_html(a, rapporter, today):
   <meta name="twitter:card" content="summary_large_image"/>
   <meta name="twitter:title" content="{html.escape(tittel, quote=True)}"/>
   <meta name="twitter:description" content="{html.escape(desc, quote=True)}"/>
-  <meta name="twitter:image" content="https://exday.no/assets/og-image.png"/>
+  <meta name="twitter:image" content="https://exday.no/assets/og-bilde.png"/>
   <script type="application/ld+json">{json_ld}</script>
   <link rel="stylesheet" href="/assets/tailwind.css"/>
   <link rel="stylesheet" href="/assets/style.css"/>

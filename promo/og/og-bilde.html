@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<!-- Kilde for assets/og-bilde.png (delingsbildet). Lag PNG med:
+     node promo/og/lag_og_bilde.js   (Playwright, 1200x630) -->
+<html lang="nb"><head><meta charset="utf-8">
+<style>
+@font-face { font-family: Inter; src: url("../../assets/fonts/inter-latin-wght-normal.woff2") format("woff2"); font-weight: 100 900; }
+* { box-sizing: border-box; margin: 0; }
+body { width: 1200px; height: 630px; font-family: Inter, sans-serif; background: #0b1120; color: #f3f4f6; overflow: hidden; }
+.ramme { position: relative; width: 1200px; height: 630px; padding: 64px 72px; background:
+  radial-gradient(900px 500px at 100% 100%, rgba(47,115,82,0.28), transparent 60%), #0b1120; }
+.logo { display: flex; align-items: center; gap: 18px; }
+.logo img { width: 64px; height: 64px; }
+.ord { font-size: 40px; font-weight: 700; letter-spacing: -0.02em; }
+.x { color: #16a34a; } .dot { color: #4ade80; }
+h1 { margin-top: 64px; font-size: 76px; line-height: 1.05; font-weight: 800; letter-spacing: -0.03em; max-width: 720px; }
+p { margin-top: 26px; font-size: 32px; line-height: 1.35; color: #cbd5e1; max-width: 640px; }
+.stolper { position: absolute; right: 72px; bottom: 64px; display: flex; align-items: flex-end; gap: 18px; height: 330px; }
+.stolper div { width: 54px; border-radius: 10px 10px 0 0; background: #2f7352; }
+.stolper div:last-child { background: #6fa98a; }
+.akse { position: absolute; right: 60px; bottom: 62px; width: 380px; height: 3px; background: #334155; border-radius: 2px; }
+</style></head><body><div class="ramme">
+  <div class="logo"><img src="../../logo/exday_icon_inverse.svg" alt=""><span class="ord">e<span class="x">x</span>day<span class="dot">.no</span></span></div>
+  <h1>Utbytteaksjer på Oslo Børs</h1>
+  <p>Utbytte per aksje, yield og ex-datoer. Oppdateres hver børsdag.</p>
+  <div class="stolper"><div style="height:38%"></div><div style="height:52%"></div><div style="height:47%"></div><div style="height:68%"></div><div style="height:86%"></div><div style="height:100%"></div></div>
+  <div class="akse"></div>
+</div></body></html>
