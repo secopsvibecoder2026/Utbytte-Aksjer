@@ -32,7 +32,9 @@ grunnrenteskatt.
    forstår setningen: «equity certificates, the shares savings banks issue
    instead of ordinary shares». Ikke mer enn det.
 4. **Egennavn oversettes ikke:** Oslo Børs, Folketrygdfondet, Norges Bank,
-   selskapsnavn. Myndigheter får engelsk navn der det finnes et offisielt
+   selskapsnavn, tidligere navn. Står et norsk egennavn med småord i seg
+   («Det norske oljeselskap»), legg det i «egennavn» i ordlisten i stedet for
+   å fjerne det fra teksten. Myndigheter får engelsk navn der det finnes et offisielt
    («the Financial Supervisory Authority of Norway»).
 5. **Britisk eller amerikansk, men samme i hele teksten.** Bruk britisk
    rettskriving (licence, organisation), som `engelsk.py`.

@@ -122,7 +122,7 @@ def valider(art, nokkel, engelsk, norsk, navn=""):
         if ord_.lower() in lav:
             feil.append(f"unngå: «{ord_.strip()}»")
     renset = re.sub(r"<[^>]+>", " ", engelsk)
-    for egennavn in filter(None, [navn]):
+    for egennavn in filter(None, [navn] + liste.get("egennavn", [])):
         renset = renset.replace(egennavn, " ")
     norske = NORSK_RE.findall(renset)
     if norske:

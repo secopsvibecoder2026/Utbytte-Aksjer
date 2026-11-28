@@ -66,7 +66,8 @@ class TestSide(unittest.TestCase):
             side = en.aksje_side_en(a, DAG)
             tekst = _synlig_tekst(side).replace("Oslo Børs", "")
             # Selskapsnavn er egennavn («Høland og Setskog Sparebank»).
-            for navn in (en.navn_en(a), en.kort_navn(a)):
+            import oversett
+            for navn in (en.navn_en(a), en.kort_navn(a), *oversett.ordliste().get("egennavn", [])):
                 tekst = tekst.replace(navn, "")
             treff = norsk.findall(tekst)
             self.assertEqual(treff, [], f"{a['ticker']}: {treff[:5]}")
