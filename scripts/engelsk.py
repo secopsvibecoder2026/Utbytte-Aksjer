@@ -535,7 +535,7 @@ def _dokument(tittel, beskr, sti_en, sti_nb, ld_smule, innhold):
   <meta property="og:description" content="{html.escape(beskr)}"/>
   <meta property="og:url" content="{kanonisk}"/>
   <meta property="og:type" content="website"/>
-  <meta property="og:image" content="https://exday.no/assets/og-image.png"/>
+  <meta property="og:image" content="https://exday.no/assets/og-bilde.png"/>
   <meta property="og:locale" content="en_GB"/>
   <meta property="og:locale:alternate" content="nb_NO"/>
   <meta property="og:site_name" content="exday.no"/>
