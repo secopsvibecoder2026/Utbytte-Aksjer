@@ -84,9 +84,59 @@ class TestSide(unittest.TestCase):
         a = {"navn": "Test ASA", "inkorporeringsland": "Norge"}
         self.assertIn("25%", en.skatt(a))
         a["inkorporeringsland"] = "Bermuda"
-        self.assertIn("does not withhold", en.skatt(a))
+        self.assertIn("Bermuda does not withhold", en.skatt(a))
         a["inkorporeringsland"] = "Sverige"
         self.assertIn("rules of Sweden apply", en.skatt(a))
+        self.assertNotIn("  ", en.skatt(a))
+        # Ingen avtalesats som Skatteetaten ikke oppgir.
+        self.assertNotIn("15%", en.skatt({"navn": "X ASA"}))
+
+
+
+class TestOversettPort(unittest.TestCase):
+    """scripts/oversett.py: porten som lagrer engelske tekster."""
+
+    def setUp(self):
+        import tempfile
+        import oversett
+        self.ov = oversett
+        self.mappe = tempfile.mkdtemp()
+        self._gammel = oversett.TEKSTER
+        oversett.TEKSTER = os.path.join(self.mappe, "tekster_en.json")
+
+    def tearDown(self):
+        self.ov.TEKSTER = self._gammel
+
+    NORSK = ("Sparebanken utsteder egenkapitalbevis, og den betalte utbytte i 2023 og 2024. "
+             "Banken har vært notert siden 1994.")
+    GOD = ("The savings bank issues equity certificates and paid a dividend in 2023 and 2024. "
+           "The bank has been listed since 1994.")
+
+    def test_god_tekst_slipper_gjennom(self):
+        self.assertEqual(self.ov.valider("selskap", "X", self.GOD, self.NORSK), [])
+
+    def test_feil_blir_stoppet(self):
+        feil = " ".join(self.ov.valider("selskap", "X",
+            "The bank — a robust lender og more — paid 7% in 2023 and 2024, listed since 1994.",
+            self.NORSK))
+        for ord_ in ("tall som ikke", "equity certificate", "robust", "norske ord", "tankestrek"):
+            self.assertIn(ord_, feil)
+        self.assertIn("årstall", " ".join(self.ov.valider("selskap", "X", self.GOD.replace("1994", "long"), self.NORSK)))
+
+    def test_html_taggene_maa_vaere_like(self):
+        no, en_ = "<p>Banken er <strong>stor</strong>.</p>", "<p>The bank is big.</p>"
+        self.assertTrue(any("HTML" in f for f in self.ov.valider("sektor", "X", en_, no)))
+
+    def test_utdatert_oversettelse_vises_ikke(self):
+        self.ov.lagre("selskap", "X", self.GOD, self.NORSK)
+        self.assertEqual(self.ov.gjeldende("selskap", "X", self.NORSK), self.GOD)
+        self.assertEqual(self.ov.gjeldende("selskap", "X", self.NORSK + " Ny setning."), "")
+
+    def test_ordlisten_har_gyldige_uttrykk(self):
+        liste = self.ov.ordliste()
+        for stamme, former in liste["termer"].items():
+            re.compile(stamme)
+            self.assertTrue(former, stamme)
 
 
 if __name__ == "__main__":

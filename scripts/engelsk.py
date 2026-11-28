@@ -80,10 +80,6 @@ HENDELSE_EN = {
     "utbytte_pause": "Distributions paused",
 }
 
-# Land der selskapet ikke trekker kildeskatt på utbytte til utlendinger
-# (samme liste som skatte-FAQ-en på den norske siden).
-UTEN_KILDESKATT = {"Bermuda", "Singapore", "Kypros"}
-
 MND_EN = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
           "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 MND_LANG_EN = ["January", "February", "March", "April", "May", "June", "July",
@@ -307,6 +303,18 @@ def historikk(a, today):
             '</tbody></table></div>')
 
 
+def om_selskapet(a):
+    """Den oversatte selskapsteksten, bare når den hører til dagens norske tekst."""
+    import oversett
+    norsk = (fs._redaksjonell_intro(a["ticker"], a.get("sektor", "")) or "").strip()
+    tekst = oversett.gjeldende("selskap", a["ticker"], norsk)
+    if not tekst:
+        return ""
+    avsnitt = [html.escape(re.sub(r"\s+", " ", x).strip()) for x in re.split(r"\n\s*\n", tekst) if x.strip()]
+    return ('<h2 id="about">About the company</h2><div class="les">'
+            + "".join(f"<p>{x}</p>" for x in avsnitt) + '</div>')
+
+
 def hendelse_boks(a):
     h = a.get("hendelse") or {}
     if not h.get("type"):
@@ -322,27 +330,42 @@ def hendelse_boks(a):
     return f'<div class="varsel les"><p><strong>{etikett}{naar}.</strong>{tekst}{lenke}</p></div>'
 
 
+# Kildeskatt, kontrollert 28.11.2026 mot Skatteetaten («Reduced withholding tax
+# on dividends», med undersidene «Refunds» og «Future dividends») og PwC
+# Worldwide Tax Summaries for Bermuda, Kypros og Singapore. Skatteetaten sier
+# ikke «typisk 15 %», så siden nevner ingen avtalesats.
+SKATTEETATEN_KILDESKATT = ("https://www.skatteetaten.no/en/person/taxes/get-the-taxes-right/"
+                           "shares-and-securities/about-shares-and-securities/"
+                           "reduced-withholding-tax-on-dividends/")
+UTENLANDSK_KILDESKATT = {
+    "Bermuda": "Bermuda does not withhold tax on dividends.",
+    "Singapore": "Singapore does not withhold tax on dividends.",
+    "Kypros": "Cyprus does not, as a rule, withhold tax on dividends paid to shareholders abroad.",
+}
+
+
 def skatt(a):
     """Kildeskatt for den som bor utenfor Norge, etter hvor selskapet hører hjemme."""
     land = a.get("inkorporeringsland") or "Norge"
     navn = kort_navn(a)
+    lenke = f'<a href="{SKATTEETATEN_KILDESKATT}" rel="noopener">the Norwegian Tax Administration</a>'
     if land == "Norge":
-        tekst = (f"{navn} is a Norwegian company. Norway withholds 25% tax on dividends paid to "
-                 "shareholders who live abroad. A tax treaty between Norway and your country often "
-                 "lowers the rate, and your bank or broker usually applies it. Check with "
-                 '<a href="https://www.skatteetaten.no/en/" rel="noopener">the Norwegian Tax '
-                 "Administration</a> and your own tax authority.")
-    elif land in UTEN_KILDESKATT:
-        tekst = (f"{navn} is registered in {LAND_EN[land]}, which does not withhold tax on "
-                 "dividends paid to shareholders abroad. Norwegian withholding tax does not apply "
-                 "either. Your own country may still tax the dividend.")
+        tekst = (f"{navn} is a Norwegian company, and Norwegian companies deduct 25% withholding tax "
+                 "on dividends to shareholders resident abroad. If a tax treaty between Norway and "
+                 "your country gives a lower rate, you can get it when the dividend is paid by giving "
+                 "your custodian or account operator the documentation, or apply to "
+                 f"{lenke} for a refund afterwards, within five years. Shareholders resident in the EEA "
+                 "may instead use the risk-free return allowance where that gives less tax, and "
+                 "companies resident in the EEA may be exempt. Your own country may also tax the dividend.")
     else:
-        tekst = (f"{navn} is registered in {LAND_EN.get(land, land)}, so the withholding tax rules "
-                 f"of {LAND_EN.get(land, land)} apply, not Norway's. Your own country may also tax "
-                 "the dividend.")
+        land_en = LAND_EN.get(land, land)
+        tekst = (f"{navn} is registered in {land_en}. Norwegian withholding tax is deducted by "
+                 "Norwegian companies, so the rules of " + land_en + " apply instead. "
+                 + UTENLANDSK_KILDESKATT.get(land, "")
+                 + " Your own country may also tax the dividend.").replace("  ", " ")
     if (fs.kapital_andel(a) or 0) > 0:
-        tekst += (" The latest payment was a return of paid-in capital rather than a dividend, "
-                  "which is often taxed differently.")
+        tekst += (" The latest payment was a return of paid-in capital rather than a dividend. "
+                  "Check how your country treats it.")
     return f'<h2 id="tax">Tax for investors outside Norway</h2><p class="les">{tekst}</p>'
 
 
@@ -530,11 +553,12 @@ def aksje_side_en(a, today):
   <p class="ingress les">{html.escape(ingress(a, today))}</p>
   {nokkeltall(a, today)}
   {hentet_linje}
+  {om_selskapet(a)}
   {betalt_tabell(a)}
   {historikk(a, today)}
   {skatt(a)}
   <div class="norsk-boks les">
-    <p>The company description, frequently asked questions, quarterly report summaries and the price chart
+    <p>{"Frequently asked questions" if om_selskapet(a) else "The company description, frequently asked questions"}, quarterly report summaries and the price chart
     are on the <a href="{url_nb(ticker)}" hreflang="nb">Norwegian page for {ticker}</a>.</p>
   </div>
 {FOOTER}

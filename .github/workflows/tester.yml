@@ -124,6 +124,7 @@ jobs:
           python scripts/test_kvartalsrapport.py
           python scripts/test_seo.py
           python scripts/test_engelsk.py
+          python scripts/oversett.py --sjekk --streng
           python promo/test_promo_felles.py
           python promo/test_finn_kandidater.py
 
