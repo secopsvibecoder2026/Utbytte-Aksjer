@@ -23,18 +23,14 @@ SEKTOR_REDAKSJONELL = {
 <p>Finans er den klart største utbyttesektoren på Oslo Børs, og den er
 dominert av noe utenlandske investorer ofte misforstår: sparebankene. En
 sparebank har ingen aksjer i vanlig forstand. Den er selveiende, og det den
-utsteder til markedet heter <strong>egenkapitalbevis</strong> — et
-verdipapir som gir rett til en andel av overskuddet og stemmerett i
-forstanderskapet, men ikke eierskap til hele banken. Resten av egenkapitalen
+utsteder til markedet heter <strong>egenkapitalbevis</strong>, et verdipapir som gir rett til en andel av overskuddet og stemmerett i generalforsamlingen, men ikke eierskap til hele banken. Resten av egenkapitalen
 tilhører banken selv, i det som kalles grunnfondet.</p>
 
 <p>Denne strukturen er hele forklaringen på hvorfor norske sparebanker
 betaler så jevnt. Overskuddet deles mellom eierandelskapitalen
 (egenkapitalbeviseierne) og grunnfondet etter et forholdstall som ligger
 nokså fast, og bankene har en uttalt praksis om at de to skal behandles
-likt. Kutter banken utbyttet til beviseierne, må den også holde tilbake fra
-grunnfondet — og da vokser ikke banken. Det gir en innebygd motvilje mot å
-kutte som du ikke finner i et vanlig aksjeselskap.</p>
+likt. Kutter banken utbyttet til beviseierne, kutter den normalt også gavene til lokalsamfunnet fra grunnfondets del, siden de to delene skal ha samme utdelingsgrad. Et kutt rammer dermed både investorene og nærmiljøet banken lever av, og det gir en innebygd motvilje mot å kutte som du ikke finner i et vanlig aksjeselskap.</p>
 
 <p>Det andre som styrer utbyttet er kapitalkravene. Finanstilsynet setter
 minstekrav til ren kjernekapital, og en bank kan ikke dele ut penger den
@@ -45,7 +41,7 @@ er på plass, er det lite annet å bruke overskuddet til enn utbytte og
 tilbakekjøp.</p>
 
 <p>Risikoen er konsentrert i to størrelser. Den ene er
-<strong>rentenettoen</strong> — differansen mellom hva banken tar for utlån
+<strong>rentenettoen</strong>, differansen mellom hva banken tar for utlån
 og betaler på innskudd. Den utvider seg gjerne når styringsrenten stiger
 raskt, fordi utlånsrentene justeres før innskuddsrentene, og krymper igjen
 når rentene faller. Mye av inntjeningsveksten i norske banker de siste årene
@@ -56,7 +52,7 @@ skikkelig nedtur i norsk økonomi treffer dem samtidig og i samme retning.</p>
 
 <p>For en utbytteinvestor er den praktiske konsekvensen at sektoren gir
 forutsigbarhet, men lite spredning. Å eie fem sparebanker er ikke det samme
-som å eie fem uavhengige selskaper — de har i stor grad samme
+som å eie fem uavhengige selskaper. De har i stor grad samme
 konjunkturfølsomhet, samme regulator og samme boliglånsbok. Spredningen
 ligger i hvilke geografiske markeder de betjener og hvor mye de har av
 næringsliv mot personkunder, ikke i at de reagerer ulikt på et rentesjokk.</p>
@@ -65,8 +61,7 @@ næringsliv mot personkunder, ikke i at de reagerer ulikt på et rentesjokk.</p>
 mekanismer. Et skadeforsikringsselskap tjener penger på to måter: forskjellen
 mellom premier og erstatninger, og avkastningen på pengene som ligger og
 venter på å bli utbetalt. Den siste delen gjør at også forsikring liker
-høyere renter. Combined ratio — erstatninger og kostnader som andel av
-premiene — er nøkkeltallet å følge, og et tall under hundre betyr at
+høyere renter. Nøkkeltallet å følge er combined ratio, altså erstatninger og kostnader som andel av premiene, og et tall under hundre betyr at
 forsikringsdriften i seg selv går med overskudd.</p>
 """,
 
@@ -85,14 +80,12 @@ ordreinngangen faller, vet ledelsen det lenge før det slår ut i resultatet,
 og de kan tilpasse utbyttet i tide. Motsatt betyr det at et svakt kvartal
 sjelden er nok til å true utbyttet, så lenge ordrereserven står.</p>
 
-<p>Derfor er ordreinngang og ordrereserve de tallene som forteller mest om
-utbyttet framover — mer enn kvartalets omsetning. En ordrereserve som dekker
+<p>Derfor er ordreinngang og ordrereserve de tallene som forteller mest om utbyttet framover, mer enn kvartalets omsetning. En ordrereserve som dekker
 mer enn et år med produksjon gir et helt annet utgangspunkt enn en som dekker
 et kvartal.</p>
 
 <p>Marginene er det andre nøkkelpunktet, og de er strammere enn mange antar.
-Entreprenørvirksomhet drives på noen få prosents margin, og et
-fastpriskontrakt som går galt kan spise fortjenesten fra flere som gikk bra.
+Entreprenørvirksomhet drives på noen få prosents margin, og en fastpriskontrakt som går galt kan spise fortjenesten fra flere som gikk bra.
 Dette er en sektor der enkeltprosjekter kan velte et årsresultat. Selskaper
 med mange små kontrakter har derfor jevnere utbytte enn selskaper med få
 store, uavhengig av hvor lønnsomme de er i gjennomsnitt.</p>
@@ -100,12 +93,10 @@ store, uavhengig av hvor lønnsomme de er i gjennomsnitt.</p>
 <p>Kostnadssiden domineres av lønn, stål og energi. Norske industribedrifter
 konkurrerer med lavkostland på pris og med resten av Norden på kompetanse,
 og en svak krone hjelper dem som eksporterer mens den straffer dem som kjøper
-innsatsvarer i utlandet. Det er verdt å sjekke hvilken av de to en bedrift
-faktisk er, for kronekursen trekker i motsatt retning for de to gruppene.</p>
+innsatsvarer i utlandet. Sjekk hvilken av de to en bedrift faktisk er, for kronekursen trekker i motsatt retning for de to gruppene.</p>
 
 <p>Konjunkturfølsomheten varierer mer enn sektornavnet antyder. Selskaper som
-leverer til offentlig sektor — samferdsel, forsvar, infrastruktur — har
-etterspørsel som følger statsbudsjetter mer enn konjunkturer, og de har
+leverer til offentlig sektor, som samferdsel, forsvar og infrastruktur, har etterspørsel som følger statsbudsjetter mer enn konjunkturer, og de har
 holdt utbyttet gjennom nedturer der byggenæringen har kuttet. Selskaper som
 leverer til boligmarkedet eller til privat næringsinvestering svinger langt
 mer. To industriaksjer kan derfor ha helt ulik utbytterisiko selv om de står
@@ -126,20 +117,17 @@ fraktrater i et marked der tilbudet er låst på kort sikt og etterspørselen
 svinger fritt.</p>
 
 <p>Et skip tar to til tre år å bygge. Når ratene stiger, kan ikke rederiene
-levere mer kapasitet med det første, og hele prisøkningen slår rett inn på
-bunnlinjen — driftskostnadene per dag er tilnærmet de samme enten raten er
+levere mer kapasitet med det første, og hele prisøkningen slår rett inn på bunnlinjen. Driftskostnadene per dag er tilnærmet de samme enten raten er
 høy eller lav. Det er derfor et godt shippingår kan gi et utbytte som
 tilsvarer en betydelig del av aksjekursen. Og det er derfor det neste kan gi
 null.</p>
 
 <p>Baksiden er den samme mekanismen i revers. Høye rater utløser
-nybyggingsordrer hos alle rederiene samtidig, skipene leveres to–tre år
-senere, og da kommer kapasiteten inn i markedet i en klump. Ordreboken for
-et segment — hvor mange skip som er under bygging målt mot flåten som
-seiler — er derfor et av de mest talende tallene i sektoren, og den peker
+nybyggingsordrer hos alle rederiene samtidig, skipene leveres to til tre år
+senere, og da kommer kapasiteten inn i markedet i en klump. Ordreboken for et segment, altså hvor mange skip som er under bygging målt mot flåten som seiler, er derfor et av de mest talende tallene i sektoren, og den peker
 flere år fram i tid.</p>
 
-<p>Regnskapsvalutaen er verdt å merke seg. De fleste rederiene tjener penger
+<p>Legg også merke til regnskapsvalutaen. De fleste rederiene tjener penger
 i <strong>dollar</strong>, fordi frakt prises i dollar internasjonalt, mens
 aksjen handles i kroner på Oslo Børs. Et utbytte som er uendret i dollar
 kan derfor bli større eller mindre i kroner fra ett år til det neste, uten
@@ -151,20 +139,17 @@ kontantstrømmen</strong> framfor til et fast beløp: de deler ut en oppgitt
 andel av det som er igjen etter drift, renter og avdrag. Det er en ærlig
 modell, men den betyr at utbyttet er ment å svinge. En yield beregnet på
 fjorårets utbetaling sier da lite om hva neste år gir, og et kutt er ikke
-nødvendigvis et faresignal — det kan være politikken som virker etter
+nødvendigvis et faresignal. Det kan være politikken som virker etter
 hensikten.</p>
 
-<p>Det finnes en viktig nyansering mellom segmentene. Rederier på lange
-certepartier — der skipet er leid ut på flere års kontrakt til en avtalt
-rate — har en helt annen forutsigbarhet enn de som seiler i spotmarkedet.
+<p>Segmentene skiller seg tydelig fra hverandre. Rederier på lange certepartier, der skipet er leid ut på flere års kontrakt til en avtalt rate, har en helt annen forutsigbarhet enn de som seiler i spotmarkedet.
 Det første ligner mer på utleie av infrastruktur, det andre er en ren
-eksponering mot dagsraten. To shippingaksjer i samme tabell kan derfor være
+eksponering mot dagraten. To shippingaksjer i samme tabell kan derfor være
 nesten motsatte investeringer, og kontraktsdekningen er det som avgjør
 hvilken av dem du har.</p>
 
 <p>Kostnadssiden domineres av drivstoff, mannskap og kapital. Drivstoff er
-den mest volatile, og hvem som bærer den kostnaden avhenger av
-kontraktsformen — i noen avtaler ligger den hos befrakteren, i andre hos
+den mest volatile, og hvem som bærer den kostnaden avhenger av kontraktsformen. I noen avtaler ligger den hos befrakteren, i andre hos
 rederiet. Det er en detalj som avgjør hvor mye en oljeprisoppgang faktisk
 betyr for resultatet.</p>
 
@@ -172,8 +157,7 @@ betyr for resultatet.</p>
 svovelinnhold i drivstoff, til energieffektivitet og til gradvis reduserte
 utslipp gjør at eldre og mindre effektive skip taper konkurransekraft eller
 må oppgraderes. For flåteeiere betyr det investeringer som konkurrerer med
-utbyttet, men også at eldre tonnasje faller ut av markedet raskere — noe som
-strammer tilbudet og støtter ratene for dem som har fornyet flåten.</p>
+utbyttet, men også at eldre tonnasje faller ut av markedet raskere, og det strammer tilbudet og støtter ratene for dem som har fornyet flåten.</p>
 
 <p>Gjeldsgraden avgjør hvem som overlever nedturen. Skip finansieres i stor
 grad med lån, og rentekostnaden løper uavhengig av om ratene er høye eller
@@ -192,15 +176,14 @@ et salg.</p>
 
     # ────────────────────────────────────────────────────────────────────
     "Energitjenester": """
-<p>Energitjenester er selskapene som lever av at oljeselskapene investerer —
-seismikk, boring, subsea-installasjon, vedlikehold, fartøy og bemanning. De
+<p>Energitjenester er selskapene som lever av at oljeselskapene investerer: seismikk, boring, subsea-installasjon, vedlikehold, fartøy og bemanning. De
 selger ikke olje, de selger arbeidet med å finne og hente den. Det gjør
 utbyttet deres avhengig av noe annet enn oljeprisen: <strong>oljeselskapenes
 investeringsbudsjetter</strong>.</p>
 
 <p>Forskjellen er viktig og ofte oversett. En oljepris som stiger gir ikke
 umiddelbart høyere inntekter i denne sektoren. Den gir høyere inntekter når
-oljeselskapene bestemmer seg for å bruke mer penger — og den beslutningen
+oljeselskapene bestemmer seg for å bruke mer penger, og den beslutningen
 tas etter at prisen har holdt seg oppe en stund, ofte et år eller to.
 Motsatt fortsetter igangsatte prosjekter en god stund etter at prisen har
 falt. Sektoren henger altså etter oljeprisen i begge retninger, og det gjør
@@ -211,8 +194,7 @@ falt fra over hundre dollar til under femti, oljeselskapene kuttet
 investeringene hardt, og leverandørindustrien fikk flere år med
 overkapasitet, ratekrig og gjeldsrestrukturering. En rekke selskaper kuttet
 utbyttet helt. Det er derfor mange av selskapene i denne sektoren har
-kortere sammenhengende utbyttehistorikk enn alderen deres skulle tilsi — de
-finansielle sporene av den perioden ligger fortsatt i tallene.</p>
+kortere sammenhengende utbyttehistorikk enn alderen deres skulle tilsi. De finansielle sporene av den perioden ligger fortsatt i tallene.</p>
 
 <p>Dagratene er sektorens svar på fraktrater. En borerigg eller et
 konstruksjonsfartøy leies ut per dag, og forskjellen mellom en rate som
@@ -227,9 +209,7 @@ flerårige rammeavtaler på vedlikehold har en inntektsstrøm som ligner et
 abonnement, mens en som selger enkeltoppdrag i et prosjektmarked kan ha et
 fantastisk og et forferdelig år på rad. Begge står i samme sektortabell.</p>
 
-<p>Den lange linjen er energiomstillingen. Deler av kompetansen i sektoren —
-maritime operasjoner, fundamentering, kabellegging, undervannsarbeid — er
-direkte overførbar til havvind, og flere selskaper har bygget opp
+<p>Den lange linjen er energiomstillingen. Deler av kompetansen i sektoren, som maritime operasjoner, fundamentering, kabellegging og undervannsarbeid, er direkte overførbar til havvind, og flere selskaper har bygget opp
 fornybarvirksomhet ved siden av oljetjenestene. For utbyttet betyr det to
 ting samtidig: en ny etterspørselskilde som ikke følger oljeprisen, og et
 investeringsbehov som konkurrerer med utbyttet om de samme kronene. Selskaper
@@ -240,7 +220,7 @@ skulle tilsi.</p>
     # ────────────────────────────────────────────────────────────────────
     "Havbruk": """
 <p>Havbruk har vært blant de mest lønnsomme næringene på Oslo Børs, og den
-har en utbytteprofil som følger to størrelser: <strong>laksprisen</strong>
+har en utbytteprofil som følger to størrelser: <strong>lakseprisen</strong>
 og <strong>biologien</strong>. Den første svinger med tilbud og etterspørsel
 i verdensmarkedet, den andre med hva som skjer i merdene.</p>
 
@@ -248,7 +228,7 @@ i verdensmarkedet, den andre med hva som skjer i merdene.</p>
 fordi produksjonen er regulert gjennom konsesjoner og fordi biologien setter
 grenser for hvor mye fisk som kan stå i sjøen. Etterspørselen har vokst
 jevnt i flere tiår. Når tilbudet stagnerer og etterspørselen fortsetter
-oppover, stiger prisen kraftig — og fordi kostnaden per kilo er relativt fast
+oppover, stiger prisen kraftig. Fordi kostnaden per kilo er relativt fast
 på kort sikt, går nesten hele prisøkningen til bunnlinjen. Det er
 mekanismen bak de store overskuddsårene.</p>
 
@@ -258,8 +238,7 @@ stresser fisken og reduserer tilveksten, og lusegrensene setter tak på hvor
 mye fisk et anlegg kan holde. Sykdomsutbrudd kan tvinge fram nedslakting av
 en hel lokalitet. Algeoppblomstring har ved flere anledninger tatt ut store
 mengder fisk på kort tid. Dette er tap som ikke lar seg forsikre bort i sin
-helhet, og de rammer enkeltselskaper i enkeltregioner — ikke sektoren
-samlet.</p>
+helhet, og de rammer enkeltselskaper i enkeltregioner, ikke sektoren samlet.</p>
 
 <p>Det gjør geografisk spredning til et reelt kvalitetstrekk. Et selskap med
 anlegg langs hele kysten, eller med virksomhet i flere land, tåler et
@@ -279,8 +258,8 @@ selskapene kan dele ut framover.</p>
 <p>Kostnadssiden domineres av fôr, som utgjør størstedelen av kostnaden per
 kilo produsert laks. Fôret bygger på marine og vegetabilske råvarer som
 prises internasjonalt, så en oppgang i råvaremarkedene presser marginene selv
-når laksprisen er uendret. Forholdet mellom laksepris og fôrkostnad sier
-derfor mer om lønnsomheten enn laksprisen alene.</p>
+når lakseprisen er uendret. Forholdet mellom laksepris og fôrkostnad sier
+derfor mer om lønnsomheten enn lakseprisen alene.</p>
 
 <p>Samlet er dette en sektor som kan betale svært godt, men der
 enkeltselskaper kan få et dårlig år av grunner som ikke har noe med markedet
@@ -304,8 +283,7 @@ stor grad fri kontantstrøm, og fordi det er lite å investere i, kan mye av
 det deles ut. Det er hovedgrunnen til at flere av selskapene i sektoren har
 lange, jevne utbytterekker.</p>
 
-<p>Nøkkeltallet er <strong>faktureringsgraden</strong>. Kostnadene — i
-praksis lønn — løper uansett om konsulentene har oppdrag eller ikke, så noen
+<p>Nøkkeltallet er <strong>faktureringsgraden</strong>. Kostnadene, i praksis lønn, løper uansett om konsulentene har oppdrag eller ikke, så noen
 få prosentpoengs fall i utnyttelsen slår hardt inn på marginen. Det er også
 her nedturen kommer først: bedrifter som skal kutte, kutter gjerne
 konsulentbruk før de sier opp egne ansatte. Sektoren er altså mindre syklisk
@@ -317,8 +295,7 @@ reelle ressurs er ansatte som kan gå til en konkurrent, og i perioder med
 knapphet på utviklere presses lønningene opp raskere enn timeprisene lar seg
 justere. Marginen kan da falle i et år der omsetningen vokser fint.</p>
 
-<p>Offentlig sektor er en usedvanlig viktig kunde i Norge — stat, kommune og
-helseforetak kjøper IT-tjenester i stort omfang, og de gjør det gjennom
+<p>Offentlig sektor er en usedvanlig viktig kunde i Norge. Stat, kommune og helseforetak kjøper IT-tjenester i stort omfang, og de gjør det gjennom
 langvarige rammeavtaler. En leverandør med tung offentlig portefølje har
 derfor mer forutsigbare inntekter enn en som selger til privat næringsliv,
 og det har vist seg i utbyttestabiliteten gjennom flere nedturer.</p>
@@ -333,7 +310,7 @@ er ofte et bedre tegn enn det ser ut som.</p>
 <p>Det som skal følges over tid er teknologiskiftene. En systemintegrator
 lever av kompleksitet hos kundene, og verktøy som reduserer den kompleksiteten
 er både en mulighet og en trussel. Sektoren har lav syklisk risiko og høyere
-strukturell risiko enn snittet — utbyttet trues sjelden av konjunkturer, men
+strukturell risiko enn snittet. Utbyttet trues sjelden av konjunkturer, men
 oftere av at forretningsmodellen endrer seg under selskapet.</p>
 """,
 
@@ -348,7 +325,7 @@ selskapenes kontroll, de to andre er beslutninger de tar selv.</p>
 Kostnadene ved å drive et felt i produksjon er i stor grad faste, så
 differansen mellom oljeprisen og driftskostnaden per fat er det som varierer.
 Et selskap med lave produksjonskostnader beholder en langt større del av en
-prisoppgang enn et med høye — og overlever et prisfall som tar knekken på
+prisoppgang enn et med høye, og overlever et prisfall som tar knekken på
 konkurrenten. Kostnad per fat er derfor et mer opplysende tall enn
 produksjonsvolumet.</p>
 
@@ -363,7 +340,7 @@ demper utbyttet i toppårene og støtter det i bunnårene.</p>
 
 <p>Gass har fått en større rolle i inntektsbildet enn den hadde. Norsk gass
 selges i hovedsak til Europa, og europeiske gasspriser har vist seg å kunne
-bevege seg helt uavhengig av oljeprisen — i perioder langt kraftigere. For
+bevege seg helt uavhengig av oljeprisen, i perioder langt kraftigere. For
 selskaper med tyngdepunkt i gass er det derfor den europeiske gassprisen som
 er den relevante indikatoren, ikke Brent.</p>
 
@@ -377,16 +354,13 @@ produksjonsprofil sier mer om utbyttets holdbarhet enn dagens utdelingsgrad.</p>
 
 <p>Flere av selskapene skiller mellom et <strong>ordinært utbytte</strong>
 de mener å kunne betale gjennom syklusen, og <strong>ekstrautbytte</strong>
-eller tilbakekjøp i år med høye priser. Den todelingen er verdt å lese seg
-opp på før man bruker fjorårets samlede utbetaling som grunnlag for en
-yieldberegning — bare den ene delen er ment å vare.</p>
+eller tilbakekjøp i år med høye priser. Les deg opp på den todelingen før du bruker fjorårets samlede utbetaling som grunnlag for en yieldberegning. Bare den ene delen er ment å vare.</p>
 """,
 
     # ────────────────────────────────────────────────────────────────────
     "Materialer": """
-<p>Materialer omfatter selskapene som utvinner og foredler råvarer — metaller,
-mineraler og kjemiske produkter. Utbyttet følger råvareprisene, men veien fra
-pris til utbetaling går gjennom to filtre som er verdt å forstå:
+<p>Materialer omfatter selskapene som utvinner og foredler råvarer: metaller, mineraler og kjemiske produkter. Utbyttet følger råvareprisene, men veien fra
+pris til utbetaling går gjennom to filtre:
 kostnadsposisjon og kapitalintensitet.</p>
 
 <p>Råvarer er per definisjon standardiserte. En produsent kan ikke ta en
@@ -414,8 +388,7 @@ Det er en av grunnene til at utbyttet i denne sektoren kuttes raskere enn i
 sektorer med lettere balanser.</p>
 
 <p>Valuta virker gjennomgående i favør av norske produsenter. Metaller prises
-i dollar på internasjonale børser, mens en betydelig del av kostnadene —
-lønn, kraft, lokale innsatsfaktorer — påløper i kroner. En svakere krone
+i dollar på internasjonale børser, mens en betydelig del av kostnadene, som lønn, kraft og lokale innsatsfaktorer, påløper i kroner. En svakere krone
 øker dermed marginen uten at noe annet er endret. Det gjør at
 kroneregnskapet kan se bedre ut enn den underliggende driften tilsier, og
 omvendt.</p>
@@ -430,8 +403,7 @@ nettoeffekten på kort sikt likevel at kapital bindes opp.</p>
 
     # ────────────────────────────────────────────────────────────────────
     "Forbruksvarer": """
-<p>Forbruksvarer samler selskapene som selger direkte til privatpersoner —
-dagligvarer, merkevarer, detaljhandel og tjenester til husholdningene. Som
+<p>Forbruksvarer samler selskapene som selger direkte til privatpersoner: dagligvarer, merkevarer, detaljhandel og tjenester til husholdningene. Som
 utbyttesektor er den blant de mer forutsigbare, av en enkel grunn: folk
 handler mat, klær og hverdagstjenester også i et dårlig år.</p>
 
@@ -440,14 +412,14 @@ nødvendighetsvarer og det som kan utsettes. Dagligvarehandel og
 hverdagsprodukter har etterspørsel som er nesten upåvirket av konjunkturene,
 mens møbler, elektronikk og opplevelser er blant de første postene et
 husholdningsbudsjett kutter. To selskaper i samme sektortabell kan derfor ha
-helt ulik motstandskraft — og det er ikke størrelsen som avgjør, men hva de
+helt ulik motstandskraft, og det er ikke størrelsen som avgjør, men hva de
 selger.</p>
 
 <p>Marginene er tynne i handelsleddet. En dagligvarekjede driver på noen få
 prosent, og det gjør resultatet uforholdsmessig følsomt for små endringer i
 kostnadene. En oppgang i innkjøpspriser som ikke lar seg sende videre til
 kunden med det samme kan halvere overskuddet i et kvartal. Evnen til å ta ut
-prisøkninger — det som gjerne kalles prissettingsmakt — er derfor det som
+prisøkninger, det som gjerne kalles prissettingsmakt, er derfor det som
 skiller de stabile utbyttebetalerne fra resten.</p>
 
 <p>Merkevarer har den makten i større grad enn rene distributører. Et
@@ -460,8 +432,7 @@ selger inn i samme marked.</p>
 forbrukeren ved å gjøre priser sammenlignbare med noen tastetrykk, og den
 lar internasjonale aktører nå norske kunder uten å ha butikker her.
 Norske forbruksvareselskaper med tunge fysiske butikknett har derfor både en
-kostnadsbase og en konkurransesituasjon som har endret seg vedvarende — ikke
-syklisk.</p>
+kostnadsbase og en konkurransesituasjon som har endret seg vedvarende, ikke syklisk.</p>
 
 <p>Valuta rammer denne sektoren i motsatt retning av eksportindustrien. Mye
 av det som selges i norske butikker er kjøpt inn i utenlandsk valuta, mens
@@ -473,27 +444,24 @@ shippingaksjer er tilsvarende dårlig her.</p>
 
     # ────────────────────────────────────────────────────────────────────
     "Kommunikasjonstjenester": """
-<p>Kommunikasjonstjenester dekker medie- og markedsplasselskaper — de som
-tjener penger på oppmerksomhet og på å koble kjøpere og selgere. Utbyttet
+<p>Kommunikasjonstjenester dekker medie- og markedsplasselskaper, de som tjener penger på oppmerksomhet og på å koble kjøpere og selgere. Utbyttet
 her er tett knyttet til annonsemarkedet, og annonsemarkedet er en av de
 mest konjunkturfølsomme postene som finnes i et bedriftsbudsjett.</p>
 
 <p>Grunnen er at markedsføring er lett å kutte og lett å skru på igjen. Når
 en bedrift skal spare raskt, er annonsebudsjettet blant de første som
 reduseres, fordi effekten av kuttet ikke merkes på kort sikt. Det gjør at
-mediehusenes inntekter faller tidligere og brattere i en nedtur enn økonomien
-for øvrig — og tar seg opp tilsvarende raskt når det snur.</p>
+mediehusenes inntekter faller tidligere og brattere i en nedtur enn økonomien for øvrig, og tar seg opp tilsvarende raskt når det snur.</p>
 
 <p>Digitale markedsplasser er en langt bedre forretningsmodell enn tradisjonell
-annonsering, og det er verdt å skille mellom de to. En markedsplass med en
+annonsering, og de to bør holdes fra hverandre. En markedsplass med en
 etablert posisjon innen bolig, bil eller jobb har en nettverkseffekt: selgerne
 er der fordi kjøperne er der, og omvendt. Det gir en posisjon som er vanskelig
 å angripe og en prissettingsmakt som gjør at inntektene kan vokse uten
 tilsvarende kostnadsvekst. Flere av de mest stabile utbyttebetalerne i denne
 sektoren er markedsplasser, ikke medier.</p>
 
-<p>Den strukturelle utfordringen for de tradisjonelle mediene er velkjent, men
-verdt å konkretisere: annonsekronene har flyttet seg til globale plattformer
+<p>Den strukturelle utfordringen for de tradisjonelle mediene er velkjent. Konkret betyr den at annonsekronene har flyttet seg til globale plattformer
 som kan målrette bedre og selge billigere. Det som er igjen av trykte og
 lineære inntekter faller år for år, og spørsmålet for utbyttet er om
 digitale abonnementer vokser raskere enn de gamle inntektene forsvinner.
@@ -532,7 +500,7 @@ kontanter som faktisk kan tas opp fra prosjektene.</p>
 
 <p>Den avgjørende avtalen er kraftsalgsavtalen. Et anlegg som har solgt
 produksjonen sin på en tjueårig avtale til en fast pris har en inntektsstrøm
-som ligner en obligasjon — forutsigbar, og lite påvirket av hva strømprisen
+som ligner en obligasjon: forutsigbar, og lite påvirket av hva strømprisen
 gjør. Et anlegg som selger i spotmarkedet har eksponering mot en pris som
 kan svinge kraftig. Andelen kontraktsfestet produksjon er dermed det
 tallet som best forteller hvor stabil kontantstrømmen er.</p>
@@ -571,24 +539,21 @@ kombinasjonen som gjør utslaget stort. Den første er
 lånene skal refinansieres til en høyere rente, spiser rentene en større del
 av leieinntekten. Den andre er <strong>verdsettelsen</strong>: en eiendom
 prises som leieinntekt delt på et avkastningskrav, og når renten stiger,
-stiger avkastningskravet — verdien faller uten at bygget eller leietakeren
+stiger avkastningskravet. Verdien faller uten at bygget eller leietakeren
 har endret seg.</p>
 
-<p>Det er verdt å holde de to fra hverandre når man leser et
-eiendomsregnskap. Verdiendringer på eiendommene går gjennom resultatet og kan
+<p>Hold de to fra hverandre når du leser et eiendomsregnskap. Verdiendringer på eiendommene går gjennom resultatet og kan
 gi enorme regnskapsmessige tap eller gevinster som ikke har noe med
 kontantstrømmen å gjøre. Et selskap kan levere et tungt underskudd og likevel
 ha full dekning for utbyttet, fordi underskuddet er en nedskrivning og ikke
-en utbetaling. Leieinntekt minus drift og renter — ikke bunnlinjen — er
-tallet som avgjør hva som kan deles ut.</p>
+en utbetaling. Leieinntekt minus drift og renter, ikke bunnlinjen, er tallet som avgjør hva som kan deles ut.</p>
 
 <p>Leiekontraktene er kvaliteten i selskapet. Gjennomsnittlig gjenværende
 løpetid forteller hvor lenge inntekten er sikret, og hvem leietakerne er
 forteller hvor sikker den er. Offentlige leietakere og store, solide
 virksomheter på tiårskontrakter gir en helt annen trygghet enn mange små
 leietakere på korte avtaler. De fleste norske kontorleiekontrakter er dessuten
-knyttet til konsumprisindeksen, slik at leien justeres med inflasjonen — en
-reell beskyttelse som mange andre sektorer mangler.</p>
+knyttet til konsumprisindeksen, slik at leien justeres med inflasjonen. Det er en reell beskyttelse som mange andre sektorer mangler.</p>
 
 <p>Segmentene oppfører seg ulikt. Logistikk og lager har hatt medvind fra
 netthandelens vekst. Kontor er avhengig av sysselsetting og av hvor mye plass
@@ -623,7 +588,7 @@ det som ellers beveger børsen.</p>
 <p>Den store risikoen er derimot spesifikk og brutal:
 <strong>patentutløp</strong>. Et legemiddel er beskyttet i et begrenset antall
 år, og når beskyttelsen faller bort kommer generiske konkurrenter inn og
-prisen kollapser — ofte til en brøkdel i løpet av kort tid. Inntekten fra
+prisen kollapser, ofte til en brøkdel i løpet av kort tid. Inntekten fra
 det produktet forsvinner i praksis. For et selskap som er avhengig av ett
 eller få produkter er dette en kjent dato i framtiden som utbyttet må
 planlegges rundt. Bredde i produktporteføljen er derfor et vesentlig
@@ -633,7 +598,7 @@ kvalitetstrekk.</p>
 langvarige og dyre, noe som holder konkurrenter ute og beskytter marginene
 til den som først kommer gjennom. Samtidig kan en myndighet endre
 refusjonsordninger eller presse prisene ned, og i land med offentlig
-finansiert helsevesen — som Norge — er den ene kunden også den som setter
+finansiert helsevesen, som Norge, er den ene kunden også den som setter
 prisen. Prispress fra det offentlige er en varig faktor, ikke en
 enkelthendelse.</p>
 
@@ -652,14 +617,13 @@ kan være et tegn på at utbyttet finansieres av framtiden.</p>
 
     # ────────────────────────────────────────────────────────────────────
     "Telekommunikasjon": """
-<p>Telekom er sjablongen på en utbyttesektor: tung infrastruktur,
+<p>Telekom er skoleeksempelet på en utbyttesektor: tung infrastruktur,
 abonnementsinntekter som kommer hver måned, og et marked med få aktører. Det
 er en av de mest forutsigbare inntektsstrømmene som finnes på Oslo Børs, og
 utbyttepolitikken gjenspeiler det.</p>
 
 <p>Abonnementsmodellen er kjernen. Kundene betaler fast hver måned, de bytter
-sjelden leverandør, og inntekten er nesten upåvirket av konjunkturene — mobil
-og bredbånd er blant de aller siste postene en husholdning kutter. Det gir en
+sjelden leverandør, og inntekten er nesten upåvirket av konjunkturene. Mobil og bredbånd er blant de aller siste postene en husholdning kutter. Det gir en
 kontantstrøm som er planleggbar flere år fram, og som gjør det mulig å love
 et utbytte og faktisk holde det.</p>
 
@@ -667,7 +631,7 @@ et utbytte og faktisk holde det.</p>
 mobilabonnement har det allerede, og markedet er i praksis mettet. Vekst må
 derfor komme fra å ta kunder fra konkurrenter, fra å øke inntekten per kunde,
 eller fra oppkjøp i andre markeder. Fordi det er lite å investere i som gir
-vekst, går en stor del av overskuddet til utbytte — det er selve grunnen til
+vekst, går en stor del av overskuddet til utbytte. Det er selve grunnen til
 at sektoren har høy utdelingsgrad.</p>
 
 <p>Investeringsbehovet er likevel betydelig, og det er syklisk. Hver nye
@@ -675,8 +639,7 @@ mobilgenerasjon krever utbygging av nett over hele landet før den gir noen
 inntekt, og fiberutbygging binder store beløp i grøfter og utstyr som betaler
 seg tilbake over mange år. I perioder med tung utbygging konkurrerer disse
 investeringene direkte med utbyttet, og selskapene har historisk løst det ved
-å låne framfor å kutte utbetalingen. Det gjør gjeldsnivået til et tall som
-er verdt å følge.</p>
+å låne framfor å kutte utbetalingen. Det gjør gjeldsnivået til et tall du bør følge med på.</p>
 
 <p>Reguleringen setter rammene på en måte som er uvanlig direkte. Frekvenser
 tildeles og auksjoneres av myndighetene, priser for tilgang til nettet kan
@@ -685,7 +648,7 @@ frekvensauksjon kan koste milliarder i ett enkelt år. Dette er kostnader som
 kommer sjelden, men stort, og som ikke lar seg planlegge bort.</p>
 
 <p>Konkurransen er den langsiktige marginrisikoen. I et mettet marked med få
-aktører kan prisene holdes oppe — men en ny aktør, eller en eksisterende som
+aktører kan prisene holdes oppe, men en ny aktør, eller en eksisterende som
 velger å kjempe om markedsandel med pris, kan presse inntekten per kunde ned
 for alle. Fordi kostnadsbasen er nesten helt fast, slår et slikt prispress
 nesten uavkortet inn på resultatet, og dermed på utbyttekapasiteten.</p>
